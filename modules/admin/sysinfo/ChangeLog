@@ -1,0 +1,159 @@
+CHANGELOG:
+2.0 - fixed filesystem output t0 display even if proc isn't the last
+      filesystem (Alan Eldridge <alane at geeksrus.net>)
+    - added slovak translation (<stenzel at inmail.sk> and <fi0dor at x-day.sk>)
+    - added OpenBSD support (Scott Lipcon <slipcon at mercea.net>)
+    - added class.BSD.common.inc.php (me)
+    - genericized class.FreeBSD.inc.php to use new common class (me)
+    - genericized class.OpenBSD.inc.php to use new common class (me)
+    - made read_dmesg() return the dmesg array in the bsd world (me)
+    - create get_sys_ticks() for BSD (me)
+    - move cpu_info() and scsi_info() into the BSD.common class (me)
+    - updated slovak translation (stenzel <stenzel at inmail.sk>)
+    - changed grab_key() in BSD.common (Scott Lipcon <slipcon at mercea.net>)
+    - added NetBSD support (Scott Lipcon <slipcon at mercea.net>)
+    - fixed pci and ide reporting on net/openbsd (me)
+    - updated korean translation (ace at aceteam.org)
+    - fix bsd memory reporting if you pagesize != 1024KB (Dinesh Nair <dinesh at alphaque.com>)
+    - added initial Darwin (OSX) support (David Schlosnagle <schlosna at users.sf.net>)
+    - added Catalonia translation (Miquel Montalat <mikelet15 at netscape.net>)
+    - added a default css which is a little prettier (me)
+    - small fix phpgroupware (Webbie <webbie at ipfw.org>)
+    - updated id.php (Firman Pribadi <firmanp at ragiel.dhs.org>)
+	- CSS'ified all the templates (Webbie <webbie at ipfw.org>)
+	- removed color_scheme.php, not needed anymore (me)
+	- moved all the os classes into includes/os/ (me)
+	- moved all the table classes into includes/tables/ (me)
+	- more CSS fixes from Webbie
+	- added iso9660 fix, won't show read all the time (Stu Tomlinson <nosnilmot at users.sf.net>)
+	- updated it.php (endelwar at users.sf.net)
+	- yet some more fbsd memory fixes (me)
+	- cosmetic cleanups (webbie)
+	- uniq the scsi, ide, and pci arrays on *bsd. /var/run/dmesg.boot doens't
+	  appear to clean itself out on some platforms (me)
+
+
+1.9 - added black template (<wkamphuis at users.sourceforge.net>)
+    - added browser language detection (Peter Palmreuther <pit at zone35.de>)
+    - added big5 translation (<iloveyou at ms7.url.com.tw>)
+    - typo from class conversion (me)
+    - added freebsd patch from Webbie (<webbie at ipfw.org>)
+    - seperated execute_program() into 2 functions (me)
+    - made execute_program() pipe aware, very crude (me)
+    - updated FreeBSD Class to reflect new pipe aware execute_program() (me)
+    - Added FreeBSD PCI and IDE reporting (<webbie at ipfw.org>)
+    - Added more FreeBSD updates (<webbie at ipfw.org>)
+    - Only print hardware information that we have (me)
+    - Updated Webbie's patch so that we only read /var/run/dmesg.boot once (me)
+    - Updated Swedish translation (Anders Wallenquist <aw at kreawit.se>)
+    - Added Catalan translation (Jaume Teixi <jaume at teixi.net>)
+    - Fixed IDE/SCSI detection (Alan E <alane at geeksrus.net>)
+    - Added Indonesian translation (Firman Pribadi <firmanp at ragiel.dhs.org>)
+    - fixed small bug w/ templates when register_globals=off (me)
+
+
+1.8 - updated a <? to <?php (me)
+    - updated dutch (nl) translation (<jurgen at introweb.nl>)
+    - updated danish (da) translation (Jonas Koch Bentzen <jonas at understroem.dk>)
+    - updated french (fr) translation (Christophe Merlet <christophe.merlet at eikonex.net>)
+    - updated Dutch translation (Vincent van Adrighem <vincent at dirck.mine.nu>)
+    - updated Romanian translation (Silviu Simen <ssimen at sympatico.ca>)
+    - updated German translations (Olaf Peters <olf at users.sf.net>)
+    - updated Estonian (et) translation (Hans Motsh?rg <hans.motsharg at eyp.ee>)
+    - updated Brazillian (br) translation (Alvaro Reguly <alvaro at reguly.net>)
+    - added Korean translation (<oxox at hanmir.com>)
+    - added Romanian translation (Robert Stan <robalo at avg.ro>)
+    - added Icelandic translation (Insanic <insanic at linux.is>)
+    - added Finnish translation (Jani Ponkko <jponkko at metku.net>)
+    - added Polish translation (jazzman <jazzman at qw.pl>)
+    - added format_bytesize() call in table_hardware.php (Michal Cihar <cihar at email.cz>)
+    - added Traditional-Chinese (tw.php) translation (Pao-Hsi Huang doggy at miniasp.com)
+    - removed filesystems of type bind (Wolter Kamphuis <wkamphuis at users.sf.net>)
+    - added timestamp to the title (me)
+    - added fix incase register_globals is off (Steve Alberty <staybyte at users.sf.net>)
+    - added Meta Themes (Markus Weissmann <mail at mweissmann.de>)
+
+
+1.7 - changed the way we get percentage free of disk.  We don't have any way
+      knowing how much is reserved so we can't trust 'df' (me)
+    - fixed bug in filesystem display (me)
+    - added a CSS checker (me, bacon_boy)
+    - added 'blue' template (Michal Cihar <cihar at email.cz>)
+    - added Czech Translation (Michal Cihar)
+    - added posibility to set charset in language file (Michal Cihar)
+    - changed $lang -> $lng causes problems in urls (in some browsers is &lang
+      interpreted as html entity) (Michal Cihar)
+    - added extra i18n variables (uptime, footer, template, etc) (Michal Cihar)
+
+
+1.6 - Added Dutch Translation (C.J. van der Maas <cjvdmaas at hetnet.nl>)
+    - Added Danish Translation (Jonas Koch Bentzen <jonas at understroem.dk>)
+    - Added Brazilian Translation (Alvaro Reguly alvaro at reguly.net)
+    - Cleaned up the _core_ HTML.   Now passes validator (<jfh at adr.dk>)
+      Now templates are the only problem :)
+    - Cleaned up the classic template.  We now pass validator! (me)
+    - Changed the aq template to have blue bars. (Javier Rodriguez
+      <jay at zero-distortion.de>)
+    - Added Template Form (me & Jesse <jesse at krylotek.com>)
+    - Added execute_program(), should fix the brokeness that is SuSE (me)
+    - Added Language Form (me)
+    - Code formatting/cleanups, tabs to spaces, include()'s to
+      require_once()'s, removed extra color_scheme includes (me)
+
+
+1.5 - Added Swedish translation (multiple people)
+    - Added Estonian translation (Hans Motsh?rg <hans.motsharg at eyp.ee>)
+    - Added initial templates (Joseph Engo <jengo at phpgroupware.org>)
+    - Indenting cleaned up (me)
+    - Misc code clean ups (me)
+    - Due to popular demand, changed the threshold for warnings in the
+      bar graphs to 90% (me)
+
+
+1.2 - Added Norwegian translation (Stig-?rjan Smelror <sos at lincom.no>)
+    - Updated Spanish translation (Francisco Javier Ahijado <ahijado at iberica.com>)
+    - Added $text['none'] for more i18n (me)
+    - Added German Translation (multiple people)
+    - Added compatability functions for PHP3 use (Eric Lacroix <eric.lacroix at alcove.fr>)
+    - Added Italian translation (Alessio Bragadini <alessio at albourne.com>)
+    - Added Lithuanian translation (Paulius Samulionis <kucha at vejas.mintis.lt>)
+    - Added Dutch translation (Kenneth Laulund Nielsen <linux at trinity-inet.dk>)
+    - Added German translation (Alexander Wild <alexwild at gmx.de>)
+
+
+1.1 - Added support for fs detection (Berthold Tenhumberg <b.tenhumberg at web.de>)
+    - Added i18n support (me)
+    - Added meta-refresh support (Ed Voncken <evoncken at users.sourceforge.net>)
+    - Better IP detection (Berthold Tenhumberg <b.tenhumberg at web.de>)
+    - Added Spanish translation (angela <angela at alphaweb.net>)
+    - Added French translation (Denis Bodor <dbodor at linuxmag-france.org>)
+    - Fixed small bug in IDE/SCSI chain parsing (infinite)
+    - Changed all <? to <?php (me)
+
+
+1.0 - Complete rewrite Much nicer. (infinite)
+
+
+0.6 - Added Checking for CPU MHz (Brent Metzler <bmetzler at pluto.twistedpair.net>)
+    - Added Support for DAC960 /dev/rd Raid Devices
+    - Added Basic Caching System to increase performance
+
+
+0.5 - Added support for lspci for the 2.2 kernel if the file exists to stop
+      errors about using obsolete /proc/pci
+    - Removed all `unix command` operators.  Changed everything over to more
+      friendly exec()'s and passthru()'s
+
+
+0.4 - Multiple IDE and Ethernet devices should be working now
+    - Fixed up some weirdness with the LM Sensors Display
+    - Added IP address display of the current host
+
+
+0.3 - Added LM Sensors Parsing
+    - Added IDE Support
+    - Changed the way that Ethernet devices are parsed
+
+
+0.2 - Added /proc/pci parsing
+    - Added tty information

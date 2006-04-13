@@ -1,0 +1,392 @@
+# MySQL dump 8.12
+#
+# $Id$
+#
+# Host: localhost    Database: phpbb14
+#--------------------------------------------------------
+# Server version	3.23.32
+
+#
+# Table structure for table 'access'
+#
+
+CREATE TABLE access (
+  access_id int(10) NOT NULL auto_increment,
+  access_title varchar(20) default NULL,
+  PRIMARY KEY (access_id)
+);
+
+#
+# Dumping data for table 'access'
+#
+
+INSERT INTO access VALUES (-1,'Deleted');
+INSERT INTO access VALUES (1,'User');
+INSERT INTO access VALUES (2,'Moderator');
+INSERT INTO access VALUES (3,'Super Moderator');
+INSERT INTO access VALUES (4,'Administrator');
+
+#
+# Table structure for table 'banlist'
+#
+
+CREATE TABLE banlist (
+  ban_id int(10) NOT NULL auto_increment,
+  ban_userid int(10) default NULL,
+  ban_ip varchar(16) default NULL,
+  ban_start int(32) default NULL,
+  ban_end int(50) default NULL,
+  ban_time_type int(10) default NULL,
+  PRIMARY KEY (ban_id),
+  KEY ban_id(ban_id)
+);
+
+#
+# Table structure for table 'catagories'
+#
+
+CREATE TABLE catagories (
+  cat_id int(10) NOT NULL auto_increment,
+  cat_title varchar(100) default NULL,
+  cat_order varchar(10) default NULL,
+  PRIMARY KEY (cat_id)
+);
+
+#
+# Table structure for table 'config'
+#
+
+CREATE TABLE config (
+  config_id int(10) NOT NULL auto_increment,
+  sitename varchar(100) default NULL,
+  allow_html int(2) default NULL,
+  allow_bbcode int(2) default NULL,
+  allow_sig int(2) default NULL,
+  allow_namechange int(2) default '0',
+  admin_passwd varchar(32) default NULL,
+  selected int(2) NOT NULL default '0',
+  posts_per_page int(10) default NULL,
+  hot_threshold int(10) default NULL,
+  topics_per_page int(10) default NULL,
+  allow_theme_create int(10) default NULL,
+  override_themes int(2) default '0',
+  email_sig varchar(255) default NULL,
+  email_from varchar(100) default NULL,
+  default_lang varchar(255) default NULL,
+  PRIMARY KEY (config_id),
+  UNIQUE KEY selected(selected)
+);
+
+#
+# Dumping data for table 'config'
+#
+
+INSERT INTO config VALUES (1,'This Site',1,1,1,0,NULL,1,15,15,50,NULL,0,'Yours Truely,\r\n\r\nThe Site Admin','webmaster@www.bokt.nl','english');
+
+#
+# Table structure for table 'disallow'
+#
+
+CREATE TABLE disallow (
+  disallow_id int(10) NOT NULL auto_increment,
+  disallow_username varchar(50) default NULL,
+  PRIMARY KEY (disallow_id)
+);
+
+#
+# Table structure for table 'forum_access'
+#
+
+CREATE TABLE forum_access (
+  forum_id int(10) NOT NULL default '0',
+  user_id int(10) NOT NULL default '0',
+  can_post tinyint(1) NOT NULL default '0',
+  PRIMARY KEY (forum_id,user_id)
+);
+
+#
+# Table structure for table 'forum_mods'
+#
+
+CREATE TABLE forum_mods (
+  forum_id int(10) NOT NULL default '0',
+  user_id int(10) NOT NULL default '0'
+);
+
+#
+# Table structure for table 'forums'
+#
+
+CREATE TABLE forums (
+  forum_id int(10) NOT NULL auto_increment,
+  forum_name varchar(150) default NULL,
+  forum_desc text,
+  forum_access int(10) default '1',
+  forum_moderator int(10) default NULL,
+  forum_topics int(10) NOT NULL default '0',
+  forum_posts int(10) NOT NULL default '0',
+  forum_last_post_id int(10) default NULL,
+  cat_id int(10) default NULL,
+  forum_type int(10) default '0',
+  PRIMARY KEY (forum_id),
+  KEY forum_last_post_id(forum_last_post_id)
+);
+
+#
+# Table structure for table 'headermetafooter'
+#
+
+CREATE TABLE headermetafooter (
+  header text,
+  meta text,
+  footer text
+);
+
+#
+# Table structure for table 'posts'
+#
+
+CREATE TABLE posts (
+  post_id int(10) NOT NULL auto_increment,
+  topic_id int(10) NOT NULL default '0',
+  forum_id int(10) NOT NULL default '0',
+  poster_id int(10) NOT NULL default '0',
+  post_time varchar(20) default NULL,
+  poster_ip varchar(16) default NULL,
+  PRIMARY KEY (post_id),
+  KEY post_id(post_id),
+  KEY forum_id(forum_id),
+  KEY topic_id(topic_id),
+  KEY poster_id(poster_id)
+);
+
+#
+# Table structure for table 'posts_text'
+#
+
+CREATE TABLE posts_text (
+  post_id int(10) NOT NULL default '0',
+  post_text text,
+  PRIMARY KEY (post_id)
+);
+
+#
+# Table structure for table 'priv_msgs'
+#
+
+CREATE TABLE priv_msgs (
+  msg_id int(10) NOT NULL auto_increment,
+  from_userid int(10) NOT NULL default '0',
+  to_userid int(10) NOT NULL default '0',
+  msg_time varchar(20) default NULL,
+  poster_ip varchar(16) default NULL,
+  msg_status int(10) default '0',
+  msg_text text,
+  PRIMARY KEY (msg_id),
+  KEY msg_id(msg_id),
+  KEY to_userid(to_userid)
+);
+
+#
+# Table structure for table 'ranks'
+#
+
+CREATE TABLE ranks (
+  rank_id int(10) NOT NULL auto_increment,
+  rank_title varchar(50) NOT NULL default '',
+  rank_min int(10) NOT NULL default '0',
+  rank_max int(10) NOT NULL default '0',
+  rank_special int(2) default '0',
+  rank_image varchar(255) default NULL,
+  PRIMARY KEY (rank_id),
+  KEY rank_min(rank_min),
+  KEY rank_max(rank_max)
+);
+
+#
+# Table structure for table 'sessions'
+#
+
+CREATE TABLE sessions (
+  sess_id int(10) unsigned NOT NULL default '0',
+  user_id int(10) NOT NULL default '0',
+  start_time int(10) unsigned NOT NULL default '0',
+  remote_ip varchar(15) NOT NULL default '',
+  PRIMARY KEY (sess_id),
+  KEY sess_id(sess_id),
+  KEY start_time(start_time),
+  KEY remote_ip(remote_ip)
+);
+
+#
+# Table structure for table 'smiles'
+#
+
+CREATE TABLE smiles (
+  id int(10) NOT NULL auto_increment,
+  code varchar(50) default NULL,
+  smile_url varchar(100) default NULL,
+  emotion varchar(75) default NULL,
+  PRIMARY KEY (id)
+) TYPE=MyISAM;
+
+#
+# Dumping data for table 'smiles'
+#
+
+INSERT INTO smiles VALUES (1,':D','icon_biggrin.gif','Very Happy');
+INSERT INTO smiles VALUES (2,':-D','icon_biggrin.gif','Very Happy');
+INSERT INTO smiles VALUES (3,':grin:','icon_biggrin.gif','Very Happy');
+INSERT INTO smiles VALUES (4,':)','icon_smile.gif','Smile');
+INSERT INTO smiles VALUES (5,':-)','icon_smile.gif','Smile');
+INSERT INTO smiles VALUES (6,':smile:','icon_smile.gif','Smile');
+INSERT INTO smiles VALUES (7,':(','icon_frown.gif','Sad');
+INSERT INTO smiles VALUES (8,':-(','icon_frown.gif','Sad');
+INSERT INTO smiles VALUES (9,':sad:','icon_frown.gif','Sad');
+INSERT INTO smiles VALUES (10,':o','icon_eek.gif','Surprised');
+INSERT INTO smiles VALUES (11,':-o','icon_eek.gif','Surprised');
+INSERT INTO smiles VALUES (12,':eek:','icon_eek.gif','Suprised');
+INSERT INTO smiles VALUES (13,':-?','icon_confused.gif','Confused');
+INSERT INTO smiles VALUES (14,':???:','icon_confused.gif','Confused');
+INSERT INTO smiles VALUES (15,'8)','icon_cool.gif','Cool');
+INSERT INTO smiles VALUES (16,'8-)','icon_cool.gif','Cool');
+INSERT INTO smiles VALUES (17,':cool:','icon_cool.gif','Cool');
+INSERT INTO smiles VALUES (18,':lol:','icon_lol.gif','Laughing');
+INSERT INTO smiles VALUES (19,':x','icon_mad.gif','Mad');
+INSERT INTO smiles VALUES (20,':-x','icon_mad.gif','Mad');
+INSERT INTO smiles VALUES (21,':mad:','icon_mad.gif','Mad');
+INSERT INTO smiles VALUES (22,':P','icon_razz.gif','Razz');
+INSERT INTO smiles VALUES (23,':-P','icon_razz.gif','Razz');
+INSERT INTO smiles VALUES (24,':razz:','icon_razz.gif','Razz');
+INSERT INTO smiles VALUES (25,':oops:','icon_redface.gif','Embaressed');
+INSERT INTO smiles VALUES (26,':cry:','icon_cry.gif','Crying (very sad)');
+INSERT INTO smiles VALUES (27,':evil:','icon_evil.gif','Evil or Very Mad');
+INSERT INTO smiles VALUES (28,':roll:','icon_rolleyes.gif','Rolling Eyes');
+INSERT INTO smiles VALUES (29,':wink:','icon_wink.gif','Wink');
+INSERT INTO smiles VALUES (30,';)','icon_wink.gif','Wink');
+INSERT INTO smiles VALUES (31,';-)','icon_wink.gif','Wink');
+
+#
+# Table structure for table 'themes'
+#
+
+CREATE TABLE themes (
+  theme_id int(10) NOT NULL auto_increment,
+  theme_name varchar(35) default NULL,
+  bgcolor varchar(10) default NULL,
+  textcolor varchar(10) default NULL,
+  color1 varchar(10) default NULL,
+  color2 varchar(10) default NULL,
+  table_bgcolor varchar(10) default NULL,
+  header_image varchar(50) default NULL,
+  newtopic_image varchar(50) default NULL,
+  reply_image varchar(50) default NULL,
+  linkcolor varchar(15) default NULL,
+  vlinkcolor varchar(15) default NULL,
+  theme_default int(2) default '0',
+  fontface varchar(100) default NULL,
+  fontsize1 varchar(5) default NULL,
+  fontsize2 varchar(5) default NULL,
+  fontsize3 varchar(5) default NULL,
+  fontsize4 varchar(5) default NULL,
+  tablewidth varchar(10) default NULL,
+  replylocked_image varchar(255) default NULL,
+  PRIMARY KEY (theme_id)
+);
+
+#
+# Dumping data for table 'themes'
+#
+
+INSERT INTO themes VALUES (1,'Default','#000000','#FFFFFF','#6C706D','#2E4460','#001100','images/header-dark.jpg','images/new_topic-dark.jpg','images/reply-dark.jpg','#11C6BD','#11C6BD',1,'sans-serif','1','2','-2','+1','95%','images/reply_locked-dark.jpg');
+INSERT INTO themes VALUES (2,'Ocean','#FFFFFF','#000000','#CCCCCC','#9BB6DA','#000000','images/header.jpg','images/new_topic.jpg','images/reply.jpg','#011001','#2100cc',0,'sans-serif','1','2','-2','+1','95%','images/reply_locked-dark.jpg');
+INSERT INTO themes VALUES (3,'OCPrices.com','#FFFFFF','#000000','#efefef','#cdcdcd','#001100','images/header.jpg','images/new_topic.jpg','images/reply.jpg','#000000','#000000',0,'sans-serif','1','2','-2','+1','95%','images/reply_locked-dark.jpg');
+
+#
+# Table structure for table 'topics'
+#
+
+CREATE TABLE topics (
+  topic_id int(10) NOT NULL auto_increment,
+  topic_title varchar(100) default NULL,
+  topic_poster int(10) default NULL,
+  topic_time varchar(20) default NULL,
+  topic_views int(10) NOT NULL default '0',
+  topic_replies int(10) NOT NULL default '0',
+  topic_last_post_id int(10) default NULL,
+  forum_id int(10) NOT NULL default '0',
+  topic_status int(10) NOT NULL default '0',
+  topic_notify int(2) default '0',
+  PRIMARY KEY (topic_id),
+  KEY topic_id(topic_id),
+  KEY forum_id(forum_id),
+  KEY topic_last_post_id(topic_last_post_id)
+);
+
+#
+# Table structure for table 'users'
+#
+
+CREATE TABLE users (
+  user_id int(10) NOT NULL auto_increment,
+  username varchar(40) NOT NULL default '',
+  user_regdate varchar(20) NOT NULL default '',
+  user_password varchar(32) NOT NULL default '',
+  user_email varchar(50) default NULL,
+  user_icq varchar(15) default NULL,
+  user_website varchar(100) default NULL,
+  user_occ varchar(100) default NULL,
+  user_from varchar(100) default NULL,
+  user_intrest varchar(150) default NULL,
+  user_sig varchar(255) default NULL,
+  user_viewemail tinyint(2) default NULL,
+  user_theme int(10) default NULL,
+  user_aim varchar(18) default NULL,
+  user_yim varchar(25) default NULL,
+  user_msnm varchar(25) default NULL,
+  user_posts int(10) default '0',
+  user_attachsig int(2) default '0',
+  user_desmile int(2) default '0',
+  user_html int(2) default '0',
+  user_bbcode int(2) default '0',
+  user_rank int(10) default '0',
+  user_level int(10) default '1',
+  user_lang varchar(255) default NULL,
+  user_actkey varchar(32) default NULL,
+  user_newpasswd varchar(32) default NULL,
+  PRIMARY KEY (user_id)
+);
+
+#
+# Dumping data for table 'users'
+#
+
+INSERT INTO users VALUES (-1,'Anonymous','May 12, 1978','',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,0,1,NULL,NULL,NULL);
+INSERT INTO users VALUES (1,'Admin','Apr 11, 2001','21232f297a57a5a743894a0e4a801fc3','admin@domain.com','','','','','','',1,NULL,'','','',0,0,0,0,0,0,4,NULL,NULL,NULL);
+
+#
+# Table structure for table 'whosonline'
+#
+
+CREATE TABLE whosonline (
+  id int(3) NOT NULL auto_increment,
+  ip varchar(255) default NULL,
+  name varchar(255) default NULL,
+  count varchar(255) default NULL,
+  date varchar(255) default NULL,
+  username varchar(40) default NULL,
+  forum int(10) default NULL,
+  PRIMARY KEY (id)
+);
+
+#
+# Table structure for table 'words'
+#
+
+CREATE TABLE words (
+  word_id int(10) NOT NULL auto_increment,
+  word varchar(100) default NULL,
+  replacement varchar(100) default NULL,
+  PRIMARY KEY (word_id)
+);
+

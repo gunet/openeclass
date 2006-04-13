@@ -1,0 +1,23 @@
+Reporting Bugs
+------------------------------------------------------------------------
+Found a bug? Good, we'll fix it! To report a bug you can go to the offical
+phpBB forums at http://www.phpbb.com/phpBB/ and post it in the 'phpBB Bug
+Reports' forum (please make sure someone else hasn't already reported it
+there!), or you can email it to bugs@phpbb.com
+
+If you are emailing a bug please follow this little template:
+
+Subject: [BUG] Brief Description
+Body:
+phpBB Version: <version number, You can find this in config.php or page_tail>
+Web Server Software: <Apache/IIS/Whatever>
+Web Server Version: <You get the idea>
+PHP Version: <3.0.9/4.0.4pl1 etc etc>
+Full description of error, how to reproduce it, and preferrable with a URL 
+where we can check it out ourselves.
+
+If email bugs are not submitted in this manor they will most likely get
+lost in the mail! Please follow it carfully!
+
+Thank you.
+The phpBB Group.

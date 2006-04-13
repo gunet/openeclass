@@ -1,0 +1,49 @@
+phpSysInfo 2.0 - http://phpsysinfo.sourceforge.net
+
+Copyright (c), 1999-2001, Uriah Welcome (precision@devrandom.net)
+Copyright (c), 1999-2001, Matthew Snelham (infinite@valinux.com)
+
+****************************************************************
+*** This script has been tested and works on linux 2.2/2.4,  ***
+*** FreeBSD 4.x, OpenBSD 2.8+, NetBSD, Dawin/OSX             ***
+****************************************************************
+
+
+INSTALLATION AND CONFIGURATION:
+  Please read the INSTALL file for installation instructions.
+
+
+PLATFORM SPECIFIC:
+  There is currently a bug in FreeBSD that if you boot your system up and drop
+  to single user mode and then again back to multiuser the system removes
+  /var/run/dmesg.boot.  This will cause phpsysinfo to fail.  A bug has already
+  been reported to the FreeBSD team.  (PS, this may exist in other *BSDs also)
+
+
+OTHER NOTES:
+  As of version 1.1 we have added internationalization to phpSysInfo.  If you
+  feel like doing a translation please send an email to one of us.  If you'd 
+  like to see the i18n support in action look at ./includes/lang for the 
+  language files.  Then just add a ?lang=$filename to your url.
+
+  As of version 1.5 we have added templating support thanks to Joseph Engo! 
+  If you wish to create new templates take a look in the templates/ directory.
+  If you make a cool new one and think we should distribute it w/ the code
+  email it to us.
+
+  In version 1.9-2.0 we've got *bsd support thanks to many, many people.
+  Hopes are to have {free,net,open}bsd support along w/ OSX by release.
+
+  This code has grown and been distributed to places we never dreamed... 
+  Now proudly sporting full i18n and templates!  If you wish to add a
+  translation, or template please feel free to send it to us.  Also, if you
+  have an unusual system, and the hardware doesn't parse out of /proc
+  correctly, send us an email describing the problem  (AND the output of
+  'cat /proc/<whatever>')
+
+  -- Uriah Welcome (precision@devrandom.net)
+
+
+LICENSING:
+  This program and all associated files are released under the GNU Public License,
+  see COPYING for details.

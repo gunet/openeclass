@@ -1,0 +1,273 @@
+------------------------------------------------------------------------
+Table of Contents
+1.0 Introduction
+  1.0.1 Licence
+	
+2.0 Installation
+  2.0.1 Requirements
+  2.0.2 Pre-Installation Setup
+  2.0.3 Running the Installer
+  2.0.4 Post-Installation
+
+3.0 Upgrading
+
+4.0 System Setup
+  4.0.1 Adding a Category
+  4.0.2 Adding Forums
+
+5.0 Conclusion
+
+Appendix A: Notes for installing phpBB on Windows.
+
+-------------------------------------------------------------------------
+
+-------------------------------------------------------------------------
+1.0 Introduction
+
+Thank you for choosing phpBB as your forum software. 
+We have spent many months on this product and hope that 
+you find it useful. 
+
+1.0.1 Licence
+
+This product is protected under the GNU General Public Licence (GPL).
+For full details on this licence and the rights it grants to you, 
+the user of this software, and to us, the developers, please see the
+file COPYING that is distributed with this software. Also, for more 
+information on the GPL and the Free Software Foundation visit 
+http://www.fsf.org/ or http://www.gnu.org/
+-------------------------------------------------------------------------
+
+-------------------------------------------------------------------------
+2.0 Installation
+
+If you are upgrading from version 1.0.0 of phpBB please skip down to section
+3.0 Upgrading. Thank you.
+
+2.0.1 Requirements
+
+phpBB requires very little to run, and most well configured web servers 
+should be able to run phpBB. You need at least the following:
+
+1 Web server w/PHP 3.0.15 or greater  (Apache is know to work very well with phpBB)
+1 MySQL server (phpBB has been tested on 3.22 and 3.23)
+1 Admin crazy enough to run a forum (That would be you :) )
+
+2.0.2 Pre-Installation Setup
+
+Before beginning the install you should do 3 things:
+
+1. Make sure PHP is installed and configured on your server, you can do
+this by creating a file called phpinfo.php (or .php3) on your web server.
+This file should contain the following code:
+
+<?php
+phpinfo();
+?>
+
+This should, if PHP is installed correctly, produce a nicely formatted
+diagnostic page that gives you ALOT of information about the current status
+of PHP on your system. Make sure this page contains a section entitled
+'MySQL', if it does, you're ready to continue. If this section does not
+exist then you will have to contact your system administrator and have
+him/her reconfigure PHP with MySQL support. If you are the system
+administrator and don't know how to do this please see the PHP manual
+section on installation:
+http://www.php.net/manual/en/installation.php
+
+2. You must edit the file config.php. In this file you will have to set
+the path to phpBB, and some cookie variables. This file contains
+instructions on what settings need to be set and what they should be set
+to. Also, this file MUST be writeable by the web server! To set this file
+writeable you can issue the following command at a Unix command prompt:
+
+chmod a+w config.php
+
+If you do not have command line access to your web server then your FTP
+client should be able to change file permissions.
+
+3. You must check the status of MySQL. Make sure that MySQL is running on
+the system and that you have a valid username/password to use with phpBB. If
+your MySQL user has access to create databases on the server this is all you
+have to do. If you do not have access to create databases please contact
+your system administrator and have them create a database for your phpBB
+install. Once you have a database to install phpBB into you are ready to
+continue.
+
+2.0.3 Running the Installer
+
+We have tried to make the installer as user-friendly as we possible. Open your
+web browser and type in the address of your phpBB install file. For example:
+http://www.yoursite.com/phpBB/install.php. If you do not have the correct file
+permissions on config.php you will see an error message telling you how to
+correct this. If all goes well you should see the first screen of the
+installer, the database information screen. You will see that values have
+been set for you, these may not work for you! They are simply there to give
+you an idea of what needs to be entered. Set them to the correct values before
+proceeding. Next you will see a screen that tells you the status of the
+database creation, if all goes well your database has now been set-up for
+phpBB. After that you will be presented with the user registration screen for
+the admin user. You must fill out at least the username, password, and email
+fields in this form, all the rest are optional. Next you will see the forum
+wide options configuration screen. This form allows you to set-up the basic
+options to be used on the forum, default values have been entered for you to
+give you an idea of what data you should enter.
+
+If all goes well you should be presented with a link to the administration
+panel. Congratulations, you have just installed phpBB.
+
+If you have any problems with this install please contact us at
+http://www.phpbb.com/ or support@phpbb.com and we'll try and help.
+
+2.0.4 Post-Installation
+
+Once you have finished the install you should make sure that you reset
+config.php so that is NOT writeable by the web server. This is purely for
+security reasons, you don't want just anyone writing values to that file.
+You can do this by issuing the following Unix command:
+
+chmod a-w config.php
+
+Or, again if you don't have command line access to your server you can do
+this via your FTP client.
+
+You can now continue with section 4.0 System Setup.
+
+3.0 Upgrading
+------------------------------------------------------------------------------
+
+Upgrading from older versions of phpBB is very simple. We have provided full 
+upgrade scripts along with this release. There are 5 steps to upgrading:
+
+1. Backup your old phpBB files.
+
+2. Unpack the new phpBB distribution.
+
+3. Edit config.php and set the values as you need. There are some changes
+from the old config file so make sure you read the new file carefully.
+You will also have to copy your old database configuration values over to
+the new file. The values you want to copy over are 
+$dbuser
+$dbpasswd
+$dbhost
+$dbname
+Make sure config.php ends with ?> and there are no blank spaces after that.
+
+4. Open your web browser and type in the address of your phpBB upgrade
+script. For Example:
+http://www.yoursite.com/phpBB/upgrade_14.php
+There are two different upgrade scripts. upgrade_14.php is for the conversion 
+from 1.2.x to 1.4 and upgrade_12.php can be used if you are still using a
+1.0.x database. In this case you'll fist have to run upgrade_12.php and after
+that you can run the upgrade_14.php script to convert your DB from the 1.2 
+format to the format required for 1.4.
+
+5. Follow the instructions that the upgrade script gives you. (Basically you
+just have to keep hitting next).
+
+The upgrade script will make a backup of your old database but it is still
+advisable that you also make a manual backup of the database in case
+something goes very wrong.
+
+If everything goes well, and you don't receive any errors you should now have
+a working copy of phpBB v1.4.
+
+Please don't forget to rename/move or delete the upgrade and installation
+scripts because they are not needed anymore (install.php, upgrade_12.php and
+upgrade_14.php).
+
+
+4.0 System Setup
+-----------------------------------------------------------------------------
+In order for your freshly installed forums to be useful to anyone you will
+have to create (at least) one category and one forum. This section tells you
+how to do this via the administration panel. Once the installer has
+finished you will be provided with a link to the administration section of
+the forums, once there you will have to enter the username and password of
+the admin user that you created during the install. Your web browser MUST
+have cookies enabled for you to use the admin panel.
+
+4.0.1 Adding a Category
+
+Once you enter the administration panel click on the 'Add a category' link.
+You should be presented with a form where you can fill in a category name,
+do so and click 'submit'. You will now see a screen that tells you that the
+category has been created with a link back to the admin panel.
+Congratulations, you now have your first category.
+
+4.0.2 Adding a Forum
+
+Once back at the administration panel click on the 'Add a Forum' link and
+you will be taken to a form where you can create a new forum.
+
+You must fill out a Forum Name, Moderator, Category, Access Level, and
+type on each forum, only the Description is optional.
+
+You must select at LEAST 1 moderator but there is no limit on the number of
+moderators a forum can have.
+
+Access level is the level of registration that a user must have before he/she
+can post in the forum. Anonymous Posting means that anyone who visits the
+forum can post, even those without accounts. Registered users only means
+that only users that have registered with the board my post in this forum.
+And finally Moderator/Administrator Only means that only moderators, super
+moderators, or admins can post in that forum.
+
+Type sets the security level on a forum. Public means anyone can view the
+forum and post to. Private means that only people on the access control list
+for that forum can view it, and only those how have been granted posting
+rights can post to it. If you create a private forum make sure that you also
+visit the 'Set Private Forum Permissions' section of the administration
+panel and give viewing/posting right to the users you wish to have access to
+that forum.
+
+5.0 Conclusion
+----------------------------------------------------------------------------
+Congratulations! If you have made it this far you should have a working
+board that people can register and post on. You've just entered the
+wonderful world of online communities. We hope you have found this document
+useful and you find out software equally useful. 
+
+Any questions/comments can be posted at our official support forums at:
+http://www.phpbb.com/phpBB/index.php
+Or by emailing support@phpbb.com
+
+Thank you.
+The phpBB Group
+
+-----------------------------------------------------------------------------
+Appendix A: Notes for Installing phpBB on windows systems.
+
+First, thanks to our Windows using bug hunter David Tod Sigafoos for
+coming up with this solution.
+
+phpBB will only function correctly when PHP4 is installed as an ISAPI Apache
+module, here are instructions for installing it as such:
+
+1) Stop your apache server
+
+2) Download php 4.0.3pl1 from php.net.  Download the isapi version
+from here http://www.php.net/downloads.php
+
+3) Unzip php into your directory (for me it was c:\php)
+
+4) Copy the php4ts.dll into the windows\system directory.  (there
+should only be one in system or system32)
+
+In http.conf
+
+5) In apache http.conf find the loadmodule section and add this line
+LoadModule php4_module c:/php/sapi/php4apache.dll
+
+6) Be sure you have the AddType for php
+
+Also, some people have had success by adding the following line to config.php:
+
+$PHP_SELF = $PATH_INFO;
+
+This should only be used if you have PHP installed as a CGI module.
+If you have any other problems installing on Windows please visit the
+support forums at http://www.phpbb.com/phpBB/
+
+--------------------------------------------------------------------------
+

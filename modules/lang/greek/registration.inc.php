@@ -1,0 +1,312 @@
+<?php
+/*
+      +----------------------------------------------------------------------+
+      | CLAROLINE version 1.3.0 $Revision$                            |
+      +----------------------------------------------------------------------+
+      | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
+      +----------------------------------------------------------------------+
+      |   $Id$      |
+      |   English Translation                                                |
+      +----------------------------------------------------------------------+
+      |   This program is free software; you can redistribute it and/or      |
+      |   modify it under the terms of the GNU General Public License        |
+      |   as published by the Free Software Foundation; either version 2     |
+      |   of the License, or (at your option) any later version.             |
+      |                                                                      |
+      |   This program is distributed in the hope that it will be useful,    |
+      |   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
+      |   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
+      |   GNU General Public License for more details.                       |
+      |                                                                      |
+      |   You should have received a copy of the GNU General Public License  |
+      |   along with this program; if not, write to the Free Software        |
+      |   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
+      |   02111-1307, USA. The GNU GPL license is also available through     |
+      |   the world-wide-web at http://www.gnu.org/copyleft/gpl.html         |
+      +----------------------------------------------------------------------+
+      | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
+      |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
+      |          Christophe Geschι <gesche@ipm.ucl.ac.be>                    |
+      +----------------------------------------------------------------------+
+      | Translator :                                                         |
+      |          Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
+      |          Andrew Lynn       <Andrew.Lynn@strath.ac.uk>                |
+      +----------------------------------------------------------------------+
+ */
+// REGISTRATION - AUTH
+
+
+$langSee = "Προεπισκόπηση";
+$langNoSee = "Απαιτείται εγγραφή";
+$langSubscribe = "Υποβολή αλλαγών";
+$langCourseName = "Τίτλος Μαθήματος";
+$langLanguage = "Γλώσσα";
+$langCoursesLabel = 'Τμήματα';
+
+$langRegistration="Εγγραφή";
+$langName="Όνομα";
+$langSurname="Επώνυμο";
+$langUsername="Όνομα χρήστη (username)";
+$langPass="Συνθηματικό (password)";
+$langConfirmation="Επιβεβαίωση συνθηματικού";
+$langUserNotice = "(μέχρι 20 χαρακτήρες)";
+$langEmail="e-mail";
+$langEmailNotice = "Το e-mail δεν είναι απαραίτητο, αλλά χωρίς αυτό δε θα μπορείτε να λαμβάνετε 
+ανακοινώσεις, ούτε θα μπορείτε να χρησιμοποιήσετε τη λειτουργία υπενθύμισης συνθηματικού.";
+$langMailErrorMessage = "Παρουσιάστηκε σφάλμα κατά την αποστολή του μηνύματος - η αίτησή σας δεν στάλθηκε. Παρακαλούμε 
+επικοινωνήστε με το διαχειριστή του συστήματος στη διεύθυνση";
+$langStatus="Ενέργεια";
+$langRegStudent="Παρακολούθηση μαθημάτων";
+$langRegAdmin="Δημιουργία μαθημάτων";
+$langAm = "Αριθμός μητρώου";
+$langDepartment="Σχολή / Τμήμα";
+$langUserDetails = "Στοιχεία νέου χρήστη";
+// newuser_second.php
+
+$langPassTwice="Πληκτρολογήσατε δύο διαφορετικά συνθηματικά. Χρησιμοποιήστε το πλήκτρο «επιστροφή» του browser σας και ξαναδοκιμάστε.";
+
+$langEmptyFields="Αφήσατε μερικά πεδία κενά. Χρησιμοποιήστε το πλήκτρο «επιστροφή» του browser σας και ξαναδοκιμάστε.";
+
+$langUserFree="Το όνομα χρήστη που επιλέξατε χρησιμοποιείται! Χρησιμοποιήστε το πλήκτρο «επιστροφή» του browser σας και 
+ξαναδοκιμάστε.";
+
+$langYourReg="Η εγγραφή σας στο";
+$langDear="Αγαπητέ";
+$langYouAreReg="Ο λογαριασμός σας στην πλατφόρμα ";
+$langSettings="δημιουργήθηκε με επιτυχία!\nΤα προσωπικά στοιχεία του λογαριασμού σας είναι τα εξής:\n\nΌνομα χρήστη:";
+$langAddress="Η διεύθυνση του";
+$langIs="είναι";
+$langProblem="Στη περίπτωση που αντιμετωπίζετε προβλήματα, επικοινωνήστε με την Ομάδα Ασύγχρονης Τηλεκπαίδευσης";
+$langFormula="Φιλικά";
+$langManager="Υπεύθυνος";
+$langPersonalSettings="Οι προσωπικές σας ρυθμίσεις έχουν καταχωρηθεί 
+	και σας στάλθηκε ένα e-mail για να θυμάστε το όνομα χρήστη και το συνθηματικό σας.</p>
+	<p>Επιλέξτε από τον παρακάτω κατάλογο τα μαθήματα που θέλετε να παρακολουθήσετε.</p><p> Αν δεν επιθυμείτε 
+	να εγγραφείτε σε κάποιο μάθημα από τα παρακάτω κάντε κλίκ <a href='../../index.php'>εδώ</a> για να 
+	επιστρέψετε στην αρχική σελίδα της πλατφόρμας. Μπορείτε να εγγραφείτε αργότερα στα μαθήματα.";
+$langYourRegTo="Ο κατάλογος μαθημάτων σας περιέχει";
+$langIsReg="έχει ενημερωθεί";
+$langCanEnter="Είσοδος στην ψηφιακή αίθουσα.";
+
+// profile.php
+
+
+$langModifProfile="Αλλαγή του προφίλ μου";
+$langPassTwo="Έχετε πληκτρολογήσει δύο διαφορετικά συνθηματικά";
+$langAgain="Ξαναπροσπαθήστε!";
+$langFields="Αφήσατε μερικά πεδία κενά";
+$langUserTaken="Το όνομα χρήστη που επιλέξατε δεν είναι διαθέσιμο";
+$langEmailWrong="Η διεύθυνση ηλεκτρονικού ταχυδρομείου δεν είναι συμπληρωμένη ή περιέχει άκυρους χαρακτήρες";
+$langProfileReg="Οι αλλαγές στο προφίλ σας αποθηκεύτηκαν";
+$langHome="Επιστροφή στην αρχική σελίδα";
+$langChange="Αλλαγή";
+$langUnregUser = "Διαγραφή Λογαριασμού";
+
+// user.php
+
+$langUsers="Χρήστες";
+$langModRight="Αλλαγή των δικαιωμάτων διαχειριστή του";
+$langNone="κανένας";
+$langAll="όλοι";
+$langNoAdmin="δεν έχει<b>δικαιώματα διαχειριστή σε αυτό το site</b>";
+$langAllAdmin="έχει τώρα<b>όλα τα δικαιώματα διαχειριστή σε αυτό το site</b>";
+$langModRole="Αλλαγή του ρόλου του";
+$langRole="Ρόλος";
+$langIsNow="είναι τώρα";
+$langInC="σε αυτό το μάθημα";
+$langFilled="Εχετε αφήσει μερικά πεδία κενά.";
+$langUserNo="Το όνομα χρήστη που διαλέξατε";
+$langTaken="χρησιμοποιείται ήδη. Διαλέξτε άλλο.";
+$langOneResp="Ένας από τους διαχειριστές του μαθήματος";
+$langRegYou="σας έχει γράψει στο μάθημα";
+$langTheU="Ο χρήστης";
+$langAddedU="έχει προστεθεί. Στάλθηκε ένα email σε αυτόν";
+$langAndP="και το συνθηματικό τους";
+$langDereg="έχει διαγραφεί από αυτό το μάθημα";
+$langAddAU="Προσθέστε ένα χρήστη";
+$langStudent="φοιτητής";
+$langBegin="αρχή";
+$langPreced50 = "Προηγούμενα 50.";
+$langFollow50 = "Επόμενα 50";
+$langEnd = "τέλος";
+$langAdmR="Δικαιώματα Διαχειριστή";
+$langUnreg = "Διαγραφή";
+$langAddHereSomeCourses = "<br><blockquote><p>Για να εγγραφείτε / απεγγραφείτε σε / από ένα μάθημα, 
+πρώτα επιλέξτε το τμήμα στο οποίο βρίσκεστε και στη συνέχεια επιλέξτε / αποεπιλέξτε το μάθημα.</p>
+<p>Για να καταχωρηθούν οι προτιμήσεις σας πατήστε 'Υποβολή αλλαγών'</p></blockquote><br>";
+$langTitular = "Διδάσκων";
+
+// adduser.php - added by adia 2003-02-21
+$langAskUser = "Πληκτρολογήστε το επώνυμο ή το όνομα ή το όνομα χρήστη για να αναζητήσετε τον χρήστη που θέλετε να προστεθεί.
+		<br><br>Ο χρήστης θα πρέπει να έχει ήδη λογαριασμό στην πλατφόρμα για να γραφτεί στο μάθημά σας.";
+$langAskManyUsers = "Πληκτρολογήστε το όνομα αρχείου χρηστών ή κάντε κλικ στο πλήκτρο \"Browse\" για να το 
+	αναζητήσετε.<br><br>Οι χρήστες θα πρέπει να έχουν ήδη λογαριασμό στην πλατφόρμα για να γραφτούν στον μάθημά 
+σας.";
+$langAskManyUsers2 = "<strong>Σημείωση</strong>: Το αρχείο χρηστών πρέπει να είναι απλό αρχείο κειμένου με τα ονόματα 
+		των χρηστών ένα ανά γραμμή. Παράδειγμα:
+	<blockquote><code>
+	eleni<br>
+	nikos<br>
+	spiros<br>
+	</code></blockquote>";
+$langAskSearch = "Πληκτρολογήστε το επώνυμο ή το όνομα ή το όνομα χρήστη που θέλετε να αναζητήσετε."; 
+$langAddUser = "Προσθήκη ενός χρήστη";
+$langAddManyUsers  = "Προσθήκη πολλών χρηστών";
+$langAdd = "Προσθήκη:";
+$langOneUser = "ενός χρήστη";
+$langManyUsers = "πολλών χρηστών";
+$langGUser = "χρήστη επισκέπτη";
+$langSearch = "Αναζήτηση";
+$langNoUsersFound = "Δε βρέθηκε κανένας χρήστης με τα στοιχεία που δώσατε ή ο χρήστης υπάρχει ήδη στο μάθημά σας.";
+$langRegister = "Εγγραφή χρήστη στο μάθημα";
+$langAdded = " προστέθηκε στο μάθημά σας.";
+$langAddError = "Σφάλμα! Ο χρήστης δεν προστέθηκε στο μάθημα. Παρακαλούμε προσπαθήστε ξανά ή επικοινωνήστε με το διαχειριστή του συστήματος.";
+$langAddBack = "Επιστροφή στη σελίδα εγγραφής χρηστών";
+$langAskUserFile = "Όνομα αρχείου";
+$langFileNotAllowed = "Λάθος τύπος αρχείου! Το αρχείο χρηστών πρέπει να είναι απλό αρχείο κειμένου με τα ονόματα 
+των χρηστών ανά γραμμή";
+$langResult = "Αποτέλεσμα";
+$langUserNoExist = "Ο χρήστης δεν είναι γραμμένος στην πλατφόρμα";
+$langUserAlready = "Ο χρήστης είναι ήδη γραμμένος στο μάθημά σας";
+$langUserFile = "Όνομα αρχείου χρηστών";
+$langOk = "Προσθήκη";
+
+// search_user.php - added by jexi Feb 26 2003
+$langphone= "Τηλέφωνο";
+
+$langGroup="Ομάδα χρηστών";
+$langUserNoneMasc="-";
+$langTutor="Διδάσκων";
+$langTutorDefinition="Διδάσκων (δικαίωμα να επιβλέπει τις ομάδες χρηστών)";
+$langAdminDefinition="Διαχειριστής (δικαίωμα να αλλάζει το περιεχόμενο των μαθημάτων)";
+$langDeleteUserDefinition="Διαγραφή (διαγραφή από τον κατάλογο χρηστών του <b>παρόντος</b> μαθήματος)";
+$langNoTutor = "δεν είναι διδάσκων σε αυτό το μάθημα";
+$langYesTutor = "είναι διδάσκων σε αυτό το μάθημα";
+$langUserRights="Δικαιώματα χρηστών";
+$langNow="τώρα";
+$langOneByOne="Προσθήκη χρήστη";
+$langUserMany="Εισαγωγή καταλόγου χρηστών μέσω αρχείων κειμένου";
+$langNo="όχι";
+$langYes="ναι";
+$langUserAddExplanation="κάθε γραμμή του αρχείου που θα στείλετε θα περιέχει 5 πεδία:
+		 <b>Όνομα&nbsp;&nbsp;&nbsp;Επίθετο&nbsp;&nbsp;&nbsp;
+		Όνομα Χρήστη&nbsp;&nbsp;&nbsp;Συνθηματικό&nbsp;
+		&nbsp;&nbsp;email</b> και θα ειναι χωρισμένο με tab.
+		Οι χρήστες θα λάβουν ειδοποίηση μέσω email με το όνομα χρήστη / συνθηματικό.";
+$langSend="Αποστολή";
+$langDownloadUserList="Ανέβασμα καταλόγου";
+$langUserNumber="αριθμός";
+$langGiveAdmin="Προσθήκη δικαίωματος";
+$langRemoveRight="Αφαίρεση δικαίωματος";
+$langGiveTutor="Προσθήκη δικαίωματος";
+$langUserOneByOneExplanation="Αυτός (αυτή) θα λάβει ειδοποίηση μέσω email με όνομα χρήστη και συνθηματικό";
+$langBackUser="Επιστροφή στη λίστα χρηστών";
+$langUserAlreadyRegistered="Ενας χρήστης με ίδιο όνομα / επίθετο είναι ήδη γραμμένος σε αυτό το μάθημα.
+				Δεν μπορείτε να τον (την) ξαναγράψετε.";
+
+$langAddedToCourse="είναι ήδη γραμμένος στην πλατφόρμα αλλά όχι σε αυτό το μάθημα. Τώρα έγινε.";
+$langGroupUserManagement="Διαχείριση ομάδας χρηστών";
+$langIsReg="Οι αλλαγές σας κατοχυρώθηκαν.";
+$langPassTooEasy ="Το συνθηματικό σας είναι πολύ απλό. Χρησιμοποιήστε ένα συνθηματικό σαν και αυτό";
+
+$langChoiceLesson ="Επιλογή Μαθημάτων";
+$langCoursesRegistered="Η εγγραφή σας στα μαθήματα που επιλέξατε έγινε με επιτυχία!";
+$langNoCoursesRegistered="<p>Δεν επιλέξατε μάθημα για εγγραφή.</p><p> Μπορείτε να εγγραφείτε σε μάθημα, την 
+επόμενη φορά που θα μπείτε στην πλατφόρμα.</p>";
+
+$langIfYouWantToAddManyUsers="Αν θέλετε να προσθέσετε ένα κατάλογο με χρήστες στο μάθημά σας, παρακαλώ συμβουλευτείτε τον διαχειριστή συστήματος.";
+
+$langCourse="μάθημα";
+$langCourses="μαθήματα";
+
+$langLastVisits="Οι τελευταίες μου επισκέψεις";
+
+$langGuestUser="Προσθήκη χρήστη επισκέπτη";
+$langDumpUser="Κατάλογος χρηστών:";
+$langExcel="α) σε αρχείο Excel";
+$langCsv="β) σε αρχείο csv";
+
+$langFieldsMissing="Αφήσατε κάποιο(α) από τα υποχρεωτικά πεδία κενό(ά) !";
+$langFillAgain="Παρακαλούμε ξανασυμπληρώστε την";
+$langFillAgainLink="αίτηση";
+
+// Following messages added for e-Class:
+$reqregprof="Αίτηση Εγγραφής Καθηγητή";
+$profpers="Στοιχεία Καθηγητή";
+$profsname="Επίθετο Καθηγητή";
+$profname="Όνομα Καθηγητή";
+$profphone="Τηλέφωνο Καθηγητή";
+$profuname="Επιθυμητό Όνομα Χρήστη (Username)";
+$profcomment="Σχόλια";
+$profreason="(Αναφέρατε τους λόγους χρήσης της πλατφόρμας)";
+$profemail="E-mail Χρήστη";
+
+$reg="Εγγραφή";
+$reguser="Εγγραφή Χρήστη";
+$reguserldap="Εγγραφή Χρήστη μέσω LDAP";
+$regprof="Εγγραφή Καθηγητή";
+$regprofldap="Εγγραφή Καθηγητή μέσω LDAP";
+$langByLdap="Μέσω LDAP";
+$langNewProf="Εισαγωγή στοιχείων νέου λογαριασμού καθηγητή";
+$profsuccess="Η δημιουργία νέου λογαριασμού καθηγητή πραγματοποιήθηκε με επιτυχία!";
+
+$dearprof="Αγαπητέ διδάσκων!";
+$success="Η αποστολή των στοιχείων σας έγινε με επιτυχία!";
+$click="Κάντε κλίκ";
+$here="εδώ";
+$backpage="για να επιστρέψετε στην αρχική σελίδα.";
+
+$emailprompt="Δώστε την διεύθυνση e-mail σας:";
+$ldapprompt="Δώστε το συνθηματικό LDAP σας:";
+$univprompt="Επιλέξτε Πανεπιστημιακό Ίδρυμα";
+$ldapnamesur="Ονοματεπώνυμο:";
+$langInstitution='Ίδρυμα:';
+
+$ldapuserexists="Στο σύστημα υπάρχει ήδη κάποιος χρήστης με τα στοιχεία που δώσατε.";
+$ldapempty="Αφήσατε κάποιο από τα πεδία κενό!";
+$ldapfound="βρέθηκε στον εξυπηρέτη LDAP και τα στοιχεία που έδωσε είναι σωστά";
+$ldapchoice="Παρακαλούμε επιλέξτε το ίδρυμα στο οποίο ανήκετε!";
+$ldapnorecords="Δεν βρέθηκαν εγγραφές. Πιθανόν να δώσατε λάθος στοιχεία.";
+$ldapwrongpasswd="Το συνθηματικό που δώσατε είναι λανθασμένο. Παρακαλούμε δοκιμάστε ξανά";
+$ldapproblem="Υπάρχει πρόβλημα με τα στοιχεία του";
+$ldapcontact="Παρακαλούμε επικοινωνήστε με τον διαχειριστή του εξυπηρέτη LDAP.";
+$ldaperror="Δεν είναι δυνατή η σύνδεση στον εξυπηρέτη του LDAP.";
+$ldapmailpass="Το συνθηματικό σας είναι το ίδιο με αυτό της υπηρεσίας e-mail.";
+
+$ldapback="Επιστροφή στην";
+$ldaplastpage="προηγούμενη σελίδα";
+
+$back="Επιστροφή στην αρχική σελίδα";
+
+$star="(Τα πεδία με (*) είναι υποχρεωτικά)";
+
+$mailsubject="Αίτηση Καθηγητή - Υπηρεσία Ασύγχρονης Τηλεκπαίδευσης";
+
+$contactphone="Τηλέφωνο επικοινωνίας";
+
+$contactpoint="Επικοινωνία";
+
+$admin="Εργαλεία Διαχείρισης";
+
+$searchuser="Αναζήτηση Καθηγητών / Χρηστών";
+
+$typeyourmessage="Πληκτρολογήστε το μήνυμά σας παρακάτω";
+$emailsuccess="Το e-mail στάλθηκε!";
+
+$langBackReq = "Επιστροφή στις Ανοικτές Αιτήσεις Καθηγητών";
+$langTheTeacher = 'Ο διδάσκων';
+$langTheUser = 'Ο χρήστης';
+
+$langDestination = 'Παραλήπτης:';
+$langAsProf = 'ως καθηγητής';
+$langTel = 'Τηλ.';
+$langPassSameLDAP = 'Το συνθηματικό σας είναι αυτό της υπηρεσίας καταλόγου (LDAP).';
+
+$langLDAPUser = 'Χρήστης LDAP';
+$langLogIn = 'Σύνδεση';
+$langLogOut = 'Αποσύνδεση';
+$langDate = 'Ημερομηνία';
+$langAction = 'Ενέργεια';
+$langRequiredFields = '(Τα πεδία με (*) είναι υποχρεωτικά)';
+
+?>

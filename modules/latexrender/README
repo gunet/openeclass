@@ -1,0 +1,68 @@
+LaTeX Rendering Class 0.6
+Copyright (C) 2003/2004  Benjamin Zeiss <zeiss@math.uni-goettingen.de>
+----------------------
+
+This Class is supposed to offer easy to use functionality to render LaTeX formulas
+into pictures (png by default). This Class relies on:
+
+- tetex (latex)
+- imagemagick tools (convert, identify)
+
+Do "which latex", "which convert" and "which identify" to find out if
+these are installed already.
+
+It most probably won't work on windows systems out of the box and i won't assist with
+plans on getting it work on them ;-) Using this class may possibly open security holes as LaTeX
+is a very complex system and it is easy to oversee things ! I need assistance to enhance this !
+
+There is a small example included. To run it, you need to adjust paths in latexrender_test.php and
+the imagemagick/tmp-directory paths in class.latexrender.php.
+
+Also included are two files which form a modification for the well known web-based bulletin board
+PHPBB (www.phpbb.org). The modification is very minor and update-patches from the phpbb crew
+should still work as long as this is the only modification.
+
+Here are the instructions on how to modify the board software (2.04):
+
+- copy the latexrender directory to /phpbb/latexrender
+
+- adjust imagemagick paths and the tmp directory path in class.latexrender.php
+
+- ./includes/bbcode.php (about line 195)
+
+    before:
+        // Patterns and replacements for URL and email tags..
+        $patterns = array();
+        $replacements = array();
+
+    insert:
+        include("/var/www/phpbb/latexrender/phpbb_hook_2.php");
+
+    after:
+        // [img]image_url_here[/img] code..
+        // This one gets first-passed..
+
+- ./includes/bbcode.php (about line 288)
+
+    before:
+        // [img]image_url_here[/img] code..
+        $text = preg_replace("#\[img\]((ht|f)tp://)([^\r\n\t<\"]*?)\[/img\]#sie", "'[img:$uid]\\1' . str_replace(' ', '%20', '\\3') . '[/img:$uid]'", $text);
+
+    insert:
+        include("/var/www/phpbb/latexrender/phpbb_hook_1.php");
+
+    after:
+        // Remove our padding from the string..
+        return substr($text, 1);
+
+- you must adjust the paths in the phpbb_hook?.php files. I was too lazy to dig more in the phpbb
+  code to find out the proper way to do it. feel free to send me enhancement requests or solutions.
+
+- make sure the temporary directory as well as the image directory are
+readable and writeable by the webserver
+
+thats all for now !
+
+thanks
+Ulrich Klauer (for sending bad latex tags)
+Steve Mayr (for bugfixing, more phpbb tweaks and evangelism work :-))

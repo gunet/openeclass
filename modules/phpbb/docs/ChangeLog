@@ -1,0 +1,43 @@
+v1.4.0
+April, 2001
+-------------------------------------------
+- A lot of performance enhancements that have been introduced in the
+  development version of 2.x have been backported to 1.4. (James, Paul)
+- Magic Quotes explicitly turned off, and fixing of related bugs (Bart)
+- Added USE_IIS_LOGIN_HACK to admin section (James, Nathan)
+- Fixed admin section bugs dealing with adding/removing moderators and
+  private forum permissions (James)
+- Added ability to change the title of a category (James)
+- Other minor bugfixes
+
+v1.2.1
+March 13, 2001
+-------------------------------------------
+- A lot of bugfixes, mainly by Nathan
+
+v1.2.0
+February 9, 2001
+-------------------------------------------
+- Access control list functionality added to private forums (Nathan)
+- Fix for security hole that would allow anyone into the admin area (Bart)
+- Translation system (Bart & James)
+- Centralized error_die() function (Bart)
+- Centralized login_form() function (Bart)
+- Improved Installer (Frank)
+- Config.php cleanup (Bart)
+- Page_header.php cleanup (Bart)
+- Improved BBcode handling (Nathan)
+- Privmsg notification (Nathan & Bart)
+- Fixed password changing (James)
+- Improved tracking of what has been read (Bart)
+- Better indexes on DB (Frank)
+- Fixed postcount (posts get subtracted) (James)
+- Fixed search.php (limit and search order) (Bart)
+- Auto-linker works correctly now (Nathan)
+- Lots of minor bugfixes and enhancements (Everyone)
+
+v1.0.0
+December 9, 2000
+-------------------------------------------
+Inital release of phpBB.
+Contains too many features to list here.

@@ -1,0 +1,18 @@
+Some comments regarding the translation system.
+
+If you want to translate phpBB to a language that isn't available yet please
+consider sending this file to support@phpbb.com so we can include that
+language in the official release.
+
+Not only the used strings in the code can be translated but the FAQ and the
+images can be translated as well. This can be accomplished by adding -language
+to the filename. For example:
+
+faq.php  (default)
+faq-norwegian.php  (norwegian version)
+reply.gif
+reply-norwegian.gif
+
+etc..
+
+$Id$

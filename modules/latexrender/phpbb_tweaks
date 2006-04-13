@@ -1,0 +1,98 @@
+Steve Mayr has developed the following tweaks. So i'm basically doing
+cut and paste of this additional phpbb work here. Please note that all
+patches not listed here are already incorporated!
+
+===========================================================================
+
+Add a TeX button which will add the [tex] and [/tex] tags
+
+posting_body.tpl
+Add
+
+Code:
+,'[tex]','[/tex]'
+
+to the end of the bbtags array to get
+
+Code:
+bbtags = new
+Array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[quote]','[/quote]','[code]','[/code]',
+'[list]','[/list]','[list=]',[/list]','[img]','[/img]','[url]','[/url]','[tex]','[/tex]');
+
+though you may also have other buttons
+
+===========================================================================
+
+To make the posting box look better you may wish to change the width 
+of the textboxes from
+
+posting_body.tpl
+
+Code:
+width:450px
+
+to
+
+Code:
+width:500px
+
+At the end of the section starting with
+
+Code:
+<input type="button" class="button" accesskey="b" name="addbbcode0"
+value=" B "
+style="font-weight:bold; width: 30px" onClick="bbstyle(0)"
+onMouseOver="helpline('b')" />
+
+Add
+
+Code:
+<td><span class="genmed">
+<input type="button" class="button" accesskey="x" name="addbbcode18"
+value="TeX"
+style="width: 40px"  onClick="bbstyle(18)" onMouseOver="helpline('x')"
+/>
+</span></td>
+
+===========================================================================
+
+replacing 18 (twice) with an even number 2 more than the number in the
+previous lines. Change x (in accesskey="x") if you already have this
+letter for other buttons
+
+lang_main.php
+
+After
+Code:
+$lang['bbcode_f_help'] = 'Font size: [size=x-small]small text[/size]';
+
+Add
+Code:
+$lang['bbcode_x_help'] = 'Formula: [tex]formula[/tex]  (alt+x)';
+
+posting.php
+
+After
+Code:
+'L_BBCODE_F_HELP' => $lang['bbcode_f_help'],
+
+Add
+Code:
+'L_BBCODE_X_HELP' => $lang['bbcode_x_help'],
+
+===========================================================================
+
+Still think the text looks too big? You can reduce it to 8pt if you
+(or your host) install the extsizes package available from CTAN. Add
+these files to a new extsizes directory in usr/share/texmf/tex/latex.
+Refresh the database using "texhash" command assuming you are using tetex.
+
+Finally, in class.latexrender.php change
+
+Code:
+var $_font_size = 10;
+
+to
+
+Code:
+var $_font_size = 8;

@@ -1,0 +1,46 @@
+****************************************************************
+*** This script has been tested and works on linux 2.2/2.4,  ***
+*** FreeBSD 4.x, OpenBSD 2.8+                                ***
+****************************************************************
+
+
+Installing phpSysInfo:
+----------------------
+
+Just decompress and untar the source (which you should have done by now, if
+you're reading this...), into your webserver's document root.
+
+Then make sure your 'php.ini' file's include_path entry contains ".".
+
+...and that's it.  Restart your webserver (if you changed php.ini), and viola!
+
+Please keep in the mind that because phpSysInfo requires access to many files
+in /proc and other system binary you MUST DISABLE php's safe_mode.  Please see
+the PHP documentation for information on how you can do this.
+
+if you wish to see the i18n support either edit the index.php and change
+the default language or add ?lng=es or ?lng=fr to your URL..
+(ie. http://phpsysinfo.sourceforge.net/phpsysinfo/?lng=fr)
+
+In version 1.5 we added template support.  Currently a number templates are
+packaged with the distribution.  If you wish to change you template just edit
+index.php and change "define('TEMPLATE_SET','classic');" to which ever
+template you want to use by default.  Alternatively you can add pass the
+template on the url w/ ?template=classic or ?template=aq .
+
+
+If Something Borked:
+---------------------
+
+You did it wrong.  Yes, really.  This code is practically perfect in every way.
+Just like Mary Poppins. ;)
+
+But seriously, if you do find some system that this script breaks on, or some
+ways in which this script could be improved, please email me at
+phpsysinfo-devel@lists.sourceforge.net
+
+if you don't feel like emailing me personally, submit a bug at
+
+http://sourceforge.net/projects/phpsysinfo/
+
+Since I'm one of the programmers at sourceforge, I tend to read it daily. ;-)

@@ -1,0 +1,52 @@
+body {
+	background-color: white; }
+body, h1, h2, h3, h4, h5, h6, p, blockquote, td, ol, ul {
+	font-family: Verdana, Arial, Helvetica, sans-serif; }
+body, p, blockquote, td, ol, ul {
+	font-size: 10pt; }
+a:link, a:active, a:visited {
+	color: #003399; }
+a.invisible, a.invisible:link, a.invisible:active, a.invisible:visited {
+	color: #999999; }
+.topBanner a {
+	text-decoration: none; }
+.topBanner a:hover {
+	text-decoration: underline; }
+.topBanner td {
+	border-top: solid White 1px; }
+.alternativeBgLight {
+	background-color: #F5F5F5; }
+.alternativeBgDark {
+	background-color: #E6E6E6; }
+.forms {
+	background-color : #E6E6E6;
+	letter-spacing: normal;
+	text-align: justify;
+	text-indent: 3pt;
+	word-spacing: normal;
+	padding-top: 2px;
+	padding-right: 5px;
+	padding-bottom: 2px;
+	padding-left: 5px ; }
+.formsTips {
+	text-align: justify;
+	text-indent: 15pt;
+	word-spacing: normal; }
+input.forms {
+	letter-spacing: normal;
+	text-align: justify;
+	text-indent: 3pt;
+	word-spacing: normal;
+	padding-top: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	padding-left: 0px; }
+th {
+	font-weight: normal; }
+dt {
+	font-weight: bold; }
+.fileman p, .fileman td, .fileman th {
+	font-size: 12px; }
+.comment {
+	margin-left: 30px; }
+
