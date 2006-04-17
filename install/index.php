@@ -77,7 +77,7 @@ if(!isset($alreadyVisited))
 	// extract the path to append to the url if it is not installed on the web root directory
 	$urlAppendPath = ereg_replace ("/install/index.php", "", $_SERVER['PHP_SELF']);
    	$urlForm = "http://".$_SERVER['SERVER_NAME'].$urlAppendPath."/";
-	$pathForm=realpath("../..")."/";
+	$pathForm=realpath("../")."/";
 	$emailForm=$_SERVER['SERVER_ADMIN'];
 	$nameForm="Νίκος";
 	$surnameForm="Παπαδόπουλος";
