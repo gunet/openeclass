@@ -66,8 +66,8 @@ if (isset($phpMyAdminURL))
 	echo "<li><a href='".$phpMyAdminURL."sql.php?db=".$mysqlMainDb."&table=loginout&goto=db_details.php&sql_query=SELECT+%2A+FROM+%60loginout%60&pos=0'>".$langLogIdentLogout."</a></li>";
 ?>
 
-<li><a href="<?= $urlServer?>modules/auth/manual.php"><?= $langManuals ?></a></li>
-<li><a href="<?= $urlServer?>modules/manuals/manA/admin.txt"><?= $langAdminManual ?></a></li>
+<li><a href="<?= $urlServer?>/manuals/manual.php"><?= $langManuals ?></a></li>
+<li><a href="<?= $urlServer?>/manuals/manA/admin.txt"><?= $langAdminManual ?></a></li>
 </ul>
 
 <?
