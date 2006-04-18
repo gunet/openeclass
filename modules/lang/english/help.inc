@@ -412,10 +412,10 @@ $langWorkContent = "
 <p>As a professor, you can create an assignment by clicking on <b>\"New Assignment\"</b>.
 Fill in the title of the assignment, define a deadline and optionally add a comment.</p>
 <p>When the assignment has completed, do not forget to activate it by clicking on the icon 
-<img src=\"../image/invisible.gif\" border=\"0\" align=\"absmiddle\">. The assignment will be visible
+<img src=\"../../images/invisible.gif\" border=\"0\" align=\"absmiddle\">. The assignment will be visible
 and accessible by the students only when it is activated.
-You can edit the assignment by clicking on the icon <img src=\"../image/edit.gif\" border=\"0\" align=\"middle\"> 
-or deleting it by clicking on the icon <img src=\"../image/delete.gif\" border=\"0\" align=\"middle\">.
+You can edit the assignment by clicking on the icon <img src=\"../../images/edit.gif\" border=\"0\" align=\"middle\"> 
+or deleting it by clicking on the icon <img src=\"../../images/delete.gif\" border=\"0\" align=\"middle\">.
 Clicking on the title of the assignment, you have access to the students submissions.
 The corresponding details are the submission date and the filename.
 Clicking on \"Download assignments (in .zip format)\" you will download all the submitted files by the students
@@ -545,7 +545,7 @@ $langPathContent="
 The Learning Path tool has two functions :
 <ul><li>Create a learning Path</li>
 <li>Upload a Scorm or IMS format Learning path</li></ul>
-<img src=\"../image/path_help.gif\">
+<img src=\"../../images/path_help.gif\">
 <p><b>
 What is a Learning Path ?</b>
 </p><p>A Learning Path is a sequence of learning steps included in modules. It can be content-based (looking like a table of contents) or activities-based, looking like an agenda or a programme of what you need to do in order to understand and practice a certain knowledge or know-how.</p><p>In addition to being structured, a learning path can also be sequenced. This means that some steps will constitute pre-requisites for others ('you cannot go to step 2 before step1'). Your sequence can be suggestive (you show steps one after the other) or imperative (you add pre-requisites so that people are forced to follow the sequence).
