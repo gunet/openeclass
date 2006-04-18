@@ -1,5 +1,5 @@
 <?  session_start();
-include('../include/config.php');
+include('../../config/config.php');
 /***************************************************************************
                           search.php  -  description
                              -------------------

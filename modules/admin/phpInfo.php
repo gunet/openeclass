@@ -18,7 +18,7 @@ if ($to=="phpinfo") {
 }
 elseif ($to=="clarconf") {
 	echo '<div style="background-color: #dfdfff;"><HR>config file<HR>';
-	highlight_file("../../include/config.php");
+	highlight_file("../../config/config.php");
 	echo '<hr></div>';
 }
 

@@ -39,7 +39,7 @@ header("Content-type: text/html; charset=iso-8859-7");
 
 @include ("../modules/lang/greek/install.inc.php");
 
-if (file_exists("../include/config.php")) {
+if (file_exists("../config/config.php")) {
 	echo "
 <html>
 <head>
@@ -178,12 +178,12 @@ if(isset($install2) OR isset($back2))
 				</h2>
 				Tο e-Class είναι ελεύθερη εφαρμογή και διανέμεται σύμφωνα με την άδεια GNU General Public Licence (GPL). 
 				Παρακαλούμε διαβάστε την άδεια και κάνετε κλίκ στην 'Αποδοχή'. 
-				<a href=\"../license/gpl_print.txt\">(".$langPrintVers.")</a>
+				<a href=\"../info/license/gpl_print.txt\">(".$langPrintVers.")</a>
 				<br>
 				<br>
 				<br>
 				<textarea wrap=\"virtual\" cols=\"65\" rows=\"15\">";
-	include ('../license/gpl.txt');
+	include ('../info/license/gpl.txt');
 	echo "</textarea>
 		</td>
 	</tr>
@@ -206,9 +206,9 @@ if(isset($install2) OR isset($back2))
 elseif(isset($install3) OR isset($back3)) {
 
 // The two following CHMOD are necessary, 666 for Windows, 0666 for Linux
-
-@chmod( "../include/config.php", 666 );
-@chmod( "../include/config.php", 0666 );
+@mkdir ("../config", 0777);
+@chmod( "../config/config.php", 666 );
+@chmod( "../config/config.php", 0666 );
 
 ###### STEP 3 MYSQL DATABASE SETTINGS ##############################################
 	echo "
@@ -582,8 +582,8 @@ elseif(isset($install6))
 
 	$pathForm = str_replace("\\\\", "/", $pathForm);
 
-	@chmod( "../include/config.php", 666 );
-	@chmod( "../include/config.php", 0666 );
+	@chmod( "../config/config.php", 666 );
+	@chmod( "../config/config.php", 0666 );
 	
 	echo "
 		<h2>
@@ -1174,7 +1174,7 @@ CREATE TABLE `pma_column_comments` (
 	
 	########################## WRITE config.php ##################################
 	
-	$fd=@fopen("../include/config.php", "w");
+	$fd=@fopen("../config/config.php", "w");
 	if (!$fd) {
 		echo "		<h2>
 					".$langStep6." ".$langCfgSetting." 
@@ -1281,7 +1281,6 @@ $have_latex = FALSE;
 ######### DEALING WITH FILES #########################################
 
 	fwrite($fd, $stringConfig);
-	@mkdir('../courses/garbage',0777);
 
 ############ PROTECTING FILES AGAINST WEB WRITING ###################
 
@@ -1296,7 +1295,7 @@ $have_latex = FALSE;
 				<br>
 				<br><b>
 				Συμβουλή: Για να προστατέψετε το e-class, αλλάξτε τα δικαιώματα πρόσβασης των αρχείων 
-				<tt>/include/config.php</tt> και <tt>/install/index.php</tt> και 
+				<tt>/config/config.php</tt> και <tt>/install/index.php</tt> και 
 				επιτρέψτε μόνο ανάγνωση (CHMOD 444).</b>
 				<br>
 				<br>

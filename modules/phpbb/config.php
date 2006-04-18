@@ -1,6 +1,6 @@
 <?  
 if (!session_id()) { session_start(); }
-include('../../include/config.php');
+include('../../config/config.php');
 
 /***************************************************************************
                           config.php  -  description

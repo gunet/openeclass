@@ -4,7 +4,7 @@ if (!isset($colorLight)) $colorLight = "#F5F5F5";
 if (!isset($colorMedium)) $colorMedium = "#004571";
 if (!isset($colorDark)) $colorDark = "#000066";
 if (!isset($bannerPath)) $bannerPath = 'images/gunet/banner.jpg';
-include 'include/config.php';
+include 'config/config.php';
 
 $support_forum_url = 'http://eclass.gunet.gr/teledu/index.htm';
 

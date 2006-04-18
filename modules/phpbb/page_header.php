@@ -51,7 +51,7 @@ if($pagetype == "admin") {
 $login_logout_link = make_login_logout_link($user_logged_in, $url_phpbb);
 
 
-include('../../include/config.php');
+include('../../config/config.php');
 include('../../include/settings.php');
 include("../lang/english/phpbb.inc");
 @include("../lang/$language/phpbb.inc");

@@ -41,7 +41,7 @@
 */
 
 unset($language);
-@include('./include/config.php'); 
+@include('./config/config.php'); 
 @include("./modules/lang/english/index.inc");
 @include("./modules/lang/english/trad4all.inc.php");
 @include("./modules/lang/$language/index.inc");

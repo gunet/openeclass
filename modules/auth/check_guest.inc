@@ -1,7 +1,7 @@
 <?
 // added by jexi Tue Mar 18 12:41:23 EET 2003
 
-include('../../include/config.php');
+include('../../config/config.php');
 
 $db = mysql_connect("$mysqlServer", "$mysqlUser", "$mysqlPassword");
 mysql_select_db($mysqlMainDb,$db);

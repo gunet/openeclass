@@ -32,6 +32,7 @@ include "lib/main.lib.php";
 
 if (!session_id()) { session_start(); }
 
+@include "../../config/config.php";
 
 // Set some defaults 
 if (!isset($colorLight)) {
@@ -47,17 +48,13 @@ if (!isset($bannerPath)) {
 	$bannerPath = 'images/gunet/banner.jpg';
 }
 
-@include('config.php');
 // Get configuration variables
-if (!$webDir) {
-    @include('../include/config.php');
-	if (!$webDir) {
-	    @include('../modules/include/config.php');
-		if (!$webDir) {
+if (!isset($webDir)) {
+    @include('../config/config.php');
+		if (!isset($webDir)) {
 			die("Unable to open configuration file,
 			please contact the system administrator");
 		}
-	}
 }
 
 
