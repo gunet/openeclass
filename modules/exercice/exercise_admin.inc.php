@@ -156,7 +156,7 @@ else
   <?php echo nl2br($exerciseDescription); ?>
 </blockquote>
 
-<a href="<?php echo $PHP_SELF; ?>?modifyExercise=yes"><img src="../image/edit.gif" border="0" align="absmiddle" alt="<?php echo $langModify; ?>"></a>
+<a href="<?php echo $PHP_SELF; ?>?modifyExercise=yes"><img src="../../images/edit.gif" border="0" align="absmiddle" alt="<?php echo $langModify; ?>"></a>
 
 <?php
 }

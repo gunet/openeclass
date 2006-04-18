@@ -150,11 +150,11 @@ if($is_adminOfCourse) {
 				printf("<table width=\"600\" cellpadding=\"5\" cellspacing=\"0\" border=\"0\">
 				<tr>
 					<td bgcolor=\"#F5F5F5\" width=\"30\" valign=\"top\">
-						<a href=\"../../$currentCourseID/video/%s\" ><img src=\"../../images/video.gif\" border=\"0\"  alt=\"video\"></a>
+						<a href=\"../../courses/$currentCourseID/video/%s\" ><img src=\"../../images/video.gif\" border=\"0\"  alt=\"video\"></a>
 					</td>
 					<td width=\"570\" valign=\"top\" bgcolor=\"#F5F5F5\">
 						<font size=\"2\" face=\"arial, helvetica\">
-							<a href=\"../../$currentCourseID/video/%s\">%s</a>
+							<a href=\"../../courses/$currentCourseID/video/%s\">%s</a>
 							<br>
 							%s
  						</font>", $myrow[1], $myrow[1], $myrow[2], $myrow[3]);
@@ -172,11 +172,11 @@ if($is_adminOfCourse) {
 				printf("<table width=\"600\" cellpadding=\"5\" cellspacing=\"0\" border=\"0\">
 				<tr>
 					<td bgcolor=\"#E6E6E6\" width=\"30\" valign=\"top\">
-						<a href=\"../../$currentCourseID/video/%s\"><img  alt=\"video\" src=\"../../images/video.gif\" border=\"0\"></a>
+						<a href=\"../../courses/$currentCourseID/video/%s\"><img  alt=\"video\" src=\"../../images/video.gif\" border=\"0\"></a>
 					</td>
 					<td width=\"570\" valign=\"top\" bgcolor=\"#E6E6E6\">
 						<font size=\"2\" face=\"arial, helvetica\">
-							<a href=\"../../$currentCourseID/video/%s\">%s</a>
+							<a href=\"../../courses/$currentCourseID/video/%s\">%s</a>
 							<br>
 							%s", $myrow[1], $myrow[1], $myrow[2], $myrow[3]);
 					printf("<br>
@@ -254,10 +254,10 @@ else {
 			printf("<table width=\"600\" cellpadding=\"5\" cellspacing=\"0\" border=\"0\">
 			<tr>
 			<td bgcolor=\"#E6E6E6\" width=\"30\" valign=\"top\">
-			<a href=\"../../$currentCourseID/video/%s\"><img alt=\"video\" src=\"../../images/video.gif\" border=\"0\"></a>
+			<a href=\"../../courses/$currentCourseID/video/%s\"><img alt=\"video\" src=\"../../images/video.gif\" border=\"0\"></a>
 			</td>
 			<td width=\"570\" valign=\"top\" bgcolor=\"#E6E6E6\"><font size=\"2\" face=\"arial, helvetica\">
-			<a href=\"../../$currentCourseID/video/%s\">%s</a>
+			<a href=\"../../courses/$currentCourseID/video/%s\">%s</a>
 			<br>%s
 			</td>
 			</tr>
@@ -266,10 +266,10 @@ else {
 			printf("<table width=\"600\" cellpadding=\"5\" cellspacing=\"0\" border=\"0\">
 			<tr>
 			<td bgcolor=\"#F5F5F5\" width=\"30\" valign=\"top\">
-			<a href=\"../../$currentCourseID/video/%s\"><img alt=\"video\" src=\"../../images/video.gif\" border=\"0\"></a>
+			<a href=\"../../courses/$currentCourseID/video/%s\"><img alt=\"video\" src=\"../../images/video.gif\" border=\"0\"></a>
 			</td>
 			<td width=\"570\" valign=\"top\" bgcolor=\"#F5F5F5\"><font size=\"2\" face=\"arial, helvetica\">
-			<a href=\"../../$currentCourseID/video/%s\">%s</a>
+			<a href=\"../../courses/$currentCourseID/video/%s\">%s</a>
 			<br>%s
 			</td></tr>
 			</table>", $myrow[1], $myrow[1], $myrow[2], $myrow[3]);

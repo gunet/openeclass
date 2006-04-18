@@ -85,8 +85,8 @@ elseif (isset($_REQUEST['delete']))
 	$groupGarbage=uniqid(20);
 	
 	@mkdir("../../courses/garbage");
-	rename("../../$currentCourse/group", "../../courses/garbage/$groupGarbage");
-	mkdir("../../$currentCourse/group", 0777);
+	rename("../../courses/$currentCourse/group", "../../courses/garbage/$groupGarbage");
+	mkdir("../../courses/$currentCourse/group", 0777);
 
 	// Delete all members of this group
 	$delGroupUsers=mysql_query("DELETE FROM user_group");
@@ -102,7 +102,7 @@ elseif (isset($_REQUEST['delete_one']))
 	$sqlDir=mysql_query("SELECT secretDirectory, forumId FROM student_group WHERE id='$id'"); 
 	while ($myDir = mysql_fetch_array($sqlDir))
 	{
-		rename("../../$currentCourse/group/$myDir[secretDirectory]", 
+		rename("../../courses/$currentCourse/group/$myDir[secretDirectory]", 
 				"../../courses/garbage/$groupGarbage");
 
 		mysql_query("DELETE FROM forums WHERE cat_id='1' AND forum_id='$myDir[forumId]'");

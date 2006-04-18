@@ -94,15 +94,15 @@ if($nbrQuestions)
 </tr>
 <tr>
   <td>
-	<a href="<?php echo $PHP_SELF; ?>?editQuestion=<?php echo $id; ?>"><img src="../image/edit.gif" border="0" align="absmiddle" alt="<?php echo $langModify; ?>"></a>
-	<a href="<?php echo $PHP_SELF; ?>?deleteQuestion=<?php echo $id; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlspecialchars($langConfirmYourChoice)); ?>')) return false;"><img src="../image/delete.gif" border="0" align="absmiddle" alt="<?php echo $langDelete; ?>"></a>
+	<a href="<?php echo $PHP_SELF; ?>?editQuestion=<?php echo $id; ?>"><img src="../../images/edit.gif" border="0" align="absmiddle" alt="<?php echo $langModify; ?>"></a>
+	<a href="<?php echo $PHP_SELF; ?>?deleteQuestion=<?php echo $id; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlspecialchars($langConfirmYourChoice)); ?>')) return false;"><img src="../../images/delete.gif" border="0" align="absmiddle" alt="<?php echo $langDelete; ?>"></a>
 
 <?php
 		if($i != 1)
 		{
 ?>
 
-	<a href="<?php echo $PHP_SELF; ?>?moveUp=<?php echo $id; ?>"><img src="../image/up.gif" border="0" align="absmiddle" alt="<?php echo $langMoveUp; ?>"></a>
+	<a href="<?php echo $PHP_SELF; ?>?moveUp=<?php echo $id; ?>"><img src="../../images/up.gif" border="0" align="absmiddle" alt="<?php echo $langMoveUp; ?>"></a>
 
 <?php
 		}
@@ -111,7 +111,7 @@ if($nbrQuestions)
 		{
 ?>
 
-	<a href="<?php echo $PHP_SELF; ?>?moveDown=<?php echo $id; ?>"><img src="../image/down.gif" border="0" align="absmiddle" alt="<?php echo $langMoveDown; ?>"></a>
+	<a href="<?php echo $PHP_SELF; ?>?moveDown=<?php echo $id; ?>"><img src="../../images/down.gif" border="0" align="absmiddle" alt="<?php echo $langMoveDown; ?>"></a>
 
 <?php
 		}

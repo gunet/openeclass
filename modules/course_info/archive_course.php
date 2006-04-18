@@ -56,7 +56,7 @@ $langFiles = 'archive_course';
 include ('../../include/init.php');
  
 $verboseBackup = FALSE; 
-$archiveDir = "/archive";  	// <- must moved to config
+$archiveDir = "/courses/archive";  	// <- must moved to config
 $ext ="txt";				// <- must moved to config
  
 if (extension_loaded("zlib")) {
