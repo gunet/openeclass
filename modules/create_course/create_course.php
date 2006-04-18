@@ -2078,7 +2078,6 @@ mysql_query("INSERT INTO cours_faculte VALUES ( '', '$faculte', '$repertoire')")
 ################ CREATE DIRECTORIES #######################################
 ###########################################################################
 	umask(0);
-	mkdir("../../courses", 0777);
 	mkdir("../../courses/$repertoire", 0777);
 	mkdir("../../courses/$repertoire/image", 0777);
 	mkdir("../../courses/$repertoire/document", 0777);

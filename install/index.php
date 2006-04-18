@@ -209,6 +209,8 @@ elseif(isset($install3) OR isset($back3)) {
 @mkdir ("../config", 0777);
 @chmod( "../config/config.php", 666 );
 @chmod( "../config/config.php", 0666 );
+// courses directory
+mkdir("../courses", 0777);
 
 ###### STEP 3 MYSQL DATABASE SETTINGS ##############################################
 	echo "
