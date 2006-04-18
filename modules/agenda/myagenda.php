@@ -74,7 +74,7 @@ function get_agendaitems($query, $month, $year)
 			$agendaday = intval($agendadate[2]);
 			$agendatime = explode(":", $item['hour']);
 			$time = $agendatime[0].":".$agendatime[1];
-		        $URL = $urlServer."/".$mycours[k];
+		        $URL = $urlServer."courses/".$mycours[k];
 	    	$items[$agendaday][$item['hour']] .= "<br><i>$agendatime[0]:$agendatime[1]</i>
 			 <a href=\"$URL\" title=\"$mycours[i]\">$mycours[fc]</a> $item[titre]";
 		}
