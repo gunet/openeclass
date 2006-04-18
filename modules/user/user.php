@@ -15,7 +15,7 @@ $result_numb = db_query($sqlUserOfCourse, $mysqlMainDb);
 $countUser = mysql_num_rows($result_numb);
 
 $nameTools = $langUsers." ($langUserNumber : $countUser)";
-$tool_content = "";
+$tool_content = "";//initialise $tool_content
 //begin_page();
 
 // IF PROF ONLY 
