@@ -1,5 +1,5 @@
 <?php  
-
+//Μετατροπή του εργαλείου για να χρησιμοποιεί το baseTheme
 $require_current_course = TRUE;
 $langFiles = 'registration';
 $require_help = TRUE;
