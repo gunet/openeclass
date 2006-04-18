@@ -63,7 +63,7 @@ echo "<tr><td><font face=\"arial, helvetica\" size=\"2\">$langSubTitle</td>
 		mysql_query("INSERT INTO accueil VALUES ('NULL',
 					'$name_link',
 					'$link \"target=_blank',
-					'../../images/travaux.png',
+					'../../../images/travaux.png',
 					'1',
 					'0',
 					'$link'
