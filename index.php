@@ -363,12 +363,12 @@ elseif ((isset($logout) && $logout) OR (1==1)) {
         echo "<tr><td><img src='images/arrow.gif' width='4' height='8'><font face='arial, helvetica' size='2'>
         <a href='./manuals/manual.php'>$langManuals</a></font></td></tr>";
 	echo "<tr><td><img src='images/arrow.gif' width='4' height='8'><font face='arial, helvetica' size='2'>
-        <a href='modules/auth/about.php'>$langInfoPlat</a></font></td></tr>";
+        <a href='info/about.php'>$langInfoPlat</a></font></td></tr>";
 	echo "<tr><td style='padding-top: 40px;'><img src='./images/arrow.gif' width='4' height='8'><font face='arial, helvetica' size='2'>
         <a href='http://eclass.gunet.gr/teledu/index.htm' target=_blank>$langSupportForum</a></font></td></tr>";
 	echo "<tr><td style='padding-bottom: 60px;'><img src='./images/arrow.gif' width='4' 
 height='8'><font face='arial, helvetica' size='2'>
-        <a href='modules/auth/contact.php'>$langContact</a></font></td></tr>";
+        <a href='info/contact.php'>$langContact</a></font></td></tr>";
 	echo "</table>";        
         echo "</td>";
 	if (isset($logout) && $logout && isset($uid)) {

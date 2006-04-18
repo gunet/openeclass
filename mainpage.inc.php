@@ -20,7 +20,7 @@ $main_page_footer = '
 &nbsp;<img align=center src="images/infosoc.jpg" border=0>
 &nbsp;&nbsp;&nbsp;
 Διαχείριση : <a href=mailto:'.$emailAdministrator.'>'.$langAsynchronous.'</a> 
-&nbsp;&nbsp; &mdash; &nbsp;&nbsp;<a href="modules/auth/copyright.php">'.$langCopyright.'</a>
+&nbsp;&nbsp; &mdash; &nbsp;&nbsp;<a href="info/copyright.php">'.$langCopyright.'</a>
 </font></td></tr>
 </table>
 ';
