@@ -34,46 +34,30 @@
       +----------------------------------------------------------------------+
 */
 
-$langFiles = array('registration','gunet');
-include '../../include/init.php';
+$langFiles = 'copyright';
 
-$nameTools = $contactpoint;
+include '../include/init.php';
+
+$nameTools = $langCopyright;
 begin_page();
+
 ?>
-	<tr>
-	<td>
-	<table cellpadding="3" cellspacing="0" border="0" width="100%">
-	<tr valign="top" bgcolor="<?= $color2 ?>">
-	<td>
-	<font size="2" face="arial, helvetica">
-	<p align=justify style="padding-left: 10px;padding-right:10px;"><?= $introcontact ?></p><br>
-	<blockquote>
-	<?=  $contact; ?>
-	<br><br>
-	<?= $contact2; ?>
-        <br>				
-	<?= $contact9; ?>
-	<br>
-	<?= $contact3; ?>
-	<br>
-	<?= $contact4; ?>
-	<br>
-	<?= $contact5; ?>
-	<br>
-	<br>
-	<?= $contact6; ?>
-	<br>
-	<?= $contact7; ?>
-	<br>
-	<br>
-	<b><?= $langEmail ?>: </b><a href="mailto:<?= $emailAdministrator ?>">
-	<?= $emailAdministrator ?></a>		
-	</font>
-	<br><br>
-	</blockquote>
-	</td>
-	</table>
-	</tr>
+<tr>
+<td>
+<table cellpadding="3" cellspacing="0" border="0" width="100%">
+<tr valign="top" bgcolor="<?= $color2 ?>">
+<td>
+<blockquote>
+<font size="2" face="arial, helvetica">
+<p align=justify><?= $langCopyrightNotice ?></p><br>
+</font>
+</blockquote>
+<br>
+</td>
+</table>
+</td>
+
+</tr>
 </table>
 </body>
 </html>

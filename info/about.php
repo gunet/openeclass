@@ -1,6 +1,6 @@
 <?
 $langFiles = 'about';
-include '../../include/init.php';
+include '../include/init.php';
 $nameTools = $langInfo;
 begin_page();
 ?>
