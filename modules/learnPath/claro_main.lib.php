@@ -1142,19 +1142,19 @@ function claro_disp_progress_bar ($progress, $factor)
 
     // display progress bar
     // origin of the bar
-    $progressBar = '<img src="../image/bar_1.gif" width="1" height="12" alt="">';
+    $progressBar = '<img src="../../images/bar_1.gif" width="1" height="12" alt="">';
 
     if($progress != 0)
-            $progressBar .= '<img src="../image/bar_1u.gif" width="' . $barwidth . '" height="12" alt="">';
+            $progressBar .= '<img src="../../images/bar_1u.gif" width="' . $barwidth . '" height="12" alt="">';
     // display 100% bar
 
     if($progress!= 100 && $progress != 0)
-            $progressBar .= '<img src="../image/bar_1m.gif" width="1" height="12" alt="">';
+            $progressBar .= '<img src="../../images/bar_1m.gif" width="1" height="12" alt="">';
 
     if($progress != 100)
-            $progressBar .= '<img src="../image/bar_1r.gif" width="' . ($maxSize - $barwidth) . '" height="12" alt="">';
+            $progressBar .= '<img src="../../images/bar_1r.gif" width="' . ($maxSize - $barwidth) . '" height="12" alt="">';
     // end of the bar
-    $progressBar .=  '<img src="../image/bar_1.gif" width="1" height="12" alt="">';
+    $progressBar .=  '<img src="../../images/bar_1.gif" width="1" height="12" alt="">';
 
     return $progressBar;
 }

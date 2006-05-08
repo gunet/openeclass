@@ -28,6 +28,7 @@
 
 $require_current_course = TRUE;
 $langFiles              = "learnPath";
+require("../../../config/config.php");
 require("../../../include/init.php");
 
 $TABLELEARNPATH         = "lp_learnPath";

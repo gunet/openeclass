@@ -222,11 +222,11 @@ function commentBox($type, $mode)
                 echo '<p>' . "\n"
                 .    '<small>' . "\n"
                 .    '<a href="' . $_SERVER['PHP_SELF'] . '?cmd=update' . $col_name . '">' . "\n"
-                .    '<img src="../image/edit.gif" alt="' . $langModify . '" border="0" />'
+                .    '<img src="../../images/edit.gif" alt="' . $langModify . '" border="0" />'
                 .    '</a>' . "\n"
                 .    '<a href="' . $_SERVER['PHP_SELF'].'?cmd=del' . $col_name . '" '
                 .    ' onclick="javascript:if(!confirm(\''.clean_str_for_javascript($langConfirmYourChoice).'\')) return false;">' . "\n"
-                .    '<img src="../image/delete.gif" alt="' . $langDelete . '" border="0" />' . "\n"
+                .    '<img src="../../images/delete.gif" alt="' . $langDelete . '" border="0" />' . "\n"
                 .    '</a>' . "\n"
                 .    '</small>' . "\n"
                 .    '</p>' . "\n"
@@ -347,7 +347,7 @@ function nameBox($type, $mode)
 
         if ( $is_adminOfCourse )
             echo '<br /><a href="' . $_SERVER['PHP_SELF'] . '?cmd=updateName">'
-            .    '<img src="../image/edit.gif" alt="' . $langModify . '" border="0" />'
+            .    '<img src="../../images/edit.gif" alt="' . $langModify . '" border="0" />'
             .    '</a>' . "\n";
         echo '</h4>'."\n\n";
     }
