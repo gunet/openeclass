@@ -144,11 +144,11 @@ class ScormExport
         /* Build various directories' names */
         
         // Replace ',' too, because pclzip doesn't support it.
-        $this->destDir = $webDir . $currentCourseID . '/temp/' 
+        $this->destDir = $webDir . "courses/" . $currentCourseID . '/temp/' 
             . str_replace(',', '_', replace_dangerous_char($this->name));
-        $this->srcDirDocument = $webDir . $currentCourseID . "/document";
-        $this->srcDirExercise  = $webDir . $currentCourseID . "/exercise";
-        $this->srcDirScorm    = $webDir . $currentCourseID . "/scormPackages/path_".$this->id;
+        $this->srcDirDocument = $webDir . "courses/" . $currentCourseID . "/document";
+        $this->srcDirExercise  = $webDir . "courses/" . $currentCourseID . "/exercise";
+        $this->srcDirScorm    = $webDir . "courses/" . $currentCourseID . "/scormPackages/path_".$this->id;
         
         /* Now, get the complete list of modules, etc... */
         $sql = 'SELECT  LPM.`learnPath_module_id` ID, LPM.`lock`, LPM.`visibility`, LPM.`rank`, 

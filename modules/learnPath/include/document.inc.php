@@ -25,7 +25,7 @@ $sql = "SELECT `path`
 $assetPath = claro_sql_query_get_single_value($sql);
 
 $baseServDir = $webDir;
-$courseDir = "$currentCourseID/document";
+$courseDir = "courses/".$currentCourseID."/document";
 $baseWorkDir = $baseServDir.$courseDir;
 $file = $baseWorkDir.$assetPath;
 $fileSize = format_file_size(filesize($file));

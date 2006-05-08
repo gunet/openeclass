@@ -76,7 +76,7 @@ echo "<script>
 switch ( $cmd ) {
     // DELETE COMMAND
     case "delete" :
-            if (is_dir($webDir.$currentCourseID."/scormPackages/path_".$_GET['del_path_id']))
+            if (is_dir($webDir."courses/".$currentCourseID."/scormPackages/path_".$_GET['del_path_id']))
             {
                 $findsql = "SELECT M.`module_id`
                             FROM  `".$TABLELEARNPATHMODULE."` AS LPM,
@@ -127,7 +127,7 @@ switch ( $cmd ) {
                 mysql_query($delModuleSql);
 
                 // DELETE the directory containing the package and all its content
-                $real = realpath($webDir.$currentCourseID."/scormPackages/path_".$_GET['del_path_id']);
+                $real = realpath($webDir."courses/".$currentCourseID."/scormPackages/path_".$_GET['del_path_id']);
                 claro_delete_file($real);
 
             }   // end of dealing with the case of a scorm learning path.
@@ -488,7 +488,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
              "</td>\n";
 
         // DELETE link
-        $real = realpath($webDir.$currentCourseID."/scormPackages/path_".$list['learnPath_id']);
+        $real = realpath($webDir."courses/".$currentCourseID."/scormPackages/path_".$list['learnPath_id']);
 
         // check if the learning path is of a Scorm import package and add right popup:
 

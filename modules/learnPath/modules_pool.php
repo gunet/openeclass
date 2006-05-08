@@ -63,7 +63,7 @@ switch( $cmd )
         // used to physically delete the module  from server
         include("../../include/lib/fileManageLib.inc.php");
 
-        $moduleDir   = $currentCourseID."/modules";
+        $moduleDir   = "courses/".$currentCourseID."/modules";
         $moduleWorkDir = $webDir.$moduleDir;
 
         // delete all assets of this module
