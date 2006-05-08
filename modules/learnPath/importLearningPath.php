@@ -8,13 +8,13 @@ Header
        CLAROLINE MAIN
   ======================================*/
   
-include("../include/learnPathLib.inc.php");
+include("../../include/lib/learnPathLib.inc.php");
 include("./claro_main.lib.php");
-include("../include/fileManageLib.inc.php");
+include("../../include/lib/fileManageLib.inc.php");
 include("fileManage.lib.php");
-include("../include/fileUploadLib.inc.php");
+include("../../include/lib/fileUploadLib.inc.php");
 include("fileUpload.lib.php");
-include("../include/fileDisplayLib.inc.php");
+include("../../include/lib/fileDisplayLib.inc.php");
 
 $require_current_course = TRUE;
 $langFiles              = "learnPath";
@@ -27,7 +27,7 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 define('CLARO_FILE_PERMISSIONS', 0777);
 
-include("../include/header.php");
+include("../../include/init.php");
 
 $is_AllowedToEdit = $is_adminOfCourse;
 
@@ -507,7 +507,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
     if (!is_dir($baseWorkDir)) claro_mkdir($baseWorkDir, CLARO_FILE_PERMISSIONS );
 
     // unzip package
-    include("../include/pclzip/pclzip.lib.php");
+    include("../../include/pclzip/pclzip.lib.php");
 
     /*
      * Check if the file is valide (not to big and exists)

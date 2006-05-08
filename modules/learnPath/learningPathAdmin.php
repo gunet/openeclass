@@ -9,9 +9,9 @@ Header
 - CommentBox texteditor
 */
 
-include("../include/learnPathLib.inc.php");
-include("./claro_main.lib.php");
-include("../include/fileDisplayLib.inc.php");
+include("../../include/lib/learnPathLib.inc.php");
+include("claro_main.lib.php");
+include("../../include/lib/fileDisplayLib.inc.php");
 
 $require_current_course = TRUE;
 $langFiles              = "learnPath";
@@ -22,9 +22,9 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-$imgRepositoryWeb       = "../image/";
+$imgRepositoryWeb       = "../../images/";
 
-include("../include/header.php");
+include("../../include/init.php");
 
 $nameTools = $langLearningPath;
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);

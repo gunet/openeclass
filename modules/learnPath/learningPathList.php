@@ -10,7 +10,7 @@ Same page:
 */
 
 include("../../include/lib/learnPathLib.inc.php");
-include("./claro_main.lib.php");
+include("claro_main.lib.php");
 
 $require_current_course = TRUE;
 $langFiles              = "learnPath";

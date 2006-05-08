@@ -25,16 +25,16 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 // exercises table name
 $TABLEEXERCISES         = "exercices";
 
-include("../include/header.php");
-include("../include/learnPathLib.inc.php");
-include("./claro_main.lib.php");
-include("../include/fileDisplayLib.inc.php");
+include("../../include/init.php");
+include("../../include/lib/learnPathLib.inc.php");
+include("claro_main.lib.php");
+include("../../include/lib/fileDisplayLib.inc.php");
 
 $nameTools = $langInsertMyExerciseToolName;
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
 $navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langLearningPathAdmin);
 
-$imgRepositoryWeb = "../image/";
+$imgRepositoryWeb = "../../images/";
 $is_AllowedToEdit = $is_adminOfCourse;
 
 if ( ! $is_AllowedToEdit ) die($langNotAllowed);

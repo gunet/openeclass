@@ -8,8 +8,8 @@ Header
        CLAROLINE MAIN
   ======================================*/
   
-include("../include/learnPathLib.inc.php");
-include("./claro_main.lib.php");
+include("../../include/lib/learnPathLib.inc.php");
+include("claro_main.lib.php");
 
 $require_current_course = TRUE;
 $langFiles              = "learnPath";
@@ -20,9 +20,9 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-$imgRepositoryWeb = "../image/";
+$imgRepositoryWeb = "../../images/";
 
-include("../include/header.php");
+include("../../include/init.php");
 
 $is_AllowedToEdit = $is_adminOfCourse;
 
@@ -61,7 +61,7 @@ switch( $cmd )
     // MODULE DELETE
     case "eraseModule" :
         // used to physically delete the module  from server
-        include("../include/fileManageLib.inc.php");
+        include("../../include/lib/fileManageLib.inc.php");
 
         $moduleDir   = $currentCourseID."/modules";
         $moduleWorkDir = $webDir.$moduleDir;

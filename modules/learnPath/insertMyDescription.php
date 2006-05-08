@@ -4,8 +4,8 @@
 Header
 */
 
-include("../include/learnPathLib.inc.php");
-include("./claro_main.lib.php");
+include("../../include/lib/learnPathLib.inc.php");
+include("claro_main.lib.php");
 
 $require_current_course = TRUE;
 $langFiles              = "learnPath";
@@ -18,7 +18,7 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 //$TABLEDOCUMENT          = "document";
 
-include("../include/header.php");
+include("../../include/init.php");
 
 $nameTools = $langInsertMyDescToolName;
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);

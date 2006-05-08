@@ -4,11 +4,11 @@
 Header, Copyright, etc ...
 */
 
-include("../include/learnPathLib.inc.php");
-include("./claro_main.lib.php");
-include("../include/fileDisplayLib.inc.php");
-include("../include/fileManageLib.inc.php");
-include("../include/fileUploadLib.inc.php");
+include("../../include/lib/learnPathLib.inc.php");
+include("claro_main.lib.php");
+include("../../include/lib/fileDisplayLib.inc.php");
+include("../../include/lib/fileManageLib.inc.php");
+include("../../include/lib/fileUploadLib.inc.php");
 
 $require_current_course = TRUE;
 $langFiles              = "learnPath";
@@ -22,9 +22,9 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 $TABLEQUIZTEST          = "exercices";
 $dbTable                = $TABLEASSET; // for old functions of document tool
 
-$imgRepositoryWeb       = "../image/";
+$imgRepositoryWeb       = "../../images/";
 
-include("../include/header.php");
+include("../include/init.php");
 
 $nameTools = $langModule;
 $is_AllowedToEdit = $is_adminOfCourse;

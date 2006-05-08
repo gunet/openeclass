@@ -8,10 +8,10 @@ Header
 - Modules ? (search source code)
 */
 
-include("../include/learnPathLib.inc.php");
-include("./claro_main.lib.php");
-include("../include/fileDisplayLib.inc.php");
-include("../include/fileManageLib.inc.php");
+include("../../include/lib/learnPathLib.inc.php");
+include("claro_main.lib.php");
+include("../../include/lib/fileDisplayLib.inc.php");
+include("../../include/lib/fileManageLib.inc.php");
 
 $require_current_course = TRUE;
 $langFiles              = "learnPath";
@@ -22,12 +22,12 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-$imgRepositoryWeb       = "../image/";
+$imgRepositoryWeb       = "../../images/";
 
 $dbTable                = "document";
 $TABLEDOCUMENT          = "document";
 
-include("../include/header.php");
+include("../../include/init.php");
 
 $courseDir   = "$currentCourseID/document";
 //$moduleDir   = $_course['path']."/modules";
