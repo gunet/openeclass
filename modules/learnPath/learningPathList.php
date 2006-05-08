@@ -9,7 +9,7 @@ Same page:
 - Understand Blocking and hrefs
 */
 
-include("../include/learnPathLib.inc.php");
+include("../../include/lib/learnPathLib.inc.php");
 include("./claro_main.lib.php");
 
 $require_current_course = TRUE;
@@ -25,7 +25,7 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 define('CLARO_FILE_PERMISSIONS', 0777);
 
-include("../include/header.php");
+include("../../include/init.php");
 
 $nameTools = $langLearningPathList;
 $is_AllowedToEdit = $is_adminOfCourse;
