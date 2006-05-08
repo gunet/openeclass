@@ -397,7 +397,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
 
     if ( !$is_blocked ) {
         echo "<td align=\"left\"><a href=\"learningPath.php?path_id="
-            .$list['learnPath_id']."\"".$style."><img src=\"../image/learnpath.gif\" alt=\"\"
+            .$list['learnPath_id']."\"".$style."><img src=\"../../images/learnpath.gif\" alt=\"\"
             border=\"0\" />  ".htmlspecialchars($list['name'])."</a></td>";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
@@ -471,7 +471,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
         }
     }
     else {  //else of !$is_blocked condition , we have already been blocked before, so we continue beeing blocked : we don't display any links to next paths any longer
-        echo "<td align=\"left\"> <img src=\"../image/learnpath.gif\" alt=\"\"
+        echo "<td align=\"left\"> <img src=\"../../images/learnpath.gif\" alt=\"\"
                     border=\"0\" /> ".$list['name'].$list['minRaw']."</td>\n";
     }
 
@@ -483,7 +483,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
         // Modify command / go to other page
         echo "<td>\n",
              "<a href=\"learningPathAdmin.php?path_id=".$list['learnPath_id']."\">\n",
-             "<img src=\"../image/edit.gif\" border=\"0\" alt=\"$langModify\" />\n",
+             "<img src=\"../../images/edit.gif\" border=\"0\" alt=\"$langModify\" />\n",
              "</a>\n",
              "</td>\n";
 
@@ -496,7 +496,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
             echo  "<td>\n",
                   "<a href=\"",$_SERVER['PHP_SELF'],"?cmd=delete&del_path_id=".$list['learnPath_id']."\" ",
                   "onClick=\"return scormConfirmation('",clean_str_for_javascript($list['name']),"');\">\n",
-                  "<img src=\"../image/delete.gif\" border=\"0\" alt=\"$langDelete\" />\n",
+                  "<img src=\"../../images/delete.gif\" border=\"0\" alt=\"$langDelete\" />\n",
                   "</a>\n",
                   "</td>\n";
 
@@ -505,7 +505,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
             echo  "<td>\n",
                   "<a href=\"",$_SERVER['PHP_SELF'],"?cmd=delete&del_path_id=".$list['learnPath_id']."\" ",
                   "onClick=\"return confirmation('",clean_str_for_javascript($list['name']),"');\">\n",
-                  "<img src=\"../image/delete.gif\" border=\"0\" alt=\"$langDelete\" />\n",
+                  "<img src=\"../../images/delete.gif\" border=\"0\" alt=\"$langDelete\" />\n",
                   "</a>\n",
                   "</td>\n";
         }
@@ -516,12 +516,12 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
 
         if ( $list['lock'] == 'OPEN') {
             echo  "<a href=\"",$_SERVER['PHP_SELF'],"?cmd=mkBlock&cmdid=".$list['learnPath_id']."\">\n",
-                  "<img src=\"../image/unblock.gif\" alt=\"$langBlock\" border=\"0\">\n",
+                  "<img src=\"../../images/unblock.gif\" alt=\"$langBlock\" border=\"0\">\n",
                   "</a>\n";
         }
         else {
             echo  "<a href=\"",$_SERVER['PHP_SELF'],"?cmd=mkUnblock&cmdid=".$list['learnPath_id']."\">\n",
-                  "<img src=\"../image/block.gif\" alt=\"$langAltMakeNotBlocking\" border=\"0\">\n",
+                  "<img src=\"../../images/block.gif\" alt=\"$langAltMakeNotBlocking\" border=\"0\">\n",
                   "</a>\n";
         }
         echo  "</td>\n";
@@ -532,7 +532,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
 
         if ( $list['visibility'] == 'HIDE') {
             echo  "<a href=\"",$_SERVER['PHP_SELF'],"?cmd=mkVisibl&visibility_path_id=".$list['learnPath_id']."\">\n",
-                  "<img src=\"../image/invisible.gif\" alt=\"$langAltMakeVisible\" border=\"0\" />\n",
+                  "<img src=\"../../images/invisible.gif\" alt=\"$langAltMakeVisible\" border=\"0\" />\n",
                   "</a>";
         }
         else {
@@ -544,7 +544,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
             }
 
             echo "<a href=\"",$_SERVER['PHP_SELF'],"?cmd=mkInvisibl&visibility_path_id=".$list['learnPath_id']."\" ",$onclick, " >\n",
-                 "<img src=\"../image/visible.gif\" alt=\"$langMakeInvisible\" border=\"0\" />\n",
+                 "<img src=\"../../images/visible.gif\" alt=\"$langMakeInvisible\" border=\"0\" />\n",
                  "</a>\n";
         }
         echo  "</td>\n";
@@ -555,7 +555,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
         if ($iterator != 1) {
             echo  "<td>\n",
                   "<a href=\"",$_SERVER['PHP_SELF'],"?cmd=moveUp&move_path_id=".$list['learnPath_id']."\">\n",
-                  "<img src=\"../image/up.gif\" alt=\"$langAltMoveUp\" border=\"0\" />\n",
+                  "<img src=\"../../images/up.gif\" alt=\"$langAltMoveUp\" border=\"0\" />\n",
                   "</a>\n",
                   "</td>\n";
         }
@@ -567,7 +567,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
         if($iterator < $LPNumber) {
             echo  "<td>\n",
                   "<a href=\"",$_SERVER['PHP_SELF'],"?cmd=moveDown&move_path_id=".$list['learnPath_id']."\">\n",
-                  "<img src=\"../image/down.gif\" alt=\"$langMoveDown\" border=\"0\" />\n",
+                  "<img src=\"../../images/down.gif\" alt=\"$langMoveDown\" border=\"0\" />\n",
                   "</a>\n",
                   "</td>\n";
         }
@@ -577,12 +577,12 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
         
         // EXPORT links
         echo '<td><a href="' . $_SERVER['PHP_SELF'] . '?cmd=export&amp;path_id=' . $list['learnPath_id'] . '" >'
-            .'<img src="../image/export.gif" alt="' . $langExport . '" border="0"></a></td>' . "\n";
+            .'<img src="../../images/export.gif" alt="' . $langExport . '" border="0"></a></td>' . "\n";
         
         // statistics links
         echo "<td>\n
           <a href=\"".$clarolineRepositoryWeb."tracking/learnPath_details.php?path_id=".$list['learnPath_id']."\">
-          <img src=\"../image/statistics.gif\" border=\"0\" alt=\"$langTracking\" />
+          <img src=\"../../images/statistics.gif\" border=\"0\" alt=\"$langTracking\" />
           </a>
           </td>\n";
     }

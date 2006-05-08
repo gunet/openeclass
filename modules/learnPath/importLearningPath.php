@@ -473,7 +473,7 @@ $errorMsgs = array();
     
 $maxFilledSpace = 100000000;
 
-$courseDir   = $currentCourseID."/scormPackages/";
+$courseDir   = "courses/".$currentCourseID."/scormPackages/";
 $baseWorkDir = $webDir.$courseDir; // path_id
 // handle upload
 // if the post is done a second time, the claroformid mecanism

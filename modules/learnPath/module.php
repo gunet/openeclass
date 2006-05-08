@@ -24,7 +24,7 @@ $dbTable                = $TABLEASSET; // for old functions of document tool
 
 $imgRepositoryWeb       = "../../images/";
 
-include("../include/init.php");
+include("../../include/init.php");
 
 $nameTools = $langModule;
 $is_AllowedToEdit = $is_adminOfCourse;

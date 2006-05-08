@@ -28,7 +28,7 @@
 
 $require_current_course = TRUE;
 $langFiles              = "learnPath";
-require("../../include/header.php");
+require("../../../include/init.php");
 
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";
@@ -39,7 +39,7 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 $clarolineRepositoryWeb = $urlServer.$currentCourseID;
 
 // lib of this tool
-include("../../include/learnPathLib.inc.php");
+include("../../../include/lib/learnPathLib.inc.php");
 include("../claro_main.lib.php");
 mysql_select_db($currentCourseID);
 

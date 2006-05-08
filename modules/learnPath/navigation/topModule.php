@@ -24,7 +24,7 @@
   ======================================*/
   $require_current_course = TRUE;
   $langFiles              = "learnPath";
-  require("../../include/header.php");
+  require("../../../include/init.php");
 
   $navigation[]= array ("url"=>"../learningPathList.php", "name"=> $langLearningPathList);
   if ( $is_adminOfCourse )

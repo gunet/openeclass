@@ -5,9 +5,9 @@ Header
 */
 
 $require_current_course = TRUE;
-include("../../include/learnPathLib.inc.php");
+include("../../../include/lib/learnPathLib.inc.php");
 include("../claro_main.lib.php");
-require("../../include/header.php");
+require("../../../include/init.php");
 mysql_select_db($currentCourseID);
 
 
