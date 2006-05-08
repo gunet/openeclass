@@ -1483,6 +1483,15 @@ mysql_query("INSERT INTO accueil VALUES (
                '0',
                '../../../images/pastillegris.png'
                )");
+               
+    mysql_query("INSERT INTO accueil VALUES (
+               '21',
+               '$langLearnPath',
+               '../claroline/learnPath/learningPathList.php',
+               '../../claroline/image/learnpath.gif',
+               '1',
+               '0',
+               '../../claroline/image/pastillegris.png')");
 
 if (mysql_version())   {
 	       
@@ -1969,6 +1978,69 @@ mysql_query("INSERT INTO group_properties
                description char(50) NOT NULL,
                PRIMARY KEY (id)) 
 	TYPE=MyISAM");
+	
+############################# LEARNING PATH ######################################
+
+mysql_query("CREATE TABLE `lp_module` (
+              `module_id` int(11) NOT NULL auto_increment,
+              `name` varchar(255) NOT NULL default '',
+              `comment` text NOT NULL,
+              `accessibility` enum('PRIVATE','PUBLIC') NOT NULL default 'PRIVATE',
+              `startAsset_id` int(11) NOT NULL default '0',
+              `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','LABEL','COURSE_DESCRIPTION') NOT NULL,
+              `launch_data` text NOT NULL,
+              PRIMARY KEY  (`module_id`)
+            ) "); //TYPE=MyISAM COMMENT='List of available modules used in learning paths';
+            
+mysql_query("CREATE TABLE `lp_learnPath` (
+              `learnPath_id` int(11) NOT NULL auto_increment,
+              `name` varchar(255) NOT NULL default '',
+              `comment` text NOT NULL,
+              `lock` enum('OPEN','CLOSE') NOT NULL default 'OPEN',
+              `visibility` enum('HIDE','SHOW') NOT NULL default 'SHOW',
+              `rank` int(11) NOT NULL default '0',
+              PRIMARY KEY  (`learnPath_id`),
+              UNIQUE KEY rank (`rank`)
+            ) "); //TYPE=MyISAM COMMENT='List of learning Paths';
+
+mysql_query("CREATE TABLE `lp_rel_learnPath_module` (
+                `learnPath_module_id` int(11) NOT NULL auto_increment,
+                `learnPath_id` int(11) NOT NULL default '0',
+                `module_id` int(11) NOT NULL default '0',
+                `lock` enum('OPEN','CLOSE') NOT NULL default 'OPEN',
+                `visibility` enum('HIDE','SHOW') NOT NULL default 'SHOW',
+                `specificComment` text NOT NULL,
+                `rank` int(11) NOT NULL default '0',
+                `parent` int(11) NOT NULL default '0',
+                `raw_to_pass` tinyint(4) NOT NULL default '50',
+                PRIMARY KEY  (`learnPath_module_id`)
+              ) ");//TYPE=MyISAM COMMENT='This table links module to the learning path using them';
+              
+mysql_query("CREATE TABLE `lp_asset` (
+              `asset_id` int(11) NOT NULL auto_increment,
+              `module_id` int(11) NOT NULL default '0',
+              `path` varchar(255) NOT NULL default '',
+              `comment` varchar(255) default NULL,
+              PRIMARY KEY  (`asset_id`)
+            ) "); //TYPE=MyISAM COMMENT='List of resources of module of learning paths';
+
+mysql_query("CREATE TABLE `lp_user_module_progress` (
+              `user_module_progress_id` int(22) NOT NULL auto_increment,
+              `user_id` mediumint(9) NOT NULL default '0',
+              `learnPath_module_id` int(11) NOT NULL default '0',
+              `learnPath_id` int(11) NOT NULL default '0',
+              `lesson_location` varchar(255) NOT NULL default '',
+              `lesson_status` enum('NOT ATTEMPTED','PASSED','FAILED','COMPLETED','BROWSED','INCOMPLETE','UNKNOWN') NOT NULL default 'NOT ATTEMPTED',
+              `entry` enum('AB-INITIO','RESUME','') NOT NULL default 'AB-INITIO',
+              `raw` tinyint(4) NOT NULL default '-1',
+              `scoreMin` tinyint(4) NOT NULL default '-1',
+              `scoreMax` tinyint(4) NOT NULL default '-1',
+              `total_time` varchar(13) NOT NULL default '0000:00:00.00',
+              `session_time` varchar(13) NOT NULL default '0000:00:00.00',
+              `suspend_data` text NOT NULL,
+              `credit` enum('CREDIT','NO-CREDIT') NOT NULL default 'NO-CREDIT',
+              PRIMARY KEY  (`user_module_progress_id`)
+            ) "); //TYPE=MyISAM COMMENT='Record the last known status of the user in the course';
 
 }
 	
@@ -2085,6 +2157,8 @@ mysql_query("INSERT INTO cours_faculte VALUES ( '', '$faculte', '$repertoire')")
  	mkdir("../../courses/$repertoire/video", 0777);
 	mkdir("../../courses/$repertoire/work", 0777);
 	mkdir("../../courses/$repertoire/group", 0777);
+	mkdir("../../courses/$repertoire/temp", 0777);
+	mkdir("../../courses/$repertoire/scormPackages", 0777);
 
 	$titou='$dbname';
 

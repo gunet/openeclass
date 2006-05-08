@@ -98,6 +98,7 @@ $langAddPageHome="Upload page and link to Homepage";
 $langLinkSite="Add link on Homepage";
 $langModifyInfo="Modify course info";
 $langDropBox = "DropBox";
+$langLearnPath = "Learning Path";
 
 
 // Other SQL tables

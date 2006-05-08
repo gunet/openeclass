@@ -1,0 +1,643 @@
+<?php
+
+/* 
+Header
+*/
+
+/* TODO
+- Delete document when it belongs to a label bug
+- CommentBox texteditor
+*/
+
+include("../include/learnPathLib.inc.php");
+include("./claro_main.lib.php");
+include("../include/fileDisplayLib.inc.php");
+
+$require_current_course = TRUE;
+$langFiles              = "learnPath";
+
+$TABLELEARNPATH         = "lp_learnPath";
+$TABLEMODULE            = "lp_module";
+$TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
+$TABLEASSET             = "lp_asset";
+$TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
+
+$imgRepositoryWeb       = "../image/";
+
+include("../include/header.php");
+
+$nameTools = $langLearningPath;
+$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
+
+// $_SESSION
+if ( isset($_GET['path_id']) && $_GET['path_id'] > 0 )
+{
+      $_SESSION['path_id'] = (int) $_GET['path_id'];
+}
+
+// get user out of here if he is not allowed to edit
+if ( !$is_adminOfCourse ) 
+{
+    if ( isset($_SESSION['path_id']) ) 
+    {
+        header("Location: ./learningPath.php?path_id=".$_SESSION['path_id']);
+    }
+    else
+    {
+        header("Location: ./learningPathList.php");
+    }
+    exit();
+}
+
+begin_page();
+
+
+
+echo "</td></tr></table>";
+mysql_select_db($currentCourseID);
+
+echo "<script>
+            function confirmation (txt)
+            {
+                if (confirm(txt))
+                    {return true;}
+                else
+                    {return false;}
+            }
+            </script>";
+
+$cmd = ( isset($_REQUEST['cmd']) )? $_REQUEST['cmd'] : '';
+
+switch($cmd)
+{
+    // MODULE DELETE
+    case "delModule" :
+        //--- BUILD ARBORESCENCE OF MODULES IN LEARNING PATH
+        $sql = "SELECT M.*, LPM.*
+                FROM `".$TABLEMODULE."` AS M, `".$TABLELEARNPATHMODULE."` AS LPM
+                WHERE M.`module_id` = LPM.`module_id`
+                AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
+                ORDER BY LPM.`rank` ASC";
+        $result = claro_sql_query($sql);
+           
+        $extendedList = array();
+        while ($list = mysql_fetch_array($result, MYSQL_ASSOC))
+        {
+            $extendedList[] = $list;
+        }
+           
+        //-- delete module cmdid and his children if it is a label
+        // get the modules tree ( cmdid module and all its children)
+        $temp[0] = get_module_tree( build_element_list($extendedList, 'parent', 'learnPath_module_id'), $_REQUEST['cmdid'] , 'learnPath_module_id');
+        // delete the tree
+        delete_module_tree($temp);
+
+        break;
+
+    // VISIBILITY COMMAND
+    case "mkVisibl" :
+    case "mkInvisibl" :
+        $cmd == "mkVisibl" ? $visibility = 'SHOW' : $visibility = 'HIDE';
+        //--- BUILD ARBORESCENCE OF MODULES IN LEARNING PATH
+        $sql = "SELECT M.*, LPM.*
+                FROM `".$TABLEMODULE."` AS M, `".$TABLELEARNPATHMODULE."` AS LPM
+                WHERE M.`module_id` = LPM.`module_id`
+                AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'] ."
+                ORDER BY LPM.`rank` ASC";
+        $result = claro_sql_query($sql);
+        
+        $extendedList = array();
+        while ($list = mysql_fetch_array($result, MYSQL_ASSOC))
+        {
+          $extendedList[] = $list;
+        }
+
+        //-- set the visibility for module cmdid and his children if it is a label
+        // get the modules tree ( cmdid module and all its children)
+        $temp[0] = get_module_tree( build_element_list($extendedList, 'parent', 'learnPath_module_id'), $_REQUEST['cmdid'] );
+        // change the visibility according to the new father visibility
+        set_module_tree_visibility( $temp, $visibility);
+        
+        break;
+
+    // ACCESSIBILITY COMMAND
+    case "mkBlock" :
+    case "mkUnblock" :
+        $cmd == "mkBlock" ? $blocking = 'CLOSE' : $blocking = 'OPEN';
+        $sql = "UPDATE `".$TABLELEARNPATHMODULE."`
+                SET `lock` = '$blocking'
+                WHERE `learnPath_module_id` = ". (int)$_REQUEST['cmdid']."
+                AND `lock` != '$blocking'";
+        $query = claro_sql_query ($sql);
+        break;
+
+    // ORDER COMMAND
+    case "changePos" :               
+        // changePos form sent
+        if( isset($_POST["newPos"]) && $_POST["newPos"] != "")
+        {
+            // get order of parent module            
+            $sql = "SELECT * 
+                    FROM `".$TABLELEARNPATHMODULE."` 
+                    WHERE `learnPath_module_id` = ". (int)$_REQUEST['cmdid'];
+            $temp = claro_sql_query_fetch_all($sql);
+            $movedModule = $temp[0];
+               
+            // if origin and target are the same ... cancel operation
+            if ($movedModule['learnPath_module_id'] == $_POST['newPos'])
+            {
+                $dialogBox .= $langWrongOperation;
+            }
+            else
+            {
+                //--
+                // select max order 
+                // get the max rank of the children of the new parent of this module
+                $sql = "SELECT MAX(`rank`)
+                        FROM `".$TABLELEARNPATHMODULE."`
+                        WHERE `parent` = ". (int)$_POST['newPos'];
+
+                $result = claro_sql_query($sql);
+
+                list($orderMax) = mysql_fetch_row($result);
+                $order = $orderMax + 1;
+                
+                // change parent module reference in the moved module and set order (added to the end of target group)
+                $sql = "UPDATE `".$TABLELEARNPATHMODULE."`
+                        SET `parent` = ". (int)$_POST['newPos'].",
+                            `rank` = " . (int)$order . "
+                        WHERE `learnPath_module_id` = ". (int)$_REQUEST['cmdid'];
+                $query = claro_sql_query($sql);  
+                $dialogBox .= $langModuleMoved;
+            }
+
+        }
+        else  // create form requested
+        {
+            // create elementList
+            $sql = "SELECT M.*, LPM.*
+                    FROM `".$TABLEMODULE."` AS M, `".$TABLELEARNPATHMODULE."` AS LPM
+                    WHERE M.`module_id` = LPM.`module_id`
+                      AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
+                      AND M.`contentType` = \"".CTLABEL_."\"
+                    ORDER BY LPM.`rank` ASC";
+            $result = claro_sql_query($sql);
+            $i=0;
+            $extendedList = array();
+            while ($list = mysql_fetch_array($result))
+            {
+                // this array will display target for the "move" command
+                // so don't add the module itself build_element_list will ignore all childre so that
+                // children of the moved module won't be shown, a parent cannot be a child of its own children                    
+                if ( $list['learnPath_module_id'] != $_REQUEST['cmdid'] ) $extendedList[] = $list;
+            }
+            
+            // build the array that will be used by the claro_build_nested_select_menu function
+            $elementList = array();
+            $elementList = build_element_list($extendedList, 'parent', 'learnPath_module_id');
+            
+            $topElement['name'] = $langRoot;
+            $topElement['value'] = 0;    // value is required by claro_nested_build_select_menu
+            if (!is_array($elementList)) $elementList = array();
+            array_unshift($elementList,$topElement);
+            
+            // get infos about the moved module
+            $sql = "SELECT M.`name`
+                    FROM `".$TABLELEARNPATHMODULE."` AS LPM, 
+                         `".$TABLEMODULE."` AS M
+                    WHERE LPM.`module_id` = M.`module_id`
+                      AND LPM.`learnPath_module_id` = ". (int)$_REQUEST['cmdid'];
+            $temp = claro_sql_query_fetch_all($sql);
+            $moduleInfos = $temp[0];
+            
+            $displayChangePosForm = true; // the form code comes after name and comment boxes section
+        }
+        break;
+
+    case "moveUp" :
+        $thisLPMId = $_REQUEST['cmdid'];
+        $sortDirection = "DESC";
+        break;
+
+    case "moveDown" :
+        $thisLPMId = $_REQUEST['cmdid'];
+        $sortDirection = "ASC";
+        break;
+
+    case "createLabel" :
+        // create form sent
+        if( isset($_REQUEST["newLabel"]) && trim($_REQUEST["newLabel"]) != "")
+        {
+            // determine the default order of this Learning path ( a new label is a root child)
+            $sql = "SELECT MAX(`rank`)
+                    FROM `".$TABLELEARNPATHMODULE."`
+                    WHERE `parent` = 0";
+            $result = claro_sql_query($sql);
+
+            list($orderMax) = mysql_fetch_row($result);
+            $order = $orderMax + 1;
+
+            // create new module
+            $sql = "INSERT INTO `".$TABLEMODULE."`
+                   (`name`, `comment`, `contentType`, `launch_data`)
+                   VALUES ('". addslashes($_POST['newLabel']) ."','', '".CTLABEL_."','')";
+            $query = claro_sql_query($sql);
+
+            // request ID of the last inserted row (module_id in $TABLEMODULE) to add it in $TABLELEARNPATHMODULE
+            $thisInsertedModuleId = mysql_insert_id();
+
+            // create new learning path module
+            $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
+                   (`learnPath_id`, `module_id`, `specificComment`, `rank`, `parent`)
+                   VALUES ('". (int)$_SESSION['path_id']."', '". (int)$thisInsertedModuleId."','', " . (int)$order . ", 0)";
+            $query = claro_sql_query($sql);
+        }
+        else  // create form requested
+        {
+            $displayCreateLabelForm = true; // the form code comes after name and comment boxes section
+        }
+        break;
+
+     default:
+        break;
+
+}
+
+// IF ORDER COMMAND RECEIVED
+// CHANGE ORDER
+
+if (isset($sortDirection) && $sortDirection)
+{
+
+    // get list of modules with same parent as the moved module
+    $sql = "SELECT LPM.`learnPath_module_id`, LPM.`rank`
+            FROM (`".$TABLELEARNPATHMODULE."` AS LPM, `".$TABLELEARNPATH."` AS LP)
+              LEFT JOIN `".$TABLELEARNPATHMODULE."` AS LPM2 ON LPM2.`parent` = LPM.`parent`
+            WHERE LPM2.`learnPath_module_id` = ". (int)$thisLPMId."
+              AND LPM.`learnPath_id` = LP.`learnPath_id`
+              AND LP.`learnPath_id` = ". (int)$_SESSION['path_id']."
+            ORDER BY LPM.`rank` $sortDirection";
+                          
+    $listModules  = claro_sql_query_fetch_all($sql);
+     
+    // LP = learningPath
+    foreach( $listModules as $module)
+    {
+        // STEP 2 : FOUND THE NEXT ANNOUNCEMENT ID AND ORDER.
+        //          COMMIT ORDER SWAP ON THE DB
+
+        if (isset($thisLPMOrderFound)&& $thisLPMOrderFound == true)
+        {
+
+            $nextLPMId = $module['learnPath_module_id'];
+            $nextLPMOrder =  $module['rank'];
+
+            $sql = "UPDATE `".$TABLELEARNPATHMODULE."`
+                    SET `rank` = \"" . (int)$nextLPMOrder . "\"
+                    WHERE `learnPath_module_id` =  \"" . (int)$thisLPMId . "\"";
+            claro_sql_query($sql);
+
+            $sql = "UPDATE `".$TABLELEARNPATHMODULE."`
+                    SET `rank` = \"" . (int)$thisLPMOrder . "\"
+                    WHERE `learnPath_module_id` =  \"" . (int)$nextLPMId . "\"";
+            claro_sql_query($sql);
+
+            break;
+        }
+
+        // STEP 1 : FIND THE ORDER OF THE ANNOUNCEMENT
+        if ($module['learnPath_module_id'] == $thisLPMId)
+        {
+            $thisLPMOrder = $module['rank'];
+            $thisLPMOrderFound = true;
+        }
+    }
+}
+// select details of learning path to display
+
+$sql = "SELECT *
+        FROM `".$TABLELEARNPATH."`
+        WHERE `learnPath_id` = ". (int)$_SESSION['path_id'];
+$query = mysql_query($sql);
+$LPDetails = mysql_fetch_array($query);
+
+//####################################################################################\\
+//############################ LEARNING PATH NAME BOX ################################\\
+//####################################################################################\\
+
+if ( $cmd == "updateName" )
+{
+    nameBox(LEARNINGPATH_, UPDATE_);
+}
+else
+{
+    nameBox(LEARNINGPATH_, DISPLAY_);
+}
+
+//####################################################################################\\
+//############################ LEARNING PATH COMMENT BOX #############################\\
+//####################################################################################\\
+
+if ( $cmd == "updatecomment" )
+{
+    commentBox(LEARNINGPATH_, UPDATE_);
+}
+elseif ($cmd == "delcomment" )
+{
+    commentBox(LEARNINGPATH_, DELETE_);
+}
+else
+{
+    commentBox(LEARNINGPATH_, DISPLAY_);
+}
+
+//####################################################################################\\
+//############################ create label && change pos forms  #####################\\
+//####################################################################################\\
+
+if (isset($displayCreateLabelForm) && $displayCreateLabelForm)
+{
+    $dialogBox = "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">
+                  <h4><label for=\"newLabel\">".$langNewLabel."</label></h4>
+                  <input type=\"text\" name=\"newLabel\" id=\"newLabel\" maxlength=\"255\" />
+                  <input type=\"hidden\" name=\"cmd\" value=\"createLabel\" />
+                  <input type=\"submit\" value=\"".$langOk."\" />
+                  </form>";
+}
+if (isset($displayChangePosForm) && $displayChangePosForm)
+{ 
+    $dialogBox = "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">
+                  <h4>".$langMove." ' ".$moduleInfos['name']." ' ".$langTo."</h4>";
+    // build select input - $elementList has been declared in the previous big cmd case
+    $dialogBox .= claro_build_nested_select_menu("newPos",$elementList);
+    $dialogBox .= "<input type=\"hidden\" name=\"cmd\" value=\"changePos\" />
+                   <input type=\"hidden\" name=\"cmdid\" value=\"".$_REQUEST['cmdid']."\" />
+                   <input type=\"submit\" value=\"".$langOk."\" />
+                   </form>";
+}
+
+//####################################################################################\\
+//############################### DIALOG BOX SECTION #################################\\
+//####################################################################################\\
+
+if (isset($dialogBox) && $dialogBox!="")
+{
+    echo claro_disp_message_box($dialogBox);
+}
+
+//####################################################################################\\
+//######################### LEARNING PATH COURSEADMIN LINKS ##########################\\
+//####################################################################################\\
+
+?>
+ <p>
+ <a class="claroCmd" href="insertMyDoc.php"><?php echo $langDocumentAsModule; ?></a> |
+ <a class="claroCmd" href="insertMyExercise.php"><?php echo $langExerciseAsModule; ?></a> |
+ <a class="claroCmd" href="insertMyModule.php"><?php echo $langModuleOfMyCourse; ?></a> |
+ <a class="claroCmd" href="<?php echo $_SERVER['PHP_SELF'] ?>?cmd=createLabel"><?php echo $langCreateLabel; ?></a> |
+ <?php // TODO: insert langWhatever here ?>
+ <a href="insertMyDescription.php">Use Course Description</a>
+ </p>
+<?php
+
+//####################################################################################\\
+//######################### LEARNING PATH LIST CONTENT ###############################\\
+//####################################################################################\\
+
+//--- BUILD ARBORESCENCE OF MODULES IN LEARNING PATH
+
+$sql = "SELECT M.*, LPM.*, A.`path`
+        FROM (`".$TABLEMODULE."` AS M, 
+             `".$TABLELEARNPATHMODULE."` AS LPM)
+        LEFT JOIN `".$TABLEASSET."` AS A ON M.`startAsset_id` = A.`asset_id`
+        WHERE M.`module_id` = LPM.`module_id`
+          AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
+        ORDER BY LPM.`rank` ASC";
+
+$result = mysql_query($sql);
+
+$extendedList = array();
+while ($list = mysql_fetch_array($result, MYSQL_ASSOC))
+{
+    $extendedList[] = $list;
+}
+
+// build the array of modules     
+// build_element_list return a multi-level array, where children is an array with all nested modules
+// build_display_element_list return an 1-level array where children is the deep of the module
+
+$flatElementList = build_display_element_list(build_element_list($extendedList, 'parent', 'learnPath_module_id'));
+
+$iterator = 1;
+$atleastOne = false;
+$i = 0;
+
+// look for maxDeep
+$maxDeep = 1; // used to compute colspan of <td> cells
+for ($i=0 ; $i < sizeof($flatElementList) ; $i++)
+{
+    if ($flatElementList[$i]['children'] > $maxDeep) $maxDeep = $flatElementList[$i]['children'] ;
+}
+
+//####################################################################################\\
+//######################### LEARNING PATH LIST HEADER ################################\\
+//####################################################################################\\
+
+?>
+  <table class="claroTable emphaseLine" width="100%" border="0" cellspacing="2">
+       <thead>
+         <tr class="headerX" align="center" valign="top" bgcolor="#e6e6e6">
+           <th colspan="<?php echo $maxDeep+1 ?>"><?php echo $langModule; ?></th>
+           <th><?php echo $langModify; ?></th>
+           <th><?php echo $langRemove; ?></th>
+           <th><?php echo $langBlock; ?></th>
+           <th><?php echo $langVisibility; ?></th>
+           <th><?php echo $langMove; ?></th>
+           <th colspan="2"><?php echo $langOrder; ?></th>
+          </tr>
+     </thead>
+     <tbody>
+<?php
+
+//####################################################################################\\
+//######################### LEARNING PATH LIST DISPLAY ###############################\\
+//####################################################################################\\
+
+foreach ($flatElementList as $module)
+{
+    //-------------visibility-----------------------------
+    if ( $module['visibility'] == 'HIDE' )
+    {
+        if ($is_adminOfCourse)
+        {
+            $style=" class=\"invisible\"";
+        }
+        else
+        {
+            continue; // skip the display of this file
+        }
+    }
+    else
+    {
+        $style="";
+    }
+         
+    $spacingString = "";
+     
+    for($i = 0; $i < $module['children']; $i++)
+           $spacingString .= "<td width='5'>&nbsp;</td>";
+    
+    $colspan = $maxDeep - $module['children']+1;
+         
+    echo "<tr align=\"center\"".$style.">\n".$spacingString."<td colspan=\"".$colspan."\" align=\"left\">";
+                      
+    if ($module['contentType'] == CTLABEL_) // chapter head
+    {
+        echo "<font ".$style." style=\"font-weight: bold\">".htmlspecialchars($module['name'])."</font>\n";
+    }
+    else // module
+    {
+        if($module['contentType'] == CTEXERCISE_ ) 
+            $moduleImg = "quiz.gif";
+        else 
+            $moduleImg = choose_image(basename($module['path']));
+             
+               
+        $contentType_alt = selectAlt($module['contentType']);
+        echo "<a href=\"module.php?module_id=".$module['module_id']."\"".$style.">" 
+            . "<img src=\"".$imgRepositoryWeb."".$moduleImg."\" alt=\"".$contentType_alt."\" border=\"0\">"
+            . htmlspecialchars($module['name'])
+            . "</a>";
+    }
+    echo "</td>"; // end of td of module name
+
+    // Modify command / go to other page
+    echo "<td>
+          <a href=\"module.php?module_id=".$module['module_id']."\">".
+         "<img src=\"".$imgRepositoryWeb."edit.gif\" border=0 alt=\"".$langModify."\" />".
+         "</a>
+         </td>";
+
+    // DELETE ROW
+
+   //in case of SCORM module, the pop-up window to confirm must be different as the action will be different on the server
+    echo "<td>
+          <a href=\"".$_SERVER['PHP_SELF']."?cmd=delModule&cmdid=".$module['learnPath_module_id']."\" ".
+         "onClick=\"return confirmation('".clean_str_for_javascript($langAreYouSureToRemove." ".$module['name'])." ? ";
+
+    if ($module['contentType'] == CTSCORM_) 
+        echo clean_str_for_javascript($langAreYouSureToRemoveSCORM) ;
+    elseif ( $module['contentType'] == CTLABEL_ )
+        echo clean_str_for_javascript($langAreYouSureToRemoveLabel);
+    else
+        echo clean_str_for_javascript($langAreYouSureToRemoveStd);
+
+    echo   "');\"
+    ><img src=\"".$imgRepositoryWeb."delete.gif\" border=0 alt=\"".$langRemove."\"></a>
+       </td>";
+
+    // LOCK
+    echo    "<td>";
+
+    if ( $module['contentType'] == CTLABEL_)
+    {
+        echo "&nbsp;";
+    }
+    elseif ( $module['lock'] == 'OPEN')
+    {
+        echo "<a href=\"",$_SERVER['PHP_SELF'],"?cmd=mkBlock&cmdid=".$module['learnPath_module_id']."\">".
+             "<img src=\"".$imgRepositoryWeb."unblock.gif\" alt=\"$langBlock\" border=0>".
+             "</a>";
+    }
+    elseif( $module['lock'] == 'CLOSE')
+    {
+        echo "<a href=\"",$_SERVER['PHP_SELF'],"?cmd=mkUnblock&cmdid=".$module['learnPath_module_id']."\">".
+             "<img src=\"".$imgRepositoryWeb."block.gif\" alt=\"$langAltMakeNotBlocking\" border=0>".
+             "</a>";
+    }
+    echo "</td>";
+
+    // VISIBILITY
+    echo "<td>";
+
+    if ( $module['visibility'] == 'HIDE')
+    {
+        echo "<a href=\"",$_SERVER['PHP_SELF'],"?cmd=mkVisibl&cmdid=".$module['module_id']."\">".
+             "<img src=\"".$imgRepositoryWeb."invisible.gif\" alt=\"$langAltMakeVisible\" border=\"0\">".
+             "</a>";
+    }
+    else
+    {
+        if( $module['lock'] == 'CLOSE' )
+        {
+            $onclick = "onClick=\"return confirmation('".clean_str_for_javascript($langAlertBlockingMakedInvisible)."');\"";
+        }
+        else
+        {
+            $onclick = "";
+        }
+        echo "<a href=\"",$_SERVER['PHP_SELF'],"?cmd=mkInvisibl&cmdid=".$module['module_id']."\" ",$onclick, " >".
+             "<img src=\"".$imgRepositoryWeb."visible.gif\" alt=\"$langMakeInvisible\" border=0>".
+             "</a>";
+    }
+
+    echo "</td>";
+
+    // ORDER COMMANDS
+    // DISPLAY CATEGORY MOVE COMMAND 
+    echo "<td>".
+         "<a href=\"",$_SERVER['PHP_SELF'],"?cmd=changePos&cmdid=".$module['learnPath_module_id']."\">".
+         "<img src=\"".$imgRepositoryWeb."move.gif\" alt=\"$langAltMove\" border=0>".
+         "</a>".
+         "</td>";
+
+    // DISPLAY MOVE UP COMMAND only if it is not the top learning path
+    if ($module['up'])
+    {
+        echo "<td>".
+             "<a href=\"",$_SERVER['PHP_SELF'],"?cmd=moveUp&cmdid=".$module['learnPath_module_id']."\">".
+             "<img src=\"".$imgRepositoryWeb."up.gif\" alt=\"$langAltMoveUp\" border=0>".
+             "</a>".
+             "</td>";
+    }
+    else
+    {
+        echo "<td>&nbsp;</td>";
+    }
+
+    // DISPLAY MOVE DOWN COMMAND only if it is not the bottom learning path
+    if ($module['down'])
+    {
+        echo "<td>".
+             "<a href=\"",$_SERVER['PHP_SELF'],"?cmd=moveDown&cmdid=".$module['learnPath_module_id']."\">".
+             "<img src=\"".$imgRepositoryWeb."down.gif\" alt=\"$langMoveDown\" border=0>".
+             "</a>".
+             "</td>";
+    }
+    else
+    {
+        echo "<td>&nbsp;</td>";
+    }
+
+    echo "\n</tr>\n";
+    $iterator++;
+    $atleastOne = true;
+}
+
+echo "</tbody>";
+
+echo "<tfoot>";
+
+if ($atleastOne == false)
+{
+    echo "<tr><td align=\"center\" colspan=\"7\">".$langNoModule."</td></tr>";
+}
+
+echo "</tfoot>";
+echo "</table>";
+
+
+?>
+
+</body>
+</html>

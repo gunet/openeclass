@@ -8,6 +8,8 @@ a:link, a:active, a:visited {
 	color: #003399; }
 a.invisible, a.invisible:link, a.invisible:active, a.invisible:visited {
 	color: #999999; }
+.invisible {
+   color: #999999; }
 .topBanner a {
 	text-decoration: none; }
 .topBanner a:hover {

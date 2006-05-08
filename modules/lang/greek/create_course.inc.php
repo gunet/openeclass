@@ -101,6 +101,7 @@ $langLinkSite="Προσθήκη συνδέσμου στην αρχική σελίδα";
 $langModifyInfo="Αλλαγή πληροφοριών μαθήματος";
 $langChat ="Κουβέντα";
 $langDropBox = "Χώρος Ανταλλαγής Αρχείων";
+$langLearnPath = "Γραμμή Μάθησης";
 
 // Other SQL tables
 $langAgendaTitle="Πρώτο μάθημα";
