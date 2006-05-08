@@ -29,7 +29,7 @@ $TABLEDOCUMENT          = "document";
 
 include("../../include/init.php");
 
-$courseDir   = "$currentCourseID/document";
+$courseDir   = "courses/".$currentCourseID."/document";
 //$moduleDir   = $_course['path']."/modules";
 $baseWorkDir = $webDir.$courseDir;
 //$moduleWorkDir = $coursesRepositorySys.$moduleDir;

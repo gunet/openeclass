@@ -37,7 +37,7 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-$clarolineRepositoryWeb = $urlServer.$currentCourseID;
+$clarolineRepositoryWeb = $urlServer."courses/".$currentCourseID;
 
 // lib of this tool
 include("../../../include/lib/learnPathLib.inc.php");
