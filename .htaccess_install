@@ -4,3 +4,4 @@ php_value upload_max_filesize 20M
 php_value memory_limit 25M
 php_value post_max_size 25M
 php_value max_execution_time 100
+php_value default_charset ISO-8859-7
