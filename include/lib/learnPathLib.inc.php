@@ -489,12 +489,11 @@ function is_num($var)
  */
 function display_path_content()
 {
-    $tbl_cdb_names = claro_sql_get_course_tbl();
-    $tbl_lp_learnPath            = $tbl_cdb_names['lp_learnPath'];
-    $tbl_lp_rel_learnPath_module = $tbl_cdb_names['lp_rel_learnPath_module'];
-    $tbl_lp_user_module_progress = $tbl_cdb_names['lp_user_module_progress'];
-    $tbl_lp_module               = $tbl_cdb_names['lp_module'];
-    $tbl_lp_asset                = $tbl_cdb_names['lp_asset'];
+    $tbl_lp_learnPath            = "lp_learnPath";
+    $tbl_lp_rel_learnPath_module = "lp_rel_learnPath_module";
+    $tbl_lp_user_module_progress = "lp_user_module_progress";
+    $tbl_lp_module               = "lp_module";
+    $tbl_lp_asset                = "lp_asset";
 
     global $_cid;
     global $langModule;
@@ -685,8 +684,9 @@ function get_learnPath_progress($lpid, $lpUid)
  */
 function display_my_exercises($dialogBox)
 {
-    $tbl_cdb_names = claro_sql_get_course_tbl();
-    $tbl_quiz_test = $tbl_cdb_names['quiz_test'];
+    //$tbl_cdb_names = claro_sql_get_course_tbl();
+    //$tbl_quiz_test = $tbl_cdb_names['quiz_test'];
+    $tbl_quiz_test = "quiz_test";
 
     global $langAddModule;
     global $langAddModulesButton;
@@ -1143,8 +1143,9 @@ function build_display_element_list($elementList, $deepness = 0)
  */
 function set_module_tree_visibility($module_tree, $visibility)
 {
-    $tbl_cdb_names = claro_sql_get_course_tbl();
-    $tbl_lp_rel_learnPath_module = $tbl_cdb_names['lp_rel_learnPath_module'];
+    //$tbl_cdb_names = claro_sql_get_course_tbl();
+    //$tbl_lp_rel_learnPath_module = $tbl_cdb_names['lp_rel_learnPath_module'];
+    $tbl_lp_rel_learnPath_module = "lp_rel_learnPath_module";
 
     foreach($module_tree as $module)
     {
