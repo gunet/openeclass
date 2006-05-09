@@ -10,7 +10,7 @@
  * @package eclass 2.0
  */
 
-
+echo $pageName;
 //include('header.php');
 include('init.php');
 //echo $langAdmin;
@@ -32,8 +32,8 @@ function getTools($menuTypeID){
 	 * interface and parse it to the user's browser.
 	 * 
 	 */
-function draw($toolContent, $menuTypeID){
-
+function draw($toolContent, $menuTypeID, $tool_css = null){
+	global $langUser, $prenom, $nom, $langLogout, $intitule,  $nameTools, $langHelp, $language, $helpTopic, $require_help;
 	$toolArr = getTools($menuTypeID);
 //	dumpArray($toolArr);
 
@@ -89,7 +89,42 @@ function draw($toolContent, $menuTypeID){
 		}
 	
 		$t->set_var('TOOL_CONTENT', $toolContent);
+		
+		$t->set_var('LANG_USER', $langUser);
+		$t->set_var('USER_NAME', $prenom);
+		$t->set_var('USER_SURNAME', $nom);
+		$t->set_var('LANG_LOGOUT', $langLogout);
+		
+		$t->set_var('LESSON_TITLE', $intitule);
+		$t->set_var('TOOL_NAME',  $nameTools);
+		
+		
+		if (isset($tool_css)){
+			
+			$t->set_var('TOOL_CSS', "<link href=\"../../modules/$tool_css/tool.css\" rel=\"stylesheet\" type=\"text/css\" />");
+		}
+		
+		if ($require_help == true){
+			$help_link = <<<hLink
+		 <a href="../help/help.php?topic=$helpTopic&language=$language>" 
+        onClick="window.open('../help/help.php?topic=$helpTopic&language=$language','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10'); 
+        return false;">$langHelp</a>
+hLink;
 
+			$help_link_icon = " <a id=\"help_icon\" href=\"../help/help.php?topic=$helpTopic&language=$language>\" 
+        onClick=\"window.open('../help/help.php?topic=$helpTopic&language=$language','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10'); 
+        return false;\"></a>";
+	
+			
+			$t->set_var('HELP_LINK', $help_link);
+			$t->set_var('HELP_LINK_ICON', $help_link_icon);
+			$t->set_var('LANG_HELP', $langHelp);
+		} else {
+			$t->set_var('{HELP_LINK}', '');
+			$t->set_var('LANG_HELP', '');
+		}
+		
+		
 
 		//		At this point all variables are set and we are ready to send the final output
 		//		back to the browser
