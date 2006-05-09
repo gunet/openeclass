@@ -1,0 +1,121 @@
+h1 {
+font-size:18px;
+}
+
+h2 {
+font-size:16px;
+}
+
+h3 {
+font-size:14px;
+}
+
+h4 {
+font-size:12px;
+}
+
+h5 {
+font-size:10px;
+}
+
+#tool_title {
+width:99%;
+margin-top:30px;
+margin-bottom:70px;
+//margin-bottom:30px;
+}
+
+#tool_title .tool_name{
+font-size:14px;
+font-family: Arial, Helvetica, sans-serif;
+position:absolute;
+font-weight:bold;
+}
+
+#tool_title .help a{
+float:right;
+font-family: Arial, Helvetica, sans-serif;
+font-size:12px;
+}
+
+#help_icon
+{
+	float: right;
+	width: 14px;
+	height: 14px;
+	margin-top:0.1em;
+	margin-left:0.1em;
+	background-image: url(img/help_icon.gif);
+	background-repeat: no-repeat;
+	overflow:visible;
+}
+
+#tool_operations {
+width:99%;
+
+margin-bottom:40px;
+}
+
+#tool_operations .operation{
+margin-right:2px;
+font-size:12px;
+}
+
+#tool_operations a{
+margin-right:2px;
+}
+
+
+
+table, th, td {
+	border: 1px solid #D4E0EE;
+	border-collapse: collapse;
+	font-family: Verdana, Arial, sans-serif;
+	color: #555;
+	
+}
+
+caption {
+	font-size: 150%;
+	font-weight: bold;
+	margin: 5px;
+	text-align: left;
+}
+
+td, th {
+	padding: 4px;
+}
+
+thead th {
+	text-align: center;
+	background: #E6EDF5;
+	color: #4F76A3;
+	font-size: 90% !important;
+}
+
+tbody th {
+	font-weight: bold;
+}
+
+tbody tr { background: #FCFDFE; font-size:12px;}
+
+tbody tr.odd { background: #F7F9FC; }
+
+table a:link {
+	color: #718ABE;
+	text-decoration: none;
+}
+
+table a:visited {
+	color: #718ABE;
+	text-decoration: none;
+}
+
+table a:hover {
+	color: #718ABE;
+	text-decoration: underline !important;
+}
+
+tfoot th, tfoot td {
+	font-size: 85%;
+}
