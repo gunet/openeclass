@@ -22,35 +22,17 @@ $tool_content = "";//initialise $tool_content
 //   show  help link and  link to Add new  user and  managment page  of groups
 if ($is_adminOfCourse) {
 $tool_content .= <<<cData
-	<table>
-	<tr>
-	<td>
-	<font face="arial, helvetica" size="2">
-	<a href="../group/group.php">$langGroupUserManagement</a>&nbsp;-&nbsp;
-	$langDumpUser
-	<a href="dumpuser.php">$langExcel</a>
-	<a href="dumpuser2.php">$langCsv</a>
-	</font>	
-	</td>
-	</tr>
-	<tr><td>&nbsp;</td></tr>
-	<tr>
-		<td>
-			<font face="arial, helvetica" size="2">
-				$langAdd&nbsp;
-				<a href="adduser.php">$langOneUser</a>,
-				<a href="muladduser.php">$langManyUsers</a>,
-				<a href="guestuser.php">$langGUser</a>
-			</font>	
-		<br>
-		<br>
-		</td>
-	</tr>
-	</table>
+	<div id="tool_operations">
+		<span class="operation"><a href="../group/group.php">$langGroupUserManagement</a>&nbsp;-&nbsp;$langDumpUser <a href="dumpuser.php">$langExcel</a> <a href="dumpuser2.php">$langCsv</a></span>
+	</div>
+	<div id="tool_operations">
+		<span class="operation">$langAdd&nbsp; <a href="adduser.php">$langOneUser</a>, <a href="muladduser.php">$langManyUsers</a>, <a href="guestuser.php">$langGUser</a></span>
+	</div>
+	
 cData;
 }	// if prof
 
-$tool_content .= "<tr><td>";
+//$tool_content .= "<tr><td>";
 
 #################### ADMIN SQL FUNCTIONS ########################
 
@@ -170,56 +152,33 @@ if ($countUser>=50) {
 }	// Show navigation buttons
 
 ############# SHOW FIELD NAMES FOR USERS LIST ##################
+	
 $tool_content .= "<table width=99% cellpadding=2 cellspacing=1 border=0>
-	<tr bgcolor=silver>
-	<td >
-	</td>
-	<td valign=\"top\">
-	<font face=\"arial, helvetica\" size=\"2\">
-	$langSurname
-	<br>
-	$langName
-	</font>
-	</td>";
+
+<thead>
+				<tr>
+					<th></th>
+					<th scope=\"col\">$langSurname<br>$langName</th>";
+
 if(isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2))  {
-	$tool_content .=" <td valign=\"top\">
-	<font face=\"arial, helvetica\" size=\"2\">
-		$langEmail
-	</font>
-	</td>";
+	$tool_content .="<th scope=\"col\">$langEmail</th>";
 	}
 
-$tool_content .= "<td valign=\"top\">
-	<font face=\"arial, helvetica\" size=\"2\">
-		$langAm
-	</font>
-	</td>
-	<td valign=top>
-	<font face=\"arial, helvetica\" size=2>
-		$langGroup
-	</font>
-	</td>";
+$tool_content .= "<th scope=\"col\">$langAm</th>
+					<th scope=\"col\">$langGroup</th>";
 
 // SHOW ADMIN, TUTOR AND UNREGISTER ONLY TO ADMINS
 
 if(isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2)) {
-	$tool_content .= "<td valign=\"top\">
-		<font face=\"arial, helvetica\" size=\"2\">
-		$langTutor</font>
-		</td>
-		<td valign=\"top\">
-		<font face=\"arial, helvetica\" size=\"2\">
-			$langAdmR
-		</font>
-		</td>
-		<td valign=\"top\">
-		<font face=\"arial, helvetica\" size=\"2\">
-			$langUnreg
-		</font>
-		</td>";
+	$tool_content .= "	<th scope=\"col\">$langTutor</th>
+		<th scope=\"col\">$langAdmR</th>
+			
+		<th scope=\"col\">$langUnreg</th>";
+			
 }	// ADMIN ONLY
 
-$tool_content .= "</tr>";
+$tool_content .= "</tr>
+			</thead>";
 
 ############## SELECT NAME, SURNAME, EMAIL, STATUS AND GROUP OF USERS ###########
 
@@ -243,7 +202,7 @@ while ($myrow = mysql_fetch_array($result)) {
 	}	
 
 	// SHOW PUBLIC LIST OF USERS
-	$tool_content .= "<td valign=\"top\">
+	$tool_content .= "<tbody><td valign=\"top\">
 		<font face=\"arial, helvetica\" size=\"2\">$i</font>
 		</td>
 		<td valign=\"top\">
@@ -286,8 +245,8 @@ if(isset($status) && ($status["$currentCourseID"]=='1' OR $status["$currentCours
 			<a href=\"$_SERVER[PHP_SELF]?giveTutor=yes&user_id=$myrow[user_id]\">$langGiveTutor</a></font>
 			</td>";
 		} else {
-			$tool_content .=  "<td valign=\"top\" bgcolor=\"#CCFF99\">
-			<font face=\"arial, helvetica\" size=\"2\">$langTutor
+			$tool_content .=  "<td class=\"highlight\">
+			$langTutor
 			<br>
 			<a href=\"$_SERVER[PHP_SELF]?removeTutor=yes&user_id=$myrow[user_id]\">$langRemoveRight</a></font>
 			</td>";
@@ -296,8 +255,8 @@ if(isset($status) && ($status["$currentCourseID"]=='1' OR $status["$currentCours
 		// ADMIN RIGHT
 		if ($myrow["user_id"]!=$_SESSION["uid"]) {
 			if ($myrow["statut"]=='1') {
-				$tool_content .= "<td valign=\"top\" bgcolor=\"#CCFF99\">
-					<font face=\"arial, helvetica\" size=\"2\">
+				$tool_content .= "<td class=\"highlight\">
+					
 					$langAdmR
 					<br><a href=\"$_SERVER[PHP_SELF]?removeAdmin=yes&user_id=$myrow[user_id]\">$langRemoveRight</a>
 				</td>";
@@ -335,7 +294,7 @@ if(isset($status) && ($status["$currentCourseID"]=='1' OR $status["$currentCours
 
 } 	// END WHILE AND END OF STUDENTS LIST SHOW
 
-$tool_content .= "</table>";
+$tool_content .= "</tbody></table>";
 
 ############ BOTTOM NAVIGATION BUTTONS IF MORE THAN 50 USERS ###############
 
@@ -375,7 +334,7 @@ if($countUser>=50) {
 		</table>";
 
 }	// navigation buttons
-draw($tool_content,2);
+draw($tool_content, 2, 'user');
 ?>
 <!--</td></tr>
 <tr><td colspan="2"></td></tr>
