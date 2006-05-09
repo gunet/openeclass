@@ -22,7 +22,7 @@ $TABLEDOCUMENT = $_course['dbNameGlu']."document";
 $sql = "SELECT `path`
          FROM `".$TABLEASSET."`
         WHERE `module_id` = ". (int)$_SESSION['module_id'];
-$assetPath = claro_sql_query_get_single_value($sql);
+$assetPath = db_query_get_single_value($sql);
 
 $baseServDir = $webDir;
 $courseDir = "courses/".$currentCourseID."/document";

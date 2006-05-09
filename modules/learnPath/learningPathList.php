@@ -89,7 +89,7 @@ switch ( $cmd ) {
                                     )
                               AND LPM.`module_id` = M.`module_id`
                                 ";
-                $findResult = mysql_query($findsql);
+                $findResult = db_query($findsql);
 
                 // Delete the startAssets
 
@@ -103,7 +103,7 @@ switch ( $cmd ) {
                     $delAssetSql .= " OR `module_id`=". (int)$delList['module_id'];
                 }
 
-                mysql_query($delAssetSql);
+                db_query($delAssetSql);
 
                 // DELETE the SCORM modules
 
@@ -124,7 +124,7 @@ switch ( $cmd ) {
                 }
                 $delModuleSql .= ")";
 
-                mysql_query($delModuleSql);
+                db_query($delModuleSql);
 
                 // DELETE the directory containing the package and all its content
                 $real = realpath($webDir."courses/".$currentCourseID."/scormPackages/path_".$_GET['del_path_id']);
@@ -141,7 +141,7 @@ switch ( $cmd ) {
                                  AND LPM.`module_id` = M.`module_id`
                                  ";
                 //echo $findsql;
-                $findResult = mysql_query($findsql);
+                $findResult = db_query($findsql);
                 // delete labels of non scorm learning path
                 $delLabelModuleSql = "DELETE
                                      FROM `".$TABLEMODULE."`
@@ -152,7 +152,7 @@ switch ( $cmd ) {
                 {
                     $delLabelModuleSql .= " OR `module_id`=". (int)$delList['module_id'];
                 }
-                $query = mysql_query($delLabelModuleSql);
+                $query = db_query($delLabelModuleSql);
             }
             
             // delete everything for this path (common to normal and scorm paths) concerning modules, progression and path
@@ -161,20 +161,20 @@ switch ( $cmd ) {
             $sql1 = "DELETE
                        FROM `".$TABLEUSERMODULEPROGRESS."`
                        WHERE `learnPath_id` = ". (int)$_GET['del_path_id'];
-            $query = mysql_query($sql1);
+            $query = db_query($sql1);
 
             // delete all relation between modules and the deleted learning path
             $sql2 = "DELETE
                        FROM `".$TABLELEARNPATHMODULE."`
                        WHERE `learnPath_id` = ". (int)$_GET['del_path_id'];
-            $query = mysql_query($sql2);
+            $query = db_query($sql2);
 
             // delete the learning path
             $sql3 = "DELETE
                           FROM `".$TABLELEARNPATH."`
                           WHERE `learnPath_id` = ". (int)$_GET['del_path_id'] ;
 
-            $query = mysql_query($sql3);
+            $query = db_query($sql3);
 
             break;
       
@@ -186,7 +186,7 @@ switch ( $cmd ) {
                     SET `lock` = '$blocking'
                     WHERE `learnPath_id` = ". (int)$_GET['cmdid']."
                       AND `lock` != '$blocking'";
-            $query = mysql_query ($sql);
+            $query = db_query ($sql);
             break;
                         
       // VISIBILITY COMMAND
@@ -197,7 +197,7 @@ switch ( $cmd ) {
                        SET `visibility` = '$visibility'
                      WHERE `learnPath_id` = ". (int)$_GET['visibility_path_id']."
                        AND `visibility` != '$visibility'";
-            $query = mysql_query ($sql);
+            $query = db_query ($sql);
             break;
 
       // ORDER COMMAND
@@ -218,11 +218,11 @@ switch ( $cmd ) {
                 $sql = "SELECT `name`
                          FROM `".$TABLELEARNPATH."`
                         WHERE `name` = '". addslashes($_POST['newPathName']) ."'";
-                $query = mysql_query($sql);
+                $query = db_query($sql);
                 $num = mysql_numrows($query);
                 if($num == 0 ) { // "name" doesn't already exist
                     // determine the default order of this Learning path
-                    $result = mysql_query("SELECT MAX(`rank`)
+                    $result = db_query("SELECT MAX(`rank`)
                                                FROM `".$TABLELEARNPATH."`");
 
                     list($orderMax) = mysql_fetch_row($result);
@@ -233,7 +233,7 @@ switch ( $cmd ) {
                               INTO `".$TABLELEARNPATH."`
                                      (`name`, `comment`, `rank`)
                               VALUES ('". addslashes($_POST['newPathName']) ."','" . addslashes(trim($_POST['newComment']))."',".(int)$order.")";
-                    $lp_id = mysql_query($sql);
+                    $lp_id = db_query($sql);
                 }
                 else {
                     // display error message
@@ -261,7 +261,7 @@ if (isset($sortDirection) && $sortDirection)
     $sql = "SELECT `learnPath_id`, `rank`
             FROM `".$TABLELEARNPATH."`
             ORDER BY `rank` $sortDirection";
-    $result = mysql_query($sql);
+    $result = db_query($sql);
 
      // LP = learningPath
      while (list ($LPId, $LPOrder) = mysql_fetch_row($result))
@@ -278,19 +278,19 @@ if (isset($sortDirection) && $sortDirection)
             $sql = "UPDATE `".$TABLELEARNPATH."`
                     SET `rank` = \"-1337\"
                     WHERE `learnPath_id` =  \"" . (int)$thisLearningPathId . "\"";
-            mysql_query($sql);
+            db_query($sql);
 
              // move 2 to the previous rank of 1
              $sql = "UPDATE `".$TABLELEARNPATH."`
                      SET `rank` = \"" . (int)$thisLPOrder . "\"
                      WHERE `learnPath_id` =  \"" . (int)$nextLPId . "\"";
-             mysql_query($sql);
+             db_query($sql);
 
              // move 1 to previous rank of 2
              $sql = "UPDATE `".$TABLELEARNPATH."`
                              SET `rank` = \"" . (int)$nextLPOrder . "\"
                            WHERE `learnPath_id` =  \"" . (int)$thisLearningPathId . "\"";
-             mysql_query($sql);
+             db_query($sql);
 
              break;
          }
@@ -370,7 +370,7 @@ $sql = "SELECT LP.* , MIN(UMP.`raw`) AS minRaw, LP.`lock`
       GROUP BY LP.`learnPath_id`
       ORDER BY LP.`rank`";
 
-$result = mysql_query($sql);
+$result = db_query($sql);
 
 // used to know if the down array (for order) has to be displayed
 $LPNumber = mysql_num_rows($result);
@@ -415,7 +415,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
 
         //echo $blocksql;
 
-        $resultblock = mysql_query($blocksql);
+        $resultblock = db_query($blocksql);
 
         // step 2. see if there is a user progression in db concerning this module of the current learning path
 
@@ -428,7 +428,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
                           AND `user_id`='". (int)$lpUid."'
                          ";
 
-            $resultblock2 = mysql_query($blocksql2);
+            $resultblock2 = db_query($blocksql2);
             $moduleNumber = mysql_num_rows($resultblock2);
         }
         else {

@@ -11,7 +11,7 @@ if( isset($_POST['newRaw']) && is_num($_POST['newRaw']) && $_POST['newRaw'] <= 1
 			SET `raw_to_pass` = " . (int) $_POST['newRaw'] . "
 			WHERE `module_id` = " . (int) $_SESSION['module_id'] . "
 			AND `learnPath_id` = " . (int) $_SESSION['path_id'];
-	claro_sql_query($sql);
+	db_query($sql);
 
 	$dialogBox = $langRawHasBeenChanged;
 }
@@ -31,7 +31,7 @@ $sql = "SELECT `lock`, `raw_to_pass`
        WHERE LPM.`module_id` = " . (int) $_SESSION['module_id'] . "
          AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'];
 
-$learningPath_module = claro_sql_query_fetch_all($sql);
+$learningPath_module = db_query_fetch_all($sql);
 
 if( isset($learningPath_module[0]['lock'])
 	&& $learningPath_module[0]['lock'] == 'CLOSE'

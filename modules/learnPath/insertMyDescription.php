@@ -48,7 +48,7 @@ $sql = "SELECT *
 	FROM `".$TABLEMODULE."` AS M, `".$TABLEASSET."` AS A
 	WHERE A.`module_id` = M.`module_id`
 	AND M.`contentType` = \"".CTCOURSE_DESCRIPTION_."\"";
-$query = claro_sql_query($sql);
+$query = db_query($sql);
 $num = mysql_numrows($query);
 
 if ($num == 0)
@@ -58,7 +58,7 @@ if ($num == 0)
 	$sql = "INSERT INTO `".$TABLEMODULE."`
 		(`name`, `contentType`)
 		VALUES ('Course Description', '".CTCOURSE_DESCRIPTION_."' )";
-	$query = claro_sql_query($sql);
+	$query = db_query($sql);
 
 	$insertedModule_id = mysql_insert_id();
 
@@ -66,19 +66,19 @@ if ($num == 0)
 	$sql = "INSERT INTO `".$TABLEASSET."`
 		(`path` , `module_id`, `comment` )
 		VALUES ('', " . (int)$insertedModule_id . ", '' )";
-	$query = claro_sql_query($sql);
+	$query = db_query($sql);
 
 	$insertedAsset_id = mysql_insert_id();
 
 	$sql = "UPDATE `".$TABLEMODULE."`
 	SET `startAsset_id` = " . (int)$insertedAsset_id . "
 	WHERE `module_id` = " . (int)$insertedModule_id . "";
-	$query = claro_sql_query($sql);
+	$query = db_query($sql);
 
 	// determine the default order of this Learning path
 	$sql = "SELECT MAX(`rank`)
 		FROM `".$TABLELEARNPATHMODULE."`";
-	$result = claro_sql_query($sql);
+	$result = db_query($sql);
 
 	list($orderMax) = mysql_fetch_row($result);
 	$order = $orderMax + 1;
@@ -88,7 +88,7 @@ if ($num == 0)
 		(`learnPath_id`, `module_id`, `rank`, `lock`)
 		VALUES ('". (int)$_SESSION['path_id']."', '". (int)$insertedModule_id."',
 		" . (int)$order . ", 'OPEN')";
-	$query = claro_sql_query($sql);
+	$query = db_query($sql);
 
 	echo "done";
 }
@@ -98,7 +98,7 @@ else
 	// determine the default order of this Learning path
 	$sql = "SELECT MAX(`rank`)
 		FROM `".$TABLELEARNPATHMODULE."`";
-	$result = claro_sql_query($sql);
+	$result = db_query($sql);
 
 	list($orderMax) = mysql_fetch_row($result);
 	$order = $orderMax + 1;
@@ -108,7 +108,7 @@ else
 		(`learnPath_id`, `module_id`, `rank`, `lock`)
 		VALUES ('". (int)$_SESSION['path_id']."', '".(int)$thisDocumentModule['module_id']."',
 		" . (int)$order . ", 'OPEN')";
-	$query = claro_sql_query($sql);
+	$query = db_query($sql);
 
 	echo "done2";
 }

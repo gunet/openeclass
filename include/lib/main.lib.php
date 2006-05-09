@@ -55,6 +55,62 @@ function db_query($sql, $db = FALSE) {
         return $r;
 }
 
+// Eclass SQL query wrapper returning only a single result value.
+// Useful in some cases because, it avoid nested arrays of results.
+function db_query_get_single_value($sqlQuery, $db = FALSE) {
+	$result = db_query($sqlQuery, $db);
+	
+	if ($result) {
+		list($value) = mysql_fetch_row($result);
+		mysql_free_result($result);
+		return $value;
+	}
+	else {
+		return false;
+	}
+}
+
+
+// Claroline SQL query wrapper returning only the first row of the result
+// Useful in some cases because, it avoid nested arrays of results.
+function db_query_get_single_row($sqlQuery, $db = FALSE) {
+    $result = db_query($sqlQuery, $dbHandler);
+
+    if($result) {
+        $row = mysql_fetch_array($result, MYSQL_ASSOC);
+        mysql_free_result($result);
+        return $row;
+    }
+    else {
+        return false;
+    }
+}
+
+// Eclass SQL fetch array returning all the result rows
+// in an associative array. Compared to the PHP mysql_fetch_array(),
+// it proceeds in a single pass.
+function db_fetch_all($sqlResultHandler, $resultType = MYSQL_ASSOC) {
+	$rowList = array();
+
+    while( $row = mysql_fetch_array($sqlResultHandler, $resultType) )
+    {
+        $rowList [] = $row;
+    }
+
+    mysql_free_result($sqlResultHandler);
+
+    return $rowList;
+}
+
+// Eclass SQL query and fetch array wrapper. It returns all the result rows
+// in an associative array.
+function db_query_fetch_all($sqlQuery, $db = FALSE) {
+	$result = db_query($sqlQuery, $db);
+	
+	if ($result) return db_fetch_all($result);
+    else         return false;
+}
+
 
 // ----------------------------------------------------------------------
 // for safety reasons use the functions below

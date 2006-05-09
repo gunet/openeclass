@@ -73,7 +73,7 @@ function buildRequestModules()
               FROM `".$TABLELEARNPATHMODULE."` AS LPM
               WHERE LPM.`learnPath_id` = ". (int)$_SESSION['path_id'];
 
- $firstResult = claro_sql_query($firstSql);
+ $firstResult = db_query($firstSql);
 
  // 2) We build the request to get the modules we need
 
@@ -137,7 +137,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                     WHERE A.`module_id` = M.`module_id`
                       AND A.`path` LIKE \"". addslashes($insertDocument)."\"
                       AND M.`contentType` = \"".CTDOCUMENT_."\"";
-            $query = claro_sql_query($sql);
+            $query = db_query($sql);
             $num = mysql_numrows($query);
             $basename = substr($insertDocument, strrpos($insertDocument, '/') + 1);
 
@@ -147,7 +147,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                 $sql = "INSERT INTO `".$TABLEMODULE."`
                         (`name` , `comment`, `contentType`, `launch_data`)
                         VALUES ('". addslashes($basename) ."' , '". addslashes($langDefaultModuleComment) . "', '".CTDOCUMENT_."','')";
-                $query = claro_sql_query($sql);
+                $query = db_query($sql);
 
                 $insertedModule_id = mysql_insert_id();
 
@@ -155,19 +155,19 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                 $sql = "INSERT INTO `".$TABLEASSET."`
                         (`path` , `module_id` , `comment`)
                         VALUES ('". addslashes($insertDocument)."', " . (int)$insertedModule_id . ", '')";
-                $query = claro_sql_query($sql);
+                $query = db_query($sql);
 
                 $insertedAsset_id = mysql_insert_id();
 
                 $sql = "UPDATE `".$TABLEMODULE."`
                         SET `startAsset_id` = " . (int)$insertedAsset_id . "
                         WHERE `module_id` = " . (int)$insertedModule_id . "";
-                $query = claro_sql_query($sql);
+                $query = db_query($sql);
 
                 // determine the default order of this Learning path
                 $sql = "SELECT MAX(`rank`)
                         FROM `".$TABLELEARNPATHMODULE."`";
-                $result = claro_sql_query($sql);
+                $result = db_query($sql);
 
                 list($orderMax) = mysql_fetch_row($result);
                 $order = $orderMax + 1;
@@ -176,7 +176,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                 $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
                         (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`)
                         VALUES ('". (int)$_SESSION['path_id']."', '".(int)$insertedModule_id."','".addslashes($langDefaultModuleAddedComment)."', ".(int)$order.", 'OPEN')";
-                $query = claro_sql_query($sql);
+                $query = db_query($sql);
                 
                 $addedDoc = $basename;
 
@@ -193,7 +193,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                           AND M.`startAsset_id` = A.`asset_id`
                           AND A.`path` = '". addslashes($insertDocument)."'
                           AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'];
-                $query2 = claro_sql_query($sql);
+                $query2 = db_query($sql);
                 $num = mysql_numrows($query2);
                 if ($num == 0)     // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                 {
@@ -201,7 +201,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                     // determine the default order of this Learning path
                     $sql = "SELECT MAX(`rank`)
                             FROM `".$TABLELEARNPATHMODULE."`";
-                    $result = claro_sql_query($sql);
+                    $result = db_query($sql);
 
                     list($orderMax) = mysql_fetch_row($result);
                     $order = $orderMax + 1;
@@ -209,7 +209,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                     $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
                             (`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`)
                             VALUES ('". (int)$_SESSION['path_id']."', '". (int)$thisDocumentModule['module_id']."','".addslashes($langDefaultModuleAddedComment)."', ".(int)$order.",'OPEN')";
-                    $query = claro_sql_query($sql);
+                    $query = db_query($sql);
                      
                     $addedDoc =  $basename;
 
@@ -273,7 +273,7 @@ $sql = "SELECT *
         FROM `".$TABLEDOCUMENT."`
         WHERE `path` LIKE \"". addslashes($curDirPath) ."/%\"
         AND `path` NOT LIKE \"". addslashes($curDirPath) ."/%/%\"";
-$result = claro_sql_query($sql);
+$result = db_query($sql);
 $attribute = array();
            
 while($row = mysql_fetch_array($result, MYSQL_ASSOC))
@@ -404,13 +404,13 @@ if (isset($attribute))
         $sql = "DELETE
                 FROM `".$dbTable."`
                 WHERE ".$queryClause;
-        claro_sql_query($sql);
+        db_query($sql);
 
         $sql = "DELETE
                 FROM `".$dbTable."`
                 WHERE `comment` LIKE ''
                   AND `visibility` LIKE 'v'";
-        claro_sql_query($sql);
+        db_query($sql);
 
         /* The second query clean the DB 'in case of' empty records (no comment an visibility=v)
            These kind of records should'nt be there, but we never know... */

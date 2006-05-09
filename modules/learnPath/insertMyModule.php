@@ -64,7 +64,7 @@ function buildRequestModules()
               FROM `".$TABLELEARNPATHMODULE."` AS LPM
               WHERE LPM.`learnPath_id` = ". (int)$_SESSION['path_id'];
 
- $firstResult = claro_sql_query($firstSql);
+ $firstResult = db_query($firstSql);
 
  // 2) We build the request to get the modules we need
 
@@ -103,7 +103,7 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add'))
 
     // select all 'addable' modules of this course for this learning path
 
-    $result = claro_sql_query(buildRequestModules());
+    $result = db_query(buildRequestModules());
     $atLeastOne = FALSE;
     $nb=0;
     while ($list = mysql_fetch_array($result))
@@ -115,7 +115,7 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add'))
             $sql = "SELECT MAX(`rank`)
                     FROM `".$TABLELEARNPATHMODULE."`
                     WHERE learnPath_id = " . (int)$_SESSION['path_id'];
-            $result2 = claro_sql_query($sql);
+            $result2 = db_query($sql);
 
             list($orderMax) = mysql_fetch_row($result2);
             $order = $orderMax + 1;
@@ -125,7 +125,7 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add'))
             $insertquery="INSERT INTO `".$TABLELEARNPATHMODULE."`
                           (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock` )
                           VALUES (". (int)$_SESSION['path_id'].", ". (int)$list['module_id'].", '',".$order.", 'OPEN')";
-            claro_sql_query($insertquery);
+            db_query($insertquery);
 
             $atleastOne = TRUE;
             $nb++;
@@ -143,7 +143,7 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add'))
 // this is the same SELECT as "select all 'addable' modules of this course for this learning path"
 // **BUT** normally there is less 'addable' modules here than in the first one
 
-$result = claro_sql_query(buildRequestModules());
+$result = db_query(buildRequestModules());
 
 echo '<table class="claroTable" width="100%">'."\n"
        .'<thead>'."\n"

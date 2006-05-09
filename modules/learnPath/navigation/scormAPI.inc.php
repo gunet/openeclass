@@ -28,7 +28,7 @@ if($uid)
                AND M.`module_id` = LPM.`module_id`
                AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
                AND LPM.`module_id` = ". (int)$_SESSION['module_id'];
-    $userProgressionDetails = claro_sql_query_get_single_row($sql);
+    $userProgressionDetails = db_query_get_single_row($sql);
     //echo $sql;
     //print_r($userProgressionDetails);
 }

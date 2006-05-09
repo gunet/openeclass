@@ -67,7 +67,7 @@ if($_POST['ump_id'])
                 `suspend_data` = '". addslashes($_POST['suspend_data'])."',
                 `credit` = '". addslashes($credit_value) ."'
           WHERE `user_module_progress_id` = ". (int)$_POST['ump_id'];
-  claro_sql_query($sql);
+  db_query($sql);
 }
 
 // display the form to accept new commit and

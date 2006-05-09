@@ -70,24 +70,24 @@ switch( $cmd )
         $sql = "DELETE
                 FROM `".$TABLEASSET."`
                 WHERE `module_id` = ". (int)$_REQUEST['cmdid'];
-        claro_sql_query($sql);
+        db_query($sql);
 
         // delete from all learning path of this course but keep there id before
         $sql = "SELECT *
                 FROM `".$TABLELEARNPATHMODULE."`
                 WHERE `module_id` = ". (int)$_REQUEST['cmdid'];
-        $result = claro_sql_query($sql);
+        $result = db_query($sql);
 
         $sql = "DELETE
                 FROM `".$TABLELEARNPATHMODULE."`
                 WHERE `module_id` = ". (int)$_REQUEST['cmdid'];
-        claro_sql_query($sql);
+        db_query($sql);
 
         // delete the module in modules table
         $sql = "DELETE
                 FROM `".$TABLEMODULE."`
                 WHERE `module_id` = ". (int)$_REQUEST['cmdid'];
-        claro_sql_query($sql);
+        db_query($sql);
 
         //delete all user progression concerning this module
         $sql = "DELETE
@@ -98,12 +98,12 @@ switch( $cmd )
         {
             $sql.=" OR `learnPath_module_id`=". (int)$list['learnPath_module_id'];
         }
-        claro_sql_query($sql);
+        db_query($sql);
 
         // This query does the same as the 3 previous queries but does not work with MySQL versions before 4.0.0
         // delete all asset, all learning path module, and from module table
         /*
-        claro_sql_query("DELETE
+        db_query("DELETE
                        FROM `".$TABLEASSET."`, `".$TABLELEARNPATHMODULE."`, `".$TABLEMODULE."`
                       WHERE `module_id` = ".$_REQUEST['cmdid'] );
         */
@@ -119,7 +119,7 @@ switch( $cmd )
         $query= "SELECT `name`
                  FROM `".$TABLEMODULE."`
                  WHERE `module_id` = '". (int)$_REQUEST['module_id']."'";
-        $result = claro_sql_query($query);
+        $result = db_query($query);
         $list = mysql_fetch_array($result);
         echo "
             <form method=\"post\" name=\"rename\" action=\"".$_SERVER['PHP_SELF']."\">
@@ -143,7 +143,7 @@ switch( $cmd )
                   WHERE `name` = '". addslashes($_POST['newName'])."'
                     AND `module_id` != '". (int)$_REQUEST['module_id']."'";
 
-            $query = claro_sql_query($sql);
+            $query = db_query($sql);
             $num = mysql_numrows($query);
             if($num == 0 ) // "name" doesn't already exist
             {
@@ -152,7 +152,7 @@ switch( $cmd )
                         SET `name`= '". addslashes($_POST['newName'])."'
                         WHERE `module_id` = '". (int)$_REQUEST['module_id']."'";
 
-                $result = claro_sql_query($query);
+                $result = db_query($query);
             }
             else
             {
@@ -175,7 +175,7 @@ switch( $cmd )
             $query="SELECT `comment`
                     FROM `".$TABLEMODULE."`
                     WHERE `module_id` = '". (int)$_REQUEST['module_id']."'";
-            $result = claro_sql_query($query);
+            $result = db_query($query);
             $comment = mysql_fetch_array($result);
             
             if( isset($comment['comment']) )
@@ -199,7 +199,7 @@ switch( $cmd )
             $sql = "UPDATE `".$TABLEMODULE."`
                     SET `comment` = \"". addslashes($_REQUEST['comment']) ."\"
                     WHERE `module_id` = '". (int)$_REQUEST['module_id']."'";
-            claro_sql_query($sql);
+            db_query($sql);
         }
         break;
 }
@@ -232,7 +232,7 @@ $sql = "SELECT M.*, count(M.`module_id`) AS timesUsed
         GROUP BY M.`module_id`
         ORDER BY M.`name` ASC, M.`contentType`ASC, M.`accessibility` ASC";
 
-$result = claro_sql_query($sql);
+$result = db_query($sql);
 $atleastOne = false;
 
 // Display modules of the pool of this course

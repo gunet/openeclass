@@ -141,7 +141,7 @@ function commentBox($type, $mode)
             $sql = "UPDATE `" . $tbl_name . "`
                            SET `" . $col_name . "` = \"". addslashes($_POST['insertCommentBox'])."\"
                          WHERE " . $where_cond;
-            claro_sql_query($sql);
+            db_query($sql);
             
             if($mode == UPDATE_)
             	$dsp = true;
@@ -154,7 +154,7 @@ function commentBox($type, $mode)
             $sql = "SELECT `".$col_name."`
                        FROM `" . $tbl_name . "`
                       WHERE " . $where_cond;
-            $oldComment = claro_sql_query_get_single_value($sql);
+            $oldComment = db_query_get_single_value($sql);
 
             echo '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">' . "\n"
                 .claro_disp_html_area('insertCommentBox', $oldComment, 15, 55).'<br />' . "\n"
@@ -173,7 +173,7 @@ function commentBox($type, $mode)
         $sql =  "UPDATE `" . $tbl_name . "`
                  SET `" . $col_name . "` = ''
                  WHERE " . $where_cond;
-        claro_sql_query($sql);
+        db_query($sql);
         $dsp = TRUE;
     }
 
@@ -184,7 +184,7 @@ function commentBox($type, $mode)
                 FROM `" . $tbl_name . "`
                 WHERE " . $where_cond;
 
-        $result = mysql_query($sql);
+        $result = db_query($sql);
         if($result)
         {
            list($value) = mysql_fetch_row($result);
@@ -285,7 +285,7 @@ function nameBox($type, $mode)
                                  FROM `" . $tbl_name . "`
                                 WHERE `" . $col_name . "` = '" . addslashes($_POST['newName']) . "'
                                   AND !(" . $where_cond . ")";
-            $num = claro_sql_query_get_single_value($sql);
+            $num = db_query_get_single_value($sql);
 
             if ($num == 0)  // name doesn't already exists
             {
@@ -294,7 +294,7 @@ function nameBox($type, $mode)
                                       SET `" . $col_name . "` = '" . addslashes($_POST['newName']) ."'
                                     WHERE " . $where_cond;
 
-                claro_sql_query($sql);
+                db_query($sql);
                 $dsp = TRUE;
             }
             else
@@ -309,7 +309,7 @@ function nameBox($type, $mode)
                     FROM `" . $tbl_name . "`
                     WHERE " . $where_cond;
 
-            $oldName = claro_sql_query_get_single_value($sql);
+            $oldName = db_query_get_single_value($sql);
 
             echo '<form method="POST" action="' . $_SERVER['PHP_SELF'].'">' . "\n"
             .    '<input type="text" name="newName" size="50" maxlength="255" value="'.htmlspecialchars($oldName).'" />'
@@ -330,7 +330,7 @@ function nameBox($type, $mode)
                       FROM `" . $tbl_name . "`
                      WHERE " . $where_cond;
 
-        $result = mysql_query($sql);
+        $result = db_query($sql);
         if($result)
         {
            list($value) = mysql_fetch_row($result);
@@ -512,7 +512,7 @@ function display_path_content()
               AND LP.`learnPath_id` = LPM.`learnPath_id`
               AND LPM.`module_id` = M.`module_id`
             ORDER BY LPM.`rank`";
-    $moduleList = claro_sql_query_fetch_all($sql);
+    $moduleList = db_query_fetch_all($sql);
 
     $extendedList = array();
     foreach( $moduleList as $module)
@@ -605,7 +605,7 @@ function get_learnPath_progress($lpid, $lpUid)
               AND M.`module_id` = LPM.`module_id`
               AND M.`contentType` != '" . CTLABEL_ . "'";
 
-    $result = mysql_query($sql);
+    $result = db_query($sql);
 	$modules = array();
 
     while( $row = mysql_fetch_array($result) )
@@ -653,7 +653,7 @@ function get_learnPath_progress($lpid, $lpUid)
                     AND M.`contentType` != '" . CTLABEL_ . "'
                     AND M.`module_id` = LPM.`module_id`
                     ";
-        $result = mysql_query($sqlnum);
+        $result = db_query($sqlnum);
         if($result) {
             list($value) = mysql_fetch_row($result);
             mysql_free_result($result);
@@ -721,7 +721,7 @@ function display_my_exercises($dialogBox)
     $sql = "SELECT `id`, `titre` AS `title`, `description`
             FROM `" . $tbl_quiz_test . "`
             ORDER BY  `titre`, `id`";
-    $exercises = claro_sql_query_fetch_all($sql);
+    $exercises = db_query_fetch_all($sql);
     
     if( is_array($exercises) && !empty($exercises) )
     {
@@ -1155,7 +1155,7 @@ function set_module_tree_visibility($module_tree, $visibility)
                         SET `visibility` = '" . addslashes($visibility) . "'
                         WHERE `learnPath_module_id` = " . (int) $module['learnPath_module_id'] . "
                           AND `visibility` != '" . addslashes($visibility) . "'";
-            claro_sql_query ($sql);
+            db_query($sql);
         }
         if (isset($module['children']) && is_array($module['children']) ) set_module_tree_visibility($module['children'], $visibility);
     }
@@ -1185,17 +1185,17 @@ function delete_module_tree($module_tree)
                                     FROM `".$tbl_lp_asset."`
                                     WHERE `module_id` =  ". (int)$module['module_id']."
                                     ";
-                claro_sql_query($delAssetSql);
+                db_query($delAssetSql);
                 // no break; because we need to delete modul
             case CTLABEL_ : // delete module if scorm && if label
                 $delModSql = "DELETE FROM `" . $tbl_lp_module . "`
                                      WHERE `module_id` =  ". (int)$module['module_id'];
-                claro_sql_query($delModSql);
+                db_query($delModSql);
                 // no break; because we need to delete LMP and UMP
             default : // always delete LPM and UMP
-                claro_sql_query("DELETE FROM `" . $tbl_lp_rel_learnPath_module . "`
+                db_query("DELETE FROM `" . $tbl_lp_rel_learnPath_module . "`
                                         WHERE `learnPath_module_id` = " . (int)$module['learnPath_module_id']);
-                claro_sql_query("DELETE FROM `" . $tbl_lp_user_module_progress . "`
+                db_query("DELETE FROM `" . $tbl_lp_user_module_progress . "`
                                         WHERE `learnPath_module_id` = " . (int)$module['learnPath_module_id']);
     
                 break;

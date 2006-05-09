@@ -60,7 +60,7 @@ mysql_select_db($currentCourseID);
 
 $sql = "SELECT *
         FROM `".$TABLEEXERCISES;
-$resultex = claro_sql_query($sql);
+$resultex = db_query($sql);
 
 // for each exercise checked, try to add it to the learning path.
 
@@ -78,7 +78,7 @@ while ($listex = mysql_fetch_array($resultex) )
                   AND A.`path` LIKE \"". (int)$insertedExercise."\"
                   AND M.`contentType` = \"".CTEXERCISE_."\"";
 
-        $query = claro_sql_query($sql);
+        $query = db_query($sql);
 
         $num = mysql_numrows($query);
 
@@ -89,14 +89,14 @@ while ($listex = mysql_fetch_array($resultex) )
                     FROM `".$TABLEEXERCISES."`
                     WHERE `id` = ". (int)$insertedExercise;
 
-            $result = claro_sql_query($sql);
+            $result = db_query($sql);
             $exercise = mysql_fetch_array($result);
 
             // create new module
             $sql = "INSERT INTO `".$TABLEMODULE."`
                     (`name` , `comment`, `contentType`, `launch_data`)
                     VALUES ('".addslashes($exercise['titre'])."' , '".addslashes($langDefaultModuleComment)."', '".CTEXERCISE_."','')";
-            $query = claro_sql_query($sql);
+            $query = db_query($sql);
 
             $insertedExercice_id = mysql_insert_id();
 
@@ -104,17 +104,17 @@ while ($listex = mysql_fetch_array($resultex) )
             $sql = "INSERT INTO `".$TABLEASSET."`
                     (`path` , `module_id` , `comment`)
                     VALUES ('". (int)$insertedExercise."', ". (int)$insertedExercice_id ." , '')";
-            $query = claro_sql_query($sql);
+            $query = db_query($sql);
 
             $insertedAsset_id = mysql_insert_id();
 
             $sql = "UPDATE `".$TABLEMODULE."`
                        SET `startAsset_id` = ". (int)$insertedAsset_id."
                      WHERE `module_id` = ". (int)$insertedExercice_id;
-            $query = claro_sql_query($sql);
+            $query = db_query($sql);
 
             // determine the default order of this Learning path
-            $result = claro_sql_query("SELECT MAX(`rank`)
+            $result = db_query("SELECT MAX(`rank`)
                                      FROM `".$TABLELEARNPATHMODULE."`");
 
             list($orderMax) = mysql_fetch_row($result);
@@ -123,7 +123,7 @@ while ($listex = mysql_fetch_array($resultex) )
             $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
                     (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`)
                     VALUES ('". (int)$_SESSION['path_id']."', '".(int)$insertedExercice_id."','".addslashes($langDefaultModuleAddedComment)."', ".$order.",'OPEN')";
-            $query = claro_sql_query($sql);
+            $query = db_query($sql);
 
             $dialogBox .= $exercise['titre'] ." :  ".$langExInsertedAsModule."<br>";
         }
@@ -139,7 +139,7 @@ while ($listex = mysql_fetch_array($resultex) )
                        AND A.`path` = ". (int)$insertedExercise."
                        AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'];
 
-            $query2 = claro_sql_query($sql);
+            $query2 = db_query($sql);
             $num = mysql_numrows($query2);
 
             if ($num == 0)     // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
@@ -148,7 +148,7 @@ while ($listex = mysql_fetch_array($resultex) )
                 // determine the default order of this Learning path
                 $sql = "SELECT MAX(`rank`)
                         FROM `".$TABLELEARNPATHMODULE."`";
-                $result = claro_sql_query($sql);
+                $result = db_query($sql);
 
                 list($orderMax) = mysql_fetch_row($result);
                 $order = $orderMax + 1;
@@ -157,14 +157,14 @@ while ($listex = mysql_fetch_array($resultex) )
                 $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
                         (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`)
                         VALUES (".(int)$_SESSION['path_id'].", ".(int)$thisExerciseModule['module_id'].",'".addslashes($langDefaultModuleAddedComment)."', ".$order.", 'OPEN')";
-                $query = claro_sql_query($sql);
+                $query = db_query($sql);
 
                 // select infos about added exercise
                 $sql = "SELECT *
                         FROM `".$TABLEEXERCISES."`
                         WHERE `id` = ". (int)$insertedExercise;
 
-                $result = claro_sql_query($sql);
+                $result = db_query($sql);
                 $exercise = mysql_fetch_array($result);
                 $dialogBox .= $exercise['titre']." : ".$langExInsertedAsModule."<br>";
             }

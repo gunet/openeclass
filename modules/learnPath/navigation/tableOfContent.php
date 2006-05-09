@@ -75,7 +75,7 @@ $sql = "SELECT LPM.`learnPath_module_id` ,
      GROUP BY LPM.`module_id`
      ORDER BY LPM.`rank`";
 
-$extendedList = claro_sql_query_fetch_all($sql);
+$extendedList = db_query_fetch_all($sql);
 
 // build the array of modules
 // build_element_list return a multi-level array, where children is an array with all nested modules
@@ -100,7 +100,7 @@ $sql = "SELECT `name`
       FROM `".$TABLELEARNPATH."`
       WHERE `learnPath_id` = '". (int)$_SESSION['path_id']."'";
 
-$lpName = claro_sql_query_get_single_value($sql);
+$lpName = db_query_get_single_value($sql);
 
 echo '<p><b>'.wordwrap($lpName,$moduleNameLength,' ',1).'</b></p>'."\n"
 	. '<p>'."\n"

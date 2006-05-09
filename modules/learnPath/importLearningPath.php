@@ -492,14 +492,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
     // this line will be removed if an error occurs
     $sql = "SELECT MAX(`rank`)
             FROM `".$TABLELEARNPATH."`";
-    $result = claro_sql_query($sql);
+    $result = db_query($sql);
 
     list($rankMax) = mysql_fetch_row($result);
 
     $sql = "INSERT INTO `".$TABLELEARNPATH."`
             (`name`,`visibility`,`rank`,`comment`)
             VALUES ('". addslashes($lpName) ."','HIDE',".($rankMax+1).",'')";
-    claro_sql_query($sql);
+    db_query($sql);
     
     $tempPathId = mysql_insert_id();
     $baseWorkDir .= "path_".$tempPathId;
@@ -843,7 +843,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
                             (`name` , `comment`, `contentType`, `launch_data`)
                             VALUES ('".addslashes($chapterTitle)."' , '', '".CTLABEL_."','')";
 
-                    $query = claro_sql_query($sql);
+                    $query = db_query($sql);
                     
                     if ( mysql_error() )
                     {
@@ -868,7 +868,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
                     $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
                             (`learnPath_id`, `module_id`,`rank`, `visibility`, `parent`)
                             VALUES ('".$tempPathId."', '".$insertedModule_id[$i]."', ".$rank.", '".$visibility."', ".$parent.")";
-                    $query = claro_sql_query($sql);
+                    $query = db_query($sql);
                      
                     // get the inserted id of the learnPath_module rel to allow 'parent' link in next inserts
                     $insertedLPMid[$item['itemIdentifier']]['LPMid'] = mysql_insert_id();
@@ -928,7 +928,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
                 $sql = "INSERT INTO `".$TABLEMODULE."`
                         (`name` , `comment`, `contentType`, `launch_data`)
                         VALUES ('".addslashes($moduleName)."' , '".addslashes($description)."', '".CTSCORM_."', '".addslashes($item['datafromlms'])."')";
-                $query = claro_sql_query($sql);
+                $query = db_query($sql);
 
                 if ( mysql_error() )
                 {
@@ -963,7 +963,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
                         (`path` , `module_id` , `comment`)
                         VALUES ('". addslashes($assetPath) ."', ".$insertedModule_id[$i]." , '')";
 
-                $query = claro_sql_query($sql);
+                $query = db_query($sql);
                 if ( mysql_error() )
                 {
                     $errorFound = true;
@@ -977,7 +977,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
                 $sql = "UPDATE `".$TABLEMODULE."`
                         SET `startAsset_id` = ". (int)$insertedAsset_id[$i]."
                         WHERE `module_id` = ". (int)$insertedModule_id[$i];
-                $query = claro_sql_query($sql);
+                $query = db_query($sql);
 
                 if ( mysql_error() )
                 {
@@ -1000,7 +1000,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
                 $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
                         (`learnPath_id`, `module_id`, `specificComment`, `rank`, `visibility`, `lock`, `parent`)
                         VALUES ('".$tempPathId."', '".$insertedModule_id[$i]."','".addslashes($langDefaultModuleAddedComment)."', ".$rank.", '".$visibility."', 'OPEN', ".$parent.")";
-                $query = claro_sql_query($sql);
+                $query = db_query($sql);
                     
                 // get the inserted id of the learnPath_module rel to allow 'parent' link in next inserts
                 $insertedLPMid[$item['itemIdentifier']]['LPMid']  = mysql_insert_id();
@@ -1054,7 +1054,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
         {
             $sqlDelAssets .= " OR `asset_id` = ". (int)$insertedAsset;
         }
-        claro_sql_query($sqlDelAssets);
+        db_query($sqlDelAssets);
 
         // delete modules
         $sqlDelModules = "DELETE FROM `".$TABLEMODULE."`
@@ -1063,17 +1063,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
         {
              $sqlDelModules .= " OR `module_id` = ". (int)$insertedModule;
         }
-        claro_sql_query($sqlDelModules);
+        db_query($sqlDelModules);
 
         // delete learningPath_module
         $sqlDelLPM = "DELETE FROM `".$TABLELEARNPATHMODULE."`
                       WHERE `learnPath_id` = ". (int)$tempPathId;
-        claro_sql_query($sqlDelLPM);
+        db_query($sqlDelLPM);
 
         // delete learning path
         $sqlDelLP = "DELETE FROM `".$TABLELEARNPATH."`
                      WHERE `learnPath_id` = ". (int)$tempPathId;
-        claro_sql_query($sqlDelLP);
+        db_query($sqlDelLP);
 
         // delete the directory (and files) of this learning path and all its content
         claro173_delete_file($baseWorkDir);
@@ -1084,7 +1084,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
         // finalize insertion : update the empty learning path insert that was made to find its id
         $sql = "SELECT MAX(`rank`)
                 FROM `".$TABLELEARNPATH."`";
-        $result = claro_sql_query($sql);
+        $result = db_query($sql);
 
         list($rankMax) = mysql_fetch_row($result);
 
@@ -1113,7 +1113,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
                     `comment` = '".addslashes($lpComment)."',
                     `visibility` = 'SHOW'
                 WHERE `learnPath_id` = ". (int)$tempPathId;
-        claro_sql_query($sql);
+        db_query($sql);
 
     }
 

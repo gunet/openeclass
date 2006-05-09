@@ -609,7 +609,7 @@ function update_db_info173($action, $filePath, $newParamList = array())
                      WHERE path=\"".addslashes($filePath)."\"
                      OR    path LIKE \"".addslashes($filePath)."/%\"";
 
-        claro_sql_query($theQuery);
+        db_query($theQuery);
     }
     elseif ($action == 'update')
     {
@@ -619,7 +619,7 @@ function update_db_info173($action, $filePath, $newParamList = array())
                 FROM `".$dbTable."`
                 WHERE path=\"".addslashes($filePath)."\"";
 
-        $result = claro_sql_query_fetch_all($sql);
+        $result = db_query_fetch_all($sql);
         if ( count($result) > 0 ) list($oldAttributeList) = $result;
         else                      $oldAttributeList = null;
     
@@ -657,7 +657,7 @@ function update_db_info173($action, $filePath, $newParamList = array())
             }
         } // end else if ! $oldAttributeList
 
-        if( isset($theQuery ) ) claro_sql_query($theQuery);
+        if( isset($theQuery ) ) db_query($theQuery);
 
         if ( $newPath )
         {
@@ -667,7 +667,7 @@ function update_db_info173($action, $filePath, $newParamList = array())
                         WHERE path = '" . addslashes($filePath) . "' 
                         OR path LIKE '" . addslashes($filePath) . "/%'";
 
-            claro_sql_query($theQuery);
+            db_query($theQuery);
         }
     } // end else if action == update
 }
@@ -691,7 +691,7 @@ function update_Doc_Path_in_Assets($type, $oldPath, $newPath)
                                               SUBSTRING(`path`, LENGTH('" . addslashes($oldPath) . "')+1) )
                           WHERE `path` LIKE '" . addslashes($oldPath) . "%'";
 
-                  claro_sql_query($sql);
+                  db_query($sql);
 
                   break;
 
@@ -706,7 +706,7 @@ function update_Doc_Path_in_Assets($type, $oldPath, $newPath)
                          WHERE `path` LIKE '" . addslashes($oldPath) . "%' 
                          ";
 
-                  $result = claro_sql_query($sql);
+                  $result = db_query($sql);
 
                   $num = mysql_numrows($result);
                   if ($num != 0)
@@ -723,7 +723,7 @@ function update_Doc_Path_in_Assets($type, $oldPath, $newPath)
                            $sqllpm.= " OR `module_id` = '" . (int)$list['module_id'] . "' ";
                         }
                         
-                        $result2 = claro_sql_query($sqllpm);
+                        $result2 = db_query($sqllpm);
 
                         //delete the learning path module(s)
 
@@ -738,7 +738,7 @@ function update_Doc_Path_in_Assets($type, $oldPath, $newPath)
                                 WHERE 0=1
                                ";
                                
-                        $result = mysql_query($sqllpm);//:to reset result resused
+                        $result = db_query($sqllpm);//:to reset result resused
 
                         while ($list=mysql_fetch_array($result))
                         {
@@ -746,8 +746,8 @@ function update_Doc_Path_in_Assets($type, $oldPath, $newPath)
                            $sql2.= " OR `module_id` = '" . (int)$list['module_id'] . "' ";
                         }
 
-                        claro_sql_query($sql1);
-                        claro_sql_query($sql2);
+                        db_query($sql1);
+                        db_query($sql2);
 
                         //delete the user module progress concerned
 
@@ -760,7 +760,7 @@ function update_Doc_Path_in_Assets($type, $oldPath, $newPath)
                            $sql.= " OR `learnPath_module_id` = '" . (int)$list['learnPath_module_id'] . "' ";
                         }
 
-                        claro_sql_query($sql);
+                        db_query($sql);
 
                         // delete the assets
 
@@ -770,7 +770,7 @@ function update_Doc_Path_in_Assets($type, $oldPath, $newPath)
                                `path` LIKE '" . addslashes($oldPath) . "%'
                                ";
 
-                        claro_sql_query($sql);
+                        db_query($sql);
                   } //end if($num !=0)
                   break;
          }

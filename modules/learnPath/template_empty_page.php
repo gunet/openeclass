@@ -37,14 +37,6 @@ else { // Student View
 
 /*>>>>>>>>>>>> END: COMMON TO TEACHERS AND STUDENTS <<<<<<<<<<<<*/
 
-/*  TODO
-
-- Add introduction text
-- Create | Import | Other stuff
-- Learning Path table
-
-*/
-
 ?>
 
 </body>

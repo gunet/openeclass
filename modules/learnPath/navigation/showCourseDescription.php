@@ -28,7 +28,7 @@ $nameTools = $langCourseProgram;
 
 	mysql_select_db("$currentCourseID",$db);
 	$sql = "SELECT `id`,`title`,`content` FROM `course_description` order by id";
-	$res = mysql_query($sql);
+	$res = db_query($sql);
 	if (mysql_num_rows($res) >0 )
 	{
 		echo "

@@ -57,13 +57,13 @@ if($uid) // if not anonymous
 	         AND UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
 	         AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
 	         AND LPM.`module_id` = ". (int)$_SESSION['module_id'];
-	$num = claro_sql_query_get_single_value($sql);
+	$num = db_query_get_single_value($sql);
 
 	$sql = "SELECT `learnPath_module_id`
 	        FROM `".$TABLELEARNPATHMODULE."`
 	       WHERE `learnPath_id` = ". (int)$_SESSION['path_id']."
 	         AND `module_id` = ". (int)$_SESSION['module_id'];
-	$learnPathModuleId = claro_sql_query_get_single_value($sql);
+	$learnPathModuleId = db_query_get_single_value($sql);
 
 	// if never intialised : create an empty user_module_progress line
 	if( !$num || $num == 0 )
@@ -71,7 +71,7 @@ if($uid) // if not anonymous
 	    $sql = "INSERT INTO `".$TABLEUSERMODULEPROGRESS."`
 	            ( `user_id` , `learnPath_id` , `learnPath_module_id`, `lesson_location`, `suspend_data` )
 	            VALUES ( '" . (int)$uid . "' , ". (int)$_SESSION['path_id']." , ". (int)$learnPathModuleId.",'', '')";
-	    claro_sql_query($sql);
+	    db_query($sql);
 	}
 }  // else anonymous : record nothing !
 
@@ -82,13 +82,13 @@ $sql = "SELECT `contentType`,`startAsset_id`
           FROM `".$TABLEMODULE."`
          WHERE `module_id` = ". (int)$_SESSION['module_id'];
 
-$module = claro_sql_query_get_single_row($sql);
+$module = db_query_get_single_row($sql);
 
 $sql = "SELECT `path`
                FROM `".$TABLEASSET."`
               WHERE `asset_id` = ". (int)$module['startAsset_id'];
 
-$assetPath = claro_sql_query_get_single_value($sql);
+$assetPath = db_query_get_single_value($sql);
 
 // Get path of file of the starting asset to launch
 
@@ -109,7 +109,7 @@ switch ($module['contentType'])
 		             WHERE `user_id` = " . (int)$uid . "
 		               AND `learnPath_module_id` = ". (int)$learnPathModuleId;
 
-		    claro_sql_query($sql);
+		    db_query($sql);
 		} // else anonymous : record nothing
 
 		$startAssetPage = urlencode($assetPath);
@@ -169,7 +169,7 @@ switch ($module['contentType'])
 		             WHERE `user_id` = " . (int)$uid . "
 		               AND `learnPath_module_id` = ". (int)$learnPathModuleId;
 
-		    claro_sql_query($sql);
+		    db_query($sql);
 		} // else anonymous : record nothing
 		
 		$moduleStartAssetPage = "showCourseDescription.php";

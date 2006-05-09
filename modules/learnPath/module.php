@@ -70,7 +70,7 @@ $sql = "SELECT `comment`, `startAsset_id`, `contentType`
         FROM `".$TABLEMODULE."`
         WHERE `module_id` = ". (int)$_SESSION['module_id'];
 
-$module = claro_sql_query_get_single_row($sql);
+$module = db_query_get_single_row($sql);
 
 if( empty($module['comment']) || $module['comment'] == $langDefaultModuleComment )
 {
@@ -97,7 +97,7 @@ $sql = "SELECT `specificComment`
         FROM `".$TABLELEARNPATHMODULE."`
         WHERE `module_id` = ". (int)$_SESSION['module_id'];
 
-$learnpath_module = claro_sql_query_get_single_row($sql);
+$learnpath_module = db_query_get_single_row($sql);
 
 if( empty($learnpath_module['specificComment']) || $learnpath_module['specificComment'] == $langDefaultModuleAddedComment )
 {
@@ -125,7 +125,7 @@ $sql = "SELECT `contentType`,
           AND LPM.`module_id` = ". (int)$_SESSION['module_id']."
           AND LPM.`module_id` = M.`module_id`
              ";
-$resultBrowsed = claro_sql_query_get_single_row($sql);
+$resultBrowsed = db_query_get_single_row($sql);
 
 // redirect user to the path browser if needed
 if( !$is_AllowedToEdit
@@ -313,7 +313,7 @@ if($module['contentType'] != CTLABEL_) //
              WHERE `asset_id` = ". (int)$module['startAsset_id']."
                AND `module_id` = ". (int)$_SESSION['module_id'];
 
-	$asset = claro_sql_query_get_single_row($sql);
+	$asset = db_query_get_single_row($sql);
 
     if( $module['startAsset_id'] != "" && $asset['asset_id'] == $module['startAsset_id'] )
     {

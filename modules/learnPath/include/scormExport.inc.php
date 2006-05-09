@@ -124,7 +124,7 @@ class ScormExport
                 FROM `'.$TABLELEARNPATH.'`
                 WHERE `learnPath_id` = '. $this->id;
                 
-        $result = claro_sql_query($sql);
+        $result = db_query($sql);
         if ( empty($result) )
         {
             $this->error[] = $langLearningPathNotFound;
@@ -163,7 +163,7 @@ class ScormExport
                 ORDER BY LPM.`parent`, LPM.`rank`
                ';
 
-        $result = claro_sql_query($sql);
+        $result = db_query($sql);
         if ( empty($result) )
         {
             $this->error = $langLearningPathEmpty;

@@ -86,7 +86,7 @@ $sql = "SELECT LPM.`learnPath_module_id`,
        GROUP BY LPM.`module_id`
        ORDER BY LPM.`rank`";
 
-$extendedList = claro_sql_query_fetch_all($sql);
+$extendedList = db_query_fetch_all($sql);
 
 // build the array of modules     
 // build_element_list return a multi-level array, where children is an array with all nested modules
