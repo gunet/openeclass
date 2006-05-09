@@ -140,7 +140,7 @@ function claro_rename_file($oldFilePath, $newFilePath)
  */
 
 
-function claro_move_file($sourcePath, $targetPath)
+/*function claro_move_file($sourcePath, $targetPath)
 {
     if (realpath($sourcePath) == realpath($targetPath) ) return true;
 
@@ -163,7 +163,7 @@ function claro_move_file($sourcePath, $targetPath)
     {
         return rename($sourcePath, $targetPath);
     }
-}
+}*/
 
 //------------------------------------------------------------------------------
 
