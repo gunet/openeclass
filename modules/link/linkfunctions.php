@@ -20,7 +20,8 @@ function addlinkcategory($type)
 {
 	global $catlinkstatus;
 	global $msgErr;
-
+	global $tool_content;
+	global $dbname;
 	$ok=true;
 
 	if($type == "link")
@@ -59,7 +60,7 @@ function addlinkcategory($type)
 			}
 
 			// looking for the largest ordre number for this category
-			$result=db_query("SELECT MAX(ordre) FROM  `".$tbl_link."` WHERE category='$selectcategory'");
+			$result=db_query("SELECT MAX(ordre) FROM  `".$tbl_link."` WHERE category='$selectcategory'", $dbname);
 
 			list($orderMax)=mysql_fetch_row($result);
 
@@ -90,7 +91,7 @@ function addlinkcategory($type)
 		else
 		{
 			// looking for the largest ordre number for this category
-			$result = db_query("SELECT MAX(ordre) FROM  `".$tbl_categories."`");
+			$result = db_query("SELECT MAX(ordre) FROM  `".$tbl_categories."`" , $dbname);
 
 			list($orderMax) = mysql_fetch_row($result);
 
@@ -104,7 +105,7 @@ function addlinkcategory($type)
 		}
 	}
 
-	db_query($sql);
+	db_query($sql, $dbname);
 	return $ok;
 }
 // End of the function addlinkcategory
@@ -116,6 +117,8 @@ function deletelinkcategory($type)
 global $tbl_categories;
 global $tbl_link;
 global $catlinkstatus;
+global $tool_content;
+global $dbname;
 
 if ($type=="link")
 	{
@@ -131,12 +134,12 @@ if ($type=="category")
 	global $langCategoryDeleted;
 	// first we delete the category itself and afterwards all the links of this category.
 	$sql="DELETE FROM `".$tbl_categories."` WHERE id='".$id."'";
-	db_query($sql);
+	db_query($sql, $dbname);
 	$sql="DELETE FROM `".$tbl_link."` WHERE category='".$id."'";
 	$catlinkstatus=$langCategoryDeleted;
 	unset($id);
 	}
-db_query($sql);
+db_query($sql, $dbname);
 // End of the function deletelinkcategory
 }
 
@@ -151,6 +154,8 @@ global $catlinkstatus;
 global $id;
 global $submitLink;
 global $submitCategory;
+global $tool_content;
+global $dbname;
 
 if ($type=="link")
 	{
@@ -163,7 +168,7 @@ if ($type=="link")
 	if (!$submitLink)
 		{
 		$sql="SELECT * FROM `".$tbl_link."` WHERE id='".$id."'";
-		$result=db_query($sql);
+		$result=db_query($sql, $dbname);
 		if ($myrow=mysql_fetch_array($result))
 			{
 			$urllink = $myrow["url"];
@@ -179,7 +184,7 @@ if ($type=="link")
 		global $selectcategory;
 
 		$sql="UPDATE `".$tbl_link."` set url='$urllink', titre='$title', description='$description', category='$selectcategory' WHERE id='".$id."'";
-		mysql_query($sql);
+		db_query($sql, $dbname);
 		$catlinkstatus=$langLinkModded;
 
 		}
@@ -193,7 +198,7 @@ if ($type=="category")
 	if (!$submitCategory)
 		{
 		$sql="SELECT * FROM `".$tbl_categories."` WHERE id='".$id."'";
-		$result=mysql_query($sql);
+		$result=db_query($sql, $dbname);
 		if ($myrow=mysql_fetch_array($result))
 			{
 			$categoryname= $myrow["categoryname"];
@@ -205,7 +210,7 @@ if ($type=="category")
 		{
 		global $langCategoryModded;
 		$sql="UPDATE `".$tbl_categories."` set categoryname='$categoryname', description='$description' WHERE id='".$id."'";
-		mysql_query($sql);
+		db_query($sql, $dbname);
 		$catlinkstatus=$langCategoryModded;
 		}
 	}
@@ -223,6 +228,7 @@ function makedefaultviewcode($locatie)
 {
 global $aantalcategories;
 global $view;
+global $tool_content;
 
 for($j = 0; $j <= $aantalcategories-1; $j++)
 	{
@@ -252,58 +258,61 @@ global $langLinkDelconfirm;
 global $langDelete;
 global $langCategoryDelconfirm;
 global $langModify, $langLinks;
-
+global $tool_content;
+global $dbname;
 
 $sqlLinks = "SELECT * FROM `".$tbl_link."` WHERE category='".$catid."' ORDER BY ordre DESC";
-$result = mysql_query($sqlLinks);
+$result = db_query($sqlLinks, $dbname);
 $numberoflinks=mysql_num_rows($result);
-echo "<table border=\"0\">";
+//$tool_content .=  "<table width=\"99%\">";
 $i=1;
 while ($myrow = mysql_fetch_array($result))
 	{
 	$myrow[3] = parse_tex($myrow[3]);
-	echo	"<tr>",
-			"<td align=\"right\" valign=\"top\" width=\"40\">",
-			"<img src=\"../../images/pixel.gif\" border=\"0\" width=\"10\">",
-			"<a href=\"link_goto.php?link_id=",$myrow[0],"&link_url=",urlencode($myrow[1]),"\" target=\"_blank\">",
-			"<img src=\"../../images/liens.png\" border=\"0\" alt=\"".$langLinks."\">",
-			"</td>",
+	$tool_content .= 	"<tr>
+			<td align=\"right\" valign=\"top\" width=\"20\">
+			<img src=\"../../images/pixel.gif\" border=\"0\" width=\"10\">
+			<a href=\"link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">
+			<img src=\"../../images/links.gif\" border=\"0\" alt=\"".$langLinks."\">
+			</td>
 
-			"<td width=\"580\" valign=\"top\">",
-                        "<a href=\"link_goto.php?link_id=",$myrow[0],"&link_url=",urlencode($myrow[1]),"\" target=\"_blank\">",$myrow[2],"</a>\n",
-			"<br>",$myrow[3],"";
+			<td width=\"580\" valign=\"top\">
+                        <a href=\"link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">".$myrow[2]."</a>\n
+			<br>".$myrow[3]."";
 	if ($is_adminOfCourse)
 		{
-		echo	"<br>";
+		$tool_content .= 	"<br>";
 			if (isset($category))
-				echo "<a href=\"$_SERVER[PHP_SELF]?action=editlink&category=$category&id=$myrow[0]&urlview=$urlview\">";
+				$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?action=editlink&category=$category&id=$myrow[0]&urlview=$urlview\">";
 			else 
-				echo "<a href=\"$_SERVER[PHP_SELF]?action=editlink&id=$myrow[0]&urlview=$urlview\">";
-			echo "<img src=\"../../images/edit.gif\" border=\"0\" alt=\"",$langModify,"\">",
-				"</a>",
-				" <a href=\"",$_SERVER['PHP_SELF'],"?action=deletelink&id=",$myrow[0],"&urlview=",$urlview,"\" onclick=\"javascript:if(!confirm('".$langLinkDelconfirm."')) return false;\">",
-				"<img src=\"../../images/delete.gif\" border=\"0\" alt=\"",$langDelete,"\">",
-				"</a>";
+				$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?action=editlink&id=$myrow[0]&urlview=$urlview\">";
+			$tool_content .=  "<img src=\"../../images/edit.gif\" border=\"0\" alt=\"".$langModify."\">
+				</a>
+				<a href=\"".$_SERVER['PHP_SELF']."?action=deletelink&id=".$myrow[0]."&urlview=".$urlview."\" onclick=\"javascript:if(!confirm('".$langLinkDelconfirm."')) return false;\">
+				<img src=\"../../images/delete.gif\" border=\"0\" alt=\"".$langDelete."\">
+				</a>";
 		// DISPLAY MOVE UP COMMAND only if it is not the top link
 		if ($i!=1)
 			{
-			echo	"<a href=\"$_SERVER[PHP_SELF]?urlview=".$urlview."&up=",$myrow["id"],"\">",
-					"<img src=../../images/up.gif border=0 alt=\"Up\">",
-					"</a>\n";
+			$tool_content .= 	"<a href=\"$_SERVER[PHP_SELF]?urlview=".$urlview."&up=".$myrow["id"]."\">
+					<img src=../../images/up.gif border=0 alt=\"Up\">
+					</a>\n";
 			}
 		// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link
 		if($i < $numberoflinks)
 			{
-				echo	"<a href=\"$_SERVER[PHP_SELF]?urlview=".$urlview."&down=".$myrow["id"]."\">",
-						"<img src=\"../../images/down.gif\" border=\"0\" alt=\"Down\">",
-						"</a>\n";
+				$tool_content .= 	"<a href=\"$_SERVER[PHP_SELF]?urlview=".$urlview."&down=".$myrow["id"]."\">
+						<img src=\"../../images/down.gif\" border=\"0\" alt=\"Down\">
+						</a>\n";
 			}
 		}
-	echo	"</td>",
-			"</tr>";
+	$tool_content .= 	"</td>
+			</tr>";
 	$i++;
 	}
-echo "</table>";
+//$tool_content .=  "</table>";
+
+//echo $tool_content;
 }
 
 
@@ -318,28 +327,29 @@ global $langDelete;
 global $langCatDel;
 
 global $langModify;
+global $tool_content;
 
-echo "<a href=\"$_SERVER[PHP_SELF]?action=editcategory&id=$categoryid&urlview=$urlview\">",
-		"<img src=\"../../images/edit.gif\" border=\"0\" alt=\"",$langModify,"\">",
-		"</a> \n";
+$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?action=editcategory&id=$categoryid&urlview=$urlview\">
+		<img src=\"../../images/edit.gif\" border=\"0\" alt=\"".$langModify."\">
+		</a> \n";
 
-echo " <a href=\"",$_SERVER['PHP_SELF'],"?action=deletecategory&id=",$categoryid,"&urlview=",$urlview,"\" onclick=\"javascript:if(!confirm('".$langCatDel."')) return false;\">", "<img src=\"../../images/delete.gif\" border=\"0\" alt=\"",$langDelete,"\">",
-"</a>";
+$tool_content .=  " <a href=\"".$_SERVER['PHP_SELF']."?action=deletecategory&id=".$categoryid."&urlview=".$urlview."\" onclick=\"javascript:if(!confirm('".$langCatDel."')) return false;\">". "<img src=\"../../images/delete.gif\" border=\"0\" alt=\"".$langDelete."\">
+</a>";
 
 
 // DISPLAY MOVE UP COMMAND only if it is not the top link
 if ($catcounter!=1)
 	{
-	echo "<a href=\"$_SERVER[PHP_SELF]?catmove=true&up=",$categoryid,"&urlview=$urlview\">",
-			"<img src=../../images/up.gif border=0 alt=\"Up\">",
-			"</a>\n";
+	$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?catmove=true&up=".$categoryid."&urlview=$urlview\">
+			<img src=../../images/up.gif border=0 alt=\"Up\">
+			</a>\n";
 	}
 // DISPLAY MOVE DOWN COMMAND only if it is not the bottom link
 if($catcounter < $aantalcategories)
 	{
-	echo "<a href=\"$_SERVER[PHP_SELF]?catmove=true&down=".$categoryid."&urlview=$urlview\">",
-			"<img src=\"../../images/down.gif\" border=\"0\" alt=\"Down\">",
-			"</a>\n";
+	$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?catmove=true&down=".$categoryid."&urlview=$urlview\">
+			<img src=\"../../images/down.gif\" border=\"0\" alt=\"Down\">
+			</a>\n";
 	}
 $catcounter++;
 }
@@ -353,6 +363,8 @@ global $up;
 global $down;
 global $tbl_link;
 global $tbl_categories;
+global $tool_content;
+global $dbname;
 
 if ($down)
 	{
@@ -377,7 +389,7 @@ else
 	$movetable=$tbl_link;
 	//getting the category of the link
 	$sql="SELECT category from `".$movetable."` WHERE id='$thiscatlinkId'";
-	$result=mysql_query($sql);
+	$result=db_query($sql, $dbname);
 	$catid=mysql_fetch_array($result);
 	}
 
@@ -394,7 +406,7 @@ if ($sortDirection)
 		{
 		$sqlcatlinks="SELECT id, ordre FROM `".$movetable."` WHERE category='".$catid[0]."' ORDER BY `ordre` $sortDirection";
 		}
-	$linkresult = mysql_query($sqlcatlinks);
+	$linkresult = db_query($sqlcatlinks, $dbname);
 	while ($sortrow=mysql_fetch_array($linkresult))
 		{
 		// STEP 2 : FOUND THE NEXT ANNOUNCEMENT ID AND ORDER, COMMIT SWAP
@@ -405,13 +417,13 @@ if ($sortDirection)
 			$nextlinkId=$sortrow["id"];
 			$nextlinkOrdre=$sortrow["ordre"];
 
-			mysql_query("UPDATE `".$movetable."`
+			db_query("UPDATE `".$movetable."`
 			             SET ordre = '$nextlinkOrdre'
-			             WHERE id =  '$thiscatlinkId'");
+			             WHERE id =  '$thiscatlinkId'", $dbname);
 
-			mysql_query("UPDATE `".$movetable."`
+			db_query("UPDATE `".$movetable."`
 			             SET ordre = '$thislinkOrdre'
-						 WHERE id =  '$nextlinkId'");
+						 WHERE id =  '$nextlinkId'", $dbname);
 
 			break;
 			}
