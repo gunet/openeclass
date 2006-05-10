@@ -26,7 +26,7 @@
       +----------------------------------------------------------------------+
       | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
       |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-      |          Christophe Gesché <gesche@ipm.ucl.ac.be>                    |
+      |          Christophe Geschï¿½ <gesche@ipm.ucl.ac.be>                    |
       +----------------------------------------------------------------------+
       | Translator :                                                         |
       |          Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
@@ -99,6 +99,7 @@ $langLinkSite="Add link on Homepage";
 $langModifyInfo="Modify course info";
 $langDropBox = "DropBox";
 $langLearnPath = "Learning Path";
+$langToolManagement = "Tool management";
 
 
 // Other SQL tables
