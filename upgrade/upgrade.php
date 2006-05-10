@@ -309,6 +309,19 @@ db_query("INSERT IGNORE INTO accueil VALUES (
 				'../../../images/pastillegris.png'
                 )", $code[0]);
 
+
+//for tool management
+$langToolManagement = "Διαχείριση εργαλείων";
+db_query("INSERT IGNORE INTO accueil VALUES (
+				'22',
+				'$langToolManagement',
+				'../../modules/course_tools/course_tools.php',
+				'../../../images/course_tools.gif',
+				'0',
+				'1',
+				'../../../images/pastillegris.png'
+                )", $code[0]);
+
 // for doc quota
 // temporarily commented 
 // add_field('document','size',"INT(16) DEFAULT '0' NOT NULL");

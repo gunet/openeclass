@@ -1492,6 +1492,15 @@ mysql_query("INSERT INTO accueil VALUES (
                '1',
                '0',
                '../../../images/pastillegris.png')");
+    
+    mysql_query("INSERT INTO accueil VALUES (
+               '22',
+               '$langToolManagement',
+               '../../modules/course_tools/course_tools.php',
+               '../../../images/course_tools.gif',
+               '0',
+               '1',
+               '../../../images/pastillegris.png')");
 
 if (mysql_version())   {
 	       

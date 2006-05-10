@@ -95,6 +95,7 @@ if($is_adminOfCourse) {
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langChat' WHERE id='19'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langCourseDesc' WHERE id='20'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langLearnPath' WHERE id='21'");
+		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langToolManagement' WHERE id='22'");
 		echo "<font face=\"arial, helvetica\" size=\"2\">$langModifDone.<br><br>
 		<a href=\"".$_SERVER['PHP_SELF']."\">$langBack</a> 
 		<br><br>
