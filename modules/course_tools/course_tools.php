@@ -4,7 +4,7 @@ $require_current_course = TRUE;
 $langFiles = array('toolManagement', 'create_course');
 $require_help = TRUE;
 $helpTopic = 'User';
-//include('../../include/init.php');
+
 include '../../include/baseTheme.php';
 $require_login = true;
 
@@ -66,7 +66,6 @@ if ($is_admin){
 				$sql = "UPDATE `accueil` SET `rubrique` = '".$tool_name[$i]."'
 							WHERE `id`='".$tool_id[$i]."';";
 				
-				echo $sql;
 				mysql_query($sql);
 			}
 
@@ -80,7 +79,6 @@ if ($is_admin){
 
 	}
 
-//	$this->getTools();
 }
 
 
@@ -114,7 +112,7 @@ if ($is_admin){
 		for($i=0; $i< $numOfToolGroups; $i++){
 
 			$numOfTools = count($toolArr[$i][1]);
-//			echo $numOfTools;
+
 			for($j=0; $j< $numOfTools; $j++){
 
 				if ($i  == 0){
