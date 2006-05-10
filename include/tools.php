@@ -384,13 +384,14 @@ function lessonToolsMenu(){
 	$sideMenuSubGroup = array();
 	$sideMenuText = array();
 	$sideMenuLink = array();
-
+	$sideMenuID = array();
 
 	array_push($sideMenuSubGroup, 'Energa Ergaleia');//TODO: add lang
 	while ($toolsRow = mysql_fetch_array($result)) {
 
 		array_push($sideMenuText, $toolsRow["rubrique"]);
 		array_push($sideMenuLink, $toolsRow["lien"]);
+		array_push($sideMenuID, $toolsRow["id"]);
 
 		//		$uTools[$toolCount]['id']		= $toolsRow["id"];
 		//		$uTools[$toolCount]['link'] 	= $toolsRow["lien"];
@@ -400,6 +401,7 @@ function lessonToolsMenu(){
 
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);
+	array_push($sideMenuSubGroup, $sideMenuID);
 	array_push($sideMenuGroup, $sideMenuSubGroup);
 	//	------------------------------------------------------------------
 	//	END of Get public tools
@@ -423,17 +425,19 @@ function lessonToolsMenu(){
 		$sideMenuSubGroup = array();
 		$sideMenuText = array();
 		$sideMenuLink = array();
-
+		$sideMenuID = array();
 
 		array_push($sideMenuSubGroup, 'Ergaleia Diaxeirishs');//TODO: add lang
 		while ($toolsRow = mysql_fetch_array($result)) {
 
 			array_push($sideMenuText, $toolsRow["rubrique"]);
 			array_push($sideMenuLink, $toolsRow["lien"]);
+			array_push($sideMenuID, $toolsRow["id"]);
 		}
 
 		array_push($sideMenuSubGroup, $sideMenuText);
 		array_push($sideMenuSubGroup, $sideMenuLink);
+		array_push($sideMenuSubGroup, $sideMenuID);
 		array_push($sideMenuGroup, $sideMenuSubGroup);
 		//get inactive tools
 		$result= getToolsArray('PublicButHide');
@@ -441,6 +445,7 @@ function lessonToolsMenu(){
 		$sideMenuSubGroup = array();
 		$sideMenuText = array();
 		$sideMenuLink = array();
+		$sideMenuID = array();
 
 
 		array_push($sideMenuSubGroup, 'Anenerga ergaleia');//TODO: add lang
@@ -449,10 +454,12 @@ function lessonToolsMenu(){
 
 			array_push($sideMenuText, $toolsRow["rubrique"]);
 			array_push($sideMenuLink, $toolsRow["lien"]);
+			array_push($sideMenuID, $toolsRow["id"]);
 		}
 
 		array_push($sideMenuSubGroup, $sideMenuText);
 		array_push($sideMenuSubGroup, $sideMenuLink);
+		array_push($sideMenuSubGroup, $sideMenuID);
 		array_push($sideMenuGroup, $sideMenuSubGroup);
 	}
 	//	------------------------------------------------------------------
@@ -469,17 +476,19 @@ function lessonToolsMenu(){
 		$sideMenuSubGroup = array();
 		$sideMenuText = array();
 		$sideMenuLink = array();
-
+		$sideMenuID = array();
 
 		array_push($sideMenuSubGroup, 'Ergaleia Diaxeiristh');//TODO: add lang
 		while ($toolsRow = mysql_fetch_array($result)) {
 
 			array_push($sideMenuText, $toolsRow["rubrique"]);
 			array_push($sideMenuLink, $toolsRow["lien"]);
+			array_push($sideMenuID, $toolsRow["id"]);
 		}
 
 		array_push($sideMenuSubGroup, $sideMenuText);
 		array_push($sideMenuSubGroup, $sideMenuLink);
+		array_push($sideMenuSubGroup, $sideMenuID);
 		array_push($sideMenuGroup, $sideMenuSubGroup);
 	}
 	//	------------------------------------------------------------------
