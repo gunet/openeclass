@@ -28,8 +28,8 @@
 
 $require_current_course = TRUE;
 $langFiles              = "learnPath";
-require("../../../config/config.php");
-require("../../../include/init.php");
+require_once("../../../config/config.php");
+require_once("../../../include/init.php");
 
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";
@@ -40,8 +40,7 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 $clarolineRepositoryWeb = $urlServer."courses/".$currentCourseID;
 
 // lib of this tool
-include("../../../include/lib/learnPathLib.inc.php");
-include("../claro_main.lib.php");
+require_once("../../../include/lib/learnPathLib.inc.php");
 mysql_select_db($currentCourseID);
 
 if(isset ($_GET['viewModule_id']) && $_GET['viewModule_id'] != '')
@@ -191,7 +190,7 @@ switch ($module['contentType'])
    if ( $module['contentType'] == CTSCORM_ )
    {
       
-      include("scormAPI.inc.php");
+      require_once("scormAPI.inc.php");
       echo "<frameset border='0' cols='0,20%,80%' frameborder='no'>
             <frame src='updateProgress.php' name='upFrame'>";
       

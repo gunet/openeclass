@@ -25,10 +25,9 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 // exercises table name
 $TABLEEXERCISES         = "exercices";
 
-include("../../include/init.php");
-include("../../include/lib/learnPathLib.inc.php");
-include("claro_main.lib.php");
-include("../../include/lib/fileDisplayLib.inc.php");
+require_once("../../include/init.php");
+require_once("../../include/lib/learnPathLib.inc.php");
+require_once("../../include/lib/fileDisplayLib.inc.php");
 
 $nameTools = $langInsertMyExerciseToolName;
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);

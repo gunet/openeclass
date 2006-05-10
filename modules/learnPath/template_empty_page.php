@@ -11,7 +11,7 @@ Initializations
 $require_current_course = TRUE;
 $langFiles = "learnPath";
 
-include("../../include/init.php");
+require_once("../../include/init.php");
 
 $nameTools = $langlearnPath;
 

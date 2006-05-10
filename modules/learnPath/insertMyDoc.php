@@ -8,10 +8,9 @@ Header
 - Modules ? (search source code)
 */
 
-include("../../include/lib/learnPathLib.inc.php");
-include("claro_main.lib.php");
-include("../../include/lib/fileDisplayLib.inc.php");
-include("../../include/lib/fileManageLib.inc.php");
+require_once("../../include/lib/learnPathLib.inc.php");
+require_once("../../include/lib/fileDisplayLib.inc.php");
+require_once("../../include/lib/fileManageLib.inc.php");
 
 $require_current_course = TRUE;
 $langFiles              = "learnPath";
@@ -27,7 +26,7 @@ $imgRepositoryWeb       = "../../images/";
 $dbTable                = "document";
 $TABLEDOCUMENT          = "document";
 
-include("../../include/init.php");
+require_once("../../include/init.php");
 
 $courseDir   = "courses/".$currentCourseID."/document";
 //$moduleDir   = $_course['path']."/modules";

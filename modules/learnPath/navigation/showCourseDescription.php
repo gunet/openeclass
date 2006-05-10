@@ -8,10 +8,10 @@ $require_current_course = TRUE;
 $langFiles = array('course_description','pedaSuggest');
 $require_help = TRUE;
 $helpTopic = 'Coursedescription';
-require("../../../config/config.php");
-include ('../../../include/init.php');
+require_once("../../../config/config.php");
+require_once ('../../../include/init.php');
 
-include('../../../include/lib/textLib.inc.php'); 
+require_once('../../../include/lib/textLib.inc.php'); 
 
 $nameTools = $langCourseProgram;
 //begin_page();

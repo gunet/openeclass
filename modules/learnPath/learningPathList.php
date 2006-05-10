@@ -9,8 +9,7 @@ Same page:
 - Understand Blocking and hrefs
 */
 
-include("../../include/lib/learnPathLib.inc.php");
-include("claro_main.lib.php");
+require_once("../../include/lib/learnPathLib.inc.php");
 
 $require_current_course = TRUE;
 $langFiles              = "learnPath";
@@ -25,7 +24,7 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 define('CLARO_FILE_PERMISSIONS', 0777);
 
-include("../../include/init.php");
+require_once("../../include/init.php");
 
 $nameTools = $langLearningPathList;
 $is_AllowedToEdit = $is_adminOfCourse;
@@ -34,7 +33,7 @@ $lpUid = $uid;
 if ( $cmd == 'export' )
 {
       mysql_select_db($currentCourseID);
-      include("include/scormExport.inc.php");
+      require_once("include/scormExport.inc.php");
       $scorm = new ScormExport($_REQUEST['path_id']);
       if ( !$scorm->export() )
       {

@@ -4,11 +4,10 @@
 Header, Copyright, etc ...
 */
 
-include("../../include/lib/learnPathLib.inc.php");
-include("claro_main.lib.php");
-include("../../include/lib/fileDisplayLib.inc.php");
-include("../../include/lib/fileManageLib.inc.php");
-include("../../include/lib/fileUploadLib.inc.php");
+require_once("../../include/lib/learnPathLib.inc.php");
+require_once("../../include/lib/fileDisplayLib.inc.php");
+require_once("../../include/lib/fileManageLib.inc.php");
+require_once("../../include/lib/fileUploadLib.inc.php");
 
 $require_current_course = TRUE;
 $langFiles              = "learnPath";
@@ -24,7 +23,7 @@ $dbTable                = $TABLEASSET; // for old functions of document tool
 
 $imgRepositoryWeb       = "../../images/";
 
-include("../../include/init.php");
+require_once("../../include/init.php");
 
 $nameTools = $langModule;
 $is_AllowedToEdit = $is_adminOfCourse;
@@ -340,13 +339,13 @@ if( $is_AllowedToEdit ) // for teacher only
     switch ($module['contentType'])
     {
         case CTDOCUMENT_ :
-            include("./include/document.inc.php");
+            require_once("./include/document.inc.php");
             break;
         case CTEXERCISE_ :
-            include("./include/exercise.inc.php");
+            require_once("./include/exercise.inc.php");
             break;
         case CTSCORM_ :
-            include("./include/scorm.inc.php");
+            require_once("./include/scorm.inc.php");
             break;
         case CTCLARODOC_ :
             break;

@@ -7,8 +7,8 @@ Header, Copyright, etc ...
 $require_current_course = TRUE;
 $langFiles              = "learnPath";
 
-require("../../../config/config.php");
-require("../../../include/init.php");
+require_once("../../../config/config.php");
+require_once("../../../include/init.php");
 
 // the following constant defines the default display of the learning path browser
 // 0 : display only table of content and content

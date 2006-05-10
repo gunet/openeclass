@@ -18,8 +18,8 @@
 
 $require_current_course = TRUE;
 $langFiles              = "learnPath";
-require("../../../config/config.php");
-require("../../../include/init.php");
+require_once("../../../config/config.php");
+require_once("../../../include/init.php");
 
 /*
  * DB tables definition
@@ -33,11 +33,10 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 $imgRepositoryWeb = "../../../images/";
 
 // lib of this tool
-include("../../../include/lib/learnPathLib.inc.php");
-include("../claro_main.lib.php");
+require_once("../../../include/lib/learnPathLib.inc.php");
 
 //lib of document tool
-include("../../../include/lib/fileDisplayLib.inc.php");
+require_once("../../../include/lib/fileDisplayLib.inc.php");
 
 $lpUid =  $uid;
 mysql_select_db($currentCourseID);
