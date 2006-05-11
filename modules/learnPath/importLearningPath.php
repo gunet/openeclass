@@ -1114,7 +1114,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
     /*--------------------------------------
       status messages
      --------------------------------------*/
-
+	$tool_content .= "<div id=\"tool_operations\"><span class=\"operation\">";
     $tool_content .= "\n<!-- Messages -->\n";
     foreach ( $okMsgs as $msg)
     {
@@ -1139,7 +1139,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
         $tool_content .= "\n<br /><center><b>".$langNotInstalled."</b></center>";
     }
     $tool_content .= "\n<br /><a href=\"learningPathList.php\">$langBack</a>";   
-       
+    $tool_content .= "</span></div>";
 }
 else // if method == 'post'
 {
@@ -1150,7 +1150,7 @@ else // if method == 'post'
       UPLOAD FORM
      --------------------------------------*/
 
-
+$tool_content .= "<div id=\"tool_operations\"><span class=\"operation\">";
 $tool_content .= "\n\n".$langScormIntroTextForDummies;
 $tool_content .= "<br /><br />"
 ."<form enctype=\"multipart/form-data\" action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">"
@@ -1160,10 +1160,10 @@ $tool_content .= "<br /><br />"
 ."<small>"
 .$langMaxFileSize
 .format_file_size(get_max_upload_size($maxFilledSpace,$baseWorkDir))
-."</small></form>";
+."</small></form></span></div>";
   
 } // else if method == 'post'
 
 chdir($pwd);
-draw($tool_content, 2);
+draw($tool_content, 2, "learnPath");
 ?>

@@ -140,9 +140,9 @@ if( !$is_AllowedToEdit
 //################################## MODULE NAME BOX #################################\\
 //####################################################################################\\
 
-$tool_content .= '<br />'."\n";
-
 $cmd = ( isset($_REQUEST['cmd']) )? $_REQUEST['cmd'] : '';
+
+$tool_content .= "<div id=\"tool_operations\"><span class=\"operation\">";
 
 if ( $cmd == "updateName" )
 {
@@ -152,10 +152,9 @@ else
 {
     $tool_content .= nameBox(MODULE_, DISPLAY_);
 }
-
+$tool_content .= "<br />";
 if($module['contentType'] != CTLABEL_ )
 {
-
     //####################################################################################\\
     //############################### MODULE COMMENT BOX #################################\\
     //####################################################################################\\
@@ -173,7 +172,7 @@ if($module['contentType'] != CTLABEL_ )
     {
         $tool_content .= commentBox(MODULE_, DISPLAY_);
     }
-
+$tool_content .= "<br />";
     //#### ADDED COMMENT #### courseAdmin can always modify this ####\\
     // this is a comment for THIS module in THIS learning path
     if ( $cmd == "updatespecificComment" )
@@ -188,7 +187,9 @@ if($module['contentType'] != CTLABEL_ )
     {
         $tool_content .= commentBox(LEARNINGPATHMODULE_, DISPLAY_);
     }
+$tool_content .= "<br />";
 } //  if($module['contentType'] != CTLABEL_ )
+
 
 //back button
 if ($is_AllowedToEdit)
@@ -200,8 +201,8 @@ else
 	$pathBack = "./learningPath.php";
 }
 
-$tool_content .= '<small><a href="'.$pathBack.'"><< '.$langBackModule.'</a></small><br /><br />'."\n\n";
-
+$tool_content .= '<small><a href="'.$pathBack.'"><< '.$langBackModule.'</a></small>'."\n\n";
+$tool_content .= "</span></div>";
 //####################################################################################\\
 //############################ PROGRESS  AND  START LINK #############################\\
 //####################################################################################\\
@@ -219,10 +220,10 @@ if($module['contentType'] != CTLABEL_) //
         if ($resultBrowsed['contentType']== CTEXERCISE_ ) { $contentDescType = $langEXERCISETypeDesc; }
         if ($resultBrowsed['contentType']== CTDOCUMENT_ ) { $contentDescType = $langDOCUMENTTypeDesc; }
 
-		$tool_content .= '<b>'.$langProgInModuleTitle.'</b><br /><br />'."\n\n"
-			.'<table align="center" class="claroTable" border="0" cellspacing="2">'."\n"
+		$tool_content .= '<strong>'.$langProgInModuleTitle.'</strong><br /><br />'."\n\n"
+			.'<table align="center">'."\n"
 			.'<thead>'."\n"
-			.'<tr class="headerX" bgcolor="#e6e6e6">'."\n"
+			.'<tr>'."\n"
 			.'<th>'.$langInfoProgNameTitle.'</th>'."\n"
 			.'<th>'.$langPersoValue.'</th>'."\n"
 			.'</tr>'."\n"
@@ -352,6 +353,6 @@ if( $is_AllowedToEdit ) // for teacher only
     }
 } // if ($is_AllowedToEdit)
 
-draw($tool_content, 2);
+draw($tool_content, 2, "learnPath");
 
 ?>

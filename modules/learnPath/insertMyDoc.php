@@ -427,13 +427,14 @@ $tool_content .= display_my_documents($dialogBox) ;
 //################################## MODULES LIST ####################################\\
 //####################################################################################\\
 
+$tool_content .= "<br /><div id=\"tool_operations\"><span class=\"operation\">";
 $tool_content .= claro_disp_tool_title($langPathContentTitle);
 $tool_content .= '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
-
 // display list of modules used by this learning path
 $tool_content .= display_path_content();
+$tool_content .= "</span></div>";
 
 chdir($pwd);
-draw($tool_content, 2);
+draw($tool_content, 2, "learnPath");
 
 ?>

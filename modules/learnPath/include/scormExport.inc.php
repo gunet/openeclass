@@ -286,8 +286,8 @@ class ScormExport
             $questionPonderationList[$questionId] = $question->selectWeighting();
             
             // Generic display, valid for all kind of question
-            $pageBody .= '<table width="100%" cellpadding="4" cellspacing="2" border="0" class="claroTable">
-    <tr class="headerX"><th valign="top" colspan="2">' . $langQuestion . ' ' . $questionCount . '</th></tr>
+            $pageBody .= '<table width="100%">
+    <tr><th valign="top" colspan="2">' . $langQuestion . ' ' . $questionCount . '</th></tr>
     <tfoot>
         <tr><td valign="top" colspan="2">' . $qtitle . '</td></tr>
         <tr><td valign="top" colspan="2"><i>' . claro_parse_user_text($qdescription) . '</i></td></tr>' . "\n";

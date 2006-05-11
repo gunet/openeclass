@@ -205,23 +205,22 @@ function commentBox($type, $mode)
             // if no comment and user is admin : display link to add a comment
             if ( $is_adminOfCourse )
             {
-                $output .= '<p>' . "\n"
-                .    '<a class="claroCmd" href="' . $_SERVER['PHP_SELF'] . '?cmd=update' . $col_name . '">' . "\n"
+                $output .= '<!--<p>-->' . "\n"
+                .    '<a href="' . $_SERVER['PHP_SELF'] . '?cmd=update' . $col_name . '">' . "\n"
                 .    $langAddComment . '</a>' . "\n"
-                .    '</p>' . "\n"
+                .    '<!--</p>-->' . "\n"
                 ;
             }
         }
         else
         {
             // display comment
-            $output .= "<p>".$currentComment."</p>";
+            $output .= $currentComment;
             // display edit and delete links if user as the right to see it
             if ( $is_adminOfCourse )
             {
 
-                $output .= '<p>' . "\n"
-                .    '<small>' . "\n"
+                $output .= '<br />' . "\n"
                 .    '<a href="' . $_SERVER['PHP_SELF'] . '?cmd=update' . $col_name . '">' . "\n"
                 .    '<img src="../../images/edit.gif" alt="' . $langModify . '" border="0" />'
                 .    '</a>' . "\n"
@@ -229,13 +228,11 @@ function commentBox($type, $mode)
                 .    ' onclick="javascript:if(!confirm(\''.clean_str_for_javascript($langConfirmYourChoice).'\')) return false;">' . "\n"
                 .    '<img src="../../images/delete.gif" alt="' . $langDelete . '" border="0" />' . "\n"
                 .    '</a>' . "\n"
-                .    '</small>' . "\n"
-                .    '</p>' . "\n"
                 ;
             }
         }
     }
-
+	
     return $output;
 }
 
@@ -344,16 +341,16 @@ function nameBox($type, $mode)
            $currentName = false;
         }
 
-        $output .= '<h4>' 
+        $output .= '<strong>' 
         .    $currentName;
 
         if ( $is_adminOfCourse )
             $output .= '<br /><a href="' . $_SERVER['PHP_SELF'] . '?cmd=updateName">'
             .    '<img src="../../images/edit.gif" alt="' . $langModify . '" border="0" />'
             .    '</a>' . "\n";
-        $output .= '</h4>'."\n\n";
+        $output .= '</strong>'."\n\n";
     }
-
+	
     return $output;
 }
 
@@ -534,8 +531,8 @@ function display_path_content()
         if ($flatElementList[$i]['children'] > $maxDeep) $maxDeep = $flatElementList[$i]['children'] ;
     }
 
-    $output .= "\n".'<table class="claroTable" width="100%"  border="0" cellspacing="2">'."\n\n"
-    .    '<tr class="headerX" align="center" valign="top" bgcolor="#e6e6e6">'."\n"
+    $output .= "\n".'<table width="100%">'."\n\n"
+    .    '<tr align="center" valign="top">'."\n"
 	.    '<th colspan="' . ($maxDeep+1).'">' . $langModule . '</th>'."\n"
     .    '</tr>'."\n\n"
 	.	 '<tbody>'."\n"
@@ -709,8 +706,8 @@ function display_my_exercises($dialogBox)
     {
         echo claro_disp_message_box($dialogBox).'<br />'."\n";
     }
-    echo '<table class="claroTable" width="100%" border="0" cellspacing="">'."\n\n"
-    .    '<tr class="headerX" align="center" valign="top">'."\n"
+    echo '<table width="100%">'."\n\n"
+    .    '<tr align="center" valign="top">'."\n"
     .    '<th width="10%">'
     .    $langAddModule
     .    '</th>'."\n"
@@ -841,8 +838,7 @@ function display_my_documents($dialogBox)
     $cmdCurDirPath = rawurlencode($curDirPath);
     $cmdParentDir  = rawurlencode($parentDir);
 
-    $output .= '<br />'
-    .    '<form action="' . $_SERVER['PHP_SELF'] . '" method="POST">';
+    $output .= '<form action="' . $_SERVER['PHP_SELF'] . '" method="POST">';
 
     /*--------------------------------------
     DIALOG BOX SECTION
@@ -867,13 +863,13 @@ function display_my_documents($dialogBox)
         ;
     }
     /* CURRENT DIRECTORY */
-    $output .= '<table class="claroTable" width="100%" border="0" cellspacing="2">';
+    $output .= '<table width="100%">';
     if ( $curDirName ) /* if the $curDirName is empty, we're in the root point
     and there is'nt a dir name to display */
     {
         $output .= '<!-- current dir name -->' . "\n"
         .    '<tr>' . "\n"
-        .    '<th class="superHeader" colspan="' . $colspan . '" align="left">'. "\n"
+        .    '<th colspan="' . $colspan . '" align="left">'. "\n"
         .    '<img src="' . $imgRepositoryWeb . 'opendir.gif" align="absbottom" vspace=2 hspace=5 alt="" />' . "\n"
         .    $dspCurDirName . "\n"
         .    '</td>' . "\n"
@@ -881,7 +877,7 @@ function display_my_documents($dialogBox)
         ;
     }
 
-    $output .= '<tr class="headerX" align="center" valign="top" bgcolor="#e6e6e6">'
+    $output .= '<tr align="center" valign="top">'
     .    '<th>' . $langAddModule . '</th>' . "\n"
     .    '<th>' . $langName . '</th>' . "\n"
     .    '<th>' . $langSize . '</th>' . "\n"
@@ -1492,7 +1488,7 @@ function claro_disp_tool_title($titlePart, $helpUrl = false)
     }
 
 
-    $string = "\n" . '<h3 class="claroToolTitle">' . "\n";
+    $string = "\n" . '<h3>' . "\n";
 
     if ($helpUrl)
     {
@@ -1545,7 +1541,7 @@ function claro_disp_tool_title($titlePart, $helpUrl = false)
 
 function claro_disp_message_box($message)
 {
-    return "\n".'<table class="claroMessageBox" border="0" cellspacing="0" cellpadding="10">'
+    return "\n".'<table>'
     .      '<tr>'
     .      '<td>'
     .      $message
@@ -1621,7 +1617,7 @@ function claro_disp_button($url, $text, $confirmMessage = '')
             $onClickCommand = "document.location='".$url."';return false";
         }
 
-        return '<button class="claroButton" onclick="' . $onClickCommand . '">'
+        return '<button onclick="' . $onClickCommand . '">'
         .      $text
         .      '</button>&nbsp;' . "\n"
         ;

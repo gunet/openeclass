@@ -142,9 +142,9 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add'))
 
 $result = db_query(buildRequestModules());
 
-$tool_content .= '<table class="claroTable" width="100%">'."\n"
+$tool_content .= '<table width="100%">'."\n"
        .'<thead>'."\n"
-       .'<tr class="headerX" bgcolor="#e6e6e6">'."\n"
+       .'<tr>'."\n"
        .'<th width="10%">'
        .$langAddModule
        .'</th>'."\n"
@@ -226,14 +226,14 @@ $tool_content .= "\n".'</tfoot>'."\n\n".'</form>'."\n".'</table>';
 //################################## MODULES LIST ####################################\\
 //####################################################################################\\
 
+$tool_content .= "<br /><div id=\"tool_operations\"><span class=\"operation\">";
 // display subtitle
 $tool_content .= claro_disp_tool_title($langPathContentTitle);
-
 // display back link to return to the LP administration
 $tool_content .= '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
-
 // display list of modules used by this learning path
 $tool_content .= display_path_content();
+$tool_content .= "</span></div>";
 
-draw($tool_content, 2);
+draw($tool_content, 2, "learnPath");
 ?>

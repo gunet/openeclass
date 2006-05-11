@@ -320,7 +320,7 @@ $LPDetails = mysql_fetch_array($query);
 //####################################################################################\\
 //############################ LEARNING PATH NAME BOX ################################\\
 //####################################################################################\\
-
+$tool_content .= "<div id=\"tool_operations\"><span class=\"operation\">";
 if ( $cmd == "updateName" )
 {
     $tool_content .= nameBox(LEARNINGPATH_, UPDATE_);
@@ -329,11 +329,10 @@ else
 {
     $tool_content .= nameBox(LEARNINGPATH_, DISPLAY_);
 }
-
+$tool_content .= "<br />";
 //####################################################################################\\
 //############################ LEARNING PATH COMMENT BOX #############################\\
 //####################################################################################\\
-
 if ( $cmd == "updatecomment" )
 {
     $tool_content .= commentBox(LEARNINGPATH_, UPDATE_);
@@ -346,7 +345,7 @@ else
 {
     $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 }
-
+$tool_content .= "</span></div>";
 //####################################################################################\\
 //############################ create label && change pos forms  #####################\\
 //####################################################################################\\
@@ -354,7 +353,7 @@ else
 if (isset($displayCreateLabelForm) && $displayCreateLabelForm)
 {
     $dialogBox = "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">
-                  <h4><label for=\"newLabel\">".$langNewLabel."</label></h4>
+                  <strong><label for=\"newLabel\">".$langNewLabel."</label></strong>&nbsp;
                   <input type=\"text\" name=\"newLabel\" id=\"newLabel\" maxlength=\"255\" />
                   <input type=\"hidden\" name=\"cmd\" value=\"createLabel\" />
                   <input type=\"submit\" value=\"".$langOk."\" />
@@ -363,7 +362,7 @@ if (isset($displayCreateLabelForm) && $displayCreateLabelForm)
 if (isset($displayChangePosForm) && $displayChangePosForm)
 { 
     $dialogBox = "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">
-                  <h4>".$langMove." ' ".$moduleInfos['name']." ' ".$langTo."</h4>";
+                  <strong>".$langMove." ' ".$moduleInfos['name']." ' ".$langTo."</strong>&nbsp;";
     // build select input - $elementList has been declared in the previous big cmd case
     $dialogBox .= claro_build_nested_select_menu("newPos",$elementList);
     $dialogBox .= "<input type=\"hidden\" name=\"cmd\" value=\"changePos\" />
@@ -378,7 +377,9 @@ if (isset($displayChangePosForm) && $displayChangePosForm)
 
 if (isset($dialogBox) && $dialogBox!="")
 {
+    $tool_content .= "<div id=\"tool_operations\"><span class=\"operation\">";
     $tool_content .= claro_disp_message_box($dialogBox);
+    $tool_content .= "</span></div>";
 }
 
 //####################################################################################\\
@@ -386,14 +387,13 @@ if (isset($dialogBox) && $dialogBox!="")
 //####################################################################################\\
 
 $tool_content .=
- "<p>"
-."<a href=\"insertMyDoc.php\">".$langDocumentAsModule."</a> |"
-."<a href=\"insertMyExercise.php\">".$langExerciseAsModule."</a> |"
-."<a href=\"insertMyModule.php\">".$langModuleOfMyCourse."</a> |"
-."<a href=\"".$_SERVER['PHP_SELF']."?cmd=createLabel\">".$langCreateLabel."</a> |"
+ "<div id=\"tool_operations\"><span class=\"operation\">"
+."<a href=\"insertMyDoc.php\">".$langDocumentAsModule."</a> | "
+."<a href=\"insertMyExercise.php\">".$langExerciseAsModule."</a> | "
+."<a href=\"insertMyModule.php\">".$langModuleOfMyCourse."</a> | "
+."<a href=\"".$_SERVER['PHP_SELF']."?cmd=createLabel\">".$langCreateLabel."</a> | "
 ."<a href=\"insertMyDescription.php\">Use Course Description</a>"
-."</p>";
-
+."</span></div>";
 
 //####################################################################################\\
 //######################### LEARNING PATH LIST CONTENT ###############################\\
@@ -631,5 +631,5 @@ if ($atleastOne == false)
 $tool_content .= "</tfoot>";
 $tool_content .= "</table>";
 
-draw($tool_content, 2);
+draw($tool_content, 2, "learnPath");
 ?>

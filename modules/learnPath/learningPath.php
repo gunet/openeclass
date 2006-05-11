@@ -118,8 +118,8 @@ $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 //####################################################################################\\
 
 $tool_content .= "\n".'<br />'."\n"
-  	.'<table class="claroTable" width="100%" border="0" cellspacing="2">'."\n"
-	.'<tr class="headerX" align="center" valign="top" bgcolor="#e6e6e6">'."\n"
+  	.'<table width="100%">'."\n"
+	.'<tr align="center" valign="top">'."\n"
 	.'<th colspan="'.($maxDeep+1).'">'.$langModule.'</th>'."\n";
 
 
@@ -302,6 +302,6 @@ elseif($uid && $moduleNb > 0)
 }
 $tool_content .= '</table>'."\n\n";
 
-draw($tool_content, 2);
+draw($tool_content, 2, "learnPath");
 
 ?>

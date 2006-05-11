@@ -1,0 +1,18 @@
+.invisible { color: #999999; }
+.invisible a,
+.invisible a:link,
+.invisible a:visited,
+a.invisible,
+a:link.invisible,
+a:visited.invisible
+{
+   color: #999999;
+}
+
+.correct{ color: #009900; }
+.error{  color: #990000; }
+
+.comment {
+    font-size: smaller;
+    margin-left: 30px;
+}

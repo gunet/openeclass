@@ -111,6 +111,6 @@ else
 	$tool_content .= "done2";
 }
  
-draw($tool_content, 2);
+draw($tool_content, 2, "learnPath");
 
 ?>

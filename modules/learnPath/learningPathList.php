@@ -32,7 +32,7 @@ $nameTools = $langLearningPathList;
 $is_AllowedToEdit = $is_adminOfCourse;
 $lpUid = $uid;
 
-if ( $cmd == 'export' )
+if ( $cmd == 'export' && $is_adminOfCourse )
 {
       mysql_select_db($currentCourseID);
       require_once("include/scormExport.inc.php");
@@ -50,8 +50,8 @@ if ( $cmd == 'export' )
 
 mysql_select_db($currentCourseID);
 
-
-$tool_content .= "<script>
+if ($is_adminOfCourse) {
+	$tool_content .= "<script>
           function confirmation (name)
           {
               if (confirm('". clean_str_for_javascript($langAreYouSureToDelete) . " ' + name + '? " . $langModuleStillInPool . "'))
@@ -60,7 +60,7 @@ $tool_content .= "<script>
                   {return false;}
           }
           </script>";
-$tool_content .= "<script>
+	$tool_content .= "<script>
           function scormConfirmation (name)
           {
               if (confirm('". clean_str_for_javascript($langAreYouSureToDeleteScorm) .  "' + name + '?'))
@@ -69,11 +69,11 @@ $tool_content .= "<script>
                   {return false;}
           }
           </script>";
-
-// execution of commands
-switch ( $cmd ) {
-    // DELETE COMMAND
-    case "delete" :
+	
+	// execution of commands
+	switch ( $cmd ) {
+    	// DELETE COMMAND
+    	case "delete" :
             if (is_dir($webDir."courses/".$currentCourseID."/scormPackages/path_".$_GET['del_path_id']))
             {
                 $findsql = "SELECT M.`module_id`
@@ -174,10 +174,9 @@ switch ( $cmd ) {
             $query = db_query($sql3);
 
             break;
-      
       // ACCESSIBILITY COMMAND
-      case "mkBlock" :
-      case "mkUnblock" :
+		case "mkBlock" :
+		case "mkUnblock" :
             $cmd == "mkBlock" ? $blocking = 'CLOSE' : $blocking = 'OPEN';
             $sql = "UPDATE `".$TABLELEARNPATH."`
                     SET `lock` = '$blocking'
@@ -185,10 +184,9 @@ switch ( $cmd ) {
                       AND `lock` != '$blocking'";
             $query = db_query ($sql);
             break;
-                        
-      // VISIBILITY COMMAND
-      case "mkVisibl" :
-      case "mkInvisibl" :      
+		// VISIBILITY COMMAND
+		case "mkVisibl" :
+		case "mkInvisibl" :      
             $cmd == "mkVisibl" ? $visibility = 'SHOW' : $visibility = 'HIDE';
             $sql = "UPDATE `".$TABLELEARNPATH."`
                        SET `visibility` = '$visibility'
@@ -196,19 +194,17 @@ switch ( $cmd ) {
                        AND `visibility` != '$visibility'";
             $query = db_query ($sql);
             break;
-
-      // ORDER COMMAND
-      case "moveUp" :
+		// ORDER COMMAND
+		case "moveUp" :
             $thisLearningPathId = $_GET['move_path_id'];
             $sortDirection = "DESC";
             break;
-      case "moveDown" :
+		case "moveDown" :
             $thisLearningPathId = $_GET['move_path_id'];
             $sortDirection = "ASC";
             break;
-            
-      // CREATE COMMAND
-      case "create" :
+		// CREATE COMMAND
+		case "create" :
             // create form sent
             if( isset($_POST["newPathName"]) && $_POST["newPathName"] != "") {
                 // check if name already exists
@@ -238,18 +234,23 @@ switch ( $cmd ) {
                 }
             }
             else { // create form requested
-                        $tool_content .= "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"POST\">\n"
-                              ."<h4>".$langCreateNewLearningPath."</h4>\n"
-                              ."<label for=\"newPathName\">".$langLearningPathName."</label><br />\n"
-                              ."<input type=\"text\" name=\"newPathName\" id=\"newPathName\" maxlength=\"255\"></input><br /><br />\n"
-                              ."<label for=\"newComment\">".$langComment."</label><br />\n"
-                              ."<textarea id=\"newComment\" name=\"newComment\" rows=\"2\" cols=\"50\"></textarea><br />\n"
-                              ."<input type=\"hidden\" name=\"cmd\" value=\"create\">\n"
-                              ."<input type=\"submit\" value=\"".$langOk."\"></input>\n"
-                              ."</form>\n\n";
+            	$tool_content .= 
+					 "<div id=\"tool_operations\"><span class=\"operation\">"
+					."<form action=\"".$_SERVER['PHP_SELF']."\" method=\"POST\">"
+                    ."<strong>".$langCreateNewLearningPath."</strong><br /><br />"
+                    ."<label for=\"newPathName\">".$langLearningPathName."</label><br />"
+                    ."<input type=\"text\" name=\"newPathName\" id=\"newPathName\" "
+                    ."maxlength=\"255\"></input><br /><br />"
+                    ."<label for=\"newComment\">".$langComment."</label><br />"
+                    ."<textarea id=\"newComment\" name=\"newComment\" rows=\"2\" "
+                    ."cols=\"50\"></textarea><br />"
+                    ."<input type=\"hidden\" name=\"cmd\" value=\"create\">"
+                    ."<input type=\"submit\" value=\"".$langOk."\"></input>"
+                    ."</form></span></div>";
             }
             break;
-}
+	} // end of switch
+} // end of if
 
 // IF ORDER COMMAND RECEIVED
 // CHANGE ORDER
@@ -301,19 +302,22 @@ if (isset($sortDirection) && $sortDirection)
      }
 }
 
-if (isset($dialogBox)) {
-$tool_content .= $dialogBox;
-}
-
 // Display links to create and import a learning path
 if($is_adminOfCourse) {
-$tool_content .=
-      "<p>
-      <a href=\"".$_SERVER['PHP_SELF']."?cmd=create\">".$langCreateNewLearningPath."</a> |
-      <a href=\"importLearningPath.php\">".$langimportLearningPath."</a> |
-      <a href=\"modules_pool.php\">".$langModulesPoolToolName."</a> |
-      <a href=\"learnPath_detailsAllPath.php\">".$langTrackAllPath."</a>
-      </p>";
+	
+	if (isset($dialogBox)) {
+		$tool_content .= "<div id=\"tool_operations\"><span class=\"operation\">";
+		$tool_content .= $dialogBox;
+		$tool_content .= "</span></div>";
+	}
+
+	$tool_content .=
+       "<div id=\"tool_operations\"><span class=\"operation\">"
+      ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=create\">".$langCreateNewLearningPath."</a> | "
+      ."<a href=\"importLearningPath.php\">".$langimportLearningPath."</a> | "
+      ."<a href=\"modules_pool.php\">".$langModulesPoolToolName."</a> | "
+      ."<a href=\"learnPath_detailsAllPath.php\">".$langTrackAllPath."</a>"
+      ."</span></div>";
 }
 
 $tool_content .= "<table width=\"100%\">
@@ -620,6 +624,6 @@ elseif (!$is_adminOfCourse && $iterator != 1 && $lpUid) {
 $tool_content .= "</tfoot>\n";
 $tool_content .= "</table>\n";
 
-draw($tool_content, 2);
+draw($tool_content, 2, "learnPath");
 
 ?>

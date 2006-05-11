@@ -48,7 +48,8 @@ $tool_content .= "<script>
   ======================================*/
 
 // display use explication text
-$tool_content .= $langUseOfPool."<br /><br />";
+$tool_content .= "<div id=\"tool_operations\"><span class=\"operation\">";
+$tool_content .= $langUseOfPool."</span></div>";
 
 // HANDLE COMMANDS:
 $cmd = ( isset($_REQUEST['cmd']) )? $_REQUEST['cmd'] : '';
@@ -118,6 +119,7 @@ switch( $cmd )
                  WHERE `module_id` = '". (int)$_REQUEST['module_id']."'";
         $result = db_query($query);
         $list = mysql_fetch_array($result);
+        $tool_content .= "<div id=\"tool_operations\"><span class=\"operation\">";
         $tool_content .= "
             <form method=\"post\" name=\"rename\" action=\"".$_SERVER['PHP_SELF']."\">
             <label for=\"newName\">".$langInsertNewModuleName."</label> :
@@ -125,8 +127,8 @@ switch( $cmd )
             <input type=\"submit\" value=\"".$langOk."\" name=\"submit\">
             <input type=\"hidden\" name=\"cmd\" value=\"exRename\">
             <input type=\"hidden\" name=\"module_id\" value=\"".$_REQUEST['module_id']."\">
-            </form>
-            ";
+            </form>";
+         $tool_content .= "</span></div>";
         break;
 
      //try to change name for selected module
@@ -153,14 +155,18 @@ switch( $cmd )
             }
             else
             {
+                $tool_content .= "<div id=\"tool_operations\"><span class=\"operation\">";
                 $tool_content .= claro_disp_message_box($langErrorNameAlreadyExists);
                 $tool_content .= "<br />";
+                $tool_content .= "</span></div>";
             }
         }
         else
         {
+            $tool_content .= "<div id=\"tool_operations\"><span class=\"operation\">";
             $tool_content .= claro_disp_message_box($langErrorEmptyName);
             $tool_content .= "<br />";
+            $tool_content .= "</span></div>";
         }
         break;
 
@@ -177,6 +183,7 @@ switch( $cmd )
             
             if( isset($comment['comment']) )
             {
+                $tool_content .= "<div id=\"tool_operations\"><span class=\"operation\">";
                 $tool_content .= "<form method=\"get\" action=\"".$_SERVER['PHP_SELF']."\">\n"
                     .claro_disp_html_area('comment', $comment['comment'], 15, 55)
                     ."<br />\n"
@@ -185,6 +192,7 @@ switch( $cmd )
                     ."<input type=\"submit\" value=\"".$langOk."\">\n"
                     ."<br /><br />\n"
                     ."</form>\n";
+                 $tool_content .= "</span></div>";
             }
         } // else no module_id
         break;
@@ -202,9 +210,9 @@ switch( $cmd )
 }
 
 
-$tool_content .= "<table class=\"claroTable\" width=\"100%\" border=\"0\" cellspacing=\"2\">
+$tool_content .= "<table width=\"100%\">
     <thead>
-        <tr class=\"headerX\" align=\"center\" valign=\"top\" bgcolor=\"#e6e6e6\">
+        <tr align=\"center\" valign=\"top\">
           <th>
             ".$langModule."
           </th>
@@ -279,6 +287,6 @@ if ($atleastOne == false) {$tool_content .= "<tr><td align=\"center\" colspan=\"
 
 $tool_content .= "</tbody>\n</table>";
 
-draw($tool_content, 2);
+draw($tool_content, 2, "learnPath");
 
 ?>

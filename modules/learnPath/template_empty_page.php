@@ -31,6 +31,6 @@ else { // Student View
 
 /*>>>>>>>>>>>> END: COMMON TO TEACHERS AND STUDENTS <<<<<<<<<<<<*/
 
-draw($tool_content, 2);
+draw($tool_content, 2, "learnPath");
 
 ?>
