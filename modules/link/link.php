@@ -13,6 +13,9 @@
 // - add link to 'root' category => category-less link is always visible
 //echo $dbname;
 //echo $_SESSION['dbname'];
+
+//TODO: line 202, remove <thead>
+
 $dbname = 'TMA101';
 $require_current_course = TRUE;
 $langFiles = 'link';
@@ -20,7 +23,7 @@ $require_help = TRUE;
 $helpTopic = 'Link';
 //include ('../../include/init.php');
 include '../../include/baseTheme.php';
-
+$dbname = $_SESSION['dbname'];
 $tbl_link = "liens";
 $tbl_categories = "link_categories";
 
