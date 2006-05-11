@@ -1,10 +1,11 @@
 <?
 
 include '../include/init.php';
+
 $nameTools = "Αναβάθμιση των βάσεων δεδομένων του e-Class";
 
-$OK = "[<font color='green'> Εντάξει </font>]";
-$BAD = "[<font color='red'> Σφάλμα! </font>]";
+$OK = "[<font color='green'> Επιτυχία </font>]";
+$BAD = "[<font color='red'> Σφάλμα ή δεν χρειάζεται τροποποίηση</font>]";
 
 begin_page();
 
@@ -31,6 +32,10 @@ if (!isset($diskQuotaDropbox)) {
 	$diskQuotaDropbox = 40000000;
 }
 
+// **************************************
+// 		upgrade eclass main database 
+// **************************************
+
 //upgrade queries from 1.2 --> 1.4
 
 if (!mysql_field_exists("$mysqlMainDb", 'user', 'am')) 
@@ -54,10 +59,35 @@ if (!mysql_field_exists("$mysqlMainDb",'cours','group_quota'))
 if (!mysql_field_exists("$mysqlMainDb",'cours','dropbox_quota'))
 	add_field('cours', 'dropbox_quota', "FLOAT DEFAULT '$diskQuotaDropbox' NOT NULL");
 
+
+// *************************************
+// 		upgrade courses databases 
+// ************************************
+
+
 $res = db_query("SELECT code FROM cours");
 while ($code = mysql_fetch_row($res)) {
-	echo "<p><h4>Αναβάθμιση μαθήματος $code[0]</h4><br>\n";
-	mysql_select_db($code[0]);
+
+// modify course_code/index.php
+
+echo "<p><h4>Τροποποίηση αρχείου index.php του μαθήματος $code[0]</h4></p>";
+if (!chdir("$webDir/courses/$code[0]")) {
+	die ("Δεν πραγματοποιήθηκε η αλλαγή στον κατάλογο των μαθημάτων! Ελέγξτε τα δικαιώματα πρόσβασης.");
+
+}
+$filecontents = file_get_contents("index.php");
+if (!$filecontents)
+  die ("To αρχείο δεν μπόρεσε να διαβαστεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
+$newfilecontents = preg_replace('#../claroline/#','../../modules/',$filecontents);
+$fp = @fopen("index.php","w");
+if (!$fp)
+	  die ("To αρχείο δεν μπόρεσε να διαβαστεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
+if (!@fwrite($fp, $newfilecontents))
+		die ("Το αρχείο δεν μπόρεσε να τροποποιηθεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
+fclose($fp);
+
+echo "<p><h4>Αναβάθμιση μαθήματος $code[0]</h4></p>";
+mysql_select_db($code[0]);
 
 	// upgrade queries from 1.2 --> 1.4
 
@@ -117,7 +147,7 @@ while ($code = mysql_fetch_row($res)) {
 	update_assignment_submit();
 
 	// upgrade queries to 1.4
-	if (db_query("UPDATE accueil SET lien='../claroline/stat/index2.php?table=stat_accueil".
+	if (db_query("UPDATE accueil SET lien='../../modules/stat/index2.php?table=stat_accueil".
 		"&reset=0&period=jour' WHERE id=11", $code[0])) {
 			echo "Πίνακας accueil: $OK<br>";
 	} else {
@@ -139,18 +169,16 @@ if (!mysql_table_exists($code[0], 'videolinks'))  {
 
         db_query("UPDATE accueil SET
                rubrique='$langVideoLinks',
-               lien='../claroline/video/videolinks.php',
-               image='../../claroline/image/videos.png',
+               lien='.././modules/video/videolinks.php',
+               image='../../../images/videos.png',
                visible='0',
                admin='0',
-               address='../../claroline/image/pastillegris.png'
+               address='../../../images/pastillegris.png'
                WHERE id='6'", $code[0]);
 
         }
 
 // upgrade queries for e-Class 1.6
-
-
 add_field('liens','category',"INT(4) DEFAULT '0' NOT NULL");
 add_field('liens','ordre',"MEDIUMINT(8) DEFAULT '0' NOT NULL");
 
@@ -164,7 +192,7 @@ if (!mysql_table_exists($code[0], 'link_categories'))  {
 	}
 
 // correct link entries to correctly appear in a blank window
-$legend = "Διόρθωση συνδέσμων";
+$legend = "<p>Διόρθωση συνδέσμων</p>";
 echo $legend;
 echo "<br>";
 
@@ -215,16 +243,15 @@ if (!mysql_table_exists($code[0], 'dropbox_post'))  {
 db_query("INSERT IGNORE INTO accueil VALUES (
                 '16',
                 '$langDropbox',
-                '../claroline/dropbox/index.php',
-                '../../claroline/image/dropbox.png',
+                '../../modules/dropbox/index.php',
+                '../../../images/dropbox.png',
                 '0',
                 '0',
-                '../../claroline/image/pastillegris.png'
+                '../../../images/pastillegris.png'
                 )", $code[0]);
 
 
-// upgrade queries for e-Class 1.6
-
+// upgrade queries for eclass 2.0
 // for learning path
 
 $langLearnPath = "Γραμμή Μάθησης";
@@ -322,19 +349,55 @@ db_query("INSERT IGNORE INTO accueil VALUES (
 				'../../../images/pastillegris.png'
                 )", $code[0]);
 
-// for doc quota
-// temporarily commented 
-// add_field('document','size',"INT(16) DEFAULT '0' NOT NULL");
 
+// table accueil
+echo "Διόρθωση εγγραφών του πίνακα accueil<br>";
+	if (db_query("UPDATE accueil SET lien='../../modules/agenda/agenda.php' WHERE id=1", $code[0])) {
+			echo "Εγγραφή με id 1 του πίνακα <b>accueil</b> $OK<br>";
+	} else {
+			echo "Εγγραφή με id 1 του πίνακα <b>accueil</b>: $BAD<br>";
+			$errors++;
+	}
+
+$sql = db_query("SELECT id,lien,image,address FROM accueil");
+while ($u = mysql_fetch_row($sql))  {
+        $oldlink_lien = $u[1];
+				$newlink_lien = preg_replace('#../claroline/#','../../modules/',$oldlink_lien);
+				$oldlink_image = $u[2];
+				$newlink_image = preg_replace('#../claroline/image/#','../../images/',$oldlink_image);
+				$oldlink_address = $u[3];
+				$newlink_address = preg_replace('#../claroline/image/#','../../images/',$oldlink_address);
+			if	(db_query("UPDATE accueil 
+							SET lien='$newlink_lien', image='$newlink_image', address='$newlink_address'
+            		WHERE id='$u[0]'")) {
+					echo "Εγγραφή με id $u[0] του πίνακα <b>accueil</b>: $OK<br>";
+				} else {
+					echo "Εγγραφή με id $u[0] του πίνακα <b>accueil</b>: $BAD<br>";
+					$errors++;
+				}
+}
+																																				
+// table stat_accueil
+$sql = db_query("SELECT id,request FROM stat_accueil");
+  while ($u = mysql_fetch_row($sql))  {
+	    $old_request = $u[1];
+			$new_request = preg_replace('#'.$code[0].'/#','courses/'.$code[0].'/', $old_request);
+		  if (db_query("UPDATE stat_accueil SET request='$new_request' WHERE id = '$u[0]'")) {
+						echo "Εγγραφή με id $u[0] του πίνακα <b>stat_accueil</b>: $OK<br>";
+					} else {
+						echo "Εγγραφή με id $u[0] του πίνακα <b>stat_accueil</b>: $BAD<br>";
+						$errors++;
+			}
+echo "<br>";
+}
+																																		
 echo "</p>\n";
-} // end of while (do for each course)
-
+} // end of do ... while for each course)
 
 echo "<p>Σφάλματα: $errors.";
 echo "<br><center><a href='../index.php'>Επιστροφή</a></center></p>";
 
 end_page();
-
 
 // Removes initial part of path from assignment_submit.file_path
 function update_assignment_submit()
