@@ -38,6 +38,8 @@ $langOn="Σε";
 $langRegUser="εγγεγραμμένους χρήστες του μαθήματος";
 $langUnvalid="έχουν άκυρη διεύθυνση email ή δεν έχουν καθόλου";
 $langModifAnn="Αλλαγή της ανακοίνωσης";
+$langAnnouncement = "Ανακοίνωση";
+$langMove = "Μετακίνηση";
 
 // ANNOUNCEMENTS
 $langAnnEmpty="Τα περιεχόμενα του καταλόγου ανακοινώσεων διαγράφτηκαν";

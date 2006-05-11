@@ -38,6 +38,9 @@ $langOn="On";
 $langRegUser="registered users of the site";
 $langUnvalid="have unvalid or no email address";
 $langModifAnn="Modify this announcement";
+$langAnnouncement = "Announcement";
+$langMove = "Move";
+
 // ANNOUNCEMENTS
 $langAnnEmpty="Announcements list has been cleared up";
 $langAnnModify="Announcement has been modified";
