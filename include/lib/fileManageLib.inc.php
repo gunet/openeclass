@@ -577,7 +577,7 @@ function claro_rename_file($oldFilePath, $newFilePath)
     $newFilePath = dirname($newFilePath).'/'
                   .replace_dangerous_char(basename($newFilePath));
 
-    if (check_name_exist173($newFilePath)
+    if (check_name_exist($newFilePath)
         && $newFilePath != $oldFilePath)
     {
         return false;

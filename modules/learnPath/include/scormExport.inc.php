@@ -31,7 +31,6 @@ if(!class_exists('ScormExport')):
 
 require_once("../../include/lib/fileManageLib.inc.php");
 require_once("../../include/lib/fileUploadLib.inc.php");
-require_once("fileUpload.lib.php");
 require_once("../../include/pclzip/pclzip.lib.php");
 
 /*$tbl_cdb_names = claro_sql_get_course_tbl();
@@ -642,7 +641,7 @@ class ScormExport
         global $clarolineRepositorySys, $claro_stylesheet;
         global $langErrorCopyScormFiles, $langErrorCreatingDirectory, $langErrorCopyingScorm, $langErrorCopyAttachedFile;
         // (re)create fresh directory
-        claro173_delete_file($this->destDir);
+        claro_delete_file($this->destDir);
         if ( !claro_mkdir($this->destDir, CLARO_FILE_PERMISSIONS , true))
         {
             $this->error[] = $langErrorCreatingDirectory . $this->destDir;
@@ -973,7 +972,7 @@ class ScormExport
         }
         
         // Temporary directory can be deleted, now that the zip is made.
-        claro173_delete_file($this->destDir);
+        claro_delete_file($this->destDir);
 
         return true;
         

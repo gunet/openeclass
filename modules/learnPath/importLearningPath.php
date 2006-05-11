@@ -11,7 +11,6 @@ Header
 require_once("../../include/lib/learnPathLib.inc.php");
 require_once("../../include/lib/fileManageLib.inc.php");
 require_once("../../include/lib/fileUploadLib.inc.php");
-require_once("fileUpload.lib.php");
 require_once("../../include/lib/fileDisplayLib.inc.php");
 
 $require_current_course = TRUE;
@@ -1074,7 +1073,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
         db_query($sqlDelLP);
 
         // delete the directory (and files) of this learning path and all its content
-        claro173_delete_file($baseWorkDir);
+        claro_delete_file($baseWorkDir);
 
     }
     else

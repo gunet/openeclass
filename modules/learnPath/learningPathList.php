@@ -10,6 +10,7 @@ Same page:
 */
 
 require_once("../../include/lib/learnPathLib.inc.php");
+require_once("../../include/lib/fileManageLib.inc.php");
 
 $require_current_course = TRUE;
 $langFiles              = "learnPath";
