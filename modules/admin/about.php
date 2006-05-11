@@ -54,6 +54,8 @@
  	document/document.php, scormdocument.php
 ==============================================================================
 */
+
+
 $langFiles = array('admin','about');
 include '../../include/baseTheme.php';
 @include "check_admin.inc";
