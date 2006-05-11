@@ -29,10 +29,10 @@ Header
 
 if(!class_exists('ScormExport')):
 
-include_once("fileManage.lib.php");
-include_once("../../include/lib/fileUploadLib.inc.php");
-include_once("fileUpload.lib.php");
-include_once("../../include/pclzip/pclzip.lib.php");
+require_once("../../include/lib/fileManageLib.inc.php");
+require_once("../../include/lib/fileUploadLib.inc.php");
+require_once("fileUpload.lib.php");
+require_once("../../include/pclzip/pclzip.lib.php");
 
 /*$tbl_cdb_names = claro_sql_get_course_tbl();
 $tbl_quiz_test              = $tbl_cdb_names['quiz_test'             ];

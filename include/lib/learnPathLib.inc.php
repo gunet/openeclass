@@ -1373,54 +1373,6 @@ function addScormTime($time1, $time2)
     }
 }
 
-/* ************************************* Thanos MODS ********************** */
-
-
-/******************** FILE MANAGE LIB ****************/
-
-/**
- * Delete a file or a directory (and its whole content)
- *
- * @param  - $filePath (String) - the path of file or directory to delete
- * @return - boolean - true if the delete succeed
- *           boolean - false otherwise.
- */
-
-function claro_delete_file($filePath)
-{
-    if( is_file($filePath) )
-    {
-        return unlink($filePath);
-    }
-    elseif( is_dir($filePath) )
-    {
-        $dirHandle = opendir($filePath);
-
-        if ( ! $dirHandle ) return false;
-
-        $removableFileList = array();
-
-        while ( $file = readdir($dirHandle) )
-        {
-            if ( $file == '.' || $file == '..') continue;
-
-            $removableFileList[] = $filePath . '/' . $file;
-        }
-
-        closedir($dirHandle); // impossible to test, closedir return void ...
-
-        if ( sizeof($removableFileList) > 0)
-        {
-            foreach($removableFileList as $thisFile)
-            {
-                if ( ! claro_delete_file($thisFile) ) return false;
-            }
-        }
-       
-        return rmdir($filePath);
-
-    } // end elseif is_dir()
-}
 
 /*********************** Functions from claroline 1.7.x ***********************/
 

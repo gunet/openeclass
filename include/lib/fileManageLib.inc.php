@@ -502,4 +502,204 @@ function form_dir_list($sourceType, $sourceComponent, $command, $baseWorkDir)
 
 //------------------------------------------------------------------------------
 
+/**
+ * Delete a file or a directory (and its whole content)
+ *
+ * @param  - $filePath (String) - the path of file or directory to delete
+ * @return - boolean - true if the delete succeed
+ *           boolean - false otherwise.
+ */
+
+function claro_delete_file($filePath)
+{
+    if( is_file($filePath) )
+    {
+        return unlink($filePath);
+    }
+    elseif( is_dir($filePath) )
+    {
+        $dirHandle = opendir($filePath);
+
+        if ( ! $dirHandle ) return false;
+
+        $removableFileList = array();
+
+        while ( $file = readdir($dirHandle) )
+        {
+            if ( $file == '.' || $file == '..') continue;
+
+            $removableFileList[] = $filePath . '/' . $file;
+        }
+
+        closedir($dirHandle); // impossible to test, closedir return void ...
+
+        if ( sizeof($removableFileList) > 0)
+        {
+            foreach($removableFileList as $thisFile)
+            {
+                if ( ! claro_delete_file($thisFile) ) return false;
+            }
+        }
+       
+        return rmdir($filePath);
+
+    } // end elseif is_dir()
+}
+
+/**
+ * Rename a file or a directory
+ *
+ * @param  - $filePath (string) - complete path of the file or the directory
+ * @param  - $newFileName (string) - new name for the file or the directory
+ * @return - string  - new file path if it succeeds
+ *         - boolean - false otherwise
+ * @see    - rename() uses the check_name_exist() and php2phps() functions
+ */
+
+function claro_rename_file($oldFilePath, $newFilePath)
+{
+    if (realpath($oldFilePath) == realpath($newFilePath) ) return true;
+
+    /* CHECK IF THE NEW NAME HAS AN EXTENSION */
+
+    if (( ! ereg('[[:print:]]+\.[[:alnum:]]+$', $newFilePath))
+        &&  ereg('[[:print:]]+\.([[:alnum:]]+)$', $oldFilePath, $extension))
+    {
+        $newFilePath .= '.' . $extension[1];
+    }
+
+    /* PREVENT FILE NAME WITH PHP EXTENSION */
+
+    $newFilePath = get_secure_file_name($newFilePath);
+
+    /* REPLACE CHARACTER POTENTIALY DANGEROUS FOR THE SYSTEM */
+
+    $newFilePath = dirname($newFilePath).'/'
+                  .replace_dangerous_char(basename($newFilePath));
+
+    if (check_name_exist173($newFilePath)
+        && $newFilePath != $oldFilePath)
+    {
+        return false;
+    }
+    else
+    {
+        if ( rename($oldFilePath, $newFilePath) )
+        {
+            return $newFilePath;
+        }
+        else
+        {
+            return false;
+        }
+    }
+}
+
+/**
+ * Copy a a file or a directory and its content to an other area
+ *
+ * @param  - $origDirPath (String) - the path of the directory to move
+ * @param  - $destination (String) - the path of the new area
+ * @param  - $delete (bool) - move or copy the file
+ * @return - void no return !!
+ */
+
+function claro_copy_file($sourcePath, $targetPath)
+{
+    $fileName = basename($sourcePath);
+
+    if ( is_file($sourcePath) )
+    {
+        return copy($sourcePath , $targetPath . '/' . $fileName);
+    }
+    elseif ( is_dir($sourcePath) )
+    {
+        // check to not copy the directory inside itself
+        if ( ereg('^'.$sourcePath . '/', $targetPath . '/') ) return false;
+
+        if ( ! claro_mkdir($targetPath . '/' . $fileName, CLARO_FILE_PERMISSIONS) )   return false;
+
+        $dirHandle = opendir($sourcePath);
+
+        if ( ! $dirHandle ) return false;
+
+        $copiableFileList = array();
+
+        while ($element = readdir($dirHandle) )
+        {
+            if ( $element == '.' || $element == '..') continue;
+
+            $copiableFileList[] = $sourcePath . '/' . $element;
+        }
+
+        closedir($dirHandle);
+
+        if ( count($copiableFileList) > 0 )
+        {
+            foreach($copiableFileList as $thisFile)
+            {
+                if ( ! claro_copy_file($thisFile, $targetPath . '/' . $fileName) ) return false;
+            }
+        }
+
+        return true;
+    } // end elseif is_dir()
+}
+
+/**
+ * create directory
+ *
+ * @param string  $pathname
+ * @param int     $mode directory permission (optional)
+ * @param boolean $recursive (optional)
+ * @return boolean TRUE if succeed, false otherwise
+ */
+
+function claro_mkdir($pathName, $mode = 0777, $recursive = false)
+{
+    global $webDir;
+
+    if ($recursive)
+    {
+        if ( strstr($pathName,$webDir) !== false )
+        {
+            /* Remove rootSys path from pathName for system with safe_mode or open_basedir restrictions
+               Functions (like file_exists, mkdir, ...) return false for files inaccessible with these restrictions
+            */
+            
+            $pathName = str_replace($webDir,'',$pathName);
+            $dirTrail = $webDir ;
+        }
+        else
+        {
+            $dirTrail = '';
+        }
+
+        $dirList = explode( '/', str_replace('\\', '/', $pathName) );
+        
+        $dirList[0] = empty($dirList[0]) ? '/' : $dirList[0];
+
+        foreach($dirList as $thisDir)
+        {
+            $dirTrail .= empty($dirTrail) ? $thisDir : '/'.$thisDir;
+
+            if ( file_exists($dirTrail) ) 
+            {
+                if ( is_dir($dirTrail) ) continue;
+                else                     return false;
+            }
+            else
+            {
+                 if ( ! @mkdir($dirTrail , $mode) ) return false;
+            }
+
+        }
+        return true;
+    }
+    else
+    {
+        return @mkdir($pathName, $mode);
+    }
+}
+
 ?>

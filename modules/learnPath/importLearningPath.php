@@ -10,7 +10,6 @@ Header
   
 require_once("../../include/lib/learnPathLib.inc.php");
 require_once("../../include/lib/fileManageLib.inc.php");
-require_once("fileManage.lib.php");
 require_once("../../include/lib/fileUploadLib.inc.php");
 require_once("fileUpload.lib.php");
 require_once("../../include/lib/fileDisplayLib.inc.php");
