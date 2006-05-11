@@ -23,7 +23,8 @@ $dbTable                = $TABLEASSET; // for old functions of document tool
 
 $imgRepositoryWeb       = "../../images/";
 
-require_once("../../include/init.php");
+require_once("../../include/baseTheme.php");
+$tool_content = "";
 
 $nameTools = $langModule;
 $is_AllowedToEdit = $is_adminOfCourse;
@@ -49,9 +50,6 @@ if ( isset($_GET['module_id']) && $_GET['module_id'] != '')
     $_SESSION['module_id'] = $_GET['module_id'];
 }
 
-begin_page();
-
-echo "</td></tr></table>";
 mysql_select_db($currentCourseID);
 
 // main page
@@ -142,17 +140,17 @@ if( !$is_AllowedToEdit
 //################################## MODULE NAME BOX #################################\\
 //####################################################################################\\
 
-echo '<br />'."\n";
+$tool_content .= '<br />'."\n";
 
 $cmd = ( isset($_REQUEST['cmd']) )? $_REQUEST['cmd'] : '';
 
 if ( $cmd == "updateName" )
 {
-    nameBox(MODULE_, UPDATE_);
+    $tool_content .= nameBox(MODULE_, UPDATE_);
 }
 else
 {
-    nameBox(MODULE_, DISPLAY_);
+    $tool_content .= nameBox(MODULE_, DISPLAY_);
 }
 
 if($module['contentType'] != CTLABEL_ )
@@ -165,30 +163,30 @@ if($module['contentType'] != CTLABEL_ )
     // this the comment of the module in ALL learning paths
     if ( $cmd == "updatecomment" )
     {
-        commentBox(MODULE_, UPDATE_);
+        $tool_content .= commentBox(MODULE_, UPDATE_);
     }
     elseif ($cmd == "delcomment" )
     {
-        commentBox(MODULE_, DELETE_);
+        $tool_content .= commentBox(MODULE_, DELETE_);
     }
     else
     {
-        commentBox(MODULE_, DISPLAY_);
+        $tool_content .= commentBox(MODULE_, DISPLAY_);
     }
 
     //#### ADDED COMMENT #### courseAdmin can always modify this ####\\
     // this is a comment for THIS module in THIS learning path
     if ( $cmd == "updatespecificComment" )
     {
-        commentBox(LEARNINGPATHMODULE_, UPDATE_);
+        $tool_content .= commentBox(LEARNINGPATHMODULE_, UPDATE_);
     }
     elseif ($cmd == "delspecificComment" )
     {
-        commentBox(LEARNINGPATHMODULE_, DELETE_);
+        $tool_content .= commentBox(LEARNINGPATHMODULE_, DELETE_);
     }
     else
     {
-        commentBox(LEARNINGPATHMODULE_, DISPLAY_);
+        $tool_content .= commentBox(LEARNINGPATHMODULE_, DISPLAY_);
     }
 } //  if($module['contentType'] != CTLABEL_ )
 
@@ -202,7 +200,7 @@ else
 	$pathBack = "./learningPath.php";
 }
 
-echo '<small><a href="'.$pathBack.'"><< '.$langBackModule.'</a></small><br /><br />'."\n\n";
+$tool_content .= '<small><a href="'.$pathBack.'"><< '.$langBackModule.'</a></small><br /><br />'."\n\n";
 
 //####################################################################################\\
 //############################ PROGRESS  AND  START LINK #############################\\
@@ -221,7 +219,7 @@ if($module['contentType'] != CTLABEL_) //
         if ($resultBrowsed['contentType']== CTEXERCISE_ ) { $contentDescType = $langEXERCISETypeDesc; }
         if ($resultBrowsed['contentType']== CTDOCUMENT_ ) { $contentDescType = $langDOCUMENTTypeDesc; }
 
-		echo '<b>'.$langProgInModuleTitle.'</b><br /><br />'."\n\n"
+		$tool_content .= '<b>'.$langProgInModuleTitle.'</b><br /><br />'."\n\n"
 			.'<table align="center" class="claroTable" border="0" cellspacing="2">'."\n"
 			.'<thead>'."\n"
 			.'<tr class="headerX" bgcolor="#e6e6e6">'."\n"
@@ -232,19 +230,19 @@ if($module['contentType'] != CTLABEL_) //
 			.'<tbody>'."\n\n";
 
         //display type of the module
-		echo '<tr>'."\n"
+		$tool_content .= '<tr>'."\n"
             .'<td>'.$langTypeOfModule.'</td>'."\n"
 			.'<td><img src="'.$imgRepositoryWeb.$contentType_img.'" alt="'.$contentType_alt.'" border="0" />'.$contentDescType.'</td>'."\n"
 			.'</tr>'."\n\n";
 
         //display total time already spent in the module
-		echo '<tr>'."\n"
+		$tool_content .= '<tr>'."\n"
 			.'<td>'.$langTotalTimeSpent.'</td>'."\n"
 			.'<td>'.$resultBrowsed['total_time'].'</td>'."\n"
 			.'</tr>'."\n\n";
 
         //display time passed in last session
-		echo '<tr>'."\n"
+		$tool_content .= '<tr>'."\n"
 			.'<td>'.$langLastSessionTimeSpent.'</td>'."\n"
 			.'<td>'.$resultBrowsed['session_time'].'</td>'."\n"
 			.'</tr>'."\n\n";
@@ -270,7 +268,7 @@ if($module['contentType'] != CTLABEL_) //
         // no sens to display a score in case of a document module
         if (($resultBrowsed['contentType'] != CTDOCUMENT_))
         {
-			echo '<tr>'."\n"
+			$tool_content .= '<tr>'."\n"
 				.'<td>'.$langYourBestScore.'</td>'."\n"
 				.'<td>'.claro_disp_progress_bar($raw, 1).' '.$raw.'%</td>'."\n"
 				.'</tr>'."\n\n";
@@ -295,7 +293,7 @@ if($module['contentType'] != CTLABEL_) //
         {
             $statusToDisplay = $resultBrowsed['lesson_status'];
         }
-		echo '<tr>'."\n"
+		$tool_content .= '<tr>'."\n"
 			.'<td>'.$langLessonStatus.'</td>'."\n"
 			.'<td>'.$statusToDisplay.'</td>'."\n"
 			.'</tr>'."\n\n"
@@ -317,7 +315,7 @@ if($module['contentType'] != CTLABEL_) //
     if( $module['startAsset_id'] != "" && $asset['asset_id'] == $module['startAsset_id'] )
     {
 
-		echo '<center>'."\n"
+		$tool_content .= '<center>'."\n"
 			.'<form action="./navigation/viewer.php" method="post">'."\n"
 			.'<input type="submit" value="'.$langStartModule.'" />'."\n"
 			.'</form>'."\n"
@@ -325,7 +323,7 @@ if($module['contentType'] != CTLABEL_) //
     }
     else
     {
-        echo '<p><center>'.$langNoStartAsset.'</center></p>'."\n";
+        $tool_content .= '<p><center>'.$langNoStartAsset.'</center></p>'."\n";
     }
 }// end if($module['contentType'] != CTLABEL_) 
 // if module is a label, only allow to change its name.
@@ -354,7 +352,6 @@ if( $is_AllowedToEdit ) // for teacher only
     }
 } // if ($is_AllowedToEdit)
 
-?>
+draw($tool_content, 2);
 
-</body>
-</html>
+?>

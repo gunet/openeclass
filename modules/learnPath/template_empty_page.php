@@ -11,16 +11,10 @@ Initializations
 $require_current_course = TRUE;
 $langFiles = "learnPath";
 
-require_once("../../include/init.php");
+require_once("../../include/baseTheme.php");
+$tool_content = "";
 
 $nameTools = $langlearnPath;
-
-begin_page();
-
-
-/* entos plaisiou */
-echo "</td></tr></table>";
-/* ap' arkh s'akrh */
 
 
 if($is_adminOfCourse) {       // Teacher View
@@ -37,7 +31,6 @@ else { // Student View
 
 /*>>>>>>>>>>>> END: COMMON TO TEACHERS AND STUDENTS <<<<<<<<<<<<*/
 
-?>
+draw($tool_content, 2);
 
-</body>
-</html>
+?>

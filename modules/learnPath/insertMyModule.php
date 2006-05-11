@@ -22,7 +22,8 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 $imgRepositoryWeb       = "../../images/";
 
-require_once("../../include/init.php");
+require_once("../../include/baseTheme.php");
+$tool_content = "";
 
 $is_AllowedToEdit = $is_adminOfCourse;
 
@@ -38,9 +39,6 @@ if ( !isset($_SESSION['path_id']) )
     die ("<center> Not allowed ! (path_id not set :@ )</center>");
 }
 
-begin_page();
-
-echo "</td></tr></table>";
 mysql_select_db($currentCourseID);
 
 /*======================================
@@ -144,7 +142,7 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add'))
 
 $result = db_query(buildRequestModules());
 
-echo '<table class="claroTable" width="100%">'."\n"
+$tool_content .= '<table class="claroTable" width="100%">'."\n"
        .'<thead>'."\n"
        .'<tr class="headerX" bgcolor="#e6e6e6">'."\n"
        .'<th width="10%">'
@@ -158,7 +156,7 @@ echo '<table class="claroTable" width="100%">'."\n"
        .'<tbody>'."\n\n";
 
 // Display available modules
-echo '<form name="addmodule" action="'.$_SERVER['PHP_SELF'].'?cmdglobal=add">'."\n";
+$tool_content .= '<form name="addmodule" action="'.$_SERVER['PHP_SELF'].'?cmdglobal=add">'."\n";
 
 $atleastOne = FALSE;
 
@@ -172,7 +170,7 @@ while ($list=mysql_fetch_array($result))
         
     $contentType_alt = selectAlt($list['contentType']);
     
-    echo '<tr>'."\n"
+    $tool_content .= '<tr>'."\n"
         .'<td align="center">'."\n"
         .'<input type="checkbox" name="check_'.$list['module_id'].'" id="check_'.$list['module_id'].'">'."\n"
         .'</td>'."\n"
@@ -185,7 +183,7 @@ while ($list=mysql_fetch_array($result))
 
     if ($list['comment'] != null)
     {
-        echo '<tr>'."\n"
+        $tool_content .= '<tr>'."\n"
             .'<td>&nbsp;</td>'."\n"
             .'<td>'."\n"
             .'<small>'.$list['comment'].'</small>'."\n"
@@ -196,17 +194,17 @@ while ($list=mysql_fetch_array($result))
 
 }//end while another module to display
 
-echo "\n".'</tbody>'."\n\n".'<tfoot>'."\n\n";
+$tool_content .= "\n".'</tbody>'."\n\n".'<tfoot>'."\n\n";
 
 if ( !$atleastOne )
 {
-    echo '<tr>'."\n"
+    $tool_content .= '<tr>'."\n"
         .'<td colspan="2" align="center">'
         .$langNoMoreModuleToAdd
         .'</td>'."\n"
         .'</tr>'."\n";
 }
-echo '<tr>'
+$tool_content .= '<tr>'
 	.'<td colspan="6"><hr noshade size="1"></td>'
 	.'</tr>'."\n"
 	;
@@ -214,7 +212,7 @@ echo '<tr>'
 
 if ( $atleastOne )
 {
-    echo '<tr>'."\n"
+    $tool_content .= '<tr>'."\n"
         .'<td colspan="2">'."\n"
         .'<input type="submit" value="'.$langAddModulesButton.'" />'."\n"
         .'<input type="hidden" name="cmdglobal" value="add">'."\n"
@@ -222,22 +220,20 @@ if ( $atleastOne )
         .'</tr>'."\n";
 }
 
-echo "\n".'</tfoot>'."\n\n".'</form>'."\n".'</table>';
+$tool_content .= "\n".'</tfoot>'."\n\n".'</form>'."\n".'</table>';
 
 //####################################################################################\\
 //################################## MODULES LIST ####################################\\
 //####################################################################################\\
 
 // display subtitle
-echo claro_disp_tool_title($langPathContentTitle);
+$tool_content .= claro_disp_tool_title($langPathContentTitle);
 
 // display back link to return to the LP administration
-echo '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
+$tool_content .= '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
 
 // display list of modules used by this learning path
-display_path_content();
+$tool_content .= display_path_content();
 
+draw($tool_content, 2);
 ?>
-
-</body>
-</html>

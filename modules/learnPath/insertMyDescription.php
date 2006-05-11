@@ -17,7 +17,8 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 //$TABLEDOCUMENT          = "document";
 
-require_once("../../include/init.php");
+require_once("../../include/baseTheme.php");
+$tool_content = "";
 
 $nameTools = $langInsertMyDescToolName;
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
@@ -31,9 +32,7 @@ if ( !isset($_SESSION['path_id']) )
       die ("<center> Not allowed ! (path_id not set :@ )</center>");
 }
 
-begin_page();
 
-echo "</td></tr></table>";
 mysql_select_db($currentCourseID);
 
 /*======================================*/
@@ -89,7 +88,7 @@ if ($num == 0)
 		" . (int)$order . ", 'OPEN')";
 	$query = db_query($sql);
 
-	echo "done";
+	$tool_content .= "done";
 }
 else 
 {
@@ -109,11 +108,9 @@ else
 		" . (int)$order . ", 'OPEN')";
 	$query = db_query($sql);
 
-	echo "done2";
+	$tool_content .= "done2";
 }
  
- 
-?>
+draw($tool_content, 2);
 
-</body>
-</html>
+?>

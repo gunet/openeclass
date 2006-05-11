@@ -97,6 +97,7 @@ function commentBox($type, $mode)
     global $langDefaultModuleAddedComment, $langDelete;
     // will be set 'true' if the comment has to be displayed
     $dsp = false;
+    $output = "";
 
     // those vars will be used to build sql queries according to the comment type
     switch ( $type )
@@ -156,7 +157,7 @@ function commentBox($type, $mode)
                       WHERE " . $where_cond;
             $oldComment = db_query_get_single_value($sql);
 
-            echo '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">' . "\n"
+            $output .= '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">' . "\n"
                 .claro_disp_html_area('insertCommentBox', $oldComment, 15, 55).'<br />' . "\n"
                 .'<input type="hidden" name="cmd" value="update' . $col_name . '" />'
                 .'<input type="submit" value="' . $langOk . '" />' . "\n"
@@ -197,14 +198,14 @@ function commentBox($type, $mode)
         }
 
         // display nothing if this is default comment and not an admin
-        if ( ($currentComment == $defaultTxt) && !$is_adminOfCourse ) return 0;
+        if ( ($currentComment == $defaultTxt) && !$is_adminOfCourse ) return $output;
 
         if ( empty($currentComment) )
         {
             // if no comment and user is admin : display link to add a comment
             if ( $is_adminOfCourse )
             {
-                echo '<p>' . "\n"
+                $output .= '<p>' . "\n"
                 .    '<a class="claroCmd" href="' . $_SERVER['PHP_SELF'] . '?cmd=update' . $col_name . '">' . "\n"
                 .    $langAddComment . '</a>' . "\n"
                 .    '</p>' . "\n"
@@ -214,12 +215,12 @@ function commentBox($type, $mode)
         else
         {
             // display comment
-            echo "<p>".$currentComment."</p>";
+            $output .= "<p>".$currentComment."</p>";
             // display edit and delete links if user as the right to see it
             if ( $is_adminOfCourse )
             {
 
-                echo '<p>' . "\n"
+                $output .= '<p>' . "\n"
                 .    '<small>' . "\n"
                 .    '<a href="' . $_SERVER['PHP_SELF'] . '?cmd=update' . $col_name . '">' . "\n"
                 .    '<img src="../../images/edit.gif" alt="' . $langModify . '" border="0" />'
@@ -235,7 +236,7 @@ function commentBox($type, $mode)
         }
     }
 
-    return 0;
+    return $output;
 }
 
 /**
@@ -258,6 +259,7 @@ function nameBox($type, $mode)
 
     // $dsp will be set 'true' if the comment has to be displayed
     $dsp = FALSE;
+    $output = "";
 
     // those vars will be used to build sql queries according to the name type
     switch ( $type )
@@ -299,7 +301,7 @@ function nameBox($type, $mode)
             }
             else
             {
-                echo $langErrorNameAlreadyExists . '<br />';
+                $output .= $langErrorNameAlreadyExists . '<br />';
                 $dsp = TRUE;
             }
         }
@@ -311,7 +313,7 @@ function nameBox($type, $mode)
 
             $oldName = db_query_get_single_value($sql);
 
-            echo '<form method="POST" action="' . $_SERVER['PHP_SELF'].'">' . "\n"
+            $output .= '<form method="POST" action="' . $_SERVER['PHP_SELF'].'">' . "\n"
             .    '<input type="text" name="newName" size="50" maxlength="255" value="'.htmlspecialchars($oldName).'" />'
             .    '<br />' . "\n"
             .    '<input type="hidden" name="cmd" value="updateName" />' ."\n"
@@ -342,17 +344,17 @@ function nameBox($type, $mode)
            $currentName = false;
         }
 
-        echo '<h4>' 
+        $output .= '<h4>' 
         .    $currentName;
 
         if ( $is_adminOfCourse )
-            echo '<br /><a href="' . $_SERVER['PHP_SELF'] . '?cmd=updateName">'
+            $output .= '<br /><a href="' . $_SERVER['PHP_SELF'] . '?cmd=updateName">'
             .    '<img src="../../images/edit.gif" alt="' . $langModify . '" border="0" />'
             .    '</a>' . "\n";
-        echo '</h4>'."\n\n";
+        $output .= '</h4>'."\n\n";
     }
 
-    return 0;
+    return $output;
 }
 
 /**
@@ -499,6 +501,7 @@ function display_path_content()
     global $langModule;
     global $imgRepositoryWeb;
     $style = "";
+    $output = "";
 
     $sql = "SELECT M.`name`, M.`contentType`, 
                    LPM.`learnPath_module_id`, LPM.`parent`, 
@@ -531,7 +534,7 @@ function display_path_content()
         if ($flatElementList[$i]['children'] > $maxDeep) $maxDeep = $flatElementList[$i]['children'] ;
     }
 
-    echo "\n".'<table class="claroTable" width="100%"  border="0" cellspacing="2">'."\n\n"
+    $output .= "\n".'<table class="claroTable" width="100%"  border="0" cellspacing="2">'."\n\n"
     .    '<tr class="headerX" align="center" valign="top" bgcolor="#e6e6e6">'."\n"
 	.    '<th colspan="' . ($maxDeep+1).'">' . $langModule . '</th>'."\n"
     .    '</tr>'."\n\n"
@@ -545,14 +548,14 @@ function display_path_content()
         	$spacingString .= '<td width="5">&nbsp;</td>'."\n";
         $colspan = $maxDeep - $module['children']+1;
 
-        echo '<tr align="center" '.$style.'>' . "\n"
+        $output .= '<tr align="center" '.$style.'>' . "\n"
         .    $spacingString 
         .    '<td colspan="' . $colspan . '" align="left">'
         ;
 
         if ($module['contentType'] == CTLABEL_) // chapter head
         {
-            echo '<b>' . $module['name'] . '</b>';
+            $output .= '<b>' . $module['name'] . '</b>';
         }
         else // module
         {
@@ -563,15 +566,17 @@ function display_path_content()
             	
             $contentType_alt = selectAlt($module['contentType']);
 
-            echo '<img src="' . $imgRepositoryWeb . $moduleImg . '" alt="' .$contentType_alt.'" border="0" />'
+            $output .= '<img src="' . $imgRepositoryWeb . $moduleImg . '" alt="' .$contentType_alt.'" border="0" />'
             .    $module['name']
             ;
         }
-        echo '</td>'."\n"
+        $output .= '</td>'."\n"
 		.	 '</tr>'."\n\n";
     }
-    echo '</tbody>'."\n\n"
+    $output .= '</tbody>'."\n\n"
 	.	 '</table>'."\n\n";
+	
+	return $output;
 }
 
 /**
@@ -826,16 +831,17 @@ function display_my_documents($dialogBox)
     
     global $secureDocumentDownload;
 
+	$output = "";
     /**
      * DISPLAY
      */
-    echo '<!-- display_my_documents output -->' . "\n";
+    $output .= '<!-- display_my_documents output -->' . "\n";
 
     $dspCurDirName = htmlspecialchars($curDirName);
     $cmdCurDirPath = rawurlencode($curDirPath);
     $cmdParentDir  = rawurlencode($parentDir);
 
-    echo '<br />'
+    $output .= '<br />'
     .    '<form action="' . $_SERVER['PHP_SELF'] . '" method="POST">';
 
     /*--------------------------------------
@@ -844,7 +850,7 @@ function display_my_documents($dialogBox)
     $colspan = 4;
     if( !empty($dialogBox) )
     {
-        echo claro_disp_message_box($dialogBox);
+        $output .= claro_disp_message_box($dialogBox);
     }
     /*--------------------------------------
     CURRENT DIRECTORY LINE
@@ -854,18 +860,18 @@ function display_my_documents($dialogBox)
     if ($curDirName) /* if the $curDirName is empty, we're in the root point
     and we can't go to a parent dir */
     {
-        echo '<a href="' . $_SERVER['PHP_SELF'] . '?cmd=exChDir&amp;file=' . $cmdParentDir . '">' . "\n"
+        $output .= '<a href="' . $_SERVER['PHP_SELF'] . '?cmd=exChDir&amp;file=' . $cmdParentDir . '">' . "\n"
         .    '<img src="' . $imgRepositoryWeb . 'parent.gif" border="0" align="absbottom" hspace="5" alt="" />'."\n"
         .    '<small>' . $langUp . '</small>' . "\n"
         .    '</a>' . "\n"
         ;
     }
     /* CURRENT DIRECTORY */
-    echo '<table class="claroTable" width="100%" border="0" cellspacing="2">';
+    $output .= '<table class="claroTable" width="100%" border="0" cellspacing="2">';
     if ( $curDirName ) /* if the $curDirName is empty, we're in the root point
     and there is'nt a dir name to display */
     {
-        echo '<!-- current dir name -->' . "\n"
+        $output .= '<!-- current dir name -->' . "\n"
         .    '<tr>' . "\n"
         .    '<th class="superHeader" colspan="' . $colspan . '" align="left">'. "\n"
         .    '<img src="' . $imgRepositoryWeb . 'opendir.gif" align="absbottom" vspace=2 hspace=5 alt="" />' . "\n"
@@ -875,7 +881,7 @@ function display_my_documents($dialogBox)
         ;
     }
 
-    echo '<tr class="headerX" align="center" valign="top" bgcolor="#e6e6e6">'
+    $output .= '<tr class="headerX" align="center" valign="top" bgcolor="#e6e6e6">'
     .    '<th>' . $langAddModule . '</th>' . "\n"
     .    '<th>' . $langName . '</th>' . "\n"
     .    '<th>' . $langSize . '</th>' . "\n"
@@ -943,12 +949,12 @@ function display_my_documents($dialogBox)
                 $urlFileName = $_SERVER['PHP_SELF'] . '?openDir=' . $cmdFileName;
             }
 
-            echo '<tr align="center" ' . $style . '>'."\n";
+            $output .= '<tr align="center" ' . $style . '>'."\n";
 
             if ($fileList['type'][$fileKey] == A_FILE)
             {
                 $iterator++;
-                echo '<td>'
+                $output .= '<td>'
                 .    '<input type="checkbox" name="insertDocument_' . $iterator . '" id="insertDocument_' . $iterator . '" value="' . $curDirPath . "/" . $fileName . '" />'
                 .    '</td>' . "\n"
                 ;
@@ -956,9 +962,9 @@ function display_my_documents($dialogBox)
             }
             else
             {
-                echo '<td>&nbsp;</td>';
+                $output .= '<td>&nbsp;</td>';
             }
-            echo '<td align="left">'
+            $output .= '<td align="left">'
             .    '<a href="' . $urlFileName . '" ' . $style . '>'
             .    '<img src="' . $imgRepositoryWeb . $image . '" border="0" hspace="5" alt="" />' . $dspFileName . '</a>'
             .    '</td>'."\n"
@@ -971,7 +977,7 @@ function display_my_documents($dialogBox)
             */
 
 
-            echo '</tr>' . "\n";
+            $output .= '</tr>' . "\n";
 
             /* COMMENTS */
 
@@ -980,7 +986,7 @@ function display_my_documents($dialogBox)
                 $fileList['comment'][$fileKey] = htmlspecialchars($fileList['comment'][$fileKey]);
                 $fileList['comment'][$fileKey] = claro_parse_user_text($fileList['comment'][$fileKey]);
 
-                echo '<tr align="left">'."\n"
+                $output .= '<tr align="left">'."\n"
                 	.'<td>&nbsp;</td>'."\n"
                 	.'<td colspan="'.$colspan.'">'."\n"
                 	.'<div class="comment">'
@@ -991,10 +997,10 @@ function display_my_documents($dialogBox)
             }
         }  // end each ($fileList)
         // form button
-        echo '</tbody><tfoot>'
+        $output .= '</tbody><tfoot>'
         	.'<tr><td colspan="4"><hr noshade size="1"></td></tr>'."\n";
 
-        echo '<tr>'."\n"
+        $output .= '<tr>'."\n"
 			.'<td colspan="'.$colspan.'" align="left">'."\n"
 			.'<input type="hidden" name="openDir" value="'.$curDirPath.'" />'."\n"
 			.'<input type="hidden" name="maxDocForm" value ="'.$iterator.'" />'."\n"
@@ -1004,13 +1010,14 @@ function display_my_documents($dialogBox)
     } // end if ( $fileList)
 	else
 	{
-		echo '<tr><td colspan="4"><hr noshade size="1"></td></tr>'."\n";
+		$output .= '<tr><td colspan="4"><hr noshade size="1"></td></tr>'."\n";
     }
 
-	echo '</tfoot></table>'."\n"
+	$output .= '</tfoot></table>'."\n"
     	.'</form>'."\n"
     	.'<!-- end of display_my_documents output -->'."\n";
-
+	
+	return $output;
 }
 
 /**

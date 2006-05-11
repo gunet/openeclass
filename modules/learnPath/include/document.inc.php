@@ -35,7 +35,7 @@ $fileDate = format_date(filectime($file));
 //####################################################################################\\
 //######################## DISPLAY DETAILS ABOUT THE DOCUMENT ########################\\
 //####################################################################################\\
-echo "\n\n".'<hr noshade="noshade" size="1" />'."\n\n"
+$tool_content .= "\n\n".'<hr noshade="noshade" size="1" />'."\n\n"
 	.'<h4>'.$langDocumentInModule.'</h4>'."\n\n"
 	.'<table class="claroTable" width="100%" border="0" cellspacing="2">'."\n"
 	.'<thead>'."\n"

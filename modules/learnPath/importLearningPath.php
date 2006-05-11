@@ -24,7 +24,9 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 define('CLARO_FILE_PERMISSIONS', 0777);
 
-require_once("../../include/init.php");
+require_once("../../include/baseTheme.php");
+$tool_content = "";
+$pwd = getcwd();
 
 $is_AllowedToEdit = $is_adminOfCourse;
 
@@ -33,9 +35,6 @@ $navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPathL
 
 if (! $is_AllowedToEdit ) claro_die($langNotAllowed);
 
-begin_page();
-
-echo "</td></tr></table>";
 mysql_select_db($currentCourseID);
 
 // error handling
@@ -221,7 +220,6 @@ function elementData($parser,$data)
     {
     
         case "RESOURCE" :
-            //echo "Resource : ".$data;
             break;
         case "TITLE" :
             // $data == '' (empty string) means that title tag contains elements (<langstring> for an exemple), so it's not the title we need
@@ -318,7 +316,6 @@ function elementData($parser,$data)
             break;
         
         case "LANGSTRING" :
-            //echo $data."<br>";
             switch ( $flagTag['type'] )
             {
                 case "item" :
@@ -394,7 +391,6 @@ function elementData($parser,$data)
                         if (compareArrays($posPackageTitle,$elementsPile))
                         {
                             $manifestData['packageTitle'] = $data;
-                            //echo $data;
                         }
                     }
                     break;
@@ -472,6 +468,7 @@ $maxFilledSpace = 100000000;
 
 $courseDir   = "courses/".$currentCourseID."/scormPackages/";
 $baseWorkDir = $webDir.$courseDir; // path_id
+
 // handle upload
 // if the post is done a second time, the claroformid mecanism
 // will set $_POST to NULL, so we need to check it
@@ -1118,57 +1115,55 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
       status messages
      --------------------------------------*/
 
-    echo "\n<!-- Messages -->\n";
+    $tool_content .= "\n<!-- Messages -->\n";
     foreach ( $okMsgs as $msg)
     {
-        echo "\n<b>[</b><span class=\"correct\">ok</span><b>]</b>&nbsp;&nbsp;&nbsp;".$msg."<br />";
+        $tool_content .= "\n<b>[</b><span class=\"correct\">ok</span><b>]</b>&nbsp;&nbsp;&nbsp;".$msg."<br />";
     }
 
     foreach ( $errorMsgs as $msg)
     {
-        echo "\n<b>[</b><span class=\"error\">ko</span><b>]</b>&nbsp;&nbsp;&nbsp;".$msg."<br />";
+        $tool_content .= "\n<b>[</b><span class=\"error\">ko</span><b>]</b>&nbsp;&nbsp;&nbsp;".$msg."<br />";
     }
     
-    echo "\n<!-- End messages -->\n";  
+    $tool_content .= "\n<!-- End messages -->\n";  
       
     // installation completed or not message
     if ( !$errorFound )
     {
-        echo "\n<br /><center><b>".$langInstalled."</b></center>";
-        echo "\n<br /><br ><center><a href=\"learningPathAdmin.php?path_id=".$tempPathId."\">".$lpName."</a></center>";
+        $tool_content .= "\n<br /><center><b>".$langInstalled."</b></center>";
+        $tool_content .= "\n<br /><br ><center><a href=\"learningPathAdmin.php?path_id=".$tempPathId."\">".$lpName."</a></center>";
     }
     else
     {
-        echo "\n<br /><center><b>".$langNotInstalled."</b></center>";
+        $tool_content .= "\n<br /><center><b>".$langNotInstalled."</b></center>";
     }
-    echo "\n<br /><a href=\"learningPathList.php\">$langBack</a>";   
+    $tool_content .= "\n<br /><a href=\"learningPathList.php\">$langBack</a>";   
        
 }
 else // if method == 'post'
 {
+
     // don't display the form if user already sent it
 
     /*--------------------------------------
       UPLOAD FORM
      --------------------------------------*/
-    echo "\n\n".$langScormIntroTextForDummies;
-    ?>
-<br /><br />
 
-<form enctype="multipart/form-data" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
 
-<input type="hidden" name="claroFormId" value="<?php echo uniqid(''); ?>">
-<input type="file" name="uploadedPackage">
-<input type="submit" value="<?php echo $langImport ?>"><br />
-
-<small><?php echo $langMaxFileSize; ?> <?php echo format_file_size( get_max_upload_size($maxFilledSpace,$baseWorkDir) ); ?></small>
-
-</form>
-
-     <?php
+$tool_content .= "\n\n".$langScormIntroTextForDummies;
+$tool_content .= "<br /><br />"
+."<form enctype=\"multipart/form-data\" action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">"
+."<input type=\"hidden\" name=\"claroFormId\" value=\"".uniqid('')."\">"
+."<input type=\"file\" name=\"uploadedPackage\">"
+."<input type=\"submit\" value=\"".$langImport."\"><br />"
+."<small>"
+.$langMaxFileSize
+.format_file_size(get_max_upload_size($maxFilledSpace,$baseWorkDir))
+."</small></form>";
+  
 } // else if method == 'post'
 
+chdir($pwd);
+draw($tool_content, 2);
 ?>
-
-</body>
-</html>

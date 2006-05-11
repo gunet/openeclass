@@ -21,7 +21,8 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 $imgRepositoryWeb = "../../images/";
 
-require_once("../../include/init.php");
+require_once("../../include/baseTheme.php");
+$tool_content = "";
 
 $is_AllowedToEdit = $is_adminOfCourse;
 
@@ -30,12 +31,9 @@ $navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPathL
 
 if ( ! $is_AllowedToEdit ) claro_die($langNotAllowed);
 
-begin_page();
-
-echo "</td></tr></table>";
 mysql_select_db($currentCourseID);
 
-echo "<script>
+$tool_content .= "<script>
         function confirmation (name)
         {
             if (confirm(\"".clean_str_for_javascript($langAreYouSureDeleteModule)."\"+ name))
@@ -50,7 +48,7 @@ echo "<script>
   ======================================*/
 
 // display use explication text
-echo $langUseOfPool."<br /><br />";
+$tool_content .= $langUseOfPool."<br /><br />";
 
 // HANDLE COMMANDS:
 $cmd = ( isset($_REQUEST['cmd']) )? $_REQUEST['cmd'] : '';
@@ -120,7 +118,7 @@ switch( $cmd )
                  WHERE `module_id` = '". (int)$_REQUEST['module_id']."'";
         $result = db_query($query);
         $list = mysql_fetch_array($result);
-        echo "
+        $tool_content .= "
             <form method=\"post\" name=\"rename\" action=\"".$_SERVER['PHP_SELF']."\">
             <label for=\"newName\">".$langInsertNewModuleName."</label> :
             <input type=\"text\" name=\"newName\" id=\"newName\" value=\"".htmlspecialchars($list['name'])."\"></input>
@@ -155,14 +153,14 @@ switch( $cmd )
             }
             else
             {
-                echo claro_disp_message_box($langErrorNameAlreadyExists);
-                echo "<br />";
+                $tool_content .= claro_disp_message_box($langErrorNameAlreadyExists);
+                $tool_content .= "<br />";
             }
         }
         else
         {
-            echo claro_disp_message_box($langErrorEmptyName);
-            echo "<br />";
+            $tool_content .= claro_disp_message_box($langErrorEmptyName);
+            $tool_content .= "<br />";
         }
         break;
 
@@ -179,7 +177,7 @@ switch( $cmd )
             
             if( isset($comment['comment']) )
             {
-                echo "<form method=\"get\" action=\"".$_SERVER['PHP_SELF']."\">\n"
+                $tool_content .= "<form method=\"get\" action=\"".$_SERVER['PHP_SELF']."\">\n"
                     .claro_disp_html_area('comment', $comment['comment'], 15, 55)
                     ."<br />\n"
                     ."<input type=\"hidden\" name=\"cmd\" value=\"exComment\">\n"
@@ -204,7 +202,7 @@ switch( $cmd )
 }
 
 
-echo "<table class=\"claroTable\" width=\"100%\" border=\"0\" cellspacing=\"2\">
+$tool_content .= "<table class=\"claroTable\" width=\"100%\" border=\"0\" cellspacing=\"2\">
     <thead>
         <tr class=\"headerX\" align=\"center\" valign=\"top\" bgcolor=\"#e6e6e6\">
           <th>
@@ -219,8 +217,8 @@ echo "<table class=\"claroTable\" width=\"100%\" border=\"0\" cellspacing=\"2\">
           <th>
             ".$langComment."
           </th>";
-echo      "</tr>\n",
-      "</thead>\n",
+$tool_content .=      "</tr>\n".
+      "</thead>\n".
           "<tbody>\n";
 
 $sql = "SELECT M.*, count(M.`module_id`) AS timesUsed
@@ -242,28 +240,28 @@ while ($list = mysql_fetch_array($result))
 
     $contentType_img = selectImage($list['contentType']);
     $contentType_alt = selectAlt($list['contentType']);
-    echo "
+    $tool_content .= "
          <tr>
             <td align=\"left\">
             <img src=\"".$imgRepositoryWeb.$contentType_img."\" alt=\"".$contentType_alt."\" />".$list['name']."
             </td>
             <td align='center'>
-             <a href=\"",$_SERVER['PHP_SELF'],"?cmd=eraseModule&amp;cmdid=".$list['module_id']."\"
+             <a href=\"".$_SERVER['PHP_SELF']."?cmd=eraseModule&amp;cmdid=".$list['module_id']."\"
                 onClick=\"return confirmation('".clean_str_for_javascript($list['name'] . $langUsedInLearningPaths . $list['timesUsed'])."');\">
                 <img src=\"".$imgRepositoryWeb."delete.gif\" border=\"0\" alt=\"".$langDelete."\" />
                 </a>
             </td>
             <td align=\"center\">
-               <a href=\"",$_SERVER['PHP_SELF'],"?cmd=rqRename&amp;module_id=".$list['module_id']."\"><img src=\"".$imgRepositoryWeb."edit.gif\" border=0 alt=\"$langRename\" /></a>
+               <a href=\"".$_SERVER['PHP_SELF']."?cmd=rqRename&amp;module_id=".$list['module_id']."\"><img src=\"".$imgRepositoryWeb."edit.gif\" border=0 alt=\"$langRename\" /></a>
             </td>
             <td align=\"center\">
-               <a href=\"",$_SERVER['PHP_SELF'],"?cmd=rqComment&amp;module_id=".$list['module_id']."\"><img src=\"".$imgRepositoryWeb."comment.gif\" border=0 alt=\"$langComment\" /></a>
+               <a href=\"".$_SERVER['PHP_SELF']."?cmd=rqComment&amp;module_id=".$list['module_id']."\"><img src=\"".$imgRepositoryWeb."comment.gif\" border=0 alt=\"$langComment\" /></a>
             </td>";
-    echo "</tr>";
+    $tool_content .= "</tr>";
 
     if ( isset($list['comment']) )
     {
-        echo "
+        $tool_content .= "
               <tr>
                  <td colspan=\"5\">
                         <small>".$list['comment']."</small>
@@ -275,13 +273,12 @@ while ($list = mysql_fetch_array($result))
 
 } //end while another module to display
 
-if ($atleastOne == false) {echo "<tr><td align=\"center\" colspan=\"5\">".$langNoModule."</td></tr>";}
+if ($atleastOne == false) {$tool_content .= "<tr><td align=\"center\" colspan=\"5\">".$langNoModule."</td></tr>";}
 
 // Display button to add selected modules
 
-echo "</tbody>\n</table>";
+$tool_content .= "</tbody>\n</table>";
+
+draw($tool_content, 2);
 
 ?>
-
-</body>
-</html>
