@@ -1,3 +1,8 @@
 td.category {
 	background: #E6EDF5;
+	
+	font-size: 90% !important;
+}
+.linkimg{
+	vertical-align:top; 
 }
