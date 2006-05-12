@@ -360,24 +360,24 @@ if($is_adminOfCourse) // check teacher status
 			SELECT * FROM annonces WHERE code_cours='$currentCourse' ORDER BY ordre DESC",$mysqlMainDb);
 		$iterator = 1;
 		$bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
-		$tool_content .=  "<table width=\"99%\"";
+		$tool_content .=  "<table width=\"99%\">";
 		if ($announcementNumber>0){
 			$tool_content .= "<thead>
 				<tr>
-					<th scope=\"col\">$langAnnouncement</th>";
+					<th width=\"99%\">$langAnnouncement</th>";
 					
 					if ($announcementNumber>1){
-					$tool_content .= "<th scope=\"col\">$langMove</th>";
+					$tool_content .= "<th width=\"21\">$langMove</th>";
 					}
-			$tool_content .= "</thead>";
+			$tool_content .= "</tr></thead>";
 		}
 		while ( $myrow = mysql_fetch_array($result) )
 		{
 			// FORMAT CONTENT
 			$content = make_clickable($myrow['contenu']);
 			$content = nl2br($content);
-			$tool_content .=  "
-				<tr class=\"odd\">
+			$tool_content .=  "<tbody>
+				<tr class=\"displayed\"><span></span>
 					<td class=\"arrow\">
 						
 							".$langPubl." 
@@ -423,28 +423,25 @@ if($is_adminOfCourse) // check teacher status
 							".$content."
 							<br>
 							<a href=\"$_SERVER[PHP_SELF]?modify=".$myrow['id']."\">
-								".$langModify."
-							</a>
-							&nbsp;
-							|
-							&nbsp;
-							<a href=\"$_SERVER[PHP_SELF]?delete=".$myrow['id']."\">".
-								$langDelete."
-							</a>
-							<br>
+			<img src=\"../../images/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a>
+				
+		<a href=\"$_SERVER[PHP_SELF]?delete=".$myrow['id']."\">
+			<img src=\"../../images/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a>
+			
+							
 							<br>
 						
 					</td>
 				</tr>";
 			$iterator ++;
 		}	// end while ($myrow = mysql_fetch_array($result))
-			$tool_content .=  "
+			$tool_content .=  "</tbody>
 			</table>";
 		// DISPLAY DELETE ALL ANNOUNCEMENTS COMMAND
 		if ($announcementNumber > 1)
 		{
 			$tool_content .=  "
-			<table width=\"99%\">
+			<table width=\"99%\"><tbody>
 				<tr class=\"odd\">
 					<td align=\"right\">
 						<p>
@@ -453,7 +450,7 @@ if($is_adminOfCourse) // check teacher status
 						
 						</p>
 					</td>
-				</tr>
+				</tr></tbody>
 			</table>";
 		}	// if announcementNumber > 1
 	}	// end: if ($displayAnnoucementList == true)
