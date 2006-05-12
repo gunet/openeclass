@@ -5,48 +5,55 @@ $langFiles = 'registration';
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'User';
-include('../../include/init.php');
-
-$local_style = "input { font-size: 10px; }";
+//include('../../include/init.php');
+include '../../include/baseTheme.php';
+//$local_style = "input { font-size: 10px; }";
 
 $nameTools = $langAddUser;
 $navigation[] = array ("url"=>"user.php", "name"=> $langUsers);
 
-begin_page();
+//begin_page();
 
 // IF PROF ONLY
 if($is_adminOfCourse) {
 
 if (isset($add)) {
-	echo "<tr><td>";
+//	$tool_content .=  "<tr><td>";
 	mysql_select_db($mysqlMainDb);
 	$result = db_query("INSERT INTO cours_user (user_id, code_cours, statut) ".
 		"VALUES ('".mysql_escape_string($add)."', '$currentCourseID', ".
 		"'5')");
 	if ($result) {
-		echo "$langTheU $langAdded";
+		$tool_content .=  "<p>$langTheU $langAdded</p>";
 	} else {
-		echo $langAddError;
+		$tool_content .=  "<p>$langAddError</p>";
 	}
-	echo "</td></tr><tr><td><br><br><a href=\"adduser.php\">$langAddBack</a></td></tr>\n";
+	$tool_content .=  "</td></tr><tr><td><br><br><a href=\"adduser.php\">$langAddBack</a></td></tr>\n";
 } else {
 
-?>
-	<tr><td><font size="2"><?= $langAskUser ?></td></font></tr>
-	<tr><td>&nbsp;</td></tr>
-	<tr><td>
+$tool_content .= "
+	<p>$langAskUser</p>
+	
+	
+    	<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\" enctype=\"multipart/form-data\">";
+
+$tool_content .= <<<tCont
 	<table>	
-    	<form method="post" action="<?= $_SERVER['PHP_SELF'] ?>" enctype="multipart/form-data">
-	<tr><td><font size="2"><?= $langSurname ?></td><td><input type="text" name="search_nom" value="<? echo @$search_nom ?>"></td></font></tr>
-	<tr><td><font size="2"><?= $langName ?></td><td><input type="text" name="search_prenom" value="<? echo @$search_prenom ?>"></td></font></tr>
-	<tr><td><font size="2"><?= $langUsername ?></td><td><input type="text" name="search_uname" value="<? echo @$search_uname ?>"></td></font></tr>
-	<tr><td>&nbsp;</td></tr>
-	<tr><td><input type="submit" value="<?= $langSearch ?>"></td></tr>
+	<thead>
+	<tr><th>$langSurname</th><td><input type="text" name="search_nom" value="$search_nom"></td></tr>
+	
+	<tr><th>$langName</th><td><input type="text" name="search_prenom" value="$search_prenom"></td></tr>
+	
+	<tr><th>$langUsername</th><td><input type="text" name="search_uname" value="$search_uname"></td></tr>
+	</thead>
+	</table>
+	<br>
+	<input type="submit" value="$langSearch">
 	</form>
-	</table>	
-	</td></tr>
+	
 	<tr><td>
-<?
+tCont;
+
 	mysql_select_db($mysqlMainDb);
 	$search=array();
 	if(!empty($search_nom)) {
@@ -61,31 +68,31 @@ if (isset($add)) {
 	// added by jexi
 	if (!empty($users_file)) {
 		$tmpusers=trim($_FILES['users_file']['name']);
-		?>
-		<table width=100% cellpadding=2 cellspacing=1 border=0>
+		$tool_content .= <<<tCont2
+		<table width=99% >
 		<tr bgcolor=silver>
-		<th><? echo $langUsers ?></th><th><? echo $langResult ?></th>
-		<?
+		<th>$langUsers</th><th>$langResult</th>
+tCont2;
 		$f=fopen($users_file,"r");
 		while (!feof($f))	{
 			$uname=trim(fgets($f,1024));
 			if (!$uname) continue;
 			if (!check_uname_line($uname)) {
-				echo "<tr><td colspan=\"2\">$langFileNotAllowed</td></tr>\n";
+				$tool_content .= "<tr><td colspan=\"2\">$langFileNotAllowed</td></tr>\n";
 				break;
 			}
 			$result=adduser($uname,$currentCourseID);
-			echo "<tr><td align=center>$uname</td><td>";
+			$tool_content .= "<tr><td align=center>$uname</td><td>";
 			if ($result == -1) {
-				echo $langUserNoExist;
+				$tool_content .= $langUserNoExist;
 			} elseif ($result == -2) {
-				echo $langUserAlready;
+				$tool_content .= $langUserAlready;
 			} else {
-				echo $langTheU.$langAdded;
+				$tool_content .= $langTheU.$langAdded;
 			}
-			echo "</td></tr>\n";
+			$tool_content .= "</td></tr>\n";
 		}
-		echo "</table>\n";
+		$tool_content .= "</table>\n";
 		fclose($f);
 	}
 
@@ -101,26 +108,30 @@ if (isset($add)) {
 			c.user_id IS NULL AND $query
 			");
 		if (mysql_num_rows($result) == 0) {
-			echo $langNoUsersFound."</td></tr>\n";
+			$tool_content .= "<p>$langNoUsersFound </p></td></tr>\n";
 		} else {
-?>
-	<table width=100% cellpadding=2 cellspacing=1 border=0>
-		<tr bgcolor=silver>
+
+			$tool_content .= <<<tCont3
+	<table width=99% >
+	<thead>
+		<tr>
 			<th></th>
-			<th><?= $langName ?></th>
-			<th><?= $langSurname ?></th>
-			<th><?= $langUsername ?></th>
+			<th>$langName</th>
+			<th>$langSurname</th>
+			<th>$langUsername</th>
 			<th></th>
 		</tr>
-<?
+	<thead>
+	<tbody>
+tCont3;
 			$i = 1;
 			while ($myrow = mysql_fetch_array($result)) {
 				if ($i % 2 == 0) {
-					echo "<tr bgcolor=\"$color2\">";
+					$tool_content .= "<tr>";
 		        	} else {
-					echo "<tr bgcolor=\"$color1\">";
+					$tool_content .= "<tr class=\"odd\">";
 				}
-				echo "<td>$i</td>".
+				$tool_content .= "<td>$i</td>".
 				     "<td>$myrow[prenom]</td>".
 				     "<td>$myrow[nom]</td>".
 				     "<td>$myrow[username]</td>".
@@ -128,23 +139,21 @@ if (isset($add)) {
 				     "$langRegister</a></td></tr>\n";
 				$i++;
 			}
-?>
-	</table>
-<?
+
+	$tool_content .= "</tbody>";
+	$tool_content .= "</table>";
+
         	}
 		db_query("DROP TABLE lala");
 	}
-	echo "</td></tr>
-	<tr><td>&nbsp;</td></tr>
-	<tr><td><a href=\"user.php\">$langBackUser</a>\n";
+	$tool_content .= "
+	<p><a href=\"user.php\">$langBackUser</a></p>";
 	}
 }
-?>
-</td></tr>
-</table>
-</body>
-</html>
-<?
+
+
+draw($tool_content, 2);
+
 
 // function for adding users 
 
