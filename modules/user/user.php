@@ -22,12 +22,10 @@ $tool_content = "";//initialise $tool_content
 //   show  help link and  link to Add new  user and  managment page  of groups
 if ($is_adminOfCourse) {
 $tool_content .= <<<cData
-	<div id="tool_operations">
-		<span class="operation"><a href="../group/group.php">$langGroupUserManagement</a>&nbsp;-&nbsp;$langDumpUser <a href="dumpuser.php">$langExcel</a> <a href="dumpuser2.php">$langCsv</a></span>
-	</div>
-	<div id="tool_operations">
-		<span class="operation">$langAdd&nbsp; <a href="adduser.php">$langOneUser</a>, <a href="muladduser.php">$langManyUsers</a>, <a href="guestuser.php">$langGUser</a></span>
-	</div>
+	<p><a href="../group/group.php">$langGroupUserManagement</a>&nbsp;-&nbsp;$langDumpUser <a href="dumpuser.php">$langExcel</a> <a href="dumpuser2.php">$langCsv</a></p>
+	
+	<p>$langAdd&nbsp; <a href="adduser.php">$langOneUser</a>, <a href="muladduser.php">$langManyUsers</a>, <a href="guestuser.php">$langGUser</a></p>
+	
 	
 cData;
 }	// if prof
@@ -113,7 +111,7 @@ $i=$startList+1;
 
 // Do not show navigation buttons if less than 50 users
 if ($countUser>=50) {
-	$tool_content .= "<table width=99% cellpadding=1 cellspacing=1 border=0>
+	$tool_content .= "<table width=99%>
 		<tr>
 		<td valign=bottom align=left width=20%>
 		<form method=post action=\"$_SERVER[PHP_SELF]?numbList=begin\">
@@ -153,7 +151,7 @@ if ($countUser>=50) {
 
 ############# SHOW FIELD NAMES FOR USERS LIST ##################
 	
-$tool_content .= "<table width=99% cellpadding=2 cellspacing=1 border=0>
+$tool_content .= "<table width=99%>
 
 <thead>
 				<tr>
@@ -195,14 +193,14 @@ $result = mysql_query("SELECT user.user_id, user.nom, user.prenom, user.email, u
 while ($myrow = mysql_fetch_array($result)) {
 	// BI COLORED TABLE
 	if ($i%2==0) {
-		$tool_content .= "<tr bgcolor=\"".$color2."\">";
+		$tool_content .= "<tbody><tr >";
 	}     	
 	elseif ($i%2==1) {
-		$tool_content .= "<tr bgcolor=\"".$color1."\">";
+		$tool_content .= "<tbody><tr class=\"odd\">";
 	}	
 
 	// SHOW PUBLIC LIST OF USERS
-	$tool_content .= "<tbody><td valign=\"top\">
+	$tool_content .= "<td valign=\"top\">
 		<font face=\"arial, helvetica\" size=\"2\">$i</font>
 		</td>
 		<td valign=\"top\">
@@ -226,7 +224,7 @@ if (isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]
 		</font>
 		</td>
 		<td valign=top>
-		<font face=\"arial, helvetica\" size=2>";
+		";
 
 	// NULL AND NOT '0' BECAUSE TEAM CAN BE INEXISTENT
 	if($myrow["team"]==NULL) {
@@ -234,21 +232,21 @@ if (isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]
 	} else {
 		$tool_content .= "$myrow[team]";
 	}
-	$tool_content .= "</font></td>";
+	$tool_content .= "</td>";
 
 ################## TUTOR, ADMIN AND UNSUBSCRIBE (ADMIN ONLY) ######################
 if(isset($status) && ($status["$currentCourseID"]=='1' OR $status["$currentCourseID"]=='2')) {
 		// TUTOR RIGHT
 		if ($myrow["tutor"]=='0') {
 			$tool_content .= "<td valign=\"top\">
-			<font face=\"arial, helvetica\" size=\"2\">
-			<a href=\"$_SERVER[PHP_SELF]?giveTutor=yes&user_id=$myrow[user_id]\">$langGiveTutor</a></font>
+			
+			<a href=\"$_SERVER[PHP_SELF]?giveTutor=yes&user_id=$myrow[user_id]\">$langGiveTutor</a>
 			</td>";
 		} else {
 			$tool_content .=  "<td class=\"highlight\">
 			$langTutor
 			<br>
-			<a href=\"$_SERVER[PHP_SELF]?removeTutor=yes&user_id=$myrow[user_id]\">$langRemoveRight</a></font>
+			<a href=\"$_SERVER[PHP_SELF]?removeTutor=yes&user_id=$myrow[user_id]\">$langRemoveRight</a>
 			</td>";
 		}
 		
@@ -301,7 +299,7 @@ $tool_content .= "</tbody></table>";
 // Do not show navigation buttons if less than 50 users
 
 if($countUser>=50) {
-	$tool_content .= "<table width=\"99%\" cellpadding=\"1\" cellspacing=\"1\" border=\"0\">
+	$tool_content .= "<table width=\"99%\">
 		<tr>
 		<td valign=\"bottom\" align=\"left\" width=\"20%\">
 			<form method=\"post\" action=\"$_SERVER[PHP_SELF]?numbList=begin\">
