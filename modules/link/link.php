@@ -16,7 +16,6 @@
 
 //TODO: line 202, remove <thead>
 
-$dbname = 'TMA101';
 $require_current_course = TRUE;
 $langFiles = 'link';
 $require_help = TRUE;
@@ -32,14 +31,7 @@ $nameTools = $langLinks;
 
 $tool_content = "";
 
-?>
-<script language="JavaScript" type="text/JavaScript">
-function MM_popupMsg(msg) { 
-  confirm(msg);
-}
-</script>
 
-<?php
 
 include("linkfunctions.php");
 
@@ -195,7 +187,7 @@ $resultcategories=db_query($sqlcategories, $dbname);
 if (mysql_num_rows($resultcategories) > 0) {
 
 //Starting the table which contains the categories
-$tool_content .=  "<table width=99%>";
+$tool_content .=  "<table width=\"99%\">";
 // displaying the links which have no category (thus category = 0 or NULL), if none present this will not be displayed
 	$sqlLinks = "SELECT * FROM `".$tbl_link."` WHERE category=0 or category IS NULL";
 	$result = db_query($sqlLinks, $dbname);
