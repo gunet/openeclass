@@ -18,6 +18,13 @@ h5 {
 font-size:10px;
 }
 
+a, p {
+font-family: Arial, Helvetica, sans-serif;
+font-size:12px;
+}
+
+
+
 #tool_title {
 width:99%;
 margin-top:30px;
@@ -71,6 +78,7 @@ table, th, td {
 	border: 1px solid #D4E0EE;
 	border-collapse: collapse;
 	font-family: Verdana, Arial, sans-serif;
+	font-size:12px;
 	color: #555;
 	
 }
