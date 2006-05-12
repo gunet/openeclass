@@ -71,7 +71,7 @@ while ($code = mysql_fetch_row($res)) {
 // modify course_code/index.php
 
 echo "<p><h4>Τροποποίηση αρχείου index.php του μαθήματος $code[0]</h4></p>";
-if (!chdir("$webDir/courses/$code[0]")) {
+if (!@chdir("$webDir/courses/$code[0]")) {
 	die ("Δεν πραγματοποιήθηκε η αλλαγή στον κατάλογο των μαθημάτων! Ελέγξτε τα δικαιώματα πρόσβασης.");
 
 }
