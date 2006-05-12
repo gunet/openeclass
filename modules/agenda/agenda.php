@@ -259,7 +259,7 @@ $tool_content .= "
 	<tbody>
 		<tr>
 			<td colspan=\"6\"> 
-				<textarea id='ta' name='contenu' value='$contenu' style='width:100%' rows='20' cols='80'>".@$contenu."</textarea>
+				<textarea id='ta' name='contenu' value='$contenu' rows='20' cols='78'>".@$contenu."</textarea>
 			</td></tr>
 	</tbody>
 </table>		
