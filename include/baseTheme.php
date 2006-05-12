@@ -10,8 +10,7 @@
  * @package eclass 2.0
  */
 
-echo $pageName;
-//include('header.php');
+
 include('init.php');
 //echo $langAdmin;
 include('../../template/template.inc');
@@ -32,7 +31,7 @@ function getTools($menuTypeID){
 	 * interface and parse it to the user's browser.
 	 * 
 	 */
-function draw($toolContent, $menuTypeID, $tool_css = null){
+function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null){
 	global $langUser, $prenom, $nom, $langLogout, $intitule,  $nameTools, $langHelp, $language, $helpTopic, $require_help;
 	$toolArr = getTools($menuTypeID);
 //	dumpArray($toolArr);
@@ -102,6 +101,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null){
 		if (isset($tool_css)){
 			
 			$t->set_var('TOOL_CSS', "<link href=\"../../modules/$tool_css/tool.css\" rel=\"stylesheet\" type=\"text/css\" />");
+		}
+		
+		if (isset($head_content)){
+			$t->set_var('HEAD_EXTRAS', $head_content);
+		}
+		
+		if (isset($body_action)){
+			$t->set_var('BODY_ACTION', $body_action);
 		}
 		
 		if ($require_help == true){
