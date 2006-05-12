@@ -1691,8 +1691,13 @@ function claro_disp_progress_bar ($progress, $factor)
 function claro_disp_html_area($name, $content = '',
                               $rows=20,    $cols=80, $optAttrib='')
 {
-    global $urlAppend, $iso639_1_code, $langTextEditorDisable, $langTextEditorEnable,$langSwitchEditorToTextConfirm;
-    $incPath = $urlAppend.'/claroline/inc/htmlarea';
+    global $urlAppend, $iso639_2_code, $langTextEditorDisable, $langTextEditorEnable,$langSwitchEditorToTextConfirm;
+    $incPath = $urlAppend.'/include/htmlarea';
+    // ugly fix for using gr for greek instead of el
+    // FIXME: use this function everywhere in eclass and then fix it
+    if (strcmp($iso639_2_code, "el") == 0) {
+    	$iso639_2_code = "gr";
+    }
 
     ob_start();
 
@@ -1764,7 +1769,7 @@ echo '<textarea '
 
 <script type="text/javascript">_editor_url = "<?php echo  $incPath?>";</script>
 <script type="text/javascript" src="<?php echo $incPath; ?>/htmlarea.js"></script>
-<script type="text/javascript" src="<?php echo $incPath; ?>/lang/<?php echo $iso639_1_code; ?>.js"></script>
+<script type="text/javascript" src="<?php echo $incPath; ?>/lang/<?php echo $iso639_2_code; ?>.js"></script>
 <script type="text/javascript" src="<?php echo $incPath; ?>/dialog.js"></script>
 
 <script type="text/javascript">

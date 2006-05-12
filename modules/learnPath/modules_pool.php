@@ -22,6 +22,7 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 $imgRepositoryWeb = "../../images/";
 
 require_once("../../include/baseTheme.php");
+$head_content = "";
 $tool_content = "";
 
 $is_AllowedToEdit = $is_adminOfCourse;
@@ -33,7 +34,7 @@ if ( ! $is_AllowedToEdit ) claro_die($langNotAllowed);
 
 mysql_select_db($currentCourseID);
 
-$tool_content .= "<script>
+$head_content .= "<script>
         function confirmation (name)
         {
             if (confirm(\"".clean_str_for_javascript($langAreYouSureDeleteModule)."\"+ name))
@@ -287,6 +288,6 @@ if ($atleastOne == false) {$tool_content .= "<tr><td align=\"center\" colspan=\"
 
 $tool_content .= "</tbody>\n</table>";
 
-draw($tool_content, 2, "learnPath");
+draw($tool_content, 2, "learnPath", $head_content);
 
 ?>

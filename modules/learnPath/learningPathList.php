@@ -26,6 +26,7 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 define('CLARO_FILE_PERMISSIONS', 0777);
 
 require_once("../../include/baseTheme.php");
+$head_content = "";
 $tool_content = "";
 
 $nameTools = $langLearningPathList;
@@ -51,7 +52,7 @@ if ( $cmd == 'export' && $is_adminOfCourse )
 mysql_select_db($currentCourseID);
 
 if ($is_adminOfCourse) {
-	$tool_content .= "<script>
+	$head_content .= "<script>
           function confirmation (name)
           {
               if (confirm('". clean_str_for_javascript($langAreYouSureToDelete) . " ' + name + '? " . $langModuleStillInPool . "'))
@@ -60,7 +61,7 @@ if ($is_adminOfCourse) {
                   {return false;}
           }
           </script>";
-	$tool_content .= "<script>
+	$head_content .= "<script>
           function scormConfirmation (name)
           {
               if (confirm('". clean_str_for_javascript($langAreYouSureToDeleteScorm) .  "' + name + '?'))
@@ -624,6 +625,6 @@ elseif (!$is_adminOfCourse && $iterator != 1 && $lpUid) {
 $tool_content .= "</tfoot>\n";
 $tool_content .= "</table>\n";
 
-draw($tool_content, 2, "learnPath");
+draw($tool_content, 2, "learnPath", $head_content);
 
 ?>

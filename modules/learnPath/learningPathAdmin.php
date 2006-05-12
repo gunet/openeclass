@@ -24,6 +24,7 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 $imgRepositoryWeb       = "../../images/";
 
 require_once("../../include/baseTheme.php");
+$head_content = "";
 $tool_content = "";
 
 $nameTools = $langLearningPath;
@@ -52,7 +53,7 @@ if ( !$is_adminOfCourse )
 
 mysql_select_db($currentCourseID);
 
-$tool_content .= "<script>
+$head_content .= "<script>
             function confirmation (txt)
             {
                 if (confirm(txt))
@@ -631,5 +632,5 @@ if ($atleastOne == false)
 $tool_content .= "</tfoot>";
 $tool_content .= "</table>";
 
-draw($tool_content, 2, "learnPath");
+draw($tool_content, 2, "learnPath", $head_content);
 ?>
