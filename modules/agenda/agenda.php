@@ -35,33 +35,36 @@ $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Agenda';
 
-include('../../include/init.php');
+//include('../../include/init.php');
+include '../../include/baseTheme.php';
 
 include('../../include/lib/textLib.inc.php'); 
 
 $dateNow = date("d-m-Y / H:i:s",time());
 $nameTools = $langAgenda;
-$local_style = '
+$local_style1 = '
 	.month { font-weight : bold; color: #FFFFFF; background-color: #000066;
 		padding-left: 15px; padding-right : 15px; }
 	.content {position: relative; left: 25px; }';
 mysql_select_db($dbname);
-begin_page();
+//begin_page();
 
 if ($language == 'greek')
         $lang_editor='gr';
 else
         $lang_editor='en';
+        
+$tool_content = "";
 
-?>
 
+$head_content = <<<hContent
 <script type="text/javascript">
-  _editor_url = '<?= $urlAppend ?>/include/htmlarea/';
-  _css_url='<?= $urlAppend ?>/css/';
-  _image_url='<?= $urlAppend ?>/include/htmlarea/images/';
-  _editor_lang = '<?= $lang_editor ?>';
+  _editor_url = '$urlAppend/include/htmlarea/';
+  _css_url='$urlAppend/css/';
+  _image_url='$urlAppend/include/htmlarea/images/';
+  _editor_lang = '$lang_editor';
 </script>
-<script type="text/javascript" src='<?= $urlAppend ?>/include/htmlarea/htmlarea.js'></script>
+<script type="text/javascript" src='$urlAppend/include/htmlarea/htmlarea.js'></script>
 
 <script type="text/javascript">
 var editor = null;
@@ -80,15 +83,16 @@ function initEditor() {
 }
 
 </script>
+hContent;
 
-<body onload="initEditor()">
+$body_action = "onload=\"initEditor()\"";
 
-<font size="2">
-<?= $langDateNow ?>&nbsp;
-<?= $dateNow ?>
-<br><br></font>
-
-<?
+$tool_content .= <<<tContent1
+<div id="tool_operations">
+		<span class="operation">$langDateNow : $dateNow</span>
+	</div>
+	
+tContent1;
 
 if ($is_adminOfCourse) {
 
@@ -137,26 +141,28 @@ if ($is_adminOfCourse) {
 		$dayAncient=$myrow["day"];
 		$lastingAncient=$myrow["lasting"];
 	}
-?>
+	
+	//TODO: add this if logic as it was in the old system
+// if (isset($id)) echo $id 
+$tool_content .= <<<tContentForm
 
-<!-- Form -->
 
-<form method="post" action="<?= $_SERVER['PHP_SELF'] ?>">
-	<input type="hidden" name="id" value="<? if (isset($id)) echo $id ?>">
-	<table>
+	<p>$langAddEvent</p>
+<form method="post" action="".$_SERVER[PHP_SELF]."">
+	<input type="hidden" name="id" value="$id">
+	<table width = "99%">
+	<thead>
 	<tr>
-	<td colspan="7">
-	<font size="3" face="arial, helvetica"><?= $langAddEvent?></font>
-	</td>
+		<th>$langDay</th>
+		<th>$langMonth</th>
+		<th>$langYear</th>
+		<th>$langHour</th>
+		<th>$langMinute</th>
+		<th>$langLasting</th>
+	</thead>
 	</tr>
-	<tr><td><?= $langDay; ?></td>
-	<td><?= $langMonth; ?></td>
-	<td><?= $langYear; ?></td>
-	<td><?= $langHour; ?></td>
-	<td><?= $langMinute; ?></td>
-	<td><?= $langLasting ?></td>
-	</tr>
-<?
+tContentForm;
+
 	$day	= date("d");
 	$month	= date("m");
 	$year	= date("Y");
@@ -174,92 +180,117 @@ if ($is_adminOfCourse) {
 		$month=$dayAncient[1];
 		$day=$dayAncient[2];
 	}
-?>
+$tool_content .= "
+<tbody>
 	<tr>
-	<td>
-	<select name="fday">
-	<option value="<?=  $day ?>">[<?= $day ?>]</option>
-	<? 
-	for ($d=1; $d<=31; $d++) echo "<option value='$d'>$d</option>";
-	?>
+		<td>
+			<select name=\"fday\">
+				<option value=\"$day\">[$day]</option>";
+	
+	for ($d=1; $d<=31; $d++) $tool_content .= "<option value='$d'>$d</option>";
+	
+	$tool_content .= "
 	</select>
 	</td>
 	<td>
-	<select name="fmonth">
-	<option value="<?= $month ?>">[<?= $langMonthNames['long'][($month-1)] ?>]</option>
-	<? 
+	<select name=\"fmonth\">
+	<option value=\"$month\">[".$langMonthNames['long'][($month-1)]."]</option>";
+	
 	for ($i=1; $i<=12; $i++)
-		echo "<option value='$i'>".$langMonthNames['long'][$i-1]."</option>";
-	?>
+		$tool_content .= "<option value='$i'>".$langMonthNames['long'][$i-1]."</option>";
+	$tool_content .= "
 	</select>
 	</td>
 	<td>
-	<select name="fyear">
-	<option value="<?= $year ?>">[<?= $year ?>]</option>
-	<? 
+	<select name=\"fyear\">
+	<option value=\"$year\">[$year]</option>";
+	
 	$currentyear = date("Y");
 	for ($y = $currentyear - 1; $y <= $currentyear + 2; $y++) {
-		echo "<option value=\"$y\">$y</option>\n";
-	} ?>
+		$tool_content .= "<option value=\"$y\">$y</option>\n";
+	} 
+	
+	$tool_content .= "
 	</select>
 	</td>
 	<td>
-	<select name="fhour">
-	<option value="<?= $hours ?>">[<?= $hours ?>]</option>
-	<option value="--">--</option>
-	<? 
+	<select name=\"fhour\">
+	<option value=\"$hours\">[$hours]</option>
+	<option value=\"--\">--</option>";
+	 
 	for ($h=0; $h<=24; $h++) 
-		echo "<option value='$h'>$h</option>";
-	?>
+		$tool_content .= "<option value='$h'>$h</option>";
+	
+		$tool_content .= "
 	</select>
 	</td>
 	<td>
-	<select name="fminute">
-	<option value="<?= $minutes ?>">[<?= $minutes ?>]</option>
-	<option value="--">--</option>
-	<? 
-	for ($m=0; $m<=55; $m=$m+5) echo "<option value='$m'>$m</option>";
-	?>
+	<select name=\"fminute\">
+	<option value=\"$minutes\">[$minutes]</option>
+	<option value=\"--\">--</option>";
+	
+	for ($m=0; $m<=55; $m=$m+5) $tool_content .=  "<option value='$m'>$m</option>";
+	
+	$tool_content .= "
 	</select>
 	</td>
-	<td><input type="text" name="lasting" value="<?= @$myrow['lasting'] ?>" size="2"></td>
+	<td><input type=\"text\" name=\"lasting\" value=\"".@$myrow['lasting']."\" size=\"8\"></td>
 	</tr>
-	<tr><td>&nbsp;</td><tr>
-	<tr><td align="center" valign="top"><?= $langTitle ?> :</td></tr>
-	<tr>
-	<td colspan="6"><input type="text" size="60" name="titre" value="<?php  if (isset($titre)) echo $titre ?>"></td>
-	</tr>
-	<tr><td align="center"><?= $langDetail ?>:</td></tr>
-	<tr>
-	<td colspan="6"> 
-	<textarea id='ta' name='contenu' value='<?= $contenu ?>' style='width:100%' rows='20' cols='80'><?= @$contenu 
-?>
-	</textarea>
-	<br><div align="right"><input type="Submit" name="submit" value="<?= $langOk ?>"> </div>
-	</td></tr>
-</table>
-</form>
+	</tbody>
+	</table><br>";
+	
+	$tool_content .="
+	<table width = \"99%\">
+	<thead>
+		<tr>
+			<th>$langTitle :</th>
+			<td colspan=\"5\"><input type=\"text\" size=\"60\" name=\"titre\" value=\"".@$titre."\"></td>
+		</tr>
+	</thead>	
+	</table><br>";
+	
+	$tool_content .= "
+	<table width = \"99%\">
+	<thead>
+		<tr>
+			<th colspan=6>$langDetail</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td colspan=\"6\"> 
+				<textarea id='ta' name='contenu' value='$contenu' style='width:100%' rows='20' cols='80'>".@$contenu."</textarea>
+			</td></tr>
+	</tbody>
+</table>		
+	<br><div align=\"right\"><input type=\"Submit\" name=\"submit\" value=\"$langOk\"> </div>
 
-<?
+</form>
+<br><br><br><br>";
+
+
 	}
 
 /*---------------------------------------------
  *  End  of  prof only                         
  *-------------------------------------------*/
-
-echo "<table width=\"$mainInterfaceWidth\" cellpadding=\"2\" cellspacing=\"0\" border=\"0\">";
-echo "<tr><td colspan=\"2\" valign=\"top\"><div align=\"right\"><font size=\"-2\">";
 $sens =" ASC";
 if (isset($_GET["sens"]) && $_GET["sens"]=="d") 
 { 
-	echo "<a href=\"".$_SERVER['PHP_SELF']."?sens=\" >$langOldToNew</a>";
+	$tool_content .=  "<a href=\"".$_SERVER['PHP_SELF']."?sens=\" >$langOldToNew</a>";
 	$sens=" DESC ";
 }
 else
 {
-	echo "<a href=\"".$_SERVER['PHP_SELF']."?sens=d\" >$langNewToOld</a>";
+	$tool_content .=  "<p> <a href=\"".$_SERVER['PHP_SELF']."?sens=d\" >$langNewToOld</a></p>";
 }
-echo "</font></div></td></tr>";
+$tool_content .=  "<table width=\"99%\" cellpadding=\"2\" cellspacing=\"0\" border=\"0\">";
+$tool_content .=  "<thead><tr><th>$langEvents</th>";
+if ($is_adminOfCourse) {
+	$tool_content .=  "<th>$langActions</th>";
+}
+$tool_content .= "</tr></thead>";
+$tool_content .= "<tbody>";
 $numLine=0;
 $result = mysql_query("SELECT id, titre, contenu, day, hour, lasting FROM agenda ORDER BY day ".$sens.", hour ".$sens,$db);
 $barreMois ="";
@@ -276,7 +307,7 @@ while ($myrow = mysql_fetch_array($result))
 			((strtotime($myrow["day"]." ".$myrow["hour"]) < time()) && ($sens==" DESC "))) {
 			if ($barreMois!=date("m",time())) {
 				$barreMois=date("m",time());
-				echo "
+				$tool_content .=  "
 				<tr>
 					<td class=\"month\" colspan=\"2\" valign=\"top\">
 						".$langCalendar."&nbsp;".ucfirst(claro_format_locale_date("%B %Y",time()))."
@@ -284,40 +315,36 @@ while ($myrow = mysql_fetch_array($result))
 				</tr>";
 			}
 			$nowBarShowed = TRUE;
-			echo "<tr> 
-					<td>
-						<font color=\"#CC3300\">
-							<b>".$dateNow." &nbsp;</b>
-						</font>
+			$tool_content .=  "<tr> 
+					<td colspan=2 class=\"today\">
+						
+							<b>$langNow : $dateNow</b>
+						
 					</td>
-					<td align=\"right\" bgcolor=\"#CC3300\">
-						<font color=\"#FFFFFF\">
-							<b>&lt;&lt;&lt; ".$langNow." &nbsp;</b>
-						</font>
-					</td>
+					
 				</tr>";
 		}
 	}
 	if ($barreMois!=date("m",strtotime($myrow["day"])))
 	{
 		$barreMois=date("m",strtotime($myrow["day"]));
-		echo "<tr><td class=\"month\" colspan=\"2\" valign=\"top\">
+		$tool_content .=  "<tr><td class=\"month\" colspan=\"2\" valign=\"top\">
 			".$langCalendar."&nbsp;".ucfirst(claro_format_locale_date("%B %Y",strtotime($myrow["day"])))."
 			</td></tr>";
 	}
-	echo "
+	$tool_content .=  "
 <!-- Date -->
 	";
 	if($numLine%2 == 0) 	
-		echo "<tr valign=\"top\" bgcolor=\"$color1\">";
+		$tool_content .=  "<tr>";
 	elseif($numLine%2 == 1)     	
-		echo "<tr valign=\"top\" bgcolor=\"$color2\">";
+		$tool_content .=  "<tr class=\"odd\">";
     if ($is_adminOfCourse) 
-		echo "<td valign=\"top\">";
+		$tool_content .=  "<td valign=\"top\">";
 	else
-		echo "<td valign=\"top\" colspan=\"2\">";
+		$tool_content .=  "<td valign=\"top\" colspan=\"2\">";
 
-	echo "<p>".ucfirst(claro_format_locale_date($dateFormatLong,strtotime($myrow["day"])))."
+	$tool_content .=  "<p>".ucfirst(claro_format_locale_date($dateFormatLong,strtotime($myrow["day"])))."
 		/ $langHour: 
 		".ucfirst(date("H:i",strtotime($myrow["hour"])))." ";
 
@@ -326,31 +353,35 @@ while ($myrow = mysql_fetch_array($result))
 			$message = $langHour;
 		else 
 			$message = $langHours;
-		echo "<br>".$langLasting.": ".$myrow["lasting"]." ".$message."";
+		$tool_content .=  "<br>".$langLasting.": ".$myrow["lasting"]." ".$message."";
 	}
 
-	echo "<br><span class=\"content\">
+	$tool_content .=  "<br>
 		<b>".$myrow["titre"]."</b>
-		<br>$contenu</span></p></td>";
+		<br>$contenu</p></td>";
+	
+	//agenda event functions
+	//added icons next to each function
+	//(evelthon, 12/05/2006)
+//	<span class="help">{HELP_LINK_ICON} {HELP_LINK}</span>
 	if ($is_adminOfCourse) { 
-		echo "<td align=\"right\" valign=\"top\">
-			<a href=\"$_SERVER[PHP_SELF]?id=".$myrow["id"]."\">$langModify</a> &#151; 
-			<a href=\"$_SERVER[PHP_SELF]?id=".$myrow[0]."&delete=yes\">$langDelete</a>
+		$tool_content .=  "<td >
+		<a href=\"$_SERVER[PHP_SELF]?id=".$myrow["id"]."\">
+			<img src=\"../../images/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a>
+				
+		<a href=\"$_SERVER[PHP_SELF]?id=".$myrow[0]."&delete=yes\">
+			<img src=\"../../images/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a>
+			
 		</td>";
 	}
-	echo "</tr>";
+	$tool_content .=  "</tr>";
 	$numLine++;
 } 	// while
-echo "</table>";
-?>
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2">
-			<hr noshade size="1">
-			<div align="right">
-			</div>
-<?
-	end_page();
+$tool_content .= "</tbody>";
+$tool_content .=  "</table>";
+
+//	end_page();
+draw($tool_content, 2, 'agenda', $head_content, $body_action);
+
 ?>
 
