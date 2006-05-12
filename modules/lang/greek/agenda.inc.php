@@ -52,6 +52,8 @@ $langHelp="Βοήθεια";
 $langOk="Προσθήκη / Τροποποίηση";
 $langAddIntro="Προσθήκη Εισαγωγικού Κειμένου";
 $langBackList="Επιστροφή στον κατάλογο";
+$langEvents="Γεγονότα";
+$langActions="Ενέργειες";
 
 // AGENDA
 

@@ -33,6 +33,10 @@
       |          Andrew Lynn       <Andrew.Lynn@strath.ac.uk>                |
       +----------------------------------------------------------------------+
  */
+//GENERIC
+$langEvents="Events";
+$langActions="Actions";
+
 // AGENDA
 
 $langAgenda="Agenda";
