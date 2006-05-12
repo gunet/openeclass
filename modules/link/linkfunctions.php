@@ -270,13 +270,13 @@ while ($myrow = mysql_fetch_array($result))
 	{
 	$myrow[3] = parse_tex($myrow[3]);
 	$tool_content .= 	"<tr>
-			<td align=\"right\" valign=\"top\" width=\"20\">
-			<img src=\"../../images/pixel.gif\" border=\"0\" width=\"10\">
+			<td width=\"20\" class=\"linkimg\">
+			
 			<a href=\"link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">
 			<img src=\"../../images/links.gif\" border=\"0\" alt=\"".$langLinks."\">
 			</td>
 
-			<td width=\"580\" valign=\"top\">
+			<td  width=\"99%\">
                         <a href=\"link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">".$myrow[2]."</a>\n
 			<br>".$myrow[3]."";
 	if ($is_adminOfCourse)

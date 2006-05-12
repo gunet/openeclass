@@ -73,7 +73,7 @@ if($is_adminOfCourse)
 	if (isset($urlview))
 		$tool_content .=  "<span class=\"operation\"><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory&urlview=".$urlview."\">".$langCategoryAdd."</a></span>";
 	else
-		$tool_content .=  "<span class=\"operation\"><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory\">".$langCategoryAdd."</a> | </span>";
+		$tool_content .=  "<span class=\"operation\"><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory\">".$langCategoryAdd."</a></span>";
 	$tool_content .=  "</div>";
 
 	//displaying the error / status messages if there is one
@@ -159,21 +159,21 @@ $sqlcategories="SELECT * FROM `".$tbl_categories."` ORDER BY `ordre` DESC";
 $resultcategories=db_query($sqlcategories, $dbname);
 $aantalcategories = @mysql_num_rows($resultcategories);
 if ($aantalcategories > 0) {
-	$tool_content .= "<div id=\"tool_operations\">";
+	$tool_content .= "<p>";
 	
-$tool_content .=  "<span class=\"operation\"><a href=\"".$_SERVER['PHP_SELF']."?urlview=";
+$tool_content .=  "<a href=\"".$_SERVER['PHP_SELF']."?urlview=";
 	for($j = 1; $j <= $aantalcategories; $j++)
 	{
 	$tool_content .=  "0";
 	}
-$tool_content .=  "\">$shownone</a></span>";
-$tool_content .=  "<span class=\"operation\">| <a href=\"".$_SERVER['PHP_SELF']."?urlview=";
+$tool_content .=  "\">$shownone</a>";
+$tool_content .=  " | <a href=\"".$_SERVER['PHP_SELF']."?urlview=";
 	for($j = 1; $j <= $aantalcategories; $j++)
 	{
 	$tool_content .=  "1";
 	}
-$tool_content .=  "\">$showall</a></span><p>";
-$tool_content .= "</div>";
+$tool_content .=  "\">$showall</a>";
+$tool_content .= "</p>";
 }
 
 if (isset($down))
