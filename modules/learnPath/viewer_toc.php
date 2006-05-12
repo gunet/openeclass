@@ -1,25 +1,13 @@
 <?php // $Id$
-/**
- * CLAROLINE 
- *
- * @version 1.7 $Revision$
- *
- * @copyright (c) 2001, 2005 Universite catholique de Louvain (UCL)
- *
- * @license http://www.gnu.org/copyleft/gpl.html (GPL) GENERAL PUBLIC LICENSE
- *
- * @author Piraux Sébastien <pir@cerdecam.be>
- * @author Lederer Guillaume <led@cerdecam.be>
- *
- * @package CLLNP
- * @subpackage navigation
- *
- */
+
+/*
+Header, Copyright, etc ...
+*/
 
 $require_current_course = TRUE;
 $langFiles              = "learnPath";
-require_once("../../../config/config.php");
-require_once("../../../include/init.php");
+require_once("../../config/config.php");
+require_once("../../include/init.php");
 
 /*
  * DB tables definition
@@ -30,13 +18,13 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-$imgRepositoryWeb = "../../../images/";
+$imgRepositoryWeb = "../../images/";
 
 // lib of this tool
-require_once("../../../include/lib/learnPathLib.inc.php");
+require_once("../../include/lib/learnPathLib.inc.php");
 
 //lib of document tool
-require_once("../../../include/lib/fileDisplayLib.inc.php");
+require_once("../../include/lib/fileDisplayLib.inc.php");
 
 $lpUid =  $uid;
 mysql_select_db($currentCourseID);
@@ -101,17 +89,7 @@ $sql = "SELECT `name`
 
 $lpName = db_query_get_single_value($sql);
 
-echo '<p><b>'.wordwrap($lpName,$moduleNameLength,' ',1).'</b></p>'."\n"
-	. '<p>'."\n"
-	. '<small>'
-	. $langView.' : '
-	. '<a href="viewer.php?frames=0" target="_top">'.$langFullScreen.'</a>'
-	. ' | '
-	. '<a href="viewer.php?frames=1" target="_top">'.$langInFrames.'</a>'
-	. '</small>'."\n"
-	. '</p>'."\n\n"
-	. '<table width="100%">'."\n\n"
-	;
+echo '<strong>'.wordwrap($lpName,$moduleNameLength,' ',1).'</strong>';
   
 $previous = ""; // temp id of previous module, used as a buffer in foreach
 $previousModule = ""; // module id that will be used in the previous link
@@ -157,7 +135,7 @@ foreach ($flatElementList as $module)
 		}
 	}
 
-	echo '<tr>'."\n";
+// 	echo '<tr>'."\n";
 	// display the current module name (and link if allowed)
 	$spacingString = '';
 
@@ -167,12 +145,12 @@ foreach ($flatElementList as $module)
         
       
 	// spacing col
-	echo $spacingString.'<td colspan="'.$colspan.'"><small>';
+// 	echo $spacingString.'<td colspan="'.$colspan.'"><small>';
 	if ( !$is_blocked )
 	{
 		if($module['contentType'] == CTLABEL_) // chapter head
 		{
-			echo '<b>'.$module['name'].'</b>';
+// 			echo '<b>'.$module['name'].'</b>';
 		}
 		else
 		{
@@ -184,6 +162,7 @@ foreach ($flatElementList as $module)
 			// bold the title of the current displayed module
 			if( $_SESSION['module_id'] == $module['module_id'] )
 			{
+				$currentName = $displayedName;
 				$displayedName = '<b>'.$displayedName.'</b>';
 				$previousModule = $previous;
 			}
@@ -192,8 +171,8 @@ foreach ($flatElementList as $module)
 			{
 				$nextModule = $module['module_id'];
 			}
-			echo '<a href="startModule.php?viewModule_id='.$module['module_id'].'" target="mainFrame" title="'.htmlspecialchars($module['name']).'">'
-				.'<img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.' : '.$module['name'].'" border="0" />'.$displayedName.'</a>';
+// 			echo '<a href="startModule.php?viewModule_id='.$module['module_id'].'" target="mainFrame" title="'.htmlspecialchars($module['name']).'">'
+// 				.'<img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.' : '.$module['name'].'" border="0" />'.$displayedName.'</a>';
 		}
         // a module ALLOW access to the following modules if
         // document module : credit == CREDIT || lesson_status == 'completed'
@@ -218,7 +197,7 @@ foreach ($flatElementList as $module)
 	{
 		if($module['contentType'] == CTLABEL_) // chapter head
 		{
-			echo '<b>'.$module['name'].'</b>';
+// 			echo '<b>'.$module['name'].'</b>';
 		}
 		else
 		{
@@ -227,7 +206,7 @@ foreach ($flatElementList as $module)
 			else
 				$displayedName = $module['name'];
 
-			echo '<img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" border="0" />'.$displayedName;
+// 			echo '<img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" border="0" />'.$displayedName;
 		}
 	}
 
@@ -238,7 +217,7 @@ foreach ($flatElementList as $module)
 		$globalProg =  $globalProg+$progress;
 	}
        
-	echo '</small></td>'."\n".'<td>';
+// 	echo '</small></td>'."\n".'<td>';
 
 	if($module['contentType'] != CTLABEL_ )
 	{
@@ -246,21 +225,21 @@ foreach ($flatElementList as $module)
 
 		if($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED')
 		{
-			echo '<img src="'.$imgRepositoryWeb.'mark.gif" alt="'.$module['lesson_status'].'" />';
+// 			echo '<img src="'.$imgRepositoryWeb.'mark.gif" alt="'.$module['lesson_status'].'" />';
 		}
 		else
 		{
-			echo '&nbsp;';
+// 			echo '&nbsp;';
 		}
 	}
 	else
 	{
-		echo '&nbsp;';
+// 		echo '&nbsp;';
 	}
       
 	$atleastOne = true;
-	echo '</td>'."\n"
-		.'</tr>'."\n\n";
+// 	echo '</td>'."\n"
+// 		.'</tr>'."\n\n";
 	// used in the foreach the remember the id of the previous module_id
 	// don't remember if label...
 	if ($module['contentType'] != CTLABEL_ )
@@ -269,55 +248,63 @@ foreach ($flatElementList as $module)
       
 } // end of foreach ($flatElementList as $module)
 
-echo '</table>'."\n\n";
-   
-
-
-//  set redirection link
-if ( $is_adminOfCourse )
-	$returl = '../learningPathAdmin.php';
-else
-	$returl = '../learningPath.php';
-
-echo '<br />'."\n\n".'<center>'."\n";
-
+/*echo "<table cellpadding=\"0\" cellspacing=\"0\" align=\"left\">"
+	."<tr height=\"5\"><td><img src=\"../../images/scormline.jpg\">"
+	."</td></tr><tr><td>";*/
 // display previous and next links only if there is more than one module
 if ( $moduleNb > 1 )
 {
-	$prevNextString = '<small>';
+	$prevNextString = /*' - '.$currentName.*/"&nbsp;&nbsp;&nbsp;";
+	$imgPrevious = '<img src="'.$imgRepositoryWeb.'previous.gif" border="0" title="'.$langPrevious.'">';
+	$imgNext = '<img src="'.$imgRepositoryWeb.'next.gif" border="0" title="'.$langNext.'">';
 	
 	if( $previousModule != '' )
 	{
-		$prevNextString .= '<a href="startModule.php?viewModule_id='.$previousModule.'" target="mainFrame">'.$langPrevious.'</a>';
+		$prevNextString .= '<a href="navigation/startModule.php?viewModule_id='.$previousModule.'" target="mainFrame">'.$imgPrevious.'</a>';
 	}
 	else
 	{
-		$prevNextString .=  $langPrevious;
+		$prevNextString .=  $imgPrevious;
 	}
-	$prevNextString .=  ' | ';
+	$prevNextString .=  '&nbsp;&nbsp;';
 	
 	if( $nextModule != '' )
 	{
-		$prevNextString .=  '<a href="startModule.php?viewModule_id='.$nextModule.'" target="mainFrame">'.$langNext.'</a>';
+		$prevNextString .=  '<a href="navigation/startModule.php?viewModule_id='.$nextModule.'" target="mainFrame">'.$imgNext.'</a>';
 	}
 	else
 	{
-		$prevNextString .=  $langNext;
+		$prevNextString .=  $imgNext;
 	}  
-	$prevNextString .=  '</small><br /><br />'."\n";
 	
 	echo $prevNextString;
 }
 
 //  set redirection link 
 if ( $is_adminOfCourse )
-	$returl = '../learningPathAdmin.php';
+	$returl = 'learningPathAdmin.php';
 else
-	$returl = '../learningPath.php';
+	$returl = 'learningPath.php';
 	
-?>
-<form action="<?php echo $returl; ?>" method="post" target="_top">
-<input type="submit" value="<?php echo $langQuitViewer; ?>">
-</form>
+echo "&nbsp;&nbsp;"
+	."<a href=\"".$returl."\" target=\"_top\">"
+	.'<img src="'.$imgRepositoryWeb.'scormrestart.jpg" border="0" title="'.$langQuitViewer.'">'
+	."</a>"
+	.'&nbsp;&nbsp;'
+	.'<a href="viewer.php?fullscreen=1" target="_top">'
+	.'<img src="'.$imgRepositoryWeb.'scormfullscreen.jpg" border="0" title="'.$langFullScreen.'">'
+	.'</a>'
+	.'&nbsp;&nbsp;'
+	.'<a href="viewer.php?fullscreen=0" target="_top">'
+	.'<img src="'.$imgRepositoryWeb.'scormexitfullscreen.jpg" border="0" title="'.$langInFrames.'">'
+	.'</a>&nbsp;&nbsp;&nbsp;';
+if($lpUid) {
+	echo '<small>'
+		//.'current progress: '
+		.$langGlobalProgress
+		.claro_disp_progress_bar(round($globalProg / ($moduleNb) ), 1 )
+		."&nbsp;".round($globalProg / ($moduleNb) )."%"
+		.'</small><hr noshade>';
+}
 
-</center>
+?>

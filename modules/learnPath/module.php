@@ -132,7 +132,7 @@ if( !$is_AllowedToEdit
 	&& !$noStartAsset
 	)
 {
-    header("Location:./navigation/viewer.php");
+    header("Location:./viewer.php");
     exit();
 }
 
@@ -317,7 +317,7 @@ if($module['contentType'] != CTLABEL_) //
     {
 
 		$tool_content .= '<center>'."\n"
-			.'<form action="./navigation/viewer.php" method="post">'."\n"
+			.'<form action="./viewer.php" method="post">'."\n"
 			.'<input type="submit" value="'.$langStartModule.'" />'."\n"
 			.'</form>'."\n"
 			.'</center>'."\n\n";

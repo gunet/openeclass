@@ -191,16 +191,16 @@ switch ($module['contentType'])
    {
       
       require_once("scormAPI.inc.php");
-      echo "<frameset border='0' cols='0,20%,80%' frameborder='no'>
+      echo "<frameset border='0' rows='0,40,*' frameborder='no'>
             <frame src='updateProgress.php' name='upFrame'>";
       
    }
    else
    {
-      echo "<frameset border='0' cols='20%,80%' frameborder='yes'>";
+      echo "<frameset border='0' rows='40,*' frameborder='yes'>";
    }
 ?>
-    <frame src="tableOfContent.php" name="tocFrame" />
+    <frame src="../viewer_toc.php" name="tocFrame" scrolling="no" />
     <frame src="<?php echo $moduleStartAssetPage; ?>" name="scoFrame">
 
     </frameset>
