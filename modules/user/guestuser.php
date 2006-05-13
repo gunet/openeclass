@@ -4,129 +4,128 @@ $langFiles = array('registration','guest');
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'User';
-include('../../include/init.php');
-
-$local_style = "input { font-size: 10px; }";
+//include('../../include/init.php');
+include '../../include/baseTheme.php';
+//$local_style = "input { font-size: 10px; }";
 
 $nameTools = $langAddGuest;
 $navigation[] = array ("url"=>"user.php", "name"=> $langUsers);
-begin_page();
-
+//begin_page();
+$tool_content = "";
 // IF PROF ONLY
 if($is_adminOfCourse)
 {
 
-// Create guest account
-function createguest($c,$p) {
+	// Create guest account
+	function createguest($c,$p) {
 
-	global $langGuestUserName,$langGuestSurname,$langGuestName, $mysqlMainDb;
+		global $langGuestUserName,$langGuestSurname,$langGuestName, $mysqlMainDb;
 
-	// guest account user name 	
-	$guestusername=$langGuestUserName.$c;
-	// Guest account created...
-	mysql_select_db($mysqlMainDb);
+		// guest account user name
+		$guestusername=$langGuestUserName.$c;
+		// Guest account created...
+		mysql_select_db($mysqlMainDb);
 
-	$q=mysql_query("SELECT user_id FROM user WHERE username='$guestusername'");
-	if (mysql_num_rows($q) > 0) {
-		$s = mysql_fetch_array($q);
+		$q=mysql_query("SELECT user_id FROM user WHERE username='$guestusername'");
+		if (mysql_num_rows($q) > 0) {
+			$s = mysql_fetch_array($q);
 
-		mysql_query("UPDATE user SET password='$p' WHERE user_id='$s[0]'")
-				or die ($langGuestFail);
+			mysql_query("UPDATE user SET password='$p' WHERE user_id='$s[0]'")
+			or die ($langGuestFail);
 
-		mysql_query("INSERT INTO cours_user (code_cours,user_id,statut,role) 
+			mysql_query("INSERT INTO cours_user (code_cours,user_id,statut,role)
 			VALUES ('$c','$s[0]','10','Επισκέπτης')")
-				or die ($langGuestFail);
+			or die ($langGuestFail);
 
-	} else {
-		mysql_query("INSERT INTO user (nom,prenom,username,password,statut) 
+		} else {
+			mysql_query("INSERT INTO user (nom,prenom,username,password,statut)
 			VALUES ('$langGuestName','$langGuestSurname','$guestusername','$p','10')")
-				or die ($langGuestFail);
+			or die ($langGuestFail);
 
-		mysql_query("INSERT INTO cours_user (code_cours,user_id,statut,role) 
+			mysql_query("INSERT INTO cours_user (code_cours,user_id,statut,role)
 			VALUES ('$c','".mysql_insert_id()."','10','Επισκέπτης')")
-				or die ($langGuestFail);
+			or die ($langGuestFail);
+		}
 	}
-}
 
 
-// Checking if Guest account exists....
-function guestid($c) {	
-	global $mysqlMainDb;
+	// Checking if Guest account exists....
+	function guestid($c) {
+		global $mysqlMainDb;
 
-	mysql_select_db($mysqlMainDb);
-	$q1=mysql_query("SELECT user_id  from cours_user WHERE statut='10' AND code_cours='$c'");
-	if (mysql_num_rows($q1) == 0) {
-		return FALSE;
-	} else {
-		$s=mysql_fetch_array($q1);
-		return $s[0];
+		mysql_select_db($mysqlMainDb);
+		$q1=mysql_query("SELECT user_id  from cours_user WHERE statut='10' AND code_cours='$c'");
+		if (mysql_num_rows($q1) == 0) {
+			return FALSE;
+		} else {
+			$s=mysql_fetch_array($q1);
+			return $s[0];
+		}
 	}
-}
 
-if (isset($createguest) and (!guestid($currentCourseID))) {
+	if (isset($createguest) and (!guestid($currentCourseID))) {
 
-	createguest($currentCourseID,$guestpassword);
-	echo "<tr><td>$langGuestSuccess</td></tr>";
-} elseif (isset($changepass)) {
+		createguest($currentCourseID,$guestpassword);
+		$tool_content .= "<tr><td>$langGuestSuccess</td></tr>";
+	} elseif (isset($changepass)) {
 
-	$g=guestid($currentCourseID);
-	$uguest=mysql_query("UPDATE user SET password='$guestpassword' WHERE user_id='$g'")
+		$g=guestid($currentCourseID);
+		$uguest=mysql_query("UPDATE user SET password='$guestpassword' WHERE user_id='$g'")
 		or die($langGuestFail);
-	echo "<tr><td>$langGuestChange</td></tr>";
-} else {
-	$id = guestid($currentCourseID);
-	if ($id) {
-		echo "<tr><td>$langGuestExist</td></tr>";
-		echo "<tr><td>&nbsp;</td></tr>";
-		echo "<tr><td>";
-		$q1=mysql_query("SELECT nom,prenom,username,password FROM user where user_id='$id'");
-		$s=mysql_fetch_array($q1);
-		echo "<table>";
-		echo "<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">";
-		echo "<tr><td>$langName:</td><td>$s[nom]</td></tr>";
-		echo "<tr><td>$langSurname:</td><td>$s[prenom]</td></tr>";
-		echo "<tr><td>$langUsername:&nbsp;&nbsp;&nbsp;&nbsp;</td><td>$s[username]</td></tr>";
-		echo "<tr><td>$langPass:</td><td><input type=\"text\" name=\"guestpassword\" value=\"".
-			htmlspecialchars($s['password'])."\"></td></tr>";
-		echo "<tr><td>&nbsp;</td></tr>";
-		echo "<tr><td><input type=\"submit\" name=\"changepass\" value=\"$langChangeGuestPasswd\"></td></tr>";
-		echo "</form>";
-		echo "</table>";
-		echo "</td></tr>";
-		echo "</font>";
+		$tool_content .= "<p>$langGuestChange</p>";
 	} else {
+		$id = guestid($currentCourseID);
+		if ($id) {
+			$tool_content .=  "<p>$langGuestExist</p>";
+			
+			$q1=mysql_query("SELECT nom,prenom,username,password FROM user where user_id='$id'");
+			$s=mysql_fetch_array($q1);
+			
+			$tool_content .=  "<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">";
+			$tool_content .=  "<table>";
+			$tool_content .= "<thead>";
+			$tool_content .=  "<tr><th>$langName:</th><td>$s[nom]</td></tr>";
+			$tool_content .=  "<tr><th>$langSurname:</th><td>$s[prenom]</td></tr>";
+			$tool_content .=  "<tr><th>$langUsername:</th><td>$s[username]</td></tr>";
+			$tool_content .=  "<tr><th>$langPass:</th><td><input type=\"text\" name=\"guestpassword\" value=\"".
+			htmlspecialchars($s['password'])."\"></td></tr>";
+			$tool_content .= "</thead>";
+			$tool_content .=  "</table>";
+			$tool_content .= "<br>";
+			$tool_content .=  "<input type=\"submit\" name=\"changepass\" value=\"$langChangeGuestPasswd\">";
+			$tool_content .=  "</form>";
 
-	?>
-	<tr><td>
-		<? echo $langAskGuest ?><br><br>
-		<tr><td>
+		} else {
+
+	$tool_content .="
+	
+		<p>$langAskGuestf</p>
+		
+		
+		<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">";
+		
+	$tool_content .= <<<tCont
 		<table>	
-		<form method="post" action="<?= $_SERVER['PHP_SELF'] ?>">
-		<tr><td><? echo $langName ?>:</td><td><? echo $langGuestName?></td></tr>
-		<tr><td><? echo $langSurname ?>:</td><td><? echo $langGuestSurname?></td></tr>
-		<tr><td><? echo $langUsername ?>:&nbsp;&nbsp;&nbsp;</td><td><? echo $langGuestUserName.$currentCourseID?></td></tr>
-		<tr><td><? echo $langPass ?>:</td><td><input type="text" name="guestpassword"></td></tr>
-		<tr><td>&nbsp;</td></tr>
-		<tr><td><input type="submit" name="createguest" value="<? echo $langGuestAdd ?>"></td></tr>
-		</form>
+		<thead>
+		<tr><th>$langName:</th><td>$langGuestName</td></tr>
+		<tr><th>$langSurname:</th><td>$langGuestSurname</td></tr>
+		<tr><th>$langUsername:</th><td>$langGuestUserName.$currentCourseID</td></tr>
+		<tr><th>$langPass:</th><td><input type="text" name="guestpassword"></td></tr>
+		</thead>
 		</table>
-		</td></tr>
-	    </font>
-	</td></tr>
-	<tr><td>
-
-<? 	
+		<br>
+		<input type="submit" name="createguest" value="$langGuestAdd">
+		</form>
+tCont;
+		}
 	}
-}
-?>
-</td></tr>
-<tr><td>&nbsp;</td></tr>
-<tr><td><a href="user.php"><? echo $langBackUser ?></a>
-</td></tr>
-</table>
-</body>
-</html>
-<?
-	 }
+
+$tool_content .= <<<tCont2
+
+<p><a href="user.php">$langBackUser</a><p>
+
+tCont2;
+
+draw($tool_content, 2);	 }
 
 ?>
