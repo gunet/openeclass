@@ -176,7 +176,7 @@ if(isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]=
 }	// ADMIN ONLY
 
 $tool_content .= "</tr>
-			</thead>";
+			</thead><tbody>";
 
 ############## SELECT NAME, SURNAME, EMAIL, STATUS AND GROUP OF USERS ###########
 
@@ -193,10 +193,10 @@ $result = mysql_query("SELECT user.user_id, user.nom, user.prenom, user.email, u
 while ($myrow = mysql_fetch_array($result)) {
 	// BI COLORED TABLE
 	if ($i%2==0) {
-		$tool_content .= "<tbody><tr >";
+		$tool_content .= "<tr >";
 	}     	
 	elseif ($i%2==1) {
-		$tool_content .= "<tbody><tr class=\"odd\">";
+		$tool_content .= "<tr class=\"odd\">";
 	}	
 
 	// SHOW PUBLIC LIST OF USERS
