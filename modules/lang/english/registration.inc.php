@@ -179,11 +179,11 @@ $langAskUser = "Enter the name, surname or username of the user you want to add.
 $langAskManyUsers = "Type the filename or click in \"Browse\" to browse for it.<br><br>
 		Users must have an account in platform.";
 $langAskManyUsers2 = "<strong>Note</strong>: Users file must be a simple text file with one username per line: E.g.
-	        <blockquote><code>
+	       <br><br>
         	helen<br>
         	nick<br>
         	john<br>
-        	</code></blockquote>";
+        	";
 
 $langAskSearch = "Enter the name, surname or username of the user you want to search for.";
 $langAddUser = "Add User";
