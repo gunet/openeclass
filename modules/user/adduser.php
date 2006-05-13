@@ -12,6 +12,7 @@ include '../../include/baseTheme.php';
 $nameTools = $langAddUser;
 $navigation[] = array ("url"=>"user.php", "name"=> $langUsers);
 
+$tool_content="";
 //begin_page();
 
 // IF PROF ONLY
