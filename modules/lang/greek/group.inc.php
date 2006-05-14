@@ -14,8 +14,8 @@ $langHelp="Βοήθεια";
 $langNewGroupCreate="Δημιουργία καινούριας ομάδας χρηστών";
 $langGroupCreation="Δημιουργία καινούριας ομάδας χρηστών";
 $langCreate="Δημιουργία";
-$langNewGroups="ομάδα(ες) χρηστών";
-$langMax="μέγ.";
+$langNewGroups="Αριθμός ομάδων χρηστών";
+$langMax="Μέγ.";
 $langPlaces="συμμετέχοντες στην ομάδα χρηστών (προαιρετικό)";
 $langGroupPlacesThis="συμμετέχοντες (προαιρετικό)"; 
 $langCreate="Δημιουργία";
@@ -24,6 +24,7 @@ $langGroupsAdded="ομάδες χρηστών έχουν προστεθεί";
 $langGroupAdded = "ομάδα χρηστών έχει προστεθεί";
 $langGroupsDeleted="Ολες οι ομάδες χρηστών έχουν διαγραφεί";
 $langGroupDel="Η ομάδα χρηστών διαγράφτηκε";
+$langMove="Μετακίνηση";
 
 
 $langGroupsEmptied="Όλες οι ομάδες χρηστών είναι άδειες";
@@ -68,6 +69,9 @@ $langGroupMembers="Μέλη ομάδας χρηστών";
 $langGroupValidate="Επικύρωση";
 $langGroupCancel="Ακύρωση";
 $langGroupSettingsModified="Οι ρυθμίσεις της ομάδας χρηστών έχουν αλλάξει";
+$langNameSurname="Όνομα Επίθετο";
+$langAM="Αριμός Μητρώου";
+$langEmail="Email";
 
 $langGroupStudentsInGroup="φοιτητές εγγεγραμμένοι σε ομάδες χρηστών";
 $langGroupStudentsRegistered="φοιτητές εγγεγραμμένοι στο μάθημα";
@@ -76,9 +80,9 @@ $langGroupUsersList="Βλέπε <a href=../user/user.php>Χρήστες</a>";
 $langGroupTooMuchMembers="Ο αριθμός που προτάθηκε υπερβαίνει το μέγιστο επιτρεπόμενο (μπορείτε να το αλλάξετε παρακάτω). 
 	Η σύνθεση της ομάδας δεν άλλαξε";
 $langGroupTutor="Διδάσκοντας";
-$langGroupNoTutor="(κανένας)";
-$langGroupNone="(δεν υπάρχει)";
-$langGroupNoneMasc="(κανένας)";
+$langGroupNoTutor="κανένας";
+$langGroupNone="δεν υπάρχει";
+$langGroupNoneMasc="κανένας";
 $langGroupUManagement="Διαχείριση Χρηστών";
 $langAddTutors="Διαχείριση καταλόγου χρηστών";
 

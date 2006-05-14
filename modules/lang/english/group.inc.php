@@ -14,8 +14,8 @@ $langHelp="Help";
 $langNewGroupCreate="Create new group(s)";
 $langGroupCreation="New groups creation";
 $langCreate="Create";
-$langNewGroups="new group(s)";
-$langMax="max.";
+$langNewGroups="Number of new groups";
+$langMax="Max.";
 $langPlaces="seats by groups (optional)";
 $langGroupPlacesThis="seats (optional";
 $langCreate="create";
@@ -24,7 +24,7 @@ $langGroupsAdded="groups have been added";
 $langGroupAdded = "group has been added";
 $langGroupsDeleted="All groups have been deleted";
 $langGroupDel="Group deleted";
-
+$langMove="Move";
 
 $langGroupsEmptied="All groups are now empty";
 $langEmtpyGroups="Empty all groups";
@@ -72,6 +72,10 @@ $langGroupMembers="Group members";
 $langGroupValidate="validate";
 $langGroupCancel="cancel";
 $langGroupSettingsModified="Group settings modified";
+$langNameSurname="Name Surname";
+$langAM="Student ID";
+$langEmail="Email";
+
 
 $langGroupStudentsInGroup="students registered in groups";
 $langGroupStudentsRegistered="students registered to this course";
@@ -80,9 +84,9 @@ $langGroupUsersList="See <a href=../user/user.php>Users</a>";
 $langGroupTooMuchMembers="Number proposed exceeds max. that you allowed (you can modify it below). 
 				Group composition has not been modified";
 $langGroupTutor="Tutor";
-$langGroupNoTutor="(none)";
-$langGroupNone="(none)";
-$langGroupNoneMasc="(none)";
+$langGroupNoTutor="none";
+$langGroupNone="none";
+$langGroupNoneMasc="none";
 $langGroupUManagement="Users admin";
 $langAddTutors="Admin users list";
 
