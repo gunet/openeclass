@@ -1,16 +1,17 @@
-<?
+<?php
 
 $require_login = TRUE;
 $require_current_course = TRUE;
 $langFiles = 'group';
 $require_help = TRUE;
 $helpTopic = 'Group';
-include('../../include/init.php');
-
+//include('../../include/init.php');
+include '../../include/baseTheme.php';
 $nameTools = $langEditGroup;
 $navigation[]= array ("url"=>"group.php", "name"=> $langGroupManagement);
-begin_page();
-?>
+//begin_page();
+$tool_content ="";
+$head_content = <<<hCont
 <script type="text/javascript" language="JavaScript">
 
 <!-- Begin javascript menu swapper 
@@ -72,11 +73,12 @@ function reverseAll(cbList) {
 }
 
 </script>
+hCont;
 
-<tr>
-<td width="100%" colspan="2"> <font size="2" face="arial, helvetica">
+$tool_content .= <<<tCont
 
-<? 
+
+tCont;
 
 ################### IF MODIFY #######################################
 
@@ -118,22 +120,20 @@ if(isset($modify))
 		$langGroupEdited=$langGroupSettingsModified;
 	}	// else
 
-	echo "<table width=100% cellpadding=8 bgcolor=#9999FF>
+	$tool_content .= "<table>
+		<thead>
 		<tr>
-		<td><font size=\"2\" face=\"arial, helvetica\">
+		<th>
 			$langGroupEdited
-		</td>
+		</th>
 		</tr>
-		</table>";
+		</thead>
+		</table>
+		<br>";
 
 }	// if $modify
 
-?>
-
-<form name= "groupedit" method="POST" action="<?= $_SERVER['PHP_SELF']?>?edit=yes&userGroupId=<?= $userGroupId?>">
-<table border="0" width="100%" cellspacing="3" cellpadding="5" bgcolor="<?= $color2 ?>">
-
-<?
+//=======================================================================
 ################# NAME, DESCRIPTION, TUTOR AND MAX STUDENTS ########################
 
 // Select name, description, max members and tutor from student_group DB
@@ -142,29 +142,9 @@ $groupSelect=db_query("SELECT name, tutor, description, maxStudent
 
 while ($myStudentGroup = mysql_fetch_array($groupSelect)) 
 {
-	echo "
-	<tr valign=top> 
-		<td><font size=\"2\" face=\"arial, helvetica\">
-			<p>
-				<b>
-					$langGroupName
-				</b>
-				<br>
-				<input type=text name=\"name\" size=40 value=\"$myStudentGroup[name]\">
-			</p>
-		</td>
-		<td align=right><font size=\"2\" face=\"arial, helvetica\">
-			<a href=\"group_space.php?userGroupId=$userGroupId\">$langGroupThisSpace</a>
-			<br>
-		</td>
-	</tr>
-	<tr>
-		<td><font size=\"2\" face=\"arial, helvetica\">
-			<b>
-				$langGroupTutor
-			</b>
-			<br>
-			<select name=\"tutor\">";
+		$tool_content_group_name = $myStudentGroup[name];
+
+
 	// SELECT TUTORS
 	$resultTutor=mysql_query("SELECT user.user_id, user.nom, user.prenom
 		FROM `$mysqlMainDb`.user, `$mysqlMainDb`.cours_user
@@ -172,13 +152,14 @@ while ($myStudentGroup = mysql_fetch_array($groupSelect))
 			AND cours_user.tutor='1'
 			AND cours_user.code_cours='$currentCourse'");
 	$tutorExists=0;
+	$tool_content_tutor="";
 	while ($myTutor = mysql_fetch_array($resultTutor))
 	{
 		//  Present tutor appears first in select box
 		if($myStudentGroup[tutor]==$myTutor[user_id])
 		{
 			$tutorExists=1;
-			echo "
+			$tool_content_tutor .= "
 				<option SELECTED value=\"$myTutor[user_id]\">
 					$myTutor[nom] $myTutor[prenom]
 				</option>";
@@ -186,62 +167,42 @@ while ($myStudentGroup = mysql_fetch_array($groupSelect))
 		else 
 		{
 			
-			echo "
+			$tool_content_tutor .= "
 				<option value=$myTutor[user_id]>
 					$myTutor[nom] $myTutor[prenom]
 				</option>";
 		}
 	}
 	
+	
+	
 	if($tutorExists==0)
 	{
-		echo "<option SELECTED value=0>$langGroupNoTutor</option>";
+		$tool_content_tutor .=  "<option SELECTED value=0>$langGroupNoTutor</option>";
 	}
 	else 
 	{
-		echo "<option value=0>$langGroupNoTutor</option>";
+		$tool_content_tutor .=  "<option value=0>$langGroupNoTutor</option>";
 	}
-
-	echo "</select>&nbsp;&nbsp;
-		<font size=1><a href=\"../user/user.php\">$langAddTutors</a></font>
-		</td>
-		<td align=right><font size=\"2\" face=\"arial, helvetica\">
-		<nobr>
-		$langMax ";
 
 
 	if($myStudentGroup['maxStudent']==0)
 	{
-		echo "<input type=text name=\"maxStudent\" size=2 value=\"-\">";
+		$tool_content_max_student =  "-";
 	}
 	else
 	{
-		echo "<input type=text name=\"maxStudent\" size=2 value=\"$myStudentGroup[maxStudent]\">";
+		$tool_content_max_student =  $myStudentGroup[maxStudent];
 	}
+	
+	$tool_content_group_description = $myStudentGroup[description];
 
-echo " $langGroupPlacesThis</nobr></td></tr>
-	<tr valign=top> 
-		<td colspan=2><font size=\"2\" face=\"arial, helvetica\">
-			<b>
-				$langGroupDescription
-			</b>
-			&nbsp;$langUncompulsory
-			<br>
-			<textarea name=\"description\" rows=4 cols=70 wrap=virtual>$myStudentGroup[description]</textarea>
-		</td>
-	</tr>";
 
-}	// while	
-
-echo "</table>";
+}	// while
 
 ################### STUDENTS IN AND OUT GROUPS #######################
 
-echo "<center><table border=0 cellspacing=3 cellpadding=4 width=100% bgcolor=\"$color1\">
-		<tr valign=top align=center> 
-			<td align=left><font size=\"2\" face=\"arial, helvetica\">
-				<b>$langNoGroupStudents</b> <p>
-	<select name=\"nogroup[]\" size=20 multiple>";
+
 // Student registered to the course but inserted in no group
 
 $sqll= "SELECT DISTINCT u.user_id , u.nom, u.prenom 
@@ -254,70 +215,109 @@ $sqll= "SELECT DISTINCT u.user_id , u.nom, u.prenom
 			AND cu.statut=5
 			AND cu.tutor=0";
 
+$tool_content_not_Member="";
 $resultNotMember=mysql_query($sqll);
 while ($myNotMember = mysql_fetch_array($resultNotMember))
 {
-	echo "<option value=\"$myNotMember[user_id]\">
+	$tool_content_not_Member .=  "<option value=\"$myNotMember[user_id]\">
 		$myNotMember[prenom] $myNotMember[nom]
 	</option>";
 
 }	// while loop
 
-?>
-			</select>
-			</p>
-			<p>&nbsp; </p>
-			</td>
-			<td> 
-			<p>&nbsp;</p>
-			<p>&nbsp;</p>
-			<p> 
-<?
-// WATCH OUT ! form elements are called by numbers "form.element[3]"... 
-// because select name contains "[]" causing a javascript element name problem
-?>
-	<input type="button" onClick="move(this.form.elements[4],this.form.elements[7])" value="   >>   ">
-	<br>
-	<input type="button" onClick="move(this.form.elements[7],this.form.elements[4])" value="   <<   ">
-	</p>
-	</td>
-	<td><font size="2" face="arial, helvetica">
-	<p><b><?= $langGroupMembers ?></b></p>
-	<p> 
-	<select name="ingroup[]" size="8" multiple>
-
-<?
 $resultMember=mysql_query("SELECT user_group.id, user.user_id, user.nom, user.prenom, user.email 
 	FROM `$mysqlMainDb`.user, user_group 
 	WHERE user_group.team='$userGroupId' AND user_group.user=$mysqlMainDb.user.user_id");
 
 $a=0;
+$tool_content_group_members = "";
 while ($myMember = mysql_fetch_array($resultMember))
 	{
 	$userIngroupId=$myMember[user_id];
- 	echo "<option value=\"$userIngroupId\">$myMember[prenom] $myMember[nom]</option>";
+ 	$tool_content_group_members .=  "<option value=\"$userIngroupId\">$myMember[prenom] $myMember[nom]</option>";
 	$a++;
 }
 
-?>
-	</select></p>
-	<table bgcolor="#CCCCCC" width="80%" cellpadding="18">
-	<tr><td><font size="2" face="arial, helvetica">
-	<input type=submit value="<?= $langValidate ?>" style="font-weight: bold" name="modify" onClick="selectAll(this.form.elements[7],true)">
-	</td>
-	</tr>
-	</table>
-	</td>
-	</tr>
-	</table>
-</center>
-</form>
-		</td>
-	</tr>
-	<tr> <td width="100%" colspan="3"></td></tr>
+
+//========================================================================
+$tool_content .="
+
+<p><a href=\"group_space.php?userGroupId=$userGroupId\">$langGroupThisSpace</a></p>
+<p><a href=\"../user/user.php\">$langAddTutors</a></p>
+
+<form name= \"groupedit\" method=\"POST\" action=\"".$_SERVER['PHP_SELF']."?edit=yes&userGroupId=$userGroupId\">
+
+<table>
+	<thead>
+		<tr>
+			<th>$langGroupName $myStudentGroup[name]</th>
+			<td><input type=text name=\"name\" size=40 value=\"$tool_content_group_name\"></td>
+		</tr>
+		<tr>
+			<th>$langGroupTutor</th>
+			<td>
+				<select name=\"tutor\">
+				$tool_content_tutor
+				</select>	
+			</td>
+		</tr>
+		<tr>
+			<th>$langMax $langGroupPlacesThis</th>
+			<td><input type=text name=\"maxStudent\" size=2 value=\"$tool_content_max_student\"></td>
+		</tr>
+	</thead>
 </table>
-</body>
-</html>
+<br>
+<table>
+	<thead>
+		<tr>
+			<th>$langGroupDescription $langUncompulsory</th>
+		</tr>
+		<tr>
+			<td><textarea name=\"description\" rows=6 cols=60 wrap=virtual>$tool_content_group_description</textarea></td>
+		</tr>
+	</thead>
+</table>
+<br>
+<table>
+	<thead>
+		<tr>
+			<th>$langNoGroupStudents</th>
+			<th>$langMove</th>
+			<th> $langGroupMembers</th>
+		</tr>
+		<tr>
+			<td>
+				<select name=\"nogroup[]\" size=20 multiple>
+					$tool_content_not_Member
+				</select
+			</td>
+			<td>
+				<input type=\"button\" onClick=\"move(this.form.elements[4],this.form.elements[7])\" value=\"   >>   \">
+				<br>
+				<input type=\"button\" onClick=\"move(this.form.elements[7],this.form.elements[4])\" value=\"   <<   \"></td>
+			<td>
+			
+			<select name=\"ingroup[]\" size=\"20\" multiple>
+				$tool_content_group_members
+			</select>
+			
+			</td>
+		</tr>
+	</thead>
+</table>
+<br>
+
+<input type=submit value=\"$langValidate\"  name=\"modify\" onClick=\"selectAll(this.form.elements[7],true)\">
+<br>
+
+
+";
+//TELOS ROUTINE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+draw($tool_content, 2, 'group', $head_content);
+
+?>
 
 
 

@@ -1,101 +1,100 @@
-<?  
+<?php
 $require_current_course = TRUE;
 
 $langFiles = 'group';
 $require_help = TRUE;
 $helpTopic = 'Group';
-include ('../../include/init.php');
-
+//include ('../../include/init.php');
+include '../../include/baseTheme.php';
 $nameTools = $langGroupProperties;
 $navigation[]= array ("url"=>"group.php", "name"=> $langGroupManagement);
-begin_page();
+//begin_page();
 
-?>
-<tr> 
-<td width="100%" colspan="2">
-<font size="2" face="arial, helvetica">
+$dbname = $_SESSION['dbname'];
+$tool_content = "";
+$tool_content .= <<<tCont
+
 <form method="post" action="group.php">
-<table border="0" width="100%" cellspacing="0" cellpadding="4">
-<tbody>
+<table>
+<thead>
 <tr> 
-<td valign="top" bgcolor="#000066">
-<font size="2" face="arial, helvetica">
-<b><font color="#ffffff"><?= $langGroupProperties ?></font></b>
-</td>
+<th>
+$langGroupProperties
+</th>
 </tr>
-<tr bgcolor="<?= $color2?>">
-<td valign="top">
+</thead>
+<tbody>
+<tr>
+<td>
 
-<?
+tCont;
 $resultProperties=db_query("SELECT id, self_registration, private, forum, document 
-			FROM group_properties WHERE id=1");
+			FROM group_properties WHERE id=1", $dbname);
 while ($myProperties = mysql_fetch_array($resultProperties))
 {
 	if($myProperties['self_registration'])
 	{
-		echo "<input type=checkbox name=\"self_registration\" value=1 checked>";
+		$tool_content .=  "<input type=checkbox name=\"self_registration\" value=1 checked>";
 	}
 	else 
 	{
-		echo "<input type=checkbox name=\"self_registration\" value=1>";
+		$tool_content .=  "<input type=checkbox name=\"self_registration\" value=1>";
 	}
-	echo "$langGroupAllowStudentRegistration</td></tr>
-		<tr bgcolor=\"$color2\">
-		<td valign=top>
-		<p><b>$langGroupTools</b></p>
+	$tool_content .=  "$langGroupAllowStudentRegistration</td></tr>
+		<tr >
+		<td class=\"category\">
+		$langGroupTools
 		</td>
 		</tr>
-		<tr bgcolor=\"$color2\">
-		<td valign=top>";
+		<tr>
+		<td >";
 	if($myProperties['forum'])
 	{
-		echo "<input type=checkbox name=\"forum\" value=1 checked>";
+		$tool_content .=  "<input type=checkbox name=\"forum\" value=1 checked>";
 	}
 	else 
 	{
-		echo "<input type=checkbox name=\"forum\" value=1>";
+		$tool_content .=  "<input type=checkbox name=\"forum\" value=1>";
 	}
-	echo "$langGroupForum&nbsp;&nbsp;&nbsp;";
+	$tool_content .=  "$langGroupForum :";
 	if($myProperties['private'])
 	{
-		echo "<input type=radio name=\"private\" value=1 checked>
+		$tool_content .=  "<input type=radio name=\"private\" value=1 checked>
 		&nbsp;$langPrivate&nbsp;
 		<input type=radio name=\"private\" value=0>
 		&nbsp;$langPublic";
 	}
 	else 
 	{
-		echo "<input type=radio name=\"private\" value=1>
+		$tool_content .=  "<input type=radio name=\"private\" value=1>
 		&nbsp;$langPrivate&nbsp;
 		<input type=radio name=\"private\" value=0 checked>
 		&nbsp;$langPublic";
 	}
-	echo "</td></tr><tr bgcolor=\"$color2\"><td>";
+	$tool_content .=  "</td></tr><tr><td>";
 	if($myProperties['document'])
 	{
-		echo "<input type=checkbox name=\"document\" value=1 checked>";
+		$tool_content .=  "<input type=checkbox name=\"document\" value=1 checked>";
 	}
 	else 
 	{
-		echo "<input type=checkbox name=\"document\" value=1>";
+		$tool_content .=  "<input type=checkbox name=\"document\" value=1>";
 	}
-	echo "$langGroupDocument"; 
+	$tool_content .=  "$langGroupDocument"; 
 }
 
-?>
+$tool_content .= <<<tCont2
 	</td></tr>
-	<tr bgcolor="<?= $color2?>">
-	<td valign="top" align="right">
-	<input type="submit" name="properties" value="<?= $langValidate ?>">
-	</td>
-	</tr>
-	</tbody>
+</tbody>
 	</table>
+	<br>
+	<input type="submit" name="properties" value="$langValidate">
+
 </form>
-	</td>
-	</tr>
-	<tr><td width="100%" colspan="3"></td></tr>
-	</tbody>
-</table>
-</body>
-</html>
+
+
+tCont2;
+
+draw($tool_content, 2, 'group');
+
+?>

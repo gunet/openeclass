@@ -1,4 +1,4 @@
-<?
+<?php
 
 // Delete ancient possible other group values
 session_unregister("secretDirectory");
@@ -10,24 +10,35 @@ $require_current_course = TRUE;
 $langFiles = 'group';
 $require_help = TRUE;
 $helpTopic = 'Group';
-include('../../include/init.php');
-
+//include('../../include/init.php');
+include '../../include/baseTheme.php';
 $nameTools = $langGroupSpace;
 $navigation[] = array ("url"=>"group.php", "name"=> $langGroupManagement);
 
-begin_page();
+//begin_page();
+
+
+if(!session_is_registered('userGroupId')){
+//	$userGroupId=$_REQUEST['userGroupId'];
+	$_SESSION['userGroupId'] = $_REQUEST['userGroupId'];
+}
 
 ########################### SQL SELF-REGISTRATION ################################
 
 if(isset($registration) and $statut != 10)
 {
+	 $userGroupId = $_SESSION['userGroupId'];
+//	 echo $userGroupId;
+	 session_unregister('userGroupId');
+//	echo $_REQUEST['userGroupId'];
+//	die();
 	$sqlExist=mysql_query("SELECT id FROM `$dbname`.user_group 
 				WHERE user='$uid' AND team='$userGroupId'");
 				$countExist = mysql_num_rows($sqlExist);
 	if($countExist==0 )
 	{
 		$sqlReg=mysql_query("INSERT INTO `$dbname`.user_group (user, team) VALUES ('$uid', '$userGroupId')");
-		$message="<font color=red>$langGroupNowMember</font>";
+		$message="<font color=red>$langGroupNowMember</font> | ";
 		$regDone=1;
 	}
 }
@@ -62,37 +73,63 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 {
 	$forumId=$myGroup['forumId'];
 
-	echo "&nbsp;</td>
-		</tr><tr bgcolor=\"$color2\"><td colspan=2>
-		<table width=100% cellpadding=0 cellspacing=0 border=0>
-		<tr>
-		<td>
-		<b>$langGroupName<br></b></td>";
-
-	echo "<td align=right valign=top>";
-
+	
 	if ($is_adminOfCourse) 
 	{
-		echo "<a href=\"group_edit.php?userGroupId=$userGroupId\">$langEditGroup</a>";
+		$tool_content .=  "<p><a href=\"group_edit.php?userGroupId=$userGroupId\">$langEditGroup</a> | ";
 
 	}
 	elseif(isset($selfReg) AND ($uid))
 	{
-		echo "<a href=\"$_SERVER[PHP_SELF]?registration=1\">$langRegIntoGroup</a>"; 
+		$tool_content .=  "<p><a href=\"$_SERVER[PHP_SELF]?registration=1\">$langRegIntoGroup</a>"; 
 	}
 	elseif(isset($regDone))
 	{
-		echo "$message";
+		$tool_content .=  "<p>$message";
 	}
-	else
-	{
-		echo "&nbsp;";
-	}
+	
+	$tool_content .= loadGroupTools()."</p>";
+	
+	$tool_content .=  "
+		<table>
+		<thead>
+		<tr>
+		<th>
+			$langGroupName
+		</th>
+		<td>
+			$myGroup[name]
+		</td>
+		</tr>
+		</thead>
+		</table>
+		<br>
+		";
 
-	echo "</td></tr>";
-	echo "<tr><td colspan=2>$myGroup[name]
-		<br><br>
-		<b>$langGroupTutor</b><br>";
+//	$tool_content .=  "<td align=right valign=top>";
+//
+//	if ($is_adminOfCourse) 
+//	{
+//		$tool_content .=  "<a href=\"group_edit.php?userGroupId=$userGroupId\">$langEditGroup</a>";
+//
+//	}
+//	elseif(isset($selfReg) AND ($uid))
+//	{
+//		$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?registration=1\">$langRegIntoGroup</a>"; 
+//	}
+//	elseif(isset($regDone))
+//	{
+//		$tool_content .=  "$message";
+//	}
+//	else
+//	{
+//		$tool_content .=  "&nbsp;";
+//	}
+
+//	$tool_content .= "<table>";
+//	$tool_content .=  "<tr><td colspan=2>$myGroup[name]
+//		<br><br>
+//		<b>$langGroupTutor</b><br>";
 
 	$sqlTutor=mysql_query("SELECT tutor, user_id, nom, prenom, email, forumId 
 					FROM `$mysqlMainDb`.user, student_group
@@ -102,79 +139,94 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 
 	if ($countTutor==0)
 	{
-		echo "$langGroupNoTutor<br><br>";	
+		$tool_content_tutor .=  "$langGroupNoTutor";	
 	}
 	else 
 	{
 		while ($myTutor = mysql_fetch_array($sqlTutor))
 		{
-			echo "$myTutor[nom] $myTutor[prenom] 
-				<a href=mailto:$myTutor[email]>$myTutor[email]</a><br><br>";
+			$tool_content_tutor .=  "$myTutor[nom] $myTutor[prenom] 
+				<a href=mailto:$myTutor[email]>$myTutor[email]</a>";
 		}	// while tutor
 
 	}	// else
 
-	echo "<b>$langGroupDescription</b><br>";
+	$tool_content .=  "
+		<table>
+		<thead>
+		<tr>
+		<th>
+			$langGroupTutor
+		</th>
+		<td>
+			$tool_content_tutor
+		</td>
+		</tr>
+		</thead>
+		</table>
+		<br>
+		";
+	
+//	$tool_content .=  "<table><b>$langGroupDescription</b><br>";
 
 	// Show 'none' if no description
 	$countDescription=strlen ($myGroup['description']);
 	if(($countDescription <= 3))
 	{
-		echo "$langGroupNone<br><br>";
+		$tool_content_description .=  "$langGroupNone";
 	}
 	else
 	{
-		echo "$myGroup[description]<br><br>";
+		$tool_content_description .=  "$myGroup[description]";
 	}	// else
+	
+	$tool_content .=  "
+		<table>
+		<thead>
+		<tr>
+		<th>
+			$langGroupDescription
+		</th>
+		<td>
+			$tool_content_description
+		</td>
+		</tr>
+		</thead>
+		</table>
+		<br>
+		";
 }	// while loop
 
-echo "</td></tr>";
-
-###################### TOOLS #############################
-
-// Vars needed to determine group File Manager and group Forum
-// They are unregistered when opening group.php once again.
-
-session_register("secretDirectory");
-session_register("userGroupId");
-session_register("forumId");
-
-echo "<tr>";
-
-if(isset($selfReg))
-{
-	echo "<td>&nbsp;</td>";
-}
-else
-{
-	echo "<td valign=\"top\"><b>$langTools</b><br>";
-
-	$resultProperties=mysql_query("SELECT id, self_registration, private, forum, document 
-					FROM group_properties WHERE id=1");
-	while ($myProperties = mysql_fetch_array($resultProperties))
-	{
-		// Drive members into their own forum
-		if($myProperties['forum']==1){
-			echo "<a href=\"../phpbb/viewforum.php?forum=$forumId\">$langForums</a>";
-		}
-		echo "<br>";
-
-		// Drive members into their own File Manager
-		if($myProperties['document']==1){
-			echo "<a href=\"document.php?userGroupId=$userGroupId\">$langDocuments</a>";
-		}
-	}	// while loop
-
-if ($is_adminOfCourse)
-{
-	echo "<br>";
-	echo "<a href=\"group_email.php?userGroupId=$userGroupId\">$langEmailGroup</a>";
-}
-	echo "</td>";
-}
 
 ################ MEMBERS ################################
-echo "<td valign=\"top\" align=\"left\"><b>$langGroupMembers</b>&nbsp;&nbsp;<br>"; 
+
+	$tool_content .=  "
+	<br>
+		<table>
+		<thead>
+		<tr>
+		<th colspan=3>
+			$langGroupMembers
+		</th>
+		</tr>
+		<tr>
+		<th>
+			 $langNameSurname
+		</th>
+		<th>
+			$langAM
+		</th>
+		<th>
+			$langEmail
+		</th>
+		</tr>
+		
+			
+
+		";
+//$tool_content .=  "<td valign=\"top\" align=\"left\"><b>$langGroupMembers</b>&nbsp;&nbsp;<br>"; 
+
+
 
 $resultMember=mysql_query("SELECT nom, prenom, email, am
 			FROM `$mysqlMainDb`.user, user_group 
@@ -184,25 +236,91 @@ $countMember = mysql_num_rows($resultMember);
 
 if(($countMember==0))
 {
-	echo "$langGroupNoneMasc<br><br>";
+	$tool_content .=  "<td colspan=3>$langGroupNoneMasc</td>";
 }
 else
 {
 	while ($myMember = mysql_fetch_array($resultMember))
-	{
-		echo "$myMember[prenom] $myMember[nom]";
+	{	
+		$tool_content .= "<tr>";
+		$tool_content .= "<td>";
+		$tool_content .=  "$myMember[prenom] $myMember[nom]";
+		$tool_content .= "</td>";
+		$tool_content .= "<td>";
 		if (!empty($myMember['am'])) {
-			echo " ($myMember[am])";
+			$tool_content .=  "$myMember[am]";
+		} else {
+			$tool_content .= "-";
 		}
-		echo ", <a href=mailto:$myMember[email]>$myMember[email]</a><br>";
+		$tool_content .= "</td>";
+		$tool_content .= "<td>";
+		$tool_content .= "<a href=mailto:$myMember[email]>$myMember[email]</a>";
+		$tool_content .= "</td>";
+		$tool_content .= "</tr>";
 	}	// while loop
 }	// else
+
+$tool_content .= "</tbody>
+		</table>";
+
+
+draw($tool_content, 2, 'group');
+
+
+function loadGroupTools(){
+global $selfReg, $forumId, $langForums, $userGroupId, $langDocuments;
+global $is_adminOfCourse, $userGroupId, $langEmailGroup;
+###################### TOOLS #############################
+
+// Vars needed to determine group File Manager and group Forum
+// They are unregistered when opening group.php once again.
+
+session_register("secretDirectory");
+session_register("userGroupId");
+session_register("forumId");
+
+//$tool_content .=  "<tr>";
+$group_tools = "";
+if(isset($selfReg))
+{
+	$group_tools .=  "&nbsp;</td>";
+}
+else
+{
+//	$tool_content .=  "<td valign=\"top\"><b>$langTools</b><br>";
+
+	$resultProperties=mysql_query("SELECT id, self_registration, private, forum, document 
+					FROM group_properties WHERE id=1");
+	while ($myProperties = mysql_fetch_array($resultProperties))
+	{
+		// Drive members into their own forum
+		if($myProperties['forum']==1){
+			$group_tools .=  "<a href=\"../phpbb/viewforum.php?forum=$forumId\">$langForums</a> | ";
+		}
+//		$tool_content .=  "<br>";
+
+		// Drive members into their own File Manager
+		if($myProperties['document']==1){
+			$group_tools .=  "<a href=\"document.php?userGroupId=$userGroupId\">$langDocuments</a>";
+		}
+		
+		
+	}	// while loop
+
+if ($is_adminOfCourse)
+{
+//	$tool_content .=  "<br>";
+	$group_tools .=  " | <a href=\"group_email.php?userGroupId=$userGroupId\">$langEmailGroup</a>";
+}
+//	$tool_content .=  "</td>";
+}
+$group_tools .= "</p>";
+
+session_unregister("secretDirectory");
+//session_unregister("userGroupId");
+session_unregister("forumId");
+
+return $group_tools;
+}
 ?>
-<br>
-<br>
-	</td></tr></table>
-</td>
-</tr>
-</table>
-</body>
-</html>
+
