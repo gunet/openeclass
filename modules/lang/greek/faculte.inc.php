@@ -1,5 +1,5 @@
 <?
-$langCodeF=Κωδικός;
+$langCodeF="Κωδικός";
 
 $langListFaculte="Κατάλογος Σχολών / Τμημάτων - Ενέργειες";
 $langCodeFaculte1="Κωδικός Σχολής / Τμήματος";
