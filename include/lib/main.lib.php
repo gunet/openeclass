@@ -283,6 +283,26 @@ function check_prof()
 }
 
 
+// ---------------------------------------------------
+// just make sure that the $uid variable isn't faked
+// --------------------------------------------------
+
+function check_uid() {
+
+global $urlServer, $require_valid_uid, $uid;
+
+if (isset($_SESSION['uid']))
+     $uid = $_SESSION['uid'];
+	else
+		unset($uid);
+	
+	if ($require_valid_uid and !isset($uid)) {
+		 header("Location: $urlServer");
+		 exit;
+	}
+																
+}
+
 // Convert HTML to plain text
 
 function html2text ($string)
@@ -364,52 +384,6 @@ if (version_compare("4.1", $ver) <= 0)
 	return true;
 else
 	return false;
-}
-
-
-// -------------------------------------------------------
-// Below there are some function adapted from dokeos
-// -------------------------------------------------------
-
-function api_display_message($message)
-{
-        ?>
-                <div align="center">
-                <table border="0" cellspacing="0" cellpadding="4" bgcolor="#FFCC00">
-                <tr>
-                <td>
-                <?=  $message ?>
-                </td>
-                </tr>
-                </table>
-                </div>
-        <?php
-}
-
-
-
-function shorten($input, $length) {
-        if ($length=='') { $length=15; }
-        if (strlen($input)>$length)
-        {
-                $output=substr($input,0,$length-1);
-                $output.="...";
-        }
-        else
-        {
-                $output=$input;
-        }
-        return $output;
-}
-
-
-function api_session_unregister($variable)
-{
-        unset($GLOBALS[$variable]);
-
-        session_unregister($variable);
-
-        $_SESSION[$variable]=null;
 }
 
 

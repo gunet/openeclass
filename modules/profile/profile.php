@@ -42,7 +42,7 @@ $helpTopic = 'Profile';
 include ('../../include/init.php');
 
 $require_valid_uid = TRUE;
-include "../../include/check_uid.php";
+check_uid();
 
 $nameTools = $langModifProfile;
 
