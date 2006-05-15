@@ -6,7 +6,7 @@
       | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
       +----------------------------------------------------------------------+
       |   $Id$     |
-	  |   English Translation                                                |
+      |   English Translation                                                |
       +----------------------------------------------------------------------+
       |   This program is free software; you can redistribute it and/or      |
       |   modify it under the terms of the GNU General Public License        |
@@ -46,7 +46,7 @@ $langEx="e.g. <i>History of Literature</i>";
 $langFac="Category";
 $langDivision = "Division";
 $langDescription = "Description";
-$langTargetFac="This is the faculty, department or school where the course is delivered"; 
+$langTargetFac="This is the faculty, department or school where the course is delivered";
 $langCode="Course code";
 $langMax="max. 12 characters, e.g. <i>ROM2121</i>";
 $langDoubt="If you doubt on your course's code, consult, ";
@@ -100,6 +100,7 @@ $langModifyInfo="Modify course info";
 $langDropBox = "DropBox";
 $langLearnPath = "Learning Path";
 $langToolManagement = "Tool management";
+$langUsage ="Usage statistics";
 
 
 // Other SQL tables
@@ -123,4 +124,5 @@ $langCreateCourseGroups="Groups";
 $langCatagoryMain="Main";
 $langCatagoryGroup="Groups forums";
 $langChat ="Chat";
+
 ?>

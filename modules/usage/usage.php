@@ -82,7 +82,7 @@ require_once "form.php";
 
 // echo $tool_content;
 
-draw($tool_content, 2, 'usage');
+draw($tool_content, 2, '', $local_head, '');
 
 //end_page();
 ?>
