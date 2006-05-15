@@ -49,7 +49,7 @@ include("../../include/init.php");
 
 $nameTools = $langCoursesLabel;
 
-@include('../auth/check_guest.inc');
+check_guest();
 
 $icons = array(
 	2 => "<img src=\"../../images/gunet/OpenCourse.gif\" alt=\"\">",

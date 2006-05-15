@@ -46,7 +46,7 @@ check_uid();
 
 $nameTools = $langModifProfile;
 
-include('../auth/check_guest.inc');
+check_guest();
 
 begin_page();
 

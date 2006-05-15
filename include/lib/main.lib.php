@@ -261,6 +261,27 @@ function check_admin()
         }
 }
 
+
+// ------------------------------------------
+// function to check if user is a guest user
+// ------------------------------------------
+
+function check_guest() {
+	global $mysqlMainDb, $uid;
+
+	$res = db_query("SELECT statut FROM user WHERE user_id = '$uid'", $mysqlMainDb);
+	$g = mysql_fetch_row($res);
+
+	if ($g[0] == 10) {
+      echo "<center><br><br><b>Χώρος Ελεγχόμενης Πρόσβασης</b><br><br><br>
+		  <font face=\"arial, helvetica\" size=2>Ο λογαριασμός Επισκέπτη που έχετε δεν σας δίνει αυτό το δικαίωμα.<br>
+			Επικοινωνήστε με τον διδάσκοντα του μαθήματος για την απόκτηση λογαριασμού κανονικού χρήστη.<br>
+			Επιστροφή στην <a href=\"../../index.php\">αρχική σελίδα</a><br>
+			</center>";
+			exit();
+	}																																																				
+}
+
 // ---------------------------------------------------------------------
 // function to check that we are really a professor (and not fake!). 
 // It is used in various scripts 
