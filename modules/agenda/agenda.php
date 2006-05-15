@@ -143,7 +143,10 @@ if ($is_adminOfCourse) {
 	}
 	
 	//TODO: add this if logic as it was in the old system
-// if (isset($id)) echo $id 
+ if (!isset($id)) {
+ 	$id="";
+ }
+ 
 $tool_content .= <<<tContentForm
 
 
@@ -249,6 +252,10 @@ $tool_content .= "
 	</thead>	
 	</table><br>";
 	
+	if (!isset($contenu)){
+		$contenu="";
+	}
+	
 	$tool_content .= "
 	<table width = \"99%\">
 	<thead>
@@ -259,7 +266,7 @@ $tool_content .= "
 	<tbody>
 		<tr>
 			<td colspan=\"6\"> 
-				<textarea id='ta' name='contenu' value='$contenu' rows='20' cols='78'>".@$contenu."</textarea>
+				<textarea id='ta' name='contenu' value='$contenu' rows='20' cols='78'>".$contenu."</textarea>
 			</td></tr>
 	</tbody>
 </table>		
