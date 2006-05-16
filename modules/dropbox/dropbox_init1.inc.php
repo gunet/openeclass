@@ -40,11 +40,12 @@ $langFiles = "dropbox";
 $require_help = TRUE;
 $helpTopic = 'Dropbox';
 
-include ('../../include/init.php');
-
+//include ('../../include/init.php');
+include_once '../../include/baseTheme.php';
+$tool_content = "";
 // javascript functions
-
-$local_head ='<script>
+//$local_head
+$head_content ='<script>
                 function confirmation (name) {
                 if (confirm("'.$dropbox_lang['confirmDelete1'].'" + name + "'.$dropbox_lang['confirmDelete2'].'" )) {
                         return true;

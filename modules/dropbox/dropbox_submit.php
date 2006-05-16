@@ -40,7 +40,7 @@
 require_once("dropbox_init1.inc.php");
 
 $nameTools = $dropbox_lang["dropbox"];
-begin_page();
+//begin_page();
 
 /**
  * ========================================
@@ -75,15 +75,13 @@ if (isset($_SESSION["dropbox_uniqueid"]) && isset($_GET["dropbox_unid"]) && $dro
 
     header("Location: $mypath");
 
-	exit();
+//	exit();
 }
 
 $dropbox_uniqueid = $dropbox_unid;
 session_register("dropbox_uniqueid");
 
-echo '<br><br>';  
 require_once("dropbox_class.inc.php");
-
 
 
 /**
@@ -164,7 +162,7 @@ if (isset($_POST["submitWork"]))
      * --------------------------------------
      */
     if (!$error)
-    {
+    {$cwd = getcwd();
 	if (is_dir($dropbox_cnf["sysPath"]))
 		$dropbox_space = dir_total_space($dropbox_cnf["sysPath"]);
 	$dropbox_filename = $_FILES['file']['name'];
@@ -184,6 +182,7 @@ if (isset($_POST["submitWork"]))
 
         if (!$error)
         { 
+        	
             // Try to add an extension to the file if it hasn't got one
             $dropbox_filename = add_ext_on_mime( $dropbox_filename); 
             // Replace dangerous characters
@@ -256,6 +255,7 @@ if (isset($_POST["submitWork"]))
 		new Dropbox_SentWork($uid, $dropbox_title, $_POST['description'], $_POST['authors'], $dropbox_filename, $dropbox_filesize, $newWorkRecipients);
         	}
         }
+        chdir ($cwd);
     } //end if(!$error)
 	
 	
@@ -266,26 +266,28 @@ if (isset($_POST["submitWork"]))
      */
     if (!$error)
     {
-		echo $dropbox_lang["docAdd"];
-		echo "<br><br>";
+    	$tool_content .=  "<table><thead><tr><th>";
+    	$tool_content .=  $dropbox_lang["docAdd"];
+    	$tool_content .=  "</th></tr></thead></table>";
+		$tool_content .=  "<br>";
 		if (isset($origin))  {
-			echo "<a href='index.php?origin=$origin'>".$dropbox_lang['backList']."</a>";
-			echo "<br>";
+			$tool_content .=  "<p><a href='index.php?origin=$origin'>".$dropbox_lang['backList']."</a></p>";
+			$tool_content .=  "<br>";
 		} else { 
-			echo "<a href='index.php'>".$dropbox_lang['backList']."</a><br>";
+			$tool_content .=  "<p><a href='index.php'>".$dropbox_lang['backList']."</a><br></p>";
 		}
     }
 
     else
     {
-	echo "<b><font color='#FF0000'>".$errormsg."</font></b><br><br>";
+	$tool_content .=  "<b><font color='#FF0000'>".$errormsg."</font></b><br><br>";
 	if (isset($origin))
-		echo "<a href='index.php?origin=$origin'>".$dropbox_lang['backList']."</a>";
+		$tool_content .=  "<a href='index.php?origin=$origin'>".$dropbox_lang['backList']."</a>";
 	else 
-		echo "<a href='index.php'>".$dropbox_lang['backList']."</a><br>";
+		$tool_content .=  "<a href='index.php'>".$dropbox_lang['backList']."</a><br>";
 
     }
-    exit();
+//    exit();
 } 
 
 
@@ -510,6 +512,8 @@ if (isset($_GET['mailingIndex']))  // examine or send
 			{
 		        $errormsg .= '<br>' . $dropbox_lang["mailingNotYetSent"] . '<br>';
 			}
+			
+			
         }
     }
     else
@@ -525,21 +529,21 @@ if (isset($_GET['mailingIndex']))  // examine or send
      */
     if ($error)
     {
-        ?>
-		<b><font color="#FF0000"><?=$errormsg?></font></b><br><br>
-		<a href="index.php<?php echo "?origin=$origin"; ?>"><?=$dropbox_lang["backList"]?></a><br>
-		<?php
+        $tool_content.="
+		<b><font color=\"#FF0000\">$errormsg</font></b><br><br>
+		<a href=\"index.php?origin=$origin\">".$dropbox_lang["backList"]."></a><br>
+		";
     }
 
     else
     {
-        ?>
-		<?=$errormsg?><br><br>
-		<a href="index.php<?php echo "?origin=$origin"; ?>"><?=$dropbox_lang["backList"]?></a><br>
-		<?php
+        $tool_content .= "
+		$errormsg<br><br>
+		<a href=\"index.php?origin=$origin\">".$dropbox_lang["backList"]."</a><br>
+		";
     }
 
-    exit();
+//    exit();
 }
 
 
@@ -554,6 +558,7 @@ if (isset($_GET['mailingIndex']))  // examine or send
  */
 if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent']))
 {
+	
 	if (isset($_GET['mailing']))  // RH
 	{
 		checkUserOwnsThisMailing($_GET['mailing'], $uid);
@@ -610,13 +615,16 @@ if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent']))
      * ========================================
      */
 
-	echo $dropbox_lang["fileDeleted"];
-	echo "<br><br>";
+	$tool_content .=  $dropbox_lang["fileDeleted"];
+	$tool_content .=  "<br><br>";
 	if (isset($origin)) 
-		echo "<a href='index.php?origin=$origin'>".$dropbox_lang['backList']."</a><br>";
+		$tool_content .=  "<a href='index.php?origin=$origin'>".$dropbox_lang['backList']."</a><br>";
 	else 
-		echo "<a href='index.php'>".$dropbox_lang['backList']."</a><br>";
-    exit();
+		$tool_content .=  "<a href='index.php'>".$dropbox_lang['backList']."</a><br>";
+
+//    exit();
 }
 
+
+draw($tool_content, 2, 'dropbox', $head_content);
 ?>
