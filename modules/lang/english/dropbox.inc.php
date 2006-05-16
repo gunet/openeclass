@@ -97,6 +97,11 @@ $dropbox_lang['author'] = "author";
 $dropbox_lang['sender'] = "sender";
 $dropbox_lang['recipient'] = "recipient";
 
+$dropbox_lang['file'] = "File";
+$dropbox_lang['fileSize'] = "Size";
+$dropbox_lang['date'] = "Date";
+$dropbox_lang['col_recipient'] = "Recipient";
+
 /**
  * Feedback variables
  */

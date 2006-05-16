@@ -93,6 +93,12 @@ $dropbox_lang['title'] = "τον τίτλο";
 $dropbox_lang['size'] = "το μέγεθος του αρχείου";
 $dropbox_lang['author'] = "τον διδάσκοντα";
 $dropbox_lang['sender'] = "τον αποστολέα";
+
+$dropbox_lang['file'] = "Αρχείο";
+$dropbox_lang['fileSize'] = "Μέγεθος";
+$dropbox_lang['date'] = "Ημερομηνία";
+$dropbox_lang['col_recipient'] = "Παραλήπτης";
+
 $dropbox_lang['recipient'] = "τον παραλήπτη";
 
 /**
