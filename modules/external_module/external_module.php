@@ -60,13 +60,25 @@ echo "<tr><td><font face=\"arial, helvetica\" size=\"2\">$langSubTitle</td>
 				<a href=\"../../$currentCourseID/index.php\">$langHome</a></td>";
 			exit();
 		}
-		mysql_query("INSERT INTO accueil VALUES ('NULL',
+		
+		$sql = 'SELECT MAX(`id`) FROM `accueil` ';
+		$res = mysql_query($sql);
+		while ($maxID = mysql_fetch_row($res)) {
+			$mID = $maxID[0];
+		}
+		echo $mID . "  ";
+		if($mID<101) $mID = 101;
+		else $mID = $mID+1;
+		echo $mID;
+		
+		mysql_query("INSERT INTO accueil VALUES ($mID,
 					'$name_link',
 					'$link \"target=_blank',
 					'../../../images/travaux.png',
 					'1',
 					'0',
-					'$link'
+					'$link',
+					''
 					)");
 		echo "<tr><td><font face=\"arial, helvetica\" size=\"2\">
 			$langAdded
