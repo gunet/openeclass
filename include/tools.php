@@ -387,7 +387,10 @@ function lessonToolsMenu(){
 	$sideMenuID = array();
 
 	array_push($sideMenuSubGroup, 'Energa Ergaleia');//TODO: add lang
+//	define('MODULE_ID_AGENDA', 4);
 	while ($toolsRow = mysql_fetch_array($result)) {
+
+		define($toolsRow["define_var"], $toolsRow["id"]);
 
 		array_push($sideMenuText, $toolsRow["rubrique"]);
 		array_push($sideMenuLink, $toolsRow["lien"]);
@@ -430,6 +433,8 @@ function lessonToolsMenu(){
 		array_push($sideMenuSubGroup, 'Ergaleia Diaxeirishs');//TODO: add lang
 		while ($toolsRow = mysql_fetch_array($result)) {
 
+			define($toolsRow["define_var"], $toolsRow["id"]);
+			
 			array_push($sideMenuText, $toolsRow["rubrique"]);
 			array_push($sideMenuLink, $toolsRow["lien"]);
 			array_push($sideMenuID, $toolsRow["id"]);
@@ -451,6 +456,8 @@ function lessonToolsMenu(){
 		array_push($sideMenuSubGroup, 'Anenerga ergaleia');//TODO: add lang
 		
 		while ($toolsRow = mysql_fetch_array($result)) {
+			
+			define($toolsRow["define_var"], $toolsRow["id"]);
 
 			array_push($sideMenuText, $toolsRow["rubrique"]);
 			array_push($sideMenuLink, $toolsRow["lien"]);
@@ -481,6 +488,8 @@ function lessonToolsMenu(){
 		array_push($sideMenuSubGroup, 'Ergaleia Diaxeiristh');//TODO: add lang
 		while ($toolsRow = mysql_fetch_array($result)) {
 
+			define($toolsRow["define_var"], $toolsRow["id"]);
+			
 			array_push($sideMenuText, $toolsRow["rubrique"]);
 			array_push($sideMenuLink, $toolsRow["lien"]);
 			array_push($sideMenuID, $toolsRow["id"]);
