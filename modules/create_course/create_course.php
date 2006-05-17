@@ -187,6 +187,8 @@ echo "</select></td></tr>
 ###########################################################################
 
 else {
+
+
     $repertoire = new_code(find_faculty_by_name($faculte));
     $language=$languageCourse;
     @include("../lang/$language/create_course.inc.php");
@@ -234,6 +236,7 @@ else {
         else
             $cdb=mysql_query("CREATE DATABASE `$repertoire`");
         $code=$repertoire;
+
 
 ##############################################################################
 ######## CREATE AND POPULATE TABLES FORUM PHPBB 1.4 www.phpbb.com #######
@@ -1288,8 +1291,10 @@ mysql_query("CREATE TABLE accueil (
                visible tinyint(4),
                admin varchar(200),
                address varchar(120),
-               PRIMARY KEY (id))
-        TYPE=MyISAM DEFAULT CHARSET=greek");
+               define_var VARCHAR(50),
+               PRIMARY KEY (id)) 
+		TYPE=MyISAM DEFAULT CHARSET=greek");
+
 } else {
 
 mysql_query("CREATE TABLE accueil (
@@ -1299,19 +1304,25 @@ mysql_query("CREATE TABLE accueil (
                visible tinyint(4),
                admin varchar(200),
                address varchar(120),
-               PRIMARY KEY (id))
-        TYPE=MyISAM");
+               define_var VARCHAR(50),
+               PRIMARY KEY (id)) 
+		TYPE=MyISAM");
+
+
 }
+
 
     // Content accueil (homepage) Table
 mysql_query("INSERT INTO accueil VALUES (
-    '1',
-    '$langAgenda',
-    '../../modules/agenda/agenda.php',
-    '../../../images/agenda.png',
-    '1',
-    '0',
-    '../../../images/pastillegris.png')");
+
+	'1',
+	'$langAgenda',
+	'../../modules/agenda/agenda.php',
+	'../../../images/agenda.png',
+	'1',
+	'0',
+	'../../../images/pastillegris.png',
+	'MODULE_ID_AGENDA')");
 
     mysql_query("INSERT INTO accueil VALUES (
                '2',
@@ -1320,7 +1331,8 @@ mysql_query("INSERT INTO accueil VALUES (
                '../../../images/liens.png',
                '1',
                '0',
-               '../../../images/pastillegris.png'
+               '../../../images/pastillegris.png',
+               'MODULE_ID_LINKS'
                )");
 
     mysql_query("INSERT INTO accueil VALUES (
@@ -1330,10 +1342,13 @@ mysql_query("INSERT INTO accueil VALUES (
                '../../../images/documents.png',
                '1',
                '0',
-               '../../../images/pastillegris.png'
+               '../../../images/pastillegris.png',
+               'MODULE_ID_DOCS'
                )");
 
-    mysql_query("INSERT INTO accueil VALUES (
+	//videos >> to be removed!
+	mysql_query("INSERT INTO accueil VALUES (
+
                '4',
                '$langVideo',
                '../../modules/video/video.php',
@@ -1350,7 +1365,8 @@ mysql_query("INSERT INTO accueil VALUES (
                '../../../images/works.png',
                '0',
                '0',
-               '../../../images/pastillegris.png'
+               '../../../images/pastillegris.png',
+               'MODULE_ID_ASSIGN'
                )");
 
     mysql_query("INSERT INTO accueil VALUES (
@@ -1360,7 +1376,8 @@ mysql_query("INSERT INTO accueil VALUES (
                '../../../images/videos.png',
                '0',
                '0',
-               '../../../images/pastillegris.png'
+               '../../../images/pastillegris.png',
+               'MODULE_ID_VIDEO'
                )");
 
     mysql_query("INSERT INTO accueil VALUES (
@@ -1370,18 +1387,22 @@ mysql_query("INSERT INTO accueil VALUES (
                '../../../images/valves.png',
                '1',
                '0',
-               '../../../images/pastillegris.png'
+               '../../../images/pastillegris.png',
+               'MODULE_ID_ANNOUNCE'
                )");
 
-    mysql_query("INSERT INTO accueil VALUES (
-        '8',
-        '$langUsers',
-        '../../modules/user/user.php',
-        '../../../images/membres.png',
-        '0',
-        '0',
-        '../../../images/pastillegris.png'
-        )");
+
+	mysql_query("INSERT INTO accueil VALUES (
+		'8',
+		'$langUsers',
+		'../../modules/user/user.php',
+		'../../../images/membres.png',
+		'0',
+		'0',
+		'../../../images/pastillegris.png',
+		'MODULE_ID_USERS'
+		)"); 
+
 
     mysql_query("INSERT INTO accueil VALUES (
                '9',
@@ -1390,7 +1411,8 @@ mysql_query("INSERT INTO accueil VALUES (
                '../../../images/forum.png',
                '0',
                '0',
-               '../../../images/pastillegris.png'
+               '../../../images/pastillegris.png',
+               'MODULE_ID_FORUM'
                )");
 
     mysql_query("INSERT INTO accueil VALUES (
@@ -1400,28 +1422,34 @@ mysql_query("INSERT INTO accueil VALUES (
                '../../../images/quiz.png',
                '0',
                '0',
-               '../../../images/pastillegris.png'
+               '../../../images/pastillegris.png',
+               'MODULE_ID_EXERCISE'
                )");
 
-    mysql_query("INSERT INTO accueil VALUES (
-        '15',
-        '$langGroups',
-        '../../modules/group/group.php',
-        '../../../images/group.png',
-        '0',
-        '0',
-        '../../../images/pastillegris.png'
-        )");
 
-    mysql_query("INSERT INTO accueil VALUES (
-        '16',
-        '$langDropBox',
-        '../../modules/dropbox/index.php',
-        '../../../images/dropbox.png',
-        '0',
-        '0',
-        '../../../images/pastillegris.png'
-        )");
+	mysql_query("INSERT INTO accueil VALUES (
+		'15',
+		'$langGroups',
+		'../../modules/group/group.php',
+		'../../../images/group.png',
+		'0',
+		'0',
+		'../../../images/pastillegris.png',
+		'MODULE_ID_GROUPS'
+		)"); 
+
+	mysql_query("INSERT INTO accueil VALUES (
+		'16',
+		'$langDropBox',
+		'../../modules/dropbox/index.php',
+		'../../../images/dropbox.png',
+		'0',
+		'0',
+		'../../../images/pastillegris.png',
+		'MODULE_ID_DROPBOX'
+		)"); 
+
+
 
 #####################ACCUEIL - PROF ONLY ######################################
 
@@ -1432,7 +1460,8 @@ mysql_query("INSERT INTO accueil VALUES (
                '../../../images/statistiques.png',
                '0',
                '1',
-               ''
+               '',
+               'MODULE_ID_STAT'
                )");
 
                 mysql_query("INSERT INTO accueil VALUES (
@@ -1442,7 +1471,8 @@ mysql_query("INSERT INTO accueil VALUES (
                '../../../images/page.png',
                '0',
                '1',
-               ''
+               '',
+               'MODULE_ID_IMPORT'
                )");
 
     mysql_query("INSERT INTO accueil VALUES (
@@ -1452,7 +1482,8 @@ mysql_query("INSERT INTO accueil VALUES (
                '../../../images/npage.png',
                '0',
                '1',
-               ''
+               '',
+               'MODULE_ID_EXTERNAL'
                )");
 
     mysql_query("INSERT INTO accueil VALUES (
@@ -1462,17 +1493,20 @@ mysql_query("INSERT INTO accueil VALUES (
                '../../../images/referencement.png',
                '0',
                '1',
-               ''
+               '',
+               'MODULE_ID_COURSEINFO'
                )");
 
-    mysql_query("INSERT INTO accueil VALUES (
-    '19',
-    '$langChat',
-    '../../modules/chat/chat.php',
-    '../../../images/forum.png',
-    '0',
-    '0',
-    '../../../images/pastillegris.png')");
+	mysql_query("INSERT INTO accueil VALUES (
+	'19',
+	'$langChat',
+	'../../modules/chat/chat.php',
+	'../../../images/forum.png',
+	'0',
+	'0',
+	'../../../images/pastillegris.png',
+	'MODULE_ID_CHAT'
+	)");
 
     mysql_query("INSERT INTO accueil VALUES (
                '20',
@@ -1481,7 +1515,8 @@ mysql_query("INSERT INTO accueil VALUES (
                '../../../images/info.png',
                '1',
                '0',
-               '../../../images/pastillegris.png'
+               '../../../images/pastillegris.png',
+               'MODULE_ID_DESCRIPTION'
                )");
 
     mysql_query("INSERT INTO accueil VALUES (
@@ -1491,7 +1526,10 @@ mysql_query("INSERT INTO accueil VALUES (
                '../../../images/learnpath.gif',
                '1',
                '0',
-               '../../../images/pastillegris.png')");
+               '../../../images/pastillegris.png',
+               'MODULE_ID_LP'
+               )");
+    
 
     mysql_query("INSERT INTO accueil VALUES (
                '22',
@@ -1500,7 +1538,10 @@ mysql_query("INSERT INTO accueil VALUES (
                '../../../images/course_tools.gif',
                '0',
                '1',
-               '../../../images/pastillegris.png')");
+               '../../../images/pastillegris.png',
+               'MODULE_ID_TOOLADMIN'
+               )");
+
     mysql_query("INSERT INTO accueil VALUES (
                '23',
                '$langUsage',
@@ -1508,7 +1549,10 @@ mysql_query("INSERT INTO accueil VALUES (
                '../../../images/usage.gif',
                '0',
                '1',
-               '../../../images/pastillegris.png')");
+               '../../../images/pastillegris.png',
+               ''
+               )");
+
 
 if (mysql_version())   {
 
@@ -2240,6 +2284,7 @@ mysql_query("INSERT INTO cours_faculte VALUES ( '', '$faculte', '$repertoire')")
 ###########################################################################
 ################ CREATE DIRECTORIES #######################################
 ###########################################################################
+
     umask(0);
     mkdir("../../courses/$repertoire", 0777);
     mkdir("../../courses/$repertoire/image", 0777);
@@ -2250,6 +2295,7 @@ mysql_query("INSERT INTO cours_faculte VALUES ( '', '$faculte', '$repertoire')")
     mkdir("../../courses/$repertoire/group", 0777);
     mkdir("../../courses/$repertoire/temp", 0777);
     mkdir("../../courses/$repertoire/scormPackages", 0777);
+
 
     $titou='$dbname';
 
