@@ -326,8 +326,25 @@ if (!mysql_table_exists($code[0], 'lp_user_module_progress'))  {
             ) ", $code[0]); //TYPE=MyISAM COMMENT='Record the last known status of the user in the course';
 }
 
+	//===============================================================================================
+	//BEGIN: Move all external links to id > 100, add column define_var
+	//===============================================================================================
+
+	if (db_query("	UPDATE `accueil`
+					SET `id` = `id` + 80
+					WHERE `id`>20")) {
+	echo "<p>All external (id >= 20)links moved to id >=101</p>";
+					} else {
+						echo "<p>Error: Could not move external links</p>";
+						$GLOBALS['errors']++;
+						die();
+					}
+	//===============================================================================================
+	//END: Move all external links to id > 100
+	//===============================================================================================
+
 db_query("INSERT IGNORE INTO accueil VALUES (
-				'21',
+				21,
 				'$langLearnPath',
 				'../../modules/learnPath/learningPathList.php',
 				'../../../images/learnpath.gif',
@@ -340,7 +357,7 @@ db_query("INSERT IGNORE INTO accueil VALUES (
 //for tool management
 $langToolManagement = "Διαχείριση εργαλείων";
 db_query("INSERT IGNORE INTO accueil VALUES (
-				'22',
+				22,
 				'$langToolManagement',
 				'../../modules/course_tools/course_tools.php',
 				'../../../images/course_tools.gif',
@@ -349,6 +366,32 @@ db_query("INSERT IGNORE INTO accueil VALUES (
 				'../../../images/pastillegris.png'
                 )", $code[0]);
 
+//Create new column (define_var)
+					add_field("accueil","define_var", "VARCHAR(50) NOT NULL");
+					echo "<p>Added field <i>define_var</i> to table <i>".$code[0]."accueil</i></p>";
+
+					//set define string vars
+					update_field("accueil", "define_var","MODULE_ID_AGENDA", "id", 		1);
+					update_field("accueil", "define_var","MODULE_ID_LINKS", "id",	 		2);
+					update_field("accueil", "define_var","MODULE_ID_DOCS", "id",	 		3);
+					//id 4 is Video (this tool is to be removed)
+					update_field("accueil", "define_var","MODULE_ID_ASSIGN", "id",		5);
+					update_field("accueil", "define_var","MODULE_ID_VIDEO", "id",	 		6);//vinteoskophmena ma8hmata
+					update_field("accueil", "define_var","MODULE_ID_ANNOUNCE", "id",		7);
+					update_field("accueil", "define_var","MODULE_ID_USERS", "id", 		8);
+					update_field("accueil", "define_var","MODULE_ID_FORUM", "id", 		9);
+					update_field("accueil", "define_var","MODULE_ID_EXERCISE", "id", 		10);
+					update_field("accueil", "define_var","MODULE_ID_STAT", "id", 			11);
+					update_field("accueil", "define_var","MODULE_ID_IMPORT", "id", 		12);
+					update_field("accueil", "define_var","MODULE_ID_EXTERNAL", "id",		13);
+					update_field("accueil", "define_var","MODULE_ID_COURSEINFO", "id",	14);
+					update_field("accueil", "define_var","MODULE_ID_GROUPS", "id", 		15);
+					update_field("accueil", "define_var","MODULE_ID_DROPBOX", "id", 		16);
+
+					update_field("accueil", "define_var","MODULE_ID_CHAT", "id", 			19);
+					update_field("accueil", "define_var","MODULE_ID_DESCRIPTION", "id", 	20);
+					update_field("accueil", "define_var","MODULE_ID_LP", "id", 			21);
+					update_field("accueil", "define_var","MODULE_ID_TOOLADMIN", "id", 	22);
 
 // table accueil
 echo "Διόρθωση εγγραφών του πίνακα accueil<br>";
@@ -398,6 +441,12 @@ echo "<p>Σφάλματα: $errors.";
 echo "<br><center><a href='../index.php'>Επιστροφή</a></center></p>";
 
 end_page();
+
+//function to update a field in a table
+function update_field($table, $field, $field_name, $id_col, $id) {
+	$sql = "UPDATE `$table` SET `$field` = '$field_name' WHERE `$id_col` = $id;";
+	db_query($sql);
+}
 
 // Removes initial part of path from assignment_submit.file_path
 function update_assignment_submit()
