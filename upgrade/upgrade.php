@@ -33,12 +33,12 @@ if (!isset($diskQuotaDropbox)) {
 }
 
 // **************************************
-// 		upgrade eclass main database 
+// 		upgrade eclass main database
 // **************************************
 
 //upgrade queries from 1.2 --> 1.4
 
-if (!mysql_field_exists("$mysqlMainDb", 'user', 'am')) 
+if (!mysql_field_exists("$mysqlMainDb", 'user', 'am'))
 	add_field('user', 'am', "VARCHAR( 20 ) NOT NULL");
 if (mysql_table_exists($mysqlMainDb, 'todo'))
 	db_query("DROP TABLE `todo`");
@@ -61,7 +61,7 @@ if (!mysql_field_exists("$mysqlMainDb",'cours','dropbox_quota'))
 
 
 // *************************************
-// 		upgrade courses databases 
+// 		upgrade courses databases
 // ************************************
 
 
@@ -91,22 +91,22 @@ mysql_select_db($code[0]);
 
 	// upgrade queries from 1.2 --> 1.4
 
-	if (!mysql_field_exists('$code[0]','exercices','type')) 
-		add_field('exercices','type',"TINYINT( 4 ) UNSIGNED DEFAULT '1' NOT NULL AFTER `description`");	
-	if (!mysql_field_exists('$code[0]','exercices','random')) 
-		add_field('exercices','random',"SMALLINT( 6 ) DEFAULT '0' NOT NULL AFTER `type`");	
-	if (!mysql_field_exists('$code[0]','reponses','ponderation')) 
-		add_field('reponses','ponderation',"SMALLINT( 5 ) NOT NULL AFTER `comment`");	
+	if (!mysql_field_exists('$code[0]','exercices','type'))
+		add_field('exercices','type',"TINYINT( 4 ) UNSIGNED DEFAULT '1' NOT NULL AFTER `description`");
+	if (!mysql_field_exists('$code[0]','exercices','random'))
+		add_field('exercices','random',"SMALLINT( 6 ) DEFAULT '0' NOT NULL AFTER `type`");
+	if (!mysql_field_exists('$code[0]','reponses','ponderation'))
+		add_field('reponses','ponderation',"SMALLINT( 5 ) NOT NULL AFTER `comment`");
 
 	$s = db_query("SELECT type FROM questions",$code[0]);
 	while ($f = mysql_fetch_row($s)) {
-		if (empty($f[0]))  {	
+		if (empty($f[0]))  {
 			if (db_query("UPDATE `questions` SET type=1",$code[0]))  {
 				echo "Πίνακας questions: $OK<br>";
 			} else {
 				echo "Πίνακας questions: $BAD<br>";
 				$errors++;
-			}	
+			}
 		}
 	} // while
 
@@ -188,7 +188,7 @@ if (!mysql_table_exists($code[0], 'link_categories'))  {
    		`categoryname` varchar(255) default NULL,
   		`description` text,
 		  `ordre` mediumint(8) NOT NULL default '0',
-		  PRIMARY KEY  (`id`))",$code[0]);	
+		  PRIMARY KEY  (`id`))",$code[0]);
 	}
 
 // correct link entries to correctly appear in a blank window
@@ -223,7 +223,7 @@ if (!mysql_table_exists($code[0], 'dropbox_file'))  {
   		uploadDate datetime NOT NULL default '0000-00-00 00:00:00',
 	  	lastUploadDate datetime NOT NULL default '0000-00-00 00:00:00',
   		PRIMARY KEY  (id),
-  		UNIQUE KEY UN_filename (filename))", $code[0]);	
+  		UNIQUE KEY UN_filename (filename))", $code[0]);
 }
 
 if (!mysql_table_exists($code[0], 'dropbox_person'))  {
@@ -241,7 +241,7 @@ if (!mysql_table_exists($code[0], 'dropbox_post'))  {
 }
 
 db_query("INSERT IGNORE INTO accueil VALUES (
-                '16',
+                16,
                 '$langDropbox',
                 '../../modules/dropbox/index.php',
                 '../../../images/dropbox.png',
@@ -410,7 +410,7 @@ while ($u = mysql_fetch_row($sql))  {
 				$newlink_image = preg_replace('#../claroline/image/#','../../images/',$oldlink_image);
 				$oldlink_address = $u[3];
 				$newlink_address = preg_replace('#../claroline/image/#','../../images/',$oldlink_address);
-			if	(db_query("UPDATE accueil 
+			if	(db_query("UPDATE accueil
 							SET lien='$newlink_lien', image='$newlink_image', address='$newlink_address'
             		WHERE id='$u[0]'")) {
 					echo "Εγγραφή με id $u[0] του πίνακα <b>accueil</b>: $OK<br>";
@@ -419,7 +419,7 @@ while ($u = mysql_fetch_row($sql))  {
 					$errors++;
 				}
 }
-																																				
+
 // table stat_accueil
 $sql = db_query("SELECT id,request FROM stat_accueil");
   while ($u = mysql_fetch_row($sql))  {
@@ -433,7 +433,7 @@ $sql = db_query("SELECT id,request FROM stat_accueil");
 			}
 echo "<br>";
 }
-																																		
+
 echo "</p>\n";
 } // end of do ... while for each course)
 
@@ -501,7 +501,7 @@ function mysql_field_exists($db,$table,$field)
     $fields = db_query("SHOW COLUMNS from $table LIKE '$field'",'$db');
     if (mysql_num_rows($fields) > 0)
     return TRUE;
-    
+
 }
 
 // checks if admin user
@@ -521,9 +521,9 @@ function is_admin($username, $password)
 // error
 function upgrade_failure () {
 	echo "<p><center><h4>Παρουσιάστηκαν κάποια σφάλματα κατά την αναβάθμιση των βάσεων δεδομένων του e-Class!</h4></center></p>";
-	echo "<p><h4>Πιθανόν κάποιο μάθημα να μην δουλεύει τελείως σωστά. Μπορείτε να επικοινωνήστε μαζί 
-	μας στο <a href='mailto:elearn@noc.uoa.gr'>elearn@noc.uoa.gr</a> 
-	περιγράφοντας το πρόβλημα που παρουσιάστηκε και στέλνοντας (αν είναι δυνατόν) 
+	echo "<p><h4>Πιθανόν κάποιο μάθημα να μην δουλεύει τελείως σωστά. Μπορείτε να επικοινωνήστε μαζί
+	μας στο <a href='mailto:elearn@noc.uoa.gr'>elearn@noc.uoa.gr</a>
+	περιγράφοντας το πρόβλημα που παρουσιάστηκε και στέλνοντας (αν είναι δυνατόν)
 	όλα τα μυνήματα που εμφανίστηκαν στην οθόνη σας.</h4>";
 }
 
