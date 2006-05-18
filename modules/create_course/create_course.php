@@ -1292,7 +1292,7 @@ mysql_query("CREATE TABLE accueil (
                admin varchar(200),
                address varchar(120),
                define_var VARCHAR(50),
-               PRIMARY KEY (id)) 
+               PRIMARY KEY (id))
 		TYPE=MyISAM DEFAULT CHARSET=greek");
 
 } else {
@@ -1305,7 +1305,7 @@ mysql_query("CREATE TABLE accueil (
                admin varchar(200),
                address varchar(120),
                define_var VARCHAR(50),
-               PRIMARY KEY (id)) 
+               PRIMARY KEY (id))
 		TYPE=MyISAM");
 
 
@@ -1315,7 +1315,7 @@ mysql_query("CREATE TABLE accueil (
     // Content accueil (homepage) Table
 mysql_query("INSERT INTO accueil VALUES (
 
-	'1',
+	1,
 	'$langAgenda',
 	'../../modules/agenda/agenda.php',
 	'../../../images/agenda.png',
@@ -1325,7 +1325,7 @@ mysql_query("INSERT INTO accueil VALUES (
 	'MODULE_ID_AGENDA')");
 
     mysql_query("INSERT INTO accueil VALUES (
-               '2',
+               2,
                '$langLinks',
                '../../modules/link/link.php',
                '../../../images/liens.png',
@@ -1336,7 +1336,7 @@ mysql_query("INSERT INTO accueil VALUES (
                )");
 
     mysql_query("INSERT INTO accueil VALUES (
-               '3',
+               3,
                '$langDoc',
                '../../modules/document/document.php',
                '../../../images/documents.png',
@@ -1349,7 +1349,7 @@ mysql_query("INSERT INTO accueil VALUES (
 	//videos >> to be removed!
 	mysql_query("INSERT INTO accueil VALUES (
 
-               '4',
+               4,
                '$langVideo',
                '../../modules/video/video.php',
                '../../../images/videos.png',
@@ -1359,7 +1359,7 @@ mysql_query("INSERT INTO accueil VALUES (
                )");
 
            mysql_query("INSERT INTO accueil VALUES (
-               '5',
+               5,
                '$langWorks',
                '../../modules/work/work.php',
                '../../../images/works.png',
@@ -1370,7 +1370,7 @@ mysql_query("INSERT INTO accueil VALUES (
                )");
 
     mysql_query("INSERT INTO accueil VALUES (
-               '6',
+               6,
                '$langVideoLinks',
                '../../modules/video/videolinks.php',
                '../../../images/videos.png',
@@ -1381,7 +1381,7 @@ mysql_query("INSERT INTO accueil VALUES (
                )");
 
     mysql_query("INSERT INTO accueil VALUES (
-               '7',
+               7,
                '$langAnnouncements',
                '../../modules/announcements/announcements.php',
                '../../../images/valves.png',
@@ -1393,7 +1393,7 @@ mysql_query("INSERT INTO accueil VALUES (
 
 
 	mysql_query("INSERT INTO accueil VALUES (
-		'8',
+		8,
 		'$langUsers',
 		'../../modules/user/user.php',
 		'../../../images/membres.png',
@@ -1401,11 +1401,11 @@ mysql_query("INSERT INTO accueil VALUES (
 		'0',
 		'../../../images/pastillegris.png',
 		'MODULE_ID_USERS'
-		)"); 
+		)");
 
 
     mysql_query("INSERT INTO accueil VALUES (
-               '9',
+               9,
                '$langForums',
                '../../modules/phpbb/index.php',
                '../../../images/forum.png',
@@ -1416,7 +1416,7 @@ mysql_query("INSERT INTO accueil VALUES (
                )");
 
     mysql_query("INSERT INTO accueil VALUES (
-               '10',
+               10,
                '$langExercices',
                '../../modules/exercice/exercice.php',
                '../../../images/quiz.png',
@@ -1428,7 +1428,7 @@ mysql_query("INSERT INTO accueil VALUES (
 
 
 	mysql_query("INSERT INTO accueil VALUES (
-		'15',
+		15,
 		'$langGroups',
 		'../../modules/group/group.php',
 		'../../../images/group.png',
@@ -1436,10 +1436,10 @@ mysql_query("INSERT INTO accueil VALUES (
 		'0',
 		'../../../images/pastillegris.png',
 		'MODULE_ID_GROUPS'
-		)"); 
+		)");
 
 	mysql_query("INSERT INTO accueil VALUES (
-		'16',
+		16,
 		'$langDropBox',
 		'../../modules/dropbox/index.php',
 		'../../../images/dropbox.png',
@@ -1447,14 +1447,14 @@ mysql_query("INSERT INTO accueil VALUES (
 		'0',
 		'../../../images/pastillegris.png',
 		'MODULE_ID_DROPBOX'
-		)"); 
+		)");
 
 
 
 #####################ACCUEIL - PROF ONLY ######################################
 
     mysql_query("INSERT INTO accueil VALUES (
-               '11',
+               11,
                '$langStatistics',
                '../../modules/stat/index2.php?table=stat_accueil&reset=0&period=jour',
                '../../../images/statistiques.png',
@@ -1465,7 +1465,7 @@ mysql_query("INSERT INTO accueil VALUES (
                )");
 
                 mysql_query("INSERT INTO accueil VALUES (
-               '12',
+               12,
                '$langAddPageHome',
                '../../modules/import/import.php?',
                '../../../images/page.png',
@@ -1476,7 +1476,7 @@ mysql_query("INSERT INTO accueil VALUES (
                )");
 
     mysql_query("INSERT INTO accueil VALUES (
-               '13',
+               13,
                '$langLinkSite',
                '../../modules/external_module/external_module.php?',
                '../../../images/npage.png',
@@ -1487,7 +1487,7 @@ mysql_query("INSERT INTO accueil VALUES (
                )");
 
     mysql_query("INSERT INTO accueil VALUES (
-               '14',
+               14,
                '$langModifyInfo',
                '../../modules/course_info/infocours.php?',
                '../../../images/referencement.png',
@@ -1498,7 +1498,7 @@ mysql_query("INSERT INTO accueil VALUES (
                )");
 
 	mysql_query("INSERT INTO accueil VALUES (
-	'19',
+	19,
 	'$langChat',
 	'../../modules/chat/chat.php',
 	'../../../images/forum.png',
@@ -1509,7 +1509,7 @@ mysql_query("INSERT INTO accueil VALUES (
 	)");
 
     mysql_query("INSERT INTO accueil VALUES (
-               '20',
+               20,
                '$langCourseDesc',
                '../../modules/course_description/',
                '../../../images/info.png',
@@ -1520,7 +1520,7 @@ mysql_query("INSERT INTO accueil VALUES (
                )");
 
     mysql_query("INSERT INTO accueil VALUES (
-               '21',
+               21,
                '$langLearnPath',
                '../../modules/learnPath/learningPathList.php',
                '../../../images/learnpath.gif',
@@ -1529,10 +1529,10 @@ mysql_query("INSERT INTO accueil VALUES (
                '../../../images/pastillegris.png',
                'MODULE_ID_LP'
                )");
-    
+
 
     mysql_query("INSERT INTO accueil VALUES (
-               '22',
+               22,
                '$langToolManagement',
                '../../modules/course_tools/course_tools.php',
                '../../../images/course_tools.gif',
@@ -1543,7 +1543,7 @@ mysql_query("INSERT INTO accueil VALUES (
                )");
 
     mysql_query("INSERT INTO accueil VALUES (
-               '23',
+               23,
                '$langUsage',
                '../../modules/usage/usage.php',
                '../../../images/usage.gif',
