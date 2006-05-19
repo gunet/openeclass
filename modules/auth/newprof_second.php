@@ -1,42 +1,13 @@
-<?
- /*
-      +----------------------------------------------------------------------+
-      | CLAROLINE version 1.3.0 $Revision$                            |
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
-      +----------------------------------------------------------------------+
-      |   $Id$ |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
-      |                                                                      |
-      |   This program is distributed in the hope that it will be useful,    |
-      |   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-      |   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-      |   GNU General Public License for more details.                       |
-      |                                                                      |
-      |   You should have received a copy of the GNU General Public License  |
-      |   along with this program; if not, write to the Free Software        |
-      |   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-      |   02111-1307, USA. The GNU GPL license is also available through     |
-      |   the world-wide-web at http://www.gnu.org/copyleft/gpl.html         |
-      +----------------------------------------------------------------------+
-      | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-      |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-	  |          Christophe Gesché <gesche@ipm.ucl.ac.be>                    |
-      +----------------------------------------------------------------------+
- */
-
+<?php
 $langFiles = array('registration', 'admin', 'gunet');
-include('../../include/init.php');
+include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
-
-check_admin();
-
+@include "check_admin.inc";
 $nameTools = $regprof;
-$navigation[]= array ("url"=>"../admin/", "name"=> $admin);
+
+// Initialise $tool_content
+$tool_content = "";
+// Main body
 
 if (!isset($userMailCanBeEmpty))
 {	
@@ -44,8 +15,6 @@ if (!isset($userMailCanBeEmpty))
 } 
 
 $statut=1;
-
-begin_page();
 
 if($submit)
 {
@@ -68,17 +37,9 @@ if($submit)
 		|| (strtoupper($password) == strtoupper($prenom_form))
 		|| (strtoupper($password) == strtoupper($email))) {
 		
-		echo "<tr bgcolor=\"$color2\" height=\"200\">
-		<td colspan=\"3\" valign=\"top\">
-			<font face=\"arial, helvetica\" size=\"2\">
-			<br>$langPassTooEasy : 
-				<strong>".substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8)."</strong>
-			<br>
-			<br><a href=\"./newprof.php\">$langAgain</a></font>
-			</td>
-		</tr>
-		</table>";
-		exit();
+		$tool_content .= "<p>$langPassTooEasy : 
+				<strong>".substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8)."</strong></p>
+			<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
 	}
 
 
@@ -86,30 +47,20 @@ if($submit)
 
 	elseif (empty($nom_form) or empty($prenom_form) or empty($password)
 		or empty($uname) or (empty($email_form) && !$userMailCanBeEmpty)) {
-		echo "<tr bgcolor=\"$color2\" height=\"200\">
-			<td bgcolor=\"$color2\" colspan=\"3\" valign=\"top\">
-			<br>
-			<font size=\"2\" face=\"arial, helvetica\">$langEmptyFields</font>
-			</td>
-		</tr>";
+		$tool_content .= "<p>$langEmptyFields</p>
+		<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
 	}
 
 	elseif(isset($user_exist) and $uname==$user_exist) {
-		echo "<tr bgcolor=\"$color2\" height=\"200\">
-			<td colspan=\"3\" valign=\"top\">
-			<font size=\"2\" face=\"arial, helvetica\"><br>$langUserFree</font>
-			</td>
-			</tr>";
+		$tool_content .= "<p>$langUserFree</p>
+		<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
     }
 
 // check if email syntax is valid
    
  elseif(!$userMailCanBeEmpty &&!eregi($regexp,$email)) {
-        echo "<tr><td colspan=\"3\">
-		<font face=\"arial, helvetica\" size=\"2\">$langEmailWrong.<br>
-		<a href=\"$_SERVER[PHP_SELF]\">".$langAgain."</a>
-		</font></td></tr>";
-            exit();
+        $tool_content .= "<p>$langEmailWrong.</p>
+		<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
 	}
 
 
@@ -164,19 +115,11 @@ send_mail($siteName, $emailAdministrator, '', $email_form, $emailsubject, $email
 			(user_id, nom, prenom, username, password, email, statut, department, inst_id)
 			VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password', '$email_form','$statut','$dep[id]', '$institut')");
 		$last_id=mysql_insert_id();
-	        echo "<tr valign='top' bgcolor=$color2>
-                                        <td>
-                                                <font size='2' face='arial, helvetica'>
-  	                             		$profsuccess
+	        $tool_content .= "<p>$profsuccess</p>
 						<br><br>
-						<a href='../admin/listreq.php'>$langBackReq</a>
-						<br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;<br>
-		                       </font>
-                                    </td>
-                                </tr>";		
+						<center><p><a href='../admin/listreq.php'>$langBackReq</a></p></center>";
 	}
 }
+
+draw($tool_content,3,'admin');
 ?>
-</table>
-</body>
-</html>
