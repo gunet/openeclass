@@ -1,117 +1,397 @@
 <?
-$langFiles = array('admin','gunet');
-include '../../include/init.php';
+/**=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Α full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/**===========================================================================
+	listusers.php
+	@last update: 05-05-2006 by Karatzidis Stratos
+	@authors list: Karatzidis Stratos <kstratos@uom.gr>
+		       Vagelis Pitsioygas <vagpits@uom.gr>
+==============================================================================        
+        @Description: List Users (eclass version)
+
+ 	This script displays information about User Info / List.
+
+ 	The user can : - navigate through files and directories.
+                       - upload a file
+                       - delete, copy a file or a directory
+ 
+ 	@Comments: The script is organised in four sections.
+
+ 	1) Execute the command called by the user
+           Note (March 2004) some editing functions (renaming, commenting)
+           are moved to a separate page, edit_document.php. This is also
+           where xml and other stuff should be added.
+ 
+  	@todo: eliminate code duplication between
+ 	document/document.php, scormdocument.php
+==============================================================================
+*/
+
+$langFiles = array('admin','about');
+include '../../include/baseTheme.php';
+include 'admin.inc.php';
 @include "check_admin.inc";
-
+$nameTools = $langVersion;
+// Initialise $tool_content
+$tool_content = "";
+//include '../../include/init.php';
 $nameTools = "Λίστα Χρηστών / Ενέργειες";
-$navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
-begin_page();
 
-echo "<tr><td>";
+/*
+Η λίστα χρηστών θα πρέπει να παρέχει μια σειρά από διαχειριστικές ενέργειες για κάθε χρήστη όπως: 
+- Διόρθωση στοιχείων του χρήστη
+- Αλλαγή ρόλου (εκπαιδευόμενος, εκπαιδευτής, διαχειριστής κλπ)
+- Λίστα Μαθημάτων που συμμετέχει
+- Εγγραφή/Διαγραφή από μαθήματα
+- Στατιστικά Χρήστη (ομάδα εργασίας 7)
+- Συνολική Διαγραφή χρήστη 
+- Eνεργοποίηση/απενεργοποίηση λογαριασμού χρήστη
+*/
+$search = isset($_GET['search'])?$_GET['search']:'';
+$c = isset($_GET['c'])?$_GET['c']:(isset($_POST['c'])?$_POST['c']:'');
 
-$conn = mysql_connect("$mysqlServer", "$mysqlUser", "$mysqlPassword");
-if (!mysql_select_db("$mysqlMainDb", $conn)) {
-	die("Cannot select database $mysqlMainDb.\n");
+switch($c)
+{
+	case '0': $view = 1;		break;		// normal listing
+	case '':	$view = 1;		break;		// normal listing
+	case 'searchlist': $view = 2;		break;		// search listing (search_user.php)
+	default:	$view = 3;	break;		// list per course
 }
 
-
-if (isset($ord)) {
-	switch ($ord) {
-		case "s":
-			$order = "statut"; break;
-		case "n":
-			$order = "nom"; break;
-		case "p":
-			$order = "prenom"; break;
-		case "u":
-			$order = "username"; break;
-		default:
-			$order = "statut"; break;
+if($view==2)				// coming from search_user.php
+{
+	if((!empty($search)) && ($search="yes"))
+	{
+		$user_sirname = isset($_POST['user_sirname'])?$_POST['user_sirname']:'';
+		$user_am = isset($_POST['user_am'])?$_POST['user_am']:'';
+		$user_type = isset($_POST['user_type'])?$_POST['user_type']:'';
+		$user_registered_at_flag = isset($_POST['user_registered_at_flag'])?$_POST['user_registered_at_flag']:'';
+		$datetime = new DATETIME();
+		//$datetime->set_timename("hour", "min", "sec");
+		$datetime->set_datetime_byglobal("HTTP_POST_VARS");
+		$mytime = $datetime->get_timestamp_entered();
+		//$user_registered_at = isset($_POST['user_registered_at'])?$_POST['user_registered_at']:'';
+		if(!empty($mytime))
+		{
+			$user_registered_at = $mytime;
+		}
+		else
+		{
+			$user_registered_at = "";
+		}
+		$user_email = isset($_POST['user_email'])?$_POST['user_email']:'';
+	
+		// register their values into session variables
+		session_unregister('user_sirname');
+		session_unregister('user_am');
+		session_unregister('user_type');
+		session_unregister('user_registered_at_flag');
+		session_unregister('user_registered_at');
+		session_unregister('user_email');
+		//session_register('user_sirname');
+		//session_register('user_am');
+		//session_register('user_type');
+		//session_register('user_registered_at_flag');
+		//session_register('user_registered_at');
+		//session_register('user_email');
 	}
-} else {
+	else
+	{
+	$user_sirname = isset($_SESSION['user_sirname'])?$_SESSION['user_sirname']:'';
+	$user_am = isset($_SESSION['user_am'])?$_SESSION['user_am']:'';
+	$user_type = isset($_SESSION['user_type'])?$_SESSION['user_type']:'';
+	$user_registered_at_flag = isset($_SESSION['user_registered_at_flag'])?$_SESSION['user_registered_at_flag']:'';
+	$user_registered_at = isset($_SESSION['user_registered_at'])?$_SESSION['user_registered_at']:'';
+	$user_email = isset($_SESSION['user_email'])?$_SESSION['user_email']:'';	
+	/*
+	$tool_content .= "The current values are:<br>
+	sirname:$user_sirname<br> 
+	am:$user_am<br>
+	type:$user_type<br>
+	registered_at_flag:$user_registered_at_flag<br>
+	registered_at:$user_registered_at<br>
+	email:$user_email<br>";
+	*/
+	}
+	/*
+	if ((!empty($search)) && ($search=="yes")) 
+	{
+		$searchurl = "&search=yes";
+		if (!empty($user_search_submit)) 
+		{
+			session_register('user_sirname');
+			session_register('user_am');
+			session_register('user_type');
+			session_register('user_registered_at_flag');
+			session_register('user_registered_at');
+			session_register('user_email');
+		} 
+		else 
+		{
+			$user_sirname = $_SESSION['user_sirname'];
+			$user_am = $_SESSION['user_am'];
+			$user_type = $_SESSION['user_type'];
+			$user_registered_at_flag = $_SESSION['user_registered_at_flag'];
+			$user_registered_at = $_SESSION['user_registered_at'];
+			$user_email = $_SESSION['user_email'];
+		}
+	}
+	*/
+}
+else		// means that we have 'normal' listing or 'users per course' listing
+{
+	$user_sirname = "";
+	$user_am = "";
+	$user_type = "";
+	$user_registered_at_flag = "";
+	$user_registered_at = "";
+	$user_email = "";
+}	
+	
+// Criteria/Filters
+$criteria = 0;
+if(!empty($user_sirname))
+{
+	$user_sirname_qry = " nom LIKE '".$user_sirname."%'";
+	$criteria++; 
+}
+else
+{
+	$user_sirname_qry = "";
+}
+	
+if(!empty($user_am))
+{
+	if($criteria!=0)
+	{
+		$user_am_qry = " AND";
+	}
+	else
+	{
+		$user_am_qry = "";
+	}
+	$criteria++;
+	$user_am_qry .= " am='".$user_am."'";			
+}
+else
+{
+	$user_am_qry = "";
+}
+	
+if(!empty($user_type))
+{
+	if($criteria!=0)
+	{
+		$user_type_qry = " AND";
+	}
+	else
+	{
+		$user_type_qry = "";
+	}
+	$criteria++;
+	$user_type_qry .= " statut=".$user_type;
+}
+else
+{
+	$user_type_qry = "";
+}
+	
+if(!empty($user_registered_at_flag))
+{
+	if($criteria!=0)
+	{
+		$user_registered_at_qry = " AND";
+		$criteria++;
+	}
+	else
+	{
+		$user_registered_at_qry = "";
+	}
+	$user_registered_at_qry .= " registered_at";
+	switch($user_registered_at_flag)
+	{
+		case 1:	$user_registered_at_qry .= " <="; break;
+		case 2: $user_registered_at_qry .= " >="; break;
+		default: $user_registered_at_qry .= " <="; break;
+	}
+	if(!empty($user_registered_at))
+	{
+		$user_registered_at_qry .= $user_registered_at;
+	}
+	else
+	{
+		$user_registered_at_qry = "";
+	}
+}
+else
+{
+	$user_registered_at_qry = "";
+}
+	
+if(!empty($user_email))
+{
+	if($criteria!=0)
+	{
+		$user_email_qry = " AND";
+		$criteria++;
+	}
+	else
+	{
+		$user_email_qry = "";
+	}
+	$user_email_qry .= " email LIKE '".$user_email."%'";
+}
+else
+{
+	$user_email_qry = "";
+}		
+// end filter/criteria
+
+
+$ord = isset($_GET['ord'])?$_GET['ord']:'';
+if(!empty($ord)) 
+{
+	switch ($ord) 
+  {
+		case "s":		$order = "statut"; break;
+		case "n":		$order = "nom"; break;
+		case "p":		$order = "prenom"; break;
+		case "u":		$order = "username"; break;
+		default:		$order = "statut"; break;
+    }
+} 
+else 
+{
 	$order = "statut";
 }
 
-
-// Αν έχει ζητηθεί κάποιο μάθημα με τον κωδικό c, και βρέθηκαν χρήστες,
-// εμφανίζεται η σελίδα με τους χρήστες:
-
-$a=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user"));
-$b=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='1'"));
-$c=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='5'"));
-$d=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='10'"));
-echo "<p><i>Υπάρχουν <b>$b[0]</b> Καθηγητές, <b>$c[0]</b> φοιτητές και <b>$d[0]</b> επισκέπτες</i></p>";
-echo "<p><i>Σύνολο <b>$a[0]</b> χρήστες</i></p>";
-
-$countUser = $a[0];
-
-// DEFINE SETTINGS FOR THE 5 NAVIGATION BUTTONS INTO THE USERS LIST: begin, less, all, more and end
-$endList=50;
-
-if(isset ($numbering) && $numbering)
+$caption ="";
+	
+	
+if($view==3)
 {
-        if($numbList=="more")
-        {
-                $startList=$startList+50;
-        }
-        elseif($numbList=="less")
-        {
-                $startList=abs($startList-50);
-        }
-        elseif($numbList=="all")
-        {
-                $startList=0;
-                $endList=$countUser;
-        }
-        elseif($numbList=="begin")
-        {
-                $startList=0;
-        }
-        elseif($numbList=="final")
-        {
-                $startList=((int)($countUser / 50)*50);
-        }
-}       // if numbering
-
-// default status for the list: users 0 to 50
+		$qry = "SELECT a.user_id,a.nom, a.prenom, a.username, a.email, b.statut 
+		FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
+		WHERE b.code_cours='".$c."'";
+}
 else
 {
-        $startList=0;
+	// Count users, with or without criteria/filters
+	$qry = "SELECT user_id,nom,prenom,username,email,statut FROM user";
+	if((!empty($user_sirname_qry)) || (!empty($user_am_qry)) || (!empty($user_type_qry)) || (!empty($user_registered_at_qry)) || (!empty($user_email_qry)) )
+	{
+		$qry .= " WHERE".$user_sirname_qry.$user_am_qry.$user_type_qry.$user_registered_at_qry.$user_email_qry;
+	}		
 }
-
-// Numerating the items in the list to show: starts at 1 and not 0
-$i=$startList+1;
-
-// Do not show navigation buttons if less than 50 users
-if ($countUser >= 50)
+	
+$sql = mysql_query($qry);
+if($sql)
 {
+	$countUser = mysql_num_rows($sql);
+	$teachers = 0;
+	$students = 0;
+	$visitors = 0;
+	$other = 0;
+	while($numrows=mysql_fetch_array($sql,MYSQL_ASSOC))
+	{
+		switch ($numrows['statut']) 
+		{
+			case 1:		$teachers++; break;
+ 			case 5:		$students++; break;
+			case 10:	$visitors++; break;
+ 			default:	$other++; break;
+		}
+	}
+	$caption = "";
+	$caption .= "<p><i>Υπάρχουν <b>$teachers</b> Καθηγητές, <b>$students</b> φοιτητές και <b>$visitors</b> επισκέπτες</i></p>";
+	$caption .= "<p><i>Σύνολο <b>$countUser</b> χρήστες</i></p>";
+		
+	// DEFINE SETTINGS FOR THE 5 NAVIGATION BUTTONS INTO THE USERS LIST: begin, less, all, more and end
+	$endList=50;
+	if(isset ($numbering) && $numbering)
+	{
+			if($numbList=="more")
+    	{
+      	$startList=$startList+50;
+    	}
+    	elseif($numbList=="less")
+    	{
+    		$startList=abs($startList-50);
+			}
+    	elseif($numbList=="all")
+    	{
+    		$startList=0;
+      	$endList=$countUser;
+			}
+    	elseif($numbList=="begin")
+    	{
+      	$startList=0;
+    	}
+    	elseif($numbList=="final")
+    	{
+				$startList=((int)($countUser / 50)*50);
+			}
+		}       // if numbering
+		else	// default status for the list: users 0 to 50
+		{
+    	$startList=0;
+		}
 
-	echo "
+		// Numerating the items in the list to show: starts at 1 and not 0
+		$i=$startList+1;
+
+		if ($countUser >= 50)	// Do not show navigation buttons if less than 50 users
+		{
+			$tool_content .= "
                 <table width=100% cellpadding=1 cellspacing=1 border=0>
                         <tr>
-                                <td valign=bottom align=left width=20%>
-                                        <form method=post action=\"$PHP_SELF?numbList=begin\">
-                                                <input type=submit value=\"$langBegin<<\" name=\"numbering\">
-                                        </form>
-                                </td>
-                                <td valign=bottom align=middle width=20%>";
-
-        // if beginning of list or complete listing, do not show "previous" button
-        if($startList!=0)
-        {
-		if (isset($_REQUEST['ord'])) {
-        	        echo "<form method=post action=\"$PHP_SELF?startList=$startList&numbList=less&ord=$_REQUEST[ord]\">
+                      	  <td valign=bottom align=left width=20%>
+                              <form method=post action=\"$PHP_SELF?numbList=begin\"><input type=submit value=\"$langBegin<<\" name=\"numbering\">
+                              </form>
+                          </td>
+                          <td valign=bottom align=middle width=20%>";
+        		// if beginning of list or complete listing, do not show "previous" button
+			if($startList!=0)
+    	{
+				if (isset($_REQUEST['ord'])) 
+				{
+        	$tool_content .= "<form method=post action=\"$PHP_SELF?startList=$startList&numbList=less&ord=$_REQUEST[ord]\">
                 	       <input type=submit value=\"$langPreced50<\" name=\"numbering\">
                        		</form>";
-		} else {
-		       echo "<form method=post action=\"$PHP_SELF?startList=$startList&numbList=less\">
+				} 
+				else 
+				{
+		       $tool_content .= "<form method=post action=\"$PHP_SELF?startList=$startList&numbList=less\">
                        <input type=submit value=\"$langPreced50<\" name=\"numbering\">
                        </form>";
-		}
-        }
+				}
+			}
 
-	if (isset($_REQUEST['ord'])) {
-        	     echo "
+			if (isset($_REQUEST['ord'])) 
+			{
+      	$tool_content .= "
                      </td>
                      <td valign=bottom align=middle width=20%>
                      <form method=post action=\"$PHP_SELF?startList=$startList&numbList=all&ord=$_REQUEST[ord]\">
@@ -119,8 +399,10 @@ if ($countUser >= 50)
                      </form>
                      </td>
                      <td valign=bottom align=middle width=20%>";
-		} else {
-			echo "
+			} 
+			else 
+			{
+				$tool_content .= "
                       </td>
                       <td valign=bottom align=middle width=20%>
                       <form method=post action=\"$PHP_SELF?startList=$startList&numbList=all\">
@@ -128,23 +410,26 @@ if ($countUser >= 50)
                       </form>
                       </td>
                       <td valign=bottom align=middle width=20%>";
-		}		
+			}		
 
-// if end of list or complete listing, do not show "next" button
-        if(!((($countUser-$startList) <= 50) OR ($endList == $countUser)))
-        {
-		if (isset($_REQUEST['ord'])) {
-                	echo " <form method=post action=\"$PHP_SELF?startList=$startList&numbList=more&ord=$_REQUEST[ord]\">
+			if(!((($countUser-$startList) <= 50) OR ($endList == $countUser)))		// if end of list or complete listing, do not show "next" button
+			{
+				if (isset($_REQUEST['ord'])) 
+				{
+        	$tool_content .= " <form method=post action=\"$PHP_SELF?startList=$startList&numbList=more&ord=$_REQUEST[ord]\">
                                    <input type=submit value=\"$langFollow50>\" name=numbering>
                               </form>";
-		} else {
-                	echo " <form method=post action=\"$PHP_SELF?startList=$startList&numbList=more\">
+				} 
+				else 
+				{
+        	$tool_content .= " <form method=post action=\"$PHP_SELF?startList=$startList&numbList=more\">
                                    <input type=submit value=\"$langFollow50>\" name=numbering>
                               </form>";
-		}
-        }
-	if (isset($_REQUEST['ord'])) {
-        	     echo "
+				}
+			}
+			if (isset($_REQUEST['ord'])) 
+			{
+        	     $tool_content .= "
                      </td>
                      <td valign=bottom align=right width=20%>
                       <form method=post action=\"$PHP_SELF?numbList=final&ord=$_REQUEST[ord]\">
@@ -153,8 +438,10 @@ if ($countUser >= 50)
                       </td>
                       </tr>
                 	</table>"; 
-		} else {
-        		echo "
+			} 
+			else 
+			{
+      	$tool_content .= "
                               </td>
                               <td valign=bottom align=right width=20%>
                                         <form method=post action=\"$PHP_SELF?numbList=final\">
@@ -163,63 +450,94 @@ if ($countUser >= 50)
                               </td>
                               </tr>
                 	</table>"; 
-		}	
+			}	
+	}       // Show navigation buttons if ($countUser >= 50)
 
-}       // Show navigation buttons
-
-// Show users
-
-if (isset($numbering) and isset($_REQUEST['startList']) and isset($_REQUEST['numbList']))   {
-	echo "<table border=\"1\">\n<tr><th>".
-	    "<a href=\"listusers.php?ord=n&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">Επώνυμο</a></th><th>".
-	    "<a href=\"listusers.php?ord=p&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">Όνομα</a></th><th>".
-	    "<a href=\"listusers.php?ord=u&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">Username</a></th><th>".
-	    "Password</th><th>".
-	     "<a href=\"listusers.php?ord=s&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">Email</a></th><th>".
-	     "Ιδιότητα</th>".
-	     "<th>Ενέργειες</th></tr>";
-} else {
-	echo "<table border=\"1\">\n<tr><th>".
-	     "<a href=\"listusers.php?ord=n\">Επώνυμο</a></th><th>".
-			 "<a href=\"listusers.php?ord=p\">Όνομα</a></th><th>".
-			 "<a href=\"listusers.php?ord=u\">Username</a></th><th>".
-			 "Password</th><th>".
-			 "<a href=\"listusers.php?ord=s\">Email</a></th><th>".
-			 "Ιδιότητα</th>".
-			 "<th>Ενέργειες</th></tr>";
-}
-
-$sql = mysql_query("SELECT user_id,nom,prenom,username,password,email,statut FROM user 
-			ORDER BY $order LIMIT $startList, $endList");
-
-        for ($j = 0; $j < mysql_num_rows($sql); $j++) {
-                $logs = mysql_fetch_array($sql);
-                echo("<tr>");
-                for ($i = 1; $i < 6; $i++) {
-                        echo("<td width='500'>".htmlspecialchars($logs[$i])."</td>");
+		
+		
+		
+	// Show users
+	if($view==3)
+	{
+		$qry = "SELECT a.user_id,a.nom, a.prenom, a.username, a.email, b.statut 
+		FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
+		WHERE b.code_cours='".$c."'";
+	}
+	else
+	{
+		$qry = "SELECT user_id,nom,prenom,username,email,statut 
+			FROM user";
+	
+		if((!empty($user_sirname_qry)) || (!empty($user_am_qry)) || (!empty($user_type_qry)) || (!empty($user_registered_at_qry)) || (!empty($user_email_qry)) )
+		{
+			$qry .= " WHERE".$user_sirname_qry.$user_am_qry.$user_type_qry.$user_registered_at_qry.$user_email_qry;
+		}		
+	}
+	
+	$qry .= "	ORDER BY $order LIMIT $startList, $endList";
+	mysql_free_result($sql);
+	$sql = mysql_query($qry);
+		
+	if (isset($numbering) and isset($_REQUEST['startList']) and isset($_REQUEST['numbList']))   
+	{
+		$tool_content .= "<table width=\"99%\"><caption>".$caption."</caption><thead><tr>".
+					"<th scope=\"col\"><a href=\"listusers.php?ord=n&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">Επώνυμο</a></th>".
+					"<th><a href=\"listusers.php?ord=p&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">Όνομα</a></th>".
+					"<th><a href=\"listusers.php?ord=u&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">Username</a></th>".
+				 "<th scope=\"col\"><a href=\"listusers.php?ord=s&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">Email</a></th>".
+				 "<th scope=\"col\">Ιδιότητα</th>".
+				 "<th scope=\"col\">Ενέργειες</th>".
+				 "<th scope=\"col\">Διαγραφή Χρήστη</th>".
+				 "<th scope=\"col\">Στατιστικά Χρήστη</th>".
+				 "</tr></thead><tbody>";
+	} 
+	else 
+	{
+		$tool_content .= "<table width=\"99%\"><caption>".$caption."</caption><thead><tr>".
+					"<th scope=\"col\"><a href=\"listusers.php?ord=n\">Επώνυμο</a></th><th>".
+				 "<a href=\"listusers.php?ord=p\">Όνομα</a></th><th>".
+				 "<a href=\"listusers.php?ord=u\">Username</a></th>".
+				 "<th scope=\"col\"><a href=\"listusers.php?ord=s\">Email</a></th>".
+				 "<th scope=\"col\">Ιδιότητα</th>".
+				 "<th scope=\"col\">Ενέργειες</th>".
+				 "<th scope=\"col\">Διαγραφή Χρήστη</th>".
+				 "<th scope=\"col\">Στατιστικά Χρήστη</th>".
+				 "</tr></thead><tbody>";
 		}
-		 switch ($logs[6]) {
-                        case 1:
-                                echo "<td>Καθηγητής</td>"; break;
-                        case 5:
-                                echo "<td>Φοιτητής</td>"; break;
-			case 10:
-				echo "<td>Επισκέπτης</td>"; break;
-                        default:
-                               echo "<td>¶λλο ($logs[6])</td>"; break;
-
+		
+		for ($j = 0; $j < mysql_num_rows($sql); $j++) 
+		{
+			while($logs = mysql_fetch_array($sql,MYSQL_ASSOC))
+  		{
+				$tool_content .= ("<tr>");
+				$tool_content .= "<td>".htmlspecialchars($logs['nom'])."</td>".
+				"<td>".htmlspecialchars($logs['prenom'])."</td>".
+				"<td>".htmlspecialchars($logs['username'])."</td>".
+				"<td>".htmlspecialchars($logs['email'])."</td>";
+				switch ($logs['statut']) 
+				{
+					case 1:		$tool_content .= "<td>Καθηγητής</td>";break;
+    			case 5:		$tool_content .= "<td>Φοιτητής</td>";break;
+					case 10:	$tool_content .= "<td>Επισκέπτης</td>";break;
+    			default:	$tool_content .= "<td>¶λλο ($logs[6])</td>";break;
+				}
+				$tool_content .= "<td><a href=\"edituser.php?u=".$logs['user_id']."\">Επεξεργασία</a></td>
+				<td><a href=\"manageuser.php?u=".$logs['user_id']."\">Διαγραφή</a></td>
+				<td><a href=\"manageuser.php?u=".$logs['user_id']."\">Στατιστικά</a></td>\n";
+				$tool_content .= "</tr>";
 			}
-
-		for ($i = 7; $i < mysql_num_fields($sql); $i++) {
-			 echo("<td width='500'>".htmlspecialchars($logs[$i])."</td>");
-
-                }
-                echo "<td><a href=\"edituser.php?u=$logs[0]\">Επεξεργασία</a></td>\n";
+		}
+		$tool_content .= "</tbody></table>";
+		
 }
-            echo("</td>");
-        echo("</tr>");
+else
+{
+	$tool_content .= "<br />NO LISTING RESULTS<br />";
+}
 
-	echo "</table>";
-	echo "<p><center><a href=\"index.php\">Επιστροφή</a></p></center>";
+	
+$tool_content .= "<p><center><a href=\"index.php\">Επιστροφή</a></p></center>";
+
+draw($tool_content,3);
+
 ?>
-</body></html>
