@@ -43,17 +43,16 @@ Modify course settings like:
 */
 
 // If course language was changed, we need to include message files for the new language
-
 if(isset($submit)) {
 	$language_override=$lanCourseForm;
 }
 
 $require_current_course = TRUE;
 $langFiles = array('course_info', 'create_course', 'opencours');
-include '../../include/init.php';
-
+include '../../include/baseTheme.php';
 $nameTools = $langModifInfo;
-begin_page();
+
+$tool_content = "";
 
 ####################### SUBMIT #################################
 // check if prof logged
@@ -64,13 +63,19 @@ if($is_adminOfCourse) {
 		@include("../lang/$default_language/create_course.inc");
 		@include("../lang/$languageInterface/create_course.inc");
 		// UPDATE course settings
+		if ($checkpassword=="on" && $formvisible=="1") {
+			$password = $password;
+		} else {
+			$password = "";
+		}
 		$sql = "UPDATE $mysqlMainDb.cours 
 			SET intitule='$int', faculte='$facu', description='$description', 
 			visible='$formvisible', titulaires='$titulary', 
 			languageCourse='$lanCourseForm',
 			departmentUrlName ='$_POST[departmentUrlName]',
 			departmentUrl='$_POST[departmentUrl]',
-			type='$type'
+			type='$type',
+			password='$password'
 			WHERE code='$currentCourseID'";
 		mysql_query($sql);
 		mysql_query("UPDATE `$mysqlMainDb`.cours_faculte SET faculte='$facu' WHERE code='$currentCourseID'");
@@ -94,74 +99,76 @@ if($is_adminOfCourse) {
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langDropBox' WHERE id='16'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langChat' WHERE id='19'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langCourseDesc' WHERE id='20'");
-		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langLearnPath' WHERE id='21'");
-		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langToolManagement' WHERE id='22'");
-		echo "<font face=\"arial, helvetica\" size=\"2\">$langModifDone.<br><br>
-		<a href=\"".$_SERVER['PHP_SELF']."\">$langBack</a> 
-		<br><br>
-		<a href=\"../../courses/".$currentCourseID."/index.php\">".$langHome."</a>
-		<br><br>";
+		$tool_content .= "<p>$langModifDone.</p>
+		<center><p><a href=\"".$_SERVER['PHP_SELF']."\">$langBack</a></p></center><br>
+		<center><p><a href=\"../../courses/".$currentCourseID."/index.php\">".$langHome."</a></p></center>";
 	} else {
-	       $sql = "SELECT cours_faculte.faculte, 
+	  $sql = "SELECT cours_faculte.faculte, 
 			cours.intitule, cours.description,
 			cours.visible, cours.fake_code, cours.titulaires, cours.languageCourse, 
-			cours.departmentUrlName, cours.departmentUrl, cours.type
+			cours.departmentUrlName, cours.departmentUrl, cours.type, cours.password
 			FROM `$mysqlMainDb`.cours, `$mysqlMainDb`.cours_faculte 
 			WHERE cours.code='$currentCourseID' 
 			AND cours_faculte.code='$currentCourseID'";
-	    $result = mysql_query($sql);
-	    $leCours = mysql_fetch_array($result);
-	    $int = $leCours['intitule'];
-	    $facu = $leCours['faculte'];
-	    $type = $leCours['type'];
-	    $visible = $leCours['visible'];
-	    $visibleChecked[$visible]="checked";
-	    $fake_code = $leCours['fake_code'];
-	    $titulary = $leCours['titulaires'];
-	    $languageCourse	= $leCours['languageCourse'];
-	    $departmentUrlName = $leCours['departmentUrlName'];
-	    $departmentUrl = $leCours['departmentUrl'];
-	    echo "<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
-		<table width=\"600\" cellpadding=\"3\" cellspacing=\"0\" border=\"0\">
-		<tr><td valign=\"top\"><font face=\"arial, helvetica\" size=\"2\">$langCode&nbsp;:</font></td>
+	  $result = mysql_query($sql);
+	  $leCours = mysql_fetch_array($result);
+	  $int = $leCours['intitule'];
+	  $facu = $leCours['faculte'];
+	  $type = $leCours['type'];
+	  $visible = $leCours['visible'];
+	  $visibleChecked[$visible]="checked";
+	  $fake_code = $leCours['fake_code'];
+	  $titulary = $leCours['titulaires'];
+	  $languageCourse	= $leCours['languageCourse'];
+	  $departmentUrlName = $leCours['departmentUrlName'];
+	  $departmentUrl = $leCours['departmentUrl'];
+	  $password = $leCours['password'];
+	  if ($password!="") $checkpasssel = "checked";
+	    
+	  $tool_content .="<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
+		<table width=\"99%\"><caption>Γενικές Πληροφορίες</caption><tbody>
+		<tr><td valign=\"top\"><b>$langCode:</b></td>
 		<td valign=\"top\">$fake_code</td></tr>
-		<tr><td><font face=\"arial, helvetica\" size=\"2\">$langProfessors&nbsp;:</font></td>
+		<tr><td><b>$langProfessors:</b></td>
 		<td><input type=\"text\" name=\"titulary\" value=\"$titulary\" size=\"60\"></td></tr>
-		<tr><td><font face=\"arial, helvetica\" size=\"2\">$langTitle:</font></td>
+		<tr><td><b>$langTitle:</b></td>
 		<td><input type=\"Text\" name=\"int\" value=\"$int\" size=\"60\"></td></tr>
-		<tr><td><font face=\"arial, helvetica\" size=\"2\">$langDescription :</font></td>
+		<tr><td><b>$langDescription:</b></td>
 		<td><input type=\"Text\" name=\"description\" value=\"$leCours[description]\" size=\"60\"></td></tr>
-		<tr><td><font face=\"arial, helvetica\" size=\"2\">$langFaculty :</font></td>
+		<tr><td><b>$langFaculty:</b></td>
 		<td>
 		<select name=\"facu\">";
+	    
 		$resultFac=mysql_query("SELECT name FROM `$mysqlMainDb`.faculte ORDER BY number");
 		while ($myfac = mysql_fetch_array($resultFac)) {	
-			if($myfac[name]==$facu) echo "<option selected>$myfac[name]</option>";
-			else echo "<option>$myfac[name]</option>";
+			if($myfac[name]==$facu)
+				$tool_content .= "<option selected>$myfac[name]</option>";
+			else
+				$tool_content .= "<option>$myfac[name]</option>";
 		}
-		echo "</select></td></tr>
-		<tr><td><font face=\"arial, helvetica\" size=\"2\">$m[type]:</font></td><td>";
-		selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']),'type', $type);
-		echo "</td></tr><tr><td><font face=\"arial, helvetica\" size=\"2\">$langDepartmentUrlName&nbsp;:</font></td>
+		$tool_content .= "</select></td></tr>
+		<tr><td><b>$m[type]:</b></td><td>";
+
+		$tool_content .= selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']),'type', $type);
+		
+		$tool_content .= "</td></tr><tr><td><b>$langDepartmentUrlName:</b></td>
 		<td><input type=\"text\" name=\"departmentUrlName\" value=\"$departmentUrlName\" size=\"60\" maxlength=\"60\"></td>
 		</tr>
-		<tr><td><font face=\"arial, helvetica\" size=\"2\">$langDepartmentUrl&nbsp;:</font></td>
+		<tr><td><b>$langDepartmentUrl:</b></td>
 		<td><input type=\"text\" name=\"departmentUrl\" value=\"$departmentUrl\" size=\"60\" maxlength=\"180\"></td></tr>
-		<tr><td colspan=\"2\"><hr noshade size=\"1\">
-		<font face=\"arial, helvetica\" size=\"2\"><b>$langConfidentiality</b></font>
-		</td></tr><tr>
-		<td colspan=\"2\"><font face=\"arial, helvetica\" size=\"2\">$langConfTip</font></td></tr>
+		</tbody></table><br><table width=\"99%\"><caption>$langConfidentiality</caption><tbody>
+		<tr>	<td colspan=\"2\"><i>$langConfTip</i></td></tr>
 		<tr><td align=\"right\"><input type=\"radio\" name=\"formvisible\" value=\"2\"".@$visibleChecked[2]."></td>
-		<td><font face=\"arial, helvetica\" size=\"2\">$langPublic</font></td></tr>
-		<tr><td align=\"right\"><input type=\"radio\" name=\"formvisible\" value=\"1\"".@$visibleChecked[1]."></td>
-		<td><font face=\"arial, helvetica\" size=\"2\">$langPrivOpen</font></td></tr>
+		<td>$langPublic</td></tr>
+		<tr><td align=\"right\" valign=\"top\"><input type=\"radio\" name=\"formvisible\" value=\"1\"".@$visibleChecked[1]."></td>
+		<td>$langPrivOpen<br>&nbsp;&nbsp;<input type=\"checkbox\" name=\"checkpassword\" ".$checkpasssel.">Προαιρετικό συνθηματικό: <input type=\"text\" name=\"password\" value=\"".$password."\"></td></tr>
 		<tr><td align=\"right\"><input type=\"radio\" name=\"formvisible\" value=\"0\"".@$visibleChecked[0]."></td>
-		<td><font face=\"arial, helvetica\" size=\"2\">$langPrivate</font></td></tr>
-		<tr><td colspan=\"2\"><hr noshade size=\"1\"><font face=\"arial, helvetica\" size=\"2\"><b>$langLanguage</b></font></td></tr>
-		<tr><td colspan=\"2\"><font face=\"arial, helvetica\" size=\"2\">$langTipLang</font></td></tr>
-		<tr><td colspan=\"2\"><font face=\"arial, helvetica\" size=\"2\">
-		
+		<td>$langPrivate</td></tr>
+		</tbody></table><br><table width=\"99%\"><caption>$langLanguage</caption><tbody>
+		<tr><td><i>$langTipLang</i></td></tr>
+		<tr><td>		
 		<select name=\"lanCourseForm\">";
+
 		// determine past language of the course 
 
 		$dirname = "../lang/";
@@ -171,38 +178,30 @@ if($is_adminOfCourse) {
 			if ($entries=='.'||$entries=='..'||$entries=='CVS')
 			continue;
 			if (is_dir($dirname.$entries)) {
-				echo "<option value=\"$entries\"";
+				$tool_content .= "<option value=\"$entries\"";
 				if ($entries == $languageCourse) 
-					echo " selected ";
-				echo ">$entries"; 
+					$tool_content .= " selected ";
+				$tool_content .= ">$entries"; 
 				if (!empty($langNameOfLang[$entries]) && $langNameOfLang[$entries]!="" && $langNameOfLang[$entries]!=$entries)
-					echo " - $langNameOfLang[$entries]";
-				echo "</option>";
+					$tool_content .= " - $langNameOfLang[$entries]";
+				$tool_content .= "</option>";
 			}
 		}	
 		closedir($handle);
-		echo "</select></font></td></tr>
-		<tr><td colspan=\"2\"><input type=\"Submit\" name=\"submit\" value=\"$langOk\"></td></tr>
-		<tr><td colspan=\"2\"><hr noshade size=\"1\">
-		<font face=\"arial, helvetica\" size=\"2\"><a href=\"archive_course.php\">$langBackupCourse</a>
-		<br><br>
-		<a href=\"delete_course.php\">$langDelCourse</a>	
-		<br><br>
-		<a href=\"refresh_course.php\">$langRefreshCourse</a>
-                </font>
-		</td>
-		</tr>
-		</table>
-		</form>";
+		$tool_content .= "</select></td></tr>
+		</tbody></table><br><p><input type=\"Submit\" name=\"submit\" value=\"$langOk\"></p><br>
+		<table width=\"99%\"><caption>Αλλες Ενέργειες</caption><tbody>
+		<tr><td><a href=\"archive_course.php\">$langBackupCourse</a></td></tr>
+		<tr><td><a href=\"delete_course.php\">$langDelCourse</a>	</td></tr>
+		<tr><td><a href=\"refresh_course.php\">$langRefreshCourse</a></td></tr>
+		</tbody></table></form>";
 	}     // else
 }   // if uid==prof_id
 
 // student view
 else {
-	echo "<font face=\"arial, helvetica\" size=\"2\">$langForbidden</font>";
+	$tool_content .= "<p>$langForbidden</p>";
 }  
 
-echo "</td></tr><tr><td colspan=\"2\"><hr noshade size=\"1\"></td></tr></table>";
+draw($tool_content,2,'admin');
 ?>
-</body>
-</html>
