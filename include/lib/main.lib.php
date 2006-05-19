@@ -221,19 +221,22 @@ function group_secret($gid)
 // $entries: an array of (value => label)
 // $name: the name of the selection element
 // $default: if it matches one of the values, specifies the default entry
+// Changed by vagpits
 function selection($entries, $name, $default = '')
 {
-	echo "<select name='$name'>\n";
+	$retString = "";
+	$retString .= "<select name='$name'>\n";
 	foreach ($entries as $value => $label) {
 		if ($value == $default) {
-			echo "<option selected value='" . htmlspecialchars($value) . "'>" .
+			$retString .= "<option selected value='" . htmlspecialchars($value) . "'>" .
 				htmlspecialchars($label) . "</option>\n";
 		} else {
-			echo "<option value='" . htmlspecialchars($value) . "'>" .
+			$retString .= "<option value='" . htmlspecialchars($value) . "'>" .
 				htmlspecialchars($label) . "</option>\n";
 		}
 	}
-	echo "</select>\n";
+	$retString .= "</select>\n";
+	return $retString;
 }
 
 
