@@ -1,12 +1,14 @@
-<?
+<?php
 $langFiles = array('admin','gunet');
-include '../../include/init.php';
+include '../../include/baseTheme.php';
 @include "check_admin.inc";
-
 $nameTools = "Λίστα Μαθημάτων / Ενέργειες";
-$navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
-begin_page();
 
+// Initialise $tool_content
+$tool_content = "";
+// Main body
+
+// Manage order of display list
 if (isset($ord)) {
 	switch ($ord) {
 		case "s":
@@ -34,77 +36,96 @@ if (isset($c)) {
 	}
 }
 
-// Αν δεν είναι ορισμένη η παράμετρος c (c=<Κωδικός μαθήματος>),
-// ή δεν βρίσκονται χρήστες που να έχουν μάθημα με τον κωδικό αυτόν,
-// εμφανίζεται η σελίδα με τα μαθήματα.
-
-if (!isset($c) or mysql_num_rows($sql) == 0) {
-
-	$a=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours"));
-	echo "<p><i>Υπάρχουν $a[0] μαθήματα</i></p>";
-	echo "<table border=\"1\">\n<tr><th>Τμήμα</th><th>Κωδικός</th>".
-	     "<th>Τίτλος (Διδάσκων)</th><th>Κατάσταση Μαθήματος</th><th>Χρήστες</th><th>Όριο Αποθηκ. Χώρου<th>Διαγραφή 
-Μαθήματος</th></tr>";
-
-	$sql = mysql_query(
-		"SELECT faculte, code, intitule,titulaires,visible FROM cours ORDER BY faculte");
-	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
-		$logs = mysql_fetch_array($sql);
-		echo("<tr>");
-		 for ($i = 0; $i < 2; $i++) {
-			echo("<td width='500'>".htmlspecialchars($logs[$i])."</td>");
-		}
-		echo "<td width='500'>".htmlspecialchars($logs[2])." ($logs[3])</td>";
-		switch ($logs[4]) {
-		case 2:
-			echo "<td>Ανοιχτό</td>"; break;
-		case 1:
-			echo "<td>Απαιτείται Εγγραφή</td>"; break;
-		case 0:
-			echo "<td>Κλειστό</td>"; break;
-		}	
-		echo "<td><a href=\"listcours.php?c=$logs[1]\">Χρήστες</a></td>";
-		echo "<td><a href=\"quotacours.php?c=$logs[1]\">Αλλαγή</a></td>";
-		echo "<td><a href=\"delcours.php?c=$logs[1]\">Διαγραφή</a></td>\n";
-  }
-	echo "</table>\n";
-
-echo "<center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
-
+if (isset($search) && $search=="yes") {
+	$searchurl = "&search=yes";
+	if (isset($search_submit)) {
+		$searchtitle = $formsearchtitle;
+		session_register('searchtitle');
+		$searchcode = $formsearchcode;
+		session_register('searchcode');
+		$searchtype = $formsearchtype;
+		session_register('searchtype');
+		$searchfaculte = $formsearchfaculte;
+		session_register('searchfaculte');
+	} else {
+		$searchtitle = $_SESSION['searchtitle'];
+		$searchcode = $_SESSION['searchcode'];
+		$searchtype = $_SESSION['searchtype'];
+		$searchfaculte = $_SESSION['searchfaculte'];
+	}
+	$searchcours=array();
+	if(!empty($searchtitle)) {
+		$searchcours[] = "intitule LIKE '".mysql_escape_string($searchtitle)."%'";
+	}
+	if(!empty($searchcode)) {
+		$searchcours[] = "code LIKE '".mysql_escape_string($searchcode)."%'";
+	}
+	if ($searchtype!="-1") {
+		$searchcours[] = "visible = '".mysql_escape_string($searchtype)."'";
+	}
+	if($searchfaculte!="0") {
+		$searchcours[] = "faculte = '".mysql_escape_string($searchfaculte)."'";
+	}
+	$query=join(' AND ',$searchcours);
+	if (!empty($query)) {
+		$sql=mysql_query("SELECT faculte, code, intitule,titulaires,visible FROM cours WHERE $query ORDER BY faculte");
+		$caption .= "Βρέθηκαν ".mysql_num_rows($sql)." μαθήματα";
+	} else {
+		$sql=mysql_query("SELECT faculte, code, intitule,titulaires,visible FROM cours ORDER BY faculte");
+		$caption .= "Βρέθηκαν ".mysql_num_rows($sql)." μαθήματα";			
+	}
 } else {
-
-// Αν έχει ζητηθεί κάποιο μάθημα με τον κωδικό c, και βρέθηκαν χρήστες,
-// εμφανίζεται η σελίδα με τους χρήστες:
-
-
-	echo "<table border=\"1\">\n<tr><th>".
-	     "<a href=\"listcours.php?c=$c&ord=n\">Επώνυμο</a></th><th>".
-			 "<a href=\"listcours.php?c=$c&ord=p\">Όνομα</a></th><th>".
-			 "<a href=\"listcours.php?c=$c&ord=u\">Username</a></th><th>".
-			 "Password</th><th>".
-			 "<a href=\"listcours.php?c=$c&ord=s\">Ιδιότητα</a></th>".
-			 "<th>Λειτουργίες</th></tr>";
-
-	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
-		$logs = mysql_fetch_array($sql);
-		echo("<tr>");
-		for ($i = 0; $i < 4; $i++) {	
-			echo("<td>".htmlspecialchars($logs[$i])."</td>");
-		}
-		switch ($logs[4]) {
-			case 1:
-				echo "<td>Καθηγητής</td>"; break;
-			case 5:
-				echo "<td>Φοιτητής</td>"; break;
-			default:
-				echo "<td>¶λλο ($logs[4])</td>"; break;
-		}
-		echo "<td><a href=\"edituser.php?u=$logs[5]\">Επεξεργασία</a></td></tr>\n";
-  }
-	echo "</table>
-		<p><a href=\"listcours.php\">Επιστροφή στη λίστα μαθημάτων</a></p>\n";
-
+	$a=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours"));		
+	$caption .= "Υπάρχουν ".$a[0]." μαθήματα";
+	$sql = mysql_query("SELECT faculte, code, intitule,titulaires,visible FROM cours ORDER BY faculte");
 }
 
+	
+// Construct cours list table
+$tool_content .= "<table border=\"1\"><caption>".$caption."</caption>
+<thead>
+  <tr>
+    <th scope=\"col\">Τμήμα</th>
+    <th scope=\"col\">Κωδικός</th>
+    <th scope=\"col\">Τίτλος (Διδάσκων)</th>
+    <th scope=\"col\">Κατάσταση Μαθήματος</th>
+    <th scope=\"col\">Χρήστες</th>
+    <th scope=\"col\">Διαγραφή Μαθήματος</th>
+    <th scope=\"col\">Ενέργειες</th>
+  </tr>
+</thead><tbody>\n";
+
+for ($j = 0; $j < mysql_num_rows($sql); $j++) {
+	$logs = mysql_fetch_array($sql);
+	$tool_content .= "  <tr>\n";
+	 for ($i = 0; $i < 2; $i++) {
+	 	$tool_content .= "    <td width=\"500\">".htmlspecialchars($logs[$i])."</td>\n";
+	}
+	$tool_content .= "    <td width='500'>".htmlspecialchars($logs[2])." (".$logs[3].")</td>\n";
+	switch ($logs[4]) {
+	case 2:
+		$tool_content .= "    <td>Ανοιχτό</td>\n";
+		break;
+	case 1:
+		$tool_content .= "    <td>Απαιτείται Εγγραφή</td>\n";
+		break;
+	case 0:
+		$tool_content .= "    <td>Κελιστό</td>\n";
+		break;
+	}	
+	$tool_content .= "    <td><a href=\"listusers.php?c=".$logs[1]."\">Χρήστες</a></td>
+    <td><a href=\"delcours.php?c=".$logs[1]."\">Διαγραφή</a></td>
+    <td><a href=\"editcours.php?c=".$logs[1]."".$searchurl."\">Επεξεργασία</a></td>\n";
+}
+
+$tool_content .= "</tbody></table>\n";
+  
+// If a search is started display link to search page
+if (isset($search) && $search=="yes") {
+	$tool_content .= "<br><center><p><a href=\"searchcours.php\">Επιστροφή στην αναζήτηση</a></p></center>";
+}
+	
+$tool_content .= "<br><center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
+
+draw($tool_content,3,'admin');
 ?>
-</body></html>
