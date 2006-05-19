@@ -1,27 +1,26 @@
-<?
+<?php
 $langFiles = 'admin';
-include '../../include/init.php';
+include '../../include/baseTheme.php';
 @include "check_admin.inc";
-
 $nameTools = "Πληροφορίες για την PHP";
-$navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
-begin_page();
-echo "</tr></td>";
-end_page();
+
+// Initialise $tool_content
+$tool_content = "";
+// Main body
 
 if (!isset($to)) $to = '';
 
 if ($to=="phpinfo") {
-	echo '<div style="background-color: white;">';
+	$tool_content .= '<div>';
+	ob_start();
 	phpinfo();
-	echo '</div>';
-}
-elseif ($to=="clarconf") {
-	echo '<div style="background-color: #dfdfff;"><HR>config file<HR>';
-	highlight_file("../../config/config.php");
-	echo '<hr></div>';
+	$phpinfo = ob_get_contents();
+	ob_end_clean();
+	$tool_content .= $phpinfo;
+	$tool_content .= '</div>';
 }
 
+$tool_content .= "<br><center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
+
+draw($tool_content,3,'admin');
 ?>
-</body>
-</html>

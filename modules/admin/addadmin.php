@@ -1,74 +1,52 @@
-<?
-
-/*
-      +----------------------------------------------------------------------+
-      | CLAROLINE version 1.3.0 $Revision: 1.1.1.1 $                             |
-      +----------------------------------------------------------------------+
-      | $Id: addadmin.php,v 1.1.1.1 2006/01/10 15:02:11 adia Exp $  |
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
-      |                                                                      |
-      |   This program is distributed in the hope that it will be useful,    |
-      |   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-      |   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-      |   GNU General Public License for more details.                       |
-      |                                                                      |
-      |   You should have received a copy of the GNU General Public License  |
-      |   along with this program; if not, write to the Free Software        |
-      |   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-      |   02111-1307, USA. The GNU GPL license is also available through     |
-      |   the world-wide-web at http://www.gnu.org/copyleft/gpl.html         |
-      +----------------------------------------------------------------------+
-      | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-      |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-      |          Christophe Geschι <gesche@ipm.ucl.ac.be>                    |
-      +----------------------------------------------------------------------+
- */
-
+<?php
 $langFiles = array('admin','addadmin');
-include '../../include/init.php';
+include '../../include/baseTheme.php';
 @include "check_admin.inc";
-
 $nameTools = $langNomPageAddHtPass;
-$navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
-begin_page();
+
+// Initialise $tool_content
+$tool_content = "";
+// Main body
+
+
+
+
+
+
+
 
 if (isset($encodeLogin)) {
 	$res = mysql_query("SELECT user_id FROM user WHERE username='$encodeLogin'");
 	if (mysql_num_rows($res) == 1) {
 		$row = mysql_fetch_row($res);
 		if (mysql_query("INSERT INTO admin VALUES('$row[0]')")) 
-			echo "$langUser $encodeLogin $langWith  id='$row[0]' $langDone";
+			$tool_content .= "<p>$langUser $encodeLogin $langWith  id='$row[0]' $langDone</p>";
 		 else 
-			echo "$langError <br>&nbsp;<br>";
-		echo "<center><a href='index.php'>$langBack</a></center>";
+			$tool_content .= "<p>$langError</p>";
 	} else {
-		echo "$langUser $encodeLogin $langNotFound.<br>&nbsp;<br>";
-		printform($langLogin);
-		echo "<center><a href='index.php'>$langBack</a></center>";
+		$tool_content .= "<p>$langUser $encodeLogin $langNotFound.</p>";
+		$tool_content .= printform($langLogin);
 	}
 } else {
-	printform($langLogin);
-	echo "<center><a href='index.php'>$langBack</a></center>";
+	$tool_content .= printform($langLogin);
 }
 
-end_page();
+$tool_content .= "<center><p><a href='index.php'>$langBack</a></p></center>";
+
+draw($tool_content,3,'admin');
 
 // -------------- functions -------------------------
 
 function printform ($message) { 
 	global $langAdd;
 
-	echo "<form method='post' name='makeadmin' action='$_SERVER[PHP_SELF]'>";
-	echo "$message: ";
-	echo "<input type='text' name='encodeLogin' size='20' maxlength='30'>";
-	echo "<input type='submit' name='crypt' value='$langAdd'>";
-	echo "</form>";
+	$ret = "";
+	$ret .= "<form method='post' name='makeadmin' action='$_SERVER[PHP_SELF]'>";
+	$ret .= "<table width=\"99%\"><caption>Εισαγωγή στοιχείων χρήστη</caption><tbody>
+	<tr><td width=\"3%\" nowrap>".$message."</td><td><input type='text' name='encodeLogin' size='20' maxlength='30'></td></tr>
+	<tr><td colspan=\"2\"><input type='submit' name='crypt' value='$langAdd'></td></tr></tbody></table></form>";
+	
+	return $ret;
 }
 
 ?>
