@@ -267,6 +267,8 @@ function adminMenu(){
 	array_push($sideMenuLink, "search_user.php");
 	array_push($sideMenuText, $langAddAdminInApache);
 	array_push($sideMenuLink, "addadmin.php");
+	array_push($sideMenuText, "Πιστοποίηση Χρηστών");
+	array_push($sideMenuLink, "auth.php");
 
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);
@@ -282,6 +284,10 @@ function adminMenu(){
 
 	array_push($sideMenuText, $langListCours);
 	array_push($sideMenuLink, "listcours.php");
+	// Added by vagpits
+	array_push($sideMenuText, "Αναζήτηση Μαθημάτων");
+	array_push($sideMenuLink, "searchcours.php");
+	// End
 	array_push($sideMenuText, $langRestoreCourse);
 	array_push($sideMenuLink, "../course_info/restore_course.php");
 	array_push($sideMenuText, $langSpeeSubscribe);
@@ -340,7 +346,10 @@ function adminMenu(){
 	array_push($sideMenuText, $langVersion);
 	array_push($sideMenuLink, "about.php");
 	array_push($sideMenuText, $langConfigFile);
-	array_push($sideMenuLink, "phpInfo.php?to=clarconf");
+	// Changed by vagpits
+	//array_push($sideMenuLink, "phpInfo.php?to=clarconf");
+	array_push($sideMenuLink, "clarconf.php");
+	// End
 	array_push($sideMenuText, $siteName);
 	array_push($sideMenuLink, "statClaro.php");
 
