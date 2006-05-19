@@ -1,115 +1,168 @@
-<?
+<?php
+/**=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Α full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/**===========================================================================
+	serachuser.php
+	@last update: 10-05-2006 by Karatzidis Stratos
+	@authors list: Karatzidis Stratos <kstratos@uom.gr>
+		       Pitsiougas Vagelis <vagpits@uom.gr>
+==============================================================================        
+  @Description: User Search form based upon criteria/filters
+
+ 	This script allows the admin to search for platform users,
+ 	specifying certain criteria/filters
+	
+ 	The admin can : - specify the criteria, view the list and later searching again
+                    with the same criteria or   
+ 									- do a new/clear search
+==============================================================================
+*/
+
 $langFiles = array('gunet','admin','registration');
-include '../../include/init.php';
+include '../../include/baseTheme.php';
+include 'admin.inc.php';
 @include "check_admin.inc";
+$nameTools = "Αναζήτηση Χρηστών";
 
-$nameTools=$searchuser;
-$navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
-begin_page();
+// Initialise $tool_content
+$tool_content = "";
+
+// Main body
+
+$new = isset($_GET['new'])?$_GET['new']:'yes';		//variable of declaring a new search
+
+if((!empty($new)) && ($new=="yes")) 
+{
+	// It is a new search, so unregister the search terms/filters in session variables
+	session_unregister('user_sirname');
+	session_unregister('user_am');
+	session_unregister('user_type');
+	session_unregister('user_registered_at_flag');
+	session_unregister('user_registered_at');
+	session_unregister('user_email');
+	unset($user_sirname);
+	unset($user_am);
+	unset($user_type);
+	unset($user_registered_at_flag);
+	unset($user_registered_at);
+	unset($user_email);
+}
+
+// initialize the variables
+$user_sirname = isset($_SESSION['user_sirname'])?$_SESSION['user_sirname']:'';
+$user_am = isset($_SESSION['user_am'])?$_SESSION['user_am']:'';
+$user_type = isset($_SESSION['user_type'])?$_SESSION['user_type']:'5';
+$user_registered_at_flag = isset($_SESSION['user_registered_at_flag'])?$_SESSION['user_registered_at_flag']:'1';
+$user_registered_at = isset($_SESSION['user_registered_at'])?$_SESSION['user_registered_at']:time();
+$user_email = isset($_SESSION['user_email'])?$_SESSION['user_email']:'';
+
+
+$newsearch = " <a href=\"search_user.php?new=yes\">Νέα Αναζήτηση</a>";	// link: 'new search'
+	
+// display the search form
+$tool_content .= "<form action=\"listusers.php?search=".$new."\" method=\"post\" name=\"user_search\">";
+$tool_content .= "<table border=\"0\" cellspacing=\"0\" cellpadding=\"1\"><caption>Αναζήτηση Χρηστών&nbsp;&nbsp;".$newsearch."</caption><tbody>";
+$tool_content .= "<tr>
+    <td width=\"3%\" nowrap><b>Επίθετο</b>:</td>
+    <td><input type=\"text\" name=\"user_sirname\" size=\"40\" value=\"".$user_sirname."\"></td>
+</tr>";
+$tool_content .= "  <tr>
+    <td width=\"3%\" nowrap><b>Αριθμός μητρώου:</b></td>
+    <td><input type=\"text\" name=\"user_am\" size=\"30\" value=\"".$user_am."\"></td>
+</tr>";
+$tool_content .= "  <tr>
+    <td width=\"3%\" nowrap><b>Τύπος χρήστη (Εκπαιδευόμενος/Εκπαιδευτής):</b></td>
+    <td>";
+$usertype_data = array();
+$usertype_data[5] = "Εκπαιδευόμενος";
+$usertype_data[1] = "Εκπαιδευτής";
+$tool_content .= selection2($usertype_data,"user_type",$user_type);
+$tool_content .= "</td>
+</tr>";
+$tool_content .= " <tr>
+    <td width=\"3%\" nowrap><b>Ημερομηνία εγγραφής χρήστη:</b></td>
+    <td>";
+$user_registered_at_flag_data = array();
+$user_registered_at_flag_data[1] = "Πρίν από";
+$user_registered_at_flag_data[2] = "Μετα από";
+$tool_content .= selection2($user_registered_at_flag_data,"user_registered_at_flag",$user_registered_at_flag);
+    
+// format the drop-down menu for data
+$datetime = new DATETIME();
+$datetime->set_timename("hour", "min", "sec");
+
+//if((!empty($user_search_submit)) && (!empty($user_registered_at)))
+//if(!empty($user_registered_at))
+//{
+	// initialization by POST variables
+	//$datetime->set_datetime_byglobal("HTTP_POST_VARS");
+	$datetime->set_datetime_byvar2($user_registered_at);
+	$mytime = $datetime->get_timestamp_entered();
+	// $qry = "UPDATE user SET expires_at='".$mytime."' WHERE user_id=".$_POST['u'];
+	$user_registered_at = $mytime;
+//} 
+//else 
+//{
+	// $datetime->set_datetime_byvar2($user_registered_at);
+	//$datetime->set_datetime_byvar2(time());
+	//$user_registered_at = $datetime->get_timestamp_entered();
+//}
+
+if ($datetime->get_date_error())
+{
+	$tool_content .= "<b><font color=red>".$datetime->get_date_error()."</font>";
+}
+else 
+{
+	$tool_content .= "&nbsp;";
+}
+
+$tool_content .= $datetime->get_select_years("ldigit", "2002", "2029", "year")." "
+	. $datetime->get_select_months(1, "sword", "month")." "
+	. $datetime->get_select_days(1, "day")."&nbsp;&nbsp;&nbsp;"
+	. $datetime->get_select_hours(1, 12, "hour")
+	. $datetime->get_select_minutes(1, "min")
+	. $datetime->get_select_ampm();
+	//. $datetime->get_select_seconds(1, "sec")
+	
+$tool_content .= "</td>
+  </tr>";  
+$tool_content .= "<tr>
+    <td width=\"3%\" nowrap><b>Ηλεκτρονική Διεύθυνση:</b></td>
+    <td><input type=\"text\" name=\"user_email\" size=\"40\" value=\"".$user_email."\"></td>
+</tr>";
+$tool_content .= "  <tr>
+    <td colspan=\"2\"><br>
+    <input type=\"hidden\" name=\"c\" value=\"searchlist\">
+    <input type=\"submit\" name=\"search_submit\" value=\"Αναζήτηση\"></td>
+  </tr>";
+$tool_content .= "</tbody></table></form>";
+// end form
+
+
+$tool_content .= "<br /><center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
+
+draw($tool_content,3);
 ?>
-<tr><td><b><?= $langAskSearch;?></b><br><br><br></td></tr>
-<tr>
-<td>
-
-<font size="1" face="arial, helvetica">
-<form method="post" action="<?= $_SERVER['PHP_SELF'] ?>">
-
-<table>
-<tr><td><? echo $langSurname ?>:&nbsp;</td><td><input type="text" name="search_nom" value="<?= @$search_nom 
-?>"></td></tr>
-<tr><td><? echo $langName ?>:&nbsp;</td><td><input type="text" name="search_prenom" value="<?= @$search_prenom 
-?>"></td></tr>
-<tr><td><? echo $langUsername ?>:&nbsp;</td><td><input type="text" name="search_uname" value="<?= @$search_uname ?>"></td></tr>
-<tr><td><input type="submit" value="<? echo $langSearch ?>"></td</tr>
-</table>
-
-</form>
-<br><br><br>
-</font>
-
-</td></tr>
-<tr>
-
-<?
-$conn = mysql_connect("$mysqlServer", "$mysqlUser", "$mysqlPassword");
-if (!mysql_select_db("$mysqlMainDb", $conn)) {
-        die("Cannot select database $mysqlMainDb.\n");
-}
-
-$search=array();
-if(!empty($search_nom)) {
-	$search[] = "nom LIKE '".mysql_escape_string($search_nom)."%'";
-}
-if(!empty($search_prenom)) {
-	$search[] = "prenom LIKE '".mysql_escape_string($search_prenom)."%'";
-}
-if(!empty($search_uname)) {
-	$search[] = "username LIKE '".mysql_escape_string($search_uname)."%'";
-}
-
-$query=join(' AND ',$search);
-if (!empty($query)) {
-	$sql=mysql_query("SELECT nom,prenom,username,password,email,statut,user_id FROM user WHERE $query");
-
-	if (mysql_num_rows($sql) > 0) {
-?>
-<td> 
-<table width=100% cellpadding=2 cellspacing=1 border=1>
-                <tr bgcolor=silver>
-                        <th><?= $langSurname ?></th>
-			<th><?= $langName ?></th>
-                        <th><?= $langUsername ?></th>
-			<th><?= $langPass ?></th>
-			<th><?= $langEmail ?></th>
-			<th>Ιδιότητα</th>
-			<th><?= $langphone ?></th>
-			<th><?= $langDepartment ?></th>
-			<th><?= $langActions ?></th>
-                </tr>
-<?
-
- 	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
-		$logs = mysql_fetch_array($sql);
-		echo "<tr>";
-                for ($i = 0; $i < 5 ; $i++) {
-                        echo("<td width='500' align=justify>&nbsp;".htmlspecialchars($logs[$i])."</td>");
-                }
-		 switch ($logs[5]) {
-                        case 1:
-                                echo "<td>Καθηγητής</td>"; 
-				$s2=array();
-                                if(!empty($search_nom)) {
-                                	$s2[] = "profsurname LIKE '".mysql_escape_string($search_nom)."%'";
-                                }
-                                if(!empty($search_prenom)) {
-                                	$s2[] = "profname LIKE '".mysql_escape_string($search_prenom)."%'";
-                                }
-                                if(!empty($search_uname)) {
-                                	$s2[] = "profuname LIKE '".mysql_escape_string($search_uname)."%'";
-                                }
-                                $q2=join(' AND ',$s2);
-                                $a=mysql_query("SELECT profcomm,proftmima FROM prof_request WHERE $q2");
-                                $p=mysql_fetch_array($a);
-                                echo "<td>".htmlspecialchars($p[0])."</td><td>".htmlspecialchars($p[1])."</td>";
-				break;
-                        case 5:
-                                echo "<td>Φοιτητής</td><td>&nbsp;</td><td>&nbsp;</td>"; break;
-			case 10:
-				echo "<td>Επισκέπτης</td><td>&nbsp;</td><td>&nbsp;</td>"; break;
-                        default:
-                               echo "<td>¶λλο ($logs[5])</td><td>&nbsp;</td><td>&nbsp;</td>"; break;
-
-                }
-		echo "<td><a href=\"edituser.php?u=$logs[user_id]\">Επεξεργασία</a></td>\n";
-		echo "</tr>";
-	}
-} else {
-	echo "<tr><td>Δεν βρέθηκε κανένας χρήστης με τα στοιχεία που δώσατε.</td></tr>"; 
-	}
-}
-?>
-</td>
-</table>
-<p><center><a href="index.php">Επιστροφή</a></p></center>
-</body>
-</html>
