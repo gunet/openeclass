@@ -41,28 +41,41 @@
 */
 
 unset($language);
-@include('./config/config.php'); 
+//@include('./config/config.php'); 
 @include("./modules/lang/english/index.inc");
 @include("./modules/lang/english/trad4all.inc.php");
 @include("./modules/lang/$language/index.inc");
 @include("./modules/lang/$language/trad4all.inc.php");
-@include('./mainpage.inc.php');
 
-header('Content-Type: text/html; charset='. $charset);
+$require_help = true;
+$helpTopic="Clar2";
+$nameTools = "Καλωσορίσατε στο e-Class!";
+//$homePage is used by baseTheme.php
+//to parse correctly the breadcrumb.
+$homePage = true;
+//@include('./mainpage.inc.php');
+//notify base theme that we are not in a module to fix relative paths
+//$pathOverride = true;
+//$_SESSION['pathOverride'] = $pathOverride;
+//$relativePath = "";
+//header('Content-Type: text/html; charset='. $charset);
+//require './include/baseTheme.php';
 
-?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<head>
-<?
-	if (isset($siteName)) echo "<title>".$siteName."</title>"; 
-	else echo "<title>Εγκατάσταση του e-Class</title>";
-?>
-<meta http-equiv="Description" content="elearn Platform">
-<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=<?= $charset ?>">	
-</head>
+//Flag to modify the prefix for relative paths.(used by init.php)
+$path2add=0;
+include("include/baseTheme.php");
+//echo "hm2";
 
-<body bgcolor="white">
-<?
+	//This will be setting a var in the template and NOT concat $tool_content!
+//	if (isset($siteName)) $tool_content .=  "<title>".$siteName."</title>"; 
+//	else $tool_content .= "<title>Εγκατάσταση του e-Class</title>";
+
+//<!--<meta http-equiv="Description" content="elearn Platform">
+//<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=$charset">	
+//</head>
+//
+//<body bgcolor="white">-->
+
 
 // first check
 // check if we can connect to database. If not then probably it is the first time we install eclass
@@ -72,30 +85,7 @@ if (isset($mysqlServer) and isset($mysqlUser) and isset($mysqlPassword)) {
 	if (mysql_version()) mysql_query("SET NAMES greek");
 	}
 if (!isset($db)) {
-	echo "
-	<html>
-	<head><title>e-Class</title></head>
-	<body bgcolor='white'>
-	<center>
-	<table cellpadding='6' cellspacing='0' border='0' width='650' bgcolor='#E6E6E6'>
-	<tr bgcolor='navy'><td valign='top' align='center'>
-	<font color='white' face='arial, helvetica'>Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης GUNet e-Class</font>
-	</td></tr><tr><td>&nbsp;</td></tr>
-	<tr bgcolor='#E6E6E6'>
-	<td>
-	<b>Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης δεν λειτουργεί !</b>
-	<p>Πιθανοί λόγοι: 
-	<ul>
-	<li>Χρησιμοποιείτε την πλατφόρμα για πρώτη φορά.<br> Σε αυτή την περίπτωση κάντε κλίκ στον 
-	<a href=\"./install/\">Οδηγό Εγκατάστασης</a> για να ξεκινήσετε το πρόγραμμα 
-	εγκατάστασης.</li>
-	<li>Το αρχείο <tt>config.php</tt> δεν υπάρχει ή δεν μπορεί να διαβαστεί.</li>
-	<li>Η MySQL δεν λειτουργεί (επικοινωνήστε με το διαχειριστή του συστήματος).</li>
-	</ul></p> 
-	</td>
-        </tr>
-	</table>";
-	exit();
+	include ("not_installed.php");
 }
 
 // second check
@@ -103,29 +93,7 @@ if (!isset($db)) {
 
 if (isset($mysqlMainDb)) $selectResult = mysql_select_db($mysqlMainDb,$db); 
 if (!isset($selectResult)) {
-	echo "<html><head><title>e-Class</title></head>
-	<body bgcolor='white'><center>
-	<table cellpadding='6' cellspacing='0' border='0' width='650' bgcolor='#E6E6E6'>
-        <tr bgcolor='navy'>
-        <td valign='top' align='center'>
-        <font color='white' face='arial, helvetica'>Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης e-Class</font>
-        </td></tr>
-        <tr><td>&nbsp;</td></tr>
-        <tr bgcolor='#E6E6E6'><td>
-        <b>Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης δεν λειτουργεί !</b>
-        <p>Πιθανοί λόγοι:
-        <ul><li>Υπάρχει πρόβλημα με την MySQL (επικοινωνήστε με το διαχειριστή του συστήματος).</li>
-        <li>Υπάρχει πρόβλημα στις ρυθμίσεις του αρχείου <tt>config.php</tt></li></ul></p>
-        </td>
-        </tr>
-        <tr bgcolor='#E6E6E6'>
-        <td><p>Ένας πιθανός λόγος, επίσης, είναι ότι χρησιμοποιείτε την πλατφόρμα για πρώτη φορά.</p>
-        Σε αυτή την περίπτωση κάντε κλίκ στον <a href=\"./install/\">Οδηγό Εγκατάστασης</a>
-        για να ξεκινήσετε το πρόγραμμα εγκατάστασης.
-        </td>
-        </tr>
-	</table>";
-	exit();
+include("general_error.php");
 }
 
 // unset system that records visitor only once by course for statistics
@@ -202,142 +170,44 @@ if (isset($submit) && $submit) {
 
 // -------------------------------------------------------------
 
-?>
-<table width="600" align="center" cellpadding="3" cellspacing="2" border="0">
-<tr><td colspan="3" align="center" style="padding: 0px;" bgcolor="<?= $colorMedium ?>">
-<?= $main_page_banner ?>
-</td></tr>  
-<tr><td valign="top" align="left"  bgcolor="<?= $colorMedium ?>" colspan="3">
-<font face="Arial, Helvetica, sans-serif" color="#FFFFFF" size="2">&nbsp; 
-<?
+//$tool_content .= <<<tCont
+//<table width="600" align="center" cellpadding="3" cellspacing="2" border="0">
+//<tr><td colspan="3" align="center" style="padding: 0px;" bgcolor="$colorMedium">
+//$main_page_banner
+//</td></tr>  
+//<tr><td valign="top" align="left"  bgcolor="$colorMedium" colspan="3">
+//<font face="Arial, Helvetica, sans-serif" color="#FFFFFF" size="2">&nbsp; 
+//tCont;
+
+//echo $tool_content;
 if (isset($_SESSION['uid'])) $uid = $_SESSION['uid'];
 else unset($uid);
 
-if (isset($uid)) echo "$langUser : $prenom $nom";
-else echo "<a href=\"#\"></a>"; 
+// This must be setting a var in basethem and NOT concat $tool_content
+if (isset($uid)) $tool_content .=  "$langUser : $prenom $nom";
+else $tool_content .=  "<a href=\"#\"></a>"; 
 
-?>
-</font></td></tr>
-<tr>
-<td valign="top" align="left" colspan="3">
-<font size="1" face="arial, helvetica">
-<b><font face="arial, helvetica" size="1"><?= $siteName ?></font></b>
-</font><br><br></td></tr>
-<?
+//$tool_content .= <<<tCont2
+//</font></td></tr>
+//<tr>
+//<td valign="top" align="left" colspan="3">
+//<font size="1" face="arial, helvetica">
+//<b><font face="arial, helvetica" size="1">$siteName</font></b>
+//</font><br><br></td></tr>
+//tCont2;
 
+//echo $tool_content ;
 //----------------------------------------------------------------
 // if login succesful display courses lists 
 // --------------------------------------------------------------
 
-
 // first case check in which courses are registered as a student
 if (isset($uid) AND !isset($logout)) { 
-	echo '<tr valign="top"><td><table cellpadding="4" border="0" width="410" cellspacing="2">';
-	$result2 = mysql_query("SELECT cours.code k, cours.fake_code c, cours.intitule i, cours.titulaires t, cours_user.statut s
-		FROM cours, cours_user WHERE cours.code=cours_user.code_cours AND cours_user.user_id='".$uid."'
-		AND (cours_user.statut='5' OR cours_user.statut='10')");
-        if (mysql_num_rows($result2) > 0) {
-		echo '<tr><td><font size=2 face="arial, helvetica"><b>'.$langMyCoursesUser.'</b></font></td></tr>';
-		$i=0; 
-		// SHOW COURSES
-		while ($mycours = mysql_fetch_array($result2)) {
-			$dbname = $mycours["k"];
-			$status[$dbname] = $mycours["s"];
-			if ($i%2==0) echo '<tr bgcolor="'.$color1.'">';
-			elseif($i%2==1) echo '<tr bgcolor="'.$color2.'">';
-			echo '<td><font size="2" face="arial, helvetica">
-			<a href="courses/'.$mycours['k'].'/">'.$mycours['i'].'</a>
-			<br>'.$mycours['t'].'<br>'.$mycours['c'].'</font>
-			</td>
-			</tr>';
-			$i++; 
-		}	// while 
-	} // end of if
-// second case check in which courses are registered as a professeror
-	$result2 = mysql_query("SELECT cours.code k, cours.fake_code c, cours.intitule i, cours.titulaires t, cours_user.statut s
-        	FROM cours, cours_user WHERE cours.code=cours_user.code_cours 
-		AND cours_user.user_id='".$uid."' AND cours_user.statut='1'");
-	if (mysql_num_rows($result2) > 0) {
-	        echo '<tr valign="top"><td><font size=2 face="arial, helvetica"><b>'.$langMyCoursesProf.'</b></font>
-               </td></tr>';
-        	$i=0;
-        	while ($mycours = mysql_fetch_array($result2)) {
-                	$dbname = $mycours["k"];
-                	$status[$dbname] = $mycours["s"];
-                	if ($i%2==0) echo '<tr bgcolor="'.$color1.'">';
-                	elseif($i%2==1) echo '<tr bgcolor="'.$color2.'">';
-                        echo '<td><font size="2" face="arial, helvetica">
-                        <a href="'.$urlServer."courses/".$mycours['k'].'/">'.$mycours['i'].'</a>
-                        <br>'.$mycours['t'].'<br>'.$mycours['c'].'</font>
-                        </td>
-                        </tr>';
-                	$i++;
-        	}       // while
-	} // if
-	echo '</table></td>'; 
-	session_register('status');
-// --------------------------------------------------------------
-// display right menu
-// --------------------------------------------------------------
-
-?>
-	<td colspan="2" rowspan="2">
-	<table border="0" cellpadding="4" cellspacing="2" width="170"> 
-	<tr><td><font size="2" face="arial,helvetica"><b><?= $langMenu ?></b></font></td></tr>
-<?
-	// User is not currently in a course - set statut from main database
-	$res2 = mysql_query("SELECT statut FROM user WHERE user_id = '$uid'");
-	if ($row = mysql_fetch_row($res2)) $statut = $row[0];
-	if ($statut==1) { 
-?>
-		<tr bgcolor="#E6E6E6"><td><font size="2" face="arial, helvetica">
-		<a href="<?= $urlServer ?>modules/create_course/create_course.php">
-		<?= $langCourseCreate ?></a></font></td></tr>
-<?
-	} 
-	if (isset($is_admin) and $is_admin) { 
-?>
-		<tr bgcolor="#ffff99"><td><font size="2" face="arial, helvetica">
-		<a href="modules/admin/"><?= $langAdminTool?></a></font></td></tr>
-<?
-	}
- 	if ($statut != 10) {  
-?>
-		<tr bgcolor="#F5F5F5">
-		<td><font size="2" face="arial, helvetica"><a href="modules/auth/courses.php">
-		<?= $langOtherCourses ?></a>
-		</font></td></tr>
-		<tr bgcolor="#E6E6E6"><td>
-		<font size="2" face="arial, helvetica"><a href="modules/agenda/myagenda.php"><?= $langMyAgenda ?></a></font>
-		</td></tr>
-		<tr bgcolor="#F5F5F5"><td>
-              	<a href="modules/announcements/myannouncements.php">
-		<font size="2" face="arial, helvetica">
-		<?= $langMyAnnouncements ?></font>
-<? // check for new announces
-                if (check_new_announce())
-                    echo "<font size=\"1\" face=\"arial, helvetica\" color=\"blue\"><img src='./images/nea.gif' border=0 align=center alt = '(".$langNewAnnounce.")'></font>";
-?>
-		</a></td></tr>
-		<tr bgcolor="#E6E6E6"><td><font size="2" face="arial, helvetica">
-		<a href="modules/profile/profile.php">
-		<?= $langModifyProfile ?></a>
-		</font></td></tr>
-<?
-	}
-?>
-	<tr bgcolor="#F5F5F5"><td>
-	<a href="modules/help/help.php?topic=Clar2" 
-		onClick="window.open('modules/help/help.php?topic=Clar2','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); 
-		return false;">
-	<font size="2" face="arial, helvetica"><?= $langHelp ?></font></a></td></tr>
-	<tr bgcolor="#E6E6E6"><td>
-	<font size="2" face="arial, helvetica"><a href="<?= $_SERVER['PHP_SELF']?>?logout=yes">
-	<?= $langLogout ?></a></font></td></tr>
 	
-	</table>
-	</td> </tr></table>
-<?
+include("logged_in_content.php");
+
+draw($tool_content,1);
+
 }	// end of if login
 
 // -------------------------------------------------------------------------------------
@@ -345,32 +215,7 @@ if (isset($uid) AND !isset($logout)) {
 // -------------------------------------------------------------------------------------
 
 elseif ((isset($logout) && $logout) OR (1==1)) { 
-	echo "<tr><td bgcolor='#004571' valign='top' width='170'>&nbsp;</td><td bgcolor='#E6E6E6'>&nbsp;</td></tr>";
-	echo "<tr><td rowspan='2' bgcolor='#e6e6e6' valign='top' width='170'><br>";
-	echo "<table>";
-	echo "<tr><td><img src='images/arrow.gif' width='4' height='8'><font face='arial, helvetica' size='2'>
-        <a href='modules/auth/listfaculte.php'>$langListFaculte</a></font></td></tr>";
-        echo "<tr><td><img src='./images/arrow.gif' width='4' height='8'><font face='arial, helvetica' size='2'>";
 	
-	/* Check for LDAP server entries */
-	$ldap_entries = mysql_fetch_array(mysql_query("SELECT ldapserver FROM institution"));
-	if ($ldap_entries['ldapserver'] <> NULL) $newuser = "newuser_info.php";
-	else $newuser = "newuser.php";
-	// end of checking	
-	echo " <a href='modules/auth/$newuser'>$langNewUser</a></font></td></tr>";
-	echo "<tr><td><img src='images/arrow.gif' width='4' height='8'><font face='arial, helvetica' size='2'>";
-        echo " <a href='modules/auth/formprof.php'>$langProfReq</a></font></td></tr>";
-        echo "<tr><td><img src='images/arrow.gif' width='4' height='8'><font face='arial, helvetica' size='2'>
-        <a href='./manuals/manual.php'>$langManuals</a></font></td></tr>";
-	echo "<tr><td><img src='images/arrow.gif' width='4' height='8'><font face='arial, helvetica' size='2'>
-        <a href='info/about.php'>$langInfoPlat</a></font></td></tr>";
-	echo "<tr><td style='padding-top: 40px;'><img src='./images/arrow.gif' width='4' height='8'><font face='arial, helvetica' size='2'>
-        <a href='http://eclass.gunet.gr/teledu/index.htm' target=_blank>$langSupportForum</a></font></td></tr>";
-	echo "<tr><td style='padding-bottom: 60px;'><img src='./images/arrow.gif' width='4' 
-height='8'><font face='arial, helvetica' size='2'>
-        <a href='info/contact.php'>$langContact</a></font></td></tr>";
-	echo "</table>";        
-        echo "</td>";
 	if (isset($logout) && $logout && isset($uid)) {
 		mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user,
 			loginout.ip, loginout.when, loginout.action)
@@ -379,31 +224,18 @@ height='8'><font face='arial, helvetica' size='2'>
 		unset($nom);
 		session_destroy();
 	}
+	
+	include("logged_out_content.php");
 
-?>	
-      <td bgcolor="#f5f5f5" valign="middle" width="430" style='padding-top: 20px;'> 
-      <form action="<?= $_SERVER['PHP_SELF']?>" method="post">
-        <p align="center"><font face="Tahoma, arial, helvetica" size="2"><?= $langUserName ?></font><br>
-        <input style='width:150px; heigth:25px;' name="uname" size="20"><br>
-        <font face="arial, helvetica" size="2"><?= $langPass ?></font><br>
-        <input style='width:150px; height:25px;' name="pass" type="password" size="20"><br>
-        <input value="<?= $langEnter ?>" name="submit" type="submit"><br>
-	<font size="1"><?= $warning ?></font>
-	<font size="2"><a href="modules/auth/lostpass.php"><?= $lang_forgot_pass?></a></font><br></p>
-      </form>
-      <div style="padding-top: 4px; padding-left: 20px; padding-right:20px; padding-bottom: 5px;">
-      <?= $main_text  ?>
-      </div>
-      </td>
 
-<?
-
-	echo "</tr></table>";
+draw($tool_content, 0,'index');
+//	$tool_content .=  "</tr></table>";
 } // end of display 
 
 
+
 // display page footer
-echo $main_page_footer;
+//echo $main_page_footer;
 
 // check for new announcements
 function check_new_announce() {
@@ -439,5 +271,6 @@ else
 
 
 ?>
-</body> 
+<!--</body> 
 </html>
+-->
