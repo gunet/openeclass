@@ -114,7 +114,7 @@ function getToolsArray($cat) {
  * @return unknown
  */
 function loggedInMenu(){
-	global $webDir, $language, $uid, $is_admin;
+	global $webDir, $language, $uid, $is_admin, $urlServer;
 
 	include("$webDir$urlAppend/modules/lang/$language/index.inc");
 
@@ -132,36 +132,38 @@ function loggedInMenu(){
 	//	dumpArray($row);
 	if ($statut==1) {
 		array_push($sideMenuText, $langCourseCreate);
-		array_push($sideMenuLink, $urlServer . "claroline/create_course/create_course.php");
+		array_push($sideMenuLink, $urlServer . "modules/create_course/create_course.php");
 	}
 
 	if (isset($is_admin) and $is_admin) {
 		array_push($sideMenuText, $langAdminTool);
-		array_push($sideMenuLink, $urlServer . "claroline/admin/");
+		array_push($sideMenuLink, $urlServer . "modules/admin/");
 	}
 
 	if ($statut != 10) {
+//		echo $urlServer . "modules/auth/courses.php<br>";
+//		echo $urlServer;
 		array_push($sideMenuText, $langOtherCourses);
-		array_push($sideMenuLink, $urlServer . "claroline/auth/courses.php");
+		array_push($sideMenuLink, $urlServer . "modules/auth/courses.php");
 
 		array_push($sideMenuText, $langMyAgenda);
-		array_push($sideMenuLink, $urlServer . "claroline/calendar/myagenda.php");
+		array_push($sideMenuLink, $urlServer . "modules/agenda/myagenda.php");
 
 		array_push($sideMenuText, $langMyAnnouncements);
-		array_push($sideMenuLink, $urlServer . "claroline/announcements/myannouncements.php");
+		array_push($sideMenuLink, $urlServer . "modules/announcements/myannouncements.php");
 
 		array_push($sideMenuText, $langModifyProfile);
-		array_push($sideMenuLink, $urlServer . "claroline/auth/profile.php");
+		array_push($sideMenuLink, $urlServer . "modules/profile/profile.php");
 
 	}
 
-	array_push($sideMenuText, $langHelp);
-	array_push($sideMenuLink, $urlServer . "\claroline/help/help.php?topic=Clar2\"
-		onClick=\"window.open('claroline/help/help.php?topic=Clar2','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); 
-		return false;");
+//	array_push($sideMenuText, $langHelp);
+//	array_push($sideMenuLink, $urlServer . "\modules/help/help.php?topic=Clar2\"
+//		onClick=\"window.open('modules/help/help.php?topic=Clar2','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); 
+//		return false;");
 
-	array_push($sideMenuText, $langLogout);
-	array_push($sideMenuLink, $_SERVER['PHP_SELF'] . "?logout=yes");
+//	array_push($sideMenuText, $langLogout);
+//	array_push($sideMenuLink, $_SERVER['PHP_SELF'] . "?logout=yes");
 
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);
@@ -180,7 +182,7 @@ function loggedInMenu(){
  */
 function loggedOutMenu(){
 
-	global $webDir, $language;
+	global $webDir, $language, $urlServer;
 
 	include("$webDir$urlAppend/modules/lang/$language/index.inc");
 
@@ -193,26 +195,26 @@ function loggedOutMenu(){
 	array_push($sideMenuSubGroup, $langMenu);
 
 	array_push($sideMenuText, $langListFaculte);
-	array_push($sideMenuLink, "claroline/auth/listfaculte.php");
+	array_push($sideMenuLink, "modules/auth/listfaculte.php");
 
 	/* Check for LDAP server entries */
 	$ldap_entries = mysql_fetch_array(mysql_query("SELECT ldapserver FROM institution"));
 	if ($ldap_entries['ldapserver'] <> NULL) $newuser = "newuser_info.php";
 	else $newuser = "newuser.php";
 	// end of checking
-
+	
 	array_push($sideMenuText, $langNewUser);
-	array_push($sideMenuLink, "claroline/auth/$newuser");
+	array_push($sideMenuLink, $urlServer."modules/auth/$newuser");
 	array_push($sideMenuText, $langProfReq);
-	array_push($sideMenuLink, "claroline/auth/formprof.php");
+	array_push($sideMenuLink, $urlServer."modules/auth/formprof.php");
 	array_push($sideMenuText, $langManuals);
-	array_push($sideMenuLink, "claroline/auth/manual.php");
+	array_push($sideMenuLink, $urlServer."manuals/manual.php");
 	array_push($sideMenuText, $langInfoPlat);
-	array_push($sideMenuLink, "claroline/auth/about.php");
+	array_push($sideMenuLink, $urlServer."info/about.php");
 	array_push($sideMenuText, $langSupportForum);
 	array_push($sideMenuLink, "http://eclass.gunet.gr/teledu/index.htm");
 	array_push($sideMenuText, $langContact);
-	array_push($sideMenuLink, "claroline/auth/contact.php");
+	array_push($sideMenuLink, $urlServer."info/contact.php");
 
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);
@@ -222,7 +224,8 @@ function loggedOutMenu(){
 
 function adminMenu(){
 
-	global $webDir, $urlAppend, $language, $phpSysInfoURL, $phpMyAdminURL,  $siteName, $is_admin;
+	global $webDir, $urlAppend, $language, $phpSysInfoURL, $phpMyAdminURL;
+	global $siteName, $is_admin, $urlServer;
 
 	include("$webDir$urlAppend/modules/lang/$language/admin.inc.php");
 	/* Check for LDAP server entries */
