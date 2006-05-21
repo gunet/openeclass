@@ -94,6 +94,16 @@ td, th {
 	padding: 4px;
 }
 
+td.caution {
+   background-color:#FBEC5D;
+}
+td.success {
+   background-color:#CCFF99;
+}
+
+td.inactive {
+   background-color:#B0C4DE;
+}
 thead th {
 	text-align: center;
 	background: #E6EDF5;
