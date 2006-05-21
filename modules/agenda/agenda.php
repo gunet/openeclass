@@ -93,7 +93,7 @@ $tool_content .= <<<tContent1
 	</div>
 	
 tContent1;
-
+//$is_adminOfCourse=true;
 if ($is_adminOfCourse) {
 
 	if (isset($submit)&&$submit) {	
@@ -387,7 +387,7 @@ while ($myrow = mysql_fetch_array($result))
 $tool_content .= "</tbody>";
 $tool_content .=  "</table>";
 
-//	end_page();
+
 draw($tool_content, 2, 'agenda', $head_content, $body_action);
 
 ?>
