@@ -18,7 +18,23 @@
  +----------------------------------------------------------------------+
 */
 
-
+//Modify the relative path prefix according to the state of the system
+//0: logged in/out screen
+//1: user home
+//else: everything else(modules)
+if (isset($path2add) && $path2add == 0){
+	$relPathLib = "../include/";
+	$relPath = "";
+} elseif (isset($path2add) && $path2add == 1) {
+	$relPathLib = "";
+	$relPath = "../../";
+} elseif (isset($path2add) && $path2add == 2) {
+	$relPathLib = "";
+	$relPath = "../";
+} else {
+	$relPathLib = "";
+	$relPath = "../../";
+}
 //------------------------------------
 // include the following necessary files
 // ---------------------------------
@@ -28,11 +44,11 @@ include "header.php";
 // footer
 include "footer.php";
 // function library
-include "lib/main.lib.php";
+//path for logged out + logged in
+//include "../include/lib/main.lib.php";
+include $relPathLib . "lib/main.lib.php";
 
 if (!session_id()) { session_start(); }
-
-@include "../../config/config.php";
 
 // Set some defaults 
 if (!isset($colorLight)) {
@@ -50,18 +66,23 @@ if (!isset($bannerPath)) {
 
 // Get configuration variables
 if (!isset($webDir)) {
-    @include('../config/config.php');
+	//path for logged out + logge in
+//    @include($pathOverride . "config/config.php");
+
+//path for course_home
+		@include($relPath . "config/config.php");
 		if (!isset($webDir)) {
 			die("Unable to open configuration file,
 			please contact the system administrator");
 		}
 }
 
-
 // Connect to database
 $db = mysql_connect($mysqlServer, $mysqlUser, $mysqlPassword);
 if (mysql_version()) mysql_query("SET NAMES greek");
 mysql_select_db($mysqlMainDb, $db);
+
+
 
 // Include messages
 @ include("$webDir/modules/lang/english/trad4all.inc.php");
@@ -120,12 +141,14 @@ if (isset($require_current_course) and $require_current_course) {
 		$dbname = $_SESSION['dbname'];
 	}
 	$currentCourse = $dbname;
+	
 	$result = db_query("
 		SELECT code, fake_code, intitule, faculte, 
 			titulaires, languageCourse, 
 			departmentUrlName, departmentUrl, visible
 		FROM cours
 		WHERE cours.code='$currentCourse'");
+	
 	while ($theCourse = mysql_fetch_array($result)) {
 		$fake_code 	= $theCourse["fake_code"];
 		$code_cours = $theCourse["code"];
