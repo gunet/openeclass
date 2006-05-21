@@ -4,8 +4,10 @@
 <head>
 <title>e-class v2.0 base theme</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-7" />
-<link href="../../template/classic/theme.css" rel="stylesheet" type="text/css" />
-<link href="../../template/classic/tool_content.css" rel="stylesheet" type="text/css" />
+<!--<link href="../../template/classic/theme.css" rel="stylesheet" type="text/css" />
+<link href="../../template/classic/tool_content.css" rel="stylesheet" type="text/css" />-->
+<link href="{TOOL_PATH}template/classic/theme.css" rel="stylesheet" type="text/css" />
+<link href="{TOOL_PATH}template/classic/tool_content.css" rel="stylesheet" type="text/css" />
 {TOOL_CSS}
 
 
@@ -39,14 +41,32 @@
   
   <div id="firstBar"> 
   	<span class="user">{LANG_USER}: {USER_NAME} {USER_SURNAME}</span>
-    <span class="logout"><a class="logout_icon" href="../../index.php?logout=yes" title="{LANG_LOGOUT}"></a><a href="../../index.php?logout=yes" title="{LANG_LOGOUT}" >{LANG_LOGOUT}</a></span>
+    <span class="logout"><a class="logout_icon" href="{TOOL_PATH}index.php?logout=yes" title="{LANG_LOGOUT}"></a><a href="{LOGOUT_LINK}index.php?logout=yes" title="{LANG_LOGOUT}" >{LANG_LOGOUT}</a></span>
   </div>
   
 	<div id="secondBar"> 
   	
-		<span id="bread">
+	<span id="bread">
+	<!-- BEGIN breadCrumbHomeBlock -->
+	<ul>
+	<li class="first">{BREAD_HREF_FRONT}{BREAD_TEXT}{BREAD_HREF_END}		
+			<!-- END breadCrumbHomeBlock -->
+			
+						<!-- BEGIN breadCrumbStartBlock -->
+							<ul>
+								<li>{BREAD_ARROW} {BREAD_HREF_FRONT}{BREAD_TEXT}{BREAD_HREF_END}
+							<!-- END breadCrumbStartBlock -->	
+							<!-- BEGIN breadCrumbEndBlock -->
+								</li>
+							</ul>
+							<!-- END breadCrumbEndBlock -->
+						
+	</span>
+	
+	
+		<!--<span id="bread">
 			<ul>
-				<li class="first"><a href="#">Η αρχική μου σελίδα</a>
+				<li class="first"><a href="{BREAD_START_LINK}">{BREAD_START}</a>
 					<ul>
 						<li>&#187; <a href="#">Εισαγωγή στις Τηλεπικοινωνίες</a>
 							<ul>
@@ -57,14 +77,14 @@
 					</ul>
 				</li>
 			</ul>
-		</span>
+		</span>-->
   		<span class="langSwitch"><a href="#" title="English" accesskey="l" target="_self">English</a></span>
   </div>
 	<div id="thirdBar">
 		<span class="lesson_icon"></span><span class="lesson">{LESSON_TITLE}</span>
 	  	<!-- <span class="search"> -->	<form name="form1" id="form1" method="post" action="">
   									<input type="text" name="textfield" />
-									<input type="image" name="Submit" src="../../template/classic/img/search_icon.gif" alt="Search" width="14" WIDTH="13" BORDER="0">
+									<input type="image" name="Submit" src="{TOOL_PATH}template/classic/img/search_icon.gif" alt="Search" width="14" WIDTH="13" BORDER="0">
 								</form>  
 		<!-- </span> -->
 	  </div>
@@ -79,7 +99,7 @@
 					<!-- BEGIN leftNavCategoryBlock -->
   					<li class="{NAV_CSS_CAT_CLASS}">{ACTIVE_TOOLS}</li>
 						<!-- BEGIN leftNavLinkBlock -->
- 						 	<li><a href="{TOOL_LINK}">{TOOL_TEXT}</a></li>
+ 						 	<li class="{TOOL_ICON}"><div><a href="{TOOL_LINK}"><img src="{TOOL_PATH}template/classic/img/agenda.gif" width="14" height="16" border="0" /> {TOOL_TEXT}</a></div></li>
 						<!-- END leftNavLinkBlock -->
 					<!-- END leftNavCategoryBlock -->
 				</ul>
