@@ -35,32 +35,52 @@ h5 { font-weight: normal; }
 .normal { font-size: 10pt; }';
 
 $langFiles = 'announcements';
-include('../../include/init.php');
+include '../../include/baseTheme.php';
 include('../../include/lib/textLib.inc.php'); 
-begin_page($langMyAnnouncements);
-
+$nameTools = $langMyAnnouncements;
+$tool_content = "";
 $result = db_query("SELECT * FROM annonces,cours_user 
 			WHERE annonces.code_cours=cours_user.code_cours 
 			AND cours_user.user_id='$uid' 
 			ORDER BY temps DESC",$mysqlMainDb) OR die("DB problem");
 
-	echo "<table width=\"600\" cellpadding=\"2\" cellspacing=\"4\" border=\"0\">";
+	$tool_content .= "<table width=\"99%\">
+						<thead>
+							<tr>
+								<th width=\"200\">Ma8hma</th>
+								<th>$langAnn</th>
+								<th>Anakoinwsh</th>
+							</tr>
+						</thead>
+						<tbody>
+	
+	";
+	$i=0;
 	while ($myrow = mysql_fetch_array($result))
 	{	
 		$content = $myrow['contenu'];
 		$content = make_clickable($content);
 		$content = nl2br($content);
 		$row = mysql_fetch_array(db_query("SELECT intitule,titulaires FROM cours WHERE code='$myrow[code_cours]'"));
-		echo "<tr><td bgcolor=\"$color2\"><em>$row[intitule]</em> ($langTitulaire <b>$row[titulaires]</b>)
-			<h5>($langAnn : ".$myrow['temps'].")</h5></td></tr>
-		      <tr><td class=\"normal\">$content</td></tr>";
+		if($i%2 ==0) {
+			$tool_content .= "<tr>";
+		} else {
+			$tool_content .= "<tr class=\"odd\">";
+		}
+		
+		$tool_content .= "	
+				<td>$row[intitule]</td>
+				<td>".$myrow['temps']."</td>
+				<td>$content</td>
+			</tr>
+		";
+		$i++;
+//		$tool_content .= "<tr><td bgcolor=\"$color2\"><em>$row[intitule]</em> ($langTitulaire <b>$row[titulaires]</b>)
+//			<h5>($langAnn : ".$myrow['temps'].")</h5></td></tr>
+//		      <tr><td class=\"normal\">$content</td></tr>";
 	}	// while loop
-	echo "
-	</table>";
+	$tool_content .= "
+	</tbody></table>";
+	draw($tool_content, 1);
 ?>
-		<hr noshade size="1">
-	</td>
-	</tr>
-</table>
-</body>
-</html>
+	
