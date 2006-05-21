@@ -25,6 +25,7 @@ $nameTools = $langGroupManagement;
 
 $tool_content = "";
 
+//echo MODULE_ID_AGENDA;
 ############## GROUP MODIFICATIONS ###############################
 
 // Group creation
@@ -212,9 +213,9 @@ if ($is_adminOfCourse)
 		$tool_content .= "
 		<table>
 		<thead>
-		<tr><th>
+		<tr><td class=\"success\">
 		$message
-		</th>
+		</td>
 		</tr>
 		</thead>
 		</table>
