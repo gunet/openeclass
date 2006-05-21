@@ -205,6 +205,11 @@ background-colorr: red;
 	display: inline;
 	}
 
+#bread ul li a:active, #bread ul li a:visited,#bread ul li a:link{
+	font-size:10px;
+	color:blue;
+	}	
+	
 #headerMenu
 {
 	list-style-type: none;
@@ -559,6 +564,32 @@ width: 170px;
 color:#FFFFFF;
 background-color:#009933;
 }
+
+#navcontainer li2{
+background-images: url(img/agenda.gif) left center no-repeat;
+}
+
+#navcontainer li{
+text-indentd: 5px;
+}
+
+#navcontainer li img{
+float:left;
+margin-right:5px;
+clear:left;
+}
+#navcontainer li.agenda2
+{
+position:relative;
+padding-left:1px;
+text-indent: 14px;
+background-image: url(img/agenda.gif);
+background-repeat: no-repeat;
+background-position: 1% 40%;
+z-index:2;
+}
+
+
 
 #content_main
 {
