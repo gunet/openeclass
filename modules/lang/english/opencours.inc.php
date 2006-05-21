@@ -30,4 +30,8 @@ $m['legopen'] = 'Open Course';
 $m['legrestricted'] = 'Registration required';
 $m['legclosed'] = 'Closed Course';
 
+$m['type']="Tpe";
+$m['name']="Lesson name";
+$m['code']="Lesson code";
+$m['prof']="Professor(s)";
 ?>

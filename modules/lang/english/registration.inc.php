@@ -79,6 +79,10 @@ $langPersonalSettings="Your personnal settings have been registered and an email
 $langYourRegTo="Your are registered to";
 $langIsReg="has been updated";
 $langCanEnter="Enter the classroom";
+$langChoice="Επιλογή";
+$langLessonName="Όνομα μαθήματος";
+$langLessonCode="Κωδικός μαθήματος";
+$langProfessors="Καθηγητής(ες)";
 
 // profile.php
 

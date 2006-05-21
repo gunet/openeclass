@@ -87,7 +87,10 @@ $langPersonalSettings="Οι προσωπικές σας ρυθμίσεις έχουν καταχωρηθεί
 $langYourRegTo="Ο κατάλογος μαθημάτων σας περιέχει";
 $langIsReg="έχει ενημερωθεί";
 $langCanEnter="Είσοδος στην ψηφιακή αίθουσα.";
-
+$langChoice="Επιλογή";
+$langLessonName="Όνομα μαθήματος";
+$langLessonCode="Κωδικός μαθήματος";
+$langProfessors="Καθηγητής(ες)";
 // profile.php
 
 
