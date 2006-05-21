@@ -36,7 +36,8 @@
  */
 
 $langFiles = array('registration', 'gunet');
-include('../../include/init.php');
+//include('../../include/init.php');
+include '../../include/baseTheme.php';
 $nameTools = $langUserDetails;
 
 if(isset($already_second) and $already_second) {
@@ -52,58 +53,56 @@ $ldap_entries = mysql_fetch_array(mysql_query("SELECT ldapserver FROM institutio
 if ($ldap_entries['ldapserver'] <> NULL)
 	$navigation[]= array ("url"=>"newuser_info.php", "name"=> $reguser);
 
-begin_page();
-			
-?>
-<table><tr>
-<td width="600">
+//begin_page();
+$tool_content = "";			
+$tool_content .= <<<tCont
+
 <form action="newuser_second.php" method="post">
-<table cellpadding="3" cellspacing="0" border="0" width="100%" bgcolor="<?= $color2 ?>">
-<tr valign="top">
-<td><font size="2" face="arial, helvetica"><?= $langName;?></font></td>
-<td><input type="text" name="prenom_form"><font size="1">&nbsp;(*)</font></td>
+<table  width="99%">
+<thead>
+<tr>
+<th>$langName</th>
+<td><input type="text" name="prenom_form">(*)</td>
 </tr>
-<tr><td><font size="2" face="arial, helvetica"><?= $langSurname;?></font></td>
-<td><input type="text" name="nom_form"><font size="1">&nbsp;(*)</font></td>
+<tr><th>$langSurname</th>
+<td><input type="text" name="nom_form">(*)</td>
 </tr>
-<tr><td><font size="2" face="arial, helvetica"><?= $langUsername;?></font></td>
-<td><input type="text" name="uname" size="20" maxlength="20"><font size="1">&nbsp;(*)</font></td>
+<tr><th>$langUsername</th>
+<td><input type="text" name="uname" size="20" maxlength="20">(*) $langUserNotice</td>
 </tr>
-<tr><td>&nbsp;</td><td><font size="1"><?= $langUserNotice ?></font></td></tr>
-<tr><td><font size="2" face="arial, helvetica"><?= $langPass;?></font></td>
-<td><input type="password" name="password1" size="20" maxlength="20"><font size="1">&nbsp;(*)</font></td>
+
+<tr><th>$langPass</th>
+<td><input type="password" name="password1" size="20" maxlength="20">(*) $langUserNotice</td>
 </tr>
 <tr>
-<td><font size="2" face="arial, helvetica"><?= $langConfirmation;?><br>
-</td>
-<td valign="top"><input type="password" name="password" size="20" maxlength="20"><font size="1">&nbsp;(*)</font></td>
+<th>$langConfirmation </th>
+<td><input type="password" name="password" size="20" maxlength="20">(*) $langUserNotice</td>
 </tr>
-<tr><td>&nbsp;</td><td><font size="1"><?= $langUserNotice ?></font></td></tr>
+
 <tr>
-<td><font size="2" face="arial, helvetica"><?= $langEmail;?></font></td>
-<td><input type="text" name="email"></td>
+<th>$langEmail</th>
+<td><input type="text" name="email"> $langEmailNotice</td>
 </tr>
-<tr><td>&nbsp;</td><td><font size="1"><?= $langEmailNotice ?></font></td></tr>
-<tr><td><font size="2" face="arial, helvetica"><?= $langAm;?></font></td>
+
+<tr><th>$langAm</th>
 <td><input type="text" name="am"></td>
 </tr>
-<tr><td><font size="2" face="arial, helvetica"><?= $langDepartment;?></font></td>
+<tr><th>$langDepartment</th>
 <td>
 <select name="department">
 
-<?
+tCont;
 $deps=mysql_query("SELECT name, id FROM faculte ORDER BY id");
 while ($dep = mysql_fetch_array($deps)) 
-	echo "\n<option value=\"$dep[1]\">$dep[0]</option>";
-?>
+	$tool_content .=  "\n<option value=\"$dep[1]\">$dep[0]</option>";
 
-</select></td></tr>
-<tr><td>&nbsp;</td><td><input type="submit" name="submit" value="<?= $langRegistration?>" ></td></tr>
+$tool_content .= "
+</select></td></tr></thead>
 </table>
-</form>
-</td>
-</tr>
-<tr><td  align='right'><font size="1"><?= $langRequiredFields ?></font>
-<?
-end_page();
+<br>
+<input type=\"submit\" name=\"submit\" value=\"$langRegistration\" >
+</form><br>
+<p>$langRequiredFields</p>";
+
+draw($tool_content, 0);
 ?>
