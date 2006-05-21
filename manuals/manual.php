@@ -35,46 +35,42 @@
 */
 
 
-include ('../include/init.php');
+//include ('../include/init.php');
+$path2add=2;
+include '../include/baseTheme.php';
 $nameTools = "Διαθέσιμα Εγχειρίδια";
+//begin_page();
 
-begin_page();
+//$um="$urlServer/modules/manuals/";
+$tool_content = "";
+$tool_content .= <<<tCont
+<p>Στη σελίδα αυτή θα βρείτε χρήσιμα εγχειρίδια που αφορούν την πλατφόρμα e-Class.</p>
+<ul>
 
-$um="$urlServer/modules/manuals/";
+<li><a href="$urlServer/modules/manuals/e-Class.pdf" target=_blank>Αναλυτική Περιγραφή e-Class</a></li>
+<li><a href="$urlServer/modules/manuals/e-Class_short.pdf" target=_blank>Σύντομη Περιγραφή e-Class</a></li>
 
-?>
-<tr>
-<td>
-<table cellpadding="3" cellspacing="0" border="0" width="100%">
-<tr valign="top" bgcolor="<?= $color2 ?>">
-<td><font size="2">
-Στη σελίδα αυτή θα βρείτε χρήσιμα εγχειρίδια που αφορούν την πλατφόρμα e-Class.</font><br><br>
-<ul>
-<font size="2">
-<li><a href="<?= $um; ?>e-Class.pdf" target=_blank>Αναλυτική Περιγραφή e-Class</a></li>
-<li><a href="<?= $um; ?>e-Class_short.pdf" target=_blank>Σύντομη Περιγραφή e-Class</a></li>
-</font>
-</ul><br>
-<ul>
-<font size="2">
-<li>Εγχειρίδιο Χρήστη (Μαθητή/Φοιτητή): σε μορφή <a href="<?= $um; ?>manS/ManS.pdf" target=_blank>PDF</a>
-ή <a href="<?= $um; ?>manS/ManS.htm" target=_blank>HTML</a></li>
-<li>Εγχειρίδιο Καθηγητή: σε μορφή <a href="<?= $um; ?>manT/ManT.pdf" target=_blank>PDF</a>
-ή <a href="<? echo $um; ?>manT/ManT.htm" target=_blank>HTML</a></li>
-</ul><br>
-</font>
-<ul>
-<font size="2">
-<li><a href="<?= $um; ?>Teleteaching_Std.pdf" target=_blank>Πρότυπα Μαθησιακών Τεχνολογιών</a></li>
-</font>
 </ul>
-<br><br><br>
-</td></tr>
-<tr><td><font size="1">Για να διαβάσετε τα αρχεία PDF μπορείτε να χρησιμοποιήσετε το πρόγραμμα
+<ul>
+
+<li>Εγχειρίδιο Χρήστη (Μαθητή/Φοιτητή): σε μορφή <a href="$urlServer/modules/manuals/manS/ManS.pdf" target=_blank>PDF</a>
+ή <a href="$urlServer/modules/manuals/manS/ManS.htm" target=_blank>HTML</a></li>
+<li>Εγχειρίδιο Καθηγητή: σε μορφή <a href="$urlServer/modules/manuals/manT/ManT.pdf" target=_blank>PDF</a>
+ή <a href="$urlServer/modules/manuals/manT/ManT.htm" target=_blank>HTML</a></li>
+</ul>
+
+<ul>
+
+<li><a href="$urlServer/modules/manuals/Teleteaching_Std.pdf" target=_blank>Πρότυπα Μαθησιακών Τεχνολογιών</a></li>
+
+</ul>
+
+
+<p>Για να διαβάσετε τα αρχεία PDF μπορείτε να χρησιμοποιήσετε το πρόγραμμα
 Acrobat Reader που θα βρείτε <a href="http://www.adobe.com/products/acrobat/readstep2.html" 
-target=_blank>εδώ</a>.</font></td></tr>
-</table>
-</td>
-</table>
-</body>
-</html>
+target=_blank>εδώ</a>.</p>
+
+tCont;
+
+draw($tool_content, 0);
+?>
