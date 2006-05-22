@@ -34,22 +34,23 @@ $require_current_course = TRUE;
 $langFiles = array('course_description','pedaSuggest');
 $require_help = TRUE;
 $helpTopic = 'Coursedescription';
-include ('../../include/init.php');
-
+//include ('../../include/init.php');
+include '../../include/baseTheme.php';
 include('../../include/lib/textLib.inc.php'); 
 
 $nameTools = $langCourseProgram;
-begin_page();
+//begin_page();
+$tool_content = "";
 
-?>
+$tool_content .= "
 
 <tr>
-<td colspan="2">
+<td colspan=\"2\">";
 
-<?php 
+
 if ($is_adminOfCourse)
 { 
-	echo "
+	$tool_content .= "
 			<a href=\"edit.php\">
 				".$langEditCourseProgram."
 			</a>";
@@ -61,11 +62,11 @@ if ($is_adminOfCourse)
 	$res = mysql_query($sql);
 	if (mysql_num_rows($res) >0 )
 	{
-		echo "
+		$tool_content .= "
 			<hr noshade size=\"1\">";
 		while ($bloc = mysql_fetch_array($res))
 		{ 
-			echo "
+			$tool_content .= "
 			<H4>
 				".$bloc["title"]."
 			</H4>
@@ -76,12 +77,13 @@ if ($is_adminOfCourse)
 	}
 	else
 	{
-		echo "<br><h4>$langThisCourseDescriptionIsEmpty</h4>";
+		$tool_content .= "<br><h4>$langThisCourseDescriptionIsEmpty</h4>";
 	}
 }
 
+draw($tool_content, 2);
 ?>
-		</td>
+	<!--	</td>
 	</tr>
 	<tr name="bottomLine" >
 		<td colspan="2">
@@ -91,5 +93,5 @@ if ($is_adminOfCourse)
 	</tr>
 </table>
 </body>
-</html>
+</html>-->
 

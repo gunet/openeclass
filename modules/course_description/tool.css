@@ -1,0 +1,10 @@
+form.category {
+	margin: 0 auto;
+	text-align:right;
+}
+
+.cellpos{
+	position:relative;
+	vertical-align:middle; 
+	text-align:right;
+}

@@ -33,29 +33,31 @@ $require_current_course = TRUE;
 $langFiles = array('course_description','pedaSuggest');
 $require_help = TRUE;
 $helpTopic = 'Coursedescription';
-include ('../../include/init.php');
-
+//include ('../../include/init.php');
+include '../../include/baseTheme.php';
 include('../../include/lib/textLib.inc.php'); 
 
 $showPedaSuggest = false;
 
 $nameTools = $langEditCourseProgram ;
 $navigation[]= array ("url"=>"index.php", "name"=> $langCourseProgram);
-begin_page();
-
+//begin_page();
+$db = $_SESSION['dbname'];
 if ($language == 'greek')
         $lang_editor='gr';
 else
         $lang_editor='en';
-?>
+        
+      
+$head_content = <<<hCont
 
 <script type="text/javascript">
-  _editor_url = '<?= $urlAppend ?>/include/htmlarea/';
-  _css_url='<?= $urlAppend ?>/css/';
-  _image_url='<?= $urlAppend ?>/include/htmlarea/images/';
-  _editor_lang = '<?= $lang_editor ?>';
+  _editor_url = '$urlAppend/include/htmlarea/';
+  _css_url='$urlAppend/css/';
+  _image_url='$urlAppend/include/htmlarea/images/';
+  _editor_lang = '$lang_editor';
 </script>
-<script type="text/javascript" src='<?= $urlAppend ?>/include/htmlarea/htmlarea.js'></script>
+<script type="text/javascript" src='$urlAppend/include/htmlarea/htmlarea.js'></script>
 
 <script type="text/javascript">
 var editor = null;
@@ -74,13 +76,18 @@ function initEditor() {
 }
 
 </script>
+hCont;
+//<body onload="initEditor()">
+//</td></tr>
+//<tr>
+//<td colspan="2">
 
-<body onload="initEditor()">
-</td></tr>
-<tr>
-<td colspan="2">
-
-<?
+$body_action = "onload=\"initEditor()\"";
+//
+//if(!isset($numBloc)){
+//	unset($head_content);
+//	unset($body_action);
+//}
 if ($is_adminOfCourse) { 
 
 //// SAVE THE BLOC
@@ -113,7 +120,7 @@ if ($is_adminOfCourse) {
 		VALUES 
 		('".$_POST["edIdBloc"]."');";
 		}
-		db_query($sql);
+		db_query($sql, $db);
 		if ($edTitleBloc=="")
 		{
 			$edTitleBloc = $titreBloc[$edIdBloc];
@@ -126,34 +133,36 @@ if ($is_adminOfCourse) {
 		`content` ='".trim($edContentBloc)."',
 		`upDate` = NOW() 
 		WHERE id = '".$_POST["edIdBloc"]."';";
-		db_query($sql);
+		db_query($sql, $db);
 	}
 	
 //// Kill THE BLOC
 	if (isset($deleteOK)) {
+		
 		$sql = "SELECT * FROM `course_description` where id = '".$_POST["edIdBloc"]."'";
 		$res = db_query($sql,$db);
 		$blocs = mysql_fetch_array($res);
 		if (is_array($blocs)) {
-			echo "<h4>$langBlockDeleted</h4>";
-			echo "
+			$tool_content .=  "<h4>$langBlockDeleted</h4>";
+			$tool_content .=  "
 			<div class=\"deleted\">
-				<B>
+				<p>
 					".$blocs["title"]."
-				</B>
-				<BR>
+				</p>
+				<p>
 				".$blocs["content"]."
+				</p>
 			</div>";
 		}
 		
 		$sql ="DELETE FROM `course_description` WHERE id = '".$_POST["edIdBloc"]."'";
 		$res = db_query($sql,$db);
-		echo "
+		$tool_content .=  "
 		<BR>
-		<a href=\"".$_SERVER['PHP_SELF']."\">
-			<font face=\"Arial, Helvetica, sans-serif\" size=\"2\">
+		<p><a href=\"".$_SERVER['PHP_SELF']."\">
+			
 				".$langBack."
-			</font></a>";
+			</a></p>";
 	}
 //// Edit THE BLOC 
 	elseif(isset($numBloc)) {
@@ -167,41 +176,42 @@ if ($is_adminOfCourse) {
 				$contentBloc = $blocs["content"];
 			}
 		}
-	echo "<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
+	$tool_content .=  "<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
+				
 		<p>
 		<b>
-		<font face=\"Arial, Helvetica, sans-serif\" size=\"2\">
+		
 			".@$titreBloc[$numBloc]."
-		</font>
+		
 		</b>
 		<br><br>";
 		if (isset($delete) and $delete == "ask") {
-			echo "<input type=\"submit\" name=\"deleteOK\" value=\"".$langDelete."\"><br>";
+			$tool_content .=  "<input type=\"submit\" name=\"deleteOK\" value=\"".$langDelete."\"><br>";
 		}
 
 		if (($numBloc =="add") || @(!$titreBlocNotEditable[$numBloc])) { 
-			echo "<font face=\"Arial, Helvetica, sans-serif\" size=\"2\">
+			$tool_content .=  "
 					".$langOuAutreTitre."
-				</font>
+				
 				<br>
 			<input type=\"text\" name=\"edTitleBloc\" size=\"50\" value=\"".@$titreBloc[$numBloc]."\" >";
 		} else {
-			echo "<input type=\"hidden\" name=\"edTitleBloc\" value=\"".$titreBloc[$numBloc]."\" >";
+			$tool_content .=  "<input type=\"hidden\" name=\"edTitleBloc\" value=\"".$titreBloc[$numBloc]."\" >";
 		}
 
 		if ($numBloc =="add") { 
-			echo "<input type=\"hidden\" name=\"edIdBloc\" value=\"add\">";
+			$tool_content .=  "<input type=\"hidden\" name=\"edIdBloc\" value=\"add\">";
 		} else {
-			echo "<input type=\"hidden\" name=\"edIdBloc\" value=\"".$numBloc."\">";
+			$tool_content .=  "<input type=\"hidden\" name=\"edIdBloc\" value=\"".$numBloc."\">";
 		}
-		echo "</p><table><tr><td valign=\"top\">";
+		$tool_content .=  "</p><table><tr><td valign=\"top\">";
 		
-	echo "<textarea id='ta' name='edContentBloc' value='".@$contentBloc."' rows='20' cols='70'>".@$contentBloc."</textarea>";
-	echo "</td>";
+	$tool_content .=  "<textarea id='ta' name='edContentBloc' value='".@$contentBloc."' rows='20' cols='70'>".@$contentBloc."</textarea>";
+	$tool_content .=  "</td>";
 	
 	if ($showPedaSuggest) {
 		if (isset($questionPlan[$numBloc])) {
-			echo "<td valign=\"top\">		
+			$tool_content .=  "<td valign=\"top\">		
 				<table><tr>
 				<td valign=\"top\" class=\"QuestionDePlanification\">		
 				<b><font face=\"Arial, Helvetica, sans-serif\" size=\"2\">".$langQuestionPlan."</font></b>
@@ -209,13 +219,13 @@ if ($is_adminOfCourse) {
 				</td></tr></table>";
 			}
 			if (isset($info2Say[$numBloc])) {
-				echo "<table><tr><td valign=\"top\" class=\"InfoACommuniquer\">		
+				$tool_content .=  "<table><tr><td valign=\"top\" class=\"InfoACommuniquer\">		
 				<b><font face=\"Arial, Helvetica, sans-serif\" size=\"2\">$langInfo2Say</font></b>
 				<br><font face=\"Arial, Helvetica, sans-serif\" size=\"2\">".$info2Say[$numBloc]."</font>
 				</td></tr></table></td>";
 			}
 		}
-		echo "</tr></table>
+		$tool_content .=  "</tr></table>
 		<input type=\"submit\" name=\"save\" value=\"".$langValid."\">
 		<input type=\"submit\" name=\"ignore\" value=\"".$langBackAndForget ."\"></form>";
 	} else {
@@ -227,57 +237,71 @@ if ($is_adminOfCourse) {
 			$titreBloc[$bloc["id"]]	= $bloc["title"];
 			$contentBloc[$bloc["id"]] = $bloc["content"];
 		}
-		echo "<table width=\"100%\"><tr>
-		<td valign=\"middle\">
-		<b><font face=\"Arial, Helvetica, sans-serif\" size=\"2\">$langAddCat</font></b>
-		</td>
-		<td align=\"right\" valign=\"middle\">
+		$tool_content .=  "<table width=\"99%\">
+		<thead>
+		<tr>
+		<th width=\"200\">
+		$langAddCat
+		</th>
+		<td>
 		
-		<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
+		<form class=\"category\" method=\"post\" action=\"$_SERVER[PHP_SELF]\">
 		<select name=\"numBloc\" size=\"1\">";
 		while (list($numBloc,) = each($titreBloc)) { 
 			if (!isset($blocState[$numBloc])||$blocState[$numBloc]!="used")
-			echo "<option value=\"".$numBloc."\">".$titreBloc[$numBloc]."</option>";
+			$tool_content .=  "<option value=\"".$numBloc."\">".$titreBloc[$numBloc]."</option>";
 		}
-		echo "<option value=\"add\">".$langNewBloc."</option></select>
+		$tool_content .=  "<option value=\"add\">".$langNewBloc."</option></select>
 		<input type=\"submit\" name=\"add\" value=\"".$langAdd."\"></form>
-		</td></tr></table>";
-		echo "<table width=\"100%\"><tr><td colspan=\"2\" bgcolor=\"".$color2."\"></td></tr>";
+		</td></tr></thead></table>";
+		$tool_content .= "<br><br>";
+		
 		reset($titreBloc);		
 		while (list($numBloc,) = each($titreBloc)) { 
 			if (isset($blocState[$numBloc])&&$blocState[$numBloc]=="used") {
-				echo "<tr><td  bgcolor=\"$color1\">
-					<h4>".$titreBloc[$numBloc]."</h4></td>
-					<td align=\"left\">
-					<a href=\"".$_SERVER['PHP_SELF']."?numBloc=".$numBloc."\">
-					<font size=\"2\" face=\"Arial, Helvetica, sans-serif\" >".$langModify."</font></a>
-					| 
-					<a href=\"".$_SERVER['PHP_SELF']."?delete=ask&numBloc=".$numBloc."\">
-					<font size=\"2\" face=\"Arial, Helvetica, sans-serif\">".$langDelete."</font></a>
-					</td>
+
+				$tool_content .=  "<table width=\"99%\">";
+				$tool_content .=  "
+				<thead>
+					<tr>
+						<th width=\"20%\">".$titreBloc[$numBloc]."</th>
+						<td>
+						<div class=\"cellpos\">
+							<a href=\"".$_SERVER['PHP_SELF']."?numBloc=".$numBloc."\">
+								<img src=\"../../images/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a>
+					 
+							<a href=\"".$_SERVER['PHP_SELF']."?delete=ask&numBloc=".$numBloc."\">
+								<img src=\"../../images/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a>
+						</div>
+						</td>
 					</tr>
-					<tr><td colspan=\"2\">
-					<font face=\"Arial, Helvetica, sans-serif\" size=\"2\">
-					".make_clickable(nl2br($contentBloc[$numBloc]))."
-					</font>
-					</td></tr>";
+					<tr>
+						<td  colspan=\"2\">
+					
+						".make_clickable(nl2br($contentBloc[$numBloc]))."
+					
+						</td>
+					</tr>";
+				$tool_content .=  "</thead></table><br>";
 			}
 		}
-		echo "</table>";
+		
 	}
 } else {
 	exit();
 }
 
 // End of page
+if(isset($numBloc)){
+draw($tool_content, 2, '', $head_content, $body_action);
+} else {
+	draw($tool_content, 2, 'course_description');
+}
 ?>
 
-</td></tr>
+<!--</td></tr>
 <tr name="bottomLine">
 <td colspan=2><br>
-<hr noshade size=1>
+<hr noshade size=1>-->
 
-<?
-end_page();
-?>
 
