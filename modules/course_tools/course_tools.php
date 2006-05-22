@@ -15,12 +15,12 @@ $tool_content = "";
 
 if ($is_adminOfCourse){
 	global $dbname;
-	
+
 	$tool_stat = $_POST[toolStat];
-//	dumpArray($tool_stat);
-	
+	//	dumpArray($tool_stat);
+
 	$hideSql = "UPDATE  `accueil` SET `visible` = 0 ";
-	
+
 	if (isset($_REQUEST['toolStatus'])) {
 
 		$loopCount = count($tool_stat);
@@ -47,7 +47,14 @@ if ($is_adminOfCourse){
 
 		db_query($publicSql, $dbname);
 
-	} 
+	}
+
+	if (isset($delete)) {
+		$sql = "DELETE FROM `accueil` WHERE `id` = " . $delete ." ";
+		db_query($sql, $dbname);
+		unset($sql);
+	}
+
 }
 
 if ($is_admin){
@@ -61,17 +68,17 @@ if ($is_admin){
 		$publicTools = array();
 
 		while ($i< $loopCount) {
-			
+
 			if (strlen($tool_name[$i]) > 2){
 				$sql = "UPDATE `accueil` SET `rubrique` = '".$tool_name[$i]."'
 							WHERE `id`='".$tool_id[$i]."';";
-				
-				mysql_query($sql);
+
+				db_query($sql, $dbname);
 			}
 
 			$i++;
 
-			
+
 		}
 
 		unset($sql);
@@ -95,12 +102,12 @@ if ($is_adminOfCourse) {
 
 tForm;
 
-if ($is_admin){	
-	$tool_content .= "	<th>$langRename</th>
+	if ($is_admin){
+		$tool_content .= "	<th>$langRename</th>
       					</tr>
    						</thead>";
 
-}
+	}
 
 	$tool_content .= "
 <tbody>";
@@ -121,35 +128,40 @@ if ($is_admin){
 				      <tr>
 				         <td>".$toolArr[$i][1][$j]."</td>
 				         <td><input name=\"toolStat[]\" type=\"checkbox\" value=\"".$toolArr[$i][3][$j]."\" checked></td>";
-				         if ($is_admin){
-				         	$tool_content .= "
+					if ($is_admin){
+						$tool_content .= "
 				        
 				         <td><input type=\"text\" name=\"toolName[]\"><input type=\"hidden\" name=\"id[]\" value=\"".$toolArr[$i][3][$j]."\"></td>";
-				       }
-				         $tool_content .= "</tr>";
-				         	
+					}
+					$tool_content .= "</tr>";
+
 				}  elseif ($i ==  1) {
 					$tool_content .= "
 					 <tr>
 				         <td>".$toolArr[$i][1][$j]."</td>
 				         <td><input name=\"toolStatDisabled[]\" type=\"checkbox\" value=\"none\" checked disabled></td>";
-				          if ($is_admin){
-				         	$tool_content .= "
+					if ($is_admin){
+						$tool_content .= "
 				         <td><input type=\"text\" name=\"toolName[]\"><input type=\"hidden\" name=\"id[]\" value=\"".$toolArr[$i][3][$j]."\"></td>";
-				          }
-				     $tool_content .= "</tr>";
+					}
+					$tool_content .= "</tr>";
 				} elseif ($i == 2){
+
+					if ($toolArr[$i][3][$j] > 100) {
+						$deleteExternLink = $_SERVER['PHP_SELF'] . "?delete=" . $toolArr[$i][3][$j];
+						$delLink = "<a href=\"$deleteExternLink\">Delete</a>";
+					}
 					$tool_content .= "
 				    
 				      <tr>
-				         <td>".$toolArr[$i][1][$j]."</td>
+				         <td>".$toolArr[$i][1][$j]." $delLink</td>
 				         <td><input name=\"toolStat[]\" type=\"checkbox\" value=\"".$toolArr[$i][3][$j]."\"></td>";
-				         
-				          if ($is_admin){
-				         	$tool_content .= "
+
+					if ($is_admin){
+						$tool_content .= "
 				         <td><input type=\"text\" name=\"toolName[]\"><input type=\"hidden\" name=\"id[]\" value=\"".$toolArr[$i][3][$j]."\"></td>";
-				          }
-				      $tool_content .= "</tr>";
+					}
+					$tool_content .= "</tr>";
 
 				}
 
