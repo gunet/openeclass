@@ -1,79 +1,29 @@
-<?
-/*
-      +----------------------------------------------------------------------+
-      | CLAROLINE version 1.3.0  $Revision$                            |
-      +----------------------------------------------------------------------+
-      | Copyright 2001, 2002 Universite catholique de Louvain (UCL)          |
-			| Copyright 2003 University of Athens                                  |
-      +----------------------------------------------------------------------+
-      |   $Id$    	 |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
-      |                                                                      |
-      |   This program is distributed in the hope that it will be useful,    |
-      |   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-      |   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-      |   GNU General Public License for more details.                       |
-      |                                                                      |
-      |   You should have received a copy of the GNU General Public License  |
-      |   along with this program; if not, write to the Free Software        |
-      |   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-      |   02111-1307, USA. The GNU GPL license is also available through     |
-      |   the world-wide-web at http://www.gnu.org/copyleft/gpl.html         |
-      +----------------------------------------------------------------------+
-      | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-      |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-      |          Christophe Gesche <gesche@ipm.ucl.ac.be>                    |
-      +----------------------------------------------------------------------+
-      | E-class changes by:                                                  |
-      |          Yannis Exidaridis <jexi@noc.uoa.gr>                         |
-      |          Alexandros Diamantidis <adia@noc.uoa.gr>                    |
-      +----------------------------------------------------------------------+
- */
-
+<?php
 $langFiles = array('admin', 'restore_course');
-include('../../include/init.php');
-
+include '../../include/baseTheme.php';
 include '../../include/lib/fileUploadLib.inc.php';
 include '../../include/lib/fileManageLib.inc.php';
 include '../../include/pclzip/pclzip.lib.php';
-
-include '../admin/check_admin.inc';
-
+@include "check_admin.inc";
 $nameTools = $langRestoreCourse;
-$navigation[] = array ("url"=>"../admin/index.php", "name"=> $langAdmin);
 
-begin_page();
+// Initialise $tool_content
+$tool_content = "";
+// Main body
 
 if (isset($send_archive) and $_FILES['archiveZipped']['size'] > 0) {
 
-?>
-<h3><?= $langFileSent ?></h3>
-<table>
-	<tr>
-	<td><?= $langFileSentName ?></td>
-	<td><?= $_FILES['archiveZipped']['name']; ?></td>
-	</tr>
-	<tr>
-	<td><?= $langFileSentSize ?></td>
-	<td><?= $_FILES['archiveZipped']['size']; ?></td>
-	</tr>
-	<tr>
-	<td><?= $langFileSentType ?></td>
-	<td><?= $_FILES['archiveZipped']['type']; ?></td>
-	</tr>
-	<tr>
-	<td><?= $langFileSentTName ?> </td>
-	<td><?= $_FILES['archiveZipped']['tmp_name']; ?></td>
-	</tr>
-</table>
+	$tool_content .= "<table width=\"99%\"><caption>".$langFileSent."</caption><tbody>
+<tr><td width=\"3%\"nowrap>$langFileSentName</td><td>".$_FILES['archiveZipped']['name']."</td></tr>
+<tr><td width=\"3%\"nowrap>$langFileSentSize</td><td>".$_FILES['archiveZipped']['size']."</td></tr>
+<tr><td width=\"3%\"nowrap>$langFileSentType</td><td>".$_FILES['archiveZipped']['type']."</td></tr>
+<tr><td width=\"3%\"nowrap>$langFileSentTName</td><td>".$_FILES['archiveZipped']['tmp_name']."</td></tr>	
+	";
+	$tool_content .= "<tbody></table><br>";
 
-<h3><?= $langFileUnzipping ?></h3>
-<?
-	unpack_zip_show_files($archiveZipped);
+		$tool_content .= "<table width=\"99%\"><caption>".$langFileUnzipping."</caption><tbody>";
+		$tool_content .= "<tr><td>".unpack_zip_show_files($archiveZipped)."</td></tr>";
+		$tool_content .= "<tbody></table><br>";
 }
 elseif (isset($create_dir_for_course)) {
 	/* 3° Try to create course with data uploaded
@@ -85,17 +35,25 @@ elseif (isset($create_dir_for_course)) {
 		$course_desc, $course_fac, $course_vis, $course_prof, $course_type);
 	move_dir($r, "$webDir/courses/$course_code");
 	course_index("$webDir/courses/$course_code", $course_code);
-	echo "<p>$langCopyFiles $webDir/courses/$course_code</p>";
+	$tool_content .= "<p>$langCopyFiles $webDir/courses/$course_code</p><br><p>";
 	$action = 1;
 	$userid_map = array();
 	// now we include the file for restoring
-	include ("$restoreThis/backup.php");
+	ob_start();
+	include("$restoreThis/backup.php");
+	$tool_content .= ob_get_contents();
+	ob_end_clean();
+	$tool_content .= "</p>";
+	@mkdir("../../courses/garbage");
+	@mkdir("../../courses/garbage/tmpUnzipping");
+	rename("../../courses/tmpUnzipping", "../../courses/garbage/tmpUnzipping/".time()."");
+	$tool_content .= "<br><center><p><a href=\"../admin/index.php\">Επιστροφή</p></center>";
 }
 elseif (isset($send_path) and !empty($pathToArchive)) {
 	if (file_exists($pathToArchive))
 		unpack_zip_show_files($pathToArchive);
 	else
-		echo $langFileNotFound;
+		$tool_content .= $langFileNotFound;
 	
 }
 elseif (isset($pathOf4path)) {
@@ -106,32 +64,27 @@ elseif (isset($pathOf4path)) {
 	// If $action == 0, the course isn't restored - the user just
 	// gets a form with the archived course details.	
 	$action = 0;
+	ob_start();
 	include("$restoreThis/backup.php");
+	$tool_content .= ob_get_contents();
+	ob_end_clean();
 
-}
-else
-{
-?>
-
-<tr><td>
-<p>
-<?= $langRequest1 ?> 
-<form action="<?= $_SERVER['PHP_SELF']?>" method="post" name="sendZip"  enctype="multipart/form-data">
-	<input type="file" name="archiveZipped" >
-	<input type="submit" name="send_archive" value="<?= $langSend ?>">
-</form>
-<p>
-<?= $langRequest2 ?> 
-<form action="<?= $_SERVER['PHP_SELF']?>" method="post" name="sendPath" >
-	<input type="text" name="pathToArchive">
-	<input type="submit" name="send_path" value="<?= $langSend ?>">
-</form>
-</td></tr>
-
-<?
+} else {
+	$tool_content .= "<table width=\"99%\"><caption>1ος Τρόπος</caption><tbody>
+	<tr><td>$langRequest1<br><br><form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" name=\"sendZip\"  enctype=\"multipart/form-data\">
+	<input type=\"file\" name=\"archiveZipped\" >
+	<input type=\"submit\" name=\"send_archive\" value=\"".$langSend."\">
+</form></td></tr>
+	</tbody></table><br>";
+	$tool_content .= "<table width=\"99%\"><caption>2ος Τρόπος</caption><tbody>
+	<tr><td>$langRequest2<br><br><form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" name=\"sendPath\"  enctype=\"multipart/form-data\">
+	<input type=\"text\" name=\"pathToArchive\">
+	<input type=\"submit\" name=\"send_path\" value=\"".$langSend."\">
+</form></td></tr>
+	</tbody></table><br>";
 }
 
-end_page();
+draw($tool_content,3, 'admin');
 
 // 4° move rep of archive/html in the  new rep for the course
 // 5° create course database,  tables and fill tables
@@ -568,14 +521,16 @@ function unpack_zip_show_files($zipfile)
 {
 	global $webDir, $uid, $langEndFileUnzip, $langLesFound, $langRestore, $langLesFiles;
 
+	$retString = "";
+
 	$destdir = $webDir."courses/tmpUnzipping/".$uid;
-	mkpath("$destdir/archive");
+	mkpath("$destdir");
 	$zip = new pclZip($zipfile);
 	chdir($destdir);
 	$state = $zip->extract();
 
-	echo "<br>$langEndFileUnzip<br><br>$langLesFound<OL>" ;
-	$dirnameCourse = realpath("$destdir/archive/");
+	$retString .= "<br>$langEndFileUnzip<br><br>$langLesFound<ol>" ;
+	$dirnameCourse = realpath("$destdir/courses/archive/");
 	if($dirnameCourse[strlen($dirnameCourse)-1]!='/')
 		$dirnameCourse.='/';
 	$handle = opendir($dirnameCourse);
@@ -583,10 +538,10 @@ function unpack_zip_show_files($zipfile)
 		if ($entries == '.' or $entries == '..' or $entries == 'CVS')
 			continue;
 		if (is_dir($dirnameCourse.$entries))
-			echo "<li>".$entries."<br>".$langLesFiles."
+			$retString .= "<li>".$entries."<br>".$langLesFiles."
 			<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" name=\"restoreThis\">
 			<ol>";
-			$dirnameArchive = realpath("$destdir/archive/$entries/");
+			$dirnameArchive = realpath("$destdir/courses/archive/$entries/");
 			if($dirnameArchive[strlen($dirnameArchive)-1]!='/')
 				$dirnameArchive.='/';
 			$handle2=opendir($dirnameArchive);
@@ -594,13 +549,13 @@ function unpack_zip_show_files($zipfile)
 				if ($entries=='.'||$entries=='..'||$entries=='CVS')
 					continue;
 				if (is_dir($dirnameArchive.$entries))
-					echo "
+					$retString.= "
 				<li>
 					<input type=\"radio\" checked name=\"restoreThis\" value=\"".realpath($dirnameArchive.$entries)."\"> ".$entries."
 				</li>";
 			}
 			closedir($handle2);
-			echo "
+			$retString .= "
 			</ol>
 			<br>
 			<input type=\"submit\" value=\"$langRestore\" name=\"pathOf4path\">
@@ -608,7 +563,10 @@ function unpack_zip_show_files($zipfile)
 		</li>";
 	}
 	closedir($handle);
-	echo "</ol>\n";
+	$retString .= "</ol>\n";
+	
+	chdir($webDir."modules/course_info");
+	return $retString;
 }
 
 ?>

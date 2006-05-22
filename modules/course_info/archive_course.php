@@ -1,60 +1,17 @@
-<?
-/*
-      +----------------------------------------------------------------------+
-      | CLAROLINE version 1.3.0  $Revision$                      	 |
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
-      +----------------------------------------------------------------------+
-      |   $Id$	 |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
-      |                                                                      |
-      |   This program is distributed in the hope that it will be useful,    |
-      |   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-      |   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-      |   GNU General Public License for more details.                       |
-      |                                                                      |
-      |   You should have received a copy of the GNU General Public License  |
-      |   along with this program; if not, write to the Free Software        |
-      |   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-      |   02111-1307, USA. The GNU GPL license is also available through     |
-      |   the world-wide-web at http://www.gnu.org/copyleft/gpl.html         |
-      +----------------------------------------------------------------------+
-      | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-      |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-      |          Christophe Geschι <gesche@ipm.ucl.ac.be>                    |
-      +----------------------------------------------------------------------+
- */
-
-/**
- * Backuping  of  a course.
- *
- * this  script  must be  adminCourse only.
- *
- *	- check if course exist ( to be used  by admin.)
- * 	- build backup config file contain max info to restore the  course.
- *	- Copy all of  this  in a  target directory.
- * 		- records  form main database, about the course
- * 		- course database
- * 		- diretory of the  course
- * 
- * 	- compress the directory and content  in a archive file.
- * 
- * @var boolean	$verboseBackup		fix if the comment about backuping must be echo
- * @var string	$archiveDir			path  from claroRoot
- * @var string	$ext				ext of global description file  of backup.
- * @var string	$dateBackuping		litteral date  to marks all file generated during the backup
- * @var	string	$shortDateBackuping litteral date  to marks file generated during the backup
- * @var string	$systemFileNameOfArchive	global description file  of backup.
- */
-
+<?php
+if (isset($c) && ($c!="")) {
+	@include "check_admin.inc";
+	$dbname = $c;
+	session_register("dbname");
+}
 $require_current_course = TRUE;
 $langFiles = 'archive_course';
-include ('../../include/init.php');
- 
+include '../../include/baseTheme.php';
+
+$nameTools = $langArchiveCourse;
+
+$tool_content = "";
+
 $verboseBackup = FALSE; 
 $archiveDir = "/courses/archive";  	// <- must moved to config
 $ext ="txt";				// <- must moved to config
@@ -63,11 +20,6 @@ if (extension_loaded("zlib")) {
 	include("../../include/pclzip/pclzip.lib.php");
 }
 		
-$nameTools = $langArchiveCourse;
-begin_page();
-
-echo "<tr><td colspan='2'>";
-
 // check if you are admin
 if($is_adminOfCourse) {
 	
@@ -76,39 +28,14 @@ if($is_adminOfCourse) {
 	$archiveDir .= "/".$currentCourseID."/".$dateBackuping;
 	$systemFileNameOfArchive = realpath("../..").$archiveDir."/claroBak-".$currentCourseID."-".$dateBackuping.".".$ext;
 
-echo "
-<hr>
-<u>
-	".$langArchiveName."
-</u> : 
-<strong>
-	".basename($systemFileNameOfArchive)."
-</strong>
-<br>
-<u>
-	$langArchiveLocation
-</u> : 
-<strong>
-		".realpath($systemFileNameOfArchive)."
-</strong>
-<br>
-<u>
-	".$langSizeOf." ".realpath("../../".$currentCourseID."/")."
-</u> : 
-<strong>
-	".DirSize("../../".$currentCourseID."/")."
-</strong> bytes 
-<br>";
-	if ( function_exists('diskfreespace'))
-	echo "
-<u>
-	$langDisk_free_space
-</u> : 
-<strong>
-	".diskfreespace("/")."
-</strong> bytes";
-	echo "
-<hr>" ;
+	$tool_content .= "<table width=\"99%\"><caption>Αποτελέσματα Διαδικασίας</caption<tbody>
+<tr><td><u>".$langArchiveName."</u>: ".basename($systemFileNameOfArchive)."</td></tr>
+<tr><td><u>".$langArchiveLocation."</u>: ".realpath($systemFileNameOfArchive)."</td></tr>
+<tr><td><u>".$langSizeOf." ".realpath("../../".$currentCourseID."/")."</u>: ".DirSize("../../".$currentCourseID."/")."</td></tr>
+	";
+	if (function_exists('diskfreespace')) {
+		$tool_content .= "<tr><td><u>".$langDisk_free_space."</u>: ".diskfreespace("/")." bytes</td></tr>";
+	}
 
 	
 // ********************************************************************
@@ -132,6 +59,7 @@ echo "
 
 ";
 
+	$tool_content .= "<tr><td align=\"center\"><ol>";
 	echo "
 	<ol>";
 
@@ -139,24 +67,16 @@ echo "
 
     $dirCourBase = realpath("../..").$archiveDir."/courseBase";
 	if (!is_dir($dirCourBase)) {
-		echo "
-		<li>
-			".$langCreateMissingDirectories."<hr>";
+		$tool_content .= "<li>".$langCreateMissingDirectories."</li>";
 		mkpath($dirCourBase,$verboseBackup);
-		echo "
-		</li>";
 	}
 
 	create_backup_file("$webDir/$archiveDir/backup.php");
     
     $dirMainBase = realpath("../..").$archiveDir."/mainBase";
 	if (!is_dir($dirMainBase)) {
-		echo "
-		<li>
-			".$langCreateMissingDirectories."<hr>";
+		$tool_content .= "<li>".$langCreateMissingDirectories."</li>";
 		mkpath($dirMainBase,$verboseBackup);
-		echo "
-		</li>";
 	}
     $dirhtml = realpath("../..").$archiveDir."/html";
 
@@ -167,7 +87,7 @@ echo "
 //  info  about cours
 // ********************************************************************
 
-	echo "<li>".$langBUCourseDataOfMainBase."  ".$currentCourseID."<hr><pre>";
+	$tool_content .= "<li>".$langBUCourseDataOfMainBase."  ".$currentCourseID."";
 	$sqlInsertCourse = "
 INSERT INTO cours SET ";
 	$csvInsertCourse ="\n";
@@ -188,7 +108,6 @@ INSERT INTO cours SET ";
 #	".$sqlInsertCourse."
 #------------------------------------------
 	";
-	echo "</pre>";
 
 	$fcoursql = fopen(realpath("../..").$archiveDir."/mainBase/cours.sql", "w");
 	fwrite($fcoursql, $sqlInsertCourse); 
@@ -201,7 +120,7 @@ INSERT INTO cours SET ";
 // ********************************************************************
 //  info  about users
 // ********************************************************************
-	echo "<li>".$langBUUsersInMainBase." ".$currentCourseID."<hR><pre>";
+	$tool_content .= "<li>".$langBUUsersInMainBase." ".$currentCourseID."";
 	
 	$sqlUserOfTheCourse ="
 SELECT user.* FROM `$mysqlMainDb`.user, `$mysqlMainDb`.cours_user
@@ -245,7 +164,6 @@ INSERT IGNORE INTO user SET ";
 			$sqlInsertUsers .= ";";
 			$htmlInsertUsers .= "\t</tr>\n";
 		}
-	echo "</pre>";
 	$htmlInsertUsers .= "</table>\n";
 
 	$stringConfig .= "
@@ -272,7 +190,7 @@ INSERT IGNORE INTO user SET ";
 // ********************************************************************
 //  info  about announcment
 // ********************************************************************
-	echo "<li>".$langBUAnnounceInMainBase." ".$currentCourseID."<hR><pre>";
+	$tool_content .= "<li>".$langBUAnnounceInMainBase." ".$currentCourseID."";
 	
 	$sqlAnnounceOfTheCourse ="SELECT a.* FROM  `$mysqlMainDb`.annonces a WHERE a.code_cours='$currentCourseID'";
 
@@ -310,7 +228,6 @@ INSERT IGNORE INTO user SET ";
 			$sqlInsertAnn .= ";";
 			$htmlInsertAnn .= "\t</tr>\n";
 		}
-	echo "</pre>";
 	$htmlInsertAnn .= "</table>\n";
 
 	
@@ -336,21 +253,21 @@ INSERT IGNORE INTO user SET ";
 /*  End  of  backup Annonces */
 
 	// we can copy file of course
-	echo "<li>".$langCopyDirectoryCourse."<hR>";
+	$tool_content .= "<li>".$langCopyDirectoryCourse."<br>(";
 	$nbFiles = copydir(realpath("../../courses/".$currentCourseID."/"), $dirhtml,$verboseBackup);
-	echo "<strong>".$nbFiles."</strong> ".$langFileCopied."<br></li>";
+	$tool_content .= "<strong>".$nbFiles."</strong> ".$langFileCopied.")</li>";
 	$stringConfig .= "// ".$nbFiles." was in ".realpath("../../courses/".$currentCourseID."/");
 
 // ********************************************************************
 // Copy of  DB course
 // with mysqldump
 // ********************************************************************
-	echo "<li>".$langBackupOfDataBase." ".$currentCourseID."  (SQL)<hr>";
-	backupDatabase($db , $currentCourseID , true, true , 'SQL' , realpath("../..".$archiveDir."/courseBase/"),true,$verboseBackup);
-	echo "</li><li>".$langBackupOfDataBase." ".$currentCourseID."  (PHP)<hr>";
-	backupDatabase($db , $currentCourseID , true, true , 'PHP' , realpath("../..".$archiveDir."/courseBase/"),true,$verboseBackup);
-	echo "</li><li>".$langBackupOfDataBase." ".$currentCourseID."  (CSV)<hr>";
-	backupDatabase($db , $currentCourseID , true, true , 'CSV' , realpath("../..".$archiveDir."/courseBase/"),true,$verboseBackup);
+	$tool_content .= "<li>".$langBackupOfDataBase." ".$currentCourseID."  (SQL)<br>(";
+	$tool_content .= backupDatabase($db , $currentCourseID , true, true , 'SQL' , realpath("../..".$archiveDir."/courseBase/"),true,$verboseBackup);
+	$tool_content .= ")</li><li>".$langBackupOfDataBase." ".$currentCourseID."  (PHP)<br>(";
+	$tool_content .= backupDatabase($db , $currentCourseID , true, true , 'PHP' , realpath("../..".$archiveDir."/courseBase/"),true,$verboseBackup);
+	$tool_content .= ")</li><li>".$langBackupOfDataBase." ".$currentCourseID."  (CSV)<br>(";
+	$tool_content .= backupDatabase($db , $currentCourseID , true, true , 'CSV' , realpath("../..".$archiveDir."/courseBase/"),true,$verboseBackup);
 
 // ********************************************************************
 // Copy of DB course
@@ -360,24 +277,33 @@ INSERT IGNORE INTO user SET ";
 	$fdesc = fopen($systemFileNameOfArchive, "w");
 	fwrite($fdesc,$stringConfig);
 	fclose($fdesc);
-	echo "</li></ol><hr>".$langBuildTheCompressedFile."<br>";
+	$tool_content .=  ")</li></ol><br>".$langBuildTheCompressedFile."<br>";
+	
 if (extension_loaded("zlib")) {
 	$zipCourse = new PclZip("../..".$archiveDir."/../archive.".$currentCourseID.".".$shortDateBackuping.".zip");
 	$zipCourse->create("../..".$archiveDir."/");
-	echo "<font color=\"#FF0000\">".$langBackupSuccesfull."</font>
-	<a href=\"".$urlServer."/".$archiveDir."/../archive.".$currentCourseID.".".$shortDateBackuping.".zip\">".$langDownload."</A>";
+	$tool_content .= "".$langBackupSuccesfull." <a href=\"".$urlServer."/".$archiveDir."/../archive.".$currentCourseID.".".$shortDateBackuping.".zip\">".$langDownload."</a>";
 } else {
-		echo "<font color=\"#FF0000\">".$langBackupSuccesfull."</font>";
+		$tool_content .= $langBackupSuccesfull;
 	}
+	
+	$tool_content .= "</td></tr></tbody></table><br>";
 
 }	// end of isadminOfCourse
 else 
 {
-	echo "<font size=\"2\" face=\"arial, helvetica\">$langNotAllowed</font>";
+	$tool_content .= "<center><p>$langNotAllowed</p></center>";
 }
 
-echo "<hr noshade size='1'>";
-end_page();
+if (isset($c) && ($c!="")) {
+	if (isset($search) && ($search=="yes")) $searchurl = "&search=yes";
+	else $searchurl = "";
+	$tool_content .= "<center><p><a href=\"../admin/editcours.php?c=".$c."".$searchurl."\">Επιστροφή</p></center>";
+} else {
+	$tool_content .= "<center><p><a href=\"infocours.php\">Επιστροφή</p></center>";
+}
+
+draw($tool_content, 2, 'course_info');
 
 // -----------------
 // useful functions
@@ -487,7 +413,7 @@ function backupDatabase($link , $db_name , $structure , $donnees , $format="SQL"
 		} 
 		$i++; 
 	} 
-	echo "$langBackupEnd $format";
+	return "$langBackupEnd $format";
 	fclose($fp); 
 }
 
