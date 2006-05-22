@@ -104,28 +104,32 @@ tForm;
 
 	if ($is_admin){
 		$tool_content .= "	<th>$langRename</th>
-      					</tr>
-   						</thead>";
+      					";
 
 	}
 
-	$tool_content .= "
+	$tool_content .= "</tr>
+   						</thead>
 <tbody>";
 	$toolArr = getTools(2);
 	$numOfToolGroups = count($toolArr);
 
 	if (is_array($toolArr)){
-
+		$alterRow=0;
 		for($i=0; $i< $numOfToolGroups; $i++){
 
 			$numOfTools = count($toolArr[$i][1]);
 
-			for($j=0; $j< $numOfTools; $j++){
 
+			for($j=0; $j< $numOfTools; $j++){
+				
+				$rowClass = ($alterRow%2) ? "class=\"odd\"" : "";
+									
 				if ($i  == 0){
+
 					$tool_content .= "
 				    
-				      <tr>
+				      <tr $rowClass>
 				         <td>".$toolArr[$i][1][$j]."</td>
 				         <td><input name=\"toolStat[]\" type=\"checkbox\" value=\"".$toolArr[$i][3][$j]."\" checked></td>";
 					if ($is_admin){
@@ -134,10 +138,11 @@ tForm;
 				         <td><input type=\"text\" name=\"toolName[]\"><input type=\"hidden\" name=\"id[]\" value=\"".$toolArr[$i][3][$j]."\"></td>";
 					}
 					$tool_content .= "</tr>";
-
+					
+					$alterRow++;
 				}  elseif ($i ==  1) {
 					$tool_content .= "
-					 <tr>
+					 <tr $rowClass>
 				         <td>".$toolArr[$i][1][$j]."</td>
 				         <td><input name=\"toolStatDisabled[]\" type=\"checkbox\" value=\"none\" checked disabled></td>";
 					if ($is_admin){
@@ -145,6 +150,8 @@ tForm;
 				         <td><input type=\"text\" name=\"toolName[]\"><input type=\"hidden\" name=\"id[]\" value=\"".$toolArr[$i][3][$j]."\"></td>";
 					}
 					$tool_content .= "</tr>";
+					//					If ($alterRow<=$j) $alterRow++;
+					$alterRow++;
 				} elseif ($i == 2){
 
 					if ($toolArr[$i][3][$j] > 100) {
@@ -153,7 +160,7 @@ tForm;
 					}
 					$tool_content .= "
 				    
-				      <tr>
+				      <tr $rowClass>
 				         <td>".$toolArr[$i][1][$j]." $delLink</td>
 				         <td><input name=\"toolStat[]\" type=\"checkbox\" value=\"".$toolArr[$i][3][$j]."\"></td>";
 
@@ -162,10 +169,11 @@ tForm;
 				         <td><input type=\"text\" name=\"toolName[]\"><input type=\"hidden\" name=\"id[]\" value=\"".$toolArr[$i][3][$j]."\"></td>";
 					}
 					$tool_content .= "</tr>";
-
+					$alterRow++;
 				}
 
 			}
+
 
 		}
 
