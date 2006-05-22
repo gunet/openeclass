@@ -139,7 +139,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var('BREAD_HREF_END',  '</a>');
 			$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
 			$breadIterator++;
-		} else {
+		} elseif (isset($currentCourseID) && $courseHome) {
 			$t->set_var('BREAD_HREF_FRONT',  '');
 			$t->set_var('BREAD_LINK',  '');
 			$t->set_var('BREAD_TEXT',  $intitule);
