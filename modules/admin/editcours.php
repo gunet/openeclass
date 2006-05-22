@@ -122,7 +122,7 @@ if (isset($c)) {
     <td>Στατιστικά Μαθήματος</td>
   </tr>";
 	$tool_content .= "  <tr>
-    <td>Λήψη Αντιγράφου Ασφαλείας</td>
+    <td><a href=\"../course_info/archive_course.php?c=".$c."".$searchurl."\">Λήψη Αντιγράφου Ασφαλείας<a/></td>
   </tr>";
 	$tool_content .= "  <tr>
     <td><a href=\"delcours.php?c=".$c."".$searchurl."\">Συνολική Διαγραφή Μαθήματος</a></td>
