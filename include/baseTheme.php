@@ -36,9 +36,10 @@ function getTools($menuTypeID){
 	 */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null){
 	global $langUser, $prenom, $nom, $langLogout, $intitule,  $nameTools, $langHelp;
-	global $language, $helpTopic, $require_help, $homePage;
+	global $language, $helpTopic, $require_help;
 	global $relPath, $urlServer;
 	global $page_name, $page_navi,$currentCourseID, $siteName;
+	global $homePage, $courseHome;
 
 	$toolArr = getTools($menuTypeID);
 	//	dumpArray($toolArr);
@@ -125,7 +126,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 		$breadIterator=1;
 		$t->set_block('mainBlock', 'breadCrumbStartBlock', 'breadCrumbStart');
-		if (isset($currentCourseID)){
+		if (isset($currentCourseID) && !$courseHome){
 			$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_LINK}">');
 			$t->set_var('BREAD_LINK',  $urlServer.'courses/'.$currentCourseID.'/index.php');
 			$t->set_var('BREAD_TEXT',  $intitule);
@@ -135,6 +136,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$breadIterator++;
 			//			echo "&nbsp;&gt;&nbsp;<a href=\"".$urlServer.
 			//			"courses/$currentCourseID/index.php\" target=\"_top\">". q($intitule) . "</a>\n";
+		} else {
+			$t->set_var('BREAD_HREF_FRONT',  '');
+			$t->set_var('BREAD_LINK',  '');
+			$t->set_var('BREAD_TEXT',  $intitule);
+			$t->set_var('BREAD_ARROW', '');
+			$t->set_var('BREAD_HREF_END',  '');
+			$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
+			$breadIterator++;
 		}
 		if (isset($page_navi) && is_array($page_navi) && !$homePage){
 			foreach ($page_navi as $step){
