@@ -8,8 +8,12 @@
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version 1.0
  * @package eclass 2.0
+ * 
+ +----------------------------------------------------------------------+
+ |   $Id$       |
+ +----------------------------------------------------------------------+
  */
-
+ 
 
 include('init.php');
 
@@ -38,7 +42,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	global $langUser, $prenom, $nom, $langLogout, $intitule,  $nameTools, $langHelp;
 	global $language, $helpTopic, $require_help;
 	global $relPath, $urlServer;
-	global $page_name, $page_navi,$currentCourseID, $siteName;
+	global $page_name, $page_navi,$currentCourseID, $siteName, $navigation;
 	global $homePage, $courseHome;
 
 	$toolArr = getTools($menuTypeID);
@@ -126,6 +130,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 		$breadIterator=1;
 		$t->set_block('mainBlock', 'breadCrumbStartBlock', 'breadCrumbStart');
+		
 		if (isset($currentCourseID) && !$courseHome){
 			$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_LINK}">');
 			$t->set_var('BREAD_LINK',  $urlServer.'courses/'.$currentCourseID.'/index.php');
@@ -134,19 +139,19 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var('BREAD_HREF_END',  '</a>');
 			$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
 			$breadIterator++;
-			//			echo "&nbsp;&gt;&nbsp;<a href=\"".$urlServer.
-			//			"courses/$currentCourseID/index.php\" target=\"_top\">". q($intitule) . "</a>\n";
 		} else {
 			$t->set_var('BREAD_HREF_FRONT',  '');
 			$t->set_var('BREAD_LINK',  '');
 			$t->set_var('BREAD_TEXT',  $intitule);
-			$t->set_var('BREAD_ARROW', '');
+			$t->set_var('BREAD_ARROW', '&#187;');
 			$t->set_var('BREAD_HREF_END',  '');
 			$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
 			$breadIterator++;
 		}
+		
 		if (isset($page_navi) && is_array($page_navi) && !$homePage){
 			foreach ($page_navi as $step){
+
 				$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_LINK}">');
 				$t->set_var('BREAD_LINK',  $step["url"]);
 				$t->set_var('BREAD_TEXT',  $step["name"]);
@@ -154,20 +159,13 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 				$t->set_var('BREAD_HREF_END',  '</a>');
 				$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
 
-
-//				$t->set_var('BREAD_TEXT',  $intitule);
-//				$t->set_var('BREAD_ARROW', '&#187;');
-
-				$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
 				$breadIterator++;
 			}
 		}
-		//		echo "&nbsp;&gt;&nbsp;<a target=\"_top\" href=\""
-		//		.$step["url"]."\" >".q($step["name"])."</a>";
+
 		if (isset($page_name) && !$homePage) {
-			//			echo "&nbsp;&gt;&nbsp;<b>" . q($page_name) . "</b>";
+			
 			$t->set_var('BREAD_HREF_FRONT',  '');
-			//			$t->set_var('BREAD_LINK',  $urlServer.'courses/'.$currentCourseID.'/index.php');
 			$t->set_var('BREAD_TEXT',  $page_name);
 			$t->set_var('BREAD_ARROW', '&#187;');
 			$t->set_var('BREAD_HREF_END',  '');
@@ -175,7 +173,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
 			$breadIterator++;
 		}
-		//		echo $breadIterator;
+		
 		$t->set_block('mainBlock', 'breadCrumbEndBlock', 'breadCrumbEnd');
 		for($breadIterator2=0; $breadIterator2 <= $breadIterator; $breadIterator2++){
 
@@ -229,29 +227,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 	}
 }
-/**
-	 * function makeToolLink
-	 *
-	 * The tool links are stored in a database in the format of
-	 * "../claroline/
-	 * This method removes the beginning dots to be able to be used
-	 * with the new interface.
-	 * 
-	 * There is a problem to be resolved regarding external module links
-	 * 
-	 * @param string $link
-	 * @return string
-	 */
-/*function makeToolLink($link){
-$path = $this->eclBase->varVal("get", "url_server");
-if (substr($link, 3) != "htt") {
-$path .= substr($link, 3);
-} else {
-$path = substr($link, 3);
-}
-//		$path .= substr($link, 3);
-return $path;
-}*/
+
 
 /**
  * function dumpArray
