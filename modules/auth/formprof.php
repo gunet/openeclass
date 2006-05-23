@@ -2,7 +2,7 @@
 $langFiles = array('registration','gunet');
 //include ('../../include/init.php');
 include '../../include/baseTheme.php';
-
+$tool_content = "";
 $tool_content .= "";
 if (@$usercomment != "" AND $name != "" AND $surname != "" AND $username != ""
 AND $userphone != "" AND $usermail != "")  {
@@ -73,6 +73,13 @@ if (isset($Add) and (empty($usercomment) or empty($name) or empty($surname) or e
 	exit;// call draw?
 }
 $frmAction = $_SERVER["PHP_SELF"];
+
+if (!isset($name)) $name = "";
+if (!isset($surname)) $surname = "";
+if (!isset($userphone)) $userphone = "";
+if (!isset($username)) $username = "";
+if (!isset($usermail)) $usermail = "";
+if (!isset($usercomment)) $usercomment = "";
 $tool_content .= "
 	<form action=\"$frmAction\" method=\"post\">
 	<table width=\"99%\">

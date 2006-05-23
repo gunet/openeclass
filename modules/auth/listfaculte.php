@@ -33,7 +33,7 @@ $langFiles = 'opencours';
 //include('../../include/init.php');
 include '../../include/baseTheme.php';
 $nameTools = $listfac;
-$tool_content .= "";
+$tool_content = "";
 //$local_style = "
 //	p { line-height: 25pt; font-size: 11pt; padding: 1em; background: $color2; }
 //";
