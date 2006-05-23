@@ -187,7 +187,7 @@ foreach (array("pre" => $m['pres'],
 			}
 		}
 
-		$tool_content .= "<td>".$mycours[i]."</td>
+		$tool_content .= "<td>$mycours[i]</td>
 		<td>".$codelink."</td>";
 
 		$tool_content .= "<td>$mycours[t]</td>
