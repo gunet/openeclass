@@ -41,35 +41,45 @@ $require_current_course = TRUE;
 $langFiles = 'external_module';
 $require_help = TRUE;
 $helpTopic = 'Module';
-include('../../include/init.php');
-
+//include('../../include/init.php');
+include '../../include/baseTheme.php';
 $nameTools = $langLinkSite;
-begin_page();
 
+$tool_content = "";
 if ($is_adminOfCourse) 
 { 
 
-echo "<tr><td><font face=\"arial, helvetica\" size=\"2\">$langSubTitle</td>
-        <td valign=\"top\">&nbsp;</td></tr>";
+$tool_content .=  "<p>$langSubTitle</p>";
 
 	if(isset($submit)) 
 	{
 		if (($link == "http://") or ($link == "ftp://") or empty($link))  {
-			echo "<td>	
-				$langInvalidLink<br><br>
-				<a href=\"../../$currentCourseID/index.php\">$langHome</a></td>";
+			$tool_content .= "
+		<table>
+			<tbody>
+				<tr>
+					<td class=\"caution\">
+					<p>$langInvalidLink</p>
+					<a href=\"../../courses/$currentCourseID/index.php\">$langHome</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		";
+			
+			draw($tool_content, 2);
 			exit();
 		}
 		
 		$sql = 'SELECT MAX(`id`) FROM `accueil` ';
-		$res = mysql_query($sql);
+		$res = db_query($sql,$dbname);
 		while ($maxID = mysql_fetch_row($res)) {
 			$mID = $maxID[0];
 		}
-		echo $mID . "  ";
+		
 		if($mID<101) $mID = 101;
 		else $mID = $mID+1;
-		echo $mID;
+		
 		
 		mysql_query("INSERT INTO accueil VALUES ($mID,
 					'$name_link',
@@ -80,55 +90,59 @@ echo "<tr><td><font face=\"arial, helvetica\" size=\"2\">$langSubTitle</td>
 					'$link',
 					''
 					)");
-		echo "<tr><td><font face=\"arial, helvetica\" size=\"2\">
-			$langAdded
-			<br>
-			<a href=\"../../courses/$currentCourseID/index.php\">$langHome</a>
-			<br>
-			</font>
-			</td></tr>";
+		
+		$tool_content .= "
+		<table>
+			<tbody>
+				<tr>
+					<td class=\"success\">
+					<p>$langAdded</p>
+					<a href=\"../../courses/$currentCourseID/index.php\">$langHome</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		";
+		
 	} 
 	else 
 	{  // display form
-		echo "<tr><td><font face=\"arial, helvetica\" size=\"2\">
+		$tool_content .=  "
 			<form method=\"post\" action=\"$_SERVER[PHP_SELF]?submit=yes\">
 			<table>
+				<thead>
 				<tr>
-					<td>
-						<font face=\"arial, helvetica\" size=\"2\">
+					<th>
+						
 							$langLink&nbsp;:
-					</td>
-					<td><font face=\"arial, helvetica\" size=\"2\">
+					</th>
+					<td>
 						<input type=\"text\" name=\"link\" size=\"50\" value=\"http://\">
 					</td>
 				</tr>
 				<tr>
-					<td><font face=\"arial, helvetica\" size=\"2\">
-						<font face=\"arial, helvetica\" size=\"2\">
+					<th>
 							$langName&nbsp;:
-					</td>
-					<td><font face=\"arial, helvetica\" size=\"2\">
+					</th>
+					<td>
 						<input type=\"Text\" name=\"name_link\" size=\"50\">
 					</td>
 				</tr>
-				<tr>
-					<td colspan=\"2\"><font face=\"arial, helvetica\" size=\"2\">	
+				</thead></table>
+				<br>
 					<input type=\"Submit\" name=\"submit\" value=\"$langAdd\">
-					</td>
-				</tr>
+				
 			</form>
-			</table></td>
-			</tr>";
+			";
 	}
 } else // student view 
 	{
-		echo "<tr><td colspan=\"2\">$langNotAllowed<br><br>
+		$tool_content .=  "<tr><td colspan=\"2\">$langNotAllowed<br><br>
 		<a href=\"../../courses/$currentCourseID/index.php\">$langHome</a>
 		</td></tr></table>";
 	}
 
-echo "<tr><td colspan=\"2\"><hr noshade size=\"1\"></td></tr></table>";
+$tool_content .=  "<tr><td colspan=\"2\"></td></tr></table>";
+draw($tool_content, 2);
 ?>
-</body>
-</html>
 
