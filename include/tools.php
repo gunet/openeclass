@@ -114,7 +114,7 @@ function getToolsArray($cat) {
  * @return unknown
  */
 function loggedInMenu(){
-	global $webDir, $language, $uid, $is_admin, $urlServer;
+	global $webDir, $language, $uid, $is_admin, $urlServer, $mysqlMainDb;
 
 	include("$webDir/modules/lang/$language/index.inc");
 
@@ -127,9 +127,9 @@ function loggedInMenu(){
 	array_push($sideMenuSubGroup, $langMenu);
 
 	// User is not currently in a course - set statut from main database
-	$res2 = mysql_query("SELECT statut FROM user WHERE user_id = '$uid'");
+	$res2 = db_query("SELECT statut FROM user WHERE user_id = '$uid'",$mysqlMainDb);
 	if ($row = mysql_fetch_row($res2)) $statut = $row[0];
-	//	dumpArray($row);
+
 	if ($statut==1) {
 		array_push($sideMenuText, $langCourseCreate);
 		array_push($sideMenuLink, $urlServer . "modules/create_course/create_course.php");
