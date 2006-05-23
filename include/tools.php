@@ -429,8 +429,8 @@ function lessonToolsMenu(){
 	$res2 = db_query("SELECT statut FROM user WHERE user_id = '$uid'",$mysqlMainDb);
 
 	if ($row = mysql_fetch_row($res2)) $statut = $row[0];
-	//	dumpArray($row);
-	if ($statut==1 || $is_adminOfCourse) {
+		dumpArray($row);
+	if (@$statut==1 || $is_adminOfCourse) {
 		//		$courseAdminTools = getToolsArray('courseAdmin');
 		//		$hiddenTools = getToolsArray('PublicButHide');
 
