@@ -16,7 +16,7 @@ $tool_content = "";
 if ($is_adminOfCourse){
 	global $dbname;
 
-	$tool_stat = $_POST[toolStat];
+	if(isset($_POST['toolStat'])) $tool_stat = $_POST['toolStat'];
 	//	dumpArray($tool_stat);
 
 	$hideSql = "UPDATE  `accueil` SET `visible` = 0 ";
@@ -158,8 +158,8 @@ tForm;
 						$deleteExternLink = $_SERVER['PHP_SELF'] . "?delete=" . $toolArr[$i][3][$j];
 						$delLink = "<a href=\"$deleteExternLink\">Delete</a>";
 					}
+					if (!isset($delLink)) $delLink = "";
 					$tool_content .= "
-				    
 				      <tr $rowClass>
 				         <td>".$toolArr[$i][1][$j]." $delLink</td>
 				         <td><input name=\"toolStat[]\" type=\"checkbox\" value=\"".$toolArr[$i][3][$j]."\"></td>";
