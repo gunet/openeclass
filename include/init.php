@@ -23,7 +23,7 @@
 //1: user home
 //else: everything else(modules)
 if (isset($path2add) && $path2add == 0){
-	$relPathLib = "../include/";
+	$relPathLib = "include/";
 	$relPath = "";
 } elseif (isset($path2add) && $path2add == 1) {
 	$relPathLib = "";
@@ -45,7 +45,7 @@ include "header.php";
 include "footer.php";
 // function library
 //path for logged out + logged in
-//include "../include/lib/main.lib.php";
+//include "include/lib/main.lib.php";
 include $relPathLib . "lib/main.lib.php";
 
 if (!session_id()) { session_start(); }

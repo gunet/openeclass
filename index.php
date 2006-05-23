@@ -61,7 +61,7 @@ $homePage = true;
 //$relativePath = "";
 //header('Content-Type: text/html; charset='. $charset);
 //require './include/baseTheme.php';
-
+$tool_content = "";
 //Flag to modify the prefix for relative paths.(used by init.php)
 
 
@@ -259,14 +259,14 @@ function check_new_announce() {
 // note version_compare() is used for checking the php version but works for mysql too
 // ------------------------------------------------------------------------------------
 
-function mysql_version() {
+/*function mysql_version() {
 
 $ver = mysql_get_server_info();
 if (version_compare("4.1", $ver) <= 0)
         return true;
 else
 	return false;
-}
+}*/
 
 
 ?>

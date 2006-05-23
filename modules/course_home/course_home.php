@@ -38,9 +38,10 @@
 $require_current_course = TRUE;
 $langFiles = 'course_home';
 //include ('../../include/init.php');
-include ('../../../include/lib/textLib.inc.php'); 
+include ('../../include/lib/textLib.inc.php'); 
 unset($relativePath);
 //$relativePath = "../../";
+$courseHome = true;
 $path2add=1;
 include '../../include/baseTheme.php';
 //echo "dbname is " . $dbname;

@@ -116,7 +116,7 @@ function getToolsArray($cat) {
 function loggedInMenu(){
 	global $webDir, $language, $uid, $is_admin, $urlServer;
 
-	include("$webDir$urlAppend/modules/lang/$language/index.inc");
+	include("$webDir/modules/lang/$language/index.inc");
 
 	$sideMenuGroup = array();
 
@@ -184,7 +184,7 @@ function loggedOutMenu(){
 
 	global $webDir, $language, $urlServer;
 
-	include("$webDir$urlAppend/modules/lang/$language/index.inc");
+	include("$webDir/modules/lang/$language/index.inc");
 
 	$sideMenuGroup = array();
 
@@ -469,7 +469,9 @@ function lessonToolsMenu(){
 		
 		while ($toolsRow = mysql_fetch_array($result)) {
 			
-			define($toolsRow["define_var"], $toolsRow["id"]);
+			if(!defined($toolsRow["define_var"])) {
+				define($toolsRow["define_var"], $toolsRow["id"]);
+			}
 
 			array_push($sideMenuText, $toolsRow["rubrique"]);
 			array_push($sideMenuLink, $toolsRow["lien"]);

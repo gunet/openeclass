@@ -37,6 +37,7 @@ $helpTopic = 'Coursedescription';
 include '../../include/baseTheme.php';
 include('../../include/lib/textLib.inc.php'); 
 
+$tool_content = "";
 $showPedaSuggest = false;
 
 $nameTools = $langEditCourseProgram ;

@@ -282,7 +282,9 @@ $tool_content .= <<<tCont5
 	<td>
 	
 tCont5;
-
+if (!isset($origin)) {
+	$origin="";
+}
 $tool_content .= "
 <div>
 		<form class=\"sort\" name=\"formReceived\" method=\"get\" action=\"index.php?origin=$origin\">

@@ -38,6 +38,9 @@ $tool_content .= "
 	
     	<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\" enctype=\"multipart/form-data\">";
 
+if(!isset($search_nom)) $search_nom = "";
+if(!isset($search_prenom)) $search_prenom = "";
+if(!isset($search_uname)) $search_uname = "";
 $tool_content .= <<<tCont
 	<table>	
 	<thead>
