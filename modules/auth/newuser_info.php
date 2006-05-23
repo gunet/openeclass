@@ -30,8 +30,8 @@
  */
 
 $langFiles = array('registration', 'gunet');
-include('../../include/init.php');
-
+//include('../../include/init.php');
+include '../../include/baseTheme.php';
 if(isset($already_second)) {
 	session_register("uid");
 	session_unregister("statut");
@@ -40,23 +40,18 @@ if(isset($already_second)) {
 	session_unregister("uname");
 }
 $nameTools = $reguser;
-begin_page();
-?>
+//begin_page();
+$tool_content = "";
 
-<form action="newuser_second.php" method="post">
-<table cellpadding="3" cellspacing="0" border="0" width="100%">
-<tr valign="top" bgcolor="<?= $color2 ?>">
-<td>
-<font size="2" face="arial, helvetica">
-<blockquote><?= $userinfo ?></blockquote>
-<ol><li>
-<a href="ldapnewuser.php"><?= $regldap ?></a></li><br>
-<br>
-<li><a href="newuser.php"><?= $regnoldap ?></a></li></ol>
-<br><br>
-</font>
-</td></table>
+$tool_content .= "
 
-<?
-	end_page();
+<p>$userinfo</p>
+
+ <ul id=\"tool_content\">
+
+<li><a href=\"ldapnewuser.php\">$regldap</a></li>
+<li><a href=\"newuser.php\">$regnoldap</a></li>
+</ul>";
+
+draw($tool_content, 0);
 ?>
