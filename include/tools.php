@@ -195,7 +195,7 @@ function loggedOutMenu(){
 	array_push($sideMenuSubGroup, $langMenu);
 
 	array_push($sideMenuText, $langListFaculte);
-	array_push($sideMenuLink, "modules/auth/listfaculte.php");
+	array_push($sideMenuLink, $urlServer."modules/auth/listfaculte.php");
 
 	/* Check for LDAP server entries */
 	$ldap_entries = mysql_fetch_array(mysql_query("SELECT ldapserver FROM institution"));
