@@ -30,51 +30,51 @@
  */
 
 $langFiles = array('registration', 'gunet');
-include('../../include/init.php');
-
+//include('../../include/init.php');
+include '../../include/baseTheme.php';
 $nameTools = $langLDAPUser;
 $navigation[]= array ("url"=>"newuser_info.php", "name"=> "$reguser");
 
-begin_page();
-?>
-	<tr bgcolor="<?= $color2 ?>">
-		<td>
+//begin_page();
+$tool_content = "";
+$tool_content .= <<<tCont
+	
 			<form method="POST" action="ldapsearch.php">
-				<table>
-				<tr><td><?= $emailprompt?></td>
+				<table><thead>
+				<tr><th>$emailprompt</th>
 					<td><input type=text name=ldap_email></td>
 				</tr>
-				<tr><td><?= $ldapprompt?></td>
+				<tr><th>$ldapprompt</th>
 					<td><input type=password name=ldap_passwd></td>
 				</tr>
-				<tr colspan=2><td><br>
-				<?
+				
+tCont;
 					mysql_select_db($mysqlMainDb, $db);
 					$result = mysql_query("select * from institution ORDER BY nom",$db);
 					if (mysql_num_rows($result) > 1) {
-						echo "<select name=ldap_server><option value=\"0\" SELECTED>$univprompt</option>\n";
+						$tool_content .= "<tr colspan=2><td>";
+						$tool_content .= "<select name=ldap_server><option value=\"0\" SELECTED>$univprompt</option>\n";
 						while (($row = mysql_fetch_object($result))) {
-							echo "<option value=".$row->ldapserver."_".$row->basedn."_".$row->inst_id.">\n";
-							echo $row->nom."\n";
-							echo "</option>\n";
+							$tool_content .= "<option value=".$row->ldapserver."_".$row->basedn."_".$row->inst_id.">\n";
+							$tool_content .= $row->nom."\n";
+							$tool_content .= "</option>\n";
 						}
-						echo "</select>\n";
+						$tool_content .= "</select>\n";
+						$tool_content .= "</td>";
 					} else {
 						$row = mysql_fetch_object($result);
-						echo "<strong>".$langInstitution." </strong>".($row->nom)."\n";
-						echo "<input type='hidden' name='ldap_server' value=".$row->ldapserver."_".$row->basedn."_".$row->inst_id.">\n";
+						$tool_content .= "<tr><th>".$langInstitution."</th><td>".($row->nom)."</td></tr>\n";
+//						$tool_content .= "<strong>".$langInstitution." </strong>".($row->nom)."\n";
+						$tool_content .= "<input type='hidden' name='ldap_server' value=".$row->ldapserver."_".$row->basedn."_".$row->inst_id.">\n";
 					}
 					mysql_free_result($result);
-				?>
-				</td>
-				</tr>
-				<tr colspan=2>
-					<td><br><input type=submit name=is_submit value='<? echo $reg ?>'>
-					<br><br>
-					</td>
-				</tr>
-				<br><br></table>
+$tool_content .= <<<tCont2
+				
+				</thead></table>
+				<br><input type=submit name=is_submit value='$reg'>
+					
 			</form>
-<?
-	end_page();
+tCont2;
+//	end_page();
+draw($tool_content, 0);
 ?>
