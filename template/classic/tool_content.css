@@ -72,7 +72,10 @@ font-size:12px;
 margin-right:2px;
 }
 
-
+#tool_content li { 
+	list-style-type: square; 
+	font-size: 12px;	
+}
 
 table, th, td {
 	border: 1px solid #D4E0EE;
