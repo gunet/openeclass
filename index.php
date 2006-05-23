@@ -41,7 +41,8 @@
 */
 
 unset($language);
-//@include('./config/config.php'); 
+$path2add=0;
+include("include/baseTheme.php");
 @include("./modules/lang/english/index.inc");
 @include("./modules/lang/english/trad4all.inc.php");
 @include("./modules/lang/$language/index.inc");
@@ -49,7 +50,7 @@ unset($language);
 
 $require_help = true;
 $helpTopic="Clar2";
-$nameTools = "Καλωσορίσατε στο e-Class!";
+$nameTools = "Καλωσορίσατε στο e-Class!";//Put it in a lang file
 //$homePage is used by baseTheme.php
 //to parse correctly the breadcrumb.
 $homePage = true;
@@ -62,9 +63,7 @@ $homePage = true;
 //require './include/baseTheme.php';
 
 //Flag to modify the prefix for relative paths.(used by init.php)
-$path2add=0;
-include("include/baseTheme.php");
-//echo "hm2";
+
 
 	//This will be setting a var in the template and NOT concat $tool_content!
 //	if (isset($siteName)) $tool_content .=  "<title>".$siteName."</title>"; 
@@ -184,8 +183,8 @@ if (isset($_SESSION['uid'])) $uid = $_SESSION['uid'];
 else unset($uid);
 
 // This must be setting a var in basethem and NOT concat $tool_content
-if (isset($uid)) $tool_content .=  "$langUser : $prenom $nom";
-else $tool_content .=  "<a href=\"#\"></a>"; 
+//if (isset($uid)) $tool_content .=  "$langUser : $prenom $nom";
+//else $tool_content .=  "<a href=\"#\"></a>"; 
 
 //$tool_content .= <<<tCont2
 //</font></td></tr>
