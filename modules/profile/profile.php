@@ -192,33 +192,36 @@ session_register("prenom");
 
 // if LDAP user - added by adia
 if ($myrow['inst_id'] > 0) {		// LDAP user:
-	$tool_content .= "<table width=\"99%\"><tr>
-		<td valign=\"top\">
-		<font face=\"arial, helvetica\" size=\"2\">$langName</font>
-		</td>
-		<td colspan=\"2\">$prenom_form</td>
-		 </tr>
-		<tr><td valign=\"top\">
-		<font face=\"arial, helvetica\" size=\"2\">$langSurname</font>
-		</td>
-		<td colspan=\"2\">$nom_form</td>
-		 </tr>
+	$tool_content .= "<table>
+	<thead>
+	<tr>
+		<th>
+		$langName
+		</th>
+		<td>$prenom_form</td>
+	</tr>
+	<tr>
+		<th>
+		$langSurname
+		</th>
+		<td>$nom_form</td>
+	</tr>
 		<tr>
-		<td valign=\"top\">
-		<font face=\"arial, helvetica\" size=\"2\">$langUsername</font>
-		</td>
-		<td colspan=\"2\">$username_form</td>
+		<th>
+		$langUsername
+		</th>
+		<td>$username_form</td>
 		</tr>
 		<tr>
-		<td valign=\"top\">
-		<font face=\"arial, helvetica\" size=\"2\">$langEmail</font>
-		</td>
-		<td colspan=\"2\">$email_form</td>
+		<th>
+		$langEmail
+		</th>
+		<td>$email_form</td>
 		</tr>
 		<tr>
-		<td colspan=\"3\">$langLDAPUser</td>
+		<td colspan=\"2\" class=\"caution\">$langLDAPUser</td>
 		</tr>
-		</table>";
+		</thead></table><br><br>";
 } else {		// Not LDAP user:
 	if (!isset($urlSecure)) {
 		$sec = $urlServer.'modules/profile/profile.php';
