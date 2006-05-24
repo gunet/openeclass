@@ -1805,7 +1805,7 @@ mysql_query("CREATE TABLE `lp_module` (
               `comment` text NOT NULL,
               `accessibility` enum('PRIVATE','PUBLIC') NOT NULL default 'PRIVATE',
               `startAsset_id` int(11) NOT NULL default '0',
-              `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','LABEL','COURSE_DESCRIPTION') NOT NULL,
+              `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','LABEL','COURSE_DESCRIPTION','LINK') NOT NULL,
               `launch_data` text NOT NULL,
               PRIMARY KEY  (`module_id`)
              ) TYPE=MyISAM DEFAULT CHARSET=greek");

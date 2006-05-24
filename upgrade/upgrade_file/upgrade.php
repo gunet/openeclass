@@ -253,7 +253,7 @@ if (!mysql_table_exists($code[0], 'lp_module'))  {
               `comment` text NOT NULL,
               `accessibility` enum('PRIVATE','PUBLIC') NOT NULL default 'PRIVATE',
               `startAsset_id` int(11) NOT NULL default '0',
-              `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','LABEL','COURSE_DESCRIPTION') NOT NULL,
+              `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','LABEL','COURSE_DESCRIPTION','LINK') NOT NULL,
               `launch_data` text NOT NULL,
               PRIMARY KEY  (`module_id`)
              ) ", $code[0]); //TYPE=MyISAM COMMENT='List of available modules used in learning paths';

@@ -391,9 +391,10 @@ $tool_content .=
  "<div id=\"tool_operations\"><span class=\"operation\">"
 ."<a href=\"insertMyDoc.php\">".$langDocumentAsModule."</a> | "
 ."<a href=\"insertMyExercise.php\">".$langExerciseAsModule."</a> | "
-."<a href=\"insertMyModule.php\">".$langModuleOfMyCourse."</a> | "
+."<a href=\"insertMyLink.php\">Use Link</a> | "
+."<a href=\"insertMyDescription.php\">Use Course Description</a> | "
 ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=createLabel\">".$langCreateLabel."</a> | "
-."<a href=\"insertMyDescription.php\">Use Course Description</a>"
+."<a href=\"insertMyModule.php\">".$langModuleOfMyCourse."</a>"
 ."</span></div>";
 
 //####################################################################################\\

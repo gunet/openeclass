@@ -47,6 +47,10 @@ define ( 'CTLABEL_', 'LABEL' );
 * content type
 */
 define ( 'CTCOURSE_DESCRIPTION_', 'COURSE_DESCRIPTION' );
+/**
+* content type
+*/
+define ( 'CTLINK_', 'LINK' );
 
 
 /**
