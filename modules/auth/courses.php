@@ -97,40 +97,45 @@ if (isset($_POST["submit"])) {
 else
 {
 	$tool_content .= "<table width=\"99%\">";
-	$tool_content .= "<tr><td bgcolor= $color2 >";
 
 
 // check if user requested a specific faculte
 if (isset( $_GET['fc'] ) ) { 
 	// get faculte name from db
 	$fac = getfacfromfc( $_GET['fc'] );
+	$facid = $_GET['fc'];
 } else {
 	// get faculte name from user's department column
-	$fac = getfacfromuid($uid);
-	$tool_content .= $fac;
+	$facid = getfacfromuid($uid);
+	$fac = getfacnamefromfacid($facid);
+	//$tool_content .= $fac;
 }
 
-if (!$fac) {
+if ($facid==0) {
  	$tool_content .= "</td></tr>";
 	$tool_content .= "<tr><td bgcolor= $color2>$langAddHereSomeCourses</td></tr>";
     $tool_content .= "<tr><td bgcolor= $color2 >";
 	$tool_content .= collapsed_facultes_vert(0);
 } else {
 	// department exists
+
+	$tool_content .= "<caption>Σχολή/Τμήμα: ".$fac."</caption><tbody>";
 	
 	$tool_content .= "<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">";
 	$formend = "<tr>
-			<TD colspan=\"6\" bgcolor= $color2 >
+			<td colspan=\"6\" bgcolor= $color2 >
 				<input type=\"submit\" name=\"submit\" value=\"$langSubscribe\">
-			</TD>
-		</TR>";
+			</td>
+		</tr>";
 		
-	$numofcourses = getdepnumcourses($fac);
+	$numofcourses = getdepnumcourses($facid);
 		
 	// display all the facultes collapsed
-	$tool_content .= collapsed_facultes_horiz($fac);
+	$tool_content .= "<tr><td><b>Διαθέσιμα Τμήματα:</b></td</tr><tr><td>".collapsed_facultes_horiz($facid)."</td></tr>";
 	if ( $numofcourses > 0 ) {
-		$tool_content .= expanded_faculte($fac, $uid);
+		$tool_content .= expanded_faculte($facid, $uid);
+	} else {
+		$tool_content .= "<tr><td>Δεν υπάρχουν Διαθέσιμα Μαθήματα...</td></tr>";
 	}
 	
 
@@ -138,9 +143,9 @@ if (!$fac) {
 
 
 	$tool_content .= "
-		</td></tr></table>
+		</tbody></table>
 		";
-	if (isset($formend))
+	if (isset($formend) && $numofcourses>0)
 		$tool_content .= $formend;
 }
 
@@ -159,7 +164,7 @@ function getfacfromfc( $dep_id) {
 
 function getfacfromuid($uid) {
 	$res = mysql_fetch_row(mysql_query(
-	"SELECT name
+	"SELECT id
 	FROM faculte,user
 	WHERE user.user_id = '$uid'
 		AND faculte.id = user.department"));
@@ -169,17 +174,25 @@ function getfacfromuid($uid) {
 		return 0;
 }
 
-function getdepnumcourses($fac) {
+function getfacnamefromfacid($facid) {
+	$res = mysql_fetch_row(mysql_query("SELECT name FROM faculte WHERE id='".$facid."'"));
+	if ( isset($res[0]) )
+		return $res[0];
+	else
+		return "";
+}
+
+function getdepnumcourses($facid) {
 	$res = mysql_fetch_row(mysql_query(
-	"SELECT count(code) 
+	"SELECT count(*) 
 	FROM cours_faculte
-	WHERE faculte='$fac'" ));
+	WHERE facid='$facid'" ));
 	return $res[0];
 }
 
 
 
-function expanded_faculte($fac, $uid) {
+function expanded_faculte($facid, $uid) {
 	global $m, $icons, $langTitular, $langBegin, $mysqlMainDb;
 	$retString = "";
 	
@@ -199,14 +212,11 @@ function expanded_faculte($fac, $uid) {
 	 	$myCourses[$rowMyCourses["cc"]]["statut"]= $rowMyCourses["ss"]; 
 	}
 	
-	$retString .= "<h2><a name=\"top\">$m[department]:</a> <em>$fac</em></h2>";
-	
 	// get the different course types available for this faculte
 		$typesresult = mysql_query(
 		"SELECT DISTINCT cours.type types 
 		FROM cours 
-		WHERE cours.faculte = '$fac' 
-			AND cours.visible <> 0 
+		WHERE cours.faculteid = '$facid' 
 		ORDER BY cours.type");
 		
 		// count the number of different types
@@ -230,16 +240,12 @@ function expanded_faculte($fac, $uid) {
 		}
 		
 		// now output the legend
-		$retString .= "<hr><font class=\"courses\">"
-		."<b>".$m['legend'].":</b> ".$icons[2]
+		$retString .= "<tr><td><b>".$m['legend'].":</b></td></tr><tr><td>".$icons[2]
 		." ".$m['legopen']." | ".$icons[1]
 		." ".$m['legrestricted']
-		//." | "
-		//.$icons[0]
-		//." ".$m['legclosed']
-		."</font>";
-		
-		$retString .= "<div class='courses'>";
+		." | "
+		.$icons[0]
+		." ".$m['legclosed']."</td></tr>";
 		
 		// changed this foreach statement a bit
 				// this way we sort by the course types
@@ -258,8 +264,7 @@ function expanded_faculte($fac, $uid) {
 			        FROM cours_faculte, cours
 			        WHERE cours.code = cours_faculte.code
 							      AND cours.type = '$type'
-                		AND cours_faculte.faculte='$fac'
-						AND cours.visible <> '0'
+                		AND cours_faculte.facid='$facid'
 		                ORDER BY cours.intitule, cours.titulaires");
 					
 					if (mysql_num_rows($result) == 0) {
@@ -267,18 +272,18 @@ function expanded_faculte($fac, $uid) {
 					}
 					
 					// We changed the style a bit here and we output types as the title
-					$retString .= "<hr><a name=\"$type\" class=\"largeorange\">$message</a><p>\n";
+					$retString .= "<tr><td><b><a name=\"$type\" class=\"largeorange\">$message</a>:</b></td></tr>\n";
 					
 					while ($mycours = mysql_fetch_array($result)) {
 					// changed the variable because of the previous change in the select argument
 						if ($mycours['visible'] == 2) {
-							$codelink = "<a href='../../$mycours[k]/' target=\"blank\">$mycours[c]</a>";
+							$codelink = $mycours['c'].": <a href='../../courses/$mycours[k]/' target=\"blank\">$mycours[i]</a>";
 						} else {
-							$codelink = $mycours['c'];
+							$codelink = $mycours['c'].": ".$mycours[i];
 						}
-						
+
 						// output each course as a table for beautifying reasons
-						$retString .= "<table border=\"0\" class=\"courses\" cellspacing=\"0\" cellpadding=\"0\">
+						$retString .= "<tr><td><table width=\"99%\">
 						<tr><td rowspan=\"2\" valign=\"top\">";
 						
 						// show the necessary access icon
@@ -287,31 +292,45 @@ function expanded_faculte($fac, $uid) {
 								$retString .= $image;
 							}
 						}
-						
-						$retString .= "</td><td width=\"100%\" valign=\"top\">"
-							.$codelink.": <b>$mycours[i]</b> </td>"
+						if ($mycours["visible"]==0 && !isset ($myCourses[$mycours["k"]]["subscribed"])) {
+							$contactprof = " <a href=\"contactprof.php?fc=".$facid."&cc=".$mycours['k']."\">Αποστολή ενημερωτικού email στον διδάδκοντα</a>";
+							$retString .= "</td><td width=\"100%\" valign=\"top\" colspan=\"2\"><b>".$codelink."</b>";							
+						} else {
+							$retString .= "</td><td width=\"100%\" valign=\"top\"><b>".$codelink."</b></td>"
 							."<td align=\"right\">";
+						}
 						
 						if (isset ($myCourses[$mycours["k"]]["subscribed"])) { 
 							if ($myCourses[$mycours["k"]]["statut"]!=1) {
 								$retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]' checked >";
+							if ($mycours['p']!="" && $mycours['visible'] == 1) {
+								$requirepassword = "Κωδικός: <input type=\"password\" name=\"".$mycours[k]."\" value=\"".$mycours['p']."\">";
+							}
 							} else {
 								$retString .= "[$langTitular]";
 							}
 						}
 						else {
 							if ($mycours['p']!="" && $mycours['visible'] == 1) {
-								$requirepassword = "Κωδικός: <input type=\"text\" name=\"".$mycours[k]."\">";
-							} 
-							$retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]'>";
+								$requirepassword = "Κωδικός: <input type=\"password\" name=\"".$mycours[k]."\">";
+							}
+							if ($mycours["visible"]>0  || isset ($myCourses[$mycours["k"]]["subscribed"]))
+								$retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]'>";
 						}
-						$retString .= "<input type='hidden' name='changeCourse[]' value='$mycours[k]'>\n";
+						if ($mycours["visible"]>0 || isset ($myCourses[$mycours["k"]]["subscribed"])) {
+							$retString .= "<input type='hidden' name='changeCourse[]' value='$mycours[k]'>\n";
 						
 							$retString .= "</td></tr>
 							<tr>
-							<td>$mycours[t]</td><td width=\"3%\" nowrap>".$requirepassword."</td>
-							</tr></table></p>";
+							<td>$mycours[t]".$contactprof."</td><td width=\"3%\" nowrap>".$requirepassword."</td>
+							</tr></table>";
+						} else {
+							$retString .= "</td></tr>
+							<tr>
+							<td colspan=\"2\">$mycours[t]".$contactprof."</td></tr></table>";
+						}
 						$requirepassword = "";
+						$contactprof = "";
 					}
 					// output a top href link if necessary
                if ( $numoftypes > 1)
@@ -321,8 +340,6 @@ function expanded_faculte($fac, $uid) {
 					// upatras.gr patch end
 				}
 				
-			$retString .= "<hr size=\"1\"></div>";
-			
 			return $retString;
 }
 
@@ -354,19 +371,17 @@ function collapsed_facultes_vert($fac) {
 	return $retString;
 }
 
-function collapsed_facultes_horiz($fac) {
+function collapsed_facultes_horiz($facid) {
 	$retString = "";
 	
 	$result = mysql_query(
-		"SELECT DISTINCT cours.faculte f, faculte.id id
-		FROM cours, faculte 
-		WHERE (cours.visible = '1' OR cours.visible = '2') 
-			AND faculte.name = cours.faculte
-		ORDER BY cours.faculte");
+		"SELECT DISTINCT faculte.id id, faculte.name f
+		FROM faculte 
+		ORDER BY name");
 	$counter = 1;
 	while ($facs = mysql_fetch_array($result)) {
 		if ($counter != 1) $retString .= "<font class=\"small\"> | </font>";
-		if ($facs['f'] != $fac)
+		if ($facs['id'] != $facid)
 			$codelink = "<a href=\"?fc=$facs[id]\" class=\"small\">$facs[f]</a>"; 
 		else
 			$codelink = "<font class=\"small\">$facs[f]</font>";
@@ -375,7 +390,6 @@ function collapsed_facultes_horiz($fac) {
 		$counter++;
 	}
 	
-	$retString .= "<hr size=\"1\">";
 	return $retString;
 }
 
