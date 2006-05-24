@@ -298,6 +298,7 @@ echo "&nbsp;&nbsp;"
 	.'<a href="viewer.php?fullscreen=0" target="_top">'
 	.'<img src="'.$imgRepositoryWeb.'scormexitfullscreen.jpg" border="0" title="'.$langInFrames.'">'
 	.'</a>&nbsp;&nbsp;&nbsp;';
+
 if($lpUid) {
 	echo '<small>'
 		//.'current progress: '
