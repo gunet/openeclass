@@ -333,6 +333,9 @@ function adminMenu(){
 		array_push($sideMenuText, $langDBaseAdmin);
 		array_push($sideMenuLink, $phpMyAdminURL);
 	}
+	// Added by vagpits
+	array_push($sideMenuText, "Αναβάθμιση Βάσης Δεδομένων");
+	array_push($sideMenuLink, "upgrade.php");
 
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);
