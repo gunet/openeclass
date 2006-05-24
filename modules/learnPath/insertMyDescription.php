@@ -88,7 +88,9 @@ if ($num == 0)
 		" . (int)$order . ", 'OPEN')";
 	$query = db_query($sql);
 
-	$tool_content .= "done";
+	//$tool_content .= "done";
+	header("Location: ./learningPathAdmin.php");
+    exit();
 }
 else 
 {
@@ -108,9 +110,13 @@ else
 		" . (int)$order . ", 'OPEN')";
 	$query = db_query($sql);
 
-	$tool_content .= "done2";
+	//$tool_content .= "done2";
+	header("Location: ./learningPathAdmin.php");
+    exit();
 }
  
-draw($tool_content, 2, "learnPath");
+//draw($tool_content, 2, "learnPath");
+header("Location: ./learningPathAdmin.php");
+exit();
 
 ?>
