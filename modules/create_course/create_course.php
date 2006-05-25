@@ -60,13 +60,118 @@ $require_login = TRUE;
 $require_prof = TRUE;
 
 $langFiles = array('create_course', 'opencours');
+
+$local_head = "
+
+<script language=\"JavaScript\">
+
+function validate()
+{
+	if (document.forms[0].intitule.value==\"\")
+ 	{
+   		alert(\"Παρακαλώ συμπληρώστε τον τίτλο του μαθήματος!\"); 
+   		return false;
+ 	}
+ 	
+ 	if (document.forms[0].description.value==\"\")
+ 	{
+   		alert(\"Παρακαλώ συμπληρώστε την περιγραφή του μαθήματος!\"); 
+   		return false;
+ 	}
+ 	
+ 	if (document.forms[0].titulaires.value==\"\")
+ 	{
+   		alert(\"Παρακαλώ συμπληρώστε τουλάχιστον έναν διαχειριστή για το μάθημα!\"); 
+   		return false;
+ 	}
+ 	
+
+ 	return true;
+}
+ 
+</script>
+
+";
+
+
+//ektypwnei ena <td> </td> me hyperlink pros to help me vash kapoio $topic
+function help ($topic)
+{
+	echo"
+	<td valign=\"middle\">
+		<a href=\"../help/help.php?topic=$topic\" onclick=\"window.open('../help/help.php?topic=$topic','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a></td>";
+}
+
+
+
 include '../../include/init.php';
 
 $titulaire_probable="$prenom $nom";
 $local_style = "input { font-size: 12px; }";
 begin_page($langCreateSite);
 
+	//ean to mathima hdh yparxei emfanise mhnyma (elegxos mesw $_GET)
+	if(isset($_GET["course_exists"]))
+	{
+		@include("../lang/$language/create_course.inc.php");
+
+		echo "<tr bgcolor=\"$color2\">
+		<td colspan=\"3\" valign=\"top\">
+		<font face=\"arial, helvetica\" size=\"2\">
+			$langCodeTaken.
+		</td></tr>";
+	}
+
 ###################### FORM  #########################################
+<<<<<<< create_course.php
+echo "
+<!-- S T E P  1   [start] -->    
+
+<tr bgcolor=\"$color1\">
+	<td>
+		<table bgcolor=\"$color1\" border=\"2\">
+			<tr valign=\"top\" align=\"middle\">
+				<td colspan=\"3\" valign=\"middle\">
+					<table width=\"100%\">
+						<tr>
+							<td align=\"left\">
+								<font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourse</font>
+							</td>
+							<td align=\"right\">
+								<font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourseStep&nbsp;1&nbsp;$langCreateCourseStep2&nbsp;3</font>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr><td colspan=\"3\">&nbsp;</td></tr>
+			<tr valign=\"top\">
+				<td colspan=\"5\" valign=\"middle\">
+					<font face=\"arial, helvetica\" size=\"2\"><b>$langCreateCourseStep1Title</b></font>
+					<hr>
+					<font face=\"arial, helvetica\" size=\"2\">$langFieldsRequ</font>
+				</td>
+			</tr>
+			<tr><td colspan=\"3\">&nbsp;</td></tr>
+			<tr valign=\"top\">
+				<td valign=\"top\" align=\"right\">
+					<form method=\"post\" action=\"create_course2.php\" onsubmit=\"return validate();\">
+					<font face=\"arial, helvetica\" size=\"2\"><b>$langTitle:</b></font>
+				</td>
+				<td valign=\"top\">
+					<font face=\"arial, helvetica\" size=\"2\">
+					<input type=\"Text\" name=\"intitule\" size=\"60\">$langFieldsRequAsterisk<br>$langEx</font>
+				</td>";
+				help("CreateCourse_Title");
+echo"
+			</tr>
+		</td>
+	<tr>
+	<td valign=\"top\" align=\"right\">
+	<font face=\"arial, helvetica\" size=\"2\"><b>$langFac:</b></font>
+	</td>
+	<td valign=\"top\">
+=======
 if(!isset($submit)) {
     echo "<tr bgcolor=\"$color2\">
     <td colspan=\"3\">
@@ -90,6 +195,7 @@ if(!isset($submit)) {
     <font face=\"arial, helvetica\" size=\"2\">$langFac&nbsp;:</font>
     </td>
     <td valign=\"top\">
+>>>>>>> 1.10
 
 <select name=\"faculte\">";
 
@@ -101,22 +207,52 @@ while ($myfac = mysql_fetch_array($resultFac)) {
     else
         echo "<option>$myfac[name]</option>";
 }
+<<<<<<< create_course.php
+echo "</select>$langFieldsRequAsterisk<br><font face=\"arial, helvetica\" size=\"2\">$langTargetFac</font>
+	</td>
+	";
+	help("CreateCourse_faculte");
+	
+echo "</tr>
+=======
 echo "</select><br><font face=\"arial, helvetica\" size=\"2\">$langTargetFac</font>
     </td></tr>
+>>>>>>> 1.10
        <tr valign=\"top\">
-       <td width=\"100\" valign=\"top\">
-       <font face=\"arial, helvetica\" size=\"2\">$langDescription&nbsp;:</font>
+       <td width=\"100\" valign=\"top\" align=\"right\">
+       <font face=\"arial, helvetica\" size=\"2\"><b>$langDescrInfo:</b></font>
        </td>
        <td valign=top>
        <font face=\"arial, helvetica\" size=\"2\">
-       <textarea name=\"description\" cols=\"60\" rows=\"4\"></textarea>
+       <textarea name=\"description\" cols=\"30\" rows=\"4\"></textarea>
+	   $langFieldsRequAsterisk
        <br>$langDescrInfo
        </font>
-       </td>
+       </td>";
+	   help("CreateCourse_description");
+echo "
       </tr>";
 
 unset($repertoire);
 
+<<<<<<< create_course.php
+/* SAKIS:  edw na valw ta kwdikia gia thn epilogh twn diaxeiristwn!!!!!! */
+
+echo "<tr valign=\"top\">
+	<td width=\"100\" valign=\"top\" align=\"right\">
+	<font face=\"arial, helvetica\" size=\"2\"><b>$langProfessors:</b></font>
+	</td>
+	<td valign=\"top\">
+	<input type=\"Text\" name=\"titulaires\" size=\"60\" value=\"$titulaire_probable\"><font face=\"arial, helvetica\" size=\"2\">$langFieldsRequAsterisk<br>$langProfessorsInfo</font>
+	</td>";
+	help("CreateCourse_titulaires");
+
+echo "
+	</tr>
+	<tr>
+	<td align=\"right\"><font face=\"arial, helvetica\" size=\"2\"><b>$m[type]:</b></font></td>
+	<td>";
+=======
 echo "<tr valign=\"top\"><td width=\"100\" valign=\"top\">
     <font face=\"arial, helvetica\" size=\"2\">$langProfessors&nbsp;:</font>
     </td>
@@ -127,8 +263,31 @@ echo "<tr valign=\"top\"><td width=\"100\" valign=\"top\">
     <tr>
     <td><font face=\"arial, helvetica\" size=\"2\">$m[type]&nbsp;:</font></td>
     <td>";
+>>>>>>> 1.10
 selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']), 'type');
 
+<<<<<<< create_course.php
+echo "
+	<font face=\"arial, helvetica\" size=\"2\">$langFieldsRequAsterisk<br>$langCourseCategory</br></td>";
+					help("CreateCourse_Type");
+echo "
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+		<td align=\"left\">
+			<input type=\"button\" disabled=\"disabled\" name=\"button\" value=\"$langPreviousStep\">
+		</td>
+		<td align=\"right\">
+			<input type=\"Submit\" name=\"submit\" value=\"$langNextStep\">
+		</td>
+	</tr>
+	</table>
+	</td>
+	</tr>
+	</table>
+</form>";
+=======
 echo "</td></tr>
         <tr><td><font face=\"arial, helvetica\" size=\"2\">$langLn&nbsp;:</font></td>
         <td>
@@ -1805,7 +1964,7 @@ mysql_query("CREATE TABLE `lp_module` (
               `comment` text NOT NULL,
               `accessibility` enum('PRIVATE','PUBLIC') NOT NULL default 'PRIVATE',
               `startAsset_id` int(11) NOT NULL default '0',
-              `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','LABEL','COURSE_DESCRIPTION','LINK') NOT NULL,
+              `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','LABEL','COURSE_DESCRIPTION') NOT NULL,
               `launch_data` text NOT NULL,
               PRIMARY KEY  (`module_id`)
              ) TYPE=MyISAM DEFAULT CHARSET=greek");
@@ -2366,7 +2525,7 @@ function DefaultScoring($ChoiceCount,$Z,$weight) {
 }//End of function DefaultScoring
 
 
+>>>>>>> 1.10
 ?>
 </body>
 </html>
-
