@@ -350,6 +350,8 @@ if( $is_AllowedToEdit ) // for teacher only
             break;
         case CTLABEL_ :
             break;
+        case CTLINK_:
+        	break;
     }
 } // if ($is_AllowedToEdit)
 

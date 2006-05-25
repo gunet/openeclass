@@ -91,8 +91,6 @@ $assetPath = db_query_get_single_value($sql);
 
 // Get path of file of the starting asset to launch
 
-$withFrames = false;
-
 switch ($module['contentType'])
 {
 	case CTDOCUMENT_ :
@@ -125,7 +123,6 @@ switch ($module['contentType'])
             // question mark argument method, for IIS ...
             $moduleStartAssetPage = $clarolineRepositoryWeb.'/document'.str_replace('%2F','/',$startAssetPage);
         }
-  		$withFrames = true;
 		break;
 
 	case CTEXERCISE_ :
@@ -172,8 +169,23 @@ switch ($module['contentType'])
 		} // else anonymous : record nothing
 		
 		$moduleStartAssetPage = "showCourseDescription.php";
+		break;
+	case CTLINK_ :
+		if ($uid) {
+			// if credit was already set this query changes nothing else it update the query made at the beginning of this script
+		    $sql = "UPDATE `".$TABLEUSERMODULEPROGRESS."`
+		               SET `credit` = 1,
+		                   `raw` = 100,
+		                   `lesson_status` = 'completed',
+		                   `scoreMin` = 0,
+		                   `scoreMax` = 100
+		             WHERE `user_id` = " . (int)$uid . "
+		               AND `learnPath_module_id` = ". (int)$learnPathModuleId;
+
+		    db_query($sql);
+		}
 		
-		$withFrames = true;
+		$moduleStartAssetPage = $assetPath;
 		break;
 } // end switch
 

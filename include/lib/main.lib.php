@@ -74,7 +74,7 @@ function db_query_get_single_value($sqlQuery, $db = FALSE) {
 // Claroline SQL query wrapper returning only the first row of the result
 // Useful in some cases because, it avoid nested arrays of results.
 function db_query_get_single_row($sqlQuery, $db = FALSE) {
-    $result = db_query($sqlQuery, $dbHandler);
+    $result = db_query($sqlQuery, $db);
 
     if($result) {
         $row = mysql_fetch_array($result, MYSQL_ASSOC);

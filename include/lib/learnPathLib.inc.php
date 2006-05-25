@@ -1543,14 +1543,23 @@ function claro_disp_tool_title($titlePart, $helpUrl = false)
  * @return $string - the
  */
 
-function claro_disp_message_box($message)
+function claro_disp_message_box($message, $style = FALSE)
 {
+	if ($style) {
+		$cell = "<td class=\"$style\">";
+	}
+	else {
+		$cell = "<td>";
+	}
+	
     return "\n".'<table>'
+    .      '<tbody>'
     .      '<tr>'
-    .      '<td>'
+    .      $cell
     .      $message
     .      '</td>'
     .      '</tr>'
+    .      '</tbody>'
     .      '</table>' . "\n\n"
     ;
 }

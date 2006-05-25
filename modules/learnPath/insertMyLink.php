@@ -23,6 +23,7 @@ $imgRepositoryWeb       = "../../images/";
 
 require_once("../../include/baseTheme.php");
 $tool_content = "";
+$dialogBox = "";
 
 $nameTools = $langInsertMyLinkToolName;
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
@@ -45,9 +46,116 @@ if (!isset($_POST['maxLinkForm'])) $_POST['maxLinkForm'] = 0;
 
 while ($iterator <= $_POST['maxLinkForm']) {
 	if (isset($_POST['submitInsertedLink']) && isset($_POST['insertLink_'.$iterator])) {
-		//echo $_POST['insertLink_'.$iterator];
-	}
+
+		// get from DB everything related to the link
+		$sql = "SELECT * FROM `".$tbl_link."` WHERE `id` = \"" 
+			.$_POST['insertLink_'.$iterator] ."\"";
+		$row = db_query_get_single_row($sql);
+		
+		// check if this link is already a module
+		$sql = "SELECT *
+        		FROM `".$TABLEMODULE."` AS M, `".$TABLEASSET."` AS A
+        		WHERE A.`module_id` = M.`module_id`
+        		AND M.`name` LIKE \"" .addslashes($row['titre']) ."\"
+        		AND M.`comment` LIKE \"" .addslashes($row['description']) ."\"
+        		AND A.`path` LIKE \"" .addslashes($row['url']) ."\"
+        		AND M.`contentType` = \"".CTLINK_."\"";
+		$query0 = db_query($sql);
+        $num = mysql_numrows($query0);
+        
+        if ($num == 0) { 
+			// create new module
+			$sql = "INSERT INTO `".$TABLEMODULE."`
+					(`name` , `comment`, `contentType`, `launch_data`)
+					VALUES ('". addslashes($row['titre']) ."' , '"
+					.addslashes($row['description']) . "', '".CTLINK_."','')";
+			$query = db_query($sql);
+
+			$insertedModule_id = mysql_insert_id();
+
+			// create new asset
+			$sql = "INSERT INTO `".$TABLEASSET."`
+					(`path` , `module_id` , `comment`)
+					VALUES ('". addslashes($row['url'])."', " 
+					. (int)$insertedModule_id . ", '')";
+			$query = db_query($sql);
+
+			$insertedAsset_id = mysql_insert_id();
+
+			$sql = "UPDATE `".$TABLEMODULE."`
+					SET `startAsset_id` = " . (int)$insertedAsset_id . "
+					WHERE `module_id` = " . (int)$insertedModule_id . "";
+			$query = db_query($sql);
+			
+			// determine the default order of this Learning path
+			$sql = "SELECT MAX(`rank`)
+					FROM `".$TABLELEARNPATHMODULE."`";
+			$result = db_query($sql);
+
+			list($orderMax) = mysql_fetch_row($result);
+			$order = $orderMax + 1;
+
+			// finally : insert in learning path
+			$sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
+					(`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`)
+					VALUES ('". (int)$_SESSION['path_id']."', '".(int)$insertedModule_id."','" 
+					."', ".(int)$order.", 'OPEN')";
+			$query = db_query($sql);
+			
+			$dialogBox .= $row['titre']." : ".$langLinkInsertedAsModule."<br />";
+			$style = "success";
+        } 
+        else { 
+        	// check if this is this LP that used this document as a module
+        	$sql = "SELECT *
+					FROM `".$TABLELEARNPATHMODULE."` AS LPM,
+						`".$TABLEMODULE."` AS M,
+						`".$TABLEASSET."` AS A
+					WHERE M.`module_id` =  LPM.`module_id`
+					AND M.`startAsset_id` = A.`asset_id`
+					AND A.`path` = '". addslashes($row['url'])."'
+					AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'];
+			$query2 = db_query($sql);
+			$num = mysql_numrows($query2);
+			
+			if($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
+				
+				$thisLinkModule = mysql_fetch_array($query0);
+				// determine the default order of this Learning path
+				$sql = "SELECT MAX(`rank`)
+						FROM `".$TABLELEARNPATHMODULE."`";
+				$result = db_query($sql);
+
+				list($orderMax) = mysql_fetch_row($result);
+				$order = $orderMax + 1;
+				
+				// finally : insert in learning path
+				$sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
+						(`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`)
+						VALUES ('". (int)$_SESSION['path_id']."', '"
+						.(int)$thisLinkModule['module_id']."','"
+						."', ".(int)$order.",'OPEN')";
+				$query = db_query($sql);
+				
+				$dialogBox .= $row['titre']." : ".$langLinkInsertedAsModule."<br />";
+				$style = "success";
+			}
+			else {
+				$dialogBox .= $row['titre']." : ".$langLinkAlreadyUsed."<br />";
+				$style = "caution";
+			}
+        } 
+
+	} 
+	
 	$iterator++;
+} 
+
+
+if (isset($dialogBox) && $dialogBox != "") {
+    $tool_content .= "<div id=\"tool_operations\"><span class=\"operation\">";
+    $tool_content .= claro_disp_message_box($dialogBox, $style);
+    $tool_content .= "</span></div>";
 }
 
 $tool_content .= showlinks($tbl_link, $dbname);
