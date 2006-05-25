@@ -43,7 +43,7 @@ else
 if ( $displayFull == 0	) 
 {
 	$tool_content .= "<iframe src=\"navigation/startModule.php\" name=\"mainFrame\" "
-		."width=\"100%\" height=\"550\" scrolling=\"no\" frameborder=\"0\">"
+		."width=\"99%\" height=\"550\" scrolling=\"no\" frameborder=\"0\">"
 		.$langBrowserCannotSeeFrames
 		."<br />"
 		."<a href=\"module.php\">".$langBack."</a>"

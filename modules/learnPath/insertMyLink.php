@@ -153,19 +153,17 @@ while ($iterator <= $_POST['maxLinkForm']) {
 
 
 if (isset($dialogBox) && $dialogBox != "") {
-    $tool_content .= "<div id=\"tool_operations\"><span class=\"operation\">";
     $tool_content .= claro_disp_message_box($dialogBox, $style);
-    $tool_content .= "</span></div>";
+    $tool_content .= "<br />";
 }
 
 $tool_content .= showlinks($tbl_link, $dbname);
 
-$tool_content .= "<br /><div id=\"tool_operations\"><span class=\"operation\">";
+$tool_content .= "<br />";
 $tool_content .= claro_disp_tool_title($langPathContentTitle);
 $tool_content .= '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
 // display list of modules used by this learning path
 $tool_content .= display_path_content();
-$tool_content .= "</span></div>";
 
 
 draw($tool_content, 2, "learnPath");

@@ -19,7 +19,7 @@ $nameTools = $langCourseProgram;
 ?>
 <html>
 <body>
-<table width="100%" border="0">
+<table width="99%" border="0">
 <tr>
 <td colspan="2">
 

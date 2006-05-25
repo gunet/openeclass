@@ -118,7 +118,7 @@ $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 //####################################################################################\\
 
 $tool_content .= "\n".'<br />'."\n"
-  	.'<table width="100%">'."\n"
+  	.'<table width="99%">'."\n"
 	.'<tr align="center" valign="top">'."\n"
 	.'<th colspan="'.($maxDeep+1).'">'.$langModule.'</th>'."\n";
 

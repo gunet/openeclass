@@ -142,17 +142,15 @@ if( !$is_AllowedToEdit
 
 $cmd = ( isset($_REQUEST['cmd']) )? $_REQUEST['cmd'] : '';
 
-$tool_content .= "<div id=\"tool_operations\"><span class=\"operation\">";
-
 if ( $cmd == "updateName" )
 {
-    $tool_content .= nameBox(MODULE_, UPDATE_);
+    $tool_content .= "<p>".nameBox(MODULE_, UPDATE_)."</p>";
 }
 else
 {
-    $tool_content .= nameBox(MODULE_, DISPLAY_);
+    $tool_content .= "<p>".nameBox(MODULE_, DISPLAY_)."</p>";
 }
-$tool_content .= "<br />";
+
 if($module['contentType'] != CTLABEL_ )
 {
     //####################################################################################\\
@@ -162,30 +160,30 @@ if($module['contentType'] != CTLABEL_ )
     // this the comment of the module in ALL learning paths
     if ( $cmd == "updatecomment" )
     {
-        $tool_content .= commentBox(MODULE_, UPDATE_);
+        $tool_content .= "<p>".commentBox(MODULE_, UPDATE_)."</p>";
     }
     elseif ($cmd == "delcomment" )
     {
-        $tool_content .= commentBox(MODULE_, DELETE_);
+        $tool_content .= "<p>".commentBox(MODULE_, DELETE_)."</p>";
     }
     else
     {
-        $tool_content .= commentBox(MODULE_, DISPLAY_);
+        $tool_content .= "<p>".commentBox(MODULE_, DISPLAY_)."</p>";
     }
-$tool_content .= "<br />";
+
     //#### ADDED COMMENT #### courseAdmin can always modify this ####\\
     // this is a comment for THIS module in THIS learning path
     if ( $cmd == "updatespecificComment" )
     {
-        $tool_content .= commentBox(LEARNINGPATHMODULE_, UPDATE_);
+        $tool_content .= "<p>".commentBox(LEARNINGPATHMODULE_, UPDATE_)."</p>";
     }
     elseif ($cmd == "delspecificComment" )
     {
-        $tool_content .= commentBox(LEARNINGPATHMODULE_, DELETE_);
+        $tool_content .= "<p>".commentBox(LEARNINGPATHMODULE_, DELETE_)."</p>";
     }
     else
     {
-        $tool_content .= commentBox(LEARNINGPATHMODULE_, DISPLAY_);
+        $tool_content .= "<p>".commentBox(LEARNINGPATHMODULE_, DISPLAY_)."</p>";
     }
 $tool_content .= "<br />";
 } //  if($module['contentType'] != CTLABEL_ )
@@ -202,7 +200,6 @@ else
 }
 
 $tool_content .= '<small><a href="'.$pathBack.'"><< '.$langBackModule.'</a></small>'."\n\n";
-$tool_content .= "</span></div>";
 //####################################################################################\\
 //############################ PROGRESS  AND  START LINK #############################\\
 //####################################################################################\\
@@ -220,7 +217,7 @@ if($module['contentType'] != CTLABEL_) //
         if ($resultBrowsed['contentType']== CTEXERCISE_ ) { $contentDescType = $langEXERCISETypeDesc; }
         if ($resultBrowsed['contentType']== CTDOCUMENT_ ) { $contentDescType = $langDOCUMENTTypeDesc; }
 
-		$tool_content .= '<strong>'.$langProgInModuleTitle.'</strong><br /><br />'."\n\n"
+		$tool_content .= '<br /><center><strong>'.$langProgInModuleTitle.'</strong></center><br />'."\n\n"
 			.'<table align="center">'."\n"
 			.'<thead>'."\n"
 			.'<tr>'."\n"

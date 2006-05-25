@@ -37,7 +37,7 @@ $fileDate = format_date(filectime($file));
 //####################################################################################\\
 $tool_content .= "\n\n".'<hr noshade="noshade" size="1" />'."\n\n"
 	.'<h4>'.$langDocumentInModule.'</h4>'."\n\n"
-	.'<table width="100%">'."\n"
+	.'<table width="99%">'."\n"
 	.'<thead>'."\n"
 	.'<tr>'."\n"
 	.'<th>'.$langFileName.'</th>'."\n"

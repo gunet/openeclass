@@ -535,7 +535,7 @@ function display_path_content()
         if ($flatElementList[$i]['children'] > $maxDeep) $maxDeep = $flatElementList[$i]['children'] ;
     }
 
-    $output .= "\n".'<table width="100%">'."\n\n"
+    $output .= "\n".'<table width="99%">'."\n\n"
     .    '<tr align="center" valign="top">'."\n"
 	.    '<th colspan="' . ($maxDeep+1).'">' . $langModule . '</th>'."\n"
     .    '</tr>'."\n\n"
@@ -710,7 +710,7 @@ function display_my_exercises($dialogBox)
     {
         echo claro_disp_message_box($dialogBox).'<br />'."\n";
     }
-    echo '<table width="100%">'."\n\n"
+    echo '<table width="99%">'."\n\n"
     .    '<tr align="center" valign="top">'."\n"
     .    '<th width="10%">'
     .    $langAddModule
@@ -867,7 +867,7 @@ function display_my_documents($dialogBox)
         ;
     }
     /* CURRENT DIRECTORY */
-    $output .= '<table width="100%">';
+    $output .= '<table width="99%">';
     if ( $curDirName ) /* if the $curDirName is empty, we're in the root point
     and there is'nt a dir name to display */
     {
@@ -1443,7 +1443,7 @@ function claro_parse_user_text($userText)
                               $userText);
 
        $userText = str_replace('[/tex]',
-                               '" width="100%" pluginspace="http://www.integretechpub.com/">',
+                               '" width="99%" pluginspace="http://www.integretechpub.com/">',
                                $userText);
    }
 
@@ -1768,7 +1768,7 @@ function claro_disp_html_area($name, $content = '',
 echo '<textarea '
         .'id="'.$name.'" '
         .'name="'.$name.'" '
-        .'style="width:100%" '
+        .'style="width:99%" '
         .'rows="'.$rows.'" '
         .'cols="'.$cols.'" '
         .$optAttrib.' >'

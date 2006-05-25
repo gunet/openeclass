@@ -321,7 +321,7 @@ $LPDetails = mysql_fetch_array($query);
 //####################################################################################\\
 //############################ LEARNING PATH NAME BOX ################################\\
 //####################################################################################\\
-$tool_content .= "<div id=\"tool_operations\"><span class=\"operation\">";
+$tool_content .= "<p>";
 if ( $cmd == "updateName" )
 {
     $tool_content .= nameBox(LEARNINGPATH_, UPDATE_);
@@ -346,7 +346,7 @@ else
 {
     $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 }
-$tool_content .= "</span></div>";
+$tool_content .= "<br /><br /></p>";
 //####################################################################################\\
 //############################ create label && change pos forms  #####################\\
 //####################################################################################\\
@@ -354,22 +354,23 @@ $tool_content .= "</span></div>";
 if (isset($displayCreateLabelForm) && $displayCreateLabelForm)
 {
     $dialogBox = "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">
-                  <strong><label for=\"newLabel\">".$langNewLabel."</label></strong>&nbsp;
+                  <p><strong><label for=\"newLabel\">".$langNewLabel."</label></strong>&nbsp;
                   <input type=\"text\" name=\"newLabel\" id=\"newLabel\" maxlength=\"255\" />
                   <input type=\"hidden\" name=\"cmd\" value=\"createLabel\" />
                   <input type=\"submit\" value=\"".$langOk."\" />
-                  </form>";
+                  </p></form>";
 }
 if (isset($displayChangePosForm) && $displayChangePosForm)
 { 
     $dialogBox = "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">
-                  <strong>".$langMove." ' ".$moduleInfos['name']." ' ".$langTo."</strong>&nbsp;";
+                  <p><strong>".$langMove." ' ".$moduleInfos['name']." ' "
+                  .$langTo."</strong>&nbsp;";
     // build select input - $elementList has been declared in the previous big cmd case
     $dialogBox .= claro_build_nested_select_menu("newPos",$elementList);
     $dialogBox .= "<input type=\"hidden\" name=\"cmd\" value=\"changePos\" />
                    <input type=\"hidden\" name=\"cmdid\" value=\"".$_REQUEST['cmdid']."\" />
                    <input type=\"submit\" value=\"".$langOk."\" />
-                   </form>";
+                   </p></form>";
 }
 
 //####################################################################################\\
@@ -378,9 +379,8 @@ if (isset($displayChangePosForm) && $displayChangePosForm)
 
 if (isset($dialogBox) && $dialogBox!="")
 {
-    $tool_content .= "<div id=\"tool_operations\"><span class=\"operation\">";
     $tool_content .= claro_disp_message_box($dialogBox);
-    $tool_content .= "</span></div>";
+    $tool_content .= "<br />";
 }
 
 //####################################################################################\\
@@ -388,14 +388,13 @@ if (isset($dialogBox) && $dialogBox!="")
 //####################################################################################\\
 
 $tool_content .=
- "<div id=\"tool_operations\"><span class=\"operation\">"
+ "<p>"
 ."<a href=\"insertMyDoc.php\">".$langDocumentAsModule."</a> | "
 ."<a href=\"insertMyExercise.php\">".$langExerciseAsModule."</a> | "
 ."<a href=\"insertMyLink.php\">Use Link</a> | "
 ."<a href=\"insertMyDescription.php\">Use Course Description</a> | "
 ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=createLabel\">".$langCreateLabel."</a> | "
-."<a href=\"insertMyModule.php\">".$langModuleOfMyCourse."</a>"
-."</span></div>";
+."<a href=\"insertMyModule.php\">".$langModuleOfMyCourse."</a></p>";
 
 //####################################################################################\\
 //######################### LEARNING PATH LIST CONTENT ###############################\\
@@ -441,7 +440,7 @@ for ($i=0 ; $i < sizeof($flatElementList) ; $i++)
 //####################################################################################\\
 
 $tool_content .=
-  "<table width=\"100%\">"
+  "<table width=\"99%\">"
        ."<thead>"
          ."<tr align=\"center\" valign=\"top\">"
            ."<th colspan=\"".($maxDeep+1)."\">".$langModule."</th>"

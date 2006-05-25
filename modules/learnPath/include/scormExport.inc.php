@@ -242,7 +242,7 @@ class ScormExport
         
         $pageBody = '<body onload="loadPage()">
     <div id="claroBody"><form id="quiz">
-    <table width="100%" border="0" cellpadding="1" cellspacing="0"><tr><td>' . "\n";
+    <table width="99%" border="0" cellpadding="1" cellspacing="0"><tr><td>' . "\n";
         
         
         // read the exercise
@@ -286,7 +286,7 @@ class ScormExport
             $questionPonderationList[$questionId] = $question->selectWeighting();
             
             // Generic display, valid for all kind of question
-            $pageBody .= '<table width="100%">
+            $pageBody .= '<table width="99%">
     <tr><th valign="top" colspan="2">' . $langQuestion . ' ' . $questionCount . '</th></tr>
     <tfoot>
         <tr><td valign="top" colspan="2">' . $qtitle . '</td></tr>
@@ -472,7 +472,7 @@ class ScormExport
                     else
                     {
                         $pageBody .= '<tr><td colspan="2">
-                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <table border="0" cellpadding="0" cellspacing="0" width="99%">
                         <tr>
                             <td width="40%" valign="top"><b>' . $choiceCounter . '.</b> ' . $answerText . '</td>
                             <td width="20%" valign="center">&nbsp;<select name="matching_' . $questionCount . '_' . 
@@ -508,7 +508,7 @@ class ScormExport
                             while ( isset($Select[$choiceCounter]) )
                             {
                                 $pageBody .= '<tr><td colspan="2">
-                                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <table border="0" cellpadding="0" cellspacing="0" width="99%">
                                 <tr>
                                     <td width="40%">&nbsp;</td>
                                     <td width="20%">&nbsp;</td>

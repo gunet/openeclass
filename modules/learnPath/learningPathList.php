@@ -236,9 +236,9 @@ if ($is_adminOfCourse) {
             }
             else { // create form requested
             	$tool_content .= 
-					 "<div id=\"tool_operations\"><span class=\"operation\">"
+            	     ""
 					."<form action=\"".$_SERVER['PHP_SELF']."\" method=\"POST\">"
-                    ."<strong>".$langCreateNewLearningPath."</strong><br /><br />"
+                    ."<p><strong>".$langCreateNewLearningPath."</strong><br /><br />"
                     ."<label for=\"newPathName\">".$langLearningPathName."</label><br />"
                     ."<input type=\"text\" name=\"newPathName\" id=\"newPathName\" "
                     ."maxlength=\"255\"></input><br /><br />"
@@ -247,7 +247,7 @@ if ($is_adminOfCourse) {
                     ."cols=\"50\"></textarea><br />"
                     ."<input type=\"hidden\" name=\"cmd\" value=\"create\">"
                     ."<input type=\"submit\" value=\"".$langOk."\"></input>"
-                    ."</form></span></div>";
+                    ."<br /><br /></p></form>";
             }
             break;
 	} // end of switch
@@ -307,21 +307,19 @@ if (isset($sortDirection) && $sortDirection)
 if($is_adminOfCourse) {
 	
 	if (isset($dialogBox)) {
-		$tool_content .= "<div id=\"tool_operations\"><span class=\"operation\">";
 		$tool_content .= $dialogBox;
-		$tool_content .= "</span></div>";
 	}
 
 	$tool_content .=
-       "<div id=\"tool_operations\"><span class=\"operation\">"
+	   "<p>"
       ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=create\">".$langCreateNewLearningPath."</a> | "
       ."<a href=\"importLearningPath.php\">".$langimportLearningPath."</a> | "
       ."<a href=\"modules_pool.php\">".$langModulesPoolToolName."</a> | "
       ."<a href=\"learnPath_detailsAllPath.php\">".$langTrackAllPath."</a>"
-      ."</span></div>";
+      ."</p>";
 }
 
-$tool_content .= "<table width=\"100%\">
+$tool_content .= "<table width=\"99%\">
  <thead>
  <tr align=\"center\" valign=\"top\">
   <th>".$langLearningPath."</th>";
