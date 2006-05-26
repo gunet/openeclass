@@ -20,7 +20,7 @@ if (isset($submit))  {
     list($facid, $facname) = split("--", $faculte);
 	$sql = mysql_query("UPDATE cours SET faculte='$facname', titulaires='$titulaires', intitule='$intitule', faculteid='$facid' WHERE code='$c'");
 	if (mysql_affected_rows() > 0) {
-		$sql = mysql_query("UPDATE cours_faculte SET facid='$facid' WHERE code='$c'");
+		$sql = mysql_query("UPDATE cours_faculte SET faculte='$facname', facid='$facid' WHERE code='$c'");
 		$tool_content .= "<p>Τα στοιχεία του μαθήματος άλλαξαν με επιτυχία!</p>";
 	} else {
 		$tool_content .= "<p>Δεν πραγματοποιήθηκε καμία αλλαγή!</p>";
