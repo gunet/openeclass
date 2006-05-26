@@ -112,9 +112,9 @@ if (isset( $_GET['fc'] ) ) {
 }
 
 if ($facid==0) {
- 	$tool_content .= "</td></tr>";
-	$tool_content .= "<tr><td bgcolor= $color2>$langAddHereSomeCourses</td></tr>";
-    $tool_content .= "<tr><td bgcolor= $color2 >";
+ 	$tool_content .= "<caption>Επιλογή Τμήματος</caption><tbody>";
+	$tool_content .= "<tr><td><i>$langAddHereSomeCourses</i></td></tr>";
+    $tool_content .= "<tr><td>";
 	$tool_content .= collapsed_facultes_vert(0);
 } else {
 	// department exists
@@ -343,7 +343,7 @@ function expanded_faculte($facid, $uid) {
 			return $retString;
 }
 
-function collapsed_facultes_vert($fac) {
+function collapsed_facultes_vert($facid) {
 	
 	global $avlesson, $avlessons;
 	$retString = "";
@@ -351,20 +351,19 @@ function collapsed_facultes_vert($fac) {
 	$result = mysql_query(
 		"SELECT DISTINCT cours.faculte f, faculte.id id
 		FROM cours, faculte 
-		WHERE (cours.visible = '1' OR cours.visible = '2') 
-			AND faculte.name = cours.faculte
-			AND faculte.name <> '$fac'
+		WHERE faculte.id = cours.faculteid
+			AND faculte.id <> '$facid'
 		ORDER BY cours.faculte");
 	
 	while ($fac = mysql_fetch_array($result)) {
 		$retString .= "<blockquote>";
-		$retString .= "<a href=\"?fc=$fac[id]\" class=\"normal\">$fac[f]</a>";
+		$retString .= "<a href=\"?fc=$fac[id]\" class=\"normal\"><b>$fac[f]</b></a>";
 		
 		$n = mysql_query("SELECT COUNT(*) FROM cours
-			WHERE cours.faculte='$fac[f]' AND cours.visible <> '0'");
+			WHERE cours.faculteid='$fac[id]'");
                 $r = mysql_fetch_array($n);
-                $retString .= " <span style='font-size: 10pt'>($r[0] "
-                        . ($r[0] == 1? $avlesson: $avlessons) . ")</span><br>\n";
+                $retString .= " <span style='font-size: 10pt'><i>($r[0] "
+                        . ($r[0] == 1? $avlesson: $avlessons) . ")</i></span><br>\n";
 		$retString .= "</blockquote>";
 	}
 		$retString .= "<br>";
