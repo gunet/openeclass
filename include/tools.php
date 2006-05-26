@@ -227,7 +227,7 @@ function adminMenu(){
 	global $webDir, $urlAppend, $language, $phpSysInfoURL, $phpMyAdminURL;
 	global $siteName, $is_admin, $urlServer;
 
-	include("$webDir$urlAppend/modules/lang/$language/admin.inc.php");
+	include($webDir."modules/lang/$language/admin.inc.php");
 	/* Check for LDAP server entries */
 	$ldap_entries = mysql_fetch_array(mysql_query("SELECT ldapserver FROM institution"));
 	if ($ldap_entries['ldapserver'] <> NULL)
@@ -247,9 +247,9 @@ function adminMenu(){
 	array_push($sideMenuText, $langProfReg);
 	array_push($sideMenuLink, "../auth/" . $newuser);
 	array_push($sideMenuText, $langProfOpen);
-	array_push($sideMenuLink, "listreq.php");
+	array_push($sideMenuLink, "../admin/listreq.php");
 	array_push($sideMenuText, $langInfoMail);
-	array_push($sideMenuLink, "mailtoprof.php");
+	array_push($sideMenuLink, "../admin/mailtoprof.php");
 
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);
@@ -265,13 +265,13 @@ function adminMenu(){
 	array_push($sideMenuSubGroup, $langAdminUsers);
 
 	array_push($sideMenuText, $langListUsers);
-	array_push($sideMenuLink, "listusers.php");
+	array_push($sideMenuLink, "../admin/listusers.php");
 	array_push($sideMenuText, $langSearchUser);
-	array_push($sideMenuLink, "search_user.php");
+	array_push($sideMenuLink, "../admin/search_user.php");
 	array_push($sideMenuText, $langAddAdminInApache);
-	array_push($sideMenuLink, "addadmin.php");
+	array_push($sideMenuLink, "../admin/addadmin.php");
 	array_push($sideMenuText, "Πιστοποίηση Χρηστών");
-	array_push($sideMenuLink, "auth.php");
+	array_push($sideMenuLink, "../admin/auth.php");
 
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);
@@ -286,17 +286,17 @@ function adminMenu(){
 	array_push($sideMenuSubGroup, $langAdminCours);
 
 	array_push($sideMenuText, $langListCours);
-	array_push($sideMenuLink, "listcours.php");
+	array_push($sideMenuLink, "../admin/listcours.php");
 	// Added by vagpits
 	array_push($sideMenuText, "Αναζήτηση Μαθημάτων");
-	array_push($sideMenuLink, "searchcours.php");
+	array_push($sideMenuLink, "../admin/searchcours.php");
 	// End
 	array_push($sideMenuText, $langRestoreCourse);
 	array_push($sideMenuLink, "../course_info/restore_course.php");
 	array_push($sideMenuText, $langSpeeSubscribe);
-	array_push($sideMenuLink, "speedSubscribe.php");
+	array_push($sideMenuLink, "../admin/speedSubscribe.php");
 	array_push($sideMenuText, $langListFaculte);
-	array_push($sideMenuLink, "addfaculte.php");
+	array_push($sideMenuLink, "../admin/addfaculte.php");
 
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);
@@ -315,7 +315,7 @@ function adminMenu(){
 		array_push($sideMenuLink, $phpSysInfoURL);
 	}
 	array_push($sideMenuText, $langPHPInfo);
-	array_push($sideMenuLink, "phpInfo.php?to=phpinfo");
+	array_push($sideMenuLink, "../admin/phpInfo.php?to=phpinfo");
 
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);
@@ -335,7 +335,7 @@ function adminMenu(){
 	}
 	// Added by vagpits
 	array_push($sideMenuText, "Αναβάθμιση Βάσης Δεδομένων");
-	array_push($sideMenuLink, "upgrade.php");
+	array_push($sideMenuLink, "../admin/upgrade.php");
 
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);
@@ -350,14 +350,14 @@ function adminMenu(){
 	array_push($sideMenuSubGroup, $langGenAdmin);
 
 	array_push($sideMenuText, $langVersion);
-	array_push($sideMenuLink, "about.php");
+	array_push($sideMenuLink, "../admin/about.php");
 	array_push($sideMenuText, $langConfigFile);
 	// Changed by vagpits
 	//array_push($sideMenuLink, "phpInfo.php?to=clarconf");
-	array_push($sideMenuLink, "clarconf.php");
+	array_push($sideMenuLink, "../admin/clarconf.php");
 	// End
 	array_push($sideMenuText, $siteName);
-	array_push($sideMenuLink, "statClaro.php");
+	array_push($sideMenuLink, "../admin/statClaro.php");
 
 	if (isset($phpMyAdminURL)){
 		array_push($sideMenuText, $langLogIdentLogout);
