@@ -68,17 +68,19 @@ if($is_adminOfCourse) {
 		} else {
 			$password = "";
 		}
+		list($facid, $facname) = split("--", $facu);
 		$sql = "UPDATE $mysqlMainDb.cours 
-			SET intitule='$int', faculte='$facu', description='$description', 
+			SET intitule='$int', faculte='$facname', description='$description', 
 			visible='$formvisible', titulaires='$titulary', 
 			languageCourse='$lanCourseForm',
 			departmentUrlName ='$_POST[departmentUrlName]',
 			departmentUrl='$_POST[departmentUrl]',
 			type='$type',
-			password='$password'
+			password='$password',
+			faculteid='$facid'
 			WHERE code='$currentCourseID'";
 		mysql_query($sql);
-		mysql_query("UPDATE `$mysqlMainDb`.cours_faculte SET faculte='$facu' WHERE code='$currentCourseID'");
+		mysql_query("UPDATE `$mysqlMainDb`.cours_faculte SET faculte='$facname', facid='$facid' WHERE code='$currentCourseID'");
 		// UPDATE Home Page Menu Titles for new language
 		mysql_select_db("$currentCourseID",$db);
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langAgenda' WHERE id='1'");
@@ -139,12 +141,12 @@ if($is_adminOfCourse) {
 		<td>
 		<select name=\"facu\">";
 	    
-		$resultFac=mysql_query("SELECT name FROM `$mysqlMainDb`.faculte ORDER BY number");
+		$resultFac=mysql_query("SELECT id,name FROM `$mysqlMainDb`.faculte ORDER BY number");
 		while ($myfac = mysql_fetch_array($resultFac)) {	
 			if($myfac[name]==$facu)
-				$tool_content .= "<option selected>$myfac[name]</option>";
+				$tool_content .= "<option value=\"".$myfac['id']."--".$myfac['name']."\" selected>$myfac[name]</option>";
 			else
-				$tool_content .= "<option>$myfac[name]</option>";
+				$tool_content .= "<option value=\"".$myfac['id']."--".$myfac['name']."\">$myfac[name]</option>";
 		}
 		$tool_content .= "</select></td></tr>
 		<tr><td><b>$m[type]:</b></td><td>";
