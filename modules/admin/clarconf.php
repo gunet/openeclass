@@ -78,40 +78,40 @@ CHMOD 0666 (Win: remove read-only file property) to edit manually
 // HTTP_COOKIE :		'.$_SERVER['HTTP_COOKIE'].'
 
 
-$urlServer	=	"'.$formurlServer.'";
-$urlAppend	=	"'.$formurlAppend.'";
-$webDir		=	"'.str_replace("\\","/",realpath($formwebDir)."/").'" ;
+$urlServer	=	"'.$_POST['formurlServer'].'";
+$urlAppend	=	"'.$_POST['formurlAppend'].'";
+$webDir		=	"'.str_replace("\\","/",realpath($_POST['formwebDir'])."/").'" ;
 
-$mysqlServer="'.$formmysqlServer.'";
-$mysqlUser="'.$formmysqlUser.'";
-$mysqlPassword="'.$formmysqlPassword.'";
-$mysqlMainDb="'.$formmysqlMainDb.'";
-$phpMyAdminURL="'.$formphpMyAdminURL.'";
-$phpSysInfoURL="'.$formphpSysInfoURL.'";
-$emailAdministrator="'.$formemailAdministrator.'";
-$administratorName="'.$formadministratorName.'";
-$administratorSurname="'.$formadministratorSurname.'";
-$siteName="'.$formsiteName.'";
+$mysqlServer="'.$_POST['formmysqlServer'].'";
+$mysqlUser="'.$_POST['formmysqlUser'].'";
+$mysqlPassword="'.$_POST['formmysqlPassword'].'";
+$mysqlMainDb="'.$_POST['formmysqlMainDb'].'";
+$phpMyAdminURL="'.$_POST['formphpMyAdminURL'].'";
+$phpSysInfoURL="'.$_POST['formphpSysInfoURL'].'";
+$emailAdministrator="'.$_POST['formemailAdministrator'].'";
+$administratorName="'.$_POST['formadministratorName'].'";
+$administratorSurname="'.$_POST['formadministratorSurname'].'";
+$siteName="'.$_POST['formsiteName'].'";
 
-$telephone="'.$formtelephone.'";
-$emailhelpdesk="'.$formemailhelpdesk.'";
-$Institution="'.$formInstitution.'";
-$InstitutionUrl="'.$formInstitutionUrl.'";
-$color1="'.$formcolor1.'"; // light grey
-$color2="'.$formcolor2.'"; // less light grey for bicolored tables
+$telephone="'.$_POST['formtelephone'].'";
+$emailhelpdesk="'.$_POST['formemailhelpdesk'].'";
+$Institution="'.$_POST['formInstitution'].'";
+$InstitutionUrl="'.$_POST['formInstitutionUrl'].'";
+$color1="'.$_POST['formcolor1'].'"; // light grey
+$color2="'.$_POST['formcolor2'].'"; // less light grey for bicolored tables
 
 // available: greek and english
-$language = "'.$formlanguage.'";
+$language = "'.$_POST['formlanguage'].'";
 
-$userMailCanBeEmpty = "'.$formuserMailCanBeEmpty.'";
-$mainInterfaceWidth ="'.$formmainInterfaceWidth.'";
+$userMailCanBeEmpty = "'.$_POST['formuserMailCanBeEmpty'].'";
+$mainInterfaceWidth ="'.$_POST['formmainInterfaceWidth'].'";
 
-$bannerPath = "'.$formbannerPath.'";
-$colorLight = "'.$formcolorLight.'";
-$colorMedium = "'.$formcolorMedium.'";
-$colorDark = "'.$formcolorDark.'";
+$bannerPath = "'.$_POST['formbannerPath'].'";
+$colorLight = "'.$_POST['formcolorLight'].'";
+$colorMedium = "'.$_POST['formcolorMedium'].'";
+$colorDark = "'.$_POST['formcolorDark'].'";
 
-$have_latex = "'.$formhave_latex.'";
+$have_latex = "'.$_POST['formhave_latex'].'";
 
 ?>';
 
