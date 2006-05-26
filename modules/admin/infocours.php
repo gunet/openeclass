@@ -17,8 +17,10 @@ if (isset($submit))  {
         $vq = $vq * 1000000;
         $gq = $gq * 1000000;
         $drq = $drq * 1000000;
-	$sql = mysql_query("UPDATE cours SET faculte='$faculte', titulaires='$titulaires', intitule='$intitule' WHERE code='$c'");
+    list($facid, $facname) = split("--", $faculte);
+	$sql = mysql_query("UPDATE cours SET faculte='$facname', titulaires='$titulaires', intitule='$intitule', faculteid='$facid' WHERE code='$c'");
 	if (mysql_affected_rows() > 0) {
+		$sql = mysql_query("UPDATE cours_faculte SET facid='$facid' WHERE code='$c'");
 		$tool_content .= "<p>Τα στοιχεία του μαθήματος άλλαξαν με επιτυχία!</p>";
 	} else {
 		$tool_content .= "<p>Δεν πραγματοποιήθηκε καμία αλλαγή!</p>";
@@ -36,13 +38,13 @@ if (isset($submit))  {
     <td width=\"3%\" nowrap><b>Τμήμα:</b></td>
     <td><select name=\"faculte\">\n";
   
-$resultFac=mysql_query("SELECT name FROM faculte ORDER BY number");
+$resultFac=mysql_query("SELECT id,name FROM faculte ORDER BY number");
 
 	while ($myfac = mysql_fetch_array($resultFac)) {	
-		if($myfac['name'] == $row['faculte']) 
-			$tool_content .= "      <option selected>$myfac[name]</option>";
+		if($myfac['id'] == $row['faculteid']) 
+			$tool_content .= "      <option value=\"".$myfac['id']."--".$myfac[name]."\" selected>$myfac[name]</option>";
 		else 
-			$tool_content .= "      <option>$myfac[name]</option>";
+			$tool_content .= "      <option value=\"".$myfac['id']."--".$myfac[name]."\">$myfac[name]</option>";
 	}
 	$tool_content .= "</select>
     </td>
