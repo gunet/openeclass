@@ -2,7 +2,7 @@
 
 /*
       +----------------------------------------------------------------------+
-      | e-Class version 1.2                                                  |
+      | e-Class version 1.9                                                  |
       | based on CLAROLINE version 1.3.0 $Revision$                   |
       +----------------------------------------------------------------------+
       | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
@@ -27,6 +27,7 @@
       | e-Class Authors:    Costas Tsibanis <costas@noc.uoa.gr>              |
       |                     Yannis Exidaridis <jexi@noc.uoa.gr>              |
       |                     Alexandros Diamantidis <adia@noc.uoa.gr>         |
+      |		   (v2 changes)	Sakis Agorastos <th_agorastos@hotmail.com>	     |
       |                                                                      |
       | Claroline Authors:  Thomas Depraetere <depraetere@ipm.ucl.ac.be>     |
       |                     Hugues Peeters    <peeters@ipm.ucl.ac.be>        |
@@ -123,7 +124,7 @@ begin_page($langCreateSite);
 	}
 
 ###################### FORM  #########################################
-// <<<< create_course.php
+<<<<<<< create_course.php
 echo "
 <!-- S T E P  1   [start] -->    
 
