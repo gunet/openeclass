@@ -8,7 +8,7 @@ $nameTools = 'Αναβάθμιση Βάσης Δεδομένων';
 $tool_content = "";
 // Main body
 
-$tool_content .= "<form method=\"post\" action=\"../../upgrade/upgrade_file/upgrade.php\">
+$tool_content .= "<form method=\"post\" action=\"../../upgrade/upgrade.php\">
 <table width=\"99%\"><caption>Πληροφορίες Αναβάθμισης</caption><tbody>
 <tr><td valign=\"top\" width=\"3%\" nowrap><b>ΒΗΜΑ 1:</b></td>
 <td><br>Διαβάστε τις οδηγίες αναβάθμισης του e-Class κάνοντας κλικ <b><a href=\"../../upgrade/UPGRADE.txt\" target=\"blank\">ΕΔΩ</a></b>.</td></tr>
