@@ -1,6 +1,6 @@
 <?
 
-include '../../config/config.php';
+//include '../../config/config.php';
 $db = mysql_connect("$mysqlServer", "$mysqlUser", "$mysqlPassword");
 mysql_select_db("$mysqlMainDb",$db);
 
