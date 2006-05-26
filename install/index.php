@@ -731,6 +731,8 @@ if (mysql_version())  {
   `video_quota` float NOT NULL default '20000000',
   `group_quota` float NOT NULL default '40000000',
   `dropbox_quota` float NOT NULL default '40000000',
+  `password` varchar(50) default NULL,
+  `faculteid` int(11) NOT NULL default '0',
   PRIMARY KEY  (`cours_id`))
   TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
@@ -744,6 +746,7 @@ if (mysql_version())  {
       id int(11) NOT NULL auto_increment,
       faculte varchar(100) NOT NULL,
       code varchar(20) NOT NULL,
+      facid int(11) NOT NULL default '0',
       PRIMARY KEY  (id))
       TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
