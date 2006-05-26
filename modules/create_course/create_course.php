@@ -123,7 +123,7 @@ begin_page($langCreateSite);
 	}
 
 ###################### FORM  #########################################
-<<<<<<< create_course.php
+// <<<< create_course.php
 echo "
 <!-- S T E P  1   [start] -->    
 
