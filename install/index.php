@@ -712,11 +712,11 @@ if (mysql_version())  {
   `code` varchar(20) default NULL,
   `languageCourse` varchar(15) default NULL,
   `intitule` varchar(250) default NULL,
-  `description` text,
-  `course_objectives` text,
-  `course_prerequisites` text,
-  `course_keywords` text,
-  `course_references` text,
+  `description` text default NULL,
+  `course_objectives` text default NULL,
+  `course_prerequisites` text default NULL,
+  `course_keywords` text default NULL,
+  `course_references` text default NULL,
   `faculte` varchar(100) default NULL,
   `visible` tinyint(4) default NULL,
   `cahier_charges` varchar(250) default NULL,
@@ -738,7 +738,7 @@ if (mysql_version())  {
   `password` varchar(50) default NULL,
   `faculteid` int(11) NOT NULL default '0',
   PRIMARY KEY  (`cours_id`))
-  TYPE=MyISAM DEFAULT CHARACTER SET=greek");
+  TYPE=MyISAM DEFAULT CHARACTER SET='greek'");
 
     # --------------------------------------------------------
 
@@ -938,7 +938,7 @@ CREATE TABLE `pma_column_comments` (
        PRIMARY KEY (id),
        UNIQUE KEY db_name (db_name, table_name, column_name))
        TYPE=MyISAM DEFAULT CHARACTER SET=greek");
-       
+
 // New table auth for authentication methods
 // added by kstratos
 	mysql_query("
@@ -980,7 +980,11 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
   `code` varchar(20) default NULL,
   `languageCourse` varchar(15) default NULL,
   `intitule` varchar(250) default NULL,
-  `description` text,
+  `description` text default NULL,
+  `course_objectives` text default NULL,
+  `course_prerequisites` text default NULL,
+  `course_keywords` text default NULL,
+  `course_references` text default NULL,
   `faculte` varchar(100) default NULL,
   `visible` tinyint(4) default NULL,
   `cahier_charges` varchar(250) default NULL,
@@ -1222,7 +1226,7 @@ mysql_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)");
 mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
 
  }
- 
+
     ########################## WRITE config.php ##################################
 
     $fd=@fopen("../config/config.php", "w");
