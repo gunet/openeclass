@@ -63,6 +63,6 @@ $tool_content .= "<table width=\"100%\">
 				</tr>
 			</table>";
 	
-draw($tool_content,1);
+draw($tool_content,0);
 
 ?>

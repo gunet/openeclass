@@ -205,6 +205,6 @@ else
 	*/
 
 
-draw($tool_content,1);
+draw($tool_content,0);
 
 ?>

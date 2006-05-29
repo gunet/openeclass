@@ -343,5 +343,5 @@ function get_auth_settings()
 $tool_content .= "</table>";
 $tool_content .= "<br />";
 
-draw($tool_content,1);
+draw($tool_content,0);
 ?>

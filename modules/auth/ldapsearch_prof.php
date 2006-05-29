@@ -308,6 +308,6 @@ function user_exists($login)
 
 $tool_content .= "</table>";
 
-draw($tool_content,3,'admin');
+draw($tool_content,0);
 
 ?>

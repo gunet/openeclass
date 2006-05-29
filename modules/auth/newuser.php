@@ -100,6 +100,6 @@ $tool_content .= "</select></td></tr>
 <tr><td  align='right'><font size=\"1\">".$langRequiredFields."</font>
 </td></tr></table>";
 
-draw($tool_content,1);
+draw($tool_content,0);
 
 ?>

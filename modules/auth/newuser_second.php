@@ -216,6 +216,6 @@ if ($submit)
 		$tool_content .= "</table>";
 	}
 } // if submit
-draw($tool_content,1);
+draw($tool_content,0);
 
 ?>

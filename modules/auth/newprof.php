@@ -61,7 +61,7 @@ $tool_content .= "	<form action=\"newprof_second.php\" method=\"post\">
 
 $tool_content .= "<center><p><a href=\"../admin/index.php\">Επιστροφή</p></center>";
 
-draw($tool_content,1);
+draw($tool_content,0);
 
 // creating passwords automatically
 function create_pass($length) {

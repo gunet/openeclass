@@ -62,6 +62,6 @@ $tool_content .= "<table><tr>
 			<br /><br /></table>
 		</form><br />";
 		
-draw($tool_content,1);
+draw($tool_content,0);
 
 ?>

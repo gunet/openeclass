@@ -81,5 +81,5 @@ $tool_content .= "<tr bgcolor=\"".$color2."\">
 
 $tool_content .= "<br />";
 
-draw($tool_content,1);
+draw($tool_content,0);
 ?>
