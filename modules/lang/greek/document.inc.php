@@ -45,7 +45,7 @@ $langMove="Μετακίνηση";
 $langMoveFrom = "Μετακίνηση του";
 $langRename="Μετονομασία";
 $langComment="Σχόλια";
-$langOkComment="Προσθήκη / Αλλαγή";
+$langOkComment="Επικύρωση αλλαγών"; //"Προσθήκη / Αλλαγή";
 $langSave = "Αποθήκευση";
 $langVisible="Ορατό / Αόρατο";
 $langCopy="Αντιγραφή";
@@ -64,7 +64,7 @@ $langComMod="Τα σχόλια τροποποιήθηκαν";
 $langIn="στο";
 $langNewDir="Όνομα του καινούριου καταλόγου";
 $langImpossible="Δεν είναι δυνατή η λειτουργία";
-$langAddComment="Προσθήκη / αλλαγή σχολίου στο";
+$langAddComment="Προσθήκη / αλλαγή πληροφοριών στο έγγραφο: ";
 $langUp="Πάνω";
 $langViMod="Η ορατότητα του εγγράφου άλλαξε";
 $langElRen="Το αντικείμενο μετονομάστηκε";
@@ -86,4 +86,34 @@ $langParentDir = "αρχικό κατάλογο";
 $langNoticeGreek = "(*) Προσοχή! Το όνομα του αρχείου δεν πρέπει να περιέχει ελληνικούς χαρακτήρες";
 $langInvalidDir = "Ακυρο ή μη υπαρκτό όνομα καταλόγου";
 
+
+
+//prosthikes gia v2 - metadata
+$langTitle="Τίτλος";
+$langCategory="Κατηγορία";
+//$langCreator=""; //den xrhsimopoieitai giati o creator einai o diaxeirisths pou kanei upload
+$langCreatorEmail="Ηλ. Διεύθυνση Συγγραφέα";
+$langDescription="Περιγραφή";
+$langFormat="Τυπος-Κατηγορία";
+// $langDate=""; //den xrhsimopieitai giati to pairnei aftomata
+// $langFormat="";  //den xrhsimopoieitai. antistoixei se mime type
+$langSubject="Θέμα";
+$langAuthor="Συγγραφέας";
+$langLanguage="Γλώσσα";
+$langCopyrighted="Πνευματικά Δικαιώματα";
+$langCopyrightedFree="Ελεύθερο";
+$langCopyrightedNotFree="Προστατευμένο";
+$langCopyrightedUnknown="'Αγνωστο";
+$langChangeMetadata="Αλλαγή πληροφοριών εγγράφου";
+$langEditMeta="Επεξεργασία<br>Πληροφοριών";
+
+
+$langCategoryExcercise="Aσκηση";
+$langCategoryEssay="Εργασία";
+$langCategoryDescription="Περιγραφή μαθήματος";
+$langCategoryExample="Παράδειγμα";
+$langCategoryTheory="Θεωρία";
+$langCategoryLecture="Διάλεξη";
+$langCategoryNotes="Σημειώσεις";
+$langCategoryOther="Aλλο";
 ?>
