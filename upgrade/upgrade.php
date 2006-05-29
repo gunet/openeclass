@@ -77,17 +77,7 @@ add_field('cours', 'course_references', "TEXT");
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_keywords'))
 add_field('cours', 'course_keywords', "TEXT");
 
-if (!mysql_field_exists("$mysqlMainDb",'cours','course_objectives'))
-	add_field('cours', 'course_objectives', "TEXT");
-	
-if (!mysql_field_exists("$mysqlMainDb",'cours','course_prerequisites'))
-	add_field('cours', 'course_prerequisites', "TEXT");
-	
-if (!mysql_field_exists("$mysqlMainDb",'cours','course_references'))
-	add_field('cours', 'course_references', "TEXT");
-	
-if (!mysql_field_exists("$mysqlMainDb",'cours','course_keywords'))
-	add_field('cours', 'course_keywords', "TEXT");
+
 
 
 // **********************************************
@@ -115,6 +105,48 @@ fclose($fp);
 
 $tool_content .= "<tr><td><b>Αναβάθμιση μαθήματος $code[0]</b><br>";
 mysql_select_db($code[0]);
+
+	//sakis - prosthiki epipleon pediwn ston pinaka documents gia ta metadedomena (xrhsimopoiountai apo ton neo file manager)
+	if (!mysql_field_exists("$code[0]",'document','filename'))
+	add_field('document', 'filename', "TEXT");
+	
+	if (!mysql_field_exists("$code[0]",'document','category'))
+	add_field('document', 'category', "TEXT");
+	
+	if (!mysql_field_exists("$code[0]",'document','title'))
+	add_field('document', 'title', "TEXT");
+	
+	if (!mysql_field_exists("$code[0]",'document','creator'))
+	add_field('document', 'creator', "TEXT");
+	
+	if (!mysql_field_exists("$code[0]",'document','date'))
+	add_field('document', 'date', "DATETIME");
+	
+	if (!mysql_field_exists("$code[0]",'document','date_modified'))
+	add_field('document', 'date_modified', "DATETIME");
+	
+	if (!mysql_field_exists("$code[0]",'document','subject'))
+	add_field('document', 'subject', "TEXT");
+	
+	if (!mysql_field_exists("$code[0]",'document','description'))
+	add_field('document', 'description', "TEXT");
+	
+	if (!mysql_field_exists("$code[0]",'document','author'))
+	add_field('document', 'author', "TEXT");
+	
+	if (!mysql_field_exists("$code[0]",'document','format'))
+	add_field('document', 'format', "TEXT");
+	
+	if (!mysql_field_exists("$code[0]",'document','language'))
+	add_field('document', 'language', "TEXT");
+	
+	if (!mysql_field_exists("$code[0]",'document','copyrighted'))
+	add_field('document', 'copyrighted', "TEXT");
+
+	
+	
+	
+	
 
 	// upgrade queries from 1.2 --> 1.4
 
