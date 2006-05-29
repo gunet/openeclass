@@ -44,9 +44,9 @@ function db_query2($sql, $db = FALSE)
 function db_query($sql, $db = FALSE) {
         if ($db) {
                 mysql_select_db($db);
-                $r = mysql_query($sql);
+                $r = mysql_query($sql,$GLOBALS['db']);
         } else {
-                $r = mysql_query($sql);
+                $r = mysql_query($sql,$GLOBALS['db']);
         }
         if (mysql_errno()) {
                 echo '<hr>' . mysql_errno() . ': ' . mysql_error() .
