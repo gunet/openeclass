@@ -122,6 +122,7 @@ begin_page($langCreateSite);
 	<input type=\"hidden\" name=\"faculte\" value=\"$faculte\">
 	<input type=\"hidden\" name=\"description\" value=\"$description\">
 	<input type=\"hidden\" name=\"titulaires\" value=\"$titulaires\">
+	<input type=\"hidden\" name=\"type\" value=\"$type\">
 	
 
 	<tr>

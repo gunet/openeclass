@@ -91,6 +91,11 @@ $titulaire_probable="$prenom $nom";
 $local_style = "input { font-size: 12px; }";
 begin_page($langCreateSite);
 
+//arxikopoihsh metavlhtwn gia na mhn vgazei notices
+$course_prerequisites = "";
+$course_references = "";
+$course_keywords = "";
+
 ###################### FORM  #########################################
 if(!isset($_GET["finish_create_course"])) {
     echo "
