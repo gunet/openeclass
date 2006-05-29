@@ -220,8 +220,15 @@ echo "
 	</tr>
 	<tr>
 	<td align=\"right\"><font face=\"arial, helvetica\" size=\"2\"><b>$m[type]:</b></font></td>
-	<td>";
-selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']), 'type');
+	<td>
+		<select name = \"type\">
+			<option value=\"pre\">	".$m['pre']."</option>
+			<option value=\"post\"> ".$m['post']."</option>
+			<option value=\"other\">".$m['other']."</option>
+		</select>
+		
+		";
+//selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']), 'type');
 
 echo "
 	<font face=\"arial, helvetica\" size=\"2\">$langFieldsRequAsterisk<br>$langCourseCategory</br></td>";
