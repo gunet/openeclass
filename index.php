@@ -48,6 +48,9 @@ include("include/baseTheme.php");
 @include("./modules/lang/$language/index.inc");
 @include("./modules/lang/$language/trad4all.inc.php");
 
+//@include("./include/lib/main.lib.php");
+@include("./modules/auth/auth.inc.php");
+
 $require_help = true;
 $helpTopic="Clar2";
 $nameTools = "Καλωσορίσατε στο e-Class!";//Put it in a lang file
@@ -91,8 +94,9 @@ if (!isset($db)) {
 // can we select database ? if not then there is some problem
 
 if (isset($mysqlMainDb)) $selectResult = mysql_select_db($mysqlMainDb,$db); 
-if (!isset($selectResult)) {
-include("general_error.php");
+if (!isset($selectResult)) 
+{
+	include("general_error.php");
 }
 
 // unset system that records visitor only once by course for statistics
@@ -104,68 +108,168 @@ unset($dbname);
 // then authenticate user. First via LDAP then via MyQL
 // -----------------------------------------------------------------------
 $warning = '';
-if (isset($submit) && $submit) {
-        unset($uid);
-        $sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, inst_id, iduser is_admin
+$uname = isset($_POST['uname'])?$_POST['uname']:'';
+$pass = isset($_POST['pass'])?$_POST['pass']:'';
+$submit = isset($_POST['submit'])?$_POST['submit']:'';
+$auth = get_auth_id();
+
+if(!empty($submit))
+{
+	unset($uid);
+  $sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, inst_id, iduser is_admin
                 FROM user LEFT JOIN admin
                 ON user.user_id = admin.iduser
-                WHERE username='$_POST[uname]'";
-        $result=mysql_query($sqlLogin);
-        while ($myrow = mysql_fetch_array($result)) {
-                if ($myrow["inst_id"] == 0) {           // If user is not authenticated via LDAP...
-                                                        // ...get account details from db.
-                        if (($_POST["uname"] == $myrow["username"]) and ($_POST["pass"] == $myrow["password"])) {
-                                $uid = $myrow["user_id"];
-                                $nom = $myrow["nom"];
-                                $prenom = $myrow["prenom"];
-                                $statut = $myrow["statut"];
-                                $email = $myrow["email"];
-                                $is_admin = $myrow["is_admin"];
-                        }
-                } elseif (!empty($_POST["pass"])) {    // If user auth is via LDAP...
-                        $findserver = "SELECT ldapserver, basedn FROM institution
-                                       WHERE inst_id = ".$myrow["inst_id"];
-                        $ldapresult = mysql_query($findserver);
-                        while ($myrow1 = mysql_fetch_array($ldapresult)) {
-                                $ds = ldap_connect($myrow1["ldapserver"]);  //get the ldapServer, baseDN from the db
-                                if ($ds) {
-                                        $r=@ldap_bind($ds);     // this is an "anonymous" bind
-                                        if ($r) {
-                                                $mailadd = ldap_search($ds, $myrow1["basedn"], "mail=".$_POST["uname"]);
-                                                $info = ldap_get_entries($ds, $mailadd);
-                                                if ($info["count"] == 1) {       // user found
-                                                        $authbind = @ldap_bind($ds, $info[0]["dn"], $_POST["pass"]);
-                                                        if ($authbind) {
-                                                                $uid = $myrow["user_id"];
-                                                                $nom = $myrow["nom"];
-                                                                $prenom = $myrow["prenom"];
-                                                                $statut = $myrow["statut"];
-                                                                $email = $myrow["email"];
-                                                                $is_admin = $myrow["is_admin"];
-                                                        }
-                                                }
-                                        }
-                                }
-                        }
-                }
-        }
+                WHERE username='".$uname."'";
+  $result=mysql_query($sqlLogin);
+  $check_passwords = array("pop3","imap","ldap","db");
+  $warning = "";
+  while ($myrow = mysql_fetch_array($result)) 
+  {
+  	
+  	if(!empty($auth))
+  	{
+  		if(!in_array($myrow["password"],$check_passwords))
+  		{
+  			// try to authenticate him via eclass
+  			if (($uname == $myrow["username"]) and ($pass == $myrow["password"])) 
+	      {
+	      	// check if his/her account is active
+	      	$is_active = check_activity($myrow["user_id"]);
+	      	if($myrow["user_id"]==$myrow["is_admin"])
+	      	{
+	      		$is_active = 1;
+	      	}
+	      	if(!empty($is_active))
+	      	{
+		      	$uid = $myrow["user_id"];
+		        $nom = $myrow["nom"];
+		        $prenom = $myrow["prenom"];
+		        $statut = $myrow["statut"];
+		        $email = $myrow["email"];
+		        $is_admin = $myrow["is_admin"];
+	      	}
+		      else
+		      {
+		      	$warning .= "<br />Your account is inactive. <br />Please contact the Eclass Admin<br />";
+		      }
+				}
+  		}
+  		else
+  		{
+  			// try to authenticate him via the alternative defined method
+  			$auth_method_settings = get_auth_settings($auth);
+  			if($myrow['password']==$auth_method_settings['auth_name'])
+  			{
+	  			switch($auth)
+	  			{
+	  				case '2':	$pop3host = str_replace("pop3host=","",$auth_method_settings['auth_settings']);
+	  					break;
+	  				case '3':	$imaphost = str_replace("imaphost=","",$auth_method_settings['auth_settings']);
+	  					break;
+	  				case 4:	$ldapsettings = $auth_method_settings['auth_settings'];
+					    $ldap = explode("|",$ldapsettings);
+					    $ldaphost = str_replace("ldaphost=","",$ldap[0]);	//ldaphost
+					    $ldapbind_dn = str_replace("ldapbind_dn=","",$ldap[1]);	//ldapbase_dn
+					    $ldapbind_user = str_replace("ldapbind_user=","",$ldap[2]);	//ldapbind_user
+					    $ldapbind_pw = str_replace("ldapbind_pw=","",$ldap[3]);		// ldapbind_pw
+							break;
+						case 5:	$dbsettings = $auth_method_settings['auth_settings'];
+    					$edb = explode("|",$dbsettings);
+    					$dbhost = str_replace("dbhost=","",$edb[0]);	//dbhost
+    					$dbname = str_replace("dbname=","",$edb[1]);	//dbname
+    					$dbuser = str_replace("dbuser=","",$edb[2]);//dbuser
+    					$dbpass = str_replace("dbpass=","",$edb[3]);// dbpass
+					    $dbtable = str_replace("dbtable=","",$edb[4]);//dbtable
+					    $dbfielduser = str_replace("dbfielduser=","",$edb[5]);//dbfielduser
+					    $dbfieldpass = str_replace("dbfieldpass=","",$edb[6]);//dbfieldpass
+							break;
+	  				default:
+	  					break;
+	  			}
+	  			
+					$is_valid = auth_user_login($auth,$uname,$pass);
+					if($is_valid)
+					{
+						// check if the account is active
+						$is_active = check_activity($myrow["user_id"]);
+						
+						// always the admin is active
+						if($myrow["user_id"]==$myrow["is_admin"])
+	      		{
+	      			$is_active = 1;
+	      		}
+	      		
+						if(!empty($is_active))
+						{
+							$auth_allow = 1;
+						}
+						else
+						{
+							$auth_allow = 0;
+							$warning .= "<br />Your account is inactive. <br />Please contact the Eclass Admin<br />";		
+						}
+					}
+					else
+					{
+						echo "<br />The connection does not seem to work!<br />";
+						$auth_allow = 0;
+					}	
+					if($auth_allow==1)
+					{	
+	  				$uid = $myrow["user_id"];
+	          $nom = $myrow["nom"];
+	          $prenom = $myrow["prenom"];
+	          $statut = $myrow["statut"];
+	          $email = $myrow["email"];
+	          $is_admin = $myrow["is_admin"];
+					}
+					else
+					{
+						echo "auth_allow:".$auth_allow."<br>";
+						echo $db;
+						exit;
+					}
+				}
+				else
+				{
+					$warning .= "<br>Invalid user auth method!Please contact the admin<br>";
+					//exit;
+				}
+  			
+  		}
+  		
+  	}
+  	else
+  	{
+  		echo "<br>No auth method defined.Cannot proceed!<br>";
+  		exit;
+  		
+  	}
+  	
 
-       if (!isset($uid)) {
-                $warning = $langInvalidId;
-	} else {
-                $warning = '';
-                $log='yes';
-                session_register('uid');
-                session_register('nom');
-                session_register('prenom');
-                session_register('email');
-                session_register('statut');
-                session_register('is_admin');
-                $_SESSION['uid'] = $uid;
-                mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action)
+	}		// while
+
+	if (!isset($uid)) 
+	{
+                $warning .= $langInvalidId;
+	} 
+	else 
+	{
+		$warning = '';
+		$log='yes';
+		session_register('uid');
+		session_register('nom');
+		session_register('prenom');
+		session_register('email');
+		session_register('statut');
+		session_register('is_admin');
+		$_SESSION['uid'] = $uid;
+		mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action)
                 VALUES ('', '".$uid."', '".$REMOTE_ADDR."', NOW(), 'LOGIN')");
-        	}
+	
+	}
 }  // end of user authentication
+
 
 // -------------------------------------------------------------
 

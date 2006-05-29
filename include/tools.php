@@ -203,10 +203,13 @@ function loggedOutMenu(){
 	else $newuser = "newuser.php";
 	// end of checking
 	
+	$newuser = ($auth==1)?'newuser.php':'newuser_info.php';
+	$newprof = ($auth==1)?'newprof.php':'newprof_info.php';
+		
 	array_push($sideMenuText, $langNewUser);
 	array_push($sideMenuLink, $urlServer."modules/auth/$newuser");
 	array_push($sideMenuText, $langProfReq);
-	array_push($sideMenuLink, $urlServer."modules/auth/formprof.php");
+	array_push($sideMenuLink, $urlServer."modules/auth/$newprof");
 	array_push($sideMenuText, $langManuals);
 	array_push($sideMenuLink, $urlServer."manuals/manual.php");
 	array_push($sideMenuText, $langInfoPlat);
@@ -245,7 +248,8 @@ function adminMenu(){
 	array_push($sideMenuSubGroup, $langAdminProf);
 
 	array_push($sideMenuText, $langProfReg);
-	array_push($sideMenuLink, "../auth/" . $newuser);
+	//array_push($sideMenuLink, "../auth/" . $newuser);
+	array_push($sideMenuLink, "../auth/newprofadmin.php");
 	array_push($sideMenuText, $langProfOpen);
 	array_push($sideMenuLink, "../admin/listreq.php");
 	array_push($sideMenuText, $langInfoMail);
