@@ -127,7 +127,8 @@ function loggedInMenu(){
 	array_push($sideMenuSubGroup, $langMenu);
 
 	// User is not currently in a course - set statut from main database
-	$res2 = db_query("SELECT statut FROM user WHERE user_id = '$uid'",$mysqlMainDb);
+	// $res2 = db_query("SELECT statut FROM user WHERE user_id = '$uid'",$mysqlMainDb);
+	$res2 = db_query("SELECT statut FROM user WHERE user_id = '$uid'");
 	if ($row = mysql_fetch_row($res2)) $statut = $row[0];
 
 	if ($statut==1) {
@@ -232,7 +233,7 @@ function adminMenu(){
 
 	include($webDir."modules/lang/$language/admin.inc.php");
 	/* Check for LDAP server entries */
-	$ldap_entries = mysql_fetch_array(mysql_query("SELECT ldapserver FROM institution", $db));
+	$ldap_entries = mysql_fetch_array(mysql_query("SELECT ldapserver FROM institution",$db));
 	if ($ldap_entries['ldapserver'] <> NULL)
 	$newuser = "newprof_info.php";
 	else

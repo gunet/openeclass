@@ -107,14 +107,14 @@ if($is_submit)
 					    $ldapbind_pw = str_replace("ldapbind_pw=","",$ldap[3]);		// ldapbind_pw
 							break;
 			case '5':	$dbsettings = $auth_method_settings['auth_settings'];
-    					$db = explode("|",$dbsettings);
-    					$dbhost = str_replace("dbhost=","",$db[0]);	//dbhost
-    					$dbname = str_replace("dbname=","",$db[1]);	//dbname
-    					$dbuser = str_replace("dbuser=","",$db[2]);//dbuser
-    					$dbpass = str_replace("dbpass=","",$db[3]);// dbpass
-					    $dbtable = str_replace("dbtable=","",$db[4]);//dbtable
-					    $dbfielduser = str_replace("dbfielduser=","",$db[5]);//dbfielduser
-					    $dbfieldpass = str_replace("dbfieldpass=","",$db[6]);//dbfieldpass
+    					$edb = explode("|",$dbsettings);
+    					$dbhost = str_replace("dbhost=","",$edb[0]);	//dbhost
+    					$dbname = str_replace("dbname=","",$edb[1]);	//dbname
+    					$dbuser = str_replace("dbuser=","",$edb[2]);//dbuser
+    					$dbpass = str_replace("dbpass=","",$edb[3]);// dbpass
+					    $dbtable = str_replace("dbtable=","",$edb[4]);//dbtable
+					    $dbfielduser = str_replace("dbfielduser=","",$edb[5]);//dbfielduser
+					    $dbfieldpass = str_replace("dbfieldpass=","",$edb[6]);//dbfieldpass
 							break;
 			default:
 							break;
@@ -164,7 +164,7 @@ if($is_submit)
 <tr><td>".$langDepartment."</td>
 <td>
 <select name=\"department\">";
-$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id");
+$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id",$db);
 while ($dep = mysql_fetch_array($deps)) 
 		$tool_content .= "\n<option value=\"$dep[1]\">$dep[0]</option>";
 $tool_content .= "</select></td></tr>
