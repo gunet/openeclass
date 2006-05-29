@@ -810,8 +810,6 @@ if (mysql_version())  {
           department int(10) default NULL,
       inst_id int(11) default NULL,
       am varchar(20) default NULL,
-      registered_at int(10) NOT NULL default '0',
-      expires_at int(10) NOT NULL default '0',
      PRIMARY KEY  (user_id))
       TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
