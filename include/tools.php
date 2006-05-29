@@ -228,11 +228,11 @@ function loggedOutMenu(){
 function adminMenu(){
 
 	global $webDir, $urlAppend, $language, $phpSysInfoURL, $phpMyAdminURL;
-	global $siteName, $is_admin, $urlServer;
+	global $siteName, $is_admin, $urlServer, $db;
 
 	include($webDir."modules/lang/$language/admin.inc.php");
 	/* Check for LDAP server entries */
-	$ldap_entries = mysql_fetch_array(mysql_query("SELECT ldapserver FROM institution"));
+	$ldap_entries = mysql_fetch_array(mysql_query("SELECT ldapserver FROM institution", $db));
 	if ($ldap_entries['ldapserver'] <> NULL)
 	$newuser = "newprof_info.php";
 	else
