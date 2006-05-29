@@ -810,6 +810,8 @@ if (mysql_version())  {
           department int(10) default NULL,
       inst_id int(11) default NULL,
       am varchar(20) default NULL,
+      registered_at int(10) NOT NULL default '0',
+      expires_at int(10) NOT NULL default '0',
      PRIMARY KEY  (user_id))
       TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
@@ -936,6 +938,24 @@ CREATE TABLE `pma_column_comments` (
        PRIMARY KEY (id),
        UNIQUE KEY db_name (db_name, table_name, column_name))
        TYPE=MyISAM DEFAULT CHARACTER SET=greek");
+       
+// New table auth for authentication methods
+// added by kstratos
+	mysql_query("
+CREATE TABLE `auth` (
+  `auth_id` int(2) NOT NULL auto_increment,
+  `auth_name` varchar(20) NOT NULL default '',
+  `auth_settings` text NOT NULL default '',
+  `auth_instructions` text NOT NULL default '',
+  `auth_default` tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (`auth_id`))
+  TYPE=MyISAM DEFAULT CHARACTER SET=greek");
+
+mysql_query("INSERT INTO `auth` VALUES (1, 'eclass', '', '', 1)");
+mysql_query("INSERT INTO `auth` VALUES (2, 'pop3', '', '', 0)");
+mysql_query("INSERT INTO `auth` VALUES (3, 'imap', '', '', 0)");
+mysql_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)");
+mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
 
 
  } else {
@@ -979,6 +999,8 @@ CREATE TABLE `pma_column_comments` (
   `video_quota` float NOT NULL default '20000000',
   `group_quota` float NOT NULL default '40000000',
   `dropbox_quota` float NOT NULL default '40000000',
+  `password` varchar(50) default NULL,
+  `faculteid` int(11) NOT NULL default '0',
   PRIMARY KEY  (`cours_id`))
   TYPE=MyISAM");
 
@@ -992,6 +1014,7 @@ CREATE TABLE `pma_column_comments` (
       id int(11) NOT NULL auto_increment,
       faculte varchar(100) NOT NULL,
       code varchar(20) NOT NULL,
+      facid int(11) NOT NULL default '0',
       PRIMARY KEY  (id))
       TYPE=MyISAM");
 
@@ -1180,8 +1203,6 @@ CREATE TABLE `pma_column_comments` (
        UNIQUE KEY db_name (db_name, table_name, column_name))
        TYPE=MyISAM");
 
- }
- 
 // New table auth for authentication methods
 // added by kstratos
 	mysql_query("
@@ -1200,7 +1221,8 @@ mysql_query("INSERT INTO `auth` VALUES (3, 'imap', '', '', 0)");
 mysql_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)");
 mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
 
-
+ }
+ 
     ########################## WRITE config.php ##################################
 
     $fd=@fopen("../config/config.php", "w");
