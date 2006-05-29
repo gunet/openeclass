@@ -14,10 +14,9 @@ $tool_content = "upgrading.. ";
 //====================
 //For Vangelis : added the following 2 lines for testing...
 //remove :)
-//draw($tool_content,3, 'admin');
-//die();
-$tool_content .= "<table width=\"99%\"><caption>Εξέλιξη Αναβάθμισης</caption><tbody>
-";
+draw($tool_content,3, 'admin');
+die();
+$tool_content .= "<table width=\"99%\"><caption>Εξέλιξη Αναβάθμισης</caption><tbody>";
 
 $OK = "[<font color='green'> Επιτυχία </font>]";
 $BAD = "[<font color='red'> Σφάλμα ή δεν χρειάζεται τροποποίηση</font>]";
@@ -65,7 +64,7 @@ if (!mysql_field_exists("$mysqlMainDb",'cours','group_quota'))
 if (!mysql_field_exists("$mysqlMainDb",'cours','dropbox_quota'))
 	add_field('cours', 'dropbox_quota', "FLOAT DEFAULT '$diskQuotaDropbox' NOT NULL");
 
-//anavathmisi se v2.0 (sakis)
+//upgrade queries to 2.0
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_objectives'))
 add_field('cours', 'course_objectives', "TEXT");
 
@@ -77,63 +76,23 @@ add_field('cours', 'course_references', "TEXT");
 
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_keywords'))
 add_field('cours', 'course_keywords', "TEXT");
-	
 
-// *************************************
-// 		upgrade courses databases
-// ************************************
-
-//sakis - erwthmata gia prosthiki pediwn gia ton neo create_course
-	if (!mysql_field_exists("$mysqlMainDb",'cours','course_objectives'))
+if (!mysql_field_exists("$mysqlMainDb",'cours','course_objectives'))
 	add_field('cours', 'course_objectives', "TEXT");
 	
-	if (!mysql_field_exists("$mysqlMainDb",'cours','course_prerequisites'))
+if (!mysql_field_exists("$mysqlMainDb",'cours','course_prerequisites'))
 	add_field('cours', 'course_prerequisites', "TEXT");
 	
-	if (!mysql_field_exists("$mysqlMainDb",'cours','course_references'))
+if (!mysql_field_exists("$mysqlMainDb",'cours','course_references'))
 	add_field('cours', 'course_references', "TEXT");
 	
-	if (!mysql_field_exists("$mysqlMainDb",'cours','course_keywords'))
+if (!mysql_field_exists("$mysqlMainDb",'cours','course_keywords'))
 	add_field('cours', 'course_keywords', "TEXT");
 
 
-//sakis - prosthiki epipleon pediwn ston pinaka documents gia ta metadedomena (xrhsimopoiountai apo ton neo file manager)
-	if (!mysql_field_exists("$mysqlMainDb",'document','filename'))
-	add_field('document', 'filename', "TEXT");
-	
-	if (!mysql_field_exists("$mysqlMainDb",'document','category'))
-	add_field('document', 'category', "TEXT");
-	
-	if (!mysql_field_exists("$mysqlMainDb",'document','title'))
-	add_field('document', 'title', "TEXT");
-	
-	if (!mysql_field_exists("$mysqlMainDb",'document','creator'))
-	add_field('document', 'creator', "TEXT");
-	
-	if (!mysql_field_exists("$mysqlMainDb",'document','date'))
-	add_field('document', 'date', "DATETIME");
-	
-	if (!mysql_field_exists("$mysqlMainDb",'document','date_modified'))
-	add_field('document', 'date_modified', "DATETIME");
-	
-	if (!mysql_field_exists("$mysqlMainDb",'document','subject'))
-	add_field('document', 'subject', "TEXT");
-	
-	if (!mysql_field_exists("$mysqlMainDb",'document','description'))
-	add_field('document', 'description', "TEXT");
-	
-	if (!mysql_field_exists("$mysqlMainDb",'document','author'))
-	add_field('document', 'author', "TEXT");
-	
-	if (!mysql_field_exists("$mysqlMainDb",'document','format'))
-	add_field('document', 'format', "TEXT");
-	
-	if (!mysql_field_exists("$mysqlMainDb",'document','language'))
-	add_field('document', 'language', "TEXT");
-	
-	if (!mysql_field_exists("$mysqlMainDb",'document','copyrighted'))
-	add_field('document', 'copyrighted', "TEXT");	
-
+// **********************************************
+// upgrade courses databases
+// **********************************************
 
 $res = db_query("SELECT code FROM cours");
 while ($code = mysql_fetch_row($res)) {
@@ -314,8 +273,7 @@ db_query("INSERT IGNORE INTO accueil VALUES (
                 )", $code[0]);
 
 
-// upgrade queries for eclass 2.0
-// for learning path
+// upgrade queries for e-Class 2.0
 
 $langLearnPath = "Γραμμή Μάθησης";
 if (!mysql_table_exists($code[0], 'lp_module'))  {
@@ -389,6 +347,7 @@ if (!mysql_table_exists($code[0], 'lp_user_module_progress'))  {
             ) ", $code[0]); //TYPE=MyISAM COMMENT='Record the last known status of the user in the course';
 }
 
+  
 	//===============================================================================================
 	//BEGIN: Move all external links to id > 100, add column define_var
 	//===============================================================================================
@@ -414,7 +373,7 @@ db_query("INSERT IGNORE INTO accueil VALUES (
 				'1',
 				'0',
 				'../../../images/pastillegris.png'
-                )", $code[0]);
+         )", $code[0]);
 
 
 //for tool management
@@ -500,11 +459,11 @@ $tool_content .= "<br><br></td></tr>";
 } // end of do ... while for each course)
 
 $tool_content .= "<tr><td align=\"center\"><b><i>Σφάλματα: $errors.</i></b></td></tr>";
-
 $tool_content .= "</tbody></table><br>";
-
 $tool_content .= "<table width=\"99%\"><caption>Αποτελέσματα Αναβάθμισης</caption><tbody><tr><td>
 ";
+
+// display info message 
 if ($errors==0) {
 	$tool_content .= upgrade_success();
 } else {
