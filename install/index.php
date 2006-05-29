@@ -810,6 +810,8 @@ if (mysql_version())  {
           department int(10) default NULL,
       inst_id int(11) default NULL,
       am varchar(20) default NULL,
+      registered_at int(10) NOT NULL default '0',
+      expires_at int(10) NOT NULL default '0',
      PRIMARY KEY  (user_id))
       TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
@@ -1188,10 +1190,10 @@ CREATE TABLE `pma_column_comments` (
 CREATE TABLE `auth` (
   `auth_id` int(2) NOT NULL auto_increment,
   `auth_name` varchar(20) NOT NULL default '',
-  `auth_settings` text NOT NULL,
-  `auth_instructions` text NOT NULL,
+  `auth_settings` text NOT NULL default '',
+  `auth_instructions` text NOT NULL default '',
   `auth_default` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`auth_id`)
+  PRIMARY KEY  (`auth_id`))
   TYPE=MyISAM");
 
 mysql_query("INSERT INTO `auth` VALUES (1, 'eclass', '', '', 1)");
