@@ -1,6 +1,7 @@
 <?
 $langFiles = array('registration', 'admin', 'gunet');
 include '../../include/baseTheme.php';
+include 'auth.inc.php';
 @include "check_admin.inc";
 $nameTools = "Εγγραφή Καθηγητή";
 

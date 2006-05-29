@@ -189,10 +189,11 @@ function convert_time($seconds)
     $f_days = $i_hours / 24;
     $i_days = floor($f_days);
     $r_hours = intval(($f_days - $i_days) * 24);
-					        
+    $r = "";					        
     if ($i_days > 0) 
     {
-        if($i_days > 365)
+        //$r .= $i_days."<br>".$r_minutes."<br>";
+	if($i_days >= 365)
 	{
 	    $i_years = floor($i_days / 365);    
 	    $i_days = $i_days % 365;
@@ -205,150 +206,21 @@ function convert_time($seconds)
 	    {
 		$r .= " year ";
 	    }
-	    $r .= $i_days . " days ";
+	    if($i_days!=0)
+	    {
+		$r .= $i_days . " days ";
+	    }
 	}
 	else
 	{
-	    $r = "$i_days days ";
+	    $r .= "$i_days days ";
 	}
     }
     if ($r_hours > 0) $r .= "$r_hours hours ";
     if ($r_minutes > 0) $r .= "$r_minutes min";
-    else $r = "less than a minute";
-								    
+    //else $r .= "less than a minute";
+        								    
     return $r;
 }
-
-// purpose: find/return the id of the default authentication method
-function get_auth_id()
-{
-    $sql = "SELECT auth_id FROM auth WHERE auth_default=1";
-    $auth_method = db_query($sql);
-    if($auth_method)
-    {
-	$authrow = mysql_fetch_row($auth_method);
-	if(mysql_num_rows($auth_method)==1)
-	{
-	    $auth_id = $authrow[0];
-	    return $auth_id;
-	}
-	else
-	{
-	    return 0;
-	}
-    }
-    else
-    {
-	return 0;
-    }
-}
-
-// purpose: find the settings for a specified auth method (e.g. ldap or pop3)
-function get_auth_settings($auth)
-{
-    $qry = "SELECT * FROM auth WHERE auth_id = ".$auth;
-    $result = db_query($qry);
-    $db_auth_email = array();
-    if($result)
-    {
-	if(mysql_num_rows($result)==1)
-	{
-	    $auth_row = mysql_fetch_array($result,MYSQL_ASSOC);
-	    return $auth_row;
-	}
-	else
-	{
-	    return 0;
-	}	
-    }
-    else
-    {
-	return 0;
-    }
-}
-
-require("auth/pop3.php");
-
-function auth_user_login ($auth,$test_username, $test_password) 
-{
-    switch($auth)
-    {
-	case 1:
-	    // Returns true if the username and password work and false if they don't
-	    $sql = "SELECT user_id FROM user WHERE username='".$test_username."' AND password='".$test_password."'";
-	    $result = db_query($sql);
-	    if(mysql_num_rows($result)==1)
-	    {
-    		$testauth = true;
-	    }
-	    else
-	    {
-		$testauth = false;
-	    }
-	break;	
-    
-    
-	case 2:
-	    $pop3host = $GLOBALS['pop3host'];
-	    $pop3=new pop3_class;
-	    $pop3->hostname = $pop3host;	/* POP 3 server host name                      */
-	    $pop3->port=110;				/* POP 3 server host port                      */
-	    $user = $test_username;                       	/* Authentication user name                    */
-	    $password = $test_password;                   	/* Authentication password                     */
-	    $pop3->realm="";                         	/* Authentication realm or domain              */
-	    $pop3->workstation="";			/* Workstation for NTLM authentication         */
-	    $apop = 0;			/* Use APOP authentication                     */
-	    $pop3->authentication_mechanism="USER";  /* SASL authentication mechanism               */
-	    $pop3->debug=0;                          /* Output debug information                    */
-	    $pop3->html_debug=1;                     /* Debug information is in HTML                */
-	    $pop3->join_continuation_header_lines=1; /* Concatenate headers split in multiple lines */
-
-	    if(($error=$pop3->Open())=="")
-	    {
-		if(($error=$pop3->Login($user,$password,$apop))=="")
-		{
-		    if($error=="" && ($error=$pop3->Close())=="")
-		    {
-		    $testauth = true;
-		    }
-		    else
-		    {
-		    $testauth = false;
-		    }
-		}
-		else
-		{
-		    $testauth = false;
-		}
-	    }
-	    else
-	    {
-		$testauth = false;
-	    }
-	    if($error!="")
-	    {
-		$testauth = false;
-	    }
-	    break;
-	
-	case 3:
-	    $imaphost = $GLOBALS['imaphost'];
-	    $imapauth = imap_auth($imaphost, $test_username, $test_password);
-	    if($imapauth)
-	    {
-		$testauth = true;
-	    }
-	    else
-	    {
-		$testauth = false;
-	    }
-	    break;
-	default:
-	    $testauth = false;
-    }
-    
-    return $testauth;
-}
-
 
 ?>
