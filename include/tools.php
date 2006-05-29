@@ -183,7 +183,7 @@ function loggedInMenu(){
  */
 function loggedOutMenu(){
 
-	global $webDir, $language, $urlServer;
+	global $webDir, $language, $urlServer, $auth;
 
 	include("$webDir/modules/lang/$language/index.inc");
 

@@ -1,12 +1,14 @@
 <?
 $langFiles = array('registration', 'admin', 'gunet');
 include '../../include/baseTheme.php';
+include 'auth.inc.php';
 //@include "check_admin.inc";
 $nameTools = "Εγγραφή Καθηγητή";
 
 // Initialise $tool_content
 $tool_content = "";
 
+$auth = get_auth_id();
 
 $tool_content .= "	<form action=\"newprof_second.php\" method=\"post\">
 	<table width=\"99%\"><caption>Εισαγωγή Στοιχείων Καθηγητή</caption><tbody>

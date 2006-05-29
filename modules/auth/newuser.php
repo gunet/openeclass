@@ -37,13 +37,14 @@
 
 $langFiles = array('registration','gunet');
 include '../../include/baseTheme.php';
+include 'auth.inc.php';
 $nameTools = $langUserDetails;
 
 // Initialise $tool_content
 $tool_content = "";
 // Main body
 
-
+$auth = get_auth_id();
 /* Check for LDAP server entries */
 $ldap_entries = mysql_fetch_array(mysql_query("SELECT ldapserver FROM institution"));
 if ($ldap_entries['ldapserver'] <> NULL)
