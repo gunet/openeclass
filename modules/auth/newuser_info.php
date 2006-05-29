@@ -29,9 +29,9 @@
       +----------------------------------------------------------------------+
  */
 
-$langFiles = array('registration', 'gunet');
-//include('../../include/init.php');
+$langFiles = array('registration','gunet');
 include '../../include/baseTheme.php';
+include 'auth.inc.php';
 if(isset($already_second)) {
 	session_register("uid");
 	session_unregister("statut");
@@ -39,19 +39,42 @@ if(isset($already_second)) {
 	session_unregister("nom");
 	session_unregister("uname");
 }
+//@include "check_admin.inc";
 $nameTools = $reguser;
-//begin_page();
+
+// Initialise $tool_content
 $tool_content = "";
+// Main body
 
-$tool_content .= "
+$tool_content .= "<table width=\"99%\">
+<tr valign=\"top\" bgcolor=\"".$color2."\">
+<td>";
+$auth = get_auth_id();
+if(!empty($auth))
+{
+	$tool_content .= "<ul>";
+	$tool_content .= "<li><a href=\"newuser.php\">".$regnoldap."</a><br /></li>";
+	if($auth!=1)
+	{
+		$auth_method_settings = get_auth_settings($auth);
+		$tool_content .= "<li><a href=\"ldapnewuser.php\">".$regldap."</a></li>";
+		if(!empty($auth_method_settings))
+		{
+			$tool_content .= "<br />".$auth_method_settings['auth_instructions'];
+		}
+	}
+	$tool_content .= "</ul>";
+}
+else
+{
+	$tool_content .= "<br />Η εγγραφή στην πλατφόρμα, πρός το παρόν δεν επιτρέπεται.<br />
+	Παρακαλούμε, ενημερώστε το διαχειριστή του συστήματος<br />";
+}
 
-<p>$userinfo</p>
+$tool_content .= "</td></tr></table>";
 
- <ul id=\"tool_content\">
 
-<li><a href=\"ldapnewuser.php\">$regldap</a></li>
-<li><a href=\"newuser.php\">$regnoldap</a></li>
-</ul>";
+$tool_content .= "<br />";
 
-draw($tool_content, 0);
+draw($tool_content,1);
 ?>

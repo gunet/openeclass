@@ -1,180 +1,195 @@
 <?
 $langFiles = array('registration','gunet');
-//include ('../../include/init.php');
-include '../../include/baseTheme.php';
-$tool_content = "";
-$tool_content .= "";
-if (@$usercomment != "" AND $name != "" AND $surname != "" AND $username != ""
-AND $userphone != "" AND $usermail != "")  {
+include ('../../include/init.php');
 
+if (@$usercomment != "" AND $name != "" AND $surname != "" AND $username != "" AND $userphone != "" AND $usermail != "")  
+{
 	$nameTools = $reqregprof;
 	$MailErrorMessage = $langMailErrorMessage;
 	include('../../include/sendMail.inc.php');
-
-	//	begin_page();
+	
+	begin_page();
 
 	// ------------------- Update table prof_request ------------------------------
 	mysql_select_db($mysqlMainDb,$db);
-	$upd=mysql_query("INSERT INTO prof_request(profname,profsurname,profuname,profemail,proftmima,profcomm,status,date_open,comment)
-	VALUES('$name','$surname','$username','$usermail','$department','$userphone','1',NOW(),'$usercomment')");
-
+	$upd=mysql_query("INSERT INTO prof_request(profname,profsurname,profuname,profemail,proftmima,profcomm,status,date_open,comment) 
+		VALUES('$name','$surname','$username','$usermail','$department','$userphone','1',NOW(),'$usercomment')");
+	
 	//----------------------------- Email Message --------------------------
-	$MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" .
-	$mailbody3 . $mailbody4 . $mailbody5 . "$mailbody6\n\n" .
-	"$langDepartment: $department\n$profcomment: $usercomment\n" .
-	"$profuname : $username\n$profemail : $usermail\n" .
-	"$contactphone : $userphone\n\n\n$logo\n\n";
+	    $MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" .
+				$mailbody3 . $mailbody4 . $mailbody5 . "$mailbody6\n\n" .
+				"$langDepartment: $department\n$profcomment: $usercomment\n" .
+				"$profuname : $username\n$profemail : $usermail\n" .
+				"$contactphone : $userphone\n\n\n$logo\n\n";
 
-	if (!send_mail($gunet, $emailhelpdesk, '', $emailhelpdesk, $mailsubject, $MailMessage, $charset)) {
-		$tool_content .= "<table width=\"99%\">";
-		$tool_content .=  "<tbody><tr><td class=\"caution\">
-                
-		$MailErrorMessage
+	if (!send_mail($gunet, $emailhelpdesk, '', $emailhelpdesk, $mailsubject, $MailMessage, $charset)) 
+	{
+		echo("<table border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" width=\"$mainInterfaceWidth\">");
+        	echo "<tr bgcolor=$color2><td>
+                <font size=\"2\" face=\"arial, helvetica\">
+		<br><br>$MailErrorMessage
 		<a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a>.
-	       
-                
-		</td></tr></tbody>
-		</table><br>";
-		//		exit();
+	        </font>
+                <br><br><br>
+		</td></tr>
+		</table>";
+		exit();
 	}
 
 	//------------------------------------User Message ----------------------------------------
-	$tool_content .= "<table  width=\"99%\"><tbody";
-	$tool_content .= "<tr class=\"odd\"><td>
-				       
-                        $dearprof<br><br>$success<br><br>$infoprof<br><br>				
-			$click <a href=\"$urlServer\">$here</a> $backpage
-                        
-                       
-                </td>
-        </tr>
-        </tbody>
-	</table>";
+		echo("<table border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" width=\"$mainInterfaceWidth\">");
+		echo("<tr bgcolor=$color2><td>
+				<font size=\"2\" face=\"arial, helvetica\">		       
+	                        <br><br>$dearprof<br><br>$success<br><br>$infoprof<br><br>				
+				$click <a href=\"$urlServer\">$here</a> $backpage
+	                        </font>
+	                        <br><br><br>
+	                </td>
+	        </tr>
+		</table>");
 	// --------------------------------------------------------------------------------------
 
-	//	$tool_content .=  "<body bgcolor='white'>";
+	echo "<body bgcolor='white'>";
 
-} else {
+} 
+else 
+{
+	$tool_content .= "<br />No data provided. Cannot proceed<br>";
+}
+
+
+
+
+
+
+
+
+/*
+
 
 	$nameTools = $reqregprof;
-//	begin_page();
+	begin_page();
 
-//$tool_content .= "
-//<table  width=\"99%\">
-//	<tr>
-//	<td>";
-
-if (isset($Add) and (empty($usercomment) or empty($name) or empty($surname) or empty($username) or empty($userphone) or empty($usermail))) {
-	$tool_content .=  "<table width='99%'><tbody>";
-	$tool_content .=  "<tr><td>$langFieldsMissing</td></tr>";
-	$tool_content .= "<tr><td></td></tr>";
-	$tool_content .= "<tr><td>
-               $langFillAgain <a href='$_SERVER[PHP_SELF]'>$langFillAgainLink</a>.<br><br><br></td></tr></tbody></table>";
-	exit;// call draw?
-}
-$frmAction = $_SERVER["PHP_SELF"];
-
-if (!isset($name)) $name = "";
-if (!isset($surname)) $surname = "";
-if (!isset($userphone)) $userphone = "";
-if (!isset($username)) $username = "";
-if (!isset($usermail)) $usermail = "";
-if (!isset($usercomment)) $usercomment = "";
-$tool_content .= "
-	<form action=\"$frmAction\" method=\"post\">
-	<table width=\"99%\">
-	<thead>
-	<tr >
-	<th width=\"200\">
-	
-	$profname
-	
-	</th>
+	?>
+	<table border="0" align="center" cellpadding="0" cellspacing="0" width="<?= $mainInterfaceWidth?>">
+		<tr>
+		<td>
+	<?
+	if (isset($Add) and (empty($usercomment) or empty($name) or empty($surname) or empty($username) or empty($userphone) or empty($usermail))) {
+	                echo "<table cellpadding='3' cellspacing='0' border='0' width='100%'>";
+	                echo "<tr bgcolor=$color2><td><font size='2' face='arial, helvetica'>$langFieldsMissing</font></td></tr>";
+	                echo "<tr bgcolor=$color2><td></td></tr>";
+	                echo "<tr bgcolor=$color2><td>
+	                <font size='2' face='arial, helvetica'>$langFillAgain <a href='$_SERVER[PHP_SELF]'>$langFillAgainLink</a>.</font><br><br><br></td></tr></table>";
+	                exit;
+	        }
+	?>
+	<form action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
+	<table cellpadding="3" cellspacing="0" border="0" width="100%">
+	<tr bgcolor="<?= $color2;?>">
+	<td>
+	<font size="2" face="arial, helvetica">
+	<?= $profname ?>
+	</font>
+	</td>
         <td>
-        <input type=\"text\" name=\"name\" value=\"$name\">
-	(*)
+        <input type="text" name="name" value="<?echo @$name ?>">
+	<font size="1">&nbsp;(*)</font>
         </td>
         </tr>
-	<tr >
-	<th width=\"200\">
-	
-	$profsname
-	
-	</th>
+	<tr valign="top" bgcolor="<?= $color2 ?>">
 	<td>
-	<input type=\"text\" name=\"surname\" value=\"$surname\">
-	(*)
+	<font size="2" face="arial, helvetica">
+	<?= $profsname?>
+	</font>
+	</td>
+	<td>
+	<input type="text" name="surname" value="<?echo @$surname?>">
+	<font size="1">&nbsp;(*)</font>
 	</td>
 	</tr>
-	<tr>
-	<th  width=\"200\">
-	
-	$profphone
-	
-	</th>
+	<tr bgcolor="<?= $color2;?>">
 	<td>
-	<input type=\"text\" name=\"userphone\" value=\"$userphone\">
-	(*)
+	<font size="2" face="arial, helvetica">
+	<?= $profphone?>
+	</font>
+	</td>
+	<td>
+	<input type="text" name="userphone" value="<?echo @$userphone ?>">
+	<font size="1">&nbsp;(*)</font>
 	</td>
 	</tr>
-	<tr>
-	<th  width=\"200\">
-	
-	$profuname
-	</th>
+	<tr bgcolor="<?= $color2;?>">
 	<td>
-	<input type=\"text\" name=\"username\" size=\"20\" maxlength=\"20\" value=\"$username\">(*)$langUserNotice
+	<font size="2" face="arial, helvetica">
+	<?= $profuname?>
+	</font>
+	</td>
+	<td>
+	<input type="text" name="username" size="20" maxlength="20" value="<?echo @$username ?>"><font size="1">&nbsp;&nbsp;(*)</font>
 	</td>
 	</tr>
-	
-	<tr>
-        <th  width=\"200\">
-       
-        profemail
-       
-        </th>
+	<tr bgcolor="<?= $color2;?>"><td>&nbsp;</td><td><font size="1"><?= $langUserNotice ?></font></td></tr>
+	<tr bgcolor="<?= $color2;?>">
         <td>
-        <input type=\"text\" name=\"usermail\" value=\"$usermail\">	(*)
+        <font size="2" face="arial, helvetica">
+        <?= $profemail ?>
+        </font>
+        </td>
+        <td>
+        <input type="text" name="usermail" value="<?echo @$usermail ?>">
+	<font size="1">&nbsp;(*)</font>
         </td>
         </tr>	
-	<tr >
-        <th width=\"200\">
-        
-      $profcomment $profreason
-	
-       	</th>
+	<tr bgcolor="<?= $color2;?>">
         <td>
-        <textarea name=\"usercomment\" COLS=\"35\" ROWS=\"4\" WRAP=\"SOFT\">$usercomment</textarea>(*)
+        <font size="2" face="arial, helvetica">
+        <?= $profcomment ?>
+        </font><br><font size="1" face="arial, helvetica">
+	<?= $profreason ?>
+	</font>
+       	</td>
+        <td>
+        <textarea name="usercomment" COLS="35" ROWS="4" WRAP="SOFT"><?echo @$usercomment; ?></textarea>
+	<font size="1">&nbsp;(*)</font>
         </td>
         </tr>
-	<tr>
-        <th width=\"200\">
-        
-        $langDepartment
-        
-        </th>
+	<tr bgcolor="<?= $color2;?>">
         <td>
-        <select name=\"department\">
-";
-$deps=mysql_query("SELECT name FROM faculte order by id");
-while ($dep = mysql_fetch_array($deps)) {
-	$tool_content .=  "<option value=\"$dep[0]\">$dep[0]</option>\n";
-}
-$tool_content .= "
+        <font size="2" face="arial, helvetica">
+        <?= $langDepartment;?>&nbsp;:
+        </font>
+        </td>
+        <td>
+        <select name="department">
+<?
+        $deps=mysql_query("SELECT name FROM faculte order by id");
+        while ($dep = mysql_fetch_array($deps)) {
+                  echo "<option value=\"$dep[0]\">$dep[0]</option>\n";
+        }
+?>
         </select>
         </td>
-        </tr></thead>				
-	</table><br>
-	<input type=\"submit\" name=\"Add\" value=\"$langSend\">
-       
-	
-</form>
-	<p>$langRequiredFields</p>
-";
-}// end of else if
-
-draw($tool_content, 0);
+        </tr>				
+	<tr bgcolor="<?= $color2;?>" >
+        <td>&nbsp;</td>
+        <td>
+	<input type="submit" name="Add" value="<?= $langSend ?>">
+        </td>
+        </tr>
+	</table>
+	</form>
+		</td>
+		</tr>
+	<tr><td  align='right'><font size="1"><?= $langRequiredFields ?></font></td></tr>
+	</table>
+	<?
+}   // end of else if
 ?>
-<!--</body>
+</body>
 </html>
--->
+*/
+
+draw($tool_content,1);
+
+?>

@@ -30,13 +30,11 @@
  */
 
 $langFiles = array('registration', 'admin', 'gunet');
-include('../../include/init.php');
-
+include '../../include/baseTheme.php';
 // added by jexi - adia
 session_register("prof");
 $prof=1;
-
-check_admin();
+//check_admin();
 
 if(isset($already_second))
 {
@@ -47,30 +45,24 @@ if(isset($already_second))
 	session_unregister("uname");
 }
 $nameTools = $regprof;
-$navigation[] = array ("url"=>"../admin/", "name"=> $admin);
-begin_page();
-?>
-	<tr>
-		<td>
 
-<form action="newprof_second.php" method="post">
-			<table cellpadding="3" cellspacing="0" border="0" width="100%">
 
-				<tr valign="top" bgcolor="<?php echo $color2 ?>">
-					<td>
-						<font size="2" face="arial, helvetica">		
-					<? echo $dearprof?> <br><br>
-					<p><? echo $profinfo ?></p><br>
-					<ol><li>
-					<a href="ldapnewprof.php"><? echo $regprofldap?></a></li><br>
-					<br>
-					<li><a href="newprof.php"><? echo $regprofnoldap ?></a></li></ol>
-				<br><br>
-								
-				</font>
+$tool_content = "";
+// Main body
+//$navigation[] = array ("url"=>"../admin/", "name"=> $admin);
+
+$tool_content .= "<table width=\"100%\">
+				<tr>
+					<td>".$dearprof."<br /><br />
+					<p>".$profinfo."</p><br />
+					<ul>
+					<li><a href=\"ldapnewprof.php\">".$regprofldap."</a><br /><br /></li>
+					<li><a href=\"newprof.php\">".$regprofnoldap."</a></li>
+					</ul><br /><br />
 				</td>
-			</table>
-	</tr>
-</table>
-</body>
-</html>
+				</tr>
+			</table>";
+	
+draw($tool_content,1);
+
+?>

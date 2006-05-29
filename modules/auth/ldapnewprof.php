@@ -30,55 +30,38 @@
  */
 
 $langFiles = array('registration', 'admin', 'gunet');
-include('../../include/init.php');
+include '../../include/baseTheme.php';
+require_once 'auth.inc.php';
+//check_admin();
 
-check_admin();
-
-$nameTools = $langByLdap;
+//$nameTools = $langByLdap;
+$auth = get_auth_id();
+$msg = get_auth_info($auth);
+if(!empty($msg)) $nameTools = $msg;
 $navigation[] = array("url"=>"../admin/", "name"=> $admin);
 $navigation[] = array("url"=>"newprof_info.php", "name"=> $regprof);
-$page_title = $regprofldap;
-begin_page();
-?>
-	<tr bgcolor="<?= $color2;?>">
+//$page_title = $regprofldap;
+
+$tool_content = "";
+
+$tool_content .= "<table><tr>
 		<td>
-			<form method="POST" action="ldapsearch_prof.php">
+			<form method=\"POST\" action=\"ldapsearch_prof.php\">
 				<table>
-				<tr><td><?= $emailprompt ?></td>
-					<td><input type=text name=ldap_email value=<?= @$m ?>></td>
+				<tr><td>Username</td>
+					<td><input type=\"text\" name=\"ldap_email\" value=\"".@$m."\"></td>
 				</tr>
-				<tr colspan=2><td><br>
-				<?
-					$db = mysql_connect("$mysqlServer", "$mysqlUser", "$mysqlPassword");
-					mysql_select_db($mysqlMainDb, $db);
-					$result = mysql_query("select * from institution ORDER BY nom",$db);
-					if (mysql_num_rows($result) > 1) {
-						?>
-						<select name=ldap_server>
-						<option value="0" SELECTED>
-						<?php echo $univprompt?></option>
-						<?
-						while (($row = mysql_fetch_object($result))) {
-							echo "<option value=".$row->ldapserver."_".$row->basedn."_".$row->inst_id.">\n";
-							echo $row->nom."\n";
-							echo "</option>\n";
-						}
-						echo "</select>\n";
-					} else {
-						$row = mysql_fetch_object($result);
-						echo "<strong>$langInstitution</strong> ".($row->nom)."\n";
-						echo "<input type='hidden' name=ldap_server value=".$row->ldapserver."_".$row->basedn."_".$row->inst_id.">\n";
-					}
-					mysql_free_result($result);
-					?>
-				</td></tr>
+				<tr><td>Password</td>
+				<td><input type=\"password\" name=\"ldap_passwd\" value=\"".@$m."\"></td>
+				</tr>
 				<tr colspan=2>
-					<td><br><input type=submit name=is_submit value='<? echo $reg?>'>
-					<br><br>
+					<td><br><input type=\"submit\" name=\"is_submit\" value=\"".$reg."\">
+					<br /><br />
 					</td>
 				</tr>
-			<br><br></table>
-		</form>
-<?
-	end_page();
+			<br /><br /></table>
+		</form><br />";
+		
+draw($tool_content,1);
+
 ?>

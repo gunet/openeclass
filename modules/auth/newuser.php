@@ -35,74 +35,71 @@
       +----------------------------------------------------------------------+
  */
 
-$langFiles = array('registration', 'gunet');
-//include('../../include/init.php');
+$langFiles = array('registration','gunet');
 include '../../include/baseTheme.php';
 $nameTools = $langUserDetails;
 
-if(isset($already_second) and $already_second) {
-	session_register("uid");
-	session_unregister("statut");
-	session_unregister("prenom");
-	session_unregister("nom");
-	session_unregister("uname");
-}
+// Initialise $tool_content
+$tool_content = "";
+// Main body
+
 
 /* Check for LDAP server entries */
 $ldap_entries = mysql_fetch_array(mysql_query("SELECT ldapserver FROM institution"));
 if ($ldap_entries['ldapserver'] <> NULL)
 	$navigation[]= array ("url"=>"newuser_info.php", "name"=> $reguser);
 
-//begin_page();
-$tool_content = "";			
-$tool_content .= <<<tCont
 
-<form action="newuser_second.php" method="post">
-<table  width="99%">
-<thead>
-<tr>
-<th>$langName</th>
-<td><input type="text" name="prenom_form">(*)</td>
+$tool_content .= "<table><tr>
+<td width=\"600\">
+<form action=\"newuser_second.php\" method=\"post\">
+<table cellpadding=\"3\" cellspacing=\"0\" border=\"0\" width=\"100%\" bgcolor=\"".$color2."\">
+<tr valign=\"top\">
+<td>".$langName."</td>
+<td><input type=\"text\" name=\"prenom_form\"><font size=\"1\">&nbsp;(*)</font></td>
 </tr>
-<tr><th>$langSurname</th>
-<td><input type="text" name="nom_form">(*)</td>
+<tr><td>".$langSurname."</td>
+<td><input type=\"text\" name=\"nom_form\"><font size=\"1\">&nbsp;(*)</font></td>
 </tr>
-<tr><th>$langUsername</th>
-<td><input type="text" name="uname" size="20" maxlength="20">(*) $langUserNotice</td>
+<tr><td>".$langUsername."</td>
+<td><input type=\"text\" name=\"uname\" size=\"20\" maxlength=\"20\"><font size=\"1\">&nbsp;(*)</font></td>
 </tr>
-
-<tr><th>$langPass</th>
-<td><input type="password" name="password1" size="20" maxlength="20">(*) $langUserNotice</td>
+<tr><td>&nbsp;</td><td><font size=\"1\">".$langUserNotice."</font></td></tr>
+<tr><td>".$langPass."</td>
+<td><input type=\"password\" name=\"password1\" size=\"20\" maxlength=\"20\"><font size=\"1\">&nbsp;(*)</font></td>
 </tr>
 <tr>
-<th>$langConfirmation </th>
-<td><input type="password" name="password" size="20" maxlength="20">(*) $langUserNotice</td>
+<td>".$langConfirmation."<br>
+</td>
+<td valign=\"top\"><input type=\"password\" name=\"password\" size=\"20\" maxlength=\"20\"><font size=\"1\">&nbsp;(*)</font></td>
 </tr>
-
+<tr><td>&nbsp;</td><td><font size=\"1\">".$langUserNotice."</font></td></tr>
 <tr>
-<th>$langEmail</th>
-<td><input type="text" name="email"> $langEmailNotice</td>
+<td>".$langEmail."</td>
+<td><input type=\"text\" name=\"email\"></td>
 </tr>
-
-<tr><th>$langAm</th>
-<td><input type="text" name="am"></td>
+<tr><td>&nbsp;</td><td><font size=\"1\">".$langEmailNotice."</font></td></tr>
+<tr><td>".$langAm."</td>
+<td><input type=\"text\" name=\"am\"></td>
 </tr>
-<tr><th>$langDepartment</th>
+<tr><td>".$langDepartment."</td>
 <td>
-<select name="department">
+<select name=\"department\">";
 
-tCont;
 $deps=mysql_query("SELECT name, id FROM faculte ORDER BY id");
 while ($dep = mysql_fetch_array($deps)) 
-	$tool_content .=  "\n<option value=\"$dep[1]\">$dep[0]</option>";
+	$tool_content .= "\n<option value=\"$dep[1]\">$dep[0]</option>";
 
-$tool_content .= "
-</select></td></tr></thead>
+
+$tool_content .= "</select></td></tr>
+<tr><td>&nbsp;</td><td><input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\"></td></tr>
 </table>
-<br>
-<input type=\"submit\" name=\"submit\" value=\"$langRegistration\" >
-</form><br>
-<p>$langRequiredFields</p>";
+</form>
+</td>
+</tr>
+<tr><td  align='right'><font size=\"1\">".$langRequiredFields."</font>
+</td></tr></table>";
 
-draw($tool_content, 0);
+draw($tool_content,1);
+
 ?>

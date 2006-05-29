@@ -369,6 +369,7 @@ function auth_user_login ($auth,$test_username, $test_password)
 			     		$testauth = true;
 			 
 			    		mysql_close($link);
+					mysql_select_db($mysqlMainDb,$GLOBALS['db']);
 						}
 		    	}
 		    	else
