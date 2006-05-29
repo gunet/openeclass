@@ -65,6 +65,19 @@ if (!mysql_field_exists("$mysqlMainDb",'cours','group_quota'))
 if (!mysql_field_exists("$mysqlMainDb",'cours','dropbox_quota'))
 	add_field('cours', 'dropbox_quota', "FLOAT DEFAULT '$diskQuotaDropbox' NOT NULL");
 
+//anavathmisi se v2.0 (sakis)
+if (!mysql_field_exists("$mysqlMainDb",'cours','course_objectives'))
+add_field('cours', 'course_objectives', "TEXT");
+
+if (!mysql_field_exists("$mysqlMainDb",'cours','course_prerequisites'))
+add_field('cours', 'course_prerequisites', "TEXT");
+
+if (!mysql_field_exists("$mysqlMainDb",'cours','course_references'))
+add_field('cours', 'course_references', "TEXT");
+
+if (!mysql_field_exists("$mysqlMainDb",'cours','course_keywords'))
+add_field('cours', 'course_keywords', "TEXT");
+	
 
 // *************************************
 // 		upgrade courses databases
