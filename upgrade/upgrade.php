@@ -83,7 +83,7 @@ add_field('cours', 'course_keywords', "TEXT");
 // 		upgrade courses databases
 // ************************************
 
-//anavathmisi se v2.0 (sakis)
+//sakis - erwthmata gia prosthiki pediwn gia ton neo create_course
 	if (!mysql_field_exists("$mysqlMainDb",'cours','course_objectives'))
 	add_field('cours', 'course_objectives', "TEXT");
 	
@@ -95,7 +95,44 @@ add_field('cours', 'course_keywords', "TEXT");
 	
 	if (!mysql_field_exists("$mysqlMainDb",'cours','course_keywords'))
 	add_field('cours', 'course_keywords', "TEXT");
+
+
+//sakis - prosthiki epipleon pediwn ston pinaka documents gia ta metadedomena (xrhsimopoiountai apo ton neo file manager)
+	if (!mysql_field_exists("$mysqlMainDb",'document','filename'))
+	add_field('document', 'filename', "TEXT");
 	
+	if (!mysql_field_exists("$mysqlMainDb",'document','category'))
+	add_field('document', 'category', "TEXT");
+	
+	if (!mysql_field_exists("$mysqlMainDb",'document','title'))
+	add_field('document', 'title', "TEXT");
+	
+	if (!mysql_field_exists("$mysqlMainDb",'document','creator'))
+	add_field('document', 'creator', "TEXT");
+	
+	if (!mysql_field_exists("$mysqlMainDb",'document','date'))
+	add_field('document', 'date', "DATETIME");
+	
+	if (!mysql_field_exists("$mysqlMainDb",'document','date_modified'))
+	add_field('document', 'date_modified', "DATETIME");
+	
+	if (!mysql_field_exists("$mysqlMainDb",'document','subject'))
+	add_field('document', 'subject', "TEXT");
+	
+	if (!mysql_field_exists("$mysqlMainDb",'document','description'))
+	add_field('document', 'description', "TEXT");
+	
+	if (!mysql_field_exists("$mysqlMainDb",'document','author'))
+	add_field('document', 'author', "TEXT");
+	
+	if (!mysql_field_exists("$mysqlMainDb",'document','format'))
+	add_field('document', 'format', "TEXT");
+	
+	if (!mysql_field_exists("$mysqlMainDb",'document','language'))
+	add_field('document', 'language', "TEXT");
+	
+	if (!mysql_field_exists("$mysqlMainDb",'document','copyrighted'))
+	add_field('document', 'copyrighted', "TEXT");	
 
 
 $res = db_query("SELECT code FROM cours");
