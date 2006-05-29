@@ -217,12 +217,15 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		}
 		else
 		{
-			$qry = mysql_query("UPDATE user 
+			
+			$sql = "UPDATE user 
 				SET nom='".$lname."', prenom='".$fname."', username='".$username."', password='".$password."', email='".$email."', phone='".$phone."',department=".$department.", expires_at=".$expires_at.
-				" WHERE user_id = '".$u."'");
+				" WHERE user_id = '".$u."'";
+			//	$tool_content .= "$sql<br>";
+			$qry = mysql_query($sql);
 			if (!$qry) 
 			{
-				die("Unable to make the update for user with id:".$u."!");
+				$tool_content .= "Unable to make the update for user with id:".$u."!";
 			}
 			else
 			{
