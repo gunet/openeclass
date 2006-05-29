@@ -142,6 +142,8 @@ $langFieldsRequAsterisk="<font face=\"arial, helvetica\" color=\"#FF0000\" size=
 $langNextStep="Επόμενο βήμα";
 $langPreviousStep="Προηγούμενο βήμα";
 $langFinalize="Δημιουργία μαθήματος!";
+$langCourseCategory="Η κατηγορία στην οποία ανήκει το μάθημα";
+$langProfessorsInfo="Ονοματεπώνυμα καθηγητών του μαθήματος χωρισμένα με κόμματα (π.χ.<i>Νίκος Τζικόπουλος, Κώστας Αδαμόπουλος</i>)";
 
 $langPublic="Ανοικτό (Ελεύθερη Πρόσβαση από τη αρχική σελίδα χωρίς συνθηματικό)";
 $langPrivOpen="Ανοικτό με Εγγραφή (Ελεγχόμενη Πρόσβαση με ανοιχτή εγγραφή)";

@@ -70,6 +70,20 @@ if (!mysql_field_exists("$mysqlMainDb",'cours','dropbox_quota'))
 // 		upgrade courses databases
 // ************************************
 
+//anavathmisi se v2.0 (sakis)
+	if (!mysql_field_exists("$mysqlMainDb",'cours','course_objectives'))
+	add_field('cours', 'course_objectives', "TEXT");
+	
+	if (!mysql_field_exists("$mysqlMainDb",'cours','course_prerequisites'))
+	add_field('cours', 'course_prerequisites', "TEXT");
+	
+	if (!mysql_field_exists("$mysqlMainDb",'cours','course_references'))
+	add_field('cours', 'course_references', "TEXT");
+	
+	if (!mysql_field_exists("$mysqlMainDb",'cours','course_keywords'))
+	add_field('cours', 'course_keywords', "TEXT");
+	
+
 
 $res = db_query("SELECT code FROM cours");
 while ($code = mysql_fetch_row($res)) {
