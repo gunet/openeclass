@@ -522,8 +522,8 @@ if($sql)
     			default:	$tool_content .= "<td>Άλλο ($logs[6])</td>";break;
 				}
 				$tool_content .= "<td><a href=\"edituser.php?u=".$logs['user_id']."\">Επεξεργασία</a></td>
-				<td><a href=\"manageuser.php?u=".$logs['user_id']."\">Διαγραφή</a></td>
-				<td><a href=\"manageuser.php?u=".$logs['user_id']."\">Στατιστικά</a></td>\n";
+				<td><a href=\"unreguser.php?u=".$logs['user_id']."\">Διαγραφή</a></td>
+				<td><a href=\"edituser.php?u=".$logs['user_id']."\">Στατιστικά</a></td>\n";
 				$tool_content .= "</tr>";
 			}
 		}
