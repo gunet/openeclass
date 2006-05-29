@@ -221,7 +221,7 @@ echo "
     <tr>
     <td align=\"right\"><font face=\"arial, helvetica\" size=\"2\"><b>$m[type]:</b></font></td>
     <td>";
-selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']), 'type');
+echo selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']), 'type');
 
 echo "
     <font face=\"arial, helvetica\" size=\"2\">$langFieldsRequAsterisk<br>$langCourseCategory</br></td>";
