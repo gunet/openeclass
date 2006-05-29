@@ -125,4 +125,28 @@ $langGroups="Ομάδες Χρηστών";
 $langCreateCourseGroups="Ομάδες Χρηστών";
 $langCatagoryMain="Αρχή";
 $langCatagoryGroup="Συζήτησεις Ομάδων χρηστών";
+
+//neos odhgos dhmiourgias mathimaton
+$langEnterMetadata="Μπορείτε να συμπληρώσετε επιπλέον πληροφορίες για το μάθημα μέσα από τη σελίδα αλλαγής πληροφοριών μαθήματος";
+$langCreateCourse="Οδηγός δημιουργίας μαθήματος";
+$langCreateCourseStep="Βήμα";
+$langCreateCourseStep2="από";
+$langCreateCourseStep1Title="Βασικά στοιχεία και πληροφορίες μαθήματος";
+$langCreateCourseStep2Title="Συμπληρωματικές πληροφορίες μαθήματος";
+$langCreateCourseStep3Title="Επιλογές συστήματος για το μάθημα";
+$langcourse_objectives="Στόχοι του μαθήματος";
+$langcourse_prerequisites="Προαπαιτούμενες γνώσεις";
+$langcourse_references="Βιβλιογραφία";
+$langcourse_keywords="Λέξεις κλειδιά";
+$langFieldsRequAsterisk="<font face=\"arial, helvetica\" color=\"#FF0000\" size=\"5\">*</font>";
+$langNextStep="Επόμενο βήμα";
+$langPreviousStep="Προηγούμενο βήμα";
+$langFinalize="Δημιουργία μαθήματος!";
+
+$langPublic="Ανοικτό (Ελεύθερη Πρόσβαση από τη αρχική σελίδα χωρίς συνθηματικό)";
+$langPrivOpen="Ανοικτό με Εγγραφή (Ελεγχόμενη Πρόσβαση με ανοιχτή εγγραφή)";
+$langPrivate="Κλειστό (Πρόσβαση στο μάθημα έχουν μόνο οι χρήστες που βρίσκονται στη Λίστα Χρηστών)";
+
+$langPoll="Δημοσκόπηση";
+$langSurvey="Ερωτηματολόγιο μαθησιακού προφίλ";
 ?>
