@@ -1898,6 +1898,97 @@ mysql_query("INSERT INTO group_properties
                PRIMARY KEY (id),
                KEY id (id)) 
 		TYPE=MyISAM DEFAULT CHARSET=greek");
+		
+#################### SURVEY ###############################################
+	
+	mysql_query("CREATE TABLE survey (
+  	sid bigint(14) NOT NULL auto_increment,
+  	creator_id mediumint(8) unsigned NOT NULL default '0',
+  	course_id varchar(20) NOT NULL default '0',
+  	name varchar(255) NOT NULL default '',
+  	creation_date datetime NOT NULL default '0000-00-00 00:00:00',
+  	start_date datetime NOT NULL default '0000-00-00 00:00:00',
+  	end_date datetime NOT NULL default '0000-00-00 00:00:00',
+  	type int(11) NOT NULL default '0',
+  	active int(11) NOT NULL default '0',
+  	PRIMARY KEY  (sid)) 
+	TYPE=MyISAM DEFAULT CHARSET=greek");
+	
+	mysql_query("CREATE TABLE survey_answer (
+		aid bigint(12) NOT NULL default '0',
+  	creator_id mediumint(8) unsigned NOT NULL default '0',
+  	sid bigint(12) NOT NULL default '0',
+  	date datetime NOT NULL default '0000-00-00 00:00:00',
+  	PRIMARY KEY  (aid)) 
+ TYPE=MyISAM DEFAULT CHARSET=greek");
+
+	mysql_query("CREATE TABLE survey_answer_record (
+  	arid int(11) NOT NULL auto_increment,
+  	aid bigint(12) NOT NULL default '0',
+  	question_text varchar(250) NOT NULL default '',
+  	question_answer varchar(250) NOT NULL default '',
+  	PRIMARY KEY  (arid)) 
+ TYPE=MyISAM DEFAULT CHARSET=greek");
+
+	mysql_query("CREATE TABLE survey_question (
+  	sqid bigint(12) NOT NULL default '0',
+  	sid bigint(12) NOT NULL default '0',
+  	question_text varchar(250) NOT NULL default '',
+  	PRIMARY KEY  (sqid)) 
+	TYPE=MyISAM DEFAULT CHARSET=greek");
+
+	mysql_query("CREATE TABLE survey_question_answer (
+  	sqaid int(11) NOT NULL auto_increment,
+  	sqid bigint(12) NOT NULL default '0',
+  	answer_text varchar(250) default NULL,
+  	PRIMARY KEY  (sqaid)) 
+  TYPE=MyISAM DEFAULT CHARSET=greek");
+
+
+#################### POLL #################################################
+
+	mysql_query("CREATE TABLE poll (
+  	pid bigint(14) NOT NULL auto_increment,
+  	creator_id mediumint(8) unsigned NOT NULL default '0',
+  	course_id varchar(20) NOT NULL default '0',
+  	name varchar(255) NOT NULL default '',
+  	creation_date datetime NOT NULL default '0000-00-00 00:00:00',
+  	start_date datetime NOT NULL default '0000-00-00 00:00:00',
+  	end_date datetime NOT NULL default '0000-00-00 00:00:00',
+  	type int(11) NOT NULL default '0',
+  	active int(11) NOT NULL default '0',
+  	PRIMARY KEY  (pid)) 
+	TYPE=MyISAM DEFAULT CHARSET=greek");
+
+	mysql_query("CREATE TABLE poll_answer (
+  	aid bigint(12) NOT NULL default '0',
+  	creator_id mediumint(8) unsigned NOT NULL default '0',
+  	pid bigint(12) NOT NULL default '0',
+  	date datetime NOT NULL default '0000-00-00 00:00:00',
+  	PRIMARY KEY  (aid))
+	TYPE=MyISAM DEFAULT CHARSET=greek");
+
+	mysql_query("CREATE TABLE poll_answer_record (
+  	arid int(11) NOT NULL auto_increment,
+  	aid bigint(12) NOT NULL default '0',
+  	question_text varchar(250) NOT NULL default '',
+  	question_answer varchar(250) NOT NULL default '',
+  	PRIMARY KEY  (arid))
+	TYPE=MyISAM DEFAULT CHARSET=greek");
+
+	mysql_query("CREATE TABLE poll_question (
+  	pqid bigint(12) NOT NULL default '0',
+  	pid bigint(12) NOT NULL default '0',
+  	question_text varchar(250) NOT NULL default '',
+  	PRIMARY KEY  (pqid))
+	TYPE=MyISAM DEFAULT CHARSET=greek");
+
+	mysql_query("CREATE TABLE poll_question_answer (
+  	pqaid int(11) NOT NULL auto_increment,
+  	pqid bigint(12) NOT NULL default '0',
+  	answer_text varchar(250) default NULL,
+  	PRIMARY KEY  (pqaid))
+	TYPE=MyISAM DEFAULT CHARSET=greek");
 
 ###########################################################################
 
@@ -2134,6 +2225,98 @@ mysql_query("INSERT INTO group_properties
                PRIMARY KEY (id),
                KEY id (id)) 
 		TYPE=MyISAM");
+		
+		
+#################### SURVEY ###############################################
+	
+	mysql_query("CREATE TABLE survey (
+  	sid bigint(14) NOT NULL auto_increment,
+  	creator_id mediumint(8) unsigned NOT NULL default '0',
+  	course_id varchar(20) NOT NULL default '0',
+  	name varchar(255) NOT NULL default '',
+  	creation_date datetime NOT NULL default '0000-00-00 00:00:00',
+  	start_date datetime NOT NULL default '0000-00-00 00:00:00',
+  	end_date datetime NOT NULL default '0000-00-00 00:00:00',
+  	type int(11) NOT NULL default '0',
+  	active int(11) NOT NULL default '0',
+  	PRIMARY KEY  (sid)) 
+	TYPE=MyISAM");
+	
+	mysql_query("CREATE TABLE survey_answer (
+		aid bigint(12) NOT NULL default '0',
+  	creator_id mediumint(8) unsigned NOT NULL default '0',
+  	sid bigint(12) NOT NULL default '0',
+  	date datetime NOT NULL default '0000-00-00 00:00:00',
+  	PRIMARY KEY  (aid)) 
+ TYPE=MyISAM");
+
+	mysql_query("CREATE TABLE survey_answer_record (
+  	arid int(11) NOT NULL auto_increment,
+  	aid bigint(12) NOT NULL default '0',
+  	question_text varchar(250) NOT NULL default '',
+  	question_answer varchar(250) NOT NULL default '',
+  	PRIMARY KEY  (arid)) 
+ TYPE=MyISAM");
+
+	mysql_query("CREATE TABLE survey_question (
+  	sqid bigint(12) NOT NULL default '0',
+  	sid bigint(12) NOT NULL default '0',
+  	question_text varchar(250) NOT NULL default '',
+  	PRIMARY KEY  (sqid)) 
+	TYPE=MyISAM");
+
+	mysql_query("CREATE TABLE survey_question_answer (
+  	sqaid int(11) NOT NULL auto_increment,
+  	sqid bigint(12) NOT NULL default '0',
+  	answer_text varchar(250) default NULL,
+  	PRIMARY KEY  (sqaid)) 
+  TYPE=MyISAM");
+
+
+#################### POLL #################################################
+
+	mysql_query("CREATE TABLE poll (
+  	pid bigint(14) NOT NULL auto_increment,
+  	creator_id mediumint(8) unsigned NOT NULL default '0',
+  	course_id varchar(20) NOT NULL default '0',
+  	name varchar(255) NOT NULL default '',
+  	creation_date datetime NOT NULL default '0000-00-00 00:00:00',
+  	start_date datetime NOT NULL default '0000-00-00 00:00:00',
+  	end_date datetime NOT NULL default '0000-00-00 00:00:00',
+  	type int(11) NOT NULL default '0',
+  	active int(11) NOT NULL default '0',
+  	PRIMARY KEY  (pid)) 
+	TYPE=MyISAM");
+
+	mysql_query("CREATE TABLE poll_answer (
+  	aid bigint(12) NOT NULL default '0',
+  	creator_id mediumint(8) unsigned NOT NULL default '0',
+  	pid bigint(12) NOT NULL default '0',
+  	date datetime NOT NULL default '0000-00-00 00:00:00',
+  	PRIMARY KEY  (aid))
+	TYPE=MyISAM");
+
+	mysql_query("CREATE TABLE poll_answer_record (
+  	arid int(11) NOT NULL auto_increment,
+  	aid bigint(12) NOT NULL default '0',
+  	question_text varchar(250) NOT NULL default '',
+  	question_answer varchar(250) NOT NULL default '',
+  	PRIMARY KEY  (arid))
+	TYPE=MyISAM");
+
+	mysql_query("CREATE TABLE poll_question (
+  	pqid bigint(12) NOT NULL default '0',
+  	pid bigint(12) NOT NULL default '0',
+  	question_text varchar(250) NOT NULL default '',
+  	PRIMARY KEY  (pqid))
+	TYPE=MyISAM");
+
+	mysql_query("CREATE TABLE poll_question_answer (
+  	pqaid int(11) NOT NULL auto_increment,
+  	pqid bigint(12) NOT NULL default '0',
+  	answer_text varchar(250) default NULL,
+  	PRIMARY KEY  (pqaid))
+	TYPE=MyISAM");
 
 ###########################################################################
 
