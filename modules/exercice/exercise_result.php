@@ -43,6 +43,14 @@ include '../../include/init.php';
 $nameTools = $langExercices;
 $navigation[]= array ("url"=>"exercice.php", "name"=> $langExercices);
 
+/////////////////////////////////////////////////////////////////////////////
+// Destroy cookie
+/////////////////////////////////////////////////////////////////////////////
+if (!setcookie("marvelous_cookie", "", time()-3600, "/")) {
+	header('Location: exercise_redirect.php');
+	exit();
+}
+
 begin_page($nameTools);
 
 // latex support
@@ -63,6 +71,7 @@ if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExer
 }
 
 $exerciseTitle=$objExercise->selectTitle();
+$exerciseId=$objExercise->selectId();
 
 ?>
 
@@ -369,6 +378,51 @@ $exerciseTitle=$objExercise->selectTitle();
 		$totalWeighting+=$questionWeighting;
 	}	// end foreach()
 ?>
+
+<?
+
+
+/////////////////////////////////////////////////////////////////////////////
+// UPDATE results to DB
+/////////////////////////////////////////////////////////////////////////////
+$eid=$objExercise->selectId();
+mysql_select_db($currentCourseID);
+$sql="SELECT RecordStartDate FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
+$result=mysql_query($sql);
+$attempt = count($result);
+$row=mysql_fetch_array($result);
+//$RecordStartDate = ($RecordStartTime_temp = $result[count($result)-1]);
+$RecordStartDate = ($RecordStartTime_temp = $row[count($result)-1]);
+//echo "<h1>RecordStartDate = $RecordStartDate</h1>";
+$RecordStartTime_temp = mktime(substr($RecordStartTime_temp, 11,2),substr($RecordStartTime_temp, 14,2),substr($RecordStartTime_temp, 17,2),substr($RecordStartTime_temp, 5,2),substr($RecordStartTime_temp, 8,2),substr($RecordStartTime_temp, 0,4));	
+$exerciseTimeConstrain=$objExercise->selectTimeConstrain();
+//echo "<h1>exerciseTimeConstrain = $exerciseTimeConstrain minutes</h1>";
+$exerciseTimeConstrain = $exerciseTimeConstrain*60;
+$RecordEndDate = ($SubmitDate = date("Y-m-d H:i:s"));
+//echo "<h1>RecordEndDate = $RecordEndDate</h1>";
+$SubmitDate = mktime(substr($SubmitDate, 11,2),substr($SubmitDate, 14,2),substr($SubmitDate, 17,2),substr($SubmitDate, 5,2),substr($SubmitDate, 8,2),substr($SubmitDate, 0,4));	
+$OnTime = ($SubmitDate - ($RecordStartTime_temp + $exerciseTimeConstrain));
+if ($OnTime) { // exercise time limit hasn't expired
+	$sql="SELECT eurid FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
+	//echo "<h1>OnTime = $OnTime</h1>";
+	$result = mysql_query($sql);
+	$row=mysql_fetch_array($result);
+	//echo "<h1>-$row</h1>";
+	$x = $row[count($result)-1];
+	//echo "<h1>-$x</h1>";
+	//echo "<h1>-".count($result)."</h1>";
+	$eurid = $row[count($result)-1];
+	//echo "<h1>-$eurid</h1>";
+	// record end/results of exercise
+	$sql="UPDATE `exercise_user_record` SET RecordEndDate='$RecordEndDate',TotalScore='$totalScore', TotalWeighting='$totalWeighting', attempt='$attempt' WHERE eurid='$eurid'";
+	db_query($sql,$currentCourseID);
+} else {  // not allowed begin again
+	header('Location: exercise_redirect.php');
+	exit();
+}
+
+?>
+
 
 <table width="100%" border="0" cellpadding="3" cellspacing="2">
 <tr>

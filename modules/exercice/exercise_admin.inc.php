@@ -45,6 +45,12 @@ if(isset($submitExercise))
 		$objExercise->updateTitle($exerciseTitle);
 		$objExercise->updateDescription($exerciseDescription);
 		$objExercise->updateType($exerciseType);
+		
+		$objExercise->updateStartDate($exerciseStartDate);
+		$objExercise->updateEndDate($exerciseEndDate);
+		$objExercise->updateTimeConstrain($exerciseTimeConstrain);
+		$objExercise->updateAttemptsAllowed($exerciseAttemptsAllowed);
+		
 		$objExercise->setRandom($randomQuestions);
 		$objExercise->save();
 
@@ -59,6 +65,10 @@ else
 	$exerciseTitle=$objExercise->selectTitle();
 	$exerciseDescription=$objExercise->selectDescription();
 	$exerciseType=$objExercise->selectType();
+	$exerciseStartDate=$objExercise->selectStartDate();
+	$exerciseEndDate=$objExercise->selectEndDate();
+	$exerciseTimeConstrain=$objExercise->selectTimeConstrain();
+	$exerciseAttemptsAllowed=$objExercise->selectAttemptsAllowed();
 	$randomQuestions=$objExercise->isRandom();
 }
 
@@ -91,7 +101,8 @@ if(isset($modifyExercise))
 
 <tr>
   <td><?php echo $langExerciseName; ?> :</td>
-  <td><input type="text" name="exerciseTitle" size="50" maxlength="200" value="<?php echo htmlspecialchars($exerciseTitle); ?>" style="width:400px;"></td>
+  <td><input type="text" name="exerciseTitle" size="50" maxlength="200" 
+  	value="<?php echo htmlspecialchars($exerciseTitle); ?>" style="width:400px;"></td>
 </tr>
 <tr>
   <td valign="top"><?php echo $langExerciseDescription; ?> :</td>
@@ -102,7 +113,30 @@ if(isset($modifyExercise))
   <td><input type="radio" name="exerciseType" value="1" <?php if($exerciseType <= 1) echo 'checked="checked"'; ?>> <?php echo $langSimpleExercise; ?><br>
       <input type="radio" name="exerciseType" value="2" <?php if($exerciseType >= 2) echo 'checked="checked"'; ?>> <?php echo $langSequentialExercise; ?></td>
 </tr>
-
+<tr>
+  <td valign="top"><?php echo $langExerciseStart; ?> :</td>
+  <td><input type="text" name="exerciseStartDate" value="<?php echo htmlspecialchars($exerciseStartDate); ?>" 
+  	size="22" maxlength="19"> 
+  (<?php echo $langExerciseEg; ?> 1977-06-29 12:00:00)</td>
+</tr>
+<tr>
+  <td valign="top"><?php echo $langExerciseEnd; ?> :</td>
+  <td><input type="text" name="exerciseEndDate" value="<?php echo htmlspecialchars($exerciseEndDate); ?>" 
+  	size="22" maxlength="19"> 
+  (<?php echo $langExerciseEg; ?> 1977-06-29 12:00:00)</td>
+</tr>
+<tr>
+  <td valign="top"><?php echo $langExerciseConstrain; ?> :</td>
+  <td><input type="text" name="exerciseTimeConstrain" size="3" maxlength="3" 
+  	value="<?php echo htmlspecialchars($exerciseTimeConstrain); ?>"> 
+  	<?php echo $langExerciseConstrainUnit; ?> (<?php echo $langExerciseConstrainExplanation; ?>)</td>
+</tr>
+<tr>
+  <td valign="top"><?php echo $langExerciseAttemptsAllowed; ?> :</td>
+  <td><input type="text" name="exerciseAttemptsAllowed" size="2" maxlength="2" 
+  	value="<?php echo htmlspecialchars($exerciseAttemptsAllowed); ?>"> 
+  	<?php echo $langExerciseAttemptsAllowedUnit; ?> (<?php echo $langExerciseAttemptsAllowedExplanation; ?>)</td>
+</tr>
 <?php
 	if($exerciseId && $nbrQuestions)
 	{
@@ -153,7 +187,28 @@ else
 </h3>
 
 <blockquote>
-  <?php echo nl2br($exerciseDescription); ?>
+	<table border="0">
+		<tr>
+		  <td valign="top"><?php echo $langExerciseDescription; ?> :</td>
+		  <td><?php echo nl2br($exerciseDescription); ?></td>
+		</tr>
+		<tr>
+		  <td valign="top"><?php echo $langExerciseStart; ?> :</td>
+		  <td><?php echo $exerciseStartDate; ?></td>
+		</tr>
+		<tr>
+		  <td valign="top"><?php echo $langExerciseEnd; ?> :</td>
+		  <td><?php echo $exerciseEndDate; ?></td>
+		</tr>
+		<tr>
+		  <td valign="top"><?php echo $langExerciseConstrain; ?> :</td>
+		  <td><?php echo $exerciseTimeConstrain; ?></td>
+		</tr>
+		<tr>
+		  <td valign="top"><?php echo $langExerciseAttemptsAllowed; ?> :</td>
+		  <td><?php echo $exerciseAttemptsAllowed; ?></td>
+		</tr>
+	</table>
 </blockquote>
 
 <a href="<?php echo $PHP_SELF; ?>?modifyExercise=yes"><img src="../../images/edit.gif" border="0" align="absmiddle" alt="<?php echo $langModify; ?>"></a>

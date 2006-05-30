@@ -29,6 +29,10 @@ class Exercise
 	var $exercise;
 	var $description;
 	var $type;
+	var $StartDate; 				// added
+	var $EndDate;						//	
+	var $TimeConstrain;			//
+	var $AttemptsAllowed; 	// end of added
 	var $random;
 	var $active;
 
@@ -45,6 +49,10 @@ class Exercise
 		$this->exercise='';
 		$this->description='';
 		$this->type=1;
+		$this->StartDate=date("Y-m-d H:i:s");
+		$this->EndDate='';
+		$this->TimeConstrain=0;
+		$this->AttemptsAllowed=0;
 		$this->random=0;
 		$this->active=1;
 
@@ -62,7 +70,7 @@ class Exercise
 	{
 		global $TBL_EXERCICES, $TBL_EXERCICE_QUESTION, $TBL_QUESTIONS, $currentCourseID;
 		mysql_select_db($currentCourseID);
-		$sql="SELECT titre,description,type,random,active FROM `$TBL_EXERCICES` WHERE id='$id'";
+		$sql="SELECT titre,description,type,StartDate,EndDate,TimeConstrain,AttemptsAllowed,random,active FROM `$TBL_EXERCICES` WHERE id='$id'";
 		$result=mySqlQueryShowError($sql);
 		$result=mysql_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);
 
@@ -73,6 +81,12 @@ class Exercise
 			$this->exercise=$object->titre;
 			$this->description=$object->description;
 			$this->type=$object->type;
+			////////////////////////////////////////////////////////////////////
+			$this->StartDate=$object->StartDate;
+			$this->EndDate=$object->EndDate;
+			$this->TimeConstrain=$object->TimeConstrain;
+			$this->AttemptsAllowed=$object->AttemptsAllowed;
+			////////////////////////////////////////////////////////////////////
 			$this->random=$object->random;
 			$this->active=$object->active;
 
@@ -142,7 +156,24 @@ class Exercise
 	{
 		return $this->type;
 	}
-
+/////////////////////////////////////////////////////////
+	function selectStartDate()
+	{
+		return $this->StartDate;
+	}
+	function selectEndDate()
+	{
+		return $this->EndDate;
+	}
+	function selectTimeConstrain()
+	{
+		return $this->TimeConstrain;
+	}
+	function selectAttemptsAllowed()
+	{
+		return $this->AttemptsAllowed;
+	}
+/////////////////////////////////////////////////////////
 	/**
 	 * tells if questions are selected randomly, and if so returns the draws
 	 *
@@ -292,7 +323,24 @@ class Exercise
 	{
 		$this->type=$type;
 	}
-
+////////////////////////////////////////////////////////////////
+	function updateStartDate($StartDate)
+	{
+		$this->StartDate=$StartDate;
+	}
+	function updateEndDate($EndDate)
+	{
+		$this->EndDate=$EndDate;
+	}
+	function updateTimeConstrain($TimeConstrain)
+	{
+		$this->TimeConstrain=$TimeConstrain;
+	}
+	function updateAttemptsAllowed($AttemptsAllowed)
+	{
+		$this->AttemptsAllowed=$AttemptsAllowed;
+	}
+////////////////////////////////////////////////////////////////
 	/**
 	 * sets to 0 if questions are not selected randomly
 	 * if questions are selected randomly, sets the draws
@@ -338,19 +386,28 @@ class Exercise
 		$exercise=addslashes($this->exercise);
 		$description=addslashes($this->description);
 		$type=$this->type;
+		$StartDate=$this->StartDate; 							// added
+		$EndDate=$this->EndDate;									//	
+		$TimeConstrain=$this->TimeConstrain;			//
+		$AttemptsAllowed=$this->AttemptsAllowed; 	// end of added
 		$random=$this->random;
 		$active=$this->active;
 
 		// exercise already exists
 		if($id)
 		{
-			$sql="UPDATE `$TBL_EXERCICES` SET titre='$exercise',description='$description',type='$type',random='$random',active='$active' WHERE id='$id'";
+			$sql="UPDATE `$TBL_EXERCICES` SET titre='$exercise',description='$description',type='$type',".
+				"StartDate='$StartDate',EndDate='$EndDate',TimeConstrain='$TimeConstrain',".
+				"AttemptsAllowed='$AttemptsAllowed',random='$random',active='$active' WHERE id='$id'";
 			mysql_query($sql) or die("Error : UPDATE in file ".__FILE__." at line ".__LINE__);
 		}
 		// creates a new exercise
 		else
 		{
-			$sql="INSERT INTO `$TBL_EXERCICES`(titre,description,type,random,active) VALUES('$exercise','$description','$type','$random','$active')";
+			$sql="INSERT INTO `$TBL_EXERCICES`(titre,description,type,StartDate,".
+				"EndDate,TimeConstrain,AttemptsAllowed,random,active) VALUES(".
+				"'$exercise','$description','$type','$StartDate','$EndDate','$TimeConstrain','$AttemptsAllowed',".
+				"'$random','$active')";
 			mysql_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
 
 			$this->id=mysql_insert_id();

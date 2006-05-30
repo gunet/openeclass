@@ -139,6 +139,46 @@ $exerciseTitle=$objExercise->selectTitle();
 $exerciseDescription=$objExercise->selectDescription();
 $randomQuestions=$objExercise->isRandom();
 $exerciseType=$objExercise->selectType();
+$exerciseTimeConstrain=$objExercise->selectTimeConstrain();
+$exerciseAllowedAttemtps=$objExercise->selectAttemptsAllowed();
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+$eid_temp = $objExercise->selectId();
+$exerciseTimeConstrainSecs = time() + ($exerciseTimeConstrain*60);
+$RecordStartDate = date("Y-m-d H:i:s",time());
+
+//echo $RecordStartDate;
+
+if ((!$is_adminOfCourse)&&(isset($uid))) { //if registered student
+$CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record WHERE eid='$eid_temp' AND uid='$uid'", $currentCourseID));
+++$CurrentAttempt[0];
+//echo "CA = " . $CurrentAttempt[0] . "AA = " . $exerciseAllowedAttemtps;
+	if (!isset($_COOKIE['marvelous_cookie'])) { // either expired or begin again
+		//echo "3421421";
+		if ((!$exerciseAllowedAttemtps)||($CurrentAttempt[0] <= $exerciseAllowedAttemtps)) { // if it is allowed begin again
+			//echo "3421421";
+			if (!$exerciseTimeConstrainSecs)
+				$exerciseTimeConstrainSecs = 9999999;
+				$CookieLife=time()+$exerciseTimeConstrainSecs;
+			if (!setcookie("marvelous_cookie", $eid_temp, $CookieLife, "/")) {
+				header('Location: exercise_redirect.php');
+				//echo "grrrr1";
+				exit();
+			}
+			// record start of exercise
+			mysql_select_db($currentCourseID);
+			$sql="INSERT INTO `exercise_user_record` (eurid,eid,uid,RecordStartDate,RecordEndDate,".
+				"TotalScore,TotalWeighting,attempt) VALUES".
+				"(0,'$eid_temp','$uid','$RecordStartDate','','','',1)";
+			$result=mysql_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);		
+		} else {  // not allowed begin again
+			header('Location: exercise_redirect.php');
+			//echo "grrrr2";
+			//echo $CurrentAttempt[0]." ". $exerciseAllowedAttemtps;
+			//echo "setcookie(\"marvelous_cookie\", $eid_temp, $exerciseTimeConstrainSecs, \"/\")";
+			exit();
+		}
+	}
+}
 
 if(!session_is_registered('questionList')) {
 	// selects the list of question ID

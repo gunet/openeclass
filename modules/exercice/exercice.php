@@ -101,7 +101,8 @@ if($is_allowedToEdit)
 // only for students
 else
 {
-	$sql="SELECT id,titre,type FROM `$TBL_EXERCICES` WHERE active='1' ORDER BY id LIMIT $from,".($limitExPage+1);
+	$sql="SELECT id,titre,type,StartDate,EndDate,TimeConstrain,AttemptsAllowed ".
+		"FROM `$TBL_EXERCICES` WHERE active='1' ORDER BY id LIMIT $from,".($limitExPage+1);
 	$result=mysql_query($sql) or die("Error : SELECT at line ".__LINE__);
 }
 
@@ -116,9 +117,10 @@ if($is_allowedToEdit)
 {
 ?>
 
-  <td width="50%">
+  <td width="80%">
 	<a href="admin.php"><?php echo $langNewEx; ?></a> |
 	<a href="question_pool.php"><?php echo $langQuestionPool; ?></a>
+	<!-- | <a href="results.php?exerciseId=<?php echo $exerciseId; ?>"><?php echo $langResults; ?></a>-->
   </td>
   <td width="50%" align="right">
 
@@ -191,6 +193,9 @@ if($is_allowedToEdit)
   </td>
   <td align="center">
 	<?php echo "$langActivate / $langDeactivate"; ?>
+  </td>
+  <td align="center">
+	<?php echo "$langResults"; ?>
   </td>
 </tr>
 
@@ -265,9 +270,12 @@ else
 
 }
 ?>
-</tr>
+
 
 <?php
+	echo "<td width='20%' align='center'>
+	<a href='results.php?&exerciseId=$row[id]'>
+	<img src='../../images/invisible.gif' border='0' alt='htmlspecialchars($langActivate)'></a></td></tr>";
 	}
 	// student only
 	else
@@ -279,7 +287,46 @@ else
 	<tr>
 	  <td width="20" align="right"><?php echo @($i+($page*$limitExPage)).'.'; ?></td>
 	  <td width="1">&nbsp;</td>
-	  <td><a href="exercice_submit.php?exerciseId=<?= $row['id']; ?>"><?=  $row['titre']; ?></a></td>
+	  <td>
+<?php
+	$CurrentDate = time();
+//	$CurrentDate = date("Y-m-d H:i:s");
+//	echo "CurrentDate = ".$CurrentDate."<br>\n";
+//	echo substr($CurrentDate, 11,2)."|".
+//		substr($CurrentDate, 14,2)."|".
+//		substr($CurrentDate, 17,2)."|".
+//		substr($CurrentDate, 5,2)."|".
+//		substr($CurrentDate, 8,2)."|".
+//		substr($CurrentDate, 0,4)."<br><br>";
+//	$CurrentDate = mktime(substr($CurrentDate, 11,2),substr($CurrentDate, 14,2),substr($CurrentDate, 17,2),substr($CurrentDate, 5,2),substr($CurrentDate, 8,2),substr($CurrentDate, 0,4));
+	//echo "temp_StartDate = ".$row['StartDate']."<br>\n";
+	//echo "temp_EndDate = ".$row['EndDate']."<br>\n";
+	$temp_StartDate = mktime(substr($row['StartDate'], 11,2),substr($row['StartDate'], 14,2),substr($row['StartDate'], 17,2),substr($row['StartDate'], 5,2),substr($row['StartDate'], 8,2),substr($row['StartDate'], 0,4));
+	$temp_EndDate = mktime(substr($row['EndDate'], 11,2),substr($row['EndDate'], 14,2),substr($row['EndDate'], 17,2),substr($row['EndDate'], 5,2),substr($row['EndDate'], 8,2),substr($row['EndDate'], 0,4));
+//	echo "CurrentDate = ".$CurrentDate."<br>\n";
+//	echo "temp_StartDate = ".$temp_StartDate."<br>\n";
+//	echo "temp_EndDate = ".$temp_EndDate."<br>\n";
+	if (($CurrentDate >= $temp_StartDate) && ($CurrentDate < $temp_EndDate)) {
+?>
+	  <a href="exercice_submit.php?exerciseId=<?= $row['id']; ?>"><?=  $row['titre']; ?></a>
+<?php
+	} else {
+?>
+		<?=  $row['titre']; ?>
+<?php
+	}
+?>  
+	  <?php echo "<br>".$langExerciseStart; ?>: <?=  $row['StartDate']; ?>
+	  <?php echo "<br>".$langExerciseEnd; ?>: <?=  $row['EndDate']; ?>
+	  <?php 
+	  if ($row['TimeConstrain']>0)
+	  	echo "<br>".$langExerciseConstrain.": ".$row['TimeConstrain']." ".$langExerciseConstrainUnit;; 
+	  if ($row['AttemptsAllowed']>0)	
+	   echo "<br>".$langExerciseAttemptsAllowed.": ".$row['AttemptsAllowed']; 
+	  
+	  
+	  ?>
+	  </td>
 	</tr>
 	</table>
   </td>
