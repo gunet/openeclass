@@ -353,7 +353,7 @@ if (!mysql_table_exists($code[0], 'lp_user_module_progress'))  {
               PRIMARY KEY  (`user_module_progress_id`)
             ) ", $code[0]); //TYPE=MyISAM COMMENT='Record the last known status of the user in the course';
 }
-
+/*
 // kstratos - UOM
 
 // Add 1 new field into table 'prof_request', after the field 'profuname'
@@ -399,7 +399,7 @@ if(!mysql_table_exists($code[0], 'auth'))
     db_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)",$code[0]);
 }
 
-
+*/
 	//===============================================================================================
 	//BEGIN: Move all external links to id > 100, add column define_var
 	//===============================================================================================
