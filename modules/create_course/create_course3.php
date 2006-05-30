@@ -1683,7 +1683,6 @@ mysql_query("CREATE TABLE accueil (
                'MODULE_ID_DESCRIPTION'
                )");
     
-    //na prostehtei MODULE_ID_ gia to Surveys
     mysql_query("INSERT INTO accueil VALUES (
 			    '21',
 			    '$langSurvey',
@@ -1692,10 +1691,9 @@ mysql_query("CREATE TABLE accueil (
 			    '".$sbsystems[21]."',
 			    '0',
 			    '../../../images/pastillegris.png',
-			    ''
+			    'MODULE_ID_SURVEY'
 			    )");
     
-    //na prostehtei MODULE_ID_ gia to Poll
     mysql_query("INSERT INTO accueil VALUES (
 			    '22',
 			    '$langPoll',
@@ -1704,7 +1702,7 @@ mysql_query("CREATE TABLE accueil (
 			    '".$sbsystems[22]."',
 			    '0',
 			    '../../../images/pastillegris.png',
-			    ''
+			    'MODULE_ID_POLL'
 			    )");
     
     
