@@ -150,7 +150,7 @@ if(!empty($submit))
 	      	}
 		      else
 		      {
-		      	$warning .= "<br />Your account is inactive. <br />Please <a href=\"auth/contactadmin.php?userid=".$myrow["user_id"]."\">contact the Eclass Admin.</a><br /><br />";
+		      	$warning .= "<br />Your account is inactive. <br />Please <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">contact the Eclass Admin.</a><br /><br />";
 		      }
 				}
   		}
@@ -229,7 +229,7 @@ if(!empty($submit))
 					}
 					elseif($auth_allow==3)
 					{
-						$tool_content .= "<br />Your account is inactive. <br />Please <a href=\"auth/contactadmin.php?userid=".$myrow["user_id"]."\">contact the Eclass Admin.</a><br /><br />";
+						$tool_content .= "<br />Your account is inactive. <br />Please <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">contact the Eclass Admin.</a><br /><br />";
 					}
 					else
 					{
