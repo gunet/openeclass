@@ -271,9 +271,7 @@ echo "</select><br><font face=\"arial, helvetica\" size=\"2\">$langLanguageTip</
 help("CreateCourse_lang");
 
 echo "</tr>
-		
-		
-		
+				
 	<tr>
 		<td>
 			&nbsp;
@@ -288,8 +286,6 @@ echo "</tr>
 	</table>
 	</td>
 	</tr>
-	
-	
 	
 			
 		</table>
@@ -329,7 +325,6 @@ else {
 			<br>
 			<font face=\"arial, helvetica\" size=\"2\">
 			$langEmpty
-			<p>&nbsp;</p><p>&nbsp;</p>
 			</font>
 		</td>
 	</tr>";
@@ -353,7 +348,6 @@ else {
 			<font face=\"arial, helvetica\" size=\"2\">
 				$langCodeTaken.
 				<br>
-				<p>&nbsp;</p>
 				<p>&nbsp;</p>
 			</td></tr></table>";
 			exit();
@@ -2501,7 +2495,7 @@ mysql_select_db("$mysqlMainDb");
 		role = '$langProfessor',
 		tutor='1'");
 
-mysql_query("INSERT INTO cours_faculte VALUES ( '', '$faculte', '$repertoire', '')");
+mysql_query("INSERT INTO cours_faculte VALUES ( '', '$faculte', '$repertoire', '$facid')");
 
 ###########################################################################
 ################ CREATE DIRECTORIES #######################################
