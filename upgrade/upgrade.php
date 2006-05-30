@@ -91,6 +91,76 @@ if (!mysql_field_exists("$mysqlMainDb",'cours','course_references'))
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_keywords'))
 	$tool_content .= add_field('cours', 'course_keywords', "TEXT");
 
+// kstratos - UOM
+// Add 1 new field into table 'prof_request', after the field 'profuname'
+if (!mysql_field_exists($mysqlMainDb,'prof_request','profpassword'))
+{
+    $retString = "";
+    $field = "profpassword";
+    $table = "prof_request";
+    $retString .= "Προσθήκη πεδίου <b>$field</b> στον πίνακα <b>$table</b>: ";
+    if(db_query("ALTER TABLE `prof_request` ADD `profpassword` VARCHAR(255) NOT NULL AFTER `profuname`",$mysqlMainDb))
+    {
+	$retString .= " $OK<br>";
+    }
+    else
+    {
+	$retString .= " $BAD<br>";
+	$GLOBALS['errors']++;
+    }
+}
+$tool_content .= "<br />".$retString."<br />";
+
+// Add 2 new fileds into table 'user': registered_at,expires_at
+if (!mysql_field_exists($mysqlMainDb,'user','registered_at'))
+    $tool_content .= add_field('user', 'registered_at', "INT(10)");
+if (!mysql_field_exists($mysqlMainDb,'user','expires_at'))
+    $tool_content .= add_field('user', 'expires_at', "INT(10)");
+
+
+// Add 2 new fileds into table 'cours': password,faculteid
+if (!mysql_field_exists($mysqlMainDb,'cours','password'))
+    $tool_content .= add_field('cours', 'password', "VARCHAR(50)");
+if (!mysql_field_exists($mysqlMainDb,'cours','faculteid'))
+    $tool_content .= add_field('cours', 'faculteid', "INT(11)");
+    
+// Add 1 new filed into table 'cours_faculte': facid
+if (!mysql_field_exists($mysqlMainDb,'cours_faculte','facid'))
+    $tool_content .= add_field('cours_faculte', 'facid', "INT(11)");    
+
+// 'New table 'auth' with auth methods in Eclass 2.0';
+if(!mysql_table_exists($mysqlMainDb, 'auth'))
+{
+    $retString = "";
+    $table = "auth";
+    $retString .= "Προσθήκη πίνακα <b>$table</b>: ";
+    
+    if(db_query("CREATE TABLE `auth` (
+	`auth_id` int( 2 ) NOT NULL AUTO_INCREMENT ,
+	`auth_name` varchar( 20 ) NOT NULL default '',
+	`auth_settings` text NOT NULL default '',
+	`auth_instructions` text NOT NULL default '',
+	`auth_default` tinyint( 1 ) NOT NULL default '0',
+	PRIMARY KEY ( `auth_id` )
+    ) ",$mysqlMainDb)) //TYPE = MYISAM  COMMENT='New table with auth methods in Eclass 2.0';
+    {
+	$retString .= " $OK<br>";
+	// Insert the default values into the new table
+	db_query("INSERT INTO `auth` VALUES (1, 'eclass', '', '', 1)",$mysqlMainDb);
+	db_query("INSERT INTO `auth` VALUES (2, 'pop3', '', '', 0)",$mysqlMainDb);
+	db_query("INSERT INTO `auth` VALUES (3, 'imap', '', '', 0)",$mysqlMainDb);
+	db_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)",$mysqlMainDb);
+	db_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)",$mysqlMainDb);
+    }
+    else
+    {
+	$retString .= " $BAD<br>";
+    }
+}
+$tool_content .= $retString;
+
+
+
 // **********************************************
 // upgrade courses databases
 // **********************************************
@@ -353,53 +423,8 @@ if (!mysql_table_exists($code[0], 'lp_user_module_progress'))  {
               PRIMARY KEY  (`user_module_progress_id`)
             ) ", $code[0]); //TYPE=MyISAM COMMENT='Record the last known status of the user in the course';
 }
-/*
-// kstratos - UOM
-
-// Add 1 new field into table 'prof_request', after the field 'profuname'
-if (!mysql_field_exists("$code[0]",'prof_request','profpassword'))
-{
-    db_query("ALTER TABLE `prof_request` ADD `profpassword` VARCHAR(255) NOT NULL AFTER `profuname`");
-}
-
-// Add 2 new fileds into table 'user': registered_at,expires_at
-if (!mysql_field_exists("$code[0]",'user','registered_at'))
-    add_field('user', 'registered_at', "INT(10)");
-if (!mysql_field_exists("$code[0]",'user','expires_at'))
-    add_field('user', 'expires_at', "INT(10)");
 
 
-// Add 2 new fileds into table 'cours': password,faculteid
-if (!mysql_field_exists("$code[0]",'cours','password'))
-    add_field('cours', 'password', "VARCHAR(50)");
-if (!mysql_field_exists("$code[0]",'cours','faculteid'))
-    add_field('cours', 'faculteid', "INT(11)");
-    
-// Add 1 new filed into table 'cours_faculte': facid
-if (!mysql_field_exists("$code[0]",'cours_faculte','facid'))
-    add_field('cours_faculte', 'facid', "INT(11)");    
-
-// 'New table 'auth' with auth methods in Eclass 2.0';
-if(!mysql_table_exists($code[0], 'auth'))
-{
-    db_query("CREATE TABLE `auth` (
-	`auth_id` int( 2 ) NOT NULL AUTO_INCREMENT ,
-	`auth_name` varchar( 20 ) NOT NULL default '',
-	`auth_settings` text NOT NULL default '',
-	`auth_instructions` text NOT NULL default '',
-	`auth_default` tinyint( 1 ) NOT NULL default '0',
-	PRIMARY KEY ( `auth_id` )
-    ) ",$code[0]); //TYPE = MYISAM  COMMENT='New table with auth methods in Eclass 2.0';
-
-    // Insert the default values into the new table
-    db_query("INSERT INTO `auth` VALUES (1, 'eclass', '', '', 1)",$code[0]);
-    db_query("INSERT INTO `auth` VALUES (2, 'pop3', '', '', 0)",$code[0]);
-    db_query("INSERT INTO `auth` VALUES (3, 'imap', '', '', 0)",$code[0]);
-    db_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)",$code[0]);
-    db_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)",$code[0]);
-}
-
-*/
 	//===============================================================================================
 	//BEGIN: Move all external links to id > 100, add column define_var
 	//===============================================================================================
