@@ -139,7 +139,7 @@ if(!empty($submit))
 	      	{
 	      		$is_active = 1;
 	      	}
-	      	if(!empty($is_active))
+	      	if($is_active==1)
 	      	{
 		      	$uid = $myrow["user_id"];
 		        $nom = $myrow["nom"];
@@ -150,7 +150,7 @@ if(!empty($submit))
 	      	}
 		      else
 		      {
-		      	$warning .= "<br />Your account is inactive. <br />Please contact the Eclass Admin<br />";
+		      	$warning .= "<br />Your account is inactive. <br />Please <a href=\"auth/contactadmin.php?userid=".$myrow["user_id"]."\">contact the Eclass Admin.</a><br /><br />";
 		      }
 				}
   		}
@@ -205,14 +205,14 @@ if(!empty($submit))
 						}
 						else
 						{
-							$auth_allow = 0;
-							$warning .= "<br />Your account is inactive. <br />Please contact the Eclass Admin<br />";		
+							$auth_allow = 3;
+							//$warning .= "<br />Your account is inactive. <br />Please contact the Eclass Admin<br />";		
 						}
 					}
 					else
 					{
-						echo "<br />The connection does not seem to work!<br />";
-						$auth_allow = 0;
+						//$tool_content .= "<br />The connection does not seem to work!<br />";
+						$auth_allow = 2;
 					}	
 					if($auth_allow==1)
 					{	
@@ -223,11 +223,17 @@ if(!empty($submit))
 	          $email = $myrow["email"];
 	          $is_admin = $myrow["is_admin"];
 					}
+					elseif($auth_allow==2)
+					{
+						$tool_content .= "<br />The connection with the auth server does not seem to work!<br />";
+					}
+					elseif($auth_allow==3)
+					{
+						$tool_content .= "<br />Your account is inactive. <br />Please <a href=\"auth/contactadmin.php?userid=".$myrow["user_id"]."\">contact the Eclass Admin.</a><br /><br />";
+					}
 					else
 					{
-						echo "auth_allow:".$auth_allow."<br>";
-						echo $db;
-						exit;
+						$tool_content .= "CANNOT PROCEED<br />";
 					}
 				}
 				else
@@ -241,8 +247,8 @@ if(!empty($submit))
   	}
   	else
   	{
-  		echo "<br>No auth method defined.Cannot proceed!<br>";
-  		exit;
+  		$tool_content .= "<br>No authentication method defined.Cannot proceed!<br>";
+  		//exit;
   		
   	}
   	
