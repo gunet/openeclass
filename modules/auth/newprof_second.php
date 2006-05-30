@@ -25,8 +25,9 @@ $nom_form = isset($_POST['nom_form'])?$_POST['nom_form']:'';
 $prenom_form = isset($_POST['prenom_form'])?$_POST['prenom_form']:'';
 $usercomment = isset($_POST['usercomment'])?$_POST['usercomment']:'';
 $department = isset($_POST['department'])?$_POST['department']:'';
+$userphone = isset($_POST['userphone'])?$_POST['userphone']:'';
 
-if($submit)
+if(!empty($submit))
 {
 	// Don't worry about figuring this regular expression out quite yet...// It will test for address@domainname and address@ip
 	$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
@@ -93,10 +94,10 @@ if($submit)
 		$name = $prenom_form;
 		
 		mysql_select_db($mysqlMainDb,$db);
-		$upd=mysql_query("INSERT INTO prof_request(profname,profsurname,profuname,profpassword,
-		profemail,proftmima,profcomm,status,date_open,comment) 
-			VALUES('$name','$surname','$username','$password',
-			'$usermail','$department','$userphone','1',NOW(),'$usercomment')");
+		$sql = "INSERT INTO prof_request(profname,profsurname,profuname,profpassword,
+		profemail,proftmima,profcomm,status,date_open,comment) VALUES(
+		'$name','$surname','$username','$password','$usermail','$department','$userphone','1',NOW(),'$usercomment')";
+		$upd=mysql_query($sql,$db);
 		//----------------------------- Email Message --------------------------
 	    $MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" .
 				$mailbody3 . $mailbody4 . $mailbody5 . "$mailbody6\n\n" .
@@ -105,26 +106,22 @@ if($submit)
 				"$contactphone : $userphone\n\n\n$logo\n\n";
 		if (!send_mail($gunet, $emailhelpdesk, '', $emailhelpdesk, $mailsubject, $MailMessage, $charset)) 
 		{
-			$tool_content .= "<table border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" width=\"$mainInterfaceWidth\">
+			$tool_content .= "<table width=\"$mainInterfaceWidth\">
         	<tr bgcolor=$color2><td>
-                <font size=\"2\" face=\"arial, helvetica\">
-			<br><br>$MailErrorMessage
+                <br /><br />$MailErrorMessage
 			<a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a>.
-		        </font>
-	                <br><br><br>
+		        <br /><br /><br />
 			</td></tr>
 			</table>";
-			//exit();
 		}
 
 		//------------------------------------User Message ----------------------------------------
-		$tool_content .= "<table border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" width=\"$mainInterfaceWidth\">
+		$tool_content .= "<table width=\"$mainInterfaceWidth\">
 		<tr bgcolor=$color2><td>
-				<font size=\"2\" face=\"arial, helvetica\">		       
-	                        <br><br>$dearprof<br><br>$success<br><br>$infoprof<br><br>				
+				<br /><br />$dearprof<br /><br />$success<br /><br>$infoprof<br /><br />				
 				$click <a href=\"$urlServer\">$here</a> $backpage
 	                        </font>
-	                        <br><br><br>
+	                        <br /><br /><br />
 	                </td>
 	        </tr>
 		</table>";

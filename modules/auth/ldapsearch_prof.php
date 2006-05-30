@@ -48,6 +48,9 @@ $errormessage1 = "<tr valign=\"top\" bgcolor=\"$color2\"><td><font size=\"2\" fa
 $errormessage3 = "</font><p>&nbsp;</p><br><br><br></td></tr>";
 $errormessage2 = "<p>Επιστροφή στην <a href=\"ldapnewprof.php\">προηγούμενη σελίδα</a></p>$errormessage3";
 $is_submit = isset($_POST['is_submit'])?$_POST['is_submit']:'';
+$ldap_email = isset($_POST['ldap_email'])?$_POST['ldap_email']:'';
+$ldap_passwd = isset($_POST['ldap_passwd'])?$_POST['ldap_passwd']:'';
+
 if(!empty($is_submit))
 {
 	
@@ -55,11 +58,18 @@ if(!empty($is_submit))
 	if (empty($ldap_email) or empty($ldap_passwd)) // check for empty username-password
 	{
 		$tool_content .= $errormessage1 . $ldapempty . $errormessage2;
+		$auth_allow = 0;
 	} 
 	elseif (user_exists($ldap_email)) // check if the user already exists
 	{
 		$tool_content .= $errormessage1 . $ldapuserexists . $errormessage2;
+		$auth_allow = 0;
 	} 
+	elseif (user_exists_request($ldap_email)) // check if the user already exists in prof_request
+	{
+		$tool_content .= "There is already a request for user:$ldap_email<br>Cannot Proceed<br>";
+		$auth_allow = 0;
+	}
 	else 
 	{
 		// try to authenticate him
@@ -118,7 +128,11 @@ if(!empty($is_submit))
 							<tr>
 								<td>E-mail:</td>   
 								<td><input type=\"text\" name=\"email_form\" size=\"30\" value=\"\"></td>
-							</tr>			
+							</tr>		
+							<tr>
+								<td>Phone:</td>   
+								<td><input type=\"text\" name=\"userphone\" size=\"30\" value=\"\"></td>
+							</tr>		
 							<tr bgcolor=\"".$color2."\">
         <td>".$profcomment."<br><font size=\"1\">".$profreason."
        	</td>
@@ -164,6 +178,23 @@ function user_exists($login)
 	global $mysqlMainDb;
 	global $db;
 	$username_check = mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='$login'",$db);
+	if (mysql_num_rows($username_check) > 0) 
+	{
+		return TRUE;
+	} 
+	else 
+	{
+		return FALSE;
+	}
+}
+
+// Check if a user with usename $login already exists in the requests(prof_request)
+function user_exists_request($login) 
+{
+	global $mysqlMainDb;
+	global $db;
+	$username_check = mysql_query("SELECT profuname FROM `$mysqlMainDb`.prof_request 
+	WHERE profuname='$login'",$db);
 	if (mysql_num_rows($username_check) > 0) 
 	{
 		return TRUE;
