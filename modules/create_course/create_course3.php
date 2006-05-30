@@ -2434,7 +2434,7 @@ mysql_select_db("$mysqlMainDb");
 		role = '$langProfessor',
 		tutor='1'");
 
-mysql_query("INSERT INTO cours_faculte VALUES ( '', '$faculte', '$repertoire')");
+mysql_query("INSERT INTO cours_faculte VALUES ( '', '$faculte', '$repertoire', '')");
 
 ###########################################################################
 ################ CREATE DIRECTORIES #######################################
