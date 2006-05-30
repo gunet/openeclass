@@ -170,9 +170,22 @@ echo"
 	<td valign=\"top\" align=\"right\">
 	<font face=\"arial, helvetica\" size=\"2\"><b>$langFac:</b></font>
 	</td>
-	<td valign=\"top\">
+	<td valign=\"top\">";
 
-<select name=\"faculte\">";
+
+echo "		<select name=\"faculte\">";
+	    
+		$resultFac=mysql_query("SELECT id,name FROM `$mysqlMainDb`.faculte ORDER BY number");
+		while ($myfac = mysql_fetch_array($resultFac)) {	
+			if($myfac['name']==$facu)
+				echo "<option value=\"".$myfac['id']."--".$myfac['name']."\" selected>$myfac[name]</option>";
+			else
+				echo  "<option value=\"".$myfac['id']."--".$myfac['name']."\">$myfac[name]</option>";
+		}
+		echo "</select>";
+
+
+/* echo "<select name=\"faculte\">";
 
 $resultFac=mysql_query("SELECT name FROM faculte ORDER BY number");
 
@@ -182,7 +195,9 @@ while ($myfac = mysql_fetch_array($resultFac)) {
 	else 
 		echo "<option>$myfac[name]</option>";
 }
-echo "</select>$langFieldsRequAsterisk<br><font face=\"arial, helvetica\" size=\"2\">$langTargetFac</font>
+echo "</select>"; */
+
+echo "$langFieldsRequAsterisk<br><font face=\"arial, helvetica\" size=\"2\">$langTargetFac</font>
 	</td>
 	";
 	help("CreateCourse_faculte");
