@@ -1262,13 +1262,29 @@ mysql_query("CREATE TABLE exercices (
 		id tinyint(4) NOT NULL auto_increment,
 		titre varchar(250) default NULL,
 		description text,
-		type tinyint(4) UNSIGNED default '1' NOT NULL,
-                random smallint(6) default '0' NOT NULL,
+  	type tinyint(4) unsigned NOT NULL default '1',
+  	StartDate datetime default NULL,
+  	EndDate datetime default NULL,
+  	TimeConstrain int(11) default '0',
+  	AttemptsAllowed int(11) default '0',
+  	random smallint(6) NOT NULL default '0',
 		active tinyint(4) default NULL,
 		PRIMARY KEY  (id))
 		TYPE=MyISAM DEFAULT CHARSET=greek");
 
-mysql_query("INSERT INTO exercices VALUES ( '1', '$langExerciceEx', '$langAntique', '1', '0', NULL)");
+	mysql_query("INSERT INTO exercices VALUES ( '1', '$langExerciceEx', '$langAntique', '1', NULL, NULL, '0', '0', '0', NULL)");
+
+	mysql_query("CREATE TABLE exercise_user_record (
+  	eurid int(11) NOT NULL auto_increment,
+  	eid tinyint(4) NOT NULL default '0',
+  	uid mediumint(8) NOT NULL default '0',
+  	RecordStartDate datetime NOT NULL default '0000-00-00 00:00:00',
+  	RecordEndDate datetime NOT NULL default '0000-00-00 00:00:00',
+  	TotalScore int(11) NOT NULL default '0',
+  	TotalWeighting int(11) default '0',
+  	attempt int(11) NOT NULL default '0',
+  	PRIMARY KEY  (eurid))
+  	TYPE=MyISAM DEFAULT CHARSET=greek");
 
 // QUESTIONS
 mysql_query("CREATE TABLE questions (
@@ -1319,13 +1335,29 @@ mysql_query("CREATE TABLE exercices (
 		id tinyint(4) NOT NULL auto_increment,
 		titre varchar(250) default NULL,
 		description text,
-		type tinyint(4) UNSIGNED default '1' NOT NULL,
-                random smallint(6) default '0' NOT NULL,
+  	type tinyint(4) unsigned NOT NULL default '1',
+  	StartDate datetime default NULL,
+  	EndDate datetime default NULL,
+  	TimeConstrain int(11) default '0',
+  	AttemptsAllowed int(11) default '0',
+  	random smallint(6) NOT NULL default '0',
 		active tinyint(4) default NULL,
 		PRIMARY KEY  (id))
 		TYPE=MyISAM");
 
-mysql_query("INSERT INTO exercices VALUES ( '1', '$langExerciceEx', '$langAntique', '1', '0', NULL)");
+	mysql_query("INSERT INTO exercices VALUES ( '1', '$langExerciceEx', '$langAntique', '1', NULL, NULL, '0', '0', '0', NULL)");
+
+	mysql_query("CREATE TABLE exercise_user_record (
+  	eurid int(11) NOT NULL auto_increment,
+  	eid tinyint(4) NOT NULL default '0',
+  	uid mediumint(8) NOT NULL default '0',
+  	RecordStartDate datetime NOT NULL default '0000-00-00 00:00:00',
+  	RecordEndDate datetime NOT NULL default '0000-00-00 00:00:00',
+  	TotalScore int(11) NOT NULL default '0',
+  	TotalWeighting int(11) default '0',
+  	attempt int(11) NOT NULL default '0',
+  	PRIMARY KEY  (eurid))
+  	TYPE=MyISAM");
 
 // QUESTIONS
 mysql_query("CREATE TABLE questions (
