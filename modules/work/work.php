@@ -753,11 +753,21 @@ function show_assignments()
 </tr><?
 
 	while ($row = mysql_fetch_array($result)) {
+// Check if assignement contains unevaluatde (incoming) submissions
+		$AssignementId = $row['id'];
+		$result_s = db_query("SELECT COUNT(*) FROM assignment_submit WHERE assignment_id='$AssignementId' AND grade=''");
+		$row_s = mysql_fetch_array($result_s);
+		$hasUnevaluatedSubmissions = $row_s[0];
+		//echo $hasUnevaluatedSubmissions;
 ?>
 
 <tr><td>
     <a href="work.php?id=<?= $row['id'] ?>" <? if(!$row['active']) echo 'class="invisible"'; ?>>
-       <?= htmlspecialchars($row['title']) ?></a></td>
+<? if ($hasUnevaluatedSubmissions) echo "<b>"; ?>
+       <?= htmlspecialchars($row['title']) ?>
+<? if ($hasUnevaluatedSubmissions) echo "</b>"; ?>
+       
+</a></td>
     <td align="center"><?= $row['deadline'] ?></td>
     <td align="center"><a href="work.php?id=<?= $row['id'] ?>&choice=edit"><img src="../../images/edit.gif" border="0" alt="<?= $m['edit'] ?>"></a></td>
     <td align="center"><a href="work.php?id=<?= $row['id'] ?>&choice=delete"><img src="../../images/delete.gif" border="0" alt="<?= $m['delete'] ?>"></a></td>
