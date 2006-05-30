@@ -136,7 +136,7 @@ if($is_adminOfCourse) {
 	  $course_prerequisites = $leCours['course_prerequisites'];
 	  $course_references = $leCours['course_references'];
 	  $password = $leCours['password'];
-	  if ($password!="") $checkpasssel = "checked";
+	  if ($password!="") $checkpasssel = "checked"; else $checkpasssel="";
 	    
 	  $tool_content .="<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
 		<table width=\"99%\"><caption>Γενικές Πληροφορίες</caption><tbody>
@@ -154,7 +154,7 @@ if($is_adminOfCourse) {
 	    
 		$resultFac=mysql_query("SELECT id,name FROM `$mysqlMainDb`.faculte ORDER BY number");
 		while ($myfac = mysql_fetch_array($resultFac)) {	
-			if($myfac[name]==$facu)
+			if($myfac['name']==$facu)
 				$tool_content .= "<option value=\"".$myfac['id']."--".$myfac['name']."\" selected>$myfac[name]</option>";
 			else
 				$tool_content .= "<option value=\"".$myfac['id']."--".$myfac['name']."\">$myfac[name]</option>";
