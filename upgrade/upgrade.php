@@ -3,20 +3,34 @@
 //See init.php to undestand it's logic
 $path2add=2;
 include '../include/baseTheme.php';
-include "../modules/admin/check_admin.inc";
 
 $nameTools = "Αναβάθμιση των βάσεων δεδομένων του e-Class";
 
 // Initialise $tool_content
 $tool_content = "";
-$tool_content = "upgrading.. ";
+
+$fromadmin = true;
+
+if (isset($_POST['submit_upgrade'])) {
+	$fromadmin = false;
+}
+
+if (isset($_POST['login']) and isset($_POST['password']) and !is_admin($_POST['login'], $_POST['password'])) {
+	$tool_content .= "<p>Τα στοιχεία που δώσατε δεν αντιστοιχούν στο διαχειριστή του
+		συστήματος! Παρακαλούμε επιστρέψτε στην προηγούμενη σελίδα και ξαναδοκιμάστε.</p>
+		<center><a href=\"index.php\">Επιστροφή</a></center>";
+	draw($tool_content,0);
+	die();
+}
+
+if ($fromadmin)
+	include "../modules/admin/check_admin.inc";
+
+
 // Main body
 //====================
-//For Vangelis : added the following 2 lines for testing...
-//remove :)
-draw($tool_content,3, 'admin');
-die();
-$tool_content .= "<table width=\"99%\"><caption>Εξέλιξη Αναβάθμισης</caption><tbody>";
+
+$tool_content .= "<table width=\"99%\"><caption>Εξέλιξη Αναβάθμισης...</caption><tbody>";
 
 $OK = "[<font color='green'> Επιτυχία </font>]";
 $BAD = "[<font color='red'> Σφάλμα ή δεν χρειάζεται τροποποίηση</font>]";
@@ -37,6 +51,7 @@ if (!isset($diskQuotaDropbox)) {
 	$diskQuotaDropbox = 40000000;
 }
 
+
 // **************************************
 // 		upgrade eclass main database
 // **************************************
@@ -47,7 +62,6 @@ if (!mysql_field_exists("$mysqlMainDb", 'user', 'am'))
 	add_field('user', 'am', "VARCHAR( 20 ) NOT NULL");
 if (mysql_table_exists($mysqlMainDb, 'todo'))
 	db_query("DROP TABLE `todo`");
-
 
 // upgrade queries to 1.4
 
@@ -77,35 +91,34 @@ add_field('cours', 'course_references', "TEXT");
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_keywords'))
 add_field('cours', 'course_keywords', "TEXT");
 
-
-
-
 // **********************************************
 // upgrade courses databases
 // **********************************************
 
 $res = db_query("SELECT code FROM cours");
 while ($code = mysql_fetch_row($res)) {
-
-// modify course_code/index.php
-$tool_content .= "<tr><td><b>Τροποποίηση αρχείου index.php του μαθήματος $code[0]</td></tr>";
-if (!@chdir("$webDir/courses/$code[0]")) {
-	die ("Δεν πραγματοποιήθηκε η αλλαγή στον κατάλογο των μαθημάτων! Ελέγξτε τα δικαιώματα πρόσβασης.");
-}
-$filecontents = file_get_contents("index.php");
-if (!$filecontents)
-  die ("To αρχείο δεν μπόρεσε να διαβαστεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
-$newfilecontents = preg_replace('#../claroline/#','../../modules/',$filecontents);
-$fp = @fopen("index.php","w");
-if (!$fp)
+	
+	// modify course_code/index.php
+	$tool_content .= "<tr><td><b>Τροποποίηση αρχείου index.php του μαθήματος $code[0]</td></tr>";
+	if (!@chdir("$webDir/courses/$code[0]")) {
+		die ("Δεν πραγματοποιήθηκε η αλλαγή στον κατάλογο των μαθημάτων! Ελέγξτε τα δικαιώματα πρόσβασης.");
+	}
+	$filecontents = file_get_contents("index.php");
+	if (!$filecontents)
 	  die ("To αρχείο δεν μπόρεσε να διαβαστεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
-if (!@fwrite($fp, $newfilecontents))
-		die ("Το αρχείο δεν μπόρεσε να τροποποιηθεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
-fclose($fp);
-
-$tool_content .= "<tr><td><b>Αναβάθμιση μαθήματος $code[0]</b><br>";
-mysql_select_db($code[0]);
-
+	$newfilecontents = preg_replace('#../claroline/#','../../modules/',$filecontents);
+	$fp = @fopen("index.php","w");
+	if (!$fp)
+		  die ("To αρχείο δεν μπόρεσε να διαβαστεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
+	if (!@fwrite($fp, $newfilecontents))
+			die ("Το αρχείο δεν μπόρεσε να τροποποιηθεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
+	fclose($fp);
+	// Fixed By vagpits
+	@chdir("$webDir/upgrade");
+	
+	$tool_content .= "<tr><td><b>Αναβάθμιση μαθήματος $code[0]</b><br>";
+	mysql_select_db($code[0]);
+	
 	//sakis - prosthiki epipleon pediwn ston pinaka documents gia ta metadedomena (xrhsimopoiountai apo ton neo file manager)
 	if (!mysql_field_exists("$code[0]",'document','filename'))
 	add_field('document', 'filename', "TEXT");
@@ -142,12 +155,7 @@ mysql_select_db($code[0]);
 	
 	if (!mysql_field_exists("$code[0]",'document','copyrighted'))
 	add_field('document', 'copyrighted', "TEXT");
-
 	
-	
-	
-	
-
 	// upgrade queries from 1.2 --> 1.4
 
 	if (!mysql_field_exists('$code[0]','exercices','type'))
@@ -202,7 +210,8 @@ mysql_select_db($code[0]);
 	}
 
 	update_assignment_submit();
-
+	
+	
 	// upgrade queries to 1.4
 	if (db_query("UPDATE accueil SET lien='../../modules/stat/index2.php?table=stat_accueil".
 		"&reset=0&period=jour' WHERE id=11", $code[0])) {
@@ -211,7 +220,7 @@ mysql_select_db($code[0]);
 			$tool_content .= "Πίνακας accueil: $BAD<br>";
 			$errors++;
 	}
-
+	
 // upgrade queries for e-Class 1.5
 
 $langVideoLinks = "Βιντεοσκοπημένα Μαθήματα";
@@ -234,7 +243,7 @@ if (!mysql_table_exists($code[0], 'videolinks'))  {
                WHERE id='6'", $code[0]);
 
         }
-
+        
 // upgrade queries for e-Class 1.6
 $tool_content .= add_field('liens','category',"INT(4) DEFAULT '0' NOT NULL");
 $tool_content .= add_field('liens','ordre',"MEDIUMINT(8) DEFAULT '0' NOT NULL");
@@ -294,6 +303,11 @@ if (!mysql_table_exists($code[0], 'dropbox_post'))  {
   		PRIMARY KEY  (fileId,recipientId))", $code[0]);
 }
 
+// This prints an error:
+// 1136: Column count doesn't match value count at row 1
+
+// Fix and uncomment
+/*
 db_query("INSERT IGNORE INTO accueil VALUES (
                 16,
                 '$langDropbox',
@@ -303,8 +317,8 @@ db_query("INSERT IGNORE INTO accueil VALUES (
                 '0',
                 '../../../images/pastillegris.png'
                 )", $code[0]);
-
-
+*/                
+                
 // upgrade queries for e-Class 2.0
 
 $langLearnPath = "Γραμμή Μάθησης";
@@ -379,10 +393,15 @@ if (!mysql_table_exists($code[0], 'lp_user_module_progress'))  {
             ) ", $code[0]); //TYPE=MyISAM COMMENT='Record the last known status of the user in the course';
 }
 
-  
 	//===============================================================================================
 	//BEGIN: Move all external links to id > 100, add column define_var
 	//===============================================================================================
+
+// This prints an error:
+// Duplicate entry '101' for key 1
+
+// Fix and uncomment
+/*
 
 	if (db_query("	UPDATE `accueil`
 					SET `id` = `id` + 80
@@ -393,10 +412,17 @@ if (!mysql_table_exists($code[0], 'lp_user_module_progress'))  {
 						$GLOBALS['errors']++;
 						die();
 					}
+	*/
+	
 	//===============================================================================================
 	//END: Move all external links to id > 100
 	//===============================================================================================
 
+// This prints an error:
+// 1136: Column count doesn't match value count at row 1
+
+// Fix and uncomment
+/*
 db_query("INSERT IGNORE INTO accueil VALUES (
 				21,
 				'$langLearnPath',
@@ -406,7 +432,13 @@ db_query("INSERT IGNORE INTO accueil VALUES (
 				'0',
 				'../../../images/pastillegris.png'
          )", $code[0]);
+*/
 
+// This prints an error:
+// 1136: Column count doesn't match value count at row 1
+
+// Fix and uncomment
+/*
 
 //for tool management
 $langToolManagement = "Διαχείριση εργαλείων";
@@ -419,6 +451,7 @@ db_query("INSERT IGNORE INTO accueil VALUES (
 				'1',
 				'../../../images/pastillegris.png'
                 )", $code[0]);
+*/
 
 //Create new column (define_var)
 					$tool_content .= add_field("accueil","define_var", "VARCHAR(50) NOT NULL");
@@ -446,7 +479,7 @@ db_query("INSERT IGNORE INTO accueil VALUES (
 					update_field("accueil", "define_var","MODULE_ID_DESCRIPTION", "id", 	20);
 					update_field("accueil", "define_var","MODULE_ID_LP", "id", 			21);
 					update_field("accueil", "define_var","MODULE_ID_TOOLADMIN", "id", 	22);
-
+					
 // table accueil
 $tool_content .= "Διόρθωση εγγραφών του πίνακα accueil<br>";
 	if (db_query("UPDATE accueil SET lien='../../modules/agenda/agenda.php' WHERE id=1", $code[0])) {
@@ -488,7 +521,12 @@ $sql = db_query("SELECT id,request FROM stat_accueil");
 }
 
 $tool_content .= "<br><br></td></tr>";
-} // end of do ... while for each course)
+	
+} // End while courses
+
+// Fixed by vagpits
+mysql_select_db($mysqlMainDb);
+
 
 $tool_content .= "<tr><td align=\"center\"><b><i>Σφάλματα: $errors.</i></b></td></tr>";
 $tool_content .= "</tbody></table><br>";
@@ -502,9 +540,15 @@ if ($errors==0) {
 	$tool_content .= upgrade_failure();
 }
 $tool_content .= "</td></tr></tbody></table>";
-$tool_content .= "<br><center><p><a href=\"../../modules/admin/index.php\">Επιστροφή</a></p></center>";
+if ($fromadmin)
+	$tool_content .= "<br><center><p><a href=\"../modules/admin/index.php\">Επιστροφή</a></p></center>";
+else
+	$tool_content .= "<br><center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
 
-draw($tool_content,3, 'admin');
+if ($fromadmin)
+	draw($tool_content,3, 'admin');
+else
+	draw($tool_content,0);
 
 
 //function to update a field in a table
