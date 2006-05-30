@@ -114,47 +114,12 @@ while ($code = mysql_fetch_row($res)) {
 			die ("Το αρχείο δεν μπόρεσε να τροποποιηθεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
 	fclose($fp);
 	// Fixed By vagpits
-	@chdir("$webDir/upgrade");
-	
+	if (!@chdir("$webDir/upgrade")) {
+		die("Δεν πραγματοποιήθηκε η αλλαγή στον κατάλογο αναβάθμισης! Ελέγξτε τα δικαιώματα πρόσβασης.");
+		}
+		
 	$tool_content .= "<tr><td><b>Αναβάθμιση μαθήματος $code[0]</b><br>";
 	mysql_select_db($code[0]);
-	
-	//sakis - prosthiki epipleon pediwn ston pinaka documents gia ta metadedomena (xrhsimopoiountai apo ton neo file manager)
-	if (!mysql_field_exists("$code[0]",'document','filename'))
-	add_field('document', 'filename', "TEXT");
-	
-	if (!mysql_field_exists("$code[0]",'document','category'))
-	add_field('document', 'category', "TEXT");
-	
-	if (!mysql_field_exists("$code[0]",'document','title'))
-	add_field('document', 'title', "TEXT");
-	
-	if (!mysql_field_exists("$code[0]",'document','creator'))
-	add_field('document', 'creator', "TEXT");
-	
-	if (!mysql_field_exists("$code[0]",'document','date'))
-	add_field('document', 'date', "DATETIME");
-	
-	if (!mysql_field_exists("$code[0]",'document','date_modified'))
-	add_field('document', 'date_modified', "DATETIME");
-	
-	if (!mysql_field_exists("$code[0]",'document','subject'))
-	add_field('document', 'subject', "TEXT");
-	
-	if (!mysql_field_exists("$code[0]",'document','description'))
-	add_field('document', 'description', "TEXT");
-	
-	if (!mysql_field_exists("$code[0]",'document','author'))
-	add_field('document', 'author', "TEXT");
-	
-	if (!mysql_field_exists("$code[0]",'document','format'))
-	add_field('document', 'format', "TEXT");
-	
-	if (!mysql_field_exists("$code[0]",'document','language'))
-	add_field('document', 'language', "TEXT");
-	
-	if (!mysql_field_exists("$code[0]",'document','copyrighted'))
-	add_field('document', 'copyrighted', "TEXT");
 	
 	// upgrade queries from 1.2 --> 1.4
 
@@ -303,11 +268,6 @@ if (!mysql_table_exists($code[0], 'dropbox_post'))  {
   		PRIMARY KEY  (fileId,recipientId))", $code[0]);
 }
 
-// This prints an error:
-// 1136: Column count doesn't match value count at row 1
-
-// Fix and uncomment
-/*
 db_query("INSERT IGNORE INTO accueil VALUES (
                 16,
                 '$langDropbox',
@@ -315,9 +275,10 @@ db_query("INSERT IGNORE INTO accueil VALUES (
                 '../../../images/dropbox.png',
                 '0',
                 '0',
-                '../../../images/pastillegris.png'
+                '../../../images/pastillegris.png',
+								'MODULE_ID_DROPBOX'
                 )", $code[0]);
-*/                
+
                 
 // upgrade queries for e-Class 2.0
 
@@ -397,13 +358,8 @@ if (!mysql_table_exists($code[0], 'lp_user_module_progress'))  {
 	//BEGIN: Move all external links to id > 100, add column define_var
 	//===============================================================================================
 
-// This prints an error:
-// Duplicate entry '101' for key 1
 
-// Fix and uncomment
-/*
-
-	if (db_query("	UPDATE `accueil`
+	if (db_query("UPDATE IGNORE `accueil`
 					SET `id` = `id` + 80
 					WHERE `id`>20")) {
 	$tool_content .= "All external (id >= 20) links moved to id >=101<br>";
@@ -412,17 +368,11 @@ if (!mysql_table_exists($code[0], 'lp_user_module_progress'))  {
 						$GLOBALS['errors']++;
 						die();
 					}
-	*/
 	
 	//===============================================================================================
 	//END: Move all external links to id > 100
 	//===============================================================================================
 
-// This prints an error:
-// 1136: Column count doesn't match value count at row 1
-
-// Fix and uncomment
-/*
 db_query("INSERT IGNORE INTO accueil VALUES (
 				21,
 				'$langLearnPath',
@@ -430,15 +380,9 @@ db_query("INSERT IGNORE INTO accueil VALUES (
 				'../../../images/learnpath.gif',
 				'1',
 				'0',
-				'../../../images/pastillegris.png'
+				'../../../images/pastillegris.png',
+				'MODULE_ID_LP'
          )", $code[0]);
-*/
-
-// This prints an error:
-// 1136: Column count doesn't match value count at row 1
-
-// Fix and uncomment
-/*
 
 //for tool management
 $langToolManagement = "Διαχείριση εργαλείων";
@@ -449,13 +393,50 @@ db_query("INSERT IGNORE INTO accueil VALUES (
 				'../../../images/course_tools.gif',
 				'0',
 				'1',
-				'../../../images/pastillegris.png'
-                )", $code[0]);
-*/
+				'../../../images/pastillegris.png',
+				'MODULE_ID_TOOLADMIN'
+				)", $code[0]);
 
-//Create new column (define_var)
-					$tool_content .= add_field("accueil","define_var", "VARCHAR(50) NOT NULL");
-					$tool_content .= "Added field <i>define_var</i> to table <i>".$code[0]."accueil</i><br>";
+//sakis - prosthiki epipleon pediwn ston pinaka documents gia ta metadedomena (xrhsimopoiountai apo ton neo file manager)
+  if (!mysql_field_exists("$code[0]",'document','filename'))
+	  $tool_content .= add_field('document', 'filename', "TEXT");
+
+  if (!mysql_field_exists("$code[0]",'document','category'))
+			$tool_content .= add_field('document', 'category', "TEXT");
+
+	if (!mysql_field_exists("$code[0]",'document','title'))
+			$tool_content .= add_field('document', 'title', "TEXT");
+
+	if (!mysql_field_exists("$code[0]",'document','creator'))
+			$tool_content .= add_field('document', 'creator', "TEXT");
+
+	if (!mysql_field_exists("$code[0]",'document','date'))
+			$tool_content .= add_field('document', 'date', "DATETIME");
+
+	if (!mysql_field_exists("$code[0]",'document','date_modified'))
+			$tool_content .= add_field('document', 'date_modified', "DATETIME");
+
+	if (!mysql_field_exists("$code[0]",'document','subject'))
+			$tool_content .= add_field('document', 'subject', "TEXT");
+
+	if (!mysql_field_exists("$code[0]",'document','description'))
+			$tool_content .= add_field('document', 'description', "TEXT");
+
+	if (!mysql_field_exists("$code[0]",'document','author'))
+			$tool_content .= add_field('document', 'author', "TEXT");
+
+	if (!mysql_field_exists("$code[0]",'document','format'))
+			$tool_content .= add_field('document', 'format', "TEXT");
+
+	if (!mysql_field_exists("$code[0]",'document','language'))
+			$tool_content .= add_field('document', 'language', "TEXT");
+
+	if (!mysql_field_exists("$code[0]",'document','copyrighted'))
+			$tool_content .= add_field('document', 'copyrighted', "TEXT");
+
+//table accueil -  create new column (define_var)
+			$tool_content .= add_field("accueil","define_var", "VARCHAR(50) NOT NULL");
+			$tool_content .= "Added field <i>define_var</i> to table <i>".$code[0]."accueil</i><br>";
 
 					//set define string vars
 					update_field("accueil", "define_var","MODULE_ID_AGENDA", "id", 		1);
