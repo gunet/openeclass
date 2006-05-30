@@ -59,37 +59,37 @@ if (!isset($diskQuotaDropbox)) {
 //upgrade queries from 1.2 --> 1.4
 
 if (!mysql_field_exists("$mysqlMainDb", 'user', 'am'))
-	add_field('user', 'am', "VARCHAR( 20 ) NOT NULL");
+	$tool_content .= add_field('user', 'am', "VARCHAR( 20 ) NOT NULL");
 if (mysql_table_exists($mysqlMainDb, 'todo'))
 	db_query("DROP TABLE `todo`");
 
 // upgrade queries to 1.4
 
 if (!mysql_field_exists("$mysqlMainDb",'cours','type'))
-	add_field('cours', 'type', "ENUM('pre', 'post', 'other') DEFAULT 'pre' NOT NULL");
+	$tool_content .= add_field('cours', 'type', "ENUM('pre', 'post', 'other') DEFAULT 'pre' NOT NULL");
 if (!mysql_field_exists("$mysqlMainDb",'cours','doc_quota'))
-	add_field('cours', 'doc_quota', "FLOAT DEFAULT '$diskQuotaDocument' NOT NULL");
+	$tool_content .= add_field('cours', 'doc_quota', "FLOAT DEFAULT '$diskQuotaDocument' NOT NULL");
 if (!mysql_field_exists("$mysqlMainDb",'cours','video_quota'))
-	add_field('cours', 'video_quota', "FLOAT DEFAULT '$diskQuotaVideo' NOT NULL");
+	$tool_content .= add_field('cours', 'video_quota', "FLOAT DEFAULT '$diskQuotaVideo' NOT NULL");
 if (!mysql_field_exists("$mysqlMainDb",'cours','group_quota'))
-	add_field('cours', 'group_quota', "FLOAT DEFAULT '$diskQuotaGroup' NOT NULL");
+	$tool_content .= add_field('cours', 'group_quota', "FLOAT DEFAULT '$diskQuotaGroup' NOT NULL");
 
 // upgrade query to 1.6
 if (!mysql_field_exists("$mysqlMainDb",'cours','dropbox_quota'))
-	add_field('cours', 'dropbox_quota', "FLOAT DEFAULT '$diskQuotaDropbox' NOT NULL");
+	$tool-content .= add_field('cours', 'dropbox_quota', "FLOAT DEFAULT '$diskQuotaDropbox' NOT NULL");
 
 //upgrade queries to 2.0
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_objectives'))
-add_field('cours', 'course_objectives', "TEXT");
+	$tool_content .= add_field('cours', 'course_objectives', "TEXT");
 
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_prerequisites'))
-add_field('cours', 'course_prerequisites', "TEXT");
+	$tool_content .= add_field('cours', 'course_prerequisites', "TEXT");
 
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_references'))
-add_field('cours', 'course_references', "TEXT");
+	$tool_content .= add_field('cours', 'course_references', "TEXT");
 
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_keywords'))
-add_field('cours', 'course_keywords', "TEXT");
+	$tool_content .= add_field('cours', 'course_keywords', "TEXT");
 
 // **********************************************
 // upgrade courses databases
