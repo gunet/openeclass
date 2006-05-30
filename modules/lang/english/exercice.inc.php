@@ -190,4 +190,19 @@ $langScoreGet="Numbers in black = Score";
 $langShowScor="Show scoring to students : "; 
 $langConfirmYourChoice = "Are you sure?";
 
+$langExerciseStart="Start";
+$langExerciseEnd="End";
+$langExerciseConstrain="Time constrain";
+$langExerciseEg="eg.";
+$langExerciseConstrainUnit="minutes";
+$langExerciseConstrainExplanation="0 for no constrain";
+$langExerciseAttemptsAllowedExplanation="0 for unlimited number of attempts";
+$langExerciseAttemptsAllowed="Attempts allowed";
+$langExerciseAttemptsAllowedUnit="times";
+$langExerciseExpired="The time limit for the exercise expired or you have reache dthe maximum number of allowed attempts.";
+$langExerciseLis="List of exercises";
+$langResults="Results";
+$langResultsFailed="Failure";
+$langYourTotalScore2="Total score";
+
 ?>

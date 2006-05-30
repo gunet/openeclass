@@ -215,4 +215,18 @@ $langShowScor="Εμφάνιση βαθμολογίας στους φοιτητές : ";
 
 $langConfirmYourChoice="Είστε σίγουρος;";
 
+$langExerciseStart="Έναρξη";
+$langExerciseEnd="Λήξη";
+$langExerciseConstrain="Χρονικός περιορισμός";
+$langExerciseEg="π.χ.";
+$langExerciseConstrainUnit="λεπτά";
+$langExerciseConstrainExplanation="0 για καθόλου περιορισμό";
+$langExerciseAttemptsAllowedExplanation="0 για απεριόριστο αριθμό επαναλήψεων";
+$langExerciseAttemptsAllowed="Επιτρεπόμενες επαναλήψεις";
+$langExerciseAttemptsAllowedUnit="φορές";
+$langExerciseExpired="Έχετε ξεπεράσει το επιτρεπτό χρονικό όριο ή έχετε ήδη φτάσει τον μέγιστο επιτρεπτό αριθμό επαναλήψεων της άσκησης.";
+$langExerciseLis="Λίστα ασκήσεων";
+$langResults="Αποτελέσματα";
+$langResultsFailed="Αποτυχία";
+$langYourTotalScore2="Συνολική βαθμολογία";
 ?>
