@@ -70,14 +70,21 @@ if($is_adminOfCourse) {
 		}
 		list($facid, $facname) = split("--", $facu);
 		$sql = "UPDATE $mysqlMainDb.cours 
-			SET intitule='$int', faculte='$facname', description='$description', 
-			visible='$formvisible', titulaires='$titulary', 
-			languageCourse='$lanCourseForm',
-			departmentUrlName ='$_POST[departmentUrlName]',
-			departmentUrl='$_POST[departmentUrl]',
-			type='$type',
-			password='$password',
-			faculteid='$facid'
+			SET intitule='$int', 
+				faculte='$facname', 
+				description='$description',
+				course_objectives='$course_objectives',
+				course_prerequisites='$course_prerequisites',
+				course_references='$course_references',
+				course_keywords='$course_keywords', 
+				visible='$formvisible', 
+				titulaires='$titulary', 
+				languageCourse='$lanCourseForm',
+				departmentUrlName ='$_POST[departmentUrlName]',
+				departmentUrl='$_POST[departmentUrl]',
+				type='$type',
+				password='$password',
+				faculteid='$facid'
 			WHERE code='$currentCourseID'";
 		mysql_query($sql);
 		mysql_query("UPDATE `$mysqlMainDb`.cours_faculte SET faculte='$facname', facid='$facid' WHERE code='$currentCourseID'");
@@ -106,7 +113,7 @@ if($is_adminOfCourse) {
 		<center><p><a href=\"../../courses/".$currentCourseID."/index.php\">".$langHome."</a></p></center>";
 	} else {
 	  $sql = "SELECT cours_faculte.faculte, 
-			cours.intitule, cours.description,
+			cours.intitule, cours.description, course_keywords, course_objectives, course_prerequisites, course_references,
 			cours.visible, cours.fake_code, cours.titulaires, cours.languageCourse, 
 			cours.departmentUrlName, cours.departmentUrl, cours.type, cours.password
 			FROM `$mysqlMainDb`.cours, `$mysqlMainDb`.cours_faculte 
@@ -124,6 +131,10 @@ if($is_adminOfCourse) {
 	  $languageCourse	= $leCours['languageCourse'];
 	  $departmentUrlName = $leCours['departmentUrlName'];
 	  $departmentUrl = $leCours['departmentUrl'];
+	  $course_keywords = $leCours['course_keywords'];
+	  $course_objectives = $leCours['course_objectives'];
+	  $course_prerequisites = $leCours['course_prerequisites'];
+	  $course_references = $leCours['course_references'];
 	  $password = $leCours['password'];
 	  if ($password!="") $checkpasssel = "checked";
 	    
@@ -157,7 +168,23 @@ if($is_adminOfCourse) {
 		<td><input type=\"text\" name=\"departmentUrlName\" value=\"$departmentUrlName\" size=\"60\" maxlength=\"60\"></td>
 		</tr>
 		<tr><td><b>$langDepartmentUrl:</b></td>
-		<td><input type=\"text\" name=\"departmentUrl\" value=\"$departmentUrl\" size=\"60\" maxlength=\"180\"></td></tr>
+		<td><input type=\"text\" name=\"departmentUrl\" value=\"$departmentUrl\" size=\"60\" maxlength=\"180\"></td></tr>		
+		<tr>
+			<td><b>$langcourse_objectives:</b></td>
+			<td><input type=\"Text\" name=\"course_objectives\" value=\"$leCours[course_objectives]\" size=\"60\"></td>
+		</tr>
+		<tr>
+			<td><b>$langcourse_prerequisites:</b></td>
+			<td><input type=\"Text\" name=\"course_prerequisites\" value=\"$leCours[course_prerequisites]\" size=\"60\"></td>
+		</tr>
+		<tr>
+			<td><b>$langcourse_references:</b></td>
+			<td><input type=\"Text\" name=\"course_references\" value=\"$leCours[course_references]\" size=\"60\"></td></tr>
+		</tr>
+		<tr>
+			<td><b>$langcourse_keywords:</b></td>
+			<td><input type=\"Text\" name=\"course_keywords\" value=\"$leCours[course_keywords]\" size=\"60\"></td>
+		</tr>		
 		</tbody></table><br><table width=\"99%\"><caption>$langConfidentiality</caption><tbody>
 		<tr>	<td colspan=\"2\"><i>$langConfTip</i></td></tr>
 		<tr><td align=\"right\"><input type=\"radio\" name=\"formvisible\" value=\"2\"".@$visibleChecked[2]."></td>
