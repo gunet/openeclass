@@ -51,7 +51,7 @@ $tool_content = "";			// Initialise $tool_content
 
 $auth = get_auth_id();
 	
-$tool_content .= "<table cellpadding=\"2\" cellspacing=\"0\" border=\"0\" width=\"99%\">
+$tool_content .= "<table width=\"99%\">
 <tr><td>";
 
 $tool_content .= "<form name=\"authmenu\" method=\"post\" action=\"auth_process.php\">

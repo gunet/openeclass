@@ -24,32 +24,38 @@
 ==============================================================================*/
 
 /**===========================================================================
-	auth.php
-	@last update: 09-05-2006 by Stratos Karatzidis
+	auth_process.php
+	@last update: 31-05-2006 by Stratos Karatzidis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
 ==============================================================================        
         @Description: Platform Authentication Methods and their settings
 
- 	This script displays the alternative methods of authentication 
-	and their settings.
+ 	This script tries to get the values of an authentication method, establish 
+ 	a connectiond and with a test account successfully connect to the server.
+ 	Possible scenarios:
+ 	- The settings of the method are fine and the mechanism authenticates the 
+ 	test account
+ 	- The settings of the method are fine, but the method does not work 
+ 	with the test account
+ 	- The settings are wrong.
+ 	
+ 	The admin can: - choose a method and define its settings
 
- 	The admin can: - choose a method.
-                       - define its settings
-
- 	@Comments: 
-	
 
 ==============================================================================
 */
+
+// LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
 $langFiles = array('admin','about');
 include '../../include/baseTheme.php';
 include_once '../auth/auth.inc.php';
-@include "check_admin.inc";
+@include "check_admin.inc";			// check if user is administrator
 $nameTools = "Πιστοποίηση Χρηστών";
 
 $tool_content = "";			// Initialise $tool_content
 
+// get the values
 $auth = isset($_POST['auth'])?$_POST['auth']:'';
 $auth_submit = isset($_POST['auth_submit'])?$_POST['auth_submit']:'';
 
@@ -57,22 +63,22 @@ if((!empty($auth_submit)) && ($auth_submit==1))
 {
 	$submit = isset($_POST['submit'])?$_POST['submit']:'';
 
-  if((array_key_exists('submit', $_POST)) && (!empty($submit))) 
+  if((array_key_exists('submit', $_POST)) && (!empty($submit))) // if form is submitted
 	{
 		$test_username = isset($_POST['test_username'])?$_POST['test_username']:'';
 		$test_password = isset($_POST['test_password'])?$_POST['test_password']:'';
-		$tool_content .= "<br />Try to test the auth method...<br /><br />";
+		$tool_content .= "<br />Γίνεται δοκιμή του τρόπου πιστοποίησης...";
 		if((!empty($test_username)) && (!empty($test_password)))
 		{
 	    $is_valid = auth_user_login($auth,$test_username,$test_password);
 	    if($is_valid)
 	    {
 				$auth_allow = 1;	
-				$tool_content .= "Successfully connected...<br />";
+				$tool_content .= "<span style=\"color:green;font-weight:bold;\">ΕΠΙΤΥΧΗΣ ΣΥΝΔΕΣΗ</span><br /><br />";
 	    }
 	    else
 	    {
-				$tool_content .= "<br />The connection does not seem to work!<br />";
+				$tool_content .= "<span style=\"color:red;font-weight:bold;\">Η ΣΥΝΔΕΣΗ ΔΕΝ ΔΟΥΛΕΥΕΙ</span><br /><br />";
 				$auth_allow = 0;
 	    }	
 	}
@@ -81,13 +87,12 @@ if((!empty($auth_submit)) && ($auth_submit==1))
 	    $tool_content .= "<br />You did not provide a valid pair of username/password<br />";
 	    $auth_allow = 0;
 	}
-	//$tool_content .= "<br>is_valid:".$is_valid."<br>";
-	//$auth_allow=0;
+	
+	// store the values - do the updates
 	if((!empty($auth_allow))&&($auth_allow==1))
 	{
-	    // store the values - do the updates
 	    $currentauth = get_auth_id();
-	    $qry = "UPDATE auth set auth_default=0";
+	    $qry = "UPDATE auth set auth_default=0";		// set inactive the previous auth method
 	    $sql = mysql_query($qry,$db);
 	    if($sql)
 	    {
@@ -132,29 +137,25 @@ if((!empty($auth_submit)) && ($auth_submit==1))
 				}
 				 
 				$qry = "UPDATE auth SET auth_settings='".$auth_settings."',auth_instructions='".$auth_instructions."',auth_default=1 WHERE auth_id=".$auth;
-				$sql2 = mysql_query($qry,$db);
+				$sql2 = mysql_query($qry,$db);		// do the update as the default method
 				if(($sql2) && (mysql_affected_rows($db)==1))
 				{
-					//$tool_content .= "SUCCESSFUL!<br />";
-				  $tool_content .= "This authentication method works and it has been defined as the default platform method<br />";
+					$tool_content .= "<br />O τρόπος πιστοποίησης που επιλέξατε έχει οριστεί ως ο προκαθορισμένος της πλατφόρμας<br />";
 				}
 				else	// rollback the previous operation
 				{
-				    $tool_content .= "ERROR!<br />";
+				    $tool_content .= "ΣΦΑΛΜΑ. Ο τρόπος πιστοποίησης δεν μπορεί να οριστεί ως προκαθορισμένος<br />";
 				    $qry = "UPDATE auth set auth_default=1 WHERE auth_id=".$currentauth;
 				    $sql3 = db_query($qry);
 				}
-				
 	    }
 	    else
 	    {
-		$tool_content ." <br>An error occured<br />";
+				$tool_content .= "ΣΦΑΛΜΑ. Ο τρόπος πιστοποίησης δεν μπορεί να οριστεί ως προκαθορισμένος<br />";
 	    }
+		}
+		
 	}
-		
-		
-    }
-	
 
 }
 else
