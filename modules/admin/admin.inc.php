@@ -25,35 +25,33 @@
 
 /**===========================================================================
 	admin.inc.php
-	@last update: 09-05-2006 by Stratos Karatzidis
+	@last update: 31-05-2006 by Stratos Karatzidis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
 ==============================================================================        
         @Description: Functions Library for admin purposes
 
- 	Thislibrary includes all the functions that admin is using 
+ 	This library includes all the functions that admin is using 
 	and their settings.
-
- 	@Comments: 
-	
 
 ==============================================================================
 */
 
+// a class to format date/time for managing the account activity
 include 'datetime/datetimeclass.inc';
 
-/**
- * eclass replacement for php stripslashes() function
- *
- * The standard php stripslashes() removes ALL backslashes
- * even from strings - so  C:\temp becomes C:temp - this isn't good.
- * This function should work as a fairly safe replacement
- * to be called on quoted AND unquoted strings (to be sure)
- *
- * @param string the string to remove unsafe slashes from
- * @return string
- */
-function stripslashes_safe($string) {
+/*******************************************************
+	eclass replacement for php stripslashes() function
+	The standard php stripslashes() removes ALL backslashes
+	even from strings - so  C:\temp becomes C:temp - this isn't good.
+	This function should work as a fairly safe replacement
+	to be called on quoted AND unquoted strings (to be sure)
+
+	@param string the string to remove unsafe slashes from
+	@return string
+*********************************************************/
+function stripslashes_safe($string) 
+{
 
     $string = str_replace("\\'", "'", $string);
     $string = str_replace('\\"', '"', $string);
@@ -61,11 +59,17 @@ function stripslashes_safe($string) {
     return $string;
 }
 
-// Show a selection box. Taken from main.lib.php
-// Difference: the return value and not just echo the select box
-// $entries: an array of (value => label)
-// $name: the name of the selection element
-// $default: if it matches one of the values, specifies the default entry
+/*************************************************************
+Show a selection box. Taken from main.lib.php
+
+Difference: The function returns a value( a formatted select box)
+and not just echo the select box (version in main.lib.php)
+
+$entries: an array of (value => label)
+$name: the name of the selection element
+$default: if it matches one of the values, specifies the default entry
+return $select_box : string (a formatted select box)
+****************************************************************/
 function selection2($entries, $name, $default = '')
 {
 	$select_box = "<select name='$name'>\n";
@@ -87,95 +91,48 @@ function selection2($entries, $name, $default = '')
 	return $select_box;
 }
 
+/*************************************************************
+Show a selection box with departments. 
 
+The function returns a value( a formatted select box with departments)
+and their values as keys in the array/select box
 
-/**
- * Print a message in a standard themed box.
- *
- * @param string $message ?
- * @param string $align ?
- * @param string $width ?
- * @param string $color ?
- * @param int $padding ?
- * @param string $class ?
- * @todo Finish documenting this function
- */
-function print_simple_box($message, $align='', $width='', $color='', $padding=5, $style='') 
-{
-    $simple_box = print_simple_box_start($align, $width, $color, $padding, $style);
-    $simple_box .= stripslashes_safe($message);
-    $simple_box .= print_simple_box_end();
-    
-    return $simple_box;
-}
-
-/**
- * Print the top portion of a standard themed box.
- *
- * @param string $align ?
- * @param string $width ?
- * @param string $color ?
- * @param int $padding ?
- * @param string $class ?
- * @todo Finish documenting this function
-*/
- 
-function print_simple_box_start($align='center', $width='', $color='', $padding=5, $style='') 
-{
-    if ($color) {
-        $color = 'bgcolor="'. $color .'"';
-    }
-    if ($align) {
-        $align = 'align="'. $align .'"';
-    }
-    if ($width) {
-        $width = 'width="'. $width .'"';
-    }
-
-    $style = "border-width:1px;border-style:solid;margin-bottom: 15px;";
-
-    $simple_box_start = "<table $align $width style=\"$style\" border=\"0\" cellpadding=\"$padding\" cellspacing=\"0\">".
-         "<tr><td $color style=\"$style"."content\">";
-    
-    return $simple_box_start;
-}
-
-/*
-* Print the end portion of a standard themed box.
-*/
-function print_simple_box_end() 
-{
-    $simple_box_end = '</td></tr></table>';
-    
-    return $simple_box_end;
-}
-
+$department_value: the predefined/selected department value
+return $departments_select : string (a formatted select box)
+****************************************************************/
 function list_departments($department_value)
 {
-    $qry = "SELECT faculte.id,faculte.name FROM faculte ORDER BY faculte.name";
-    $dep = mysql_query($qry);
-    if($dep)
-    {
-	$departments_select = "";
-	$departments = array();
-	while($row=mysql_fetch_array($dep))
-	{
+	$qry = "SELECT faculte.id,faculte.name FROM faculte ORDER BY faculte.name";
+  $dep = mysql_query($qry);
+  if($dep)
+  {
+		$departments_select = "";
+		$departments = array();
+		while($row=mysql_fetch_array($dep))
+		{
 	    $id = $row['id'];    
 	    $name = $row['name'];
 	    $departments[$id] = $name;
-	}
-	$departments_select = selection2($departments,"department",$department_value);
+		}
+		$departments_select = selection2($departments,"department",$department_value);
 	
-	return $departments_select;
-	//return $departments;
-	//return $dep;
-    }
-    else
-    {
-	return 0;
-    }
+		return $departments_select;
+	
+  }
+	else
+  {
+		return 0;
+	}
 }
 
+/**************************************************************
+Purpose: covert the difference ($seconds) between 2 unix timestamps
+and produce a string ($r), explaining the time 
+(e.g. 2 years 2 months 1 day)
+
+$seconds : integer
+return $r
+***************************************************************/
 function convert_time($seconds)
 {
     $f_minutes = $seconds / 60;
