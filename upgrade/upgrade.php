@@ -529,7 +529,7 @@ db_query("INSERT IGNORE INTO accueil VALUES (
 
 					update_field("accueil", "define_var","MODULE_ID_CHAT", "id", 			19);
 					update_field("accueil", "define_var","MODULE_ID_DESCRIPTION", "id", 	20);
-					update_field("accueil", "define_var","MODULE_ID_LP", "id", 			21);
+					update_field("accueil", "define_var","MODULE_ID_LP", "id", 			23);
 					update_field("accueil", "define_var","MODULE_ID_TOOLADMIN", "id", 	22);
 					
 // table accueil
