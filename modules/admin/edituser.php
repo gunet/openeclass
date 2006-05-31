@@ -24,31 +24,22 @@
 ==============================================================================*/
 
 /**===========================================================================
-	listusers.php
-	@last update: 05-05-2006 by Karatzidis Stratos
+	edituser.php
+	@last update: 31-05-2006 by Karatzidis Stratos
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
 ==============================================================================        
         @Description: Edit user info (eclass version)
 
- 	This script allows to edit the user info.
+ 	This script allows the admin to :
+ 	- edit the user info
+ 	- activate / deactivate a user account
 
- 	The user can : - navigate through files and directories.
-                       - upload a file
-                       - delete, copy a file or a directory
-  
- 	@Comments: The script is organised in four sections.
-
- 	1) Execute the command called by the user
-           Note (March 2004) some editing functions (renaming, commenting)
-           are moved to a separate page, edit_document.php. This is also
-           where xml and other stuff should be added.
-   	2) Define the directory to display
-
-  	@todo: eliminate code duplication between
- 	document/document.php, scormdocument.php
+ 	
 ==============================================================================
 */
+
+// LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
 $langFiles = array('admin','about');
 include '../../include/baseTheme.php';
 include 'admin.inc.php';
@@ -60,8 +51,6 @@ $tool_content = "";
 
 $nameTools = $langEditUser;
 
-// Αν έχει δοθεί όνομα χρήστη προς επεξεργασία, εμφανίζεται η σελίδα με τα μαθήματα και τις πληροφορίες του χρήστη
-// if (isset($u)) 
 $u = (string)isset($_GET['u'])?$_GET['u']:(isset($_POST['u'])?$_POST['u']:'');
 $u_submitted = isset($_POST['u_submitted'])?$_POST['u_submitted']:'';
 if((!empty($u)) && ctype_digit($u))	// validate the user id
@@ -79,7 +68,7 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		$info = mysql_fetch_array($sql);
 		$tool_content .= "<h4>Επεξεργασία χρήστη $info[2]</h4>";
 		$tool_content .= "<form name=\"edituser\" method=\"post\" action=\"./edituser.php\">
-	<table width=\"100%\" border=\"0\">
+	<table width=\"99%\" border=\"0\">
 	<tr><td width=\"20%\">Επώνυμο: </td><td width=\"80%\"><input type=\"text\" name=\"lname\" size=\"40\" value=\"".$info[0]."\"</td></tr>
 	<tr><td width=\"20%\">Όνομα: </td><td width=\"80%\"><input type=\"text\" name=\"fname\" size=\"40\" value=\"".$info[1]."\"</td></tr>
 	<tr><td width=\"20%\">Username: </td><td width=\"80%\"><input type=\"text\" name=\"username\" size=\"30\" value=\"".$info[2]."\"</td></tr>
