@@ -25,7 +25,7 @@
 
 /**===========================================================================
 	serachuser.php
-	@last update: 10-05-2006 by Karatzidis Stratos
+	@last update: 31-05-2006 by Karatzidis Stratos
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Pitsiougas Vagelis <vagpits@uom.gr>
 ==============================================================================        
@@ -40,14 +40,14 @@
 ==============================================================================
 */
 
+// LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
 $langFiles = array('gunet','admin','registration');
 include '../../include/baseTheme.php';
 include 'admin.inc.php';
-@include "check_admin.inc";
-$nameTools = "Αναζήτηση Χρηστών";
+@include "check_admin.inc";		// check if user is administrator
+$nameTools = "Αναζήτηση Χρηστών";		// Define $nameTools
+$tool_content = "";		// Initialise $tool_content
 
-// Initialise $tool_content
-$tool_content = "";
 
 // Main body
 
@@ -112,23 +112,9 @@ $tool_content .= selection2($user_registered_at_flag_data,"user_registered_at_fl
 // format the drop-down menu for data
 $datetime = new DATETIME();
 $datetime->set_timename("hour", "min", "sec");
-
-//if((!empty($user_search_submit)) && (!empty($user_registered_at)))
-//if(!empty($user_registered_at))
-//{
-	// initialization by POST variables
-	//$datetime->set_datetime_byglobal("HTTP_POST_VARS");
-	$datetime->set_datetime_byvar2($user_registered_at);
-	$mytime = $datetime->get_timestamp_entered();
-	// $qry = "UPDATE user SET expires_at='".$mytime."' WHERE user_id=".$_POST['u'];
-	$user_registered_at = $mytime;
-//} 
-//else 
-//{
-	// $datetime->set_datetime_byvar2($user_registered_at);
-	//$datetime->set_datetime_byvar2(time());
-	//$user_registered_at = $datetime->get_timestamp_entered();
-//}
+$datetime->set_datetime_byvar2($user_registered_at);
+$mytime = $datetime->get_timestamp_entered();
+$user_registered_at = $mytime;
 
 if ($datetime->get_date_error())
 {
@@ -145,7 +131,6 @@ $tool_content .= $datetime->get_select_years("ldigit", "2002", "2029", "year")."
 	. $datetime->get_select_hours(1, 12, "hour")
 	. $datetime->get_select_minutes(1, "min")
 	. $datetime->get_select_ampm();
-	//. $datetime->get_select_seconds(1, "sec")
 	
 $tool_content .= "</td>
   </tr>";  
@@ -154,7 +139,7 @@ $tool_content .= "<tr>
     <td><input type=\"text\" name=\"user_email\" size=\"40\" value=\"".$user_email."\"></td>
 </tr>";
 $tool_content .= "  <tr>
-    <td colspan=\"2\"><br>
+    <td colspan=\"2\"><br />
     <input type=\"hidden\" name=\"c\" value=\"searchlist\">
     <input type=\"submit\" name=\"search_submit\" value=\"Αναζήτηση\"></td>
   </tr>";
@@ -164,5 +149,6 @@ $tool_content .= "</tbody></table></form>";
 
 $tool_content .= "<br /><center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
 
+// 3: display administrator menu
 draw($tool_content,3);
 ?>
