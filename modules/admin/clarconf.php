@@ -1,29 +1,91 @@
 <?php
-$langFiles = 'admin';
-include '../../include/baseTheme.php';
-@include "check_admin.inc";
-$nameTools = "Configuration File του e-Class";
+/**=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Α full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
 
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/**===========================================================================
+	clarconf.php
+	@last update: 31-05-2006 by Pitsiougas Vagelis
+	@authors list: Karatzidis Stratos <kstratos@uom.gr>
+		       Pitsiougas Vagelis <vagpits@uom.gr>
+==============================================================================        
+        @Description: Change configuration file settings
+
+ 	This script allows the administrator to change all values in the config.php,
+ 	to make a backup of the orginal and restore values from backup config.php
+
+ 	The user can : - Change settings in config.php
+ 	               - Create a backup file of the original config.php
+ 	               - Restore values from backup config.php
+                 - Return to course list
+
+ 	@Comments: The script is organised in three sections.
+
+  1) Display values from config.php
+  2) Restore values from backup config.php
+  3) Save new config.php
+  4) Create a backup file of config.php
+  5) Display all on an HTML page
+  
+==============================================================================*/
+
+/*****************************************************************************
+		DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
+******************************************************************************/
+// Set the langfiles needed
+$langFiles = 'admin';
+// Include baseTheme
+include '../../include/baseTheme.php';
+// Check if user is administrator and if yes continue
+// Othewise exit with appropriate message
+@include "check_admin.inc";
+// Define $nameTools
+$nameTools = "Configuration File του e-Class";
 // Initialise $tool_content
 $tool_content = "";
-// Main body
 
-
+/*****************************************************************************
+		MAIN BODY
+******************************************************************************/
+// Save new config.php
 if (isset($submit))  {
-	
+	// Make config directory writable
 	@chmod( "../../config",777 );
 	@chmod( "../../config", 0777 );
+	// Create backup file
 	if ($backupfile=="on") {
+		// If a backup already exists delete it
 		if (file_exists("../../config/config_backup.php"))
 			unlink("../../config/config_backup.php");
+		// Create the backup
 		copy("../../config/config.php","../../config/config_backup.php");
 	}
-	
+	// Open config.php empty
 	$fd=@fopen("../../config/config.php", "w");
 	if (!$fd) {
 		
 	} else {
-	
+		// Prepare config.php content
 		$stringConfig='<?php
 /*
       +----------------------------------------------------------------------+
@@ -114,22 +176,25 @@ $colorDark = "'.$_POST['formcolorDark'].'";
 $have_latex = "'.$_POST['formhave_latex'].'";
 
 ?>';
-
+	// Save new config.php
 	fwrite($fd, $stringConfig);
-
+	// Display result message
 	$tool_content .= "<p>Το αρχείο ρυθμίσεων τροποποιήθηκε με επιτυχία!</p>";
 	
 }
-	
+	// Display link to go back to index.php
 	$tool_content .= "<center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
 
-} else {
-	
+}
+// Display config.php edit form
+else {
+	// Check if restore has been selected
 	if (isset($restore) && $restore=="yes") {
+		// Substitute variables with those from backup file
 		$titleextra = " (Restored Values)";
 		@include("../../config/config_backup.php");
 	}
-	
+	// Constract the form
 	$tool_content .= "<form action=\"".$_SERVER[PHP_SELF]."\" method=\"post\"";
 	$tool_content .= "<table width=\"99%\"><caption>Επεξεργασία Αρχείου".$titleextra."</caption><tbody>";
 	$tool_content .= "  <tr>
@@ -298,21 +363,31 @@ $have_latex = "'.$_POST['formhave_latex'].'";
     <td colspan=\"2\"><br><input type='submit' name='submit' value='$langModify'></td>
   </tr>";
 	$tool_content .= "</tbody></table></form>\n";
+	// Check if a backup file exists
   if (file_exists("../../config/config_backup.php")) {
-  		$tool_content .= "<table width=\"99%\"><caption>Αλλες Ενέργειες</caption><tbody>";
+  	// Give option to restore values from backup file
+  	$tool_content .= "<table width=\"99%\"><caption>Αλλες Ενέργειες</caption><tbody>";
 		$tool_content .= "  <tr>
     <td colspan=\"2\"><a href=\"clarconf.php?restore=yes\">Restore values from backup</a></td>
   </tr>";
 		$tool_content .= "</tbody></table>";
 	}
-
+	// Display link to index.php
 	$tool_content .= "<br><center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
-	
+	// After restored values have been inserted into form then bring back
+	// values from original config.php, so the rest of the page can be played correctly
 	if (isset($restore) && $restore=="yes") {
-		@include("../../config/cconfig.php");
+		@include("../../config/config.php");
 	}
 
 }
 
+/*****************************************************************************
+		DISPLAY HTML
+******************************************************************************/
+// Call draw function to display the HTML
+// $tool_content: the content to display
+// 3: display administrator menu
+// admin: use tool.css from admin folder
 draw($tool_content,3,'admin');
 ?>
