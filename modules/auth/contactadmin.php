@@ -1,4 +1,46 @@
 <?php
+/**=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Α full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/**===========================================================================
+	contactadmin.php
+	@last update: 31-05-2006 by Karatzidis Stratos
+	@authors list: Karatzidis Stratos <kstratos@uom.gr>
+		       Vagelis Pitsioygas <vagpits@uom.gr>
+==============================================================================        
+  @Description: Contact the admin with an e-mail message
+  when an account has been deactivated
+
+ 	This script:
+ 	allows a user the send an e-mail to the admin, requesting
+ 	the re-activation of his/her account
+	
+	
+==============================================================================
+*/
+
+//LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
 //$require_login = TRUE;
 $langFiles = array('registration', 'opencours');
 
@@ -7,6 +49,10 @@ include('../../include/sendMail.inc.php');
 $nameTools = "Αποστολή ενημερωτικού email στον ADMIN";
 $tool_content = "";
 
+
+// MAIN BODY
+
+// get the incoming values and initialize them
 $userid = isset($_GET['userid'])?$_GET['userid']:(isset($_POST['id'])?$_POST['id']:'');
 $submit = isset($_POST['submit'])?$_POST['submit']:'';
 if(!empty($userid))
@@ -42,9 +88,6 @@ if(!empty($userid))
 	}
 	else
 	{
-		//$sql = "SELECT * FROM user WHERE user_id='".$uid."'";
-		//$res = mysql_query($sql);
-		//$row = mysql_fetch_array($res);
 		$tool_content .= "<form action=\"./contactadmin.php?userid=".$userid."\" method=\"post\">
 	<table width=\"99%\"><caption>Συμπλήρωση Φόρμας</caption><tbody>";
 		$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\"><b>Όνομα:</b></td><td>".$firstname."</td></tr>";	
@@ -60,10 +103,8 @@ if(!empty($userid))
 	
 }
 
-
 $tool_content .= "<center><p><a href=\"../../index.php\">Επιστροφή</a></p></center>";
 
 draw($tool_content,0);
-
 
 ?>

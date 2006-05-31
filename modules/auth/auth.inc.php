@@ -25,17 +25,16 @@
 
 /**===========================================================================
 	auth.inc.php
-	@last update: 09-05-2006 by Stratos Karatzidis
+	@last update: 31-05-2006 by Stratos Karatzidis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
 ==============================================================================        
-        @Description: Functions Library for admin purposes
+        @Description: Functions Library for authentication purposes
 
- 	Thislibrary includes all the functions that admin is using 
+ 	This library includes all the functions for authentication
 	and their settings.
 
- 	@Comments: 
-	
+ 		
 
 ==============================================================================
 */
@@ -43,14 +42,14 @@
 // pop3 class
 require("methods/pop3.php");
 
-/* --------------------------------------------------------
+/****************************************************************
 find/return the id of the default authentication method
-----------------------------------------------------------*/
+return $auth_id (a value between 1 and 5: 1-eclass,2-pop3,3-imap,4-ldap,5-db)
+****************************************************************/
 function get_auth_id()
 {
 	global $db;
 	$sql = "SELECT auth_id FROM auth WHERE auth_default=1";
-  //$auth_method = db_query($sql,$mysqlMainDb);
   $auth_method = mysql_query($sql,$db);
   if($auth_method)
   {
@@ -71,6 +70,10 @@ function get_auth_id()
 	}
 }
 
+/****************************************************************
+find/return the string, describing in words the default authentication method
+return $m (string)
+****************************************************************/
 function get_auth_info($auth)
 {
 	if(!empty($auth))
@@ -96,9 +99,12 @@ function get_auth_info($auth)
 	}
 }
 
-/* ---------------------------------------------------------------------------
-purpose: find the settings for a specified auth method (e.g. ldap or pop3)
-----------------------------------------------------------------------------*/
+/****************************************************************
+find/return the settings of the default authentication method
+
+$auth : integer a value between 1 and 5: 1-eclass,2-pop3,3-imap,4-ldap,5-db)
+return $auth_row : an associative array
+****************************************************************/
 function get_auth_settings($auth)
 {
 	$qry = "SELECT * FROM auth WHERE auth_id = ".$auth;
@@ -122,15 +128,15 @@ function get_auth_settings($auth)
 	}
 }
 
-/* ------------------------------------------------------------
+/****************************************************************
 Try to authenticate the user with the admin-defined auth method
-Result(var $testauth): 
 true (the user is authenticated) / false (not authenticated)
-Arguments: 
-1. $auth an integer-value for auth method(1:eclass, 2:pop3, 3:imap, 4:ldap, 5:db)
-2. $test_username
-3. $test_password
--------------------------------------------------------------*/
+
+$auth an integer-value for auth method(1:eclass, 2:pop3, 3:imap, 4:ldap, 5:db)
+$test_username
+$test_password
+return $testauth (boolean: true-is authenticated, false-is not)
+****************************************************************/
 function auth_user_login ($auth,$test_username, $test_password) 
 {
     switch($auth)
@@ -262,83 +268,6 @@ function auth_user_login ($auth,$test_username, $test_password)
     	$testauth = false;
     }
 
-    
-			
-			
-			
-			
-			
-			/*
-			if ($ds) 
-			{ 
-				if ($r=ldap_bind($ds)) 		// this is an "anonymous" bind, typically read-only access
-				{
-					$mailadd=ldap_search($ds, $basedn, "uid=".$ldap_uid);  
-					$testauth .= "<br>ldap_search:$mailadd<br>";
-					$info = ldap_get_entries($ds, $mailadd);
-					$testauth .= "<br>info:$info<br>";
-					foreach($info as $k=>$v)
-					{
-						$testauth .= "$k=>$v<br>";
-					}
-					if ($info["count"] == 0) 	//Den vre8hke eggrafh
-					{ 
-	    				    $testauth .= "false1";
-					}
-					else if ($info["count"] == 1) 	// user found
-					{ 
-						$authbind=@ldap_bind($ds,$info[0]["dn"],$ldap_passwd);
-						if ($authbind) 
-						{
-							$testauth = true;
-						} 
-						else 
-						{
-							$testauth .= "false2";
-						} 
-					} // end of user found
-			 		else 
-			 		{ 
-	    			$testauth .= "false3";
-					}
-					
-				}  // end of bind if
-				elseif($r=ldap_bind($ds,$a_user,$a_pass)) // this is not "anonymous" bind
-				{
-					$mailadd=ldap_search($ds, $basedn, "uid=".$ldap_uid);  
-	    		$info = ldap_get_entries($ds, $mailadd);
-					if ($info["count"] == 0) 	//Den vre8hke eggrafh
-					{ 
-	    			$testauth = true;
-					}
-					else if ($info["count"] == 1) 	// user found
-					{ 
-						$authbind=@ldap_bind($ds,$info[0]["dn"],$ldap_passwd);
-						if ($authbind) 
-						{
-							$testauth = true;
-						} 
-						else 
-						{
-							$testauth = false;
-						} 
-					} // end of user found
-			 		else 
-			 		{ 
-	    			$testauth = false;
-					}
-				}
-				else
-				{
-					$testauth .= "false4";
-				}
-				ldap_close($ds);
-			}
-			else
-			{
-				$testauth .= "false5";
-			}
-	    */
 			break;    
 
 	case '5':
@@ -398,11 +327,14 @@ function auth_user_login ($auth,$test_username, $test_password)
 
 }
 
-// Show a selection box. Taken from main.lib.php
-// Difference: the return value and not just echo the select box
-// $entries: an array of (value => label)
-// $name: the name of the selection element
-// $default: if it matches one of the values, specifies the default entry
+/********************************************************************
+Show a selection box. Taken from main.lib.php
+Difference: the return value and not just echo the select box
+
+$entries: an array of (value => label)
+$name: the name of the selection element
+$default: if it matches one of the values, specifies the default entry
+***********************************************************************/
 function selection3($entries, $name, $default = '')
 {
 	$select_box = "<select name='$name'>\n";
@@ -425,6 +357,14 @@ function selection3($entries, $name, $default = '')
 }
 
 
+/****************************************************************
+TCheck if an account is active or not. Apart from admin, everybody has
+a registration unix timestamp and an expiration unix timestamp.
+By default is set to last a year
+
+$userid : the id of the account
+return $testauth (boolean: true-is authenticated, false-is not)
+****************************************************************/
 function check_activity($userid)
 {
 	global $db;
