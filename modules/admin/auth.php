@@ -25,7 +25,7 @@
 
 /**===========================================================================
 	auth.php
-	@last update: 09-05-2006 by Stratos Karatzidis
+	@last update: 31-05-2006 by Stratos Karatzidis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
 ==============================================================================        
@@ -34,19 +34,18 @@
  	This script displays the alternative methods of authentication 
 	and their settings.
 
- 	The admin can: - choose a method.
-                       - define its settings
+ 	The admin can: - choose a method and define its settings
 
- 	@Comments: 
-	
 
 ==============================================================================
 */
+
+// LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
 $langFiles = array('admin','about');
 include '../../include/baseTheme.php';
 include_once '../auth/auth.inc.php';
-@include "check_admin.inc";
-$nameTools = "Πιστοποίηση Χρηστών";
+@include "check_admin.inc";		// check if user is administrator
+$nameTools = "Πιστοποίηση Χρηστών";		// Define $nameTools
 
 $tool_content = "";			// Initialise $tool_content
 
