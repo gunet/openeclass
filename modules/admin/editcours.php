@@ -1,13 +1,71 @@
 <?php
-$langFiles = array('admin','gunet');
-include '../../include/baseTheme.php';
-@include "check_admin.inc";
-$nameTools = "Επεξεργασία Μαθήματος";
+/**=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Α full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
 
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/**===========================================================================
+	editcours.php
+	@last update: 31-05-2006 by Pitsiougas Vagelis
+	@authors list: Karatzidis Stratos <kstratos@uom.gr>
+		       Pitsiougas Vagelis <vagpits@uom.gr>
+==============================================================================        
+        @Description: Show all information of a course and give links to edit
+
+ 	This script allows the administrator to see all available information of
+ 	a course and select other links to edit that information
+
+ 	The user can : - See all available course information
+ 	               - Select a link to edit some information
+                 - Return to course list
+
+ 	@Comments: The script is organised in three sections.
+
+  1) Gather course information
+  2) Embed available choices
+  3) Display all on an HTML page
+  
+  @todo: Create a valid link for course statistics
+
+==============================================================================*/
+
+/*****************************************************************************
+		DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
+******************************************************************************/
+// Set the langfiles needed
+$langFiles = array('admin','gunet');
+// Include baseTheme
+include '../../include/baseTheme.php';
+// Check if user is administrator and if yes continue
+// Othewise exit with appropriate message
+@include "check_admin.inc";
+// Define $nameTools
+$nameTools = "Επεξεργασία Μαθήματος";
 // Initialise $tool_content
 $tool_content = "";
-// Main body
 
+/*****************************************************************************
+		MAIN BODY
+******************************************************************************/
 // Manage order of display list
 if (isset($ord)) {
 	switch ($ord) {
@@ -25,31 +83,18 @@ if (isset($ord)) {
 } else {
 	$order = "b.statut";
 }
-
+// A course has been selected
 if (isset($c)) {
-	$sql = mysql_query("
-		SELECT a.nom, a.prenom, a.username, a.password, b.statut, a.user_id
-		FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-		WHERE b.code_cours='$c' ORDER BY $order");
-	if (!$sql) {
-		die("Unable to query database!");
-	}
-}
-
-// Αν δεν είναι ορισμένη η παράμετρος c (c=<Κωδικός μαθήματος>),
-// ή δεν βρίσκονται χρήστες που να έχουν μάθημα με τον κωδικό αυτόν,
-// εμφανίζεται η σελίδα με τα μαθήματα.
-
-if (isset($c)) {
+	// Define $searchurl to go back to search results
 	if (isset($search) && ($search=="yes")) {
 		$searchurl = "&search=yes";
 	}
-	
+	// Get information about selected course
 	$sql = mysql_query(
 		"SELECT * FROM cours WHERE code = '".$c."'");
 	$row = mysql_fetch_array($sql);
+	// Display course information and link to edit
 	$tool_content .= "<table width=\"99%\"><caption>Στοιχεία Μαθήματος (<a href=\"infocours.php?c=".$c."".$searchurl."\">Αλλαγή</a>)</caption><tbody>";
-	
 	$tool_content .= "  <tr>
     <td width=\"3%\" nowrap><b>Τμήμα:</b></td>
     <td>".$row['faculte']."</td>
@@ -66,8 +111,10 @@ if (isset($c)) {
     <td width=\"3%\" nowrap><b>Διδάσκων:</b></td>
     <td>".$row['titulaires']."</td>
 </tr>";
-	$tool_content .= "</tbody></table><br>\n";	
+	$tool_content .= "</tbody></table><br>\n";
+	// Display course quota and link to edit
 	$tool_content .= "<table width=\"99%\"><caption>Όρια αποθηκευτικού χώρου (<a href=\"quotacours.php?c=$c".$searchurl."\">Αλλαγή</a>)</caption><tbody>";
+	// Get information about course quota
 	$q = mysql_fetch_array(mysql_query("SELECT code,intitule,doc_quota,video_quota,group_quota,dropbox_quota 
 			FROM cours WHERE code='$c'"));
 	$tool_content .= "  <tr>
@@ -93,7 +140,8 @@ if (isset($c)) {
     <td width=\"3%\" nowrap>$langLegend <b>$langDropbox</b>:</td>
     <td>".$drq." Mb.</td>
 </tr>";
-	$tool_content .= "</tbody></table><br>\n";	
+	$tool_content .= "</tbody></table><br>\n";
+	// Display course type and link to edit
 	$tool_content .= "<table width=\"99%\"><caption>Κατάσταση Μαθήματος (<a href=\"statuscours.php?c=".$c."".$searchurl."\">Αλλαγή</a>)</caption><tbody>";
 	$tool_content .= "  <tr>
     <td width=\"3%\" nowrap><b>Τρέχουσα κατάσταση:</b></td>
@@ -111,37 +159,51 @@ if (isset($c)) {
 	}	
     $tool_content .= "</td>
 </tr></tbody></table><br>\n";
+	// Display other available choices
 	$tool_content .= "<table width=\"99%\"><caption>Aλλες ενέργειες</caption><tbody>";
+	// Users list
 	$tool_content .= "  <tr>
     <td><a href=\"listusers.php?c=".$c."\">Λίστα Χρηστών</a></td>
   </tr>";
+  // Register unregister users
 	$tool_content .= "  <tr>
     <td><a href=\"addusertocours.php?c=".$c."".$searchurl."\">Γρήγορη εγγραφή/διαγραφή Εκπαιδευτών-Εκπαιδευομένων</a></td>
   </tr>";
+  // Course statistics
 	$tool_content .= "  <tr>
     <td>Στατιστικά Μαθήματος</td>
   </tr>";
+  // Backup course
 	$tool_content .= "  <tr>
     <td><a href=\"../course_info/archive_course.php?c=".$c."".$searchurl."\">Λήψη Αντιγράφου Ασφαλείας<a/></td>
   </tr>";
+  // Delete course
 	$tool_content .= "  <tr>
     <td><a href=\"delcours.php?c=".$c."".$searchurl."\">Συνολική Διαγραφή Μαθήματος</a></td>
   </tr>";
 	$tool_content .= "</tbody></table>";
 
+	// If a search is on display link to go back to listcours with search results
 	if (isset($search) && ($search=="yes")) {
 		$tool_content .= "<br><center><p><a href=\"listcours.php?search=yes\">Επιστροφή στα αποτελέσματα της αναζήτησης</a></p></center>";
 	}
-
+	// Display link to go back to listcours.php
 	$tool_content .= "<br><center><p><a href=\"listcours.php\">Επιστροφή</a></p></center>";
-
-} else {
-
-$tool_content .= "<br><center><p>Παρουσιάστηκε σφάλμα στην επιλογή μαθήματος!</p></center>";
-
-$tool_content .= "<br><center><p><a href=\"listcours.php\">Επιστροφή</a></p></center>";
-
+}
+// If $c is not set we have a problem
+else {
+	// Print an error message
+	$tool_content .= "<br><center><p>Παρουσιάστηκε σφάλμα στην επιλογή μαθήματος!</p></center>";
+	// Display link to go back to listcours.php
+	$tool_content .= "<br><center><p><a href=\"listcours.php\">Επιστροφή</a></p></center>";
 }
 
+/*****************************************************************************
+		DISPLAY HTML
+******************************************************************************/
+// Call draw function to display the HTML
+// $tool_content: the content to display
+// 3: display administrator menu
+// admin: use tool.css from admin folder
 draw($tool_content,3, 'admin');
 ?>

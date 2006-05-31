@@ -1,19 +1,76 @@
-<?
-$langFiles = 'admin';
-include '../../include/baseTheme.php';
-@include "check_admin.inc";
-$nameTools = "Γρήγορη εγγραφή - διαγραφή εκπαιδευομένων - εκπαιδευτών";
+<?php
+/**=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Α full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
 
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/**===========================================================================
+	quotacours.php
+	@last update: 31-05-2006 by Pitsiougas Vagelis
+	@authors list: Karatzidis Stratos <kstratos@uom.gr>
+		       Pitsiougas Vagelis <vagpits@uom.gr>
+==============================================================================        
+        @Description: Edit quota of a course
+
+ 	This script allows the administrator to edit the quota of a selected
+ 	course
+
+ 	The user can : - Edit the quota of a course
+                 - Return to edit course list
+
+ 	@Comments: The script is organised in four sections.
+
+  1) Get course quota information
+  2) Edit that information
+  3) Update course quota
+  4) Display all on an HTML page
+  
+==============================================================================*/
+
+/*****************************************************************************
+		DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
+******************************************************************************/
+// Set the langfiles needed
+$langFiles = 'admin';
+// Include baseTheme
+include '../../include/baseTheme.php';
+// Check if user is administrator and if yes continue
+// Othewise exit with appropriate message
+@include "check_admin.inc";
+// Define $nameTools
+$nameTools = "Γρήγορη εγγραφή - διαγραφή εκπαιδευομένων - εκπαιδευτών";
 // Initialise $tool_content
 $tool_content = "";
-// Main body
 
+/*****************************************************************************
+		MAIN BODY
+******************************************************************************/
+// Define $searchurl to go back to search results
 if (isset($search) && ($search=="yes")) {
 	$searchurl = "&search=yes";
 }
-
+// Register - Unregister students - professors to course
 if (isset($submit))  {
-	
+	// Count students and professors
 	$numberStuds = @count($regstuds);
 	$numberProfs = @count($regprofs);
 	
@@ -36,8 +93,10 @@ if (isset($submit))  {
 
 	$tool_content .= "<p>Η διαχείριση χρηστών ολοκληρώθηκε με επιτυχία!</p>";
 
-} else {
-	
+}
+// Display form to manage users
+else {
+	// Some javascript is needed
 	$tool_content .= '<script type="text/javascript" language="JavaScript">
 
 <!-- Begin javascript menu swapper 
@@ -110,9 +169,7 @@ function reverseAll(cbList) {
 				<b>Λίστα Μη Εγγεγραμμένων Χρηστών</b> <p>
 	<select name=\"unregusers[]\" size=20 multiple>";  
   
-  
-  
-	// Student registered to the course but inserted in no group
+	// Registered users not registered in the selected course
 	
 	$sqll= "SELECT DISTINCT u.user_id , u.nom, u.prenom 
 				FROM user u
@@ -165,6 +222,7 @@ function reverseAll(cbList) {
 		<p> 
 		<select name=\"regstuds[]\" size=\"8\" multiple>";
 	
+	// Students registered in the selected course
 	$resultStud=mysql_query("SELECT DISTINCT u.user_id , u.nom, u.prenom 
 				FROM user u, cours_user cu
 				WHERE cu.code_cours='$c'
@@ -184,6 +242,8 @@ function reverseAll(cbList) {
 		<p> 
 		<select name=\"regprofs[]\" size=\"8\" multiple>";
 	
+	// Professors registered in the selected course
+	// Administrator is excluded
 	$resultProf=mysql_query("SELECT DISTINCT u.user_id , u.nom, u.prenom 
 				FROM user u, cours_user cu
 				WHERE cu.code_cours='$c'
@@ -206,13 +266,21 @@ function reverseAll(cbList) {
 	$tool_content .= "</form>";
 	
 }
-
+// If course selected go back to editcours.php
 if (isset($c)) {
 	$tool_content .= "<center><p><a href=\"editcours.php?c=".$c."".$searchurl."\">Επιστροφή</a></p></center>";
-} else {
+}
+// Else go back to index.php directly
+else {
 	$tool_content .= "<center><p><a href=\"index.php\">".$langBackAdmin."</a></p></center>";
 }
 
+/*****************************************************************************
+		DISPLAY HTML
+******************************************************************************/
+// Call draw function to display the HTML
+// $tool_content: the content to display
+// 3: display administrator menu
+// admin: use tool.css from admin folder
 draw($tool_content,3,'admin');
-
 ?>
