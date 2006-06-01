@@ -1,27 +1,57 @@
 <?php // $Id$
-/*
-      +----------------------------------------------------------------------+
-      | CLAROLINE version 1.3.2 $Revision$                            |
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2003 Universite catholique de Louvain (UCL)      |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
-      +----------------------------------------------------------------------+
-      | Authors: Olivier Brouckaert <oli.brouckaert@skynet.be>               |
-      +----------------------------------------------------------------------+
+/*=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Á full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/*===========================================================================
+	work.php
+	@last update: 17-4-2006 by Costas Tsibanis
+	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
+==============================================================================        
+        @Description: Main script for the work tool
+
+ 	This is a tool plugin that allows course administrators - or others with the
+ 	same rights
+
+ 	The user can : - navigate through files and directories.
+                       - upload a file
+                       - delete, copy a file or a directory
+                       - edit properties & content (name, comments, 
+			 html content)
+
+ 	@Comments: The script is organised in four sections.
+
+ 	1) Execute the command called by the user
+           Note (March 2004) some editing functions (renaming, commenting)
+           are moved to a separate page, edit_document.php. This is also
+           where xml and other stuff should be added.
+   	2) Define the directory to display
+  	3) Read files and directories from the directory defined in part 2
+  	4) Display all of that on an HTML page
+ 
+  	@TODO: eliminate code duplication between document/document.php, scormdocument.php
+==============================================================================
 */
-
-		/*>>>>>>>>>>>>>>>>>>>> QUESTION POOL <<<<<<<<<<<<<<<<<<<<*/
-
-/**
- * This script allows administrators to manage questions and add them
- * into their exercises.
- *
- * One question can be in several exercises.
- */
 
 include('exercise.class.php');
 include('question.class.php');
@@ -29,12 +59,17 @@ include('answer.class.php');
 
 $require_current_course = TRUE;
 $langFiles='exercice';
-include ('../../include/init.php');
+
+//include('../../include/init.php');
+
+include '../../include/baseTheme.php';
+
+$tool_content = "";
 
 $nameTools=$langQuestionPool;
 $navigation[]=array("url" => "exercice.php","name" => $langExercices);
 
-begin_page($nameTools);
+//begin_page($nameTools);
 
 $is_allowedToEdit=$is_adminOfCourse;
 
@@ -92,37 +127,51 @@ if($is_allowedToEdit)
 // if admin of course
 if($is_allowedToEdit)
 {
-?>
 
-<form method="get" action="<?= $PHP_SELF; ?>">
-<input type="hidden" name="fromExercise" value="<?= @$fromExercise; ?>">
-<table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
-<tr>
-  <td colspan="<?php echo $fromExercise?2:3; ?>" align="right">
-	<?php echo $langFilter; ?> : <select name="exerciseId">
-	<option value="0">-- <?php echo $langAllExercises; ?> --</option>
-	<option value="-1" <?php if(isset($exerciseId) && $exerciseId == -1) echo 'selected="selected"'; ?>>-- <?php echo $langOrphanQuestions; ?> --</option>
+$tool_content .= <<<cData
+	<form method="get" action="${PHP_SELF}">
+	<input type="hidden" name="fromExercise" value="@$fromExercise">
+	<table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
+	<tr>
+cData;
+	
+	$tool_content .= "<td colspan=\"";
+	if ($fromExercise)
+		$tool_content .= "2";
+	else
+		$tool_content .= "3";
+		
+	$tool_content .= "\" align=\"right\">";
+  
+	$tool_content .= $langFilter." : <select name=\"exerciseId\">".
+		"<option value=\"0\">-- ".$langAllExercises." --</option>".
+		"<option value=\"-1\" ";
+		
+	if(isset($exerciseId) && $exerciseId == -1) 
+		$tool_content .= "selected=\"selected\""; 
+	$tool_content .= ">-- ".$langOrphanQuestions." --</option>";
 
-<?php
 	$sql="SELECT id,titre FROM `$TBL_EXERCICES` WHERE id<>'$fromExercise' ORDER BY id";
 	$result=mysql_query($sql) or die("Error : SELECT at line ".__LINE__);
 
 	// shows a list-box allowing to filter questions
 	while($row=mysql_fetch_array($result))
 	{
-?>
 
-	<option value="<?php echo $row['id']; ?>" <?php if(isset($exerciseId) && $exerciseId == $row['id']) echo 'selected="selected"'; ?>><?php echo $row['titre']; ?></option>
+	$tool_content .= "<option value=\"".$row['id']."\"";
+	
+	if(isset($exerciseId) && $exerciseId == $row['id']) 
+		$tool_content .= "selected=\"selected\"";
+	$tool_content .= ">".$row['titre']."</option>";
 
-<?php
 	}
-?>
-
-    </select> <input type="submit" value="<?php echo $langOk; ?>">
+	
+$tool_content .= <<<cData
+    </select> <input type="submit" value="${langOk}">
   </td>
 </tr>
+cData;
 
-<?php
 	@$from=$page*$limitQuestPage;
 
 	// if we have selected an exercise in the list-box 'Filter'
@@ -148,104 +197,95 @@ if($is_allowedToEdit)
 	}
 
 	$nbrQuestions=mysql_num_rows($result);
-?>
 
-<tr>
-  <td colspan="<?php echo $fromExercise?2:3; ?>">
-	<table border="0" cellpadding="0" cellspacing="0" width="100%">
+$tool_content .= <<<cData
 	<tr>
-	  <td>
+	  <td colspan="
+cData;
 
-<?php
+
+$tool_content .= $fromExercise?2:3;
+
+$tool_content .= "\"><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr><td>";
+
 	if(isset($fromExercise))
 	{
-?>
 
-		<a href="admin.php">&lt;&lt; <?php echo $langGoBackToEx; ?></a>
+		$tool_content .= "<a href=\"admin.php\">&lt;&lt; ".$langGoBackToEx."</a>";
 
-<?php
 	}
 	else
 	{
-?>
 
-		<a href="admin.php?newQuestion=yes"><?php echo $langNewQu; ?></a>
+		$tool_content .= "<a href=\"admin.php?newQuestion=yes\">".$langNewQu."</a>";
 
-<?php
 	}
-?>
 
-	  </td>
-	  <td align="right">
+	  $tool_content .= "</td><td align=\"right\">";
 
-<?php
 	if(isset($page))
 	{
-?>
 
-	<small><a href="<?php echo $PHP_SELF; ?>?exerciseId=<?php echo $exerciseId; ?>&fromExercise=<?php echo $fromExercise; ?>&page=<?php echo ($page-1); ?>">&lt;&lt; <?php echo $langPreviousPage; ?></a></small> |
+	$tool_content .= "<small><a href=\"".$PHP_SELF.
+		"?exerciseId=".$exerciseId.
+		"&fromExercise=".$fromExercise.
+		"&page=".($page-1)."\">&lt;&lt; ".$langPreviousPage."</a></small> |";
 
-<?php
 	}
 	elseif($nbrQuestions > $limitQuestPage)
 	{
-?>
 
-	<small>&lt;&lt; <?php echo $langPreviousPage; ?> |</small>
+	$tool_content .= "<small>&lt;&lt; $langPreviousPage |</small>";
 
-<?php
 	}
 
 	if($nbrQuestions > $limitQuestPage)
 	{
-?>
 
-	<small><a href="<?php echo $PHP_SELF; ?>?exerciseId=<?php echo $exerciseId; ?>&fromExercise=<?php echo $fromExercise; ?>&page=<?php echo ($page+1); ?>"><?php echo $langNextPage; ?> &gt;&gt;</a></small>
+	$tool_content .= "<small><a href=\"".$PHP_SELF.
+	"?exerciseId=".$exerciseId.
+	"&fromExercise=".$fromExercise.
+	"&page=".($page+1)."\">".$langNextPage.
+	" &gt;&gt;</a></small>";
 
-<?php
 	}
 	elseif(isset($page))
 	{
-?>
 
-	<small><?php echo $langNextPage; ?> &gt;&gt;</small>
+	$tool_content .= "<small>$langNextPage &gt;&gt;</small>";
 
-<?php
 	}
-?>
 
-	  </td>
-	</tr>
-	</table>
-  </td>
-</tr>
-<tr bgcolor="#E6E6E6">
+	 $tool_content .= <<<cData
+	 	</td>
+			</tr>
+			</table>
+		  </td>
+		</tr>
+		<tr bgcolor="#E6E6E6">
+cData;
 
-<?php
 	if(isset($fromExercise))
 	{
-?>
 
-  <td width="80%" align="center"><?php echo $langQuestion; ?></td>
-  <td width="20%" align="center"><?php echo $langReuse; ?></td>
+	$tool_content .= <<<cData
+	  <td width="80%" align="center">${langQuestion}</td>
+	  <td width="20%" align="center">${langReuse}</td>
+cData;
 
-<?php
 	}
 	else
 	{
-?>
 
-  <td width="60%" align="center"><?php echo $langQuestion; ?></td>
-  <td width="20%" align="center"><?php echo $langModify; ?></td>
-  <td width="20%" align="center"><?php echo $langDelete; ?></td>
-
-<?php
+  $tool_content .= <<<cData
+	<td width="60%" align="center">${langQuestion}</td>
+	<td width="20%" align="center">${langModify}</td>
+	<td width="20%" align="center">${langDelete}</td>
+cData;
 	}
-?>
 
-</tr>
+$tool_content .= "</tr>";
 
-<?php
 	$i=1;
 
 	while($row=mysql_fetch_array($result))
@@ -253,50 +293,37 @@ if($is_allowedToEdit)
 		// if we come from the exercise administration to get a question, doesn't show the question already used by that exercise
 		if(!isset($fromExercise) || !$objExercise->isInList($row['id']))
 		{
-?>
 
-<tr>
-  <td><a href="admin.php?editQuestion=<?= $row['id']; ?>&fromExercise=<?= @$fromExercise; ?>"><?= $row['question']; ?></a></td>
-  <td align="center">
+$tool_content .= "<tr><td><a href=\"admin.php?editQuestion=".$row['id'].
+	"&fromExercise=".@$fromExercise."\">".$row['question']."</a></td><td align=\"center\">";
 
-<?php
 			if(!isset($fromExercise))
 			{
-?>
 
-	<a href="admin.php?editQuestion=<?= $row['id']; ?>"><img src="../../images/edit.gif" border="0" alt="<?php echo $langModify; ?>"></a>
+	$tool_content .= "<a href=\"admin.php?editQuestion=".$row['id']."\"><img src=\"../../images/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a>";
 
-<?php
 			}
 			else
 			{
-?>
 
-	<a href="<?= $PHP_SELF; ?>?recup=<?= $row['id']; ?>&fromExercise=<?= $fromExercise; ?>"><img src="../../images/enroll.gif" border="0" alt="<?= $langReuse; ?>"></a>
+	$tool_content .= "<a href=\"".$PHP_SELF."?recup=".$row['id'].
+		"&fromExercise=".$fromExercise."\"><img src=\"../../images/enroll.gif\" border=\"0\" alt=\"".$langReuse."\"></a>";
 
-<?php
 			}
-?>
 
-  </td>
+  $tool_content .= "</td>";
 
-<?php
 			if(!isset($fromExercise))
 			{
-?>
 
-  <td align="center">
-    <a href="<?= $PHP_SELF; ?>?exerciseId=<?= $exerciseId; ?>&delete=<?= $row['id']; ?>" 
-onclick="javascript:if(!confirm('<?php echo addslashes(htmlspecialchars($langConfirmYourChoice)); ?>')) return false;"><img src="../../images/delete.gif" border="0" alt="<?= $langDelete; ?>"></a>
-  </td>
+  $tool_content .= "<td align=\"center\"><a href=\"".$PHP_SELF."?exerciseId=".$exerciseId."&delete=".$row['id']."\"". 
+		" onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice)).
+		"')) return false;\"><img src=\"../../images/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a></td>";
 
-<?php
 			}
-?>
 
-</tr>
+$tool_content .= "</tr>";
 
-<?php
 			// skips the last question, that is only used to know if we have or not to create a link "Next page"
 			if($i == $limitQuestPage)
 			{
@@ -309,25 +336,29 @@ onclick="javascript:if(!confirm('<?php echo addslashes(htmlspecialchars($langCon
 
 	if(!$nbrQuestions)
 	{
-?>
 
-<tr>
-  <td colspan="<?php echo $fromExercise?2:3; ?>"><?php echo $langNoQuestion; ?></td>
-</tr>
+$tool_content .= "<tr><td colspan=\"";
 
-<?php
+if ($fromExercise)
+	$tool_content .= "2";
+else
+	$tool_content .= "3";	
+	
+	$tool_content .= "\">".$langNoQuestion."</td></tr>";
+
 	}
-?>
+
+$tool_content .= <<<cData
 
 </table>
 </form>
+cData;
 
-<?php
 }
 // if not admin of course
 else
 {
-	echo $langNotAllowed;
+	$tool_content .= $langNotAllowed;
 }
 
 ?>
