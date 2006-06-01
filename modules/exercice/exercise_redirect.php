@@ -1,37 +1,57 @@
 <?php 
- // $Id$
-/*
-      +----------------------------------------------------------------------+
-      | CLAROLINE version 1.3.2 $Revision$                            |
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2003 Universite catholique de Louvain (UCL)      |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
-      +----------------------------------------------------------------------+
-      | Authors: Olivier Brouckaert <oli.brouckaert@skynet.be>               |
-      +----------------------------------------------------------------------+
+/*=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Á full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/*===========================================================================
+	work.php
+	@last update: 17-4-2006 by Costas Tsibanis
+	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
+==============================================================================        
+        @Description: Main script for the work tool
+
+ 	This is a tool plugin that allows course administrators - or others with the
+ 	same rights
+
+ 	The user can : - navigate through files and directories.
+                       - upload a file
+                       - delete, copy a file or a directory
+                       - edit properties & content (name, comments, 
+			 html content)
+
+ 	@Comments: The script is organised in four sections.
+
+ 	1) Execute the command called by the user
+           Note (March 2004) some editing functions (renaming, commenting)
+           are moved to a separate page, edit_document.php. This is also
+           where xml and other stuff should be added.
+   	2) Define the directory to display
+  	3) Read files and directories from the directory defined in part 2
+  	4) Display all of that on an HTML page
+ 
+  	@TODO: eliminate code duplication between document/document.php, scormdocument.php
+==============================================================================
 */
-
-		/*>>>>>>>>>>>>>>>>>>>> EXERCISE SUBMISSION <<<<<<<<<<<<<<<<<<<<*/
-
-/**
- * This script allows to run an exercise. According to the exercise type, questions
- * can be on an unique page, or one per page with a Next button.
- *
- * One exercise may contain different types of answers (unique or multiple selection,
- * matching and fill in blanks).
- *
- * Questions are selected randomly or not.
- *
- * When the user has answered all questions and clicks on the button "Ok",
- * it goes to exercise_result.php
- *
- * Notice : This script is also used to show a question before modifying it by
- * the administrator
- */
 
 include('exercise.class.php');
 include('question.class.php');
@@ -50,7 +70,11 @@ $langFiles='exercice';
 $require_help = TRUE;
 $helpTopic = 'Exercise';
 
-include('../../include/init.php');
+//include('../../include/init.php');
+
+include '../../include/baseTheme.php';
+
+$tool_content = "";
 
 $nameTools = $langExercice;
 
@@ -67,7 +91,7 @@ $TBL_QUESTIONS='questions';
 $TBL_REPONSES='reponses';
 
 $navigation[]=array("url" => "exercice.php","name" => $langExercices);
-begin_page($nameTools);
+//begin_page($nameTools);
 
 // if the object is not in the session
 if(!session_is_registered('objExercise')) {
@@ -90,9 +114,10 @@ $exerciseTitle=$objExercise->selectTitle();
 //$randomQuestions=$objExercise->isRandom();
 //$exerciseType=$objExercise->selectType();
 
+$tool_content .= <<<cData
+	<h3>${exerciseTitle}</h3>
+	<p>${langExerciseExpired}<a href="exercice.php">${langExerciseLis}</a></p>
+cData;
+
+draw($tool_content, 2);
 ?>
-
-<h3><?= $exerciseTitle; ?></h3>
-
-<p><?= $langExerciseExpired ?><a href="exercice.php"><?= $langExerciseLis ?></a></p>
-
