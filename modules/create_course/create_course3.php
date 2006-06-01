@@ -1716,6 +1716,17 @@ mysql_query("CREATE TABLE accueil (
                '../../../images/pastillegris.png',
                'MODULE_ID_LP'
                )");
+    
+    mysql_query("INSERT INTO accueil VALUES (
+               24,
+               '$langToolManagement',
+               '../../modules/course_tools/course_tools.php',
+               '../../../images/course_tools.gif',
+               '0',
+               '1',
+               '../../../images/pastillegris.png',
+               'MODULE_ID_TOOLADMIN'
+               )");
 
 require_once("../usage/module.php");
 usage_module::create_course(24, $langUsage, $sbsystems[24]);
