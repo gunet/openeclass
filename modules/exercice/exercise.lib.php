@@ -1,35 +1,61 @@
 <?php // $Id$
-/*
-      +----------------------------------------------------------------------+
-      | CLAROLINE version 1.4.0 $Revision$                            |
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2003 Universite catholique de Louvain (UCL)      |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
-      +----------------------------------------------------------------------+
-      | Authors: Olivier Brouckaert <oli.brouckaert@skynet.be>               |
-      +----------------------------------------------------------------------+
+/*=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Á full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/*===========================================================================
+	work.php
+	@last update: 17-4-2006 by Costas Tsibanis
+	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
+==============================================================================        
+        @Description: Main script for the work tool
+
+ 	This is a tool plugin that allows course administrators - or others with the
+ 	same rights
+
+ 	The user can : - navigate through files and directories.
+                       - upload a file
+                       - delete, copy a file or a directory
+                       - edit properties & content (name, comments, 
+			 html content)
+
+ 	@Comments: The script is organised in four sections.
+
+ 	1) Execute the command called by the user
+           Note (March 2004) some editing functions (renaming, commenting)
+           are moved to a separate page, edit_document.php. This is also
+           where xml and other stuff should be added.
+   	2) Define the directory to display
+  	3) Read files and directories from the directory defined in part 2
+  	4) Display all of that on an HTML page
+ 
+  	@TODO: eliminate code duplication between document/document.php, scormdocument.php
+==============================================================================
 */
-
-		/*>>>>>>>>>>>>>>>>>>>> EXERCISE TOOL LIBRARY <<<<<<<<<<<<<<<<<<<<*/
-
-/**
- * shows a question and its answers
- *
- * @returns 'number of answers' if question exists, otherwise false
- *
- * @author Olivier Brouckaert <oli.brouckaert@skynet.be>
- *
- * @param integer	$questionId		ID of the question to show
- * @param boolean	$onlyAnswers	set to true to show only answers
- */
 
 function showQuestion($questionId, $onlyAnswers=false)
 {
-	global $picturePath, $webDir;
+	global $tool_content, $picturePath, $webDir;
  	include_once "$webDir"."/modules/latexrender/latex.php";
 
 	// construction of the Question object
@@ -53,29 +79,26 @@ function showQuestion($questionId, $onlyAnswers=false)
 		$questionName=latex_content($questionName);
 		$questionDescription=latex_content($questionDescription);
 
-?>
+	$questionDescription_temp = nl2br(make_clickable($questionDescription));
+	$tool_content .= <<<cData
+		<tr>
+		  <td valign="top" colspan="2">
+				${questionName}
+		  </td>
+		</tr>
+		<tr>
+		  <td valign="top" colspan="2">
+			<i>${questionDescription_temp}</i>
+		  </td>
+		</tr>
+cData;
 
-	<tr>
-	  <td valign="top" colspan="2">
-		<?php echo $questionName; ?>
-	  </td>
-	</tr>
-	<tr>
-	  <td valign="top" colspan="2">
-		<i><?php echo nl2br(make_clickable($questionDescription)); ?></i>
-	  </td>
-	</tr>
-
-<?php
 		if(file_exists($picturePath.'/quiz-'.$questionId))
 		{
-?>
 
-	<tr>
-	  <td align="center" colspan="2"><img src="<?php echo $picturePath.'/quiz-'.$questionId; ?>" border="0"></td>
-	</tr>
+	$tool_content .= "<tr><td align=\"center\" colspan=\"2\"><img src=\"".
+		${picturePath}."/quiz-".${questionId}."\" border=\"0\"></td></tr>";
 
-<?php
 		}
 	}  // end if(!$onlyAnswers)
 
@@ -110,47 +133,37 @@ function showQuestion($questionId, $onlyAnswers=false)
 		// unique answer
 		if($answerType == UNIQUE_ANSWER)
 		{
-?>
-
-	<tr>
-	  <td width="5%" align="center">
-		<input type="radio" name="choice[<?php echo $questionId; ?>]" value="<?php echo $answerId; ?>">
-	  </td>
-	  <td width="95%">
-		<?php echo $answer; ?>
-	  </td>
-	</tr>
-
-<?php
+	$tool_content .= <<<cData
+		<tr>
+		  <td width="5%" align="center">
+			<input type="radio" name="choice[${questionId}]" value="${answerId}">
+		  </td>
+		  <td width="95%">
+			${answer}
+		  </td>
+		</tr>
+cData;
 		}
 		// multiple answers
 		elseif($answerType == MULTIPLE_ANSWER)
 		{
-?>
-
-	<tr>
-	  <td width="5%" align="center">
-		<input type="checkbox" name="choice[<?php echo $questionId; ?>][<?php echo $answerId; ?>]" value="1">
-	  </td>
-	  <td width="95%">
-		<?php echo $answer; ?>
-	  </td>
-	</tr>
-
-<?php
+	$tool_content .= <<<cData
+		<tr>
+		  <td width="5%" align="center">
+			<input type="checkbox" name="choice[${questionId}][${answerId}]" value="1">
+		  </td>
+		  <td width="95%">
+			${answer}
+		  </td>
+		</tr>
+cData;
 		}
 		// fill in blanks
 		elseif($answerType == FILL_IN_BLANKS)
 		{
-?>
 
-	<tr>
-	  <td colspan="2">
-		<?php echo $answer; ?>
-	  </td>
-	</tr>
+			$tool_content .= "<tr><td colspan=\"2\">${answer}</td></tr>";
 
-<?php
 		}
 		// matching
 		else
@@ -164,36 +177,34 @@ function showQuestion($questionId, $onlyAnswers=false)
 			}
 			else
 			{
-?>
 
-	<tr>
-	  <td colspan="2">
-		<table border="0" cellpadding="0" cellspacing="0" width="100%">
-		<tr>
-		  <td width="40%" valign="top"><?php echo '<b>'.$cpt2.'.</b> '.$answer; ?></td>
-		  <td width="20%" align="center">&nbsp;&nbsp;<select name="choice[<?php echo $questionId; ?>][<?php echo $answerId; ?>]">
-			<option value="0">--</option>
+				$tool_content .= <<<cData
+					<tr>
+				  <td colspan="2">
+					<table border="0" cellpadding="0" cellspacing="0" width="100%">
+					<tr>
+					  <td width="40%" valign="top"><b>${cpt2}.</b> ${answer}</td>
+					  <td width="20%" align="center">&nbsp;&nbsp;<select name="choice[${questionId}][${answerId}]">
+						<option value="0">--</option>
+cData;
 
-<?php
 	            // fills the list-box
 	            foreach($Select as $key=>$val)
 	            {
-?>
 
-			<option value="<?php echo $key; ?>"><?php echo $val['Lettre']; ?></option>
+			$tool_content .= "<option value=\"${key}\"><${val['Lettre']}</option>";
 
-<?php
 				}  // end foreach()
-?>
 
-		  </select>&nbsp;&nbsp;</td>
-		  <td width="40%" valign="top"><?php if(isset($Select[$cpt2])) echo '<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse']; else echo '&nbsp;'; ?></td>
-		</tr>
-		</table>
-	  </td>
-	</tr>
+		  $tool_content .= "</select>&nbsp;&nbsp;</td><td width=\"40%\" valign=\"top\">";
+		  
+		  if(isset($Select[$cpt2])) 
+		  	$tool_content .= '<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse']; 
+		  else 
+		  	$tool_content .= '&nbsp;';
+		  	
+		  $tool_content .=	"</td></tr></table></td></tr>";
 
-<?php
 				$cpt2++;
 
 				// if the left side of the "matching" has been completely shown
@@ -202,20 +213,12 @@ function showQuestion($questionId, $onlyAnswers=false)
 					// if it remains answers to shown at the right side
 					while(isset($Select[$cpt2]))
 					{
-?>
-
-	<tr>
-	  <td colspan="2">
-		<table border="0" cellpadding="0" cellspacing="0" width="100%">
-		<tr>
-		  <td width="60%" colspan="2">&nbsp;</td>
-		  <td width="40%" align="right" valign="top"><?php echo '<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse']; ?></td>
-		</tr>
-		</table>
-	  </td>
-	</tr>
-
-<?php
+/////////////////////////////////////////////////////////////////////////////////
+		$tool_content .= "<tr><td colspan=\"2\">".
+			"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">".
+			"<tr><td width=\"60%\" colspan=\"2\">&nbsp;</td><td width=\"40%\" align=\"right\" valign=\"top\">".
+			"<b>".$Select[$cpt2]['Lettre'].".</b> ".$Select[$cpt2]['Reponse']."</td></tr></table></td></tr>";
+/////////////////////////////////////////////////////////////////////////////////
 						$cpt2++;
 					}	// end while()
 				}  // end if()
