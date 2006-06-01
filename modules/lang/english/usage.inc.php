@@ -42,6 +42,11 @@ Translate the interface in chosen language
  $langUsage = "Usage Statistics";
  $langStartDate = "Start Date";
  $langEndDate = "End Date";
+ $langUser = "User";
+ $langAllUsers = "All Users";
+ $langSubmit = "Submit";
+ $langModule = "Module";
+ $langAllModules = "All Modules";
 
 
 ?>

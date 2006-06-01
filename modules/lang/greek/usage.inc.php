@@ -42,6 +42,11 @@ Translate the interface in chosen language
  $langUsage = "Στατιστικά Χρήσης";
  $langStartDate = "Ημερομηνία Έναρξης";
  $langEndDate = "Ημερομηνία Λήξης";
+ $langUser = "Χρήστης";
+ $langAllUsers = "Όλοι οι Χρήστες";
+ $langSubmit = "Υποβολή";
+ $langModule = "Υποσύστημα";
+ $langAllModules = "Όλα τα Υποσυστήματα";
 
 ?>
 
