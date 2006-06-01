@@ -1718,7 +1718,7 @@ mysql_query("CREATE TABLE accueil (
                )");
     
     mysql_query("INSERT INTO accueil VALUES (
-               24,
+               25,
                '$langToolManagement',
                '../../modules/course_tools/course_tools.php',
                '../../../images/course_tools.gif',
