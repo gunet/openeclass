@@ -48,7 +48,7 @@ include '../../include/baseTheme.php';
 
 include('../../include/action.php');
 
-action::record(ACCUEIL_ID_USAGE);
+action::record(MODULE_ID_USAGE);
 
 $tool_content = '';
 
@@ -76,7 +76,11 @@ $local_head = $jscalendar->get_load_files_code();
 
 //mysql_select_db($dbname);
 
-require_once "form.php";
+if (!$_POST['btnUsage']) {
+    require_once "form.php";
+} else {
+    require_once "results.php";
+}
 
 //$tool_content = 'Hello! {foo}';
 

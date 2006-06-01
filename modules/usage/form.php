@@ -17,10 +17,31 @@ $end_cal = $jscalendar->make_input_field(
            array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
                  'name'        => 'date_end',
                  'value'       => strftime('%Y-%m-%d', strtotime('now'))));
-$out = "<pre>$start_cal \n $end_cal</pre>";
+
+$qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, b.statut
+    FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
+    WHERE b.code_cours='".$currentCourseID."'";
+
+
+$user_opts .= '<option value="-1">'.$langAllUsers."</option>\n";
+$result = db_query($qry, $mysqlMainDb);
+while ($row = mysql_fetch_assoc($result)) {
+    $user_opts .= '<option value="'.$row["user_id"].'">'.$row['prenom'].' '.$row['nom']."</option>\n";
+}
+
+
+$qry = "SELECT id, rubrique AS name FROM accueil WHERE define_var != '' AND visible = 1 ORDER BY name ";
+
+$mod_opts .= '<option value="-1">'.$langAllModules."</option>\n";
+$result = db_query($qry, $currentCourseID);
+while ($row = mysql_fetch_assoc($result)) {
+    $mod_opts .= '<option value="'.$row["id"].'">'.$row['name']."</option>\n";
+}
+
+
 //die($out);
 $tool_content .= '
-<form>
+<form method="post">
     <table>
         <tr><td colspan="2" align="center">'.$statsImage.'</td></tr>
         <tr>
@@ -36,10 +57,18 @@ $tool_content .= '
             <td>'."$end_cal".'</td>
         </tr>
         <tr>
-            <td>Χρήστης</td>
+            <td>'.$langUser.'</td>
             <td>
-                <select>
-                    <option>Γιώργος Παπαδάκης</option>
+                <select name="user_id">
+                  '.$user_opts.'
+               </select>
+            </td>
+        </tr>
+        <tr>
+            <td>'.$langModules.'</td>
+            <td>
+                <select name="module_id">
+                  '.$mod_opts.'
                </select>
             </td>
         </tr>
@@ -53,6 +82,12 @@ $tool_content .= '
             <td>Προβολή Χρηστών</td>
             <td>
                 <input type="checkbox" name="uncompress" value="1">
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>
+                <input type="submit" name="btnUsage" value="'.$langSubmit.'">
             </td>
         </tr>
 </table>
