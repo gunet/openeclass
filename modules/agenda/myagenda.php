@@ -55,7 +55,7 @@ if (isset($uid))
 $langToday);
 }
 
-end_page();
+//end_page();
 
 function get_agendaitems($query, $month, $year)
 {
