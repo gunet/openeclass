@@ -829,6 +829,17 @@ if (mysql_version())  {
       PRIMARY KEY  (idLog))
       TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
+    // haniotak:
+    // table for loginout rollups
+    // only contains LOGIN events summed up by a period (typically weekly)
+    mysql_query("CREATE TABLE loginout_summary (
+        id mediumint unsigned NOT NULL auto_increment,
+        login_sum int(11) unsigned  NOT NULL default '0',
+        start_date datetime NOT NULL default '0000-00-00 00:00:00',
+        end_date datetime NOT NULL default '0000-00-00 00:00:00',
+        PRIMARY KEY  (id))
+        TYPE=MyISAM DEFAULT CHARACTER SET=greek");
+
     mysql_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`)
     VALUES ('$nameForm', '$surnameForm', '$loginForm','$passForm','$emailForm','1')");
     $idOfAdmin=mysql_insert_id();
@@ -942,7 +953,7 @@ CREATE TABLE `pma_column_comments` (
 
 // New table auth for authentication methods
 // added by kstratos
-	mysql_query("
+    mysql_query("
 CREATE TABLE `auth` (
   `auth_id` int(2) NOT NULL auto_increment,
   `auth_name` varchar(20) NOT NULL default '',
@@ -1098,6 +1109,18 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
       PRIMARY KEY  (idLog))
       TYPE=MyISAM");
 
+    // haniotak:
+    // table for loginout rollups
+    // only contains LOGIN events summed up by a period (typically weekly)
+    mysql_query("CREATE TABLE loginout_summary (
+        id mediumint unsigned NOT NULL auto_increment,
+        login_sum int(11) unsigned  NOT NULL default '0',
+        start_date datetime NOT NULL default '0000-00-00 00:00:00',
+        end_date datetime NOT NULL default '0000-00-00 00:00:00',
+        PRIMARY KEY  (id))
+        TYPE=MyISAM");
+
+
     mysql_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`)
     VALUES ('$nameForm', '$surnameForm', '$loginForm','$passForm','$emailForm','1')");
     $idOfAdmin=mysql_insert_id();
@@ -1211,7 +1234,7 @@ CREATE TABLE `pma_column_comments` (
 
 // New table auth for authentication methods
 // added by kstratos
-	mysql_query("
+    mysql_query("
 CREATE TABLE `auth` (
   `auth_id` int(2) NOT NULL auto_increment,
   `auth_name` varchar(20) NOT NULL default '',
