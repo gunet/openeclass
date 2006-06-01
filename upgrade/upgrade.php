@@ -462,7 +462,7 @@ if (!mysql_table_exists($code[0], 'lp_user_module_progress'))  {
     //===============================================================================================
 
 db_query("INSERT IGNORE INTO accueil VALUES (
-                21,
+                23,
                 '$langLearnPath',
                 '../../modules/learnPath/learningPathList.php',
                 '../../../images/learnpath.gif',
@@ -475,7 +475,7 @@ db_query("INSERT IGNORE INTO accueil VALUES (
 //for tool management
 $langToolManagement = "Διαχείριση εργαλείων";
 db_query("INSERT IGNORE INTO accueil VALUES (
-                22,
+                25,
                 '$langToolManagement',
                 '../../modules/course_tools/course_tools.php',
                 '../../../images/course_tools.gif',
@@ -550,10 +550,10 @@ usage_module::upgrade(24, $code[0]);
 
                     update_field("accueil", "define_var","MODULE_ID_CHAT", "id", 		19);
                     update_field("accueil", "define_var","MODULE_ID_DESCRIPTION", "id", 20);
-                    update_field("accueil", "define_var","MODULE_ID_TOOLADMIN", "id", 	22);
+                    
                     update_field("accueil", "define_var","MODULE_ID_LP", "id", 			23);
                     update_field("accueil", "define_var","MODULE_ID_USAGE", "id", 		24);
-
+					update_field("accueil", "define_var","MODULE_ID_TOOLADMIN", "id", 	25);
 // table accueil
 $tool_content .= "Διόρθωση εγγραφών του πίνακα accueil<br>";
     if (db_query("UPDATE accueil SET lien='../../modules/agenda/agenda.php' WHERE id=1", $code[0])) {
