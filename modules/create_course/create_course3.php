@@ -229,7 +229,7 @@ echo "
                                 <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"22\" />
                                   $langPoll</td>
                                   <td><input type=\"checkbox\" name=\"subsystems[]\"  value=\"23\" checked=\"checked\" />$langLearnPath</td>
-                                  <td>&nbsp;</td>
+                                  <td><input type=\"checkbox\" name=\"subsystems[]\"  value=\"24\" />$langUsage</td>
                                   <td>&nbsp;</td>
                                 </tr>
 
