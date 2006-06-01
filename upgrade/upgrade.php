@@ -12,19 +12,22 @@ $tool_content = "";
 $fromadmin = true;
 
 if (isset($_POST['submit_upgrade'])) {
-	$fromadmin = false;
+    $fromadmin = false;
 }
 
 if (isset($_POST['login']) and isset($_POST['password']) and !is_admin($_POST['login'], $_POST['password'])) {
-	$tool_content .= "<p>Τα στοιχεία που δώσατε δεν αντιστοιχούν στο διαχειριστή του
-		συστήματος! Παρακαλούμε επιστρέψτε στην προηγούμενη σελίδα και ξαναδοκιμάστε.</p>
-		<center><a href=\"index.php\">Επιστροφή</a></center>";
-	draw($tool_content,0);
-	die();
+    $tool_content .= "<p>Τα στοιχεία που δώσατε δεν αντιστοιχούν στο διαχειριστή του
+        συστήματος! Παρακαλούμε επιστρέψτε στην προηγούμενη σελίδα και ξαναδοκιμάστε.</p>
+        <center><a href=\"index.php\">Επιστροφή</a></center>";
+    draw($tool_content,0);
+    die();
 }
 
 if ($fromadmin)
-	include "../modules/admin/check_admin.inc";
+    include "../modules/admin/check_admin.inc";
+
+// haniotak: usage
+require_once('../modules/usage/module.php');
 
 
 // Main body
@@ -39,16 +42,16 @@ $BAD = "[<font color='red'> Σφάλμα ή δεν χρειάζεται τροποποίηση</font>]";
 $errors = 0;
 
 if (!isset($diskQuotaDocument)) {
-	$diskQuotaDocument = 40000000;
+    $diskQuotaDocument = 40000000;
 }
 if (!isset($diskQuotaGroup)) {
-	$diskQuotaGroup = 40000000;
+    $diskQuotaGroup = 40000000;
 }
 if (!isset($diskQuotaVideo)) {
-	$diskQuotaVideo = 20000000;
+    $diskQuotaVideo = 20000000;
 }
 if (!isset($diskQuotaDropbox)) {
-	$diskQuotaDropbox = 40000000;
+    $diskQuotaDropbox = 40000000;
 }
 
 
@@ -59,37 +62,37 @@ if (!isset($diskQuotaDropbox)) {
 //upgrade queries from 1.2 --> 1.4
 
 if (!mysql_field_exists("$mysqlMainDb", 'user', 'am'))
-	$tool_content .= add_field('user', 'am', "VARCHAR( 20 ) NOT NULL");
+    $tool_content .= add_field('user', 'am', "VARCHAR( 20 ) NOT NULL");
 if (mysql_table_exists($mysqlMainDb, 'todo'))
-	db_query("DROP TABLE `todo`");
+    db_query("DROP TABLE `todo`");
 
 // upgrade queries to 1.4
 
 if (!mysql_field_exists("$mysqlMainDb",'cours','type'))
-	$tool_content .= add_field('cours', 'type', "ENUM('pre', 'post', 'other') DEFAULT 'pre' NOT NULL");
+    $tool_content .= add_field('cours', 'type', "ENUM('pre', 'post', 'other') DEFAULT 'pre' NOT NULL");
 if (!mysql_field_exists("$mysqlMainDb",'cours','doc_quota'))
-	$tool_content .= add_field('cours', 'doc_quota', "FLOAT DEFAULT '$diskQuotaDocument' NOT NULL");
+    $tool_content .= add_field('cours', 'doc_quota', "FLOAT DEFAULT '$diskQuotaDocument' NOT NULL");
 if (!mysql_field_exists("$mysqlMainDb",'cours','video_quota'))
-	$tool_content .= add_field('cours', 'video_quota', "FLOAT DEFAULT '$diskQuotaVideo' NOT NULL");
+    $tool_content .= add_field('cours', 'video_quota', "FLOAT DEFAULT '$diskQuotaVideo' NOT NULL");
 if (!mysql_field_exists("$mysqlMainDb",'cours','group_quota'))
-	$tool_content .= add_field('cours', 'group_quota', "FLOAT DEFAULT '$diskQuotaGroup' NOT NULL");
+    $tool_content .= add_field('cours', 'group_quota', "FLOAT DEFAULT '$diskQuotaGroup' NOT NULL");
 
 // upgrade query to 1.6
 if (!mysql_field_exists("$mysqlMainDb",'cours','dropbox_quota'))
-	$tool_content .= add_field('cours', 'dropbox_quota', "FLOAT DEFAULT '$diskQuotaDropbox' NOT NULL");
+    $tool_content .= add_field('cours', 'dropbox_quota', "FLOAT DEFAULT '$diskQuotaDropbox' NOT NULL");
 
 //upgrade queries to 2.0
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_objectives'))
-	$tool_content .= add_field('cours', 'course_objectives', "TEXT");
+    $tool_content .= add_field('cours', 'course_objectives', "TEXT");
 
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_prerequisites'))
-	$tool_content .= add_field('cours', 'course_prerequisites', "TEXT");
+    $tool_content .= add_field('cours', 'course_prerequisites', "TEXT");
 
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_references'))
-	$tool_content .= add_field('cours', 'course_references', "TEXT");
+    $tool_content .= add_field('cours', 'course_references', "TEXT");
 
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_keywords'))
-	$tool_content .= add_field('cours', 'course_keywords', "TEXT");
+    $tool_content .= add_field('cours', 'course_keywords', "TEXT");
 
 // kstratos - UOM
 // Add 1 new field into table 'prof_request', after the field 'profuname'
@@ -101,12 +104,12 @@ if (!mysql_field_exists($mysqlMainDb,'prof_request','profpassword'))
     $retString .= "Προσθήκη πεδίου <b>$field</b> στον πίνακα <b>$table</b>: ";
     if(db_query("ALTER TABLE `prof_request` ADD `profpassword` VARCHAR(255) NOT NULL AFTER `profuname`",$mysqlMainDb))
     {
-	$retString .= " $OK<br>";
+    $retString .= " $OK<br>";
     }
     else
     {
-	$retString .= " $BAD<br>";
-	$GLOBALS['errors']++;
+    $retString .= " $BAD<br>";
+    $GLOBALS['errors']++;
     }
 }
 $tool_content .= "<br />".$retString."<br />";
@@ -123,10 +126,21 @@ if (!mysql_field_exists($mysqlMainDb,'cours','password'))
     $tool_content .= add_field('cours', 'password', "VARCHAR(50)");
 if (!mysql_field_exists($mysqlMainDb,'cours','faculteid'))
     $tool_content .= add_field('cours', 'faculteid', "INT(11)");
-    
+
 // Add 1 new filed into table 'cours_faculte': facid
 if (!mysql_field_exists($mysqlMainDb,'cours_faculte','facid'))
-    $tool_content .= add_field('cours_faculte', 'facid', "INT(11)");    
+    $tool_content .= add_field('cours_faculte', 'facid', "INT(11)");
+
+// haniotak:: new table for loginout summary for eclass 2.0
+if (!mysql_table_exists($mysqlMainDb, 'loginout_summary'))  {
+    mysql_query("CREATE TABLE loginout_summary (
+        id mediumint unsigned NOT NULL auto_increment,
+        login_sum int(11) unsigned  NOT NULL default '0',
+        start_date datetime NOT NULL default '0000-00-00 00:00:00',
+        end_date datetime NOT NULL default '0000-00-00 00:00:00',
+        PRIMARY KEY  (id))
+        TYPE=MyISAM DEFAULT CHARACTER SET=greek");
+}
 
 // 'New table 'auth' with auth methods in Eclass 2.0';
 if(!mysql_table_exists($mysqlMainDb, 'auth'))
@@ -134,27 +148,27 @@ if(!mysql_table_exists($mysqlMainDb, 'auth'))
     $retString = "";
     $table = "auth";
     $retString .= "Προσθήκη πίνακα <b>$table</b>: ";
-    
+
     if(db_query("CREATE TABLE `auth` (
-	`auth_id` int( 2 ) NOT NULL AUTO_INCREMENT ,
-	`auth_name` varchar( 20 ) NOT NULL default '',
-	`auth_settings` text NOT NULL default '',
-	`auth_instructions` text NOT NULL default '',
-	`auth_default` tinyint( 1 ) NOT NULL default '0',
-	PRIMARY KEY ( `auth_id` )
+    `auth_id` int( 2 ) NOT NULL AUTO_INCREMENT ,
+    `auth_name` varchar( 20 ) NOT NULL default '',
+    `auth_settings` text NOT NULL default '',
+    `auth_instructions` text NOT NULL default '',
+    `auth_default` tinyint( 1 ) NOT NULL default '0',
+    PRIMARY KEY ( `auth_id` )
     ) ",$mysqlMainDb)) //TYPE = MYISAM  COMMENT='New table with auth methods in Eclass 2.0';
     {
-	$retString .= " $OK<br>";
-	// Insert the default values into the new table
-	db_query("INSERT INTO `auth` VALUES (1, 'eclass', '', '', 1)",$mysqlMainDb);
-	db_query("INSERT INTO `auth` VALUES (2, 'pop3', '', '', 0)",$mysqlMainDb);
-	db_query("INSERT INTO `auth` VALUES (3, 'imap', '', '', 0)",$mysqlMainDb);
-	db_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)",$mysqlMainDb);
-	db_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)",$mysqlMainDb);
+    $retString .= " $OK<br>";
+    // Insert the default values into the new table
+    db_query("INSERT INTO `auth` VALUES (1, 'eclass', '', '', 1)",$mysqlMainDb);
+    db_query("INSERT INTO `auth` VALUES (2, 'pop3', '', '', 0)",$mysqlMainDb);
+    db_query("INSERT INTO `auth` VALUES (3, 'imap', '', '', 0)",$mysqlMainDb);
+    db_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)",$mysqlMainDb);
+    db_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)",$mysqlMainDb);
     }
     else
     {
-	$retString .= " $BAD<br>";
+    $retString .= " $BAD<br>";
     }
 }
 $tool_content .= $retString;
@@ -167,67 +181,67 @@ $tool_content .= $retString;
 
 $res = db_query("SELECT code FROM cours");
 while ($code = mysql_fetch_row($res)) {
-	
-	// modify course_code/index.php
-	$tool_content .= "<tr><td><b>Τροποποίηση αρχείου index.php του μαθήματος $code[0]</td></tr>";
-	if (!@chdir("$webDir/courses/$code[0]")) {
-		die ("Δεν πραγματοποιήθηκε η αλλαγή στον κατάλογο των μαθημάτων! Ελέγξτε τα δικαιώματα πρόσβασης.");
-	}
-	$filecontents = file_get_contents("index.php");
-	if (!$filecontents)
-	  die ("To αρχείο δεν μπόρεσε να διαβαστεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
-	$newfilecontents = preg_replace('#../claroline/#','../../modules/',$filecontents);
-	$fp = @fopen("index.php","w");
-	if (!$fp)
-		  die ("To αρχείο δεν μπόρεσε να διαβαστεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
-	if (!@fwrite($fp, $newfilecontents))
-			die ("Το αρχείο δεν μπόρεσε να τροποποιηθεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
-	fclose($fp);
-	// Fixed By vagpits
-	if (!@chdir("$webDir/upgrade")) {
-		die("Δεν πραγματοποιήθηκε η αλλαγή στον κατάλογο αναβάθμισης! Ελέγξτε τα δικαιώματα πρόσβασης.");
-		}
-		
-	$tool_content .= "<tr><td><b>Αναβάθμιση μαθήματος $code[0]</b><br>";
-	mysql_select_db($code[0]);
-	
-	// upgrade queries from 1.2 --> 1.4
 
-	if (!mysql_field_exists('$code[0]','exercices','type'))
-		$tool_content .= add_field('exercices','type',"TINYINT( 4 ) UNSIGNED DEFAULT '1' NOT NULL AFTER `description`");
-	if (!mysql_field_exists('$code[0]','exercices','random'))
-		$tool_content .= add_field('exercices','random',"SMALLINT( 6 ) DEFAULT '0' NOT NULL AFTER `type`");
-	if (!mysql_field_exists('$code[0]','reponses','ponderation'))
-		$tool_content .= add_field('reponses','ponderation',"SMALLINT( 5 ) NOT NULL AFTER `comment`");
+    // modify course_code/index.php
+    $tool_content .= "<tr><td><b>Τροποποίηση αρχείου index.php του μαθήματος $code[0]</td></tr>";
+    if (!@chdir("$webDir/courses/$code[0]")) {
+        die ("Δεν πραγματοποιήθηκε η αλλαγή στον κατάλογο των μαθημάτων! Ελέγξτε τα δικαιώματα πρόσβασης.");
+    }
+    $filecontents = file_get_contents("index.php");
+    if (!$filecontents)
+      die ("To αρχείο δεν μπόρεσε να διαβαστεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
+    $newfilecontents = preg_replace('#../claroline/#','../../modules/',$filecontents);
+    $fp = @fopen("index.php","w");
+    if (!$fp)
+          die ("To αρχείο δεν μπόρεσε να διαβαστεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
+    if (!@fwrite($fp, $newfilecontents))
+            die ("Το αρχείο δεν μπόρεσε να τροποποιηθεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
+    fclose($fp);
+    // Fixed By vagpits
+    if (!@chdir("$webDir/upgrade")) {
+        die("Δεν πραγματοποιήθηκε η αλλαγή στον κατάλογο αναβάθμισης! Ελέγξτε τα δικαιώματα πρόσβασης.");
+        }
 
-	$s = db_query("SELECT type FROM questions",$code[0]);
-	while ($f = mysql_fetch_row($s)) {
-		if (empty($f[0]))  {
-			if (db_query("UPDATE `questions` SET type=1",$code[0]))  {
-				$tool_content .= "Πίνακας questions: $OK<br>";
-			} else {
-				$tool_content .= "Πίνακας questions: $BAD<br>";
-				$errors++;
-			}
-		}
-	} // while
+    $tool_content .= "<tr><td><b>Αναβάθμιση μαθήματος $code[0]</b><br>";
+    mysql_select_db($code[0]);
 
-	if (!mysql_table_exists($code[0], 'assignments'))  {
-		db_query("CREATE TABLE `assignments` (
-    	         `id` int(11) NOT NULL auto_increment,
-      	        `title` varchar(200) NOT NULL default '',
-        	      `description` text NOT NULL,
-          	    `comments` text NOT NULL,
+    // upgrade queries from 1.2 --> 1.4
+
+    if (!mysql_field_exists('$code[0]','exercices','type'))
+        $tool_content .= add_field('exercices','type',"TINYINT( 4 ) UNSIGNED DEFAULT '1' NOT NULL AFTER `description`");
+    if (!mysql_field_exists('$code[0]','exercices','random'))
+        $tool_content .= add_field('exercices','random',"SMALLINT( 6 ) DEFAULT '0' NOT NULL AFTER `type`");
+    if (!mysql_field_exists('$code[0]','reponses','ponderation'))
+        $tool_content .= add_field('reponses','ponderation',"SMALLINT( 5 ) NOT NULL AFTER `comment`");
+
+    $s = db_query("SELECT type FROM questions",$code[0]);
+    while ($f = mysql_fetch_row($s)) {
+        if (empty($f[0]))  {
+            if (db_query("UPDATE `questions` SET type=1",$code[0]))  {
+                $tool_content .= "Πίνακας questions: $OK<br>";
+            } else {
+                $tool_content .= "Πίνακας questions: $BAD<br>";
+                $errors++;
+            }
+        }
+    } // while
+
+    if (!mysql_table_exists($code[0], 'assignments'))  {
+        db_query("CREATE TABLE `assignments` (
+                 `id` int(11) NOT NULL auto_increment,
+                  `title` varchar(200) NOT NULL default '',
+                  `description` text NOT NULL,
+                  `comments` text NOT NULL,
                 `deadline` date NOT NULL default '0000-00-00',
                 `submission_date` date NOT NULL default '0000-00-00',
                 `active` char(1) NOT NULL default '1',
                 `secret_directory` varchar(30) NOT NULL,
                 `group_submissions` CHAR(1) DEFAULT '0' NOT NULL,
                 UNIQUE KEY `id` (`id`))", $code[0]);
-	}
+    }
 
-	if (!mysql_table_exists($code[0], 'assignment_submit')) {
-		db_query("CREATE TABLE `assignment_submit` (
+    if (!mysql_table_exists($code[0], 'assignment_submit')) {
+        db_query("CREATE TABLE `assignment_submit` (
         `id` int(11) NOT NULL auto_increment,
         `uid` int(11) NOT NULL default '0',
         `assignment_id` int(11) NOT NULL default '0',
@@ -242,20 +256,20 @@ while ($code = mysql_fetch_row($res)) {
         `grade_submission_ip` varchar(16) NOT NULL default '',
                                 `group_id` INT( 11 ) DEFAULT NULL,
          UNIQUE KEY `id` (`id`))",$code[0]);
-	}
+    }
 
-	update_assignment_submit();
-	
-	
-	// upgrade queries to 1.4
-	if (db_query("UPDATE accueil SET lien='../../modules/stat/index2.php?table=stat_accueil".
-		"&reset=0&period=jour' WHERE id=11", $code[0])) {
-			$tool_content .= "Πίνακας accueil: $OK<br>";
-	} else {
-			$tool_content .= "Πίνακας accueil: $BAD<br>";
-			$errors++;
-	}
-	
+    update_assignment_submit();
+
+
+    // upgrade queries to 1.4
+    if (db_query("UPDATE accueil SET lien='../../modules/stat/index2.php?table=stat_accueil".
+        "&reset=0&period=jour' WHERE id=11", $code[0])) {
+            $tool_content .= "Πίνακας accueil: $OK<br>";
+    } else {
+            $tool_content .= "Πίνακας accueil: $BAD<br>";
+            $errors++;
+    }
+
 // upgrade queries for e-Class 1.5
 
 $langVideoLinks = "Βιντεοσκοπημένα Μαθήματα";
@@ -278,19 +292,19 @@ if (!mysql_table_exists($code[0], 'videolinks'))  {
                WHERE id='6'", $code[0]);
 
         }
-        
+
 // upgrade queries for e-Class 1.6
 $tool_content .= add_field('liens','category',"INT(4) DEFAULT '0' NOT NULL");
 $tool_content .= add_field('liens','ordre',"MEDIUMINT(8) DEFAULT '0' NOT NULL");
 
 if (!mysql_table_exists($code[0], 'link_categories'))  {
-	db_query("CREATE TABLE `link_categories` (
-  		`id` int(6) NOT NULL auto_increment,
-   		`categoryname` varchar(255) default NULL,
-  		`description` text,
-		  `ordre` mediumint(8) NOT NULL default '0',
-		  PRIMARY KEY  (`id`))",$code[0]);
-	}
+    db_query("CREATE TABLE `link_categories` (
+          `id` int(6) NOT NULL auto_increment,
+           `categoryname` varchar(255) default NULL,
+          `description` text,
+          `ordre` mediumint(8) NOT NULL default '0',
+          PRIMARY KEY  (`id`))",$code[0]);
+    }
 
 // correct link entries to correctly appear in a blank window
 $tool_content .= "<b>Διόρθωση συνδέσμων</b><br>";
@@ -310,32 +324,32 @@ while ($u = mysql_fetch_row($sql))  {
 // for dropbox
 $langDropbox = "Χώρος Ανταλλαγής Αρχείων";
 if (!mysql_table_exists($code[0], 'dropbox_file'))  {
-	db_query("CREATE TABLE dropbox_file (
-  		id int(11) unsigned NOT NULL auto_increment,
-		uploaderId int(11) unsigned NOT NULL default '0',
-		filename varchar(250) NOT NULL default '',
-		filesize int(11) unsigned NOT NULL default '0',
-	  	title varchar(250) default '',
-  		description varchar(250) default '',
-  		author varchar(250) default '',
-  		uploadDate datetime NOT NULL default '0000-00-00 00:00:00',
-	  	lastUploadDate datetime NOT NULL default '0000-00-00 00:00:00',
-  		PRIMARY KEY  (id),
-  		UNIQUE KEY UN_filename (filename))", $code[0]);
+    db_query("CREATE TABLE dropbox_file (
+          id int(11) unsigned NOT NULL auto_increment,
+        uploaderId int(11) unsigned NOT NULL default '0',
+        filename varchar(250) NOT NULL default '',
+        filesize int(11) unsigned NOT NULL default '0',
+          title varchar(250) default '',
+          description varchar(250) default '',
+          author varchar(250) default '',
+          uploadDate datetime NOT NULL default '0000-00-00 00:00:00',
+          lastUploadDate datetime NOT NULL default '0000-00-00 00:00:00',
+          PRIMARY KEY  (id),
+          UNIQUE KEY UN_filename (filename))", $code[0]);
 }
 
 if (!mysql_table_exists($code[0], 'dropbox_person'))  {
-	db_query("CREATE TABLE dropbox_person (
-  		fileId int(11) unsigned NOT NULL default '0',
-  		personId int(11) unsigned NOT NULL default '0',
-  		PRIMARY KEY  (fileId,personId))", $code[0]);
+    db_query("CREATE TABLE dropbox_person (
+          fileId int(11) unsigned NOT NULL default '0',
+          personId int(11) unsigned NOT NULL default '0',
+          PRIMARY KEY  (fileId,personId))", $code[0]);
 }
 
 if (!mysql_table_exists($code[0], 'dropbox_post'))  {
-	db_query("CREATE TABLE dropbox_post (
-  		fileId int(11) unsigned NOT NULL default '0',
-  		recipientId int(11) unsigned NOT NULL default '0',
-  		PRIMARY KEY  (fileId,recipientId))", $code[0]);
+    db_query("CREATE TABLE dropbox_post (
+          fileId int(11) unsigned NOT NULL default '0',
+          recipientId int(11) unsigned NOT NULL default '0',
+          PRIMARY KEY  (fileId,recipientId))", $code[0]);
 }
 
 db_query("INSERT IGNORE INTO accueil VALUES (
@@ -346,15 +360,18 @@ db_query("INSERT IGNORE INTO accueil VALUES (
                 '0',
                 '0',
                 '../../../images/pastillegris.png',
-								'MODULE_ID_DROPBOX'
+                                'MODULE_ID_DROPBOX'
                 )", $code[0]);
 
-                
+
 // upgrade queries for e-Class 2.0
+
+
+
 
 $langLearnPath = "Γραμμή Μάθησης";
 if (!mysql_table_exists($code[0], 'lp_module'))  {
-	db_query("CREATE TABLE `lp_module` (
+    db_query("CREATE TABLE `lp_module` (
               `module_id` int(11) NOT NULL auto_increment,
               `name` varchar(255) NOT NULL default '',
               `comment` text NOT NULL,
@@ -367,7 +384,7 @@ if (!mysql_table_exists($code[0], 'lp_module'))  {
 }
 
 if (!mysql_table_exists($code[0], 'lp_learnPath'))  {
-	db_query("CREATE TABLE `lp_learnPath` (
+    db_query("CREATE TABLE `lp_learnPath` (
               `learnPath_id` int(11) NOT NULL auto_increment,
               `name` varchar(255) NOT NULL default '',
               `comment` text NOT NULL,
@@ -380,7 +397,7 @@ if (!mysql_table_exists($code[0], 'lp_learnPath'))  {
 }
 
 if (!mysql_table_exists($code[0], 'lp_rel_learnPath_module'))  {
-	db_query("CREATE TABLE `lp_rel_learnPath_module` (
+    db_query("CREATE TABLE `lp_rel_learnPath_module` (
                 `learnPath_module_id` int(11) NOT NULL auto_increment,
                 `learnPath_id` int(11) NOT NULL default '0',
                 `module_id` int(11) NOT NULL default '0',
@@ -395,7 +412,7 @@ if (!mysql_table_exists($code[0], 'lp_rel_learnPath_module'))  {
 }
 
 if (!mysql_table_exists($code[0], 'lp_asset'))  {
-	db_query("CREATE TABLE `lp_asset` (
+    db_query("CREATE TABLE `lp_asset` (
               `asset_id` int(11) NOT NULL auto_increment,
               `module_id` int(11) NOT NULL default '0',
               `path` varchar(255) NOT NULL default '',
@@ -405,7 +422,7 @@ if (!mysql_table_exists($code[0], 'lp_asset'))  {
 }
 
 if (!mysql_table_exists($code[0], 'lp_user_module_progress'))  {
-	db_query("CREATE TABLE `lp_user_module_progress` (
+    db_query("CREATE TABLE `lp_user_module_progress` (
               `user_module_progress_id` int(22) NOT NULL auto_increment,
               `user_id` mediumint(9) NOT NULL default '0',
               `learnPath_module_id` int(11) NOT NULL default '0',
@@ -425,155 +442,160 @@ if (!mysql_table_exists($code[0], 'lp_user_module_progress'))  {
 }
 
 
-	//===============================================================================================
-	//BEGIN: Move all external links to id > 100, add column define_var
-	//===============================================================================================
+    //===============================================================================================
+    //BEGIN: Move all external links to id > 100, add column define_var
+    //===============================================================================================
 
 
-	if (db_query("UPDATE IGNORE `accueil`
-					SET `id` = `id` + 80
-					WHERE `id`>20")) {
-	$tool_content .= "All external (id >= 20) links moved to id >=101<br>";
-					} else {
-						$tool_content .= "Error: Could not move external links<br>";
-						$GLOBALS['errors']++;
-						die();
-					}
-	
-	//===============================================================================================
-	//END: Move all external links to id > 100
-	//===============================================================================================
+    if (db_query("UPDATE IGNORE `accueil`
+                    SET `id` = `id` + 80
+                    WHERE `id`>20")) {
+    $tool_content .= "All external (id >= 20) links moved to id >=101<br>";
+                    } else {
+                        $tool_content .= "Error: Could not move external links<br>";
+                        $GLOBALS['errors']++;
+                        die();
+                    }
+
+    //===============================================================================================
+    //END: Move all external links to id > 100
+    //===============================================================================================
 
 db_query("INSERT IGNORE INTO accueil VALUES (
-				21,
-				'$langLearnPath',
-				'../../modules/learnPath/learningPathList.php',
-				'../../../images/learnpath.gif',
-				'1',
-				'0',
-				'../../../images/pastillegris.png',
-				'MODULE_ID_LP'
+                21,
+                '$langLearnPath',
+                '../../modules/learnPath/learningPathList.php',
+                '../../../images/learnpath.gif',
+                '1',
+                '0',
+                '../../../images/pastillegris.png',
+                'MODULE_ID_LP'
          )", $code[0]);
 
 //for tool management
 $langToolManagement = "Διαχείριση εργαλείων";
 db_query("INSERT IGNORE INTO accueil VALUES (
-				22,
-				'$langToolManagement',
-				'../../modules/course_tools/course_tools.php',
-				'../../../images/course_tools.gif',
-				'0',
-				'1',
-				'../../../images/pastillegris.png',
-				'MODULE_ID_TOOLADMIN'
-				)", $code[0]);
+                22,
+                '$langToolManagement',
+                '../../modules/course_tools/course_tools.php',
+                '../../../images/course_tools.gif',
+                '0',
+                '1',
+                '../../../images/pastillegris.png',
+                'MODULE_ID_TOOLADMIN'
+                )", $code[0]);
+
+// haniotak: Usage module upgrade
+usage_module::upgrade(24, $code[0]);
+
 
 //sakis - prosthiki epipleon pediwn ston pinaka documents gia ta metadedomena (xrhsimopoiountai apo ton neo file manager)
   if (!mysql_field_exists("$code[0]",'document','filename'))
-	  $tool_content .= add_field('document', 'filename', "TEXT");
+      $tool_content .= add_field('document', 'filename', "TEXT");
 
   if (!mysql_field_exists("$code[0]",'document','category'))
-			$tool_content .= add_field('document', 'category', "TEXT");
+            $tool_content .= add_field('document', 'category', "TEXT");
 
-	if (!mysql_field_exists("$code[0]",'document','title'))
-			$tool_content .= add_field('document', 'title', "TEXT");
+    if (!mysql_field_exists("$code[0]",'document','title'))
+            $tool_content .= add_field('document', 'title', "TEXT");
 
-	if (!mysql_field_exists("$code[0]",'document','creator'))
-			$tool_content .= add_field('document', 'creator', "TEXT");
+    if (!mysql_field_exists("$code[0]",'document','creator'))
+            $tool_content .= add_field('document', 'creator', "TEXT");
 
-	if (!mysql_field_exists("$code[0]",'document','date'))
-			$tool_content .= add_field('document', 'date', "DATETIME");
+    if (!mysql_field_exists("$code[0]",'document','date'))
+            $tool_content .= add_field('document', 'date', "DATETIME");
 
-	if (!mysql_field_exists("$code[0]",'document','date_modified'))
-			$tool_content .= add_field('document', 'date_modified', "DATETIME");
+    if (!mysql_field_exists("$code[0]",'document','date_modified'))
+            $tool_content .= add_field('document', 'date_modified', "DATETIME");
 
-	if (!mysql_field_exists("$code[0]",'document','subject'))
-			$tool_content .= add_field('document', 'subject', "TEXT");
+    if (!mysql_field_exists("$code[0]",'document','subject'))
+            $tool_content .= add_field('document', 'subject', "TEXT");
 
-	if (!mysql_field_exists("$code[0]",'document','description'))
-			$tool_content .= add_field('document', 'description', "TEXT");
+    if (!mysql_field_exists("$code[0]",'document','description'))
+            $tool_content .= add_field('document', 'description', "TEXT");
 
-	if (!mysql_field_exists("$code[0]",'document','author'))
-			$tool_content .= add_field('document', 'author', "TEXT");
+    if (!mysql_field_exists("$code[0]",'document','author'))
+            $tool_content .= add_field('document', 'author', "TEXT");
 
-	if (!mysql_field_exists("$code[0]",'document','format'))
-			$tool_content .= add_field('document', 'format', "TEXT");
+    if (!mysql_field_exists("$code[0]",'document','format'))
+            $tool_content .= add_field('document', 'format', "TEXT");
 
-	if (!mysql_field_exists("$code[0]",'document','language'))
-			$tool_content .= add_field('document', 'language', "TEXT");
+    if (!mysql_field_exists("$code[0]",'document','language'))
+            $tool_content .= add_field('document', 'language', "TEXT");
 
-	if (!mysql_field_exists("$code[0]",'document','copyrighted'))
-			$tool_content .= add_field('document', 'copyrighted', "TEXT");
+    if (!mysql_field_exists("$code[0]",'document','copyrighted'))
+            $tool_content .= add_field('document', 'copyrighted', "TEXT");
 
 //table accueil -  create new column (define_var)
-			$tool_content .= add_field("accueil","define_var", "VARCHAR(50) NOT NULL");
-			$tool_content .= "Added field <i>define_var</i> to table <i>".$code[0]."accueil</i><br>";
+            $tool_content .= add_field("accueil","define_var", "VARCHAR(50) NOT NULL");
+            $tool_content .= "Added field <i>define_var</i> to table <i>".$code[0]."accueil</i><br>";
 
-					//set define string vars
-					update_field("accueil", "define_var","MODULE_ID_AGENDA", "id", 		1);
-					update_field("accueil", "define_var","MODULE_ID_LINKS", "id",	 		2);
-					update_field("accueil", "define_var","MODULE_ID_DOCS", "id",	 		3);
-					//id 4 is Video (this tool is to be removed)
-					update_field("accueil", "define_var","MODULE_ID_ASSIGN", "id",		5);
-					update_field("accueil", "define_var","MODULE_ID_VIDEO", "id",	 		6);//vinteoskophmena ma8hmata
-					update_field("accueil", "define_var","MODULE_ID_ANNOUNCE", "id",		7);
-					update_field("accueil", "define_var","MODULE_ID_USERS", "id", 		8);
-					update_field("accueil", "define_var","MODULE_ID_FORUM", "id", 		9);
-					update_field("accueil", "define_var","MODULE_ID_EXERCISE", "id", 		10);
-					update_field("accueil", "define_var","MODULE_ID_STAT", "id", 			11);
-					update_field("accueil", "define_var","MODULE_ID_IMPORT", "id", 		12);
-					update_field("accueil", "define_var","MODULE_ID_EXTERNAL", "id",		13);
-					update_field("accueil", "define_var","MODULE_ID_COURSEINFO", "id",	14);
-					update_field("accueil", "define_var","MODULE_ID_GROUPS", "id", 		15);
-					update_field("accueil", "define_var","MODULE_ID_DROPBOX", "id", 		16);
+                    //set define string vars
+                    update_field("accueil", "define_var","MODULE_ID_AGENDA", "id", 		1);
+                    update_field("accueil", "define_var","MODULE_ID_LINKS", "id",	 	2);
+                    update_field("accueil", "define_var","MODULE_ID_DOCS", "id",	 	3);
+                    //id 4 is Video (this tool is to be removed)
+                    update_field("accueil", "define_var","MODULE_ID_ASSIGN", "id",		5);
+                    update_field("accueil", "define_var","MODULE_ID_VIDEO", "id",	 	6);//vinteoskophmena ma8hmata
+                    update_field("accueil", "define_var","MODULE_ID_ANNOUNCE", "id",	7);
+                    update_field("accueil", "define_var","MODULE_ID_USERS", "id", 		8);
+                    update_field("accueil", "define_var","MODULE_ID_FORUM", "id", 		9);
+                    update_field("accueil", "define_var","MODULE_ID_EXERCISE", "id", 	10);
+                    update_field("accueil", "define_var","MODULE_ID_STAT", "id", 		11);
+                    update_field("accueil", "define_var","MODULE_ID_IMPORT", "id", 		12);
+                    update_field("accueil", "define_var","MODULE_ID_EXTERNAL", "id",	13);
+                    update_field("accueil", "define_var","MODULE_ID_COURSEINFO", "id",	14);
+                    update_field("accueil", "define_var","MODULE_ID_GROUPS", "id", 		15);
+                    update_field("accueil", "define_var","MODULE_ID_DROPBOX", "id", 	16);
 
-					update_field("accueil", "define_var","MODULE_ID_CHAT", "id", 			19);
-					update_field("accueil", "define_var","MODULE_ID_DESCRIPTION", "id", 	20);
-					update_field("accueil", "define_var","MODULE_ID_LP", "id", 			23);
-					update_field("accueil", "define_var","MODULE_ID_TOOLADMIN", "id", 	22);
-					
+                    update_field("accueil", "define_var","MODULE_ID_CHAT", "id", 		19);
+                    update_field("accueil", "define_var","MODULE_ID_DESCRIPTION", "id", 20);
+                    update_field("accueil", "define_var","MODULE_ID_TOOLADMIN", "id", 	22);
+                    update_field("accueil", "define_var","MODULE_ID_LP", "id", 			23);
+                    update_field("accueil", "define_var","MODULE_ID_USAGE", "id", 		24);
+
 // table accueil
 $tool_content .= "Διόρθωση εγγραφών του πίνακα accueil<br>";
-	if (db_query("UPDATE accueil SET lien='../../modules/agenda/agenda.php' WHERE id=1", $code[0])) {
-			$tool_content .= "Εγγραφή με id 1 του πίνακα <b>accueil</b> $OK<br>";
-	} else {
-			$tool_content .= "Εγγραφή με id 1 του πίνακα <b>accueil</b>: $BAD<br>";
-			$errors++;
-	}
+    if (db_query("UPDATE accueil SET lien='../../modules/agenda/agenda.php' WHERE id=1", $code[0])) {
+            $tool_content .= "Εγγραφή με id 1 του πίνακα <b>accueil</b> $OK<br>";
+    } else {
+            $tool_content .= "Εγγραφή με id 1 του πίνακα <b>accueil</b>: $BAD<br>";
+            $errors++;
+    }
 
 $sql = db_query("SELECT id,lien,image,address FROM accueil");
 while ($u = mysql_fetch_row($sql))  {
         $oldlink_lien = $u[1];
-				$newlink_lien = preg_replace('#../claroline/#','../../modules/',$oldlink_lien);
-				$oldlink_image = $u[2];
-				$newlink_image = preg_replace('#../claroline/image/#','../../images/',$oldlink_image);
-				$oldlink_address = $u[3];
-				$newlink_address = preg_replace('#../claroline/image/#','../../images/',$oldlink_address);
-			if	(db_query("UPDATE accueil
-							SET lien='$newlink_lien', image='$newlink_image', address='$newlink_address'
-            		WHERE id='$u[0]'")) {
-					$tool_content .= "Εγγραφή με id $u[0] του πίνακα <b>accueil</b>: $OK<br>";
-				} else {
-					$tool_content .= "Εγγραφή με id $u[0] του πίνακα <b>accueil</b>: $BAD<br>";
-					$errors++;
-				}
+                $newlink_lien = preg_replace('#../claroline/#','../../modules/',$oldlink_lien);
+                $oldlink_image = $u[2];
+                $newlink_image = preg_replace('#../claroline/image/#','../../images/',$oldlink_image);
+                $oldlink_address = $u[3];
+                $newlink_address = preg_replace('#../claroline/image/#','../../images/',$oldlink_address);
+            if	(db_query("UPDATE accueil
+                            SET lien='$newlink_lien', image='$newlink_image', address='$newlink_address'
+                    WHERE id='$u[0]'")) {
+                    $tool_content .= "Εγγραφή με id $u[0] του πίνακα <b>accueil</b>: $OK<br>";
+                } else {
+                    $tool_content .= "Εγγραφή με id $u[0] του πίνακα <b>accueil</b>: $BAD<br>";
+                    $errors++;
+                }
 }
 
 // table stat_accueil
 $sql = db_query("SELECT id,request FROM stat_accueil");
   while ($u = mysql_fetch_row($sql))  {
-	    $old_request = $u[1];
-			$new_request = preg_replace('#'.$code[0].'/#','courses/'.$code[0].'/', $old_request);
-		  if (db_query("UPDATE stat_accueil SET request='$new_request' WHERE id = '$u[0]'")) {
-						$tool_content .= "Εγγραφή με id $u[0] του πίνακα <b>stat_accueil</b>: $OK<br>";
-					} else {
-						$tool_content .= "Εγγραφή με id $u[0] του πίνακα <b>stat_accueil</b>: $BAD<br>";
-						$errors++;
-			}
+        $old_request = $u[1];
+            $new_request = preg_replace('#'.$code[0].'/#','courses/'.$code[0].'/', $old_request);
+          if (db_query("UPDATE stat_accueil SET request='$new_request' WHERE id = '$u[0]'")) {
+                        $tool_content .= "Εγγραφή με id $u[0] του πίνακα <b>stat_accueil</b>: $OK<br>";
+                    } else {
+                        $tool_content .= "Εγγραφή με id $u[0] του πίνακα <b>stat_accueil</b>: $BAD<br>";
+                        $errors++;
+            }
 }
 
 $tool_content .= "<br><br></td></tr>";
-	
+
 } // End while courses
 
 // Fixed by vagpits
@@ -585,71 +607,71 @@ $tool_content .= "</tbody></table><br>";
 $tool_content .= "<table width=\"99%\"><caption>Αποτελέσματα Αναβάθμισης</caption><tbody><tr><td>
 ";
 
-// display info message 
+// display info message
 if ($errors==0) {
-	$tool_content .= upgrade_success();
+    $tool_content .= upgrade_success();
 } else {
-	$tool_content .= upgrade_failure();
+    $tool_content .= upgrade_failure();
 }
 $tool_content .= "</td></tr></tbody></table>";
 if ($fromadmin)
-	$tool_content .= "<br><center><p><a href=\"../modules/admin/index.php\">Επιστροφή</a></p></center>";
+    $tool_content .= "<br><center><p><a href=\"../modules/admin/index.php\">Επιστροφή</a></p></center>";
 else
-	$tool_content .= "<br><center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
+    $tool_content .= "<br><center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
 
 if ($fromadmin)
-	draw($tool_content,3, 'admin');
+    draw($tool_content,3, 'admin');
 else
-	draw($tool_content,0);
+    draw($tool_content,0);
 
 
 //function to update a field in a table
 function update_field($table, $field, $field_name, $id_col, $id) {
-	$sql = "UPDATE `$table` SET `$field` = '$field_name' WHERE `$id_col` = $id;";
-	db_query($sql);
+    $sql = "UPDATE `$table` SET `$field` = '$field_name' WHERE `$id_col` = $id;";
+    db_query($sql);
 }
 
 // Removes initial part of path from assignment_submit.file_path
 function update_assignment_submit()
 {
-	$updated = FALSE;
-	$q = db_query('SELECT id, file_path FROM assignment_submit');
-	if ($q) {
-		while ($i = mysql_fetch_array($q)) {
-			$new = preg_replace('+^.*/work/+', '', $i['file_path']);
-			if ($new != $i['file_path']) {
-				db_query("UPDATE assignment_submit SET file_path = " .
-					quote($new) . " WHERE id = $i[id]");
-				$updated = TRUE;
-			}
-		}
-	}
-	if ($updated) {
-		echo "Πίνακας assignment_submit: $GLOBALS[OK]<br>\n";
-	}
+    $updated = FALSE;
+    $q = db_query('SELECT id, file_path FROM assignment_submit');
+    if ($q) {
+        while ($i = mysql_fetch_array($q)) {
+            $new = preg_replace('+^.*/work/+', '', $i['file_path']);
+            if ($new != $i['file_path']) {
+                db_query("UPDATE assignment_submit SET file_path = " .
+                    quote($new) . " WHERE id = $i[id]");
+                $updated = TRUE;
+            }
+        }
+    }
+    if ($updated) {
+        echo "Πίνακας assignment_submit: $GLOBALS[OK]<br>\n";
+    }
 }
 
 
 // Adds field $field to table $table of current database, if it doesn't already exist
 function add_field($table, $field, $type)
 {
-	global $OK, $BAD;
-	
-	$retString = "";
-	$retString .= "Προσθήκη πεδίου <b>$field</b> στον πίνακα <b>$table</b>: ";
-	$fields = db_query("SHOW COLUMNS FROM $table LIKE '$field'");
-	if (mysql_num_rows($fields) == 0) {
-		if (db_query("ALTER TABLE `$table` ADD `$field` $type")) {
-			$retString .= " $OK<br>";
-		} else {
-			$retString .= " $BAD<br>";
-			$GLOBALS['errors']++;
-		}
-	} else {
-		$retString .= "Υπάρχει ήδη. $OK<br>";
-	}
-	
-	return $retString;
+    global $OK, $BAD;
+
+    $retString = "";
+    $retString .= "Προσθήκη πεδίου <b>$field</b> στον πίνακα <b>$table</b>: ";
+    $fields = db_query("SHOW COLUMNS FROM $table LIKE '$field'");
+    if (mysql_num_rows($fields) == 0) {
+        if (db_query("ALTER TABLE `$table` ADD `$field` $type")) {
+            $retString .= " $OK<br>";
+        } else {
+            $retString .= " $BAD<br>";
+            $GLOBALS['errors']++;
+        }
+    } else {
+        $retString .= "Υπάρχει ήδη. $OK<br>";
+    }
+
+    return $retString;
 }
 
 // checks if a mysql table exists
@@ -673,35 +695,35 @@ function mysql_field_exists($db,$table,$field)
 
 function is_admin($username, $password)
 {
-	$r = db_query("SELECT * FROM user, admin WHERE admin.idUser = user.user_id
-			AND user.username = '$username' AND user.password = '$password'");
-	if (mysql_num_rows($r) == 0) {
-		return FALSE;
-	} else {
-		return TRUE;
-	}
+    $r = db_query("SELECT * FROM user, admin WHERE admin.idUser = user.user_id
+            AND user.username = '$username' AND user.password = '$password'");
+    if (mysql_num_rows($r) == 0) {
+        return FALSE;
+    } else {
+        return TRUE;
+    }
 }
 
 
 // error
 function upgrade_failure () {
-	$retString = "";
-	$retString .= "<b>Παρουσιάστηκαν κάποια σφάλματα κατά την αναβάθμιση των βάσεων δεδομένων του e-Class!</b><br><br>";
-	$retString .= "Πιθανόν κάποιο μάθημα να μην δουλεύει τελείως σωστά. Μπορείτε να επικοινωνήστε μαζί
-	μας στο <a href='mailto:elearn@noc.uoa.gr'>elearn@noc.uoa.gr</a>
-	περιγράφοντας το πρόβλημα που παρουσιάστηκε και στέλνοντας (αν είναι δυνατόν)
-	όλα τα μυνήματα που εμφανίστηκαν στην οθόνη σας.";
-	
-	return $retString;
+    $retString = "";
+    $retString .= "<b>Παρουσιάστηκαν κάποια σφάλματα κατά την αναβάθμιση των βάσεων δεδομένων του e-Class!</b><br><br>";
+    $retString .= "Πιθανόν κάποιο μάθημα να μην δουλεύει τελείως σωστά. Μπορείτε να επικοινωνήστε μαζί
+    μας στο <a href='mailto:elearn@noc.uoa.gr'>elearn@noc.uoa.gr</a>
+    περιγράφοντας το πρόβλημα που παρουσιάστηκε και στέλνοντας (αν είναι δυνατόν)
+    όλα τα μυνήματα που εμφανίστηκαν στην οθόνη σας.";
+
+    return $retString;
 }
 
 // success
 function upgrade_success () {
-	$retString = "";
-	$retString .= "<b>Η αναβάθμιση των βάσεων δεδομένων του e-Class πραγματοποιήθηκε με επιτυχία!</b><br><br>";
-	$retString .= "Είστε πλέον έτοιμοι να χρησιμοποιήσετε την καινούρια έκδοση του e-Class.";
-	
-	return $retString;
+    $retString = "";
+    $retString .= "<b>Η αναβάθμιση των βάσεων δεδομένων του e-Class πραγματοποιήθηκε με επιτυχία!</b><br><br>";
+    $retString .= "Είστε πλέον έτοιμοι να χρησιμοποιήσετε την καινούρια έκδοση του e-Class.";
+
+    return $retString;
 }
 
 ?>
