@@ -1,28 +1,57 @@
 <?php // $Id$
-/*
-      +----------------------------------------------------------------------+
-      | CLAROLINE version 1.3.2 $Revision$                            |
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2003 Universite catholique de Louvain (UCL)      |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
-      +----------------------------------------------------------------------+
-      | Authors: Olivier Brouckaert <oli.brouckaert@skynet.be>               |
-      +----------------------------------------------------------------------+
+/*=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Á full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/*===========================================================================
+	work.php
+	@last update: 17-4-2006 by Costas Tsibanis
+	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
+==============================================================================        
+        @Description: Main script for the work tool
+
+ 	This is a tool plugin that allows course administrators - or others with the
+ 	same rights
+
+ 	The user can : - navigate through files and directories.
+                       - upload a file
+                       - delete, copy a file or a directory
+                       - edit properties & content (name, comments, 
+			 html content)
+
+ 	@Comments: The script is organised in four sections.
+
+ 	1) Execute the command called by the user
+           Note (March 2004) some editing functions (renaming, commenting)
+           are moved to a separate page, edit_document.php. This is also
+           where xml and other stuff should be added.
+   	2) Define the directory to display
+  	3) Read files and directories from the directory defined in part 2
+  	4) Display all of that on an HTML page
+ 
+  	@TODO: eliminate code duplication between document/document.php, scormdocument.php
+==============================================================================
 */
-
-		/*>>>>>>>>>>>>>>>>>>>> EXERCISE RESULT <<<<<<<<<<<<<<<<<<<<*/
-
-/**
- * This script gets informations from the script "exercise_submit.php",
- * through the session, and calculates the score of the student for
- * that exercise.
- *
- * Then it shows results at screen.
- */
 
 include('exercise.class.php');
 include('question.class.php');
@@ -38,7 +67,12 @@ define('MATCHING', 4);
 
 $require_current_course = TRUE;
 $langFiles='exercice';
-include '../../include/init.php';
+
+//include '../../include/init.php';
+
+include '../../include/baseTheme.php';
+
+$tool_content = "";
 
 $nameTools = $langExercices;
 $navigation[]= array ("url"=>"exercice.php", "name"=> $langExercices);
@@ -51,7 +85,7 @@ if (!setcookie("marvelous_cookie", "", time()-3600, "/")) {
 	exit();
 }
 
-begin_page($nameTools);
+//begin_page($nameTools);
 
 // latex support
 include_once "$webDir"."/modules/latexrender/latex.php";
@@ -73,15 +107,9 @@ if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExer
 $exerciseTitle=$objExercise->selectTitle();
 $exerciseId=$objExercise->selectId();
 
-?>
+$tool_content .= "<h3>".stripslashes($exerciseTitle)." : ".$langResult."</h3>".
+	"<form method=\"get\" action=\"exercice.php\">";
 
-<h3>
-  <?php echo stripslashes($exerciseTitle).' : '.$langResult; ?>
-</h3>
-
-<form method="get" action="exercice.php">
-
-<?php
 	$i=$totalScore=$totalWeighting=0;
 
 	// for each question
@@ -115,66 +143,63 @@ $exerciseId=$objExercise->selectId();
 		{
 			$colspan=1;
 		}
-?>
+$iplus = $i+1;
+$tool_content .= <<<cData
+	<table width="100%" border="0" cellpadding="3" cellspacing="2">
+		<tr bgcolor="#E6E6E6">
+		  <td colspan="${colspan}">
+				${langQuestion} ${iplus}
+		  </td>
+		</tr>
+		<tr>
+		  <td colspan="${colspan}">${questionName}</td>
+		</tr>
+cData;
 
-<table width="100%" border="0" cellpadding="3" cellspacing="2">
-<tr bgcolor="#E6E6E6">
-  <td colspan="<?php echo $colspan; ?>">
-	<?php echo $langQuestion.' '.($i+1); ?>
-  </td>
-</tr>
-<tr>
-  <td colspan="<?php echo $colspan; ?>">
-	<?php echo $questionName; ?>
-  </td>
-</tr>
-
-<?
 		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
 		{
-?>
-
+$tool_content .= <<<cData
 <tr>
   <td width="5%" valign="top" align="center" nowrap="nowrap">
-	<small><i><?php echo $langChoice; ?></i></small>
+	<small><i>${langChoice}</i></small>
   </td>
   <td width="5%" valign="top" nowrap="nowrap">
-	<small><i><?php echo $langExpectedChoice; ?></i></small>
+	<small><i>${langExpectedChoice}</i></small>
   </td>
   <td width="45%" valign="top">
-	<small><i><?php echo $langAnswer; ?></i></small>
+	<small><i>${langAnswer}</i></small>
   </td>
   <td width="45%" valign="top">
-	<small><i><?php echo $langComment; ?></i></small>
+	<small><i>${langComment}</i></small>
   </td>
 </tr>
+cData;
 
-<?
 	}
 	elseif($answerType == FILL_IN_BLANKS)
 	{
-?>
 
-<tr>
-  <td>
-	<small><i><?= $langAnswer; ?></i></small>
-  </td>
-</tr>
+$tool_content .= <<<cData
+	<tr>
+  	<td>
+		<small><i>${langAnswer}</i></small>
+  	</td>
+	</tr>
+cData;
 
-<?
 	} else {
-?>
-
-<tr>
-  <td width="50%">
-	<small><i><?= $langElementList; ?></i></small>
-  </td>
-  <td width="50%">
-	<small><i><?= $langCorrespondsTo; ?></i></small>
-  </td>
+		
+$tool_content .= <<<cData
+	<tr>
+	  <td width="50%">
+		<small><i>${langElementList}</i></small>
+	  </td>
+	  <td width="50%">
+	<small><i>${langCorrespondsTo}</i></small>
+	  </td>
 </tr>
+cData;
 
-<?
 		}
 
 		// construction of the Answer object
@@ -316,60 +341,85 @@ $exerciseId=$objExercise->selectId();
 			{
 				if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
 				{
-?>
-
+$tool_content .= <<<cData
 <tr>
   <td width="5%" align="center">
-	<img src="../../images/<?php echo ($answerType == UNIQUE_ANSWER)?'radio':'checkbox'; echo $studentChoice?'_on':'_off'; ?>.gif" border="0">
-  </td>
-  <td width="5%" align="center">
-	<img src="../../images/<?php echo ($answerType == UNIQUE_ANSWER)?'radio':'checkbox'; echo $answerCorrect?'_on':'_off'; ?>.gif" border="0">
-  </td>
-  <td width="45%">
-	<?php echo $answer; ?>
-  </td>
-  <td width="45%">
-	<?php if($studentChoice) echo nl2br(make_clickable($answerComment)); else echo '&nbsp;'; ?>
-  </td>
-</tr>
+	<img src="../../images/
+cData;	
+	
+	if ($answerType == UNIQUE_ANSWER)
+		$tool_content .= "radio";
+	else
+		$tool_content .= "checkbox";
+	
+	if ($studentChoice)
+		$tool_content .= "_on";
+	else
+		$tool_content .= '_off';
+		
+	$tool_content .= <<<cData
+		.gif" border="0">
+  	</td>
+  	<td width="5%" align="center">
+cData;
 
-<?
+	
+	if ($answerType == UNIQUE_ANSWER)
+		$tool_content .= "<img src=\"../../images/radio";
+	else
+		$tool_content .= "<img src=\"../../images/checkbox";
+	if ($answerCorrect)
+		$tool_content .= "_on";
+	else	
+		$tool_content .= "_off";
+	
+	$tool_content .= ".gif\" border=\"0\">";
+	
+  $tool_content .= <<<cData
+  </td>
+  <td width="45%">
+		${answer}
+  </td>
+  <td width="45%">
+cData;
+
+if($studentChoice) 
+	$tool_content .= nl2br(make_clickable($answerComment)); 
+else 
+	$tool_content .= '&nbsp;'; 
+
+  $tool_content .= "</td></tr>";
+
 	} elseif($answerType == FILL_IN_BLANKS) {
-?>
 
-<tr>
-  <td>
-	<?php echo nl2br($answer); ?>
-  </td>
-</tr>
+$tool_content .= "<tr><td>".nl2br($answer)."</td></tr>";
 
-<?
 	} else {
-?>
 
-<tr>
-  <td width="50%">
-	<?= $answer; ?>
-  </td>
-  <td width="50%">
-	<? echo $choice[$answerId]; ?> / <font color="green"><b><?php echo $matching[$answerCorrect]; ?></b></font>
-  </td>
-</tr>
+$tool_content .= <<<cData
+	<tr>
+	  <td width="50%">
+			${answer}
+	  </td>
+	  <td width="50%">
+			${choice[$answerId]} / <font color="green"><b>${matching[$answerCorrect]}</b></font>
+	  </td>
+	</tr>
+cData;
 
-<?
 		}
 	}
 }	// end for()
-?>
 
-<tr>
-  <td colspan="<?= $colspan; ?>" align="right">
-	<b><?php echo "$langScore : $questionScore/$questionWeighting"; ?></b>
-  </td>
-</tr>
-</table>
+$tool_content .= <<<cData
+	<tr>
+	  <td colspan="${colspan}" align="right">
+		<b>${langScore} : ${questionScore}/${questionWeighting}</b>
+	  </td>
+	</tr>
+	</table>
+cData;
 
-<?
 		// destruction of Answer
 		unset($objAnswerTmp);
 
@@ -421,28 +471,27 @@ if ($OnTime) { // exercise time limit hasn't expired
 	exit();
 }
 
-?>
 
+$tool_content .= <<<cData
+	<table width="100%" border="0" cellpadding="3" cellspacing="2">
+	<tr>
+	  <td align="center">
+		<b>${langYourTotalScore} ${totalScore}/${totalWeighting} !</b>
+	  </td>
+	</tr>
+	<tr>
+	  <td align="center">
+	    <br>
+		<input type="submit" value="${langFinish}">
+	  </td>
+	</tr>
+	</table>
+	
+	</form>
+	
+	<br>
+cData;
 
-<table width="100%" border="0" cellpadding="3" cellspacing="2">
-<tr>
-  <td align="center">
-	<b><?php echo "$langYourTotalScore $totalScore/$totalWeighting"; ?> !</b>
-  </td>
-</tr>
-<tr>
-  <td align="center">
-    <br>
-	<input type="submit" value="<?= $langFinish; ?>">
-  </td>
-</tr>
-</table>
-
-</form>
-
-<br>
-
-<?
 /*******************************/
 /* Tracking of results         */
 /*******************************/
