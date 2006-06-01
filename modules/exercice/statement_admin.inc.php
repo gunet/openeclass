@@ -1,26 +1,57 @@
 <?php // $Id$
-/*
-      +----------------------------------------------------------------------+
-      | CLAROLINE version 1.4.0 $Revision$                            |
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2003 Universite catholique de Louvain (UCL)      |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
-      +----------------------------------------------------------------------+
-      | Authors: Olivier Brouckaert <oli.brouckaert@skynet.be>               |
-      +----------------------------------------------------------------------+
+/*=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Á full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/*===========================================================================
+	work.php
+	@last update: 17-4-2006 by Costas Tsibanis
+	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
+==============================================================================        
+        @Description: Main script for the work tool
+
+ 	This is a tool plugin that allows course administrators - or others with the
+ 	same rights
+
+ 	The user can : - navigate through files and directories.
+                       - upload a file
+                       - delete, copy a file or a directory
+                       - edit properties & content (name, comments, 
+			 html content)
+
+ 	@Comments: The script is organised in four sections.
+
+ 	1) Execute the command called by the user
+           Note (March 2004) some editing functions (renaming, commenting)
+           are moved to a separate page, edit_document.php. This is also
+           where xml and other stuff should be added.
+   	2) Define the directory to display
+  	3) Read files and directories from the directory defined in part 2
+  	4) Display all of that on an HTML page
+ 
+  	@TODO: eliminate code duplication between document/document.php, scormdocument.php
+==============================================================================
 */
-
-		/*>>>>>>>>>>>>>>>>>>>> STATEMENT ADMINISTRATION <<<<<<<<<<<<<<<<<<<<*/
-
-/**
- * This script allows to manage statement of questions
- *
- * It is included from the script admin.php
- */
 
 // ALLOWED_TO_INCLUDE is defined in admin.php
 if(!defined('ALLOWED_TO_INCLUDE'))
@@ -154,88 +185,103 @@ if((isset($newQuestion) || isset($modifyQuestion)) && !isset($usedInSeveralExerc
 {
 	// is picture set ?
 	$okPicture=file_exists($picturePath.'/quiz-'.$questionId)?true:false;
-?>
 
-<h3>
-  <?php echo $questionName; ?>
-</h3>
+$tool_content .= "<h3>$questionName</h3>";
 
-<form enctype="multipart/form-data" method="post" action="<?= $PHP_SELF; ?>?modifyQuestion=<?= @$modifyQuestion; ?>&newQuestion=<?= @$newQuestion; ?>">
-<table border="0" cellpadding="5">
+$tool_content .= "<form enctype=\"multipart/form-data\" method=\"post\" action=\"".$PHP_SELF.
+	"?modifyQuestion=".@$modifyQuestion."&newQuestion=".@$newQuestion."\"><table border=\"0\" cellpadding=\"5\">";
 
-<?php
 	if($okPicture)
 	{
-?>
 
-<tr>
-  <td colspan="2" align="center"><img src="<?php echo $picturePath.'/quiz-'.$questionId; ?>" border="0"></td>
-</tr>
+$tool_content .= "<tr><td colspan=\"2\" align=\"center\"><img src=\"".$picturePath.
+	"/quiz-".$questionId."\" border=\"0\"></td></tr>";
 
-<?php
 	}
 
 	// if there is an error message
 	if(!empty($msgErr))
 	{
-?>
 
-<tr>
-  <td colspan="2">
-	<table border="0" cellpadding="3" align="center" width="400" bgcolor="#FFCC00">
+$tool_content .= <<<cData
 	<tr>
-	  <td><?php echo $msgErr; ?></td>
+	  <td colspan="2">
+		<table border="0" cellpadding="3" align="center" width="400" bgcolor="#FFCC00">
+		<tr>
+		  <td>${msgErr}</td>
+		</tr>
+		</table>
+	  </td>
+	</tr>
+cData;
+	}
+
+$tool_content .= "<tr><td>".$langQuestion." :</td><td><input type=\"text\" name=\"questionName\"" .
+	"size=\"50\" maxlength=\"200\" value=\"".htmlspecialchars($questionName)."\" style=\"width:400px;\"></td>";
+
+$tool_content .= <<<cData
+	</tr>
+	<tr>
+	  <td valign="top">${langQuestionDescription} :</td>
+cData;
+
+  $tool_content .= "<td><textarea wrap=\"virtual\" name=\"questionDescription\" cols=\"50\" rows=\"4\" ".
+  	"style=\"width:400px;\">".htmlspecialchars($questionDescription)."</textarea></td></tr><tr><td>";
+
+if ($okPicture) 
+	$tool_content .= "$langReplacePicture";
+else 
+	$tool_content .= "$langAddPicture";	
+
+$tool_content .= " :</td> <td><input type=\"file\" name=\"imageUpload\" size=\"30\" style=\"width:390px;\">";
+	if ($okPicture)
+	{
+
+	$tool_content .= "<br><input type=\"checkbox\" name=\"deletePicture\" value=\"1\" ";
+	
+	if(isset($deletePicture)) 
+		$tool_content .= 'checked="checked"'; 
+	$tool_content .= "> ".$langDeletePicture;
+
+	}
+
+  $tool_content .= <<<cData
+		  </td>
+		</tr>
+		<tr>
+		  <td valign="top">${langAnswerType} :</td>
+cData;
+
+
+  $tool_content .= "<td><input type=\"radio\" name=\"answerType\" value=\"1\" "; 
+  	if ($answerType <= 1) 
+  		$tool_content .= 'checked="checked"'; 
+  	$tool_content .= "> ".$langUniqueSelect."<br>";
+	$tool_content .= "<input type=\"radio\" name=\"answerType\" value=\"2\" ";
+		if ($answerType == 2) 
+			$tool_content .= 'checked="checked"';
+		$tool_content .= "> ".$langMultipleSelect."<br>";
+	$tool_content .= "<input type=\"radio\" name=\"answerType\" value=\"4\" ";
+		if ($answerType >= 4) 
+			$tool_content .= 'checked="checked"';
+		$tool_content .= "> ".$langMatching."<br>";
+	$tool_content .= "<input type=\"radio\" name=\"answerType\" value=\"3\" ";
+		if ($answerType == 3) 
+			$tool_content .= 'checked="checked"';
+		$tool_content .= "> ".$langFillBlanks;
+$tool_content .= <<<cData
+
+	  </td>
+	</tr>
+	<tr>
+	  <td colspan="2" align="center">
+		<input type="submit" name="submitQuestion" value="${langOk}">
+		&nbsp;&nbsp;<input type="submit" name="cancelQuestion" value="${langCancel}">
+	  </td>
 	</tr>
 	</table>
-  </td>
-</tr>
+	</form>
+cData;
 
-<?php
-	}
-?>
-
-<tr>
-  <td><?php echo $langQuestion; ?> :</td>
-  <td><input type="text" name="questionName" size="50" maxlength="200" value="<?php echo htmlspecialchars($questionName); ?>" style="width:400px;"></td>
-</tr>
-<tr>
-  <td valign="top"><?php echo $langQuestionDescription; ?> :</td>
-  <td><textarea wrap="virtual" name="questionDescription" cols="50" rows="4" style="width:400px;"><?php echo htmlspecialchars($questionDescription); ?></textarea></td>
-</tr>
-<tr>
-  <td><?php echo $okPicture?$langReplacePicture:$langAddPicture; ?> :</td>
-  <td><input type="file" name="imageUpload" size="30" style="width:390px;">
-
-<?php
-	if($okPicture)
-	{
-?>
-
-	<br><input type="checkbox" name="deletePicture" value="1" <?php if(isset($deletePicture)) echo 'checked="checked"'; ?>> <?= $langDeletePicture; ?>
-
-<?php
-	}
-?>
-
-  </td>
-</tr>
-<tr>
-  <td valign="top"><?php echo $langAnswerType; ?> :</td>
-  <td><input type="radio" name="answerType" value="1" <?php if($answerType <= 1) echo 'checked="checked"'; ?>> <?php echo $langUniqueSelect; ?><br>
-	  <input type="radio" name="answerType" value="2" <?php if($answerType == 2) echo 'checked="checked"'; ?>> <?php echo $langMultipleSelect; ?><br>
-	  <input type="radio" name="answerType" value="4" <?php if($answerType >= 4) echo 'checked="checked"'; ?>> <?php echo $langMatching; ?><br>
-	  <input type="radio" name="answerType" value="3" <?php if($answerType == 3) echo 'checked="checked"'; ?>> <?php echo $langFillBlanks; ?>
-  </td>
-</tr>
-<tr>
-  <td colspan="2" align="center">
-	<input type="submit" name="submitQuestion" value="<?php echo $langOk; ?>">
-	&nbsp;&nbsp;<input type="submit" name="cancelQuestion" value="<?php echo $langCancel; ?>">
-  </td>
-</tr>
-</table>
-</form>
-
-<?php
 }
 ?>
