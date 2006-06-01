@@ -1,66 +1,57 @@
 <?php 
- // $Id$
-/*
-      +----------------------------------------------------------------------+
-      | CLAROLINE version 1.3.2 $Revision$                             |
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2003 Universite catholique de Louvain (UCL)      |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
-      +----------------------------------------------------------------------+
-      | Authors: Olivier Brouckaert <oli.brouckaert@skynet.be>               |
-      +----------------------------------------------------------------------+
+/*=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Á full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/*===========================================================================
+	work.php
+	@last update: 17-4-2006 by Costas Tsibanis
+	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
+==============================================================================        
+        @Description: Main script for the work tool
+
+ 	This is a tool plugin that allows course administrators - or others with the
+ 	same rights
+
+ 	The user can : - navigate through files and directories.
+                       - upload a file
+                       - delete, copy a file or a directory
+                       - edit properties & content (name, comments, 
+			 html content)
+
+ 	@Comments: The script is organised in four sections.
+
+ 	1) Execute the command called by the user
+           Note (March 2004) some editing functions (renaming, commenting)
+           are moved to a separate page, edit_document.php. This is also
+           where xml and other stuff should be added.
+   	2) Define the directory to display
+  	3) Read files and directories from the directory defined in part 2
+  	4) Display all of that on an HTML page
+ 
+  	@TODO: eliminate code duplication between document/document.php, scormdocument.php
+==============================================================================
 */
-
-		/*>>>>>>>>>>>>>>>>>>>> EXERCISE ADMINISTRATION <<<<<<<<<<<<<<<<<<<<*/
-
-/**
- * This script allows to manage (create, modify) an exercise and its questions
- *
- * Following scripts are includes for a best code understanding :
- *
- * - exercise.class.php : for the creation of an Exercise object
- * - question.class.php : for the creation of a Question object
- * - answer.class.php : for the creation of an Answer object
- *
- * - exercise.lib.php : functions used in the exercise tool
- *
- * - exercise_admin.inc.php : management of the exercise
- * - question_admin.inc.php : management of a question (statement & answers)
- * - statement_admin.inc.php : management of a statement
- * - answer_admin.inc.php : management of answers
- * - question_list_admin.inc.php : management of the question list
- *
- * Main variables used in this script :
- *
- * - $is_allowedToEdit : set to 1 if the user is allowed to manage the exercise
- *
- * - $objExercise : exercise object
- * - $objQuestion : question object
- * - $objAnswer : answer object
- *
- * - $aType : array with answer types
- * - $exerciseId : the exercise ID
- * - $picturePath : the path of question pictures
- *
- * - $newQuestion : ask to create a new question
- * - $modifyQuestion : ID of the question to modify
- * - $editQuestion : ID of the question to edit
- * - $submitQuestion : ask to save question modifications
- * - $cancelQuestion : ask to cancel question modifications
- * - $deleteQuestion : ID of the question to delete
- * - $moveUp : ID of the question to move up
- * - $moveDown : ID of the question to move down
- * - $modifyExercise : ID of the exercise to modify
- * - $submitExercise : ask to save exercise modifications
- * - $cancelExercise : ask to cancel exercise modifications
- * - $modifyAnswers : ID of the question which we want to modify answers for
- * - $cancelAnswers : ask to cancel answer modifications
- * - $buttonBack : ask to go back to the previous page in answers of type "Fill in blanks"
- */
 
 include('exercise.class.php');
 include('question.class.php');
@@ -70,7 +61,12 @@ include('exercise.lib.php');
 
 $require_current_course = TRUE;
 $langFiles='exercice';
-include ('../../include/init.php');
+
+//include ('../../include/init.php');
+
+include '../../include/baseTheme.php';
+
+$tool_content = "";
 
 $nameTools = $langExercices;
 $navigation[]= array ("url"=>"exercice.php", "name"=> $langExercices);
@@ -236,7 +232,7 @@ if(isset($modifyIn) && $modifyIn == 'thisExercise') {
 	}
 }
 
-begin_page();
+//begin_page();
 
 if(isset($newQuestion) || isset($modifyQuestion)) {
 	// statement management
@@ -263,5 +259,5 @@ if(!isset($newQuestion) && !isset($modifyQuestion) && !isset($editQuestion) && !
 		include('question_list_admin.inc.php');
 	}
 }
-
+draw($tool_content, 2);
 ?>
