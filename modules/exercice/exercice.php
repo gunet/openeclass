@@ -1,26 +1,58 @@
 <?php 
  
- // $Id$
-/*
-      +----------------------------------------------------------------------+
-      | CLAROLINE version 1.4.0 $Revision$                            |
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2003 Universite catholique de Louvain (UCL)      |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
-      +----------------------------------------------------------------------+
-      | Authors: Olivier Brouckaert <oli.brouckaert@skynet.be>               |
-      +----------------------------------------------------------------------+
+/*=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Á full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/*===========================================================================
+	exercise.php
+	@last update: 17-4-2006 by Costas Tsibanis
+	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
+==============================================================================        
+        @Description: Main script for the exercise tool
+
+ 	This is a tool plugin that allows course administrators - or others with the
+ 	same rights
+
+ 	The user can : - navigate through files and directories.
+                       - upload a file
+                       - delete, copy a file or a directory
+                       - edit properties & content (name, comments, 
+			 html content)
+
+ 	@Comments: The script is organised in four sections.
+
+ 	1) Execute the command called by the user
+           Note (March 2004) some editing functions (renaming, commenting)
+           are moved to a separate page, edit_document.php. This is also
+           where xml and other stuff should be added.
+   	2) Define the directory to display
+  	3) Read files and directories from the directory defined in part 2
+  	4) Display all of that on an HTML page
+ 
+  	@TODO: eliminate code duplication between document/document.php, scormdocument.php
+==============================================================================
 */
-
-		/*>>>>>>>>>>>>>>>>>>>> EXERCISE LIST <<<<<<<<<<<<<<<<<<<<*/
-
-/**
- * This script shows the list of exercises for administrators and students.
- */
 
 include('exercise.class.php');
 include('question.class.php');
@@ -31,10 +63,14 @@ $langFiles='exercice';
 $require_help = TRUE;
 $helpTopic = 'Exercise';
 
-include('../../include/init.php');
+//include('../../include/init.php');
+
+include '../../include/baseTheme.php';
+
+$tool_content = "";
 
 $nameTools = $langExercices;
-begin_page($nameTools);
+//begin_page($nameTools);
 
 /*******************************/
 /* Clears the exercise session */
@@ -107,110 +143,99 @@ else
 }
 
 $nbrExercises=mysql_num_rows($result);
-?>
 
-<table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
-<tr>
 
-<?php
+$tool_content .= "<table border=\"0\" align=\"center\" cellpadding=\"2\" cellspacing=\"2\" width=\"100%\"><tr>";
+
+
 if($is_allowedToEdit)
 {
-?>
+/////////////////////////////////////////////////////////////////////////////////
 
-  <td width="80%">
-	<a href="admin.php"><?php echo $langNewEx; ?></a> |
-	<a href="question_pool.php"><?php echo $langQuestionPool; ?></a>
-	<!-- | <a href="results.php?exerciseId=<?php echo $exerciseId; ?>"><?php echo $langResults; ?></a>-->
+  $tool_content .= <<<cData
+  	<td width="80%">
+		<a href="admin.php">${langNewEx}</a> |
+	<a href="question_pool.php">${langQuestionPool}</a>
   </td>
   <td width="50%" align="right">
+cData;
 
-<?php
+/////////////////////////////////////////////////////////////////////////////////
 }
-else
-{
-?>
-
-	<td align="right">
-
-<?php
+else 
+{ 
+	$tool_content .= "<td align=\"right\">";
 }
 
 if(isset($page))
 {
-?>
 
-<small><a href="<?= $PHP_SELF; ?>?page=<?php echo ($page-1); ?>">&lt;&lt; <?= $langPreviousPage; ?></a></small> |
+	$page_temp = $page-1;
+	$tool_content .= <<<cData
+		<small><a href="${PHP_SELF}?page=${page_temp}">
+	&lt;&lt; ${langPreviousPage}</a></small> |
+cData;
 
-<?php
 }
 elseif($nbrExercises > $limitExPage)
 {
-?>
-	<small>&lt;&lt; <?= $langPreviousPage; ?> |</small>
-<?php
+	$tool_content .= "<small>&lt;&lt; ${langPreviousPage} |</small>";
 }
 
 if($nbrExercises > $limitExPage)
 {
-?>
 
-	<small><a href="<?php echo $PHP_SELF; ?>?page=<?php echo ($page+1); ?>"><?php echo $langNextPage; ?> &gt;&gt;</a></small>
+	$page_temp = $page+1;
+	$tool_content .= <<<cData
+	<small><a href="${PHP_SELF}?page=${page_temp}>">${langNextPage} &gt;&gt;</a></small>
+cData;
 
-<?php
 }
 elseif(isset($page))
 {
-?>
-
-	<small><?php echo $langNextPage; ?> &gt;&gt;</small>
-
-<?php
+	$tool_content .= "<small>${langNextPage} &gt;&gt;</small>";
 }
-?>
 
-  </td>
-</tr>
-</table>
+$tool_content .= <<<cData
+	</td>
+	</tr>
+	</table>
+	<table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
+cData;
 
-<table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
-
-<?php
 // shows the title bar only for the administrator
 if($is_allowedToEdit)
 {
 
-?>
+$tool_content .= <<<cData
+	<tr bgcolor="#E6E6E6">
+	  <td align="center">
+			${langExerciseName}
+	  </td>
+	  <td align="center">
+			${langModify}
+	  </td>
+	  <td align="center">
+			${langDelete}
+	  </td>
+	  <td align="center">
+			${langActivate} / ${langDeactivate}
+	  </td>
+	  <td align="center">
+			${langResults}
+	  </td>
+	</tr>
+cData;
 
-<tr bgcolor="#E6E6E6">
-  <td align="center">
-	<?php echo $langExerciseName; ?>
-  </td>
-  <td align="center">
-	<?php echo $langModify; ?>
-  </td>
-  <td align="center">
-	<?php echo $langDelete; ?>
-  </td>
-  <td align="center">
-	<?php echo "$langActivate / $langDeactivate"; ?>
-  </td>
-  <td align="center">
-	<?php echo "$langResults"; ?>
-  </td>
-</tr>
-
-<?php
 }
 
 if(!$nbrExercises)
 {
-?>
 
-<tr>
-  <td <?php if($is_allowedToEdit) echo 'colspan="4"'; ?>><?php echo $langNoEx; ?></td>
-</tr>
-
-<?php
+	$tool_content .= "<tr><td";
+	if($is_allowedToEdit) 
+		$tool_content .= " colspan=\"4\"";
+	$tool_content .= ">${langNoEx}</td></tr>";
 }
 
 $i=1;
@@ -218,77 +243,80 @@ $i=1;
 // while list exercises
 while($row=mysql_fetch_array($result))
 {
-?>
 
-<tr>
+$tool_content .= "<tr>";
 
-<?php
 	// prof only
 	if($is_allowedToEdit)
 	{
-?>
+	$page_temp = ($i+(@$page*$limitExPage)).'.';
+  $tool_content .= <<<cData
+	  <td width="60%">
+		<table border="0" cellpadding="0" cellspacing="0" width="100%">
+		<tr>
+		<td width="20" align="right">${page_temp}</td>
+		  <td width="1">&nbsp;</td>
+		  <td><a href="exercice_submit.php?exerciseId=${row['id']}" 
+cData;
 
-  <td width="60%">
-	<table border="0" cellpadding="0" cellspacing="0" width="100%">
-	<tr>
-	  <td width="20" align="right"><?php echo ($i+(@$page*$limitExPage)).'.'; ?></td>
-	  <td width="1">&nbsp;</td>
-	  <td><a href="exercice_submit.php?exerciseId=<?= $row['id']; ?>" <?php if(!$row['active']) echo 'class="invisible"'; ?>><?php echo $row['titre']; ?></a></td>
-	</tr>
-	</table>
-  </td>
-  <td width="10%" align="center"><a href="admin.php?exerciseId=<?= $row['id']; ?>"><img src="../../images/edit.gif" border="0" alt="<?php echo htmlspecialchars($langModify); ?>"></a></td>
-  <td width="10%" align="center"><a href="<?php echo $PHP_SELF; ?>?choice=delete&exerciseId=<?= $row['id']; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlspecialchars($langConfirmYourChoice)); ?>')) return false;"><img src="../../images/delete.gif" border="0" alt="<?php echo htmlspecialchars($langDelete); ?>"></a></td>
+	if(!$row['active']) 
+		$tool_content .= "class=\"invisible\"".">"; 
+	$tool_content .= $row['titre']."</a></td>";
+	
+	$langModify_temp = htmlspecialchars($langModify);
+	$langConfirmYourChoice_temp = addslashes(htmlspecialchars($langConfirmYourChoice));
+	$langDelete_temp = htmlspecialchars($langDelete);
+	$tool_content .= <<<cData
+		</tr></table></td>
+	  <td width="10%" align="center"><a href="admin.php?exerciseId=${row['id']}">
+	  <img src="../../images/edit.gif" border="0" alt="${langModify_temp}"></a></td>
+	  <td width="10%" align="center">
+	  <a href="${PHP_SELF}?choice=delete&exerciseId=${row['id']}" 
+	  onclick="javascript:if(!confirm('${langConfirmYourChoice_temp}')) return false;">
+	  <img src="../../images/delete.gif" border="0" alt="${langDelete_temp}"></a></td>
+cData;
 
-<?php
 		// if active
 		if($row['active'])
 		{
 
-if (isset($page))	
-	echo "<td width='20%' align='center'>
-	<a href='$PHP_SELF?choice=disable&page=$page&exerciseId=$row[id]'>
-	<img src='../../images/visible.gif' border='0' alt='htmlspecialchars($langDeactivate)'></a></td>";
-else
-	echo "<td width='20%' align='center'>
-	<a href='$PHP_SELF?choice=disable&exerciseId=$row[id]'>
-	<img src='../../images/visible.gif' border='0' alt='htmlspecialchars($langDeactivate)'></a></td>";
-
+			if (isset($page))	
+				$tool_content .= "<td width='20%' align='center'>".
+					"<a href='${PHP_SELF}?choice=disable&page=${page}&exerciseId=${row[id]}'>".
+					"<img src='../../images/visible.gif' border='0' alt='".htmlspecialchars($langDeactivate)."'></a></td>";
+			else
+				$tool_content .= "<td width='20%' align='center'><a href='${PHP_SELF}?choice=disable&exerciseId=${row[id]}'>".
+					"<img src='../../images/visible.gif' border='0' alt='".htmlspecialchars($langDeactivate)."'></a></td>";
 }
 // else if not active
 else
 {
-
-if (isset($page))
-	echo "<td width='20%' align='center'>
-	<a href='$PHP_SELF?choice=enable&page=$page&exerciseId=$row[id]'>
-	<img src='../../images/invisible.gif' border='0' alt='htmlspecialchars($langActivate)'></a></td>";
-else
-	echo "<td width='20%' align='center'>
-	<a href='$PHP_SELF?choice=enable&exerciseId=$row[id]'>
-	<img src='../../images/invisible.gif' border='0' alt='htmlspecialchars($langActivate)'></a></td>";
-
+	if (isset($page))
+		$tool_content .= "<td width='20%' align='center'>".
+			"<a href='${PHP_SELF}?choice=enable&page=${page}&exerciseId=${row[id]}'>".
+			"<img src='../../images/invisible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
+	else
+		$tool_content .= "<td width='20%' align='center'>".
+			"<a href='${PHP_SELF}?choice=enable&exerciseId=${row[id]}'>".
+			"<img src='../../images/invisible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
 }
-?>
 
-
-<?php
-	echo "<td width='20%' align='center'>
-	<a href='results.php?&exerciseId=$row[id]'>
-	<img src='../../images/invisible.gif' border='0' alt='htmlspecialchars($langActivate)'></a></td></tr>";
+	$tool_content .= "<td width='20%' align='center'>	<a href='results.php?&exerciseId=${row[id]}'>".
+		"<img src='../../images/invisible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td></tr>";
 	}
 	// student only
 	else
 	{
-?>
+	$page_offset_temp = @($i+($page*$limitExPage)).'.';
+	$tool_content .= <<<cData
+	  <td width="100%">
+		<table border="0" cellpadding="0" cellspacing="0" width="100%">
+		<tr>
+			<td width="20" align="right">${page_offset_temp}</td>
+		  <td width="1">&nbsp;</td>
+		  <td>
+cData;
 
-  <td width="100%">
-	<table border="0" cellpadding="0" cellspacing="0" width="100%">
-	<tr>
-	  <td width="20" align="right"><?php echo @($i+($page*$limitExPage)).'.'; ?></td>
-	  <td width="1">&nbsp;</td>
-	  <td>
-<?php
 	$CurrentDate = time();
 //	$CurrentDate = date("Y-m-d H:i:s");
 //	echo "CurrentDate = ".$CurrentDate."<br>\n";
@@ -299,40 +327,27 @@ else
 //		substr($CurrentDate, 8,2)."|".
 //		substr($CurrentDate, 0,4)."<br><br>";
 //	$CurrentDate = mktime(substr($CurrentDate, 11,2),substr($CurrentDate, 14,2),substr($CurrentDate, 17,2),substr($CurrentDate, 5,2),substr($CurrentDate, 8,2),substr($CurrentDate, 0,4));
-	//echo "temp_StartDate = ".$row['StartDate']."<br>\n";
-	//echo "temp_EndDate = ".$row['EndDate']."<br>\n";
+//	echo "temp_StartDate = ".$row['StartDate']."<br>\n";
+//	echo "temp_EndDate = ".$row['EndDate']."<br>\n";
 	$temp_StartDate = mktime(substr($row['StartDate'], 11,2),substr($row['StartDate'], 14,2),substr($row['StartDate'], 17,2),substr($row['StartDate'], 5,2),substr($row['StartDate'], 8,2),substr($row['StartDate'], 0,4));
 	$temp_EndDate = mktime(substr($row['EndDate'], 11,2),substr($row['EndDate'], 14,2),substr($row['EndDate'], 17,2),substr($row['EndDate'], 5,2),substr($row['EndDate'], 8,2),substr($row['EndDate'], 0,4));
 //	echo "CurrentDate = ".$CurrentDate."<br>\n";
 //	echo "temp_StartDate = ".$temp_StartDate."<br>\n";
 //	echo "temp_EndDate = ".$temp_EndDate."<br>\n";
 	if (($CurrentDate >= $temp_StartDate) && ($CurrentDate < $temp_EndDate)) {
-?>
-	  <a href="exercice_submit.php?exerciseId=<?= $row['id']; ?>"><?=  $row['titre']; ?></a>
-<?php
+		$tool_content .= "<a href=\"exercice_submit.php?exerciseId=${row['id']}\">${row['titre']}</a>";
 	} else {
-?>
-		<?=  $row['titre']; ?>
-<?php
+		$tool_content .= $row['titre'];
 	}
-?>  
-	  <?php echo "<br>".$langExerciseStart; ?>: <?=  $row['StartDate']; ?>
-	  <?php echo "<br>".$langExerciseEnd; ?>: <?=  $row['EndDate']; ?>
-	  <?php 
+	  $tool_content .= "<br>".$langExerciseStart.": ".$row['StartDate'].
+	  	"<br>".$langExerciseEnd.": ".$row['EndDate'];
 	  if ($row['TimeConstrain']>0)
-	  	echo "<br>".$langExerciseConstrain.": ".$row['TimeConstrain']." ".$langExerciseConstrainUnit;; 
+	  	$tool_content .= "<br>".$langExerciseConstrain.": ".$row['TimeConstrain']." ".$langExerciseConstrainUnit;
 	  if ($row['AttemptsAllowed']>0)	
-	   echo "<br>".$langExerciseAttemptsAllowed.": ".$row['AttemptsAllowed']; 
+	   $tool_content .= "<br>".$langExerciseAttemptsAllowed.": ".$row['AttemptsAllowed']; 
 	  
-	  
-	  ?>
-	  </td>
-	</tr>
-	</table>
-  </td>
-</tr>
+	  $tool_content .= "</td></tr></table></td></tr>";
 
-<?php
 	}
 
 	// skips the last exercise, that is only used to know if we have or not to create a link "Next page"
@@ -343,29 +358,27 @@ else
 
 	$i++;
 }	// end while()
-?>
 
-</table>
+	$tool_content .= "</table>";
 
-<?php
 /*****************************************/
 /* Exercise Results (uses tracking tool) */
 /*****************************************/
 
 // if tracking is enabled
 if(isset($is_trackingEnabled)):
-?>
 
-<br><br>
+	$tool_content .= <<<cData
+		<br><br>
 
-<table cellpadding="2" cellspacing="2" border="0" width="80%">
-<tr bgcolor="#E6E6E6" align="center">
-  <td width="50%"><?php echo $langExercice; ?></td>
-  <td width="30%"><?php echo $langDate; ?></td>
-  <td width="20%"><?php echo $langResult; ?></td>
-</tr>
+		<table cellpadding="2" cellspacing="2" border="0" width="80%">
+		<tr bgcolor="#E6E6E6" align="center">
+		  <td width="50%">${langExercice}</td>
+		  <td width="30%">${langDate}</td>
+		  <td width="20%">${langResult}</td>
+		</tr>
+cData;
 
-<?php
 $sql="SELECT `ce`.`titre`, `te`.`exe_result` , `te`.`exe_weighting`, UNIX_TIMESTAMP(`te`.`exe_date`)
       FROM `$TBL_EXERCICES` AS ce , `$TBL_TRACK_EXERCICES` AS te
       WHERE `te`.`exe_user_id` = '$_uid'
@@ -379,31 +392,20 @@ if(is_array($results))
 	for($i = 0; $i < sizeof($results); $i++)
 	{
 
-?>
-<tr>
-  <td class="content"><?php echo $results[$i][0]; ?></td>
-  <td class="content" align="center"><small><?php echo strftime($dateTimeFormatLong,$results[$i][3]); ?></small></td>
-  <td class="content" align="center"><?php echo $results[$i][1]; ?> / <?php echo $results[$i][2]; ?></td>
-</tr>
+/////////////////////////////////////////////////////////////////////////////////
+	$date_strftime = strftime($dateTimeFormatLong,$results[$i][3]);
+	$tool_content .= "<tr><td class=\"content\">".$results[$i][0]."></td>".
+  	"<td class=\"content\" align=\"center\"><small>".$date_strftime."</small></td>".
+  	"<td class=\"content\" align=\"center\">".$results[$i][1]." / ".$results[$i][2]."</td></tr>";
 
-<?php
+/////////////////////////////////////////////////////////////////////////////////
 	}
 }
 else
-{
-?>
+	$tool_content .= "<tr><td colspan=\"3\">${langNoResult}</td></tr>";
 
-<tr>
-  <td colspan="3"><?php echo $langNoResult; ?></td>
-</tr>
+$tool_content .= "</table>";
 
-<?php
-}
-?>
-
-</table>
-
-<?php
 endif; // end if tracking is enabled
-
+draw($tool_content, 2);
 ?>
