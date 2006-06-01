@@ -45,15 +45,9 @@ h2 { font-size: 12pt; font-style: bold; }
 
 $require_login = TRUE;
 $langFiles = array('registration', 'opencours');
-//<<<<<<< courses.php
-//include("../../include/init.php");
-//$path2add=1;
+
 include '../../include/baseTheme.php';
-//=======
-//
-//include '../../include/baseTheme.php';
-//
-//>>>>>>> 1.3
+
 $nameTools = $langCoursesLabel;
 
 check_guest();
