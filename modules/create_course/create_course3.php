@@ -148,106 +148,7 @@ if(!isset($_GET["finish_create_course"])) {
 <input type=\"hidden\" name=\"course_references\" value=\"$course_references\">
 <input type=\"hidden\" name=\"course_keywords\" value=\"$course_keywords\">
  -->
-<<<<<<< create_course3.php
 
-    <!-- S T E P  3   [start] -->
-
-
-    <tr>
-    <td colspan=\"4\">
-        <table bgcolor=\"$color1\" border=\"2\">
-            <tr>
-                <td valign=\"top\" align=\"right\">
-                    <font face=\"arial, helvetica\" size=\"2\"><b>Τύπος πρόσβασης:</b></font>
-                </td>
-                <td valign=\"top\">
-                    <font face=\"arial, helvetica\" size=\"2\">
-                        <fieldset>
-                              <legend>Διαθέσιμοι τύποι πρόσβασης </legend>
-                              <p>
-                            <input name=\"formvisible\" type=\"radio\" value=\"2\" checked=\"checked\" /> $langPublic <br />
-                              <input name=\"formvisible\" type=\"radio\" value=\"1\" /> $langPrivOpen <br />
-                              <input name=\"formvisible\" type=\"radio\" value=\"0\" /> $langPrivate
-                              </p>
-                          </fieldset>
-                          $langFieldsRequAsterisk<br>$langAccessType
-                    </font>
-                </td>";
-                    help("CreateCourse_formvisible");
-echo "
-            </tr>
-            <tr>
-                <td valign=\"top\" align=\"right\">
-                    <font face=\"arial, helvetica\" size=\"2\"><b>Υποσυστήματα:</b></font>
-                </td>
-                <td valign=\"top\">
-                    <font face=\"arial, helvetica\" size=\"2\">
-                            <table border=\"1\">
-                                <tr>
-                                  <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"1\" checked=\"checked\" />
-                                  $langAgenda</td>
-                                  <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"2\" checked=\"checked\" />
-                                  $langLinks</td>
-                                  <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"3\" checked=\"checked\" />
-                                  $langDoc</td>
-                                  <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"4\" checked=\"checked\" />
-                            $langVideo</td>
-                                </tr>
-                                <tr>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"5\" />
-                            $langWorks</td>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"6\" />
-                                  $langVideoLinks</td>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"7\" />
-                                  $langAnnouncements</td>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"8\" />
-                            $langUsers</td>
-                                </tr>
-                                <tr>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"9\" />
-                            $langForums</td>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"10\" />
-                                    $langExercices</td>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"11\" />
-                                  $langStatistics</td>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"16\" />
-                                  $langDropBox</td>
-                                </tr>
-
-                                  <tr>
-                                <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" />
-                                  $langCourseDesc</td>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"15\" />
-                                  $langGroups</td>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"19\" />
-                                  $langChat</td>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"21\" />
-                                  $langSurvey</td>
-                                </tr>
-
-                                <tr>
-                                <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"22\" />
-                                  $langPoll</td>
-                                <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"23\" />
-                                  $langUsage</td>
-                                  <td>&nbsp;</td>
-                                  <td>&nbsp;</td>
-                                </tr>
-
-                              </table>
-                              <br>$langSubsystems
-
-                </td>
-                ";
-                    help("CreateCourse_subsystems");
-echo "
-
-    </td></tr>
-
-
-    <tr><td align=\"right\"><font face=\"arial, helvetica\" size=\"2\"><b>$langLn:</b></font></td>
-    <td>
-=======
 
     <!-- S T E P  3   [start] -->
 
@@ -345,7 +246,6 @@ echo "
 
     <tr><td align=\"right\"><font face=\"arial, helvetica\" size=\"2\"><b>$langLn:</b></font></td>
     <td>
->>>>>>> 1.11
 <select name=\"languageCourse\">";
 $dirname = "../lang/";
 if($dirname[strlen($dirname)-1]!='/')
