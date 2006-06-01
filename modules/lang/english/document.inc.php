@@ -84,4 +84,34 @@ $langParentDir = "parent directory";
 $langNoticeGreek = "Be aware that filename cannot have greek characters!";
 $langInvalidDir = "Invalid Directory or Directory not exists";
 
+
+//prosthikes gia v2 - metadata
+$langTitle="Title";
+$langCategory="Category";
+//$langCreator=""; //den xrhsimopoieitai giati o creator einai o diaxeirisths pou kanei upload
+$langCreatorEmail="Author's email";
+$langDescription="Description";
+$langFormat="Format";
+// $langDate=""; //den xrhsimopieitai giati to pairnei aftomata
+// $langFormat="";  //den xrhsimopoieitai. antistoixei se mime type
+$langSubject="Subject";
+$langAuthor="Author";
+$langLanguage="Language";
+$langCopyrighted="Copyright";
+$langCopyrightedFree="Free";
+$langCopyrightedNotFree="Protected";
+$langCopyrightedUnknown="Unknown";
+$langChangeMetadata="Modify document information";
+$langEditMeta="Modify<br>Information";
+
+
+$langCategoryExcercise="Excersise";
+$langCategoryEssay="Essay";
+$langCategoryDescription="Course description";
+$langCategoryExample="Example";
+$langCategoryTheory="Theory";
+$langCategoryLecture="Lecture";
+$langCategoryNotes="Notes";
+$langCategoryOther="Other";
+
 ?>
