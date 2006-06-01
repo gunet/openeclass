@@ -312,10 +312,19 @@ else unset($uid);
 
 // first case check in which courses are registered as a student
 if (isset($uid) AND !isset($logout)) { 
-	
-include("logged_in_content.php");
 
+//$eclass_perso will be read from the db.
+//keep as is for now
+$eclass_perso = 1;
+if ($eclass_perso == 0) {
+	include("logged_in_content.php");
 draw($tool_content,1);
+} else {
+	include("perso.php");
+	drawPerso($tool_content);
+}
+
+
 
 }	// end of if login
 
