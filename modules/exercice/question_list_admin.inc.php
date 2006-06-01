@@ -63,19 +63,18 @@ if(isset($deleteQuestion))
 	// destruction of the Question object
 	unset($objQuestionTmp);
 }
-?>
 
-<hr size="1" noshade="noshade">
-
-<a href="<?php echo $PHP_SELF; ?>?newQuestion=yes"><?php echo $langNewQu; ?></a> | <a href="question_pool.php?fromExercise=<?php echo $exerciseId; ?>"><?php echo $langGetExistingQuestion; ?></a>
-
-<br><br>
-
-<b><?php echo $langQuestionList; ?></b>
-
+$tool_content .= <<<cData
+	<hr size="1" noshade="noshade">
+	
+	<a href="${PHP_SELF}?newQuestion=yes">${langNewQu}</a> | <a href="question_pool.php?fromExercise=${exerciseId}">
+		${langGetExistingQuestion}</a>
+	<br><br>
+	<b>${langQuestionList}</b>
+	
 <table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
+cData;
 
-<?php
 if($nbrQuestions)
 {
 	$questionList=$objExercise->selectQuestionList();
@@ -87,40 +86,36 @@ if($nbrQuestions)
 		$objQuestionTmp=new Question();
 
 		$objQuestionTmp->read($id);
-?>
 
-<tr>
-  <td><?php echo "$i. ".$objQuestionTmp->selectTitle(); ?><br><small><?php echo $aType[$objQuestionTmp->selectType()-1]; ?></small></td>
-</tr>
-<tr>
-  <td>
-	<a href="<?php echo $PHP_SELF; ?>?editQuestion=<?php echo $id; ?>"><img src="../../images/edit.gif" border="0" align="absmiddle" alt="<?php echo $langModify; ?>"></a>
-	<a href="<?php echo $PHP_SELF; ?>?deleteQuestion=<?php echo $id; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlspecialchars($langConfirmYourChoice)); ?>')) return false;"><img src="../../images/delete.gif" border="0" align="absmiddle" alt="<?php echo $langDelete; ?>"></a>
+$tool_content .= "<tr><td>".$i." ".$objQuestionTmp->selectTitle()."<br><small>".
+	$aType[$objQuestionTmp->selectType()-1]."</small></td>";
+	
+$tool_content .= <<<cData
+	</tr>
+	<tr>
+	  <td>
+		<a href="<?php echo $PHP_SELF; ?>?editQuestion=<?php echo $id; ?>"><img src="../../images/edit.gif" border="0" align="absmiddle" alt="<?php echo $langModify; ?>"></a>
+		<a href="<?php echo $PHP_SELF; ?>?deleteQuestion=<?php echo $id; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlspecialchars($langConfirmYourChoice)); ?>')) return false;"><img src="../../images/delete.gif" border="0" align="absmiddle" alt="<?php echo $langDelete; ?>"></a>
+cData;
 
-<?php
 		if($i != 1)
 		{
-?>
 
-	<a href="<?php echo $PHP_SELF; ?>?moveUp=<?php echo $id; ?>"><img src="../../images/up.gif" border="0" align="absmiddle" alt="<?php echo $langMoveUp; ?>"></a>
+	$tool_content .= "<a href=\"".$PHP_SELF."?moveUp=".$id.
+		"\"><img src=\"../../images/up.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langMoveUp."\"></a>";
 
-<?php
 		}
 
 		if($i != $nbrQuestions)
 		{
-?>
 
-	<a href="<?php echo $PHP_SELF; ?>?moveDown=<?php echo $id; ?>"><img src="../../images/down.gif" border="0" align="absmiddle" alt="<?php echo $langMoveDown; ?>"></a>
+	$tool_content .= "<a href=\"".$PHP_SELF."?moveDown=".$id.
+		"\"><img src=\"../../images/down.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langMoveDown."\"></a>";
 
-<?php
 		}
-?>
 
-  </td>
-</tr>
+  $tool_content .= "</td></tr>";
 
-<?php
 		$i++;
 
 		unset($objQuestionTmp);
@@ -129,14 +124,13 @@ if($nbrQuestions)
 
 if(!isset($i))
 {
-?>
-
-<tr>
-  <td><?php echo $langNoQuestion; ?></td>
-</tr>
-
-<?php
+$tool_content .= <<<cData
+	<tr>
+	  <td>${langNoQuestion}</td>
+	</tr>
+cData;
 }
-?>
 
-</table>
+
+$tool_content .= "</table>";
+?>
