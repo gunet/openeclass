@@ -131,7 +131,7 @@ if(!isset($search_terms)) {
 	
 }else 
 {//if isset($submit) = true
-	$tool_content .= "<h2>".$langSearchingFor."<br>".$search_terms."...</h2><br><br>";
+	$tool_content .=$langSearchingFor."<br><h2>".$search_terms."...</h2><br><br>";
 
 	
 	//anazhthsh sthn kentrikh vash - epilogh ths kentrikhs DB
@@ -154,7 +154,7 @@ if(!isset($search_terms)) {
 		$c++;
 		$tool_content .= "<li>".$res['contenu'].": ".$res['temps']."<br>";
 	}
-	if ($c == 0) $tool_content .= "<li>0 apotelesmata<br>";
+	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
 	
 	
 
@@ -178,7 +178,7 @@ if(!isset($search_terms)) {
 		$c++;
 		$tool_content .= "<li>".$res['titre'].": ".$res['contenu']."<br>";
 	}
-	if ($c == 0) $tool_content .= "<li>0 apotelesmata<br>";
+	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
 
 	
 	
@@ -198,7 +198,7 @@ if(!isset($search_terms)) {
 		$c++;
 		$tool_content .= "<li>".$res['title'].": ".$res['content']."<br>";
 	}
-	if ($c == 0) $tool_content .= "<li>0 apotelesmata<br>";
+	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
 	
 	
 	
@@ -218,7 +218,7 @@ if(!isset($search_terms)) {
 		$c++;
 		$tool_content .= "<li><b>".$res['filename']."</b>: (".$res['comment'].")<br>";
 	}
-	if ($c == 0) $tool_content .= "<li>0 apotelesmata<br>";
+	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
 	
 	
 	
@@ -238,7 +238,7 @@ if(!isset($search_terms)) {
 		$c++;
 		$tool_content .= "<li>".$res['titre'].": ".$res['description']."<br>";
 	}
-	if ($c == 0) $tool_content .= "<li>0 apotelesmata<br>";
+	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
 	
 	
 	
@@ -257,8 +257,27 @@ if(!isset($search_terms)) {
 		$c++;
 		$tool_content .= "<li>".$res['texte_intro']."<br>";
 	}
-	if ($c == 0) $tool_content .= "<li>0 apotelesmata<br>";
+	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
 	
+	
+	
+	
+	
+	
+	//-------------------------------------------------------------------------------------------------
+	//anazhthsh ston pinaka posts_text (periexomeno mhnymatwn gia ta forums)
+	$tool_content .= "</ul><br><br><br>$langForum<hr><ul>";
+	
+	$query = "SELECT * FROM posts_text WHERE post_text LIKE '%".$search_terms."%'";	
+	$result = mysql_query($query);	
+	
+	$c = 0;
+	while($res = mysql_fetch_array($result))
+	{
+		$c++;
+		$tool_content .= "<li>".$res['post_text']."<br>";
+	}
+	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
 	
 	
 	
@@ -277,7 +296,7 @@ if(!isset($search_terms)) {
 		$c++;
 		$tool_content .= "<li>".$res['url'].": ".$res['titre']." (".$res['description'].")<br>";
 	}
-	if ($c == 0) $tool_content .= "<li>0 apotelesmata<br>";
+	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
 	
 	
 	
@@ -296,7 +315,7 @@ if(!isset($search_terms)) {
 		$c++;
 		$tool_content .= "<li>".$res['url'].": ".$res['titre']." (".$res['description'].")<br>";
 	}
-	if ($c == 0) $tool_content .= "<li>0 apotelesmata<br>";
+	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
 	
 	
 	
@@ -304,7 +323,7 @@ if(!isset($search_terms)) {
 	
 	//-------------------------------------------------------------------------------------------------
 	//anazhthsh ston pinaka questions
-	$tool_content .= "</ul><br><br><br>$langQuestions<hr><ul>";
+	$tool_content .= "</ul><br><br><br>Questions<hr><ul>";
 	
 	$query = "SELECT * FROM questions WHERE question LIKE '%".$search_terms."%' OR description LIKE '%".$search_terms."%'";	
 	$result = mysql_query($query);	
@@ -315,7 +334,7 @@ if(!isset($search_terms)) {
 		$c++;
 		$tool_content .= "<li>".$res['question']." (".$res['description'].")<br>";
 	}
-	if ($c == 0) $tool_content .= "<li>0 apotelesmata<br>";
+	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
 	
 	
 	
@@ -333,7 +352,7 @@ if(!isset($search_terms)) {
 		$c++;
 		$tool_content .= "<li>".$res['url'].": ".$res['titre']." (".$res['description'].")<br>";
 	}
-	if ($c == 0) $tool_content .= "<li>0 apotelesmata<br>";
+	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
 	
 	
 	
@@ -352,7 +371,7 @@ if(!isset($search_terms)) {
 		$c++;
 		$tool_content .= "<li>".$res['url'].": ".$res['titre']." (".$res['description'].")<br>";
 	}
-	if ($c == 0) $tool_content .= "<li>0 apotelesmata<br>";
+	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
 	
 	
 
