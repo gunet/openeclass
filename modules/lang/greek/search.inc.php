@@ -1,9 +1,14 @@
 <?
 
+$langSearch = "Αναζήτηση";
+$langDoSearch = "Εκτέλεση Αναζήτησης";
+$langSearch_terms = "Όροι Αναζήτησης: ";
+$langSearchIn = "Αναζήτηση σε: ";
 
 $langSearchingFor = "Αναζήτηση με τους παρακάτω όρους: ";
-$langNoResults = "Δεν βρέθηκαν αποτελέσματα...";
+$langNoResult = "Δεν βρέθηκαν αποτελέσματα...";
 
 $langIntroductionNote = "Εισαγωγικό Σημείωμα";
+$langForum = "Περιοχή συζητήσεων";
 
 ?>

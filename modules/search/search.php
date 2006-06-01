@@ -13,111 +13,56 @@ include '../../include/baseTheme.php';
 //$nameTools = $langModifInfo;
 
 $tool_content = "";
-$head_content = "<script language=\"JavaScript\">
-					function checkAll(field)
-					{
-					for (i = 0; i < field.length; i++)
-						field[i].checked = true ;
-					}
-					
-					function uncheckAll(field)
-					{
-					for (i = 0; i < field.length; i++)
-						field[i].checked = false ;
-					}
-					
-				</script>";
 
 
-
-
-
-
-//$tool_content .= "<br><br>$search_terms<br><br>";
-
-
-
-if(!isset($search_terms)) {
-//emfanish formas gia anahzthsh
+if(empty($search_terms)) {
+//emfanish formas anahzthshs
 	
 	
 	$tool_content .= "
 			<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
-			<table width=\"99%\"><caption>Anazhthsh</caption><tbody>
+			<table width=\"99%\"><caption>$langSearch</caption>
 			<tr>
 				<td valign=\"middle\" align=\"right\">
-					<b>Oroi anazhthshs:</b>
+					<b>$langSearch_terms</b>
 				</td>
 				<td valign=\"middle\">
 					<input name=\"search_terms\" type=\"text\" size=\"80\" />
 				</td>
 			</tr>
 			<tr>
-				<td valign=\"middle\" align=\"right\"><b>Anazhthsh se: </b></td>
+				<td valign=\"middle\" align=\"right\"><b>$langSearchIn</b></td>
 				<td>
 					<table width=\"99%\">
-					
+					<tr>
+						<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"7\" checked=\"checked\" />
+						$langAnnouncements</td>
 						<td><input name=\"subsystems[]\" type=\"checkbox\" value=\"1\" checked=\"checked\" />
 						$langAgenda</td>
-						<td><input name=\"subsystems[]\" type=\"checkbox\" value=\"2\" checked=\"checked\" />
-						$langLinks</td>
+						<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" checked=\"checked\" />
+						$langCourseDesc</td>
 						<td><input name=\"subsystems[]\" type=\"checkbox\" value=\"3\" checked=\"checked\" />
 						$langDoc</td>
+					</tr>
+					<tr>						
+						<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"9\" checked=\"checked\" />
+						$langForums</td>
+						<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"10\" checked=\"checked\" />
+						$langExercices</td>
 						<td><input name=\"subsystems[]\" type=\"checkbox\" value=\"4\" checked=\"checked\" />
 						$langVideo</td>
-						</tr>
-						<tr>
-						<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"5\" />
-						$langWorks</td>
-						<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"6\" />
-						$langVideoLinks</td>
-						<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"7\" />
-						$langAnnouncements</td>
-						<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"8\" />
-						$langUsers</td>
-						</tr>
-						<tr>
-						<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"9\" />
-						$langForums</td>
-						<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"10\" />
-						$langExercices</td>
-						<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"11\" />
-						$langStatistics</td>
-						<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"16\" />
-						$langDropBox</td>
-						</tr>
-						
-						<tr>
-						<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" />
-						$langCourseDesc</td>
-						<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"15\" />
-						$langGroups</td>
-						<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"19\" />
-						$langChat</td>
-						<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"21\" />
-						$langSurvey</td>
-						</tr>
-						
-						<tr>
-						<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"22\" />
-						$langPoll</td>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
-						</tr>
-					</table>
-					
-					<!-- <input type=\"button\" name=\"CheckAll\" value=\"Epilogh olwn\" onClick=\"checkAll(document.myform.subsystems)\">
-					<input type=\"button\" name=\"UnCheckAll\" value=\"Epepilogh olwn\" onClick=\"uncheckAll(document.myform.subsystems)\"> -->
-					
+						<td><input name=\"subsystems[]\" type=\"checkbox\" value=\"2\" checked=\"checked\" />
+						$langLinks</td>
+					</tr>					
+					</table>													
 				</td>
 			</tr>			
 			<tr>
 				<td colspan=\"2\" align=\"center\">
-					<input type=\"Submit\" name=\"submit\" value=\"Anazhthsh\" />
+					<input type=\"Submit\" name=\"submit\" value=\"$langDoSearch\" />
 				</td>
 			</tr>
-			</tbody></table>
+			</table>
 			</form>
 	
 	
@@ -131,6 +76,23 @@ if(!isset($search_terms)) {
 	
 }else 
 {//if isset($submit) = true
+	
+	
+	//arxikopoihsh tou array gia ta checkboxes
+	for ($i=0; $i<=50; $i++)
+	{
+		$sbsystems[$i] = 0;
+	}
+	
+	//allagh timwn sto array analoga me to poio checkbox exei epilegei
+	foreach ( $subsystems as $sb )
+	{
+		$sbsystems[$sb] = 1;
+	}
+	
+	
+	
+	//ektypwsh mhnymatwn anazhthshs
 	$tool_content .=$langSearchingFor."<br><h2>".$search_terms."...</h2><br><br>";
 
 	
@@ -138,24 +100,33 @@ if(!isset($search_terms)) {
 	mysql_select_db("$mysqlMainDb");
 	
 	
-	//-------------------------------------------------------------------------------------------------
-	//anazhthsh ston pinaka annonces (anakoinwseis)
-	//
-	// h anazhthsh perilamvanei mono to peron mathima
-	//-------------------------------------------------------------------------------------------------
-	$tool_content .= "$langAnnouncements<hr><ul>";
 	
-	$query = "SELECT * FROM annonces WHERE (contenu LIKE '%".$search_terms."%' OR temps LIKE '%".$search_terms."%') AND code_cours='".$currentCourseCode."'";	
-	$result = mysql_query($query);	
 	
-	$c = 0;	
-	while($res = mysql_fetch_array($result))
+	
+	
+	
+	
+	if($sbsystems["7"] == 1)
 	{
-		$c++;
-		$tool_content .= "<li>".$res['contenu'].": ".$res['temps']."<br>";
+		//-------------------------------------------------------------------------------------------------
+		//anazhthsh ston pinaka annonces (anakoinwseis)
+		//
+		// h anazhthsh perilamvanei MONO to paron mathima
+		//-------------------------------------------------------------------------------------------------
+		$tool_content .= "$langAnnouncements<hr><ul>";
+		
+		$query = "SELECT * FROM annonces WHERE (contenu LIKE '%".$search_terms."%' OR temps LIKE '%".$search_terms."%') AND code_cours='".$currentCourseCode."'";	
+		$result = mysql_query($query);	
+		
+		$c = 0;	
+		while($res = mysql_fetch_array($result))
+		{
+			$c++;
+			$tool_content .= "<li>".$res['contenu'].": ".$res['temps']."<br>";
+		}
+		if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
+		
 	}
-	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
-	
 	
 
 	
@@ -164,81 +135,7 @@ if(!isset($search_terms)) {
 	
 	//anazhthsh sthn vash tou mathimatos
 	mysql_select_db("$currentCourseCode");
-	
-	//-------------------------------------------------------------------------------------------------
-	//anazhthsh ston pinaka agenda
-	$tool_content .= "</ul><br><br><br>$langAgenda<hr><ul>";
-	
-	$query = "SELECT * FROM agenda WHERE titre LIKE '%".$search_terms."%' OR contenu LIKE '%".$search_terms."%'";	
-	$result = mysql_query($query);	
-	
-	$c = 0;
-	while($res = mysql_fetch_array($result))
-	{
-		$c++;
-		$tool_content .= "<li>".$res['titre'].": ".$res['contenu']."<br>";
-	}
-	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
 
-	
-	
-	
-	
-	
-	//-------------------------------------------------------------------------------------------------
-	//anazhthsh ston pinaka course_description
-	$tool_content .= "</ul><br><br><br>$langCourseDesc<hr><ul>";
-	
-	$query = "SELECT * FROM course_description WHERE title LIKE '%".$search_terms."%' OR content LIKE '%".$search_terms."%'";	
-	$result = mysql_query($query);	
-	
-	$c = 0;
-	while($res = mysql_fetch_array($result))
-	{
-		$c++;
-		$tool_content .= "<li>".$res['title'].": ".$res['content']."<br>";
-	}
-	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
-	
-	
-	
-	
-	
-	
-	//-------------------------------------------------------------------------------------------------
-	//anazhthsh ston pinaka documents (perioxh eggrafwn)
-	$tool_content .= "</ul><br><br><br>$langDoc<hr><ul>";
-	
-	$query = "SELECT * FROM document WHERE filename LIKE '%".$search_terms."%' OR comment LIKE '%".$search_terms."%' OR category LIKE '%".$search_terms."%' OR title LIKE '%".$search_terms."%' OR creator LIKE '%".$search_terms."%' OR subject LIKE '%".$search_terms."%' OR description LIKE '%".$search_terms."%' OR author LIKE '%".$search_terms."%' OR language LIKE '%".$search_terms."%'";	
-	$result = mysql_query($query);	
-	
-	$c = 0;
-	while($res = mysql_fetch_array($result))
-	{
-		$c++;
-		$tool_content .= "<li><b>".$res['filename']."</b>: (".$res['comment'].")<br>";
-	}
-	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
-	
-	
-	
-	
-	
-	
-	//-------------------------------------------------------------------------------------------------
-	//anazhthsh ston pinaka excercises
-	$tool_content .= "</ul><br><br><br>$langExercices<hr><ul>";
-	
-	$query = "SELECT * FROM exercices WHERE titre LIKE '%".$search_terms."%' OR description LIKE '%".$search_terms."%'";
-	$result = mysql_query($query);	
-	
-	$c = 0;
-	while($res = mysql_fetch_array($result))
-	{
-		$c++;
-		$tool_content .= "<li>".$res['titre'].": ".$res['description']."<br>";
-	}
-	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
 	
 	
 	
@@ -258,50 +155,144 @@ if(!isset($search_terms)) {
 		$tool_content .= "<li>".$res['texte_intro']."<br>";
 	}
 	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
+
 	
 	
 	
 	
 	
 	
-	//-------------------------------------------------------------------------------------------------
-	//anazhthsh ston pinaka posts_text (periexomeno mhnymatwn gia ta forums)
-	$tool_content .= "</ul><br><br><br>$langForum<hr><ul>";
 	
-	$query = "SELECT * FROM posts_text WHERE post_text LIKE '%".$search_terms."%'";	
-	$result = mysql_query($query);	
 	
-	$c = 0;
-	while($res = mysql_fetch_array($result))
+	
+	if($sbsystems["1"] == 1)
 	{
-		$c++;
-		$tool_content .= "<li>".$res['post_text']."<br>";
-	}
-	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
+
+		//-------------------------------------------------------------------------------------------------
+		//anazhthsh ston pinaka agenda
+		$tool_content .= "</ul><br><br><br>$langAgenda<hr><ul>";
+		
+		$query = "SELECT * FROM agenda WHERE titre LIKE '%".$search_terms."%' OR contenu LIKE '%".$search_terms."%'";	
+		$result = mysql_query($query);	
+		
+		$c = 0;
+		while($res = mysql_fetch_array($result))
+		{
+			$c++;
+			$tool_content .= "<li>".$res['titre'].": ".$res['contenu']."<br>";
+		}
+		if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
+
+	}	
 	
 	
 	
-	
-	
-	//-------------------------------------------------------------------------------------------------
-	//anazhthsh ston pinaka liens (syndesmoi sto internet)
-	$tool_content .= "</ul><br><br><br>$langLinks<hr><ul>";
-	
-	$query = "SELECT * FROM liens WHERE url LIKE '%".$search_terms."%' OR titre LIKE '%".$search_terms."%' OR description LIKE '%".$search_terms."%'";	
-	$result = mysql_query($query);	
-	
-	$c = 0;
-	while($res = mysql_fetch_array($result))
+	if($sbsystems["20"] == 1)
 	{
-		$c++;
-		$tool_content .= "<li>".$res['url'].": ".$res['titre']." (".$res['description'].")<br>";
+		//-------------------------------------------------------------------------------------------------
+		//anazhthsh ston pinaka course_description
+		$tool_content .= "</ul><br><br><br>$langCourseDesc<hr><ul>";
+		
+		$query = "SELECT * FROM course_description WHERE title LIKE '%".$search_terms."%' OR content LIKE '%".$search_terms."%'";	
+		$result = mysql_query($query);	
+		
+		$c = 0;
+		while($res = mysql_fetch_array($result))
+		{
+			$c++;
+			$tool_content .= "<li>".$res['title'].": ".$res['content']."<br>";
+		}
+		if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
 	}
-	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
 	
 	
 	
 	
+	if($sbsystems["3"] == 1)
+	{
+		//-------------------------------------------------------------------------------------------------
+		//anazhthsh ston pinaka documents (perioxh eggrafwn)
+		$tool_content .= "</ul><br><br><br>$langDoc<hr><ul>";
+		
+		$query = "SELECT * FROM document WHERE filename LIKE '%".$search_terms."%' OR comment LIKE '%".$search_terms."%' OR category LIKE '%".$search_terms."%' OR title LIKE '%".$search_terms."%' OR creator LIKE '%".$search_terms."%' OR subject LIKE '%".$search_terms."%' OR description LIKE '%".$search_terms."%' OR author LIKE '%".$search_terms."%' OR language LIKE '%".$search_terms."%'";	
+		$result = mysql_query($query);	
+		
+		$c = 0;
+		while($res = mysql_fetch_array($result))
+		{
+			$c++;
+			$tool_content .= "<li><b>".$res['filename']."</b>: (".$res['comment'].")<br>";
+		}
+		if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
+		
+	}
 	
+	
+	
+	
+	if($sbsystems["10"] == 1)
+	{
+		//-------------------------------------------------------------------------------------------------
+		//anazhthsh ston pinaka excercises
+		$tool_content .= "</ul><br><br><br>$langExercices<hr><ul>";
+		
+		$query = "SELECT * FROM exercices WHERE titre LIKE '%".$search_terms."%' OR description LIKE '%".$search_terms."%'";
+		$result = mysql_query($query);	
+		
+		$c = 0;
+		while($res = mysql_fetch_array($result))
+		{
+			$c++;
+			$tool_content .= "<li>".$res['titre'].": ".$res['description']."<br>";
+		}
+		if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
+	
+	}
+	
+	
+	if($sbsystems["9"] == 1)
+	{
+		//-------------------------------------------------------------------------------------------------
+		//anazhthsh ston pinaka posts_text (periexomeno mhnymatwn gia ta forums)
+		$tool_content .= "</ul><br><br><br>$langForum<hr><ul>";
+		
+		$query = "SELECT * FROM posts_text WHERE post_text LIKE '%".$search_terms."%'";	
+		$result = mysql_query($query);	
+		
+		$c = 0;
+		while($res = mysql_fetch_array($result))
+		{
+			$c++;
+			$tool_content .= "<li>".$res['post_text']."<br>";
+		}
+		if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
+		
+	}	
+	
+	
+	
+	if($sbsystems["2"] == 1)
+	{
+		//-------------------------------------------------------------------------------------------------
+		//anazhthsh ston pinaka liens (syndesmoi sto internet)
+		$tool_content .= "</ul><br><br><br>$langLinks<hr><ul>";
+		
+		$query = "SELECT * FROM liens WHERE url LIKE '%".$search_terms."%' OR titre LIKE '%".$search_terms."%' OR description LIKE '%".$search_terms."%'";	
+		$result = mysql_query($query);	
+		
+		$c = 0;
+		while($res = mysql_fetch_array($result))
+		{
+			$c++;
+			$tool_content .= "<li>".$res['url'].": ".$res['titre']." (".$res['description'].")<br>";
+		}
+		if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
+		
+	}
+	
+	
+	
+/* afta ta theloume ?	
 	//-------------------------------------------------------------------------------------------------
 	//anazhthsh ston pinaka pages (?)
 	$tool_content .= "</ul><br><br><br>Selides<hr><ul>";
@@ -323,6 +314,7 @@ if(!isset($search_terms)) {
 	
 	//-------------------------------------------------------------------------------------------------
 	//anazhthsh ston pinaka questions
+	
 	$tool_content .= "</ul><br><br><br>Questions<hr><ul>";
 	
 	$query = "SELECT * FROM questions WHERE question LIKE '%".$search_terms."%' OR description LIKE '%".$search_terms."%'";	
@@ -335,51 +327,55 @@ if(!isset($search_terms)) {
 		$tool_content .= "<li>".$res['question']." (".$res['description'].")<br>";
 	}
 	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
+
+*/
 	
 	
-	
-	
-	//-------------------------------------------------------------------------------------------------
-	//anazhthsh ston pinaka video
-	$tool_content .= "</ul><br><br><br>$langVideo<hr><ul>";
-	
-	$query = "SELECT * FROM video WHERE url LIKE '%".$search_terms."%' OR titre LIKE '%".$search_terms."%' OR description LIKE '%".$search_terms."%'";	
-	$result = mysql_query($query);	
-	
-	$c = 0;
-	while($res = mysql_fetch_array($result))
-	{
-		$c++;
-		$tool_content .= "<li>".$res['url'].": ".$res['titre']." (".$res['description'].")<br>";
-	}
-	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
-	
-	
-	
-	
-	
-	//-------------------------------------------------------------------------------------------------
-	//anazhthsh ston pinaka videolinks
-	$tool_content .= "</ul><br><br><br>$langVideoLinks<hr><ul>";
-	
-	$query = "SELECT * FROM videolinks WHERE url LIKE '%".$search_terms."%' OR titre LIKE '%".$search_terms."%' OR description LIKE '%".$search_terms."%'";	
-	$result = mysql_query($query);	
-	
-	$c = 0;
-	while($res = mysql_fetch_array($result))
-	{
-		$c++;
-		$tool_content .= "<li>".$res['url'].": ".$res['titre']." (".$res['description'].")<br>";
-	}
-	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
+	if($sbsystems["4"] == 1)
+	{	
+		//-------------------------------------------------------------------------------------------------
+		//anazhthsh ston pinaka video
+		$tool_content .= "</ul><br><br><br>$langVideo<hr><ul>";
+		
+		$query = "SELECT * FROM video WHERE url LIKE '%".$search_terms."%' OR titre LIKE '%".$search_terms."%' OR description LIKE '%".$search_terms."%'";	
+		$result = mysql_query($query);	
+		
+		$c = 0;
+		while($res = mysql_fetch_array($result))
+		{
+			$c++;
+			$tool_content .= "<li>".$res['url'].": ".$res['titre']." (".$res['description'].")<br>";
+		}
+		if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
+		
+		
+		
+		
+		
+		//-------------------------------------------------------------------------------------------------
+		//anazhthsh ston pinaka videolinks
+		$tool_content .= "</ul><br><br><br>$langVideoLinks<hr><ul>";
+		
+		$query = "SELECT * FROM videolinks WHERE url LIKE '%".$search_terms."%' OR titre LIKE '%".$search_terms."%' OR description LIKE '%".$search_terms."%'";	
+		$result = mysql_query($query);	
+		
+		$c = 0;
+		while($res = mysql_fetch_array($result))
+		{
+			$c++;
+			$tool_content .= "<li>".$res['url'].": ".$res['titre']." (".$res['description'].")<br>";
+		}
+		if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
+		
+	}//telos if($sbsystems["3"] == 1) <- theoroume pws videos & videolinks perilamvanetai sto idio checkbox
 	
 	
 
-}//telos anazhthshs (if isset($submit) = true)
+}//telos anazhthshs (if empty($search_terms) = false)
 
-draw($tool_content,2,'search');
+draw($tool_content, 2);
 
 
-//katharisma ths $search_terms gia aofygh lathwn
+//katharisma ths $search_terms gia apofygh lathwn
 $search_terms = "";
 ?>
