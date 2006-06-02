@@ -441,6 +441,133 @@ if (!mysql_table_exists($code[0], 'lp_user_module_progress'))  {
             ) ", $code[0]); //TYPE=MyISAM COMMENT='Record the last known status of the user in the course';
 }
 
+//---------------------------------------------------------------------
+// Begin table definitions for SURVEY module
+//---------------------------------------------------------------------
+if (!mysql_table_exists($code[0], 'survey'))  {
+	db_query("CREATE TABLE `survey` (
+		`sid` bigint(14) NOT NULL auto_increment,
+	  `creator_id` mediumint(8) unsigned NOT NULL default '0',
+	  `course_id` varchar(20) NOT NULL default '0',
+	  `name` varchar(255) NOT NULL default '',
+	  `creation_date` datetime NOT NULL default '0000-00-00 00:00:00',
+	  `start_date` datetime NOT NULL default '0000-00-00 00:00:00',
+	  `end_date` datetime NOT NULL default '0000-00-00 00:00:00',
+	  `type` int(11) NOT NULL default '0',
+	  `active` int(11) NOT NULL default '0',
+	  PRIMARY KEY  (`sid`)
+	) ", $code[0]); //TYPE=MyISAM COMMENT='For the survey module';
+}
+if (!mysql_table_exists($code[0], 'survey_answer'))  {
+	db_query("CREATE TABLE `survey_answer` (
+		`aid` bigint(12) NOT NULL default '0',
+	  `creator_id` mediumint(8) unsigned NOT NULL default '0',
+	  `sid` bigint(12) NOT NULL default '0',
+	  `date` datetime NOT NULL default '0000-00-00 00:00:00',
+	  PRIMARY KEY  (`aid`)
+	) ", $code[0]); //TYPE=MyISAM COMMENT='For the survey module';
+}
+if (!mysql_table_exists($code[0], 'survey_answer_record'))  {
+	db_query("CREATE TABLE `survey_answer_record` (
+		`arid` int(11) NOT NULL auto_increment,
+	  `aid` bigint(12) NOT NULL default '0',
+	  `question_text` varchar(250) NOT NULL default '',
+	  `question_answer` varchar(250) NOT NULL default '',
+	  PRIMARY KEY  (`arid`)
+	) ", $code[0]); //TYPE=MyISAM COMMENT='For the survey module';
+}
+if (!mysql_table_exists($code[0], 'survey_question'))  {
+	db_query("CREATE TABLE `survey_question` (
+		`sqid` bigint(12) NOT NULL default '0',
+	  `sid` bigint(12) NOT NULL default '0',
+	  `question_text` varchar(250) NOT NULL default '',
+	  PRIMARY KEY  (`sqid`)
+	) ", $code[0]); //TYPE=MyISAM COMMENT='For the survey module';
+}
+if (!mysql_table_exists($code[0], 'survey_question_answer'))  {
+	db_query("CREATE TABLE `survey_question_answer` (
+		`sqaid` int(11) NOT NULL auto_increment,
+	  `sqid` bigint(12) NOT NULL default '0',
+	  `answer_text` varchar(250) default NULL,
+	  PRIMARY KEY  (`sqaid`)
+	) ", $code[0]); //TYPE=MyISAM COMMENT='For the survey module';
+}
+// End of table definitions for SURVEY module
+
+
+//---------------------------------------------------------------------
+// Begin table definitions for POLL module
+//---------------------------------------------------------------------
+if (!mysql_table_exists($code[0], 'poll'))  {
+	db_query("CREATE TABLE `poll` (
+		`pid` bigint(14) NOT NULL auto_increment,
+	  `creator_id` mediumint(8) unsigned NOT NULL default '0',
+	  `course_id` varchar(20) NOT NULL default '0',
+	  `name` varchar(255) NOT NULL default '',
+	  `creation_date` datetime NOT NULL default '0000-00-00 00:00:00',
+	  `start_date` datetime NOT NULL default '0000-00-00 00:00:00',
+	  `end_date` datetime NOT NULL default '0000-00-00 00:00:00',
+	  `type` int(11) NOT NULL default '0',
+	  `active` int(11) NOT NULL default '0',
+	  PRIMARY KEY  (`pid`)
+	) ", $code[0]); //TYPE=MyISAM COMMENT='For the poll module';
+}
+if (!mysql_table_exists($code[0], 'poll_answer'))  {
+	db_query("CREATE TABLE `poll_answer` (
+		`aid` bigint(12) NOT NULL default '0',
+	  `creator_id` mediumint(8) unsigned NOT NULL default '0',
+	  `pid` bigint(12) NOT NULL default '0',
+	  `date` datetime NOT NULL default '0000-00-00 00:00:00',
+	  PRIMARY KEY  (`aid`)
+	) ", $code[0]); //TYPE=MyISAM COMMENT='For the poll module';
+}
+if (!mysql_table_exists($code[0], 'pollpoll_answer_record'))  {
+	db_query("CREATE TABLE `pollpoll_answer_record` (
+		`arid` int(11) NOT NULL auto_increment,
+	  `aid` bigint(12) NOT NULL default '0',
+	  `question_text` varchar(250) NOT NULL default '',
+	  `question_answer` varchar(250) NOT NULL default '',
+	  PRIMARY KEY  (`arid`)
+	) ", $code[0]); //TYPE=MyISAM COMMENT='For the poll module';
+}
+if (!mysql_table_exists($code[0], 'poll_question'))  {
+	db_query("CREATE TABLE `poll_question` (
+		`pqid` bigint(12) NOT NULL default '0',
+	  `pid` bigint(12) NOT NULL default '0',
+	  `question_text` varchar(250) NOT NULL default '',
+	  PRIMARY KEY  (`pqid`)
+	) ", $code[0]); //TYPE=MyISAM COMMENT='For the poll module';
+}
+if (!mysql_table_exists($code[0], 'poll_question_answer'))  {
+	db_query("CREATE TABLE `poll_question_answer` (
+		`pqaid` int(11) NOT NULL auto_increment,
+	  `pqid` bigint(12) NOT NULL default '0',
+	  `answer_text` varchar(250) default NULL,
+	  PRIMARY KEY  (`pqaid`)
+	) ", $code[0]); //TYPE=MyISAM COMMENT='For the poll module';
+}
+// End of table definitions for POLL module
+
+
+//---------------------------------------------------------------------
+// Add table EXERCISE_USER_RECORD for new func of EXERCISE module
+//---------------------------------------------------------------------
+if (!mysql_table_exists($code[0], 'exercise_user_record'))  {
+	db_query("CREATE TABLE `exercise_user_record` (
+		`eurid` int(11) NOT NULL auto_increment,
+	  `eid` tinyint(4) NOT NULL default '0',
+	  `uid` mediumint(8) NOT NULL default '0',
+	  `RecordStartDate` datetime NOT NULL default '0000-00-00 00:00:00',
+	  `RecordEndDate` datetime NOT NULL default '0000-00-00 00:00:00',
+	  `TotalScore` int(11) NOT NULL default '0',
+	  `TotalWeighting` int(11) default '0',
+	  `attempt` int(11) NOT NULL default '0',
+	  PRIMARY KEY  (`eurid`)
+	) ", $code[0]); //TYPE=MyISAM COMMENT='For the poll module';
+}
+// End of table definitions for POLL module
+
+
 
     //===============================================================================================
     //BEGIN: Move all external links to id > 100, add column define_var
@@ -470,6 +597,30 @@ db_query("INSERT IGNORE INTO accueil VALUES (
                 '0',
                 '../../../images/pastillegris.png',
                 'MODULE_ID_LP'
+         )", $code[0]);
+         
+// For SURVEY module
+db_query("INSERT IGNORE INTO accueil VALUES (
+                21,
+                '$langSurvey',
+                '../../modules/survey/survey.php',
+                '../../../images/survey.gif',
+                '1',
+                '0',
+                '../../../images/pastillegris.png',
+                'MODULE_ID_SURVEY'
+         )", $code[0]);
+
+// For POLL module
+db_query("INSERT IGNORE INTO accueil VALUES (
+                22,
+                '$langPoll',
+                '../../modules/poll/poll.php',
+                '../../../images/poll.gif',
+                '1',
+                '0',
+                '../../../images/pastillegris.png',
+                'MODULE_ID_POLL'
          )", $code[0]);
 
 //for tool management
@@ -526,6 +677,22 @@ usage_module::upgrade(24, $code[0]);
     if (!mysql_field_exists("$code[0]",'document','copyrighted'))
             $tool_content .= add_field('document', 'copyrighted', "TEXT");
 
+
+//---------------------------------------------------------------------
+// Upgrading EXERCISE table for new func of EXERCISE module
+//--------------------------------------------------------------------- 
+ if (!mysql_field_exists("$code[0]",'exercise','StartDate'))
+      $tool_content .= add_field_after_field('exercise', 'StartDate', 'type', "DATETIME");
+ if (!mysql_field_exists("$code[0]",'exercise','EndDate'))
+      $tool_content .= add_field_after_field('exercise', 'EndDate', 'StartDate', "DATETIME");
+ if (!mysql_field_exists("$code[0]",'exercise','TimeConstrain'))
+      $tool_content .= add_field_after_field('exercise', 'TimeConstrain', 'EndDate', "INT(11)");
+ if (!mysql_field_exists("$code[0]",'exercise','AttemptsAllowed'))
+      $tool_content .= add_field_after_field('exercise', 'AttemptsAllowed', 'TimeConstrain', "INT(11)");
+// End of upgrading EXERCISE table for new func of EXERCISE module
+
+          
+
 //table accueil -  create new column (define_var)
             $tool_content .= add_field("accueil","define_var", "VARCHAR(50) NOT NULL");
             $tool_content .= "Added field <i>define_var</i> to table <i>".$code[0]."accueil</i><br>";
@@ -550,7 +717,8 @@ usage_module::upgrade(24, $code[0]);
 
                     update_field("accueil", "define_var","MODULE_ID_CHAT", "id", 		19);
                     update_field("accueil", "define_var","MODULE_ID_DESCRIPTION", "id", 20);
-                    
+                    update_field("accueil", "define_var","MODULE_ID_SURVEY", "id", 21);
+                    update_field("accueil", "define_var","MODULE_ID_POLL", "id", 22);
                     update_field("accueil", "define_var","MODULE_ID_LP", "id", 			23);
                     update_field("accueil", "define_var","MODULE_ID_USAGE", "id", 		24);
 					update_field("accueil", "define_var","MODULE_ID_TOOLADMIN", "id", 	25);
@@ -662,6 +830,27 @@ function add_field($table, $field, $type)
     $fields = db_query("SHOW COLUMNS FROM $table LIKE '$field'");
     if (mysql_num_rows($fields) == 0) {
         if (db_query("ALTER TABLE `$table` ADD `$field` $type")) {
+            $retString .= " $OK<br>";
+        } else {
+            $retString .= " $BAD<br>";
+            $GLOBALS['errors']++;
+        }
+    } else {
+        $retString .= "Υπάρχει ήδη. $OK<br>";
+    }
+
+    return $retString;
+}
+
+function add_field_after_field($table, $field, $after_field, $type)
+{
+    global $OK, $BAD;
+
+    $retString = "";
+    $retString .= "Προσθήκη πεδίου <b>$field</b> μετά το πεδίο <b>$after_field</b> στον πίνακα <b>$table</b>: ";
+    $fields = db_query("SHOW COLUMNS FROM $table LIKE '$field'");
+    if (mysql_num_rows($fields) == 0) {
+        if (db_query("ALTER TABLE `$table` ADD COLUMN `$field` $type AFTER `$after_field`")) {
             $retString .= " $OK<br>";
         } else {
             $retString .= " $BAD<br>";
