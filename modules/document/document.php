@@ -685,10 +685,11 @@ if($is_adminOfCourse)
         					$langAddComment<br>
         						<strong>".htmlspecialchars($oldFilename)."</strong>
         					<hr>
+        					$langNotRequired<br>
         					<input type=\"hidden\" size=\"80\" name=\"file_filename\" value=\"$oldFilename\"><br>
-        					$langComment:<input type=\"text\" size=\"80\" name=\"file_comment\" value=\"$oldComment\"><br>
-							$langTitle&nbsp;:<input type=\"text\" size=\"80\" name=\"file_title\" value=\"$oldTitle\"><br>
-							$langCategory:							";
+        					$langComment:<br><input type=\"text\" size=\"80\" name=\"file_comment\" value=\"$oldComment\"><br>
+							$langTitle&nbsp;:<br><input type=\"text\" size=\"80\" name=\"file_title\" value=\"$oldTitle\"><br>
+							$langCategory:<br>							";
         //ektypwsh tou combobox gia thn epilogh kathgorias tou eggrafou
 		$dialogBox .= "
 	
@@ -708,22 +709,22 @@ if($is_adminOfCourse)
 							
     						<input type=\"hidden\" size=\"80\" name=\"file_creator\" value=\"$oldCreator\">
     						<input type=\"hidden\" size=\"80\" name=\"file_date\" value=\"$oldDate\">
-    						$langSubject&nbsp;:<input type=\"text\" size=\"80\" name=\"file_subject\" value=\"$oldSubject\"><br>
-    						$langDescription&nbsp;:<input type=\"text\" size=\"80\" name=\"file_description\" value=\"$oldDescription\"><br>
-    						$langAuthor&nbsp;:<input type=\"text\" size=\"80\" name=\"file_author\" value=\"$oldAuthor\"><br>";
+    						$langSubject&nbsp;:<Br><input type=\"text\" size=\"80\" name=\"file_subject\" value=\"$oldSubject\"><br>
+    						$langDescription&nbsp;:<br><input type=\"text\" size=\"80\" name=\"file_description\" value=\"$oldDescription\"><br>
+    						$langAuthor&nbsp;:<br><input type=\"text\" size=\"80\" name=\"file_author\" value=\"$oldAuthor\"><br>";
     	
-		$dialogBox .= "		$langCopyrighted&nbsp;: <input name=\"file_copyrighted\" type=\"radio\" value=\"0\" "; if ($oldCopyrighted=="0") $dialogBox .= " checked=\"checked\" "; $dialogBox .= " /> $langCopyrightedUnknown
+		$dialogBox .= "		$langCopyrighted&nbsp;:<br><input name=\"file_copyrighted\" type=\"radio\" value=\"0\" "; if ($oldCopyrighted=="0") $dialogBox .= " checked=\"checked\" "; $dialogBox .= " /> $langCopyrightedUnknown
     					   							<input name=\"file_copyrighted\" type=\"radio\" value=\"2\" "; if ($oldCopyrighted=="2") $dialogBox .= " checked=\"checked\" "; $dialogBox .= " /> $langCopyrightedFree
   						   							<input name=\"file_copyrighted\" type=\"radio\" value=\"1\" "; if ($oldCopyrighted=="0") $dialogBox .= " checked=\"checked\" "; $dialogBox .= "/> $langCopyrightedNotFree
   						   							
   						   							
-  		<input type=\"hidden\" size=\"80\" name=\"file_oldLanguage\" value=\"$oldLanguage\">";
+  		<br><input type=\"hidden\" size=\"80\" name=\"file_oldLanguage\" value=\"$oldLanguage\">";
     						
     						
     						
     	//ektypwsh tou combox gia epilogh glwssas			
     	
-		$dialogBox .= "		<br>$langLanguage&nbsp;: $oldLanguage
+		$dialogBox .= "		<br>$langLanguage&nbsp;: $oldLanguage<br>
 		
 		
 		
