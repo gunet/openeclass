@@ -116,4 +116,6 @@ $langCategoryTheory="Θεωρία";
 $langCategoryLecture="Διάλεξη";
 $langCategoryNotes="Σημειώσεις";
 $langCategoryOther="Aλλο";
+
+$langNotRequired = "Η συμπλήρωση των πεδίων είναι προαιρετική";
 ?>

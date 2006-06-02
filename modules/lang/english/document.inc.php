@@ -114,4 +114,5 @@ $langCategoryLecture="Lecture";
 $langCategoryNotes="Notes";
 $langCategoryOther="Other";
 
+$langNotRequired = "Filling-in the fields is not mandatory";
 ?>
