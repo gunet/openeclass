@@ -106,7 +106,7 @@ if(empty($search_terms)) {
 	
 	
 	
-	if($sbsystems["7"] == 1)
+	if($sbsystems["7"] == 1 && !empty($currentCourseCode))
 	{
 		//-------------------------------------------------------------------------------------------------
 		//anazhthsh ston pinaka annonces (anakoinwseis)
