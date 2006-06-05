@@ -1,43 +1,43 @@
 <?php session_start(); 
 
 /*
-      +----------------------------------------------------------------------+
-      | e-class version 1.6                                                  |
-      | based on CLAROLINE version 1.3.0 $Revision$		     |
-      +----------------------------------------------------------------------+
-      |   $Id$
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
-      | Copyright (c) 2003 GUNet                                             |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
-      |                                                                      |
-      |   This program is distributed in the hope that it will be useful,    |
-      |   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-      |   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-      |   GNU General Public License for more details.                       |
-      |                                                                      |
-      |   You should have received a copy of the GNU General Public License  |
-      |   along with this program; if not, write to the Free Software        |
-      |   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-      |   02111-1307, USA. The GNU GPL license is also available through     |
-      |   the world-wide-web at http://www.gnu.org/copyleft/gpl.html         |
-      +----------------------------------------------------------------------+
-      | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-      |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-      |          Christophe Gesche <gesche@ipm.ucl.ac.be>                    |
-      |                                                                      |
-      | e-class changes by: Costas Tsibanis <costas@noc.uoa.gr>              |
-      |                     Yannis Exidaridis <jexi@noc.uoa.gr>              |
-      |                     Alexandros Diamantidis <adia@noc.uoa.gr>         |
-      +----------------------------------------------------------------------+
++----------------------------------------------------------------------+
+| e-class version 1.6                                                  |
+| based on CLAROLINE version 1.3.0 $Revision$		     |
++----------------------------------------------------------------------+
+|   $Id$
++----------------------------------------------------------------------+
+| Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
+| Copyright (c) 2003 GUNet                                             |
++----------------------------------------------------------------------+
+|   This program is free software; you can redistribute it and/or      |
+|   modify it under the terms of the GNU General Public License        |
+|   as published by the Free Software Foundation; either version 2     |
+|   of the License, or (at your option) any later version.             |
+|                                                                      |
+|   This program is distributed in the hope that it will be useful,    |
+|   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
+|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
+|   GNU General Public License for more details.                       |
+|                                                                      |
+|   You should have received a copy of the GNU General Public License  |
+|   along with this program; if not, write to the Free Software        |
+|   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
+|   02111-1307, USA. The GNU GPL license is also available through     |
+|   the world-wide-web at http://www.gnu.org/copyleft/gpl.html         |
++----------------------------------------------------------------------+
+| Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
+|          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
+|          Christophe Gesche <gesche@ipm.ucl.ac.be>                    |
+|                                                                      |
+| e-class changes by: Costas Tsibanis <costas@noc.uoa.gr>              |
+|                     Yannis Exidaridis <jexi@noc.uoa.gr>              |
+|                     Alexandros Diamantidis <adia@noc.uoa.gr>         |
++----------------------------------------------------------------------+
 
-/*************************************************************** 
-*               HOME PAGE OF ECLASS		               * 
-**************************************************************** 
+/***************************************************************
+*               HOME PAGE OF ECLASS		               *
+****************************************************************
 */
 
 unset($language);
@@ -68,12 +68,12 @@ $tool_content = "";
 //Flag to modify the prefix for relative paths.(used by init.php)
 
 
-	//This will be setting a var in the template and NOT concat $tool_content!
-//	if (isset($siteName)) $tool_content .=  "<title>".$siteName."</title>"; 
+//This will be setting a var in the template and NOT concat $tool_content!
+//	if (isset($siteName)) $tool_content .=  "<title>".$siteName."</title>";
 //	else $tool_content .= "<title>Εγκατάσταση του e-Class</title>";
 
 //<!--<meta http-equiv="Description" content="elearn Platform">
-//<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=$charset">	
+//<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=$charset">
 //</head>
 //
 //<body bgcolor="white">-->
@@ -85,7 +85,7 @@ $tool_content = "";
 if (isset($mysqlServer) and isset($mysqlUser) and isset($mysqlPassword)) {
 	$db = mysql_connect($mysqlServer, $mysqlUser, $mysqlPassword);
 	if (mysql_version()) mysql_query("SET NAMES greek");
-	}
+}
 if (!isset($db)) {
 	include ("not_installed.php");
 }
@@ -93,15 +93,15 @@ if (!isset($db)) {
 // second check
 // can we select database ? if not then there is some problem
 
-if (isset($mysqlMainDb)) $selectResult = mysql_select_db($mysqlMainDb,$db); 
-if (!isset($selectResult)) 
+if (isset($mysqlMainDb)) $selectResult = mysql_select_db($mysqlMainDb,$db);
+if (!isset($selectResult))
 {
 	include("general_error.php");
 }
 
 // unset system that records visitor only once by course for statistics
 unset($alreadyHome);
-unset($dbname); 
+unset($dbname);
 
 // ------------------------------------------------------------------------
 // if we try to login...
@@ -116,89 +116,89 @@ $auth = get_auth_id();
 if(!empty($submit))
 {
 	unset($uid);
-  $sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, inst_id, iduser is_admin
+	$sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, inst_id, iduser is_admin
                 FROM user LEFT JOIN admin
                 ON user.user_id = admin.iduser
                 WHERE username='".$uname."'";
-  $result=mysql_query($sqlLogin);
-  $check_passwords = array("pop3","imap","ldap","db");
-  $warning = "";
-  while ($myrow = mysql_fetch_array($result)) 
-  {
-  	
-  	if(!empty($auth))
-  	{
-  		if(!in_array($myrow["password"],$check_passwords))
-  		{
-  			// try to authenticate him via eclass
-  			if (($uname == $myrow["username"]) and ($pass == $myrow["password"])) 
-	      {
-	      	// check if his/her account is active
-	      	$is_active = check_activity($myrow["user_id"]);
-	      	if($myrow["user_id"]==$myrow["is_admin"])
-	      	{
-	      		$is_active = 1;
-	      	}
-	      	if($is_active==1)
-	      	{
-		      	$uid = $myrow["user_id"];
-		        $nom = $myrow["nom"];
-		        $prenom = $myrow["prenom"];
-		        $statut = $myrow["statut"];
-		        $email = $myrow["email"];
-		        $is_admin = $myrow["is_admin"];
-	      	}
-		      else
-		      {
-		      	$warning .= "<br />Your account is inactive. <br />Please <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">contact the Eclass Admin.</a><br /><br />";
-		      }
+	$result=mysql_query($sqlLogin);
+	$check_passwords = array("pop3","imap","ldap","db");
+	$warning = "";
+	while ($myrow = mysql_fetch_array($result))
+	{
+
+		if(!empty($auth))
+		{
+			if(!in_array($myrow["password"],$check_passwords))
+			{
+				// try to authenticate him via eclass
+				if (($uname == $myrow["username"]) and ($pass == $myrow["password"]))
+				{
+					// check if his/her account is active
+					$is_active = check_activity($myrow["user_id"]);
+					if($myrow["user_id"]==$myrow["is_admin"])
+					{
+						$is_active = 1;
+					}
+					if($is_active==1)
+					{
+						$uid = $myrow["user_id"];
+						$nom = $myrow["nom"];
+						$prenom = $myrow["prenom"];
+						$statut = $myrow["statut"];
+						$email = $myrow["email"];
+						$is_admin = $myrow["is_admin"];
+					}
+					else
+					{
+						$warning .= "<br />Your account is inactive. <br />Please <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">contact the Eclass Admin.</a><br /><br />";
+					}
 				}
-  		}
-  		else
-  		{
-  			// try to authenticate him via the alternative defined method
-  			$auth_method_settings = get_auth_settings($auth);
-  			if($myrow['password']==$auth_method_settings['auth_name'])
-  			{
-	  			switch($auth)
-	  			{
-	  				case '2':	$pop3host = str_replace("pop3host=","",$auth_method_settings['auth_settings']);
-	  					break;
-	  				case '3':	$imaphost = str_replace("imaphost=","",$auth_method_settings['auth_settings']);
-	  					break;
-	  				case 4:	$ldapsettings = $auth_method_settings['auth_settings'];
-					    $ldap = explode("|",$ldapsettings);
-					    $ldaphost = str_replace("ldaphost=","",$ldap[0]);	//ldaphost
-					    $ldapbind_dn = str_replace("ldapbind_dn=","",$ldap[1]);	//ldapbase_dn
-					    $ldapbind_user = str_replace("ldapbind_user=","",$ldap[2]);	//ldapbind_user
-					    $ldapbind_pw = str_replace("ldapbind_pw=","",$ldap[3]);		// ldapbind_pw
-							break;
+			}
+			else
+			{
+				// try to authenticate him via the alternative defined method
+				$auth_method_settings = get_auth_settings($auth);
+				if($myrow['password']==$auth_method_settings['auth_name'])
+				{
+					switch($auth)
+					{
+						case '2':	$pop3host = str_replace("pop3host=","",$auth_method_settings['auth_settings']);
+						break;
+						case '3':	$imaphost = str_replace("imaphost=","",$auth_method_settings['auth_settings']);
+						break;
+						case 4:	$ldapsettings = $auth_method_settings['auth_settings'];
+						$ldap = explode("|",$ldapsettings);
+						$ldaphost = str_replace("ldaphost=","",$ldap[0]);	//ldaphost
+						$ldapbind_dn = str_replace("ldapbind_dn=","",$ldap[1]);	//ldapbase_dn
+						$ldapbind_user = str_replace("ldapbind_user=","",$ldap[2]);	//ldapbind_user
+						$ldapbind_pw = str_replace("ldapbind_pw=","",$ldap[3]);		// ldapbind_pw
+						break;
 						case 5:	$dbsettings = $auth_method_settings['auth_settings'];
-    					$edb = explode("|",$dbsettings);
-    					$dbhost = str_replace("dbhost=","",$edb[0]);	//dbhost
-    					$dbname = str_replace("dbname=","",$edb[1]);	//dbname
-    					$dbuser = str_replace("dbuser=","",$edb[2]);//dbuser
-    					$dbpass = str_replace("dbpass=","",$edb[3]);// dbpass
-					    $dbtable = str_replace("dbtable=","",$edb[4]);//dbtable
-					    $dbfielduser = str_replace("dbfielduser=","",$edb[5]);//dbfielduser
-					    $dbfieldpass = str_replace("dbfieldpass=","",$edb[6]);//dbfieldpass
+						$edb = explode("|",$dbsettings);
+						$dbhost = str_replace("dbhost=","",$edb[0]);	//dbhost
+						$dbname = str_replace("dbname=","",$edb[1]);	//dbname
+						$dbuser = str_replace("dbuser=","",$edb[2]);//dbuser
+						$dbpass = str_replace("dbpass=","",$edb[3]);// dbpass
+						$dbtable = str_replace("dbtable=","",$edb[4]);//dbtable
+						$dbfielduser = str_replace("dbfielduser=","",$edb[5]);//dbfielduser
+						$dbfieldpass = str_replace("dbfieldpass=","",$edb[6]);//dbfieldpass
+						break;
+						default:
 							break;
-	  				default:
-	  					break;
-	  			}
-	  			
+					}
+
 					$is_valid = auth_user_login($auth,$uname,$pass);
 					if($is_valid)
 					{
 						// check if the account is active
 						$is_active = check_activity($myrow["user_id"]);
-						
+
 						// always the admin is active
 						if($myrow["user_id"]==$myrow["is_admin"])
-	      		{
-	      			$is_active = 1;
-	      		}
-	      		
+						{
+							$is_active = 1;
+						}
+
 						if(!empty($is_active))
 						{
 							$auth_allow = 1;
@@ -206,22 +206,22 @@ if(!empty($submit))
 						else
 						{
 							$auth_allow = 3;
-							//$warning .= "<br />Your account is inactive. <br />Please contact the Eclass Admin<br />";		
+							//$warning .= "<br />Your account is inactive. <br />Please contact the Eclass Admin<br />";
 						}
 					}
 					else
 					{
 						//$tool_content .= "<br />The connection does not seem to work!<br />";
 						$auth_allow = 2;
-					}	
+					}
 					if($auth_allow==1)
-					{	
-	  				$uid = $myrow["user_id"];
-	          $nom = $myrow["nom"];
-	          $prenom = $myrow["prenom"];
-	          $statut = $myrow["statut"];
-	          $email = $myrow["email"];
-	          $is_admin = $myrow["is_admin"];
+					{
+						$uid = $myrow["user_id"];
+						$nom = $myrow["nom"];
+						$prenom = $myrow["prenom"];
+						$statut = $myrow["statut"];
+						$email = $myrow["email"];
+						$is_admin = $myrow["is_admin"];
 					}
 					elseif($auth_allow==2)
 					{
@@ -241,25 +241,25 @@ if(!empty($submit))
 					$warning .= "<br>Invalid user auth method!Please contact the admin<br>";
 					//exit;
 				}
-  			
-  		}
-  		
-  	}
-  	else
-  	{
-  		$tool_content .= "<br>No authentication method defined.Cannot proceed!<br>";
-  		//exit;
-  		
-  	}
-  	
+
+			}
+
+		}
+		else
+		{
+			$tool_content .= "<br>No authentication method defined.Cannot proceed!<br>";
+			//exit;
+
+		}
+
 
 	}		// while
 
-	if (!isset($uid)) 
+	if (!isset($uid))
 	{
-                $warning .= $langInvalidId;
-	} 
-	else 
+		$warning .= $langInvalidId;
+	}
+	else
 	{
 		$warning = '';
 		$log='yes';
@@ -272,7 +272,7 @@ if(!empty($submit))
 		$_SESSION['uid'] = $uid;
 		mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action)
                 VALUES ('', '".$uid."', '".$REMOTE_ADDR."', NOW(), 'LOGIN')");
-	
+
 	}
 }  // end of user authentication
 
@@ -283,9 +283,9 @@ if(!empty($submit))
 //<table width="600" align="center" cellpadding="3" cellspacing="2" border="0">
 //<tr><td colspan="3" align="center" style="padding: 0px;" bgcolor="$colorMedium">
 //$main_page_banner
-//</td></tr>  
+//</td></tr>
 //<tr><td valign="top" align="left"  bgcolor="$colorMedium" colspan="3">
-//<font face="Arial, Helvetica, sans-serif" color="#FFFFFF" size="2">&nbsp; 
+//<font face="Arial, Helvetica, sans-serif" color="#FFFFFF" size="2">&nbsp;
 //tCont;
 
 //echo $tool_content;
@@ -294,7 +294,7 @@ else unset($uid);
 
 // This must be setting a var in basethem and NOT concat $tool_content
 //if (isset($uid)) $tool_content .=  "$langUser : $prenom $nom";
-//else $tool_content .=  "<a href=\"#\"></a>"; 
+//else $tool_content .=  "<a href=\"#\"></a>";
 
 //$tool_content .= <<<tCont2
 //</font></td></tr>
@@ -307,33 +307,33 @@ else unset($uid);
 
 //echo $tool_content ;
 //----------------------------------------------------------------
-// if login succesful display courses lists 
+// if login succesful display courses lists
 // --------------------------------------------------------------
 
 // first case check in which courses are registered as a student
-if (isset($uid) AND !isset($logout)) { 
+if (isset($uid) AND !isset($logout)) {
 
-//$eclass_perso will be read from the db.
-//keep as is for now
-$eclass_perso = 1;
-if ($eclass_perso == 0) {
-	include("logged_in_content.php");
-draw($tool_content,1);
-} else {
-	include("perso.php");
-	drawPerso($tool_content);
-}
+	//$eclass_perso will be read from the db.
+	//keep as is for now
+	$eclass_perso = 0;
+	if ($eclass_perso == 0) {
+		include("logged_in_content.php");
+		draw($tool_content,1);
+	} else {
+		include("perso.php");
+		drawPerso($tool_content);
+	}
 
 
 
 }	// end of if login
 
 // -------------------------------------------------------------------------------------
-// display login  page 
+// display login  page
 // -------------------------------------------------------------------------------------
 
-elseif ((isset($logout) && $logout) OR (1==1)) { 
-	
+elseif ((isset($logout) && $logout) OR (1==1)) {
+
 	if (isset($logout) && $logout && isset($uid)) {
 		mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user,
 			loginout.ip, loginout.when, loginout.action)
@@ -342,13 +342,13 @@ elseif ((isset($logout) && $logout) OR (1==1)) {
 		unset($nom);
 		session_destroy();
 	}
-	
+
 	include("logged_out_content.php");
 
 
-draw($tool_content, 0,'index');
-//	$tool_content .=  "</tr></table>";
-} // end of display 
+	draw($tool_content, 0,'index');
+	//	$tool_content .=  "</tr></table>";
+} // end of display
 
 
 
@@ -367,9 +367,9 @@ function check_new_announce() {
                 AND cours_user.user_id='$uid' AND annonces.temps >= '$lastlogin'
                 ORDER BY temps DESC";
 	if (mysql_num_rows(mysql_query($sql)) > 0)
-		return TRUE;
-	else 
-		return FALSE;
+	return TRUE;
+	else
+	return FALSE;
 
 }
 
@@ -382,9 +382,9 @@ function check_new_announce() {
 
 $ver = mysql_get_server_info();
 if (version_compare("4.1", $ver) <= 0)
-        return true;
+return true;
 else
-	return false;
+return false;
 }*/
 
 
