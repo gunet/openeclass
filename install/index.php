@@ -1441,6 +1441,8 @@ else
     echo "</ul>";
     echo "<UL>Προαιρετικά PHP modules";
     warnIfExtNotLoaded("ldap");
+    warnIfExtNotLoaded("gd");
+    warnIfExtNotLoaded("mbstring");
     echo "</ul>";
     echo "
     <br>
