@@ -50,7 +50,7 @@ Translate the interface in chosen language
 $langAdmin = "Εργαλεία Διαχείρισης Πλατφόρμας";
 $langAdminBy = "Διαχείριση από ";
 $langTools = "Διαχείριση πλατφόρμας e-Class";
-$langState = "Εργαλεία διαχείρισης εξυπηρετητή"; 
+$langState = "Εργαλεία διαχείρισης εξυπηρετητή";
 $langDevAdmin ="Εργαλεία διαχείρισης βάσης δεδομένων";
 $langLinksToClaroProjectSite ="Σύνδεσμοι προς το site του project";
 $langNomOutilTodo 		= "Διαχείριση του καταλόγου 'Να γίνουν'"; // to do
@@ -61,6 +61,7 @@ $langDiffTranslation 	= "Σύγκριση μεταφράσεων"; // diff of translation
 $langStatOf 			= "Στατιστικά του "; // Stats of...
 $langSpeeSubscribe 		= "Γρήγορη εγγραφή σαν διαχειριστής μαθήματος";
 $langLogIdentLogout 	= "Καταγραφή των εισόδων και εξόδων από το σύστημα";
+$langPlatformStats 		= "Στατιστικά Πλατφόρμας";
 
 $langListCours = "Λίστα Μαθημάτων / Ενέργειες";
 $langListUsers = "Λίστα Χρηστών / Ενέργειες";
@@ -122,7 +123,7 @@ $langMissing   ="λείπει";
 $langExist     ="υπάρχει";
 
 $langAddAdminInApache ="Προσθήκη ενός χρήστη στους διαχειριστές";
-$langAddFaculties ="Προσθήκη σχολών / τμημάτων"; 
+$langAddFaculties ="Προσθήκη σχολών / τμημάτων";
 $langRestoreCourse = "Ανάκτηση μαθήματος";
 
 // Create Claro table
