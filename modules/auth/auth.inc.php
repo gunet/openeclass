@@ -284,8 +284,8 @@ function auth_user_login ($auth,$test_username, $test_password)
 	    $link = mysql_connect($dbhost,$dbuser,$dbpass,$newlink);
 	    if($link)
 	    {
-				$db = mysql_select_db($dbname,$link);
-				if($db)
+				$db_ext = mysql_select_db($dbname,$link);
+				if($db_ext)
 				{
 		    	$qry = "SELECT * FROM ".$dbname.".".$dbtable." WHERE ".$dbfielduser."='".$test_username."' AND ".$dbfieldpass."='".$test_password."'";
 
