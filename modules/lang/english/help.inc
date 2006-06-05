@@ -6,7 +6,7 @@
       | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
       +----------------------------------------------------------------------+
       |   $Id$           |
-	  |   English Translation                                                |
+      |   English Translation                                                |
       +----------------------------------------------------------------------+
       |   This program is free software; you can redistribute it and/or      |
       |   modify it under the terms of the GNU General Public License        |
@@ -39,7 +39,7 @@ $langClose="Close window";
 
 $langHFor="Help Forums";
 $langForContent="<p>The forum is a written asynchronous discussion tool.
- Where email allows one-to-one dialogue, forums allow public or semi-public 
+ Where email allows one-to-one dialogue, forums allow public or semi-public
  dialogue.</p><p>Technically speaking, the students need only their
  browser to use claroline forums.</P><p>To organise forums, click on
  'Administer'. Discussions are organised in sets and subsets as
@@ -93,22 +93,22 @@ $langHomeContent="<p>For more convenience, claroline tools contain default entri
 $langHClar="Start Help";
 $langClarContent="<p>Type your username and password to login in platform.</p>
  <p>
-<b>New user registration</b></p><p>If you are a student you have to register, by clicking in 'New user 
+<b>New user registration</b></p><p>If you are a student you have to register, by clicking in 'New user
 registration', and then you have to choose your desired courses. </p>
 <b>Professor acount request</b>
 <p>If you are a professor, you also have to register by clicking in 'Professor account request'.
  After that you must fill a form with some personal informations: Name, surname, username, phone, e-mail and
- the department in which you belong. After filling the form, your request will be sent in the administrators 
+ the department in which you belong. After filling the form, your request will be sent in the administrators
  of platform. They will create your account and send you an e-mail will all the details of your account.
- Using your username / password you will be able to login in platform. After entering the platform you have to 
- click in 'Create course site'. After completing some details about your course, your course will be created 
+ Using your username / password you will be able to login in platform. After entering the platform you have to
+ click in 'Create course site'. After completing some details about your course, your course will be created
  and you will be directed in your newly created course home page.</p>";
 
 
 $langHClar2="Courses home page";
-$langClar2Content="<b>Courses home page </b><p>In this page there are all the courses in which you are 
-registered (as a student) or you 
-have created (as a professor). If you wish you can click in 'Modify my profile' to modify your personal 
+$langClar2Content="<b>Courses home page </b><p>In this page there are all the courses in which you are
+registered (as a student) or you
+have created (as a professor). If you wish you can click in 'Modify my profile' to modify your personal
 informations. </p>";
 
 // help_document.php
@@ -119,7 +119,7 @@ $langDocContent="<p>The Documents tool is similar to the FileManager of
  Powerpoint, Excel, Acrobat, Flash, Quicktime, etc.). Your only concern
  must be that your students have the corresponding software to read them.
  Some file types can contain viruses, it is your responsibilty not to
- upload virus contaminated files. It is a worthwhile precaution to check documents with 
+ upload virus contaminated files. It is a worthwhile precaution to check documents with
  antivirus software before uploading them.</p>
 <p>The documents are presented in alphabetical order.<br><b>Tip : </b>If
  you want to present them in a different order, numerate them: 01, 02,
@@ -129,107 +129,107 @@ $langDocContent="<p>The Documents tool is similar to the FileManager of
 <ul>
   <li>Select the file on your computer using the Browse button <input
  type=submit value=Browse name=submit2>
-	on the right of your screen.</li>
-		<li>
-			Launch the upload with the Upload Button <input type=submit value=Upload name=submit2>.
-		</li>
-	</ul>
-	<h4>
-		Rename a document (a directory)
-	</h4>
-	<ul>
-		<li>
-			click on the <img src=../document/img/renommer.gif width=20 height=20 align=baseline> 
-			button in the Rename column
-		</li>
-		<li>
-			Type the new name in the field (top left)
-		</li>
-		<li>
-			Validate by clicking <input type=submit value=Ok name=submit24>.
-		</li>
-	</ul>
-		<h4>
-			Delete a document (or a directory)
-		</h4>
-		<ul>
-			<li>
-				Click on <img src=../document/img/supprimer.gif width=20 height=20> 
-				in column 'Delete'.
-			</li>
-		</ul>
-		<h4>
-			Make a document (or directory) invisible to students
-		</h4>
-		<ul>
-			<li>
-				Click on <img src=../document/img/visible.gif width=20 height=20>
-				in column 'Visible/invisible'.
-			</li>
-			<li>
-				The document (or directory) still exists but it is not visible by students anymore.
-			</li>
-			<li>
-				To make it invisible back again, click on 
-				<img src=../document/../document/img/invisible.gif width=24 height=20> 
-				in column 'Visible/invisible'
-			</li>
-		</ul>
-		<h4>
-			Add or modify a comment to a document (or a directory)
-		</h4>
-		<ul>
-			<li>
-				Click on <img src=../document/../document/img/comment.gif width=20 height=20> in column 'Comment'
-			</li>
-			<li>
-				Type new comment in the corresponding field (top right).
-			</li>
-			<li>
-				Validate by clicking <input type=submit value=OK name=submit2>
-			.</li>
-		</ul>
-		<p>
-		To delete a comment, click on <img src=../document/../document/img/comment.gif width=20 height=20>, 
-		delete the old comment in the field and click 
-		<input type=submit value=OK name=submit22>.
-		<hr>
-		<p>
-			You can organise your content through filing. For this:
-		</p>
-		<h4>
-			<b>
-				Create a directory
-			</b>
-		</h4>
-		<ul>
-			<li>
-				Click on 
-				<img src=../document/../document/img/dossier.gif width=20 height=20>
-				'Create a directory' (top left)
-			</li>
-			<li>
-				Type the name of your new directory in the corresponding field (top left)
-			</li>
-			<li>
-				Validate by clicking <input type=submit value=OK name=submit23>.
-			</li>
-		</ul>
-		<h4>
-			Move a document (or directory)
-		</h4>
-		<ul>
-			<li>
-				Click on button <img src=../document/../document/img/deplacer.gif width=34 height=16> 
-				in column 'Move'
-			</li>
-			<li>
-				Choose the directory into which you want to move the document (or directory) in the corresponding scrolling menu (top left) (note: the word 'root' means you cannot go upper than that level in the document tree of the server).
-			</li>
-			<li>
-				Validate by clicking on <input type=submit value=OK name=submit232>.
-			</li>
-		</ul>
+    on the right of your screen.</li>
+        <li>
+            Launch the upload with the Upload Button <input type=submit value=Upload name=submit2>.
+        </li>
+    </ul>
+    <h4>
+        Rename a document (a directory)
+    </h4>
+    <ul>
+        <li>
+            click on the <img src=../document/img/renommer.gif width=20 height=20 align=baseline>
+            button in the Rename column
+        </li>
+        <li>
+            Type the new name in the field (top left)
+        </li>
+        <li>
+            Validate by clicking <input type=submit value=Ok name=submit24>.
+        </li>
+    </ul>
+        <h4>
+            Delete a document (or a directory)
+        </h4>
+        <ul>
+            <li>
+                Click on <img src=../document/img/supprimer.gif width=20 height=20>
+                in column 'Delete'.
+            </li>
+        </ul>
+        <h4>
+            Make a document (or directory) invisible to students
+        </h4>
+        <ul>
+            <li>
+                Click on <img src=../document/img/visible.gif width=20 height=20>
+                in column 'Visible/invisible'.
+            </li>
+            <li>
+                The document (or directory) still exists but it is not visible by students anymore.
+            </li>
+            <li>
+                To make it invisible back again, click on
+                <img src=../document/../document/img/invisible.gif width=24 height=20>
+                in column 'Visible/invisible'
+            </li>
+        </ul>
+        <h4>
+            Add or modify a comment to a document (or a directory)
+        </h4>
+        <ul>
+            <li>
+                Click on <img src=../document/../document/img/comment.gif width=20 height=20> in column 'Comment'
+            </li>
+            <li>
+                Type new comment in the corresponding field (top right).
+            </li>
+            <li>
+                Validate by clicking <input type=submit value=OK name=submit2>
+            .</li>
+        </ul>
+        <p>
+        To delete a comment, click on <img src=../document/../document/img/comment.gif width=20 height=20>,
+        delete the old comment in the field and click
+        <input type=submit value=OK name=submit22>.
+        <hr>
+        <p>
+            You can organise your content through filing. For this:
+        </p>
+        <h4>
+            <b>
+                Create a directory
+            </b>
+        </h4>
+        <ul>
+            <li>
+                Click on
+                <img src=../document/../document/img/dossier.gif width=20 height=20>
+                'Create a directory' (top left)
+            </li>
+            <li>
+                Type the name of your new directory in the corresponding field (top left)
+            </li>
+            <li>
+                Validate by clicking <input type=submit value=OK name=submit23>.
+            </li>
+        </ul>
+        <h4>
+            Move a document (or directory)
+        </h4>
+        <ul>
+            <li>
+                Click on button <img src=../document/../document/img/deplacer.gif width=34 height=16>
+                in column 'Move'
+            </li>
+            <li>
+                Choose the directory into which you want to move the document (or directory) in the corresponding scrolling menu (top left) (note: the word 'root' means you cannot go upper than that level in the document tree of the server).
+            </li>
+            <li>
+                Validate by clicking on <input type=submit value=OK name=submit232>.
+            </li>
+        </ul>
 <center>
 <p>";
 
@@ -267,8 +267,8 @@ him/her or reminding him/her his/her login and  password.</p>";
 
 $langHGroup="Help groups";
 $langGroupContent="<p><b>Introduction</b></p>
-<p>This tool allows to create and manage work groups. 
-At creation (Create groups), groups are emtpy. There are 
+<p>This tool allows to create and manage work groups.
+At creation (Create groups), groups are emtpy. There are
 many ways to fill them:
 <ul><li>automatically ('Fill groups'),</li>
 <li>manually ('Edit'),</li>
@@ -287,19 +287,19 @@ create. Maximum number of members is optional but we suggest to chose one. If yo
 unchanged, groups size maximum will be infinite.</p><hr noshade size=1>
 <p><b>Group settings</b></p>
 <p>You can determine Group settings globally (for all groups).
-<b>Students are allowed to self-register in groups</b>: 
-<p>You create empty groups, students self-register. 
-If you have defined a maximum number, full groups do not accept new members. 
-This method is good for teachers who do not know students list when 
+<b>Students are allowed to self-register in groups</b>:
+<p>You create empty groups, students self-register.
+If you have defined a maximum number, full groups do not accept new members.
+This method is good for teachers who do not know students list when
 creating groups.</p>
 <b>Outils</b>:</p>
-<p>Every group possesses either a forum (private or public) or a Documents area 
+<p>Every group possesses either a forum (private or public) or a Documents area
 (a shared file manager) or (most frequent) both.</p>
 <hr noshade size=1>
 <p><b>Manual edit</b></p>
-<p>Once groups created (Create groups), you see at bottom of page, a list of groups 
+<p>Once groups created (Create groups), you see at bottom of page, a list of groups
 with a series of informations and functions
-<ul><li><b>Edit</b> to modify manually Group name, description, tutor, 
+<ul><li><b>Edit</b> to modify manually Group name, description, tutor,
 members list.</li>
 <li><b>Delete</b> deletes a group.</li></ul>
 <hr noshade size=1>";
@@ -356,7 +356,7 @@ To remove a word from the text, and so to create a blank, put this word between 
 Once the text has been typed and blanks defined, you can add a comment that will be seen by the student when it
 replies to the question.<br><br>
 Save your text, and you will enter the next step that will allow you to give a weighting to each blank. For
-example, if the question worths 10 points and you have 5 blanks, you can give a weighting of 2 points to each 
+example, if the question worths 10 points and you have 5 blanks, you can give a weighting of 2 points to each
 blank.</p>
 <hr>
 <b>Matching</b>
@@ -380,7 +380,7 @@ above.</p>
 align=\"absmiddle\"> beside the exercise to delete.</p>
 <hr>
 <b>Exercise enabling</b>
-<p>So as for an exercise to be used, you have to enable it by clicking on the picture 
+<p>So as for an exercise to be used, you have to enable it by clicking on the picture
 <img src=\"../img/invisible.gif\" border=\"0\" align=\"absmiddle\"> beside the exercise to enable.</p>
 <hr>
 <b>Exercise running</b>
@@ -411,10 +411,10 @@ $langWorkContent = "
 <p>Work tool is a complete tool for creating / submittion of assignments.</p>
 <p>As a professor, you can create an assignment by clicking on <b>\"New Assignment\"</b>.
 Fill in the title of the assignment, define a deadline and optionally add a comment.</p>
-<p>When the assignment has completed, do not forget to activate it by clicking on the icon 
+<p>When the assignment has completed, do not forget to activate it by clicking on the icon
 <img src=\"../../images/invisible.gif\" border=\"0\" align=\"absmiddle\">. The assignment will be visible
 and accessible by the students only when it is activated.
-You can edit the assignment by clicking on the icon <img src=\"../../images/edit.gif\" border=\"0\" align=\"middle\"> 
+You can edit the assignment by clicking on the icon <img src=\"../../images/edit.gif\" border=\"0\" align=\"middle\">
 or deleting it by clicking on the icon <img src=\"../../images/delete.gif\" border=\"0\" align=\"middle\">.
 Clicking on the title of the assignment, you have access to the students submissions.
 The corresponding details are the submission date and the filename.
@@ -424,10 +424,10 @@ If you want to score the assignment, just fill the grade next to student name an
 <b>\"Assignment grade\"</b>. The student will have his grade after clicking the assignment</p>
 
 <p>On the other hand, student can have access to all visible assigments by the professor
-The list of the assignments include the deadline, the professor grade and a tick mark denoting if the student has 
-uploaded an assignment or no. 
+The list of the assignments include the deadline, the professor grade and a tick mark denoting if the student has
+uploaded an assignment or no.
 Note, the student cannot upload an assignment after the deadline.
-Also, if he / she has uploaded an assignment and wants to upload a new one, the old one will be replaced by the new 
+Also, if he / she has uploaded an assignment and wants to upload a new one, the old one will be replaced by the new
 one.
 </p>
 ";
@@ -442,12 +442,12 @@ pressing 'Ok'. If you wish, you can change some event properties by clickin 'Mod
 
 $langHLink = "Link";
 $langLinkContent="<p>
-The Links tool allows you to create a library of resources for your students. Especially resources that you have 
+The Links tool allows you to create a library of resources for your students. Especially resources that you have
 not created yourself.</p>
-<p>When the list grows, it might prove relevant to organise it into categories to help your students find the 
+<p>When the list grows, it might prove relevant to organise it into categories to help your students find the
 right information at the right place.
 You can edit every link to re-assign it into a new category (you need to create this category first).</p>
-<p>The Description field can be used to give pre-information on the target web pages but also to describe what 
+<p>The Description field can be used to give pre-information on the target web pages but also to describe what
 you expect the student to do with the link. If, for instance, you point to a website on Aristotle,
 the description field may ask the student to study the difference between synthesis and analysis. ";
 
@@ -470,7 +470,7 @@ $langProfileContent = "<p>You can modify your personal info in the platform</p>
 //help video links
 
 $langHVideoLinks = "Video links";
-$langVideoLinksContent = "You can add video links in yous course. Just type the address of a video on 
+$langVideoLinksContent = "You can add video links in yous course. Just type the address of a video on
 demand (VOD) server in field 'URL'. You can also type the title and the description and finally press button 'Add'.
 When you change 'Delete whole list' you can delete all the video links of your course";
 
@@ -519,16 +519,16 @@ and includes all messages of the conversations that take part in 'Chat'. Finally
 you can delete all mesaages in 'Chat' by pressing button 'Wash'.</p>";
 
 $langHVideo = "Video";
-$langVideoContent = "You can add video files in your course. You can upload a video file, pressing 'Browse', typing the 
-title and some description and finally press button 'Add'. You can modify some of the file parameters, by selecting 
-'Modify', or you can delete a video file, by selecting 'Delete'. Also, bu selecting 'Delete whole list' you can 
+$langVideoContent = "You can add video files in your course. You can upload a video file, pressing 'Browse', typing the
+title and some description and finally press button 'Add'. You can modify some of the file parameters, by selecting
+'Modify', or you can delete a video file, by selecting 'Delete'. Also, bu selecting 'Delete whole list' you can
 delete all video files of the course.";
 
 $langHCoursedescription = "Course Description";
-$langCoursedescriptionContent = "<p>You can add some additional info about the course, when you click in 'Create 
+$langCoursedescriptionContent = "<p>You can add some additional info about the course, when you click in 'Create
 and Edit'. You can add a category, selecting it from the drop down box and click in the button 'Add'.
 After entering the information you want press the button 'Add'. If, for some reason, you decide that don't want to enter
-the information press 'Return and Cancel'. Whenever you want, you can modify the information you have entered by 
+the information press 'Return and Cancel'. Whenever you want, you can modify the information you have entered by
 clicking 'Modify' or deleting it by clicking on 'Delete'.</p>";
 
 $langHModule = "Ádd link in home page";
@@ -601,14 +601,14 @@ contents.</p>
 like NETg, Macromedia, Microsoft, Skillsoft, etc. and acting at three levels:
 </p>
 <ul>
-<li><b>Economy</b> : Scorm allows whole courses or small content units to be reusable on different Learning 
+<li><b>Economy</b> : Scorm allows whole courses or small content units to be reusable on different Learning
 Management Systems (LMS) through the separation of content and context,</li>
 <li><b>Pedagogy</b> : Scorm integrates the notion of
 pre-requisite or <i>sequencing</i> (<i>e.g. </i>\"Youcannot go to chapter 2 before passing Quiz 1\"),</li>
 <li><b>Technology</b> : Scorm generates a table of contents as
 an abstraction layer situated outside content and outside the LMS. It
 helps content and LMS communicate with each other. What is communicated is mainly <i>bookmarks
-</i>(\"Where is John in thecourse?\"), <i>scoring</i> (\"How did John pass the test?\") and <i>time</i> 
+</i>(\"Where is John in thecourse?\"), <i>scoring</i> (\"How did John pass the test?\") and <i>time</i>
 (\"How much time did John spent in chapter 1?\").</li>
 </ul>
 <b>How to create a SCORM compliant learning path?</b><br>
@@ -632,5 +632,10 @@ and all uploaded <i>Scorm format Learning Paths</i>, as well. It is wise
 to put every uploaded Scorm path into separate directories.
 </p>";
 
+$langHUsage = "Usage Statistics";
+$langUsageContent =
+"
+Write Help Text Here.
+";
 
 ?>
