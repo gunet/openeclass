@@ -27,31 +27,28 @@
 
 /*
 ===========================================================================
-    usage/index.php
-    @last update: 2006-05-07 by Vangelis Haniotakis
+    usage/usage.php
+    @last update: 2006-06-04 by Vangelis Haniotakis
     @authors list: Vangelis Haniotakis haniotak@ucnet.uoc.gr
 ==============================================================================
     @Description: Main script for the usage statistics module
 
 
-    @todo: Make it work.
+    @todo: Nothing much; most functionality is already in form.php and results.php
 ==============================================================================
 */
-//Μετατροπή του εργαλείου για να χρησιμοποιεί το baseTheme
+
 $require_current_course = TRUE;
-$langFiles = 'usage';
-$require_help = false;
-$helpTopic = 'Usage';
+$langFiles 				= 'usage';
+$require_help 			= true;
+$helpTopic 				= 'Usage';
 
-// include('../../include/init.php');
 include '../../include/baseTheme.php';
-
 include('../../include/action.php');
 
 action::record(MODULE_ID_USAGE);
 
 $tool_content = '';
-
 
 $dateNow = date("d-m-Y / H:i:s",time());
 $nameTools = $langUsage;
@@ -60,7 +57,6 @@ $local_style = '
      padding-left: 15px; padding-right : 15px; }
     .content {position: relative; left: 25px; }';
 
-// add javascripts for jscalendar - haniotak
 include('../../include/jscalendar/calendar.php');
 if ($language == 'greek') {
     $lang = 'el';
@@ -70,23 +66,24 @@ if ($language == 'greek') {
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-win2k-2', false);
 $local_head = $jscalendar->get_load_files_code();
-
-//begin_page();
-
-
-//mysql_select_db($dbname);
-
-if (!$_POST['btnUsage']) {
-    require_once "form.php";
+if ($_POST['u_analyze'] && ($_POST['user_id'] != -1)) {
+    require_once "analyze.php";
 } else {
-    require_once "results.php";
+    if (!extension_loaded('gd')) {
+        $tool_content .= "<p>$langGDRequired</p>";
+    } else {
+        $made_chart = true;
+        require_once "results.php";
+        require_once "form.php";
+    }
 }
-
-//$tool_content = 'Hello! {foo}';
-
-// echo $tool_content;
 
 draw($tool_content, 2, '', $local_head, '');
 
-//end_page();
+if ($made_chart) {
+    ob_flush();
+    sleep(5);
+    unlink ($webDir.$chart_path);
+}
+
 ?>
