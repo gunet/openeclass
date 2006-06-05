@@ -38,7 +38,7 @@ Translate the interface in chosen language
 *****************************************************************/
 // chat.php
 
- $langHello = "Hello World";
+ $langGDRequired = "The GD library is required!";
  $langUsage = "Usage Statistics";
  $langStartDate = "Start Date";
  $langEndDate = "End Date";
@@ -47,7 +47,27 @@ Translate the interface in chosen language
  $langSubmit = "Submit";
  $langModule = "Module";
  $langAllModules = "All Modules";
-
+ $langStatsType = "Statistics Type";
+ $langVisits = "Visits";
+ $langFavourite = "Module Preferences";
+ $langInterval = "Interval";
+ $langDaily = "Daily";
+ $langWeekly = "Weekly";
+ $langMonthly = "Montlhy";
+ $langYearly = "Yearly";
+ $langSummary = "Summary";
+ $langMonths[1] = "Jan";
+ $langMonths[2] = "Feb";
+ $langMonths[3] = "Mar";
+ $langMonths[4] = "Apr";
+ $langMonths[5] = "May";
+ $langMonths[6] = "Jun";
+ $langMonths[7] = "Jul";
+ $langMonths[8] = "Aug";
+ $langMonths[9] = "Sep";
+ $langMonths[10] = "Oct";
+ $langMonths[11] = "Nov";
+ $langMonths[12] = "Dec";
 
 ?>
 

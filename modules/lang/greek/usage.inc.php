@@ -38,7 +38,7 @@ Translate the interface in chosen language
 *****************************************************************/
 // chat.php
 
- $langHello = "Καλημέρα";
+ $langGDRequired = "Απαιτείται η βιβιλιοθήκη GD!";
  $langUsage = "Στατιστικά Χρήσης";
  $langStartDate = "Ημερομηνία Έναρξης";
  $langEndDate = "Ημερομηνία Λήξης";
@@ -47,6 +47,27 @@ Translate the interface in chosen language
  $langSubmit = "Υποβολή";
  $langModule = "Υποσύστημα";
  $langAllModules = "Όλα τα Υποσυστήματα";
+ $langStatsType = "Είδος Στατιστικών";
+ $langVisits = "Επισκέψεις";
+ $langFavourite = "Προτιμήση Υποσυστημάτων";
+ $langInterval = "Διάστημα";
+ $langDaily = "Ημερήσιο";
+ $langWeekly = "Εβδομαδιαίο";
+ $langMonthly = "Μηνιαίο";
+ $langYearly = "Ετήσιο";
+ $langSummary = "Συγκεντρωτικά";
+ $langMonths[1] = "Ιαν";
+ $langMonths[2] = "Φεβ";
+ $langMonths[3] = "Μαρ";
+ $langMonths[4] = "Απρ";
+ $langMonths[5] = "Μαϊ";
+ $langMonths[6] = "Ιουν";
+ $langMonths[7] = "Ιουλ";
+ $langMonths[8] = "Αυγ";
+ $langMonths[9] = "Σεπ";
+ $langMonths[10] = "Οκτ";
+ $langMonths[11] = "Νοε";
+ $langMonths[12] = "Δεκ";
 
 ?>
 
