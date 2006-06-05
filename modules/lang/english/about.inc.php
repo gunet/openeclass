@@ -6,6 +6,10 @@ $langHostName="Host Name is";
 $langWebVersion="uses";
 $langMySqlVersion="MySql  ";
 $langNoMysql="MySql not working!!!";
+$langUptime = "Platform operational since";
+$langTotalHits = "Total hits";
+$langTotalCourses = "Number of courses";
+
 
 // -------------------------------
 $langInfo = "Platform Info";
@@ -21,4 +25,5 @@ $langClosed = "closed";
 $langOpen = "opened";
 $langSemiopen = "require registration";
 $langUsers = "users";
+
 ?>
