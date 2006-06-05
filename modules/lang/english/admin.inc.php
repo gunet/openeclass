@@ -6,7 +6,7 @@
       | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
       +----------------------------------------------------------------------+
       |   $Id$           |
-	  |   English Translation                                                |
+      |   English Translation                                                |
       +----------------------------------------------------------------------+
       |   This program is free software; you can redistribute it and/or      |
       |   modify it under the terms of the GNU General Public License        |
@@ -36,7 +36,7 @@
 $langAdmin = "Administration Tools";
 $langAdminBy = "Admin by ";
 $langTools = "Tools";
-$langState = "State"; 
+$langState = "State";
 $langDevAdmin ="Development Administration";
 $langLinksToClaroProjectSite ="Links to the project's website";
 $langNomPageAdmin 		= "Administration";
@@ -46,6 +46,7 @@ $langDiffTranslation 	= "Compare translations"; // diff of translation
 $langStatOf 			= "Statistics of "; // Stats of...
 $langSpeeSubscribe 		= "Quick subscribe as Course Checker";
 $langLogIdentLogout 	= "Log of login and logout";
+$langPlatformStats 		= "Platform statistics";
 
 $langUnregUser = "Unregister User";
 $langListCours = "Courses List / Actions";
@@ -81,7 +82,7 @@ $langNbAnnoucement = "Number of announcements";
 
 $langPleaseCheckConfigForMainDataBaseName = "Please check these values
 <br>
-Main database name in 
+Main database name in
 <br>";
 $langBaseFound ="Found
 <br>
@@ -103,7 +104,7 @@ $langTableStructureDontKnow ="Structure of this table unknown";
 
 $langRestoreCourse = "Restore Course";
 $langServerStatus ="MySql servet status : ";
-$langDataBase = "Database "; 
+$langDataBase = "Database ";
 $langRun = "work";
 $langClient = "MySql Client ";
 $langServer = "MySql Server ";
