@@ -6,6 +6,9 @@ $langHostName="Ο υπολογιστής στον οποίο βρίσκεται η πλατφόρμα είναι ο ";
 $langWebVersion="Xρησιμοποιεί ";
 $langMySqlVersion="και MySql  ";
 $langNoMysql="Η MySql δεν λειτουργεί !!!";
+$langUptime = "Η πλατφόρμα λειτουργεί από τις";
+$langTotalHits = "Συνολικές προσβάσεις";
+$langTotalCourses = "Αριθμός μαθημάτων";
 
 // -------------------------------
 $langInfo = "Ταυτότητα Πλατφόρμας";
