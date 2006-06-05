@@ -6,7 +6,7 @@
       | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
       +----------------------------------------------------------------------+
       |   $Id$           |
-	  |   English Translation                                                |
+      |   English Translation                                                |
       +----------------------------------------------------------------------+
       |   This program is free software; you can redistribute it and/or      |
       |   modify it under the terms of the GNU General Public License        |
@@ -49,7 +49,7 @@ $langPass="Password";
 $langConfirmation="Confirmation";
 $langUserNotice = "(max 20 characters)";
 $langEmail="e-mail";
-$langEmailNotice = "e-mail address is not required but, keep in mind that without it, professor cannot send 
+$langEmailNotice = "e-mail address is not required but, keep in mind that without it, professor cannot send
 announcements to your mail box, neither you can use the feature 'forgot your password'";
 $langMailErrorMessage = "There was an error during sending message - your request could not be sent.";
 $langAm = "Student ID";
@@ -146,10 +146,10 @@ $langUserMany="Import users list through textfile";
 $langNo="no";
 $langYes="yes";
 $langUserAddExplanation="every line of file to send will necessarily an only
-		include 5 fields: <b>Name&nbsp;&nbsp;&nbsp;Surname&nbsp;&nbsp;&nbsp;
-		Login&nbsp;&nbsp;&nbsp;Password&nbsp;
-		&nbsp;&nbsp;Email</b> separated by tabs and in this order.
-		Users will recieve email confirmation with login/password.";
+        include 5 fields: <b>Name&nbsp;&nbsp;&nbsp;Surname&nbsp;&nbsp;&nbsp;
+        Login&nbsp;&nbsp;&nbsp;Password&nbsp;
+        &nbsp;&nbsp;Email</b> separated by tabs and in this order.
+        Users will recieve email confirmation with login/password.";
 $langSend="Send";
 $langDownloadUserList="Upload list";
 $langUserNumber="number";
@@ -159,15 +159,15 @@ $langGiveTutor="Make tutor";
 $langUserOneByOneExplanation="He (she) will recieve email confirmation with login and password";
 $langBackUser="Back to users list";
 $langUserAlreadyRegistered="A user with same name/surname is already registered
-			in this course. You cannot register him (her) twice.";
+            in this course. You cannot register him (her) twice.";
 
 $langAddedToCourse="is already registered to campus but not in this course. It is done now.";
 $langGroupUserManagement="Groups management";
 $langIsReg="Your modifications have been registered";
 $langPassTooEasy ="this password  is too simple. Use a pass like this ";
 
-$langIfYouWantToAddManyUsers="If you want to add a list of users in 
-			your course, please contact your web administrator.";
+$langIfYouWantToAddManyUsers="If you want to add a list of users in
+            your course, please contact your web administrator.";
 
 $langCourse="course";
 $langCourses="courses";
@@ -179,15 +179,15 @@ $langphone= "Telephone";
 
 // adduser.php
 $langAskUser = "Enter the name, surname or username of the user you want to add.<br><br>
-		User must have an account in platform";
+        User must have an account in platform";
 $langAskManyUsers = "Type the filename or click in \"Browse\" to browse for it.<br><br>
-		Users must have an account in platform.";
+        Users must have an account in platform.";
 $langAskManyUsers2 = "<strong>Note</strong>: Users file must be a simple text file with one username per line: E.g.
-	       <br><br>
-        	helen<br>
-        	nick<br>
-        	john<br>
-        	";
+           <br><br>
+            helen<br>
+            nick<br>
+            john<br>
+            ";
 
 $langAskSearch = "Enter the name, surname or username of the user you want to search for.";
 $langAddUser = "Add User";
@@ -304,5 +304,7 @@ $langLogOut = 'Logout';
 $langDate = 'Date';
 $langAction = 'Action';
 $langRequiredFields = '(fields marked by (*) are required)';
+
+$langCourseVisits = "Course Visits";
 
 ?>
