@@ -94,16 +94,16 @@ $questions = array();
 //$tool_content .= "</table>";
 //////////////////////////////////////////////////////
 
-	$tool_content = "\n<!-- BEGIN SURVEY -->\n";
+	$tool_content = "\n<!-- BEGIN POLL -->\n";
 	$current_poll = db_query("
 		select * from poll 
 		where pid=$pid 
 		ORDER BY pid", $currentCourse);
-	$theSurvey = mysql_fetch_array($current_poll);
-	$tool_content .= "<b>" . $theSurvey["name"] . "</b></b><br>";
-	$tool_content .= $langPollCreation . ":" . $theSurvey["creation_date"] . "<br>";
-	$tool_content .= $langPollStart . ":" . $theSurvey["start_date"] . "<br>";
-	$tool_content .= $langPollEnd . ":" . $theSurvey["end_date"] . "<br><br>";
+	$thePoll = mysql_fetch_array($current_poll);
+	$tool_content .= "<b>" . $thePoll["name"] . "</b></b><br>";
+	$tool_content .= $langPollCreation . ":" . $thePoll["creation_date"] . "<br>";
+	$tool_content .= $langPollStart . ":" . $thePoll["start_date"] . "<br>";
+	$tool_content .= $langPollEnd . ":" . $thePoll["end_date"] . "<br><br>";
 
 if ($type == 2) { //TF
 	$tool_content .= "\n<!-- BEGIN TF -->\n";
@@ -219,11 +219,11 @@ if ($type == 2) { //TF
 				}
 			}
 			//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-			$tool_content .= "<br>\$current_q_t = ".$current_q_t."<br>";
-			$tool_content .= "<br>".count($q_a_GD)."<br>";
-			foreach ($q_a_GD as $k => $v) {
-  		 $tool_content .= "<br>\$q_a_GD[$k] => $v.<br>";
-			}
+//			$tool_content .= "<br>\$current_q_t = ".$current_q_t."<br>";
+//			$tool_content .= "<br>".count($q_a_GD)."<br>";
+//			foreach ($q_a_GD as $k => $v) {
+//  		 $tool_content .= "<br>\$q_a_GD[$k] => $v.<br>";
+//			}
 			//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 			$chart->setTitle("$q_t_GD[$i]");
 			
@@ -236,7 +236,8 @@ if ($type == 2) { //TF
 				
 			$chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
 			$chart->render($webDir.$chart_path);
-			$tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
+			$tool_content .= "<b>" . $langPollCharts . "</b><br>";
+			$tool_content .= '<br><table width="100%"><tr><td><img src="'.$urlServer.$chart_path.'" /></td></tr></table><br>';
 			
 		}
 
@@ -244,6 +245,8 @@ if ($type == 2) { //TF
 /*****************************************************************************
  Print individual results 
 ******************************************************************************/
+	$tool_content .= "<b>" . $langPollIndividuals . "</b><br>";
+	
 	$answers = db_query("
 		select * from poll_answer 
 		where pid=$pid 
