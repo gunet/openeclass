@@ -345,7 +345,7 @@ Service», κάνοντας δεξί κλικ και επιλέγοντας «stop». Για να
 Ταυτόχρονα με την εγκατάσταση της PHP, απαιτείται
 και ενεργοποίηση της υποστήριξης του Apache για PHP.
 Σημειώστε ότι στην PHP, θα πρέπει να ενεργοποιήσετε την υποστήριξη για τα
-modules mysql, zlib, pcre και (προαιρετικά) ldap.
+modules mysql, zlib, pcre και (προαιρετικά) τα ldap, gd, και mbstring.
 Αν επιθυμείτε να χρησιμοποιήσετε κάποιον εξυπηρέτη LDAP για την πιστοποίηση
 των χρηστών, τότε θα πρέπει να ενεργοποιήσετε και το module για τον ldap.
 Οι περισσότερες διανομές της PHP έχουν ενσωματωμένη υποστήριξη για τα modules αυτά.
@@ -358,6 +358,8 @@ modules mysql, zlib, pcre και (προαιρετικά) ldap.
     * Ορίζετε register_globals = On (η προκαθορισμένη τιμή είναι Off)
     * Στα Windows extensions βγάζετε τα σχόλια (;) από το τη γραμμή
        extension = php_ldap.dll
+       extension = php_mbstring.dll
+       extension = php_gd2.dll
     * Αλλάξτε την μεταβλητή session.save_path σε ένα path το οποίο υπάρχει
       (π.χ. session.save_path=c:\winnt\temp\).
       Βεβαιωθείτε επίσης, ότι ο apache έχει δικαιώματα πρόσβασης σε αυτό.
