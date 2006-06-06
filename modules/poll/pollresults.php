@@ -135,14 +135,83 @@ if ($type == 2) { //TF
 			$tool_content .= "<b>" . $langPollTotalAnswers . ": " . $total_answers . "</b><br>";
 	}
 } else { //MC
-	$tool_content .= "\n<!-- BEGIN TF -->\n";
+	$tool_content .= "\n<!-- BEGIN MC -->\n";
 
+	
+		
+	$total_answers = 0;
+	
+// Print pie chart ////////////////////////////////////////////////////
+
+	require_once '../../include/libchart/libchart.php';
+	$chart = new PieChart(500, 250);
+	$chart->setTitle("Αποτελέσματα Δημοσκόπισης");
+	
 	$answers = db_query("
-	select * from poll_answer 
-	where pid=$pid 
-	ORDER BY pid", $currentCourse);
+		select * from poll_answer 
+		where pid=$pid 
+		ORDER BY pid", $currentCourse);
+		
 	while ($theAnswer = mysql_fetch_array($answers)) {
-		++$total_answers;	
+		$aid = $theAnswer["aid"];
+		
+		$arids = db_query("
+			select arid from poll_answer_record 
+			where aid=$aid 
+			ORDER BY aid", $currentCourse);
+		
+		while ($theArid = mysql_fetch_array($arids)) {
+			// Creat array to hold IDs to ANSWER_RECORDs for current poll
+			$arid_GD[] = $theArid["arid"]; 
+			
+			// Get the text of questions
+			$q_ts = db_query("
+				select question_text from poll_answer_record 
+				where aid=$aid 
+				ORDER BY arid", $currentCourse);
+			
+			$q_t_GD = array(); // the array to hold the text of questions
+			
+			while ($theQ_Ts = mysql_fetch_array($q_ts)) {
+				if (!count($q_t_GD)) {
+					$q_t_GD[] = $theQ_Ts["question_text"]; 
+				} else {
+					$flag = 0;
+					for ($i = 0; $i < count($q_t_GD); $i++) {
+   					if ($q_t_GD[$i] == $theQ_Ts["question_text"]) 
+   						++$flag;
+					}
+					if (!$flag) 
+						$q_t_GD[] = $theQ_Ts["question_text"]; 
+				}
+			}
+			for ($i = 0; $i < count($q_t_GD); $i++) {
+   			
+   			 $current_q_t = $q_t_GD[$i];
+   			
+   			//$chart->addPoint(new Point("Other (50)", 50));
+   			
+   			$q_as = db_query("
+				select question_answer from poll_answer_record 
+				where question_text=$current_q_t; 
+				ORDER BY arid", $currentCourse);
+   			
+			}
+		}
+	}
+
+$chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
+$chart->render($webDir.$chart_path);
+$tool_content .= '<img src="'.$urlServer.$chart_path.'" />';		
+
+// Print individual results ///////////////////////////////////////////
+	$answers = db_query("
+		select * from poll_answer 
+		where pid=$pid 
+		ORDER BY pid", $currentCourse);
+	
+	while ($theAnswer = mysql_fetch_array($answers)) {
+		//++$total_answers;	
 		$creator_id = $theAnswer["creator_id"];
 		$aid = $theAnswer["aid"];
 		$answer_creator = db_query("
