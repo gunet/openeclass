@@ -66,32 +66,32 @@ $tool_content = "";
 $total_answers = 0;
 $questions = array();
 /////////////////////////////////////////////////////
-$tool_content .= "<table>";
-
-$total_answers_query = db_query("
-	select * from poll_answer 
-	where pid=$pid", $currentCourse);
-while ($totalAnswer = mysql_fetch_array($total_answers_query)) {
-	++$total_answers;
-}
-$results = db_query("
-	select * from poll_answer 
-	where pid=$pid", $currentCourse);
-while ($qas = mysql_fetch_array($results)) {
-	$count = count($questions);
-	$check = 0;
-	for ($i = 0; $i < $count; $i++) {
-		if ($questions[$i] == $question_text) {
-			$check = 1;
-		}
-	}
-	if (!$check) 
-		$questions[$question_text] = 0;  
-}
-	
-$tool_content .= $totalAnswer;
-//$tool_content .= $questions;
-$tool_content .= "</table>";
+//$tool_content .= "<table>";
+//
+//$total_answers_query = db_query("
+//	select * from poll_answer 
+//	where pid=$pid", $currentCourse);
+//while ($totalAnswer = mysql_fetch_array($total_answers_query)) {
+//	++$total_answers;
+//}
+//$results = db_query("
+//	select * from poll_answer 
+//	where pid=$pid", $currentCourse);
+//while ($qas = mysql_fetch_array($results)) {
+//	$count = count($questions);
+//	$check = 0;
+//	for ($i = 0; $i < $count; $i++) {
+//		if ($questions[$i] == $question_text) {
+//			$check = 1;
+//		}
+//	}
+//	if (!$check) 
+//		$questions[$question_text] = 0;  
+//}
+//	
+//$tool_content .= $totalAnswer;
+////$tool_content .= $questions;
+//$tool_content .= "</table>";
 //////////////////////////////////////////////////////
 
 	$tool_content = "\n<!-- BEGIN SURVEY -->\n";
@@ -141,11 +141,11 @@ if ($type == 2) { //TF
 		
 	$total_answers = 0;
 	
-// Print pie chart ////////////////////////////////////////////////////
+// Get data to print pie chart ////////////////////////////////////////////////////
 
 	require_once '../../include/libchart/libchart.php';
-	$chart = new PieChart(500, 250);
-	$chart->setTitle("Αποτελέσματα Δημοσκόπισης");
+	//$chart = new PieChart(600, 300);
+	//$chart->setTitle("Αποτελέσματα Δημοσκόπισης");
 	
 	$answers = db_query("
 		select * from poll_answer 
@@ -153,6 +153,8 @@ if ($type == 2) { //TF
 		ORDER BY pid", $currentCourse);
 		
 	while ($theAnswer = mysql_fetch_array($answers)) {
+		++$total_answers;
+		
 		$aid = $theAnswer["aid"];
 		
 		$arids = db_query("
@@ -161,7 +163,7 @@ if ($type == 2) { //TF
 			ORDER BY aid", $currentCourse);
 		
 		while ($theArid = mysql_fetch_array($arids)) {
-			// Creat array to hold IDs to ANSWER_RECORDs for current poll
+			// Create array to hold IDs to ANSWER_RECORDs for current poll
 			$arid_GD[] = $theArid["arid"]; 
 			
 			// Get the text of questions
@@ -185,26 +187,63 @@ if ($type == 2) { //TF
 						$q_t_GD[] = $theQ_Ts["question_text"]; 
 				}
 			}
-			for ($i = 0; $i < count($q_t_GD); $i++) {
-   			
-   			 $current_q_t = $q_t_GD[$i];
-   			
-   			//$chart->addPoint(new Point("Other (50)", 50));
-   			
-   			$q_as = db_query("
-				select question_answer from poll_answer_record 
-				where question_text=$current_q_t; 
-				ORDER BY arid", $currentCourse);
-   			
-			}
 		}
 	}
+/*****************************************************************************
+		Print graphs
+******************************************************************************/
+			//$chart->reset();
+			
+			for ($i = 0; $i < count($q_t_GD); $i++) {
+   		
+   			$chart = new PieChart(600, 300);
+   			
+   		 $current_q_t = $q_t_GD[$i];
+   		
+   		$q_as = db_query("
+			select question_answer from poll_answer_record 
+			where question_text='$current_q_t' 
+			ORDER BY arid", $currentCourse);
+			
+			$q_a_GD = array();
+			while ($theQ_As = mysql_fetch_array($q_as)) {
+				$v = $theQ_As["question_answer"];
+				//$tool_content .= "<br>".$v."<br>";
+				if (!count($q_a_GD)) {
+					$q_a_GD[$v] = 1; 
+				} else {
+   					if (array_key_exists($v,$q_a_GD))
+   						++$q_a_GD[$v];
+   					else
+   						$q_a_GD[$v] = 1;
+				}
+			}
+			//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+			$tool_content .= "<br>\$current_q_t = ".$current_q_t."<br>";
+			$tool_content .= "<br>".count($q_a_GD)."<br>";
+			foreach ($q_a_GD as $k => $v) {
+  		 $tool_content .= "<br>\$q_a_GD[$k] => $v.<br>";
+			}
+			//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+			$chart->setTitle("$q_t_GD[$i]");
+			
+			foreach ($q_a_GD as $k => $v) {
+   			//echo "\$a[$k] => $v.\n";
+   			$percentage = 100*($v/$total_answers);
+   			$label = $q_a_GD["$k"]; 
+   			$chart->addPoint(new Point("$k ($percentage)", $percentage));
+			}
+				
+			$chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
+			$chart->render($webDir.$chart_path);
+			$tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
+			
+		}
 
-$chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
-$chart->render($webDir.$chart_path);
-$tool_content .= '<img src="'.$urlServer.$chart_path.'" />';		
 
-// Print individual results ///////////////////////////////////////////
+/*****************************************************************************
+ Print individual results 
+******************************************************************************/
 	$answers = db_query("
 		select * from poll_answer 
 		where pid=$pid 
