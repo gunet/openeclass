@@ -41,7 +41,8 @@ include '../../include/baseTheme.php';
 include('../../include/lib/textLib.inc.php');
 
 include('../../include/action.php');
-action::record(MODULE_ID_AGENDA);
+$action = new action();
+$action->record(MODULE_ID_AGENDA);
 
 $dateNow = date("d-m-Y / H:i:s",time());
 $nameTools = $langAgenda;
