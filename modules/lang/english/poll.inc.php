@@ -72,4 +72,6 @@ $langPollUser = "User";
 $langPollTotalAnswers = "Total number of answers";
 $langPollNone = "There are no polls for the current course.";
 $langPollInactive = "The poll has expired or is not active yet.";
+$langPollCharts = "Collective Results";
+$langPollIndividuals = "Results per user";
 ?>
