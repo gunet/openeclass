@@ -1716,7 +1716,7 @@ mysql_query("CREATE TABLE accueil (
                '../../../images/pastillegris.png',
                'MODULE_ID_LP'
                )");
-    
+
     mysql_query("INSERT INTO accueil VALUES (
                25,
                '$langToolManagement',
@@ -1729,7 +1729,8 @@ mysql_query("CREATE TABLE accueil (
                )");
 
 require_once("../usage/module.php");
-usage_module::create_course(24, $langUsage, $sbsystems[24]);
+$usage_mod = new usage_module();
+$usage_mod->create_course(24, $langUsage, $sbsystems[24]);
 
 if (mysql_version())   {
 

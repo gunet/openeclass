@@ -1,16 +1,11 @@
 <?php
-/*
- * Created on May 31, 2006
- *
- * To change the template for this generated file go to
- * Window - Preferences - PHPeclipse - PHP - Code Templates
- */
+
 
 class usage_module {
-    static $course_db_name = '';
+    var $course_db_name;
 
 
-    static $queries = array(
+    var $queries = array(
         'add_module' =>
             "INSERT IGNORE INTO accueil VALUES (
                 '___MODULE_ID___',
@@ -49,8 +44,8 @@ class usage_module {
 
 
     function create_course($module_id, $module_name = 'Στατιστικά Χρήσης', $is_visible = false) {
-        usage_module::insert_module($module_id, $module_name, $is_visible);
-        foreach (usage_module::$queries['create_tables'] as $key => $query) {
+        $this->insert_module($module_id, $module_name, $is_visible);
+        foreach ($this->queries['create_tables'] as $key => $query) {
             db_query($query);
         }
 
@@ -67,34 +62,34 @@ class usage_module {
             $module_name,
             $is_visible,
         );
-        $query = usage_module::$queries['add_module'];
+        $query = $this->queries['add_module'];
         $query = str_replace($search, $replace, $query);
 
-        if ( usage_module::$course_db_name) {
-            db_query($query, usage_module::$course_db_name);
+        if ( $this->course_db_name) {
+            db_query($query, $this->course_db_name);
         } else {
             db_query($query);
         }
     }
 
     function upgrade($module_id, $course_db_name) {
-        usage_module::$course_db_name = $course_db_name;
-        usage_module::insert_module($module_id);
+        $this->course_db_name = $course_db_name;
+        $this->insert_module($module_id);
 
         if (!mysql_table_exists($course_db_name, 'action_types')) {
-            $query = usage_module::$queries['action_types'];
+            $query = $this->queries['action_types'];
             db_query($query, $course_db_name);
-            $query = usage_module::$queries['action_types_fill'];
+            $query = $this->queries['action_types_fill'];
             db_query($query, $course_db_name);
         }
 
         if (!mysql_table_exists($course_db_name, 'actions')) {
-            $query = usage_module::$queries['actions'];
+            $query = $this->queries['actions'];
             db_query($query, $course_db_name);
         }
 
         if (!mysql_table_exists($course_db_name, 'actions_summary')) {
-            $query = usage_module::$queries['actions_summary'];
+            $query = $this->queries['actions_summary'];
             db_query($query, $course_db_name);
         }
     }
