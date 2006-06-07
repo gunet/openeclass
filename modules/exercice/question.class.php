@@ -58,7 +58,7 @@ class Question
 	 */
 	function read($id)
 	{
-		global $TBL_QUESTIONS, $TBL_EXERCICE_QUESTION, $currentCourseID;;
+		global $TBL_QUESTIONS, $TBL_EXERCICE_QUESTION, $currentCourseID;
 		
 		mysql_select_db($currentCourseID);
 		$sql="SELECT question,description,ponderation,q_position,type FROM `$TBL_QUESTIONS` WHERE id='$id'";
@@ -378,7 +378,9 @@ class Question
 	 */
 	function save($exerciseId=0)
 	{
-		global $TBL_QUESTIONS;
+		global $TBL_QUESTIONS, $currentCourseID;
+		
+		mysql_select_db($currentCourseID);
 
 		$id=$this->id;
 		$question=addslashes($this->question);

@@ -52,6 +52,7 @@
   	@TODO: eliminate code duplication between document/document.php, scormdocument.php
 ==============================================================================
 */
+//include '../../include/baseTheme.php';
 
 if(!class_exists('Exercise')):
 
@@ -419,7 +420,7 @@ class Exercise
 	 */
 	function save()
 	{
-		global $TBL_EXERCICES, $TBL_QUESTIONS;
+		global $TBL_EXERCICES, $TBL_QUESTIONS, $currentCourseID;
 
 		$id=$this->id;
 		$exercise=addslashes($this->exercise);
@@ -443,10 +444,14 @@ class Exercise
 		// creates a new exercise
 		else
 		{
-			$sql="INSERT INTO `$TBL_EXERCICES`(titre,description,type,StartDate,".
-				"EndDate,TimeConstrain,AttemptsAllowed,random,active) VALUES(".
-				"'$exercise','$description','$type','$StartDate','$EndDate','$TimeConstrain','$AttemptsAllowed',".
-				"'$random','$active')";
+			//echo $TBL_EXERCICES;
+			mysql_select_db($currentCourseID);
+//			echo "INSERT INTO `$TBL_EXERCICES` VALUES(".
+//				"0,'$exercise','$description',$type,'$StartDate','$EndDate',$TimeConstrain,$AttemptsAllowed,".
+//				"$random,$active)"."<br>";
+			$sql="INSERT INTO `$TBL_EXERCICES` VALUES(".
+				"0,'$exercise','$description',$type,'$StartDate','$EndDate',$TimeConstrain,$AttemptsAllowed,".
+				"$random,$active)";
 			mysql_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
 
 			$this->id=mysql_insert_id();
