@@ -128,8 +128,11 @@ cData;
 cData;
 	}
 /////////////////////////////////////////////////////////////////////////////////
+//$tool_content .= "<tr><td>".$langExerciseName." :</td><td><input type=\"text\" name=\"exerciseTitle\" ".
+//	"size=\"50\" maxlength=\"200\" value=\"".htmlspecialchars($exerciseTitle)." style=\"width:400px;\"></td></tr>";
+
 $tool_content .= "<tr><td>".$langExerciseName." :</td><td><input type=\"text\" name=\"exerciseTitle\" ".
-	"size=\"50\" maxlength=\"200\" value=\"".htmlspecialchars($exerciseTitle)." style=\"width:400px;\"></td></tr>";
+	"size=\"50\" maxlength=\"200\" value=\"".htmlspecialchars($exerciseTitle)."\" style=\"width:400px;\"></td></tr>";
 
 $tool_content .= "<tr><td valign=\"top\">".$langExerciseDescription." :</td><td><textarea wrap=\"virtual\" ".
 	"name=\"exerciseDescription\" cols=\"50\" rows=\"4\" style=\"width:400px;\">".
