@@ -260,8 +260,8 @@ $tool_content .= "<tr>";
 cData;
 
 	if(!$row['active']) 
-		$tool_content .= "class=\"invisible\"".">"; 
-	$tool_content .= $row['titre']."</a></td>";
+		$tool_content .= "class=\"invisible\""; 
+	$tool_content .= ">".$row['titre']."</a></td>";
 	
 	$langModify_temp = htmlspecialchars($langModify);
 	$langConfirmYourChoice_temp = addslashes(htmlspecialchars($langConfirmYourChoice));

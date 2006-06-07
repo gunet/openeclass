@@ -217,7 +217,7 @@ $tool_content .= <<<cData
 <blockquote>
 	<table border="0">
 		<tr>
-		  <td valign="top"><?php echo $langExerciseDescription; ?> :</td>
+		  <td valign="top">$langExerciseDescription :</td>
 		  <td>
 cData;
 
