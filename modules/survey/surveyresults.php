@@ -106,7 +106,117 @@ if ($type == 2) { //TF
 			$tool_content .= "<b>" . $langSurveyTotalAnswers . ": " . $total_answers . "</b><br>";
 	}
 } else { //MC
-	$tool_content .= "\n<!-- BEGIN TF -->\n";
+	$tool_content .= "\n<!-- BEGIN MC -->\n";
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	$total_answers = 0;
+	
+// Get data to print pie chart ////////////////////////////////////////////////////
+
+	require_once '../../include/libchart/libchart.php';
+	//$chart = new PieChart(600, 300);
+	//$chart->setTitle("Αποτελέσματα Δημοσκόπισης");
+	
+	$answers = db_query("
+		select * from survey_answer 
+		where sid=$sid 
+		ORDER BY sid", $currentCourse);
+		
+	while ($theAnswer = mysql_fetch_array($answers)) {
+		++$total_answers;
+		
+		$aid = $theAnswer["aid"];
+		
+		$arids = db_query("
+			select arid from survey_answer_record 
+			where aid=$aid 
+			ORDER BY aid", $currentCourse);
+		
+		while ($theArid = mysql_fetch_array($arids)) {
+			// Create array to hold IDs to ANSWER_RECORDs for current survey
+			$arid_GD[] = $theArid["arid"]; 
+			
+			// Get the text of questions
+			$q_ts = db_query("
+				select question_text from survey_answer_record 
+				where aid=$aid 
+				ORDER BY arid", $currentCourse);
+			
+			$q_t_GD = array(); // the array to hold the text of questions
+			
+			while ($theQ_Ts = mysql_fetch_array($q_ts)) {
+				if (!count($q_t_GD)) {
+					$q_t_GD[] = $theQ_Ts["question_text"]; 
+				} else {
+					$flag = 0;
+					for ($i = 0; $i < count($q_t_GD); $i++) {
+   					if ($q_t_GD[$i] == $theQ_Ts["question_text"]) 
+   						++$flag;
+					}
+					if (!$flag) 
+						$q_t_GD[] = $theQ_Ts["question_text"]; 
+				}
+			}
+		}
+	}
+	$tool_content .= $langSurveyTotalAnswers . ": " . $total_answers . "</b><br>";
+/*****************************************************************************
+		Print graphs
+******************************************************************************/
+			//$chart->reset();
+			$tool_content .= "<br><br><b>" . $langSurveyCharts . "</b><br>";
+			for ($i = 0; $i < count($q_t_GD); $i++) {
+   		
+   			$chart = new PieChart(600, 300);
+   			
+   		 $current_q_t = $q_t_GD[$i];
+   		
+   		$q_as = db_query("
+			select question_answer from survey_answer_record 
+			where question_text='$current_q_t' 
+			ORDER BY arid", $currentCourse);
+			
+			$q_a_GD = array();
+			while ($theQ_As = mysql_fetch_array($q_as)) {
+				$v = $theQ_As["question_answer"];
+				//$tool_content .= "<br>".$v."<br>";
+				if (!count($q_a_GD)) {
+					$q_a_GD[$v] = 1; 
+				} else {
+   					if (array_key_exists($v,$q_a_GD))
+   						++$q_a_GD[$v];
+   					else
+   						$q_a_GD[$v] = 1;
+				}
+			}
+			//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+//			$tool_content .= "<br>\$current_q_t = ".$current_q_t."<br>";
+//			$tool_content .= "<br>".count($q_a_GD)."<br>";
+//			foreach ($q_a_GD as $k => $v) {
+//  		 $tool_content .= "<br>\$q_a_GD[$k] => $v.<br>";
+//			}
+			//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+			$chart->setTitle("$q_t_GD[$i]");
+			
+			foreach ($q_a_GD as $k => $v) {
+   			//echo "\$a[$k] => $v.\n";
+   			$percentage = 100*($v/$total_answers);
+   			$label = $q_a_GD["$k"]; 
+   			$chart->addPoint(new Point("$k ($percentage)", $percentage));
+			}
+				
+			$chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
+			$chart->render($webDir.$chart_path);
+			
+			$tool_content .= '<br><table width="100%"><tr><td><img src="'.$urlServer.$chart_path.'" /></td></tr></table><br>';
+			
+		}
+
+
+/*****************************************************************************
+ Print individual results 
+******************************************************************************/
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	$answers = db_query("
 	select * from survey_answer 
