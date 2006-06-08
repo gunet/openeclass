@@ -123,9 +123,9 @@ function addEvent(SelectedQuestion) {
 	
 	var NewAnswer; 
 	var OldAnswer;
-	alert('Length: '+CurrentQuestion.length);
+	//alert('Length: '+CurrentQuestion.length);
 	for(var i=1; i < CurrentQuestion.length; i++ ){
-		alert('i: '+i);
+		//alert('i: '+i);
 		if (CurrentQuestion[i] != "") {
 			//var NewAnswer;
 			if (i<3) {
@@ -137,14 +137,37 @@ function addEvent(SelectedQuestion) {
 				NewAnswer = document.createElement('input');
 				NewAnswer.value = CurrentQuestion[i];
 				NewAnswer.setAttribute('id','NewAnswer'+i);
-				OldAnswer = document.getElementById('NewAnswer'+(i-1));
-				alert('Adding: '+NewAnswer.value);
-				alert('OldAnswer: '+OldAnswer.value);
-				OldAnswer.parentNode.insertBefore(NewAnswer,OldAnswer.nextSibling);
+				NewAnswer.setAttribute('type','text');
+				NewAnswer.setAttribute('size','50');
+				NewAnswer.setAttribute('name','answerx.'+i);
+				
+				TheTABLE = document.getElementById('QuestionTable');
+				
+				NewTR = document.createElement('tr');
+				LabelTD = document.createElement('td');
+				LabelP = document.createElement('p');
+				LabelP.value = "Απάντηση";
+				LabelTD.appendChild(LabelP);
+				NewTD = document.createElement('td');
+				NewTD.appendChild(NewAnswer);
+				NewTR.appendChild(LabelTD);
+				NewTR.appendChild(NewTD);
+				OldTR = document.getElementById('NextLine');
+				OldTR.parentNode.insertBefore(NewTR,OldTR);
+				
+				
+				//NewAnswer = document.createElement('input');
+				//NewAnswer.value = CurrentQuestion[i];
+				//NewAnswer.setAttribute('id','NewAnswer'+i);
+				//OldAnswer = document.getElementById('NewAnswer'+(i-1));
+				//alert('Adding: '+NewAnswer.value);
+				//alert('OldAnswer: '+OldAnswer.value);
+				//OldAnswer.parentNode.insertBefore(NewAnswer,OldAnswer.nextSibling);
 			}
 		}
 	}
 	//removeEvent();
+	
 }
 
 function removeEvent() {
@@ -212,9 +235,9 @@ function printMCQuestionForm() {
 		createMCSurvey();
 	} elseif(count($_POST)<5) { // Just entered MC survey cretion dialiog ****************************
 		$tool_content .= <<<cData
-		<form action="addsurvey.php" id="survey" method="post">
+		<form action="addsurvey.php" id="survey" method="post" name="SurveyForm">
 		<input type="hidden" value="1" name="UseCase">
-		<table>
+		<table id="QuestionTable">
 			<tr><td>$langSurveyName</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
 			<tr><td>$langSurveyStart</td><td colspan="2"><input type="text" size="10" name="SurveyStart" value="$SurveyStart"></td></tr>
 			<tr><td>$langSurveyEnd</td><td colspan="2"><input type="text" size="10" name="SurveyEnd" value="$SurveyEnd"></td></tr>
@@ -229,8 +252,8 @@ function printMCQuestionForm() {
 			<!--//////////////-->
 			<tr><td>$langSurveyQuestion</td><td><input type="text" name="question1" size="50" id="NewQuestion"></td></tr> 
 			<tr><td>$langSurveyAnswer #1</td><td><input type="text" name="answer1.1" size="50" id="NewAnswer1"></td></tr>
-			<tr><td>$langSurveyAnswer #2</td><td><input type="text" name="answer2.1" size="50" id="NewAnswer2"></td></tr>
-			<tr>
+			<tr><td>$langSurveyAnswer #2</td><td><input type="text" name="answer1.2" size="50" id="NewAnswer2"></td></tr>
+			<tr id="NextLine">
 			  <td><label>
 			    <input name="MoreQuestions" type="radio" value="1" />
 		      $langSurveyMoreAnswers</label></td>
@@ -289,7 +312,7 @@ cData;
 		++$NumOfQuestions;
 		
 		$tool_content .= <<<cData
-		<form action="addsurvey.php" id="survey" method="post">
+		<form action="addsurvey.php" id="survey" method="post" name="SurveyForm">
 		<input type="hidden" value="1" name="UseCase">
 		<table>
 		<tr><td>$langSurveyName</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
@@ -302,15 +325,26 @@ cData;
 		printAllQA();
 		$tool_content .= "\n\n<!-- END printAllQA() -->\n\n";
 		
-		$tool_content .= "<tr><td colspan=3><hr></td></tr> <tr> <td>" . 
-//			$langSurveyQuestion . "	</td><td><input type='text' name='question" .
-//			($answer_num + 1) . "'></td></tr>";
-				$langSurveyQuestion . "	</td><td><input type='text' name='questionx'></td></tr>".
-				"<tr><td>$langSurveyAnswer #1</td><td><input type='text' name='answerx1' size='50'></td></tr>".
-				"<tr><td>$langSurveyAnswer #2</td><td><input type='text' name='answerx2' size='50'></td></tr>";
+		$tool_content .= <<<cData
+		<tr><td colspan=3><hr></td></tr>
+		<!--///////////////-->
+			<tr><td colspan=3>
+				<SELECT NAME="questionx" onChange="addEvent(this.selectedIndex);this.parentNode.removeChild(this);" id="QuestionSelector">
+				<OPTION> Selecte one of the predeefined COLLES ATTLS...
+				<OPTION VALUE="question1"> In this online unit, my learning focuses on issues that interest me
+				<OPTION VALUE="question2"> In this online unit, what I learn is important for my professional practice.
+				</SELECT>
+			</td></tr>
+			<!--//////////////-->
+cData;
+		
+		$tool_content .= "<tr> <td>" . 
+				$langSurveyQuestion . "	</td><td><input type='text' name='questionx' id='NewQuestion'></td></tr>".
+				"<tr><td>$langSurveyAnswer #1</td><td><input type='text' name='answerx.1' size='50' id='NewAnswer1'></td></tr>".
+				"<tr><td>$langSurveyAnswer #2</td><td><input type='text' name='answerx.2' size='50' id='NewAnswer2'></td></tr>";
 			
 		$tool_content .= <<<cData
-				<tr><td colspan=3><hr></td></tr>
+				<tr id="NextLine"><td colspan=3><hr></td></tr>
 				<tr>
 			  <td><label>
 			    <input name="MoreQuestions" type="radio" value="1" />
@@ -512,13 +546,13 @@ function printAllQA() {
 				if (substr($key, 0, 8) == "question") { //question
 					++$CurrentQuestion;
 					$tool_content .= "<tr><td colspan=3><hr></td></tr> <tr><td>" . $langSurveyQuestion . 
-						" </td><td><input type='text' name='question{$CurrentQuestion}' value='".
+						" </td><td><input type='text' size='50' name='question{$CurrentQuestion}' value='".
 						$$key."'></td></tr>\n";
 				} else { //answer
 					if ($$key != '') {
 						++$CurrentAnswer;
 						$tool_content .= " <tr><td>" . $langSurveyAnswer . 
-						" </td><td><input type='text' name='answer{$CurrentQuestion}.{$CurrentAnswer}' ".
+						" </td><td><input type='text' size='50' name='answer{$CurrentQuestion}.{$CurrentAnswer}' ".
 						"value='{$$key}'></td></tr>\n";
 					}
 					
