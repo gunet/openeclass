@@ -90,20 +90,88 @@ function addEvent(SelectedQuestion) {
 	var CurrentQuestion = new Array(6);
 
 	var question1= new Array(6);
-	question1[0]="In this online unit, my learning focuses on issues that interest me.";
-	question1[1]="Almost Never.";
-	question1[2]="Seldom.";
-	question1[3]="Sometimes.";
-	question1[4]="Often.";
-	question1[5]="Almost Always.";
+	question1[0]="Σε αυτή την ενότητα, η προσπάθια μου επικεντρώθηκε σε θέματα που με ενδιέφεραν.";
+	question1[1]="Σχεδόν ποτέ.";
+	question1[2]="Σπάνια.";
+	question1[3]="Μερικές φορές.";
+	question1[4]="Συχνά.";
+	question1[5]="Σχεδόν πάντα.";
 	
 	var question2= new Array(6);
-	question2[0]="In this online unit, what I learn is important for my professional practice.";
-	question2[1]="Almost Never.";
-	question2[2]="Seldom.";
-	question2[3]="Sometimes.";
-	question2[4]="Often.";
-	question2[5]="Almost Always.";
+	question2[0]="Σε αυτή την ενότητα, αυτά που μαθαίνω έχουν να κάνουν με το επάγγελμά μου.";
+	question2[1]="Σχεδόν ποτέ.";                                                                   
+	question2[2]="Σπάνια.";                                                                        
+	question2[3]="Μερικές φορές.";                                                                 
+	question2[4]="Συχνά.";                                                                         
+	question2[5]="Σχεδόν πάντα.";    
+	
+	var question3= new Array(6);
+	question3[0]="Σε αυτή την ενότητα, ασκώ κριτική σκέψη.";
+	question3[1]="Σχεδόν ποτέ.";                                                                   
+	question3[2]="Σπάνια.";                                                                        
+	question3[3]="Μερικές φορές.";                                                                 
+	question3[4]="Συχνά.";                                                                         
+	question3[5]="Σχεδόν πάντα.";     
+	
+	var question4= new Array(6);
+	question4[0]="Σε αυτή την ενότητα, συνεργάζομαι με τους συμφοιτητές μου.";
+	question4[1]="Σχεδόν ποτέ.";                                                                   
+	question4[2]="Σπάνια.";                                                                        
+	question4[3]="Μερικές φορές.";                                                                 
+	question4[4]="Συχνά.";                                                                         
+	question4[5]="Σχεδόν πάντα.";    
+	
+	var question5= new Array(6);
+	question5[0]="Σε αυτή την ενότητα, η διδασκαλία κρίνεται ικανοποιητική.";
+	question5[1]="Σχεδόν ποτέ.";                                                                   
+	question5[2]="Σπάνια.";                                                                        
+	question5[3]="Μερικές φορές.";                                                                 
+	question5[4]="Συχνά.";                                                                         
+	question5[5]="Σχεδόν πάντα.";                                                         
+	
+	var question6= new Array(6);
+	question6[0]="Σε αυτή την ενότητα, υπάρχει σωστή επικοινωνία με τον διδάσκοντα.";
+	question6[1]="Σχεδόν ποτέ.";                                                                   
+	question6[2]="Σπάνια.";                                                                        
+	question6[3]="Μερικές φορές.";                                                                 
+	question6[4]="Συχνά.";                                                                         
+	question6[5]="Σχεδόν πάντα."; 
+	
+	var question7= new Array(6);
+	question7[0]="Προσπαθώ να βρίσκω λάθη στο σκεπτικό του συνομιλητή μου.";
+	question7[1]="ΟΧΙ!";                                                                   
+	question7[2]="ίσως όχι.";                                                                        
+	question7[3]="Ούτε συμφωνώ, ούτε διαφωνώ.";                                                                 
+	question7[4]="Ίσως ναι.";                                                                         
+	question7[5]="ΝΑΙ!";
+	question7[5]="";  
+	
+	var question8= new Array(6);
+	question8[0]="Όταν συζητώ μπαίνω στην θέση του συνομιλητή μου.";
+	question8[1]="ΟΧΙ!";                                                                   
+	question8[2]="ίσως όχι.";                                                                        
+	question8[3]="Ούτε συμφωνώ, ούτε διαφωνώ.";                                                                 
+	question8[4]="Ίσως ναι.";                                                                         
+	question8[5]="ΝΑΙ!"; 
+	question8[5]="";
+	
+	var question9= new Array(6);
+	question9[0]="Μένω αντικειμενικός κατά την ανάλυση καταστάσεων.";
+	question9[1]="ΟΧΙ!";                                                                   
+	question9[2]="ίσως όχι.";                                                                        
+	question9[3]="Ούτε συμφωνώ, ούτε διαφωνώ.";                                                                 
+	question9[4]="Ίσως ναι.";                                                                         
+	question9[5]="ΝΑΙ!"; 
+	question9[5]=""; 
+	
+	var question10= new Array(6);
+	question10[0]="Μου αρέσει να παίρνω τον ρόλο του συνήγορου του διαβόλου.";
+	question10[1]="ΟΧΙ!";                                                                   
+	question10[2]="ίσως όχι.";                                                                        
+	question10[3]="Ούτε συμφωνώ, ούτε διαφωνώ.";                                                                 
+	question10[4]="Ίσως ναι.";                                                                         
+	question10[5]="ΝΑΙ!"; 
+	question10[5]="";
 	
 	var PollForm = document.getElementById('survey');
 	
@@ -115,6 +183,14 @@ function addEvent(SelectedQuestion) {
 	switch(SelectedQuestion) {
       case 1:   CurrentQuestion = question1; break
       case 2:   CurrentQuestion = question2; break
+      case 3:   CurrentQuestion = question3; break
+      case 4:   CurrentQuestion = question4; break
+      case 5:   CurrentQuestion = question5; break
+      case 6:   CurrentQuestion = question6; break
+      case 7:   CurrentQuestion = question7; break
+      case 8:   CurrentQuestion = question8; break
+      case 9:   CurrentQuestion = question9; break
+      case 10:   CurrentQuestion = question10; break
       default:  alert("JS error");         
    }
 	
@@ -244,9 +320,17 @@ function printMCQuestionForm() {
 			<!--///////////////-->
 			<tr><td colspan=3>
 				<SELECT NAME="questionx" onChange="addEvent(this.selectedIndex);this.parentNode.removeChild(this);" id="QuestionSelector">
-				<OPTION> Selecte one of the predeefined COLLES ATTLS...
-				<OPTION VALUE="question1"> In this online unit, my learning focuses on issues that interest me
-				<OPTION VALUE="question2"> In this online unit, what I learn is important for my professional practice.
+				<OPTION> Επιλέξτε μία από τις προκαθόρισμένες ερωτήσεις (πρότυπα COLLES/ATTL)...
+				<OPTION VALUE="question1"> Σε αυτή την ενότητα, η προσπάθια μου επικεντρώθηκε σε θέματα που με ενδιέφεραν
+				<OPTION VALUE="question2"> Σε αυτή την ενότητα, αυτά που μαθαίνω έχουν να κάνουν με το επάγγελμά μου.
+				<OPTION VALUE="question3"> Σε αυτή την ενότητα, ασκώ κριτική σκέψη.
+				<OPTION VALUE="question4"> Σε αυτή την ενότητα, συνεργάζομαι με τους συμφοιτητές μου.
+				<OPTION VALUE="question5"> Σε αυτή την ενότητα, η διδασκαλία κρίνεται ικανοποιητική.
+				<OPTION VALUE="question6"> Σε αυτή την ενότητα, υπάρχει σωστή επικοινωνία με τον διδάσκοντα.
+				<OPTION VALUE="question7"> Προσπαθώ να βρίσκω λάθη στο σκεπτικό του συνομιλητή μου.
+				<OPTION VALUE="question8"> Όταν συζητώ μπαίνω στην θέση του συνομιλητή μου.
+				<OPTION VALUE="question9"> Μένω αντικειμενικός κατά την ανάλυση καταστάσεων.
+				<OPTION VALUE="question10"> Μου αρέσει να παίρνω τον ρόλο του συνήγορου του διαβόλου.
 				</SELECT>
 			</td></tr>
 			<!--//////////////-->
@@ -330,9 +414,17 @@ cData;
 		<!--///////////////-->
 			<tr><td colspan=3>
 				<SELECT NAME="questionx" onChange="addEvent(this.selectedIndex);this.parentNode.removeChild(this);" id="QuestionSelector">
-				<OPTION> Selecte one of the predeefined COLLES ATTLS...
-				<OPTION VALUE="question1"> In this online unit, my learning focuses on issues that interest me
-				<OPTION VALUE="question2"> In this online unit, what I learn is important for my professional practice.
+				<OPTION> Επιλέξτε μία από τις προκαθόρισμένες ερωτήσεις (πρότυπα COLLES/ATTL)...
+				<OPTION VALUE="question1"> Σε αυτή την ενότητα, η προσπάθια μου επικεντρώθηκε σε θέματα που με ενδιέφεραν
+				<OPTION VALUE="question2"> Σε αυτή την ενότητα, αυτά που μαθαίνω έχουν να κάνουν με το επάγγελμά μου.
+				<OPTION VALUE="question3"> Σε αυτή την ενότητα, ασκώ κριτική σκέψη.
+				<OPTION VALUE="question4"> Σε αυτή την ενότητα, συνεργάζομαι με τους συμφοιτητές μου.
+				<OPTION VALUE="question5"> Σε αυτή την ενότητα, η διδασκαλία κρίνεται ικανοποιητική.
+				<OPTION VALUE="question6"> Σε αυτή την ενότητα, υπάρχει σωστή επικοινωνία με τον διδάσκοντα.
+				<OPTION VALUE="question7"> Προσπαθώ να βρίσκω λάθη στο σκεπτικό του συνομιλητή μου.
+				<OPTION VALUE="question8"> Όταν συζητώ μπαίνω στην θέση του συνομιλητή μου.
+				<OPTION VALUE="question9"> Μένω αντικειμενικός κατά την ανάλυση καταστάσεων.
+				<OPTION VALUE="question10"> Μου αρέσει να παίρνω τον ρόλο του συνήγορου του διαβόλου.
 				</SELECT>
 			</td></tr>
 			<!--//////////////-->
@@ -563,4 +655,5 @@ function printAllQA() {
 			
 		}
 }
+
 ?>
