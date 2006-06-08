@@ -78,7 +78,90 @@ default:
    printSurveyCreationForm();
 }
 
-draw($tool_content, 2); 
+// Get JS  ******************************************************
+$head_content = <<<hContent
+<script type="text/javascript">
+<!-- Begin
+
+function addEvent(SelectedQuestion) {
+	
+//	alert("CRAP "+SelectedQuestion);
+	
+	var CurrentQuestion = new Array(6);
+
+	var question1= new Array(6);
+	question1[0]="In this online unit, my learning focuses on issues that interest me.";
+	question1[1]="Almost Never.";
+	question1[2]="Seldom.";
+	question1[3]="Sometimes.";
+	question1[4]="Often.";
+	question1[5]="Almost Always.";
+	
+	var question2= new Array(6);
+	question2[0]="In this online unit, what I learn is important for my professional practice.";
+	question2[1]="Almost Never.";
+	question2[2]="Seldom.";
+	question2[3]="Sometimes.";
+	question2[4]="Often.";
+	question2[5]="Almost Always.";
+	
+	var PollForm = document.getElementById('survey');
+	
+	var NewQuestion = document.getElementById('NewQuestion');
+	
+	//var question = "question"+SelectedQuestion;
+	//var question = "question";
+	
+	switch(SelectedQuestion) {
+      case 1:   CurrentQuestion = question1; break
+      case 2:   CurrentQuestion = question2; break
+      default:  alert("JS error");         
+   }
+	
+	NewQuestion.value = CurrentQuestion[0];
+	//alert(SelectedQuestion);
+	
+	var NewAnswer; 
+	var OldAnswer;
+	alert('Length: '+CurrentQuestion.length);
+	for(var i=1; i < CurrentQuestion.length; i++ ){
+		alert('i: '+i);
+		if (CurrentQuestion[i] != "") {
+			//var NewAnswer;
+			if (i<3) {
+				//alert('NewAnswer'+i);
+				NewAnswer = document.getElementById('NewAnswer'+i);
+				NewAnswer.value = CurrentQuestion[i];
+			} else {
+				
+				NewAnswer = document.createElement('input');
+				NewAnswer.value = CurrentQuestion[i];
+				NewAnswer.setAttribute('id','NewAnswer'+i);
+				OldAnswer = document.getElementById('NewAnswer'+(i-1));
+				alert('Adding: '+NewAnswer.value);
+				alert('OldAnswer: '+OldAnswer.value);
+				OldAnswer.parentNode.insertBefore(NewAnswer,OldAnswer.nextSibling);
+			}
+		}
+	}
+	//removeEvent();
+}
+
+function removeEvent() {
+	var PollForm = document.getElementById('survey');
+	var SelectElement = document.getElementById('QuestionSelector');
+	try {
+		PollForm.removeChild(SelectElement);
+	} catch (err) {
+		alert("ERROR: "+err);
+	}
+}
+//  End -->
+</script>
+hContent;
+
+
+draw($tool_content, 2, 'survey', $head_content); 
 
 /*****************************************************************************
 		Prints the new survey creation form
@@ -98,7 +181,7 @@ function printSurveyCreationForm() {
 			<input type="text" size="17" name="SurveyStart" value="$CurrentDate">
 		</td></tr>
 		<tr><td>$langSurveyEnd</td><td colspan="2"><input type="text" size="17" name="SurveyEnd"></td></tr>
-		<tr>
+		<!--<tr>
 		  <td>$langSurveyType</td>
 		  <td><label>
 		    <input name="UseCase" type="radio" value="1" />
@@ -106,7 +189,8 @@ function printSurveyCreationForm() {
 		  <td><label>
 		    <input name="UseCase" type="radio" value="2" />
 	      $langSurveyFillText</label></td>
-		</tr>
+		</tr>-->
+		<input name="UseCase" type="hidden" value="1" />
 		<tr><td colspan="3" align="right">
 		  <input name="$langSurveyContinue" type="submit" value="$langSurveyContinue -&gt;"></td>
 	</table>
@@ -134,9 +218,18 @@ function printMCQuestionForm() {
 			<tr><td>$langSurveyName</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
 			<tr><td>$langSurveyStart</td><td colspan="2"><input type="text" size="10" name="SurveyStart" value="$SurveyStart"></td></tr>
 			<tr><td>$langSurveyEnd</td><td colspan="2"><input type="text" size="10" name="SurveyEnd" value="$SurveyEnd"></td></tr>
-			<tr><td>$langSurveyQuestion</td><td><input type="text" name="question1" size="50"></td></tr> 
-			<tr><td>$langSurveyAnswer #1</td><td><input type="text" name="answer1.1" size="50"></td></tr>
-			<tr><td>$langSurveyAnswer #2</td><td><input type="text" name="answer2.1" size="50"></td></tr>
+			<!--///////////////-->
+			<tr><td colspan=3>
+				<SELECT NAME="questionx" onChange="addEvent(this.selectedIndex);this.parentNode.removeChild(this);" id="QuestionSelector">
+				<OPTION> Selecte one of the predeefined COLLES ATTLS...
+				<OPTION VALUE="question1"> In this online unit, my learning focuses on issues that interest me
+				<OPTION VALUE="question2"> In this online unit, what I learn is important for my professional practice.
+				</SELECT>
+			</td></tr>
+			<!--//////////////-->
+			<tr><td>$langSurveyQuestion</td><td><input type="text" name="question1" size="50" id="NewQuestion"></td></tr> 
+			<tr><td>$langSurveyAnswer #1</td><td><input type="text" name="answer1.1" size="50" id="NewAnswer1"></td></tr>
+			<tr><td>$langSurveyAnswer #2</td><td><input type="text" name="answer2.1" size="50" id="NewAnswer2"></td></tr>
 			<tr>
 			  <td><label>
 			    <input name="MoreQuestions" type="radio" value="1" />
