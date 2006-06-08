@@ -72,4 +72,6 @@ $langSurveyUser = "User";
 $langSurveyTotalAnswers = "Total number of answers";
 $langSurveyNone = "There are no surveys for the current course.";
 $langSurveyInactive = "The survey has expired or has not started yet.";
+$langSurveyCharts = "Collective Results";
+$langSurveyIndividuals = "Results per user";
 ?>

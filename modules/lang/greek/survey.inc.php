@@ -74,4 +74,6 @@ $langSurveyUser = "Χρήστης";
 $langSurveyTotalAnswers = "Συνολικός αριθμός απαντήσεων";
 $langSurveyNone = "Δεν έχουν δημιουργηθεί έρευνες μαθησιακού προφίλ για το μάθημα";
 $langSurveyInactive = "Η Έρευνα Μαθησιακού Προφίλ έχε λήξει ή δεν έχει ενεργοποιηθεί ακόμα.";
+$langSurveyCharts = "Συγκεντρωτικά αποτελέσματα";
+$langSurveyIndividuals = "Αποτελέσματα ανά χρήστη";
 ?>
