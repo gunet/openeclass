@@ -704,6 +704,25 @@ if (mysql_version())  {
     # --------------------------------------------------------
 
     #
+    # table `agenda`
+    #
+
+    mysql_query("CREATE TABLE `agenda` (
+  `id` int(11) NOT NULL auto_increment,
+  `lesson_event_id` int(11) NOT NULL default '0',
+  `titre` varchar(200) NOT NULL default '',
+  `contenu` text NOT NULL,
+  `day` date NOT NULL default '0000-00-00',
+  `hour` time NOT NULL default '00:00:00',
+  `lasting` varchar(20) NOT NULL default '',
+  `lesson_code` varchar(50) NOT NULL default '',
+  `lesson_title` varchar(250) NOT NULL default '',
+  PRIMARY KEY  (`id`)
+) TYPE=MyISAM DEFAULT CHARACTER SET=greek");
+    
+    # --------------------------------------------------------
+    
+    #
     # table `cours`
     #
 
@@ -812,6 +831,10 @@ if (mysql_version())  {
       am varchar(20) default NULL,
       registered_at int(10) NOT NULL default '0',
       expires_at int(10) NOT NULL default '0',
+       `perso` enum('yes','no') NOT NULL default 'no',
+  	`announce_flag` date NOT NULL default '0000-00-00',
+ 	 `doc_flag` date NOT NULL default '0000-00-00',
+  	`forum_flag` date NOT NULL default '0000-00-00',
      PRIMARY KEY  (user_id))
       TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
@@ -984,6 +1007,25 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
     # --------------------------------------------------------
 
     #
+    # table `agenda`
+    #
+    
+    mysql_query("CREATE TABLE `agenda` (
+  	`id` int(11) NOT NULL auto_increment,
+  	`lesson_event_id` int(11) NOT NULL default '0',
+  	`titre` varchar(200) NOT NULL default '',
+  	`contenu` text NOT NULL,
+  	`day` date NOT NULL default '0000-00-00',
+  	`hour` time NOT NULL default '00:00:00',
+  	`lasting` varchar(20) NOT NULL default '',
+  	`lesson_code` varchar(50) NOT NULL default '',
+  	`lesson_title` varchar(250) NOT NULL default '',
+  	PRIMARY KEY  (`id`)
+	) TYPE=MyISAM ");
+    
+    # --------------------------------------------------------
+    
+    #
     # table `cours`
     #
 
@@ -1092,6 +1134,10 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
       am varchar(20) default NULL,
       registered_at int(10) NOT NULL default '0',
       expires_at int(10) NOT NULL default '0',
+       `perso` enum('yes','no') NOT NULL default 'no',
+  	`announce_flag` date NOT NULL default '0000-00-00',
+ 	 `doc_flag` date NOT NULL default '0000-00-00',
+  	`forum_flag` date NOT NULL default '0000-00-00',
      PRIMARY KEY  (user_id))
       TYPE=MyISAM");
 
