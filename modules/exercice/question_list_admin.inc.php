@@ -90,13 +90,11 @@ if($nbrQuestions)
 $tool_content .= "<tr><td>".$i." ".$objQuestionTmp->selectTitle()."<br><small>".
 	$aType[$objQuestionTmp->selectType()-1]."</small></td>";
 	
-$tool_content .= <<<cData
-	</tr>
-	<tr>
-	  <td>
-		<a href="<?php echo $PHP_SELF; ?>?editQuestion=<?php echo $id; ?>"><img src="../../images/edit.gif" border="0" align="absmiddle" alt="<?php echo $langModify; ?>"></a>
-		<a href="<?php echo $PHP_SELF; ?>?deleteQuestion=<?php echo $id; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(htmlspecialchars($langConfirmYourChoice)); ?>')) return false;"><img src="../../images/delete.gif" border="0" align="absmiddle" alt="<?php echo $langDelete; ?>"></a>
-cData;
+$tool_content .= "</tr><tr><td><a href=\"".$PHP_SELF."?editQuestion=".$id."\">".
+	"<img src=\"../../images/edit.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langModify."\"></a>".
+	" <a href=\"".$PHP_SELF."?deleteQuestion=".$id."\" ".
+	"onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice))."')) return false;\">".
+	"<img src=\"../../images/delete.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langDelete."\"></a>";
 
 		if($i != 1)
 		{

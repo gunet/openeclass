@@ -444,11 +444,8 @@ class Exercise
 		// creates a new exercise
 		else
 		{
-			//echo $TBL_EXERCICES;
 			mysql_select_db($currentCourseID);
-//			echo "INSERT INTO `$TBL_EXERCICES` VALUES(".
-//				"0,'$exercise','$description',$type,'$StartDate','$EndDate',$TimeConstrain,$AttemptsAllowed,".
-//				"$random,$active)"."<br>";
+
 			$sql="INSERT INTO `$TBL_EXERCICES` VALUES(".
 				"0,'$exercise','$description',$type,'$StartDate','$EndDate',$TimeConstrain,$AttemptsAllowed,".
 				"$random,$active)";
@@ -632,6 +629,8 @@ endif;
 // mysql query
 function mySqlQueryShowError($sql,$db="###")
 {
+	global $tool_content;
+	
     if ($db=="###")
 	{
 		$val =  @mysql_query($sql);
@@ -642,11 +641,11 @@ function mySqlQueryShowError($sql,$db="###")
 	}
 	if (mysql_errno())
 	{
-		echo "<HR>".mysql_errno().": ".mysql_error()."<br><PRE>$sql</PRE><HR>";
+		$tool_content .= "<HR>".mysql_errno().": ".mysql_error()."<br><PRE>$sql</PRE><HR>";
 	}
     else
 	{
-		echo "<!-- \n$sql\n-->";
+		$tool_content .= "<!-- \n$sql\n-->";
 	}
 	return $val;
 }
