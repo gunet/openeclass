@@ -120,7 +120,7 @@ cData;
 			  <td colspan="2">
 				<table border="0" cellpadding="3" align="center" width="400" bgcolor="#FFCC00">
 				<tr>
-				  <td><?php echo $msgErr; ?></td>
+				  <td>$msgErr</td>
 				</tr>
 				</table>
 			  </td>
