@@ -150,7 +150,6 @@ $tool_content .= "<table border=\"0\" align=\"center\" cellpadding=\"2\" cellspa
 
 if($is_allowedToEdit)
 {
-/////////////////////////////////////////////////////////////////////////////////
 
   $tool_content .= <<<cData
   	<td width="80%">
@@ -160,7 +159,6 @@ if($is_allowedToEdit)
   <td width="50%" align="right">
 cData;
 
-/////////////////////////////////////////////////////////////////////////////////
 }
 else 
 { 
@@ -318,22 +316,9 @@ else
 cData;
 
 	$CurrentDate = time();
-//	$CurrentDate = date("Y-m-d H:i:s");
-//	echo "CurrentDate = ".$CurrentDate."<br>\n";
-//	echo substr($CurrentDate, 11,2)."|".
-//		substr($CurrentDate, 14,2)."|".
-//		substr($CurrentDate, 17,2)."|".
-//		substr($CurrentDate, 5,2)."|".
-//		substr($CurrentDate, 8,2)."|".
-//		substr($CurrentDate, 0,4)."<br><br>";
-//	$CurrentDate = mktime(substr($CurrentDate, 11,2),substr($CurrentDate, 14,2),substr($CurrentDate, 17,2),substr($CurrentDate, 5,2),substr($CurrentDate, 8,2),substr($CurrentDate, 0,4));
-//	echo "temp_StartDate = ".$row['StartDate']."<br>\n";
-//	echo "temp_EndDate = ".$row['EndDate']."<br>\n";
+
 	$temp_StartDate = mktime(substr($row['StartDate'], 11,2),substr($row['StartDate'], 14,2),substr($row['StartDate'], 17,2),substr($row['StartDate'], 5,2),substr($row['StartDate'], 8,2),substr($row['StartDate'], 0,4));
 	$temp_EndDate = mktime(substr($row['EndDate'], 11,2),substr($row['EndDate'], 14,2),substr($row['EndDate'], 17,2),substr($row['EndDate'], 5,2),substr($row['EndDate'], 8,2),substr($row['EndDate'], 0,4));
-//	echo "CurrentDate = ".$CurrentDate."<br>\n";
-//	echo "temp_StartDate = ".$temp_StartDate."<br>\n";
-//	echo "temp_EndDate = ".$temp_EndDate."<br>\n";
 	if (($CurrentDate >= $temp_StartDate) && ($CurrentDate < $temp_EndDate)) {
 		$tool_content .= "<a href=\"exercice_submit.php?exerciseId=${row['id']}\">${row['titre']}</a>";
 	} else {
