@@ -241,10 +241,12 @@ cData;
 $i=0;
 foreach($questionList as $questionId) {
 	$i++;
+	//$tool_content .= "<h1>".$i."</h1>";
 
 	// for sequential exercises
 	if($exerciseType == 2)
 	{
+		//$tool_content .= "<h1>"."type=2"."</h1>";
 		// if it is not the right question, goes to the next loop iteration
 		if($questionNum != $i)
 		{
