@@ -639,7 +639,7 @@ cData;
 
 $tool_content .= <<<cData
 <h3>
-  <?php echo $questionName; ?>
+  $questionName
 </h3>
 cData;
 

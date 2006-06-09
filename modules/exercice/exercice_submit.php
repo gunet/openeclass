@@ -170,16 +170,12 @@ $eid_temp = $objExercise->selectId();
 $exerciseTimeConstrainSecs = time() + ($exerciseTimeConstrain*60);
 $RecordStartDate = date("Y-m-d H:i:s",time());
 
-//echo $RecordStartDate;
 
 if ((!$is_adminOfCourse)&&(isset($uid))) { //if registered student
 $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record WHERE eid='$eid_temp' AND uid='$uid'", $currentCourseID));
 ++$CurrentAttempt[0];
-//echo "CA = " . $CurrentAttempt[0] . "AA = " . $exerciseAllowedAttemtps;
 	if (!isset($_COOKIE['marvelous_cookie'])) { // either expired or begin again
-		//echo "3421421";
 		if ((!$exerciseAllowedAttemtps)||($CurrentAttempt[0] <= $exerciseAllowedAttemtps)) { // if it is allowed begin again
-			//echo "3421421";
 			if (!$exerciseTimeConstrainSecs)
 				$exerciseTimeConstrainSecs = 9999999;
 				$CookieLife=time()+$exerciseTimeConstrainSecs;
