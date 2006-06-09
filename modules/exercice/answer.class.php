@@ -93,7 +93,9 @@ class Answer
 	 */
 	function read()
 	{
-		global $TBL_REPONSES;
+		global $TBL_REPONSES, $currentCourseID;
+		
+		mysql_select_db($currentCourseID);
 
 		$questionId=$this->questionId;
 
