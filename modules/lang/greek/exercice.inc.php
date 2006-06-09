@@ -229,7 +229,7 @@ $langExerciseLis="Λίστα ασκήσεων";
 $langResults="Αποτελέσματα";
 $langResultsFailed="Αποτυχία";
 $langYourTotalScore2="Συνολική βαθμολογία";
-$langExerciseScores1="Ανά άτομο";
+$langExerciseScores1="Ιστοσελίδα";
 $langExerciseScores2="Ποσοστιαία";
 $langExerciseScores3="CSV";
 
