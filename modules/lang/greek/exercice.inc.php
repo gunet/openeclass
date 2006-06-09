@@ -232,5 +232,6 @@ $langYourTotalScore2="Συνολική βαθμολογία";
 $langExerciseScores1="Ιστοσελίδα";
 $langExerciseScores2="Ποσοστιαία";
 $langExerciseScores3="CSV";
-
+$langExerciseName="Όνομα";
+$langExerciseSurname="Επώνυμο";
 ?>
