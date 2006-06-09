@@ -299,8 +299,8 @@ else
 			"<img src='../../images/invisible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
 }
 
-	$tool_content .= "<td width='20%' align='center'>	<a href='results.php?&exerciseId=${row[id]}'>".
-		"<img src='../../images/invisible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td></tr>";
+	$tool_content .= "<td width='20%' align='center'>	<nobr><a href='results.php?&exerciseId=${row[id]}'>".
+	$langExerciseScores1."</a> | <a href='csv.php?&exerciseId=${row[id]}'>".$langExerciseScores3."</a></nobr></td></tr>";
 	}
 	// student only
 	else
