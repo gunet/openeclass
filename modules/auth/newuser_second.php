@@ -1,91 +1,86 @@
 <?
+ /**=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Á full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
 
- /*
-      +----------------------------------------------------------------------+
-      | e-class version 1.0                                                  |
-      | based on CLAROLINE version 1.3.0 $Revision$		     |
-      +----------------------------------------------------------------------+
-      |   $Id$
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
-      | Copyright (c) 2003 GUNet                                             |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
-      |                                                                      |
-      |   This program is distributed in the hope that it will be useful,    |
-      |   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-      |   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-      |   GNU General Public License for more details.                       |
-      |                                                                      |
-      |   You should have received a copy of the GNU General Public License  |
-      |   along with this program; if not, write to the Free Software        |
-      |   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-      |   02111-1307, USA. The GNU GPL license is also available through     |
-      |   the world-wide-web at http://www.gnu.org/copyleft/gpl.html         |
-      +----------------------------------------------------------------------+
-      | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-      |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-      |          Christophe Gesche <gesche@ipm.ucl.ac.be>                    |
-      |                                                                      |
-      | e-class changes by: Costas Tsibanis <costas@noc.uoa.gr>              |
-      |                     Yannis Exidaridis <jexi@noc.uoa.gr>              |
-      |                     Alexandros Diamantidis <adia@noc.uoa.gr>         |
-      +----------------------------------------------------------------------+
- */
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/**===========================================================================
+	newuser_second.php
+	@last update: 07-06-2006 by Stratos Karatzidis
+	@authors list: Karatzidis Stratos <kstratos@uom.gr>
+		       Vagelis Pitsioygas <vagpits@uom.gr>
+==============================================================================        
+        @Description: Second step in new user registration
+
+ 	Purpose: The file checks for user provided information and after that makes 
+ 	the registration in the platform.
+
+==============================================================================
+*/
 
 $langFiles = 'registration';
 include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
 include 'auth.inc.php';
 $nameTools = $reguser;
-// Initialise $tool_content
-$tool_content = "";
+
+$tool_content = "";		// Initialise $tool_content
+
 // Main body
+$navigation[] = array("url"=>"newuser.php", "name"=> $langRegistration);
 
-$navigation[]= array ("url"=>"newuser.php", "name"=> $langRegistration);
+$statut=5;		// This file registers only students
 
-// This file registers only students
-$statut=5;
+// Get the incoming variables and initialize them
+$submit = isset($_POST['submit'])?$_POST['submit']:'';
+$auth = isset($_POST['auth'])?$_POST['auth']:'';
+$uname = isset($_POST['uname'])?$_POST['uname']:'';
+$password = isset($_POST['password'])?$_POST['password']:'';
 
-if ($submit) 
+if(!empty($submit))
 {
-	$uname = isset($_POST['uname'])?$_POST['uname']:'';
-	$password = isset($_POST['password'])?$_POST['password']:'';
-	// check if there are empty fields
-	//$tool_content .= "nom_form:$nom_form<br>prenom_form:$prenom_form<br>password:$password<br>uname:$uname<br>";
-	$tool_content .= "<table border=0>";
-	//if (empty($nom_form) or empty($prenom_form) or empty($password1) or empty($password) or empty($uname)) 
-	if (empty($nom_form) or empty($prenom_form) or empty($password) or empty($uname)) 
+	$tool_content .= "<table border=\"0\" width=\"99%\">";
+	if (empty($nom_form) or empty($prenom_form) or empty($password) or empty($uname)) 	// check if there are empty fields
 	{
-			$tool_content .= "<tr bgcolor=\"".$color2."\" height=\"400\">
+		$tool_content .= "<tr bgcolor=\"".$color2."\" height=\"400\">
 			<td bgcolor=\"$color2\" colspan=\"3\" valign=\"top\">
 			<br>".$langEmptyFields."</td></tr></table>";
-			//exit();
 	}
 	else
 	{
-		// check if the username exist
-		$username_check=mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='$uname'");
+		$username_check=mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='$uname'");	// check if the username exist
 		if ($myusername = mysql_fetch_array($username_check)) 
 		{
 			$tool_content .= "<tr bgcolor=\"".$color2."\" height=\"400\">
-	   			<td colspan=\"3\" valign=\"top\">
-			    <br />".$langUserFree."</td></tr></table>";
-			//exit();
+	   			<td colspan=\"3\" valign=\"top\"><br />".$langUserFree."</td>
+	   			</tr></table>";
 		}
 		else
 		{
-			$auth = isset($_POST['auth'])?$_POST['auth']:'';
 			$auth_method_settings = get_auth_settings($auth);
 			if((!empty($auth_method_settings)) && ($auth!=1))
 			{
-				//$password = $password1 = $auth_method_settings['auth_name'];
 				$password = $auth_method_settings['auth_name'];
 			}
-			
 			// check if the passwd is too easy
 			elseif((strtoupper($password) == strtoupper($uname)) || (strtoupper($password) == strtoupper($nom_form))
 				|| (strtoupper($password) == strtoupper($prenom_form)) || (strtoupper($password) == strtoupper($email))) 
@@ -101,8 +96,7 @@ if ($submit)
 					//exit();
 			}
 			
-			// check if the user email is valid
-			if (!empty($email)) 
+			if (!empty($email)) 	// check if the user email is valid
 			{
 				// Don't worry about figuring this regular expression out quite yet...It will test for address@domainname and address@ip
 				$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
@@ -114,13 +108,11 @@ if ($submit)
 						<br />".$langEmailWrong."<br /><br />
 						<a href=\"newuser.php\">".$langAgain."</a>
 						</td></tr></table>";
-        	//exit();
 				}
 			}
 			
 			// registration accepted
 			$emailsubject = "$langYourReg $siteName";
-			//if (@($institut > 0)) 
 			if((!empty($auth_method_settings)) && ($auth!=1))
 			{
 				$emailbody = "$langDestination $prenom_form $nom_form
@@ -147,7 +139,6 @@ if ($submit)
 			}
 	
 			send_mail($siteName, $emailAdministrator, '', $email,	$emailsubject, $emailbody, $charset);
- 			//added by adia to department kai to institut 
  			$registered_at = time();
  			$expires_at = time() + 31536000;
 			$inscr_user=mysql_query("INSERT INTO `$mysqlMainDb`.user
@@ -212,7 +203,6 @@ if ($submit)
 		}	// end of registration accepted
 
 		$already_second=1;
-
 		$tool_content .= "</table>";
 	}
 } // if submit

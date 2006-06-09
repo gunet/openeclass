@@ -1,59 +1,53 @@
 <?
-/*
-      +----------------------------------------------------------------------+
-      | e-class version 1.0                                                  |
-      | based on CLAROLINE version 1.3.0 $Revision$		     |
-      +----------------------------------------------------------------------+
-      |   $Id$
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
-      | Copyright (c) 2003 GUNet                                             |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
-      |                                                                      |
-      |   This program is distributed in the hope that it will be useful,    |
-      |   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-      |   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-      |   GNU General Public License for more details.                       |
-      |                                                                      |
-      |   You should have received a copy of the GNU General Public License  |
-      |   along with this program; if not, write to the Free Software        |
-      |   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-      |   02111-1307, USA. The GNU GPL license is also available through     |
-      |   the world-wide-web at http://www.gnu.org/copyleft/gpl.html         |
-      +----------------------------------------------------------------------+
-      | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-      |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-      |          Christophe Gesche <gesche@ipm.ucl.ac.be>                    |
-      |                                                                      |
-      | e-class changes by: Costas Tsibanis <costas@noc.uoa.gr>              |
-      |                     Yannis Exidaridis <jexi@noc.uoa.gr>              |
-      |                     Alexandros Diamantidis <adia@noc.uoa.gr>         |
-      +----------------------------------------------------------------------+
- */
+ /**=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Á full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/**===========================================================================
+	newuser.php
+	@last update: 07-06-2006 by Stratos Karatzidis
+	@authors list: Karatzidis Stratos <kstratos@uom.gr>
+		       Vagelis Pitsioygas <vagpits@uom.gr>
+==============================================================================        
+        @Description: First step in new user registration
+
+ 	Purpose: The file displays the form that that the candidate user must fill
+ 	in with all the basic information.
+
+==============================================================================
+*/
 
 $langFiles = array('registration','gunet');
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
 $nameTools = $langUserDetails;
 
-// Initialise $tool_content
-$tool_content = "";
+$tool_content = "";		// Initialise $tool_content
+
 // Main body
-
-$auth = get_auth_id();
-/* Check for LDAP server entries */
-$ldap_entries = mysql_fetch_array(mysql_query("SELECT ldapserver FROM institution"));
-if ($ldap_entries['ldapserver'] <> NULL)
-	$navigation[]= array ("url"=>"newuser_info.php", "name"=> $reguser);
-
-
-$tool_content .= "<table><tr>
+$tool_content .= "<table width=\"99%\"><tr>
 <td width=\"600\">
-<form action=\"newuser_second.php\" method=\"post\">
+<form action=\"newuser_second.php\" method=\"post\" name=\"newusersecond\">
 <table cellpadding=\"3\" cellspacing=\"0\" border=\"0\" width=\"100%\" bgcolor=\"".$color2."\">
 <tr valign=\"top\">
 <td>".$langName."</td>
@@ -70,8 +64,7 @@ $tool_content .= "<table><tr>
 <td><input type=\"password\" name=\"password1\" size=\"20\" maxlength=\"20\"><font size=\"1\">&nbsp;(*)</font></td>
 </tr>
 <tr>
-<td>".$langConfirmation."<br>
-</td>
+<td>".$langConfirmation."<br /></td>
 <td valign=\"top\"><input type=\"password\" name=\"password\" size=\"20\" maxlength=\"20\"><font size=\"1\">&nbsp;(*)</font></td>
 </tr>
 <tr><td>&nbsp;</td><td><font size=\"1\">".$langUserNotice."</font></td></tr>
@@ -84,21 +77,20 @@ $tool_content .= "<table><tr>
 <td><input type=\"text\" name=\"am\"></td>
 </tr>
 <tr><td>".$langDepartment."</td>
-<td>
-<select name=\"department\">";
-
+<td><select name=\"department\">";
 $deps=mysql_query("SELECT name, id FROM faculte ORDER BY id");
 while ($dep = mysql_fetch_array($deps)) 
-	$tool_content .= "\n<option value=\"$dep[1]\">$dep[0]</option>";
-
-
-$tool_content .= "</select></td></tr>
-<tr><td>&nbsp;</td><td><input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\"></td></tr>
+	$tool_content .= "\n<option value=\"".$dep[1]."\">".$dep[0]."</option>";
+$tool_content .= "</select></td>
+</tr>
+<tr><td>&nbsp;</td><td>
+<input type=\"hidden\" name=\"auth\" value=\"1\">
+<input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\"></td></tr>
 </table>
 </form>
 </td>
 </tr>
-<tr><td  align='right'><font size=\"1\">".$langRequiredFields."</font>
+<tr><td align=\"right\"><font size=\"1\">".$langRequiredFields."</font>
 </td></tr></table>";
 
 draw($tool_content,0);
