@@ -207,5 +207,7 @@ $langYourTotalScore2="Total score";
 $langExerciseScores1="Webpage";
 $langExerciseScores2="Percentages";
 $langExerciseScores3="CSV";
+$langExerciseName="First Name";
+$langExerciseSurname="Surname";
 
 ?>
