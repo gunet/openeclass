@@ -5,7 +5,6 @@ $path2add=2;
 include '../include/baseTheme.php';
 
 $nameTools = "Αναβάθμιση των βάσεων δεδομένων του e-Class";
-
 // Initialise $tool_content
 $tool_content = "";
 
@@ -26,10 +25,6 @@ if (isset($_POST['login']) and isset($_POST['password']) and !is_admin($_POST['l
 if ($fromadmin)
 include "../modules/admin/check_admin.inc";
 
-// haniotak: usage
-require_once('../modules/usage/module.php');
-
-
 // Main body
 //====================
 
@@ -37,7 +32,6 @@ $tool_content .= "<table width=\"99%\"><caption>Εξέλιξη Αναβάθμισης...</caption>
 
 $OK = "[<font color='green'> Επιτυχία </font>]";
 $BAD = "[<font color='red'> Σφάλμα ή δεν χρειάζεται τροποποίηση</font>]";
-
 
 $errors = 0;
 
@@ -97,37 +91,22 @@ $tool_content .= add_field('cours', 'course_keywords', "TEXT");
 // kstratos - UOM
 // Add 1 new field into table 'prof_request', after the field 'profuname'
 if (!mysql_field_exists($mysqlMainDb,'prof_request','profpassword'))
-{
-	$retString = "";
-	$field = "profpassword";
-	$table = "prof_request";
-	$retString .= "Προσθήκη πεδίου <b>$field</b> στον πίνακα <b>$table</b>: ";
-	if(db_query("ALTER TABLE `prof_request` ADD `profpassword` VARCHAR(255) NOT NULL AFTER `profuname`",$mysqlMainDb))
-	{
-		$retString .= " $OK<br>";
-	}
-	else
-	{
-		$retString .= " $BAD<br>";
-		$GLOBALS['errors']++;
-	}
-}
-$tool_content .= "<br />".$retString."<br />";
+$tool_content .= add_field('prof_request','profpassword',"VARCHAR(255)");
 
-// Add 2 new fileds into table 'user': registered_at,expires_at
+// Add 2 new fields into table 'user': registered_at,expires_at
 if (!mysql_field_exists($mysqlMainDb,'user','registered_at'))
 $tool_content .= add_field('user', 'registered_at', "INT(10)");
 if (!mysql_field_exists($mysqlMainDb,'user','expires_at'))
 $tool_content .= add_field('user', 'expires_at', "INT(10)");
 
 
-// Add 2 new fileds into table 'cours': password,faculteid
+// Add 2 new fields into table 'cours': password,faculteid
 if (!mysql_field_exists($mysqlMainDb,'cours','password'))
 $tool_content .= add_field('cours', 'password', "VARCHAR(50)");
 if (!mysql_field_exists($mysqlMainDb,'cours','faculteid'))
 $tool_content .= add_field('cours', 'faculteid', "INT(11)");
 
-// Add 1 new filed into table 'cours_faculte': facid
+// Add 1 new field into table 'cours_faculte': facid
 if (!mysql_field_exists($mysqlMainDb,'cours_faculte','facid'))
 $tool_content .= add_field('cours_faculte', 'facid', "INT(11)");
 
@@ -143,22 +122,15 @@ if (!mysql_table_exists($mysqlMainDb, 'loginout_summary'))  {
 }
 
 // 'New table 'auth' with auth methods in Eclass 2.0';
-if(!mysql_table_exists($mysqlMainDb, 'auth'))
-{
-	$retString = "";
-	$table = "auth";
-	$retString .= "Προσθήκη πίνακα <b>$table</b>: ";
-
-	if(db_query("CREATE TABLE `auth` (
+if(!mysql_table_exists($mysqlMainDb, 'auth')) {
+	db_query("CREATE TABLE `auth` (
     `auth_id` int( 2 ) NOT NULL AUTO_INCREMENT ,
     `auth_name` varchar( 20 ) NOT NULL default '',
     `auth_settings` text NOT NULL default '',
     `auth_instructions` text NOT NULL default '',
     `auth_default` tinyint( 1 ) NOT NULL default '0',
-    PRIMARY KEY ( `auth_id` )
-    ) ",$mysqlMainDb)) //TYPE = MYISAM  COMMENT='New table with auth methods in Eclass 2.0';
-	{
-		$retString .= " $OK<br>";
+    PRIMARY KEY ( `auth_id` )) ",$mysqlMainDb); //TYPE = MYISAM  COMMENT='New table with auth methods in Eclass 2.0'
+	
 		// Insert the default values into the new table
 		db_query("INSERT INTO `auth` VALUES (1, 'eclass', '', '', 1)",$mysqlMainDb);
 		db_query("INSERT INTO `auth` VALUES (2, 'pop3', '', '', 0)",$mysqlMainDb);
@@ -166,20 +138,11 @@ if(!mysql_table_exists($mysqlMainDb, 'auth'))
 		db_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)",$mysqlMainDb);
 		db_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)",$mysqlMainDb);
 	}
-	else
-	{
-		$retString .= " $BAD<br>";
-	}
-}
-$tool_content .= $retString;
+
 
 //Table agenda (stores events from all lessons)
 if (!mysql_table_exists($mysqlMainDb, 'agenda'))  {
-	$retString = "";
-	$table = "agenda";
-	$retString .= "Προσθήκη πίνακα <b>$table</b> στην κεντρική ΒΔ: ";
-
-	if (db_query("CREATE TABLE `agenda` (
+	db_query("CREATE TABLE `agenda` (
   	`id` int(11) NOT NULL auto_increment,
   	`lesson_event_id` int(11) NOT NULL default '0',
   	`titre` varchar(200) NOT NULL default '',
@@ -188,101 +151,8 @@ if (!mysql_table_exists($mysqlMainDb, 'agenda'))  {
   	`hour` time NOT NULL default '00:00:00',
   	`lasting` varchar(20) NOT NULL default '',
   	`lesson_code` varchar(50) NOT NULL default '',
-  	PRIMARY KEY  (`id`)
-	) TYPE=MyISAM ", $mysqlMainDb)){
-
-	$retString .= " $OK<br>";
-
-	//insert data from all agendas
-	} else  {
-		$retString .= " $BAD<br>";
-	}
+  	PRIMARY KEY  (`id`)) TYPE=MyISAM ", $mysqlMainDb);
 }
-$tool_content .= $retString;
-
-//Move all non-expired events from lessons' agendas to the main agenda table
-$agendasParsed = true;
-$sqlGetAllDBs ="SELECT code FROM cours ";
-$result=db_query($sqlGetAllDBs, $mysqlMainDb);
-
-$i=0;
-while ($myrow = mysql_fetch_array($result)) {
-	$db_code[$i++] = $myrow[0];
-}
-
-$number_of_lessons = $i;
-unset($i);
-
-for ($i=0; $i <$number_of_lessons; $i++)
-{
-	//Get professor and lesson name for each lesson
-	//	$sql = 'SELECT code
-	//           	FROM '.$mysqlMainDb.'.cours
-	//			WHERE code = \''.$db_code[$i].'\' ';
-	//
-	//
-	//	$mysql_query_result = db_query($sql, $mysqlMainDb);
-	//	$lesson_details = mysql_fetch_array($mysql_query_result);
-
-	//Get all events of this lesson
-
-	$sql = 'SELECT id, titre, contenu, day, hour, lasting
-                                        FROM '.$db_code[$i].'.agenda
-                                        WHERE 
-                                        CONCAT(titre,contenu) != \'\'
-                                        AND DATE_FORMAT(day,\'%Y %m %d\') >= \''.date("Y m d").'\'';
-
-
-	// 2.  Get all agenda events from each table & parse them to arrays
-	$mysql_query_result = db_query($sql, $db_code[$i]);
-
-	//$total_agenda_events_counter = 0;
-	$event_counter=0;
-	while ($myAgenda = mysql_fetch_array($mysql_query_result)) {
-
-		$lesson_agenda[$i][$event_counter]['id']                  = $myAgenda[0];
-		$lesson_agenda[$i][$event_counter]['title']               = $myAgenda[1];
-		$lesson_agenda[$i][$event_counter]['content']             = $myAgenda[2];
-		$lesson_agenda[$i][$event_counter]['date']                = $myAgenda[3];
-		$lesson_agenda[$i][$event_counter]['time']                = $myAgenda[4];
-		$lesson_agenda[$i][$event_counter]['duree']               = $myAgenda[5];
-		$lesson_agenda[$i][$event_counter]['lesson_code']         = $db_code[$i];
-		//		$lesson_agenda[$i][$event_counter]['lesson_title']        = $lesson_details[1];
-		//		$lesson_agenda[$i][$event_counter]['lesson_prof']         = $lesson_details[2];
-		$event_counter++;
-	}
-	$events_per_lesson[$i] = $event_counter;
-}
-
-for ($i=0; $i <$number_of_lessons; $i++) {
-
-	for ($j=0; $j <$events_per_lesson[$i]; $j++) {
-
-		if (!db_query("INSERT INTO $mysqlMainDb.agenda
-                                 
-                                ( lesson_event_id, titre, contenu, day, hour, lasting, lesson_code)
-                                
-                                VALUES (
-
-                                '".$lesson_agenda[$i][$j]['id']."', 
-                                '".$lesson_agenda[$i][$j]['title']."', 
-                                '".$lesson_agenda[$i][$j]['content']."', 
-                                '".$lesson_agenda[$i][$j]['date']."', 
-                                '".$lesson_agenda[$i][$j]['time']."', 
-                                '".$lesson_agenda[$i][$j]['duree']."',
-                                '".$lesson_agenda[$i][$j]['lesson_code']."'
-                        
-                                )", $mysqlMainDb)) {
-		$agendasParsed = false;
-                                }
-
-	}
-}
-
-if ($agendasParsed) $agendaResult = $OK;
-else $agendaResult = $BAD;
-
-$tool_content .= "Μεταφορά γεγονότων στον πίνακα <b>$table</b>" . $agendaResult;
 
 // add 4 new fields to table users
 
@@ -488,11 +358,49 @@ while ($code = mysql_fetch_row($res)) {
                 )", $code[0]);
 
 
-	// upgrade queries for e-Class 2.0
+// -----------------------------------------------------
+// upgrade queries for e-Class 2.0
+// -----------------------------------------------------
 
 
+//Move all non-expired events from lessons' agendas to the main agenda table
+//$tool_content .= "Μεταφορά γεγονότων στον πίνακα <b>$table</b>" . $agendaResult;
 
+$sql = 'SELECT id, titre, contenu, day, hour, lasting
+                FROM  agenda
+                WHERE CONCAT(titre,contenu) != \'\'
+                AND DATE_FORMAT(day,\'%Y %m %d\') >= \''.date("Y m d").'\'';
 
+//.  Get all agenda events from each table & parse them to arrays
+$mysql_query_result = db_query($sql, $code[0]);
+//$total_agenda_events_counter = 0;
+$event_counter=0;
+	while ($myAgenda = mysql_fetch_array($mysql_query_result)) {
+		$lesson_agenda[$event_counter]['id']                  = $myAgenda[0];
+		$lesson_agenda[$event_counter]['title']               = $myAgenda[1];
+		$lesson_agenda[$event_counter]['content']             = $myAgenda[2];
+		$lesson_agenda[$event_counter]['date']                = $myAgenda[3];
+		$lesson_agenda[$event_counter]['time']                = $myAgenda[4];
+		$lesson_agenda[$event_counter]['duree']               = $myAgenda[5];
+		$lesson_agenda[$event_counter]['lesson_code']         = $code[0];
+		//		$lesson_agenda[$i][$event_counter]['lesson_title']        = $lesson_details[1];
+		//		$lesson_agenda[$i][$event_counter]['lesson_prof']         = $lesson_details[2];
+		$event_counter++;
+	}
+
+		for ($j=0; $j <$event_counter; $j++) {
+					db_query("INSERT INTO agenda (lesson_event_id, titre, contenu, day, hour, lasting, lesson_code)
+          VALUES ('".$lesson_agenda[$j]['id']."', 
+                  '".$lesson_agenda[$j]['title']."', 
+                  '".$lesson_agenda[$j]['content']."', 
+                  '".$lesson_agenda[$j]['date']."', 
+                  '".$lesson_agenda[$j]['time']."', 
+                  '".$lesson_agenda[$j]['duree']."',
+                  '".$lesson_agenda[$j]['lesson_code']."'
+                  )", $mysqlMainDb);
+		}
+// end of agenda
+		  
 	$langLearnPath = "Γραμμή Μάθησης";
 	if (!mysql_table_exists($code[0], 'lp_module'))  {
 		db_query("CREATE TABLE `lp_module` (
@@ -672,6 +580,36 @@ while ($code = mysql_fetch_row($res)) {
 	}
 	// End of table definitions for POLL module
 
+// table definitions for usage modules
+
+if (!mysql_table_exists($code[0], 'actions')) {
+	db_query("CREATE TABLE actions (
+	        id int(11) NOT NULL auto_increment,
+					user_id int(11) NOT NULL,
+					module_id int(11) NOT NULL, 
+					action_type_id int(11) NOT NULL,																																									  date_time DATETIME NOT NULL default '0000-00-00 00:00:00',																													PRIMARY KEY (id))", $code[0]);	
+	}
+
+if (!mysql_table_exists($code[0], 'action_types')) {
+					db_query("CREATE TABLE action_types (
+						id int(11) NOT NULL auto_increment,
+  	        name varchar(200),
+						PRIMARY KEY (id))", $code[0]);
+		db_query("INSERT INTO action_types VALUES ('1', 'access')", $code[0]);
+	}
+
+if (!mysql_table_exists($code[0], 'actions_summary')) {
+					db_query("CREATE TABLE actions_summary (
+             id int(11) NOT NULL auto_increment,
+             module_id int(11) NOT NULL,
+             start_date DATETIME NOT NULL default '0000-00-00 00:00:00',
+             end_date DATETIME NOT NULL default '0000-00-00 00:00:00',
+             PRIMARY KEY (id))", $code[0]);
+		}
+		
+
+
+
 
 	//---------------------------------------------------------------------
 	// Add table EXERCISE_USER_RECORD for new func of EXERCISE module
@@ -698,7 +636,7 @@ while ($code = mysql_fetch_row($res)) {
 	//===============================================================================================
 
 	$result = db_query( $sql = 'SELECT `define_var` FROM `accueil`'
-	. ' WHERE `id` = 25');
+	. ' WHERE `id` = 25', $code[0]);
 
 	$item = mysql_fetch_array($result);
 
@@ -706,7 +644,7 @@ while ($code = mysql_fetch_row($res)) {
 
 		if (db_query("UPDATE IGNORE `accueil`
                     SET `id` = `id` + 80
-                    WHERE `id`>20")) {
+                    WHERE `id`>20", $code[0])) {
 		$tool_content .= "All external (id >= 20) links moved to id >=101<br>";
                     } else {
                     	$tool_content .= "Error: Could not move external links<br>";
@@ -755,6 +693,19 @@ while ($code = mysql_fetch_row($res)) {
                 'MODULE_ID_POLL'
          )", $code[0]);
 
+// for usage module
+$langUsageModule = "Στατιστικά Χρήσης";
+	db_query("INSERT IGNORE INTO accueil VALUES (
+                '24',
+                '$langUsageModule',
+                '../../modules/usage/usage.php',
+                '../../../images/usage.gif',
+                '0',
+                '1',
+                '../../../images/pastillegris.png',
+                'MODULE_ID_USAGE')", $code[0]);
+
+								
 	//for tool management
 	$langToolManagement = "Διαχείριση εργαλείων";
 	db_query("INSERT IGNORE INTO accueil VALUES (
@@ -768,8 +719,7 @@ while ($code = mysql_fetch_row($res)) {
                 'MODULE_ID_TOOLADMIN'
                 )", $code[0]);
 
-	// haniotak: Usage module upgrade
-	usage_module::upgrade(24, $code[0]);
+
 
 
 	//sakis - prosthiki epipleon pediwn ston pinaka documents gia ta metadedomena (xrhsimopoiountai apo ton neo file manager)
@@ -811,17 +761,17 @@ while ($code = mysql_fetch_row($res)) {
 
 
 	//---------------------------------------------------------------------
-	// Upgrading EXERCISE table for new func of EXERCISE module
+	// Upgrading EXERCICES table for new func of EXERCISE module
 	//---------------------------------------------------------------------
-	if (!mysql_field_exists("$code[0]",'exercise','StartDate'))
-	$tool_content .= add_field_after_field('exercise', 'StartDate', 'type', "DATETIME");
-	if (!mysql_field_exists("$code[0]",'exercise','EndDate'))
-	$tool_content .= add_field_after_field('exercise', 'EndDate', 'StartDate', "DATETIME");
-	if (!mysql_field_exists("$code[0]",'exercise','TimeConstrain'))
-	$tool_content .= add_field_after_field('exercise', 'TimeConstrain', 'EndDate', "INT(11)");
-	if (!mysql_field_exists("$code[0]",'exercise','AttemptsAllowed'))
-	$tool_content .= add_field_after_field('exercise', 'AttemptsAllowed', 'TimeConstrain', "INT(11)");
-	// End of upgrading EXERCISE table for new func of EXERCISE module
+	if (!mysql_field_exists("$code[0]",'exercices','StartDate'))
+	$tool_content .= add_field_after_field('exercices', 'StartDate', 'type', "DATETIME");
+	if (!mysql_field_exists("$code[0]",'exercices','EndDate'))
+	$tool_content .= add_field_after_field('exercices', 'EndDate', 'StartDate', "DATETIME");
+	if (!mysql_field_exists("$code[0]",'exercices','TimeConstrain'))
+	$tool_content .= add_field_after_field('exercices', 'TimeConstrain', 'EndDate', "INT(11)");
+	if (!mysql_field_exists("$code[0]",'exercices','AttemptsAllowed'))
+	$tool_content .= add_field_after_field('exercices', 'AttemptsAllowed', 'TimeConstrain', "INT(11)");
+	// End of upgrading EXERCICES table for new func of EXERCISE module
 
 
 
@@ -896,7 +846,7 @@ while ($code = mysql_fetch_row($res)) {
 
 	$tool_content .= "<br><br></td></tr>";
 
-} // End while courses
+} // End of 'while' courses
 
 // Fixed by vagpits
 mysql_select_db($mysqlMainDb);
