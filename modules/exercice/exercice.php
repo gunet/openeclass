@@ -280,10 +280,10 @@ cData;
 
 			if (isset($page))	
 				$tool_content .= "<td width='20%' align='center'>".
-					"<a href=\"${PHP_SELF}?choice=disable&page=${page}&exerciseId=".$row[id]."\">".
+					"<a href=\"${PHP_SELF}?choice=disable&page=${page}&exerciseId=".$row['id']."\">".
 					"<img src=\"../../images/visible.gif\" border=\"0\" alt=\"".htmlspecialchars($langDeactivate)."\"></a></td>";
 			else
-				$tool_content .= "<td width='20%' align='center'><a href='${PHP_SELF}?choice=disable&exerciseId=".$row[id]."'>".
+				$tool_content .= "<td width='20%' align='center'><a href='${PHP_SELF}?choice=disable&exerciseId=".$row['id']."'>".
 					"<img src='../../images/visible.gif' border='0' alt='".htmlspecialchars($langDeactivate)."'></a></td>";
 }
 // else if not active
@@ -291,16 +291,16 @@ else
 {
 	if (isset($page))
 		$tool_content .= "<td width='20%' align='center'>".
-			"<a href='${PHP_SELF}?choice=enable&page=${page}&exerciseId=".$row[id]."'>".
+			"<a href='${PHP_SELF}?choice=enable&page=${page}&exerciseId=".$row['id']."'>".
 			"<img src='../../images/invisible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
 	else
 		$tool_content .= "<td width='20%' align='center'>".
-			"<a href='${PHP_SELF}?choice=enable&exerciseId=".$row[id]."'>".
+			"<a href='${PHP_SELF}?choice=enable&exerciseId=".$row['id']."'>".
 			"<img src='../../images/invisible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
 }
 
-	$tool_content .= "<td width=\"20%\" align=\"center\">	<nobr><a href=\"results.php?&exerciseId=".$row[id]."\">".
-	$langExerciseScores1."</a> | <a href=\"csv.php?&exerciseId=".$row[id]."\">".$langExerciseScores3."</a></nobr></td></tr>";
+	$tool_content .= "<td width=\"20%\" align=\"center\">	<nobr><a href=\"results.php?&exerciseId=".$row['id']."\">".
+	$langExerciseScores1."</a> | <a href=\"csv.php?&exerciseId=".$row['id']."\">".$langExerciseScores3."</a></nobr></td></tr>";
 	}
 	// student only
 	else
