@@ -642,13 +642,7 @@ class ScormExport
         global $langErrorCopyScormFiles, $langErrorCreatingDirectory, $langErrorCopyingScorm, $langErrorCopyAttachedFile;
         // (re)create fresh directory
         claro_delete_file($this->destDir);
-        if ( 
-               !claro_mkdir($this->destDir, CLARO_FILE_PERMISSIONS , true)
-            || !claro_mkdir($this->destDir."/common", CLARO_FILE_PERMISSIONS , true)
-            || !claro_mkdir($this->destDir."/extend", CLARO_FILE_PERMISSIONS , true)
-            || !claro_mkdir($this->destDir."/unique", CLARO_FILE_PERMISSIONS , true)
-            || !claro_mkdir($this->destDir."/vocab", CLARO_FILE_PERMISSIONS , true)
-            )
+        if ( !claro_mkdir($this->destDir, CLARO_FILE_PERMISSIONS , true))
         {
             $this->error[] = $langErrorCreatingDirectory . $this->destDir;
             return false;
@@ -657,44 +651,11 @@ class ScormExport
         // Copy usual files (.css, .js, .xsd, etc)
         if (
                !claro_copy_file('export/APIWrapper.js', $this->destDir)
-            || !claro_copy_file('export/XMLSchema.dtd', $this->destDir)
-            || !claro_copy_file('export/adlcp_v1p3.xsd', $this->destDir)
-            || !claro_copy_file('export/adlnav_v1p3.xsd', $this->destDir)
-            || !claro_copy_file('export/adlseq_v1p3.xsd', $this->destDir)
-            || !claro_copy_file('export/datatypes.dtd', $this->destDir)
-            || !claro_copy_file('export/ims_xml.xsd', $this->destDir)
-            || !claro_copy_file('export/imscp_v1p1.xsd', $this->destDir)
-            || !claro_copy_file('export/imsss_v1p0.xsd', $this->destDir)
-            || !claro_copy_file('export/imsss_v1p0auxresource.xsd', $this->destDir)
-            || !claro_copy_file('export/imsss_v1p0control.xsd', $this->destDir)
-            || !claro_copy_file('export/imsss_v1p0delivery.xsd', $this->destDir)
-            || !claro_copy_file('export/imsss_v1p0limit.xsd', $this->destDir)
-            || !claro_copy_file('export/imsss_v1p0objective.xsd', $this->destDir)
-            || !claro_copy_file('export/imsss_v1p0random.xsd', $this->destDir)
-            || !claro_copy_file('export/imsss_v1p0rollup.xsd', $this->destDir)
-            || !claro_copy_file('export/imsss_v1p0seqrule.xsd', $this->destDir)
-            || !claro_copy_file('export/imsss_v1p0util.xsd', $this->destDir)
-            || !claro_copy_file('export/lom.xsd', $this->destDir)
-            || !claro_copy_file('export/lomCustom.xsd', $this->destDir)
-            || !claro_copy_file('export/lomLoose.xsd', $this->destDir)
-            || !claro_copy_file('export/lomStrict.xsd', $this->destDir)
             || !claro_copy_file('export/scores.js', $this->destDir)
-            || !claro_copy_file('export/xml.xsd', $this->destDir)
-            || !claro_copy_file('export/common/anyElement.xsd', $this->destDir."/common")
-            || !claro_copy_file('export/common/dataTypes.xsd', $this->destDir."/common")
-            || !claro_copy_file('export/common/elementNames.xsd', $this->destDir."/common")
-            || !claro_copy_file('export/common/elementTypes.xsd', $this->destDir."/common")
-            || !claro_copy_file('export/common/rootElement.xsd', $this->destDir."/common")
-            || !claro_copy_file('export/common/vocabTypes.xsd', $this->destDir."/common")
-            || !claro_copy_file('export/common/vocabValues.xsd', $this->destDir."/common")
-            || !claro_copy_file('export/extend/custom.xsd', $this->destDir."/extend")
-            || !claro_copy_file('export/extend/strict.xsd', $this->destDir."/extend")
-            || !claro_copy_file('export/unique/loose.xsd', $this->destDir."/unique")
-            || !claro_copy_file('export/unique/strict.xsd', $this->destDir."/unique")
-            || !claro_copy_file('export/vocab/custom.xsd', $this->destDir."/vocab")
-            || !claro_copy_file('export/vocab/loose.xsd', $this->destDir."/vocab")
-            || !claro_copy_file('export/vocab/strict.xsd', $this->destDir."/vocab")
-            )
+            || !claro_copy_file('export/ims_xml.xsd', $this->destDir)
+            || !claro_copy_file('export/imscp_rootv1p1p2.xsd', $this->destDir)
+            || !claro_copy_file('export/imsmd_rootv1p2p1.xsd', $this->destDir)
+            || !claro_copy_file('export/adlcp_rootv1p2.xsd', $this->destDir)  )
         {
             $this->error[] = $langErrorCopyScormFiles;
             return false;
@@ -747,7 +708,7 @@ class ScormExport
         }
         
         // Did we find an mp3 ?
-        /*if ( $this->mp3Found)
+        if ( $this->mp3Found)
         {        
             if ( !claro_copy_file($clarolineRepositorySys . '/exercice/claroPlayer.swf', $this->destDir) )
             {
@@ -756,7 +717,7 @@ class ScormExport
                 // This is *NOT* a fatal error.
                 // Do *NOT* return false.
             }
-        }*/
+        }
         
         
         return true;
@@ -780,119 +741,35 @@ class ScormExport
          * @return A string containing the metadata block.
          * @author Amand Tihon <amand@alrj.org>
          */
-        function makeMetaData($title, $description, $identifier)
+        function makeMetaData($title, $description)
         {
-            if ( empty($title) and empty($description) ) return ' ';
+            if ( empty($title) and empty($description) ) return '<metadata />';
         
-            $out = "<metadata>"."\n"
-                  ."<lom:lom>"."\n"
-                  ."<lom:general>"."\n"
-                  ."<lom:identifier>"."\n"
-                  ."<lom:entry>".$identifier
-                  ."</lom:entry>"."\n"
-                  ."</lom:identifier>"."\n";
+            $out = '<metadata>
+    <imsmd:lom>
+        <imsmd:general>';
         
-            if (empty($title))
+            if (!empty($title))
             {
-            	$title = "null";
+            $out .= '
+            <imsmd:title>
+                <imsmd:langstring>' . htmlspecialchars($title) . '</imsmd:langstring>
+            </imsmd:title>';
             }
-            $out .= "<lom:title>"."\n"
-                   ."<lom:string>"
-                   .htmlspecialchars($title)
-                   ."</lom:string>"."\n"
-                   ."</lom:title>"."\n";
         
-            if (empty($description))
+            if (!empty($description))
             {
-            	$description = "null";
-            	$keyword = "null";
+            $out .= '    
+            <imsmd:description>
+                <imsmd:langstring>' . htmlspecialchars($description) . '</imsmd:langstring>
+            </imsmd:description>';
             }
-            $out .= "<lom:description>"."\n"
-                   ."<lom:string>"
-                   .htmlspecialchars($description)."\n"
-                   ."</lom:string>"."\n"
-                   ."</lom:description>"."\n";
-            $out .= "<lom:keyword>"."\n"
-                   ."<lom:string>"
-                   .htmlspecialchars($description)."\n"
-                   ."</lom:string>"."\n"
-                   ."</lom:keyword>"."\n";
             
-            $out .= "</lom:general>"."\n"
-                   ."<lom:lifeCycle>"."\n"
-                   ."<lom:version>"."\n"
-                   ."<lom:string>1.0</lom:string>"."\n"
-                   ."</lom:version>"."\n"
-                   ."<lom:status>"."\n"
-                   ."<lom:source>LOMv1.0</lom:source>"."\n"
-                   ."<lom:value>final</lom:value>"."\n"
-                   ."</lom:status>"."\n"
-                   ."</lom:lifeCycle>"."\n"
-                   ."<lom:metaMetadata>"."\n"
-                   ."<lom:identifier>"."\n"
-                   ."<lom:entry>".$identifier
-                   ."</lom:entry>"."\n"
-                   ."</lom:identifier>"."\n"
-                   ."<lom:metadataSchema>LOMv1.0</lom:metadataSchema>"."\n"
-                   ."<lom:metadataSchema>SCORM_CAM_v1.3</lom:metadataSchema>"."\n"
-                   ."</lom:metaMetadata>"."\n"
-                   ."<lom:technical>"."\n"
-                   ."<lom:format>text/html</lom:format>"."\n" // TODO
-                   ."</lom:technical>"."\n"
-                   ."<lom:rights>"."\n"
-                   ."<lom:cost>"."\n"
-                   ."<lom:source>LOMv1.0</lom:source>"."\n"
-                   ."<lom:value>no</lom:value>"."\n"
-                   ."</lom:cost>"."\n"
-                   ."<lom:copyrightAndOtherRestrictions>"."\n"
-                   ."<lom:source>LOMv1.0</lom:source>"."\n"
-                   ."<lom:value>no</lom:value>"."\n"
-                   ."</lom:copyrightAndOtherRestrictions>"."\n"
-                   ."</lom:rights>"."\n"
-                   ."</lom:lom>"."\n"
-                   ."</metadata>"."\n";
-        
-            return $out;
-        }
-        
-        function makeCAMetaData($title, $description)
-        {
-            if ( empty($title) and empty($description) ) return ' ';
-        
-            $out = "<metadata>"."\n"
-                  ."<schema>ADL SCORM</schema>"."\n"
-                  ."<schemaversion>CAM 1.3</schemaversion>"."\n"
-                  ."<lom:lom>"."\n"
-                  ."<lom:general>"."\n";
-        
-            if (empty($title))
-            {
-            	$title = "null";
-            }
-            $out .= "<lom:title>"."\n"
-                   ."<lom:string>"
-                   .htmlspecialchars($title)
-                   ."</lom:string>"."\n"
-                   ."</lom:title>"."\n";
-            
-            if (empty($description))
-            {
-            	$description = "null";
-            }
-            $out .= "<lom:description>"."\n"
-                   ."<lom:string>"
-                   .htmlspecialchars($description)
-                   ."</lom:string>"."\n"
-                   ."</lom:description>"."\n";
-            
-            $out .= "</lom:general>"."\n"
-                   ."<lom:metaMetadata>"."\n"
-                   ."<lom:metadataSchema>LOMv1.0</lom:metadataSchema>"."\n"
-                   ."<lom:metadataSchema>SCORM_CAM_v1.3</lom:metadataSchema>"."\n"
-                   ."</lom:metaMetadata>"."\n"
-                   ."</lom:lom>"."\n"
-                   ."</metadata>"."\n";
-            
+            $out .= '
+        </imsmd:general>
+    </imsmd:lom>
+</metadata>';
+
             return $out;
         }
         
@@ -914,8 +791,7 @@ class ScormExport
             for ($i=0; $i<$depth; $i++) $ident .= "    ";
             foreach ($itemlist as $item)
             {
-                $identifier = "I_".$item['ID'];
-                $out .= $ident . '<item identifier="'.$identifier.'" isvisible="true" ';
+                $out .= $ident . '<item identifier="I_'.$item['ID'].'" isvisible="true" ';
                 if ( $item['contentType'] != 'LABEL' )
                 {
                     $out .= 'identifierref="R_' . $item['ID'] . '" ';
@@ -932,7 +808,7 @@ class ScormExport
                 // Add metadata, except for LABELS
                 if ( $item['contentType'] != 'LABEL' )
                 {
-                    $out .= makeMetaData($item['name'], $item['itemComment'], $identifier);
+                    $out .= makeMetaData($item['name'], $item['itemComment']) . "\n";
                 }
                 
                 if ( ! isset($item['children']) )
@@ -1008,13 +884,11 @@ class ScormExport
                     if ( !createFrameFile($framefile, 'Documents'.$module['path'])) return false;
                     
                     // Add the resource to the manifest
-                    $ridentifier = "R_".$module['ID'];
-                    $manifest_resources .= '<resource identifier="' . $ridentifier . '" type="webcontent"  adlcp:scormType="sco" '
+                    $manifest_resources .= '<resource identifier="R_' . $module['ID'] . '" type="webcontent"  adlcp:scormtype="sco" '
                         . ' href="' . basename($framefile) . '">' . "\n"
                         . '  <file href="' . basename($framefile) . '" />' . "\n"
-                        . '  <file href="' . $targetfile . '">' . "\n"
-                        . makeMetaData($module['name'], $module['resourceComment'], $ridentifier)
-                        . "</file>\n"
+                        . '  <file href="' . $targetfile . '" />' . "\n"
+                        . makeMetaData($module['name'], $module['resourceComment'])
                         . "</resource>\n";
                     break;
 
@@ -1022,12 +896,10 @@ class ScormExport
                     $targetfile = $module['fileName'];
                     
                     // Add the resource to the manifest
-                    $ridentifier = "R_".$module['ID'];
-                    $manifest_resources .= '<resource identifier="' . $ridentifier . '" type="webcontent"  adlcp:scormType="sco" '
+                    $manifest_resources .= '<resource identifier="R_' . $module['ID'] . '" type="webcontent"  adlcp:scormtype="sco" '
                         . ' href="' . $targetfile . '" >' . "\n"
-                        . '  <file href="' . $targetfile . '">' . "\n"
-                        . makeMetaData($module['name'], $module['resourceComment'], $ridentifier)
-                        . "</file>\n"
+                        . '  <file href="' . $targetfile . '" />' . "\n"
+                        . makeMetaData($module['name'], $module['resourceComment'])
                         . "</resource>\n";
                     break;
                         
@@ -1035,12 +907,10 @@ class ScormExport
                 case 'SCORM'   : 
                     // Add the resource to the manifest
                     $path = 'OrigScorm';
-                    $ridentifier = "R_".$module['ID'];
-                    $manifest_resources .= '<resource identifier="' . $ridentifier . '" type="webcontent"  adlcp:scormType="sco" '
+                    $manifest_resources .= '<resource identifier="R_' . $module['ID'] . '" type="webcontent"  adlcp:scormtype="sco" '
                         . ' href="OrigScorm' . $module['path'] . '">' . "\n"
-                        . '  <file href="OrigScorm' . $module['path'] . '">' . "\n"
-                        . makeMetaData($module['name'], $module['resourceComment'], $ridentifier)
-                        . "</file>\n"
+                        . '  <file href="OrigScorm' . $module['path'] . '" />' . "\n"
+                        . makeMetaData($module['name'], $module['resourceComment'])
                         . "</resource>\n";
                     break;
                     
@@ -1058,25 +928,19 @@ class ScormExport
         }
         
         // Prepare Metadata
-        $metadata = makeCAMetaData($this->name, $this->comment);
+        $metadata = makeMetaData($this->name, $this->comment);
         
         // Write header
         global $charset;
         fwrite($f, '<?xml version="1.0" encoding="' . $charset . '" ?>
 <manifest identifier="SingleCourseManifest" version="1.1"
-          xmlns="http://www.imsglobal.org/xsd/imscp_v1p1" 
-          xmlns:lom="http://ltsc.ieee.org/xsd/LOM" 
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-          xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_v1p3" 
-          xmlns:imsss="http://www.imsglobal.org/xsd/imsss" 
-          xmlns:adlseq="http://www.adlnet.org/xsd/adlseq_v1p3" 
-          xmlns:adlnav="http://www.adlnet.org/xsd/adlnav_v1p3" 
-          xsi:schemaLocation="http://www.imsglobal.org/xsd/imscp_v1p1 imscp_v1p1.xsd
-          http://ltsc.ieee.org/xsd/LOM lom.xsd
-          http://www.adlnet.org/xsd/adlcp_v1p3 adlcp_v1p3.xsd
-          http://www.imsglobal.org/xsd/imsss imsss_v1p0.xsd
-          http://www.adlnet.org/xsd/adlseq_v1p3 adlseq_v1p3.xsd
-          http://www.adlnet.org/xsd/adlnav_v1p3 adlnav_v1p3.xsd">' . "\n");
+            xmlns="http://www.imsproject.org/xsd/imscp_rootv1p1p2"
+            xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_rootv1p2"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:imsmd="http://www.imsglobal.org/xsd/imsmd_rootv1p2p1"
+            xsi:schemaLocation="http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd
+            http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 imsmd_rootv1p2p1.xsd
+            http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd">' . "\n");
         fwrite($f, $metadata);
         fwrite($f, $manifest_itemTree);
         fwrite($f, $manifest_resources);
