@@ -600,7 +600,7 @@ function show_assignment($id, $message = FALSE)
 {
 	global $tool_content, $m, $langBack, $langNoSubmissions, $langSubmissions, $mysqlMainDb, $langWorks;
 	global $langEndDeadline, $langWEndDeadline, $langNEndDeadline, $langDays, $langDaysLeft, $langZipDownload, $langGradeOk;
-	global $color1, $color2, $colorMedium;
+	global $color1, $color2, $colorMedium, $currentCourseID, $webDir, $urlServer;
 	
 	$res = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days FROM assignments WHERE id = '$id'");
 	$row = mysql_fetch_array($res);
@@ -644,6 +644,47 @@ $tool_content .= "<h4>".$langSubmissions."</h4>";
 		} else {
 			$tool_content .= sprintf("<p>$m[more_submissions]</p>\n", $num_results);
 		}
+		
+// Print pie chart for grade distribution /////////////////////////////////////////////////////////
+$tool_content .= "\n\n<!-- BEGIN GRAPH -->\n\n";
+		require_once '../../include/libchart/libchart.php';
+   		
+		$chart = new PieChart(600, 300);
+		$chart->setTitle("Κατανομή βαθολογίας εργασίας");
+					
+		$gradeOccurances = array(); // Named array to hold grade occurances/stats
+		$gradesExists = 0;
+		while ($row = mysql_fetch_array($result)) {
+			$theGrade = $row['grade'];
+			if ($theGrade)
+				$gradesExists = 1;
+			if (!$gradeOccurances[$theGrade]) {
+				$gradeOccurances[$theGrade] = 1;
+			} else {
+				++$gradeOccurances[$theGrade];
+				//$tool_content .= "\n\n".$theGrade.": ".	$gradeOccurances[$theGrade]."\n\n";
+			}
+		}
+		
+		if ($gradesExists) {
+			foreach ( $gradeOccurances as $gradeValue=>$gradeOccurance ) {
+				$percentage = 100*($gradeOccurance/$num_results);
+				$chart->addPoint(new Point("$gradeValue ($percentage)", $percentage));
+			}
+						
+			$chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
+			$chart->render($webDir.$chart_path);
+					
+			$tool_content .= '<table width="100%"><tr><td><img src="'.$urlServer.$chart_path.'" /></td></tr></table>';
+		}
+$tool_content .= "\n\n<!-- END GRAPH -->\n\n";		
+// end of pie chart /////////////////////////////////////////////////////////////////////////////////
+
+				$result = db_query("SELECT *
+					FROM `$GLOBALS[code_cours]`.assignment_submit AS assign,
+					`$mysqlMainDb`.user AS user
+					WHERE assign.assignment_id='$id' AND user.user_id = assign.uid
+					ORDER BY $order $rev");
 
 			$tool_content .= <<<cData
 				<form action="work.php" method="post">
