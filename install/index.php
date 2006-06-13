@@ -716,7 +716,6 @@ if (mysql_version())  {
   `hour` time NOT NULL default '00:00:00',
   `lasting` varchar(20) NOT NULL default '',
   `lesson_code` varchar(50) NOT NULL default '',
-  `lesson_title` varchar(250) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) TYPE=MyISAM DEFAULT CHARACTER SET=greek");
     
@@ -1019,7 +1018,6 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
   	`hour` time NOT NULL default '00:00:00',
   	`lasting` varchar(20) NOT NULL default '',
   	`lesson_code` varchar(50) NOT NULL default '',
-  	`lesson_title` varchar(250) NOT NULL default '',
   	PRIMARY KEY  (`id`)
 	) TYPE=MyISAM ");
     
