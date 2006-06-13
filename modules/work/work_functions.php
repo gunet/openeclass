@@ -1,28 +1,66 @@
 <?php 
 
-/*
- +----------------------------------------------------------------------+
- | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
- | Copyright (c) 2003, 2004, 2005 GUNet                                 |
- +----------------------------------------------------------------------+
- | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
- |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
- |          Christophe Gesche <gesche@ipm.ucl.ac.be>                    |
- |                                                                      |
- | e-class changes by: Costas Tsibanis <costas@noc.uoa.gr>              |
- |                     Yannis Exidaridis <jexi@noc.uoa.gr>              |
- |                     Alexandros Diamantidis <adia@noc.uoa.gr>         |
- +----------------------------------------------------------------------+
- | Student work utility functions                                       |
- +----------------------------------------------------------------------+
+/*=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Á full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/*===========================================================================
+	work_functions.php
+	@last update: 17-4-2006 by Costas Tsibanis
+	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
+==============================================================================        
+        @Description: Main script for the work tool
+
+ 	This is a tool plugin that allows course administrators - or others with the
+ 	same rights
+
+ 	The user can : - navigate through files and directories.
+                       - upload a file
+                       - delete, copy a file or a directory
+                       - edit properties & content (name, comments, 
+			 html content)
+
+ 	@Comments: The script is organised in four sections.
+
+ 	1) Execute the command called by the user
+           Note (March 2004) some editing functions (renaming, commenting)
+           are moved to a separate page, edit_document.php. This is also
+           where xml and other stuff should be added.
+   	2) Define the directory to display
+  	3) Read files and directories from the directory defined in part 2
+  	4) Display all of that on an HTML page
+ 
+  	@TODO: eliminate code duplication between document/document.php, scormdocument.php
+==============================================================================
 */
 
 
 // Print a two-cell table row with that title, if the content is non-empty
 function table_row($title, $content)
 {
+	global $tool_content;
 	if (trim($content) != '') {
-		echo "<tr><td><b>$title:</b></td><td>".
+		$tool_content .= "<tr><td><b>$title:</b></td><td>".
 			htmlspecialchars($content)."</td></tr>";
 	}
 }
@@ -32,7 +70,7 @@ function table_row($title, $content)
 // use the assignment's id instead. Also insures that secret subdir exists
 function work_secret($id)
 {
-	global $currentCourseID, $workPath;
+	global $currentCourseID, $workPath, $tool_content;
 	
 	$res = db_query("SELECT secret_directory FROM assignments WHERE id = '$id'", $currentCourseID);
 	if ($res) {
@@ -55,6 +93,7 @@ function work_secret($id)
 // Is this a group assignment?
 function is_group_assignment($id)
 {
+	global $tool_content;
 	$res = db_query("SELECT group_submissions FROM assignments WHERE id = '$id'");
 	if ($res) {
 		$row = mysql_fetch_row($res);
@@ -72,21 +111,21 @@ function is_group_assignment($id)
 // Delete submissions to exercise $id if submitted by user $uid or group $gid
 function delete_submissions_by_uid($uid, $gid, $id)
 {
-	global $m;
+	global $m, $tool_content;
 
 	$res = db_query("SELECT * FROM assignment_submit WHERE
 		uid = '$uid' AND assignment_id = '$id'");
 	while ($row = mysql_fetch_array($res)) {
 		@unlink("$GLOBALS[workPath]/$row[file_path]");
 		db_query("DELETE FROM assignment_submit WHERE id = '$row[id]'");
-		echo "<p>$m[deleted_work_by_user] \"$row[file_name]\".</p>";
+		$tool_content .= "<p>$m[deleted_work_by_user] \"$row[file_name]\".</p>";
 	}
 	$res = db_query("SELECT * FROM assignment_submit WHERE
 		group_id = '$gid' AND assignment_id = '$id'");
 	while ($row = mysql_fetch_array($res)) {
 		@unlink("$GLOBALS[workPath]/$row[file_path]");
 		db_query("DELETE FROM assignment_submit WHERE id = '$row[id]'");
-		echo "<p>$m[deleted_work_by_group] \"$row[file_name]\".</p>";
+		$tool_content .= "<p>$m[deleted_work_by_group] \"$row[file_name]\".</p>";
 	}
 }
 
@@ -114,7 +153,7 @@ function greek_to_latin($string)
 // Returns an array of a group's members' uids
 function group_members($gid)
 {	
-	global $currentCourseID;
+	global $currentCourseID, $tool_content;
 
 	$members = array();
 	$res = db_query("SELECT user FROM user_group WHERE team = '$gid'",
@@ -130,6 +169,7 @@ function group_members($gid)
 // a group's members
 function group_member_names($gid)
 {
+	global $tool_content;
 	$start = TRUE;
 	$names= '';
 	foreach (group_members($gid) as $id) {
@@ -150,6 +190,7 @@ function group_member_names($gid)
 // Find submission by a user (or the user's group)
 function find_submission($uid, $id)
 {
+	global $tool_content;
 	if (is_group_assignment($id)) {
 		$gid = user_group($uid);
 		$res = db_query("SELECT id FROM assignment_submit
@@ -174,7 +215,7 @@ function find_submission($uid, $id)
 // grade or professor comment is set
 function submission_grade($subid)
 {
-	global $m;
+	global $m, $tool_content;
 
 	$res = mysql_fetch_row(db_query("SELECT grade, grade_comments
 		FROM assignment_submit WHERE id = '$subid'"));
@@ -199,6 +240,7 @@ function submission_grade($subid)
 // assignments were found.
 function was_graded($uid, $id, $ret_val = FALSE)
 {
+	global $tool_content;
 	$gid = user_group($uid);
 	$res = db_query("SELECT * FROM assignment_submit
 			WHERE assignment_id = '$id'
@@ -222,7 +264,7 @@ function was_graded($uid, $id, $ret_val = FALSE)
 // Show details of a submission
 function show_submission_details($id)
 {
-	global $uid, $m, $currentCourseID, $langSubmittedAndGraded;
+	global $uid, $m, $currentCourseID, $langSubmittedAndGraded, $tool_content;
 
 	$sub = mysql_fetch_array(
 		db_query("SELECT * FROM assignment_submit
@@ -237,18 +279,18 @@ function show_submission_details($id)
 		$graded = FALSE;
 		$notice = $GLOBALS['langSubmitted'];
 	}
-	echo "<p><b>$notice</b></p><table>";
+	$tool_content .= "<p><b>$notice</b></p><table>";
 	table_row($m['grade'], $sub['grade']);
 	table_row($m['gradecomments'], $sub['grade_comments']);
 	table_row($m['sub_date'], $sub['submission_date']);
 	table_row($m['filename'], $sub['file_name']);
 	table_row($m['comments'], $sub['comments']);
 	if ($sub['uid'] != $uid) {
-		echo "<tr><td colspan='2'>$m[submitted_by_other_member] ".
+		$tool_content .= "<tr><td colspan='2'>$m[submitted_by_other_member] ".
 			"<a href='../group/group_space.php?userGroupId=$sub[group_id]'>".
 			"$m[your_group]</a> (".uid_to_name($sub['uid']).")</td></tr>\n";
 	}
-	echo "</table>";
+	$tool_content .= "</table>";
 	mysql_select_db($currentCourseID);
 }
 
@@ -257,6 +299,7 @@ function show_submission_details($id)
 // for assignment id. Returns 'user' if by user, 'group' if by group
 function was_submitted($uid, $gid, $id)
 {
+	global $tool_content;
 	if (mysql_num_rows(db_query(
 		"SELECT id FROM assignment_submit WHERE assignment_id = '$id'
 			AND uid = '$uid'"))) {
