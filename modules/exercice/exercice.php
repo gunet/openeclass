@@ -280,10 +280,10 @@ cData;
 
 			if (isset($page))	
 				$tool_content .= "<td width='20%' align='center'>".
-					"<a href='${PHP_SELF}?choice=disable&page=${page}&exerciseId=${row[id]}'>".
-					"<img src='../../images/visible.gif' border='0' alt='".htmlspecialchars($langDeactivate)."'></a></td>";
+					"<a href=\"${PHP_SELF}?choice=disable&page=${page}&exerciseId=".$row[id]."\">".
+					"<img src=\"../../images/visible.gif\" border=\"0\" alt=\"".htmlspecialchars($langDeactivate)."\"></a></td>";
 			else
-				$tool_content .= "<td width='20%' align='center'><a href='${PHP_SELF}?choice=disable&exerciseId=${row[id]}'>".
+				$tool_content .= "<td width='20%' align='center'><a href='${PHP_SELF}?choice=disable&exerciseId=".$row[id]."'>".
 					"<img src='../../images/visible.gif' border='0' alt='".htmlspecialchars($langDeactivate)."'></a></td>";
 }
 // else if not active
@@ -291,16 +291,16 @@ else
 {
 	if (isset($page))
 		$tool_content .= "<td width='20%' align='center'>".
-			"<a href='${PHP_SELF}?choice=enable&page=${page}&exerciseId=${row[id]}'>".
+			"<a href='${PHP_SELF}?choice=enable&page=${page}&exerciseId=".$row[id]."'>".
 			"<img src='../../images/invisible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
 	else
 		$tool_content .= "<td width='20%' align='center'>".
-			"<a href='${PHP_SELF}?choice=enable&exerciseId=${row[id]}'>".
+			"<a href='${PHP_SELF}?choice=enable&exerciseId=".$row[id]."'>".
 			"<img src='../../images/invisible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
 }
 
-	$tool_content .= "<td width='20%' align='center'>	<nobr><a href='results.php?&exerciseId=${row[id]}'>".
-	$langExerciseScores1."</a> | <a href='csv.php?&exerciseId=${row[id]}'>".$langExerciseScores3."</a></nobr></td></tr>";
+	$tool_content .= "<td width=\"20%\" align=\"center\">	<nobr><a href=\"results.php?&exerciseId=".$row[id]."\">".
+	$langExerciseScores1."</a> | <a href=\"csv.php?&exerciseId=".$row[id]."\">".$langExerciseScores3."</a></nobr></td></tr>";
 	}
 	// student only
 	else
@@ -320,7 +320,7 @@ cData;
 	$temp_StartDate = mktime(substr($row['StartDate'], 11,2),substr($row['StartDate'], 14,2),substr($row['StartDate'], 17,2),substr($row['StartDate'], 5,2),substr($row['StartDate'], 8,2),substr($row['StartDate'], 0,4));
 	$temp_EndDate = mktime(substr($row['EndDate'], 11,2),substr($row['EndDate'], 14,2),substr($row['EndDate'], 17,2),substr($row['EndDate'], 5,2),substr($row['EndDate'], 8,2),substr($row['EndDate'], 0,4));
 	if (($CurrentDate >= $temp_StartDate) && ($CurrentDate < $temp_EndDate)) {
-		$tool_content .= "<a href=\"exercice_submit.php?exerciseId=${row['id']}\">${row['titre']}</a>";
+		$tool_content .= "<a href=\"exercice_submit.php?exerciseId=".$row['id']."\">".$row['titre']."</a>";
 	} else {
 		$tool_content .= $row['titre'];
 	}
