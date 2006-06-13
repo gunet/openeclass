@@ -575,6 +575,7 @@ function assignment_details($id, $row)
 // the <th> tags
 function sort_link($title, $opt, $attrib = '')
 {
+	global $tool_content;
 	$i = '';
 	if (isset($_REQUEST['id'])) {
 		$i = "&id=$_REQUEST[id]";
@@ -671,7 +672,7 @@ cData;
 					<td align="center">${stud_am[0]}</td>
 					<td align="center"><a href="work.php?get=${row['id']}">${row['file_name']}</a></td>
 				<td align="center">${row['submission_date']}</td>
-					<td align="center"><input type="text" value="${row['grade']} ?>" size="5"
+					<td align="center"><input type="text" value="${row['grade']} " size="5"
 						name="grades[${row['id']}]"></td>
 				</tr>
 cData;
@@ -803,7 +804,7 @@ function show_assignments()
 			  	${m['delete']}
 			  </th>	
 			  <th align="center">
-				${m[activate]} / ${m[deactivate]}
+				${m['activate']} / ${m['deactivate']}
 			  </th>
 			</tr>
 cData;
@@ -816,14 +817,15 @@ cData;
 		$hasUnevaluatedSubmissions = $row_s[0];
 		//echo $hasUnevaluatedSubmissions;
 	
-	$tool_content .= "<tr><td><a href=\"work.php?id=${row['id']}\">"; 
+	$tool_content .= "<tr><td><a href=\"work.php?id=${row['id']}\" "; 
 	
 	if(!$row['active']) 
-		$tool_content .= "class=\"invisible\" >";
+		$tool_content .= "class=\"invisible\" ";
+	$tool_content .= " >";
 
 	if ($hasUnevaluatedSubmissions) 
 		$tool_content .= "<b>";
-  $tool_content .= "aAAAAAAAAAAAAAAAaa" . htmlspecialchars($row['title']);
+  $tool_content .= htmlspecialchars($row['title']);
 	if ($hasUnevaluatedSubmissions) 
 		$tool_content .= "</b>";
        
@@ -840,6 +842,7 @@ cData;
     	$tool_content .= "<a href=\"work.php?choice=disable&id=${row['id']}\">".
 	  		"<img src=\"../../images/visible.gif\" border=\"0\" alt=\"${deactivate_temp}\"></a>";
     } else {
+    	$activate_temp = htmlspecialchars($m['activate']);
     	$tool_content .= "<a href=\"work.php?choice=enable&id=${row['id']}\">".
 	  		"<img src=\"../../images/invisible.gif\" border=\"0\" alt=\"${activate_temp}\"></a>";
     }
