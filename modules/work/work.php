@@ -300,8 +300,12 @@ function new_assignment()
 	$tool_content .= "<form action=\"work.php\" method=\"post\"><table><tr><td>".
 		$m['title'].":</td><td><input type=\"text\" name=\"title\" size=\"55\"></td></tr><tr><td>".
 		$m['description'].":</td><td>".
-		"<textarea id=\"ta\" name=\"desc\" value=\"$desc\" style=\"width:100%\" rows=\"20\" cols=\"80\">".
-		@$desc."</textarea></td></tr><tr><td>".$m['comments'].":</td><td>".
+		"<textarea id=\"ta\" name=\"desc\" value=\"$desc\" style=\"width:100%\" rows=\"20\" cols=\"80\">";
+
+	if ($desc)
+		$tool_content .= $desc;
+
+	$tool_content .=	"</textarea></td></tr><tr><td>".$m['comments'].":</td><td>".
 		"<textarea name=\"comments\" rows=\"5\" cols=\"55\"></textarea></td></tr><tr><td>".
 		$m['deadline'].":</td><td>";
 
