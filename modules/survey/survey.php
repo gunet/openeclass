@@ -55,10 +55,10 @@
 */
 
 $require_current_course = TRUE;
-$langFiles = 'Survey';
+$langFiles = 'survey';
 
 $require_help = TRUE;
-$helpTopic = 'survey';
+$helpTopic = 'Survey';
 
 include '../../include/baseTheme.php';
 

@@ -58,7 +58,7 @@ $require_current_course = TRUE;
 $langFiles = 'poll';
 
 $require_help = TRUE;
-$helpTopic = 'poll';
+$helpTopic = 'Poll';
 
 include '../../include/baseTheme.php';
 
