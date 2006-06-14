@@ -32,6 +32,7 @@ if(!class_exists('ScormExport')):
 require_once("../../include/lib/fileManageLib.inc.php");
 require_once("../../include/lib/fileUploadLib.inc.php");
 require_once("../../include/pclzip/pclzip.lib.php");
+require_once('../../include/lib/textLib.inc.php');
 
 /*$tbl_cdb_names = claro_sql_get_course_tbl();
 $tbl_quiz_test              = $tbl_cdb_names['quiz_test'             ];
@@ -811,12 +812,12 @@ class ScormExport
             }
             $out .= "<lom:description>"."\n"
                    ."<lom:string>"
-                   .htmlspecialchars($description)."\n"
+                   .htmlspecialchars($description)
                    ."</lom:string>"."\n"
                    ."</lom:description>"."\n";
             $out .= "<lom:keyword>"."\n"
                    ."<lom:string>"
-                   .htmlspecialchars($description)."\n"
+                   .htmlspecialchars($description)
                    ."</lom:string>"."\n"
                    ."</lom:keyword>"."\n";
             
@@ -983,6 +984,63 @@ class ScormExport
             return true;
         }
         
+        function createDescFrameFile($fileName)
+        {
+            global $langErrorCreatingFrame, $langErrorCreatingManifest;
+            
+            if ( !($f = fopen($fileName, 'w')) )
+            {
+                $this->error[] = $langErrorCreatingFrame;
+                return false;
+            }
+            
+            $course_description = "";
+            //mysql_select_db("$currentCourseID",$db);
+			$sql = "SELECT `id`,`title`,`content` FROM `course_description` order by id";
+			$res = db_query($sql);
+			if (mysql_num_rows($res) >0 )
+			{
+				$course_description .= "
+					<hr noshade size=\"1\">";
+				while ($bloc = mysql_fetch_array($res))
+				{ 
+					$course_description .= "
+					<H4>
+						".$bloc["title"]."
+					</H4>
+					<font size=2 face='arial, helvetica'>
+						".make_clickable(nl2br($bloc["content"]))."
+					</font>";
+				}
+			}
+			else
+			{
+				$course_description .= "<br><h4>$langThisCourseDescriptionIsEmpty</h4>";
+			}
+            
+            fwrite($f, '<html>'."\n"
+				.'<body>'."\n"
+				.'<table width="99%" border="0">'."\n"
+				.'<tr>'."\n"
+				.'<td colspan="2">'."\n"
+				.$course_description."\n"
+				.'</td>'."\n"
+				.'</tr>'."\n"
+				.'<tr name="bottomLine">'."\n"
+				.'<td colspan="2">'."\n"
+				.'<br>'."\n"
+				.'<hr noshade size="1">'."\n"
+				.'</td>'."\n"
+				.'</tr>'."\n"
+				.'</table>'."\n"
+				.'</body>'."\n"
+				.'</html>'."\n"
+            	);
+            fclose($f);
+            
+            return true;
+        }
+        
         
         
         // Start creating sections for items and resources
@@ -1045,6 +1103,23 @@ class ScormExport
                         . "</file>\n"
                         . "</resource>\n";
                     break;
+                    
+                 case 'COURSE_DESCRIPTION':
+                 	$framefile = $this->destDir . '/frame_for_' . $module['ID'] . '.html';
+                 	
+                 	// Create an html file with a frame for the document.
+                    if ( !createDescFrameFile($framefile)) return false;
+                    
+                    // Add the resource to the manifest
+                    $ridentifier = "R_".$module['ID'];
+                    $manifest_resources .= '<resource identifier="' . $ridentifier . '" type="webcontent"  adlcp:scormType="sco" '
+                        . ' href="' . basename($framefile) . '">' . "\n"
+                        . '  <file href="' . basename($framefile) . '">' . "\n"
+                        . makeMetaData($module['name'], $module['resourceComment'], $ridentifier)
+                        . "</file>\n"
+                        . "</resource>\n";
+                 	
+                 	break;
                     
                 default        : break;
             }

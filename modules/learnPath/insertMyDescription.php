@@ -94,25 +94,39 @@ if ($num == 0)
 }
 else 
 {
-	$thisDocumentModule = mysql_fetch_array($query);
-	// determine the default order of this Learning path
-	$sql = "SELECT MAX(`rank`)
-		FROM `".$TABLELEARNPATHMODULE."`";
-	$result = db_query($sql);
+	// check if this is this LP that used this course description as a module
+	$sql = "SELECT *
+			FROM `".$TABLELEARNPATHMODULE."` AS LPM,
+					`".$TABLEMODULE."` AS M,
+					`".$TABLEASSET."` AS A
+			WHERE M.`module_id` =  LPM.`module_id`
+				AND M.`startAsset_id` = A.`asset_id`
+				AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'] ."
+				AND M.`contentType` = \"".CTCOURSE_DESCRIPTION_."\"";
+	$query2 = db_query($sql);
+	$num = mysql_numrows($query2);
+	
+	if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
+		$thisDocumentModule = mysql_fetch_array($query);
+		// determine the default order of this Learning path
+		$sql = "SELECT MAX(`rank`)
+			FROM `".$TABLELEARNPATHMODULE."`";
+		$result = db_query($sql);
+	
+		list($orderMax) = mysql_fetch_row($result);
+		$order = $orderMax + 1;
+	
+		// finally : insert in learning path
+		$sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
+			(`learnPath_id`, `module_id`, `rank`, `lock`)
+			VALUES ('". (int)$_SESSION['path_id']."', '".(int)$thisDocumentModule['module_id']."',
+			" . (int)$order . ", 'OPEN')";
+		$query = db_query($sql);
 
-	list($orderMax) = mysql_fetch_row($result);
-	$order = $orderMax + 1;
-
-	// finally : insert in learning path
-	$sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
-		(`learnPath_id`, `module_id`, `rank`, `lock`)
-		VALUES ('". (int)$_SESSION['path_id']."', '".(int)$thisDocumentModule['module_id']."',
-		" . (int)$order . ", 'OPEN')";
-	$query = db_query($sql);
-
+    }
 	//$tool_content .= "done2";
 	header("Location: ./learningPathAdmin.php");
-    exit();
+	exit();
 }
  
 //draw($tool_content, 2, "learnPath");
