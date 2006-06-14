@@ -55,7 +55,7 @@
 */
 
 $require_current_course = TRUE;
-$langFiles = 'survey';
+$langFiles = 'Survey';
 
 $require_help = TRUE;
 $helpTopic = 'survey';
