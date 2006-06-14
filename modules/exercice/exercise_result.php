@@ -24,7 +24,7 @@
 ==============================================================================*/
 
 /*===========================================================================
-	work.php
+	exercise_result.php
 	@last update: 17-4-2006 by Costas Tsibanis
 	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
 ==============================================================================        
@@ -67,6 +67,18 @@ define('MATCHING', 4);
 
 $require_current_course = TRUE;
 $langFiles='exercice';
+
+//$tool_content = "";
+/////////////////////////////////////////////////////////////////////////////////
+//if (isset($_SESSION['status']))
+//	$tool_content .= "mmmmmmmmmmmmmmmmmmmm";
+//
+//foreach ($_SESSION as $s)
+//	$tool_content .= $s;
+//	
+//	foreach ($status as $s)
+//	$tool_content .= $s;
+/////////////////////////////////////////////////////////////////////////////////
 
 //include '../../include/init.php';
 
@@ -484,6 +496,8 @@ $tool_content .= <<<cData
 	<br>
 cData;
 
+draw($tool_content, 2);
+
 /*******************************/
 /* Tracking of results         */
 /*******************************/
@@ -495,7 +509,5 @@ if(isset($is_trackingEnabled))
 
 	event_exercice($objExercise->selectId(),$totalScore,$totalWeighting);
 }
-
-
 
 ?>
