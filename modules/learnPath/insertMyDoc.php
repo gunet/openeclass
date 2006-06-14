@@ -124,6 +124,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
     if (isset($_REQUEST['submitInsertedDocument']) && isset($_POST['insertDocument_'.$iterator]) )
     {
         $insertDocument = str_replace('..', '',$_POST['insertDocument_'.$iterator]);
+        $filenameDocument = $_POST['filenameDocument_'.$iterator];
         
         $sourceDoc = $baseWorkDir.$insertDocument;
 
@@ -144,7 +145,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                 // create new module
                 $sql = "INSERT INTO `".$TABLEMODULE."`
                         (`name` , `comment`, `contentType`, `launch_data`)
-                        VALUES ('". addslashes($basename) ."' , '". addslashes($langDefaultModuleComment) . "', '".CTDOCUMENT_."','')";
+                        VALUES ('". addslashes($filenameDocument) ."' , '". addslashes($langDefaultModuleComment) . "', '".CTDOCUMENT_."','')";
                 $query = db_query($sql);
 
                 $insertedModule_id = mysql_insert_id();
@@ -176,7 +177,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                         VALUES ('". (int)$_SESSION['path_id']."', '".(int)$insertedModule_id."','".addslashes($langDefaultModuleAddedComment)."', ".(int)$order.", 'OPEN')";
                 $query = db_query($sql);
                 
-                $addedDoc = $basename;
+                $addedDoc = $filenameDocument;
 
                 $dialogBox .= $addedDoc ." ".$langDocInsertedAsModule."<br>";
             }
@@ -209,13 +210,13 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                             VALUES ('". (int)$_SESSION['path_id']."', '". (int)$thisDocumentModule['module_id']."','".addslashes($langDefaultModuleAddedComment)."', ".(int)$order.",'OPEN')";
                     $query = db_query($sql);
                      
-                    $addedDoc =  $basename;
+                    $addedDoc =  $filenameDocument;
 
                     $dialogBox .= $addedDoc ." ".$langDocInsertedAsModule."<br>";
                 }
                 else
                 {
-                    $dialogBox .= $basename." : ".$langDocumentAlreadyUsed."<br>";
+                    $dialogBox .= $filenameDocument." : ".$langDocumentAlreadyUsed."<br>";
                 }
             }
         }
@@ -279,6 +280,7 @@ while($row = mysql_fetch_array($result, MYSQL_ASSOC))
     $attribute['path'      ][] = $row['path'      ];
     $attribute['visibility'][] = $row['visibility'];
     $attribute['comment'   ][] = $row['comment'   ];
+    $attribute['filename'  ][] = $row['filename'  ];
 }
 
 /*--------------------------------------
@@ -342,11 +344,13 @@ while ($file = readdir($handle))
     {
         $fileList['comment'   ][] = $attribute['comment'   ][$keyAttribute];
         $fileList['visibility'][] = $attribute['visibility'][$keyAttribute];
+        $fileList['filename'  ][] = $attribute['filename'  ][$keyAttribute];
     }
     else
     {
         $fileList['comment'   ][] = false;
         $fileList['visibility'][] = false;
+        $fileList['filename'  ][] = false;
     }
 } // end while ($file = readdir($handle))
 
@@ -358,7 +362,8 @@ if ($fileList)
 {
     array_multisort($fileList['type'], $fileList['name'],
                     $fileList['size'], $fileList['date'],
-                    $fileList['comment'],$fileList['visibility']);
+                    $fileList['comment'],$fileList['visibility'],
+                    $fileList['filename']);
 }
 
 /*----------------------------------------

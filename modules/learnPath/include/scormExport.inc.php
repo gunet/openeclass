@@ -199,6 +199,7 @@ class ScormExport
                 }
             }
         }
+
         
         return true;
     }
@@ -725,7 +726,8 @@ class ScormExport
         {
             if ( $module['contentType'] == 'DOCUMENT' )
             {
-                $documentName = basename($module['path']);
+                //$documentName = basename($module['path']);
+                $documentName = basename($module['name']);
                 if ( dirname($module['path']) != '/' )
                 {
                     $destinationDir = $this->destDir . '/Documents' . dirname($module['path']) . '/';
@@ -1002,10 +1004,10 @@ class ScormExport
             {
                 case 'DOCUMENT': 
                     $framefile = $this->destDir . '/frame_for_' . $module['ID'] . '.html';
-                    $targetfile = 'Documents'.$module['path'];
+                    $targetfile = 'Documents/'.$module['name'];
                     
                     // Create an html file with a frame for the document.
-                    if ( !createFrameFile($framefile, 'Documents'.$module['path'])) return false;
+                    if ( !createFrameFile($framefile, $targetfile)) return false;
                     
                     // Add the resource to the manifest
                     $ridentifier = "R_".$module['ID'];

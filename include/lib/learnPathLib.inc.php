@@ -815,6 +815,8 @@ function display_my_documents($dialogBox)
 {
     global $is_adminOfCourse;
 
+	global $courseDir;
+	global $baseWorkDir;
     global $curDirName;
     global $curDirPath;
     global $parentDir;
@@ -895,13 +897,13 @@ function display_my_documents($dialogBox)
     --------------------------------------*/
 
     if ( $fileList )
-    {
+    { /*print_r($fileList); die();*/
         $iterator = 0;
 
         while ( list( $fileKey, $fileName ) = each ( $fileList['name'] ) )
         {
 
-            $dspFileName = htmlspecialchars($fileName);
+			$dspFileName = htmlspecialchars($fileList['filename'][$fileKey]);
             $cmdFileName = str_replace("%2F","/",rawurlencode($curDirPath."/".$fileName));
 
             if ($fileList['visibility'][$fileKey] == "i")
@@ -927,19 +929,8 @@ function display_my_documents($dialogBox)
                 $size        = format_file_size($fileList['size'][$fileKey]);
                 $date        = format_date($fileList['date'][$fileKey]);
                 
-                if ( strstr($_SERVER['SERVER_SOFTWARE'], 'Apache')
-                    && (isset($secureDocumentDownload) && $secureDocumentDownload == true) )
-                {
-                    // slash argument method - only compatible with Apache
-                    $doc_url = $cmdFileName;
-                }
-                else
-                {
-                    // question mark argument method, for IIS ...
-                    $doc_url = '?url=' . $cmdFileName;
-                }
-                
-                $urlFileName = '../document/goto/index.php'.$doc_url;
+                $doc_url = $cmdFileName;
+                $urlFileName = "../../".$courseDir.$doc_url;
             }
             elseif ($fileList['type'][$fileKey] == A_DIRECTORY)
             {
@@ -956,9 +947,9 @@ function display_my_documents($dialogBox)
                 $iterator++;
                 $output .= '<td>'
                 .    '<input type="checkbox" name="insertDocument_' . $iterator . '" id="insertDocument_' . $iterator . '" value="' . $curDirPath . "/" . $fileName . '" />'
+                .'<input type="hidden" name="filenameDocument_' . $iterator . '" id="filenameDocument_' . $iterator . '" value="' .$dspFileName .'" />'
                 .    '</td>' . "\n"
                 ;
-
             }
             else
             {
