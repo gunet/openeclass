@@ -122,7 +122,10 @@ $tool_content .= "<h3>$exerciseTitle</h3>";
 mysql_select_db($currentCourseID);
 $sql="SELECT DISTINCT uid FROM `exercise_user_record`";
 $result = mysql_query($sql);
+//$i=0;
 while($row=mysql_fetch_array($result)) {
+	//++$i;
+	//$tool_content .= $i;
 	$sid = $row['uid'];
 	$StudentName = db_query("select nom,prenom from user where user_id='$sid'", $mysqlMainDb);
 	$theStudent = mysql_fetch_array($StudentName);
@@ -133,12 +136,12 @@ while($row=mysql_fetch_array($result)) {
 	$tool_content .= "<td>".$langYourTotalScore."</td></tr>";
 	
 	mysql_select_db($currentCourseID);
-	$sql="SELECT RecordStartDate,RecordEndDate,TotalScore,TotalWeighting  FROM `exercise_user_record`";
-	$result = mysql_query($sql);
-	while($row=mysql_fetch_array($result)) {
+	$sql2="SELECT RecordStartDate,RecordEndDate,TotalScore,TotalWeighting  FROM `exercise_user_record` WHERE uid='$sid'";
+	$result2 = mysql_query($sql2);
+	while($row2=mysql_fetch_array($result2)) {
 
-		$RecordEndDate = $row['RecordEndDate'];
-		$tool_content .= "<tr><td>".$row['RecordEndDate']."</td>";
+		$RecordEndDate = $row2['RecordEndDate'];
+		$tool_content .= "<tr><td>".$row2['RecordEndDate']."</td>";
 	
 		if ($RecordEndDate != "0000-00-00 00:00:00") { 
 			$tool_content .= "<td>".$RecordEndDate."</td>";
@@ -146,9 +149,9 @@ while($row=mysql_fetch_array($result)) {
 			$tool_content .= "<td>".$langResultsFailed."</td>";
 		}
 		
-		$tool_content .= "<td>".$row['TotalScore']. "/".$row['TotalWeighting']."</td></tr>";
+		$tool_content .= "<td>".$row2['TotalScore']. "/".$row2['TotalWeighting']."</td></tr>";
 	}
-$tool_content .= "</table>";
+$tool_content .= "</table><br><br>";
 }
 
 draw($tool_content, 2);
