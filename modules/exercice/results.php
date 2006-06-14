@@ -133,7 +133,7 @@ while($row=mysql_fetch_array($result)) {
 	$tool_content .= "<table border=\"1\"><tr><td colspan=\"3\">".$theStudent["nom"]." ".$theStudent["prenom"]."</td></tr>";
 	$tool_content .= "<tr><td>".$langExerciseStart."</td>";
 	$tool_content .= "<td>".$langExerciseEnd."</td>";
-	$tool_content .= "<td>".$langYourTotalScore."</td></tr>";
+	$tool_content .= "<td>".$langYourTotalScore2."</td></tr>";
 	
 	mysql_select_db($currentCourseID);
 	$sql2="SELECT RecordStartDate,RecordEndDate,TotalScore,TotalWeighting  FROM `exercise_user_record` WHERE uid='$sid'";
