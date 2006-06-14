@@ -159,6 +159,7 @@ $langScore="Score";
 $langCorrespondsTo="Corresponds to";
 $langExpectedChoice="Expected Choice";
 $langYourTotalScore="Your total score is";
+$langYourTotalScore2="Score";
 
 
 

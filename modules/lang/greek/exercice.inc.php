@@ -185,6 +185,7 @@ $langScore="Βαθμολογία";
 $langCorrespondsTo="Αντιστοιχεί σε";
 $langExpectedChoice="Αναμενόμενη Απάντηση";
 $langYourTotalScore="Η συνολική σου βαθμολογία είναι";
+$langYourTotalScore2="Βαθμολογία";
 
 // exercice_submit.php
 
