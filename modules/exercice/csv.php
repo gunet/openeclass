@@ -23,30 +23,15 @@ if (ereg('[^(]*\((.*)\)[^)]*',$client,$regs)) {
 	}
 
 
-	echo "$langExerciseSurname $langExerciseName\t$langExerciseStart\t$langExerciseEnd\t$langYourTotalScore";
+	echo "$langExerciseSurname\t$langExerciseName\t$langExerciseStart\t$langExerciseEnd\t$langYourTotalScore2\t$langQuestionWeighting";
 	echo "$crlf";
 	echo "$crlf";
-//	$sql = db_query("SELECT  user.nom, user.prenom, user.email, user.am, user.username, user_group.team
-//                        FROM cours_user, user LEFT JOIN `$currentCourseID`.user_group ON `user`.user_id=user_group.user
-//                         WHERE `user`.`user_id`=`cours_user`.`user_id` AND `cours_user`.`code_cours`='$currentCourseID'
-//			ORDER BY user.nom", $mysqlMainDb);
-//	$r=0;
-//	while ($r < mysql_num_rows($sql)) {
-//		$a=mysql_fetch_array($sql);
-//		echo "$crlf";
-//		$f=0;
-//		while ($f < mysql_num_fields($sql)) {
-//			echo("$a[$f]\t");
-//			$f++;
-//			}
-//		$r++;
-/////////////////////////////////////////////////////////////////////////////////
+
 mysql_select_db($currentCourseID);
 $sql="SELECT DISTINCT uid FROM `exercise_user_record`";
 $result = mysql_query($sql);
 while($row=mysql_fetch_array($result)) {
-	echo "$crlf";
-	$f=0;
+	//echo "$crlf";
 	$sid = $row['uid'];
 	$StudentName = db_query("select nom,prenom from user where user_id='$sid'", $mysqlMainDb);
 	$theStudent = mysql_fetch_array($StudentName);
@@ -54,33 +39,28 @@ while($row=mysql_fetch_array($result)) {
 	$nom = $theStudent["nom"];
 	$prenom = $theStudent["prenom"];
 	
-	echo("$prenom $nom[$f]\t");
-	$f++;
-	
-	echo("$prenom $nom[$f]\t");
-	$f++;
-	
 	mysql_select_db($currentCourseID);
-	$sql="SELECT RecordStartDate,RecordEndDate,TotalScore,TotalWeighting  FROM `exercise_user_record`";
-	$result = mysql_query($sql);
-	while($row=mysql_fetch_array($result)) {
+	$sql2="SELECT RecordStartDate,RecordEndDate,TotalScore,TotalWeighting  FROM `exercise_user_record` WHERE uid='$sid'";
+	$result2 = mysql_query($sql2);
+	while($row2=mysql_fetch_array($result2)) {
+		echo "$crlf";
+		echo("$prenom \t");
+		echo("$nom \t");
 
-		$RecordStartDate = $row['RecordStartDate'];
-		echo("$RecordStartDate[$f]\t");
-		$f++;
+		$RecordStartDate = $row2['RecordStartDate'];
+		echo("$RecordStartDate\t");
 		
-		$RecordEndDate = $row['RecordEndDate'];
+		$RecordEndDate = $row2['RecordEndDate'];
 		if ($RecordEndDate != "0000-00-00 00:00:00") { 
-			echo("$RecordEndDate[$f]\t");
-			$f++;
+			echo("$RecordEndDate\t");
 		} else { // user termination or excercise time limit exceeded
-			echo("$langResultsFailed[$f]\t");
-			$f++;
+			echo("$langResultsFailed\t");
 		}
 		
-		$theScore = $row['TotalScore']."/".$row['TotalWeighting'];
-		echo("$theScore[$f]\t");
-		$f++;
+		$TotalScore = $row2['TotalScore'];
+		$TotalWeighting = $row2['TotalWeighting'];
+		echo("$TotalScore\t");
+		echo("$TotalWeighting\t");
 	}
 /////////////////////////////////////////////////////////////////////////////////
 }
