@@ -1120,6 +1120,23 @@ class ScormExport
                         . "</resource>\n";
                  	
                  	break;
+                 
+                 case 'LINK': 
+                    $framefile = $this->destDir . '/frame_for_' . $module['ID'] . '.html';
+                    $targetfile = $module['path'];
+                    
+                    // Create an html file with a frame for the document.
+                    if ( !createFrameFile($framefile, $targetfile)) return false;
+                    
+                    // Add the resource to the manifest
+                    $ridentifier = "R_".$module['ID'];
+                    $manifest_resources .= '<resource identifier="' . $ridentifier . '" type="webcontent"  adlcp:scormType="sco" '
+                        . ' href="' . basename($framefile) . '">' . "\n"
+                        . '  <file href="' . basename($framefile) . '">' . "\n"
+                        . makeMetaData($module['name'], $module['resourceComment'], $ridentifier)
+                        . "</file>\n"
+                        . "</resource>\n";
+                    break;
                     
                 default        : break;
             }
