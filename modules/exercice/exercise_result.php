@@ -68,18 +68,6 @@ define('MATCHING', 4);
 $require_current_course = TRUE;
 $langFiles='exercice';
 
-//$tool_content = "";
-/////////////////////////////////////////////////////////////////////////////////
-//if (isset($_SESSION['status']))
-//	$tool_content .= "mmmmmmmmmmmmmmmmmmmm";
-//
-//foreach ($_SESSION as $s)
-//	$tool_content .= $s;
-//	
-//	foreach ($status as $s)
-//	$tool_content .= $s;
-/////////////////////////////////////////////////////////////////////////////////
-
 //include '../../include/init.php';
 
 include '../../include/baseTheme.php';
@@ -120,7 +108,7 @@ $exerciseTitle=$objExercise->selectTitle();
 $exerciseId=$objExercise->selectId();
 
 $tool_content .= "<h3>".stripslashes($exerciseTitle)." : ".$langResult."</h3>".
-	"<form method=\"get\" action=\"exercice.php\">";
+	"<form method=\"GET\" action=\"exercice.php\">";
 
 	$i=$totalScore=$totalWeighting=0;
 
@@ -160,7 +148,7 @@ $tool_content .= <<<cData
 	<table width="100%" border="0" cellpadding="3" cellspacing="2">
 		<tr bgcolor="#E6E6E6">
 		  <td colspan="${colspan}">
-				${langQuestion} ${iplus}
+				$langQuestion $iplus
 		  </td>
 		</tr>
 		<tr>
@@ -357,7 +345,7 @@ $tool_content .= <<<cData
 <tr>
   <td width="5%" align="center">
 	<img src="../../images/
-cData;	
+cData;
 	
 	if ($answerType == UNIQUE_ANSWER)
 		$tool_content .= "radio";
