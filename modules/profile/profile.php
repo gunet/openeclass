@@ -52,7 +52,8 @@ check_guest();
 
 //begin_page();
 
-if (isset($submit)) {
+//if (isset($submit) && ($ldap_submit != "ON")) {
+if (isset($submit) && (!isset($ldap_submit))) {
     $regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
 
 // check if username exists
@@ -147,10 +148,13 @@ if (isset($submit)) {
     }
 
 // everything is ok
-
+	##[BEGIN personalisation modification]############
+	if (!isset($persoStatus) || $persoStatus == "") $persoStatus = "no";
+	else  $persoStatus = "yes";
     mysql_query("UPDATE user
         SET nom='$nom_form', prenom='$prenom_form',
-        username='$username_form', password='$password_form', email='$email_form', am='$am_form'
+        username='$username_form', password='$password_form', email='$email_form', am='$am_form',
+			perso='$persoStatus'
         WHERE user_id='".$_SESSION["uid"]."'");
     $tool_content .= "<font face=\"arial, helvetica\" size=\"2\">
     $langProfileReg
@@ -161,9 +165,27 @@ if (isset($submit)) {
 
 }	// if submit
 
+##[BEGIN personalisation modification - For LDAP users]############
+if (isset($submit) && isset($ldap_submit) && ($ldap_submit == "ON")) {
+	if ($persoStatus=="") $persoStatus = "no";
+	mysql_query(" UPDATE user SET perso = '$persoStatus' WHERE user_id='".$HTTP_SESSION_VARS["uid"]."' ");
+	if (session_is_registered("user_perso_active") && $persoStatus=="no") session_unregister("user_perso_active");
+
+	
+$tool_content .= "
+	<font face=\"arial, helvetica\" size=\"2\">
+		$langProfileReg
+	<br>
+	<a href=\"../../index.php\">$langHome</a>
+	<br>
+	<hr size=\"1\" noshade>";
+
+}
+##[END personalisation modification]############
+
  /**************************************************************************************/
 // inst_id added by adia for LDAP users
-$sqlGetInfoUser ="SELECT nom, prenom, username, password, email, inst_id, am
+$sqlGetInfoUser ="SELECT nom, prenom, username, password, email, inst_id, am, perso
     FROM user WHERE user_id='".$uid."'";
 $result=mysql_query($sqlGetInfoUser);
 $myrow = mysql_fetch_array($result);
@@ -174,6 +196,13 @@ $username_form = $myrow['username'];
 $password_form = $myrow['password'];
 $email_form = $myrow['email'];
 $am_form = $myrow['am'];
+##[BEGIN personalisation modification, added 'personalisation on SELECT]############
+$persoStatus=	$myrow['perso'];
+
+
+if ($persoStatus == "yes") $checkedPerso = "checked";
+else $checkedPerso = "";
+##[END personalisation modification]############
 
 session_unregister("uname");
 session_unregister("pass");
@@ -189,6 +218,11 @@ session_register("uname");
 session_register("pass");
 session_register("nom");
 session_register("prenom");
+
+##[BEGIN personalisation modification]############IT DOES NOT UPDATE THE DB!!!
+if ($persoStatus=="yes" && session_is_registered("perso_is_active")) session_register("user_perso_active");	
+if ($persoStatus=="no" && session_is_registered("perso_is_active")) session_unregister("user_perso_active");	
+##[END personalisation modification]############
 
 // if LDAP user - added by adia
 if ($myrow['inst_id'] > 0) {		// LDAP user:
@@ -222,6 +256,35 @@ if ($myrow['inst_id'] > 0) {		// LDAP user:
         <td colspan=\"2\" class=\"caution\">$langLDAPUser</td>
         </tr>
         </thead></table><br><br>";
+   
+    ##[BEGIN personalisation modification]############	
+
+	if (session_is_registered("perso_is_active")) {
+		$tool_content .= " 	
+		<br>
+				<form method=\"post\" action=\"$PHP_SELF?submit=yes\">
+				<input type=hidden name=\"ldap_submit\" value=\"ON\">
+					<table width=\"100%\">
+						<thead>
+						<tr>
+							<th>
+								
+									eClass Personalised
+								
+							</th>
+			 				<td>
+								<input type=checkbox name='persoStatus' value=\"yes\" $checkedPerso>
+							</td>
+						</tr>
+						<tr>
+						</thead>
+						</table>
+						<br>
+								<input type=\"Submit\" name=\"submit\" value=\"$langChange\">
+						
+				</form>";
+	}
+##[END personalisation modification]############
 } else {		// Not LDAP user:
     if (!isset($urlSecure)) {
         $sec = $urlServer.'modules/profile/profile.php';
@@ -285,7 +348,24 @@ $tool_content .= "<form method=\"post\" action=\"$sec?submit=yes\">
         <td>
             <input type=\"text\" size=\"20\" name=\"am_form\" value=\"$am_form\">
         </td>
-    </tr>
+    </tr>";
+    ##[BEGIN personalisation modification]############		
+	if (session_is_registered("perso_is_active")) {
+
+		$tool_content .="		
+				<tr>
+					<th width=\"150\">
+						
+							eClass Personalised
+						
+					</th>
+			 		<td>
+						<input type=checkbox name='persoStatus' value=\"yes\" $checkedPerso>
+					</td>
+				</tr>";
+	}
+	##[END personalisation modification]############	
+    $tool_content .= "
     </thead>
     </table>
     <br>
