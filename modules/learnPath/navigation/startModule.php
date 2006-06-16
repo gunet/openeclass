@@ -145,6 +145,21 @@ switch ($module['contentType'])
 		$moduleStartAssetPage = $startAssetpage."?exerciseId=".$assetPath;
 		break;
 	case CTSCORM_ :
+		if($uid)
+		{ 
+		    // if credit was already set this query changes nothing else it update the query made at the beginning of this script
+		    $sql = "UPDATE `".$TABLEUSERMODULEPROGRESS."`
+		               SET `credit` = 1,
+		                   `raw` = 100,
+		                   `lesson_status` = 'completed',
+		                   `scoreMin` = 0,
+		                   `scoreMax` = 100
+		             WHERE `user_id` = " . (int)$uid . "
+		               AND `learnPath_module_id` = ". (int)$learnPathModuleId;
+
+		    db_query($sql);
+		} // else anonymous : record nothing
+		
 		// real scorm content method
 		$startAssetPage = $assetPath;
 		$modulePath     = "path_".$_SESSION['path_id'];
