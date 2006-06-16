@@ -40,7 +40,9 @@
 ****************************************************************
 */
 
-unset($language);
+//unset($language);
+//$language = "english";
+
 $path2add=0;
 include("include/baseTheme.php");
 @include("./modules/lang/english/index.inc");
@@ -103,6 +105,8 @@ if (!isset($selectResult))
 unset($alreadyHome);
 unset($dbname);
 
+	$whatViewToLoad = "yes";
+	if ($whatViewToLoad == "yes") session_register("perso_is_active");
 // ------------------------------------------------------------------------
 // if we try to login...
 // then authenticate user. First via LDAP then via MyQL
@@ -116,7 +120,7 @@ $auth = get_auth_id();
 if(!empty($submit))
 {
 	unset($uid);
-	$sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, inst_id, iduser is_admin
+	$sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, inst_id, iduser is_admin, perso
                 FROM user LEFT JOIN admin
                 ON user.user_id = admin.iduser
                 WHERE username='".$uname."'";
@@ -147,6 +151,7 @@ if(!empty($submit))
 						$statut = $myrow["statut"];
 						$email = $myrow["email"];
 						$is_admin = $myrow["is_admin"];
+						$userPerso = $myrow["perso"];//user perso flag
 					}
 					else
 					{
@@ -274,6 +279,14 @@ if(!empty($submit))
                 VALUES ('', '".$uid."', '".$REMOTE_ADDR."', NOW(), 'LOGIN')");
 
 	}
+	
+		##[BEGIN personalisation modification]############
+	
+	if (($userPerso == "yes") && session_is_registered("perso_is_active")) 
+	{
+		session_register("user_perso_active");
+	}
+	##[END personalisation modification]############
 }  // end of user authentication
 
 
@@ -315,8 +328,11 @@ if (isset($uid) AND !isset($logout)) {
 
 	//$eclass_perso will be read from the db.
 	//keep as is for now
+//	$whatViewToLoad = "yes";
+//	if ($whatViewToLoad == "yes") session_register("perso_is_active");
+	
 	$eclass_perso = 0;
-	if ($eclass_perso == 0) {
+	if (!session_is_registered("user_perso_active")) {
 		include("logged_in_content.php");
 		draw($tool_content,1);
 	} else {
