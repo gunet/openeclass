@@ -97,9 +97,13 @@ function delete_announcements() {
 }
 
 function delete_agenda() {
-	global $langAgendaDeleted;
+	global $langAgendaDeleted, $currentCourseID, $mysqlMainDb;
 
 	db_query("DELETE FROM agenda");
+	
+	##[BEGIN personalisation modification]############
+	db_query("DELETE FROM ".$mysqlMainDb.".agenda WHERE lesson_code='$currentCourseID'");
+	##[END personalisation modification]############
 	echo "<p>$langAgendaDeleted</p>";
 }
 
