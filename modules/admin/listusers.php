@@ -25,7 +25,7 @@
 
 /**===========================================================================
 	listusers.php
-	@last update: 31-05-2006 by Karatzidis Stratos
+	@last update: 16-06-2006 by Karatzidis Stratos
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
 ==============================================================================        
@@ -92,6 +92,7 @@ if($view==2)				// coming from search_user.php(search with criteria)
 	{
 		// get the incoming values
 		$user_sirname = isset($_POST['user_sirname'])?$_POST['user_sirname']:'';
+		$user_firstname = isset($_POST['user_firstname'])?$_POST['user_firstname']:'';
 		$user_am = isset($_POST['user_am'])?$_POST['user_am']:'';
 		$user_type = isset($_POST['user_type'])?$_POST['user_type']:'';
 		$user_registered_at_flag = isset($_POST['user_registered_at_flag'])?$_POST['user_registered_at_flag']:'';
@@ -112,6 +113,7 @@ if($view==2)				// coming from search_user.php(search with criteria)
 	
 		// unregister their values from session variables
 		session_unregister('user_sirname');
+		session_unregister('user_firstname');
 		session_unregister('user_am');
 		session_unregister('user_type');
 		session_unregister('user_registered_at_flag');
@@ -123,6 +125,7 @@ if($view==2)				// coming from search_user.php(search with criteria)
 	{
 		// get their values from session
 		$user_sirname = isset($_SESSION['user_sirname'])?$_SESSION['user_sirname']:'';
+		$user_firstname = isset($_SESSION['user_firstname'])?$_SESSION['user_firstname']:'';
 		$user_am = isset($_SESSION['user_am'])?$_SESSION['user_am']:'';
 		$user_type = isset($_SESSION['user_type'])?$_SESSION['user_type']:'';
 		$user_registered_at_flag = isset($_SESSION['user_registered_at_flag'])?$_SESSION['user_registered_at_flag']:'';
@@ -134,6 +137,7 @@ if($view==2)				// coming from search_user.php(search with criteria)
 else		// means that we have 'normal' listing or 'users per course' listing
 {
 	$user_sirname = "";
+	$user_firstname = "";
 	$user_am = "";
 	$user_type = "";
 	$user_registered_at_flag = "";
@@ -154,7 +158,25 @@ else
 {
 	$user_sirname_qry = "";
 }
-	
+
+if(!empty($user_firstname))
+{
+	if($criteria!=0)
+	{
+		$user_firstname_qry = " AND";
+	}
+	else
+	{
+		$user_firstname_qry = "";
+	}
+	$criteria++;
+	$user_firstname_qry .= " prenom LIKE '".$user_firstname."%'";			
+}
+else
+{
+	$user_firstname_qry = "";
+}
+
 if(!empty($user_am))
 {
 	if($criteria!=0)
@@ -273,12 +295,12 @@ else
 {
 	// Count users, with or without criteria/filters
 	$qry = "SELECT user_id,nom,prenom,username,email,statut FROM user";
-	if((!empty($user_sirname_qry)) || (!empty($user_am_qry)) || (!empty($user_type_qry)) || (!empty($user_registered_at_qry)) || (!empty($user_email_qry)) )
+	if((!empty($user_sirname_qry)) || (!empty($user_firstname_qry)) || (!empty($user_am_qry)) || (!empty($user_type_qry)) || (!empty($user_registered_at_qry)) || (!empty($user_email_qry)) )
 	{
-		$qry .= " WHERE".$user_sirname_qry.$user_am_qry.$user_type_qry.$user_registered_at_qry.$user_email_qry;
+		$qry .= " WHERE".$user_sirname_qry.$user_firstname_qry.$user_am_qry.$user_type_qry.$user_registered_at_qry.$user_email_qry;
 	}		
 }
-	
+
 $sql = mysql_query($qry);
 if($sql)
 {
@@ -434,19 +456,20 @@ if($sql)
 	else
 	{
 		$qry = "SELECT user_id,nom,prenom,username,email,statut FROM user";
-		if((!empty($user_sirname_qry)) || (!empty($user_am_qry)) || (!empty($user_type_qry)) || (!empty($user_registered_at_qry)) || (!empty($user_email_qry)) )
+		if((!empty($user_sirname_qry)) || (!empty($user_firstname_qry)) || (!empty($user_am_qry)) || (!empty($user_type_qry)) || (!empty($user_registered_at_qry)) || (!empty($user_email_qry)) )
 		{
-			$qry .= " WHERE".$user_sirname_qry.$user_am_qry.$user_type_qry.$user_registered_at_qry.$user_email_qry;
+			$qry .= " WHERE".$user_sirname_qry.$user_firstname_qry.$user_am_qry.$user_type_qry.$user_registered_at_qry.$user_email_qry;
 		}		
 	}
 	
 	$qry .= "	ORDER BY $order LIMIT $startList, $endList";
 	mysql_free_result($sql);
+	
 	$sql = mysql_query($qry);
 	
 	
 	/****************************************
-	Show users - Format the table for dispaly
+	Show users - Format the table for display
 	*****************************************/	
 	if (isset($numbering) and isset($_REQUEST['startList']) and isset($_REQUEST['numbList']))   
 	{

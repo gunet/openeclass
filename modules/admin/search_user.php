@@ -25,7 +25,7 @@
 
 /**===========================================================================
 	serachuser.php
-	@last update: 31-05-2006 by Karatzidis Stratos
+	@last update: 16-06-2006 by Karatzidis Stratos
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Pitsiougas Vagelis <vagpits@uom.gr>
 ==============================================================================        
@@ -57,12 +57,14 @@ if((!empty($new)) && ($new=="yes"))
 {
 	// It is a new search, so unregister the search terms/filters in session variables
 	session_unregister('user_sirname');
+	session_unregister('user_firstname');
 	session_unregister('user_am');
 	session_unregister('user_type');
 	session_unregister('user_registered_at_flag');
 	session_unregister('user_registered_at');
 	session_unregister('user_email');
 	unset($user_sirname);
+	unset($user_firstname);
 	unset($user_am);
 	unset($user_type);
 	unset($user_registered_at_flag);
@@ -72,6 +74,7 @@ if((!empty($new)) && ($new=="yes"))
 
 // initialize the variables
 $user_sirname = isset($_SESSION['user_sirname'])?$_SESSION['user_sirname']:'';
+$user_firstname = isset($_SESSION['user_firstname'])?$_SESSION['user_firstname']:'';
 $user_am = isset($_SESSION['user_am'])?$_SESSION['user_am']:'';
 $user_type = isset($_SESSION['user_type'])?$_SESSION['user_type']:'5';
 $user_registered_at_flag = isset($_SESSION['user_registered_at_flag'])?$_SESSION['user_registered_at_flag']:'1';
@@ -87,7 +90,12 @@ $tool_content .= "<table border=\"0\" cellspacing=\"0\" cellpadding=\"1\"><capti
 $tool_content .= "<tr>
     <td width=\"3%\" nowrap><b>Επίθετο</b>:</td>
     <td><input type=\"text\" name=\"user_sirname\" size=\"40\" value=\"".$user_sirname."\"></td>
-</tr>";
+</tr>
+<tr>
+    <td width=\"3%\" nowrap><b>Όνομα</b>:</td>
+    <td><input type=\"text\" name=\"user_firstname\" size=\"40\" value=\"".$user_firstname."\"></td>
+</tr>
+";
 $tool_content .= "  <tr>
     <td width=\"3%\" nowrap><b>Αριθμός μητρώου:</b></td>
     <td><input type=\"text\" name=\"user_am\" size=\"30\" value=\"".$user_am."\"></td>
