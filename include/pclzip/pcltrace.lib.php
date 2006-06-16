@@ -1,4 +1,4 @@
-<?
+<?php
 // --------------------------------------------------------------------------------
 // PhpConcept Library (PCL) Trace 2.0-beta1
 // --------------------------------------------------------------------------------
@@ -472,6 +472,235 @@
     echo "<td><div align=center><font color=#FFFFFF face=$v_font>&nbsp</font></div></td>";
     echo "</tr>";
     echo "</table>";
+  }
+  // --------------------------------------------------------------------------------
+
+  // --------------------------------------------------------------------------------
+  // Function : TrDisplayNew()
+  // Description :
+  // Parameters :
+  // --------------------------------------------------------------------------------
+  function PclTraceDisplayNew()
+  {
+    global $g_pcl_trace_level;
+    global $g_pcl_trace_mode;
+    global $g_pcl_trace_filename;
+    global $g_pcl_trace_name;
+    global $g_pcl_trace_index;
+    global $g_pcl_trace_entries;
+    global $g_pcl_trace_suspend;
+
+    // ----- Look for disabled trace
+    if (($g_pcl_trace_level <= 0) || ($g_pcl_trace_mode != "memory") || ($g_pcl_trace_suspend))
+      return;
+
+?>
+
+<script language="javascript">
+function PclTraceToggleView(element) {
+	if (element.style.visibility == 'visible') {
+	    PclTraceHide(element);
+	} else {
+	    PclTraceShow(element);
+	}
+}
+function PclTraceShow(element) {
+	    element.style.visibility = 'visible';
+	    element.style.position='relative';
+}
+function PclTraceHide(element) {
+	    element.style.visibility = 'hidden';
+	    element.style.position='absolute';
+}
+
+</script>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" bordercolor="#0000CC">
+  <tr>
+    <td bgcolor="#0000CC">
+      <div align="center"><font face="Verdana, Arial, Helvetica, sans-serif" color="#FFFFFF"><b>Trace</b></font></div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+<?php
+    $v_font = "\"Verdana, Arial, Helvetica, sans-serif\"";
+
+    // ----- Trace Header
+
+    // ----- Display the items
+    $v_again=0;
+    for ($i=0; $i<sizeof($g_pcl_trace_entries); $i++)
+    {
+      switch ($g_pcl_trace_entries[$i]['type']) {
+        case 1: // fct start
+		  PclTraceDisplayItemStart($i);
+        break;
+        case 2: // fct stop
+		  PclTraceDisplayItemStop($i);
+        break;
+        case 3: // fct msg
+        case 4: // msg
+          PclTraceDisplayItemMsg($i);
+        break;
+        default:
+      }
+/*
+      echo "</tr></table></td>";
+      echo "<td width=5></td>";
+      echo "<td><font size=1 face=$v_font>".basename($g_pcl_trace_entries[$i]['file'])."</font></td>";
+      echo "<td width=5></td>";
+      echo "<td><font size=1 face=$v_font>".$g_pcl_trace_entries[$i]['line']."</font></td>";
+      echo "</tr>";
+      */
+    }
+
+    // ----- Trace footer
+?>
+    </td>
+  </tr>
+  <tr>
+    <td bgcolor="#0000CC">&nbsp;</td>
+  </tr>
+</table>
+
+<script language="javascript">
+function PclTraceShowAll() {
+<?php
+    for ($i=0; $i<sizeof($g_pcl_trace_entries); $i++) {
+      if ($g_pcl_trace_entries[$i]['type'] == 1) {
+        echo "PclTraceShow(document.getElementById('fct-".$i."'));";
+      }
+    }
+?>
+}
+function PclTraceHideAll() {
+<?php
+    for ($i=0; $i<sizeof($g_pcl_trace_entries); $i++) {
+      if ($g_pcl_trace_entries[$i]['type'] == 1) {
+        echo "PclTraceHide(document.getElementById('fct-".$i."'));";
+      }
+    }
+?>
+}
+
+</script>
+<form id="formulaire" action="POST">
+<p>
+<input type='button' value='Show All' onclick="PclTraceShowAll();"></input>
+<input type='button' value='Hide All' onclick="PclTraceHideAll();"></input>
+</p>
+</form>
+
+
+<?php
+  }
+  // --------------------------------------------------------------------------------
+
+  // --------------------------------------------------------------------------------
+  // Function : TrDisplayNew()
+  // Description :
+  // Parameters :
+  // --------------------------------------------------------------------------------
+  function PclTraceDisplayItemStart($p_id)
+  {
+    global $g_pcl_trace_level;
+    global $g_pcl_trace_mode;
+    global $g_pcl_trace_filename;
+    global $g_pcl_trace_name;
+    global $g_pcl_trace_index;
+    global $g_pcl_trace_entries;
+    global $g_pcl_trace_suspend;
+
+?>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="10"><font face="Verdana, Arial, Helvetica, sans-serif" color="#FFFFFF"><b><font color="#000000" size="2">+</font></b></font></td>
+          <td style="width:2px;"></td>
+          <td><font face="Verdana, Arial, Helvetica, sans-serif" color="#FFFFFF"><b><font color="#000000" size="2">
+		      <a href="javascript:null();"
+				 title="<?php echo 'File:'.basename($g_pcl_trace_entries[$p_id]['file'])." Line: ".$g_pcl_trace_entries[$p_id]['line'];?>"
+			     onClick="PclTraceToggleView(document.getElementById('<?php echo 'fct-'.$p_id; ?>'));">
+			  <?php echo $g_pcl_trace_entries[$p_id]['name']."(".$g_pcl_trace_entries[$p_id]['param'].")" ?>
+			  </a></font></b></font></td>
+        </tr>
+        <tr id="<?php echo 'fct-'.$p_id; ?>" style="visibility:hidden;position:absolute;">
+          <td width="10">&nbsp;</td>
+          <td style="width:2px;" bgcolor="#0000CC"></td>
+          <td>
+<?php
+
+  }
+  // --------------------------------------------------------------------------------
+
+  // --------------------------------------------------------------------------------
+  // Function : TrDisplayNew()
+  // Description :
+  // Parameters :
+  // --------------------------------------------------------------------------------
+  function PclTraceDisplayItemStop($p_id)
+  {
+    global $g_pcl_trace_level;
+    global $g_pcl_trace_mode;
+    global $g_pcl_trace_filename;
+    global $g_pcl_trace_name;
+    global $g_pcl_trace_index;
+    global $g_pcl_trace_entries;
+    global $g_pcl_trace_suspend;
+
+?>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td><font face="Verdana, Arial, Helvetica, sans-serif" color="#FFFFFF"><b><font color="#000000" size="2">
+			  <?php echo $g_pcl_trace_entries[$p_id]['name']."()=".$g_pcl_trace_entries[$p_id]['param']; ?>
+			  </font></b></font></td>
+        </tr>
+      </table>
+
+          </td>
+        </tr>
+      </table>
+
+<?php
+
+
+  }
+  // --------------------------------------------------------------------------------
+
+  // --------------------------------------------------------------------------------
+  // Function : TrDisplayNew()
+  // Description :
+  // Parameters :
+  // --------------------------------------------------------------------------------
+  function PclTraceDisplayItemMsg($p_id)
+  {
+    global $g_pcl_trace_level;
+    global $g_pcl_trace_mode;
+    global $g_pcl_trace_filename;
+    global $g_pcl_trace_name;
+    global $g_pcl_trace_index;
+    global $g_pcl_trace_entries;
+    global $g_pcl_trace_suspend;
+
+?>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="10"><font face="Verdana, Arial, Helvetica, sans-serif" color="#FFFFFF"><b><font color="#000000" size="2"><center>.</center></font></b></font></td>
+          <td style="width:2px;"></td>
+          <td><font face="Verdana, Arial, Helvetica, sans-serif" color="#FFFFFF"><b><font color="#000000" size="2">
+		      
+			  <?php echo $g_pcl_trace_entries[$p_id]['message'] ?>
+			  </font></b></font></td>
+
+
+      <td width=5></td>
+      <td><font size=1 face="Verdana, Arial, Helvetica, sans-serif"><?php echo basename($g_pcl_trace_entries[$p_id]['file']); ?></font></td>
+      <td width=5></td>
+      <td><font size=1 face="Verdana, Arial, Helvetica, sans-serif"><?php echo $g_pcl_trace_entries[$p_id]['line']; ?></font></td>
+        </tr>
+      </table>
+
+<?php
+
   }
   // --------------------------------------------------------------------------------
 
