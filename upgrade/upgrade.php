@@ -830,6 +830,10 @@ $langUsageModule = "Στατιστικά Χρήσης";
                     	$errors++;
                     }
 	}
+	
+	//Move Users module from public to course-admin tools
+	 $sql = 'UPDATE `accueil` SET `visible` = \'0\', `admin` = \'1\' WHERE `id` = 8 LIMIT 1';
+	 db_query($sql, $code[0]);
 
 	// table stat_accueil
 	$sql = db_query("SELECT id,request FROM stat_accueil");
