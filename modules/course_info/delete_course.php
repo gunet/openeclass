@@ -18,6 +18,9 @@ if($is_adminOfCourse) {
 		mysql_query("DELETE FROM `$mysqlMainDb`.cours_user WHERE code_cours='$currentCourseID'");
 		mysql_query("DELETE FROM `$mysqlMainDb`.cours_faculte WHERE code='$currentCourseID'");
 		mysql_query("DELETE FROM `$mysqlMainDb`.annonces WHERE code_cours='$currentCourseID'");
+		##[BEGIN personalisation modification]############
+		mysql_query("DELETE FROM `$mysqlMainDb`.agenda WHERE lesson_code='$currentCourseID'");
+		##[END personalisation modification]############
 		@mkdir("../../courses/garbage");
 		rename("../../courses/$currentCourseID", "../../courses/garbage/$currentCourseID");
 		exit();
