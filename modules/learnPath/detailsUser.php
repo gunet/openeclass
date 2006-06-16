@@ -1,0 +1,115 @@
+<?php
+
+/*
+Header, Copyright, etc ...
+*/
+
+/***************
+Initializations
+****************/
+
+require_once("../../include/lib/learnPathLib.inc.php");
+$require_current_course = TRUE;
+$langFiles = "learnPath";
+
+$TABLECOURSUSER	        = "cours_user";
+$TABLEUSER              = "user";
+$TABLELEARNPATH         = "lp_learnPath";
+$TABLEMODULE            = "lp_module";
+$TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
+$TABLEASSET             = "lp_asset";
+$TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
+
+require_once("../../include/baseTheme.php");
+$head_content = "";
+$tool_content = "";
+
+$nameTools = $langTrackUser;
+$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
+$navigation[] = array("url"=>"detailsAll.php", "name"=> $langTrackAllPath);
+
+if (! $is_adminOfCourse ) die($langNotAllowed);
+
+// user info can not be empty, return to the list of details
+if( empty($_REQUEST['uInfo']) )
+{
+	header("Location: ./detailsAll.php");
+	exit();
+}
+
+
+// check if user is in this course
+$sql = "SELECT `u`.`nom` AS `lastname`,`u`.`prenom` AS `firstname`, `u`.`email`
+			FROM `".$TABLECOURSUSER."` as `cu` , `".$TABLEUSER."` as `u`
+			WHERE `cu`.`user_id` = `u`.`user_id`
+				AND `cu`.`code_cours` = '". addslashes($currentCourseID) ."'
+				AND `u`.`user_id` = '". (int)$_REQUEST['uInfo']."'";
+                            
+$results = db_query_fetch_all($sql);
+
+if( empty($results) ) 
+{
+	header("Location: ./detailsAll.php");
+	exit();
+}
+
+$trackedUser = $results[0];
+
+$tool_content .= '<p>'."\n"
+	.'<ul>'."\n"
+	.'<li>'.$langLastName.' : '.$trackedUser['lastname'].'</li>'."\n"
+	.'<li>'.$langFirstName.' : '.$trackedUser['firstname'].'</li>'."\n"
+	.'<li>'.$langEmail.' : ';
+if( empty($trackedUser['email']) )	$tool_content .= $langNoEmail;
+else 								$tool_content .= $trackedUser['email'];
+
+$tool_content .= '</li>'."\n"
+	.'</ul>'."\n"
+	.'</p>'."\n";                            
+
+mysql_select_db($currentCourseID);
+// get list of learning paths of this course
+// list available learning paths
+$sql = "SELECT LP.`name`, LP.`learnPath_id`
+			FROM `".$TABLELEARNPATH."` AS LP
+			ORDER BY LP.`rank`";
+
+$lpList = db_query_fetch_all($sql);
+
+// table header
+$tool_content .= '<table cellpadding="2" cellspacing="1" border="0" align="center">'."\n"
+	.'<thead>'."\n"
+	.'<tr>'."\n"
+	.'<th>'.$langLearningPath.'</th>'."\n"
+	.'<th colspan="2">'.$langProgress.'</th>'."\n"
+	.'</tr>'."\n"
+	.'</thead>';
+if(sizeof($lpList) == 0)
+{
+	echo '<tfoot>'."\n".'<tr>'."\n"
+		.'<td colspan="3" align="center">'.$langNoLearningPath.'</td>'."\n"
+		.'</tr>'."\n".'</tfoot>'."\n";
+}
+else
+{
+	// display each learning path with the corresponding progression of the user
+	foreach($lpList as $lpDetails)
+	{
+		
+		$lpProgress = get_learnPath_progress($lpDetails['learnPath_id'],$_GET['uInfo']);
+		$tool_content .= "\n".'<tr>'."\n"
+			.'<td><a href="detailsUserPath.php?uInfo='.$_GET['uInfo'].'&path_id='.$lpDetails['learnPath_id'].'">'.htmlspecialchars($lpDetails['name']).'</a></td>'."\n"
+			.'<td align="right">'."\n"
+			.claro_disp_progress_bar($lpProgress, 1)
+			.'</td>'."\n"
+			.'<td align="left"><small>'.$lpProgress.'%</small></td>'."\n"
+			.'</tr>'."\n";
+	}
+}
+$tool_content .= '</table>'."\n"
+	.'</td>'."\n".'</tr>'."\n";
+
+
+draw($tool_content, 2, "learnPath", $head_content);
+
+?>

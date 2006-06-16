@@ -315,7 +315,7 @@ if($is_adminOfCourse) {
       ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=create\">".$langCreateNewLearningPath."</a> | "
       ."<a href=\"importLearningPath.php\">".$langimportLearningPath."</a> | "
       ."<a href=\"modules_pool.php\">".$langModulesPoolToolName."</a> | "
-      ."<a href=\"learnPath_detailsAllPath.php\">".$langTrackAllPath."</a>"
+      ."<a href=\"detailsAll.php\">".$langTrackAllPath."</a>"
       ."</p>";
 }
 
@@ -576,7 +576,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
         
         // statistics links
         $tool_content .= "<td>\n
-          <a href=\"".$clarolineRepositoryWeb."tracking/learnPath_details.php?path_id=".$list['learnPath_id']."\">
+          <a href=\"details.php?path_id=".$list['learnPath_id']."\">
           <img src=\"../../images/statistics.gif\" border=\"0\" alt=\"$langTracking\" />
           </a>
           </td>\n";
