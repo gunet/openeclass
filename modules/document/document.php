@@ -76,7 +76,6 @@ $diskQuotaDocument = $d['doc_quota'];
 
 if (@$action=="download")
  {
-    include('forcedownload.php');
 		$real_file = $webDir."/courses/".$currentCourseID."/document/".$id;
 		if (strpos($real_file, '/../') === FALSE) {
     	send_file_to_client($real_file, basename($id));
@@ -1375,7 +1374,7 @@ if($is_adminOfCourse) {
 
             echo "<tr align=\"center\"".$style.">\n";
             echo "<td align=\"left\">\n";
-            echo "<a href=\"".$urlFileName."\" target=_blank".$style.">\n";
+           echo "<a href=\"".$urlFileName."\" target=_blank".$style.">\n";
             echo "<img src=\"./img/".$image."\" border=0 hspace=5>\n";
             
             
