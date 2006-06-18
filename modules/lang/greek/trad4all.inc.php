@@ -64,7 +64,7 @@ $langHelp="Βοήθεια";
 $langOk="Επικύρωση";
 $langAddIntro="Προσθήκη εισαγωγικού κειμένου";
 $langBackList="Επιστροφή στη λίστα";
-$langUser = "Χρήστης";
+$langUser = "Χρήστης:";
 $langLogout = "Έξοδος";
 $langNoAdminAccess = '
 		<center><br><br><font face=\"arial, helvetica\" size=2>Η σελίδα

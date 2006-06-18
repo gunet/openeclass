@@ -92,6 +92,6 @@ $langHelp="Help";
 $langOk="Ok";
 $langAddIntro="Add introduction text";
 $langBackList="Return to the list";
-$langUser = "Login";
+$langUser = "User:";
 $langLogout = "Logout";
 ?>
