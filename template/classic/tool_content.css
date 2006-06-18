@@ -78,7 +78,7 @@ margin-right:2px;
 }
 
 table, th, td {
-	border: 1px solid #D4E0EE;
+	border: 1px solid #a2a2a3;
 	border-collapse: collapse;
 	font-family: Verdana, Arial, sans-serif;
 	font-size:12px;
@@ -134,7 +134,7 @@ table a:visited {
 
 table a:hover {
 	color: #718ABE;
-	text-decoration: underline !important;
+	text-decoration: underline !importantT;
 }
 
 tfoot th, tfoot td {
