@@ -130,14 +130,14 @@ if(!mysql_table_exists($mysqlMainDb, 'auth')) {
     `auth_instructions` text NOT NULL default '',
     `auth_default` tinyint( 1 ) NOT NULL default '0',
     PRIMARY KEY ( `auth_id` )) ",$mysqlMainDb); //TYPE = MYISAM  COMMENT='New table with auth methods in Eclass 2.0'
-	
-		// Insert the default values into the new table
-		db_query("INSERT INTO `auth` VALUES (1, 'eclass', '', '', 1)",$mysqlMainDb);
-		db_query("INSERT INTO `auth` VALUES (2, 'pop3', '', '', 0)",$mysqlMainDb);
-		db_query("INSERT INTO `auth` VALUES (3, 'imap', '', '', 0)",$mysqlMainDb);
-		db_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)",$mysqlMainDb);
-		db_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)",$mysqlMainDb);
-	}
+
+	// Insert the default values into the new table
+	db_query("INSERT INTO `auth` VALUES (1, 'eclass', '', '', 1)",$mysqlMainDb);
+	db_query("INSERT INTO `auth` VALUES (2, 'pop3', '', '', 0)",$mysqlMainDb);
+	db_query("INSERT INTO `auth` VALUES (3, 'imap', '', '', 0)",$mysqlMainDb);
+	db_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)",$mysqlMainDb);
+	db_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)",$mysqlMainDb);
+}
 
 
 //Table agenda (stores events from all lessons)
@@ -358,23 +358,23 @@ while ($code = mysql_fetch_row($res)) {
                 )", $code[0]);
 
 
-// -----------------------------------------------------
-// upgrade queries for e-Class 2.0
-// -----------------------------------------------------
+	// -----------------------------------------------------
+	// upgrade queries for e-Class 2.0
+	// -----------------------------------------------------
 
 
-//Move all non-expired events from lessons' agendas to the main agenda table
-//$tool_content .= "Μεταφορά γεγονότων στον πίνακα <b>$table</b>" . $agendaResult;
+	//Move all non-expired events from lessons' agendas to the main agenda table
+	//$tool_content .= "Μεταφορά γεγονότων στον πίνακα <b>$table</b>" . $agendaResult;
 
-$sql = 'SELECT id, titre, contenu, day, hour, lasting
+	$sql = 'SELECT id, titre, contenu, day, hour, lasting
                 FROM  agenda
                 WHERE CONCAT(titre,contenu) != \'\'
                 AND DATE_FORMAT(day,\'%Y %m %d\') >= \''.date("Y m d").'\'';
 
-//.  Get all agenda events from each table & parse them to arrays
-$mysql_query_result = db_query($sql, $code[0]);
-//$total_agenda_events_counter = 0;
-$event_counter=0;
+	//.  Get all agenda events from each table & parse them to arrays
+	$mysql_query_result = db_query($sql, $code[0]);
+	//$total_agenda_events_counter = 0;
+	$event_counter=0;
 	while ($myAgenda = mysql_fetch_array($mysql_query_result)) {
 		$lesson_agenda[$event_counter]['id']                  = $myAgenda[0];
 		$lesson_agenda[$event_counter]['title']               = $myAgenda[1];
@@ -388,8 +388,8 @@ $event_counter=0;
 		$event_counter++;
 	}
 
-		for ($j=0; $j <$event_counter; $j++) {
-					db_query("INSERT INTO agenda (lesson_event_id, titre, contenu, day, hour, lasting, lesson_code)
+	for ($j=0; $j <$event_counter; $j++) {
+		db_query("INSERT INTO agenda (lesson_event_id, titre, contenu, day, hour, lasting, lesson_code)
           VALUES ('".$lesson_agenda[$j]['id']."', 
                   '".$lesson_agenda[$j]['title']."', 
                   '".$lesson_agenda[$j]['content']."', 
@@ -398,9 +398,9 @@ $event_counter=0;
                   '".$lesson_agenda[$j]['duree']."',
                   '".$lesson_agenda[$j]['lesson_code']."'
                   )", $mysqlMainDb);
-		}
-// end of agenda
-		  
+	}
+	// end of agenda
+
 	$langLearnPath = "Γραμμή Μάθησης";
 	if (!mysql_table_exists($code[0], 'lp_module'))  {
 		db_query("CREATE TABLE `lp_module` (
@@ -580,33 +580,33 @@ $event_counter=0;
 	}
 	// End of table definitions for POLL module
 
-// table definitions for usage modules
+	// table definitions for usage modules
 
-if (!mysql_table_exists($code[0], 'actions')) {
-	db_query("CREATE TABLE actions (
+	if (!mysql_table_exists($code[0], 'actions')) {
+		db_query("CREATE TABLE actions (
 	        id int(11) NOT NULL auto_increment,
 					user_id int(11) NOT NULL,
 					module_id int(11) NOT NULL, 
 					action_type_id int(11) NOT NULL,																																									  date_time DATETIME NOT NULL default '0000-00-00 00:00:00',																													PRIMARY KEY (id))", $code[0]);	
 	}
 
-if (!mysql_table_exists($code[0], 'action_types')) {
-					db_query("CREATE TABLE action_types (
+	if (!mysql_table_exists($code[0], 'action_types')) {
+		db_query("CREATE TABLE action_types (
 						id int(11) NOT NULL auto_increment,
   	        name varchar(200),
 						PRIMARY KEY (id))", $code[0]);
 		db_query("INSERT INTO action_types VALUES ('1', 'access')", $code[0]);
 	}
 
-if (!mysql_table_exists($code[0], 'actions_summary')) {
-					db_query("CREATE TABLE actions_summary (
+	if (!mysql_table_exists($code[0], 'actions_summary')) {
+		db_query("CREATE TABLE actions_summary (
              id int(11) NOT NULL auto_increment,
              module_id int(11) NOT NULL,
              start_date DATETIME NOT NULL default '0000-00-00 00:00:00',
              end_date DATETIME NOT NULL default '0000-00-00 00:00:00',
              PRIMARY KEY (id))", $code[0]);
-		}
-		
+	}
+
 
 
 
@@ -693,8 +693,8 @@ if (!mysql_table_exists($code[0], 'actions_summary')) {
                 'MODULE_ID_POLL'
          )", $code[0]);
 
-// for usage module
-$langUsageModule = "Στατιστικά Χρήσης";
+	// for usage module
+	$langUsageModule = "Στατιστικά Χρήσης";
 	db_query("INSERT IGNORE INTO accueil VALUES (
                 '24',
                 '$langUsageModule',
@@ -705,7 +705,7 @@ $langUsageModule = "Στατιστικά Χρήσης";
                 '../../../images/pastillegris.png',
                 'MODULE_ID_USAGE')", $code[0]);
 
-								
+
 	//for tool management
 	$langToolManagement = "Διαχείριση εργαλείων";
 	db_query("INSERT IGNORE INTO accueil VALUES (
@@ -830,10 +830,37 @@ $langUsageModule = "Στατιστικά Χρήσης";
                     	$errors++;
                     }
 	}
-	
+
 	//Move Users module from public to course-admin tools
-	 $sql = 'UPDATE `accueil` SET `visible` = \'0\', `admin` = \'1\' WHERE `id` = 8 LIMIT 1';
-	 db_query($sql, $code[0]);
+	$sql = 'UPDATE `accueil` SET `visible` = \'0\', `admin` = \'1\' WHERE `id` = 8 LIMIT 1';
+	db_query($sql, $code[0]);
+
+	//set the new images for the icons of lesson modules
+	update_field("accueil", "image","calendar", "id", 		1);
+	update_field("accueil", "image","links", "id",	 		2);
+	update_field("accueil", "image","docs", "id",	 		3);
+	//id 4 is Video (this tool is to be removed)
+	update_field("accueil", "image","assignments", "id",	5);
+	update_field("accueil", "image","video", "id",	 		6);//vinteoskophmena ma8hmata
+	update_field("accueil", "image","announcements", "id",	7);
+	update_field("accueil", "image","users", "id", 			8);
+	update_field("accueil", "image","forum", "id", 			9);
+	update_field("accueil", "image","exercise", "id", 		10);
+	update_field("accueil", "image","stat", "id", 			11);
+	update_field("accueil", "image","import", "id", 		12);//(evelthon)i think this is to be removed ?
+	update_field("accueil", "image","external", "id",		13);
+	update_field("accueil", "image","course_info", "id",	14);
+	update_field("accueil", "image","groups", "id", 		15);
+	update_field("accueil", "image","dropbox", "id", 		16);
+
+	update_field("accueil", "image","chat", "id", 			19);
+	update_field("accueil", "image","description", "id",	20);
+	update_field("accueil", "image","survey", "id", 		21);
+	update_field("accueil", "image","poll", "id", 			22);
+	update_field("accueil", "image","lp", "id", 			23);
+	update_field("accueil", "image","usage", "id", 			24);
+	update_field("accueil", "image","tooladmin", "id", 		25);
+
 
 	// table stat_accueil
 	$sql = db_query("SELECT id,request FROM stat_accueil");
