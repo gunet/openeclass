@@ -52,10 +52,10 @@ include("include/baseTheme.php");
 
 //@include("./include/lib/main.lib.php");
 @include("./modules/auth/auth.inc.php");
-
-$require_help = true;
-$helpTopic="Clar2";
-$nameTools = "Καλωσορίσατε στο e-Class!";//Put it in a lang file
+//
+//$require_help = true;
+//$helpTopic="Clar2";
+$nameTools = $langWelcomeToEclass;//Put it in a lang file
 //$homePage is used by baseTheme.php
 //to parse correctly the breadcrumb.
 $homePage = true;
@@ -326,6 +326,8 @@ else unset($uid);
 // first case check in which courses are registered as a student
 if (isset($uid) AND !isset($logout)) {
 
+$require_help = true;
+$helpTopic="Clar2";
 	//$eclass_perso will be read from the db.
 	//keep as is for now
 //	$whatViewToLoad = "yes";
