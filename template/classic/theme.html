@@ -82,9 +82,9 @@
 
   <div id="firstBar"> 
 
-  	<span class="user">{LANG_USER}: {USER_NAME} {USER_SURNAME}</span>
+  	<span class="user">{LANG_USER} {USER_NAME} {USER_SURNAME}</span>
 
-    <span class="logout"><a class="logout_icon" href="{TOOL_PATH}index.php?logout=yes" title="{LANG_LOGOUT}"></a><a href="{LOGOUT_LINK}index.php?logout=yes" title="{LANG_LOGOUT}" >{LANG_LOGOUT}</a></span>
+    <span class="logout"><a class="{LOGOUT_CLASS_ICON}" href="{TOOL_PATH}index.php?logout=yes" title="{LANG_LOGOUT}"></a><a href="{LOGOUT_LINK}index.php?logout=yes" title="{LANG_LOGOUT}" >{LANG_LOGOUT}</a></span>
 
   </div>
 
@@ -158,15 +158,15 @@
 
 		</span>-->
 
-  		<span class="langSwitch"><a href="#" title="English" accesskey="l" target="_self">English</a></span>
+  		<span class="langSwitch"><a href="{LOCALIZE_LINK}" title="{LANG_LOCALIZE}" accesskey="l" target="_self">{LANG_LOCALIZE}</a></span>
 
   </div>
 
 	<div id="thirdBar">
 
-		<span class="lesson_icon"></span><span class="lesson">{LESSON_TITLE}</span>
+		<span class="{THIRDBAR_LEFT_ICON}"></span><span class="lesson">{THIRD_BAR_TEXT}</span>
 
-	  	<!-- <span class="search"> -->	<form name="form1" id="form1" method="post" action="../../modules/search/search.php">
+		{INV1} 	<form name="form1" id="form1" method="post" action="../../modules/search/search.php">
 
   									<input type="text" name="search_terms" />
 
@@ -174,7 +174,7 @@
 
 								</form>  
 
-		<!-- </span> -->
+		 {INV2}
 
 	  </div>
 
@@ -185,7 +185,7 @@
 	 <!--  <div id="content_mainHeader">Περιγραφή Μαθήματος</div> -->
 
 
-
+<div id="leftSub">
 	  <div id="leftnav"> 
 
 	  
@@ -210,9 +210,11 @@
 
 			</div>
 
-	  
 
 	  </div>
+	
+<p><strong>Χώρος για εικόνες.</strong> Αυτό θα χρησιμοποιείται μόνο στην αρχική σελίδα του e-Class! </p>
+</div>
 
 
 

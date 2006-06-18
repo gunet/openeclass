@@ -182,6 +182,19 @@ body {
 	overflow:visible;
 }
 
+.briefcase_icon
+{
+	float: left;
+	width: 16px;
+	height: 13px;
+	margin-top:0.5em;
+	margin-left: 0.6em;
+	background-image: url(img/briefcase.gif);
+	background-repeat: no-repeat;
+	//background-positionf: center left;
+	overflow:visible;
+}
+
 #bread {
 padding:0.6em;
 color: black;
@@ -347,7 +360,7 @@ background-colorr: red;
 #firstBar {
 		width:100%;
 		height: 25px;
-		background-color: #1a334d;1a334d
+		background-color: #1a334d;
 		//borderr: 1px solid #e6e6e6;
 		//border-bottomr: 1px solid #e6e6e6;
 		position:relative;
@@ -438,6 +451,12 @@ border-right: 1px solid #a2a2a3;
 border-left: 1px solid #a2a2a3;
 }
 
+#leftSub{
+float:left;
+clear:left;
+width:178px;
+
+}
  #thirdBar
 {
 float: left;
