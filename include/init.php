@@ -1,21 +1,22 @@
 <?
+//if(!session_id()) session_start();
 
 /*
- +----------------------------------------------------------------------+
- | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
- | Copyright (c) 2003 GUNet                                             |
- +----------------------------------------------------------------------+
- | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
- |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
- |          Christophe Gesche <gesche@ipm.ucl.ac.be>                    |
- |                                                                      |
- | e-class changes by: Costas Tsibanis <costas@noc.uoa.gr>              |
- |                     Yannis Exidaridis <jexi@noc.uoa.gr>              |
- |                     Alexandros Diamantidis <adia@noc.uoa.gr>         |
- +----------------------------------------------------------------------+
- | Standard header included by all e-class files                        |
- | Defines standard functions and validates variables                   |
- +----------------------------------------------------------------------+
++----------------------------------------------------------------------+
+| Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
+| Copyright (c) 2003 GUNet                                             |
++----------------------------------------------------------------------+
+| Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
+|          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
+|          Christophe Gesche <gesche@ipm.ucl.ac.be>                    |
+|                                                                      |
+| e-class changes by: Costas Tsibanis <costas@noc.uoa.gr>              |
+|                     Yannis Exidaridis <jexi@noc.uoa.gr>              |
+|                     Alexandros Diamantidis <adia@noc.uoa.gr>         |
++----------------------------------------------------------------------+
+| Standard header included by all e-class files                        |
+| Defines standard functions and validates variables                   |
++----------------------------------------------------------------------+
 */
 
 //Modify the relative path prefix according to the state of the system
@@ -50,7 +51,7 @@ include $relPathLib . "lib/main.lib.php";
 
 if (!session_id()) { session_start(); }
 
-// Set some defaults 
+// Set some defaults
 if (!isset($colorLight)) {
 	$colorLight	= "#F5F5F5";
 }
@@ -64,17 +65,46 @@ if (!isset($bannerPath)) {
 	$bannerPath = 'images/gunet/banner.jpg';
 }
 
+// Set user desired language
+if (isset($localize)) {
+
+	switch ($localize) {
+
+		case "en":
+			
+			$_SESSION['langswitch'] = "english";
+			$_SESSION['langLinkText'] = "Ελληνικά";
+			$_SESSION['langLinkURL'] = "?localize=el";
+			break;
+
+		case "el":
+			
+			$_SESSION['langswitch'] = "greek";
+			$_SESSION['langLinkText'] = "English";
+			$_SESSION['langLinkURL'] = "?localize=en";
+			break;
+
+		default:
+			die("Invalid language parameter passed");
+	}
+//	unset($localize);
+}
 // Get configuration variables
 if (!isset($webDir)) {
 	//path for logged out + logge in
-//    @include($pathOverride . "config/config.php");
+	//    @include($pathOverride . "config/config.php");
 
-//path for course_home
-		@include($relPath . "config/config.php");
-		if (!isset($webDir)) {
-			die("Unable to open configuration file,
+	//path for course_home
+	@include($relPath . "config/config.php");
+	if (!isset($webDir)) {
+		die("Unable to open configuration file,
 			please contact the system administrator");
-		}
+	}
+}
+if (session_is_registered('langswitch')) {
+	$language 		= $_SESSION['langswitch'];
+	$langChangeLang = $_SESSION['langLinkText'];
+	$switchLangURL 	= $_SESSION['langLinkURL'];
 }
 
 // Connect to database
@@ -107,18 +137,18 @@ if (isset($_SESSION['uid'])) {
 }
 
 if (isset($_SESSION["is_admin"]) and $_SESSION["is_admin"])
-	$is_admin = TRUE;
+$is_admin = TRUE;
 else
-	$is_admin = FALSE;
+$is_admin = FALSE;
 
 if (isset($require_login) and $require_login and !$uid) {
-	exit("Session is lost. Please go back to <a href='../index.php' "."target='_top'>course homepage</a> 
+	exit("Session is lost. Please go back to <a href='../index.php' "."target='_top'>course homepage</a>
 and refresh");
 }
 
 if (isset($require_prof) and $require_prof) {
-	if (!check_prof()) 
-		exit("You are not allowed to proceed this action.
+	if (!check_prof())
+	exit("You are not allowed to proceed this action.
 		Please go back to <a href='../index.php' "."target='_top'>course homepage</a> and refresh");
 }
 
@@ -131,24 +161,24 @@ if (isset($require_current_course) and $require_current_course) {
 	// Work around bug in some versions of PHP - session registered
 	// variables aren't immediately available in $HTTP_SESSION_VARS[]
 	if (session_is_registered('dbname') and
-	    !isset($_SESSION['dbname'])) {
-				$HTTP_SESSION['dbname'] = $dbname;
+	!isset($_SESSION['dbname'])) {
+		$HTTP_SESSION['dbname'] = $dbname;
 	}
 	if (!isset($_SESSION['dbname'])) {
 		exit("Session is lost. Please go back to <a href='../index.php' ".
-			"target='_top'>course homepage</a> and refresh");
+		"target='_top'>course homepage</a> and refresh");
 	} else {
 		$dbname = $_SESSION['dbname'];
 	}
 	$currentCourse = $dbname;
-	
+
 	$result = db_query("
 		SELECT code, fake_code, intitule, faculte, 
 			titulaires, languageCourse, 
 			departmentUrlName, departmentUrl, visible
 		FROM cours
 		WHERE cours.code='$currentCourse'");
-	
+
 	while ($theCourse = mysql_fetch_array($result)) {
 		$fake_code 	= $theCourse["fake_code"];
 		$code_cours = $theCourse["code"];
@@ -159,7 +189,7 @@ if (isset($require_current_course) and $require_current_course) {
 		$departmentUrl= $theCourse["departmentUrl"];
 		$departmentUrlName= $theCourse["departmentUrlName"];
 		$visible = $theCourse['visible'];
-	  // New variables
+		// New variables
 		$currentCourseCode				= $fake_code ;
 		$currentCourseID				= $code_cours;
 		$currentCourseName				= $intitule;
@@ -167,7 +197,7 @@ if (isset($require_current_course) and $require_current_course) {
 		$currentCourseTitular 			= $titulaires;
 		$currentCourseLanguage			= $languageInterface;
 		$currentCourseDepartmentUrl		= $departmentUrl;
-		$currentCourseDepartmentUrlName	= $departmentUrlName; 
+		$currentCourseDepartmentUrlName	= $departmentUrlName;
 	}
 	if (!isset($code_cours) or empty($code_cours)) {
 		exit("This course doesn't exist");
@@ -219,7 +249,7 @@ if (isset($require_current_course) and $require_current_course) {
 		}
 		$language = $languageInterface ;
 	}
-} 
+}
 
 
 
@@ -227,7 +257,7 @@ if (isset($require_current_course) and $require_current_course) {
 // When all script use $is_adminOfCourse, it's easier to implement
 // multi-level admin access
 
-// actually a prof has $status 1 or 2 
+// actually a prof has $status 1 or 2
 
 // the system admin has uid=1
 if ($uid == 1) {
@@ -238,14 +268,11 @@ if ($uid == 1) {
 if (isset($_SESSION['status'])) {
 	$status = $_SESSION['status'];
 	if (isset($currentCourse) and
-		($status[$currentCourse] == 1 or $status[$currentCourse] == 2)) {
+	($status[$currentCourse] == 1 or $status[$currentCourse] == 2)) {
 		$is_adminOfCourse = TRUE;
 	}
 } else {
 	unset($status);
 }
-
-
-
 
 ?>
