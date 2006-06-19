@@ -46,7 +46,7 @@ $helpTopic 				= 'Usage';
 include '../../include/baseTheme.php';
 include('../../include/action.php');
 $action = new action();
-$action->record(MODULE_ID_USAGE);
+$action->record('MODULE_ID_USAGE');
 
 $tool_content = '';
 
