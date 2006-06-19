@@ -94,19 +94,17 @@ $langUsers="Users";
 $langForums="Forums";
 $langExercices="Exercices";
 $langStatistics="Statistics";
-$langAddPageHome="Upload page and link to Homepage";
+$langAddPageHome="Upload Webpage";
 $langLinkSite="Add link on Homepage";
-$langModifyInfo="Modify course info";
+$langModifyInfo="Lesson Admin";
 $langDropBox = "DropBox";
 $langLearnPath = "Learning Path";
 $langToolManagement = "Tool management";
 $langUsage ="Usage statistics";
+$langGroups="Groups";
 
 
 // Other SQL tables
-$langAgendaTitle="Tuesday the 11th of December - First lesson : Newton 18";
-$langAgendaText="General introduction to philosophy and methodology principles";
-$langMicro="Street interviews";
 $langVideoText="This is an example of a RealVideo file. You can upload any audio and video file type (.mov, .rm, .mpeg...), as far as your students have the corresponding plug-in to read them";
 $langGoogle="Quick and powerfull search engine";
 $langIntroductionText="This is the introduction text of your course. To replace it by your own text, click below on <b>modify</b>.";
@@ -119,7 +117,6 @@ $langEnter="Back to my courses list";
 $langMillikan="Millikan experiment";
 $langCourseDesc = "Course description";
  // Groups
-$langGroups="Groups";
 $langCreateCourseGroups="Groups";
 $langCatagoryMain="Main";
 $langCatagoryGroup="Groups forums";
