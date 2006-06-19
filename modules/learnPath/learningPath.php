@@ -119,6 +119,7 @@ $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 
 $tool_content .= "\n".'<br />'."\n"
   	.'<table width="99%">'."\n"
+  	.'<thead>'."\n"
 	.'<tr align="center" valign="top">'."\n"
 	.'<th colspan="'.($maxDeep+1).'">'.$langModule.'</th>'."\n";
 
@@ -129,7 +130,7 @@ if ( $uid )
     $tool_content .= '<th colspan="2">'.$langProgress.'</th>'."\n";
 }
 
-$tool_content .= '</tr>'."\n\n"
+$tool_content .= '</tr></thead>'."\n\n"
 	.'<tbody>'."\n\n";
 
    
@@ -197,7 +198,7 @@ foreach ($flatElementList as $module)
     {
         if($module['contentType'] == CTEXERCISE_ ) 
         {
-            $moduleImg = 'quiz.gif';
+            $moduleImg = 'quiz.png';
         }
         else
         {
@@ -234,7 +235,7 @@ foreach ($flatElementList as $module)
     {
         if($module['contentType'] == CTEXERCISE_ ) 
         {
-            $moduleImg = 'quiz.gif';
+            $moduleImg = 'quiz.png';
         }
         else
         {

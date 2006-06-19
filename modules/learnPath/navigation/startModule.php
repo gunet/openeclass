@@ -140,9 +140,10 @@ switch ($module['contentType'])
 		session_unregister('exerciseResult');
 		session_unregister('exeStartTime');
 
-		$_SESSION['inPathMode'] = true;
-		$startAssetpage = $urlServer.'/modules/'.'exercice/exercice_submit.php';
-		$moduleStartAssetPage = $startAssetpage."?exerciseId=".$assetPath;
+		//$_SESSION['inPathMode'] = true;
+		//$startAssetpage = $urlServer.'/modules/'.'exercice/exercice_submit.php';
+		//$moduleStartAssetPage = $startAssetpage."?exerciseId=".$assetPath;
+		$moduleStartAssetPage = "showExercise.php?exerciseId=".$assetPath;
 		break;
 	case CTSCORM_ :
 		// real scorm content method

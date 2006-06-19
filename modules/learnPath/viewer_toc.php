@@ -98,7 +98,7 @@ $nextModule = ""; // module id that will be used in the next link
 foreach ($flatElementList as $module)
 {
 	if($module['contentType'] == CTEXERCISE_ )
-		$moduleImg = 'quiz.gif';
+		$moduleImg = 'quiz.png';
 	else
 		$moduleImg = choose_image(basename($module['path']));
 

@@ -170,7 +170,7 @@ foreach ($flatElementList as $module)
 	else
 	{
 		if($module['contentType'] == CTEXERCISE_ )
-		$moduleImg = "quiz.gif";
+		$moduleImg = "quiz.png";
 		else
 		$moduleImg = choose_image(basename($module['path']));
 
