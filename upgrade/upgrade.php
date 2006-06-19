@@ -835,6 +835,12 @@ while ($code = mysql_fetch_row($res)) {
 	$sql = 'UPDATE `accueil` SET `visible` = \'0\', `admin` = \'1\' WHERE `id` = 8 LIMIT 1';
 	db_query($sql, $code[0]);
 
+// update messages
+  $langModifyInfoNew = "Διαχείριση Μαθήματος";
+	$langAddPageHomeNew= "Ανέβασμα Ιστοσελίδας";
+  update_field("accueil", "rubrique", "$langModifyInfoNew", "id", 14);
+  update_field("accueil", "rubrique", "$langAddPageHomeNew", "id", 12);
+
 	//set the new images for the icons of lesson modules
 	update_field("accueil", "image","calendar", "id", 		1);
 	update_field("accueil", "image","links", "id",	 		2);
