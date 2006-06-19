@@ -113,7 +113,9 @@ function doInitialize()
    var api = getAPIHandle();
    if (api == null)
    {
-      alert("Unable to locate the LMS's API Implementation.\nInitialize was not successful.");
+      if (_Debug == true) {
+        alert("Unable to locate the LMS's API Implementation.\nInitialize was not successful.");
+      }
       return "false";
    }
 
@@ -144,7 +146,9 @@ function doTerminate()
    var api = getAPIHandle();
    if (api == null)
    {
-      alert("Unable to locate the LMS's API Implementation.\nTerminate was not successful.");
+      if (_Debug == true) {
+        alert("Unable to locate the LMS's API Implementation.\nTerminate was not successful.");
+      }
       return "false";
    }
    else
@@ -180,7 +184,9 @@ function doGetValue(name)
    var api = getAPIHandle();
    if (api == null)
    {
-      alert("Unable to locate the LMS's API Implementation.\nGetValue was not successful.");
+      if (_Debug == true) {
+        alert("Unable to locate the LMS's API Implementation.\nGetValue was not successful.");
+      }
       return "";
    }
    else
@@ -191,7 +197,9 @@ function doGetValue(name)
       {
          // an error was encountered so display the error description
          var errDescription = api.GetErrorString(errCode);
-         alert("GetValue("+name+") failed. \n"+ errDescription);
+         if (_Debug == true) {
+           alert("GetValue("+name+") failed. \n"+ errDescription);
+         }
          return "";
       }
       else
@@ -219,7 +227,9 @@ function doSetValue(name, value)
    var api = getAPIHandle();
    if (api == null)
    {
-      alert("Unable to locate the LMS's API Implementation.\nSetValue was not successful.");
+      if (_Debug == true) {
+        alert("Unable to locate the LMS's API Implementation.\nSetValue was not successful.");
+      }
       return;
    }
    else
@@ -249,7 +259,9 @@ function doCommit()
    var api = getAPIHandle();
    if (api == null)
    {
-      alert("Unable to locate the LMS's API Implementation.\nCommit was not successful.");
+      if (_Debug == true) {
+        alert("Unable to locate the LMS's API Implementation.\nCommit was not successful.");
+      }
       return "false";
    }
    else
@@ -279,7 +291,9 @@ function doGetLastError()
    var api = getAPIHandle();
    if (api == null)
    {
-      alert("Unable to locate the LMS's API Implementation.\nGetLastError was not successful.");
+      if (_Debug == true) {
+        alert("Unable to locate the LMS's API Implementation.\nGetLastError was not successful.");
+      }
       //since we can't get the error code from the LMS, return a general error
       return _GeneralError;
    }
@@ -302,7 +316,9 @@ function doGetErrorString(errorCode)
    var api = getAPIHandle();
    if (api == null)
    {
-      alert("Unable to locate the LMS's API Implementation.\nGetErrorString was not successful.");
+      if (_Debug == true) {
+        alert("Unable to locate the LMS's API Implementation.\nGetErrorString was not successful.");
+      }
    }
 
    return api.GetErrorString(errorCode).toString();
@@ -324,7 +340,9 @@ function doGetDiagnostic(errorCode)
    var api = getAPIHandle();
    if (api == null)
    {
-      alert("Unable to locate the LMS's API Implementation.\nGetDiagnostic was not successful.");
+      if (_Debug == true) {
+        alert("Unable to locate the LMS's API Implementation.\nGetDiagnostic was not successful.");
+      }
    }
 
    return api.GetDiagnostic(errorCode).toString();
@@ -347,7 +365,9 @@ function ErrorHandler()
    var api = getAPIHandle();
    if (api == null)
    {
-      alert("Unable to locate the LMS's API Implementation.\nCannot determine LMS error code.");
+      if (_Debug == true) {
+        alert("Unable to locate the LMS's API Implementation.\nCannot determine LMS error code.");
+      }
       return;
    }
 
@@ -366,7 +386,9 @@ function ErrorHandler()
          // on the previous error.
       }
 
-      alert(errDescription);
+      if (_Debug == true) {
+        alert(errDescription);
+      }
    }
 
    return errCode;
@@ -412,7 +434,9 @@ function findAPI(win)
       
       if (findAPITries > 500) 
       {
-         alert("Error finding API -- too deeply nested.");
+         if (_Debug == true) {
+           alert("Error finding API -- too deeply nested.");
+         }
          return null;
       }
       
@@ -445,7 +469,9 @@ function getAPI()
    }
    if (theAPI == null)
    {
-      alert("Unable to find an API adapter");
+      if (_Debug == true) {
+        alert("Unable to find an API adapter");
+      }
    }
    return theAPI
 }
