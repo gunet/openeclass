@@ -155,95 +155,64 @@ if(!isset($_GET["finish_create_course"])) {
 
     <tr>
     <td colspan=\"4\">
-        <table bgcolor=\"$color1\" border=\"2\">
-            <tr>
-                <td valign=\"top\" align=\"right\">
-                    <font face=\"arial, helvetica\" size=\"2\"><b>Τύπος πρόσβασης:</b></font>
-                </td>
-                <td valign=\"top\">
-                    <font face=\"arial, helvetica\" size=\"2\">
-                        <fieldset>
-                              <legend>Διαθέσιμοι τύποι πρόσβασης </legend>
-                              <p>
-                            <input name=\"formvisible\" type=\"radio\" value=\"2\" checked=\"checked\" /> $langPublic <br />
-                              <input name=\"formvisible\" type=\"radio\" value=\"1\" /> $langPrivOpen <br />
-                              <input name=\"formvisible\" type=\"radio\" value=\"0\" /> $langPrivate
-                              </p>
-                          </fieldset>
-                          $langFieldsRequAsterisk<br>$langAccessType
-                    </font>
-                </td>";
-                    help("CreateCourse_formvisible");
-echo "
-            </tr>
-            <tr>
-                <td valign=\"top\" align=\"right\">
-                    <font face=\"arial, helvetica\" size=\"2\"><b>Υποσυστήματα:</b></font>
-                </td>
-                <td valign=\"top\">
-                    <font face=\"arial, helvetica\" size=\"2\">
-                            <table border=\"1\">
-                                <tr>
-                                  <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"1\" checked=\"checked\" />
-                                  $langAgenda</td>
-                                  <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"2\" checked=\"checked\" />
-                                  $langLinks</td>
-                                  <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"3\" checked=\"checked\" />
-                                  $langDoc</td>
-                                  <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"4\" checked=\"checked\" />
-                            $langVideo</td>
-                                </tr>
-                                <tr>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"5\" />
-                            $langWorks</td>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"6\" />
-                                  $langVideoLinks</td>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"7\" />
-                                  $langAnnouncements</td>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"8\" />
-                            $langUsers</td>
-                                </tr>
-                                <tr>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"9\" />
-                            $langForums</td>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"10\" />
-                                    $langExercices</td>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"11\" />
-                                  $langStatistics</td>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"16\" />
-                                  $langDropBox</td>
-                                </tr>
+    <table bgcolor=\"$color1\" border=\"2\">
+    <tr>
+    <td valign=\"top\" align=\"right\">
+    <font face=\"arial, helvetica\" size=\"2\"><b>Τύπος πρόσβασης:</b></font>
+    </td>
+    <td valign=\"top\">
+    <font face=\"arial, helvetica\" size=\"2\">
+    <fieldset>
+    <legend>Διαθέσιμοι τύποι πρόσβασης</legend>
+    <p>
+    <input name=\"formvisible\" type=\"radio\" value=\"2\" checked=\"checked\" />$langPublic<br />
+    <input name=\"formvisible\" type=\"radio\" value=\"1\" />$langPrivOpen<br />
+    <input name=\"formvisible\" type=\"radio\" value=\"0\" />$langPrivate</p>
+    </fieldset>
+    $langFieldsRequAsterisk<br>$langAccessType
+    </font>
+    </td>";
+    help("CreateCourse_formvisible");
 
-                                  <tr>
-                                <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" />
-                                  $langCourseDesc</td>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"15\" />
-                                  $langGroups</td>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"19\" />
-                                  $langChat</td>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"21\" />
-                                  $langSurvey</td>
-                                </tr>
-
-                                <tr>
-                                <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"22\" />
-                                  $langPoll</td>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\"  value=\"23\" checked=\"checked\" />$langLearnPath</td>
-                                  <td><input type=\"checkbox\" name=\"subsystems[]\"  value=\"24\" />$langUsage</td>
-                                  <td>&nbsp;</td>
-                                </tr>
-
-                              </table>
-                              <br>$langSubsystems
-
-                </td>
-                ";
-                    help("CreateCourse_subsystems");
-echo "
-
-    </td></tr>
-
-
+		echo "
+  		</tr>
+      <tr>
+      <td valign=\"top\" align=\"right\">
+      <font face=\"arial, helvetica\" size=\"2\"><b>Υποσυστήματα:</b></font>
+      </td>
+      <td valign=\"top\">
+      <font face=\"arial, helvetica\" size=\"2\">
+      <table border=\"1\">
+      <tr>
+      <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"1\" checked=\"checked\" />$langAgenda</td>
+      <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"2\" checked=\"checked\" />$langLinks</td>
+      <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"3\" checked=\"checked\" />$langDoc</td>
+      <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"4\" checked=\"checked\" />$langVideo</td>
+      </tr>
+      <tr>
+      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"5\" />$langWorks</td>
+      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"6\" />$langVideoLinks</td>
+      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"7\" />$langAnnouncements</td>
+      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"9\" />$langForums</td>
+      </tr>
+      <tr>
+      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"10\" />$langExercices</td>
+      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"15\" />$langDropBox</td>
+      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"16\" />$langGroups</td>
+      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"19\" />$langChat</td>
+      </tr>
+      <tr>
+      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" />$langCourseDesc</td>
+      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"21\" />$langSurvey</td>
+      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"22\" />$langPoll</td>
+      <td><input type=\"checkbox\" name=\"subsystems[]\"  value=\"23\" checked=\"checked\" />$langLearnPath</td>
+      </tr>
+      </table>
+      <br>$langSubsystems
+      </td>
+      ";
+       help("CreateCourse_subsystems");
+echo "</td></tr>
     <tr><td align=\"right\"><font face=\"arial, helvetica\" size=\"2\"><b>$langLn:</b></font></td>
     <td>
 <select name=\"languageCourse\">";
@@ -252,7 +221,7 @@ if($dirname[strlen($dirname)-1]!='/')
     $dirname.='/';
 $handle=opendir($dirname);
 while ($entries = readdir($handle)) {
-    if ($entries=='.'||$entries=='..'||$entries=='CVS')
+    if ($entries=='.'||$entries=='..' || $entries=='CVS')
         continue;
     if (is_dir($dirname.$entries)) {
         echo "<option value=\"$entries\"";
@@ -272,11 +241,7 @@ echo "</select><br><font face=\"arial, helvetica\" size=\"2\">$langLanguageTip</
 help("CreateCourse_lang");
 
 echo "</tr>
-
-    <tr>
-        <td>
-            &nbsp;
-        </td>
+    <tr><td>&nbsp;</td>
         <td align=\"left\">
             <input type=\"button\" name=\"button\" value=\"$langPreviousStep\" onclick=\"previous_step();\">
         </td>
@@ -288,26 +253,15 @@ echo "</tr>
     </td>
     </tr>
 
-
-        </table>
+</table>
     </td>
     </tr>
-
 </form>";
 
-}   // IF ! SUBMIT
+}   // end of if.. submit
 
-###########################################################################
-####################SORT THE FORM #########################################
-###########################################################################
 
-###########################################################################
-#### 1. CHECK IF DIRECTORY/COURSE_CODE ALREADY TAKEN ######################
-###########################################################################
-
-###########################################################################
-####### CREATE THE COURSE AND THE DATABASE OF IT ##########################
-###########################################################################
+// create the course and the course database
 
 else {
 
@@ -330,11 +284,11 @@ else {
         </td>
     </tr>";
     } else {	// if all form fields fulfilled
-        // replace lower case letters by upper case in code_cours md 2121 > MD 2121
+        // replace lower case letters by upper case in code_cours
         $repertoire=strtoupper($repertoire);
         $faculte_lower=strtolower($faculte);
 
-        //remove space in code_cours > MD 2121 > MD2121
+        //remove space in code_cours 
         $repertoire = str_replace (" ", "", $repertoire);
         $repertoire_lower=strtolower($repertoire);
 
@@ -363,9 +317,7 @@ else {
             $cdb=mysql_query("CREATE DATABASE `$repertoire`");
         $code=$repertoire;
 
-##############################################################################
-######## CREATE AND POPULATE TABLES FORUM PHPBB 1.4 www.phpbb.com #######
-##############################################################################
+// create phpbb 1.4 tables
 
         mysql_select_db($repertoire);
         if (mysql_version()) {
@@ -1558,18 +1510,7 @@ mysql_query("CREATE TABLE accueil (
                '../../../images/pastillegris.png',
                'MODULE_ID_ANNOUNCE'
                )");
-	//@From Evelthon: this tool is supposed to be viewed by professors
-	//Change logic accordingly
-    mysql_query("INSERT INTO accueil VALUES (
-        '8',
-        '$langUsers',
-        '../../modules/user/user.php',
-        'users',
-        '0',
-        '1',
-        '../../../images/pastillegris.png',
-        'MODULE_ID_USERS'
-        )");
+    
 
     mysql_query("INSERT INTO accueil VALUES (
                '9',
@@ -1615,10 +1556,86 @@ mysql_query("CREATE TABLE accueil (
         'MODULE_ID_DROPBOX'
         )");
 
-    //TODO: na prosthethoun erwthmata gia ta modules: Grammh mathisis kai Diaxeirish ergaleiwn
+    mysql_query("INSERT INTO accueil VALUES (
+                '19',
+                '$langChat',
+                '../../modules/chat/chat.php',
+                'chat',
+                '".$sbsystems[19]."',
+                '0',
+                '../../../images/pastillegris.png',
+                'MODULE_ID_CHAT'
+                )");
 
+    mysql_query("INSERT INTO accueil VALUES (
+               '20',
+               '$langCourseDesc',
+               '../../modules/course_description/',
+               'description',
+               '".$sbsystems[20]."',
+               '0',
+               '../../../images/pastillegris.png',
+               'MODULE_ID_DESCRIPTION'
+               )");
+
+
+    mysql_query("INSERT INTO accueil VALUES (
+                '21',
+                '$langSurvey',
+                '../../modules/survey/survey.php',
+                'survey',
+                '".$sbsystems[21]."',
+                '0',
+                '../../../images/pastillegris.png',
+                'MODULE_ID_SURVEY'
+                )");
+								
+    mysql_query("INSERT INTO accueil VALUES (
+                '22',
+                '$langPoll',
+                '../../modules/poll/poll.php',
+                'poll',
+                '".$sbsystems[22]."',
+                '0',
+                '../../../images/pastillegris.png',
+                'MODULE_ID_POLL'
+                )");
+								
+    mysql_query("INSERT INTO accueil VALUES (
+               '23',
+               '$langLearnPath',
+               '../../modules/learnPath/learningPathList.php',
+               'lp',
+               '".$sbsystems[23]."',
+               '0',
+               '../../../images/pastillegris.png',
+               'MODULE_ID_LP'
+               )");
+
+    mysql_query("INSERT INTO accueil VALUES (
+               25,
+               '$langToolManagement',
+               '../../modules/course_tools/course_tools.php',
+               'tooladmin',
+               '0',
+               '1',
+               '../../../images/pastillegris.png',
+               'MODULE_ID_TOOLADMIN'
+               )");
+							 
 #####################ACCUEIL - PROF ONLY ######################################
 
+		mysql_query("INSERT INTO accueil VALUES (
+        '8',
+        '$langUsers',
+        '../../modules/user/user.php',
+        'users',
+        '0',
+        '1',
+        '',
+        'MODULE_ID_USERS'
+        )");
+				
     mysql_query("INSERT INTO accueil VALUES (
                '11',
                '$langStatistics',
@@ -1663,71 +1680,7 @@ mysql_query("CREATE TABLE accueil (
                'MODULE_ID_COURSEINFO'
                )");
 
-    mysql_query("INSERT INTO accueil VALUES (
-                '19',
-                '$langChat',
-                '../../modules/chat/chat.php',
-                'chat',
-                '".$sbsystems[19]."',
-                '0',
-                '../../../images/pastillegris.png',
-                'MODULE_ID_CHAT'
-                )");
 
-    mysql_query("INSERT INTO accueil VALUES (
-               '20',
-               '$langCourseDesc',
-               '../../modules/course_description/',
-               'description',
-               '".$sbsystems[20]."',
-               '0',
-               '../../../images/pastillegris.png',
-               'MODULE_ID_DESCRIPTION'
-               )");
-
-    mysql_query("INSERT INTO accueil VALUES (
-                '21',
-                '$langSurvey',
-                '../../modules/survey/survey.php',
-                'survey',
-                '".$sbsystems[21]."',
-                '0',
-                '../../../images/pastillegris.png',
-                'MODULE_ID_SURVEY'
-                )");
-
-    mysql_query("INSERT INTO accueil VALUES (
-                '22',
-                '$langPoll',
-                '../../modules/poll/poll.php',
-                'poll',
-                '".$sbsystems[22]."',
-                '0',
-                '../../../images/pastillegris.png',
-                'MODULE_ID_POLL'
-                )");
-
-    mysql_query("INSERT INTO accueil VALUES (
-               '23',
-               '$langLearnPath',
-               '../../modules/learnPath/learningPathList.php',
-               'lp',
-               '".$sbsystems[23]."',
-               '0',
-               '../../../images/pastillegris.png',
-               'MODULE_ID_LP'
-               )");
-
-    mysql_query("INSERT INTO accueil VALUES (
-               25,
-               '$langToolManagement',
-               '../../modules/course_tools/course_tools.php',
-               'tooladmin',
-               '0',
-               '1',
-               '../../../images/pastillegris.png',
-               'MODULE_ID_TOOLADMIN'
-               )");
 
 require_once("../usage/module.php");
 $usage_mod = new usage_module();
