@@ -9,6 +9,9 @@ Header
 Initializations
 ****************/
 
+require_once("../../include/lib/learnPathLib.inc.php");
+require_once("../../include/lib/fileDisplayLib.inc.php");
+
 $require_current_course = TRUE;
 $langFiles = "learnPath";
 
@@ -25,15 +28,16 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 // exercises table name
 $TABLEEXERCISES         = "exercices";
 
-require_once("../../include/init.php");
-require_once("../../include/lib/learnPathLib.inc.php");
-require_once("../../include/lib/fileDisplayLib.inc.php");
+$imgRepositoryWeb = "../../images/";
+
+require_once("../../include/baseTheme.php");
+$head_content = "";
+$tool_content = "";
 
 $nameTools = $langInsertMyExerciseToolName;
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
 $navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langLearningPathAdmin);
 
-$imgRepositoryWeb = "../../images/";
 $is_AllowedToEdit = $is_adminOfCourse;
 
 if ( ! $is_AllowedToEdit ) die($langNotAllowed);
@@ -44,9 +48,6 @@ if ( !isset($_SESSION['path_id']) )
       die ("<center> Not allowed ! (path_id not set :@ )</center>");
 }
 
-begin_page();
-
-echo "</td></tr></table>";
 mysql_select_db($currentCourseID);
 
 /* ---------------------------------------------------------- */
@@ -90,11 +91,18 @@ while ($listex = mysql_fetch_array($resultex) )
 
             $result = db_query($sql);
             $exercise = mysql_fetch_array($result);
+            
+            if( !empty($exercise['description']) ) {
+            	$comment = $exercise['description'];
+            }
+            else {
+            	$comment = $langDefaultModuleComment;
+            }
 
             // create new module
             $sql = "INSERT INTO `".$TABLEMODULE."`
                     (`name` , `comment`, `contentType`, `launch_data`)
-                    VALUES ('".addslashes($exercise['titre'])."' , '".addslashes($langDefaultModuleComment)."', '".CTEXERCISE_."','')";
+                    VALUES ('".addslashes($exercise['titre'])."' , '".addslashes($comment)."', '".CTEXERCISE_."','')";
             $query = db_query($sql);
 
             $insertedExercice_id = mysql_insert_id();
@@ -125,6 +133,7 @@ while ($listex = mysql_fetch_array($resultex) )
             $query = db_query($sql);
 
             $dialogBox .= $exercise['titre'] ." :  ".$langExInsertedAsModule."<br>";
+            $style = "success";
         }
         else    // exercise is already used as a module in another learning path , so reuse its reference
         {
@@ -166,23 +175,27 @@ while ($listex = mysql_fetch_array($resultex) )
                 $result = db_query($sql);
                 $exercise = mysql_fetch_array($result);
                 $dialogBox .= $exercise['titre']." : ".$langExInsertedAsModule."<br>";
+                $style = "success";
             }
             else
             {
                 $dialogBox .= $listex['titre']." : ".$langExAlreadyUsed."<br>";
+                $style = "caution";
             }
         }
     }
 } //end while
 
 //STEP ONE : display form to add an exercise
-display_my_exercises($dialogBox);
+$tool_content .= display_my_exercises($dialogBox, $style);
 
 //STEP TWO : display learning path content
-echo claro_disp_tool_title($langPathContentTitle);
-echo '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
+$tool_content .= claro_disp_tool_title($langPathContentTitle);
+$tool_content .= '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
 
 // display list of modules used by this learning path
-display_path_content();
+$tool_content .= display_path_content();
+
+draw($tool_content, 2, "learnPath");
 
 ?>

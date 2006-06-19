@@ -17,7 +17,7 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-$TOCurl = "tableOfContent.php"; 
+$TOCurl = "../viewer_toc.php"; 
 
 /*********************/
 /* HANDLING API FORM */

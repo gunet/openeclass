@@ -141,7 +141,7 @@ switch ($module['contentType'])
 		session_unregister('exeStartTime');
 
 		$_SESSION['inPathMode'] = true;
-		$startAssetpage = $clarolineRepositoryWeb."exercice/exercice_submit.php";
+		$startAssetpage = $urlServer.'/modules/'.'exercice/exercice_submit.php';
 		$moduleStartAssetPage = $startAssetpage."?exerciseId=".$assetPath;
 		break;
 	case CTSCORM_ :

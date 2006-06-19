@@ -34,17 +34,21 @@ require_once("../../include/lib/fileUploadLib.inc.php");
 require_once("../../include/pclzip/pclzip.lib.php");
 require_once('../../include/lib/textLib.inc.php');
 
-/*$tbl_cdb_names = claro_sql_get_course_tbl();
-$tbl_quiz_test              = $tbl_cdb_names['quiz_test'             ];
+
+$TBL_EXERCICES              = 'exercices';
+$TBL_EXERCICE_QUESTION      = 'exercice_question';
+$TBL_QUESTIONS              = 'questions';
+$TBL_REPONSES               = 'reponses';
+/*$tbl_quiz_test              = $tbl_cdb_names['quiz_test'             ];
 $tbl_quiz_rel_test_question = $tbl_cdb_names['quiz_rel_test_question'];
 $tbl_quiz_question          = $tbl_cdb_names['quiz_question'         ];
 $tbl_quiz_answer            = $tbl_cdb_names['quiz_answer'           ];*/
 
 
-/*require_once('../exercice/exercise.class.php');
+require_once('../exercice/exercise.class.php');
 require_once('../exercice/question.class.php');
 require_once('../exercice/answer.class.php');
-require_once('../exercice/exercise.lib.php');*/
+require_once('../exercice/exercise.lib.php');
 
 define('UNIQUE_ANSWER',   1);
 define('MULTIPLE_ANSWER', 2);
@@ -295,7 +299,7 @@ class ScormExport
         <tr><td valign="top" colspan="2"><i>' . claro_parse_user_text($qdescription) . '</i></td></tr>' . "\n";
             
             // Attached file, if it exists.
-            $attachedFile = $question->selectAttachedFile();
+            //$attachedFile = $question->selectAttachedFile();
             if ( !empty($attachedFile))
             {
                 // copy the attached file
@@ -572,34 +576,34 @@ class ScormExport
 		{
 	        rawScore = CalculateRawScore(document, ' . $idCounter . ', fillAnswerList);
 	        var score = Math.max(Math.round(rawScore * 100 / weighting), 0);
-	        var oldScore = doLMSGetValue("cmi.core.score.raw");
+	        var oldScore = doGetValue("cmi.core.score.raw");
 
-	        doLMSSetValue("cmi.core.score.max", weighting);
-	        doLMSSetValue("cmi.core.score.min", 0);
+	        doSetValue("cmi.core.score.max", weighting);
+	        doSetValue("cmi.core.score.min", 0);
 
 	        computeTime();
 
 	        if (score > oldScore) // Update only if score is better than the previous time.
 	        {
-	            doLMSSetValue("cmi.core.score.raw", rawScore);
+	            doSetValue("cmi.core.score.raw", rawScore);
 	        }
 
-	        var mode = doLMSGetValue( "cmi.core.lesson_mode" );
+	        var mode = doGetValue( "cmi.core.lesson_mode" );
 	        if ( mode != "review"  &&  mode != "browse" )
 	        {
-	            var oldStatus = doLMSGetValue( "cmi.core.lesson_status" )
+	            var oldStatus = doGetValue( "cmi.core.lesson_status" )
 	            if (score >= raw_to_pass)
 	            {
-	                doLMSSetValue("cmi.core.lesson_status", "passed");
+	                doSetValue("cmi.core.lesson_status", "passed");
 	            }
 	            else if (oldStatus != "passed" ) // If passed once, never mark it as failed.
 	            {
-	                doLMSSetValue("cmi.core.lesson_status", "failed");
+	                doSetValue("cmi.core.lesson_status", "failed");
 	            }
 	        }
 
-	        doLMSCommit();
-	        doLMSFinish();
+	        doCommit();
+	        doTerminate();
 	        scoreCommited = true;
 	        if(showScore) alert(\''.clean_str_for_javascript($langScore).' :\n\' + rawScore + \'/\' + weighting );
 		}

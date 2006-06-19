@@ -373,7 +373,7 @@ function nameBox($type, $mode)
 
       $imgList[CTDOCUMENT_] = "document.gif";
       $imgList[CTCLARODOC_] = "clarodoc.gif";
-      $imgList[CTEXERCISE_] = "quiz.gif";
+      $imgList[CTEXERCISE_] = "quiz.png";
       $imgList[CTSCORM_] = "scorm.gif";
 
       if (array_key_exists( $contentType , $imgList ))
@@ -536,9 +536,11 @@ function display_path_content()
     }
 
     $output .= "\n".'<table width="99%">'."\n\n"
+    .    '<thead>'."\n"
     .    '<tr align="center" valign="top">'."\n"
 	.    '<th colspan="' . ($maxDeep+1).'">' . $langModule . '</th>'."\n"
-    .    '</tr>'."\n\n"
+    .    '</tr>'."\n"
+    .    '</thead>'."\n\n"
 	.	 '<tbody>'."\n"
     ;
 
@@ -561,7 +563,7 @@ function display_path_content()
         else // module
         {
             if($module['contentType'] == CTEXERCISE_ )
-            	$moduleImg = 'quiz.gif';
+            	$moduleImg = 'quiz.png';
             else
             	$moduleImg = choose_image(basename($module['path']));
             	
@@ -688,11 +690,11 @@ function get_learnPath_progress($lpid, $lpUid)
  * @author Piraux Sébastien <pir@cerdecam.be>
  * @author Lederer Guillaume <led@cerdecam.be>
  */
-function display_my_exercises($dialogBox)
+function display_my_exercises($dialogBox, $style)
 {
     //$tbl_cdb_names = claro_sql_get_course_tbl();
     //$tbl_quiz_test = $tbl_cdb_names['quiz_test'];
-    $tbl_quiz_test = "quiz_test";
+    $tbl_quiz_test = "exercices";
 
     global $langAddModule;
     global $langAddModulesButton;
@@ -700,17 +702,19 @@ function display_my_exercises($dialogBox)
     global $langNoEx;
     global $langAddOneModuleButton;
     global $imgRepositoryWeb;
+    $output = "";
 
-    echo '<!-- display_my_exercises output -->' . "\n";
+    $output .= '<!-- display_my_exercises output -->' . "\n";
     /*--------------------------------------
     DIALOG BOX SECTION
     --------------------------------------*/
     $colspan = 4;
     if( !empty($dialogBox) )
     {
-        echo claro_disp_message_box($dialogBox).'<br />'."\n";
+        $output .= claro_disp_message_box($dialogBox, $style).'<br />'."\n";
     }
-    echo '<table width="99%">'."\n\n"
+    $output .= '<table width="99%">'."\n\n"
+    .    '<thead>'."\n"
     .    '<tr align="center" valign="top">'."\n"
     .    '<th width="10%">'
     .    $langAddModule
@@ -718,11 +722,12 @@ function display_my_exercises($dialogBox)
     .    '<th>'
     .    $langExercise
     .    '</th>'."\n"
-    .    '</tr>'."\n\n"
+    .    '</tr>'."\n"
+    .    '</thead>'."\n\n"
     ;
 
     // Display available modules
-    echo '<form method="POST" name="addmodule" action="' . $_SERVER['PHP_SELF'] . '?cmdglobal=add">'."\n";
+    $output .= '<form method="POST" name="addmodule" action="' . $_SERVER['PHP_SELF'] . '?cmdglobal=add">'."\n";
     $atleastOne = FALSE;
     $sql = "SELECT `id`, `titre` AS `title`, `description`
             FROM `" . $tbl_quiz_test . "`
@@ -731,17 +736,17 @@ function display_my_exercises($dialogBox)
     
     if( is_array($exercises) && !empty($exercises) )
     {
-		echo '<tbody>' . "\n\n";
+		$output .= '<tbody>' . "\n\n";
 		
 	    foreach ( $exercises as $exercise )
 	    {
-	        echo '<tr>'."\n"
+	        $output .= '<tr>'."\n"
 	        .    '<td align="center">'
 	        .    '<input type="checkbox" name="check_' . $exercise['id'] . '" id="check_' . $exercise['id'] . '" value="' . $exercise['id'] . '" />'
 	        .    '</td>'."\n"
 	        .    '<td align="left">'
 	        .    '<label for="check_'.$exercise['id'].'" >'
-	        .    '<img src="' . $imgRepositoryWeb . 'quiz.gif" alt="' . $langExercise . '" />'
+	        .    '<img src="' . $imgRepositoryWeb . 'quiz.png" alt="' . $langExercise . '" />'
 	        .    $exercise['title']
 	        .    '</label>'
 	        .    '</td>'."\n"
@@ -752,7 +757,7 @@ function display_my_exercises($dialogBox)
 
 	        if( !empty($exercise['description']) )
 	        {
-	            echo '<tr>'."\n"
+	            $output .= '<tr>'."\n"
 	            .    '<td>&nbsp;</td>'."\n"
 	            .    '<td>'
 	            .    '<small>' . $exercise['description'] . '</small>'
@@ -762,14 +767,14 @@ function display_my_exercises($dialogBox)
 	        }
 	        $atleastOne = true;
 	    }//end while another module to display
-	    echo '</tbody>'."\n\n";
+	    $output .= '</tbody>'."\n\n";
 	}
     
-    echo '<tfoot>'."\n\n";
+    $output .= '<tfoot>'."\n\n";
     
     if( !$atleastOne )
     {
-        echo '<tr>'."\n"
+        $output .= '<tr>'."\n"
 		.	 '<td colspan="2" align="center">'
         .    $langNoEx
         .    '</td>'."\n"
@@ -779,7 +784,7 @@ function display_my_exercises($dialogBox)
 
     // Display button to add selected modules
 
-    echo '<tr>'."\n"
+    $output .= '<tr>'."\n"
     .    '<td colspan="2">'
     .    '<hr noshade size="1">'
     .    '</td>'."\n"
@@ -787,18 +792,20 @@ function display_my_exercises($dialogBox)
     ;
     if( $atleastOne )
     {
-        echo '<tr>'."\n"
+        $output .= '<tr>'."\n"
 		.	 '<td colspan="2">'
         .    '<input type="submit" name="insertExercise" value="'.$langAddModulesButton.'" />'
         .    '</td>'."\n"
 		.	 '</tr>'."\n\n"
         ;
     }
-    echo '</form>'."\n\n"
+    $output .= '</form>'."\n\n"
     .    '</tfoot>'."\n\n"
     .    '</table>'."\n\n"
     .    '<!-- end of display_my_exercises output -->' . "\n"
     ;
+    
+    return $output;
 }
 
 /**
