@@ -188,6 +188,7 @@ $have_latex = "'.$_POST['formhave_latex'].'";
 }
 // Display config.php edit form
 else {
+	$titleextra = "config.php";
 	// Check if restore has been selected
 	if (isset($restore) && $restore=="yes") {
 		// Substitute variables with those from backup file
@@ -195,8 +196,8 @@ else {
 		@include("../../config/config_backup.php");
 	}
 	// Constract the form
-	$tool_content .= "<form action=\"".$_SERVER[PHP_SELF]."\" method=\"post\"";
-	$tool_content .= "<table width=\"99%\"><caption>Επεξεργασία Αρχείου".$titleextra."</caption><tbody>";
+	$tool_content .= "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\"";
+	$tool_content .= "<table width=\"99%\"><caption>Επεξεργασία Αρχείου ".$titleextra."</caption><tbody>";
 	$tool_content .= "  <tr>
     <td width=\"3%\" nowrap><b>\$urlServer:</b></td>
     <td><input type=\"text\" name=\"formurlServer\" size=\"40\" value=\"".$urlServer."\"></td>

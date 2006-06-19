@@ -100,7 +100,7 @@ $langEmail : $emailAdministrator
 else {
 	// Constract form
 	$tool_content .= "<h5>".$typeyourmessage."</h5>";
-	$tool_content .= "<form action=\"".$_SERVER[PHP_SELF]."\" method=\"post\">
+	$tool_content .= "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">
 <textarea name=\"body_mail\" rows=\"10\" cols=\"60\"></textarea>
 <br><br>
 Αποστολή μηνύματος προς <select name=\"sendTo\">

@@ -105,10 +105,10 @@ while ($mycours = mysql_fetch_array($result)) {
 	if($mycours['f'] != @$facOnce)
 	{
 		if ($firstfac) {
-			$tool_content .= "<table width=\"99%\"><caption>".$mycours[f]."</caption><tbody>";
+			$tool_content .= "<table width=\"99%\"><caption>".$mycours['f']."</caption><tbody>";
 			$firstfac = false;
 		} else {
-			$tool_content .= "</tbody></table><br><table width=\"99%\"><caption>".$mycours[f]."</caption><tbody>";
+			$tool_content .= "</tbody></table><br><table width=\"99%\"><caption>".$mycours['f']."</caption><tbody>";
 		}
 	}
 	$facOnce=$mycours['f'];

@@ -82,14 +82,14 @@ if (isset($searchtitle) && isset($searchcode) && isset($searchtype) && isset($se
 	
 	// Constract search form
 	$tool_content .= "<form action=\"listcours.php?search=yes\" method=\"post\">";
-	$tool_content .= "<table width=\"99%\"><caption>Κριτήρια Αναζήτησης ".$newsearch."</caption><tbody>";
+	$tool_content .= "<table width=\"99%\"><caption>Κριτήρια Αναζήτησης ".@$newsearch."</caption><tbody>";
 	$tool_content .= "  <tr>
     <td width=\"3%\" nowrap><b>Τίτλος:</b></td>
-    <td><input type=\"text\" name=\"formsearchtitle\" size=\"40\" value=\"".$searchtitle."\"></td>
+    <td><input type=\"text\" name=\"formsearchtitle\" size=\"40\" value=\"".@$searchtitle."\"></td>
 </tr>";
 	$tool_content .= "  <tr>
     <td width=\"3%\" nowrap><b>Κωδικός:</b></td>
-    <td><input type=\"text\" name=\"formsearchcode\" size=\"40\" value=\"".$searchcode."\"></td>
+    <td><input type=\"text\" name=\"formsearchcode\" size=\"40\" value=\"".@$searchcode."\"></td>
 </tr>";
 	switch ($searchcode) {
 		case "2":
