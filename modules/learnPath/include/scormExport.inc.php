@@ -978,9 +978,8 @@ class ScormExport
     <script src="APIWrapper.js" type="text/javascript" language="JavaScript"></script>
     <title>Default Title</title>
 </head>
-<frameset border="0" rows="100%,*" onload="immediateComplete()">
+<frameset border="0" rows="100%" onload="immediateComplete()">
     <frame src="' . $targetPath . '" scrolling="auto">
-    <frame src="SCOFunctions.js">
 </frameset>
 </html>');
             fclose($f);
@@ -1023,7 +1022,10 @@ class ScormExport
 			}
             
             fwrite($f, '<html>'."\n"
-				.'<body>'."\n"
+            	.'<head>'."\n"
+            	.'<script src="APIWrapper.js" type="text/javascript" language="JavaScript"></script>'."\n"
+            	.'</head>'."\n"
+				.'<body onload="immediateComplete()">'."\n"
 				.'<table width="99%" border="0">'."\n"
 				.'<tr>'."\n"
 				.'<td colspan="2">'."\n"
