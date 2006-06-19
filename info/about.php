@@ -1,10 +1,8 @@
 <?
 $langFiles = 'about';
-//include '../include/init.php';
 $path2add=2;
 include '../include/baseTheme.php';
 $nameTools = $langInfo;
-//begin_page();
 $tool_content ="";
 
 $tool_content .= "<p>$langAboutText <b>$siteName $langEclassVersion</b></p>";

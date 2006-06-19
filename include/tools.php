@@ -379,9 +379,9 @@ function adminMenu(){
 	array_push($sideMenuLink, "../admin/platformStats.php");
 
 	array_push($sideMenuText, $langManuals);
-	array_push($sideMenuLink, $urlServer . "claroline/auth/manual.php");
+	array_push($sideMenuLink, $urlServer . "manuals/manual.php");
 	array_push($sideMenuText, $langAdminManual);
-	array_push($sideMenuLink, $urlServer . "claroline/manuals/manA/admin.txt");
+	array_push($sideMenuLink, $urlServer . "manuals/manA/admin.txt");
 
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);

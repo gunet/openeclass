@@ -279,7 +279,7 @@ function expanded_faculte($facid, $uid) {
 						if ($mycours['visible'] == 2) {
 							$codelink = $mycours['c'].": <a href='../../courses/$mycours[k]/' target=\"blank\">$mycours[i]</a>";
 						} else {
-							$codelink = $mycours['c'].": ".$mycours[i];
+							$codelink = $mycours['c'].": ".$mycours['i'];
 						}
 
 						// output each course as a table for beautifying reasons
