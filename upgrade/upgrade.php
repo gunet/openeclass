@@ -364,8 +364,8 @@ while ($code = mysql_fetch_row($res)) {
 
 
 	//Move all non-expired events from lessons' agendas to the main agenda table
-	//$tool_content .= "Μεταφορά γεγονότων στον πίνακα <b>$table</b>" . $agendaResult;
-
+	$sql = 'TRUNCATE TABLE `agenda`';//empty main agenda table so that we do not have multiple entries
+	db_query($sql, $mysqlMainDb);
 	$sql = 'SELECT id, titre, contenu, day, hour, lasting
                 FROM  agenda
                 WHERE CONCAT(titre,contenu) != \'\'
