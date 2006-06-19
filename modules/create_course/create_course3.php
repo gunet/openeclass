@@ -174,8 +174,8 @@ if(!isset($_GET["finish_create_course"])) {
     </td>";
     help("CreateCourse_formvisible");
 
-		echo "
-  		</tr>
+        echo "
+          </tr>
       <tr>
       <td valign=\"top\" align=\"right\">
       <font face=\"arial, helvetica\" size=\"2\"><b>Υποσυστήματα:</b></font>
@@ -288,7 +288,7 @@ else {
         $repertoire=strtoupper($repertoire);
         $faculte_lower=strtolower($faculte);
 
-        //remove space in code_cours 
+        //remove space in code_cours
         $repertoire = str_replace (" ", "", $repertoire);
         $repertoire_lower=strtolower($repertoire);
 
@@ -1510,7 +1510,7 @@ mysql_query("CREATE TABLE accueil (
                '../../../images/pastillegris.png',
                'MODULE_ID_ANNOUNCE'
                )");
-    
+
 
     mysql_query("INSERT INTO accueil VALUES (
                '9',
@@ -1589,7 +1589,7 @@ mysql_query("CREATE TABLE accueil (
                 '../../../images/pastillegris.png',
                 'MODULE_ID_SURVEY'
                 )");
-								
+
     mysql_query("INSERT INTO accueil VALUES (
                 '22',
                 '$langPoll',
@@ -1600,7 +1600,7 @@ mysql_query("CREATE TABLE accueil (
                 '../../../images/pastillegris.png',
                 'MODULE_ID_POLL'
                 )");
-								
+
     mysql_query("INSERT INTO accueil VALUES (
                '23',
                '$langLearnPath',
@@ -1622,10 +1622,10 @@ mysql_query("CREATE TABLE accueil (
                '../../../images/pastillegris.png',
                'MODULE_ID_TOOLADMIN'
                )");
-							 
+
 #####################ACCUEIL - PROF ONLY ######################################
 
-		mysql_query("INSERT INTO accueil VALUES (
+        mysql_query("INSERT INTO accueil VALUES (
         '8',
         '$langUsers',
         '../../modules/user/user.php',
@@ -1635,7 +1635,7 @@ mysql_query("CREATE TABLE accueil (
         '',
         'MODULE_ID_USERS'
         )");
-				
+
     mysql_query("INSERT INTO accueil VALUES (
                '11',
                '$langStatistics',
@@ -1680,11 +1680,39 @@ mysql_query("CREATE TABLE accueil (
                'MODULE_ID_COURSEINFO'
                )");
 
+    mysql_query("INSERT INTO accueil VALUES (
+                '24',
+                '".$langUsage."',
+                '../../modules/usage/usage.php',
+                'usage',
+                '".$sbsystems[24]."',
+                '1',
+                '../../../images/pastillegris.png',
+                'MODULE_ID_USAGE')");
 
 
-require_once("../usage/module.php");
-$usage_mod = new usage_module();
-$usage_mod->create_course(24, $langUsage, $sbsystems[24]);
+
+#################################### USAGE ################################
+// no db version specific stuff
+db_query("CREATE TABLE action_types (
+            id int(11) NOT NULL auto_increment,
+            name varchar(200),
+            PRIMARY KEY (id))");
+db_query("INSERT INTO action_types VALUES ('1', 'access')");
+db_query("CREATE TABLE actions (
+            id int(11) NOT NULL auto_increment,
+            user_id int(11) NOT NULL,
+            module_id int(11) NOT NULL,
+            action_type_id int(11) NOT NULL,
+            date_time DATETIME NOT NULL default '0000-00-00 00:00:00',
+            PRIMARY KEY (id))");
+
+db_query("CREATE TABLE actions_summary (
+            id int(11) NOT NULL auto_increment,
+            module_id int(11) NOT NULL,
+            start_date DATETIME NOT NULL default '0000-00-00 00:00:00',
+            end_date DATETIME NOT NULL default '0000-00-00 00:00:00',
+            PRIMARY KEY (id))");
 
 if (mysql_version())   {
 
