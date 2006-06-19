@@ -13,7 +13,7 @@ class action {
                 " action_type_id = '$action_type_id', ".
                 " date_time = NOW() ";
         $result = db_query($sql, $currentCourseID);
-        mysql_free_result($result);
+        @mysql_free_result($result);
     }
 
     function summarize() {
