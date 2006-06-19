@@ -114,7 +114,6 @@ $langProfessor="Professor";
 $langAnnouncementEx="This is an example of announcement. Only the profesor and other administrators of the course can publish announcements.";
 $langJustCreated="You just created the course website";
 $langEnter="Back to my courses list";
-$langMillikan="Millikan experiment";
 $langCourseDesc = "Course description";
  // Groups
 $langCreateCourseGroups="Groups";

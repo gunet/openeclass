@@ -74,7 +74,7 @@ $langDelAdmin="Διαγράψτε την μέσω του εργαλείου διαχείρισης της περιοχής";
 $langMessage="Όταν διαγράψετε τη δοκιμαστική περιοχή συζητήσεων, θα διαγραφτεί και το παρόν μήνυμα.";
 $langExMessage="Παράδειγμα Μηνύματος";
 $langAnonymous="Ανώνυμος";
-$langExerciceEx="Υπόδειγμα Ασκησης";
+$langExerciceEx="Υπόδειγμα άσκησης";
 $langAntique="Ιστορία της αρχαίας φιλοσοφίας";
 $langSocraticIrony="Η Σωκρατική ειρωνεία είναι...";
 $langManyAnswers="(περισσότερες από μία απαντήσεις μπορεί να είναι σωστές)";
@@ -91,7 +91,7 @@ $langNotFalse="Η απάντηση δεν είναι εσφαλμένη. Είναι αλήθεια ότι η αποκάλυψη της
 // Home Page MySQL Table "accueil"
 $langAgenda="Ατζέντα";
 $langLinks="Σύνδεσμοι";
-$langDoc="Εγγραφα";
+$langDoc="Έγγραφα";
 $langVideo="Βίντεο";
 $langVideoLinks="Βιντεοσκοπημένα μαθήματα";
 $langWorks="Εργασίες φοιτητών";
@@ -123,7 +123,6 @@ $langProfessor="Καθηγητής";
 $langAnnouncementEx="Παράδειγμα ανακοίνωσης. Μόνο ο καθηγητής και τυχόν άλλοι διαχειριστές του μαθήματος μπορεί να εισαγάγουν ανακοινώσεις.";
 $langJustCreated="Μόλις δημιουργήσατε με επιτυχία το μάθημα";
 $langEnter="Είσοδος";
-$langMillikan="Πείραμα Millikan";
  // Groups
 $langGroups="Ομάδες Χρηστών";
 $langCreateCourseGroups="Ομάδες Χρηστών";
