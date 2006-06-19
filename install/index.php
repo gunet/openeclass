@@ -1,41 +1,31 @@
 <?php
 /*
-      +----------------------------------------------------------------------+
-      | e-Class version 1.5                                                  |
-      | based on CLAROLINE version 1.3.0 $Revision$                   |
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
-      | Copyright (c) 2003 GUNet                                             |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
-      |                                                                      |
-      |   This program is distributed in the hope that it will be useful,    |
-      |   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-      |   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-      |   GNU General Public License for more details.                       |
-      |                                                                      |
-      |   You should have received a copy of the GNU General Public License  |
-      |   along with this program; if not, write to the Free Software        |
-      |   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-      |   02111-1307, USA. The GNU GPL license is also available through     |
-      |   the world-wide-web at http://www.gnu.org/copyleft/gpl.html         |
-      +----------------------------------------------------------------------+
-      | e-Class Authors:    Costas Tsibanis <costas@noc.uoa.gr>              |
-      |                     Yannis Exidaridis <jexi@noc.uoa.gr>              |
-      |                     Alexandros Diamantidis <adia@noc.uoa.gr>         |
-      |                                                                      |
-      | Claroline Authors:  Thomas Depraetere <depraetere@ipm.ucl.ac.be>     |
-      |                     Hugues Peeters    <peeters@ipm.ucl.ac.be>        |
-      |                     Christophe Geschι <gesche@ipm.ucl.ac.be>         |
-      |                                                                      |
-      +----------------------------------------------------------------------+
+=============================================================================
+           GUnet e-Class 2.0
+        E-learning and Course Management Program
+================================================================================
+        Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Α full copyright notice can be read in "/info/copyright.txt".
+
+           Authors:     Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+                    Yannis Exidaridis <jexi@noc.uoa.gr>
+                       Alexandros Diamantidis <adia@noc.uoa.gr>
+
+        For a full list of contributors, see "credits.txt".
+
+        This program is a free software under the terms of the GNU
+        (General Public License) as published by the Free Software
+        Foundation. See the GNU License for more details.
+        The full license can be read in "license.txt".
+
+        Contact address: GUnet Asynchronous Teleteaching Group,
+        Network Operations Center, University of Athens,
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================
 */
 
 header("Content-type: text/html; charset=iso-8859-7");
-
 
 @include ("../modules/lang/greek/install.inc.php");
 
@@ -65,7 +55,7 @@ exit;
 }
 
 
-##### STEP 0 INITIALISE FORM VARIABLES IF FIRST VISIT ##################
+//  step 0 initialise variables
 if(!isset($alreadyVisited))
 {
     $dbHostForm="localhost";
@@ -201,8 +191,6 @@ if(isset($install2) OR isset($back2))
             </table>";
 }
 
-######## CHMOD PROBLEM #################################################
-
 elseif(isset($install3) OR isset($back3)) {
 
 // The two following CHMOD are necessary, 666 for Windows, 0666 for Linux
@@ -212,8 +200,9 @@ elseif(isset($install3) OR isset($back3)) {
 // courses directory
 mkdir("../courses", 0777);
 
-###### STEP 3 MYSQL DATABASE SETTINGS ##############################################
-    echo "
+// step 3 mysql database settings
+
+echo "
                 <h2>
                     ".$langStep3." ".$langDBSetting."
                 </h2>
@@ -343,12 +332,10 @@ mkdir("../courses", 0777);
                 </table>";
 }	 // install3
 
-
-###### STEP 4 CONFIG SETTINGS ##############################################
+// step 4 config settings
 
 elseif(isset($install5) OR isset($back4))
 {
-
     echo "
         <h2>
             ".$langStep4." ".$langCfgSetting."
@@ -577,7 +564,7 @@ echo "
 
 }
 
-###### STEP 5 LAST CHECK BEFORE INSTALL ##############################################
+// step 5 last check before install
 
 elseif(isset($install6))
 {
@@ -640,12 +627,12 @@ elseif(isset($install6))
             </tr>
         </table>";
 }
-###### STEP 6 INSTALLATION SUCCESSFULL !##############################################
+// step 6 installation successful
 
 elseif(isset($install7))
 {
 
-############# DB CREATE + STRUCTURE + CONTENT #############################
+// database creation
 
     $db = @mysql_connect("$dbHostForm", "$dbUsernameForm", "$dbPassForm");
     if (mysql_errno()>0) // problem with server
@@ -1296,7 +1283,7 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
 
  }
 
-    ########################## WRITE config.php ##################################
+// creation of config.php
 
     $fd=@fopen("../config/config.php", "w");
     if (!$fd) {
@@ -1311,49 +1298,40 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
         και δοκιμάστε ξανά την εγκατάσταση.\n";
     } else {
 
+
     $stringConfig='<?php
 /*
-      +----------------------------------------------------------------------+
-      | e-Class version 1.6                                                  |
-      | based on CLAROLINE version 1.3.0                                     |
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
-      | Copyright (c) 2003, 2004 GUNet                                             |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
-      |                                                                      |
-      |   This program is distributed in the hope that it will be useful,    |
-      |   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-      |   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-      |   GNU General Public License for more details.                       |
-      |                                                                      |
-      |   You should have received a copy of the GNU General Public License  |
-      |   along with this program; if not, write to the Free Software        |
-      |   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-      |   02111-1307, USA. The GNU GPL license is also available through     |
-      |   the world-wide-web at http://www.gnu.org/copyleft/gpl.html         |
-      +----------------------------------------------------------------------+
-      | e-Class Authors:    Costas Tsibanis <costas@noc.uoa.gr>              |
-      |                     Yannis Exidaridis <jexi@noc.uoa.gr>              |
-      |                     Alexandros Diamantidis <adia@noc.uoa.gr>         |
-      |                                                                      |
-      | Claroline Authors:  Thomas Depraetere <depraetere@ipm.ucl.ac.be>     |
-      |                     Hugues Peeters    <peeters@ipm.ucl.ac.be>        |
-      |                     Christophe Geschι <gesche@ipm.ucl.ac.be>         |
-      |                                                                      |
-      +----------------------------------------------------------------------+
+=============================================================================
+           GUnet e-Class 2.0
+        E-learning and Course Management Program
+================================================================================
+        Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Α full copyright notice can be read in "/info/copyright.txt".
+
+           Authors:     Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+                    Yannis Exidaridis <jexi@noc.uoa.gr>
+                       Alexandros Diamantidis <adia@noc.uoa.gr>
+
+        For a full list of contributors, see "credits.txt".
+
+        This program is a free software under the terms of the GNU
+        (General Public License) as published by the Free Software
+        Foundation. See the GNU License for more details.
+        The full license can be read in "license.txt".
+
+        Contact address: GUnet Asynchronous Teleteaching Group,
+        Network Operations Center, University of Athens,
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================
 */
-/***************************************************************
-*           CONFIG OF VIRTUAL CAMPUS
+
+
+***************************************************************
+*           config file of e-Class
 ****************************************************************
-GOAL
-****
-List of variables to be modified by the campus site administrator.
-File has been CHMODDED 0444 by install.php.
-CHMOD 0666 (Win: remove read-only file property) to edit manually
+File has been chmoded 0444 by install.php.
+chmod 0666 (Win: remove read-only file property) to edit manually
 *****************************************************************/
 
 // This file was generate by script /install/index.php
@@ -1402,13 +1380,10 @@ $have_latex = FALSE;
 
 ?>';
 
-######### DEALING WITH FILES #########################################
-
-    fwrite($fd, $stringConfig);
-
-############ PROTECTING FILES AGAINST WEB WRITING ###################
-
-    echo "
+// write to file
+fwrite($fd, $stringConfig);
+// message
+echo "
                 <h2>
                     ".$langStep6." ".$langCfgSetting."
                 </h2>
@@ -1431,11 +1406,10 @@ $have_latex = FALSE;
     <p align=\"right\"><input type=\"submit\" value=\"Είσοδος στο e-Class\"></p>";
 
     }       // τέλος ελεγχου για δικαιώματα
-}	// STEP 6 of 6 END
+}	// end of step 6
 
+// step 1 requirements
 
-
-###### STEP 1 REQUIREMENTS ##############################################
 else
 {
     echo "
@@ -1532,7 +1506,6 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
 
 // useful functions
 
-
 /**
  * check extention and  write  if exist  in a  <LI></LI>
  *
@@ -1542,7 +1515,6 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
  * @desc check extention and  write  if exist  in a  <LI></LI>
  *
  */
-
 function warnIfExtNotLoaded($extentionName) {
 
         if (extension_loaded ($extentionName)) {
