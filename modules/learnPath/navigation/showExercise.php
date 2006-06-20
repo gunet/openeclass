@@ -1,7 +1,40 @@
 <?php 
 
-/*
-Header, Copyright, etc ...
+/**=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Á full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/**===========================================================================
+	showExercise.php
+	@last update: 30-06-2006 by Thanos Kyritsis
+	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+==============================================================================        
+    @Description:
+
+ 	@Comments:
+ 
+  	@todo: 
+==============================================================================
 */
 
 require_once('../../exercice/exercise.class.php');
@@ -16,8 +49,6 @@ define('MATCHING',4);
 
 $require_current_course = TRUE;
 $langFiles='exercice';
-$require_help = TRUE;
-$helpTopic = 'Exercise';
 
 require_once("../../../config/config.php");
 require_once ('../../../include/init.php');
@@ -166,7 +197,11 @@ if(!isset($questionNum) || $_POST['questionNum']) {
 	}
 }
 
-echo "<html>"."\n";
+echo "<html>"."\n"
+.'<head>
+  <meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">
+  <title>'.$langExercice.'</title>
+</head>'."\n";
 echo "<body>"."\n";
 
 if(@$_POST['questionNum']) {

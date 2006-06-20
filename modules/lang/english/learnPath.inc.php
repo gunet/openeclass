@@ -238,7 +238,7 @@ $langModify = "Modify";
 $langOk = "Ok";
 $langQuestion = "Question";
 $langRawHasBeenChanged = "Minimum raw to pass has been changed";
-$langScore = "Score";
+
 $langSize = "Size";
 
 $langAddComment = "Add a comment";
@@ -268,8 +268,8 @@ $langErrorInvalidParms = "Error : Invalid parameter (use numbers only)";
 $langErrorNameAlreadyExists = "Error : Name already exists in the learning path or in the module pool";
 $langErrorValuesInDouble = "Error : One or more values are doubled";
 $langExercise = "Exercise";
-$langExerciseCancelled = "Exercise cancelled, choose a module in the list to continue.";
-$langExerciseDone = "Exercise done, choose a module in the list to continue.";
+$langExerciseCancelled = "Exercise cancelled, choose the next module to continue by clicking next.";
+$langExerciseDone = "Exercise done, choose the next module to continue by clicking next.";
 $langExercises = "Exercises";
 $langForums = "Forums";
 $langFullScreen = "Fullscreen";
@@ -330,5 +330,6 @@ $langFirstName = "First Name";
 $langEmail = "Email";
 $langNoEmail = "No email address specified";
 $langModules = "Modules";
+$langLINKTypeDesc = "Link";
 
 ?>

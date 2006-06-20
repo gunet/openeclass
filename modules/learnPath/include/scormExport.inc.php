@@ -1,7 +1,40 @@
 <?php
 
-/*
-Header
+/**=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Á full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/**===========================================================================
+	scromExport.inc.php
+	@last update: 30-06-2006 by Thanos Kyritsis
+	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+==============================================================================        
+    @Description:
+
+ 	@Comments:
+ 
+  	@todo: 
+==============================================================================
 */
 
 /*
@@ -227,7 +260,7 @@ class ScormExport
     function prepareQuiz($quizId, $raw_to_pass=50)
     {
         global $langQuestion, $langOk, $langScore, $claro_stylesheet, $clarolineRepositorySys;
-        
+        global $charset, $langExerciseDone;
         // those two variables are needed by display_attached_file()
         global $attachedFilePathWeb;
         global $attachedFilePathSys;
@@ -237,6 +270,7 @@ class ScormExport
 // Generate standard page header 
         $pageHeader = '<html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">
 <meta http-equiv="expires" content="Tue, 05 DEC 2000 07:00:00 GMT">
 <meta http-equiv="Pragma" content="no-cache">
 <link rel="stylesheet" type="text/css" href="compatible.css" />
@@ -605,7 +639,7 @@ class ScormExport
 	        doCommit();
 	        doTerminate();
 	        scoreCommited = true;
-	        if(showScore) alert(\''.clean_str_for_javascript($langScore).' :\n\' + rawScore + \'/\' + weighting );
+	        if(showScore) alert(\''.clean_str_for_javascript($langScore).' :\n\' + rawScore + \'/\' + weighting + \'\n\' + \''.clean_str_for_javascript($langExerciseDone).'\');
 		}
     }
 
@@ -967,7 +1001,7 @@ class ScormExport
          */
         function createFrameFile($fileName, $targetPath)
         {
-            global $langErrorCreatingFrame, $langErrorCreatingManifest;
+            global $langErrorCreatingFrame, $langErrorCreatingManifest, $charset;
             
             if ( !($f = fopen($fileName, 'w')) )
             {
@@ -976,6 +1010,7 @@ class ScormExport
             }
             
             fwrite($f, '<html><head>
+    <meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">
     <script src="APIWrapper.js" type="text/javascript" language="JavaScript"></script>
     <title>Default Title</title>
 </head>
@@ -990,7 +1025,7 @@ class ScormExport
         
         function createDescFrameFile($fileName)
         {
-            global $langErrorCreatingFrame, $langErrorCreatingManifest;
+            global $langErrorCreatingFrame, $langErrorCreatingManifest, $charset;
             
             if ( !($f = fopen($fileName, 'w')) )
             {
@@ -1024,6 +1059,7 @@ class ScormExport
             
             fwrite($f, '<html>'."\n"
             	.'<head>'."\n"
+            	.'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
             	.'<script src="APIWrapper.js" type="text/javascript" language="JavaScript"></script>'."\n"
             	.'</head>'."\n"
 				.'<body onload="immediateComplete()">'."\n"

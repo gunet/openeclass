@@ -1,7 +1,40 @@
 <?php
 
-/*
-Header
+/**=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Á full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/**===========================================================================
+	insertMyLink.php
+	@last update: 30-06-2006 by Thanos Kyritsis
+	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+==============================================================================        
+    @Description:
+
+ 	@Comments:
+ 
+  	@todo: 
+==============================================================================
 */
 
 require_once("../../include/lib/learnPathLib.inc.php");
@@ -16,7 +49,6 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-$dbname                 = $_SESSION['dbname'];
 $tbl_link               = "liens";
 
 $imgRepositoryWeb       = "../../images/";
@@ -157,7 +189,7 @@ if (isset($dialogBox) && $dialogBox != "") {
     $tool_content .= "<br />";
 }
 
-$tool_content .= showlinks($tbl_link, $dbname);
+$tool_content .= showlinks($tbl_link);
 
 $tool_content .= "<br />";
 $tool_content .= claro_disp_tool_title($langPathContentTitle);
@@ -169,7 +201,7 @@ $tool_content .= display_path_content();
 draw($tool_content, 2, "learnPath");
 
 
-function showlinks($tbl_link, $dbname)
+function showlinks($tbl_link)
 {
 	global $langComment;
 	global $langAddModule;
@@ -177,7 +209,7 @@ function showlinks($tbl_link, $dbname)
 	global $langAddModulesButton;
 	
 	$sqlLinks = "SELECT * FROM `".$tbl_link."` ORDER BY ordre DESC";
-	$result = db_query($sqlLinks, $dbname);
+	$result = db_query($sqlLinks);
 	$numberoflinks=mysql_num_rows($result);
 
 	$output = "";

@@ -64,8 +64,8 @@ $langDescriptionCours = "Περιγραφή μαθήματος";
 $langDocInsertedAsModule = "έχει προστεθεί σαν ενότητα";
 $langDocument = "Έγγραφα";
 $langDocumentAlreadyUsed = "Αυτό το έγγραφο έχει ήδη χρησιμοποιηθεί σαν ενότητα σε αυτή τη γραμμή μάθησης";
-$langDocumentAsModule = "Χρήση εγγράφου";
-$langDocumentInModule = "Έγγαρφο σε ενότητα";
+$langDocumentAsModule = "Χρήση Εγγράφου";
+$langDocumentInModule = "Έγγραφο σε ενότητα";
 $langEXERCISETypeDesc = "¶σκηση Eclass";
 $langErrorAssetNotFound = "Το στοιχείο δεν ευρέθη : ";
 $langErrorCopyAttachedFile = " Μη δυνατή η αντιγραφή αρχείου: ";
@@ -95,7 +95,7 @@ $langErrortExtractingManifest = "Δεν μπορεί να εμφανιστεί απόσπασμα απο το αρχεί
 $langExAlreadyUsed = "Αυτή η άσκηση ήδη χρησιμοποιείται σαν ενότητα σε αυτή τη γραμμή μάθησης";
 $langExInsertedAsModule = "έχει προστεθεί σαν ενότητα μαθήματος αυτής της γραμμής μάθησης";
 $langExercise = "Ασκήσεις";
-$langExerciseAsModule = "Χρήση της άσκησης";
+$langExerciseAsModule = "Χρήση ¶σκησης";
 $langExerciseInModule = "Ασκηση στην ενότητα";
 $langExercises = "Ασκήσεις";
 $langExport = " Εξαγωγή ";
@@ -221,7 +221,6 @@ $langForbidden = "Μη επιτρεπτή";
 
 $langChangeRaw = "Αλλαξε το ελάχιστο αρχικό σημείο για να περάσει αυτή η ενότητα (ποσοστό): ";
 $langDate = "Ημερομηνία";
-$langDocumentInModule = "Έγγαρφο σε ενότητα";
 $langErrorCopyAttachedFile = " Μη δυνατή η αντιγραφή αρχείου: ";
 $langErrorCopyScormFiles = " Σφάλμα κατά την αντιγραφή των αναγκαίων αρχείων SCORM ";
 $langErrorCopyingScorm = "Σφάλμα αντιγραφής υπάρχων περιεχομένου SCORM";
@@ -240,7 +239,7 @@ $langModify = "Διόρθωση";
 $langOk = "Εντάξει";
 $langQuestion = "Ερώτηση";
 $langRawHasBeenChanged = "Ο ελάχιστος βαθμός για να προαγωγή έχει αλλαχθεί";
-$langScore = "Βαθμολογία";
+
 $langSize = "Μέγεθος";
 
 $langAddComment = "Προσθήκη / αλλαγή σχολίου στο";
@@ -271,8 +270,8 @@ $langErrorInvalidParms = "Σφάλμα : μη έγγυρη παράμετρος (χρησιμοποιήστε μόνο αρι
 $langErrorNameAlreadyExists = "Σφάλμα : Το όνομα υπάρχει ήδη στη γραμμή μάθησης ή στο σύνολο των ενοτήτων ";
 $langErrorValuesInDouble = "Σφάλμα : μία ή δυο τιμές είναι διπλές";
 $langExercise = "Ασκήσεις";
-$langExerciseCancelled = "Ακυρωση άσκησης, επιλέξτε ενότητα σε αυτή τη λίστα για να συνεχίσετε.";
-$langExerciseDone = "Ασκηση έτοιμη, επιλέξτε ενότητα στη λίστα για να συνεχίσετε.";
+$langExerciseCancelled = "Ακύρωση άσκησης, επιλέξτε την επόμενη ενότητα για να συνεχίσετε, κάνοντας κλίκ στο επόμενο βήμα.";
+$langExerciseDone = "Ολοκλήρωση άσκησης, επιλέξτε την επόμενη ενότητα για να συνεχίσετε, κάνοντας κλίκ στο επόμενο βήμα.";
 $langExercises = "Ασκήσεις";
 $langForums = "Περιοχή συζητήσεων";
 $langFullScreen = "μεγάλη/γεμάτη οθόνη ";
@@ -333,5 +332,6 @@ $langFirstName = "Όνομα";
 $langEmail = "Email";
 $langNoEmail = "Δεν έχει οριστεί email";
 $langModules = "Ενότητες";
+$langLINKTypeDesc = "Σύνδεσμος";
 
 ?>
