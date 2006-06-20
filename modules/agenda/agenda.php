@@ -35,14 +35,13 @@ $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Agenda';
 
-//include('../../include/init.php');
 include '../../include/baseTheme.php';
 
 include('../../include/lib/textLib.inc.php');
 
 include('../../include/action.php');
 $action = new action();
-$action->record(MODULE_ID_AGENDA);
+$action->record('MODULE_ID_AGENDA');
 
 $dateNow = date("d-m-Y / H:i:s",time());
 $nameTools = $langAgenda;
@@ -51,7 +50,6 @@ $local_style1 = '
         padding-left: 15px; padding-right : 15px; }
     .content {position: relative; left: 25px; }';
 mysql_select_db($dbname);
-//begin_page();
 
 if ($language == 'greek')
 $lang_editor='gr';

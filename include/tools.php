@@ -127,8 +127,8 @@ function loggedInMenu(){
 	array_push($sideMenuSubGroup, $langMenu);
 
 	// User is not currently in a course - set statut from main database
-	// $res2 = db_query("SELECT statut FROM user WHERE user_id = '$uid'",$mysqlMainDb);
-	$res2 = db_query("SELECT statut FROM user WHERE user_id = '$uid'");
+	$res2 = db_query("SELECT statut FROM user WHERE user_id = '$uid'",$mysqlMainDb);
+//	$res2 = db_query("SELECT statut FROM user WHERE user_id = '$uid'");
 	if ($row = mysql_fetch_row($res2)) $statut = $row[0];
 
 	if ($statut==1) {

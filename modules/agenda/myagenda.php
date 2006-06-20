@@ -26,7 +26,6 @@ include '../../include/baseTheme.php';
 include('../../include/lib/textLib.inc.php');
 
 $nameTools = $langMyAgenda;
-//begin_page();
 $tool_content = "";
 
 $TABLECOURS     = "`$mysqlMainDb`.cours";
@@ -34,7 +33,6 @@ $TABLECOURSUSER = "`$mysqlMainDb`.cours_user";
 
 if (isset($uid))
 {
-
  	$query = db_query("SELECT cours.code k, cours.fake_code fc,
 				cours.intitule i, cours.titulaires t
 	                        FROM cours, cours_user
@@ -55,7 +53,9 @@ if (isset($uid))
 $langToday);
 }
 
-//end_page();
+// -----------------------
+// function list
+// -----------------------
 
 function get_agendaitems($query, $month, $year)
 {

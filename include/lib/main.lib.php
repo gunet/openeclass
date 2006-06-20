@@ -294,9 +294,9 @@ function check_guest() {
 
 function check_prof()
 {
-	global $uid;
+	global $mysqlMainDb, $uid;
 	if (isset($uid)) {
-		$res = db_query("SELECT statut FROM user WHERE user_id='$uid'");
+		$res = db_query("SELECT statut FROM user WHERE user_id='$uid'", $mysqlMainDb);
 		$s = mysql_fetch_array($res);
 		if ($s['statut'] == 1)
 			return true;
