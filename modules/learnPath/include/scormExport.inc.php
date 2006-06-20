@@ -931,10 +931,11 @@ class ScormExport
                 $out .= $ident . '    <title>'.htmlspecialchars($item['name']).'</title>' . "\n";
                 
                 // Check if previous was blocking
-                if (!empty($blocking) && ($item['contentType'] != 'LABEL'))
+                // not valid for scorm 2004
+                /*if (!empty($blocking) && ($item['contentType'] != 'LABEL'))
                 {
                     $out .= '        <adlcp:prerequisites type="aicc_script"><![CDATA[I_'.$blocking.']]></adlcp:prerequisites>'."\n";
-                }
+                }*/
                 
                 // Add metadata, except for LABELS
                 if ( $item['contentType'] != 'LABEL' )
