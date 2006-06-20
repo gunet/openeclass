@@ -53,10 +53,10 @@ require_once("../../include/baseTheme.php");
 $head_content = "";
 $tool_content = "";
 
-$nameTools = $langStatsOfLearnPath;
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
 
-if (! $is_adminOfCourse ) die($langNotAllowed);
+$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
+if (! $is_adminOfCourse ) claro_die($langNotAllowed);
+$nameTools = $langStatsOfLearnPath;
 
 // path id can not be empty, return to the list of learning paths
 if( empty($_REQUEST['path_id']) )

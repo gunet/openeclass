@@ -62,6 +62,11 @@ $sql = "SELECT `path`
         WHERE `module_id` = ". (int)$_SESSION['module_id'];
 $assetPath = db_query_get_single_value($sql);
 
+$sql = "SELECT `filename`
+         FROM `".$TABLEDOCUMENT."`
+        WHERE `path` LIKE \"" .addslashes($assetPath) ."\"";
+$fileName = db_query_get_single_value($sql);
+
 $baseServDir = $webDir;
 $courseDir = "courses/".$currentCourseID."/document";
 $baseWorkDir = $baseServDir.$courseDir;
@@ -85,7 +90,7 @@ $tool_content .= "\n\n".'<hr noshade="noshade" size="1" />'."\n\n"
 	.'</thead>'."\n"
 	.'<tbody>'."\n"
 	.'<tr align="center">'."\n"
-	.'<td align="left">'.basename($file).'</td>'."\n"
+	.'<td align="left">'.$fileName.'</td>'."\n"
     .'<td>'.$fileSize.'</td>'."\n"
     .'<td>'.$fileDate.'</td>'."\n"
 	.'</tr>'."\n"

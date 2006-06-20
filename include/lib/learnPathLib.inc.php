@@ -851,7 +851,7 @@ function display_my_exercises($dialogBox, $style)
   * @author Lederer Guillaume <led@cerdecam.be>
   */
 
-function display_my_documents($dialogBox)
+function display_my_documents($dialogBox, $style)
 {
     global $is_adminOfCourse;
 
@@ -892,7 +892,7 @@ function display_my_documents($dialogBox)
     $colspan = 4;
     if( !empty($dialogBox) )
     {
-        $output .= claro_disp_message_box($dialogBox);
+        $output .= claro_disp_message_box($dialogBox, $style)."<br />";
     }
     /*--------------------------------------
     CURRENT DIRECTORY LINE
@@ -1263,7 +1263,7 @@ function get_module_tree( $lpModules , $id, $field = 'module_id')
         }
         elseif ( isset($module['children']) && is_array($module['children']) )
         {
-            $temp = get_module_tree($module['children'], $id);
+            $temp = get_module_tree($module['children'], $id, $field);
             if( is_array($temp) )
             return $temp;
             // else check next node
@@ -1603,29 +1603,14 @@ function claro_disp_message_box($message, $style = FALSE)
 
 function claro_die($message)
 {
-    global $includePath, $clarolineRepositoryWeb, $claro_stylesheet, $rootWeb,
-           $siteName, $text_dir, $uid, $_cid, $administrator_name, $administrator_email,
-           $is_platformAdmin, $_course, $_user, $_courseToolList, $coursesRepositoryWeb,
-           $is_courseAllowed, $imgRepositoryWeb, $lang_footer_p_CourseManager,
-           $lang_p_platformManager, $langPoweredBy, $langModifyProfile,
-           $langLogout, $langOtherCourses, $langModifyProfile, $langMyCourses,
-           $langMyAgenda, $langLogin, $langCourseHome, $_tid;
 
-    if ( ! headers_sent () )
-    {
-    // display header
-        require $includePath . '/claro_init_header.inc.php';
-    }
-
-    echo '<table align="center">'
+    $tool_content = '<p><br /></br></p><table align="center">'
     .    '<tr><td>'
-    .    claro_disp_message_box($message)
+    .    claro_disp_message_box($message, "caution")
     .    '</td></tr>'
     .    '</table>'
     ;
-
-    require $includePath . '/claro_init_footer.inc.php' ;
-
+	draw($tool_content, 2, "learnPath");
     die(); // necessary to prevent any continuation of the application
 }
 

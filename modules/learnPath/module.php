@@ -60,9 +60,8 @@ require_once("../../include/baseTheme.php");
 $tool_content = "";
 
 $nameTools = $langModule;
-$is_AllowedToEdit = $is_adminOfCourse;
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
-if ( $is_AllowedToEdit )
+if ( $is_adminOfCourse )
 {
     $navigation[]= array ("url"=>"learningPathAdmin.php", "name"=> $langLearningPath);
 }
@@ -158,7 +157,7 @@ $sql = "SELECT `contentType`,
 $resultBrowsed = db_query_get_single_row($sql);
 
 // redirect user to the path browser if needed
-if( !$is_AllowedToEdit
+if( !$is_adminOfCourse
 	&& ( !is_array($resultBrowsed) || !$resultBrowsed || count($resultBrowsed) <= 0 )
 	&& $noModuleComment
 	&& $noModuleSpecificComment
@@ -223,7 +222,7 @@ $tool_content .= "<br />";
 
 
 //back button
-if ($is_AllowedToEdit)
+if ($is_adminOfCourse)
 {
 	$pathBack = "./learningPathAdmin.php";
 }
@@ -240,7 +239,7 @@ $tool_content .= '<small><a href="'.$pathBack.'"><< '.$langBackModule.'</a></sma
 /* Display PROGRESS */
 
 if($module['contentType'] != CTLABEL_) //
-{ 
+{
     if( $resultBrowsed && count($resultBrowsed) > 0 && $module['contentType'] != CTLABEL_)
     {
         $contentType_img = selectImage($resultBrowsed['contentType']);
@@ -250,6 +249,7 @@ if($module['contentType'] != CTLABEL_) //
         if ($resultBrowsed['contentType']== CTEXERCISE_ ) { $contentDescType = $langEXERCISETypeDesc; }
         if ($resultBrowsed['contentType']== CTDOCUMENT_ ) { $contentDescType = $langDOCUMENTTypeDesc; }
         if ($resultBrowsed['contentType']== CTLINK_ ) { $contentDescType = $langLINKTypeDesc; }
+        if ($resultBrowsed['contentType']== CTCOURSE_DESCRIPTION_ ) { $contentDescType = $langDescriptionCours; }
 
 		$tool_content .= '<br /><center><strong>'.$langProgInModuleTitle.'</strong></center><br />'."\n\n"
 			.'<table align="center">'."\n"
@@ -364,7 +364,7 @@ if($module['contentType'] != CTLABEL_) //
 //################################# ADMIN DISPLAY ####################################\\
 //####################################################################################\\
 
-if( $is_AllowedToEdit ) // for teacher only
+if( $is_adminOfCourse ) // for teacher only
 {
     switch ($module['contentType'])
     {
@@ -381,10 +381,12 @@ if( $is_AllowedToEdit ) // for teacher only
             break;
         case CTLABEL_ :
             break;
+        case CTCOURSE_DESCRIPTION_ :
         case CTLINK_:
+        	$tool_content .= '<hr noshade="noshade" size="1" />';
         	break;
     }
-} // if ($is_AllowedToEdit)
+} // if ($is_adminOfCourse)
 
 draw($tool_content, 2, "learnPath");
 

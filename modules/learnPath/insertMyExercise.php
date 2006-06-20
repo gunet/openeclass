@@ -64,18 +64,15 @@ $tool_content = "";
 $dialogBox = "";
 $style = "";
 
-$nameTools = $langInsertMyExerciseToolName;
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
+if ( ! $is_adminOfCourse ) claro_die($langNotAllowed);
 $navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langLearningPathAdmin);
-
-$is_AllowedToEdit = $is_adminOfCourse;
-
-if ( ! $is_AllowedToEdit ) die($langNotAllowed);
+$nameTools = $langInsertMyExerciseToolName;
 
 // $_SESSION
 if ( !isset($_SESSION['path_id']) )
 {
-      die ("<center> Not allowed ! (path_id not set :@ )</center>");
+      claro_die ("<center> Not allowed ! (path_id not set :@ )</center>");
 }
 
 mysql_select_db($currentCourseID);

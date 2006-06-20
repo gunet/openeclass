@@ -54,12 +54,9 @@ require_once("../../include/baseTheme.php");
 $head_content = "";
 $tool_content = "";
 
-$is_AllowedToEdit = $is_adminOfCourse;
-
-$nameTools = $langModulesPoolToolName;
 $navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPathList);
-
-if ( ! $is_AllowedToEdit ) claro_die($langNotAllowed);
+if ( ! $is_adminOfCourse ) claro_die($langNotAllowed);
+$nameTools = $langModulesPoolToolName;
 
 mysql_select_db($currentCourseID);
 

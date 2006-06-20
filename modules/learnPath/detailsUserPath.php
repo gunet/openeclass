@@ -56,11 +56,11 @@ require_once("../../include/baseTheme.php");
 $head_content = "";
 $tool_content = "";
 
-$nameTools = $langModules;
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
+if (! $is_adminOfCourse ) claro_die($langNotAllowed);
 $navigation[] = array("url"=>"details.php?path_id=".$_REQUEST['path_id'], "name"=> $langStatsOfLearnPath);
+$nameTools = $langTrackUser;
 
-if (! $is_adminOfCourse ) die($langNotAllowed);
 
 if( empty($_REQUEST['uInfo']) || empty($_REQUEST['path_id']) )
 {
@@ -136,11 +136,11 @@ for ( $i = 0 ; $i < sizeof($flatElementList) ; $i++ )
 }
 
 //### SOME USER DETAILS ###########################################
-$tool_content .= ucfirst(strtolower($langUser)).' : <br />'."\n"
+$tool_content .= ucfirst(strtolower($langUser)).': <br />'."\n"
 	.'<ul>'."\n"
-	.'<li>'.$langLastName.' : '.$uDetails['lastname'].'</li>'."\n"
-	.'<li>'.$langFirstName.' : '.$uDetails['firstname'].'</li>'."\n"
-	.'<li>'.$langEmail.' : '.$uDetails['email'].'</li>'."\n"
+	.'<li>'.$langLastName.': '.$uDetails['lastname'].'</li>'."\n"
+	.'<li>'.$langFirstName.': '.$uDetails['firstname'].'</li>'."\n"
+	.'<li>'.$langEmail.': '.$uDetails['email'].'</li>'."\n"
 	.'</ul>'."\n\n";
 
 //### TABLE HEADER ################################################
@@ -243,7 +243,7 @@ foreach ($flatElementList as $module)
 		//-- status
 		$tool_content .= '<td>';
 		if($module['contentType'] == CTEXERCISE_ && $module['lesson_status'] != "" ) 
-		$tool_content .= ' <a href="userLog.php?uInfo='.$_REQUEST['uInfo'].'&amp;view=0100000&amp;exoDet='.$module['path'].'">'.strtolower($module['lesson_status']).'</a>';
+		$tool_content .= strtolower($module['lesson_status']);
 		else
 		$tool_content .= strtolower($module['lesson_status']);
 		$tool_content .= '</td>'."\n";

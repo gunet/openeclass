@@ -53,11 +53,11 @@ require_once("../../include/baseTheme.php");
 $head_content = "";
 $tool_content = "";
 
-$nameTools = $langTrackUser;
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
-$navigation[] = array("url"=>"detailsAll.php", "name"=> $langTrackAllPath);
 
-if (! $is_adminOfCourse ) die($langNotAllowed);
+$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
+if (! $is_adminOfCourse ) claro_die($langNotAllowed);
+$navigation[] = array("url"=>"detailsAll.php", "name"=> $langTrackAllPath);
+$nameTools = $langTrackUser;
 
 // user info can not be empty, return to the list of details
 if( empty($_REQUEST['uInfo']) )
@@ -84,11 +84,11 @@ if( empty($results) )
 
 $trackedUser = $results[0];
 
-$tool_content .= '<p>'."\n"
+$tool_content .= ucfirst(strtolower($langUser)).': <br />'."\n"
 	.'<ul>'."\n"
-	.'<li>'.$langLastName.' : '.$trackedUser['lastname'].'</li>'."\n"
-	.'<li>'.$langFirstName.' : '.$trackedUser['firstname'].'</li>'."\n"
-	.'<li>'.$langEmail.' : ';
+	.'<li>'.$langLastName.': '.$trackedUser['lastname'].'</li>'."\n"
+	.'<li>'.$langFirstName.': '.$trackedUser['firstname'].'</li>'."\n"
+	.'<li>'.$langEmail.': ';
 if( empty($trackedUser['email']) )	$tool_content .= $langNoEmail;
 else 								$tool_content .= $trackedUser['email'];
 

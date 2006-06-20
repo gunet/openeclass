@@ -53,11 +53,9 @@ require_once("../../include/baseTheme.php");
 $head_content = "";
 $tool_content = "";
 
-$nameTools = $langTrackAllPath;
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
-
-if (! $is_adminOfCourse ) die($langNotAllowed);
-
+if (! $is_adminOfCourse ) claro_die($langNotAllowed);
+$nameTools = $langTrackAllPath;
 
 // display title
 //$titleTab['mainTitle'] = $nameTools;

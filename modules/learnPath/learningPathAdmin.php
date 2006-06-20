@@ -54,8 +54,9 @@ $imgRepositoryWeb       = "../../images/";
 require_once("../../include/baseTheme.php");
 $head_content = "";
 $tool_content = "";
+$dialogBox = "";
 
-$nameTools = $langLearningPath;
+$nameTools = $langLearningPathAdmin;
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
 
 // $_SESSION
@@ -113,6 +114,7 @@ switch($cmd)
            
         //-- delete module cmdid and his children if it is a label
         // get the modules tree ( cmdid module and all its children)
+        //$temp[0] = get_module_tree( build_element_list($extendedList, 'parent', 'learnPath_module_id'), $_REQUEST['cmdid'] , 'learnPath_module_id');
         $temp[0] = get_module_tree( build_element_list($extendedList, 'parent', 'learnPath_module_id'), $_REQUEST['cmdid'] , 'learnPath_module_id');
         // delete the tree
         delete_module_tree($temp);

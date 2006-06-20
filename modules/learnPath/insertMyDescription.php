@@ -53,16 +53,16 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 require_once("../../include/baseTheme.php");
 $tool_content = "";
 
-$nameTools = $langInsertMyDescToolName;
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
+if ( ! $is_adminOfCourse ) claro_die($langNotAllowed);
 $navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langLearningPathAdmin);
+$nameTools = $langInsertMyDescToolName;
 
-if ( ! $is_adminOfCourse ) die($langNotAllowed);
 
 // $_SESSION
 if ( !isset($_SESSION['path_id']) )
 {
-      die ("<center> Not allowed ! (path_id not set :@ )</center>");
+      claro_die ("<center> Not allowed ! (path_id not set :@ )</center>");
 }
 
 

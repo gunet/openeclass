@@ -57,12 +57,9 @@ require_once("../../include/baseTheme.php");
 $tool_content = "";
 $pwd = getcwd();
 
-$is_AllowedToEdit = $is_adminOfCourse;
-
-$nameTools = $langimportLearningPath;
 $navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPathList);
-
-if (! $is_AllowedToEdit ) claro_die($langNotAllowed);
+if (! $is_adminOfCourse ) claro_die($langNotAllowed);
+$nameTools = $langimportLearningPath;
 
 mysql_select_db($currentCourseID);
 

@@ -64,18 +64,15 @@ $courseDir   = "courses/".$currentCourseID."/document";
 $baseWorkDir = $webDir.$courseDir;
 //$moduleWorkDir = $coursesRepositorySys.$moduleDir;
 
-$nameTools = $langInsertMyDocToolName;
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
+if ( ! $is_adminOfCourse ) claro_die($langNotAllowed);
 $navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langLearningPathAdmin);
-
-$is_AllowedToEdit = $is_adminOfCourse;
-
-if ( ! $is_AllowedToEdit ) die($langNotAllowed);
+$nameTools = $langInsertMyDocToolName;
 
 // $_SESSION
 if ( !isset($_SESSION['path_id']) )
 {
-      die ("<center> Not allowed ! (path_id not set :@ )</center>");
+      claro_die ("<center> Not allowed ! (path_id not set :@ )</center>");
 }
 
 mysql_select_db($currentCourseID);
@@ -141,6 +138,7 @@ function buildRequestModules()
 
 // evaluate how many form could be sent
 if (!isset($dialogBox)) $dialogBox = "";
+if (!isset($style)) $style = "";
 
 $iterator = 0;
 
@@ -209,6 +207,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                 $addedDoc = $filenameDocument;
 
                 $dialogBox .= $addedDoc ." ".$langDocInsertedAsModule."<br>";
+                $style = "success";
             }
             else
             {
@@ -242,10 +241,12 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                     $addedDoc =  $filenameDocument;
 
                     $dialogBox .= $addedDoc ." ".$langDocInsertedAsModule."<br>";
+                    $style = "success";
                 }
                 else
                 {
-                    $dialogBox .= $filenameDocument." : ".$langDocumentAlreadyUsed."<br>";
+                    $dialogBox .= $filenameDocument.": ".$langDocumentAlreadyUsed."<br>";
+                    $style = "caution";
                 }
             }
         }
@@ -316,7 +317,7 @@ while($row = mysql_fetch_array($result, MYSQL_ASSOC))
   LOAD FILES AND DIRECTORIES INTO ARRAYS
   --------------------------------------*/
 @chdir (realpath($baseWorkDir.$curDirPath))
-or die("<center>
+or claro_die("<center>
         <b>Wrong directory !</b>
         <br /> Please contact your platform administrator.</center>");
 $handle = opendir(".");
@@ -455,7 +456,7 @@ unset($attribute);
 
 // display list of available documents
 
-$tool_content .= display_my_documents($dialogBox) ;
+$tool_content .= display_my_documents($dialogBox, $style) ;
 
 //####################################################################################\\
 //################################## MODULES LIST ####################################\\

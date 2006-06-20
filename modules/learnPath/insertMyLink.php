@@ -57,16 +57,15 @@ require_once("../../include/baseTheme.php");
 $tool_content = "";
 $dialogBox = "";
 
-$nameTools = $langInsertMyLinkToolName;
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
+if ( ! $is_adminOfCourse ) claro_die($langNotAllowed);
 $navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langLearningPathAdmin);
-
-if ( ! $is_adminOfCourse ) die($langNotAllowed);
+$nameTools = $langInsertMyLinkToolName;
 
 // $_SESSION
 if ( !isset($_SESSION['path_id']) )
 {
-      die ("<center> Not allowed ! (path_id not set :@ )</center>");
+      claro_die ("<center> Not allowed ! (path_id not set :@ )</center>");
 }
 
 
