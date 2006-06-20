@@ -65,7 +65,7 @@ $langDocument = "Documents and Links";
 $langDocumentAlreadyUsed = "This document is already used as a module in this learning path";
 $langDocumentAsModule = "Use a document";
 $langDocumentInModule = "Document in module";
-$langEXERCISETypeDesc = "Claroline exercise";
+$langEXERCISETypeDesc = "Eclass exercise";
 $langErrorAssetNotFound = "Asset not found : ";
 $langErrorCopyAttachedFile = "Unable to copy file : ";
 $langErrorCopyScormFiles = "Error when copying needed SCORM files";
@@ -175,9 +175,9 @@ $langRawHasBeenChanged = "Minimum raw to pass has been changed";
 $langRemove = "Remove";
 $langRename = "Rename";
 $langRoot = "root";
-$langSCORMTypeDesc = "SCORM 1.2 conformable content";
+$langSCORMTypeDesc = "SCORM 2004 conformable content";
 $langScore = "Score";
-$langScormIntroTextForDummies = "Imported packages must consist of a zip file and be SCORM 1.2 conformable";
+$langScormIntroTextForDummies = "Imported packages must consist of a zip file and be SCORM 2004 conformable";
 $langSecondShort = "sec.";
 $langSize = "Size";
 $langStartModule = "Start Module";
@@ -242,8 +242,7 @@ $langScore = "Score";
 $langSize = "Size";
 
 $langAddComment = "Add a comment";
-$langAddModule = "Add";
-$langAddModulesButton = "Add module(s)";
+
 $langAddOneModuleButton = "Add module";
 $langAgenda = "Agenda";
 $langAltClarodoc = "Clarodoc";
@@ -289,8 +288,8 @@ $langModule = "Module";
 $langMonthNames = "Array";
 $langMyAgenda = "My calendar";
 $langMyCourses = "My course list";
-$langName = "Name";
-$langNameOfLang = "Array";
+
+
 $langNext = "Next";
 $langNoEx = "There is no exercise for the moment";
 $langOk = "Ok";
@@ -316,5 +315,20 @@ $langWork = "Assignments";
 $lang_enroll = "Enrol";
 $lang_footer_p_CourseManager = "Manager(s) for %s";
 $lang_p_platformManager = "Administrator for %s";
+
+$langLinkAsModule = "Use a Link";
+$langCourseDescriptionAsModule = "Use Course Description";
+$langInsertMyLinkToolName = "Insert a link as module";
+$langLinkInsertedAsModule = "has been added as a module of the course and of this learning path";
+$langLinkAlreadyUsed = "This link is already used as a module in this learning path";
+$langThisCourseDescriptionIsEmpty = "This course is presently not described";
+$langStatsOfLearnPath = "Statistics";
+$langTrackAllPathExplanation = "Progression of users on all learning paths";
+$langTrackUser = "User Tracking";
+$langLastName = "Last Name";
+$langFirstName = "First Name";
+$langEmail = "Email";
+$langNoEmail = "No email address specified";
+$langModules = "Modules";
 
 ?>
