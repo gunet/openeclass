@@ -1,28 +1,35 @@
 <?
-
 /*
- +----------------------------------------------------------------------+
- | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
- | Copyright (c) 2003 GUNet                                             |
- +----------------------------------------------------------------------+
- | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
- |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
- |          Christophe Gesche <gesche@ipm.ucl.ac.be>                    |
- |                                                                      |
- | e-class changes by: Costas Tsibanis <costas@noc.uoa.gr>              |
- |                     Yannis Exidaridis <jexi@noc.uoa.gr>              |
- |                     Alexandros Diamantidis <adia@noc.uoa.gr>         |
- +----------------------------------------------------------------------+
- | Standard header included by all e-class files                        |
- | Defines standard functions and validates variables                   |
- +----------------------------------------------------------------------+
-*/
+=============================================================================
+           GUnet e-Class 2.0
+        E-learning and Course Management Program
+================================================================================
+        Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Á full copyright notice can be read in "/info/copyright.txt".
 
+           Authors:     Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+                    Yannis Exidaridis <jexi@noc.uoa.gr>
+                       Alexandros Diamantidis <adia@noc.uoa.gr>
 
+        For a full list of contributors, see "credits.txt".
+
+        This program is a free software under the terms of the GNU
+        (General Public License) as published by the Free Software
+        Foundation. See the GNU License for more details.
+        The full license can be read in "license.txt".
+
+        Contact address: GUnet Asynchronous Teleteaching Group,
+        Network Operations Center, University of Athens,
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
 /*
-     +----------------------------------------------------------------------+
-     | General useful functions for e-Class                                        |
-     +----------------------------------------------------------------------+
+ 
+ /*
+ ----------------------------------------------------------------------
+  General useful functions for e-Class                                        
+  Standard header included by all e-class files                        
+  Defines standard functions and validates variables                   
+  ---------------------------------------------------------------------
 */
 
 // Show query string and then do MySQL query
@@ -41,6 +48,8 @@ function db_query2($sql, $db = FALSE)
 -----------------------------------------------------------------------
 */
 // Debug MySQL queries 
+ // commented, not working in all cases
+/*
 function db_query($sql, $db = FALSE) {
         if ($db) {
                 mysql_select_db($db);
@@ -54,6 +63,24 @@ function db_query($sql, $db = FALSE) {
         }
         return $r;
 }
+
+*/
+
+function db_query($sql, $db = FALSE) {
+
+	if ($db) {
+			mysql_select_db($db);
+			} 
+	$r = mysql_query($sql);
+
+	if (mysql_errno()) {
+						echo '<hr>' . mysql_errno() . ': ' . mysql_error()
+						. "<br><pre>$sql</pre><hr>";
+				}
+	return $r;
+}
+
+
 
 // Eclass SQL query wrapper returning only a single result value.
 // Useful in some cases because, it avoid nested arrays of results.
