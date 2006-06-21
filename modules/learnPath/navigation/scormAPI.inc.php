@@ -43,7 +43,7 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-//$TABLEUSERS             = "users";
+$TABLEUSERS             = "user";
 
 /*======================================
        CLAROLINE MAIN
@@ -51,6 +51,14 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 if($uid)
 {
+    mysql_select_db($mysqlMainDb);
+    // Get user first and last name
+    $sql = "SELECT nom, prenom
+              FROM `".$TABLEUSERS."` AS U
+             WHERE U.`user_id` = ". (int)$uid;
+    $userDetails = db_query_get_single_row($sql);
+    
+    mysql_select_db($currentCourseID);
     // Get general information to generate the right API inmplementation
     $sql = "SELECT *
               FROM `".$TABLEUSERMODULEPROGRESS."` AS UMP,
@@ -62,8 +70,8 @@ if($uid)
                AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
                AND LPM.`module_id` = ". (int)$_SESSION['module_id'];
     $userProgressionDetails = db_query_get_single_row($sql);
-    //echo $sql;
-    //print_r($userProgressionDetails);
+    $userProgressionDetails['nom'] = $userDetails['nom'];
+    $userProgressionDetails['prenom'] = $userDetails['prenom'];
 }
 
 if( !$uid || !$userProgressionDetails )
