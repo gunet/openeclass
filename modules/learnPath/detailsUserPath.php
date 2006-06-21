@@ -199,7 +199,11 @@ foreach ($flatElementList as $module)
 	else
 	{
 		if($module['contentType'] == CTEXERCISE_ )
-		$moduleImg = "quiz.png";
+			$moduleImg = "quiz.png";
+		else if($module['contentType'] == CTLINK_ )
+        	$moduleImg = "links.gif";
+        else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
+        	$moduleImg = "info.png";
 		else
 		$moduleImg = choose_image(basename($module['path']));
 
@@ -242,10 +246,53 @@ foreach ($flatElementList as $module)
 		$tool_content .= '<td>'.$total_time.'</td>'."\n";
 		//-- status
 		$tool_content .= '<td>';
-		if($module['contentType'] == CTEXERCISE_ && $module['lesson_status'] != "" ) 
-		$tool_content .= strtolower($module['lesson_status']);
-		else
-		$tool_content .= strtolower($module['lesson_status']);
+		if($module['contentType'] == CTEXERCISE_ && $module['lesson_status'] != "" ) {
+			//$tool_content .= strtolower($module['lesson_status']);
+			if ($module['lesson_status']=="NOT ATTEMPTED") {
+				$tool_content .= $langNotAttempted;
+			}
+			else if ($module['lesson_status']=="PASSED") {
+				$tool_content .= $langPassed;
+			}
+			else if ($module['lesson_status']=="FAILED") {
+				$tool_content .= $langFailed;
+			}
+			else if ($module['lesson_status']=="COMPLETED") {
+				$tool_content .= $langAlreadyBrowsed;
+			}
+			else if ($module['lesson_status']=="BROWSED") {
+				$tool_content .= $langAlreadyBrowsed;
+			}
+			else if ($module['lesson_status']=="INCOMPLETE") {
+				$tool_content .= $langNeverBrowsed;
+			}
+			else {
+				$tool_content .= strtolower($module['lesson_status']);
+			}
+		}
+		else {
+			if ($module['lesson_status']=="NOT ATTEMPTED") {
+				$tool_content .= $langNotAttempted;
+			}
+			else if ($module['lesson_status']=="PASSED") {
+				$tool_content .= $langPassed;
+			}
+			else if ($module['lesson_status']=="FAILED") {
+				$tool_content .= $langFailed;
+			}
+			else if ($module['lesson_status']=="COMPLETED") {
+				$tool_content .= $langAlreadyBrowsed;
+			}
+			else if ($module['lesson_status']=="BROWSED") {
+				$tool_content .= $langAlreadyBrowsed;
+			}
+			else if ($module['lesson_status']=="INCOMPLETE") {
+				$tool_content .= $langNeverBrowsed;
+			}
+			else {
+				$tool_content .= strtolower($module['lesson_status']);
+			}
+		}
 		$tool_content .= '</td>'."\n";
 		//-- progression
 		if($module['contentType'] != CTLABEL_ )

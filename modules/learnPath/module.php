@@ -298,7 +298,10 @@ if($module['contentType'] != CTLABEL_) //
         }
 
         // no sens to display a score in case of a document module
-        if (($resultBrowsed['contentType'] != CTDOCUMENT_))
+        if ( ($resultBrowsed['contentType'] != CTDOCUMENT_) &&
+             ($resultBrowsed['contentType'] != CTLINK_) &&
+             ($resultBrowsed['contentType'] != CTCOURSE_DESCRIPTION_)
+           )
         {
 			$tool_content .= '<tr>'."\n"
 				.'<td>'.$langYourBestScore.'</td>'."\n"
@@ -308,21 +311,27 @@ if($module['contentType'] != CTLABEL_) //
 
         //display lesson status
 
-        // document are just browsed or not, but not completed or passed...
+        // display a human readable string ...
 
-        if (($resultBrowsed['contentType']== CTDOCUMENT_))
-        {
-            if ($resultBrowsed['lesson_status']=="COMPLETED")
-            {
-                $statusToDisplay = $langAlreadyBrowsed;
-            }
-            else
-            {
-                $statusToDisplay = $langNeverBrowsed;
-            }
-        }
-        else
-        {
+		if ($resultBrowsed['lesson_status']=="NOT ATTEMPTED") {
+			$statusToDisplay = $langNotAttempted;
+		}
+		else if ($resultBrowsed['lesson_status']=="PASSED") {
+			$statusToDisplay = $langPassed;
+		}
+		else if ($resultBrowsed['lesson_status']=="FAILED") {
+			$statusToDisplay = $langFailed;
+		}
+		else if ($resultBrowsed['lesson_status']=="COMPLETED") {
+			$statusToDisplay = $langAlreadyBrowsed;
+		}
+		else if ($resultBrowsed['lesson_status']=="BROWSED") {
+			$statusToDisplay = $langAlreadyBrowsed;
+		}
+		else if ($resultBrowsed['lesson_status']=="INCOMPLETE") {
+			$statusToDisplay = $langNeverBrowsed;
+		}
+        else {
             $statusToDisplay = $resultBrowsed['lesson_status'];
         }
 		$tool_content .= '<tr>'."\n"

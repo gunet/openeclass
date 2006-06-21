@@ -88,7 +88,7 @@ if ($num == 0)
 	// TODO: name goes from langWhatever
 	$sql = "INSERT INTO `".$TABLEMODULE."`
 		(`name`, `contentType`)
-		VALUES ('Course Description', '".CTCOURSE_DESCRIPTION_."' )";
+		VALUES ('".$langCourseDescription."', '".CTCOURSE_DESCRIPTION_."' )";
 	$query = db_query($sql);
 
 	$insertedModule_id = mysql_insert_id();
