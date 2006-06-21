@@ -1,25 +1,15 @@
 <?
-
-$require_current_course = TRUE;
+//$require_current_course = TRUE;
 $langFiles = array('course_info', 'create_course', 'opencours', 'search');
 
-
-
-
-
-
-
 include '../../include/baseTheme.php';
-//$nameTools = $langModifInfo;
 
 $tool_content = "";
-
 
 if(empty($search_terms)) {
 //emfanish formas anahzthshs
 	
-	
-	$tool_content .= "
+		$tool_content .= "
 			<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
 			<table width=\"99%\"><caption>$langSearch</caption>
 			<tr>
@@ -64,15 +54,7 @@ if(empty($search_terms)) {
 			</tr>
 			</table>
 			</form>
-	
-	
-	
-	
-	
-	
-	
-	
-	";
+		";
 	
 }else 
 {//if isset($submit) = true
@@ -91,21 +73,12 @@ if(empty($search_terms)) {
 	}
 	
 	
-	
 	//ektypwsh mhnymatwn anazhthshs
 	$tool_content .=$langSearchingFor."<br><h2>".$search_terms."...</h2><br><br>";
 
-	
-	//anazhthsh sthn kentrikh vash - epilogh ths kentrikhs DB
-	mysql_select_db("$mysqlMainDb");
-	
-	
-	
-	
-	
-	
-	
-	
+		//anazhthsh sthn kentrikh vash - epilogh ths kentrikhs DB
+//	mysql_select_db("$mysqlMainDb");
+		
 	if($sbsystems["7"] == 1 && !empty($currentCourseCode))
 	{
 		//-------------------------------------------------------------------------------------------------
@@ -116,7 +89,7 @@ if(empty($search_terms)) {
 		$tool_content .= "$langAnnouncements<hr><ul>";
 		
 		$query = "SELECT * FROM annonces WHERE (contenu LIKE '%".$search_terms."%' OR temps LIKE '%".$search_terms."%') AND code_cours='".$currentCourseCode."'";	
-		$result = mysql_query($query);	
+		$result = db_query($query);	
 		
 		$c = 0;	
 		while($res = mysql_fetch_array($result))
@@ -128,19 +101,10 @@ if(empty($search_terms)) {
 		
 	}
 	
-
-	
-	
-	
 	
 	//anazhthsh sthn vash tou mathimatos
 	mysql_select_db("$currentCourseCode");
 
-	
-	
-	
-	
-	
 	//-------------------------------------------------------------------------------------------------
 	//anazhthsh ston pinaka introduction (eisagwgiko mhnyma)
 	$tool_content .= "</ul><br><br><br>$langIntroductionNote<hr><ul>";
@@ -155,15 +119,6 @@ if(empty($search_terms)) {
 		$tool_content .= "<li>".$res['texte_intro']."<br>";
 	}
 	if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
-
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	if($sbsystems["1"] == 1)
 	{
@@ -205,9 +160,7 @@ if(empty($search_terms)) {
 		if ($c == 0) $tool_content .= "<li>$langNoResult<br>";
 	}
 	
-	
-	
-	
+		
 	if($sbsystems["3"] == 1)
 	{
 		//-------------------------------------------------------------------------------------------------
