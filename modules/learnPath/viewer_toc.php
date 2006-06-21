@@ -158,12 +158,14 @@ foreach ($flatElementList as $module)
 	{
 		if ( $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED')
 		{
-			$progress = 100;
+			// commenting due to bug. Progress is calculated correctyl above
+			//$progress = 100;
 			$passExercise = true;
 		}
 		else
 		{
-			$progress = 0;
+			// commenting due to bug. Progress is calculated correctyl above
+			//$progress = 0;
 			$passExercise = false;
 		}
 	}
