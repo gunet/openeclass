@@ -230,13 +230,13 @@ foreach ($flatElementList as $module)
     elseif ( !$is_blocked )
     {
         if($module['contentType'] == CTEXERCISE_ ) 
-        {
             $moduleImg = 'quiz.png';
-        }
+        else if($module['contentType'] == CTLINK_ )
+        	$moduleImg = "links.gif";
+        else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
+        	$moduleImg = "info.png";
         else
-        {
             $moduleImg = choose_image(basename($module['path']));
-        }
             
         $contentType_alt = selectAlt($module['contentType']);
         $tool_content .= '<a href="module.php?module_id='.$module['module_id'].'">'
@@ -267,13 +267,13 @@ foreach ($flatElementList as $module)
     else
     {
         if($module['contentType'] == CTEXERCISE_ ) 
-        {
             $moduleImg = 'quiz.png';
-        }
+        else if($module['contentType'] == CTLINK_ )
+        	$moduleImg = "links.gif";
+        else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
+        	$moduleImg = "info.png";
         else
-        {
             $moduleImg = choose_image(basename($module['path']));
-        }
 
         $tool_content .= '<img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" border="0" />'."\n"
              .htmlspecialchars($module['name']);

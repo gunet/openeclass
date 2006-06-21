@@ -404,17 +404,19 @@ function nameBox($type, $mode)
  function selectImage($contentType)
  {
 
-      $imgList[CTDOCUMENT_] = "document.gif";
+      $imgList[CTDOCUMENT_] = "documents.png";
       $imgList[CTCLARODOC_] = "clarodoc.gif";
       $imgList[CTEXERCISE_] = "quiz.png";
       $imgList[CTSCORM_] = "scorm.gif";
+      $imgList[CTLINK_] = "links.gif";
+      $imgList[CTCOURSE_DESCRIPTION_] = "info.png";
 
       if (array_key_exists( $contentType , $imgList ))
       {
           return $imgList[$contentType];
       }
 
-      return "default.gif";
+      return "documents.png";
 
  }
  /**

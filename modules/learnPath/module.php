@@ -378,12 +378,9 @@ if( $is_adminOfCourse ) // for teacher only
             require_once("./include/scorm.inc.php");
             break;
         case CTCLARODOC_ :
-            break;
         case CTLABEL_ :
-            break;
         case CTCOURSE_DESCRIPTION_ :
         case CTLINK_:
-        	$tool_content .= '<hr noshade="noshade" size="1" />';
         	break;
     }
 } // if ($is_adminOfCourse)

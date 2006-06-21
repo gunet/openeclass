@@ -86,8 +86,9 @@ function choose_image($fileName)
 		$type['web'       ] = array("htm", "html", "htx", "xml", "xsl", "php");
 		$type['image'     ] = array("gif", "jpg", "png", "bmp", "jpeg");
 		$type['audio'     ] = array("wav", "midi", "mp2", "mp3", "mp4", "vqf", "midi");
+		$type['video'     ] = array("avi", "mpg", "mpeg", "mov", "divx");
 		$type['excel'     ] = array("xls", "xlt", "xls", "xlt");
-		$type['compressed'] = array("zip", "tar", "rar", "gz");
+		$type['compressed'] = array("zip", "tar", "rar", "gz", "bz2");
 		$type['code'      ] = array("js", "cpp", "c", "java");
 		$type['acrobat'   ] = array("pdf");
 		$type['powerpoint'] = array("ppt");
@@ -97,6 +98,7 @@ function choose_image($fileName)
 		$image['web'       ] = "html.gif";
 		$image['image'     ] = "gif.gif";
 		$image['audio'     ] = "wav.gif";
+		$image['video'     ] = "mpg.gif";
 		$image['excel'     ] = "xls.gif";
 		$image['compressed'] = "zip.gif";
 		$image['code'      ] = "js.gif";
@@ -118,7 +120,7 @@ function choose_image($fileName)
 		}
 	}
 
-	return "defaut.gif";
+	return "documents.png";
 }
 
 //------------------------------------------------------------------------------
