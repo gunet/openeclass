@@ -49,7 +49,7 @@ Translate the interface in chosen language
  $langAllModules = "Όλα τα Υποσυστήματα";
  $langStatsType = "Είδος Στατιστικών";
  $langVisits = "Επισκέψεις";
- $langFavourite = "Προτιμήση Υποσυστημάτων";
+ $langFavourite = "Προτίμηση Υποσυστημάτων";
  $langInterval = "Διάστημα";
  $langDaily = "Ημερήσιο";
  $langWeekly = "Εβδομαδιαίο";

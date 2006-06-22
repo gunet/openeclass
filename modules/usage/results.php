@@ -100,7 +100,7 @@ switch ($u_stats_type) {
             }
         break;
     }
-    $chart->setTitle("Visits");
+    $chart->setTitle("$langVisits");
 
     break;
     case "favourite":
@@ -110,7 +110,7 @@ switch ($u_stats_type) {
         while ($row = mysql_fetch_assoc($result)) {
             $chart->addPoint(new Point($row['name'], $row['cnt']));
         }
-    $chart->setTitle("Favourite Modules");
+    $chart->setTitle("$langFavourite");
     break;
 }
 mysql_free_result($result);

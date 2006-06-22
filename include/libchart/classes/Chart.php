@@ -65,8 +65,8 @@
             unset($this->lowerBound);
             unset($this->upperBound);
 
-            $this->setTitle("Untitled chart");
-            $this->setLogo(dirname(__FILE__) . "/../images/PoweredBy.png");
+//            $this->setTitle("Untitled Chart");
+//            $this->setLogo(dirname(__FILE__) . "/../images/PoweredBy.png");
         }
 
         /**
