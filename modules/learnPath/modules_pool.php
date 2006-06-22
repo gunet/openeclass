@@ -8,8 +8,8 @@
         Á full copyright notice can be read in "/info/copyright.txt".
         
        	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
-      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+                     Yannis Exidaridis <jexi@noc.uoa.gr> 
+                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
         For a full list of contributors, see "credits.txt".  
      
@@ -28,12 +28,23 @@
 	modules_pool.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+	               
+	based on Claroline version 1.7 licensed under GPL
+	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
+	      
+	      original file: modules_pool.php Revision: 1.32
+	      
+	Claroline authors: Piraux Sébastien <pir@cerdecam.be>
+                      Lederer Guillaume <led@cerdecam.be>
 ==============================================================================        
-    @Description:
+    @Description: This is the page where the list of modules of the course
+                  present on the platform can be browsed
+                  user allowed to edit the course can 
+                  delete the modules form this page
 
- 	@Comments:
+    @Comments:
  
-  	@todo: 
+    @todo: 
 ==============================================================================
 */
 

@@ -8,8 +8,8 @@
         Á full copyright notice can be read in "/info/copyright.txt".
         
        	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
-      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+                     Yannis Exidaridis <jexi@noc.uoa.gr> 
+                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
         For a full list of contributors, see "credits.txt".  
      
@@ -28,12 +28,34 @@
 	learningPathAdmin.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+	               
+	based on Claroline version 1.7 licensed under GPL
+	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
+	      
+	      original file: learningPathAdmin.php Revision: 1.40.2.1
+	      
+	Claroline authors: Piraux Sébastien <pir@cerdecam.be>
+                      Lederer Guillaume <led@cerdecam.be>
 ==============================================================================        
-    @Description:
+    @Description: This file is available only to the course admin
 
- 	@Comments:
+                  It allow course admin to :
+                  - change learning path name
+                  - change learning path comment
+                  - links to
+                    - create empty module
+                    - use document as module
+                    - use exercice as module
+                    - use link as module
+                    - use course description as module
+                    - re-use a module of the same course
+                  - remove modules from learning path (it doesn't delete it ! )
+                  - change locking , visibility, order
+                  - access to config page of modules in this learning path
+
+    @Comments:
  
-  	@todo: 
+    @todo: 
 ==============================================================================
 */
 

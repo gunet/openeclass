@@ -8,8 +8,8 @@
         Á full copyright notice can be read in "/info/copyright.txt".
         
        	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
-      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+                     Yannis Exidaridis <jexi@noc.uoa.gr> 
+                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
         For a full list of contributors, see "credits.txt".  
      
@@ -28,12 +28,32 @@
 	learningPathList.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+	               
+	based on Claroline version 1.7 licensed under GPL
+	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
+	      
+	      original file: learningPathList Revision: 1.56
+	      
+	Claroline authors: Piraux Sébastien <pir@cerdecam.be>
+                      Lederer Guillaume <led@cerdecam.be>
 ==============================================================================        
-    @Description:
+    @Description: This file displays the list of all learning paths available
+                  for the course.
 
- 	@Comments:
+                  Display :
+                  - Name of tool
+                  - Introduction text for learning paths
+                  - (admin of course) link to create new empty learning path
+                  - (admin of course) link to import (upload) a learning path
+                  - list of available learning paths
+                  - (student) only visible learning paths
+                  - (student) the % of progression into each learning path
+                  - (admin of course) all learning paths with
+                  - modify, delete, statistics, visibility and order, options
+
+    @Comments:
  
-  	@todo: 
+    @todo: 
 ==============================================================================
 */
 

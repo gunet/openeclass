@@ -8,8 +8,8 @@
         Á full copyright notice can be read in "/info/copyright.txt".
         
        	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
-      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+                     Yannis Exidaridis <jexi@noc.uoa.gr> 
+                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
         For a full list of contributors, see "credits.txt".  
      
@@ -28,36 +28,46 @@
 	scormExport12.inc.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+	               
+	based on Claroline version 1.7 licensed under GPL
+	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
+	      
+	      original file: scormExport.inc.php Revision: 1.11.2.4
+	      
+	Claroline authors: Amand Tihon <amand.tihon@alrj.org>
 ==============================================================================        
-    @Description:
+    @Description: This script is for export to SCORM 1.2 package. It is kept
+                  for historical and backwards compatibility reasons.
+                  
+                  How SCORM export should be done
 
- 	@Comments:
+                  1. Get (flat) list of LP's content
+                  2. Create export directory structure, with base files 
+                  (dtd/xsd, javascript, ...)
+                  3. Find if any SCOs are used in the LP
+                  4. If it's the case, copy the whole SCORM content into 
+                  destination directory
+                  5. Rebuild imsmanifest.xml from the list we got in 1.
+                     - *EVERY* document must be present in the LP. If an 
+                     HTML document includes an image, 
+                     it must be declared in the LP, but marked as "invisible".
+                     - If a module is "visible", add it both as an <item> and 
+                     as a <resource>, otherwise, add it only as a <resource>.
+                     - The rebuild must take into acount that modules are ordered 
+                     in a tree, not a flat list.
+
+                  Current limitations :
+                  - Dependencies between resources are not taken into account.
+                  - No multi-page exercises
+
+                  This file is currently supposed to be included by 
+                  learningPathList.php, in order to inherit some of its global 
+                  variables, like some tables' names.
+
+    @Comments:
  
-  	@todo: 
+    @todo: 
 ==============================================================================
-*/
-
-/*
-    How SCORM export should be done
-    
-    1. Get (flat) list of LP's content
-    2. Create export directory structure, with base files (dtd/xsd, javascript, ...)
-    3. Find if any SCOs are used in the LP
-    4. If it's the case, copy the whole SCORM content into destination directory
-    5. Rebuild imsmanifest.xml from the list we got in 1.
-        - *EVERY* document must be present in the LP. If an HTML document includes an image,
-          it must be declared in the LP, but marked as "invisible".
-        - If a module is "visible", add it both as an <item> and as a <resource>,
-          otherwise, add it only as a <resource>.
-        - The rebuild must take into acount that modules are ordered in a tree, not a flat list.
-        
-    Current limitations :
-    - Dependencies between resources are not taken into account.
-    - No multi-page exercises
-    
-    This file is currently supposed to be included by learningPathList.php, in order to inherit some
-    of its global variables, like some tables' names.
-    
 */
 
 if(!class_exists('ScormExport')):

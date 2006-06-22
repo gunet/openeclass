@@ -8,8 +8,8 @@
         Á full copyright notice can be read in "/info/copyright.txt".
         
        	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
-      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+                     Yannis Exidaridis <jexi@noc.uoa.gr> 
+                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
         For a full list of contributors, see "credits.txt".  
      
@@ -29,11 +29,12 @@
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 ==============================================================================        
-    @Description:
+    @Description: This script displays the Course Description when 
+                  the user is navigating in a learning path.
 
- 	@Comments:
+    @Comments:
  
-  	@todo: 
+    @todo: 
 ==============================================================================
 */
 

@@ -8,8 +8,8 @@
         Á full copyright notice can be read in "/info/copyright.txt".
         
        	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
-      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+                     Yannis Exidaridis <jexi@noc.uoa.gr> 
+                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
         For a full list of contributors, see "credits.txt".  
      
@@ -28,12 +28,16 @@
 	showExercise.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+	               Dionysios G. Synodinos <synodinos@gmail.com>
 ==============================================================================        
-    @Description:
+    @Description: This script is a replicate from 
+                  exercice/exercice.php, but it is modified for the 
+                  displaying needs of the learning path tool. The core 
+                  application logic remains the same.
 
- 	@Comments:
+    @Comments:
  
-  	@todo: 
+    @todo: 
 ==============================================================================
 */
 

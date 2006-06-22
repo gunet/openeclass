@@ -8,8 +8,8 @@
         Á full copyright notice can be read in "/info/copyright.txt".
         
        	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
-      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+                     Yannis Exidaridis <jexi@noc.uoa.gr> 
+                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
         For a full list of contributors, see "credits.txt".  
      
@@ -28,36 +28,45 @@
 	scromExport.inc.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+	               
+	based on Claroline version 1.7 licensed under GPL
+	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
+	      
+	      original file: scormExport.inc.php Revision: 1.11.2.4
+	      
+	Claroline authors: Amand Tihon <amand.tihon@alrj.org>
 ==============================================================================        
-    @Description:
+    @Description: This script is for export to SCORM 2004 package.
+                  
+                  How SCORM export should be done
 
- 	@Comments:
+                  1. Get (flat) list of LP's content
+                  2. Create export directory structure, with base files 
+                  (dtd/xsd, javascript, ...)
+                  3. Find if any SCOs are used in the LP
+                  4. If it's the case, copy the whole SCORM content into 
+                  destination directory
+                  5. Rebuild imsmanifest.xml from the list we got in 1.
+                     - *EVERY* document must be present in the LP. If an 
+                     HTML document includes an image, 
+                     it must be declared in the LP, but marked as "invisible".
+                     - If a module is "visible", add it both as an <item> and 
+                     as a <resource>, otherwise, add it only as a <resource>.
+                     - The rebuild must take into acount that modules are ordered 
+                     in a tree, not a flat list.
+
+                  Current limitations :
+                  - Dependencies between resources are not taken into account.
+                  - No multi-page exercises
+
+                  This file is currently supposed to be included by 
+                  learningPathList.php, in order to inherit some of its global 
+                  variables, like some tables' names.
+
+    @Comments:
  
-  	@todo: 
+    @todo: 
 ==============================================================================
-*/
-
-/*
-    How SCORM export should be done
-    
-    1. Get (flat) list of LP's content
-    2. Create export directory structure, with base files (dtd/xsd, javascript, ...)
-    3. Find if any SCOs are used in the LP
-    4. If it's the case, copy the whole SCORM content into destination directory
-    5. Rebuild imsmanifest.xml from the list we got in 1.
-        - *EVERY* document must be present in the LP. If an HTML document includes an image,
-          it must be declared in the LP, but marked as "invisible".
-        - If a module is "visible", add it both as an <item> and as a <resource>,
-          otherwise, add it only as a <resource>.
-        - The rebuild must take into acount that modules are ordered in a tree, not a flat list.
-        
-    Current limitations :
-    - Dependencies between resources are not taken into account.
-    - No multi-page exercises
-    
-    This file is currently supposed to be included by learningPathList.php, in order to inherit some
-    of its global variables, like some tables' names.
-    
 */
 
 if(!class_exists('ScormExport')):
@@ -95,6 +104,7 @@ define('LISTBOX_FILL',	2);
 /**
  * Exports a Learning Path to a SCORM package.
  *
+ * @author Thanos Kyritsis <atkyritsis@upnet.gr>
  * @author Amand Tihon <amand@alrj.org>
  */
 class ScormExport
@@ -149,6 +159,7 @@ class ScormExport
      * Fetch info from the database 
      *
      * @return False on error, true otherwise.
+     * @author Thanos Kyritsis <atkyritsis@upnet.gr>
      * @author Amand Tihon <amand@alrj.org>
      */
     function fetch()
@@ -255,6 +266,7 @@ class ScormExport
     * @param $quizId The quiz 
     * @param $raw_to_pass The needed score to attain
     * @return False on error, True if everything went well.
+    * @author Thanos Kyritsis <atkyritsis@upnet.gr>
     * @author  Amand Tihon <amand@alrj.org>
     */
     function prepareQuiz($quizId, $raw_to_pass=50)
@@ -674,6 +686,7 @@ class ScormExport
      * 
      * @return False on error, true otherwise.
      * @see createManifest
+     * @author Thanos Kyritsis <atkyritsis@upnet.gr>
      * @author Amand Tihon <amand@alrj.org>
      */
     function prepare()
@@ -808,6 +821,7 @@ class ScormExport
      * Create the imsmanifest.xml file.
      *
      * @return False on error, true otherwise.
+     * @author Thanos Kyritsis <atkyritsis@upnet.gr>
      * @author Amand Tihon <amand@alrj.org>
      */
     function createManifest()
@@ -819,6 +833,7 @@ class ScormExport
          * @param $title The resource title
          * @param $description The resource description
          * @return A string containing the metadata block.
+         * @author Thanos Kyritsis <atkyritsis@upnet.gr>
          * @author Amand Tihon <amand@alrj.org>
          */
         function makeMetaData($title, $description, $identifier)
@@ -896,6 +911,16 @@ class ScormExport
             return $out;
         }
         
+        /**
+         * Create a <metadata> for the whole CAM model package
+         *
+         *
+         * @param $title The resource title
+         * @param $description The resource description
+         * @return A string containing the metadata block.
+         *
+         * @author Thanos Kyritsis <atkyritsis@upnet.gr>
+         */
         function makeCAMetaData($title, $description)
         {
             if ( empty($title) and empty($description) ) return ' ';
@@ -943,6 +968,8 @@ class ScormExport
          * @param $itemlist the subtree to build
          * @param $depth indentation level. Is it really useful ?
          * @return the (sub-)tree representation
+         *
+         * @author Thanos Kyritsis <atkyritsis@upnet.gr>
          * @author Amand Tihon <amand@alrj.org>
          */
         $blocking = "";
@@ -997,6 +1024,8 @@ class ScormExport
          * @param $filename string: the name of the file to create, absolute.
          * @param $targetPath string: The actual document path, relative to the scorm
          * @return False on error, true otherwise.
+         *
+         * @author Thanos Kyritsis <atkyritsis@upnet.gr>
          * @author Amand Tihon <amand@alrj.org>
          */
         function createFrameFile($fileName, $targetPath)
@@ -1023,6 +1052,14 @@ class ScormExport
             return true;
         }
         
+        /**
+         * Create the frame file that'll hold the course description. 
+         * This frame sets the SCO's status
+         * @param $filename string: the name of the file to create, absolute.
+         * @return False on error, true otherwise.
+         *
+         * @author Thanos Kyritsis <atkyritsis@upnet.gr>
+         */
         function createDescFrameFile($fileName)
         {
             global $langErrorCreatingFrame, $langErrorCreatingManifest, $charset;

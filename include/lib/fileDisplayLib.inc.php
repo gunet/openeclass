@@ -1,23 +1,50 @@
 <?php
 
-/* vim: set expandtab tabstop=4 shiftwidth=4:
-  +----------------------------------------------------------------------+
-  | CLAROLINE version 1.3.0 $Revision$                             |
-  +----------------------------------------------------------------------+
-  | Copyright (c) 2000, 2001 Universite catholique de Louvain (UCL)      |
-  +----------------------------------------------------------------------+
-  | $Id$  |
-  +----------------------------------------------------------------------+
-  | This source file is subject to the GENERAL PUBLIC LICENSE,           |
-  | available through the world-wide-web at                              |
-  | http://www.gnu.org/copyleft/gpl.html                                 |
-  +----------------------------------------------------------------------+
-  | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-  |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-  |          Christophe Gesché <gesche@ipm.ucl.ac.be>                    |
-  +----------------------------------------------------------------------+
-*/
+/**=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Á full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+                     Yannis Exidaridis <jexi@noc.uoa.gr> 
+                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/**===========================================================================
+	fileDisplayLib.inc.php
+	@last update: 30-06-2006 by Thanos Kyritsis
+	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+	               
+	based on Claroline version 1.3 licensed under GPL
+	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
+	      
+	      original file: fileDisplayLib.inc.php Revision: 1.2
+	      
+	Claroline authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>
+                      Hugues Peeters    <peeters@ipm.ucl.ac.be>
+                      Christophe Gesché <gesche@ipm.ucl.ac.be>
+==============================================================================        
+    @Description: 
+
+    @Comments:
+ 
+    @todo: 
+==============================================================================
+*/
 
 /******************************************
  GENERIC FUNCTIONS : FOR OLDER PHP VERSIONS
@@ -70,6 +97,7 @@ function stripSubmitValue(&$submitArray)
  * Define the image to display for each file extension
  * This needs an existing image repository to works
  *
+ * @author - Thanos Kyritsis <atkyritsis@upnet.gr>
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
  * @param  - fileName (string) - name of a file
  * @retrun - the gif image to chose

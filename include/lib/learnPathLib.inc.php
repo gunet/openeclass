@@ -8,8 +8,8 @@
         Á full copyright notice can be read in "/info/copyright.txt".
         
        	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
-      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+                     Yannis Exidaridis <jexi@noc.uoa.gr> 
+                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
         For a full list of contributors, see "credits.txt".  
      
@@ -28,33 +28,23 @@
 	learnPathLib.inc.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+	               
+	based on Claroline version 1.7 licensed under GPL
+	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
+	      
+	      original file: learnPath.lib.inc.php Revision: 1.41.2.2
+	      
+	Claroline authors: Piraux Sébastien <pir@cerdecam.be>
+                      Lederer Guillaume <led@cerdecam.be>
 ==============================================================================        
-    @Description:
+    @Description: This functions library is used by most of the pages of the 
+                  learning path tool.
 
- 	@Comments:
+    @Comments:
  
-  	@todo: 
+    @todo: 
 ==============================================================================
 */
-
-/**
- * CLAROLINE 
- *
- * This functions library is used by most of the pages of the learning path tool
- *
- * @version version 1.7 $Revision$
- *
- * @copyright (c) 2001, 2005 Universite catholique de Louvain (UCL)
- *
- * @license http://www.gnu.org/copyleft/gpl.html (GPL) GENERAL PUBLIC LICENSE 
- *
- * @author Piraux Sébastien <pir@cerdecam.be>
- * @author Lederer Guillaume <led@cerdecam.be>
- *
- * @package CLLNP
- *
- */
-
 
 /**
 * content type
@@ -119,6 +109,7 @@ define ( 'LEARNINGPATHMODULE_', 4 );
  * @param string $type MODULE_ , LEARNINGPATH_ , LEARNINGPATHMODULE_
  * @param string $mode DISPLAY_ , UPDATE_ , DELETE_
  *
+ * @author Thanos Kyritsis <atkyritsis@upnet.gr>
  * @author Piraux Sébastien <pir@cerdecam.be>
  * @author Lederer Guillaume <led@cerdecam.be>
  */
@@ -278,6 +269,8 @@ function commentBox($type, $mode)
   *
   * @param string $type MODULE_ , LEARNINGPATH_
   * @param string $mode display(DISPLAY_) or update(UPDATE_) mode, no delete for a name
+  *
+  * @author Thanos Kyritsis <atkyritsis@upnet.gr>
   * @author Piraux Sébastien <pir@cerdecam.be>
   * @author Lederer Guillaume <led@cerdecam.be>
   */
@@ -398,6 +391,8 @@ function nameBox($type, $mode)
   *
   * @param  string $contentType type of content in learning path
   * @return string name of the image with extension
+  *
+  * @author Thanos Kyritsis <atkyritsis@upnet.gr>
   * @author Piraux Sébastien <pir@cerdecam.be>
   * @author Lederer Guillaume <led@cerdecam.be>
   */
@@ -722,13 +717,12 @@ function get_learnPath_progress($lpid, $lpUid)
  *
  * @param string $dialogBox Error or confirmation text
  *
+ * @author Thanos Kyritsis <atkyritsis@upnet.gr>
  * @author Piraux Sébastien <pir@cerdecam.be>
  * @author Lederer Guillaume <led@cerdecam.be>
  */
 function display_my_exercises($dialogBox, $style)
 {
-    //$tbl_cdb_names = claro_sql_get_course_tbl();
-    //$tbl_quiz_test = $tbl_cdb_names['quiz_test'];
     $tbl_quiz_test = "exercices";
 
     global $langAddModule;
@@ -849,6 +843,8 @@ function display_my_exercises($dialogBox, $style)
   *
   * @param string $dialogBox Error or confirmation text
   * @return nothing
+  *
+  * @author Thanos Kyritsis <atkyritsis@upnet.gr>
   * @author Piraux Sébastien <pir@cerdecam.be>
   * @author Lederer Guillaume <led@cerdecam.be>
   */
@@ -1253,6 +1249,7 @@ function delete_module_tree($module_tree)
  *
  * @return array the requesting node (with all its children)
  *
+ * @author Thanos Kyritsis <atkyritsis@upnet.gr>
  * @author Piraux Sébastien <pir@cerdecam.be>
  */
 function get_module_tree( $lpModules , $id, $field = 'module_id')
@@ -1570,6 +1567,7 @@ function claro_disp_tool_title($titlePart, $helpUrl = false)
  * to display any confirmation or error messages, or to ask to the user
  * to enter simple parameters.
  *
+ * @author Thanos Kyritsis <atkyritsis@upnet.gr>
  * @author Hugues Peeters <hugues.peeters@claroline.net>
  * @param string $message - include your self any additionnal html
  *                          tag if you need them
@@ -1662,6 +1660,7 @@ function claro_disp_button($url, $text, $confirmMessage = '')
 /**
  * Function used to draw a progression bar
  *
+ * @author Thanos Kyritsis <atkyritsis@upnet.gr>
  * @author Piraux Sï¿½astien <pir@cerdecam.be>
  *
  * @param integer $progress progression in pourcent
@@ -1713,6 +1712,7 @@ function claro_disp_progress_bar ($progress, $factor)
  *
  * @global strin urlAppend from    claro_main.conf.php
  *
+ * @author Thanos Kyritsis <atkyritsis@upnet.gr>
  * @author Hugues Peeters <hugues.peeters@claroline.net>
  */
 // Example : $htmlHeadXtra[] = '<style type="text/css">

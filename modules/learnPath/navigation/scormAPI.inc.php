@@ -8,8 +8,8 @@
         Á full copyright notice can be read in "/info/copyright.txt".
         
        	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
-      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+                     Yannis Exidaridis <jexi@noc.uoa.gr> 
+                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
         For a full list of contributors, see "credits.txt".  
      
@@ -28,12 +28,24 @@
 	scromAPI.inc.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+	               
+	based on Claroline version 1.7 licensed under GPL
+	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
+	      
+	      original file: scormAPI.inc.php Revision: 1.12.2.2
+	      
+	Claroline authors: Piraux Sébastien <pir@cerdecam.be>
+                      Lederer Guillaume <led@cerdecam.be>
 ==============================================================================        
-    @Description:
+    @Description: This file must be included when the module browsed is SCORM 
+                  conformant. This script supplies the SCORM API 
+                  implementation in javascript for browsers like NS and 
+                  Mozilla. This script is the client side API javascript 
+                  generated for user with browser like NS and Mozilla.
 
- 	@Comments:
+    @Comments:
  
-  	@todo: 
+    @todo: 
 ==============================================================================
 */
 

@@ -8,8 +8,8 @@
         Á full copyright notice can be read in "/info/copyright.txt".
         
        	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
-      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+                     Yannis Exidaridis <jexi@noc.uoa.gr> 
+                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
         For a full list of contributors, see "credits.txt".  
      
@@ -28,12 +28,26 @@
 	detailsUser.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+	               
+	based on Claroline version 1.7 licensed under GPL
+	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
+	      
+	      original file: tracking/userLog.php Revision: 1.37
+	      
+	Claroline authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>
+                      Hugues Peeters    <peeters@ipm.ucl.ac.be>
+                      Christophe Gesché <gesche@ipm.ucl.ac.be>
+                      Sebastien Piraux  <piraux_seb@hotmail.com>
 ==============================================================================        
-    @Description:
+    @Description: This script presents the student's progress for all 
+                  learning paths available in a course to the teacher.
+                  
+                  Only the Learning Path specific code was ported and 
+                  modified from the original claroline file.
 
- 	@Comments:
+    @Comments:
  
-  	@todo: 
+    @todo: 
 ==============================================================================
 */
 

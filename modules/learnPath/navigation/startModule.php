@@ -8,8 +8,8 @@
         Á full copyright notice can be read in "/info/copyright.txt".
         
        	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
-      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+                     Yannis Exidaridis <jexi@noc.uoa.gr> 
+                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
         For a full list of contributors, see "credits.txt".  
      
@@ -28,37 +28,26 @@
 	startModule.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+	               
+	based on Claroline version 1.7 licensed under GPL
+	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
+	      
+	      original file: startModule.php Revision: 1.21.2.1
+	      
+	Claroline authors: Piraux Sébastien <pir@cerdecam.be>
+                      Lederer Guillaume <led@cerdecam.be>
 ==============================================================================        
-    @Description:
+    @Description: This script is the main page loaded when user start viewing 
+                  a module in the browser. We define here the frameset 
+                  containing the launcher module (SCO if it is a SCORM 
+                  conformant one) and a frame to update the user's progress.
+                  
 
- 	@Comments:
+    @Comments:
  
-  	@todo: 
+    @todo: 
 ==============================================================================
 */
-
-/**
- * CLAROLINE 
- *
- * @version 1.7 $Revision$
- *
- * @copyright (c) 2001, 2005 Universite catholique de Louvain (UCL)
- *
- * @license http://www.gnu.org/copyleft/gpl.html (GPL) GENERAL PUBLIC LICENSE
- *
- * @author Piraux Sébastien <pir@cerdecam.be>
- * @author Lederer Guillaume <led@cerdecam.be>
- *
- * @package CLLNP
- * @subpackage navigation
- *
-  * This script is the main page loaded when user start viewing a module in the browser.
-  * We define here the frameset containing the launcher module (SCO if it is a SCORM conformant one)
-  * and a top and bottom frame to display the claroline banners.
-  * If the module is an exercise of claroline, no frame is created,
-  * we redirect to exercise_submit.php page in a path mode
-  *
-  */
 
 /*======================================
        CLAROLINE MAIN
