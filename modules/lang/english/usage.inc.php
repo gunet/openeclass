@@ -48,6 +48,7 @@ Translate the interface in chosen language
  $langModule = "Module";
  $langAllModules = "All Modules";
  $langStatsType = "Statistics Type";
+ $langTotalVisits = "Total Visits";
  $langVisits = "Visits";
  $langFavourite = "Module Preferences";
  $langInterval = "Interval";

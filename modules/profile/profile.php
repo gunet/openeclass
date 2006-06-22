@@ -25,7 +25,7 @@
 ==============================================================================
 */
 
-$langFiles = 'registration';
+$langFiles = array('registration','usage');
 $require_help = TRUE;
 $helpTopic = 'Profile';
 include '../../include/baseTheme.php';
@@ -365,10 +365,9 @@ $tool_content .= "<form method=\"post\" action=\"$sec?submit=yes\">
 #############################################################
 //$tool_content .=  "</td></tr><tr><td><br><hr noshade size=\"1\">";
 
-
 // Chart display added - haniotak
 if (!extension_loaded('gd')) {
-    $tool_content .= "GD library not installed!";
+    $tool_content .= "$langGDRequired";
 } else {
 		$totalHits = 0;
     require_once '../../include/libchart/libchart.php';
@@ -387,7 +386,7 @@ if (!extension_loaded('gd')) {
         }
         mysql_free_result($result);
     }
-    $tool_content .= "<p>Total visits: $totalHits</p>";
+    $tool_content .= "<p>$langTotalVisits: $totalHits</p>";
     $chart = new PieChart(500, 300);
     foreach ($hits as $code => $count) {
         $chart->addPoint(new Point($code, $count));
@@ -448,12 +447,11 @@ while ($leRecord = mysql_fetch_array($leResultat)) {
 }
 
 $tool_content .= "</tbody></table>";
-//end_page();
 draw($tool_content, 1);
 
 // Unlink chart file - haniotak
 if ($made_chart) {
-    $ob_flush(); // don't keep user waiting
+    ob_flush(); // don't keep user waiting
     sleep(5);
     unlink($webDir.$chart_path);
 }
