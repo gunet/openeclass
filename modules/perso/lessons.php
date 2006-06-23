@@ -52,7 +52,7 @@ function  getUserLessonInfo($uid, $type) {
 	$repeat_val = 0;
 
 	$lesson_titles = array();
-
+//	$userStatus = 0;//flat to check what links should be shown in the personalised interface
 	//getting user's lesson titles
 	while ($mycourses = mysql_fetch_row($mysql_query_result)) {
 
@@ -75,7 +75,7 @@ function  getUserLessonInfo($uid, $type) {
 	$memory_result = db_query($memory, $mysqlMainDb);
 	
 	while ($my_memory_result = mysql_fetch_row($memory_result)) {
-		dumpArray($my_memory_result);
+//		dumpArray($my_memory_result);
 		$lesson_announce_f = eregi_replace("-", " ", $my_memory_result[0]);
 		$lesson_doc_f = eregi_replace("-", " ", $my_memory_result[1]);
 		$lesson_forum_f = eregi_replace("-", " ", $my_memory_result[2]);
@@ -103,54 +103,51 @@ function  getUserLessonInfo($uid, $type) {
 		return $ret_val;
 	}
 
-	//	return($ret_val);
-
 }
 
 
 function htmlInterface($data) {
+	global $statut, $is_admin, $urlServer,$langCourseCreate,$langOtherCourses;
 	$lesson_content = <<<lCont
 
-      		<div class="blocks">
-			<table width="100%" class="blocks">
-			<thead>
-				<tr><th>Τα μαθήματα μου</th></tr>
-			</thead><tbody>
+      		<div id="datacontainer">
+
+				<ul id="datalist">
 lCont;
 
 	for ($i=0; $i<$data[0]; $i++){
-		if ($data[4][$i] == 1) {
+/*		if ($data[4][$i] == 1) {
 			$prof_css = "class=\"statut\"";
 		} else {
 			$prof_css = "";
-		}
+		}*/
 
 		$lesson_content .= "
-	<tr>
-	<td><div $prof_css>
-		<a $prof_css href=\"courses/".$data[2][$i]."\" onfocus=\"this.blur()\">".$data[2][$i]." - ".$data[1][$i]."
-		<br>".$data[3][$i]."</div></a>
-	</td>
-	</tr>
+	<li>
+	<a class=\"square_bullet\" href=\"courses/".$data[2][$i]."\">
 	
+	<div class=\"title_pos\">".$data[2][$i]." - ".$data[1][$i]."</div>
+	<div class=\"content_pos\">".$data[3][$i]."</div>
+	</a>
+	</li>
 	";
 	}
 
 
 
-	$lesson_content .= <<<lCont2
-	<tr>
-		<td>
+	$lesson_content .= "
+	</ul>
+			</div> 
 		<br>
-		<p>Λίστα μαθημάτων | Δημιουργία μαθήματος</p>
-		</td>
-	</tr>
- 		</tbody></table>
-		</div>
-   		
-lCont2;
+		<a class=\"enroll_icon\" href=".$urlServer."modules/auth/courses.php>$langOtherCourses</a>
+	   		";
 
-
+if ($statut == 1) {
+	$lesson_content .= "
+	 | <a class=\"create_lesson\" href=".$urlServer."modules/create_course/create_course.php>$langCourseCreate</a>
+	";
+}
+	
 	return $lesson_content;
 }
 function LessonsView($param = null)
