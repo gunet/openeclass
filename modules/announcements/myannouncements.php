@@ -30,10 +30,6 @@
  */
 $require_login = TRUE;
 
-$local_style = 'em { font-weight: bold; color: #f0741e; font-size:11pt; }
-h5 { font-weight: normal; }
-.normal { font-size: 10pt; }';
-
 $langFiles = 'announcements';
 include '../../include/baseTheme.php';
 include('../../include/lib/textLib.inc.php'); 
@@ -47,9 +43,9 @@ $result = db_query("SELECT * FROM annonces,cours_user
 	$tool_content .= "<table width=\"99%\">
 						<thead>
 							<tr>
-								<th width=\"200\">Ma8hma</th>
+								<th width=\"200\">$langtheCourse</th>
 								<th>$langAnn</th>
-								<th>Anakoinwsh</th>
+								<th>$langAnnouncement</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -75,9 +71,7 @@ $result = db_query("SELECT * FROM annonces,cours_user
 			</tr>
 		";
 		$i++;
-//		$tool_content .= "<tr><td bgcolor=\"$color2\"><em>$row[intitule]</em> ($langTitulaire <b>$row[titulaires]</b>)
-//			<h5>($langAnn : ".$myrow['temps'].")</h5></td></tr>
-//		      <tr><td class=\"normal\">$content</td></tr>";
+
 	}	// while loop
 	$tool_content .= "
 	</tbody></table>";
