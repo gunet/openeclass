@@ -1,6 +1,4 @@
 <?
-//if(!session_id()) session_start();
-
 /*
 +----------------------------------------------------------------------+
 | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
@@ -13,6 +11,7 @@
 | e-class changes by: Costas Tsibanis <costas@noc.uoa.gr>              |
 |                     Yannis Exidaridis <jexi@noc.uoa.gr>              |
 |                     Alexandros Diamantidis <adia@noc.uoa.gr>         |
+|					  Evelthon Prodromou <eprodromou@upnet.gr>		   |	
 +----------------------------------------------------------------------+
 | Standard header included by all e-class files                        |
 | Defines standard functions and validates variables                   |
@@ -268,7 +267,7 @@ if ($uid == 1) {
 if (isset($_SESSION['status'])) {
 	$status = $_SESSION['status'];
 	if (isset($currentCourse) and
-	($status[$currentCourse] == 1 or $status[$currentCourse] == 2)) {
+	(@$status[$currentCourse] == 1 or @$status[$currentCourse] == 2)) {
 		$is_adminOfCourse = TRUE;
 	}
 } else {
