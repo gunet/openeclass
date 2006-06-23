@@ -64,4 +64,6 @@ $langModify = "Αλλαγή";
 $langUpdate = "Αλλαγή Τίτλου";
 $langIcon = "Εικονίδιο";
 $langNameOfTheLink ="Όνομα Συνδέσμου";
+
+$langNumOfUsers = "Εγγεγραμμένοι χρήστες";
 ?>

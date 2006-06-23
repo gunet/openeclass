@@ -52,4 +52,6 @@ $langNameOfTheLink ="Name of the link";
 $langModify = "Modify";
 $langUpdate = "Modify Link";
 $langIcon = "Icon";
+
+$langNumOfUsers = "Registered users";
 ?>
