@@ -33,15 +33,18 @@ $require_current_course = TRUE;
 $langFiles = 'forum_admin';
 $require_help = TRUE;
 $helpTopic = 'For';
-include '../../include/init.php';
+//include '../../include/init.php';
+include '../../include/baseTheme.php';
+
 
 $nameTools = $langOrganisation;
 $navigation[]= array ("url"=>"../phpbb/index.php", "name"=> $langForums);
 
-begin_page();
+//begin_page();
+$tool_content = "";//initialise $tool_content
 
 	
-echo "<tr><td>";
+//$tool_content .= "<tr><td>";
 
 
 ########### AFFICHER ####################################
@@ -52,41 +55,40 @@ if($is_adminOfCourse)
 ############################################################
     if(isset($forumgo))
 	{
-    echo "<font size=2 face=\"arial, helvetica\"><b>$langForCat $ctg</b> &nbsp;&nbsp;[<a href=\"$PHP_SELF?forumadmin=yes\">$langBackCat</a>]</font size></font>
+    $tool_content .= "<b>$langForCat $ctg</b> &nbsp;&nbsp;[<a href=\"$PHP_SELF?forumadmin=yes\">$langBackCat</a>]
     <form action=\"forum_admin.php?forumgoadd=yes&ctg=$ctg&cat_id=$cat_id\" method=post>
-    <table border=0 width=600 cellpadding=4 cellspacing=2><tr bgcolor=silver>
-	<td width=25%><font size=2 face=\"arial, helvetica\"><b>$langForName</b></td>
-	<td width=50%><font size=2 face=\"arial, helvetica\"><b>$langDescription</b></td>
-	<td width=25%><font size=2 face=\"arial, helvetica\"><b>$langFunctions</b></td></tr>";
+    <table width=99%><tr>
+	<td width=25%><b>$langForName</b></td>
+	<td width=50%><b>$langDescription</b></td>
+	<td width=25%><b>$langFunctions</b></td></tr>";
     $result = mysql_query("select forum_id, forum_name, forum_desc, forum_access,
     forum_moderator, forum_type from forums where cat_id='$cat_id'");
     $i=0;
     while(list($forum_id, $forum_name, $forum_desc, $forum_access,
     $forum_moderator, $forum_type) = mysql_fetch_row($result)) {
 	    if($i%2==0){
-		echo "<tr bgcolor=$color1>";
+		$tool_content .= "<tr bgcolor=$color1>";
 	}     	// IF
 	elseif($i%2==1) {
-		echo "<tr bgcolor=$color2>";
+		$tool_content .= "<tr bgcolor=$color2>";
 	}
-	echo "<td valign=top><font size=2 face=\"arial, helvetica\">$forum_name</td>
-	<td valign=top><font size=2 face=\"arial, helvetica\">$forum_desc&nbsp;</td>";
+	$tool_content .= "<td>$forum_name</td>
+	<td valign=top>$forum_desc&nbsp;</td>";
 
-	echo "
-	<td valign=top><font size=2 face=\"arial, helvetica\"><a href=forum_admin.php?forumgoedit=yes&forum_id=$forum_id&ctg=$ctg&cat_id=$cat_id>$langModify</a>
+	$tool_content .= "
+	<td><a href=forum_admin.php?forumgoedit=yes&forum_id=$forum_id&ctg=$ctg&cat_id=$cat_id>$langModify</a>
          | <a href=forum_admin.php?forumgodel=yes&forum_id=$forum_id&cat_id=$cat_id&ctg=$ctg&ok=0>$langDelete</a>
 		</td></tr>";
 	$i++;
     }
-    echo "</form></td></tr></table>
-    <br><font size=2 face=\"arial, helvetica\"><b>$langAddForCat $ctg</b><br>
-    <font size=2 face=\"arial, helvetica\">
+    $tool_content .= "</form></td></tr></table>
+    <br><b>$langAddForCat $ctg</b><br>
     <form action=\"forum_admin.php?forumgoadd=yes&ctg=$ctg&cat_id=$cat_id\" method=post>
-    <table border=0 width=600>
-    <tr><td><font size=2 face=\"arial, helvetica\">$langForName</td><td><input type=text name=forum_name size=40></td></tr>
-    <tr><td><font size=2 face=\"arial, helvetica\">$langDescription</td><td><textarea name=forum_desc cols=40 rows=3></textarea></td></tr>";
+    <table width=99%>
+    <tr><td>$langForName</td><td><input type=text name=forum_name size=40></td></tr>
+    <tr><td>$langDescription</td><td><textarea name=forum_desc cols=40 rows=3></textarea></td></tr>";
 
-    echo "</table>
+    $tool_content .= "</table>
     <input type=hidden name=cat_id value=\"$cat_id\">
     <input type=hidden name=forumgoadd value=yes>
     <input type=submit value=$langAdd>
@@ -104,25 +106,25 @@ elseif(isset($forumgoedit)) {
 
     list($forum_id, $forum_name, $forum_desc, $forum_access, $forum_moderator, $cat_id_1,
     $forum_type) = mysql_fetch_row($result);
-    echo "<font size=2 face=\"arial, helvetica\"><b>$langModify $forum_name</b></font>
+    $tool_content .= "<b>$langModify $forum_name</b>
     <form action=\"forum_admin.php?forumgosave=yes&ctg=$ctg&cat_id=".@$cat_id."\" method=post>
     <input type=hidden name=forum_id value=$forum_id>
-    <table border=0 width=600><tr><td>
-    <tr><td><font size=2 face=\"arial, helvetica\">$langForName</td>
+    <table width=99%><tr><td>
+    <tr><td>$langForName</td>
     <td><input type=text name=forum_name size=50 value=\"$forum_name\"></td></tr>
-    <tr><td><font size=2 face=\"arial, helvetica\">$langDescription</td><td>
+    <tr><td>$langDescription</td><td>
     <textarea name=forum_desc cols=50 rows=3>$forum_desc</textarea></td></tr>
-    <tr><td><font size=2 face=\"arial, helvetica\">$langChangeCat</td>
+    <tr><td>$langChangeCat</td>
     <td><SELECT NAME=cat_id>";
     $result = mysql_query("select cat_id, cat_title from catagories");
     while(list($cat_id, $cat_title) = mysql_fetch_row($result)) {
         if ($cat_id == $cat_id_1) {
-    echo "<OPTION VALUE=\"$cat_id\" selected>$cat_title</OPTION>";          }
+    $tool_content .= "<OPTION VALUE=\"$cat_id\" selected>$cat_title</OPTION>";          }
     else {
-    echo "<OPTION VALUE=\"$cat_id\">$cat_title</OPTION>";
+    $tool_content .= "<OPTION VALUE=\"$cat_id\">$cat_title</OPTION>";
              }
                                                                                               }
-    echo "</SELECT></td></tr></table>
+    $tool_content .= "</SELECT></td></tr></table>
     <input type=hidden name=forumgosave value=yes>
     <input type=submit value=\"$langSave\">
     </form>";
@@ -135,13 +137,13 @@ elseif(isset($forumgoedit)) {
     elseif(isset($forumcatedit)) {
     $result = mysql_query("select cat_id, cat_title from catagories where cat_id='$cat_id'");
     list($cat_id, $cat_title) = mysql_fetch_row($result);
-    echo "<font size=2 face=\"arial, helvetica\"><b>$langModCatName</b></font>
+    $tool_content .= "<b>$langModCatName</b>
     <form action=\"forum_admin.php?forumcatsave=yes\" method=post>
     <input type=hidden name=cat_id value=$cat_id>
-    <table border=0 width=600><tr><td><font size=2 face=\"arial, helvetica\">$langCat</td><td><input type=text name=cat_title size=55 value=\"$cat_title\"></td></tr><tr><td>
+    <table width=99%><tr><td>$langCat</td><td><input type=text name=cat_title size=55 value=\"$cat_title\"></td></tr><tr><td>
     </td></tr></table>";
     //   <input type=hidden name=forumcatsave value=yes>
-    echo "<input type=submit value=\"$langSave\">
+    $tool_content .= "<input type=submit value=\"$langSave\">
 		</form>";
 }
 
@@ -151,8 +153,8 @@ elseif(isset($forumgoedit)) {
 
 elseif (isset($forumcatsave)) {
     mysql_query("update catagories set cat_title='$cat_title' where cat_id='$cat_id'");
-    // echo "<META http-equiv=\"REFRESH\" CONTENT=\"0; URL=\"$PHP_SELF?forumadmin=yes\"> ";
-    echo "<font size=2 face=\"arial, helvetica\">$langNameCatMod, &nbsp;<a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a>";
+    // $tool_content .= "<META http-equiv=\"REFRESH\" CONTENT=\"0; URL=\"$PHP_SELF?forumadmin=yes\"> ";
+    $tool_content .= "$langNameCatMod, &nbsp;<a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a>";
 }
 
 #############################################################
@@ -167,7 +169,7 @@ elseif(isset($forumgosave)) {
 	    @mysql_query("update forums set forum_name='$forum_name', forum_desc='$forum_desc',
             forum_access='2', forum_moderator='1', cat_id='$cat_id',
             forum_type='$forum_type' where forum_id='$forum_id'");
-         echo "<font size=2 face=\"arial, helvetica\">
+         $tool_content .= "
 	 <a href=\"$PHP_SELF?forumgo=yes&cat_id=$cat_id&ctg=$ctg\">$langBack</a>";
 
 }
@@ -180,9 +182,9 @@ elseif(isset($forumgosave)) {
 
 elseif(isset($forumcatadd)) {
     mysql_query("insert into catagories values (NULL, '$catagories', NULL)");
-    echo "<font size=2 face=\"arial, helvetica\">$langCatAdded,&nbsp;<a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a>";
+    $tool_content .= "$langCatAdded,&nbsp;<a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a>";
     //Header("Location: forum_admin.php?afficher=yes");
-     //echo "<a href=\$PHP_SELF?forumgo=yes&cat_id=$cat_id&ctg=$ctg\">Retour</a>";
+     //$tool_content .= "<a href=\$PHP_SELF?forumgo=yes&cat_id=$cat_id&ctg=$ctg\">Retour</a>";
 }
 
 #############################################################
@@ -202,7 +204,7 @@ elseif(isset($forumgoadd)) {
         $forid=$my_forum_id[0];
         }
         mysql_query("insert into forum_mods (forum_id, user_id) values ('$forid', '1')");
-         echo "<font size=2 face=\"arial, helvetica\"><a href=\"$PHP_SELF?forumgo=yes&cat_id=$cat_id&ctg=$ctg\">$langBack</a>";
+         $tool_content .= "<a href=\"$PHP_SELF?forumgo=yes&cat_id=$cat_id&ctg=$ctg\">$langBack</a>";
 
 }
 #############################################################
@@ -216,8 +218,8 @@ elseif(isset($forumcatdel)) {
 	}
 	mysql_query("delete from forums where cat_id=$cat_id");
 	mysql_query("delete from catagories where cat_id=$cat_id");
- echo "<font size=2 face=\"arial, helvetica\"><a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a>";
-// 	echo "</TD></TR></TABLE></TD></TR></TABLE>";
+ $tool_content .= "<a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a>";
+// 	$tool_content .= "</TD></TR></TABLE></TD></TR></TABLE>";
 	//include("footer.php");
 
 }
@@ -231,7 +233,7 @@ elseif(isset($forumgodel)){
 
 	mysql_query("delete from forumtopics where forum_id=$forum_id");
 	mysql_query("delete from forums where forum_id=$forum_id");
-         echo "<font size=2 face=\"arial, helvetica\">
+         $tool_content .= "
 	 <a href=\"$PHP_SELF?forumgo=yes&ctg=$ctg&cat_id=$cat_id\">$langBack</a>";
 
 }
@@ -239,12 +241,12 @@ elseif(isset($forumgodel)){
 ############################################
 
 else {
-    echo "<font size=2 face=\"arial, helvetica\"><b>$langForCategories</b><br>$langAddForums.</font>
+    $tool_content .= "<b>$langForCategories</b><br>$langAddForums.
     <form action=\"forum_admin.php?forumadmin=yes\" method=post></td><tr><td>";
 
-    echo "<table BORDER=0 CELLSPACING=2 CELLPADDING=4 width=600>
-    <tr bgcolor=silver><td><font size=2 face=\"arial, helvetica\"><b>ID</b></td><td><b><font size=2 face=\"arial, helvetica\">$langCategories</b></td>
-    <td><font size=2 face=\"arial, helvetica\"><b>$langNbFor</b></td><td><font size=2 face=\"arial, helvetica\"><b>$langFunctions</b></td></tr>";
+    $tool_content .= "<table width=99%>
+    <tr><td><b>ID</b></td><td><b>$langCategories</b></td>
+    <td><b>$langNbFor</b></td><td><b>$langFunctions</b></td></tr>";
     $result = mysql_query("select cat_id, cat_title from catagories order by cat_id");
 
     $i=0;
@@ -253,26 +255,26 @@ else {
 	$numbers= mysql_fetch_array($gets);
 
 	    if($i%2==0){
-		echo "<tr bgcolor=$color1>";
+		$tool_content .= "<tr bgcolor=$color1>";
 	}     	// IF
 	elseif($i%2==1) {
-		echo "<tr bgcolor=$color2>";
+		$tool_content .= "<tr bgcolor=$color2>";
 	}
-    	echo "<td><font size=2 face=\"arial, helvetica\">$cat_id</td>
-		<td><font size=2 face=\"arial, helvetica\">$cat_title &nbsp;</td>
-		<td><font size=2 face=\"arial, helvetica\">$numbers[total]</td>
-		<td><font size=2 face=\"arial, helvetica\">
+    	$tool_content .= "<td>$cat_id</td>
+		<td>$cat_title &nbsp;</td>
+		<td>$numbers[total]</td>
+		<td>
 		<a href=\"forum_admin.php?forumgo=yes&cat_id=$cat_id&ctg=$cat_title\">$langForums</a> |
 		<a href=forum_admin.php?forumcatedit=yes&cat_id=$cat_id>$langModify</a> |
-		<a href=forum_admin.php?forumcatdel=yes&cat_id=$cat_id&ok=0>$langDelete</a></font size></td></tr>";
+		<a href=forum_admin.php?forumcatdel=yes&cat_id=$cat_id&ok=0>$langDelete</a></td></tr>";
 		$i++;
     }
 
-    echo "</table></form>
-  <font size=2 face=\"arial, helvetica\"><b>$langAddCategory</b><br><br>
-    <font size=2>
+    $tool_content .= "</table></form>
+  <b>$langAddCategory</b><br><br>
+    
     <form action=\"forum_admin.php?forumcatadd=yes\" method=post>
-    <table border=0 width=600><tr><td><font size=2 face=\"arial, helvetica\">$langCat</td>
+    <table width=99%><tr><td>$langCat</td>
     <td><input type=text name=catagories size=50></td></tr>
 	<tr><td><input type=hidden name=forumcatadd value=yes>
     <input type=submit value=\"$langAdd\"></form></td><td>&nbsp;</td></tr></table>";
@@ -283,16 +285,19 @@ else {
 
 else {
 
-echo "<font face=\"arial, helvetica\" size=2>$langNotAllowed</font><br>";
+$tool_content .= "$langNotAllowed<br>";
 }
 ########################################"
 #######################################
+draw($tool_content, 2);
 ?>
+<!--
 </td>
 	</tr>
 	<tr>
 		<td>
 			<hr noshade size=1>
+-->
 <?
-end_page();
+//end_page();
 ?>
