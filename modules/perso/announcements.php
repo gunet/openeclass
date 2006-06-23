@@ -49,8 +49,8 @@ function getUserAnnouncements($param = null, $type) {
 	'max_repeat_val'	=> $max_repeat_val,
 	'date'				=> $usr_memory
 	);
-//echo $max_repeat_val;
-//	dumpArray($usr_memory);
+	//echo $max_repeat_val;
+	//	dumpArray($usr_memory);
 	$announce_query_new 	= createQueries($queryParamNew);
 	$announce_query_memo 	= createQueries($queryParamMemo);
 
@@ -69,7 +69,7 @@ function getUserAnnouncements($param = null, $type) {
 
 		if ($num_rows = mysql_num_rows($mysql_query_result) > 0) {
 			$getNewAnnounce = true;
-			
+
 			$announceLessonData = array();
 			$announceData = array();
 
@@ -85,7 +85,7 @@ function getUserAnnouncements($param = null, $type) {
 		}
 
 		while ($myAnnouncements = mysql_fetch_row($mysql_query_result)) {
-			
+
 			if ($myAnnouncements){
 				array_push($announceData,$myAnnouncements);
 			}
@@ -105,27 +105,29 @@ function getUserAnnouncements($param = null, $type) {
 		$sqlNowDate = eregi_replace(" ", "-",$usr_lst_login);
 		$sql = "UPDATE `user` SET `announce_flag` = '$sqlNowDate' WHERE `user_id` = $uid ";
 		db_query($sql, $mysqlMainDb);
-		echo $sql;
+//		echo $sql;
 		//update announcemenets memory
 		//call announceHtmlInterface()
 	} elseif (!$getNewAnnounce) {
 		//if there are no new announcements, get the last announcements the user had
 		//so that we always have something to display
 		for ($i=0; $i < $max_repeat_val; $i++){
-			$announceLessonData = array();
-			$announceData = array();
-			array_push($announceLessonData, $lesson_title[$i]);
-			array_push($announceLessonData, $lesson_code[$i]);
-
 			$mysql_query_result = db_query($announce_query_memo[$i]);
+			if (mysql_num_rows($mysql_query_result) > 0) {
+				$announceLessonData = array();
+				$announceData = array();
+				array_push($announceLessonData, $lesson_title[$i]);
+				array_push($announceLessonData, $lesson_code[$i]);
 
-			while ($myAnnouncements = mysql_fetch_row($mysql_query_result)) {
-				array_push($announceData,$myAnnouncements);
+				$mysql_query_result = db_query($announce_query_memo[$i]);
+
+				while ($myAnnouncements = mysql_fetch_row($mysql_query_result)) {
+					array_push($announceData,$myAnnouncements);
+				}
+
+				array_push($announceLessonData, $announceData);
+				array_push($announceSubGroup, $announceLessonData);
 			}
-
-
-			array_push($announceLessonData, $announceData);
-			array_push($announceSubGroup, $announceLessonData);
 		}
 		array_push($announceGroup, $announceSubGroup);
 	}
@@ -133,45 +135,58 @@ function getUserAnnouncements($param = null, $type) {
 
 	//	array_push($announceGroup, $announceSubGroup);
 
-//	dumpArray($announceSubGroup); <<<---- auto einai to swsto array!!!
+	//		print_a($announceSubGroup); //<<<---- auto einai to swsto array!!!
 	//	dumpArray($announceGroup);
-
+	//	print_a($announceSubGroup);
 	//	return  $announcements_values;
 	if($type == "html") {
-		return announceHtmlInterface($announceSubGroup);
+		return announceHtmlInterface($announceSubGroup, $max_repeat_val);
 	} elseif ($type == "data") {
 		return $announceSubGroup;
 	}
 
 }
 
-function announceHtmlInterface($data) {
+function announceHtmlInterface($data, $max_repeat_val) {
+	global $urlServer ;
+	$announceExist = false;
 	$assign_content= <<<aCont
-	<table width="100%">
-		<thead>
-			<tr>
-				<th>oi anakoinwseis mou</th>
-				
-			<tr>
-		</thead>
-		<tbody>
+	<div id="datacontainer">
+
+				<ul id="datalist">
 aCont;
-	$iterator =  count($data);
-	for ($i=0; $i < $iterator; $i++){
-		$assign_content .= "
-		<tr>
-			<td>ma8hma??</td>
-			<td>".$data[$i][1]."</td>
-			<td>".$data[$i][3]."</td>
-		</tr>
-	";
+	$max_repeat_val = count($data);
+	for ($i=0; $i <$max_repeat_val; $i++) {
+		$iterator =  count($data[$i][2]);
+		if ($iterator > 0) {
+			$announceExist = true;
+			$assign_content .= "
+		<li class=\"category\">".$data[$i][0]."</li>
+		";
+			$url = $_SERVER['PHP_SELF'] . "?perso=2&c=" .$data[$i][1];
+			for ($j=0; $j < $iterator; $j++){
+
+				$assign_content .= "
+		<li><a class=\"square_bullet\" href=\"$url\"><div class=\"content_pos\">".$data[$i][2][$j][1]." : ".$data[$i][2][$j][0]."</div></a>
+			
+		</li>
+		";
+			}
+
+			if ($i+1 <$max_repeat_val) $assign_content .= "<br>";
+		}
 	}
 
 	$assign_content .= "
-	</tbody></table>
+	</ul>
+			</div> 
 ";
+
+	if (!$announceExist) {
+		$assign_content = "<p>Δεν υπάρχουν ανακοινώσεις</p>";
+	}
 	return $assign_content;
-	//	$assign_content .=
+
 }
 
 function createQueries($queryParam){
@@ -194,7 +209,7 @@ function createQueries($queryParam){
 									AND DATE_FORMAT(temps,'%Y %m %d') >='" .$dateVar."'
 									ORDER BY temps DESC
 									";
-//		echo $announce_query[$i] . "<br>";
+		//		echo $announce_query[$i] . "<br>";
 	}
 
 	return $announce_query;
