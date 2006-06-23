@@ -23,7 +23,7 @@
 
 function getUserAgenda($param, $type) {
 
-	$uniqueDates = 7;
+	$uniqueDates = 5;
 
 	global $mysqlMainDb, $uid, $dbname, $currentCourseID;
 
@@ -66,18 +66,22 @@ function getUserAgenda($param, $type) {
 
 	$mysql_query_result = db_query($sql, $mysqlMainDb);
 
-//	$i = 0;
-//	$agendaGroup = array();
+	//	$i = 0;
+	//	$agendaGroup = array();
 	$agendaDateData = array();
-//	$today = date("Y-m-d");
+
 	$previousDate = "0000-00-00";
+	$firstRun = true;
 	while ($myAgenda = mysql_fetch_row($mysql_query_result)) {
-//		$parsedAgenda = false;
-		if ($myAgenda[2] != $previousDate) {
-			@array_push($agendaDateData, $agendaData);
-//			$parsedAgenda = true;
+		if ($myAgenda[2] != $previousDate ) {
+			if (!$firstRun) {
+				@array_push($agendaDateData, $agendaData);
+
+			}
 		}
-		
+
+		if ($firstRun) $firstRun = false;
+
 		if ($myAgenda[2] == $previousDate) {
 			array_push($agendaData, $myAgenda);
 		} else {
@@ -86,13 +90,15 @@ function getUserAgenda($param, $type) {
 			array_push($agendaData, $myAgenda);
 		}
 
-//		echo $previousDate ." <br>";
+	}
+
+	if (!$firstRun) {
+		array_push($agendaDateData, $agendaData);
 	}
 
 
-		array_push($agendaDateData, $agendaData);
-	
-//	dumpArray($agendaDateData);
+//	print_a($agendaDateData);
+	//	dumpArray($agendaDateData);
 	//		Constructing the array of data to be parsed back
 	//		------------------------------------------------
 	/*$agenda_values = array	(
@@ -102,9 +108,57 @@ function getUserAgenda($param, $type) {
 
 	//	return $agenda_values;
 
+	if($type == "html") {
+		return agendaHtmlInterface($agendaDateData);
+	} elseif ($type == "data") {
+		return $agendaDateData;
+	}
+
 }
 
+function agendaHtmlInterface($data) {
+	$numOfDays = count($data);
+	if ($numOfDays > 0) {
+		$agenda_content= <<<agCont
+	<div id="datacontainer">
 
+				<ul id="datalist">
+agCont;
+
+		for ($i=0; $i <$numOfDays; $i++) {
+			$agenda_content .= "
+		<li class=\"category\">".$data[$i][0][2]."</li>
+		";
+			$iterator =  count($data[$i]);
+			//			$url = $_SERVER['PHP_SELF'] . "?perso=4&c=" .$data[$i][1];
+			for ($j=0; $j < $iterator; $j++){
+				$url = $_SERVER['PHP_SELF'] . "?perso=4&c=" . $data[$i][$j][5];
+				if (strlen($data[$i][$j][4]) < 2) {
+					$data[$i][$j][4] = "Agnwsto";
+				}
+
+				$agenda_content .= "
+		<li><a class=\"square_bullet\" href=\"$url\"><div class=\"title_pos\">".$data[$i][$j][6]." - ".$data[$i][$j][3]." (Diarkeia: ".$data[$i][$j][4].")</div>
+			<div class=\"content_pos\">".$data[$i][$j][0]."</div>
+			<div class=\"content_pos\">".$data[$i][$j][1]."</div>
+		</a></li>
+		";
+			}
+
+			//		$agenda_content .= "</tbody></table>";
+			if ($i+1 <$numOfDays) $agenda_content .= "<br>";
+		}
+
+		$agenda_content .= "
+	</ul>
+			</div> 
+";
+	} else {
+		$agenda_content = "<p>Δεν υπάρχουν γεγονότα</p>";
+	}
+
+	return $agenda_content;
+}
 
 
 ?>
