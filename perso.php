@@ -1,6 +1,6 @@
 <?php
 //perso.php
-
+include("redirector.php");
 //Check for lessons that the user is a professor
 $result2 = mysql_query("SELECT cours.code k, cours.fake_code c, cours.intitule i, cours.titulaires t, cours_user.statut s
         	FROM cours, cours_user WHERE cours.code=cours_user.code_cours 
@@ -87,7 +87,7 @@ $param = array(	'uid'	=> $uid,
 );
 //dumpArray($user_lesson_info[0][5]);
 $user_announcements = getUserAnnouncements($param, "html");
-
+//echo $user_announcements;	
 // END - Get user announcements
 
 
@@ -123,7 +123,9 @@ $user_forumPosts = getUserForumPosts($param, "html");
 $tool_content = array(
 						'lessons_content' 	=> $user_lesson_info[1],
 						'assigns_content' 	=> $user_assignments,
-						'announce_content' 	=> $user_announcements
+						'announce_content' 	=> $user_announcements,
+						'agenda_content' 	=> $user_agenda,
+						'forum_content' 	=> $user_forumPosts
 );
 // == END create array with personalised content
 //dumpArray($user_lesson_info);
