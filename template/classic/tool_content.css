@@ -134,7 +134,7 @@ table a:visited {
 
 table a:hover {
 	color: #718ABE;
-	text-decoration: underline !importantT;
+	text-decoration: underline !important;
 }
 
 tfoot th, tfoot td {
