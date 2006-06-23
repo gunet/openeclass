@@ -58,8 +58,12 @@ if ($is_adminOfCourse){
 }
 
 if ($is_admin){
-	$tool_name = $_POST[toolName];
-	$tool_id = $_POST[id];
+	if (isset($_POST['toolName'])) {
+		$tool_name = $_POST['toolName'];
+	}
+	if (isset($_POST['id'])) {
+		$tool_id = $_POST['id'];
+	}
 
 	if (isset($_REQUEST['toolStatus'])) {
 
@@ -122,23 +126,23 @@ tForm;
 
 
 			for($j=0; $j< $numOfTools; $j++){
-				
+
 				$rowClass = ($alterRow%2) ? "class=\"odd\"" : "";
-									
+
 				if ($i  == 0){
 
 					$tool_content .= "
 				    
 				      <tr $rowClass>
 				         <td>".$toolArr[$i][1][$j]."</td>
-				         <td><input name=\"toolStat[]\" type=\"checkbox\" value=\"".$toolArr[$i][3][$j]."\" checked></td>";
+				         <td><input name=\"toolStat[]\" type=\"checkbox\" value=\"".$toolArr[$i][4][$j]."\" checked></td>";
 					if ($is_admin){
 						$tool_content .= "
 				        
-				         <td><input type=\"text\" name=\"toolName[]\"><input type=\"hidden\" name=\"id[]\" value=\"".$toolArr[$i][3][$j]."\"></td>";
+				         <td><input type=\"text\" name=\"toolName[]\"><input type=\"hidden\" name=\"id[]\" value=\"".$toolArr[$i][4][$j]."\"></td>";
 					}
 					$tool_content .= "</tr>";
-					
+
 					$alterRow++;
 				}  elseif ($i ==  1) {
 					$tool_content .= "
@@ -147,26 +151,26 @@ tForm;
 				         <td><input name=\"toolStatDisabled[]\" type=\"checkbox\" value=\"none\" checked disabled></td>";
 					if ($is_admin){
 						$tool_content .= "
-				         <td><input type=\"text\" name=\"toolName[]\"><input type=\"hidden\" name=\"id[]\" value=\"".$toolArr[$i][3][$j]."\"></td>";
+				         <td><input type=\"text\" name=\"toolName[]\"><input type=\"hidden\" name=\"id[]\" value=\"".$toolArr[$i][4][$j]."\"></td>";
 					}
 					$tool_content .= "</tr>";
 					//					If ($alterRow<=$j) $alterRow++;
 					$alterRow++;
 				} elseif ($i == 2){
 
-					if ($toolArr[$i][3][$j] > 100) {
-						$deleteExternLink = $_SERVER['PHP_SELF'] . "?delete=" . $toolArr[$i][3][$j];
-						$delLink = "<a href=\"$deleteExternLink\">Delete</a>";
+					if ($toolArr[$i][4][$j] > 100) {
+						$deleteExternLink = $_SERVER['PHP_SELF'] . "?delete=" . $toolArr[$i][4][$j];
+						$delLink = " (<a href=\"$deleteExternLink\">$langDelete</a>)";
 					}
 					if (!isset($delLink)) $delLink = "";
 					$tool_content .= "
 				      <tr $rowClass>
 				         <td>".$toolArr[$i][1][$j]." $delLink</td>
-				         <td><input name=\"toolStat[]\" type=\"checkbox\" value=\"".$toolArr[$i][3][$j]."\"></td>";
+				         <td><input name=\"toolStat[]\" type=\"checkbox\" value=\"".$toolArr[$i][4][$j]."\"></td>";
 
 					if ($is_admin){
 						$tool_content .= "
-				         <td><input type=\"text\" name=\"toolName[]\"><input type=\"hidden\" name=\"id[]\" value=\"".$toolArr[$i][3][$j]."\"></td>";
+				         <td><input type=\"text\" name=\"toolName[]\"><input type=\"hidden\" name=\"id[]\" value=\"".$toolArr[$i][4][$j]."\"></td>";
 					}
 					$tool_content .= "</tr>";
 					$alterRow++;

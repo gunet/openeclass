@@ -84,7 +84,7 @@ $tool_content .=  "<p>$langSubTitle</p>";
 		mysql_query("INSERT INTO accueil VALUES ($mID,
 					'$name_link',
 					'$link \"target=_blank',
-					'../../../images/travaux.png',
+					'external_link',
 					'1',
 					'0',
 					'$link',
