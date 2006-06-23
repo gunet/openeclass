@@ -36,7 +36,7 @@
 
 $langInvalidId = '<font color="red" size="1" face="arial, helvetica">
 	Login failed.<br>If you are not registered, create a new account
-	using the <a href=claroline/auth/newuser_info.php>registration form</a>.
+	using the <a href=module/auth/newuser_info.php>registration form</a>.
 	</font><br>&nbsp;<br>';
 $langMyCourses="My courses";
 $langMyCoursesProf="My courses (Professors)";
@@ -79,7 +79,15 @@ $langWelcomeToEclass = "Welcome to e-Class!";
 $langAnonUser = "Anonymous";
 $langSearch = "Search";
 
-$langUserBriefcase = "User briefcase";
+$langUserBriefcase = "User portofolio";
+$langPersonalisedBriefcase = "Personalised portofolio";
+$langMyPersoLessons = "MY LESSONS";
+$langMyPersoDeadlines = "MY DEADLINES";
+$langMyPersoAnnouncements = "MY ANNOUNCEMENTS";
+$langMyPersoDocs = "MY LATEST DOCUMENTS";
+$langMyPersoAgenda = "MY AGENDA";
+$langMyPersoForum = "THE LATEST SUBMISSION TO MY FORUMS";
+
 $langEclass = "e-Class learning management system";
 $langInfo = "<b>GUNet e-Class</b> platform is a ... <b>edit /lang/english/index.inc and fix this!!</b> είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και αποτελεί την πρόταση του Ακαδημαϊκού Διαδικτύου για την υποστήριξη της 
 Υπηρεσίας Ασύγχρονης Τηλεκπαίδευσης. Έχει σχεδιαστεί με προσανατολισμό την ενίσχυση 
