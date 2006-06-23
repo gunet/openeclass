@@ -87,7 +87,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 				$t->set_var('TOOL_LINK', $toolArr[$i][2][$j]);
 				$t->set_var('TOOL_TEXT', $toolArr[$i][1][$j]);
-				$t->set_var('TOOL_ICON', 'agenda');
+				//				$t->set_var('TOOL_ICON', 'agenda');
+				$t->set_var('IMG_FILE', $toolArr[$i][3][$j]);
 				$t->parse('leftNavLink', 'leftNavLinkBlock', true);
 
 			}
@@ -266,11 +267,15 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 function drawPerso($toolContent, $menuTypeID=null, $tool_css = null, $head_content = null, $body_action = null){
 
-	global $langUser, $prenom, $nom, $langLogout, $intitule,  $nameTools, $langHelp;
+	global $langUser, $prenom, $nom, $langLogout, $intitule,  $nameTools, $langHelp, $langPersonalisedBriefcase;
 	global $language, $helpTopic, $require_help;
-	global $relPath, $urlServer;
+	global $relPath, $urlServer, $is_admin;
 	global $page_name, $page_navi,$currentCourseID, $siteName, $navigation;
 	global $homePage, $courseHome;
+	global $langPersonalisedBriefcase, $langMyPersoLessons, $langMyPersoDeadlines;
+	global $langMyPersoAnnouncements, $langMyPersoDocs, $langMyPersoAgenda, $langMyPersoForum;
+	global $langModifyProfile, $langSearch, $langAdminTool;
+	global $langChangeLang, $switchLangURL;
 
 	//	global $lesson_content;
 
@@ -291,94 +296,118 @@ function drawPerso($toolContent, $menuTypeID=null, $tool_css = null, $head_conte
 	$t->set_var('USER_NAME', $prenom);
 	$t->set_var('USER_SURNAME', $nom);
 	$t->set_var('LANG_LOGOUT', $langLogout);
-	//TODO: set a var for logout link url!
-	$t->set_var('LESSON_TITLE', $intitule);
-	$t->set_var('TOOL_NAME',  $nameTools);
-
 	$t->set_var('LOGOUT_LINK',  $relPath);
 
-	$t->set_var('LESSON_CONTENT', $lesson_content);
-	$t->set_var('ASSIGN_CONTENT', $assigns_content);
-	$t->set_var('ANNOUNCE_CONTENT', $announce_content);
-	$t->set_var('AGENDA_CONTENT', $agenda_content);
-	$t->set_var('FORUM_CONTENT', $forum_content);
-	$t->set_var('TOOL_PATH',  $relPath);
+	//	$t->set_var('TOOL_NAME',  $nameTools);//feugei ?
 
-	//START breadcrumb
+	//	$t->set_var('LESSON_TITLE', $intitule);//auto allazei
 
-	if (!$page_navi) $page_navi = $navigation;
-	if (!$page_name) $page_name = $nameTools;
-
-	$t->set_block('mainBlock', 'breadCrumbHomeBlock', 'breadCrumbHome');
-	$t->set_var('BREAD_TEXT',  $siteName);
-	if (!$homePage) {
-		$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_START_LINK}">');
-		$t->set_var('BREAD_START_LINK',  $urlServer);
-		$t->set_var('BREAD_HREF_END',  '</a>');
+	$otherLinks = "| <a class=\"create_course_icon\" href=".$urlServer."modules/profile/profile.php>$langModifyProfile</a> ";
+	if ($is_admin) {
+		$otherLinks .= "| <a class=\"admin_icon\" href=".$urlServer."modules/admin/>$langAdminTool</a> ";
 	}
+	$otherLinks .= "| <a class=\"search_icon\" href=".$urlServer."modules/search/search.php>$langSearch</a>";
+	$t->set_var('OTHER_LINKS',  $otherLinks);
 
-	$t->parse('breadCrumbHome', 'breadCrumbHomeBlock',false);
+	$t->set_var('THIRD_BAR_TEXT', $langPersonalisedBriefcase);
+	$t->set_var('THIRDBAR_LEFT_ICON', 'briefcase_icon');
 
-	$breadIterator=1;
-	$t->set_block('mainBlock', 'breadCrumbStartBlock', 'breadCrumbStart');
-
-	if (isset($currentCourseID) && !$courseHome){
-		$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_LINK}">');
-		$t->set_var('BREAD_LINK',  $urlServer.'courses/'.$currentCourseID.'/index.php');
-		$t->set_var('BREAD_TEXT',  $intitule);
-		$t->set_var('BREAD_ARROW', '&#187;');
-		$t->set_var('BREAD_HREF_END',  '</a>');
-		$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
-		$breadIterator++;
-	} elseif (isset($currentCourseID) && $courseHome) {
-		$t->set_var('BREAD_HREF_FRONT',  '');
-		$t->set_var('BREAD_LINK',  '');
-		$t->set_var('BREAD_TEXT',  $intitule);
-		$t->set_var('BREAD_ARROW', '&#187;');
-		$t->set_var('BREAD_HREF_END',  '');
-		$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
-		$breadIterator++;
+	if (session_is_registered('langswitch')) {
+		$t->set_var('LANG_LOCALIZE',  $langChangeLang);
+		$t->set_var('LOCALIZE_LINK',  $switchLangURL);
+	} else {
+		$t->set_var('LANG_LOCALIZE',  'English');
+		$t->set_var('LOCALIZE_LINK',  '?localize=en');
 	}
+		$t->set_var('LANG_MY_PERSO_LESSONS', $langMyPersoLessons);
+		$t->set_var('LANG_MY_PERSO_DEADLINES', $langMyPersoDeadlines);
+		$t->set_var('LANG_MY_PERSO_ANNOUNCEMENTS', $langMyPersoAnnouncements);
+		$t->set_var('LANG_MY_PERSO_DOCS', $langMyPersoDocs);
+		$t->set_var('LANG_MY_PERSO_AGENDA', $langMyPersoAgenda);
+		$t->set_var('LANG_PERSO_FORUM',  $langMyPersoForum);
 
-	if (isset($page_navi) && is_array($page_navi) && !$homePage){
-		foreach ($page_navi as $step){
+		$t->set_var('LESSON_CONTENT', $lesson_content);
+		$t->set_var('ASSIGN_CONTENT', $assigns_content);
+		$t->set_var('ANNOUNCE_CONTENT', $announce_content);
+		$t->set_var('AGENDA_CONTENT', $agenda_content);
+		$t->set_var('FORUM_CONTENT', $forum_content);
+		$t->set_var('TOOL_PATH',  $relPath);
 
+		//START breadcrumb
+
+		if (!$page_navi) $page_navi = $navigation;
+		if (!$page_name) $page_name = $nameTools;
+
+		$t->set_block('mainBlock', 'breadCrumbHomeBlock', 'breadCrumbHome');
+		$t->set_var('BREAD_TEXT',  $siteName);
+		if (!$homePage) {
+			$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_START_LINK}">');
+			$t->set_var('BREAD_START_LINK',  $urlServer);
+			$t->set_var('BREAD_HREF_END',  '</a>');
+		}
+
+		$t->parse('breadCrumbHome', 'breadCrumbHomeBlock',false);
+
+		$breadIterator=1;
+		$t->set_block('mainBlock', 'breadCrumbStartBlock', 'breadCrumbStart');
+
+		if (isset($currentCourseID) && !$courseHome){
 			$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_LINK}">');
-			$t->set_var('BREAD_LINK',  $step["url"]);
-			$t->set_var('BREAD_TEXT',  $step["name"]);
+			$t->set_var('BREAD_LINK',  $urlServer.'courses/'.$currentCourseID.'/index.php');
+			$t->set_var('BREAD_TEXT',  $intitule);
 			$t->set_var('BREAD_ARROW', '&#187;');
 			$t->set_var('BREAD_HREF_END',  '</a>');
 			$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
-
+			$breadIterator++;
+		} elseif (isset($currentCourseID) && $courseHome) {
+			$t->set_var('BREAD_HREF_FRONT',  '');
+			$t->set_var('BREAD_LINK',  '');
+			$t->set_var('BREAD_TEXT',  $intitule);
+			$t->set_var('BREAD_ARROW', '&#187;');
+			$t->set_var('BREAD_HREF_END',  '');
+			$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
 			$breadIterator++;
 		}
+
+		if (isset($page_navi) && is_array($page_navi) && !$homePage){
+			foreach ($page_navi as $step){
+
+				$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_LINK}">');
+				$t->set_var('BREAD_LINK',  $step["url"]);
+				$t->set_var('BREAD_TEXT',  $step["name"]);
+				$t->set_var('BREAD_ARROW', '&#187;');
+				$t->set_var('BREAD_HREF_END',  '</a>');
+				$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
+
+				$breadIterator++;
+			}
+		}
+
+		if (isset($page_name) && !$homePage) {
+
+			$t->set_var('BREAD_HREF_FRONT',  '');
+			$t->set_var('BREAD_TEXT',  $page_name);
+			$t->set_var('BREAD_ARROW', '&#187;');
+			$t->set_var('BREAD_HREF_END',  '');
+
+			$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
+			$breadIterator++;
+		}
+
+		$t->set_block('mainBlock', 'breadCrumbEndBlock', 'breadCrumbEnd');
+		for($breadIterator2=0; $breadIterator2 <= $breadIterator; $breadIterator2++){
+
+			$t->parse('breadCrumbEnd', 'breadCrumbEndBlock',true);
+		}
+
+		//END breadcrumb
+
+		$t->parse('main', 'mainBlock', false);
+
+		$t->pparse('Output', 'fh');
 	}
 
-	if (isset($page_name) && !$homePage) {
-
-		$t->set_var('BREAD_HREF_FRONT',  '');
-		$t->set_var('BREAD_TEXT',  $page_name);
-		$t->set_var('BREAD_ARROW', '&#187;');
-		$t->set_var('BREAD_HREF_END',  '');
-
-		$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
-		$breadIterator++;
-	}
-
-	$t->set_block('mainBlock', 'breadCrumbEndBlock', 'breadCrumbEnd');
-	for($breadIterator2=0; $breadIterator2 <= $breadIterator; $breadIterator2++){
-
-		$t->parse('breadCrumbEnd', 'breadCrumbEndBlock',true);
-	}
-
-	//END breadcrumb
-
-	$t->parse('main', 'mainBlock', false);
-
-	$t->pparse('Output', 'fh');
-}
-
-/**
+	/**
  * function dumpArray
  *
  * Used for debugging purposes. Dumps array to browser
@@ -386,35 +415,35 @@ function drawPerso($toolContent, $menuTypeID=null, $tool_css = null, $head_conte
  * 
  * @param array $arr
  */
-function dumpArray($arr){
-	echo "<pre>";
-	print_r($arr);
-	echo "</pre>";
-}
-
-function print_a( $TheArray )
-{ // Note: the function is recursive
-	echo "<table border=1>n";
-
-	$Keys = array_keys( $TheArray );
-	foreach( $Keys as $OneKey )
-	{
-		echo "<tr>n";
-
-		echo "<td bgcolor='yellow'>";
-		echo "<B>" . $OneKey . "</B>";
-		echo "</td>n";
-
-		echo "<td bgcolor='#C4C2A6'>";
-		if ( is_array($TheArray[$OneKey]) )
-		print_a($TheArray[$OneKey]);
-		else
-		echo $TheArray[$OneKey];
-		echo "</td>n";
-
-		echo "</tr>n";
+	function dumpArray($arr){
+		echo "<pre>";
+		print_r($arr);
+		echo "</pre>";
 	}
-	echo "</table>n";
-}
+
+	function print_a( $TheArray )
+	{ // Note: the function is recursive
+		echo "<table border=1>n";
+
+		$Keys = array_keys( $TheArray );
+		foreach( $Keys as $OneKey )
+		{
+			echo "<tr>n";
+
+			echo "<td bgcolor='yellow'>";
+			echo "<B>" . $OneKey . "</B>";
+			echo "</td>n";
+
+			echo "<td bgcolor='#C4C2A6'>";
+			if ( is_array($TheArray[$OneKey]) )
+			print_a($TheArray[$OneKey]);
+			else
+			echo $TheArray[$OneKey];
+			echo "</td>n";
+
+			echo "</tr>n";
+		}
+		echo "</table>n";
+	}
 
 ?>
