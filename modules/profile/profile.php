@@ -153,8 +153,10 @@ if (isset($submit) && (!isset($ldap_submit))) {
 
 ##[BEGIN personalisation modification - For LDAP users]############
 if (isset($submit) && isset($ldap_submit) && ($ldap_submit == "ON")) {
-	if ($persoStatus=="") $persoStatus = "no";
-	mysql_query(" UPDATE user SET perso = '$persoStatus' WHERE user_id='".$HTTP_SESSION_VARS["uid"]."' ");
+//	$persoStatus = $_POST['persoStatus'];
+	if (!isset($persoStatus) || $persoStatus == "") $persoStatus = "no";
+	else  $persoStatus = "yes";
+	mysql_query(" UPDATE user SET perso = '$persoStatus' WHERE user_id='".$_SESSION["uid"]."' ");
 	if (session_is_registered("user_perso_active") && $persoStatus=="no") session_unregister("user_perso_active");
 
 	
@@ -212,7 +214,11 @@ if ($persoStatus=="no" && session_is_registered("perso_is_active")) session_unre
 
 // if LDAP user - added by adia
 if ($myrow['inst_id'] > 0) {		// LDAP user:
-    $tool_content .= "<table>
+    $tool_content .= "
+    <form method=\"post\" action=\"$PHP_SELF?submit=yes\">
+	<input type=hidden name=\"ldap_submit\" value=\"ON\">
+    
+    <table>
     <thead>
     <tr>
         <th>
@@ -238,39 +244,34 @@ if ($myrow['inst_id'] > 0) {		// LDAP user:
         </th>
         <td>$email_form</td>
         </tr>
-        <tr>
-        <td colspan=\"2\" class=\"caution\">$langLDAPUser</td>
-        </tr>
-        </thead></table><br><br>";
-   
-    ##[BEGIN personalisation modification]############	
+        ";
+        
+        ##[BEGIN personalisation modification]############	
 
 	if (session_is_registered("perso_is_active")) {
 		$tool_content .= " 	
-		<br>
-				<form method=\"post\" action=\"$PHP_SELF?submit=yes\">
-				<input type=hidden name=\"ldap_submit\" value=\"ON\">
-					<table width=\"100%\">
-						<thead>
-						<tr>
-							<th>
-								
-									eClass Personalised
-								
-							</th>
-			 				<td>
-								<input type=checkbox name='persoStatus' value=\"yes\" $checkedPerso>
-							</td>
-						</tr>
-						<tr>
-						</thead>
-						</table>
-						<br>
-								<input type=\"Submit\" name=\"submit\" value=\"$langChange\">
-						
-				</form>";
+		<tr>
+			<th>eClass Personalised</th>
+			<td>
+				<input type=checkbox name='persoStatus' value=\"yes\" $checkedPerso>
+			</td>
+		</tr>
+";
 	}
 ##[END personalisation modification]############
+    
+        $tool_content .= "
+        <tr>
+        <td colspan=\"2\" class=\"caution\">$langLDAPUser</td>
+        </tr>
+        </thead></table><br>
+        
+        <input type=\"Submit\" name=\"submit\" value=\"$langChange\">
+						
+				</form><br><br>
+        ";
+   
+
 } else {		// Not LDAP user:
     if (!isset($urlSecure)) {
         $sec = $urlServer.'modules/profile/profile.php';
@@ -430,10 +431,11 @@ $i = 0;
 
 $nomAction["LOGIN"] = "<font color=\"#008000\">$langLogIn</font>";
 $nomAction["LOGOUT"] = "<font color=\"#FF0000\">$langLogOut</font>";
+$i=0;
 while ($leRecord = mysql_fetch_array($leResultat)) {
    $when = $leRecord["when"];
    $action = $leRecord["action"];
-   if ($i%2==1) {
+   if ($i%2==0) {
         $tool_content .= "<tr>";
    } else {
        $tool_content .= "<tr class=\"odd\">";
@@ -444,6 +446,7 @@ while ($leRecord = mysql_fetch_array($leResultat)) {
     </td>
     <td>".$nomAction[$action]."</td>
     </tr>";
+   $i++;
 }
 
 $tool_content .= "</tbody></table>";
