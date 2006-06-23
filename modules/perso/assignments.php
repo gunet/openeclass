@@ -21,7 +21,7 @@
 
 
 function getUserAssignments($param, $type) {
-	//	global $dbname;
+		global $mysqlMainDb;
 	$uid				= $param['uid'];
 	$lesson_code		= $param['lesson_code'];
 	$max_repeat_val		= $param['max_repeat_val'];
@@ -32,10 +32,12 @@ function getUserAssignments($param, $type) {
 
 	for ($i=0;$i<$max_repeat_val;$i++) {
 
-		$assignments_query[$i] = "SELECT assignments.id, title, assignments.description, assignments.deadline
-										FROM  ".$lesson_code[$i].".assignments
+		$assignments_query[$i] = "SELECT assignments.id, title, assignments.description, assignments.deadline,
+									cours.intitule
+										FROM  ".$lesson_code[$i].".assignments, ".$mysqlMainDb.".cours
 										WHERE (TO_DAYS(deadline) - TO_DAYS(NOW())) >= '0'
 										AND assignments.active = '1'
+										AND cours.code = '".$lesson_code[$i]."'
 										ORDER BY deadline";
 
 	}
@@ -68,55 +70,9 @@ function getUserAssignments($param, $type) {
 	}
 	
 //	dumpArray($assignGroup);
+//print_a($assignGroup);
 
-//	count the number of assignments
-//	$countValidAssigns =  count($assignGroup);
-//
-//	if more than four dont do anything else
-//	if zero, try to get five expired to have something to sisplay
-//	else get {5-(not expired)} assignments to have at least five to display
-//
-//	if ($countValidAssigns < 5) {
-//
-//		for ($i=0;$i<$max_repeat_val;$i++) {
-//			query to get expired assignments
-//			$assignments_query[$i] = "SELECT assignments.id, title, assignments.description, assignments.deadline
-//										FROM  ".$lesson_code[$i].".assignments
-//										WHERE (TO_DAYS(deadline) - TO_DAYS(NOW())) < '0'
-//										AND assignments.active = '1'
-//										ORDER BY deadline";
-//
-//		}
-//
-//		$expiredAssignGroup = array();
-//		for ($i=0;$i<$max_repeat_val;$i++) {	//each iteration refers to one lesson
-//
-//			$mysql_query_result = db_query($assignments_query[$i], $lesson_code[$i]);
-//			$assignments_repeat_val=0;
-//			while($myAssignments = mysql_fetch_row($mysql_query_result)){
-//
-//				if ($myAssignments){
-//					array_push($myAssignments, $lesson_code[$i]);
-//
-//					if ($submission = findSubmission($uid, $myAssignments[0], $lesson_code[$i])) {
-//												$lesson_assign[$i][$assignments_repeat_val]['delivered'] = 1;
-//						array_push($myAssignments, 1);//delivered
-//					} else {
-//						$lesson_assign[$i][$assignments_repeat_val]['delivered'] = 0;
-//						array_push($myAssignments, 0);//not delivered
-//					}
-//
-//					array_push($expiredAssignGroup, $myAssignments);
-//				}
-//
-//			}
-//
-//		}
-//	}
-
-
-	//Sort all expired assignments by date to get the ones that expired recently
-//	$expiredAssignGroup = columnSort($expiredAssignGroup, 3);
+	$assignGroup = columnSort($assignGroup, 3);
 	//	get {5-(not expired)} assignments to have at least five to display
 //	array_slice($expiredAssignGroup,5-count($assignGroup));
 
@@ -134,23 +90,44 @@ function getUserAssignments($param, $type) {
 
 function assignHtmlInterface($data) {
 	$assign_content= <<<aCont
-	<table width="100%">
+	
+	<table  width="100%" class="assign">
 		<thead>
 			<tr>
-				<th>ma8hma</th>
-				<th>ergasia</th>
-				<th>Dioria</th>
+				<th class="assign">Μάθημα</th>
+				<th class="assign">Εργασία</th>
+				<th class="assign">Λήξη</th>
 			<tr>
 		</thead>
 		<tbody>
 aCont;
 $iterator =  count($data);
 for ($i=0; $i < $iterator; $i++){
+	/*if ($i%2 == 1) {
+		$trClass = "class=\"odd\"";
+	} else {
+		$trClass = "";
+	}*/
+	$url = $_SERVER['PHP_SELF'] . "?perso=1&c=" .$data[$i][5]."&i=".$data[$i][0];
 	$assign_content .= "
-		<tr>
-			<td>ma8hma??</td>
-			<td>".$data[$i][1]."</td>
-			<td>".$data[$i][3]."</td>
+		<tr >
+			<td class=\"assign\"><p>".$data[$i][4]."</p></td>
+			
+			<td class=\"assign\">
+				<div id=\"datacontainer\">
+					<ul id=\"datalist\">
+						<li>
+							<a class=\"bottom\" href=\"$url\">
+								<img src=\"{TOOL_PATH}template/classic/img/square_bullet.gif\" width=\"5\" height=\"5\" border=\"0\" />
+								<span class=\"title_pos\">".$data[$i][1]."</span>
+							</a>
+						</li>
+					</ul>
+				</div> 
+			
+			</td>
+			
+			<td class=\"assign\"><p>".$data[$i][3]."</p></td>
 		</tr>
 	";
 }
