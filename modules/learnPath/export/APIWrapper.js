@@ -489,10 +489,10 @@ var exitPageStatus;
 function loadPage()
 {
     var result = doInitialize();
-    var status = doGetValue("cmi.core.lesson_status");
+    var status = doGetValue("cmi.completion_status");
     if (status == "not attempted")
     {
-        doSetValue("cmi.core.lesson_status", "incomplete");
+        doSetValue("cmi.completion_status", "incomplete");
     }
     
     exitPageStatus = false;
@@ -505,10 +505,10 @@ function doQuit(status)
     exitPageStatus = true;
     
     var result;
-    result = doSetValue("cmi.core.lesson_status", status);
+    result = doSetValue("cmi.completion_status", status);
     result = doCommit();
     
-    result = doGetValue("cmi.core.lesson_status");
+    result = doGetValue("cmi.completion_status");
     result = doTerminate();
 }
 
@@ -545,7 +545,7 @@ function computeTime()
         formattedTime = "00:00:00.0";
     }
     
-    doSetValue( "cmi.core.session_time", formattedTime );
+    doSetValue( "cmi.session_time", formattedTime );
 }
 
 /*******************************************************************************

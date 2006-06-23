@@ -622,31 +622,27 @@ class ScormExport
 		{
 	        rawScore = CalculateRawScore(document, ' . $idCounter . ', fillAnswerList);
 	        var score = Math.max(Math.round(rawScore * 100 / weighting), 0);
-	        var oldScore = doGetValue("cmi.core.score.raw");
+	        var oldScore = doGetValue("cmi.score.raw");
 
-	        doSetValue("cmi.core.score.max", weighting);
-	        doSetValue("cmi.core.score.min", 0);
+	        doSetValue("cmi.score.max", weighting);
+	        doSetValue("cmi.score.min", 0);
 
 	        computeTime();
 
 	        if (score > oldScore) // Update only if score is better than the previous time.
 	        {
-	            doSetValue("cmi.core.score.raw", rawScore);
+	            doSetValue("cmi.score.raw", rawScore);
 	        }
 
-	        var mode = doGetValue( "cmi.core.lesson_mode" );
-	        if ( mode != "review"  &&  mode != "browse" )
-	        {
-	            var oldStatus = doGetValue( "cmi.core.lesson_status" )
-	            if (score >= raw_to_pass)
-	            {
-	                doSetValue("cmi.core.lesson_status", "passed");
-	            }
-	            else if (oldStatus != "passed" ) // If passed once, never mark it as failed.
-	            {
-	                doSetValue("cmi.core.lesson_status", "failed");
-	            }
-	        }
+			var oldStatus = doGetValue( "cmi.success_status" )
+			if (score >= raw_to_pass)
+			{
+				doSetValue("cmi.success_status", "passed");
+			}
+			else if (oldStatus != "passed" ) // If passed once, never mark it as failed.
+			{
+				doSetValue("cmi.success_status", "failed");
+			}
 
 	        doCommit();
 	        doTerminate();

@@ -754,11 +754,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
 
                 for ( $i = 0 ; $i < sizeof($zipContentArray) ; $i++)
                 {
+                    if (isset($manifestData['scos'][$item['identifierref']]['xml:base'])) 
+						$extraPath = $manifestData['scos'][$item['identifierref']]['xml:base'];
+					else if (isset($manifestData['assets'][$item['identifierref']]['xml:base']))
+						$extraPath = $manifestData['assets'][$item['identifierref']]['xml:base'];
+					else 
+						$extraPath = "";
+						
                     if ( isset($zipContentArray[$i]["filename"]) && 
                         ( ( isset($manifestData['scos'][$item['identifierref']]['href'] ) 
-                            && $zipContentArray[$i]["filename"] == $pathToManifest.$manifestData['scos'][$item['identifierref']]['href']) 
+                            && $zipContentArray[$i]["filename"] == $pathToManifest.$extraPath.$manifestData['scos'][$item['identifierref']]['href']) 
                          || (isset($manifestData['assets'][$item['identifierref']]['href']) 
-                         && $zipContentArray[$i]["filename"] == $pathToManifest.$manifestData['assets'][$item['identifierref']]['href'])
+                         && $zipContentArray[$i]["filename"] == $pathToManifest.$extraPath.$manifestData['assets'][$item['identifierref']]['href'])
                         )
                        )
                     {
@@ -980,9 +987,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
                 if (!isset($manifestData['scos'][$item['identifierref']]['parameters'])) $manifestData['scos'][$item['identifierref']]['parameters'] = "";
                 if (!isset($manifestData['assets'][$item['identifierref']]['parameters'])) $manifestData['assets'][$item['identifierref']]['parameters'] = "";
             
+                if (isset($manifestData['scos'][$item['identifierref']]['xml:base'])) 
+                	$extraPath = $manifestData['scos'][$item['identifierref']]['xml:base'];
+                else if (isset($manifestData['assets'][$item['identifierref']]['xml:base']))
+                	$extraPath = $manifestData['assets'][$item['identifierref']]['xml:base'];
+                else 
+                	$extraPath = "";
+                	
                 $assetPath = "/"
                              .$manifestData['xml:base']['manifest']
                              .$manifestData['xml:base']['ressources']
+                             .$extraPath
                              .$manifestData['scos'][$item['identifierref']]['href']
                              .$manifestData['assets'][$item['identifierref']]['href']
                              .$manifestData['scos'][$item['identifierref']]['parameters']
