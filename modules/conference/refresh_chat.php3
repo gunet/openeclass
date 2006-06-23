@@ -25,8 +25,7 @@ $body_action='';
 $tool_content = "";//initialise $tool_content
 
 
-
-$nick=$prenom." ".$nom;
+$nick=htmlentities(mb_convert_encoding($prenom." ".$nom,"UTF-8","ISO-8859-7") ,ENT_QUOTES,"UTF-8");
 $coursePath=$webDir."courses";
 
 
@@ -56,14 +55,14 @@ if (!file_exists($fileChatName)) {
           COMMANDS
   ==========================*/
 
-$tool_content .= "<table border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" width=\" $mainInterfaceWidth\">";
-$tool_content .= "<tr><td>";
+//$tool_content .= "<table border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" width=\" $mainInterfaceWidth\">";
+//$tool_content .= "<tr><td>";
 
 /*---------------------------
           RESET COMMAND
   ---------------------------*/
 
-if (isset($_GET['reset']) && $is_adminOfCourse) {
+if (isset($_POST['reset']) && $is_adminOfCourse) {
         $fchat = fopen($fileChatName,'w');
         fwrite($fchat, $timeNow." ---- ".$langWashFrom." ---- ".$nick." --------\n");
         fclose($fchat);
@@ -74,7 +73,7 @@ if (isset($_GET['reset']) && $is_adminOfCourse) {
          STORE COMMAND
   --------------------------*/
 
-if (isset($_GET['store']) && $is_adminOfCourse) {
+if (isset($_POST['store']) && $is_adminOfCourse) {
         $saveIn = "chat.".date("Y-m-j-B").".txt";
 
         // COMPLETE ARCHIVE FILE WITH THE LAST LINES BEFORE STORING

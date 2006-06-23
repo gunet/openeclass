@@ -7,7 +7,7 @@ $helpTopic = 'User';
 include '../../include/baseTheme.php';
 
 
-$nameTools = "conference";
+//$nameTools = "conference";
 
 
 //HEADER
@@ -20,6 +20,19 @@ $head_content='
 <script>
 
 var video_div="";
+
+function clear_chat()
+	{
+	  	new Ajax.Request("refresh_chat.php3", {method:"post", postBody:"reset=true"});
+		return false;
+	}
+function save_chat()
+	{
+	  	new Ajax.Request("refresh_chat.php3", {method:"get", postBody:"store=true"});
+		return false;
+	}
+
+/*function for chat submit*/
 function prepare_message()
 {
 	    var pars = "chatLine="+escape(document.chatForm.msg.value);
@@ -33,18 +46,23 @@ function prepare_message()
 }
 
 
+
+/* when student page load chat div load*/
 function init_student()
 	{
 	    var url = "refresh_chat.php3";
 	    var target = "chat";
 	    var myAjax = new Ajax.Updater(target, url);
 	}
+/* when teacher page load chat div load*/
 function init_teacher()
 	{
 	    var url = "refresh_chat.php3";
 	    var target = "chat";
 	    var myAjax = new Ajax.Updater(target, url);
 	}
+
+/* refresh video div, chat div, page div for student*/
 function refresh_student()
 	{
 
@@ -72,9 +90,9 @@ var set_video = function(t) {
     }
 var set_presantation = function(t) {
 
-    if(t.responseText!=document.getElementById("presantation_window").src)
-    	{
-    	document.getElementById("presantation_window").src=t.responseText;
+    if(t.responseText.substring(1,t.responseText.length)!=document.getElementById("presantation_window").src)
+    {
+    		document.getElementById("presantation_window").src=t.responseText;
     	}
     }
 var errFunc = function(t) {
@@ -90,6 +108,7 @@ var errFunc = function(t) {
 	    var target = "chat";
 	    var myAjax = new Ajax.Updater(target, url);
 	}
+/* refresh chat div for teacher*/
 function refresh_teacher()
 	{  
 	    var url = "refresh_chat.php3";
@@ -97,67 +116,46 @@ function refresh_teacher()
 	    var myAjax = new Ajax.Updater(target, url);
 	}
 
-function play_video()
+
+
+function netmeeting()
 	{
-var player;
-var video_type;
+		document.getElementById("video_control").innerHTML="";
+		var player="<object ID=\'NetMeeting\' CLASSID=\'CLSID:3E9BAF2D-7A79-11d2-9334-0000F875AE17\'>\
+		<PARAM NAME =\'MODE\' VALUE =\'RemoteOnly\'>\
+		</object>";
+		document.getElementById("video").innerHTML=player;
+		var netmeeting_number="'.$currentCourseID.'@'.$MCU.'";
+		NetMeeting.CallTo(netmeeting_number);
+		new Ajax.Request("pass_parameters.php3", {method:"post", postBody:"video_div="+player+"&netmeeting_number="+netmeeting_number});
+	}
+function mediaplayer()
+	{
+		document.getElementById("video_control").innerHTML=\'<input type="text" id="Video_URL" size="20"><input type="submit" value=" Play ">\';
 
-var video_type_object=document.forms["video_form"].elements["video_type"];
-
-for(var i = 0; i < video_type_object.length; i++)
-
-{
-
-if(video_type_object[i].checked) {
-			video_type=video_type_object[i].value;
-		}
 
 	}
 
-if(video_type=="video")
-{
-var video_url=document.getElementById("video_URL").value;
-player="<OBJECT id=\'VIDEO\' width=\'149\' height=\'149\' \
-	CLASSID=\'CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6\'\
-	type=\'application/x-oleobject\'>\
-	<PARAM NAME=\'URL\' VALUE=\'"+video_url+"\'>\
-	<PARAM NAME=\'SendPlayStateChangeEvents\' VALUE=\'True\'>\
-	<PARAM NAME=\'AutoStart\' VALUE=\'True\'>\
-	<PARAM name=\'uiMode\' value=\'none\'>\
-	<PARAM name=\'PlayCount\' value=\'9999\'>\
-</OBJECT>";
 
 
-}
+/* load media player or netmeeting */
+function play_video()
+	{
 
-if(video_type=="netmeeting")
-{
+		
+		var video_url=document.getElementById("video_URL").value;
+		var player="<OBJECT id=\'VIDEO\' width=\'149\' height=\'149\' \
+			CLASSID=\'CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6\'\
+			type=\'application/x-oleobject\'>\
+			<PARAM NAME=\'URL\' VALUE=\'"+video_url+"\'>\
+			<PARAM NAME=\'SendPlayStateChangeEvents\' VALUE=\'True\'>\
+			<PARAM NAME=\'AutoStart\' VALUE=\'True\'>\
+			<PARAM name=\'uiMode\' value=\'none\'>\
+			<PARAM name=\'PlayCount\' value=\'9999\'>\
+		</OBJECT>";
 
-player="<object ID=\'NetMeeting\' CLASSID=\'CLSID:3E9BAF2D-7A79-11d2-9334-0000F875AE17\'>\
-<PARAM NAME =\'MODE\' VALUE =\'RemoteOnly\'>\
-</object>";
-
-
-}
-
-document.getElementById("video").innerHTML=player;
-
-if(video_type=="netmeeting")
-{
-var netmeeting_number="00302993333";
-NetMeeting.CallTo(netmeeting_number);
-}
-
-
-if(video_type=="netmeeting")
-{
-	new Ajax.Request("pass_parameters.php3", {method:"post", postBody:"video_div="+player+"&netmeeting_number="+netmeeting_number});
-
-}
-if(video_type=="video")
-{
-	new Ajax.Request("pass_parameters.php3", {method:"post", postBody:"video_div="+document.getElementById("video").innerHTML});
-}
+		new Ajax.Request("pass_parameters.php3", {method:"post", postBody:"video_div="+document.getElementById("video").innerHTML});
+		document.getElementById("video").innerHTML=player;
 
 
 return false;
@@ -166,6 +164,12 @@ return false;
 	}
 
 
+
+
+
+
+	
+/* load presantation in right iframe*/
 function show_presantation()
 	{
 var presantation_url=document.getElementById("Presantation_URL").value;
@@ -218,7 +222,7 @@ $tool_content = "";//initialise $tool_content
 
 
 $tool_content.=
-'
+'<div>
 <table >
 <tr valign="top"><td width="150">
 	<div id="video"  style="height: 150px;width: 150px;border:groove;">
@@ -235,19 +239,19 @@ $tool_content.='
 <tr>
 <td>
     <label>
-      <input type="radio" name="video_type" id="video_type1" value="netmeeting" />
+      <input type="radio" name="video_type" id="video_type1" value="netmeeting" onclick="javascript:netmeeting();" />
       <br>netmeeting</label>
 </td>
 <td>
     <label>
-      <input type="radio" name="video_type" id="video_type2" value="video" />
+      <input type="radio" name="video_type" id="video_type2" value="video" onclick="javascript:mediaplayer();" />
 <br>video</label>
 </td>
 </tr>
 </table>
     <br />
-  
-<input type="text" id="Video_URL" size="20"><input type="submit" value=" Play ">
+    <div id="video_control"> 
+</div>
   </label>
 
 </form>
@@ -288,8 +292,8 @@ $tool_content.='
 ';
 		if ($is_adminOfCourse) {
 			$tool_content.=' 
-        		<a href="conference.php3?reset=true" target="conference">'.$langWash.'</a> |
-        		<a href="conference.php3?store=true" target="conference">'.$langSave.'</a>
+        		<a href="conference.php3?reset=true" onclick="return clear_chat();">'.$langWash.'</a> <!--|
+			<a href="conference.php3?store=true" onclick="return save_chat()">'.$langSave.'</a>-->
 			';
  		}
 		$tool_content.='
@@ -299,6 +303,7 @@ $tool_content.='
 
 	</TD></TR>
 	</TABLE>
+	</div>
 ';
 
 
