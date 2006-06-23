@@ -360,7 +360,8 @@ background-colorr: red;
 #firstBar {
 		width:100%;
 		height: 25px;
-		background-color: #1a334d;
+		background-colorR: #1a334d;
+		background-color: #0066cc;
 		//borderr: 1px solid #e6e6e6;
 		//border-bottomr: 1px solid #e6e6e6;
 		position:relative;
@@ -377,12 +378,30 @@ background-colorr: red;
 	margin-left:0.4em;
 	position:absolute;
 }
+#firstBar .user a{
+
+	font-family: Verdana, Arial, sans-serif;
+	font-size:11px;
+	color:#FFFFFF;
+	margin-top:0.4em;
+	margin-left:0.4em;
+	positionN:absolute;
+	padding-leftT: 20px;
+}
+
+#firstBar .user imgh{
+position: absolute;
+margin-right:20px;
+padding-right:20px;
+	border: 1px solid red;
+	 text-decoration: none;
+}
 
 #firstBar .logout a{
-float:right;
-margin-top:0.4em;
+	float:right;
+	margin-top:0.4em;
 	margin-right:0.2em;
-font-family: Verdana, Arial, sans-serif;
+	font-family: Verdana, Arial, sans-serif;
 	font-size:11px;
 	color:#FFFFFF;
 }
