@@ -338,6 +338,7 @@ $helpTopic="Clar2";
 		include("logged_in_content.php");
 		draw($tool_content,1);
 	} else {
+		include("./modules/lang/$language/perso.inc.php");
 		include("perso.php");
 		drawPerso($tool_content);
 	}
