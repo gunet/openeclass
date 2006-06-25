@@ -117,6 +117,7 @@ function getUserAgenda($param, $type) {
 }
 
 function agendaHtmlInterface($data) {
+	global $langNoEventsExist;
 	$numOfDays = count($data);
 	if ($numOfDays > 0) {
 		$agenda_content= <<<agCont
@@ -154,7 +155,7 @@ agCont;
 			</div> 
 ";
 	} else {
-		$agenda_content = "<p>Δεν υπάρχουν γεγονότα</p>";
+		$agenda_content = "<p>$langNoEventsExist</p>";
 	}
 
 	return $agenda_content;
