@@ -56,25 +56,16 @@ if (session_is_registered("uid") && isset($perso)) {
 			header("location:".$url);
 			break;
 		}
+		
+		case 6: {//documents
+			$_SESSION["dbname"] = $c;
+			$url = $urlServer."modules/document/document.php";
+			header("location:".$url);
+			break;
+		}
 	}
 
-	/*if (substr($url, 0, 5 ) != "http:")
-	{
-		session_register("dbname");
 
-		$url = substr($url, 3);
-
-		$final_url = $urlServer . $url;
-		if (isset($id))
-		{
-			$final_url .= "?id=" . $id;
-		}
-		if (isset($topic) && isset($forum) && isset($sub))
-		{
-			$final_url .= "?topic=" . $topic . "&forum=" . $forum . "&" . $sub ;
-			
-		}
-		*/
 }
 	
 //	persoLogger($mysqlMainDb, $uid, $dbname, $mysqlServer, $mysqlUser, $mysqlPassword);
