@@ -458,7 +458,7 @@ function adminMenu(){
 function lessonToolsMenu(){
 	global $is_admin, $is_adminOfCourse, $uid, $mysqlMainDb;
 	global $webDir, $language;
-	include($webDir."modules/lang/$language/perso.inc.php");
+	include($webDir."modules/lang/$language/lessonTools.inc.php");
 	$sideMenuGroup = array();
 
 	//	------------------------------------------------------------------
@@ -471,8 +471,8 @@ function lessonToolsMenu(){
 	$sideMenuLink = array();
 	$sideMenuImg = array();
 	$sideMenuID = array();
-
-	array_push($sideMenuSubGroup, $langActiveTools);//TODO: add lang
+	if($is_adminOfCourse) array_push($sideMenuSubGroup, $langActiveTools);
+	else array_push($sideMenuSubGroup, $langTools);
 	//	define('MODULE_ID_AGENDA', 4);
 	while ($toolsRow = mysql_fetch_array($result)) {
 
