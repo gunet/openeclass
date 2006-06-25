@@ -283,6 +283,7 @@ function drawPerso($toolContent, $menuTypeID=null, $tool_css = null, $head_conte
 	$lesson_content 	= $toolContent['lessons_content'];
 	$assigns_content 	= $toolContent['assigns_content'];
 	$announce_content 	= $toolContent['announce_content'];
+	$docs_content		= $toolContent['docs_content'];
 	$agenda_content 	= $toolContent['agenda_content'];
 	$forum_content 		= $toolContent['forum_content'];
 
@@ -329,6 +330,7 @@ function drawPerso($toolContent, $menuTypeID=null, $tool_css = null, $head_conte
 		$t->set_var('LESSON_CONTENT', $lesson_content);
 		$t->set_var('ASSIGN_CONTENT', $assigns_content);
 		$t->set_var('ANNOUNCE_CONTENT', $announce_content);
+		$t->set_var('DOCS_CONTENT', $docs_content);
 		$t->set_var('AGENDA_CONTENT', $agenda_content);
 		$t->set_var('FORUM_CONTENT', $forum_content);
 		$t->set_var('TOOL_PATH',  $relPath);
