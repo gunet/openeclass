@@ -176,12 +176,18 @@ border: 1px solid #ff9933;
 font-weight: bold;
 }
 .title_pos {
-padding-left: 14px;
+padding-left: 16px;
 color: #045bb3;
 font-weight: bold;
 }
 .content_pos {
 padding-left: 14px;
+}
+
+.assign_pos {
+padding-left: 18px;
+color: #045bb3;
+font-weight: bold;
 }
 
 
@@ -251,8 +257,84 @@ padding-left: 14px;
 	margin: .5em 0;
 }
 
+.tick
+{
+	widthx: 16px;
+	heighxt: 16px;
+	background-image: url(img/tick.gif);
+	background-repeat: no-repeat;
+	background-position: 0 50%;
+	background-position: 0px 2px;
+	paddingX: 4px 0 4px 20px;
+	marginX: .5em 0;
+}
+
+.exclamation
+{
+	background-image: url(img/exclamation.gif);
+	background-repeat: no-repeat;
+	background-position: 0 50%;
+	background-position: 0px 2px;
+	paddingX: 4px 0 4px 20px;
+	marginX: .5em 0;
+}
+
 
 
 table {
 	border-top: 3px solid #0066cc;
+}
+
+//---------------
+
+
+ #assigncontainer { width: 100%; padding:0;}
+
+#assigncontainer ul
+{
+margin: 0;
+padding: 0;
+list-style-type: none;
+font-family: Arial, Helvetica, sans-serif;
+}
+
+#assigncontainer a
+{
+display: block;
+paddingX: 3px;
+padding-top: 3px;
+padding-bottom: 3px;
+margin-left:1px;
+//width: 99.9%;
+//margin-right:14px;
+}
+
+#assigncontainer a:link, #assignlist a:visited
+{
+colorR: #EEE;
+text-decoration: none;
+background-colorR: green;
+}
+
+#assigncontainer a:hover
+{
+background-color: #fbcb1b;
+color: #0066cc;
+text-decoration: none;
+paddingX: 3px;
+padding-top: 3px;
+padding-bottom: 3px;
+margin-left:1px;
+}
+
+#assigncontainer li.category
+{
+margin-top: 1px;
+margin-left: 1px;
+display: block;
+padding: 3px;
+color:#4f76a3;
+background-color: #e6edf5;
+border: 1px solid #ff9933;
+font-weight: bold;
 }
