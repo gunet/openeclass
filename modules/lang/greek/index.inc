@@ -82,13 +82,6 @@ $langWelcomeToEclass = "Καλωσορίσατε στο e-Class!";
 $langAnonUser = "Ανώνυμος";
 $langUserBriefcase = "Χαρτοφυλάκιο χρήστη";
 
-$langPersonalisedBriefcase = "Προσωπικό χαρτοφυλάκιο";
-$langMyPersoLessons = "ΤΑ ΜΑΘΗΜΑΤΑ ΜΟΥ";
-$langMyPersoDeadlines = "ΟΙ ΔΙΟΡΙΕΣ ΜΟΥ";
-$langMyPersoAnnouncements = "ΟΙ ΤΕΛΕΥΤΑΙΕΣ ΜΟΥ ΑΝΑΚΟΙΝΩΣΕΙΣ";
-$langMyPersoDocs = "ΤΑ ΤΕΛΕΥΤΑΙΑ ΜΟΥ ΕΓΓΡΑΦΑ";
-$langMyPersoAgenda = "Η ΑΤΖΕΝΤΑ ΜΟΥ";
-$langMyPersoForum = "ΟΙ ΤΕΛΕΥΤΑΙΕΣ ΑΠΟΣΤΟΛΕΣ ΣΤΙΣ ΠΕΡΙΟΧΕΣ ΣΥΖΗΤΗΣΕΩΝ ΜΟΥ";
 
 $langSearch = "Αναζήτηση";
 $langEclass = "Πλατφόρμα ασύγχρονης τηλεκπαίδευσης e-Class";
