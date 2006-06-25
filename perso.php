@@ -22,6 +22,7 @@ session_register('status');
 include("./modules/perso/lessons.php");
 include("./modules/perso/assignments.php");
 include("./modules/perso/announcements.php");
+include("./modules/perso/documents.php");
 include("./modules/perso/agenda.php");
 include("./modules/perso/forumPosts.php");
 
@@ -58,74 +59,97 @@ if ($row = mysql_fetch_row($user_status_query)) {
 
 $user_lesson_info = getUserLessonInfo($uid, "html");
 
+if ($user_lesson_info[0][0] > 0) {//if user is registered to at least one lesson
+	// BEGIN - Get user assignments
+	$param = array(	'uid'	=> $uid,
+	'max_repeat_val' 	=> $user_lesson_info[0][0], //max repeat val (num of lessons)
+	'lesson_titles'	=> $user_lesson_info[0][1],
+	'lesson_code'	=> $user_lesson_info[0][2],
+	'lesson_professor'	=> $user_lesson_info[0][3],
+	'lesson_statut'		=> $user_lesson_info[0][4]
 
-// BEGIN - Get user assignments
-$param = array(	'uid'	=> $uid,
-'max_repeat_val' 	=> $user_lesson_info[0][0], //max repeat val (num of lessons)
-'lesson_titles'	=> $user_lesson_info[0][1],
-'lesson_code'	=> $user_lesson_info[0][2],
-'lesson_professor'	=> $user_lesson_info[0][3],
-'lesson_statut'		=> $user_lesson_info[0][4]
+	);
+	//echo $user_lesson_info[0][0];
+	$user_assignments = getUserAssignments($param, "html");
 
-);
-//echo $user_lesson_info[0][0];
-$user_assignments = getUserAssignments($param, "html");
+	//echo $user_assignments;
+	//END - Get user assignments
 
-//echo $user_assignments;
-//END - Get user assignments
+	// BEGIN - Get user announcements
 
-// BEGIN - Get user announcements
+	$param = array(	'uid'	=> $uid,
+	'max_repeat_val' 	=> $user_lesson_info[0][0], //max repeat val (num of lessons)
+	'lesson_titles'	=> $user_lesson_info[0][1],
+	'lesson_code'	=> $user_lesson_info[0][2],
+	'lesson_professor'	=> $user_lesson_info[0][3],
+	'lesson_statut'		=> $user_lesson_info[0][4],
+	'usr_lst_login'		=> $_user["lastLogin"],
+	'usr_memory'		=> $user_lesson_info[0][5]
+	);
+	//dumpArray($user_lesson_info[0][5]);
+	$user_announcements = getUserAnnouncements($param, "html");
+	//echo $user_announcements;
+	// END - Get user announcements
 
-$param = array(	'uid'	=> $uid,
-'max_repeat_val' 	=> $user_lesson_info[0][0], //max repeat val (num of lessons)
-'lesson_titles'	=> $user_lesson_info[0][1],
-'lesson_code'	=> $user_lesson_info[0][2],
-'lesson_professor'	=> $user_lesson_info[0][3],
-'lesson_statut'		=> $user_lesson_info[0][4],
-'usr_lst_login'		=> $_user["lastLogin"],
-'usr_memory'		=> $user_lesson_info[0][5]
-);
-//dumpArray($user_lesson_info[0][5]);
-$user_announcements = getUserAnnouncements($param, "html");
-//echo $user_announcements;	
-// END - Get user announcements
+	// BEGIN - Get user documents
 
+	$param = array(	'uid'	=> $uid,
+	'max_repeat_val' 	=> $user_lesson_info[0][0], //max repeat val (num of lessons)
+	'lesson_titles'	=> $user_lesson_info[0][1],
+	'lesson_code'	=> $user_lesson_info[0][2],
+	'lesson_professor'	=> $user_lesson_info[0][3],
+	'lesson_statut'		=> $user_lesson_info[0][4],
+	'usr_lst_login'		=> $_user["lastLogin"],
+	'usr_memory'		=> $user_lesson_info[0][6]
+	);
 
-//BEGIN - Get user agenda
-$param = array(	'uid'	=> $uid,
-'max_repeat_val' 	=> $user_lesson_info[0][0], //max repeat val (num of lessons)
-'lesson_titles'	=> $user_lesson_info[0][1],
-'lesson_code'	=> $user_lesson_info[0][2],
-'lesson_professor'	=> $user_lesson_info[0][3],
-'lesson_statut'		=> $user_lesson_info[0][4],
-'usr_lst_login'		=> $_user["lastLogin"]
-);
-$user_agenda = getUserAgenda($param, "html");
+	$user_documents = getUserDocuments($param, "html");
 
-//END - Get user agenda
+	// END - Get user documents
 
-//BEGIN - Get user forum posts
-$param = array(	'uid'	=> $uid,
-'max_repeat_val' 	=> $user_lesson_info[0][0], //max repeat val (num of lessons)
-'lesson_titles'	=> $user_lesson_info[0][1],
-'lesson_code'	=> $user_lesson_info[0][2],
-'lesson_professor'	=> $user_lesson_info[0][3],
-'lesson_statut'		=> $user_lesson_info[0][4],
-'usr_lst_login'		=> $_user["lastLogin"],
-'usr_memory'		=> $user_lesson_info[0][7]//forums memory
-);
-$user_forumPosts = getUserForumPosts($param, "html");
+	//BEGIN - Get user agenda
+	$param = array(	'uid'	=> $uid,
+	'max_repeat_val' 	=> $user_lesson_info[0][0], //max repeat val (num of lessons)
+	'lesson_titles'	=> $user_lesson_info[0][1],
+	'lesson_code'	=> $user_lesson_info[0][2],
+	'lesson_professor'	=> $user_lesson_info[0][3],
+	'lesson_statut'		=> $user_lesson_info[0][4],
+	'usr_lst_login'		=> $_user["lastLogin"]
+	);
+	$user_agenda = getUserAgenda($param, "html");
 
-//END - Get user forum posts
+	//END - Get user agenda
 
+	//BEGIN - Get user forum posts
+	$param = array(	'uid'	=> $uid,
+	'max_repeat_val' 	=> $user_lesson_info[0][0], //max repeat val (num of lessons)
+	'lesson_titles'	=> $user_lesson_info[0][1],
+	'lesson_code'	=> $user_lesson_info[0][2],
+	'lesson_professor'	=> $user_lesson_info[0][3],
+	'lesson_statut'		=> $user_lesson_info[0][4],
+	'usr_lst_login'		=> $_user["lastLogin"],
+	'usr_memory'		=> $user_lesson_info[0][7]//forums memory
+	);
+	$user_forumPosts = getUserForumPosts($param, "html");
+
+	//END - Get user forum posts
+} else {
+	
+	$user_assignments = "<p>-</p>";
+	$user_announcements = "<p>-</p>";
+	$user_documents = "<p>-</p>";
+	$user_agenda = "<p>-</p>";
+	$user_forumPosts = "<p>-</p>";
+}
 //$lesson_content = $user_lesson_info[1];
 // ==  BEGIN create array with personalised content
 $tool_content = array(
-						'lessons_content' 	=> $user_lesson_info[1],
-						'assigns_content' 	=> $user_assignments,
-						'announce_content' 	=> $user_announcements,
-						'agenda_content' 	=> $user_agenda,
-						'forum_content' 	=> $user_forumPosts
+'lessons_content' 	=> $user_lesson_info[1],
+'assigns_content' 	=> $user_assignments,
+'announce_content' 	=> $user_announcements,
+'docs_content'		=> $user_documents,
+'agenda_content' 	=> $user_agenda,
+'forum_content' 	=> $user_forumPosts
 );
 // == END create array with personalised content
 //dumpArray($user_lesson_info);
