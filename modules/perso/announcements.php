@@ -105,9 +105,7 @@ function getUserAnnouncements($param = null, $type) {
 		$sqlNowDate = eregi_replace(" ", "-",$usr_lst_login);
 		$sql = "UPDATE `user` SET `announce_flag` = '$sqlNowDate' WHERE `user_id` = $uid ";
 		db_query($sql, $mysqlMainDb);
-//		echo $sql;
-		//update announcemenets memory
-		//call announceHtmlInterface()
+
 	} elseif (!$getNewAnnounce) {
 		//if there are no new announcements, get the last announcements the user had
 		//so that we always have something to display
@@ -148,8 +146,9 @@ function getUserAnnouncements($param = null, $type) {
 }
 
 function announceHtmlInterface($data, $max_repeat_val) {
-	global $urlServer ;
+	global $urlServer,$langNoAnnouncementsExist ;
 	$announceExist = false;
+	
 	$assign_content= <<<aCont
 	<div id="datacontainer">
 
@@ -183,7 +182,7 @@ aCont;
 ";
 
 	if (!$announceExist) {
-		$assign_content = "<p>Δεν υπάρχουν ανακοινώσεις</p>";
+		$assign_content = "<p>$langNoAnnouncementsExist</p>";
 	}
 	return $assign_content;
 

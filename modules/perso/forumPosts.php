@@ -109,7 +109,7 @@ function getUserForumPosts($param, $type)
 		//		$lesson_posts[$i]['lesson_title']						= $lesson_titles[$i];
 		//		$lesson_posts[$i]['number_of_posts']					= $forum_posts_per_lesson[$i];
 		if ($num_rows > 0) {
-//			echo "lala";
+			//			echo "lala";
 			array_push($forumSubData, $forumContent);
 			array_push($forumData, $forumSubData);
 			array_push($forumPosts, $forumData);
@@ -150,8 +150,7 @@ function getUserForumPosts($param, $type)
 
 	}
 
-//		dumpArray($forumPosts);
-//		print_a($forumPosts);
+	//		print_a($forumPosts);
 
 	if($type == "html") {
 		return forumHtmlInterface($forumPosts);
@@ -163,34 +162,41 @@ function getUserForumPosts($param, $type)
 
 
 function forumHtmlInterface($data) {
-	$content= <<<fCont
+	global $langNoPosts;
+	$content = "";
+	if($numOfLessons = count($data) < 0) {
+		
+		$content .= <<<fCont
 
 	 <div id="datacontainer">
 
 				<ul id="datalist">
 fCont;
-	$numOfLessons = count($data);
-	for ($i=0; $i <$numOfLessons; $i++) {
-		$content .= "
+		$numOfLessons = count($data);
+		for ($i=0; $i <$numOfLessons; $i++) {
+			$content .= "
 		<li class=\"category\">".$data[$i][0]."
 		</li>";
-		$iterator =  count($data[$i][2][0]);
-		for ($j=0; $j < $iterator; $j++){
-			$url = $_SERVER['PHP_SELF']."?perso=5&c=".$data[$i][1]."&t=".$data[$i][2][0][$j][2]."&f=".$data[$i][2][0][$j][0]."&s=".$data[$i][2][0][$j][4];
-			$content .= "
+			$iterator =  count($data[$i][2][0]);
+			for ($j=0; $j < $iterator; $j++){
+				$url = $_SERVER['PHP_SELF']."?perso=5&c=".$data[$i][1]."&t=".$data[$i][2][0][$j][2]."&f=".$data[$i][2][0][$j][0]."&s=".$data[$i][2][0][$j][4];
+				$content .= "
 		<li><a class=\"square_bullet\" href=\"$url\"><div class=\"title_pos\">".$data[$i][2][0][$j][3]." (".$data[$i][2][0][$j][5].")</div>
 			<div class=\"content_pos\">".$data[$i][2][0][$j][8]."</div>
 			<div class=\"content_pos\">Apostoleas: ".$data[$i][2][0][$j][6]." ".$data[$i][2][0][$j][7]."</div>
 		</a></li>
 		";
+			}
+
+			if ($i+1 <$numOfLessons) $content .= "<br>";
 		}
 
-		if ($i+1 <$numOfLessons) $content .= "<br>";
-	}
-
-	$content .= "</ul>
+		$content .= "</ul>
 			</div> 
-";
+		";
+	} else {
+		$content .= "<p>$langNoPosts</p>";
+	}
 
 
 	return $content;
@@ -228,7 +234,6 @@ function createForumQueries($dateVar){
 			
 						ORDER BY posts.post_time ';
 	//		echo $forum_query . "<br>";
-
 
 	return $forum_query;
 }

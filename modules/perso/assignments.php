@@ -21,7 +21,7 @@
 
 
 function getUserAssignments($param, $type) {
-		global $mysqlMainDb;
+	global $mysqlMainDb;
 	$uid				= $param['uid'];
 	$lesson_code		= $param['lesson_code'];
 	$max_repeat_val		= $param['max_repeat_val'];
@@ -32,8 +32,8 @@ function getUserAssignments($param, $type) {
 
 	for ($i=0;$i<$max_repeat_val;$i++) {
 
-		$assignments_query[$i] = "SELECT assignments.id, title, assignments.description, assignments.deadline,
-									cours.intitule
+		$assignments_query[$i] = "SELECT assignments.id, assignments.title, assignments.description, assignments.deadline,
+									cours.intitule,(TO_DAYS(assignments.deadline) - TO_DAYS(NOW())) AS days_left
 										FROM  ".$lesson_code[$i].".assignments, ".$mysqlMainDb.".cours
 										WHERE (TO_DAYS(deadline) - TO_DAYS(NOW())) >= '0'
 										AND assignments.active = '1'
@@ -52,6 +52,7 @@ function getUserAssignments($param, $type) {
 		while($myAssignments = mysql_fetch_row($mysql_query_result)){
 
 			if ($myAssignments){
+
 				array_push($myAssignments, $lesson_code[$i]);
 
 				if ($submission = findSubmission($uid, $myAssignments[0], $lesson_code[$i])) {
@@ -68,17 +69,11 @@ function getUserAssignments($param, $type) {
 		}
 
 	}
-	
-//	dumpArray($assignGroup);
-//print_a($assignGroup);
+
+	//print_a($assignGroup);
 
 	$assignGroup = columnSort($assignGroup, 3);
-	//	get {5-(not expired)} assignments to have at least five to display
-//	array_slice($expiredAssignGroup,5-count($assignGroup));
 
-	//	$assigns = $assignGroup + $expiredAssignGroup;
-//	array_push($assignGroup, $expiredAssignGroup);
-	
 	if($type == "html") {
 		return assignHtmlInterface($assignGroup);
 	} elseif ($type == "data") {
@@ -89,37 +84,44 @@ function getUserAssignments($param, $type) {
 }
 
 function assignHtmlInterface($data) {
-	$assign_content= <<<aCont
+	global  $langLesson, $langAssignment, $langDeadline, $langNoAssignmentsExist;
+	$assign_content = "";
+	$iterator =  count($data);
+	
+	if ($iterator > 0) {
+		$assign_content .= <<<aCont
 	
 	<table  width="100%" class="assign">
 		<thead>
 			<tr>
-				<th class="assign">Μάθημα</th>
-				<th class="assign">Εργασία</th>
-				<th class="assign">Λήξη</th>
+				<th class="assign">$langLesson</th>
+				<th class="assign">$langAssignment</th>
+				<th class="assign">$langDeadline</th>
 			<tr>
 		</thead>
 		<tbody>
 aCont;
-$iterator =  count($data);
-for ($i=0; $i < $iterator; $i++){
-	/*if ($i%2 == 1) {
-		$trClass = "class=\"odd\"";
-	} else {
-		$trClass = "";
-	}*/
-	$url = $_SERVER['PHP_SELF'] . "?perso=1&c=" .$data[$i][5]."&i=".$data[$i][0];
-	$assign_content .= "
+
+		for ($i=0; $i < $iterator; $i++){
+
+			if($data[$i][7] == 1) {
+				$class = "class=\"tick\"";
+			} elseif ($data[$i][5] < 3) {
+				$class = "class=\"exclamation\"";
+			} else {
+				$class = "";
+			}
+			$url = $_SERVER['PHP_SELF'] . "?perso=1&c=" .$data[$i][6]."&i=".$data[$i][0];
+			$assign_content .= "
 		<tr >
 			<td class=\"assign\"><p>".$data[$i][4]."</p></td>
 			
 			<td class=\"assign\">
-				<div id=\"datacontainer\">
-					<ul id=\"datalist\">
+				<div id=\"assigncontainer\">
+					<ul id=\"assignlist\">
 						<li>
-							<a class=\"bottom\" href=\"$url\">
-								<img src=\"{TOOL_PATH}template/classic/img/square_bullet.gif\" width=\"5\" height=\"5\" border=\"0\" />
-								<span class=\"title_pos\">".$data[$i][1]."</span>
+							<a $class href=\"$url\">
+								<div class=\"assign_pos\">".$data[$i][1]."</div>
 							</a>
 						</li>
 					</ul>
@@ -129,14 +131,17 @@ for ($i=0; $i < $iterator; $i++){
 			
 			<td class=\"assign\"><p>".$data[$i][3]."</p></td>
 		</tr>
-	";
-}
+		";
+		}
 
-$assign_content .= "
-	</tbody></table>
-";
-return $assign_content;
-//	$assign_content .= 
+		$assign_content .= "
+			</tbody></table>
+			";
+	} else {
+		$assign_content .= "<p>$langNoAssignmentsExist</p>";
+	}
+	return $assign_content;
+	//	$assign_content .=
 }
 
 function columnSort($unsorted, $column) {

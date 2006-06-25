@@ -87,9 +87,9 @@ function  getUserLessonInfo($uid, $type) {
 
 	$ret_val[0] = $max_repeat_val;
 	$ret_val[1] = $lesson_titles;
-	$ret_val[2]	= $lesson_code;
-	$ret_val[3] = $lesson_professor;
-	$ret_val[4] = $lesson_statut;
+	@$ret_val[2]	= $lesson_code;
+	@$ret_val[3] = $lesson_professor;
+	@$ret_val[4] = $lesson_statut;
 	$ret_val[5] = $lesson_announce_f;
 	$ret_val[6] = $lesson_doc_f;
 	$ret_val[7] = $lesson_forum_f;
@@ -107,8 +107,11 @@ function  getUserLessonInfo($uid, $type) {
 
 
 function htmlInterface($data) {
-	global $statut, $is_admin, $urlServer,$langCourseCreate,$langOtherCourses;
-	$lesson_content = <<<lCont
+	global $statut, $is_admin, $urlServer, $langCourseCreate, $langOtherCourses;
+	global $langNotEnrolledToLessons, $langCreateLesson, $langEnroll;
+	$lesson_content = "";
+	if ($data[0] > 0) {
+	$lesson_content .= <<<lCont
 
       		<div id="datacontainer">
 
@@ -138,7 +141,21 @@ lCont;
 	$lesson_content .= "
 	</ul>
 			</div> 
-		<br>
+		<br>";
+	} else {
+		$lesson_content .= "
+		<p>$langNotEnrolledToLessons</p>
+		";
+		if ($statut == 1) {
+			$lesson_content .= "
+		<p>$langCreateLesson</p>
+		";
+		}
+		$lesson_content .= "
+		<p>$langEnroll</p>
+		";
+	}
+	$lesson_content .= "
 		<a class=\"enroll_icon\" href=".$urlServer."modules/auth/courses.php>$langOtherCourses</a>
 	   		";
 
@@ -150,38 +167,5 @@ if ($statut == 1) {
 	
 	return $lesson_content;
 }
-function LessonsView($param = null)
-{
-
-	//$this->user_id			= $this->setDefault($param['user_id'], null);
-	//$this->tools_url		= $this->setDefault($param['tools_url'], null);
-	$this->max_repeat_val	= $this->setDefault($param['max_repeat_val'], null);
-	$this->lesson_titles	= $this->setDefault($param['lesson_titles'], null);
-	$this->lesson_code		= $this->setDefault($param['lesson_code'], null);
-	$this->lesson_professor	= $this->setDefault($param['lesson_professor'], null);
-
-
-	//$lv = new DBI();
-	//$user_lesson_info = $lv->getUserLessonInfo($this->user_id);
-
-	$max_repeat_val = $this->max_repeat_val;/*$user_lesson_info[0];*/
-	$lesson_titles = $this->lesson_titles;/*$user_lesson_info[1];*/
-	$lesson_code = $this->lesson_code;/*$user_lesson_info[2];*/
-
-
-
-
-	for ($i=0;$i<$max_repeat_val;$i++)
-	{
-		$tree_data[$i]['lesson_code']	= $lesson_code[$i];
-		$tree_data[$i]['lesson_title'] 	= $this->lesson_titles[$i];
-		$tree_data[$i]['lesson_prof']	= $this->lesson_professor[$i];
-
-	}
-
-	return $tree_data;
-
-}
-
 
 ?>
