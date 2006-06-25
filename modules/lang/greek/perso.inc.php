@@ -28,11 +28,25 @@
       +----------------------------------------------------------------------+
 
  */
+$langPersonalisedBriefcase = "Προσωπικό χαρτοφυλάκιο";
+$langMyPersoLessons = "ΤΑ ΜΑΘΗΜΑΤΑ ΜΟΥ";
+$langMyPersoDeadlines = "ΟΙ ΔΙΟΡΙΕΣ ΜΟΥ";
+$langMyPersoAnnouncements = "ΟΙ ΤΕΛΕΥΤΑΙΕΣ ΜΟΥ ΑΝΑΚΟΙΝΩΣΕΙΣ";
+$langMyPersoDocs = "ΤΑ ΤΕΛΕΥΤΑΙΑ ΜΟΥ ΕΓΓΡΑΦΑ";
+$langMyPersoAgenda = "Η ΑΤΖΕΝΤΑ ΜΟΥ";
+$langMyPersoForum = "ΟΙ ΤΕΛΕΥΤΑΙΕΣ ΑΠΟΣΤΟΛΕΣ ΣΤΙΣ ΠΕΡΙΟΧΕΣ ΣΥΖΗΤΗΣΕΩΝ ΜΟΥ";
 
+$langLesson = "Μάθημα";
+$langAssignment = "Εργασία";
+$langDeadline = "Λήξη";
 
-$langActiveTools="Ενεργά εργαλεία";
-$langAdministrationTools="Εργαλεία διαχείρισης";
-$langInactiveTools="Ανενεργά εργαλεία";
-$langAdministratorTools="Εργαλεία διαχειριστή";
+$langNoEventsExist="Δεν υπάρχουν γεγονότα";
+$langNoAssignmentsExist="Δεν υπάρχουν εργασίες προς παράδοση";
+$langNoAnnouncementsExist="Δεν υπάρχουν ανακοινώσεις";
+$langNoDocsExist="Δεν υπάρχουν έγγραφα";
+$langNoPosts="Δεν υπάρχουν αποστολές στις περιοχές συζητήσεων";
 
+$langNotEnrolledToLessons="Δεν είστε εγγεγραμμένος/η σε μαθήματα";
+$langCreateLesson="Μπορείτε να δημιουργήσετε μάθημα ακολουθώντας τον σύνδεσμο \"$langCourseCreate\"";
+$langEnroll="Μπορείτε να εγγραφείτε σε μαθήματα ακολουθώντας τον σύνδεσμο \"$langOtherCourses\"";
 ?>

@@ -28,11 +28,25 @@
       +----------------------------------------------------------------------+
 
  */
+$langPersonalisedBriefcase = "Personalised portofolio";
+$langMyPersoLessons = "MY LESSONS";
+$langMyPersoDeadlines = "MY DEADLINES";
+$langMyPersoAnnouncements = "MY ANNOUNCEMENTS";
+$langMyPersoDocs = "MY LATEST DOCUMENTS";
+$langMyPersoAgenda = "MY AGENDA";
+$langMyPersoForum = "THE LATEST SUBMISSION TO MY FORUMS";
 
+$langLesson = "Lesson";
+$langAssignment = "Assignment";
+$langDeadline = "Deadline";
 
-$langActiveTools="Active tools";
-$langAdministrationTools="Administration tools";
-$langInactiveTools="Inactive tools";
-$langAdministratorTools="Administrator tools";
+$langNoEventsExist="No events exist";
+$langNoAssignmentsExist="No assignments exist";
+$langNoAnnouncementsExist="No announcements exist";
+$langNoDocsExist="No documents exist";
+$langNoPosts="There are no submissions to your forums";
 
+$langNotEnrolledToLessons="You are not enrolled to any lessons";
+$langCreateLesson="You can create a course by following the link \"$langCourseCreate\"";
+$langEnroll="You can enroll to a course by following the link \"$langOtherCourses\"";
 ?>
