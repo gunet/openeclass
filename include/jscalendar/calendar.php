@@ -70,6 +70,7 @@ class DHTML_Calendar {
     }
 
     function make_input_field($cal_options = array(), $field_attributes = array()) {
+        $code = '';
         $id = $this->_gen_id();
         $attrstr = $this->_make_html_attr(array_merge($field_attributes,
                                                       array('id'   => $this->_field_id($id),
