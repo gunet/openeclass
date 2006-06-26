@@ -66,7 +66,7 @@ if ($language == 'greek') {
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-win2k-2', false);
 $local_head = $jscalendar->get_load_files_code();
-if ($_POST['u_analyze'] && ($_POST['user_id'] != -1)) {
+if (isset($_POST['u_analyze']) && isset($_POST['user_id']) && $_POST['user_id'] != -1) {
     require_once "analyze.php";
 } else {
     if (!extension_loaded('gd')) {
@@ -81,7 +81,9 @@ if ($_POST['u_analyze'] && ($_POST['user_id'] != -1)) {
 draw($tool_content, 2, '', $local_head, '');
 
 if ($made_chart) {
+    ob_end_flush();
     ob_flush();
+    flush();
     sleep(5);
     unlink ($webDir.$chart_path);
 }

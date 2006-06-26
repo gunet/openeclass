@@ -134,13 +134,13 @@ if (isset($submit) && (!isset($ldap_submit))) {
     }
 
 // everything is ok
-	##[BEGIN personalisation modification]############
-	if (!isset($persoStatus) || $persoStatus == "") $persoStatus = "no";
-	else  $persoStatus = "yes";
+    ##[BEGIN personalisation modification]############
+    if (!isset($persoStatus) || $persoStatus == "") $persoStatus = "no";
+    else  $persoStatus = "yes";
     mysql_query("UPDATE user
         SET nom='$nom_form', prenom='$prenom_form',
         username='$username_form', password='$password_form', email='$email_form', am='$am_form',
-			perso='$persoStatus'
+            perso='$persoStatus'
         WHERE user_id='".$_SESSION["uid"]."'");
     $tool_content .= "<font face=\"arial, helvetica\" size=\"2\">
     $langProfileReg
@@ -154,19 +154,19 @@ if (isset($submit) && (!isset($ldap_submit))) {
 ##[BEGIN personalisation modification - For LDAP users]############
 if (isset($submit) && isset($ldap_submit) && ($ldap_submit == "ON")) {
 //	$persoStatus = $_POST['persoStatus'];
-	if (!isset($persoStatus) || $persoStatus == "") $persoStatus = "no";
-	else  $persoStatus = "yes";
-	mysql_query(" UPDATE user SET perso = '$persoStatus' WHERE user_id='".$_SESSION["uid"]."' ");
-	if (session_is_registered("user_perso_active") && $persoStatus=="no") session_unregister("user_perso_active");
+    if (!isset($persoStatus) || $persoStatus == "") $persoStatus = "no";
+    else  $persoStatus = "yes";
+    mysql_query(" UPDATE user SET perso = '$persoStatus' WHERE user_id='".$_SESSION["uid"]."' ");
+    if (session_is_registered("user_perso_active") && $persoStatus=="no") session_unregister("user_perso_active");
 
-	
+
 $tool_content .= "
-	<font face=\"arial, helvetica\" size=\"2\">
-		$langProfileReg
-	<br>
-	<a href=\"../../index.php\">$langHome</a>
-	<br>
-	<hr size=\"1\" noshade>";
+    <font face=\"arial, helvetica\" size=\"2\">
+        $langProfileReg
+    <br>
+    <a href=\"../../index.php\">$langHome</a>
+    <br>
+    <hr size=\"1\" noshade>";
 
 }
 ##[END personalisation modification]############
@@ -208,16 +208,16 @@ session_register("nom");
 session_register("prenom");
 
 ##[BEGIN personalisation modification]############IT DOES NOT UPDATE THE DB!!!
-if ($persoStatus=="yes" && session_is_registered("perso_is_active")) session_register("user_perso_active");	
-if ($persoStatus=="no" && session_is_registered("perso_is_active")) session_unregister("user_perso_active");	
+if ($persoStatus=="yes" && session_is_registered("perso_is_active")) session_register("user_perso_active");
+if ($persoStatus=="no" && session_is_registered("perso_is_active")) session_unregister("user_perso_active");
 ##[END personalisation modification]############
 
 // if LDAP user - added by adia
 if ($myrow['inst_id'] > 0) {		// LDAP user:
     $tool_content .= "
     <form method=\"post\" action=\"$PHP_SELF?submit=yes\">
-	<input type=hidden name=\"ldap_submit\" value=\"ON\">
-    
+    <input type=hidden name=\"ldap_submit\" value=\"ON\">
+
     <table>
     <thead>
     <tr>
@@ -245,32 +245,32 @@ if ($myrow['inst_id'] > 0) {		// LDAP user:
         <td>$email_form</td>
         </tr>
         ";
-        
-        ##[BEGIN personalisation modification]############	
 
-	if (session_is_registered("perso_is_active")) {
-		$tool_content .= " 	
-		<tr>
-			<th>eClass Personalised</th>
-			<td>
-				<input type=checkbox name='persoStatus' value=\"yes\" $checkedPerso>
-			</td>
-		</tr>
+        ##[BEGIN personalisation modification]############
+
+    if (session_is_registered("perso_is_active")) {
+        $tool_content .= "
+        <tr>
+            <th>eClass Personalised</th>
+            <td>
+                <input type=checkbox name='persoStatus' value=\"yes\" $checkedPerso>
+            </td>
+        </tr>
 ";
-	}
+    }
 ##[END personalisation modification]############
-    
+
         $tool_content .= "
         <tr>
         <td colspan=\"2\" class=\"caution\">$langLDAPUser</td>
         </tr>
         </thead></table><br>
-        
+
         <input type=\"Submit\" name=\"submit\" value=\"$langChange\">
-						
-				</form><br><br>
+
+                </form><br><br>
         ";
-   
+
 
 } else {		// Not LDAP user:
     if (!isset($urlSecure)) {
@@ -336,22 +336,22 @@ $tool_content .= "<form method=\"post\" action=\"$sec?submit=yes\">
             <input type=\"text\" size=\"20\" name=\"am_form\" value=\"$am_form\">
         </td>
     </tr>";
-    ##[BEGIN personalisation modification]############		
-	if (session_is_registered("perso_is_active")) {
+    ##[BEGIN personalisation modification]############
+    if (session_is_registered("perso_is_active")) {
 
-		$tool_content .="		
-				<tr>
-					<th width=\"150\">
-						
-							eClass Personalised
-						
-					</th>
-			 		<td>
-						<input type=checkbox name='persoStatus' value=\"yes\" $checkedPerso>
-					</td>
-				</tr>";
-	}
-	##[END personalisation modification]############	
+        $tool_content .="
+                <tr>
+                    <th width=\"150\">
+
+                            eClass Personalised
+
+                    </th>
+                     <td>
+                        <input type=checkbox name='persoStatus' value=\"yes\" $checkedPerso>
+                    </td>
+                </tr>";
+    }
+    ##[END personalisation modification]############
     $tool_content .= "
     </thead>
     </table>
@@ -370,7 +370,7 @@ $tool_content .= "<form method=\"post\" action=\"$sec?submit=yes\">
 if (!extension_loaded('gd')) {
     $tool_content .= "$langGDRequired";
 } else {
-		$totalHits = 0;
+        $totalHits = 0;
     require_once '../../include/libchart/libchart.php';
     $sql = "SELECT code FROM cours";
     $result = db_query($sql);
@@ -454,7 +454,9 @@ draw($tool_content, 1);
 
 // Unlink chart file - haniotak
 if ($made_chart) {
-    ob_flush(); // don't keep user waiting
+    ob_end_flush();
+    ob_flush();
+    flush();
     sleep(5);
     unlink($webDir.$chart_path);
 }
