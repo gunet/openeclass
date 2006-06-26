@@ -46,8 +46,8 @@
 
 //            $this->fontCondensed = dirname(__FILE__) . "/../fonts/DejaVuSansCondensed.ttf";
 //            $this->fontCondensedBold = dirname(__FILE__) . "/../fonts/DejaVuSansCondensed-Bold.ttf";
-            $this->fontCondensed = dirname(__FILE__) . "/../fonts/arial.ttf";
-            $this->fontCondensedBold = dirname(__FILE__) . "/../fonts/arialbd.ttf";
+            $this->fontCondensed = dirname(__FILE__) . "/../fonts/MgOpenModernaRegular.ttf";
+            $this->fontCondensedBold = dirname(__FILE__) . "/../fonts/MgOpenModernaBold.ttf";
 
         }
 
