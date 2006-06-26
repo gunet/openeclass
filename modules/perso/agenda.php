@@ -47,9 +47,8 @@ function getUserAgenda($param, $type) {
 	}
 
 	//		5.	select data from temp and sort by date
-
-
-	$sql = "SELECT agenda.titre, agenda.contenu, agenda.day, agenda.hour, agenda.lasting, agenda.lesson_code,cours.intitule
+	
+	$sql_4 = "SELECT agenda.titre, agenda.contenu, agenda.day, agenda.hour, agenda.lasting, agenda.lesson_code,cours.intitule
 			FROM 
 			(	SELECT day
 				FROM agenda 
@@ -63,10 +62,30 @@ function getUserAgenda($param, $type) {
 			WHERE agenda.lesson_code = cours.code
 			ORDER by day, hour
 			";
+	$sql_5= "SELECT agenda.titre, agenda.contenu, agenda.day, agenda.hour, agenda.lasting, agenda.lesson_code,cours.intitule
+			FROM 
+			((	SELECT day
+				FROM agenda 
+				WHERE ($tbl_lesson_codes)
+				GROUP BY day
+				HAVING (TO_DAYS(day) - TO_DAYS(NOW())) >= '0'
+				ORDER BY day DESC
+				LIMIT $uniqueDates
+			) AS A, cours)
+			JOIN agenda ON agenda.day = A.day
+			WHERE agenda.lesson_code = cours.code
+			ORDER by day, hour
+			";
 
+	$ver = mysql_get_server_info();
+	
+	if (version_compare("5.0", $ver) <= 0)
+	$sql = $sql_5;//mysql 4 compatible query
+	elseif (version_compare("4.1", $ver) <= 0)
+	$sql = $sql_4;//mysql 5 compatible query
+	
 	$mysql_query_result = db_query($sql, $mysqlMainDb);
 
-	//	$i = 0;
 	//	$agendaGroup = array();
 	$agendaDateData = array();
 
@@ -97,7 +116,7 @@ function getUserAgenda($param, $type) {
 	}
 
 
-//	print_a($agendaDateData);
+	//	print_a($agendaDateData);
 	//	dumpArray($agendaDateData);
 	//		Constructing the array of data to be parsed back
 	//		------------------------------------------------
@@ -131,7 +150,7 @@ agCont;
 		<li class=\"category\">".$data[$i][0][2]."</li>
 		";
 			$iterator =  count($data[$i]);
-			
+
 			for ($j=0; $j < $iterator; $j++){
 				$url = $_SERVER['PHP_SELF'] . "?perso=4&c=" . $data[$i][$j][5];
 				if (strlen($data[$i][$j][4]) < 2) {
