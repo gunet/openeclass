@@ -148,15 +148,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var('INV2',  '-->');
 		}
 
-		//START breadcrumb
-		//		$t->set_var('BREAD_TEXT',  "Η αρχική μου σελίδα");
-		//		$t->set_var('BREAD_START_LINK',  $urlServer);
+		//START breadcrumb AND page title
 
 		if (!$page_navi) $page_navi = $navigation;
 		if (!$page_name) $page_name = $nameTools;
 
 		$t->set_block('mainBlock', 'breadCrumbHomeBlock', 'breadCrumbHome');
 		$t->set_var('BREAD_TEXT',  $siteName);
+		$pageTitle = $siteName;
 		if (!$homePage) {
 			$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_START_LINK}">');
 			$t->set_var('BREAD_START_LINK',  $urlServer);
@@ -176,6 +175,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var('BREAD_HREF_END',  '</a>');
 			$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
 			$breadIterator++;
+			$pageTitle .= " | " .$intitule;
+
 		} elseif (isset($currentCourseID) && $courseHome) {
 			$t->set_var('BREAD_HREF_FRONT',  '');
 			$t->set_var('BREAD_LINK',  '');
@@ -184,6 +185,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var('BREAD_HREF_END',  '');
 			$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
 			$breadIterator++;
+			$pageTitle .= " | " .$intitule;
+
 		}
 
 		if (isset($page_navi) && is_array($page_navi) && !$homePage){
@@ -197,6 +200,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 				$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
 
 				$breadIterator++;
+
+				$pageTitle .= " | " .$step["name"];
 			}
 		}
 
@@ -209,6 +214,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 			$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
 			$breadIterator++;
+			$pageTitle .= " | " .$page_name;
+
 		}
 
 		$t->set_block('mainBlock', 'breadCrumbEndBlock', 'breadCrumbEnd');
@@ -218,7 +225,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		}
 
 		//END breadcrumb
-
+		$t->set_var('PAGE_TITLE',  $pageTitle);
 		if (isset($tool_css)){
 
 			$t->set_var('TOOL_CSS', "<link href=\"{TOOL_PATH}modules/$tool_css/tool.css\" rel=\"stylesheet\" type=\"text/css\" />");
@@ -292,7 +299,7 @@ function drawPerso($toolContent, $menuTypeID=null, $tool_css = null, $head_conte
 	$t->set_file('fh', "perso.html");
 
 	$t->set_block('fh', 'mainBlock', 'main');
-
+	
 	$t->set_var('LANG_USER', $langUser);
 	$t->set_var('USER_NAME', $prenom);
 	$t->set_var('USER_SURNAME', $nom);
@@ -320,96 +327,97 @@ function drawPerso($toolContent, $menuTypeID=null, $tool_css = null, $head_conte
 		$t->set_var('LANG_LOCALIZE',  'English');
 		$t->set_var('LOCALIZE_LINK',  '?localize=en');
 	}
-		$t->set_var('LANG_MY_PERSO_LESSONS', $langMyPersoLessons);
-		$t->set_var('LANG_MY_PERSO_DEADLINES', $langMyPersoDeadlines);
-		$t->set_var('LANG_MY_PERSO_ANNOUNCEMENTS', $langMyPersoAnnouncements);
-		$t->set_var('LANG_MY_PERSO_DOCS', $langMyPersoDocs);
-		$t->set_var('LANG_MY_PERSO_AGENDA', $langMyPersoAgenda);
-		$t->set_var('LANG_PERSO_FORUM',  $langMyPersoForum);
+	$t->set_var('LANG_MY_PERSO_LESSONS', $langMyPersoLessons);
+	$t->set_var('LANG_MY_PERSO_DEADLINES', $langMyPersoDeadlines);
+	$t->set_var('LANG_MY_PERSO_ANNOUNCEMENTS', $langMyPersoAnnouncements);
+	$t->set_var('LANG_MY_PERSO_DOCS', $langMyPersoDocs);
+	$t->set_var('LANG_MY_PERSO_AGENDA', $langMyPersoAgenda);
+	$t->set_var('LANG_PERSO_FORUM',  $langMyPersoForum);
 
-		$t->set_var('LESSON_CONTENT', $lesson_content);
-		$t->set_var('ASSIGN_CONTENT', $assigns_content);
-		$t->set_var('ANNOUNCE_CONTENT', $announce_content);
-		$t->set_var('DOCS_CONTENT', $docs_content);
-		$t->set_var('AGENDA_CONTENT', $agenda_content);
-		$t->set_var('FORUM_CONTENT', $forum_content);
-		$t->set_var('TOOL_PATH',  $relPath);
+	$t->set_var('LESSON_CONTENT', $lesson_content);
+	$t->set_var('ASSIGN_CONTENT', $assigns_content);
+	$t->set_var('ANNOUNCE_CONTENT', $announce_content);
+	$t->set_var('DOCS_CONTENT', $docs_content);
+	$t->set_var('AGENDA_CONTENT', $agenda_content);
+	$t->set_var('FORUM_CONTENT', $forum_content);
+	$t->set_var('TOOL_PATH',  $relPath);
 
-		//START breadcrumb
+	//START breadcrumb
 
-		if (!$page_navi) $page_navi = $navigation;
-		if (!$page_name) $page_name = $nameTools;
+	if (!$page_navi) $page_navi = $navigation;
+	if (!$page_name) $page_name = $nameTools;
 
-		$t->set_block('mainBlock', 'breadCrumbHomeBlock', 'breadCrumbHome');
-		$t->set_var('BREAD_TEXT',  $siteName);
-		if (!$homePage) {
-			$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_START_LINK}">');
-			$t->set_var('BREAD_START_LINK',  $urlServer);
-			$t->set_var('BREAD_HREF_END',  '</a>');
-		}
-
-		$t->parse('breadCrumbHome', 'breadCrumbHomeBlock',false);
-
-		$breadIterator=1;
-		$t->set_block('mainBlock', 'breadCrumbStartBlock', 'breadCrumbStart');
-
-		if (isset($currentCourseID) && !$courseHome){
-			$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_LINK}">');
-			$t->set_var('BREAD_LINK',  $urlServer.'courses/'.$currentCourseID.'/index.php');
-			$t->set_var('BREAD_TEXT',  $intitule);
-			$t->set_var('BREAD_ARROW', '&#187;');
-			$t->set_var('BREAD_HREF_END',  '</a>');
-			$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
-			$breadIterator++;
-		} elseif (isset($currentCourseID) && $courseHome) {
-			$t->set_var('BREAD_HREF_FRONT',  '');
-			$t->set_var('BREAD_LINK',  '');
-			$t->set_var('BREAD_TEXT',  $intitule);
-			$t->set_var('BREAD_ARROW', '&#187;');
-			$t->set_var('BREAD_HREF_END',  '');
-			$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
-			$breadIterator++;
-		}
-
-		if (isset($page_navi) && is_array($page_navi) && !$homePage){
-			foreach ($page_navi as $step){
-
-				$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_LINK}">');
-				$t->set_var('BREAD_LINK',  $step["url"]);
-				$t->set_var('BREAD_TEXT',  $step["name"]);
-				$t->set_var('BREAD_ARROW', '&#187;');
-				$t->set_var('BREAD_HREF_END',  '</a>');
-				$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
-
-				$breadIterator++;
-			}
-		}
-
-		if (isset($page_name) && !$homePage) {
-
-			$t->set_var('BREAD_HREF_FRONT',  '');
-			$t->set_var('BREAD_TEXT',  $page_name);
-			$t->set_var('BREAD_ARROW', '&#187;');
-			$t->set_var('BREAD_HREF_END',  '');
-
-			$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
-			$breadIterator++;
-		}
-
-		$t->set_block('mainBlock', 'breadCrumbEndBlock', 'breadCrumbEnd');
-		for($breadIterator2=0; $breadIterator2 <= $breadIterator; $breadIterator2++){
-
-			$t->parse('breadCrumbEnd', 'breadCrumbEndBlock',true);
-		}
-
-		//END breadcrumb
-
-		$t->parse('main', 'mainBlock', false);
-
-		$t->pparse('Output', 'fh');
+	$t->set_block('mainBlock', 'breadCrumbHomeBlock', 'breadCrumbHome');
+	$t->set_var('BREAD_TEXT',  $siteName);
+	$t->set_var('PAGE_TITLE',  $siteName);
+	/*if (!$homePage) {
+		$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_START_LINK}">');
+		$t->set_var('BREAD_START_LINK',  $urlServer);
+		$t->set_var('BREAD_HREF_END',  '</a>');
 	}
 
-	/**
+	$t->parse('breadCrumbHome', 'breadCrumbHomeBlock',false);
+
+	$breadIterator=1;
+	$t->set_block('mainBlock', 'breadCrumbStartBlock', 'breadCrumbStart');*/
+
+/*	if (isset($currentCourseID) && !$courseHome){
+		$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_LINK}">');
+		$t->set_var('BREAD_LINK',  $urlServer.'courses/'.$currentCourseID.'/index.php');
+		$t->set_var('BREAD_TEXT',  $intitule);
+		$t->set_var('BREAD_ARROW', '&#187;');
+		$t->set_var('BREAD_HREF_END',  '</a>');
+		$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
+		$breadIterator++;
+	} elseif (isset($currentCourseID) && $courseHome) {
+		$t->set_var('BREAD_HREF_FRONT',  '');
+		$t->set_var('BREAD_LINK',  '');
+		$t->set_var('BREAD_TEXT',  $intitule);
+		$t->set_var('BREAD_ARROW', '&#187;');
+		$t->set_var('BREAD_HREF_END',  '');
+		$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
+		$breadIterator++;
+	}*/
+
+/*	if (isset($page_navi) && is_array($page_navi) && !$homePage){
+		foreach ($page_navi as $step){
+
+			$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_LINK}">');
+			$t->set_var('BREAD_LINK',  $step["url"]);
+			$t->set_var('BREAD_TEXT',  $step["name"]);
+			$t->set_var('BREAD_ARROW', '&#187;');
+			$t->set_var('BREAD_HREF_END',  '</a>');
+			$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
+
+			$breadIterator++;
+		}
+	}*/
+
+/*	if (isset($page_name) && !$homePage) {
+
+		$t->set_var('BREAD_HREF_FRONT',  '');
+		$t->set_var('BREAD_TEXT',  $page_name);
+		$t->set_var('BREAD_ARROW', '&#187;');
+		$t->set_var('BREAD_HREF_END',  '');
+
+		$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
+		$breadIterator++;
+	}
+
+	$t->set_block('mainBlock', 'breadCrumbEndBlock', 'breadCrumbEnd');
+	for($breadIterator2=0; $breadIterator2 <= $breadIterator; $breadIterator2++){
+
+		$t->parse('breadCrumbEnd', 'breadCrumbEndBlock',true);
+	}
+*/
+	//END breadcrumb
+
+	$t->parse('main', 'mainBlock', false);
+
+	$t->pparse('Output', 'fh');
+}
+
+/**
  * function dumpArray
  *
  * Used for debugging purposes. Dumps array to browser
@@ -417,35 +425,35 @@ function drawPerso($toolContent, $menuTypeID=null, $tool_css = null, $head_conte
  * 
  * @param array $arr
  */
-	function dumpArray($arr){
-		echo "<pre>";
-		print_r($arr);
-		echo "</pre>";
+function dumpArray($arr){
+	echo "<pre>";
+	print_r($arr);
+	echo "</pre>";
+}
+
+function print_a( $TheArray )
+{ // Note: the function is recursive
+	echo "<table border=1>n";
+
+	$Keys = array_keys( $TheArray );
+	foreach( $Keys as $OneKey )
+	{
+		echo "<tr>n";
+
+		echo "<td bgcolor='yellow'>";
+		echo "<B>" . $OneKey . "</B>";
+		echo "</td>n";
+
+		echo "<td bgcolor='#C4C2A6'>";
+		if ( is_array($TheArray[$OneKey]) )
+		print_a($TheArray[$OneKey]);
+		else
+		echo $TheArray[$OneKey];
+		echo "</td>n";
+
+		echo "</tr>n";
 	}
-
-	function print_a( $TheArray )
-	{ // Note: the function is recursive
-		echo "<table border=1>n";
-
-		$Keys = array_keys( $TheArray );
-		foreach( $Keys as $OneKey )
-		{
-			echo "<tr>n";
-
-			echo "<td bgcolor='yellow'>";
-			echo "<B>" . $OneKey . "</B>";
-			echo "</td>n";
-
-			echo "<td bgcolor='#C4C2A6'>";
-			if ( is_array($TheArray[$OneKey]) )
-			print_a($TheArray[$OneKey]);
-			else
-			echo $TheArray[$OneKey];
-			echo "</td>n";
-
-			echo "</tr>n";
-		}
-		echo "</table>n";
-	}
+	echo "</table>n";
+}
 
 ?>
