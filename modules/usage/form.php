@@ -23,7 +23,7 @@ $qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, b.statut
     WHERE b.code_cours='".$currentCourseID."'";
 
 
-$user_opts .= '<option value="-1">'.$langAllUsers."</option>\n";
+$user_opts = '<option value="-1">'.$langAllUsers."</option>\n";
 $result = db_query($qry, $mysqlMainDb);
 while ($row = mysql_fetch_assoc($result)) {
     if ($u_user_id == $row['user_id']) { $selected = 'selected'; } else { $selected = ''; }
@@ -33,18 +33,18 @@ while ($row = mysql_fetch_assoc($result)) {
 
 $qry = "SELECT id, rubrique AS name FROM accueil WHERE define_var != '' AND visible = 1 ORDER BY name ";
 
-$mod_opts .= '<option value="-1">'.$langAllModules."</option>\n";
+$mod_opts = '<option value="-1">'.$langAllModules."</option>\n";
 $result = db_query($qry, $currentCourseID);
 while ($row = mysql_fetch_assoc($result)) {
     if ($u_module_id == $row['id']) { $selected = 'selected'; } else { $selected = ''; }
     $mod_opts .= '<option '.$selected.' value="'.$row["id"].'">'.$row['name']."</option>\n";
 }
 
-$statsTypeOptions .=
+$statsTypeOptions =
     '<option value="visits" '.	 (($u_stats_type=='visits')?('selected'):(''))	  .'>'.$langVisits."</option>\n".
     '<option value="favourite" '.(($u_stats_type=='favourite')?('selected'):('')) .'>'.$langFavourite."</option>\n";
 
-$statsIntervalOptions .=
+$statsIntervalOptions =
     '<option value="daily"   '.(($u_interval=='daily')?('selected'):(''))  .' >'.$langDaily."</option>\n".
     '<option value="weekly"  '.(($u_interval=='weekly')?('selected'):('')) .'>'.$langWeekly."</option>\n".
     '<option value="monthly" '.(($u_interval=='monthly')?('selected'):('')).'>'.$langMonthly."</option>\n".
