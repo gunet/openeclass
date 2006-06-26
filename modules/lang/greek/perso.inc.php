@@ -49,4 +49,9 @@ $langNoPosts="Δεν υπάρχουν αποστολές στις περιοχές συζητήσεων";
 $langNotEnrolledToLessons="Δεν είστε εγγεγραμμένος/η σε μαθήματα";
 $langCreateLesson="Μπορείτε να δημιουργήσετε μάθημα ακολουθώντας τον σύνδεσμο \"$langCourseCreate\"";
 $langEnroll="Μπορείτε να εγγραφείτε σε μαθήματα ακολουθώντας τον σύνδεσμο \"$langOtherCourses\"";
+
+$langMore="...[Περισσότερα]";
+$langSender="Αποστολέας";
+$langUnknown="Άγνωστο";
+$langDuration="Διάρκεια";
 ?>

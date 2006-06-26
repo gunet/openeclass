@@ -87,7 +87,20 @@ function getUserAnnouncements($param = null, $type) {
 		while ($myAnnouncements = mysql_fetch_row($mysql_query_result)) {
 
 			if ($myAnnouncements){
+				/*if(strlen($myAnnouncements[0]) > 150) {
+				$myAnnouncements[0] = substr($myAnnouncements[0], 0, 150);
+				$myAnnouncements[0] .= " ...[Περισσότερα]";
+				}*/
+
 				array_push($announceData,$myAnnouncements);
+
+				/*				if (strlen($this->announce_data[5][$i][$rep_val]['content']) > 150)
+				{
+				$this->announce_data[5][$i][$rep_val]['content'] = substr($this->announce_data[5][$i][$rep_val]['content'], 0, 150);
+				$this->announce_data[5][$i][$rep_val]['content'] .= "...  ";
+
+				$t->set_var('ANNOUNCE_CONTENT_MORE_TXT', $this->langBlocksMoreTxt);
+				}*/
 			}
 		}
 		//		dumpArray($announceData);
@@ -146,9 +159,9 @@ function getUserAnnouncements($param = null, $type) {
 }
 
 function announceHtmlInterface($data, $max_repeat_val) {
-	global $urlServer,$langNoAnnouncementsExist ;
+	global $urlServer,$langNoAnnouncementsExist, $langMore;
 	$announceExist = false;
-	
+
 	$assign_content= <<<aCont
 	<div id="datacontainer">
 
@@ -164,9 +177,14 @@ aCont;
 		";
 			$url = $_SERVER['PHP_SELF'] . "?perso=2&c=" .$data[$i][1];
 			for ($j=0; $j < $iterator; $j++){
-
+				if(strlen($data[$i][2][$j][0]) > 150) {
+					$data[$i][2][$j][0] = substr($data[$i][2][$j][0], 0, 150);
+					$data[$i][2][$j][0] .= " <span class=\"announce_date\">$langMore</span>
+					";
+				}
 				$assign_content .= "
-		<li><a class=\"square_bullet\" href=\"$url\"><div class=\"content_pos\">".$data[$i][2][$j][1]." : ".$data[$i][2][$j][0]."</div></a>
+		<li><a class=\"square_bullet\" href=\"$url\">
+		<div class=\"content_pos\"><span class=\"announce_date\">".$data[$i][2][$j][1]." : </span>".$data[$i][2][$j][0]."</div></a>
 			
 		</li>
 		";

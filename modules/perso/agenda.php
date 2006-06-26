@@ -117,7 +117,7 @@ function getUserAgenda($param, $type) {
 }
 
 function agendaHtmlInterface($data) {
-	global $langNoEventsExist;
+	global $langNoEventsExist, $langUnknown, $langDuration, $langMore;
 	$numOfDays = count($data);
 	if ($numOfDays > 0) {
 		$agenda_content= <<<agCont
@@ -131,16 +131,21 @@ agCont;
 		<li class=\"category\">".$data[$i][0][2]."</li>
 		";
 			$iterator =  count($data[$i]);
-			//			$url = $_SERVER['PHP_SELF'] . "?perso=4&c=" .$data[$i][1];
+			
 			for ($j=0; $j < $iterator; $j++){
 				$url = $_SERVER['PHP_SELF'] . "?perso=4&c=" . $data[$i][$j][5];
 				if (strlen($data[$i][$j][4]) < 2) {
-					$data[$i][$j][4] = "Agnwsto";
+					$data[$i][$j][4] = "$langUnknown";
 				}
 
+				if(strlen($data[$i][$j][1]) > 150) {
+					$data[$i][$j][1] = substr($data[$i][$j][1], 0, 150);
+					$data[$i][$j][1] .= " <span class=\"announce_date\">$langMore</span>
+					";
+				}
 				$agenda_content .= "
-		<li><a class=\"square_bullet\" href=\"$url\"><div class=\"title_pos\">".$data[$i][$j][6]." - ".$data[$i][$j][3]." (Diarkeia: ".$data[$i][$j][4].")</div>
-			<div class=\"content_pos\">".$data[$i][$j][0]."</div>
+		<li><a class=\"square_bullet\" href=\"$url\"><div class=\"title_pos\">".$data[$i][$j][6]." - ".$data[$i][$j][3]." ($langDuration: ".$data[$i][$j][4].")</div>
+			<div class=\"content_pos\"><span class=\"announce_date\">".$data[$i][$j][0]."</span></div>
 			<div class=\"content_pos\">".$data[$i][$j][1]."</div>
 		</a></li>
 		";
