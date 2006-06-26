@@ -162,9 +162,9 @@ function getUserForumPosts($param, $type)
 
 
 function forumHtmlInterface($data) {
-	global $langNoPosts;
+	global $langNoPosts, $langMore, $langSender;
 	$content = "";
-	if($numOfLessons = count($data) < 0) {
+	if($numOfLessons = count($data) > 0) {
 		
 		$content .= <<<fCont
 
@@ -179,11 +179,20 @@ fCont;
 		</li>";
 			$iterator =  count($data[$i][2][0]);
 			for ($j=0; $j < $iterator; $j++){
+				
 				$url = $_SERVER['PHP_SELF']."?perso=5&c=".$data[$i][1]."&t=".$data[$i][2][0][$j][2]."&f=".$data[$i][2][0][$j][0]."&s=".$data[$i][2][0][$j][4];
+				
+				if(strlen($data[$i][2][0][$j][8]) > 150) {
+					$data[$i][2][0][$j][8] = substr($data[$i][2][0][$j][8], 0, 150);
+					$data[$i][2][0][$j][8] .= " <span class=\"announce_date\">$langMore</span>
+					";
+				}
+				
 				$content .= "
-		<li><a class=\"square_bullet\" href=\"$url\"><div class=\"title_pos\">".$data[$i][2][0][$j][3]." (".$data[$i][2][0][$j][5].")</div>
-			<div class=\"content_pos\">".$data[$i][2][0][$j][8]."</div>
-			<div class=\"content_pos\">Apostoleas: ".$data[$i][2][0][$j][6]." ".$data[$i][2][0][$j][7]."</div>
+		<li><a class=\"square_bullet\" href=\"$url\">
+		<div class=\"title_pos\">".$data[$i][2][0][$j][3]." (".$data[$i][2][0][$j][5].")</div>
+		<div class=\"content_pos\">".$data[$i][2][0][$j][8]."</div>
+		<div class=\"content_pos\">$langSender: ".$data[$i][2][0][$j][6]." ".$data[$i][2][0][$j][7]."</div>
 		</a></li>
 		";
 			}
