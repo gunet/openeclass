@@ -91,7 +91,7 @@ function getUserAnnouncements($param = null, $type) {
 				$myAnnouncements[0] = substr($myAnnouncements[0], 0, 150);
 				$myAnnouncements[0] .= " ...[Περισσότερα]";
 				}*/
-
+				$myAnnouncements[0] = strip_tags($myAnnouncements[0]);
 				array_push($announceData,$myAnnouncements);
 
 				/*				if (strlen($this->announce_data[5][$i][$rep_val]['content']) > 150)
@@ -133,6 +133,7 @@ function getUserAnnouncements($param = null, $type) {
 				$mysql_query_result = db_query($announce_query_memo[$i]);
 
 				while ($myAnnouncements = mysql_fetch_row($mysql_query_result)) {
+					$myAnnouncements[0] = strip_tags($myAnnouncements[0]);
 					array_push($announceData,$myAnnouncements);
 				}
 

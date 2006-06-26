@@ -92,6 +92,8 @@ function getUserAgenda($param, $type) {
 	$previousDate = "0000-00-00";
 	$firstRun = true;
 	while ($myAgenda = mysql_fetch_row($mysql_query_result)) {
+		
+		$myAgenda[1] = strip_tags($myAgenda[1]);
 		if ($myAgenda[2] != $previousDate ) {
 			if (!$firstRun) {
 				@array_push($agendaDateData, $agendaData);
