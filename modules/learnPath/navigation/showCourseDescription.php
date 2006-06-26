@@ -51,9 +51,12 @@ $nameTools = $langCourseProgram;
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset?>">
+  <link href="../../../template/classic/theme.css" rel="stylesheet" type="text/css" />
+  <link href="../../../template/classic/tool_content.css" rel="stylesheet" type="text/css" />
+  <link href="../tool.css" rel="stylesheet" type="text/css" />
   <title><?php echo $langCourseProgram ?></title>
 </head>
-<body>
+<body style="margin: 2px;">
 <table width="99%" border="0">
 <tr>
 <td colspan="2">

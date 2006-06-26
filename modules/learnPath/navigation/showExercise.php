@@ -202,11 +202,15 @@ if(!isset($questionNum) || $_POST['questionNum']) {
 }
 
 echo "<html>"."\n"
-.'<head>
-  <meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">
-  <title>'.$langExercice.'</title>
-</head>'."\n";
-echo "<body>"."\n";
+    .'<head>'."\n"
+    .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
+    .'<link href="../../../template/classic/theme.css" rel="stylesheet" type="text/css" />'."\n"
+    .'<link href="../../../template/classic/tool_content.css" rel="stylesheet" type="text/css" />'."\n"
+    .'<link href="../tool.css" rel="stylesheet" type="text/css" />'."\n"
+    .'<title>'.$langExercice.'</title>'."\n"
+    .'</head>'."\n"
+    .'<body style="margin: 2px;">'."\n"
+    .'<div align="left">';
 
 if(@$_POST['questionNum']) {
 	$QUERY_STRING="questionNum=$questionNum";
@@ -289,7 +293,7 @@ foreach($questionList as $questionId) {
 
  	echo " <input type=\"submit\" name=\"buttonCancel\" value=\"${langCancel}\">";
 	echo "</td></tr></form></table>";
-	echo "</body>"."\n";
+	echo "</div></body>"."\n";
 	echo "</html>"."\n";
 /////////////////////////////////////////////////////////////////////////////////
 

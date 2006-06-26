@@ -80,11 +80,15 @@ if (!setcookie("marvelous_cookie", "", time()-3600, "/")) {
 include_once "$webDir"."/modules/latexrender/latex.php";
 
 echo "<html>"."\n"
-.'<head>
-  <meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">
-  <title>'.$langExercices.'</title>
-</head>'."\n";
-echo "<body>"."\n";
+    .'<head>'."\n"
+    .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
+    .'<link href="../../../template/classic/theme.css" rel="stylesheet" type="text/css" />'."\n"
+    .'<link href="../../../template/classic/tool_content.css" rel="stylesheet" type="text/css" />'."\n"
+    .'<link href="../tool.css" rel="stylesheet" type="text/css" />'."\n"
+    .'<title>'.$langExercices.'</title>'."\n"
+    .'</head>'."\n"
+    .'<body style="margin: 2px;">'."\n"
+    .'<div align="left">';
 
 $TBL_EXERCICE_QUESTION='exercice_question';
 $TBL_EXERCICES='exercices';
@@ -558,6 +562,6 @@ if(isset($is_trackingEnabled))
 	event_exercice($objExercise->selectId(),$totalScore,$totalWeighting);
 }
 
-echo "</body></html>"."\n";
+echo "</div></body></html>"."\n";
 
 ?>

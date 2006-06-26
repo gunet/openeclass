@@ -61,6 +61,7 @@ $langDocumentAsModule = "Use a document";
 $langDocumentInModule = "Document in module";
 $langEXERCISETypeDesc = "Eclass exercise";
 $langEmail = "Email";
+$langEndOfSteps = "Click exit after completing this last step.";
 $langErrorAssetNotFound = "Asset not found: ";
 $langErrorCopyAttachedFile = "Unable to copy file: ";
 $langErrorCopyScormFiles = "Error when copying needed SCORM files";

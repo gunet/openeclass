@@ -61,6 +61,7 @@ $langDocumentAsModule = "Χρήση Εγγράφου";
 $langDocumentInModule = "Έγγραφο σε ενότητα";
 $langEXERCISETypeDesc = "¶σκηση Eclass";
 $langEmail = "Email";
+$langEndOfSteps = "Κάντε κλίκ στη λήξη αφού ολοκληρώσετε αυτό το τελευταίο βήμα.";
 $langErrorAssetNotFound = "Το στοιχείο δεν ευρέθη : ";
 $langErrorCopyAttachedFile = "Μη δυνατή η αντιγραφή αρχείου: ";
 $langErrorCopyScormFiles = "Σφάλμα κατά την αντιγραφή των αναγκαίων αρχείων SCORM ";

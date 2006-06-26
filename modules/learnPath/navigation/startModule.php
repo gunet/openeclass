@@ -231,13 +231,13 @@ switch ($module['contentType'])
    {
       
       require_once("scormAPI.inc.php");
-      echo "<frameset border='0' rows='0,40,*' frameborder='no'>
+      echo "<frameset border='0' rows='0,75,*' frameborder='no'>
             <frame src='updateProgress.php' name='upFrame'>";
       
    }
    else
    {
-      echo "<frameset border='0' rows='40,*' frameborder='yes'>";
+      echo "<frameset border='0' rows='75,*' frameborder='yes'>";
    }
 ?>
     <frame src="../viewer_toc.php" name="tocFrame" scrolling="no" />

@@ -68,12 +68,22 @@ require_once("../../include/lib/learnPathLib.inc.php");
 //lib of document tool
 require_once("../../include/lib/fileDisplayLib.inc.php");
 
-$lpUid =  $uid;
 mysql_select_db($currentCourseID);
 
-if($lpUid)
+
+echo '<html>'."\n"
+    .'<head>'."\n"
+    .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
+    .'<link href="../../template/classic/theme.css" rel="stylesheet" type="text/css" />'."\n"
+    .'<link href="../../template/classic/tool_content.css" rel="stylesheet" type="text/css" />'."\n"
+    .'<link href="./tool.css" rel="stylesheet" type="text/css" />'."\n"
+    .'</head>'."\n"
+    .'<body style="margin: 2px;">'."\n";
+
+
+if($uid)
 {
-	$uidCheckString = "AND UMP.`user_id` = ". (int)$lpUid;
+	$uidCheckString = "AND UMP.`user_id` = ". (int)$uid;
 }
 else // anonymous
 {
@@ -131,7 +141,7 @@ $sql = "SELECT `name`
 
 $lpName = db_query_get_single_value($sql);
 
-echo '<strong>'.wordwrap($lpName,$moduleNameLength,' ',1).'</strong>';
+$learnPath =  '<strong>'.wordwrap($lpName,$moduleNameLength,' ',1).'</strong>';
   
 $previous = ""; // temp id of previous module, used as a buffer in foreach
 $previousModule = ""; // module id that will be used in the previous link
@@ -141,6 +151,10 @@ foreach ($flatElementList as $module)
 {
 	if($module['contentType'] == CTEXERCISE_ )
 		$moduleImg = 'quiz.png';
+	else if($module['contentType'] == CTLINK_ )
+		$moduleImg = "links.gif";
+	else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
+		$moduleImg = "info.png";
 	else
 		$moduleImg = choose_image(basename($module['path']));
 
@@ -179,7 +193,6 @@ foreach ($flatElementList as $module)
 		}
 	}
 
-// 	echo '<tr>'."\n";
 	// display the current module name (and link if allowed)
 	$spacingString = '';
 
@@ -189,14 +202,9 @@ foreach ($flatElementList as $module)
         
       
 	// spacing col
-// 	echo $spacingString.'<td colspan="'.$colspan.'"><small>';
 	if ( !$is_blocked )
 	{
-		if($module['contentType'] == CTLABEL_) // chapter head
-		{
-// 			echo '<b>'.$module['name'].'</b>';
-		}
-		else
+		if($module['contentType'] != CTLABEL_) // chapter head
 		{
 			if ( strlen($module['name']) > $moduleNameLength)
 				$displayedName = substr($module['name'],0,$moduleNameLength)."...";
@@ -206,17 +214,29 @@ foreach ($flatElementList as $module)
 			// bold the title of the current displayed module
 			if( $_SESSION['module_id'] == $module['module_id'] )
 			{
-				$currentName = $displayedName;
+				$sql = "SELECT M.`name`
+				         FROM `".$TABLELEARNPATHMODULE."` AS LPM,
+				         `".$TABLEMODULE."` AS M
+				         WHERE LPM.`learnPath_module_id` = '" .(int)$module['parent'] ."'
+				           AND LPM.`module_id` = M.`module_id`
+				           AND LPM.`learnPath_id` = '" . (int)$_SESSION['path_id'] ."'
+				       ";
+				$currentLabel = db_query_get_single_value($sql);
+				
+				$currentName = '<img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" border="0" /> '.$displayedName;
 				$displayedName = '<b>'.$displayedName.'</b>';
 				$previousModule = $previous;
+				
+				if($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED')
+				{
+					$imagePassed = '&nbsp;<img src="'.$imgRepositoryWeb.'mark.gif" alt="'.$module['lesson_status'].'" />';
+				}
 			}
 			// store next value if user has the right to access it
 			if( $previous == $_SESSION['module_id'] )
 			{
 				$nextModule = $module['module_id'];
 			}
-// 			echo '<a href="startModule.php?viewModule_id='.$module['module_id'].'" target="mainFrame" title="'.htmlspecialchars($module['name']).'">'
-// 				.'<img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.' : '.$module['name'].'" border="0" />'.$displayedName.'</a>';
 		}
         // a module ALLOW access to the following modules if
         // document module : credit == CREDIT || lesson_status == 'completed'
@@ -225,7 +245,7 @@ foreach ($flatElementList as $module)
 
 		if( $module['lock'] == 'CLOSE' && $module['credit'] != 'CREDIT' && $module['lesson_status'] != 'COMPLETED' && $module['lesson_status'] != 'PASSED' && !$passExercise )
 		{
-			if($lpUid)
+			if($uid)
 			{
 				$is_blocked = true; // following modules will be unlinked
 			}
@@ -239,18 +259,12 @@ foreach ($flatElementList as $module)
 	}
 	else
 	{
-		if($module['contentType'] == CTLABEL_) // chapter head
-		{
-// 			echo '<b>'.$module['name'].'</b>';
-		}
-		else
+		if($module['contentType'] != CTLABEL_)
 		{
 			if ( strlen($module['name']) > $moduleNameLength)
 				$displayedName = substr($module['name'],0,$moduleNameLength).'...';
 			else
 				$displayedName = $module['name'];
-
-// 			echo '<img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" border="0" />'.$displayedName;
 		}
 	}
 
@@ -260,45 +274,26 @@ foreach ($flatElementList as $module)
 	{
 		$globalProg =  $globalProg+$progress;
 	}
-       
-// 	echo '</small></td>'."\n".'<td>';
 
 	if($module['contentType'] != CTLABEL_ )
 	{
 		$moduleNb++; // increment number of modules used to compute global progression except if the module is a title
-
-		if($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED')
-		{
-// 			echo '<img src="'.$imgRepositoryWeb.'mark.gif" alt="'.$module['lesson_status'].'" />';
-		}
-		else
-		{
-// 			echo '&nbsp;';
-		}
-	}
-	else
-	{
-// 		echo '&nbsp;';
 	}
       
 	$atleastOne = true;
-// 	echo '</td>'."\n"
-// 		.'</tr>'."\n\n";
+
 	// used in the foreach the remember the id of the previous module_id
 	// don't remember if label...
 	if ($module['contentType'] != CTLABEL_ )
 		$previous = $module['module_id'];
-      
-      
+
 } // end of foreach ($flatElementList as $module)
 
-/*echo "<table cellpadding=\"0\" cellspacing=\"0\" align=\"left\">"
-	."<tr height=\"5\"><td><img src=\"../../images/scormline.jpg\">"
-	."</td></tr><tr><td>";*/
+
 // display previous and next links only if there is more than one module
 if ( $moduleNb > 1 )
 {
-	$prevNextString = /*' - '.$currentName.*/"&nbsp;&nbsp;&nbsp;";
+	$prevNextString = ""/*' - '.$currentName.*//*"&nbsp;&nbsp;&nbsp;"*/;
 	$imgPrevious = '<img src="'.$imgRepositoryWeb.'previous.gif" border="0" title="'.$langPrevious.'">';
 	$imgNext = '<img src="'.$imgRepositoryWeb.'next.gif" border="0" title="'.$langNext.'">';
 	
@@ -319,9 +314,8 @@ if ( $moduleNb > 1 )
 	else
 	{
 		$prevNextString .=  $imgNext;
+		$endOfSteps = $langEndOfSteps;
 	}  
-	
-	echo $prevNextString;
 }
 
 //  set redirection link 
@@ -330,7 +324,22 @@ if ( $is_adminOfCourse )
 else
 	$returl = 'learningPath.php';
 	
-echo "&nbsp;&nbsp;"
+
+echo '<table align="center">'
+    /*.'<thead>'*/
+    .'<tr>'
+    .'<th>'
+    .$learnPath.": ";
+if(isset($currentLabel))
+	echo "<strong>".$currentLabel."</strong> - ";
+if(isset($currentName))
+	echo $currentName;
+if(isset($imagePassed))
+	echo $imagePassed;
+echo '</th>'
+    .'<th>'
+    .$prevNextString
+    ."&nbsp;&nbsp;"
 	."<a href=\"".$returl."\" target=\"_top\">"
 	.'<img src="'.$imgRepositoryWeb.'scormrestart.jpg" border="0" title="'.$langQuitViewer.'">'
 	."</a>"
@@ -341,15 +350,30 @@ echo "&nbsp;&nbsp;"
 	.'&nbsp;&nbsp;'
 	.'<a href="viewer.php?fullscreen=0" target="_top">'
 	.'<img src="'.$imgRepositoryWeb.'scormexitfullscreen.jpg" border="0" title="'.$langInFrames.'">'
-	.'</a>&nbsp;&nbsp;&nbsp;';
-
-if($lpUid) {
+	.'</a>&nbsp;&nbsp;&nbsp;'."\n"
+	.'</th>'
+    .'<th>';
+if($uid) {
 	echo '<small>'
-		//.'current progress: '
 		.$langGlobalProgress
 		.claro_disp_progress_bar(round($globalProg / ($moduleNb) ), 1 )
 		."&nbsp;".round($globalProg / ($moduleNb) )."%"
-		.'</small><hr noshade>';
+		.'</small>'."\n";
 }
+echo '</th>'
+    .'</tr>'
+    /*.'</thead>'*/;
+if(isset($endOfSteps)) {
+	echo '<tbody>'
+	    .'<tr>'
+	    .'<td colspan="3" align="center">'
+	    .'<small>'.$endOfSteps.'</small>'
+	    .'</td>'
+	    .'</tr>'
+	    .'</tbody>';
+}
+echo '</table>'
+    .'<hr noshade></body></html>'."\n"
+     ;
 
 ?>
