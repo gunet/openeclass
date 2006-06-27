@@ -34,10 +34,6 @@ function getUserAgenda($param, $type) {
 	//	$lesson_code		= $param['lesson_code'];
 	//	$lesson_professor	= $param['lesson_professor'];
 
-	//	$usr_lst_login	= $param['usr_lst_login'];
-
-	//	$usr_memory = $param['usr_memory'];
-
 	for($i=0; $i < $max_repeat_val; $i++) {
 		if($i < 1) {
 			$tbl_lesson_codes = " lesson_code=" . "'$lesson_code[$i]'";
@@ -93,7 +89,7 @@ function getUserAgenda($param, $type) {
 	$firstRun = true;
 	while ($myAgenda = mysql_fetch_row($mysql_query_result)) {
 		
-		$myAgenda[1] = strip_tags($myAgenda[1]);
+		$myAgenda[1] = strip_tags($myAgenda[1], '<b><i><u><ol><ul><li><br>');
 		if ($myAgenda[2] != $previousDate ) {
 			if (!$firstRun) {
 				@array_push($agendaDateData, $agendaData);
@@ -119,15 +115,9 @@ function getUserAgenda($param, $type) {
 
 
 	//	print_a($agendaDateData);
-	//	dumpArray($agendaDateData);
+
 	//		Constructing the array of data to be parsed back
 	//		------------------------------------------------
-	/*$agenda_values = array	(
-	'0'	=> $i,	//number of agenda events
-	'1'	=> $lesson_agenda	// agenda data
-	);*/
-
-	//	return $agenda_values;
 
 	if($type == "html") {
 		return agendaHtmlInterface($agendaDateData);
@@ -161,18 +151,16 @@ agCont;
 
 				if(strlen($data[$i][$j][1]) > 150) {
 					$data[$i][$j][1] = substr($data[$i][$j][1], 0, 150);
-					$data[$i][$j][1] .= " <span class=\"announce_date\">$langMore</span>
-					";
+					$data[$i][$j][1] .= " <span class=\"announce_date\">$langMore</span>";
 				}
 				$agenda_content .= "
 		<li><a class=\"square_bullet\" href=\"$url\"><div class=\"title_pos\">".$data[$i][$j][6]." - ".$data[$i][$j][3]." ($langDuration: ".$data[$i][$j][4].")</div>
 			<div class=\"content_pos\"><span class=\"announce_date\">".$data[$i][$j][0]."</span></div>
-			<div class=\"content_pos\">".$data[$i][$j][1]."</div>
+			<div class=\"content_pos\">".$data[$i][$j][1].autoCloseTags($data[$i][$j][1])."</div>
 		</a></li>
 		";
 			}
 
-			//		$agenda_content .= "</tbody></table>";
 			if ($i+1 <$numOfDays) $agenda_content .= "<br>";
 		}
 

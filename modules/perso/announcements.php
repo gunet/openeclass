@@ -4,7 +4,7 @@
 *
 *	File : class.Announcements.php
 *
-*	Announcements Class
+*	Announcements component for eclass personalised
 *
 *	The class in charge for collecting data regarding announcements for all
 *	the lessons a user is subscribed to.
@@ -17,10 +17,7 @@
 *
 */
 
-/*ALTER TABLE `user` ADD `perso` ENUM( 'yes', 'no' ) DEFAULT 'no' NOT NULL ,
-ADD `announce_flag` DATE NOT NULL ,
-ADD `doc_flag` DATE NOT NULL ,
-ADD `forum_flag` DATE NOT NULL ;*/
+
 function getUserAnnouncements($param = null, $type) {
 
 	global $mysqlMainDb, $uid, $dbname, $currentCourseID;
@@ -76,31 +73,15 @@ function getUserAnnouncements($param = null, $type) {
 			array_push($announceLessonData, $lesson_title[$i]);
 			array_push($announceLessonData, $lesson_code[$i]);
 
-			//update the corresponding field in cours_user and set
-			//the field's value to the last LOGIN date of the user
-			//set a flag so that it only updates the date once! :)
-
-			//PROSOXH!! to update na ginetai afou bgei apo to for!!1
-			//alliws 8a to kanei se ka8e ma8hma pou exei nees anakoinwseis!! (axreiasto!)
 		}
 
 		while ($myAnnouncements = mysql_fetch_row($mysql_query_result)) {
 
 			if ($myAnnouncements){
-				/*if(strlen($myAnnouncements[0]) > 150) {
-				$myAnnouncements[0] = substr($myAnnouncements[0], 0, 150);
-				$myAnnouncements[0] .= " ...[Περισσότερα]";
-				}*/
-				$myAnnouncements[0] = strip_tags($myAnnouncements[0]);
+
+				$myAnnouncements[0] = strip_tags($myAnnouncements[0], '<b><i><u><ol><ul><li><br>');
 				array_push($announceData,$myAnnouncements);
 
-				/*				if (strlen($this->announce_data[5][$i][$rep_val]['content']) > 150)
-				{
-				$this->announce_data[5][$i][$rep_val]['content'] = substr($this->announce_data[5][$i][$rep_val]['content'], 0, 150);
-				$this->announce_data[5][$i][$rep_val]['content'] .= "...  ";
-
-				$t->set_var('ANNOUNCE_CONTENT_MORE_TXT', $this->langBlocksMoreTxt);
-				}*/
 			}
 		}
 		//		dumpArray($announceData);
@@ -133,7 +114,7 @@ function getUserAnnouncements($param = null, $type) {
 				$mysql_query_result = db_query($announce_query_memo[$i]);
 
 				while ($myAnnouncements = mysql_fetch_row($mysql_query_result)) {
-					$myAnnouncements[0] = strip_tags($myAnnouncements[0]);
+					$myAnnouncements[0] = strip_tags($myAnnouncements[0], '<b><i><u><ol><ul><li><br>');
 					array_push($announceData,$myAnnouncements);
 				}
 
@@ -185,7 +166,7 @@ aCont;
 				}
 				$assign_content .= "
 		<li><a class=\"square_bullet\" href=\"$url\">
-		<div class=\"content_pos\"><span class=\"announce_date\">".$data[$i][2][$j][1]." : </span>".$data[$i][2][$j][0]."</div></a>
+		<div class=\"content_pos\"><span class=\"announce_date\">".$data[$i][2][$j][1]." : </span>".$data[$i][2][$j][0].autoCloseTags($data[$i][2][$j][0])."</div></a>
 			
 		</li>
 		";
@@ -227,7 +208,6 @@ function createQueries($queryParam){
 									AND DATE_FORMAT(temps,'%Y %m %d') >='" .$dateVar."'
 									ORDER BY temps DESC
 									";
-		//		echo $announce_query[$i] . "<br>";
 	}
 
 	return $announce_query;

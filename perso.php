@@ -134,7 +134,7 @@ if ($user_lesson_info[0][0] > 0) {//if user is registered to at least one lesson
 
 	//END - Get user forum posts
 } else {
-	
+
 	$user_assignments = "<p>-</p>";
 	$user_announcements = "<p>-</p>";
 	$user_documents = "<p>-</p>";
@@ -154,5 +154,42 @@ $tool_content = array(
 // == END create array with personalised content
 //dumpArray($user_lesson_info);
 
+function autoCloseTags($string) {
+
+	$donotclose=array('br','img','input'); //Tags that are not to be closed
+
+	//prepare vars and arrays
+	$tagstoclose='';
+	$tags=array();
+	//echo  $string;
+	//put all opened tags into an array
+	preg_match_all("/<(([A-Z]|[a-z]).*)(( )|(>))/isU",$string,$result);
+	//print_a($result);
+	$openedtags=$result[1];
+	//print_a($result[1]);
+	$openedtags=array_reverse($openedtags); //this is just done so that the order of the closed tags in the end will be better
+
+	//put all closed tags into an array
+	preg_match_all("/<\/(([A-Z]|[a-z]).*)(( )|(>))/isU",$string,$result2);
+	$closedtags=$result2[1];
+	//print_a($closedtags);
+	//look up which tags still have to be closed and put them in an array
+	for ($i=0;$i<count($openedtags);$i++) {
+		if (in_array($openedtags[$i],$closedtags)) { unset($closedtags[array_search($openedtags[$i],$closedtags)]); }
+		else array_push($tags, $openedtags[$i]);
+	}
+
+	//$tags=array_reverse($tags); //now this reversion is done again for a better order of close-tags
+	//print_a($tags);
+	//prepare the close-tags for output
+	for($x=0;$x<count($tags);$x++) {
+		$add=strtolower(trim($tags[$x]));
+		//echo $add . "<br>";
+		if(!in_array($add,$donotclose)) $tagstoclose.='</'.$add.'>';
+	}
+
+	return $tagstoclose;
+
+}
 
 ?>
