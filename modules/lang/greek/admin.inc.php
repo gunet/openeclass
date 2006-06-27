@@ -33,53 +33,39 @@
       |          Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
       |          Andrew Lynn       <Andrew.Lynn@strath.ac.uk>                |
       +----------------------------------------------------------------------+
-
 */
 
-/***************************************************************
-*                   Language translation
-****************************************************************
-GOAL
-****
-Translate the interface in chosen language
-
-**************************************************************** */
-
-
-// INDEX
+// index
 $langAdmin = "Εργαλεία Διαχείρισης Πλατφόρμας";
 $langAdminBy = "Διαχείριση από ";
 $langTools = "Διαχείριση πλατφόρμας e-Class";
-$langState = "Εργαλεία διαχείρισης εξυπηρετητή";
-$langDevAdmin ="Εργαλεία διαχείρισης βάσης δεδομένων";
-$langLinksToClaroProjectSite ="Σύνδεσμοι προς το site του project";
-$langNomOutilTodo 		= "Διαχείριση του καταλόγου 'Να γίνουν'"; // to do
+$langState = "Διαχείριση Εξυπηρετητή";
+$langDevAdmin ="Διαχείριση Βάσης Δεδομένων";
 $langNomPageAdmin 		= "Διαχείριση";
-$langSysInfo  			= "Πληροφορίες για το σύστημα";        // Show system status
-$langCheckDatabase  	= "Ελεγχος κύριας βάσης δεδομένων";        // Check Database
-$langDiffTranslation 	= "Σύγκριση μεταφράσεων"; // diff of translation
-$langStatOf 			= "Στατιστικά του "; // Stats of...
-$langSpeeSubscribe 		= "Γρήγορη εγγραφή σαν διαχειριστής μαθήματος";
+$langSysInfo  			= "Πληροφορίες Συστήματος";        
+$langCheckDatabase  	= "Ελεγχος κύριας βάσης δεδομένων";      
+$langStatOf 			= "Στατιστικά του "; 
+$langSpeeSubscribe 		= "Εγγραφή σαν Διαχειριστής Μαθήματος";
 $langLogIdentLogout 	= "Καταγραφή των εισόδων και εξόδων από το σύστημα";
 $langPlatformStats 		= "Στατιστικά Πλατφόρμας";
 
 $langListCours = "Λίστα Μαθημάτων / Ενέργειες";
 $langListUsers = "Λίστα Χρηστών / Ενέργειες";
 $langSearchUser = "Αναζήτηση Χρήστη";
-$langInfoMail = "Αποστολή ενημερωτικού email στους καθηγητές";
+$langInfoMail = "Ενημερωτικό email";
 $langProfReg = "Εγγραφή Καθηγητή";
-$langProfOpen = "Ανοικτές Αιτήσεις Καθηγητών";
+$langProfOpen = "Αιτήσεις Καθηγητών";
 $langListFaculte = "Λίστα Σχολών / Ενέργειες";
 $langPHPInfo = "Πληροφορίες για την PHP";
 $langManuals = "Διαθέσιμα Εγχειρίδια";
 $langAdminManual = "Εγχειρίδιο Διαχειριστή";
 $langVersion = "Έκδοση του e-Class";
 $langConfigFile = "Configuration file του e-Class";
-$langDBaseAdmin = "Διαχείριση βάσεων δεδομένων (phpMyAdmin)";
+$langDBaseAdmin = "Διαχείριση Β.Δ. (phpMyAdmin)";
 $langUnregUser = "Διαγραφή Χρήστη";
 $langActions = "Ενέργειες";
-$langAdminProf = "Διαχείριση καθηγητών";
-$langAdminUsers = "Διαχείριση χρηστών";
+$langAdminProf = "Διαχείριση Καθηγητών";
+$langAdminUsers = "Διαχείριση Χρηστών";
 $langAdminCours = "Διαχείριση Μαθημάτων";
 
 $langRefresh="Ανανέωση Μαθήματος";
@@ -89,27 +75,15 @@ $langBackAdmin = "Επιστροφή στη σελίδα διαχείρισης";
 // Stat
 $langStatistiques = "Στατιστικά";
 
-
 $langNbProf = "Αριθμός καθηγητών";
 $langNbStudents = "Αριθμός φοιτητών";
 $langNbLogin = "Αριθμός εισόδων";
 $langToday   ="Σήμερα";
 $langLast7Days ="Τελευταίες 7 μέρες";
 $langLast30Days ="Τελευταίες 30 μέρες";
-
-
 $langNbAnnoucement = "Αριθμός ανακοινώσεων";
 
-// Check Data base
-
-
-$langPleaseCheckConfigForMainDataBaseName = "Παρακαλώ ελέγξτε αυτές τις τιμές
-<br>
-Όνομα της κύριας βάσης δεδομένων
-<br>";
-$langBaseFound ="Βρέθηκε
-<br>
-Έλεγχος πινάκων της βάσης";
+$langBaseFound ="Βρέθηκε<br>Έλεγχος πινάκων της βάσης";
 
 $langDataBase = "Βάση δεδομένων";
 $langNotNeeded = "δεν απαιτείται";
@@ -122,14 +96,9 @@ $langCheckingCourses ="Έλεγχος μαθημάτων";
 $langMissing   ="λείπει";
 $langExist     ="υπάρχει";
 
-$langAddAdminInApache ="Προσθήκη ενός χρήστη στους διαχειριστές";
+$langAddAdminInApache ="Προσθήκη Διαχειριστή";
 $langAddFaculties ="Προσθήκη σχολών / τμημάτων";
 $langRestoreCourse = "Ανάκτηση μαθήματος";
-
-// Create Claro table
-$langCreateClaroTables ="Δημιουργία πίνακα για την κύρια βάση δεδομένων";
-$langTableStructureDontKnow ="Η δομή αυτού του πίνακα είναι άγνωστη";
-
 
 $langServerStatus ="Κατάσταση του εξυπηρέτη Mysql : ";
 $langDataBase = "Βάση δεδομένων ";
@@ -142,7 +111,6 @@ $langUpgradeBase = "Αναβάθμιση βάσης Δεδομένων";
 
 $langEditUser="Επεξεργασία Χρήστη";
 
-
 // listusers
 $langBegin="αρχή";
 $langPreced50 = "Προηγούμενοι 50";
@@ -151,7 +119,6 @@ $langEnd = "τέλος";
 $langAll="όλοι";
 
 // quotacours
-
 $langQuotaAdmin = "Διαχείριση Αποθηκευτικού Χώρου Μαθήματος";
 $langQuotaSuccess = "Η αλλαγή έγινε με επιτυχία";
 $langQuotaFail = "Η αλλαγή δεν έγινε!";

@@ -40,9 +40,9 @@ $langState = "State";
 $langDevAdmin ="Development Administration";
 $langLinksToClaroProjectSite ="Links to the project's website";
 $langNomPageAdmin 		= "Administration";
-$langSysInfo  			= "Info about System";        // Show system status
-$langCheckDatabase  	= "Check main database";        // Check Database
-$langDiffTranslation 	= "Compare translations"; // diff of translation
+$langSysInfo  			= "Info about System";        
+$langCheckDatabase  	= "Check main database";       
+$langDiffTranslation 	= "Compare translations";
 $langStatOf 			= "Statistics of "; // Stats of...
 $langSpeeSubscribe 		= "Quick subscribe as Course Checker";
 $langLogIdentLogout 	= "Log of login and logout";
@@ -77,13 +77,6 @@ $langLast30Days ="Last 30 days";
 
 $langNbAnnoucement = "Number of announcements";
 
-// Check Data base
-
-
-$langPleaseCheckConfigForMainDataBaseName = "Please check these values
-<br>
-Main database name in
-<br>";
 $langBaseFound ="Found
 <br>
 Checking tables of this base";
@@ -97,10 +90,6 @@ $langCheckingCourses ="Checking courses";
 $langMissing   ="missing";
 $langExist     ="exists";
 $langRestoreCourse = "Restore Course";
-
-// Create Claro table
-$langCreateClaroTables ="Create Table for main Database";
-$langTableStructureDontKnow ="Structure of this table unknown";
 
 $langRestoreCourse = "Restore Course";
 $langServerStatus ="MySql servet status : ";
