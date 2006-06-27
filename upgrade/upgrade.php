@@ -853,8 +853,8 @@ while ($code = mysql_fetch_row($res)) {
 	update_field("accueil", "image","forum", "id", 			9);
 	update_field("accueil", "image","exercise", "id", 		10);
 	update_field("accueil", "image","stat", "id", 			11);
-	update_field("accueil", "image","import", "id", 		12);//(evelthon)i think this is to be removed ?
-	update_field("accueil", "image","external", "id",		13);
+	//update_field("accueil", "image","import", "id", 		12);
+	//update_field("accueil", "image","external", "id",		13);
 	update_field("accueil", "image","course_info", "id",	14);
 	update_field("accueil", "image","groups", "id", 		15);
 	update_field("accueil", "image","dropbox", "id", 		16);
@@ -867,6 +867,25 @@ while ($code = mysql_fetch_row($res)) {
 	update_field("accueil", "image","usage", "id", 			24);
 	update_field("accueil", "image","tooladmin", "id", 		25);
 
+	//remove modules import & external (now a part of tool admin)
+	$sql = 'DELETE FROM `accueil` WHERE (`id` = 12 OR `id` = 13)';
+	db_query($sql, $code[0]);
+	
+	//-----delete redundant files & folders-----------------------
+	//The platform admin has to set the correct permissions for this to work
+	// OR delete manually :)
+	/*$file2Delete = $webDir . "modules/import/import.php";
+	unlink($file2Delete);
+	$file2Delete = $webDir . "modules/import/import_page.php";
+	unlink($file2Delete);
+	$dir2Delete = $webDir . "module/import";
+	rmdir($dir2Delete);
+	
+	$file2Delete = $webDir . "modules/external_module/modules/external_module.php";
+	unlink($file2Delete);
+	$dir2Delete = $webDir . "modules/external_module";
+	rmdir($dir2Delete);*/
+	
 
 	// table stat_accueil
 	$sql = db_query("SELECT id,request FROM stat_accueil");
