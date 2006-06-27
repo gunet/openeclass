@@ -50,7 +50,7 @@ function getSideMenu($menuTypeID){
 function getToolsArray($cat) {
 	global $currentCourse, $currentCourseID;
 	$currentCourse = $currentCourseID;
-	
+
 	switch ($cat) {
 		case 'Public':
 
@@ -127,7 +127,11 @@ function loggedInMenu(){
 	// $res2 = db_query("SELECT statut FROM user WHERE user_id = '$uid'",$mysqlMainDb);
 
 	//	$res2 = db_query("SELECT statut FROM user WHERE user_id = '$uid'", $mysqlMainDb);
-
+	if (isset($is_admin) and $is_admin) {
+		array_push($sideMenuText, "<b>$langAdminTool</b>");
+		array_push($sideMenuLink, $urlServer . "modules/admin/");
+		array_push($sideMenuImg, "admin-tools.gif");
+	}
 
 	$res2 = db_query("SELECT statut FROM user WHERE user_id = '$uid'",$mysqlMainDb);
 	//	$res2 = db_query("SELECT statut FROM user WHERE user_id = '$uid'");
@@ -138,12 +142,6 @@ function loggedInMenu(){
 		array_push($sideMenuText, $langCourseCreate);
 		array_push($sideMenuLink, $urlServer . "modules/create_course/create_course.php");
 		array_push($sideMenuImg, "create_lesson.gif");
-	}
-
-	if (isset($is_admin) and $is_admin) {
-		array_push($sideMenuText, $langAdminTool);
-		array_push($sideMenuLink, $urlServer . "modules/admin/");
-		array_push($sideMenuImg, "admin-tools.gif");
 	}
 
 	if ($statut != 10) {
