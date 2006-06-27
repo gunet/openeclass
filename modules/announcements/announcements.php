@@ -1,69 +1,69 @@
 <?php 
- /*
-      +----------------------------------------------------------------------+
-      | CLAROLINE version 1.3.0 $Revision$                            |
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
-      +----------------------------------------------------------------------+
-      | $Id$        |
-      +----------------------------------------------------------------------+
-      |    This program is free software; you can redistribute it and/or     |
-      |    modify it under the terms of the GNU General Public License       |
-      |    as published by the Free Software Foundation; either version 2    |
-      |   of the License, or (at your option) any later version.             |
-      |                                                                      |
-      |   This program is distributed in the hope that it will be useful,    |
-      |   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-      |   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-      |   GNU General Public License for more details.                       |
-      |                                                                      |
-      |   You should have received a copy of the GNU General Public License  |
-      |   along with this program; if not, write to the Free Software        |
-      |   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-      |   02111-1307, USA. The GPL license is also available through the     |
-      |   world-wide-web at http://www.gnu.org/copyleft/gpl.html             |
-      +----------------------------------------------------------------------+
-      | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-      |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-      |          Christophe Gesché <gesche@ipm.ucl.ac.be>                    |
-      +----------------------------------------------------------------------+
- */
 /*
- * Originally written by Thomas Depraetere <depraetere@ipm.ucl.ac.be> 15 January 2002.
- * Partially rewritten by Hugues Peeters <peeters@ipm.ucl.ac.be> 19 April 2002.
- *
- * The script works with the 'annonces' tables in the main claroline table
- *
- * DB Table structure:
- * ---
- *
- * id         : announcement id
- * contenu    : announcement content
- * temps      : date of the announcement introduction / modification
- * code_cours : course code of wich the announcement is linked
- * ordre      : order of the announcement display
- *              (the announcements are display in desc order)
- *
- * Script Structure:
- * ---
- *
- * - Teacher only section
- *
- *		commands
- *			move up and down announcement
- *			delete announcement
- *			delete all announcements
- *			modify announcement
- *			submit announcement (new or modified)
- *
- *		display
- *			casual message (often used after the execution of a command)
- *			announcement list
- *			form to fill new or modified announcement
- *
- * - Student section (only display)
- *
- */
++----------------------------------------------------------------------+
+| CLAROLINE version 1.3.0 $Revision$                            |
++----------------------------------------------------------------------+
+| Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
++----------------------------------------------------------------------+
+| $Id$        |
++----------------------------------------------------------------------+
+|    This program is free software; you can redistribute it and/or     |
+|    modify it under the terms of the GNU General Public License       |
+|    as published by the Free Software Foundation; either version 2    |
+|   of the License, or (at your option) any later version.             |
+|                                                                      |
+|   This program is distributed in the hope that it will be useful,    |
+|   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
+|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
+|   GNU General Public License for more details.                       |
+|                                                                      |
+|   You should have received a copy of the GNU General Public License  |
+|   along with this program; if not, write to the Free Software        |
+|   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
+|   02111-1307, USA. The GPL license is also available through the     |
+|   world-wide-web at http://www.gnu.org/copyleft/gpl.html             |
++----------------------------------------------------------------------+
+| Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
+|          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
+|          Christophe Gesché <gesche@ipm.ucl.ac.be>                    |
++----------------------------------------------------------------------+
+*/
+/*
+* Originally written by Thomas Depraetere <depraetere@ipm.ucl.ac.be> 15 January 2002.
+* Partially rewritten by Hugues Peeters <peeters@ipm.ucl.ac.be> 19 April 2002.
+*
+* The script works with the 'annonces' tables in the main claroline table
+*
+* DB Table structure:
+* ---
+*
+* id         : announcement id
+* contenu    : announcement content
+* temps      : date of the announcement introduction / modification
+* code_cours : course code of wich the announcement is linked
+* ordre      : order of the announcement display
+*              (the announcements are display in desc order)
+*
+* Script Structure:
+* ---
+*
+* - Teacher only section
+*
+*		commands
+*			move up and down announcement
+*			delete announcement
+*			delete all announcements
+*			modify announcement
+*			submit announcement (new or modified)
+*
+*		display
+*			casual message (often used after the execution of a command)
+*			announcement list
+*			form to fill new or modified announcement
+*
+* - Student section (only display)
+*
+*/
 
 
 $require_current_course = TRUE;
@@ -72,17 +72,18 @@ $langFiles = 'announcements';
 $helpTopic = 'Announce';
 //include('../../include/init.php');
 include '../../include/baseTheme.php';
-include('../../include/lib/textLib.inc.php'); 
+include('../../include/lib/textLib.inc.php');
 include('../../include/sendMail.inc.php');
 $nameTools = $langAn;
-//begin_page($langAn);
+$tool_content = "";
 
-if ($language == 'greek')
-        $lang_editor='gr';
-else
-        $lang_editor='en';
+if ($is_adminOfCourse && (@$addAnnouce==1 || isset($modify))) {
+	if ($language == 'greek')
+	$lang_editor='gr';
+	else
+	$lang_editor='en';
 
-$head_content = <<<hContent
+	$head_content = <<<hContent
 <script type="text/javascript">
   _editor_url = '$urlAppend/include/htmlarea/';
   _css_url='$urlAppend/css/';
@@ -110,26 +111,25 @@ function initEditor() {
 </script>
 hContent;
 
-$body_action = "onload=\"initEditor()\"";
+	$body_action = "onload=\"initEditor()\"";
 
-$tool_content = "";
-
+}
 
 /*****************************************
-              TEACHER ONLY
+TEACHER ONLY
 *****************************************/
 if($is_adminOfCourse) // check teacher status
 {
 
 	/*----------------------------------------
-		   DEFAULT DISPLAY SETTINGS
-	 --------------------------------------*/
+	DEFAULT DISPLAY SETTINGS
+	--------------------------------------*/
 	$displayAnnouncementList = true;
 	$displayForm             = true;
 
 	/*----------------------------------------
-		 MOVE UP AND MOVE DOWN COMMANDS
-	 --------------------------------------*/
+	MOVE UP AND MOVE DOWN COMMANDS
+	--------------------------------------*/
 	if (isset($down) && $down)
 	{
 		$thisAnnouncementId = $down;
@@ -142,9 +142,9 @@ if($is_adminOfCourse) // check teacher status
 		$sortDirection = "ASC";
 	}
 
-	if (isset($thisAnnouncementId ) && $thisAnnouncementId && isset($sortDirection) && $sortDirection) 
+	if (isset($thisAnnouncementId ) && $thisAnnouncementId && isset($sortDirection) && $sortDirection)
 	{
-	$result = db_query("SELECT id, ordre FROM annonces WHERE code_cours='$currentCourseID'
+		$result = db_query("SELECT id, ordre FROM annonces WHERE code_cours='$currentCourseID'
 		ORDER BY ordre $sortDirection",$mysqlMainDb);
 
 		while (list ($announcementId, $announcementOrder) = mysql_fetch_row($result))
@@ -167,18 +167,18 @@ if($is_adminOfCourse) // check teacher status
 	}
 
 	/*----------------------------------------
-	       DELETE ANNOUNCEMENT COMMAND
-	 --------------------------------------*/
+	DELETE ANNOUNCEMENT COMMAND
+	--------------------------------------*/
 
-	if (isset($delete) && $delete) 
+	if (isset($delete) && $delete)
 	{
 		$result =  db_query("DELETE FROM annonces WHERE id='$delete'", $mysqlMainDb);
 		$message = $langAnnDel;
 	}
 
 	/*----------------------------------------
-	     DELETE ALL ANNOUNCEMENTS COMMAND
-	 --------------------------------------*/
+	DELETE ALL ANNOUNCEMENTS COMMAND
+	--------------------------------------*/
 
 	if (isset($deleteAllAnnouncement) && $deleteAllAnnouncement) {
 		db_query("DELETE FROM annonces WHERE code_cours='$currentCourseID'",$mysqlMainDb);
@@ -187,9 +187,9 @@ if($is_adminOfCourse) // check teacher status
 
 
 	/*----------------------------------------
-				  MODIFY COMMAND
-	 --------------------------------------*/
-	
+	MODIFY COMMAND
+	--------------------------------------*/
+
 	if (isset($modify) && $modify) {
 		// RETRIEVE THE CONTENT OF THE ANNOUNCEMENT TO MODIFY
 		$result =  db_query("SELECT * FROM annonces WHERE id='$modify'",$mysqlMainDb);
@@ -198,30 +198,30 @@ if($is_adminOfCourse) // check teacher status
 		if ($myrow) {
 			$AnnouncementToModify = $myrow['id'];
 			$contentToModify = $myrow['contenu'];
-			$displayAnnouncementList = false;
+			$displayAnnouncementList = true;
 		}
-		
+
 	}
 	/*----------------------------------------
-	        SUBMIT ANNOUNCEMENT COMMAND
-	 --------------------------------------*/
+	SUBMIT ANNOUNCEMENT COMMAND
+	--------------------------------------*/
 
-	if (isset($submitAnnouncement) && $submitAnnouncement) 
+	if (isset($submitAnnouncement) && $submitAnnouncement)
 	{
 		/*** MODIFY ANNOUNCEMENT ***/
 
 		if($id) {
-			db_query("UPDATE annonces SET contenu='$newContent', temps=NOW() 
+			db_query("UPDATE annonces SET contenu='$newContent', temps=NOW()
 				WHERE id=$id",$mysqlMainDb);
 			$message = $langAnnModify;
-		} 
+		}
 
 		/*** ADD NEW ANNOUNCEMENT ***/
-		else 
+		else
 		{
 			// DETERMINE THE ORDER OF THE NEW ANNOUNCEMENT
 
-			$result = db_query("SELECT MAX(ordre) FROM annonces 
+			$result = db_query("SELECT MAX(ordre) FROM annonces
 				WHERE code_cours = '$currentCourseID'",$mysqlMainDb);
 
 			list($orderMax) = mysql_fetch_row($result);
@@ -237,8 +237,8 @@ if($is_adminOfCourse) // check teacher status
 			if(isset($emailOption) && $emailOption==1)
 			{
 				$emailContent=stripslashes($newContent);
-			        $emailSubject = "$professorMessage ($currentCourseID - $intitule)";
-				
+				$emailSubject = "$professorMessage ($currentCourseID - $intitule)";
+
 				// Select students email list
 				$sqlUserOfCourse = "SELECT user.email
 			FROM cours_user, user WHERE code_cours='$currentCourseID'
@@ -246,16 +246,16 @@ if($is_adminOfCourse) // check teacher status
 				$result = db_query($sqlUserOfCourse,$mysqlMainDb);
 
 				$countEmail = mysql_num_rows($result);
-				
+
 				// Email syntax test
 				$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,5})$";
-				
+
 				$unvalid=0;
 				// send email one by one to avoid antispam
 				while ( $myrow = mysql_fetch_array($result) )
 				{
 					$emailTo=$myrow["email"];
-					// echo "emailTo : $emailTo<br>";	// testing 
+					// echo "emailTo : $emailTo<br>";	// testing
 					// check email syntax validity
 					if(!eregi( $regexp, $emailTo )) {
 						$unvalid++;
@@ -263,11 +263,11 @@ if($is_adminOfCourse) // check teacher status
 						//avoid antispam by varying string
 						$emailBody=html2text("$emailContent\n\n$emailTo");
 						send_mail_multipart("$prenom $nom", $email, '',
-							$myrow["email"], $emailSubject,
-							$emailBody, $emailContent, $charset);
-						}
+						$myrow["email"], $emailSubject,
+						$emailBody, $emailContent, $charset);
+					}
 				}
-				$messageUnvalid=" $langOn $countEmail $langRegUser, $unvalid $langUnvalid"; 
+				$messageUnvalid=" $langOn $countEmail $langRegUser, $unvalid $langUnvalid";
 				$message = " $langAnnAdd $langEmailSent.
 				<br>
 				<b>
@@ -275,13 +275,13 @@ if($is_adminOfCourse) // check teacher status
 				</b>";
 				/*
 				for ($i = 1; $i <= $countUser; $i++) {
-					// $myrow = mysql_fetch_array($result);
-					// $emailArray[$i]="$myrow[email]";
+				// $myrow = mysql_fetch_array($result);
+				// $emailArray[$i]="$myrow[email]";
 				}
 				$emailList = implode(",", $emailArray);
-				*/				
+				*/
 			}       // if $emailOption==1
-			else 
+			else
 			{
 				$message = "$langAnnAdd";
 			}	// else
@@ -289,86 +289,108 @@ if($is_adminOfCourse) // check teacher status
 	}	// if $submit Announcement
 
 	/*****************************************
-	              TEACHER DISPLAY
+	TEACHER DISPLAY
 	*****************************************/
 
 	/*----------------------------------------
-	            DISPLAY ACTION MESSAGE
-	 --------------------------------------*/
+	DISPLAY ACTION MESSAGE
+	--------------------------------------*/
 
 	if (isset($message) && $message)
 	{
 		$tool_content .=  "
-			<font face='arial, helvetica' size=2>
-				".$message.".
-				<br>
-				<br>
-				<a href=\"$_SERVER[PHP_SELF]\">".$langBackList."</a>
-				<br>
-			</font>";
-		$displayAnnouncementList = false;
-		$displayForm             = false;
+					<table>
+				<tbody>
+					<tr>
+						<td class=\"success\">
+						$message
+					</td>
+					</tr>
+				</tbody>
+			</table><br/>";
+		
+		$displayAnnouncementList = true;//do not show announcements
+		$displayForm             = false;//do not show form
 	}
 
 
 
-		/*----------------------------------------
-		   DISPLAY FORM TO FILL AN ANNOUNCEMENT
-			   (USED FOR ADD AND MODIFY)
-		 --------------------------------------*/
+	/*----------------------------------------
+	DISPLAY FORM TO FILL AN ANNOUNCEMENT
+	(USED FOR ADD AND MODIFY)
+	--------------------------------------*/
 
-	if ($displayForm ==  true)
-	{
+	if ($displayForm ==  true && (@$addAnnouce==1 || isset($modify))) {
 
 		// DISPLAY ADD ANNOUNCEMENT COMMAND
-		
-	$tool_content .=  "<font face='arial, helvetica' size=2>
+
+		$tool_content .=  "
 	<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">\n";
 		// should not send email if updating old message
 		if (isset ($modify) && $modify) {
 			$tool_content .=   "$langModifAnn";
 		} else {
-			$tool_content .=  "<b>
-			".$langAddAnn."</b>
+			$tool_content .=  "<p><b>
+			".$langAddAnn."</b></p>
 			<br>
 			
-				$langEmailOption : 
-				<input type=checkbox value=\"1\" name=\"emailOption\">";
+				<p>$langEmailOption : 
+				<input type=checkbox value=\"1\" name=\"emailOption\"></p>";
 		}
-		
+
 		if (!isset($AnnouncementToModify) )
-			$AnnouncementToModify ="";
+		$AnnouncementToModify ="";
 		if (!isset($contentToModify) )
-			$contentToModify ="";
+		$contentToModify ="";
 
 
 
-	$tool_content .=  "<textarea id='ta' name='newContent' value='$contentToModify' rows='20' cols='96'>$contentToModify</textarea>";
-	$tool_content .=  "<br><input type=\"hidden\" name=\"id\" value=\"".$AnnouncementToModify."\">";
-	$tool_content .=  "<input type=\"Submit\" name=\"submitAnnouncement\" value=\"$langOk\"></form>";
-	
-	$tool_content .= "<br><br><br>";
+		$tool_content .=  "<textarea id='ta' name='newContent' value='$contentToModify' rows='20' cols='96'>$contentToModify</textarea>";
+		$tool_content .=  "<br><input type=\"hidden\" name=\"id\" value=\"".$AnnouncementToModify."\">";
+		$tool_content .=  "<input type=\"Submit\" name=\"submitAnnouncement\" value=\"$langOk\"></form>";
+
+		$tool_content .= "<br><br><br>";
 	}
 
 	/*----------------------------------------
-	          DISPLAY ANNOUNCEMENT LIST
-	  --------------------------------------*/
+	DISPLAY ANNOUNCEMENT LIST
+	--------------------------------------*/
 
-	if ($displayAnnouncementList == true) 
+	if ($displayAnnouncementList == true)
 	{
 		$result = db_query("
 			SELECT * FROM annonces WHERE code_cours='$currentCourse' ORDER BY ordre DESC",$mysqlMainDb);
 		$iterator = 1;
 		$bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
+		
+		
+		if (@$addAnnouce !=1) {
+			$tool_content .= "
+
+			<a href=\"".$_SERVER['PHP_SELF']."?addAnnouce=1\">".$langAddAnn."</a>";
+		}
+		if (@$addAnnouce!=1 && $announcementNumber >1) {
+			$tool_content .= " | ";
+		}
+		
+		if ($announcementNumber > 1)
+		{
+			$tool_content .=  "
+				<a href=\"$_SERVER[PHP_SELF]?deleteAllAnnouncement=1\">$langEmptyAnn</a>
+				";
+		}	// if announcementNumber > 1
+		if (@$addAnnouce !=1 || $announcementNumber > 1) {
+			$tool_content .= "<br/><br/>";
+		}
 		$tool_content .=  "<table width=\"99%\">";
 		if ($announcementNumber>0){
 			$tool_content .= "<thead>
 				<tr>
 					<th width=\"99%\">$langAnnouncement</th>";
-					
-					if ($announcementNumber>1){
-					$tool_content .= "<th width=\"21\">$langMove</th>";
-					}
+
+			if ($announcementNumber>1){
+				$tool_content .= "<th width=\"21\">$langMove</th>";
+			}
 			$tool_content .= "</tr></thead>";
 		}
 		while ( $myrow = mysql_fetch_array($result) )
@@ -377,7 +399,7 @@ if($is_adminOfCourse) // check teacher status
 			$content = make_clickable($myrow['contenu']);
 			$content = nl2br($content);
 			$tool_content .=  "<tbody>
-				<tr class=\"displayed\"><span></span>
+				<tr class=\"odd\"><span></span>
 					<td class=\"arrow\">
 						
 							".$langPubl." 
@@ -385,9 +407,9 @@ if($is_adminOfCourse) // check teacher status
 							".$myrow['temps']."
 						
 					</td>";
-					if ($announcementNumber>1){
-						$tool_content .= "<td width=21>";
-					}
+			if ($announcementNumber>1){
+				$tool_content .= "<td width=21>";
+			}
 			/*** DISPLAY MOVE UP AND MOVE DOWN COMMANDS ***/
 			// DISPLAY MOVE UP COMMAND
 			//condition: only if it is not the top announcement
@@ -398,11 +420,11 @@ if($is_adminOfCourse) // check teacher status
 							<img class=\"displayed\" src=../../images/up.gif border=0 alt=\"Up\">
 						</a>";
 			}
-//			$tool_content .=  "
-//					</td>
-//				</tr>
-//				<tr bgcolor=$color2>
-//					<td width=21 bgcolor=white>";
+			//			$tool_content .=  "
+			//					</td>
+			//				</tr>
+			//				<tr bgcolor=$color2>
+			//					<td width=21 bgcolor=white>";
 			// DISPLAY MOVE DOWN COMMAND
 			// condition: only if it is not the bottom announcement
 			if($iterator < $bottomAnnouncement)
@@ -435,40 +457,26 @@ if($is_adminOfCourse) // check teacher status
 				</tr>";
 			$iterator ++;
 		}	// end while ($myrow = mysql_fetch_array($result))
-			$tool_content .=  "</tbody>
+		$tool_content .=  "</tbody>
 			</table>";
 		// DISPLAY DELETE ALL ANNOUNCEMENTS COMMAND
-		if ($announcementNumber > 1)
-		{
-			$tool_content .=  "
-			<table width=\"99%\"><tbody>
-				<tr class=\"odd\">
-					<td align=\"right\">
-						<p>
-						
-							<a href=\"$_SERVER[PHP_SELF]?deleteAllAnnouncement=1\">$langEmptyAnn</a>
-						
-						</p>
-					</td>
-				</tr></tbody>
-			</table>";
-		}	// if announcementNumber > 1
+		
 	}	// end: if ($displayAnnoucementList == true)
 } // end: teacher only
 
 
 /*****************************************
-             STUDENT VIEW
+STUDENT VIEW
 *****************************************/
 
 else
 {
-	$result = db_query("SELECT * FROM annonces WHERE code_cours='$currentCourseID' 
+	$result = db_query("SELECT * FROM annonces WHERE code_cours='$currentCourseID'
 				ORDER BY ordre DESC",$mysqlMainDb) OR die("DB problem");
 
 	$tool_content .=  "<table width=\"99%\"";
 	while ($myrow = mysql_fetch_array($result))
-	{	
+	{
 		$content = $myrow[1];
 		$content = make_clickable($content);
 		$content = nl2br($content);
@@ -488,11 +496,15 @@ else
 						
 					</td>
 				</tr>";
-		
+
 	}	// while loop
 	$tool_content .=  "</table>";
 }
 
-draw($tool_content, 2, 'announcements', $head_content, $body_action);
+if($is_adminOfCourse && (@$addAnnouce == 1 || isset($modify))) {
+	draw($tool_content, 2, 'announcements', $head_content, $body_action);
+} else {
+	draw($tool_content, 2, 'announcements');
+}
 ?>
 			
