@@ -42,7 +42,7 @@ $langAddPageToSite="Add a page to site";
 $langNotAllowed="Not allowed";
 $langExercices="Exercices";
 $langCouldNot="File could not be sent";
-$langOkSent="Your page has been sent.<p>It is now linked from course <a href=../../$dbname/index.php>Homepage</a>";
+$langOkSent="<p><b>Your page has been sent</b><br/><br/>A link has been created on the left menu</p>";
 $langTooBig="You didn't choose any file to send, or it is too big";
 $langExplanation="The page must be in HTML format (e.g. \"my_page.htm\"). It will be linked from Homepage. If you want to send non HTML documents (PDF, Word, Power Point, Video, etc.) use <a href=../document/document.php>Documents tool</a>";
 $langPgTitle="Title of the page";
