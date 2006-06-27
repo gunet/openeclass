@@ -493,7 +493,7 @@ while ($myrow = mysql_fetch_array($result))
 $tool_content .= "</tbody>";
 $tool_content .=  "</table>";
 
-if(isset($head_content)) {
+if($is_adminOfCourse && isset($head_content)) {
 	draw($tool_content, 2, 'agenda', $head_content, $body_action);
 } else {
 	draw($tool_content, 2, 'agenda');
