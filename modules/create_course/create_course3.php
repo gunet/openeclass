@@ -1647,7 +1647,7 @@ mysql_query("CREATE TABLE accueil (
                'MODULE_ID_STAT'
                )");
 
-    mysql_query("INSERT INTO accueil VALUES (
+ /*   mysql_query("INSERT INTO accueil VALUES (
                '12',
                '$langAddPageHome',
                '../../modules/import/import.php?',
@@ -1656,9 +1656,9 @@ mysql_query("CREATE TABLE accueil (
                '1',
                '',
                'MODULE_ID_IMPORT'
-               )");
+               )");*/
 
-    mysql_query("INSERT INTO accueil VALUES (
+/*    mysql_query("INSERT INTO accueil VALUES (
                '13',
                '$langLinkSite',
                '../../modules/external_module/external_module.php?',
@@ -1667,7 +1667,7 @@ mysql_query("CREATE TABLE accueil (
                '1',
                '',
                'MODULE_ID_EXTERNAL'
-               )");
+               )");*/
 
     mysql_query("INSERT INTO accueil VALUES (
                '14',
