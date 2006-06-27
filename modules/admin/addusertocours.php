@@ -57,7 +57,7 @@ include '../../include/baseTheme.php';
 // Othewise exit with appropriate message
 @include "check_admin.inc";
 // Define $nameTools
-$nameTools = "Γρήγορη εγγραφή - διαγραφή εκπαιδευομένων - εκπαιδευτών";
+$nameTools = $langQuickAddDelUserToCours;
 // Initialise $tool_content
 $tool_content = "";
 
@@ -91,7 +91,7 @@ if (isset($submit))  {
 		mysql_query($sqlInsertProf) ;
 	}
 
-	$tool_content .= "<p>Η διαχείριση χρηστών ολοκληρώθηκε με επιτυχία!</p>";
+	$tool_content .= "<p>".$langQuickAddDelUserToCoursSuccess."</p>";
 
 }
 // Display form to manage users
@@ -162,11 +162,11 @@ function reverseAll(cbList) {
 </script>';
 	
 	$tool_content .= "<form action=".$_SERVER[PHP_SELF]."?c=".$c."".$searchurl." method=\"post\">";
-	$tool_content .= "<table width=\"99%\"><caption>Φόρμα Διαχείρισης Χρηστών</caption><tbody>";
+	$tool_content .= "<table width=\"99%\"><caption>".$langFormUserManage."</caption><tbody>";
 
 	$tool_content .= "<tr valign=top align=center> 
 			<td align=left><font size=\"2\" face=\"arial, helvetica\">
-				<b>Λίστα Μη Εγγεγραμμένων Χρηστών</b> <p>
+				<b>".$langListNotRegisteredUsers."</b> <p>
 	<select name=\"unregusers[]\" size=20 multiple>";  
   
 	// Registered users not registered in the selected course
@@ -192,7 +192,7 @@ function reverseAll(cbList) {
 			<td width=\"3%\" nowrap> 
 			<p>&nbsp;</p>
 			<p>&nbsp;</p>
-			<p><b>Εκπαιδευόμενοι</b></p>
+			<p><b>".$langStudents."</b></p>
 			<p>";
 
 	// WATCH OUT ! form elements are called by numbers "form.element[3]"... 
@@ -207,7 +207,7 @@ function reverseAll(cbList) {
 			<p>&nbsp;</p>
 			<p>&nbsp;</p>
 			<p>&nbsp;</p>
-			<p><b>Εκπαιδευτές</b></p>
+			<p><b>".$langProfessors."</b></p>
 			<p>";
 
 	// WATCH OUT ! form elements are called by numbers "form.element[3]"... 
@@ -218,7 +218,7 @@ function reverseAll(cbList) {
 		</p>
 		</td>
 		<td><font size=\"2\" face=\"arial, helvetica\">
-		<p><b>Λίστα Εγγεγραμμένων Εκπαιδευομένων</b></p>
+		<p><b>".$langListRegisteredStudents."</b></p>
 		<p> 
 		<select name=\"regstuds[]\" size=\"8\" multiple>";
 	
@@ -238,7 +238,7 @@ function reverseAll(cbList) {
 
 	$tool_content .= "</select></p>
 		<p>&nbsp;</p>
-		<p><b>Λίστα Εγγεγραμμένων Εκπαιδευτών</b></p>
+		<p><b>".$langListRegisteredProfessors."</b></p>
 		<p> 
 		<select name=\"regprofs[]\" size=\"8\" multiple>";
 	
@@ -260,7 +260,7 @@ function reverseAll(cbList) {
 
 	$tool_content .= "</select></p></td></tr><tr><td colspan=\"3\">
 	<table width=\"100%\"><tbody>
-	<tr><td align=\"center\"><input type=submit value=\"Επικύρωση Αλλαγών\" style=\"font-weight: bold\" name=\"submit\" onClick=\"selectAll(this.form.elements[5],this.form.elements[6],true)\"></td></tr></tbody></table>
+	<tr><td align=\"center\"><input type=submit value=\"".$langAcceptChanges."\" style=\"font-weight: bold\" name=\"submit\" onClick=\"selectAll(this.form.elements[5],this.form.elements[6],true)\"></td></tr></tbody></table>
 	</td></tr></tbody></table>";
 	
 	$tool_content .= "</form>";
@@ -268,7 +268,7 @@ function reverseAll(cbList) {
 }
 // If course selected go back to editcours.php
 if (isset($c)) {
-	$tool_content .= "<center><p><a href=\"editcours.php?c=".$c."".$searchurl."\">Επιστροφή</a></p></center>";
+	$tool_content .= "<center><p><a href=\"editcours.php?c=".$c."".$searchurl."\">".$langReturn."</a></p></center>";
 }
 // Else go back to index.php directly
 else {

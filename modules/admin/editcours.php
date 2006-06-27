@@ -59,7 +59,7 @@ include '../../include/baseTheme.php';
 // Othewise exit with appropriate message
 @include "check_admin.inc";
 // Define $nameTools
-$nameTools = "Επεξεργασία Μαθήματος";
+$nameTools = $langCourseEdit;
 // Initialise $tool_content
 $tool_content = "";
 
@@ -94,26 +94,26 @@ if (isset($c)) {
 		"SELECT * FROM cours WHERE code = '".$c."'");
 	$row = mysql_fetch_array($sql);
 	// Display course information and link to edit
-	$tool_content .= "<table width=\"99%\"><caption>Στοιχεία Μαθήματος (<a href=\"infocours.php?c=".$c."".$searchurl."\">Αλλαγή</a>)</caption><tbody>";
+	$tool_content .= "<table width=\"99%\"><caption>".$langCourseInfo." (<a href=\"infocours.php?c=".$c."".$searchurl."\">".$langChange."</a>)</caption><tbody>";
 	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>Τμήμα:</b></td>
+    <td width=\"3%\" nowrap><b>".$langDepartment.":</b></td>
     <td>".$row['faculte']."</td>
 </tr>";
 	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>Κωδικός:</b></td>
+    <td width=\"3%\" nowrap><b>".$langCourseCode.":</b></td>
     <td>".$row['code']."</td>
 </tr>";
 	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>Τίτλος:</b></td>
+    <td width=\"3%\" nowrap><b>".$langTitle.":</b></td>
     <td>".$row['intitule']."</td>
 </tr>";
 	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>Διδάσκων:</b></td>
+    <td width=\"3%\" nowrap><b>".$langDidaskon.":</b></td>
     <td>".$row['titulaires']."</td>
 </tr>";
 	$tool_content .= "</tbody></table><br>\n";
 	// Display course quota and link to edit
-	$tool_content .= "<table width=\"99%\"><caption>Όρια αποθηκευτικού χώρου (<a href=\"quotacours.php?c=$c".$searchurl."\">Αλλαγή</a>)</caption><tbody>";
+	$tool_content .= "<table width=\"99%\"><caption>".$langQuota." (<a href=\"quotacours.php?c=$c".$searchurl."\">".$langChange."</a>)</caption><tbody>";
 	// Get information about course quota
 	$q = mysql_fetch_array(mysql_query("SELECT code,intitule,doc_quota,video_quota,group_quota,dropbox_quota 
 			FROM cours WHERE code='$c'"));
@@ -142,9 +142,9 @@ if (isset($c)) {
 </tr>";
 	$tool_content .= "</tbody></table><br>\n";
 	// Display course type and link to edit
-	$tool_content .= "<table width=\"99%\"><caption>Κατάσταση Μαθήματος (<a href=\"statuscours.php?c=".$c."".$searchurl."\">Αλλαγή</a>)</caption><tbody>";
+	$tool_content .= "<table width=\"99%\"><caption>".$langCourseStatus." (<a href=\"statuscours.php?c=".$c."".$searchurl."\">".$langChange."</a>)</caption><tbody>";
 	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>Τρέχουσα κατάσταση:</b></td>
+    <td width=\"3%\" nowrap><b>".$langCurrentStatus.":</b></td>
     <td>";
 	switch ($row['visible']) {
 	case 2:
@@ -160,35 +160,35 @@ if (isset($c)) {
     $tool_content .= "</td>
 </tr></tbody></table><br>\n";
 	// Display other available choices
-	$tool_content .= "<table width=\"99%\"><caption>Aλλες ενέργειες</caption><tbody>";
+	$tool_content .= "<table width=\"99%\"><caption>".$langOtherActions."</caption><tbody>";
 	// Users list
 	$tool_content .= "  <tr>
-    <td><a href=\"listusers.php?c=".$c."\">Λίστα Χρηστών</a></td>
+    <td><a href=\"listusers.php?c=".$c."\">".$langListUsers."</a></td>
   </tr>";
   // Register unregister users
 	$tool_content .= "  <tr>
-    <td><a href=\"addusertocours.php?c=".$c."".$searchurl."\">Γρήγορη εγγραφή/διαγραφή Εκπαιδευτών-Εκπαιδευομένων</a></td>
+    <td><a href=\"addusertocours.php?c=".$c."".$searchurl."\">".$langQuickAddDelUserToCours."</a></td>
   </tr>";
   // Course statistics
 	$tool_content .= "  <tr>
-    <td>Στατιστικά Μαθήματος</td>
+    <td>".$langStatsCourse."</td>
   </tr>";
   // Backup course
 	$tool_content .= "  <tr>
-    <td><a href=\"../course_info/archive_course.php?c=".$c."".$searchurl."\">Λήψη Αντιγράφου Ασφαλείας<a/></td>
+    <td><a href=\"../course_info/archive_course.php?c=".$c."".$searchurl."\">".$langTakeBackup."<a/></td>
   </tr>";
   // Delete course
 	$tool_content .= "  <tr>
-    <td><a href=\"delcours.php?c=".$c."".$searchurl."\">Συνολική Διαγραφή Μαθήματος</a></td>
+    <td><a href=\"delcours.php?c=".$c."".$searchurl."\">".$langCourseDelFull."</a></td>
   </tr>";
 	$tool_content .= "</tbody></table>";
 
 	// If a search is on display link to go back to listcours with search results
 	if (isset($search) && ($search=="yes")) {
-		$tool_content .= "<br><center><p><a href=\"listcours.php?search=yes\">Επιστροφή στα αποτελέσματα της αναζήτησης</a></p></center>";
+		$tool_content .= "<br><center><p><a href=\"listcours.php?search=yes\">".$langReturnToSearch."</a></p></center>";
 	}
 	// Display link to go back to listcours.php
-	$tool_content .= "<br><center><p><a href=\"listcours.php\">Επιστροφή</a></p></center>";
+	$tool_content .= "<br><center><p><a href=\"listcours.php\">".$langReturn."</a></p></center>";
 }
 // If $c is not set we have a problem
 else {

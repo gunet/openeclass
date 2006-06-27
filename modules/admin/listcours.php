@@ -59,7 +59,7 @@ include '../../include/baseTheme.php';
 // Othewise exit with appropriate message
 @include "check_admin.inc";
 // Define $nameTools
-$nameTools = "Λίστα Μαθημάτων / Ενέργειες";
+$nameTools = $langListCours;
 // Initialise $tool_content
 $tool_content = "";
 $caption = "";
@@ -131,20 +131,20 @@ if (isset($search) && $search=="yes") {
 // Normal list, no search, select all courses
 else {
 	$a=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours"));		
-	$caption .= "Υπάρχουν ".$a[0]." μαθήματα";
+	$caption .= "".$langManyExist." ".$a[0]." μαθήματα";
 	$sql = mysql_query("SELECT faculte, code, intitule,titulaires,visible FROM cours ORDER BY faculte");
 }
 // Construct cours list table
 $tool_content .= "<table border=\"1\"><caption>".$caption."</caption>
 <thead>
   <tr>
-    <th scope=\"col\">Τμήμα</th>
-    <th scope=\"col\">Κωδικός</th>
-    <th scope=\"col\">Τίτλος (Διδάσκων)</th>
-    <th scope=\"col\">Κατάσταση Μαθήματος</th>
-    <th scope=\"col\">Χρήστες</th>
-    <th scope=\"col\">Διαγραφή Μαθήματος</th>
-    <th scope=\"col\">Ενέργειες</th>
+    <th scope=\"col\">".$langDepartment."</th>
+    <th scope=\"col\">".$langCourseCode."</th>
+    <th scope=\"col\">".$langTitle." (".$langDidaskon.")</th>
+    <th scope=\"col\">".$langCourseStatus."</th>
+    <th scope=\"col\">".$langUsers."</th>
+    <th scope=\"col\">".$langCourseDel."</th>
+    <th scope=\"col\">".$langActions."</th>
   </tr>
 </thead><tbody>\n";
 
@@ -164,22 +164,22 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 		$tool_content .= "    <td>Απαιτείται Εγγραφή</td>\n";
 		break;
 	case 0:
-		$tool_content .= "    <td>Κελιστό</td>\n";
+		$tool_content .= "    <td>Κλειστό</td>\n";
 		break;
 	}
 	// Add links to course users, delete course and course edit
-	$tool_content .= "    <td><a href=\"listusers.php?c=".$logs[1]."\">Χρήστες</a></td>
-    <td><a href=\"delcours.php?c=".$logs[1]."\">Διαγραφή</a></td>
-    <td><a href=\"editcours.php?c=".$logs[1]."".$searchurl."\">Επεξεργασία</a></td>\n";
+	$tool_content .= "    <td><a href=\"listusers.php?c=".$logs[1]."\">".$langUsers."</a></td>
+    <td><a href=\"delcours.php?c=".$logs[1]."\">".$langDelete."</a></td>
+    <td><a href=\"editcours.php?c=".$logs[1]."".$searchurl."\">".$langEdit."</a></td>\n";
 }
 // Close table correctly
 $tool_content .= "</tbody></table>\n";
 // If a search is started display link to search page
 if (isset($search) && $search=="yes") {
-	$tool_content .= "<br><center><p><a href=\"searchcours.php\">Επιστροφή στην αναζήτηση</a></p></center>";
+	$tool_content .= "<br><center><p><a href=\"searchcours.php\">".$langReturnSearch."</a></p></center>";
 }
 // Display link to index.php	
-$tool_content .= "<br><center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
+$tool_content .= "<br><center><p><a href=\"index.php\">".$langReturn."</a></p></center>";
 
 /*****************************************************************************
 		DISPLAY HTML

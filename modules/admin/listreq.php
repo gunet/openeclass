@@ -3,7 +3,7 @@ $langFiles = array('gunet','registration','admin');
 include '../../include/baseTheme.php';
 @include "check_admin.inc";
 include('../../include/sendMail.inc.php');
-$nameTools= "Ανοικτές Αιτήσεις Καθηγητών";
+$nameTools= $langOpenProfessorRequests;
 
 // Initialise $tool_content
 $tool_content = "";
@@ -18,7 +18,7 @@ switch($close)
     case '1':
 	    //$tool_content .= "TOTAL DELETE OF REQUEST";
 	    $sql = db_query("UPDATE prof_request set status='2', date_closed=NOW() WHERE rid='$id'");
-	    $tool_content .= "<p><center>Η αίτηση του καθηγητή έκλεισε !</p>";
+	    $tool_content .= "<p><center>$langProfessorRequestClosed</p>";
 	    break;
     case '2':
 	    //$tool_content .= "DELETE OF REQUEST AND SENDING A MESSAGE";

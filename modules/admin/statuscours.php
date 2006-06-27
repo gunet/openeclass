@@ -57,7 +57,7 @@ include '../../include/baseTheme.php';
 // Othewise exit with appropriate message
 @include "check_admin.inc";
 // Define $nameTools
-$nameTools = "Επεξεργασία Μαθήματοςς";
+$nameTools = $langCourseEdit;
 // Initialise $tool_content
 $tool_content = "";
 
@@ -78,11 +78,11 @@ if (isset($submit))  {
 	$sql = mysql_query("UPDATE cours SET visible='$formvisible' WHERE code='$c'");
 	// Some changes occured
 	if (mysql_affected_rows() > 0) {
-		$tool_content .= "<p>Ο τύπος πρόσβασης του μαθήματος άλλαγε με επιτυχία!</p>";
+		$tool_content .= "<p>".$langCourseStatusChangedSuccess."</p>";
 	}
 	// Nothing updated
 	else {
-		$tool_content .= "<p>Δεν πραγματοποιήθηκε καμία αλλαγή!</p>";
+		$tool_content .= "<p>".$langNoChangeHappened."</p>";
 	}
 
 }
@@ -94,7 +94,7 @@ else {
 	$visibleChecked[$visible]="checked";
 	// Constract edit form
 	$tool_content .= "<form action=".$_SERVER[PHP_SELF]."?c=".$c."".$searchurl." method=\"post\">";
-	$tool_content .= "<table width=\"99%\"><caption>Αλλαγή τύπου πρόσβασης μαθήματος</caption><tbody>";
+	$tool_content .= "<table width=\"99%\"><caption>".$langCourseStatusChange."</caption><tbody>";
 	$tool_content .= "  <tr>
     <td colspan=\"2\"><i>$langConfTip</i></td>
   </tr>";
@@ -117,7 +117,7 @@ else {
 }
 // If course selected go back to editcours.php
 if (isset($c)) {
-	$tool_content .= "<center><p><a href=\"editcours.php?c=".$c."".$searchurl."\">Επιστροφή</a></p></center>";
+	$tool_content .= "<center><p><a href=\"editcours.php?c=".$c."".$searchurl."\">".$langReturn."</a></p></center>";
 }
 // Else go back to index.php directly
 else {

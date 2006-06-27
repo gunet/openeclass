@@ -57,7 +57,7 @@ include '../../include/baseTheme.php';
 // Othewise exit with appropriate message
 @include "check_admin.inc";
 // Define $nameTools
-$nameTools = "Επεξεργασία Μαθήματος";
+$nameTools = $langCourseEdit;
 // Initialise $tool_content
 $tool_content = "";
 
@@ -127,7 +127,7 @@ else {
 }
 // If course selected go back to editcours.php
 if (isset($c)) {
-	$tool_content .= "<center><p><a href=\"editcours.php?c=".$c."".$searchurl."\">Επιστροφή</a></p></center>";
+	$tool_content .= "<center><p><a href=\"editcours.php?c=".$c."".$searchurl."\">".$langReturn."</a></p></center>";
 }
 // Else go back to index.php directly
 else {

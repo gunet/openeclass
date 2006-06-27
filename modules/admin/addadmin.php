@@ -115,12 +115,12 @@ draw($tool_content,3,'admin');
   $ret: (String) The constracted form
 ******************************************************************************/
 function printform ($message) { 
-	global $langAdd;
+	global $langAdd, $langInsertUserInfo;
 	// Initialize $ret
 	$ret = "";
 	// Constract the display form
 	$ret .= "<form method='post' name='makeadmin' action='$_SERVER[PHP_SELF]'>";
-	$ret .= "<table width=\"99%\"><caption>Εισαγωγή στοιχείων χρήστη</caption><tbody>
+	$ret .= "<table width=\"99%\"><caption>".$langInsertUserInfo."</caption><tbody>
 	<tr><td width=\"3%\" nowrap>".$message."</td><td><input type='text' name='encodeLogin' size='20' maxlength='30'></td></tr>
 	<tr><td colspan=\"2\"><input type='submit' name='crypt' value='$langAdd'></td></tr></tbody></table></form>";
 	// Return $ret

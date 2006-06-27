@@ -124,7 +124,7 @@ $tool_content .=
 $tool_content .="
 <br></tbody></td></tr></table>";
 // Display link back to index.php
-$tool_content .= "<br><center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
+$tool_content .= "<br><center><p><a href=\"index.php\">".$langReturn."</a></p></center>";
 
 
 

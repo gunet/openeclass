@@ -57,7 +57,7 @@ include '../../include/baseTheme.php';
 // Othewise exit with appropriate message
 @include "check_admin.inc";
 // Define $nameTools
-$nameTools = "Επεξεργασία Μαθήματος";
+$nameTools = $langCourseEdit;
 // Initialise $tool_content
 $tool_content = "";
 
@@ -82,11 +82,11 @@ if (isset($submit))  {
 	// Some changes happened
 	if (mysql_affected_rows() > 0) {
 		$sql = mysql_query("UPDATE cours_faculte SET faculte='$facname', facid='$facid' WHERE code='$c'");
-		$tool_content .= "<p>Τα στοιχεία του μαθήματος άλλαξαν με επιτυχία!</p>";
+		$tool_content .= "<p>".$langCourseEditSuccess."</p>";
 	}
 	// Nothing updated
 	else {
-		$tool_content .= "<p>Δεν πραγματοποιήθηκε καμία αλλαγή!</p>";
+		$tool_content .= "<p>".$langNoChangeHappened."</p>";
 	}
 
 }
@@ -96,12 +96,12 @@ else {
 	$row = mysql_fetch_array(mysql_query("SELECT * FROM cours WHERE code='$c'"));
 	// Constract the edit form
 	$tool_content .= "<form action=".$_SERVER[PHP_SELF]."?c=".$c."".$searchurl." method=\"post\">";	
-	$tool_content .= "<table width=\"99%\"><caption>Αλλαγή Στοιχείων Μαθήματος</caption><tbody>";
+	$tool_content .= "<table width=\"99%\"><caption>".$langCourseInfoEdit."</caption><tbody>";
 	$tool_content .= "  <tr>
-    <td colspan=\"2\"><b><u>Στοιχεία Μαθήματος</u></b><br><br></td>
+    <td colspan=\"2\"><b><u>".$langCourseInfos."</u></b><br><br></td>
   </tr>";
 	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>Τμήμα:</b></td>
+    <td width=\"3%\" nowrap><b>".$langDepartment.":</b></td>
     <td><select name=\"faculte\">\n";
   // Construct select object for facultes
 	$resultFac=mysql_query("SELECT id,name FROM faculte ORDER BY number");
@@ -116,15 +116,15 @@ else {
     </td>
   </tr>";  
 	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>Κωδικός:</b></td>
+    <td width=\"3%\" nowrap><b>".$langCourseCode.":</b></td>
     <td><i>".$row['code']."</i></td>
   </tr>";
 	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>Τίτλος:</b></td>
+    <td width=\"3%\" nowrap><b>".$langTitle.":</b></td>
     <td><input type=\"text\" name=\"intitule\" value=\"".$row['intitule']."\" size=\"60\"></td>
   </tr>";
 	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>Διδάσκων:</b></td>
+    <td width=\"3%\" nowrap><b>".$langDidaskon.":</b></td>
     <td><input type=\"text\" name=\"titulaires\" value=\"".$row['titulaires']."\" size=\"60\"></td>
   </tr>";
 	$tool_content .= "  <tr>
@@ -134,7 +134,7 @@ else {
 }
 // If course selected go back to editcours.php
 if (isset($c)) {
-	$tool_content .= "<center><p><a href=\"editcours.php?c=".$c."".$searchurl."\">Επιστροφή</a></p></center>";
+	$tool_content .= "<center><p><a href=\"editcours.php?c=".$c."".$searchurl."\">".$langReturn."</a></p></center>";
 }
 // Else go back to index.php directly
 else {

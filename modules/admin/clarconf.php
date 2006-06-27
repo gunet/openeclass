@@ -60,7 +60,7 @@ include '../../include/baseTheme.php';
 // Othewise exit with appropriate message
 @include "check_admin.inc";
 // Define $nameTools
-$nameTools = "Configuration File του e-Class";
+$nameTools = $langClaroConf;
 // Initialise $tool_content
 $tool_content = "";
 
@@ -179,11 +179,11 @@ $have_latex = "'.$_POST['formhave_latex'].'";
 	// Save new config.php
 	fwrite($fd, $stringConfig);
 	// Display result message
-	$tool_content .= "<p>Το αρχείο ρυθμίσεων τροποποιήθηκε με επιτυχία!</p>";
+	$tool_content .= "<p>".$langFileUpdatedSuccess."</p>";
 	
 }
 	// Display link to go back to index.php
-	$tool_content .= "<center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
+	$tool_content .= "<center><p><a href=\"index.php\">".$langReturn."</a></p></center>";
 
 }
 // Display config.php edit form
@@ -197,7 +197,7 @@ else {
 	}
 	// Constract the form
 	$tool_content .= "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\"";
-	$tool_content .= "<table width=\"99%\"><caption>Επεξεργασία Αρχείου ".$titleextra."</caption><tbody>";
+	$tool_content .= "<table width=\"99%\"><caption>".$langFileEdit." ".$titleextra."</caption><tbody>";
 	$tool_content .= "  <tr>
     <td width=\"3%\" nowrap><b>\$urlServer:</b></td>
     <td><input type=\"text\" name=\"formurlServer\" size=\"40\" value=\"".$urlServer."\"></td>
@@ -358,7 +358,7 @@ else {
     <td colspan=\"2\"><hr></td>
   </tr>";
 	$tool_content .= "  <tr>
-    <td colspan=\"2\"><input type=\"checkbox\" name=\"backupfile\" checked> Αντικατάσταση του config_backup.php.</td>
+    <td colspan=\"2\"><input type=\"checkbox\" name=\"backupfile\" checked> ".$langReplaceBackupFile."</td>
   </tr>";
 	$tool_content .= "  <tr>
     <td colspan=\"2\"><br><input type='submit' name='submit' value='$langModify'></td>
@@ -367,14 +367,14 @@ else {
 	// Check if a backup file exists
   if (file_exists("../../config/config_backup.php")) {
   	// Give option to restore values from backup file
-  	$tool_content .= "<table width=\"99%\"><caption>Αλλες Ενέργειες</caption><tbody>";
+  	$tool_content .= "<table width=\"99%\"><caption>".$langOtherActions."</caption><tbody>";
 		$tool_content .= "  <tr>
     <td colspan=\"2\"><a href=\"clarconf.php?restore=yes\">Restore values from backup</a></td>
   </tr>";
 		$tool_content .= "</tbody></table>";
 	}
 	// Display link to index.php
-	$tool_content .= "<br><center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
+	$tool_content .= "<br><center><p><a href=\"index.php\">".$langReturn."</a></p></center>";
 	// After restored values have been inserted into form then bring back
 	// values from original config.php, so the rest of the page can be played correctly
 	if (isset($restore) && $restore=="yes") {

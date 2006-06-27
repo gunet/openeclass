@@ -11,4 +11,8 @@ $langWith = "with";
 $langDone = "became admin.";
 $langError = "Error: User didn't become admin. Probably he is already admin.";
 
+// Added by vagpits
+
+$langInsertUserInfo = "Insert user information";
+
 ?>

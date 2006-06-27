@@ -57,7 +57,7 @@ include '../../include/baseTheme.php';
 // Othewise exit with appropriate message
 @include "check_admin.inc";
 // Define $nameTools
-$nameTools = "Αναζήτηση Μαθημάτων";
+$nameTools = $langSearchCourse;
 // Initialise $tool_content
 $tool_content = "";
 
@@ -77,12 +77,12 @@ if (isset($new) && ($new=="yes")) {
 }
 // Display link for new search if there is one already
 if (isset($searchtitle) && isset($searchcode) && isset($searchtype) && isset($searchfaculte)) {
-	$newsearch = "(<a href=\"searchcours.php?new=yes\">Νέα Αναζήτηση</a>)";
+	$newsearch = "(<a href=\"searchcours.php?new=yes\">".$langNewSearch."</a>)";
 }
 	
 	// Constract search form
 	$tool_content .= "<form action=\"listcours.php?search=yes\" method=\"post\">";
-	$tool_content .= "<table width=\"99%\"><caption>Κριτήρια Αναζήτησης ".@$newsearch."</caption><tbody>";
+	$tool_content .= "<table width=\"99%\"><caption>".$langSearchCriteria." ".@$newsearch."</caption><tbody>";
 	$tool_content .= "  <tr>
     <td width=\"3%\" nowrap><b>Τίτλος:</b></td>
     <td><input type=\"text\" name=\"formsearchtitle\" size=\"40\" value=\"".@$searchtitle."\"></td>
@@ -117,7 +117,7 @@ if (isset($searchtitle) && isset($searchcode) && isset($searchtype) && isset($se
     </td>
 </tr>";
 	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>Τμήμα:</b></td>
+    <td width=\"3%\" nowrap><b>".$langDepartment.":</b></td>
     <td><select name=\"formsearchfaculte\">
     	<option value=\"0\">Όλα</option>\n";
   
@@ -133,12 +133,12 @@ $resultFac=mysql_query("SELECT name FROM faculte ORDER BY number");
     </td>
   </tr>";  
 	$tool_content .= "  <tr>
-    <td colspan=\"2\"><br><input type='submit' name='search_submit' value='Αναζήτηση'></td>
+    <td colspan=\"2\"><br><input type='submit' name='search_submit' value='$langSearch'></td>
   </tr>";
 	$tool_content .= "</tbody></table></form>";
 
 	// Display link to go back to index.php
-	$tool_content .= "<center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
+	$tool_content .= "<center><p><a href=\"index.php\">".$langReturn."</a></p></center>";
 
 /*****************************************************************************
 		DISPLAY HTML

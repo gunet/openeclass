@@ -103,14 +103,14 @@ else {
 	$tool_content .= "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">
 <textarea name=\"body_mail\" rows=\"10\" cols=\"60\"></textarea>
 <br><br>
-Αποστολή μηνύματος προς <select name=\"sendTo\">
-<option value=\"0\">Όλους τους χρήστες</option>
-<option value=\"1\">Μόνο στους εκπαιδευτές</option></select><br><br><input type=\"submit\" name=\"submit\" value=\"Αποστολή\"></input>
+$langSendMessageTo <select name=\"sendTo\">
+<option value=\"0\">".$langAllUsers."</option>
+<option value=\"1\">".$langProfOnly."</option></select><br><br><input type=\"submit\" name=\"submit\" value=\"Αποστολή\"></input>
 </form></td></tr></tbody></table>";
 
 }
 // Display link back to index.php
-$tool_content .= "<br><center><p><a href=\"index.php\">Επιστροφή</a></p></center>";	
+$tool_content .= "<br><center><p><a href=\"index.php\">".$langReturn."</a></p></center>";	
 
 /*****************************************************************************
 		DISPLAY HTML

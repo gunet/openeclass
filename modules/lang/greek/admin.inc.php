@@ -162,4 +162,90 @@ $langDocument = "Έγγραφα";
 $langDropbox = "Χώρος Ανταλλαγής Αρχείων";
 $langVideo = "Βίντεο";
 $langGroup = "Ομάδες Χρηστών";
+
+// Added by vagpits
+
+// General
+$langReturn = "Επιστροφή";
+$langReturnToSearch = "Επιστροφή στα αποτελέσματα αναζήτησης";
+$langReturnSearch = "Επιστροφή στην αναζήτηση";
+$langDelete = "Διαγραφή";
+$langOtherActions = "Αλλες Ενέργειες";
+$langAdd = "Προσθήκη";
+$langChange = "Αλλαγή";
+$langNoChangeHappened = "Δεν πραγματοποιήθηκε καμία αλλαγή!";
+
+// addfaculte.php
+$langFaculteCatalog = "Κατάλογος Σχολών";
+$langFaculteDepartment = "Σχολή / Τμήμα";
+$langFaculteDepartments = "Σχολές / Τμήματα";
+$langManyExist = "Υπάρχουν";
+$langReturnToAddFaculte = "Επιστροφή στην προσθήκη τμήματος";
+$langFaculteAdd = "Προσθήκη Τμήματος";
+$langAcceptChanges = "Επικύρωση Αλλαγών";
+
+// addusertocours.php
+$langQuickAddDelUserToCours = "Γρήγορη εγγραφή - διαγραφή εκπαιδευομένων - εκπαιδευτών";
+$langQuickAddDelUserToCoursSuccess = "Η διαχείριση χρηστών ολοκληρώθηκε με επιτυχία!";
+$langFormUserManage = "Φόρμα Διαχείρισης Χρηστών";
+$langListNotRegisteredUsers = "Λίστα Μη Εγγεγραμμένων Χρηστών";
+$langStudents = "Εκπαιδευόμενοι";
+$langProfessors = "Εκπαιδευτές";
+$langListRegisteredStudents = "Λίστα Εγγεγραμμένων Εκπαιδευομένων";
+$langListRegisteredProfessors = "Λίστα Εγγεγραμμένων Εκπαιδευτών";
+
+// clarconf.php
+$langClaroConf = "Configuration File του e-Class";
+$langFileUpdatedSuccess = "Το αρχείο ρυθμίσεων τροποποιήθηκε με επιτυχία!";
+$langFileEdit = "Επεξεργασία Αρχείου";
+$langReplaceBackupFile = "Αντικατάσταση του config_backup.php.";
+
+// delcours.php
+$langCourseDel = "Διαγραφή μαθήματος";
+$langCourseDelSuccess = "Το μάθημα διαγράφηκε με επιτυχία!";
+$langCourseDelConfirm = "Επιβεβαίωση Διαγραφής Μαθήματος";
+$langCourseDelConfirm2 = "Θέλετε σίγουρα να διαγράψετε το μάθημα με κωδικό";
+
+// editcours.php
+$langCourseEdit = "Επεξεργασία Μαθήματος";
+$langCourseInfo = "Στοιχεία Μαθήματος";
+$langDepartment = "Τμήμα";
+$langCourseCode = "Κωδικός";
+$langTitle = "Τίτλος";
+$langDidaskon = "Διδάσκων";
+$langQuota = "Όρια αποθηκευτικού χώρου";
+$langCourseStatus = "Κατάσταση Μαθήματος";
+$langCurrentStatus = "Τρέχουσα κατάσταση";
+$langListUsers = "Λίστα Χρηστών";
+$langCourseDelFull = "Συνολική Διαγραφή Μαθήματος";
+$langTakeBackup = "Λήψη Αντιγράφου Ασφαλείας";
+$langStatsCourse = "Στατιστικά Μαθήματος";
+
+// infocours.php
+$langCourseEditSuccess = "Τα στοιχεία του μαθήματος άλλαξαν με επιτυχία!";
+$langCourseInfoEdit = "Αλλαγή Στοιχείων Μαθήματος";
+$langCourseInfos = "Στοιχεία Μαθήματος";
+$langDepartment = "Τμήμα";
+$langUsers = "Χρήστες";
+$langEdit = "Επεξεργασία";
+
+// listreq.php
+$langOpenProfessorRequests = "Ανοικτές Αιτήσεις Καθηγητών";
+$langProfessorRequestClosed = "Η αίτηση του καθηγητή έκλεισε !";
+
+// mailtoprof.php
+$langSendMessageTo = "Αποστολή μηνύματος προς";
+$langAllUsers = "Όλους τους χρήστες";
+$langProfOnly = "Μόνο στους εκπαιδευτές";
+
+// searchcours.php
+$langSearchCourse = "Αναζήτηση Μαθημάτων";
+$langNewSearch = "Νέα Αναζήτηση";
+$langSearchCriteria = "Κριτήρια Αναζήτησης";
+$langSearch = "Αναζήτηση";
+
+// statuscours.php
+$langCourseStatusChangedSuccess = "Ο τύπος πρόσβασης του μαθήματος άλλαγε με επιτυχία!";
+$langCourseStatusChange = "Αλλαγή τύπου πρόσβασης μαθήματος";
+
 ?>

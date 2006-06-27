@@ -125,4 +125,89 @@ $langDropbox = "Dropbox";
 $langVideo = "Video";
 $langGroup = "User Groups";
 
+// Added by vagpits
+
+// General
+$langReturn = "Return";
+$langReturnToSearch = "Return to search results";
+$langReturnSearch = "Return to search";
+$langDelete = "Delete";
+$langOtherActions = "Other Actions";
+$langAdd = "Add";
+$langChange = "Edit";
+$langNoChangeHappened = "No change performed!";
+
+// addfaculte.php
+$langFaculteCatalog = "Department Catalogue";
+$langFaculteDepartment = "Faculte / Department";
+$langFaculteDepartments = "Facultes / Departments";
+$langManyExist = "Exist";
+$langReturnToAddFaculte = "Return to add faculte";
+$langFaculteAdd = "Add Faculte";
+$langAcceptChanges = "Confirm Changes";
+
+// addusertocours.php
+$langQuickAddDelUserToCours = "Quick register - unregister students - professors";
+$langQuickAddDelUserToCoursSuccess = "User management finished with success!";
+$langFormUserManage = "User Management Form";
+$langListNotRegisteredUsers = "Unregistered Users List";
+$langStudents = "Students";
+$langProfessors = "Professors";
+$langListRegisteredStudents = "Registered Students List";
+$langListRegisteredProfessors = "Registered Professors List";
+
+// clarconf.php
+$langClaroConf = "Configuration File of e-Class";
+$langFileUpdatedSuccess = "Config file edited with success!";
+$langFileEdit = "File Edit";
+$langReplaceBackupFile = "Replace config_backup.php.";
+
+// delcours.php
+$langCourseDel = "Delete course";
+$langCourseDelSuccess = "Course deleted with success!";
+$langCourseDelConfirm = "Course Deletion Confirm";
+$langCourseDelConfirm2 = "are you sure you want to delete course with code";
+
+// editcours.php
+$langCourseEdit = "Course Edit";
+$langCourseInfo = "Course Information";
+$langDepartment = "Faculte";
+$langCourseCode = "Code";
+$langTitle = "Title";
+$langDidaskon = "Professor";
+$langQuota = "Quota course";
+$langCourseStatus = "Course Status";
+$langCurrentStatus = "Current situation";
+$langListUsers = "User List";
+$langCourseDelFull = "Full Course Deletion";
+$langTakeBackup = "Backup";
+$langStatsCourse = "Course Statistics";
+
+// infocours.php
+$langCourseEditSuccess = "Course information changed with success!";
+$langCourseInfoEdit = "Change Course Information";
+$langCourseInfos = "Course Information";
+$langDepartment = "Faculte";
+$langUsers = "Users";
+$langEdit = "Edit";
+
+// listreq.php
+$langOpenProfessorRequests = "Open Professors Requests";
+$langProfessorRequestClosed = "Professor request closed !";
+
+// mailtoprof.php
+$langSendMessageTo = "Send mail to";
+$langAllUsers = "All users";
+$langProfOnly = "Just the professors";
+
+// searchcours.php
+$langSearchCourse = "Search Courses";
+$langNewSearch = "New Search";
+$langSearchCriteria = "Search Criteria";
+$langSearch = "Search";
+
+// statuscours.php
+$langCourseStatusChangedSuccess = "Course type changed with success!";
+$langCourseStatusChange = "Change course type";
+
 ?>

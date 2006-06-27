@@ -56,7 +56,7 @@ include '../../include/baseTheme.php';
 // Othewise exit with appropriate message
 @include "check_admin.inc";
 // Define $nameTools
-$nameTools = "Διαγραφή μαθήματος";
+$nameTools = $langCourseDel;
 // Initialise $tool_content
 $tool_content = "";
 
@@ -76,15 +76,15 @@ if (isset($delete) && isset($c))  {
 	mysql_query("DELETE FROM `$mysqlMainDb`.annonces WHERE code_cours='$c'");
 	@mkdir("../../courses/garbage");
 	rename("../../courses/$c", "../../courses/garbage/$c");
-	$tool_content .= "<p>Το μάθημα διαγράφηκε με επιτυχία!</p>";
+	$tool_content .= "<p>".$langCourseDelSuccess."</p>";
 }
 // Display confirmationm message for course deletion
 else {
 	$row = mysql_fetch_array(mysql_query("SELECT * FROM cours WHERE code='$c'"));
 	
-	$tool_content .= "<table width=\"99%\"><caption>Επιβεβαίωση Διαγραφής Μαθήματος</caption><tbody>";
+	$tool_content .= "<table width=\"99%\"><caption>".$langCourseDelConfirm."</caption><tbody>";
 	$tool_content .= "  <tr>
-    <td><br>Θέλετε σίγουρα να διαγράψετε το μάθημα με κωδικό <em>$c</em>;<br><br></td>
+    <td><br>".$langCourseDelConfirm2." <em>$c</em>;<br><br></td>
   </tr>";
 	$tool_content .= "  <tr>
     <td><ul><li><a href=\"".$_SERVER['PHP_SELF']."?c=".$c."&delete=yes".$searchurl."\"><b>Ναι</b></a><br>&nbsp;</li>
@@ -94,16 +94,16 @@ else {
 }
 // If course deleted go back to editcours.php
 if (isset($c) && !isset($delete)) {
-	$tool_content .= "<center><p><a href=\"editcours.php?c=".$c."".$searchurl."\">Επιστροφή</a></p></center>";
+	$tool_content .= "<center><p><a href=\"editcours.php?c=".$c."".$searchurl."\">".$langReturn."</a></p></center>";
 }
 // Go back to listcours.php
 else {
 	// Display link to listcours.php with search results
 	if (isset($search) && ($search=="yes")) {
-		$tool_content .= "<center><p><a href=\"listcours.php?search=yes\">Επιστροφή στα αποτελέσματα αναζήτησης</a></p></center>";
+		$tool_content .= "<center><p><a href=\"listcours.php?search=yes\">".$langReturnToSearch."</a></p></center>";
 	}
 	// Display link to listcours.php
-	$tool_content .= "<center><p><a href=\"listcours.php\">Επιστροφή</a></p></center>";
+	$tool_content .= "<center><p><a href=\"listcours.php\">$langReturn</a></p></center>";
 }
 
 /*****************************************************************************
