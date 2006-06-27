@@ -279,10 +279,12 @@ font-weight: bold;
 	marginX: .5em 0;
 }
 
-
-
 table {
 	border-top: 3px solid #0066cc;
+}
+
+.announce_date{
+font-weight: bold;
 }
 
 //---------------

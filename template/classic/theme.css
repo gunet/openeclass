@@ -182,6 +182,19 @@ body {
 	overflow:visible;
 }
 
+.admin_bar_icon
+{
+	float: left;
+	width: 16px;
+	height: 14px;
+	margin-top:0.5em;
+	margin-left: 0.6em;
+	background-image: url(img/admin-tools.gif);
+	background-repeat: no-repeat;
+	//background-positionf: center left;
+	overflow:visible;
+}
+
 .briefcase_icon
 {
 	float: left;
