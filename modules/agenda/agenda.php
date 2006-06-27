@@ -45,21 +45,19 @@ $action->record('MODULE_ID_AGENDA');
 
 $dateNow = date("d-m-Y / H:i:s",time());
 $nameTools = $langAgenda;
-$local_style1 = '
-    .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
-        padding-left: 15px; padding-right : 15px; }
-    .content {position: relative; left: 25px; }';
-mysql_select_db($dbname);
-
-if ($language == 'greek')
-$lang_editor='gr';
-else
-$lang_editor='en';
-
 $tool_content = "";
 
+mysql_select_db($dbname);
+if (@$addEvent == 1 || (isset($id) && $id)) {
+	if ($language == 'greek')
+	$lang_editor='gr';
+	else
+	$lang_editor='en';
+	//--end if add event
 
-$head_content = <<<hContent
+
+	//--if add event
+	$head_content = <<<hContent
 <script type="text/javascript">
   _editor_url = '$urlAppend/include/htmlarea/';
   _css_url='$urlAppend/css/';
@@ -87,15 +85,15 @@ function initEditor() {
 </script>
 hContent;
 
-$body_action = "onload=\"initEditor()\"";
-
+	$body_action = "onload=\"initEditor()\"";
+}
 $tool_content .= <<<tContent1
 <div id="tool_operations">
         <span class="operation">$langDateNow : $dateNow</span>
     </div>
 
 tContent1;
-//$is_adminOfCourse=true;
+
 if ($is_adminOfCourse) {
 
 	if (isset($submit)&&$submit) {
@@ -170,7 +168,7 @@ if ($is_adminOfCourse) {
                                         '".$perso_query_result[4]."','".$perso_query_result[5]."',
                                         '".$currentCourseID."'
                                 )";
-		
+
 		}
 
 		db_query($perso_sql, $mysqlMainDb);
@@ -179,7 +177,20 @@ if ($is_adminOfCourse) {
 		unset($perso_sql_delete);
 		unset($id);
 		##[END personalisation modification]############
+		
+		$tool_content .=  "
+					<table>
+						<tbody>
+							<tr>
+								<td class=\"success\">
+									$langStoredOK
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<br/>";
 
+		unset($addEvent);
 	}
 	elseif (isset($delete) && $delete) {
 		$sql = "DELETE FROM agenda WHERE id=$id";
@@ -191,15 +202,28 @@ if ($is_adminOfCourse) {
                                                         lesson_code= '$currentCourseID'
                                                 AND
                                                         lesson_event_id='$id' ";
-		
+
 		db_query($perso_sql, $mysqlMainDb);
 		##[END personalisation modification]############
+		
+		$tool_content .=  "
+					<table>
+						<tbody>
+							<tr>
+								<td class=\"success\">
+									$langDeleteOK
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<br/>";
+		unset($addEvent);
 	}
 
 	if (isset($id) && $id) {
-		
+
 		$sql = "SELECT id, titre, contenu, day, hour, lasting FROM agenda WHERE id=$id";
-		
+
 		$result= db_query($sql, $currentCourseID);
 		$myrow = mysql_fetch_array($result);
 		$id = $myrow["id"];
@@ -208,7 +232,7 @@ if ($is_adminOfCourse) {
 		$hourAncient=$myrow["hour"];
 		$dayAncient=$myrow["day"];
 		$lastingAncient=$myrow["lasting"];
-		
+
 	}
 
 	//TODO: add this if logic as it was in the old system
@@ -216,7 +240,9 @@ if ($is_adminOfCourse) {
 		$id="";
 	}
 
-	$tool_content .= <<<tContentForm
+
+	if (@$addEvent == 1 || (isset($id) && $id)) {
+		$tool_content .= <<<tContentForm
 
 
     <p>$langAddEvent</p>
@@ -235,54 +261,54 @@ if ($is_adminOfCourse) {
     </tr>
 tContentForm;
 
-	$day	= date("d");
-	$month	= date("m");
-	$year	= date("Y");
-	$hours	= date("H");
-	$minutes= date("i");
+		$day	= date("d");
+		$month	= date("m");
+		$year	= date("Y");
+		$hours	= date("H");
+		$minutes= date("i");
 
-	if (isset($hourAncient) && $hourAncient) {
-		$hourAncient = split(":", $hourAncient);
-		$hours=$hourAncient[0];
-		$minutes=$hourAncient[1];
-	}
-	if (isset($dayAncient) && $dayAncient) {
-		$dayAncient= split("-",  $dayAncient);
-		$year=$dayAncient[0];
-		$month=$dayAncient[1];
-		$day=$dayAncient[2];
-	}
-	$tool_content .= "
+		if (isset($hourAncient) && $hourAncient) {
+			$hourAncient = split(":", $hourAncient);
+			$hours=$hourAncient[0];
+			$minutes=$hourAncient[1];
+		}
+		if (isset($dayAncient) && $dayAncient) {
+			$dayAncient= split("-",  $dayAncient);
+			$year=$dayAncient[0];
+			$month=$dayAncient[1];
+			$day=$dayAncient[2];
+		}
+		$tool_content .= "
 <tbody>
     <tr>
         <td>
             <select name=\"fday\">
                 <option value=\"$day\">[$day]</option>";
 
-	for ($d=1; $d<=31; $d++) $tool_content .= "<option value='$d'>$d</option>";
+		for ($d=1; $d<=31; $d++) $tool_content .= "<option value='$d'>$d</option>";
 
-	$tool_content .= "
+		$tool_content .= "
     </select>
     </td>
     <td>
     <select name=\"fmonth\">
     <option value=\"$month\">[".$langMonthNames['long'][($month-1)]."]</option>";
 
-	for ($i=1; $i<=12; $i++)
-	$tool_content .= "<option value='$i'>".$langMonthNames['long'][$i-1]."</option>";
-	$tool_content .= "
+		for ($i=1; $i<=12; $i++)
+		$tool_content .= "<option value='$i'>".$langMonthNames['long'][$i-1]."</option>";
+		$tool_content .= "
     </select>
     </td>
     <td>
     <select name=\"fyear\">
     <option value=\"$year\">[$year]</option>";
 
-	$currentyear = date("Y");
-	for ($y = $currentyear - 1; $y <= $currentyear + 2; $y++) {
-		$tool_content .= "<option value=\"$y\">$y</option>\n";
-	}
+		$currentyear = date("Y");
+		for ($y = $currentyear - 1; $y <= $currentyear + 2; $y++) {
+			$tool_content .= "<option value=\"$y\">$y</option>\n";
+		}
 
-	$tool_content .= "
+		$tool_content .= "
     </select>
     </td>
     <td>
@@ -290,10 +316,10 @@ tContentForm;
     <option value=\"$hours\">[$hours]</option>
     <option value=\"--\">--</option>";
 
-	for ($h=0; $h<=24; $h++)
-	$tool_content .= "<option value='$h'>$h</option>";
+		for ($h=0; $h<=24; $h++)
+		$tool_content .= "<option value='$h'>$h</option>";
 
-	$tool_content .= "
+		$tool_content .= "
     </select>
     </td>
     <td>
@@ -301,9 +327,9 @@ tContentForm;
     <option value=\"$minutes\">[$minutes]</option>
     <option value=\"--\">--</option>";
 
-	for ($m=0; $m<=55; $m=$m+5) $tool_content .=  "<option value='$m'>$m</option>";
+		for ($m=0; $m<=55; $m=$m+5) $tool_content .=  "<option value='$m'>$m</option>";
 
-	$tool_content .= "
+		$tool_content .= "
     </select>
     </td>
     <td><input type=\"text\" name=\"lasting\" value=\"".@$myrow['lasting']."\" size=\"8\"></td>
@@ -311,7 +337,7 @@ tContentForm;
     </tbody>
     </table><br>";
 
-	$tool_content .="
+		$tool_content .="
     <table width = \"99%\">
     <thead>
         <tr>
@@ -321,11 +347,11 @@ tContentForm;
     </thead>
     </table><br>";
 
-	if (!isset($contenu)){
-		$contenu="";
-	}
+		if (!isset($contenu)){
+			$contenu="";
+		}
 
-	$tool_content .= "
+		$tool_content .= "
     <table width = \"99%\">
     <thead>
         <tr>
@@ -339,12 +365,23 @@ tContentForm;
             </td></tr>
     </tbody>
 </table>
-    <br><div align=\"right\"><input type=\"Submit\" name=\"submit\" value=\"$langOk\"> </div>
+    <br>
+    <input type=\"Submit\" name=\"submit\" value=\"$langOk\">
 
 </form>
 <br><br><br><br>";
+	}
 
 
+	if (@$addEvent != 1) {
+		$tool_content .= "
+
+			<a href=\"".$_SERVER['PHP_SELF']."?addEvent=1\">".$langAddEvent."</a> | 
+				
+";
+		//This will be a plain link
+		// agenda.php?addEvent=1
+	}
 }
 
 /*---------------------------------------------
@@ -353,12 +390,12 @@ tContentForm;
 $sens =" ASC";
 if (isset($_GET["sens"]) && $_GET["sens"]=="d")
 {
-	$tool_content .=  "<a href=\"".$_SERVER['PHP_SELF']."?sens=\" >$langOldToNew</a>";
+	$tool_content .=  "<a href=\"".$_SERVER['PHP_SELF']."?sens=\" >$langOldToNew</a><br/><br/>";
 	$sens=" DESC ";
 }
 else
 {
-	$tool_content .=  "<p> <a href=\"".$_SERVER['PHP_SELF']."?sens=d\" >$langNewToOld</a></p>";
+	$tool_content .=  "<a href=\"".$_SERVER['PHP_SELF']."?sens=d\" >$langNewToOld</a><br/><br/>";
 }
 $tool_content .=  "<table width=\"99%\" cellpadding=\"2\" cellspacing=\"0\" border=\"0\">";
 $tool_content .=  "<thead><tr><th>$langEvents</th>";
@@ -456,8 +493,10 @@ while ($myrow = mysql_fetch_array($result))
 $tool_content .= "</tbody>";
 $tool_content .=  "</table>";
 
-
-draw($tool_content, 2, 'agenda', $head_content, $body_action);
-
+if(isset($head_content)) {
+	draw($tool_content, 2, 'agenda', $head_content, $body_action);
+} else {
+	draw($tool_content, 2, 'agenda');
+}
 ?>
 
