@@ -208,7 +208,7 @@ if ($is_adminOfCourse) {
 		$hourAncient=$myrow["hour"];
 		$dayAncient=$myrow["day"];
 		$lastingAncient=$myrow["lasting"];
-		dumpArray($myrow);
+		
 	}
 
 	//TODO: add this if logic as it was in the old system
