@@ -139,4 +139,7 @@ $hour48="18h45";
 $hour49="19h00";
 $hour50="19h15";
 $hour51="No specific time";
+
+$langStoredOK="The event was stored";
+$langDeleteOK="The event was deleted";
 ?>
