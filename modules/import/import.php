@@ -48,10 +48,13 @@ DETAIL
 
 $require_current_course = TRUE;
 $langFiles = 'import';
-include('../../include/init.php');
+//include('../../include/init.php');
+include '../../include/baseTheme.php';
 
 $nameTools = $langAddPage;
-begin_page();
+
+$tool_content = "";
+//begin_page();
 
 // Check if user=prof or assistant
 
@@ -74,38 +77,58 @@ if($is_adminOfCourse)
 
 		@copy("$file", "$updir/$file_name")
 		or die("
-		<tr>
-		<td colspan=\"2\">
-			<font face=\"arial, helvetica\" size=2>
+		
+			<p>
 				$langCouldNot
-			</font>
-		</td>
+			</p>
 	</tr>");
+$sql = 'SELECT MAX(`id`) FROM `accueil` ';
+		$res = db_query($sql,$dbname);
+		while ($maxID = mysql_fetch_row($res)) {
+			$mID = $maxID[0];
+		}
+		
+		if($mID<101) $mID = 101;
+		else $mID = $mID+1;
 
-		mysql_query("INSERT INTO accueil VALUES ('NULL',
-				'$nom_fichier',
-				'../../modules/import/import_page.php?link=$file_name \"target=_blank',
-				'../../../images/travaux.png',
-				'1',
-				'0',
-				'../../$currentCourseID/page/$file_name'
-				)");
-
-			echo "
-					<font face=\"arial, helvetica\" size=\"2\">
+		db_query("INSERT INTO accueil VALUES (
+					$mID,
+					'$link_name',
+					'../../courses/$currentCourse/page/$file_name \"target=_blank',
+					'external_link',
+					'1',
+					'0',
+					'',
+					'HTML_PAGE'
+					)", $currentCourse);
+		
+			$tool_content .=  "
+					<table>
+				<tbody>
+					<tr>
+						<td class=\"success\">
 						$langOkSent.
-					</font>";
+					</td>
+					</tr>
+				</tbody>
+			</table>";
 		}
 		else 
 		{
-			die("
-			<tr>
-				<td colspan=\"2\">
-					<font face=\"arial, helvetica\" size=\"2\">
-						$langTooBig.
-					</font>
-				</td>
-			</tr>");
+			$tool_content .= "
+			<table>
+				<tbody>
+					<tr>
+						<td class=\"caution\">
+					
+						$langTooBig
+					
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			";
+			draw($tool_content, 2);
 		}	// else
 	}	// if submit
 
@@ -113,60 +136,63 @@ if($is_adminOfCourse)
 
 else
 	{
-		echo "
-		<font face=\"arial, helvetica\" size=\"2\">
-			$langExplanation
-			<br>
-			<hr noshade size=\"1\">
+		$tool_content .=  "
+		<p>$langExplanation</p>
+			
+			
 		<form method=\"POST\" action=\"$PHP_SELF?submit=yes\" enctype=\"multipart/form-data\">
 			<table>
+			<thead>
 				<tr>
-					<td>
-						<font face=\"arial, helvetica\" size=\"2\">
+					<th>
+						
 							$langSendPage :
-						</font>
-					</td>
+						
+					</th>
 					<td>
 						<input type=\"file\" name=\"file\" size=\"35\" accept=\"text/html\">
 					</td>
 				</tr>
 				<tr>
-					<td>
-						<font face=\"arial, helvetica\" size=\"2\">
+					<th>
+						
 							$langPgTitle :
-						</font>
-					</td>
+						
+					</th>
 					<td>
-						<input type=\"Text\" name=\"nom_fichier\" size=\"50\">
+						<input type=\"Text\" name=\"link_name\" size=\"50\">
 					</td>
 				</tr>
-				<tr>
-					<td colspan=\"2\">
+				</thead>
+				</table>
+				<br>
 						<input type=\"Submit\" name=\"submit\" value=\"$langAddOk\">
-					</td>
-				</tr>
-			</table>
+				
 </form>";
 	}	// else
 }	// if uid=prof_id
 
 else {
 	// Print You are not identified as responsible for this course
-	echo "
-	<font face=\"arial, helvetica\" size=\"2\">
-		$langNotAllowed
-	</font>";
+	$tool_content .=  "
+				<table>
+				<tbody>
+					<tr>
+						<td class=\"caution\">
+					
+						$langNotAllowed
+					
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		
+	";
 }	// else
 
-echo "";
+$tool_content .=  "";
+
+draw($tool_content, 2);
+
 ?>
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2">
-			<hr noshade size="1">
-		</td>
-	</tr>
-</table>
-</body>
-</html>
+
