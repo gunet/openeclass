@@ -45,7 +45,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	global $relPath, $urlServer;
 	global $page_name, $page_navi,$currentCourseID, $siteName, $navigation;
 	global $homePage, $courseHome, $uid;
-	global $langChangeLang, $langUserBriefcase, $switchLangURL;
+	global $langChangeLang, $langUserBriefcase, $langAdmin, $switchLangURL;
 
 	$toolArr = getTools($menuTypeID);
 	//	dumpArray($toolArr);
@@ -123,6 +123,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		} elseif (isset($langUserBriefcase) && $menuTypeID > 0) {
 			$t->set_var('THIRD_BAR_TEXT', $langUserBriefcase);
 			$t->set_var('THIRDBAR_LEFT_ICON', 'briefcase_icon');
+		} elseif ($menuTypeID == 3)  {
+			$t->set_var('THIRD_BAR_TEXT', $langAdmin);
+			$t->set_var('THIRDBAR_LEFT_ICON', 'admin_bar_icon');
 		} else {
 			$t->set_var('THIRD_BAR_TEXT', $langEclass);
 		}
