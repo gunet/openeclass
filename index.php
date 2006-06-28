@@ -282,7 +282,7 @@ if(!empty($submit))
 	
 		##[BEGIN personalisation modification]############
 	
-	if (($userPerso == "yes") && session_is_registered("perso_is_active")) 
+	if ((@$userPerso == "yes") && session_is_registered("perso_is_active")) 
 	{
 		session_register("user_perso_active");
 	}
