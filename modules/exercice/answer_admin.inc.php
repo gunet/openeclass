@@ -604,6 +604,7 @@ $tool_content .="<tr>  <td valign=\"top\">$i</td>";
 
 $tool_content .= "<td valign=\"top\"><input type=\"checkbox\" value=\"1\" name=\"correct[".$i."]\" ";
 if(isset($correct[$i])) $tool_content .= "checked=\"checked\"></td>";
+else $tool_content .= "></td>";
 
 				}
 
