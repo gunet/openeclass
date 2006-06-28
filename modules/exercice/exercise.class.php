@@ -436,6 +436,7 @@ class Exercise
 		// exercise already exists
 		if($id)
 		{
+			mysql_select_db($currentCourseID);
 			$sql="UPDATE `$TBL_EXERCICES` SET titre='$exercise',description='$description',type='$type',".
 				"StartDate='$StartDate',EndDate='$EndDate',TimeConstrain='$TimeConstrain',".
 				"AttemptsAllowed='$AttemptsAllowed',random='$random',active='$active' WHERE id='$id'";
