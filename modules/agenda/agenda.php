@@ -87,13 +87,14 @@ hContent;
 
 	$body_action = "onload=\"initEditor()\"";
 }
+/*
 $tool_content .= <<<tContent1
 <div id="tool_operations">
         <span class="operation">$langDateNow : $dateNow</span>
     </div>
 
 tContent1;
-
+*/
 if ($is_adminOfCourse) {
 
 	if (isset($submit)&&$submit) {
