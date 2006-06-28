@@ -220,7 +220,7 @@ $tool_content .= <<<cData
 		
 		<br><br>
 		
-		<table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
+		<table border="0" align="center" cellpadding="2" cellspacing="2" width="95%">
 	<form>
 cData;
 
