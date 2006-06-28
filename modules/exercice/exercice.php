@@ -145,7 +145,7 @@ else
 $nbrExercises=mysql_num_rows($result);
 
 
-$tool_content .= "<table border=\"0\" align=\"center\" cellpadding=\"2\" cellspacing=\"2\" width=\"100%\"><tr>";
+$tool_content .= "<table border=\"0\" align=\"center\" cellpadding=\"2\" cellspacing=\"2\" width=\"95%\"><tr>";
 
 
 if($is_allowedToEdit)
@@ -198,7 +198,7 @@ $tool_content .= <<<cData
 	</td>
 	</tr>
 	</table>
-	<table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
+	<table border="0" align="center" cellpadding="2" cellspacing="2" width="95%">
 cData;
 
 // shows the title bar only for the administrator
