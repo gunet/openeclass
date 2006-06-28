@@ -150,7 +150,8 @@ cData;
 	if(isset($exerciseId) && $exerciseId == -1) 
 		$tool_content .= "selected=\"selected\""; 
 	$tool_content .= ">-- ".$langOrphanQuestions." --</option>";
-
+	
+	mysql_select_db($currentCourseID);
 	$sql="SELECT id,titre FROM `$TBL_EXERCICES` WHERE id<>'$fromExercise' ORDER BY id";
 	$result=mysql_query($sql) or die("Error : SELECT at line ".__LINE__);
 
@@ -173,7 +174,9 @@ $tool_content .= <<<cData
 cData;
 
 	@$from=$page*$limitQuestPage;
-
+	
+	//mysql_select_db($currentCourseID);
+	
 	// if we have selected an exercise in the list-box 'Filter'
 	if(isset($exerciseId) && $exerciseId > 0)
 	{
@@ -361,4 +364,5 @@ else
 	$tool_content .= $langNotAllowed;
 }
 
+draw($tool_content, 2);
 ?>
