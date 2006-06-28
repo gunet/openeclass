@@ -131,7 +131,7 @@ if($is_allowedToEdit)
 $tool_content .= <<<cData
 	<form method="get" action="${PHP_SELF}">
 	<input type="hidden" name="fromExercise" value="@$fromExercise">
-	<table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
+	<table border="0" align="center" cellpadding="2" cellspacing="2" width="95%">
 	<tr>
 cData;
 	
@@ -209,7 +209,7 @@ cData;
 
 $tool_content .= $fromExercise?2:3;
 
-$tool_content .= "\"><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr><td>";
+$tool_content .= "\"><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"95%\"><tr><td>";
 
 	if(isset($fromExercise))
 	{

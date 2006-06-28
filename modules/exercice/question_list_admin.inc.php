@@ -72,7 +72,7 @@ $tool_content .= <<<cData
 	<br><br>
 	<b>${langQuestionList}</b>
 	
-<table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
+<table border="0" align="center" cellpadding="2" cellspacing="2" width="95%">
 cData;
 
 if($nbrQuestions)

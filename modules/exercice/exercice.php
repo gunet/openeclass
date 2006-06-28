@@ -250,7 +250,7 @@ $tool_content .= "<tr>";
 	$page_temp = ($i+(@$page*$limitExPage)).'.';
   $tool_content .= <<<cData
 	  <td width="60%">
-		<table border="0" cellpadding="0" cellspacing="0" width="100%">
+		<table border="0" cellpadding="0" cellspacing="0" width="95%">
 		<tr>
 		<td width="20" align="right">${page_temp}</td>
 		  <td width="1">&nbsp;</td>
@@ -308,7 +308,7 @@ else
 	$page_offset_temp = @($i+($page*$limitExPage)).'.';
 	$tool_content .= <<<cData
 	  <td width="100%">
-		<table border="0" cellpadding="0" cellspacing="0" width="100%">
+		<table border="0" cellpadding="0" cellspacing="0" width="95%">
 		<tr>
 			<td width="20" align="right">${page_offset_temp}</td>
 		  <td width="1">&nbsp;</td>
