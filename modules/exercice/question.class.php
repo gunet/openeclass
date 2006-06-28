@@ -231,7 +231,7 @@ class Question
 	 */
 	function updateType($type)
 	{
-		global $TBL_REPONSES;
+		global $TBL_REPONSES, $currentCourseID;
 
 		// if we really change the type
 		if($type != $this->type)
@@ -240,6 +240,7 @@ class Question
 			if(!in_array($this->type,array(UNIQUE_ANSWER,MULTIPLE_ANSWER)) || !in_array($type,array(UNIQUE_ANSWER,MULTIPLE_ANSWER)))
 			{
 				// removes old answers
+				mysql_select_db($currentCourseID);
 				$sql="DELETE FROM `$TBL_REPONSES` WHERE question_id='".$this->id."'";
 				mysql_query($sql) or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
 			}
