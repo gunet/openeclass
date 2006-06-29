@@ -115,13 +115,13 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 
 
-		if (isset($uid) && strlen($nom) > 0) {
+		if (session_is_registered('uid') && strlen($nom) > 0) {
 			$t->set_var('LANG_USER', $langUser);
 			$t->set_var('USER_NAME', $prenom);
 			$t->set_var('USER_SURNAME', $nom);
 		}
 
-		if ($menuTypeID > 0) {
+		if (session_is_registered('uid')) {
 			$t->set_var('LANG_LOGOUT', $langLogout);
 			$t->set_var('LOGOUT_CLASS_ICON', 'logout_icon');
 		}
