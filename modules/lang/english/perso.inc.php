@@ -28,7 +28,7 @@
       +----------------------------------------------------------------------+
 
  */
-$langPersonalisedBriefcase = "Personalised portofolio";
+
 $langMyPersoLessons = "MY LESSONS";
 $langMyPersoDeadlines = "MY DEADLINES";
 $langMyPersoAnnouncements = "MY ANNOUNCEMENTS";

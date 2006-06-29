@@ -80,8 +80,6 @@ $langCopyright = "Πληροφορίες Πνευματικών Δικαιωμάτων";
 $langUserLogin = "Σύνδεση χρήστη";
 $langWelcomeToEclass = "Καλωσορίσατε στο e-Class!";
 $langAnonUser = "Ανώνυμος";
-$langUserBriefcase = "Χαρτοφυλάκιο χρήστη";
-
 
 $langSearch = "Αναζήτηση";
 $langEclass = "Πλατφόρμα ασύγχρονης τηλεκπαίδευσης e-Class";

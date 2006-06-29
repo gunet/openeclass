@@ -28,7 +28,7 @@
       +----------------------------------------------------------------------+
 
  */
-$langPersonalisedBriefcase = "пЯОСЫПИЙЭ ВАЯТОЖУКэЙИО";
+
 $langMyPersoLessons = "та лахглата лоу";
 $langMyPersoDeadlines = "ои диояиес лоу";
 $langMyPersoAnnouncements = "ои текеутаиес лоу амайоимысеис";
