@@ -1,8 +1,7 @@
 <?
-$langCopyright = "Πληροφορίες Πνευματικών Δικαιωμάτων";
 
 $langCopyrightNotice = '
-GUNet e-Class © 2003 - 2005 <a href="http://www.gunet.gr/" target=_blank>Ακαδημαϊκό Διαδίκτυο GUNet</a>.<br>&nbsp;<br>
+GUNet e-Class © 2003 - 2006, <a href="http://www.gunet.gr/" target=_blank>Ακαδημαϊκό Διαδίκτυο GUNet</a>.<br>&nbsp;<br>
 Η πλατφόρμα GUNet e-Class αναπτύχθηκε και υποστηρίζεται από την Ομάδα Ασύγχρονης Τηλεκπαίδευσης του 
 Ακαδημαϊκού Διαδικτύου GUNet. Η πλατφόρμα στον αρχικό της σχεδιασμό βασίστηκε στο σύστημα
 classroom online  © 2001, 2002, 2003 του Universit&eacute; catholique de Louvain (UCL).<br>&nbsp;<br>
