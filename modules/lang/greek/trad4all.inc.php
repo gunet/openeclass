@@ -84,7 +84,7 @@ $langLoginRequired = '
 
 $langUserBriefcase = "Χαρτοφυλάκιο χρήστη";
 $langPersonalisedBriefcase = "Προσωπικό χαρτοφυλάκιο";
-
+$langEclass = "Πλατφόρμα ασύγχρονης τηλεκπαίδευσης e-Class";
 $langCopyrightFooter="Πληροφορίες πνευματικών δικαιωμάτων";
 
 $langGreek="Ελληνικά";

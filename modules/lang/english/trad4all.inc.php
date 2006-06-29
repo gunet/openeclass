@@ -97,7 +97,7 @@ $langLogout = "Logout";
 
 $langUserBriefcase = "User portofolio";
 $langPersonalisedBriefcase = "Personalised portofolio";
-
+$langEclass = "e-Class learning management system";
 $langCopyrightFooter="Copyright notice";
 
 $langGreek="Greek";
