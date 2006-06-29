@@ -149,7 +149,7 @@ echo "<h3>".stripslashes($exerciseTitle)." : ".$langResult."</h3>".
 		}
 $iplus = $i+1;
 echo <<<cData
-	<table width="100%" border="0" cellpadding="3" cellspacing="2">
+	<table width="95%" border="0" cellpadding="3" cellspacing="2">
 		<tr bgcolor="#E6E6E6">
 		  <td colspan="${colspan}">
 				$langQuestion $iplus
@@ -469,7 +469,7 @@ if ($OnTime) { // exercise time limit hasn't expired
 
 
 echo <<<cData
-	<table width="100%" border="0" cellpadding="3" cellspacing="2">
+	<table width="95%" border="0" cellpadding="3" cellspacing="2">
 	<tr>
 	  <td align="center">
 		<b>${langYourTotalScore} ${totalScore}/${totalWeighting} !</b>

@@ -425,7 +425,7 @@ cData;
 				echo <<<cData
 					<tr>
 				  <td colspan="2">
-					<table border="0" cellpadding="0" cellspacing="0" width="100%">
+					<table border="0" cellpadding="0" cellspacing="0" width="95%">
 					<tr>
 					  <td width="40%" valign="top"><b>${cpt2}.</b> ${answer}</td>
 					  <td width="20%" align="center">&nbsp;&nbsp;<select name="choice[${questionId}][${answerId}]">
@@ -459,7 +459,7 @@ cData;
 					{
 /////////////////////////////////////////////////////////////////////////////////
 		echo "<tr><td colspan=\"2\">".
-			"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">".
+			"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"95%\">".
 			"<tr><td width=\"60%\" colspan=\"2\">&nbsp;</td><td width=\"40%\" align=\"right\" valign=\"top\">".
 			"<b>".$Select[$cpt2]['Lettre'].".</b> ".$Select[$cpt2]['Reponse']."</td></tr></table></td></tr>";
 /////////////////////////////////////////////////////////////////////////////////
