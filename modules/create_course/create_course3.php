@@ -76,20 +76,26 @@ function first_step()
 </script>";
 
 
+
 //ektypwnei ena <td> </td> me hyperlink pros to help me vash kapoio $topic
-function help ($topic)
-{
-    echo"
-    <td valign=\"middle\">
-        <a href=\"../help/help.php?topic=$topic\" onclick=\"window.open('../help/help.php?topic=$topic','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a></td>";
-}
+/*
+	"
+	<td valign=\"middle\">
+		<a href=\"../help/help.php?topic=$topic\" onclick=\"window.open('../help/help.php?topic=$topic','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
+	</td>
+	"
+*/
 
 
-include '../../include/init.php';
+//include '../../include/init.php';
+include '../../include/baseTheme.php';
+
+$tool_content = "";
+
 
 $titulaire_probable="$prenom $nom";
 $local_style = "input { font-size: 12px; }";
-begin_page($langCreateSite);
+//begin_page($langCreateSite);
 
 //arxikopoihsh metavlhtwn gia na mhn vgazei notices
 $course_prerequisites = "";
@@ -99,7 +105,7 @@ $course_keywords = "";
 
 ###################### FORM  #########################################
 if(!isset($_GET["finish_create_course"])) {
-    echo "
+    $tool_content .=  "
 <!-- S T E P  1   [start] -->
 
 <tr bgcolor=\"$color1\">
@@ -113,7 +119,7 @@ if(!isset($_GET["finish_create_course"])) {
                                 <font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourse</font>
                             </td>
                             <td align=\"right\">
-                                <font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourseStep&nbsp;1&nbsp;$langCreateCourseStep2&nbsp;3</font>
+                                <font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourseStep&nbsp;3&nbsp;$langCreateCourseStep2&nbsp;3</font>
                             </td>
                         </tr>
                     </table>
@@ -171,11 +177,11 @@ if(!isset($_GET["finish_create_course"])) {
     </fieldset>
     $langFieldsRequAsterisk<br>$langAccessType
     </font>
-    </td>";
-    help("CreateCourse_formvisible");
-
-        echo "
-          </tr>
+    </td>
+    <td valign=\"middle\">
+		<a href=\"../help/help.php?topic=CreateCourse_formvisible\" onclick=\"window.open('../help/help.php?topic=CreateCourse_formvisible','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
+	</td>
+    </tr>
       <tr>
       <td valign=\"top\" align=\"right\">
       <font face=\"arial, helvetica\" size=\"2\"><b>Υποσυστήματα:</b></font>
@@ -210,9 +216,10 @@ if(!isset($_GET["finish_create_course"])) {
       </table>
       <br>$langSubsystems
       </td>
-      ";
-       help("CreateCourse_subsystems");
-echo "</td></tr>
+      <td valign=\"middle\">
+		<a href=\"../help/help.php?topic=CreateCourse_subsystems\" onclick=\"window.open('../help/help.php?topic=CreateCourse_subsystems','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
+	</td>
+	</tr>
     <tr><td align=\"right\"><font face=\"arial, helvetica\" size=\"2\"><b>$langLn:</b></font></td>
     <td>
 <select name=\"languageCourse\">";
@@ -224,23 +231,23 @@ while ($entries = readdir($handle)) {
     if ($entries=='.'||$entries=='..' || $entries=='CVS')
         continue;
     if (is_dir($dirname.$entries)) {
-        echo "<option value=\"$entries\"";
+        $tool_content .=  "<option value=\"$entries\"";
         if ($entries == $language)
-            echo " selected ";
-        echo ">";
+            $tool_content .=  " selected ";
+        $tool_content .=  ">";
         if (!empty($langNameOfLang[$entries]) && $langNameOfLang[$entries]!="" && $langNameOfLang[$entries]!=$entries)
-        echo "$langNameOfLang[$entries] - ";
-        echo "$entries
+        $tool_content .=  "$langNameOfLang[$entries] - ";
+        $tool_content .=  "$entries
         </option>";
     }
 }
 closedir($handle);
 
-echo "</select><br><font face=\"arial, helvetica\" size=\"2\">$langLanguageTip</font></td>";
-
-help("CreateCourse_lang");
-
-echo "</tr>
+$tool_content .=  "</select><br><font face=\"arial, helvetica\" size=\"2\">$langLanguageTip</font></td>
+	<td valign=\"middle\">
+		<a href=\"../help/help.php?topic=CreateCourse_lang\" onclick=\"window.open('../help/help.php?topic=CreateCourse_lang','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
+	</td>
+	</tr>
     <tr><td>&nbsp;</td>
         <td align=\"left\">
             <input type=\"button\" name=\"button\" value=\"$langPreviousStep\" onclick=\"previous_step();\">
@@ -275,7 +282,7 @@ else {
     $language=$languageCourse;
     @include("../lang/$language/create_course.inc.php");
     if(empty($intitule) OR empty($repertoire)) {
-        echo "<tr bgcolor=\"$color2\" height=\"400\">
+        $tool_content .=  "<tr bgcolor=\"$color2\" height=\"400\">
         <td bgcolor=\"$color2\" colspan=\"2\" valign=\"top\">
             <br>
             <font face=\"arial, helvetica\" size=\"2\">
@@ -298,7 +305,7 @@ else {
         while ($cnt < $dbNumber) {
             $dbCode = mysql_db_name($dbList, $cnt);
             if ($dbCode == $repertoire) {
-            echo "<tr bgcolor=\"$color2\" height=\"400\">
+            $tool_content .=  "<tr bgcolor=\"$color2\" height=\"400\">
             <td colspan=\"2\" valign=\"top\">
             <font face=\"arial, helvetica\" size=\"2\">
                 $langCodeTaken.
@@ -2669,7 +2676,7 @@ fwrite($fd, "$string");
 $status[$repertoire]=1;
 session_register("status");
 
-echo "<tr bgcolor=$color2>
+$tool_content .=  "<tr bgcolor=$color2>
     <td colspan=3>
     <font face=\"arial, helvetica\" size=2>
     $langJustCreated $repertoire<br><br><br>
@@ -2681,7 +2688,10 @@ echo "<tr bgcolor=$color2>
 
 } // if all fields fulfilled
 
-echo "</table>";
+$tool_content .=  "</table>
+</body>
+</html>
+";
 
 ######################   Function list  #######################################
 
@@ -2722,6 +2732,6 @@ function DefaultScoring($ChoiceCount,$Z,$weight) {
 }//End of function DefaultScoring
 
 
+draw($tool_content, '1', '', $local_head);
+
 ?>
-</body>
-</html>

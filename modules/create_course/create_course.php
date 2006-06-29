@@ -62,6 +62,8 @@ $require_prof = TRUE;
 
 $langFiles = array('create_course', 'opencours');
 
+$require_help = TRUE;
+$helpTopic = 'create_course';
 
 
 $local_head = "

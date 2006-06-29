@@ -69,24 +69,33 @@ function previous_step()
 }
 </script>";
 
+
+
+
+
 //ektypwnei ena <td> </td> me hyperlink pros to help me vash kapoio $topic
-function help ($topic)
-{
-	echo"
+/*
+	"
 	<td valign=\"middle\">
-		<a href=\"../help/help.php?topic=$topic\" onclick=\"window.open('../help/help.php?topic=$topic','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a></td>";
-}
+		<a href=\"../help/help.php?topic=$topic\" onclick=\"window.open('../help/help.php?topic=$topic','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
+	</td>
+	"
+*/
 
 
-include '../../include/init.php';
+//include '../../include/init.php';
+include '../../include/baseTheme.php';
+
+$tool_content = "";
+
 
 $titulaire_probable="$prenom $nom";
 $local_style = "input { font-size: 12px; }";
-begin_page($langCreateSite);
+//begin_page($langCreateSite);
 
 ###################### FORM  #########################################
 
-    echo "
+    $tool_content .= "
 <!-- S T E P  2   [start] -->    
 
 <tr bgcolor=\"$color1\">
@@ -136,9 +145,8 @@ begin_page($langCreateSite);
 					<font face=\"arial, helvetica\" size=\"2\">
 				<textarea name=\"course_objectives\" cols=\"30\" rows=\"5\"></textarea>$langFieldsRequAsterisk<br>$langObjectives</font>
 				</td>
-				<td>";
-					help("CreateCourse_course_objectives");
-echo "					
+				<td valign=\"middle\">
+					<a href=\"../help/help.php?topic=CreateCourse_course_objectives\" onclick=\"window.open('../help/help.php?topic=CreateCourse_course_objectives','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>					
 				</td>
 			</tr>
 			<tr>				
@@ -148,9 +156,8 @@ echo "
 				<td valign=\"top\">
 					<textarea name=\"course_intronote\" cols=\"30\" rows=\"5\"></textarea><br>$langIntroNote
 				</td>
-				<td>";
-					help("CreateCourse_course_intronote");
-echo "
+				<td>
+					<a href=\"../help/help.php?topic=CreateCourse_course_intronote\" onclick=\"window.open('../help/help.php?topic=CreateCourse_course_intronote','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
 				</td>
 			</tr>
 		</table>
@@ -168,8 +175,10 @@ echo "
 	</td>
 	</tr>
 	</table>
-</form>";
+</form>
+</body>
+</html>";
+
+draw($tool_content, '1', '', $local_head);
 
 ?>
-</body>
-</html>
