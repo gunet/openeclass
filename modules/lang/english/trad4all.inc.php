@@ -99,4 +99,7 @@ $langUserBriefcase = "User portofolio";
 $langPersonalisedBriefcase = "Personalised portofolio";
 
 $langCopyrightFooter="Copyright notice";
+
+$langGreek="Greek";
+$langEnglish="English";
 ?>

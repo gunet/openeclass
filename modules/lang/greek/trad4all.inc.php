@@ -87,4 +87,6 @@ $langPersonalisedBriefcase = "Προσωπικό χαρτοφυλάκιο";
 
 $langCopyrightFooter="Πληροφορίες πνευματικών δικαιωμάτων";
 
+$langGreek="Ελληνικά";
+$langEnglish="Αγγλικά";
 ?>
