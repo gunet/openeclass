@@ -59,7 +59,11 @@
 $require_current_course = TRUE;
 $langFiles = 'document';
 
-include '../../include/init.php';
+//include '../../include/init.php';
+include '../../include/baseTheme.php';
+$tool_content = "";
+
+
 include 'forcedownload.php';
 
 $nameTools = $langDoc;
@@ -124,9 +128,9 @@ function confirmation (name)
 stripSubmitValue($_POST);
 stripSubmitValue($_GET);
 
-begin_page();
+//begin_page();
 
-echo '</td></tr></table>';
+//$tool_content .=  '</td></tr></table>';
 
 /*****************************************************************************/
 
@@ -222,7 +226,8 @@ if($is_adminOfCourse)
             //(aftos einai ousiastika o elegxos if_exists dedomenou tou oti to onoma tou arxeiou sto filesystem
             //einai monadiko)
             
-            $result = mysql_query ("SELECT filename FROM document WHERE filename LIKE '%$fileName%'");
+            $result = mysql_query ("SELECT filename FROM document WHERE filename LIKE '%$uploadPath/$fileName%'");
+            $tool_content .= "SELECT filename FROM document WHERE filename LIKE '%$fileName%'";
         	$row = mysql_fetch_array($result);
         	
         	if (!empty($row['filename'])) 
@@ -289,9 +294,9 @@ if($is_adminOfCourse)
 		            
 		            
 		            //debuging commands
-		            /*echo $query;
-		            echo "<br><br>";
-		            echo "Copy: $userFile to $baseWorkDir$uploadPath/$safe_fileName<br><br>";
+		            /*$tool_content .=  $query;
+		            $tool_content .=  "<br><br>";
+		            $tool_content .=  "Copy: $userFile to $baseWorkDir$uploadPath/$safe_fileName<br><br>";
 		            exit;*/
 		            
 		            
@@ -339,7 +344,7 @@ if($is_adminOfCourse)
 
     if (isset($moveTo))
     {
-        if (move($baseWorkDir.$source,$baseWorkDir.$moveTo)) {
+        if (move($baseWorkDir."/".$source,$baseWorkDir.$moveTo)) {
             update_db_info("update", $source, $moveTo."/".basename($source));
             $dialogBox = $langDirMv;
         }
@@ -368,10 +373,10 @@ if($is_adminOfCourse)
     	$res = mysql_fetch_array($result);
     	if(!empty($res))
     	{
-    		$moveFileName = $res['filename'];
+    		$moveFileNameAlias = $res['filename'];
     	}
     	
-        @$dialogBox .= form_dir_list("source", $moveFileName, "moveTo", $baseWorkDir);
+        @$dialogBox .= "<strong>$moveFileNameAlias</strong>".form_dir_list("source", $moveFileName, "moveTo", $baseWorkDir);
     }
 
 
@@ -431,7 +436,7 @@ if($is_adminOfCourse)
     {
 
 		$query =  "UPDATE ".$dbTable." SET filename=\"".$renameTo2."\" WHERE path=\"".$sourceFile."\"";
-		echo "<br><br>".$query."<br><br>";
+		//$tool_content .=  "<br><br>".$query."<br><br>";
 		mysql_query($query);
 		
 		$dialogBox = "<b>$langElRen</b>";
@@ -651,7 +656,7 @@ if($is_adminOfCourse)
         $oldComment='';
         /*** Retrieve the old comment and metadata ***/
                 
-        $query = "SELECT * FROM $dbTable WHERE path LIKE \"%".$comment."%\"";
+        $query = "SELECT * FROM $dbTable WHERE path LIKE '%".$comment."%'";
         $result = mysql_query ($query);
        	
         $row = mysql_fetch_array($result);
@@ -714,7 +719,7 @@ if($is_adminOfCourse)
     	
 		$dialogBox .= "		$langCopyrighted&nbsp;:<br><input name=\"file_copyrighted\" type=\"radio\" value=\"0\" "; if ($oldCopyrighted=="0") $dialogBox .= " checked=\"checked\" "; $dialogBox .= " /> $langCopyrightedUnknown
     					   							<input name=\"file_copyrighted\" type=\"radio\" value=\"2\" "; if ($oldCopyrighted=="2") $dialogBox .= " checked=\"checked\" "; $dialogBox .= " /> $langCopyrightedFree
-  						   							<input name=\"file_copyrighted\" type=\"radio\" value=\"1\" "; if ($oldCopyrighted=="0") $dialogBox .= " checked=\"checked\" "; $dialogBox .= "/> $langCopyrightedNotFree
+  						   							<input name=\"file_copyrighted\" type=\"radio\" value=\"1\" "; if ($oldCopyrighted=="1") $dialogBox .= " checked=\"checked\" "; $dialogBox .= "/> $langCopyrightedNotFree
   						   							
   						   							
   		<br><input type=\"hidden\" size=\"80\" name=\"file_oldLanguage\" value=\"$oldLanguage\">";
@@ -1138,7 +1143,7 @@ if (isset($attribute))
 
 
 } else {
-	echo $langInvalidDir;
+	$tool_content .=  $langInvalidDir;
 }
 
 
@@ -1158,23 +1163,40 @@ if($is_adminOfCourse) {
     $cmdCurDirPath = rawurlencode($curDirPath);
     $cmdParentDir  = rawurlencode($parentDir);
 
-    ?>
-    <div class="fileman" align="center">
-    <table width="100%" border="1" cellspacing="2" cellpadding="4">
-    <tr>
-        <td>&nbsp;</td>
-        <td align="right">
-        <a href="../help/help.php?topic=Doc&language=<?= $language?>" 
-        onClick="window.open('../help/help.php?topic=Doc&language=<?= $language?>','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10'); 
-        return false;">
-        <font size=2 face="arial, helvetica"><?= $langHelp ?></font>
+    $tool_content .= "
+    <div class=\"fileman\" align=\"center\">
+    <table width=\"99%\" border=\"0\" cellspacing=\"2\" cellpadding=\"4\">
+    <tr>";
+    
+    /*------------------------------------------------------------------------------------------------------------------------------
+        UPLOAD SECTION (ektypwnei th forma me ta stoixeia gia upload eggrafou + ola ta pedia gia ta metadata symfwna me Dublin Core)
+    -------------------------------------------------------------------------------------------------------------------------------*/
+    $tool_content .=  "<!-- upload  -->
+    <td align=\"left\">
+    	<a href=\"upload.php?uploadPath=$curDirPath\">$langDownloadFile</a>
+   	&nbsp;|&nbsp;";
+    
+    /*----------------------------------------
+        Create new folder
+    --------------------------------------*/
+    $tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?createDir=".$cmdCurDirPath."\">$langCreateDir</small></a>
+    </td>";
+  	
+  	/*----------------------------------------
+        HELP
+    --------------------------------------*/
+  	$tool_content .=  "
+        <td align=\"right\">
+        <a href=\"../help/help.php?topic=Doc&language=$language\" 
+        onClick=\"window.open('../help/help.php?topic=Doc&language=$language','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10'); 
+        return false;\">
+        <font size=2 face=\"arial, helvetica\">$langHelp</font>
         </a>
         </td>
     </tr>
 
-    <tr>
+    <tr>";
 
-    <?php
 
 
     /*----------------------------------------
@@ -1182,91 +1204,83 @@ if($is_adminOfCourse) {
     --------------------------------------*/
     if (!empty($dialogBox))
     {
-        echo "<td bgcolor=\"#9999FF\">";
-        echo "<!-- dialog box -->";
-        echo $dialogBox;
-        echo "</td>";
+        $tool_content .=  "<td class=\"success\" colspan=\"2\">";
+        $tool_content .=  "<!-- dialog box -->";
+        $tool_content .=  $dialogBox;
+        $tool_content .=  "</td>";
     }
     else
     {
-        echo "<td>\n<!-- dialog box -->\n&nbsp;\n</td>\n";
+        $tool_content .=  "<td colspan=\"2\">\n<!-- dialog box -->\n&nbsp;\n</td>\n";
     }
 
 
-    /*------------------------------------------------------------------------------------------------------------------------------
-        UPLOAD SECTION (ektypwnei th forma me ta stoixeia gia upload eggrafou + ola ta pedia gia ta metadata symfwna me Dublin Core)
-    -------------------------------------------------------------------------------------------------------------------------------*/
-    echo "<!-- upload  -->
-    <td align=\"right\">
-    	<a href=\"upload.php?fileCreator=$prenom $nom&uploadPath=$curDirPath\">$langDownloadFile</a>
-  	</td>\n";
-
-    ?>
-
+	$tool_content .="
     </tr>
     </table>
     
-    <table width="100%" border="1" cellspacing="2">
-    <?php
+    <br>
+    
+    <table width=\"99%\" border=\"1\" cellspacing=\"2\">";
+
 
 
     /*----------------------------------------
         CURRENT DIRECTORY LINE
     --------------------------------------*/
 
-    echo "<tr>\n";
-    echo "<td colspan=8>\n";
+    $tool_content .=  "<tr>\n";
+    $tool_content .=  "<td colspan=8>\n";
 
     /*** go to parent directory ***/
     if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
     {
-        echo "<!-- parent dir -->\n";
-        echo "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdParentDir."\">\n";
-        echo "<IMG src=\"img/parent.gif\" border=0 align=\"absbottom\" hspace=5>\n";
-        echo "<small>$langUp</small>\n";
-        echo "</a>\n";
+        $tool_content .=  "<!-- parent dir -->\n";
+        $tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdParentDir."\">\n";
+        $tool_content .=  "<IMG src=\"img/parent.gif\" border=0 align=\"absbottom\" hspace=5>\n";
+        $tool_content .=  "<small>$langUp</small>\n";
+        $tool_content .=  "</a>\n";
     }
 
 
     /*** create directory ***/
-    echo "<!-- create dir -->\n";
-    echo "<a href=\"$_SERVER[PHP_SELF]?createDir=".$cmdCurDirPath."\">";
-    echo "<IMG src=\"img/dossier.gif\" border=0 align=\"absbottom\" hspace=5>";
-    echo "<small> $langCreateDir</small>";
-    echo "</a>";
+    /*$tool_content .=  "<!-- create dir -->\n";
+    $tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?createDir=".$cmdCurDirPath."\">";
+    $tool_content .=  "<IMG src=\"img/dossier.gif\" border=0 align=\"absbottom\" hspace=5>";
+    $tool_content .=  "<small> $langCreateDir</small>";
+    $tool_content .=  "</a>";*/
 
-    echo "</tr>\n";
-    echo "</td>\n";
+    $tool_content .=  "</tr>\n";
+    $tool_content .=  "</td>\n";
 
 
     if ($curDirName) // if the $curDirName is empty, we're in the root point and there is'nt a dir name to display
     {
         /*** current directory ***/
-        echo "<!-- current dir name -->\n";
-        echo "<tr>\n";
-        echo "<td colspan=\"8\" align=\"left\" bgcolor=\"#000066\">\n";
-        echo "<img src=\"img/opendir.gif\" align=\"absbottom\" vspace=2 hspace=5>\n";
-        echo "<font color=\"#CCCCCC\">".$dspCurDirName."</font>\n";
-        echo "</td>\n";
-        echo "</tr>\n";
+        $tool_content .=  "<!-- current dir name -->\n";
+        $tool_content .=  "<tr>\n";
+        $tool_content .=  "<td colspan=\"8\" align=\"left\" bgcolor=\"#000066\">\n";
+        $tool_content .=  "<img src=\"img/opendir.gif\" align=\"absbottom\" vspace=2 hspace=5>\n";
+        $tool_content .=  "<font color=\"#CCCCCC\">".$dspCurDirName."</font>\n";
+        $tool_content .=  "</td>\n";
+        $tool_content .=  "</tr>\n";
     }
 
-    ?>
 
 
-    <!-- command list -->
-
-    <tr bgcolor="<?php echo "$color2" ?>"  align="center" valign="top">
-    <?
-    echo "<td>$langName</td>
-    <td>$langSize</td>
-    <td>$langDate</td>
-    <td>$langDelete</td>
-    <td>$langMove</td>
-    <td>$langRename</td>
-    <td>$langEditMeta</td>
-    <td>$langVisible</td>
-    </tr>";
+    $tool_content .= "<!-- command list -->
+    <thead>
+    	<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">
+			<th>$langName</th>
+		    <th>$langSize</th>
+		    <th>$langDate</th>
+		    <th>$langDelete</th>
+		    <th>$langMove</th>
+		    <th>$langRename</th>
+		    <th>$langEditMeta</th>
+		    <th>$langVisible</th>
+    	</tr>
+    </thead>";
 
 
     
@@ -1290,43 +1304,43 @@ if($is_adminOfCourse) {
                 $style="";
             }
 
-            echo "<tr align=\"center\">\n";
-            echo "<td align=\"left\">\n";
-            echo "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style.">\n";
-            echo "<img src=\"img/dossier.gif\" border=0 hspace=5>\n";
-            echo $dspDirName."\n";
-            echo "</a>\n";
+            $tool_content .=  "<tr align=\"center\">\n";
+            $tool_content .=  "<td align=\"left\">\n";
+            $tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style.">\n";
+            $tool_content .=  "<img src=\"img/dossier.gif\" border=0 hspace=5>\n";
+            $tool_content .=  $dspDirName."\n";
+            $tool_content .=  "</a>\n";
 
             /*** skip display date and time ***/
-            echo "<td>&nbsp;</td>\n";
-            echo "<td>&nbsp;</td>\n";
+            $tool_content .=  "<td>&nbsp;</td>\n";
+            $tool_content .=  "<td>&nbsp;</td>\n";
 
             /*** delete command ***/
-            echo "<td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdDirName."\" onClick=\"return confirmation('".addslashes($dspDirName)."');\">
+            $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdDirName."\" onClick=\"return confirmation('".addslashes($dspDirName)."');\">
 		<img src=\"./img/supprimer.gif\" border=0></a></td>\n";
             /*** copy command ***/
-            echo "<td><a href=\"$_SERVER[PHP_SELF]?move=".$cmdDirName."\">
+            $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?move=".$cmdDirName."\">
 		<img src=\"img/deplacer.gif\" border=0></a></td>\n";
             /*** rename command ***/
-            echo "<td><a href=\"$_SERVER[PHP_SELF]?rename=".$cmdDirName."\">
+            $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?rename=".$cmdDirName."\">
 		<img src=\"img/renommer.gif\" border=0></a></td>\n";
             /*** comment command ***/
-            echo "<td><a href=\"$_SERVER[PHP_SELF]?comment=".$cmdDirName."\">
+            $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?comment=".$cmdDirName."\">
 		<img src=\"img/comment.gif\" border=0></a></td>\n";
 
             /*** visibility command ***/
             if (@$dirVisibilityList[$dirKey] == "i")
             {
-                echo "<td><a href=\"$_SERVER[PHP_SELF]?mkVisibl=".$cmdDirName."\">
+                $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?mkVisibl=".$cmdDirName."\">
 			<img src=\"img/invisible.gif\" border =0></a>\n</td>\n";
             }
             else
             {
-                echo "<td><a href=\"$_SERVER[PHP_SELF]?mkInvisibl=".$cmdDirName."\">
+                $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?mkInvisibl=".$cmdDirName."\">
 			<img src=\"img/visible.gif\" border =0></a></td>\n";
             }
 
-            echo "</tr>\n";
+            $tool_content .=  "</tr>\n";
 
             /*** comments ***/
             if ( @$dirCommentList[$dirKey] != "" )
@@ -1334,13 +1348,13 @@ if($is_adminOfCourse) {
                 $dirCommentList[$dirKey] = htmlspecialchars($dirCommentList[$dirKey]);
                 $dirCommentList[$dirKey] = nl2br($dirCommentList[$dirKey]);
 
-                echo "<tr align=\"left\">\n";
-                echo "<td colspan=\"8\">\n";
-                echo "<div class=\"comment\">";
-                echo $dirCommentList[$dirKey];
-                echo "</div>\n";
-                echo "</td>\n";
-                echo "</tr>\n";
+                $tool_content .=  "<tr align=\"left\">\n";
+                $tool_content .=  "<td colspan=\"8\">\n";
+                $tool_content .=  "<div class=\"comment\">";
+                $tool_content .=  $dirCommentList[$dirKey];
+                $tool_content .=  "</div>\n";
+                $tool_content .=  "</td>\n";
+                $tool_content .=  "</tr>\n";
             }
         }
     }
@@ -1372,10 +1386,10 @@ if($is_adminOfCourse) {
 
 
 
-            echo "<tr align=\"center\"".$style.">\n";
-            echo "<td align=\"left\">\n";
-           echo "<a href=\"".$urlFileName."\" target=_blank".$style.">\n";
-            echo "<img src=\"./img/".$image."\" border=0 hspace=5>\n";
+            $tool_content .=  "<tr align=\"center\"".$style.">\n";
+            $tool_content .=  "<td align=\"left\">\n";
+           $tool_content .=  "<a href=\"".$urlFileName."\" target=_blank".$style.">\n";
+            $tool_content .=  "<img src=\"./img/".$image."\" border=0 hspace=5>\n";
             
             
             
@@ -1395,7 +1409,7 @@ if($is_adminOfCourse) {
         	$row = mysql_fetch_array($result);
             
             //ektypwsh tou onomatos tou arxeiou ean yparxei eggrafh sth vash, alliws typwse to onoma tou filesystem (gia logous compability)
-            if(empty($row["filename"])) echo $dspFileName."</a>"; else echo $row["filename"]."</a>";
+            if(empty($row["filename"])) $tool_content .=  $dspFileName."</a>"; else $tool_content .=  $row["filename"]."</a>";
             
             
             
@@ -1413,7 +1427,7 @@ if($is_adminOfCourse) {
             
             
             
-            echo "<a href='$_SERVER[PHP_SELF]?action=download&id=".$cmdFileName."'>
+            $tool_content .=  "<a href='$_SERVER[PHP_SELF]?action=download&id=".$cmdFileName."'>
             <img src=\"./img/save.gif\" border=\"0\" align=\"absmiddle\" title=\"$langSave\"></a>"; 
             
             
@@ -1426,53 +1440,53 @@ if($is_adminOfCourse) {
                 $fileCommentList[$fileKey] = htmlspecialchars($fileCommentList[$fileKey]);
                 $fileCommentList[$fileKey] = nl2br($fileCommentList[$fileKey]);
                 
-                echo "&nbsp;<span class=\"comment\">";
-                echo "(".$fileCommentList[$fileKey].")";
-                echo "</span>\n";
+                $tool_content .=  "&nbsp;<span class=\"comment\">";
+                $tool_content .=  "(".$fileCommentList[$fileKey].")";
+                $tool_content .=  "</span>\n";
             }
             
             
             
             
 
-            echo "</td>";
+            $tool_content .=  "</td>";
 
             /*** size ***/
-            echo "<td><small>".$size."</small></td>\n";
+            $tool_content .=  "<td><small>".$size."</small></td>\n";
             /*** date ***/
-            echo "<td><small>".$date."</small></td>\n";
+            $tool_content .=  "<td><small>".$date."</small></td>\n";
 
             /*** delete command ***/
-            echo "<td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdFileName."\" onClick=\"return confirmation('".addslashes($dspFileName)."');\">
+            $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdFileName."\" onClick=\"return confirmation('".addslashes($dspFileName)."');\">
 		<img src=\"img/supprimer.gif\" border=0></a></td>\n";
             /*** copy command ***/
-            echo "<td><a href=\"$_SERVER[PHP_SELF]?move=".$cmdFileName."\">
+            $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?move=".$cmdFileName."\">
 		<img src=\"img/deplacer.gif\" border=0></a></td>\n";
             /*** rename command ***/
-            echo "<td><a href=\"$_SERVER[PHP_SELF]?rename=".$cmdFileName."\">
+            $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?rename=".$cmdFileName."\">
 		<img src=\"img/renommer.gif\" border=0></a></td>\n";
             /*** comment command ***/
-            echo "<td><a href=\"$_SERVER[PHP_SELF]?comment=".$cmdFileName."\">
+            $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?comment=".$cmdFileName."\">
 		<img src=\"img/comment.gif\" border=0></a></td>\n";
 
             /*** visibility command ***/
             if (@$fileVisibilityList[$fileKey] == "i")
             {
-                echo "<td><a href=\"$_SERVER[PHP_SELF]?mkVisibl=".$cmdFileName."\">
+                $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?mkVisibl=".$cmdFileName."\">
 			<img src=\"img/invisible.gif\" border=0></a>\n</td>\n";
             }
             else
             {
-                echo "<td><a href=\"$_SERVER[PHP_SELF]?mkInvisibl=".$cmdFileName."\">
+                $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?mkInvisibl=".$cmdFileName."\">
 			<img src=\"img/visible.gif\" border=0></a></td>\n";
             }
 
-            echo "</tr>\n";
+            $tool_content .=  "</tr>\n";
 
         }
     }
-    echo "</table>\n";
-    echo "</div>\n";
+    $tool_content .=  "</table>\n";
+    $tool_content .=  "</div>\n";
 
 }
 
@@ -1493,11 +1507,10 @@ $dspCurDirName = htmlspecialchars($curDirName);
 $cmdCurDirPath = rawurlencode($curDirPath);
 $cmdParentDir  = rawurlencode($parentDir);
 
-?>
-<div class="fileman" align="center">
-<table width="600" border="1" cellspacing="2">
+$tool_content .= "
+<div class=\"fileman\" align=\"center\">
+<table width=\"600\" border=\"1\" cellspacing=\"2\">";
 
-<?
 
 // -- current dir name -->
 
@@ -1509,38 +1522,37 @@ $cmdParentDir  = rawurlencode($parentDir);
 
 if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
 {
-    echo "<tr>\n";
-    echo "<td colspan=\"3\" align=\"left\">\n";
-    echo "<!-- parent dir -->\n";
-    echo "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdParentDir."\">\n";
-    echo "<IMG src=\"img/parent.gif\" border=0 align=\"absbottom\" hspace=5>\n";
-    echo "<small>$langUp</small>\n";
-    echo "</a>\n";
-    echo "</td>\n";
-    echo "</tr>\n";
+    $tool_content .=  "<tr>\n";
+    $tool_content .=  "<td colspan=\"3\" align=\"left\">\n";
+    $tool_content .=  "<!-- parent dir -->\n";
+    $tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdParentDir."\">\n";
+    $tool_content .=  "<IMG src=\"img/parent.gif\" border=0 align=\"absbottom\" hspace=5>\n";
+    $tool_content .=  "<small>$langUp</small>\n";
+    $tool_content .=  "</a>\n";
+    $tool_content .=  "</td>\n";
+    $tool_content .=  "</tr>\n";
 }
 
 /*** current directory ***/
 
 if ($curDirName) // if the $curDirName is empty, we're in the root point and there is'nt a dir name to display
 {
-    echo "<!-- current dir name -->\n";
-    echo "<tr>\n";
-    echo "<td colspan=\"3\" align=\"left\" bgcolor=\"#000066\">\n";
-    echo "<img src=\"img/opendir.gif\" align=\"absbottom\" vspace=2 hspace=5>\n";
-    echo "<font color=\"#CCCCCC\">".$dspCurDirName."</font>\n";
-    echo "</td>\n";
-    echo "</tr>\n";
+    $tool_content .=  "<!-- current dir name -->\n";
+    $tool_content .=  "<tr>\n";
+    $tool_content .=  "<td colspan=\"3\" align=\"left\" bgcolor=\"#000066\">\n";
+    $tool_content .=  "<img src=\"img/opendir.gif\" align=\"absbottom\" vspace=2 hspace=5>\n";
+    $tool_content .=  "<font color=\"#CCCCCC\">".$dspCurDirName."</font>\n";
+    $tool_content .=  "</td>\n";
+    $tool_content .=  "</tr>\n";
 }
-?>
 
-
+$tool_content .= "
 <!-- command list -->
 </tr>
-<tr bgcolor="<?= $color2 ?>"  align="center" valign="top">
+<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">";
 
-<?
-echo "<td>$langName</td>
+
+$tool_content .=  "<td>$langName</td>
 <td>$langSize</td>
 <td>$langDate</td>
 </tr>";
@@ -1568,18 +1580,18 @@ if (isset($dirNameList))
                 $style = '';
             }
 
-            echo "<tr align=\"center\">\n";
-            echo "<td align=\"left\">\n";
-            echo "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style.">\n";
-            echo "<img src=\"img/dossier.gif\" border=0 hspace=5>\n";
-            echo $dspDirName."\n";
-            echo "</a>\n";
+            $tool_content .=  "<tr align=\"center\">\n";
+            $tool_content .=  "<td align=\"left\">\n";
+            $tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style.">\n";
+            $tool_content .=  "<img src=\"img/dossier.gif\" border=0 hspace=5>\n";
+            $tool_content .=  $dspDirName."\n";
+            $tool_content .=  "</a>\n";
 
             /*** skip display date and time ***/
-            echo "<td>&nbsp;</td>\n";
-            echo "<td>&nbsp;</td>\n";
+            $tool_content .=  "<td>&nbsp;</td>\n";
+            $tool_content .=  "<td>&nbsp;</td>\n";
 
-            echo "</tr>\n";
+            $tool_content .=  "</tr>\n";
 
             /*** comments ***/
             if (@$dirCommentList[$dirKey] != "" )
@@ -1587,13 +1599,13 @@ if (isset($dirNameList))
                 $dirCommentList[$dirKey] = htmlspecialchars($dirCommentList[$dirKey]);
                 $dirCommentList[$dirKey] = nl2br($dirCommentList[$dirKey]);
 
-                echo "<tr align=\"left\">\n";
-                echo "<td colspan=\"3\">\n";
-                echo "<div class=\"comment\">";
-                echo $dirCommentList[$dirKey];
-                echo "</div>\n";
-                echo "</td>\n";
-                echo "</tr>\n";
+                $tool_content .=  "<tr align=\"left\">\n";
+                $tool_content .=  "<td colspan=\"3\">\n";
+                $tool_content .=  "<div class=\"comment\">";
+                $tool_content .=  $dirCommentList[$dirKey];
+                $tool_content .=  "</div>\n";
+                $tool_content .=  "</td>\n";
+                $tool_content .=  "</tr>\n";
             }
 
         }
@@ -1622,12 +1634,12 @@ if (isset($fileNameList))
         else
         {
             $style='';
-            echo "<tr align=\"center\"".$style.">\n";
-            echo "<td align=\"left\">\n";
-            echo "<a href=\"".$urlFileName."\"".$style.">\n";
-            echo "<img src=\"./img/".$image."\" border=0 hspace=5>\n";
-            echo $dspFileName."\n";
-            echo "</a>\n";
+            $tool_content .=  "<tr align=\"center\"".$style.">\n";
+            $tool_content .=  "<td align=\"left\">\n";
+            $tool_content .=  "<a href=\"".$urlFileName."\"".$style.">\n";
+            $tool_content .=  "<img src=\"./img/".$image."\" border=0 hspace=5>\n";
+            $tool_content .=  $dspFileName."\n";
+            $tool_content .=  "</a>\n";
 
             
             /*** comments ***/
@@ -1636,37 +1648,39 @@ if (isset($fileNameList))
                 $fileCommentList[$fileKey] = htmlspecialchars($fileCommentList[$fileKey]);
                 $fileCommentList[$fileKey] = nl2br($fileCommentList[$fileKey]);
 
-                //echo "<tr align=\"left\">\n";
-                //echo "<td colspan=\"8\">\n";
-                //echo "<div class=\"comment\">";
-                echo $fileCommentList[$fileKey];
-                //echo "</div>\n";
-                //echo "</td>\n";
-                //echo "</tr>\n";
+                //$tool_content .=  "<tr align=\"left\">\n";
+                //$tool_content .=  "<td colspan=\"8\">\n";
+                //$tool_content .=  "<div class=\"comment\">";
+                $tool_content .=  $fileCommentList[$fileKey];
+                //$tool_content .=  "</div>\n";
+                //$tool_content .=  "</td>\n";
+                //$tool_content .=  "</tr>\n";
             }
             
             
-            echo "<a href='$_SERVER[PHP_SELF]?action=download&id=".$cmdFileName."'>
+            $tool_content .=  "<a href='$_SERVER[PHP_SELF]?action=download&id=".$cmdFileName."'>
                                 <img src=\"./img/save.gif\" border=\"0\" align=\"absmiddle\" title=\"$langSave\"></a>";
 
             /*** size ***/
-            echo "<td><small>".$size."</small></td>\n";
+            $tool_content .=  "<td><small>".$size."</small></td>\n";
             /*** date ***/
-            echo "<td><small>".$date."</small></td>\n";
+            $tool_content .=  "<td><small>".$date."</small></td>\n";
 
-            echo "</tr>\n";
+            $tool_content .=  "</tr>\n";
 
             
         }
     }
 }
-echo "</table>";
-echo "</div>";
+$tool_content .=  "</table>";
+$tool_content .=  "</div>";
 }
 
 /*>>>>>>>>>>>> END: STUDENT VIEW <<<<<<<<<<<<*/
 
-?>
+$tmp_cwd = getcwd();
+chdir($baseServDir."/modules/document/");
+draw($tool_content, 2, '', $local_head);
+chdir($tmp_cwd);
 
-</body>
-</html>
+?>
