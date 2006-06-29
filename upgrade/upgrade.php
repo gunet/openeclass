@@ -168,6 +168,9 @@ $tool_content .= add_field('user', 'doc_flag', "date NOT NULL default '0000-00-0
 if (!mysql_field_exists("$mysqlMainDb",'user','forum_flag'))
 $tool_content .= add_field('user', 'forum_flag', "date NOT NULL default '0000-00-00'");
 
+//add new filed to table users for user's language
+if (!mysql_field_exists("$mysqlMainDb",'user','lang'))
+$tool_content .= add_field('user', 'lang', "ENUM('el', 'en') DEFAULT 'el' NOT NULL");
 
 // **********************************************
 // upgrade courses databases
@@ -885,6 +888,7 @@ while ($code = mysql_fetch_row($res)) {
 	unlink($file2Delete);
 	$dir2Delete = $webDir . "modules/external_module";
 	rmdir($dir2Delete);*/
+	
 	
 
 	// table stat_accueil

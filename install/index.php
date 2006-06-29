@@ -821,6 +821,7 @@ if (mysql_version())  {
   	`announce_flag` date NOT NULL default '0000-00-00',
  	 `doc_flag` date NOT NULL default '0000-00-00',
   	`forum_flag` date NOT NULL default '0000-00-00',
+  	 `lang` enum('el','en') NOT NULL default 'el',
      PRIMARY KEY  (user_id))
       TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
@@ -1123,6 +1124,7 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
   	`announce_flag` date NOT NULL default '0000-00-00',
  	 `doc_flag` date NOT NULL default '0000-00-00',
   	`forum_flag` date NOT NULL default '0000-00-00',
+  	 `lang` enum('el','en') NOT NULL default 'el',
      PRIMARY KEY  (user_id))
       TYPE=MyISAM");
 
