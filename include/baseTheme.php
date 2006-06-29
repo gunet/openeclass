@@ -45,7 +45,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	global $relPath, $urlServer;
 	global $page_name, $page_navi,$currentCourseID, $siteName, $navigation;
 	global $homePage, $courseHome, $uid, $webDir;
-	global $langChangeLang, $langUserBriefcase, $langAdmin, $switchLangURL;
+	global $langChangeLang, $langUserBriefcase, $langPersonalisedBriefcase, $langAdmin, $switchLangURL;
 
 	$toolArr = getTools($menuTypeID);
 	//	dumpArray($toolArr);
@@ -72,7 +72,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 	$t->set_block('leftNavCategoryBlock', 'leftNavLinkBlock', 'leftNavLink');
 
-	if (is_array($toolArr)){
+	if (is_array($toolArr)) {
 
 		for($i=0; $i< $numOfToolGroups; $i++){
 
@@ -95,7 +95,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 			$t->clear_var('leftNavLink'); //clear inner block
 		}
-		
+
 		$t->set_var('TOOL_CONTENT', $toolContent);
 
 		//if we are on the login page we can include two optional html files
@@ -103,23 +103,23 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		//eclass_home_extras_right.html (if exists) for extra content on the
 		//left and right bar.
 
-		if ($homePage && file_exists('./eclass_home_extras_left.html')) {
-			$s = file_get_contents($webDir . 'eclass_home_extras_left.html'); 
+		if ($homePage && file_exists('./eclass_home_extras_left.html') && !session_is_registered('uid')) {
+			$s = file_get_contents($webDir . 'eclass_home_extras_left.html');
 			$t->set_var('ECLASS_HOME_EXTRAS_LEFT', $s);
 		}
-		
-		if ($homePage && file_exists('./eclass_home_extras_right.html')) {
-			$s = file_get_contents($webDir . 'eclass_home_extras_right.html'); 
+
+		if ($homePage && file_exists('./eclass_home_extras_right.html') && !session_is_registered('uid')) {
+			$s = file_get_contents($webDir . 'eclass_home_extras_right.html');
 			$t->set_var('ECLASS_HOME_EXTRAS_RIGHT', $s);
 		}
 
-		
-		
+
+
 		if (isset($uid) && strlen($nom) > 0) {
 			$t->set_var('LANG_USER', $langUser);
 			$t->set_var('USER_NAME', $prenom);
 			$t->set_var('USER_SURNAME', $nom);
-		} 
+		}
 
 		if ($menuTypeID > 0) {
 			$t->set_var('LANG_LOGOUT', $langLogout);
@@ -155,7 +155,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		} else {
 			$t->set_var('LANG_LOCALIZE',  '');
 		}
-		//		<!-- -->
+
 		if ($menuTypeID !=2) {
 			$t->set_var('INV1',  '<!--');
 			$t->set_var('INV2',  '-->');
@@ -167,7 +167,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		if (!$page_name) $page_name = $nameTools;
 
 		$t->set_block('mainBlock', 'breadCrumbHomeBlock', 'breadCrumbHome');
-		$t->set_var('BREAD_TEXT',  $siteName);
+
+		if(!session_is_registered('uid')) $t->set_var('BREAD_TEXT',  $siteName);
+		elseif(session_is_registered('uid') && session_is_registered('user_perso_active')) {
+			$t->set_var('BREAD_TEXT',  $langPersonalisedBriefcase);
+		} elseif(session_is_registered('uid') && !session_is_registered('user_perso_active')) {
+			$t->set_var('BREAD_TEXT',  $langUserBriefcase);
+		}
+
 		$pageTitle = $siteName;
 		if (!$homePage) {
 			$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_START_LINK}">');
@@ -238,13 +245,15 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		}
 
 		//END breadcrumb
-		$t->set_var('PAGE_TITLE',  $pageTitle);
-		if (isset($tool_css)){
 
+		$t->set_var('PAGE_TITLE',  $pageTitle);
+
+		if (isset($tool_css)){
 			$t->set_var('TOOL_CSS', "<link href=\"{TOOL_PATH}modules/$tool_css/tool.css\" rel=\"stylesheet\" type=\"text/css\" />");
 		}
 
 		$t->set_var('TOOL_PATH',  $relPath);
+
 		if (isset($head_content)){
 			$t->set_var('HEAD_EXTRAS', $head_content);
 		}
@@ -361,69 +370,10 @@ function drawPerso($toolContent, $menuTypeID=null, $tool_css = null, $head_conte
 	if (!$page_name) $page_name = $nameTools;
 
 	$t->set_block('mainBlock', 'breadCrumbHomeBlock', 'breadCrumbHome');
-	$t->set_var('BREAD_TEXT',  $siteName);
+	//	$t->set_var('BREAD_TEXT',  $siteName);
+	$t->set_var('BREAD_TEXT',  $langPersonalisedBriefcase);
 	$t->set_var('PAGE_TITLE',  $siteName);
-	/*if (!$homePage) {
-	$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_START_LINK}">');
-	$t->set_var('BREAD_START_LINK',  $urlServer);
-	$t->set_var('BREAD_HREF_END',  '</a>');
-	}
-
-	$t->parse('breadCrumbHome', 'breadCrumbHomeBlock',false);
-
-	$breadIterator=1;
-	$t->set_block('mainBlock', 'breadCrumbStartBlock', 'breadCrumbStart');*/
-
-	/*	if (isset($currentCourseID) && !$courseHome){
-	$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_LINK}">');
-	$t->set_var('BREAD_LINK',  $urlServer.'courses/'.$currentCourseID.'/index.php');
-	$t->set_var('BREAD_TEXT',  $intitule);
-	$t->set_var('BREAD_ARROW', '&#187;');
-	$t->set_var('BREAD_HREF_END',  '</a>');
-	$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
-	$breadIterator++;
-	} elseif (isset($currentCourseID) && $courseHome) {
-	$t->set_var('BREAD_HREF_FRONT',  '');
-	$t->set_var('BREAD_LINK',  '');
-	$t->set_var('BREAD_TEXT',  $intitule);
-	$t->set_var('BREAD_ARROW', '&#187;');
-	$t->set_var('BREAD_HREF_END',  '');
-	$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
-	$breadIterator++;
-	}*/
-
-	/*	if (isset($page_navi) && is_array($page_navi) && !$homePage){
-	foreach ($page_navi as $step){
-
-	$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_LINK}">');
-	$t->set_var('BREAD_LINK',  $step["url"]);
-	$t->set_var('BREAD_TEXT',  $step["name"]);
-	$t->set_var('BREAD_ARROW', '&#187;');
-	$t->set_var('BREAD_HREF_END',  '</a>');
-	$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
-
-	$breadIterator++;
-	}
-	}*/
-
-	/*	if (isset($page_name) && !$homePage) {
-
-	$t->set_var('BREAD_HREF_FRONT',  '');
-	$t->set_var('BREAD_TEXT',  $page_name);
-	$t->set_var('BREAD_ARROW', '&#187;');
-	$t->set_var('BREAD_HREF_END',  '');
-
-	$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
-	$breadIterator++;
-	}
-
-	$t->set_block('mainBlock', 'breadCrumbEndBlock', 'breadCrumbEnd');
-	for($breadIterator2=0; $breadIterator2 <= $breadIterator; $breadIterator2++){
-
-	$t->parse('breadCrumbEnd', 'breadCrumbEndBlock',true);
-	}
-	*/
-	//END breadcrumb
+	// end breadcrumb
 
 	$t->parse('main', 'mainBlock', false);
 
