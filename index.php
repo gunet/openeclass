@@ -40,35 +40,19 @@
 ****************************************************************
 */
 
-//unset($language);
-//$language = "english";
-
 $path2add=0;
 include("include/baseTheme.php");
-@include("./modules/lang/english/index.inc");
-@include("./modules/lang/english/trad4all.inc.php");
-@include("./modules/lang/$language/index.inc");
-@include("./modules/lang/$language/trad4all.inc.php");
 
 //@include("./include/lib/main.lib.php");
 @include("./modules/auth/auth.inc.php");
-//
-//$require_help = true;
-//$helpTopic="Clar2";
-$nameTools = $langWelcomeToEclass;//Put it in a lang file
+
 //$homePage is used by baseTheme.php
 //to parse correctly the breadcrumb.
 $homePage = true;
-//@include('./mainpage.inc.php');
-//notify base theme that we are not in a module to fix relative paths
-//$pathOverride = true;
-//$_SESSION['pathOverride'] = $pathOverride;
-//$relativePath = "";
-//header('Content-Type: text/html; charset='. $charset);
-//require './include/baseTheme.php';
-$tool_content = "";
-//Flag to modify the prefix for relative paths.(used by init.php)
 
+//header('Content-Type: text/html; charset='. $charset);
+
+$tool_content = "";
 
 //This will be setting a var in the template and NOT concat $tool_content!
 //	if (isset($siteName)) $tool_content .=  "<title>".$siteName."</title>";
@@ -76,9 +60,6 @@ $tool_content = "";
 
 //<!--<meta http-equiv="Description" content="elearn Platform">
 //<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=$charset">
-//</head>
-//
-//<body bgcolor="white">-->
 
 
 // first check
@@ -96,8 +77,7 @@ if (!isset($db)) {
 // can we select database ? if not then there is some problem
 
 if (isset($mysqlMainDb)) $selectResult = mysql_select_db($mysqlMainDb,$db);
-if (!isset($selectResult))
-{
+if (!isset($selectResult)) {
 	include("general_error.php");
 }
 
@@ -105,8 +85,8 @@ if (!isset($selectResult))
 unset($alreadyHome);
 unset($dbname);
 
-	$whatViewToLoad = "yes";
-	if ($whatViewToLoad == "yes") session_register("perso_is_active");
+$whatViewToLoad = "yes";
+if ($whatViewToLoad == "yes") session_register("perso_is_active");
 // ------------------------------------------------------------------------
 // if we try to login...
 // then authenticate user. First via LDAP then via MyQL
@@ -120,7 +100,7 @@ $auth = get_auth_id();
 if(!empty($submit))
 {
 	unset($uid);
-	$sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, inst_id, iduser is_admin, perso
+	$sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, inst_id, iduser is_admin, perso, lang
                 FROM user LEFT JOIN admin
                 ON user.user_id = admin.iduser
                 WHERE username='".$uname."'";
@@ -152,6 +132,7 @@ if(!empty($submit))
 						$email = $myrow["email"];
 						$is_admin = $myrow["is_admin"];
 						$userPerso = $myrow["perso"];//user perso flag
+						$userLanguage = $myrow["lang"];//user preferred language
 					}
 					else
 					{
@@ -227,6 +208,8 @@ if(!empty($submit))
 						$statut = $myrow["statut"];
 						$email = $myrow["email"];
 						$is_admin = $myrow["is_admin"];
+						$userPerso = $myrow["perso"];//user perso flag
+						$userLanguage = $myrow["lang"];//user preferred language
 					}
 					elseif($auth_allow==2)
 					{
@@ -279,46 +262,42 @@ if(!empty($submit))
                 VALUES ('', '".$uid."', '".$REMOTE_ADDR."', NOW(), 'LOGIN')");
 
 	}
-	
-		##[BEGIN personalisation modification]############
-	
-	if ((@$userPerso == "yes") && session_is_registered("perso_is_active")) 
-	{
+
+	##[BEGIN personalisation modification]############
+
+	if ((@$userPerso == "yes") && session_is_registered("perso_is_active")) {
 		session_register("user_perso_active");
 	}
 	##[END personalisation modification]############
+
+	//check user language preferences
+	if ($userLanguage == "el") {
+		$language = $_SESSION['langswitch'] = "greek";
+		$_SESSION['langLinkText'] = "English";
+		$_SESSION['langLinkURL'] = "?localize=en";
+		
+	} else {
+		$language = $_SESSION['langswitch'] = "english";
+		$_SESSION['langLinkText'] = "Ελληνικά";
+		$_SESSION['langLinkURL'] = "?localize=el";
+	}
+
 }  // end of user authentication
 
-
+//Include lang files at this point. If a user logs in the language setting will take 
+//over and load the user's specified language
+@include("./modules/lang/english/index.inc");
+@include("./modules/lang/english/trad4all.inc.php");
+@include("./modules/lang/$language/index.inc");
+@include("./modules/lang/$language/trad4all.inc.php");
+$nameTools = $langWelcomeToEclass;
 // -------------------------------------------------------------
 
-//$tool_content .= <<<tCont
-//<table width="600" align="center" cellpadding="3" cellspacing="2" border="0">
-//<tr><td colspan="3" align="center" style="padding: 0px;" bgcolor="$colorMedium">
-//$main_page_banner
-//</td></tr>
-//<tr><td valign="top" align="left"  bgcolor="$colorMedium" colspan="3">
-//<font face="Arial, Helvetica, sans-serif" color="#FFFFFF" size="2">&nbsp;
-//tCont;
 
-//echo $tool_content;
 if (isset($_SESSION['uid'])) $uid = $_SESSION['uid'];
 else unset($uid);
 
-// This must be setting a var in basethem and NOT concat $tool_content
-//if (isset($uid)) $tool_content .=  "$langUser : $prenom $nom";
-//else $tool_content .=  "<a href=\"#\"></a>";
 
-//$tool_content .= <<<tCont2
-//</font></td></tr>
-//<tr>
-//<td valign="top" align="left" colspan="3">
-//<font size="1" face="arial, helvetica">
-//<b><font face="arial, helvetica" size="1">$siteName</font></b>
-//</font><br><br></td></tr>
-//tCont2;
-
-//echo $tool_content ;
 //----------------------------------------------------------------
 // if login succesful display courses lists
 // --------------------------------------------------------------
@@ -326,13 +305,13 @@ else unset($uid);
 // first case check in which courses are registered as a student
 if (isset($uid) AND !isset($logout)) {
 
-$require_help = true;
-$helpTopic="Clar2";
+	$require_help = true;
+	$helpTopic="Clar2";
 	//$eclass_perso will be read from the db.
 	//keep as is for now
-//	$whatViewToLoad = "yes";
-//	if ($whatViewToLoad == "yes") session_register("perso_is_active");
-	
+	//	$whatViewToLoad = "yes";
+	//	if ($whatViewToLoad == "yes") session_register("perso_is_active");
+
 	$eclass_perso = 0;
 	if (!session_is_registered("user_perso_active")) {
 		include("logged_in_content.php");
@@ -364,15 +343,9 @@ elseif ((isset($logout) && $logout) OR (1==1)) {
 
 	include("logged_out_content.php");
 
-
 	draw($tool_content, 0,'index');
-	//	$tool_content .=  "</tr></table>";
+	
 } // end of display
-
-
-
-// display page footer
-//echo $main_page_footer;
 
 // check for new announcements
 function check_new_announce() {
@@ -405,9 +378,4 @@ return true;
 else
 return false;
 }*/
-
-
 ?>
-<!--</body> 
-</html>
--->

@@ -11,7 +11,7 @@
 | e-class changes by: Costas Tsibanis <costas@noc.uoa.gr>              |
 |                     Yannis Exidaridis <jexi@noc.uoa.gr>              |
 |                     Alexandros Diamantidis <adia@noc.uoa.gr>         |
-|					  Evelthon Prodromou <eprodromou@upnet.gr>		   |	
+|					  Evelthon Prodromou <eprodromou@upnet.gr>		   |
 +----------------------------------------------------------------------+
 | Standard header included by all e-class files                        |
 | Defines standard functions and validates variables                   |
@@ -70,23 +70,23 @@ if (isset($localize)) {
 	switch ($localize) {
 
 		case "en":
-			
+
 			$_SESSION['langswitch'] = "english";
-			$_SESSION['langLinkText'] = "Ελληνικά";
+			$_SESSION['langLinkText'] = 'Ελληνικά';
 			$_SESSION['langLinkURL'] = "?localize=el";
 			break;
 
 		case "el":
-			
+
 			$_SESSION['langswitch'] = "greek";
-			$_SESSION['langLinkText'] = "English";
+			$_SESSION['langLinkText'] = 'English';
 			$_SESSION['langLinkURL'] = "?localize=en";
 			break;
 
 		default:
 			die("Invalid language parameter passed");
 	}
-//	unset($localize);
+	//	unset($localize);
 }
 // Get configuration variables
 if (!isset($webDir)) {
@@ -111,7 +111,23 @@ $db = mysql_connect($mysqlServer, $mysqlUser, $mysqlPassword);
 if (mysql_version()) mysql_query("SET NAMES greek");
 mysql_select_db($mysqlMainDb, $db);
 
-
+if(session_is_registered('uid') && !session_is_registered('langswitch')) {
+	$sqlLang= "SELECT lang
+                FROM user 
+                WHERE uid='".$_SESSION['uid']."'";
+	$result=mysql_query($sqlLang);
+	while ($myrow = mysql_fetch_array($result)) {
+		if ($myrow[0]== "el") {
+			$language = "greek";
+			$_SESSION['langLinkText'] = "English";
+			$_SESSION['langLinkURL'] = "?localize=en";
+		} else {
+			$language = "english";
+			$_SESSION['langLinkText'] = "Ελληνικά";
+			$_SESSION['langLinkURL'] = "?localize=el";
+		}
+	}
+}
 
 // Include messages
 @ include("$webDir/modules/lang/english/trad4all.inc.php");
