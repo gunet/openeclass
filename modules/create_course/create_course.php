@@ -62,6 +62,8 @@ $require_prof = TRUE;
 
 $langFiles = array('create_course', 'opencours');
 
+
+
 $local_head = "
 
 <script language=\"JavaScript\">
@@ -96,27 +98,31 @@ function validate()
 
 
 //ektypwnei ena <td> </td> me hyperlink pros to help me vash kapoio $topic
-function help ($topic)
-{
-	echo"
+/*
+	"
 	<td valign=\"middle\">
-		<a href=\"../help/help.php?topic=$topic\" onclick=\"window.open('../help/help.php?topic=$topic','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a></td>";
-}
+		<a href=\"../help/help.php?topic=$topic\" onclick=\"window.open('../help/help.php?topic=$topic','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
+	</td>
+	"
+*/
 
 
 
-include '../../include/init.php';
+//include '../../include/init.php';
+include '../../include/baseTheme.php';
+
+$tool_content = "";
 
 $titulaire_probable="$prenom $nom";
 $local_style = "input { font-size: 12px; }";
-begin_page($langCreateSite);
+//begin_page($langCreateSite);
 
 	//ean to mathima hdh yparxei emfanise mhnyma (elegxos mesw $_GET)
 	if(isset($_GET["course_exists"]))
 	{
 		@include("../lang/$language/create_course.inc.php");
 
-		echo "<tr bgcolor=\"$color2\">
+		$tool_content .=  "<tr bgcolor=\"$color2\">
 		<td colspan=\"3\" valign=\"top\">
 		<font face=\"arial, helvetica\" size=\"2\">
 			$langCodeTaken.
@@ -124,15 +130,15 @@ begin_page($langCreateSite);
 	}
 
 ###################### FORM  #########################################
-echo "
-<!-- S T E P  1   [start] -->    
+$tool_content .=  "
+<!-- S T E P  1   [start] -->  
 
 <tr bgcolor=\"$color1\">
 	<td>
-		<table bgcolor=\"$color1\" border=\"2\">
+		<table bgcolor=\"$color1\" border=\"2\" width=\"99%\">
 			<tr valign=\"top\" align=\"middle\">
 				<td colspan=\"3\" valign=\"middle\">
-					<table width=\"100%\">
+					<table width=\"99%\">
 						<tr>
 							<td align=\"left\">
 								<font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourse</font>
@@ -161,48 +167,49 @@ echo "
 				<td valign=\"top\">
 					<font face=\"arial, helvetica\" size=\"2\">
 					<input type=\"Text\" name=\"intitule\" size=\"60\">$langFieldsRequAsterisk<br>$langEx</font>
-				</td>";
-				help("CreateCourse_Title");
-echo"
+				</td>
+				<td valign=\"middle\">
+					<a href=\"../help/help.php?topic=CreateCourse_Title\" onclick=\"window.open('../help/help.php?topic=CreateCourse_Title','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
+				</td>
 			</tr>
 		</td>
 	<tr>
-	<td valign=\"top\" align=\"right\">
-	<font face=\"arial, helvetica\" size=\"2\"><b>$langFac:</b></font>
-	</td>
-	<td valign=\"top\">";
+		<td valign=\"top\" align=\"right\">
+			<font face=\"arial, helvetica\" size=\"2\"><b>$langFac:</b></font>
+		</td>
+		<td valign=\"top\">";
 
 
-echo "		<select name=\"faculte\">";
+$tool_content .=  "		<select name=\"faculte\">";
 	    
 		$resultFac=mysql_query("SELECT id,name FROM `$mysqlMainDb`.faculte ORDER BY number");
 		while ($myfac = mysql_fetch_array($resultFac)) {	
-			if($myfac['name']==$facu)
-				echo "<option value=\"".$myfac['id']."--".$myfac['name']."\" selected>$myfac[name]</option>";
-			else
-				echo  "<option value=\"".$myfac['id']."--".$myfac['name']."\">$myfac[name]</option>";
+			//if($myfac['name']==$facu)
+			//	$tool_content .=  "<option value=\"".$myfac['id']."--".$myfac['name']."\" selected>$myfac[name]</option>";
+			//else
+				$tool_content .=   "<option value=\"".$myfac['id']."--".$myfac['name']."\">$myfac[name]</option>";
 		}
-		echo "</select>";
+		$tool_content .=  "</select>";
 
 
-/* echo "<select name=\"faculte\">";
+/* $tool_content .=  "<select name=\"faculte\">";
 
 $resultFac=mysql_query("SELECT name FROM faculte ORDER BY number");
 
 while ($myfac = mysql_fetch_array($resultFac)) {	
 	if($myfac['name'] == $facu) 
-		echo "<option selected>$myfac[name]</option>";
+		$tool_content .=  "<option selected>$myfac[name]</option>";
 	else 
-		echo "<option>$myfac[name]</option>";
+		$tool_content .=  "<option>$myfac[name]</option>";
 }
-echo "</select>"; */
+$tool_content .=  "</select>"; */
 
-echo "$langFieldsRequAsterisk<br><font face=\"arial, helvetica\" size=\"2\">$langTargetFac</font>
-	</td>
-	";
-	help("CreateCourse_faculte");
-	
-echo "</tr>
+$tool_content .=  "$langFieldsRequAsterisk<br><font face=\"arial, helvetica\" size=\"2\">$langTargetFac</font>
+		</td>
+		<td valign=\"middle\">
+			<a href=\"../help/help.php?topic=CreateCourse_faculte\" onclick=\"window.open('../help/help.php?topic=CreateCourse_faculte','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
+		</td>
+	</tr>
        <tr valign=\"top\">
        <td width=\"100\" valign=\"top\" align=\"right\">
        <font face=\"arial, helvetica\" size=\"2\"><b>$langDescrInfo:</b></font>
@@ -213,25 +220,26 @@ echo "</tr>
 	   $langFieldsRequAsterisk
        <br>$langDescrInfo
        </font>
-       </td>";
-	   help("CreateCourse_description");
-echo "
+       </td>
+       <td valign=\"middle\">
+			<a href=\"../help/help.php?topic=CreateCourse_description\" onclick=\"window.open('../help/help.php?topic=CreateCourse_description','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
+		</td>
       </tr>";
 
 unset($repertoire);
 
 /* SAKIS:  edw na valw ta kwdikia gia thn epilogh twn diaxeiristwn!!!!!! */
 
-echo "<tr valign=\"top\">
+$tool_content .=  "<tr valign=\"top\">
 	<td width=\"100\" valign=\"top\" align=\"right\">
 	<font face=\"arial, helvetica\" size=\"2\"><b>$langProfessors:</b></font>
 	</td>
 	<td valign=\"top\">
 	<input type=\"Text\" name=\"titulaires\" size=\"60\" value=\"$titulaire_probable\"><font face=\"arial, helvetica\" size=\"2\">$langFieldsRequAsterisk<br>$langProfessorsInfo</font>
-	</td>";
-	help("CreateCourse_titulaires");
-
-echo "
+	</td>
+	<td valign=\"middle\">
+		<a href=\"../help/help.php?topic=CreateCourse_titulaires\" onclick=\"window.open('../help/help.php?topic=CreateCourse_titulaires','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
+	</td>
 	</tr>
 	<tr>
 	<td align=\"right\"><font face=\"arial, helvetica\" size=\"2\"><b>$m[type]:</b></font></td>
@@ -245,10 +253,11 @@ echo "
 		";
 //selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']), 'type');
 
-echo "
-	<font face=\"arial, helvetica\" size=\"2\">$langFieldsRequAsterisk<br>$langCourseCategory</br></td>";
-					help("CreateCourse_Type");
-echo "
+$tool_content .=  "
+	<font face=\"arial, helvetica\" size=\"2\">$langFieldsRequAsterisk<br>$langCourseCategory</br></td>
+	<td valign=\"middle\">
+		<a href=\"../help/help.php?topic=CreateCourse_Type\" onclick=\"window.open('../help/help.php?topic=CreateCourse_Type','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
+	</td>
 	<tr>
 		<td>
 			&nbsp;
@@ -264,7 +273,9 @@ echo "
 	</td>
 	</tr>
 	</table>
-</form>";
-?>
+</form>
 </body>
-</html>
+</html>";
+
+draw($tool_content, '1', '', $local_head);
+?>
