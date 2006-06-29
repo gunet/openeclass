@@ -62,9 +62,6 @@ $require_prof = TRUE;
 
 $langFiles = array('create_course', 'opencours');
 
-$require_help = TRUE;
-$helpTopic = 'create_course';
-
 
 $local_head = "
 
@@ -132,7 +129,7 @@ $local_style = "input { font-size: 12px; }";
 	}
 
 ###################### FORM  #########################################
-$tool_content .=  "
+$tool_content .= "
 <!-- S T E P  1   [start] -->  
 
 <tr bgcolor=\"$color1\">
