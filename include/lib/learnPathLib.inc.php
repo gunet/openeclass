@@ -399,19 +399,19 @@ function nameBox($type, $mode)
  function selectImage($contentType)
  {
 
-      $imgList[CTDOCUMENT_] = "documents.png";
+      $imgList[CTDOCUMENT_] = "docs_on.gif";
       $imgList[CTCLARODOC_] = "clarodoc.gif";
-      $imgList[CTEXERCISE_] = "quiz.png";
+      $imgList[CTEXERCISE_] = "exercise_on.gif";
       $imgList[CTSCORM_] = "scorm.gif";
       $imgList[CTLINK_] = "links.gif";
-      $imgList[CTCOURSE_DESCRIPTION_] = "info.png";
+      $imgList[CTCOURSE_DESCRIPTION_] = "description_on.gif";
 
       if (array_key_exists( $contentType , $imgList ))
       {
           return $imgList[$contentType];
       }
 
-      return "documents.png";
+      return "docs_on.gif";
 
  }
  /**
@@ -593,7 +593,7 @@ function display_path_content()
         else // module
         {
             if($module['contentType'] == CTEXERCISE_ )
-            	$moduleImg = 'quiz.png';
+            	$moduleImg = 'exercise_on.gif';
             else
             	$moduleImg = choose_image(basename($module['path']));
             	
@@ -775,7 +775,7 @@ function display_my_exercises($dialogBox, $style)
 	        .    '</td>'."\n"
 	        .    '<td align="left">'
 	        .    '<label for="check_'.$exercise['id'].'" >'
-	        .    '<img src="' . $imgRepositoryWeb . 'quiz.png" alt="' . $langExercise . '" />'
+	        .    '<img src="' . $imgRepositoryWeb . 'exercise_on.gif" alt="' . $langExercise . '" />'
 	        .    $exercise['title']
 	        .    '</label>'
 	        .    '</td>'."\n"

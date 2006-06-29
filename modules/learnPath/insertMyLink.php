@@ -52,7 +52,7 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 $tbl_link               = "liens";
 
-$imgRepositoryWeb       = "../../images/";
+$imgRepositoryWeb       = "../../template/classic/img/";
 
 require_once("../../include/baseTheme.php");
 $tool_content = "";
@@ -232,7 +232,7 @@ function showlinks($tbl_link)
 
 		<td>
         <a href=\"../link/link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">
-        <img src=\"../../images/links.gif\" border=\"0\">&nbsp;
+        <img src=\"../../template/classic/img/links.gif\" border=\"0\">&nbsp;
         ".$myrow[2]."</a>\n
 		</td><td>".$myrow[3]."";
 	

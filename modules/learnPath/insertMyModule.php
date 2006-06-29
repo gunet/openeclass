@@ -58,7 +58,7 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-$imgRepositoryWeb       = "../../images/";
+$imgRepositoryWeb       = "../../template/classic/img/";
 
 require_once("../../include/baseTheme.php");
 $tool_content = "";

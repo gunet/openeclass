@@ -148,7 +148,7 @@ function choose_image($fileName)
 		}
 	}
 
-	return "documents.png";
+	return "docs_on.gif";
 }
 
 //------------------------------------------------------------------------------

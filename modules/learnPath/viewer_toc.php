@@ -60,7 +60,7 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-$imgRepositoryWeb = "../../images/";
+$imgRepositoryWeb = "../../template/classic/img/";
 
 // lib of this tool
 require_once("../../include/lib/learnPathLib.inc.php");
@@ -150,11 +150,11 @@ $nextModule = ""; // module id that will be used in the next link
 foreach ($flatElementList as $module)
 {
 	if($module['contentType'] == CTEXERCISE_ )
-		$moduleImg = 'quiz.png';
+		$moduleImg = 'exercise_on.gif';
 	else if($module['contentType'] == CTLINK_ )
 		$moduleImg = "links.gif";
 	else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
-		$moduleImg = "info.png";
+		$moduleImg = "description_on.gif";
 	else
 		$moduleImg = choose_image(basename($module['path']));
 
@@ -229,7 +229,7 @@ foreach ($flatElementList as $module)
 				
 				if($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED')
 				{
-					$imagePassed = '&nbsp;<img src="'.$imgRepositoryWeb.'mark.gif" alt="'.$module['lesson_status'].'" />';
+					$imagePassed = '&nbsp;<img src="'.$imgRepositoryWeb.'tick.gif" alt="'.$module['lesson_status'].'" />';
 				}
 			}
 			// store next value if user has the right to access it

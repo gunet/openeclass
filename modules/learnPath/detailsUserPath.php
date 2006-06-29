@@ -56,7 +56,7 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-$imgRepositoryWeb       = "../../images/";
+$imgRepositoryWeb       = "../../template/classic/img/";
 
 require_once("../../include/baseTheme.php");
 $head_content = "";
@@ -205,11 +205,11 @@ foreach ($flatElementList as $module)
 	else
 	{
 		if($module['contentType'] == CTEXERCISE_ )
-			$moduleImg = "quiz.png";
+			$moduleImg = "exercise_on.gif";
 		else if($module['contentType'] == CTLINK_ )
         	$moduleImg = "links.gif";
         else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
-        	$moduleImg = "info.png";
+        	$moduleImg = "description_on.gif";
 		else
 		$moduleImg = choose_image(basename($module['path']));
 

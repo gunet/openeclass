@@ -64,7 +64,7 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 $TABLEQUIZTEST          = "exercices";
 $dbTable                = $TABLEASSET; // for old functions of document tool
 
-$imgRepositoryWeb       = "../../images/";
+$imgRepositoryWeb       = "../../template/classic/img/";
 
 require_once("../../include/baseTheme.php");
 $tool_content = "";

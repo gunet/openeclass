@@ -348,7 +348,7 @@ cData;
 echo <<<cData
 <tr>
   <td width="5%" align="center">
-	<img src="../../../images/
+	<img src="../../../template/classic/img/
 cData;
 	
 	if ($answerType == UNIQUE_ANSWER)
@@ -369,9 +369,9 @@ cData;
 
 	
 	if ($answerType == UNIQUE_ANSWER)
-		echo "<img src=\"../../../images/radio";
+		echo "<img src=\"../../../template/classic/img/radio";
 	else
-		echo "<img src=\"../../../images/checkbox";
+		echo "<img src=\"../../../template/classic/img/checkbox";
 	if ($answerCorrect)
 		echo "_on";
 	else	
