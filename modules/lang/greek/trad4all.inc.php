@@ -85,5 +85,6 @@ $langLoginRequired = '
 $langUserBriefcase = "Χαρτοφυλάκιο χρήστη";
 $langPersonalisedBriefcase = "Προσωπικό χαρτοφυλάκιο";
 
+$langCopyrightFooter="Πληροφορίες πνευματικών δικαιωμάτων";
 
 ?>

@@ -97,4 +97,6 @@ $langLogout = "Logout";
 
 $langUserBriefcase = "User portofolio";
 $langPersonalisedBriefcase = "Personalised portofolio";
+
+$langCopyrightFooter="Copyright notice";
 ?>
