@@ -1,5 +1,4 @@
 <?php
-session_start();
 /***************************************************************************
                           index.php  -  description
                              -------------------
@@ -20,6 +19,15 @@ session_start();
  *
  ***************************************************************************/
 
+$require_current_course = TRUE;
+$langFiles = 'phpbb';
+$require_help = TRUE;
+$helpTopic = 'Forums';
+include '../../baseTheme.php';
+$nameTools = $langUsers . " ($langUserNumber : $countUser)";
+$tool_content = "";
+//session_start();
+
 include('extention.inc');
 include('functions.'.$phpEx);
 include('config.'.$phpEx);
@@ -37,24 +45,20 @@ if(!$result = mysql_query($sql, $db))
 $total_categories = mysql_num_rows($result);
 
 
-
-?>
-
-<TABLE BORDER="0" WIDTH="<?php echo $TableWidth?>" CELLPADDING="1" CELLSPACING="0" ALIGN="CENTER" VALIGN="TOP">
-<TR><TD BGCOLOR="<?php echo $table_bgcolor?>">
-<TABLE BORDER="0" CELLPADDING="1" CELLSPACING="1" WIDTH="100%">
-<TR BGCOLOR="<?php echo $color1?>" ALIGN="LEFT">
-	<TD BGCOLOR="<?php echo $color1?>" ALIGN="CENTER" VALIGN="MIDDLE">&nbsp;</TD>
-	<TD><FONT FACE="<?php echo $FontFace?>" SIZE="<?php echo $FontSize1?>" COLOR="<?php echo $textcolor?>">
-	<B><?php echo $l_forum?></B></font></TD>
-	<TD ALIGN="CENTER"><FONT FACE="<?php echo $FontFace?>" SIZE="<?php echo $FontSize1?>" COLOR="<?php echo $textcolor?>">
-	<B><?php echo $l_topics?></B></font></TD>
-	<TD ALIGN="CENTER"><FONT FACE="<?php echo $FontFace?>" SIZE="<?php echo $FontSize1?>" COLOR="<?php echo $textcolor?>">
-	<B><?php echo $l_posts?></B></font></TD>
-	<TD ALIGN="CENTER"><FONT FACE="<?php echo $FontFace?>" SIZE="<?php echo $FontSize1?>" COLOR="<?php echo $textcolor?>">
-	<B><?php echo $l_lastpost?></B></font></TD>
-
-</TR>
+$tool_content .= "<TABLE WIDTH=\"" . $TableWidth . "\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\">";
+$tool_content .= "<TR><TD BGCOLOR=\"" . $table_bgcolor . "\">\"";
+$tool_content .= "<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"1\" WIDTH=\"100%\">";
+$tool_content .= "<TR BGCOLOR=\"" . $color1 . "\" ALIGN=\"LEFT\">";
+$tool_content .= "<TD BGCOLOR=\"" . $color1 . "\" ALIGN=\"CENTER\" VALIGN=\"MIDDLE\">&nbsp;</TD>";
+$tool_content .= "<TD><FONT FACE=\" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\"" . $textcolor . "\">";
+$tool_content .= "<B>" . $l_forum . "</B></font></TD>";
+$tool_content .= "<TD ALIGN=\"CENTER\"><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\" . $textcolor . "\">";
+$tool_content .= "<B>" . $l_topics . "</B></font></TD>";
+$tool_content .= "<TD ALIGN=\"CENTER\"><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\" . $textcolor . "\">";
+$tool_content .= "<B>" . $l_posts . "</B></font></TD>";
+$tool_content .= "<TD ALIGN=\"CENTER\"><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\" . $textcolor . "\">";
+$tool_content .= "<B>" . $l_lastpost . "</B></font></TD>";
+$tool_content .= "</TR>";
 
 <?php
 if($total_categories)
@@ -92,8 +96,8 @@ for($i = 0; $i < $total_categories; $i++) {
    if($viewcat != -1) {
       if($categories[$i][cat_id] != $viewcat) {
 	$title = stripslashes($categories[$i][cat_title]);
-	echo "<TR ALIGN=\"LEFT\" VALIGN=\"TOP\"><TD COLSPAN=6 BGCOLOR=\"$color1\">
-	<FONT FACE=\"$FontFace\" SIZE=\"$FontSize2\" COLOR=\"$textcolor\"><B>$title</B></FONT></TD></TR>";
+        $tool_content .= "<TR ALIGN=\"LEFT\" VALIGN=\"TOP\"><TD COLSPAN=6 BGCOLOR=\"" . $color1 "\">";
+        $tool_content .= "<FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize2 . "\" COLOR=\"" . $textcolor . "\"><B>" . $title . "</B></FONT></TD></TR>";
 	continue;
      }
    }
@@ -104,8 +108,8 @@ for($i = 0; $i < $total_categories; $i++) {
    // Added by Thomas for Claroline : distinguish group forums from others
    $catNum=$categories[$i][cat_id];
 
-   echo "<TR ALIGN=\"LEFT\" VALIGN=\"TOP\"><TD COLSPAN=6 BGCOLOR=\"$color1\">
-   <FONT FACE=\"$FontFace\" SIZE=\"$FontSize2\" COLOR=\"$textcolor\"><B>$title</B></FONT></TD></TR>";
+   $tool_content .= "<TR ALIGN=\"LEFT\" VALIGN=\"TOP\"><TD COLSPAN=6 BGCOLOR=\"" . $color1 . "\">";
+   $tool_content .= "<FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize2 . "\" COLOR=\"" . $textcolor . "\"><B>" . $title . "</B></FONT></TD></TR>";
    @reset($forum_row);
    for($x = 0; $x < count($forum_row); $x++)
      {
@@ -126,20 +130,20 @@ for($i = 0; $i < $total_categories; $i++) {
 	 {
 	 	$last_post = "No Posts";
 	 }
-	 echo "<TR  ALIGN=\"LEFT\" VALIGN=\"TOP\">";
+         $tool_content .= "<TR  ALIGN=\"LEFT\" VALIGN=\"TOP\">";
       //if((($last_visit - $last_post_time) < 600) && $last_post != "No posts") {
 	 if($last_post_time > $last_visit && $last_post != "No posts") {
-	    echo "<TD BGCOLOR=\"$color1\" ALIGN=\"CENTER\" VALIGN=\"middle\" WIDTH=5%><IMG SRC=\"$newposts_image\"></TD>";
+            $tool_content .= "<TD BGCOLOR=\"$color1\" ALIGN=\"CENTER\" VALIGN=\"middle\" WIDTH=5%><IMG SRC=\"$newposts_image\"></TD>";
 	 }
 	 else {
-	    echo "<TD BGCOLOR=\"$color1\" ALIGN=\"CENTER\" VALIGN=\"middle\" WIDTH=5%><IMG SRC=\"$folder_image\"></TD>";
+            $tool_content .= "<TD BGCOLOR=\"$color1\" ALIGN=\"CENTER\" VALIGN=\"middle\" WIDTH=5%><IMG SRC=\"$folder_image\"></TD>";
 	 }
 	 	$name = stripslashes($forum_row[$x][forum_name]);
 		$total_posts = $forum_row[$x]["forum_posts"];
 		$total_topics = $forum_row[$x]["forum_topics"];
 		$desc = stripslashes($forum_row[$x][forum_desc]);
 
-	 	echo "<TD BGCOLOR=\"$color2\"><FONT FACE=\"$FontFace\" SIZE=\"$FontSize2\" COLOR=\"$textcolor\">";
+                $tool_content .= "<TD BGCOLOR=\"$color2\"><FONT FACE=\"$FontFace\" SIZE=\"$FontSize2\" COLOR=\"$textcolor\">";
 
 
 		$forum=$forum_row[$x]["forum_id"];
@@ -163,12 +167,12 @@ for($i = 0; $i < $total_categories; $i++) {
 
 			if ($countTutor==0)
 			{
-				echo "<a href=\"viewforum.$phpEx?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a> 
+                                $tool_content .= "<a href=\"viewforum.$phpEx?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a> 
 						";
 			}
 			else
 			{
-				echo "<a href=\"viewforum.$phpEx?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>
+                                $tool_content .= "<a href=\"viewforum.$phpEx?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>
 					&nbsp;($langOneMyGroups)";
 			}
 		}
@@ -177,7 +181,7 @@ for($i = 0; $i < $total_categories; $i++) {
 		// ADMIN VIEW
 		elseif($status[$dbname] == 1 OR $status[$dbname] == 2)
 		{
-			echo "<a href=\"viewforum.$phpEx?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>";
+                        $tool_content .= "<a href=\"viewforum.$phpEx?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>";
 		}
 
 
@@ -188,18 +192,18 @@ for($i = 0; $i < $total_categories; $i++) {
 
 			if ($forum==$myGroupForum)
 			{
-				echo "<a href=\"viewforum.$phpEx?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>
+                                $tool_content .= "<a href=\"viewforum.$phpEx?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>
 					&nbsp;&nbsp;($langMyGroup) ";
 			}	
 			else
 			{
 				if($privProp==1)
 				{
-					echo "$name";
+                                        $tool_content .= "$name";
 				}
 				else
 				{
-					echo "<a href=\"viewforum.$phpEx?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>";
+                                        $tool_content .= "<a href=\"viewforum.$phpEx?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>";
 				}
 			}
 		}
@@ -207,28 +211,28 @@ for($i = 0; $i < $total_categories; $i++) {
 		// OTHER FORUMS
 		else
 		{
-			echo "<a href=\"viewforum.$phpEx?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a> ";
+                        $tool_content .= "<a href=\"viewforum.$phpEx?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a> ";
 		}
 
 
 
-		echo "</font>\n";
-	 	echo "<br><FONT FACE=\"$FontFace\" SIZE=\"$FontSize1\" COLOR=\"$textcolor\">$desc</font></TD>\n";
-	 	echo "<TD BGCOLOR=\"$color1\" WIDTH=5% ALIGN=\"CENTER\" VALIGN=\"MIDDLE\">
+                $tool_content .= "</font>\n";
+                $tool_content .= "<br><FONT FACE=\"$FontFace\" SIZE=\"$FontSize1\" COLOR=\"$textcolor\">$desc</font></TD>\n";
+                $tool_content .= "<TD BGCOLOR=\"$color1\" WIDTH=5% ALIGN=\"CENTER\" VALIGN=\"MIDDLE\">
 		<FONT FACE=\"$FontFace\" SIZE=\"$FontSize2\" COLOR=\"$textcolor\">$total_topics</font></TD>\n";
-	 	echo "<TD BGCOLOR=\"$color2\" WIDTH=5% ALIGN=\"CENTER\" VALIGN=\"MIDDLE\">
+                $tool_content .= "<TD BGCOLOR=\"$color2\" WIDTH=5% ALIGN=\"CENTER\" VALIGN=\"MIDDLE\">
 		<FONT FACE=\"$FontFace\" SIZE=\"$FontSize2\" COLOR=\"$textcolor\">$total_posts</font></TD>\n";
-	 	echo "<TD BGCOLOR=\"$color1\" WIDTH=15% ALIGN=\"CENTER\" VALIGN=\"MIDDLE\">
+                $tool_content .= "<TD BGCOLOR=\"$color1\" WIDTH=15% ALIGN=\"CENTER\" VALIGN=\"MIDDLE\">
 		<FONT FACE=\"$FontFace\" SIZE=\"$FontSize1\" COLOR=\"$textcolor\">$last_post</font></TD>\n";
 	 	$forum_moderators = get_moderators($forum_row[$x][forum_id], $db);
-	 	echo "</tr>\n";
+                $tool_content .= "</tr>\n";
       }
     }
   }
 }
-
+draw($tool_content, 2, 'user');
 ?>
-     </TABLE></TD></TR></TABLE>
+//     </TABLE></TD></TR></TABLE>
 
 
 
