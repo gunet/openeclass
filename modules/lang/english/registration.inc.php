@@ -85,7 +85,7 @@ $langLessonCode="Κωδικός μαθήματος";
 $langProfessors="Καθηγητής(ες)";
 
 // profile.php
-
+$langUnregUser = "Delete account";
 $langModifProfile="Modify my profile";
 $langPassTwo="You have typed two different passwords";
 $langAgain="Try again!";
