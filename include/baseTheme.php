@@ -114,14 +114,12 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		}
 
 		
-		$t->set_var('LANG_USER', $langUser);
+		
 		if (isset($uid) && strlen($nom) > 0) {
+			$t->set_var('LANG_USER', $langUser);
 			$t->set_var('USER_NAME', $prenom);
 			$t->set_var('USER_SURNAME', $nom);
-		} else {
-			$t->set_var('USER_NAME', $langAnonUser);
-			$t->set_var('USER_SURNAME', '');
-		}
+		} 
 
 		if ($menuTypeID > 0) {
 			$t->set_var('LANG_LOGOUT', $langLogout);
