@@ -41,7 +41,7 @@ function getTools($menuTypeID){
 	 */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null){
 	global $langUser, $prenom, $nom, $langLogout, $intitule,  $nameTools, $langHelp, $langAnonUser;
-	global $language, $helpTopic, $require_help, $langEclass;
+	global $language, $helpTopic, $require_help, $langEclass, $langCopyrightFooter;
 	global $relPath, $urlServer;
 	global $page_name, $page_navi,$currentCourseID, $siteName, $navigation;
 	global $homePage, $courseHome, $uid, $webDir;
@@ -282,7 +282,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var('LANG_HELP', '');
 		}
 
-
+		$t->set_var('LANG_COPYRIGHT_NOTICE', $langCopyrightFooter);
 
 		//		At this point all variables are set and we are ready to send the final output
 		//		back to the browser
@@ -297,7 +297,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 function drawPerso($toolContent, $menuTypeID=null, $tool_css = null, $head_content = null, $body_action = null){
 
 	global $langUser, $prenom, $nom, $langLogout, $intitule,  $nameTools, $langHelp, $langPersonalisedBriefcase;
-	global $language, $helpTopic, $require_help;
+	global $language, $helpTopic, $require_help, $langCopyrightFooter;
 	global $relPath, $urlServer, $is_admin;
 	global $page_name, $page_navi,$currentCourseID, $siteName, $navigation;
 	global $homePage, $courseHome;
@@ -375,6 +375,8 @@ function drawPerso($toolContent, $menuTypeID=null, $tool_css = null, $head_conte
 	$t->set_var('PAGE_TITLE',  $siteName);
 	// end breadcrumb
 
+	$t->set_var('LANG_COPYRIGHT_NOTICE', $langCopyrightFooter);
+	
 	$t->parse('main', 'mainBlock', false);
 
 	$t->pparse('Output', 'fh');
