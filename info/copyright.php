@@ -39,6 +39,7 @@ $tool_content .= "<blockquote><font size='2' face='arial, helvetica'>
 </font>
 </blockquote>";
 
-draw($tool_content, 0);
+if(session_is_registered('uid')) draw($tool_content,1);
+else draw($tool_content, 0);
 
 ?>
