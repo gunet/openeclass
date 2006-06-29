@@ -44,7 +44,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	global $language, $helpTopic, $require_help, $langEclass;
 	global $relPath, $urlServer;
 	global $page_name, $page_navi,$currentCourseID, $siteName, $navigation;
-	global $homePage, $courseHome, $uid;
+	global $homePage, $courseHome, $uid, $webDir;
 	global $langChangeLang, $langUserBriefcase, $langAdmin, $switchLangURL;
 
 	$toolArr = getTools($menuTypeID);
@@ -77,11 +77,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		for($i=0; $i< $numOfToolGroups; $i++){
 
 			$numOfTools = count($toolArr[$i][1]);
-			//echo "draw";
-
-			//			$t->set_var('TOOL_LINK', $url_intro);
-			//			$t->set_var('TOOL_TEXT', 'Eisagwgh Ma8hmatos');
-			//			$t->parse('leftNavLink', 'leftNavLinkBlock', true);
 
 			for($j=0; $j< $numOfTools; $j++){
 
@@ -100,8 +95,25 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 			$t->clear_var('leftNavLink'); //clear inner block
 		}
-
+		
 		$t->set_var('TOOL_CONTENT', $toolContent);
+
+		//if we are on the login page we can include two optional html files
+		//by including eclass_home_extras_left.html (if exists) and
+		//eclass_home_extras_right.html (if exists) for extra content on the
+		//left and right bar.
+
+		if ($homePage && file_exists('./eclass_home_extras_left.html')) {
+			$s = file_get_contents($webDir . 'eclass_home_extras_left.html'); 
+			$t->set_var('ECLASS_HOME_EXTRAS_LEFT', $s);
+		}
+		
+		if ($homePage && file_exists('./eclass_home_extras_right.html')) {
+			$s = file_get_contents($webDir . 'eclass_home_extras_right.html'); 
+			$t->set_var('ECLASS_HOME_EXTRAS_RIGHT', $s);
+		}
+
+		
 		$t->set_var('LANG_USER', $langUser);
 		if (isset($uid) && strlen($nom) > 0) {
 			$t->set_var('USER_NAME', $prenom);
@@ -302,7 +314,7 @@ function drawPerso($toolContent, $menuTypeID=null, $tool_css = null, $head_conte
 	$t->set_file('fh', "perso.html");
 
 	$t->set_block('fh', 'mainBlock', 'main');
-	
+
 	$t->set_var('LANG_USER', $langUser);
 	$t->set_var('USER_NAME', $prenom);
 	$t->set_var('USER_SURNAME', $nom);
@@ -354,9 +366,9 @@ function drawPerso($toolContent, $menuTypeID=null, $tool_css = null, $head_conte
 	$t->set_var('BREAD_TEXT',  $siteName);
 	$t->set_var('PAGE_TITLE',  $siteName);
 	/*if (!$homePage) {
-		$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_START_LINK}">');
-		$t->set_var('BREAD_START_LINK',  $urlServer);
-		$t->set_var('BREAD_HREF_END',  '</a>');
+	$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_START_LINK}">');
+	$t->set_var('BREAD_START_LINK',  $urlServer);
+	$t->set_var('BREAD_HREF_END',  '</a>');
 	}
 
 	$t->parse('breadCrumbHome', 'breadCrumbHomeBlock',false);
@@ -364,55 +376,55 @@ function drawPerso($toolContent, $menuTypeID=null, $tool_css = null, $head_conte
 	$breadIterator=1;
 	$t->set_block('mainBlock', 'breadCrumbStartBlock', 'breadCrumbStart');*/
 
-/*	if (isset($currentCourseID) && !$courseHome){
-		$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_LINK}">');
-		$t->set_var('BREAD_LINK',  $urlServer.'courses/'.$currentCourseID.'/index.php');
-		$t->set_var('BREAD_TEXT',  $intitule);
-		$t->set_var('BREAD_ARROW', '&#187;');
-		$t->set_var('BREAD_HREF_END',  '</a>');
-		$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
-		$breadIterator++;
+	/*	if (isset($currentCourseID) && !$courseHome){
+	$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_LINK}">');
+	$t->set_var('BREAD_LINK',  $urlServer.'courses/'.$currentCourseID.'/index.php');
+	$t->set_var('BREAD_TEXT',  $intitule);
+	$t->set_var('BREAD_ARROW', '&#187;');
+	$t->set_var('BREAD_HREF_END',  '</a>');
+	$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
+	$breadIterator++;
 	} elseif (isset($currentCourseID) && $courseHome) {
-		$t->set_var('BREAD_HREF_FRONT',  '');
-		$t->set_var('BREAD_LINK',  '');
-		$t->set_var('BREAD_TEXT',  $intitule);
-		$t->set_var('BREAD_ARROW', '&#187;');
-		$t->set_var('BREAD_HREF_END',  '');
-		$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
-		$breadIterator++;
+	$t->set_var('BREAD_HREF_FRONT',  '');
+	$t->set_var('BREAD_LINK',  '');
+	$t->set_var('BREAD_TEXT',  $intitule);
+	$t->set_var('BREAD_ARROW', '&#187;');
+	$t->set_var('BREAD_HREF_END',  '');
+	$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
+	$breadIterator++;
 	}*/
 
-/*	if (isset($page_navi) && is_array($page_navi) && !$homePage){
-		foreach ($page_navi as $step){
+	/*	if (isset($page_navi) && is_array($page_navi) && !$homePage){
+	foreach ($page_navi as $step){
 
-			$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_LINK}">');
-			$t->set_var('BREAD_LINK',  $step["url"]);
-			$t->set_var('BREAD_TEXT',  $step["name"]);
-			$t->set_var('BREAD_ARROW', '&#187;');
-			$t->set_var('BREAD_HREF_END',  '</a>');
-			$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
+	$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_LINK}">');
+	$t->set_var('BREAD_LINK',  $step["url"]);
+	$t->set_var('BREAD_TEXT',  $step["name"]);
+	$t->set_var('BREAD_ARROW', '&#187;');
+	$t->set_var('BREAD_HREF_END',  '</a>');
+	$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
 
-			$breadIterator++;
-		}
+	$breadIterator++;
+	}
 	}*/
 
-/*	if (isset($page_name) && !$homePage) {
+	/*	if (isset($page_name) && !$homePage) {
 
-		$t->set_var('BREAD_HREF_FRONT',  '');
-		$t->set_var('BREAD_TEXT',  $page_name);
-		$t->set_var('BREAD_ARROW', '&#187;');
-		$t->set_var('BREAD_HREF_END',  '');
+	$t->set_var('BREAD_HREF_FRONT',  '');
+	$t->set_var('BREAD_TEXT',  $page_name);
+	$t->set_var('BREAD_ARROW', '&#187;');
+	$t->set_var('BREAD_HREF_END',  '');
 
-		$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
-		$breadIterator++;
+	$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
+	$breadIterator++;
 	}
 
 	$t->set_block('mainBlock', 'breadCrumbEndBlock', 'breadCrumbEnd');
 	for($breadIterator2=0; $breadIterator2 <= $breadIterator; $breadIterator2++){
 
-		$t->parse('breadCrumbEnd', 'breadCrumbEndBlock',true);
+	$t->parse('breadCrumbEnd', 'breadCrumbEndBlock',true);
 	}
-*/
+	*/
 	//END breadcrumb
 
 	$t->parse('main', 'mainBlock', false);
