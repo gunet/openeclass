@@ -546,11 +546,11 @@ foreach ($flatElementList as $module)
     else // module
     {
         if($module['contentType'] == CTEXERCISE_ ) 
-            $moduleImg = "quiz.png";
+            $moduleImg = "exercise_on.gif";
         else if($module['contentType'] == CTLINK_ )
         	$moduleImg = "links.gif";
         else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
-        	$moduleImg = "info.png";
+        	$moduleImg = "description_on.gif";
         else 
             $moduleImg = choose_image(basename($module['path']));
              
