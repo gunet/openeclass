@@ -94,4 +94,7 @@ $langAddIntro="Add introduction text";
 $langBackList="Return to the list";
 $langUser = "User:";
 $langLogout = "Logout";
+
+$langUserBriefcase = "User portofolio";
+$langPersonalisedBriefcase = "Personalised portofolio";
 ?>

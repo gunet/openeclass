@@ -82,5 +82,8 @@ $langLoginRequired = '
 		</center>
 ';
 
+$langUserBriefcase = "Χαρτοφυλάκιο χρήστη";
+$langPersonalisedBriefcase = "Προσωπικό χαρτοφυλάκιο";
+
 
 ?>
