@@ -495,7 +495,8 @@ function form_dir_list($sourceType, $sourceComponent, $command, $baseWorkDir)
 
 	$dialogBox .= "<form action=\"".$PHP_SELF."\" method=\"post\">\n" ;
 	$dialogBox .= "<input type=\"hidden\" name=\"".$sourceType."\" value=\"".$sourceComponent."\">\n" ;
-	$dialogBox .= " ".$langMoveFrom." ".$sourceComponent." ".$langTo.":\n" ;
+	//palios tropos emfanishs entolhs + onomatos arxeiou --       $dialogBox .= " ".$langMoveFrom." ".$sourceComponent." ".$langTo.":\n" ;
+	$dialogBox .= " ".$langMoveFrom." ".$langTo.":\n" ;
 	$dialogBox .= "<select name=\"".$command."\">\n" ;
 	$dialogBox .= "<option value=\"\" style=\"color:#999999\">".$langParentDir."\n";
 
