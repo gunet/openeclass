@@ -130,8 +130,11 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		if ($menuTypeID == 2) {
 			$t->set_var('THIRD_BAR_TEXT', $intitule);
 			$t->set_var('THIRDBAR_LEFT_ICON', 'lesson_icon');
-		} elseif (isset($langUserBriefcase) && $menuTypeID > 0) {
+		} elseif (isset($langUserBriefcase) && $menuTypeID > 0 && !session_is_registered('user_perso_active')) {
 			$t->set_var('THIRD_BAR_TEXT', $langUserBriefcase);
+			$t->set_var('THIRDBAR_LEFT_ICON', 'briefcase_icon');
+		} elseif (isset($langPersonalisedBriefcase) && $menuTypeID > 0 && session_is_registered('user_perso_active')) {
+			$t->set_var('THIRD_BAR_TEXT', $langPersonalisedBriefcase);
 			$t->set_var('THIRDBAR_LEFT_ICON', 'briefcase_icon');
 		} elseif ($menuTypeID == 3)  {
 			$t->set_var('THIRD_BAR_TEXT', $langAdmin);
