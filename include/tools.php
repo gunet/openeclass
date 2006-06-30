@@ -195,7 +195,7 @@ function loggedInMenu(){
  */
 function loggedOutMenu(){
 
-	global $webDir, $language, $urlServer, $auth;
+	global $webDir, $language, $urlServer, $is_eclass_unique;
 
 	include("$webDir/modules/lang/$language/index.inc");
 
@@ -218,8 +218,8 @@ function loggedOutMenu(){
 	else $newuser = "newuser.php";
 	// end of checking
 
-	$newuser = ($auth==1)?'newuser.php':'newuser_info.php';
-	$newprof = ($auth==1)?'newprof.php':'newprof_info.php';
+	$newuser = ($is_eclass_unique==1)?'newuser.php':'newuser_info.php';
+	$newprof = ($is_eclass_unique==1)?'newprof.php':'newprof_info.php';
 
 	array_push($sideMenuText, $langNewUser);
 	array_push($sideMenuLink, $urlServer."modules/auth/$newuser");
@@ -309,7 +309,7 @@ function adminMenu(){
 	array_push($sideMenuText, $langAddAdminInApache);
 	array_push($sideMenuLink, "../admin/addadmin.php");
 	array_push($sideMenuImg, "user_add_admin.gif");
-	array_push($sideMenuText, "Πιστοποίηση Χρηστών");
+	array_push($sideMenuText, $langUserAuthentication);
 	array_push($sideMenuLink, "../admin/auth.php");
 	array_push($sideMenuImg, "user_auth.gif");
 
@@ -331,7 +331,7 @@ function adminMenu(){
 	array_push($sideMenuLink, "../admin/listcours.php");
 	array_push($sideMenuImg, "lessons_list.gif");
 	// Added by vagpits
-	array_push($sideMenuText, "Αναζήτηση Μαθημάτων");
+	array_push($sideMenuText, $langSearchCourses);
 	array_push($sideMenuLink, "../admin/searchcours.php");
 	array_push($sideMenuImg, "lessons_search.gif");
 	// End
