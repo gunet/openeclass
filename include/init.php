@@ -114,7 +114,7 @@ mysql_select_db($mysqlMainDb, $db);
 if(session_is_registered('uid') && !session_is_registered('langswitch')) {
 	$sqlLang= "SELECT lang
                 FROM user 
-                WHERE uid='".$_SESSION['uid']."'";
+                WHERE user_id='".$_SESSION['uid']."'";
 	$result=mysql_query($sqlLang);
 	while ($myrow = mysql_fetch_array($result)) {
 		if ($myrow[0]== "el") {
