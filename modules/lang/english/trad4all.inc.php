@@ -95,8 +95,8 @@ $langBackList="Return to the list";
 $langUser = "User:";
 $langLogout = "Logout";
 
-$langUserBriefcase = "User portofolio";
-$langPersonalisedBriefcase = "Personalised portofolio";
+$langUserBriefcase = "User portfolio";
+$langPersonalisedBriefcase = "Personalised portfolio";
 $langEclass = "e-Class learning management system";
 $langCopyrightFooter="Copyright notice";
 
