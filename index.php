@@ -95,7 +95,9 @@ $warning = '';
 $uname = isset($_POST['uname'])?$_POST['uname']:'';
 $pass = isset($_POST['pass'])?$_POST['pass']:'';
 $submit = isset($_POST['submit'])?$_POST['submit']:'';
-$auth = get_auth_id();
+// $auth = get_auth_id();
+$auth = get_auth_active_methods();
+$is_eclass_unique = is_eclass_unique();
 
 if(!empty($submit))
 {
@@ -136,13 +138,23 @@ if(!empty($submit))
 					}
 					else
 					{
-						$warning .= "<br />Your account is inactive. <br />Please <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">contact the Eclass Admin.</a><br /><br />";
+						// $warning .= "<br />Your account is inactive. <br />Please <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">contact the Eclass Admin.</a><br /><br />";
+						$warning .= "<br />".$langAccountInactive1." <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">".$langAccountInactive2."</a><br /><br />";
 					}
 				}
 			}
 			else
 			{
 				// try to authenticate him via the alternative defined method
+				switch($myrow["password"])
+				{
+					case 'eclass': $auth = 1; break;
+					case 'pop3': $auth = 2; break;
+					case 'imap': $auth = 3; break;
+					case 'ldap': $auth = 4; break;
+					case 'db': $auth = 5; break;
+					default: break;
+				}
 				$auth_method_settings = get_auth_settings($auth);
 				if($myrow['password']==$auth_method_settings['auth_name'])
 				{
@@ -176,29 +188,23 @@ if(!empty($submit))
 					$is_valid = auth_user_login($auth,$uname,$pass);
 					if($is_valid)
 					{
-						// check if the account is active
-						$is_active = check_activity($myrow["user_id"]);
-
-						// always the admin is active
-						if($myrow["user_id"]==$myrow["is_admin"])
+						$is_active = check_activity($myrow["user_id"]);		// check if the account is active
+						if($myrow["user_id"]==$myrow["is_admin"])			// always the admin is active
 						{
 							$is_active = 1;
 						}
-
 						if(!empty($is_active))
 						{
 							$auth_allow = 1;
 						}
 						else
 						{
-							$auth_allow = 3;
-							//$warning .= "<br />Your account is inactive. <br />Please contact the Eclass Admin<br />";
+							$auth_allow = 3;		//$warning .= "<br />Your account is inactive. <br />Please contact the Eclass Admin<br />";
 						}
 					}
 					else
 					{
-						//$tool_content .= "<br />The connection does not seem to work!<br />";
-						$auth_allow = 2;
+						$auth_allow = 2;		//$tool_content .= "<br />The connection does not seem to work!<br />";
 					}
 					if($auth_allow==1)
 					{
@@ -213,21 +219,23 @@ if(!empty($submit))
 					}
 					elseif($auth_allow==2)
 					{
-						$tool_content .= "<br />The connection with the auth server does not seem to work!<br />";
+						// $tool_content .= "<br />The connection with the auth server does not seem to work!<br />";
+						$tool_content .= "<br />".$langNoConnection."<br />";
 					}
 					elseif($auth_allow==3)
 					{
-						$tool_content .= "<br />Your account is inactive. <br />Please <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">contact the Eclass Admin.</a><br /><br />";
+						// $tool_content .= "<br />Your account is inactive. <br />Please <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">contact the Eclass Admin.</a><br /><br />";
+						$tool_content .= "<br />".$langAccountInactive1." <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">".$langAccountInactive2."</a><br /><br />";
 					}
 					else
 					{
-						$tool_content .= "CANNOT PROCEED<br />";
+						// $tool_content .= "CANNOT PROCEED<br />";
+						$tool_content .= $langLoginFatalError."<br />";
 					}
 				}
 				else
 				{
 					$warning .= "<br>Invalid user auth method!Please contact the admin<br>";
-					//exit;
 				}
 
 			}
@@ -236,8 +244,6 @@ if(!empty($submit))
 		else
 		{
 			$tool_content .= "<br>No authentication method defined.Cannot proceed!<br>";
-			//exit;
-
 		}
 
 

@@ -25,7 +25,7 @@
 
 /**===========================================================================
 	auth_process.php
-	@last update: 31-05-2006 by Stratos Karatzidis
+	@last update: 27-06-2006 by Stratos Karatzidis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
 ==============================================================================        
@@ -47,17 +47,19 @@
 */
 
 // LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-$langFiles = array('admin','about');
+$langFiles = array('admin','registration');
 include '../../include/baseTheme.php';
 include_once '../auth/auth.inc.php';
 @include "check_admin.inc";			// check if user is administrator
-$nameTools = "Πιστοποίηση Χρηστών";
+$nameTools = $langUserAuthentication;
 
 $tool_content = "";			// Initialise $tool_content
 
 // get the values
 $auth = isset($_POST['auth'])?$_POST['auth']:'';
 $auth_submit = isset($_POST['auth_submit'])?$_POST['auth_submit']:'';
+$test_username = isset($_POST['test_username'])?$_POST['test_username']:'';
+$test_password = isset($_POST['test_password'])?$_POST['test_password']:'';
 
 if((!empty($auth_submit)) && ($auth_submit==1))
 {
@@ -65,39 +67,32 @@ if((!empty($auth_submit)) && ($auth_submit==1))
 
   if((array_key_exists('submit', $_POST)) && (!empty($submit))) // if form is submitted
 	{
-		$test_username = isset($_POST['test_username'])?$_POST['test_username']:'';
-		$test_password = isset($_POST['test_password'])?$_POST['test_password']:'';
-		$tool_content .= "<br />Γίνεται δοκιμή του τρόπου πιστοποίησης...";
+		$tool_content .= "<br />$langConnTest";
 		if((!empty($test_username)) && (!empty($test_password)))
 		{
 	    $is_valid = auth_user_login($auth,$test_username,$test_password);
 	    if($is_valid)
 	    {
 				$auth_allow = 1;	
-				$tool_content .= "<span style=\"color:green;font-weight:bold;\">ΕΠΙΤΥΧΗΣ ΣΥΝΔΕΣΗ</span><br /><br />";
+				$tool_content .= "<span style=\"color:green;font-weight:bold;\">$langConnYes</span><br /><br />";
 	    }
 	    else
 	    {
-				$tool_content .= "<span style=\"color:red;font-weight:bold;\">Η ΣΥΝΔΕΣΗ ΔΕΝ ΔΟΥΛΕΥΕΙ</span><br /><br />";
+				$tool_content .= "<span style=\"color:red;font-weight:bold;\">$langConnNo</span><br /><br />";
 				$auth_allow = 0;
 	    }	
-	}
-	else
-	{
+		}
+		else
+		{
 	    $tool_content .= "<br />You did not provide a valid pair of username/password<br />";
 	    $auth_allow = 0;
-	}
+		}
 	
-	// store the values - do the updates
-	if((!empty($auth_allow))&&($auth_allow==1))
-	{
-	    $currentauth = get_auth_id();
-	    $qry = "UPDATE auth set auth_default=0";		// set inactive the previous auth method
-	    $sql = mysql_query($qry,$db);
-	    if($sql)
-	    {
-	    	switch($auth)
-				{
+		///// store the values - do the updates /////
+		if((!empty($auth_allow))&&($auth_allow==1))
+		{
+			switch($auth)
+			{
 					case '1':	$auth_default = 1;
 						$auth_settings = "";
 						$auth_instructions = "";
@@ -134,33 +129,33 @@ if((!empty($auth_submit)) && ($auth_submit==1))
 						break;
 						default:
 						break;
-				}
+			}
 				 
-				$qry = "UPDATE auth SET auth_settings='".$auth_settings."',auth_instructions='".$auth_instructions."',auth_default=1 WHERE auth_id=".$auth;
-				$sql2 = mysql_query($qry,$db);		// do the update as the default method
-				if(($sql2) && (mysql_affected_rows($db)==1))
+			$qry = "UPDATE auth SET auth_settings='".$auth_settings."',auth_instructions='".$auth_instructions."',auth_default=1 WHERE auth_id=".$auth;
+			$sql2 = mysql_query($qry,$db);		// do the update as the default method
+			if($sql2)
+			{
+				if(mysql_affected_rows($db)==1)
 				{
-					$tool_content .= "<br />O τρόπος πιστοποίησης που επιλέξατε έχει οριστεί ως ο προκαθορισμένος της πλατφόρμας<br />";
+					$tool_content .= "<br />O τρόπος πιστοποίησης που επιλέξατε, έχει ενεργοποιηθεί<br />";
 				}
-				else	// rollback the previous operation
+				else
 				{
-				    $tool_content .= "ΣΦΑΛΜΑ. Ο τρόπος πιστοποίησης δεν μπορεί να οριστεί ως προκαθορισμένος<br />";
-				    $qry = "UPDATE auth set auth_default=1 WHERE auth_id=".$currentauth;
-				    $sql3 = db_query($qry);
+					$tool_content .= "<br />O τρόπος πιστοποίησης που επιλέξατε, είναι ήδη ενεργοποιημένος<br />";
 				}
-	    }
-	    else
-	    {
-				$tool_content .= "ΣΦΑΛΜΑ. Ο τρόπος πιστοποίησης δεν μπορεί να οριστεί ως προκαθορισμένος<br />";
-	    }
-		}
+			}
+			else
+			{
+				$tool_content .= "ΣΦΑΛΜΑ. Ο τρόπος πιστοποίησης δεν μπορεί να ενεργοποιηθεί<br />";
+			}
 		
-	}
+		}
 
+	}
 }
 else
 {
-	// display the form
+	////// display the form //////
 	if(!empty($auth))
 	{
 		$auth_data = get_auth_settings($auth);
@@ -171,32 +166,27 @@ else
 	$tool_content .= "<form name=\"authmenu\" method=\"post\" action=\"auth_process.php\">
 	<input type=\"hidden\" name=\"auth_submit\" value=\"1\" />
 	<input type=\"hidden\" name=\"auth\" value=\"".$auth."\" />
-	AUTH METHOD:<br /><br />";
+	$langAuthMethod: <strong>".get_auth_info($auth)."</strong><br /><br /><br />";
 	switch($auth)
 	{
-		case 1: $tool_content .= "<br />ECLASS<br />";
-			include_once '../auth/methods/eclassform.php';
+		case 1: include_once '../auth/methods/eclassform.php';
 			break;
-		case 2: $tool_content .= "<br />POP3<br />";
-			include_once '../auth/methods/pop3form.php';
+		case 2: include_once '../auth/methods/pop3form.php';
 			break;
-		case 3: $tool_content .= "<br />IMAP<br />";
-			include_once '../auth/methods/imapform.php';
+		case 3: include_once '../auth/methods/imapform.php';
 			break;			
-		case 4: $tool_content .= "<br />LDAP<br />";
-			include_once '../auth/methods/ldapform.php';
+		case 4: include_once '../auth/methods/ldapform.php';
 			break;
-		case 5: $tool_content .= "<br />EXTERNAL DATABASE<br />";
-			include_once '../auth/methods/db/dbform.php';
+		case 5: include_once '../auth/methods/db/dbform.php';
 			break;
 		default:
 			break;		
 	}	
 	
-	$tool_content .= "<br />
+	$tool_content .= "<br />$langTestAccount<br /><br />
 	Username:<input type=\"text\" name=\"test_username\" value=\"".$test_username."\"><br />
 	Password:<input type=\"password\" name=\"test_password\" value=\"".$test_password."\"><br />
-	<input type=\"submit\" name=\"submit\" value=\"ΕΝΗΜΕΡΩΣΗ\"><br />";
+	<input type=\"submit\" name=\"submit\" value=\"$langUpdate\"><br />";
 	
 	$tool_content .= "</form>";
 	$tool_content .="<br /></td></tr></table>";

@@ -25,17 +25,16 @@
 
 /**===========================================================================
 	auth.php
-	@last update: 31-05-2006 by Stratos Karatzidis
+	@last update: 27-06-2006 by Stratos Karatzidis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
 ==============================================================================        
-        @Description: Platform Authentication Methods and their settings
+	@Description: Platform Authentication Methods and their settings
 
  	This script displays the alternative methods of authentication 
 	and their settings.
 
  	The admin can: - choose a method and define its settings
-
 
 ==============================================================================
 */
@@ -45,23 +44,52 @@ $langFiles = array('admin','about');
 include '../../include/baseTheme.php';
 include_once '../auth/auth.inc.php';
 @include "check_admin.inc";		// check if user is administrator
-$nameTools = "Πιστοποίηση Χρηστών";		// Define $nameTools
+$nameTools = $langUserAuthentication;		// Define $nameTools
 
 $tool_content = "";			// Initialise $tool_content
 
-$auth = get_auth_id();
+$auth = isset($_GET['auth'])?$_GET['auth']:"";
+$active = isset($_GET['active'])?$_GET['active']:"";
+if((!empty($auth)) && (!empty($active)))
+{
+	switch($active)
+	{
+		case 'yes': $qry = "UPDATE auth SET auth_default=1 WHERE auth_id=".$auth;
+		break;
+		case 'no': $qry = "UPDATE auth SET auth_default=0 WHERE auth_id=".$auth;
+		break;
+		default:
+		break;
+	}
+	if(!empty($qry))
+	{
+	$sql = mysql_query($qry,$db);		// do the update as the default method
+	}
+}
+$auth_methods = get_auth_active_methods();
+
 	
 $tool_content .= "<table width=\"99%\">
 <tr><td>";
 
 $tool_content .= "<form name=\"authmenu\" method=\"post\" action=\"auth_process.php\">
-Επιλέξτε τον τρόπο πιστοποίησης χρηστών:<br /><br />
-<input type=\"radio\" name=\"auth\" value=\"1\"";if($auth==1) $tool_content .= " checked"; $tool_content .= "\">ECLASS<br />
-<input type=\"radio\" name=\"auth\" value=\"2\"";if($auth==2) $tool_content .= " checked"; $tool_content .= "\">POP3<br />
-<input type=\"radio\" name=\"auth\" value=\"3\"";if($auth==3) $tool_content .= " checked"; $tool_content .= "\">IMAP<br />
-<input type=\"radio\" name=\"auth\" value=\"4\"";if($auth==4) $tool_content .= " checked"; $tool_content .= "\">LDAP<br />
-<input type=\"radio\" name=\"auth\" value=\"5\"";if($auth==5) $tool_content .= " checked"; $tool_content .= "\">EXTERNAL DB<br /><br />";
-$tool_content .= "<input type=\"submit\" name=\"submit\" value=\"Συνέχεια\"><br />";
+$langChooseAuthMethod:<br /><br />
+<input type=\"radio\" name=\"auth\" value=\"1\" checked>ECLASS&nbsp;&nbsp;";
+$tool_content .= in_array("1",$auth_methods)? "<a href=\"auth.php?auth=1&active=no\">".$langAuthDeactivate."</a>":"<a href=\"auth.php?auth=1&active=yes\">".$langAuthActivate."</a>";
+$tool_content .= "<br />";
+$tool_content .= "<input type=\"radio\" name=\"auth\" value=\"2\">POP3&nbsp;&nbsp;";
+$tool_content .= in_array("2",$auth_methods)? "<a href=\"auth.php?auth=2&active=no\">".$langAuthDeactivate."</a>":"<a href=\"auth.php?auth=2&active=yes\">".$langAuthActivate."</a>";
+$tool_content .= "<br />";
+$tool_content .= "<input type=\"radio\" name=\"auth\" value=\"3\">IMAP&nbsp;&nbsp;";
+$tool_content .= in_array("3",$auth_methods)? "<a href=\"auth.php?auth=3&active=no\">".$langAuthDeactivate."</a>":"<a href=\"auth.php?auth=3&active=yes\">".$langAuthActivate."</a>";
+$tool_content .= "<br />";
+$tool_content .= "<input type=\"radio\" name=\"auth\" value=\"4\">LDAP&nbsp;&nbsp;";
+$tool_content .= in_array("4",$auth_methods)? "<a href=\"auth.php?auth=4&active=no\">".$langAuthDeactivate."</a>":"<a href=\"auth.php?auth=4&active=yes\">".$langAuthActivate."</a>";
+$tool_content .= "<br />";
+$tool_content .= "<input type=\"radio\" name=\"auth\" value=\"5\">EXTERNAL DB&nbsp;&nbsp;";
+$tool_content .= in_array("5",$auth_methods)? "<a href=\"auth.php?auth=5&active=no\">".$langAuthDeactivate."</a>":"<a href=\"auth.php?auth=5&active=yes\">".$langAuthActivate."</a>";
+$tool_content .= "<br />";
+$tool_content .= "<br /><input type=\"submit\" name=\"submit\" value=\"$langNextStep\"><br />";
 $tool_content .= "</form><br />";
 $tool_content .="<br /></td></tr></table>";
 
