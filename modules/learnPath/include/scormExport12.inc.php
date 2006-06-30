@@ -75,18 +75,19 @@ if(!class_exists('ScormExport')):
 require_once("../../include/lib/fileManageLib.inc.php");
 require_once("../../include/lib/fileUploadLib.inc.php");
 require_once("../../include/pclzip/pclzip.lib.php");
-
-/*$tbl_cdb_names = claro_sql_get_course_tbl();
-$tbl_quiz_test              = $tbl_cdb_names['quiz_test'             ];
-$tbl_quiz_rel_test_question = $tbl_cdb_names['quiz_rel_test_question'];
-$tbl_quiz_question          = $tbl_cdb_names['quiz_question'         ];
-$tbl_quiz_answer            = $tbl_cdb_names['quiz_answer'           ];*/
+require_once('../../include/lib/textLib.inc.php');
 
 
-/*require_once('../exercice/exercise.class.php');
+$TBL_EXERCICES              = 'exercices';
+$TBL_EXERCICE_QUESTION      = 'exercice_question';
+$TBL_QUESTIONS              = 'questions';
+$TBL_REPONSES               = 'reponses';
+
+
+require_once('../exercice/exercise.class.php');
 require_once('../exercice/question.class.php');
 require_once('../exercice/answer.class.php');
-require_once('../exercice/exercise.lib.php');*/
+require_once('../exercice/exercise.lib.php');
 
 define('UNIQUE_ANSWER',   1);
 define('MULTIPLE_ANSWER', 2);
@@ -100,6 +101,7 @@ define('LISTBOX_FILL',	2);
 /**
  * Exports a Learning Path to a SCORM package.
  *
+ * @author Thanos Kyritsis <atkyritsis@upnet.gr>
  * @author Amand Tihon <amand@alrj.org>
  */
 class ScormExport
@@ -154,6 +156,7 @@ class ScormExport
      * Fetch info from the database 
      *
      * @return False on error, true otherwise.
+     * @author Thanos Kyritsis <atkyritsis@upnet.gr>
      * @author Amand Tihon <amand@alrj.org>
      */
     function fetch()
@@ -259,6 +262,7 @@ class ScormExport
     * @param $quizId The quiz 
     * @param $raw_to_pass The needed score to attain
     * @return False on error, True if everything went well.
+    * @author Thanos Kyritsis <atkyritsis@upnet.gr>
     * @author  Amand Tihon <amand@alrj.org>
     */
     function prepareQuiz($quizId, $raw_to_pass=50)
@@ -336,7 +340,7 @@ class ScormExport
         <tr><td valign="top" colspan="2"><i>' . claro_parse_user_text($qdescription) . '</i></td></tr>' . "\n";
             
             // Attached file, if it exists.
-            $attachedFile = $question->selectAttachedFile();
+            //$attachedFile = $question->selectAttachedFile();
             if ( !empty($attachedFile))
             {
                 // copy the attached file
@@ -677,6 +681,7 @@ class ScormExport
      * 
      * @return False on error, true otherwise.
      * @see createManifest
+     * @author Thanos Kyritsis <atkyritsis@upnet.gr>
      * @author Amand Tihon <amand@alrj.org>
      */
     function prepare()
@@ -693,12 +698,12 @@ class ScormExport
         
         // Copy usual files (.css, .js, .xsd, etc)
         if (
-               !claro_copy_file('export/APIWrapper.js', $this->destDir)
-            || !claro_copy_file('export/scores.js', $this->destDir)
-            || !claro_copy_file('export/ims_xml.xsd', $this->destDir)
-            || !claro_copy_file('export/imscp_rootv1p1p2.xsd', $this->destDir)
-            || !claro_copy_file('export/imsmd_rootv1p2p1.xsd', $this->destDir)
-            || !claro_copy_file('export/adlcp_rootv1p2.xsd', $this->destDir)  )
+               !claro_copy_file('export12/APIWrapper.js', $this->destDir)
+            || !claro_copy_file('export12/scores.js', $this->destDir)
+            || !claro_copy_file('export12/ims_xml.xsd', $this->destDir)
+            || !claro_copy_file('export12/imscp_rootv1p1p2.xsd', $this->destDir)
+            || !claro_copy_file('export12/imsmd_rootv1p2p1.xsd', $this->destDir)
+            || !claro_copy_file('export12/adlcp_rootv1p2.xsd', $this->destDir)  )
         {
             $this->error[] = $langErrorCopyScormFiles;
             return false;

@@ -81,10 +81,6 @@ $TBL_EXERCICES              = 'exercices';
 $TBL_EXERCICE_QUESTION      = 'exercice_question';
 $TBL_QUESTIONS              = 'questions';
 $TBL_REPONSES               = 'reponses';
-/*$tbl_quiz_test              = $tbl_cdb_names['quiz_test'             ];
-$tbl_quiz_rel_test_question = $tbl_cdb_names['quiz_rel_test_question'];
-$tbl_quiz_question          = $tbl_cdb_names['quiz_question'         ];
-$tbl_quiz_answer            = $tbl_cdb_names['quiz_answer'           ];*/
 
 
 require_once('../exercice/exercise.class.php');

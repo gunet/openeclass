@@ -96,6 +96,22 @@ if ( isset($_REQUEST['cmd']) && $_REQUEST['cmd'] == 'export' && $is_adminOfCours
       }
 } // endif $cmd == export
 
+if ( isset($_REQUEST['cmd']) && $_REQUEST['cmd'] == 'export12' && $is_adminOfCourse )
+{
+      mysql_select_db($currentCourseID);
+      require_once("include/scormExport12.inc.php");
+      $scorm = new ScormExport($_REQUEST['path_id']);
+      if ( !$scorm->export() )
+      {
+          $dialogBox = '<b>Error exporting SCORM package</b><br />'."\n".'<ul>'."\n";
+          foreach( $scorm->getError() as $error)
+          {
+              $dialogBox .= '<li>' . $error . '</li>'."\n";
+          }
+          $dialogBox .= '<ul>'."\n";
+      }
+} // endif $cmd == export
+
 mysql_select_db($currentCourseID);
 
 if ($is_adminOfCourse) {
@@ -621,7 +637,10 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
         
         // EXPORT links
         $tool_content .= '<td><a href="' . $_SERVER['PHP_SELF'] . '?cmd=export&amp;path_id=' . $list['learnPath_id'] . '" >'
-            .'<img src="../../template/classic/img/export.gif" alt="' . $langExport . '" border="0"></a></td>' . "\n";
+            .'<img src="../../template/classic/img/export.gif" alt="'.$langExport2004. '" border="0" title="'.$langExport2004.'"></a>' ."\n"
+            .'<a href="' . $_SERVER['PHP_SELF'] . '?cmd=export12&amp;path_id=' . $list['learnPath_id'] . '" >'
+            .'<img src="../../template/classic/img/export.gif" alt="'.$langExport12.'" border="0" title="'.$langExport12.'"></a>' ."\n"
+            .'</td>' . "\n";
         
         // statistics links
         $tool_content .= "<td>\n
