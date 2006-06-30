@@ -250,12 +250,11 @@ function commentBox($type, $mode)
 
                 $output .= '<br />' . "\n"
                 .    '<a href="' . $_SERVER['PHP_SELF'] . '?cmd=update' . $col_name . '">' . "\n"
-                .    '<img src="../../images/edit.gif" alt="' . $langModify . '" border="0" />'
+                .    '<img src="../../template/classic/img/edit.gif" alt="' . $langModify . '" border="0" />'
                 .    '</a>' . "\n"
                 .    '<a href="' . $_SERVER['PHP_SELF'].'?cmd=del' . $col_name . '" '
                 .    ' onclick="javascript:if(!confirm(\''.clean_str_for_javascript($langConfirmYourChoice).'\')) return false;">' . "\n"
-                .    '<img src="../../images/delete.gif" alt="' . $langDelete . '" border="0" />' . "\n"
-                .    '</a>' . "\n"
+                .    '<img src="../../template/classic/img/delete.gif" alt="'.$langDelete.'" border="0" /></a>' . "\n"
                 ;
             }
         }
@@ -376,7 +375,7 @@ function nameBox($type, $mode)
 
         if ( $is_adminOfCourse )
             $output .= '<br /><a href="' . $_SERVER['PHP_SELF'] . '?cmd=updateName">'
-            .    '<img src="../../images/edit.gif" alt="' . $langModify . '" border="0" />'
+            .    '<img src="../../template/classic/img/edit.gif" alt="' . $langModify . '" border="0" />'
             .    '</a>' . "\n";
         $output .= '</strong>'."\n\n";
     }
@@ -1679,19 +1678,19 @@ function claro_disp_progress_bar ($progress, $factor)
 
     // display progress bar
     // origin of the bar
-    $progressBar = '<img src="../../images/bar_1.gif" width="1" height="12" alt="">';
+    $progressBar = '<img src="../../template/classic/img/bar_1.gif" width="1" height="12" alt="">';
 
     if($progress != 0)
-            $progressBar .= '<img src="../../images/bar_1u.gif" width="' . $barwidth . '" height="12" alt="">';
+            $progressBar .= '<img src="../../template/classic/img/bar_1u.gif" width="' . $barwidth . '" height="12" alt="">';
     // display 100% bar
 
     if($progress!= 100 && $progress != 0)
-            $progressBar .= '<img src="../../images/bar_1m.gif" width="1" height="12" alt="">';
+            $progressBar .= '<img src="../../template/classic/img/bar_1m.gif" width="1" height="12" alt="">';
 
     if($progress != 100)
-            $progressBar .= '<img src="../../images/bar_1r.gif" width="' . ($maxSize - $barwidth) . '" height="12" alt="">';
+            $progressBar .= '<img src="../../template/classic/img/bar_1r.gif" width="' . ($maxSize - $barwidth) . '" height="12" alt="">';
     // end of the bar
-    $progressBar .=  '<img src="../../images/bar_1.gif" width="1" height="12" alt="">';
+    $progressBar .=  '<img src="../../template/classic/img/bar_1.gif" width="1" height="12" alt="">';
 
     return $progressBar;
 }
