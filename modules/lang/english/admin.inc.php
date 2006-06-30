@@ -199,4 +199,81 @@ $langSearch = "Search";
 $langCourseStatusChangedSuccess = "Course type changed with success!";
 $langCourseStatusChange = "Change course type";
 
+
+// authentication
+$langAuthActivate = "Activate";
+$langAuthDeactivate = "Deactivate";
+$langChooseAuthMethod = "Choose an authentication Method and define the method settings";
+$langNextStep = "Next step";
+$langConnYes = "SUCCESSFUL CONNECTION";
+$langConnNo = "THE CONNECTION DOES NOT WORK PROPERLY";
+$langAuthNoValidUser = "NO VALID USER in the auth method.Cannot register the user";
+$langConnTest = "Trying to establish a connection...";
+$langAuthMethod = "User Authentication Method";
+$langdbhost = "Database Host";
+$langdbname = "Database Name";
+$langdbuser = "Database User";
+$langdbpass = "Database User's Password";
+$langdbtable = "Database Table Name";
+$langdbfielduser = "Table field name for users";
+$langdbfieldpass = "Table field name for users' passwords";
+$langInstructions = "Instructions/Info about user authentication";
+$langTestAccount = "To activate the authentication method, you must provide a valid account of this method";
+$langpop3host = "POP3 Host";
+$langpop3port = "POP3 port";
+$langimaphost = "IMAP Host";
+$langimapport = "IMAP port";
+$langldap_host_url = "LDAP host";
+$langldap_bind_dn = "LDAP bind settings";
+$langldap_bind_user = "LDAP bind username";
+$langldap_bind_pw = "LDAP bind password";
+$langUserAuthentication = "User Authentication";
+$langSearchCourses = "Search Courses";
+
+// other
+$langTeachers = "Teachers";
+$langStudents = "Students";
+$langVisitors = "Visitors";
+$langTeacher = "Teacher";
+$langStudent = "Student";
+$langVisitor = "Visitor";
+$langOther = "Other";
+$langUsers = "Users";
+$langThereAre = "There are";
+$langTotal = "Total";
+$langProperty = "Property";
+$langStats = "Statistics per User";
+$langUser2 = "";
+$langEdit = "Edit";
+$langDelete = "Delete";
+$langStat = "Statistics";
+$langNoUserList = "No listing results";
+$langContactAdmin = "Send a message to the Administrator";
+$langActivateAccount = "Please activate my account";
+
+// unregister
+$langConfirmDelete = "Confirm of Delete action";
+$langConfirmDeleteQuestion1 = "Are you sure that you want to delete the user";
+$langConfirmDeleteQuestion2 = "from the course with id";
+$langQueryMark = "?";
+$langCannotDeleteAdmin = "Cannot delete the admin account!";
+$langUserWithId = "The user with id";
+$langWasDeleted = "was deleted";
+$langWasAdmin = "was administrator";
+$langWasCourseDeleted = "was deleted from the course";
+$langErrorDelete = "Error during the delete action";
+$langAfter = "After";
+$langBefore = "Before";
+$langUserType = "User type";
+$langStudent2 = "Student";
+
+// other
+$langAddAdminInApache = "Add a user in the Admin Group";
+
+// search
+$langSearchUsers = "Search Users";
+
+// list requests
+$langListRequests = "List Open Requests";
+
 ?>

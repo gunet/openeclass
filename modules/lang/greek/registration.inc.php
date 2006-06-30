@@ -314,4 +314,41 @@ $langRequiredFields = '(Τα πεδία με (*) είναι υποχρεωτικά)';
 
 $langCourseVisits = "Επισκέψεις ανά μάθημα";
 
+
+// USER REGISTRATION
+$langAuthPassword = "Δώστε το συνθηματικό σας:";
+$langAuthenticateVia = "Πιστοποίηση μέσω";
+$langAuthenticateVia2 = "Διαθέσιμοι τρόποι πιστοποίησης στο ίδρυμα";
+$langCannotUseAuthMethods = "Η εγγραφή στην πλατφόρμα, πρός το παρόν δεν επιτρέπεται. Παρακαλούμε, ενημερώστε το διαχειριστή του συστήματος";
+
+// LIST REQUESTS
+$langDateRequest = "Ημ/νια αίτησης";
+$langDeleteRequest = "Διαγραφή";
+$langRejectRequest = "Απόρριψη";
+$langAcceptRequest = "Εγγραφή";
+$langActions = "Ενέργειες";
+$langListRequest = "Λίστα Αιτήσεων";
+$langComments = "Σχόλια";
+$langTeacherRequestHasDeleted = "Η αίτηση του καθηγητή διαγράφτηκε!";
+$langRejectRequestSubject = "Απόρριψη αίτησης εγγραφής στην Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης";
+$langGoingRejectRequest = "Πρόκειται να απορρίψετε την αίτηση καθηγητή με στοιχεία:";
+$langRequestSendMessage = "Αποστολή μηνύματος στο χρήστη - e-mail διεύθυνση:";
+$langRequestDisplayMessage = "στο μήνυμα θα αναφέρεται και το παραπάνω σχόλιο";
+$langNoSuchRequest = "Δεν υπάρχει κάποια σχετική αίτηση με αυτό το ID. Δεν είναι δυνατή η επεξεργασία της αίτησης.";
+$langTeacherRequestHasRejected = "Η αίτηση του καθηγητή απορρίφθηκε";
+$langRequestMessageHasSent = " και στάλθηκε ενημερωτικό μήνυμα στη διεύθυνση ";
+$langRequestHasRejected = "Η αίτησή σας για εγγραφή στην πλατφόρμα e-Class απορρίφθηκε.";
+$langRegistrationDate = "Ημ/νια εγγραφής";
+$langExpirationDate = "Ημ/νια λήξης";
+$langUserID = "Κωδικός χρήστη(ID)";
+$langUpdate = "ΕΝΗΜΕΡΩΣΗ";
+$langStudentParticipation = "Μαθήματα στα οποία συμμετέχει ο χρήστης";
+$langNoStudentParticipation = "Ο χρήστης δεν συμμετέχει σε κανένα μάθημα";
+$langCannotDeleteAdmin = "Ο χρήστης αυτός (με user id = 1) είναι ο βασικός διαχειριστής της πλατφόρμας και δε διαγράφεται.";
+$langExpireBeforeRegister = "Σφάλμα: H ημ/νια λήξης είναι πρίν την ημ/νια εγγραφής";
+$langSuccessfulUpdate = "Μόλις ενημερώθηκε η Βάση Δεδομένων της πλατφόρμας E-Class με τα νέα στοιχεία για τον χρήστη με ID";
+$langNoUpdate = "Δεν είναι εφικτή η ενημέρωση των στοιχείων για το χρήστη με id";
+$langUpdateNoChange = "Δεν αλλάξατε κάποιο/κάποια από τα στοιχεία του χρήστη.";
+$langError = "Σφάλμα";
+
 ?>

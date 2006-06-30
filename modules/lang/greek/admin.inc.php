@@ -215,4 +215,78 @@ $langSearch = "Αναζήτηση";
 $langCourseStatusChangedSuccess = "Ο τύπος πρόσβασης του μαθήματος άλλαγε με επιτυχία!";
 $langCourseStatusChange = "Αλλαγή τύπου πρόσβασης μαθήματος";
 
+
+// authentication
+$langAuthActivate = "Ενεργοποίηση";
+$langAuthDeactivate = "Απενεργοποίηση";
+$langChooseAuthMethod = "Επιλέξτε τον τρόπο πιστοποίησης χρηστών και καθορίστε τις ρυθμίσεις του";
+$langNextStep = "Συνέχεια";
+$langConnYes = "ΕΠΙΤΥΧΗΣ ΣΥΝΔΕΣΗ";
+$langConnNo = "H ΣΥΝΔΕΣΗ ΔΕΝ ΛΕΙΤΟΥΡΓΕΙ";
+$langAuthNoValidUser = "Μη έγκυρος χρήστης.Αδύνατη η εγγραφή";
+$langConnTest = "Γίνεται δοκιμή του τρόπου πιστοποίησης...";
+$langAuthMethod = "Τρόπος πιστοποίησης χρηστών";
+$langdbhost = "Διακομιστής Database";
+$langdbname = "Όνομα Database";
+$langdbuser = "Χρήστης Database";
+$langdbpass = "Συνθηματικό χρήστη Database";
+$langdbtable = "Όνομα πίνακα Database";
+$langdbfielduser = "Όνομα πεδίου Χρήστη στον πίνακα";
+$langdbfieldpass = "Όνομα πεδίου Συνθηματικού Χρήστη στον πίνακα";
+$langInstructions = "Οδηγίες διασύνδεσης και χρήσης";
+$langTestAccount = "Για να ενεργοποιηθεί ο τρόπος πιστοποίησης είναι απαραίτητο να κάνετε μια δοκιμαστική χρήση με ένα λογαριασμό της μεθόδου που επιλέξατε";
+$langpop3host = "Διακομιστής POP3";
+$langpop3port = "Πόρτα υπηρεσίας POP3";
+$langimaphost = "Διακομιστής IMAP";
+$langimapport = "Πόρτα υπηρεσίας IMAP";
+$langldap_host_url = "Διακομιστής LDAP";
+$langldap_bind_dn = "Ορίσματα για LDAP binding";
+$langldap_bind_user = "Username για LDAP binding";
+$langldap_bind_pw = "Password για LDAP binding";
+$langUserAuthentication = "Πιστοποίηση Χρηστών";
+$langSearchCourses = "Αναζήτηση μαθημάτων";
+
+// other
+$langTeachers = "Εκπαιδευτές";
+$langStudents = "Εκπαιδευόμενοι";
+$langVisitors = "Επισκέπτες";
+$langTeacher = "Εκπαιδευτής";
+$langStudent = "Εκπαιδευόμενος";
+$langVisitor = "Επισκέπτης";
+$langOther = "’λλο";
+$langUsers = "Χρήστες";
+$langThereAre = "Υπάρχουν";
+$langTotal = "Σύνολο";
+$langProperty = "Ιδιότητα";
+$langStats = "Στατιστικά Χρήστη";
+$langUser2 = "χρήστη";
+$langEdit = "Επεξεργασία";
+$langDelete = "Διαγραφή";
+$langStat = "Στατιστικά";
+$langNoUserList = "Δεν υπάρχουν αποτελέσματα πρός εμφάνιση";
+$langContactAdmin = "Αποστολή ενημερωτικού email στον Διαχειριστή";
+$langActivateAccount = "Παρακαλώ να ενεργοποιήσετε το λογαριασμό μου";
+
+// unregister
+$langConfirmDelete = "Επιβεβαίωση διαγραφής";
+$langConfirmDeleteQuestion1 = "Θέλετε σίγουρα να διαγράψετε τον χρήστη";
+$langConfirmDeleteQuestion2 = "από το μάθημα με κωδικό";
+$langQueryMark = ";";
+$langCannotDeleteAdmin = "Προσπαθήσατε να διαγράψετε τον χρήστη με user id = 1(Admin)!";
+$langUserWithId = "Ο χρήστης με id";
+$langWasDeleted = "διαγράφτηκε";
+$langWasAdmin = "ήταν διαχειριστής";
+$langWasCourseDeleted = "διαγράφτηκε από το Μάθημα";
+$langErrorDelete = "Σφάλμα κατά τη διαγραφή του χρήστη";
+$langAfter = "Μετα από";
+$langBefore = "Πρίν από";
+$langUserType = "Τύπος χρήστη";
+$langStudent2 = "Εκπαιδευόμενος";
+
+// search
+$langSearchUsers = "Αναζήτηση Χρηστών";
+
+// list requests
+$langListRequests = "Ανοικτές Αιτήσεις Καθηγητών";
+
 ?>

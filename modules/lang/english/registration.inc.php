@@ -307,4 +307,42 @@ $langRequiredFields = '(fields marked by (*) are required)';
 
 $langCourseVisits = "Course Visits";
 
+
+
+// USER REGISTRATION
+$langAuthPassword = "Please type your password:";
+$langAuthenticateVia = "Authenticate via";
+$langAuthenticateVia2 = "Available authentication methods of the institution";
+$langCannotUseAuthMethods = "You cannot use the platform at the moment. Please inform the platform admin";
+
+// LIST REQUESTS
+$langDateRequest = "Date of Request";
+$langDeleteRequest = "Delete";
+$langRejectRequest = "Reject";
+$langAcceptRequest = "Register";
+$langActions = "Actions";
+$langListRequest = "List Requests";
+$langComments = "Comments";
+$langTeacherRequestHasDeleted = "Teacher's Request is now deleted!";
+$langRejectRequestSubject = "Reject Request for registration in the plaform of asynchronous e-learning";
+$langGoingRejectRequest = "You are going to reject the request with the provided data:";
+$langRequestSendMessage = "Send message to the user - e-mail address:";
+$langRequestDisplayMessage = "the message will also include the above comment";
+$langNoSuchRequest = "No such prof request with this ID. Cannot Proceed";
+$langTeacherRequestHasRejected = "Teacher's Request is now rejected";
+$langRequestMessageHasSent = " and a message was sent in the address ";
+$langRequestHasRejected = "Your request for registration in the e-Class platform has rejected.";
+$langRegistrationDate = "Registration Date";
+$langExpirationDate = "Expiration Date";
+$langUserID = "User ID";
+$langUpdate = "UPDATE";
+$langStudentParticipation = "Modules that User has registered";
+$langNoStudentParticipation = "The user has no registered modules";
+$langCannotDeleteAdmin = "This user is the platform admininstrator and you cannot delete this account";
+$langExpireBeforeRegister = "Error: Expiration day is before the registration day";
+$langSuccessfulUpdate = "Successful Database Update for User with ID";
+$langNoUpdate = "Unable to do the update for user with id";
+$langUpdateNoChange = "You did not change any user info.";
+$langError = "Error";
+
 ?>
