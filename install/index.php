@@ -1380,6 +1380,9 @@ $colorDark = "#000066";
 
 $have_latex = FALSE;
 
+//$vodServer="";
+//$MCU="";
+
 ?>';
 
 // write to file

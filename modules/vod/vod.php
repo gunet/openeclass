@@ -386,7 +386,7 @@ else {
 	$i=0;
 	while ($myrow = mysql_fetch_array($result)) {
 				if($myrow[7])
-				{$videoURL=$myrow[1];
+				{$videoURL=$myrow[1]; echo "aaaa";
 				}else{
 					if(isset($vodServer))
 						{
@@ -401,10 +401,10 @@ else {
 			$tool_content.=sprintf("<table width=\"600\" cellpadding=\"5\" cellspacing=\"0\" border=\"0\">
 			<tr>
 			<td bgcolor=\"#E6E6E6\" width=\"30\" valign=\"top\">
-			<a href=\"../../courses/$currentCourseID/video/%s\"><img alt=\"video\" src=\"images/video.gif\" border=\"0\"></a>
+			<a href=\"%s\"><img alt=\"video\" src=\"images/video.gif\" border=\"0\"></a>
 			</td>
 			<td width=\"570\" valign=\"top\" bgcolor=\"#E6E6E6\"><font size=\"2\" face=\"arial, helvetica\">
-			<a href=\"../../courses/$currentCourseID/video/%s\">%s</a>
+			<a href=\"%s\">%s</a>
 			<br>%s
 			</td>
 			</tr>
@@ -413,10 +413,10 @@ else {
 			$tool_content.=sprintf("<table width=\"600\" cellpadding=\"5\" cellspacing=\"0\" border=\"0\">
 			<tr>
 			<td bgcolor=\"#F5F5F5\" width=\"30\" valign=\"top\">
-			<a href=\"../../courses/$currentCourseID/video/%s\"><img alt=\"video\" src=\"images/video.gif\" border=\"0\"></a>
+			<a href=\"%s\"><img alt=\"video\" src=\"images/video.gif\" border=\"0\"></a>
 			</td>
 			<td width=\"570\" valign=\"top\" bgcolor=\"#F5F5F5\"><font size=\"2\" face=\"arial, helvetica\">
-			<a href=\"../../courses/$currentCourseID/video/%s\">%s</a>
+			<a href=\"%s\">%s</a>
 			<br>%s
 			</td></tr>
 			</table>", $videoURL, $videoURL, $myrow[2], $myrow[3]);
