@@ -2649,16 +2649,16 @@ mysql_query("INSERT INTO cours_faculte VALUES ( '', '$faculte', '$repertoire', '
     mkdir("../../courses/$repertoire/image", 0777);
     mkdir("../../courses/$repertoire/document", 0777);
     mkdir("../../courses/$repertoire/page", 0777);
-    //mkdir("../../courses/$repertoire/video", 0777);
     mkdir("../../courses/$repertoire/work", 0777);
     mkdir("../../courses/$repertoire/group", 0777);
     mkdir("../../courses/$repertoire/temp", 0777);
     mkdir("../../courses/$repertoire/scormPackages", 0777);
 
-    //ditsa
+
+    //mkdir("../../courses/$repertoire/video", 0777);
     mkdir("../../video/$repertoire", 0777);
     symlink("../../video/$repertoire","../../courses/$repertoire/video");
-    //end ditsa
+
     $titou='$dbname';
 
 ####################################################################
