@@ -71,6 +71,96 @@ function get_auth_id()
 }
 
 /****************************************************************
+find/return the ids of the default authentication methods
+return $auth_methods (array with all the values of the defined/active methods)
+****************************************************************/
+function get_auth_active_methods()
+{
+	global $db;
+	$sql = "SELECT auth_id,auth_settings FROM auth WHERE auth_default=1";
+  $auth_method = mysql_query($sql,$db);
+  if($auth_method)
+  {
+		$auth_methods = array();
+		while($authrow = mysql_fetch_row($auth_method))
+		{
+			// get only those with valid,not empty settings
+			if(($authrow[0]!=1) && (empty($authrow[1])))
+			{
+				continue;
+			}
+			else
+			{
+				$auth_methods[] = $authrow[0];
+			}
+		}
+		if(!empty($auth_methods))
+		{
+			return $auth_methods;
+		}
+		else
+		{
+	    return 0;
+		}
+	}
+  else
+  {
+		return 0;
+	}
+}
+
+/****************************************************************
+find if the eclass method is the only one active in the platform
+return $is_eclass_unique (integer)
+****************************************************************/
+function is_eclass_unique()
+{
+	global $db;
+	$is_eclass_unique = 0;
+	$sql = "SELECT auth_id,auth_settings FROM auth WHERE auth_default=1";
+  $auth_method = mysql_query($sql,$db);
+  if($auth_method)
+  {
+		$count_methods = 0;
+		$is_eclass = 0;
+		while($authrow = mysql_fetch_row($auth_method))
+		{
+			if($authrow[0]==1)
+			{
+				$is_eclass = 1;
+				$count_methods++;
+			}
+			else
+			{
+				if(empty($authrow[1]))
+				{
+					continue;
+				}
+				else
+				{
+					$count_methods++;
+				}
+			}
+		}
+		if(($is_eclass==1) && ($count_methods==1))
+		{
+			$is_eclass_unique = 1;
+		}
+		else
+		{
+			$is_eclass_unique = 0;
+		}
+	}
+  else
+  {
+		$is_eclass_unique = 0;
+	}
+	
+	return $is_eclass_unique;
+	
+}
+
+/****************************************************************
 find/return the string, describing in words the default authentication method
 return $m (string)
 ****************************************************************/
@@ -80,6 +170,8 @@ function get_auth_info($auth)
 	{
 		switch($auth)
 		{
+			case '1': $m = "Πιστοποίηση μέσω ECLASS";
+				break;
 			case '2': $m = "Πιστοποίηση μέσω POP3";
 				break;
 			case '3': $m = "Πιστοποίηση μέσω IMAP";
@@ -109,7 +201,6 @@ function get_auth_settings($auth)
 {
 	$qry = "SELECT * FROM auth WHERE auth_id = ".$auth;
   $result = db_query($qry);
-  $db_auth_email = array();
   if($result)
   {
 		if(mysql_num_rows($result)==1)
@@ -139,6 +230,7 @@ return $testauth (boolean: true-is authenticated, false-is not)
 ****************************************************************/
 function auth_user_login ($auth,$test_username, $test_password) 
 {
+    global $mysqlMainDb;
     switch($auth)
     {
 	case '1':
@@ -272,7 +364,7 @@ function auth_user_login ($auth,$test_username, $test_password)
 
 	case '5':
 	    
-	    $dbtype = $GLOBALS['dbtype'];
+	    //$dbtype = $GLOBALS['dbtype'];
 	    $dbhost = $GLOBALS['dbhost'];
 	    $dbname = $GLOBALS['dbname'];
 	    $dbuser = $GLOBALS['dbuser'];
@@ -281,6 +373,7 @@ function auth_user_login ($auth,$test_username, $test_password)
 	    $dbfielduser = $GLOBALS['dbfielduser'];
 	    $dbfieldpass = $GLOBALS['dbfieldpass'];
 	    $newlink = true;
+	    mysql_close($GLOBALS['db']);			// close the previous link
 	    $link = mysql_connect($dbhost,$dbuser,$dbpass,$newlink);
 	    if($link)
 	    {
@@ -288,17 +381,20 @@ function auth_user_login ($auth,$test_username, $test_password)
 				if($db_ext)
 				{
 		    	$qry = "SELECT * FROM ".$dbname.".".$dbtable." WHERE ".$dbfielduser."='".$test_username."' AND ".$dbfieldpass."='".$test_password."'";
-
 		    	$res = mysql_query($qry,$link);
-			    	
 		    	if($res)
 		    	{
 						if(mysql_num_rows($res)>0)
 						{
 			     		$testauth = true;
-			 
 			    		mysql_close($link);
-					mysql_select_db($mysqlMainDb,$GLOBALS['db']);
+							//mysql_select_db($mysqlMainDb,$GLOBALS['db']);
+							// Connect to database
+							$GLOBALS['db'] = mysql_connect($GLOBALS['mysqlServer'], $GLOBALS['mysqlUser'], $GLOBALS['mysqlPassword']);
+							if (mysql_version()) mysql_query("SET NAMES greek");
+							mysql_select_db($mysqlMainDb, $GLOBALS['db']);
+
+
 						}
 		    	}
 		    	else
@@ -358,7 +454,7 @@ function selection3($entries, $name, $default = '')
 
 
 /****************************************************************
-TCheck if an account is active or not. Apart from admin, everybody has
+Check if an account is active or not. Apart from admin, everybody has
 a registration unix timestamp and an expiration unix timestamp.
 By default is set to last a year
 
