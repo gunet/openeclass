@@ -76,26 +76,20 @@ function first_step()
 </script>";
 
 
-
 //ektypwnei ena <td> </td> me hyperlink pros to help me vash kapoio $topic
-/*
-	"
-	<td valign=\"middle\">
-		<a href=\"../help/help.php?topic=$topic\" onclick=\"window.open('../help/help.php?topic=$topic','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
-	</td>
-	"
-*/
+function help ($topic)
+{
+    echo"
+    <td valign=\"middle\">
+        <a href=\"../help/help.php?topic=$topic\" onclick=\"window.open('../help/help.php?topic=$topic','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a></td>";
+}
 
 
-//include '../../include/init.php';
-include '../../include/baseTheme.php';
-
-$tool_content = "";
-
+include '../../include/init.php';
 
 $titulaire_probable="$prenom $nom";
 $local_style = "input { font-size: 12px; }";
-//begin_page($langCreateSite);
+begin_page($langCreateSite);
 
 //arxikopoihsh metavlhtwn gia na mhn vgazei notices
 $course_prerequisites = "";
@@ -105,7 +99,7 @@ $course_keywords = "";
 
 ###################### FORM  #########################################
 if(!isset($_GET["finish_create_course"])) {
-    $tool_content .=  "
+    echo "
 <!-- S T E P  1   [start] -->
 
 <tr bgcolor=\"$color1\">
@@ -119,7 +113,7 @@ if(!isset($_GET["finish_create_course"])) {
                                 <font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourse</font>
                             </td>
                             <td align=\"right\">
-                                <font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourseStep&nbsp;3&nbsp;$langCreateCourseStep2&nbsp;3</font>
+                                <font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourseStep&nbsp;1&nbsp;$langCreateCourseStep2&nbsp;3</font>
                             </td>
                         </tr>
                     </table>
@@ -177,11 +171,11 @@ if(!isset($_GET["finish_create_course"])) {
     </fieldset>
     $langFieldsRequAsterisk<br>$langAccessType
     </font>
-    </td>
-    <td valign=\"middle\">
-		<a href=\"../help/help.php?topic=CreateCourse_formvisible\" onclick=\"window.open('../help/help.php?topic=CreateCourse_formvisible','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
-	</td>
-    </tr>
+    </td>";
+    help("CreateCourse_formvisible");
+
+        echo "
+          </tr>
       <tr>
       <td valign=\"top\" align=\"right\">
       <font face=\"arial, helvetica\" size=\"2\"><b>Υποσυστήματα:</b></font>
@@ -216,10 +210,9 @@ if(!isset($_GET["finish_create_course"])) {
       </table>
       <br>$langSubsystems
       </td>
-      <td valign=\"middle\">
-		<a href=\"../help/help.php?topic=CreateCourse_subsystems\" onclick=\"window.open('../help/help.php?topic=CreateCourse_subsystems','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
-	</td>
-	</tr>
+      ";
+       help("CreateCourse_subsystems");
+echo "</td></tr>
     <tr><td align=\"right\"><font face=\"arial, helvetica\" size=\"2\"><b>$langLn:</b></font></td>
     <td>
 <select name=\"languageCourse\">";
@@ -231,23 +224,23 @@ while ($entries = readdir($handle)) {
     if ($entries=='.'||$entries=='..' || $entries=='CVS')
         continue;
     if (is_dir($dirname.$entries)) {
-        $tool_content .=  "<option value=\"$entries\"";
+        echo "<option value=\"$entries\"";
         if ($entries == $language)
-            $tool_content .=  " selected ";
-        $tool_content .=  ">";
+            echo " selected ";
+        echo ">";
         if (!empty($langNameOfLang[$entries]) && $langNameOfLang[$entries]!="" && $langNameOfLang[$entries]!=$entries)
-        $tool_content .=  "$langNameOfLang[$entries] - ";
-        $tool_content .=  "$entries
+        echo "$langNameOfLang[$entries] - ";
+        echo "$entries
         </option>";
     }
 }
 closedir($handle);
 
-$tool_content .=  "</select><br><font face=\"arial, helvetica\" size=\"2\">$langLanguageTip</font></td>
-	<td valign=\"middle\">
-		<a href=\"../help/help.php?topic=CreateCourse_lang\" onclick=\"window.open('../help/help.php?topic=CreateCourse_lang','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
-	</td>
-	</tr>
+echo "</select><br><font face=\"arial, helvetica\" size=\"2\">$langLanguageTip</font></td>";
+
+help("CreateCourse_lang");
+
+echo "</tr>
     <tr><td>&nbsp;</td>
         <td align=\"left\">
             <input type=\"button\" name=\"button\" value=\"$langPreviousStep\" onclick=\"previous_step();\">
@@ -282,7 +275,7 @@ else {
     $language=$languageCourse;
     @include("../lang/$language/create_course.inc.php");
     if(empty($intitule) OR empty($repertoire)) {
-        $tool_content .=  "<tr bgcolor=\"$color2\" height=\"400\">
+        echo "<tr bgcolor=\"$color2\" height=\"400\">
         <td bgcolor=\"$color2\" colspan=\"2\" valign=\"top\">
             <br>
             <font face=\"arial, helvetica\" size=\"2\">
@@ -305,7 +298,7 @@ else {
         while ($cnt < $dbNumber) {
             $dbCode = mysql_db_name($dbList, $cnt);
             if ($dbCode == $repertoire) {
-            $tool_content .=  "<tr bgcolor=\"$color2\" height=\"400\">
+            echo "<tr bgcolor=\"$color2\" height=\"400\">
             <td colspan=\"2\" valign=\"top\">
             <font face=\"arial, helvetica\" size=\"2\">
                 $langCodeTaken.
@@ -1654,7 +1647,7 @@ mysql_query("CREATE TABLE accueil (
                'MODULE_ID_STAT'
                )");
 
- /*   mysql_query("INSERT INTO accueil VALUES (
+    mysql_query("INSERT INTO accueil VALUES (
                '12',
                '$langAddPageHome',
                '../../modules/import/import.php?',
@@ -1663,9 +1656,9 @@ mysql_query("CREATE TABLE accueil (
                '1',
                '',
                'MODULE_ID_IMPORT'
-               )");*/
+               )");
 
-/*    mysql_query("INSERT INTO accueil VALUES (
+    mysql_query("INSERT INTO accueil VALUES (
                '13',
                '$langLinkSite',
                '../../modules/external_module/external_module.php?',
@@ -1674,7 +1667,7 @@ mysql_query("CREATE TABLE accueil (
                '1',
                '',
                'MODULE_ID_EXTERNAL'
-               )");*/
+               )");
 
     mysql_query("INSERT INTO accueil VALUES (
                '14',
@@ -1768,12 +1761,15 @@ mysql_query ("CREATE TABLE document (id int(4) NOT NULL auto_increment,
     TYPE=MyISAM DEFAULT CHARSET=greek");
 
 ############################# VIDEO ###########################################
-
     mysql_query("CREATE TABLE video (
                id int(11) NOT NULL auto_increment,
                url varchar(200),
-               titre varchar(200),
+               title varchar(200),
                description text,
+               creator varchar(200),
+               publisher varchar(200),
+               date DATETIME,
+	       external_URL CHAR(1) DEFAULT '0' NOT NULL,
                PRIMARY KEY (id))
         TYPE=MyISAM DEFAULT CHARSET=greek");
 
@@ -2653,12 +2649,16 @@ mysql_query("INSERT INTO cours_faculte VALUES ( '', '$faculte', '$repertoire', '
     mkdir("../../courses/$repertoire/image", 0777);
     mkdir("../../courses/$repertoire/document", 0777);
     mkdir("../../courses/$repertoire/page", 0777);
-    mkdir("../../courses/$repertoire/video", 0777);
+    //mkdir("../../courses/$repertoire/video", 0777);
     mkdir("../../courses/$repertoire/work", 0777);
     mkdir("../../courses/$repertoire/group", 0777);
     mkdir("../../courses/$repertoire/temp", 0777);
     mkdir("../../courses/$repertoire/scormPackages", 0777);
 
+    //ditsa
+    mkdir("../../video/$repertoire", 0777);
+    symlink("../../video/$repertoire","../../courses/$repertoire/video");
+    //end ditsa
     $titou='$dbname';
 
 ####################################################################
@@ -2676,7 +2676,7 @@ fwrite($fd, "$string");
 $status[$repertoire]=1;
 session_register("status");
 
-$tool_content .=  "<tr bgcolor=$color2>
+echo "<tr bgcolor=$color2>
     <td colspan=3>
     <font face=\"arial, helvetica\" size=2>
     $langJustCreated $repertoire<br><br><br>
@@ -2688,10 +2688,7 @@ $tool_content .=  "<tr bgcolor=$color2>
 
 } // if all fields fulfilled
 
-$tool_content .=  "</table>
-</body>
-</html>
-";
+echo "</table>";
 
 ######################   Function list  #######################################
 
@@ -2732,6 +2729,6 @@ function DefaultScoring($ChoiceCount,$Z,$weight) {
 }//End of function DefaultScoring
 
 
-draw($tool_content, '1', '', $local_head);
-
 ?>
+</body>
+</html>
