@@ -76,9 +76,10 @@ $langListFaculte = "Faculte";
 $langInfoPlat = "Platform infornation";
 $langUserLogin = "User login";
 $langWelcomeToEclass = "Welcome to e-Class!";
-$langAnonUser = "Anonymous";
+
 $langSearch = "Search";
 
+$langPlatformAnnounce = "Announcements";
 $langEclass = "e-Class learning management system";
 $langInfo = "<b>GUNet e-Class</b> platform is a ... <b>edit /lang/english/index.inc and fix this!!</b> είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και αποτελεί την πρόταση του Ακαδημαϊκού Διαδικτύου για την υποστήριξη της 
 Υπηρεσίας Ασύγχρονης Τηλεκπαίδευσης. Έχει σχεδιαστεί με προσανατολισμό την ενίσχυση 
