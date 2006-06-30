@@ -530,7 +530,6 @@ echo "
                                 <input type=\"text\" size=\"40\" name=\"dnldapserver\" value=\"$dnldapserver\">
                             </td>
                         </tr>
-			<!--ditsa-->
                         <tr>
                             <td>
                                 <font size=\"2\" face=\"arial, helvetica\">
@@ -543,9 +542,11 @@ function set_video_input()
 	{
 		if(document.getElementById(\"video_check\").checked==true)
 		{
-			document.getElementById(\"video_input_div\").innerHTML='Εξηπηρετητής video streamining: <input type=\"text\" size=\"20\" name=\"vodServerForm\" value=\"$vodServer\">';
+			document.getElementById(\"video_input_div_text\").innerHTML='<font size=\"2\" face=\"arial, helvetica\">Πρόθεμα του τελικού URL με το οποίο θα σερβίρονται τα αποθηκευμένα στον video streaming εξυπηρετητή αρχεία</font><font color=\"red\">*</font>';
+			document.getElementById(\"video_input_div_input\").innerHTML='<input type=\"text\" size=\"20\" name=\"vodServerForm\" value=\"$vodServer\"><br>Πχ. mms://windows_media.server.gr/, rtsp://real.server.gr';
 		}
-		else{ document.getElementById(\"video_input_div\").innerHTML='';
+		else{ document.getElementById(\"video_input_div_text\").innerHTML='';
+		      document.getElementById(\"video_input_div_input\").innerHTML='';
 		}
 		
 
@@ -557,13 +558,15 @@ function set_video_input()
                             </td>
                         </tr>
 
-			<!--end ditsa-->
 			<tr>
-				<td colspan=2>
-				 <div id=\"video_input_div\">
+				<td>
+				 <div id=\"video_input_div_text\">
 				 </div>
-
 				</td>
+				<td>
+				 <div id=\"video_input_div_input\">
+				</td>
+
 			</tr>
 
                         <tr><td colspan=\"2\">&nbsp;</td></tr>
