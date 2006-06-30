@@ -47,7 +47,7 @@ $navigation[]= array ("url"=>"newuser_info.php", "name"=> "$reguser");
 $tool_content = "";
 
 // Main body
-$auth = get_auth_id();
+$auth = isset($_GET['auth'])?$_GET['auth']:'';
 $msg = get_auth_info($auth);
 $settings = get_auth_settings($auth);
 if(!empty($msg)) $nameTools = $msg;
@@ -58,7 +58,7 @@ $tool_content .= $settings['auth_instructions']."<br />
 				<tr><td>Δώστε το username σας:</td>
 					<td><input type=\"text\" name=\"ldap_email\"></td>
 				</tr>
-				<tr><td>".$ldapprompt."</td>
+				<tr><td>".$langAuthPassword."</td>
 					<td><input type=\"password\" name=\"ldap_passwd\"></td>
 				</tr>
 				<tr colspan=2><td><br>";
@@ -66,8 +66,10 @@ $tool_content .= $settings['auth_instructions']."<br />
 					$tool_content .= "</td>
 				</tr>
 				<tr colspan=2>
-					<td><br><input type=\"submit\" name=\"is_submit\" value=\"".$reg."\">
-					<br><br>
+					<td><br />
+					<input type=\"hidden\" name=\"auth\" value=\"".$auth."\">
+					<input type=\"submit\" name=\"is_submit\" value=\"".$reg."\">
+					<br><br />
 					</td>
 				</tr>
 				<br><br></table>

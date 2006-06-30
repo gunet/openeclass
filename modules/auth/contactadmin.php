@@ -25,7 +25,7 @@
 
 /**===========================================================================
 	contactadmin.php
-	@last update: 31-05-2006 by Karatzidis Stratos
+	@last update: 27-05-2006 by Karatzidis Stratos
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
 ==============================================================================        
@@ -42,11 +42,11 @@
 
 //LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
 //$require_login = TRUE;
-$langFiles = array('registration', 'opencours');
+$langFiles = array('registration', 'admin','gunet');
 
 include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
-$nameTools = "Αποστολή ενημερωτικού email στον ADMIN";
+$nameTools = $langContactAdmin;
 $tool_content = "";
 
 
@@ -69,7 +69,8 @@ if(!empty($userid))
 	{
 		$body = isset($_POST['body'])?$_POST['body']:'';
 		$tool_content .= "<table width=\"99%\"><tbody><tr><td>";
-		$to = $email;
+		//$to = $email;
+		$to = $GLOBALS['emailAdministrator'];
 		$emailsubject = "Ενεργοποίηση λογαριασμού χρήστη";
 		$emailbody = "Ο φοιτητής με τα παρακάτω στοιχεία επιθυμεί την 
 		επανενεργοποίηση του λογαριασμού του:
@@ -90,20 +91,22 @@ if(!empty($userid))
 	{
 		$tool_content .= "<form action=\"./contactadmin.php?userid=".$userid."\" method=\"post\">
 	<table width=\"99%\"><caption>Συμπλήρωση Φόρμας</caption><tbody>";
-		$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\"><b>Όνομα:</b></td><td>".$firstname."</td></tr>";	
-		$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\"><b>Επίθετο:</b></td><td>".$sirname."</td></tr>";	
+		$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\"><b>$langName:</b></td><td>".$firstname."</td></tr>";	
+		$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\"><b>$langSurname:</b></td><td>".$sirname."</td></tr>";	
 		$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\"><b>Email:</b></td><td>".$email."</td></tr>";
-		$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\"><b>Σχόλια:</b></td><td><textarea rows=\"6\" cols=\"40\" name=\"body\">
-		Παρακαλώ να ενεργοποιήσετε το λογαριασμό μου
+		$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\"><b>$langComments:</b></td><td><textarea rows=\"6\" cols=\"40\" name=\"body\">
+		$langActivateAccount
 		</textarea></td></tr>";
-		$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\">&nbsp;</td><td><input type=\"submit\" name=\"submit\" value=\"Αποστολή\"><input type=\"hidden\" name=\"userid\" value=\"".$userid."\"</td></tr>";
+		$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\">&nbsp;</td><td>
+		<input type=\"submit\" name=\"submit\" value=\"Αποστολή\">
+		<input type=\"hidden\" name=\"userid\" value=\"".$userid."\"</td></tr>";
 		$tool_content .= "</tbody></table></form>";
 	}
 
 	
 }
 
-$tool_content .= "<center><p><a href=\"../../index.php\">Επιστροφή</a></p></center>";
+$tool_content .= "<center><p><a href=\"../../index.php\">$back</a></p></center>";
 
 draw($tool_content,0);
 

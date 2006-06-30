@@ -25,22 +25,21 @@
 
 /**===========================================================================
 	edituser.php
-	@last update: 31-05-2006 by Karatzidis Stratos
+	@last update: 27-06-2006 by Karatzidis Stratos
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
 ==============================================================================        
         @Description: Edit user info (eclass version)
 
  	This script allows the admin to :
- 	- edit the user info
+ 	- edit the user information
  	- activate / deactivate a user account
-
  	
 ==============================================================================
 */
 
 // LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-$langFiles = array('admin','about');
+$langFiles = array('admin','registration');
 include '../../include/baseTheme.php';
 include 'admin.inc.php';
 @include "check_admin.inc";
@@ -69,13 +68,14 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		$tool_content .= "<h4>Επεξεργασία χρήστη $info[2]</h4>";
 		$tool_content .= "<form name=\"edituser\" method=\"post\" action=\"./edituser.php\">
 	<table width=\"99%\" border=\"0\">
-	<tr><td width=\"20%\">Επώνυμο: </td><td width=\"80%\"><input type=\"text\" name=\"lname\" size=\"40\" value=\"".$info[0]."\"</td></tr>
-	<tr><td width=\"20%\">Όνομα: </td><td width=\"80%\"><input type=\"text\" name=\"fname\" size=\"40\" value=\"".$info[1]."\"</td></tr>
-	<tr><td width=\"20%\">Username: </td><td width=\"80%\"><input type=\"text\" name=\"username\" size=\"30\" value=\"".$info[2]."\"</td></tr>
-	<tr><td width=\"20%\">Password: </td><td width=\"80%\"><input type=\"text\" name=\"password\" size=\"30\" value=\"".$info[3]."\"</td></tr>
+	<tr><td width=\"20%\">$langSurname: </td><td width=\"80%\"><input type=\"text\" name=\"lname\" size=\"40\" value=\"".$info[0]."\"</td></tr>
+	<tr><td width=\"20%\">$langName: </td><td width=\"80%\"><input type=\"text\" name=\"fname\" size=\"40\" value=\"".$info[1]."\"</td></tr>
+	<tr><td width=\"20%\">$langUsername: </td><td width=\"80%\"><input type=\"text\" name=\"username\" size=\"30\" value=\"".$info[2]."\"</td></tr>
+	<tr><td width=\"20%\">$langPass: </td><td width=\"80%\"><input type=\"text\" name=\"password\" size=\"30\" value=\"".$info[3]."\"</td></tr>
 	<tr><td width=\"20%\">E-mail: </td><td width=\"80%\"><input type=\"text\" name=\"email\" size=\"50\" value=\"".$info[4]."\"</td></tr>
-	<tr><td width=\"20%\">Phone: </td><td width=\"80%\"><input type=\"text\" name=\"phone\" size=\"30\" value=\"".$info[5]."\"</td></tr>
-	<tr><td width=\"20%\">Department: </td><td width=\"80%\">".$row[6];
+	<tr><td width=\"20%\">$langTel: </td><td width=\"80%\"><input type=\"text\" name=\"phone\" size=\"30\" value=\"".$info[5]."\"</td></tr>";
+
+	$tool_content .= "<tr><td width=\"20%\">$langDepartment: </td><td width=\"80%\">";
 		if(!empty($info[6]))
 		{
 	    $department_select_box = list_departments($info[6]);
@@ -86,12 +86,12 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		}
 	
 		$tool_content .= $department_select_box	    
-		."</td></tr>
-		<tr><td width=\"20%\">Ημ/νια εγγραφής: </td><td width=\"80%\"><span style=\"color:green;font-weight:bold;\">".date("j/n/Y H:i",$info[7])."</span></td></tr>
-		<tr><td width=\"20%\">Ημ/νια λήξης: </td><td width=\"80%\">";
+		."</td></tr>";
+
+		$tool_content .= "<tr><td width=\"20%\">$langRegistrationDate: </td><td width=\"80%\"><span style=\"color:green;font-weight:bold;\">".date("j/n/Y H:i",$info[7])."</span></td></tr>
+		<tr><td width=\"20%\">$langExpirationDate: </td><td width=\"80%\">";
 		
-		// Calculate the difference between registration and expiration:
-		$difference = abs($info[8]-$info[7]);
+		$difference = abs($info[8]-$info[7]);		// Calculate the difference between registration and expiration
 		
 		$tool_content .= convert_time($difference)."<br /><br />";
 		
@@ -112,15 +112,16 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 	. $datetime->get_select_days(1, "day")."&nbsp;&nbsp;&nbsp;"
 	. $datetime->get_select_hours(1, 12, "hour")
 	. $datetime->get_select_minutes(1, "min")
-	. $datetime->get_select_ampm();
+	. $datetime->get_select_seconds(1, "sec")
+	. $datetime->get_select_ampm();		// end format date-menu
 	
 		$tool_content .= "</td></tr>
-		<tr><td width=\"20%\">User ID: </td><td width=\"80%\">$u</td></tr>
+		<tr><td width=\"20%\">$langUserID: </td><td width=\"80%\">$u</td></tr>
 		</table>
 		<br /><input type=\"hidden\" name=\"u\" value=\"".$u."\">
 		<input type=\"hidden\" name=\"u_submitted\" value=\"1\">
 		<input type=\"hidden\" name=\"registered_at\" value=\"".$info[7]."\">
-		<input type=\"submit\" name=\"submit_edituser\" value=\"ΕΝΗΜΕΡΩΣΗ\"><br /><br />
+		<input type=\"submit\" name=\"submit_edituser\" value=\"$langUpdate\"><br /><br />
 		</form>";
 		
 		$sql = mysql_query("
@@ -138,9 +139,9 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα 
 		if (mysql_num_rows($sql) > 0) 
 		{
-			$tool_content .= "<h4>Μαθήματα στα οποία συμμετέχει ο χρήστης</h4>\n".
-			"<table border=\"1\">\n<tr><th>Κωδικός</th><th>Τίτλος μαθήματος</th>".
-			"<th>Ιδιότητα</th><th>Λειτουργίες</th></tr>";
+			$tool_content .= "<h4>$langStudentParticipation</h4>\n".
+			"<table border=\"1\">\n<tr><th>$langLessonCode</th><th>$langLessonName</th>".
+			"<th>$langProperty</th><th>$langActions</th></tr>";
 	
 		  for ($j = 0; $j < mysql_num_rows($sql); $j++) 
 		  {
@@ -150,18 +151,18 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 				switch ($logs[2]) 
 				{
 					case 1:
-						$tool_content .= "Καθηγητής";
+						$tool_content .= $langTeacher;
 						$tool_content .= "</td><td align=\"center\">---</td></tr>\n";
 						break;
 					case 5:
-						$tool_content .= "Φοιτητής";
+						$tool_content .= $langStudent;
 						$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">".
-						"Διαγραφή</a></td></tr>\n";
+						"$langDelete</a></td></tr>\n";
 						break;
 					default:
-						$tool_content .= "Επισκέπτης";
+						$tool_content .= $langVisitor;
 						$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">".
-	                    "Διαγραφή</a></td></tr>\n";
+	                    "$langDelete</a></td></tr>\n";
 					break;
 				}
 			}
@@ -169,17 +170,17 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		} 
 		else 
 		{ 
-			$tool_content .= "<h2>Ο χρήστης δεν συμμετέχει σε κανένα μάθημα</h2>";	
+			$tool_content .= "<h2>$langNoStudentParticipation</h2>";	
 		  if ($u > 1) 
 		  {
 				if (isset($logs))
-			    $tool_content .= "<center><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">Διαγραφή</a></center>";
+			    $tool_content .= "<center><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">$langDelete</a></center>";
 				else 
-			    $tool_content .= "<center><a href=\"unreguser.php?u=$u&un=$info[2]&c=\">Διαγραφή</a></center>";
+			    $tool_content .= "<center><a href=\"unreguser.php?u=$u&un=$info[2]&c=\">$langDelete</a></center>";
 			} 
 		  else 
 		  {
-				$tool_content .= "Ο χρήστης αυτός (με user id = 1) είναι ο βασικός διαχειριστής της πλατφόρμας και δε διαγράφεται.";
+				$tool_content .= $langCannotDeleteAdmin;
 		  }
 		}
 	}
@@ -202,7 +203,7 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		// 2. do the database update
 		if($registered_at>$expires_at)
 		{
-			$tool_content .= "<br >Expiration day is before the registration day. Please <a href=\"edituser.php?u=".$u."\">try again</a><br />";
+			$tool_content .= "<br >$langExpireBeforeRegister. Please <a href=\"edituser.php?u=".$u."\">try again</a><br />";
 		}
 		else
 		{
@@ -214,18 +215,18 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 			$qry = mysql_query($sql);
 			if (!$qry) 
 			{
-				$tool_content .= "Unable to make the update for user with id:".$u."!";
+				$tool_content .= "$langNoUpdate:".$u."!";
 			}
 			else
 			{
 				$num_update = mysql_affected_rows();
 			  if($num_update==1)
 				{
-					$tool_content .= "<br /><br />Μόλις ενημερώθηκε η Βάση Δεδομένων της πλατφόρμας με τα νέα στοιχεία για τον χρήστη με ID:".$u."<br /><br />";
+					$tool_content .= "<br /><br />$langSuccessfulUpdate:".$u."<br /><br />";
 				}
 			  else
 				{
-					$tool_content .= "Unable to do the update for user with id:".$u."<br />";
+					$tool_content .= "$langUpdateNoChange<br />";
 				}		
 			}
 		}	    
@@ -234,10 +235,10 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 else 
 {
     // Αλλιώς... τι γίνεται;
-    $tool_content .= "<h1>Σφάλμα</h1>\n<p><a href=\"listcours.php\">Επιστροφή στον κατάλογο"." μαθημάτων</p>\n";
+    $tool_content .= "<h1>$langError</h1>\n<p><a href=\"listcours.php\">$back</p>\n";
 }
 
-$tool_content .= "<center><p><a href=\"listusers.php\">Επιστροφή</a></p></center>";
+$tool_content .= "<center><p><a href=\"listusers.php\">$back</a></p></center>";
 draw($tool_content,3);
 
 ?>

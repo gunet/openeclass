@@ -20,16 +20,16 @@ $imapinstructions = isset($_POST['imapinstructions'])?$_POST['imapinstructions']
 $tool_content .= "
 <table border=\"0\">
 <tr valign=\"top\">
-    <td align=\"right\">imaphost:</td>
+    <td align=\"right\">$langimaphost:</td>
     <td>
         <input name=\"imaphost\" type=\"text\" size=\"30\" value=\"".$imaphost."\" />
     </td>
-    <td>The imap server address. Use the IP number or the domain name.
+    <td>The imap server address. (IP number or the domain name)
     </td>
 </tr>
 
 <tr valign=\"top\">
-    <td align=\"right\">imapport:</td>
+    <td align=\"right\">$langimapport:</td>
     <td>
 	143
     </td>
@@ -39,12 +39,14 @@ $tool_content .= "
 </tr>
 
 <tr valign=\"top\">
-    <td align=\"right\">instructions:</td>
+    <td align=\"right\">$langInstructions:</td>
     <td>
 	<textarea name=\"imapinstructions\" cols=\"30\" rows=\"10\" wrap=\"virtual\">".$imapinstructions."</textarea> 
     </td>
     <td> 
-	Here you can provide instructions for your users, so they know which username and password they should be using. The text you enter here will appear on the login page. If you leave this blank then no instructions will be printed.
+	Here you can provide instructions for your users, so they know which username and password they should be using. 
+	The text you enter here will appear on the login page. 
+	If you leave this blank then no instructions will be printed.
     </td>
 </tr>
 </table>";

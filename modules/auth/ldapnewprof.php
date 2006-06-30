@@ -42,7 +42,9 @@ $langFiles = array('registration', 'admin', 'gunet');
 include '../../include/baseTheme.php';
 require_once 'auth.inc.php';
 
-$auth = get_auth_id();
+$auth = isset($_GET['auth'])?$_GET['auth']:'';
+
+//$auth = get_auth_id();
 $msg = get_auth_info($auth);
 $settings = get_auth_settings($auth);
 if(!empty($msg)) $nameTools = $msg;
@@ -62,6 +64,7 @@ $tool_content .= $settings['auth_instructions']."<br />
 				</tr>
 				<tr colspan=2>
 					<td><br><input type=\"submit\" name=\"is_submit\" value=\"".$reg."\">
+					<input type=\"hidden\" name=\"auth\" value=\"".$auth."\">
 					<br /><br />
 					</td>
 				</tr>

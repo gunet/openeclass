@@ -38,6 +38,7 @@ $navigation[]= array ("url"=>"../admin/", "name"=> $admin);
 $navigation[]= array ("url"=>"ldapnewprof.php", "name"=> $regprof);
 
 $found = 0;
+$tool_content = "";
 
 if (!isset($userMailCanBeEmpty)) 
 {	
@@ -50,11 +51,12 @@ $errormessage2 = "<p>Επιστροφή στην <a href=\"ldapnewprof.php\">προηγούμενη σελί
 $is_submit = isset($_POST['is_submit'])?$_POST['is_submit']:'';
 $ldap_email = isset($_POST['ldap_email'])?$_POST['ldap_email']:'';
 $ldap_passwd = isset($_POST['ldap_passwd'])?$_POST['ldap_passwd']:'';
+$auth = isset($_POST['auth'])?$_POST['auth']:'';
 
 if(!empty($is_submit))
 {
 	
-	$auth = get_auth_id();
+	//$auth = get_auth_id();
 	if (empty($ldap_email) or empty($ldap_passwd)) // check for empty username-password
 	{
 		$tool_content .= $errormessage1 . $ldapempty . $errormessage2;
@@ -105,32 +107,31 @@ if(!empty($is_submit))
 		//$tool_content .= "is_valid: ".$is_valid."<br />";
 		if($is_valid)
 		{
-			//$tool_content .= "<br />Successfully connected<br />";
-			$auth_allow = 1;
+			$auth_allow = 1;		// Successfully connected
 		}
 		else
 		{
-			$tool_content .= "<br />The connection does not seem to work!!<br />";
+			$tool_content .= "<br />$langConnNo!<br />";
 			$auth_allow = 0;
 		}	
 		if($auth_allow==1)
 		{	
 			$tool_content .= "<form name=\"registration\" action=\"newprof_second.php\" method=\"post\">
-						<table width=\"100%\">
+						<table width=\"99%\">
 							<tr>
-								<td>Eπώνυμο:</td>   
-								<td><input type=\"text\" name=\"nom_form\" size=\"30\" value=\"\"></td>
+								<td>$langSurname:</td>   
+								<td><input type=\"text\" name=\"nom_form\" size=\"30\" value=\"\"><font size=\"1\">&nbsp;(*)</font></td>
 							</tr>
 							<tr>
-								<td>Όνομα:</td>   
-								<td><input type=\"text\" name=\"prenom_form\" size=\"30\" value=\"\"></td>
+								<td>$langName:</td>   
+								<td><input type=\"text\" name=\"prenom_form\" size=\"30\" value=\"\"><font size=\"1\">&nbsp;(*)</font></td>
 							</tr>
 							<tr>
 								<td>E-mail:</td>   
 								<td><input type=\"text\" name=\"email_form\" size=\"30\" value=\"\"></td>
 							</tr>		
 							<tr>
-								<td>Phone:</td>   
+								<td>$langTel:</td>   
 								<td><input type=\"text\" name=\"userphone\" size=\"30\" value=\"\"></td>
 							</tr>		
 							<tr bgcolor=\"".$color2."\">
@@ -149,11 +150,11 @@ if(!empty($is_submit))
         {
         	$tool_content .= "<option value=\"$dep[0]\">$dep[0]</option>\n";
         }
-        $tool_content .= "</select>
+        $tool_content .= "</select><font size=\"1\">&nbsp;(*)</font>
         </td>
         </tr>														
 							<tr>
-								<td></td>
+								<td><font size=\"1\">&nbsp;(*): Υποχρεωτική συμπλήρωση</font></td>
 								<td><input type=\"submit\" name=\"submit\" value=\"".$langOk."\"></td>
 							</tr>
 						</table>   
@@ -164,7 +165,7 @@ if(!empty($is_submit))
 		}
 		else
 		{
-			$tool_content .= "<br />NO VALID USER in the auth method.Cannot register him<br />";
+			$tool_content .= "<br />$langAuthNoValidUser<br />";
 		}
 	}
 		
@@ -206,137 +207,6 @@ function user_exists_request($login)
 }
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/*
-	
-	if ($ldap_server == '0') 
-	{
-		$tool_content .= $errormessage1.$ldapchoice.$errormessage2;	
-	} 
-	elseif (empty($ldap_email)) 
-	{
-		$tool_content .= $errormessage1. $ldapempty. $errormessage2;
-	} 
-	else 
-	{
-		$list = explode("_",$ldap_server);	
-		$ldapServer = $list[0];
-		$basedn = $list[1];
-		$institut_id = $list[2];
-
-		$ds=ldap_connect($ldapServer);  //get the ldapServer, baseDN from the db
-		if ($ds) 
-		{ 
-    	$r=@ldap_bind($ds);     // this is an "anonymous" bind, typically read-only access
-			if ($r) 
-			{
-				$mailadd=ldap_search($ds, $basedn, "mail=".$ldap_email);  
-    		$info = ldap_get_entries($ds, $mailadd);
-				if ($info["count"] == 0) 	//Den vre8hke eggrafh
-				{ 
-					echo "$errormessage1 Δεν βρέθηκαν εγγραφές. Πιθανόν να δώσατε λάθος στοιχεία. $errormessage2";
-				} 
-				else if ($info["count"] == 1) 	//Vre8hke o xrhsths 
-				{ 
-					echo "$errormessage1 Ο διδάσκοντας βρέθηκε στον εξυπηρέτη LDAP.";
-					$cn = explode(" ", $info[0]["cn"][0]);
-					$nomvar = $cn[0];
-					$prenomvar = $cn[1];
-					$emailvar = $info[0]["mail"][0];
-					$found = 1;	
-				} 
-				else 
-				{ 
-    			echo "$errormessage1 Υπάρχει πρόβλημα με τα στοιχεία του διδάσκοντα. Παρακαλούμε επικοινωνήστε με τον διαχειριστή του εξυπηρέτη LDAP. 
-					$errormessage2";
-				}
-				if ($info["count"] == 1) 
-				{
-					$tool_content .= "<tr><td>
-						<form name="registration" action="newprof_second.php" method="post">
-						<input type="hidden" name="institut" value="<? echo $institut_id ?>" >
-						<input type="hidden" name="uname" value="<? echo $emailvar ?>" >
-						<input type="hidden" name="nom_form" value="<? echo $nomvar ?>" >
-						<input type="hidden" name="prenom_form" value="<? echo $prenomvar ?>" >
-						<input type="hidden" name="email_form" value="<? echo $emailvar ?>" >
-						<input type="hidden" name="password" value="LDAP user">
-						<input type="hidden" name="password1" value="LDAP user">
-						
-						<table cellpadding="3" cellspacing="0" border="0" width="100%">
-							<tr valign="top" bgcolor="<? echo $color2 ?>">
-								<td><font size="2" face="arial, helvetica">
-									<? echo "Ονοματεπώνυμο:"?>&nbsp;:</font>
-								</td>   
-								<td>
-									<? echo "$nomvar $prenomvar"?>
-								</td>
-							</tr>
-							<tr bgcolor="<? echo $color2;?>">
-								<td><font size="2" face="arial, helvetica">
-									<? echo $langEmail;?>&nbsp;:</font>
-								</td>
-								<td>
-									<? echo $info[0]["mail"][0] ?> 
-								</td>
-							</tr>
-							<tr bgcolor="<?= $color2;?>">
-								<td>
-									&nbsp;
-								</td>
-								<td>
-									<input type="submit" name="submit" value="<?= $langOk;?>" >
-								</td>
-							</tr>
-						</table>                        
-						</form>
-						</td></tr>
-
-				}
-				ldap_close($ds);
-			} 
-			else 
-			{
-    		echo "<tr><td><h4>$ldaperror</h4></td></tr>";
-			}
-		}
- 		else 
- 		{
-    		echo "<tr><td><h4>$ldaperror</h4></td></tr>";
-		}
-
-	}
-
-}   // end of initial if
-*/
-
-
 $tool_content .= "</table>";
 
 draw($tool_content,0);

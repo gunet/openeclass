@@ -7,7 +7,7 @@ $nameTools = "Εγγραφή Καθηγητή";
 
 // Initialise $tool_content
 $tool_content = "";
-
+$submit = isset($_POST['submit'])?$_POST['submit']:'';
 if($submit)
 {
 	// register user 

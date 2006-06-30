@@ -32,44 +32,44 @@ else
 }
 
 $tool_content .= "<tr valign=\"top\">
-    <td align=\"right\">ldap_host_url:</td>
+    <td align=\"right\">$langldap_host_url:</td>
     <td>
         <input name=\"ldaphost\" type=\"text\" size=\"30\" value=\"".$ldaphost."\">
     </td>
     <td>
-    ldap host
+    LDAP Host
     </td>
 </tr>
 
 <tr valign=\"top\">
-    <td align=\"right\">ldap_bind_dn:</td>
+    <td align=\"right\">$langldap_bind_dn:</td>
     <td>
     <input name=\"ldapbind_dn\" type=\"text\" size=\"30\" value=\"".$ldapbind_dn."\">
     </td><td>
-    ldap_bind_dn
+    LDAP bind dn
     </td>
 </tr>
 
 <tr valign=\"top\">
-    <td align=\"right\">ldap_bind_user:</td>
+    <td align=\"right\">$langldap_bind_user:</td>
     <td>
     <input name=\"ldapbind_user\" type=\"text\" size=\"30\" value=\"".$ldapbind_user."\">
     </td><td>
-    ldap_bind_user. Leave blank for anonymous binding
+    User for ldap bind. Leave blank for anonymous binding
     </td>
 </tr>
 
 <tr valign=\"top\">
-    <td align=\"right\">ldap_bind_pw:</td>
+    <td align=\"right\">$langldap_bind_pw:</td>
     <td>
     <input name=\"ldap_bind_pw\" type=\"password\" size=\"30\" value=\"".$ldapbind_pw."\">
     </td><td>
-    ldap_bind_pw. Leave blank for anonymous binding
+    Password for ldap bind. Leave blank for anonymous binding
     </td>
 </tr>
 
 <tr valign=\"top\">
-    <td align=\"right\">instructions:</td>
+    <td align=\"right\">$langInstructions:</td>
     <td>
 	<textarea name=\"ldapinstructions\" cols=\"30\" rows=\"10\" wrap=\"virtual\">".$ldapinstructions."</textarea> 
     </td>
@@ -79,7 +79,5 @@ $tool_content .= "<tr valign=\"top\">
     </td>
 </tr>
 </table>";
-
-
 
 ?>

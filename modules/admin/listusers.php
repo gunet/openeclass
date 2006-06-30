@@ -25,7 +25,7 @@
 
 /**===========================================================================
 	listusers.php
-	@last update: 16-06-2006 by Karatzidis Stratos
+	@last update: 27-06-2006 by Karatzidis Stratos
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
 ==============================================================================        
@@ -40,31 +40,12 @@
 	- delete the user
 	- Register/Unregister the user from the platform
 
- 	The admin can view: 
- 	- the total number of teachers,students and visitors
- 	- the list of platform users
- 
-	The list can be produced by 3 different ways:
-	- Normal Listing
-	- Search users with filters (search_user.php)
-	- Course List / users per course (listcours.php)
- 
- 
- 	@Comments: The script is organised in four sections.
-
- 	1) Execute the command called by the user
-           Note (March 2004) some editing functions (renaming, commenting)
-           are moved to a separate page, edit_document.php. This is also
-           where xml and other stuff should be added.
- 
 	@todo: update the link for user statistics
 ==============================================================================
 */
 
-/*****************************************************************************
-LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-******************************************************************************/
-$langFiles = array('admin','about');
+// LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
+$langFiles = array('admin','registration');
 include '../../include/baseTheme.php';
 include 'admin.inc.php';			
 @include "check_admin.inc";		// check if user is administrator
@@ -72,11 +53,9 @@ $nameTools = $langVersion;
 $tool_content = "";					// Initialise $tool_content
 $nameTools = "Λίστα Χρηστών / Ενέργειες";		// Define $nameTools
 
-
 // initalize the incoming variables
 $search = isset($_GET['search'])?$_GET['search']:'';
 $c = isset($_GET['c'])?$_GET['c']:(isset($_POST['c'])?$_POST['c']:'');
-
 
 switch($c)		// get the case for each different listing
 {
@@ -119,7 +98,6 @@ if($view==2)				// coming from search_user.php(search with criteria)
 		session_unregister('user_registered_at_flag');
 		session_unregister('user_registered_at');
 		session_unregister('user_email');
-
 	}
 	else
 	{
@@ -320,8 +298,8 @@ if($sql)
 		}
 	}
 	$caption = "";
-	$caption .= "<p><i>Υπάρχουν <b>$teachers</b> Καθηγητές, <b>$students</b> φοιτητές και <b>$visitors</b> επισκέπτες</i></p>";
-	$caption .= "<p><i>Σύνολο <b>$countUser</b> χρήστες</i></p>";
+	$caption .= "<p><i>$langThereAre <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents και <b>$visitors</b> $langVisitors</i></p>";
+	$caption .= "<p><i>$langTotal <b>$countUser</b> $langUsers</i></p>";
 		
 	// DEFINE SETTINGS FOR THE 5 NAVIGATION BUTTONS INTO THE USERS LIST: begin, less, all, more and end
 	$endList=50;
@@ -474,27 +452,27 @@ if($sql)
 	if (isset($numbering) and isset($_REQUEST['startList']) and isset($_REQUEST['numbList']))   
 	{
 		$tool_content .= "<table width=\"99%\"><caption>".$caption."</caption><thead><tr>".
-					"<th scope=\"col\"><a href=\"listusers.php?ord=n&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">Επώνυμο</a></th>".
-					"<th><a href=\"listusers.php?ord=p&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">Όνομα</a></th>".
-					"<th><a href=\"listusers.php?ord=u&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">Username</a></th>".
-				 "<th scope=\"col\"><a href=\"listusers.php?ord=s&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">Email</a></th>".
-				 "<th scope=\"col\">Ιδιότητα</th>".
-				 "<th scope=\"col\">Ενέργειες</th>".
-				 "<th scope=\"col\">Διαγραφή Χρήστη</th>".
-				 "<th scope=\"col\">Στατιστικά Χρήστη</th>".
+					"<th scope=\"col\"><a href=\"listusers.php?ord=n&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langSurname</a></th>".
+					"<th><a href=\"listusers.php?ord=p&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langName</a></th>".
+					"<th><a href=\"listusers.php?ord=u&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langUsername</a></th>".
+				 "<th scope=\"col\"><a href=\"listusers.php?ord=s&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langEmail</a></th>".
+				 "<th scope=\"col\">$langProperty</th>".
+				 "<th scope=\"col\">$langActions</th>".
+				 "<th scope=\"col\">$langUnreg $langUser2</th>".
+				 "<th scope=\"col\">$langStats</th>".
 				 "</tr></thead><tbody>";
 	} 
 	else 
 	{
 		$tool_content .= "<table width=\"99%\"><caption>".$caption."</caption><thead><tr>".
-					"<th scope=\"col\"><a href=\"listusers.php?ord=n\">Επώνυμο</a></th><th>".
-				 "<a href=\"listusers.php?ord=p\">Όνομα</a></th><th>".
-				 "<a href=\"listusers.php?ord=u\">Username</a></th>".
-				 "<th scope=\"col\"><a href=\"listusers.php?ord=s\">Email</a></th>".
-				 "<th scope=\"col\">Ιδιότητα</th>".
-				 "<th scope=\"col\">Ενέργειες</th>".
-				 "<th scope=\"col\">Διαγραφή Χρήστη</th>".
-				 "<th scope=\"col\">Στατιστικά Χρήστη</th>".
+					"<th scope=\"col\"><a href=\"listusers.php?ord=n\">$langSurname</a></th><th>".
+				 "<a href=\"listusers.php?ord=p\">$langName</a></th><th>".
+				 "<a href=\"listusers.php?ord=u\">$langUsername</a></th>".
+				 "<th scope=\"col\"><a href=\"listusers.php?ord=s\">$langEmail</a></th>".
+				 "<th scope=\"col\">$langProperty</th>".
+				 "<th scope=\"col\">$langActions</th>".
+				 "<th scope=\"col\">$langUnreg $langUser2</th>".
+				 "<th scope=\"col\">$langStats</th>".
 				 "</tr></thead><tbody>";
 	}
 		
@@ -509,14 +487,14 @@ if($sql)
 				"<td>".htmlspecialchars($logs['email'])."</td>";
 			switch ($logs['statut']) 
 			{
-				case 1:		$tool_content .= "<td>Καθηγητής</td>";break;
-   			case 5:		$tool_content .= "<td>Φοιτητής</td>";break;
-				case 10:	$tool_content .= "<td>Επισκέπτης</td>";break;
-   			default:	$tool_content .= "<td>Άλλο ($logs[6])</td>";break;
+				case 1:		$tool_content .= "<td>$langTeacher</td>";break;
+   			case 5:		$tool_content .= "<td>$langStudent</td>";break;
+				case 10:	$tool_content .= "<td>$langVisitor</td>";break;
+   			default:	$tool_content .= "<td>$langOther ($logs[6])</td>";break;
 			}
-			$tool_content .= "<td><a href=\"edituser.php?u=".$logs['user_id']."\">Επεξεργασία</a></td>
-				<td><a href=\"unreguser.php?u=".$logs['user_id']."\">Διαγραφή</a></td>
-				<td><a href=\"edituser.php?u=".$logs['user_id']."\">Στατιστικά</a></td>\n";
+			$tool_content .= "<td><a href=\"edituser.php?u=".$logs['user_id']."\">$langEdit</a></td>
+				<td><a href=\"unreguser.php?u=".$logs['user_id']."\">$langDelete</a></td>
+				<td><a href=\"edituser.php?u=".$logs['user_id']."\">$langStat</a></td>\n";
 			$tool_content .= "</tr>";
 		}
 	}
@@ -526,10 +504,10 @@ if($sql)
 }
 else
 {
-	$tool_content .= "<br />NO LISTING RESULTS<br />";
+	$tool_content .= "<br />$langNoUserList<br />";
 }
 
-$tool_content .= "<p><center><a href=\"index.php\">Επιστροφή</a></p></center>";
+$tool_content .= "<p><center><a href=\"index.php\">$back</a></p></center>";
 
 // 3: display administrator menu
 draw($tool_content,3);

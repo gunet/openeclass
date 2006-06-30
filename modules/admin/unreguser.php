@@ -25,11 +25,11 @@
 
 /**===========================================================================
 	unreguser.php
-	@last update: 31-05-2006 by Karatzidis Stratos
+	@last update: 27-06-2006 by Karatzidis Stratos
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
 ==============================================================================        
-        @Description: Edit user info (eclass version)
+        @Description: Delete user from platform and from courses (eclass version)
 
  	This script allows the admin to :
  	- permanently delete a user account
@@ -38,12 +38,13 @@
 ==============================================================================
 */
 
-$langFiles = array('gunet','admin');
+// LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
+$langFiles = array('gunet','admin','registration');
 include '../../include/baseTheme.php';
 @include "check_admin.inc";
-
 $nameTools = $langUnregUser;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
+
 
 // get the incoming values and initialize them
 $u = isset($_GET['u'])?$_GET['u']:'';
@@ -52,44 +53,48 @@ $c = isset($_GET['c'])?$_GET['c']:'';
 
 if((!empty($doit)) && ($doit != "yes")) 
 {
-	$tool_content .= "<h4>Επιβεβαίωση διαγραφής</h4>
-		<p>Θέλετε σίγουρα να διαγράψετε τον χρήστη <em>$un</em>";
+	$tool_content .= "<h4>$langConfirmDelete</h4>
+		<p>$langConfirmDeleteQuestion1 <em>$un</em>";
 	if(!empty($c)) 
 	{
-		$tool_content .= " από το μάθημα με κωδικό <em>".$c."</em>";
+		$tool_content .= " $langConfirmDeleteQuestion2 <em>".$c."</em>";
 	}
-	$tool_content .= ";</p>
+	$tool_content .= "$langQueryMark</p>
 		<ul>
-		<li>Ναι: <a href=\"unreguser.php?u=$u&c=$c&doit=yes\">Διαγραφή!</a><br>&nbsp;</li>
-		<li>Όχι: <a href=\"index.php\">Επιστροφή στη σελίδα διαχείρισης</a></li>
+		<li>Ναι: <a href=\"unreguser.php?u=$u&c=$c&doit=yes\">$langDelete!</a><br>&nbsp;</li>
+		<li>Όχι: <a href=\"index.php\">$back</a></li>
 		</ul>";	
 } 
 else 
 {
-
 	$conn = mysql_connect($mysqlServer, $mysqlUser, $mysqlPassword);
-        if (!mysql_select_db($mysqlMainDb, $conn))
+	if (!mysql_select_db($mysqlMainDb, $conn))
                 die("Cannot select database \"claroline\".\n");
-
 	if(empty($c)) 
 	{
 		if ($u == 1) 
 		{
-			$tool_content .= "Σφάλμα! Προσπαθήσατε να διαγράψετε τον χρήστη με user id = 1!";
+			$tool_content .= "$langError. $langCannotDeleteAdmin";
 		}
-		$sql = mysql_query("DELETE from user WHERE user_id = '$u'");
+		else
+		{
+			$sql = mysql_query("DELETE from user WHERE user_id = '$u'");
+		}
 		if (mysql_affected_rows($conn) > 0) 
 		{
-			$tool_content .= "<p>Ο χρήστης με id $u διαγράφτηκε.</p>\n";
+			$tool_content .= "<p>$langUserWithId $u $langWasDeleted.</p>\n";
 		} 
 		else 
 		{
-			$tool_content .= "Σφάλμα κατά τη διαγραφή του χρήστη";
+			$tool_content .= "$langErrorDelete";
 		}
-		mysql_query("DELETE from admin WHERE idUser = '$u'");
+		if($u!=1)
+		{
+			mysql_query("DELETE from admin WHERE idUser = '$u'");
+		}
 		if (mysql_affected_rows($conn) > 0) 
 		{
-			$tool_content .= "<p>Ο χρήστης με id $u ήταν διαχειριστής.</p>\n";
+			$tool_content .= "<p>$langUserWithId $u $langWasAdmin.</p>\n";
 		}
 	} 
 	elseif((!empty($c)) && (!empty($u)))
@@ -97,17 +102,17 @@ else
 		$sql = mysql_query("DELETE from cours_user WHERE user_id = '$u' and code_cours='$c'");
 		if (mysql_affected_rows($conn) > 0)  
 		{
-			$tool_content .= "<p>Ο χρήστης με id $u διαγράφτηκε από το Μάθημα $c.</p>\n";
+			$tool_content .= "<p>$langUserWithId $u $langWasCourseDeleted $c.</p>\n";
 		}
 	}
 	else
 	{
-			$tool_content .= "Σφάλμα κατά τη διαγραφή του χρήστη";
+			$tool_content .= "$langErrorDelete";
 	}
-	$tool_content .= "<br>&nbsp;<br><a href=\"./index.php\">Επιστροφή στη σελίδα διαχείρισης</a><br />\n";
+	$tool_content .= "<br>&nbsp;<br><a href=\"./index.php\">$back</a><br />\n";
 }	
 
-$tool_content .= "<br><center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
+//$tool_content .= "<br><center><p><a href=\"index.php\">$back</a></p></center>";
 
 draw($tool_content,3,'admin');
 

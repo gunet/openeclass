@@ -34,9 +34,9 @@
  	This script allows the admin to search for platform users,
  	specifying certain criteria/filters
 	
- 	The admin can : - specify the criteria, view the list and later searching again
-                    with the same criteria or   
- 									- do a new/clear search
+ 	The admin can : - specify the criteria
+ 									- view the list
+ 									
 ==============================================================================
 */
 
@@ -45,12 +45,10 @@ $langFiles = array('gunet','admin','registration');
 include '../../include/baseTheme.php';
 include 'admin.inc.php';
 @include "check_admin.inc";		// check if user is administrator
-$nameTools = "Αναζήτηση Χρηστών";		// Define $nameTools
+$nameTools = $langSearchUser;		// Define $nameTools
 $tool_content = "";		// Initialise $tool_content
 
-
 // Main body
-
 $new = isset($_GET['new'])?$_GET['new']:'yes';		//variable of declaring a new search
 
 if((!empty($new)) && ($new=="yes")) 
@@ -82,39 +80,37 @@ $user_registered_at = isset($_SESSION['user_registered_at'])?$_SESSION['user_reg
 $user_email = isset($_SESSION['user_email'])?$_SESSION['user_email']:'';
 
 
-$newsearch = " <a href=\"search_user.php?new=yes\">Νέα Αναζήτηση</a>";	// link: 'new search'
-	
 // display the search form
 $tool_content .= "<form action=\"listusers.php?search=".$new."\" method=\"post\" name=\"user_search\">";
-$tool_content .= "<table border=\"0\" cellspacing=\"0\" cellpadding=\"1\"><caption>Αναζήτηση Χρηστών&nbsp;&nbsp;".$newsearch."</caption><tbody>";
+$tool_content .= "<table width=\"99%\"><tbody>";
 $tool_content .= "<tr>
-    <td width=\"3%\" nowrap><b>Επίθετο</b>:</td>
+    <td width=\"3%\" nowrap><b>$langSurname</b>:</td>
     <td><input type=\"text\" name=\"user_sirname\" size=\"40\" value=\"".$user_sirname."\"></td>
 </tr>
 <tr>
-    <td width=\"3%\" nowrap><b>Όνομα</b>:</td>
+    <td width=\"3%\" nowrap><b>$langName</b>:</td>
     <td><input type=\"text\" name=\"user_firstname\" size=\"40\" value=\"".$user_firstname."\"></td>
 </tr>
 ";
 $tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>Αριθμός μητρώου:</b></td>
+    <td width=\"3%\" nowrap><b>$langAm:</b></td>
     <td><input type=\"text\" name=\"user_am\" size=\"30\" value=\"".$user_am."\"></td>
 </tr>";
 $tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>Τύπος χρήστη (Εκπαιδευόμενος/Εκπαιδευτής):</b></td>
+    <td width=\"3%\" nowrap><b>$langUserType ($langStudent2/$langTeacher):</b></td>
     <td>";
 $usertype_data = array();
-$usertype_data[5] = "Εκπαιδευόμενος";
-$usertype_data[1] = "Εκπαιδευτής";
+$usertype_data[5] = $langStudent2;
+$usertype_data[1] = $langTeacher;
 $tool_content .= selection2($usertype_data,"user_type",$user_type);
 $tool_content .= "</td>
 </tr>";
 $tool_content .= " <tr>
-    <td width=\"3%\" nowrap><b>Ημερομηνία εγγραφής χρήστη:</b></td>
+    <td width=\"3%\" nowrap><b>$langRegistrationDate:</b></td>
     <td>";
 $user_registered_at_flag_data = array();
-$user_registered_at_flag_data[1] = "Πρίν από";
-$user_registered_at_flag_data[2] = "Μετα από";
+$user_registered_at_flag_data[1] = $langBefore;
+$user_registered_at_flag_data[2] = $langAfter;
 $tool_content .= selection2($user_registered_at_flag_data,"user_registered_at_flag",$user_registered_at_flag);
     
 // format the drop-down menu for data
@@ -138,24 +134,25 @@ $tool_content .= $datetime->get_select_years("ldigit", "2002", "2029", "year")."
 	. $datetime->get_select_days(1, "day")."&nbsp;&nbsp;&nbsp;"
 	. $datetime->get_select_hours(1, 12, "hour")
 	. $datetime->get_select_minutes(1, "min")
+		. $datetime->get_select_seconds(1, "sec")
 	. $datetime->get_select_ampm();
 	
 $tool_content .= "</td>
   </tr>";  
 $tool_content .= "<tr>
-    <td width=\"3%\" nowrap><b>Ηλεκτρονική Διεύθυνση:</b></td>
+    <td width=\"3%\" nowrap><b>E-mail:</b></td>
     <td><input type=\"text\" name=\"user_email\" size=\"40\" value=\"".$user_email."\"></td>
 </tr>";
 $tool_content .= "  <tr>
     <td colspan=\"2\"><br />
     <input type=\"hidden\" name=\"c\" value=\"searchlist\">
-    <input type=\"submit\" name=\"search_submit\" value=\"Αναζήτηση\"></td>
+    <input type=\"submit\" name=\"search_submit\" value=\"$langSearch\"></td>
   </tr>";
 $tool_content .= "</tbody></table></form>";
 // end form
 
 
-$tool_content .= "<br /><center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
+$tool_content .= "<br /><center><p><a href=\"index.php\">$back</a></p></center>";
 
 // 3: display administrator menu
 draw($tool_content,3);

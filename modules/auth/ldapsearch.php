@@ -25,7 +25,7 @@
 
 /**===========================================================================
 	ldapsearch.php
-	@last update: 31-05-2006 by Karatzidis Stratos
+	@last update: 27-06-2006 by Karatzidis Stratos
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
 ==============================================================================        
@@ -36,15 +36,18 @@
 */
 
 //LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-$langFiles = array('registration','gunet');
+$langFiles = array('registration','gunet','admin');
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
-$nameTools = $langLDAPUser;
+$auth = isset($_POST['auth'])?$_POST['auth']:'';
+
+$nameTools = get_auth_info($auth);
 $navigation[]= array ("url"=>"newuser_info.php", "name"=> "$reguser");
 
 // Initialise $tool_content
 $tool_content = "";
 // Main body
+
 
 $found = 0;
 
@@ -58,17 +61,10 @@ if (!isset($userMailCanBeEmpty))
 	$userMailCanBeEmpty = true;
 } 
 
-if (isset($prof) and $prof == 1) 		// change behaviour depending on $prof. (added by adia)
-{
-	$lastpage = 'ldapnewprof.php';
-	$userdescr = $langTheTeacher;
-} 
-else 
-{
-	$lastpage = 'ldapnewuser.php';
+	$lastpage = 'ldapnewuser.php?auth='.$auth;
 	$userdescr = $langTheUser;
-}
-//$tool_content .= "here...<br>";
+
+
 $errormessage1 = "<tr valign=\"top\" align=\"center\" bgcolor=\"$color2\"><td><font size=\"2\" face=\"arial, helvetica\"><p>&nbsp;</p>";
 $errormessage3 = "</font><p>&nbsp;</p><br><br><br></td></tr>";
 $errormessage2 = "<p>$ldapback <a href=\"$lastpage\">$ldaplastpage</a></p>$errormessage3";
@@ -90,8 +86,8 @@ if(!empty($is_submit))
 	else 
 	{
 		// try to authenticate him
-		$auth = get_auth_id();
 		$auth_method_settings = get_auth_settings($auth);		// get the db settings of the authentication method defined
+		
 		switch($auth)			// now get the connection settings
 		{
 			case '2':	$pop3host = str_replace("pop3host=","",$auth_method_settings['auth_settings']);
@@ -123,12 +119,11 @@ if(!empty($is_submit))
 		
 		if($is_valid)
 		{
-			//$tool_content .= "<br />Successfully connected<br />";
-			$auth_allow = 1;
+			$auth_allow = 1;		// Successfully connected
 		}
 		else
 		{
-			$tool_content .= "<br />The connection does not seem to work!!<br />";
+			$tool_content .= "<br />$langConnNo!<br />";
 			$auth_allow = 0;
 		}	
 		if($auth_allow==1)
@@ -173,10 +168,9 @@ if(!empty($is_submit))
 		}
 		else
 		{
-			$tool_content .= "<br />NO VALID USER in the auth method.Cannot register him<br />";
+			$tool_content .= "<br />$langAuthNoValidUser<br />";
 		}
 	}
-		
 
 
 }   // end of initial if
