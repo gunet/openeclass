@@ -105,7 +105,6 @@ $langDataBase = "Βάση δεδομένων ";
 $langRun = "εργασία";
 $langClient = "Πελάτης MySql";
 $langServer = "Εξυπηρέτης MySql";
-$langtitulary ="Κατά Τίτλο";
 $langLanguage ="Γλώσσα";
 $langUpgradeBase = "Αναβάθμιση βάσης Δεδομένων";
 
