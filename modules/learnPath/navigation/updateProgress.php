@@ -66,7 +66,7 @@ $TOCurl = "../viewer_toc.php";
 /*********************/
 
 // handling of the API form if posted by the SCORM API
-if($_POST['ump_id']) 
+if(isset($_POST['ump_id']))
 { 
   // set values for some vars because we are not sure we will change it later
   $lesson_status_value = strtoupper($_POST['lesson_status']);
@@ -86,9 +86,15 @@ if($_POST['ump_id'])
         $credit_value = "CREDIT";
   }
 
-  if(isScormTime($_POST['session_time']))
+  if(isScorm2004Time($_POST['session_time']))
+  {
+    $total_time_value = addScorm2004Time($_POST['total_time'], $_POST['session_time']);
+    $session_time_formatted = addScorm2004Time("0000:00:00.00", $_POST['session_time']);
+  }
+  else if(isScormTime($_POST['session_time']))
   {
     $total_time_value = addScormTime($_POST['total_time'], $_POST['session_time']);
+    $session_time_formatted = $_POST['session_time'];
   }
   else
   {
@@ -104,7 +110,7 @@ if($_POST['ump_id'])
                 `scoreMin` = '".(int)$_POST['scoreMin']."',
                 `scoreMax` = '". (int)$_POST['scoreMax']."',
                 `total_time` = '". addslashes($total_time_value) ."',
-                `session_time` = '". addslashes($_POST['session_time']) ."',
+                `session_time` = '". addslashes($session_time_formatted) ."',
                 `suspend_data` = '". addslashes($_POST['suspend_data'])."',
                 `credit` = '". addslashes($credit_value) ."'
           WHERE `user_module_progress_id` = ". (int)$_POST['ump_id'];
@@ -121,7 +127,7 @@ if($_POST['ump_id'])
 <head>
    <title>update progression</title>
 <?php
-if($_POST['ump_id']) 
+if(isset($_POST['ump_id']))
 {
 ?>
     <script type="text/javascript">

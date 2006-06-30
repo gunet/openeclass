@@ -511,21 +511,25 @@ $sco['session_time'] = "0000:00:00.00";
                                       break;
                                 case 'cmi.core.session_time' :
                                       // regexp to check format
-                                      // hhhh:mm:ss.ss
+                                      // hhhh:mm:ss.ss or PThHmMsS
                                       var re = /^[0-9]{2,4}:[0-9]{2}:[0-9]{2}(.)?[0-9]?[0-9]?$/;
+                                      var re2 = /^PT[0-9]{1,2}H[0-9]{1,2}M[0-9]{2}(.)?[0-9]?[0-9]?S$/;
 
-                                      if ( !re.test(val) )
+                                      if ( !re.test(val) && !re2.test(val) )
                                       {
                                            APIError("406");
                                            return "false";
                                       }
 
 									  // check that minuts and second are 0 <= x < 60
-                                      var splitted_val = val.split(":");
-                                      if( splitted_val[1] < 0 || splitted_val[1] >= 60 || splitted_val[2] < 0 || splitted_val[2] >= 60 )
-                                      {
-                                           APIError("406");
-                                           return "false";
+									  if (re.test(val)) // only for SCORM 1.2
+									  {
+										var splitted_val = val.split(":");
+										if( splitted_val[1] < 0 || splitted_val[1] >= 60 || splitted_val[2] < 0 || splitted_val[2] >= 60 )
+										{
+											APIError("406");
+											return "false";
+										}
 									  }
 									  
                                       values[i] = val;
@@ -534,21 +538,25 @@ $sco['session_time'] = "0000:00:00.00";
                                       break;
                                 case 'cmi.session_time' :
                                       // regexp to check format
-                                      // hhhh:mm:ss.ss
+                                      // hhhh:mm:ss.ss or PThHmMsS
                                       var re = /^[0-9]{2,4}:[0-9]{2}:[0-9]{2}(.)?[0-9]?[0-9]?$/;
+                                      var re2 = /^PT[0-9]{1,2}H[0-9]{1,2}M[0-9]{2}(.)?[0-9]?[0-9]?S$/;
 
-                                      if ( !re.test(val) )
+                                      if ( !re.test(val) && !re2.test(val) )
                                       {
                                            APIError("406");
                                            return "false";
                                       }
 
 									  // check that minuts and second are 0 <= x < 60
-                                      var splitted_val = val.split(":");
-                                      if( splitted_val[1] < 0 || splitted_val[1] >= 60 || splitted_val[2] < 0 || splitted_val[2] >= 60 )
-                                      {
-                                           APIError("406");
-                                           return "false";
+									  if (re.test(val)) // only for SCORM 1.2
+									  {
+										var splitted_val = val.split(":");
+										if( splitted_val[1] < 0 || splitted_val[1] >= 60 || splitted_val[2] < 0 || splitted_val[2] >= 60 )
+										{
+											APIError("406");
+											return "false";
+										}
 									  }
 									  
                                       values[11] = val; // SCORM 2004, use together with the old element
