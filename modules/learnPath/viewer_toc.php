@@ -354,10 +354,11 @@ echo '</th>'
 	.'</th>'
     .'<th>';
 if($uid) {
+	$lpProgress = get_learnPath_progress((int)$_SESSION['path_id'],$uid);
 	echo '<small>'
 		.$langGlobalProgress
-		.claro_disp_progress_bar(round($globalProg / ($moduleNb) ), 1 )
-		."&nbsp;".round($globalProg / ($moduleNb) )."%"
+		.claro_disp_progress_bar($lpProgress, 1)
+		."&nbsp;".$lpProgress."%"
 		.'</small>'."\n";
 }
 echo '</th>'
