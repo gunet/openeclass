@@ -8,8 +8,8 @@
         Α full copyright notice can be read in "/info/copyright.txt".
 
            Authors:     Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-                    Yannis Exidaridis <jexi@noc.uoa.gr>
-                       Alexandros Diamantidis <adia@noc.uoa.gr>
+  		                  Yannis Exidaridis <jexi@noc.uoa.gr>
+ 	                      Alexandros Diamantidis <adia@noc.uoa.gr>
 
         For a full list of contributors, see "credits.txt".
 
@@ -158,7 +158,7 @@ switch (PHP_OS)
 
 echo "<img src=\"$wizardImage\" align=\"right\" hspace=\"10\" vspace=\"10\">";
 
-############### STEP 2 LICENSE  ###################################
+//  step 2 license  
 
 if(isset($install2) OR isset($back2))
 {
@@ -638,7 +638,7 @@ elseif(isset($install7))
     if (mysql_errno()>0) // problem with server
     {
         $no = mysql_errno();     $msg = mysql_error();
-        echo "<HR>[".$no."] - ".$msg."<HR>
+        echo "<hr>[".$no."] - ".$msg."<hr>
         Η Mysql  δεν λειτουργεί ή το όνομα χρήστη/συνθηματικό δεν είναι σωστό.<br>
         Παρακαλούμε ελέγξετε τα στοιχεία σας. <br>
         Όνομα Υπολογιστή : ".$dbHostForm."<br>
@@ -706,7 +706,25 @@ if (mysql_version())  {
   PRIMARY KEY  (`id`)
 ) TYPE=MyISAM DEFAULT CHARACTER SET=greek");
     
-    # --------------------------------------------------------
+
+# ----------------------------------------------------
+#
+#		table admin_announcements
+#
+
+	mysql_query("CREATE TABLE `admin_announcements` (
+	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+	`gr_title` VARCHAR( 256 ) NULL ,
+	`gr_body` VARCHAR( 256 ) NULL ,
+	`gr_comment` VARCHAR( 256 ) NULL ,
+	`en_title` VARCHAR( 256 ) NULL ,
+	`en_body` VARCHAR( 256 ) NULL ,
+	`en_comment` VARCHAR( 256 ) NULL ,
+	`date` DATE NOT NULL ,
+	`visible` ENUM( 'V', 'I' ) NOT NULL
+	) TYPE = MYISAM DEFAULT CHARACTER SET=greek");
+
+		# --------------------------------------------------------
     
     #
     # table `cours`
@@ -1009,7 +1027,26 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
   	PRIMARY KEY  (`id`)
 	) TYPE=MyISAM ");
     
-    # --------------------------------------------------------
+# ---------------------------------------
+
+#
+#		table admin_announcements
+#
+
+	mysql_query("CREATE TABLE `admin_announcements` (
+	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+	`gr_title` VARCHAR( 256 ) NULL ,
+	`gr_body` VARCHAR( 256 ) NULL ,
+	`gr_comment` VARCHAR( 256 ) NULL ,
+	`en_title` VARCHAR( 256 ) NULL ,
+	`en_body` VARCHAR( 256 ) NULL ,
+	`en_comment` VARCHAR( 256 ) NULL ,
+	`date` DATE NOT NULL ,
+	`visible` ENUM( 'V', 'I' ) NOT NULL
+	) TYPE = MYISAM ");
+
+
+		# --------------------------------------------------------
     
     #
     # table `cours`
@@ -1311,8 +1348,8 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
         Α full copyright notice can be read in "/info/copyright.txt".
 
            Authors:     Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-                    Yannis Exidaridis <jexi@noc.uoa.gr>
-                       Alexandros Diamantidis <adia@noc.uoa.gr>
+		                    Yannis Exidaridis <jexi@noc.uoa.gr>
+    	                  Alexandros Diamantidis <adia@noc.uoa.gr>
 
         For a full list of contributors, see "credits.txt".
 
