@@ -154,6 +154,22 @@ if (!mysql_table_exists($mysqlMainDb, 'agenda'))  {
   	PRIMARY KEY  (`id`)) TYPE=MyISAM ", $mysqlMainDb);
 }
 
+
+// table admin_announcemets (stores administrator  announcements)
+if (!mysql_table_exists($mysqlMainDb, 'admin_announcements'))  {
+		db_query("CREATE TABLE `admin_announcements` (
+		`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+		`gr_title` VARCHAR( 256 ) NULL ,
+		`gr_body` VARCHAR( 256 ) NULL ,
+		`gr_comment` VARCHAR( 256 ) NULL ,
+		`en_title` VARCHAR( 256 ) NULL ,
+		`en_body` VARCHAR( 256 ) NULL ,
+		`en_comment` VARCHAR( 256 ) NULL ,
+		`date` DATE NOT NULL ,
+		`visible` ENUM( 'V', 'I' ) NOT NULL
+		) TYPE = MYISAM ", $mysqlMainDb);
+}
+
 // add 4 new fields to table users
 
 if (!mysql_field_exists("$mysqlMainDb",'user','perso'))
@@ -168,7 +184,7 @@ $tool_content .= add_field('user', 'doc_flag', "date NOT NULL default '0000-00-0
 if (!mysql_field_exists("$mysqlMainDb",'user','forum_flag'))
 $tool_content .= add_field('user', 'forum_flag', "date NOT NULL default '0000-00-00'");
 
-//add new filed to table users for user's language
+//add new field to table users for user's language
 if (!mysql_field_exists("$mysqlMainDb",'user','lang'))
 $tool_content .= add_field('user', 'lang', "ENUM('el', 'en') DEFAULT 'el' NOT NULL");
 
