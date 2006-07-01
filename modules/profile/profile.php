@@ -52,7 +52,7 @@ if (isset($submit) && (!isset($ldap_submit))) {
 	// check if passwds are the same
 
 	if ($password_form1 !== $password_form) {
-		header("location:". $_SERVER[PHP_SELF]."?msg=2");
+		header("location:". $_SERVER['PHP_SELF']."?msg=2");
 	}
 
 	// check if passwd is too easy
@@ -61,26 +61,26 @@ if (isset($submit) && (!isset($ldap_submit))) {
 	|| (strtoupper($password_form1) == strtoupper($nom_form))
 	|| (strtoupper($password_form1) == strtoupper($prenom_form))
 	|| (strtoupper($password_form1) == strtoupper($email_form))) {
-		header("location:". $_SERVER[PHP_SELF]."?msg=3");
+		header("location:". $_SERVER['PHP_SELF']."?msg=3");
 	}
 
 	// check if there are empty fields
 
 	elseif (empty($nom_form) OR empty($prenom_form) OR empty($password_form1)
 	OR empty($password_form) OR empty($username_form) OR empty($email_form)) {
-		header("location:". $_SERVER[PHP_SELF]."?msg=4");
+		header("location:". $_SERVER['PHP_SELF']."?msg=4");
 	}
 
 	// check if username is free
 
 	elseif(isset($user_exist) AND ($username_form==$user_exist) AND ($username_form!=$uname)) {
-		header("location:". $_SERVER[PHP_SELF]."?msg=5");
+		header("location:". $_SERVER['PHP_SELF']."?msg=5");
 	}
 
 	// check if user email is valid
 
 	elseif (!eregi($regexp, $email_form)) {
-		header("location:". $_SERVER[PHP_SELF]."?msg=6");
+		header("location:". $_SERVER['PHP_SELF']."?msg=6");
 	}
 
 	// everything is ok
@@ -94,7 +94,7 @@ if (isset($submit) && (!isset($ldap_submit))) {
         username='$username_form', password='$password_form', email='$email_form', am='$am_form',
             perso='$persoStatus', lang='$userLanguage'
         WHERE user_id='".$_SESSION["uid"]."'")){
-	header("location:". $_SERVER[PHP_SELF]."?msg=1");
+	header("location:". $_SERVER['PHP_SELF']."?msg=1");
         }
         
 	}
@@ -119,7 +119,7 @@ if (isset($submit) && isset($ldap_submit) && ($ldap_submit == "ON")) {
 		$_SESSION['langLinkURL'] = "?localize=el";
 	}
 
-	header("location:". $_SERVER[PHP_SELF]."?msg=1");
+	header("location:". $_SERVER['PHP_SELF']."?msg=1");
 }
 ##[END personalisation modification]############
 
