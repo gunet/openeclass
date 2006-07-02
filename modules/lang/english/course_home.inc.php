@@ -54,4 +54,6 @@ $langUpdate = "Modify Link";
 $langIcon = "Icon";
 
 $langNumOfUsers = "Registered users";
+
+$langLessonCode = "Lesson code";
 ?>

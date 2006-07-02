@@ -66,4 +66,6 @@ $langIcon = "Εικονίδιο";
 $langNameOfTheLink ="Όνομα Συνδέσμου";
 
 $langNumOfUsers = "Εγγεγραμμένοι χρήστες";
+
+$langLessonCode = "Κωδικός μαθήματος";
 ?>
