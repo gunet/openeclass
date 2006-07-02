@@ -47,7 +47,7 @@ $main_content = "";
 $bar_content = "";
 
 $sql = 'SELECT `description`,`course_objectives`,`course_prerequisites`,`course_keywords`,
- `course_references`,`faculte`,`lastEdit`,`type`, `visible`, `titulaires`
+ `course_references`,`faculte`,`lastEdit`,`type`, `visible`, `titulaires`, `fake_code`
  FROM `cours` WHERE `code` = "'.$currentCourse.'"';
 $res = db_query($sql, $mysqlMainDb);
 while($result = mysql_fetch_row($res)) {
@@ -62,6 +62,7 @@ while($result = mysql_fetch_row($res)) {
 	$type = $result[7];
 	$visible = $result[8];
 	$professor = $result[9];
+	$fake_code = $result[10];
 	//
 }
 
@@ -73,22 +74,25 @@ $main_content .= "<h3>$langcourse_objectives</h3><p>$objectives</p>";
 $main_content .= "<h3>$langcourse_prerequisites</h3><p>$prerequisites</p>";
 $main_content .= "<h3>$langcourse_references</h3><p>". nl2br($references)."</p>";
 
-	switch ($type){
-		case 'pre': { //pre
-			$lessonType = $m['pre'];
-			break;
-		}
-
-		case 'post': {//post
-			$lessonType = $m['post'];
-			break;
-		}
-
-		case 'other': { //other
-			$lessonType = $m['other'];
-			break;
-		}
+switch ($type){
+	case 'pre': { //pre
+		$lessonType = $m['pre'];
+		break;
 	}
+
+	case 'post': {//post
+		$lessonType = $m['post'];
+		break;
+	}
+
+	case 'other': { //other
+		$lessonType = $m['other'];
+		break;
+	}
+}
+
+$bar_content .= "<h4>$langLessonCode</h4>";
+$bar_content .= "<p>".$fake_code."</p>";
 $bar_content .= "<h4>$langProfessors</h4>";
 $bar_content .= "<p>".$professor."</p>";
 $bar_content .= "<h4>$langFaculty</h4>";
@@ -104,9 +108,9 @@ if ($is_adminOfCourse) {
 	while($result = mysql_fetch_row($res)) {
 		$numUsers = $result[0];
 	}
-	
+
 	//set the lang var for lessons visibility status
-	
+
 	switch ($visible){
 		case 0: { //closed
 			$lessonStatus = $langPrivate;
@@ -123,7 +127,7 @@ if ($is_adminOfCourse) {
 			break;
 		}
 	}
-	
+
 	$main_content .= "<br><hr><br>";
 	$main_content .= "
 		<table>
