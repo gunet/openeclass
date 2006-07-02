@@ -1,6 +1,4 @@
 <?PHP
-//session_start();
-
 /*
 *
 *	File : lessons.php
@@ -52,7 +50,7 @@ function  getUserLessonInfo($uid, $type) {
 	$repeat_val = 0;
 
 	$lesson_titles = array();
-//	$userStatus = 0;//flat to check what links should be shown in the personalised interface
+
 	//getting user's lesson titles
 	while ($mycourses = mysql_fetch_row($mysql_query_result)) {
 
@@ -60,9 +58,7 @@ function  getUserLessonInfo($uid, $type) {
 		$lesson_code[$repeat_val]		= $mycourses[0]; //lesson code used in tables
 		$lesson_professor[$repeat_val]	= $mycourses[3]; //lesson professor
 		$lesson_statut[$repeat_val]		= $mycourses[5];//statut (user|prof)
-		/*$lesson_announce_f[$repeat_val]	= eregi_replace("-", " ", $mycourses[7]);//announcements flag
-		$lesson_doc_f[$repeat_val]		= eregi_replace("-", " ", $mycourses[8]);//documents flag
-		$lesson_forum_f[$repeat_val]	= eregi_replace("-", " ", $mycourses[9]);//forum flag*/
+		$lesson_fakeCode[$repeat_val]	= $mycourses[1];//lesson fake code
 
 		$repeat_val++;
 	}
@@ -75,7 +71,7 @@ function  getUserLessonInfo($uid, $type) {
 	$memory_result = db_query($memory, $mysqlMainDb);
 	
 	while ($my_memory_result = mysql_fetch_row($memory_result)) {
-//		dumpArray($my_memory_result);
+
 		$lesson_announce_f = eregi_replace("-", " ", $my_memory_result[0]);
 		$lesson_doc_f = eregi_replace("-", " ", $my_memory_result[1]);
 		$lesson_forum_f = eregi_replace("-", " ", $my_memory_result[2]);
@@ -93,11 +89,10 @@ function  getUserLessonInfo($uid, $type) {
 	$ret_val[5] = $lesson_announce_f;
 	$ret_val[6] = $lesson_doc_f;
 	$ret_val[7] = $lesson_forum_f;
-	
-//dumpArray($ret_val);
+
 	//check what sort of data should be returned
 	if($type == "html") {
-		return array($ret_val,htmlInterface($ret_val));
+		return array($ret_val,htmlInterface($ret_val, $lesson_fakeCode));
 //		return htmlInterface($ret_val);
 	} elseif ($type == "data") {
 		return $ret_val;
@@ -106,7 +101,7 @@ function  getUserLessonInfo($uid, $type) {
 }
 
 
-function htmlInterface($data) {
+function htmlInterface($data, $lesson_fCode) {
 	global $statut, $is_admin, $urlServer, $langCourseCreate, $langOtherCourses;
 	global $langNotEnrolledToLessons, $langCreateLesson, $langEnroll;
 	$lesson_content = "";
@@ -119,17 +114,12 @@ function htmlInterface($data) {
 lCont;
 
 	for ($i=0; $i<$data[0]; $i++){
-/*		if ($data[4][$i] == 1) {
-			$prof_css = "class=\"statut\"";
-		} else {
-			$prof_css = "";
-		}*/
 
 		$lesson_content .= "
 	<li>
 	<a class=\"square_bullet\" href=\"courses/".$data[2][$i]."\">
 	
-	<div class=\"title_pos\">".$data[2][$i]." - ".$data[1][$i]."</div>
+	<div class=\"title_pos\">".$lesson_fCode[$i]." - ".$data[1][$i]."</div>
 	<div class=\"content_pos\">".$data[3][$i]."</div>
 	</a>
 	</li>
