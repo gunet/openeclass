@@ -22,18 +22,33 @@ include('../functions.'.$phpEx);
 include('../config.'.$phpEx);
 require('../auth.'.$phpEx);
 
+include '../include/baseTheme.php';
+$nameTools = $langUsers." ($langUserNumber : $countUser)";
+$tool_content = "";
+
 if($login) {
    if ($username == '') {
-      die("You have to enter your username. Go back and do so.");
+	$tool_content .= "Πρέπει να εισάγετε το αναγνωριστικό σας. Επιστρέψτε πίσω και κάντε το.";
+	draw($tool_content,3);
+	return;
+      //die("You have to enter your username. Go back and do so.");
    }
    if ($password == '') {
-      die("You have to enter your password. Go back and do so.");
+	$tool_content .= "Πρέπει να εισάγετε το συνθηματικό σας. Επιστρέψτε πίσω και κάντε το.";
+	draw($tool_content,3);
+	return;
+      //die("You have to enter your password. Go back and do so.");
    }
    if (!check_username($username, $db)) {
-      die("Invalid username \"$username\". Go back and try again.");
+	$tool_content .= "Μη έγκυρο αναγνωριστικό \"$username\". Επιστρέψτε πίσω και δοκιμάστε ξανά.";
+	draw($tool_content,3);
+	return;
+      //die("Invalid username \"$username\". Go back and try again.");
    }
    if (!check_user_pw($username, $password, $db)) {
-      die("Invalid password. Go back and try again.");
+	$tool_content .= "Μη έγκυρο συνθηματικό. Επιστρέψτε πίσω και δοκιμάστε ξανά.";
+	draw($tool_content,3);
+      //die("Invalid password. Go back and try again.");
    }
 
    $userdata = get_userdata($username, $db);
