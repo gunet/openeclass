@@ -8,8 +8,8 @@
         Α full copyright notice can be read in "/info/copyright.txt".
 
            Authors:     Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-  		                  Yannis Exidaridis <jexi@noc.uoa.gr>
- 	                      Alexandros Diamantidis <adia@noc.uoa.gr>
+                    Yannis Exidaridis <jexi@noc.uoa.gr>
+                       Alexandros Diamantidis <adia@noc.uoa.gr>
 
         For a full list of contributors, see "credits.txt".
 
@@ -131,6 +131,7 @@ echo "
             <input type=\"hidden\" name=\"institutionUrlForm\" value=\"$institutionUrlForm\">
             <input type=\"hidden\" name=\"ldapserver\" value=\"".@$ldapserver."\">
             <input type=\"hidden\" name=\"dnldapserver\" value=\"".@$dnldapserver."\">
+            <input type=\"hidden\" name=\"vodServer\" value=\"".@$vodServerForm."\">
 ";
 
 switch (PHP_OS)
@@ -158,7 +159,7 @@ switch (PHP_OS)
 
 echo "<img src=\"$wizardImage\" align=\"right\" hspace=\"10\" vspace=\"10\">";
 
-//  step 2 license  
+############### STEP 2 LICENSE  ###################################
 
 if(isset($install2) OR isset($back2))
 {
@@ -529,6 +530,44 @@ echo "
                                 <input type=\"text\" size=\"40\" name=\"dnldapserver\" value=\"$dnldapserver\">
                             </td>
                         </tr>
+                        <tr>
+                            <td>
+                                <font size=\"2\" face=\"arial, helvetica\">
+                                   Διαθέτετε εξυπηρετητή video streaming; 
+                                </font>
+                            </td>
+                            <td>
+<script>
+function set_video_input()
+	{
+		if(document.getElementById(\"video_check\").checked==true)
+		{
+			document.getElementById(\"video_input_div_text\").innerHTML='<font size=\"2\" face=\"arial, helvetica\">Πρόθεμα του τελικού URL με το οποίο θα σερβίρονται τα αποθηκευμένα στον video streaming εξυπηρετητή αρχεία</font><font color=\"red\">*</font>';
+			document.getElementById(\"video_input_div_input\").innerHTML='<input type=\"text\" size=\"20\" name=\"vodServerForm\" value=\"$vodServer\"><br>Πχ. mms://windows_media.server.gr/, rtsp://real.server.gr';
+		}
+		else{ document.getElementById(\"video_input_div_text\").innerHTML='';
+		      document.getElementById(\"video_input_div_input\").innerHTML='';
+		}
+		
+
+	}
+</script>
+
+
+			    	 <input type=\"checkbox\" id=\"video_check\" onclick=\"set_video_input();\"/><br>
+                            </td>
+                        </tr>
+
+			<tr>
+				<td>
+				 <div id=\"video_input_div_text\">
+				 </div>
+				</td>
+				<td>
+				 <div id=\"video_input_div_input\">
+				</td>
+
+			</tr>
 
                         <tr><td colspan=\"2\">&nbsp;</td></tr>
                         <tr>
@@ -638,7 +677,7 @@ elseif(isset($install7))
     if (mysql_errno()>0) // problem with server
     {
         $no = mysql_errno();     $msg = mysql_error();
-        echo "<hr>[".$no."] - ".$msg."<hr>
+        echo "<HR>[".$no."] - ".$msg."<HR>
         Η Mysql  δεν λειτουργεί ή το όνομα χρήστη/συνθηματικό δεν είναι σωστό.<br>
         Παρακαλούμε ελέγξετε τα στοιχεία σας. <br>
         Όνομα Υπολογιστή : ".$dbHostForm."<br>
@@ -686,7 +725,22 @@ if (mysql_version())  {
       PRIMARY KEY  (id))
       TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
+#---------------------------------------------
 
+#
+# table admin_announcements
+#
+		mysql_query("CREATE TABLE `admin_announcements` (
+    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+		 gr_title` VARCHAR( 255 ) NULL ,
+		 `gr_body` VARCHAR( 255 ) NULL ,
+		 `gr_comment` VARCHAR( 255 ) NULL ,
+			`en_title` VARCHAR( 255 ) NULL ,
+		  `en_body` VARCHAR( 255 ) NULL ,
+			`en_comment` VARCHAR( 255 ) NULL ,
+			`date` DATE NOT NULL ,
+			`visible` ENUM( 'V', 'I' ) NOT NULL
+			) TYPE = MyISAM DEFAULT CHARACTER SET=greek");
 
     # --------------------------------------------------------
 
@@ -706,25 +760,7 @@ if (mysql_version())  {
   PRIMARY KEY  (`id`)
 ) TYPE=MyISAM DEFAULT CHARACTER SET=greek");
     
-
-# ----------------------------------------------------
-#
-#		table admin_announcements
-#
-
-	mysql_query("CREATE TABLE `admin_announcements` (
-	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-	`gr_title` VARCHAR( 255 ) NULL ,
-	`gr_body` VARCHAR( 255 ) NULL ,
-	`gr_comment` VARCHAR( 255 ) NULL ,
-	`en_title` VARCHAR( 255 ) NULL ,
-	`en_body` VARCHAR( 255 ) NULL ,
-	`en_comment` VARCHAR( 255 ) NULL ,
-	`date` DATE NOT NULL ,
-	`visible` ENUM( 'V', 'I' ) NOT NULL
-	) TYPE = MYISAM DEFAULT CHARACTER SET=greek");
-
-		# --------------------------------------------------------
+    # --------------------------------------------------------
     
     #
     # table `cours`
@@ -839,7 +875,6 @@ if (mysql_version())  {
   	`announce_flag` date NOT NULL default '0000-00-00',
  	 `doc_flag` date NOT NULL default '0000-00-00',
   	`forum_flag` date NOT NULL default '0000-00-00',
-  	 `lang` enum('el','en') NOT NULL default 'el',
      PRIMARY KEY  (user_id))
       TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
@@ -1008,6 +1043,22 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
       PRIMARY KEY  (id))
       TYPE=MyISAM");
 
+# -------------------------------
+#
+# table admin_announcements
+#
+		mysql_query("CREATE TABLE `admin_announcements` (
+    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+		 gr_title` VARCHAR( 255 ) NULL ,
+		 `gr_body` VARCHAR( 255 ) NULL ,
+		 `gr_comment` VARCHAR( 255 ) NULL ,
+			`en_title` VARCHAR( 255 ) NULL ,
+		  `en_body` VARCHAR( 255 ) NULL ,
+			`en_comment` VARCHAR( 255 ) NULL ,
+			`date` DATE NOT NULL ,
+			`visible` ENUM( 'V', 'I' ) NOT NULL
+			) TYPE = MYISAM");
+			
 
     # --------------------------------------------------------
 
@@ -1027,26 +1078,7 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
   	PRIMARY KEY  (`id`)
 	) TYPE=MyISAM ");
     
-# ---------------------------------------
-
-#
-#		table admin_announcements
-#
-
-	mysql_query("CREATE TABLE `admin_announcements` (
-	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-	`gr_title` VARCHAR( 255 ) NULL ,
-	`gr_body` VARCHAR( 255 ) NULL ,
-	`gr_comment` VARCHAR( 255 ) NULL ,
-	`en_title` VARCHAR( 255 ) NULL ,
-	`en_body` VARCHAR( 255 ) NULL ,
-	`en_comment` VARCHAR( 255 ) NULL ,
-	`date` DATE NOT NULL ,
-	`visible` ENUM( 'V', 'I' ) NOT NULL
-	) TYPE = MYISAM ");
-
-
-		# --------------------------------------------------------
+    # --------------------------------------------------------
     
     #
     # table `cours`
@@ -1161,7 +1193,6 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
   	`announce_flag` date NOT NULL default '0000-00-00',
  	 `doc_flag` date NOT NULL default '0000-00-00',
   	`forum_flag` date NOT NULL default '0000-00-00',
-  	 `lang` enum('el','en') NOT NULL default 'el',
      PRIMARY KEY  (user_id))
       TYPE=MyISAM");
 
@@ -1348,8 +1379,8 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
         Α full copyright notice can be read in "/info/copyright.txt".
 
            Authors:     Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-		                    Yannis Exidaridis <jexi@noc.uoa.gr>
-    	                  Alexandros Diamantidis <adia@noc.uoa.gr>
+                    Yannis Exidaridis <jexi@noc.uoa.gr>
+                       Alexandros Diamantidis <adia@noc.uoa.gr>
 
         For a full list of contributors, see "credits.txt".
 
@@ -1417,9 +1448,9 @@ $colorDark = "#000066";
 
 $have_latex = FALSE;
 
-//$vodServer="";
-//$MCU="";
 
+'.($vodServer==''?'//':'').'$vodServer="'.$vodServer.'";
+$MCU="'.$MCUForm.'";
 ?>';
 
 // write to file
@@ -1517,6 +1548,13 @@ else
     <li>
         Δικαιώματα εγγραφής στον κατάλογο όπου το e-class έχει αποσυμπιεστεί.
     </li>
+    </ul>
+    <br>
+    <b>Επιπρόσθετη λειτουργικότητα:</b>
+    <ul>
+    	<li>
+    	Εάν επιθυμείται να υποστηρίζεται streaming για τα αρχεία video που θα αποτελούν μέρος του υλικού των αποθηκευμένων μαθημάτων θα πρέπει να υπάρχει εγκατεστημένος streaming server σύμφωνα με τις οδηγίες που θα βρείτε στο εγχειρίδιο τάδε. 
+    	</li>
     </ul>
     <br>
 Το e-Class θα εγκαταστήσει το δικό του διαχειριστικό εργαλείο μέσω web των βάσεων δεδομένων MySQL (<a
