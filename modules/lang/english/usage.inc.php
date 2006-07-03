@@ -29,15 +29,6 @@
       +----------------------------------------------------------------------+
  */
 
-/***************************************************************
-*                   Language translation
-****************************************************************
-GOAL
-****
-Translate the interface in chosen language
-*****************************************************************/
-// chat.php
-
  $langGDRequired = "The GD library is required!";
  $langUsage = "Usage Statistics";
  $langStartDate = "Start Date";
@@ -69,6 +60,4 @@ Translate the interface in chosen language
  $langMonths[10] = "Oct";
  $langMonths[11] = "Nov";
  $langMonths[12] = "Dec";
-
 ?>
-
