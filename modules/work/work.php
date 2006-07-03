@@ -804,13 +804,13 @@ cData;
 
 			$grade = ' - ';
 			if ($submission = find_submission($uid, $row['id'])) {
-				$tool_content .= "<img src='../../images/checkbox_on.gif' alt='$m[yes]'>";
+				$tool_content .= "<img src='../../template/classic/img/checkbox_on.gif' alt='$m[yes]'>";
 				$grade = submission_grade($submission);
 				if (!$grade) {
 					$grade = ' - ';
 				}
 			} else {
-				$tool_content .= "<img src='../../images/checkbox_off.gif' alt='$m[no]'>";
+				$tool_content .= "<img src='../../template/classic/img/checkbox_off.gif' alt='$m[no]'>";
 			}
     $tool_content .= "</td><td width=\"10%\" align=\"center\">${grade}</td></tr>";
 	}
@@ -877,19 +877,19 @@ cData;
 	$tool_content .= <<<cData
 		</a></td>
     <td align="center">${row['deadline']}</td>
-    <td align="center"><a href="work.php?id=${row['id']}&choice=edit"><img src="../../images/edit.gif" border="0" alt="${m['edit']}"></a></td>
-    <td align="center"><a href="work.php?id=${row['id']}&choice=delete"><img src="../../images/delete.gif" border="0" alt="${m['delete']}"></a></td>
+    <td align="center"><a href="work.php?id=${row['id']}&choice=edit"><img src="../../template/classic/img/edit.gif" border="0" alt="${m['edit']}"></a></td>
+    <td align="center"><a href="work.php?id=${row['id']}&choice=delete"><img src="../../template/classic/img/delete.gif" border="0" alt="${m['delete']}"></a></td>
     <td width="10%" align="center">
 cData;
     if($row['active']) {
     	$deactivate_temp = htmlspecialchars($m['deactivate']);
     	$activate_temp = htmlspecialchars($m['activate']);
     	$tool_content .= "<a href=\"work.php?choice=disable&id=${row['id']}\">".
-	  		"<img src=\"../../images/visible.gif\" border=\"0\" alt=\"${deactivate_temp}\"></a>";
+	  		"<img src=\"../../template/classic/img/visible.gif\" border=\"0\" alt=\"${deactivate_temp}\"></a>";
     } else {
     	$activate_temp = htmlspecialchars($m['activate']);
     	$tool_content .= "<a href=\"work.php?choice=enable&id=${row['id']}\">".
-	  		"<img src=\"../../images/invisible.gif\" border=\"0\" alt=\"${activate_temp}\"></a>";
+	  		"<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" alt=\"${activate_temp}\"></a>";
     }
 		$tool_content .= "</td></tr>";
 	}
