@@ -100,7 +100,7 @@ function validate()
 /*
 	"
 	<td valign=\"middle\">
-		<a href=\"../help/help.php?topic=$topic\" onclick=\"window.open('../help/help.php?topic=$topic','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
+		<a href=\"../help/help.php?topic=$topic\" onclick=\"window.open('../help/help.php?topic=$topic','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
 	</td>
 	"
 */
@@ -168,7 +168,7 @@ $tool_content .= "
 					<input type=\"Text\" name=\"intitule\" size=\"60\">$langFieldsRequAsterisk<br>$langEx</font>
 				</td>
 				<td valign=\"middle\">
-					<a href=\"../help/help.php?topic=CreateCourse_Title\" onclick=\"window.open('../help/help.php?topic=CreateCourse_Title','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
+					<a href=\"../help/help.php?topic=CreateCourse_Title\" onclick=\"window.open('../help/help.php?topic=CreateCourse_Title','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
 				</td>
 			</tr>
 		</td>
@@ -206,7 +206,7 @@ $tool_content .=  "</select>"; */
 $tool_content .=  "$langFieldsRequAsterisk<br><font face=\"arial, helvetica\" size=\"2\">$langTargetFac</font>
 		</td>
 		<td valign=\"middle\">
-			<a href=\"../help/help.php?topic=CreateCourse_faculte\" onclick=\"window.open('../help/help.php?topic=CreateCourse_faculte','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
+			<a href=\"../help/help.php?topic=CreateCourse_faculte\" onclick=\"window.open('../help/help.php?topic=CreateCourse_faculte','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
 		</td>
 	</tr>
        <tr valign=\"top\">
@@ -221,7 +221,7 @@ $tool_content .=  "$langFieldsRequAsterisk<br><font face=\"arial, helvetica\" si
        </font>
        </td>
        <td valign=\"middle\">
-			<a href=\"../help/help.php?topic=CreateCourse_description\" onclick=\"window.open('../help/help.php?topic=CreateCourse_description','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
+			<a href=\"../help/help.php?topic=CreateCourse_description\" onclick=\"window.open('../help/help.php?topic=CreateCourse_description','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
 		</td>
       </tr>";
 
@@ -237,7 +237,7 @@ $tool_content .=  "<tr valign=\"top\">
 	<input type=\"Text\" name=\"titulaires\" size=\"60\" value=\"$titulaire_probable\"><font face=\"arial, helvetica\" size=\"2\">$langFieldsRequAsterisk<br>$langProfessorsInfo</font>
 	</td>
 	<td valign=\"middle\">
-		<a href=\"../help/help.php?topic=CreateCourse_titulaires\" onclick=\"window.open('../help/help.php?topic=CreateCourse_titulaires','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
+		<a href=\"../help/help.php?topic=CreateCourse_titulaires\" onclick=\"window.open('../help/help.php?topic=CreateCourse_titulaires','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
 	</td>
 	</tr>
 	<tr>
@@ -255,7 +255,7 @@ $tool_content .=  "<tr valign=\"top\">
 $tool_content .=  "
 	<font face=\"arial, helvetica\" size=\"2\">$langFieldsRequAsterisk<br>$langCourseCategory</br></td>
 	<td valign=\"middle\">
-		<a href=\"../help/help.php?topic=CreateCourse_Type\" onclick=\"window.open('../help/help.php?topic=CreateCourse_Type','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
+		<a href=\"../help/help.php?topic=CreateCourse_Type\" onclick=\"window.open('../help/help.php?topic=CreateCourse_Type','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
 	</td>
 	<tr>
 		<td>

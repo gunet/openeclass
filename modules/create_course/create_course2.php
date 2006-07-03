@@ -77,7 +77,7 @@ function previous_step()
 /*
 	"
 	<td valign=\"middle\">
-		<a href=\"../help/help.php?topic=$topic\" onclick=\"window.open('../help/help.php?topic=$topic','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
+		<a href=\"../help/help.php?topic=$topic\" onclick=\"window.open('../help/help.php?topic=$topic','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
 	</td>
 	"
 */
@@ -146,7 +146,7 @@ $local_style = "input { font-size: 12px; }";
 				<textarea name=\"course_objectives\" cols=\"30\" rows=\"5\"></textarea>$langFieldsRequAsterisk<br>$langObjectives</font>
 				</td>
 				<td valign=\"middle\">
-					<a href=\"../help/help.php?topic=CreateCourse_course_objectives\" onclick=\"window.open('../help/help.php?topic=CreateCourse_course_objectives','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>					
+					<a href=\"../help/help.php?topic=CreateCourse_course_objectives\" onclick=\"window.open('../help/help.php?topic=CreateCourse_course_objectives','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>					
 				</td>
 			</tr>
 			<tr>				
@@ -157,7 +157,7 @@ $local_style = "input { font-size: 12px; }";
 					<textarea name=\"course_intronote\" cols=\"30\" rows=\"5\"></textarea><br>$langIntroNote
 				</td>
 				<td>
-					<a href=\"../help/help.php?topic=CreateCourse_course_intronote\" onclick=\"window.open('../help/help.php?topic=CreateCourse_course_intronote','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../images/help.gif\" border=\"0\"></a>
+					<a href=\"../help/help.php?topic=CreateCourse_course_intronote\" onclick=\"window.open('../help/help.php?topic=CreateCourse_course_intronote','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
 				</td>
 			</tr>
 		</table>
