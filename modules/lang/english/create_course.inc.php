@@ -121,4 +121,26 @@ $langCatagoryMain="Main";
 $langCatagoryGroup="Groups forums";
 $langChat ="Chat";
 
+//neos odhgos dhmiourgias mathimaton
+$langEnterMetadata="You can enter additional information about your course from the course management page";
+$langCreateCourse="Create new course wizard";
+$langCreateCourseStep="Step";
+$langCreateCourseStep2="from";
+$langCreateCourseStep1Title="Basic information about the course";
+$langCreateCourseStep2Title="Additional information about the course";
+$langCreateCourseStep3Title="System options about the course";
+$langcourse_objectives="Course objectives";
+$langcourse_prerequisites="Prerequisite knowledge";
+$langcourse_references="References";
+$langcourse_keywords="Keywords";
+$langFieldsRequAsterisk="<font face=\"arial, helvetica\" color=\"#FF0000\" size=\"5\">*</font>";
+$langNextStep="Next Step";
+$langPreviousStep="Previous Step";
+$langFinalize="Create Course!";
+$langCourseCategory="The category the course belongs to";
+$langProfessorsInfo="Full names of the instructors of the course; seperated by commas (e.g.<i>John Doe, George Smith</i>)";
+
+$langPublic="Open (Free access from the homepage without password)";
+$langPrivOpen="Open by registration (You have to register in order to grant access)";
+$langPrivate="Private (Access is granted only to students added in the Users List)";
 ?>
