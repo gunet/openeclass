@@ -903,10 +903,10 @@ function display_my_documents($dialogBox, $style)
     if ($curDirName) /* if the $curDirName is empty, we're in the root point
     and we can't go to a parent dir */
     {
-        $output .= '<a href="' . $_SERVER['PHP_SELF'] . '?cmd=exChDir&amp;file=' . $cmdParentDir . '">' . "\n"
+        $output .= '<p><a href="' . $_SERVER['PHP_SELF'] . '?openDir=' . $cmdParentDir . '">' . "\n"
         .    '<img src="' . $imgRepositoryWeb . 'parent.gif" border="0" align="absbottom" hspace="5" alt="" />'."\n"
         .    '<small>' . $langUp . '</small>' . "\n"
-        .    '</a>' . "\n"
+        .    '</a></p>' . "\n"
         ;
     }
     /* CURRENT DIRECTORY */
@@ -915,12 +915,14 @@ function display_my_documents($dialogBox, $style)
     and there is'nt a dir name to display */
     {
         $output .= '<!-- current dir name -->' . "\n"
+        .    '<thead>' . "\n"
         .    '<tr>' . "\n"
-        .    '<th colspan="' . $colspan . '" align="left">'. "\n"
+        .    '<th colspan="' . $colspan . '" align="left" style="text-align: left; background-color: #0066cc; color: #ffffff">'. "\n"
         .    '<img src="' . $imgRepositoryWeb . 'opendir.gif" align="absbottom" vspace=2 hspace=5 alt="" />' . "\n"
         .    $dspCurDirName . "\n"
-        .    '</td>' . "\n"
+        .    '</th>' . "\n"
         .    '</tr>' . "\n"
+        .    '</thead>' . "\n"
         ;
     }
 
@@ -979,6 +981,7 @@ function display_my_documents($dialogBox, $style)
                 $size        = '&nbsp;';
                 $date        = '&nbsp;';
                 $urlFileName = $_SERVER['PHP_SELF'] . '?openDir=' . $cmdFileName;
+                $dspFileName = htmlspecialchars($fileName);
             }
 
             $output .= '<tr align="center" ' . $style . '>'."\n";
