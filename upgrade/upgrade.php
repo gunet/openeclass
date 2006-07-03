@@ -159,12 +159,12 @@ if (!mysql_table_exists($mysqlMainDb, 'agenda'))  {
 if (!mysql_table_exists($mysqlMainDb, 'admin_announcements'))  {
 		db_query("CREATE TABLE `admin_announcements` (
 		`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-		`gr_title` VARCHAR( 256 ) NULL ,
-		`gr_body` VARCHAR( 256 ) NULL ,
-		`gr_comment` VARCHAR( 256 ) NULL ,
-		`en_title` VARCHAR( 256 ) NULL ,
-		`en_body` VARCHAR( 256 ) NULL ,
-		`en_comment` VARCHAR( 256 ) NULL ,
+		`gr_title` VARCHAR( 255 ) NULL ,
+		`gr_body` VARCHAR( 255 ) NULL ,
+		`gr_comment` VARCHAR( 255 ) NULL ,
+		`en_title` VARCHAR( 255 ) NULL ,
+		`en_body` VARCHAR( 255 ) NULL ,
+		`en_comment` VARCHAR( 255 ) NULL ,
 		`date` DATE NOT NULL ,
 		`visible` ENUM( 'V', 'I' ) NOT NULL
 		) TYPE = MYISAM ", $mysqlMainDb);
@@ -854,7 +854,7 @@ while ($code = mysql_fetch_row($res)) {
 	$sql = 'UPDATE `accueil` SET `visible` = \'0\', `admin` = \'1\' WHERE `id` = 8 LIMIT 1';
 	db_query($sql, $code[0]);
 
-// update messages
+// update menu entries with new messages
   $langModifyInfoNew = "Διαχείριση Μαθήματος";
 	$langAddPageHomeNew= "Ανέβασμα Ιστοσελίδας";
   update_field("accueil", "rubrique", "$langModifyInfoNew", "id", 14);
@@ -889,23 +889,6 @@ while ($code = mysql_fetch_row($res)) {
 	//remove modules import & external (now a part of tool admin)
 	$sql = 'DELETE FROM `accueil` WHERE (`id` = 12 OR `id` = 13)';
 	db_query($sql, $code[0]);
-	
-	//-----delete redundant files & folders-----------------------
-	//The platform admin has to set the correct permissions for this to work
-	// OR delete manually :)
-	/*$file2Delete = $webDir . "modules/import/import.php";
-	unlink($file2Delete);
-	$file2Delete = $webDir . "modules/import/import_page.php";
-	unlink($file2Delete);
-	$dir2Delete = $webDir . "module/import";
-	rmdir($dir2Delete);
-	
-	$file2Delete = $webDir . "modules/external_module/modules/external_module.php";
-	unlink($file2Delete);
-	$dir2Delete = $webDir . "modules/external_module";
-	rmdir($dir2Delete);*/
-	
-	
 
 	// table stat_accueil
 	$sql = db_query("SELECT id,request FROM stat_accueil");
@@ -920,7 +903,21 @@ while ($code = mysql_fetch_row($res)) {
 		}
 	}
 
-	$tool_content .= "<br><br></td></tr>";
+ // remove table 'introduction' entries and insert them in table 'cours' (field 'description') in eclass main database
+ // after that drop table introduction
+ 
+	$sql = db_query("SELECT texte_intro FROM introduction", $code[0]);
+	while ($text = mysql_fetch_array($sql)) {
+			if (db_query("UPDATE cours SET description='$text[0]' WHERE code='$code[0]'", $mysqlMainDb)) {
+				$tool_content .= "Μεταφορά του εισαγωγικού κειμένου <b>$text[0]</b> στον πίνακα <b>cours</b>: $OK<br>";
+		//		db_query("DROP TABLE introduction");
+			} else {
+				$tool_content .= "Μεταφορά του εισαγωγικού κειμένου <b>$text[0]</b> στον πίνακα <b>cours</b>: $BAD<br>";
+				$errors++;
+				}
+		}
+
+$tool_content .= "<br><br></td></tr>";
 
 } // End of 'while' courses
 
@@ -949,6 +946,16 @@ if ($fromadmin)
 draw($tool_content,3, 'admin');
 else
 draw($tool_content,0);
+
+
+//-----------------------------
+// end of main script
+// ---------------------------
+
+
+// ----------------------------------------------------------------
+// Function list
+// ----------------------------------------------------------------
 
 
 //function to update a field in a table
