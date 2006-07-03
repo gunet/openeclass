@@ -268,7 +268,7 @@ class ScormExport
     function prepareQuiz($quizId, $raw_to_pass=50)
     {
         global $langQuestion, $langOk, $langScore, $claro_stylesheet, $clarolineRepositorySys;
-        
+        global $charset, $langExerciseDone;
         // those two variables are needed by display_attached_file()
         global $attachedFilePathWeb;
         global $attachedFilePathSys;
@@ -278,6 +278,7 @@ class ScormExport
 // Generate standard page header 
         $pageHeader = '<html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">
 <meta http-equiv="expires" content="Tue, 05 DEC 2000 07:00:00 GMT">
 <meta http-equiv="Pragma" content="no-cache">
 <link rel="stylesheet" type="text/css" href="compatible.css" />
@@ -646,7 +647,7 @@ class ScormExport
 	        doLMSCommit();
 	        doLMSFinish();
 	        scoreCommited = true;
-	        if(showScore) alert(\''.clean_str_for_javascript($langScore).' :\n\' + rawScore + \'/\' + weighting );
+	        if(showScore) alert(\''.clean_str_for_javascript($langScore).' :\n\' + rawScore + \'/\' + weighting + \'\n\' + \''.clean_str_for_javascript($langExerciseDone).'\');
 		}
     }
 
@@ -883,7 +884,7 @@ class ScormExport
          */
         function createFrameFile($fileName, $targetPath)
         {
-            global $langErrorCreatingFrame, $langErrorCreatingManifest;
+            global $langErrorCreatingFrame, $langErrorCreatingManifest, $charset;
             
             if ( !($f = fopen($fileName, 'w')) )
             {
@@ -892,6 +893,7 @@ class ScormExport
             }
             
             fwrite($f, '<html><head>
+    <meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">
     <script src="APIWrapper.js" type="text/javascript" language="JavaScript"></script>
     <title>Default Title</title>
 </head>
@@ -900,6 +902,75 @@ class ScormExport
     <frame src="SCOFunctions.js">
 </frameset>
 </html>');
+            fclose($f);
+            
+            return true;
+        }
+        
+        /**
+         * Create the frame file that'll hold the course description. 
+         * This frame sets the SCO's status
+         * @param $filename string: the name of the file to create, absolute.
+         * @return False on error, true otherwise.
+         *
+         * @author Thanos Kyritsis <atkyritsis@upnet.gr>
+         */
+        function createDescFrameFile($fileName)
+        {
+            global $langErrorCreatingFrame, $langErrorCreatingManifest, $charset;
+            
+            if ( !($f = fopen($fileName, 'w')) )
+            {
+                $this->error[] = $langErrorCreatingFrame;
+                return false;
+            }
+            
+            $course_description = "";
+            //mysql_select_db("$currentCourseID",$db);
+			$sql = "SELECT `id`,`title`,`content` FROM `course_description` order by id";
+			$res = db_query($sql);
+			if (mysql_num_rows($res) >0 )
+			{
+				$course_description .= "
+					<hr noshade size=\"1\">";
+				while ($bloc = mysql_fetch_array($res))
+				{ 
+					$course_description .= "
+					<H4>
+						".$bloc["title"]."
+					</H4>
+					<font size=2 face='arial, helvetica'>
+						".make_clickable(nl2br($bloc["content"]))."
+					</font>";
+				}
+			}
+			else
+			{
+				$course_description .= "<br><h4>$langThisCourseDescriptionIsEmpty</h4>";
+			}
+            
+            fwrite($f, '<html>'."\n"
+            	.'<head>'."\n"
+            	.'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
+            	.'<script src="APIWrapper.js" type="text/javascript" language="JavaScript"></script>'."\n"
+            	.'</head>'."\n"
+				.'<body onload="immediateComplete()">'."\n"
+				.'<table width="99%" border="0">'."\n"
+				.'<tr>'."\n"
+				.'<td colspan="2">'."\n"
+				.$course_description."\n"
+				.'</td>'."\n"
+				.'</tr>'."\n"
+				.'<tr name="bottomLine">'."\n"
+				.'<td colspan="2">'."\n"
+				.'<br>'."\n"
+				.'<hr noshade size="1">'."\n"
+				.'</td>'."\n"
+				.'</tr>'."\n"
+				.'</table>'."\n"
+				.'</body>'."\n"
+				.'</html>'."\n"
+            	);
             fclose($f);
             
             return true;
@@ -959,6 +1030,40 @@ class ScormExport
                         . ' href="OrigScorm' . $module['path'] . '">' . "\n"
                         . '  <file href="OrigScorm' . $module['path'] . '" />' . "\n"
                         . makeMetaData($module['name'], $module['resourceComment'])
+                        . "</resource>\n";
+                    break;
+                    
+                 case 'COURSE_DESCRIPTION':
+                 	$framefile = $this->destDir . '/frame_for_' . $module['ID'] . '.html';
+                 	
+                 	// Create an html file with a frame for the document.
+                    if ( !createDescFrameFile($framefile)) return false;
+                    
+                    // Add the resource to the manifest
+                    $ridentifier = "R_".$module['ID'];
+                    $manifest_resources .= '<resource identifier="' . $ridentifier . '" type="webcontent"  adlcp:scormType="sco" '
+                        . ' href="' . basename($framefile) . '">' . "\n"
+                        . '  <file href="' . basename($framefile) . '">' . "\n"
+                        . makeMetaData($module['name'], $module['resourceComment'], $ridentifier)
+                        . "</file>\n"
+                        . "</resource>\n";
+                 	
+                 	break;
+                 
+                 case 'LINK': 
+                    $framefile = $this->destDir . '/frame_for_' . $module['ID'] . '.html';
+                    $targetfile = $module['path'];
+                    
+                    // Create an html file with a frame for the document.
+                    if ( !createFrameFile($framefile, $targetfile)) return false;
+                    
+                    // Add the resource to the manifest
+                    $ridentifier = "R_".$module['ID'];
+                    $manifest_resources .= '<resource identifier="' . $ridentifier . '" type="webcontent"  adlcp:scormType="sco" '
+                        . ' href="' . basename($framefile) . '">' . "\n"
+                        . '  <file href="' . basename($framefile) . '">' . "\n"
+                        . makeMetaData($module['name'], $module['resourceComment'], $ridentifier)
+                        . "</file>\n"
                         . "</resource>\n";
                     break;
                     
