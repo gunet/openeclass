@@ -91,16 +91,16 @@ $tool_content .= "<tr><td>".$i." ".$objQuestionTmp->selectTitle()."<br><small>".
 	$aType[$objQuestionTmp->selectType()-1]."</small></td>";
 	
 $tool_content .= "</tr><tr><td><a href=\"".$PHP_SELF."?editQuestion=".$id."\">".
-	"<img src=\"../../images/edit.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langModify."\"></a>".
+	"<img src=\"../../template/classic/img/edit.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langModify."\"></a>".
 	" <a href=\"".$PHP_SELF."?deleteQuestion=".$id."\" ".
 	"onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice))."')) return false;\">".
-	"<img src=\"../../images/delete.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langDelete."\"></a>";
+	"<img src=\"../../template/classic/img/delete.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langDelete."\"></a>";
 
 		if($i != 1)
 		{
 
 	$tool_content .= "<a href=\"".$PHP_SELF."?moveUp=".$id.
-		"\"><img src=\"../../images/up.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langMoveUp."\"></a>";
+		"\"><img src=\"../../template/classic/img/up.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langMoveUp."\"></a>";
 
 		}
 
@@ -108,7 +108,7 @@ $tool_content .= "</tr><tr><td><a href=\"".$PHP_SELF."?editQuestion=".$id."\">".
 		{
 
 	$tool_content .= "<a href=\"".$PHP_SELF."?moveDown=".$id.
-		"\"><img src=\"../../images/down.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langMoveDown."\"></a>";
+		"\"><img src=\"../../template/classic/img/down.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langMoveDown."\"></a>";
 
 		}
 

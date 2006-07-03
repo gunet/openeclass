@@ -188,7 +188,7 @@ $tool_content .= "<blockquote>".nl2br($questionDescription)."</blockquote>";
 	{
 
 $tool_content .= "<a href=\"".$PHP_SELF."?modifyQuestion=".$questionId.
-	"\"><img src=\"../../images/edit.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langModify."\"></a>";
+	"\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langModify."\"></a>";
 
 	}
 
@@ -243,7 +243,7 @@ $tool_content .= "</form></table><br>";
 	{
 
 $tool_content .= "<a href=\"".$PHP_SELF."?modifyAnswers=\"".$questionId.
-	"\"><img src=\"../../images/edit.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langModify."\"></a>";
+	"\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langModify."\"></a>";
 
 	}
 }

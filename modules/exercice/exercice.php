@@ -267,11 +267,11 @@ cData;
 	$tool_content .= <<<cData
 		</tr></table></td>
 	  <td width="10%" align="center"><a href="admin.php?exerciseId=${row['id']}">
-	  <img src="../../images/edit.gif" border="0" alt="${langModify_temp}"></a></td>
+	  <img src="../../template/classic/img/edit.gif" border="0" alt="${langModify_temp}"></a></td>
 	  <td width="10%" align="center">
 	  <a href="${PHP_SELF}?choice=delete&exerciseId=${row['id']}" 
 	  onclick="javascript:if(!confirm('${langConfirmYourChoice_temp}')) return false;">
-	  <img src="../../images/delete.gif" border="0" alt="${langDelete_temp}"></a></td>
+	  <img src="../../template/classic/img/delete.gif" border="0" alt="${langDelete_temp}"></a></td>
 cData;
 
 		// if active
@@ -281,10 +281,10 @@ cData;
 			if (isset($page))	
 				$tool_content .= "<td width='20%' align='center'>".
 					"<a href=\"${PHP_SELF}?choice=disable&page=${page}&exerciseId=".$row['id']."\">".
-					"<img src=\"../../images/visible.gif\" border=\"0\" alt=\"".htmlspecialchars($langDeactivate)."\"></a></td>";
+					"<img src=\"../../template/classic/img/visible.gif\" border=\"0\" alt=\"".htmlspecialchars($langDeactivate)."\"></a></td>";
 			else
 				$tool_content .= "<td width='20%' align='center'><a href='${PHP_SELF}?choice=disable&exerciseId=".$row['id']."'>".
-					"<img src='../../images/visible.gif' border='0' alt='".htmlspecialchars($langDeactivate)."'></a></td>";
+					"<img src='../../template/classic/img/visible.gif' border='0' alt='".htmlspecialchars($langDeactivate)."'></a></td>";
 }
 // else if not active
 else
@@ -292,11 +292,11 @@ else
 	if (isset($page))
 		$tool_content .= "<td width='20%' align='center'>".
 			"<a href='${PHP_SELF}?choice=enable&page=${page}&exerciseId=".$row['id']."'>".
-			"<img src='../../images/invisible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
+			"<img src='../../template/classic/img/invisible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
 	else
 		$tool_content .= "<td width='20%' align='center'>".
 			"<a href='${PHP_SELF}?choice=enable&exerciseId=".$row['id']."'>".
-			"<img src='../../images/invisible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
+			"<img src='../../template/classic/img/invisible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
 }
 
 	$tool_content .= "<td width=\"20%\" align=\"center\">	<nobr><a href=\"results.php?&exerciseId=".$row['id']."\">".

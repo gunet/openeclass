@@ -246,7 +246,7 @@ $tool_content .= <<<cData
 </blockquote>
 cData;
 
-$tool_content .= "<a href=\"".$PHP_SELF."?modifyExercise=yes\"><img src=\"../../images/edit.gif\" ".
+$tool_content .= "<a href=\"".$PHP_SELF."?modifyExercise=yes\"><img src=\"../../template/classic/img/edit.gif\" ".
 	"border=\"0\" align=\"absmiddle\" alt=\"".$langModify."\"></a>";
 
 }

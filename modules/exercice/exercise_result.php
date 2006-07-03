@@ -344,7 +344,7 @@ cData;
 $tool_content .= <<<cData
 <tr>
   <td width="5%" align="center">
-	<img src="../../images/
+	<img src="../../template/classic/img/
 cData;
 	
 	if ($answerType == UNIQUE_ANSWER)
@@ -365,9 +365,9 @@ cData;
 
 	
 	if ($answerType == UNIQUE_ANSWER)
-		$tool_content .= "<img src=\"../../images/radio";
+		$tool_content .= "<img src=\"../../template/classic/img/radio";
 	else
-		$tool_content .= "<img src=\"../../images/checkbox";
+		$tool_content .= "<img src=\"../../template/classic/img/checkbox";
 	if ($answerCorrect)
 		$tool_content .= "_on";
 	else	

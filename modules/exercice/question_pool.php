@@ -303,14 +303,14 @@ $tool_content .= "<tr><td><a href=\"admin.php?editQuestion=".$row['id'].
 			if(!isset($fromExercise))
 			{
 
-	$tool_content .= "<a href=\"admin.php?editQuestion=".$row['id']."\"><img src=\"../../images/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a>";
+	$tool_content .= "<a href=\"admin.php?editQuestion=".$row['id']."\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a>";
 
 			}
 			else
 			{
 
 	$tool_content .= "<a href=\"".$PHP_SELF."?recup=".$row['id'].
-		"&fromExercise=".$fromExercise."\"><img src=\"../../images/enroll.gif\" border=\"0\" alt=\"".$langReuse."\"></a>";
+		"&fromExercise=".$fromExercise."\"><img src=\"../../template/classic/img/enroll.gif\" border=\"0\" alt=\"".$langReuse."\"></a>";
 
 			}
 
@@ -321,7 +321,7 @@ $tool_content .= "<tr><td><a href=\"admin.php?editQuestion=".$row['id'].
 
   $tool_content .= "<td align=\"center\"><a href=\"".$PHP_SELF."?exerciseId=".$exerciseId."&delete=".$row['id']."\"". 
 		" onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice)).
-		"')) return false;\"><img src=\"../../images/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a></td>";
+		"')) return false;\"><img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a></td>";
 
 			}
 
