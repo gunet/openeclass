@@ -2655,9 +2655,9 @@ mysql_query("INSERT INTO cours_faculte VALUES ( '', '$faculte', '$repertoire', '
     mkdir("../../courses/$repertoire/scormPackages", 0777);
 
 
-    //mkdir("../../courses/$repertoire/video", 0777);
-    mkdir("../../video/$repertoire", 0777);
-    symlink("../../video/$repertoire","../../courses/$repertoire/video");
+    mkdir("../../courses/$repertoire/video", 0777);
+    //mkdir("../../video/$repertoire", 0777);
+    //symlink("../../video/$repertoire","../../courses/$repertoire/video");
 
     $titou='$dbname';
 
