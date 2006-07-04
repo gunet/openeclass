@@ -3,6 +3,7 @@
 //See init.php to undestand it's logic
 $path2add=2;
 include '../include/baseTheme.php';
+include 'document_upgrade.php';
 
 $nameTools = "Αναβάθμιση των βάσεων δεδομένων του e-Class";
 // Initialise $tool_content
@@ -779,6 +780,20 @@ while ($code = mysql_fetch_row($res)) {
 	$tool_content .= add_field('document', 'copyrighted', "TEXT");
 
 
+	$baseFolder = "$webDir/courses/".$code[0]."/document";
+	$tmpfldr = getcwd();
+	if (!@chdir("$webDir/courses/".$code[0]."/document")) {
+		die("cant enter document course folder!");
+	}
+		
+	//function gia anavathmisi twn arxeiwn se kathe course
+	//*** proypothetei oti exei proepilegei h DB tou mathimatos kai pws to CWD einai o fakelos document tou mathimatos (p.x. .../eclass/courses/TMA100/document/) ***
+	RecurseDir(getcwd(), $baseFolder);
+	
+	//epistrofh sto prohgoumeno getcwd()
+	chdir($tmpfldr);
+	
+	
 	//---------------------------------------------------------------------
 	// Upgrading EXERCICES table for new func of EXERCISE module
 	//---------------------------------------------------------------------
