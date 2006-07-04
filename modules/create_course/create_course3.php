@@ -2299,6 +2299,16 @@ db_query("CREATE TABLE `assignment_submit` (
       PRIMARY KEY  (fileId,recipientId))
     TYPE=MyISAM");
 
+############################## INTRODUCTION #######################################
+
+    mysql_query("CREATE TABLE introduction (
+		               id int(11) NOT NULL default '1',
+									 texte_intro text,
+									PRIMARY KEY (id))
+									TYPE=MyISAM");
+
+		mysql_query("INSERT INTO introduction SET texte_intro = '$course_intronote'");
+
 
 ############################## GROUPS ###########################################
 
