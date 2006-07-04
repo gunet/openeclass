@@ -175,9 +175,16 @@ $colorDark = "'.$_POST['formcolorDark'].'";
 
 $have_latex = "'.$_POST['formhave_latex'].'";
 
+$persoIsActive = "'.$_POST['formpersoIsActive'].'";
+
 ?>';
 	// Save new config.php
 	fwrite($fd, $stringConfig);
+	// Update user with perso = no if persoisactive==false
+	if ($_POST['formpersoIsActive']=="false") {
+		$sql = 'UPDATE `user` SET `perso` = \'no\'';
+		mysql_query($sql);
+	}
 	// Display result message
 	$tool_content .= "<p>".$langFileUpdatedSuccess."</p>";
 	
@@ -352,6 +359,21 @@ else {
     <td><select name=\"formhave_latex\">
       <option value=\"true\" ".$have_latexSelTrue.">true</option>
       <option value=\"false\" ".$have_latexSelFalse.">false</option>
+    </select></td>
+</tr>";
+	// Add select for $persoIsActive
+	if ($persoIsActive == "true") {
+		$persoIsActiveSelTrue = "selected";
+		$persoIsActiveSelFalse = "";
+	} else {
+		$persoIsActiveSelTrue = "";
+		$persoIsActiveSelFalse = "selected";
+	}
+	$tool_content .= "  <tr>
+    <td width=\"3%\" nowrap><b>\$persoIsActive:</b></td>
+    <td><select name=\"formpersoIsActive\">
+      <option value=\"true\" ".$persoIsActiveSelTrue.">true</option>
+      <option value=\"false\" ".$persoIsActiveSelFalse.">false</option>
     </select></td>
 </tr>";
 	$tool_content .= "  <tr>
