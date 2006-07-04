@@ -132,6 +132,7 @@ echo "
             <input type=\"hidden\" name=\"ldapserver\" value=\"".@$ldapserver."\">
             <input type=\"hidden\" name=\"dnldapserver\" value=\"".@$dnldapserver."\">
             <input type=\"hidden\" name=\"vodServer\" value=\"".@$vodServerForm."\">
+            <input type=\"hidden\" name=\"persoIsActive\" value=\"".@$persoIsActive."\">
 ";
 
 switch (PHP_OS)
@@ -337,6 +338,16 @@ echo "
 
 elseif(isset($install5) OR isset($back4))
 {
+	// Added by vagpits
+	// Global variable persoIsActive
+	if ($persoIsActive == "true") {
+		$persoIsActiveSelTrue = "selected";
+		$persoIsActiveSelFalse = "";
+	} else {
+		$persoIsActiveSelTrue = "";
+		$persoIsActiveSelFalse = "selected";
+	}
+	
     echo "
         <h2>
             ".$langStep4." ".$langCfgSetting."
@@ -568,6 +579,21 @@ function set_video_input()
 				</td>
 
 			</tr>
+// Added by vagpits
+// Global variable $persoIsActive
+                        <tr>
+                            <td>
+                                <font size=\"2\" face=\"arial, helvetica\">
+                                    Personalization
+                                </font>
+                            </td>
+                            <td>
+                            		<select name=\"persoIsActive\">
+                            			<option value=\"true\" ".$persoIsActiveSelTrue.">true</option>
+                            			<option value=\"false\" ".$persoIsActiveSelFalse.">false</option>
+                            		</select>
+                            </td>
+                        </tr>
 
                         <tr><td colspan=\"2\">&nbsp;</td></tr>
                         <tr>
@@ -1447,6 +1473,8 @@ $colorMedium = "#004571";
 $colorDark = "#000066";
 
 $have_latex = FALSE;
+
+$persoIsActive = '.$persoIsActive.';
 
 
 '.($vodServer==''?'//':'').'$vodServer="'.$vodServer.'";
