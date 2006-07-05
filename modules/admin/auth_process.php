@@ -74,11 +74,13 @@ if((!empty($auth_submit)) && ($auth_submit==1))
 	    if($is_valid)
 	    {
 				$auth_allow = 1;	
-				$tool_content .= "<span style=\"color:green;font-weight:bold;\">$langConnYes</span><br /><br />";
+				//$tool_content .= "<span style=\"color:green;font-weight:bold;\">$langConnYes</span><br /><br />";
+				$tool_content .= "<table><tbody><tr><td class=\"success\">$langConnYes</td></tr></tbody></table><br /><br />";
 	    }
 	    else
 	    {
-				$tool_content .= "<span style=\"color:red;font-weight:bold;\">$langConnNo</span><br /><br />";
+				//$tool_content .= "<span style=\"color:red;font-weight:bold;\">$langConnNo</span><br /><br />";
+				$tool_content .= "<table><tbody><tr><td class=\"caution\">$langConnNo</td></tr></tbody></table><br /><br />";
 				$auth_allow = 0;
 	    }	
 		}
