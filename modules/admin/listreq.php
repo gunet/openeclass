@@ -219,7 +219,7 @@ switch($close)
 			  	$s = mysql_query("SELECT id FROM faculte WHERE name='".$m['proftmima']."'");
 					$dep = mysql_fetch_array($s);
 					$registered_at = time();
-			 		$expires_at = time() + 31536000;
+			 		$expires_at = time() + $durationAccount;
 			 						
 					$inscr_user=mysql_query("INSERT INTO `$mysqlMainDb`.user
 						(user_id, nom, prenom, username, password, email, statut, 
