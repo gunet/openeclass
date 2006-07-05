@@ -12,6 +12,8 @@ $sql_en ="SELECT `date`, `en_title` , `en_body` , `en_comment`
 
 if(session_is_registered('langswitch')) {
 	$language = $_SESSION['langswitch'];
+} else {
+	$userLanguage == "el";
 }
 
 if ($language == "greek") $sql = $sql_el;
