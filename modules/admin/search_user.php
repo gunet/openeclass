@@ -56,6 +56,7 @@ if((!empty($new)) && ($new=="yes"))
 	// It is a new search, so unregister the search terms/filters in session variables
 	session_unregister('user_sirname');
 	session_unregister('user_firstname');
+	session_unregister('user_username');
 	session_unregister('user_am');
 	session_unregister('user_type');
 	session_unregister('user_registered_at_flag');
@@ -63,6 +64,7 @@ if((!empty($new)) && ($new=="yes"))
 	session_unregister('user_email');
 	unset($user_sirname);
 	unset($user_firstname);
+	unset($user_username);
 	unset($user_am);
 	unset($user_type);
 	unset($user_registered_at_flag);
@@ -73,6 +75,7 @@ if((!empty($new)) && ($new=="yes"))
 // initialize the variables
 $user_sirname = isset($_SESSION['user_sirname'])?$_SESSION['user_sirname']:'';
 $user_firstname = isset($_SESSION['user_firstname'])?$_SESSION['user_firstname']:'';
+$user_username = isset($_SESSION['user_username'])?$_SESSION['user_username']:'';
 $user_am = isset($_SESSION['user_am'])?$_SESSION['user_am']:'';
 $user_type = isset($_SESSION['user_type'])?$_SESSION['user_type']:'5';
 $user_registered_at_flag = isset($_SESSION['user_registered_at_flag'])?$_SESSION['user_registered_at_flag']:'1';
@@ -142,6 +145,10 @@ $tool_content .= "</td>
 $tool_content .= "<tr>
     <td width=\"3%\" nowrap><b>E-mail:</b></td>
     <td><input type=\"text\" name=\"user_email\" size=\"40\" value=\"".$user_email."\"></td>
+</tr>";
+$tool_content .= "<tr>
+    <td width=\"3%\" nowrap><b>$langUsername:</b></td>
+    <td><input type=\"text\" name=\"user_username\" size=\"40\" value=\"".$user_username."\"></td>
 </tr>";
 $tool_content .= "  <tr>
     <td colspan=\"2\"><br />
