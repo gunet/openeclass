@@ -406,9 +406,9 @@ function adminMenu(){
 
 	array_push($sideMenuSubGroup, $langGenAdmin);
 
-	array_push($sideMenuText, $langVersion);
-	array_push($sideMenuLink, "../admin/about.php");
-	array_push($sideMenuImg, "eclass_version.gif");
+	//array_push($sideMenuText, $langVersion);
+	//array_push($sideMenuLink, "../admin/about.php");
+	//array_push($sideMenuImg, "eclass_version.gif");
 	array_push($sideMenuText, $langConfigFile);
 	// Changed by vagpits
 	//array_push($sideMenuLink, "phpInfo.php?to=clarconf");
@@ -418,19 +418,19 @@ function adminMenu(){
 	array_push($sideMenuText, $siteName);
 	array_push($sideMenuLink, "../admin/statClaro.php");
 	array_push($sideMenuImg, "stat_claro.gif"); // image file does not exist! what does this tool do ?
-	if (isset($phpMyAdminURL)){
-		array_push($sideMenuText, $langLogIdentLogout);
-		array_push($sideMenuLink, $phpMyAdminURL."sql.php?db=".$mysqlMainDb."&table=loginout&goto=db_details.php&sql_query=SELECT+%2A+FROM+%60loginout%60&pos=0");
-		array_push($sideMenuImg, "logs.gif");
-	}
+	//if (isset($phpMyAdminURL)){
+		//array_push($sideMenuText, $langLogIdentLogout);
+		//array_push($sideMenuLink, $phpMyAdminURL."sql.php?db=".$mysqlMainDb."&table=loginout&goto=db_details.php&sql_query=SELECT+%2A+FROM+%60loginout%60&pos=0");
+		//array_push($sideMenuImg, "logs.gif");
+	//}
 
 	array_push($sideMenuText, $langPlatformStats);
 	array_push($sideMenuLink, "../admin/platformStats.php");
 	array_push($sideMenuImg, "platform_stats.gif");
 
-	array_push($sideMenuText, $langManuals);
-	array_push($sideMenuLink, $urlServer . "manuals/manual.php");
-	array_push($sideMenuImg, "available_manuals.gif");
+	//array_push($sideMenuText, $langManuals);
+	//array_push($sideMenuLink, $urlServer . "manuals/manual.php");
+	//array_push($sideMenuImg, "available_manuals.gif");
 	array_push($sideMenuText, $langAdminManual);
 	array_push($sideMenuLink, $urlServer . "manuals/manA/admin.txt");
 	array_push($sideMenuImg, "administrator_manual.gif");
