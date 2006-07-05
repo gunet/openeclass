@@ -73,10 +73,8 @@ $tool_content .= "<table width=\"99%\">
 <tr><td>";
 
 $tool_content .= "<form name=\"authmenu\" method=\"post\" action=\"auth_process.php\">
-$langChooseAuthMethod:<br /><br />
-<input type=\"radio\" name=\"auth\" value=\"1\" checked>ECLASS&nbsp;&nbsp;";
-$tool_content .= in_array("1",$auth_methods)? "<a href=\"auth.php?auth=1&active=no\">".$langAuthDeactivate."</a>":"<a href=\"auth.php?auth=1&active=yes\">".$langAuthActivate."</a>";
-$tool_content .= "<br />";
+$langChooseAuthMethod:<br /><br />";
+
 $tool_content .= "<input type=\"radio\" name=\"auth\" value=\"2\">POP3&nbsp;&nbsp;";
 $tool_content .= in_array("2",$auth_methods)? "<a href=\"auth.php?auth=2&active=no\">".$langAuthDeactivate."</a>":"<a href=\"auth.php?auth=2&active=yes\">".$langAuthActivate."</a>";
 $tool_content .= "<br />";
