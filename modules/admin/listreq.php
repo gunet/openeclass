@@ -11,8 +11,128 @@ $tool_content = "";
 
 $close = isset($_GET['close'])?$_GET['close']:(isset($_POST['close'])?$_POST['close']:'');
 $id = isset($_GET['id'])?$_GET['id']:(isset($_POST['id'])?$_POST['id']:'');
-if(!empty($close))
-{
+$show = isset($_GET['show'])?$_GET['show']:(isset($_POST['show'])?$_POST['show']:'');
+if (!empty($show) && ($show=="closed")) {
+	if (!empty($id) && ($id>0)) {
+		// Epanafora aitisis
+		$sql = db_query("UPDATE prof_request set status='1', date_closed=NULL WHERE rid='$id'");
+		$tool_content = "<table><tbody><tr><td class=\"success\">Η επαναφορά της αίτησης ολοκληρώθηκε με επιτυχία!</td></tr></tbody></table>";
+		
+	} else {
+		// Show only closed forms
+		$tool_content .= "<table width=\"99%\"><caption>Λίστα Αιτήσεων Που Έχουν Κλείσει</caption><thead><tr>
+		<th scope=\"col\">Όνομα</th>
+		<th scope=\"col\">Επώνυμο</th>
+		<th scope=\"col\">Username</th>
+		<th scope=\"col\">E-mail</th>
+		<th scope=\"col\">Τμήμα</th>
+		<th scope=\"col\">Τηλ.</th>
+		<th scope=\"col\">Ημερ. Αιτ.</th>
+		<th scope=\"col\">Ημερ. Κλεισ.</th>
+		<th scope=\"col\">Σχόλια</th>
+		<th scope=\"col\">Ενέργειες</th>
+		</tr></thead><tbody>";
+
+ 		$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,date_closed,comment 
+		FROM prof_request WHERE status='2'");
+
+		for ($j = 0; $j < mysql_num_rows($sql); $j++) {
+			$req = mysql_fetch_array($sql);
+			$tool_content .= "<tr>";
+			for ($i = 1; $i < mysql_num_fields($sql); $i++) {
+				if ($i == 4 and $req[$i] != "") {
+					$tool_content .= "<td><a href=\"mailto:".
+					htmlspecialchars($req[$i])."\">".
+					htmlspecialchars($req[$i])."</a></td>";
+				} else {
+					$tool_content .= "<td>".
+					htmlspecialchars($req[$i])."</td>";
+				}
+			}
+			$tool_content .= "<td align=center>
+			<a href=\"listreq.php?id=$req[rid]&"."show=closed\">Επαναφορά</a>
+			</td></tr>";
+		}
+	}
+	$tool_content .= "</tbody></table>";
+} elseif (!empty($show) && ($show=="rejected")) {
+	// Show only rejected forms
+	if (!empty($id) && ($id>0)) {
+		// Epanafora aitisis
+		$sql = db_query("UPDATE prof_request set status='1', date_closed=NULL WHERE rid='$id'");
+		$tool_content = "<table><tbody><tr><td class=\"success\">Η επαναφορά της αίτησης ολοκληρώθηκε με επιτυχία!</td></tr></tbody></table>";
+		
+	} else {
+		// Show only closed forms
+		$tool_content .= "<table width=\"99%\"><caption>Λίστα Αιτήσεων Που Έχουν Απορριφθεί</caption><thead><tr>
+		<th scope=\"col\">Όνομα</th>
+		<th scope=\"col\">Επώνυμο</th>
+		<th scope=\"col\">Username</th>
+		<th scope=\"col\">E-mail</th>
+		<th scope=\"col\">Τμήμα</th>
+		<th scope=\"col\">Τηλ.</th>
+		<th scope=\"col\">Ημερ. Αιτ.</th>
+		<th scope=\"col\">Ημερ. Απορ.</th>
+		<th scope=\"col\">Σχόλια</th>
+		<th scope=\"col\">Ενέργειες</th>
+		</tr></thead><tbody>";
+
+ 		$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,date_closed,comment 
+		FROM prof_request WHERE status='3'");
+
+		for ($j = 0; $j < mysql_num_rows($sql); $j++) {
+			$req = mysql_fetch_array($sql);
+			$tool_content .= "<tr>";
+			for ($i = 1; $i < mysql_num_fields($sql); $i++) {
+				if ($i == 4 and $req[$i] != "") {
+					$tool_content .= "<td><a href=\"mailto:".
+					htmlspecialchars($req[$i])."\">".
+					htmlspecialchars($req[$i])."</a></td>";
+				} else {
+					$tool_content .= "<td>".
+					htmlspecialchars($req[$i])."</td>";
+				}
+			}
+			$tool_content .= "<td align=center>
+			<a href=\"listreq.php?id=$req[rid]&"."show=closed\">Επαναφορά</a>
+			</td></tr>";
+		}
+	}
+	$tool_content .= "</tbody></table>";
+} elseif (!empty($show) && ($show=="accepted")) {
+	// Show only accepted forms
+	$tool_content .= "<table width=\"99%\"><caption>Λίστα Αιτήσεων Που Έχουν Ικανοποιηθεί</caption><thead><tr>
+		<th scope=\"col\">Όνομα</th>
+		<th scope=\"col\">Επώνυμο</th>
+		<th scope=\"col\">Username</th>
+		<th scope=\"col\">E-mail</th>
+		<th scope=\"col\">Τμήμα</th>
+		<th scope=\"col\">Τηλ.</th>
+		<th scope=\"col\">Ημερ. Αιτ.</th>
+		<th scope=\"col\">Ημερ. Ικανοπ.</th>
+		<th scope=\"col\">Σχόλια</th>
+		</tr></thead><tbody>";
+
+ 	$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,date_closed,comment 
+		FROM prof_request WHERE status='0'");
+
+	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
+		$req = mysql_fetch_array($sql);
+		$tool_content .= "<tr>";
+		for ($i = 1; $i < mysql_num_fields($sql); $i++) {
+			if ($i == 4 and $req[$i] != "") {
+				$tool_content .= "<td><a href=\"mailto:".
+				htmlspecialchars($req[$i])."\">".
+				htmlspecialchars($req[$i])."</a></td>";
+			} else {
+				$tool_content .= "<td>".
+				htmlspecialchars($req[$i])."</td>";
+			}
+		}
+		$tool_content .= "</tr>";
+	}
+	$tool_content .= "</tbody></table>";
+} elseif(!empty($close)) {
 switch($close)
 {
     case '1':
@@ -28,7 +148,7 @@ switch($close)
 				// post the comment and do the delete action	    
 				if (!empty($comment)) 
 				{
-		    	$sql = "UPDATE prof_request set status = '2',
+		    	$sql = "UPDATE prof_request set status = '3',
 					    date_closed = NOW(),
 					    comment = '".mysql_escape_string($comment)."'
 					    WHERE rid = '$id'";
@@ -109,7 +229,7 @@ switch($close)
 					$last_id = mysql_insert_id();
 					if($inscr_user)
 					{
-						$sql = "UPDATE prof_request set status = '2',date_closed = NOW() WHERE rid = '$id'";
+						$sql = "UPDATE prof_request set status = '0',date_closed = NOW() WHERE rid = '$id'";
 			    	if (db_query($sql)) 
 			    	{
 					  	$tool_content .= "<p>$profsuccess</p><br /><br />
@@ -173,9 +293,21 @@ else
 			</td></tr>";
 	}
 	$tool_content .= "</tbody></table>";
+	// Display other actions
+	$tool_content .= "<br><table width=\"99%\"><caption>Αλλες Ενέργειες</caption><tbody>
+		<tr><td><a href=\"listreq.php?show=closed\">Προβολή αιτήσεων που έχουν κλείσει</a><br>
+		<a href=\"listreq.php?show=rejected\">Προβολή αιτήσεων που έχουν απορριφθεί</a><br>
+		<a href=\"listreq.php?show=accepted\">Προβολή αιτήσεων που έχουν ικανοποιηθεί</a></td></tr>
+	</tbody></table>";
+		
 }
 
-$tool_content .= "<br><center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
+// If show is set then we return to listereq, else return to admin index.php
+if (!empty($show)) {
+	$tool_content .= "<br><center><p><a href=\"listreq.php\">$langReturn</a></p></center>";
+} else {
+	$tool_content .= "<br><center><p><a href=\"index.php\">$langReturn</a></p></center>";
+}
 
 draw($tool_content,3,'admin');
 
