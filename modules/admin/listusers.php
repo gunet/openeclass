@@ -270,11 +270,11 @@ if(!empty($ord))
 {
 	switch ($ord) 
   {
-		case "s":		$order = "statut"; break;
-		case "n":		$order = "nom"; break;
-		case "p":		$order = "prenom"; break;
-		case "u":		$order = "username"; break;
-		default:		$order = "statut"; break;
+		case "s":		$order = "statut,prenom,nom"; break;
+		case "n":		$order = "nom,prenom,statut"; break;
+		case "p":		$order = "prenom,nom,statut"; break;
+		case "u":		$order = "username,statut,prenom"; break;
+		default:		$order = "statut,prenom,nom"; break;
     }
 } 
 else 
@@ -467,7 +467,6 @@ if($sql)
 	
 	$sql = mysql_query($qry);
 	
-	
 	/****************************************
 	Show users - Format the table for display
 	*****************************************/	
@@ -477,8 +476,8 @@ if($sql)
 					"<th scope=\"col\"><a href=\"listusers.php?ord=n&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langSurname</a></th>".
 					"<th><a href=\"listusers.php?ord=p&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langName</a></th>".
 					"<th><a href=\"listusers.php?ord=u&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langUsername</a></th>".
-				 "<th scope=\"col\"><a href=\"listusers.php?ord=s&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langEmail</a></th>".
-				 "<th scope=\"col\">$langProperty</th>".
+				 "<th scope=\"col\">$langEmail</th>".
+				 "<th scope=\"col\"><a href=\"listusers.php?ord=s&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langProperty</a></th>".
 				 "<th scope=\"col\">$langActions</th>".
 				 "<th scope=\"col\">$langUnreg $langUser2</th>".
 				 "<th scope=\"col\">$langStats</th>".
@@ -490,8 +489,8 @@ if($sql)
 					"<th scope=\"col\"><a href=\"listusers.php?ord=n\">$langSurname</a></th><th>".
 				 "<a href=\"listusers.php?ord=p\">$langName</a></th><th>".
 				 "<a href=\"listusers.php?ord=u\">$langUsername</a></th>".
-				 "<th scope=\"col\"><a href=\"listusers.php?ord=s\">$langEmail</a></th>".
-				 "<th scope=\"col\">$langProperty</th>".
+				 "<th scope=\"col\">$langEmail</th>".
+				 "<th scope=\"col\"><a href=\"listusers.php?ord=s\">$langProperty</a></th>".
 				 "<th scope=\"col\">$langActions</th>".
 				 "<th scope=\"col\">$langUnreg $langUser2</th>".
 				 "<th scope=\"col\">$langStats</th>".
