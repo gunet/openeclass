@@ -177,6 +177,8 @@ $have_latex = "'.$_POST['formhave_latex'].'";
 
 $persoIsActive = "'.$_POST['formpersoIsActive'].'";
 
+$durationAccount = "'.$_POST['formdurationAccount'].'";
+
 ?>';
 	// Save new config.php
 	fwrite($fd, $stringConfig);
@@ -376,6 +378,12 @@ else {
       <option value=\"false\" ".$persoIsActiveSelFalse.">false</option>
     </select></td>
 </tr>";
+
+$tool_content .= "  <tr>
+    <td width=\"3%\" nowrap><b>\$durationAccount:</b></td>
+    <td><input type=\"text\" name=\"formdurationAccount\" size=\"40\" value=\"".$durationAccount."\"></td>
+</tr>";
+
 	$tool_content .= "  <tr>
     <td colspan=\"2\"><hr></td>
   </tr>";
