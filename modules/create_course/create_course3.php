@@ -1895,6 +1895,7 @@ db_query("CREATE TABLE `assignment_submit` (
       PRIMARY KEY  (fileId,recipientId))
     TYPE=MyISAM DEFAULT CHARSET=greek");
 
+/*
 ############################## INTRODUCTION #######################################
 
     mysql_query("CREATE TABLE introduction (
@@ -1907,6 +1908,7 @@ db_query("CREATE TABLE `assignment_submit` (
 
 ############################## GROUPS ###########################################
 
+*/
 mysql_query("
 CREATE TABLE student_group
 (
@@ -2298,7 +2300,7 @@ db_query("CREATE TABLE `assignment_submit` (
       recipientId int(11) unsigned NOT NULL default '0',
       PRIMARY KEY  (fileId,recipientId))
     TYPE=MyISAM");
-
+/*
 ############################## INTRODUCTION #######################################
 
     mysql_query("CREATE TABLE introduction (
@@ -2310,6 +2312,7 @@ db_query("CREATE TABLE `assignment_submit` (
 		mysql_query("INSERT INTO introduction SET texte_intro = '$course_intronote'");
 
 
+*/
 ############################## GROUPS ###########################################
 
 mysql_query("
