@@ -1475,6 +1475,7 @@ $colorDark = "#000066";
 $have_latex = FALSE;
 
 $persoIsActive = '.$persoIsActive.';
+$durationAccount = "126144000";
 
 
 '.($vodServer==''?'//':'').'$vodServer="'.$vodServer.'";
