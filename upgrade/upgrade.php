@@ -782,6 +782,8 @@ while ($code = mysql_fetch_row($res)) {
 
 	$baseFolder = "$webDir/courses/".$code[0]."/document";
 	$tmpfldr = getcwd();
+	
+	
 	if (!@chdir("$webDir/courses/".$code[0]."/document")) {
 		die("cant enter document course folder!");
 	}
@@ -920,17 +922,20 @@ while ($code = mysql_fetch_row($res)) {
 
  // remove table 'introduction' entries and insert them in table 'cours' (field 'description') in eclass main database
  // after that drop table introduction
- 
+	if (mysql_table_exists($code[0], 'introduction')) {
+	
 	$sql = db_query("SELECT texte_intro FROM introduction", $code[0]);
 	while ($text = mysql_fetch_array($sql)) {
 			if (db_query("UPDATE cours SET description='$text[0]' WHERE code='$code[0]'", $mysqlMainDb)) {
 				$tool_content .= "Μεταφορά του εισαγωγικού κειμένου <b>$text[0]</b> στον πίνακα <b>cours</b>: $OK<br>";
-		//		db_query("DROP TABLE introduction");
+				db_query("DROP TABLE introduction", $code[0]);
 			} else {
 				$tool_content .= "Μεταφορά του εισαγωγικού κειμένου <b>$text[0]</b> στον πίνακα <b>cours</b>: $BAD<br>";
 				$errors++;
 				}
-		}
+			}
+		} // end of table introduction
+	
 
 $tool_content .= "<br><br></td></tr>";
 
