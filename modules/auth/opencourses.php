@@ -35,24 +35,25 @@ session_start();
 +----------------------------------------------------------------------+
 */
 
-//$local_style = 'em, h3 { color: #f0741e; }
-//h2 { font-size: 12pt; font-style: bold; }
-//img { vertical-align:middle; }
-//.courses { font-size: 10pt; }
-//.largeorange { color: #f0741e; font-size: 12pt; font-weight: bold;}';
 $langFiles = 'opencours';
-//include('../../include/init.php');
 include '../../include/baseTheme.php';
 $nameTools = $opencours;
 $navigation[] = array ("url"=>"listfaculte.php", "name"=> $listfac);
 
 //parse the faculte id in a session
 //This is needed in case the user decides to switch language.
-$_SESSION['fc'] = $fc;
-$fac = mysql_fetch_row(mysql_query("SELECT name FROM faculte WHERE id = ".$_SESSION['fc']));
+//echo $fc;
+if (isset($fc)) {
+	$_SESSION['fc_memo'] = $fc;
+}
+
+if (!isset($fc)) {
+	$fc = $_SESSION['fc_memo'];
+}
+$fac = mysql_fetch_row(mysql_query("SELECT name FROM faculte WHERE id = ".$fc));
 if (!($fac = $fac[0])) {
 	die("ERROR: no faculty with id $fc");
-}
+} 
 
 //begin_page();
 $tool_content = "";
@@ -113,13 +114,6 @@ $tool_content .= "
 		</thead>
 	</table>
 	<br>";
-//$tool_content .= "<hr><font class=\"courses\">"
-//."<b>".$m['legend'].":</b> ".$icons[2]
-//." ".$m['legopen']." | ".$icons[1]
-//." ".$m['legrestricted']." | ".$icons[0]
-//." ".$m['legclosed']."</font>";
-
-//$tool_content .= "<div class='courses'>";
 
 // changed this foreach statement a bit
 // this way we sort by the course types
@@ -178,8 +172,7 @@ foreach (array("pre" => $m['pres'],
 		}
 
 		// output each course as a table for beautifying reasons
-		//		$tool_content .= "<table >
-		//						<tr><td rowspan=\"2\">";
+
 		if ($i%2==0) $tool_content .=  '<tr>';
 		else $tool_content .= '<tr class="odd">';
 		// show the necessary access icon
@@ -204,11 +197,3 @@ foreach (array("pre" => $m['pres'],
 
 draw($tool_content, 0);
 ?>
-			<!--	<hr size="1">
-				</div>
-				</td>
-			</table>
-	</tr>
-</table>
-</body>
-</html>-->
