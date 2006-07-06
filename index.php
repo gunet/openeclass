@@ -60,8 +60,11 @@ $tool_content = "";
 
 //<!--<meta http-equiv="Description" content="elearn Platform">
 //<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=$charset">
-
-
+@include("./modules/lang/english/index.inc");
+@include("./modules/lang/english/trad4all.inc.php");
+@include("./modules/lang/$language/index.inc");
+@include("./modules/lang/$language/trad4all.inc.php");
+$nameTools = $langWelcomeToEclass;
 // first check
 // check if we can connect to database. If not then probably it is the first time we install eclass
 
@@ -85,8 +88,9 @@ if (!isset($selectResult)) {
 unset($alreadyHome);
 unset($dbname);
 
-$whatViewToLoad = "yes";
-if ($whatViewToLoad == "yes") session_register("perso_is_active");
+//if platform admin allows usage of eclass personalised
+//create a session so that each user can activate it for himself.
+if ($persoIsActive) session_register("perso_is_active");
 // ------------------------------------------------------------------------
 // if we try to login...
 // then authenticate user. First via LDAP then via MyQL
@@ -248,7 +252,7 @@ if(!empty($submit))
 
 
 	}		// while
-
+	
 	if (!isset($uid))
 	{
 		$warning .= $langInvalidId;
@@ -277,28 +281,17 @@ if(!empty($submit))
 	##[END personalisation modification]############
 
 	//check user language preferences
-	if ($userLanguage == "el") {
-		$language = $_SESSION['langswitch'] = "greek";
-		$_SESSION['langLinkText'] = "English";
-		$_SESSION['langLinkURL'] = "?localize=en";
-		
-	} else {
+	if (isset($userLanguage) && $userLanguage == "en") {
 		$language = $_SESSION['langswitch'] = "english";
 		$_SESSION['langLinkText'] = "Ελληνικά";
 		$_SESSION['langLinkURL'] = "?localize=el";
+	} elseif(isset($userLanguage) && $userLanguage == "en") {
+		$language = $_SESSION['langswitch'] = "greek";
+		$_SESSION['langLinkText'] = "English";
+		$_SESSION['langLinkURL'] = "?localize=en";
 	}
 
 }  // end of user authentication
-
-//Include lang files at this point. If a user logs in the language setting will take 
-//over and load the user's specified language
-@include("./modules/lang/english/index.inc");
-@include("./modules/lang/english/trad4all.inc.php");
-@include("./modules/lang/$language/index.inc");
-@include("./modules/lang/$language/trad4all.inc.php");
-$nameTools = $langWelcomeToEclass;
-// -------------------------------------------------------------
-
 
 if (isset($_SESSION['uid'])) $uid = $_SESSION['uid'];
 else unset($uid);
@@ -350,7 +343,7 @@ elseif ((isset($logout) && $logout) OR (1==1)) {
 	include("logged_out_content.php");
 
 	draw($tool_content, 0,'index');
-	
+
 } // end of display
 
 // check for new announcements
