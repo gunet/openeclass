@@ -144,37 +144,24 @@ switch (PHP_OS)
     case "Linux" :
         $wizardImage = "linuxWizard.gif";
         break;
-/*	case "SunOS" :
-        $wizardImage = "sunWizard.gif"; <- can be created sun have a limitative copyright
-        break;
-    case "Darwin" : // (MacOS)
-        $wizardImage = "macWizard.gif";
-        break;
-    case "AIX":
-        $wizardImage = "aixWizard.gif";
-        break;
-*/
     default :
         $wizardImage = "defaultWizard.gif";
 }
 
 echo "<img src=\"$wizardImage\" align=\"right\" hspace=\"10\" vspace=\"10\">";
 
-############### STEP 2 LICENSE  ###################################
+// step 2 license
 
 if(isset($install2) OR isset($back2))
 {
-    echo "
-                <h2>
-                    ".$langStep2." ".$langLicence."
-                </h2>
-                Tο e-Class είναι ελεύθερη εφαρμογή και διανέμεται σύμφωνα με την άδεια GNU General Public Licence (GPL).
-                Παρακαλούμε διαβάστε την άδεια και κάνετε κλίκ στην 'Αποδοχή'.
-                <a href=\"../info/license/gpl_print.txt\">(".$langPrintVers.")</a>
-                <br>
-                <br>
-                <br>
-                <textarea wrap=\"virtual\" cols=\"65\" rows=\"15\">";
+    echo "<h2>".$langStep2." ".$langLicence."</h2>
+     Tο e-Class είναι ελεύθερη εφαρμογή και διανέμεται σύμφωνα με την άδεια GNU General Public Licence (GPL).
+     Παρακαλούμε διαβάστε την άδεια και κάνετε κλίκ στην 'Αποδοχή'.
+     <a href=\"../info/license/gpl_print.txt\">(".$langPrintVers.")</a>
+     <br>
+     <br>
+     <br>
+     <textarea wrap=\"virtual\" cols=\"65\" rows=\"15\">";
     include ('../info/license/gpl.txt');
     echo "</textarea>
         </td>
@@ -367,7 +354,7 @@ elseif(isset($install5) OR isset($back4))
                         <td>
                             <font size=\"2\" face=\"arial, helvetica\">
 
-                                <select name=\"languageForm\">	";
+    <select name=\"languageForm\">	";
     $dirname = "../modules/lang/";
     if($dirname[strlen($dirname)-1]!='/')
         $dirname.='/';
@@ -386,7 +373,7 @@ elseif(isset($install5) OR isset($back4))
     }
     closedir($handle);
 echo "
-                                </select>
+      </select>
                             </font>
                         </td>
                     </tr>
@@ -563,12 +550,9 @@ function set_video_input()
 
 	}
 </script>
-
-
-			    	 <input type=\"checkbox\" id=\"video_check\" onclick=\"set_video_input();\"/><br>
-                            </td>
-                        </tr>
-
+		<input type=\"checkbox\" id=\"video_check\" onclick=\"set_video_input();\"/><br>
+     </td>
+     </tr>
 			<tr>
 				<td>
 				 <div id=\"video_input_div_text\">
@@ -577,7 +561,6 @@ function set_video_input()
 				<td>
 				 <div id=\"video_input_div_input\">
 				</td>
-
 			</tr>
 // Added by vagpits
 // Global variable $persoIsActive
@@ -594,23 +577,19 @@ function set_video_input()
                             		</select>
                             </td>
                         </tr>
-
                         <tr><td colspan=\"2\">&nbsp;</td></tr>
                         <tr>
                             <td colspan=\"2\">
                                 <font size=\"2\" face=\"arial, helvetica\">
-                                    <font color=\"red\">
-                                        *
-                                    </font>
-                                     = υποχρεωτικό
+                                <font color=\"red\">*
+                                </font>
+                                  = υποχρεωτικό
                                 </font>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan=\"2\">
-                                    <font color=\"red\">
-                                                                               **
-                                                                        </font>
+                          <td colspan=\"2\">
+                            <font color=\"red\">**</font>
                                 <font size=\"2\" face=\"arial, helvetica\">
                                      ".$langWarnHelpDesk."
                                 </font>
@@ -633,12 +612,9 @@ function set_video_input()
 
 elseif(isset($install6))
 {
-
     $pathForm = str_replace("\\\\", "/", $pathForm);
-
     @chmod( "../config/config.php", 666 );
     @chmod( "../config/config.php", 0666 );
-
     echo "
         <h2>
             ".$langStep5." ".$langLastCheck."
@@ -722,17 +698,22 @@ elseif(isset($install7))
         $cdb=mysql_query("CREATE DATABASE $mysqlMainDb");
     mysql_select_db ($mysqlMainDb);
 
-
+	// drop old tables (if existed)
     mysql_query("DROP TABLE IF EXISTS admin");
+		mysql_query("DROP TABLE IF EXISTS admin_announcements");
+		mysql_query("DROP TABLE IF EXISTS agenda");
     mysql_query("DROP TABLE IF EXISTS annonces");
+		mysql_query("DROP TABLE IF EXISTS auth");
     mysql_query("DROP TABLE IF EXISTS cours");
     mysql_query("DROP TABLE IF EXISTS cours_faculte");
     mysql_query("DROP TABLE IF EXISTS cours_user");
     mysql_query("DROP TABLE IF EXISTS faculte");
-    mysql_query("DROP TABLE IF EXISTS user");
-    mysql_query("DROP TABLE IF EXISTS loginout");
     mysql_query("DROP TABLE IF EXISTS institution");
+    mysql_query("DROP TABLE IF EXISTS loginout");
+		mysql_query("DROP TABLE IF EXISTS loginout_summary");
     mysql_query("DROP TABLE IF EXISTS prof_request");
+    mysql_query("DROP TABLE IF EXISTS user");
+		
     #
     # table `annonces`
     #
@@ -1507,7 +1488,7 @@ echo "
     <form action=\"../\">
     <p align=\"right\"><input type=\"submit\" value=\"Είσοδος στο e-Class\"></p>";
 
-    }       // τέλος ελεγχου για δικαιώματα
+    }       // τέλος ελέγχου για δικαιώματα
 }	// end of step 6
 
 // step 1 requirements
