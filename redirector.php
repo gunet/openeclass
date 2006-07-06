@@ -59,7 +59,7 @@ if (session_is_registered("uid") && isset($perso)) {
 		
 		case 6: {//documents
 			$_SESSION["dbname"] = $c;
-			$url = $urlServer."modules/document/document.php";
+			$url = $urlServer."modules/document/document.php?openDir=" . $p;
 			header("location:".$url);
 			break;
 		}

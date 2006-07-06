@@ -79,7 +79,7 @@ function getUserDocuments($param = null, $type) {
 			//update the corresponding field in cours_user and set
 			//the field's value to the last LOGIN date of the user
 			//set a flag so that it only updates the date once! :)
-
+//http://213.5.72.84:8088/eclass/eclass20/modules/document/document.php?openDir=%2Fdokimastikos_kat%2Fdok_kat_deep
 			//PROSOXH!! to update na ginetai afou bgei apo to for!!1
 			//alliws 8a to kanei se ka8e ma8hma pou exei nees anakoinwseis!! (axreiasto!)
 //			echo "data exists";
@@ -88,6 +88,9 @@ function getUserDocuments($param = null, $type) {
 		while ($myDocuments = mysql_fetch_row($mysql_query_result)) {
 
 			if ($myDocuments){
+//				echo "<br> ".$myDocuments[0];
+				$myDocuments[0] = strrev(substr(strstr(strrev($myDocuments[0]),"/"), 1));
+//				echo "<br> $dir";
 				array_push($docsData,$myDocuments);
 			}
 		}
@@ -165,9 +168,9 @@ aCont;
 			$content .= "
 		<li class=\"category\">".$data[$i][0]."</li>
 		";
-			$url = $_SERVER['PHP_SELF'] . "?perso=6&c=" .$data[$i][1];
+//			$url = $_SERVER['PHP_SELF'] . "?perso=6&c=" .$data[$i][1]."&p=".$data[$i][2][0];
 			for ($j=0; $j < $iterator; $j++){
-
+$url = $_SERVER['PHP_SELF'] . "?perso=6&c=" .$data[$i][1]."&p=".$data[$i][2][$j][0];
 				$content .= "
 		<li><a class=\"square_bullet\" href=\"$url\"><div class=\"content_pos\">".$data[$i][2][$j][2]." ( ".$data[$i][2][$j][3].")</div></a>
 			
