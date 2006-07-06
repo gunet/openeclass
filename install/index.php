@@ -79,6 +79,8 @@ if(!isset($alreadyVisited))
     $institutionUrlForm="http://www.gunet.gr/";
 
     $languageCourse = "greek";
+    
+    $encryptionkey = "eclass";
 }
 
 ?>
@@ -133,6 +135,8 @@ echo "
             <input type=\"hidden\" name=\"dnldapserver\" value=\"".@$dnldapserver."\">
             <input type=\"hidden\" name=\"vodServer\" value=\"".@$vodServerForm."\">
             <input type=\"hidden\" name=\"persoIsActive\" value=\"".@$persoIsActive."\">
+	    
+	    <input type=\"hidden\" name=\"encryptionkey\" value=\"$encryptionkey\">
 ";
 
 switch (PHP_OS)
@@ -577,6 +581,18 @@ function set_video_input()
                             		</select>
                             </td>
                         </tr>
+			
+			<tr>
+			    <td>
+                                <font size=\"2\" face=\"arial, helvetica\">
+                                    Κλειδί για χρήση απόκριψης
+                                </font>
+                            </td>
+                            <td>
+                                <input type=\"text\" size=\"40\" name=\"encryptionkey\" value=\"$encryptionkey\">
+                            </td>
+                        </tr>
+			
                         <tr><td colspan=\"2\">&nbsp;</td></tr>
                         <tr>
                             <td colspan=\"2\">
@@ -656,6 +672,7 @@ elseif(isset($install6))
         URL του Ιδρύματος : $institutionUrlForm<br>
          LDAP εξυπηρέτης του Ιδρύματος : $ldapserver<br>
         Base dn του LDAP Εξυπηρέτη : $dnldapserver <br>
+	Κλειδί για χρήση απόκριψης: $encryptionkey <br>
         </blockquote>
         <table width=100%>
             <tr>
