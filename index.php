@@ -58,13 +58,9 @@ $tool_content = "";
 //	if (isset($siteName)) $tool_content .=  "<title>".$siteName."</title>";
 //	else $tool_content .= "<title>Εγκατάσταση του e-Class</title>";
 
-//<!--<meta http-equiv="Description" content="elearn Platform">
-//<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=$charset">
-@include("./modules/lang/english/index.inc");
-@include("./modules/lang/english/trad4all.inc.php");
 @include("./modules/lang/$language/index.inc");
 @include("./modules/lang/$language/trad4all.inc.php");
-$nameTools = $langWelcomeToEclass;
+//$nameTools = $langWelcomeToEclass;
 // first check
 // check if we can connect to database. If not then probably it is the first time we install eclass
 
@@ -252,7 +248,7 @@ if(!empty($submit))
 
 
 	}		// while
-	
+
 	if (!isset($uid))
 	{
 		$warning .= $langInvalidId;
@@ -282,13 +278,18 @@ if(!empty($submit))
 
 	//check user language preferences
 	if (isset($userLanguage) && $userLanguage == "en") {
-		$language = $_SESSION['langswitch'] = "english";
+		$_SESSION['langswitch'] = "english";
 		$_SESSION['langLinkText'] = "Ελληνικά";
 		$_SESSION['langLinkURL'] = "?localize=el";
-	} elseif(isset($userLanguage) && $userLanguage == "en") {
-		$language = $_SESSION['langswitch'] = "greek";
+	} elseif(isset($userLanguage) && $userLanguage == "el") {
+		$_SESSION['langswitch'] = "greek";
 		$_SESSION['langLinkText'] = "English";
 		$_SESSION['langLinkURL'] = "?localize=en";
+	}
+	if(session_is_registered('langswitch')) {
+		$language = $_SESSION['langswitch'];
+	} else {
+		$language = "greek";
 	}
 
 }  // end of user authentication
@@ -296,7 +297,13 @@ if(!empty($submit))
 if (isset($_SESSION['uid'])) $uid = $_SESSION['uid'];
 else unset($uid);
 
-
+//if the user logged in include the correct language files
+//in case he has a different language set in his/her profile
+if (isset($language)) {
+	@include("./modules/lang/$language/index.inc");
+	@include("./modules/lang/$language/trad4all.inc.php");
+}
+$nameTools = $langWelcomeToEclass;
 //----------------------------------------------------------------
 // if login succesful display courses lists
 // --------------------------------------------------------------
@@ -306,12 +313,7 @@ if (isset($uid) AND !isset($logout)) {
 
 	$require_help = true;
 	$helpTopic="Clar2";
-	//$eclass_perso will be read from the db.
-	//keep as is for now
-	//	$whatViewToLoad = "yes";
-	//	if ($whatViewToLoad == "yes") session_register("perso_is_active");
-
-	$eclass_perso = 0;
+	
 	if (!session_is_registered("user_perso_active")) {
 		include("logged_in_content.php");
 		draw($tool_content,1);
@@ -320,8 +322,6 @@ if (isset($uid) AND !isset($logout)) {
 		include("perso.php");
 		drawPerso($tool_content);
 	}
-
-
 
 }	// end of if login
 
