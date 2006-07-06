@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 /*
 +----------------------------------------------------------------------+
 | E-Class - based on CLAROLINE version 1.3.0 $Revision$      |
@@ -46,8 +46,10 @@ include '../../include/baseTheme.php';
 $nameTools = $opencours;
 $navigation[] = array ("url"=>"listfaculte.php", "name"=> $listfac);
 
-$fac = mysql_fetch_row(mysql_query(
-"SELECT name FROM faculte WHERE id = '$fc'"));
+//parse the faculte id in a session
+//This is needed in case the user decides to switch language.
+$_SESSION['fc'] = $fc;
+$fac = mysql_fetch_row(mysql_query("SELECT name FROM faculte WHERE id = ".$_SESSION['fc']));
 if (!($fac = $fac[0])) {
 	die("ERROR: no faculty with id $fc");
 }
