@@ -535,7 +535,7 @@ echo "
                         <tr>
                             <td>
                                 <font size=\"2\" face=\"arial, helvetica\">
-                                   Διαθέτετε εξυπηρετητή video streaming; 
+                                   Εξυπηρετητής video streaming 
                                 </font>
                             </td>
                             <td>
@@ -566,8 +566,6 @@ function set_video_input()
 				 <div id=\"video_input_div_input\">
 				</td>
 			</tr>
-// Added by vagpits
-// Global variable $persoIsActive
                         <tr>
                             <td>
                                 <font size=\"2\" face=\"arial, helvetica\">
@@ -1580,7 +1578,7 @@ else
     <b>Επιπρόσθετη λειτουργικότητα:</b>
     <ul>
     	<li>
-    	Εάν επιθυμείται να υποστηρίζεται streaming για τα αρχεία video που θα αποτελούν μέρος του υλικού των αποθηκευμένων μαθημάτων θα πρέπει να υπάρχει εγκατεστημένος streaming server σύμφωνα με τις οδηγίες που θα βρείτε στο εγχειρίδιο τάδε. 
+    	Εάν επιθυμείτε να υποστηρίζετε streaming για τα αρχεία video που θα αποτελούν μέρος του υλικού των αποθηκευμένων μαθημάτων θα πρέπει να υπάρχει εγκατεστημένος streaming server σύμφωνα με τις οδηγίες που θα βρείτε στο εγχειρίδιο τάδε. 
     	</li>
     </ul>
     <br>
