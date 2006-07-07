@@ -83,53 +83,43 @@ if (isset($submit))  {
 	// Open config.php empty
 	$fd=@fopen("../../config/config.php", "w");
 	if (!$fd) {
-		
+		$tool_content .= $langFileError;
 	} else {
 		// Prepare config.php content
 		$stringConfig='<?php
+
 /*
-      +----------------------------------------------------------------------+
-      | e-Class version 1.6                                                  |
-      | based on CLAROLINE version 1.3.0                                     |
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
-      | Copyright (c) 2003, 2004 GUNet                                             |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
-      |                                                                      |
-      |   This program is distributed in the hope that it will be useful,    |
-      |   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-      |   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-      |   GNU General Public License for more details.                       |
-      |                                                                      |
-      |   You should have received a copy of the GNU General Public License  |
-      |   along with this program; if not, write to the Free Software        |
-      |   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-      |   02111-1307, USA. The GNU GPL license is also available through     |
-      |   the world-wide-web at http://www.gnu.org/copyleft/gpl.html         |
-      +----------------------------------------------------------------------+
-      | e-Class Authors:    Costas Tsibanis <costas@noc.uoa.gr>              |
-      |                     Yannis Exidaridis <jexi@noc.uoa.gr>              |
-      |                     Alexandros Diamantidis <adia@noc.uoa.gr>         |
-      |                                                                      |
-      | Claroline Authors:  Thomas Depraetere <depraetere@ipm.ucl.ac.be>     |
-      |                     Hugues Peeters    <peeters@ipm.ucl.ac.be>        |
-      |                     Christophe Gesché <gesche@ipm.ucl.ac.be>         |
-      |                                                                      |
-      +----------------------------------------------------------------------+
+	=============================================================================
+	GUnet e-Class 2.0
+	E-learning and Course Management Program
+	================================================================================
+	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+	Á full copyright notice can be read in "/info/copyright.txt".
+
+	Authors:  Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+		Yannis Exidaridis <jexi@noc.uoa.gr>
+ 		Alexandros Diamantidis <adia@noc.uoa.gr>	
+	For a full list of contributors, see "credits.txt".
+
+	 This program is a free software under the terms of the GNU
+	(General Public License) as published by the Free Software Foundation. 
+	See the GNU License for more details.
+	The full license can be read in "license.txt".
+	Contact address: GUnet Asynchronous Teleteaching Group,
+	Network Operations Center, University of Athens,	
+	Panepistimiopolis Ilissia, 15784, Athens, Greece
+	
+	eMail: eclassadmin@gunet.gr		
+	==============================================================================
+	
+	***************************************************************
+  *           config file of e-Class
+	****************************************************************
+	File has been chmoded 0444 by install.php.
+	chmod 0666 (Win: remove read-only file property) to edit manually
+	*****************************************************************
+																																																													
 */
-/***************************************************************
-*           CONFIG OF VIRTUAL CAMPUS
-****************************************************************
-GOAL
-****
-List of variables to be modified by the campus site administrator.
-File has been CHMODDED 0444 by install.php. 
-CHMOD 0666 (Win: remove read-only file property) to edit manually
-*****************************************************************/
 
 // This file was generate by script /install/index.php
 // on '.date("r").'
@@ -175,7 +165,7 @@ $colorDark = "'.$_POST['formcolorDark'].'";
 
 $have_latex = "'.$_POST['formhave_latex'].'";
 
-$persoIsActive = "'.$_POST['formpersoIsActive'].'";
+$persoIsActive = '.$_POST['formpersoIsActive'].';
 
 $durationAccount = "'.$_POST['formdurationAccount'].'";
 
