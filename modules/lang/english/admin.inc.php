@@ -146,6 +146,7 @@ $langListRegisteredProfessors = "Registered Professors List";
 $langClaroConf = "Configuration File of e-Class";
 $langFileUpdatedSuccess = "Config file edited with success!";
 $langFileEdit = "File Edit";
+$langFileError = "Unable to write config.php!. Please check persmissions!";
 $langReplaceBackupFile = "Replace config_backup.php.";
 
 // delcours.php

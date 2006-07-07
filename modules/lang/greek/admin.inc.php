@@ -164,6 +164,7 @@ $langListRegisteredProfessors = "Λίστα Εγγεγραμμένων Εκπαιδευτών";
 $langClaroConf = "Configuration File του e-Class";
 $langFileUpdatedSuccess = "Το αρχείο ρυθμίσεων τροποποιήθηκε με επιτυχία!";
 $langFileEdit = "Επεξεργασία Αρχείου";
+$langFileError = "Το αρχείο config.php δεν μπόρεσε να διαβαστεί!. Ελέγξτε τα δικαιώματα πρόσβασης.";
 $langReplaceBackupFile = "Αντικατάσταση του config_backup.php.";
 
 // delcours.php
