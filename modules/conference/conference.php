@@ -23,12 +23,12 @@ var video_div="";
 
 function clear_chat()
 	{
-	  	new Ajax.Request("refresh_chat.php3", {method:"post", postBody:"reset=true"});
+	  	new Ajax.Request("refresh_chat.php", {method:"post", postBody:"reset=true"});
 		return false;
 	}
 function save_chat()
 	{
-	  	new Ajax.Request("refresh_chat.php3", {method:"get", postBody:"store=true"});
+	  	new Ajax.Request("refresh_chat.php", {method:"get", postBody:"store=true"});
 		return false;
 	}
 
@@ -37,7 +37,7 @@ function prepare_message()
 {
 	    var pars = "chatLine="+escape(document.chatForm.msg.value);
 	    var target = "chat";
-	    var url = "refresh_chat.php3";
+	    var url = "refresh_chat.php";
 	    var myAjax = new Ajax.Updater(target, url, {method: "get", parameters: pars});
         document.chatForm.msg.value = "";
         document.chatForm.msg.focus();
@@ -50,14 +50,14 @@ function prepare_message()
 /* when student page load chat div load*/
 function init_student()
 	{
-	    var url = "refresh_chat.php3";
+	    var url = "refresh_chat.php";
 	    var target = "chat";
 	    var myAjax = new Ajax.Updater(target, url);
 	}
 /* when teacher page load chat div load*/
 function init_teacher()
 	{
-	    var url = "refresh_chat.php3";
+	    var url = "refresh_chat.php";
 	    var target = "chat";
 	    var myAjax = new Ajax.Updater(target, url);
 	}
@@ -81,7 +81,7 @@ var set_video = function(t) {
 		}
 
 
-	  	new Ajax.Request("pass_parameters.php3", {method:"post", postBody:"variable=netmeeting_number", onSuccess:set_netmeeting_number, onFailure:errFunc});
+	  	new Ajax.Request("pass_parameters.php", {method:"post", postBody:"variable=netmeeting_number", onSuccess:set_netmeeting_number, onFailure:errFunc});
 		
 
 
@@ -98,20 +98,20 @@ var set_presantation = function(t) {
 var errFunc = function(t) {
     alert("Error " + t.status + " -- " + t.statusText);
 }
-	  new Ajax.Request("pass_parameters.php3", {method:"post", postBody:"variable=video", onSuccess:set_video, onFailure:errFunc});
+	  new Ajax.Request("pass_parameters.php", {method:"post", postBody:"variable=video", onSuccess:set_video, onFailure:errFunc});
 
-    	  new Ajax.Request("pass_parameters.php3", {method:"post", postBody:"variable=presantation", onSuccess:set_presantation, onFailure:errFunc});
+    	  new Ajax.Request("pass_parameters.php", {method:"post", postBody:"variable=presantation", onSuccess:set_presantation, onFailure:errFunc});
 
 
 
-	    var url = "refresh_chat.php3";
+	    var url = "refresh_chat.php";
 	    var target = "chat";
 	    var myAjax = new Ajax.Updater(target, url);
 	}
 /* refresh chat div for teacher*/
 function refresh_teacher()
 	{  
-	    var url = "refresh_chat.php3";
+	    var url = "refresh_chat.php";
 	    var target = "chat";
 	    var myAjax = new Ajax.Updater(target, url);
 	}
@@ -127,7 +127,7 @@ function netmeeting()
 		document.getElementById("video").innerHTML=player;
 		var netmeeting_number="'.$currentCourseID.'@'.$MCU.'";
 		NetMeeting.CallTo(netmeeting_number);
-		new Ajax.Request("pass_parameters.php3", {method:"post", postBody:"video_div="+player+"&netmeeting_number="+netmeeting_number});
+		new Ajax.Request("pass_parameters.php", {method:"post", postBody:"video_div="+player+"&netmeeting_number="+netmeeting_number});
 	}
 function mediaplayer()
 	{
@@ -154,7 +154,7 @@ function play_video()
 			<PARAM name=\'PlayCount\' value=\'9999\'>\
 		</OBJECT>";
 
-		new Ajax.Request("pass_parameters.php3", {method:"post", postBody:"video_div="+document.getElementById("video").innerHTML});
+		new Ajax.Request("pass_parameters.php", {method:"post", postBody:"video_div="+document.getElementById("video").innerHTML});
 		document.getElementById("video").innerHTML=player;
 
 
@@ -174,7 +174,7 @@ function show_presantation()
 	{
 var presantation_url=document.getElementById("Presantation_URL").value;
 document.getElementById("presantation_window").src=presantation_url;
-new Ajax.Request("pass_parameters.php3", {method:"post", postBody:"presantation_URL="+presantation_url});
+new Ajax.Request("pass_parameters.php", {method:"post", postBody:"presantation_URL="+presantation_url});
 return false;
 	
 	}
@@ -282,7 +282,7 @@ $tool_content.='
 		<div align="left" id="chat" style="position: relative;height: 60px;width: 616px; overflow: auto;">
 		</div>
 
-		<form name = "chatForm" action = "conference.php3#bottom" method = "get" target = "conference" onSubmit = "return prepare_message();">
+		<form name = "chatForm" action = "conference.php#bottom" method = "get" target = "conference" onSubmit = "return prepare_message();">
 
 		<div align="center"  style="position: relative; width:750px">
 			<input type="text" name="msg" size="80">
@@ -292,8 +292,8 @@ $tool_content.='
 ';
 		if ($is_adminOfCourse) {
 			$tool_content.=' 
-        		<a href="conference.php3?reset=true" onclick="return clear_chat();">'.$langWash.'</a> <!--|
-			<a href="conference.php3?store=true" onclick="return save_chat()">'.$langSave.'</a>-->
+        		<a href="conference.php?reset=true" onclick="return clear_chat();">'.$langWash.'</a> <!--|
+			<a href="conference.php?store=true" onclick="return save_chat()">'.$langSave.'</a>-->
 			';
  		}
 		$tool_content.='
