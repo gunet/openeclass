@@ -51,11 +51,11 @@ $tool_content .= "<TR BGCOLOR=\"" . $color1 . "\" ALIGN=\"LEFT\">";
 $tool_content .= "<TD BGCOLOR=\"" . $color1 . "\" ALIGN=\"CENTER\" VALIGN=\"MIDDLE\">&nbsp;</TD>";
 $tool_content .= "<TD><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\"" . $textcolor . "\">";
 $tool_content .= "<B>" . $l_forum . "</B></font></TD>";
-$tool_content .= "<TD ALIGN=\"CENTER\"><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\"" . $textcolor . "\">";
+$tool_content .= "<TD ALIGN=\"CENTER\"><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\" . $textcolor . "\">";
 $tool_content .= "<B>" . $l_topics . "</B></font></TD>";
-$tool_content .= "<TD ALIGN=\"CENTER\"><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\"" . $textcolor . "\">";
+$tool_content .= "<TD ALIGN=\"CENTER\"><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\" . $textcolor . "\">";
 $tool_content .= "<B>" . $l_posts . "</B></font></TD>";
-$tool_content .= "<TD ALIGN=\"CENTER\"><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\"" . $textcolor . "\">";
+$tool_content .= "<TD ALIGN=\"CENTER\"><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\" . $textcolor . "\">";
 $tool_content .= "<B>" . $l_lastpost . "</B></font></TD>";
 $tool_content .= "</TR>";
 
@@ -94,7 +94,7 @@ for($i = 0; $i < $total_categories; $i++) {
    if($viewcat != -1) {
       if($categories[$i][cat_id] != $viewcat) {
 	$title = stripslashes($categories[$i][cat_title]);
-        $tool_content .= "<TR ALIGN=\"LEFT\" VALIGN=\"TOP\"><TD COLSPAN=6 BGCOLOR=\"" . $color1 . "\">";
+        $tool_content .= "<TR ALIGN=\"LEFT\" VALIGN=\"TOP\"><TD COLSPAN=6 BGCOLOR=\"" . $color1 "\">";
         $tool_content .= "<FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize2 . "\" COLOR=\"" . $textcolor . "\"><B>" . $title . "</B></FONT></TD></TR>";
 	continue;
      }
