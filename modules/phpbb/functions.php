@@ -207,7 +207,7 @@ function showfooter($db) {
         $sql = "SELECT footer FROM headermetafooter";
         if($result = mysql_query($sql, $db)) {
 	        if($footer = mysql_fetch_array($result)) {
-		        echo stripslashes($footer[footer]);
+		        $tool_content .= stripslashes($footer[footer]);
 		}
 	}
 } 
@@ -1258,7 +1258,7 @@ function error_die($msg){
 	global $db, $userdata, $user_logged_in;
 	global $FontFace, $FontSize3, $textcolor, $phpbbversion;
 	global $starttime;
-	print("<br>
+	$tool_content .= "<br>
 		<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"$tablewidth\">
 		<TR><TD BGCOLOR=\"$table_bgcolor\">
 			<TABLE BORDER=\"0\" CALLPADDING=\"1\" CELLSPACEING=\"1\" WIDTH=\"100%\">
@@ -1272,7 +1272,8 @@ function error_die($msg){
 	 	</TABLE>
 	 <br>");
 	 include('page_tail.'.$phpEx);
-	 exit;
+	draw($tool_content, 2);
+	exit;
 }
 
 function make_jumpbox(){

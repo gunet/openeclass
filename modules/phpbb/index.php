@@ -26,10 +26,9 @@ $helpTopic = 'Forums';
 include '../../baseTheme.php';
 $nameTools = $langUsers . " ($langUserNumber : $countUser)";
 $tool_content = "";
-//session_start();
 
-include('extention.inc');
-include('functions.'.$phpEx);
+include('extention.inc'); // just one assignment: $phpEx = 'php';
+include('functions.'.$phpEx); // application logic for phpBB
 include('config.'.$phpEx);
 require("auth.$phpEx");
 $pagetitle = $l_indextitle;
@@ -52,15 +51,14 @@ $tool_content .= "<TR BGCOLOR=\"" . $color1 . "\" ALIGN=\"LEFT\">";
 $tool_content .= "<TD BGCOLOR=\"" . $color1 . "\" ALIGN=\"CENTER\" VALIGN=\"MIDDLE\">&nbsp;</TD>";
 $tool_content .= "<TD><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\"" . $textcolor . "\">";
 $tool_content .= "<B>" . $l_forum . "</B></font></TD>";
-$tool_content .= "<TD ALIGN=\"CENTER\"><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\" . $textcolor . "\">";
+$tool_content .= "<TD ALIGN=\"CENTER\"><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\"" . $textcolor . "\">";
 $tool_content .= "<B>" . $l_topics . "</B></font></TD>";
-$tool_content .= "<TD ALIGN=\"CENTER\"><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\" . $textcolor . "\">";
+$tool_content .= "<TD ALIGN=\"CENTER\"><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\"" . $textcolor . "\">";
 $tool_content .= "<B>" . $l_posts . "</B></font></TD>";
-$tool_content .= "<TD ALIGN=\"CENTER\"><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\" . $textcolor . "\">";
+$tool_content .= "<TD ALIGN=\"CENTER\"><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\"" . $textcolor . "\">";
 $tool_content .= "<B>" . $l_lastpost . "</B></font></TD>";
 $tool_content .= "</TR>";
 
-<?php
 if($total_categories)
 {
    if(!$viewcat)
@@ -85,7 +83,7 @@ if($total_categories)
 	    ORDER BY f.cat_id, f.forum_id";
    if(!$f_res = mysql_query($sql, $db))
      {
-	die("Error getting forum data<br>$sql");
+	error_die("Error getting forum data<br>$sql");
      }
 
    while($forum_data = mysql_fetch_array($f_res))
@@ -96,14 +94,12 @@ for($i = 0; $i < $total_categories; $i++) {
    if($viewcat != -1) {
       if($categories[$i][cat_id] != $viewcat) {
 	$title = stripslashes($categories[$i][cat_title]);
-        $tool_content .= "<TR ALIGN=\"LEFT\" VALIGN=\"TOP\"><TD COLSPAN=6 BGCOLOR=\"" . $color1 "\">";
+        $tool_content .= "<TR ALIGN=\"LEFT\" VALIGN=\"TOP\"><TD COLSPAN=6 BGCOLOR=\"" . $color1 . "\">";
         $tool_content .= "<FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize2 . "\" COLOR=\"" . $textcolor . "\"><B>" . $title . "</B></FONT></TD></TR>";
 	continue;
      }
    }
    $title = stripslashes($categories[$i][cat_title]);
-
-
 
    // Added by Thomas for Claroline : distinguish group forums from others
    $catNum=$categories[$i][cat_id];
@@ -115,13 +111,11 @@ for($i = 0; $i < $total_categories; $i++) {
      {
       unset($last_post);
       if($forum_row[$x]["cat_id"] == $categories[$i]["cat_id"]) {
-	 //$last_post = $last_posts[$forum_row[$x]["forum_id"]];
 	 if($forum_row[$x]["post_time"])
 	 {
 	 	$last_post = $forum_row[$x]["post_time"];
 	 }
 	 $last_post_datetime = $forum_row[$x]["post_time"];
-	 //list($last_post_datetime, $null) = split($l_by, $last_post);
 	 list($last_post_date, $last_post_time) = split(" ", $last_post_datetime);
 	 list($year, $month, $day) = explode("-", $last_post_date);
 	 list($hour, $min) = explode(":", $last_post_time);
@@ -131,7 +125,6 @@ for($i = 0; $i < $total_categories; $i++) {
 	 	$last_post = "No Posts";
 	 }
          $tool_content .= "<TR  ALIGN=\"LEFT\" VALIGN=\"TOP\">";
-      //if((($last_visit - $last_post_time) < 600) && $last_post != "No posts") {
 	 if($last_post_time > $last_visit && $last_post != "No posts") {
             $tool_content .= "<TD BGCOLOR=\"$color1\" ALIGN=\"CENTER\" VALIGN=\"middle\" WIDTH=5%><IMG SRC=\"$newposts_image\"></TD>";
 	 }
@@ -147,14 +140,11 @@ for($i = 0; $i < $total_categories; $i++) {
 
 
 		$forum=$forum_row[$x]["forum_id"];
-		// echo "forum $forum";
-		
 
 		// Claroline function added by Thomas July 2002
 		// Visit only my group forum if not admin or tutor
 		// If tutor, see all groups but indicate my groups
 		// echo "<br>categories i $catNum<br>forum : $forum myGroupForum $myGroupForum<br>";	// Debugging
-
 
 		// TUTOR VIEW
 		if($tutorCheck==1)
@@ -163,7 +153,6 @@ for($i = 0; $i < $total_categories; $i++) {
 						WHERE forumId='$forum'
 							AND tutor='$uid'");
 			$countTutor = mysql_num_rows($sqlTutor); 
-			// echo "<br>forum $forum count tutor $countTutor<br>";
 
 			if ($countTutor==0)
 			{
@@ -176,20 +165,14 @@ for($i = 0; $i < $total_categories; $i++) {
 					&nbsp;($langOneMyGroups)";
 			}
 		}
-
-
 		// ADMIN VIEW
 		elseif($status[$dbname] == 1 OR $status[$dbname] == 2)
 		{
                         $tool_content .= "<a href=\"viewforum.$phpEx?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>";
 		}
-
-
-
 		// STUDENT VIEW
 		elseif($catNum==1)
 		{ 
-
 			if ($forum==$myGroupForum)
 			{
                                 $tool_content .= "<a href=\"viewforum.$phpEx?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>
@@ -207,14 +190,11 @@ for($i = 0; $i < $total_categories; $i++) {
 				}
 			}
 		}
-
 		// OTHER FORUMS
 		else
 		{
                         $tool_content .= "<a href=\"viewforum.$phpEx?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a> ";
 		}
-
-
 
                 $tool_content .= "</font>\n";
                 $tool_content .= "<br><FONT FACE=\"$FontFace\" SIZE=\"$FontSize1\" COLOR=\"$textcolor\">$desc</font></TD>\n";
@@ -230,14 +210,5 @@ for($i = 0; $i < $total_categories; $i++) {
     }
   }
 }
-draw($tool_content, 2, 'user');
-?>
-//     </TABLE></TD></TR></TABLE>
-
-
-
-
-<?php
 require('page_tail.'.$phpEx);
-?>
-
+draw($tool_content, 2, 'user');

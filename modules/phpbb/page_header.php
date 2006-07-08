@@ -1,6 +1,5 @@
 <?php
 
-
 session_register("forumId");
 session_register("userGroupId");
 
@@ -61,35 +60,35 @@ include('../lang/english/trad4all.inc.php');
 include("../lang/$language/trad4all.inc.php");
 
 $nameTools = $l_forums;
-//</ul>$interbredcrump[]= array ("url"=>"index.php", "name"=> $langAdmin);
 
-?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+$tool_content .= "
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <HTML>
 <HEAD>
 	<TITLE>
-		<?php echo " - $pagetitle" ?>
-		<?php echo "$nameTools - $intitule - $siteName"; ?>
+		- $pagetitle
+		$nameTools - $intitule - $siteName
 	</TITLE>
+";
 
-<?php
 if($l_special_meta) {
-	echo $l_special_meta . "\n";
+	$tool_content .= $l_special_meta . "\n";
 }
 if($forward) {
-	echo "<META HTTP-EQUIV=\"refresh\" content=\"3;URL=$url_phpbb/viewtopic.$phpEx?topic=$topic&forum=$forum&$total_topic\">";
+	$tool_content .= "<META HTTP-EQUIV=\"refresh\" content=\"3;URL=$url_phpbb/viewtopic.$phpEx?topic=$topic&forum=$forum&$total_topic\">";
 } 
 $meta = showmeta($db);
-?>
-<?php echo $meta?>
+
+$tool_content .= $meta;
+$tool_content .="
 </HEAD>
-<BODY BGCOLOR="<?php echo $bgcolor?>" TEXT="<?php echo $textcolor?>" LINK="<?php echo $linkcolor?>" VLINK="<?php echo $vlinkcolor?>">
-<font face="<?php echo $FontFace?>">
-<table border="0" align="center" cellpadding="0" cellspacing="0" width="<?php echo $mainInterfaceWidth?>">
+<BODY>
+<table border="0" align="center" cellpadding="0" cellspacing="0" width="99%">
 		<tr>
 			<td colspan="4">
+";
 
-				<?php 
 				$noPHP_SELF = true; //because  phpBB need always param IN URL
 				include('../../include/phpbb_header.php');
 echo "
