@@ -203,7 +203,6 @@ for($i = 0; $i < $total_categories; $i++) {
 		<FONT FACE=\"$FontFace\" SIZE=\"$FontSize2\" COLOR=\"$textcolor\">$total_posts</font></TD>\n";
                 $tool_content .= "<TD BGCOLOR=\"$color1\" WIDTH=15% ALIGN=\"CENTER\" VALIGN=\"MIDDLE\">
 		<FONT FACE=\"$FontFace\" SIZE=\"$FontSize1\" COLOR=\"$textcolor\">$last_post</font></TD>\n";
-	 	$forum_moderators = get_moderators($forum_row[$x][forum_id], $db);
                 $tool_content .= "</tr>\n";
       }
     }

@@ -188,27 +188,6 @@ $tool_content .= "</TR><TR><TD ALIGN=\"right\" valign=top>";
 if($status[$dbname]==1 OR $status[$dbname]==2) {
 	$tool_content .= "<a href=\"../help/help.php?topic=For&language=$languageInterface\" onClick=\"window.open('../help/help.php?topic=For&language=$languageInterface','Help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10'); return false;\"><font size=2 face =\"arial, helvetica\">=$langHelp\"</font></a>";
 }	// END IF PROF OR ASSISTANT
-if ($user_logged_in) {
-			// do PM notification.
-			$last_visit_date = date("Y-m-d h:i", $last_visit);
-			$username = addslashes($userdata[username]);
-			$sql = "SELECT count(*) AS count
-			      FROM priv_msgs p, users u
-			      WHERE p.to_userid = u.user_id and p.msg_status = '0' and u.username = '$username'";
-			if(!$result = mysql_query($sql, $db))
-			{
-				error_die("phpBB was unable to check private messages because " .mysql_error($db));
-			}
-			$row = @mysql_fetch_array($result);
-			$new_message = $row[count];
-			$word = ($new_message > 1) ? "messages" : "message";
-
-			if ($new_message != 0)
-			{
-				eval($l_privnotify);
-				$tool_content .= "$privnotify";
-			}
-}
 $tool_content .= "</font></TD></TR>";
 
 //Third row with cell five and six (misc. information)

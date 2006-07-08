@@ -209,11 +209,9 @@ do {
 
    $tool_content .= "\n<FONT COLOR=\"$textcolor\" face=\"$FontFace\">" . $message . "</FONT><BR>";
    $tool_content .= "\n<HR>";
-   // Added by Thomas 30-11-2001
-  // echo " <font size=1 face='arial, helvetica'><a href=\"$url_phpbb/reply.$phpEx?topic=$topic&forum=$forum&post=$myrow[post_id]&quote=1\">$langQuote</a>&nbsp;&nbsp;";
 if($status[$dbname]==1 OR $status[$dbname]==2)
 {
-$tool_content .= "<font size=1 face='arial, helvetica'><a href=\"$url_phpbb/editpost.$phpEx?post_id=$myrow[post_id]&topic=$topic&forum=$forum\">$langEditDel</a>";
+$tool_content .= "<font size=1 face='arial, helvetica'><a href=\"$url_phpbb/editpost.php?post_id=$myrow[post_id]&topic=$topic&forum=$forum\">$langEditDel</a>";
 }
  
    $tool_content .= "</TD></TR>";

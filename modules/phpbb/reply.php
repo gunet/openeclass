@@ -104,10 +104,6 @@ if($submit) {
 	 include('page_header.php');
 	 error_die($l_nopost);
       }
-      if(is_banned($userdata[user_id], "username", $db)) {
-	 include('page_header.php');
-	 error_die($l_banned);
-      }
       if($userdata[user_id] != -1) {
 	 // You've entered your username and password, so we log you in.
 	 $sessid = new_session($userdata[user_id], $REMOTE_ADDR, $sesscookietime, $db);
@@ -242,8 +238,8 @@ if($submit) {
    $tool_content .= "<br><TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACEING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"$tablewidth\">";
    $tool_content .= "<TR><TD  BGCOLOR=\"$table_bgcolor\"><TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"1\" WIDTH=\"100%\">";
    $tool_content .= "<TR BGCOLOR=\"$color1\" ALIGN=\"LEFT\"><TD><font face='arial, helvetica' size=2><P>";
-   $tool_content .= "<P><BR><center>$l_stored<ul>$l_click <a href=\"viewtopic.$phpEx?topic=$topic&forum=$forum&$total_topic\">$l_here</a> $l_viewmsg<P>";
-   $tool_content .= "$l_click <a href=\"viewforum.$phpEx?forum=$forum&$total_forum\">$l_here</a> $l_returntopic</ul></center><P></font>";
+   $tool_content .= "<P><BR><center>$l_stored<ul>$l_click <a href=\"viewtopic.php?topic=$topic&forum=$forum&$total_topic\">$l_here</a> $l_viewmsg<P>";
+   $tool_content .= "$l_click <a href=\"viewforum.php?forum=$forum&$total_forum\">$l_here</a> $l_returntopic</ul></center><P></font>";
    $tool_content .= "</TD></TR></TABLE></TD></TR></TABLE><br>";
    
 } else {

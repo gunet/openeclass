@@ -229,37 +229,6 @@ function get_last_post($id, $db, $type) {
    return($val);
 }
 
-/*
- * Returns an array of all the moderators of a forum
- */
-function get_moderators($forum_id, $db) {
-   $sql = "SELECT u.user_id, u.username FROM users u, forum_mods f WHERE f.forum_id = '$forum_id' and f.user_id = u.user_id";
-    if(!$result = mysql_query($sql, $db))
-     return(array());
-   if(!$myrow = mysql_fetch_array($result))
-     return(array());
-   do {
-      $array[] = array("$myrow[user_id]" => "$myrow[username]");
-   } while($myrow = mysql_fetch_array($result));
-   return($array);
-}
-
-/*
- * Checks if a user (user_id) is a moderator of a perticular forum (forum_id)
- * Retruns 1 if TRUE, 0 if FALSE or Error
- */
-function is_moderator($forum_id, $user_id, $db) {
-   $sql = "SELECT user_id FROM forum_mods WHERE forum_id = '$forum_id' AND user_id = '$user_id'";
-   if(!$result = mysql_query($sql, $db))
-     return("0");
-   if(!$myrow = mysql_fetch_array($result))
-     return("0");
-   if($myrow[user_id] != '')
-     return("1");
-   else
-     return("0");
-}
-
 /**
  * Nathan Codding - July 19, 2000
  * Checks the given password against the DB for the given username. Returns true if good, false if not.
@@ -275,21 +244,6 @@ function check_user_pw($username, $password, $db) {
 	}
 	return mysql_num_rows($resultID);
 } // check_user_pw()
-
-
-/**
- * Nathan Codding - July 19, 2000
- * Returns a count of the given userid's private messages.
- */
-function get_pmsg_count($user_id, $db) {
-	$sql = "SELECT msg_id FROM priv_msgs WHERE (to_userid = $user_id)";
-	$resultID = mysql_query($sql);
-	if (!$resultID) {
-		echo mysql_error() . "<br>";
-		error_die("Error doing DB query in get_pmsg_count");
-	}
-	return mysql_num_rows($resultID);
-} // get_pmsg_count()
 
 
 /**
@@ -1056,21 +1010,7 @@ function undo_htmlspecialchars($input) {
 	
 	return $input;
 }
-/*
- * Make sure a username isn't on the disallow list
- */
-function validate_username($username, $db) {
-	$sql = "SELECT disallow_username FROM disallow WHERE disallow_username = '" . addslashes($username) . "'";
-	if(!$r = mysql_query($sql, $db))
-		return(0);
-	if($m = mysql_fetch_array($r)) {
-		if($m[disallow_username] == $username)
-			return(1);
-		else
-			return(0);
-	}
-	return(0);
-}
+
 /*
  * Check if this is the first post in a topic. Used in editpost.php
  */
@@ -1101,49 +1041,6 @@ function censor_string($string, $db) {
       $string = eregi_replace("<BR>$word", "<BR>$replacement", $string);
    }
    return($string);
-}
-
-function is_banned($ipuser, $type, $db) {
-   
-   // Remove old bans
-   $sql = "DELETE FROM banlist WHERE (ban_end < ". mktime(date("H"), date("i"), date("s"), date("m"), date("d"), date("Y")).") AND (ban_end > 0)";
-   @mysql_query($sql, $db);
-   
-   switch($type) {
-    case "ip":
-      $sql = "SELECT ban_ip FROM banlist";
-      if($r = mysql_query($sql, $db)) {
-	 while($iprow = mysql_fetch_array($r)) {
-	    $ip = $iprow[ban_ip];
-	    if($ip[strlen($ip) - 1] == ".") {
-	       $db_ip = explode(".", $ip);
-	       $this_ip = explode(".", $ipuser);
-	       
-	       for($x = 0; $x < count($db_ip) - 1; $x++) 
-		 $my_ip .= $this_ip[$x] . ".";
-
-	       if($my_ip == $ip)
-		 return(TRUE);
-	    }
-	    else {
-	       if($ipuser == $ip)
-		 return(TRUE);
-	    }
-	 }
-      }
-      else 
-	return(FALSE);
-      break;
-    case "username":
-      $sql = "SELECT ban_userid FROM banlist WHERE ban_userid = '$ipuser'";
-      if($r = mysql_query($sql, $db)) {
-	 if(mysql_num_rows($r) > 0)
-	   return(TRUE);
-      }
-      break;
-   }
-   
-   return(FALSE);
 }
 
 /**
