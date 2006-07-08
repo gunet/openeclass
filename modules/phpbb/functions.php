@@ -1270,7 +1270,7 @@ function error_die($msg){
 			</TABLE>
 		</TD></TR>
 	 	</TABLE>
-	 <br>");
+	 <br>";
 	 include('page_tail.'.$phpEx);
 	draw($tool_content, 2);
 	exit;

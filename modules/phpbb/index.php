@@ -27,13 +27,12 @@ include '../../baseTheme.php';
 $nameTools = $langUsers . " ($langUserNumber : $countUser)";
 $tool_content = "";
 
-include('extention.inc'); // just one assignment: $phpEx = 'php';
-include('functions.'.$phpEx); // application logic for phpBB
-include('config.'.$phpEx);
-require("auth.$phpEx");
+include('functions.php'); // application logic for phpBB
+include('config.php');
+require("auth.php");
 $pagetitle = $l_indextitle;
 $pagetype = "index";
-include('page_header.'.$phpEx);
+include('page_header.php');
 
 $sql = "SELECT c.* FROM catagories c, forums f
 	 WHERE f.cat_id=c.cat_id
@@ -51,11 +50,11 @@ $tool_content .= "<TR BGCOLOR=\"" . $color1 . "\" ALIGN=\"LEFT\">";
 $tool_content .= "<TD BGCOLOR=\"" . $color1 . "\" ALIGN=\"CENTER\" VALIGN=\"MIDDLE\">&nbsp;</TD>";
 $tool_content .= "<TD><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\"" . $textcolor . "\">";
 $tool_content .= "<B>" . $l_forum . "</B></font></TD>";
-$tool_content .= "<TD ALIGN=\"CENTER\"><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\" . $textcolor . "\">";
+$tool_content .= "<TD ALIGN=\"CENTER\"><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\"" . $textcolor . "\">";
 $tool_content .= "<B>" . $l_topics . "</B></font></TD>";
-$tool_content .= "<TD ALIGN=\"CENTER\"><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\" . $textcolor . "\">";
+$tool_content .= "<TD ALIGN=\"CENTER\"><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\"" . $textcolor . "\">";
 $tool_content .= "<B>" . $l_posts . "</B></font></TD>";
-$tool_content .= "<TD ALIGN=\"CENTER\"><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\" . $textcolor . "\">";
+$tool_content .= "<TD ALIGN=\"CENTER\"><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\"" . $textcolor . "\">";
 $tool_content .= "<B>" . $l_lastpost . "</B></font></TD>";
 $tool_content .= "</TR>";
 
@@ -94,7 +93,7 @@ for($i = 0; $i < $total_categories; $i++) {
    if($viewcat != -1) {
       if($categories[$i][cat_id] != $viewcat) {
 	$title = stripslashes($categories[$i][cat_title]);
-        $tool_content .= "<TR ALIGN=\"LEFT\" VALIGN=\"TOP\"><TD COLSPAN=6 BGCOLOR=\"" . $color1 "\">";
+        $tool_content .= "<TR ALIGN=\"LEFT\" VALIGN=\"TOP\"><TD COLSPAN=6 BGCOLOR=\"" . $color1 . "\">";
         $tool_content .= "<FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize2 . "\" COLOR=\"" . $textcolor . "\"><B>" . $title . "</B></FONT></TD></TR>";
 	continue;
      }
@@ -156,26 +155,26 @@ for($i = 0; $i < $total_categories; $i++) {
 
 			if ($countTutor==0)
 			{
-                                $tool_content .= "<a href=\"viewforum.$phpEx?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a> 
+                                $tool_content .= "<a href=\"viewforum.php?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a> 
 						";
 			}
 			else
 			{
-                                $tool_content .= "<a href=\"viewforum.$phpEx?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>
+                                $tool_content .= "<a href=\"viewforum.php?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>
 					&nbsp;($langOneMyGroups)";
 			}
 		}
 		// ADMIN VIEW
 		elseif($status[$dbname] == 1 OR $status[$dbname] == 2)
 		{
-                        $tool_content .= "<a href=\"viewforum.$phpEx?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>";
+                        $tool_content .= "<a href=\"viewforum.php?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>";
 		}
 		// STUDENT VIEW
 		elseif($catNum==1)
 		{ 
 			if ($forum==$myGroupForum)
 			{
-                                $tool_content .= "<a href=\"viewforum.$phpEx?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>
+                                $tool_content .= "<a href=\"viewforum.php?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>
 					&nbsp;&nbsp;($langMyGroup) ";
 			}	
 			else
@@ -186,14 +185,14 @@ for($i = 0; $i < $total_categories; $i++) {
 				}
 				else
 				{
-                                        $tool_content .= "<a href=\"viewforum.$phpEx?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>";
+                                        $tool_content .= "<a href=\"viewforum.php?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>";
 				}
 			}
 		}
 		// OTHER FORUMS
 		else
 		{
-                        $tool_content .= "<a href=\"viewforum.$phpEx?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a> ";
+                        $tool_content .= "<a href=\"viewforum.php?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a> ";
 		}
 
                 $tool_content .= "</font>\n";
@@ -212,3 +211,4 @@ for($i = 0; $i < $total_categories; $i++) {
 }
 require('page_tail.'.$phpEx);
 draw($tool_content, 2, 'user');
+?>
