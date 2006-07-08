@@ -49,8 +49,7 @@ $tool_content = "";//initialise $tool_content
 
 ########### AFFICHER ####################################
 #########################################################
-if($is_adminOfCourse) 
-{
+if($is_adminOfCourse) {
 ##################FORUM GO ################################
 ############################################################
     if(isset($forumgo))
@@ -61,8 +60,7 @@ if($is_adminOfCourse)
 	<td width=25%><b>$langForName</b></td>
 	<td width=50%><b>$langDescription</b></td>
 	<td width=25%><b>$langFunctions</b></td></tr>";
-    $result = mysql_query("select forum_id, forum_name, forum_desc, forum_access,
-    forum_moderator, forum_type from forums where cat_id='$cat_id'");
+    $result = mysql_query("select forum_id, forum_name, forum_desc, forum_access, forum_moderator, forum_type from forums where cat_id='$cat_id'");
     $i=0;
     while(list($forum_id, $forum_name, $forum_desc, $forum_access,
     $forum_moderator, $forum_type) = mysql_fetch_row($result)) {
@@ -279,25 +277,8 @@ else {
 	<tr><td><input type=hidden name=forumcatadd value=yes>
     <input type=submit value=\"$langAdd\"></form></td><td>&nbsp;</td></tr></table>";
    }
-##########################################################################
-##########################################################################
+} else {
+	$tool_content .= "$langNotAllowed<br>";
 }
-
-else {
-
-$tool_content .= "$langNotAllowed<br>";
-}
-########################################"
-#######################################
 draw($tool_content, 2);
-?>
-<!--
-</td>
-	</tr>
-	<tr>
-		<td>
-			<hr noshade size=1>
--->
-<?
-//end_page();
 ?>
