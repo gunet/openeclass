@@ -50,7 +50,7 @@ $tool_content .= "<TR><TD BGCOLOR=\"" . $table_bgcolor . "\">\"";
 $tool_content .= "<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"1\" WIDTH=\"100%\">";
 $tool_content .= "<TR BGCOLOR=\"" . $color1 . "\" ALIGN=\"LEFT\">";
 $tool_content .= "<TD BGCOLOR=\"" . $color1 . "\" ALIGN=\"CENTER\" VALIGN=\"MIDDLE\">&nbsp;</TD>";
-$tool_content .= "<TD><FONT FACE=\" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\"" . $textcolor . "\">";
+$tool_content .= "<TD><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\"" . $textcolor . "\">";
 $tool_content .= "<B>" . $l_forum . "</B></font></TD>";
 $tool_content .= "<TD ALIGN=\"CENTER\"><FONT FACE=\"" . $FontFace . "\" SIZE=\"" . $FontSize1 . "\" COLOR=\" . $textcolor . "\">";
 $tool_content .= "<B>" . $l_topics . "</B></font></TD>";
