@@ -93,27 +93,13 @@ if(strstr($PHP_SELF, "admin"))
 
 // Make a database connection.
 if(!$db = @mysql_connect("$dbhost", "$dbuser", "$dbpasswd"))
-	die('<font size=+1>An Error Occured</font><hr>phpBB was unable to connect to the database. <BR>Please check $dbhost, $dbuser, and $dbpasswd in config.php.');
+	error_die('<font size=+1>An Error Occured</font><hr>phpBB was unable to connect to the database. <BR>Please check $dbhost, $dbuser, and $dbpasswd in config.php.');
 if (mysql_version()) mysql_query("SET NAMES greek");
 if(!@mysql_select_db("$dbname",$db))
-	die("<font size=+1>An Error Occured</font><hr>phpBB was unable to find the database <b>$dbname</b> on your MySQL server. <br>TRY too login again Back to forum <form action = \"/index.php?mon_icampus=yes\" method='post'>	Username : 	<input type=\"text\" name=\"uname\" size=\"10\"><br>	Password :  <input type=\"password\" name=\"pass\" size=\"10\"><br>	<input type=\"submit\" value=\"Entrer\" name=\"submit\">	</form>");
-
-/*
- * bogart: ban should be implemented in eclass context, not in phpBB
-if(is_banned($REMOTE_ADDR, "ip", $db))
-  die($l_banned);
-*/
-
+	error_die("<font size=+1>An Error Occured</font><hr>phpBB was unable to find the database <b>$dbname</b> on your MySQL server. <br>TRY too login again Back to forum <form action = \"/index.php?mon_icampus=yes\" method='post'>	Username : 	<input type=\"text\" name=\"uname\" size=\"10\"><br>	Password :  <input type=\"password\" name=\"pass\" size=\"10\"><br>	<input type=\"submit\" value=\"Entrer\" name=\"submit\">	</form>");
 
 // Setup forum Options.
 
-/*
- * bogart: Since phpBB administration control panel (ACP) is not available in eclass
- * these variables should be stored in phpBB config file,
- * or even better, have ACP incorporated in eclass.
- * An eclass administrator has no way currently to change these variables,
- * but edit by hand the "config" table.
- */
 $sql = "SELECT * FROM config WHERE selected = 1";
 if($result = mysql_query($sql, $db)) {
    if($myrow = mysql_fetch_array($result)) {
@@ -156,14 +142,7 @@ if(isset($_COOKIE[$sesscookiename])) {
 	   update_session_time($sessid, $db);
 
 	   $userdata = get_userdata_from_id($userid, $db);
-           /*
-	    * bogart: ban should be implemented in eclass context, not phpBB
-	   if(is_banned($userdata[user_id], "username", $db))
-	     die($l_banned);
-            */
 
-	   /*
-            * bogart: theme is implemented by eclass css
 	   $theme = setuptheme($userdata["user_theme"], $db);
 	   if($theme)
 	   {
@@ -187,7 +166,6 @@ if(isset($_COOKIE[$sesscookiename])) {
 	      $reply_locked_image = $theme["replylocked_image"];
 
 	   }
-           */
 	   // Use the language the user has choosen
            /* xxx: check if user_lang can be changed */
 	   if($userdata["user_lang"] != '')
@@ -207,15 +185,6 @@ if (!$user_logged_in)
 	if(isset($_COOKIE[$cookiename]))
 	{
 	   $userdata = get_userdata_from_id($_COOKIE["$cookiename"], $db);
-           /*
-	    * bogart: ban should be implemented in eclass context, not phpBB
-	   if(is_banned($userdata[user_id], "username", $db))
-	   {
-	     die($l_banned);
-           }
-	   */
-	   /*
-            * bogart: theme is implemented by eclass css
 	   $theme = setuptheme($userdata["user_theme"], $db);
 	   if($theme)
 	  	{
@@ -238,7 +207,6 @@ if (!$user_logged_in)
 	      $TableWidth = $tablewidth;
 	      $reply_locked_image = $theme["replylocked_image"];
 	   }
-           */
 
 	   // Use the language the user has choosen.
            /* xxx: check if user_lang can be changed */
@@ -256,14 +224,12 @@ if (!$user_logged_in)
 
 // Setup the default theme
 
-/*
-* bogart: theme is implemented by eclass css
 if($override_user_themes == 1 || !$theme)
 {
    $sql = "SELECT * FROM themes WHERE theme_default = 1";
    if(!$r = mysql_query($sql, $db))
    {
-   	die('<font size=+1>An Error Occured</font><hr>phpBB was unable to connect to the database. <BR>Please check $dbhost, $dbuser, and $dbpasswd in config.php.');
+   	error_die('<font size=+1>An Error Occured</font><hr>phpBB was unable to connect to the database. <BR>Please check $dbhost, $dbuser, and $dbpasswd in config.php.');
    }
    if($theme = mysql_fetch_array($r))
    {
@@ -287,8 +253,6 @@ if($override_user_themes == 1 || !$theme)
       $reply_locked_image = $theme["replylocked_image"];
    }
 }
-*/
-
 
 // set expire dates: one for a year, one for 10 minutes
 $expiredate1 = time() + 3600 * 24 * 365;

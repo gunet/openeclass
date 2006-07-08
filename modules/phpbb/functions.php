@@ -41,7 +41,7 @@ function new_session($userid, $remote_ip, $lifespan, $db) {
 	$delresult = mysql_query($deleteSQL, $db);
 
 	if (!$delresult) {
-		die("Delete failed in new_session()");
+		error_die("Delete failed in new_session()");
 	}
 
 	$sql = "INSERT INTO sessions (sess_id, user_id, start_time, remote_ip) VALUES ($sessid, $userid, $currtime, '$remote_ip')";
@@ -52,7 +52,7 @@ function new_session($userid, $remote_ip, $lifespan, $db) {
 		return $sessid;
 	} else {
 		echo mysql_errno().": ".mysql_error()."<BR>";
-		die("Insert failed in new_session()");
+		error_die("Insert failed in new_session()");
 	} // if/else
 
 } // new_session()
@@ -86,7 +86,7 @@ function get_userid_from_session($sessid, $cookietime, $remote_ip, $db) {
 	$result = mysql_query($sql, $db);
 	if (!$result) {
 		echo mysql_error() . "<br>\n";
-		die("Error doing DB query in get_userid_from_session()");
+		error_die("Error doing DB query in get_userid_from_session()");
 	}
 	$row = mysql_fetch_array($result);
 	
@@ -109,55 +109,11 @@ function update_session_time($sessid, $db) {
 	$result = mysql_query($sql, $db);
 	if (!$result) {
 		echo mysql_error() . "<br>\n";
-		die("Error doing DB update in update_session_time()");
+		error_die("Error doing DB update in update_session_time()");
 	}
 	return 1;
 
 } // update_session_time()
-
-/**
- * Delete the given session from the database. Used by the logout page.
- */
-function end_user_session($userid, $db) {
-
-	$sql = "DELETE FROM sessions WHERE (user_id = $userid)";
-	$result = mysql_query($sql, $db);
-	if (!$result) {
-		echo mysql_error() . "<br>\n";
-		die("Delete failed in end_user_session()");
-	}
-	return 1;
-	
-} // end_session()
-
-/**
- * Prints either "logged in as [username]. Log out." or 
- * "Not logged in. Log in.", depending on the value of
- * $user_logged_in.
- */
-function print_login_status($user_logged_in, $username, $url_phpbb) {
-	global $l_loggedinas, $l_notloggedin, $l_logout, $l_login;
-	
-	if($user_logged_in) {
-		echo "<b>$l_loggedinas $username. <a href=\"$url_phpbb/logout.php\">$l_logout.</a></b><br>\n";
-	} else {
-		echo "<b>$l_notloggedin. <a href=\"$url_phpbb/login.php\">$l_login.</a></b><br>\n";
-	}
-} // print_login_status()
-
-/**
- * Prints a link to either login.php or logout.php, depending
- * on whether the user's logged in or not.
- */
-function make_login_logout_link($user_logged_in, $url_phpbb) {
-	global $l_logout, $l_login;
-	if ($user_logged_in) {
-		$link = "<a href=\"$url_phpbb/logout.php\">$l_logout</a>";
-	} else {
-		$link = "<a href=\"$url_phpbb/login.php\">$l_login</a>";
-	}
-	return $link;
-} // make_login_logout_link()
 
 /**
  * End session-management functions
@@ -211,30 +167,6 @@ function showfooter($db) {
 } 
 
 /*
- * Used to keep track of all the people viewing the forum at this time
- * Anyone who's been on the board within the last 300 seconds will be 
- * returned. Any data older then 300 seconds will be removed
- */
-function get_whosonline($IP, $username, $forum, $db) {
-	global $sys_lang;
-	if($username == '')
-		$username = get_syslang_string($sys_lang, "l_guest");
-
-	$time= explode(  " ", microtime());
-	$userusec= (double)$time[0];
-	$usersec= (double)$time[1];
-	$username= addslashes($username);
-	$deleteuser= mysql_query( "delete from whosonline where date < $usersec - 300", $db);
-	$userlog= mysql_fetch_row(MYSQL_QUERY( "SELECT * FROM whosonline where IP = '$IP'", $db));
-	if($userlog == false) {
-		$ok= @mysql_query( "insert INTO whosonline (ID,IP,DATE,username,forum) VALUES('$User_Id','$IP','$usersec', '$username', '$forum')", $db)or die( "Unable to query db!");
-	}
-	$resultlogtab   = mysql_query("SELECT Count(*) as total FROM whosonline", $db);
-	$numberlogtab   = mysql_fetch_array($resultlogtab);
-	return($numberlogtab[total]);
-}
-
-/*
  * Returns the total number of posts in the whole system, a forum, or a topic
  * Also can return the number of users on the system.
  */ 
@@ -254,7 +186,7 @@ function get_total_posts($id, $db, $type) {
       break;
    // Old, we should never get this.   
     case 'user':
-      die("Should be using the users.user_posts column for this.");
+      error_die("Should be using the users.user_posts column for this.");
    }
    if(!$result = mysql_query($sql, $db))
      return("ERROR");
@@ -339,7 +271,7 @@ function check_user_pw($username, $password, $db) {
 	$resultID = mysql_query($sql, $db);
 	if (!$resultID) {
 		echo mysql_error() . "<br>";
-		die("Error doing DB query in check_user_pw()");
+		error_die("Error doing DB query in check_user_pw()");
 	}
 	return mysql_num_rows($resultID);
 } // check_user_pw()
@@ -354,7 +286,7 @@ function get_pmsg_count($user_id, $db) {
 	$resultID = mysql_query($sql);
 	if (!$resultID) {
 		echo mysql_error() . "<br>";
-		die("Error doing DB query in get_pmsg_count");
+		error_die("Error doing DB query in get_pmsg_count");
 	}
 	return mysql_num_rows($resultID);
 } // get_pmsg_count()
@@ -370,7 +302,7 @@ function check_username($username, $db) {
 	$resultID = mysql_query($sql);
 	if (!$resultID) {
 		echo mysql_error() . "<br>";
-		die("Error doing DB query in check_username()");
+		error_die("Error doing DB query in check_username()");
 	}
 	return mysql_num_rows($resultID);
 } // check_username()
@@ -1160,7 +1092,7 @@ function is_first_post($topic_id, $post_id, $db) {
 function censor_string($string, $db) {
    $sql = "SELECT word, replacement FROM words";
    if(!$r = mysql_query($sql, $db))
-      die("Error, could not contact the database! Please check your database settings in config.php");
+      error_die("Error, could not contact the database! Please check your database settings in config.php");
    while($w = mysql_fetch_array($r)) {
       $word = quotemeta(stripslashes($w[word]));
       $replacement = stripslashes($w[replacement]);
@@ -1377,7 +1309,7 @@ function sync($db, $id, $type) {
    		$sql = "SELECT max(post_id) AS last_post FROM posts WHERE forum_id = $id";
    		if(!$result = mysql_query($sql, $db))
    		{
-   			die("Could not get post ID");
+   			error_die("Could not get post ID");
    		}
    		if($row = mysql_fetch_array($result))
    		{
@@ -1387,7 +1319,7 @@ function sync($db, $id, $type) {
    		$sql = "SELECT count(post_id) AS total FROM posts WHERE forum_id = $id";
    		if(!$result = mysql_query($sql, $db))
    		{
-   			die("Could not get post count");
+   			error_die("Could not get post count");
    		}
    		if($row = mysql_fetch_array($result))
    		{
@@ -1397,7 +1329,7 @@ function sync($db, $id, $type) {
    		$sql = "SELECT count(topic_id) AS total FROM topics WHERE forum_id = $id";
    		if(!$result = mysql_query($sql, $db))
    		{
-   			die("Could not get topic count");
+   			error_die("Could not get topic count");
    		}
    		if($row = mysql_fetch_array($result))
    		{
@@ -1407,7 +1339,7 @@ function sync($db, $id, $type) {
    		$sql = "UPDATE forums SET forum_last_post_id = '$last_post', forum_posts = $total_posts, forum_topics = $total_topics WHERE forum_id = $id";
    		if(!$result = mysql_query($sql, $db))
    		{
-   			die("Could not update forum $id");
+   			error_die("Could not update forum $id");
    		}
    	break;
 
@@ -1415,7 +1347,7 @@ function sync($db, $id, $type) {
    		$sql = "SELECT max(post_id) AS last_post FROM posts WHERE topic_id = $id";
    		if(!$result = mysql_query($sql, $db))
    		{
-   			die("Could not get post ID");
+   			error_die("Could not get post ID");
    		}
    		if($row = mysql_fetch_array($result))
    		{
@@ -1425,7 +1357,7 @@ function sync($db, $id, $type) {
    		$sql = "SELECT count(post_id) AS total FROM posts WHERE topic_id = $id";
    		if(!$result = mysql_query($sql, $db))
    		{
-   			die("Could not get post count");
+   			error_die("Could not get post count");
    		}
    		if($row = mysql_fetch_array($result))
    		{
@@ -1435,7 +1367,7 @@ function sync($db, $id, $type) {
    		$sql = "UPDATE topics SET topic_replies = $total_posts, topic_last_post_id = $last_post WHERE topic_id = $id";
    		if(!$result = mysql_query($sql, $db))
    		{
-   			die("Could not update topic $id");
+   			error_die("Could not update topic $id");
    		}
    	break;
 
@@ -1443,7 +1375,7 @@ function sync($db, $id, $type) {
    		$sql = "SELECT forum_id FROM forums";
    		if(!$result = mysql_query($sql, $db))
    		{
-   			die("Could not get forum IDs");
+   			error_die("Could not get forum IDs");
    		}
    		while($row = mysql_fetch_array($result))
    		{
@@ -1455,7 +1387,7 @@ function sync($db, $id, $type) {
    		$sql = "SELECT topic_id FROM topics";
    		if(!$result = mysql_query($sql, $db))
    		{
-   			die("Could not get topic ID's");
+   			error_die("Could not get topic ID's");
    		}
    		while($row = mysql_fetch_array($result))
    		{

@@ -1,5 +1,5 @@
-<?  session_start();
-include('../../config/config.php');
+<?php
+session_start();
 
 /***************************************************************************
                             newtopic.php  -  description
@@ -20,16 +20,24 @@ include('../../config/config.php');
  *   (at your option) any later version.
  *
  ***************************************************************************/
-include('extention.inc');
+$require_current_course = TRUE;
+$langFiles = 'phpbb';
+$require_help = TRUE;
+$helpTopic = 'Forums';
+include '../../include/baseTheme.php';
+$nameTools = $langUsers . " ($langUserNumber : $countUser)";
+$tool_content = "";
+
 // Set the error reporting to a sane value, 'cause we haven't included auth.php yet..
-error_reporting  (E_ERROR | E_WARNING | E_PARSE); // This will NOT report uninitialized variables
+//error_reporting  (E_ERROR | E_WARNING | E_PARSE); // This will NOT report uninitialized variables
+error_reporting(E_ALL); //xxx: in debug; else uncomment previous line and delete this one
 if($cancel) {
-	header("Location: viewforum.$phpEx?forum=$forum");
+	header("Location: viewforum.php?forum=$forum");
 }
 
-include('functions.'.$phpEx);
-include('config.'.$phpEx);
-require('auth.'.$phpEx);
+include('functions.php');
+include('config.php');
+require('auth.php');
 $pagetitle = "New Topic";
 $pagetype = "newtopic";
 $sql = "SELECT forum_name, forum_access, forum_type FROM forums WHERE (forum_id = '$forum')";
@@ -80,10 +88,6 @@ if($submit) {
 	     {
 		error_die($l_nopost);
 	     }
-	   if(is_banned($userdata[user_id], "username", $db))
-	     {
-		error_die($l_banned);
-	     }
 	}
       if($userdata[user_id] != -1) 
 	{
@@ -118,7 +122,6 @@ if($submit) {
      $is_html_disabled = true;
    }
    
-
    if($allow_bbcode == 1 && !($_POST['bbcode']))
      $message = bbencode($message, $is_html_disabled);
    
@@ -203,67 +206,30 @@ if($submit) {
    // Subtract 1 because we want the nr of replies, not the nr of posts.
    
    $forward = 1;
-   include('page_header.'.$phpEx);
-
-
-
+   include('page_header.php');
   
-   echo "<br><TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACEING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"$tablewidth\">";
-   echo "<TR><TD  BGCOLOR=\"$table_bgcolor\"><TABLE BORDER=\"0\" CALLPADDING=\"1\" CELLSPACEING=\"1\" WIDTH=\"100%\">";
-	echo "<TR BGCOLOR=\"$color1\" ALIGN=\"LEFT\"><TD><font face=\"arial, helvetica\" size=\"2\"><P>";
-   echo "<P><BR><center>$l_stored<P>$l_click
-   <a href=\"viewtopic.$phpEx?topic=$topic_id&forum=$forum&$total_topic\">$l_here</a>
-   $l_viewmsg<p>$l_click <a href=\"viewforum.$phpEx?forum=$forum_id&total_forum\">$l_here</a> $l_returntopic</center><P></font>";
-   echo "</TD></TR></TABLE></TD></TR></TABLE><br>"; 
+   $tool_content .= "<br><TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACEING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"$tablewidth\">";
+   $tool_content .= "<TR><TD  BGCOLOR=\"$table_bgcolor\"><TABLE BORDER=\"0\" CALLPADDING=\"1\" CELLSPACEING=\"1\" WIDTH=\"100%\">";
+   $tool_content .= "<TR BGCOLOR=\"$color1\" ALIGN=\"LEFT\"><TD><font face=\"arial, helvetica\" size=\"2\"><P>";
+   $tool_content .= "<P><BR><center>$l_stored<P>$l_click <a href=\"viewtopic.php?topic=$topic_id&forum=$forum&$total_topic\">$l_here</a>$l_viewmsg<p>$l_click <a href=\"viewforum.php?forum=$forum_id&total_forum\">$l_here</a> $l_returntopic</center><P></font>";
+   $tool_content .= "</TD></TR></TABLE></TD></TR></TABLE><br>"; 
    
 } else {
-   include('page_header.'.$phpEx);
+   include('page_header.php');
 
 
 // ADDED BY CLAROLINE: exclude non identified visitors
 if (!$uid AND !$fakeUid){
-	echo "<center><br><br><font face=\"arial, helvetica\" size=2>$langLoginBeforePost1<br>
-		$langLoginBeforePost2<a href=../../index.php>$langLoginBeforePost3.</a></center>";
+	$tool_content .= "<center><br><br><font face=\"arial, helvetica\" size=2>$langLoginBeforePost1<br>$langLoginBeforePost2<a href=../../index.php>$langLoginBeforePost3.</a></center>";
+	draw($tool_content, 0);
 	exit();
 }
 
 // END ADDED BY CLAROLINE exclude visitors unidentified
 
-?>
+$tool_content .= "<FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\"><TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"$tablewidth\"><TR><TD  BGCOLOR=\"$table_bgcolor\"><TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"1\" WIDTH=\"99%\"><TR ALIGN=\"LEFT\"><TD  BGCOLOR=\"$color1\" width=\"20%\"><font size=\"$FontSize2\" face=\"$FontFace\"><b>$l_subject:</b></TD><TD  BGCOLOR=\"$color2\"><INPUT TYPE=\"TEXT\" NAME=\"subject\" SIZE=\"50\" MAXLENGTH=\"100\"></TD></TR><TR ALIGN=\"LEFT\"><TD  valign=top BGCOLOR=\"$color1\" width=\"20%\"><font size=\"$FontSize2\" face=\"$FontFace\"><b>$l_body:</b><br><br></font></TD><TD  BGCOLOR=\"$color2\"><TEXTAREA NAME=\"message\" ROWS=14 COLS=50 WRAP=\"VIRTUAL\"></TEXTAREA></TD></TR><TR><TD  BGCOLOR=\"$color1\" colspan=2 ALIGN=\"CENTER\"><font size=\"$FontSize2\" face=\"$FontFace\"><INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\"><INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">&nbsp;<INPUT TYPE=\"SUBMIT\" NAME=\"cancel\" VALUE=\"$l_cancelpost\"></TD></TR></TABLE></TD></TR></TABLE></FORM>";
 
-	<FORM ACTION="<?php echo $PHP_SELF?>" METHOD="POST">
-	<TABLE BORDER="0" CELLPADDING="1" CELLSPACING=0" ALIGN="CENTER" VALIGN="TOP" WIDTH="<?php echo $tablewidth?>">
-<TR><TD  BGCOLOR="<?php echo $table_bgcolor?>">
-	<TABLE BORDER="0" CELLPADDING="1" CELLSPACING=1" WIDTH="100%">
-	<TR ALIGN="LEFT">
-		<TD  BGCOLOR="<?php echo $color1?>" width=20%><font size="<?php echo $FontSize2?>" face="<?php echo $FontFace?>">
-		<b><?php echo $l_subject?>:</b></TD>
-		<TD  BGCOLOR="<?php echo $color2?>"> <INPUT TYPE="TEXT" NAME="subject" SIZE="50" MAXLENGTH="100"></TD>
-	</TR>
-	<TR ALIGN="LEFT">
-		<TD  valign=top BGCOLOR="<?php echo $color1?>" width=20%><font size="<?php echo $FontSize2?>" face="<?php echo $FontFace?>">
-		<b><?php echo $l_body?>:</b><br><br>
-
-
-		</font></TD>
-		<TD  BGCOLOR="<?php echo $color2?>"><TEXTAREA NAME="message" ROWS=14 COLS=50 WRAP="VIRTUAL"></TEXTAREA></TD>
-	</TR>
-	
-	<TR>
-		<TD  BGCOLOR="<?php echo $color1?>" colspan=2 ALIGN="CENTER">
-		<font size="<?php echo $FontSize2?>" face="<?php echo $FontFace?>">
-		<INPUT TYPE="HIDDEN" NAME="forum" VALUE="<?php echo $forum?>">
-		<INPUT TYPE="SUBMIT" NAME="submit" VALUE="<?php echo $l_submit?>">
-		&nbsp;<INPUT TYPE="SUBMIT" NAME="cancel" VALUE="<?php echo $l_cancelpost?>">
-		</TD>
-	</TR>
-	</TABLE>
-</TD>
-</TR>
-</TABLE>
-</FORM>
-
-<?php
 }
-require('page_tail.'.$phpEx);
+require('page_tail.php');
+draw($tool_content, 2);
 ?>

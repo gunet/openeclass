@@ -1,4 +1,4 @@
-<?  session_start();
+<?php  session_start();
 /***************************************************************************
                             reply.php  -  description
                              -------------------
@@ -18,14 +18,21 @@
  *   (at your option) any later version.
  *
  ***************************************************************************/
-include('extention.inc');
+$require_current_course = TRUE;
+$langFiles = 'phpbb';
+$require_help = TRUE;
+$helpTopic = 'Forums';
+include '../../include/baseTheme.php';
+$nameTools = $langUsers . " ($langUserNumber : $countUser)";
+$tool_content = "";
+
 if(isset($cancel) && $cancel) {
-	header("Location: viewtopic.$phpEx?topic=$topic&forum=$forum");
+	header("Location: viewtopic.php?topic=$topic&forum=$forum");
 }
 
-include('functions.'.$phpEx);
-include('config.'.$phpEx);
-require('auth.'.$phpEx);
+include('functions.php');
+include('config.php');
+require('auth.php');
 $pagetitle = "Post Reply";
 $pagetype = "reply";
 
@@ -77,28 +84,28 @@ if($submit) {
       }
       else if($username == '' || $password == '') {
 	 // no valid session, need to check user/pass.
-	 include('page_header.'.$phpEx);
+	 include('page_header.php');
 	 error_die($l_userpass);
       }
 
       if($userdata[user_level] == -1) {
-	 include('page_header.'.$phpEx);
+	 include('page_header.php');
 	 error_die($l_userremoved);
       }
       if($userdata[user_id] != -1) {
 	 $md_pass = md5($password);
 	 $userdata = get_userdata($username, $db);
 	 if($md_pass != $userdata["user_password"]) {
-	    include('page_header.'.$phpEx);
+	    include('page_header.php');
 	    error_die($l_wrongpass);
 	 }	
       }
       if($forum_access == 3 && $userdata[user_level] < 2) {
-	 include('page_header.'.$phpEx);
+	 include('page_header.php');
 	 error_die($l_nopost);
       }
       if(is_banned($userdata[user_id], "username", $db)) {
-	 include('page_header.'.$phpEx);
+	 include('page_header.php');
 	 error_die($l_banned);
       }
       if($userdata[user_id] != -1) {
@@ -109,7 +116,7 @@ if($submit) {
    }
    else {            
       if($forum_access == 3 && $userdata[user_level] < 2) {
-	 include('page_header.'.$phpEx);
+	 include('page_header.php');
 	 error_die($l_nopost);
       }
    }
@@ -120,7 +127,7 @@ if($submit) {
      {
 	   if (!check_priv_forum_auth($userdata[user_id], $forum, TRUE, $db))
 	   {
-	      include('page_header.'.$phpEx);
+	      include('page_header.php');
 	      error_die("$l_privateforum $l_nopost");
 	   }
 	}
@@ -230,91 +237,46 @@ if($submit) {
    // Subtract 1 because we want the nr of replies, not the nr of posts.
    
    $forward = 1;
-   include('page_header.'.$phpEx);
-
-
-
-  
+   include('page_header.php');
    
-   echo "<br><TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACEING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"$tablewidth\">";
-   echo "<TR><TD  BGCOLOR=\"$table_bgcolor\"><TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"1\" WIDTH=\"100%\">";
-   echo "<TR BGCOLOR=\"$color1\" ALIGN=\"LEFT\"><TD><font face='arial, helvetica' size=2><P>";
-   echo "<P><BR><center>$l_stored<ul>$l_click <a href=\"viewtopic.$phpEx?topic=$topic&forum=$forum&$total_topic\">$l_here</a> $l_viewmsg<P>";
-   echo "$l_click <a href=\"viewforum.$phpEx?forum=$forum&$total_forum\">$l_here</a> $l_returntopic</ul></center><P></font>";
-   echo "</TD></TR></TABLE></TD></TR></TABLE><br>";
+   $tool_content .= "<br><TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACEING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"$tablewidth\">";
+   $tool_content .= "<TR><TD  BGCOLOR=\"$table_bgcolor\"><TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"1\" WIDTH=\"100%\">";
+   $tool_content .= "<TR BGCOLOR=\"$color1\" ALIGN=\"LEFT\"><TD><font face='arial, helvetica' size=2><P>";
+   $tool_content .= "<P><BR><center>$l_stored<ul>$l_click <a href=\"viewtopic.$phpEx?topic=$topic&forum=$forum&$total_topic\">$l_here</a> $l_viewmsg<P>";
+   $tool_content .= "$l_click <a href=\"viewforum.$phpEx?forum=$forum&$total_forum\">$l_here</a> $l_returntopic</ul></center><P></font>";
+   $tool_content .= "</TD></TR></TABLE></TD></TR></TABLE><br>";
    
 } else {
 	// Private forum logic here.
-	
-	if(($forum_type == 1) && !$user_logged_in && !$logging_in) 
-	{
-		require('page_header.'.$phpEx);
-
-	?>
-	<FORM ACTION="<?php echo $PHP_SELF?>" METHOD="POST">
-		<TABLE BORDER="0" CELLPADDING="1" CELLSPACING="0" ALIGN="CENTER" VALIGN="TOP" WIDTH="<?php echo $tablewidth?>">
-			<TR>
-				<TD BGCOLOR="<?php echo $table_bgcolor?>">
-					<TABLE BORDER="0" CELLPADDING="1" CELLSPACING="1" WIDTH="100%">
-						<TR BGCOLOR="<?php echo $color1?>" ALIGN="LEFT">
-							<TD ALIGN="CENTER"><?php echo $l_private?></TD>
-						</TR>
-						<TR BGCOLOR="<?php echo $color2?>" ALIGN="LEFT">
-							<TD ALIGN="CENTER">
-								
-							</TD>
-						</TR>
-						<TR BGCOLOR="<?php echo $color1?>" ALIGN="LEFT">
-							<TD ALIGN="CENTER">
-								<INPUT TYPE="HIDDEN" NAME="forum" VALUE="<?php echo $forum?>">
-								<INPUT TYPE="HIDDEN" NAME="topic" VALUE="<?php echo $topic?>">
-								<INPUT TYPE="HIDDEN" NAME="post" VALUE="<?php echo $post?>">
-								<INPUT TYPE="HIDDEN" NAME="quote" VALUE="<?php echo $quote?>">
-								<INPUT TYPE="SUBMIT" NAME="logging_in" VALUE="<?php echo $l_enter?>">
-							</TD>
-						</TR>
-					</TABLE>
-				</TD>
-			</TR>
-		</TABLE>
-	</FORM>
-	<?php
-		require('page_tail.'.$phpEx);
+	if(($forum_type == 1) && !$user_logged_in && !$logging_in) {
+		require('page_header.php');
+		$tool_content .= "<FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\"><TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"$tablewidth\"><TR><TD BGCOLOR=\"$table_bgcolor\"><TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"1\" WIDTH=\"99%\"><TR BGCOLOR=\"$color1\" ALIGN=\"LEFT\"><TD ALIGN=\"CENTER\">$l_private</TD></TR><TR BGCOLOR=\"$color2\" ALIGN=\"LEFT\"><TD ALIGN=\"CENTER\"></TD></TR><TR BGCOLOR=\"$color1\" ALIGN=\"LEFT\"><TD ALIGN=\"CENTER\"><INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\"><INPUT TYPE=\"HIDDEN\" NAME=\"topic\" VALUE=\"$topic\"><INPUT TYPE=\"HIDDEN\" NAME=\"post\" VALUE=\"$post\"><INPUT TYPE=\"HIDDEN\" NAME=\"quote\" VALUE=\"$quote\"><INPUT TYPE=\"SUBMIT\" NAME=\"logging_in\" VALUE=\"$l_enter\"></TD></TR></TABLE></TD></TR></TABLE></FORM>";
+		require('page_tail.php');
+		draw($tool_content, 0);
 		exit();
-	}
-   else 
-     {
-	if ($logging_in)
-	  {
-	     if ($username == '' || $password == '') 
-	       {
+} else {
+	if ($logging_in) {
+	     if ($username == '' || $password == '') {
 		  error_die($l_userpass);
-	       }
-	     if (!check_username($username, $db)) 
-	       {
+	     }
+	     if (!check_username($username, $db)) {
 		  error_die($l_nouser);
-	       }
-	     if (!check_user_pw($username, $password, $db)) 
-	       {
+	     }
+	     if (!check_user_pw($username, $password, $db)) {
 		  error_die($l_wrongpass);
-	       }
-	     
+	     }
 	     /* if we get here, user has entered a valid username and password combination. */
 	     $userdata = get_userdata($username, $db);
 	     $sessid = new_session($userdata[user_id], $REMOTE_ADDR, $sesscookietime, $db);	
 	     set_session_cookie($sessid, $sesscookietime, $sesscookiename, $cookiepath, $cookiedomain, $cookiesecure);
-	  }
-	
-	require('page_header.'.$phpEx);
-
-
-
-	 // ADDED BY CLAROLINE: exclude non identified visitors
-if (!$uid AND !$fakeUid){
-	echo "<center><br><br><font face='arial, helvetica' size=2>$langLoginBeforePost1<br>
-		$langLoginBeforePost2<a href=../../index.php>$langLoginBeforePost3</a></center>";
-	exit();
-}
+	}
+	require('page_header.php');
+	// ADDED BY CLAROLINE: exclude non identified visitors
+	if (!$uid AND !$fakeUid) {
+		$tool_content .= "<center><br><br><font face='arial, helvetica' size=2>$langLoginBeforePost1<br>$langLoginBeforePost2<a href=../../index.php>$langLoginBeforePost3</a></center>";
+		$draw($tool_content, 0);
+		exit();
+	}
 	
 	if ($forum_type == 1)
 	  {
@@ -324,73 +286,43 @@ if (!$uid AND !$fakeUid){
 	       {
 		  error_die("$l_privateforum $l_nopost");
 	       }
-	     
 	     // Ok, looks like we're good.
 	  }
-	
      }	
-	
-   
-?>
-	<FORM ACTION="<?php echo $PHP_SELF?>" METHOD="POST">
-	<TABLE BORDER="0" CELLPADDING="1" CELLSPACING="0" ALIGN="CENTER" VALIGN="TOP" WIDTH="<?php echo $tablewidth?>"><TR><TD  BGCOLOR="<?php echo $table_bgcolor?>">
-	<TABLE BORDER="0" CELLPADDING="1" CELLSPACING="1" WIDTH="100%">
-	
+	$tool_content .= "<FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\"><TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"$tablewidth\"><TR><TD  BGCOLOR=\"$table_bgcolor\"><TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"1\" WIDTH=\"99%\">";
 
-<?PHP
 	if (!$user_logged_in) { 
 		// no session, need a password.
 		
 	}
-?>
 
-	<TR ALIGN="LEFT">
-		<TD  VALIGN=TOP BGCOLOR="<?php echo $color1?>" width=25%><font size="<?php echo $FontSize2?>" face="<?php echo $FontFace?>"><b><?php echo $l_body?>:</b><br><br>
-		<?php
-		
-		if($quote) {
-			$sql = "SELECT pt.post_text, p.post_time, u.username FROM posts p, users u, posts_text pt WHERE p.post_id = '$post' AND p.poster_id = u.user_id AND pt.post_id = p.post_id";
-			if($r = mysql_query($sql, $db)) {
-				$m = mysql_fetch_array($r);
-				$text = desmile($m[post_text]);
-				$text = str_replace("<BR>", "\n", $text);
-				$text = stripslashes($text);
-				$text = bbdecode($text);
-				$text = undo_make_clickable($text);
-				$text = str_replace("[addsig]", "", $text);
-				$syslang_quotemsg = get_syslang_string($sys_lang, "l_quotemsg");
-				eval("\$reply = \"$syslang_quotemsg\";");
-			}
-			else {
-				error_die("Error Contacting database. Please try again.\n<br>$sql");
-			}
-		}				
-		?>		
-		</font></TD>
-		<TD  BGCOLOR="<?php echo $color2?>">
-			<TEXTAREA NAME="message" ROWS=15 COLS=50 WRAP="VIRTUAL"><?php echo $reply?></TEXTAREA>
-		</TD>
-	</TR>
-	
-	<TR>
-		<TD  BGCOLOR="<?php echo $color1?>" colspan=2 ALIGN="CENTER">
-                <font size="<?php echo $FontSize2?>" face="<?php echo $FontFace?>">
-		<INPUT TYPE="HIDDEN" NAME="forum" VALUE="<?php echo $forum?>">
-		<INPUT TYPE="HIDDEN" NAME="topic" VALUE="<?php echo $topic?>">
-		<INPUT TYPE="HIDDEN" NAME="quote" VALUE="<?php echo $quote?>">
-		<INPUT TYPE="SUBMIT" NAME="submit" VALUE="<?php echo $l_submit?>">
-		&nbsp;<INPUT TYPE="SUBMIT" NAME="cancel" VALUE="<?php echo $l_cancelpost?>">
-		</TD>
-	</TR>
-	</TABLE></TD></TR></TABLE>
-	</FORM>
-<?php     
+	$tool_content .= "<TR ALIGN=\"LEFT\"><TD  VALIGN=TOP BGCOLOR=\"$color1\" width=\"25%\"><font size=\"$FontSize2\" face=\"$FontFace\"><b>$l_body:</b><br><br>";
+	if($quote) {
+		$sql = "SELECT pt.post_text, p.post_time, u.username FROM posts p, users u, posts_text pt WHERE p.post_id = '$post' AND p.poster_id = u.user_id AND pt.post_id = p.post_id";
+		if($r = mysql_query($sql, $db)) {
+			$m = mysql_fetch_array($r);
+			$text = desmile($m[post_text]);
+			$text = str_replace("<BR>", "\n", $text);
+			$text = stripslashes($text);
+			$text = bbdecode($text);
+			$text = undo_make_clickable($text);
+			$text = str_replace("[addsig]", "", $text);
+			$syslang_quotemsg = get_syslang_string($sys_lang, "l_quotemsg");
+			eval("\$reply = \"$syslang_quotemsg\";");
+		}
+		else {
+			error_die("Error Contacting database. Please try again.\n<br>$sql");
+		}
+	}				
+	$tool_content .= "</font></TD><TD  BGCOLOR=\"$color2\"><TEXTAREA NAME=\"message\" ROWS=15 COLS=50 WRAP=\"VIRTUAL\">$reply</TEXTAREA></TD></TR><TR><TD  BGCOLOR=\"$color1\" colspan=2 ALIGN=\"CENTER\"><font size=\"$FontSize2\" face=\"$FontFace\"><INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\"><INPUT TYPE=\"HIDDEN\" NAME=\"topic\" VALUE=\"$topic\"><INPUT TYPE=\"HIDDEN\" NAME=\"quote\" VALUE=\"$quote\"><INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">&nbsp;<INPUT TYPE=\"SUBMIT\" NAME=\"cancel\" VALUE=\"$l_cancelpost\"></TD></TR></TABLE></TD></TR></TABLE></FORM>";
+
 	// Topic review
-	echo "<font size=\"$FontSize2\" face=\"$FontFace\">";
-	echo "<BR><CENTER>";
-	echo "<a href=\"viewtopic.$phpEx?topic=$topic&forum=$forum\" target=\"_blank\"><b>$l_topicreview</b></a>";
-	echo "</CENTER><BR>";
+	$tool_content .= "<font size=\"$FontSize2\" face=\"$FontFace\">";
+	$tool_content .= "<BR><CENTER>";
+	$tool_content .= "<a href=\"viewtopic.php?topic=$topic&forum=$forum\" target=\"_blank\"><b>$l_topicreview</b></a>";
+	$tool_content .= "</CENTER><BR>";
 
 }
-require('page_tail.'.$phpEx);
+require('page_tail.php');
+draw($tool_content,2);
 ?>

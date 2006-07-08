@@ -31,22 +31,9 @@ $mtime = explode(" ",$mtime);
 $mtime = $mtime[1] + $mtime[0];
 $starttime = $mtime;
 
-/* Who's Online Hack */
-$IP=$REMOTE_ADDR;
-
-if($pagetype == "index") {
-	$users_online = get_whosonline($IP, $userdata[username], 0, $db);
-}
-if($pagetype == "viewforum" || $pagetype == "viewtopic") {
-	$users_online = get_whosonline($IP, $userdata[username], $forum, $db);
-}
 if($pagetype == "admin") {
 	$header_image = "../$header_image";
 }
-
-
-$login_logout_link = make_login_logout_link($user_logged_in, $url_phpbb);
-
 
 include('../../config/config.php');
 include('../../include/settings.php');
@@ -90,8 +77,6 @@ $tool_content .="
 				$noPHP_SELF = true; //because  phpBB need always param IN URL
 				include('../../include/phpbb_header.php');
 $tool_content .= "
-				<br>
-				<a href=\"./search.php?addterms=any&forum=all&sortby=p.post_time%20desc&searchboth=both&submit=Rechercher\">$langLastMsgs</a>
 			</td>
 		</tr>
 	</table>
@@ -217,7 +202,6 @@ if ($user_logged_in) {
 			$row = @mysql_fetch_array($result);
 			$new_message = $row[count];
 			$word = ($new_message > 1) ? "messages" : "message";
-			$privmsg_url = "$url_phpbb/viewpmsg.php";
 
 			if ($new_message != 0)
 			{
@@ -237,8 +221,6 @@ switch($pagetype) {
 		$row = mysql_fetch_array($res);
 		$newest_user = $row["username"];
 		$newest_user_id = $row["user_id"];
-		$profile_url = "$url_phpbb/bb_profile.php?mode=view&user=$newest_user_id";
-		$online_url = "$url_phpbb/whosonline.php";
 		$tool_content .="
 			<TR>
 			<TD COLSPAN=\"2\" ALIGN=\"RIGHT\">
@@ -264,9 +246,6 @@ switch($pagetype) {
 			$tool_content = "<b>$l_separator</b>";
 		$tool_content .= "$topic_subject";
 		$tool_content .= "</TD></TR>";
-		break;
-	case 'privmsgs':
-		$tool_content .= "<TR><TD COLSPAN=\"2\" ALIGN=\"CENTER\"><FONT FACE=\"$FontFace\" SIZE=\"$FontSize2\" COLOR=\"$textcolor\"> [<a href=\"$url_phpbb/sendpmsg.php\">$l_sendpmsg</a>] <br> </TD> </TR>";
 		break;
 }
 $tool_content .= "</TABLE> </center>";
