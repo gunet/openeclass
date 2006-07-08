@@ -23,7 +23,7 @@ $require_current_course = TRUE;
 $langFiles = 'phpbb';
 $require_help = TRUE;
 $helpTopic = 'Forums';
-include '../../baseTheme.php';
+include '../../include/baseTheme.php';
 $nameTools = $langUsers . " ($langUserNumber : $countUser)";
 $tool_content = "";
 
@@ -209,6 +209,6 @@ for($i = 0; $i < $total_categories; $i++) {
     }
   }
 }
-require('page_tail.'.$phpEx);
+require('page_tail.php');
 draw($tool_content, 2, 'user');
 ?>

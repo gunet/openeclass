@@ -136,13 +136,12 @@ function end_user_session($userid, $db) {
  * $user_logged_in.
  */
 function print_login_status($user_logged_in, $username, $url_phpbb) {
-	global $phpEx;
 	global $l_loggedinas, $l_notloggedin, $l_logout, $l_login;
 	
 	if($user_logged_in) {
-		echo "<b>$l_loggedinas $username. <a href=\"$url_phpbb/logout.$phpEx\">$l_logout.</a></b><br>\n";
+		echo "<b>$l_loggedinas $username. <a href=\"$url_phpbb/logout.php\">$l_logout.</a></b><br>\n";
 	} else {
-		echo "<b>$l_notloggedin. <a href=\"$url_phpbb/login.$phpEx\">$l_login.</a></b><br>\n";
+		echo "<b>$l_notloggedin. <a href=\"$url_phpbb/login.php\">$l_login.</a></b><br>\n";
 	}
 } // print_login_status()
 
@@ -151,12 +150,11 @@ function print_login_status($user_logged_in, $username, $url_phpbb) {
  * on whether the user's logged in or not.
  */
 function make_login_logout_link($user_logged_in, $url_phpbb) {
-	global $phpEx;
 	global $l_logout, $l_login;
 	if ($user_logged_in) {
-		$link = "<a href=\"$url_phpbb/logout.$phpEx\">$l_logout</a>";
+		$link = "<a href=\"$url_phpbb/logout.php\">$l_logout</a>";
 	} else {
-		$link = "<a href=\"$url_phpbb/login.$phpEx\">$l_login</a>";
+		$link = "<a href=\"$url_phpbb/login.php\">$l_login</a>";
 	}
 	return $link;
 } // make_login_logout_link()
@@ -1162,7 +1160,7 @@ function is_first_post($topic_id, $post_id, $db) {
 function censor_string($string, $db) {
    $sql = "SELECT word, replacement FROM words";
    if(!$r = mysql_query($sql, $db))
-      die("Error, could not contact the database! Please check your database settings in config.$phpEx");
+      die("Error, could not contact the database! Please check your database settings in config.php");
    while($w = mysql_fetch_array($r)) {
       $word = quotemeta(stripslashes($w[word]));
       $replacement = stripslashes($w[replacement]);
@@ -1254,7 +1252,6 @@ function check_priv_forum_auth($userid, $forumid, $is_posting, $db)
  */
 function error_die($msg){
 	global $tablewidth, $table_bgcolor, $color1;
-	global $phpEx;
 	global $db, $userdata, $user_logged_in;
 	global $FontFace, $FontSize3, $textcolor, $phpbbversion;
 	global $starttime;
@@ -1270,19 +1267,19 @@ function error_die($msg){
 			</TABLE>
 		</TD></TR>
 	 	</TABLE>
-	 <br>";
-	 include('page_tail.'.$phpEx);
+	 	<br>";
+	include('page_tail.php');
 	draw($tool_content, 2);
 	exit;
 }
 
 function make_jumpbox(){
-global $phpEx, $db;
+global $db;
 global $FontFace, $FontSize2, $textcolor;
 global $l_jumpto, $l_selectforum, $l_go;
 
 	?>
-	<FORM ACTION="viewforum.<?php echo $phpEx?>" METHOD="GET">
+	<FORM ACTION="viewforum.php" METHOD="GET">
 	<SELECT NAME="forum"><OPTION VALUE="-1"><?php echo $l_selectforum?></OPTION>
 	<?php
 	  $sql = "SELECT cat_id, cat_title FROM catagories ORDER BY cat_order";
@@ -1317,13 +1314,12 @@ global $l_jumpto, $l_selectforum, $l_go;
 }
 
 function language_select($default, $name="language", $dirname="language/"){
-global $phpEx;
 	$dir = opendir($dirname);
 	$lang_select = "<SELECT NAME=\"$name\">\n";
 	while ($file = readdir($dir)) {
 		if (ereg("^lang_", $file)) {
 			$file = str_replace("lang_", "", $file);
-			$file = str_replace(".$phpEx", "", $file);
+			$file = str_replace(".php", "", $file);
 			$file == $default ? $selected = " SELECTED" : $selected = "";
 			$lang_select .= "  <OPTION$selected>$file\n";
 		}
@@ -1348,8 +1344,7 @@ function get_translated_file($file){
 }
 
 function get_syslang_string($sys_lang, $string) {
-	global $phpEx;
-	include('language/lang_'.$sys_lang.'.'.$phpEx);
+	include('language/lang_' . $sys_lang . '.php');
 	$ret_string = $$string;
 	return($ret_string);
 }
@@ -1475,7 +1470,7 @@ function sync($db, $id, $type) {
 function login_form(){
 	global $TableWidth, $table_bgcolor, $color1, $color2, $textcolor;
 	global $FontFace, $FontSize2;
-	global $phpEx, $userdata, $PHP_SELF;
+	global $userdata, $PHP_SELF;
 	global $l_userpass, $l_username, $l_password, $l_passwdlost, $l_submit;
 	global $mode, $msgid;
 
@@ -1511,7 +1506,7 @@ function login_form(){
 	</TR><TR BGCOLOR="<?php echo $color2?>">
 		<TD COLSPAN="2" ALIGN="CENTER">
 			<FONT FACE="<?php echo $FontFace?>" SIZE="<?php echo $FontSize2?>" COLOR="<?php echo $textcolor?>">
-			<a href="sendpassword.<?php echo $phpEx?>"><?php echo $l_passwdlost?></a><br><br>
+			<a href="sendpassword.php"><?php echo $l_passwdlost?></a><br><br>
 			</FONT>
 			<?PHP
 			if (isset($mode))

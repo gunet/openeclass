@@ -38,8 +38,8 @@ $url_phpbb =$urlAppend."/modules/phpbb";
 $url_admin = "$url_phpbb/admin";
 $url_images = "$url_phpbb/images";
 $url_smiles = "$url_images/smiles";
-$url_phpbb_index = $url_phpbb . '/index.' . $phpEx;
-$url_admin_index = $url_admin . '/index.' . $phpEx;
+$url_phpbb_index = $url_phpbb . '/index.php';
+$url_admin_index = $url_admin . '/index.php';
 
 /* -- Cookie settings (lastvisit, userid) -- */
 // Most likely you can leave this be, however if you have problems

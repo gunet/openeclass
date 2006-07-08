@@ -18,10 +18,17 @@
  *   (at your option) any later version.
  *
  ***************************************************************************/
-include('extention.inc');
-include('functions.'.$phpEx);
-include('config.'.$phpEx);
-require('auth.'.$phpEx);
+$require_current_course = TRUE;
+$langFiles = 'phpbb';
+$require_help = TRUE;
+$helpTopic = 'Forums';
+include '../../include/baseTheme.php';
+$nameTools = $langUsers . " ($langUserNumber : $countUser)";
+$tool_content = "";
+
+include('functions.php');
+include('config.php');
+require('auth.php');
 $pagetitle = $l_viewforum;
 $pagetype = "viewforum";
 if($forum == -1)
@@ -38,46 +45,52 @@ $forum_name = own_stripslashes($myrow[forum_name]);
 
 if(($myrow[forum_type] == 1) && !$user_logged_in && !$logging_in) 
 {
-	require('page_header.'.$phpEx);
-?>
-<FORM ACTION="<?php echo $PHP_SELF?>" METHOD="POST">
-	<TABLE BORDER="0" CELLPADDING="1" CELLSPACING="0" ALIGN="CENTER" VALIGN="TOP" WIDTH="<?php echo $tablewidth?>">
-		<TR>
-			<TD BGCOLOR="<?php echo $table_bgcolor?>">
-				<TABLE BORDER="0" CELLPADDING="1" CELLSPACING="1" WIDTH="100%">
-					<TR BGCOLOR="<?php echo $color1?>" ALIGN="LEFT">
-						<TD ALIGN="CENTER"><font face='arial, helvetica' size=2><?php echo $l_private?></TD>
-					</TR>
-					<TR BGCOLOR="<?php echo $color2?>" ALIGN="LEFT">
-						<TD ALIGN="CENTER">
-							<TABLE BORDER="0" CELLPADDING="1" CELLSPACING="0">
-							  <TR>
-							    <TD>
-							      <font face='arial, helvetica' size=2 COLOR="<?php echo $textcolor?>">
-							      <b>User Name: &nbsp;</b></font></TD><TD><INPUT TYPE="TEXT" NAME="username" SIZE="25" MAXLENGTH="40" VALUE="<?php echo $userdata[username]?>">
-							    </TD>
-							  </TR><TR>
-							    <TD>
-							      <FONT FACE="<?php echo $FontFace?>" SIZE="<?php echo $FontSize2?>" COLOR="<?php echo $textcolor?>">
-							      <b>Password: </b></TD><TD><INPUT TYPE="PASSWORD" NAME="password" SIZE="25" MAXLENGTH="25">
-							    </TD>
-							  </TR>
-							</TABLE>
-						</TD>
-					</TR>
-					<TR BGCOLOR="<?php echo $color1?>" ALIGN="LEFT">
-						<TD ALIGN="CENTER">
-							<INPUT TYPE="HIDDEN" NAME="forum" VALUE="<?php echo $forum?>">
-							<INPUT TYPE="SUBMIT" NAME="logging_in" VALUE="<?php echo $l_enter?>">
-						</TD>
-					</TR>
-				</TABLE>
-			</TD>
-		</TR>
+	require('page_header.php');
+
+$tool_content .= "
+<FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
+<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"$tablewidth\">
+<TR>
+	<TD BGCOLOR=\"$table_bgcolor\">
+	<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"1\" WIDTH=\"99%\">
+	<TR BGCOLOR=\"$color1\" ALIGN=\"LEFT\">
+		<TD ALIGN=\"CENTER\"><font face='arial, helvetica' size=2>$l_private</TD>
+	</TR>
+	<TR BGCOLOR=\"$color2\" ALIGN=\"LEFT\">
+		<TD ALIGN=\"CENTER\">
+			<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\">
+			<TR>
+			    <TD>
+		 	      <font face='arial, helvetica' size=2 COLOR=\"$textcolor\">
+			      <b>User Name: &nbsp;</b></font>
+			    </TD>
+			    <TD>
+			      <INPUT TYPE=\"TEXT\" NAME=\"username\" SIZE=\"25\" MAXLENGTH=\"40\" VALUE=\"$userdata[username]\">
+			    </TD>
+		       </TR>
+		       <TR>
+			    <TD>
+			      <FONT FACE=\"$FontFace\" SIZE=\"$FontSize2\" COLOR=\"$textcolor\">
+			      <b>Password: </b></TD><TD><INPUT TYPE=\"PASSWORD\" NAME=\"password\" SIZE=\"25\" MAXLENGTH=\"25\">
+			    </TD>
+		      </TR>
+		      </TABLE>
+	      </TD>
+	</TR>
+	<TR BGCOLOR=\"$color1\" ALIGN=\"LEFT\">
+		<TD ALIGN=\"CENTER\">
+			<INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
+			<INPUT TYPE=\"SUBMIT\" NAME=\"logging_in\" VALUE=\"$l_enter\">
+		</TD>
+	</TR>
 	</TABLE>
-</FORM>
-<?php
-require('page_tail.'.$phpEx);
+	</TD>
+</TR>
+</TABLE>
+</FORM>";
+
+require('page_tail.php');
+draw($tool_content, 1);
 exit();
 }
 else 
@@ -107,7 +120,7 @@ else
 		
 	}
 
-	require('page_header.'.$phpEx);
+	require('page_header.php');
 	
 	if ($myrow[forum_type] == 1)
 	{
@@ -122,27 +135,8 @@ else
 		// Ok, looks like we're good.
 	}
 
-?>
-<TABLE BORDER="0" CELLPADDING="1" CELLSPACING="0" ALIGN="CENTER" VALIGN="TOP" WIDTH="<?php echo $tablewidth?>">
-<TR><TD  BGCOLOR="<?php echo $table_bgcolor?>">
-<TABLE BORDER="0" CELLPADDING="1" CELLSPACING="1" WIDTH="100%">
-<TR BGCOLOR="<?php echo $color1?>" ALIGN="LEFT">
-	<TD WIDTH=2%>&nbsp;</TD>
-	<TD><font face="arial, helvetica" size="2">&nbsp;<?php echo $l_topic?></font></TD>
-	<TD WIDTH=9% ALIGN="CENTER"><font face="arial, helvetica" size="2">
-	<?php echo $l_replies?></font></TD>
-	<TD WIDTH=20% ALIGN="CENTER">
-<font face="arial, helvetica" size="2">
+$tool_content .= "<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"$tablewidth\"><TR><TD  BGCOLOR=\"$table_bgcolor\"><TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"1\" WIDTH=\"99%\"><TR BGCOLOR=\"$color1\" ALIGN=\"LEFT\"><TD WIDTH=2%>&nbsp;</TD><TD><font face=\"arial, helvetica\" size=\"2\">&nbsp;$l_topic</font></TD><TD WIDTH=9% ALIGN=\"CENTER\"><font face=\"arial, helvetica\" size=\"2\">$l_replies</font></TD><TD WIDTH=20% ALIGN=\"CENTER\"><font face=\"arial, helvetica\" size=\"2\">&nbsp;$l_poster</font></TD><TD WIDTH=8% ALIGN=\"CENTER\"><font face=\"arial, helvetica\" size=\"2\">$langSeen</font></TD><TD WIDTH=15% ALIGN=\"CENTER\"><font face=\"arial, helvetica\" size=\"2\">$langLastMsg</font></TD></TR>";
 
-	&nbsp;<?php echo $l_poster?></font></TD>
-	<TD WIDTH=8% ALIGN="CENTER">
-<font face="arial, helvetica" size="2">
-	<?php echo $langSeen?></font></TD>
-	<TD WIDTH=15% ALIGN="CENTER">
-<font face="arial, helvetica" size="2">
-	<?php echo $langLastMsg?></font></TD>
-</TR>
-<?php
 if(!$start) $start = 0;
    
 $sql = "SELECT t.*, u.username, u2.username as last_poster, p.post_time FROM topics t
@@ -158,19 +152,16 @@ $topics_start = $start;
    
 if($myrow = mysql_fetch_array($result)) {
    do {
-      echo"<TR>\n";
+      $tool_content .= "<TR>\n";
       $replys = $myrow["topic_replies"];
       $last_post = $myrow["post_time"];
       $last_post_datetime = $myrow["post_time"];
       
-      //list($last_post_datetime, $null) = split("by", $last_post);
       list($last_post_date, $last_post_time) = split(" ", $last_post_datetime);
       list($year, $month, $day) = explode("-", $last_post_date);
       list($hour, $min) = explode(":", $last_post_time);
       $last_post_time = mktime($hour, $min, 0, $month, $day, $year);
-      
 		 if($replys >= $hot_threshold) {
-			 
 			 if($last_post_time < $last_visit) 
 				 $image = $hot_folder_image;
 			 else 
@@ -184,13 +175,12 @@ if($myrow = mysql_fetch_array($result)) {
 		 }
 		 if($myrow[topic_status] == 1)
 			 $image = $locked_image;
-      
-      echo "<TD BGCOLOR=\"$color1\"><IMG SRC=\"$image\"></TD>\n";
+      $tool_content .= "<TD BGCOLOR=\"$color1\"><IMG SRC=\"$image\"></TD>\n";
       
       $topic_title = own_stripslashes($myrow[topic_title]);
 		$pagination = '';
 		$start = '';
-		$topiclink = "viewtopic.$phpEx?topic=$myrow[topic_id]&forum=$forum";
+		$topiclink = "viewtopic.php?topic=$myrow[topic_id]&forum=$forum";
 		if($replys+1 > $posts_per_page) 
 		{
 			$pagination .= "&nbsp;&nbsp;&nbsp;<font size=\"$FontSize3\" face=\"$FontFace\" color=\"$textcolor\">(<img src=\"$posticon\">$l_gotopage ";
@@ -232,30 +222,22 @@ if($myrow = mysql_fetch_array($result)) {
 
 		$topiclink .= "&$replys";
 
-      echo "<TD BGCOLOR=\"$color2\"><font face=\"$FontFace\" size=\"2\">&nbsp;<a href=\"$topiclink\">$topic_title</a></font>$pagination";
+      $tool_content .= "<TD BGCOLOR=\"$color2\"><font face=\"$FontFace\" size=\"2\">&nbsp;<a href=\"$topiclink\">$topic_title</a></font>$pagination";
 	      
-      echo "</TD>\n";
-      echo "<TD BGCOLOR=\"$color1\" ALIGN=\"CENTER\" VALIGN=\"MIDDLE\">
-<font face=\"arial, helvetica\" size=\"2\">$replys</font></TD>\n";
-      echo "<TD BGCOLOR=\"$color2\" ALIGN=\"CENTER\" VALIGN=\"MIDDLE\">
-      <font face=\"arial, helvetica\" size=\"2\">$myrow[prenom] $myrow[nom]</font></TD>\n";
-      echo "<TD BGCOLOR=\"$color1\" ALIGN=\"CENTER\" VALIGN=\"MIDDLE\">
-      <font face=\"arial, helvetica\" size=\"2\">$myrow[topic_views]</font></TD>\n";
-      echo "<TD BGCOLOR=\"$color2\" ALIGN=\"CENTER\" VALIGN=\"MIDDLE\"><font face=\"$FontFace\" size=\"$FontSize1\">$last_post</font></TD></TR>\n";
+      $tool_content .= "</TD>\n";
+      $tool_content .= "<TD BGCOLOR=\"$color1\" ALIGN=\"CENTER\" VALIGN=\"MIDDLE\"><font face=\"arial, helvetica\" size=\"2\">$replys</font></TD>\n";
+      $tool_content .= "<TD BGCOLOR=\"$color2\" ALIGN=\"CENTER\" VALIGN=\"MIDDLE\"><font face=\"arial, helvetica\" size=\"2\">$myrow[prenom] $myrow[nom]</font></TD>\n";
+      $tool_content .= "<TD BGCOLOR=\"$color1\" ALIGN=\"CENTER\" VALIGN=\"MIDDLE\"><font face=\"arial, helvetica\" size=\"2\">$myrow[topic_views]</font></TD>\n";
+      $tool_content .= "<TD BGCOLOR=\"$color2\" ALIGN=\"CENTER\" VALIGN=\"MIDDLE\"><font face=\"$FontFace\" size=\"$FontSize1\">$last_post</font></TD></TR>\n";
       
    } while($myrow = mysql_fetch_array($result));
 }
 else {
-	echo "<TD BGCOLOR=\"$color1\" colspan = 6 ALIGN=CENTER><font face=\"arial, helvetica\" size=\"2\">$l_notopics</TD></TR>\n";
+	$tool_content .= "<TD BGCOLOR=\"$color1\" colspan = 6 ALIGN=CENTER><font face=\"arial, helvetica\" size=\"2\">$l_notopics</TD></TR>\n";
 }
 
-
-?>
-</TABLE></TD></TR></TABLE>
-
-
-
-<?php
+$tool_content .= "</TABLE></TD></TR></TABLE>";
 }
-require('page_tail.'.$phpEx);
+require('page_tail.php');
+draw($tool_content, 2);
 ?>

@@ -82,12 +82,12 @@ if(get_magic_quotes_gpc() == 1)
 }
 
 // Check if the config file is writable (shouldn't be!!)
-$config_file_name = "config.$phpEx";
+$config_file_name = "config.php";
 if(strstr($PHP_SELF, "admin"))
 {
    if(!strstr($PHP_SELF, "topicadmin"))
    {
-     $config_file_name = "../config.$phpEx";
+     $config_file_name = "../config.php";
    }
 }
 
@@ -318,14 +318,14 @@ $last_visit = $temptime;
 /* xxx: check to use only one language */
 if(!strstr($PHP_SELF, "admin"))
 {
-   include('language/lang_'.$default_lang.'.'.$phpEx);
+   include('language/lang_' . $default_lang . '.php');
 }
 else
 {
    if(strstr($PHP_SELF, "topicadmin")) {
-     include('language/lang_'.$default_lang.'.'.$phpEx);
+     include('language/lang_' . $default_lang . '.php');
 	} else {
-     include('../language/lang_'.$default_lang.'.'.$phpEx);
+     include('../language/lang_' . $default_lang . '.php');
 	}
 }
 
@@ -337,7 +337,7 @@ $newtopic_image = get_translated_file($newtopic_image);
 $reply_image = get_translated_file($reply_image);
 
 // Set documentation locations:
-$faq_url = get_translated_file("faq.$phpEx");
+$faq_url = get_translated_file("faq.php");
 $bbref_url = $faq_url . "#bbcode";
 $smileref_url = $faq_url . "#smilies";
 
