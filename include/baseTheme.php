@@ -15,13 +15,13 @@
  */
 
 
-
 include('init.php');
 
-//template path for modules
-//include('../../template/template.inc');
-
 //template path for logged out + logged in
+if(isset($errorMessagePath)) {
+	$relPath = $errorMessagePath;
+}
+
 include($relPath."template/template.inc");
 include('tools.php');
 
@@ -42,18 +42,22 @@ function getTools($menuTypeID){
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null){
 	global $langUser, $prenom, $nom, $langLogout, $intitule,  $nameTools, $langHelp, $langAnonUser;
 	global $language, $helpTopic, $require_help, $langEclass, $langCopyrightFooter;
-	global $relPath, $urlServer;
+	global $relPath, $urlServer, $toolContent_ErrorExists;
 	global $page_name, $page_navi,$currentCourseID, $siteName, $navigation;
 	global $homePage, $courseHome, $uid, $webDir;
 	global $langChangeLang, $langUserBriefcase, $langPersonalisedBriefcase, $langAdmin, $switchLangURL;
 
+	//if an error exists (ex., sessions is lost...)
+	//show the error message and not the normal tool content
+
+	if(isset($toolContent_ErrorExists)) {
+		$toolContent = $toolContent_ErrorExists;
+		$menuTypeID = 0;
+	}
 	$toolArr = getTools($menuTypeID);
-	//	dumpArray($toolArr);
 
 	$numOfToolGroups = count($toolArr);
 
-	//	$t = new Template("../../template/classic");
-	//	echo $relPath;
 	$t = new Template($relPath ."template/classic");
 
 	$t->set_file('fh', "theme.html");
@@ -63,8 +67,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	//	if(isset($this->head_extras)) $t->set_var('HEAD_EXTRAS', $this->head_extras);
 	//	if(isset($this->body_action)) $t->set_var('BODY_ACTION', $this->body_action);
 
-	//			BEGIN constructing of left navigation
-	//			---------------------------------------------------------------------------------------------------------------------------------------------
+	//	BEGIN constructing of left navigation
+	//	---------------------------------------------------------------------------
 	$t->set_block('mainBlock', 'leftNavCategoryBlock', 'leftNavCategory');
 	//
 	//	$t->set_var('LESSON_TITLE', $currentCourseName);
@@ -379,7 +383,7 @@ function drawPerso($toolContent, $menuTypeID=null, $tool_css = null, $head_conte
 	// end breadcrumb
 
 	$t->set_var('LANG_COPYRIGHT_NOTICE', $langCopyrightFooter);
-	
+
 	$t->parse('main', 'mainBlock', false);
 
 	$t->pparse('Output', 'fh');
