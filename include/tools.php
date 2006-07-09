@@ -9,7 +9,6 @@
  * @package eclass 2.0
  */
 
-
 function getSideMenu($menuTypeID){
 
 	switch ($menuTypeID){
@@ -195,7 +194,7 @@ function loggedInMenu(){
  */
 function loggedOutMenu(){
 
-	global $webDir, $language, $urlServer, $is_eclass_unique;
+	global $webDir, $language, $urlServer, $is_eclass_unique, $mysqlMainDb;
 
 	include("$webDir/modules/lang/$language/index.inc");
 
@@ -213,7 +212,7 @@ function loggedOutMenu(){
 	array_push($sideMenuImg, "faculte.gif");
 
 	/* Check for LDAP server entries */
-	$ldap_entries = mysql_fetch_array(mysql_query("SELECT ldapserver FROM institution"));
+	$ldap_entries = mysql_fetch_array(db_query("SELECT ldapserver FROM institution", $mysqlMainDb));
 	if ($ldap_entries['ldapserver'] <> NULL) $newuser = "newuser_info.php";
 	else $newuser = "newuser.php";
 	// end of checking
