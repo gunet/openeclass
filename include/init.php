@@ -157,14 +157,21 @@ else
 $is_admin = FALSE;
 
 if (isset($require_login) and $require_login and !$uid) {
-	exit("Session is lost. Please go back to <a href='../index.php' "."target='_top'>course homepage</a>
-and refresh");
+	$toolContent_ErrorExists = "Session is lost. Please go back to the <a href='$urlServer' "."target='_top'>start page</a>
+and login";
+	$errorMessagePath = "../../";
+	//	exit("Session is lost. Please go back to <a href='../index.php' "."target='_top'>course homepage</a>
+	//and refresh");
 }
 
 if (isset($require_prof) and $require_prof) {
-	if (!check_prof())
-	exit("You are not allowed to proceed this action.
-		Please go back to <a href='../index.php' "."target='_top'>course homepage</a> and refresh");
+	if (!check_prof()) {
+		$toolContent_ErrorExists = "You are not allowed to proceed this action.
+		Please go back to the <a href=$urlServer' "."target='_top'>start page</a> and login";
+		$errorMessagePath = "../../";
+	}
+//	exit("You are not allowed to proceed this action.
+//		Please go back to <a href='../index.php' "."target='_top'>course homepage</a> and refresh");
 }
 
 
@@ -180,8 +187,12 @@ if (isset($require_current_course) and $require_current_course) {
 		$HTTP_SESSION['dbname'] = $dbname;
 	}
 	if (!isset($_SESSION['dbname'])) {
-		exit("Session is lost. Please go back to <a href='../index.php' ".
-		"target='_top'>course homepage</a> and refresh");
+
+		$toolContent_ErrorExists = "Session is lost. Please go back to the <a href='$urlServer' ".
+		"target='_top'>start page</a> and login";
+		$errorMessagePath = "../../";
+		//		exit("Session is lost. Please go back to <a href='../index.php' ".
+		//		"target='_top'>course homepage</a> and refresh");
 	} else {
 		$dbname = $_SESSION['dbname'];
 	}
@@ -232,16 +243,16 @@ if (isset($require_current_course) and $require_current_course) {
 
 	if ($visible != 2) {
 		if (!$uid) {
-			begin_page();
-			echo $langNoAdminAccess;
-			end_page();
-			exit;
+
+			$toolContent_ErrorExists = $langNoAdminAccess;
+			$errorMessagePath = "../../";
+
 		} elseif ($visible == 1) {
 			if ($statut == 0) {
-				begin_page();
-				echo $langLoginRequired;
-				end_page();
-				exit;
+
+				$toolContent_ErrorExists = $langLoginRequired;
+				$errorMessagePath = "../../";
+
 			}
 		}
 	}
