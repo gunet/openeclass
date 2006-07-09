@@ -73,9 +73,9 @@ $tool_content .= "
 // upatras.gr patch begin, atkyritsis@upnet.gr, daskalou@upnet.gr
 // use the following array for the legend icons
 $icons = array(
-2 => "<img src=\"../../images/gunet/OpenCourse.gif\" alt=\"\">",
-1 => "<img src=\"../../images/gunet/Registration.gif\" alt=\"\">",
-0 => "<img src=\"../../images/gunet/ClosedCourse.gif\" alt=\"\">"
+2 => "<img src=\"../../template/classic/img/OpenCourse.gif\" alt=\"\">",
+1 => "<img src=\"../../template/classic/img/Registration.gif\" alt=\"\">",
+0 => "<img src=\"../../template/classic/img/ClosedCourse.gif\" alt=\"\">"
 );
 
 // get the different course types available for this faculte
