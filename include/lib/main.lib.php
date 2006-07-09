@@ -274,20 +274,20 @@ function selection($entries, $name, $default = '')
 // ----------------------------------------------------------------------------
 function check_admin()
 {
-        global $uid;
+        global $uid, $urlServer;
         if (isset($uid)) {
                 $res = mysql_query("SELECT * FROM admin WHERE idUser='$uid'");
         }
         if (!isset($uid) or !$res or mysql_num_rows($res) == 0) {
-                ?>
-<center><h1>Χώρος Ελεγχόμενης Πρόσβασης</h1>
-<font face="arial, helvetica" size=2>
-<p>Η σελίδα που προσπαθείτε να μπείτε απαιτεί δικαιώματα διαχειριστή.<br>
-Παρακαλούμε πηγαίνετε στην <a href=../index.php>αρχική σελίδα</a> και
-δώστε τα στοιχεία σας.</p></font>
-</center>
-                <?
-                exit();
+        	
+        	$toolContent_ErrorExists = "
+        	<h1>Χώρος Ελεγχόμενης Πρόσβασης</h1>
+        	<p>Η σελίδα που προσπαθείτε να μπείτε απαιτεί δικαιώματα διαχειριστή.<br>
+			Παρακαλούμε πηγαίνετε στην <a href='.$urlServer.'>αρχική σελίδα</a> και
+			δώστε τα στοιχεία σας.</p>
+        	";
+			$errorMessagePath = "../../";
+
         }
 }
 
@@ -297,18 +297,27 @@ function check_admin()
 // ------------------------------------------
 
 function check_guest() {
-	global $mysqlMainDb, $uid;
+	global $mysqlMainDb, $uid, $urlServer;
 
 	$res = db_query("SELECT statut FROM user WHERE user_id = '$uid'", $mysqlMainDb);
 	$g = mysql_fetch_row($res);
 
 	if ($g[0] == 10) {
-      echo "<center><br><br><b>Χώρος Ελεγχόμενης Πρόσβασης</b><br><br><br>
-		  <font face=\"arial, helvetica\" size=2>Ο λογαριασμός Επισκέπτη που έχετε δεν σας δίνει αυτό το δικαίωμα.<br>
+		
+		
+        	$toolContent_ErrorExists = "
+        	<h1>Χώρος Ελεγχόμενης Πρόσβασης</h1>
+        	<p>Ο λογαριασμός Επισκέπτη που έχετε δεν σας δίνει αυτό το δικαίωμα.<br>
 			Επικοινωνήστε με τον διδάσκοντα του μαθήματος για την απόκτηση λογαριασμού κανονικού χρήστη.<br>
-			Επιστροφή στην <a href=\"../../index.php\">αρχική σελίδα</a><br>
-			</center>";
-			exit();
+			Επιστροφή στην <a href='.$urlServer.'>αρχική σελίδα</a></p>
+        	";
+			$errorMessagePath = "../../";
+//      echo "<center><br><br><b>Χώρος Ελεγχόμενης Πρόσβασης</b><br><br><br>
+//		  <font face=\"arial, helvetica\" size=2>Ο λογαριασμός Επισκέπτη που έχετε δεν σας δίνει αυτό το δικαίωμα.<br>
+//			Επικοινωνήστε με τον διδάσκοντα του μαθήματος για την απόκτηση λογαριασμού κανονικού χρήστη.<br>
+//			Επιστροφή στην <a href=\"../../index.php\">αρχική σελίδα</a><br>
+//			</center>";
+//			exit();
 	}																																																				
 }
 
