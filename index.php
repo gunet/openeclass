@@ -340,6 +340,8 @@ elseif ((isset($logout) && $logout) OR (1==1)) {
 		session_destroy();
 	}
 
+	$require_help = true;
+	$helpTopic="Clar";
 	include("logged_out_content.php");
 
 	draw($tool_content, 0,'index');
