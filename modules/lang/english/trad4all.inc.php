@@ -102,4 +102,16 @@ $langCopyrightFooter="Copyright notice";
 
 $langGreek="Greek";
 $langEnglish="English";
+
+$langNoAdminAccess = '
+		<p>This page requires a valid username and password. Please return to the 
+		<a href='.$urlServer.'>start page</a> and login.</p>
+';
+
+$langLoginRequired = '
+		<p>
+		You are not enrolled to the lesson you are trying to access. 
+		Please return to the <a href='.$urlServer.'>start page</a> and enroll to the lesson (if the lesson is open for registration).
+		</p>
+';
 ?>
