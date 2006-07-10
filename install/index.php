@@ -1475,9 +1475,9 @@ $have_latex = FALSE;
 $persoIsActive = '.$persoIsActive.';
 $durationAccount = "126144000";
 
-
 '.($vodServer==''?'//':'').'$vodServer="'.$vodServer.'";
 $MCU="'.$MCUForm.'";
+$encryptionkey = "'.$encryptionkey.'";
 ?>';
 
 // write to file
