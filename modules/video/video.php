@@ -101,16 +101,15 @@ if($is_adminOfCourse) {
 					$file_name = str_replace("\'", "", $file_name);
 
 					if ($title == "") $title = $file_name;
-					@copy("$file", "$updir/$file_name")
-						or die("<tr><td colspan=2><font size=2 face='arial, helvetica'>$langFileNot</td></tr>");
+					$iscopy=@copy("$file", "$updir/$file_name");
+					if(!$iscopy)
+					 {$tool_content="<table><tbody><tr><td colspan=2 class=\"caution\">$langFileNot</td></tr></tbody></table><a href=\"$_SERVER[PHP_SELF]\">$langBack</a>";
+					draw($tool_content, 2, 'user', $head_content);}
 				} else {
-					die("<tr><td colspan=2>
-						<font size=2 face='arial, helvetica'>$langTooBig</font>
-						</td>
-					</tr>");
+					$tool_content="<table><tbody><tr><td colspan=2 class=\"caution\">$langTooBig</td></tr></tbody></table><a href=\"$_SERVER[PHP_SELF]\">$langBack</a>";
+draw($tool_content, 2, 'user', $head_content);
+exit;
 				}
-
-
 
 
 			$url="$file_name";
@@ -119,21 +118,45 @@ if($is_adminOfCourse) {
 		}	// else
 		$result = db_query($sql,$currentCourseID);
 		if (isset($tout)) {
-			$tool_content.="<font size=2 face='arial, helvetica'>
+			$tool_content.="
+				<table>
+				<tbody>
+				<tr>
+				<td class=\"success\">
 				$langVideoDeleted
+				</td>
+				</tr>
+				</tbody>
+				</table>
 				<br><br>";
 			$tool_content.="<a href=\"$_SERVER[PHP_SELF]\">$langBack</a>
 			<br>";
 		} elseif($id) {
-			$tool_content.="<font size=\"2\" face=\"arial, helvetica\">
+			$tool_content.="
+				<table>
+				<tbody>
+				<tr>
+				<td class=\"success\">
 				$langTitleMod
-				<br><br>
+				</td>
+				</tr>
+				</tbody>
+				</table>
+				<br>
 				<a href=\"$_SERVER[PHP_SELF]\">$langBack</a>
 				<br>";
 		} else {
-			$tool_content.="<font size=\"2\" face=\"arial, helvetica\">
+			$tool_content.="
+				<table>
+				<tbody>
+				<tr>
+				<td class=\"success\">
 				$langFAdd
-				<br><br>
+				</td>
+				</tr>
+				</tbody>
+				</table>
+				<br>
 				<a href=\"$_SERVER[PHP_SELF]\">$langBack</a>
 			<br>";
 		}	 // else
@@ -145,15 +168,98 @@ if($is_adminOfCourse) {
 		$myrow = mysql_fetch_array($result);
 		$nom_document=$myrow[0];
 		if($myrow[1]==0)
-		unlink("$webDir/courses/$currentCourseID/video/$nom_document");
 		$sql = "DELETE FROM video WHERE id=$id";
 		$result = db_query($sql,$currentCourseID);
-		$tool_content.="<font size=\"2\" face=\"arial, helvetica\">$langDelF
+		$tool_content.="
+			<table>
+			<tbody>
+			<tr>
+			<td class=\"success\">
+			$langDelF
+			</td>
+			</tr>
+			</tbody>
+			</table>
 			<p><a href=\"$_SERVER[PHP_SELF]\">$langBack</a>";
 	}	
 	else {
 ########################### IF NO SUBMIT #############################
 		if (!isset($id)) {
+			$tool_content.="
+			<br>
+			<br>
+			<label>$langAddV <input type=\"radio\"  onclick=\"javascript:change_form_input('file');\" name=\"choose\" checked=\"checked\" value=\"\" /></label> <label>$langAddVideoLink <input type=\"radio\"  onclick=\"javascript:change_form_input('URL');\" name=\"choose\" value=\"\" /></label>";
+
+$head_content="
+<script>
+
+function change_form_input(type)
+{
+if(type==\"file\")
+	{
+		document.getElementById(\"title_file_url\").innerHTML='$langsendV';
+		document.getElementById(\"file_url_input_type\").innerHTML='<input type=\"file\" name=\"file\" size=\"45\">';
+	}
+if(type==\"URL\")
+	{
+		document.getElementById(\"title_file_url\").innerHTML='$langURL';
+		document.getElementById(\"file_url_input_type\").innerHTML='<input type=\"text\" name=\"URL\" size=\"45\">';
+	}
+		
+}
+
+
+</script>
+";
+		$tool_content.="<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\">
+			<input type=\"hidden\" name=\"id\" value=\"".@$id."\">
+			<table width=\"800\"><tr><td><font size=\"2\" face=\"arial, helvetica\">
+				<div id=\"title_file_url\">$langsendV&nbsp;</div>
+				</font></td>
+				<td><div id=\"file_url_input_type\"><input type=\"file\" name=\"file\" size=\"45\"></div></td>
+			</tr>
+			<tr><td><font size=\"2\" face=\"arial, helvetica\">
+					$langVideoTitle&nbsp;:
+			</font></td>
+			<td><input type=\"text\" name=\"title\" value=\"\" size=\"55\"></td>
+			</tr>
+			<tr>
+			<td valign=\"top\">
+				<font size=\"2\" face=\"arial, helvetica\">
+					$langDescr&nbsp;:
+				</font>
+			</td>
+			<td>
+			<textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"50\"></textarea>
+			</td>
+			</tr>
+
+			<tr><td><font size=\"2\" face=\"arial, helvetica\">
+					$langcreator&nbsp;:
+			</font></td>
+			<td><input type=\"text\" name=\"creator\" value=\"$nick\" size=\"55\"></td>
+			</tr>
+			<tr><td><font size=\"2\" face=\"arial, helvetica\">
+					$langpublisher &nbsp;:
+			</font></td>
+			<td><input type=\"text\" name=\"publisher\" value=\"$nick\" size=\"55\"></td>
+			</tr>
+			<tr><td><font size=\"2\" face=\"arial, helvetica\">
+					$langdate &nbsp;:
+			</font></td>
+			<td><input type=\"text\" name=\"date\" value=\"".date("Y-m-d G:i:s")."\" size=\"55\"></td>
+			</tr>
+
+			<tr>
+			<td colspan=\"2\">
+				<font size=\"1\" face='arial, helvetica'>$langDelList&nbsp;:</font size>
+				<input type=\"checkbox\" name=\"tout\" value=\"tout\">
+			</td>
+			</tr>
+			<tr><td colspan=\"2\"><input type=\"Submit\" name=\"submit\" value=\"$langAdd\"></td></tr>
+
+			</table>
+		</form>";
 			// print the list if there is no editing
 			$result = db_query("SELECT * FROM video ORDER BY title",$currentCourseID);
 			$i=0;
@@ -231,32 +337,6 @@ if($is_adminOfCourse) {
 				$i++;
 			}	// while
 		######################### FORM #######################################
-			$tool_content.="
-			<br>
-			<br>
-			<label>$langAddV <input type=\"radio\"  onclick=\"javascript:change_form_input('file');\" name=\"choose\" checked=\"checked\" value=\"\" /></label> <label>$langAddVideoLink <input type=\"radio\"  onclick=\"javascript:change_form_input('URL');\" name=\"choose\" value=\"\" /></label>";
-
-$head_content="
-<script>
-
-function change_form_input(type)
-{
-if(type==\"file\")
-	{
-		document.getElementById(\"title_file_url\").innerHTML='$langsendV';
-		document.getElementById(\"file_url_input_type\").innerHTML='<input type=\"file\" name=\"file\" size=\"45\">';
-	}
-if(type==\"URL\")
-	{
-		document.getElementById(\"title_file_url\").innerHTML='$langURL';
-		document.getElementById(\"file_url_input_type\").innerHTML='<input type=\"text\" name=\"URL\" size=\"45\">';
-	}
-		
-}
-
-
-</script>
-";
 
 
 
@@ -271,60 +351,6 @@ if(type==\"URL\")
 			$creator = $myrow[4];
 			$publisher = $myrow[5];
 			$date = $myrow[6];
-		}	// if id
-		if(!isset($id)) {
-
-		$tool_content.="<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\">
-			<input type=\"hidden\" name=\"id\" value=\"".@$id."\">
-			<table width=\"800\"><tr><td><font size=\"2\" face=\"arial, helvetica\">
-				<div id=\"title_file_url\">$langsendV&nbsp;</div>
-				</font></td>
-				<td><div id=\"file_url_input_type\"><input type=\"file\" name=\"file\" size=\"45\"></div></td>
-			</tr>
-			<tr><td><font size=\"2\" face=\"arial, helvetica\">
-					$langVideoTitle&nbsp;:
-			</font></td>
-			<td><input type=\"text\" name=\"title\" value=\"\" size=\"55\"></td>
-			</tr>
-			<tr>
-			<td valign=\"top\">
-				<font size=\"2\" face=\"arial, helvetica\">
-					$langDescr&nbsp;:
-				</font>
-			</td>
-			<td>
-			<textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"50\"></textarea>
-			</td>
-			</tr>
-
-			<tr><td><font size=\"2\" face=\"arial, helvetica\">
-					$langcreator&nbsp;:
-			</font></td>
-			<td><input type=\"text\" name=\"creator\" value=\"$nick\" size=\"55\"></td>
-			</tr>
-			<tr><td><font size=\"2\" face=\"arial, helvetica\">
-					$langpublisher &nbsp;:
-			</font></td>
-			<td><input type=\"text\" name=\"publisher\" value=\"$nick\" size=\"55\"></td>
-			</tr>
-			<tr><td><font size=\"2\" face=\"arial, helvetica\">
-					$langdate &nbsp;:
-			</font></td>
-			<td><input type=\"text\" name=\"date\" value=\"".date("Y-m-d G:i:s")."\" size=\"55\"></td>
-			</tr>
-
-			<tr>
-			<td colspan=\"2\">
-				<font size=\"1\" face='arial, helvetica'>$langDelList&nbsp;:</font size>
-				<input type=\"checkbox\" name=\"tout\" value=\"tout\">
-			</td>
-			</tr>
-			<tr><td colspan=\"2\"><input type=\"Submit\" name=\"submit\" value=\"$langAdd\"></td></tr>
-
-			</table>
-		</form>";
-		}else
-		{
 			$rdf="<tr><td><font size=\"2\" face=\"arial, helvetica\">
 					$langVideoTitle&nbsp;:
 			</font></td>
@@ -372,8 +398,7 @@ if(type==\"URL\")
 			".$rdf."
 			</table>
 		</form>";
-
-		}
+		}	// if id
 
 
 
