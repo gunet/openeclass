@@ -117,6 +117,11 @@ if(!empty($submit))
 			if(!in_array($myrow["password"],$check_passwords))
 			{
 				// try to authenticate him via eclass
+				$crypt = new Encryption;
+				$key = $encryptkey;
+				$password_decrypted = $crypt->decrypt($key, $myrow["password"]);
+				$errors = $crypt->errors;
+				$myrow["password"] = $password_decrypted;
 				if (($uname == $myrow["username"]) and ($pass == $myrow["password"]))
 				{
 					// check if his/her account is active
