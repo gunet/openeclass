@@ -65,6 +65,7 @@ $tool_content = "";
 
 
 include 'forcedownload.php';
+include 'gaugebar.php';
 
 $nameTools = $langDoc;
 $dbTable = "document";
@@ -74,6 +75,8 @@ $d = mysql_fetch_array(mysql_query("SELECT doc_quota FROM cours
     WHERE code='$currentCourseID'"));
 $diskQuotaDocument = $d['doc_quota'];
 
+mysql_select_db($currentCourseID);
+
 // -------------------------
 // download action 
 // --------------------------
@@ -82,6 +85,16 @@ if (@$action=="download")
  {
 		$real_file = $webDir."/courses/".$currentCourseID."/document/".$id;
 		if (strpos($real_file, '/../') === FALSE) {
+		
+		//fortwma tou pragmatikou onomatos tou arxeiou pou vrisketai apothikevmeno sth vash
+		$result = mysql_query ("SELECT filename FROM document WHERE path LIKE '%$id%'");            
+        	$row = mysql_fetch_array($result);
+        	
+        	if (!empty($row['filename'])) 
+        	{
+        		$id = $row['filename'];
+        	}
+			
     	send_file_to_client($real_file, basename($id));
 	exit;
 		} else {
@@ -100,7 +113,7 @@ if($is_adminOfCourse) // for teacher only
         include("../../include/pclzip/pclzip.lib.php");
 }
 
-mysql_select_db($currentCourseID);
+
 
 /**************************************
 FILEMANAGER BASIC VARIABLES DEFINITION
@@ -110,6 +123,8 @@ $baseServDir = $webDir;
 $baseServUrl = $urlAppend."/";      
 $courseDir = "courses/$currentCourseID/document";
 $baseWorkDir = $baseServDir.$courseDir;
+
+$diskUsed = dir_total_space($baseWorkDir);
 
 $local_head = '
 <script>
@@ -149,7 +164,7 @@ if($is_adminOfCourse)
     //provlhma sto filesystem apo to onoma tou arxeiou. Parola afta to palio filename pernaei apo
     //'filtrarisma' wste na apofefxthoun 'epikyndynoi' xarakthres.
     
-    //gia pardeigma me $fileName = "test.jpg" sto filesystem grafetai arxeio $safe_fileName = "20060301121510.jpg"
+    //gia pardeigma me $fileName = "test.jpg" sto filesystem grafetai arxeio $safe_fileName = "20060301121510sdjklhsd.jpg"
     
     ********************************************************************************************************************************/
     
@@ -167,7 +182,8 @@ if($is_adminOfCourse)
         $diskUsed = dir_total_space($baseWorkDir);
         if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaDocument) {
             $dialogBox .= $langNoSpace;
-        } elseif (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .
+        }
+        if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .
                 'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .
                 'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userFile']['name'])) {
             $dialogBox .= "$langUnwantedFiletype: {$_FILES['userFile']['name']}";
@@ -227,7 +243,7 @@ if($is_adminOfCourse)
             //einai monadiko)
             
             $result = mysql_query ("SELECT filename FROM document WHERE filename LIKE '%$uploadPath/$fileName%'");
-            $tool_content .= "SELECT filename FROM document WHERE filename LIKE '%$fileName%'";
+            //$tool_content .= "SELECT filename FROM document WHERE filename LIKE '%$fileName%'";
         	$row = mysql_fetch_array($result);
         	
         	if (!empty($row['filename'])) 
@@ -252,7 +268,7 @@ if($is_adminOfCourse)
 		            
 		            //ypologismos onomatos arxeiou me date + time.
 		            //to onoma afto tha xrhsimopoiei sto filesystem & tha apothikevetai ston pinaka documents
-		            $safe_fileName = date("YmdGis").".".get_file_extention($fileName);
+		            $safe_fileName = date("YmdGis").randomkeys("8").".".get_file_extention($fileName);
 		            
 		            
 		            
@@ -717,7 +733,7 @@ if($is_adminOfCourse)
     						$langDescription&nbsp;:<br><input type=\"text\" size=\"80\" name=\"file_description\" value=\"$oldDescription\"><br>
     						$langAuthor&nbsp;:<br><input type=\"text\" size=\"80\" name=\"file_author\" value=\"$oldAuthor\"><br>";
     	
-		$dialogBox .= "		$langCopyrighted&nbsp;:<br><input name=\"file_copyrighted\" type=\"radio\" value=\"0\" "; if ($oldCopyrighted=="0") $dialogBox .= " checked=\"checked\" "; $dialogBox .= " /> $langCopyrightedUnknown
+		$dialogBox .= "		$langCopyrighted&nbsp;:<br><input name=\"file_copyrighted\" type=\"radio\" value=\"0\" "; if ($oldCopyrighted=="0" || empty($oldCopyrighted)) $dialogBox .= " checked=\"checked\" "; $dialogBox .= " /> $langCopyrightedUnknown
     					   							<input name=\"file_copyrighted\" type=\"radio\" value=\"2\" "; if ($oldCopyrighted=="2") $dialogBox .= " checked=\"checked\" "; $dialogBox .= " /> $langCopyrightedFree
   						   							<input name=\"file_copyrighted\" type=\"radio\" value=\"1\" "; if ($oldCopyrighted=="1") $dialogBox .= " checked=\"checked\" "; $dialogBox .= "/> $langCopyrightedNotFree
   						   							
@@ -919,8 +935,15 @@ if($is_adminOfCourse)
     {
         $visibilityPath = @$mkVisibl.@$mkInvisibl; // At least one of these variables are empty. So it's okay to proceed this way
 
-        /*** Check if there is yet a record for this file in the DB ***/
-        $result = mysql_query ("SELECT * FROM $dbTable WHERE path LIKE \"".$visibilityPath."\"");
+        // analoga me poia metavlhth exei timh ($mkVisibl h' $mkInvisibl) vale antistoixh
+        //timh sthn $newVisibilityStatus gia na graftei sth vash
+        if (isset($mkVisibl)) $newVisibilityStatus = "v"; else $newVisibilityStatus = "i";
+        
+        
+        /*** enallagh ths timhs sto pedio visibility tou pinaka document ***/
+        mysql_query ("UPDATE $dbTable SET visibility='".$newVisibilityStatus."' WHERE path LIKE '%".$visibilityPath."%'");
+        
+        /* o parakatw kwdikas exei ginei comment out giati den xreiazetai.
         while($row = mysql_fetch_array($result, MYSQL_ASSOC))
         {
             $attribute['path']= $row['path'];
@@ -952,6 +975,7 @@ if($is_adminOfCourse)
 
         mysql_query($query);
         unset($attribute);
+        */
 
         $dialogBox = "<b>$langViMod</b>";
 
@@ -1274,11 +1298,7 @@ if($is_adminOfCourse) {
 			<th>$langName</th>
 		    <th>$langSize</th>
 		    <th>$langDate</th>
-		    <th>$langDelete</th>
-		    <th>$langMove</th>
-		    <th>$langRename</th>
-		    <th>$langEditMeta</th>
-		    <th>$langVisible</th>
+		    <th>$langCommands</th>
     	</tr>
     </thead>";
 
@@ -1316,31 +1336,31 @@ if($is_adminOfCourse) {
             $tool_content .=  "<td>&nbsp;</td>\n";
 
             /*** delete command ***/
-            $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdDirName."\" onClick=\"return confirmation('".addslashes($dspDirName)."');\">
-		<img src=\"./img/supprimer.gif\" border=0></a></td>\n";
+            $tool_content .=  "<td><table><tr><td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdDirName."\" onClick=\"return confirmation('".addslashes($dspDirName)."');\">
+		<img src=\"./img/supprimer.gif\" border=0 title=\"$langDelete\"></a></td>";
             /*** copy command ***/
             $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?move=".$cmdDirName."\">
-		<img src=\"img/deplacer.gif\" border=0></a></td>\n";
+		<img src=\"img/deplacer.gif\" border=0 title=\"$langMove\"></a></td>";
             /*** rename command ***/
             $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?rename=".$cmdDirName."\">
-		<img src=\"img/renommer.gif\" border=0></a></td>\n";
+		<img src=\"img/renommer.gif\" border=0 title=\"$langRename\"></a></td>";
             /*** comment command ***/
-            $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?comment=".$cmdDirName."\">
-		<img src=\"img/comment.gif\" border=0></a></td>\n";
+            $tool_content .= "<td><a href=\"$_SERVER[PHP_SELF]?comment=".$cmdDirName."\">
+		<img src=\"img/comment.gif\" border=0 title=\"$langComment\"></a></td>";
 
             /*** visibility command ***/
             if (@$dirVisibilityList[$dirKey] == "i")
             {
                 $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?mkVisibl=".$cmdDirName."\">
-			<img src=\"img/invisible.gif\" border =0></a>\n</td>\n";
+			<img src=\"img/invisible.gif\" border=0 title=\"$langVisible\"></a></td>";
             }
             else
             {
                 $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?mkInvisibl=".$cmdDirName."\">
-			<img src=\"img/visible.gif\" border =0></a></td>\n";
+			<img src=\"img/visible.gif\" border=0 title=\"$langVisible\"></a></td>";
             }
 
-            $tool_content .=  "</tr>\n";
+            $tool_content .=  "</tr></table></td></tr>\n";
 
             /*** comments ***/
             if ( @$dirCommentList[$dirKey] != "" )
@@ -1388,7 +1408,7 @@ if($is_adminOfCourse) {
 
             $tool_content .=  "<tr align=\"center\"".$style.">\n";
             $tool_content .=  "<td align=\"left\">\n";
-           $tool_content .=  "<a href=\"".$urlFileName."\" target=_blank".$style.">\n";
+          //aferaish tou: kathe arxeio na einai hyperlink me apeftheias URL -  $tool_content .=  "<a href=\"".$urlFileName."\" target=_blank".$style.">\n";
             $tool_content .=  "<img src=\"./img/".$image."\" border=0 hspace=5>\n";
             
             
@@ -1404,12 +1424,21 @@ if($is_adminOfCourse) {
             
             // ************* P R O S O X H ***********
             //Aftos o tropos stelnei pollapla erwthmata ston mySQL server & endexetai na ton fortwnei!
-            $query = "SELECT filename FROM document WHERE path LIKE '%".$curDirPath."/".$fileName."%'";
+            $query = "SELECT filename, copyrighted FROM document WHERE path LIKE '%".$curDirPath."/".$fileName."%'";
             $result = mysql_query ($query);
         	$row = mysql_fetch_array($result);
             
             //ektypwsh tou onomatos tou arxeiou ean yparxei eggrafh sth vash, alliws typwse to onoma tou filesystem (gia logous compability)
-            if(empty($row["filename"])) $tool_content .=  $dspFileName."</a>"; else $tool_content .=  $row["filename"]."</a>";
+            //aferaish tou: kathe arxeio na einai hyperlink me apeftheias URL  -  if(empty($row["filename"])) $tool_content .=  $dspFileName."</a>"; else $tool_content .=  $row["filename"]."</a>";
+            if(empty($row["filename"]))
+            {
+            	$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action=download&id=".$cmdFileName."' title=\"$langSave\">".$dspFileName."</a>"; 
+            }else
+            {
+            	$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action=download&id=".$cmdFileName."' title=\"$langSave\">".$row["filename"];
+            	if ($row["copyrighted"] == "1") $tool_content .= "<img src=\"./img/copyrighted.jpg\" border=\"0\">";
+            	$tool_content .= "</a>";
+            }
             
             
             
@@ -1427,8 +1456,7 @@ if($is_adminOfCourse) {
             
             
             
-            $tool_content .=  "<a href='$_SERVER[PHP_SELF]?action=download&id=".$cmdFileName."'>
-            <img src=\"./img/save.gif\" border=\"0\" align=\"absmiddle\" title=\"$langSave\"></a>"; 
+            //$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action=download&id=".$cmdFileName."' title=\"$langSave\"><img src=\"./img/save.gif\" border=\"0\" align=\"absmiddle\" title=\"$langSave\"></a>"; 
             
             
             
@@ -1457,36 +1485,85 @@ if($is_adminOfCourse) {
             $tool_content .=  "<td><small>".$date."</small></td>\n";
 
             /*** delete command ***/
-            $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdFileName."\" onClick=\"return confirmation('".addslashes($dspFileName)."');\">
-		<img src=\"img/supprimer.gif\" border=0></a></td>\n";
+            $tool_content .=  "<td><table><tr><td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdFileName."\" onClick=\"return confirmation('".addslashes($dspFileName)."');\">
+		<img src=\"img/supprimer.gif\" border=0  title=\"$langDelete\"></a></td>";
             /*** copy command ***/
             $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?move=".$cmdFileName."\">
-		<img src=\"img/deplacer.gif\" border=0></a></td>\n";
+		<img src=\"img/deplacer.gif\" border=0  title=\"$langCopy\"></a></td>";
             /*** rename command ***/
             $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?rename=".$cmdFileName."\">
-		<img src=\"img/renommer.gif\" border=0></a></td>\n";
+		<img src=\"img/renommer.gif\" border=0  title=\"$langRename\"></a></td>";
             /*** comment command ***/
             $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?comment=".$cmdFileName."\">
-		<img src=\"img/comment.gif\" border=0></a></td>\n";
+		<img src=\"img/comment.gif\" border=0  title=\"$langComment\"></a></td>";
 
             /*** visibility command ***/
             if (@$fileVisibilityList[$fileKey] == "i")
             {
                 $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?mkVisibl=".$cmdFileName."\">
-			<img src=\"img/invisible.gif\" border=0></a>\n</td>\n";
+			<img src=\"img/invisible.gif\" border=0  title=\"$langVisible\"></a></td>";
             }
             else
             {
                 $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?mkInvisibl=".$cmdFileName."\">
-			<img src=\"img/visible.gif\" border=0></a></td>\n";
+			<img src=\"img/visible.gif\" border=0  title=\"$langVisible\"></a></td>";
             }
 
-            $tool_content .=  "</tr>\n";
+            $tool_content .=  "</tr></table></td></tr>\n";
 
         }
     }
-    $tool_content .=  "</table>\n";
-    $tool_content .=  "</div>\n";
+    $tool_content .=  "</table>";
+    
+    //diamorfwsh ths grafikhs mparas xrhsimopoioumenou kai eleftherou xwrou (me vash ta quotas) + ypologismos statistikwn stoixeiwn
+    $oGauge = new myGauge(); //vrisketai sto arxeio 'gaugebar.php' & ginetai include parapanw
+    
+    // apodosh timwn gia thn mpara
+	$fc = "#E6E6E6"; //foreground color
+	$bc = "#4F76A3"; //background color
+	$wi = 125; //width pixel
+	$hi = 10; //width pixel
+	$mi = 0;  //minimum value
+	$ma = $diskQuotaDocument; //maximum value
+	$cu = $diskUsed; //current value
+	$oGauge->setValues($fc, $bc, $wi, $hi, $mi, $ma, $cu);
+    
+	//pososto xrhsimopoioumenou xorou se %
+	$diskUsedPercentage = round(($diskUsed / $diskQuotaDocument) * 100)."%";
+	
+	
+	//morfopoihsh tou synolikou diathesimou megethous tou quota
+	$diskQuotaDocument = format_bytesize($diskQuotaDocument / 1024);
+	
+	//morfopoihsh tou synolikou megethous pou xrhsimopoieitai
+	$diskUsed = format_bytesize($diskUsed / 1024);
+	format_bytesize($diskUsed, '0');
+	//telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
+	
+	
+	//ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
+	$tool_content .= "<br>
+	<table cellpadding = \"0\" cellspacing = \"0\" border = \"1\">
+	<thead>
+		<tr>
+			<th>$langQuotaUsed</td>
+			<th>$langQuotaPercentage</td>
+			<th>$langQuotaTotal</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td align=\"center\">$diskUsed</td>
+			<td align=\"center\">";
+    		$tool_content .= $oGauge->display();
+    		$tool_content .= "$diskUsedPercentage
+    		</td>
+    		<td align=\"center\">$diskQuotaDocument</td>
+    	</tr>
+    </tbody>
+    </table>";
+    
+    $tool_content .=  "</div>";
 
 }
 
@@ -1638,7 +1715,7 @@ if (isset($fileNameList))
             $tool_content .=  "<td align=\"left\">\n";
             $tool_content .=  "<a href=\"".$urlFileName."\"".$style.">\n";
             $tool_content .=  "<img src=\"./img/".$image."\" border=0 hspace=5>\n";
-            $tool_content .=  $dspFileName."\n";
+            $tool_content .=  "<a href='$_SERVER[PHP_SELF]?action=download&id=".$cmdFileName."' title=\"$langSave\">".$dspFileName."</a>";
             $tool_content .=  "</a>\n";
 
             
@@ -1658,8 +1735,7 @@ if (isset($fileNameList))
             }
             
             
-            $tool_content .=  "<a href='$_SERVER[PHP_SELF]?action=download&id=".$cmdFileName."'>
-                                <img src=\"./img/save.gif\" border=\"0\" align=\"absmiddle\" title=\"$langSave\"></a>";
+            //$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action=download&id=".$cmdFileName."' title=\"$langSave\"></a>";
 
             /*** size ***/
             $tool_content .=  "<td><small>".$size."</small></td>\n";
@@ -1683,4 +1759,42 @@ chdir($baseServDir."/modules/document/");
 draw($tool_content, 2, '', $local_head);
 chdir($tmp_cwd);
 
+
+
+
+//epipleon functions
+
+
+//function pou epistrefei tyxaious xarakthres. to orisma $length kathorizei to megethos tou apistrefomenou xarakthra
+function randomkeys($length)
+{
+   $key = "";
+   $pattern = "1234567890abcdefghijklmnopqrstuvwxyz";
+   for($i=0;$i<$length;$i++)
+   {
+     $key .= $pattern{rand(0,35)};
+   }
+   return $key;
+   
+}
+
+ 
+// A helper function, when passed a number representing KB,
+// and optionally the number of decimal places required,
+// it returns a formated number string, with unit identifier.
+function format_bytesize ($kbytes, $dec_places = 2)
+{
+    global $text;
+    if ($kbytes > 1048576) {
+        $result  = sprintf('%.' . $dec_places . 'f', $kbytes / 1048576);
+        $result .= '&nbsp;Gb';
+    } elseif ($kbytes > 1024) {
+        $result  = sprintf('%.' . $dec_places . 'f', $kbytes / 1024);
+        $result .= '&nbsp;Mb';
+    } else {
+        $result  = sprintf('%.' . $dec_places . 'f', $kbytes);
+        $result .= '&nbsp;Kb';
+    }
+    return $result;
+}
 ?>
