@@ -215,7 +215,7 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 			// encryption of password
 			$crypt = new Encryption;
 			$key = $encryptkey;
-			$password_encrypted = $crypt->encrypt($key, $myrow["password"]);
+			$password_encrypted = $crypt->encrypt($key, $password);
 						
 			$sql = "UPDATE user 
 				SET nom='".$lname."', prenom='".$fname."', username='".$username."', password='".$password_encrypted."', email='".$email."', phone='".$phone."',department=".$department.", expires_at=".$expires_at.
