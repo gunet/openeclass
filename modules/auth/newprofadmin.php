@@ -54,14 +54,29 @@ if($submit)
 		$dep = mysql_fetch_array($s);
 		$registered_at = time();
  		$expires_at = time() + 31536000;
- 		$auth_method_settings = get_auth_settings($auth);
-		if((!empty($auth_method_settings)) && ($auth!=1))
+ 		switch($password)
+				{
+					case 'pop3': $auth = 2; break;
+					case 'imap': $auth = 3; break;
+					case 'ldap': $auth = 4; break;
+					case 'db': $auth = 5; break;
+					default: $auth=1; break;
+				}
+ 		
+ 		if($auth==1)
+ 		{		
+		$crypt = new Encryption;
+		$key = $encryptkey;
+		$pswdlen = "20";
+		$password_encrypted = $crypt->encrypt($key, $password, $pswdlen);
+		}
+		else
 		{
-			$password = $auth_method_settings['auth_name'];
+			$password_encrypted = $password;
 		}
 		$inscr_user=mysql_query("INSERT INTO `$mysqlMainDb`.user
 			(user_id, nom, prenom, username, password, email, statut, department, inst_id, registered_at, expires_at)
-			VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password', '$email_form','$statut','$dep[id]', '$institut', '$registered_at', '$expires_at')");
+			VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email_form','$statut','$dep[id]', '$institut', '$registered_at', '$expires_at')");
 		$last_id=mysql_insert_id();
 	        $tool_content .= "<p>$profsuccess</p>
 						<br><br>

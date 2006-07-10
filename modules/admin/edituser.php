@@ -212,11 +212,18 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		}
 		else
 		{
+			if(($password!='imap') || ($password!='pop3') || ($password!='ldap') || ($password!='db'))
+			{
 			// encryption of password
 			$crypt = new Encryption;
 			$key = $encryptkey;
-			$password_encrypted = $crypt->encrypt($key, $password);
-						
+			$pswdlen = "20";
+			$password_encrypted = $crypt->encrypt($key, $password, $pswdlen);
+			}
+			else
+			{
+				$password_encrypted = $password;
+			}		
 			$sql = "UPDATE user 
 				SET nom='".$lname."', prenom='".$fname."', username='".$username."', password='".$password_encrypted."', email='".$email."', phone='".$phone."',department=".$department.", expires_at=".$expires_at.
 				" WHERE user_id = '".$u."'";

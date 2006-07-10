@@ -221,11 +221,19 @@ switch($close)
 					$dep = mysql_fetch_array($s);
 					$registered_at = time();
 			 		$expires_at = time() + $durationAccount;
-			 		
+					
+					if(($m['profpassword']!='imap') || ($m['profpassword']!='pop3') || ($m['profpassword']!='ldap') || ($m['profpassword']!='db'))
+					{			 		
 			 		$crypt = new Encryption;
 		 			$key = $encryptkey;
 		 			$pswdlen = "20";
 		 			$password_encrypted = $crypt->encrypt($key, $m['profpassword'], $pswdlen);
+			 	}
+			 		else
+			 		{
+			 				$password_encrypted = $m['profpassword'];
+			 		}
+			 		
 			 		
 					$inscr_user=mysql_query("INSERT INTO `$mysqlMainDb`.user
 						(user_id, nom, prenom, username, password, email, statut, 
