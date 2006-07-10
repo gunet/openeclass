@@ -80,7 +80,7 @@ if(!isset($alreadyVisited))
 
     $languageCourse = "greek";
     
-    $encryptionkey = "eclass";
+    $encryptkey = "eclass";
 }
 
 ?>
@@ -136,7 +136,7 @@ echo "
             <input type=\"hidden\" name=\"vodServer\" value=\"".@$vodServerForm."\">
             <input type=\"hidden\" name=\"persoIsActive\" value=\"".@$persoIsActive."\">
 	    
-	    <input type=\"hidden\" name=\"encryptionkey\" value=\"$encryptionkey\">
+	    <input type=\"hidden\" name=\"encryptkey\" value=\"$encryptkey\">
 ";
 
 switch (PHP_OS)
@@ -587,7 +587,7 @@ function set_video_input()
                                 </font>
                             </td>
                             <td>
-                                <input type=\"text\" size=\"40\" name=\"encryptionkey\" value=\"$encryptionkey\">
+                                <input type=\"text\" size=\"40\" name=\"encryptkey\" value=\"$encryptkey\">
                             </td>
                         </tr>
 			
@@ -670,7 +670,7 @@ elseif(isset($install6))
         URL του Ιδρύματος : $institutionUrlForm<br>
          LDAP εξυπηρέτης του Ιδρύματος : $ldapserver<br>
         Base dn του LDAP Εξυπηρέτη : $dnldapserver <br>
-	Κλειδί για χρήση απόκριψης: $encryptionkey <br>
+	Κλειδί για χρήση απόκριψης: $encryptkey <br>
         </blockquote>
         <table width=100%>
             <tr>
@@ -1477,7 +1477,7 @@ $durationAccount = "126144000";
 
 '.($vodServer==''?'//':'').'$vodServer="'.$vodServer.'";
 $MCU="'.$MCUForm.'";
-$encryptionkey = "'.$encryptionkey.'";
+$encryptkey = "'.$encryptkey.'";
 ?>';
 
 // write to file
