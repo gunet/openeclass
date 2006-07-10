@@ -3,6 +3,7 @@ $langFiles = array('gunet','registration','admin');
 include '../../include/baseTheme.php';
 @include "check_admin.inc";
 include('../../include/sendMail.inc.php');
+include '../auth/auth.inc.php';
 $nameTools= $langOpenProfessorRequests;
 
 // Initialise $tool_content
@@ -220,11 +221,16 @@ switch($close)
 					$dep = mysql_fetch_array($s);
 					$registered_at = time();
 			 		$expires_at = time() + $durationAccount;
-			 						
+			 		
+			 		$crypt = new Encryption;
+		 			$key = $encryptkey;
+		 			$pswdlen = "20";
+		 			$password_encrypted = $crypt->encrypt($key, $m['profpassword'], $pswdlen);
+			 		
 					$inscr_user=mysql_query("INSERT INTO `$mysqlMainDb`.user
 						(user_id, nom, prenom, username, password, email, statut, 
 						department, inst_id, registered_at, expires_at)
-						VALUES ('NULL', '".$m['profsurname']."', '".$m['profname']."', '".$m['profuname']."', '".$m['profpassword']."', '".$m['profemail']."','1',
+						VALUES ('NULL', '".$m['profsurname']."', '".$m['profname']."', '".$m['profuname']."', '".$password_encrypted."', '".$m['profemail']."','1',
 						'".$dep[0]."', '0', '".$registered_at."', '".$expires_at."')");
 					$last_id = mysql_insert_id();
 					if($inscr_user)
