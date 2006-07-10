@@ -143,9 +143,16 @@ if(!empty($submit))
  			//$expires_at = time() + 31536000;
  			$expires_at = time() + $durationAccount;
  			$institut = 1;
+ 			
+ 			// manage the store/encrypt process of password into database
+ 			$crypt = new Encryption;
+ 			$key = $encryptkey;
+ 			$pswdlen = "20";
+ 			$password_encrypted = $crypt->encrypt($key, $password, $pswdlen);
+ 			
 			$inscr_user=mysql_query("INSERT INTO `$mysqlMainDb`.user
 			(user_id, nom, prenom, username, password, email, statut, department, inst_id, am, registered_at, expires_at)
-			VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password', '$email','$statut',
+			VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email','$statut',
 				'$department','$institut','$am',".$registered_at.",".$expires_at.")");
 			$last_id=mysql_insert_id();
 			$result=mysql_query("SELECT user_id, nom, prenom FROM `$mysqlMainDb`.user WHERE user_id='$last_id'");
