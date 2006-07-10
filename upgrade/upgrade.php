@@ -43,7 +43,7 @@ else
 }
 
 
-if (isset($_POST['login']) and isset($_POST['password']) and !is_admin($_POST['login'], $_POST['password'])) {
+if (isset($_POST['login']) and isset($_POST['password']) and !is_admin($_POST['login'], $newpass)) {
 	$tool_content .= "<p>Τα στοιχεία που δώσατε δεν αντιστοιχούν στο διαχειριστή του
         συστήματος! Παρακαλούμε επιστρέψτε στην προηγούμενη σελίδα και ξαναδοκιμάστε.</p>
         <center><a href=\"index.php\">Επιστροφή</a></center>";
@@ -240,6 +240,66 @@ $tool_content .= add_field('user', 'lang', "ENUM('el', 'en') DEFAULT 'el' NOT NU
 		}
 		fclose($f);
 		$tool_content .= "Ενημερώθηκε το config.php για το durationAccount<br />";
+		
+		// update users with no registration date
+		if($res = db_query("SELECT user_id,registered_at_expires_at FROM user 
+		WHERE registered_at='0' 
+		OR registered_at='NULL' OR registered_at=NULL  
+		OR registered_at='null' OR registered_at=null 
+		OR registered_at='\N' OR registered_at=\N 
+		OR registered_at=''"))
+		{
+			while($row = mysql_fetch_array($res))
+			{
+					$registered_at = $row["registered_at"];
+				
+					// do the update
+					$regtime = 126144000+time();
+					if(db_query("UPDATE user SET registered_at=".time().",expires_at=".$regtime))
+					{
+						$tool_content .= "SUCCESSFUL registration time update for user with id=".$row["user_id"].".Encrypted pass is:".$newpass."<br />";
+					}
+					else
+					{
+						$tool_content .= "NO UPDATE for user with id=".$row["user_id"]."<br />";
+					}
+			}
+		}
+		else
+		{
+			die("Δεν έγινε κάποια ενημέρωση σε κανένα account σχετικά με to registration time.Η ενημέρωση θα συνεχιστεί κανονικά.");
+		}
+	}
+	else
+	{
+		// update users with no registration date
+		if($res = db_query("SELECT user_id,registered_at,expires_at FROM user 
+		WHERE registered_at='0' 
+		OR registered_at='NULL' OR registered_at=NULL  
+		OR registered_at='null' OR registered_at=null 
+		OR registered_at='\N' OR registered_at=\N 
+		OR registered_at=''"))
+		{
+			while($row = mysql_fetch_array($res))
+			{
+					$registered_at = $row["registered_at"];
+				
+					// do the update
+					$regtime = 126144000+time();
+					if(db_query("UPDATE user SET registered_at=".time().",expires_at=".$regtime))
+					{
+						$tool_content .= "SUCCESSFUL registration time update for user with id=".$row["user_id"].".Encrypted pass is:".$newpass."<br />";
+					}
+					else
+					{
+						$tool_content .= "NO UPDATE for user with id=".$row["user_id"]."<br />";
+					}
+			}
+		}
+		else
+		{
+			die("Δεν έγινε κάποια ενημέρωση σε κανένα account σχετικά με to registration time.Η ενημέρωση θα συνεχιστεί κανονικά.");
+		}
 	}
 
 
