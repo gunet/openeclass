@@ -752,17 +752,17 @@ if (mysql_version())  {
 #
 # table admin_announcements
 #
-		mysql_query("CREATE TABLE `admin_announcements` (
-    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-		 gr_title` VARCHAR( 255 ) NULL ,
-		 `gr_body` VARCHAR( 255 ) NULL ,
-		 `gr_comment` VARCHAR( 255 ) NULL ,
-			`en_title` VARCHAR( 255 ) NULL ,
-		  `en_body` VARCHAR( 255 ) NULL ,
-			`en_comment` VARCHAR( 255 ) NULL ,
-			`date` DATE NOT NULL ,
-			`visible` ENUM( 'V', 'I' ) NOT NULL
-			) TYPE = MyISAM DEFAULT CHARACTER SET=greek");
+		mysql_query("CREATE TABLE admin_announcements (
+    		id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+		gr_title VARCHAR(255) NULL,
+		 gr_body VARCHAR(255) NULL,
+		 gr_comment VARCHAR(255) NULL,
+		 en_title VARCHAR(255) NULL,
+		  en_body VARCHAR(255) NULL,
+		en_comment VARCHAR(255) NULL,
+		date DATE NOT NULL,
+		visible ENUM('V', 'I') NOT NULL
+		) TYPE = MyISAM DEFAULT CHARACTER SET=greek");
 
     # --------------------------------------------------------
 
@@ -1069,16 +1069,16 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
 #
 # table admin_announcements
 #
-		mysql_query("CREATE TABLE `admin_announcements` (
-    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-		 gr_title` VARCHAR( 255 ) NULL ,
-		 `gr_body` VARCHAR( 255 ) NULL ,
-		 `gr_comment` VARCHAR( 255 ) NULL ,
-			`en_title` VARCHAR( 255 ) NULL ,
-		  `en_body` VARCHAR( 255 ) NULL ,
-			`en_comment` VARCHAR( 255 ) NULL ,
-			`date` DATE NOT NULL ,
-			`visible` ENUM( 'V', 'I' ) NOT NULL
+		mysql_query("CREATE TABLE admin_announcements (
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+		gr_title VARCHAR(255) NULL ,
+		 gr_body VARCHAR(255) NULL ,
+		 gr_comment VARCHAR(255) NULL ,
+		en_title VARCHAR(255) NULL ,
+		  en_body VARCHAR(255) NULL ,
+			en_comment VARCHAR(255) NULL ,
+			date  DATE NOT NULL ,
+			visible ENUM('V', 'I') NOT NULL
 			) TYPE = MYISAM");
 			
 
