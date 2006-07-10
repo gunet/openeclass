@@ -5,6 +5,21 @@ $path2add=2;
 include '../include/baseTheme.php';
 include 'document_upgrade.php';
 
+// encryption
+include '../modules/auth/auth.inc.php';
+$crypt = new Encryption;
+if((!isset($encryptkey)) || (empty($encryptkey)))
+{
+	$key1 = "eclass";
+}
+else
+{
+	$key1 = $encryptkey;
+}
+$pswdlen = "20";
+$auth_methods = array("imap","pop3","ldap","db");
+
+
 $nameTools = "Αναβάθμιση των βάσεων δεδομένων του e-Class";
 // Initialise $tool_content
 $tool_content = "";
@@ -14,6 +29,19 @@ $fromadmin = true;
 if (isset($_POST['submit_upgrade'])) {
 	$fromadmin = false;
 }
+
+if((isset($_POST['password'])) && (!in_array($_POST['password'],$auth_methods)))
+{
+	if((isset($encryptkey)) || (!empty($encryptkey)))
+	$newpass = $crypt->encrypt($key1, $_POST['password'], $pswdlen);
+	else
+	$newpass = $_POST['password'];
+}
+else
+{
+	$newpass = $_POST['password'];
+}
+
 
 if (isset($_POST['login']) and isset($_POST['password']) and !is_admin($_POST['login'], $_POST['password'])) {
 	$tool_content .= "<p>Τα στοιχεία που δώσατε δεν αντιστοιχούν στο διαχειριστή του
@@ -188,6 +216,96 @@ $tool_content .= add_field('user', 'forum_flag', "date NOT NULL default '0000-00
 //add new field to table users for user's language
 if (!mysql_field_exists("$mysqlMainDb",'user','lang'))
 $tool_content .= add_field('user', 'lang', "ENUM('el', 'en') DEFAULT 'el' NOT NULL");
+
+
+// encryption of passwords
+// Orismos $durationAccount sto config.php
+	if((!isset($durationAccount)) || (empty($durationAccount)))
+	{
+		@chmod( "../config",777 );
+		@chmod( "../config", 0777 );
+		$remove_this = "?>";
+		$text1 = "\$durationAccount = \"126144000\";\n";		//load file into $fc array
+		$fc=@file("../config/config.php");	//open same file and use "w" to clear file
+		$f=fopen("../config/config.php","w");
+		foreach($fc as $line)			//loop through array using foreach
+		{
+			if(!strstr($line,$remove_this)) //look for $key in each line
+		          fputs($f,$line); //place $line back in file
+			else
+			{
+		  	fwrite($f, $text1);
+		  	fwrite($f, $remove_this);
+			}
+		}
+		fclose($f);
+		$tool_content .= "Ενημερώθηκε το config.php για το durationAccount<br />";
+	}
+
+
+
+
+// Orismos $encryptkey sto config.php
+	if((!isset($encryptkey)) || (empty($encryptkey)))
+	{
+		@chmod( "../config",777 );
+		@chmod( "../config", 0777 );
+		$has_encryption = 0;
+		$remove_this = "?>";
+		$text2 = "\$encryptkey = \"eclass\";\n";
+		$fc=@file("../config/config.php");		//load file into $fc array
+		$f=fopen("../config/config.php","w");		//open same file and use "w" to clear file
+		foreach($fc as $line)		//loop through array using foreach
+		{
+			if(!strstr($line,$remove_this)) //look for $key in each line
+		          fputs($f,$line); //place $line back in file
+			else
+			{
+		  	fwrite($f, $text2);
+		  	fwrite($f, $remove_this);
+		  	$has_encryption = 1;
+			}
+		}
+		fclose($f);
+		$tool_content .= "Ενημερώθηκε το config.php για το encryptkey<br />";
+		
+		// update all the records in user table
+		if($res = db_query("SELECT user_id,password FROM user"))
+		{
+			while($row = mysql_fetch_array($res))
+			{
+				$pass = $row["password"];
+				$newpass = $crypt->encrypt($key1, $pass, $pswdlen);
+				if(!in_array($pass,$auth_methods))
+				{
+					// do the update
+					if(db_query("UPDATE user SET password = '".$newpass."' WHERE user_id=".$row["user_id"]))
+					{
+						$tool_content .= "SUCCESS for user with id=".$row["user_id"].".Encrypted pass is:".$newpass."<br />";
+					}
+					else
+					{
+						$tool_content .= "NO UPDATE for user with id=".$row["user_id"]."<br />";
+					}
+				}
+				else
+				{
+					continue; // move to the next one
+				}
+			}
+		}
+		else
+		{
+			die("ΠΡΟΣΟΧΗ! Τα passwords στη ΒΔ δεν είναι κρυπτογραφημένα και η πλατφόρμα δεν μπορεί να λειτουργήσει");
+		}
+		
+	}
+	else
+	{
+		// check if the passwords are already encrypted
+	}
+
+
 
 // **********************************************
 // upgrade courses databases
