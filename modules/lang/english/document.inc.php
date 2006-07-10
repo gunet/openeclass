@@ -115,4 +115,9 @@ $langCategoryNotes="Notes";
 $langCategoryOther="Other";
 
 $langNotRequired = "Filling-in the fields is not mandatory";
+$langCommands = "Actions";
+
+$langQuotaUsed = "Used disk space";
+$langQuotaTotal = "Total available disk space";
+$langQuotaPercentage = "Usage percentage";
 ?>

@@ -118,4 +118,9 @@ $langCategoryNotes="Σημειώσεις";
 $langCategoryOther="Aλλο";
 
 $langNotRequired = "Η συμπλήρωση των πεδίων είναι προαιρετική";
+$langCommands = "Ενέργειες";
+
+$langQuotaUsed = "Χρησιμοποιούμενος Χώρος";
+$langQuotaTotal = "Συνολικός Διαθέσιμος Χώρος";
+$langQuotaPercentage = "Ποσοστό χρήσης";
 ?>
