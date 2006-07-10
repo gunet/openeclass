@@ -42,11 +42,12 @@
 $langFiles = array('admin','registration');
 include '../../include/baseTheme.php';
 include 'admin.inc.php';
+include '../auth/auth.inc.php';
 @include "check_admin.inc";
 $nameTools = $langVersion;
 // Initialise $tool_content
 $tool_content = "";
-//include '../../include/init.php';
+
 
 $nameTools = $langEditUser;
 
@@ -65,13 +66,17 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 	    die("Unable to query database (user_id='$u')!");
 		}
 		$info = mysql_fetch_array($sql);
+		$crypt = new Encryption;
+			$key = $encryptkey;
+			$password_decrypted = $crypt->decrypt($key, $info[3]);
+			
 		$tool_content .= "<h4>Επεξεργασία χρήστη $info[2]</h4>";
 		$tool_content .= "<form name=\"edituser\" method=\"post\" action=\"./edituser.php\">
 	<table width=\"99%\" border=\"0\">
 	<tr><td width=\"20%\">$langSurname: </td><td width=\"80%\"><input type=\"text\" name=\"lname\" size=\"40\" value=\"".$info[0]."\"</td></tr>
 	<tr><td width=\"20%\">$langName: </td><td width=\"80%\"><input type=\"text\" name=\"fname\" size=\"40\" value=\"".$info[1]."\"</td></tr>
 	<tr><td width=\"20%\">$langUsername: </td><td width=\"80%\"><input type=\"text\" name=\"username\" size=\"30\" value=\"".$info[2]."\"</td></tr>
-	<tr><td width=\"20%\">$langPass: </td><td width=\"80%\"><input type=\"text\" name=\"password\" size=\"30\" value=\"".$info[3]."\"</td></tr>
+	<tr><td width=\"20%\">$langPass: </td><td width=\"80%\"><input type=\"text\" name=\"password\" size=\"30\" value=\"".$password_decrypted."\"</td></tr>
 	<tr><td width=\"20%\">E-mail: </td><td width=\"80%\"><input type=\"text\" name=\"email\" size=\"50\" value=\"".$info[4]."\"</td></tr>
 	<tr><td width=\"20%\">$langTel: </td><td width=\"80%\"><input type=\"text\" name=\"phone\" size=\"30\" value=\"".$info[5]."\"</td></tr>";
 
@@ -207,9 +212,13 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		}
 		else
 		{
-			
+			// encryption of password
+			$crypt = new Encryption;
+			$key = $encryptkey;
+			$password_encrypted = $crypt->encrypt($key, $myrow["password"]);
+						
 			$sql = "UPDATE user 
-				SET nom='".$lname."', prenom='".$fname."', username='".$username."', password='".$password."', email='".$email."', phone='".$phone."',department=".$department.", expires_at=".$expires_at.
+				SET nom='".$lname."', prenom='".$fname."', username='".$username."', password='".$password_encrypted."', email='".$email."', phone='".$phone."',department=".$department.", expires_at=".$expires_at.
 				" WHERE user_id = '".$u."'";
 			//	$tool_content .= "$sql<br>";
 			$qry = mysql_query($sql);
