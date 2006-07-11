@@ -25,7 +25,7 @@
 
 /**===========================================================================
 	listcours.php
-	@last update: 31-05-2006 by Pitsiougas Vagelis
+	@last update: 11-07-2006 by Pitsiougas Vagelis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Pitsiougas Vagelis <vagpits@uom.gr>
 ==============================================================================        
@@ -39,6 +39,7 @@
  	               - Go to delete course page
  	               - Go to edit course page
                  - Return to main administrator page
+                 - A paging navigation has been added
 
  	@Comments: The script is organised in three sections.
 
@@ -58,6 +59,8 @@ include '../../include/baseTheme.php';
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 @include "check_admin.inc";
+// Other includes
+@include 'admin.inc.php';
 // Define $nameTools
 $nameTools = $langListCours;
 // Initialise $tool_content
@@ -66,23 +69,12 @@ $caption = "";
 /*****************************************************************************
 		MAIN BODY
 ******************************************************************************/
-// Manage order of display list
-if (isset($ord)) {
-	switch ($ord) {
-		case "s":
-			$order = "b.statut"; break;
-		case "n":
-			$order = "a.nom"; break;
-		case "p":
-			$order = "a.prenom"; break;
-		case "u":
-			$order = "a.username"; break;
-		default:
-			$order = "b.statut"; break;
-	}
-} else {
-	$order = "b.statut";
-}
+
+// Manage list limits
+$countcourses = mysql_fetch_array(mysql_query("SELECT COUNT(*) AS cnt FROM cours"));
+$fulllistsize = $countcourses['cnt'];
+$listsize = 50;
+$limit = isset($_GET['limit'])?$_GET['limit']:0;
 
 // A search has been submitted
 if (isset($search) && $search=="yes") {
@@ -132,10 +124,15 @@ if (isset($search) && $search=="yes") {
 else {
 	$a=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours"));		
 	$caption .= "".$langManyExist." ".$a[0]." μαθήματα";
-	$sql = mysql_query("SELECT faculte, code, intitule,titulaires,visible FROM cours ORDER BY faculte");
+	$sql = mysql_query("SELECT faculte, code, intitule,titulaires,visible FROM cours ORDER BY faculte,code LIMIT ".$limit.",".$listsize."");
+	
+	if ($fulllistsize > $listsize ) {
+		// Display navigation in pages
+		$tool_content .= show_paging($limit, $listsize, $fulllistsize, "listcours.php");
+	}
 }
 // Construct cours list table
-$tool_content .= "<table border=\"1\"><caption>".$caption."</caption>
+$tool_content .= "<table width=\"99%\"><caption>".$caption."</caption>
 <thead>
   <tr>
     <th scope=\"col\">".$langDepartment."</th>
@@ -177,6 +174,9 @@ $tool_content .= "</tbody></table>\n";
 // If a search is started display link to search page
 if (isset($search) && $search=="yes") {
 	$tool_content .= "<br><center><p><a href=\"searchcours.php\">".$langReturnSearch."</a></p></center>";
+} elseif ($fulllistsize > $listsize) {
+	// Display navigation in pages
+	$tool_content .= show_paging($limit, $listsize, $fulllistsize, "listcours.php");
 }
 // Display link to index.php	
 $tool_content .= "<br><center><p><a href=\"index.php\">".$langReturn."</a></p></center>";
