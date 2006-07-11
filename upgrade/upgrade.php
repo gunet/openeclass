@@ -672,7 +672,7 @@ while ($code = mysql_fetch_row($res)) {
 	}
 
 	//---------------------------------------------------------------------
-	// Begin table definitions for SURVEY module
+	// Begin table definitions for QUESTIONNAIRE module
 	//---------------------------------------------------------------------
 	if (!mysql_table_exists($code[0], 'survey'))  {
 		db_query("CREATE TABLE `survey` (
@@ -722,11 +722,11 @@ while ($code = mysql_fetch_row($res)) {
 	  PRIMARY KEY  (`sqaid`)
 	) ", $code[0]); //TYPE=MyISAM COMMENT='For the survey module';
 	}
-	// End of table definitions for SURVEY module
+	
 
 
 	//---------------------------------------------------------------------
-	// Begin table definitions for POLL module
+	// More table definitions for QUESTIONNAIRE module
 	//---------------------------------------------------------------------
 	if (!mysql_table_exists($code[0], 'poll'))  {
 		db_query("CREATE TABLE `poll` (
@@ -776,7 +776,7 @@ while ($code = mysql_fetch_row($res)) {
 	  PRIMARY KEY  (`pqaid`)
 	) ", $code[0]); //TYPE=MyISAM COMMENT='For the poll module';
 	}
-	// End of table definitions for POLL module
+	// End of table definitions for QUESTIONNAIRE module
 
 	// table definitions for usage modules
 
@@ -825,7 +825,7 @@ while ($code = mysql_fetch_row($res)) {
 	  PRIMARY KEY  (`eurid`)
 	) ", $code[0]); //TYPE=MyISAM COMMENT='For the poll module';
 	}
-	// End of table definitions for POLL module
+	// End of table definitions
 
 
 
@@ -865,30 +865,43 @@ while ($code = mysql_fetch_row($res)) {
                 'MODULE_ID_LP'
          )", $code[0]);
 
-	// For SURVEY module
-	$langSurvey = "Έρευνα";
-	db_query("INSERT IGNORE INTO accueil VALUES (
-                21,
-                '$langSurvey',
-                '../../modules/survey/survey.php',
-                '../../../images/survey.gif',
-                '1',
-                '0',
-                '../../../images/pastillegris.png',
-                'MODULE_ID_SURVEY'
-         )", $code[0]);
+//	// For SURVEY module
+//	$langSurvey = "Έρευνα";
+//	db_query("INSERT IGNORE INTO accueil VALUES (
+//                21,
+//                '$langSurvey',
+//                '../../modules/survey/survey.php',
+//                '../../../images/survey.gif',
+//                '1',
+//                '0',
+//                '../../../images/pastillegris.png',
+//                'MODULE_ID_SURVEY'
+//         )", $code[0]);
+//
+//	// For POLL module
+//	$langPoll = "Ψηφοφορίες";
+//	db_query("INSERT IGNORE INTO accueil VALUES (
+//                22,
+//                '$langPoll',
+//                '../../modules/poll/poll.php',
+//                '../../../images/poll.gif',
+//                '1',
+//                '0',
+//                '../../../images/pastillegris.png',
+//                'MODULE_ID_POLL'
+//         )", $code[0]);
 
-	// For POLL module
-	$langPoll = "Ψηφοφορίες";
+ 	// For QUESTIONNAIRE module (maybe remove old 21)
+	$langQuestionnaire = "Ερωτηματολόγιο";
 	db_query("INSERT IGNORE INTO accueil VALUES (
-                22,
-                '$langPoll',
-                '../../modules/poll/poll.php',
-                '../../../images/poll.gif',
+                21,																
+                '$langQuestionnaire',
+                '../../modules/questionnaire/questionnaire.php',
+                '../../../images/questionnaire.gif',
                 '1',
                 '0',
                 '../../../images/pastillegris.png',
-                'MODULE_ID_POLL'
+                'MODULE_ID_QUESTIONNAIRE'
          )", $code[0]);
 
 	// for usage module
@@ -1013,8 +1026,9 @@ while ($code = mysql_fetch_row($res)) {
 
 	update_field("accueil", "define_var","MODULE_ID_CHAT", "id", 		19);
 	update_field("accueil", "define_var","MODULE_ID_DESCRIPTION", "id", 20);
-	update_field("accueil", "define_var","MODULE_ID_SURVEY", "id", 21);
-	update_field("accueil", "define_var","MODULE_ID_POLL", "id", 22);
+//	update_field("accueil", "define_var","MODULE_ID_SURVEY", "id", 21);
+//	update_field("accueil", "define_var","MODULE_ID_POLL", "id", 22);
+update_field("accueil", "define_var","MODULE_ID_QUESTIONNAIRE", "id", 21);
 	update_field("accueil", "define_var","MODULE_ID_LP", "id", 			23);
 	update_field("accueil", "define_var","MODULE_ID_USAGE", "id", 		24);
 	update_field("accueil", "define_var","MODULE_ID_TOOLADMIN", "id", 	25);
@@ -1075,8 +1089,9 @@ while ($code = mysql_fetch_row($res)) {
 
 	update_field("accueil", "image","chat", "id", 			19);
 	update_field("accueil", "image","description", "id",	20);
-	update_field("accueil", "image","survey", "id", 		21);
-	update_field("accueil", "image","poll", "id", 			22);
+//	update_field("accueil", "image","survey", "id", 		21);
+//	update_field("accueil", "image","poll", "id", 			22);
+	update_field("accueil", "image","questionnaire", "id", 			21);
 	update_field("accueil", "image","lp", "id", 			23);
 	update_field("accueil", "image","usage", "id", 			24);
 	update_field("accueil", "image","tooladmin", "id", 		25);
