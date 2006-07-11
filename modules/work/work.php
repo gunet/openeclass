@@ -297,7 +297,7 @@ function new_assignment()
 	$month	= date("m");
 	$year	= date("Y");
 
-	$tool_content .= "<form action=\"work.php\" method=\"post\"><table><tr><td>".
+	$tool_content .= "<form action=\"work.php\" method=\"post\"><table width=\"95%\"><tr><td>".
 		$m['title'].":</td><td><input type=\"text\" name=\"title\" size=\"55\"></td></tr><tr><td>".
 		$m['description'].":</td><td>".
 		"<textarea id=\"ta\" name=\"desc\" value=\"$desc\" style=\"width:100%\" rows=\"20\" cols=\"80\">";
@@ -370,7 +370,7 @@ $tool_content .= <<<cData
 	<form action="work.php" method="post">
 	<input type="hidden" name="id" value="$id">
 	<input type="hidden" name="choice" value="do_edit">
-	<table>
+	<table width="95%">
 	<tr><td>${m['title']}:</td>
 	<td><input type="text" name="title" size="55" value="${row['title']}" style="width: 100%"></td></tr>
 <tr><td>${m['description']}:</td>
@@ -524,7 +524,7 @@ function show_submission_form($id)
 		$tool_content .= <<<cData
 		<form enctype="multipart/form-data" action="work.php" method="post">
 			<input type="hidden" name="id" value="${id}">
-			<table>
+			<table width="95%">
 			<tr><td colspan='2'><b>${langSendFile}</b></th></tr>
 			<tr><td>${langWorkFile}:</td><td><input type="file" name="userfile"></td></tr>
 			<tr><td>${m['comments']} :</td><td><textarea name="stud_comments" rows="5"
@@ -679,7 +679,7 @@ $tool_content .= "\n\n<!-- BEGIN GRAPH -->\n\n";
 			$chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
 			$chart->render($webDir.$chart_path);
 					
-			$tool_content .= '<table width="100%"><tr><td><img src="'.$urlServer.$chart_path.'" /></td></tr></table>';
+			$tool_content .= '<table width="95%"><tr><td><img src="'.$urlServer.$chart_path.'" /></td></tr></table>';
 		}
 $tool_content .= "\n\n<!-- END GRAPH -->\n\n";		
 // end of pie chart /////////////////////////////////////////////////////////////////////////////////
@@ -693,7 +693,7 @@ $tool_content .= "\n\n<!-- END GRAPH -->\n\n";
 			$tool_content .= <<<cData
 				<form action="work.php" method="post">
 				<input type="hidden" name="grades_id" value="${id}">
-				<table border="0" align="center" cellpadding="2" cellspacing="0" width="100%">
+				<table border="0" align="center" cellpadding="2" cellspacing="0" width="80%">
 					<tr bgcolor="${colorMedium}">
 cData;
 
@@ -769,7 +769,7 @@ function show_student_assignments()
 	if (mysql_num_rows($result)) {
 		
 		$tool_content .= <<<cData
-			<table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
+			<table border="0" align="center" cellpadding="2" cellspacing="2" width="95%">
 				<tr bgcolor="#E6E6E6">
 					<th align="center">${m['title']}</th>
 			  <th align="center">
@@ -836,7 +836,7 @@ function show_assignments()
 	if (mysql_num_rows($result)) {
 		
 		$tool_content .= <<<cData
-			<table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
+			<table border="0" align="center" cellpadding="2" cellspacing="2" width="95%">
 				<tr bgcolor="#E6E6E6">
 					<th align="center">${m['title']}</th>
 			  <th align="center">
@@ -980,7 +980,7 @@ function create_zip_index($path, $id, $online = FALSE)
 		<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">
 	</head>
 	<body>
-		<table border="1">
+		<table border="1" width="95%">
 			<tr>
 				<th>'.$m['username'].'</th>
 				<th>'.$m['am'].'</th>
