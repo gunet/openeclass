@@ -167,7 +167,7 @@ and login";
 if (isset($require_prof) and $require_prof) {
 	if (!check_prof()) {
 		$toolContent_ErrorExists = "You are not allowed to proceed this action.
-		Please go back to the <a href=$urlServer' "."target='_top'>start page</a> and login";
+		Please go back to the <a href='$urlServer' "."target='_top'>start page</a> and login";
 		$errorMessagePath = "../../";
 	}
 //	exit("You are not allowed to proceed this action.
