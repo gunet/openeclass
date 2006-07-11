@@ -117,4 +117,8 @@ $langPollNone = "There are no polls for the current course.";
 $langPollInactive = "The poll has expired or is not active yet.";
 $langPollCharts = "Collective Results";
 $langPollIndividuals = "Results per user";
+
+$langQPref = "What type of questionnaire do you prefer?";
+$langQPrefSurvey = "Survey";
+$langQPrefPoll = "Poll";
 ?>
