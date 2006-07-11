@@ -123,8 +123,8 @@ function printMCQuestionForm() {
 		<input type="hidden" value="1" name="UseCase">
 		<table>
 			<tr><td>$langPollName</td><td colspan="2"><input type="text" size="50" name="PollName" value="$PollName"></td></tr>
-			<tr><td>$langPollStart</td><td colspan="2"><input type="text" size="10" name="PollStart" value="$PollStart"></td></tr>
-			<tr><td>$langPollEnd</td><td colspan="2"><input type="text" size="10" name="PollEnd" value="$PollEnd"></td></tr>
+			<tr><td>$langPollStart</td><td colspan="2"><input type="text" size="17" name="PollStart" value="$PollStart"></td></tr>
+			<tr><td>$langPollEnd</td><td colspan="2"><input type="text" size="17" name="PollEnd" value="$PollEnd"></td></tr>
 			<tr><td>$langPollQuestion</td><td><input type="text" name="question1" size="50"></td></tr> 
 			<tr><td>$langPollAnswer #1</td><td><input type="text" name="answer1.1" size="50"></td></tr>
 			<tr><td>$langPollAnswer #2</td><td><input type="text" name="answer2.1" size="50"></td></tr>
@@ -153,8 +153,8 @@ cData;
 		<input type="hidden" value="1" name="UseCase">
 		<table>
 			<tr><td>$langPollName</td><td colspan="2"><input type="text" size="50" name="PollName" value="$PollName"></td></tr>
-			<tr><td>$langPollStart</td><td colspan="2"><input type="text" size="10" name="PollStart" value="$PollStart"></td></tr>
-			<tr><td>$langPollEnd</td><td colspan="2"><input type="text" size="10" name="PollEnd" value="$PollEnd"></td></tr>
+			<tr><td>$langPollStart</td><td colspan="2"><input type="text" size="17" name="PollStart" value="$PollStart"></td></tr>
+			<tr><td>$langPollEnd</td><td colspan="2"><input type="text" size="17" name="PollEnd" value="$PollEnd"></td></tr>
 			
 cData;
 
@@ -191,8 +191,8 @@ cData;
 		<input type="hidden" value="1" name="UseCase">
 		<table>
 		<tr><td>$langPollName</td><td colspan="2"><input type="text" size="50" name="PollName" value="$PollName"></td></tr>
-			<tr><td>$langPollStart</td><td colspan="2"><input type="text" size="10" name="PollStart" value="$PollStart"></td></tr>
-			<tr><td>$langPollEnd</td><td colspan="2"><input type="text" size="10" name="PollEnd" value="$PollEnd"></td></tr>
+			<tr><td>$langPollStart</td><td colspan="2"><input type="text" size="17" name="PollStart" value="$PollStart"></td></tr>
+			<tr><td>$langPollEnd</td><td colspan="2"><input type="text" size="17" name="PollEnd" value="$PollEnd"></td></tr>
 			
 cData;
 		
@@ -203,7 +203,7 @@ cData;
 		$tool_content .= "<tr><td colspan=3><hr></td></tr> <tr> <td>" . 
 //			$langPollQuestion . "	</td><td><input type='text' name='question" .
 //			($answer_num + 1) . "'></td></tr>";
-				$langPollQuestion . "	</td><td><input type='text' name='questionx'></td></tr>".
+				$langPollQuestion . "	</td><td><input type='text' name='questionx' size='50'></td></tr>".
 				"<tr><td>$langPollAnswer #1</td><td><input type='text' name='answerx1' size='50'></td></tr>".
 				"<tr><td>$langPollAnswer #2</td><td><input type='text' name='answerx2' size='50'></td></tr>";
 			
@@ -402,13 +402,13 @@ function printAllQA() {
 				if (substr($key, 0, 8) == "question") { //question
 					++$CurrentQuestion;
 					$tool_content .= "<tr><td colspan=3><hr></td></tr> <tr><td>" . $langPollQuestion . 
-						" </td><td><input type='text' name='question{$CurrentQuestion}' value='".
+						" </td><td><input size='50' type='text' name='question{$CurrentQuestion}' value='".
 						$$key."'></td></tr>\n";
 				} else { //answer
 					if ($$key != '') {
 						++$CurrentAnswer;
 						$tool_content .= " <tr><td>" . $langPollAnswer . 
-						" </td><td><input type='text' name='answer{$CurrentQuestion}.{$CurrentAnswer}' ".
+						" </td><td><input size='50' type='text' name='answer{$CurrentQuestion}.{$CurrentAnswer}' ".
 						"value='{$$key}'></td></tr>\n";
 					}
 					
