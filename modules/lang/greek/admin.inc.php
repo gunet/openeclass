@@ -212,7 +212,7 @@ $langSearchCriteria = "Κριτήρια Αναζήτησης";
 $langSearch = "Αναζήτηση";
 
 // statuscours.php
-$langCourseStatusChangedSuccess = "Ο τύπος πρόσβασης του μαθήματος άλλαγε με επιτυχία!";
+$langCourseStatusChangedSuccess = "Ο τύπος πρόσβασης του μαθήματος άλλαξε με επιτυχία!";
 $langCourseStatusChange = "Αλλαγή τύπου πρόσβασης μαθήματος";
 
 
