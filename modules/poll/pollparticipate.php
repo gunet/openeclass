@@ -135,6 +135,12 @@ cData;
 					$tool_content .= " value=\"" . $theAnswer["answer_text"] . "\" ";
 					$tool_content .= "> " . $theAnswer["answer_text"] . "</label>\n";
 				}
+				$tool_content .= "\n<label><input type=\"radio\" ";
+				$tool_content .= " name=\"answer" . $CurrentQuestion . "\" ";
+				$tool_content .= " value=\"" . "Δεν γνωρίζω/Δεν απαντώ" . "\" ";
+				$tool_content .= " checked=\"checked\"  ";
+				$tool_content .= "> " . "Δεν γνωρίζω/Δεν απαντώ" . "</label>\n";				
+				
 		}
 		$tool_content .= "<br><br>";
 	} else { //TF
