@@ -134,6 +134,7 @@ echo "
             <input type=\"hidden\" name=\"ldapserver\" value=\"".@$ldapserver."\">
             <input type=\"hidden\" name=\"dnldapserver\" value=\"".@$dnldapserver."\">
             <input type=\"hidden\" name=\"vodServer\" value=\"".@$vodServerForm."\">
+            <input type=\"hidden\" name=\"MCU\" value=\"".@$MCUForm."\">
             <input type=\"hidden\" name=\"persoIsActive\" value=\"".@$persoIsActive."\">
 	    
 	    <input type=\"hidden\" name=\"encryptkey\" value=\"$encryptkey\">
@@ -569,6 +570,40 @@ function set_video_input()
                         <tr>
                             <td>
                                 <font size=\"2\" face=\"arial, helvetica\">
+                                   MCU 
+                                </font>
+                            </td>
+                            <td>
+<script>
+function set_MCU()
+	{
+		if(document.getElementById(\"MCU_check\").checked==true)
+		{
+			document.getElementById(\"MCU_div_text\").innerHTML='<font size=\"2\" face=\"arial, helvetica\">MCU</font><font color=\"red\">*</font>';
+			document.getElementById(\"MCU_div_input\").innerHTML='<input type=\"text\" size=\"20\" name=\"MCUForm\" value=\"$MCU\"><br>Πχ. rts.grnet.gr';
+		}
+		else{ document.getElementById(\"MCU_div_text\").innerHTML='';
+		      document.getElementById(\"MCU_div_input\").innerHTML='';
+		}
+		
+
+	}
+</script>
+		<input type=\"checkbox\" id=\"MCU_check\" onclick=\"set_MCU();\"/><br>
+     </td>
+     </tr>
+			<tr>
+				<td>
+				 <div id=\"MCU_div_text\">
+				 </div>
+				</td>
+				<td>
+				 <div id=\"MCU_div_input\">
+				</td>
+			</tr>
+                        <tr>
+                            <td>
+                                <font size=\"2\" face=\"arial, helvetica\">
                                     Personalization
                                 </font>
                             </td>
@@ -670,6 +705,8 @@ elseif(isset($install6))
         URL του Ιδρύματος : $institutionUrlForm<br>
          LDAP εξυπηρέτης του Ιδρύματος : $ldapserver<br>
         Base dn του LDAP Εξυπηρέτη : $dnldapserver <br>
+	MCU: $MCUForm <br>
+	Vod Server: $vodServerForm <br>
 	Κλειδί για χρήση απόκριψης: $encryptkey <br>
         </blockquote>
         <table width=100%>
@@ -1490,10 +1527,9 @@ $persoIsActive = '.$persoIsActive.';
 $durationAccount = "126144000";
 
 '.($vodServer==''?'//':'').'$vodServer="'.$vodServer.'";
-$MCU="'.$MCUForm.'";
+'.($MCU==''?'//':'').'$MCU="'.$MCU.'";
 $encryptkey = "'.$encryptkey.'";
 ?>';
-
 // write to file
 fwrite($fd, $stringConfig);
 // message
