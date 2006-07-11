@@ -36,27 +36,6 @@
       +----------------------------------------------------------------------+
 */
 
-/**
- * COURSE SITE CREATION TOOL
- * GOALS
- * *******
- * Allow professors and administrative staff to create course sites.
- * This big script makes, basically, 6 things:
- *     1. Create a database whose name=course code (sort of course id)
- *     2. Create tables in this base and fill some of them
- *     3. Create a www directory with the same name as the db name
- *     4. Add the course to the main icampus/course table
- *     5. Check whether the course code is not already taken.
- *     6. Associate the current user id with the course in order to let 
- *        him administer it.
- * 
- * One of the functions of this script is to merge the different 
- * Open Source Tools used in the courses (statistics by EzBoo, 
- * forum by phpBB...) under one unique user session and one unique 
- * course id.
- * ******************************************************************
- */
-
 $require_login = TRUE;
 $require_prof = TRUE;
 
@@ -70,9 +49,6 @@ function previous_step()
 </script>";
 
 
-
-
-
 //ektypwnei ena <td> </td> me hyperlink pros to help me vash kapoio $topic
 /*
 	"
@@ -82,20 +58,18 @@ function previous_step()
 	"
 */
 
-
-//include '../../include/init.php';
 include '../../include/baseTheme.php';
 
 $tool_content = "";
 
-
 $titulaire_probable="$prenom $nom";
 $local_style = "input { font-size: 12px; }";
-//begin_page($langCreateSite);
 
-###################### FORM  #########################################
+// ----------------------------------
+// ---------------------- form ------
+// ----------------------------------
 
-    $tool_content .= "
+   @$tool_content .= "
 <!-- S T E P  2   [start] -->    
 
 <tr bgcolor=\"$color1\">
@@ -115,14 +89,13 @@ $local_style = "input { font-size: 12px; }";
 					</table>
 				</td>
 			</tr>
-			<tr><td colspan=\"3\">&nbsp;</td></tr>
 			<tr valign=\"top\">
 				<td colspan=\"5\" valign=\"middle\">
-					<font face=\"arial, helvetica\" size=\"2\"><b>$langCreateCourseStep2Title</b></font>
-					<hr>
-					<font face=\"arial, helvetica\" size=\"2\">$langFieldsRequ</font>
+					<font face=\"arial, helvetica\" size=\"3\"><b>$langCreateCourseStep2Title</b></font>
+					<font face=\"arial, helvetica\" size=\"3\">($langFieldsOptional)</font>
 				</td>
 			</tr>
+			<tr><td colspan=\"3\"><font face=\"arial, helvetica\" size=\"2\"><i>$langFieldsOptionalNote</i></font></td></tr>
 			<tr><td colspan=\"3\">&nbsp;</td></tr>
 
 <form method=\"post\" action=\"create_course3.php\">
@@ -133,34 +106,58 @@ $local_style = "input { font-size: 12px; }";
 	<input type=\"hidden\" name=\"titulaires\" value=\"$titulaires\">
 	<input type=\"hidden\" name=\"type\" value=\"$type\">
 	
-
 	<tr>
 	<td colspan=\"3\">
 		<table bgcolor=\"$color1\" border=\"2\">
 			<tr>
-				<td valign=\"top\" align=\"right\">		
-					<font face=\"arial, helvetica\" size=\"2\"><b>Στόχοι του μαθήματος:</b></font>
+				<td valign=\"middle\" align=\"right\">		
+					<font face=\"arial, helvetica\" size=\"2\"><b>$langObjectives</b></font>
 				</td>
 				<td valign=\"top\">
 					<font face=\"arial, helvetica\" size=\"2\">
-				<textarea name=\"course_objectives\" cols=\"30\" rows=\"5\"></textarea>$langFieldsRequAsterisk<br>$langObjectives</font>
+				<textarea name=\"course_objectives\" value=\"$course_objectives\" cols=\"30\" rows=\"5\"></textarea><br>$langObjectivesNote</font>
 				</td>
 				<td valign=\"middle\">
 					<a href=\"../help/help.php?topic=CreateCourse_course_objectives\" onclick=\"window.open('../help/help.php?topic=CreateCourse_course_objectives','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>					
 				</td>
 			</tr>
 			<tr>				
-				<td valign=\"top\" align=\"right\">		
-					<font face=\"arial, helvetica\" size=\"2\"><b>Εισαγωγικό Σημείωμα:</b></font>
+				<td valign=\"middle\" align=\"left\">		
+					<font face=\"arial, helvetica\" size=\"2\"><b>$langCoursePrereq</b></font>
 				</td>
 				<td valign=\"top\">
-					<textarea name=\"course_intronote\" cols=\"30\" rows=\"5\"></textarea><br>$langIntroNote
+					<font face=\"arial, helvetica\" size=\"2\">
+					<textarea name=\"course_prerequisites\" value=\"$course_prerequisites\" cols=\"30\" rows=\"5\"></textarea><br>$langCoursePrereqNote</font>
 				</td>
-				<td>
+				<td valign=\"middle\">
 					<a href=\"../help/help.php?topic=CreateCourse_course_intronote\" onclick=\"window.open('../help/help.php?topic=CreateCourse_course_intronote','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
 				</td>
 			</tr>
-		</table>
+			<tr>
+			<td align=\"top\" align=\"right\">
+		<font face=\"arial, helvetica\" size=\"2\"><b>$langCourseKeywords</b></font>
+		</td>
+<td valign=\"top\">
+			<font face=\"arial, helvetica\" size=\"2\">
+			<textarea name=\"course_keywords\" value=\"$course_keywords\" cols=\"30\" rows=\"5\"></textarea><br>$langCourseKeywordsNote</font>
+				</td>
+				<td valign=\"middle\">
+					<a href=\"../help/help.php?topic=CreateCourse_course_intronote\" onclick=\"window.open('../help/help.php?topic=CreateCourse_course_intronote','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
+				</td>
+			</tr>
+			<tr>
+			<td align=\"top\" align=\"right\">
+		<font face=\"arial, helvetica\" size=\"2\"><b>$langCourseReferences</b></font>
+		</td>
+<td valign=\"top\">
+			<font face=\"arial, helvetica\" size=\"2\">
+			<textarea name=\"course_references\" value=\"$course_references\" cols=\"30\" rows=\"5\"></textarea><br>$langCourseReferencesNote</font>
+			</td>
+			<td>
+			<a href=\"../help/help.php?topic=CreateCourse_course_intronote\" onclick=\"window.open('../help/help.php?topic=CreateCourse_course_intronote','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
+		</td>
+			</tr>
+			</table>
 	</td>
 	</tr>
 	<tr>

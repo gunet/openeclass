@@ -62,7 +62,6 @@ $require_prof = TRUE;
 
 $langFiles = array('create_course', 'opencours');
 
-
 $local_head = "
 
 <script language=\"JavaScript\">
@@ -105,9 +104,6 @@ function validate()
 	"
 */
 
-
-
-//include '../../include/init.php';
 include '../../include/baseTheme.php';
 
 $tool_content = "";

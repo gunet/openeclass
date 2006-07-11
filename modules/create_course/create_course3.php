@@ -36,26 +36,6 @@
       +----------------------------------------------------------------------+
 */
 
-/**
- * COURSE SITE CREATION TOOL
- * GOALS
- * *******
- * Allow professors and administrative staff to create course sites.
- * This big script makes, basically, 6 things:
- *     1. Create a database whose name=course code (sort of course id)
- *     2. Create tables in this base and fill some of them
- *     3. Create a www directory with the same name as the db name
- *     4. Add the course to the main icampus/course table
- *     5. Check whether the course code is not already taken.
- *     6. Associate the current user id with the course in order to let
- *        him administer it.
- *
- * One of the functions of this script is to merge the different
- * Open Source Tools used in the courses (statistics by EzBoo,
- * forum by phpBB...) under one unique user session and one unique
- * course id.
- * ******************************************************************
- */
 
 $require_login = TRUE;
 $require_prof = TRUE;
@@ -85,23 +65,17 @@ function help ($topic)
 }
 
 
-include '../../include/init.php';
+//include '../../include/init.php';
+include '../../include/baseTheme.php';
 
-$titulaire_probable="$prenom $nom";
-$local_style = "input { font-size: 12px; }";
-begin_page($langCreateSite);
-
-//arxikopoihsh metavlhtwn gia na mhn vgazei notices
-$course_prerequisites = "";
-$course_references = "";
-$course_keywords = "";
-
+//$titulaire_probable="$prenom $nom";
+//$local_style = "input { font-size: 12px; }";
+//begin_page($langCreateSite);
+$tool_content = "";
 
 ###################### FORM  #########################################
 if(!isset($_GET["finish_create_course"])) {
-    echo "
-<!-- S T E P  1   [start] -->
-
+    $tool_content .= "
 <tr bgcolor=\"$color1\">
     <td>
         <table bgcolor=\"$color1\" border=\"2\">
@@ -122,7 +96,7 @@ if(!isset($_GET["finish_create_course"])) {
             <tr><td colspan=\"3\">&nbsp;</td></tr>
             <tr valign=\"top\">
                 <td colspan=\"5\" valign=\"middle\">
-                    <font face=\"arial, helvetica\" size=\"2\"><b>$langCreateCourseStep3Title</b></font>
+                    <font face=\"arial, helvetica\" size=\"3\"><b>$langCreateCourseStep3Title</b></font>
                     <hr>
                     <font face=\"arial, helvetica\" size=\"2\">$langFieldsRequ</font>
                 </td>
@@ -141,17 +115,12 @@ if(!isset($_GET["finish_create_course"])) {
 
 <!-- S T E P  2   [form data] -->
 <input type=\"hidden\" name=\"course_objectives\" value=\"$course_objectives\">
-<input type=\"hidden\" name=\"course_intronote\" value=\"$course_intronote\">
-
-<!-- ta parakatw dedomena eisagwntai apo th selida epeksergasia plhroforiwn mathimatos wste o odhgos na diatireitai aplos
 <input type=\"hidden\" name=\"course_prerequisites\" value=\"$course_prerequisites\">
 <input type=\"hidden\" name=\"course_references\" value=\"$course_references\">
 <input type=\"hidden\" name=\"course_keywords\" value=\"$course_keywords\">
- -->
 
 
     <!-- S T E P  3   [start] -->
-
 
     <tr>
     <td colspan=\"4\">
@@ -172,9 +141,10 @@ if(!isset($_GET["finish_create_course"])) {
     $langFieldsRequAsterisk<br>$langAccessType
     </font>
     </td>";
+		
     help("CreateCourse_formvisible");
-
-        echo "
+		
+$tool_content .= "
           </tr>
       <tr>
       <td valign=\"top\" align=\"right\">
@@ -211,11 +181,14 @@ if(!isset($_GET["finish_create_course"])) {
       <br>$langSubsystems
       </td>
       ";
+			
        help("CreateCourse_subsystems");
-echo "</td></tr>
+			 
+		$tool_content .= "</td></tr>
     <tr><td align=\"right\"><font face=\"arial, helvetica\" size=\"2\"><b>$langLn:</b></font></td>
     <td>
 <select name=\"languageCourse\">";
+
 $dirname = "../lang/";
 if($dirname[strlen($dirname)-1]!='/')
     $dirname.='/';
@@ -224,23 +197,23 @@ while ($entries = readdir($handle)) {
     if ($entries=='.'||$entries=='..' || $entries=='CVS')
         continue;
     if (is_dir($dirname.$entries)) {
-        echo "<option value=\"$entries\"";
+				$tool_content .= "<option value=\"$entries\"";
         if ($entries == $language)
-            echo " selected ";
-        echo ">";
+            $tool_content .= " selected ";
+        $tool_content .= ">";
         if (!empty($langNameOfLang[$entries]) && $langNameOfLang[$entries]!="" && $langNameOfLang[$entries]!=$entries)
-        echo "$langNameOfLang[$entries] - ";
-        echo "$entries
+        $tool_content .= "$langNameOfLang[$entries] - ";
+        $tool_content .= "$entries
         </option>";
     }
 }
 closedir($handle);
 
-echo "</select><br><font face=\"arial, helvetica\" size=\"2\">$langLanguageTip</font></td>";
+$tool_content .= "</select><br><font face=\"arial, helvetica\" size=\"2\">$langLanguageTip</font></td>";
 
 help("CreateCourse_lang");
 
-echo "</tr>
+$tool_content .= "</tr>
     <tr><td>&nbsp;</td>
         <td align=\"left\">
             <input type=\"button\" name=\"button\" value=\"$langPreviousStep\" onclick=\"previous_step();\">
@@ -275,7 +248,7 @@ else {
     $language=$languageCourse;
     @include("../lang/$language/create_course.inc.php");
     if(empty($intitule) OR empty($repertoire)) {
-        echo "<tr bgcolor=\"$color2\" height=\"400\">
+        $tool_content .= "<tr bgcolor=\"$color2\" height=\"400\">
         <td bgcolor=\"$color2\" colspan=\"2\" valign=\"top\">
             <br>
             <font face=\"arial, helvetica\" size=\"2\">
@@ -298,7 +271,7 @@ else {
         while ($cnt < $dbNumber) {
             $dbCode = mysql_db_name($dbList, $cnt);
             if ($dbCode == $repertoire) {
-            echo "<tr bgcolor=\"$color2\" height=\"400\">
+            $tool_content .= "<tr bgcolor=\"$color2\" height=\"400\">
             <td colspan=\"2\" valign=\"top\">
             <font face=\"arial, helvetica\" size=\"2\">
                 $langCodeTaken.
@@ -2689,31 +2662,30 @@ fwrite($fd, "$string");
 $status[$repertoire]=1;
 session_register("status");
 
-echo "<tr bgcolor=$color2>
+$tool_content .= "<tr bgcolor=$color2>
     <td colspan=3>
-    <font face=\"arial, helvetica\" size=2>
+    <font face='arial, helvetica' size=2>
     $langJustCreated $repertoire<br><br><br>
-    <a href='../../courses/$repertoire/index.php'>$langEnter</a><br><br><br>
+    <a href=\"../../courses/$repertoire/index.php\">$langEnter</a><br><br><br>
     $langEnterMetadata
     </font><br>
     </td></tr>";
+		
  } // else
 
 } // if all fields fulfilled
 
-echo "</table>";
+$tool_content .= "</table>";
 
-######################   Function list  #######################################
+draw($tool_content, '1', '', $local_head);
 
-/*****************************************************************************************
-*                                 DefaultScoring Function
-******************************************************************************************
-*
+
+
+/*
+* Default Scoring function
 * Goal : compute a default scoring for a grouped multiple choise.
-* ----
-*
-*
-*******************************************************************************************/
+*/
+
 function DefaultScoring($ChoiceCount,$Z,$weight) {
 
     if ($Z==0)
@@ -2739,8 +2711,7 @@ function DefaultScoring($ChoiceCount,$Z,$weight) {
 
     return $score/10*$weight;
 
-}//End of function DefaultScoring
-
+} //End of function DefaultScoring
 
 ?>
 </body>
