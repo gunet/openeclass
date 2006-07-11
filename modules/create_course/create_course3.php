@@ -1552,26 +1552,37 @@ mysql_query("CREATE TABLE accueil (
                )");
 
 
+//    mysql_query("INSERT INTO accueil VALUES (
+//                '21',
+//                '$langSurvey',
+//                '../../modules/survey/survey.php',
+//                'survey',
+//                '".$sbsystems[21]."',
+//                '0',
+//                '../../../images/pastillegris.png',
+//                'MODULE_ID_SURVEY'
+//                )");
+//
+//    mysql_query("INSERT INTO accueil VALUES (
+//                '22',
+//                '$langPoll',
+//                '../../modules/poll/poll.php',
+//                'poll',
+//                '".$sbsystems[22]."',
+//                '0',
+//                '../../../images/pastillegris.png',
+//                'MODULE_ID_POLL'
+//                )");
+                
     mysql_query("INSERT INTO accueil VALUES (
                 '21',
-                '$langSurvey',
-                '../../modules/survey/survey.php',
-                'survey',
+                '$langQuestionnaire',
+                '../../modules/questionnaire/questionnaire.php',
+                'questionnaire',
                 '".$sbsystems[21]."',
                 '0',
                 '../../../images/pastillegris.png',
-                'MODULE_ID_SURVEY'
-                )");
-
-    mysql_query("INSERT INTO accueil VALUES (
-                '22',
-                '$langPoll',
-                '../../modules/poll/poll.php',
-                'poll',
-                '".$sbsystems[22]."',
-                '0',
-                '../../../images/pastillegris.png',
-                'MODULE_ID_POLL'
+                'MODULE_ID_QUESTIONNAIRE'
                 )");
 
     mysql_query("INSERT INTO accueil VALUES (
@@ -1941,7 +1952,7 @@ mysql_query("INSERT INTO group_properties
                KEY id (id))
         TYPE=MyISAM DEFAULT CHARSET=greek");
 
-#################### SURVEY ###############################################
+#################### QUESTIONNAIRE ###############################################
 
     mysql_query("CREATE TABLE survey (
       sid bigint(14) NOT NULL auto_increment,
@@ -1985,9 +1996,6 @@ mysql_query("INSERT INTO group_properties
       answer_text varchar(250) default NULL,
       PRIMARY KEY  (sqaid))
   TYPE=MyISAM DEFAULT CHARSET=greek");
-
-
-#################### POLL #################################################
 
     mysql_query("CREATE TABLE poll (
       pid bigint(14) NOT NULL auto_increment,
