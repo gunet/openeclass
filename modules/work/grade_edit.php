@@ -69,7 +69,7 @@ function get_assignment_details($id)
 // $assign contains an array with the assignment's details
 function show_edit_form($id, $sid, $assign)
 {
-	global $m, $langGradeOk;
+	global $m, $langGradeOk, $tool_content;
 
 	if ($sub = mysql_fetch_array(db_query("SELECT * FROM assignment_submit WHERE id = '$sid'"))) {
 		
