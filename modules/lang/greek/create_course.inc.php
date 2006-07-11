@@ -139,13 +139,13 @@ $langCatagoryMain="Αρχή";
 $langCatagoryGroup="Συζήτησεις Ομάδων χρηστών";
 
 //neos odhgos dhmiourgias mathimaton
-$langEnterMetadata="Μπορείτε να συμπληρώσετε επιπλέον πληροφορίες για το μάθημα μέσα από τη σελίδα αλλαγής πληροφοριών μαθήματος";
+$langEnterMetadata="(Σημ.) μπορείτε να αλλάξετε διάφορες ρυθμίσεις του μαθήματος μέσα από τη λειτουργία 'Διαχείριση Μαθήματος'";
 $langCreateCourse="Οδηγός δημιουργίας μαθήματος";
 $langCreateCourseStep="Βήμα";
 $langCreateCourseStep2="από";
 $langCreateCourseStep1Title="Βασικά στοιχεία και πληροφορίες μαθήματος";
 $langCreateCourseStep2Title="Συμπληρωματικές πληροφορίες μαθήματος";
-$langCreateCourseStep3Title="Επιλογές συστήματος για το μάθημα";
+$langCreateCourseStep3Title="Υποσυστήματα και τύπος πρόσβασης";
 $langcourse_objectives="Στόχοι του μαθήματος";
 $langcourse_prerequisites="Προαπαιτούμενες γνώσεις";
 $langcourse_references="Βιβλιογραφία";
