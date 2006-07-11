@@ -1532,7 +1532,7 @@ mysql_query("CREATE TABLE accueil (
     mysql_query("INSERT INTO accueil VALUES (
                 '19',
                 '$langChat',
-                '../../modules/chat/chat.php',
+                '../../modules/conference/conference.php',
                 'chat',
                 '".$sbsystems[19]."',
                 '0',
