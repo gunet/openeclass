@@ -26,6 +26,7 @@ while ($row = mysql_fetch_assoc($result)) {
 mysql_free_result($result);
 
 $first_date_time = time();
+$totalHits = 0;
 foreach ($course_codes as $course_code) {
     $sql = "SELECT COUNT(*) AS cnt FROM actions";
     $result = db_query($sql, $course_code);
@@ -78,6 +79,43 @@ $tool_content .= "<table width=\"99%\"><caption>Στοιχεία Πλατφόρμας</caption><tb
 <p>".$langAboutUsers." <b>".$e[0]."</b> ".$langUsers." (<i><b>".$b[0]."</b> ".$langProf.", <b>".$c[0]."</b> ".$langStud." ".$langAnd." <b>".$d[0]."</b> ".$langGuest."</i>)</p>
 <p>".$langTotalHits.": <b>".$totalHits."</b></p>
 <p>".$langUptime.": <b>".$uptime."</b></p>";
+
+$tool_content .= "</td></tr></tbody></table><br>";
+
+// Count prof requests with status = 1
+$sql = "SELECT COUNT(*) AS cnt FROM prof_request WHERE status = 1";
+$result = mysql_query($sql);
+$myrow = mysql_fetch_array($result);
+$count_prof_requests = $myrow['cnt'];
+if ($count_prof_requests > 0) {
+	$prof_request_msg = "Υπάρχουν ".$count_prof_requests." ανοικτές αιτήσεις καθηγητών";
+} else {
+	$prof_request_msg = "Δεν βρέθηκαν ανοικτές αιτήσεις καθηγητών";
+}
+
+// Find last course created
+$sql = "SELECT code, intitule, titulaires FROM cours ORDER BY cours_id DESC LIMIT 0,1";
+$result = mysql_query($sql);
+$myrow = mysql_fetch_array($result);
+$last_course_info = "<b>".$myrow['intitule']."</b> <i>(".$myrow['code'].", ".$myrow['titulaires'].")</i>";
+
+// Find last prof registration
+$sql = "SELECT prenom, nom, email, registered_at FROM user WHERE statut = 1 ORDER BY user_id DESC LIMIT 0,1";
+$result = mysql_query($sql);
+$myrow = mysql_fetch_array($result);
+$last_prof_info = "<b>".$myrow['prenom']." ".$myrow['nom']."</b> <i>(".$myrow['email'].", ".date("j/n/Y H:i",$myrow['registered_at']).")</i>";
+
+// Find last stud registration
+$sql = "SELECT prenom, nom, email, registered_at FROM user WHERE statut = 5 ORDER BY user_id DESC LIMIT 0,1";
+$result = mysql_query($sql);
+$myrow = mysql_fetch_array($result);
+$last_stud_info = "<b>".$myrow['prenom']." ".$myrow['nom']."</b> <i>(".$myrow['email'].", ".date("j/n/Y H:i",$myrow['registered_at']).")</i>";
+
+$tool_content .= "<table width=\"99%\"><caption>Ενημερωτικά Στοιχεία για τον Διαχειριστή</caption><tbody><tr><td>
+<p>Ανοικτές αιτήσεις καθηγητών: <b>".$prof_request_msg."</b></p>
+<p>Τελευταίο μάθημα που δημιουργήθηκε: ".$last_course_info."</p>
+<p>Τελευταία εγγραφή εκπαιδευτή: ".$last_prof_info."</p>
+<p>Τελευταία εγγραφή εκπαιδευομένου: ".$last_stud_info."</p>";
 
 $tool_content .= "</td></tr></tbody></table><br>";
 
