@@ -926,8 +926,15 @@ if (mysql_version())  {
         PRIMARY KEY  (id))
         TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
-    mysql_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`)
-    VALUES ('$nameForm', '$surnameForm', '$loginForm','$passForm','$emailForm','1')");
+		// encrypt the admin password into DB
+		include '../modules/auth/auth.inc.php';
+		$crypt = new Encryption;
+		$key = $encryptkey;
+		$pswdlen = "20";
+		$password_encrypted = $crypt->encrypt($key, $passForm, $pswdlen);
+		$exp_time = time() + 140000000;
+    mysql_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`,`registered_at`,`expires_at`)
+    VALUES ('$nameForm', '$surnameForm', '$loginForm','$password_encrypted','$emailForm','1',".time().",".$exp_time.")");
     $idOfAdmin=mysql_insert_id();
     mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action) VALUES ('', '".$idOfAdmin."', '".$REMOTE_ADDR."', NOW(), 'LOGIN')");
 
@@ -1245,9 +1252,16 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
         PRIMARY KEY  (id))
         TYPE=MyISAM");
 
+		// encrypt the admin password before storing it, into DB
+		include '../modules/auth/auth.inc.php';
+		$crypt = new Encryption;
+		$key = $encryptkey;
+		$pswdlen = "20";
+		$password_encrypted = $crypt->encrypt($key, $passForm, $pswdlen);
+		$exp_time = time() + 140000000;
 
-    mysql_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`)
-    VALUES ('$nameForm', '$surnameForm', '$loginForm','$passForm','$emailForm','1')");
+    mysql_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`, `registered_at`,`expires_at`)
+    VALUES ('$nameForm', '$surnameForm', '$loginForm','$password_encrypted','$emailForm','1',".time().",".$exp_time.")");
     $idOfAdmin=mysql_insert_id();
     mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action) VALUES ('', '".$idOfAdmin."', '".$REMOTE_ADDR."', NOW(), 'LOGIN')");
 
