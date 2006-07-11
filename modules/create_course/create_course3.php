@@ -173,9 +173,9 @@ $tool_content .= "
       </tr>
       <tr>
       <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" />$langCourseDesc</td>
-      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"21\" />$langSurvey</td>
-      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"22\" />$langPoll</td>
+      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"21\" />$langQuestionnaire</td>
       <td><input type=\"checkbox\" name=\"subsystems[]\"  value=\"23\" checked=\"checked\" />$langLearnPath</td>
+      <td></td>
       </tr>
       </table>
       <br>$langSubsystems
