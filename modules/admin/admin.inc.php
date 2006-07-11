@@ -26,6 +26,7 @@
 /**===========================================================================
 	admin.inc.php
 	@last update: 31-05-2006 by Stratos Karatzidis
+	              11-07-2006 by Vagelis Pitsiougas
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
 ==============================================================================        
@@ -178,6 +179,148 @@ function convert_time($seconds)
     //else $r .= "less than a minute";
         								    
     return $r;
+}
+
+/**************************************************************
+Purpose: display paging navigation
+Parameters: limit - the current limit
+            listsize - the size of the list
+            fulllistsize - the size of the full list
+            page - the page to send links from pages
+
+return String (the constracted table)
+***************************************************************/
+function show_paging($limit, $listsize, $fulllistsize, $page) {
+	$retString = "";
+	// Page numbers of navigation
+	$pn = 15;
+	
+	$retString .= "<br><table width=\"99%\"><tbody><tr><td width=\"3%\" nowrap><b>Σελίδα:</b></td><td align=\"center\">";
+	// Deal with previous page
+	if ($limit!=0) {
+		$newlimit = $limit - $listsize;
+		$retString .= "<a href=\"".$page."?limit=".$newlimit."\"><b>Προηγούμενη</b></a>&nbsp;|&nbsp;";
+	} else {
+		$retString .= "<b>Προηγούμενη</b>&nbsp;|&nbsp;";
+	}
+	// Deal with pages
+	if (ceil($fulllistsize / $listsize) <= $pn/3)
+	{ 
+		// Show all
+		$counter = 0;
+		while ($counter * $listsize < $fulllistsize) {
+			$aa = $counter + 1;
+			if ($counter * $listsize == $limit) {
+				$retString .= "<b>".$aa."</b>&nbsp;";
+			} else {
+				$newlimit = $counter * $listsize;
+				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."\">".$aa."</a></b>&nbsp;";
+			}
+			$counter++;
+		}
+	} elseif ($limit / $listsize < ($pn/3)+3) {
+		// Show first 10
+		$counter = 0;
+		while ($counter * $listsize < $fulllistsize && $counter < $pn/3*2) {
+			$aa = $counter + 1;
+			if ($counter * $listsize == $limit) {
+				$retString .= "<b>".$aa."</b>&nbsp;";
+			} else {
+				$newlimit = $counter * $listsize;
+				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."\">".$aa."</a></b>&nbsp;";
+			}
+			$counter++;
+		}
+		$retString .= "<b>...</b>&nbsp;";
+		// Show last 5
+		$counter = ceil($fulllistsize / $listsize) - ($pn/3);
+		while ($counter * $listsize < $fulllistsize) {
+			$aa = $counter + 1;
+			if ($counter * $listsize == $limit) {
+				$retString .= "<b>".$aa."</b>&nbsp;";
+			} else {
+				$newlimit = $counter * $listsize;
+				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."\">".$aa."</a></b>&nbsp;";
+			}
+			$counter++;
+		}
+	} elseif ($limit / $listsize >= ceil($fulllistsize / $listsize) - ($pn/3)-3) {
+		// Show first 5
+		$counter = 0;
+		while ($counter * $listsize < $fulllistsize && $counter < ($pn/3)) {
+			$aa = $counter + 1;
+			if ($counter * $listsize == $limit) {
+				$retString .= "<b>".$aa."</b>&nbsp;";
+			} else {
+				$newlimit = $counter * $listsize;
+				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."\">".$aa."</a></b>&nbsp;";
+			}
+			$counter++;
+		}
+		$retString .= "<b>...</b>&nbsp;";
+		// Show last 10
+		$counter = ceil($fulllistsize / $listsize) - ($pn/3*2);
+		while ($counter * $listsize < $fulllistsize) {
+			$aa = $counter + 1;
+			if ($counter * $listsize == $limit) {
+				$retString .= "<b>".$aa."</b>&nbsp;";
+			} else {
+				$newlimit = $counter * $listsize;
+				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."\">".$aa."</a></b>&nbsp;";
+			}
+			$counter++;
+		}
+	} else {
+		// Show first 5
+		$counter = 0;
+		while ($counter * $listsize < $fulllistsize && $counter < ($pn/3)) {
+			$aa = $counter + 1;
+			if ($counter * $listsize == $limit) {
+				$retString .= "<b>".$aa."</b>&nbsp;";
+			} else {
+				$newlimit = $counter * $listsize;
+				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."\">".$aa."</a></b>&nbsp;";
+			}
+			$counter++;
+		}
+		$retString .= "<b>...</b>&nbsp;";
+		// Show middle 5
+		$counter = ($limit / $listsize) - 2;
+		$top = $counter + 5;
+		while ($counter * $listsize < $fulllistsize && $counter < $top) {
+			$aa = $counter + 1;
+			if ($counter * $listsize == $limit) {
+				$retString .= "<b>".$aa."</b>&nbsp;";
+			} else {
+				$newlimit = $counter * $listsize;
+				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."\">".$aa."</a></b>&nbsp;";
+			}
+			$counter++;
+		}
+		$retString .= "<b>...</b>&nbsp;";
+		// Show last 5
+		$counter = ceil($fulllistsize / $listsize) - ($pn/3);
+		while ($counter * $listsize < $fulllistsize) {
+			$aa = $counter + 1;
+			if ($counter * $listsize == $limit) {
+				$retString .= "<b>".$aa."</b>&nbsp;";
+			} else {
+				$newlimit = $counter * $listsize;
+				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."\">".$aa."</a></b>&nbsp;";
+			}
+			$counter++;
+		}		
+	}
+	// Deal with next page
+	if ($limit + $listsize >= $fulllistsize) {
+		$retString .= "|&nbsp;<b>Επόμενη</b>";
+	} else {
+		$newlimit = $limit + $listsize;
+		$retString .= "|&nbsp;<a href=\"".$page."?limit=".$newlimit."\"><b>Επόμενη</b></a>";
+	}
+	$retString .= "</td></tr></tbody></table>";
+	
+	return $retString;
 }
 
 ?>
