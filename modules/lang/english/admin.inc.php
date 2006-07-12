@@ -274,9 +274,8 @@ $langSearchUsers = "Search Users";
 // list requests
 $langListRequests = "List Open Requests";
 
-
 // admin announcements
-$langAdminAn = "Admin Announceements";
+$langAdminAn = "Admin Announcements";
 $langAdminAddAnn = "Add Announcement";
 $langAdminModifAnn = "Modify Announcement";
 $langAdminAnnModify = "Anouncement modified";
@@ -286,6 +285,5 @@ $langAdminAnnDel = "Announcement deleted";
 $langAdminAnnTitle = "Title";
 $langAdminAnnBody = "Announcement";
 $langAdminAnnComm = "Comments";
-
-
+$langAdminAnnMes = "announced in";
 ?>
