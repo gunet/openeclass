@@ -22,7 +22,7 @@ if ($is_adminOfCourse && (@$addAnnouce==1 || isset($modify))) {
 */
 
 // display settings 
-		$displayAnnouncementList = true;
+	$displayAnnouncementList = true;
 	$displayForm = true;
 
 	// delete announcement command 
@@ -115,9 +115,9 @@ if ($is_adminOfCourse && (@$addAnnouce==1 || isset($modify))) {
 
 	// display admin announcements 
 		if ($displayAnnouncementList == true) {
-			$result = db_query("SELECT * FROM admin_announcements ORDER BY id DESC",$mysqlMainDb);
-			$bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
-			if (@$addAnnouce !=1) {
+			$result = db_query("SELECT * FROM admin_announcements ORDER BY id DESC", $mysqlMainDb);
+			$announcementNumber = mysql_num_rows($result);
+			if (@$addAnnouce != 1) {
 					$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?addAnnouce=1\">".$langAdminAddAnn."</a>";
 			}
 			$tool_content .=  "<table width=\"99%\">";
@@ -128,23 +128,20 @@ if ($is_adminOfCourse && (@$addAnnouce==1 || isset($modify))) {
 		while ($myrow = mysql_fetch_array($result)) {
 			$content = make_clickable($myrow['gr_body']);
 			$content = nl2br($content);
-			$tool_content .=  "<tbody>
-				<tr class=\"odd\"><span></span>
-					<td class=\"arrow\"> 
-							".$myrow['gr_title']."
-			</td>";
-
+			$tool_content .=  "<tbody><tr class='odd'><td>".$myrow['gr_title']." (".$langAdminAnnMes." ".$myrow['date'].")</td>";
 			// display announcements content
-			$tool_content .=  "</td></tr>
+			$tool_content .= "</tr>
 				<tr><td colspan=2>".$content."<br>
 				<a href=\"$_SERVER[PHP_SELF]?modify=".$myrow['id']."\">
-			<img src=\"../../images/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a>
-			<a href=\"$_SERVER[PHP_SELF]?delete=".$myrow['id']."\">
-			<img src=\"../../images/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a>
-			<br></td></tr>";
+			  <img src=\"../../images/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a>
+			  <a href=\"$_SERVER[PHP_SELF]?delete=".$myrow['id']."\">
+			  <img src=\"../../images/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a>
+			  </td></tr>";
 			$tool_content .= "<tr><td>".$myrow['gr_comment']."</td></tr>";
+			// blank line
+			$tool_content .= "<tr><td>&nbsp;</td></tr>";
 		}	// end while ($myrow = mysql_fetch_array($result))
-		$tool_content .=  "</tbody></table>";
+		$tool_content .= "</tbody></table>";
 	}	// end: if ($displayAnnoucementList == true)
 
 
