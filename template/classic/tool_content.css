@@ -36,7 +36,7 @@ margin-bottom:70px;
 }
 
 #tool_title .tool_name{
-font-size:14px;
+font-size:15px;
 font-family: Arial, Helvetica, sans-serif;
 position:absolute;
 font-weight:bold;
@@ -90,7 +90,7 @@ table, th, td {
 }
 
 caption {
-	font-size: 150%;
+	font-size: 13px;
 	font-weight: bold;
 	margin: 5px;
 	text-align: left;
