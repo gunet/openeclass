@@ -76,14 +76,12 @@ function getUserDocuments($param = null, $type) {
 		while ($myDocuments = mysql_fetch_row($mysql_query_result)) {
 
 			if ($myDocuments){
-//				echo "<br> ".$myDocuments[0];
+
 				$myDocuments[0] = strrev(substr(strstr(strrev($myDocuments[0]),"/"), 1));
-				echo "<br> $myDocuments";
-//				echo "<br> $dir";
 				array_push($docsData,$myDocuments);
 			}
 		}
-//				print_a($docsData);
+
 		if ($num_rows > 0) {
 			array_push($docsLessonData, $docsData);
 			array_push($docsSubGroup, $docsLessonData);
@@ -142,7 +140,7 @@ function getUserDocuments($param = null, $type) {
 
 function docsHtmlInterface($data) {
 	global $urlServer, $langNoDocsExist ;
-	print_a($data);
+
 	$docsExist = false;
 	$content= <<<aCont
 	<div id="datacontainer">
