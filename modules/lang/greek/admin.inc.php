@@ -289,4 +289,16 @@ $langSearchUsers = "Αναζήτηση Χρηστών";
 // list requests
 $langListRequests = "Ανοικτές Αιτήσεις Καθηγητών";
 
+// admin announcements
+$langAdminAn = "Ανακοινώσεις Διαχειριστή";
+$langAdminAddAnn = "Προσθήκη ανακοίνωσης διαχειριστή";
+$langAdminModifAnn = "Τροποποίηση ανακοίνωσης διαχειριστή";
+$langAdminAnnModify = "Η ανακοίνωση διαχειριστή τροποποιήθηκε";
+$langAdminAnVis = "Ορατή";
+$langAdminAnnAdd = "Η ανακοίνωση διαχειριστή προστέθηκε";
+$langAdminAnnDel = "Η ανακοίνωση διαχειριστή διαγράφτηκε";
+$langAdminAnnTitle = "Τίτλος";
+$langAdminAnnBody = "Ανακοίνωση";
+$langAdminAnnComm = "Σχόλια";
+
 ?>

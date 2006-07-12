@@ -274,4 +274,18 @@ $langSearchUsers = "Search Users";
 // list requests
 $langListRequests = "List Open Requests";
 
+
+// admin announcements
+$langAdminAn = "Admin Announceements";
+$langAdminAddAnn = "Add Announcement";
+$langAdminModifAnn = "Modify Announcement";
+$langAdminAnnModify = "Anouncement modified";
+$langAdminAnVis = "Visible";
+$langAdminAnnAdd = "Announcement added";
+$langAdminAnnDel = "Announcement deleted";
+$langAdminAnnTitle = "Title";
+$langAdminAnnBody = "Announcement";
+$langAdminAnnComm = "Comments";
+
+
 ?>
