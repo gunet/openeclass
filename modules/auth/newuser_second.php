@@ -145,10 +145,18 @@ if(!empty($submit))
  			$institut = 1;
  			
  			// manage the store/encrypt process of password into database
- 			$crypt = new Encryption;
- 			$key = $encryptkey;
- 			$pswdlen = "20";
- 			$password_encrypted = $crypt->encrypt($key, $password, $pswdlen);
+ 			$authmethods = array("2","3","4","5");
+ 			if(!in_array($auth,$authmethods))
+ 			{
+ 				$crypt = new Encryption;
+ 				$key = $encryptkey;
+ 				$pswdlen = "20";
+ 				$password_encrypted = $crypt->encrypt($key, $password, $pswdlen);
+ 			}
+ 			else
+ 			{
+ 				$password_encrypted = $password;
+ 			}
  			
 			$inscr_user=mysql_query("INSERT INTO `$mysqlMainDb`.user
 			(user_id, nom, prenom, username, password, email, statut, department, inst_id, am, registered_at, expires_at)
