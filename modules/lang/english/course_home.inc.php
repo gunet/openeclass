@@ -53,7 +53,8 @@ $langModify = "Modify";
 $langUpdate = "Modify Link";
 $langIcon = "Icon";
 
-$langNumOfUsers = "Registered users";
-
+$langUsers = "Users";
+$langRegistered = "registered";
 $langLessonCode = "Lesson code";
+$langIdentity = "Identity";
 ?>

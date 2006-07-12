@@ -65,7 +65,8 @@ $langUpdate = "Αλλαγή Τίτλου";
 $langIcon = "Εικονίδιο";
 $langNameOfTheLink ="Όνομα Συνδέσμου";
 
-$langNumOfUsers = "Εγγεγραμμένοι χρήστες";
-
+$langUsers = "Χρήστες";
+$langRegistered = "εγγεγραμμένοι";
 $langLessonCode = "Κωδικός μαθήματος";
+$langIdentity = "Ταυτότητα";
 ?>
