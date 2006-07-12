@@ -54,7 +54,7 @@ $langFiles = array('admin','addadmin');
 include '../../include/baseTheme.php';
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
-@include "check_admin.inc";
+check_admin();
 // Define $nameTools
 $nameTools = $langNomPageAddHtPass;
 // Initialise $tool_content

@@ -1,7 +1,7 @@
 <?php
 $langFiles = 'registration';
 include '../../include/baseTheme.php';
-@include "check_admin.inc";
+check_admin();
 $nameTools = 'Αναβάθμιση Βάσης Δεδομένων';
 
 // Initialise $tool_content

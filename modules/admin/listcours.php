@@ -58,7 +58,7 @@ $langFiles = array('admin','gunet');
 include '../../include/baseTheme.php';
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
-@include "check_admin.inc";
+check_admin();
 // Other includes
 @include 'admin.inc.php';
 // Define $nameTools

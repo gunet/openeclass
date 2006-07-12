@@ -55,7 +55,7 @@ $langFiles = array('gunet','admin','registration');
 include '../../include/baseTheme.php';
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
-@include "check_admin.inc";
+check_admin();
 // Define $nameTools
 $nameTools = $langSearchCourse;
 // Initialise $tool_content
@@ -91,7 +91,7 @@ if (isset($searchtitle) && isset($searchcode) && isset($searchtype) && isset($se
     <td width=\"3%\" nowrap><b>Κωδικός:</b></td>
     <td><input type=\"text\" name=\"formsearchcode\" size=\"40\" value=\"".@$searchcode."\"></td>
 </tr>";
-	switch ($searchcode) {
+	switch (@$searchcode) {
 		case "2":
 			$typeSel[2] = "selected";
 			break;
@@ -110,9 +110,9 @@ if (isset($searchtitle) && isset($searchcode) && isset($searchtype) && isset($se
     <td>
       <select name=\"formsearchtype\">
       	<option value=\"-1\" ".$typeSel[-1].">Όλα</option>
-        <option value=\"2\" ".$typeSel[2].">Ανοιχτό</option>
-        <option value=\"1\" ".$typeSel[1].">Ανοιχτό με εγγραφή</option>
-        <option value=\"0\" ".$typeSel[0].">Κλειστό</option>
+        <option value=\"2\" ".@$typeSel[2].">Ανοιχτό</option>
+        <option value=\"1\" ".@$typeSel[1].">Ανοιχτό με εγγραφή</option>
+        <option value=\"0\" ".@$typeSel[0].">Κλειστό</option>
       </select>
     </td>
 </tr>";
@@ -124,7 +124,7 @@ if (isset($searchtitle) && isset($searchcode) && isset($searchtype) && isset($se
 $resultFac=mysql_query("SELECT name FROM faculte ORDER BY number");
 
 	while ($myfac = mysql_fetch_array($resultFac)) {	
-		if($myfac['name'] == $searchfaculte) 
+		if($myfac['name'] == @$searchfaculte) 
 			$tool_content .= "      <option selected>$myfac[name]</option>";
 		else 
 			$tool_content .= "      <option>$myfac[name]</option>";

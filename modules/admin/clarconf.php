@@ -58,7 +58,7 @@ $langFiles = 'admin';
 include '../../include/baseTheme.php';
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
-@include "check_admin.inc";
+check_admin();
 // Define $nameTools
 $nameTools = $langClaroConf;
 // Initialise $tool_content
@@ -195,7 +195,7 @@ else {
 		@include("../../config/config_backup.php");
 	}
 	// Constract the form
-	$tool_content .= "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\"";
+	$tool_content .= "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">";
 	$tool_content .= "<table width=\"99%\"><caption>".$langFileEdit." ".$titleextra."</caption><tbody>";
 	$tool_content .= "  <tr>
     <td width=\"3%\" nowrap><b>\$urlServer:</b></td>

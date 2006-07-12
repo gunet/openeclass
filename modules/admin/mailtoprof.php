@@ -54,7 +54,7 @@ $langFiles = array('gunet','registration','admin');
 include '../../include/baseTheme.php';
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
-@include('check_admin.inc');
+check_admin();
 // Include functions needed to send email
 include('../../include/sendMail.inc.php');
 // Define $nameTools

@@ -54,7 +54,7 @@ $langFiles = array('course_info', 'create_course', 'opencours','admin');
 include '../../include/baseTheme.php';
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
-@include "check_admin.inc";
+check_admin();
 // Define $nameTools
 $nameTools = $langCourseDel;
 // Initialise $tool_content

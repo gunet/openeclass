@@ -53,7 +53,7 @@ $langFiles = array('admin','gunet','speedSubscribe');
 include '../../include/baseTheme.php';
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
-@include "check_admin.inc";
+check_admin();
 // Define $nameTools
 $nameTools = $langSpeedSubscribe;
 // Initialise $tool_content
