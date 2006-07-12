@@ -267,14 +267,15 @@ draw($tool_content, 2, 'survey', $head_content);
 ******************************************************************************/
 function printSurveyCreationForm() {
 	global $tool_content, $langSurveyName, $langSurveyStart, 
-		$langSurveyEnd, $langSurveyType, $langSurveyMC, $langSurveyFillText, $langSurveyContinue;
+		$langSurveyEnd, $langSurveyType, $langSurveyMC, $langSurveyFillText, 
+		$langSurveyContinue, $langSurveyCreate;
 	
 	$CurrentDate = date("Y-m-d H:i:s");
 	$CurrentDate = htmlspecialchars($CurrentDate);
 	$tool_content .= <<<cData
 	<form action="addsurvey.php" id="survey">
 	<input type="hidden" value="0" name="MoreQuestions">
-	<table>
+	<table><thead>$langSurveyCreate</thead>
 		<tr><td>$langSurveyName</td><td colspan="2"><input type="text" size="50" name="SurveyName"></td></tr>
 		<tr><td>$langSurveyStart</td><td colspan="2">
 			<input type="text" size="17" name="SurveyStart" value="$CurrentDate">
