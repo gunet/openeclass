@@ -10,16 +10,20 @@ check_admin();
 $nameTools = $langAdminAn;
 $tool_content = "";
 
-/*
-if ($is_adminOfCourse && (@$addAnnouce==1 || isset($modify))) {
-	if ($language == 'greek')
-	$lang_editor='gr';
-	else
-	$lang_editor='en';
+// default language
+if (!isset($localize)) $localize='el';
 
+// choose the database tables
+if (isset($localize) and $localize == 'en') {
+	$table_title = 'en_title';
+	$table_content = 'en_body';
+	$table_comment = 'en_comment';
+} else {
+	$table_title = 'gr_title';
+	$table_content = 'gr_body';
+	$table_comment = 'gr_comment';
 }
 
-*/
 
 // display settings 
 	$displayAnnouncementList = true;
@@ -33,14 +37,14 @@ if ($is_adminOfCourse && (@$addAnnouce==1 || isset($modify))) {
 
 	// moddify announcement command 
 	if (isset($modify) && $modify) {
-		$result =  db_query("SELECT * FROM admin_announcements WHERE id='$modify'",$mysqlMainDb);
+		$result = db_query("SELECT * FROM admin_announcements WHERE id='$modify'",$mysqlMainDb);
 		$myrow = mysql_fetch_array($result);
 
 		if ($myrow) {
 			$AnnouncementToModify = $myrow['id'];
-			$titleToModify = $myrow['gr_title'];
-			$contentToModify = $myrow['gr_body'];
-			$commentToModify = $myrow['gr_comment'];
+			$titleToModify = $myrow[$table_title];
+			$contentToModify = $myrow[$table_content];
+			$commentToModify = $myrow[$table_comment];
 			$visibleToModify = $myrow['visible'];
 			$displayAnnouncementList = true;
 		}
@@ -52,10 +56,11 @@ if ($is_adminOfCourse && (@$addAnnouce==1 || isset($modify))) {
 		if($id) {
 			if (isset($visible)) {
 				db_query("UPDATE admin_announcements 
-					SET gr_title='$title', gr_body='$newContent', gr_comment='$comment', visible='V', date=NOW() WHERE id=$id",$mysqlMainDb);
+					SET $table_title='$title', $table_content='$newContent', $table_comment='$comment', visible='V', date=NOW() WHERE id=$id",$mysqlMainDb);
+					
 			} else {
 				db_query("UPDATE admin_announcements 
-				SET gr_title='$title', gr_body='$newContent', gr_comment='$comment', visible='I', date=NOW() WHERE id=$id",$mysqlMainDb);
+				SET $table_title='$title', $table_content='$newContent', $table_comment='$comment', visible='I', date=NOW() WHERE id=$id",$mysqlMainDb);
 				}
 			$message = $langAdminAnnModify;
 		}
@@ -64,10 +69,10 @@ if ($is_adminOfCourse && (@$addAnnouce==1 || isset($modify))) {
 			// insert announcement 
 			if (isset($visible)) {
 			db_query("INSERT INTO admin_announcements 
-					SET gr_title = '$title', gr_body = '$newContent', gr_comment = '$comment', date = NOW()");
+					SET $table_title = '$title', $table_content = '$newContent', $table_comment = '$comment', date = NOW()");
 				} else {
 			db_query("INSERT INTO admin_announcements 
-					SET gr_title = '$title', gr_body = '$newContent', gr_comment = '$comment', visible='I', date = NOW()");
+					SET $table_title = '$title', $table_content = '$newContent', $table_comment = '$comment', visible='I', date = NOW()");
 				}
 					$message = "$langAdminAnnAdd";
 		}	// else
@@ -85,7 +90,7 @@ if ($is_adminOfCourse && (@$addAnnouce==1 || isset($modify))) {
 	if ($displayForm ==  true && (@$addAnnouce==1 || isset($modify))) {
 
 		// display add announcement command
-		$tool_content .=  "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">";
+		$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?localize=$localize'>";
 			if (isset($modify)) {
 				$tool_content .= "$langAdminModifAnn";
 			} else {
@@ -118,7 +123,7 @@ if ($is_adminOfCourse && (@$addAnnouce==1 || isset($modify))) {
 			$result = db_query("SELECT * FROM admin_announcements ORDER BY id DESC", $mysqlMainDb);
 			$announcementNumber = mysql_num_rows($result);
 			if (@$addAnnouce != 1) {
-					$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?addAnnouce=1\">".$langAdminAddAnn."</a>";
+					$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?addAnnouce=1&localize=$localize\">".$langAdminAddAnn."</a>";
 			}
 			$tool_content .=  "<table width=\"99%\">";
 			if ($announcementNumber>0) {
@@ -126,18 +131,18 @@ if ($is_adminOfCourse && (@$addAnnouce==1 || isset($modify))) {
 				$tool_content .= "</tr></thead>";
 			}
 		while ($myrow = mysql_fetch_array($result)) {
-			$content = make_clickable($myrow['gr_body']);
+			$content = make_clickable($myrow[$table_content]);
 			$content = nl2br($content);
-			$tool_content .=  "<tbody><tr class='odd'><td>".$myrow['gr_title']." (".$langAdminAnnMes." ".$myrow['date'].")</td>";
+			$tool_content .=  "<tbody><tr class='odd'><td>".$myrow[$table_title]." (".$langAdminAnnMes." ".$myrow['date'].")</td>";
 			// display announcements content
 			$tool_content .= "</tr>
 				<tr><td colspan=2>".$content."<br>
-				<a href=\"$_SERVER[PHP_SELF]?modify=".$myrow['id']."\">
+				<a href=\"$_SERVER[PHP_SELF]?modify=".$myrow['id']."&localize=".$localize."\">
 			  <img src=\"../../images/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a>
-			  <a href=\"$_SERVER[PHP_SELF]?delete=".$myrow['id']."\">
+			  <a href=\"$_SERVER[PHP_SELF]?delete=".$myrow['id']."&localize=".$localize."\">
 			  <img src=\"../../images/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a>
 			  </td></tr>";
-			$tool_content .= "<tr><td>".$myrow['gr_comment']."</td></tr>";
+			$tool_content .= "<tr><td>".$myrow[$table_comment]."</td></tr>";
 			// blank line
 			$tool_content .= "<tr><td>&nbsp;</td></tr>";
 		}	// end while ($myrow = mysql_fetch_array($result))
