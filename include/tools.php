@@ -405,6 +405,10 @@ function adminMenu(){
 
 	array_push($sideMenuSubGroup, $langGenAdmin);
 
+	array_push($sideMenuText, $langAdminAn);
+	array_push($sideMenuLink, "../admin/adminannouncements.php");
+	array_push($sideMenuImg, "adm_announce.gif");
+
 	//array_push($sideMenuText, $langVersion);
 	//array_push($sideMenuLink, "../admin/about.php");
 	//array_push($sideMenuImg, "eclass_version.gif");
