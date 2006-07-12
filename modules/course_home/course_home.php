@@ -66,29 +66,44 @@ while($result = mysql_fetch_row($res)) {
 	//
 }
 
+if(strlen($description) > 0) {
+	$main_content .= "<div id=\"course_home_id\">$langDescription</div><p>$description</p>";
+}
 
-$main_content .= "<h3>$langDescription</h3><p>$description</p>";
-$main_content .= "<h3>$langcourse_keywords</h3><p>$keywords</p>";
+if (strlen($keywords) > 0) {
+	$main_content .= "<p><b>$langcourse_keywords: </b>$keywords</p>";
+}
 
-$main_content .= "<h3>$langcourse_objectives</h3><p>$objectives</p>";
-$main_content .= "<h3>$langcourse_prerequisites</h3><p>$prerequisites</p>";
-$main_content .= "<h3>$langcourse_references</h3><p>". nl2br($references)."</p>";
+if (strlen($objectives) > 0) {
+	$main_content .= "<div id=\"course_home_id\">$langcourse_objectives</div><p>$objectives</p>";
+}
+
+if(strlen($prerequisites) > 0) {
+	$main_content .= "<div id=\"course_home_id\">$langcourse_prerequisites</div><p>$prerequisites</p>";
+}
+
+//add if for evaluation
+
+if(strlen($references) > 0) {
+	$main_content .= "<div id=\"course_home_id\">$langcourse_references</div><p>". nl2br($references)."</p>";
+}
+
 
 switch ($type){
-	case 'pre': { //pre
-		$lessonType = $m['pre'];
-		break;
-	}
+case 'pre': { //pre
+	$lessonType = $m['pre'];
+	break;
+}
 
-	case 'post': {//post
-		$lessonType = $m['post'];
-		break;
-	}
+case 'post': {//post
+	$lessonType = $m['post'];
+	break;
+}
 
-	case 'other': { //other
-		$lessonType = $m['other'];
-		break;
-	}
+case 'other': { //other
+	$lessonType = $m['other'];
+	break;
+}
 }
 
 $bar_content .= "<h4>$langLessonCode</h4>";
@@ -127,58 +142,18 @@ if ($is_adminOfCourse) {
 			break;
 		}
 	}
-
-	$main_content .= "<br><hr><br>";
-	$main_content .= "
-		<table>
-			<thead>
-				<tr>
-					<th>
-						$langConfidentiality
-					</th>
-					<td>
-					$lessonStatus
-					</td>
-				</tr>
-				<tr>
-					<th>
-						$langNumOfUsers
-					</th>
-					<td>
-					$numUsers
-					</td>
-				</tr>
-			</thead>
-		</table>
-	
-	";
+	$bar_content .= "<h4>$langConfidentiality</h4>";
+	$bar_content .= "<p>".$lessonStatus."</p>";
+	$bar_content .= "<h4>$langUsers</h4>";
+	$bar_content .= "<p>".$numUsers." ".$langRegistered."</p>";
 }
-
-// professor view
-
-//$table= "stat_accueil";
-
-// statistics  - Count only if first visit during the session
-//if (!isset($alreadyHome) || (isset($alreadyHome) && !$alreadyHome)) {
-//	include ("../../../modules/stat/write_logs.php");
-//}
-
-//$alreadyHome = 1;
-//session_register("alreadyHome");
-
-// function for displaying tools
-
-//$tool_content .= "<p>Content viewable by everyone</p>";
-
-
-//-----------------------------------------------------------
 
 $tool_content .= <<<lCont
 <div id="container_login">
 
 <div id="wrapper">
 <div id="content_login">
-<p>$main_content</p>
+$main_content
 
 
 </div>
@@ -186,6 +161,11 @@ $tool_content .= <<<lCont
 <div id="navigation">
 
  <table width="99%">
+ 	<thead>
+ 		<tr>
+ 			<th>$langIdentity</th>
+ 		</tr>
+ 	</thead>
      <tbody>
       	<tr class="odd">
       		<td>
