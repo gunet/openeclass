@@ -2,6 +2,7 @@
 
 $langSearch = "Αναζήτηση";
 $langDoSearch = "Εκτέλεση Αναζήτησης";
+$langNewSearch = "Νέα Αναζήτηση";
 $langSearch_terms = "Όροι Αναζήτησης: ";
 $langSearchIn = "Αναζήτηση σε: ";
 
