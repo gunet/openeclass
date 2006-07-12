@@ -93,7 +93,157 @@ $tool_content .= "<table width=\"90%\"><thead>$langNamesSurvey</thead><tbody><tr
  * printSurveys()
  ****************************************************************************************************/
 	function printSurveys() {
- 		global $tool_content;
+ 		global $tool_content, $currentCourse, $langSurveyNone, $langSurveyNone,
+ 			$langSurveyCreate, $langSurveyCreate, $langSurveyName, $langSurveyCreator, 
+ 			$langSurveyCreation, $langSurveyStart, $langSurveyEnd, $langSurveyType, 
+ 			$langSurveyOperations, $is_adminOfCourse;
+
+		$survey_check = 0;
+		$result = mysql_list_tables($currentCourse);
+		while ($row = mysql_fetch_row($result)) {
+			if ($row[0] == 'survey') {
+		 		//$tool_content .= $row[0] . "<br><br>";
+		 		$result = db_query("select * from survey", $currentCourse);
+				$num_rows = mysql_num_rows($result);
+				if ($num_rows > 0)
+		 			++$survey_check;
+			}
+		}
+		if (!$survey_check) {
+			$tool_content .= $langSurveyNone . "<br><br>";
+			if ($is_adminOfCourse) 
+				$tool_content .= '<b><a href="addsurvey.php?UseCase=0">'.$langSurveyCreate.'</a></b><br><br>  ';
+			}
+		else {
+			//$tool_content .= $num_rows . " " . $survey_check;
+		
+			if ($is_adminOfCourse) 
+				$tool_content .= '<b><a href="addsurvey.php?UseCase=0">'.$langSurveyCreate.'</a></b><br><br>  ';
+			
+			// Print active surveys //////////////////////////////////////////
+			$tool_content .= <<<cData
+				<b>$langSurveysActive</b>
+				<table border="1"><tr>
+				<td>$langSurveyName</td>
+				<td>$langSurveyCreator</td>
+				<td>$langSurveyCreation</td>
+				<td>$langSurveyStart</td>
+				<td>$langSurveyEnd</td>
+				<td>$langSurveyType</td>
+				<td>$langSurveyOperations</td>
+				</tr>
+cData;
+			
+			$active_surveys = db_query("
+				select * from survey 
+				where active=1", $currentCourse);
+				
+			while ($theSurvey = mysql_fetch_array($active_surveys)) {	
+				
+				$creator_id = $theSurvey["creator_id"];
+				
+				$survey_creator = db_query("
+				select nom,prenom from user 
+				where user_id='$creator_id'", $mysqlMainDb);
+				$theCreator = mysql_fetch_array($survey_creator);
+				
+				$sid = $theSurvey["sid"];
+				$answers = db_query("
+				select * from survey_answer 
+				where sid='$sid'", $currentCourse);
+				$countAnswers = mysql_num_rows($answers);
+				
+				if ($is_adminOfCourse) { 
+					$tool_content .= "<tr><td><a href=\"surveyresults.php?sid=". 
+					$sid ."&type=" . $theSurvey["type"]."\">" . $theSurvey["name"] .
+					"</a></td>";
+				} else {
+					$tool_content .= "<tr><td>" . $theSurvey["name"] . "</td>";
+				}	
+					
+				$tool_content .= "<td>" . $theCreator["nom"]. " " . $theCreator["prenom"] . "</td>";
+				$tool_content .= "<td>" . $theSurvey["creation_date"] . "</td>";
+				$tool_content .= "<td>" . $theSurvey["start_date"] . "</td>";
+				$tool_content .= "<td>" . $theSurvey["end_date"] . "</td>";
+				
+				if ($theSurvey["type"] == 1) {
+					$tool_content .= "<td>" . $langSurveyMC . "</td>";
+				} else {
+					$tool_content .= "<td>" . $langSurveyFillText . "</td>";
+				}
+				if ($is_adminOfCourse) 
+					$tool_content .= "<td><!--<a href='editsurvey.php?sid={$sid}'>".$langSurveyEdit."</a> | -->".
+						"<a href='deletesurvey.php?sid={$sid}'>".$langSurveyRemove."</a> | ".
+						"<a href='deactivatesurvey.php?sid={$sid}'>".$langSurveyDeactivate."</a> | ".
+						"</td></tr>";
+				else
+					$tool_content .= "<td><a href='surveyparticipate.php?UseCase=1&sid=". $sid ."'>".$langSurveyParticipate."</a></td></tr>";
+			}
+			$tool_content .= "</table><br>";
+			
+			//		Print inactive surveys ///////////////////////////////
+			if ($is_adminOfCourse) {
+				
+				$tool_content .= <<<cData
+					<b>$langSurveysInactive</b>
+					<table border="1"><tr>
+					<td>$langSurveyName</td>
+					<td>$langSurveyCreator</td>
+					<td>$langSurveyCreation</td>
+					<td>$langSurveyStart</td>
+					<td>$langSurveyEnd</td>
+					<td>$langSurveyType</td>
+					<td>$langSurveyOperations</td>
+					</tr>
+cData;
+				
+				$inactive_surveys = db_query("
+					select * from survey 
+					where active=0", $currentCourse);
+					
+				while ($theSurvey = mysql_fetch_array($inactive_surveys)) {	
+					
+					$creator_id = $theSurvey["creator_id"];
+					
+					$survey_creator = db_query("
+					select nom,prenom from user 
+					where user_id='$creator_id'", $mysqlMainDb);
+					$theCreator = mysql_fetch_array($survey_creator);
+					
+					$sid = $theSurvey["sid"];
+					$answers = db_query("
+					select * from survey_answer 
+					where sid='$sid'", $currentCourse);
+					$countAnswers = mysql_num_rows($answers);
+					
+					//$tool_content .= "<tr><td>" . $theSurvey["name"] . "</td>";
+					if ($is_adminOfCourse) { 
+						$tool_content .= "<tr><td><a href=\"surveyresults.php?sid=". 
+						$sid ."&type=" . $theSurvey["type"]."\">" . $theSurvey["name"] .
+					"</a></td>";
+					} else {
+						$tool_content .= "<tr><td>" . $theSurvey["name"] . "</td>";
+					}
+					//$tool_content .= "<td>" . $countAnswers . "</td>";
+					$tool_content .= "<td>" . $theCreator["nom"]. " " . $theCreator["prenom"] . "</td>";
+					$tool_content .= "<td>" . $theSurvey["creation_date"] . "</td>";
+					$tool_content .= "<td>" . $theSurvey["start_date"] . "</td>";
+					$tool_content .= "<td>" . $theSurvey["end_date"] . "</td>";
+					
+					if ($theSurvey["type"] == 1) {
+						$tool_content .= "<td>" . $langSurveyMC . "</td>";
+					} else {
+						$tool_content .= "<td>" . $langSurveyFillText . "</td>";
+					}
+					$tool_content .= "<td><!--<a href='editsurvey.php?sid={$sid}'>".$langSurveyEdit."</a> | -->".
+					"<a href='deletesurvey.php?sid={$sid}'>".$langSurveyRemove."</a> | ".
+					"<a href='activatesurvey.php?sid={$sid}'>".$langSurveyActivate."</a> | ".
+					"</td></tr>";
+				}
+				$tool_content .= "</table><br>";
+			}
+		}
+
 	}
 	
  /***************************************************************************************************
