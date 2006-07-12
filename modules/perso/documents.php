@@ -17,10 +17,6 @@
 *
 */
 
-/*ALTER TABLE `user` ADD `perso` ENUM( 'yes', 'no' ) DEFAULT 'no' NOT NULL ,
-ADD `announce_flag` DATE NOT NULL ,
-ADD `doc_flag` DATE NOT NULL ,
-ADD `forum_flag` DATE NOT NULL ;*/
 function getUserDocuments($param = null, $type) {
 
 	global $mysqlMainDb, $uid, $dbname, $currentCourseID;
@@ -54,7 +50,6 @@ function getUserDocuments($param = null, $type) {
 	$docs_query_new 	= createDocsQueries($queryParamNew);
 	$docs_query_memo 	= createDocsQueries($queryParamMemo);
 
-//	print_a($docs_query_new);
 	//		We have 2 SQL cases. The scripts tries to return all the new Announcement
 	//		the user had since his last login. If the returned items are less than 1
 	//		it gets the last announcements the user saw.
@@ -76,13 +71,6 @@ function getUserDocuments($param = null, $type) {
 			array_push($docsLessonData, $lesson_title[$i]);
 			array_push($docsLessonData, $lesson_code[$i]);
 
-			//update the corresponding field in cours_user and set
-			//the field's value to the last LOGIN date of the user
-			//set a flag so that it only updates the date once! :)
-//http://213.5.72.84:8088/eclass/eclass20/modules/document/document.php?openDir=%2Fdokimastikos_kat%2Fdok_kat_deep
-			//PROSOXH!! to update na ginetai afou bgei apo to for!!1
-			//alliws 8a to kanei se ka8e ma8hma pou exei nees anakoinwseis!! (axreiasto!)
-//			echo "data exists";
 		}
 
 		while ($myDocuments = mysql_fetch_row($mysql_query_result)) {
@@ -90,6 +78,7 @@ function getUserDocuments($param = null, $type) {
 			if ($myDocuments){
 //				echo "<br> ".$myDocuments[0];
 				$myDocuments[0] = strrev(substr(strstr(strrev($myDocuments[0]),"/"), 1));
+				echo "<br> $myDocuments";
 //				echo "<br> $dir";
 				array_push($docsData,$myDocuments);
 			}
@@ -105,13 +94,12 @@ function getUserDocuments($param = null, $type) {
 
 
 	if ($getNewDocs) {
+		
 		array_push($docsGroup, $docsSubGroup);
 		$sqlNowDate = eregi_replace(" ", "-",$usr_lst_login);
 		$sql = "UPDATE `user` SET `doc_flag` = '$sqlNowDate' WHERE `user_id` = $uid ";
 		db_query($sql, $mysqlMainDb);
-//		echo $sql;
-		//update announcemenets memory
-		//call announceHtmlInterface()
+
 	} elseif (!$getNewDocs) {
 		
 		//if there are no new announcements, get the last announcements the user had
@@ -128,6 +116,7 @@ function getUserDocuments($param = null, $type) {
 //				$mysql_query_result = db_query($announce_query_memo[$i]);
 
 				while ($myDocuments = mysql_fetch_row($mysql_query_result)) {
+					$myDocuments[0] = strrev(substr(strstr(strrev($myDocuments[0]),"/"), 1));
 					array_push($docsData,$myDocuments);
 				}
 
@@ -153,7 +142,7 @@ function getUserDocuments($param = null, $type) {
 
 function docsHtmlInterface($data) {
 	global $urlServer, $langNoDocsExist ;
-	
+	print_a($data);
 	$docsExist = false;
 	$content= <<<aCont
 	<div id="datacontainer">
