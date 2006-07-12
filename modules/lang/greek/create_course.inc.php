@@ -120,6 +120,7 @@ $langToolManagement = "Διαχείριση εργαλείων";
 $langUsage = "Στατιστικά Χρήσης";
 $langPoll="Δημοσκόπηση";
 $langSurvey="Ερωτηματολόγιο μαθησιακού προφίλ";
+$langQuestionnaire = "Ερωτηματολόγιο";
 $langCourseDesc = "Περιγραφή Μαθήματος";
 
 // Other SQL tables

@@ -111,6 +111,7 @@ $langVideoText="This is an example of a RealVideo file. You can upload any audio
 $langGoogle="Quick and powerfull search engine";
 $langIntroductionText="This is the introduction text of your course. To replace it by your own text, click below on <b>modify</b>.";
 $langIntroductionTwo="This page allows any student or group to upload a document on the course\'s website. Send HTML file only if it contains no image.";
+$langQuestionnaire = "Questionnaire";
 $langCourseDescription="Write here the description that will appear in the course list.";
 $langProfessor="Professor";
 $langAnnouncementEx="This is an example of announcement. Only the profesor and other administrators of the course can publish announcements.";
