@@ -300,5 +300,5 @@ $langAdminAnnDel = "Η ανακοίνωση διαχειριστή διαγράφτηκε";
 $langAdminAnnTitle = "Τίτλος";
 $langAdminAnnBody = "Ανακοίνωση";
 $langAdminAnnComm = "Σχόλια";
-
+$langAdminAnnMes = "τοποθετήθηκε την";
 ?>
