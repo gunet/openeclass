@@ -55,6 +55,19 @@ function valid_email($e) {
 	return TRUE;
 }
 
+function check_password_editable($password)
+{
+	$authmethods = array("pop3","imap","ldap","db");
+	if(in_array($password,$authmethods))
+	{
+		return 0; // it is not editable, because it belongs in external auth method
+	}
+	else
+	{
+		return 1; // is editable
+	}
+}
+
 if (!isset($femail)) {
 	/***** Email address entry form *****/
 
@@ -91,6 +104,9 @@ else
 		if (mysql_num_rows($res) > 0) 
 		{
 			$text = $lang_pass_email_intro. $emailhelpdesk;
+			
+			
+			
 			if (mysql_num_rows($res) == 1) 
 			{
 				$text .= "\n$lang_pass_email_account\n";
@@ -101,13 +117,32 @@ else
 			}
 			while ($s = mysql_fetch_array($res, MYSQL_ASSOC)) 
 			{
-				$text .= "
+				$is_editable = check_password_editable($s['password']);
+				if(!empty($is_editable))
+				{
+					// decrypt now, the password from db
+					$crypt = new Encryption;
+					$key = $encryptkey;
+					$password_decrypted = $crypt->decrypt($key, $s['password']);
+					
+					$text .= "
 					$lang_pass_email_name " . htmlspecialchars($s['prenom']." ".$s['nom']) . "
 					$lang_pass_email_status " . (($s['statut'] == 1)? "$lang_prof": (
 						($s['statut'] == 5)? "$lang_student": "$lang_other")) . "
-						$lang_pass_email_username " . htmlspecialchars($s['username']) .
-						($s['inst_id']? " $lang_pass_email_ldap": "
-						$lang_pass_email_password " . htmlspecialchars($s['password']) . "\n");
+						$lang_pass_email_username " . htmlspecialchars($s['username']);
+						//($s['inst_id']? $lang_pass_email_ldap:$lang_pass_email_password . htmlspecialchars($password_decrypted) . "\n");
+						$text .= $lang_pass_email_password . htmlspecialchars($password_decrypted) . "\n";
+				}
+				else
+				{
+					switch($s['password'])
+					{
+						case 'pop3':$auth=2;break; case 'imap':$auth=3;break; case 'ldap':$auth=4;break; case 'db':$auth=5;break; default:$auth=1;break;
+					}
+					$text .= "Το συνθηματικό αυτού του λογαριασμού δεν μπορεί να αλλαχθεί,
+					διότι ανήκει σε εξωτερική μέθοδο πιστοποίησης\n
+					Παρακαλούμε, επικοινωνήστε με το διαχειριστή για την ".get_auth_info($auth);
+				}
 			}
 			/***** Account details found, now send e-mail *****/
 			$emailheaders = "From: $siteName <$emailAdministrator>\n".
@@ -128,6 +163,10 @@ else
 				$tool_content .= $lang_pass_email_ok
 				."<code> ".$femail." </code>.";
 			}
+			
+			
+			
+			
 		} 
 		else 
 		{
