@@ -48,6 +48,12 @@ $tool_content = "";
 
 // Main body
 $auth = isset($_GET['auth'])?$_GET['auth']:'';
+$authmethods = get_auth_active_methods();
+
+if(!in_array($auth,$authmethods))		// means try to hack,attack
+{
+	die("INVALID AUTHENTICATION METHOD");
+}
 $msg = get_auth_info($auth);
 $settings = get_auth_settings($auth);
 if(!empty($msg)) $nameTools = $msg;

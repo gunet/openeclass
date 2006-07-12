@@ -56,27 +56,26 @@ $tool_content = "";		// Initialise $tool_content
 $tool_content .= "<table width=\"99%\">
 <tr valign=\"top\" bgcolor=\"".$color2."\">
 <td>";
-$auth = get_auth_id();
+// $auth = get_auth_id();
+$auth = get_auth_active_methods();
+$e = 1;
+$tool_content .= "<ul>";
+$tool_content .= "<li><a href=\"newuser.php\">Εγγραφή χρήστη με ".get_auth_info($e)."</a><br /></li>";
 if(!empty($auth))
 {
-	$tool_content .= "<ul>";
-	$tool_content .= "<li><a href=\"newuser.php\">".$regnoldap."</a><br /></li>";
-	if($auth!=1)
+	foreach($auth as $k=>$v)
 	{
-		$auth_method_settings = get_auth_settings($auth);
-		$tool_content .= "<li><a href=\"ldapnewuser.php\">".$regldap."</a></li>";
-		if(!empty($auth_method_settings))
+		if($v!=1)
 		{
-			$tool_content .= "<br />".$auth_method_settings['auth_instructions'];
+			$tool_content .= "<li><a href=\"ldapnewuser.php?auth=".$v."\">Εγγραφή χρήστη με ".get_auth_info($v)."</a></li>";
+		}
+		else
+		{
+			continue;
 		}
 	}
-	$tool_content .= "</ul>";
 }
-else
-{
-	$tool_content .= "<br />Η εγγραφή στην πλατφόρμα, πρός το παρόν δεν επιτρέπεται.<br />
-	Παρακαλούμε, ενημερώστε το διαχειριστή του συστήματος<br />";
-}
+$tool_content .= "<ul>";
 
 $tool_content .= "</td></tr></table>";
 
