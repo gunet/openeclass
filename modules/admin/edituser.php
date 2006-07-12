@@ -66,10 +66,17 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 	    die("Unable to query database (user_id='$u')!");
 		}
 		$info = mysql_fetch_array($sql);
-		$crypt = new Encryption;
+		$password = $info[3];
+		if(($password!='imap') || ($password!='pop3') || ($password!='ldap') || ($password!='db'))
+		{
+			$crypt = new Encryption;
 			$key = $encryptkey;
 			$password_decrypted = $crypt->decrypt($key, $info[3]);
-			
+		}
+		else
+		{
+			$password_decrypted = $password;
+		}
 		$tool_content .= "<h4>Επεξεργασία χρήστη $info[2]</h4>";
 		$tool_content .= "<form name=\"edituser\" method=\"post\" action=\"./edituser.php\">
 	<table width=\"99%\" border=\"0\">
