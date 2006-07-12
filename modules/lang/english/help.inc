@@ -304,6 +304,21 @@ members list.</li>
 <li><b>Delete</b> deletes a group.</li></ul>
 <hr noshade size=1>";
 
+// Help survey
+$langHSurvey="Help";
+$langSurveyContent="<p>This tool allows the teacher to create and 
+manage Surveys.</p>";
+
+// Help poll.php
+$langHPoll="Help";
+$langPollContent="<p>This tool allows the teacher to create and 
+manage Polls.</p>";
+
+// Help questionnaire.php
+$langHQuestionnaire="Help";
+$langQuestionnaireContent="<p>This tool allows the teacher to create and 
+manage Questionnaires.</p>";;
+
 // Help exercise.php
 
 
