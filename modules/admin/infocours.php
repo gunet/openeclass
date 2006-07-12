@@ -49,6 +49,9 @@
 /*****************************************************************************
 		DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
 ******************************************************************************/
+// Initialize some variables
+$searchurl = "";
+
 // Set the langfiles needed
 $langFiles = 'admin';
 // Include baseTheme
@@ -70,10 +73,6 @@ if (isset($search) && ($search=="yes")) {
 }
 // Update cours basic information
 if (isset($submit))  {
-	$dq = $dq * 1000000;
-        $vq = $vq * 1000000;
-        $gq = $gq * 1000000;
-        $drq = $drq * 1000000;
   // Get faculte ID and faculte name for $faculte
   // $faculte example: 12--Tmima 1
   list($facid, $facname) = split("--", $faculte);
@@ -95,7 +94,7 @@ else {
 	// Get course information
 	$row = mysql_fetch_array(mysql_query("SELECT * FROM cours WHERE code='$c'"));
 	// Constract the edit form
-	$tool_content .= "<form action=".$_SERVER[PHP_SELF]."?c=".$c."".$searchurl." method=\"post\">";	
+	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".$c."".$searchurl." method=\"post\">";	
 	$tool_content .= "<table width=\"99%\"><caption>".$langCourseInfoEdit."</caption><tbody>";
 	$tool_content .= "  <tr>
     <td colspan=\"2\"><b><u>".$langCourseInfos."</u></b><br><br></td>
@@ -108,9 +107,9 @@ else {
 
 	while ($myfac = mysql_fetch_array($resultFac)) {	
 		if($myfac['id'] == $row['faculteid']) 
-			$tool_content .= "      <option value=\"".$myfac['id']."--".$myfac[name]."\" selected>$myfac[name]</option>";
+			$tool_content .= "      <option value=\"".$myfac['id']."--".$myfac['name']."\" selected>$myfac[name]</option>";
 		else 
-			$tool_content .= "      <option value=\"".$myfac['id']."--".$myfac[name]."\">$myfac[name]</option>";
+			$tool_content .= "      <option value=\"".$myfac['id']."--".$myfac['name']."\">$myfac[name]</option>";
 	}
 	$tool_content .= "</select>
     </td>

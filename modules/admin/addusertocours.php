@@ -64,6 +64,9 @@ $tool_content = "";
 /*****************************************************************************
 		MAIN BODY
 ******************************************************************************/
+// Initialize some variables
+$searchurl = "";
+
 // Define $searchurl to go back to search results
 if (isset($search) && ($search=="yes")) {
 	$searchurl = "&search=yes";
@@ -161,7 +164,7 @@ function reverseAll(cbList) {
 
 </script>';
 	
-	$tool_content .= "<form action=".$_SERVER[PHP_SELF]."?c=".$c."".$searchurl." method=\"post\">";
+	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".$c."".$searchurl." method=\"post\">";
 	$tool_content .= "<table width=\"99%\"><caption>".$langFormUserManage."</caption><tbody>";
 
 	$tool_content .= "<tr valign=top align=center> 

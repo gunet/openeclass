@@ -64,16 +64,15 @@ $tool_content = "";
 /*****************************************************************************
 		MAIN BODY
 ******************************************************************************/
+// Initialize some variables
+$searchurl = "";
+
 // Define $searchurl to go back to search results
 if (isset($search) && ($search=="yes")) {
 	$searchurl = "&search=yes";
 }
 // Update course status
 if (isset($submit))  {
-	$dq = $dq * 1000000;
-        $vq = $vq * 1000000;
-        $gq = $gq * 1000000;
-        $drq = $drq * 1000000;
   // Update query
 	$sql = mysql_query("UPDATE cours SET visible='$formvisible' WHERE code='$c'");
 	// Some changes occured
@@ -93,7 +92,7 @@ else {
 	$visible = $row['visible'];
 	$visibleChecked[$visible]="checked";
 	// Constract edit form
-	$tool_content .= "<form action=".$_SERVER[PHP_SELF]."?c=".$c."".$searchurl." method=\"post\">";
+	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".$c."".$searchurl." method=\"post\">";
 	$tool_content .= "<table width=\"99%\"><caption>".$langCourseStatusChange."</caption><tbody>";
 	$tool_content .= "  <tr>
     <td colspan=\"2\"><i>$langConfTip</i></td>

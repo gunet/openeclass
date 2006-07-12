@@ -70,6 +70,9 @@ $caption = "";
 		MAIN BODY
 ******************************************************************************/
 
+// Initialize some variables
+$searchurl = "";
+
 // Manage list limits
 $countcourses = mysql_fetch_array(mysql_query("SELECT COUNT(*) AS cnt FROM cours"));
 $fulllistsize = $countcourses['cnt'];

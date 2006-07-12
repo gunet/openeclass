@@ -66,6 +66,10 @@ $tool_content = "";
 /*****************************************************************************
 		MAIN BODY
 ******************************************************************************/
+
+// Initialize some variables
+$searchurl = "";
+
 // Manage order of display list
 if (isset($ord)) {
 	switch ($ord) {

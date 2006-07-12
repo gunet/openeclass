@@ -64,6 +64,10 @@ $tool_content = "";
 /*****************************************************************************
 		MAIN BODY
 ******************************************************************************/
+// Initialize some variables
+$searchurl = "";
+$quota_info = "";
+
 // Define $searchurl to go back to search results
 if (isset($search) && ($search=="yes")) {
 	$searchurl = "&search=yes";
@@ -91,13 +95,13 @@ else {
 	// Get course information
 	$q = mysql_fetch_array(mysql_query("SELECT code,intitule,doc_quota,video_quota,group_quota,dropbox_quota 
 			FROM cours WHERE code='$c'"));
-	$quota_info .= "<i>".$langTheCourse." <b>".$q[intitule]."</b> ".$langMaxQuota;
+	$quota_info .= "<i>".$langTheCourse." <b>".$q['intitule']."</b> ".$langMaxQuota;
 	$dq = $q['doc_quota'] / 1000000;
 	$vq = $q['video_quota'] / 1000000;
 	$gq = $q['group_quota'] / 1000000;
 	$drq = $q['dropbox_quota'] / 1000000;
 	// Constract the edit form
-	$tool_content .= "<form action=".$_SERVER[PHP_SELF]."?c=".$c."".$searchurl." method=\"post\">
+	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".$c."".$searchurl." method=\"post\">
 <table width=\"99%\"><caption>".$langQuotaAdmin."</caption><tbody>
   <tr>
     <td colspan=\"2\">".$quota_info."</td>

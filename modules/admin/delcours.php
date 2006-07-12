@@ -63,6 +63,9 @@ $tool_content = "";
 /*****************************************************************************
 		MAIN BODY
 ******************************************************************************/
+// Initialize some variables
+$searchurl = "";
+
 // Define $searchurl to go back to search results
 if (isset($search) && ($search=="yes")) {
 	$searchurl = "&search=yes";
@@ -84,7 +87,7 @@ else {
 	
 	$tool_content .= "<table width=\"99%\"><caption>".$langCourseDelConfirm."</caption><tbody>";
 	$tool_content .= "  <tr>
-    <td><br>".$langCourseDelConfirm2." <em>$c</em>;<br><br></td>
+    <td><br>".$langCourseDelConfirm2." <em>$c</em>;<br><br><i><b>Προσοχή!</b> Η διαγραφή του μαθήματος θα διαγράψει επίσης τους εγγεγραμμένους φοιτητές από το μάθημα, την αντιστοιχία του μαθήματος στο Τμήμα, καθώς και όλο το υλικό του μαθήματος.</i><br><br></td>
   </tr>";
 	$tool_content .= "  <tr>
     <td><ul><li><a href=\"".$_SERVER['PHP_SELF']."?c=".$c."&delete=yes".$searchurl."\"><b>Ναι</b></a><br>&nbsp;</li>
