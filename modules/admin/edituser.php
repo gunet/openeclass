@@ -67,8 +67,10 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		}
 		$info = mysql_fetch_array($sql);
 		$password = $info[3];
-		if(($password!='imap') || ($password!='pop3') || ($password!='ldap') || ($password!='db'))
+		$authmethods = array("pop3","imap","ldap","db");
+		if(!in_array($password,$authmethods))
 		{
+			$tool_content .= "pass now:".$password."<br>";
 			$crypt = new Encryption;
 			$key = $encryptkey;
 			$password_decrypted = $crypt->decrypt($key, $info[3]);
