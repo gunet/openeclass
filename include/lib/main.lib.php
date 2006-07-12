@@ -274,7 +274,7 @@ function selection($entries, $name, $default = '')
 // ----------------------------------------------------------------------------
 function check_admin()
 {
-        global $uid, $urlServer;
+        global $uid, $urlServer, $toolContent_ErrorExists, $errorMessagePath;
         if (isset($uid)) {
                 $res = mysql_query("SELECT * FROM admin WHERE idUser='$uid'");
         }
