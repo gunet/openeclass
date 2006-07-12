@@ -25,7 +25,7 @@
 
 /**===========================================================================
 	addfaculte.php
-	@last update: 31-05-2006 by Pitsiougas Vagelis
+	@last update: 12-07-2006 by Pitsiougas Vagelis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Pitsiougas Vagelis <vagpits@uom.gr>
 ==============================================================================        
@@ -37,6 +37,7 @@
  	The user can : - See the available facultes
  	               - Delete a faculte
  	               - Create a new faculte
+ 	               - Edit a faculte
                  - Return to main administrator page
 
  	@Comments: The script is organised in four sections.
@@ -57,7 +58,7 @@ $langFiles = array('admin','gunet','faculte');
 include '../../include/baseTheme.php';
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
-@include "check_admin.inc";
+check_admin();
 // Define $nameTools
 $nameTools=$langListFaculte;
 // Initialise $tool_content
@@ -81,14 +82,14 @@ if (!isset($a)) {
 		for ($i = 0; $i < 2; $i++) {
 			$tool_content .= "<td width='500'>".htmlspecialchars($logs[$i])."</td>";
 		}
-		// Give administrator a link to delete a faculte
-    $tool_content .= "<td><a href=\"addfaculte.php?a=2&c=$logs[1]\">".$langDelete."</a></td></tr>\n";
+		// Give administrator a link to delete or edit a faculte
+    $tool_content .= "<td width=\"3%\" nowrap><a href=\"addfaculte.php?a=2&c=$logs[1]\">".$langDelete."</a> | <a href=\"addfaculte.php?a=3&c=$logs[0]\">".$langEdit."</a></td></tr>\n";
 	}
 	// Close table correctly
 	$tool_content .= "</tbody></table><br>";
 	// Give administrator a link to add a new faculte
 	$tool_content .= "<table width=\"99%\"><caption>".$langOtherActions."</caption><tbody>
-	<tr><td><a href=\"addfaculte.php?a=1\">".$langAdd."</a></td></tr></tbody</table>";
+	<tr><td><a href=\"addfaculte.php?a=1\">".$langAdd."</a></td></tr></tbody></table>";
 	// Display link back to index.php
 	$tool_content .= "<br><center><p><a href=\"index.php\">".$langBackToIndex."</a></p></center>";
 }
@@ -154,6 +155,44 @@ elseif ($a == 2) {
 	// Display link back to addfaculte.php
 	$tool_content .= "<br><center><p><a href=\"addfaculte.php\">".$langBackToIndex."</a></p></center>";
 }
+// Edit a faculte
+elseif ($a == 3)  {
+	if (isset($edit)) {
+		// Check for empty fields
+		if (empty($faculte)) {
+			$tool_content .= "<p>".$langEmptyFaculte."</p><br>";
+			// Display link back to addfaculte.php
+			$tool_content .= "<center><p><a href=\"addfaculte.php?a=3&c=$codefaculte\">Επιστροφή στην Επεξεργασία Τμήματος</a></p></center>";
+			} 
+		// Check if faculte name already exists
+		elseif (mysql_num_rows(mysql_query("SELECT * from faculte WHERE name='$faculte'")) > 0) {
+			$tool_content .= "<p>".$langFaculteExists."</p><br>";
+			// Display link back to addfaculte.php
+			$tool_content .= "<center><p><a href=\"addfaculte.php?a=3&c=$codefaculte\">Επιστροφή στην Επεξεργασία Τμήματος</a></p></center>";
+		} else {
+		// OK Update the faculte
+			mysql_query("UPDATE faculte SET name = '$faculte' WHERE code='$codefaculte'") 
+				or die ($langNoSuccess);
+			$tool_content .= "<p>Η επεξεργασία του μαθήματος ολοκληρώθηκε με επιτυχία!</p><br>";
+			}
+	} else {
+		// Get faculte information
+		$sql = "SELECT code, name FROM faculte WHERE code='".@$c."'";
+		$result = mysql_query($sql);
+		$myrow = mysql_fetch_array($result);
+		// Display form for edit faculte information
+		$tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?a=3\">";
+		$tool_content .= "<table width=\"99%\"><caption>Επεξεργασία Τμήματος</caption><tbody>";
+		$tool_content .= "		<tr><td width=\"3%\" nowrap>".$langCodeFaculte1.":</td><td><input type=\"text\" name=\"codefaculte\" value=\"".$myrow['code']."\" readonly></td></tr>
+		<tr><td>&nbsp;</td><td><i>".$langCodeFaculte2."</i></td></tr>
+		<tr><td width=\"3%\" nowrap>".$langFaculte1.":</td><td><input type=\"text\" name=\"faculte\" value=\"".$myrow['name']."\"></td></tr>
+		<tr><td>&nbsp;</td><td><i>".$langFaculte2."</i></td></tr>
+		<tr><td colspan=\"2\"><input type=\"submit\" name=\"edit\" value=\"Επικύρωση\"></td</tr>
+		</tbody></table></form>";
+		}
+		// Display link back to addfaculte.php
+		$tool_content .= "<br><center><p><a href=\"addfaculte.php\">".$langBackToIndex."</a></p></center>";
+	}
 
 /*****************************************************************************
 		DISPLAY HTML
