@@ -96,7 +96,9 @@ $tool_content .= "<table width=\"90%\"><thead>$langNamesSurvey</thead><tbody><tr
  		global $tool_content, $currentCourse, $langSurveyNone, $langSurveyNone,
  			$langSurveyCreate, $langSurveyCreate, $langSurveyName, $langSurveyCreator, 
  			$langSurveyCreation, $langSurveyStart, $langSurveyEnd, $langSurveyType, 
- 			$langSurveyOperations, $is_adminOfCourse;
+ 			$langSurveyOperations, $is_adminOfCourse, $langSurveysActive, $mysqlMainDb, 
+ 			$langSurveyMC, $langSurveyEdit, $langSurveyRemove, $langSurveyDeactivate,
+ 			$langSurveysInactive, $langSurveyActivate;
 
 		$survey_check = 0;
 		$result = mysql_list_tables($currentCourse);
@@ -123,7 +125,7 @@ $tool_content .= "<table width=\"90%\"><thead>$langNamesSurvey</thead><tbody><tr
 			// Print active surveys //////////////////////////////////////////
 			$tool_content .= <<<cData
 				<b>$langSurveysActive</b>
-				<table border="1"><tr>
+				<table border="1" width="95%"><tr>
 				<td>$langSurveyName</td>
 				<td>$langSurveyCreator</td>
 				<td>$langSurveyCreation</td>
@@ -174,7 +176,7 @@ cData;
 				if ($is_adminOfCourse) 
 					$tool_content .= "<td><!--<a href='editsurvey.php?sid={$sid}'>".$langSurveyEdit."</a> | -->".
 						"<a href='deletesurvey.php?sid={$sid}'>".$langSurveyRemove."</a> | ".
-						"<a href='deactivatesurvey.php?sid={$sid}'>".$langSurveyDeactivate."</a> | ".
+						"<a href='deactivatesurvey.php?sid={$sid}'>".$langSurveyDeactivate."</a>  ".
 						"</td></tr>";
 				else
 					$tool_content .= "<td><a href='surveyparticipate.php?UseCase=1&sid=". $sid ."'>".$langSurveyParticipate."</a></td></tr>";
@@ -186,7 +188,7 @@ cData;
 				
 				$tool_content .= <<<cData
 					<b>$langSurveysInactive</b>
-					<table border="1"><tr>
+					<table border="1" width="95%"><tr>
 					<td>$langSurveyName</td>
 					<td>$langSurveyCreator</td>
 					<td>$langSurveyCreation</td>
@@ -237,7 +239,7 @@ cData;
 					}
 					$tool_content .= "<td><!--<a href='editsurvey.php?sid={$sid}'>".$langSurveyEdit."</a> | -->".
 					"<a href='deletesurvey.php?sid={$sid}'>".$langSurveyRemove."</a> | ".
-					"<a href='activatesurvey.php?sid={$sid}'>".$langSurveyActivate."</a> | ".
+					"<a href='activatesurvey.php?sid={$sid}'>".$langSurveyActivate."</a>  ".
 					"</td></tr>";
 				}
 				$tool_content .= "</table><br>";
@@ -253,7 +255,8 @@ cData;
 		global $tool_content, $currentCourse, $langPollCreate, $langPollsActive, 
 			$langPollName, $langPollCreator, $langPollCreation, $langPollStart, 
 			$langPollEnd, $langPollOperations, $langPollNone, $is_adminOfCourse, $langNamesPoll,
-			$langNamesSurvey ;
+			$langNamesSurvey, $mysqlMainDb, $langPollEdit, $langPollRemove, 
+			$langPollDeactivate, $langPollsInactive, $langPollActivate;
 		
 		$poll_check = 0;
 		$result = mysql_list_tables($currentCourse);
@@ -278,7 +281,7 @@ cData;
 			// Print active polls //////////////////////////////////////////////////////
 			$tool_content .= <<<cData
 				<b>$langPollsActive</b>
-				<table border="1"><tr>
+				<table border="1" width="95%"><tr>
 				<td>$langPollName</td>
 				<td>$langPollCreator</td>
 				<td>$langPollCreation</td>
@@ -324,7 +327,7 @@ cData;
 				if ($is_adminOfCourse) 
 					$tool_content .= "<td><!--<a href='editpoll.php?pid={$pid}'>".$langPollEdit."</a> | -->".
 						"<a href='deletepoll.php?pid={$pid}'>".$langPollRemove."</a> | ".
-						"<a href='deactivatepoll.php?pid={$pid}'>".$langPollDeactivate."</a> | ".
+						"<a href='deactivatepoll.php?pid={$pid}'>".$langPollDeactivate."</a>  ".
 						"</td></tr>";
 				else
 					$tool_content .= "<td><a href='pollparticipate.php?UseCase=1&pid=". $pid ."'>".$langPollParticipate."</a></td></tr>";
@@ -336,7 +339,7 @@ cData;
 				
 				$tool_content .= <<<cData
 					<b>$langPollsInactive</b>
-					<table border="1"><tr>
+					<table border="1" width="95%"><tr>
 					<td>$langPollName</td>
 					<td>$langPollCreator</td>
 					<td>$langPollCreation</td>
@@ -380,7 +383,7 @@ cData;
 					
 					$tool_content .= "<td><!--<a href='editpoll.php?pid={$pid}'>".$langPollEdit."</a> | -->".
 					"<a href='deletepoll.php?pid={$pid}'>".$langPollRemove."</a> | ".
-					"<a href='activatepoll.php?pid={$pid}'>".$langPollActivate."</a> | ".
+					"<a href='activatepoll.php?pid={$pid}'>".$langPollActivate."</a>  ".
 					"</td></tr>";
 				}
 				$tool_content .= "</table><br>";
