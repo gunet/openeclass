@@ -8,7 +8,7 @@ $langFiles = array('gunet','admin','about');
 include '../../include/baseTheme.php';
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
-@include "check_admin.inc";
+check_admin();
 // Define $nameTools
 $nameTools = $langAdmin;
 // Initialise $tool_content
@@ -111,11 +111,30 @@ $result = mysql_query($sql);
 $myrow = mysql_fetch_array($result);
 $last_stud_info = "<b>".$myrow['prenom']." ".$myrow['nom']."</b> <i>(".$myrow['email'].", ".date("j/n/Y H:i",$myrow['registered_at']).")</i>";
 
+// Find admin's last login
+$sql = "SELECT `when` FROM loginout WHERE id_user = '".$uid."' AND action = 'LOGIN' ORDER BY `when` DESC LIMIT 1,1";
+$result = mysql_query($sql);
+$myrow = mysql_fetch_array($result);
+$lastadminlogin = strtotime($myrow['when']!=""?$myrow['when']:0);
+
+// Count profs registered after last login
+$sql = "SELECT COUNT(*) AS cnt FROM user WHERE statut = 1 AND registered_at > '".$lastadminlogin."'";
+$result = mysql_query($sql);
+$myrow = mysql_fetch_array($result);
+$lastregisteredprofs = $myrow['cnt'];
+
+// Count studs registered after last login
+$sql = "SELECT COUNT(*) AS cnt FROM user WHERE statut = 5 AND registered_at > '".$lastadminlogin."'";
+$result = mysql_query($sql);
+$myrow = mysql_fetch_array($result);
+$lastregisteredstuds = $myrow['cnt'];
+
 $tool_content .= "<table width=\"99%\"><caption>Ενημερωτικά Στοιχεία για τον Διαχειριστή</caption><tbody><tr><td>
 <p>Ανοικτές αιτήσεις καθηγητών: <b>".$prof_request_msg."</b></p>
 <p>Τελευταίο μάθημα που δημιουργήθηκε: ".$last_course_info."</p>
 <p>Τελευταία εγγραφή εκπαιδευτή: ".$last_prof_info."</p>
-<p>Τελευταία εγγραφή εκπαιδευομένου: ".$last_stud_info."</p>";
+<p>Τελευταία εγγραφή εκπαιδευομένου: ".$last_stud_info."</p>
+<p>Μετά το τελευταίο σας login έχουν εγγραφεί στην πλατφόρμα: <i><b>".$lastregisteredprofs."</b> Εκπαιδευτές και <b>".$lastregisteredstuds."</b> Εκπαιδευόμενοι</i></p>";
 
 $tool_content .= "</td></tr></tbody></table><br>";
 
