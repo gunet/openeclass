@@ -41,6 +41,7 @@ if ($is_adminOfCourse && (@$addAnnouce==1 || isset($modify))) {
 			$titleToModify = $myrow['gr_title'];
 			$contentToModify = $myrow['gr_body'];
 			$commentToModify = $myrow['gr_comment'];
+			$visibleToModify = $myrow['visible'];
 			$displayAnnouncementList = true;
 		}
 	}
@@ -98,14 +99,17 @@ if ($is_adminOfCourse && (@$addAnnouce==1 || isset($modify))) {
 
 		$tool_content .= "<table>";
 		$tool_content .= "<tr><td>$langAdminAnnTitle</td></tr>";
-		@$tool_content .= "<tr><td><input type=\"text\" name='title' value='$titleToModify' size='50'>
-		$langAdminAnVis : <input type=checkbox value=\"1\" name=\"visible\" checked></td></tr>";
+		@$tool_content .= "<tr><td><input type=\"text\" name='title' value='$titleToModify' size='50'>";
+		if (isset($visibleToModify) and $visibleToModify == 'V') 
+				$tool_content .= "$langAdminAnVis : <input type=checkbox value=\"1\" name=\"visible\" checked></td></tr>";
+		else		
+				$tool_content .= "$langAdminAnVis : <input type=checkbox value=\"1\" name=\"visible\"></td></tr>";
 		$tool_content .= "<tr><td>$langAdminAnnBody</td></tr>";
-		@$tool_content .=  "<tr><td><textarea name='newContent' value='$contentToModify' rows='20' cols='96'>$contentToModify</textarea></td></tr>";
-		$tool_content .=  "<tr><td><input type=\"hidden\" name=\"id\" value=\"".$AnnouncementToModify."\"></td></tr>";
+		@$tool_content .= "<tr><td><textarea name='newContent' value='$contentToModify' rows='20' cols='96'>$contentToModify</textarea></td></tr>";
+		$tool_content .= "<tr><td><input type=\"hidden\" name=\"id\" value=\"".$AnnouncementToModify."\"></td></tr>";
 		$tool_content .= "<tr><td>$langAdminAnnComm</td></tr>";
 		@$tool_content .= "<tr><td><textarea name='comment' value='$comment' rows='2' cols='80'>$commentToModify</textarea></td></tr>";	
-		$tool_content .=  "<tr><td><input type=\"Submit\" name=\"submitAnnouncement\" value=\"$langOk\"></td></tr></table></form>";
+		$tool_content .= "<tr><td><input type=\"Submit\" name=\"submitAnnouncement\" value=\"$langOk\"></td></tr></table></form>";
 		$tool_content .= "<br><br>";
 	}
 
