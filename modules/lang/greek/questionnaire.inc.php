@@ -123,4 +123,7 @@ $langPollIndividuals = "Αποτελέσματα ανά χρήστη";
 $langQPref = "Τι τύπο ερωτηματολογίου επιθυμείτε;";
 $langQPrefSurvey = "Έρευνα μαθησιακού προφίλ";
 $langQPrefPoll = "Δημοσκόπηση";
+
+$langNamesPoll = "Δημοσκοπήσεις";
+$langNamesSurvey = "Έρευνες Μαθησιακού Προφίλ";
 ?>

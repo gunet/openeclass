@@ -121,4 +121,7 @@ $langPollIndividuals = "Results per user";
 $langQPref = "What type of questionnaire do you prefer?";
 $langQPrefSurvey = "Survey";
 $langQPrefPoll = "Poll";
+
+$langNamesPoll = "Polls";
+$langNamesSurvey = "Surveys";
 ?>
