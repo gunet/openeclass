@@ -1,10 +1,3 @@
-<!doctype html public "-//W3C//DTD HTML 4.0 //EN">
-<html>
-<head>
-   <title>horizontal gauge test</title>
-</head>
-<body>
-
 <?php
 
 class myGauge {
