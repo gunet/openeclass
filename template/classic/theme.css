@@ -368,20 +368,16 @@ background-colorr: red;
 #firstBar {
 		width:100%;
 		height: 25px;
-		background-colorR: #1a334d;
-		background-color: #0066cc;
-		//borderr: 1px solid #e6e6e6;
-		//border-bottomr: 1px solid #e6e6e6;
+		background-color: #fbcb1b;
 		position:relative;
-		z-index:2;
-		
+		z-index:2;	
 }
 
 #firstBar .user{
 
 	font-family: Verdana, Arial, sans-serif;
 	font-size:11px;
-	color:#FFFFFF;
+	color:#000;
 	margin-top:0.4em;
 	margin-left:0.4em;
 	position:absolute;
@@ -390,19 +386,11 @@ background-colorr: red;
 
 	font-family: Verdana, Arial, sans-serif;
 	font-size:11px;
-	color:#FFFFFF;
+	color:#000;
 	margin-top:0.4em;
 	margin-left:0.4em;
 	positionN:absolute;
 	padding-leftT: 20px;
-}
-
-#firstBar .user imgh{
-position: absolute;
-margin-right:20px;
-padding-right:20px;
-	border: 1px solid red;
-	 text-decoration: none;
 }
 
 #firstBar .logout a{
@@ -411,7 +399,7 @@ padding-right:20px;
 	margin-right:0.2em;
 	font-family: Verdana, Arial, sans-serif;
 	font-size:11px;
-	color:#FFFFFF;
+	color:#000;
 }
 
 #secondBar {
@@ -459,7 +447,6 @@ position:absolute;
 		padding:5px 0 ;
 }
 #content {
-//margin-topfff: 8px;
 		width: 100%;
 		padding:0 ;
 		}
@@ -490,8 +477,6 @@ float: left;
 width: 100%;
 height:30px;
 min-height:30px;
-
-
 border-bottom:1px solid #a2a2a3;
 border-top:1px solid #a2a2a3;
 background-color: #e5edf9;
@@ -524,8 +509,7 @@ position:relative;
 	borderr: 1px solid red;
 }
 
- #thirdBar p
-{
+#thirdBar p {
 	position:relative;
 	paddingg: 1em;
 	//paddingg:0.8em;
@@ -566,7 +550,6 @@ text-decoration: none;
 
 #navcontainer a:hover
 {
-colord:#FFFFFF;
 color:black;
 background-color3:#FF6600;
 background-color:#fbcb1b;
@@ -624,6 +607,7 @@ float:left;
 margin-right:5px;
 clear:left;
 }
+
 #navcontainer li.agenda2
 {
 position:relative;
@@ -634,8 +618,6 @@ background-repeat: no-repeat;
 background-position: 1% 40%;
 z-index:2;
 }
-
-
 
 #content_main
 {
@@ -662,10 +644,9 @@ height:17px;
 background: url(img/tb_bg2.gif)  ;
 color:#FFFFFF;
 font-family: Verdana, Arial, sans-serif;
- font-weight:bold;
- font-size:11px;
- border-bottom:1px solid black;
- 
+font-weight:bold;
+font-size:11px;
+border-bottom:1px solid black;
 }
 
 #footer	{
@@ -673,12 +654,11 @@ font-family: Verdana, Arial, sans-serif;
 		bottom:0;
 		width:100%;
 		height: 28px;
-		backgroundd: url(img/foot_gradient.gif) repeat-x;
 		background-color: #e5edf9;
 		border:1px solid #a2a2a3;
 }
-#footer p {
 
+#footer p {
 float:none;
 vertical-align:middle;
 font-size:11px;
