@@ -1,22 +1,49 @@
 <?PHP
+/**===========================================================================
+ *              GUnet e-Class 2.0 
+ *       E-learning and Course Management Program  
+ * ===========================================================================
+ *	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+ *	Á full copyright notice can be read in "/info/copyright.txt".
+ *       
+ *  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+ *				Yannis Exidaridis <jexi@noc.uoa.gr> 
+ *				Alexandros Diamantidis <adia@noc.uoa.gr> 
+ *
+ *	For a full list of contributors, see "credits.txt".  
+ *    
+ *	This program is a free software under the terms of the GNU 
+ *	(General Public License) as published by the Free Software 
+ *	Foundation. See the GNU License for more details. 
+ *	The full license can be read in "license.txt".
+ *    
+ *	Contact address: 	GUnet Asynchronous Teleteaching Group, 
+ *						Network Operations Center, University of Athens, 
+ *						Panepistimiopolis Ilissia, 15784, Athens, Greece
+ *						eMail: eclassadmin@gunet.gr
+  ============================================================================*/
 
-/*
-*
-*	File : documents.php
-*
-*	documents personalised component
-*
-*	In charge for collecting data regarding documents for all
-*	the lessons a user is subscribed to.
-*
-*	@author Evelthon Prodromou <eprodromou@upnet.gr>
-*
-*	@access public
-*
-*	@version 1.0.1
-*
-*/
+/**
+ * Personalised Documents Component, e-Class Personalised
+ * 
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ * @package e-Class Personalised
+ * 
+ * @abstract This component populates the documents block on the user's personalised 
+ * interface. It is based on the diploma thesis of Evelthon Prodromou.
+ *
+ */
 
+/**
+ * Function getUserDocuments
+ * 
+ * Generates html content for the documents block of e-class personalised.
+ *
+ * @param array $param
+ * @param  string $type (data, html)
+ * @return array
+ */
 function getUserDocuments($param = null, $type) {
 
 	global $mysqlMainDb, $uid, $dbname, $currentCourseID;
@@ -138,6 +165,15 @@ function getUserDocuments($param = null, $type) {
 
 }
 
+/**
+ * Function docsHtmlInterface
+ * 
+ * Generates html content for the documents block of e-class personalised.
+ *
+ * @param array $data
+ * @return string HTML content for the documents block
+ * @see function getUserDocuments()
+ */
 function docsHtmlInterface($data) {
 	global $urlServer, $langNoDocsExist ;
 
@@ -182,6 +218,15 @@ $url = $_SERVER['PHP_SELF'] . "?perso=6&c=" .$data[$i][1]."&p=".$data[$i][2][$j]
 
 }
 
+/**
+ * Function createDocsQueries
+ * 
+ * Creates needed queries used by getUserDocuments
+ *
+ * @param array $queryParam 
+ * @return array sql query
+ * @see function getUserDocuments()
+ */
 function createDocsQueries($queryParam){
 	global $mysqlMainDb, $maxValue;
 
