@@ -120,7 +120,9 @@ $langCategoryOther="Aλλο";
 $langNotRequired = "Η συμπλήρωση των πεδίων είναι προαιρετική";
 $langCommands = "Ενέργειες";
 
+$langQuotaBar = "Επισκόπηση αποθηκευτικού χώρου";
 $langQuotaUsed = "Χρησιμοποιούμενος Χώρος";
 $langQuotaTotal = "Συνολικός Διαθέσιμος Χώρος";
 $langQuotaPercentage = "Ποσοστό χρήσης";
+$langBack = "Κλείσιμο";
 ?>

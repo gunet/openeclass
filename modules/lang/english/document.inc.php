@@ -117,7 +117,9 @@ $langCategoryOther="Other";
 $langNotRequired = "Filling-in the fields is not mandatory";
 $langCommands = "Actions";
 
+$langQuotaBar = "View available disk space";
 $langQuotaUsed = "Used disk space";
 $langQuotaTotal = "Total available disk space";
 $langQuotaPercentage = "Usage percentage";
+$langBack = "Close";
 ?>
