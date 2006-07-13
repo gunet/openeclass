@@ -152,4 +152,9 @@ $langCourseReferencesNote = "ð.÷. <i>2 tests and 1 final exam 2</i>";
 $langPublic="Open (Free access from the homepage without password)";
 $langPrivOpen="Open by registration (You have to register in order to grant access)";
 $langPrivate="Private (Access is granted only to students added in the Users List)";
+
+$langAccess = "Choose your access type:";
+$langAvailableTypes = "Available Access Types";
+$langModules = "Modules:";
+
 ?>

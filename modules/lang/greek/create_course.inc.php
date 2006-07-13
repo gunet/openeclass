@@ -75,6 +75,10 @@ $langAccessType="Επιλέξτε έναν από τους 3 τύπους πρόσβασης";
 $langSubsystems="Επιλέξτε ποιά από τα υποσυστήματα θέλετε να ενεργοποιήσετε και ποιά όχι";
 $langLanguageTip="Επιλέξτε σε ποια γλώσσα θα εμφανίζονται οι σελίδες του μαθήματος";
 
+$langAccess = "Τύπος Πρόσβασης:";
+$langAvailableTypes = "Διαθέσιμοι τύποι πρόσβασης";
+$langModules = "Υποσυστήματα:";
+
 // tables MySQL
 $langFormula="Μετά τιμής";
 $langForumLanguage="english";	// other possibilities are english, spanish (this uses phpbb language functions)
