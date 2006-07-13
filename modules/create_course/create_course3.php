@@ -65,7 +65,6 @@ function help ($topic)
 }
 
 
-//include '../../include/init.php';
 include '../../include/baseTheme.php';
 
 //$titulaire_probable="$prenom $nom";
@@ -97,8 +96,6 @@ if(!isset($_GET["finish_create_course"])) {
             <tr valign=\"top\">
                 <td colspan=\"5\" valign=\"middle\">
                     <font face=\"arial, helvetica\" size=\"3\"><b>$langCreateCourseStep3Title</b></font>
-                    <hr>
-                    <font face=\"arial, helvetica\" size=\"2\">$langFieldsRequ</font>
                 </td>
             </tr>
             <tr><td colspan=\"3\">&nbsp;</td></tr>
@@ -127,18 +124,18 @@ if(!isset($_GET["finish_create_course"])) {
     <table bgcolor=\"$color1\" border=\"2\">
     <tr>
     <td valign=\"top\" align=\"right\">
-    <font face=\"arial, helvetica\" size=\"2\"><b>Τύπος πρόσβασης:</b></font>
+    <font face=\"arial, helvetica\" size=\"2\"><b>$langAccess</b></font>
     </td>
     <td valign=\"top\">
     <font face=\"arial, helvetica\" size=\"2\">
     <fieldset>
-    <legend>Διαθέσιμοι τύποι πρόσβασης</legend>
+    <legend>$langAvailableTypes</legend>
     <p>
     <input name=\"formvisible\" type=\"radio\" value=\"2\" checked=\"checked\" />$langPublic<br />
     <input name=\"formvisible\" type=\"radio\" value=\"1\" />$langPrivOpen<br />
     <input name=\"formvisible\" type=\"radio\" value=\"0\" />$langPrivate</p>
     </fieldset>
-    $langFieldsRequAsterisk<br>$langAccessType
+		$langAccessType
     </font>
     </td>";
 		
@@ -148,7 +145,7 @@ $tool_content .= "
           </tr>
       <tr>
       <td valign=\"top\" align=\"right\">
-      <font face=\"arial, helvetica\" size=\"2\"><b>Υποσυστήματα:</b></font>
+      <font face=\"arial, helvetica\" size=\"2\"><b>$langModules</b></font>
       </td>
       <td valign=\"top\">
       <font face=\"arial, helvetica\" size=\"2\">
