@@ -1628,6 +1628,7 @@ mysql_query("CREATE TABLE accueil (
                'MODULE_ID_STAT'
                )");
 
+/*
     mysql_query("INSERT INTO accueil VALUES (
                '12',
                '$langAddPageHome',
@@ -1649,6 +1650,8 @@ mysql_query("CREATE TABLE accueil (
                '',
                'MODULE_ID_EXTERNAL'
                )");
+
+*/
 
     mysql_query("INSERT INTO accueil VALUES (
                '14',
