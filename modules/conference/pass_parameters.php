@@ -1,5 +1,4 @@
 <?
-
 //ÌåôáôñïðÞ ôïõ åñãáëåßïõ ãéá íá ÷ñçóéìïðïéåß ôï baseTheme
 $require_current_course = TRUE;
 $langFiles = 'conference';
@@ -31,12 +30,17 @@ if ($is_adminOfCourse) {
 		}
 		if(isset($_POST["presantation_URL"]))
 		{
-			$URL["presantation"]=$_POST["presantation_URL"];
+			$URL["presantation"]=stripslashes($_POST["presantation_URL"]);
 		}
 		if(isset($_POST["netmeeting_number"]))
 		{
 			$URL["netmeeting_number"]=$_POST["netmeeting_number"];
 		}
+		if(isset($_POST["video_type"]))
+		{
+			$URL["video_type"]=$_POST["video_type"];
+		}
+
 
 
      		$fp = fopen($fileParameter, 'w+');
@@ -62,6 +66,11 @@ else
                 {
 			if(isset($URL["netmeeting_number"]))
                        		echo $URL["netmeeting_number"];
+                }
+                if($_POST["variable"]=="video_type")
+                {
+			if(isset($URL["video_type"]))
+                       		echo $URL["video_type"];
                 }
 
 }
