@@ -1515,53 +1515,9 @@ if($is_adminOfCourse) {
     }
     $tool_content .=  "</table>";
     
-    //diamorfwsh ths grafikhs mparas xrhsimopoioumenou kai eleftherou xwrou (me vash ta quotas) + ypologismos statistikwn stoixeiwn
-    $oGauge = new myGauge(); //vrisketai sto arxeio 'gaugebar.php' & ginetai include parapanw
-    
-    // apodosh timwn gia thn mpara
-	$fc = "#E6E6E6"; //foreground color
-	$bc = "#4F76A3"; //background color
-	$wi = 125; //width pixel
-	$hi = 10; //width pixel
-	$mi = 0;  //minimum value
-	$ma = $diskQuotaDocument; //maximum value
-	$cu = $diskUsed; //current value
-	$oGauge->setValues($fc, $bc, $wi, $hi, $mi, $ma, $cu);
-    
-	//pososto xrhsimopoioumenou xorou se %
-	$diskUsedPercentage = round(($diskUsed / $diskQuotaDocument) * 100)."%";
-	
-	
-	//morfopoihsh tou synolikou diathesimou megethous tou quota
-	$diskQuotaDocument = format_bytesize($diskQuotaDocument / 1024);
-	
-	//morfopoihsh tou synolikou megethous pou xrhsimopoieitai
-	$diskUsed = format_bytesize($diskUsed / 1024);
-	format_bytesize($diskUsed, '0');
-	//telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
-	
-	
-	//ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
-	$tool_content .= "<br>
-	<table cellpadding = \"0\" cellspacing = \"0\" border = \"1\">
-	<thead>
-		<tr>
-			<th>$langQuotaUsed</td>
-			<th>$langQuotaPercentage</td>
-			<th>$langQuotaTotal</td>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td align=\"center\">$diskUsed</td>
-			<td align=\"center\">";
-    		$tool_content .= $oGauge->display();
-    		$tool_content .= "$diskUsedPercentage
-    		</td>
-    		<td align=\"center\">$diskQuotaDocument</td>
-    	</tr>
-    </tbody>
-    </table>";
+    //emfanish link gia to quota bar
+    $diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
+    $tool_content .= "<a href=\"showquota.php?diskQuotaDocument=$diskQuotaDocument&diskUsed=$diskUsed\" target=\"blank\">$langQuotaBar</a>";
     
     $tool_content .=  "</div>";
 
