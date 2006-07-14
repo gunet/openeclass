@@ -25,6 +25,9 @@ $nameTools = "Αναβάθμιση των βάσεων δεδομένων του e-Class";
 $tool_content = "";
 
 $fromadmin = true;
+/*
+
+*/
 
 if (isset($_POST['submit_upgrade'])) {
 	$fromadmin = false;
@@ -39,7 +42,21 @@ if((isset($_POST['password'])) && (!in_array($_POST['password'],$auth_methods)))
 }
 else
 {
-	$newpass = $_POST['password'];
+	if((isset($uid)) && ($uid==1)) 	// means he is the main admin, doing the upgrade from the admin panel
+	{
+		// now get his password from DB
+		if($res = db_query("SELECT password FROM user WHERE user_id='1'"));
+		{
+				$row = mysql_fetch_array($res);
+				$passdb = $row[0]; // it is the encrypted password, do the decrypt process
+				$passdb_decrypted = $crypt->decrypt($key1, $row[0]);
+				$newpass = $passdb_decrypted;
+		}
+	}
+	else	// doing the upgrade from the url (not admin)
+	{
+		$newpass = $_POST['password'];
+	}
 }
 
 
