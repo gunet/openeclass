@@ -5,6 +5,7 @@ include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
 include '../auth/auth.inc.php';
 $nameTools= $langOpenProfessorRequests;
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 // Initialise $tool_content
 $tool_content = "";
@@ -13,6 +14,23 @@ $tool_content = "";
 $close = isset($_GET['close'])?$_GET['close']:(isset($_POST['close'])?$_POST['close']:'');
 $id = isset($_GET['id'])?$_GET['id']:(isset($_POST['id'])?$_POST['id']:'');
 $show = isset($_GET['show'])?$_GET['show']:(isset($_POST['show'])?$_POST['show']:'');
+
+// Deal with navigation
+switch ($show) {
+	case "closed":
+		$navigation[] = array("url" => "listreq.php", "name" => $langOpenProfessorRequests);
+		$nameTools = "Προβολή Αιτήσεων που έχουν Κλείσει";
+		break;
+	case "rejected":
+		$navigation[] = array("url" => "listreq.php", "name" => $langOpenProfessorRequests);
+		$nameTools = "Προβολή Αιτήσεων που έχουν Απορριφθεί";
+		break;
+	case "accepted":
+		$navigation[] = array("url" => "listreq.php", "name" => $langOpenProfessorRequests);
+		$nameTools = "Προβολή Αιτήσεων που έχουν Ικανοποιηθεί";
+		break;
+}
+
 if (!empty($show) && ($show=="closed")) {
 	if (!empty($id) && ($id>0)) {
 		// Epanafora aitisis
@@ -21,7 +39,7 @@ if (!empty($show) && ($show=="closed")) {
 		
 	} else {
 		// Show only closed forms
-		$tool_content .= "<table width=\"99%\"><caption>Λίστα Αιτήσεων Που Έχουν Κλείσει</caption><thead><tr>
+		$tool_content .= "<table width=\"99%\"><caption>Λίστα Αιτήσεων</caption><thead><tr>
 		<th scope=\"col\">Όνομα</th>
 		<th scope=\"col\">Επώνυμο</th>
 		<th scope=\"col\">Username</th>
@@ -65,7 +83,7 @@ if (!empty($show) && ($show=="closed")) {
 		
 	} else {
 		// Show only closed forms
-		$tool_content .= "<table width=\"99%\"><caption>Λίστα Αιτήσεων Που Έχουν Απορριφθεί</caption><thead><tr>
+		$tool_content .= "<table width=\"99%\"><caption>Λίστα Αιτήσεων</caption><thead><tr>
 		<th scope=\"col\">Όνομα</th>
 		<th scope=\"col\">Επώνυμο</th>
 		<th scope=\"col\">Username</th>
@@ -102,7 +120,7 @@ if (!empty($show) && ($show=="closed")) {
 	$tool_content .= "</tbody></table>";
 } elseif (!empty($show) && ($show=="accepted")) {
 	// Show only accepted forms
-	$tool_content .= "<table width=\"99%\"><caption>Λίστα Αιτήσεων Που Έχουν Ικανοποιηθεί</caption><thead><tr>
+	$tool_content .= "<table width=\"99%\"><caption>Λίστα Αιτήσεων</caption><thead><tr>
 		<th scope=\"col\">Όνομα</th>
 		<th scope=\"col\">Επώνυμο</th>
 		<th scope=\"col\">Username</th>

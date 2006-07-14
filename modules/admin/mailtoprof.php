@@ -59,6 +59,7 @@ check_admin();
 include('../../include/sendMail.inc.php');
 // Define $nameTools
 $nameTools=$sendinfomail;
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
 // Initialise $tool_content
 $tool_content = "";
 
