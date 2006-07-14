@@ -282,8 +282,14 @@ $langAdminAnnModify = "Anouncement modified";
 $langAdminAnVis = "Visible";
 $langAdminAnnAdd = "Announcement added";
 $langAdminAnnDel = "Announcement deleted";
-$langAdminAnnTitle = "Title";
-$langAdminAnnBody = "Announcement";
-$langAdminAnnComm = "Comments";
 $langAdminAnnMes = "announced in";
+
+$langAdminAnnTitleEn = "Title";
+$langAdminAnnBodyEn = "Announcement";
+$langAdminAnnCommEn = "Comment";
+
+$langAdminAnnTitleGr = "Title (in greek) ";
+$langAdminAnnBodyGr = "Announcement (in greek)";
+$langAdminAnnCommGr = "Comment (in greeka)";
+
 ?>

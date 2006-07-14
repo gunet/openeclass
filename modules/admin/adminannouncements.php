@@ -15,15 +15,23 @@ if (!isset($localize)) $localize='el';
 
 // choose the database tables
 if (isset($localize) and $localize == 'en') {
-	$table_title = 'en_title';
-	$table_content = 'en_body';
-	$table_comment = 'en_comment';
-} else {
-	$table_title = 'gr_title';
-	$table_content = 'gr_body';
-	$table_comment = 'gr_comment';
-}
 
+
+$table_title = 'en_title';
+	$_lang_title_ = $langAdminAnnTitleGr;
+	$_lang_body_ = $langAdminAnnBodyGr;
+	$_lang_comment_ = $langAdminAnnCommGr;
+	$_lang_titleen_ = $langAdminAnnTitleEn;
+	$_lang_bodyen_ = $langAdminAnnBodyEn;
+	$_lang_commenten_ = $langAdminAnnCommEn;
+} else {
+	$_lang_title_ = $langAdminAnnTitle;
+	$_lang_body_ = $langAdminAnnBody;
+	$_lang_comment_ = $langAdminAnnComm;
+	$_lang_titleen_ = $langAdminAnnTitleEn;
+	$_lang_bodyen_ = $langAdminAnnBodyEn;
+	$_lang_commenten_ = $langAdminAnnCommEn;
+}
 
 // display settings 
 	$displayAnnouncementList = true;
@@ -42,9 +50,12 @@ if (isset($localize) and $localize == 'en') {
 
 		if ($myrow) {
 			$AnnouncementToModify = $myrow['id'];
-			$titleToModify = $myrow[$table_title];
-			$contentToModify = $myrow[$table_content];
-			$commentToModify = $myrow[$table_comment];
+			$titleToModify = $myrow['gr_title'];
+			$contentToModify = $myrow['gr_body'];
+			$commentToModify = $myrow['gr_comment'];
+			$titleToModifyEn = $myrow['en_title'];
+			$contentToModifyEn = $myrow['en_body'];
+			$commentToModifyEn = $myrow['en_comment'];
 			$visibleToModify = $myrow['visible'];
 			$displayAnnouncementList = true;
 		}
@@ -56,11 +67,15 @@ if (isset($localize) and $localize == 'en') {
 		if($id) {
 			if (isset($visible)) {
 				db_query("UPDATE admin_announcements 
-					SET $table_title='$title', $table_content='$newContent', $table_comment='$comment', visible='V', date=NOW() WHERE id=$id",$mysqlMainDb);
+					SET gr_title='$title', gr_body='$newContent', gr_comment='$comment', 
+					en_title='$title_en', en_body='$newContent_en', en_comment='$comment_en',
+					visible='V', date=NOW() WHERE id=$id",$mysqlMainDb);
 					
 			} else {
 				db_query("UPDATE admin_announcements 
-				SET $table_title='$title', $table_content='$newContent', $table_comment='$comment', visible='I', date=NOW() WHERE id=$id",$mysqlMainDb);
+					SET gr_title='$title', gr_body='$newContent', gr_comment='$comment', 
+					en_title='$title_en', en_body='$newContent_en', en_comment='$comment_en',
+					visible='I', date=NOW() WHERE id=$id",$mysqlMainDb);
 				}
 			$message = $langAdminAnnModify;
 		}
@@ -69,10 +84,14 @@ if (isset($localize) and $localize == 'en') {
 			// insert announcement 
 			if (isset($visible)) {
 			db_query("INSERT INTO admin_announcements 
-					SET $table_title = '$title', $table_content = '$newContent', $table_comment = '$comment', date = NOW()");
+					SET gr_title = '$title', gr_body = '$newContent', gr_comment = '$comment', 
+					en_title='$title_en', en_body='$newContent_en', en_comment='$comment_en',
+					date = NOW()");
 				} else {
 			db_query("INSERT INTO admin_announcements 
-					SET $table_title = '$title', $table_content = '$newContent', $table_comment = '$comment', visible='I', date = NOW()");
+					SET gr_title = '$title', gr_body = '$newContent', gr_comment = '$comment', 
+					en_title='$title_en', en_body='$newContent_en', en_comment='$comment_en',
+					visible='I', date = NOW()");
 				}
 					$message = "$langAdminAnnAdd";
 		}	// else
@@ -101,19 +120,30 @@ if (isset($localize) and $localize == 'en') {
 		if (!isset($contentToModify))	$contentToModify ="";
 		if (!isset($titleToModify))	$titleToModify ="";
 		if (!isset($commentToModify))	$commentToModify ="";
+		// english
+		if (!isset($contentToModifyEn))	$contentToModifyEn ="";
+		if (!isset($titleToModifyEn))	$titleToModifyEn ="";
+		if (!isset($commentToModifyEn))	$commentToModifyEn ="";
 
 		$tool_content .= "<table>";
-		$tool_content .= "<tr><td>$langAdminAnnTitle</td></tr>";
+		$tool_content .= "<tr><td>$_lang_title_</td></tr>";
 		@$tool_content .= "<tr><td><input type=\"text\" name='title' value='$titleToModify' size='50'>";
 		if (isset($visibleToModify) and $visibleToModify == 'V') 
 				$tool_content .= "$langAdminAnVis : <input type=checkbox value=\"1\" name=\"visible\" checked></td></tr>";
 		else		
 				$tool_content .= "$langAdminAnVis : <input type=checkbox value=\"1\" name=\"visible\"></td></tr>";
-		$tool_content .= "<tr><td>$langAdminAnnBody</td></tr>";
-		@$tool_content .= "<tr><td><textarea name='newContent' value='$contentToModify' rows='20' cols='96'>$contentToModify</textarea></td></tr>";
+		$tool_content .= "<tr><td>$_lang_body_</td></tr>";
+		@$tool_content .= "<tr><td><textarea name='newContent' value='$contentToModify' rows='15' cols='96'>$contentToModify</textarea></td></tr>";
 		$tool_content .= "<tr><td><input type=\"hidden\" name=\"id\" value=\"".$AnnouncementToModify."\"></td></tr>";
-		$tool_content .= "<tr><td>$langAdminAnnComm</td></tr>";
+		$tool_content .= "<tr><td>$_lang_comment_</td></tr>";
 		@$tool_content .= "<tr><td><textarea name='comment' value='$comment' rows='2' cols='80'>$commentToModify</textarea></td></tr>";	
+		// english
+		$tool_content .= "<tr><td>$_lang_titleen_</td></tr>";
+		@$tool_content .= "<tr><td><input type=\"text\" name='title_en' value='$titleToModifyEn' size='50'></td</tr>";
+		$tool_content .= "<tr><td>$_lang_bodyen_</td></tr>";
+		@$tool_content .= "<tr><td><textarea name='newContent_en' value='$contentToModifyEn' rows='15' cols='96'>$contentToModifyEn</textarea></td></tr>";
+		$tool_content .= "<tr><td>$_lang_commenten_</td></tr>";
+		@$tool_content .= "<tr><td><textarea name='comment_en' value='$commentToModifyEn' rows='2' cols='80'>$commentToModifyEn</textarea></td></tr>";	
 		$tool_content .= "<tr><td><input type=\"Submit\" name=\"submitAnnouncement\" value=\"$langOk\"></td></tr></table></form>";
 		$tool_content .= "<br><br>";
 	}
@@ -127,32 +157,43 @@ if (isset($localize) and $localize == 'en') {
 			}
 			$tool_content .=  "<table width=\"99%\">";
 			if ($announcementNumber>0) {
-				$tool_content .= "<thead><tr><th width=\"99%\">$langAdminAn</th>";
+				$tool_content .= "<thead><tr><th width=\"99%\" colspan=\"2\">$langAdminAn</th>";
 				$tool_content .= "</tr></thead>";
 			}
 		while ($myrow = mysql_fetch_array($result)) {
-			$content = make_clickable($myrow[$table_content]);
+			$content = make_clickable($myrow['gr_body']);
 			$content = nl2br($content);
-			$tool_content .=  "<tbody><tr class='odd'><td>".$myrow[$table_title]." (".$langAdminAnnMes." ".$myrow['date'].")</td>";
-			// display announcements content
-			$tool_content .= "</tr>
-				<tr><td colspan=2>".$content."<br>
+			$content_en = make_clickable($myrow['en_body']);
+			$content_en = nl2br($content_en);
+			$tool_content .=  "<tbody><tr class='odd'>";
+			$tool_content .= 	"<td colspan='2'> (".$langAdminAnnMes." ".$myrow['date'].")</td></tr>";
+			$tool_content .= "<tr class='odd'>";
+			// title
+			$tool_content .= "<td>".$myrow['gr_title']."</td>";
+			// english title
+			$tool_content .= "<td>".$myrow['en_title']."</td>";
+			// announcements content
+			$tool_content .= "</tr>";
+			$tool_content .=	"<tr><td>".$content."<br>
 				<a href=\"$_SERVER[PHP_SELF]?modify=".$myrow['id']."&localize=".$localize."\">
 			  <img src=\"../../images/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a>
 			  <a href=\"$_SERVER[PHP_SELF]?delete=".$myrow['id']."&localize=".$localize."\">
 			  <img src=\"../../images/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a>
-			  </td></tr>";
-			$tool_content .= "<tr><td>".$myrow[$table_comment]."</td></tr>";
+			  </td>";
+				//english content
+			$tool_content .= "<td>".$content_en."</td></tr>";
+			// comments
+			$tool_content .= "<tr><td>".$myrow['gr_comment']."</td>";
+			// english comments
+			$tool_content .= "<td>".$myrow['en_comment']."</td></tr>";
+			
 			// blank line
-			$tool_content .= "<tr><td>&nbsp;</td></tr>";
+			$tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
 		}	// end while ($myrow = mysql_fetch_array($result))
 		$tool_content .= "</tbody></table>";
 	}	// end: if ($displayAnnoucementList == true)
 
 
-if((@$addAnnouce == 1 || isset($modify))) {
-	draw($tool_content, 3, 'announcements', $head_content, $body_action);
-} else {
-	draw($tool_content, 3, 'admin');
-}
+// display everything 
+draw($tool_content, 3, 'admin');
 ?>			

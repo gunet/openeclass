@@ -297,8 +297,13 @@ $langAdminAnnModify = "Η ανακοίνωση διαχειριστή τροποποιήθηκε";
 $langAdminAnVis = "Ορατή";
 $langAdminAnnAdd = "Η ανακοίνωση διαχειριστή προστέθηκε";
 $langAdminAnnDel = "Η ανακοίνωση διαχειριστή διαγράφτηκε";
+$langAdminAnnMes = "τοποθετήθηκε την";
+
 $langAdminAnnTitle = "Τίτλος";
 $langAdminAnnBody = "Ανακοίνωση";
 $langAdminAnnComm = "Σχόλια";
-$langAdminAnnMes = "τοποθετήθηκε την";
+
+$langAdminAnnTitleEn = "Τίτλος (Αγγλικά)";
+$langAdminAnnBodyEn = "Ανακοίνωση (Αγγλικά)";
+$langAdminAnnCommEn = "Σχόλια (Αγγλικά)";
 ?>
