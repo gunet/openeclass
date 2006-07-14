@@ -49,7 +49,7 @@
 		DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
 ******************************************************************************/
 // Set the langfiles needed
-$langFiles = array('admin','addadmin');
+$langFiles = array('admin','addadmin','registration');
 // Include baseTheme
 include '../../include/baseTheme.php';
 // Check if user is administrator and if yes continue
@@ -87,6 +87,28 @@ if (isset($encodeLogin)) {
 } else { // No form post has been done
 	// Display form
 	$tool_content .= printform($langLogin);
+}
+if($r1=db_query("SELECT user_id,prenom,nom,username FROM user,admin WHERE user.user_id=admin.idUser ORDER BY user_id"))
+{
+	$tool_content .= "<br /><center><table width=\"80%\"><thead><tr>
+	<th scope=\"col\">ID</th>
+	<th scope=\"col\">".$langSurname." - ".$langName."</th>
+	<th scope=\"col\">".$langUsername."</th>";
+	$tool_content .= "<th scope=\"col\">".$langActions."</th>";
+	$tool_content .= "</tr></thead><tbody>";
+	while($row = mysql_fetch_array($r1))
+	{
+		$tool_content .= "<tr>";
+		$tool_content .= "<td>".htmlspecialchars($row['user_id'])."</td>".
+		"<td>".htmlspecialchars($row['prenom'])." " .htmlspecialchars($row['nom'])."</td>".
+		"<td>".htmlspecialchars($row['username'])."</td>";
+		if($row['user_id']!=1)
+		{
+			$tool_content .= "<td>Διαγραφή</td>";
+		}
+		$tool_content .= "</tr>";
+	}
+	$tool_content .= "</tbody></table></center><br />";
 }
 // Display link back to index.php
 $tool_content .= "<center><p><a href='index.php'>$langBack</a></p></center>";
