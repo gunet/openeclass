@@ -63,6 +63,7 @@ check_admin();
 @include 'admin.inc.php';
 // Define $nameTools
 $nameTools = $langListCours;
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
 // Initialise $tool_content
 $tool_content = "";
 $caption = "";

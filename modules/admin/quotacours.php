@@ -57,7 +57,10 @@ include '../../include/baseTheme.php';
 // Othewise exit with appropriate message
 check_admin();
 // Define $nameTools
-$nameTools = $langCourseEdit;
+$nameTools = $langQuota;
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$navigation[] = array("url" => "listcours.php", "name" => $langListCours);
+$navigation[] = array("url" => "editcours.php?c=$c", "name" => $langCourseEdit);
 // Initialise $tool_content
 $tool_content = "";
 

@@ -57,6 +57,9 @@ include '../../include/baseTheme.php';
 check_admin();
 // Define $nameTools
 $nameTools = $langCourseDel;
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$navigation[] = array("url" => "listcours.php", "name" => $langListCours);
+$navigation[] = array("url" => "editcours.php?c=$c", "name" => $langCourseEdit);
 // Initialise $tool_content
 $tool_content = "";
 
