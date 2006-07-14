@@ -82,14 +82,8 @@ function refresh_student()
 				document.getElementById("video").innerHTML=player;
 				NetMeeting.CallTo("'.$currentCourseID.'@'.$MCU.'");
 
-				
-
 		}
 		video_type=t.responseText;
-		
-		
-		
-
 	}
 	var set_presantation = function(t) {
     		if(unescape(t.responseText)!="\n"+document.getElementById("presantation_window").innerHTML){
@@ -100,7 +94,6 @@ function refresh_student()
     		alert("Error " + t.status + " -- " + t.statusText);
 	}
 	new Ajax.Request("pass_parameters.php", {method:"post", postBody:"variable=video_type", onSuccess:set_video_type, onFailure:errFunc});
-	//new Ajax.Request("pass_parameters.php", {method:"post", postBody:"variable=video", onSuccess:set_video, onFailure:errFunc});
 
     	new Ajax.Request("pass_parameters.php", {method:"post", postBody:"variable=presantation", onSuccess:set_presantation, onFailure:errFunc});
 	var url = "refresh_chat.php";
@@ -136,7 +129,7 @@ function netmeeting()
 
 function mediaplayer()
 	{
-		document.getElementById("video_control").innerHTML=\'<input type="text" id="Video_URL" size="20"><input type="submit" value=" Play ">\';
+		document.getElementById("video_control").innerHTML=\''.$langsetvideo.'<br><input type="text" id="Video_URL" size="20"><input type="submit" value=" Play ">\';
 
 
 	}
@@ -246,7 +239,7 @@ $tool_content.='
 <td>
     <label>
       <input type="radio" name="video_type" id="video_type1" value="netmeeting" onclick="javascript:netmeeting();" />
-      <br>netmeeting</label>
+      <br>'.$langconference.'</label>
 </td>';
 }
 $tool_content.='
@@ -263,9 +256,9 @@ $tool_content.='
 </form>
 
 <form id="Presantation_form" onSubmit = "return show_presantation();">
-<BR>'.$Presantation_URL.'<BR>
+<BR>'.$langpresantation.'<BR>
 <input type="text" id="Presentation_URL" name="Presantation_URL" size="20">
-<input type="submit" value="Go">
+<input type="submit" value="OK">
 </form>
 </div>
 ';

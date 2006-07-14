@@ -48,5 +48,8 @@ Translate the interface in chosen language
  $langCopyFailed = "Η εκτύπωση απέτυχε";
  $langClearedBy = "καθαρισμός από";
  $langChatError = "Δεν είναι δυνατόν να ξεκινήσει η Ζωντανή Κουβέντα";
+ $langsetvideo="Τοποθετήστε τον σύνδεσμο";
+ $langconference="Τηλεδιάσκεψη";
+ $langpresantation="Σύνδεσμος παρουσίασης";
 ?>
 
