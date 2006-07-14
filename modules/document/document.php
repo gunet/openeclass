@@ -59,7 +59,6 @@
 $require_current_course = TRUE;
 $langFiles = 'document';
 
-//include '../../include/init.php';
 include '../../include/baseTheme.php';
 $tool_content = "";
 
@@ -102,14 +101,13 @@ if (@$action=="download")
  		}
  }
 
+
 include "../../include/lib/fileDisplayLib.inc.php";
+include "../../include/lib/fileManageLib.inc.php";
+include "../../include/lib/fileUploadLib.inc.php";
 
-if($is_adminOfCourse) // for teacher only
-{
-    include "../../include/lib/fileManageLib.inc.php";
-    include "../../include/lib/fileUploadLib.inc.php";
-
-    if (@$uncompress == 1)
+if($is_adminOfCourse)  {
+	if (@$uncompress == 1)
         include("../../include/pclzip/pclzip.lib.php");
 }
 
