@@ -1,28 +1,52 @@
 <?PHP
-/*
-*
-*	File : class.Agenda.php
-*
-*	Agenda class
-*
-*	Base class responsible for all calendar events
-*	Responsible for organising calendar events and return them to the main class.
-*
-*	@author Evelthon Prodromou <eprodromou@upnet.gr>
-*
-*	@access public
-*
-*	@version 1.0.1
-*
-*	@license http://opensource.org/licenses/gpl-license.php GNU General Public License
-*
-*/
+/**===========================================================================
+ *              GUnet e-Class 2.0 
+ *       E-learning and Course Management Program  
+ * ===========================================================================
+ *	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+ *	Á full copyright notice can be read in "/info/copyright.txt".
+ *       
+ *  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+ *				Yannis Exidaridis <jexi@noc.uoa.gr> 
+ *				Alexandros Diamantidis <adia@noc.uoa.gr> 
+ *
+ *	For a full list of contributors, see "credits.txt".  
+ *    
+ *	This program is a free software under the terms of the GNU 
+ *	(General Public License) as published by the Free Software 
+ *	Foundation. See the GNU License for more details. 
+ *	The full license can be read in "license.txt".
+ *    
+ *	Contact address: 	GUnet Asynchronous Teleteaching Group, 
+ *						Network Operations Center, University of Athens, 
+ *						Panepistimiopolis Ilissia, 15784, Athens, Greece
+ *						eMail: eclassadmin@gunet.gr
+  ============================================================================*/
 
+/**
+ * Personalised Documents Component, e-Class Personalised
+ * 
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ * @package e-Class Personalised
+ * 
+ * @abstract This component populates the agenda block on the user's personalised 
+ * interface. It is based on the diploma thesis of Evelthon Prodromou.
+ *
+ */
 
-
-
+/**
+ * Function getUserAgenda
+ * 
+ * Populates an array with data regarding the user's personalised agenda.
+ *
+ * @param array $param
+ * @param string $type (data, html)
+ * @return array
+ */
 function getUserAgenda($param, $type) {
 
+	//number of unique dates to collect data for
 	$uniqueDates = 5;
 
 	global $mysqlMainDb, $uid, $dbname, $currentCourseID;
@@ -30,9 +54,6 @@ function getUserAgenda($param, $type) {
 	$uid				= $param['uid'];
 	$lesson_code		= $param['lesson_code'];
 	$max_repeat_val		= $param['max_repeat_val'];
-	//	$lesson_title		= $param['lesson_titles'];
-	//	$lesson_code		= $param['lesson_code'];
-	//	$lesson_professor	= $param['lesson_professor'];
 
 	for($i=0; $i < $max_repeat_val; $i++) {
 		if($i < 1) {
@@ -42,8 +63,7 @@ function getUserAgenda($param, $type) {
 		}
 	}
 
-	//		5.	select data from temp and sort by date
-	
+	//mysql version 4.x query
 	$sql_4 = "SELECT agenda.titre, agenda.contenu, agenda.day, agenda.hour, agenda.lasting, agenda.lesson_code,cours.intitule
 			FROM 
 			(	SELECT day
@@ -58,6 +78,8 @@ function getUserAgenda($param, $type) {
 			WHERE agenda.lesson_code = cours.code
 			ORDER by day, hour
 			";
+	
+	//mysql version 5.x query
 	$sql_5= "SELECT agenda.titre, agenda.contenu, agenda.day, agenda.hour, agenda.lasting, agenda.lesson_code,cours.intitule
 			FROM 
 			((	SELECT day
@@ -89,6 +111,8 @@ function getUserAgenda($param, $type) {
 	$firstRun = true;
 	while ($myAgenda = mysql_fetch_row($mysql_query_result)) {
 		
+		//allow certain html tags that do not cause errors in the
+		//personalised interface
 		$myAgenda[1] = strip_tags($myAgenda[1], '<b><i><u><ol><ul><li><br>');
 		if ($myAgenda[2] != $previousDate ) {
 			if (!$firstRun) {
@@ -113,12 +137,6 @@ function getUserAgenda($param, $type) {
 		array_push($agendaDateData, $agendaData);
 	}
 
-
-	//	print_a($agendaDateData);
-
-	//		Constructing the array of data to be parsed back
-	//		------------------------------------------------
-
 	if($type == "html") {
 		return agendaHtmlInterface($agendaDateData);
 	} elseif ($type == "data") {
@@ -127,6 +145,13 @@ function getUserAgenda($param, $type) {
 
 }
 
+/**
+ * Function agendaHtmlInterface
+ *
+ * @param array $data
+ * @return string HTML content for the documents block
+ * @see function getUserAgenda()
+ */
 function agendaHtmlInterface($data) {
 	global $langNoEventsExist, $langUnknown, $langDuration, $langMore;
 	$numOfDays = count($data);

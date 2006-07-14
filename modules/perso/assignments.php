@@ -1,25 +1,49 @@
 <?PHP
-/*
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Á full copyright notice can be read in "/info/copyright.txt".
 *
-*	File : assignments.php
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
 *
-*	Assignments
+*	For a full list of contributors, see "credits.txt".
 *
-*	The class responsible for filtering out all deadlined due
-*	for each lesson the user is subscribed to.
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
 *
-*	@author Evelthon Prodromou <eprodromou@upnet.gr>
-*
-*	@access public
-*
-*	@version 1.0.1
-*
-*	@license http://opensource.org/licenses/gpl-license.php GNU General Public License
-*
-*/
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
 
+/**
+ * Personalised Assignments Component, e-Class Personalised
+ * 
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ * @package e-Class Personalised
+ * 
+ * @abstract This component populates the assignments block on the user's personalised 
+ * interface. It is based on the diploma thesis of Evelthon Prodromou.
+ *
+ */
 
-
+/**
+ * Function getUserAssignments
+ * 
+ * Populates an array with data regarding the user's personalised assignments
+ *
+ * @param array $param
+ * @param string $type (data, html)
+ * @return array
+ */
 function getUserAssignments($param, $type) {
 	global $mysqlMainDb;
 	$uid				= $param['uid'];
@@ -70,7 +94,6 @@ function getUserAssignments($param, $type) {
 
 	}
 
-	//print_a($assignGroup);
 
 	$assignGroup = columnSort($assignGroup, 3);
 
@@ -79,15 +102,23 @@ function getUserAssignments($param, $type) {
 	} elseif ($type == "data") {
 		return $assignGroup;
 	}
-	//If no assignments exists there will be no data.
 
 }
 
+/**
+ * Function assignHtmlInterface
+ * 
+ * Generates html content for the assignments block of e-class personalised.
+ *
+ * @param array $data
+ * @return string HTML content for the assignments block
+ * @see getUserAssignments()
+ */
 function assignHtmlInterface($data) {
 	global  $langLesson, $langAssignment, $langDeadline, $langNoAssignmentsExist;
 	$assign_content = "";
 	$iterator =  count($data);
-	
+
 	if ($iterator > 0) {
 		$assign_content .= <<<aCont
 	
@@ -144,6 +175,15 @@ aCont;
 	//	$assign_content .=
 }
 
+/**
+ * Function columnSort
+ *
+ * Sorts an array by one of it's columns specified by $column
+ * 
+ * @param array $unsorted
+ * @param mixed $column (array dimension to sort)
+ * @return array sorted $unsorted
+ */
 function columnSort($unsorted, $column) {
 	//bubbleSort
 	$sorted = $unsorted;
@@ -158,9 +198,18 @@ function columnSort($unsorted, $column) {
 	return $sorted;
 }
 
-function findSubmission($uid, $id, $lesson_db)
-{
-	//	$lv = new DBI();
+/**
+ * Function findSubmission
+ *
+ *  Gets the id of an assignments
+ * 
+ * @param int $uid
+ * @param int $id
+ * @param string $lesson_db
+ * @return mixed (assignment id if true, else false)
+ */
+function findSubmission($uid, $id, $lesson_db) {
+
 	if (isGroupAssignment($id, $lesson_db))	{
 		$gid = getUserGroup($uid, $lesson_db);
 		$res = db_query("SELECT id FROM $lesson_db.assignment_submit
@@ -180,9 +229,17 @@ function findSubmission($uid, $id, $lesson_db)
 
 }
 
-// Is this a group assignment?
-function isGroupAssignment($id, $lesson_db)
-{
+/**
+ * Function isGroupAssignment
+ *
+ * Checks if an assignments is a group assignment
+ * Returns true if it is.
+ * 
+ * @param int $id
+ * @param string $lesson_db
+ * @return boolean
+ */
+function isGroupAssignment($id, $lesson_db) {
 	//	$lv = new DBI();
 	$res = db_query("SELECT group_submissions FROM $lesson_db.assignments WHERE id = '$id'", $lesson_db);
 	if ($res) {
@@ -197,9 +254,17 @@ function isGroupAssignment($id, $lesson_db)
 	}
 }
 
-function getUserGroup($uid, $lesson_db)
-{
-	//	$lv = new DBI();
+/**
+ * Function getUserGroup
+ *
+ * Returns the user's group he is enrolled at, false otherwise
+ * 
+ * @param int $uid
+ * @param string $lesson_db
+ * @return mixed 
+ */
+function getUserGroup($uid, $lesson_db) {
+
 	$res =db_query("SELECT team FROM $lesson_db.user_group WHERE user = '$uid'", $lesson_db);
 	if ($res) {
 		$row = mysql_fetch_row($res);
