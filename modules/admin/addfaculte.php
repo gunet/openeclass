@@ -61,6 +61,23 @@ include '../../include/baseTheme.php';
 check_admin();
 // Define $nameTools
 $nameTools=$langListFaculte;
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+if (isset($a)) {
+	switch ($a) {
+		case 1:
+			$navigation[] = array("url" => "addfaculte.php", "name" => $langListFaculte);
+			$nameTools = $langFaculteAdd;
+			break;
+		case 2:
+			$navigation[] = array("url" => "addfaculte.php", "name" => $langListFaculte);
+			$nameTools = "Διαγραφή Τμήματος";
+			break;
+		case 3:
+			$navigation[] = array("url" => "addfaculte.php", "name" => $langListFaculte);
+			$nameTools = "Επεξεργασία Τμήματος";
+			break;
+	}
+}
 // Initialise $tool_content
 $tool_content = "";
 /*****************************************************************************
@@ -128,7 +145,7 @@ elseif ($a == 1)  {
 	} else {
 		// Display form for new faculte information
 		$tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?a=1\">";
-		$tool_content .= "<table width=\"99%\"><caption>".$langFaculteAdd."</caption><tbody>";
+		$tool_content .= "<table width=\"99%\"><caption>Εισαγωγή Στοιχείων Τμήματος</caption><tbody>";
 		$tool_content .= "		<tr><td width=\"3%\" nowrap>".$langCodeFaculte1.":</td><td><input type=\"text\" name=\"codefaculte\" value=\"".@$codefaculte."\"></td></tr>
 		<tr><td>&nbsp;</td><td><i>".$langCodeFaculte2."</i></td></tr>
 		<tr><td width=\"3%\" nowrap>".$langFaculte1.":</td><td><input type=\"text\" name=\"faculte\" value=\"".@$faculte."\"></td></tr>
@@ -182,7 +199,7 @@ elseif ($a == 3)  {
 		$myrow = mysql_fetch_array($result);
 		// Display form for edit faculte information
 		$tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?a=3\">";
-		$tool_content .= "<table width=\"99%\"><caption>Επεξεργασία Τμήματος</caption><tbody>";
+		$tool_content .= "<table width=\"99%\"><caption>Επεξεργασία Στοιχειών Τμήματος</caption><tbody>";
 		$tool_content .= "		<tr><td width=\"3%\" nowrap>".$langCodeFaculte1.":</td><td><input type=\"text\" name=\"codefaculte\" value=\"".$myrow['code']."\" readonly></td></tr>
 		<tr><td>&nbsp;</td><td><i>".$langCodeFaculte2."</i></td></tr>
 		<tr><td width=\"3%\" nowrap>".$langFaculte1.":</td><td><input type=\"text\" name=\"faculte\" value=\"".$myrow['name']."\"></td></tr>
