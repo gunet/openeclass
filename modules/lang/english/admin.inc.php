@@ -60,6 +60,10 @@ $langAdminManual = "Admin Manual";
 $langVersion = "e-Class Version";
 $langConfigFile = "e-Class Configuration file";
 $langDBaseAdmin = "phpMyAdmin";
+$langAdminProf = "Admin Professors";
+$langAdminUsers = "Admin Users";
+$langAdminCours = "Admin Courses";
+$langGenAdmin="Other Tools";
 
 // Stat
 $langStatistiques = "Statistics";
