@@ -1,27 +1,50 @@
 <?PHP
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Á full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
 
-/*
-*
-*	File : forumPosts.php
-*
-*	Forum Posts
-*
-*	The component responsible for all posts in lessons the user is
-*	subscribed to.
-*
-*	@author Evelthon Prodromou <eprodromou@upnet.gr>
-*
-*	@access public
-*
-*	@version 1.0.1
-*
-*
-*/
+/**
+ * Personalised ForumPosts Component, e-Class Personalised
+ * 
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ * @package e-Class Personalised
+ * 
+ * @abstract This component populates the Forum Posts block on the user's personalised 
+ * interface. It is based on the diploma thesis of Evelthon Prodromou.
+ *
+ */
 
-
-
-function getUserForumPosts($param, $type)
-{
+/**
+ * Function getUserForumPosts
+ * 
+ * Populates an array with data regarding the user's personalised forum posts
+ *
+ * @param array $param
+ * @param string $type (data, html)
+ * @return array
+ */
+function getUserForumPosts($param, $type) {
 	global $mysqlMainDb, $uid, $dbname, $currentCourseID;
 
 	$uid				= $param['uid'];
@@ -37,19 +60,7 @@ function getUserForumPosts($param, $type)
 
 	//		Generate SQL code for all queries
 	//		----------------------------------------
-	/*	$queryParamNew = array(
-	'lesson_code'		=> $lesson_code,
-	'max_repeat_val'	=> $max_repeat_val,
-	'date'				=> $usr_lst_login
-	);
 
-	$queryParamMemo = array(
-	'lesson_code'		=> $lesson_code,
-	'max_repeat_val'	=> $max_repeat_val,
-	'date'				=> $usr_memory
-	);*/
-
-	//	dumpArray($usr_memory);
 	$forum_query_new 	= createForumQueries($usr_lst_login);
 	$forum_query_memo 	= createForumQueries($usr_memory);
 
@@ -58,15 +69,11 @@ function getUserForumPosts($param, $type)
 	$getNewPosts = false;
 	for ($i=0;$i<$max_repeat_val;$i++) {
 
-		//		array_push($forumPostsData, $lesson_title[$i]);
-		//		array_push($forumPostsData, $lesson_code[$i]);
-
 		$mysql_query_result = db_query($forum_query_new, $lesson_code[$i]);
 
 		if ($num_rows = mysql_num_rows($mysql_query_result) > 0) {
 			$getNewPosts = true;
 
-			//			$announceLessonData = array();
 			$forumData = array();
 			$forumSubData = array();
 			$forumContent = array();
@@ -74,57 +81,30 @@ function getUserForumPosts($param, $type)
 			array_push($forumData, $lesson_title[$i]);
 			array_push($forumData, $lesson_code[$i]);
 
-			//update the corresponding field in cours_user and set
-			//the field's value to the last LOGIN date of the user
-			//set a flag so that it only updates the date once! :)
-
-			//PROSOXH!! to update na ginetai afou bgei apo to for!!1
-			//alliws 8a to kanei se ka8e ma8hma pou exei nees anakoinwseis!! (axreiasto!)
 		}
-
-		//		$forum_post_counter = 0;
 
 		while ($myForumPosts = mysql_fetch_row($mysql_query_result)) {
 			if ($myForumPosts){
 				array_push($forumContent, $myForumPosts);
 			}
-			/*			$lesson_posts[$i][$forum_post_counter]['forum_name']	= $myForumPosts[1];
-			$lesson_posts[$i][$forum_post_counter]['topic_title']	= $myForumPosts[3];
-			$lesson_posts[$i][$forum_post_counter]['name']			= $myForumPosts[11];
-			$lesson_posts[$i][$forum_post_counter]['surname']		= $myForumPosts[10];
-			$lesson_posts[$i][$forum_post_counter]['post_time']		= $myForumPosts[9];
 
-			$post_text = strip_tags($myForumPosts[13]);
-
-			$lesson_posts[$i][$forum_post_counter]['post_text']		= $post_text;
-
-			$lesson_posts[$i][$forum_post_counter]['topic_id']		= $myForumPosts[2];
-			$lesson_posts[$i][$forum_post_counter]['forum_id']		= $myForumPosts[0];
-			$lesson_posts[$i][$forum_post_counter]['sub_id']		= $myForumPosts[5];
-
-			$forum_post_counter++;*/
 		}
-		//		dumpArray($forumContent);
-		//		$forum_posts_per_lesson[$i] = $forum_post_counter;
-		//		$lesson_posts[$i]['lesson_title']						= $lesson_titles[$i];
-		//		$lesson_posts[$i]['number_of_posts']					= $forum_posts_per_lesson[$i];
+
 		if ($num_rows > 0) {
-			//			echo "lala";
+
 			array_push($forumSubData, $forumContent);
 			array_push($forumData, $forumSubData);
 			array_push($forumPosts, $forumData);
 		}
 
 	}
-	//fix apo dw k katw (ta ekana c/p apo announcements)
+
 	if ($getNewPosts) {
-		//		array_push($announceGroup, $announceSubGroup);
+
 		$sqlNowDate = eregi_replace(" ", "-",$usr_lst_login);
 		$sql = "UPDATE `user` SET `forum_flag` = '$sqlNowDate' WHERE `user_id` = $uid ";
 		db_query($sql, $mysqlMainDb);
-		//		echo $sql;
-		//update announcemenets memory
-		//call announceHtmlInterface("new")
+
 	} elseif (!$getNewPosts) {
 		//if there are no new announcements, get the last announcements the user had
 		//so that we always have something to display
@@ -150,7 +130,6 @@ function getUserForumPosts($param, $type)
 
 	}
 
-	//		print_a($forumPosts);
 
 	if($type == "html") {
 		return forumHtmlInterface($forumPosts);
@@ -161,6 +140,15 @@ function getUserForumPosts($param, $type)
 }
 
 
+/**
+ * Function forumHtmlInterface
+ * 
+ * Generates html content for the Forum Posts block of e-class personalised.
+ *
+ * @param array $data
+ * @return string HTML content for the documents block
+ * @see function getUserForumPosts()
+ */
 function forumHtmlInterface($data) {
 	global $langNoPosts, $langMore, $langSender;
 	$content = "";
@@ -211,6 +199,14 @@ fCont;
 	return $content;
 }
 
+/**
+ * Function createForumQueries
+ * 
+ * Creates needed queries used by getUserForumPosts()
+ *
+ * @param string $dateVar
+ * @return string SQL query
+ */
 function createForumQueries($dateVar){
 
 	$forum_query = 'SELECT	forums.forum_id,
@@ -242,8 +238,6 @@ function createForumQueries($dateVar){
 						AND	DATE_FORMAT(posts.post_time, \'%Y %m %d\') >= "'.$dateVar.'"
 			
 						ORDER BY posts.post_time ';
-	//		echo $forum_query . "<br>";
-
 	return $forum_query;
 }
 

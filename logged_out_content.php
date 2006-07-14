@@ -1,10 +1,50 @@
 <?PHP
-//logged_out_content.php
-// @author Evelthon Prodromou <eprodromou@upnet.gr>
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Á full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
+
+/**
+ * Logged Out Component
+ * 
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ * 
+ * @abstract This component creates the content of the index page when the 
+ * user is not logged in
+ * It includes: 
+ * 1. The login form, 
+ * 2. an optional content below the login form, 
+ * 3. The introductory message
+ * 4. Platform announcements (If there are any)
+ *
+ */
+
+//query for greek announcements
 $sql_el ="SELECT `date`, `gr_title` , `gr_body` , `gr_comment`
 		FROM `admin_announcements`
 		WHERE `visible` = \"V\"
 		";
+//query for english announcements
 $sql_en ="SELECT `date`, `en_title` , `en_body` , `en_comment`
 		FROM `admin_announcements`
 		WHERE `visible` = \"V\"
@@ -12,12 +52,12 @@ $sql_en ="SELECT `date`, `en_title` , `en_body` , `en_comment`
 
 if(session_is_registered('langswitch')) {
 	$language = $_SESSION['langswitch'];
-} 
+}
 
 if ($language == "greek") $sql = $sql_el;
 else $sql = $sql_en;
 
-	$tool_content .= <<<lCont
+$tool_content .= <<<lCont
 <div id="container_login">
 
 <div id="wrapper">
@@ -25,13 +65,13 @@ else $sql = $sql_en;
 <p>$langInfo</p>
 lCont;
 $result = db_query($sql, $mysqlMainDb);
-	if (mysql_num_rows($result) > 0) {
-		$announceArr = array();
-		while ($eclassAnnounce = mysql_fetch_array($result)) {
-			array_push($announceArr, $eclassAnnounce);
-		}
+if (mysql_num_rows($result) > 0) {
+	$announceArr = array();
+	while ($eclassAnnounce = mysql_fetch_array($result)) {
+		array_push($announceArr, $eclassAnnounce);
+	}
 
-		$tool_content .= "
+	$tool_content .= "
 <br/>
 
 <table width=\"99%\">
@@ -43,14 +83,14 @@ $result = db_query($sql, $mysqlMainDb);
 	<tbody>";
 
 
-		$numOfAnnouncements = count($announceArr);
+	$numOfAnnouncements = count($announceArr);
 
-		for($i=0; $i < $numOfAnnouncements; $i++) {
+	for($i=0; $i < $numOfAnnouncements; $i++) {
 
-			if ($i%2 == 0) $rowClass = "class=\"odd\"";
-			else $rowClass = "";
+		if ($i%2 == 0) $rowClass = "class=\"odd\"";
+		else $rowClass = "";
 
-			$tool_content .= "
+		$tool_content .= "
 		<tr $rowClass>
 			<td>
 				<p><b>".$announceArr[$i][0].":</b> <u>".$announceArr[$i][1]."</u></p>
@@ -60,13 +100,13 @@ $result = db_query($sql, $mysqlMainDb);
 		</tr>
 		";
 
-		}
+	}
 
-		$tool_content .= "
+	$tool_content .= "
 			</tbody>
 		</table>";
-	}
-	$tool_content .= <<<lCont2
+}
+$tool_content .= <<<lCont2
 </div>
 </div>
 <div id="navigation">
