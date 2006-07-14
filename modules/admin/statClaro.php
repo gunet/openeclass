@@ -46,6 +46,7 @@ include '../../include/baseTheme.php';
 // Define $nameTools
 $langStat4Claroline = "Στατιστικά πλατφόρμας";
 $nameTools = $langStat4Claroline;
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
 // Initialise $tool_content
 $tool_content = "";
 

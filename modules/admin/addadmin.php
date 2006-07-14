@@ -57,6 +57,7 @@ include '../../include/baseTheme.php';
 check_admin();
 // Define $nameTools
 $nameTools = $langNomPageAddHtPass;
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
 // Initialise $tool_content
 $tool_content = "";
 

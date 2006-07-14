@@ -55,6 +55,7 @@ include '../../include/baseTheme.php';
 @include "check_admin.inc";
 // Define $nameTools
 $nameTools = "Πληροφορίες για την PHP";
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
 // Initialise $tool_content
 $tool_content = "";
 

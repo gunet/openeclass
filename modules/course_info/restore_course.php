@@ -4,8 +4,9 @@ include '../../include/baseTheme.php';
 include '../../include/lib/fileUploadLib.inc.php';
 include '../../include/lib/fileManageLib.inc.php';
 include '../../include/pclzip/pclzip.lib.php';
-@include "check_admin.inc";
+check_admin();
 $nameTools = $langRestoreCourse;
+$navigation[] = array("url" => "../admin/index.php", "name" => "Εργαλεία Διαχείρισης Πλατφόρμας");
 
 // Initialise $tool_content
 $tool_content = "";

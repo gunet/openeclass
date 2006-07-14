@@ -2,8 +2,9 @@
 $langFiles = array('registration', 'admin', 'gunet');
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
-@include "check_admin.inc";
+check_admin();
 $nameTools = "Εγγραφή Καθηγητή";
+$navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 
 // Initialise $tool_content
 $tool_content = "";
