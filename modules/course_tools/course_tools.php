@@ -1,22 +1,43 @@
 <?PHP
-/*
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Á full copyright notice can be read in "/info/copyright.txt".
 *
-*	File : course_tools.php
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
 *
-*	Various operations regarding a course's tools
+*	For a full list of contributors, see "credits.txt".
 *
-*	Activate/De-activate tools
-*	Upload external html page
-*	Add external links
-*	Delete the last two when inactive
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
 *
-*	@author Evelthon Prodromou <eprodromou@upnet.gr>
-*
-*	@access public
-*
-*	@version 1.0.1
-*
-*/
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
+
+/**
+ * Course Tools Component
+ * 
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ * 
+ * @abstract This component offers several operations regarding a course's tools.
+ * The course administrator can:
+ * 1. Activate/De-activate tools
+ * 2. Upload external html page
+ * 3. Add external links
+ * 4. Delete the last two when inactive
+ *
+ */
+
 $require_current_course = TRUE;
 $langFiles = array('toolManagement', 'create_course', 'external_module', 'import');
 $require_help = TRUE;
