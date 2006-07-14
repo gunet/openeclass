@@ -1,44 +1,45 @@
 <?
-/*
-+----------------------------------------------------------------------+
-| e-class version 1.0                                                  |
-| based on CLAROLINE version 1.3.0 $Revision$		     |
-+----------------------------------------------------------------------+
-|   $Id$
-+----------------------------------------------------------------------+
-| Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
-| Copyright (c) 2003 GUNet                                             |
-+----------------------------------------------------------------------+
-|   This program is free software; you can redistribute it and/or      |
-|   modify it under the terms of the GNU General Public License        |
-|   as published by the Free Software Foundation; either version 2     |
-|   of the License, or (at your option) any later version.             |
-|                                                                      |
-|   This program is distributed in the hope that it will be useful,    |
-|   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-|   GNU General Public License for more details.                       |
-|                                                                      |
-|   You should have received a copy of the GNU General Public License  |
-|   along with this program; if not, write to the Free Software        |
-|   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-|   02111-1307, USA. The GNU GPL license is also available through     |
-|   the world-wide-web at http://www.gnu.org/copyleft/gpl.html         |
-+----------------------------------------------------------------------+
-| Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-|          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-|          Christophe Gesche <gesche@ipm.ucl.ac.be>                    |
-|                                                                      |
-| e-class changes by: Costas Tsibanis <costas@noc.uoa.gr>              |
-|                     Yannis Exidaridis <jexi@noc.uoa.gr>              |
-|                     Alexandros Diamantidis <adia@noc.uoa.gr>         |
-+----------------------------------------------------------------------+
-*/
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Á full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
+
+/**
+ * Course Home Component
+ * 
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ * 
+ * @abstract This component creates the content for the course's home page
+ *
+ */
 
 $require_current_course = TRUE;
 $langFiles = array('course_info', 'create_course', 'opencours', 'course_home');
 
+//$courseHome is used by the breadcrumb logic 
+//See function draw() in baseTheme.php for details
 $courseHome = true;
+//$path2add is used in init.php to fix relative paths
 $path2add=1;
 include '../../include/baseTheme.php';
 
@@ -57,13 +58,11 @@ while($result = mysql_fetch_row($res)) {
 	$keywords = $result[3];
 	$references = $result[4];
 	$faculte = $result[5];
-	//will the dates work ?
-
 	$type = $result[7];
 	$visible = $result[8];
 	$professor = $result[9];
 	$fake_code = $result[10];
-	//
+
 }
 
 if(strlen($description) > 0) {
@@ -180,7 +179,7 @@ $main_content
 <div id="extra">
 <p></p>
 </div>
-<!--<div id="footer"><p>Here it goes the footer</p></div>-->
+
 </div>
 
 lCont;
