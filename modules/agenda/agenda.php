@@ -1,34 +1,37 @@
 <?
-/*
-+----------------------------------------------------------------------+
-| CLAROLINE version 1.3.0 $Revision$                            |
-+----------------------------------------------------------------------+
-| Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
-+----------------------------------------------------------------------+
-| $Id$               |
-+----------------------------------------------------------------------+
-|   This program is free software; you can redistribute it and/or      |
-|   modify it under the terms of the GNU General Public License        |
-|   as published by the Free Software Foundation; either version 2     |
-|   of the License, or (at your option) any later version.             |
-|                                                                      |
-|   This program is distributed in the hope that it will be useful,    |
-|   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-|   GNU General Public License for more details.                       |
-|                                                                      |
-|   You should have received a copy of the GNU General Public License  |
-|   along with this program; if not, write to the Free Software        |
-|   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-|   02111-1307, USA. The GNU GPL license is also available through     |
-|   the world-wide-web at http://www.gnu.org/copyleft/gpl.html         |
-+----------------------------------------------------------------------+
-| Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-|          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-|          Christophe Gesché <gesche@ipm.ucl.ac.be>                    |
-+----------------------------------------------------------------------+
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Á full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
 
-*/
+/**
+ * Agenda Component
+ * 
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ * 
+ * @abstract This component creates the content for the agenda module
+ *
+ */
 
 $langFiles = 'agenda';
 $require_current_course = TRUE;
@@ -90,8 +93,8 @@ hContent;
 /*
 $tool_content .= <<<tContent1
 <div id="tool_operations">
-        <span class="operation">$langDateNow : $dateNow</span>
-    </div>
+<span class="operation">$langDateNow : $dateNow</span>
+</div>
 
 tContent1;
 */
@@ -178,7 +181,7 @@ if ($is_adminOfCourse) {
 		unset($perso_sql_delete);
 		unset($id);
 		##[END personalisation modification]############
-		
+
 		$tool_content .=  "
 					<table>
 						<tbody>
@@ -206,7 +209,7 @@ if ($is_adminOfCourse) {
 
 		db_query($perso_sql, $mysqlMainDb);
 		##[END personalisation modification]############
-		
+
 		$tool_content .=  "
 					<table>
 						<tbody>
@@ -236,7 +239,6 @@ if ($is_adminOfCourse) {
 
 	}
 
-	//TODO: add this if logic as it was in the old system
 	if (!isset($id)) {
 		$id="";
 	}
@@ -380,8 +382,7 @@ tContentForm;
 			<a href=\"".$_SERVER['PHP_SELF']."?addEvent=1\">".$langAddEvent."</a> | 
 				
 ";
-		//This will be a plain link
-		// agenda.php?addEvent=1
+
 	}
 }
 
@@ -409,8 +410,8 @@ $numLine=0;
 $result = db_query("SELECT id, titre, contenu, day, hour, lasting FROM agenda ORDER BY day ".$sens.", hour ".$sens,$currentCourseID);
 $barreMois ="";
 $nowBarShowed = FALSE;
-while ($myrow = mysql_fetch_array($result))
-{
+
+while ($myrow = mysql_fetch_array($result)) {
 	$contenu = $myrow["contenu"];
 	$contenu = nl2br($contenu);
 	$contenu = make_clickable($contenu);
@@ -477,14 +478,14 @@ while ($myrow = mysql_fetch_array($result))
 	//agenda event functions
 	//added icons next to each function
 	//(evelthon, 12/05/2006)
-	//	<span class="help">{HELP_LINK_ICON} {HELP_LINK}</span>
+
 	if ($is_adminOfCourse) {
 		$tool_content .=  "<td >
         <a href=\"$_SERVER[PHP_SELF]?id=".$myrow["id"]."\">
-            <img src=\"../../images/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a>
+            <img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a>
 
         <a href=\"$_SERVER[PHP_SELF]?id=".$myrow[0]."&delete=yes\">
-            <img src=\"../../images/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a>
+            <img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a>
 
         </td>";
 	}
