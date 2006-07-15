@@ -1,23 +1,45 @@
 <?PHP
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Á full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
 
 /**
- * baseTheme
- * 
- *Includes some basic functions to render the UI.
+ * Base Theme Component, e-Class Core
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version 1.0
- * @package eclass 2.0
+ * @version $Id$
  * 
- +----------------------------------------------------------------------+
- |   $Id$       |
- +----------------------------------------------------------------------+
+ * @abstract This component is the core of eclass. Each and every file that 
+ * requires output to the user's browser must include this file and use
+ * the draw method to output the UI to the user's browser.
+ * 
+ * An exception of this scenario is when the user uses the personalised 
+ * interface. In that case function drawPerso needs to be called.
+ *
  */
-
-
 include('init.php');
 
-//template path for logged out + logged in
+//template path for logged out + logged in (ex., when session expires)
 if(isset($errorMessagePath)) {
 	$relPath = $errorMessagePath;
 }
@@ -25,20 +47,18 @@ if(isset($errorMessagePath)) {
 include($relPath."template/template.inc");
 include('tools.php');
 
-function getTools($menuTypeID){
-
-	return getSideMenu($menuTypeID);
-}
-
-
 /**
-	 * function draw
-	 * 
-	 * This method processes all data to render the display. It is executed by
-	 * each tool. Is in charge of generating the 
-	 * interface and parse it to the user's browser.
-	 * 
-	 */
+ * Function draw
+ *
+ * This method processes all data to render the display. It is executed by
+ * each tool. Is in charge of generating the interface and parse it to the user's browser.
+ * 
+ * @param mixed $toolContent html code
+ * @param int $menuTypeID 
+ * @param string $tool_css (optional) catalog name where a "tool.css" file exists
+ * @param string $head_content (optional) code to be added to the HEAD of the UI
+ * @param string $body_action (optional) code to be added to the BODY tag
+ */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null){
 	global $langUser, $prenom, $nom, $langLogout, $intitule,  $nameTools, $langHelp, $langAnonUser;
 	global $language, $helpTopic, $require_help, $langEclass, $langCopyrightFooter;
@@ -54,8 +74,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		$toolContent = $toolContent_ErrorExists;
 		$menuTypeID = 0;
 	}
-	$toolArr = getTools($menuTypeID);
-
+	//get the left side menu from tools.php
+	$toolArr = getSideMenu($menuTypeID);
 	$numOfToolGroups = count($toolArr);
 
 	$t = new Template($relPath ."template/classic");
@@ -64,16 +84,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 	$t->set_block('fh', 'mainBlock', 'main');
 
-	//	if(isset($this->head_extras)) $t->set_var('HEAD_EXTRAS', $this->head_extras);
-	//	if(isset($this->body_action)) $t->set_var('BODY_ACTION', $this->body_action);
-
 	//	BEGIN constructing of left navigation
-	//	---------------------------------------------------------------------------
+	//	----------------------------------------------------------------------
 	$t->set_block('mainBlock', 'leftNavCategoryBlock', 'leftNavCategory');
-	//
-	//	$t->set_var('LESSON_TITLE', $currentCourseName);
-	//	$t->set_var('URL_APPEND', $urlAppend);
-
 	$t->set_block('leftNavCategoryBlock', 'leftNavLinkBlock', 'leftNavLink');
 
 	if (is_array($toolArr)) {
@@ -86,7 +99,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 				$t->set_var('TOOL_LINK', $toolArr[$i][2][$j]);
 				$t->set_var('TOOL_TEXT', $toolArr[$i][1][$j]);
-				//				$t->set_var('TOOL_ICON', 'agenda');
+
 				$t->set_var('IMG_FILE', $toolArr[$i][3][$j]);
 				$t->parse('leftNavLink', 'leftNavLinkBlock', true);
 
@@ -94,8 +107,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 			$t->set_var('ACTIVE_TOOLS', $toolArr[$i][0]);
 			$t->set_var('NAV_CSS_CAT_CLASS', 'category');
-			$t->parse('leftNavCategory', 'leftNavCategoryBlock',true); //auto prepei na einai true otan mpei o ypoloipos kwdikas
-
+			$t->parse('leftNavCategory', 'leftNavCategoryBlock',true);
 
 			$t->clear_var('leftNavLink'); //clear inner block
 		}
@@ -117,14 +129,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var('ECLASS_HOME_EXTRAS_RIGHT', $s);
 		}
 
-
-
+		//show user's name and surname on the user bar
 		if (session_is_registered('uid') && strlen($nom) > 0) {
 			$t->set_var('LANG_USER', $langUser);
 			$t->set_var('USER_NAME', $prenom);
 			$t->set_var('USER_SURNAME', $nom);
 		}
 
+		//if user is logged in display the logout option
 		if (session_is_registered('uid')) {
 			$t->set_var('LANG_LOGOUT', $langLogout);
 			$t->set_var('LOGOUT_CLASS_ICON', 'logout_icon');
@@ -251,10 +263,11 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->parse('breadCrumbEnd', 'breadCrumbEndBlock',true);
 		}
 
-		//END breadcrumb
+		//END breadcrumb --------------------------------
 
 		$t->set_var('PAGE_TITLE',  $pageTitle);
 
+		//Add the optional tool-specific css of the tool, if it's set
 		if (isset($tool_css)){
 			$t->set_var('TOOL_CSS', "<link href=\"{TOOL_PATH}modules/$tool_css/tool.css\" rel=\"stylesheet\" type=\"text/css\" />");
 		}
@@ -269,6 +282,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var('BODY_ACTION', $body_action);
 		}
 
+		//if $require_help is true (set by each tool) display the help link
 		if ($require_help == true){
 			$help_link = "
 		 <a href=\"".$relPath."modules/help/help.php?topic=$helpTopic&language=$language>\" 
@@ -301,7 +315,16 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	}
 }
 
-function drawPerso($toolContent, $menuTypeID=null, $tool_css = null, $head_content = null, $body_action = null){
+/**
+ * Function drawPerso
+ * 
+ * This method processes all data to render the display. It is executed by
+ * eclass personalised. Is in charge of generating the interface and parse it to the user's browser.
+ *
+ * @param mixed $toolContent html code
+ * 
+ */
+function drawPerso($toolContent){
 
 	global $langUser, $prenom, $nom, $langLogout, $intitule,  $nameTools, $langHelp, $langPersonalisedBriefcase;
 	global $language, $helpTopic, $require_help, $langCopyrightFooter;
@@ -312,8 +335,6 @@ function drawPerso($toolContent, $menuTypeID=null, $tool_css = null, $head_conte
 	global $langMyPersoAnnouncements, $langMyPersoDocs, $langMyPersoAgenda, $langMyPersoForum;
 	global $langModifyProfile, $langSearch, $langAdminTool;
 	global $langChangeLang, $switchLangURL;
-
-	//	global $lesson_content;
 
 	//get blocks content from $toolContent array
 	$lesson_content 	= $toolContent['lessons_content'];
@@ -334,10 +355,6 @@ function drawPerso($toolContent, $menuTypeID=null, $tool_css = null, $head_conte
 	$t->set_var('USER_SURNAME', $nom);
 	$t->set_var('LANG_LOGOUT', $langLogout);
 	$t->set_var('LOGOUT_LINK',  $relPath);
-
-	//	$t->set_var('TOOL_NAME',  $nameTools);//feugei ?
-
-	//	$t->set_var('LESSON_TITLE', $intitule);//auto allazei
 
 	$otherLinks = "| <a class=\"create_course_icon\" href=".$urlServer."modules/profile/profile.php>$langModifyProfile</a> ";
 	if ($is_admin) {
@@ -377,7 +394,7 @@ function drawPerso($toolContent, $menuTypeID=null, $tool_css = null, $head_conte
 	if (!$page_name) $page_name = $nameTools;
 
 	$t->set_block('mainBlock', 'breadCrumbHomeBlock', 'breadCrumbHome');
-	//	$t->set_var('BREAD_TEXT',  $siteName);
+
 	$t->set_var('BREAD_TEXT',  $langPersonalisedBriefcase);
 	$t->set_var('PAGE_TITLE',  $siteName);
 	// end breadcrumb
@@ -390,7 +407,7 @@ function drawPerso($toolContent, $menuTypeID=null, $tool_css = null, $head_conte
 }
 
 /**
- * function dumpArray
+ * Function dumpArray
  *
  * Used for debugging purposes. Dumps array to browser
  * window.
@@ -403,8 +420,15 @@ function dumpArray($arr){
 	echo "</pre>";
 }
 
-function print_a( $TheArray )
-{ // Note: the function is recursive
+/**
+ * Function print_a
+ *
+ * Used for debugging purposes. Dumps array to browser
+ * window. Better organisation of arrays than dumpArray
+ * 
+ * @param array $arr
+ */
+function print_a($TheArray) {
 	echo "<table border=1>n";
 
 	$Keys = array_keys( $TheArray );
