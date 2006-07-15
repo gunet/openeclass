@@ -30,16 +30,6 @@ error_reporting (E_ALL);
 // note version_compare() is used for checking the php version but works for mysql too
 // ------------------------------------------------------------------------------------
 
-function mysql_version() {
-
-$ver = mysql_get_server_info();
-if (version_compare("4.1", $ver) <= 0)
-        return true;
-else
-	return false;
-}
-
-
 // Disable Magic Quotes
 function stripslashes_array(&$the_array_element, $the_array_element_key, $data)
 {
