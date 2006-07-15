@@ -1,76 +1,48 @@
 <?php 
-/*
-+----------------------------------------------------------------------+
-| CLAROLINE version 1.3.0 $Revision$                            |
-+----------------------------------------------------------------------+
-| Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
-+----------------------------------------------------------------------+
-| $Id$        |
-+----------------------------------------------------------------------+
-|    This program is free software; you can redistribute it and/or     |
-|    modify it under the terms of the GNU General Public License       |
-|    as published by the Free Software Foundation; either version 2    |
-|   of the License, or (at your option) any later version.             |
-|                                                                      |
-|   This program is distributed in the hope that it will be useful,    |
-|   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-|   GNU General Public License for more details.                       |
-|                                                                      |
-|   You should have received a copy of the GNU General Public License  |
-|   along with this program; if not, write to the Free Software        |
-|   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-|   02111-1307, USA. The GPL license is also available through the     |
-|   world-wide-web at http://www.gnu.org/copyleft/gpl.html             |
-+----------------------------------------------------------------------+
-| Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-|          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-|          Christophe Gesché <gesche@ipm.ucl.ac.be>                    |
-+----------------------------------------------------------------------+
-*/
-/*
-* Originally written by Thomas Depraetere <depraetere@ipm.ucl.ac.be> 15 January 2002.
-* Partially rewritten by Hugues Peeters <peeters@ipm.ucl.ac.be> 19 April 2002.
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Á full copyright notice can be read in "/info/copyright.txt".
 *
-* The script works with the 'annonces' tables in the main claroline table
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
 *
-* DB Table structure:
-* ---
+*	For a full list of contributors, see "credits.txt".
 *
-* id         : announcement id
-* contenu    : announcement content
-* temps      : date of the announcement introduction / modification
-* code_cours : course code of wich the announcement is linked
-* ordre      : order of the announcement display
-*              (the announcements are display in desc order)
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
 *
-* Script Structure:
-* ---
-*
-* - Teacher only section
-*
-*		commands
-*			move up and down announcement
-*			delete announcement
-*			delete all announcements
-*			modify announcement
-*			submit announcement (new or modified)
-*
-*		display
-*			casual message (often used after the execution of a command)
-*			announcement list
-*			form to fill new or modified announcement
-*
-* - Student section (only display)
-*
-*/
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
 
+/**
+ * Course Tools Component
+ * 
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ * 
+ * @abstract This component offers several operations regarding a course's announcements.
+ * The course administrator can:
+ * 1. Re-arrange the order of the announcements
+ * 2. Delete announcements (one by one or all at once)
+ * 3. Modify existing announcements
+ * 4. Add new announcements
+ *
+ */
 
 $require_current_course = TRUE;
 $require_help = TRUE;
 $langFiles = 'announcements';
 $helpTopic = 'Announce';
-//include('../../include/init.php');
+
 include '../../include/baseTheme.php';
 include('../../include/lib/textLib.inc.php');
 include('../../include/sendMail.inc.php');
@@ -420,11 +392,7 @@ if($is_adminOfCourse) // check teacher status
 							<img class=\"displayed\" src=../../images/up.gif border=0 alt=\"Up\">
 						</a>";
 			}
-			//			$tool_content .=  "
-			//					</td>
-			//				</tr>
-			//				<tr bgcolor=$color2>
-			//					<td width=21 bgcolor=white>";
+
 			// DISPLAY MOVE DOWN COMMAND
 			// condition: only if it is not the bottom announcement
 			if($iterator < $bottomAnnouncement)
