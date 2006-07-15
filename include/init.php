@@ -1,27 +1,43 @@
 <?
-/*
-+----------------------------------------------------------------------+
-| Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
-| Copyright (c) 2003 GUNet                                             |
-+----------------------------------------------------------------------+
-| Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-|          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-|          Christophe Gesche <gesche@ipm.ucl.ac.be>                    |
-|                                                                      |
-| e-class changes by: Costas Tsibanis <costas@noc.uoa.gr>              |
-|                     Yannis Exidaridis <jexi@noc.uoa.gr>              |
-|                     Alexandros Diamantidis <adia@noc.uoa.gr>         |
-|					  Evelthon Prodromou <eprodromou@upnet.gr>		   |
-+----------------------------------------------------------------------+
-| Standard header included by all e-class files                        |
-| Defines standard functions and validates variables                   |
-+----------------------------------------------------------------------+
-*/
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Á full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
+/**
+ * Init
+ * 
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ * 
+ * @abstract This file is included each and every time by baseTheme.php
+ * It initialises variables, includes security checks and serves language switching
+ *
+ */
 
 //Modify the relative path prefix according to the state of the system
 //0: logged in/out screen
 //1: user home
 //else: everything else(modules)
+//(Author: Evelthon Prodromou)
 if (isset($path2add) && $path2add == 0){
 	$relPathLib = "include/";
 	$relPath = "";
@@ -43,14 +59,15 @@ if (isset($path2add) && $path2add == 0){
 include "header.php";
 // footer
 include "footer.php";
+
 // function library
-//path for logged out + logged in
-//include "include/lib/main.lib.php";
 include $relPathLib . "lib/main.lib.php";
 
+//if session isn't started, start it. Needed by the language switch
 if (!session_id()) { session_start(); }
 
 // Set some defaults
+//NOTE (evelthon) these defaults should be deleted ...
 if (!isset($colorLight)) {
 	$colorLight	= "#F5F5F5";
 }
@@ -64,7 +81,7 @@ if (!isset($bannerPath)) {
 	$bannerPath = 'images/gunet/banner.jpg';
 }
 
-// Set user desired language
+// Set user desired language (Author: Evelthon Prodromou)
 if (isset($localize)) {
 
 	switch ($localize) {
@@ -86,7 +103,7 @@ if (isset($localize)) {
 		default:
 			die("Invalid language parameter passed");
 	}
-	//	unset($localize);
+	
 }
 // Get configuration variables
 if (!isset($webDir)) {
@@ -100,6 +117,8 @@ if (!isset($webDir)) {
 			please contact the system administrator");
 	}
 }
+
+//load the correct language (Author: Evelthon Prodromou)
 if (session_is_registered('langswitch')) {
 	$language 		= $_SESSION['langswitch'];
 	$langChangeLang = $_SESSION['langLinkText'];
@@ -111,6 +130,8 @@ $db = mysql_connect($mysqlServer, $mysqlUser, $mysqlPassword);
 if (mysql_version()) mysql_query("SET NAMES greek");
 mysql_select_db($mysqlMainDb, $db);
 
+//if the user is logged in, get this preferred language set in his
+//profile (Author: Evelthon Prodromou)
 if(session_is_registered('uid') && !session_is_registered('langswitch')) {
 	$sqlLang= "SELECT lang
                 FROM user 
@@ -160,8 +181,6 @@ if (isset($require_login) and $require_login and !$uid) {
 	$toolContent_ErrorExists = "Session is lost. Please go back to the <a href='$urlServer' "."target='_top'>start page</a>
 and login";
 	$errorMessagePath = "../../";
-	//	exit("Session is lost. Please go back to <a href='../index.php' "."target='_top'>course homepage</a>
-	//and refresh");
 }
 
 if (isset($require_prof) and $require_prof) {
@@ -170,8 +189,6 @@ if (isset($require_prof) and $require_prof) {
 		Please go back to the <a href='$urlServer' "."target='_top'>start page</a> and login";
 		$errorMessagePath = "../../";
 	}
-//	exit("You are not allowed to proceed this action.
-//		Please go back to <a href='../index.php' "."target='_top'>course homepage</a> and refresh");
 }
 
 
@@ -191,8 +208,6 @@ if (isset($require_current_course) and $require_current_course) {
 		$toolContent_ErrorExists = "Session is lost. Please go back to the <a href='$urlServer' ".
 		"target='_top'>start page</a> and login";
 		$errorMessagePath = "../../";
-		//		exit("Session is lost. Please go back to <a href='../index.php' ".
-		//		"target='_top'>course homepage</a> and refresh");
 	} else {
 		$dbname = $_SESSION['dbname'];
 	}
