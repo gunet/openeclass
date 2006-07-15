@@ -1,53 +1,42 @@
 <?php
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Á full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
+
 /**
- * Dropbox module for Claroline
- * GUI interface page for Dropbox. This contains the upload form and the sent and received files list
+ * File exchange Component
+ * 
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ * 
+ * @abstract This is responsible for exchanging files between the users of a course
+ * 
+ * Based on code by Jan Bols
  *
- * 1. Initialises vars and check installed tables
- * 2. Form upload
- * 3. Received & sent lists
- *
- * @version 1.20
- * @copyright 2004
- * @author Jan Bols <jan@ivpv.UGent.be>
- * with contributions by René Haentjens <rene.haentjens@UGent.be> (see RH)
- *
- * RH: Mailing: this form is called with ?mailing=pseudo_id for detail window
- */
-/**
- *   +----------------------------------------------------------------------
- *   |   This program is free software; you can redistribute it and/or     
- *   |   modify it under the terms of the GNU General Public License       
- *   |   as published by the Free Software Foundation; either version 2    
- *   |   of the License, or (at your option) any later version.            
- *   |                                                                     
- *   |   This program is distributed in the hope that it will be useful,   
- *   |   but WITHOUT ANY WARRANTY; without even the implied warranty of    
- *   |   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     
- *   |   GNU General Public License for more details.                      
- *   |                                                                      
- *   |   You should have received a copy of the GNU General Public License 
- *   |   along with this program; if not, write to the Free Software       
- *   |   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA         
- *   |   02111-1307, USA. The GNU GPL license is also available through    
- *   |   the world-wide-web at http://www.gnu.org/copyleft/gpl.html        
- *   +----------------------------------------------------------------------
- * | Authors: Jan Bols          <jan@ivpv.UGent.be>                       |
- *   +----------------------------------------------------------------------
  */
 
 require_once("dropbox_init1.inc.php");
 $nameTools = $dropbox_lang["dropbox"];
-//begin_page();
-
-//<style type="text/css">
-//	.dropbox_detail {  font-size: small}
-//	.dropbox_date {  font-style: italic}
-//	.dropbox_person {  font-weight: bold}
-//	.dropbox_listTitle { font-style: italic; color: black}
-//</style>
-
-
 
 /*
 * get order status of sent list.
@@ -406,23 +395,11 @@ foreach ($dropbox_person -> receivedWork as $w)
 	}
 
 	$tool_content .= "
-	<tr>
-	<!--<td >wwww-->";
+	<tr>";
 	
-	/*if (isset($origin))  {
-	$tool_content .= "<a href='dropbox_download.php?origin=$origin&id=".urlencode($w->id)."' target=_blank>
-		<img  src='../../images/travaux.gif' border='0'></a>";
-	} else  {
-	$tool_content .= "<a href='dropbox_download.php?id=".urlencode($w->id)."' target=_blank>
-		<img  src='../../images/travaux.gif' border='0'></a>";
-	}*/
 	
 	$tool_content .= <<<tCont8
-	<!--</td>
-	<td >-->
-	<!--<table width="99%" border="0" cellspacing="0" cellpadding="0">-->
-	
-	<td>
+		<td>
 tCont8;
 
 	if (isset($origin)) 
@@ -477,55 +454,6 @@ $tool_content .="
 	</div>
 	</td>
 	</tr>";
-
-
-//    if ($w -> author != '')
-//    {
-//$tool_content .= "
-//	<tr>
-//		<td colspan=\"2\"><span class=\"dropbox_detail\">
-//		".$dropbox_lang["authors"].': '.$w->author."
-//		</span></td>
-//	</tr> ";
-//
-//    }
-//    if ($w->description != '')
-//    {
-//		//only show description info if this is filled in in DB
-//       $tool_content .= "
-//	<tr>
-//	<td colspan=\"2\"><span class=\"dropbox_detail\">".$dropbox_lang["description"].': '.$w->description."</span></td>
-//	</tr> ";
-//	
-//    }
-//    $tool_content .= "
-//	<tr>
-//	<td colspan=\"2\"><span class=\"dropbox_detail\">
-//	".$dropbox_lang["sentBy"]."
-//	 <span class=\"dropbox_person\">$w->uploaderName</span>".$dropbox_lang["sentOn"]." 
-//	<span class=\"dropbox_date\">$w->uploadDate</span>
-//	</span></td>
-//	</tr> ";
-
-//	if ($w->uploadDate != $w->lastUploadDate)
-//	{
-//
-//$tool_content .= "
-//	<tr>
-//	<td colspan=\"2\">
-//	<span class=\"dropbox_detail\">".$dropbox_lang['lastUpdated']."
-//	<span class=\"dropbox_date\">$w->lastUploadDate</span></span>
-//	</td>
-//	</tr>";
-//	
-//
-//	}
-//$tool_content .= "
-//	</table>
-//	</td>
-//	</tr>";
-//
-
     	$i++;
 	} //end of foreach
 	if ($numberDisplayed == 0) {  // RH
@@ -735,105 +663,6 @@ $tool_content .= "
 
 
  // RH: Mailing: clickable images for examine and send
-/*if ($w->recipients[0]['id'] == $uid)
-{
-	$langSentTo = $dropbox_lang["justUploadInList"] . '&nbsp;';  // RH: justUpload
-}
-elseif ($w->recipients[0]['id'] > $dropbox_cnf["mailingIdBase"])
-{
-$tool_content .= "
-<a href=\"dropbox_submit.php?origin=$origin&mailingIndex=".urlencode( $i)."&dropbox_unid=".urlencode( $dropbox_unid).$mailingInUrl."\">
-<img src=\"../image/checkzip.gif\" border=\"0\" title=\"".$dropbox_lang["mailingExamine"]."\"></a>";
-  // RH: Mailing: filesize is set to zero on send, allow no 2nd send!
-	if ($w->filesize != 0)
-	{
-		$langSentTo = '';  // unsent: do not write 'Sent to'
-
-	if (isset($origin)) {
-$tool_content .= "
-	<a href=\"dropbox_submit.php?origin=$origin>&mailingIndex=".urlencode($i)."&mailingSend=yes&dropbox_unid=".urlencode( $dropbox_unid).$mailingInUrl."\" onClick='return confirmsend();'>
-		<img src=\"../../images/sendzip.gif\" border=\"0\" title=\"".$dropbox_lang["mailingSend"]."\"></a>";
-
-
-	 } else {
-$tool_content .= "
-	<a href=\"dropbox_submit.php?mailingIndex=".urlencode($i)."&mailingSend=yes&dropbox_unid=".urlencode( $dropbox_unid).$mailingInUrl."\" onClick='return confirmsend();'>
-		<img src=\"../../images/sendzip.gif\" border=\"0\" title=\"".$dropbox_lang["mailingSend"]."\"></a>";
-
-
-	} 
-
-	}
-}*/
-
-//<!--	Users cannot delete their own sent files -->
-//
-//	if (isset($origin)) {
-//$tool_content .= "
-//		<a href=\"dropbox_submit.php?origin=$origin&deleteSent=".urlencode($w->id)."&dropbox_unid=".urlencode($dropbox_unid) . $mailingInUrl."\"
-//		onClick='return confirmation(\"$w->title\");'>
-//		<img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
-//
-//	} else {
-//$tool_content .= "		
-//	<a href=\"dropbox_submit.php?deleteSent=".urlencode($w->id)."&dropbox_unid=".urlencode($dropbox_unid) . $mailingInUrl."\"
-//		onClick='return confirmation(\"$w->title\");'>
-//		<img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
-//
-//	} //if delete...
-	
-/*$tool_content .= "
-	</td>
-	</tr>";*/
-
-//    if ($w -> author != '')
-//    {
-//$tool_content .= "
-//	<tr>
-//	<td colspan=\"2\">
-//	<span class=\"dropbox_detail\">".$dropbox_lang["authors"].': '.$w->author."<br></span>
-//	</td>
-//	</tr> ";
-//
-//    }
-//    if ($w -> description != '')
-//    {
-//$tool_content .= "
-//	<tr>
-//	<td colspan=\"2\"><span class=\"dropbox_detail\">
-//	".$dropbox_lang["description"].': '.$w->description."<br>
-//	</span></td>
-//	</tr> ";
-//
-//
-//    }
-/*$tool_content .= <<<tCont13
-		<tr>
-		<td colspan="2">
-		<table border="0" cellspacing="0" cellpadding="0">
-		<tr>
-		<td align="left" valign="top">
-		<span class="dropbox_detail">$langSentTo</span>
-		</td>
-		<td align="left" valign="top"><span class="dropbox_detail">
-		<span class="dropbox_person">
-tCont13;*/
-
-//		foreach($w -> recipients as $r)
-//			{
-//				$tool_content .=  $r["name"] . "<br>\n";
-//			}
-//														
-//$tool_content .= "
-//		</span></span></td>
-//		<td align=\"left\" valign=\"top\">
-//		<span class=\"dropbox_detail\">&nbsp;".$dropbox_lang["sentOn"]."
-//		<span class=\"dropbox_date\">$w->uploadDate</span></span>
-//		</td>
-//		</tr>
-//		</table>
-//		</td>
-//		</tr> ";
 
 	if ($w -> uploadDate != $w->lastUploadDate) {
 $tool_content .= "
@@ -842,10 +671,6 @@ $tool_content .= "
 		</tr>";
 
 	}
-/*$tool_content .= "
-		</table>
-		</td>
-		</tr>";*/
 
     $i++;
 	} //end of foreach
