@@ -1,145 +1,122 @@
 <?php
-session_start();
-/***************************************************************************
-                            veiwforum.php  -  description
-                             -------------------
-    begin                : Sat June 17 2000
-    copyright            : (C) 2001 The phpBB Group
-    email                : support@phpbb.com
+/**=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        A full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
 
-    $Id$
- 
- ***************************************************************************/
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
 
-/***************************************************************************
- *                                         				                                
- *   This program is free software; you can redistribute it and/or modify  	
- *   it under the terms of the GNU General Public License as published by  
- *   the Free Software Foundation; either version 2 of the License, or	    	
- *   (at your option) any later version.
- *
- ***************************************************************************/
+/**===========================================================================
+        phpbb/viewforum.php
+        @last update: 2006-07-15 by Artemios G. Voyiatzis
+        @authors list: Artemios G. Voyiatzis <bogart@upnet.gr>
+
+        based on Claroline version 1.7 licensed under GPL
+              copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
+
+        Claroline authors: Piraux Sébastien <pir@cerdecam.be>
+                      Lederer Guillaume <led@cerdecam.be>
+
+	based on phpBB version 1.4.1 licensed under GPL
+		copyright (c) 2001, The phpBB Group
+==============================================================================
+    @Description: This module implements a per course forum for supporting
+	discussions between teachers and students or group of students.
+	It is a heavily modified adaptation of phpBB for (initially) Claroline
+	and (later) eclass. In the future, a new forum should be developed.
+	Currently we use only a fraction of phpBB tables and functionality
+	(viewforum, viewtopic, post_reply, newtopic); the time cost is
+	enormous for both core phpBB code upgrades and migration from an
+	existing (phpBB-based) to a new eclass forum :-(
+
+    @Comments:
+
+    @todo:
+==============================================================================
+*/
+
+error_reporting(E_ALL);
+/*
+ * GUNET eclass 2.0 standard stuff
+ */
 $require_current_course = TRUE;
+$require_login = TRUE;
 $langFiles = 'phpbb';
-$require_help = TRUE;
-$helpTopic = 'Forums';
+$require_help = FALSE;
 include '../../include/baseTheme.php';
-$nameTools = $langUsers . " ($langUserNumber : $countUser)";
 $tool_content = "";
+$nameTools = $l_forums;
 
-include('functions.php');
-include('config.php');
-require('auth.php');
-$pagetitle = $l_viewforum;
-$pagetype = "viewforum";
-if($forum == -1)
-  header("Location: $url_phpbb");
+/*
+ * Tool-specific includes
+ */
+include_once("./config.php");
+include("functions.php"); // application logic for phpBB
 
-$sql = "SELECT f.forum_type, f.forum_name FROM forums f WHERE forum_id = '$forum'";
-if(!$result = mysql_query($sql, $db))
-	error_die("<font size=+1>An Error Occured</font><hr>Could not connect to the forums database.");
-if(!$myrow = mysql_fetch_array($result))
-	error_die("Error - The forum you selected does not exist. Please go back and try again.");
-$forum_name = own_stripslashes($myrow[forum_name]);
+/******************************************************************************
+ * Actual code starts here
+ *****************************************************************************/
 
-// Note: page_header is included later on, because this page might need to send a cookie.
-
-if(($myrow[forum_type] == 1) && !$user_logged_in && !$logging_in) 
-{
-	require('page_header.php');
-
-$tool_content .= "
-<FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
-<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"$tablewidth\">
-<TR>
-	<TD BGCOLOR=\"$table_bgcolor\">
-	<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"1\" WIDTH=\"99%\">
-	<TR BGCOLOR=\"$color1\" ALIGN=\"LEFT\">
-		<TD ALIGN=\"CENTER\"><font face='arial, helvetica' size=2>$l_private</TD>
-	</TR>
-	<TR BGCOLOR=\"$color2\" ALIGN=\"LEFT\">
-		<TD ALIGN=\"CENTER\">
-			<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\">
-			<TR>
-			    <TD>
-		 	      <font face='arial, helvetica' size=2 COLOR=\"$textcolor\">
-			      <b>User Name: &nbsp;</b></font>
-			    </TD>
-			    <TD>
-			      <INPUT TYPE=\"TEXT\" NAME=\"username\" SIZE=\"25\" MAXLENGTH=\"40\" VALUE=\"$userdata[username]\">
-			    </TD>
-		       </TR>
-		       <TR>
-			    <TD>
-			      <FONT FACE=\"$FontFace\" SIZE=\"$FontSize2\" COLOR=\"$textcolor\">
-			      <b>Password: </b></TD><TD><INPUT TYPE=\"PASSWORD\" NAME=\"password\" SIZE=\"25\" MAXLENGTH=\"25\">
-			    </TD>
-		      </TR>
-		      </TABLE>
-	      </TD>
-	</TR>
-	<TR BGCOLOR=\"$color1\" ALIGN=\"LEFT\">
-		<TD ALIGN=\"CENTER\">
-			<INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
-			<INPUT TYPE=\"SUBMIT\" NAME=\"logging_in\" VALUE=\"$l_enter\">
-		</TD>
-	</TR>
-	</TABLE>
-	</TD>
-</TR>
-</TABLE>
-</FORM>";
-
-require('page_tail.php');
-draw($tool_content, 1);
-exit();
+$sql = "SELECT f.forum_type, f.forum_name
+	FROM forums f
+	WHERE forum_id = '$forum'";
+if(!$result = db_query($sql, $currentCourseID)) {
+	//XXX: Error message in specified language.
+	$tool_content .= "An Error Occured. Could not connect to the forums database.";
+	draw($tool_content, 2);
+	exit;
 }
-else 
-{
-	if ($logging_in)
-	{
-		if ($username == '' || $password == '')
-		  {
-			  error_die("$l_userpass $l_tryagain");
-		  }
-		if (!check_username($username, $db))
-		  {
-			  error_die("$l_nouser $l_tryagain");
-		  }
-		if (!check_user_pw($username, $password, $db))
-		  {
-			  error_die("$l_wrongpass $l_tryagain");
-		  }
-	
-		/* if we get here, user has entered a valid username and password combination. */
-	
-		$userdata = get_userdata($username, $db);
-	
-		$sessid = new_session($userdata[user_id], $REMOTE_ADDR, $sesscookietime, $db);	
-	
-		set_session_cookie($sessid, $sesscookietime, $sesscookiename, $cookiepath, $cookiedomain, $cookiesecure);
-		
+if(!$myrow = mysql_fetch_array($result)) {
+	//XXX: Error message in specified language.
+	$tool_content .= "Error - The forum you selected does not exist. Please go back and try again.";
+	draw($tool_content, 2);
+	exit;
+}
+$forum_name = own_stripslashes($myrow["forum_name"]);
+
+$tool_content .= <<<cData
+<TABLE BORDER="0" CELLPADDING="1" CELLSPACING="0" ALIGN="CENTER" VALIGN="TOP" WIDTH="99%">
+<TR><TD>
+	<TABLE BORDER="0" CELLPADDING="1" CELLSPACING="1" WIDTH="99%">
+	<TR>
+		<TD WIDTH="2%">&nbsp;</TD>
+		<TD>&nbsp;$l_topic</TD>
+		<TD WIDTH="9%">$l_replies</TD>
+		<TD WIDTH="20%">&nbsp;$l_poster</TD>
+		<TD WIDTH="8%">$langSeen</TD>
+		<TD WIDTH="15%"$langLastMsg</TD>
+	</TR>
+cData;
+
+if ( isset($start) ) {
+	if (!$start) {
+		$start = 0;
 	}
-
-	require('page_header.php');
-	
-	if ($myrow[forum_type] == 1)
-	{
-		// To get here, we have a logged-in user. So, check whether that user is allowed to view
-		// this private forum.
-		
-		if (!check_priv_forum_auth($userdata[user_id], $forum, FALSE, $db))
-		{
-			error_die("$l_privateforum $l_noread");
-		}
-		
-		// Ok, looks like we're good.
-	}
-
-$tool_content .= "<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"$tablewidth\"><TR><TD  BGCOLOR=\"$table_bgcolor\"><TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"1\" WIDTH=\"99%\"><TR BGCOLOR=\"$color1\" ALIGN=\"LEFT\"><TD WIDTH=2%>&nbsp;</TD><TD><font face=\"arial, helvetica\" size=\"2\">&nbsp;$l_topic</font></TD><TD WIDTH=9% ALIGN=\"CENTER\"><font face=\"arial, helvetica\" size=\"2\">$l_replies</font></TD><TD WIDTH=20% ALIGN=\"CENTER\"><font face=\"arial, helvetica\" size=\"2\">&nbsp;$l_poster</font></TD><TD WIDTH=8% ALIGN=\"CENTER\"><font face=\"arial, helvetica\" size=\"2\">$langSeen</font></TD><TD WIDTH=15% ALIGN=\"CENTER\"><font face=\"arial, helvetica\" size=\"2\">$langLastMsg</font></TD></TR>";
-
-if(!$start) $start = 0;
-   
+} else {
+	$start = 0;
+}
+  
+if ( !isset($topics_per_page) ) {
+	$topics_per_page = 50;
+}
+ 
 $sql = "SELECT t.*, u.username, u2.username as last_poster, p.post_time FROM topics t
         LEFT JOIN users u ON t.topic_poster = u.user_id 
         LEFT JOIN posts p ON t.topic_last_post_id = p.post_id
@@ -147,11 +124,20 @@ $sql = "SELECT t.*, u.username, u2.username as last_poster, p.post_time FROM top
         WHERE t.forum_id = '$forum' 
         ORDER BY topic_time DESC LIMIT $start, $topics_per_page";
         
-if(!$result = mysql_query($sql, $db))
-	error_die("</table></table><font size=+1>An Error Occured</font><hr>phpBB could not query the topics database.<br>$sql");
+if(!$result = db_query($sql, $currentCourseID)) {
+	$tool_content .= <<<cData
+	</TABLE>
+</TD></TR>
+</TABLE>
+cData;
+	$tool_content .= "An Error Occured. Could not query the topics database.<br>$sql";
+	draw($tool_content, 2);
+	exit;
+}
+
 $topics_start = $start;
    
-if($myrow = mysql_fetch_array($result)) {
+if ($myrow = mysql_fetch_array($result)) {
    do {
       $tool_content .= "<TR>\n";
       $replys = $myrow["topic_replies"];
@@ -162,83 +148,68 @@ if($myrow = mysql_fetch_array($result)) {
       list($year, $month, $day) = explode("-", $last_post_date);
       list($hour, $min) = explode(":", $last_post_time);
       $last_post_time = mktime($hour, $min, 0, $month, $day, $year);
-		 if($replys >= $hot_threshold) {
-			 if($last_post_time < $last_visit) 
-				 $image = $hot_folder_image;
-			 else 
-				 $image = $hot_newposts_image;
-		 }
-		 else {
-			 if($last_post_time < $last_visit) 
-				 $image = $folder_image;
-			 else
-				 $image = $newposts_image;
-		 }
-		 if($myrow[topic_status] == 1)
+      // XXX: Fix this
+      if ( !isset($last_visit) ) {
+		$last_visit = 0;
+      }
+      if($replys >= $hot_threshold) {
+		if ( $last_post_time < $last_visit ) 
+			$image = $hot_folder_image;
+		else 
+			$image = $hot_newposts_image;
+      } else {
+		if ( $last_post_time < $last_visit ) {
+			 $image = $folder_image;
+		} else {
+			 $image = $newposts_image;
+		}
+		if ( $myrow["topic_status"] == 1 ) {
 			 $image = $locked_image;
-      $tool_content .= "<TD BGCOLOR=\"$color1\"><IMG SRC=\"$image\"></TD>\n";
-      
-      $topic_title = own_stripslashes($myrow[topic_title]);
-		$pagination = '';
-		$start = '';
-		$topiclink = "viewtopic.php?topic=$myrow[topic_id]&forum=$forum";
-		if($replys+1 > $posts_per_page) 
-		{
-			$pagination .= "&nbsp;&nbsp;&nbsp;<font size=\"$FontSize3\" face=\"$FontFace\" color=\"$textcolor\">(<img src=\"$posticon\">$l_gotopage ";
-			$pagenr = 1;
-			$skippages = 0;
-			for($x = 0; $x < $replys + 1; $x += $posts_per_page) 
-			{
-				$lastpage = (($x + $posts_per_page) >= $replys + 1);
-				
-				if($lastpage)
-				{
-					$start = "&start=$x&$replys";
-				} 
-				else 
-				{
-					if ($x != 0)
-					{
-						$start = "&start=$x";
-					}
-					$start .= "&" . ($x + $posts_per_page - 1);
-				}
-				
-				if($pagenr > 3 && $skippages != 1) 
-				{
-					$pagination .= ", ... ";
-					$skippages = 1;
-				} 
-
-				if ($skippages != 1 || $lastpage) 
-				{
-					if ($x!=0) $pagination .= ", ";
-					$pagination .= "<a href=\"$topiclink$start\">$pagenr</a>";
-				}
-				
-				$pagenr++;
+		}
+      }
+      $tool_content .= "<TD><IMG SRC=\"$image\"></TD>\n";
+      $topic_title = own_stripslashes($myrow["topic_title"]);
+      $pagination = '';
+      $start = ''; //XXX: Here $start becomes empty!
+      $topiclink = "viewtopic.php?topic=" . $myrow["topic_id"] . "&forum=$forum";
+      if($replys+1 > $posts_per_page) {
+	$pagination .= '&nbsp;&nbsp;&nbsp;(<img src=\"' . $posticon . '\">' . $l_gotopage;
+	$pagenr = 1;
+	$skippages = 0;
+	for($x = 0; $x < $replys + 1; $x += $posts_per_page) {
+		$lastpage = (($x + $posts_per_page) >= $replys + 1);
+		if ($lastpage) {
+			$start = "&start=$x&$replys";
+		} else {
+			if ($x != 0) {
+				$start = "&start=$x";
 			}
-			$pagination .= ")</font>";
+			$start .= "&" . ($x + $posts_per_page - 1);
+		}
+		if($pagenr > 3 && $skippages != 1) {
+			$pagination .= ", ... ";
+			$skippages = 1;
 		} 
-
-		$topiclink .= "&$replys";
-
-      $tool_content .= "<TD BGCOLOR=\"$color2\"><font face=\"$FontFace\" size=\"2\">&nbsp;<a href=\"$topiclink\">$topic_title</a></font>$pagination";
-	      
-      $tool_content .= "</TD>\n";
-      $tool_content .= "<TD BGCOLOR=\"$color1\" ALIGN=\"CENTER\" VALIGN=\"MIDDLE\"><font face=\"arial, helvetica\" size=\"2\">$replys</font></TD>\n";
-      $tool_content .= "<TD BGCOLOR=\"$color2\" ALIGN=\"CENTER\" VALIGN=\"MIDDLE\"><font face=\"arial, helvetica\" size=\"2\">$myrow[prenom] $myrow[nom]</font></TD>\n";
-      $tool_content .= "<TD BGCOLOR=\"$color1\" ALIGN=\"CENTER\" VALIGN=\"MIDDLE\"><font face=\"arial, helvetica\" size=\"2\">$myrow[topic_views]</font></TD>\n";
-      $tool_content .= "<TD BGCOLOR=\"$color2\" ALIGN=\"CENTER\" VALIGN=\"MIDDLE\"><font face=\"$FontFace\" size=\"$FontSize1\">$last_post</font></TD></TR>\n";
-      
-   } while($myrow = mysql_fetch_array($result));
+		if ($skippages != 1 || $lastpage) {
+			if ($x != 0) {
+				 $pagination .= ", ";
+				$pagination .= "<a href=\"$topiclink$start\">$pagenr</a>";
+			}
+			$pagenr++;
+		}
+		$pagination .= ")";
+	  }
+      }
+      $topiclink .= "&$replys";
+      $tool_content .= "<TD>&nbsp;<a href=\"$topiclink\">$topic_title</a>$pagination</TD>\n";
+      $tool_content .= "<TD>$replys</TD>\n";
+      $tool_content .= "<TD>" . $myrow["prenom"] . " " . $myrow["nom"] . "</TD>\n";
+      $tool_content .= "<TD>" . $myrow["topic_views"] . "</TD>\n";
+      $tool_content .= "<TD>$last_post</TD></TR>\n";
+  } while($myrow = mysql_fetch_array($result));
+} else {
+	$tool_content .= "<TD COLSPAN=6>$l_notopics</TD></TR>\n";
 }
-else {
-	$tool_content .= "<TD BGCOLOR=\"$color1\" colspan = 6 ALIGN=CENTER><font face=\"arial, helvetica\" size=\"2\">$l_notopics</TD></TR>\n";
-}
-
 $tool_content .= "</TABLE></TD></TR></TABLE>";
-}
-require('page_tail.php');
 draw($tool_content, 2);
 ?>

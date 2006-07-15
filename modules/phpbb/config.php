@@ -1,4 +1,8 @@
 <?php  
+$topics_per_page = 20;
+$posts_per_page = 20;
+$hot_threshold = 10;
+
 $url_images = "images";
 $url_admin = "../forum_admin";
 

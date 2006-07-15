@@ -58,8 +58,7 @@ error_reporting(E_ALL);
  */
 $require_current_course = TRUE;
 $langFiles = 'phpbb';
-$require_help = TRUE;
-$helpTopic = 'Forums';
+$require_help = FALSE;
 include '../../include/baseTheme.php';
 $tool_content = "";
 
@@ -69,7 +68,6 @@ $tool_content = "";
 include_once("./config.php");
 $nameTools = $l_forums;
 //include("functions.php"); // application logic for phpBB
-//include("config.php");
 //require("auth.php");
 
 /******************************************************************************
@@ -80,6 +78,9 @@ $nameTools = $l_forums;
  * First, some decoration
  */
 
+if ( $is_adminOfCourse || $is_admin ) {
+	$tool_content .= "<a href=\"../forum_admin/forum_admin.php\">$l_adminpanel</a><P>&nbsp;";
+}
 $tool_content .= <<< cData
 <TABLE WIDTH="99%" CELLPADDING="1" CELLSPACING="0" ALIGN="CENTER" VALIGN="TOP">
 <TR><TD>
@@ -195,8 +196,7 @@ cData;
 				// Visit only my group forum if not admin or tutor
 				// If tutor, see all groups but indicate my groups
 				// echo "<br>categories i $catNum<br>forum : $forum myGroupForum $myGroupForum<br>";// Debugging
-				// XXX: fix tutorCheck
-				if ( $tutorCheck==1 ) { // TUTOR VIEW
+				if ( $is_adminOfCourse==1 ) { // TUTOR VIEW
 					$sqlTutor = db_query("SELECT id FROM student_group
 								WHERE forumId='$forum' AND tutor='$uid'", $currentCourseID );
 					$countTutor = mysql_num_rows($sqlTutor); 
