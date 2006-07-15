@@ -214,7 +214,7 @@ $l_useruniq	= "Must be unique. No two users can have the same Username.";
 $l_storecookie	= "Store my username in a cookie for 1 year.";
 
 // Prefs
-$l_prefupdated	= "$l_preferences updated. $l_click <a href=\"index.$phpEx\">$l_here</a> $l_returnindex";
+$l_prefupdated	= "$l_preferences updated. $l_click <a href=\"index.php\">$l_here</a> $l_returnindex";
 $l_editprefs	= "Edit Your $l_preferences";
 $l_themecookie	= "NOTE: In order to use themes you MUST have cookies enabled.";
 $l_alwayssig	= "Always attach my signature";
@@ -283,7 +283,7 @@ you selected to be notified on this event.
 
 You may view the topic at:
 
-http://$SERVER_NAME$url_phpbb/viewtopic.$phpEx?topic=$topic&forum=$forum
+http://$SERVER_NAME$url_phpbb/viewtopic.$php?topic=$topic&forum=$forum
 
 Or view the $sitename forum index at
 
@@ -306,7 +306,7 @@ $l_yourname	= "Your $l_username";
 $l_recptname	= "Recipient $l_username";
 
 // Replypmsg
-$l_pmposted	= "Reply Posted, you can click <a href=\"viewpmsg.$phpEx\">here</a> to view your $l_privmsgs";
+$l_pmposted	= "Reply Posted, you can click <a href=\"viewpmsg.php\">here</a> to view your $l_privmsgs";
 
 // Viewpmsg
 $l_nopmsgs	= "You don't have any $l_privmsgs.";
@@ -322,7 +322,7 @@ $l_smilepict	= "Picture";
 
 // Sendpasswd
 $l_wrongactiv	= "The activation key you provided is not correct. Please check email $l_message you recived and make sure you have copied the activation key exactly.";
-$l_passchange	= "Your password has been successfully changed. You may now goto your <a href=\"bb_profile.$phpEx?mode=edit\">profile</a> and change your password to a more suitable one.";
+$l_passchange	= "Your password has been successfully changed. You may now goto your <a href=\"bb_profile.php?mode=edit\">profile</a> and change your password to a more suitable one.";
 $l_wrongmail	= "The email address you entered does not match the one stored in our database.";
 
 $l_passsubj	= "$sitename Forums Password Change";

@@ -215,7 +215,7 @@ $l_useruniq	= "Πρέπει να είναι μοναδικό. Δε γίνεται δύο χρήστες να έχουν το ίδιο
 $l_storecookie	= "Αποθήκευση του αναγνωριστικού μου σε cookie για ένα έτος";
 
 // Prefs
-$l_prefupdated	= "$l_preferences ενημερώθηκαν. $l_click <a href=\"index.$phpEx\">$l_here</a> $l_returnindex";
+$l_prefupdated	= "$l_preferences ενημερώθηκαν. $l_click <a href=\"index.php\">$l_here</a> $l_returnindex";
 $l_editprefs	= "Επεξεργασία των Προτιμήσεών σας";
 $l_themecookie	= "ΣΗΜΕΙΩΣΗ: Για να χρησιμοποιήσετε τα θέματα ΠΡΕΠΕΙ να έχετε ενεργοποιημένα τα cookies.";
 $l_alwayssig	= "Πάντα προσθήκη της υπογραφής μου";
@@ -284,7 +284,7 @@ $l_notifybody	= 'Αγαπητέ/ή $m[username]\r\nΛαμβάνετε αυτό το email γιατί ένα μήν
 
 Μπορείτε να δείτε το θέμα στο:
 
-http://$SERVER_NAME$url_phpbb/viewtopic.$phpEx?topic=$topic&forum=$forum
+http://$SERVER_NAME$url_phpbb/viewtopic.php?topic=$topic&forum=$forum
 
 ή να δείτε τον κατάλογο των φόρα του $sitename στο:
 
@@ -307,7 +307,7 @@ $l_yourname	= "Το $l_username σας";
 $l_recptname	= "Το $l_username του παραλήπτη";
 
 // Replypmsg
-$l_pmposted	= "Η απάντηση δημοσιεύθηκε, μπορείτε να κάνετε κλικ <a href=\"viewpmsg.$phpEx\">εδώ</a> για να δείτε τα $l_privmsgs σας";
+$l_pmposted	= "Η απάντηση δημοσιεύθηκε, μπορείτε να κάνετε κλικ <a href=\"viewpmsg.php\">εδώ</a> για να δείτε τα $l_privmsgs σας";
 
 // Viewpmsg
 $l_nopmsgs	= "Δεν έχετε κάποιο $l_privmsgs.";
@@ -323,7 +323,7 @@ $l_smilepict	= "Εικόνα";
 
 // Sendpasswd
 $l_wrongactiv	= "Το κλειδί ενεργοποίησης που δώσατε δεν είναι σωστό. Παρακαλούμε ελέγξτε το $l_message email που λάβατε και βεβαιωθείτε ότι αντιγράψατε ακριβώς το κλειδί ενεργοποίησης.";
-$l_passchange	= "Το συνθηματικό σας αλλάχθηκε επιτυχώς. Μπορείτε να μεταβείτε τώρα στο <a href=\"bb_profile.$phpEx?mode=edit\">προφίλ</a> σας και να αλλάξετε το συνθηματικό σας σε ένα πιο βολικό.";
+$l_passchange	= "Το συνθηματικό σας αλλάχθηκε επιτυχώς. Μπορείτε να μεταβείτε τώρα στο <a href=\"bb_profile.php?mode=edit\">προφίλ</a> σας και να αλλάξετε το συνθηματικό σας σε ένα πιο βολικό.";
 $l_wrongmail	= "Η διεύθυνση email που δώσατε δεν ταιριάζει με αυτή που υπάρχει στη βάση.";
 
 $l_passsubj	= "Αλλαγή Συνθηματικού για Φόρα $sitename";
