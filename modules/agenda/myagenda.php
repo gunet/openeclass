@@ -1,23 +1,38 @@
 <?
-/*
-	This file generates a general agenda of all items of the courses
-	the user is registered for;
-	based on the master-calendar code of Eric Remy (6 Oct 2003);
-	adapted by Toon Van Hoecke (Dec 2003).
-*/
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Á full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
 
-//----------------------------------------------------------------------
-// CLAROLINE
-//----------------------------------------------------------------------
-// Copyright (c) 2001-2003 Universite catholique de Louvain (UCL)
-//----------------------------------------------------------------------
-// This program is under the terms of the GENERAL PUBLIC LICENSE (GPL)
-// as published by the FREE SOFTWARE FOUNDATION. The GPL is available
-// through the world-wide-web at http://www.gnu.org/copyleft/gpl.html
-//----------------------------------------------------------------------
-// Authors: Eric Remy <eremy@rmwc.edu>
-//			Toon Van Hoecke <Toon.VanHoecke@UGent.be>
-//----------------------------------------------------------------------
+/**
+ * My-Agenda Component
+ * 
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ * 
+ * @abstract This component generates a month-view agenda of all items of the courses
+ *	the user is enrolled in
+ *
+ */
 
 $require_login = TRUE;
 
@@ -57,8 +72,15 @@ $langToday);
 // function list
 // -----------------------
 
-function get_agendaitems($query, $month, $year)
-{
+/**
+ * Function get_agendaitems
+ *
+ * @param resource $query MySQL resource
+ * @param string $month
+ * @param string $year
+ * @return array of agenda items
+ */
+function get_agendaitems($query, $month, $year) {
 	global $urlServer;
 	$items = array();
 
@@ -93,8 +115,19 @@ function get_agendaitems($query, $month, $year)
 	return $agendaitems;
 }
 
-function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $monthName, $langToday)
-{
+/**
+ * Function display_monthcalendar
+ * 
+ * Creates the html content of the agenda module
+ *
+ * @param array $agendaitems
+ * @param string $month
+ * @param string $year
+ * @param array $weekdaynames days of the week
+ * @param string $monthName
+ * @param string $langToday
+ */
+function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $monthName, $langToday) {
 	//Handle leap year
 	$numberofdays = array(0,31,28,31,30,31,30,31,31,30,31,30,31);
 	if (($year%400 == 0) or ($year%4==0 and $year%100<>0)) $numberofdays[2] = 29;
