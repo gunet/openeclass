@@ -286,6 +286,10 @@ if ($is_admin){
 }
 //------------------------------------------------------
 if ($is_adminOfCourse && @$action == 1) {//upload html file
+	
+	$nameTools = $langUploadPage;
+	$navigation[]= array ("url"=>"course_tools.php", "name"=> $langToolManagement);
+	
 	$tool_content .=  "
 		<p>$langExplanation</p>
 			
@@ -321,9 +325,14 @@ if ($is_adminOfCourse && @$action == 1) {//upload html file
 </form>";
 
 	draw($tool_content, 2);
+	exit();
 }
 
 if ($is_adminOfCourse && @$action == 2) {//add external link
+
+	$nameTools = $langAddExtLink;
+	$navigation[]= array ("url"=>"course_tools.php", "name"=> $langToolManagement);
+
 	$tool_content .=  "
 			<form method=\"post\" action=\"$_SERVER[PHP_SELF]?submit=yes&action=2\">
 			<table>
@@ -352,17 +361,12 @@ if ($is_adminOfCourse && @$action == 2) {//add external link
 			</form>
 			";
 	draw($tool_content, 2);
+	exit();
 	//call draw
 }
 //---------------------------------------------------------
 if ($is_adminOfCourse) {
-	/*$tool_content .= "
-	<a href=\"" . $urlServer . "modules/import/import.php\">".$langUploadPage."</a>
-	|
-	<a href=\"" . $urlServer . "modules/external_module/external_module.php\">".$langAddExtLink."</a>
-	<br>
-	<br>
-	";*/
+
 	$tool_content .= "
 <a href=\"".$_SERVER['PHP_SELF']."?action=1\">".$langUploadPage."</a>
  | 
