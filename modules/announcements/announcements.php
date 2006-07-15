@@ -24,7 +24,7 @@
 ============================================================================*/
 
 /**
- * Course Tools Component
+ * Announcements Component
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
