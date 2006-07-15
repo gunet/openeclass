@@ -33,18 +33,12 @@ $require_current_course = TRUE;
 $langFiles = 'forum_admin';
 $require_help = TRUE;
 $helpTopic = 'For';
-//include '../../include/init.php';
 include '../../include/baseTheme.php';
-
 
 $nameTools = $langOrganisation;
 $navigation[]= array ("url"=>"../phpbb/index.php", "name"=> $langForums);
 
-//begin_page();
 $tool_content = "";//initialise $tool_content
-
-	
-//$tool_content .= "<tr><td>";
 
 
 ########### AFFICHER ####################################
@@ -60,7 +54,7 @@ if($is_adminOfCourse) {
 	<td width=25%><b>$langForName</b></td>
 	<td width=50%><b>$langDescription</b></td>
 	<td width=25%><b>$langFunctions</b></td></tr>";
-    $result = mysql_query("select forum_id, forum_name, forum_desc, forum_access, forum_moderator, forum_type from forums where cat_id='$cat_id'");
+    $result = db_query("select forum_id, forum_name, forum_desc, forum_access, forum_moderator, forum_type from forums where cat_id='$cat_id'", $currentCourseID);
     $i=0;
     while(list($forum_id, $forum_name, $forum_desc, $forum_access,
     $forum_moderator, $forum_type) = mysql_fetch_row($result)) {
@@ -99,8 +93,8 @@ if($is_adminOfCourse) {
 
 elseif(isset($forumgoedit)) {
 
-    $result = mysql_query("select forum_id, forum_name, forum_desc, forum_access, forum_moderator,
-    cat_id, forum_type from forums where forum_id='$forum_id'");
+    $result = db_query("select forum_id, forum_name, forum_desc, forum_access, forum_moderator,
+    cat_id, forum_type from forums where forum_id='$forum_id'", $currentCourseID);
 
     list($forum_id, $forum_name, $forum_desc, $forum_access, $forum_moderator, $cat_id_1,
     $forum_type) = mysql_fetch_row($result);
@@ -114,7 +108,7 @@ elseif(isset($forumgoedit)) {
     <textarea name=forum_desc cols=50 rows=3>$forum_desc</textarea></td></tr>
     <tr><td>$langChangeCat</td>
     <td><SELECT NAME=cat_id>";
-    $result = mysql_query("select cat_id, cat_title from catagories");
+    $result = db_query("select cat_id, cat_title from catagories", $currentCourseID);
     while(list($cat_id, $cat_title) = mysql_fetch_row($result)) {
         if ($cat_id == $cat_id_1) {
     $tool_content .= "<OPTION VALUE=\"$cat_id\" selected>$cat_title</OPTION>";          }
@@ -133,7 +127,7 @@ elseif(isset($forumgoedit)) {
 #############################################################
 
     elseif(isset($forumcatedit)) {
-    $result = mysql_query("select cat_id, cat_title from catagories where cat_id='$cat_id'");
+    $result = db_query("select cat_id, cat_title from catagories where cat_id='$cat_id'", $currentCourseID);
     list($cat_id, $cat_title) = mysql_fetch_row($result);
     $tool_content .= "<b>$langModCatName</b>
     <form action=\"forum_admin.php?forumcatsave=yes\" method=post>
@@ -150,7 +144,7 @@ elseif(isset($forumgoedit)) {
 #############################################################
 
 elseif (isset($forumcatsave)) {
-    mysql_query("update catagories set cat_title='$cat_title' where cat_id='$cat_id'");
+    db_query("update catagories set cat_title='$cat_title' where cat_id='$cat_id'", $currentCourseID);
     // $tool_content .= "<META http-equiv=\"REFRESH\" CONTENT=\"0; URL=\"$PHP_SELF?forumadmin=yes\"> ";
     $tool_content .= "$langNameCatMod, &nbsp;<a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a>";
 }
@@ -160,13 +154,13 @@ elseif (isset($forumcatsave)) {
 #############################################################
 
 elseif(isset($forumgosave)) {
-    $result = @mysql_query("select user_id from users where username='$forum_moderator'");
+    $result = @db_query("select user_id from users where username='$forum_moderator'", $currentCourseID);
     list($forum_moderator) = mysql_fetch_row($result);
 
-	@mysql_query("update users set user_level='2' where user_id='$forum_moderator'");
-	    @mysql_query("update forums set forum_name='$forum_name', forum_desc='$forum_desc',
+	@db_query("update users set user_level='2' where user_id='$forum_moderator'", $currrentCourseID);
+	    @db_query("update forums set forum_name='$forum_name', forum_desc='$forum_desc',
             forum_access='2', forum_moderator='1', cat_id='$cat_id',
-            forum_type='$forum_type' where forum_id='$forum_id'");
+            forum_type='$forum_type' where forum_id='$forum_id'", $currentCourseID);
          $tool_content .= "
 	 <a href=\"$PHP_SELF?forumgo=yes&cat_id=$cat_id&ctg=$ctg\">$langBack</a>";
 
@@ -179,7 +173,7 @@ elseif(isset($forumgosave)) {
 // function ForumCatAdd($catagories)
 
 elseif(isset($forumcatadd)) {
-    mysql_query("insert into catagories values (NULL, '$catagories', NULL)");
+    db_query("insert into catagories values (NULL, '$catagories', NULL)", $currentCourseID);
     $tool_content .= "$langCatAdded,&nbsp;<a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a>";
     //Header("Location: forum_admin.php?afficher=yes");
      //$tool_content .= "<a href=\$PHP_SELF?forumgo=yes&cat_id=$cat_id&ctg=$ctg\">Retour</a>";
@@ -190,18 +184,18 @@ elseif(isset($forumcatadd)) {
 #############################################################
 
 elseif(isset($forumgoadd)) {
-    $result = @mysql_query("select user_id from users where username='$forum_moderator'");
+    $result = @db_query("select user_id from users where username='$forum_moderator'", $currentCourseID);
     list($forum_moderator) = mysql_fetch_row($result);
 
-	mysql_query("update users set user_level='2' where user_id='$forum_moderator'");
-	@mysql_query("insert into forums (forum_id, forum_name, forum_desc, forum_access, forum_moderator, cat_id, forum_type)
+	db_query("update users set user_level='2' where user_id='$forum_moderator'", $currentCourseID);
+	@db_query("insert into forums (forum_id, forum_name, forum_desc, forum_access, forum_moderator, cat_id, forum_type)
         VALUES (NULL, '$forum_name', '$forum_desc', '2',
-        '1', '$cat_id', '$forum_type')");
-        $idforum=mysql_query("select forum_id from forums where forum_name='$forum_name'");
+        '1', '$cat_id', '$forum_type')", $currentCourseID);
+        $idforum=db_query("select forum_id from forums where forum_name='$forum_name'", $currentCourseID);
         while ($my_forum_id = mysql_fetch_array($idforum)) {
         $forid=$my_forum_id[0];
         }
-        mysql_query("insert into forum_mods (forum_id, user_id) values ('$forid', '1')");
+        db_query("insert into forum_mods (forum_id, user_id) values ('$forid', '1')", $currentCourseID);
          $tool_content .= "<a href=\"$PHP_SELF?forumgo=yes&cat_id=$cat_id&ctg=$ctg\">$langBack</a>";
 
 }
@@ -210,12 +204,12 @@ elseif(isset($forumgoadd)) {
 #############################################################
 
 elseif(isset($forumcatdel)) {
-   	$result = mysql_query("select forum_id from forums where cat_id='$cat_id'");
+   	$result = db_query("select forum_id from forums where cat_id='$cat_id'", $currentCourseID);
 	while(list($forum_id) = mysql_fetch_row($result)) {
-	mysql_query("delete from forumtopics where forum_id=$forum_id");
+	db_query("delete from forumtopics where forum_id=$forum_id", $currentCourseID);
 	}
-	mysql_query("delete from forums where cat_id=$cat_id");
-	mysql_query("delete from catagories where cat_id=$cat_id");
+	db_query("delete from forums where cat_id=$cat_id", $currentCourseID);
+	db_query("delete from catagories where cat_id=$cat_id", $currentCourseID);
  $tool_content .= "<a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a>";
 // 	$tool_content .= "</TD></TR></TABLE></TD></TR></TABLE>";
 	//include("footer.php");
@@ -229,8 +223,8 @@ elseif(isset($forumcatdel)) {
 
 elseif(isset($forumgodel)){
 
-	mysql_query("delete from forumtopics where forum_id=$forum_id");
-	mysql_query("delete from forums where forum_id=$forum_id");
+	db_query("delete from forumtopics where forum_id=$forum_id", $currentCourseID);
+	db_query("delete from forums where forum_id=$forum_id", $currentCourseID);
          $tool_content .= "
 	 <a href=\"$PHP_SELF?forumgo=yes&ctg=$ctg&cat_id=$cat_id\">$langBack</a>";
 
@@ -245,11 +239,11 @@ else {
     $tool_content .= "<table width=99%>
     <tr><td><b>ID</b></td><td><b>$langCategories</b></td>
     <td><b>$langNbFor</b></td><td><b>$langFunctions</b></td></tr>";
-    $result = mysql_query("select cat_id, cat_title from catagories order by cat_id");
+    $result = db_query("select cat_id, cat_title from catagories order by cat_id", $currentCourseID);
 
     $i=0;
     while(list($cat_id, $cat_title) = mysql_fetch_row($result)) {
-    $gets = mysql_query("select count(*) as total from forums where cat_id=$cat_id");
+    $gets = db_query("select count(*) as total from forums where cat_id=$cat_id", $currentCourseID);
 	$numbers= mysql_fetch_array($gets);
 
 	    if($i%2==0){
