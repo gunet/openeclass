@@ -1,14 +1,48 @@
 <?PHP
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Á full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
 
 /**
- * tools functions
- *
- * Responsible to generate the tools of each tool
- *
+ * Tool Component
+ * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @package eclass 2.0
+ * @version $Id$
+ * 
+ * @abstract This component creates an array of the tools that are displayed on the left
+ * side column .
+ * 
  */
 
+/**
+ * Function getSideMenu
+ *
+ * Offers an upper-layer logic. Decides what function should be called to
+ * create the needed tools array
+ *
+ * @param int $menuTypeID Type of menu to generate
+ * 
+ */
 function getSideMenu($menuTypeID){
 
 	switch ($menuTypeID){
@@ -37,12 +71,12 @@ function getSideMenu($menuTypeID){
 
 
 /**
- * function getToolsArray
+ * Function getToolsArray
  *
  * Queries the database for tool information in accordance
  * to the parameter passed.
  *
- * @param string $cat
+ * @param string $cat Type of lesson tools
  * @return mysql_resource
  * @see function lessonToolsMenu
  */
@@ -97,7 +131,7 @@ function getToolsArray($cat) {
 //
 
 /**
- * function loggedInMenu
+ * Function loggedInMenu
  *
  * Creates a multi-dimensional array of the user's tools
  * when the user is signed in, and not at a lesson specific tool,
@@ -105,7 +139,7 @@ function getToolsArray($cat) {
  *
  * (student | professor | platform administrator)
  *
- * @return unknown
+ * @return array
  */
 function loggedInMenu(){
 	global $webDir, $language, $uid, $is_admin, $urlServer, $mysqlMainDb;
@@ -118,14 +152,11 @@ function loggedInMenu(){
 	$sideMenuText 	= array();
 	$sideMenuLink 	= array();
 	$sideMenuImg	= array();
-	//the logic of this function was taken from the main index.php file of eclass
+	
 	array_push($sideMenuSubGroup, $langMenu);
 
 	// User is not currently in a course - set statut from main database
 
-	// $res2 = db_query("SELECT statut FROM user WHERE user_id = '$uid'",$mysqlMainDb);
-
-	//	$res2 = db_query("SELECT statut FROM user WHERE user_id = '$uid'", $mysqlMainDb);
 	if (isset($is_admin) and $is_admin) {
 		array_push($sideMenuText, "<b>$langAdminTool</b>");
 		array_push($sideMenuLink, $urlServer . "modules/admin/");
@@ -133,7 +164,6 @@ function loggedInMenu(){
 	}
 
 	$res2 = db_query("SELECT statut FROM user WHERE user_id = '$uid'",$mysqlMainDb);
-	//	$res2 = db_query("SELECT statut FROM user WHERE user_id = '$uid'");
 
 	if ($row = mysql_fetch_row($res2)) $statut = $row[0];
 
@@ -144,8 +174,7 @@ function loggedInMenu(){
 	}
 
 	if ($statut != 10) {
-		//		echo $urlServer . "modules/auth/courses.php<br>";
-		//		echo $urlServer;
+		
 		array_push($sideMenuText, $langOtherCourses);
 		array_push($sideMenuLink, $urlServer . "modules/auth/courses.php");
 		array_push($sideMenuImg, "enroll.gif");
@@ -168,14 +197,6 @@ function loggedInMenu(){
 
 	}
 
-	//	array_push($sideMenuText, $langHelp);
-	//	array_push($sideMenuLink, $urlServer . "\modules/help/help.php?topic=Clar2\"
-	//		onClick=\"window.open('modules/help/help.php?topic=Clar2','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10');
-	//		return false;");
-
-	//	array_push($sideMenuText, $langLogout);
-	//	array_push($sideMenuLink, $_SERVER['PHP_SELF'] . "?logout=yes");
-
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);
 	array_push($sideMenuSubGroup, $sideMenuImg);
@@ -185,7 +206,7 @@ function loggedInMenu(){
 }
 
 /**
- * function loggedOutMenu
+ * Function loggedOutMenu
  *
  * Creates a multi-dimensional array of the user's tools/links
  * for the menu presented when the user is not logged in.
@@ -274,7 +295,7 @@ function adminMenu(){
 	array_push($sideMenuSubGroup, $langAdminProf);
 
 	array_push($sideMenuText, $langProfReg);
-	//array_push($sideMenuLink, "../auth/" . $newuser);
+	
 	array_push($sideMenuLink, "../auth/newprofadmin.php");
 	array_push($sideMenuImg, "register_prof.gif");
 	array_push($sideMenuText, $langProfOpen);
@@ -448,7 +469,7 @@ function adminMenu(){
 
 
 /**
- * function lessonToolsMenu
+ * Function lessonToolsMenu
  *
  * Creates a multi-dimensional array of the user's tools
  * in regard to the user's user level
@@ -474,7 +495,7 @@ function lessonToolsMenu(){
 	$sideMenuID = array();
 	if($is_adminOfCourse) array_push($sideMenuSubGroup, $langActiveTools);
 	else array_push($sideMenuSubGroup, $langTools);
-	//	define('MODULE_ID_AGENDA', 4);
+	
 	while ($toolsRow = mysql_fetch_array($result)) {
 
 		if(!defined($toolsRow["define_var"])) define($toolsRow["define_var"], $toolsRow["id"]);
@@ -503,11 +524,8 @@ function lessonToolsMenu(){
 
 	if ($row = mysql_fetch_row($res2)) $statut = $row[0];
 
-	//	if (@$statut==1 || $is_adminOfCourse) {
 	if ($is_adminOfCourse) {
-		//		$courseAdminTools = getToolsArray('courseAdmin');
-		//		$hiddenTools = getToolsArray('PublicButHide');
-
+		
 		//get course administration tools
 		$result= getToolsArray('courseAdmin');
 
@@ -571,7 +589,7 @@ function lessonToolsMenu(){
 	//	Get platform administrator tools
 	//	------------------------------------------------------------------
 	if (isset($is_admin) and $is_admin) {
-		//		$adminTools = getToolsArray('claroAdmin');
+		
 		$result= getToolsArray('claroAdmin');
 
 		$sideMenuSubGroup = array();
@@ -579,7 +597,7 @@ function lessonToolsMenu(){
 		$sideMenuLink = array();
 		$sideMenuID = array();
 
-		array_push($sideMenuSubGroup, $langAdministratorTools);//TODO: add lang
+		array_push($sideMenuSubGroup, $langAdministratorTools);
 		while ($toolsRow = mysql_fetch_array($result)) {
 
 			define($toolsRow["define_var"], $toolsRow["id"]);
@@ -598,8 +616,6 @@ function lessonToolsMenu(){
 	//	End of Get professor's tools
 	//	------------------------------------------------------------------
 
-	//	array_push($sideMenuGroup, $sideMenuSubGroup);
-	//echo "<br><br>count is " . count($sideMenuGroup[0][1], COUNT_RECURSIVE);
 	return $sideMenuGroup;
 }
 
