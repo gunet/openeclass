@@ -1,4 +1,36 @@
 <?php
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Á full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
+/**
+ * Groups Component
+ * 
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ * 
+ * @abstract This module is responsible for the user groups of each lesson
+ *
+ */
 
 // Delete ancient possible other group values
 session_unregister("secretDirectory");
@@ -10,16 +42,12 @@ $require_current_course = TRUE;
 $langFiles = 'group';
 $require_help = TRUE;
 $helpTopic = 'Group';
-//include('../../include/init.php');
+
 include '../../include/baseTheme.php';
 $nameTools = $langGroupSpace;
 $navigation[] = array ("url"=>"group.php", "name"=> $langGroupManagement);
 
-//begin_page();
-
-
 if(!session_is_registered('userGroupId')){
-//	$userGroupId=$_REQUEST['userGroupId'];
 	$_SESSION['userGroupId'] = $_REQUEST['userGroupId'];
 }
 
@@ -28,10 +56,8 @@ if(!session_is_registered('userGroupId')){
 if(isset($registration) and $statut != 10)
 {
 	 $userGroupId = $_SESSION['userGroupId'];
-//	 echo $userGroupId;
 	 session_unregister('userGroupId');
-//	echo $_REQUEST['userGroupId'];
-//	die();
+
 	$sqlExist=mysql_query("SELECT id FROM `$dbname`.user_group 
 				WHERE user='$uid' AND team='$userGroupId'");
 				$countExist = mysql_num_rows($sqlExist);
@@ -106,31 +132,6 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 		<br>
 		";
 
-//	$tool_content .=  "<td align=right valign=top>";
-//
-//	if ($is_adminOfCourse) 
-//	{
-//		$tool_content .=  "<a href=\"group_edit.php?userGroupId=$userGroupId\">$langEditGroup</a>";
-//
-//	}
-//	elseif(isset($selfReg) AND ($uid))
-//	{
-//		$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?registration=1\">$langRegIntoGroup</a>"; 
-//	}
-//	elseif(isset($regDone))
-//	{
-//		$tool_content .=  "$message";
-//	}
-//	else
-//	{
-//		$tool_content .=  "&nbsp;";
-//	}
-
-//	$tool_content .= "<table>";
-//	$tool_content .=  "<tr><td colspan=2>$myGroup[name]
-//		<br><br>
-//		<b>$langGroupTutor</b><br>";
-
 	$sqlTutor=mysql_query("SELECT tutor, user_id, nom, prenom, email, forumId 
 					FROM `$mysqlMainDb`.user, student_group
 					WHERE user.user_id=student_group.tutor
@@ -166,8 +167,6 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 		</table>
 		<br>
 		";
-	
-//	$tool_content .=  "<table><b>$langGroupDescription</b><br>";
 
 	// Show 'none' if no description
 	$countDescription=strlen ($myGroup['description']);
@@ -224,9 +223,6 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 			
 
 		";
-//$tool_content .=  "<td valign=\"top\" align=\"left\"><b>$langGroupMembers</b>&nbsp;&nbsp;<br>"; 
-
-
 
 $resultMember=mysql_query("SELECT nom, prenom, email, am
 			FROM `$mysqlMainDb`.user, user_group 
@@ -279,7 +275,6 @@ session_register("secretDirectory");
 session_register("userGroupId");
 session_register("forumId");
 
-//$tool_content .=  "<tr>";
 $group_tools = "";
 if(isset($selfReg))
 {
@@ -287,8 +282,6 @@ if(isset($selfReg))
 }
 else
 {
-//	$tool_content .=  "<td valign=\"top\"><b>$langTools</b><br>";
-
 	$resultProperties=mysql_query("SELECT id, self_registration, private, forum, document 
 					FROM group_properties WHERE id=1");
 	while ($myProperties = mysql_fetch_array($resultProperties))
@@ -297,7 +290,6 @@ else
 		if($myProperties['forum']==1){
 			$group_tools .=  "<a href=\"../phpbb/viewforum.php?forum=$forumId\">$langForums</a> | ";
 		}
-//		$tool_content .=  "<br>";
 
 		// Drive members into their own File Manager
 		if($myProperties['document']==1){
@@ -309,15 +301,15 @@ else
 
 if ($is_adminOfCourse)
 {
-//	$tool_content .=  "<br>";
+
 	$group_tools .=  " | <a href=\"group_email.php?userGroupId=$userGroupId\">$langEmailGroup</a>";
 }
-//	$tool_content .=  "</td>";
+
 }
 $group_tools .= "</p>";
 
 session_unregister("secretDirectory");
-//session_unregister("userGroupId");
+
 session_unregister("forumId");
 
 return $group_tools;

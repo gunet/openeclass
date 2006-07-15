@@ -1,25 +1,50 @@
 <?php  
-
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Á full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
+/**
+ * Groups Component
+ * 
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ * 
+ * @abstract This module is responsible for the user groups of each lesson
+ *
+ */
 $require_current_course = TRUE;
 
 $langFiles = 'group';
 $require_help = TRUE;
 $helpTopic = 'Group';
-//include ('../../include/init.php');
+
 include '../../include/baseTheme.php';
 $nameTools = $langGroupMail;
 $navigation[]= array ("url"=>"group.php", "name"=> $langGroupSpace, 
 	"url"=>"group_space.php?userGroupId=$userGroupId", "name"=>$langGroupSpace);
 
-//begin_page();
-
 include('../include/sendMail.inc.php');
 
 $tool_content = "";
-//$local_style = " body,p,td {font-family: Arial, Helvetica, sans-serif; font-size: 10pt}
-//		.select {border-color:blue;border-width : 3px;}
-//	.box {  width: 200px} 
-//";
 
 $currentCourse=$dbname;
 

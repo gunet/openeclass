@@ -1,10 +1,42 @@
 <?php  
-//Μετατροπή του εργαλείου για να χρησιμοποιεί το baseTheme
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Α full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
+
+/**
+ * User Component
+ * 
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ * 
+ * @abstract This module is responsible for the user administration
+ *
+ */
 $require_current_course = TRUE;
 $langFiles = 'registration';
 $require_help = TRUE;
 $helpTopic = 'User';
-//include('../../include/init.php');
+
 include '../../include/baseTheme.php';
 
 $sqlUserOfCourse = "SELECT user.user_id
@@ -16,7 +48,7 @@ $countUser = mysql_num_rows($result_numb);
 
 $nameTools = $langUsers." ($langUserNumber : $countUser)";
 $tool_content = "";//initialise $tool_content
-//begin_page();
+
 
 // IF PROF ONLY 
 //   show  help link and  link to Add new  user and  managment page  of groups
@@ -334,8 +366,3 @@ if($countUser>=50) {
 }	// navigation buttons
 draw($tool_content, 2, 'user');
 ?>
-<!--</td></tr>
-<tr><td colspan="2"></td></tr>
-</table>
-</body>
-</html>-->
