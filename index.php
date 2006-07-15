@@ -1,39 +1,37 @@
 <?php session_start(); 
-
-/*
-+----------------------------------------------------------------------+
-| e-class version 1.6                                                  |
-| based on CLAROLINE version 1.3.0 $Revision$		     |
-+----------------------------------------------------------------------+
-|   $Id$
-+----------------------------------------------------------------------+
-| Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
-| Copyright (c) 2003 GUNet                                             |
-+----------------------------------------------------------------------+
-|   This program is free software; you can redistribute it and/or      |
-|   modify it under the terms of the GNU General Public License        |
-|   as published by the Free Software Foundation; either version 2     |
-|   of the License, or (at your option) any later version.             |
-|                                                                      |
-|   This program is distributed in the hope that it will be useful,    |
-|   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-|   GNU General Public License for more details.                       |
-|                                                                      |
-|   You should have received a copy of the GNU General Public License  |
-|   along with this program; if not, write to the Free Software        |
-|   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-|   02111-1307, USA. The GNU GPL license is also available through     |
-|   the world-wide-web at http://www.gnu.org/copyleft/gpl.html         |
-+----------------------------------------------------------------------+
-| Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-|          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-|          Christophe Gesche <gesche@ipm.ucl.ac.be>                    |
-|                                                                      |
-| e-class changes by: Costas Tsibanis <costas@noc.uoa.gr>              |
-|                     Yannis Exidaridis <jexi@noc.uoa.gr>              |
-|                     Alexandros Diamantidis <adia@noc.uoa.gr>         |
-+----------------------------------------------------------------------+
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Α full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
+/**
+ * Index
+ * 
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ * 
+ * @abstract This file serves as the home page of eclass when the user
+ * is not logged in.
+ *
+ */
 
 /***************************************************************
 *               HOME PAGE OF ECLASS		               *
@@ -50,20 +48,13 @@ include("include/baseTheme.php");
 //to parse correctly the breadcrumb.
 $homePage = true;
 
-//header('Content-Type: text/html; charset='. $charset);
-
 $tool_content = "";
-
-//This will be setting a var in the template and NOT concat $tool_content!
-//	if (isset($siteName)) $tool_content .=  "<title>".$siteName."</title>";
-//	else $tool_content .= "<title>Εγκατάσταση του e-Class</title>";
 
 @include("./modules/lang/$language/index.inc");
 @include("./modules/lang/$language/trad4all.inc.php");
-//$nameTools = $langWelcomeToEclass;
-// first check
-// check if we can connect to database. If not then probably it is the first time we install eclass
 
+// first check
+// check if we can connect to database. If not then eclass is most likely not installed
 if (isset($mysqlServer) and isset($mysqlUser) and isset($mysqlPassword)) {
 	$db = mysql_connect($mysqlServer, $mysqlUser, $mysqlPassword);
 	if (mysql_version()) mysql_query("SET NAMES greek");
@@ -73,8 +64,7 @@ if (!isset($db)) {
 }
 
 // second check
-// can we select database ? if not then there is some problem
-
+// can we select a database? if not then there is some sort of a problem
 if (isset($mysqlMainDb)) $selectResult = mysql_select_db($mysqlMainDb,$db);
 if (!isset($selectResult)) {
 	include("general_error.php");
@@ -87,6 +77,7 @@ unset($dbname);
 //if platform admin allows usage of eclass personalised
 //create a session so that each user can activate it for himself.
 if ($persoIsActive) session_register("perso_is_active");
+
 // ------------------------------------------------------------------------
 // if we try to login...
 // then authenticate user. First via LDAP then via MyQL
@@ -275,7 +266,8 @@ if(!empty($submit))
 	}
 
 	##[BEGIN personalisation modification]############
-
+	//if user has activated the personalised interface
+	//register a control session for it
 	if ((@$userPerso == "yes") && session_is_registered("perso_is_active")) {
 		session_register("user_perso_active");
 	}
@@ -309,20 +301,22 @@ if (isset($language)) {
 	@include("./modules/lang/$language/trad4all.inc.php");
 }
 $nameTools = $langWelcomeToEclass;
+
 //----------------------------------------------------------------
 // if login succesful display courses lists
 // --------------------------------------------------------------
 
-// first case check in which courses are registered as a student
 if (isset($uid) AND !isset($logout)) {
 
 	$require_help = true;
 	$helpTopic="Clar2";
 	
 	if (!session_is_registered("user_perso_active")) {
+		//load classic view
 		include("logged_in_content.php");
 		draw($tool_content,1);
 	} else {
+		//load personalised view
 		include("./modules/lang/$language/perso.inc.php");
 		include("perso.php");
 		drawPerso($tool_content);
@@ -370,18 +364,4 @@ function check_new_announce() {
 	return FALSE;
 
 }
-
-// -----------------------------------------------------------------------------------
-// checking the mysql version
-// note version_compare() is used for checking the php version but works for mysql too
-// ------------------------------------------------------------------------------------
-
-/*function mysql_version() {
-
-$ver = mysql_get_server_info();
-if (version_compare("4.1", $ver) <= 0)
-return true;
-else
-return false;
-}*/
 ?>
