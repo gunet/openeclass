@@ -1,25 +1,47 @@
 <?
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Á full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
+
 /* This script allows a course admin to add users to the course. */
 
 $langFiles = 'registration';
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'User';
-//include('../../include/init.php');
+
 include '../../include/baseTheme.php';
-//$local_style = "input { font-size: 10px; }";
 
 $nameTools = $langAddUser;
 $navigation[] = array ("url"=>"user.php", "name"=> $langUsers);
 
 $tool_content="";
-//begin_page();
 
 // IF PROF ONLY
 if($is_adminOfCourse) {
 
 if (isset($add)) {
-//	$tool_content .=  "<tr><td>";
+
 	mysql_select_db($mysqlMainDb);
 	$result = db_query("INSERT INTO cours_user (user_id, code_cours, statut) ".
 		"VALUES ('".mysql_escape_string($add)."', '$currentCourseID', ".
