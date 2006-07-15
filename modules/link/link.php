@@ -1,33 +1,56 @@
 <?php
-// Developped by Patrick Cool, Ghent University
-// December 2003 / January 2004
-// http://icto.UGent.be
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Á full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
 
-// This is a complete remake of the existing link tools.
-// The new link tool has some new features:
-// - Organize links into categories
-// - favorites/bookmarks interface
-// - move links up/down within a category
-// - move categories up/down
-// - expand/collapse all categories
-// - add link to 'root' category => category-less link is always visible
-//echo $dbname;
-//echo $_SESSION['dbname'];
-
-//TODO: line 202, remove <thead>
+/**
+ * Links Component
+ * 
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ * 
+ * @abstract This component organises the links of a lesson.
+ * This module can:
+ * - Organize links into categories
+ * - move links up/down within a category
+ * - move categories up/down
+ * - expand/collapse all categories
+ * 
+ * Based on code by Patrick Cool
+ * 
+ */
 
 $require_current_course = TRUE;
 $langFiles = 'link';
 $require_help = TRUE;
 $helpTopic = 'Link';
-//include ('../../include/init.php');
+
 include '../../include/baseTheme.php';
 $dbname = $_SESSION['dbname'];
 $tbl_link = "liens";
 $tbl_categories = "link_categories";
 
 $nameTools = $langLinks;
-//begin_page();
 
 $tool_content = "";
 
@@ -61,18 +84,14 @@ if (isset($action)) {
 	}
 }
 
-if($is_adminOfCourse)
-{
+if($is_adminOfCourse) {
 
 	//displaying the error / status messages if there is one
-	//	if (!empty($catlinkstatus) or !empty($msgErr))
-	if (!empty($catlinkstatus))
-	{
-		//	$tool_content .=  "<table cellspacing=\"0\" border=\"0\">\n\t<tr><td bgcolor=\"#FsFCC00\">".$catlinkstatus.$msgErr."</td></tr>\n</table>";
+	if (!empty($catlinkstatus))	{
+
 		$tool_content .=  "<table><tbody><tr><td class=\"success\">".$catlinkstatus."</td></tr></tbody></table>";
 		$tool_content .= "<br>";
 		unset($catlinkstatus);
-		//	unset($msgErr);
 	}
 
 
@@ -89,8 +108,8 @@ if($is_adminOfCourse)
 
 
 
-	// Displaying the correct title and the form for adding a category or link. This is only shown when nothing
-	// has been submitted yet, hence !isset($submitLink)
+	// Displaying the correct title and the form for adding a category or link.
+	//This is only shown when nothing has been submitted yet, hence !isset($submitLink)
 	if (isset($action) and ($action=="addlink" or $action=="editlink") and !isset($submitLink))
 	{
 		$tool_content .=  "<h4>";
@@ -155,7 +174,7 @@ if($is_adminOfCourse)
 
 		$tool_content .=  "</form>";
 	}
-	//	$tool_content .=  "<hr>";
+	
 }
 
 //making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
@@ -200,10 +219,8 @@ if (mysql_num_rows($resultcategories) > 0) {
 	if ($numberofzerocategory!==0)
 	{
 		$tool_content .=  "<thead><tr><td class=\"category\" colspan=\"2\">$langNoCategory</td></tr></thead>";
-		//		$tool_content .=  "<tr><td>";
+
 		showlinksofcategory(0);
-		//		$tool_content .=  "</td></tr>";
-		//		echo $tool_content;
 	}
 	$i=0;
 	$catcounter=1;
@@ -231,7 +248,7 @@ if (mysql_num_rows($resultcategories) > 0) {
 			if ($is_adminOfCourse)
 			showcategoryadmintools($myrow["id"]);
 			$tool_content .=  "</td></tr>";
-			//		$tool_content .=  "<tr><td>";
+
 			showlinksofcategory($myrow["id"]);
 			$tool_content .=  "</td></tr>";
 		} else {
@@ -247,11 +264,11 @@ if (mysql_num_rows($resultcategories) > 0) {
 		$i++;
 	}
 	$tool_content .=  "</table>";
-	//echo $tool_content;
+
 } else {   // no category
 	$tool_content .=  "<table>";
 	$tool_content .=  "<tbody><tr><td class=\"category\" colspan=\"2\" >$langLinks</td></tr>";
-	//                $tool_content .=  "<tr><td>";
+
 	showlinksofcategory(0);
 	$tool_content .=  "</td></tr>";
 	$tool_content .=  "</tbody></table>";

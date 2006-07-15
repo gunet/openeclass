@@ -1,26 +1,27 @@
-<? // $Id$
-/**
-    +-------------------------------------------------------------------+
-    | CLAROLINE version $Revision$                                |
-    +-------------------------------------------------------------------+
-    | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)   |
-    +-------------------------------------------------------------------+
-    | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>             |
-    |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                |
-    |          Christophe Gesché <gesche@ipm.ucl.ac.be>                 |
-    +-------------------------------------------------------------------+
-    |   This page is used to launch an event when a user click          |
-    |   on a page linked in a cours                                     |
-    |   - It gets name of URL                                           |
-    |   - It calls the event function                                   |
-    |   - It redirects the user to the linked page                      |
-    |                                                                   |
-    |   Need the liens.id, user.user_id et cours.cours_id               |
-    |   when called                                                     |
-    |   ?link_id=$myrow[0]&link_url=$myrow[1]                           |
-    |   url is given to avoid a new select                              |
-    +-------------------------------------------------------------------+
-*/
+<? 
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Á full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
 
 include ('../../include/init.php');
 
