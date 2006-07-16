@@ -47,10 +47,10 @@ else
 		// now get his password from DB
 		if($res = db_query("SELECT password FROM user WHERE user_id='1'"));
 		{
-				$row = mysql_fetch_array($res);
-				$passdb = $row[0]; // it is the encrypted password, do the decrypt process
-				$passdb_decrypted = $crypt->decrypt($key1, $row[0]);
-				$newpass = $passdb_decrypted;
+			$row = mysql_fetch_array($res);
+			$passdb = $row[0]; // it is the encrypted password, do the decrypt process
+			$passdb_decrypted = $crypt->decrypt($key1, $row[0]);
+			$newpass = $passdb_decrypted;
 		}
 	}
 	else	// doing the upgrade from the url (not admin)
@@ -203,7 +203,7 @@ if (!mysql_table_exists($mysqlMainDb, 'agenda'))  {
 
 // table admin_announcemets (stores administrator  announcements)
 if (!mysql_table_exists($mysqlMainDb, 'admin_announcements'))  {
-		db_query("CREATE TABLE `admin_announcements` (
+	db_query("CREATE TABLE `admin_announcements` (
 		`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 		`gr_title` VARCHAR( 255 ) NULL ,
 		`gr_body` VARCHAR( 255 ) NULL ,
@@ -237,152 +237,156 @@ $tool_content .= add_field('user', 'lang', "ENUM('el', 'en') DEFAULT 'el' NOT NU
 
 // encryption of passwords
 // Orismos $durationAccount sto config.php
-	if((!isset($durationAccount)) || (empty($durationAccount)))
+if((!isset($durationAccount)) || (empty($durationAccount)))
+{
+	@chmod( "../config",777 );
+	@chmod( "../config", 0777 );
+	$remove_this = "?>";
+	$text1 = "\$durationAccount = \"126144000\";\n";		//load file into $fc array
+	$fc=@file("../config/config.php");	//open same file and use "w" to clear file
+	$f=fopen("../config/config.php","w");
+	foreach($fc as $line)			//loop through array using foreach
 	{
-		@chmod( "../config",777 );
-		@chmod( "../config", 0777 );
-		$remove_this = "?>";
-		$text1 = "\$durationAccount = \"126144000\";\n";		//load file into $fc array
-		$fc=@file("../config/config.php");	//open same file and use "w" to clear file
-		$f=fopen("../config/config.php","w");
-		foreach($fc as $line)			//loop through array using foreach
+		if(!strstr($line,$remove_this)) //look for $key in each line
+		fputs($f,$line); //place $line back in file
+		else
 		{
-			if(!strstr($line,$remove_this)) //look for $key in each line
-		          fputs($f,$line); //place $line back in file
-			else
-			{
-		  	fwrite($f, $text1);
-		  	fwrite($f, $remove_this);
-			}
+			fwrite($f, $text1);
+			fwrite($f, $remove_this);
 		}
-		fclose($f);
-		$tool_content .= "Ενημερώθηκε το config.php για το durationAccount<br />";
-		
-		// update users with no registration date
-		if($res = db_query("SELECT user_id,registered_at_expires_at FROM user 
+	}
+	fclose($f);
+	$tool_content .= "Ενημερώθηκε το config.php για το durationAccount<br />";
+
+	// update users with no registration date
+	if($res = db_query("SELECT user_id,registered_at_expires_at FROM user
 		WHERE registered_at='0' 
 		OR registered_at='NULL' OR registered_at=NULL  
 		OR registered_at='null' OR registered_at=null 
 		OR registered_at='\N' OR registered_at=\N 
 		OR registered_at=''"))
+	{
+		while($row = mysql_fetch_array($res))
 		{
-			while($row = mysql_fetch_array($res))
+			$registered_at = $row["registered_at"];
+
+			// do the update
+			$regtime = 126144000+time();
+			if(db_query("UPDATE user SET registered_at=".time().",expires_at=".$regtime))
 			{
-					$registered_at = $row["registered_at"];
-				
-					// do the update
-					$regtime = 126144000+time();
-					if(db_query("UPDATE user SET registered_at=".time().",expires_at=".$regtime))
-					{
-						$tool_content .= "SUCCESSFUL registration time update for user with id=".$row["user_id"].".Encrypted pass is:".$newpass."<br />";
-					}
-					else
-					{
-						$tool_content .= "NO UPDATE for user with id=".$row["user_id"]."<br />";
-					}
+				$tool_content .= "SUCCESSFUL registration time update for user with id=".$row["user_id"].".Encrypted pass is:".$newpass."<br />";
 			}
-		}
-		else
-		{
-			die("Δεν έγινε κάποια ενημέρωση σε κανένα account σχετικά με to registration time.Η ενημέρωση θα συνεχιστεί κανονικά.");
+			else
+			{
+				$tool_content .= "NO UPDATE for user with id=".$row["user_id"]."<br />";
+			}
 		}
 	}
 	else
 	{
-		// update users with no registration date
-		if($res = db_query("SELECT user_id,registered_at,expires_at FROM user 
+		die("Δεν έγινε κάποια ενημέρωση σε κανένα account σχετικά με to registration time.Η ενημέρωση θα συνεχιστεί κανονικά.");
+	}
+}
+else
+{
+	// update users with no registration date
+	if($res = db_query("SELECT user_id,registered_at,expires_at FROM user
 		WHERE registered_at='0' 
 		OR registered_at='NULL' OR registered_at=NULL  
 		OR registered_at='null' OR registered_at=null 
 		OR registered_at='\N' OR registered_at=\N 
 		OR registered_at=''"))
+	{
+		while($row = mysql_fetch_array($res))
 		{
-			while($row = mysql_fetch_array($res))
+			$registered_at = $row["registered_at"];
+
+			// do the update
+			$regtime = 126144000+time();
+			if(db_query("UPDATE user SET registered_at=".time().",expires_at=".$regtime))
 			{
-					$registered_at = $row["registered_at"];
-				
-					// do the update
-					$regtime = 126144000+time();
-					if(db_query("UPDATE user SET registered_at=".time().",expires_at=".$regtime))
-					{
-						$tool_content .= "SUCCESSFUL registration time update for user with id=".$row["user_id"].".Encrypted pass is:".$newpass."<br />";
-					}
-					else
-					{
-						$tool_content .= "NO UPDATE for user with id=".$row["user_id"]."<br />";
-					}
+				$tool_content .= "SUCCESSFUL registration time update for user with id=".$row["user_id"].".Encrypted pass is:".$newpass."<br />";
+			}
+			else
+			{
+				$tool_content .= "NO UPDATE for user with id=".$row["user_id"]."<br />";
 			}
 		}
-		else
-		{
-			die("Δεν έγινε κάποια ενημέρωση σε κανένα account σχετικά με to registration time.Η ενημέρωση θα συνεχιστεί κανονικά.");
-		}
 	}
+	else
+	{
+		die("Δεν έγινε κάποια ενημέρωση σε κανένα account σχετικά με to registration time.Η ενημέρωση θα συνεχιστεί κανονικά.");
+	}
+}
 
 
 
 
 // Orismos $encryptkey sto config.php
-	if((!isset($encryptkey)) || (empty($encryptkey)))
+if((!isset($encryptkey)) || (empty($encryptkey)))
+{
+	@chmod( "../config",777 );
+	@chmod( "../config", 0777 );
+	$has_encryption = 0;
+	$remove_this = "?>";
+	$text2 = "\$encryptkey = \"eclass\";\n";
+	$fc=@file("../config/config.php");		//load file into $fc array
+	$f=fopen("../config/config.php","w");		//open same file and use "w" to clear file
+	foreach($fc as $line)		//loop through array using foreach
 	{
-		@chmod( "../config",777 );
-		@chmod( "../config", 0777 );
-		$has_encryption = 0;
-		$remove_this = "?>";
-		$text2 = "\$encryptkey = \"eclass\";\n";
-		$fc=@file("../config/config.php");		//load file into $fc array
-		$f=fopen("../config/config.php","w");		//open same file and use "w" to clear file
-		foreach($fc as $line)		//loop through array using foreach
+		if(!strstr($line,$remove_this)) //look for $key in each line
+		fputs($f,$line); //place $line back in file
+		else
 		{
-			if(!strstr($line,$remove_this)) //look for $key in each line
-		          fputs($f,$line); //place $line back in file
-			else
-			{
-		  	fwrite($f, $text2);
-		  	fwrite($f, $remove_this);
-		  	$has_encryption = 1;
-			}
+			fwrite($f, $text2);
+			fwrite($f, $remove_this);
+			$has_encryption = 1;
 		}
-		fclose($f);
-		$tool_content .= "Ενημερώθηκε το config.php για το encryptkey<br />";
-		
-		// update all the records in user table
-		if($res = db_query("SELECT user_id,password FROM user"))
+	}
+	fclose($f);
+	$tool_content .= "Ενημερώθηκε το config.php για το encryptkey<br />";
+
+	// update all the records in user table
+	if($res = db_query("SELECT user_id,password FROM user"))
+	{
+		while($row = mysql_fetch_array($res))
 		{
-			while($row = mysql_fetch_array($res))
+			$pass = $row["password"];
+			$newpass = $crypt->encrypt($key1, $pass, $pswdlen);
+			if(!in_array($pass,$auth_methods))
 			{
-				$pass = $row["password"];
-				$newpass = $crypt->encrypt($key1, $pass, $pswdlen);
-				if(!in_array($pass,$auth_methods))
+				// do the update
+				if(db_query("UPDATE user SET password = '".$newpass."' WHERE user_id=".$row["user_id"]))
 				{
-					// do the update
-					if(db_query("UPDATE user SET password = '".$newpass."' WHERE user_id=".$row["user_id"]))
-					{
-						$tool_content .= "SUCCESS for user with id=".$row["user_id"].".Encrypted pass is:".$newpass."<br />";
-					}
-					else
-					{
-						$tool_content .= "NO UPDATE for user with id=".$row["user_id"]."<br />";
-					}
+					$tool_content .= "SUCCESS for user with id=".$row["user_id"].".Encrypted pass is:".$newpass."<br />";
 				}
 				else
 				{
-					continue; // move to the next one
+					$tool_content .= "NO UPDATE for user with id=".$row["user_id"]."<br />";
 				}
 			}
+			else
+			{
+				continue; // move to the next one
+			}
 		}
-		else
-		{
-			die("ΠΡΟΣΟΧΗ! Τα passwords στη ΒΔ δεν είναι κρυπτογραφημένα και η πλατφόρμα δεν μπορεί να λειτουργήσει");
-		}
-		
 	}
 	else
 	{
-		// check if the passwords are already encrypted
+		die("ΠΡΟΣΟΧΗ! Τα passwords στη ΒΔ δεν είναι κρυπτογραφημένα και η πλατφόρμα δεν μπορεί να λειτουργήσει");
 	}
 
+}
+else
+{
+	// check if the passwords are already encrypted
+}
 
+//Empty table 'agenda' in the main database so that we do not have multiple entries
+//in case we run the upgrade script twice. This has to be done at this point and NOT
+//in the while loop. Otherwise it will be emptying the table for each iteration
+$sql = 'TRUNCATE TABLE `agenda`';//empty main agenda table so that we do not have multiple entries
+db_query($sql, $mysqlMainDb);
 
 // **********************************************
 // upgrade courses databases
@@ -579,8 +583,8 @@ while ($code = mysql_fetch_row($res)) {
 
 
 	//Move all non-expired events from lessons' agendas to the main agenda table
-	$sql = 'TRUNCATE TABLE `agenda`';//empty main agenda table so that we do not have multiple entries
-	db_query($sql, $mysqlMainDb);
+	//	$sql = 'TRUNCATE TABLE `agenda`';//empty main agenda table so that we do not have multiple entries
+	//	db_query($sql, $mysqlMainDb);
 	$sql = 'SELECT id, titre, contenu, day, hour, lasting
                 FROM  agenda
                 WHERE CONCAT(titre,contenu) != \'\'
@@ -613,6 +617,7 @@ while ($code = mysql_fetch_row($res)) {
                   '".$lesson_agenda[$j]['duree']."',
                   '".$lesson_agenda[$j]['lesson_code']."'
                   )", $mysqlMainDb);
+
 	}
 	// end of agenda
 
@@ -739,7 +744,7 @@ while ($code = mysql_fetch_row($res)) {
 	  PRIMARY KEY  (`sqaid`)
 	) ", $code[0]); //TYPE=MyISAM COMMENT='For the survey module';
 	}
-	
+
 
 
 	//---------------------------------------------------------------------
@@ -882,33 +887,33 @@ while ($code = mysql_fetch_row($res)) {
                 'MODULE_ID_LP'
          )", $code[0]);
 
-//	// For SURVEY module
-//	$langSurvey = "Έρευνα";
-//	db_query("INSERT IGNORE INTO accueil VALUES (
-//                21,
-//                '$langSurvey',
-//                '../../modules/survey/survey.php',
-//                '../../../images/survey.gif',
-//                '1',
-//                '0',
-//                '../../../images/pastillegris.png',
-//                'MODULE_ID_SURVEY'
-//         )", $code[0]);
-//
-//	// For POLL module
-//	$langPoll = "Ψηφοφορίες";
-//	db_query("INSERT IGNORE INTO accueil VALUES (
-//                22,
-//                '$langPoll',
-//                '../../modules/poll/poll.php',
-//                '../../../images/poll.gif',
-//                '1',
-//                '0',
-//                '../../../images/pastillegris.png',
-//                'MODULE_ID_POLL'
-//         )", $code[0]);
+	//	// For SURVEY module
+	//	$langSurvey = "Έρευνα";
+	//	db_query("INSERT IGNORE INTO accueil VALUES (
+	//                21,
+	//                '$langSurvey',
+	//                '../../modules/survey/survey.php',
+	//                '../../../images/survey.gif',
+	//                '1',
+	//                '0',
+	//                '../../../images/pastillegris.png',
+	//                'MODULE_ID_SURVEY'
+	//         )", $code[0]);
+	//
+	//	// For POLL module
+	//	$langPoll = "Ψηφοφορίες";
+	//	db_query("INSERT IGNORE INTO accueil VALUES (
+	//                22,
+	//                '$langPoll',
+	//                '../../modules/poll/poll.php',
+	//                '../../../images/poll.gif',
+	//                '1',
+	//                '0',
+	//                '../../../images/pastillegris.png',
+	//                'MODULE_ID_POLL'
+	//         )", $code[0]);
 
- 	// For QUESTIONNAIRE module (maybe remove old 21)
+	// For QUESTIONNAIRE module (maybe remove old 21)
 	$langQuestionnaire = "Ερωτηματολόγιο";
 	db_query("INSERT IGNORE INTO accueil VALUES (
                 21,																
@@ -990,20 +995,20 @@ while ($code = mysql_fetch_row($res)) {
 
 	$baseFolder = "$webDir/courses/".$code[0]."/document";
 	$tmpfldr = getcwd();
-	
-	
+
+
 	if (!@chdir("$webDir/courses/".$code[0]."/document")) {
 		die("cant enter document course folder!");
 	}
-		
+
 	//function gia anavathmisi twn arxeiwn se kathe course
 	//*** proypothetei oti exei proepilegei h DB tou mathimatos kai pws to CWD einai o fakelos document tou mathimatos (p.x. .../eclass/courses/TMA100/document/) ***
 	RecurseDir(getcwd(), $baseFolder);
-	
+
 	//epistrofh sto prohgoumeno getcwd()
 	chdir($tmpfldr);
-	
-	
+
+
 	//---------------------------------------------------------------------
 	// Upgrading EXERCICES table for new func of EXERCISE module
 	//---------------------------------------------------------------------
@@ -1043,9 +1048,9 @@ while ($code = mysql_fetch_row($res)) {
 
 	update_field("accueil", "define_var","MODULE_ID_CHAT", "id", 		19);
 	update_field("accueil", "define_var","MODULE_ID_DESCRIPTION", "id", 20);
-//	update_field("accueil", "define_var","MODULE_ID_SURVEY", "id", 21);
-//	update_field("accueil", "define_var","MODULE_ID_POLL", "id", 22);
-update_field("accueil", "define_var","MODULE_ID_QUESTIONNAIRE", "id", 21);
+	//	update_field("accueil", "define_var","MODULE_ID_SURVEY", "id", 21);
+	//	update_field("accueil", "define_var","MODULE_ID_POLL", "id", 22);
+	update_field("accueil", "define_var","MODULE_ID_QUESTIONNAIRE", "id", 21);
 	update_field("accueil", "define_var","MODULE_ID_LP", "id", 			23);
 	update_field("accueil", "define_var","MODULE_ID_USAGE", "id", 		24);
 	update_field("accueil", "define_var","MODULE_ID_TOOLADMIN", "id", 	25);
@@ -1080,11 +1085,11 @@ update_field("accueil", "define_var","MODULE_ID_QUESTIONNAIRE", "id", 21);
 	$sql = 'UPDATE `accueil` SET `visible` = \'0\', `admin` = \'1\' WHERE `id` = 8 LIMIT 1';
 	db_query($sql, $code[0]);
 
-// update menu entries with new messages
-  $langModifyInfoNew = "Διαχείριση Μαθήματος";
+	// update menu entries with new messages
+	$langModifyInfoNew = "Διαχείριση Μαθήματος";
 	$langAddPageHomeNew= "Ανέβασμα Ιστοσελίδας";
-  update_field("accueil", "rubrique", "$langModifyInfoNew", "id", 14);
-  update_field("accueil", "rubrique", "$langAddPageHomeNew", "id", 12);
+	update_field("accueil", "rubrique", "$langModifyInfoNew", "id", 14);
+	update_field("accueil", "rubrique", "$langAddPageHomeNew", "id", 12);
 
 	//set the new images for the icons of lesson modules
 	update_field("accueil", "image","calendar", "id", 		1);
@@ -1106,8 +1111,8 @@ update_field("accueil", "define_var","MODULE_ID_QUESTIONNAIRE", "id", 21);
 
 	update_field("accueil", "image","chat", "id", 			19);
 	update_field("accueil", "image","description", "id",	20);
-//	update_field("accueil", "image","survey", "id", 		21);
-//	update_field("accueil", "image","poll", "id", 			22);
+	//	update_field("accueil", "image","survey", "id", 		21);
+	//	update_field("accueil", "image","poll", "id", 			22);
 	update_field("accueil", "image","questionnaire", "id", 			21);
 	update_field("accueil", "image","lp", "id", 			23);
 	update_field("accueil", "image","usage", "id", 			24);
@@ -1130,24 +1135,24 @@ update_field("accueil", "define_var","MODULE_ID_QUESTIONNAIRE", "id", 21);
 		}
 	}
 
- // remove table 'introduction' entries and insert them in table 'cours' (field 'description') in eclass main database
- // after that drop table introduction
+	// remove table 'introduction' entries and insert them in table 'cours' (field 'description') in eclass main database
+	// after that drop table introduction
 	if (mysql_table_exists($code[0], 'introduction')) {
-	
-	$sql = db_query("SELECT texte_intro FROM introduction", $code[0]);
-	while ($text = mysql_fetch_array($sql)) {
+
+		$sql = db_query("SELECT texte_intro FROM introduction", $code[0]);
+		while ($text = mysql_fetch_array($sql)) {
 			if (db_query("UPDATE cours SET description='$text[0]' WHERE code='$code[0]'", $mysqlMainDb)) {
 				$tool_content .= "Μεταφορά του εισαγωγικού κειμένου <b>$text[0]</b> στον πίνακα <b>cours</b>: $OK<br>";
 				db_query("DROP TABLE introduction", $code[0]);
 			} else {
 				$tool_content .= "Μεταφορά του εισαγωγικού κειμένου <b>$text[0]</b> στον πίνακα <b>cours</b>: $BAD<br>";
 				$errors++;
-				}
 			}
-		} // end of table introduction
-	
+		}
+	} // end of table introduction
 
-$tool_content .= "<br><br></td></tr>";
+
+	$tool_content .= "<br><br></td></tr>";
 
 } // End of 'while' courses
 
