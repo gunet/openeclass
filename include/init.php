@@ -36,7 +36,8 @@
 //Modify the relative path prefix according to the state of the system
 //0: logged in/out screen
 //1: user home
-//else: everything else(modules)
+//2: used by abou, copyright, contact, manuals, upgrade
+//else: everything else (modules)
 //(Author: Evelthon Prodromou)
 if (isset($path2add) && $path2add == 0){
 	$relPathLib = "include/";
