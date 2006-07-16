@@ -1,32 +1,39 @@
 <?php  
-/*
-      +----------------------------------------------------------------------+
-      | CLAROLINE version 1.3.0 $Revision$                             |
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
-      +----------------------------------------------------------------------+
-      |   $Id$               |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
-      |                                                                      |
-      |   This program is distributed in the hope that it will be useful,    |
-      |   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-      |   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-      |   GNU General Public License for more details.                       |
-      |                                                                      |
-      |   You should have received a copy of the GNU General Public License  |
-      |   along with this program; if not, write to the Free Software        |
-      |   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-      |   02111-1307, USA. The GNU GPL license is also available through     |
-      |   the world-wide-web at http://www.gnu.org/copyleft/gpl.html         |
-      +----------------------------------------------------------------------+
-      | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-      |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-      |          Christophe Gesché <gesche@ipm.ucl.ac.be>                    |
-      +----------------------------------------------------------------------+
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Á full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
+/**
+ * Index, Course Description
+ * 
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ * 
+ * @abstract This module displays the course description of every course. If the user 
+ * is the course's professor, he/she is shown of a link to add/edit the contents of
+ * the module.
+ * 
+ * Based on previous code of eclass 1.6
+ *
  */
 
 
@@ -34,64 +41,41 @@ $require_current_course = TRUE;
 $langFiles = array('course_description','pedaSuggest');
 $require_help = TRUE;
 $helpTopic = 'Coursedescription';
-//include ('../../include/init.php');
+
 include '../../include/baseTheme.php';
-include('../../include/lib/textLib.inc.php'); 
+include('../../include/lib/textLib.inc.php');
 
 $nameTools = $langCourseProgram;
-//begin_page();
+
 $tool_content = "";
 
-$tool_content .= "
-
-<tr>
-<td colspan=\"2\">";
-
-
-if ($is_adminOfCourse)
-{ 
+if ($is_adminOfCourse) {
 	$tool_content .= "
 			<a href=\"edit.php\">
 				".$langEditCourseProgram."
 			</a>";
 }
-// else 
-{
-	mysql_select_db("$currentCourseID",$db);
-	$sql = "SELECT `id`,`title`,`content` FROM `course_description` order by id";
-	$res = mysql_query($sql);
-	if (mysql_num_rows($res) >0 )
+
+
+$sql = "SELECT `id`,`title`,`content` FROM `course_description` order by id";
+$res = db_query($sql, $currentCourseID);
+if (mysql_num_rows($res) > 0) {
+	$tool_content .= "<hr noshade size=\"1\">";
+	while ($bloc = mysql_fetch_array($res))
 	{
 		$tool_content .= "
-			<hr noshade size=\"1\">";
-		while ($bloc = mysql_fetch_array($res))
-		{ 
-			$tool_content .= "
-			<H4>
+			<h4>
 				".$bloc["title"]."
-			</H4>
-			<font size=2 face='arial, helvetica'>
+			</h4>
+			<p>
 				".make_clickable(nl2br($bloc["content"]))."
-			</font>";
-		}
+			</p>";
 	}
-	else
-	{
-		$tool_content .= "<br><h4>$langThisCourseDescriptionIsEmpty</h4>";
-	}
+} else {
+	$tool_content .= "<br><h4>$langThisCourseDescriptionIsEmpty</h4>";
 }
+
 
 draw($tool_content, 2);
 ?>
-	<!--	</td>
-	</tr>
-	<tr name="bottomLine" >
-		<td colspan="2">
-			<br>
-			<hr noshade size="1">
-		</td>
-	</tr>
-</table>
-</body>
-</html>-->
 
