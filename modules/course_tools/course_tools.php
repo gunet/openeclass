@@ -41,7 +41,7 @@
 $require_current_course = TRUE;
 $langFiles = array('toolManagement', 'create_course', 'external_module', 'import');
 $require_help = TRUE;
-$helpTopic = 'User';
+$helpTopic = 'courseTools';
 
 include '../../include/baseTheme.php';
 $require_login = true;
@@ -286,9 +286,10 @@ if ($is_admin){
 }
 //------------------------------------------------------
 if ($is_adminOfCourse && @$action == 1) {//upload html file
-	
+
 	$nameTools = $langUploadPage;
 	$navigation[]= array ("url"=>"course_tools.php", "name"=> $langToolManagement);
+	$helpTopic = 'Import';
 	
 	$tool_content .=  "
 		<p>$langExplanation</p>
@@ -332,6 +333,7 @@ if ($is_adminOfCourse && @$action == 2) {//add external link
 
 	$nameTools = $langAddExtLink;
 	$navigation[]= array ("url"=>"course_tools.php", "name"=> $langToolManagement);
+	$helpTopic = 'Module';
 
 	$tool_content .=  "
 			<form method=\"post\" action=\"$_SERVER[PHP_SELF]?submit=yes&action=2\">
@@ -394,7 +396,7 @@ tForm;
 	$tool_content .= "</tr>
    						</thead>
 <tbody>";
-	$toolArr = getTools(2);
+	$toolArr = getSideMenu(2);
 	$numOfToolGroups = count($toolArr);
 
 	if (is_array($toolArr)){
