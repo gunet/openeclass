@@ -1,27 +1,27 @@
 <?PHP
 /**===========================================================================
- *              GUnet e-Class 2.0 
- *       E-learning and Course Management Program  
- * ===========================================================================
- *	Copyright(c) 2003-2006  Greek Universities Network - GUnet
- *	Á full copyright notice can be read in "/info/copyright.txt".
- *       
- *  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
- *				Yannis Exidaridis <jexi@noc.uoa.gr> 
- *				Alexandros Diamantidis <adia@noc.uoa.gr> 
- *
- *	For a full list of contributors, see "credits.txt".  
- *    
- *	This program is a free software under the terms of the GNU 
- *	(General Public License) as published by the Free Software 
- *	Foundation. See the GNU License for more details. 
- *	The full license can be read in "license.txt".
- *    
- *	Contact address: 	GUnet Asynchronous Teleteaching Group, 
- *						Network Operations Center, University of Athens, 
- *						Panepistimiopolis Ilissia, 15784, Athens, Greece
- *						eMail: eclassadmin@gunet.gr
-  ============================================================================*/
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Á full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
 
 /**
  * Personalised Documents Component, e-Class Personalised
@@ -38,7 +38,7 @@
 /**
  * Function getUserDocuments
  * 
- * Generates html content for the documents block of e-class personalised.
+ * Populates an array with data regarding the user's personalised documents
  *
  * @param array $param
  * @param  string $type (data, html)
@@ -72,17 +72,16 @@ function getUserDocuments($param = null, $type) {
 	'max_repeat_val'	=> $max_repeat_val,
 	'date'				=> $usr_memory
 	);
-	//echo $max_repeat_val;
-	//	dumpArray($usr_memory);
+
 	$docs_query_new 	= createDocsQueries($queryParamNew);
 	$docs_query_memo 	= createDocsQueries($queryParamMemo);
 
-	//		We have 2 SQL cases. The scripts tries to return all the new Announcement
+	//		We have 2 SQL cases. The scripts tries to return all the new documents
 	//		the user had since his last login. If the returned items are less than 1
-	//		it gets the last announcements the user saw.
+	//		it gets the last documents the user had by using the docs_flag field
+	//		(table user, main database).
 	//		--------------------------------------------------------------------------
 
-	$docsGroup = array();
 	$docsSubGroup = array();
 	$getNewDocs = false;
 	for ($i=0;$i<$max_repeat_val;$i++) { //each iteration refers to one lesson
@@ -116,29 +115,25 @@ function getUserDocuments($param = null, $type) {
 
 	}
 
-
-
 	if ($getNewDocs) {
-		
+
 		array_push($docsGroup, $docsSubGroup);
 		$sqlNowDate = eregi_replace(" ", "-",$usr_lst_login);
 		$sql = "UPDATE `user` SET `doc_flag` = '$sqlNowDate' WHERE `user_id` = $uid ";
 		db_query($sql, $mysqlMainDb);
 
 	} elseif (!$getNewDocs) {
-		
-		//if there are no new announcements, get the last announcements the user had
+
+		//if there are no new documents, get the last documents the user had
 		//so that we always have something to display
 		for ($i=0; $i < $max_repeat_val; $i++){
 			$mysql_query_result = db_query($docs_query_memo[$i], $lesson_code[$i]);
-			
+
 			if (mysql_num_rows($mysql_query_result) > 0) {
 				$docsLessonData = array();
 				$docsData = array();
 				array_push($docsLessonData, $lesson_title[$i]);
 				array_push($docsLessonData, $lesson_code[$i]);
-				//auto yphrxe k sto announcements. Giati yparxei ?
-//				$mysql_query_result = db_query($announce_query_memo[$i]);
 
 				while ($myDocuments = mysql_fetch_row($mysql_query_result)) {
 					$myDocuments[0] = strrev(substr(strstr(strrev($myDocuments[0]),"/"), 1));
@@ -149,13 +144,8 @@ function getUserDocuments($param = null, $type) {
 				array_push($docsSubGroup, $docsLessonData);
 			}
 		}
-		array_push($docsGroup, $docsSubGroup);
+
 	}
-
-
-	//	array_push($announceGroup, $announceSubGroup);
-
-//			print_a($docsSubGroup); //<<<---- auto einai to swsto array!!!
 
 	if($type == "html") {
 		return docsHtmlInterface($docsSubGroup);
@@ -191,9 +181,9 @@ aCont;
 			$content .= "
 		<li class=\"category\">".$data[$i][0]."</li>
 		";
-//			$url = $_SERVER['PHP_SELF'] . "?perso=6&c=" .$data[$i][1]."&p=".$data[$i][2][0];
+
 			for ($j=0; $j < $iterator; $j++){
-$url = $_SERVER['PHP_SELF'] . "?perso=6&c=" .$data[$i][1]."&p=".$data[$i][2][$j][0];
+				$url = $_SERVER['PHP_SELF'] . "?perso=6&c=" .$data[$i][1]."&p=".$data[$i][2][$j][0];
 				$content .= "
 		<li><a class=\"square_bullet\" href=\"$url\"><div class=\"content_pos\">".$data[$i][2][$j][2]." ( ".$data[$i][2][$j][3].")</div></a>
 			
@@ -213,7 +203,7 @@ $url = $_SERVER['PHP_SELF'] . "?perso=6&c=" .$data[$i][1]."&p=".$data[$i][2][$j]
 	if (!$docsExist) {
 		$content = "<p>$langNoDocsExist</p>";
 	}
-//	echo $content;
+
 	return $content;
 
 }
@@ -233,7 +223,7 @@ function createDocsQueries($queryParam){
 	$lesson_code = $queryParam['lesson_code'];
 	$max_repeat_val = $queryParam['max_repeat_val'];
 	$date = $queryParam['date'];
-	//	echo $max_repeat_val;
+
 	for ($i=0;$i<$max_repeat_val;$i++) {
 
 		if(is_array($date)){
@@ -248,7 +238,7 @@ function createDocsQueries($queryParam){
 								AND DATE_FORMAT(date_modified,'%Y %m %d') >='" .$dateVar."'
 								ORDER BY date_modified DESC
 									";
-//				echo $docs_query[$i] . "<br>";
+
 	}
 
 	return $docs_query;

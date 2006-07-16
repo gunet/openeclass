@@ -1,23 +1,49 @@
 <?PHP
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Á full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
 
-/*
-*
-*	File : class.Announcements.php
-*
-*	Announcements component for eclass personalised
-*
-*	The class in charge for collecting data regarding announcements for all
-*	the lessons a user is subscribed to.
-*
-*	@author Evelthon Prodromou <eprodromou@upnet.gr>
-*
-*	@access public
-*
-*	@version 1.0.1
-*
-*/
+/**
+ * Personalised Announcements Component, e-Class Personalised
+ * 
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ * @package e-Class Personalised
+ * 
+ * @abstract This component populates the announcements block on the user's personalised 
+ * interface. It is based on the diploma thesis of Evelthon Prodromou.
+ *
+ */
 
-
+/**
+ * Function getUserAnnouncements
+ * 
+ * Populates an array with data regarding the user's personalised announcements
+ *
+ * @param array $param
+ * @param string $type (data, html)
+ * @return array
+ */
 function getUserAnnouncements($param = null, $type) {
 
 	global $mysqlMainDb, $uid, $dbname, $currentCourseID;
@@ -46,18 +72,15 @@ function getUserAnnouncements($param = null, $type) {
 	'max_repeat_val'	=> $max_repeat_val,
 	'date'				=> $usr_memory
 	);
-	//echo $max_repeat_val;
-	//	dumpArray($usr_memory);
+
 	$announce_query_new 	= createQueries($queryParamNew);
 	$announce_query_memo 	= createQueries($queryParamMemo);
 
-	//	dumpArray($announce_querys_new);
-	//		We have 2 SQL cases. The scripts tries to return all the new Announcement
-	//		the user had since his last login. If the returned items are less than 1
-	//		it gets the last announcements the user saw.
-	//		--------------------------------------------------------------------------
+	//		We have 2 SQL cases. The scripts tries to return all new announcements
+	//		the user had since his last login. If the returned rows are less than 1
+	//		it gets the last announcements the user had.
+	//		-----------------------------------------------------------------------
 
-	$announceGroup = array();
 	$announceSubGroup = array();
 	$getNewAnnounce = false;
 	for ($i=0;$i<$max_repeat_val;$i++) { //each iteration refers to one lesson
@@ -84,7 +107,7 @@ function getUserAnnouncements($param = null, $type) {
 
 			}
 		}
-		//		dumpArray($announceData);
+
 		if ($num_rows > 0) {
 			array_push($announceLessonData, $announceData);
 			array_push($announceSubGroup, $announceLessonData);
@@ -122,25 +145,27 @@ function getUserAnnouncements($param = null, $type) {
 				array_push($announceSubGroup, $announceLessonData);
 			}
 		}
-		array_push($announceGroup, $announceSubGroup);
+
 	}
 
-
-	//	array_push($announceGroup, $announceSubGroup);
-
-	//		print_a($announceSubGroup); //<<<---- auto einai to swsto array!!!
-	//	dumpArray($announceGroup);
-	//	print_a($announceSubGroup);
-	//	return  $announcements_values;
 	if($type == "html") {
-		return announceHtmlInterface($announceSubGroup, $max_repeat_val);
+		return announceHtmlInterface($announceSubGroup);
 	} elseif ($type == "data") {
 		return $announceSubGroup;
 	}
 
 }
 
-function announceHtmlInterface($data, $max_repeat_val) {
+/**
+ * Function announceHtmlInterface
+ * 
+ * Generates html content for the announcements block of e-class personalised.
+ *
+ * @param array $data
+ * @return string HTML content for the documents block
+ * @see function getUserAnnouncements()
+ */
+function announceHtmlInterface($data) {
 	global $urlServer,$langNoAnnouncementsExist, $langMore;
 	$announceExist = false;
 
@@ -188,6 +213,15 @@ aCont;
 
 }
 
+/**
+ * Function createQueries
+ * 
+ * Creates needed queries used by getUserAnnouncements
+ *
+ * @param array $queryParam
+ * @return array sql query
+ * @see function getUserAnnouncements()
+ */
 function createQueries($queryParam){
 	global $mysqlMainDb, $maxValue;
 
