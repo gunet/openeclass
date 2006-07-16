@@ -504,6 +504,25 @@ $langHModule = "Ádd link in home page";
 $langModuleContent = "<p>If you want to add links in lesson home page, just type the title and the address of the
 link and press button 'Add'. These links can be deactivated and deleted.</p>";
 
+//Help import page
+$langHImport = "Upload html file";
+$langImportContent = "<p>If needed, you can upload a file relative to your lesson. This file will be stored on the e-Class server. A link towards this file will be added on the left side menu, with the rest lesson tools.
+The link will open in a new browser window.</p>
+<p>To upload your html page click on 'Browse', choose the file you wish to upload, type a title in the 'Page Title' field and click on 'Add'.</p>
+<p>The link of this file can be deactivated and deleted from the 'Tools administration' module.</p>";
+
+//Help Course tools
+$langHcourseTools = "Tools Administraion";
+$langcourseToolsContent = "<p>This module is used to activate or deactivate lesson tools. Each tool's status is presented on the second column named 'Status'. (active or not).</p>
+<p>Each tool can be in three possible states:</p>
+<ul>
+	<li><input type=\"checkbox\" checked> Active</li>
+	<li><input type=\"checkbox\" checked disabled> Permanently active (this refers tou the lesson's administration tools)</li>
+	<li><input type=\"checkbox\"> Inactive</li>
+</ul>
+<p>In order to change the status of a tool click on the checkbox next to it and then click  on 'Save changes' ath the end of the table.</p>
+";
+
 $langHInfocours = "Modify course info";
 $langInfocoursContent = "<p>When the page of your course is ready, you can modify
 course information. You can modify professor name, configure the users access rights
