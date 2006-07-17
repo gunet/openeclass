@@ -670,7 +670,7 @@ href=\"http://www.adlnet.org/\">http://www.adlnet.org</a></li>
 <li>Reload: Open Source free Scorm player and editor, <a
 href=\"http://www.reload.ac.uk/\">http://www.reload.ac.uk</a></li>
 <li>Lectora: Scorm publisher authoring software, <a
-href=\"http://www.trivantis.com/\">http://www.trivantis.com</a><br>
+href=\"http://www.trivantis.com/\">http://www.trivantis.com</a></li>
 </ul>
 
 <p><b>Note:</b></p>

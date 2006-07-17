@@ -714,7 +714,7 @@ href=\"http://www.adlnet.org/\">http://www.adlnet.org</a></li>
 ανάγνωση περιεχομένου Scorm, <a
 href=\"http://www.reload.ac.uk/\">http://www.reload.ac.uk</a></li>
 <li>Lectora: εργαλείο για σύνταξη και δημοσίευση περιεχομένου Scorm, <a
-href=\"http://www.trivantis.com/\">http://www.trivantis.com</a><br>
+href=\"http://www.trivantis.com/\">http://www.trivantis.com</a></li>
 </ul>
 
 <p><b>Σημείωση:</b></p>
