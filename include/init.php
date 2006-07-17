@@ -114,8 +114,7 @@ if (!isset($webDir)) {
 	//path for course_home
 	@include($relPath . "config/config.php");
 	if (!isset($webDir)) {
-		die("Unable to open configuration file,
-			please contact the system administrator");
+			include 'not_installed.php';
 	}
 }
 
