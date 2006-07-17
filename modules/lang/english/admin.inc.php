@@ -294,6 +294,6 @@ $langAdminAnnCommEn = "Comment";
 
 $langAdminAnnTitleGr = "Title (in greek) ";
 $langAdminAnnBodyGr = "Announcement (in greek)";
-$langAdminAnnCommGr = "Comment (in greeka)";
+$langAdminAnnCommGr = "Comment (in greek)";
 
 ?>
