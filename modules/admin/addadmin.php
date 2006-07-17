@@ -60,34 +60,48 @@ $nameTools = $langNomPageAddHtPass;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 // Initialise $tool_content
 $tool_content = "";
-
+// Initialize the incoming variables
+$delete = isset($_GET['delete'])?$_GET['delete']:'';
+$aid = isset($_GET['aid'])?$_GET['aid']:'';
+$encodeLogin = isset($_POST['encodeLogin'])?$_POST['encodeLogin']:'';
 /*****************************************************************************
 		MAIN BODY
 ******************************************************************************/
-// Check if a username has been posted
-if (isset($encodeLogin)) {
-	// Search username in database
-	$res = mysql_query("SELECT user_id FROM user WHERE username='$encodeLogin'");
-	// Check that username exists
-	if (mysql_num_rows($res) == 1) {
-		// If username exists insert userid to admin table
-		// and make the user administrator
+if(!empty($encodeLogin)) 	// Check if a username has been posted
+{
+	$res = mysql_query("SELECT user_id FROM user WHERE username='$encodeLogin'");		// Search username in database
+	if (mysql_num_rows($res) == 1) 	// Check that username exists
+	{
+		// If username exists insert userid to admin table and make the user administrator
 		$row = mysql_fetch_row($res);
 		if (mysql_query("INSERT INTO admin VALUES('$row[0]')")) 
 			$tool_content .= "<p>$langUser $encodeLogin $langWith  id='$row[0]' $langDone</p>";
-		 else // If mysql_query failed print message
+		else // If mysql_query failed print message
 			$tool_content .= "<p>$langError</p>";
-	} else {
-		// If username does not exist in database
-		// Inform user about the result
+	} 
+	else 
+	{
+		// If username does not exist in database, inform user about the result
 		$tool_content .= "<p>$langUser $encodeLogin $langNotFound.</p>";
-		// Display form again
-		$tool_content .= printform($langLogin);
+		$tool_content .= printform($langLogin);		// Display form again
 	}
-} else { // No form post has been done
+} 
+else 	// No form post has been done
+{ 
 	// Display form
 	$tool_content .= printform($langLogin);
 }
+
+// delete the admin
+if((!empty($delete)) && ($delete=='1') && (!empty($aid)) && ($aid!='1'))
+{
+	if(!$r=db_query("DELETE FROM admin WHERE admin.idUser='".$aid."'"))
+	{
+		$tool_content .= "<center><br />Η διαγραφή του διαχειριστή με id:".$aid." δεν είναι εφικτή<br /></center>";
+	}
+}
+
+// Display the list of admins
 if($r1=db_query("SELECT user_id,prenom,nom,username FROM user,admin WHERE user.user_id=admin.idUser ORDER BY user_id"))
 {
 	$tool_content .= "<br /><center><table width=\"80%\"><thead><tr>
@@ -104,7 +118,7 @@ if($r1=db_query("SELECT user_id,prenom,nom,username FROM user,admin WHERE user.u
 		"<td>".htmlspecialchars($row['username'])."</td>";
 		if($row['user_id']!=1)
 		{
-			$tool_content .= "<td>Διαγραφή</td>";
+			$tool_content .= "<td><a href=\"addadmin.php?delete=1&aid=".$row['user_id']."\">Διαγραφή</a></td>";
 		}
 		$tool_content .= "</tr>";
 	}
