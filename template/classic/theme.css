@@ -691,3 +691,7 @@ padding:0.4em;
 
 .month {font-weight: bold;}
 
+.headers {font-weight: bold;
+				font-style: italic;
+				font-size: 10pt;
+}
