@@ -54,7 +54,7 @@ if($submit)
 		$s = mysql_query("SELECT id FROM faculte WHERE name='$department'");
 		$dep = mysql_fetch_array($s);
 		$registered_at = time();
- 		$expires_at = time() + 31536000;
+ 		$expires_at = time() + $durationAccount;
  		switch($password)
 				{
 					case 'pop3': $auth = 2; break;
@@ -66,10 +66,10 @@ if($submit)
  		
  		if($auth==1)
  		{		
-		$crypt = new Encryption;
-		$key = $encryptkey;
-		$pswdlen = "20";
-		$password_encrypted = $crypt->encrypt($key, $password, $pswdlen);
+			$crypt = new Encryption;
+			$key = $encryptkey;
+			$pswdlen = "20";
+			$password_encrypted = $crypt->encrypt($key, $password, $pswdlen);
 		}
 		else
 		{
