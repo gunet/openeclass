@@ -573,98 +573,111 @@ link and press button 'Add'. These links can be deactivated and deleted.</p>";
 // Help  Scorm - Learning Path
 
 
-$langHPath="Help Learning Path";
+$langHPath="Help - Learning Path";
 
 $langPathContent="
-The Learning Path tool has two functions :
-<ul><li>Create a learning Path</li>
-<li>Upload a Scorm or IMS format Learning path</li></ul>
-<img src=\"../../images/path_help.gif\">
-<p><b>
-What is a Learning Path ?</b>
-</p><p>A Learning Path is a sequence of learning steps included in modules. It can be content-based (looking like a table of contents) or activities-based, looking like an agenda or a programme of what you need to do in order to understand and practice a certain knowledge or know-how.</p><p>In addition to being structured, a learning path can also be sequenced. This means that some steps will constitute pre-requisites for others ('you cannot go to step 2 before step1'). Your sequence can be suggestive (you show steps one after the other) or imperative (you add pre-requisites so that people are forced to follow the sequence).
-</p>
+The Learning Path tool has four functions:
+<ul>
+<li>Create a learning Path</li>
+<li>Import a Scorm or IMS format Learning path</li>
+<li>Export a Scorm 2004 or 1.2 compliant Learning path</li>
+<li>Track the progress of the students following the Learning paths</li>
+</ul>
+
+<p><b>What is a Learning Path ?</b></p>
+
+<p>A Learning Path is a sequence of learning steps included in modules. It can be 
+content-based (looking like a table of contents) or activities-based, looking like 
+an agenda or a programme of what you need to do in order to understand and practice a 
+certain knowledge or know-how.</p>
+
+<p>In addition to being structured, a learning path can 
+also be sequenced. This means that some steps will constitute pre-requisites for the steps 
+after them (\"you cannot go to step 2 before step 1\"). Your sequence can only be suggestive 
+(you show steps one after the other).</p>
+
 <p><b>How to create our own Learning Path ?</b></p>
-<p>
-The first step is to arrive to Learning Path Builder section. In
-the Learning Path screen, there is a link to it. There you can create
-many paths by clicking onto <i>Add a new learning path</i>. But they are
-empty, till you add modules and steps to them.<br>If you make a path
-visible, it will appear as a new tool on the homepage of the course. This
-way their access is easier.</p>
-<p>
-<b>What are the steps for these paths ? (What are the items that can be added?)</b></p>
-<p>All Dokeos tools, activities and contents that you consider to be useful and connected to your
-imagined path can be added :<br><ul>
-<li>Agenda items</li>
+
+<p>The first step is to arrive to Learning Path List section. In
+the Learning Path List screen, there is a link to it. There you can create
+many paths by clicking onto <i>Create a new learning path</i>. But they are
+empty, till you add modules and steps to them.</p>
+
+<p><b>What are the steps for these paths ? (What are the items that can be added ?)</b></p>
+
+<p>Some of the Eclass tools, activities and contents that you consider to be useful 
+and connected to your imagined path can be added:</p>
+
+<ul>
 <li>Separate documents (texts, pictures, Office docs, ...)</li>
-<li>Announcement items</li>
-<li>Forums as a whole</li>
-<li>Topics</li>
-<li>Individual topic messages</li>
+<li>Labels</li>
 <li>Links</li>
-<li>Dokeos Tests (you have to make these tests visible in the Tests tool, which you want
-to present for students in paths)</li>
-<li>Assignments page</li>
-<li>Dropbox page</li>
-<li>External links, which point out of Dokeos system</li></ul>
-</p>
-<p>
-<b>Other features of Learning Path</b>
-</p>
-<p>
-Students can be asked to follow (read) your path in a given order, as you
-can set <u>prerequisities</u> in the path. This means that for example students
-cannot go to Quiz 2 till they have read Document 1. All items have a status :
-completed or incomplete, so the progress of students is clearly available.
-</p><p>
-If you alter the original title of a step, the new title will appear in
+<li>Eclass Tests</li>
+<li>Eclass Course Description</li>
+</ul>
+
+<p><b>Other features of Learning Path</b></p>
+
+<p>Students can be asked to follow (read) your path in a given order. This means 
+that for example students cannot go to Quiz 2 till they have read Document 1. 
+All items have a status: completed or incomplete, so the progress of students is 
+clearly available through the <i>Tracking</i> tool.</p>
+
+<p>If you alter the original title of a step, the new title will appear in
 the path, but the original title will not be deleted. So if you want
 test8.doc to appear as 'Final Exam' in the path, you do not have to rename
-the file, you can use the new title in the path. It is also useful to give new titles to links as they are too long.
-</p><p>
-When finished, do not forget to check the student view, where the table of
-contents appears on the left and the path steps usually appear on the right,
-one by one.
-</p><br><p><b>
-What is a Scorm or IMS format Learning path and how to upload (import) it?</b>
-</p>
+the file, you can use the new title in the path. It is also useful
+to give new titles to links as they are too long.</p>
+<br>
+
+
+<p><b>What is a Scorm or IMS format Learning path and how to upload (import) it ?</b></p>
+
 <p>The learning path tool allows you to upload SCORM and IMS compliant course
 contents.</p>
-<p>SCORM  (<i>Sharable Content Object Reference Model</i>) is a public standard followed by major e-Learning actors
-like NETg, Macromedia, Microsoft, Skillsoft, etc. and acting at three levels:
-</p>
+
+<p>SCORM (<i>Sharable Content Object Reference Model</i>) is a public standard 
+followed by major e-Learning actors like NETg, Macromedia, Microsoft, Skillsoft, 
+etc. and acting at three levels:</p>
+
 <ul>
-<li><b>Economy</b> : Scorm allows whole courses or small content units to be reusable on different Learning
-Management Systems (LMS) through the separation of content and context,</li>
-<li><b>Pedagogy</b> : Scorm integrates the notion of
-pre-requisite or <i>sequencing</i> (<i>e.g. </i>\"Youcannot go to chapter 2 before passing Quiz 1\"),</li>
-<li><b>Technology</b> : Scorm generates a table of contents as
+<li><b>Economy</b>: Scorm allows whole courses or small content
+units to be reusable on different Learning Management Systems (LMS)
+through the separation of content and context,</li>
+<li><b>Pedagogy</b>: Scorm integrates the notion of
+pre-requisite or <i>sequencing</i> (<i>e.g. </i>\"You
+cannot go to chapter 2 before passing Quiz 1\"),</li>
+<li><b>Technology</b>: Scorm generates a table of contents as
 an abstraction layer situated outside content and outside the LMS. It
-helps content and LMS communicate with each other. What is communicated is mainly <i>bookmarks
-</i>(\"Where is John in thecourse?\"), <i>scoring</i> (\"How did John pass the test?\") and <i>time</i>
-(\"How much time did John spent in chapter 1?\").</li>
+helps content and LMS communicate with each
+other. What is communicated is mainly <i>bookmarks</i> (\"Where is John in the
+course ?\"), <i>scoring</i> (\"How did John pass the test ?\") and <i>time</i> (\"How much
+time did John spent in chapter 1 ?\").</li>
 </ul>
-<b>How to create a SCORM compliant learning path?</b><br>
-<br>
-The most natural way is to use the Dokeos Learning Path Builder. However, you may want to create complete Scorm compliant websites locally on your own computer before uploading it onto your dokeos platform. In this case, we recommend the use of a sophisticated tool like Lectora&reg; or Reload&reg;
-<br></p><p>
-<b>Useful links</b><br>
+
+<p><b>How to create a SCORM compliant learning path ?</b></p>
+
+<p>The most natural way is to use the Eclass Learning Path Builder. However, you may want to 
+create complete Scorm compliant websites locally on your own computer before uploading it 
+onto your eclass platform. In this case, we recommend the use of a sophisticated tool like 
+Lectora&reg; or Reload&reg;</p>
+
+<p><b>Useful links</b></p>
+
 <ul>
-<li>Adlnet : authority responsible for Scorm normalisation, <a
+<li>Adlnet: authority responsible for Scorm normalisation, <a
 href=\"http://www.adlnet.org/\">http://www.adlnet.org</a></li>
-<li>Reload : Open Source free Scorm player and editor, <a
+<li>Reload: Open Source free Scorm player and editor, <a
 href=\"http://www.reload.ac.uk/\">http://www.reload.ac.uk</a></li>
-<li>Lectora : Scorm publisher authoring software, <a
+<li>Lectora: Scorm publisher authoring software, <a
 href=\"http://www.trivantis.com/\">http://www.trivantis.com</a><br>
-</li>
 </ul>
-<p><b>
-Note :</b></p><p>
-The Learning Path section lists all the <i>self-built Learning Paths</i>
-and all uploaded <i>Scorm format Learning Paths</i>, as well. It is wise
-to put every uploaded Scorm path into separate directories.
-</p>";
+
+<p><b>Note:</b></p>
+
+<p>The Learning Path section lists all the <i>self-built Learning Paths</i>
+and all uploaded <i>Scorm format Learning Paths</i>, as well.</p>
+";
 
 $langHUsage = "Usage Statistics";
 $langUsageContent =

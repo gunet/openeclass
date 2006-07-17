@@ -63,7 +63,7 @@ require_once("../../include/lib/fileManageLib.inc.php");
 $require_current_course = TRUE;
 $langFiles              = "learnPath";
 $require_help           = TRUE;
-$helpTopic              = "LearnPath";
+$helpTopic              = "Path";
 
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";
