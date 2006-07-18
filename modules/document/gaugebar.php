@@ -82,7 +82,9 @@ $oGauge->setValues($fc, $bc, $wi, $hi, $mi, $ma, $cu);
 <!-- Display the gauge 
 <table cellpadding=0 cellspacing=2 border="1">
    <tr>
-       <td><?php //echo $tmp = $oGauge->display(); ?></td>
+       <td>
+			 // echo $tmp = $oGauge->display(); 
+			 </td>
    </tr>
 </table>
 

@@ -60,12 +60,10 @@ $require_current_course = TRUE;
 $langFiles = 'document';
 
 include '../../include/baseTheme.php';
-$tool_content = "";
-
-
 include 'forcedownload.php';
-include 'gaugebar.php';
+//include 'gaugebar.php';
 
+$tool_content = "";
 $nameTools = $langDoc;
 $dbTable = "document";
 
