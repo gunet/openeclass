@@ -1,55 +1,54 @@
 h1 {
-font-size:18px;
+	font-size:18px;
 }
 
 h2 {
-font-size:16px;
+	font-size:16px;
 }
 
 h3 {
-font-size:14px;
+	font-size:14px;
 }
 
 h4 {
-font-size:12px;
+	font-size:12px;
 }
 
 h5 {
-font-size:10px;
+	font-size:10px;
 }
 
 a, p {
-font-family: Arial, Helvetica, sans-serif;
-font-size:12px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:12px;
 }
 
 a:active, a:visited, a:link{
-color:blue;
+	color:blue;
 }
 
 
 #tool_title {
-width:99%;
-margin-top:30px;
-margin-bottom:70px;
-//margin-bottom:30px;
+	width:99%;
+	margin-top:30px;
+	margin-bottom:70px;
+	//margin-bottom:30px;
 }
 
 #tool_title .tool_name{
-font-size:15px;
-font-family: Arial, Helvetica, sans-serif;
-position:absolute;
-font-weight:bold;
+	font-size:15px;
+	font-family: Arial, Helvetica, sans-serif;
+	position:absolute;
+	font-weight:bold;
 }
 
 #tool_title .help a{
-float:right;
-font-family: Arial, Helvetica, sans-serif;
-font-size:12px;
+	float:right;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:12px;
 }
 
-#help_icon
-{
+#help_icon {
 	float: right;
 	width: 14px;
 	height: 14px;
@@ -61,18 +60,17 @@ font-size:12px;
 }
 
 #tool_operations {
-width:99%;
-
-margin-bottom:40px;
+	width:99%;
+	margin-bottom:40px;
 }
 
 #tool_operations .operation{
-margin-right:2px;
-font-size:12px;
+	margin-right:2px;
+	font-size:12px;
 }
 
 #tool_operations a{
-margin-right:2px;
+	margin-right:2px;
 }
 
 #tool_content li { 
@@ -86,7 +84,6 @@ table, th, td {
 	font-family: Verdana, Arial, sans-serif;
 	font-size:12px;
 	color: #555;
-	
 }
 
 caption {
@@ -110,6 +107,7 @@ td.success {
 td.inactive {
    background-color:#B0C4DE;
 }
+
 thead th {
 	text-align: center;
 	background: #E6EDF5;
