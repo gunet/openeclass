@@ -12,4 +12,8 @@ $langNoResult = "No results...";
 $langIntroductionNote = "Introduction Note";
 $langForum = "Forum";
 
+$langOR = "At least one of the terms";
+$langNOT = "None of the following terms";
+
+$langCourseInfo = "Course Information";
 ?>
