@@ -1,40 +1,43 @@
 <?
 
-/*
-      +----------------------------------------------------------------------+
-      | e-Class version 1.2                                                  |
-      | based on CLAROLINE version 1.3.0 $Revision$                   |
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
-      | Copyright (c) 2003 GUNet                                             |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
-      |                                                                      |
-      |   This program is distributed in the hope that it will be useful,    |
-      |   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-      |   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-      |   GNU General Public License for more details.                       |
-      |                                                                      |
-      |   You should have received a copy of the GNU General Public License  |
-      |   along with this program; if not, write to the Free Software        |
-      |   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-      |   02111-1307, USA. The GNU GPL license is also available through     |
-      |   the world-wide-web at http://www.gnu.org/copyleft/gpl.html         |
-      +----------------------------------------------------------------------+
-      | e-Class Authors:    Costas Tsibanis <costas@noc.uoa.gr>              |
-      |                     Yannis Exidaridis <jexi@noc.uoa.gr>              |
-      |                     Alexandros Diamantidis <adia@noc.uoa.gr>         |
-      |		   (v2 changes)	Sakis Agorastos <th_agorastos@hotmail.com>	     |
-      |                                                                      |
-      | Claroline Authors:  Thomas Depraetere <depraetere@ipm.ucl.ac.be>     |
-      |                     Hugues Peeters    <peeters@ipm.ucl.ac.be>        |
-      |                     Christophe Gesché <gesche@ipm.ucl.ac.be>         |
-      |                                                                      |
-      +----------------------------------------------------------------------+
-*/
+
+/**=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Á full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    	Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    	Alexandros Diamantidis <adia@noc.uoa.gr> 
+
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/*===========================================================================
+	create_course2.php
+	@last update: 18-07-2006 by Sakis Agorastos
+	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
+==============================================================================        
+        @Description: 2nd step for the Create New Course Wizard
+
+    The script transfers data from the 1st step of the wizard in hidden
+    input tags.
+        
+ 	The script requires some fields to be filled-in, thus it checks the
+ 	validity of the entries by javascripts.
+==============================================================================*/
 
 $require_login = TRUE;
 $require_prof = TRUE;

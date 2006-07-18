@@ -1,4 +1,41 @@
 <?php
+/**=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Á full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/*===========================================================================
+	document_upgrade.php
+	@last update: 18-07-2006 by Sakis Agorastos
+	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
+==============================================================================        
+        @Description: Main script to upgrade the documents section
+
+ 	This script creates DB records in every course DB for every document that lies in
+	the /document folder of each course
+
+ 	The script does not return any feedback
+==============================================================================*/
+
 
 include '../include/lib/fileUploadLib.inc.php';
 include '../modules/document/forcedownload.php';

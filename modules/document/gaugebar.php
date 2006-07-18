@@ -1,4 +1,53 @@
 <?php
+/**=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Á full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    	Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    	Alexandros Diamantidis <adia@noc.uoa.gr> 
+
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/*===========================================================================
+	gaugebar.php
+	@last update: 18-07-2006 by Sakis Agorastos
+	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
+==============================================================================        
+    @Description: The script contains a class which function returns HTML code
+    			  of a graphic gauge bar with custom values.
+
+    Here is an example for using this class:
+    Main
+
+	$oGauge = new myGauge();
+	
+	
+	// Use method setValues to set datamembers, like:
+	$fc = "#FFFFFF";
+	$bc = "#990000";
+	$wi = 125;
+	$hi = 10;
+	$mi = 0;
+	$ma = 100;
+	$cu = 47;
+	$oGauge->setValues($fc, $bc, $wi, $hi, $mi, $ma, $cu);
+	
+==============================================================================*/
 
 class myGauge {
 
@@ -61,21 +110,7 @@ class myGauge {
 
 }
 
-/* Main
 
-//$oGauge = new myGauge();
-
-
-// Use method setValues to set datamembers, like:
-$fc = "#FFFFFF";
-$bc = "#990000";
-$wi = 125;
-$hi = 10;
-$mi = 0;
-$ma = 100;
-$cu = 47;
-$oGauge->setValues($fc, $bc, $wi, $hi, $mi, $ma, $cu);
-*/
 
 ?>
 

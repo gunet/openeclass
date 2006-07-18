@@ -6,7 +6,9 @@
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
         Á full copyright notice can be read in "/info/copyright.txt".
         
-       	Authors:    Agorastos Sakis <th_agorastos@hotmail.com>
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    	Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    	Alexandros Diamantidis <adia@noc.uoa.gr> 
 
         For a full list of contributors, see "credits.txt".  
      
@@ -21,10 +23,17 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
+/*===========================================================================
+	showquota.php
+	@last update: 18-07-2006 by Sakis Agorastos
+	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
+==============================================================================        
+    @Description: A page that shows a table with statistic data and a
+    gauge bar. The statistical data are transfered here with GET in
+    $diskQuotaDocument and $diskUsed
 
-
-//xrhsimopoihoume afth th morfh erwthmatwn:
-//SELECT * FROM articles WHERE MATCH (title,body,more_fields) AGAINST ('database') OR ('Security') AND ('lala')
+    This scipt uses the 'gaugebar.php' class for the graphic gauge bar
+==============================================================================*/
 
 $require_current_course = TRUE;
 $langFiles = 'document';
