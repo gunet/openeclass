@@ -25,7 +25,9 @@ $body_action='';
 $tool_content = "";//initialise $tool_content
 
 
-$nick=htmlentities(mb_convert_encoding($prenom." ".$nom,"UTF-8","ISO-8859-7") ,ENT_QUOTES,"UTF-8");
+//$nick=htmlentities(mb_convert_encoding($prenom." ".$nom,"UTF-8","ISO-8859-7") ,ENT_QUOTES,"UTF-8");
+$nick=$prenom." ".$nom;
+
 $coursePath=$webDir."courses";
 
 
