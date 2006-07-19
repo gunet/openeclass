@@ -25,9 +25,6 @@ $nameTools = "Αναβάθμιση των βάσεων δεδομένων του e-Class";
 $tool_content = "";
 
 $fromadmin = true;
-/*
-
-*/
 
 if (isset($_POST['submit_upgrade'])) {
 	$fromadmin = false;
@@ -145,7 +142,6 @@ $tool_content .= add_field('user', 'registered_at', "INT(10)");
 if (!mysql_field_exists($mysqlMainDb,'user','expires_at'))
 $tool_content .= add_field('user', 'expires_at', "INT(10)");
 
-
 // Add 2 new fields into table 'cours': password,faculteid
 if (!mysql_field_exists($mysqlMainDb,'cours','password'))
 $tool_content .= add_field('cours', 'password', "VARCHAR(50)");
@@ -233,6 +229,12 @@ $tool_content .= add_field('user', 'forum_flag', "date NOT NULL default '0000-00
 //add new field to table users for user's language
 if (!mysql_field_exists("$mysqlMainDb",'user','lang'))
 $tool_content .= add_field('user', 'lang', "ENUM('el', 'en') DEFAULT 'el' NOT NULL");
+
+
+// add full text indexes for search operation
+db_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu` ,`code_cours`)");
+db_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_objectives`
+,`course_prerequisites` ,`course_keywords` ,`course_references`)");
 
 
 // encryption of passwords
@@ -828,9 +830,6 @@ while ($code = mysql_fetch_row($res)) {
 	}
 
 
-
-
-
 	//---------------------------------------------------------------------
 	// Add table EXERCISE_USER_RECORD for new func of EXERCISE module
 	//---------------------------------------------------------------------
@@ -993,12 +992,12 @@ while ($code = mysql_fetch_row($res)) {
 	$tool_content .= add_field('document', 'copyrighted', "TEXT");
 
 
+	// upgrade course documents directory
 	$baseFolder = "$webDir/courses/".$code[0]."/document";
-	$tmpfldr = getcwd();
-
+	$tmpfldr = getcwd();	
 
 	if (!@chdir("$webDir/courses/".$code[0]."/document")) {
-		die("cant enter document course folder!");
+		die("Can't enter document course folder!");
 	}
 
 	//function gia anavathmisi twn arxeiwn se kathe course
@@ -1021,7 +1020,6 @@ while ($code = mysql_fetch_row($res)) {
 	if (!mysql_field_exists("$code[0]",'exercices','AttemptsAllowed'))
 	$tool_content .= add_field_after_field('exercices', 'AttemptsAllowed', 'TimeConstrain', "INT(11)");
 	// End of upgrading EXERCICES table for new func of EXERCISE module
-
 
 
 	//table accueil -  create new column (define_var)
@@ -1138,7 +1136,6 @@ while ($code = mysql_fetch_row($res)) {
 	// remove table 'introduction' entries and insert them in table 'cours' (field 'description') in eclass main database
 	// after that drop table introduction
 	if (mysql_table_exists($code[0], 'introduction')) {
-
 		$sql = db_query("SELECT texte_intro FROM introduction", $code[0]);
 		while ($text = mysql_fetch_array($sql)) {
 			if (db_query("UPDATE cours SET description='$text[0]' WHERE code='$code[0]'", $mysqlMainDb)) {
@@ -1150,15 +1147,52 @@ while ($code = mysql_fetch_row($res)) {
 			}
 		}
 	} // end of table introduction
+	
+// remove table 'cours_description' entries and insert them in table 'cours' 
+// after that drop table cours_description
+/*
+if (mysql_table_exists($code[0], 'course_description')) {
+	// description
+	$sql = db_query("SELECT content FROM course_description WHERE id='0'", $code[0]);
+	while ($cdesc = mysql_fetch_array($sql))  
+		db_query("UPDATE cours SET description='$cdesc[0]' WHERE code='$code[0]'", $mysqlMainDb)); 
+	$sql = db_query("SELECT content FROM course_description WHERE id='1'", $code[0]);
+	while ($cdesc = mysql_fetch_array($sql))  
+		db_query("UPDATE cours SET cours_objectives='$cdesc[0]' WHERE code='$code[0]'", $mysqlMainDb); 
+	$sql = db_query("SELECT content FROM course_description WHERE id='2'", $code[0]);
+	while ($cdesc = mysql_fetch_array($sql))  
+		db_query("UPDATE cours SET cours_prerequisites='$cdesc[0]' WHERE code='$code[0]'", $mysqlMainDb); 
+	$sql = db_query("SELECT content FROM course_description WHERE id='3'", $code[0]);
+	while ($cdesc = mysql_fetch_array($sql))  
+		db_query("UPDATE cours SET course_keywords='$cdesc[0]' WHERE code='$code[0]'", $mysqlMainDb); 
+	$sql = db_query("SELECT content FROM course_description WHERE id='4'", $code[0]);
+	while ($cdesc = mysql_fetch_array($sql)) 
+		db_query("UPDATE cours SET course_references='$cdesc[0]' WHERE code='$code[0]'", $mysqlMainDb); 
 
+	db_query("DROP TABLE course_description", $code[0]);	
 
-	$tool_content .= "<br><br></td></tr>";
+} // end of table 'cours_description'
+	
+	*/
+
+$tool_content .= "<br><br></td></tr>";
+
+// add full text indexes for search operation
+db_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");
+db_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)");
+db_query("ALTER TABLE `document` ADD FULLTEXT `document` (`filename` ,`comment` ,`title`,`creator`,
+`subject`,`description`,`author`,`language`)");
+db_query("ALTER TABLE `exercices` ADD FULLTEXT `exercices` (`titre`,`description`)");
+db_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
+db_query("ALTER TABLE `liens` ADD FULLTEXT `liens` (`url` ,`titre` ,`description`)");
+db_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`title` ,`description`)");
+db_query("ALTER TABLE `videolinks` ADD FULLTEXT `videolinks` (`url` ,`titre` ,`description`)");
+
 
 } // End of 'while' courses
 
 // Fixed by vagpits
 mysql_select_db($mysqlMainDb);
-
 
 $tool_content .= "<tr><td align=\"center\"><b><i>Σφάλματα: $errors.</i></b></td></tr>";
 $tool_content .= "</tbody></table><br>";
