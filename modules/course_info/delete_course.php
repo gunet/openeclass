@@ -11,7 +11,7 @@ if($is_adminOfCourse) {
 	if(isset($delete)) {
 		$tool_content .= "<center><p>$langCourse $currentCourseID $intitule $langHasDel.</p></center><br>
 			<center><p><a href=\"../../index.php\">".$langBackHome." ".$siteName."</a></p></center>";
-		draw($tool_content, 2);
+		draw($tool_content, 1);
 		mysql_select_db("$mysqlMainDb",$db); 
 		mysql_query("DROP DATABASE `$currentCourseID`");
 		mysql_query("DELETE FROM `$mysqlMainDb`.cours WHERE code='$currentCourseID'");
