@@ -276,11 +276,11 @@ if(!empty($submit))
 	//check user language preferences
 	if (isset($userLanguage) && $userLanguage == "en") {
 		$_SESSION['langswitch'] = "english";
-		$_SESSION['langLinkText'] = "Ελληνικά";
+		$_SESSION['langLinkText'] = "Greek";
 		$_SESSION['langLinkURL'] = "?localize=el";
 	} elseif(isset($userLanguage) && $userLanguage == "el") {
 		$_SESSION['langswitch'] = "greek";
-		$_SESSION['langLinkText'] = "English";
+		$_SESSION['langLinkText'] = "Αγγλικά";
 		$_SESSION['langLinkURL'] = "?localize=en";
 	}
 	if(session_is_registered('langswitch')) {
