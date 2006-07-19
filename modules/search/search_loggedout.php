@@ -37,9 +37,7 @@
 
 $require_current_course = FALSE;
 $langFiles = array('course_info', 'create_course', 'opencours', 'search');
-
 include '../../include/baseTheme.php';
-
 
 $tool_content = "";
 
@@ -376,7 +374,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 					$tool_content .= "</ul><br><br><br>$langVideoLinks<hr><ul>";
 					
 					//$query = "SELECT * FROM videolinks WHERE url LIKE '%".$search_terms."%' OR titre LIKE '%".$search_terms."%' OR description LIKE '%".$search_terms."%'";
-					$myquery = "SELECT * FROM videolinks WHERE MATCH (url,titre,description)".$query;
+					$myquery = "SELECT * FROM videolinks WHERE MATCH (url,title,description)".$query;
 					$result = mysql_query($myquery);	
 					
 					$c = 0;
@@ -397,7 +395,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
     
 }
 
-draw($tool_content, 2);
+draw($tool_content, 0);
 
 
 //katharisma ths $search_terms gia apofygh lathwn

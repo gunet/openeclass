@@ -35,7 +35,7 @@
 //elegxos ean o xrhsths vrisketai sthn kentrikh selida tou systhmatos xwris na exei kanei login
 if (@empty($uid))
 {	
-	include 'search_loggedout.php';
+include 'search_loggedout.php';
 	
 }else 
 {

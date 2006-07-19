@@ -699,7 +699,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
     
 }//telos anazhthshs (if empty($search_terms) = false)
 
-draw($tool_content, 2);
+draw($tool_content, 0);
 
 
 //katharisma ths $search_terms gia apofygh lathwn
