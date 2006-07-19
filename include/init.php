@@ -241,7 +241,8 @@ if (isset($require_current_course) and $require_current_course) {
 		$currentCourseDepartmentUrlName	= $departmentUrlName;
 	}
 	if (!isset($code_cours) or empty($code_cours)) {
-		exit("This course doesn't exist");
+		$toolContent_ErrorExists = "Το μάθημα δεν υπάρχει. Υπάρχει πρόβλημα στην πλατφόρμα ή εκτελέσατε μια μη επιτρεπτή ενέργεια";
+		$errorMessagePath = "../../";
 	}
 	$fac_lower = strtolower($fac);
 
