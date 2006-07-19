@@ -90,14 +90,14 @@ if (isset($localize)) {
 		case "en":
 
 			$_SESSION['langswitch'] = "english";
-			$_SESSION['langLinkText'] = 'Ελληνικά';
+			$_SESSION['langLinkText'] = 'Greek';
 			$_SESSION['langLinkURL'] = "?localize=el";
 			break;
 
 		case "el":
 
 			$_SESSION['langswitch'] = "greek";
-			$_SESSION['langLinkText'] = 'English';
+			$_SESSION['langLinkText'] = 'Αγγλικά';
 			$_SESSION['langLinkURL'] = "?localize=en";
 			break;
 
@@ -140,11 +140,11 @@ if(session_is_registered('uid') && !session_is_registered('langswitch')) {
 	while ($myrow = mysql_fetch_array($result)) {
 		if ($myrow[0]== "el") {
 			$language = "greek";
-			$_SESSION['langLinkText'] = "English";
+			$_SESSION['langLinkText'] = "Αγγλικά";
 			$_SESSION['langLinkURL'] = "?localize=en";
 		} else {
 			$language = "english";
-			$_SESSION['langLinkText'] = "Ελληνικά";
+			$_SESSION['langLinkText'] = "Greek";
 			$_SESSION['langLinkURL'] = "?localize=el";
 		}
 	}
