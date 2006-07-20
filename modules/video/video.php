@@ -89,7 +89,7 @@ if($is_adminOfCourse) {
 			$url=$URL;
 			$sql = "INSERT INTO video (url,title,description,creator,publisher,date,external_URL) VALUES ('$url','$title','$description','$creator','$publisher','$date','1')";
 			}else{
-				$updir = "$webDir/courses/$currentCourseID/video"; //path to upload directory
+				$updir = "$webDir/video/$currentCourseID/"; //path to upload directory
 				if (($file_name != "") && ($file_size <= $diskQuotaVideo )) {
 			
 					// convert php file in phps to protect the platform against malicious codes
@@ -168,6 +168,7 @@ exit;
 		$myrow = mysql_fetch_array($result);
 		$nom_document=$myrow[0];
 		if($myrow[1]==0)
+			unlink("$webDir/video/$currentCourseID/".$myrow[0]);
 		$sql = "DELETE FROM video WHERE id=$id";
 		$result = db_query($sql,$currentCourseID);
 		$tool_content.="
@@ -273,7 +274,7 @@ if(type==\"URL\")
 						}
 					else
 						{
-						$videoURL="../../courses/$currentCourseID/video/".$myrow[1];
+						$videoURL="../../video/$currentCourseID/".$myrow[1];
 						}
 				}
 				
@@ -419,7 +420,7 @@ else {
 						}
 					else
 						{
-						$videoURL="../../courses/$currentCourseID/video/".$myrow[1];
+						$videoURL="../../video/$currentCourseID/".$myrow[1];
 						}
 				}
 		if($i%2==0) {
