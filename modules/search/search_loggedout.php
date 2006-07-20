@@ -374,7 +374,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 					$tool_content .= "</ul><br><br><br>$langVideoLinks<hr><ul>";
 					
 					//$query = "SELECT * FROM videolinks WHERE url LIKE '%".$search_terms."%' OR titre LIKE '%".$search_terms."%' OR description LIKE '%".$search_terms."%'";
-					$myquery = "SELECT * FROM videolinks WHERE MATCH (url,title,description)".$query;
+					$myquery = "SELECT * FROM videolinks WHERE MATCH (url,titre,description)".$query;
 					$result = mysql_query($myquery);	
 					
 					$c = 0;
