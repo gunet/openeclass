@@ -1021,6 +1021,35 @@ while ($code = mysql_fetch_row($res)) {
 	$tool_content .= add_field_after_field('exercices', 'AttemptsAllowed', 'TimeConstrain', "INT(11)");
 	// End of upgrading EXERCICES table for new func of EXERCISE module
 
+	//---------------------------------------------------------------------
+	// Upgrading VIDEO table for new func of VIDEO module
+	//---------------------------------------------------------------------
+	if (!mysql_field_exists("$code[0]",'video','title'))
+	$tool_content .=rename_field('video','titre','title','varchar(200)');
+	if (!mysql_field_exists("$code[0]",'video','creator'))
+	$tool_content .= add_field_after_field('video', 'creator', 'description', "VARCHAR(255)");
+	if (!mysql_field_exists("$code[0]",'video','publisher'))
+	$tool_content .= add_field_after_field('video', 'publisher', 'creator',"VARCHAR(255)");
+	if (!mysql_field_exists("$code[0]",'video','date'))
+	$tool_content .= add_field_after_field('video', 'date', 'publisher',"DATETIME");
+	if (!mysql_field_exists("$code[0]",'video','external_URL'))
+	$tool_content .= add_field_after_field('video', 'external_URL', 'date',"VARCHAR(255)");
+
+	if (mysql_table_exists("$code[0]", 'video') && mysql_table_exists("$code[0]", 'videolinks'))
+	{
+		$tool_content .=merge_tables('video','videolinks',array('title','description','url','external_URL'),array('titre','description','url', '"1"'));
+		$tool_content .=delete_table('videolinks');
+
+	}
+	if (is_dir("$webDir/$code[0]/video"))
+
+	{
+
+		rename ("$webDir/$code[0]/video", "$webDir/video/$code[0]") or die ("Could not rename 
+		directory"); 
+	}
+	// End of upgrading VIDEO table for new func of VIDEO module
+
 
 	//table accueil -  create new column (define_var)
 	$tool_content .= add_field("accueil","define_var", "VARCHAR(50) NOT NULL");
@@ -1186,7 +1215,7 @@ db_query("ALTER TABLE `exercices` ADD FULLTEXT `exercices` (`titre`,`description
 db_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
 db_query("ALTER TABLE `liens` ADD FULLTEXT `liens` (`url` ,`titre` ,`description`)");
 db_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`title` ,`description`)");
-db_query("ALTER TABLE `videolinks` ADD FULLTEXT `videolinks` (`url` ,`titre` ,`description`)");
+//db_query("ALTER TABLE `videolinks` ADD FULLTEXT `videolinks` (`url` ,`titre` ,`description`)");
 
 
 } // End of 'while' courses
@@ -1295,6 +1324,67 @@ function add_field_after_field($table, $field, $after_field, $type)
 	}
 
 	return $retString;
+}
+function rename_field($table, $field, $new_field, $type)
+{
+	global $OK, $BAD;
+	$retString = "";
+	$retString .= "Μετονομασία πεδίου <b>$field</b> σε <b>$new_field</b> στον πίνακα <b>$table</b>: ";
+	$fields = db_query("SHOW COLUMNS FROM $table LIKE '$new_field'");
+	if (mysql_num_rows($fields) == 0) {
+		if (db_query("ALTER TABLE `$table` CHANGE  `$field` `$new_field` $type")) {
+			$retString .= " $OK<br>";
+		} else {
+			$retString .= " $BAD<br>";
+			$GLOBALS['errors']++;
+		}
+	} else {
+		$retString .= "Υπάρχει ήδη. $OK<br>";
+	}
+	return $retString;
+	
+
+}
+
+function delete_table($table)
+{
+	global $OK, $BAD;
+	$retString = "";
+	$retString .= "Διαγραφή πίνακα <b>$table</b>: ";
+	if (db_query("DROP TABLE $table")) {
+		$retString .= " $OK<br>";
+	} else {
+		$retString .= " $BAD<br>";
+		$GLOBALS['errors']++;
+	}
+	return $retString;
+}
+
+function merge_tables($table_destination,$table_source,$fields_destination,$fields_source)
+{
+	global $OK, $BAD;
+	$retString = "";
+	$retString .= " Ενοποίηση των πινάκων <b>$table_destination</b>,<b>$table_source</b>";
+	$query = "INSERT INTO $table_destination (";
+	foreach($fields_destination as $val)
+	{
+			$query.=$val.",";
+		}
+	$query=substr($query,0,-1).") SELECT ";
+	foreach($fields_source as $val)
+	{
+			$query.=$val.",";
+		}
+	$query=substr($query,0,-1)." FROM ".$table_source;
+		if (db_query($query)) {
+			$retString .= " $OK<br>";
+		} else {
+			$retString .= " $BAD<br>";
+			$GLOBALS['errors']++;
+		}
+	
+	return $retString;
+
 }
 
 // checks if a mysql table exists
