@@ -26,6 +26,7 @@ $langHelp="βοήθεια";
 
 // GENERIC
 
+$langForums="Forums";
 $langModify="αλλαγή";
 $langDelete="διαγραφή";
 $langTitle="Τίτλος";
