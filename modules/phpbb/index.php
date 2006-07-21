@@ -60,15 +60,13 @@ $require_current_course = TRUE;
 $langFiles = 'phpbb';
 $require_help = FALSE;
 include '../../include/baseTheme.php';
+$nameTools = $l_forums;
 $tool_content = "";
 
 /*
  * Tool-specific includes
  */
 include_once("./config.php");
-$nameTools = $l_forums;
-//include("functions.php"); // application logic for phpBB
-//require("auth.php");
 
 /******************************************************************************
  * Actual code starts here

@@ -61,8 +61,8 @@ $require_login = TRUE;
 $langFiles = 'phpbb';
 $require_help = FALSE;
 include '../../include/baseTheme.php';
-$tool_content = "";
 $nameTools = $l_forums;
+$tool_content = "";
 
 /*
  * Tool-specific includes
@@ -74,16 +74,29 @@ include("functions.php"); // application logic for phpBB
  * Actual code starts here
  *****************************************************************************/
 
+/*
+ * First, some decoration
+ */
+if ( $is_adminOfCourse || $is_admin ) {
+        $tool_content .= "<a href=\"../forum_admin/forum_admin.php\">$l_adminpanel</a><P>&nbsp;";
+}
+
+$tool_content .= "<P><a href=\"newtopic.php?forum=$forum\">$langNewTopic</a><P>";
+
+/*
+ * Retrieve and present data from course's forum
+ */
+
 $sql = "SELECT f.forum_type, f.forum_name
 	FROM forums f
 	WHERE forum_id = '$forum'";
-if(!$result = db_query($sql, $currentCourseID)) {
+if (!$result = db_query($sql, $currentCourseID)) {
 	//XXX: Error message in specified language.
 	$tool_content .= "An Error Occured. Could not connect to the forums database.";
 	draw($tool_content, 2);
 	exit;
 }
-if(!$myrow = mysql_fetch_array($result)) {
+if (!$myrow = mysql_fetch_array($result)) {
 	//XXX: Error message in specified language.
 	$tool_content .= "Error - The forum you selected does not exist. Please go back and try again.";
 	draw($tool_content, 2);
@@ -148,7 +161,7 @@ if ($myrow = mysql_fetch_array($result)) {
       list($year, $month, $day) = explode("-", $last_post_date);
       list($hour, $min) = explode(":", $last_post_time);
       $last_post_time = mktime($hour, $min, 0, $month, $day, $year);
-      // XXX: Fix this
+      // XXX: Find last_visit
       if ( !isset($last_visit) ) {
 		$last_visit = 0;
       }
@@ -170,7 +183,7 @@ if ($myrow = mysql_fetch_array($result)) {
       $tool_content .= "<TD><IMG SRC=\"$image\"></TD>\n";
       $topic_title = own_stripslashes($myrow["topic_title"]);
       $pagination = '';
-      $start = ''; //XXX: Here $start becomes empty!
+      $start = '';
       $topiclink = "viewtopic.php?topic=" . $myrow["topic_id"] . "&forum=$forum";
       if($replys+1 > $posts_per_page) {
 	$pagination .= '&nbsp;&nbsp;&nbsp;(<img src=\"' . $posticon . '\">' . $l_gotopage;

@@ -170,7 +170,7 @@ function showfooter($db) {
  * Returns the total number of posts in the whole system, a forum, or a topic
  * Also can return the number of users on the system.
  */ 
-function get_total_posts($id, $db, $type) {
+function get_total_posts($id, $thedb, $type) {
    switch($type) {
     case 'users':
       $sql = "SELECT count(*) AS total FROM users WHERE (user_id != -1) AND (user_level != -1)";
@@ -188,12 +188,12 @@ function get_total_posts($id, $db, $type) {
     case 'user':
       error_die("Should be using the users.user_posts column for this.");
    }
-   if(!$result = mysql_query($sql, $db))
+   if(!$result = db_query($sql, $thedb))
      return("ERROR");
    if(!$myrow = mysql_fetch_array($result))
      return("0");
    
-   return($myrow[total]);
+   return($myrow["total"]);
    
 }
 
