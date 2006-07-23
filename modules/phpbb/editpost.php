@@ -119,7 +119,7 @@ if (isset($submit) && $submit) {
 
 	$message = censor_string($message, $currentCourseID);
 	$message = addslashes($message);
-	if (isset($delete) && !$delete) {
+	if (!isset($delete) || !$delete) {
 		$forward = 1;
 		$topic = $topic_id;
 		$forum = $forum_id;
@@ -157,9 +157,9 @@ if (isset($submit) && $submit) {
 				<BR>
 				<center>$l_stored
 				<ul>$l_click 
-				<a href=\"viewtopic.$phpEx?topic=$topic_id&forum=$forum_id\">$l_here</a> $l_viewmsg
+				<a href=\"viewtopic.php?topic=$topic_id&forum=$forum_id\">$l_here</a> $l_viewmsg
 				<P>
-				$l_click <a href=\"viewforum.$phpEx?forum=$forum_id\">$l_here</a> $l_returntopic
+				$l_click <a href=\"viewforum.php?forum=$forum_id\">$l_here</a> $l_returntopic
 				</ul>
 				</center>
 				<P>
@@ -168,7 +168,7 @@ if (isset($submit) && $submit) {
 		</TD></TR>
 		</TABLE>
 		<br>";
-	} else {
+	 } else {
 		$now_hour = date("H");
 		$now_min = date("i");
 		list($hour, $min) = split(":", $time);
