@@ -94,145 +94,192 @@ if (!does_exists($forum, $currentCourseID, "forum")) {
 	$tool_content .= "The forum you are attempting to post to does not exist. Please try again.";
 }
 
-if ($submit) {
+if (isset($submit) && $submit) {
 	$subject = strip_tags($subject);
 	if (trim($message) == '' || trim($subject) == '') {
 		$tool_content .= $l_emptymsg;
 		draw($tool_content, 2);
 		exit;
 	}
+	if ( !isset($username) ) {
+		$username = "";
+	}
+	$userdata = get_userdata($username, $db);
 	if($forum_access == 3 && $userdata["user_level"] < 2) {
 		$tool_content .= $l_nopost;
 		draw($tool_content, 2);
 		exit;
 	}
-}
-// Either valid user/pass, or valid session. continue with post.. but first:
-// Check that, if this is a private forum, the current user can post here.
-      
-if ($forum_type == 1)
-   {
-	   if (!check_priv_forum_auth($userdata['user_id'], $forum, TRUE, $db))
-	   {
-	 		error_die("$l_privateforum $l_nopost");
-	   }
+	// Either valid user/pass, or valid session. continue with post.. but first:
+	// Check that, if this is a private forum, the current user can post here.
+	      
+	if ($forum_type == 1) {
+		if (!check_priv_forum_auth($userdata['user_id'], $forum, TRUE, $currentCourseID)) {
+			$tool_content .= "$l_privateforum $l_nopost";
+			draw($tool_content, 2);
+			exit();
+		}
 	}
-	
 	$is_html_disabled = false;
-   if($allow_html == 0 || isset($html))
-   {
-     $message = htmlspecialchars($message);
-     $is_html_disabled = true;
-   }
-   
-   if($allow_bbcode == 1 && !($_POST['bbcode']))
-     $message = bbencode($message, $is_html_disabled);
-   
-   // MUST do make_clickable() and smile() before changing \n into <br>.
-   $message = make_clickable($message);
-   if(!$smile) {
-      $message = smile($message);
-   }
-   $message = str_replace("\n", "<BR>", $message);
-   $message = str_replace("<w>", "<s><font color=red>", $message);
+	if ( (isset($allow_html) && $allow_html == 0) || isset($html)) {
+		$message = htmlspecialchars($message);
+		$is_html_disabled = true;
+	}
+	if ( (isset($allow_bbcode) && $allow_bbcode == 1) && !($_POST['bbcode'])) {
+		$message = bbencode($message, $is_html_disabled);
+	}
+	// MUST do make_clickable() and smile() before changing \n into <br>.
+	$message = make_clickable($message);
+	if (isset($smile) && !$smile) {
+		$message = smile($message);
+	}
+	$message = str_replace("\n", "<BR>", $message);
+	$message = str_replace("<w>", "<s><font color=red>", $message);
 	$message = str_replace("</w>", "</font color></s>", $message);
 	$message = str_replace("<r>", "<font color=#0000FF>", $message);
 	$message = str_replace("</r>", "</font color>", $message);
+	$message = censor_string($message, $currentCourseID);
+	$message = addslashes($message);
+	$subject = strip_tags($subject);
+	$subject = censor_string($subject, $currentCourseID);
+	$subject = addslashes($subject);
+	$poster_ip = $REMOTE_ADDR;
+	$time = date("Y-m-d H:i");
+	// ADDED BY Thomas 20.2.2002
+	$nom = addslashes($nom);
+	$prenom = addslashes($prenom);
+	// END ADDED BY THOMAS
 
-   $message = censor_string($message, $db);
-   $message = addslashes($message);
-   $subject = strip_tags($subject);
-   $subject = censor_string($subject, $db);
-   $subject = addslashes($subject);
-   $poster_ip = $REMOTE_ADDR;
-   $time = date("Y-m-d H:i");
+	//to prevent [addsig] from getting in the way, let's put the sig insert down here.
+	if (isset($sig) && $sig && $userdata['user_id'] != -1) {
+		$message .= "\n[addsig]";
+	}
+	$sql = "INSERT INTO topics (topic_title, topic_poster, forum_id, topic_time, topic_notify, nom, prenom)
+			VALUES ('$subject', '" . $userdata["user_id"] . "', '$forum', '$time', 1, '$nom', '$prenom')";
+	if (!$result = db_query($sql, $currentCourseID)) {
+		$tool_content .= "Couldn't enter topic in database.";
+		draw($tool_content, 2);
+		exit();
+	}
 
+	$topic_id = mysql_insert_id();
+	$sql = "INSERT INTO posts (topic_id, forum_id, poster_id, post_time, poster_ip, nom, prenom)
+			VALUES ('$topic_id', '$forum', '$userdata[user_id]', '$time', '$poster_ip', '$nom', '$prenom')";
+	if (!$result = db_query($sql, $currentCourseID)) {
+		$tool_content .= "Couldn't enter post in database.";
+		draw($tool_content, 2);
+		exit();
+	} else {
+		$post_id = mysql_insert_id();
+		if ($post_id) {
+			$sql = "INSERT INTO posts_text (post_id, post_text)
+					VALUES ($post_id, '$message')";
+			if (!$result = db_query($sql, $currentCourseID)) {
+				$tool_content .= "Could not enter post text!";
+				draw($tool_content, 2);
+				exit();
+			}
+			$sql = "UPDATE topics
+				SET topic_last_post_id = $post_id
+				WHERE topic_id = '$topic_id'";
+			if (!$result = db_query($sql, $currentCourseID)) {
+				$tool_content .= "Could not update topics table!";
+				draw($tool_content, 2);
+				exit();
+			}
+		}
+	}
+	if ($userdata["user_id"] != -1 && $userdata["user_id"] != "") {
+		$sql = "UPDATE users
+			SET user_posts=user_posts+1
+			WHERE (user_id = " . $userdata["user_id"] . ")";
+		$result = db_query($sql, $currentCourseID);
+		if (!$result) {
+			$tool_content .= "Couldn't update users post count.";
+			draw($tool_content, 2);
+			exit();
+		}
+	}
 
-   // ADDED BY Thomas 20.2.2002
+	$sql = "UPDATE forums
+		SET forum_posts = forum_posts+1, forum_topics = forum_topics+1, forum_last_post_id = $post_id
+		WHERE forum_id = '$forum'";
+	$result = db_query($sql, $currentCourseID);
+	if (!$result) {
+		$tool_content .= "Couldn't update forums post count.";
+		draw($tool_content, 2);
+		exit();
+	}                              
+	$topic = $topic_id;
+	$total_forum = get_total_topics($forum, $currentCourseID);
+	$total_topic = get_total_posts($topic, $currentCourseID, "topic")-1;  
+	// Subtract 1 because we want the nr of replies, not the nr of posts.
+	$forward = 1;
 
-   $nom = addslashes($nom);
-   $prenom = addslashes($prenom);
-
-   // END ADDED BY THOMAS
-
-   //to prevent [addsig] from getting in the way, let's put the sig insert down here.
-   if($sig && $userdata['user_id'] != -1) {
-      $message .= "\n[addsig]";
-   }
-   $sql = "INSERT INTO topics (topic_title, topic_poster, forum_id, topic_time, topic_notify, nom, prenom)
-   VALUES ('$subject', '$userdata[user_id]', '$forum', '$time', 1, '$nom', '$prenom')";
-
-   if(!$result = mysql_query($sql, $db)) {
-		error_die("Couldn't enter topic in database.");
-   }
-   $topic_id = mysql_insert_id();
-   $sql = "INSERT INTO posts (topic_id, forum_id, poster_id, post_time, poster_ip, nom, prenom)
-   VALUES ('$topic_id', '$forum', '$userdata[user_id]', '$time', '$poster_ip', '$nom', '$prenom')";
-   if(!$result = mysql_query($sql, $db)) {
-		error_die("Couldn't enter post in datbase.");
-   }
-   else
-   {
-   	$post_id = mysql_insert_id();
-   	if($post_id)
-   	{
-   		$sql = "INSERT INTO posts_text (post_id, post_text) values ($post_id, '$message')";
-   		if(!$result = mysql_query($sql, $db)) 
-   		{
-   			error_die("Could not enter post text!");
-   		}
-   		$sql = "UPDATE topics SET topic_last_post_id = $post_id WHERE topic_id = '$topic_id'";
-   		if(!$result = mysql_query($sql, $db)) 
-   		{
-   			error_die("Could not update topics table!");
-   		}
-   	}
-   }
-   			
-   if($userdata[user_id] != -1) {
-      $sql = "UPDATE users SET user_posts=user_posts+1 WHERE (user_id = $userdata[user_id])";
-      $result = mysql_query($sql, $db);
-      if (!$result) {
-			error_die("Couldn't update users post count.");
-      }
-   }
-   $sql = "UPDATE forums SET forum_posts = forum_posts+1, forum_topics = forum_topics+1, forum_last_post_id = $post_id WHERE forum_id = '$forum'";
-   $result = mysql_query($sql, $db);                                                                                             
-   if (!$result) {                                                                                                               
-      error_die("Couldn't update forums post count.");
-   }                              
-   $topic = $topic_id;
-   
-   
-   $total_forum = get_total_topics($forum, $db);
-   $total_topic = get_total_posts($topic, $db, "topic")-1;  
-   // Subtract 1 because we want the nr of replies, not the nr of posts.
-   
-   $forward = 1;
-   include('page_header.php');
-  
-   $tool_content .= "<br><TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACEING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"$tablewidth\">";
-   $tool_content .= "<TR><TD  BGCOLOR=\"$table_bgcolor\"><TABLE BORDER=\"0\" CALLPADDING=\"1\" CELLSPACEING=\"1\" WIDTH=\"100%\">";
-   $tool_content .= "<TR BGCOLOR=\"$color1\" ALIGN=\"LEFT\"><TD><font face=\"arial, helvetica\" size=\"2\"><P>";
-   $tool_content .= "<P><BR><center>$l_stored<P>$l_click <a href=\"viewtopic.php?topic=$topic_id&forum=$forum&$total_topic\">$l_here</a>$l_viewmsg<p>$l_click <a href=\"viewforum.php?forum=$forum_id&total_forum\">$l_here</a> $l_returntopic</center><P></font>";
-   $tool_content .= "</TD></TR></TABLE></TD></TR></TABLE><br>"; 
-   
+	$tool_content .= "<br>
+		<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACEING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"99%\">
+		<TR><TD>
+			<TABLE BORDER=\"0\" CALLPADDING=\"1\" CELLSPACEING=\"1\" WIDTH=\"100%\">
+			<TR><TD>
+				<P>
+				<P>
+				<BR>
+				<center>
+				$l_stored<P>$l_click
+				<a href=\"viewtopic.php?topic=$topic_id&forum=$forum&$total_topic\">$l_here</a>$l_viewmsg
+				<p>
+				$l_click <a href=\"viewforum.php?forum=$forum_id&total_forum\">$l_here</a> $l_returntopic
+				</center>
+				<P>
+			</TD></TR>
+			</TABLE>
+		</TD></TR>
+		</TABLE>
+		<br>"; 
 } else {
-   include('page_header.php');
-
-
-// ADDED BY CLAROLINE: exclude non identified visitors
-if (!$uid AND !$fakeUid){
-	$tool_content .= "<center><br><br><font face=\"arial, helvetica\" size=2>$langLoginBeforePost1<br>$langLoginBeforePost2<a href=../../index.php>$langLoginBeforePost3.</a></center>";
-	draw($tool_content, 0);
-	exit();
+	// ADDED BY CLAROLINE: exclude non identified visitors
+	if (!$uid AND !$fakeUid) {
+		$tool_content .= "
+				<center>
+				<br>
+				<br>
+				$langLoginBeforePost1<br>$langLoginBeforePost2
+				<a href=../../index.php>$langLoginBeforePost3.</a>
+				</center>";
+		draw($tool_content, 0);
+		exit();
+	}
+	// END ADDED BY CLAROLINE exclude visitors unidentified
+	$tool_content .= "
+		<FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
+		<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"99%\">
+		<TR><TD>
+			<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"1\" WIDTH=\"99%\">
+			<TR><TD width=\"20%\">
+				<b>$l_subject:</b>
+			    </TD>
+			    <TD>
+				<INPUT TYPE=\"TEXT\" NAME=\"subject\" SIZE=\"50\" MAXLENGTH=\"100\">
+			    </TD>
+			</TR>
+			<TR><TD width=\"20%\">
+				<b>$l_body:</b>
+				<br>
+				<br>
+			    </TD>
+			    <TD>
+				<TEXTAREA NAME=\"message\" ROWS=14 COLS=50 WRAP=\"VIRTUAL\"></TEXTAREA>
+			    </TD>
+			</TR>
+			<TR><TD colspan=2 ALIGN=\"CENTER\">
+				<INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
+				<INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">&nbsp;
+				<INPUT TYPE=\"SUBMIT\" NAME=\"cancel\" VALUE=\"$l_cancelpost\">
+			</TD></TR>
+			</TABLE>
+		</TD></TR>
+		</TABLE>
+		</FORM>";
 }
-
-// END ADDED BY CLAROLINE exclude visitors unidentified
-
-$tool_content .= "<FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\"><TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"$tablewidth\"><TR><TD  BGCOLOR=\"$table_bgcolor\"><TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"1\" WIDTH=\"99%\"><TR ALIGN=\"LEFT\"><TD  BGCOLOR=\"$color1\" width=\"20%\"><font size=\"$FontSize2\" face=\"$FontFace\"><b>$l_subject:</b></TD><TD  BGCOLOR=\"$color2\"><INPUT TYPE=\"TEXT\" NAME=\"subject\" SIZE=\"50\" MAXLENGTH=\"100\"></TD></TR><TR ALIGN=\"LEFT\"><TD  valign=top BGCOLOR=\"$color1\" width=\"20%\"><font size=\"$FontSize2\" face=\"$FontFace\"><b>$l_body:</b><br><br></font></TD><TD  BGCOLOR=\"$color2\"><TEXTAREA NAME=\"message\" ROWS=14 COLS=50 WRAP=\"VIRTUAL\"></TEXTAREA></TD></TR><TR><TD  BGCOLOR=\"$color1\" colspan=2 ALIGN=\"CENTER\"><font size=\"$FontSize2\" face=\"$FontFace\"><INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\"><INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">&nbsp;<INPUT TYPE=\"SUBMIT\" NAME=\"cancel\" VALUE=\"$l_cancelpost\"></TD></TR></TABLE></TD></TR></TABLE></FORM>";
-
-}
-require('page_tail.php');
 draw($tool_content, 2);
 ?>
