@@ -128,20 +128,15 @@ if (isset($submit) && $submit) {
 	if ( (isset($allow_bbcode) && $allow_bbcode == 1) && !($_POST['bbcode'])) {
 		$message = bbencode($message, $is_html_disabled);
 	}
-	// MUST do make_clickable() and smile() before changing \n into <br>.
+	// MUST do make_clickable() before changing \n into <br>.
 	$message = make_clickable($message);
-	if (isset($smile) && !$smile) {
-		$message = smile($message);
-	}
 	$message = str_replace("\n", "<BR>", $message);
 	$message = str_replace("<w>", "<s><font color=red>", $message);
 	$message = str_replace("</w>", "</font color></s>", $message);
 	$message = str_replace("<r>", "<font color=#0000FF>", $message);
 	$message = str_replace("</r>", "</font color>", $message);
-	$message = censor_string($message, $currentCourseID);
 	$message = addslashes($message);
 	$subject = strip_tags($subject);
-	$subject = censor_string($subject, $currentCourseID);
 	$subject = addslashes($subject);
 	$poster_ip = $REMOTE_ADDR;
 	$time = date("Y-m-d H:i");
@@ -164,7 +159,7 @@ if (isset($submit) && $submit) {
 
 	$topic_id = mysql_insert_id();
 	$sql = "INSERT INTO posts (topic_id, forum_id, poster_id, post_time, poster_ip, nom, prenom)
-			VALUES ('$topic_id', '$forum', '$userdata[user_id]', '$time', '$poster_ip', '$nom', '$prenom')";
+			VALUES ('$topic_id', '$forum', '" . $userdata["user_id"] . "', '$time', '$poster_ip', '$nom', '$prenom')";
 	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= "Couldn't enter post in database.";
 		draw($tool_content, 2);
@@ -189,18 +184,6 @@ if (isset($submit) && $submit) {
 			}
 		}
 	}
-	if ($userdata["user_id"] != -1 && $userdata["user_id"] != "") {
-		$sql = "UPDATE users
-			SET user_posts=user_posts+1
-			WHERE (user_id = " . $userdata["user_id"] . ")";
-		$result = db_query($sql, $currentCourseID);
-		if (!$result) {
-			$tool_content .= "Couldn't update users post count.";
-			draw($tool_content, 2);
-			exit();
-		}
-	}
-
 	$sql = "UPDATE forums
 		SET forum_posts = forum_posts+1, forum_topics = forum_topics+1, forum_last_post_id = $post_id
 		WHERE forum_id = '$forum'";

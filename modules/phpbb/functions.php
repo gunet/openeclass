@@ -135,26 +135,6 @@ function get_last_post($id, $thedb, $type) {
    return($val);
 }
 
-/**
- * Nathan Codding, July 19/2000
- * Get a user's data, given their user ID. 
- */
-
-function get_userdata_from_id($userid, $db) {
-	
-	$sql = "SELECT * FROM users WHERE user_id = $userid";
-	if(!$result = mysql_query($sql, $db)) {
-		$userdata = array("error" => "1");
-		return ($userdata);
-	}
-	if(!$myrow = mysql_fetch_array($result)) {
-		$userdata = array("error" => "1");
-		return ($userdata);
-	}
-	
-	return($myrow);
-}
-
 /* 
  * Gets user's data based on their username
  */

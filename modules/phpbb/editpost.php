@@ -94,7 +94,6 @@ if (isset($submit) && $submit) {
 	$topic_id = $myrow["topic_id"];
 	$this_post_time = $myrow["post_time"];
 	list($day, $time) = split(" ", $myrow["post_time"]);
-	$posterdata = get_userdata_from_id($poster_id, $db);
 	$date = date("Y-m-d H:i");
 
 	// IF we made it this far we are allowed to edit this message, yay!
@@ -106,10 +105,7 @@ if (isset($submit) && $submit) {
 	if ( isset($allow_bbcode) && $allow_bbcode == 1 && !isset($bbcode)) {
 		$message = bbencode($message, $is_html_disabled);
 	}
-	if (isset($smile) && !$smile) {
-		$message = smile($message);
-	}
-	// MUST do make_clickable() (and smile()) before changing \n into <br>.
+	// MUST do make_clickable() before changing \n into <br>.
 	$message = make_clickable($message);
 	$message = str_replace("\n", "<BR>", $message);
 	$message = str_replace("<w>", "<s><font color=red>", $message);
@@ -117,7 +113,6 @@ if (isset($submit) && $submit) {
 	$message = str_replace("<r>", "<font color=#0000FF>", $message);
 	$message = str_replace("</r>", "</font color>", $message);
 
-	$message = censor_string($message, $currentCourseID);
 	$message = addslashes($message);
 	if (!isset($delete) || !$delete) {
 		$forward = 1;
@@ -138,7 +133,6 @@ if (isset($submit) && $submit) {
 			} else {
 				$notify = 1;
 			}
-			$subject = censor_string($subject, $currentCourseID);
 			$subject = addslashes($subject);
 			$sql = "UPDATE topics
 				SET topic_title = '$subject', topic_notify = '$notify'
@@ -316,7 +310,6 @@ if (isset($submit) && $submit) {
 	$message = eregi_replace("\[addsig]$", "\n_________________\n" . $myrow["user_sig"], $message);   
 	$message = str_replace("<BR>", "\n", $message);
 	$message = stripslashes($message);
-	$message = desmile($message);
 	$message = bbdecode($message);
 	$message = undo_make_clickable($message);
 	$message = undo_htmlspecialchars($message);

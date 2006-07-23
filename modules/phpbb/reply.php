@@ -164,17 +164,13 @@ if (isset($submit) && $submit) {
 	if ( (isset($allow_bbcode) && $allow_bbcode == 1) && !isset($bbcode)) {
 		$message = bbencode($message, $is_html_disabled);
 	}
-	// MUST do make_clickable() and smile() before changing \n into <br>.
+	// MUST do make_clickable() before changing \n into <br>.
 	$message = make_clickable($message);
-	if (isset($smile) && !$smile) {
-		$message = smile($message);
-	}
 	$message = str_replace("\n", "<BR>", $message);
 	$message = str_replace("<w>", "<s><font color=red>", $message);
 	$message = str_replace("</w>", "</font color></s>", $message);
 	$message = str_replace("<r>", "<font color=#0000FF>", $message);
 	$message = str_replace("</r>", "</font color>", $message);
-	$message = censor_string($message, $currentCourseID);
 	$message = addslashes($message);
 	$time = date("Y-m-d H:i");
 	// ADDED BY Thomas 20.2.2002
@@ -183,11 +179,11 @@ if (isset($submit) && $submit) {
 	// END ADDED BY THOMAS
 
 	//to prevent [addsig] from getting in the way, let's put the sig insert down here.
-	if (isset($sig) && $sig && $userdata[user_id] != -1) {
+	if (isset($sig) && $sig && $userdata["user_id"] != -1) {
 		$message .= "\n[addsig]";
 	}
 	$sql = "INSERT INTO posts (topic_id, forum_id, poster_id, post_time, poster_ip, nom, prenom)
-			VALUES ('$topic', '$forum', '$userdata[user_id]','$time', '$poster_ip', '$nom', '$prenom')";
+			VALUES ('$topic', '$forum', '" . $userdata["user_id"] . "','$time', '$poster_ip', '$nom', '$prenom')";
 	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= "Error - Could not enter data into the database. Please go back and try again";
 		draw($tool_content, 2);
@@ -209,17 +205,6 @@ if (isset($submit) && $submit) {
 		$tool_content .= "Error - Could not enter data into the database. Please go back and try again";
 		draw($tool_content, 2);
 		exit();
-	}
-	if ($userdata["user_id"] != -1) {
-		$sql = "UPDATE users
-			SET user_posts=user_posts+1 
-			WHERE (user_id = " . $userdata["user_id"] . ")";
-		$result = db_query($sql, $currentCourseID);
-		if (!$result) {
-			$tool_content .= "Error updating user post count.";
-			draw($tool_content, 2);
-			exit();
-		}
 	}
 	$sql = "UPDATE forums 
 		SET forum_posts = forum_posts+1, forum_last_post_id = '$this_post' 
@@ -291,27 +276,6 @@ cData;
 		draw($tool_content, 2);
 		exit();
 	} else {
-		if (isset($logging_in) && $logging_in) {
-			if ($username == '' || $password == '') {
-				$tool_content .= $l_userpass;
-				draw($tool_content, 2);
-				exit();
-			}
-			if (!check_username($username, $db)) {
-				$tool_content .= $l_nouser;
-				draw($tool_content, 2);
-				exit();
-			}
-			if (!check_user_pw($username, $password, $db)) {
-				$tool_content .= $l_wrongpass;
-				draw($tool_content, 2);
-				exit();
-			}
-			/* if we get here, user has entered a valid username and password combination. */
-			$userdata = get_userdata($username, $db);
-			$sessid = new_session($userdata[user_id], $REMOTE_ADDR, $sesscookietime, $db);	
-			set_session_cookie($sessid, $sesscookietime, $sesscookiename, $cookiepath, $cookiedomain, $cookiesecure);
-		}
 		// ADDED BY CLAROLINE: exclude non identified visitors
 		if (!$uid AND !$fakeUid) {
 			$tool_content .= "<center><br><br>$langLoginBeforePost1<br>";
@@ -343,7 +307,7 @@ cData;
 			WHERE p.post_id = '$post' AND p.poster_id = u.user_id AND pt.post_id = p.post_id";
 		if ($r = db_query($sql, $currentCourseID)) {
 			$m = mysql_fetch_array($r);
-			$text = desmile($m["post_text"]);
+			$text = $m["post_text"];
 			$text = str_replace("<BR>", "\n", $text);
 			$text = stripslashes($text);
 			$text = bbdecode($text);
