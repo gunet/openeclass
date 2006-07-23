@@ -1,125 +1,62 @@
 <?php
-/***************************************************************************
-                           functions.php  -  description
-                             -------------------
-    begin                : Sat June 17 2000
-    copyright            : (C) 2001 The phpBB Group
-    email                : support@phpbb.com
+/**=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        A full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
 
-    $Id$
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
 
- ***************************************************************************/
+/**===========================================================================
+        phpbb/functions.php
+        @last update: 2006-07-23 by Artemios G. Voyiatzis
+        @authors list: Artemios G. Voyiatzis <bogart@upnet.gr>
 
-/***************************************************************************
- *                                         				                                
- *   This program is free software; you can redistribute it and/or modify  	
- *   it under the terms of the GNU General Public License as published by  
- *   the Free Software Foundation; either version 2 of the License, or	    	
- *   (at your option) any later version.
- *
- ***************************************************************************/
+        based on Claroline version 1.7 licensed under GPL
+              copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
 
-/**
- * Start session-management functions - Nathan Codding, July 21, 2000.
- */
+        Claroline authors: Piraux Sébastien <pir@cerdecam.be>
+                      Lederer Guillaume <led@cerdecam.be>
 
-/**
- * new_session()
- * Adds a new session to the database for the given userid.
- * Returns the new session ID.
- * Also deletes all expired sessions from the database, based on the given session lifespan.
- */
-function new_session($userid, $remote_ip, $lifespan, $db) {
+	based on phpBB version 1.4.1 licensed under GPL
+		copyright (c) 2001, The phpBB Group
+==============================================================================
+    @Description: This module implements a per course forum for supporting
+	discussions between teachers and students or group of students.
+	It is a heavily modified adaptation of phpBB for (initially) Claroline
+	and (later) eclass. In the future, a new forum should be developed.
+	Currently we use only a fraction of phpBB tables and functionality
+	(viewforum, viewtopic, post_reply, newtopic); the time cost is
+	enormous for both core phpBB code upgrades and migration from an
+	existing (phpBB-based) to a new eclass forum :-(
 
-	mt_srand((double)microtime()*1000000);
-	$sessid = mt_rand();
-      
-	$currtime = (string) (time());
-	$expirytime = (string) (time() - $lifespan);
+    @Comments:
 
-	$deleteSQL = "DELETE FROM sessions WHERE (start_time < $expirytime)";
-	$delresult = mysql_query($deleteSQL, $db);
+    @todo:
+==============================================================================
+*/
 
-	if (!$delresult) {
-		$tool_content .= "Delete failed in new_session()";
-		draw($tool_content, 2);
-		exit();
-	}
+error_reporting(E_ALL);
 
-	$sql = "INSERT INTO sessions (sess_id, user_id, start_time, remote_ip) VALUES ($sessid, $userid, $currtime, '$remote_ip')";
-	
-	$result = mysql_query($sql, $db);
-	
-	if ($result) {
-		return $sessid;
-	} else {
-		echo mysql_errno().": ".mysql_error()."<BR>";
-		error_die("Insert failed in new_session()");
-	} // if/else
-
-} // new_session()
-
-/**
- * Sets the sessID cookie for the given session ID. the $cookietime parameter
- * is no longer used, but just hasn't been removed yet. It'll break all the modules
- * (just login) that call this code when it gets removed. 
- * Sets a cookie with no specified expiry time. This makes the cookie last until the
- * user's browser is closed. (at last that's the case in IE5 and NS4.7.. Haven't tried
- * it with anything else.)
- */
-function set_session_cookie($sessid, $cookietime, $cookiename, $cookiepath, $cookiedomain, $cookiesecure) {
-
-	// This sets a cookie that will persist until the user closes their browser window.
-	// since session expiry is handled on the server-side, cookie expiry time isn't a big deal.
-	setcookie($cookiename,$sessid,'',$cookiepath,$cookiedomain,$cookiesecure);
-
-} // set_session_cookie()
-
-
-/**
- * Returns the userID associated with the given session, based on
- * the given session lifespan $cookietime and the given remote IP
- * address. If no match found, returns 0.
- */
-function get_userid_from_session($sessid, $cookietime, $remote_ip, $db) {
-
-	$mintime = time() - $cookietime;
-	$sql = "SELECT user_id FROM sessions WHERE (sess_id = $sessid) AND (start_time > $mintime) AND (remote_ip = '$remote_ip')";
-	$result = mysql_query($sql, $db);
-	if (!$result) {
-		echo mysql_error() . "<br>\n";
-		error_die("Error doing DB query in get_userid_from_session()");
-	}
-	$row = mysql_fetch_array($result);
-	
-	if (!$row) {
-		return 0;
-	} else {
-		return $row[user_id];
-	}
-	
-} // get_userid_from_session()
-
-/**
- * Refresh the start_time of the given session in the database.
- * This is called whenever a page is hit by a user with a valid session.
- */
-function update_session_time($sessid, $db) {
-	
-	$newtime = (string) time();
-	$sql = "UPDATE sessions SET start_time=$newtime WHERE (sess_id = $sessid)";
-	$result = mysql_query($sql, $db);
-	if (!$result) {
-		echo mysql_error() . "<br>\n";
-		error_die("Error doing DB update in update_session_time()");
-	}
-	return 1;
-
-} // update_session_time()
-
-/**
- * End session-management functions
- */
+/******************************************************************************
+ * Actual code starts here
+ *****************************************************************************/
 
 /*
  * Gets the total number of topics in a form
@@ -134,39 +71,6 @@ function get_total_topics($forum_id, $thedb) {
 	
 	return($myrow["total"]);
 }
-/*
- * Shows the 'header' data from the header/meta/footer table
- */
-function showheader($db) {
-        $sql = "SELECT header FROM headermetafooter";
-        if($result = mysql_query($sql, $db)) {
-	        if($header = mysql_fetch_array($result)) {
-		        echo stripslashes($header[header]);
-		}
-	}
-}
-/*
- * Shows the meta information from the header/meta/footer table
- */
-function showmeta($db) {
-        $sql = "SELECT meta FROM headermetafooter";
-        if($result = mysql_query($sql, $db)) {
-	        if($meta = mysql_fetch_array($result)) {
-	                echo stripslashes($meta[meta]);
-		}
-	}
-}
-/*
- * Show the footer from the header/meta/footer table
- */
-function showfooter($db) {
-        $sql = "SELECT footer FROM headermetafooter";
-        if($result = mysql_query($sql, $db)) {
-	        if($footer = mysql_fetch_array($result)) {
-		        $tool_content .= stripslashes($footer[footer]);
-		}
-	}
-} 
 
 /*
  * Returns the total number of posts in the whole system, a forum, or a topic
@@ -232,39 +136,6 @@ function get_last_post($id, $thedb, $type) {
 }
 
 /**
- * Nathan Codding - July 19, 2000
- * Checks the given password against the DB for the given username. Returns true if good, false if not.
- */
-function check_user_pw($username, $password, $db) {
-	$password = md5($password);
-	$username = addslashes($username);
-	$sql = "SELECT user_id FROM users WHERE (username = '$username') AND (user_password = '$password')";
-	$resultID = mysql_query($sql, $db);
-	if (!$resultID) {
-		echo mysql_error() . "<br>";
-		error_die("Error doing DB query in check_user_pw()");
-	}
-	return mysql_num_rows($resultID);
-} // check_user_pw()
-
-
-/**
- * Nathan Codding - July 19, 2000
- * Checks if a given username exists in the DB. Returns true if so, false if not.
- */
-function check_username($username, $db) {
-	$username = addslashes($username);
-	$sql = "SELECT user_id FROM users WHERE (username = '$username') AND (user_level != '-1')";
-	$resultID = mysql_query($sql);
-	if (!$resultID) {
-		echo mysql_error() . "<br>";
-		error_die("Error doing DB query in check_username()");
-	}
-	return mysql_num_rows($resultID);
-} // check_username()
-
-
-/**
  * Nathan Codding, July 19/2000
  * Get a user's data, given their user ID. 
  */
@@ -299,18 +170,6 @@ function get_userdata($username, $db) {
 }
 
 /*
- * Returns all the rows in the themes table
- */
-function setuptheme($theme, $db) {
-	$sql = "SELECT * FROM themes WHERE theme_id = '$theme'";
-	if(!$result = mysql_query($sql, $db))
-		return(0);
-	if(!$myrow = mysql_fetch_array($result))
-		return(0);
-	return($myrow);
-}
-
-/*
  * Checks if a forum or a topic exists in the database. Used to prevent
  * users from simply editing the URL to post to a non-existant forum or topic
  */
@@ -328,68 +187,6 @@ function does_exists($id, $thedb, $type) {
 	if(!$myrow = mysql_fetch_array($result)) 
 		return(0);
 	return(1);
-}
-
-/*
- * Checks if a topic is locked
- */
-function is_locked($topic, $thedb) {
-	$sql = "SELECT topic_status FROM topics WHERE topic_id = '$topic'";
-	if(!$r = db_query($sql, $thedb))
-		return(FALSE);
-	if(!$m = mysql_fetch_array($r))
-		return(FALSE);
-	if($m["topic_status"] == 1)
-		return(TRUE);
-	else
-		return(FALSE);
-}
-
-/*
- * Changes :) to an <IMG> tag based on the smiles table in the database.
- *
- * Smilies must be either: 
- * 	- at the start of the message.
- * 	- at the start of a line.
- * 	- preceded by a space or a period.
- * This keeps them from breaking HTML code and BBCode.
- * TODO: Get rid of global variables.
- */
-function smile($message) {
-   global $db, $url_smiles;
-   
-   // Pad it with a space so the regexp can match.
-   $message = ' ' . $message;
-   
-   if ($getsmiles = mysql_query("SELECT *, length(code) as length FROM smiles ORDER BY length DESC"))
-   {
-      while ($smiles = mysql_fetch_array($getsmiles)) 
-      {
-			$smile_code = preg_quote($smiles[code]);
-			$smile_code = str_replace('/', '//', $smile_code);
-			$message = preg_replace("/([\n\\ \\.])$smile_code/si", '\1<IMG SRC="' . $url_smiles . '/' . $smiles[smile_url] . '">', $message);
-      }
-   }
-   
-   // Remove padding, return the new string.
-   $message = substr($message, 1);
-   return($message);
-}
-
-/*
- * Changes a Smiliy <IMG> tag into its corresponding smile
- * TODO: Get rid of golbal variables, and implement a method of distinguishing between :D and :grin: using the <IMG> tag
- */
-function desmile($message) {
-   // Ick Ick Global variables...remind me to fix these! - theFinn
-   global $db, $url_smiles;
-   
-   if ($getsmiles = mysql_query("SELECT * FROM smiles")){
-      while ($smiles = mysql_fetch_array($getsmiles)) {
-	 $message = str_replace("<IMG SRC=\"$url_smiles/$smiles[smile_url]\">", $smiles[code], $message);
-      }
-   }
-   return($message);
 }
 
 /**
@@ -517,6 +314,7 @@ function bbdecode($message) {
 
 		return($message);
 }
+
 /**
  * James Atkinson - Feb 5, 2001
  * This function does exactly what the PHP4 function array_push() does
@@ -923,20 +721,6 @@ function escape_slashes($input)
 	return $output;
 }
 
-/*
- * Returns the name of the forum based on ID number
- */
-function get_forum_name($forum_id, $db) {
-	$sql = "SELECT forum_name FROM forums WHERE forum_id = '$forum_id'";
-	if(!$r = mysql_query($sql, $db))
-		return("ERROR");
-	if(!$m = mysql_fetch_array($r))
-		return("None");
-	return($m[forum_name]);
-}
-
-
-
  /**
  * Rewritten by Nathan Codding - Feb 6, 2001.
  * - Goes through the given string, and replaces xxxx://yyyy with an HTML <a> tag linking
@@ -1028,26 +812,6 @@ function is_first_post($topic_id, $post_id, $thedb) {
      return(0);
 }
 
-/*
- * Replaces banned words in a string with their replacements
- */
-function censor_string($string, $thedb) {
-   $sql = "SELECT word, replacement FROM words";
-   if(!$r = db_query($sql, $thedb)) {
-	$tool_content .= "Error, could not contact the database! Please check your database settings in config.php";
-	draw($tool_content, 2);
-	exit();
-   }
-   while($w = mysql_fetch_array($r)) {
-      $word = quotemeta(stripslashes($w[word]));
-      $replacement = stripslashes($w[replacement]);
-      $string = eregi_replace(" $word", " $replacement", $string);
-      $string = eregi_replace("^$word", "$replacement", $string);
-      $string = eregi_replace("<BR>$word", "<BR>$replacement", $string);
-   }
-   return($string);
-}
-
 /**
  * Checks if the given userid is allowed to log into the given (private) forumid.
  * If the "is_posting" flag is true, checks if the user is allowed to post to that forum.
@@ -1109,102 +873,10 @@ function error_die($msg){
 	exit();
 }
 
-function make_jumpbox(){
-global $db;
-global $FontFace, $FontSize2, $textcolor;
-global $l_jumpto, $l_selectforum, $l_go;
-
-	?>
-	<FORM ACTION="viewforum.php" METHOD="GET">
-	<SELECT NAME="forum"><OPTION VALUE="-1"><?php echo $l_selectforum?></OPTION>
-	<?php
-	  $sql = "SELECT cat_id, cat_title FROM catagories ORDER BY cat_order";
-	if($result = mysql_query($sql, $db)) {
-	   $myrow = mysql_fetch_array($result);
-	   do {
-	      echo "<OPTION VALUE=\"-1\">&nbsp;</OPTION>\n";
-	      echo "<OPTION VALUE=\"-1\">$myrow[cat_title]</OPTION>\n";
-	      echo "<OPTION VALUE=\"-1\">----------------</OPTION>\n";
-	      $sub_sql = "SELECT forum_id, forum_name FROM forums WHERE cat_id =
-	'$myrow[cat_id]' ORDER BY forum_id";
-	      if($res = mysql_query($sub_sql, $db)) {
-	    if($row = mysql_fetch_array($res)) {
-	       do {
-		  $name = stripslashes($row[forum_name]);
-		  echo "<OPTION VALUE=\"$row[forum_id]\">$name</OPTION>\n";
-	       } while($row = mysql_fetch_array($res));
-	    }
-	    else {
-	       echo "<OPTION VALUE=\"0\">No More Forums</OPTION>\n";
-	    }
-	      }
-	      else {
-	    echo "<OPTION VALUE=\"0\">Error Connecting to DB</OPTION>\n";
-	      }
-	   } while($myrow = mysql_fetch_array($result));
-	}
-	else {
-	   echo "<OPTION VALUE=\"-1\">ERROR</OPTION>\n";
-	}
-	echo "</SELECT>\n<INPUT TYPE=\"SUBMIT\" VALUE=\"$l_go\">\n</FORM>";
-}
-
-function language_select($default, $name="language", $dirname="language/"){
-	$dir = opendir($dirname);
-	$lang_select = "<SELECT NAME=\"$name\">\n";
-	while ($file = readdir($dir)) {
-		if (ereg("^lang_", $file)) {
-			$file = str_replace("lang_", "", $file);
-			$file = str_replace(".php", "", $file);
-			$file == $default ? $selected = " SELECTED" : $selected = "";
-			$lang_select .= "  <OPTION$selected>$file\n";
-		}
-	}
-	$lang_select .= "</SELECT>\n";
-	closedir($dir);
-	return $lang_select;
-
-}
-
-function get_translated_file($file){
-	global $default_lang;
-	
-	// Try adding -default_lang to the filename. i.e.:
-	// reply.jpg  becomes something like  reply-nederlands.jpg
-	$trans_file = preg_replace("/(.*)(\..*?)/", "\\1-$default_lang\\2", $file);
-	if(is_file($trans_file)){
-		return $trans_file;
-	} else {
-		return $file;
-	}
-}
-
 function get_syslang_string($sys_lang, $string) {
 	include('language/lang_' . $sys_lang . '.php');
 	$ret_string = $$string;
 	return($ret_string);
-}
-
-
-/**
- * Translates any sequence of whitespace (\t, \r, \n, or space) in the given
- * string into a single space character.
- * Returns the result.
- */
-function normalize_whitespace($str)
-{
-	$output = "";
-	
-	$tok = preg_split("/[ \t\r\n]+/", $str);
-	$tok_count = sizeof($tok);
-	for ($i = 0; $i < ($tok_count - 1); $i++)
-	{
-		$output .= $tok[$i] . " ";
-	}
-	
-	$output .= $tok[$tok_count - 1];
-      
-	return $output;
 }
 
 function sync($thedb, $id, $type) {
@@ -1240,7 +912,9 @@ function sync($thedb, $id, $type) {
    			$total_topics = $row["total"];
    		}
    		
-   		$sql = "UPDATE forums SET forum_last_post_id = '$last_post', forum_posts = $total_posts, forum_topics = $total_topics WHERE forum_id = $id";
+   		$sql = "UPDATE forums
+			SET forum_last_post_id = '$last_post', forum_posts = $total_posts, forum_topics = $total_topics
+			WHERE forum_id = $id";
    		if(!$result = db_query($sql, $thedb))
    		{
    			error_die("Could not update forum $id");
@@ -1303,76 +977,6 @@ function sync($thedb, $id, $type) {
    return(TRUE);
 }
 
-function login_form(){
-	global $TableWidth, $table_bgcolor, $color1, $color2, $textcolor;
-	global $FontFace, $FontSize2;
-	global $userdata, $PHP_SELF;
-	global $l_userpass, $l_username, $l_password, $l_passwdlost, $l_submit;
-	global $mode, $msgid;
-
-?>
-<FORM ACTION="<?php echo $PHP_SELF?>" METHOD="POST">
-<TABLE BORDER="0" CELLPADDING="1" CELLSPACING="0" ALIGN="CENTER" VALIGN="TOP">
-<TR><TD BGCOLOR="<?php echo $table_bgcolor?>">
-<TABLE BORDER="0" CELLPADDING="10" CELLSPACING="1" WIDTH="100%">
-	<TR BGCOLOR="<?php echo $color1?>" ALIGN="CENTER">
-  		<TD COLSPAN="2">
-			<FONT FACE="<?php echo $FontFace?>" SIZE="<?php echo $FontSize2?>" COLOR="<?php echo $textcolor?>">
-  			<b><?php echo $l_userpass?></b>
-			</FONT>
-			<br>
-		</TD>
-	</TR><TR BGCOLOR="<?php echo $color2?>">
-		<TD>
-			<FONT FACE="<?php echo $FontFace?>" SIZE="<?php echo $FontSize2?>" COLOR="<?php echo $textcolor?>">
-			<b><?php echo $l_username?>: &nbsp;</b></font>
-			</FONT>
-		</TD>
-		<TD>
-			<INPUT TYPE="TEXT" NAME="user" SIZE="25" MAXLENGTH="40" VALUE="<?php echo $userdata[username]?>">
-		</TD>
-	</TR><TR BGCOLOR="<?php echo $color2?>">
-		<TD>
-			<FONT FACE="<?php echo $FontFace?>" SIZE="<?php echo $FontSize2?>" COLOR="<?php echo $textcolor?>">
-			<b><?php echo $l_password?>: </b>
-			</FONT>
-		</TD><TD>
-			<INPUT TYPE="PASSWORD" NAME="passwd" SIZE="25" MAXLENGTH="25">
-		</TD>
-	</TR><TR BGCOLOR="<?php echo $color2?>">
-		<TD COLSPAN="2" ALIGN="CENTER">
-			<FONT FACE="<?php echo $FontFace?>" SIZE="<?php echo $FontSize2?>" COLOR="<?php echo $textcolor?>">
-			<a href="sendpassword.php"><?php echo $l_passwdlost?></a><br><br>
-			</FONT>
-			<?PHP
-			if (isset($mode))
-			{ 
-			?>
-				<INPUT TYPE="HIDDEN" NAME="mode" VALUE="<?php echo $mode?>">
-			<?PHP		
-			}
-			?>
-			<?PHP
-			// Need to pass through the msgid for deleting private messages.
-			if (isset($msgid))
-			{ 
-			?>
-				<INPUT TYPE="HIDDEN" NAME="msgid" VALUE="<?php echo $msgid?>">
-			<?PHP		
-			}
-			?>
-			<INPUT TYPE="SUBMIT" NAME="submit" VALUE="<?php echo $l_submit?>">
-		</TD>
-	</TR>
-</TABLE>
-</TD></TR>
-</TABLE>
-</FORM>
-
-
-<?php
-}
-
 /**
  * Less agressive version of stripslashes. Only replaces \\ \' and \"
  * The PHP stripslashes() also removed single backslashes from the string.
@@ -1393,5 +997,4 @@ function own_stripslashes($string)
             '"');   // "
    return preg_replace($find, $replace, $string);
 }
-
 ?>
