@@ -94,13 +94,13 @@ if (!$result = db_query($sql, $currentCourseID)) {
 	//XXX: Error message in specified language.
 	$tool_content .= "An Error Occured. Could not connect to the forums database.";
 	draw($tool_content, 2);
-	exit;
+	exit();
 }
 if (!$myrow = mysql_fetch_array($result)) {
 	//XXX: Error message in specified language.
 	$tool_content .= "Error - The forum you selected does not exist. Please go back and try again.";
 	draw($tool_content, 2);
-	exit;
+	exit();
 }
 $forum_name = own_stripslashes($myrow["forum_name"]);
 
@@ -145,7 +145,7 @@ if(!$result = db_query($sql, $currentCourseID)) {
 cData;
 	$tool_content .= "An Error Occured. Could not query the topics database.<br>$sql";
 	draw($tool_content, 2);
-	exit;
+	exit();
 }
 
 $topics_start = $start;

@@ -81,13 +81,13 @@ if (!$result = db_query($sql, $currentCourseID)) {
 	//XXX: Error message in specified language.
 	$tool_content .= "An Error Occured. Could not connect to the forums database.";
 	draw($tool_content, 2);
-	exit;
+	exit();
 }
 if (!$myrow = mysql_fetch_array($result)) {
 	//XXX: Error message in specified language.
 	$tool_content .= "Error - The forum/topic you selected does not exist. Please go back and try again.";
 	draw($tool_content, 2);
-	exit;
+	exit();
 }
 $forum_name = own_stripslashes($myrow["forum_name"]);
 
@@ -107,7 +107,7 @@ if ($total > $posts_per_page) {
 if (!$result = db_query($sql, $currentCourseID)) {
 	$tool_content .= "An Error Occured. Could not connect to the forums database.";
 	draw($tool_content, 2);
-	exit;
+	exit();
 }
 $myrow = mysql_fetch_array($result);
 $topic_subject = own_stripslashes($myrow["topic_title"]);
@@ -164,7 +164,7 @@ if (isset($start)) {
 if (!$result = db_query($sql, $currentCourseID)) {
 	$tool_content .= "An Error Occured. Could not connect to the Posts database. $sql";
 	draw($tool_content, 2);
-	exit;
+	exit();
 }
 $myrow = mysql_fetch_array($result);
 $row_color = $color2;

@@ -202,7 +202,7 @@ function get_total_posts($id, $thedb, $type) {
 /*
  * Returns the most recent post in a forum, or a topic
  */
-function get_last_post($id, $db, $type) {
+function get_last_post($id, $thedb, $type) {
    global $l_error, $l_noposts, $l_by;
    switch($type) {
     case 'time_fix':
@@ -218,15 +218,15 @@ function get_last_post($id, $db, $type) {
       $sql = "SELECT p.post_time FROM posts p WHERE p.poster_id = '$id' LIMIT 1";
       break;
    }
-   if(!$result = mysql_query($sql, $db))
+   if(!$result = db_query($sql, $thedb))
      return($l_error);
    
    if(!$myrow = mysql_fetch_array($result))
      return($l_noposts);
    if(($type != 'user') && ($type != 'time_fix'))
-     $val = sprintf("%s <br> %s %s", $myrow[post_time], $l_by, $myrow[username]);
+     $val = sprintf("%s <br> %s %s", $myrow["post_time"], $l_by, $myrow["username"]);
    else
-     $val = $myrow[post_time];
+     $val = $myrow["post_time"];
    
    return($val);
 }
@@ -1016,13 +1016,13 @@ function undo_htmlspecialchars($input) {
 /*
  * Check if this is the first post in a topic. Used in editpost.php
  */
-function is_first_post($topic_id, $post_id, $db) {
+function is_first_post($topic_id, $post_id, $thedb) {
    $sql = "SELECT post_id FROM posts WHERE topic_id = '$topic_id' ORDER BY post_id LIMIT 1";
-   if(!$r = mysql_query($sql, $db))
+   if(!$r = db_query($sql, $thedb))
      return(0);
    if(!$m = mysql_fetch_array($r))
      return(0);
-   if($m[post_id] == $post_id)
+   if($m["post_id"] == $post_id)
      return(1);
    else
      return(0);
@@ -1089,6 +1089,9 @@ function error_die($msg){
 	global $db, $userdata, $user_logged_in;
 	global $FontFace, $FontSize3, $textcolor, $phpbbversion;
 	global $starttime;
+	if ( !isset($tool_content) ) {
+		$tool_content = "";
+	}
 	$tool_content .= "<br>
 		<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"$tablewidth\">
 		<TR><TD BGCOLOR=\"$table_bgcolor\">
@@ -1204,11 +1207,11 @@ function normalize_whitespace($str)
 	return $output;
 }
 
-function sync($db, $id, $type) {
+function sync($thedb, $id, $type) {
    switch($type) {
    	case 'forum':
    		$sql = "SELECT max(post_id) AS last_post FROM posts WHERE forum_id = $id";
-   		if(!$result = mysql_query($sql, $db))
+   		if(!$result = db_query($sql, $thedb))
    		{
    			error_die("Could not get post ID");
    		}
@@ -1218,7 +1221,7 @@ function sync($db, $id, $type) {
    		}
    		
    		$sql = "SELECT count(post_id) AS total FROM posts WHERE forum_id = $id";
-   		if(!$result = mysql_query($sql, $db))
+   		if(!$result = db_query($sql, $thedb))
    		{
    			error_die("Could not get post count");
    		}
@@ -1228,7 +1231,7 @@ function sync($db, $id, $type) {
    		}
    		
    		$sql = "SELECT count(topic_id) AS total FROM topics WHERE forum_id = $id";
-   		if(!$result = mysql_query($sql, $db))
+   		if(!$result = db_query($sql, $thedb))
    		{
    			error_die("Could not get topic count");
    		}
@@ -1238,7 +1241,7 @@ function sync($db, $id, $type) {
    		}
    		
    		$sql = "UPDATE forums SET forum_last_post_id = '$last_post', forum_posts = $total_posts, forum_topics = $total_topics WHERE forum_id = $id";
-   		if(!$result = mysql_query($sql, $db))
+   		if(!$result = db_query($sql, $thedb))
    		{
    			error_die("Could not update forum $id");
    		}
@@ -1246,7 +1249,7 @@ function sync($db, $id, $type) {
 
    	case 'topic':
    		$sql = "SELECT max(post_id) AS last_post FROM posts WHERE topic_id = $id";
-   		if(!$result = mysql_query($sql, $db))
+   		if(!$result = db_query($sql, $thedb))
    		{
    			error_die("Could not get post ID");
    		}
@@ -1256,7 +1259,7 @@ function sync($db, $id, $type) {
    		}
    		
    		$sql = "SELECT count(post_id) AS total FROM posts WHERE topic_id = $id";
-   		if(!$result = mysql_query($sql, $db))
+   		if(!$result = db_query($sql, $thedb))
    		{
    			error_die("Could not get post count");
    		}
@@ -1266,7 +1269,7 @@ function sync($db, $id, $type) {
    		}
    		$total_posts -= 1;
    		$sql = "UPDATE topics SET topic_replies = $total_posts, topic_last_post_id = $last_post WHERE topic_id = $id";
-   		if(!$result = mysql_query($sql, $db))
+   		if(!$result = db_query($sql, $thedb))
    		{
    			error_die("Could not update topic $id");
    		}
@@ -1274,26 +1277,26 @@ function sync($db, $id, $type) {
 
    	case 'all forums':
    		$sql = "SELECT forum_id FROM forums";
-   		if(!$result = mysql_query($sql, $db))
+   		if(!$result = db_query($sql, $thedb))
    		{
    			error_die("Could not get forum IDs");
    		}
    		while($row = mysql_fetch_array($result))
    		{
    			$id = $row["forum_id"];
-   			sync($db, $id, "forum");
+   			sync($thedb, $id, "forum");
    		}
    	break;
    	case 'all topics':
    		$sql = "SELECT topic_id FROM topics";
-   		if(!$result = mysql_query($sql, $db))
+   		if(!$result = db_query($sql, $thedb))
    		{
    			error_die("Could not get topic ID's");
    		}
    		while($row = mysql_fetch_array($result))
    		{
    			$id = $row["topic_id"];
-   			sync($db, $id, "topic");
+   			sync($thedb, $id, "topic");
    		}
    	break;
    }

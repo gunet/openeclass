@@ -322,7 +322,7 @@ cData;
 		if ($forum_type == 1) {
 			// To get here, we have a logged-in user. So, check whether that user is allowed to view
 			// this private forum.
-			if (!check_priv_forum_auth($userdata["user_id"], $forum, TRUE, $db)) {
+			if (!check_priv_forum_auth($userdata["user_id"], $forum, TRUE, $currentCourseID)) {
 				$tool_content .= "$l_privateforum $l_nopost";
 				draw($tool_content, 2);
 				exit();
