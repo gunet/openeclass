@@ -25,7 +25,7 @@
 
 /**===========================================================================
         phpbb/viewtopic.php
-        @last update: 2006-07-15 by Artemios G. Voyiatzis
+        @last update: 2006-07-23 by Artemios G. Voyiatzis
         @authors list: Artemios G. Voyiatzis <bogart@upnet.gr>
 
         based on Claroline version 1.7 licensed under GPL

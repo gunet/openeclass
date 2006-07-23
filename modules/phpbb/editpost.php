@@ -69,7 +69,6 @@ $tool_content = "";
  */
 include_once("./config.php");
 include("functions.php"); // application logic for phpBB
-//require("auth.php");
 
 /******************************************************************************
  * Actual code starts here

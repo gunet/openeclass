@@ -25,7 +25,7 @@
 
 /**===========================================================================
         phpbb/reply.php
-        @last update: 2006-07-21 by Artemios G. Voyiatzis
+        @last update: 2006-07-23 by Artemios G. Voyiatzis
         @authors list: Artemios G. Voyiatzis <bogart@upnet.gr>
 
         based on Claroline version 1.7 licensed under GPL
@@ -68,7 +68,6 @@ $tool_content = "";
  */
 include_once("./config.php");
 include("functions.php"); // application logic for phpBB
-//require("auth.php");
 
 /******************************************************************************
  * Actual code starts here
