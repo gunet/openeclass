@@ -67,13 +67,13 @@ $tool_content = "";
  * Tool-specific includes
  */
 include_once("./config.php");
-//include("functions.php"); // application logic for phpBB
+include("functions.php"); // application logic for phpBB
 //require("auth.php");
 
 /******************************************************************************
  * Actual code starts here
  *****************************************************************************/
-if ($post_id) {
+if ( isset($post_id) && $post_id) {
 	// We have a post id, so include that in the checks..
 	$sql  = "SELECT f.forum_type, f.forum_name, f.forum_access ";
 	$sql .= "FROM forums f, topics t, posts p ";
@@ -98,41 +98,27 @@ if (!$myrow = mysql_fetch_array($result)) {
 	exit();
 }
 
-$forum_name = $myrow["forum_nama"];
+$forum_name = $myrow["forum_name"];
 $forum_access = $myrow["forum_access"];
 $forum_type = $myrow["forum_type"];
 $forum_id = $forum;
 
-if (is_locked($topic, $currentCourseID)) {
-	$tool_content .= $l_nopostlock;
-	draw($tool_content, 2);
-	exit();
-}
-	
 if (!does_exists($forum, $currentCourseID, "forum") || !does_exists($topic, $currentCourseID, "topic")) {
 	$tool_content .= "The forum or topic you are attempting to post to does not exist. Please try again.";
 	draw($tool_content, 2);
 	exit();
 }
 
-if ($submit) {
+if (isset($submit) && $submit) {
 	if (trim($message) == '') {
 		$tool_content .= $l_emptymsg;
 		draw($tool_content, 2);
 		exit();
 	}
-	if (!$user_logged_in) {
-		if($username == '' && $password == '' && $forum_access == 2) {
-			// Not logged in, and username and password are empty and forum_access is 2 (anon posting allowed)
-			$userdata = array("user_id" => -1);
-		}
-	} else if($username == '' || $password == '') {
-		// no valid session, need to check user/pass.
-		$tool_content .= $l_userpass;
-		draw($tool_content, 2);
-		exit();
+	if ( $forum_access = 2 ) {
+		$userdata = array("user_id" => -1);
 	}
-	if ($userdata["user_level"] == -1) {
+	if (isset($userdata["user_level"]) && $userdata["user_level"] == -1) {
 		$tool_content .= $luserremoved;
 		draw($tool_content, 2);
 		exit();
@@ -140,22 +126,14 @@ if ($submit) {
 	if ($userdata["user_id"] != -1) {
 		$md_pass = md5($password);
 		$userdata = get_userdata($username, $db);
-		if($md_pass != $userdata["user_password"]) {
-			$tool_content .= $l_wrongpass;
-			draw($tool_content, 2);
-			exit();
-		}
 	}
 	if ($forum_access == 3 && $userdata["user_level"] < 2) {
 		$tool_content .= $l_nopost;
 		draw($tool_content, 2);
+		exit();
 	}
 	// XXX: Do we need this code ?
-	if ($userdata["user_id"] != -1) {
-		// You've entered your username and password, so we log you in.
-		$sessid = new_session($userdata[user_id], $REMOTE_ADDR, $sesscookietime, $db);
-		set_session_cookie($sessid, $sesscookietime, $sesscookiename, $cookiepath, $cookiedomain, $cookiesecure);
-	} else {
+	if ( $userdata["user_id"] == -1 ) {
 		if ($forum_access == 3 && $userdata["user_level"] < 2) {
 			$tool_content .= $l_nopost;
 			draw($tool_content, 2);
@@ -173,7 +151,7 @@ if ($submit) {
 	}
 	$poster_ip = $REMOTE_ADDR;
 	$is_html_disabled = false;
-	if($allow_html == 0 || isset($html)) {
+	if ( (isset($allow_html) && $allow_html == 0) || isset($html)) {
 		$message = htmlspecialchars($message);
 		$is_html_disabled = true;
 		if (isset($quote) && $quote) {
@@ -183,12 +161,12 @@ if ($submit) {
 			$message = preg_replace("#&lt;font\ size\=-1&gt;\[\ $edit_by(.*?)\ \]&lt;/font&gt;#si", '[ ' . $edit_by . '\1 ]', $message);
 		}
 	}
-	if ($allow_bbcode == 1 && !isset($bbcode)) {
+	if ( (isset($allow_bbcode) && $allow_bbcode == 1) && !isset($bbcode)) {
 		$message = bbencode($message, $is_html_disabled);
 	}
 	// MUST do make_clickable() and smile() before changing \n into <br>.
 	$message = make_clickable($message);
-	if (!$smile) {
+	if (isset($smile) && !$smile) {
 		$message = smile($message);
 	}
 	$message = str_replace("\n", "<BR>", $message);
@@ -205,7 +183,7 @@ if ($submit) {
 	// END ADDED BY THOMAS
 
 	//to prevent [addsig] from getting in the way, let's put the sig insert down here.
-	if ($sig && $userdata[user_id] != -1) {
+	if (isset($sig) && $sig && $userdata[user_id] != -1) {
 		$message .= "\n[addsig]";
 	}
 	$sql = "INSERT INTO posts (topic_id, forum_id, poster_id, post_time, poster_ip, nom, prenom)
@@ -218,7 +196,7 @@ if ($submit) {
 	$this_post = mysql_insert_id();
 	if ($this_post) {
 		$sql = "INSERT INTO posts_text (post_id, post_text) VALUES ($this_post, '$message')";
-		if (!$result = mysql_query($sql, $currentCourseID)) {
+		if (!$result = db_query($sql, $currentCourseID)) {
 			$tool_content .= "Could not enter post text!<br>Reason:" . mysql_error();
 			draw($tool_content, 2);
 			exit();
@@ -227,7 +205,7 @@ if ($submit) {
 	$sql = "UPDATE topics
 		SET topic_replies = topic_replies+1, topic_last_post_id = $this_post, topic_time = '$time' 
 		WHERE topic_id = '$topic'";
-	if (!$result = mysql_query($sql, $currentCourseID)) {
+	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= "Error - Could not enter data into the database. Please go back and try again";
 		draw($tool_content, 2);
 		exit();
@@ -313,7 +291,7 @@ cData;
 		draw($tool_content, 2);
 		exit();
 	} else {
-		if ($logging_in) {
+		if (isset($logging_in) && $logging_in) {
 			if ($username == '' || $password == '') {
 				$tool_content .= $l_userpass;
 				draw($tool_content, 2);
@@ -359,7 +337,7 @@ cData;
 			<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"1\" WIDTH=\"99%\">
 			<TR><TD width=\"25%\">
 				<b>$l_body:</b><br><br>";
-	if ($quote) {
+	if (isset($quote) && $quote) {
 		$sql = "SELECT pt.post_text, p.post_time, u.username 
 			FROM posts p, users u, posts_text pt 
 			WHERE p.post_id = '$post' AND p.poster_id = u.user_id AND pt.post_id = p.post_id";
@@ -379,6 +357,12 @@ cData;
 			exit();
 		}
 	}				
+	if (!isset($reply)) {
+		$reply = "";
+	}
+	if (!isset($quote)) {
+		$quote = "";
+	}
 	$tool_content .= "
 			</TD>
 			<TD>

@@ -41,7 +41,9 @@ function new_session($userid, $remote_ip, $lifespan, $db) {
 	$delresult = mysql_query($deleteSQL, $db);
 
 	if (!$delresult) {
-		error_die("Delete failed in new_session()");
+		$tool_content .= "Delete failed in new_session()";
+		draw($tool_content, 2);
+		exit();
 	}
 
 	$sql = "INSERT INTO sessions (sess_id, user_id, start_time, remote_ip) VALUES ($sessid, $userid, $currtime, '$remote_ip')";
@@ -122,15 +124,15 @@ function update_session_time($sessid, $db) {
 /*
  * Gets the total number of topics in a form
  */
-function get_total_topics($forum_id, $db) {
+function get_total_topics($forum_id, $thedb) {
 	global $l_error;
 	$sql = "SELECT count(*) AS total FROM topics WHERE forum_id = '$forum_id'";
-	if(!$result = mysql_query($sql, $db))
+	if(!$result = db_query($sql, $thedb))
 		return($l_error);
 	if(!$myrow = mysql_fetch_array($result))
 		return($l_error);
 	
-	return($myrow[total]);
+	return($myrow["total"]);
 }
 /*
  * Shows the 'header' data from the header/meta/footer table
@@ -1029,10 +1031,13 @@ function is_first_post($topic_id, $post_id, $db) {
 /*
  * Replaces banned words in a string with their replacements
  */
-function censor_string($string, $db) {
+function censor_string($string, $thedb) {
    $sql = "SELECT word, replacement FROM words";
-   if(!$r = mysql_query($sql, $db))
-      error_die("Error, could not contact the database! Please check your database settings in config.php");
+   if(!$r = db_query($sql, $thedb)) {
+	$tool_content .= "Error, could not contact the database! Please check your database settings in config.php";
+	draw($tool_content, 2);
+	exit();
+   }
    while($w = mysql_fetch_array($r)) {
       $word = quotemeta(stripslashes($w[word]));
       $replacement = stripslashes($w[replacement]);
@@ -1097,7 +1102,6 @@ function error_die($msg){
 		</TD></TR>
 	 	</TABLE>
 	 	<br>";
-	include('page_tail.php');
 	draw($tool_content, 2);
 	exit();
 }
