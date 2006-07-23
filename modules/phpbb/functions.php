@@ -312,7 +312,7 @@ function setuptheme($theme, $db) {
  * Checks if a forum or a topic exists in the database. Used to prevent
  * users from simply editing the URL to post to a non-existant forum or topic
  */
-function does_exists($id, $db, $type) {
+function does_exists($id, $thedb, $type) {
 	switch($type) {
 		case 'forum':
 			$sql = "SELECT forum_id FROM forums WHERE forum_id = '$id'";
@@ -321,7 +321,7 @@ function does_exists($id, $db, $type) {
 			$sql = "SELECT topic_id FROM topics WHERE topic_id = '$id'";
 		break;
 	}
-	if(!$result = mysql_query($sql, $db))
+	if(!$result = db_query($sql, $thedb))
 		return(0);
 	if(!$myrow = mysql_fetch_array($result)) 
 		return(0);
@@ -331,13 +331,13 @@ function does_exists($id, $db, $type) {
 /*
  * Checks if a topic is locked
  */
-function is_locked($topic, $db) {
+function is_locked($topic, $thedb) {
 	$sql = "SELECT topic_status FROM topics WHERE topic_id = '$topic'";
-	if(!$r = mysql_query($sql, $db))
+	if(!$r = db_query($sql, $thedb))
 		return(FALSE);
 	if(!$m = mysql_fetch_array($r))
 		return(FALSE);
-	if($m[topic_status] == 1)
+	if($m["topic_status"] == 1)
 		return(TRUE);
 	else
 		return(FALSE);
@@ -1099,7 +1099,7 @@ function error_die($msg){
 	 	<br>";
 	include('page_tail.php');
 	draw($tool_content, 2);
-	exit;
+	exit();
 }
 
 function make_jumpbox(){
