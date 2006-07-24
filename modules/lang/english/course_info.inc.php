@@ -33,6 +33,7 @@
       |          Andrew Lynn       <Andrew.Lynn@strath.ac.uk>                |
       +----------------------------------------------------------------------+
  */
+$langGeneralInfo = "General Info";
 $langModifInfo="Modify course information";
 $langModifDone="The information has been modified";
 $langHome="Back to HomePage";
@@ -54,6 +55,8 @@ the simplest way is to open registration during
 one week, ask the students to register themselves, then close registration and check for possible intruders in the users list.";
 $langTipLang="This language will be valid for every visitor of your course's website.";
 
+$langOptPassword = "Optional Password: ";
+
 // delete_course.php
 $langDelCourse="Delete the whole course website";
 $langCourse="The website ";
@@ -64,10 +67,7 @@ $langY="YES";
 $langN="NO";
 $langBack="Back";
 
-$langDepartmentUrl = "Department URL";
-$langDepartmentUrlName = "Department";
 $langModifGroups="Groups";
-
 
 $langArchiveCourse = "Course backuping ";
 $langCreatedIn = "created in";
