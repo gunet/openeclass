@@ -111,7 +111,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 			$t->clear_var('leftNavLink'); //clear inner block
 		}
-
+		
+		$t->set_var('URL_PATH',  $urlServer);
+		
 		$t->set_var('TOOL_CONTENT', $toolContent);
 
 		//if we are on the login page we can include two optional html files
@@ -386,6 +388,7 @@ function drawPerso($toolContent){
 	$t->set_var('DOCS_CONTENT', $docs_content);
 	$t->set_var('AGENDA_CONTENT', $agenda_content);
 	$t->set_var('FORUM_CONTENT', $forum_content);
+	$t->set_var('URL_PATH',  $urlServer);
 	$t->set_var('TOOL_PATH',  $relPath);
 
 	//START breadcrumb
