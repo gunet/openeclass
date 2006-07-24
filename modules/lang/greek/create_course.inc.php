@@ -54,7 +54,7 @@ $langCode="Κωδικός Μαθήματος";
 $langMax="με λατινικά γράμματα μέχρι 12 χαρακτήρες, π.χ. <i>FYS1234</i>";
 $langDoubt="Αν δεν ξέρετε το κωδικό του μαθήματος συμβουλευτείτε";
 $langProgram="το Πρόγραμμα Μαθημάτων. Αν το μάθημα δεν έχει κωδικό βάλτε ένα της αρεσκεία σας. Για παράδειγμα<i>ΑΛΓΕΒΡΑ</i>";
-$langProfessors="Καθηγητής(ές)";
+$langProfessors="Εκπαιδευτής(ές)";
 $langExplanation="Οταν πατήσετε «Δημιουργία», θα δημιουργηθεί η ιστοσελίδα του μαθήματος με Περιοχή συζητήσεων, 
 Ατζέντα, κ.λπ. την οποία μπορείτε να τροποποιήσετε αργότερα σύμφωνα με τις απαιτήσεις σας.";
 $langExFac = "* Αν επιθυμείτε να δημιουργήσετε μάθημα, σε άλλο τμήμα από αυτό που ανήκετε, τότε επικοινωνήστε με 
@@ -62,14 +62,9 @@ $langExFac = "* Αν επιθυμείτε να δημιουργήσετε μάθημα, σε άλλο τμήμα από αυτό πο
 $langEmpty="Αφήσατε μερικά πεδία κενά.<br>Πατήστε το πλήκτρο «Επιστροφή» του browser και ξαναδοκιμάστε.";
 $langCodeTaken="Αυτός ο κωδικός μαθήματος χρησιμοποιείται ήδη. Παρακαλούμε επιλέξτε κάποιον άλλο.";
 $langCreate="Δημιουργία";
-$langObjectives = "Στόχοι του μαθήματος:";
-$langObjectivesNote="π.χ. <i>Οι μαθητές καλούνται να μάθουν ... και να εξοικειωθούν με ...</i>";
-$langCoursePrereq = "Προαπαιτούμενα:";
-$langCoursePrereqNote="π.χ. <i>Για να παρακολουθήσετε το μάθημα απαραίτητες είναι καλές γνώσεις Αλγεβρας...</i>";
 $langCourseKeywords = "Λέξεις Κλειδιά:";
 $langCourseKeywordsNote = "π.χ. <i>πρώτοι αριθμοί</i>";
-$langCourseReferences = "Τρόποι εξέτασης:";
-$langCourseReferencesNote = "π.χ. <i>θα υπάρξουν 2 εργασίες και τελικές εξετάσεις</i>";
+$langCourseAddon = "Συμπληρωματικά Στοιχεία:";
 
 $langAccessType="Επιλέξτε έναν από τους 3 τύπους πρόσβασης";
 $langSubsystems="Επιλέξτε ποιά από τα υποσυστήματα θέλετε να ενεργοποιήσετε και ποιά όχι";
@@ -80,7 +75,6 @@ $langAvailableTypes = "Διαθέσιμοι τύποι πρόσβασης";
 $langModules = "Υποσυστήματα:";
 
 // tables MySQL
-$langFormula="Μετά τιμής";
 $langForumLanguage="english";	// other possibilities are english, spanish (this uses phpbb language functions)
 $langTestForum="Δοκιμαστική περιοχή συζητήσεων";
 $langDelAdmin="Διαγράψτε την μέσω του εργαλείου διαχείρισης της περιοχής";
@@ -153,7 +147,7 @@ $langCreateCourseStep2Title="Συμπληρωματικές πληροφορίες μαθήματος";
 $langCreateCourseStep3Title="Υποσυστήματα και τύπος πρόσβασης";
 $langcourse_objectives="Στόχοι του μαθήματος";
 $langcourse_prerequisites="Προαπαιτούμενες γνώσεις";
-$langcourse_references="Βιβλιογραφία";
+$langcourse_references="Συπληρωματικά Στοιχεία";
 $langcourse_keywords="Λέξεις κλειδιά";
 $langFieldsRequAsterisk="<font face=\"arial, helvetica\" color=\"#FF0000\" size=\"5\">*</font>";
 $langNextStep="Επόμενο βήμα";

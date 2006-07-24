@@ -78,12 +78,12 @@ function help ($topic)
 
 include '../../include/baseTheme.php';
 
-//$titulaire_probable="$prenom $nom";
-//$local_style = "input { font-size: 12px; }";
-//begin_page($langCreateSite);
 $tool_content = "";
 
-###################### FORM  #########################################
+// ------------------------------------------------------------------
+// ------------------------ form ------------------------------------
+// ------------------------------------------------------------------
+
 if(!isset($_GET["finish_create_course"])) {
     $tool_content .= "
 <tr bgcolor=\"$color1\">
@@ -93,11 +93,11 @@ if(!isset($_GET["finish_create_course"])) {
                 <td colspan=\"3\" valign=\"middle\">
                     <table width=\"100%\">
                         <tr>
-                            <td align=\"left\">
-                                <font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourse</font>
-                            </td>
-                            <td align=\"right\">
-                                <font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourseStep&nbsp;1&nbsp;$langCreateCourseStep2&nbsp;3</font>
+                        <td align=\"left\">
+                        <font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourse</font>
+                        </td>
+                         <td align=\"right\">
+                        <font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourseStep&nbsp;1&nbsp;$langCreateCourseStep2&nbsp;3</font>
                             </td>
                         </tr>
                     </table>
@@ -117,14 +117,12 @@ if(!isset($_GET["finish_create_course"])) {
 <!-- S T E P  1   [form data] -->
 <input type=\"hidden\" name=\"intitule\" value=\"$intitule\">
 <input type=\"hidden\" name=\"faculte\" value=\"$faculte\">
-<input type=\"hidden\" name=\"description\" value=\"$description\">
 <input type=\"hidden\" name=\"titulaires\" value=\"$titulaires\">
 <input type=\"hidden\" name=\"type\" value=\"$type\">
 
 <!-- S T E P  2   [form data] -->
-<input type=\"hidden\" name=\"course_objectives\" value=\"$course_objectives\">
-<input type=\"hidden\" name=\"course_prerequisites\" value=\"$course_prerequisites\">
-<input type=\"hidden\" name=\"course_references\" value=\"$course_references\">
+<input type=\"hidden\" name=\"description\" value=\"$description\">
+<input type=\"hidden\" name=\"course_addon\" value=\"$course_addon\">
 <input type=\"hidden\" name=\"course_keywords\" value=\"$course_keywords\">
 
 
@@ -1314,8 +1312,8 @@ mysql_query("CREATE TABLE reponses (
         reponse text,
         correct int(11) default NULL,
         comment text,
-                ponderation smallint(5),
-                r_position int(11) default NULL,
+        ponderation smallint(5),
+        r_position int(11) default NULL,
         PRIMARY KEY  (id, question_id))
         TYPE=MyISAM");
 
@@ -1560,28 +1558,6 @@ mysql_query("CREATE TABLE accueil (
                )");
 
 
-//    mysql_query("INSERT INTO accueil VALUES (
-//                '21',
-//                '$langSurvey',
-//                '../../modules/survey/survey.php',
-//                'survey',
-//                '".$sbsystems[21]."',
-//                '0',
-//                '../../../images/pastillegris.png',
-//                'MODULE_ID_SURVEY'
-//                )");
-//
-//    mysql_query("INSERT INTO accueil VALUES (
-//                '22',
-//                '$langPoll',
-//                '../../modules/poll/poll.php',
-//                'poll',
-//                '".$sbsystems[22]."',
-//                '0',
-//                '../../../images/pastillegris.png',
-//                'MODULE_ID_POLL'
-//                )");
-                
     mysql_query("INSERT INTO accueil VALUES (
                 '21',
                 '$langQuestionnaire',
@@ -1615,7 +1591,8 @@ mysql_query("CREATE TABLE accueil (
                'MODULE_ID_TOOLADMIN'
                )");
 
-#####################ACCUEIL - PROF ONLY ######################################
+
+// --------------------- prof only ------------------------------------------
 
         mysql_query("INSERT INTO accueil VALUES (
         '8',
@@ -2609,14 +2586,11 @@ mysql_query("CREATE TABLE `lp_user_module_progress` (
     mysql_query("INSERT INTO liste_domaines VALUES ( '251', 'gov', 'Gouvernement')");
     mysql_query("INSERT INTO liste_domaines VALUES ( '252', 'mil', 'Miltaire')");
 
-##########################################################################
-############### UPDATE BASE ICAMPUS #####################################
-##########################################################################
+// ----------------------------------------
+// ------------- update main Db------------
+// ----------------------------------------
 
 mysql_select_db("$mysqlMainDb");
-
-
-
 
     mysql_query("INSERT INTO cours SET
         cours_id = '',
@@ -2624,10 +2598,8 @@ mysql_select_db("$mysqlMainDb");
         languageCourse = '$languageCourse',
         intitule = '$intitule',
         description = '$description',
-        course_objectives = '$course_objectives',
-        course_prerequisites = '$course_prerequisites',
+        course_addon = '$course_addon',
         course_keywords = '$course_keywords',
-        course_references = '$course_references',
         faculte = '$facname',
         visible = '$formvisible',
         cahier_charges = '',
@@ -2646,10 +2618,9 @@ mysql_select_db("$mysqlMainDb");
 
 mysql_query("INSERT INTO cours_faculte VALUES ( '', '$faculte', '$repertoire', '$facid')");
 
-###########################################################################
-################ CREATE DIRECTORIES #######################################
-###########################################################################
-    umask(0);
+// create directories
+    
+		umask(0);
     mkdir("../../courses/$repertoire", 0777);
     mkdir("../../courses/$repertoire/image", 0777);
     mkdir("../../courses/$repertoire/document", 0777);
@@ -2666,10 +2637,12 @@ mysql_query("INSERT INTO cours_faculte VALUES ( '', '$faculte', '$repertoire', '
 
     $titou='$dbname';
 
-####################################################################
-################CREER PAGE ACCUEIL #################################
-####################################################################
-    $fd=fopen("../../courses/$repertoire/index.php", "w");
+
+// ---------------------------------------------
+// ----------- main course index.php -----------
+// ---------------------------------------------
+    
+		$fd=fopen("../../courses/$repertoire/index.php", "w");
 $string="<?php
 session_start();
 $titou=\"$repertoire\";

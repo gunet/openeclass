@@ -49,17 +49,20 @@ function previous_step()
 {
 	document.location.href = \"./create_course.php\";
 }
+
+function validate() {
+
+		if (document.forms[0].description.value==\"\") {
+				alert(\"Παρακαλώ συμπληρώστε μια σύντομη περιγραφή για το μάθημα!\");	
+				return false;																																																	}
+
+     if (document.forms[0].course_keywords.value==\"\") {
+					alert(\"Παρακαλώ συμπληρώστε τις λέξεις κλειδιά του μαθήματος!\");
+					return false;
+		}
+	return true;																																																}
+
 </script>";
-
-
-//ektypwnei ena <td> </td> me hyperlink pros to help me vash kapoio $topic
-/*
-	"
-	<td valign=\"middle\">
-		<a href=\"../help/help.php?topic=$topic\" onclick=\"window.open('../help/help.php?topic=$topic','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
-	</td>
-	"
-*/
 
 include '../../include/baseTheme.php';
 
@@ -68,9 +71,9 @@ $tool_content = "";
 $titulaire_probable="$prenom $nom";
 $local_style = "input { font-size: 12px; }";
 
-// ----------------------------------
-// ---------------------- form ------
-// ----------------------------------
+// ---------------------------------------------
+// ---------------------- form -----------------
+// ---------------------------------------------
 
    @$tool_content .= "
 <!-- S T E P  2   [start] -->    
@@ -95,43 +98,28 @@ $local_style = "input { font-size: 12px; }";
 			<tr valign=\"top\">
 				<td colspan=\"5\" valign=\"middle\">
 					<font face=\"arial, helvetica\" size=\"3\"><b>$langCreateCourseStep2Title</b></font>
-					<font face=\"arial, helvetica\" size=\"3\">($langFieldsOptional)</font>
 				</td>
 			</tr>
 			<tr><td colspan=\"3\"><font face=\"arial, helvetica\" size=\"2\"><i>$langFieldsOptionalNote</i></font></td></tr>
 			<tr><td colspan=\"3\">&nbsp;</td></tr>
 
-<form method=\"post\" action=\"create_course3.php\">
+<form method=\"post\" action=\"create_course3.php\" onsubmit=\"return validate();\">
 	
 	<input type=\"hidden\" name=\"intitule\" value=\"$intitule\">
 	<input type=\"hidden\" name=\"faculte\" value=\"$faculte\">
-	<input type=\"hidden\" name=\"description\" value=\"$description\">
 	<input type=\"hidden\" name=\"titulaires\" value=\"$titulaires\">
 	<input type=\"hidden\" name=\"type\" value=\"$type\">
 	
-	<tr>
-	<td colspan=\"3\">
-		<table bgcolor=\"$color1\" border=\"2\">
-			<tr>
-				<td valign=\"middle\" align=\"right\">		
-					<font face=\"arial, helvetica\" size=\"2\"><b>$langObjectives</b></font>
-				</td>
-				<td valign=\"top\">
-					<font face=\"arial, helvetica\" size=\"2\">
-				<textarea name=\"course_objectives\" value=\"$course_objectives\" cols=\"30\" rows=\"5\"></textarea><br>$langObjectivesNote</font>
-				</td>
-				<td valign=\"middle\">
-					<a href=\"../help/help.php?topic=CreateCourse_course_objectives\" onclick=\"window.open('../help/help.php?topic=CreateCourse_course_objectives','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>					
-				</td>
-			</tr>
-			<tr>				
-				<td valign=\"middle\" align=\"left\">		
-					<font face=\"arial, helvetica\" size=\"2\"><b>$langCoursePrereq</b></font>
-				</td>
-				<td valign=\"top\">
-					<font face=\"arial, helvetica\" size=\"2\">
-					<textarea name=\"course_prerequisites\" value=\"$course_prerequisites\" cols=\"30\" rows=\"5\"></textarea><br>$langCoursePrereqNote</font>
-				</td>
+			<tr valign=\"top\"> 
+			<td width=\"100\" valign=\"top\" align=\"right\"> 
+			<font face=\"arial, helvetica\" size=\"2\"><b>$langDescrInfo:</b></font>
+			</td>   
+			<td valign=top>
+			<font face=\"arial, helvetica\" size=\"2\">
+			<textarea name=\"description\" cols=\"40\" rows=\"4\"></textarea>
+			$langFieldsRequAsterisk
+			</font>    
+			</td> 
 				<td valign=\"middle\">
 					<a href=\"../help/help.php?topic=CreateCourse_course_intronote\" onclick=\"window.open('../help/help.php?topic=CreateCourse_course_intronote','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
 				</td>
@@ -142,7 +130,9 @@ $local_style = "input { font-size: 12px; }";
 		</td>
 <td valign=\"top\">
 			<font face=\"arial, helvetica\" size=\"2\">
-			<textarea name=\"course_keywords\" value=\"$course_keywords\" cols=\"30\" rows=\"5\"></textarea><br>$langCourseKeywordsNote</font>
+			<textarea name=\"course_keywords\" value=\"$course_keywords\" cols=\"40\" rows=\"2\"></textarea>
+			$langFieldsRequAsterisk
+			</font>
 				</td>
 				<td valign=\"middle\">
 					<a href=\"../help/help.php?topic=CreateCourse_course_intronote\" onclick=\"window.open('../help/help.php?topic=CreateCourse_course_intronote','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
@@ -150,11 +140,11 @@ $local_style = "input { font-size: 12px; }";
 			</tr>
 			<tr>
 			<td align=\"top\" align=\"right\">
-		<font face=\"arial, helvetica\" size=\"2\"><b>$langCourseReferences</b></font>
+		<font face=\"arial, helvetica\" size=\"2\"><b>$langCourseAddon</b></font>
 		</td>
 <td valign=\"top\">
 			<font face=\"arial, helvetica\" size=\"2\">
-			<textarea name=\"course_references\" value=\"$course_references\" cols=\"30\" rows=\"5\"></textarea><br>$langCourseReferencesNote</font>
+			<textarea name=\"course_addon\" value=\"$course_addon\" cols=\"40\" rows=\"4\"></textarea></font>
 			</td>
 			<td>
 			<a href=\"../help/help.php?topic=CreateCourse_course_intronote\" onclick=\"window.open('../help/help.php?topic=CreateCourse_course_intronote','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>

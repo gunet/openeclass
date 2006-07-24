@@ -53,12 +53,6 @@ function validate()
    		return false;
  	}
  	
- 	if (document.forms[0].description.value==\"\")
- 	{
-   		alert(\"Παρακαλώ συμπληρώστε την περιγραφή του μαθήματος!\"); 
-   		return false;
- 	}
- 	
  	if (document.forms[0].titulaires.value==\"\")
  	{
    		alert(\"Παρακαλώ συμπληρώστε τουλάχιστον έναν διαχειριστή για το μάθημα!\"); 
@@ -165,40 +159,12 @@ $tool_content .=  "		<select name=\"faculte\">";
 		}
 		$tool_content .=  "</select>";
 
-
-/* $tool_content .=  "<select name=\"faculte\">";
-
-$resultFac=mysql_query("SELECT name FROM faculte ORDER BY number");
-
-while ($myfac = mysql_fetch_array($resultFac)) {	
-	if($myfac['name'] == $facu) 
-		$tool_content .=  "<option selected>$myfac[name]</option>";
-	else 
-		$tool_content .=  "<option>$myfac[name]</option>";
-}
-$tool_content .=  "</select>"; */
-
 $tool_content .=  "$langFieldsRequAsterisk<br><font face=\"arial, helvetica\" size=\"2\">$langTargetFac</font>
 		</td>
 		<td valign=\"middle\">
 			<a href=\"../help/help.php?topic=CreateCourse_faculte\" onclick=\"window.open('../help/help.php?topic=CreateCourse_faculte','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
 		</td>
-	</tr>
-       <tr valign=\"top\">
-       <td width=\"100\" valign=\"top\" align=\"right\">
-       <font face=\"arial, helvetica\" size=\"2\"><b>$langDescrInfo:</b></font>
-       </td>
-       <td valign=top>
-       <font face=\"arial, helvetica\" size=\"2\">
-       <textarea name=\"description\" cols=\"30\" rows=\"4\"></textarea>
-	   $langFieldsRequAsterisk
-       <br>$langDescrInfo
-       </font>
-       </td>
-       <td valign=\"middle\">
-			<a href=\"../help/help.php?topic=CreateCourse_description\" onclick=\"window.open('../help/help.php?topic=CreateCourse_description','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
-		</td>
-      </tr>";
+	</tr>";
 
 unset($repertoire);
 

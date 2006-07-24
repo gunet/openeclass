@@ -63,7 +63,7 @@ if($is_adminOfCourse) {
 		@include("../lang/$default_language/create_course.inc");
 		@include("../lang/$languageInterface/create_course.inc");
 		// UPDATE course settings
-		if ($checkpassword=="on" && $formvisible=="1") {
+		if (isset($checkpassword) && $checkpassword=="on" && $formvisible=="1") {
 			$password = $password;
 		} else {
 			$password = "";

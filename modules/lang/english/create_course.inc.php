@@ -52,7 +52,6 @@ $langTargetFac="This is the faculty, department or school where the course is de
 $langCode="Course code";
 $langMax="max. 12 characters, e.g. <i>ROM2121</i>";
 $langDoubt="If you doubt on your course's code, consult, ";
-$langProgram="Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management";
 $langProfessors="Professor(s)";
 $langExplanation="Once you click OK, a site with Forum, Agenda, Document manager etc. will be created. Your login, as creator of the site, allows you to modify it along your own requirements.";
 $langExFac = "If you wish to create course, in another faculty, then contact Asynchronous Teleteaching Team";
@@ -142,12 +141,8 @@ $langCourseCategory="The category the course belongs to";
 $langProfessorsInfo="Full names of the instructors of the course; seperated by commas (e.g.<i>John Doe, George Smith</i>)";
 $langCoursePrereqNote="<i>e.g.: Prerequisites are good knowledge and skills in Algebra</i>";
 
-$langObjectives = "Courses Objectives:";
-$langObjectivesNote="ð.÷. <i>The course objectives are ...</i>";
 $langCourseKeywords = "Course Keywords:";
-$langCourseKeywordsNote = "e.g. <i>number theory</i>";
-$langCourseReferences = "Course Tests:";
-$langCourseReferencesNote = "ð.÷. <i>2 tests and 1 final exam 2</i>";
+$langCourseAddon = "Add on Information:";
 
 $langPublic="Open (Free access from the homepage without password)";
 $langPrivOpen="Open by registration (You have to register in order to grant access)";

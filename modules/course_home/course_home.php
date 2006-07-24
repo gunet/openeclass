@@ -47,21 +47,17 @@ $tool_content = "";
 $main_content = "";
 $bar_content = "";
 
-$sql = 'SELECT `description`,`course_objectives`,`course_prerequisites`,`course_keywords`,
- `course_references`,`faculte`,`lastEdit`,`type`, `visible`, `titulaires`, `fake_code`
- FROM `cours` WHERE `code` = "'.$currentCourse.'"';
+$sql = 'SELECT `description`,`course_keywords`, `course_addon`,`faculte`,`lastEdit`,`type`, `visible`, `titulaires`, `fake_code` FROM `cours` WHERE `code` = "'.$currentCourse.'"';
 $res = db_query($sql, $mysqlMainDb);
 while($result = mysql_fetch_row($res)) {
 	$description = $result[0];
-	$objectives = $result[1];
-	$prerequisites  = $result[2];
-	$keywords = $result[3];
-	$references = $result[4];
-	$faculte = $result[5];
-	$type = $result[7];
-	$visible = $result[8];
-	$professor = $result[9];
-	$fake_code = $result[10];
+	$keywords = $result[1];
+	$addon = $result[3];
+	$faculte = $result[4];
+	$type = $result[5];
+	$visible = $result[6];
+	$professor = $result[7];
+	$fake_code = $result[8];
 
 }
 
@@ -72,7 +68,7 @@ if(strlen($description) > 0) {
 if (strlen($keywords) > 0) {
 	$main_content .= "<p><b>$langcourse_keywords: </b>$keywords</p>";
 }
-
+/*
 if (strlen($objectives) > 0) {
 	$main_content .= "<div id=\"course_home_id\">$langcourse_objectives</div><p>$objectives</p>";
 }
@@ -80,11 +76,11 @@ if (strlen($objectives) > 0) {
 if(strlen($prerequisites) > 0) {
 	$main_content .= "<div id=\"course_home_id\">$langcourse_prerequisites</div><p>$prerequisites</p>";
 }
-
+*/
 //add if for evaluation
 
-if(strlen($references) > 0) {
-	$main_content .= "<div id=\"course_home_id\">$langcourse_references</div><p>". nl2br($references)."</p>";
+if(strlen($addon) > 0) {
+	$main_content .= "<div id=\"course_home_id\">$langcourse_references</div><p>". nl2br($addon)."</p>";
 }
 
 
