@@ -73,15 +73,11 @@ if($is_adminOfCourse) {
 			SET intitule='$int', 
 				faculte='$facname', 
 				description='$description',
-				course_objectives='$course_objectives',
-				course_prerequisites='$course_prerequisites',
-				course_references='$course_references',
+				course_addon='$course_addon',
 				course_keywords='$course_keywords', 
 				visible='$formvisible', 
 				titulaires='$titulary', 
 				languageCourse='$lanCourseForm',
-				departmentUrlName ='$_POST[departmentUrlName]',
-				departmentUrl='$_POST[departmentUrl]',
 				type='$type',
 				password='$password',
 				faculteid='$facid'
@@ -114,7 +110,7 @@ if($is_adminOfCourse) {
 		<center><p><a href=\"../../courses/".$currentCourseID."/index.php\">".$langHome."</a></p></center>";
 	} else {
 	  $sql = "SELECT cours_faculte.faculte, 
-			cours.intitule, cours.description, course_keywords, course_objectives, course_prerequisites, course_references,
+			cours.intitule, cours.description, course_keywords, course_addon,
 			cours.visible, cours.fake_code, cours.titulaires, cours.languageCourse, 
 			cours.departmentUrlName, cours.departmentUrl, cours.type, cours.password
 			FROM `$mysqlMainDb`.cours, `$mysqlMainDb`.cours_faculte 
@@ -130,17 +126,14 @@ if($is_adminOfCourse) {
 	  $fake_code = $leCours['fake_code'];
 	  $titulary = $leCours['titulaires'];
 	  $languageCourse	= $leCours['languageCourse'];
-	  $departmentUrlName = $leCours['departmentUrlName'];
-	  $departmentUrl = $leCours['departmentUrl'];
+		$description = $leCours['description'];
 	  $course_keywords = $leCours['course_keywords'];
-	  $course_objectives = $leCours['course_objectives'];
-	  $course_prerequisites = $leCours['course_prerequisites'];
-	  $course_references = $leCours['course_references'];
+	  $course_addon = $leCours['course_addon'];
 	  $password = $leCours['password'];
 	  if ($password!="") $checkpasssel = "checked"; else $checkpasssel="";
 	    
-	  $tool_content .="<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
-		<table width=\"99%\"><caption>Γενικές Πληροφορίες</caption><tbody>
+	  @$tool_content .="<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
+		<table width=\"99%\"><caption>$langGeneralInfo</caption><tbody>
 		<tr><td valign=\"top\"><b>$langCode:</b></td>
 		<td valign=\"top\">$fake_code</td></tr>
 		<tr><td><b>$langProfessors:</b></td>
@@ -148,7 +141,7 @@ if($is_adminOfCourse) {
 		<tr><td><b>$langTitle:</b></td>
 		<td><input type=\"Text\" name=\"int\" value=\"$int\" size=\"60\"></td></tr>
 		<tr><td><b>$langDescription:</b></td>
-		<td><input type=\"Text\" name=\"description\" value=\"$leCours[description]\" size=\"60\"></td></tr>
+		<td><textarea name=\"description\" value=\"$leCours[description]\" cols=\"40\" rows=\"4\">$leCours[description]</textarea></td></tr>
 		<tr><td><b>$langFaculty:</b></td>
 		<td>
 		<select name=\"facu\">";
@@ -165,22 +158,11 @@ if($is_adminOfCourse) {
 
 		$tool_content .= selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']),'type', $type);
 		
-		$tool_content .= "</td></tr><tr><td><b>$langDepartmentUrlName:</b></td>
-		<td><input type=\"text\" name=\"departmentUrlName\" value=\"$departmentUrlName\" size=\"60\" maxlength=\"60\"></td>
-		</tr>
-		<tr><td><b>$langDepartmentUrl:</b></td>
-		<td><input type=\"text\" name=\"departmentUrl\" value=\"$departmentUrl\" size=\"60\" maxlength=\"180\"></td></tr>		
-		<tr>
-			<td><b>$langcourse_objectives:</b></td>
-			<td><input type=\"Text\" name=\"course_objectives\" value=\"$leCours[course_objectives]\" size=\"60\"></td>
-		</tr>
-		<tr>
-			<td><b>$langcourse_prerequisites:</b></td>
-			<td><input type=\"Text\" name=\"course_prerequisites\" value=\"$leCours[course_prerequisites]\" size=\"60\"></td>
-		</tr>
-		<tr>
+		$tool_content .= "</td></tr>";
+		
+		@$tool_content .= "<tr>
 			<td><b>$langcourse_references:</b></td>
-			<td><input type=\"Text\" name=\"course_references\" value=\"$leCours[course_references]\" size=\"60\"></td></tr>
+			<td><textarea name=\"course_addon\" value=\"$leCours[course_addon]\" cols=\"40\" rows\"4\">$leCours[course_addon]</textarea></td></tr>
 		</tr>
 		<tr>
 			<td><b>$langcourse_keywords:</b></td>
@@ -191,7 +173,7 @@ if($is_adminOfCourse) {
 		<tr><td align=\"right\"><input type=\"radio\" name=\"formvisible\" value=\"2\"".@$visibleChecked[2]."></td>
 		<td>$langPublic</td></tr>
 		<tr><td align=\"right\" valign=\"top\"><input type=\"radio\" name=\"formvisible\" value=\"1\"".@$visibleChecked[1]."></td>
-		<td>$langPrivOpen<br>&nbsp;&nbsp;<input type=\"checkbox\" name=\"checkpassword\" ".$checkpasssel.">Προαιρετικό συνθηματικό: <input type=\"text\" name=\"password\" value=\"".$password."\"></td></tr>
+		<td>$langPrivOpen<br>&nbsp;&nbsp;<input type=\"checkbox\" name=\"checkpassword\" ".$checkpasssel.">$langOptPassword<input type=\"text\" name=\"password\" value=\"".$password."\"></td></tr>
 		<tr><td align=\"right\"><input type=\"radio\" name=\"formvisible\" value=\"0\"".@$visibleChecked[0]."></td>
 		<td>$langPrivate</td></tr>
 		</tbody></table><br><table width=\"99%\"><caption>$langLanguage</caption><tbody>
