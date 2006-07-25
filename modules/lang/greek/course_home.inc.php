@@ -68,5 +68,5 @@ $langNameOfTheLink ="Όνομα Συνδέσμου";
 $langUsers = "Χρήστες";
 $langRegistered = "εγγεγραμμένοι";
 $langLessonCode = "Κωδικός μαθήματος";
-$langIdentity = "Ταυτότητα";
+$langIdentity = "Ταυτότητα Μαθήματος";
 ?>

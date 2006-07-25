@@ -36,13 +36,16 @@
 $require_current_course = TRUE;
 $langFiles = array('course_info', 'create_course', 'opencours', 'course_home');
 
+$require_help = TRUE;
+$helpTopic = 'course_home';
+
 //$courseHome is used by the breadcrumb logic 
 //See function draw() in baseTheme.php for details
-$courseHome = true;
+//$courseHome = true;
 //$path2add is used in init.php to fix relative paths
 $path2add=1;
 include '../../include/baseTheme.php';
-
+$nameTools = $langIdentity;
 $tool_content = "";
 $main_content = "";
 $bar_content = "";
@@ -91,14 +94,10 @@ case 'other': { //other
 }
 }
 
-$bar_content .= "<h4>$langLessonCode</h4>";
-$bar_content .= "<p>".$fake_code."</p>";
-$bar_content .= "<h4>$langProfessors</h4>";
-$bar_content .= "<p>".$professor."</p>";
-$bar_content .= "<h4>$langFaculty</h4>";
-$bar_content .= "<p>".$faculte."</p>";
-$bar_content .= "<h4>$m[type]</h4>";
-$bar_content .= "<p>".$lessonType."</p>";
+$bar_content .= "<p><b>".$langLessonCode."</b>: ".$fake_code."</p>";
+$bar_content .= "<p><b>".$langProfessors."</b>: ".$professor."</p>";
+$bar_content .= "<p><b>".$langFaculty."</b>: ".$faculte."</p>";
+$bar_content .= "<p><b>".$m['type']."</b>: ".$lessonType."</p>";
 
 if ($is_adminOfCourse) {
 	$sql = "SELECT COUNT(user_id) AS numUsers
@@ -127,45 +126,21 @@ if ($is_adminOfCourse) {
 			break;
 		}
 	}
-	$bar_content .= "<h4>$langConfidentiality</h4>";
-	$bar_content .= "<p>".$lessonStatus."</p>";
-	$bar_content .= "<h4>$langUsers</h4>";
-	$bar_content .= "<p>".$numUsers." ".$langRegistered."</p>";
+	$bar_content .= "<p><b>".$langConfidentiality."</b>: ".$lessonStatus."</p>";
+	$bar_content .= "<p><b>".$langUsers."</b>: ".$numUsers." ".$langRegistered."</p>";
 }
 
-$tool_content .= <<<lCont
-<div id="container_login">
 
-<div id="wrapper">
+$tool_content .= <<<lCont
+<p>&nbsp;</p>
+<div style="margin-right:200px;">
+<table width="99%">
+<tbody><tr class="odd"><td>$bar_content</td></tr></tbody>
+</table>
+<p>&nbsp;</p>
+</div>
 <div id="content_login">
 $main_content
-
-
-</div>
-</div>
-<div id="navigation">
-
- <table width="99%">
- 	<thead>
- 		<tr>
- 			<th>$langIdentity</th>
- 		</tr>
- 	</thead>
-     <tbody>
-      	<tr class="odd">
-      		<td>
-      			$bar_content
-     		</td>
-     	</tr>
-      </tbody>
-      </table>
-
-
-</div>
-<div id="extra">
-<p></p>
-</div>
-
 </div>
 
 lCont;
