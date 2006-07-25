@@ -59,7 +59,7 @@ $require_help = TRUE;
 $helpTopic = 'Questionnaire';
 
 include '../../include/baseTheme.php';
-
+$nameTools = $langQuestionnaire;
 $tool_content = "";
 
 //if ((isset($questionnaire_type))&&($questionnaire_type == 1)) {
