@@ -32,7 +32,7 @@
 ==============================================================================
 */
 
-//$langTestEcho = "The worked";
+$langQuestionnaire = "Questionnaires";
 $langSurveysActive = "Active Surveys";
 $langSurveysInactive = "Inactive Surveys";
 $langSurveyName = "Íame";
