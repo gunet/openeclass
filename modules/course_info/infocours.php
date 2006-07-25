@@ -162,14 +162,14 @@ if($is_adminOfCourse) {
 		
 		@$tool_content .= "<tr>
 			<td><b>$langcourse_references:</b></td>
-			<td><textarea name=\"course_addon\" value=\"$leCours[course_addon]\" cols=\"40\" rows\"4\">$leCours[course_addon]</textarea></td></tr>
+			<td><textarea name=\"course_addon\" value=\"$leCours[course_addon]\" cols=\"40\" rows=\"4\">$leCours[course_addon]</textarea></td>
 		</tr>
 		<tr>
 			<td><b>$langcourse_keywords:</b></td>
-			<td><input type=\"Text\" name=\"course_keywords\" value=\"$leCours[course_keywords]\" size=\"60\"></td>
+			<td><input type='text' name=\"course_keywords\" value=\"$leCours[course_keywords]\" size=\"60\"></td>
 		</tr>		
 		</tbody></table><br><table width=\"99%\"><caption>$langConfidentiality</caption><tbody>
-		<tr>	<td colspan=\"2\"><i>$langConfTip</i></td></tr>
+		<tr><td colspan=\"2\"><i>$langConfTip</i></td></tr>
 		<tr><td align=\"right\"><input type=\"radio\" name=\"formvisible\" value=\"2\"".@$visibleChecked[2]."></td>
 		<td>$langPublic</td></tr>
 		<tr><td align=\"right\" valign=\"top\"><input type=\"radio\" name=\"formvisible\" value=\"1\"".@$visibleChecked[1]."></td>

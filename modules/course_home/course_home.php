@@ -52,8 +52,8 @@ $res = db_query($sql, $mysqlMainDb);
 while($result = mysql_fetch_row($res)) {
 	$description = $result[0];
 	$keywords = $result[1];
-	$addon = $result[3];
-	$faculte = $result[4];
+	$addon = $result[2];
+	$faculte = $result[3];
 	$type = $result[5];
 	$visible = $result[6];
 	$professor = $result[7];
@@ -68,16 +68,6 @@ if(strlen($description) > 0) {
 if (strlen($keywords) > 0) {
 	$main_content .= "<p><b>$langcourse_keywords: </b>$keywords</p>";
 }
-/*
-if (strlen($objectives) > 0) {
-	$main_content .= "<div id=\"course_home_id\">$langcourse_objectives</div><p>$objectives</p>";
-}
-
-if(strlen($prerequisites) > 0) {
-	$main_content .= "<div id=\"course_home_id\">$langcourse_prerequisites</div><p>$prerequisites</p>";
-}
-*/
-//add if for evaluation
 
 if(strlen($addon) > 0) {
 	$main_content .= "<div id=\"course_home_id\">$langcourse_references</div><p>". nl2br($addon)."</p>";
