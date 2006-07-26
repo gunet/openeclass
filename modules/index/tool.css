@@ -4,6 +4,6 @@ div#extra{backgroundX:#FF8539}
 
 div#wrapper{float:left;width:99%;margin-right:-200px}
 div#content_login{margin-right:200px; padding-leftX:10px;}
-div#navigation{float:left;width:200px;}
+div#navigation{float:right;width:200px;}
 div#extra{float:right;clear:right;width:200px}
 div#footer{clear:both;width:100%}
