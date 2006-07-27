@@ -98,7 +98,7 @@ if ($is_adminOfCourse) {
 		if($_POST["edIdBloc"]=="add")
 		{
 		    $sql="SELECT MAX(id) as idMax from course_description";
-			$res = db_query($sql);
+			$res = db_query($sql, $db);
 			$idMax = mysql_fetch_array($res);
 			$idMax = max(sizeof($titreBloc),$idMax["idMax"]);
 			$sql ="
