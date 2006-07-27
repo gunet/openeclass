@@ -1217,6 +1217,18 @@ db_query("ALTER TABLE `liens` ADD FULLTEXT `liens` (`url` ,`titre` ,`description
 db_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`title` ,`description`)");
 //db_query("ALTER TABLE `videolinks` ADD FULLTEXT `videolinks` (`url` ,`titre` ,`description`)");
 
+// bogart: Update code for phpbb functionality START
+// Remove tables banlist, disallow, headermetafooter, priv_msgs, ranks, sessions, themes, whosonline, words
+db_query("DROP TABLE IF EXISTS banlist");
+db_query("DROP TABLE IF EXISTS disallow");
+db_query("DROP TABLE IF EXISTS headermetafooter");
+db_query("DROP TABLE IF EXISTS priv_msgs");
+db_query("DROP TABLE IF EXISTS ranks");
+db_query("DROP TABLE IF EXISTS sessions");
+db_query("DROP TABLE IF EXISTS themes");
+db_query("DROP TABLE IF EXISTS whosonline");
+db_query("DROP TABLE IF EXISTS words");
+// bogart: Update code for phpbb functionality END
 
 } // End of 'while' courses
 
