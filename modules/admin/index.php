@@ -18,8 +18,11 @@ $tool_content = "";
         MAIN BODY
 ******************************************************************************/
 
+
+
 $sql = "SELECT code FROM cours";
 $result = db_query($sql);
+$course_codes = array();
 while ($row = mysql_fetch_assoc($result)) {
     $course_codes[] = $row['code'];
 }
@@ -88,9 +91,9 @@ $result = mysql_query($sql);
 $myrow = mysql_fetch_array($result);
 $count_prof_requests = $myrow['cnt'];
 if ($count_prof_requests > 0) {
-	$prof_request_msg = "Υπάρχουν ".$count_prof_requests." ανοικτές αιτήσεις καθηγητών";
+    $prof_request_msg = "Υπάρχουν ".$count_prof_requests." ανοικτές αιτήσεις καθηγητών";
 } else {
-	$prof_request_msg = "Δεν βρέθηκαν ανοικτές αιτήσεις καθηγητών";
+    $prof_request_msg = "Δεν βρέθηκαν ανοικτές αιτήσεις καθηγητών";
 }
 
 // Find last course created
