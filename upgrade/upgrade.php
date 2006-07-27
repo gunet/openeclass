@@ -1219,8 +1219,12 @@ db_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`title` ,`description
 
 // bogart: Update code for phpbb functionality START
 // Remove tables banlist, disallow, headermetafooter, priv_msgs, ranks, sessions, themes, whosonline, words
+db_query("DROP TABLE IF EXISTS access");
 db_query("DROP TABLE IF EXISTS banlist");
+db_query("DROP TABLE IF EXISTS config");
 db_query("DROP TABLE IF EXISTS disallow");
+db_query("DROP TABLE IF EXISTS forum_access");
+db_query("DROP TABLE IF EXISTS forum_mods");
 db_query("DROP TABLE IF EXISTS headermetafooter");
 db_query("DROP TABLE IF EXISTS priv_msgs");
 db_query("DROP TABLE IF EXISTS ranks");

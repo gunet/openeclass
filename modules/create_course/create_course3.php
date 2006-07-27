@@ -298,325 +298,66 @@ else {
 
 // create phpbb 1.4 tables
 
-        mysql_select_db($repertoire);
-        if (mysql_version()) {
-        $sql ="
-        CREATE TABLE access (
-        access_id int(10) NOT NULL auto_increment,
-        access_title varchar(20),
-        PRIMARY KEY (access_id))
-        TYPE=MyISAM DEFAULT CHARSET=greek";
-        } else {
-        $sql ="
-        CREATE TABLE access (
-        access_id int(10) NOT NULL auto_increment,
-        access_title varchar(20),
-        PRIMARY KEY (access_id))
-        TYPE=MyISAM";
-        }
-    mysql_query($sql);
-
-    mysql_query("INSERT INTO access VALUES (
-                 '-1',
-                 'Deleted'
-                 )");
-
-    mysql_query("INSERT INTO access VALUES (
-                 '1',
-                 'User'
-                 )");
-
-    mysql_query("INSERT INTO access VALUES (
-                 '2',
-                 'Moderator'
-                 )");
-
-    mysql_query("INSERT INTO access VALUES (
-                 '3',
-                 'Super Moderator'
-                 )");
-
-    mysql_query("INSERT INTO access VALUES (
-                 '4',
-                 'Administrator'
-                 )");
-
 // checking if the mysql version is > 4.1
 if (mysql_version()) {
 
-    mysql_query("CREATE TABLE banlist (
-                 ban_id int(10) NOT NULL auto_increment,
-                 ban_userid int(10),
-                 ban_ip varchar(16),
-                 ban_start int(32),
-                 ban_end int(50),
-                 ban_time_type int(10),
-                 PRIMARY KEY (ban_id),
-                 KEY ban_id (ban_id))
-         TYPE=MyISAM DEFAULT CHARSET=greek");
+	mysql_query("CREATE TABLE catagories (
+		    cat_id int(10) NOT NULL auto_increment,
+		    cat_title varchar(100),
+		    cat_order varchar(10),
+		    PRIMARY KEY (cat_id))
+		    TYPE=MyISAM DEFAULT CHARSET=greek");
 
-    mysql_query("
-CREATE TABLE catagories (
-    cat_id int(10) NOT NULL auto_increment,
-    cat_title varchar(100),
-    cat_order varchar(10),
-    PRIMARY KEY (cat_id))
-    TYPE=MyISAM DEFAULT CHARSET=greek");
+	// Create a hidden category for group forums
+	mysql_query("INSERT INTO catagories VALUES (1,'$langCatagoryGroup',NULL)");
 
-// Create a hidden category for group forums
-mysql_query("INSERT INTO catagories VALUES (1,'$langCatagoryGroup',NULL)");
+	// Create an example category
+	mysql_query("INSERT INTO catagories VALUES (2,'$langCatagoryMain',NULL)");
 
-// Create an example category
-mysql_query("INSERT INTO catagories VALUES (2,'$langCatagoryMain',NULL)");
+	mysql_query("CREATE TABLE forums (
+		 forum_id int(10) NOT NULL auto_increment,
+		 forum_name varchar(150),
+		 forum_desc text,
+		 forum_access int(10) DEFAULT '1',
+		 forum_moderator int(10),
+		 forum_topics int(10) DEFAULT '0' NOT NULL,
+		 forum_posts int(10) DEFAULT '0' NOT NULL,
+		 forum_last_post_id int(10) DEFAULT '0' NOT NULL,
+		 cat_id int(10),
+		 forum_type int(10) DEFAULT '0',
+		 PRIMARY KEY (forum_id),
+		 KEY forum_last_post_id (forum_last_post_id))
+		TYPE=MyISAM DEFAULT CHARSET=greek");
 
-mysql_query("CREATE TABLE config (
-                 config_id int(10) NOT NULL auto_increment,
-                 sitename varchar(100),
-                 allow_html int(2),
-                 allow_bbcode int(2),
-                 allow_sig int(2),
-                 allow_namechange int(2) DEFAULT '0',
-                 admin_passwd varchar(32),
-                 selected int(2) DEFAULT '0' NOT NULL,
-                 posts_per_page int(10),
-                 hot_threshold int(10),
-                 topics_per_page int(10),
-                 allow_theme_create int(10),
-                 override_themes int(2) DEFAULT '0',
-                 email_sig varchar(255),
-                 email_from varchar(100),
-                 default_lang varchar(255),
-                 PRIMARY KEY (config_id),
-                 UNIQUE selected (selected))
-         TYPE=MyISAM DEFAULT CHARSET=greek");
+	mysql_query("INSERT INTO forums VALUES (1,'$langTestForum','$langDelAdmin',2,1,1,1,1,2,0)");
 
-    mysql_query("INSERT INTO config VALUES (
-                 '1',
-                 '$intitule',
-                 '1',
-                 '1',
-                 '1',
-                 '0',
-                 NULL,
-                 '1',
-                 '200',
-                 '15',
-                 '500',
-                 NULL,
-                 '0',
-                 '$langFormula',
-                 '$email',
-                 '$langForumLanguage'
-                 )");
+	mysql_query("CREATE TABLE posts (
+	    post_id int(10) NOT NULL auto_increment,
+	    topic_id int(10) DEFAULT '0' NOT NULL,
+	    forum_id int(10) DEFAULT '0' NOT NULL,
+	    poster_id int(10) DEFAULT '0' NOT NULL,
+	    post_time varchar(20),
+	    poster_ip varchar(16),
+	    nom varchar(30),
+	    prenom varchar(30),
+	    PRIMARY KEY (post_id),
+	    KEY post_id (post_id),
+	    KEY forum_id (forum_id),
+	    KEY topic_id (topic_id),
+	    KEY poster_id (poster_id))
+	    TYPE=MyISAM DEFAULT CHARSET=greek");
 
-    mysql_query("CREATE TABLE disallow (
-                  disallow_id int(10) NOT NULL auto_increment,
-                  disallow_username varchar(50),
-                  PRIMARY KEY (disallow_id))
-          TYPE=MyISAM DEFAULT CHARSET=greek");
+	mysql_query("INSERT INTO posts VALUES (1,1,1,1,NOW(),'130.104.1.1','$nom','$prenom')");
 
-    mysql_query("CREATE TABLE forum_access (
-                 forum_id int(10) DEFAULT '0' NOT NULL,
-                 user_id int(10) DEFAULT '0' NOT NULL,
-                 can_post tinyint(1) DEFAULT '0' NOT NULL,
-                 PRIMARY KEY (forum_id, user_id))
-        TYPE=MyISAM DEFAULT CHARSET=greek");
-
-    mysql_query("CREATE TABLE forum_mods (
-                 forum_id int(10) DEFAULT '0' NOT NULL,
-                 user_id int(10) DEFAULT '0' NOT NULL)
-        TYPE=MyISAM DEFAULT CHARSET=greek");
-
-    mysql_query("INSERT INTO forum_mods VALUES (
-                 '1',
-                 '1'
-                 )");
-
-    mysql_query("CREATE TABLE forums (
-                 forum_id int(10) NOT NULL auto_increment,
-                 forum_name varchar(150),
-                 forum_desc text,
-                 forum_access int(10) DEFAULT '1',
-                 forum_moderator int(10),
-                 forum_topics int(10) DEFAULT '0' NOT NULL,
-                 forum_posts int(10) DEFAULT '0' NOT NULL,
-                 forum_last_post_id int(10) DEFAULT '0' NOT NULL,
-                 cat_id int(10),
-                 forum_type int(10) DEFAULT '0',
-                 PRIMARY KEY (forum_id),
-                 KEY forum_last_post_id (forum_last_post_id))
-        TYPE=MyISAM DEFAULT CHARSET=greek");
-
-mysql_query("INSERT INTO forums VALUES (1,'$langTestForum','$langDelAdmin',2,1,1,1,1,2,0)");
-
-    mysql_query("CREATE TABLE headermetafooter (
-                 header text,
-                 meta text,
-                 footer text)
-        TYPE=MyISAM DEFAULT CHARSET=greek");
-
-    mysql_query("INSERT INTO headermetafooter VALUES (
-                 '<center><a href=../$repertoire><img border=0 src=../$repertoire/image/logo.png></a></center>',
-                 '',
-                 ''
-                 )");
-
-    mysql_query("CREATE TABLE posts (
-    post_id int(10) NOT NULL auto_increment,
-    topic_id int(10) DEFAULT '0' NOT NULL,
-    forum_id int(10) DEFAULT '0' NOT NULL,
-    poster_id int(10) DEFAULT '0' NOT NULL,
-    post_time varchar(20),
-    poster_ip varchar(16),
-    nom varchar(30),
-    prenom varchar(30),
-    PRIMARY KEY (post_id),
-    KEY post_id (post_id),
-    KEY forum_id (forum_id),
-    KEY topic_id (topic_id),
-    KEY poster_id (poster_id))
-    TYPE=MyISAM DEFAULT CHARSET=greek");
-
-mysql_query("INSERT INTO posts VALUES (1,1,1,1,NOW(),'130.104.1.1','$nom','$prenom')");
-
-    mysql_query("CREATE TABLE posts_text (
+	    mysql_query("CREATE TABLE posts_text (
                 post_id int(10) DEFAULT '0' NOT NULL,
                 post_text text,
                 PRIMARY KEY (post_id))
-        TYPE=MyISAM DEFAULT CHARSET=greek");
+		TYPE=MyISAM DEFAULT CHARSET=greek");
 
-mysql_query("INSERT INTO posts_text VALUES ('1','$langMessage')");
+	mysql_query("INSERT INTO posts_text VALUES ('1','$langMessage')");
 
-    mysql_query("CREATE TABLE priv_msgs (
-                msg_id int(10) NOT NULL auto_increment,
-                from_userid int(10) DEFAULT '0' NOT NULL,
-                to_userid int(10) DEFAULT '0' NOT NULL,
-                msg_time varchar(20),
-                poster_ip varchar(16),
-                msg_status int(10) DEFAULT '0',
-                msg_text text,
-                PRIMARY KEY (msg_id),
-                KEY msg_id (msg_id),
-                KEY to_userid (to_userid))
-        TYPE=MyISAM DEFAULT CHARSET=greek");
-
-    mysql_query("CREATE TABLE ranks (
-               rank_id int(10) NOT NULL auto_increment,
-               rank_title varchar(50) NOT NULL,
-               rank_min int(10) DEFAULT '0' NOT NULL,
-               rank_max int(10) DEFAULT '0' NOT NULL,
-               rank_special int(2) DEFAULT '0',
-               rank_image varchar(255),
-               PRIMARY KEY (rank_id),
-               KEY rank_min (rank_min),
-               KEY rank_max (rank_max))
-        TYPE=MyISAM DEFAULT CHARSET=greek");
-
-    mysql_query("CREATE TABLE sessions (
-               sess_id int(10) unsigned DEFAULT '0' NOT NULL,
-               user_id int(10) DEFAULT '0' NOT NULL,
-               start_time int(10) unsigned DEFAULT '0' NOT NULL,
-               remote_ip varchar(15) NOT NULL,
-               PRIMARY KEY (sess_id),
-               KEY sess_id (sess_id),
-               KEY start_time (start_time),
-               KEY remote_ip (remote_ip))
-        TYPE=MyISAM DEFAULT CHARSET=greek");
-
-    mysql_query("CREATE TABLE themes (
-               theme_id int(10) NOT NULL auto_increment,
-               theme_name varchar(35),
-               bgcolor varchar(10),
-               textcolor varchar(10),
-               color1 varchar(10),
-               color2 varchar(10),
-               table_bgcolor varchar(10),
-               header_image varchar(50),
-               newtopic_image varchar(50),
-               reply_image varchar(50),
-               linkcolor varchar(15),
-               vlinkcolor varchar(15),
-               theme_default int(2) DEFAULT '0',
-               fontface varchar(100),
-               fontsize1 varchar(5),
-               fontsize2 varchar(5),
-               fontsize3 varchar(5),
-               fontsize4 varchar(5),
-               tablewidth varchar(10),
-               replylocked_image varchar(255),
-               PRIMARY KEY (theme_id))
-        TYPE=MyISAM DEFAULT CHARSET=greek");
-
-    mysql_query("INSERT INTO themes VALUES (
-               '1',
-               'Default',
-               '#000000',
-               '#FFFFFF',
-               '#6C706D',
-               '#2E4460',
-               '#001100',
-               'images/header-dark.jpg',
-               'images/new_topic-dark.jpg',
-               'images/reply-dark.jpg',
-               '#0000FF',
-               '#800080',
-               '0',
-               'sans-serif',
-               '1',
-               '2',
-               '-2',
-               '+1',
-               '95%',
-               'images/reply_locked-dark.jpg'
-               )");
-
-    mysql_query("INSERT INTO themes VALUES (
-               '2',
-               'Ocean',
-               '#FFFFFF',
-               '#000000',
-               '#CCCCCC',
-               '#9BB6DA',
-               '#000000',
-               'images/header.jpg',
-               'images/new_topic.jpg',
-               'images/reply.jpg',
-                '#0000FF',
-               '#800080',
-               '0',
-               'sans-serif',
-               '1',
-               '2',
-               '-2',
-               '+1',
-               '95%',
-               'images/reply_locked-dark.jpg'
-               )");
-
-    mysql_query("INSERT INTO themes VALUES (
-                '3',
-                'OCPrices.com',
-                '#FFFFFF',
-                '#000000',
-                '#F5F5F5',
-                '#E6E6E6',
-                '#FFFFFF',
-                'images/forum.jpg',
-                'images/nouveausujet.jpg',
-                'images/repondre.jpg',
-               '#0000FF',
-               '#800080',
-                '1',
-                'Arial,Helvetica, Sans-serif',
-                '1',
-                '2',
-                '-2',
-                '+1',
-                '600',
-                'images/reply_locked-dark.jpg'
-                )");
-
-    mysql_query("CREATE TABLE topics (
+	mysql_query("CREATE TABLE topics (
                topic_id int(10) NOT NULL auto_increment,
                topic_title varchar(100),
                topic_poster int(10),
@@ -627,18 +368,17 @@ mysql_query("INSERT INTO posts_text VALUES ('1','$langMessage')");
                forum_id int(10) DEFAULT '0' NOT NULL,
                topic_status int(10) DEFAULT '0' NOT NULL,
                topic_notify int(2) DEFAULT '0',
-    nom varchar(30),
-    prenom varchar(30),
+	    nom varchar(30),
+	    prenom varchar(30),
                PRIMARY KEY (topic_id),
                KEY topic_id (topic_id),
                KEY forum_id (forum_id),
                KEY topic_last_post_id (topic_last_post_id))
-        TYPE=MyISAM DEFAULT CHARSET=greek");
+		TYPE=MyISAM DEFAULT CHARSET=greek");
 
+	mysql_query("INSERT INTO topics VALUES (1,'$langExMessage',-1,'2001-09-18 20:25',1,'',1,1,'0','1', '$nom', '$prenom')");
 
-mysql_query("INSERT INTO topics VALUES (1,'$langExMessage',-1,'2001-09-18 20:25',1,'',1,1,'0','1', '$nom', '$prenom')");
-
-    mysql_query("CREATE TABLE users (
+	mysql_query("CREATE TABLE users (
                user_id int(10) NOT NULL auto_increment,
                username varchar(40) NOT NULL,
                user_regdate varchar(20) NOT NULL,
@@ -726,38 +466,7 @@ mysql_query("INSERT INTO users VALUES (
                NULL,
                NULL
                )");
-
-    mysql_query("CREATE TABLE whosonline (
-               id int(3) NOT NULL auto_increment,
-               ip varchar(255),
-               name varchar(255),
-               count varchar(255),
-               date varchar(255),
-               username varchar(40),
-               forum int(10),
-               PRIMARY KEY (id))
-        TYPE=MyISAM DEFAULT CHARSET=greek");
-
-    mysql_query("CREATE TABLE words (
-               word_id int(10) NOT NULL auto_increment,
-               word varchar(100),
-               replacement varchar(100),
-               PRIMARY KEY (word_id))
-        TYPE=MyISAM DEFAULT CHARSET=greek");
-
-
 } else {
-
-mysql_query("CREATE TABLE banlist (
-                 ban_id int(10) NOT NULL auto_increment,
-                 ban_userid int(10),
-                 ban_ip varchar(16),
-                 ban_start int(32),
-                 ban_end int(50),
-                 ban_time_type int(10),
-                 PRIMARY KEY (ban_id),
-                 KEY ban_id (ban_id))
-         TYPE=MyISAM");
 
     mysql_query("
 CREATE TABLE catagories (
@@ -773,69 +482,6 @@ mysql_query("INSERT INTO catagories VALUES (1,'$langCatagoryGroup',NULL)");
 // Create an example catagory
 mysql_query("INSERT INTO catagories VALUES (2,'$langCatagoryMain',NULL)");
 
-mysql_query("CREATE TABLE config (
-                 config_id int(10) NOT NULL auto_increment,
-                 sitename varchar(100),
-                 allow_html int(2),
-                 allow_bbcode int(2),
-                 allow_sig int(2),
-                 allow_namechange int(2) DEFAULT '0',
-                 admin_passwd varchar(32),
-                 selected int(2) DEFAULT '0' NOT NULL,
-                 posts_per_page int(10),
-                 hot_threshold int(10),
-                 topics_per_page int(10),
-                 allow_theme_create int(10),
-                 override_themes int(2) DEFAULT '0',
-                 email_sig varchar(255),
-                 email_from varchar(100),
-                 default_lang varchar(255),
-                 PRIMARY KEY (config_id),
-                 UNIQUE selected (selected))
-         TYPE=MyISAM");
-
-    mysql_query("INSERT INTO config VALUES (
-                 '1',
-                 '$intitule',
-                 '1',
-                 '1',
-                 '1',
-                 '0',
-                 NULL,
-                 '1',
-                 '200',
-                 '15',
-                 '500',
-                 NULL,
-                 '0',
-                 '$langFormula',
-                 '$email',
-                 '$langForumLanguage'
-                 )");
-
-    mysql_query("CREATE TABLE disallow (
-                  disallow_id int(10) NOT NULL auto_increment,
-                  disallow_username varchar(50),
-                  PRIMARY KEY (disallow_id))
-          TYPE=MyISAM");
-
-    mysql_query("CREATE TABLE forum_access (
-                 forum_id int(10) DEFAULT '0' NOT NULL,
-                 user_id int(10) DEFAULT '0' NOT NULL,
-                 can_post tinyint(1) DEFAULT '0' NOT NULL,
-                 PRIMARY KEY (forum_id, user_id))
-        TYPE=MyISAM");
-
-    mysql_query("CREATE TABLE forum_mods (
-                 forum_id int(10) DEFAULT '0' NOT NULL,
-                 user_id int(10) DEFAULT '0' NOT NULL)
-        TYPE=MyISAM");
-
-    mysql_query("INSERT INTO forum_mods VALUES (
-                 '1',
-                 '1'
-                 )");
-
     mysql_query("CREATE TABLE forums (
                  forum_id int(10) NOT NULL auto_increment,
                  forum_name varchar(150),
@@ -852,18 +498,6 @@ mysql_query("CREATE TABLE config (
         TYPE=MyISAM");
 
 mysql_query("INSERT INTO forums VALUES (1,'$langTestForum','$langDelAdmin',2,1,1,1,1,2,0)");
-
-    mysql_query("CREATE TABLE headermetafooter (
-                 header text,
-                 meta text,
-                 footer text)
-        TYPE=MyISAM");
-
-    mysql_query("INSERT INTO headermetafooter VALUES (
-                 '<center><a href=../$repertoire><img border=0 src=../$repertoire/image/logo.png></a></center>',
-                 '',
-                 ''
-                 )");
 
     mysql_query("CREATE TABLE posts (
     post_id int(10) NOT NULL auto_increment,
@@ -891,135 +525,6 @@ mysql_query("INSERT INTO posts VALUES (1,1,1,1,NOW(),'130.104.1.1','$nom','$pren
 
 mysql_query("INSERT INTO posts_text VALUES ('1','$langMessage')");
 
-    mysql_query("CREATE TABLE priv_msgs (
-                msg_id int(10) NOT NULL auto_increment,
-                from_userid int(10) DEFAULT '0' NOT NULL,
-                to_userid int(10) DEFAULT '0' NOT NULL,
-                msg_time varchar(20),
-                poster_ip varchar(16),
-                msg_status int(10) DEFAULT '0',
-                msg_text text,
-                PRIMARY KEY (msg_id),
-                KEY msg_id (msg_id),
-                KEY to_userid (to_userid))
-        TYPE=MyISAM");
-
-    mysql_query("CREATE TABLE ranks (
-               rank_id int(10) NOT NULL auto_increment,
-               rank_title varchar(50) NOT NULL,
-               rank_min int(10) DEFAULT '0' NOT NULL,
-               rank_max int(10) DEFAULT '0' NOT NULL,
-               rank_special int(2) DEFAULT '0',
-               rank_image varchar(255),
-               PRIMARY KEY (rank_id),
-               KEY rank_min (rank_min),
-               KEY rank_max (rank_max))
-        TYPE=MyISAM");
-
-    mysql_query("CREATE TABLE sessions (
-               sess_id int(10) unsigned DEFAULT '0' NOT NULL,
-               user_id int(10) DEFAULT '0' NOT NULL,
-               start_time int(10) unsigned DEFAULT '0' NOT NULL,
-               remote_ip varchar(15) NOT NULL,
-               PRIMARY KEY (sess_id),
-               KEY sess_id (sess_id),
-               KEY start_time (start_time),
-               KEY remote_ip (remote_ip))
-        TYPE=MyISAM");
-
-    mysql_query("CREATE TABLE themes (
-               theme_id int(10) NOT NULL auto_increment,
-               theme_name varchar(35),
-               bgcolor varchar(10),
-               textcolor varchar(10),
-               color1 varchar(10),
-               color2 varchar(10),
-               table_bgcolor varchar(10),
-               header_image varchar(50),
-               newtopic_image varchar(50),
-               reply_image varchar(50),
-               linkcolor varchar(15),
-               vlinkcolor varchar(15),
-               theme_default int(2) DEFAULT '0',
-               fontface varchar(100),
-               fontsize1 varchar(5),
-               fontsize2 varchar(5),
-               fontsize3 varchar(5),
-               fontsize4 varchar(5),
-               tablewidth varchar(10),
-               replylocked_image varchar(255),
-               PRIMARY KEY (theme_id))
-        TYPE=MyISAM");
-
-    mysql_query("INSERT INTO themes VALUES (
-               '1',
-               'Default',
-               '#000000',
-               '#FFFFFF',
-               '#6C706D',
-               '#2E4460',
-               '#001100',
-               'images/header-dark.jpg',
-               'images/new_topic-dark.jpg',
-               'images/reply-dark.jpg',
-               '#0000FF',
-               '#800080',
-               '0',
-               'sans-serif',
-               '1',
-               '2',
-               '-2',
-               '+1',
-               '95%',
-               'images/reply_locked-dark.jpg'
-               )");
-
-    mysql_query("INSERT INTO themes VALUES (
-               '2',
-               'Ocean',
-               '#FFFFFF',
-               '#000000',
-               '#CCCCCC',
-               '#9BB6DA',
-               '#000000',
-               'images/header.jpg',
-               'images/new_topic.jpg',
-               'images/reply.jpg',
-                '#0000FF',
-               '#800080',
-               '0',
-               'sans-serif',
-               '1',
-               '2',
-               '-2',
-               '+1',
-               '95%',
-               'images/reply_locked-dark.jpg'
-               )");
-
-    mysql_query("INSERT INTO themes VALUES (
-                '3',
-                'OCPrices.com',
-                '#FFFFFF',
-                '#000000',
-                '#F5F5F5',
-                '#E6E6E6',
-                '#FFFFFF',
-                'images/forum.jpg',
-                'images/nouveausujet.jpg',
-                'images/repondre.jpg',
-               '#0000FF',
-               '#800080',
-                '1',
-                'Arial,Helvetica, Sans-serif',
-                '1',
-                '2',
-                '-2',
-                '+1',
-                '600',
-                'images/reply_locked-dark.jpg'
-                )");
-
     mysql_query("CREATE TABLE topics (
                topic_id int(10) NOT NULL auto_increment,
                topic_title varchar(100),
@@ -1031,8 +536,8 @@ mysql_query("INSERT INTO posts_text VALUES ('1','$langMessage')");
                forum_id int(10) DEFAULT '0' NOT NULL,
                topic_status int(10) DEFAULT '0' NOT NULL,
                topic_notify int(2) DEFAULT '0',
-    nom varchar(30),
-    prenom varchar(30),
+	    nom varchar(30),
+	    prenom varchar(30),
                PRIMARY KEY (topic_id),
                KEY topic_id (topic_id),
                KEY forum_id (forum_id),
@@ -1130,25 +635,6 @@ mysql_query("INSERT INTO users VALUES (
                NULL,
                NULL
                )");
-
-    mysql_query("CREATE TABLE whosonline (
-               id int(3) NOT NULL auto_increment,
-               ip varchar(255),
-               name varchar(255),
-               count varchar(255),
-               date varchar(255),
-               username varchar(40),
-               forum int(10),
-               PRIMARY KEY (id))
-        TYPE=MyISAM");
-
-    mysql_query("CREATE TABLE words (
-               word_id int(10) NOT NULL auto_increment,
-               word varchar(100),
-               replacement varchar(100),
-               PRIMARY KEY (word_id))
-        TYPE=MyISAM");
-
 }
 
 
