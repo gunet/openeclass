@@ -50,6 +50,7 @@ if (isset($fc)) {
 if (!isset($fc)) {
 	$fc = $_SESSION['fc_memo'];
 }
+$fc = intval($fc);
 $fac = mysql_fetch_row(mysql_query("SELECT name FROM faculte WHERE id = ".$fc));
 if (!($fac = $fac[0])) {
 	die("ERROR: no faculty with id $fc");
