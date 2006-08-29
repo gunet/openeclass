@@ -3,7 +3,7 @@ $langFiles = array('registration', 'admin', 'gunet');
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
 //@include "check_admin.inc";
-$nameTools = "Εγγραφή Καθηγητή";
+$nameTools = $reqregprof;
 
 // Initialise $tool_content
 $tool_content = "";
@@ -11,7 +11,7 @@ $tool_content = "";
 $auth = get_auth_id();
 
 $tool_content .= "	<form action=\"newprof_second.php\" method=\"post\">
-	<table width=\"99%\"><caption>Εισαγωγή Στοιχείων Καθηγητή</caption><tbody>
+	<table width=\"99%\"><caption>".$profpers."</caption><tbody>
 	<tr valign=\"top\" bgcolor=\"".$color2."\">
 	<td width=\"3%\" nowrap><b>".$langSurname."</b></td>
 	<td><input type=\"text\" name=\"nom_form\" value=\"".@$ps."\" >&nbsp;(*)</td>
