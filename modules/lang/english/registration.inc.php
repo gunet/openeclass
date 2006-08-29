@@ -41,6 +41,7 @@ $langCourseName = "Course name";
 $langLanguage = "Language";
 $langCoursesLabel = 'Courses';
 
+$langOtherCourses = "Course Registration";
 $langRegistration="Registration";
 $langName="First Name";
 $langSurname="Surname";

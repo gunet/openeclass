@@ -37,7 +37,7 @@ $langFiles = array('registration', 'opencours');
 
 include '../../include/baseTheme.php';
 
-$nameTools = $langCoursesLabel;
+$nameTools = $langOtherCourses;
 
 check_guest();
 
@@ -68,7 +68,7 @@ if (isset($_POST["submit"])) {
 			$sqlcheckpassword = mysql_query("SELECT password FROM cours WHERE code='".$contenu."'");
 			$myrow = mysql_fetch_array($sqlcheckpassword);
 			if ($myrow['password']!="" && $myrow['password']!=$$contenu) {
-				$tool_content .= "<p>Λάθος συνθηματικό για το μάθημα ".$contenu."</p>";				
+				$tool_content .= "<p>".$langWrongPassCourse." ".$contenu."</p>";				
 			} else {
 				$sqlInsertCourse = 
 					"INSERT INTO `cours_user` 
@@ -108,7 +108,7 @@ if ($facid==0) {
 } else {
 	// department exists
 
-	$tool_content .= "<caption>Σχολή/Τμήμα: ".$fac."</caption><tbody>";
+	$tool_content .= "<caption>".$m['department'].": ".$fac."</caption><tbody>";
 	
 	$tool_content .= "<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">";
 	$formend = "<tr>
@@ -120,7 +120,7 @@ if ($facid==0) {
 	$numofcourses = getdepnumcourses($facid);
 		
 	// display all the facultes collapsed
-	$tool_content .= "<tr><td><b>Διαθέσιμα Τμήματα:</b></td</tr><tr><td>".collapsed_facultes_horiz($facid)."</td></tr>";
+	$tool_content .= "<tr><td><b>".$langCoursesLabel."</b></td</tr><tr><td>".collapsed_facultes_horiz($facid)."</td></tr>";
 	if ( $numofcourses > 0 ) {
 		$tool_content .= expanded_faculte($facid, $uid);
 	} else {
@@ -221,7 +221,7 @@ function expanded_faculte($facid, $uid) {
 				// just concatenate the s char in the end of the string
 				$ts = $t."s";
 				//type the seperator in front of the types except the 1st
-				if ($counter != 1) echo " | ";
+				if ($counter != 1) $retString .= " | ";
 				$retString .= "<a href=\"#".$t."\">".$m["$ts"]."</a>";
 				$counter++;
 			}
@@ -282,7 +282,7 @@ function expanded_faculte($facid, $uid) {
 							}
 						}
 						if ($mycours["visible"]==0 && !isset ($myCourses[$mycours["k"]]["subscribed"])) {
-							$contactprof = " <a href=\"contactprof.php?fc=".$facid."&cc=".$mycours['k']."\">Αποστολή ενημερωτικού email στον διδάδκοντα</a>";
+							$contactprof = "<br><small>".$m['mailprof']."<a href=\"contactprof.php?fc=".$facid."&cc=".$mycours['k']."\">".$m['here']."</a></small>";
 							$retString .= "</td><td width=\"100%\" valign=\"top\" colspan=\"2\"><b>".$codelink."</b>";							
 						} else {
 							$retString .= "</td><td width=\"100%\" valign=\"top\"><b>".$codelink."</b></td>"
@@ -293,33 +293,31 @@ function expanded_faculte($facid, $uid) {
 							if ($myCourses[$mycours["k"]]["statut"]!=1) {
 								$retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]' checked >";
 							if ($mycours['p']!="" && $mycours['visible'] == 1) {
-								$requirepassword = "Κωδικός: <input type=\"password\" name=\"".$mycours['k']."\" value=\"".$mycours['p']."\">";
-							}
+								$requirepassword = $m['code'].": <input type=\"password\" name=\"".$mycours['k']."\" value=\"".$mycours['p']."\">";
+								}
 							} else {
 								$retString .= "[$langTitular]";
 							}
 						}
 						else {
 							if ($mycours['p']!="" && $mycours['visible'] == 1) {
-								$requirepassword = "Κωδικός: <input type=\"password\" name=\"".$mycours['k']."\">";
+								$requirepassword = $m['code'].": <input type=\"password\" name=\"".$mycours['k']."\">";
 							}
 							if ($mycours["visible"]>0  || isset ($myCourses[$mycours["k"]]["subscribed"]))
 								$retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]'>";
 						}
 						if ($mycours["visible"]>0 || isset ($myCourses[$mycours["k"]]["subscribed"])) {
 							$retString .= "<input type='hidden' name='changeCourse[]' value='$mycours[k]'>\n";
-						
-							$retString .= "</td></tr>
+		
+							@$retString .= "</td></tr>
 							<tr>
 							<td>$mycours[t]".$contactprof."</td><td width=\"3%\" nowrap>".$requirepassword."</td>
 							</tr></table>";
 						} else {
-							$retString .= "</td></tr>
+							@$retString .= "</td></tr>
 							<tr>
 							<td colspan=\"2\">$mycours[t]".$contactprof."</td></tr></table>";
 						}
-						$requirepassword = "";
-						$contactprof = "";
 					}
 					// output a top href link if necessary
                if ( $numoftypes > 1)

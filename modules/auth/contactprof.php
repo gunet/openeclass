@@ -43,7 +43,7 @@ else
 	$res = mysql_query($sql);
 	$row = mysql_fetch_array($res);
 	
-	$tool_content .= "<form action=\"".$_SERVER[PHP_SELF]."?fc=".$_GET['fc']."\" method=\"post\">
+	$tool_content .= "<form action=\"".$_SERVER['PHP_SELF']."?fc=".$_GET['fc']."\" method=\"post\">
 <table width=\"99%\"><caption>Συμπλήρωση Φόρμας</caption><tbody>";
 	$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\"><b>Όνομα:</b></td><td><input type=\"text\" name=\"firstname\" value=\"".$row["nom"]."\" readonly></td></tr>";	
 	$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\"><b>Επίθετο:</b></td><td><input type=\"text\" name=\"lastname\" value=\"".$row["prenom"]."\" readonly></td></tr>";	

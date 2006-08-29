@@ -43,6 +43,7 @@ $langCourseName = "Τίτλος Μαθήματος";
 $langLanguage = "Γλώσσα";
 $langCoursesLabel = 'Τμήματα';
 
+$langOtherCourses = "Εγγραφή σε μάθημα";
 $langRegistration="Εγγραφή";
 $langName="Όνομα";
 $langSurname="Επώνυμο";

@@ -6,6 +6,8 @@ $langDepartmentsList = "A list of this institution's departments apprears below.
 	any of them to view a list of its available courses."; 
 $avlesson="course available";
 $avlessons="courses available";
+$langWrongPassCourse = "Wrong Course Password";
+
 
 $m['department'] = 'Department';
 $m['tomeis'] = 'Divisions';
