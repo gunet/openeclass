@@ -65,7 +65,7 @@ $helpTopic = 'User';
 include '../../include/baseTheme.php';
 
 
-$nameTools = "video";
+$nameTools = $langVideo;
 $nick=$prenom." ".$nom;
 $tool_content="";
 

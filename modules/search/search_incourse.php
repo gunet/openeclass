@@ -41,7 +41,7 @@ $langFiles = array('course_info', 'create_course', 'opencours', 'search');
 
 include '../../include/baseTheme.php';
 
-
+$nameTools = $langSearch;
 
 /*// kwdikas gia debugging
 mysql_select_db("$dbname");
@@ -57,10 +57,6 @@ while($res = mysql_fetch_array($result))
 exit;
 //tellos debugging kwdika
 */
-
-
-
-
 
 $tool_content = "";
 
@@ -100,7 +96,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 	
 		$tool_content .= "
 			<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
-			<table width=\"99%\"><caption>$langSearch</caption>
+			<table width=\"99%\">
 			<tr>
 				<td valign=\"middle\" align=\"right\">
 					<b>$langOR</b>
