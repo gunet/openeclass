@@ -228,13 +228,12 @@ $tool_content.=
 ';
 
 if ($is_adminOfCourse) {
-if (isset($Video_URL)) {
-	$tool_content.='<div  style="position:absolute;height:291px;width: 200px;border:groove;top:410px;left:200px;">
-	<form id="video_form" onSubmit="return play_video();">
-	<br>'.$Video_URL.'<br>
-	<table>
-	<tr>';
-}
+	$tool_content .= '<div style="position:absolute;height:291px;width: 200px;border:groove;top:410px;left:200px;">
+	<form id="video_form" onSubmit="return play_video();">';
+	if (isset($Video_URL)) {
+			$tool_content .= '<br>'.$Video_URL.'<br>';
+	}
+	$tool_content .= '<table><tr>';
 
 if(isset($MCU))
 {
