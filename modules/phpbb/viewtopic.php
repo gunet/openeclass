@@ -120,8 +120,10 @@ if ( $total > $posts_per_page ) {
 		<TR><TD>$l_gotopage (
 cData;
 	$last_page = $start - $posts_per_page;
-	if ( $start > 0 ) {
+	if ( isset($start) && $start > 0 ) {
 		$tool_content .= "<a href=\"$PHP_SELF?topic=$topic&forum=$forum&start=$last_page\">$l_prevpage</a> ";
+	} else {
+		$start = 0;
 	}
 	for($x = 0; $x < $total; $x += $posts_per_page) {
 		if($times != 1) {
