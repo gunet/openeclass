@@ -19,6 +19,7 @@ $mailbody7="Faculty / Department:";
 
 $logo= "GUnet e-Class Asynchronous Teleteaching Platform";
 
+$introcontact = "You can contact with the GUNet e-Class Asynchronous Teleteaching Team using the following ways:";
 $contact="<b>Post Office Address:</b>";
 $contact2="GUnet Academic Network";
 $contact9="(Asynchronous Teleteaching Group)";

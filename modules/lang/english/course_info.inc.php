@@ -34,7 +34,7 @@
       +----------------------------------------------------------------------+
  */
 $langGeneralInfo = "General Info";
-$langModifInfo="Modify course information";
+$langModifInfo="Course Admin";
 $langModifDone="The information has been modified";
 $langHome="Back to HomePage";
 $langCode="Course code";
