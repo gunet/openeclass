@@ -173,7 +173,7 @@ switch($close)
 					    WHERE rid = '$id'";
 		    	if (db_query($sql)) 
 		    	{
-						if ($sendmail == 1) 
+						if (isset($sendmail) and ($sendmail == 1)) 
 						{
     			    $emailsubject = "Απόρριψη αίτησης εγγραφής στην Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης";
 			    		$emailbody = "Η αίτησή σας για εγγραφή στην πλατφόρμα e-Class απορρίφθηκε.
@@ -185,7 +185,7 @@ switch($close)
 			    		send_mail($siteName, $emailAdministrator, "$prof_name $prof_surname",	$prof_email, $emailsubject, $emailbody, $charset);
 						}
 						$tool_content .= "<p>Η αίτηση του καθηγητή απορρίφθηκε";
-						if ($sendmail == 1) $tool_content .= " και στάλθηκε ενημερωτικό μήνυμα στη"." διεύθυνση $prof_email";
+						$tool_content .= " και στάλθηκε ενημερωτικό μήνυμα στη"." διεύθυνση $prof_email";
 						$tool_content .= ". <br><br>Σχόλια:<br><pre>$comment</pre></p>\n";
 		    	}
 				}
@@ -198,7 +198,7 @@ switch($close)
 				$d = mysql_fetch_assoc($r);
 				$tool_content .= "
 					<br><br>
-					<center><p>Πρόκειται να απορρίψετε την αίτηση καθηγητή με στοιχεία:<br><br>".$d[profname]." ".$d[profsurname]." &lt;".$d[profemail]."&gt;
+					<center><p>Πρόκειται να απορρίψετε την αίτηση καθηγητή με στοιχεία:<br><br>".$d['profname']." ".$d['profsurname']." &lt;".$d['profemail']."&gt;
 					<br><br>Σχόλια:	<form action=\"listreq.php\" method=\"post\">
 					<input type=\"hidden\" name=\"id\" value=\"".$id."\">
 					<input type=\"hidden\" name=\"close\" value=\"2\">
