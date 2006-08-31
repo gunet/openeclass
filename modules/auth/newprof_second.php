@@ -10,11 +10,6 @@ $nameTools = $regprof;
 $tool_content = "";
 // Main body
 
-if (!isset($userMailCanBeEmpty))
-{	
-	$userMailCanBeEmpty = true;
-} 
-
 $statut=1;
 
 $submit = isset($_POST['submit'])?$_POST['submit']:'';
@@ -27,12 +22,12 @@ $usercomment = isset($_POST['usercomment'])?$_POST['usercomment']:'';
 $department = isset($_POST['department'])?$_POST['department']:'';
 $userphone = isset($_POST['userphone'])?$_POST['userphone']:'';
 
-if(!empty($submit))
-{
-	// Don't worry about figuring this regular expression out quite yet...// It will test for address@domainname and address@ip
-	$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
-	$emailtohostname = substr($email, (strrpos($email, "@") +1));
-	
+if(!empty($submit)) {
+	if (isset($email_form)) {
+			// Don't worry about figuring this regular expression out quite yet...// It will test for address@domainname and address@ip
+		$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
+//		$emailtohostname = substr($email_form, (strrpos($email_form, "@") +1));
+	}
 	// check if user name exists
 	$username_check=mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='$uname'");
 	while ($myusername = mysql_fetch_array($username_check)) 
@@ -42,17 +37,14 @@ if(!empty($submit))
 
 	// check if passwd is too easy
 	if ((strtoupper($password) == strtoupper($uname)) || (strtoupper($password) == strtoupper($nom_form))
-		|| (strtoupper($password) == strtoupper($prenom_form))
-		|| (strtoupper($password) == strtoupper($email))) 
-	{
-		
-		$tool_content .= "<p>$langPassTooEasy : 
+		|| (strtoupper($password) == strtoupper($prenom_form))) {
+			$tool_content .= "<p>$langPassTooEasy : 
 				<strong>".substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8)."</strong></p>
 			<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
 	}
 
 	// check if there are empty fields
-	elseif (empty($nom_form) or empty($prenom_form) or empty($password) or empty($usercomment) or empty($department) or empty($uname) or (empty($email_form) && !$userMailCanBeEmpty)) 
+	elseif (empty($nom_form) or empty($prenom_form) or empty($password) or empty($usercomment) or empty($department) or empty($uname) or (empty($email_form))) 
 	{
 		$tool_content .= "<p>$langEmptyFields</p>
 		<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
@@ -62,12 +54,12 @@ if(!empty($submit))
 		$tool_content .= "<p>$langUserFree</p>
 		<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
   }
-	elseif(!$userMailCanBeEmpty &&!eregi($regexp,$email)) // check if email syntax is valid
+	elseif(!eregi($regexp,$email_form)) // check if email syntax is valid
 	{
         $tool_content .= "<p>$langEmailWrong.</p>
-		<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
+				<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
 	}
-	else 		/**************** REGISTRATION ACCEPTED **************************/
+	else 		// registration is ok
 	{
 		// ------------------- Update table prof_request ------------------------------
 		$username = $uname;
@@ -120,88 +112,13 @@ if(!empty($submit))
 		<tr bgcolor=$color2><td>
 				<br /><br />$dearprof<br /><br />$success<br /><br>$infoprof<br /><br />				
 				$click <a href=\"$urlServer\">$here</a> $backpage
-	                        </font>
-	                        <br /><br /><br />
-	                </td>
-	        </tr>
-		</table>";
-		// --------------------------------------------------------------------------------------
-		
-
+	      </font><br /><br /><br /></td></tr></table>";
 	} 
-
-
 }
 else 
 {
 	$tool_content .= "<br />No data provided. Cannot proceed<br>";
 }
 
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	/*
-		$emailsubject = "$langYourReg $siteName, $langAsProf";
-		if (isset($institut) and ($institut > 0)) 
-		{
-			$emailbody = "$langDestination $prenom_form $nom_form
-				$langYouAreReg$siteName, $langAsProf, $langSettings $uname $langPassSameLDAP
-				$langAddress $siteName $langIs: $urlServer $langProblem
-				$langFormula, $administratorName $administratorSurname
-				$langManager $siteName
-				$langTel $telephone
-				$langEmail : $emailAdministrator";
-		} 
-		else 
-		{
-			$emailbody = "$langDestination $prenom_form $nom_form
-				$langYouAreReg$siteName, $langAsProf, $langSettings $uname
-				$langPass : $password
-				$langAddress $siteName $langIs: $urlServer
-				$langProblem $langFormula,
-				$administratorName $administratorSurname $langManager $siteName
-				$langTel $telephone
-				$langEmail : $emailAdministrator";
-		}
-
-		send_mail($siteName, $emailAdministrator, '', $email_form, $emailsubject, $emailbody, $charset);
-
-		// register user 
-		if (!isset($institut)) 
-		{
-			$institut = "NULL";
-		}
-		$s = mysql_query("SELECT id FROM faculte WHERE name='$department'");
-		$dep = mysql_fetch_array($s);
-		$registered_at = time();
- 		$expires_at = time() + 31536000;
- 		$auth_method_settings = get_auth_settings($auth);
-		if((!empty($auth_method_settings)) && ($auth!=1))
-		{
-			$password = $auth_method_settings['auth_name'];
-		}
-		$inscr_user=mysql_query("INSERT INTO `$mysqlMainDb`.user
-			(user_id, nom, prenom, username, password, email, statut, department, inst_id, registered_at, expires_at)
-			VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password', '$email_form','$statut','$dep[id]', '$institut', '$registered_at', '$expires_at')");
-		$last_id=mysql_insert_id();
-	        $tool_content .= "<p>$profsuccess</p>
-						<br><br>
-						<center><p><a href='../admin/listreq.php'>$langBackReq</a></p></center>";
-	*/
-
-
 draw($tool_content,0);
-
 ?>

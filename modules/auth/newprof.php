@@ -2,7 +2,6 @@
 $langFiles = array('registration', 'admin', 'gunet');
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
-//@include "check_admin.inc";
 $nameTools = $reqregprof;
 
 // Initialise $tool_content
@@ -34,15 +33,14 @@ $tool_content .= "	<form action=\"newprof_second.php\" method=\"post\">
 	<td><input type=\"text\" name=\"email_form\" value=\"".@$pe."\">&nbsp;(*)</b></td>
 	</tr>
 	<tr bgcolor=\"".$color2."\">
-        <td>".$profcomment."<br><font size=\"1\">".$profreason."
-       	</td>
+        <td>".$profcomment."<br><small>".$profreason."</small></td>
 	<td>
         <textarea name=\"usercomment\" COLS=\"35\" ROWS=\"4\" WRAP=\"SOFT\">".@$usercomment."</textarea>
 	<font size=\"1\">&nbsp;(*)</font>
         </td>
         </tr>
 	<tr bgcolor=\"".$color2."\">
-        <td>".$langDepartment.":</td>
+        <td>".$langDepartment."</td>
         <td><select name=\"department\">";
         $deps=mysql_query("SELECT name FROM faculte order by id");
         while ($dep = mysql_fetch_array($deps)) 
@@ -52,7 +50,7 @@ $tool_content .= "	<form action=\"newprof_second.php\" method=\"post\">
         $tool_content .= "</select>
         </td>
         </tr>				
-	<tr><td colspan=\"2\">".$langRequiredFields."</td></tr>
+	<tr><td colspan=\"2\"><small>".$langRequiredFields."</small></td></tr>
 	<tr><td>&nbsp;</td>
 	<td><input type=\"submit\" name=\"submit\" value=\"".$langOk."\" >
 	<input type=\"hidden\" name=\"auth\" value=\"1\" >
@@ -61,7 +59,7 @@ $tool_content .= "	<form action=\"newprof_second.php\" method=\"post\">
 </tbody></table></form>
 ";
 
-$tool_content .= "<center><p><a href=\"../admin/index.php\">Επιστροφή</p></center>";
+$tool_content .= "<center><p><a href=\"../admin/index.php\">$langReturn</p></center>";
 
 draw($tool_content,0);
 
