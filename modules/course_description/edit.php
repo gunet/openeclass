@@ -249,7 +249,7 @@ if ($is_adminOfCourse) {
 			if (!isset($blocState[$numBloc])||$blocState[$numBloc]!="used")
 			$tool_content .=  "<option value=\"".$numBloc."\">".$titreBloc[$numBloc]."</option>";
 		}
-		$tool_content .=  "<option value=\"add\">".$langNewBloc."</option></select>
+		$tool_content .=  "</select>
 		<input type=\"submit\" name=\"add\" value=\"".$langAdd."\"></form>
 		</td></tr></thead></table>";
 		$tool_content .= "<br><br>";
