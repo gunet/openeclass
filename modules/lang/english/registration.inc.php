@@ -346,4 +346,5 @@ $langNoUpdate = "Unable to do the update for user with id";
 $langUpdateNoChange = "You did not change any user info.";
 $langError = "Error";
 
+$langRegistrationError = "Error! Return to platform home page.";
 ?>
