@@ -3,7 +3,6 @@ $langFiles = array('registration', 'admin', 'gunet');
 include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
 require_once 'auth.inc.php';
-//@include "check_admin.inc";
 $nameTools = $regprof;
 
 // Initialise $tool_content
@@ -26,7 +25,6 @@ if(!empty($submit)) {
 	if (isset($email_form)) {
 			// Don't worry about figuring this regular expression out quite yet...// It will test for address@domainname and address@ip
 		$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
-//		$emailtohostname = substr($email_form, (strrpos($email_form, "@") +1));
 	}
 	// check if user name exists
 	$username_check=mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='$uname'");
@@ -117,7 +115,7 @@ if(!empty($submit)) {
 }
 else 
 {
-	$tool_content .= "<br />No data provided. Cannot proceed<br>";
+	$tool_content .= "<br />$langRegistrationError<br>";
 }
 
 draw($tool_content,0);
