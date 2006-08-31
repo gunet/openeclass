@@ -118,7 +118,7 @@ $langGroup = "User Groups";
 // Added by vagpits
 
 // General
-$langReturn = "Return";
+$langReturn = "Back";
 $langReturnToSearch = "Return to search results";
 $langReturnSearch = "Return to search";
 $langDelete = "Delete";
