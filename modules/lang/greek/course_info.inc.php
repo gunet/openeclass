@@ -51,7 +51,7 @@ Translate the interface in chosen language
 
 $langGeneralInfo = "Γενικές Πληροφορίες";
 $langBackupCourse="Αντίγραφο ασφαλείας του μαθήματος";
-$langModifInfo="Αλλαγή των πληροφοριών για το μάθημα";
+$langModifInfo="Διαχείριση Μαθήματος";
 $langModifDone="Η πληροφορία έχει αλλάξει";
 $langHome="Επιστροφή στην αρχική σελίδα";
 $langCode="Κωδικός Μαθήματος";

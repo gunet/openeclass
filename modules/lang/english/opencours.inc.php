@@ -33,7 +33,7 @@ $m['legrestricted'] = 'Registration required';
 $m['legclosed'] = 'Closed Course';
 
 $m['type']="Type";
-$m['name']="Lesson name";
-$m['code']="Lesson code";
+$m['name']="Course";
+$m['code']="Course code";
 $m['prof']="Professor(s)";
 ?>
