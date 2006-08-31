@@ -33,5 +33,7 @@ $titreBloc[] = "Τρόποι αξιολόγησης / εξέτασης";
 $titreBlocNotEditable[] = TRUE;  
 $questionPlan[] = "Με ποιο τρόπο θα γίνει η εξέταση του μαθήματος?";  
 $info2Say[] = "Η εξέταση θα γίνει με προφορικές και γραπτές εξετάσεις.";  
+$titreBloc[] ="Συμπληρωματικά στοιχεία";
+$titreBlocNotEditable[] = TRUE;
 
 ?>

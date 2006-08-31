@@ -40,7 +40,6 @@ $langQuestionPlan = "Ερώτηση στον διδάσκοντα";
 $langInfo2Say = "Πληροφορία για τους φοιτητές";
 $langOuAutreTitre = "Τίτλος";
 $langContenuPlan = "";
-$langNewBloc = "Συμπληρωματικά στοιχεία";
 $langAddCat = "Κατηγορία";
 $langAdd ="Προσθήκη";
 $langValid ="Προσθήκη";
