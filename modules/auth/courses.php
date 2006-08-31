@@ -55,7 +55,7 @@ if (isset($_POST["submit"])) {
 		// check if user tries to unregister from restricted course
 		foreach ($changeCourse as $key => $value) {
 			if (!isset($selectCourse[$key]) and is_restricted($value)) {
-				$tool_content .= "(restricted unsub $value) ";
+				$tool_content .= "$m[unsub] $value ";
 			}
 		}
 		foreach ($changeCourse as $value) {
@@ -80,7 +80,6 @@ if (isset($_POST["submit"])) {
 		}
 	}
 	$tool_content .= "<p>".$langIsReg."</p><br>";
-	
 	$tool_content .= "<center><p><a href=\"../../index.php\">$langHome</a></p></center>";
 }
 else
@@ -97,11 +96,10 @@ if (isset( $_GET['fc'] ) ) {
 	// get faculte name from user's department column
 	$facid = getfacfromuid($uid);
 	$fac = getfacnamefromfacid($facid);
-	//$tool_content .= $fac;
 }
 
 if ($facid==0) {
- 	$tool_content .= "<caption>Επιλογή Τμήματος</caption><tbody>";
+ 	$tool_content .= "<tbody>";
 	$tool_content .= "<tr><td><i>$langAddHereSomeCourses</i></td></tr>";
     $tool_content .= "<tr><td>";
 	$tool_content .= collapsed_facultes_vert(0);
@@ -126,7 +124,6 @@ if ($facid==0) {
 	} else {
 		$tool_content .= "<tr><td>Δεν υπάρχουν Διαθέσιμα Μαθήματα...</td></tr>";
 	}
-	
 
 } // end of else (department exists)
 
@@ -178,7 +175,6 @@ function getdepnumcourses($facid) {
 	WHERE facid='$facid'" ));
 	return $res[0];
 }
-
 
 
 function expanded_faculte($facid, $uid) {
@@ -308,13 +304,10 @@ function expanded_faculte($facid, $uid) {
 						}
 						if ($mycours["visible"]>0 || isset ($myCourses[$mycours["k"]]["subscribed"])) {
 							$retString .= "<input type='hidden' name='changeCourse[]' value='$mycours[k]'>\n";
-		
 							@$retString .= "</td></tr>
-							<tr>
-							<td>$mycours[t]".$contactprof."</td><td width=\"3%\" nowrap>".$requirepassword."</td>
-							</tr></table>";
+							<tr><td>".$mycours['t']."</td><td width=\"3%\" nowrap>".$requirepassword."</td></tr></table>";
 						} else {
-							@$retString .= "</td></tr>
+							$retString .= "</td></tr>
 							<tr>
 							<td colspan=\"2\">$mycours[t]".$contactprof."</td></tr></table>";
 						}
