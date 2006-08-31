@@ -36,4 +36,5 @@ $m['type']="Type";
 $m['name']="Course";
 $m['code']="Course code";
 $m['prof']="Professor(s)";
+$m['unsub'] = "Course is closed. Unregistration is not allowed";
 ?>
