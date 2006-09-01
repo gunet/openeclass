@@ -120,9 +120,7 @@ if($is_adminOfCourse)
 		} else {
 
 	$tool_content .="
-	
-		<p>$langAskGuestf</p>
-		
+		<p>$langAskGuest</p>
 		
 		<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">";
 		
