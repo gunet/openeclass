@@ -32,21 +32,12 @@
   *			   VIDEO UPLOADER AND DOWNLOADER
   ********************************************************************
 
-GOALS
-*****
-Allow professor to send quickly video immediately
-visible on his site.
-
 The script makes 5 things:
 
 	 1. Upload video
-
 	 2. Give them a name
-
 	 3. Modify data about video
-
 	 4. Delete link to video and simultaneously remove them
-
 	 5. Show video list to students and visitors
 
 On the long run, the idea is to allow sending realvideo . Which means only
@@ -107,7 +98,10 @@ if($is_adminOfCourse) {
 					draw($tool_content, 2, 'user', $head_content);}
 				} else {
 					$tool_content="<table><tbody><tr><td colspan=2 class=\"caution\">$langTooBig</td></tr></tbody></table><a href=\"$_SERVER[PHP_SELF]\">$langBack</a>";
-draw($tool_content, 2, 'user', $head_content);
+if (isset($head_content)) 					
+	draw($tool_content, 2, 'user', $head_content);
+else 	
+	draw($tool_content, 2, 'user');
 exit;
 				}
 
@@ -184,7 +178,7 @@ exit;
 			<p><a href=\"$_SERVER[PHP_SELF]\">$langBack</a>";
 	}	
 	else {
-########################### IF NO SUBMIT #############################
+// if no submit
 		if (!isset($id)) {
 			$tool_content.="
 			<br>
@@ -337,9 +331,8 @@ if(type==\"URL\")
 				}
 				$i++;
 			}	// while
-		######################### FORM #######################################
 
-
+			// --------------- form --------------------------------
 
 		}	// if ! id
 		if (isset($id)) {
@@ -402,11 +395,9 @@ if(type==\"URL\")
 		}	// if id
 
 
-
-
 	}	
 }   // if uid=prof_id
-############################# STUDENT VIEW #############################
+// student view
 else {
 	$result = db_query("SELECT * FROM video ORDER BY title",$currentCourseID);
 	$i=0;
@@ -451,7 +442,8 @@ else {
 	}	 
 }	
 
-
-draw($tool_content, 2, 'user', $head_content);
-
+if (isset($head_content))
+	draw($tool_content, 2, 'user', $head_content);
+else
+	draw($tool_content, 2, 'user');
 ?>
