@@ -50,12 +50,20 @@ $action->record('MODULE_ID_USAGE');
 
 $tool_content = '';
 
+$tool_content .= "<a href=".$_SERVER['PHP_SELF'].">".$langUsage."</a> | ";
+$tool_content .= "<a href='favourite.php'>".$langFavourite."</a> | ";
+$tool_content .= "<a href='oldStats.php'>".$langOldStats."</a><p>&nbsp</p>";
+
+
+
 $dateNow = date("d-m-Y / H:i:s",time());
 $nameTools = $langUsage;
 $local_style = '
     .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
      padding-left: 15px; padding-right : 15px; }
     .content {position: relative; left: 25px; }';
+
+
 
 include('../../include/jscalendar/calendar.php');
 if ($language == 'greek') {
@@ -77,6 +85,7 @@ if (isset($_POST['u_analyze']) && isset($_POST['user_id']) && $_POST['user_id'] 
         require_once "form.php";
     }
 }
+
 
 draw($tool_content, 2, '', $local_head, '');
 

@@ -515,7 +515,7 @@ if($sql)
 			}
 			$tool_content .= "<td><a href=\"edituser.php?u=".$logs['user_id']."\">$langEdit</a></td>
 				<td><a href=\"unreguser.php?u=".$logs['user_id']."\">$langDelete</a></td>
-				<td><a href=\"edituser.php?u=".$logs['user_id']."\">$langStat</a></td>\n";
+				<td><a href=\"userstats.php?u=".$logs['user_id']."\">$langStat</a></td>\n";
 			$tool_content .= "</tr>";
 		}
 	}

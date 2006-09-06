@@ -174,6 +174,8 @@ $langCourse="course";
 $langCourses="courses";
 
 $langLastVisits="My last visits";
+$langLastUserVisits= "Last Visits of User ";
+
 
 // search_user.php
 $langphone= "Telephone";

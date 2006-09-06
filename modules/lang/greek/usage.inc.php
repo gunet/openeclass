@@ -35,19 +35,29 @@
  $langEndDate = "Ημερομηνία Λήξης";
  $langUser = "Χρήστης";
  $langAllUsers = "Όλοι οι Χρήστες";
+ $langAllCourses = "Όλα τα μαθήματα";
+ $langCourse = "Μάθημα";
  $langSubmit = "Υποβολή";
  $langModule = "Υποσύστημα";
  $langAllModules = "Όλα τα Υποσυστήματα";
+ $langValueType = "Είδος Στατιστικών";
+ $langQuantity = "Ποσοτικά";
+ $langProportion = "Ποσοστιαία";
  $langStatsType = "Είδος Στατιστικών";
  $langTotalVisits = "Συνολικές Eπισκέψεις";
- $langVisits = "Επισκέψεις";
+ $langVisits = "Αριθμός Επισκέψεων";
  $langFavourite = "Προτίμηση Υποσυστημάτων";
+ $langFavouriteExpl = "Παρουσιάζεται η προτίμηση ενός χρήστη ή όλων των χρηστών στα υποσυστήματα μέσα σε ένα χρονικό διάστημα.";
+ $langOldStats = "Εμφάνιση παλιών στατιστικών";
+ $langOldStatsExpl = "Παρουσιάζονται συγκεντρωτικά μηνιαία στατιστικά στοιχεία παλιότερα από ";
  $langInterval = "Διάστημα";
  $langDaily = "Ημερήσιο";
  $langWeekly = "Εβδομαδιαίο";
  $langMonthly = "Μηνιαίο";
  $langYearly = "Ετήσιο";
  $langSummary = "Συγκεντρωτικά";
+ $langDuration = "Χρονική Διάρκεια Επισκέψεων";
+ $langDurationExpl = "Η χρονική διάρκεια των επισκέψεων σε κάθε υποσύστημα υπολογίζεται κατά προσέγγιση.";
  $langMonths[1] = "Ιαν";
  $langMonths[2] = "Φεβ";
  $langMonths[3] = "Μαρ";
@@ -60,4 +70,9 @@
  $langMonths[10] = "Οκτ";
  $langMonths[11] = "Νοε";
  $langMonths[12] = "Δεκ";
+ 
+ #for platform Statistics
+ $langUsersCourse = "Χρήστες ανά μάθημα";
+ $langVisitsCourseStats = "Επισκέψεις σε σελίδες μαθημάτων";
+ $langUserStats = "Στατιστικά Χρήστη";
 ?>

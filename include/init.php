@@ -244,6 +244,7 @@ if (isset($require_current_course) and $require_current_course) {
 		$toolContent_ErrorExists = "Το μάθημα δεν υπάρχει. Υπάρχει πρόβλημα στην πλατφόρμα ή εκτελέσατε μια μη επιτρεπτή ενέργεια";
 		$errorMessagePath = "../../";
 	}
+
 	$fac_lower = strtolower($fac);
 
 	// Check for course visibility by current user

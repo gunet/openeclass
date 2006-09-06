@@ -36,6 +36,7 @@ class usage_module {
             'actions_summary' => "CREATE TABLE actions_summary (
                         id int(11) NOT NULL auto_increment,
                         module_id int(11) NOT NULL,
+                        visits int(11) NOT NULL,
                         start_date DATETIME NOT NULL default '0000-00-00 00:00:00',
                         end_date DATETIME NOT NULL default '0000-00-00 00:00:00',
                         PRIMARY KEY (id))",

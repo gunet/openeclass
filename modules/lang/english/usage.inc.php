@@ -35,19 +35,29 @@
  $langEndDate = "End Date";
  $langUser = "User";
  $langAllUsers = "All Users";
+ $langAllCourses = "All Courses";
+ $langCourse = "Course";
  $langSubmit = "Submit";
  $langModule = "Module";
  $langAllModules = "All Modules";
- $langStatsType = "Statistics Type";
+ $langValueType = "Statistics Type";
+ $langStatsType = "Statistics type";
+ $langQuantity = "Quantitative";
+ $langProportion = "Proportional";
  $langTotalVisits = "Total Visits";
- $langVisits = "Visits";
+ $langVisits = "Number of visits";
  $langFavourite = "Module Preferences";
+ $langFavouriteExpl = "Παρουσιάζεται η προτίμηση ενός χρήστη ή όλων των χρηστών στα υποσυστήματα μέσα σε ένα χρονικό διάστημα.";
+ $langOldStats = "Show Old Statistics";
+ $langOldStatsExpl = "Monthly statistics older than ";
  $langInterval = "Interval";
  $langDaily = "Daily";
  $langWeekly = "Weekly";
  $langMonthly = "Montlhy";
  $langYearly = "Yearly";
  $langSummary = "Summary";
+ $langDuration = "Duration of visits";
+ $langDurationExpl = "Η χρονική διάρκεια των επισκέψεων σε κάθε υποσύστημα υπολογίζεται κατά προσέγγιση.";
  $langMonths[1] = "Jan";
  $langMonths[2] = "Feb";
  $langMonths[3] = "Mar";
@@ -60,4 +70,9 @@
  $langMonths[10] = "Oct";
  $langMonths[11] = "Nov";
  $langMonths[12] = "Dec";
+ 
+ #for platform Statistics
+ $langUsersCourse = "Users per course";
+ $langVisitsCourseStats = "number of visits to course pages";
+ $langUserStats = "User Statistics";
 ?>

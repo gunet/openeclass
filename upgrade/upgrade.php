@@ -809,7 +809,10 @@ while ($code = mysql_fetch_row($res)) {
 	        id int(11) NOT NULL auto_increment,
 					user_id int(11) NOT NULL,
 					module_id int(11) NOT NULL, 
-					action_type_id int(11) NOT NULL,																																									  date_time DATETIME NOT NULL default '0000-00-00 00:00:00',																													PRIMARY KEY (id))", $code[0]);	
+					action_type_id int(11) NOT NULL,
+                    date_time DATETIME NOT NULL default '0000-00-00 00:00:00',
+                    duration int(11) NOT NULL,
+                   	PRIMARY KEY (id))", $code[0]);
 	}
 
 	if (!mysql_table_exists($code[0], 'action_types')) {
@@ -824,8 +827,10 @@ while ($code = mysql_fetch_row($res)) {
 		db_query("CREATE TABLE actions_summary (
              id int(11) NOT NULL auto_increment,
              module_id int(11) NOT NULL,
+             visits int(11) NOT NULL,
              start_date DATETIME NOT NULL default '0000-00-00 00:00:00',
              end_date DATETIME NOT NULL default '0000-00-00 00:00:00',
+             duration int(11) NOT NULL,
              PRIMARY KEY (id))", $code[0]);
 	}
 

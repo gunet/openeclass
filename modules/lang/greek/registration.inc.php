@@ -224,6 +224,7 @@ $langCourse="μάθημα";
 $langCourses="μαθήματα";
 
 $langLastVisits="Οι τελευταίες μου επισκέψεις";
+$langLastUserVisits= "Οι τελευταίες επισκέψεις του χρήστη ";
 
 $langGuestUser="Προσθήκη χρήστη επισκέπτη";
 $langDumpUser="Κατάλογος χρηστών:";

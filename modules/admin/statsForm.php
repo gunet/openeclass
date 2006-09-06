@@ -18,22 +18,23 @@ $end_cal = $jscalendar->make_input_field(
                  'name'        => 'u_date_end',
                  'value'       => $u_date_end));
 
+$qry = "SELECT user_id, nom, prenom, username, email
+    FROM user";
 
 
-$qry = "SELECT id, rubrique AS name FROM accueil WHERE define_var != '' AND visible = 1 ORDER BY name ";
-
-$mod_opts = '<option value="-1">'.$langAllModules."</option>\n";
-$result = db_query($qry, $currentCourseID);
+$user_opts = '<option value="-1">'.$langAllUsers."</option>\n";
+$result = db_query($qry, $mysqlMainDb);
 while ($row = mysql_fetch_assoc($result)) {
-    if ($u_module_id == $row['id']) { $selected = 'selected'; } else { $selected = ''; }
-    $mod_opts .= '<option '.$selected.' value="'.$row["id"].'">'.$row['name']."</option>\n";
+    if ($u_user_id == $row['user_id']) { $selected = 'selected'; } else { $selected = ''; }
+    $user_opts .= '<option '.$selected.' value="'.$row["user_id"].'">'.$row['prenom'].' '.$row['nom']."</option>\n";
 }
 
 
-$statsValueOptions =
-    '<option value="visits" '.	 (($u_stats_value=='visits')?('selected'):(''))	  .'>'.$langVisits."</option>\n".
-    '<option value="duration" '.(($u_stats_value=='duration')?('selected'):('')) .'>'.$langDuration."</option>\n";
 
+
+$statsTypeOptions =
+    '<option value="visits" '.	 (($u_stats_type=='visits')?('selected'):(''))	  .'>'.$langVisits."</option>\n";
+  
 $statsIntervalOptions =
     '<option value="daily"   '.(($u_interval=='daily')?('selected'):(''))  .' >'.$langDaily."</option>\n".
     '<option value="weekly"  '.(($u_interval=='weekly')?('selected'):('')) .'>'.$langWeekly."</option>\n".
@@ -44,41 +45,35 @@ $statsIntervalOptions =
 //die($out);
 $tool_content .= '
 <form method="post">
-&nbsp;&nbsp;
     <table>
-        
         <tr>
-            <td>'.$langValueType.'</td>
-            <td><select name="u_stats_value">'.$statsValueOptions.'</select></td>
+            <td>'.$langStatsType.'</td>
+            <td><select name="u_stats_type">'.$statsTypeOptions.'</select></td>
         </tr>
-
         <tr>
             <td>'.$langStartDate.'</td>
-            <td>'."$start_cal".'</td>
+            <td>'.$start_cal.'</td>
         </tr>
         <tr>
             <td>'.$langEndDate.'</td>
-            <td>'."$end_cal".'</td>
+            <td>'.$end_cal.'</td>
         </tr>
         <tr>
-            <td>'.$langModule.'</td>
-            <td><select name="u_module_id">'.$mod_opts.'</select></td>
+            <td>'.$langUser.'</td>
+            <td><select name="u_user_id">'.$user_opts.'</select></td>
         </tr>
+        
         <tr>
             <td>'.$langInterval.'</td>
             <td><select name="u_interval">'.$statsIntervalOptions.'</select></td>
         </tr>
-        <tr>
-            <td>Αναλυτικό ιστορικό ενεργειών χρήστη</td>
-            <td>
-                <input type="checkbox" name="u_analyze" value="1">
-            </td>
-        </tr>
+        
         <tr>
             <td>&nbsp;</td>
             <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
         </tr>
-       
+        
+        
         
 </table>
 </form>';

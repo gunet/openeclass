@@ -44,9 +44,11 @@ foreach ($course_codes as $course_code) {
         $tmp = $row['first'];
         if ($tmp < $first_date_time) {
             $first_date_time = $tmp;
+            
         }
     }
     mysql_free_result($result);
+
 }
 $uptime = date("Y-m-d H:i:s", $first_date_time);
 

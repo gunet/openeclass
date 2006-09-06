@@ -1163,13 +1163,16 @@ db_query("CREATE TABLE actions (
             module_id int(11) NOT NULL,
             action_type_id int(11) NOT NULL,
             date_time DATETIME NOT NULL default '0000-00-00 00:00:00',
+            duration int(11) NOT NULL default 900,
             PRIMARY KEY (id))");
 
 db_query("CREATE TABLE actions_summary (
             id int(11) NOT NULL auto_increment,
             module_id int(11) NOT NULL,
+            visits int(11) NOT NULL,
             start_date DATETIME NOT NULL default '0000-00-00 00:00:00',
             end_date DATETIME NOT NULL default '0000-00-00 00:00:00',
+            duration int(11) NOT NULL,
             PRIMARY KEY (id))");
 
 if (mysql_version())   {

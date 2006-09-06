@@ -182,7 +182,8 @@ function loggedInMenu(){
 		array_push($sideMenuText, $langMyAgenda);
 		array_push($sideMenuLink, $urlServer . "modules/agenda/myagenda.php");
 		array_push($sideMenuImg, "calendar.gif");
-
+		
+        
 		array_push($sideMenuText, $langMyAnnouncements);
 		array_push($sideMenuLink, $urlServer . "modules/announcements/myannouncements.php");
 		array_push($sideMenuImg, "announcements.gif");

@@ -47,6 +47,7 @@ $langNoCourses="There are no courses";
 $langCourseCreate="Create course site";
 $langModifyProfile="Modify my profile";
 $langMyAgenda = "My Agenda";
+$langMyStats = "User statistics";   #ophelia 1-8-2006
 $langMyAnnouncements = "My Announcements";
 
 $langWelcome="courses are freely available below. Other  courses require 
