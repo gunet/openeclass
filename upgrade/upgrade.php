@@ -1029,23 +1029,19 @@ while ($code = mysql_fetch_row($res)) {
 	//---------------------------------------------------------------------
 	// Upgrading VIDEO table for new func of VIDEO module
 	//---------------------------------------------------------------------
-	if (!mysql_field_exists("$code[0]",'video','title'))
-	$tool_content .=rename_field('video','titre','title','varchar(200)');
 	if (!mysql_field_exists("$code[0]",'video','creator'))
 	$tool_content .= add_field_after_field('video', 'creator', 'description', "VARCHAR(255)");
 	if (!mysql_field_exists("$code[0]",'video','publisher'))
 	$tool_content .= add_field_after_field('video', 'publisher', 'creator',"VARCHAR(255)");
 	if (!mysql_field_exists("$code[0]",'video','date'))
 	$tool_content .= add_field_after_field('video', 'date', 'publisher',"DATETIME");
-	if (!mysql_field_exists("$code[0]",'video','external_URL'))
-	$tool_content .= add_field_after_field('video', 'external_URL', 'date',"VARCHAR(255)");
+	if (!mysql_field_exists("$code[0]",'videolinks','creator'))
+	$tool_content .= add_field_after_field('videolinks', 'creator', 'description', "VARCHAR(255)");
+	if (!mysql_field_exists("$code[0]",'videolinks','publisher'))
+	$tool_content .= add_field_after_field('videolinks', 'publisher', 'creator',"VARCHAR(255)");
+	if (!mysql_field_exists("$code[0]",'videolinks','date'))
+	$tool_content .= add_field_after_field('videolinks', 'date', 'publisher',"DATETIME");
 
-	if (mysql_table_exists("$code[0]", 'video') && mysql_table_exists("$code[0]", 'videolinks'))
-	{
-		$tool_content .=merge_tables('video','videolinks',array('title','description','url','external_URL'),array('titre','description','url', '"1"'));
-		$tool_content .=delete_table('videolinks');
-
-	}
 	if (is_dir("$webDir/$code[0]/video"))
 
 	{
@@ -1219,7 +1215,7 @@ db_query("ALTER TABLE `document` ADD FULLTEXT `document` (`filename` ,`comment` 
 db_query("ALTER TABLE `exercices` ADD FULLTEXT `exercices` (`titre`,`description`)");
 db_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
 db_query("ALTER TABLE `liens` ADD FULLTEXT `liens` (`url` ,`titre` ,`description`)");
-db_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`title` ,`description`)");
+db_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`titre` ,`description`)");
 //db_query("ALTER TABLE `videolinks` ADD FULLTEXT `videolinks` (`url` ,`titre` ,`description`)");
 
 // bogart: Update code for phpbb functionality START

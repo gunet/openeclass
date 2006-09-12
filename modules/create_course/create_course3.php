@@ -1225,12 +1225,11 @@ mysql_query ("CREATE TABLE document (id int(4) NOT NULL auto_increment,
     mysql_query("CREATE TABLE video (
                id int(11) NOT NULL auto_increment,
                url varchar(200),
-               title varchar(200),
+               titre varchar(200),
                description text,
                creator varchar(200),
                publisher varchar(200),
                date DATETIME,
-	       external_URL CHAR(1) DEFAULT '0' NOT NULL,
                PRIMARY KEY (id))
         TYPE=MyISAM DEFAULT CHARSET=greek");
 
@@ -1241,7 +1240,9 @@ mysql_query ("CREATE TABLE document (id int(4) NOT NULL auto_increment,
                url varchar(200),
                titre varchar(200),
                description text,
-               visibility CHAR(1) DEFAULT '1' NOT NULL,
+	       creator varchar(200),
+	       publisher varchar(200),
+	       date DATETIME,
                PRIMARY KEY (id))
         TYPE=MyISAM DEFAULT CHARSET=greek");
 
@@ -2120,8 +2121,8 @@ mysql_query("INSERT INTO cours_faculte VALUES ( '', '$faculte', '$repertoire', '
     mkdir("../../courses/$repertoire/scormPackages", 0777);
 
 
-    mkdir("../../courses/$repertoire/video", 0777);
-    //mkdir("../../video/$repertoire", 0777);
+    //mkdir("../../courses/$repertoire/video", 0777);
+    mkdir("../../video/$repertoire", 0777);
     //symlink("../../video/$repertoire","../../courses/$repertoire/video");
 
     $titou='$dbname';
