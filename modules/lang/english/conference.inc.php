@@ -38,7 +38,7 @@ Translate the interface in chosen language
 *****************************************************************/
 // chat.php
 
- $nameTools = "Tele cooperatione";
+ $nameTools = "Tele cooperation";
  $langWash = "Clean";
  $langWashFrom = "Chat cleared by";
  $langSave = "Save";
