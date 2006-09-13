@@ -38,18 +38,15 @@ Translate the interface in chosen language
 *****************************************************************/
 // chat.php
 
- $nameTools = "Τηλεσυνεργασία";
- $langWash = "Καθάρισμα";
- $langWashFrom = "Η κουβέντα καθάρισε από";
- $langSave = "Αποθήκευση";
- $langRefresh = "Ανανέωση";
- $langIsNowInYourDocDir = "Η Τηλεσυνεργασία  είναι τώρα στο εργαλείο των εγγράφων με το όνομα<br>";
- $langIsChatDocVisible = " (<B>Το αρχείο είναι ορατό</B>)";
- $langCopyFailed = "Η εκτύπωση απέτυχε";
- $langClearedBy = "καθαρισμός από";
- $langChatError = "Δεν είναι δυνατόν να ξεκινήσει η Ζωντανή Τηλεσυνεργασία";
- $langsetvideo="Τοποθετήστε τον σύνδεσμο";
- $langconference="Τηλεδιάσκεψη";
- $langpresantation="Σύνδεσμος παρουσίασης";
+ $nameTools = "Tele cooperatione";
+ $langWash = "Clean";
+ $langWashFrom = "Chat cleared by";
+ $langSave = "Save";
+ $langRefresh = "Refresh";
+ $langClearedBy = "cleared by";
+ $langChatError = "It is not possible to start the live conference";
+ $langsetvideo="Set URL";
+ $langconference="Teleconference";
+ $langpresantation="Presentation URL";
 ?>
 

@@ -121,7 +121,7 @@ $langCourseDesc = "Course description";
 $langCreateCourseGroups="Groups";
 $langCatagoryMain="Main";
 $langCatagoryGroup="Groups forums";
-$langChat ="Chat";
+$langChat ="Tele cooperation";
 
 //neos odhgos dhmiourgias mathimaton
 $langEnterMetadata="You can enter additional information about your course from the course management page";
