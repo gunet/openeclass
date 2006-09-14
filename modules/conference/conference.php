@@ -3,7 +3,7 @@
 $require_current_course = TRUE;
 $langFiles = 'conference';
 $require_help = TRUE;
-$helpTopic = 'User';
+$helpTopic = 'Conference';
 include '../../include/baseTheme.php';
 
 
@@ -68,14 +68,14 @@ function init_teacher()
 function refresh_student()
 	{
 	var set_video_type = function(t) {
-		if(t.responseText=="\nvideo" && video_type!=t.responseText){
+		if(t.responseText=="\n\nvideo" && video_type!=t.responseText){
 			var set_video = function(t1) {
 				document.getElementById("video").innerHTML=t1.responseText;
 				}
 			
 	  		new Ajax.Request("pass_parameters.php", {method:"post", postBody:"variable=video", onSuccess:set_video, onFailure:errFunc});
 		}
-		else if(t.responseText=="\nnetmeeting" && video_type!=t.responseText){
+		else if(t.responseText=="\n\nnetmeeting" && video_type!=t.responseText){
 				var player="<object ID=\'NetMeeting\' CLASSID=\'CLSID:3E9BAF2D-7A79-11d2-9334-0000F875AE17\'>\
 				            <PARAM NAME =\'MODE\' VALUE =\'RemoteOnly\'>\
 					     </object>";
@@ -86,7 +86,8 @@ function refresh_student()
 		video_type=t.responseText;
 	}
 	var set_presantation = function(t) {
-    		if(unescape(t.responseText)!="\n"+document.getElementById("presantation_window").innerHTML){
+    		if(unescape(t.responseText)!="\n\n"+document.getElementById("presantation_window").innerHTML){
+		//	alert(">"+document.getElementById("presantation_window").innerHTML+"<"+"\n"+">"+unescape(t.responseText)+"<");
 			document.getElementById("presantation_window").innerHTML=t.responseText;
     		}
 	}
@@ -170,7 +171,7 @@ return false;
 /* load presantation in right iframe*/
 function show_presantation()
 	{
-var presantation_url=\'<iframe style="height:500px; width:700px" src="\'+document.getElementById("Presantation_URL").value+\'"></iframe>\';
+var presantation_url=\'<iframe style="height:500px; width:700px;" src="\'+document.getElementById("Presantation_URL").value+\'"></iframe>\';
 document.getElementById("presantation_window").innerHTML=presantation_url;
 new Ajax.Request("pass_parameters.php", {method:"post", postBody:"presantation_URL="+escape(document.getElementById("presantation_window").innerHTML)});
 return false;
@@ -221,20 +222,18 @@ $tool_content = "";//initialise $tool_content
 
 $tool_content.=
 '
-	<div id="video" style="position:absolute;height: 200px;width: 200px;border:groove;top:200px;left:200px;">
+	<div id="video" style="position:absolute;height: 200px;width: 200px;border:groove;top:210px;left:200px;">
 	</div>
 
 
 ';
 
 if ($is_adminOfCourse) {
-	$tool_content .= '<div style="position:absolute;height:291px;width: 200px;border:groove;top:410px;left:200px;">
-	<form id="video_form" onSubmit="return play_video();">';
-	if (isset($Video_URL)) {
-			$tool_content .= '<br>'.$Video_URL.'<br>';
-	}
-	$tool_content .= '<table><tr>';
-
+$tool_content.='<div  style="position:absolute;height:291px;width: 200px;border:groove;top:420px;left:200px;">
+<form id="video_form" onSubmit="return play_video();">
+<BR>'.$Video_URL.'<BR>
+<table>
+<tr>';
 if(isset($MCU))
 {
 $tool_content.='
@@ -268,12 +267,12 @@ $tool_content.='
 }
 
 $tool_content.='
-	<div id="presantation_window"  style="position:absolute;height: 500px;width: 700px;border:groove;top:200px;left:410px;" >
+	<div id="presantation_window"  style="position:absolute;height: 500px;width: 700px;border:groove;top:210px;left:410px;" >
 
 	</div>
 
-	<div align="center" style="position:absolute;border:groove;top:710px;left:200px;width:910px;" >
-		<div align="left" id="chat" style="position: relative;height: 60px;width: 500px; overflow: auto;">
+	<div align="center" style="position:absolute;border:groove;top:720px;left:200px;width:910px;" >
+		<div align="left" id="chat" style="position: relative;height: 60px;width: 600px; overflow: auto;">
 		</div>
 
 		<form name = "chatForm" action = "conference.php#bottom" method = "get" target = "conference" onSubmit = "return prepare_message();">
@@ -281,15 +280,16 @@ $tool_content.='
 		<div align="center"  style="position: relative; width:750px">
 			<input type="text" name="msg" size="80">
 			<input type="hidden" name="chatLine">
-			<input type="submit" value=" >> ">
-			</form><br>
-';
+			<input type="submit" value=" >> ">';
+
 		if ($is_adminOfCourse) {
 			$tool_content.=' 
-        		<a href="conference.php?reset=true" onclick="return clear_chat();">'.$langWash.'</a> <!--|
-			<a href="conference.php?store=true" onclick="return save_chat()">'.$langSave.'</a>-->
-			';
+        		<a href="conference.php?reset=true" onclick="return clear_chat();">'.$langWash.'</a>';
  		}
+
+$tool_content.='
+			</form>
+';
 		$tool_content.='
 
 		</div>

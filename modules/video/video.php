@@ -61,7 +61,7 @@ where $currentCourseID is the web directory for the course and $webDir usually /
 $require_current_course = TRUE;
 $langFiles = 'video';
 $require_help = TRUE;
-$helpTopic = 'User';
+$helpTopic = 'Video';
 include '../../include/baseTheme.php';
 
 
