@@ -1,4 +1,5 @@
 <?php  
+header("Content-type: text/html; charset=ISO-8859-7"); 
 //Μετατροπή του εργαλείου για να χρησιμοποιεί το baseTheme
 $require_current_course = TRUE;
 $langFiles = 'conference';
@@ -6,26 +7,6 @@ $require_help = TRUE;
 $helpTopic = 'User';
 include '../../include/baseTheme.php';
 
-
-$nameTools = "conference";
-$head_content='
-
-<meta http-equiv="refresh" content="400; url=\''.$_SERVER['PHP_SELF'].'\'">
-<script>
-function prepare_message()
-{
-        document.chatForm.chatLine.value=document.chatForm.msg.value;
-        document.chatForm.msg.value = "";
-        document.chatForm.msg.focus();
-        return true;
-}
-</script>
-';
-$body_action='';
-$tool_content = "";//initialise $tool_content
-
-
-//$nick=htmlentities(mb_convert_encoding($prenom." ".$nom,"UTF-8","ISO-8859-7") ,ENT_QUOTES,"UTF-8");
 $nick=$prenom." ".$nom;
 
 $coursePath=$webDir."courses";
@@ -142,7 +123,6 @@ function buffer($content, $tmpFile) {
         $fp = fopen($tmpFile, "a");
         fwrite($fp, $content);
 }
-
 
 
 
