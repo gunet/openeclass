@@ -1,5 +1,34 @@
 <?
-//ÌåôáôñïðÞ ôïõ åñãáëåßïõ ãéá íá ÷ñçóéìïðïéåß ôï baseTheme
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*       Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*       Á full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:     Dimitris Tsachalis <ditsa@ccf.auth.gr>
+*
+*       For a full list of contributors, see "credits.txt".
+*
+*       This program is a free software under the terms of the GNU
+*       (General Public License) as published by the Free Software
+*       Foundation. See the GNU License for more details.
+*       The full license can be read in "license.txt".
+*
+*       Contact address:        GUnet Asynchronous Teleteaching Group,
+*                                               Network Operations Center, University of Athens,
+*                                               Panepistimiopolis Ilissia, 15784, Athens, Greece
+*                                               eMail: eclassadmin@gunet.gr
+============================================================================*/
+/**
+ * refresh_chat
+ * 
+ * @author Dimitris Tsachalis <ditsa@ccf.auth.gr>
+ * @version $Id$
+ * 
+ * @abstract 
+ *
+ */
 $require_current_course = TRUE;
 $langFiles = 'conference';
 $require_help = TRUE;
@@ -22,6 +51,7 @@ if (is_file($fileParameter))
 	
 	fclose($fp);
 }
+/* Admin set parameters for conference module*/
 if ($is_adminOfCourse) {
 
 		if(isset($_POST["video_div"]))
@@ -49,6 +79,7 @@ if ($is_adminOfCourse) {
 
 
 }
+/*student get parameters for conference module*/
 else
 {
 

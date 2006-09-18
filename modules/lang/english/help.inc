@@ -484,7 +484,7 @@ $langProfileContent = "<p>You can modify your personal info in the platform</p>
 
 //help video links
 
-$langHVideoLinks = "Video links";
+$langHVideoLinks = "Video";
 $langVideoLinksContent = "You can add video links in yous course. Just type the address of a video on
 demand (VOD) server in field 'URL'. You can also type the title and the description and finally press button 'Add'.
 When you change 'Delete whole list' you can delete all the video links of your course";
@@ -545,18 +545,60 @@ the documents it contains and unregister all its students (not remove them from 
 <p><b>Delete users from course :</b> You can delete all the users registered at your course
 without removing them from other courses .</p>";
 
-$langHChat = "Chat";
-$langChatContent = "<p> If you want to chat with the users that are registered at the specific course
-just type your message and then prees the button ¢>>¢. If you want to save a conversation press
-button 'Save'.When you save a conversation a .txt file is created and stored at 'Documents'
-and includes all messages of the conversations that take part in 'Chat'. Finally
-you can delete all mesaages in 'Chat' by pressing button 'Wash'.</p>";
+$langHConference = "Conference";
+$langConferenceContent = "
+<b><u>Description</u></b>
+<p>This module gives the instructor the ability to conduct live meetings with the students. It offers 4 functionalities: <br></p>
+<p>It offers 4 functionalities:</p>
+<ul>
+       <li>Video Conferencing (must first be installed by the administrator of the platform)</li>
+       <li>Video Streaming</li>
+       <li>Presentation and URL sharing</li>
+       <li>Chat</li>
+</ul>
+<b><u>Video Conferencing</u></b> 
+<p><b><u>Instructor Options</u></b></p>
+<p>
+Regarding the video conferencing functionality, the instructor may select this option on entrance to the subsystem and automatically all participants who have entered the same subsystem are given the ability to connect. Each course on the eClass platform automatically utilizes a separate \"virtual conferencing room\" for all its participants. Technically, the instructor does not have speech control over the students, so he must make sure he establishes the rules of conduct for participation in the video conferences. Best practices include: a) the suggestion of keeping muted microphones for all participants until the need to speak arises, so that inadvertent noise will not be transmitted to other participants, and b) organizing test conferences before the needed date and time of an actual conference, so that all participants may familiarize themselves with the conferencing environment and equipment. 
+The equipment requirements for conferencing are just a set of speakers and a microphone (a camera is optional), while software requirements are the exclusive use of Microsoft Internet Explorer, along with NetMeeting version 3.0.1 on the personal computer of the participants. NetMeeting comes preinstalled in WinXP, while there is an installer available for Win2000, Win98, WinNT etc. Default settings on NM will work fine with this subsystem, but if NM \"Advanced Calling\" options have been configured before, users will need to disable Gatekeeper Use. To avoid last minute problems, it is best to require that all participants go through the \"Audio Tuning Wizard\" steps before the scheduled conference time. This option which is found on the \"Tools\" menu of NM will offer the participants a simple way to confirm the reliability of the speakers (to play back conference audio) and of the local microphone (to send local audio to the conference). 
+</p>
+<p><b><u>Student Options</u></b></p>
+<p>
+Regarding the video conferencing functionality, the student will be given the ability to connect to the conference throught the web pages of this subsystem, once the instructor has activated this option. Each course on the eClass platform automatically utilizes a separate \"virtual conferencing room\" for all its participants. A good practice is for participants to keep all microphones muted, until the need to speak arises, so that inadvertent noise will not be transmitted to other participants. The use of headphones with integrated microphones is the best option for avoiding echo problems during the conferences. 
+</p>
+
+<b><u>Video</u></b> 
+<p><b><u>Instructor Options</u></b></p> 
+<p>When the instructor selects the \"video\" option, a field is activated allowing the placement of a URL for the streaming video. After completion of the URL and the selection of \"Play\", video is loaded in the window above the controls with the embedded use of the appropriate media player, as set in the OS to handle the correct file extensions. The instructor must have informed the students ahead of time that they will need to have installed the media player that the material he presents will require.</p>
+<p><b><u>Student Options</u></b></p>
+<p>The students do not need to make any selections. The video material will load automatically on their browsers (assuming the correct media player is installed) as soon as the instructor selects the video streaming option.</p>
+
+
+<b><u>Presentation </u></b> 
+<p><b><u>Instructor Options</u></b></p>
+<p>The instructor uses the field \"Presentation URL\" to specify the web page (URL) that he wishes to distribute to all the student browsers and selects \"OK\". The web page is then loaded on his presentation window on the right. The same web page get loaded in the student presentation window on his browsers. Note that once the initial URL is loaded, the instructor's view of the loaded page is not synchronized with that of the student's. E.g. if the instructor clicks on any link on that page, he will have to instruct the students to do the same on their browser manually. Only web pages that are loaded through the \"Presentation URL\" field are synched to the student browsers. </p>
+<b><u>Student Options</u></b>
+<p>The student is presented with the web page that the instructor has placed in his browser. From then on, he must follow the instructor's oral guidance in order to browse through the same links from this web page on.</p>
+
+<b><u>Chat</u></b> 
+<p><b><u>Instructor Options</u></b></p>
+<p>The instructor has the ability to exchange messages with the students that are using the Conference Module by typing the message on text field at the bottom of the page and then pressing \">>\". The instructor also has the option to clear all past messages from appearing on the page by selecting \"Clear\". </p>
+<p><b><u>Student Options</u></b></p>
+<p>The instructor has the ability to exchange messages with the students that are using the Conference Module by typing the message on text field at the bottom of the page and then pressing \">>\". The instructor also has the option to clear all past messages from appearing on the page by selecting \"Clear\".</p>
+";
 
 $langHVideo = "Video";
-$langVideoContent = "You can add video files in your course. You can upload a video file, pressing 'Browse', typing the
-title and some description and finally press button 'Add'. You can modify some of the file parameters, by selecting
-'Modify', or you can delete a video file, by selecting 'Delete'. Also, bu selecting 'Delete whole list' you can
-delete all video files of the course.";
+$langVideoContent ="
+<p>Courses might contain audio and video files as contend. Audio and video files can be distributed either via downloading or streaming. When distributed via downloading there is a significant amount of time for waiting until downloading finishes in order to playback the file. When distributed via streaming there is no wait time and playback starts immediately. Video module adds streaming capabilities to e-class.</p>
+<p><b><u>Instructor Options</u></b></p>
+<p>
+You can upload video file in several formats like mpeg, avi etc. Choose \"Add video\" and type the path to the video file you want or click on \"Browse\" to locate it visually. Optionally you can fill in the \"Document title\" & \"Description\" fields. Click on \"Add\" in order to upload the file to the platform. Additionally you can add video links to your courses. Choose \"Add video link\" and then type the link to the file on the streaming server you want to add in the \"URL\" field. Optionally you can fill in the \"Document title\" & \"Description\" fields. When finished click on \"Add\". Once added you can modify any of the fields by choosing \"Modify\" or you can delete a file or link by choosing \"Delete\". By choosing \"Delete whole list\" you can remove all the files and links added to a course. If there is a streaming server integrated with the platform the process of video files addition is transparent. There is no extra care or action to be done in order the files to be streamed from the streaming server. Keep in mind that video files and links will be available all the time if someone uses the direct url to them.
+</p>
+<p><b><u>Student Options</u></b></p>
+<p>
+Choose the video file you want to playback. If there is a streaming server integrated with e-class, the student should be informed what client should use for playback.
+</p>
+";
 
 $langHCoursedescription = "Course Description";
 $langCoursedescriptionContent = "<p>You can add some additional info about the course, when you click in 'Create

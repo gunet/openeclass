@@ -1,5 +1,36 @@
 <?php  
-//Μετατροπή του εργαλείου για να χρησιμοποιεί το baseTheme
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*       Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*       Α full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:     Dimitris Tsachalis <ditsa@ccf.auth.gr>
+*
+*       For a full list of contributors, see "credits.txt".
+*
+*       This program is a free software under the terms of the GNU
+*       (General Public License) as published by the Free Software
+*       Foundation. See the GNU License for more details.
+*       The full license can be read in "license.txt".
+*
+*       Contact address:        GUnet Asynchronous Teleteaching Group,
+*                                               Network Operations Center, University of Athens,
+*                                               Panepistimiopolis Ilissia, 15784, Athens, Greece
+*                                               eMail: eclassadmin@gunet.gr
+============================================================================*/
+/**
+ * conference
+ * 
+ * @author Dimitris Tsachalis <ditsa@ccf.auth.gr>
+ * @version $Id$
+ * 
+ * @abstract 
+ *
+ */
+
+
 $require_current_course = TRUE;
 $langFiles = 'conference';
 $require_help = TRUE;
@@ -23,6 +54,7 @@ $head_content='
 var video_div="";
 var video_type="";
 
+/*Clear in the server side all the chat messages*/
 function clear_chat()
 	{
 	  	new Ajax.Request("refresh_chat.php", {method:"post", postBody:"reset=true"});
@@ -112,7 +144,7 @@ function refresh_teacher()
 	}
 
 
-
+/* teacher set netmeeting*/
 function netmeeting()
 	{
 		document.getElementById("video_control").innerHTML="";
@@ -128,6 +160,7 @@ function netmeeting()
 
 
 
+/* teacher set video*/
 function mediaplayer()
 	{
 		document.getElementById("video_control").innerHTML=\''.$langsetvideo.'<br><input type="text" id="Video_URL" size="20"><input type="submit" value=" Play ">\';
