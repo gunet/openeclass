@@ -936,11 +936,11 @@ mysql_query("CREATE TABLE accueil (
                '4',
                '$langVideo',
                '../../modules/video/video.php',
-               '../../../images/videos.png',
+               'videos',
                '".$sbsystems[4]."',
                '0',
                '../../../images/pastillegris.png',
-               ''
+               'MODULE_ID_VIDEO'
                )");
 
            mysql_query("INSERT INTO accueil VALUES (
@@ -952,17 +952,6 @@ mysql_query("CREATE TABLE accueil (
                '0',
                '../../../images/pastillegris.png',
                'MODULE_ID_ASSIGN'
-               )");
-
-    mysql_query("INSERT INTO accueil VALUES (
-               '6',
-               '$langVideoLinks',
-               '../../modules/video/videolinks.php',
-               'video',
-               '".$sbsystems[6]."',
-               '0',
-               '../../../images/pastillegris.png',
-               'MODULE_ID_VIDEO'
                )");
 
     mysql_query("INSERT INTO accueil VALUES (
@@ -1023,9 +1012,9 @@ mysql_query("CREATE TABLE accueil (
 
     mysql_query("INSERT INTO accueil VALUES (
                 '19',
-                '$langChat',
+                '$langConference',
                 '../../modules/conference/conference.php',
-                'chat',
+                'conference',
                 '".$sbsystems[19]."',
                 '0',
                 '../../../images/pastillegris.png',
