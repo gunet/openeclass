@@ -29,7 +29,8 @@
  * @abstract 
  *
  */
-
+ 
+ $langConference = "Tele cooperation";
  $nameTools = "Tele cooperation";
  $langWash = "Clean";
  $langWashFrom = "Chat cleared by";

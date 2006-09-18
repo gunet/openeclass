@@ -98,6 +98,7 @@ $langStatistics="Statistics";
 $langAddPageHome="Upload Webpage";
 $langLinkSite="Add link on Homepage";
 $langModifyInfo="Lesson Admin";
+$langConference ="Tele cooperation";
 $langDropBox = "DropBox";
 $langLearnPath = "Learning Path";
 $langToolManagement = "Tool management";

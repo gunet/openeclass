@@ -175,7 +175,7 @@ $tool_content .= "
       <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"10\" />$langExercices</td>
       <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"15\" />$langDropBox</td>
       <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"16\" />$langGroups</td>
-      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"19\" />$langChat</td>
+      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"19\" />$langConference</td>
       </tr>
       <tr>
       <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" />$langCourseDesc</td>
@@ -930,7 +930,6 @@ mysql_query("CREATE TABLE accueil (
                '../../../images/pastillegris.png',
                'MODULE_ID_DOCS'
                )");
-
     //den yparxei akomh MODULE_ID_ gia to module VIDEO opote prepei na symplhrwthei
     mysql_query("INSERT INTO accueil VALUES (
                '4',
@@ -1009,7 +1008,6 @@ mysql_query("CREATE TABLE accueil (
         '../../../images/pastillegris.png',
         'MODULE_ID_DROPBOX'
         )");
-
     mysql_query("INSERT INTO accueil VALUES (
                 '19',
                 '$langConference',
