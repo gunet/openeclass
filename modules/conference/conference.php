@@ -100,14 +100,14 @@ function init_teacher()
 function refresh_student()
 	{
 	var set_video_type = function(t) {
-		if(t.responseText=="\n\nvideo" && video_type!=t.responseText){
+		if(t.responseText=="\nvideo" && video_type!=t.responseText){
 			var set_video = function(t1) {
 				document.getElementById("video").innerHTML=t1.responseText;
 				}
 			
 	  		new Ajax.Request("pass_parameters.php", {method:"post", postBody:"variable=video", onSuccess:set_video, onFailure:errFunc});
 		}
-		else if(t.responseText=="\n\nnetmeeting" && video_type!=t.responseText){
+		else if(t.responseText=="\nnetmeeting" && video_type!=t.responseText){
 				var player="<object ID=\'NetMeeting\' CLASSID=\'CLSID:3E9BAF2D-7A79-11d2-9334-0000F875AE17\'>\
 				            <PARAM NAME =\'MODE\' VALUE =\'RemoteOnly\'>\
 					     </object>";
@@ -118,7 +118,7 @@ function refresh_student()
 		video_type=t.responseText;
 	}
 	var set_presantation = function(t) {
-    		if(unescape(t.responseText)!="\n\n"+document.getElementById("presantation_window").innerHTML){
+    		if(unescape(t.responseText)!="\n"+document.getElementById("presantation_window").innerHTML){
 		//	alert(">"+document.getElementById("presantation_window").innerHTML+"<"+"\n"+">"+unescape(t.responseText)+"<");
 			document.getElementById("presantation_window").innerHTML=t.responseText;
     		}
@@ -214,12 +214,13 @@ return false;
 var pe;
 if (pe) pe.stop();
 ';
+$refreshtime="5";
 
 if ($is_adminOfCourse) {
-	$head_content.='pe = new PeriodicalExecuter(refresh_teacher, 5);';
+	$head_content.='pe = new PeriodicalExecuter(refresh_teacher, '.$refreshtime.');';
 }
 else{
-	$head_content.='pe = new PeriodicalExecuter(refresh_student, 5);';
+	$head_content.='pe = new PeriodicalExecuter(refresh_student, '.$refreshtime.');';
 }
 
 

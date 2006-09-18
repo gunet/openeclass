@@ -403,12 +403,6 @@ if(type==\"URL\")
 			<td><input type=\"text\" name=\"date\" value=\"".@$date."\" size=\"55\"></td>
 			</tr>
 
-			<tr>
-			<td colspan=\"2\">
-				<font size=\"1\" face='arial, helvetica'>$langDelList&nbsp;:</font size>
-				<input type=\"checkbox\" name=\"tout\" value=\"tout\">
-			</td>
-			</tr>
 			<tr><td colspan=\"2\"><input type=\"Submit\" name=\"submit\" value=\"$langAdd\"></td></tr>
 			";
 
