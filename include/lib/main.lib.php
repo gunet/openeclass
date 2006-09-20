@@ -503,4 +503,9 @@ function new_code($fac) {
 	return $code;
 }
 
+// due to a bug (?) to php function basename() our implementation
+function my_basename($path) {
+			return preg_replace('#^.*/#', '', $path);
+}
+
 ?>
