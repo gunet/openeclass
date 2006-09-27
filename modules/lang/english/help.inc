@@ -727,4 +727,7 @@ $langUsageContent =
 Write Help Text Here.
 ";
 
+//Help Create Course Wizard
+$langHCreateCourse = "Create Course Wizard";
+$langCreateCourseContent = "<p>The Create Course Wizard is one of the most important tools of the platform. By using this, the user-instructor is able to create new courses in the platform and configure them.</p><p>The wizards consists of 3 steps. Filling in every field with an asterisk, is mandatory. Under some fields, lie exemplary information to help the user with the filling-in.</p><p>In case the user enters invalid data in a field, the system informs the user and prompts him to correct the error so as to be able to continue to the next step.</p>";
 ?>
