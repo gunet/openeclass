@@ -2145,7 +2145,7 @@ session_register("status");
 $tool_content .= "<tr bgcolor=$color2>
     <td colspan=3>
     <font face='arial, helvetica' size=2>
-    $langJustCreated $repertoire<br><br><br>
+    $langJustCreated <b>$intitule</b><br><br><br>
     <a href=\"../../courses/$repertoire/index.php\">$langEnter</a><br><br><br>
     $langEnterMetadata
     </font><br>
