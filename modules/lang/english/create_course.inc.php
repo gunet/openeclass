@@ -115,7 +115,7 @@ $langQuestionnaire = "Questionnaire";
 $langCourseDescription="Write here the description that will appear in the course list.";
 $langProfessor="Professor";
 $langAnnouncementEx="This is an example of announcement. Only the profesor and other administrators of the course can publish announcements.";
-$langJustCreated="You just created the course website";
+$langJustCreated="You just created the course titled ";
 $langEnter="Back to my courses list";
 $langCourseDesc = "Course description";
  // Groups
