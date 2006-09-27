@@ -53,6 +53,10 @@ $require_prof = TRUE;
 
 $langFiles = array('create_course', 'opencours');
 
+$require_help = TRUE;
+$helpTopic = 'CreateCourse';
+
+
 $local_head = "<script language=\"javascript\">
 function previous_step()
 {
@@ -78,6 +82,8 @@ function help ($topic)
 
 include '../../include/baseTheme.php';
 
+$nameTools = $langCreateCourse;
+
 $tool_content = "";
 
 // ------------------------------------------------------------------
@@ -86,30 +92,18 @@ $tool_content = "";
 
 if(!isset($_GET["finish_create_course"])) {
     $tool_content .= "
-<tr bgcolor=\"$color1\">
-    <td>
         <table bgcolor=\"$color1\" border=\"2\">
             <tr valign=\"top\" align=\"middle\">
-                <td colspan=\"3\" valign=\"middle\">
-                    <table width=\"100%\">
-                        <tr>
-                        <td align=\"left\">
-                        <font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourse</font>
-                        </td>
-                         <td align=\"right\">
-                        <font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourseStep&nbsp;1&nbsp;$langCreateCourseStep2&nbsp;3</font>
-                            </td>
-                        </tr>
-                    </table>
+                <td colspan=\"3\" valign=\"middle\" align=\"center\">
+                    <font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourseStep&nbsp;1&nbsp;$langCreateCourseStep2&nbsp;3</font>
                 </td>
             </tr>
-            <tr><td colspan=\"3\">&nbsp;</td></tr>
             <tr valign=\"top\">
                 <td colspan=\"5\" valign=\"middle\">
                     <font face=\"arial, helvetica\" size=\"3\"><b>$langCreateCourseStep3Title</b></font>
                 </td>
             </tr>
-            <tr><td colspan=\"3\">&nbsp;</td></tr>
+            
 
 
 <form method=\"post\" action=\"$_SERVER[PHP_SELF]?finish_create_course\">
@@ -221,11 +215,11 @@ help("CreateCourse_lang");
 
 $tool_content .= "</tr>
     <tr><td>&nbsp;</td>
-        <td align=\"left\">
-            <input type=\"button\" name=\"button\" value=\"$langPreviousStep\" onclick=\"previous_step();\">
+        <td align=\"center\">
+            <input type=\"Submit\" name=\"submit\" value=\"$langFinalize\">
         </td>
         <td align=\"right\">
-            <input type=\"Submit\" name=\"submit\" value=\"$langFinalize\">
+            &nbsp;
         </td>
     </tr>
     </table>

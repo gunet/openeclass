@@ -44,6 +44,10 @@ $require_prof = TRUE;
 
 $langFiles = array('create_course', 'opencours');
 
+$require_help = TRUE;
+$helpTopic = 'CreateCourse';
+
+
 $local_head = "<script language=\"javascript\">
 function previous_step()
 {
@@ -66,6 +70,8 @@ function validate() {
 
 include '../../include/baseTheme.php';
 
+$nameTools = $langCreateCourse;
+
 $tool_content = "";
 
 $titulaire_probable="$prenom $nom";
@@ -77,22 +83,10 @@ $local_style = "input { font-size: 12px; }";
 
    @$tool_content .= "
 <!-- S T E P  2   [start] -->    
-
-<tr bgcolor=\"$color1\">
-	<td>
-		<table bgcolor=\"$color1\" border=\"2\">
+		<table bgcolor=\"$color1\" width=\"99%\">
 			<tr valign=\"top\" align=\"middle\">
-				<td colspan=\"3\" valign=\"middle\">
-					<table width=\"100%\">
-						<tr>
-							<td align=\"left\">
-								<font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourse</font>
-							</td>
-							<td align=\"right\">
-								<font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourseStep&nbsp;2&nbsp;$langCreateCourseStep2&nbsp;3</font>
-							</td>
-						</tr>
-					</table>
+				<td colspan=\"3\" valign=\"middle\" align=\"center\">
+					<font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourseStep&nbsp;2&nbsp;$langCreateCourseStep2&nbsp;3</font>
 				</td>
 			</tr>
 			<tr valign=\"top\">
@@ -100,8 +94,7 @@ $local_style = "input { font-size: 12px; }";
 					<font face=\"arial, helvetica\" size=\"3\"><b>$langCreateCourseStep2Title</b></font>
 				</td>
 			</tr>
-			<tr><td colspan=\"3\"><font face=\"arial, helvetica\" size=\"2\"><i>$langFieldsOptionalNote</i></font></td></tr>
-			<tr><td colspan=\"3\">&nbsp;</td></tr>
+			<tr><td colspan=\"3\"><font face=\"arial, helvetica\" size=\"2\"><i>$langFieldsOptionalNote</i></font></td></tr>			
 
 <form method=\"post\" action=\"create_course3.php\" onsubmit=\"return validate();\">
 	
@@ -111,17 +104,17 @@ $local_style = "input { font-size: 12px; }";
 	<input type=\"hidden\" name=\"type\" value=\"$type\">
 	
 			<tr valign=\"top\"> 
-			<td width=\"100\" valign=\"top\" align=\"right\"> 
+			<td width=\"100\" align=\"right\"> 
 			<font face=\"arial, helvetica\" size=\"2\"><b>$langDescrInfo:</b></font>
 			</td>   
-			<td valign=top>
+			<td align=\"left\">
 			<font face=\"arial, helvetica\" size=\"2\">
 			<textarea name=\"description\" cols=\"40\" rows=\"4\"></textarea>
 			$langFieldsRequAsterisk
 			</font>    
 			</td> 
 				<td valign=\"middle\">
-					<a href=\"../help/help.php?topic=CreateCourse_course_intronote\" onclick=\"window.open('../help/help.php?topic=CreateCourse_course_intronote','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
+					&nbsp;
 				</td>
 			</tr>
 			<tr>
@@ -135,7 +128,7 @@ $local_style = "input { font-size: 12px; }";
 			</font>
 				</td>
 				<td valign=\"middle\">
-					<a href=\"../help/help.php?topic=CreateCourse_course_intronote\" onclick=\"window.open('../help/help.php?topic=CreateCourse_course_intronote','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
+					&nbsp;
 				</td>
 			</tr>
 			<tr>
@@ -147,18 +140,21 @@ $local_style = "input { font-size: 12px; }";
 			<textarea name=\"course_addon\" value=\"$course_addon\" cols=\"40\" rows=\"4\"></textarea></font>
 			</td>
 			<td>
-			<a href=\"../help/help.php?topic=CreateCourse_course_intronote\" onclick=\"window.open('../help/help.php?topic=CreateCourse_course_intronote','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
-		</td>
+				&nbsp;
+			</td>
 			</tr>
-			</table>
+			
 	</td>
 	</tr>
 	<tr>
-		<td align=\"left\">
-			<input type=\"button\" name=\"button\" value=\"$langPreviousStep\" onclick=\"previous_step();\">
+		<td align=\"center\">
+			&nbsp;
 		</td>
-		<td align=\"right\">
+		<td align=\"center\">
 			<input type=\"Submit\" name=\"submit\" value=\"$langNextStep\">
+		</td>
+		<td>
+			&nbsp;
 		</td>
 	</tr>
 	</table>

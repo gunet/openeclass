@@ -41,6 +41,9 @@ $require_prof = TRUE;
 
 $langFiles = array('create_course', 'opencours');
 
+$require_help = TRUE;
+$helpTopic = 'CreateCourse';
+
 $local_head = "
 
 <script language=\"JavaScript\">
@@ -79,6 +82,8 @@ function validate()
 
 include '../../include/baseTheme.php';
 
+$nameTools = $langCreateCourse;
+
 $tool_content = "";
 
 $titulaire_probable="$prenom $nom";
@@ -105,20 +110,10 @@ $tool_content .= "
 	<td>
 		<table bgcolor=\"$color1\" border=\"2\" width=\"99%\">
 			<tr valign=\"top\" align=\"middle\">
-				<td colspan=\"3\" valign=\"middle\">
-					<table width=\"99%\">
-						<tr>
-							<td align=\"left\">
-								<font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourse</font>
-							</td>
-							<td align=\"right\">
-								<font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourseStep&nbsp;1&nbsp;$langCreateCourseStep2&nbsp;3</font>
-							</td>
-						</tr>
-					</table>
+				<td colspan=\"3\" valign=\"middle\" align=\"center\">
+					<font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourseStep&nbsp;1&nbsp;$langCreateCourseStep2&nbsp;3</font>
 				</td>
-			</tr>
-			<tr><td colspan=\"3\">&nbsp;</td></tr>
+			</tr>			
 			<tr valign=\"top\">
 				<td colspan=\"5\" valign=\"middle\">
 					<font face=\"arial, helvetica\" size=\"2\"><b>$langCreateCourseStep1Title</b></font>
@@ -137,7 +132,7 @@ $tool_content .= "
 					<input type=\"Text\" name=\"intitule\" size=\"60\">$langFieldsRequAsterisk<br>$langEx</font>
 				</td>
 				<td valign=\"middle\">
-					<a href=\"../help/help.php?topic=CreateCourse_Title\" onclick=\"window.open('../help/help.php?topic=CreateCourse_Title','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
+					&nbsp;
 				</td>
 			</tr>
 		</td>
@@ -162,7 +157,7 @@ $tool_content .=  "		<select name=\"faculte\">";
 $tool_content .=  "$langFieldsRequAsterisk<br><font face=\"arial, helvetica\" size=\"2\">$langTargetFac</font>
 		</td>
 		<td valign=\"middle\">
-			<a href=\"../help/help.php?topic=CreateCourse_faculte\" onclick=\"window.open('../help/help.php?topic=CreateCourse_faculte','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
+			&nbsp;
 		</td>
 	</tr>";
 
@@ -178,7 +173,7 @@ $tool_content .=  "<tr valign=\"top\">
 	<input type=\"Text\" name=\"titulaires\" size=\"60\" value=\"$titulaire_probable\"><font face=\"arial, helvetica\" size=\"2\">$langFieldsRequAsterisk<br>$langProfessorsInfo</font>
 	</td>
 	<td valign=\"middle\">
-		<a href=\"../help/help.php?topic=CreateCourse_titulaires\" onclick=\"window.open('../help/help.php?topic=CreateCourse_titulaires','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
+		&nbsp;
 	</td>
 	</tr>
 	<tr>
@@ -196,17 +191,17 @@ $tool_content .=  "<tr valign=\"top\">
 $tool_content .=  "
 	<font face=\"arial, helvetica\" size=\"2\">$langFieldsRequAsterisk<br>$langCourseCategory</br></td>
 	<td valign=\"middle\">
-		<a href=\"../help/help.php?topic=CreateCourse_Type\" onclick=\"window.open('../help/help.php?topic=CreateCourse_Type','help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=400,height=500,left=300,top=10'); return false;\"><img src=\"../../template/classic/img/help.gif\" border=\"0\"></a>
+		&nbsp;
 	</td>
 	<tr>
 		<td>
 			&nbsp;
 		</td>
-		<td align=\"left\">
-			<input type=\"button\" disabled=\"disabled\" name=\"button\" value=\"$langPreviousStep\">
+		<td align=\"center\">
+			<input type=\"Submit\" name=\"submit\" value=\"$langNextStep\">
 		</td>
 		<td align=\"right\">
-			<input type=\"Submit\" name=\"submit\" value=\"$langNextStep\">
+			&nbsp;
 		</td>
 	</tr>
 	</table>
