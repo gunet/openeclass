@@ -1,7 +1,17 @@
 <?php
-/*****************************************************************************
-        DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-******************************************************************************/
+/*
+===========================================================================
+    admin/oldStats.php
+    @last update: 23-09-2006
+    @authors list: ophelia neofytou
+==============================================================================
+    @Description:  Shows statistics older than two months that concern the number of visits
+        on the platform for a time period.
+        Note: Information for old statistics is taken from table 'loginout_summary' where
+        cummulative monthly data are stored.
+
+==============================================================================
+*/
 // Set the langfiles needed
 $langFiles = array('usage', 'admin');
 // Include baseTheme
@@ -10,26 +20,24 @@ include '../../include/baseTheme.php';
 // Othewise exit with appropriate message
 @include "check_admin.inc";
 // Define $nameTools
-$nameTools = $langPlatformStats;
+$nameTools = $langOldStats;
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
 // Initialise $tool_content
 $tool_content = "";
 
-$tool_content .= "<a href='platformStats.php'>".$langPlatformStats."</a> | ".
-             "<a href='usersCourseStats.php'>".$langUsersCourse."</a> | ".
-             "<a href='visitsCourseStats.php'>".$langVisitsCourseStats."</a> | ".
-             "<a href='oldStats.php'>".$langOldStats."</a>".
+$tool_content .=  "<a href='statClaro.php'>".$langPlatformGenStats."</a> <br> ".
+                "<a href='platformStats.php'>".$langVisitsStats."</a> <br> ".
+             "<a href='usersCourseStats.php'>".$langUsersCourse."</a> <br> ".
+             "<a href='visitsCourseStats.php'>".$langVisitsCourseStats."</a> <br> ".
+              "<a href='oldStats.php'>".$langOldStats."</a> <br> ".
+               "<a href='monthlyReport.php'>".$langMonthlyReport."</a>".
           "<p>&nbsp</p>";
 
 
-
+//move data from table 'loginout' to 'loginout_summary' if older than two months
 require_once "summarizeLogins.php";
 
-$dateNow = date("d-m-Y / H:i:s",time());
 
-$local_style = '
-    .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
-     padding-left: 15px; padding-right : 15px; }
-    .content {position: relative; left: 25px; }';
 
 include('../../include/jscalendar/calendar.php');
 if ($language == 'greek') {
@@ -41,35 +49,43 @@ if ($language == 'greek') {
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-win2k-2', false);
 $local_head = $jscalendar->get_load_files_code();
 
+
+
+//$min_w is the min date in 'loginout'. Statistics older than $min_w will be shown.
 $query = "SELECT MIN(`when`) as min_when FROM loginout";
 $result = db_query($query, $mysqlMainDb);
-
 while ($row = mysql_fetch_assoc($result)) {
     $min_when = strtotime($row['min_when']);
 }
 $min_w = date("d-m-Y", $min_when);
 
+
+
 if (!extension_loaded('gd')) {
     $tool_content .= "<p>$langGDRequired</p>";
 } else {
-        $made_chart = true;
-        
-        $tool_content .= "<p> $langOldStatsExpl $min_w. </p>";
+    $made_chart = true;
 
-        //make chart
-        require_once '../../include/libchart/libchart.php';
-        $usage_defaults = array (
+    $tool_content .= "<p> $langOldStatsLoginsExpl $min_w. </p>";
+
+    /*****************************************
+      start making chart
+     *******************************************/
+     require_once '../../include/libchart/libchart.php';
+
+     //default values for chart
+     $usage_defaults = array (
             'u_date_start' => strftime('%Y-%m-%d', strtotime('now -4 month')),
             'u_date_end' => strftime('%Y-%m-%d', strtotime('now -1 month')),
-        );
+      );
 
-        foreach ($usage_defaults as $key => $val) {
-            if (!isset($_POST[$key])) {
-                $$key = $val;
-            } else {
-                $$key = $_POST[$key];
-            }
-        }
+     foreach ($usage_defaults as $key => $val) {
+         if (!isset($_POST[$key])) {
+             $$key = $val;
+         } else {
+             $$key = $_POST[$key];
+         }
+     }
 
     $date_fmt = '%Y-%m-%d';
     $date_where = " (start_date BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
@@ -82,6 +98,7 @@ if (!extension_loaded('gd')) {
 
     $chart = new VerticalChart(200, 300);
 
+    //add points to chart
     while ($row = mysql_fetch_assoc($result)) {
         $mont = $langMonths[$row['month']];
         $chart->addPoint(new Point($mont." - ".$row['year'], $row['visits']));
@@ -98,8 +115,9 @@ if (!extension_loaded('gd')) {
 
     $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
 
-
-    //make form
+    /********************************************************
+       Start making the form for choosing start and end date
+    ********************************************************/
     $start_cal = $jscalendar->make_input_field(
            array('showsTime'      => false,
                  'showOthers'     => true,
@@ -119,7 +137,6 @@ if (!extension_loaded('gd')) {
                  'value'       => $u_date_end));
 
 
-    
     $tool_content .= '
     <form method="post">
     &nbsp;&nbsp;
@@ -144,14 +161,10 @@ if (!extension_loaded('gd')) {
 }
 
 
-
-
-
 draw($tool_content, 3, 'admin', $local_head, '');
 
 
 if ($made_chart) {
-
 
     ob_end_flush();
     ob_flush();
@@ -162,9 +175,5 @@ if ($made_chart) {
 
 
 
-
-
-
-#draw($tool_content,3,'admin');
 
 ?>

@@ -48,6 +48,11 @@ $langStatOf 			= "Στατιστικά του ";
 $langSpeeSubscribe 		= "Εγγραφή σαν Διαχειριστής Μαθήματος";
 $langLogIdentLogout 	= "Καταγραφή των εισόδων και εξόδων από το σύστημα";
 $langPlatformStats 		= "Στατιστικά Πλατφόρμας";
+$langPlatformGenStats   = "Γενικά στατιστικά";
+$langVisitsStats        = "Στατιστικά επισκέψεων";
+$langMonthlyReport      = "Μηνιαίες αναφορές";
+$langReport             = "Αναφορά για το μήνα ";
+$langNoReport           = "Δεν υπάρχουν διαθέσιμα στοιχεία για το μήνα ";
 
 $langListCours = "Λίστα Μαθημάτων / Ενέργειες";
 $langListUsers = "Λίστα Χρηστών / Ενέργειες";
@@ -78,10 +83,14 @@ $langStatistiques = "Στατιστικά";
 $langNbProf = "Αριθμός καθηγητών";
 $langNbStudents = "Αριθμός φοιτητών";
 $langNbLogin = "Αριθμός εισόδων";
+$langNbCourses = "Αριθμός μαθημάτων";
+$langNbVisitors = "Αριθμός επισκεπτών";
 $langToday   ="Σήμερα";
 $langLast7Days ="Τελευταίες 7 μέρες";
 $langLast30Days ="Τελευταίες 30 μέρες";
 $langNbAnnoucement = "Αριθμός ανακοινώσεων";
+$langProf = "Καθηγητές";
+$langNbUsers = "Αριθμός χρηστών";
 
 $langBaseFound ="Βρέθηκε<br>Έλεγχος πινάκων της βάσης";
 

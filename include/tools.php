@@ -440,9 +440,9 @@ function adminMenu(){
 	array_push($sideMenuLink, "../admin/clarconf.php");
 	array_push($sideMenuImg, "config_file.gif");
 	// End
-	array_push($sideMenuText, $siteName);
-	array_push($sideMenuLink, "../admin/statClaro.php");
-	array_push($sideMenuImg, "stat_claro.gif"); // image file does not exist! what does this tool do ?
+	//array_push($sideMenuText, $siteName);
+	//array_push($sideMenuLink, "../admin/statClaro.php");
+	//array_push($sideMenuImg, "stat_claro.gif"); // image file does not exist! what does this tool do ?
 	//if (isset($phpMyAdminURL)){
 		//array_push($sideMenuText, $langLogIdentLogout);
 		//array_push($sideMenuLink, $phpMyAdminURL."sql.php?db=".$mysqlMainDb."&table=loginout&goto=db_details.php&sql_query=SELECT+%2A+FROM+%60loginout%60&pos=0");
@@ -450,7 +450,7 @@ function adminMenu(){
 	//}
 
 	array_push($sideMenuText, $langPlatformStats);
-	array_push($sideMenuLink, "../admin/platformStats.php");
+	array_push($sideMenuLink, "../admin/statClaro.php");
 	array_push($sideMenuImg, "platform_stats.gif");
 
 	//array_push($sideMenuText, $langManuals);

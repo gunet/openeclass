@@ -1,7 +1,19 @@
 <?php
-/*****************************************************************************
-        DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-******************************************************************************/
+
+/*
+===========================================================================
+    admin/platformStats.php
+    @last update: 23-09-2006
+    @authors list: ophelia neofytou
+==============================================================================
+    @Description:  Shows statistics conserning the number of visits on the platform in a time period.
+        Statistics can be shown for a specific user or for all users.
+
+==============================================================================
+*/
+
+
+
 // Set the langfiles needed
 $langFiles = array('usage', 'admin');
 // Include baseTheme
@@ -10,24 +22,25 @@ include '../../include/baseTheme.php';
 // Othewise exit with appropriate message
 @include "check_admin.inc";
 // Define $nameTools
-$nameTools = $langPlatformStats;
+$nameTools = $langVisitsStats;
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$page_title = $langPlatformStats.": ".$langVisitsStats;
+
 // Initialise $tool_content
 $tool_content = "";
 
-$tool_content .= "<a href=".$_SERVER['PHP_SELF'].">".$langPlatformStats."</a> | ".
-             "<a href='usersCourseStats.php'>".$langUsersCourse."</a> | ".
-             "<a href='visitsCourseStats.php'>".$langVisitsCourseStats."</a> | ".
-             "<a href='oldStats.php'>".$langOldStats."</a>".
+$tool_content .=  "<a href='statClaro.php'>".$langPlatformGenStats."</a> <br> ".
+                "<a href='platformStats.php'>".$langVisitsStats."</a> <br> ".
+             "<a href='usersCourseStats.php'>".$langUsersCourse."</a> <br> ".
+             "<a href='visitsCourseStats.php'>".$langVisitsCourseStats."</a> <br> ".
+              "<a href='oldStats.php'>".$langOldStats."</a> <br> ".
+               "<a href='monthlyReport.php'>".$langMonthlyReport."</a>".
           "<p>&nbsp</p>";
 
 
-$dateNow = date("d-m-Y / H:i:s",time());
 
-$local_style = '
-    .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
-     padding-left: 15px; padding-right : 15px; }
-    .content {position: relative; left: 25px; }';
 
+// jscalendar is used in order to select the time period for the statistics
 include('../../include/jscalendar/calendar.php');
 if ($language == 'greek') {
     $lang = 'el';
@@ -43,7 +56,10 @@ $local_head = $jscalendar->get_load_files_code();
     } else {
         $made_chart = true;
         
+        //show chart with statistics
         require_once "statsResults.php";
+        
+        //show form for determining time period and user
         require_once "statsForm.php";
 
     }
@@ -52,8 +68,6 @@ $local_head = $jscalendar->get_load_files_code();
 draw($tool_content, 3, 'admin', $local_head, '');
 
 if ($made_chart) {
-
-
     ob_end_flush();
     ob_flush();
     flush();

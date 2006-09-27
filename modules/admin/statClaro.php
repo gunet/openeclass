@@ -37,7 +37,7 @@
         DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
 ******************************************************************************/
 // Set the langfiles needed
-$langFiles = array('admin');
+$langFiles = array('admin', 'usage');
 // Include baseTheme
 include '../../include/baseTheme.php';
 // Check if user is administrator and if yes continue
@@ -45,7 +45,7 @@ include '../../include/baseTheme.php';
 @include "check_admin.inc";
 // Define $nameTools
 $langStat4Claroline = "Στατιστικά πλατφόρμας";
-$nameTools = $langStat4Claroline;
+$nameTools = $langPlatformGenStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 // Initialise $tool_content
 $tool_content = "";
@@ -53,7 +53,15 @@ $tool_content = "";
 /*****************************************************************************
         MAIN BODY
 ******************************************************************************/
+$tool_content .=  "<a href='statClaro.php'>".$langPlatformGenStats."</a> <br> ".
+                "<a href='platformStats.php'>".$langVisitsStats."</a> <br> ".
+             "<a href='usersCourseStats.php'>".$langUsersCourse."</a> <br> ".
+             "<a href='visitsCourseStats.php'>".$langVisitsCourseStats."</a> <br> ".
+              "<a href='oldStats.php'>".$langOldStats."</a> <br> ".
+               "<a href='monthlyReport.php'>".$langMonthlyReport."</a>".
+          "<p>&nbsp</p>";
 
+          
 // Constract some tables with statistical information
 $tool_content .= "<table width=\"99%\"><caption>".$langNbLogin."</caption><tbody>";
 $tool_content .= "

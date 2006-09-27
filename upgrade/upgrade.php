@@ -163,6 +163,21 @@ if (!mysql_table_exists($mysqlMainDb, 'loginout_summary'))  {
         TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 }
 
+// new table for monthly summary for eclass 2.0
+if (!mysql_table_exists($mysqlMainDb, 'monthly_summary'))  {
+	mysql_query("CREATE TABLE monthly_summary (
+        id mediumint unsigned NOT NULL auto_increment,
+        `month` varchar(20)  NOT NULL default '0',
+        profesNum int(11) NOT NULL default '0',
+        studNum int(11) NOT NULL default '0',
+        visitorsNum int(11) NOT NULL default '0',
+        coursNum int(11) NOT NULL default '0',
+        logins int(11) NOT NULL default '0',
+        details text NOT NULL default '',
+        PRIMARY KEY  (id))
+        TYPE=MyISAM DEFAULT CHARACTER SET=greek");
+}
+
 // 'New table 'auth' with auth methods in Eclass 2.0';
 if(!mysql_table_exists($mysqlMainDb, 'auth')) {
 	db_query("CREATE TABLE `auth` (

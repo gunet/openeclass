@@ -31,10 +31,6 @@ while ($row = mysql_fetch_assoc($result)) {
 
 
 
-
-$statsTypeOptions =
-    '<option value="visits" '.	 (($u_stats_type=='visits')?('selected'):(''))	  .'>'.$langVisits."</option>\n";
-  
 $statsIntervalOptions =
     '<option value="daily"   '.(($u_interval=='daily')?('selected'):(''))  .' >'.$langDaily."</option>\n".
     '<option value="weekly"  '.(($u_interval=='weekly')?('selected'):('')) .'>'.$langWeekly."</option>\n".
@@ -46,10 +42,7 @@ $statsIntervalOptions =
 $tool_content .= '
 <form method="post">
     <table>
-        <tr>
-            <td>'.$langStatsType.'</td>
-            <td><select name="u_stats_type">'.$statsTypeOptions.'</select></td>
-        </tr>
+        
         <tr>
             <td>'.$langStartDate.'</td>
             <td>'.$start_cal.'</td>

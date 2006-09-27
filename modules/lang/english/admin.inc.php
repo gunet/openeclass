@@ -45,6 +45,12 @@ $langStatOf 			= "Statistics of "; // Stats of...
 $langSpeeSubscribe 		= "Quick subscribe as Course Checker";
 $langLogIdentLogout 	= "Log of login and logout";
 $langPlatformStats 		= "Platform statistics";
+$langPlatformGenStats   = "Συνοπτικά στατιστικά";
+$langVisitsStats        = "Visits statistics";
+$langMonthlyReport      = "Monthly reports";
+$langReport             = "Report for month ";
+$langNoReport           = "No data exist for month ";
+
 
 $langUnregUser = "Unregister User";
 $langListCours = "Courses List / Actions";
@@ -71,11 +77,14 @@ $langStatistiques = "Statistics";
 
 $langNbProf = "Number of professors";
 $langNbStudents = "Number of students";
+$langNbVisitors = "Number of visitors";
 $langNbLogin = "Number of login";
+$langNbCourses = "Number of courses";
 $langToday   ="Today";
 $langLast7Days ="Last 7 days";
 $langLast30Days ="Last 30 days";
-
+$langProf = "Professors";
+$langNbUsers = "Number of users";
 
 $langNbAnnoucement = "Number of announcements";
 

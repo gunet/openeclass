@@ -763,6 +763,7 @@ elseif(isset($install7))
     mysql_query("DROP TABLE IF EXISTS institution");
     mysql_query("DROP TABLE IF EXISTS loginout");
 		mysql_query("DROP TABLE IF EXISTS loginout_summary");
+		mysql_query("DROP TABLE IF EXISTS monthly_summary");
     mysql_query("DROP TABLE IF EXISTS prof_request");
     mysql_query("DROP TABLE IF EXISTS user");
 		
@@ -960,6 +961,21 @@ if (mysql_version())  {
         end_date datetime NOT NULL default '0000-00-00 00:00:00',
         PRIMARY KEY  (id))
         TYPE=MyISAM DEFAULT CHARACTER SET=greek");
+
+    //table keeping data for monthly reports
+    mysql_query("CREATE TABLE monthly_summary (
+        id mediumint unsigned NOT NULL auto_increment,
+        `month` varchar(20)  NOT NULL default '0',
+        profesNum int(11) NOT NULL default '0',
+        studNum int(11) NOT NULL default '0',
+        visitorsNum int(11) NOT NULL default '0',
+        coursNum int(11) NOT NULL default '0',
+        logins int(11) NOT NULL default '0',
+        details text NOT NULL default '',
+        PRIMARY KEY  (id))
+        TYPE=MyISAM DEFAULT CHARACTER SET=greek");
+
+
 
 		// encrypt the admin password into DB
 		include '../modules/auth/auth.inc.php';

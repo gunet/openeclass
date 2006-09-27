@@ -3,7 +3,7 @@
         DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
 ******************************************************************************/
 // Set the langfiles needed
-$langFiles = array('gunet','admin','about');
+$langFiles = array('gunet','admin','about', 'usage');
 // Include baseTheme
 include '../../include/baseTheme.php';
 // Check if user is administrator and if yes continue
@@ -18,6 +18,12 @@ $tool_content = "";
         MAIN BODY
 ******************************************************************************/
 
+/***************************************/
+//This is used for inserting data in 'monthly_report' table.
+//The work is done every time the admin page is called in order to
+//ensure correct (up-to-date) information on the table.
+require_once "summarizeMonthlyData.php";
+/****************************************/
 
 
 $sql = "SELECT code FROM cours";

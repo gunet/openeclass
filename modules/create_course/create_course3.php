@@ -2069,8 +2069,7 @@ mysql_query("CREATE TABLE `lp_user_module_progress` (
 
 mysql_select_db("$mysqlMainDb");
 
-    mysql_query("INSERT INTO cours SET
-        cours_id = '',
+/*print "INSERT INTO cours SET
         code = '$code',
         languageCourse = '$languageCourse',
         intitule = '$intitule',
@@ -2080,11 +2079,26 @@ mysql_select_db("$mysqlMainDb");
         faculte = '$facname',
         visible = '$formvisible',
         cahier_charges = '',
-        scoreShow = '',
         titulaires = '$titulaires',
         fake_code = '$code',
-        type = '$type',
+        `type` = '$type',
+        faculteid = '$facid'";
+*/
+    mysql_query("INSERT INTO cours SET
+        code = '$code',
+        languageCourse = '$languageCourse',
+        intitule = '$intitule',
+        description = '$description',
+        course_addon = '$course_addon',
+        course_keywords = '$course_keywords',
+        faculte = '$facname',
+        visible = '$formvisible',
+        cahier_charges = '',
+        titulaires = '$titulaires',
+        fake_code = '$code',
+        `type` = '$type',
         faculteid = '$facid'");
+
 
     mysql_query("INSERT INTO cours_user SET
         code_cours = '$repertoire',
@@ -2093,7 +2107,10 @@ mysql_select_db("$mysqlMainDb");
         role = '$langProfessor',
         tutor='1'");
 
-mysql_query("INSERT INTO cours_faculte VALUES ( '', '$faculte', '$repertoire', '$facid')");
+mysql_query("INSERT INTO cours_faculte SET
+         faculte = '$faculte',
+         code = '$repertoire',
+         facid = '$facid'");
 
 // create directories
     

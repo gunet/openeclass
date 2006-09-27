@@ -8,6 +8,7 @@ $langMySqlVersion="και MySql  ";
 $langNoMysql="Η MySql δεν λειτουργεί !!!";
 $langUptime = "Η πλατφόρμα λειτουργεί από τις";
 $langTotalHits = "Συνολικές προσβάσεις";
+$langLast30daysLogins = "Συνολικές προσβάσεις στην πλατφόρμα τις τελευταίες 30 μέρες";
 $langTotalCourses = "Αριθμός μαθημάτων";
 
 // -------------------------------
@@ -15,6 +16,7 @@ $langInfo = "Ταυτότητα Πλατφόρμας";
 $langAboutCourses = "Στην πλατφόρμα υπάρχουν συνολικά";
 $langAboutCourses2 = "από τα οποία";
 $langAboutUsers = "H πλατφόρμα έχει εγγεγραμμένους";
+
 $langProf = "Καθηγητές";
 $langStud = "Φοιτητές";
 $langGuest = "Επισκέπτες Φοιτητές";

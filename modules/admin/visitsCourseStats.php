@@ -1,7 +1,17 @@
 <?php
-/*****************************************************************************
-        DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-******************************************************************************/
+/*
+===========================================================================
+    admin/visitsCourseStats.php
+    @last update: 23-09-2006
+    @authors list: ophelia neofytou
+==============================================================================
+    @Description:  Shows statistics conserning the number of visits on courses for a time period.
+        Statistics can be shown for a specific course or for all courses.
+
+==============================================================================
+*/
+
+
 // Set the langfiles needed
 $langFiles = array('usage', 'admin');
 // Include baseTheme
@@ -10,23 +20,21 @@ include '../../include/baseTheme.php';
 // Othewise exit with appropriate message
 @include "check_admin.inc";
 // Define $nameTools
-$nameTools = $langPlatformStats;
+$nameTools = $langVisitsCourseStats;
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
 // Initialise $tool_content
 $tool_content = "";
 
-$tool_content .= "<a href='platformStats.php'>".$langPlatformStats."</a> | ".
-             "<a href='usersCourseStats.php'>".$langUsersCourse."</a> | ".
-             "<a href='visitsCourseStats.php'>".$langVisitsCourseStats."</a> | ".
-              "<a href='oldStats.php'>".$langOldStats."</a>".
+$tool_content .=  "<a href='statClaro.php'>".$langPlatformGenStats."</a> <br> ".
+                "<a href='platformStats.php'>".$langVisitsStats."</a> <br> ".
+             "<a href='usersCourseStats.php'>".$langUsersCourse."</a> <br> ".
+             "<a href='visitsCourseStats.php'>".$langVisitsCourseStats."</a> <br> ".
+              "<a href='oldStats.php'>".$langOldStats."</a> <br> ".
+               "<a href='monthlyReport.php'>".$langMonthlyReport."</a>".
           "<p>&nbsp</p>";
 
 
-$dateNow = date("d-m-Y / H:i:s",time());
 
-$local_style = '
-    .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
-     padding-left: 15px; padding-right : 15px; }
-    .content {position: relative; left: 25px; }';
 
 include('../../include/jscalendar/calendar.php');
 if ($language == 'greek') {
@@ -38,36 +46,38 @@ if ($language == 'greek') {
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-win2k-2', false);
 $local_head = $jscalendar->get_load_files_code();
 
-    if (!extension_loaded('gd')) {
-        $tool_content .= "<p>$langGDRequired</p>";
-    } else {
-        $made_chart = true;
-        
-        #make chart
-        
-        require_once '../../include/libchart/libchart.php';
-        $usage_defaults = array (
-        'u_stats_type' => 'visits',
+if (!extension_loaded('gd')) {
+    $tool_content .= "<p>$langGDRequired</p>";
+} else {
+    $made_chart = true;
+
+  /********************************************
+    start making the chart
+  *********************************************/
+    require_once '../../include/libchart/libchart.php';
+
+    //default values for chart
+    $usage_defaults = array (
         'u_interval' => 'daily',
         'u_course_id' => -1,
         'u_date_start' => strftime('%Y-%m-%d', strtotime('now -15 day')),
         'u_date_end' => strftime('%Y-%m-%d', strtotime('now')),
-        );
+    );
 
-        foreach ($usage_defaults as $key => $val) {
+    foreach ($usage_defaults as $key => $val) {
             if (!isset($_POST[$key])) {
                 $$key = $val;
             } else {
                 $$key = $_POST[$key];
             }
-        }
+    }
 
-        $date_fmt = '%Y-%m-%d';
-        $date_where = "(date_time BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
-        $date_what  = "DATE_FORMAT(MIN(date_time), '$date_fmt') AS date_start, DATE_FORMAT(MAX(date_time), '$date_fmt') AS date_end ";
+    $date_fmt = '%Y-%m-%d';
+    $date_where = "(date_time BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
+    $date_what  = "DATE_FORMAT(MIN(date_time), '$date_fmt') AS date_start, DATE_FORMAT(MAX(date_time), '$date_fmt') AS date_end ";
 
 
-        switch ($u_interval) {
+    switch ($u_interval) {
             case "summary":
                 $date_what = '';
                 $date_group = '';
@@ -89,23 +99,22 @@ $local_head = $jscalendar->get_load_files_code();
                 $date_what .= ", YEAR(date_time) AS year, ";
                 $date_group = "GROUP BY YEAR(date_time) ";
             break;
-        }
+    }
 
-#################################
-        if ($u_course_id == -1) {
-
+   
+    if ($u_course_id == -1) {
+     //show chart for all courses
            $qry1 = "SELECT DISTINCT(code) as code from cours";
            $res1 = db_query($qry1, $mysqlMainDb);
             
-            $point = array();
-            while ($row1 = mysql_fetch_assoc($res1)) { //8elei ftia3imo
-                    $cours = $row1['code'];
+           $point = array();
+           while ($row1 = mysql_fetch_assoc($res1)) {
+                $cours = $row1['code'];
             
                 $query = "SELECT ".$date_what." COUNT(*) AS cnt FROM actions ".
                     " WHERE $date_where  $date_group ORDER BY date_time ASC";
                 $result = db_query($query, $cours);
             
-
                 switch ($u_interval) {
                     case "summary":
                         while ($row = mysql_fetch_assoc($result)) {
@@ -149,94 +158,91 @@ $local_head = $jscalendar->get_load_files_code();
                               }
                         }
                     break;
-                }
-             mysql_free_result($result);
             }
+            mysql_free_result($result);
+        }
             
-           if ($u_interval != "monthly") {
-                ksort($point);
-           }
-           $chart = new VerticalChart(200, 300);
-           while ($newp = current($point)){
+        if ($u_interval != "monthly") {
+            ksort($point);
+        }
+
+        $chart = new VerticalChart(200, 300);
+        
+        //add points to chart
+        while ($newp = current($point)){
                 $chart->addPoint(new Point(key($point), $newp));
                 $chart->width += 25;
                 next($point);
-            }
+        }
             $chart->setTitle($langVisits);
            mysql_free_result($res1);
-        }
-        #apo edw pairnoume $course_code
-#################################
+    }
+        
 
-    else {
+    else {    //show chart for a specific course
 
-        switch ($u_stats_type) {
-            case "visits":
-                $query = "SELECT ".$date_what.", COUNT(*) AS cnt FROM actions ".
-                    " WHERE $date_where GROUP BY $date_group ORDER BY date_time ASC";
-                $result = db_query($query, $u_course_id);
-                $chart = new VerticalChart(200, 300);
+        $query = "SELECT ".$date_what." COUNT(*) AS cnt FROM actions ".
+            " WHERE $date_where $date_group ORDER BY date_time ASC";
+        $result = db_query($query, $u_course_id);
 
-                switch ($u_interval) {
-                    case "summary":
-                        while ($row = mysql_fetch_assoc($result)) {
+        $chart = new VerticalChart(200, 300);
+
+        switch ($u_interval) {
+            case "summary":
+                while ($row = mysql_fetch_assoc($result)) {
                         $chart->addPoint(new Point("Summary", $row['cnt']));
                         $chart->width += 25;
-                        }
-                    break;
-                    case "daily":
-                        while ($row = mysql_fetch_assoc($result)) {
+                }
+            break;
+            case "daily":
+                while ($row = mysql_fetch_assoc($result)) {
                         $chart->addPoint(new Point($row['date'], $row['cnt']));
                         $chart->width += 25;
-                        }
-                    break;
-                    case "weekly":
-                        while ($row = mysql_fetch_assoc($result)) {
-                            $chart->setLabelMarginBottom(110);
-                            $chart->setLabelMarginRight(80);
-                            $chart->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['cnt']));
-                            $chart->width += 25;
-                        }
-                    break;
-                    case "monthly":
-                        while ($row = mysql_fetch_assoc($result)) {
-                        $chart->addPoint(new Point($langMonths[$row['month']], $row['cnt']));
-                        $chart->width += 25;
-                        }
-                    break;
-                    case "yearly":
-                        while ($row = mysql_fetch_assoc($result)) {
-                            $chart->addPoint(new Point($row['year'], $row['cnt']));
-                            $chart->width += 25;
-                        }
-                    break;
                 }
-            $chart->setTitle($langVisits);
-
             break;
-
+            case "weekly":
+                while ($row = mysql_fetch_assoc($result)) {
+                        $chart->setLabelMarginBottom(110);
+                        $chart->setLabelMarginRight(80);
+                        $chart->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['cnt']));
+                        $chart->width += 25;
+                }
+            break;
+            case "monthly":
+                while ($row = mysql_fetch_assoc($result)) {
+                    $chart->addPoint(new Point($langMonths[$row['month']], $row['cnt']));
+                    $chart->width += 25;
+                }
+            break;
+            case "yearly":
+                while ($row = mysql_fetch_assoc($result)) {
+                    $chart->addPoint(new Point($row['year'], $row['cnt']));
+                    $chart->width += 25;
+                }
+            break;
         }
+
+        $chart->setTitle($langVisits);
 
         mysql_free_result($result);
 
-}
+    }
 
 
-
-        $chart_path = 'temp/chart_'.md5(serialize($chart)).'.png';
-        //$tool_content .= $query."<br />";
-        $chart->render($webDir.$chart_path);
-
-        $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
-        $tool_content .= '<p> &nbsp; </p>';
+    $chart_path = 'temp/chart_'.md5(serialize($chart)).'.png';
         
+    $chart->render($webDir.$chart_path);
 
+    $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
+    $tool_content .= '<p> &nbsp; </p>';
         
         
-        #making the Form
+/*************************************************************************
+   making the Form for determining time period, time interval and course
+***************************************************************************/
 
-
-        $start_cal = $jscalendar->make_input_field(
+    //calendar for determining start and end date
+    $start_cal = $jscalendar->make_input_field(
            array('showsTime'      => false,
                  'showOthers'     => true,
                  'ifFormat'       => '%Y-%m-%d',
@@ -245,7 +251,7 @@ $local_head = $jscalendar->get_load_files_code();
                  'name'        => 'u_date_start',
                  'value'       => $u_date_start));
 
-        $end_cal = $jscalendar->make_input_field(
+    $end_cal = $jscalendar->make_input_field(
            array('showsTime'      => false,
                  'showOthers'     => true,
                  'ifFormat'       => '%Y-%m-%d',
@@ -255,6 +261,7 @@ $local_head = $jscalendar->get_load_files_code();
                  'value'       => $u_date_end));
 
 
+    //possible courses
     $qry = "SELECT code, intitule FROM cours";
 
     $cours_opts = '<option value="-1">'.$langAllCourses."</option>\n";
@@ -265,25 +272,19 @@ $local_head = $jscalendar->get_load_files_code();
     }
 
 
-
-        $statsTypeOptions =
-            '<option value="visits" '.	 (($u_stats_type=='visits')?('selected'):(''))	  .'>'.$langVisits."</option>\n";
-
-        $statsIntervalOptions =
+    //possible time intervals
+    $statsIntervalOptions =
             '<option value="daily"   '.(($u_interval=='daily')?('selected'):(''))  .' >'.$langDaily."</option>\n".
             '<option value="weekly"  '.(($u_interval=='weekly')?('selected'):('')) .'>'.$langWeekly."</option>\n".
             '<option value="monthly" '.(($u_interval=='monthly')?('selected'):('')).'>'.$langMonthly."</option>\n".
             '<option value="yearly"  '.(($u_interval=='yearly')?('selected'):('')) .'>'.$langYearly."</option>\n".
             '<option value="summary" '.(($u_interval=='summary')?('selected'):('')).'>'.$langSummary."</option>\n";
 
-
-        $tool_content .= '
+    //form
+     $tool_content .= '
         <form method="post">
             <table>
-                <tr>
-                    <td>'.$langStatsType.'</td>
-                    <td><select name="u_stats_type">'.$statsTypeOptions.'</select></td>
-                </tr>
+               
                 <tr>
                     <td>'.$langStartDate.'</td>
                     <td>'."$start_cal".'</td>
@@ -307,9 +308,6 @@ $local_head = $jscalendar->get_load_files_code();
 
             </table>
         </form>';
-
-        
-        
 
     }
 

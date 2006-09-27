@@ -33,6 +33,70 @@
  * user is logged in
  * 
  */
+
+
+ /*
+  * Make table with general platform information
+  * ophelia neofytou - 2006/09/26
+  */
+ @include("./modules/lang/$language/admin.inc.php");
+ @include("./modules/lang/$language/about.inc.php");
+
+//find uptime
+$sql = "SELECT code FROM cours";
+$result = db_query($sql);
+$course_codes = array();
+while ($row = mysql_fetch_assoc($result)) {
+    $course_codes[] = $row['code'];
+}
+mysql_free_result($result);
+
+$first_date_time = time();
+
+foreach ($course_codes as $course_code) {
+    $sql = "SELECT UNIX_TIMESTAMP(MIN(date_time)) AS first FROM actions";
+    $result = db_query($sql, $course_code);
+    while ($row = mysql_fetch_assoc($result)) {
+        $tmp = $row['first'];
+        if ($tmp < $first_date_time and $tmp !=0 ) {
+            $first_date_time = $tmp;
+
+        }
+    }
+    mysql_free_result($result);
+
+}
+$uptime = date("Y-m-d H:i:s", $first_date_time);
+
+//find number of logins
+mysql_select_db($mysqlMainDb);
+$lastMonth = date("Y-m-d H:i:s", time()-24*3600*30);
+$total_logins = mysql_fetch_array(db_query("SELECT COUNT(idLog) FROM loginout WHERE action='LOGIN' AND `when`> '$lastMonth'"));
+
+//count courses
+$a=mysql_fetch_array(db_query("SELECT COUNT(*) FROM cours"));
+$a1=mysql_fetch_array(db_query("SELECT COUNT(*) FROM cours WHERE visible='2'"));
+$a2=mysql_fetch_array(db_query("SELECT COUNT(*) FROM cours WHERE visible='1'"));
+$a3=mysql_fetch_array(db_query("SELECT COUNT(*) FROM cours WHERE visible='0'"));
+
+// Count users
+$e=mysql_fetch_array(db_query("SELECT COUNT(*) FROM user"));
+$b=mysql_fetch_array(db_query("SELECT COUNT(*) FROM user where statut='1'"));
+$c=mysql_fetch_array(db_query("SELECT COUNT(*) FROM user where statut='5'"));
+$d=mysql_fetch_array(db_query("SELECT COUNT(*) FROM user where statut='10'"));
+ 
+$tool_content .= "<table width=\"99%\"><thead>";
+$tool_content .= "<tr><th>".$langInfo."</th></tr></thead><tbody>".
+     "<tr class=\"odd\"><td>"."<p>".$langAboutCourses." <b>".$a[0]."</b> ".$langCourses."(<i><b>".$a1[0].
+        "</b> ".$langOpen.", <b>".$a2[0]."</b> ".$langSemiopen.", <b>".$a3[0]."</b> ".$langClosed."</i>)</p>".
+        "<p>".$langAboutUsers." <b>".$e[0]."</b> ".$langUsers." (<i><b>".$b[0]."</b> ".$langProf.", <b>".$c[0]."</b> ".$langStud." ".$langAnd." <b>".$d[0]."</b> ".$langGuest."</i>)</p>".
+        "<p>".$langUptime.": <b>".$uptime."</b></p>".
+        "<p>".$langLast30daysLogins.": <b>".$total_logins[0]."</b></p>";
+           
+ $tool_content .= "</td></tr></tbody></table><br>";
+###### end of table with platform information
+ 
+
 $tool_content .= "<table width=\"99%\"><thead>";
 $result2 = mysql_query("SELECT cours.code k, cours.fake_code c, cours.intitule i, cours.titulaires t, cours_user.statut s
 		FROM cours, cours_user WHERE cours.code=cours_user.code_cours AND cours_user.user_id='".$uid."'

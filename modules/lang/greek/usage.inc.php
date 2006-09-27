@@ -50,6 +50,7 @@
  $langFavouriteExpl = "Παρουσιάζεται η προτίμηση ενός χρήστη ή όλων των χρηστών στα υποσυστήματα μέσα σε ένα χρονικό διάστημα.";
  $langOldStats = "Εμφάνιση παλιών στατιστικών";
  $langOldStatsExpl = "Παρουσιάζονται συγκεντρωτικά μηνιαία στατιστικά στοιχεία παλιότερα από ";
+ $langOldStatsLoginsExpl = "Παρουσιάζονται συγκεντρωτικά μηνιαία στατιστικά σχετικά με τις εισόδους στην πλατφόρμα παλιότερα από ";
  $langInterval = "Διάστημα";
  $langDaily = "Ημερήσιο";
  $langWeekly = "Εβδομαδιαίο";
@@ -70,6 +71,22 @@
  $langMonths[10] = "Οκτ";
  $langMonths[11] = "Νοε";
  $langMonths[12] = "Δεκ";
+ 
+ #for monthly report
+ $langMonths['01'] = "Ιανουάριο";
+ $langMonths['02'] = "Φεβρουάριο";
+ $langMonths['03'] = "Μάρτιο";
+ $langMonths['04'] = "Απρίλιο";
+ $langMonths['05'] = "Μάιο";
+ $langMonths['06'] = "Ιούνιο";
+ $langMonths['07'] = "Ιούλιο";
+ $langMonths['08'] = "Αύγουστο";
+ $langMonths['09'] = "Σεπτέμβριο";
+ $langMonths['10'] = "Οκτώβριο";
+ $langMonths['11'] = "Νοέμβριο";
+ $langMonths['12'] = "Δεκέμβριο";
+ 
+ 
  
  #for platform Statistics
  $langUsersCourse = "Χρήστες ανά μάθημα";

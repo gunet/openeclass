@@ -47,9 +47,10 @@
  $langTotalVisits = "Total Visits";
  $langVisits = "Number of visits";
  $langFavourite = "Module Preferences";
- $langFavouriteExpl = "Παρουσιάζεται η προτίμηση ενός χρήστη ή όλων των χρηστών στα υποσυστήματα μέσα σε ένα χρονικό διάστημα.";
+ $langFavouriteExpl = "One user or all users preference for modules in a certain time period.";
  $langOldStats = "Show Old Statistics";
  $langOldStatsExpl = "Monthly statistics older than ";
+ $langOldStatsLoginsExpl = "Monthly statistics regarding number of logins older than ";
  $langInterval = "Interval";
  $langDaily = "Daily";
  $langWeekly = "Weekly";
@@ -57,7 +58,7 @@
  $langYearly = "Yearly";
  $langSummary = "Summary";
  $langDuration = "Duration of visits";
- $langDurationExpl = "Η χρονική διάρκεια των επισκέψεων σε κάθε υποσύστημα υπολογίζεται κατά προσέγγιση.";
+ $langDurationExpl = "Duration of visits on each module is computed appoximately.";
  $langMonths[1] = "Jan";
  $langMonths[2] = "Feb";
  $langMonths[3] = "Mar";
@@ -70,6 +71,20 @@
  $langMonths[10] = "Oct";
  $langMonths[11] = "Nov";
  $langMonths[12] = "Dec";
+ 
+ #for monthly report
+ $langMonths['01'] = "January";
+ $langMonths['02'] = "February";
+ $langMonths['03'] = "March";
+ $langMonths['04'] = "April";
+ $langMonths['05'] = "May";
+ $langMonths['06'] = "June";
+ $langMonths['07'] = "July";
+ $langMonths['08'] = "August";
+ $langMonths['09'] = "September";
+ $langMonths['10'] = "October";
+ $langMonths['11'] = "November";
+ $langMonths['12'] = "December";
  
  #for platform Statistics
  $langUsersCourse = "Users per course";
