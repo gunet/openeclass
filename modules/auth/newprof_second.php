@@ -98,11 +98,13 @@ if(!empty($submit)) {
 		{
 			$tool_content .= "<table width=\"$mainInterfaceWidth\">
         	<tr bgcolor=$color2><td>
-                <br /><br />$MailErrorMessage
+                <br /><br />$langMailErrorMessage
 			<a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a>.
 		        <br /><br /><br />
 			</td></tr>
 			</table>";
+			draw($tool_content,0);
+		exit();
 		}
 
 		//------------------------------------User Message ----------------------------------------
