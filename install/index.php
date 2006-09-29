@@ -705,7 +705,7 @@ elseif(isset($install6))
         URL του Ιδρύματος : $institutionUrlForm<br>
          LDAP εξυπηρέτης του Ιδρύματος : $ldapserver<br>
         Base dn του LDAP Εξυπηρέτη : $dnldapserver <br>
-	MCU: $MCUForm <br>
+	MCU: ".@$MCUForm." <br>
 	Vod Server: $vodServerForm <br>
 	Κλειδί για χρήση απόκριψης: $encryptkey <br>
         </blockquote>
@@ -1618,12 +1618,12 @@ else
     warnIfExtNotLoaded("standard");
     warnIfExtNotLoaded("session");
     warnIfExtNotLoaded("mysql");
+    warnIfExtNotLoaded("gd");
     warnIfExtNotLoaded("zlib");
     warnIfExtNotLoaded("pcre");
     echo "</ul>";
-    echo "<UL>Προαιρετικά PHP modules";
+    echo "<ul>Προαιρετικά PHP modules";
     warnIfExtNotLoaded("ldap");
-    warnIfExtNotLoaded("gd");
     warnIfExtNotLoaded("mbstring");
     echo "</ul>";
     echo "
