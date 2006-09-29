@@ -45,6 +45,7 @@ include '../../include/baseTheme.php';
 $nameTools = $langUnregUser;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 
+$tool_content = "";
 
 // get the incoming values and initialize them
 $u = isset($_GET['u'])?$_GET['u']:'';
@@ -109,7 +110,7 @@ else
 	{
 			$tool_content .= "$langErrorDelete";
 	}
-	$tool_content .= "<br>&nbsp;<br><a href=\"./index.php\">$back</a><br />\n";
+	$tool_content .= "<br>&nbsp;<br><a href=\"./index.php\">$langBackAdmin</a>.<br />\n";
 }	
 
 //$tool_content .= "<br><center><p><a href=\"index.php\">$back</a></p></center>";
