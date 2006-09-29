@@ -213,7 +213,6 @@ switch($close)
 	    }	
 	    break;
     case '3':
-	    //$tool_content .= "REGISTER HIM/HER AS A TEACHER";
 	    $r = "SELECT profname,profsurname,profuname,profpassword,profemail,proftmima,profcomm,comment
 	    FROM prof_request WHERE rid='$id'";
 	    //$tool_content .= $r."<br>";
@@ -227,7 +226,7 @@ switch($close)
 				{
 					$user_exist=$myusername[0];
 				}
-				if((!empty($user_exist)) and ($uname==$user_exist))
+				if((!empty($user_exist)) and ($m['profuname'] == $user_exist))
 				{
 					$tool_content .= "<p>$langUserFree</p>
 					<br><br><center><p><a href=\"./listreq.php\">$langAgain</a></p></center>";
@@ -326,7 +325,7 @@ else
 	}
 	$tool_content .= "</tbody></table>";
 	// Display other actions
-	$tool_content .= "<br><table width=\"99%\"><caption>Αλλες Ενέργειες</caption><tbody>
+	$tool_content .= "<br><table width=\"99%\"><caption>¶λλες Ενέργειες</caption><tbody>
 		<tr><td><a href=\"listreq.php?show=closed\">Προβολή αιτήσεων που έχουν κλείσει</a><br>
 		<a href=\"listreq.php?show=rejected\">Προβολή αιτήσεων που έχουν απορριφθεί</a><br>
 		<a href=\"listreq.php?show=accepted\">Προβολή αιτήσεων που έχουν ικανοποιηθεί</a></td></tr>

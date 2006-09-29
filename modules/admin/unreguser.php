@@ -70,7 +70,7 @@ else
 {
 	$conn = mysql_connect($mysqlServer, $mysqlUser, $mysqlPassword);
 	if (!mysql_select_db($mysqlMainDb, $conn))
-                die("Cannot select database \"claroline\".\n");
+                die("Cannot select database");
 	if(empty($c)) 
 	{
 		if ($u == 1) 
@@ -113,8 +113,5 @@ else
 	$tool_content .= "<br>&nbsp;<br><a href=\"./index.php\">$langBackAdmin</a>.<br />\n";
 }	
 
-//$tool_content .= "<br><center><p><a href=\"index.php\">$back</a></p></center>";
-
 draw($tool_content,3,'admin');
-
 ?>
