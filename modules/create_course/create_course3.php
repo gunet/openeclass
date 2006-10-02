@@ -161,18 +161,17 @@ $tool_content .= "
       </tr>
       <tr>
       <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"5\" />$langWorks</td>
-      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"6\" />$langVideoLinks</td>
       <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"7\" />$langAnnouncements</td>
       <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"9\" />$langForums</td>
+      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"10\" />$langExercices</td>
       </tr>
       <tr>
-      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"10\" />$langExercices</td>
       <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"15\" />$langDropBox</td>
       <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"16\" />$langGroups</td>
       <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"19\" />$langConference</td>
+      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" />$langCourseDesc</td>
       </tr>
       <tr>
-      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" />$langCourseDesc</td>
       <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"21\" />$langQuestionnaire</td>
       <td><input type=\"checkbox\" name=\"subsystems[]\"  value=\"23\" checked=\"checked\" />$langLearnPath</td>
       <td></td>
