@@ -29,8 +29,7 @@
  * @abstract 
  *
  */
-
- $nameTools = "Τηλεσυνεργασία";
+ $langConference = "Τηλεσυνεργασία";
  $langWash = "Καθάρισμα";
  $langWashFrom = "Η κουβέντα καθάρισε από";
  $langSave = "Αποθήκευση";
