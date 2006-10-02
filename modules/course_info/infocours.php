@@ -91,20 +91,21 @@ if($is_adminOfCourse) {
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langDoc' WHERE id='3'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langVideo' WHERE id='4'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langWorks' WHERE id='5'");
-		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langVideoLinks' WHERE id='6'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langAnnouncements' WHERE id='7'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langUsers' WHERE id='8'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langForums' WHERE id='9'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langExercices' WHERE id='10'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langStatistics' WHERE id='11'");
-		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langAddPageHome' WHERE id='12'");	
-		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langLinkSite' WHERE id='13'");
+//		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langAddPageHome' WHERE id='12'");	
+//		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langLinkSite' WHERE id='13'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langModifyInfo' WHERE id='14'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langGroups' WHERE id='15'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langDropBox' WHERE id='16'");
-		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langChat' WHERE id='19'");
+		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langConference' WHERE id='19'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langCourseDesc' WHERE id='20'");
+		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langQuestionnaire' WHERE id='21'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langLearnPath' WHERE id='23'");
+		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langUsage' WHERE id='24'");
 		$tool_content .= "<p>$langModifDone.</p>
 		<center><p><a href=\"".$_SERVER['PHP_SELF']."\">$langBack</a></p></center><br>
 		<center><p><a href=\"../../courses/".$currentCourseID."/index.php\">".$langHome."</a></p></center>";
