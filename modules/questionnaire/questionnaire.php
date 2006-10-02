@@ -98,7 +98,7 @@ $tool_content .= "<table width=\"90%\"><thead>$langNamesSurvey</thead><tbody><tr
  			$langSurveyCreation, $langSurveyStart, $langSurveyEnd, $langSurveyType, 
  			$langSurveyOperations, $is_adminOfCourse, $langSurveysActive, $mysqlMainDb, 
  			$langSurveyMC, $langSurveyEdit, $langSurveyRemove, $langSurveyDeactivate,
- 			$langSurveysInactive, $langSurveyActivate;
+ 			$langSurveysInactive, $langSurveyActivate, $langSurveyParticipate;
 
 		$survey_check = 0;
 		$result = mysql_list_tables($currentCourse);
