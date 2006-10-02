@@ -142,7 +142,7 @@ if(!empty($submit))
  			$registered_at = time();
  			//$expires_at = time() + 31536000;
  			$expires_at = time() + $durationAccount;
- 			$institut = 1;
+ 			$institut = 0;
  			
  			// manage the store/encrypt process of password into database
  			$authmethods = array("2","3","4","5");
