@@ -263,13 +263,12 @@ $tool_content.=
 ';
 
 if ($is_adminOfCourse) {
-$tool_content.='<div  style="position:absolute;height:291px;width: 200px;border:groove;top:420px;left:200px;">
+@$tool_content.='<div  style="position:absolute;height:291px;width: 200px;border:groove;top:420px;left:200px;">
 <form id="video_form" onSubmit="return play_video();">
 <BR>'.$Video_URL.'<BR>
 <table>
 <tr>';
-if(isset($MCU))
-{
+if(isset($MCU)) {
 $tool_content.='
 <td>
     <label>

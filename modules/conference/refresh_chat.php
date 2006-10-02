@@ -34,6 +34,7 @@ header("Content-type: text/html; charset=ISO-8859-7");
 //Μετατροπή του εργαλείου για να χρησιμοποιεί το baseTheme
 $require_current_course = TRUE;
 $langFiles = 'conference';
+$tool_content = "";
 $require_help = TRUE;
 $helpTopic = 'User';
 include '../../include/baseTheme.php';
@@ -41,9 +42,6 @@ include '../../include/baseTheme.php';
 $nick=$prenom." ".$nom;
 
 $coursePath=$webDir."courses";
-
-
-
 
 
 /*==========================
@@ -154,11 +152,6 @@ function buffer($content, $tmpFile) {
         $fp = fopen($tmpFile, "a");
         fwrite($fp, $content);
 }
-
-
-
-
-
 
 echo utf8RawUrlDecode($tool_content);
 
