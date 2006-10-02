@@ -78,7 +78,9 @@ if ($language == 'greek') {
 draw($tool_content, 3, 'admin');
 
 if ($made_chart) {
-    ob_end_flush();
+		while (ob_get_level() > 0) {
+  	   ob_end_flush();
+  	}
     ob_flush();
     flush();
     sleep(5);
