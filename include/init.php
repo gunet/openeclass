@@ -115,15 +115,10 @@ if (!isset($webDir)) {
 	@include($relPath . "config/config.php");
 
 	if (!isset($webDir)) {
-<<<<<<< init.php
 		include 'not_installed.php';
 //		die("Unable to open configuration file,
 //			please contact the system administrator");
 	} 
-=======
-			include 'not_installed.php';
-	}
->>>>>>> 1.15
 }
 
 //load the correct language (Author: Evelthon Prodromou)
