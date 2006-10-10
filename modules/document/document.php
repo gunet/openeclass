@@ -67,6 +67,9 @@ $tool_content = "";
 $nameTools = $langDoc;
 $dbTable = "document";
 
+$require_help = TRUE;
+$helpTopic = 'Doc';
+
 // check for quotas
 $d = mysql_fetch_array(mysql_query("SELECT doc_quota FROM cours
     WHERE code='$currentCourseID'"));
@@ -92,7 +95,7 @@ if (@$action=="download")
         		$id = $row['filename'];
         	}
 			
-    	send_file_to_client($real_file, basename($id));
+    	send_file_to_client($real_file, my_basename($id));
 	exit;
 		} else {
 			header("Refresh: ${urlServer}modules/document/document.php");
@@ -354,20 +357,23 @@ if($is_adminOfCourse)
         MOVE FILE OR DIRECTORY : STEP 2
     --------------------------------------*/
 
-    if (isset($moveTo))
+ 	    if (isset($moveTo))
     {
-        if (move($baseWorkDir."/".$source,$baseWorkDir.$moveTo)) {
-            update_db_info("update", $source, $moveTo."/".basename($source));
-            $dialogBox = $langDirMv;
-        }
-        else
-        {
-            $dialogBox = $langImpossible;
-
-            /*** return to step 1 ***/
-            $move = $source;
-            unset ($moveTo);
-        }
+    	if($baseWorkDir."/".$source != $baseWorkDir.$moveTo || $baseWorkDir.$source != $baseWorkDir.$moveTo) //elegxos ean source kai destintation einai to idio
+    	{
+	        if (move($baseWorkDir."/".$source,$baseWorkDir.$moveTo)) {
+	            update_db_info("update", $source, $moveTo."/".my_basename($source));
+	            $dialogBox = $langDirMv;
+	        }
+	        else
+	        {
+	            $dialogBox = $langImpossible;
+	
+	            /*** return to step 1 ***/
+	            $move = $source;
+	            unset ($moveTo);
+	        }
+    	}
         
     }
 
@@ -388,7 +394,7 @@ if($is_adminOfCourse)
     		$moveFileNameAlias = $res['filename'];
     	}
     	
-        @$dialogBox .= "<strong>$moveFileNameAlias</strong>".form_dir_list("source", $moveFileName, "moveTo", $baseWorkDir);
+        @$dialogBox .= "<strong>$moveFileNameAlias</strong>".form_dir_list_exclude("source", $moveFileName, "moveTo", $baseWorkDir, $move);
     }
 
 
@@ -471,7 +477,7 @@ if($is_adminOfCourse)
     	if(empty($res["filename"])) 
     	{
 	    	
-	    	$fileName = basename($rename);    
+	    	$fileName = my_basename($rename);    
 	        
 	        @$dialogBox .= "<!-- rename -->\n";
 	        $dialogBox .= "<form>\n";
@@ -691,7 +697,7 @@ if($is_adminOfCourse)
       	//(ara to arxeio den exei safe_filename (=alfarithmitiko onoma)) xrhsimopoihse to
       	//$fileName gia thn provolh tou onomatos arxeiou
         
-      	$fileName = basename($comment);
+      	$fileName = my_basename($comment);
       	if (empty($oldFilename)) $oldFilename = $fileName;
 
         
@@ -752,160 +758,11 @@ if($is_adminOfCourse)
 															<select name=\"file_language\">
 																<option selected=\"selected\" value=\"\">
 																</option><option value=\"en\">English
-																</option><option value=\"da\">Danish
-																</option><option value=\"fi\">Finnish
-																</option><option value=\"is\">Icelandic
-																</option><option value=\"no\">Norwegian
-																</option><option value=\"no-nyn\">No: Nynorsk
-																</option><option value=\"no-bok\">No: Bokmaal
-																</option><option value=\"sv\">Swedish
-																</option><option value=\"i-sami-no\">Northern Sámi
-																</option><option value=\"ab\">Abkhazian
-																</option><option value=\"aa\">Afar
-																
-																</option><option value=\"af\">Afrikaans
-																</option><option value=\"sq\">Albanian
-																</option><option value=\"am\">Amharic
-																</option><option value=\"ar\">Arabic
-																</option><option value=\"hy\">Armenian
-																</option><option value=\"as\">Assamese
-																</option><option value=\"ay\">Aymara
-																</option><option value=\"az\">Azerbaijani
-																</option><option value=\"ba\">Bashkir
-																</option><option value=\"eu\">Basque
-																</option><option value=\"bn\">Bengali; Bangla
-																</option><option value=\"dz\">Bhutani
-																</option><option value=\"bh\">Bihari
-																</option><option value=\"bi\">Bislama
-																</option><option value=\"br\">Breton
-																</option><option value=\"bg\">Bulgarian
-																</option><option value=\"my\">Burmese
-																
-																</option><option value=\"be\">Byelorussian
-																</option><option value=\"km\">Cambodian
-																</option><option value=\"ca\">Catalan
-																</option><option value=\"zh\">Chinese
-																</option><option value=\"kw\">Cornish
-																</option><option value=\"co\">Corsican
-																</option><option value=\"hr\">Croatian
-																</option><option value=\"cs\">Czech
-																</option><option value=\"nl\">Dutch
-																</option><option value=\"eo\">Esperanto
-																</option><option value=\"et\">Estonian
-																</option><option value=\"fo\">Faroese
-																</option><option value=\"fj\">Fiji
 																</option><option value=\"fr\">French
-																</option><option value=\"fy\">Frisian
-																</option><option value=\"gl\">Galician
-																</option><option value=\"ka\">Georgian
-																
 																</option><option value=\"de\">German
 																</option><option value=\"el\">Greek
-																</option><option value=\"kl\">Greenlandic
-																</option><option value=\"gn\">Guarani
-																</option><option value=\"gu\">Gujarati
-																</option><option value=\"ha\">Hausa
-																</option><option value=\"he\">Hebrew
-																</option><option value=\"hi\">Hindi
-																</option><option value=\"hu\">Hungarian
-																</option><option value=\"id\">Indonesian
-																</option><option value=\"ia\">Interlingua
-																</option><option value=\"ie\">Interlingue
-																</option><option value=\"iu\">Inuktitut
-																</option><option value=\"ik\">Inupiak
-																</option><option value=\"ga\">Irish (Irish Gaelic)
 																</option><option value=\"it\">Italian
-																</option><option value=\"ja\">Japanese
-																
-																</option><option value=\"jw\">Javanese
-																</option><option value=\"kn\">Kannada
-																</option><option value=\"ks\">Kashmiri
-																</option><option value=\"kk\">Kazakh
-																</option><option value=\"rw\">Kinyarwanda
-																</option><option value=\"ky\">Kirghiz
-																</option><option value=\"rn\">Kirundi
-																</option><option value=\"ko\">Korean
-																</option><option value=\"ku\">Kurdish
-																</option><option value=\"lo\">Laothian (Laotian)
-																</option><option value=\"la\">Latin
-																</option><option value=\"lv\">Latvian; Lettish
-																</option><option value=\"ln\">Lingala
-																</option><option value=\"lt\">Lithuanian
-																</option><option value=\"lb\">Luxemburgish
-																</option><option value=\"mk\">Macedonian
-																</option><option value=\"mg\">Malagasy
-																
-																</option><option value=\"ms\">Malay
-																</option><option value=\"ml\">Malayalam
-																</option><option value=\"mt\">Maltese
-																</option><option value=\"gv\">Manx Gaelic
-																</option><option value=\"mi\">Maori
-																</option><option value=\"mr\">Marathi
-																</option><option value=\"mo\">Moldavian
-																</option><option value=\"mn\">Mongolian
-																</option><option value=\"na\">Nauru
-																</option><option value=\"ne\">Nepali
-																</option><option value=\"oc\">Occitan
-																</option><option value=\"or\">Oriya
-																</option><option value=\"om\">Oromo (Afan) 
-																</option><option value=\"ps\">Pashto; Pushto
-																</option><option value=\"fa\">Persian
-																</option><option value=\"pl\">Polish
-																</option><option value=\"pt\">Portuguese
-																
-																</option><option value=\"pa\">Punjabi
-																</option><option value=\"qu\">Quechua
-																</option><option value=\"rm\">Rhaeto-Romance
-																</option><option value=\"ro\">Romanian
-																</option><option value=\"ru\">Russian
-																</option><option value=\"sm\">Samoan
-																</option><option value=\"sg\">Sangho
-																</option><option value=\"sa\">Sanskrit
-																</option><option value=\"gd\">Scots Gaelic (Scottish Gaelic)
-																</option><option value=\"sr\">Serbian
-																</option><option value=\"sh\">Serbo-Croatian
-																</option><option value=\"st\">Sesotho
-																</option><option value=\"tn\">Setswana
-																</option><option value=\"sn\">Shona
-																</option><option value=\"sd\">Sindhi
-																</option><option value=\"si\">Singhalese
-																</option><option value=\"ss\">Siswati
-																
-																</option><option value=\"sk\">Slovak
-																</option><option value=\"sl\">Slovenian
-																</option><option value=\"so\">Somali
-																</option><option value=\"es\">Spanish
-																</option><option value=\"su\">Sudanese
-																</option><option value=\"sv\">Swedish
-																</option><option value=\"sw\">Swahili
-																</option><option value=\"tl\">Tagalog
-																</option><option value=\"tg\">Tajik
-																</option><option value=\"ta\">Tamil
-																</option><option value=\"tt\">Tatar
-																</option><option value=\"te\">Telugu
-																</option><option value=\"th\">Thai
-																</option><option value=\"bo\">Tibetan
-																</option><option value=\"ti\">Tigrinya
-																</option><option value=\"to\">Tonga
-																</option><option value=\"ts\">Tsonga
-																
-																</option><option value=\"tr\">Turkish
-																</option><option value=\"tk\">Turkmen
-																</option><option value=\"tw\">Twi
-																</option><option value=\"ug\">Uigur
-																</option><option value=\"uk\">Ukrainian
-																</option><option value=\"ur\">Urdu
-																</option><option value=\"uz\">Uzbek
-																</option><option value=\"vi\">Vietnamese
-																</option><option value=\"vo\">Volapük
-																</option><option value=\"cy\">Welsh
-																</option><option value=\"wo\">Wolof
-																</option><option value=\"xh\">Xhosa
-																</option><option value=\"yi\">Yiddish
-																</option><option value=\"yo\">Yoruba
-																</option><option value=\"za\">Zhuang
-																</option><option value=\"zu\">Zulu
-																</option>
+																</option><option value=\"es\">Spanish																								</option>
 															
 															</select>
 		
@@ -1020,7 +877,7 @@ if ($curDirPath == "/" || $curDirPath == "\\" || strpos($curDirPath, ".."))
      */
 }
 
-$curDirName = basename($curDirPath);
+$curDirName = my_basename($curDirPath);
 $parentDir = dirname($curDirPath);
 
 if ($parentDir == "/" || $parentDir == "\\")
@@ -1125,15 +982,16 @@ if (isset($attribute))
         /* search DB records wich have not correspondance on the directory */
         foreach( $attribute['path'] as $chekinFile)
         {
-            if (@$dirNameList && in_array(basename($chekinFile), $dirNameList))
+            if (@$dirNameList && in_array(my_basename($chekinFile), $dirNameList))
                 continue;
-            elseif (@$fileNameList && in_array(basename($chekinFile), $fileNameList))
+            elseif (@$fileNameList && in_array(my_basename($chekinFile), $fileNameList))
                 continue;
             else
                 $recToDel[]= $chekinFile; // add chekinFile to the list of records to delete
         }
 
         /* Build the query to delete deprecated DB records */
+        $queryClause = "";
         $nbrRecToDel = sizeof (@$recToDel);
         for ($i=0; $i < $nbrRecToDel ;$i++)
         {
@@ -1203,9 +1061,9 @@ if($is_adminOfCourse) {
     </td>";
   	
   	/*----------------------------------------
-        HELP
+        HELP (metaferthike parapanw sto neo template)
     --------------------------------------*/
-  	$tool_content .=  "
+  	/*$tool_content .=  "
         <td align=\"right\">
         <a href=\"../help/help.php?topic=Doc&language=$language\" 
         onClick=\"window.open('../help/help.php?topic=Doc&language=$language','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10'); 
@@ -1215,7 +1073,8 @@ if($is_adminOfCourse) {
         </td>
     </tr>
 
-    <tr>";
+    <tr>";*/
+  	$tool_content .= "</tr>"; //mphke sto meros ths palias 'voitheias'
 
 
 
@@ -1250,7 +1109,7 @@ if($is_adminOfCourse) {
     --------------------------------------*/
 
     $tool_content .=  "<tr>\n";
-    $tool_content .=  "<td colspan=8>\n";
+    $tool_content .=  "<td colspan=8>";
 
     /*** go to parent directory ***/
     if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
@@ -1274,22 +1133,28 @@ if($is_adminOfCourse) {
     $tool_content .=  "</td>\n";
 
 
+    //ektypwsh tou onomatos tou CWD (exei ginei comment out kai emfanizetai parakatw sto <thead>)
     if ($curDirName) // if the $curDirName is empty, we're in the root point and there is'nt a dir name to display
     {
         /*** current directory ***/
-        $tool_content .=  "<!-- current dir name -->\n";
+        /*$tool_content .=  "<!-- current dir name -->\n";
         $tool_content .=  "<tr>\n";
         $tool_content .=  "<td colspan=\"8\" align=\"left\" bgcolor=\"#000066\">\n";
         $tool_content .=  "<img src=\"img/opendir.gif\" align=\"absbottom\" vspace=2 hspace=5>\n";
         $tool_content .=  "<font color=\"#CCCCCC\">".$dspCurDirName."</font>\n";
         $tool_content .=  "</td>\n";
-        $tool_content .=  "</tr>\n";
+        $tool_content .=  "</tr>\n";*/
     }
+    
 
 
 
     $tool_content .= "<!-- command list -->
-    <thead>
+    <thead>";
+    
+    if (!empty($dspCurDirName)) $tool_content .= "<tr><th colspan=\"4\"><h3>$dspCurDirName</h3></th></tr>";
+    
+    $tool_content .= "
     	<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">
 			<th>$langName</th>
 		    <th>$langSize</th>
@@ -1314,18 +1179,31 @@ if($is_adminOfCourse) {
             if (@$dirVisibilityList[$dirKey] == "i")
             {
                 $style=" class=\"invisible\"";
+                $style2 = " class=\"invisible_doc\"";
             }
             else
             {
                 $style="";
+                $style2="";
             }
 
-            $tool_content .=  "<tr align=\"center\">\n";
+            $tool_content .=  "<tr align=\"center\" $style2>\n";
             $tool_content .=  "<td align=\"left\">\n";
             $tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style.">\n";
             $tool_content .=  "<img src=\"img/dossier.gif\" border=0 hspace=5>\n";
             $tool_content .=  $dspDirName."\n";
-            $tool_content .=  "</a>\n";
+            $tool_content .=  "</a>";
+            
+            /*** comments ***/
+            if ( @$dirCommentList[$dirKey] != "" )
+            {
+                $dirCommentList[$dirKey] = htmlspecialchars($dirCommentList[$dirKey]);
+                $dirCommentList[$dirKey] = nl2br($dirCommentList[$dirKey]);
+
+                $tool_content .=  "<span class=\"comment\">";
+                $tool_content .=  "(".$dirCommentList[$dirKey].")";
+                $tool_content .=  "</span>\n";
+            }
 
             /*** skip display date and time ***/
             $tool_content .=  "<td>&nbsp;</td>\n";
@@ -1356,22 +1234,9 @@ if($is_adminOfCourse) {
 			<img src=\"img/visible.gif\" border=0 title=\"$langVisible\"></a></td>";
             }
 
-            $tool_content .=  "</tr></table></td></tr>\n";
+            $tool_content .=  "</tr></table></td></tr>";
 
-            /*** comments ***/
-            if ( @$dirCommentList[$dirKey] != "" )
-            {
-                $dirCommentList[$dirKey] = htmlspecialchars($dirCommentList[$dirKey]);
-                $dirCommentList[$dirKey] = nl2br($dirCommentList[$dirKey]);
-
-                $tool_content .=  "<tr align=\"left\">\n";
-                $tool_content .=  "<td colspan=\"8\">\n";
-                $tool_content .=  "<div class=\"comment\">";
-                $tool_content .=  $dirCommentList[$dirKey];
-                $tool_content .=  "</div>\n";
-                $tool_content .=  "</td>\n";
-                $tool_content .=  "</tr>\n";
-            }
+            
         }
     }
 
@@ -1394,15 +1259,17 @@ if($is_adminOfCourse) {
             if (@$fileVisibilityList[$fileKey] == "i")
             {
                 $style=" class=\"invisible\"";
+                $style2=" class=\"invisible_doc\"";
             }
             else
             {
                 $style="";
+                $style2="";
             }
 
 
 
-            $tool_content .=  "<tr align=\"center\"".$style.">\n";
+            $tool_content .=  "<tr align=\"center\"".$style2.">\n";
             $tool_content .=  "<td align=\"left\">\n";
           //aferaish tou: kathe arxeio na einai hyperlink me apeftheias URL -  $tool_content .=  "<a href=\"".$urlFileName."\" target=_blank".$style.">\n";
             $tool_content .=  "<img src=\"./img/".$image."\" border=0 hspace=5>\n";
@@ -1481,7 +1348,7 @@ if($is_adminOfCourse) {
             $tool_content .=  "<td><small>".$date."</small></td>\n";
 
             /*** delete command ***/
-            $tool_content .=  "<td><table><tr><td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdFileName."\" onClick=\"return confirmation('".addslashes($dspFileName)."');\">
+            $tool_content .=  "<td><table><tr><td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdFileName."\" onClick=\"return confirmation('".addslashes($row["filename"])."');\">
 		<img src=\"img/supprimer.gif\" border=0  title=\"$langDelete\"></a></td>";
             /*** copy command ***/
             $tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?move=".$cmdFileName."\">
@@ -1513,7 +1380,8 @@ if($is_adminOfCourse) {
     
     //emfanish link gia to quota bar
     $diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
-    $tool_content .= "<a href=\"showquota.php?diskQuotaDocument=$diskQuotaDocument&diskUsed=$diskUsed\" target=\"blank\">$langQuotaBar</a>";
+    //$tool_content .= "<a href=\"showquota.php?diskQuotaDocument=$diskQuotaDocument&diskUsed=$diskUsed\" target=\"blank\">$langQuotaBar</a>";
+    $tool_content .= "<a href=\"showquota.php?diskQuotaDocument=$diskQuotaDocument&diskUsed=$diskUsed\">$langQuotaBar</a>";
     
     $tool_content .=  "</div>";
 
@@ -1547,6 +1415,22 @@ $tool_content .= "
            CURRENT DIRECTORY LINE
  --------------------------------------*/
 
+
+/*** current directory ***/
+
+
+//exei ginei comment out. efmanizetai parakatw (mesa sto <thead>)
+/*if ($curDirName) // if the $curDirName is empty, we're in the root point and there isn't a dir name to display
+{
+    $tool_content .=  "<!-- current dir name -->\n";
+    $tool_content .=  "<tr>\n";
+    $tool_content .=  "<td colspan=\"3\" align=\"left\" bgcolor=\"#000066\">\n";
+    $tool_content .=  "<img src=\"img/opendir.gif\" align=\"absbottom\" vspace=2 hspace=5>\n";
+    $tool_content .=  "<font color=\"#CCCCCC\">".$dspCurDirName."</font>\n";
+    $tool_content .=  "</td>\n";
+    $tool_content .=  "</tr>\n";
+}*/
+
 /*** go to parent directory ***/
 
 if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
@@ -1562,29 +1446,24 @@ if ($curDirName) // if the $curDirName is empty, we're in the root point and we 
     $tool_content .=  "</tr>\n";
 }
 
-/*** current directory ***/
-
-if ($curDirName) // if the $curDirName is empty, we're in the root point and there is'nt a dir name to display
-{
-    $tool_content .=  "<!-- current dir name -->\n";
-    $tool_content .=  "<tr>\n";
-    $tool_content .=  "<td colspan=\"3\" align=\"left\" bgcolor=\"#000066\">\n";
-    $tool_content .=  "<img src=\"img/opendir.gif\" align=\"absbottom\" vspace=2 hspace=5>\n";
-    $tool_content .=  "<font color=\"#CCCCCC\">".$dspCurDirName."</font>\n";
-    $tool_content .=  "</td>\n";
-    $tool_content .=  "</tr>\n";
-}
 
 $tool_content .= "
 <!-- command list -->
 </tr>
-<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">";
+<thead>
+	<tr>
+		<th colspan=\"3\"><h3>$dspCurDirName</h3></th>
+	</tr>";
 
+	if (!empty($dspCurDirName)) $tool_content .= "<tr><th colspan=\"4\"><h3>$dspCurDirName</h3></th></tr>";
 
-$tool_content .=  "<td>$langName</td>
-<td>$langSize</td>
-<td>$langDate</td>
-</tr>";
+$tool_content .= "
+	<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">
+		<th>$langName</th>
+		<th>$langSize</th>
+		<th>$langDate</th>
+	</tr>
+</thead>";
 
 // !-- dir list -->
 
@@ -1616,11 +1495,7 @@ if (isset($dirNameList))
             $tool_content .=  $dspDirName."\n";
             $tool_content .=  "</a>\n";
 
-            /*** skip display date and time ***/
-            $tool_content .=  "<td>&nbsp;</td>\n";
-            $tool_content .=  "<td>&nbsp;</td>\n";
-
-            $tool_content .=  "</tr>\n";
+            
 
             /*** comments ***/
             if (@$dirCommentList[$dirKey] != "" )
@@ -1628,14 +1503,16 @@ if (isset($dirNameList))
                 $dirCommentList[$dirKey] = htmlspecialchars($dirCommentList[$dirKey]);
                 $dirCommentList[$dirKey] = nl2br($dirCommentList[$dirKey]);
 
-                $tool_content .=  "<tr align=\"left\">\n";
-                $tool_content .=  "<td colspan=\"3\">\n";
-                $tool_content .=  "<div class=\"comment\">";
-                $tool_content .=  $dirCommentList[$dirKey];
-                $tool_content .=  "</div>\n";
-                $tool_content .=  "</td>\n";
-                $tool_content .=  "</tr>\n";
+                $tool_content .=  "<span class=\"comment\">";
+                $tool_content .=  "(".$dirCommentList[$dirKey].")";
+                $tool_content .=  "</span>\n";
             }
+            
+            /*** skip display date and time ***/
+            $tool_content .=  "<td>&nbsp;</td>\n";
+            $tool_content .=  "<td>&nbsp;</td>\n";
+
+            $tool_content .=  "</tr>\n";
 
         }
 
@@ -1679,9 +1556,9 @@ if (isset($fileNameList))
 
                 //$tool_content .=  "<tr align=\"left\">\n";
                 //$tool_content .=  "<td colspan=\"8\">\n";
-                //$tool_content .=  "<div class=\"comment\">";
-                $tool_content .=  $fileCommentList[$fileKey];
-                //$tool_content .=  "</div>\n";
+                $tool_content .=  "<span class=\"comment\">";
+                $tool_content .=  "(".$fileCommentList[$fileKey].")";
+                $tool_content .=  "</span>\n";
                 //$tool_content .=  "</td>\n";
                 //$tool_content .=  "</tr>\n";
             }
@@ -1708,7 +1585,7 @@ $tool_content .=  "</div>";
 
 $tmp_cwd = getcwd();
 chdir($baseServDir."/modules/document/");
-draw($tool_content, 2, '', $local_head);
+draw($tool_content, 2, "document", $local_head);
 chdir($tmp_cwd);
 
 

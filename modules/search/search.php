@@ -20,7 +20,13 @@
         Panepistimiopolis Ilissia, 15784, Athens, Greece
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
-
+/*===========================================================================
+	search.php
+	@last update: 05-10-2006 by Sakis Agorastos
+	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
+==============================================================================      
+	
+	
 //  elegxos gia to pou vrisketai o xrhsths sto systhma kai redirect sto antistoixo script anazhthshs
 //  oi diathesimes katastaseis einai oi ekseis:
 //
@@ -28,9 +34,11 @@
 //
 //  2. sthn kentrikh selida twn mathimatwn (amesws meta to log-in)
 //
-//  3. sthn kentrikh selida mathimatos (exei ginei log-in kai o xrhsths eigaxthhke se mathima)
-//
+//  x. sthn kentrikh selida mathimatos (exei ginei log-in kai o xrhsths eigaxthhke se mathima)
+//*/
 
+$langFiles = array('course_info', 'create_course', 'opencours', 'search');
+include '../../include/baseTheme.php';
 
 //elegxos ean o xrhsths vrisketai sthn kentrikh selida tou systhmatos xwris na exei kanei login
 if (@empty($uid))
@@ -39,17 +47,23 @@ include 'search_loggedout.php';
 	
 }else 
 {
-	//elegxos ean o xrhsths einai entos kapoiou mathimatos
-	if (@$require_current_course == FALSE) 
+	include 'search_loggedin.php';
+	
+	//exei ginei comment out giati den xreiazetai edw. th stigmh pou to mikro <input> gia anazhthsh (sto theme.php) emfanizetai mono entos enos mathimatos, to search_incourse.php kaleitai apeftheias mesw aftou (apo th forma).
+	
+	/*
+	//elegxos ean o xrhsths einai sthn kentrikh selida (xartofylakio)
+	if (@empty($currentCourseID)) 
 	{
 		include 'search_loggedin.php';
 		
-	}else 
+	}
+	else 
 	{
-		//elegxos ean o xrhsths exei kanei login alla *den* einai entos mathimatos
+		//elegxos ean o xrhsths exei kanei login kai einai entos mathimatos
 		include 'search_incourse.php';	
 		
-	}
+	}*/
 		
 }
 

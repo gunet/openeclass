@@ -1440,6 +1440,12 @@ mysql_query("INSERT INTO `auth` VALUES (3, 'imap', '', '', 0)");
 mysql_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)");
 mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
 
+
+//dhmiourgia full text indexes
+mysql_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu` ,`code_cours`)");
+mysql_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_objectives` ,`course_prerequisites` ,`course_keywords` ,`course_references`)");
+
+
  }
 
 // creation of config.php

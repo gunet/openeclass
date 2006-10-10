@@ -79,7 +79,7 @@ $langGroupForumLink="Περιοχή συζητήσεων ομάδας χρηστών";
 $langZipNoPhp="Το αρχείο zip δεν πρέπει να περιέχει αρχεία .php";
 $langUncompress="αποσυμπίεση του αρχείου (.zip) στον εξυπηρέτη <small>(*)</small>";
 $langDownloadAndZipEnd="Το αρχείο .zip ανέβηκε και αποσυμπιέστηκε";
-$langAreYouSureToDelete = "Είστε βέβαιος ότι θέλετε να διαγράψετε το αρχείο ";
+$langAreYouSureToDelete = "Είστε βέβαιος ότι θέλετε να διαγράψετε το: ";
 
 $langPublish = "Δημοσίευση";
 $langParentDir = "αρχικό κατάλογο";
@@ -124,5 +124,5 @@ $langQuotaBar = "Επισκόπηση αποθηκευτικού χώρου";
 $langQuotaUsed = "Χρησιμοποιούμενος Χώρος";
 $langQuotaTotal = "Συνολικός Διαθέσιμος Χώρος";
 $langQuotaPercentage = "Ποσοστό χρήσης";
-$langBack = "Κλείσιμο";
+$langBack = "Επιστροφή";
 ?>

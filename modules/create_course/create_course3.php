@@ -2056,6 +2056,18 @@ mysql_query("CREATE TABLE `lp_user_module_progress` (
     mysql_query("INSERT INTO liste_domaines VALUES ( '251', 'gov', 'Gouvernement')");
     mysql_query("INSERT INTO liste_domaines VALUES ( '252', 'mil', 'Miltaire')");
 
+    
+//dhmiourgia full text indexes gia th diadikasia ths anazhthshs
+mysql_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");
+mysql_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)");
+mysql_query("ALTER TABLE `document` ADD FULLTEXT `document` (`filename` ,`comment` ,`title`,`creator`,`subject`,`description`,`author`,`language`)");
+mysql_query("ALTER TABLE `exercices` ADD FULLTEXT `exercices` (`titre`,`description`)");
+mysql_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
+mysql_query("ALTER TABLE `liens` ADD FULLTEXT `liens` (`url` ,`titre` ,`description`)");
+mysql_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`titre` ,`description`)");
+mysql_query("ALTER TABLE `videolinks` ADD FULLTEXT `videolinks` (`url` ,`titre` ,`description`)");
+
+
 // ----------------------------------------
 // ------------- update main Db------------
 // ----------------------------------------

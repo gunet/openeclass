@@ -121,5 +121,5 @@ $langQuotaBar = "View available disk space";
 $langQuotaUsed = "Used disk space";
 $langQuotaTotal = "Total available disk space";
 $langQuotaPercentage = "Usage percentage";
-$langBack = "Close";
+$langBack = "Back";
 ?>
