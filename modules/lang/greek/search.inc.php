@@ -7,7 +7,7 @@ $langSearch_terms = "Όροι Αναζήτησης: ";
 $langSearchIn = "Αναζήτηση σε: ";
 $langSearchWith = "Αναζήτηση με βάση τα παρακάτω κριτήρια:";
 
-$langSearchingFor = "Αναζήτηση στοιχείων...";
+$langSearchingFor = "";
 $langNoResult = "Δεν βρέθηκαν αποτελέσματα...";
 
 $langIntroductionNote = "Εισαγωγικό Σημείωμα";

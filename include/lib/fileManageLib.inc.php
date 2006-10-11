@@ -227,7 +227,7 @@ function removeDir($dirPath)
 function my_rename($filePath, $newFileName)
 {
 	$path = @$baseWorkDir.dirname($filePath);
-	$oldFileName = basename($filePath);
+	$oldFileName = my_basename($filePath);
 
 	if (check_name_exist($path."/".$newFileName)
 		&& $newFileName != $oldFileName)
@@ -274,7 +274,7 @@ function move($source, $target)
 {
 	if ( check_name_exist($source) )
 	{
-		$fileName = basename($source);
+		$fileName = my_basename($source);
 
 		if ( check_name_exist($target."/".$fileName) )
 		{
@@ -367,7 +367,7 @@ function move_dir($src, $dest)
 function copyDirTo($origDirPath, $destination)
 {
 	// extract directory name - create it at destination - update destination trail
-	$dirName = basename($origDirPath);
+	$dirName = my_basename($origDirPath);
 	mkdir ($destination."/".$dirName, 0775);
 	$destinationTrail = $destination."/".$dirName;
 
@@ -532,6 +532,54 @@ function form_dir_list($sourceType, $sourceComponent, $command, $baseWorkDir)
 	return $dialogBox;
 }
 
+
+//afth h function (opws kai h prohgoumenh) dhmiourgei mia lista se combo box me tous fakelous enos path. sth sygkekrimenh exei prostethei to orisma $entryToExclude prokeimenou na mhn emfanizetai mia eggrafh
+function form_dir_list_exclude($sourceType, $sourceComponent, $command, $baseWorkDir, $entryToExclude)
+{
+	global $PHP_SELF, $langParentDir, $langTo, $langMoveFrom, $langMove;
+
+	$dirList = index_and_sort_dir($baseWorkDir);
+
+	$dialogBox .= "<form action=\"".$PHP_SELF."\" method=\"post\">\n" ;
+	$dialogBox .= "<input type=\"hidden\" name=\"".$sourceType."\" value=\"".$sourceComponent."\">\n" ;
+	//palios tropos emfanishs entolhs + onomatos arxeiou --       $dialogBox .= " ".$langMoveFrom." ".$sourceComponent." ".$langTo.":\n" ;
+	$dialogBox .= " ".$langMoveFrom." ".$langTo.":\n" ;
+	$dialogBox .= "<select name=\"".$command."\">\n" ;
+	$dialogBox .= "<option value=\"\" style=\"color:#999999\">".$langParentDir."\n";
+
+	$bwdLen = strlen($baseWorkDir) ;	// base directories lenght, used under
+
+	/* build html form inputs */
+
+	if ($dirList)
+	{
+		while (list( , $pathValue) = each($dirList) )
+		{
+
+			$pathValue = substr ( $pathValue , $bwdLen );		// truncate cunfidential informations confidentielles
+			$dirname = basename ($pathValue);					// extract $pathValue directory name du nom
+
+			/* compute de the display tab */
+
+			$tab = "";										// $tab reinitialisation
+			$depth = substr_count($pathValue, "/");			// The number of nombre '/' indicates the directory deepness
+
+			for ($h=0; $h<$depth; $h++)
+			{
+				$tab .= "&nbsp;&nbsp";
+			}
+			
+			if ($pathValue != $entryToExclude) $dialogBox .= "<option value=\"$pathValue\">$tab>$dirname\n";
+		}
+	}
+
+	$dialogBox .= "</select>\n";
+	$dialogBox .= "<input type=\"submit\" value=\"$langMove\">";
+	$dialogBox .= "</form>\n";
+
+	return $dialogBox;
+}
+
 //------------------------------------------------------------------------------
 
 /* --------------- backported functions from Claroline 1.7.x --------------- */
@@ -609,7 +657,7 @@ function claro_rename_file($oldFilePath, $newFilePath)
     /* REPLACE CHARACTER POTENTIALY DANGEROUS FOR THE SYSTEM */
 
     $newFilePath = dirname($newFilePath).'/'
-                  .replace_dangerous_char(basename($newFilePath));
+                  .replace_dangerous_char(my_basename($newFilePath));
 
     if (check_name_exist($newFilePath)
         && $newFilePath != $oldFilePath)
@@ -640,7 +688,7 @@ function claro_rename_file($oldFilePath, $newFilePath)
 
 function claro_copy_file($sourcePath, $targetPath)
 {
-    $fileName = basename($sourcePath);
+    $fileName = my_basename($sourcePath);
 
     if ( is_file($sourcePath) )
     {

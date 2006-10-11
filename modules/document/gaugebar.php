@@ -96,11 +96,11 @@ class myGauge {
        $RenderHtml = "<table cellspacing=0 cellpadding=0 width=" . $this->Width . " height=" . $this->Height . "><tr>";
        if ($fg_width > 0) {
            $RenderHtml = $RenderHtml . "<td width=" . $fg_width . " height=" . $this->Height . " bgcolor=" . $this->FgColor .
-               "><img src=\"/images/shim.gif\"></td>";
+               "><img src=\"./img/shim.gif\"></td>";
        }
        if ($bg_width > 0) {
            $RenderHtml = $RenderHtml . "<td width=" . $bg_width . " height=" .
-           $this->Height . " bgcolor=" . $this->BgColor . "><img src=\"/images/shim.gif\"></td>";
+           $this->Height . " bgcolor=" . $this->BgColor . "><img src=\"./img/shim.gif\"></td>";
        }
        $RenderHtml = $RenderHtml . "</tr></table>";
        
