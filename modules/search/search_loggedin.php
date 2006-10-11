@@ -49,7 +49,7 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 /**********************************************************************************************
 				emfanish formas anahzthshs ean oi oroi anazhthshs einai kenoi 
 ***********************************************************************************************/
-	
+
 		$tool_content .= "
 			<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
 			<table width=\"99%\">
@@ -134,10 +134,10 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
     	
 		$show_entry = FALSE; //flag gia emfanish apotelesmatwn se mia grammh tou array efoson entopistoun apotelesmata				
 				
-		$show_entry = match_arrays($search_terms_title, $mycours[3]);
-		if($show_entry == FALSE) $show_entry = match_arrays($search_terms_keywords, $mycours[7]);
-		if($show_entry == FALSE) $show_entry = match_arrays($search_terms_instructor, $mycours[13]);
-		if($show_entry == FALSE) $show_entry = match_arrays($search_terms_coursecode, $mycours[1]);
+		if (!empty($search_terms_title)) $show_entry = match_arrays($search_terms_title, $mycours[3]);
+		if (!empty($search_terms_keywords)) if($show_entry == FALSE) $show_entry = match_arrays($search_terms_keywords, $mycours[7]);
+		if (!empty($search_terms_instructor)) if($show_entry == FALSE) $show_entry = match_arrays($search_terms_instructor, $mycours[13]);
+		if (!empty($search_terms_coursecode)) if($show_entry == FALSE) $show_entry = match_arrays($search_terms_coursecode, $mycours[1]);
 		
 		
 		//EMFANISH APOTELESMATOS:
@@ -145,14 +145,13 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 		//$mycours, emfanise thn eggrafh
 		if($show_entry)
 		{			
-			$tool_content .= "<br><table width=\"90%\"><tr><td>".$langTitle.": <strong>".$mycours[3]."</strong><br>";
-			$tool_content .= $langCourseCode.": <strong>".$mycours[1]."</strong><br>";
-			$tool_content .= $langKeywords.": <strong>".$mycours[7]."</strong><br>";
-			$tool_content .= $langInstructor.": <strong>".$mycours[13]."</strong><br>";			
-			$tool_content .= "<a href=\"../../courses/".$mycours[1]."/\">".$langEnter."</a>";
+			$tool_content .= "<br><table width=\"90%\"><tr><td>".$langTitle.": <strong>".$mycours[3]."</strong>";
+			$tool_content .= " [".$mycours[1]."]<br>";
+			$tool_content .= $langInstructor.": <strong>".$mycours[13]."</strong>, ";
+			$tool_content .= $langKeywords.": ".$mycours[7]."<br>";
+			$tool_content .= "<strong><a href=\"../../courses/".$mycours[1]."/\">&gt; ".$langEnter."</a></strong>";
 			$tool_content .= "</td></tr></table><br>";
 
-			
 			$tool_content .= "";
 			
 			
@@ -171,7 +170,7 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
     
 }
 
-draw($tool_content, 0);
+draw($tool_content, 1);
 
 
 //katharisma twn orwn anazhthshs gia apofygh lathwn
@@ -188,16 +187,30 @@ $search_terms_coursecode ="";
 function match_arrays($search_terms_array, $mycours_string)
 {
 	//elegxos gia to an yparxoun apotelesmata sthn trexousa grammh toy $mycours_array
-		if(!empty($term) || !empty($mycours_string))
+		if(!empty($search_terms_array) || $search_terms_array != "" || !empty($mycours_string) || $mycours_string != "")
 		{
 			//echo "compare: ".$search_terms_array." == ".$mycours_string;
-			$ret = strcmp($search_terms_array, $mycours_string);
+			$ret = stripos($mycours_string, $search_terms_array);
 			//if($ret == 0) echo " MATCH!<br>";
-			if($ret == 0) return TRUE;
+			//echo "<br> RET: ".$ret;
+			if($ret !== FALSE) return TRUE;
 			
 			//echo "<br>";
 		}
 		
 	return FALSE;
+}
+
+function stripos($string, $word)
+{
+   $retval = false;
+   for($i=0;$i<=strlen($string);$i++)
+   {
+       if (strtolower(substr($string,$i,strlen($word))) == strtolower($word))
+       {
+           $retval = true;
+       }
+   }
+   return $retval;
 }
 ?>

@@ -61,7 +61,7 @@ include 'search_loggedout.php';
 	else 
 	{
 		//elegxos ean o xrhsths exei kanei login kai einai entos mathimatos
-		include 'search_incourse.php';	
+		include 'search_incourse.php';
 		
 	}*/
 		
