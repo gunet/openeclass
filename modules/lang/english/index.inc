@@ -38,6 +38,8 @@ $langInvalidId = '<font color="red" size="1" face="arial, helvetica">
 	Login failed.<br>If you are not registered, create a new account
 	using the <a href=module/auth/newuser_info.php>registration form</a>.
 	</font><br>&nbsp;<br>';
+$langAccountInactive1 = "Inactive Account.";
+$langAccountInactive2 = "Please cont the admin to activate your account.";
 $langMyCourses="My courses";
 $langMyCoursesProf="My courses (Professors)";
 $langMyCoursesUser="My registered courses (Student)";

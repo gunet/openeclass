@@ -38,6 +38,8 @@ $langInvalidId = '<font color="red" size="1" face="arial, helvetica">
         Λάθος στοιχεία.<br>Αν δεν είστε γραμμένος, συμπληρώστε τη
         <a href=modules/auth/newuser_info.php>φόρμα εγγραφής</a>.
         </font><br>&nbsp;<br>';
+$langAccountInactive1 = "Μη ενεργός λογαριασμός.";
+$langAccountInactive2 = "Παρακαλώ επικοινωνήστε με τον διαχειριστή για την ενεργοποίηση του λογαριασμού σας";
 $langMyCourses="Τα μαθήματά μου";
 $langMyCoursesProf="Τα μαθήματα που υποστηρίζω (Καθηγητής)";
 $langMyCoursesUser="Τα μαθήματα που παρακολουθώ (Εγγεγραμμένος)";
