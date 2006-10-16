@@ -212,7 +212,7 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		$datetime->set_timename("hour", "min", "sec");
 		$datetime->set_datetime_byglobal("HTTP_POST_VARS");
 		$expires_at = $datetime->get_timestamp_entered();
-		
+		$auth_methods = array('imap','pop3','ldap','db');
 		// 2. do the database update
 		if($registered_at>$expires_at)
 		{
@@ -220,18 +220,20 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		}
 		else
 		{
-			if(($password!='imap') || ($password!='pop3') || ($password!='ldap') || ($password!='db'))
+			//if(($password!='imap') || ($password!='pop3') || ($password!='ldap') || ($password!='db'))
+			if(!in_array($password,$auth_methods))
 			{
-			// encryption of password
-			$crypt = new Encryption;
-			$key = $encryptkey;
-			$pswdlen = "20";
-			$password_encrypted = $crypt->encrypt($key, $password, $pswdlen);
+				// encryption of password
+				$crypt = new Encryption;
+				$key = $encryptkey;
+				$pswdlen = "20";
+				$password_encrypted = $crypt->encrypt($key, $password, $pswdlen);
 			}
 			else
 			{
 				$password_encrypted = $password;
 			}		
+			
 			if($u=='1')
 			{
 				$department = 'NULL';
