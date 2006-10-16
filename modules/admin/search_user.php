@@ -82,6 +82,7 @@ $user_registered_at_flag = isset($_SESSION['user_registered_at_flag'])?$_SESSION
 $user_registered_at = isset($_SESSION['user_registered_at'])?$_SESSION['user_registered_at']:time();
 $user_email = isset($_SESSION['user_email'])?$_SESSION['user_email']:'';
 
+$tool_content .= "<a href=\"listusers.php?c=4\">".$langInactiveUsers."</a><br><br>";
 
 // display the search form
 $tool_content .= "<form action=\"listusers.php?search=".$new."\" method=\"post\" name=\"user_search\">";
