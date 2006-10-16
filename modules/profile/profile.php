@@ -29,6 +29,7 @@ $langFiles = array('registration','usage');
 $require_help = TRUE;
 $helpTopic = 'Profile';
 include '../../include/baseTheme.php';
+include "../auth/auth.inc.php";
 $require_valid_uid = TRUE;
 $tool_content = "";
 
@@ -89,9 +90,16 @@ if (isset($submit) && (!isset($ldap_submit))) {
 	if (!isset($persoStatus) || $persoStatus == "") $persoStatus = "no";
 	else  $persoStatus = "yes";
 	$userLanguage = $_REQUEST['userLanguage'];
+	
+	// encrypt the password
+	$crypt = new Encryption;
+ 	$key = $encryptkey;
+ 	$pswdlen = "20";
+ 	$password_encrypted = $crypt->encrypt($key, $password_form, $pswdlen);
+	
 	if(mysql_query("UPDATE user
         SET nom='$nom_form', prenom='$prenom_form',
-        username='$username_form', password='$password_form', email='$email_form', am='$am_form',
+        username='$username_form', password='$password_encrypted', email='$email_form', am='$am_form',
             perso='$persoStatus', lang='$userLanguage'
         WHERE user_id='".$_SESSION["uid"]."'")){
 	header("location:". $_SERVER['PHP_SELF']."?msg=1");
@@ -243,8 +251,10 @@ if ($userLang == "el") {
 }
 ##[END personalisation modification]############
 
+/*
 // if LDAP user - added by adia
-if ($myrow['inst_id'] > 0) {		// LDAP user:
+if ($myrow['inst_id'] > 0) 	// LDAP user:
+{		
 	$tool_content .= "
     <form method=\"post\" action=\"$PHP_SELF?submit=yes\">
     <input type=hidden name=\"ldap_submit\" value=\"ON\">
@@ -279,15 +289,15 @@ if ($myrow['inst_id'] > 0) {		// LDAP user:
 
 	##[BEGIN personalisation modification]############
 
-	if (session_is_registered("perso_is_active")) {
+	if (session_is_registered("perso_is_active")) 
+	{
 		$tool_content .= "
         <tr>
             <th>eClass Personalised</th>
             <td>
                 <input type=checkbox name='persoStatus' value=\"yes\" $checkedPerso>
             </td>
-        </tr>
-";
+        </tr>";
 	}
 	##[END personalisation modification]############
 	$tool_content .= "
@@ -297,8 +307,7 @@ if ($myrow['inst_id'] > 0) {		// LDAP user:
                 <input type='radio' name='userLanguage' value='el' $checkedLangEl>$langGreek<br>
 				<input type='radio' name='userLanguage' value='en'  $checkedLangEn>$langEnglish
             </td>
-        </tr>
-";
+        </tr>";
 
 	$tool_content .= "
         <tr>
@@ -308,11 +317,13 @@ if ($myrow['inst_id'] > 0) {		// LDAP user:
 
         <input type=\"Submit\" name=\"submit\" value=\"$langChange\">
 
-                </form><br><br>
-        ";
+                </form><br><br>";
 
 
-} else {		// Not LDAP user:
+} 
+else		// Not LDAP user: 
+{		
+*/
 	if (!isset($urlSecure)) {
 		$sec = $urlServer.'modules/profile/profile.php';
 	} else {
@@ -336,8 +347,13 @@ if ($myrow['inst_id'] > 0) {		// LDAP user:
         <td>
             <input type=\"text\" size=\"40\" name=\"nom_form\" value=\"$nom_form\">
         </td>
-    </tr>
-    <tr>
+    </tr>";
+    
+    $authmethods = array("imap","pop3","ldap","db");
+if(!in_array($password_form,$authmethods))
+{
+	$tool_content .= "
+	<tr>
         <th width=\"150\">
             $langUsername
         </th>
@@ -349,19 +365,48 @@ if ($myrow['inst_id'] > 0) {		// LDAP user:
         <th width=\"150\">
             $langPass
         </th>
-        <td>
-            <input type=\"password\" size=\"40\" name=\"password_form\" value=\"$password_form\">
-        </td>
-    </tr>
+        <td>";
+                
+        	$crypt = new Encryption;
+					$key = $encryptkey;
+					$password_decrypted = $crypt->decrypt($key, $password_form);
+					$tool_content .= "<input type=\"password\" size=\"40\" name=\"password_form\" value=\"$password_decrypted\">
+					</td>
+		</tr>
     <tr>
         <th width=\"150\">
             $langConfirmation
         </th>
-        <td>
-            <input type=\"password\" size=\"40\" name=\"password_form1\" value=\"$password_form\">
+        <td>       		
+            <input type=\"password\" size=\"40\" name=\"password_form1\" value=\"$password_decrypted\">
         </td>
-    </tr>
+    </tr>";
+}
+else		// means that it is external auth method, so the user cannot change this password
+{
+    switch($password_form)
+    {
+    	case "pop3": $auth=2;break; 
+    	case "imap": $auth=3;break; 
+    	case "ldap": $auth=4;break; 
+    	case "db": $auth=5;break; 
+    	default: $auth=1;break;
+    }
+    $auth_text = get_auth_info($auth);
+    $tool_content .= "
     <tr>
+    <th width=\"150\">".$langUsername.
+        "</th>
+        <td class=\"caution\">".$username_form." &nbsp;&nbsp;[".$auth_text."]
+        <input type=\"hidden\" name=\"password_form\" value=\"$password_form\">
+        <input type=\"hidden\" name=\"password_form1\" value=\"$password_form\">
+        <input type=\"hidden\" name=\"username_form\" value=\"$username_form\">
+        </td>
+    </tr>";
+}
+
+    
+    $tool_content .= "<tr>
         <th width=\"150\">
             $langEmail
         </th>
@@ -411,7 +456,7 @@ if ($myrow['inst_id'] > 0) {		// LDAP user:
     <p><a href='../unreguser/unreguser.php'>$langUnregUser</a></p>
     <br>
     ";
-}		// End of LDAP user added by adia
+//}		// End of LDAP user added by adia
 #############################################################
 //$tool_content .=  "</td></tr><tr><td><br><hr noshade size=\"1\">";
 
