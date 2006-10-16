@@ -100,6 +100,7 @@ if(!empty($submit))
 	$result=mysql_query($sqlLogin);
 	$check_passwords = array("pop3","imap","ldap","db");
 	$warning = "";
+	$auth_allow = 0;
 	while ($myrow = mysql_fetch_array($result))
 	{
 		if(!empty($auth))
@@ -138,6 +139,7 @@ if(!empty($submit))
 						// $warning .= "<br />Your account is inactive. <br />Please <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">contact the Eclass Admin.</a><br /><br />";
 						// $warning .= "<br />".$langAccountInactive1." <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">".$langAccountInactive2."</a><br /><br />";
 						$auth_allow = 3;
+						$user = $myrow["user_id"];
 					}
 				}
 			}
@@ -198,6 +200,7 @@ if(!empty($submit))
 						else
 						{
 							$auth_allow = 3;		//$warning .= "<br />Your account is inactive. <br />Please contact the Eclass Admin<br />";
+							$user = $myrow["user_id"];
 						}
 					}
 					else
@@ -256,7 +259,7 @@ if(!empty($submit))
 		{
 			case 1 : $warning .= ""; break;
 			case 2 : $warning .= "<br />".$langNoConnection."<br />"; break;
-			case 3 : $warning .= $tool_content .= "<br />".$langAccountInactive1." <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">".$langAccountInactive2."</a><br /><br />"; break;
+			case 3 : $warning .= $tool_content .= "<br />".$langAccountInactive1." <a href=\"modules/auth/contactadmin.php?userid=".$user."\">".$langAccountInactive2."</a><br /><br />"; break;
 			default: break;
 		}
 		//$warning .= $auth_allow . "---". $langInvalidId;
