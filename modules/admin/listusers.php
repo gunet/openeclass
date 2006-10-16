@@ -57,10 +57,12 @@ $nameTools = "Λίστα Χρηστών / Ενέργειες";		// Define $nameTools
 $search = isset($_GET['search'])?$_GET['search']:'';
 $c = isset($_GET['c'])?$_GET['c']:(isset($_POST['c'])?$_POST['c']:'');
 
+
 switch($c)		// get the case for each different listing
 {
 	case '0': $view = 1;		break;		// normal listing
 	case '':	$view = 1;		break;		// normal listing
+	case '4': $view = 1; break; // normal listing. Dispaly the inactive accounts
 	case 'searchlist': $view = 2;		break;		// search listing (search_user.php)
 	default:	$view = 3;	break;		// list per course
 }
@@ -261,7 +263,25 @@ if(!empty($user_email))
 else
 {
 	$user_email_qry = "";
-}		
+}	
+
+if($c==4)
+{
+	if($criteria!=0)
+	{
+		$users_active_qry = " AND";
+		$criteria++;
+	}
+	else
+	{
+		$users_active_qry = "";
+	}
+	$users_active_qry .= " expires_at<".time()." AND user_id<>1";
+}	
+else
+{
+	$users_active_qry = "";
+}
 // end filter/criteria
 
 
@@ -295,12 +315,12 @@ else
 {
 	// Count users, with or without criteria/filters
 	$qry = "SELECT user_id,nom,prenom,username,email,statut FROM user";
-	if((!empty($user_sirname_qry)) || (!empty($user_firstname_qry)) || (!empty($user_username_qry)) || (!empty($user_am_qry)) || (!empty($user_type_qry)) || (!empty($user_registered_at_qry)) || (!empty($user_email_qry)) )
+	if((!empty($user_sirname_qry)) || (!empty($user_firstname_qry)) || (!empty($user_username_qry)) || (!empty($user_am_qry)) || (!empty($user_type_qry)) || (!empty($user_registered_at_qry)) || (!empty($user_email_qry)) || (!empty($users_active_qry)) )
 	{
-		$qry .= " WHERE".$user_sirname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$user_registered_at_qry.$user_email_qry;
+		$qry .= " WHERE".$user_sirname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$user_registered_at_qry.$user_email_qry.$users_active_qry;
 	}		
 }
-
+//$tool_content .= $qry . "<br>";
 $sql = mysql_query($qry);
 if($sql)
 {
@@ -322,7 +342,10 @@ if($sql)
 	$caption = "";
 	$caption .= "<p><i>$langThereAre <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents και <b>$visitors</b> $langVisitors</i></p>";
 	$caption .= "<p><i>$langTotal <b>$countUser</b> $langUsers</i></p>";
-		
+	if($countUser>0)
+	{
+		$caption .= "<p><a href=\"updatetheinactive.php?activate=1\">".$langAddSixMonths."</a></p>";
+	}
 	// DEFINE SETTINGS FOR THE 5 NAVIGATION BUTTONS INTO THE USERS LIST: begin, less, all, more and end
 	$endList=50;
 	if(isset ($numbering) && $numbering)
@@ -456,9 +479,9 @@ if($sql)
 	else
 	{
 		$qry = "SELECT user_id,nom,prenom,username,email,statut FROM user";
-		if((!empty($user_sirname_qry)) || (!empty($user_firstname_qry)) || (!empty($user_username_qry)) || (!empty($user_am_qry)) || (!empty($user_type_qry)) || (!empty($user_registered_at_qry)) || (!empty($user_email_qry)) )
+		if((!empty($user_sirname_qry)) || (!empty($user_firstname_qry)) || (!empty($user_username_qry)) || (!empty($user_am_qry)) || (!empty($user_type_qry)) || (!empty($user_registered_at_qry)) || (!empty($user_email_qry)) || (!empty($users_active_qry)) )
 		{
-			$qry .= " WHERE".$user_sirname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$user_registered_at_qry.$user_email_qry;
+			$qry .= " WHERE".$user_sirname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$user_registered_at_qry.$user_email_qry.$users_active_qry;
 		}		
 	}
 	
@@ -521,6 +544,8 @@ if($sql)
 	}
 	// end format / dispaly
 	$tool_content .= "</tbody></table>";
+	
+	
 		
 }
 else
