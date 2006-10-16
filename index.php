@@ -102,7 +102,6 @@ if(!empty($submit))
 	$warning = "";
 	while ($myrow = mysql_fetch_array($result))
 	{
-
 		if(!empty($auth))
 		{
 			if(!in_array($myrow["password"],$check_passwords))
@@ -120,6 +119,7 @@ if(!empty($submit))
 					if($myrow["user_id"]==$myrow["is_admin"])
 					{
 						$is_active = 1;
+						$auth_allow = 1;
 					}
 					if($is_active==1)
 					{
@@ -131,11 +131,13 @@ if(!empty($submit))
 						$is_admin = $myrow["is_admin"];
 						$userPerso = $myrow["perso"];//user perso flag
 						$userLanguage = $myrow["lang"];//user preferred language
+						$auth_allow = 1;
 					}
 					else
 					{
 						// $warning .= "<br />Your account is inactive. <br />Please <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">contact the Eclass Admin.</a><br /><br />";
-						$warning .= "<br />".$langAccountInactive1." <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">".$langAccountInactive2."</a><br /><br />";
+						// $warning .= "<br />".$langAccountInactive1." <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">".$langAccountInactive2."</a><br /><br />";
+						$auth_allow = 3;
 					}
 				}
 			}
@@ -216,17 +218,20 @@ if(!empty($submit))
 					elseif($auth_allow==2)
 					{
 						// $tool_content .= "<br />The connection with the auth server does not seem to work!<br />";
-						$tool_content .= "<br />".$langNoConnection."<br />";
+						//$tool_content .= "<br />".$langNoConnection."<br />";
+						continue;
 					}
 					elseif($auth_allow==3)
 					{
 						// $tool_content .= "<br />Your account is inactive. <br />Please <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">contact the Eclass Admin.</a><br /><br />";
-						$tool_content .= "<br />".$langAccountInactive1." <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">".$langAccountInactive2."</a><br /><br />";
+						// $tool_content .= "<br />".$langAccountInactive1." <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">".$langAccountInactive2."</a><br /><br />";
+						continue;
 					}
 					else
 					{
 						// $tool_content .= "CANNOT PROCEED<br />";
 						$tool_content .= $langLoginFatalError."<br />";
+						continue;
 					}
 				}
 				else
@@ -247,7 +252,14 @@ if(!empty($submit))
 
 	if (!isset($uid))
 	{
-		$warning .= $langInvalidId;
+		switch($auth_allow)
+		{
+			case 1 : $warning .= ""; break;
+			case 2 : $warning .= "<br />".$langNoConnection."<br />"; break;
+			case 3 : $warning .= $tool_content .= "<br />".$langAccountInactive1." <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">".$langAccountInactive2."</a><br /><br />"; break;
+			default: break;
+		}
+		//$warning .= $auth_allow . "---". $langInvalidId;
 	}
 	else
 	{
