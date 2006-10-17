@@ -1174,6 +1174,7 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
   `course_objectives` text default NULL,
   `course_prerequisites` text default NULL,
   `course_keywords` text default NULL,
+	`course_addon` text default NULL,
   `course_references` text default NULL,
   `faculte` varchar(100) default NULL,
   `visible` tinyint(4) default NULL,
