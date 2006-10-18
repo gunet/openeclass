@@ -256,7 +256,8 @@ cData;
 			$langPollName, $langPollCreator, $langPollCreation, $langPollStart, 
 			$langPollEnd, $langPollOperations, $langPollNone, $is_adminOfCourse, $langNamesPoll,
 			$langNamesSurvey, $mysqlMainDb, $langPollEdit, $langPollRemove, 
-			$langPollDeactivate, $langPollsInactive, $langPollActivate;
+			$langPollDeactivate, $langPollsInactive, $langPollActivate, $langPollParticipate, 
+			$user_id, $langPollHasParticipated, $uid;
 		
 		$poll_check = 0;
 		$result = mysql_list_tables($currentCourse);
@@ -329,8 +330,23 @@ cData;
 						"<a href='deletepoll.php?pid={$pid}'>".$langPollRemove."</a> | ".
 						"<a href='deactivatepoll.php?pid={$pid}'>".$langPollDeactivate."</a>  ".
 						"</td></tr>";
-				else
-					$tool_content .= "<td><a href='pollparticipate.php?UseCase=1&pid=". $pid ."'>".$langPollParticipate."</a></td></tr>";
+				else {
+//					$participant = db_query("
+//					select nom,prenom from user 
+//					where user_id='$creator_id'", $mysqlMainDb);
+//					$theCreator = mysql_fetch_array($survey_creator);
+//					
+//					$sid = $theSurvey["sid"];
+						$has_participated = mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM poll_answer where creator_id='$uid'"));
+					if ( $has_participated[0] == 0) {
+						$tool_content .= "<td><a href='pollparticipate.php?UseCase=1&pid=". $pid ."'>";
+						$tool_content .= $langPollParticipate;
+						$tool_content .= "</a></td></tr>";
+						//$tool_content .= $has_participated[0].$uid;
+					} else {
+						$tool_content .= "<td>".$langPollHasParticipated."</td></tr>";
+					}
+				}
 			}
 			$tool_content .= "</table><br>";
 			
