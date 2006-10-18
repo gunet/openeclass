@@ -62,6 +62,8 @@ if (isset($_POST['login']) and isset($_POST['password']) and !is_admin($_POST['l
         συστήματος! Παρακαλούμε επιστρέψτε στην προηγούμενη σελίδα και ξαναδοκιμάστε.</p>
         <center><a href=\"index.php\">Επιστροφή</a></center>";
 	draw($tool_content,0);
+if (!mysql_field_exists("$mysqlMainDb",'cours','course_keywords'))
+$tool_content .= add_field('cours', 'course_keywords', "TEXT");
 	die();
 }
 
@@ -130,6 +132,9 @@ $tool_content .= add_field('cours', 'course_references', "TEXT");
 
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_keywords'))
 $tool_content .= add_field('cours', 'course_keywords', "TEXT");
+
+if (!mysql_field_exists("$mysqlMainDb",'cours','course_addon'))
+$tool_content .= add_field('cours', 'course_addon', "TEXT");
 
 // kstratos - UOM
 // Add 1 new field into table 'prof_request', after the field 'profuname'
@@ -276,137 +281,7 @@ if((!isset($durationAccount)) || (empty($durationAccount)))
 	$tool_content .= "Ενημερώθηκε το config.php για το durationAccount<br />";
 
 	// update users with no registration date
-	if($res = db_query("SELECT user_id,registered_at_expires_at FROM user
-		WHERE registered_at='0' 
-		OR registered_at='NULL' OR registered_at=NULL  
-		OR registered_at='null' OR registered_at=null 
-		OR registered_at='\N' OR registered_at=\N 
-		OR registered_at=''"))
-	{
-		while($row = mysql_fetch_array($res))
-		{
-			$registered_at = $row["registered_at"];
-
-			// do the update
-			$regtime = 126144000+time();
-			if(db_query("UPDATE user SET registered_at=".time().",expires_at=".$regtime))
-			{
-				$tool_content .= "SUCCESSFUL registration time update for user with id=".$row["user_id"].".Encrypted pass is:".$newpass."<br />";
-			}
-			else
-			{
-				$tool_content .= "NO UPDATE for user with id=".$row["user_id"]."<br />";
-			}
-		}
-	}
-	else
-	{
-		die("Δεν έγινε κάποια ενημέρωση σε κανένα account σχετικά με to registration time.Η ενημέρωση θα συνεχιστεί κανονικά.");
-	}
-}
-else
-{
-	// update users with no registration date
-	if($res = db_query("SELECT user_id,registered_at,expires_at FROM user
-		WHERE registered_at='0' 
-		OR registered_at='NULL' OR registered_at=NULL  
-		OR registered_at='null' OR registered_at=null 
-		OR registered_at='\N' OR registered_at=\N 
-		OR registered_at=''"))
-	{
-		while($row = mysql_fetch_array($res))
-		{
-			$registered_at = $row["registered_at"];
-
-			// do the update
-			$regtime = 126144000+time();
-			if(db_query("UPDATE user SET registered_at=".time().",expires_at=".$regtime))
-			{
-				$tool_content .= "SUCCESSFUL registration time update for user with id=".$row["user_id"].".Encrypted pass is:".$newpass."<br />";
-			}
-			else
-			{
-				$tool_content .= "NO UPDATE for user with id=".$row["user_id"]."<br />";
-			}
-		}
-	}
-	else
-	{
-		die("Δεν έγινε κάποια ενημέρωση σε κανένα account σχετικά με to registration time.Η ενημέρωση θα συνεχιστεί κανονικά.");
-	}
-}
-
-
-
-
-// Orismos $encryptkey sto config.php
-if((!isset($encryptkey)) || (empty($encryptkey)))
-{
-	@chmod( "../config",777 );
-	@chmod( "../config", 0777 );
-	$has_encryption = 0;
-	$remove_this = "?>";
-	$text2 = "\$encryptkey = \"eclass\";\n";
-	$fc=@file("../config/config.php");		//load file into $fc array
-	$f=fopen("../config/config.php","w");		//open same file and use "w" to clear file
-	foreach($fc as $line)		//loop through array using foreach
-	{
-		if(!strstr($line,$remove_this)) //look for $key in each line
-		fputs($f,$line); //place $line back in file
-		else
-		{
-			fwrite($f, $text2);
-			fwrite($f, $remove_this);
-			$has_encryption = 1;
-		}
-	}
-	fclose($f);
-	$tool_content .= "Ενημερώθηκε το config.php για το encryptkey<br />";
-
-	// update all the records in user table
-	if($res = db_query("SELECT user_id,password FROM user"))
-	{
-		while($row = mysql_fetch_array($res))
-		{
-			$pass = $row["password"];
-			$newpass = $crypt->encrypt($key1, $pass, $pswdlen);
-			if(!in_array($pass,$auth_methods))
-			{
-				// do the update
-				if(db_query("UPDATE user SET password = '".$newpass."' WHERE user_id=".$row["user_id"]))
-				{
-					$tool_content .= "SUCCESS for user with id=".$row["user_id"].".Encrypted pass is:".$newpass."<br />";
-				}
-				else
-				{
-					$tool_content .= "NO UPDATE for user with id=".$row["user_id"]."<br />";
-				}
-			}
-			else
-			{
-				continue; // move to the next one
-			}
-		}
-	}
-	else
-	{
-		die("ΠΡΟΣΟΧΗ! Τα passwords στη ΒΔ δεν είναι κρυπτογραφημένα και η πλατφόρμα δεν μπορεί να λειτουργήσει");
-	}
-
-}
-else
-{
-	// check if the passwords are already encrypted
-}
-
-//Empty table 'agenda' in the main database so that we do not have multiple entries
-//in case we run the upgrade script twice. This has to be done at this point and NOT
-//in the while loop. Otherwise it will be emptying the table for each iteration
-$sql = 'TRUNCATE TABLE `agenda`';//empty main agenda table so that we do not have multiple entries
-db_query($sql, $mysqlMainDb);
-
-// **********************************************
-// upgrade courses databases
+}	
 // **********************************************
 
 $res = db_query("SELECT code FROM cours");
