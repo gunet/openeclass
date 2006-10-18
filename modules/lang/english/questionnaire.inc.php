@@ -124,4 +124,6 @@ $langQPrefPoll = "Poll";
 
 $langNamesPoll = "Polls";
 $langNamesSurvey = "Surveys";
+
+$langPollHasParticipated = "Already participated";
 ?>

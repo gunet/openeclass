@@ -126,4 +126,5 @@ $langQPrefPoll = "Δημοσκόπηση";
 
 $langNamesPoll = "Δημοσκοπήσεις";
 $langNamesSurvey = "Έρευνες Μαθησιακού Προφίλ";
+$langPollHasParticipated = "Έχετε ήδη συμμετάσχει";
 ?>
