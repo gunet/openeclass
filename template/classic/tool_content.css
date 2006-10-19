@@ -31,8 +31,7 @@ a:active, a:visited, a:link{
 #tool_title {
 	width:99%;
 	margin-top:30px;
-	margin-bottom:70px;
-	//margin-bottom:30px;
+	margin-bottom:30px;
 }
 
 #tool_title .tool_name{
