@@ -79,7 +79,7 @@ draw($tool_content, 2);
 
 function printPollForm() {
 	global $pid, $currentCourse, $tool_content, $langPollName, $langPollStart, 
-		$langPollEnd, $langPollContinue;
+		$langPollEnd, $langPollContinue, $langPollInactive;
 ///*****************************************************************************
 //		Get poll data
 //******************************************************************************/

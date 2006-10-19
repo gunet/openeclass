@@ -337,7 +337,9 @@ cData;
 //					$theCreator = mysql_fetch_array($survey_creator);
 //					
 //					$sid = $theSurvey["sid"];
-						$has_participated = mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM poll_answer where creator_id='$uid'"));
+						$thepid = $thepoll["pid"];
+						$has_participated = mysql_fetch_array(
+							mysql_query("SELECT COUNT(*) FROM poll_answer where creator_id='$uid' AND pid='$thepid'"));
 					if ( $has_participated[0] == 0) {
 						$tool_content .= "<td><a href='pollparticipate.php?UseCase=1&pid=". $pid ."'>";
 						$tool_content .= $langPollParticipate;
