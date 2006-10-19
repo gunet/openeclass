@@ -61,13 +61,37 @@ $local_head = $jscalendar->get_load_files_code();
 
 $u_date_start = strftime('%Y-%m-%d %H:%M:%S', strtotime('now -0 day'));
 
-$start_cal = $jscalendar->make_input_field(
+$start_cal_Poll = $jscalendar->make_input_field(
            array('showsTime'      => true,
                  'showOthers'     => true,
                  'ifFormat'       => '%Y-%m-%d %H:%M:%S',
                  'timeFormat'     => '24'),
            array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
-                 'name'        => 'u_date_start',
+                 'name'        => 'PollStart',
+                 'value'       => $u_date_start));
+$end_cal_Poll = $jscalendar->make_input_field(
+           array('showsTime'      => true,
+                 'showOthers'     => true,
+                 'ifFormat'       => '%Y-%m-%d %H:%M:%S',
+                 'timeFormat'     => '24'),
+           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+                 'name'        => 'PollEnd',
+                 'value'       => $u_date_start));
+$start_cal_Suvey = $jscalendar->make_input_field(
+           array('showsTime'      => true,
+                 'showOthers'     => true,
+                 'ifFormat'       => '%Y-%m-%d %H:%M:%S',
+                 'timeFormat'     => '24'),
+           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+                 'name'        => 'SurveyStart',
+                 'value'       => $u_date_start));
+$end_cal_Survey = $jscalendar->make_input_field(
+           array('showsTime'      => true,
+                 'showOthers'     => true,
+                 'ifFormat'       => '%Y-%m-%d %H:%M:%S',
+                 'timeFormat'     => '24'),
+           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+                 'name'        => 'SurveyEnd',
                  'value'       => $u_date_start));
                  
  
