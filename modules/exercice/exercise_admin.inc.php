@@ -149,14 +149,20 @@ if($exerciseType >= 2)
 	$tool_content .= 'checked="checked"';
 $tool_content .= "> ".$langSequentialExercise."</td></tr>";
 
-$tool_content .= "<td valign=\"top\">".$langExerciseStart." :</td><td><input type=\"text\" name=\"exerciseStartDate\" ".
-	"value=\"".htmlspecialchars($exerciseStartDate)."\" size=\"22\" maxlength=\"19\"> ".
-  "(".$langExerciseEg." 1977-06-29 12:00:00)</td></tr>";
+//$tool_content .= "<td valign=\"top\">".$langExerciseStart." :</td><td><input type=\"text\" name=\"exerciseStartDate\" ".
+//	"value=\"".htmlspecialchars($exerciseStartDate)."\" size=\"22\" maxlength=\"19\"> ".
+//  "(".$langExerciseEg." 1977-06-29 12:00:00)</td></tr>";
+
+$tool_content .= "<td valign=\"top\">".$langExerciseStart." :</td>".
+	"<td>$start_cal_Excercise</td></tr>";
   
-$tool_content .= "<tr><td valign=\"top\">".$langExerciseEnd." :</td>".
-	"<td><input type=\"text\" name=\"exerciseEndDate\" value=\"".htmlspecialchars($exerciseEndDate)."\" ". 
- 	"size=\"22\" maxlength=\"19\">". 
-  "(".$langExerciseEg." 1977-06-29 12:00:00)</td></tr>";
+//$tool_content .= "<tr><td valign=\"top\">".$langExerciseEnd." :</td>".
+//	"<td><input type=\"text\" name=\"exerciseEndDate\" value=\"".htmlspecialchars($exerciseEndDate)."\" ". 
+// 	"size=\"22\" maxlength=\"19\">". 
+//  "(".$langExerciseEg." 1977-06-29 12:00:00)</td></tr>";
+
+$tool_content .= "<td valign=\"top\">".$langExerciseEnd." :</td>".
+	"<td>$end_cal_Excercise</td></tr>";
   
 $tool_content .= "<tr><td valign=\"top\">".$langExerciseConstrain." :</td>".
 	"<td><input type=\"text\" name=\"exerciseTimeConstrain\" size=\"3\" maxlength=\"3\" ". 

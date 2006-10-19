@@ -66,6 +66,9 @@ $langFiles='exercice';
 
 include '../../include/baseTheme.php';
 
+// For using with th epop-up calendar
+include 'jscalendar.inc.php';
+
 $tool_content = "";
 
 $nameTools = $langExercices;
@@ -259,5 +262,6 @@ if(!isset($newQuestion) && !isset($modifyQuestion) && !isset($editQuestion) && !
 		include('question_list_admin.inc.php');
 	}
 }
-draw($tool_content, 2);
+//draw($tool_content, 2);
+draw($tool_content, 2, '', $local_head, '');
 ?>
