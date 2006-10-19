@@ -61,6 +61,9 @@ $helpTopic = 'Questionnaire';
 
 include '../../include/baseTheme.php';
 
+// For using with th epop-up calendar
+include 'jscalendar.inc.php';
+
 $tool_content = "";
 
 
@@ -260,7 +263,8 @@ function removeEvent() {
 hContent;
 
 
-draw($tool_content, 2, 'survey', $head_content); 
+//draw($tool_content, 2, 'survey', $head_content); 
+draw($tool_content, 2, '', $local_head, '');
 
 /*****************************************************************************
 		Prints the new survey creation form
@@ -268,7 +272,7 @@ draw($tool_content, 2, 'survey', $head_content);
 function printSurveyCreationForm() {
 	global $tool_content, $langSurveyName, $langSurveyStart, 
 		$langSurveyEnd, $langSurveyType, $langSurveyMC, $langSurveyFillText, 
-		$langSurveyContinue, $langSurveyCreate;
+		$langSurveyContinue, $langSurveyCreate, $start_cal_Survey, $end_cal_Survey;
 	
 	$CurrentDate = date("Y-m-d H:i:s");
 	$CurrentDate = htmlspecialchars($CurrentDate);
@@ -278,9 +282,10 @@ function printSurveyCreationForm() {
 	<table><thead>$langSurveyCreate</thead>
 		<tr><td>$langSurveyName</td><td colspan="2"><input type="text" size="50" name="SurveyName"></td></tr>
 		<tr><td>$langSurveyStart</td><td colspan="2">
-			<input type="text" size="17" name="SurveyStart" value="$CurrentDate">
+			<!--<input type="text" size="17" name="SurveyStart" value="$CurrentDate">-->
+			$start_cal_Survey
 		</td></tr>
-		<tr><td>$langSurveyEnd</td><td colspan="2"><input type="text" size="17" name="SurveyEnd"></td></tr>
+		<tr><td>$langSurveyEnd</td><td colspan="2"><!--<input type="text" size="17" name="SurveyEnd">-->$end_cal_Survey</td></tr>
 		<!--<tr>
 		  <td>$langSurveyType</td>
 		  <td><label>
