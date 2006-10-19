@@ -61,6 +61,9 @@ $helpTopic = 'Questionnaire';
 
 include '../../include/baseTheme.php';
 
+// For using with th epop-up calendar
+include 'jscalendar.inc.php';
+
 $tool_content = "";
 
 
@@ -78,14 +81,16 @@ default:
    printPollCreationForm();
 }
 
-draw($tool_content, 2); 
+//draw($tool_content, 2); 
+draw($tool_content, 2, '', $local_head, '');
 
 /*****************************************************************************
 		Prints the new poll creation form
 ******************************************************************************/
 function printPollCreationForm() {
 	global $tool_content, $langPollName, $langPollStart, 
-		$langPollEnd, $langPollType, $langPollMC, $langPollFillText, $langPollContinue, $langPollCreate;
+		$langPollEnd, $langPollType, $langPollMC, $langPollFillText, $langPollContinue, $langPollCreate, 
+		$start_cal_Poll, $end_cal_Poll;
 	
 	$CurrentDate = date("Y-m-d H:i:s");
 	$tool_content .= <<<cData
@@ -94,9 +99,10 @@ function printPollCreationForm() {
 	<table><thead>$langPollCreate</thead>
 		<tr><td>$langPollName</td><td colspan="2"><input type="text" size="50" name="PollName"></td></tr>
 		<tr><td>$langPollStart</td><td colspan="2">
-			<input type="text" size="17" name="PollStart" value="$CurrentDate">
+			<!--<input type="text" size="17" name="PollStart" value="$CurrentDate">-->
+			$start_cal_Poll
 		</td></tr>
-		<tr><td>$langPollEnd</td><td colspan="2"><input type="text" size="17" name="PollEnd"></td></tr>
+		<tr><td>$langPollEnd</td><td colspan="2"><!--<input type="text" size="17" name="PollEnd">-->$end_cal_Poll</td></tr>
 		<input name="UseCase" type="hidden" value="1" />
 		<tr><td colspan="3" align="right">
 		  <input name="$langPollContinue" type="submit" value="$langPollContinue -&gt;"></td>
