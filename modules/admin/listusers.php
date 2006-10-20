@@ -340,225 +340,233 @@ if($sql)
  			default:	$other++; break;
 		}
 	}
-	$caption = "";
-	$caption .= "<p><i>$langThereAre <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents και <b>$visitors</b> $langVisitors</i></p>";
-	$caption .= "<p><i>$langTotal <b>$countUser</b> $langUsers</i>";
-
+	
+	
 	if($countUser>0)
 	{
-		if($c==4)
+		$caption = "";
+		$caption .= "<p><i>$langThereAre <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents και <b>$visitors</b> $langVisitors</i></p>";
+		$caption .= "<p><i>$langTotal <b>$countUser</b> $langUsers</i>";
+
+		if($countUser>0)
 		{
-			$caption .= " ως μη ενεργοί</p>";
-			$caption .= "</p><p><a href=\"updatetheinactive.php?activate=1\">".$langAddSixMonths."</a></p>";
+			if($c==4)
+			{
+				$caption .= " ως μη ενεργοί</p>";
+				$caption .= "</p><p><a href=\"updatetheinactive.php?activate=1\">".$langAddSixMonths."</a></p>";
+			}
+			else
+			{
+				$caption .= "</p>";
+			}
 		}
 		else
 		{
 			$caption .= "</p>";
 		}
-	}
-	else
-	{
-		$caption .= "</p>";
-	}
 	
-	// DEFINE SETTINGS FOR THE 5 NAVIGATION BUTTONS INTO THE USERS LIST: begin, less, all, more and end
-	$endList=50;
-	if(isset ($numbering) && $numbering)
-	{
-		if($numbList=="more")
-    {
-     	$startList=$startList+50;
-    }
-    elseif($numbList=="less")
-    {
-    	$startList=abs($startList-50);
-		}
-    elseif($numbList=="all")
-    {
-    	$startList=0;
-     	$endList=$countUser;
-		}
-    elseif($numbList=="begin")
-    {
-     	$startList=0;
-    }
-    elseif($numbList=="final")
-    {
-			$startList=((int)($countUser / 50)*50);
-		}
-	} // if numbering
-	else // default status for the list: users 0 to 50
-	{
-   	$startList=0;
-	}
-
-	// Numerating the items in the list to show: starts at 1 and not 0
-	$i=$startList+1;
-
-	if ($countUser >= 50)	// Do not show navigation buttons if less than 50 users
-	{
-		$tool_content .= "
-                <table width=99%>
-                        <tr>
-                      	  <td valign=bottom align=left width=20%>
-                              <form method=post action=\"$PHP_SELF?numbList=begin\"><input type=submit value=\"$langBegin<<\" name=\"numbering\">
-                              </form>
-                          </td>
-                          <td valign=bottom align=middle width=20%>";
-    if($startList!=0)		// if beginning of list or complete listing, do not show "previous" button
-    {
-			if (isset($_REQUEST['ord'])) 
-			{
-       	$tool_content .= "<form method=post action=\"$PHP_SELF?startList=$startList&numbList=less&ord=$_REQUEST[ord]\">
-                	       <input type=submit value=\"$langPreced50<\" name=\"numbering\">
-                       		</form>";
-			} 
-			else 
-			{
-		  	$tool_content .= "<form method=post action=\"$PHP_SELF?startList=$startList&numbList=less\">
-                       <input type=submit value=\"$langPreced50<\" name=\"numbering\">
-                       </form>";
-			}
-		}
-
-		if (isset($_REQUEST['ord'])) 
+		// DEFINE SETTINGS FOR THE 5 NAVIGATION BUTTONS INTO THE USERS LIST: begin, less, all, more and end
+		$endList=50;
+		if(isset ($numbering) && $numbering)
 		{
-    	$tool_content .= "
-                     </td>
-                     <td valign=bottom align=middle width=20%>
-                     <form method=post action=\"$PHP_SELF?startList=$startList&numbList=all&ord=$_REQUEST[ord]\">
-                         <input type=submit value=\"$langAll\" name=numbering>
-                     </form>
-                     </td>
-                     <td valign=bottom align=middle width=20%>";
-		} 
-		else 
+			if($numbList=="more")
+	    {
+	     	$startList=$startList+50;
+	    }
+	    elseif($numbList=="less")
+	    {
+	    	$startList=abs($startList-50);
+			}
+	    elseif($numbList=="all")
+	    {
+	    	$startList=0;
+	     	$endList=$countUser;
+			}
+	    elseif($numbList=="begin")
+	    {
+	     	$startList=0;
+	    }
+	    elseif($numbList=="final")
+	    {
+				$startList=((int)($countUser / 50)*50);
+			}
+		} // if numbering
+		else // default status for the list: users 0 to 50
+		{
+	   	$startList=0;
+		}
+
+		// Numerating the items in the list to show: starts at 1 and not 0
+		$i=$startList+1;
+
+		if ($countUser >= 50)	// Do not show navigation buttons if less than 50 users
 		{
 			$tool_content .= "
-                      </td>
-                      <td valign=bottom align=middle width=20%>
-                      <form method=post action=\"$PHP_SELF?startList=$startList&numbList=all\">
-                           <input type=submit value=\"$langAll\" name=numbering>
-                      </form>
-                      </td>
-                      <td valign=bottom align=middle width=20%>";
-		}		
+	                <table width=99%><tr>
+	                      	  <td valign=bottom align=left width=20%><form method=post action=\"$PHP_SELF?numbList=begin\"><input type=submit value=\"$langBegin<<\" name=\"numbering\"></form></td>
+	                          <td valign=bottom align=middle width=20%>";
+	    if($startList!=0)		// if beginning of list or complete listing, do not show "previous" button
+	    {
+				if (isset($_REQUEST['ord'])) 
+				{
+	       	$tool_content .= "<form method=post action=\"$PHP_SELF?startList=$startList&numbList=less&ord=$_REQUEST[ord]\">
+	                	       <input type=submit value=\"$langPreced50<\" name=\"numbering\">
+	                       		</form>";
+				} 
+				else 
+				{
+			  	$tool_content .= "<form method=post action=\"$PHP_SELF?startList=$startList&numbList=less\">
+	                       <input type=submit value=\"$langPreced50<\" name=\"numbering\">
+	                       </form>";
+				}
+			}
 
-		if(!((($countUser-$startList) <= 50) OR ($endList == $countUser)))		// if end of list or complete listing, do not show "next" button
-		{
 			if (isset($_REQUEST['ord'])) 
 			{
-      	$tool_content .= " <form method=post action=\"$PHP_SELF?startList=$startList&numbList=more&ord=$_REQUEST[ord]\">
-                                   <input type=submit value=\"$langFollow50>\" name=numbering>
-                              </form>";
+	    	$tool_content .= "
+	                     </td>
+	                     <td valign=bottom align=middle width=20%>
+	                     <form method=post action=\"$PHP_SELF?startList=$startList&numbList=all&ord=$_REQUEST[ord]\">
+	                         <input type=submit value=\"$langAll\" name=numbering>
+	                     </form>
+	                     </td>
+	                     <td valign=bottom align=middle width=20%>";
 			} 
 			else 
 			{
-      	$tool_content .= " <form method=post action=\"$PHP_SELF?startList=$startList&numbList=more\">
-                                   <input type=submit value=\"$langFollow50>\" name=numbering>
-                              </form>";
+				$tool_content .= "
+	                      </td>
+	                      <td valign=bottom align=middle width=20%>
+	                      <form method=post action=\"$PHP_SELF?startList=$startList&numbList=all\">
+	                           <input type=submit value=\"$langAll\" name=numbering>
+	                      </form>
+	                      </td>
+	                      <td valign=bottom align=middle width=20%>";
+			}		
+
+			if(!((($countUser-$startList) <= 50) OR ($endList == $countUser)))		// if end of list or complete listing, do not show "next" button
+			{
+				if (isset($_REQUEST['ord'])) 
+				{
+	      	$tool_content .= " <form method=post action=\"$PHP_SELF?startList=$startList&numbList=more&ord=$_REQUEST[ord]\">
+	                                   <input type=submit value=\"$langFollow50>\" name=numbering>
+	                              </form>";
+				} 
+				else 
+				{
+	      	$tool_content .= " <form method=post action=\"$PHP_SELF?startList=$startList&numbList=more\">
+	                                   <input type=submit value=\"$langFollow50>\" name=numbering>
+	                              </form>";
+				}
 			}
-		}
-		if (isset($_REQUEST['ord'])) 
+			if (isset($_REQUEST['ord'])) 
+			{
+	    	$tool_content .= "
+	                     </td>
+	                     <td valign=bottom align=right width=20%>
+	                      <form method=post action=\"$PHP_SELF?numbList=final&ord=$_REQUEST[ord]\">
+	                           <input type=submit value=\"$langEnd>>\" name=numbering>
+	                      </form>
+	                      </td>
+	                      </tr>
+	                	</table>"; 
+			} 
+			else 
+			{
+	    	$tool_content .= "</td>
+	                          <td valign=bottom align=right width=20%>
+	                               <form method=post action=\"$PHP_SELF?numbList=final\">
+	                                <input type=submit value=\"$langEnd>>\" name=numbering>
+	                              </form>
+	                              </td>
+	                              </tr>
+	                	</table>"; 
+			}	
+		}       // Show navigation buttons if ($countUser >= 50)
+
+	
+		if($view==3)
 		{
-    	$tool_content .= "
-                     </td>
-                     <td valign=bottom align=right width=20%>
-                      <form method=post action=\"$PHP_SELF?numbList=final&ord=$_REQUEST[ord]\">
-                           <input type=submit value=\"$langEnd>>\" name=numbering>
-                      </form>
-                      </td>
-                      </tr>
-                	</table>"; 
+			$qry = "SELECT a.user_id,a.nom, a.prenom, a.username, a.email, b.statut 
+			FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
+			WHERE b.code_cours='".$c."'";
+		}
+		else
+		{
+			$qry = "SELECT user_id,nom,prenom,username,email,statut FROM user";
+			if((!empty($user_sirname_qry)) || (!empty($user_firstname_qry)) || (!empty($user_username_qry)) || (!empty($user_am_qry)) || (!empty($user_type_qry)) || (!empty($user_registered_at_qry)) || (!empty($user_email_qry)) || (!empty($users_active_qry)) )
+			{
+				$qry .= " WHERE".$user_sirname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$user_registered_at_qry.$user_email_qry.$users_active_qry;
+			}		
+		}
+	
+		$qry .= "	ORDER BY $order LIMIT $startList, $endList";
+		mysql_free_result($sql);
+	
+		$sql = mysql_query($qry);
+	
+		/****************************************
+		Show users - Format the table for display
+		*****************************************/	
+		if (isset($numbering) and isset($_REQUEST['startList']) and isset($_REQUEST['numbList']))   
+		{
+			$tool_content .= "<table width=\"99%\"><caption>".$caption."</caption><thead><tr>".
+						"<th scope=\"col\"><a href=\"listusers.php?ord=n&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langSurname</a></th>".
+						"<th><a href=\"listusers.php?ord=p&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langName</a></th>".
+						"<th><a href=\"listusers.php?ord=u&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langUsername</a></th>".
+					 "<th scope=\"col\">$langEmail</th>".
+					 "<th scope=\"col\"><a href=\"listusers.php?ord=s&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langProperty</a></th>".
+					 "<th scope=\"col\">$langActions</th>".
+					 "<th scope=\"col\">$langUnreg $langUser2</th>".
+					 "<th scope=\"col\">$langStats</th>".
+					 "</tr></thead><tbody>";
 		} 
 		else 
 		{
-    	$tool_content .= "</td>
-                          <td valign=bottom align=right width=20%>
-                               <form method=post action=\"$PHP_SELF?numbList=final\">
-                                <input type=submit value=\"$langEnd>>\" name=numbering>
-                              </form>
-                              </td>
-                              </tr>
-                	</table>"; 
-		}	
-	}       // Show navigation buttons if ($countUser >= 50)
-
+			$tool_content .= "<table width=\"99%\"><caption>".$caption."</caption><thead><tr>".
+						"<th scope=\"col\"><a href=\"listusers.php?ord=n\">$langSurname</a></th><th>".
+					 "<a href=\"listusers.php?ord=p\">$langName</a></th><th>".
+					 "<a href=\"listusers.php?ord=u\">$langUsername</a></th>".
+					 "<th scope=\"col\">$langEmail</th>".
+					 "<th scope=\"col\"><a href=\"listusers.php?ord=s\">$langProperty</a></th>".
+					 "<th scope=\"col\">$langActions</th>".
+					 "<th scope=\"col\">$langUnreg $langUser2</th>".
+					 "<th scope=\"col\">$langStats</th>".
+					 "</tr></thead><tbody>";
+		}
+		
+		for ($j = 0; $j < mysql_num_rows($sql); $j++) 
+		{
+			while($logs = mysql_fetch_array($sql,MYSQL_ASSOC))
+	  	{
+				$tool_content .= ("<tr>");
+				$tool_content .= "<td>".htmlspecialchars($logs['nom'])."</td>".
+					"<td>".htmlspecialchars($logs['prenom'])."</td>".
+					"<td>".htmlspecialchars($logs['username'])."</td>".
+					"<td>".htmlspecialchars($logs['email'])."</td>";
+				switch ($logs['statut']) 
+				{
+					case 1:		$tool_content .= "<td>$langTeacher</td>";break;
+	   			case 5:		$tool_content .= "<td>$langStudent</td>";break;
+					case 10:	$tool_content .= "<td>$langVisitor</td>";break;
+	   			default:	$tool_content .= "<td>$langOther ($logs[6])</td>";break;
+				}
+				$tool_content .= "<td><a href=\"edituser.php?u=".$logs['user_id']."\">$langEdit</a></td>
+					<td><a href=\"unreguser.php?u=".$logs['user_id']."\">$langDelete</a></td>
+					<td><a href=\"userstats.php?u=".$logs['user_id']."\">$langStat</a></td>\n";
+				$tool_content .= "</tr>";
+			}
+		}
+		// end format / dispaly
+		$tool_content .= "</tbody></table>";
+		/* Show users - Format the table for display - END */	
 	
-	if($view==3)
-	{
-		$qry = "SELECT a.user_id,a.nom, a.prenom, a.username, a.email, b.statut 
-		FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-		WHERE b.code_cours='".$c."'";
 	}
 	else
 	{
-		$qry = "SELECT user_id,nom,prenom,username,email,statut FROM user";
-		if((!empty($user_sirname_qry)) || (!empty($user_firstname_qry)) || (!empty($user_username_qry)) || (!empty($user_am_qry)) || (!empty($user_type_qry)) || (!empty($user_registered_at_qry)) || (!empty($user_email_qry)) || (!empty($users_active_qry)) )
-		{
-			$qry .= " WHERE".$user_sirname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$user_registered_at_qry.$user_email_qry.$users_active_qry;
-		}		
+		$tool_content .= "Δέν υπάρχουν χρήστες σύμφωνα με τα κριτήρια που ορίσατε";
 	}
-	
-	$qry .= "	ORDER BY $order LIMIT $startList, $endList";
-	mysql_free_result($sql);
-	
-	$sql = mysql_query($qry);
-	
-	/****************************************
-	Show users - Format the table for display
-	*****************************************/	
-	if (isset($numbering) and isset($_REQUEST['startList']) and isset($_REQUEST['numbList']))   
-	{
-		$tool_content .= "<table width=\"99%\"><caption>".$caption."</caption><thead><tr>".
-					"<th scope=\"col\"><a href=\"listusers.php?ord=n&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langSurname</a></th>".
-					"<th><a href=\"listusers.php?ord=p&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langName</a></th>".
-					"<th><a href=\"listusers.php?ord=u&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langUsername</a></th>".
-				 "<th scope=\"col\">$langEmail</th>".
-				 "<th scope=\"col\"><a href=\"listusers.php?ord=s&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langProperty</a></th>".
-				 "<th scope=\"col\">$langActions</th>".
-				 "<th scope=\"col\">$langUnreg $langUser2</th>".
-				 "<th scope=\"col\">$langStats</th>".
-				 "</tr></thead><tbody>";
-	} 
-	else 
-	{
-		$tool_content .= "<table width=\"99%\"><caption>".$caption."</caption><thead><tr>".
-					"<th scope=\"col\"><a href=\"listusers.php?ord=n\">$langSurname</a></th><th>".
-				 "<a href=\"listusers.php?ord=p\">$langName</a></th><th>".
-				 "<a href=\"listusers.php?ord=u\">$langUsername</a></th>".
-				 "<th scope=\"col\">$langEmail</th>".
-				 "<th scope=\"col\"><a href=\"listusers.php?ord=s\">$langProperty</a></th>".
-				 "<th scope=\"col\">$langActions</th>".
-				 "<th scope=\"col\">$langUnreg $langUser2</th>".
-				 "<th scope=\"col\">$langStats</th>".
-				 "</tr></thead><tbody>";
-	}
-		
-	for ($j = 0; $j < mysql_num_rows($sql); $j++) 
-	{
-		while($logs = mysql_fetch_array($sql,MYSQL_ASSOC))
-  	{
-			$tool_content .= ("<tr>");
-			$tool_content .= "<td>".htmlspecialchars($logs['nom'])."</td>".
-				"<td>".htmlspecialchars($logs['prenom'])."</td>".
-				"<td>".htmlspecialchars($logs['username'])."</td>".
-				"<td>".htmlspecialchars($logs['email'])."</td>";
-			switch ($logs['statut']) 
-			{
-				case 1:		$tool_content .= "<td>$langTeacher</td>";break;
-   			case 5:		$tool_content .= "<td>$langStudent</td>";break;
-				case 10:	$tool_content .= "<td>$langVisitor</td>";break;
-   			default:	$tool_content .= "<td>$langOther ($logs[6])</td>";break;
-			}
-			$tool_content .= "<td><a href=\"edituser.php?u=".$logs['user_id']."\">$langEdit</a></td>
-				<td><a href=\"unreguser.php?u=".$logs['user_id']."\">$langDelete</a></td>
-				<td><a href=\"userstats.php?u=".$logs['user_id']."\">$langStat</a></td>\n";
-			$tool_content .= "</tr>";
-		}
-	}
-	// end format / dispaly
-	$tool_content .= "</tbody></table>";
+
 	
 	
 		
