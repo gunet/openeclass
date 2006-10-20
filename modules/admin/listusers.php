@@ -80,7 +80,8 @@ if($view==2)				// coming from search_user.php(search with criteria)
 		$user_registered_at_flag = isset($_POST['user_registered_at_flag'])?$_POST['user_registered_at_flag']:'';
 		// format the date/time filter
 		$datetime = new DATETIME();
-		$datetime->set_datetime_byglobal("HTTP_POST_VARS");
+		//$datetime->set_datetime_byglobal("HTTP_POST_VARS");
+		$datetime->set_datetime_byglobal("GLOBALS['_POST']");
 		$mytime = $datetime->get_timestamp_entered();
 		if(!empty($mytime))
 		{
@@ -341,11 +342,25 @@ if($sql)
 	}
 	$caption = "";
 	$caption .= "<p><i>$langThereAre <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents και <b>$visitors</b> $langVisitors</i></p>";
-	$caption .= "<p><i>$langTotal <b>$countUser</b> $langUsers</i></p>";
+	$caption .= "<p><i>$langTotal <b>$countUser</b> $langUsers</i>";
+
 	if($countUser>0)
 	{
-		$caption .= "<p><a href=\"updatetheinactive.php?activate=1\">".$langAddSixMonths."</a></p>";
+		if($c==4)
+		{
+			$caption .= " ως μη ενεργοί</p>";
+			$caption .= "</p><p><a href=\"updatetheinactive.php?activate=1\">".$langAddSixMonths."</a></p>";
+		}
+		else
+		{
+			$caption .= "</p>";
+		}
 	}
+	else
+	{
+		$caption .= "</p>";
+	}
+	
 	// DEFINE SETTINGS FOR THE 5 NAVIGATION BUTTONS INTO THE USERS LIST: begin, less, all, more and end
 	$endList=50;
 	if(isset ($numbering) && $numbering)
