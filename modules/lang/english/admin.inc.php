@@ -283,6 +283,8 @@ $langAddAdminInApache = "Add a user in the Admin Group";
 
 // search
 $langSearchUsers = "Search Users";
+$langInactiveUsers = "Inactive Users";
+$langAddSixMonths = "activate the account for the next 6 months";
 
 // list requests
 $langListRequests = "List Open Requests";

@@ -259,6 +259,8 @@ $langStudent2 = "Εκπαιδευόμενος";
 
 // search
 $langSearchUsers = "Αναζήτηση Χρηστών";
+$langInactiveUsers = "Μη ενεργοί χρήστες";
+$langAddSixMonths = "Προσθήκη χρόνου:6 μήνες";
 
 // list requests
 $langListRequests = "Ανοικτές Αιτήσεις Καθηγητών";
