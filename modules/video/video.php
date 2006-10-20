@@ -131,9 +131,8 @@ exit;
 				</tr>
 				</tbody>
 				</table>
-				<br><br>";
-			$tool_content.="<a href=\"$_SERVER[PHP_SELF]\">$langBack</a>
 			<br>";
+				$id="";
 		} elseif($id) {
 			$tool_content.="
 				<table>
@@ -146,8 +145,8 @@ exit;
 				</tbody>
 				</table>
 				<br>
-				<a href=\"$_SERVER[PHP_SELF]\">$langBack</a>
 				<br>";
+		$id="";
 		} else {
 			$tool_content.="
 				<table>
@@ -160,7 +159,6 @@ exit;
 				</tbody>
 				</table>
 				<br>
-				<a href=\"$_SERVER[PHP_SELF]\">$langBack</a>
 			<br>";
 		}	 // else
 	}	// if submit
@@ -184,92 +182,107 @@ exit;
 			</tr>
 			</tbody>
 			</table>
-			<p><a href=\"$_SERVER[PHP_SELF]\">$langBack</a>";
+			";
+			$id="";
 	}	
-	else {
 ########################### IF NO SUBMIT #############################
-		if (!isset($id)) {
 			$tool_content.="
 			<br>
 			<br>
-			<label>$langAddV <input type=\"radio\"  onclick=\"javascript:change_form_input('file');\" name=\"choose\" checked=\"checked\" value=\"\" /></label> <label>$langAddVideoLink <input type=\"radio\"  onclick=\"javascript:change_form_input('URL');\" name=\"choose\" value=\"\" /></label>";
 
+			<a href=\"javascript:change_form_input('file');\">$langAddV</a> | <a href=\"javascript:change_form_input('URL');\">$langAddVideoLink</a>";
 $head_content="
 <script>
-
 function change_form_input(type)
 {
 if(type==\"file\")
-	{
-		document.getElementById(\"titre_file_url\").innerHTML='$langsendV';
-		document.getElementById(\"file_url_input_type\").innerHTML='<input type=\"file\" name=\"file\" size=\"45\">';
-	}
+        
+        {	if(document.getElementById(\"edit\")!=null)
+			{document.getElementById(\"edit\").innerHTML='';
+			}
+                document.getElementById(\"form\").innerHTML='<table width=\"800\"><thead><tr>'+
+                        '<th>$langsendV'+
+                        '<input type=\"hidden\" name=\"id\" value=\"\">'+
+                        '</th>'+
+                                '<td><input type=\"file\" name=\"file\" size=\"45\"></td>'+
+                        '<tr>'+
+                                        '<th>$langVideoTitle:</th>'+
+
+                        '<td><input type=\"text\" name=\"titre\" value=\"\" size=\"55\"></td>'+
+                        '</tr>'+
+                        '<tr>'+
+                                        '<th>$langDescr&nbsp;:</th>'+
+                        '<td>'+
+                        '<textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"50\"></textarea>'+
+                        '</td>'+
+                        '</tr>'+
+                        '<tr>'+
+                                        '<th>$langcreator&nbsp;:</th>'+
+                        '<td><input type=\"text\" name=\"creator\" value=\"$nick\" size=\"55\"></td>'+
+                        '</tr>'+
+                        '<tr>'+
+                                        '<th>$langpublisher &nbsp;:</th>'+
+                        '<td><input type=\"text\" name=\"publisher\" value=\"$nick\" size=\"55\"></td>'+
+                        '</tr>'+
+                        '<tr>'+
+                                        '<th>$langdate &nbsp;:</th>'+
+                        '<td><input type=\"text\" name=\"date\" value=\"".date("Y-m-d G:i:s")."\" size=\"55\"></td>'+
+                        '</tr>'+
+                        '<tr><td><input type=\"Submit\" name=\"submit\" value=\"$langAdd\"></td></tr></thead>'+
+                        '</table>';
+
+        }
 if(type==\"URL\")
-	{
-		document.getElementById(\"titre_file_url\").innerHTML='$langURL';
-		document.getElementById(\"file_url_input_type\").innerHTML='<input type=\"text\" name=\"URL\" size=\"45\">';
-	}
-		
+        {	if(document.getElementById(\"edit\")!=null)
+			{document.getElementById(\"edit\").innerHTML='';
+			}
+                document.getElementById(\"form\").innerHTML='<table width=\"800\"><thead><tr>'+
+                        '<th>$langURL'+
+                        '<input type=\"hidden\" name=\"id\" value=\"\">'+
+                        '</th>'+
+                                '<td><input type=\"URL\" name=\"URL\" size=\"45\"></td>'+
+                        '<tr>'+
+                                        '<th>$langVideoTitle:</th>'+
+
+                        '<td><input type=\"text\" name=\"titre\" value=\"\" size=\"55\"></td>'+
+                        '</tr>'+
+                        '<tr>'+
+                                        '<th>$langDescr&nbsp;:</th>'+
+                        '<td>'+
+                        '<textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"50\"></textarea>'+
+                        '</td>'+
+                        '</tr>'+
+                        '<tr>'+
+                                        '<th>$langcreator&nbsp;:</th>'+
+                        '<td><input type=\"text\" name=\"creator\" value=\"$nick\" size=\"55\"></td>'+
+                        '</tr>'+
+                        '<tr>'+
+                                        '<th>$langpublisher &nbsp;:</th>'+
+                        '<td><input type=\"text\" name=\"publisher\" value=\"$nick\" size=\"55\"></td>'+
+                        '</tr>'+
+                        '<tr>'+
+                                        '<th>$langdate &nbsp;:</th>'+
+                        '<td><input type=\"text\" name=\"date\" value=\"".date("Y-m-d G:i:s")."\" size=\"55\"></td>'+
+                        '</tr>'+
+                        '<tr><td><input type=\"Submit\" name=\"submit\" value=\"$langAdd\"></td></tr></thead>'+
+                        '</table>';
+        }
+
 }
 
 
 </script>
+
 ";
 		$tool_content.="<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\">
-			<input type=\"hidden\" name=\"id\" value=\"".@$id."\">
-			<table width=\"800\"><tr><td><font size=\"2\" face=\"arial, helvetica\">
-				<div id=\"titre_file_url\">$langsendV&nbsp;</div>
-				</font></td>
-				<td><div id=\"file_url_input_type\"><input type=\"file\" name=\"file\" size=\"45\"></div></td>
-			</tr>
-			<tr><td><font size=\"2\" face=\"arial, helvetica\">
-					$langVideoTitle:
-			</font></td>
-			<td><input type=\"text\" name=\"titre\" value=\"\" size=\"55\"></td>
-			</tr>
-			<tr>
-			<td valign=\"top\">
-				<font size=\"2\" face=\"arial, helvetica\">
-					$langDescr&nbsp;:
-				</font>
-			</td>
-			<td>
-			<textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"50\"></textarea>
-			</td>
-			</tr>
-
-			<tr><td><font size=\"2\" face=\"arial, helvetica\">
-					$langcreator&nbsp;:
-			</font></td>
-			<td><input type=\"text\" name=\"creator\" value=\"$nick\" size=\"55\"></td>
-			</tr>
-			<tr><td><font size=\"2\" face=\"arial, helvetica\">
-					$langpublisher &nbsp;:
-			</font></td>
-			<td><input type=\"text\" name=\"publisher\" value=\"$nick\" size=\"55\"></td>
-			</tr>
-			<tr><td><font size=\"2\" face=\"arial, helvetica\">
-					$langdate &nbsp;:
-			</font></td>
-			<td><input type=\"text\" name=\"date\" value=\"".date("Y-m-d G:i:s")."\" size=\"55\"></td>
-			</tr>
-
-			<tr>
-			<td colspan=\"2\">
-				<font size=\"1\" face='arial, helvetica'>$langDelList&nbsp;:</font size>
-				<input type=\"checkbox\" name=\"tout\" value=\"tout\">
-			</td>
-			</tr>
-			<tr><td colspan=\"2\"><input type=\"Submit\" name=\"submit\" value=\"$langAdd\"></td></tr>
-
-			</table>
+			<div id=\"form\"></div>
 		</form>";
 			// print the list if there is no editing
 			$results['video'] = db_query("SELECT *  FROM video ORDER BY titre",$currentCourseID);
 			$results['videolinks'] = db_query("SELECT * FROM videolinks ORDER BY titre",$currentCourseID);
 			$i=0;
 
-
+			$tool_content.="<table>";
 			foreach($results as $table => $result)
 			while ($myrow = mysql_fetch_array($result)) {
 				if($myrow[7])
@@ -299,7 +312,7 @@ if(type==\"URL\")
 
 				if($i%2)
 				{
-				$tool_content.=sprintf("<table width=\"600\" cellpadding=\"5\" cellspacing=\"0\" border=\"0\">
+				$tool_content.=sprintf("
 				<tr>
 					<td bgcolor=\"#F5F5F5\" width=\"30\" valign=\"top\">
 						<a href=\"%s\" target=\"_blank\"><img src=\"images/video.gif\" border=\"0\"  alt=\"video\"></a>
@@ -315,17 +328,13 @@ if(type==\"URL\")
 
  						</font>", $videoURL, $videoURL, $myrow[2], $myrow[3],$myrow[4], $myrow[5],$myrow[6]);
 					$tool_content.=sprintf("<br>
-						<font size=\"1\" face=\"arial, helvetica\">
-							<a href=\"%s?id=%s&table=%s\">$langModify</a>
-							 | 
-							 ", $_SERVER['PHP_SELF'], $myrow[0],$table);
-					$tool_content.=sprintf("<a href=\"%s?id=%s&delete=yes&table=%s\">$langDelete</a>
-						</font>
+							 <a href=\"%s?id=%s&table_edit=%s&action=edit\"><img src=\"../../images/edit.gif\" border=\"0\" alt=\"$langModify\"></a>", $_SERVER['PHP_SELF'], $myrow[0],$table);
+					$tool_content.=sprintf("<a href=\"%s?id=%s&delete=yes&table=%s\"><img src=\"../../images/delete.gif\" border=\"0\" alt=\"$langDelete\"></a>
 					</td>
 				</tr>
-			</table>", $_SERVER['PHP_SELF'], $myrow[0],$table);
+			", $_SERVER['PHP_SELF'], $myrow[0],$table);
 				} else {
-				$tool_content.=sprintf("<table width=\"600\" cellpadding=\"5\" cellspacing=\"0\" border=\"0\">
+				$tool_content.=sprintf("
 				<tr>
 					<td bgcolor=\"#E6E6E6\" width=\"30\" valign=\"top\">
 						<a href=\"%s\" target=\"_blank\"><img  alt=\"video\" src=\"images/video.gif\" border=\"0\"></a>
@@ -340,29 +349,25 @@ if(type==\"URL\")
 							$langdate: %s
 							", $videoURL, $videoURL, $myrow[2], $myrow[3],$myrow[4], $myrow[5],$myrow[6]);
 					$tool_content.=sprintf("<br>
-							<font size=\"1\" face=\"arial, helvetica\">
-								|
-								&nbsp;
-								<a href=\"%s?id=%s&table=%s\">$langModify</a>
-								| ", $_SERVER['PHP_SELF'], $myrow[0],$table);
-					$tool_content.=sprintf("<a href=\"%s?id=%s&delete=yes&table=%s\">$langDelete</a>
-							</font>
+							<a href=\"%s?id=%s&table_edit=%s&action=edit\"><img src=\"../../images/edit.gif\" border=\"0\" alt=\"$langModify\"></a>", $_SERVER['PHP_SELF'], $myrow[0],$table);
+					$tool_content.=sprintf("<a href=\"%s?id=%s&delete=yes&table=%s\"><img src=\"../../images/delete.gif\" border=\"0\" alt=\"$langDelete\"></a>
 						</font>
 					</td>
 				</tr>
-			</table>", $_SERVER['PHP_SELF'], $myrow[0],$table);
-				}
+			", $_SERVER['PHP_SELF'], $myrow[0],$table);
+				}// while
 				$i++;
-			}	// while
+			}	
+			$tool_content.="</table>";
 
 
 		######################### FORM #######################################
 
 
-
-		}	// if ! id
 		if (isset($id)) {
-			$sql = "SELECT * FROM $table WHERE id=$id ORDER BY titre";
+			if($id!="")
+			{
+			$sql = "SELECT * FROM $table_edit WHERE id=$id ORDER BY titre";
 			$result = db_query($sql,$currentCourseID);
 			$myrow = mysql_fetch_array($result);
 			$id = $myrow[0];
@@ -371,54 +376,53 @@ if(type==\"URL\")
 			$creator = $myrow[4];
 			$publisher = $myrow[5];
 			$date = $myrow[6];
-			$rdf="<tr><td><font size=\"2\" face=\"arial, helvetica\">
+			$rdf="<thead><tr><th>
 					$langVideoTitle:
-			</font></td>
+			</th>
 			<td><input type=\"text\" name=\"titre\" value=\"".@$titre."\" size=\"55\"></td>
 			</tr>
 			<tr>
-			<td valign=\"top\">
-				<font size=\"2\" face=\"arial, helvetica\">
+			<th>
 					$langDescr&nbsp;:
-				</font>
-			</td>
+			</th>
 			<td>
 			<textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"50\">".@$description."</textarea>
 			</td>
 			</tr>
 
-			<tr><td><font size=\"2\" face=\"arial, helvetica\">
+			<tr>
+			<th>
 					$langcreator&nbsp;:
-			</font></td>
+			</th>
 			<td><input type=\"text\" name=\"creator\" value=\"".@$creator."\" size=\"55\"></td>
 			</tr>
-			<tr><td><font size=\"2\" face=\"arial, helvetica\">
+			<tr><th>
 					$langpublisher &nbsp;:
-			</font></td>
+			</th>
 			<td><input type=\"text\" name=\"publisher\" value=\"".@$publisher."\" size=\"55\"></td>
 			</tr>
-			<tr><td><font size=\"2\" face=\"arial, helvetica\">
+			<tr><th>
 					$langdate &nbsp;:
-			</font></td>
+			</th>
 			<td><input type=\"text\" name=\"date\" value=\"".@$date."\" size=\"55\"></td>
 			</tr>
 
-			<tr><td colspan=\"2\"><input type=\"Submit\" name=\"submit\" value=\"$langAdd\"></td></tr>
+			<tr><td colspan=\"2\"><input type=\"Submit\" name=\"edit_sumbit\" value=\"$langAdd\"></td></tr>
 			";
 
-		$tool_content.="<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\">
+		$tool_content.="<div id=\"edit\"><form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\">
 			<input type=\"hidden\" name=\"id\" value=\"".@$id."\">
 			<table width=\"800\">
 			".$rdf."
 			</table>
-			<input type=\"hidden\" name=\"table\" value=\"$table\">
-		</form>";
+			<input type=\"hidden\" name=\"table\" value=\"$table_edit\">
+		</form></div>";
+			}
 		}	// if id
 
 
 
 
-	}	
 }   // if uid=prof_id
 ############################# STUDENT VIEW #############################
 else {
