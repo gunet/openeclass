@@ -289,8 +289,10 @@ else {
             $cdb=mysql_query("CREATE DATABASE `$repertoire`");
         $code=$repertoire;
 
-// create phpbb 1.4 tables
+// select course database
+    mysql_select_db($repertoire);
 
+// create phpbb 1.4 tables
 // checking if the mysql version is > 4.1
 if (mysql_version()) {
 
@@ -631,11 +633,6 @@ mysql_query("INSERT INTO users VALUES (
 }
 
 
-###############################################################################
-####### CREATE AND POPULATE OTHER TABLES ######################################
-###############################################################################
-
-    mysql_select_db($repertoire);
 
 ####################### EXERCICES ###########################################
 
