@@ -132,7 +132,6 @@ if ($is_adminOfCourse) {
 
 
 $tool_content .= <<<lCont
-<p>&nbsp;</p>
 <div style="margin-right:100px;">
 <table width="99%">
 <tbody><tr class="odd"><td>$bar_content</td></tr></tbody>
