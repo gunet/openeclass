@@ -34,12 +34,12 @@
  $langWashFrom = "Η κουβέντα καθάρισε από";
  $langSave = "Αποθήκευση";
  $langRefresh = "Ανανέωση";
- $langIsNowInYourDocDir = "Η Τηλεσυνεργασία  είναι τώρα στο εργαλείο των εγγράφων με το όνομα<br>";
- $langIsChatDocVisible = " (<B>Το αρχείο είναι ορατό</B>)";
- $langCopyFailed = "Η εκτύπωση απέτυχε";
  $langClearedBy = "καθαρισμός από";
  $langChatError = "Δεν είναι δυνατόν να ξεκινήσει η Ζωντανή Τηλεσυνεργασία";
  $langsetvideo="Τοποθετήστε τον σύνδεσμο";
  $langconference="Τηλεδιάσκεψη";
  $langpresantation="Σύνδεσμος παρουσίασης";
+ $langVideoTeleconference_content="<p align='justify'>Εδώ θα παρουσιαστεί το βίντεο που θα επιλέξειό ο καθηγητής ή το πρόγραμμα netmeeting για ζωντανή κουβέντα με τον καθηγητή.</p>";
+ $langPresantation_content="<p align='center'>Εδώ θα παρουσιαστεί μία ιστοσελίδα που θα επιλέξει ο καθηγητής.</p>";
+ $langWashValues="Καθάρισμα μεταβλητών";
 ?>

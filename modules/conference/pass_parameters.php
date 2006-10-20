@@ -29,6 +29,7 @@
  * @abstract 
  *
  */
+header("Content-type: text/html; charset=ISO-8859-7"); 
 $require_current_course = TRUE;
 $langFiles = 'conference';
 $require_help = TRUE;
@@ -69,6 +70,16 @@ if ($is_adminOfCourse) {
 		if(isset($_POST["video_type"]))
 		{
 			$URL["video_type"]=$_POST["video_type"];
+		}
+		if(isset($_POST["action"]))
+		{
+			if($_POST["action"]=="clean")
+				{
+				$URL["video"]="";
+				$URL["presantation"]="$langPresantation_content";
+				$URL["netmeeting_number"]="";
+				$URL["video_type"]="none";
+				}
 		}
 
 

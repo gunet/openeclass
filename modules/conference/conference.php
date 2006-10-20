@@ -114,7 +114,10 @@ function refresh_student()
 				document.getElementById("video").innerHTML=player;
 				NetMeeting.CallTo("'.$currentCourseID.'@'.$MCU.'");
 
+		} else if(t.responseText=="\nnone"){
+			document.getElementById("video").innerHTML="'.$langVideoTeleconference_content.'";
 		}
+		
 		video_type=t.responseText;
 	}
 	var set_presantation = function(t) {
@@ -210,6 +213,11 @@ new Ajax.Request("pass_parameters.php", {method:"post", postBody:"presantation_U
 return false;
 	
 	}
+function clean_vars()
+	{
+		new Ajax.Request("pass_parameters.php", {method:"post", postBody:"action=clean"});
+		
+	}
 
 var pe;
 if (pe) pe.stop();
@@ -257,6 +265,7 @@ $tool_content = "";//initialise $tool_content
 $tool_content.=
 '
 	<div id="video" style="position:absolute;height: 200px;width: 200px;border:groove;top:210px;left:200px;">
+'.$langVideoTeleconference_content.'	
 	</div>
 
 
@@ -294,6 +303,7 @@ $tool_content.='
 <input type="text" id="Presentation_URL" name="Presantation_URL" size="20">
 <input type="submit" value="OK">
 </form>
+<a href="javascript:clean_vars();">'.$langWashValues.'</a>
 </div>
 ';
 
@@ -301,6 +311,7 @@ $tool_content.='
 
 $tool_content.='
 	<div id="presantation_window"  style="position:absolute;height: 500px;width: 700px;border:groove;top:210px;left:410px;" >
+	'.$langPresantation_content.'
 
 	</div>
 
@@ -335,10 +346,5 @@ $tool_content.='
 
 
 //END CONTENT
-
-
-
-
-
 draw($tool_content, 2, 'user', $head_content,$body_action);
 ?>

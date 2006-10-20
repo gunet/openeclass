@@ -40,5 +40,8 @@
  $langsetvideo="Set URL";
  $langconference="Teleconference";
  $langpresantation="Presentation URL";
+ $langVideoTeleconference_content="<p align='justify'>The video selected by the professor or the net meeting application for live chat will be presented in this window.</p>";
+ $langPresantation_content="<p align='center'>A web page selected by the professor will be presented in this window.</p>";
+ $langWashValues="Clean Variables";
 ?>
 

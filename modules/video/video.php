@@ -71,6 +71,7 @@ include '../../include/baseTheme.php';
 $nameTools = $langVideo;
 $nick=$prenom." ".$nom;
 $tool_content="";
+$tool_content .= "<div id=\"tool_operations\">";
 
 
 $d = mysql_fetch_array(db_query("SELECT video_quota FROM cours WHERE code='$currentCourseID'",$mysqlMainDb));
@@ -197,10 +198,12 @@ function change_form_input(type)
 {
 if(type==\"file\")
         
-        {	if(document.getElementById(\"edit\")!=null)
-			{document.getElementById(\"edit\").innerHTML='';
-			}
-                document.getElementById(\"form\").innerHTML='<table width=\"800\"><thead><tr>'+
+        { if(document.getElementById(\"edit_form\")!=null)
+	        {document.getElementById(\"edit_form\").innerHTML='';
+	        }
+
+		
+                document.getElementById(\"insert_form\").innerHTML='<table width=\"800\"><thead><tr>'+
                         '<th>$langsendV'+
                         '<input type=\"hidden\" name=\"id\" value=\"\">'+
                         '</th>'+
@@ -233,10 +236,10 @@ if(type==\"file\")
 
         }
 if(type==\"URL\")
-        {	if(document.getElementById(\"edit\")!=null)
-			{document.getElementById(\"edit\").innerHTML='';
+        {	if(document.getElementById(\"edit_form\")!=null)
+			{document.getElementById(\"edit_form\").innerHTML='';
 			}
-                document.getElementById(\"form\").innerHTML='<table width=\"800\"><thead><tr>'+
+                document.getElementById(\"insert_form\").innerHTML='<table width=\"800\"><thead><tr>'+
                         '<th>$langURL'+
                         '<input type=\"hidden\" name=\"id\" value=\"\">'+
                         '</th>'+
@@ -274,9 +277,8 @@ if(type==\"URL\")
 </script>
 
 ";
-		$tool_content.="<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\">
-			<div id=\"form\"></div>
-		</form>";
+		$tool_content.="<table><tr><td id=\"insert_td\"><form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"insert_form\">
+		</form></td></tr></tables>";
 			// print the list if there is no editing
 			$results['video'] = db_query("SELECT *  FROM video ORDER BY titre",$currentCourseID);
 			$results['videolinks'] = db_query("SELECT * FROM videolinks ORDER BY titre",$currentCourseID);
@@ -410,13 +412,13 @@ if(type==\"URL\")
 			<tr><td colspan=\"2\"><input type=\"Submit\" name=\"edit_sumbit\" value=\"$langAdd\"></td></tr>
 			";
 
-		$tool_content.="<div id=\"edit\"><form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\">
+		$tool_content.="<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"edit_form\">
 			<input type=\"hidden\" name=\"id\" value=\"".@$id."\">
 			<table width=\"800\">
 			".$rdf."
 			</table>
 			<input type=\"hidden\" name=\"table\" value=\"$table_edit\">
-		</form></div>";
+		</form>";
 			}
 		}	// if id
 
@@ -483,7 +485,7 @@ else {
 	}
 }	
 
-
+$tool_content .= "</div>";
 draw($tool_content, 2, 'user', $head_content);
 
 ?>
