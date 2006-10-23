@@ -156,6 +156,25 @@ function q($s)
 	return htmlspecialchars($s);
 }
 
+ /*
+* Escapes a string according to the current DBMS's standards
+* @param string $str  the string to be escaped
+* @return string  the escaped string
+* Function Purpose: prepends backslashes to the following characters: 
+* \x00, \n, \r, \, ', " and \x1a
+*/
+function escapeSimple($str)
+{
+	if (function_exists('mysql_real_escape_string')) 
+	{
+		return @mysql_real_escape_string($str, $db);
+	}
+	else 
+	{
+		return @mysql_escape_string($str);
+	}
+}
+
 // ------------------------------------------------------
 // Other useful functions. We use it in various scripts.
 // -----------------------------------------------------
