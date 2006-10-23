@@ -190,6 +190,11 @@ elseif ($a == 3)  {
 		// OK Update the faculte
 			mysql_query("UPDATE faculte SET name = '$faculte' WHERE id='$c'") 
 				or die ($langNoSuccess);
+		// For backwards compatibility update cours and cours_facult also
+			mysql_query("UPDATE cours SET faculte = '$faculte' WHERE faculteid='$c'") 
+				or die ($langNoSuccess);
+			mysql_query("UPDATE cours_faculte SET faculte = '$faculte' WHERE facid='$c'") 
+				or die ($langNoSuccess);
 			$tool_content .= "<p>Η επεξεργασία του μαθήματος ολοκληρώθηκε με επιτυχία!</p><br>";
 			}
 	} else {
