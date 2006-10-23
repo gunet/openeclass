@@ -148,12 +148,24 @@ $tool_content .= add_field('user', 'expires_at', "INT(10)");
 // Add 2 new fields into table 'cours': password,faculteid
 if (!mysql_field_exists($mysqlMainDb,'cours','password'))
 $tool_content .= add_field('cours', 'password', "VARCHAR(50)");
-if (!mysql_field_exists($mysqlMainDb,'cours','faculteid'))
-$tool_content .= add_field('cours', 'faculteid', "INT(11)");
+if (!mysql_field_exists($mysqlMainDb,'cours','faculteid')) {
+	$tool_content .= add_field('cours', 'faculteid', "INT(11)");
+	// vagpits: update cours.faculteid with if from faculte
+	mysql_query("
+	UPDATE cours,faculte SET cours.faculteid = faculte.id
+	WHERE cours.faculte = faculte.name
+	");
+}
 
 // Add 1 new field into table 'cours_faculte': facid
-if (!mysql_field_exists($mysqlMainDb,'cours_faculte','facid'))
-$tool_content .= add_field('cours_faculte', 'facid', "INT(11)");
+if (!mysql_field_exists($mysqlMainDb,'cours_faculte','facid')) {
+	$tool_content .= add_field('cours_faculte', 'facid', "INT(11)");
+	// vagpits: update cours.faculteid with if from faculte
+	mysql_query("
+	UPDATE cours_faculte,faculte SET cours_faculte.facid = faculte.id
+	WHERE cours_faculte.faculte = faculte.name
+	");
+}
 
 // haniotak:: new table for loginout summary for eclass 2.0
 if (!mysql_table_exists($mysqlMainDb, 'loginout_summary'))  {
