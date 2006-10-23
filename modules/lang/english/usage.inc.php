@@ -31,6 +31,7 @@
 
  $langGDRequired = "The GD library is required!";
  $langUsage = "Usage Statistics";
+ $langNoStatistics = "There are no visits.";
  $langStartDate = "Start Date";
  $langEndDate = "End Date";
  $langUser = "User";

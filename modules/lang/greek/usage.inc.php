@@ -31,6 +31,8 @@
 
  $langGDRequired = "Απαιτείται η βιβιλιοθήκη GD!";
  $langUsage = "Στατιστικά Χρήσης";
+ $langNoStatistics = "Δεν υπάρχουν επισκέψεις.";
+ 
  $langStartDate = "Ημερομηνία Έναρξης";
  $langEndDate = "Ημερομηνία Λήξης";
  $langUser = "Χρήστης";
