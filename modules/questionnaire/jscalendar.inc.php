@@ -41,7 +41,7 @@
 ==============================================================================*/
 
 
-$dateNow = date("d-m-Y / H:i:s",time());
+//$dateNow = date("d-m-Y / H:i:s",time());
 
 $local_style = '
     .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
@@ -60,6 +60,7 @@ $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calen
 $local_head = $jscalendar->get_load_files_code();
 
 $u_date_start = strftime('%Y-%m-%d %H:%M:%S', strtotime('now -0 day'));
+$u_date_end = strftime('%Y-%m-%d %H:%M:%S', strtotime('now +1 year'));
 
 $start_cal_Poll = $jscalendar->make_input_field(
            array('showsTime'      => true,
@@ -69,14 +70,6 @@ $start_cal_Poll = $jscalendar->make_input_field(
            array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
                  'name'        => 'PollStart',
                  'value'       => $u_date_start));
-$end_cal_Poll = $jscalendar->make_input_field(
-           array('showsTime'      => true,
-                 'showOthers'     => true,
-                 'ifFormat'       => '%Y-%m-%d %H:%M:%S',
-                 'timeFormat'     => '24'),
-           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
-                 'name'        => 'PollEnd',
-                 'value'       => $u_date_start));
 $start_cal_Survey = $jscalendar->make_input_field(
            array('showsTime'      => true,
                  'showOthers'     => true,
@@ -85,6 +78,7 @@ $start_cal_Survey = $jscalendar->make_input_field(
            array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
                  'name'        => 'SurveyStart',
                  'value'       => $u_date_start));
+
 $end_cal_Survey = $jscalendar->make_input_field(
            array('showsTime'      => true,
                  'showOthers'     => true,
@@ -92,7 +86,15 @@ $end_cal_Survey = $jscalendar->make_input_field(
                  'timeFormat'     => '24'),
            array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
                  'name'        => 'SurveyEnd',
-                 'value'       => $u_date_start));
+                 'value'       => $u_date_end));
+$end_cal_Poll = $jscalendar->make_input_field(
+           array('showsTime'      => true,
+                 'showOthers'     => true,
+                 'ifFormat'       => '%Y)-%m-%d %H:%M:%S',
+                 'timeFormat'     => '24'),
+           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+                 'name'        => 'PollEnd',
+                 'value'       => $u_date_end));
                  
  
 ?>
