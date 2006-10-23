@@ -39,7 +39,7 @@ $tool_content = "";
 //";
 //begin_page();
 
-$tool_content .= "<table><thead>";
+$tool_content .= "<table width='99%'><thead>";
 $tool_content .= "	<tr>
 						<th>
 							Τμήμα
