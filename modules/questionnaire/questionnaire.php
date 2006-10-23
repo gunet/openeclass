@@ -105,7 +105,8 @@ $tool_content .= "<table width=\"90%\"><thead>$langNamesSurvey</thead><tbody><tr
  			$langSurveyCreation, $langSurveyStart, $langSurveyEnd, $langSurveyType, 
  			$langSurveyOperations, $is_adminOfCourse, $langSurveysActive, $mysqlMainDb, 
  			$langSurveyMC, $langSurveyEdit, $langSurveyRemove, $langSurveyDeactivate,
- 			$langSurveysInactive, $langSurveyActivate, $langSurveyParticipate;
+ 			$langSurveysInactive, $langSurveyActivate, $langSurveyParticipate, 
+ 			$langSurveyHasParticipated, $uid;
 
 		$survey_check = 0;
 		$result = mysql_list_tables($currentCourse);
@@ -186,7 +187,20 @@ cData;
 						"<a href='deactivatesurvey.php?sid={$sid}'>".$langSurveyDeactivate."</a>  ".
 						"</td></tr>";
 				else
-					$tool_content .= "<td><a href='surveyparticipate.php?UseCase=1&sid=". $sid ."'>".$langSurveyParticipate."</a></td></tr>";
+					////////////////////////////////////////////////////
+						$thesid = $theSurvey["sid"];
+						$has_participated = mysql_fetch_array(
+							mysql_query("SELECT COUNT(*) FROM survey_answer where creator_id='$uid' AND sid='$thesid'"));
+					if ( $has_participated[0] == 0) {
+						$tool_content .= "<td><a href='surveyparticipate.php?UseCase=1&sid=". $sid ."'>";
+						$tool_content .= $langSurveyParticipate;
+						$tool_content .= "</a></td></tr>";
+						//$tool_content .= $has_participated[0].$uid;
+					} else {
+						$tool_content .= "<td>".$langSurveyHasParticipated."</td></tr>";
+					}
+					////////////////////////////////////////////////////
+					//$tool_content .= "<td><a href='surveyparticipate.php?UseCase=1&sid=". $sid ."'>".$langSurveyParticipate."</a></td></tr>";
 			}
 			$tool_content .= "</table><br>";
 			
