@@ -126,6 +126,7 @@ $langNamesPoll = "Polls";
 $langNamesSurvey = "Surveys";
 
 $langPollHasParticipated = "Already participated";
+$langSurveyHasParticipated = "Already participated";
 $langSurveyDeleteMsg = "Are you sure you would like to delete this survey?";
 $langPollDeleteMsg = "Are you sure you would like to delete this poll?";
 $langSurveyDeleteYes = "Yes";
