@@ -63,9 +63,15 @@ include '../../include/baseTheme.php';
 
 $tool_content = "";
 
-$sql = "DELETE FROM poll WHERE pid=$pid";
-$result = db_query($sql,$currentCourseID);
-$GLOBALS["tool_content"] .= $GLOBALS["langPollDeleted"];
+
+
+if (!isset($UseCase)) {
+	$tool_content .= "<p>". $langPollDeleteMsg." "."<a href=\"?UseCase=1&pid=$pid\">".$langSurveyDeleteYes."<a/>"." | "."<a href=\"#\" onclick=\"history.back()\">".$langSurveyDeleteNo."</a></p>";
+} else {
+	$sql = "DELETE FROM poll WHERE pid=$pid";
+	$result = db_query($sql,$currentCourseID);
+	$GLOBALS["tool_content"] .= "<p>".$GLOBALS["langPollDeleted"]."</p>";
+}
 
 draw($tool_content, 2); 
 
