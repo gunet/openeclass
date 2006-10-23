@@ -165,13 +165,34 @@ function q($s)
 */
 function escapeSimple($str)
 {
-	if (function_exists('mysql_real_escape_string')) 
+	global $db;
+	if (get_magic_quotes_gpc()) 
 	{
-		return @mysql_real_escape_string($str, $db);
+			return $str;
 	}
-	else 
+	else
 	{
-		return @mysql_escape_string($str);
+		if (function_exists('mysql_real_escape_string')) 
+		{
+			return @mysql_real_escape_string($str, $db);
+		}
+		else 
+		{
+			return @mysql_escape_string($str);
+		}
+	}
+}
+
+function escapeSimpleSelect($str)
+{
+	global $db;
+	if (get_magic_quotes_gpc()) 
+	{
+			return addslashes($str);
+	}
+	else
+	{
+		return $str;
 	}
 }
 
