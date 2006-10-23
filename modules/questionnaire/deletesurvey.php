@@ -68,7 +68,7 @@ if (!isset($UseCase)) {
 } else {
 	$sql = "DELETE FROM survey WHERE sid=$sid";
 	$result = db_query($sql,$currentCourseID);
-	$GLOBALS["tool_content"] .= $GLOBALS["langSurveyDeleted"];
+	$GLOBALS["tool_content"] .= "<p>".$GLOBALS["langSurveyDeleted"]."</p>";
 }
 
 
