@@ -25,7 +25,7 @@
 
 /**===========================================================================
 	serachuser.php
-	@last update: 16-06-2006 by Karatzidis Stratos
+	@last update: 16-10-2006 by Karatzidis Stratos
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Pitsiougas Vagelis <vagpits@uom.gr>
 ==============================================================================        
@@ -36,6 +36,7 @@
 	
  	The admin can : - specify the criteria
  									- view the list
+ 									- select the inactive users
  									
 ==============================================================================
 */
