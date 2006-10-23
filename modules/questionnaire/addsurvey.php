@@ -262,8 +262,9 @@ function removeEvent() {
 </script>
 hContent;
 
-
-//draw($tool_content, 2, 'survey', $head_content); 
+if ($UseCase ==1)
+	draw($tool_content, 2, 'survey', $head_content); 
+else	
 draw($tool_content, 2, '', $local_head, '');
 
 /*****************************************************************************
