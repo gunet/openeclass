@@ -91,7 +91,7 @@ if (!isset($a)) {
 	$tool_content .= "<table width=\"99%\"><caption>".$langFaculteCatalog."</caption><thead>
 	<tr><th scope=\"col\">$langCodeF</th><th scope=\"col\">".$langFaculteDepartment."</th scope=\"col\"><th>".$langActions."</th></tr></thead></tbody>";
 	$tool_content .= "<tr><td colspan=\"3\"><i>".$langManyExist." $a[0] ".$langFaculteDepartments."</i></td</tr>";
-	$sql=mysql_query("SELECT code,name FROM faculte");
+	$sql=mysql_query("SELECT code,name,id FROM faculte");
 	// For all facultes display some info
 	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 		$logs = mysql_fetch_array($sql);
@@ -100,7 +100,7 @@ if (!isset($a)) {
 			$tool_content .= "<td width='500'>".htmlspecialchars($logs[$i])."</td>";
 		}
 		// Give administrator a link to delete or edit a faculte
-    $tool_content .= "<td width=\"3%\" nowrap><a href=\"addfaculte.php?a=2&c=$logs[1]\">".$langDelete."</a> | <a href=\"addfaculte.php?a=3&c=$logs[0]\">".$langEdit."</a></td></tr>\n";
+    $tool_content .= "<td width=\"3%\" nowrap><a href=\"addfaculte.php?a=2&c=".$logs['id']."\">".$langDelete."</a> | <a href=\"addfaculte.php?a=3&c=".$logs['id']."\">".$langEdit."</a></td></tr>\n";
 	}
 	// Close table correctly
 	$tool_content .= "</tbody></table><br>";
@@ -158,7 +158,7 @@ elseif ($a == 1)  {
 	}
 // Delete faculte
 elseif ($a == 2) {
-	$s=mysql_query("SELECT * from cours WHERE faculte='$c'");
+	$s=mysql_query("SELECT * from cours WHERE faculteid='$c'");
 	// Check for existing courses of a faculte
 	if (mysql_num_rows($s) > 0)  {
 		// The faculte cannot be deleted
@@ -166,7 +166,7 @@ elseif ($a == 2) {
 		$tool_content .= "<p>".$langNoErase."</p><br>";
 	} else {
 		// The faculte can be deleted
-		mysql_query("DELETE from faculte WHERE name='$c'");
+		mysql_query("DELETE from faculte WHERE id='$c'");
 		$tool_content .= "<p>".$langErase."</p><br>";
 	}
 	// Display link back to addfaculte.php
@@ -179,22 +179,22 @@ elseif ($a == 3)  {
 		if (empty($faculte)) {
 			$tool_content .= "<p>".$langEmptyFaculte."</p><br>";
 			// Display link back to addfaculte.php
-			$tool_content .= "<center><p><a href=\"addfaculte.php?a=3&c=$codefaculte\">Επιστροφή στην Επεξεργασία Τμήματος</a></p></center>";
+			$tool_content .= "<center><p><a href=\"addfaculte.php?a=3&c=$c\">Επιστροφή στην Επεξεργασία Τμήματος</a></p></center>";
 			} 
 		// Check if faculte name already exists
 		elseif (mysql_num_rows(mysql_query("SELECT * from faculte WHERE name='$faculte'")) > 0) {
 			$tool_content .= "<p>".$langFaculteExists."</p><br>";
 			// Display link back to addfaculte.php
-			$tool_content .= "<center><p><a href=\"addfaculte.php?a=3&c=$codefaculte\">Επιστροφή στην Επεξεργασία Τμήματος</a></p></center>";
+			$tool_content .= "<center><p><a href=\"addfaculte.php?a=3&c=$c\">Επιστροφή στην Επεξεργασία Τμήματος</a></p></center>";
 		} else {
 		// OK Update the faculte
-			mysql_query("UPDATE faculte SET name = '$faculte' WHERE code='$codefaculte'") 
+			mysql_query("UPDATE faculte SET name = '$faculte' WHERE id='$c'") 
 				or die ($langNoSuccess);
 			$tool_content .= "<p>Η επεξεργασία του μαθήματος ολοκληρώθηκε με επιτυχία!</p><br>";
 			}
 	} else {
 		// Get faculte information
-		$sql = "SELECT code, name FROM faculte WHERE code='".@$c."'";
+		$sql = "SELECT code, name FROM faculte WHERE id='".$c."'";
 		$result = mysql_query($sql);
 		$myrow = mysql_fetch_array($result);
 		// Display form for edit faculte information
@@ -204,7 +204,7 @@ elseif ($a == 3)  {
 		<tr><td>&nbsp;</td><td><i>".$langCodeFaculte2."</i></td></tr>
 		<tr><td width=\"3%\" nowrap>".$langFaculte1.":</td><td><input type=\"text\" name=\"faculte\" value=\"".$myrow['name']."\"></td></tr>
 		<tr><td>&nbsp;</td><td><i>".$langFaculte2."</i></td></tr>
-		<tr><td colspan=\"2\"><input type=\"submit\" name=\"edit\" value=\"Επικύρωση\"></td</tr>
+		<tr><td colspan=\"2\"><input type=\"hidden\" name=\"c\" value=\"".$c."\"><input type=\"submit\" name=\"edit\" value=\"Επικύρωση\"></td</tr>
 		</tbody></table></form>";
 		}
 		// Display link back to addfaculte.php
