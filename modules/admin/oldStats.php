@@ -37,7 +37,8 @@ $tool_content .=  "<a href='statClaro.php'>".$langPlatformGenStats."</a> <br> ".
 //move data from table 'loginout' to 'loginout_summary' if older than two months
 require_once "summarizeLogins.php";
 
-
+#see if chart has content
+$chart_content=0;
 
 include('../../include/jscalendar/calendar.php');
 if ($language == 'greek') {
@@ -103,6 +104,7 @@ if (!extension_loaded('gd')) {
         $mont = $langMonths[$row['month']];
         $chart->addPoint(new Point($mont." - ".$row['year'], $row['visits']));
         $chart->width += 25;
+        $chart_content=1;
     }
 
     $chart->setTitle("$langOldStats");
@@ -113,7 +115,16 @@ if (!extension_loaded('gd')) {
    
     $chart->render($webDir.$chart_path);
 
-    $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
+
+//check if there are statistics to show
+    if ($chart_content) {
+        $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
+    }
+    else   {
+      $tool_content .='<br><p>'.$langNoStatistics.'</p>';
+    }
+    $tool_content .= '<br>';
+
 
     /********************************************************
        Start making the form for choosing start and end date

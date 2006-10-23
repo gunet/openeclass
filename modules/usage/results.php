@@ -60,7 +60,8 @@ switch ($u_interval) {
 }
 
 
-
+#check if statistics exist
+$chart_content=0;
 
 switch ($u_stats_value) {
     case "visits":
@@ -78,12 +79,14 @@ switch ($u_stats_value) {
                  
                     $chart->addPoint(new Point("Summary", $row['cnt']));
                     $chart->width += 25;
+                    $chart_content=1;
             break;
             case "daily":
                 
                     while ($row = mysql_fetch_assoc($result)) {
                         $chart->addPoint(new Point($row['date'], $row['cnt']));
                         $chart->width += 25;
+                        $chart_content=1;
                     }
                
             break;
@@ -93,18 +96,21 @@ switch ($u_stats_value) {
                     $chart->setLabelMarginRight(80);
                     $chart->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['cnt']));
                     $chart->width += 25;
+                    $chart_content=1;
                 }
             break;
             case "monthly":
                 while ($row = mysql_fetch_assoc($result)) {
                     $chart->addPoint(new Point($langMonths[$row['month']], $row['cnt']));
                     $chart->width += 25;
+                    $chart_content=1;
                 }
             break;
             case "yearly":
                 while ($row = mysql_fetch_assoc($result)) {
                     $chart->addPoint(new Point($row['year'], $row['cnt']));
                     $chart->width += 25;
+                    $chart_content=1;
                 }
             break;
         }
@@ -126,12 +132,14 @@ switch ($u_stats_value) {
                 while ($row = mysql_fetch_assoc($result)) {
                     $chart->addPoint(new Point("Summary", $row['tot_dur']));
                     $chart->width += 25;
+                    $chart_content=1;
                 }
           break;
           case "daily":
              while ($row = mysql_fetch_assoc($result)) {
                  $chart->addPoint(new Point($row['date'], $row['tot_dur']));
                  $chart->width += 25;
+                 $chart_content=1;
              }
          break;
          case "weekly":
@@ -140,18 +148,21 @@ switch ($u_stats_value) {
                 $chart->setLabelMarginRight(80);
                 $chart->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['tot_dur']));
                 $chart->width += 25;
+                $chart_content=1;
              }
          break;
          case "monthly":
             while ($row = mysql_fetch_assoc($result)) {
                 $chart->addPoint(new Point($langMonths[$row['month']], $row['tot_dur']));
                 $chart->width += 25;
+                $chart_content=1;
             }
          break;
          case "yearly":
             while ($row = mysql_fetch_assoc($result)) {
                 $chart->addPoint(new Point($row['year'], $row['tot_dur']));
                 $chart->width += 25;
+                $chart_content=1;
             }
          break;
        }
@@ -168,5 +179,14 @@ $chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).
 //$tool_content .= $query."<br />";
 $chart->render($webDir.$chart_path);
 
-$tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
+ if ($chart_content) {
+        $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
+    }
+ else   {
+      $tool_content .='<br><p>'.$langNoStatistics.'</p>';
+ }
+ $tool_content .= '<br>';
+
+
+
 ?>

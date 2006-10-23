@@ -20,6 +20,9 @@ foreach ($usage_defaults as $key => $val) {
     }
 }
 
+ #see if chart has content
+    $chart_content=0;
+
 $date_fmt = '%Y-%m-%d';
 $date_where = " (`when` BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
 $date_what  = "DATE_FORMAT(MIN(`when`), '$date_fmt') AS date_start, DATE_FORMAT(MAX(`when`), '$date_fmt') AS date_end ";
@@ -65,12 +68,14 @@ switch ($u_stats_type) {
             while ($row = mysql_fetch_assoc($result)) {
                 $chart->addPoint(new Point("Summary", $row['cnt']));
                 $chart->width += 25;
+                $chart_content=1;
             }
         break;
         case "daily":
             while ($row = mysql_fetch_assoc($result)) {
                 $chart->addPoint(new Point($row['date'], $row['cnt']));
                 $chart->width += 25;
+                $chart_content=1;
             }
         break;
         case "weekly":
@@ -79,18 +84,21 @@ switch ($u_stats_type) {
                 $chart->setLabelMarginRight(80);
                 $chart->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['cnt']));
                 $chart->width += 25;
+                $chart_content=1;
             }
         break;
         case "monthly":
             while ($row = mysql_fetch_assoc($result)) {
                 $chart->addPoint(new Point($langMonths[$row['month']], $row['cnt']));
                 $chart->width += 25;
+                $chart_content=1;
             }
         break;
         case "yearly":
             while ($row = mysql_fetch_assoc($result)) {
                 $chart->addPoint(new Point($row['year'], $row['cnt']));
                 $chart->width += 25;
+                $chart_content=1;
             }
         break;
     }
@@ -105,6 +113,15 @@ $chart_path = 'temp/chart_'.md5(serialize($chart)).'.png';
 //$tool_content .= $query."<br />";
 $chart->render($webDir.$chart_path);
 
-$tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
-$tool_content .= '<p> &nbsp; </p>';
+//check if there are statistics to show
+if ($chart_content) {
+    $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
+}
+else   {
+    $tool_content .='<p>'.$langNoStatistics.'</p>';
+}
+
+$tool_content .= '<br>';
+
+
 ?>

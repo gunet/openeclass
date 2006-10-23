@@ -128,6 +128,9 @@ $local_head = $jscalendar->get_load_files_code();
     $mod_where = " (1) ";
    }
 
+    #check if statistics exist
+    $chart_content=0;
+
     switch ($u_stats_value) {
         case "visits":
             $query = "SELECT module_id, MONTH(start_date) AS month, YEAR(start_date) AS year, SUM(visits) AS visits FROM actions_summary ".
@@ -141,6 +144,7 @@ $local_head = $jscalendar->get_load_files_code();
                 $mont = $langMonths[$row['month']];
                 $chart->addPoint(new Point($mont." - ".$row['year'], $row['visits']));
                 $chart->width += 25;
+                 $chart_content=1;
             }
        
             $chart->setTitle("$langOldStats");
@@ -160,6 +164,7 @@ $local_head = $jscalendar->get_load_files_code();
                 $mont = $langMonths[$row['month']];
                 $chart->addPoint(new Point($mont." - ".$row['year'], $row['tot_dur']));
                 $chart->width += 25;
+                 $chart_content=1;
             }
 
             $chart->setTitle("$langOldStats");
@@ -172,7 +177,13 @@ $local_head = $jscalendar->get_load_files_code();
 
     $chart->render($webDir.$chart_path);
 
-    $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
+    if ($chart_content) {
+        $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
+    }
+    else   {
+      $tool_content .='<br><p>'.$langNoStatistics.'</p>';
+    }
+    $tool_content .= '<br>';
 
 
     //make form

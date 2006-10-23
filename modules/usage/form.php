@@ -68,12 +68,7 @@ $tool_content .= '
             <td>'.$langInterval.'</td>
             <td><select name="u_interval">'.$statsIntervalOptions.'</select></td>
         </tr>
-        <tr>
-            <td>Αναλυτικό ιστορικό ενεργειών χρήστη</td>
-            <td>
-                <input type="checkbox" name="u_analyze" value="1">
-            </td>
-        </tr>
+        
         <tr>
             <td>&nbsp;</td>
             <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>

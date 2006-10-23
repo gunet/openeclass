@@ -107,6 +107,9 @@ $local_head = $jscalendar->get_load_files_code();
         $user_where = " (1) ";
     }
 
+    #check if statistics exist
+    $chart_content=0;
+
     switch ($u_stats_value) {
         case "visits":
             $query = "SELECT module_id, COUNT(*) AS cnt, accueil.rubrique AS name FROM actions ".
@@ -119,6 +122,7 @@ $local_head = $jscalendar->get_load_files_code();
             while ($row = mysql_fetch_assoc($result)) {
                 $chart->addPoint(new Point($row['name'], $row['cnt']));
                 $chart->width += 25;
+                $chart_content=1;
             }
        
             $chart->setTitle("$langFavourite");
@@ -136,6 +140,7 @@ $local_head = $jscalendar->get_load_files_code();
             while ($row = mysql_fetch_assoc($result)) {
                 $chart->addPoint(new Point($row['name'], $row['tot_dur']));
                 $chart->width += 25;
+                $chart_content=1;
             }
 
             $chart->setTitle("$langFavourite");
@@ -148,7 +153,15 @@ $local_head = $jscalendar->get_load_files_code();
 
     $chart->render($webDir.$chart_path);
 
-    $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
+    
+
+    if ($chart_content) {
+        $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
+    }
+    else   {
+      $tool_content .='<br><p>'.$langNoStatistics.'</p>';
+    }
+    $tool_content .= '<br>';
 
 
     //make form

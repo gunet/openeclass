@@ -44,9 +44,10 @@ $require_help 			= true;
 $helpTopic 				= 'Usage';
 
 include '../../include/baseTheme.php';
-include('../../include/action.php');
-$action = new action();
-$action->record('MODULE_ID_USAGE');
+
+//include('../../include/action.php');
+//$action = new action();
+//$action->record('MODULE_ID_USAGE');
 
 $tool_content = '';
 
