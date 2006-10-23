@@ -273,7 +273,8 @@ draw($tool_content, 2, '', $local_head, '');
 function printSurveyCreationForm() {
 	global $tool_content, $langSurveyName, $langSurveyStart, 
 		$langSurveyEnd, $langSurveyType, $langSurveyMC, $langSurveyFillText, 
-		$langSurveyContinue, $langSurveyCreate, $start_cal_Survey, $end_cal_Survey;
+		$langSurveyContinue, $langSurveyCreate, $start_cal_Survey, $end_cal_Survey, 
+		$langSurveyInfo1;
 	
 	$CurrentDate = date("Y-m-d H:i:s");
 	$CurrentDate = htmlspecialchars($CurrentDate);
@@ -281,6 +282,7 @@ function printSurveyCreationForm() {
 	<form action="addsurvey.php" id="survey">
 	<input type="hidden" value="0" name="MoreQuestions">
 	<table><thead>$langSurveyCreate</thead>
+	<tr><td colspan=2>$langSurveyInfo1</td></tr>
 		<tr><td>$langSurveyName</td><td colspan="2"><input type="text" size="50" name="SurveyName"></td></tr>
 		<tr><td>$langSurveyStart</td><td colspan="2">
 			<!--<input type="text" size="17" name="SurveyStart" value="$CurrentDate">-->
@@ -312,12 +314,15 @@ function printMCQuestionForm() {
 		$langSurveyType, $langSurveyMC, $langSurveyFillText, $langSurveyContinue, 
 		$langSurveyQuestion, $langSurveyCreate, $langSurveyMoreQuestions, $SurveyName, 
 		$SurveyStart, $SurveyEnd, $langSurveyCreated, $MoreQuestions, $langSurveyAnswer, 
-		$langSurveyMoreAnswers, $UseCase;
+		$langSurveyMoreAnswers, $UseCase, $langSurveyInfo2;
 		
 	if ($MoreQuestions == 2) { // Create survey ******************************************************
 		createMCSurvey();
 	} elseif(count($_POST)<5) { // Just entered MC survey cretion dialiog ****************************
 		$tool_content .= <<<cData
+		<table><thead>$langSurveyCreate</thead>
+	<tr><td colspan=2>$langSurveyInfo2</td></tr></table>
+	
 		<form action="addsurvey.php" id="survey" method="post" name="SurveyForm">
 		<input type="hidden" value="1" name="UseCase">
 		<table id="QuestionTable">
