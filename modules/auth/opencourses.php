@@ -132,7 +132,7 @@ foreach (array("pre" => $m['pres'],
 			        FROM cours_faculte, cours
 			        WHERE cours.code = cours_faculte.code
 							      AND cours.type = '$type'
-                		AND cours_faculte.faculte='$fac'
+                		AND cours_faculte.facid='$fc'
 		                ORDER BY cours.intitule, cours.titulaires");
 
 	if (mysql_num_rows($result) == 0) {

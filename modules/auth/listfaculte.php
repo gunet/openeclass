@@ -57,7 +57,7 @@ $numrows = mysql_num_rows($result);
 while ($fac = mysql_fetch_array($result)) {
 	$tool_content .= "<tr>";
 	$tool_content .= "<td><a href='opencourses.php?fc=$fac[id]'>$fac[name]</a></td>";
-	$n=mysql_query("SELECT COUNT(*) FROM cours_faculte WHERE faculte='$fac[name]'");
+	$n=mysql_query("SELECT COUNT(*) FROM cours_faculte WHERE facid='$fac[id]'");
 	$r=mysql_fetch_array($n);
 	$tool_content .= "<td>$r[0] "
 	. /*($r[0] == 1? $avlesson: $avlessons) .*/ "</td>";
