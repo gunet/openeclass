@@ -278,7 +278,7 @@ if ($is_adminOfCourse) {
 <BR>'.$Video_URL.'<BR>
 <table>
 <tr>';
-if($MCU=="") {
+if($MCU!="") {
 $tool_content.='
 <td>
     <label>
