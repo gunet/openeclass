@@ -176,7 +176,7 @@ exit;
 		$result = db_query($sql_select,$currentCourseID);
 		$myrow = mysql_fetch_array($result);
 		$nom_document=$myrow[0];
-		if($myrow[1]==0 && $table=="video")
+		if($table=="video")
 			unlink("$webDir/video/$currentCourseID/".$myrow[0]);
 		$sql = "DELETE FROM $table WHERE id=$id";
 		$result = db_query($sql,$currentCourseID);
@@ -293,9 +293,6 @@ if(type==\"URL\")
 			$tool_content.="<table>";
 			foreach($results as $table => $result)
 			while ($myrow = mysql_fetch_array($result)) {
-				if($myrow[7])
-				{$videoURL=$myrow[1];
-				}else{
 					
 					switch($table){
 						case "video":
@@ -314,7 +311,6 @@ if(type==\"URL\")
 						default:
 							exit;
 					}
-				}
 				
 
 
@@ -441,9 +437,6 @@ else {
 	foreach($results as $table => $result)
 	{
 	while ($myrow = mysql_fetch_array($result)) {
-				if($myrow[7])
-				{$videoURL=$myrow[1];
-				}else{
 					switch($table){
 						case "video":
 							if(isset($vodServer))
@@ -461,7 +454,6 @@ else {
 						default:
 							exit;
 					}
-				}
 		if($i%2==0) {
 			$tool_content.=sprintf("<table width=\"600\" cellpadding=\"5\" cellspacing=\"0\" border=\"0\">
 			<tr>
