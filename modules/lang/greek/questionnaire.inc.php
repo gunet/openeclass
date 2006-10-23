@@ -128,6 +128,7 @@ $langNamesPoll = "Δημοσκοπήσεις";
 $langNamesSurvey = "Έρευνες Μαθησιακού Προφίλ";
 $langPollHasParticipated = "Έχετε ήδη συμμετάσχει";
 $langSurveyDeleteMsg = "Είστε σίγουρος ότι θέλετε να διαγράψετε αυτή την Έρευνα Μαθησιακού Προφίλ;";
+$langPollDeleteMsg = "Είστε σίγουρος ότι θέλετε να διαγράψετε αυτή την Δημοσκόπιση;";
 $langSurveyDeleteYes = "Ναι";
 $langSurveyDeleteNo = "Όχι";
 ?>
