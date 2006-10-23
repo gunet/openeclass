@@ -36,7 +36,8 @@ $langFiles = 'conference';
 $require_help = TRUE;
 $helpTopic = 'Conference';
 include '../../include/baseTheme.php';
-
+if(!isset($MCU))
+	$MCU="";
 
 //$nameTools = "conference";
 
@@ -277,7 +278,7 @@ if ($is_adminOfCourse) {
 <BR>'.$Video_URL.'<BR>
 <table>
 <tr>';
-if(isset($MCU)) {
+if($MCU=="") {
 $tool_content.='
 <td>
     <label>
