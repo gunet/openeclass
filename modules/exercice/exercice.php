@@ -67,6 +67,12 @@ $helpTopic = 'Exercise';
 
 include '../../include/baseTheme.php';
 
+/**** The following is added for statistics purposes ***/
+include('../../include/action.php');
+$action = new action();
+$action->record('MODULE_ID_EXERCISE');
+/**************************************/
+
 $tool_content = "";
 
 $nameTools = $langExercices;

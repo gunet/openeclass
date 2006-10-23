@@ -63,6 +63,13 @@ include '../../include/baseTheme.php';
 $nameTools = $l_forums;
 $tool_content = "";
 
+/**** The following is added for statistics purposes ***/
+include('../../include/action.php');
+$action = new action();
+$action->record('MODULE_ID_FORUM');
+/**************************************/
+
+
 /*
  * Tool-specific includes
  */

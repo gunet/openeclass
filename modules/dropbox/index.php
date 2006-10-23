@@ -38,6 +38,13 @@
 require_once("dropbox_init1.inc.php");
 $nameTools = $dropbox_lang["dropbox"];
 
+/**** The following is added for statistics purposes ***/
+include('../../include/action.php');
+$action = new action();
+$action->record('MODULE_ID_DROPBOX');
+/**************************************/
+
+
 /*
 * get order status of sent list.
 * The sessionvar sentOrder keeps preference of user to by what field to order the sent files list by

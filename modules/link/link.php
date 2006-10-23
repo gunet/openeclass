@@ -45,10 +45,19 @@ $langFiles = 'link';
 $require_help = TRUE;
 $helpTopic = 'Link';
 
+
+
 include '../../include/baseTheme.php';
 $dbname = $_SESSION['dbname'];
 $tbl_link = "liens";
 $tbl_categories = "link_categories";
+
+/**** The following is added for statistics purposes ***/
+include('../../include/action.php');
+$action = new action();
+$action->record('MODULE_ID_LINKS');
+/**************************************/
+
 
 $nameTools = $langLinks;
 

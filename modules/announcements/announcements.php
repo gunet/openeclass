@@ -46,6 +46,13 @@ $helpTopic = 'Announce';
 include '../../include/baseTheme.php';
 include('../../include/lib/textLib.inc.php');
 include('../../include/sendMail.inc.php');
+
+/**** The following is added for statistics purposes ***/
+include('../../include/action.php');
+$action = new action();
+$action->record('MODULE_ID_ANNOUNCE');
+/**************************************/
+
 $nameTools = $langAn;
 $tool_content = "";
 

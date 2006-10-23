@@ -65,6 +65,12 @@ $local_style = 'textarea, input { font-size: 10pt; font-family: monospace; }';
 
 include '../../include/baseTheme.php';
 
+/**** The following is added for statistics purposes ***/
+include('../../include/action.php');
+$action = new action();
+$action->record('MODULE_ID_ASSIGN');
+/**************************************/
+
 $tool_content = "";
 
 include('work_functions.php');
