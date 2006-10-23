@@ -277,8 +277,7 @@ if(type==\"URL\")
 </script>
 
 ";
-		$tool_content.="<table><tr><td id=\"insert_td\"><form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"insert_form\">
-		</form></td></tr></tables>";
+		$tool_content.="<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"insert_form\"></form>";
 			// print the list if there is no editing
 			$results['video'] = db_query("SELECT *  FROM video ORDER BY titre",$currentCourseID);
 			$results['videolinks'] = db_query("SELECT * FROM videolinks ORDER BY titre",$currentCourseID);
