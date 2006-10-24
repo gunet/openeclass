@@ -30,15 +30,12 @@ if (isset($_POST['submit_upgrade'])) {
 	$fromadmin = false;
 }
 
-if((isset($_POST['password'])) && (!in_array($_POST['password'],$auth_methods)))
-{
+if((isset($_POST['password'])) && (!in_array($_POST['password'],$auth_methods))) {
 	if((isset($encryptkey)) || (!empty($encryptkey)))
 	$newpass = $crypt->encrypt($key1, $_POST['password'], $pswdlen);
 	else
 	$newpass = $_POST['password'];
-}
-else
-{
+} else {
 	if((isset($uid)) && ($uid==1)) 	// means he is the main admin, doing the upgrade from the admin panel
 	{
 		// now get his password from DB
@@ -56,7 +53,7 @@ else
 	}
 }
 
-
+// error message
 if (isset($_POST['login']) and isset($_POST['password']) and !is_admin($_POST['login'], $newpass)) {
 	$tool_content .= "<p>Τα στοιχεία που δώσατε δεν αντιστοιχούν στο διαχειριστή του
         συστήματος! Παρακαλούμε επιστρέψτε στην προηγούμενη σελίδα και ξαναδοκιμάστε.</p>
@@ -66,18 +63,19 @@ if (isset($_POST['login']) and isset($_POST['password']) and !is_admin($_POST['l
 }
 
 if ($fromadmin)
-include "../modules/admin/check_admin.inc";
+	include "../modules/admin/check_admin.inc";
 
+//====================
 // Main body
 //====================
 
-$tool_content .= "<table width=\"99%\"><caption>Εξέλιξη Αναβάθμισης...</caption><tbody>";
-
+$tool_content .= "<table width=\"99%\"><caption>Εξέλιξη Αναβάθμισης</caption><tbody>";
 $OK = "[<font color='green'> Επιτυχία </font>]";
 $BAD = "[<font color='red'> Σφάλμα ή δεν χρειάζεται τροποποίηση</font>]";
 
 $errors = 0;
 
+// default values for quota
 if (!isset($diskQuotaDocument)) {
 	$diskQuotaDocument = 40000000;
 }
@@ -96,78 +94,74 @@ if (!isset($diskQuotaDropbox)) {
 // 		upgrade eclass main database
 // **************************************
 
+// ***********************
+// old queries
+//  **********************
 //upgrade queries from 1.2 --> 1.4
-
 if (!mysql_field_exists("$mysqlMainDb", 'user', 'am'))
-$tool_content .= add_field('user', 'am', "VARCHAR( 20 ) NOT NULL");
+	$tool_content .= add_field('user', 'am', "VARCHAR( 20 ) NOT NULL");
 if (mysql_table_exists($mysqlMainDb, 'todo'))
-db_query("DROP TABLE `todo`");
-
+		db_query("DROP TABLE `todo`");
 // upgrade queries to 1.4
-
 if (!mysql_field_exists("$mysqlMainDb",'cours','type'))
-$tool_content .= add_field('cours', 'type', "ENUM('pre', 'post', 'other') DEFAULT 'pre' NOT NULL");
+	$tool_content .= add_field('cours', 'type', "ENUM('pre', 'post', 'other') DEFAULT 'pre' NOT NULL");
 if (!mysql_field_exists("$mysqlMainDb",'cours','doc_quota'))
-$tool_content .= add_field('cours', 'doc_quota', "FLOAT DEFAULT '$diskQuotaDocument' NOT NULL");
+	$tool_content .= add_field('cours', 'doc_quota', "FLOAT DEFAULT '$diskQuotaDocument' NOT NULL");
 if (!mysql_field_exists("$mysqlMainDb",'cours','video_quota'))
-$tool_content .= add_field('cours', 'video_quota', "FLOAT DEFAULT '$diskQuotaVideo' NOT NULL");
+	$tool_content .= add_field('cours', 'video_quota', "FLOAT DEFAULT '$diskQuotaVideo' NOT NULL");
 if (!mysql_field_exists("$mysqlMainDb",'cours','group_quota'))
-$tool_content .= add_field('cours', 'group_quota', "FLOAT DEFAULT '$diskQuotaGroup' NOT NULL");
-
+	$tool_content .= add_field('cours', 'group_quota', "FLOAT DEFAULT '$diskQuotaGroup' NOT NULL");
 // upgrade query to 1.6
 if (!mysql_field_exists("$mysqlMainDb",'cours','dropbox_quota'))
-$tool_content .= add_field('cours', 'dropbox_quota', "FLOAT DEFAULT '$diskQuotaDropbox' NOT NULL");
+	$tool_content .= add_field('cours', 'dropbox_quota', "FLOAT DEFAULT '$diskQuotaDropbox' NOT NULL");
 
-//upgrade queries to 2.0
+// ************************************
+// new queries - upgrade queries to 2.0
+// ************************************
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_objectives'))
-$tool_content .= add_field('cours', 'course_objectives', "TEXT");
-
+	$tool_content .= add_field('cours', 'course_objectives', "TEXT");
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_prerequisites'))
-$tool_content .= add_field('cours', 'course_prerequisites', "TEXT");
-
+	$tool_content .= add_field('cours', 'course_prerequisites', "TEXT");
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_references'))
-$tool_content .= add_field('cours', 'course_references', "TEXT");
-
+	$tool_content .= add_field('cours', 'course_references', "TEXT");
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_keywords'))
-$tool_content .= add_field('cours', 'course_keywords', "TEXT");
-
+	$tool_content .= add_field('cours', 'course_keywords', "TEXT");
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_addon'))
-$tool_content .= add_field('cours', 'course_addon', "TEXT");
+	$tool_content .= add_field('cours', 'course_addon', "TEXT");
 
 // kstratos - UOM
 // Add 1 new field into table 'prof_request', after the field 'profuname'
 if (!mysql_field_exists($mysqlMainDb,'prof_request','profpassword'))
-$tool_content .= add_field('prof_request','profpassword',"VARCHAR(255)");
-
+	$tool_content .= add_field('prof_request','profpassword',"VARCHAR(255)");
 // Add 2 new fields into table 'user': registered_at,expires_at
 if (!mysql_field_exists($mysqlMainDb,'user','registered_at'))
-$tool_content .= add_field('user', 'registered_at', "INT(10)");
+	$tool_content .= add_field('user', 'registered_at', "INT(10)");
 if (!mysql_field_exists($mysqlMainDb,'user','expires_at'))
-$tool_content .= add_field('user', 'expires_at', "INT(10)");
+	$tool_content .= add_field('user', 'expires_at', "INT(10)");
 
 // Add 2 new fields into table 'cours': password,faculteid
 if (!mysql_field_exists($mysqlMainDb,'cours','password'))
-$tool_content .= add_field('cours', 'password', "VARCHAR(50)");
+	$tool_content .= add_field('cours', 'password', "VARCHAR(50)");
+
+// vagpits: update cours.faculteid with id from faculte
 if (!mysql_field_exists($mysqlMainDb,'cours','faculteid')) {
 	$tool_content .= add_field('cours', 'faculteid', "INT(11)");
-	// vagpits: update cours.faculteid with if from faculte
-	mysql_query("
-	UPDATE cours,faculte SET cours.faculteid = faculte.id
-	WHERE cours.faculte = faculte.name
-	");
+	mysql_query("UPDATE cours,faculte SET cours.faculteid = faculte.id
+		WHERE cours.faculte = faculte.name");
 }
 
 // Add 1 new field into table 'cours_faculte': facid
+// vagpits: update cours.faculteid with id from faculte
 if (!mysql_field_exists($mysqlMainDb,'cours_faculte','facid')) {
 	$tool_content .= add_field('cours_faculte', 'facid', "INT(11)");
-	// vagpits: update cours.faculteid with if from faculte
-	mysql_query("
-	UPDATE cours_faculte,faculte SET cours_faculte.facid = faculte.id
-	WHERE cours_faculte.faculte = faculte.name
-	");
+	mysql_query("UPDATE cours_faculte,faculte SET cours_faculte.facid = faculte.id
+	WHERE cours_faculte.faculte = faculte.name");
 }
 
-// haniotak:: new table for loginout summary for eclass 2.0
+// *****************************
+// new tables added
+// *****************************
+// haniotak:: new table for loginout summary
 if (!mysql_table_exists($mysqlMainDb, 'loginout_summary'))  {
 	mysql_query("CREATE TABLE loginout_summary (
         id mediumint unsigned NOT NULL auto_increment,
@@ -177,8 +171,7 @@ if (!mysql_table_exists($mysqlMainDb, 'loginout_summary'))  {
         PRIMARY KEY  (id))
         TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 }
-
-// new table for monthly summary for eclass 2.0
+// new table for monthly summary
 if (!mysql_table_exists($mysqlMainDb, 'monthly_summary'))  {
 	mysql_query("CREATE TABLE monthly_summary (
         id mediumint unsigned NOT NULL auto_increment,
@@ -192,8 +185,7 @@ if (!mysql_table_exists($mysqlMainDb, 'monthly_summary'))  {
         PRIMARY KEY  (id))
         TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 }
-
-// 'New table 'auth' with auth methods in Eclass 2.0';
+// new table 'auth' with auth methods
 if(!mysql_table_exists($mysqlMainDb, 'auth')) {
 	db_query("CREATE TABLE `auth` (
     `auth_id` int( 2 ) NOT NULL AUTO_INCREMENT ,
@@ -202,15 +194,13 @@ if(!mysql_table_exists($mysqlMainDb, 'auth')) {
     `auth_instructions` text NOT NULL default '',
     `auth_default` tinyint( 1 ) NOT NULL default '0',
     PRIMARY KEY ( `auth_id` )) ",$mysqlMainDb); //TYPE = MYISAM  COMMENT='New table with auth methods in Eclass 2.0'
-
-	// Insert the default values into the new table
-	db_query("INSERT INTO `auth` VALUES (1, 'eclass', '', '', 1)",$mysqlMainDb);
-	db_query("INSERT INTO `auth` VALUES (2, 'pop3', '', '', 0)",$mysqlMainDb);
-	db_query("INSERT INTO `auth` VALUES (3, 'imap', '', '', 0)",$mysqlMainDb);
-	db_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)",$mysqlMainDb);
-	db_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)",$mysqlMainDb);
+	// Insert the default values into the new table 'auth'
+	db_query("INSERT INTO `auth` VALUES (1, 'eclass', '', '', 1)");
+	db_query("INSERT INTO `auth` VALUES (2, 'pop3', '', '', 0)");
+	db_query("INSERT INTO `auth` VALUES (3, 'imap', '', '', 0)");
+	db_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)");
+	db_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
 }
-
 
 //Table agenda (stores events from all lessons)
 if (!mysql_table_exists($mysqlMainDb, 'agenda'))  {
@@ -225,7 +215,6 @@ if (!mysql_table_exists($mysqlMainDb, 'agenda'))  {
   	`lesson_code` varchar(50) NOT NULL default '',
   	PRIMARY KEY  (`id`)) TYPE=MyISAM ", $mysqlMainDb);
 }
-
 
 // table admin_announcemets (stores administrator  announcements)
 if (!mysql_table_exists($mysqlMainDb, 'admin_announcements'))  {
@@ -242,35 +231,26 @@ if (!mysql_table_exists($mysqlMainDb, 'admin_announcements'))  {
 		) TYPE = MYISAM ", $mysqlMainDb);
 }
 
-// add 4 new fields to table users
-
+// add 5 new fields to table users
 if (!mysql_field_exists("$mysqlMainDb",'user','perso'))
-$tool_content .= add_field('user', 'perso', "enum('yes','no') NOT NULL default 'no'");
-
+	$tool_content .= add_field('user', 'perso', "enum('yes','no') NOT NULL default 'no'");
 if (!mysql_field_exists("$mysqlMainDb",'user','announce_flag'))
-$tool_content .= add_field('user', 'announce_flag', "date NOT NULL default '0000-00-00'");
-
+	$tool_content .= add_field('user', 'announce_flag', "date NOT NULL default '0000-00-00'");
 if (!mysql_field_exists("$mysqlMainDb",'user','doc_flag'))
-$tool_content .= add_field('user', 'doc_flag', "date NOT NULL default '0000-00-00'");
-
+	$tool_content .= add_field('user', 'doc_flag', "date NOT NULL default '0000-00-00'");
 if (!mysql_field_exists("$mysqlMainDb",'user','forum_flag'))
-$tool_content .= add_field('user', 'forum_flag', "date NOT NULL default '0000-00-00'");
-
-//add new field to table users for user's language
+	$tool_content .= add_field('user', 'forum_flag', "date NOT NULL default '0000-00-00'");
 if (!mysql_field_exists("$mysqlMainDb",'user','lang'))
-$tool_content .= add_field('user', 'lang', "ENUM('el', 'en') DEFAULT 'el' NOT NULL");
-
+	$tool_content .= add_field('user', 'lang', "ENUM('el', 'en') DEFAULT 'el' NOT NULL");
 
 // add full text indexes for search operation
 db_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu` ,`code_cours`)");
-db_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_objectives`
-,`course_prerequisites` ,`course_keywords` ,`course_references`)");
+db_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_objectives`,`course_prerequisites` ,`course_keywords` ,`course_references`)");
 
 
 // encryption of passwords
 // Orismos $durationAccount sto config.php
-if((!isset($durationAccount)) || (empty($durationAccount)))
-{
+if((!isset($durationAccount)) || (empty($durationAccount))) {
 	@chmod( "../config",777 );
 	@chmod( "../config", 0777 );
 	$remove_this = "?>";
@@ -296,67 +276,28 @@ if((!isset($durationAccount)) || (empty($durationAccount)))
 		OR registered_at='NULL' OR registered_at=NULL  
 		OR registered_at='null' OR registered_at=null 
 		OR registered_at='\N' OR registered_at=\N 
-		OR registered_at=''"))
-	{
-		while($row = mysql_fetch_array($res))
-		{
-			$registered_at = $row["registered_at"];
+		OR registered_at=''"))  {
 
+		while($row = mysql_fetch_array($res)) {
+			$registered_at = $row["registered_at"];
 			// do the update
 			$regtime = 126144000+time();
-			if(db_query("UPDATE user SET registered_at=".time().",expires_at=".$regtime))
-			{
-				$tool_content .= "SUCCESSFUL registration time update for user with id=".$row["user_id"].".Encrypted pass is:".$newpass."<br />";
-			}
-			else
-			{
-				$tool_content .= "NO UPDATE for user with id=".$row["user_id"]."<br />";
+			if(db_query("UPDATE user SET registered_at=".time().",expires_at=".$regtime)) {
+				$tool_content .= "Ενημέρωση του χρόνου λήξης λογαριασμού για τον χρήστη με id=".$row["user_id"].".Το κρυπτογραφημένο συνθηματικό είναι:".$newpass."<br />";
+			} else {
+				$tool_content .= "Δεν έγινε ενημέρωση για τον χρήστη με id=".$row["user_id"]."<br />";
 			}
 		}
 	}
 	else
 	{
-		die("Δεν έγινε κάποια ενημέρωση σε κανένα account σχετικά με to registration time.Η ενημέρωση θα συνεχιστεί κανονικά.");
+		die("Δεν έγινε ενημέρωση σε κανένα λογαριασμό χρήστη σχετικά με το χρόνο λήξης λογαριασμού. Η ενημέρωση θα συνεχιστεί κανονικά.");
 	}
-}
-else
-{
-	// update users with no registration date
-	if($res = db_query("SELECT user_id,registered_at,expires_at FROM user
-		WHERE registered_at='0' 
-		OR registered_at='NULL' OR registered_at=NULL  
-		OR registered_at='null' OR registered_at=null 
-		OR registered_at='\N' OR registered_at=\N 
-		OR registered_at=''"))
-	{
-		while($row = mysql_fetch_array($res))
-		{
-			$registered_at = $row["registered_at"];
-
-			// do the update
-			$regtime = 126144000+time();
-			if(db_query("UPDATE user SET registered_at=".time().",expires_at=".$regtime))
-			{
-				$tool_content .= "SUCCESSFUL registration time update for user with id=".$row["user_id"].".Encrypted pass is:".$newpass."<br />";
-			}
-			else
-			{
-				$tool_content .= "NO UPDATE for user with id=".$row["user_id"]."<br />";
-			}
-		}
-	}
-	else
-	{
-		die("Δεν έγινε κάποια ενημέρωση σε κανένα account σχετικά με to registration time.Η ενημέρωση θα συνεχιστεί κανονικά.");
-	}
-}
-
-
+}  //end of duration account
 
 
 // Orismos $encryptkey sto config.php
-if((!isset($encryptkey)) || (empty($encryptkey)))
-{
+if((!isset($encryptkey)) || (empty($encryptkey))) {
 	@chmod( "../config",777 );
 	@chmod( "../config", 0777 );
 	$has_encryption = 0;
@@ -379,37 +320,29 @@ if((!isset($encryptkey)) || (empty($encryptkey)))
 	$tool_content .= "Ενημερώθηκε το config.php για το encryptkey<br />";
 
 	// update all the records in user table
-	if($res = db_query("SELECT user_id,password FROM user"))
-	{
-		while($row = mysql_fetch_array($res))
-		{
+	if($res = db_query("SELECT user_id,password FROM user")) {
+		while($row = mysql_fetch_array($res)) {
 			$pass = $row["password"];
 			
-			
 			// do not allow the user to have the characters: ',\" or \\ in password
-			$pw = array(); 	$nr = 0;
+			$pw = array(); 	
+			$nr = 0;
 			while (isset($pass{$nr})) // convert the string $password into an array $pw
 			{
   			$pw[$nr] = $pass{$nr};
     		$nr++;
 			}
-  		if( (in_array("'",$pw)) || (in_array("\"",$pw)) || (in_array("\\",$pw)) )
-			{
-				$tool_content .= "NO PASSWORD UPDATE for user with id=".$row["user_id"]." (invalid characters in password)<br />";
+  		if((in_array("'",$pw)) || (in_array("\"",$pw)) || (in_array("\\",$pw))) {
+				$tool_content .= "Δεν έγινε κρυπτογράφηση του συνθηματικού του χρήστη με id=".$row["user_id"]." (άκυροι χαρακτήρες στο συνθηματικό)<br />";
 				continue; // get the next one
 			}
 			
-			
 			$newpass = $crypt->encrypt($key1, $pass, $pswdlen);
-			if(!in_array($pass,$auth_methods))
-			{
+			if(!in_array($pass,$auth_methods)) {
 				// do the update
-				if(db_query("UPDATE user SET password = '".$newpass."' WHERE user_id=".$row["user_id"]))
-				{
+				if(db_query("UPDATE user SET password = '".$newpass."' WHERE user_id=".$row["user_id"])) {
 					$tool_content .= "SUCCESS for user with id=".$row["user_id"].".Encrypted pass is:".$newpass."<br />";
-				}
-				else
-				{
+				} else {
 					$tool_content .= "NO UPDATE for user with id=".$row["user_id"]."<br />";
 				}
 			}
