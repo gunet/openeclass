@@ -76,6 +76,7 @@ $langSimpleExercise="Σε μία μόνο σελίδα";
 $langSequentialExercise="Σε μία ερώτηση ανά σελίδα (στη σειρά)";
 $langRandomQuestions="Τυχαίες Ερωτήσεις";
 $langGiveExerciseName="Δώστε το όνομα της άσκησης";
+$langGiveExerciseInts="Τα πεδία Χρονικός Περιορισμός & Επιτρεπόμενες Επαναλήψεις πρέπει να είναι ακέραιοι (0, 1, 2, ..,ν)";
 $langQuestCreate="Δημιουργία ερωτήσεων";
 $langExRecord="Η άσκηση σας αποθηκεύτηκε";
 $langBackModif="Επιστροφή στην διόρθωση της άσκησης";

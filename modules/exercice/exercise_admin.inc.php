@@ -70,25 +70,27 @@ if(isset($submitExercise))
 	if(empty($exerciseTitle))
 	{
 		$msgErr=$langGiveExerciseName;
-	}
-	else
-	{
-		$objExercise->updateTitle($exerciseTitle);
-		$objExercise->updateDescription($exerciseDescription);
-		$objExercise->updateType($exerciseType);
-		
-		$objExercise->updateStartDate($exerciseStartDate);
-		$objExercise->updateEndDate($exerciseEndDate);
-		$objExercise->updateTimeConstrain($exerciseTimeConstrain);
-		$objExercise->updateAttemptsAllowed($exerciseAttemptsAllowed);
-		
-		$objExercise->setRandom($randomQuestions);
-		$objExercise->save();
-
-		// reads the exercise ID (only usefull for a new exercise)
-		$exerciseId=$objExercise->selectId();
-
-		unset($modifyExercise);
+	} else {
+		if ((!is_numeric($exerciseTimeConstrain))||(!is_numeric($exerciseAttemptsAllowed))) {
+			$msgErr=$langGiveExerciseInts;
+		} else {
+			$objExercise->updateTitle($exerciseTitle);
+			$objExercise->updateDescription($exerciseDescription);
+			$objExercise->updateType($exerciseType);
+			
+			$objExercise->updateStartDate($exerciseStartDate);
+			$objExercise->updateEndDate($exerciseEndDate);
+			$objExercise->updateTimeConstrain($exerciseTimeConstrain);
+			$objExercise->updateAttemptsAllowed($exerciseAttemptsAllowed);
+			
+			$objExercise->setRandom($randomQuestions);
+			$objExercise->save();
+	
+			// reads the exercise ID (only usefull for a new exercise)
+			$exerciseId=$objExercise->selectId();
+	
+			unset($modifyExercise);
+		}
 	}
 }
 else

@@ -69,6 +69,24 @@ include '../../include/baseTheme.php';
 // For using with th epop-up calendar
 include 'jscalendar.inc.php';
 
+$local_head .= "
+
+<script language=\"JavaScript\">
+function validate() {
+	if (document.forms[0].intitule.value==\"\") {
+   		alert(\"Παρακαλώ συμπληρώστε τον τίτλο του μαθήματος!\"); 
+   		return false;
+ 	}
+ 	if (document.forms[0].titulaires.value==\"\") {
+   		alert(\"Παρακαλώ συμπληρώστε τουλάχιστον έναν διαχειριστή για το μάθημα!\"); 
+   		return false;
+ 	}
+ 	return true;
+}
+</script>
+
+";
+
 $tool_content = "";
 
 $nameTools = $langExercices;
