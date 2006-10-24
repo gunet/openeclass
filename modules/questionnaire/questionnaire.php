@@ -132,23 +132,33 @@ $tool_content .= "<table width=\"90%\"><thead>$langNamesSurvey</thead><tbody><tr
 			
 			// Print active surveys //////////////////////////////////////////
 			$tool_content .= <<<cData
-				<b>$langSurveysActive</b>
-				<table border="1" width="95%"><tr>
-				<td>$langSurveyName</td>
-				<td>$langSurveyCreator</td>
-				<td>$langSurveyCreation</td>
-				<td>$langSurveyStart</td>
-				<td>$langSurveyEnd</td>
-				<td>$langSurveyType</td>
-				<td>$langSurveyOperations</td>
-				</tr>
+				<!--<b>$langSurveysActive</b>-->
+				<table border="0" width="95%"><thead><tr>
+				<th>$langSurveyName</th>
+				<th>$langSurveyCreator</th>
+				<th>$langSurveyCreation</th>
+				<th>$langSurveyStart</th>
+				<th>$langSurveyEnd</th>
+				<th>$langSurveyType</th>
+				<th>$langSurveyRemove</th>
+				<th>$langSurveyActivate</th>
+				</tr></thead>
 cData;
 			
 			$active_surveys = db_query("
-				select * from survey 
-				where active=1", $currentCourse);
+				select * from survey", $currentCourse);
 				
 			while ($theSurvey = mysql_fetch_array($active_surveys)) {	
+				
+				$visibility = $theSurvey["active"];
+				
+				if ($visibility) {
+					$visibility_css = " ";
+					$visibility_gif = "invisible";
+				} else {
+					$visibility_css = " class=\"invisible\"";
+					$visibility_gif = "visible";
+				}
 				
 				$creator_id = $theSurvey["creator_id"];
 				
@@ -181,17 +191,17 @@ cData;
 				} else {
 					$tool_content .= "<td>" . $langSurveyFillText . "</td>";
 				}
-				if ($is_adminOfCourse) 
-					$tool_content .= "<td><!--<a href='editsurvey.php?sid={$sid}'>".$langSurveyEdit."</a> | -->".
-						"<a href='deletesurvey.php?sid={$sid}'>".$langSurveyRemove."</a> | ".
-						"<a href='deactivatesurvey.php?sid={$sid}'>".$langSurveyDeactivate."</a>  ".
+				if ($is_adminOfCourse)   {
+					$tool_content .= "<td align=center><!--<a href='editsurvey.php?sid={$sid}'>".$langSurveyEdit."</a> | -->".
+						"<a href='deletesurvey.php?sid={$sid}'><img src='../../template/classic/img/delete.gif' border='0'></a></td><td align=center> ".
+						"<a href='deactivatesurvey.php?sid={$sid}'><img src='../../template/classic/img/".$visibility_gif.".gif' border='0'></a>  ".
 						"</td></tr>";
-				else
+				} else {
 					////////////////////////////////////////////////////
 						$thesid = $theSurvey["sid"];
 						$has_participated = mysql_fetch_array(
 							mysql_query("SELECT COUNT(*) FROM survey_answer where creator_id='$uid' AND sid='$thesid'"));
-					if ( $has_participated[0] == 0) {
+					if ($has_participated[0] == 0) {
 						$tool_content .= "<td><a href='surveyparticipate.php?UseCase=1&sid=". $sid ."'>";
 						$tool_content .= $langSurveyParticipate;
 						$tool_content .= "</a></td></tr>";
@@ -200,71 +210,11 @@ cData;
 						$tool_content .= "<td>".$langSurveyHasParticipated."</td></tr>";
 					}
 					////////////////////////////////////////////////////
-					//$tool_content .= "<td><a href='surveyparticipate.php?UseCase=1&sid=". $sid ."'>".$langSurveyParticipate."</a></td></tr>";
+				}
 			}
 			$tool_content .= "</table><br>";
 			
-			//		Print inactive surveys ///////////////////////////////
-			if ($is_adminOfCourse) {
-				
-				$tool_content .= <<<cData
-					<b>$langSurveysInactive</b>
-					<table border="1" width="95%"><tr>
-					<td>$langSurveyName</td>
-					<td>$langSurveyCreator</td>
-					<td>$langSurveyCreation</td>
-					<td>$langSurveyStart</td>
-					<td>$langSurveyEnd</td>
-					<td>$langSurveyType</td>
-					<td>$langSurveyOperations</td>
-					</tr>
-cData;
-				
-				$inactive_surveys = db_query("
-					select * from survey 
-					where active=0", $currentCourse);
-					
-				while ($theSurvey = mysql_fetch_array($inactive_surveys)) {	
-					
-					$creator_id = $theSurvey["creator_id"];
-					
-					$survey_creator = db_query("
-					select nom,prenom from user 
-					where user_id='$creator_id'", $mysqlMainDb);
-					$theCreator = mysql_fetch_array($survey_creator);
-					
-					$sid = $theSurvey["sid"];
-					$answers = db_query("
-					select * from survey_answer 
-					where sid='$sid'", $currentCourse);
-					$countAnswers = mysql_num_rows($answers);
-					
-					//$tool_content .= "<tr><td>" . $theSurvey["name"] . "</td>";
-					if ($is_adminOfCourse) { 
-						$tool_content .= "<tr><td><a href=\"surveyresults.php?sid=". 
-						$sid ."&type=" . $theSurvey["type"]."\">" . $theSurvey["name"] .
-					"</a></td>";
-					} else {
-						$tool_content .= "<tr><td>" . $theSurvey["name"] . "</td>";
-					}
-					//$tool_content .= "<td>" . $countAnswers . "</td>";
-					$tool_content .= "<td>" . $theCreator["nom"]. " " . $theCreator["prenom"] . "</td>";
-					$tool_content .= "<td>" . $theSurvey["creation_date"] . "</td>";
-					$tool_content .= "<td>" . $theSurvey["start_date"] . "</td>";
-					$tool_content .= "<td>" . $theSurvey["end_date"] . "</td>";
-					
-					if ($theSurvey["type"] == 1) {
-						$tool_content .= "<td>" . $langSurveyMC . "</td>";
-					} else {
-						$tool_content .= "<td>" . $langSurveyFillText . "</td>";
-					}
-					$tool_content .= "<td><!--<a href='editsurvey.php?sid={$sid}'>".$langSurveyEdit."</a> | -->".
-					"<a href='deletesurvey.php?sid={$sid}'>".$langSurveyRemove."</a> | ".
-					"<a href='activatesurvey.php?sid={$sid}'>".$langSurveyActivate."</a>  ".
-					"</td></tr>";
-				}
-				$tool_content .= "</table><br>";
-			}
+
 		}
 
 	}
@@ -302,23 +252,33 @@ cData;
 			
 			// Print active polls //////////////////////////////////////////////////////
 			$tool_content .= <<<cData
-				<b>$langPollsActive</b>
-				<table border="1" width="95%"><tr>
-				<td>$langPollName</td>
-				<td>$langPollCreator</td>
-				<td>$langPollCreation</td>
-				<td>$langPollStart</td>
-				<td>$langPollEnd</td>
+				<!--<b>$langPollsActive</b>-->
+				<table border="1" width="95%"><thead><tr>
+				<th>$langPollName</th>
+				<th>$langPollCreator</th>
+				<th>$langPollCreation</th>
+				<th>$langPollStart</th>
+				<th>$langPollEnd</th>
 				
-				<td>$langPollOperations</td>
-				</tr>
+				<th>$langPollRemove</th>
+				<th>$langPollActivate</th>
+				</tr></thead><tbody>
 cData;
 			
 			$active_polls = db_query("
-				select * from poll 
-				where active=1", $currentCourse);
+				select * from poll", $currentCourse);
 				
 			while ($thepoll = mysql_fetch_array($active_polls)) {	
+				
+				$visibility = $thepoll["active"];
+				
+				if ($visibility) {
+					$visibility_css = " ";
+					$visibility_gif = "invisible";
+				} else {
+					$visibility_css = " class=\"invisible\"";
+					$visibility_gif = "visible";
+				}
 				
 				$creator_id = $thepoll["creator_id"];
 				
@@ -338,7 +298,7 @@ cData;
 					$pid ."&type=" . $thepoll["type"]."\">" . $thepoll["name"] .
 					"</a></td>";
 				} else {
-					$tool_content .= "<tr><td>" . $thepoll["name"] . "</td>";
+					$tool_content .= "<tr".$visibility_css."><td>" . $thepoll["name"] . "</td>";
 				}	
 					
 				$tool_content .= "<td>" . $theCreator["nom"]. " " . $theCreator["prenom"] . "</td>";
@@ -347,9 +307,9 @@ cData;
 				$tool_content .= "<td>" . $thepoll["end_date"] . "</td>";
 				
 				if ($is_adminOfCourse) 
-					$tool_content .= "<td><!--<a href='editpoll.php?pid={$pid}'>".$langPollEdit."</a> | -->".
-						"<a href='deletepoll.php?pid={$pid}'>".$langPollRemove."</a> | ".
-						"<a href='deactivatepoll.php?pid={$pid}'>".$langPollDeactivate."</a>  ".
+					$tool_content .= "<td align=center><!--<a href='editpoll.php?pid={$pid}'>".$langPollEdit."</a> | -->".
+						"<a href='deletepoll.php?pid={$pid}'><img src='../../template/classic/img/delete.gif' border='0'></a> </td><td align=center> ".
+						"<a href='deactivatepoll.php?pid={$pid}'><img src='../../template/classic/img/".$visibility_gif.".gif' border='0'></a>  ".
 						"</td></tr>";
 				else {
 //					$participant = db_query("
@@ -371,62 +331,7 @@ cData;
 					}
 				}
 			}
-			$tool_content .= "</table><br>";
-			
-			// Print inactive polls //////////////////////////////////////////////////////
-			if ($is_adminOfCourse) {
-				
-				$tool_content .= <<<cData
-					<b>$langPollsInactive</b>
-					<table border="1" width="95%"><tr>
-					<td>$langPollName</td>
-					<td>$langPollCreator</td>
-					<td>$langPollCreation</td>
-					<td>$langPollStart</td>
-					<td>$langPollEnd</td>
-					
-					<td>$langPollOperations</td>
-					</tr>
-cData;
-				
-				$inactive_polls = db_query("
-					select * from poll 
-					where active=0", $currentCourse);
-					
-				while ($thepoll = mysql_fetch_array($inactive_polls)) {	
-					
-					$creator_id = $thepoll["creator_id"];
-					
-					$poll_creator = db_query("
-					select nom,prenom from user 
-					where user_id='$creator_id'", $mysqlMainDb);
-					$theCreator = mysql_fetch_array($poll_creator);
-					
-					$pid = $thepoll["pid"];
-					$answers = db_query("
-					select * from poll_answer 
-					where pid='$pid'", $currentCourse);
-					$countAnswers = mysql_num_rows($answers);
-					
-					if ($is_adminOfCourse) { 
-						$tool_content .= "<tr><td><a href=\"pollresults.php?pid=". 
-						$pid ."&type=" . $thepoll["type"]."\">" . $thepoll["name"] .
-					"</a></td>";
-					} else {
-						$tool_content .= "<tr><td>" . $thepoll["name"] . "</td>";
-					}
-					$tool_content .= "<td>" . $theCreator["nom"]. " " . $theCreator["prenom"] . "</td>";
-					$tool_content .= "<td>" . $thepoll["creation_date"] . "</td>";
-					$tool_content .= "<td>" . $thepoll["start_date"] . "</td>";
-					$tool_content .= "<td>" . $thepoll["end_date"] . "</td>";
-					
-					$tool_content .= "<td><!--<a href='editpoll.php?pid={$pid}'>".$langPollEdit."</a> | -->".
-					"<a href='deletepoll.php?pid={$pid}'>".$langPollRemove."</a> | ".
-					"<a href='activatepoll.php?pid={$pid}'>".$langPollActivate."</a>  ".
-					"</td></tr>";
-				}
-				$tool_content .= "</table><br>";
-			}
+			$tool_content .= "</tbody></table><br>";
 		}
 		
 	}
