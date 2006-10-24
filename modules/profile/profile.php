@@ -40,71 +40,99 @@ $nameTools = $langModifProfile;
 check_guest();
 
 //if (isset($submit) && ($ldap_submit != "ON")) {
-if (isset($submit) && (!isset($ldap_submit))) {
-	$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
-
-	// check if username exists
-
-	$username_check=mysql_query("SELECT username FROM user WHERE username='$username_form'");
-	while ($myusername = mysql_fetch_array($username_check)) {
-		$user_exist=$myusername[0];
-	}
-
-	// check if passwds are the same
-
-	if ($password_form1 !== $password_form) {
-		header("location:". $_SERVER['PHP_SELF']."?msg=2");
-	}
-
-	// check if passwd is too easy
-
-	elseif ((strtoupper($password_form1) == strtoupper($username_form))
-	|| (strtoupper($password_form1) == strtoupper($nom_form))
-	|| (strtoupper($password_form1) == strtoupper($prenom_form))
-	|| (strtoupper($password_form1) == strtoupper($email_form))) {
-		header("location:". $_SERVER['PHP_SELF']."?msg=3");
-	}
-
-	// check if there are empty fields
-
-	elseif (empty($nom_form) OR empty($prenom_form) OR empty($password_form1)
-	OR empty($password_form) OR empty($username_form) OR empty($email_form)) {
-		header("location:". $_SERVER['PHP_SELF']."?msg=4");
-	}
-
-	// check if username is free
-
-	elseif(isset($user_exist) AND ($username_form==$user_exist) AND ($username_form!=$uname)) {
-		header("location:". $_SERVER['PHP_SELF']."?msg=5");
-	}
-
-	// check if user email is valid
-
-	elseif (!eregi($regexp, $email_form)) {
-		header("location:". $_SERVER['PHP_SELF']."?msg=6");
-	}
-
-	// everything is ok
-	else {
-	##[BEGIN personalisation modification]############
-	if (!isset($persoStatus) || $persoStatus == "") $persoStatus = "no";
-	else  $persoStatus = "yes";
-	$userLanguage = $_REQUEST['userLanguage'];
+if (isset($submit) && (!isset($ldap_submit))) 
+{
+	$password_form = isset($_POST['password_form'])?$_POST['password_form']:'';
+	$password_form1 = isset($_POST['password_form1'])?$_POST['password_form1']:'';
 	
-	// encrypt the password
-	$crypt = new Encryption;
- 	$key = $encryptkey;
- 	$pswdlen = "20";
- 	$password_encrypted = $crypt->encrypt($key, $password_form, $pswdlen);
+	// do not allow the user to have the characters: ',\" or \\ in password
+	$pw = array(); 	$nr = 0;	$pw1 = array();	$nr1 = 0;
+	while (isset($password_form{$nr})) // convert the string $password_form1 into an array $pw
+	{
+  	$pw[$nr] = $password_form{$nr};
+    $nr++;
+	}
+	while (isset($password_form1{$nr1})) // convert the string $password_form1 into an array $pw1
+	{
+  	$pw[$nr1] = $password_form1{$nr1};
+    $nr1++;
+	}
 	
-	if(mysql_query("UPDATE user
-        SET nom='$nom_form', prenom='$prenom_form',
-        username='$username_form', password='$password_encrypted', email='$email_form', am='$am_form',
-            perso='$persoStatus', lang='$userLanguage'
-        WHERE user_id='".$_SESSION["uid"]."'")){
-	header("location:". $_SERVER['PHP_SELF']."?msg=1");
-        }
-        
+  if( (in_array("'",$pw)) || (in_array("\"",$pw)) || (in_array("\\",$pw)) || (in_array("'",$pw1)) || (in_array("\"",$pw1)) || (in_array("\\",$pw1)) )
+	{
+		$tool_content .= "<tr bgcolor=\"".$color2."\">
+		<td bgcolor=\"$color2\" colspan=\"3\" valign=\"top\">
+		<br>Δεν επιτρέπονται στο password, οι χαρακτήρες: ',\" ή \\	<br /><br />
+		<a href=\"./newuser.php\">".$langAgain."</a></td></tr></table>";
+	}
+	else	// do the other checks
+	{
+	
+		$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
+	
+		// check if username exists
+	
+		$username_check=mysql_query("SELECT username FROM user WHERE username='".escapeSimple($username_form)."'");
+		while ($myusername = mysql_fetch_array($username_check)) 
+		{
+			$user_exist=$myusername[0];
+		}
+	
+		// check if passwds are the same
+	
+		if ($password_form1 !== $password_form) {
+			header("location:". $_SERVER['PHP_SELF']."?msg=2");
+		}
+	
+		// check if passwd is too easy
+	
+		elseif ((strtoupper($password_form1) == strtoupper($username_form))
+		|| (strtoupper($password_form1) == strtoupper($nom_form))
+		|| (strtoupper($password_form1) == strtoupper($prenom_form))
+		|| (strtoupper($password_form1) == strtoupper($email_form))) {
+			header("location:". $_SERVER['PHP_SELF']."?msg=3");
+		}
+	
+		// check if there are empty fields
+	
+		elseif (empty($nom_form) OR empty($prenom_form) OR empty($password_form1)
+		OR empty($password_form) OR empty($username_form) OR empty($email_form)) {
+			header("location:". $_SERVER['PHP_SELF']."?msg=4");
+		}
+	
+		// check if username is free
+		elseif(isset($user_exist) AND ($username_form==$user_exist) AND ($username_form!=$uname)) {
+			header("location:". $_SERVER['PHP_SELF']."?msg=5");
+		}
+	
+		// check if user email is valid
+	
+		elseif (!eregi($regexp, $email_form)) {
+			header("location:". $_SERVER['PHP_SELF']."?msg=6");
+		}
+	
+		// everything is ok
+		else {
+		##[BEGIN personalisation modification]############
+		if (!isset($persoStatus) || $persoStatus == "") $persoStatus = "no";
+		else  $persoStatus = "yes";
+		$userLanguage = $_REQUEST['userLanguage'];
+		
+		// encrypt the password
+		$crypt = new Encryption;
+	 	$key = $encryptkey;
+	 	$pswdlen = "20";
+	 	$password_encrypted = $crypt->encrypt($key, $password_form, $pswdlen);
+		$username_form = escapeSimple($username_form);
+		if(mysql_query("UPDATE user
+	        SET nom='$nom_form', prenom='$prenom_form',
+	        username='$username_form', password='$password_encrypted', email='$email_form', am='$am_form',
+	            perso='$persoStatus', lang='$userLanguage'
+	        WHERE user_id='".$_SESSION["uid"]."'")){
+		header("location:". $_SERVER['PHP_SELF']."?msg=1");
+	        }
+	        
+		}
 	}
 }	// if submit
 
@@ -132,8 +160,8 @@ if (isset($submit) && isset($ldap_submit) && ($ldap_submit == "ON")) {
 ##[END personalisation modification]############
 
 //Show message if exists
-if(isset($msg)) {
-
+if(isset($msg)) 
+{
 
 	switch ($msg){
 		case 1: { //logged out
@@ -226,10 +254,10 @@ session_unregister("pass");
 session_unregister("nom");
 session_unregister("prenom");
 
-$uname=$username_form;
-$pass=$password_form;
-$nom=$nom_form;
-$prenom=$prenom_form;
+$uname = $username_form;
+$pass = $password_form;
+$nom = $nom_form;
+$prenom = $prenom_form;
 
 session_register("uname");
 session_register("pass");
@@ -324,9 +352,12 @@ if ($myrow['inst_id'] > 0) 	// LDAP user:
 else		// Not LDAP user: 
 {		
 */
-	if (!isset($urlSecure)) {
+	if (!isset($urlSecure)) 
+	{
 		$sec = $urlServer.'modules/profile/profile.php';
-	} else {
+	} 
+	else 
+	{
 		$sec = $urlSecure.'modules/profile/profile.php';
 	}
 	$tool_content .= "<form method=\"post\" action=\"$sec?submit=yes\">
@@ -366,7 +397,6 @@ if(!in_array($password_form,$authmethods))
             $langPass
         </th>
         <td>";
-                
         	$crypt = new Encryption;
 					$key = $encryptkey;
 					$password_decrypted = $crypt->decrypt($key, $password_form);
@@ -404,7 +434,6 @@ else		// means that it is external auth method, so the user cannot change this p
         </td>
     </tr>";
 }
-
     
     $tool_content .= "<tr>
         <th width=\"150\">
@@ -440,22 +469,15 @@ else		// means that it is external auth method, so the user cannot change this p
 	$tool_content .= "
         <tr>
             <th>$langLanguage</th>
-            <td>
-                <input type='radio' name='userLanguage' value='el' $checkedLangEl>$langGreek<br>
+            <td><input type='radio' name='userLanguage' value='el' $checkedLangEl>$langGreek<br>
 				<input type='radio' name='userLanguage' value='en'  $checkedLangEn>$langEnglish
             </td>
-        </tr>
-";
+        </tr>";
 	$tool_content .= "
-    </thead>
-    </table>
-    <br>
-    <input type=\"Submit\" name=\"submit\" value=\"$langChange\">
+    </thead></table>
+    <br><input type=\"Submit\" name=\"submit\" value=\"$langChange\">
     </form>
-    <br>
-    <p><a href='../unreguser/unreguser.php'>$langUnregUser</a></p>
-    <br>
-    ";
+    <br><p><a href='../unreguser/unreguser.php'>$langUnregUser</a></p><br>";
 //}		// End of LDAP user added by adia
 #############################################################
 //$tool_content .=  "</td></tr><tr><td><br><hr noshade size=\"1\">";

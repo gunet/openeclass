@@ -44,8 +44,7 @@ include("include/baseTheme.php");
 //@include("./include/lib/main.lib.php");
 @include("./modules/auth/auth.inc.php");
 
-//$homePage is used by baseTheme.php
-//to parse correctly the breadcrumb.
+//$homePage is used by baseTheme.php to parse correctly the breadcrumb
 $homePage = true;
 
 $tool_content = "";
@@ -83,12 +82,17 @@ if ($persoIsActive) session_register("perso_is_active");
 // then authenticate user. First via LDAP then via MyQL
 // -----------------------------------------------------------------------
 $warning = '';
-$uname = isset($_POST['uname'])?$_POST['uname']:'';
+$uname = isset($_POST['uname'])?$_POST['uname']:'';	
 $pass = isset($_POST['pass'])?$_POST['pass']:'';
 $submit = isset($_POST['submit'])?$_POST['submit']:'';
 // $auth = get_auth_id();
 $auth = get_auth_active_methods();
 $is_eclass_unique = is_eclass_unique();
+
+//$tool_content .= "MAGIC QUOTES: ". get_magic_quotes_gpc() . "<br>";
+//$tool_content .= "POSTED VALUES: <br>username:".$uname . " --- password:".$pass."<br>";
+$uname = escapeSimple($uname);
+//$tool_content .= "POSTED VALUES(after addslashes - escapeSimpleSelect): <br>username:".$uname . " --- password:".$pass."<br>";
 
 if(!empty($submit))
 {
@@ -97,6 +101,7 @@ if(!empty($submit))
                 FROM user LEFT JOIN admin
                 ON user.user_id = admin.iduser
                 WHERE username='".$uname."'";
+  //$tool_content .= "<br>QUERY:".$sqlLogin."<br><br>";
 	$result=mysql_query($sqlLogin);
 	$check_passwords = array("pop3","imap","ldap","db");
 	$warning = "";
@@ -107,13 +112,20 @@ if(!empty($submit))
 		{
 			if(!in_array($myrow["password"],$check_passwords))
 			{
+				//$tool_content .= "encrypted password taken from db(myrow[password]): ".$myrow["password"]."<br>";
+				//$tool_content .= "encrypted password taken from db(myrow[password]) with stripslashes: ".$myrow["password"]."<br>";
 				// try to authenticate him via eclass
 				$crypt = new Encryption;
 				$key = $encryptkey;
 				$password_decrypted = $crypt->decrypt($key, $myrow["password"]);
+				//$tool_content .= "decrypted password taken from db:".$password_decrypted."<br>";
 				$errors = $crypt->errors;
 				$myrow["password"] = $password_decrypted;
-				if (($uname == $myrow["username"]) and ($pass == $myrow["password"]))
+				//$tool_content .= stripslashes($uname);
+				//$tool_content .= "uname:".$uname
+				//." == myrow[username]:".escapeSimpleSelect($myrow["username"])
+				//."<br>pass:".$pass." == "."myrow[password]:".escapeSimpleSelect($myrow["password"])."<br>";
+				if (($uname == escapeSimpleSelect($myrow["username"])) and ($pass == escapeSimpleSelect($myrow["password"])))
 				{
 					// check if his/her account is active
 					$is_active = check_activity($myrow["user_id"]);

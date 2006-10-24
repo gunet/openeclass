@@ -20,69 +20,89 @@ if($submit)
 	$usercomment = isset($_POST['usercomment'])?$_POST['usercomment']:'';
 	$department = isset($_POST['department'])?$_POST['department']:'';
 	$institut = isset($_POST['institut'])?$_POST['institut']:'NULL';
+	
+	// do not allow the user to have the characters: ',\" or \\ in password
+	$pw = array(); 	$nr = 0;
+	while (isset($password{$nr})) // convert the string $password into an array $pw
+	{
+  	$pw[$nr] = $password{$nr};
+    $nr++;
+	}
+  if( (in_array("'",$pw)) || (in_array("\"",$pw)) || (in_array("\\",$pw)) )
+	{
+		$tool_content .= "<tr bgcolor=\"".$color2."\">
+		<td bgcolor=\"$color2\" colspan=\"3\" valign=\"top\">
+		<br>Δεν επιτρέπονται στο password, οι χαρακτήρες: ',\" ή \\	<br /><br />
+		<a href=\"./newuser.php\">".$langAgain."</a></td></tr></table>";
+	}
+	else	// do the other checks
+	{
+		// Don't worry about figuring this regular expression out quite yet...// It will test for address@domainname and address@ip
+		$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
+		$emailtohostname = substr($email, (strrpos($email, "@") +1));
 		
-	// Don't worry about figuring this regular expression out quite yet...// It will test for address@domainname and address@ip
-	$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
-	$emailtohostname = substr($email, (strrpos($email, "@") +1));
+		// check if user name exists
+		$username_check=mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='".escapeSimple($uname)."'");
+		while ($myusername = mysql_fetch_array($username_check)) 
+		{
+			$user_exist=$myusername[0];
+		}
 	
-	// check if user name exists
-	$username_check=mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='$uname'");
-	while ($myusername = mysql_fetch_array($username_check)) 
-	{
-		$user_exist=$myusername[0];
-	}
-
-	// check if there are empty fields
-	if (empty($nom_form) or empty($prenom_form) or empty($password) or empty($usercomment) or empty($department) or empty($uname) or (empty($email_form) && !$userMailCanBeEmpty)) 
-	{
-		$tool_content .= "<p>$langEmptyFields</p>
-		<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
-	}
-	elseif(isset($user_exist) and $uname==$user_exist) 
-	{
-		$tool_content .= "<p>$langUserFree</p>
-		<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
-  }
-	elseif(!$userMailCanBeEmpty &&!eregi($regexp,$email)) // check if email syntax is valid
-	{
-        $tool_content .= "<p>$langEmailWrong.</p>
-		<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
-	}
-	else
-	{
-	
-		$s = mysql_query("SELECT id FROM faculte WHERE name='$department'");
-		$dep = mysql_fetch_array($s);
-		$registered_at = time();
- 		$expires_at = time() + $durationAccount;
- 		switch($password)
-				{
-					case 'pop3': $auth = 2; break;
-					case 'imap': $auth = 3; break;
-					case 'ldap': $auth = 4; break;
-					case 'db': $auth = 5; break;
-					default: $auth=1; break;
-				}
- 		
- 		if($auth==1)
- 		{		
-			$crypt = new Encryption;
-			$key = $encryptkey;
-			$pswdlen = "20";
-			$password_encrypted = $crypt->encrypt($key, $password, $pswdlen);
+		// check if there are empty fields
+		if (empty($nom_form) or empty($prenom_form) or empty($password) or empty($usercomment) or empty($department) or empty($uname) or (empty($email_form) && !$userMailCanBeEmpty)) 
+		{
+			$tool_content .= "<p>$langEmptyFields</p>
+			<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
+		}
+		elseif(isset($user_exist) and $uname==$user_exist) 
+		{
+			$tool_content .= "<p>$langUserFree</p>
+			<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
+	  }
+		elseif(!$userMailCanBeEmpty &&!eregi($regexp,$email)) // check if email syntax is valid
+		{
+	        $tool_content .= "<p>$langEmailWrong.</p>
+			<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
 		}
 		else
 		{
-			$password_encrypted = $password;
+		
+			$s = mysql_query("SELECT id FROM faculte WHERE name='$department'");
+			$dep = mysql_fetch_array($s);
+			$registered_at = time();
+	 		$expires_at = time() + $durationAccount;
+	 		switch($password)
+					{
+						case 'pop3': $auth = 2; break;
+						case 'imap': $auth = 3; break;
+						case 'ldap': $auth = 4; break;
+						case 'db': $auth = 5; break;
+						default: $auth=1; break;
+					}
+	 		
+	 		if($auth==1)
+	 		{		
+				$crypt = new Encryption;
+				$key = $encryptkey;
+				$pswdlen = "20";
+				$password_encrypted = $crypt->encrypt($key, $password, $pswdlen);
+			}
+			else
+			{
+				$password_encrypted = $password;
+			}
+			$uname = escapeSimple($uname);
+			$inscr_user=mysql_query("INSERT INTO `$mysqlMainDb`.user
+				(user_id, nom, prenom, username, password, email, statut, department, inst_id, registered_at, expires_at)
+				VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email_form','$statut','$dep[id]', '$institut', '$registered_at', '$expires_at')");
+			$last_id=mysql_insert_id();
+		        $tool_content .= "<p>$profsuccess</p>
+							<br><br>
+							<center><p><a href='../admin/listreq.php'>$langBackReq</a></p></center>";
 		}
-		$inscr_user=mysql_query("INSERT INTO `$mysqlMainDb`.user
-			(user_id, nom, prenom, username, password, email, statut, department, inst_id, registered_at, expires_at)
-			VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email_form','$statut','$dep[id]', '$institut', '$registered_at', '$expires_at')");
-		$last_id=mysql_insert_id();
-	        $tool_content .= "<p>$profsuccess</p>
-						<br><br>
-						<center><p><a href='../admin/listreq.php'>$langBackReq</a></p></center>";
+	
 	}
+	
 }
 else
 {

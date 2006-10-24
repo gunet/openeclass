@@ -21,99 +21,115 @@ $usercomment = isset($_POST['usercomment'])?$_POST['usercomment']:'';
 $department = isset($_POST['department'])?$_POST['department']:'';
 $userphone = isset($_POST['userphone'])?$_POST['userphone']:'';
 
-if(!empty($submit)) {
-	if (isset($email_form)) {
+if(!empty($submit)) 
+{
+	// do not allow the user to have the characters: ',\" or \\ in password
+	$pw = array(); 	$nr = 0;
+	while (isset($password{$nr})) // convert the string $password into an array $pw
+	{
+  	$pw[$nr] = $password{$nr};
+    $nr++;
+	}
+  if( (in_array("'",$pw)) || (in_array("\"",$pw)) || (in_array("\\",$pw)) )
+	{
+		$tool_content .= "<tr bgcolor=\"".$color2."\">
+		<td bgcolor=\"$color2\" colspan=\"3\" valign=\"top\">
+		<br>Δεν επιτρέπονται στο password, οι χαρακτήρες: ',\" ή \\	<br /><br />
+		<a href=\"./newuser.php\">".$langAgain."</a></td></tr></table>";
+	}
+	else	// do the other checks
+	{
+		if (isset($email_form)) 
+		{
 			// Don't worry about figuring this regular expression out quite yet...// It will test for address@domainname and address@ip
-		$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
-	}
-	// check if user name exists
-	$username_check=mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='$uname'");
-	while ($myusername = mysql_fetch_array($username_check)) 
-	{
-		$user_exist=$myusername[0];
-	}
-
-	// check if passwd is too easy
-	if ((strtoupper($password) == strtoupper($uname)) || (strtoupper($password) == strtoupper($nom_form))
-		|| (strtoupper($password) == strtoupper($prenom_form))) {
-			$tool_content .= "<p>$langPassTooEasy : 
-				<strong>".substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8)."</strong></p>
+			$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
+		}
+		// check if user name exists
+		$q1 = "SELECT username FROM `$mysqlMainDb`.user WHERE username='".escapeSimple($uname)."'";
+		$username_check=mysql_query($q1);
+		while ($myusername = mysql_fetch_array($username_check)) 
+		{
+			$user_exist=$myusername[0];
+		}
+	
+		// check if passwd is too easy
+		if ((strtoupper($password) == strtoupper($uname)) || (strtoupper($password) == strtoupper($nom_form))
+			|| (strtoupper($password) == strtoupper($prenom_form))) 
+		{
+				$tool_content .= "<p>$langPassTooEasy : 
+					<strong>".substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8)."</strong></p>
+					<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
+		}
+		// check if there are empty fields
+		elseif (empty($nom_form) or empty($prenom_form) or empty($password) or empty($usercomment) or empty($department) or empty($uname) or (empty($email_form))) 
+		{
+			$tool_content .= "<p>$langEmptyFields</p>
 			<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
-	}
-
-	// check if there are empty fields
-	elseif (empty($nom_form) or empty($prenom_form) or empty($password) or empty($usercomment) or empty($department) or empty($uname) or (empty($email_form))) 
-	{
-		$tool_content .= "<p>$langEmptyFields</p>
-		<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
-	}
-	elseif(isset($user_exist) and $uname==$user_exist) 
-	{
-		$tool_content .= "<p>$langUserFree</p>
-		<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
-  }
-	elseif(!eregi($regexp,$email_form)) // check if email syntax is valid
-	{
-        $tool_content .= "<p>$langEmailWrong.</p>
-				<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
-	}
-	else 		// registration is ok
-	{
-		// ------------------- Update table prof_request ------------------------------
-		$username = $uname;
-		$auth = $_POST['auth'];
-		if($auth!=1)
+		}
+		elseif(isset($user_exist) and $uname==$user_exist) 
 		{
-			switch($auth)
+			$tool_content .= "<p>$langUserFree</p>
+			<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
+	  }
+		elseif(!eregi($regexp,$email_form)) // check if email syntax is valid
+		{
+	        $tool_content .= "<p>$langEmailWrong.</p>
+					<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
+		}
+		else 		// registration is ok
+		{
+			$uname = escapeSimple($uname);	// escape the characters: simple and double quote
+			// ------------------- Update table prof_request ------------------------------
+			$username = $uname;
+			$auth = $_POST['auth'];
+			if($auth!=1)
 			{
-				case '2': $password = "pop3";
-					break;
-				case '3': $password = "imap";
-					break;
-				case '4':	$password = "ldap";
-					break;
-				case '5': $password = "db";
-					break;
-				default:	$password = "";
-					break;
+				switch($auth)
+				{
+					case '2': $password = "pop3";
+						break;
+					case '3': $password = "imap";
+						break;
+					case '4':	$password = "ldap";
+						break;
+					case '5': $password = "db";
+						break;
+					default:	$password = "";
+						break;
+				}
 			}
-		}
-		
-		$usermail = $email_form;
-		$surname = $nom_form;
-		$name = $prenom_form;
-		
-		mysql_select_db($mysqlMainDb,$db);
-		$sql = "INSERT INTO prof_request(profname,profsurname,profuname,profpassword,
-		profemail,proftmima,profcomm,status,date_open,comment) VALUES(
-		'$name','$surname','$username','$password','$usermail','$department','$userphone','1',NOW(),'$usercomment')";
-		$upd=mysql_query($sql,$db);
-		//----------------------------- Email Message --------------------------
-	    $MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" .
-				$mailbody3 . $mailbody4 . $mailbody5 . "$mailbody6\n\n" .
-				"$langDepartment: $department\n$profcomment: $usercomment\n" .
-				"$profuname : $username\n$profemail : $usermail\n" .
-				"$contactphone : $userphone\n\n\n$logo\n\n";
-		if (!send_mail($gunet, $emailhelpdesk, '', $emailhelpdesk, $mailsubject, $MailMessage, $charset)) 
-		{
+			
+			$usermail = $email_form;
+			$surname = $nom_form;
+			$name = $prenom_form;
+			
+			mysql_select_db($mysqlMainDb,$db);
+			$sql = "INSERT INTO prof_request(profname,profsurname,profuname,profpassword,
+			profemail,proftmima,profcomm,status,date_open,comment) VALUES(
+			'$name','$surname','$username','$password','$usermail','$department','$userphone','1',NOW(),'$usercomment')";
+			$upd=mysql_query($sql,$db);
+			//----------------------------- Email Message --------------------------
+		    $MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" . $mailbody3 
+		    . $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langDepartment: $department\n$profcomment: $usercomment\n" 
+		    . "$profuname : $username\n$profemail : $usermail\n" . "$contactphone : $userphone\n\n\n$logo\n\n";
+			if (!send_mail($gunet, $emailhelpdesk, '', $emailhelpdesk, $mailsubject, $MailMessage, $charset)) 
+			{
+				$tool_content .= "<table width=\"$mainInterfaceWidth\">
+	        	<tr bgcolor=$color2><td><br /><br />$langMailErrorMessage
+						<a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a>.
+			        <br /><br /><br /></td></tr></table>";
+				draw($tool_content,0);
+				exit();
+			}
+	
+			//------------------------------------User Message ----------------------------------------
 			$tool_content .= "<table width=\"$mainInterfaceWidth\">
-        	<tr bgcolor=$color2><td>
-                <br /><br />$langMailErrorMessage
-			<a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a>.
-		        <br /><br /><br />
-			</td></tr>
-			</table>";
-			draw($tool_content,0);
-		exit();
-		}
-
-		//------------------------------------User Message ----------------------------------------
-		$tool_content .= "<table width=\"$mainInterfaceWidth\">
-		<tr bgcolor=$color2><td>
-				<br /><br />$dearprof<br /><br />$success<br /><br>$infoprof<br /><br />				
-				$click <a href=\"$urlServer\">$here</a> $backpage
-	      </font><br /><br /><br /></td></tr></table>";
-	} 
+			<tr bgcolor=$color2><td>
+					<br /><br />$dearprof<br /><br />$success<br /><br>$infoprof<br /><br />				
+					$click <a href=\"$urlServer\">$here</a> $backpage
+		      </font><br /><br /><br /></td></tr></table>";
+		} 
+	}
 }
 else 
 {
