@@ -584,8 +584,8 @@ foreach ($flatElementList as $module)
     else
         $tool_content .= clean_str_for_javascript($langAreYouSureToRemoveStd);
 
-    $tool_content .=   "');\"
-    ><img src=\"".$imgRepositoryWeb."delete.gif\" border=0 alt=\"".$langRemove."\"></a>
+    $tool_content .=   "');\">
+    <img src=\"".$imgRepositoryWeb."delete.gif\" border=0 alt=\"".$langRemove."\"></a>
        </td>";
 
     // LOCK
@@ -678,14 +678,14 @@ foreach ($flatElementList as $module)
 
 $tool_content .= "</tbody>";
 
-$tool_content .= "<tfoot>";
 
 if ($atleastOne == false)
 {
-    $tool_content .= "<tr><td align=\"center\" colspan=\"7\">".$langNoModule."</td></tr>";
+    $tool_content .= "<tfoot>";
+    $tool_content .= "<tr><td align=\"center\" colspan=\"9\">".$langNoModule."</td></tr>";
+    $tool_content .= "</tfoot>";
 }
 
-$tool_content .= "</tfoot>";
 $tool_content .= "</table>";
 
 draw($tool_content, 2, "learnPath", $head_content);
