@@ -53,7 +53,6 @@ $action->record('MODULE_ID_CHAT');
 $head_content='
 
 
-<meta http-equiv="refresh" content="400; url=\''.$_SERVER['PHP_SELF'].'\'">
 
 <script type="text/javascript" src="js/prototype-1.4.0.js"></script>
 <script type="text/javascript" src="js/media_player.js"></script>
