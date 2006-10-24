@@ -39,7 +39,7 @@
   * Make table with general platform information
   * ophelia neofytou - 2006/09/26
   */
- @include("./modules/lang/$language/admin.inc.php");
+/* @include("./modules/lang/$language/admin.inc.php");
  @include("./modules/lang/$language/about.inc.php");
 
 //find uptime
@@ -95,7 +95,7 @@ $tool_content .= "<tr><th>".$langInfo."</th></tr></thead><tbody>".
            
  $tool_content .= "</td></tr></tbody></table><br>";
 ###### end of table with platform information
- 
+ */
 
 $tool_content .= "<table width=\"99%\"><thead>";
 $result2 = mysql_query("SELECT cours.code k, cours.fake_code c, cours.intitule i, cours.titulaires t, cours_user.statut s

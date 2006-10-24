@@ -191,6 +191,10 @@ function loggedInMenu(){
 		array_push($sideMenuText, $langModifyProfile);
 		array_push($sideMenuLink, $urlServer . "modules/profile/profile.php");
 		array_push($sideMenuImg, "profile.gif");
+		
+		array_push($sideMenuText, $langMyStats);
+		array_push($sideMenuLink, $urlServer . "modules/profile/personal_stats.php");
+		array_push($sideMenuImg, "platform_stats.gif");
 
 		array_push($sideMenuText, $langSearch);
 		array_push($sideMenuLink, $urlServer."modules/search/search.php");

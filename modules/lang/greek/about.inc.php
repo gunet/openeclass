@@ -17,6 +17,11 @@ $langAboutCourses = "Στην πλατφόρμα υπάρχουν συνολικά";
 $langAboutCourses2 = "από τα οποία";
 $langAboutUsers = "H πλατφόρμα έχει εγγεγραμμένους";
 
+#For the logged-out user:
+$langAboutCourses1 = "Αυτή τη στιγμή, η πλατφόρμα διαθέτει συνολικά";
+$langAboutUsers1 = "Οι εγγεγραμένοι χρήστες είναι ";
+$langLast30daysLogins1 = "και οι συνολικές προσβάσεις στην πλατφόρμα τις τελευταίες 30 μέρες είναι ";
+
 $langProf = "Καθηγητές";
 $langStud = "Φοιτητές";
 $langGuest = "Επισκέπτες Φοιτητές";

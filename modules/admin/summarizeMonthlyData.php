@@ -84,14 +84,32 @@
         
         
         $mtext = "<table>";
-        $mtext .= "<tr><th>".$langCourse."</th><th>".$langDepartment."</th><th>".$langProf. "</th><th>".$langNbUsers."</th></tr>";
+        $mtext .= "<tr><th>".$langCourse."</th><th>".$langCoursVisible."</th><th>".$langCoursType."</th><th>".$langDepartment."</th><th>".$langProf. "</th><th>".$langNbUsers."</th></tr>";
 
         
-        $sql = "SELECT cours.intitule AS name, cours.faculte as dept, cours.titulaires as proff, count(user_id) AS cnt FROM cours_user LEFT JOIN cours ON ".
+        $sql = "SELECT cours.intitule AS name, cours.visible as visible, cours.type as type, cours.faculte as dept, cours.titulaires as proff, count(user_id) AS cnt FROM cours_user LEFT JOIN cours ON ".
             " cours.code = cours_user.code_cours GROUP BY code_cours ";
         $result = db_query($sql, $mysqlMainDb);
         while ($row = mysql_fetch_assoc($result)) {
-            $mtext .= "<tr><td>".$row['name']."</td><td> ".$row['dept']."</td><td>".$row['proff']."</td><td>".$row['cnt']."</td></tr>";
+            //declare course type
+            if ($row['type'] == 'pre') {
+              $ctype = $langPre;
+            }
+            else {
+              $ctype = $langPost;
+            }
+            //declare visibility
+            if ($row['visible'] == 0) {
+              $cvisible = $langHidden;
+            }
+            else if ($row['visible']==1) {
+              $cvisible = $langVis_enrol;
+            }
+            else {
+                $cvisible = $langVisible;
+            }
+            
+            $mtext .= "<tr><td>".$row['name']."</td><td> ".$cvisible."</td><td> ".$ctype."</td><td> ".$row['dept']."</td><td>".$row['proff']."</td><td>".$row['cnt']."</td></tr>";
         }
         mysql_free_result($result);
         $mtext .= '</table>';

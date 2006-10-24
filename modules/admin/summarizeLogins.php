@@ -28,7 +28,7 @@
     $maxstmp = strtotime($max_date);
     
 
-    if ( $minstmp + 62*24*3600 < $maxstmp ) { //data more than two months old
+    if ( $minstmp + 243*24*3600 < $maxstmp ) { //data more than eight months old
 
         $end_stmp = strtotime($min_date)+ 31*24*60*60;  //min time + 1 month
         $start_date = $min_date;

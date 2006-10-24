@@ -329,6 +329,7 @@ if (isset($language)) {
 }
 $nameTools = $langWelcomeToEclass;
 
+
 //----------------------------------------------------------------
 // if login succesful display courses lists
 // --------------------------------------------------------------
@@ -337,6 +338,7 @@ if (isset($uid) AND !isset($logout)) {
 
 	$require_help = true;
 	$helpTopic="Clar2";
+
 	
 	if (!session_is_registered("user_perso_active")) {
 		//load classic view

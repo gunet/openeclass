@@ -56,6 +56,9 @@ $langLast30Days ="Τελευταίες 30 μέρες";
 $langNbAnnoucement = "Αριθμός ανακοινώσεων";
 $langProf = "Καθηγητές";
 $langNbUsers = "Αριθμός χρηστών";
+$langCoursVisible = "Ορατότητα";
+$langCoursType = "Τύπος";
+
 
 $langBaseFound ="Βρέθηκε<br>Έλεγχος πινάκων της βάσης";
 

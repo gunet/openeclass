@@ -32,6 +32,7 @@
  $langGDRequired = "The GD library is required!";
  $langUsage = "Usage Statistics";
  $langNoStatistics = "There are no visits.";
+ $langPersonalStats="My statistics";
  $langStartDate = "Start Date";
  $langEndDate = "End Date";
  $langUser = "User";
@@ -86,6 +87,11 @@
  $langMonths['10'] = "October";
  $langMonths['11'] = "November";
  $langMonths['12'] = "December";
+ $langPre = "Undergraduate";
+ $langPost = "Postgraduate";
+ $langHidden = "Closed";
+ $langVis_enrol = "Open with enrollment";
+ $langVisible = "Open";
  
  #for platform Statistics
  $langUsersCourse = "Users per course";

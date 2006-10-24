@@ -118,7 +118,7 @@ if (isset($_POST["selectedMonth"])) {
              <br> '.$langNbLogin.': <b>'.$logins.'</b>
 
             
-          <p>&nbsp;</p>'.$details. '</td></tr></table>';
+          <p>&nbsp;</p>'.$details. '</td></tr></table>';  //$details includes an html table with all details
           
     }
     else {

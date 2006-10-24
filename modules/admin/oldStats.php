@@ -34,7 +34,7 @@ $tool_content .=  "<a href='statClaro.php'>".$langPlatformGenStats."</a> <br> ".
           "<p>&nbsp</p>";
 
 
-//move data from table 'loginout' to 'loginout_summary' if older than two months
+//move data from table 'loginout' to 'loginout_summary' if older than eight months
 require_once "summarizeLogins.php";
 
 #see if chart has content

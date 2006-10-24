@@ -32,6 +32,7 @@
  $langGDRequired = "Απαιτείται η βιβιλιοθήκη GD!";
  $langUsage = "Στατιστικά Χρήσης";
  $langNoStatistics = "Δεν υπάρχουν επισκέψεις.";
+ $langPersonalStats="Τα στατιστικά μου";
  
  $langStartDate = "Ημερομηνία Έναρξης";
  $langEndDate = "Ημερομηνία Λήξης";
@@ -87,8 +88,11 @@
  $langMonths['10'] = "Οκτώβριο";
  $langMonths['11'] = "Νοέμβριο";
  $langMonths['12'] = "Δεκέμβριο";
- 
- 
+ $langPre = "Προπτυχιακό";
+ $langPost = "Μεταπτυχιακό";
+ $langHidden = "Κλειστό";
+ $langVis_enrol = "Ανοικτό με εγγραφή";
+ $langVisible = "Ανοικτό";
  
  #for platform Statistics
  $langUsersCourse = "Χρήστες ανά μάθημα";

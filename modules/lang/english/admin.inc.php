@@ -85,6 +85,8 @@ $langLast7Days ="Last 7 days";
 $langLast30Days ="Last 30 days";
 $langProf = "Professors";
 $langNbUsers = "Number of users";
+$langCoursVisible = "Visibility";
+$langCoursType = "Type";
 
 $langNbAnnoucement = "Number of announcements";
 
