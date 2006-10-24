@@ -676,7 +676,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
 $tool_content .= "</tbody>\n<tfoot>";
 
 if( $iterator == 1 ) {
-      $tool_content .= "<tr><td align=\"center\" colspan=\"8\">".$langNoLearningPath."</td></tr>";
+      $tool_content .= "<tr><td align=\"center\" colspan=\"9\">".$langNoLearningPath."</td></tr>";
 }
 elseif (!$is_adminOfCourse && $iterator != 1 && $uid) {
     // add a blank line between module progression and global progression

@@ -1510,11 +1510,11 @@ mysql_query("INSERT INTO group_properties
 mysql_query("CREATE TABLE `lp_module` (
               `module_id` int(11) NOT NULL auto_increment,
               `name` varchar(255) NOT NULL default '',
-              `comment` text NOT NULL,
+              `comment` text NULL default NULL,
               `accessibility` enum('PRIVATE','PUBLIC') NOT NULL default 'PRIVATE',
               `startAsset_id` int(11) NOT NULL default '0',
               `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','LABEL','COURSE_DESCRIPTION','LINK') NOT NULL,
-              `launch_data` text NOT NULL,
+              `launch_data` text NULL default NULL,
               PRIMARY KEY  (`module_id`)
              ) TYPE=MyISAM DEFAULT CHARSET=greek");
              //COMMENT='List of available modules used in learning paths';
@@ -1537,7 +1537,7 @@ mysql_query("CREATE TABLE `lp_rel_learnPath_module` (
                 `module_id` int(11) NOT NULL default '0',
                 `lock` enum('OPEN','CLOSE') NOT NULL default 'OPEN',
                 `visibility` enum('HIDE','SHOW') NOT NULL default 'SHOW',
-                `specificComment` text NOT NULL,
+                `specificComment` text NULL default NULL,
                 `rank` int(11) NOT NULL default '0',
                 `parent` int(11) NOT NULL default '0',
                 `raw_to_pass` tinyint(4) NOT NULL default '50',
@@ -1916,11 +1916,11 @@ mysql_query("INSERT INTO group_properties
 mysql_query("CREATE TABLE `lp_module` (
               `module_id` int(11) NOT NULL auto_increment,
               `name` varchar(255) NOT NULL default '',
-              `comment` text NOT NULL,
+              `comment` text NULL default NULL,
               `accessibility` enum('PRIVATE','PUBLIC') NOT NULL default 'PRIVATE',
               `startAsset_id` int(11) NOT NULL default '0',
-              `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','LABEL','COURSE_DESCRIPTION') NOT NULL,
-              `launch_data` text NOT NULL,
+              `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','LABEL','COURSE_DESCRIPTION','LINK') NOT NULL,
+              `launch_data` text NULL default NULL,
               PRIMARY KEY  (`module_id`)
              ) TYPE=MyISAM");
              //COMMENT='List of available modules used in learning paths';
@@ -1943,7 +1943,7 @@ mysql_query("CREATE TABLE `lp_rel_learnPath_module` (
                 `module_id` int(11) NOT NULL default '0',
                 `lock` enum('OPEN','CLOSE') NOT NULL default 'OPEN',
                 `visibility` enum('HIDE','SHOW') NOT NULL default 'SHOW',
-                `specificComment` text NOT NULL,
+                `specificComment` text NULL default NULL,
                 `rank` int(11) NOT NULL default '0',
                 `parent` int(11) NOT NULL default '0',
                 `raw_to_pass` tinyint(4) NOT NULL default '50',
