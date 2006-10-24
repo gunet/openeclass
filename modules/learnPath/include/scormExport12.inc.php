@@ -917,7 +917,7 @@ class ScormExport
          */
         function createDescFrameFile($fileName)
         {
-            global $langErrorCreatingFrame, $langErrorCreatingManifest, $charset;
+            global $langErrorCreatingFrame, $langErrorCreatingManifest, $langThisCourseDescriptionIsEmpty, $charset;
             
             if ( !($f = fopen($fileName, 'w')) )
             {
