@@ -177,7 +177,7 @@ function match_arrays($search_terms_array, $mycours_string)
 		if(!empty($search_terms_array) || $search_terms_array != "" || !empty($mycours_string) || $mycours_string != "")
 		{
 			//echo "compare: ".$search_terms_array." == ".$mycours_string;
-			$ret = stripos($mycours_string, $search_terms_array);
+			$ret = my_stripos($mycours_string, $search_terms_array);
 			//if($ret == 0) echo " MATCH!<br>";
 			//echo "<br> RET: ".$ret;
 			if($ret !== FALSE) return TRUE;
@@ -188,7 +188,7 @@ function match_arrays($search_terms_array, $mycours_string)
 	return FALSE;
 }
 
-function stripos($string, $word)
+function my_stripos($string, $word)
 {
    $retval = false;
    for($i=0;$i<=strlen($string);$i++)
