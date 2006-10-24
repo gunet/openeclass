@@ -283,6 +283,7 @@ if (!extension_loaded('gd')) {
     $qry = "SELECT LEFT(intitule, 1) AS first_letter FROM cours
             GROUP BY first_letter ORDER BY first_letter";
     $result = db_query($qry, $mysqlMainDb);
+    $letterlinks='';
     while ($row = mysql_fetch_assoc($result)) {
         $first_letter = $row['first_letter'];
         $letterlinks .= '<a href="?first='.$first_letter.'">'.$first_letter.'</a> ';
@@ -346,7 +347,7 @@ if (!extension_loaded('gd')) {
 
 draw($tool_content, 3, 'admin', $local_head, '');
 
-
+/*
 if ($made_chart) {
 
         while (ob_get_level() > 0) {
@@ -357,6 +358,6 @@ if ($made_chart) {
     sleep(5);
     unlink ($webDir.$chart_path);
 }
-
+*/
 
 ?>

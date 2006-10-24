@@ -174,7 +174,7 @@ if (!extension_loaded('gd')) {
 
 draw($tool_content, 3, 'admin', $local_head, '');
 
-
+/*
 if ($made_chart) {
 
 		while (ob_get_level() > 0) {
@@ -185,5 +185,5 @@ if ($made_chart) {
     sleep(5);
     unlink ($webDir.$chart_path);
 }
-
+*/
 ?>

@@ -23,6 +23,7 @@ $end_cal = $jscalendar->make_input_field(
     $qry = "SELECT LEFT(nom, 1) AS first_letter FROM user
             GROUP BY first_letter ORDER BY first_letter";
     $result = db_query($qry, $mysqlMainDb);
+    $letterlinks = '';
     while ($row = mysql_fetch_assoc($result)) {
         $first_letter = $row['first_letter'];
         $letterlinks .= '<a href="?first='.$first_letter.'">'.$first_letter.'</a> ';

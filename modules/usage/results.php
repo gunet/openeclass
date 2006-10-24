@@ -38,7 +38,8 @@ $date_what  = "DATE_FORMAT(MIN(date_time), '$date_fmt') AS date_start, DATE_FORM
 
 switch ($u_interval) {
     case "summary":
-        $date_group = '';
+        $date_group = '1';
+        $date_what ='1';
     break;
     case "daily":
         $date_what .= ", DATE_FORMAT(date_time, '$date_fmt') AS date ";
@@ -75,11 +76,11 @@ switch ($u_stats_value) {
     
         switch ($u_interval) {
             case "summary":
-                $count=0;
-                 
+                 while ($row = mysql_fetch_assoc($result)) {
                     $chart->addPoint(new Point("Summary", $row['cnt']));
                     $chart->width += 25;
                     $chart_content=1;
+                    }
             break;
             case "daily":
                 

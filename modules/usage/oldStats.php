@@ -253,7 +253,7 @@ $local_head = $jscalendar->get_load_files_code();
 
 
 draw($tool_content, 2, '', $local_head, '');
-
+/*
 if ($made_chart) {
 		while (ob_get_level() > 0) {
     	 ob_end_flush();
@@ -263,5 +263,5 @@ if ($made_chart) {
     sleep(5);
     unlink ($webDir.$chart_path);
 }
-
+*/
 ?>
