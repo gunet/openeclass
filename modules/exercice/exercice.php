@@ -151,24 +151,24 @@ else
 $nbrExercises=mysql_num_rows($result);
 
 
-$tool_content .= "<table border=\"0\" align=\"center\" cellpadding=\"2\" cellspacing=\"2\" width=\"95%\"><tr>";
+//$tool_content .= "<table border=\"0\" align=\"center\" cellpadding=\"2\" cellspacing=\"2\" width=\"95%\"><tr>";
 
 
 if($is_allowedToEdit)
 {
 
   $tool_content .= <<<cData
-  	<td width="80%">
-		<a href="admin.php">${langNewEx}</a> |
-	<a href="question_pool.php">${langQuestionPool}</a>
-  </td>
-  <td width="50%" align="right">
+  	<!--<td width="80%">aaaaaa-->
+		<p><a href="admin.php">${langNewEx}</a> |
+	<a href="question_pool.php">${langQuestionPool}</a></p>
+  <!--</td>
+  <td width="50%" align="right">-->
 cData;
 
 }
 else 
 { 
-	$tool_content .= "<td align=\"right\">";
+	$tool_content .= "<!--<td align=\"right\">-->";
 }
 
 if(isset($page))
@@ -201,10 +201,12 @@ elseif(isset($page))
 }
 
 $tool_content .= <<<cData
-	</td>
+	<!--</td>
 	</tr>
-	</table>
+	</table>--><br>
 	<table border="0" align="center" cellpadding="2" cellspacing="2" width="95%">
+		<thead>
+   		<tr>
 cData;
 
 // shows the title bar only for the administrator
@@ -212,23 +214,23 @@ if($is_allowedToEdit)
 {
 
 $tool_content .= <<<cData
-	<tr bgcolor="#E6E6E6">
-	  <td align="center">
+	<!--<tr bgcolor="#E6E6E6">-->
+	  <th>
 			${langExerciseName}
-	  </td>
-	  <td align="center">
+	  </th>
+	  <th>
 			${langModify}
-	  </td>
-	  <td align="center">
+	  </th>
+	  <th>
 			${langDelete}
-	  </td>
-	  <td align="center">
+	  </th>
+	  <th>
 			${langActivate} / ${langDeactivate}
-	  </td>
-	  <td align="center">
+	  </th>
+	  <th>
 			${langResults}
-	  </td>
-	</tr>
+	  </th>
+	</tr></thead>
 cData;
 
 }
@@ -256,11 +258,10 @@ $tool_content .= "<tr>";
 	$page_temp = ($i+(@$page*$limitExPage)).'.';
   $tool_content .= <<<cData
 	  <td width="60%">
-		<table border="0" cellpadding="0" cellspacing="0" width="95%">
-		<tr>
-		<td width="20" align="right">${page_temp}</td>
-		  <td width="1">&nbsp;</td>
-		  <td><a href="exercice_submit.php?exerciseId=${row['id']}" 
+		<!--<table border="0" cellpadding="0" cellspacing="0" width="95%"><tr>
+		<td width="20" align="right">-->${page_temp}<!--</td>-->
+		  <!--<td width="1">-->&nbsp;<!--</td>-->
+		  <!--<td>--><a href="exercice_submit.php?exerciseId=${row['id']}" 
 cData;
 
 	if(!$row['active']) 
@@ -271,7 +272,7 @@ cData;
 	$langConfirmYourChoice_temp = addslashes(htmlspecialchars($langConfirmYourChoice));
 	$langDelete_temp = htmlspecialchars($langDelete);
 	$tool_content .= <<<cData
-		</tr></table></td>
+		<!--/tr></table>--></td>
 	  <td width="10%" align="center"><a href="admin.php?exerciseId=${row['id']}">
 	  <img src="../../template/classic/img/edit.gif" border="0" alt="${langModify_temp}"></a></td>
 	  <td width="10%" align="center">
