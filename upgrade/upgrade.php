@@ -922,6 +922,13 @@ while ($code = mysql_fetch_row($res)) {
                 'MODULE_ID_USAGE')", $code[0]);
 
 
+    //remove old statistics module
+    db_query("DELETE FROM accueil WHERE rubrique='Στατιστικά'", $code[0]);
+
+    //... and remove table for the old statistics module
+    db_query("DROP TABLE IF EXISTS stat_accueil");
+
+
 	//for tool management
 	$langToolManagement = "Διαχείριση εργαλείων";
 	db_query("INSERT IGNORE INTO accueil VALUES (
@@ -934,6 +941,8 @@ while ($code = mysql_fetch_row($res)) {
                 '../../../images/pastillegris.png',
                 'MODULE_ID_TOOLADMIN'
                 )", $code[0]);
+
+
 
 
 
@@ -1130,7 +1139,7 @@ while ($code = mysql_fetch_row($res)) {
 	db_query($sql, $code[0]);
 
 	// table stat_accueil
-	$sql = db_query("SELECT id,request FROM stat_accueil");
+/*	$sql = db_query("SELECT id,request FROM stat_accueil");
 	while ($u = mysql_fetch_row($sql))  {
 		$old_request = $u[1];
 		$new_request = preg_replace('#'.$code[0].'/#','courses/'.$code[0].'/', $old_request);
@@ -1140,7 +1149,7 @@ while ($code = mysql_fetch_row($res)) {
 			$tool_content .= "Εγγραφή με id $u[0] του πίνακα <b>stat_accueil</b>: $BAD<br>";
 			$errors++;
 		}
-	}
+	}*/
 
 	// remove table 'introduction' entries and insert them in table 'cours' (field 'description') in eclass main database
 	// after that drop table introduction
