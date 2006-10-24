@@ -384,6 +384,22 @@ if((!isset($encryptkey)) || (empty($encryptkey)))
 		while($row = mysql_fetch_array($res))
 		{
 			$pass = $row["password"];
+			
+			
+			// do not allow the user to have the characters: ',\" or \\ in password
+			$pw = array(); 	$nr = 0;
+			while (isset($pass{$nr})) // convert the string $password into an array $pw
+			{
+  			$pw[$nr] = $pass{$nr};
+    		$nr++;
+			}
+  		if( (in_array("'",$pw)) || (in_array("\"",$pw)) || (in_array("\\",$pw)) )
+			{
+				$tool_content .= "NO PASSWORD UPDATE for user with id=".$row["user_id"]." (invalid characters in password)<br />";
+				continue; // get the next one
+			}
+			
+			
 			$newpass = $crypt->encrypt($key1, $pass, $pswdlen);
 			if(!in_array($pass,$auth_methods))
 			{
