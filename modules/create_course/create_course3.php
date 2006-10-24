@@ -1068,7 +1068,7 @@ mysql_query("CREATE TABLE accueil (
         'MODULE_ID_USERS'
         )");
 
-    mysql_query("INSERT INTO accueil VALUES (
+/*    mysql_query("INSERT INTO accueil VALUES (
                '11',
                '$langStatistics',
                '../../modules/stat/index2.php?table=stat_accueil&reset=0&period=jour',
@@ -1078,6 +1078,7 @@ mysql_query("CREATE TABLE accueil (
                '',
                'MODULE_ID_STAT'
                )");
+*/
 
 /*
     mysql_query("INSERT INTO accueil VALUES (
@@ -1388,10 +1389,9 @@ mysql_query("INSERT INTO group_properties
     (id, self_registration, private, forum, document, wiki, agenda)
     VALUES (NULL, '1', '0', '1', '1', '0', '0')");
 
-
 ####################STATISTIQUES ################################################
-
-    mysql_query("CREATE TABLE stat_accueil (
+/// old statistics tool
+/*    mysql_query("CREATE TABLE stat_accueil (
                id int(11) NOT NULL auto_increment,
                request char(100) NOT NULL,
                host char(100) NOT NULL,
@@ -1406,7 +1406,7 @@ mysql_query("INSERT INTO group_properties
                PRIMARY KEY (id),
                KEY id (id))
         TYPE=MyISAM DEFAULT CHARSET=greek");
-
+*/
 #################### QUESTIONNAIRE ###############################################
 
     mysql_query("CREATE TABLE survey (
@@ -1421,6 +1421,7 @@ mysql_query("INSERT INTO group_properties
       active int(11) NOT NULL default '0',
       PRIMARY KEY  (sid))
     TYPE=MyISAM DEFAULT CHARSET=greek");
+
 
     mysql_query("CREATE TABLE survey_answer (
         aid bigint(12) NOT NULL default '0',
@@ -1791,10 +1792,9 @@ mysql_query("INSERT INTO group_properties
     (id, self_registration, private, forum, document, wiki, agenda)
     VALUES (NULL, '1', '0', '1', '1', '0', '0')");
 
-
 ####################STATISTIQUES ################################################
-
-    mysql_query("CREATE TABLE stat_accueil (
+/* old statistics tool
+     mysql_query("CREATE TABLE stat_accueil (
                id int(11) NOT NULL auto_increment,
                request char(100) NOT NULL,
                host char(100) NOT NULL,
@@ -1810,7 +1810,7 @@ mysql_query("INSERT INTO group_properties
                KEY id (id))
         TYPE=MyISAM");
 
-
+*/
 #################### SURVEY ###############################################
 
     mysql_query("CREATE TABLE survey (
