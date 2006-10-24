@@ -303,7 +303,7 @@ function new_assignment()
 	$month	= date("m");
 	$year	= date("Y");
 
-	$tool_content .= "<form action=\"work.php\" method=\"post\"><table width=\"95%\"><tr><td>".
+	$tool_content .= "<form action=\"work.php\" method=\"post\"><table  width=\"95%\"><tr><td>".
 		$m['title'].":</td><td><input type=\"text\" name=\"title\" size=\"55\"></td></tr><tr><td>".
 		$m['description'].":</td><td>".
 		"<textarea id=\"ta\" name=\"desc\" value=\"$desc\" style=\"width:100%\" rows=\"20\" cols=\"80\">";
@@ -376,7 +376,7 @@ $tool_content .= <<<cData
 	<form action="work.php" method="post">
 	<input type="hidden" name="id" value="$id">
 	<input type="hidden" name="choice" value="do_edit">
-	<table width="95%">
+	<table width="95%" >
 	<tr><td>${m['title']}:</td>
 	<td><input type="text" name="title" size="55" value="${row['title']}" style="width: 100%"></td></tr>
 <tr><td>${m['description']}:</td>
@@ -843,7 +843,7 @@ function show_assignments()
 		
 		$tool_content .= <<<cData
 			<table border="0" align="center" cellpadding="2" cellspacing="2" width="95%">
-				<tr bgcolor="#E6E6E6">
+				<thead><tr>
 					<th align="center">${m['title']}</th>
 			  <th align="center">
 				${m['deadline']}
@@ -857,7 +857,7 @@ function show_assignments()
 			  <th align="center">
 				${m['activate']} / ${m['deactivate']}
 			  </th>
-			</tr>
+			</tr></thead>
 cData;
 
 	while ($row = mysql_fetch_array($result)) {
@@ -868,10 +868,16 @@ cData;
 		$hasUnevaluatedSubmissions = $row_s[0];
 		//echo $hasUnevaluatedSubmissions;
 	
-	$tool_content .= "<tr><td><a href=\"work.php?id=${row['id']}\" "; 
+	if(!$row['active']) {
+		$visibility_css = " class=\"invisible\" "; 
+	} else {
+		$visibility_css = " ";
+	}
+
+$tool_content .= "<tbody><tr ".$visibility_css."><td><a href=\"work.php?id=${row['id']}\" "; 
 	
-	if(!$row['active']) 
-		$tool_content .= "class=\"invisible\" ";
+//	if(!$row['active']) 
+//		$tool_content .= "class=\"invisible\" ";
 	$tool_content .= " >";
 
 	if ($hasUnevaluatedSubmissions) 
@@ -882,10 +888,10 @@ cData;
        
 	$tool_content .= <<<cData
 		</a></td>
-    <td align="center">${row['deadline']}</td>
-    <td align="center"><a href="work.php?id=${row['id']}&choice=edit"><img src="../../template/classic/img/edit.gif" border="0" alt="${m['edit']}"></a></td>
-    <td align="center"><a href="work.php?id=${row['id']}&choice=delete"><img src="../../template/classic/img/delete.gif" border="0" alt="${m['delete']}"></a></td>
-    <td width="10%" align="center">
+    <td $visibility_css align="center">${row['deadline']}</td>
+    <td $visibility_css align="center"><a href="work.php?id=${row['id']}&choice=edit"><img src="../../template/classic/img/edit.gif" border="0" alt="${m['edit']}"></a></td>
+    <td $visibility_css align="center"><a href="work.php?id=${row['id']}&choice=delete"><img src="../../template/classic/img/delete.gif" border="0" alt="${m['delete']}"></a></td>
+    <td $visibility_css width="10%" align="center">
 cData;
     if($row['active']) {
     	$deactivate_temp = htmlspecialchars($m['deactivate']);
@@ -897,7 +903,7 @@ cData;
     	$tool_content .= "<a href=\"work.php?choice=enable&id=${row['id']}\">".
 	  		"<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" alt=\"${activate_temp}\"></a>";
     }
-		$tool_content .= "</td></tr>";
+		$tool_content .= "</td></tr></tbody>";
 	}
 	$tool_content .= '</table>';
 	} else {
