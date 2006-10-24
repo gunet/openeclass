@@ -18,8 +18,23 @@ $end_cal = $jscalendar->make_input_field(
                  'name'        => 'u_date_end',
                  'value'       => $u_date_end));
 
-$qry = "SELECT user_id, nom, prenom, username, email
-    FROM user";
+
+
+    $qry = "SELECT LEFT(nom, 1) AS first_letter FROM user
+            GROUP BY first_letter ORDER BY first_letter";
+    $result = db_query($qry, $mysqlMainDb);
+    while ($row = mysql_fetch_assoc($result)) {
+        $first_letter = $row['first_letter'];
+        $letterlinks .= '<a href="?first='.$first_letter.'">'.$first_letter.'</a> ';
+    }
+
+    if ($_GET['first']) {
+        $firstletter = $_GET['first'];
+        $qry = "SELECT user_id, nom, prenom, username, email
+                FROM user WHERE LEFT(nom,1) = '$firstletter'";
+    } else {
+        $qry = "SELECT user_id, nom, prenom, username, email FROM user";
+    }
 
 
 $user_opts = '<option value="-1">'.$langAllUsers."</option>\n";
@@ -42,7 +57,7 @@ $statsIntervalOptions =
 $tool_content .= '
 <form method="post">
     <table>
-        
+
         <tr>
             <td>'.$langStartDate.'</td>
             <td>'.$start_cal.'</td>
@@ -53,21 +68,21 @@ $tool_content .= '
         </tr>
         <tr>
             <td>'.$langUser.'</td>
-            <td><select name="u_user_id">'.$user_opts.'</select></td>
+            <td>'.$langFirstLetterUser.':<br/>'.$letterlinks.'<br/><select name="u_user_id">'.$user_opts.'</select></td>
         </tr>
-        
+
         <tr>
             <td>'.$langInterval.'</td>
             <td><select name="u_interval">'.$statsIntervalOptions.'</select></td>
         </tr>
-        
+
         <tr>
             <td>&nbsp;</td>
             <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
         </tr>
-        
-        
-        
+
+
+
 </table>
 </form>';
 

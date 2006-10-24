@@ -5,7 +5,7 @@
         E-learning and Course Management Program
 ================================================================================
         Copyright(c) 2003-2006  Greek Universities Network - GUnet
-        Á full copyright notice can be read in "/info/copyright.txt".
+        ï¿½ full copyright notice can be read in "/info/copyright.txt".
 
            Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
                     Yannis Exidaridis <jexi@noc.uoa.gr>
@@ -82,6 +82,7 @@ if (isset($_POST['u_analyze']) && isset($_POST['user_id']) && $_POST['user_id'] 
         $tool_content .= "<p>$langGDRequired</p>";
     } else {
         $made_chart = true;
+        ob_start();
         require_once "results.php";
         require_once "form.php";
     }
@@ -91,13 +92,13 @@ if (isset($_POST['u_analyze']) && isset($_POST['user_id']) && $_POST['user_id'] 
 draw($tool_content, 2, '', $local_head, '');
 
 if ($made_chart) {
-	 	while (ob_get_level() > 0) {
-  	  ob_end_flush();
+    while (ob_get_level() > 0) {
+        ob_end_flush();
     }
     ob_flush();
     flush();
     sleep(5);
-    unlink ($webDir.$chart_path);
+//    unlink ($webDir.$chart_path);
 }
 
 ?>

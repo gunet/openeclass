@@ -5,7 +5,7 @@
         E-learning and Course Management Program
 ================================================================================
         Copyright(c) 2003-2006  Greek Universities Network - GUnet
-        Á full copyright notice can be read in "/info/copyright.txt".
+        ï¿½ï¿½ï¿½ full copyright notice can be read in "/info/copyright.txt".
 
            Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
                     Yannis Exidaridis <jexi@noc.uoa.gr>
@@ -31,10 +31,10 @@
     @last update: 2006-06-04 by Vangelis Haniotakis
     @authors list: Vangelis Haniotakis haniotak@ucnet.uoc.gr
 ==============================================================================
-    @Description: 
+    @Description:
 
 
-   
+
 ==============================================================================
 */
 
@@ -45,6 +45,7 @@ $helpTopic 				= 'Usage';
 
 include '../../include/baseTheme.php';
 include('../../include/action.php');
+
 $action = new action();
 $action->record('MODULE_ID_USAGE');
 
@@ -116,15 +117,15 @@ $local_head = $jscalendar->get_load_files_code();
             " LEFT JOIN accueil ON actions.module_id = accueil.id  WHERE $date_where AND $user_where GROUP BY module_id";
 
             $result = db_query($query, $currentCourseID);
-   
+
             $chart = new PieChart(500, 300);
-   
+
             while ($row = mysql_fetch_assoc($result)) {
                 $chart->addPoint(new Point($row['name'], $row['cnt']));
                 $chart->width += 25;
                 $chart_content=1;
             }
-       
+
             $chart->setTitle("$langFavourite");
 
         break;
@@ -145,7 +146,7 @@ $local_head = $jscalendar->get_load_files_code();
 
             $chart->setTitle("$langFavourite");
             $tool_content .= "<p> $langDurationExpl</p>";
-             
+
         break;
     }
     mysql_free_result($result);
@@ -153,7 +154,7 @@ $local_head = $jscalendar->get_load_files_code();
 
     $chart->render($webDir.$chart_path);
 
-    
+
 
     if ($chart_content) {
         $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
@@ -183,9 +184,28 @@ $local_head = $jscalendar->get_load_files_code();
                  'name'        => 'u_date_end',
                  'value'       => $u_date_end));
 
-    $qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, b.statut
+
+
+    $qry = "SELECT LEFT(a.nom, 1) AS first_letter
         FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-        WHERE b.code_cours='".$currentCourseID."'";
+        WHERE b.code_cours='".$currentCourseID."'
+        GROUP BY first_letter ORDER BY first_letter";
+    $result = db_query($qry, $mysqlMainDb);
+    while ($row = mysql_fetch_assoc($result)) {
+        $first_letter = $row['first_letter'];
+        $letterlinks .= '<a href="?first='.$first_letter.'">'.$first_letter.'</a> ';
+    }
+
+    if ($_GET['first']) {
+        $firstletter = $_GET['first'];
+        $qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, b.statut
+            FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
+            WHERE b.code_cours='".$currentCourseID."' AND LEFT(a.nom,1) = '$firstletter'";
+    } else {
+        $qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, b.statut
+            FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
+            WHERE b.code_cours='".$currentCourseID."'";
+    }
 
 
     $user_opts = '<option value="-1">'.$langAllUsers."</option>\n";
@@ -210,7 +230,7 @@ $local_head = $jscalendar->get_load_files_code();
         '<option value="visits" '.	 (($u_stats_value=='visits')?('selected'):(''))	  .'>'.$langVisits."</option>\n".
         '<option value="duration" '.(($u_stats_value=='duration')?('selected'):('')) .'>'.$langDuration."</option>\n";
 
-  
+
     $tool_content .= '
     <form method="post">
     &nbsp;&nbsp;
@@ -230,7 +250,8 @@ $local_head = $jscalendar->get_load_files_code();
         </tr>
         <tr>
             <td>'.$langUser.'</td>
-            <td><select name="u_user_id">'.$user_opts.'</select></td>
+            <td>'.$langFirstLetterUser.':<br/>'.$letterlinks.'<br />
+            <select name="u_user_id">'.$user_opts.'</select></td>
         </tr>
         <tr>
             <td>&nbsp;</td>
@@ -238,14 +259,14 @@ $local_head = $jscalendar->get_load_files_code();
         </tr>
         </table>
     </form>';
-        
+
     }
 
 
 draw($tool_content, 2, '', $local_head, '');
 
 if ($made_chart) {
-		while (ob_get_level() > 0) {
+    while (ob_get_level() > 0) {
      ob_end_flush();
     }
     ob_flush();

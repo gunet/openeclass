@@ -104,20 +104,20 @@ if (!extension_loaded('gd')) {
             break;
     }
 
-   
+
     if ($u_course_id == -1) {
      //show chart for all courses
            $qry1 = "SELECT DISTINCT(code) as code from cours";
            $res1 = db_query($qry1, $mysqlMainDb);
-            
+
            $point = array();
            while ($row1 = mysql_fetch_assoc($res1)) {
                 $cours = $row1['code'];
-            
+
                 $query = "SELECT ".$date_what." COUNT(*) AS cnt FROM actions ".
                     " WHERE $date_where  $date_group ORDER BY date_time ASC";
                 $result = db_query($query, $cours);
-            
+
                 switch ($u_interval) {
                     case "summary":
                         while ($row = mysql_fetch_assoc($result)) {
@@ -164,25 +164,25 @@ if (!extension_loaded('gd')) {
             }
             mysql_free_result($result);
         }
-            
+
         if ($u_interval != "monthly") {
             ksort($point);
         }
 
         $chart = new VerticalChart(200, 300);
-        
+
         //add points to chart
         while ($newp = current($point)){
                 $chart->addPoint(new Point(key($point), $newp));
                 $chart->width += 25;
                 next($point);
-                
+
                 $chart_content=1;
         }
             $chart->setTitle($langVisits);
            mysql_free_result($res1);
     }
-        
+
 
     else {    //show chart for a specific course
 
@@ -240,9 +240,9 @@ if (!extension_loaded('gd')) {
 
 
     $chart_path = 'temp/chart_'.md5(serialize($chart)).'.png';
-        
+
     $chart->render($webDir.$chart_path);
-    
+
     //check if there are statistics to show
     if ($chart_content) {
         $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
@@ -251,8 +251,8 @@ if (!extension_loaded('gd')) {
       $tool_content .='<p>'.$langNoStatistics.'</p>';
     }
     $tool_content .= '<br>';
-        
-        
+
+
 /*************************************************************************
    making the Form for determining time period, time interval and course
 ***************************************************************************/
@@ -277,8 +277,24 @@ if (!extension_loaded('gd')) {
                  'value'       => $u_date_end));
 
 
+
+
     //possible courses
-    $qry = "SELECT code, intitule FROM cours";
+    $qry = "SELECT LEFT(intitule, 1) AS first_letter FROM cours
+            GROUP BY first_letter ORDER BY first_letter";
+    $result = db_query($qry, $mysqlMainDb);
+    while ($row = mysql_fetch_assoc($result)) {
+        $first_letter = $row['first_letter'];
+        $letterlinks .= '<a href="?first='.$first_letter.'">'.$first_letter.'</a> ';
+    }
+
+    if ($_GET['first']) {
+        $firstletter = $_GET['first'];
+        $qry = "SELECT code, intitule
+                FROM cours WHERE LEFT(intitule,1) = '$firstletter'";
+    } else {
+        $qry = "SELECT code, intitule FROM cours";
+    }
 
     $cours_opts = '<option value="-1">'.$langAllCourses."</option>\n";
     $result = db_query($qry, $mysqlMainDb);
@@ -300,7 +316,7 @@ if (!extension_loaded('gd')) {
      $tool_content .= '
         <form method="post">
             <table>
-               
+
                 <tr>
                     <td>'.$langStartDate.'</td>
                     <td>'."$start_cal".'</td>
@@ -311,7 +327,7 @@ if (!extension_loaded('gd')) {
                 </tr>
                 <tr>
                     <td>'.$langCourse.'</td>
-                    <td><select name="u_course_id">'.$cours_opts.'</select></td>
+                    <td>'.$langFirstLetterCourse.':<br />'.$letterlinks.'<br /><select name="u_course_id">'.$cours_opts.'</select></td>
                 </tr>
                 <tr>
                     <td>'.$langInterval.'</td>
@@ -333,9 +349,9 @@ draw($tool_content, 3, 'admin', $local_head, '');
 
 if ($made_chart) {
 
-		while (ob_get_level() > 0) {
-    	 ob_end_flush();
-	  }
+        while (ob_get_level() > 0) {
+         ob_end_flush();
+      }
     ob_flush();
     flush();
     sleep(5);
