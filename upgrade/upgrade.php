@@ -506,6 +506,16 @@ while ($code = mysql_fetch_row($res)) {
 	// for dropbox
 	$langDropbox = "Χώρος Ανταλλαγής Αρχείων";
 	if (!mysql_table_exists($code[0], 'dropbox_file'))  {
+			db_query("INSERT INTO accueil VALUES (
+                16,
+								'$langDropbox',
+								'../../modules/dropbox/index.php',
+								'../../../images/dropbox.png',
+								'0',
+								'0',
+								'../../../images/pastillegris.png',
+								)", $code[0]);
+
 		db_query("CREATE TABLE dropbox_file (
          id int(11) unsigned NOT NULL auto_increment,
          uploaderId int(11) unsigned NOT NULL default '0',
@@ -531,17 +541,6 @@ while ($code = mysql_fetch_row($res)) {
           recipientId int(11) unsigned NOT NULL default '0',
           PRIMARY KEY  (fileId,recipientId))", $code[0]);
 	}
-	db_query("INSERT IGNORE INTO accueil VALUES (
-                16,
-                '$langDropbox',
-                '../../modules/dropbox/index.php',
-                '../../../images/dropbox.png',
-                '0',
-                '0',
-                '../../../images/pastillegris.png',
-                'MODULE_ID_DROPBOX'
-                )", $code[0]);
-
 
 // ******************************
 // new queries
