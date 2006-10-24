@@ -210,7 +210,7 @@ if(type==\"file\")
 	        }
 
 		
-                document.getElementById(\"insert_form\").innerHTML='<table width=\"800\"><thead><tr>'+
+                document.getElementById(\"insert_form\").innerHTML='<table width=\"700\"><thead><tr>'+
                         '<th>$langsendV'+
                         '<input type=\"hidden\" name=\"id\" value=\"\">'+
                         '</th>'+
@@ -246,7 +246,7 @@ if(type==\"URL\")
         {	if(document.getElementById(\"edit_form\")!=null)
 			{document.getElementById(\"edit_form\").innerHTML='';
 			}
-                document.getElementById(\"insert_form\").innerHTML='<table width=\"800\"><thead><tr>'+
+                document.getElementById(\"insert_form\").innerHTML='<table width=\"700\"><thead><tr>'+
                         '<th>$langURL'+
                         '<input type=\"hidden\" name=\"id\" value=\"\">'+
                         '</th>'+
@@ -416,7 +416,7 @@ if(type==\"URL\")
 
 		$tool_content.="<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"edit_form\">
 			<input type=\"hidden\" name=\"id\" value=\"".@$id."\">
-			<table width=\"800\">
+			<table width=\"700\">
 			".$rdf."
 			</table>
 			<input type=\"hidden\" name=\"table\" value=\"$table_edit\">

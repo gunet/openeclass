@@ -38,7 +38,10 @@ $tool_content = "";
 $require_help = TRUE;
 $helpTopic = 'User';
 include '../../include/baseTheme.php';
-
+if(!isset($prenom))
+        $prenom="";
+if(!isset($nom))
+        $nom="";
 $nick=$prenom." ".$nom;
 
 $coursePath=$webDir."courses";
@@ -153,7 +156,7 @@ function buffer($content, $tmpFile) {
         fwrite($fp, $content);
 }
 
-echo utf8RawUrlDecode($tool_content);
+echo "<p>".utf8RawUrlDecode($tool_content)."</p>";
 
 function utf8RawUrlDecode ($source) {
    $decodedStr = "";

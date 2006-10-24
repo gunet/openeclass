@@ -307,7 +307,7 @@ $tool_content.='
 </form>
 
 <form id="Presantation_form" onSubmit = "return show_presantation();">
-<BR>'.$langpresantation.'<BR>
+<p>'.$langpresantation.'</p>
 <input type="text" id="Presentation_URL" name="Presantation_URL" size="20">
 <input type="submit" value="OK">
 </form>
@@ -324,7 +324,7 @@ $tool_content.='
 	</div>
 
 	<div align="center" style="position:absolute;border:groove;top:720px;left:200px;width:910px;" >
-		<div align="left" id="chat" style="position: relative;height: 60px;width: 600px; overflow: auto;">
+		<div align="left" id="chat" style="position: relative;height: 100px;width: 600px; overflow: auto;">
 		</div>
 
 		<form name = "chatForm" action = "conference.php#bottom" method = "get" target = "conference" onSubmit = "return prepare_message();">
@@ -348,7 +348,7 @@ $tool_content.='
 	</div>
 
 	</div>
-	<div style="height:600px;width:910px;">
+	<div style="height:660px;width:910px;">
 	</div>
 ';
 
