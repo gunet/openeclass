@@ -511,10 +511,10 @@ class Encryption
         // Each character can only appear once in each string EXCEPT for the first character
         // which must be duplicated at the end (this gets round a bijou problemette when the
         // first character of the password is also the first character in $scramble1).
-        // orig without:\'\\\": $this->scramble1 = '! #$%&()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~!';
-        // $this->scramble2 = 'f^jAE]okIOzU[2&q1{3`h5w_794p@6s8?BgP>dFV=m D<TcS%Ze|r:lGK/uCy.Jx)HiQ!#$~(;Lt-R}Ma,NvW+Ynb*0Xf';
-        $this->scramble1 = '! #$%&()*+,-./0123456789:;\'\\\"<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~!';
-        $this->scramble2 = 'f^jAE]okIOzU[2&q1{3`h5w_794\"\'\\p@6s8?BgP>dFV=m D<TcS%Ze|r:lGK/uCy.Jx)HiQ!#$~(;Lt-R}Ma,NvW+Ynb*0Xf';
+        $this->scramble1 = '! #$%&()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~!';
+        $this->scramble2 = 'f^jAE]okIOzU[2&q1{3`h5w_794p@6s8?BgP>dFV=m D<TcS%Ze|r:lGK/uCy.Jx)HiQ!#$~(;Lt-R}Ma,NvW+Ynb*0Xf';
+        //$this->scramble1 = '! #$%&()*+,-./0123456789:;\'\\\"<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~!';
+        //$this->scramble2 = 'f^jAE]okIOzU[2&q1{3`h5w_794\"\'\\p@6s8?BgP>dFV=m D<TcS%Ze|r:lGK/uCy.Jx)HiQ!#$~(;Lt-R}Ma,NvW+Ynb*0Xf';
 
         if (strlen($this->scramble1) <> strlen($this->scramble2)) {
             $this->errors[] = '** SCRAMBLE1 is not same length as SCRAMBLE2 **';
