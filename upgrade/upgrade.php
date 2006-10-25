@@ -958,24 +958,23 @@ $result = db_query( $sql = 'SELECT `define_var` FROM `accueil`'
 	//correct agenda link
 	update_field("accueil", "lien", "../../modules/agenda/agenda.php", "id", 1);
 	//set define string vars
-	update_field("accueil", "define_var","MODULE_ID_AGENDA", "id", 		1);
-	update_field("accueil", "define_var","MODULE_ID_LINKS", "id",	 	2);
-	update_field("accueil", "define_var","MODULE_ID_DOCS", "id",	 	3);
-	//id 4 is Video (this tool is to be removed)
-	update_field("accueil", "define_var","MODULE_ID_ASSIGN", "id",		5);
-	update_field("accueil", "define_var","MODULE_ID_VIDEO", "id",	 	6);
-	update_field("accueil", "define_var","MODULE_ID_ANNOUNCE", "id",	7);
-	update_field("accueil", "define_var","MODULE_ID_USERS", "id", 		8);
-	update_field("accueil", "define_var","MODULE_ID_FORUM", "id", 		9);
-	update_field("accueil", "define_var","MODULE_ID_EXERCISE", "id", 	10);
-	update_field("accueil", "define_var","MODULE_ID_STAT", "id", 		11);
-	update_field("accueil", "define_var","MODULE_ID_IMPORT", "id", 		12);
-	update_field("accueil", "define_var","MODULE_ID_EXTERNAL", "id",	13);
-	update_field("accueil", "define_var","MODULE_ID_COURSEINFO", "id",	14);
-	update_field("accueil", "define_var","MODULE_ID_GROUPS", "id", 		15);
-	update_field("accueil", "define_var","MODULE_ID_DROPBOX", "id", 	16);
-	update_field("accueil", "define_var","MODULE_ID_CHAT", "id", 		19);
-	update_field("accueil", "define_var","MODULE_ID_DESCRIPTION", "id", 20);
+	update_field("accueil", "define_var","MODULE_ID_AGENDA", "id", 1);
+	update_field("accueil", "define_var","MODULE_ID_LINKS", "id",	2);
+	update_field("accueil", "define_var","MODULE_ID_DOCS", "id", 3);
+	update_field("accueil", "define_var","MODULE_ID_VIDEO", "id", 4);
+	update_field("accueil", "define_var","MODULE_ID_ASSIGN", "id", 5);
+	update_field("accueil", "define_var","MODULE_ID_ANNOUNCE", "id", 7);
+	update_field("accueil", "define_var","MODULE_ID_USERS", "id",	8);
+	update_field("accueil", "define_var","MODULE_ID_FORUM", "id", 9);
+	update_field("accueil", "define_var","MODULE_ID_EXERCISE", "id", 10);
+	update_field("accueil", "define_var","MODULE_ID_STAT", "id", 11);
+	update_field("accueil", "define_var","MODULE_ID_IMPORT", "id", 12);
+	update_field("accueil", "define_var","MODULE_ID_EXTERNAL", "id", 13);
+	update_field("accueil", "define_var","MODULE_ID_COURSEINFO", "id", 14);
+	update_field("accueil", "define_var","MODULE_ID_GROUPS", "id", 15);
+	update_field("accueil", "define_var","MODULE_ID_DROPBOX", "id", 16);
+	update_field("accueil", "define_var","MODULE_ID_CHAT", "id", 	19);
+	update_field("accueil", "define_var","MODULE_ID_DESCRIPTION","id", 20);
 
 	$sql = db_query("SELECT id,lien,image,address FROM accueil");
 	while ($u = mysql_fetch_row($sql))  {
@@ -1008,9 +1007,8 @@ $result = db_query( $sql = 'SELECT `define_var` FROM `accueil`'
 	update_field("accueil", "image","calendar", "id", 1);
 	update_field("accueil", "image","links", "id",	2);
 	update_field("accueil", "image","docs", "id",	 3);
-	//id 4 is Video (this tool is to be removed)
+	update_field("accueil", "image","video", "id",	4);
 	update_field("accueil", "image","assignments", "id",5);
-	update_field("accueil", "image","video", "id",	6);//vinteoskophmena ma8hmata
 	update_field("accueil", "image","announcements", "id",7);
 	update_field("accueil", "image","users", "id", 8);
 	update_field("accueil", "image","forum", "id", 9);
