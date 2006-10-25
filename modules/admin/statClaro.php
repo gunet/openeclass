@@ -54,8 +54,8 @@ $tool_content = "";
         MAIN BODY
 ******************************************************************************/
 $tool_content .=  "<a href='statClaro.php'>".$langPlatformGenStats."</a> <br> ".
-                "<a href='platformStats.php'>".$langVisitsStats."</a> <br> ".
-             "<a href='visitsCourseStats.php'>".$langVisitsCourseStats."</a> <br> ".
+                "<a href='platformStats.php?first='>".$langVisitsStats."</a> <br> ".
+             "<a href='visitsCourseStats.php?first='>".$langVisitsCourseStats."</a> <br> ".
               "<a href='oldStats.php'>".$langOldStats."</a> <br> ".
                "<a href='monthlyReport.php'>".$langMonthlyReport."</a>".
           "<p>&nbsp</p>";
@@ -99,7 +99,7 @@ $tool_content .="</tbody></table>";
 $tool_content .= "<table width=\"99%\"><caption>$langCoursesPerDept</caption><tbody>";
 $tool_content .= "
 <tr><td>
-".tablize(list_ManyResult("select DISTINCT faculte, count(*) from cours Group by faculte "))."
+".tablize(list_ManyResult("select DISTINCT faculte, count(*) from cours Group by faculte "), $language)."
 </td></tr>
 ";
 $tool_content .="</tbody></table>";
@@ -107,7 +107,7 @@ $tool_content .="</tbody></table>";
 $tool_content .= "<table width=\"99%\"><caption>$langCoursesPerLang</caption><tbody>";
 $tool_content .= "
 <tr><td>
-".tablize(list_ManyResult("select DISTINCT languageCourse, count(*) from cours Group by languageCourse "))."
+".tablize(list_ManyResult("select DISTINCT languageCourse, count(*) from cours Group by languageCourse "), $language)."
 </td></tr>
 ";
 $tool_content .="</tbody></table>";
@@ -116,7 +116,7 @@ $tool_content .= "<table width=\"99%\"><caption>$langCoursesPerVis</caption><tbo
 $tool_content .= "
 <tr><td>
 ".tablize(list_ManyResult("select DISTINCT visible, count(*) 
-from cours Group by visible "))."
+from cours Group by visible "), $language)."
 </td></tr>
 ";
 $tool_content .="</tbody></table>";
@@ -125,7 +125,7 @@ $tool_content .= "<table width=\"99%\"><caption>$langCoursesPerType</caption><tb
 $tool_content .= "
 <tr><td>
 ".tablize(list_ManyResult("select DISTINCT type, 
-count(*) from cours Group by type "))."
+count(*) from cours Group by type "), $language)."
 </td></tr>
 ";
 $tool_content .="</tbody></table>";
@@ -134,7 +134,7 @@ $tool_content .= "<table width=\"99%\"><caption>$langUsersPerCourse</caption><tb
 $tool_content .= "
 <tr><td>
 ".tablize(list_ManyResult("select cours.intitule, count(user_id)
-from cours_user, cours where cours.code=cours_user.code_cours Group by code_cours order by code_cours"))."
+from cours_user, cours where cours.code=cours_user.code_cours Group by code_cours order by code_cours"), $language)."
 </td></tr>
 ";
 $tool_content .="</tbody></table>";
@@ -150,11 +150,11 @@ $loginDouble = list_ManyResult($sqlLoginDouble);
 $tool_content .= $sqlLoginDouble;
 if (count($loginDouble) > 0) { 	
 	$tool_content .= "<br>";
-	$tool_content .= error_message();
+	$tool_content .= error_message($langError);
  	$tool_content .= "<br>";
-	$tool_content .= tablize($loginDouble);
+	$tool_content .= tablize($loginDouble, $language);
 } else { 
-	$tool_content .= ok_message();
+	$tool_content .= ok_message($langOk);
 }
 $tool_content .= "</td></tr>
 ";
@@ -169,11 +169,11 @@ $loginDouble = list_ManyResult($sqlLoginDouble);
 $tool_content .= $sqlLoginDouble;
 if (count($loginDouble) > 0) { 	
 	$tool_content .= "<br>";
-	$tool_content .= error_message();
+	$tool_content .= error_message($langError);
  	$tool_content .= "<br>";
-	$tool_content .= tablize($loginDouble);
+	$tool_content .= tablize($loginDouble, $language);
 } else { 
-	$tool_content .= ok_message();
+	$tool_content .= ok_message($langOk);
 }
 $tool_content .= "</td></tr>
 ";
@@ -188,11 +188,11 @@ $loginDouble = list_ManyResult($sqlLoginDouble);
 $tool_content .= $sqlLoginDouble;
 if (count($loginDouble) > 0) { 	
 	$tool_content .= "<br>";
-	$tool_content .= error_message();
+	$tool_content .= error_message($langError);
  	$tool_content .= "<br>";
-	$tool_content .= tablize($loginDouble);
+	$tool_content .= tablize($loginDouble, $language);
 } else { 
-	$tool_content .= ok_message();
+	$tool_content .= ok_message($langOk);
 }
 $tool_content .= "</td></tr>
 ";
@@ -209,8 +209,11 @@ $tool_content .= "<br><center><p><a href=\"index.php\">".$langReturn."</a></p></
  * @desc output an <Table> with an array
  */
  
-function tablize($tableau) { 
-	$ret = "";
+function tablize($tableau, $lang) {
+    if ($lang) {
+        include "../lang/".$lang."/usage.inc.php";
+    }
+    $ret = "";
 	if (is_array($tableau)) { 
 		$ret .= "<table ";
 		$ret .= "align=\"center\"  ";
@@ -219,16 +222,16 @@ function tablize($tableau) {
     	while ( list( $key, $laValeur ) = each($tableau)) { 
 			$ret .= "<tr>"; 
 			switch ($key) {
-				case '0': $key = 'Κλειστά'; break;
-				case '1'; $key = 'Ανοικτά με εγγραφή'; break;
-				case '2': $key = 'Ανοικτά'; break;
+				case '0': $key = $langHiddens; break;
+				case '1'; $key = $langVis_enrols; break;
+				case '2': $key = $langVisibles; break;
 				case '5': $key = 'Φοιτητές'; break;
 				case '10': $key = 'Επισκέπτες'; break;
-				case 'pre': $key = 'Προπτυχιακά'; break;
-				case 'post': $key = 'Μεταπτυχιακά'; break;
+				case 'pre': $key = $langPre; break;
+				case 'post': $key = $langPost; break;
 				case 'other': $key = '¶λλο'; break;
-				case 'english': $key = 'Αγγλικά'; break;
-				case 'greek': $key = 'Ελληνικά'; break;
+				case 'english': $key = $langEnglish; break;
+				case 'greek': $key = $langGreek; break;
 			}
 			if (strpos($key, 'Statut :10')) $key = substr_replace($key, 'Επισκέπτες', strlen($key)-10);
 			if (strpos($key, 'Statut :1')) $key = substr_replace($key, 'Καθηγητές', strlen($key)-9);
@@ -242,12 +245,12 @@ function tablize($tableau) {
 	return $ret;
 }
 
-function ok_message() {  
-	return " <b><span style=\"color: #00FF00\">Εντάξει!</span></b>";
+function ok_message($mess) {
+	return " <b><span style=\"color: #00FF00\">".$mess."</span></b>";
 }
 
-function error_message() {
-	return " <b><span style=\"color: #FF0000\">Προσοχή!</span></b>";
+function error_message($mess) {
+	return " <b><span style=\"color: #FF0000\">".$mess."</span></b>";
 } 
 
 

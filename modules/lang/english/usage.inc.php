@@ -94,6 +94,14 @@
  $langHidden = "Closed";
  $langVis_enrol = "Open with enrollment";
  $langVisible = "Open";
+ $langEnglish = "English";
+ $langGreek = "Greek";
+ 
+ $langPres = "Undergraduate";
+ $langPosts = "Postgraduate";
+ $langHiddens = "Closed";
+ $langVis_enrols = "Open with enrollment";
+ $langVisibles = "Open";
  
  #for platform Statistics
  $langUsersCourse = "Users per course";

@@ -96,6 +96,14 @@ $langFavourite = "Προτίμηση Υποσυστημάτων";
  $langVis_enrol = "Ανοικτό με εγγραφή";
  $langVisible = "Ανοικτό";
  
+ $langPres = "Προπτυχιακά";
+ $langPosts = "Μεταπτυχιακά";
+ $langHiddens = "Κλειστά";
+ $langVis_enrols = "Ανοικτά με εγγραφή";
+ $langVisibles = "Ανοικτά";
+ $langEnglish = "Αγγλικά";
+ $langGreek = "Ελληνικά";
+ 
  #for platform Statistics
  $langUsersCourse = "Χρήστες ανά μάθημα";
  $langVisitsCourseStats = "Επισκέψεις σε σελίδες μαθημάτων";

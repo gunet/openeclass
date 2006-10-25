@@ -52,7 +52,7 @@ include '../../include/baseTheme.php';
 $tool_content = '';
 
 $tool_content .= "<a href=".$_SERVER['PHP_SELF'].">".$langUsage."</a> | ";
-$tool_content .= "<a href='favourite.php'>".$langFavourite."</a> | ";
+$tool_content .= "<a href='favourite.php?first='>".$langFavourite."</a> | ";
 $tool_content .= "<a href='oldStats.php'>".$langOldStats."</a><p>&nbsp</p>";
 
 

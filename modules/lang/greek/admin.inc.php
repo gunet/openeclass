@@ -74,7 +74,8 @@ $langErrors = "Σφάλματα:";
 $langMultEnrol = "Πολλαπλές εγγραφές χρηστών";
 $langMultEmail= "Πολλαπλές εμφανίσεις διευθύνσεων e-mail";
 $langMultLoginPass = "Πολλαπλά ζεύγη LOGIN - PASS";
-
+$langError = "Προσοχή!";
+$langOk = "Εντάξει!";
 
 
 $langBaseFound ="Βρέθηκε<br>Έλεγχος πινάκων της βάσης";
