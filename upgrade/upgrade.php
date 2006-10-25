@@ -69,7 +69,7 @@ if ($fromadmin)
 // Main body
 //====================
 
-$tool_content .= "<table width=\"99%\"><caption>Εξέλιξη Αναβάθμισης</caption><tbody>";
+$tool_content .= "<table width=\"99%\"><tbody>";
 $OK = "[<font color='green'> Επιτυχία </font>]";
 $BAD = "[<font color='red'> Σφάλμα ή δεν χρειάζεται τροποποίηση</font>]";
 
@@ -951,8 +951,13 @@ $result = db_query( $sql = 'SELECT `define_var` FROM `accueil`'
                 'MODULE_ID_TOOLADMIN'
                 )", $code[0]);
 
-  //remove old statistics module
-  db_query("DELETE FROM accueil WHERE rubrique='Στατιστικά'", $code[0]);
+  //remove old statistics entry
+/*  db_query("DELETE FROM accueil WHERE id ='11'");
+	//remove videolinks entry 
+  db_query("DELETE FROM accueil WHERE id ='6'");
+	//remove entries modules import & external (now a part of tool admin)  */
+	$sql = 'DELETE FROM accueil WHERE (id = 12 OR id = 13 OR id = 11 OR id=6)';
+	db_query($sql);
 
 	//correct agenda link
 	update_field("accueil", "lien", "../../modules/agenda/agenda.php", "id", 1);
@@ -1024,9 +1029,6 @@ $result = db_query( $sql = 'SELECT `define_var` FROM `accueil`'
 	update_field("accueil", "image","usage", "id", 24);
 	update_field("accueil", "image","tooladmin", "id", 25);
 
-	//remove modules import & external (now a part of tool admin)
-	$sql = 'DELETE FROM `accueil` WHERE (`id` = 12 OR `id` = 13)';
-	db_query($sql);
 
 	// table stat_accueil
 /*	$sql = db_query("SELECT id,request FROM stat_accueil");
