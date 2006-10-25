@@ -104,14 +104,30 @@ $langGreek="Greek";
 $langEnglish="English";
 
 $langNoAdminAccess = '
-		<p>This page requires a valid username and password. Please return to the 
-		<a href='.$urlServer.'>start page</a> and login.</p>
+		<p><b>The page you tried to access requires a valid username and password.</b><br/>
+		The system has automatically redirect you to the start page to login. This could have been caused
+		by a mistyped URL or due to session timeout.</p>
 ';
 
 $langLoginRequired = '
-		<p>
-		You are not enrolled to the lesson you are trying to access. 
-		Please return to the <a href='.$urlServer.'>start page</a> and enroll to the lesson (if the lesson is open for registration).
+		<p><b>You are not enrolled to the lesson you are trying to access.</b><br/>
+		The system has automatically redirect you to the start page to enroll to the lesson (if the lesson is open for registration).
 		</p>
 ';
+
+$langSessionIsLost = "
+		<p><b>Your session has timed-out. </b><br/>The system has automatically redirect 
+		you to the start page to login again.</p>
+			";
+
+$langCheckProf = "
+		<p><b>Your action requires professor privileges. </b><br/>
+		The system has automatically redirect you to the start page to login (if you are
+		the lesson's professor you will be allowed access tou the course administration tools).</p>
+";
+
+$langLessonDoesNotExist = "
+	<p><b>The lesson you are trying to access does not exist.</b><br/>
+	This could have been caused by a not allowed action or a platform error.</p>
+";
 ?>
