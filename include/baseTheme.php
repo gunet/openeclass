@@ -40,8 +40,22 @@
 include('init.php');
 
 //template path for logged out + logged in (ex., when session expires)
+$extraMessage = "";//initialise var for security
 if(isset($errorMessagePath)) {
 	$relPath = $errorMessagePath;
+}
+
+if(isset($toolContent_ErrorExists)) {
+	$toolContent = $toolContent_ErrorExists;
+	
+	$_SESSION['errMessage'] = $toolContent_ErrorExists;
+	session_write_close();
+	header("location:".$urlServer);
+}
+
+if (session_is_registered('errMessage') && strlen($_SESSION['errMessage'])>0) {
+	$extraMessage = $_SESSION['errMessage'];
+	session_unregister('errMessage');
 }
 
 include($relPath."template/template.inc");
@@ -64,16 +78,27 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	global $language, $helpTopic, $require_help, $langEclass, $langCopyrightFooter;
 	global $relPath, $urlServer, $toolContent_ErrorExists;
 	global $page_name, $page_navi,$currentCourseID, $siteName, $navigation;
-	global $homePage, $courseHome, $uid, $webDir;
+	global $homePage, $courseHome, $uid, $webDir, $extraMessage;
 	global $langChangeLang, $langUserBriefcase, $langPersonalisedBriefcase, $langAdmin, $switchLangURL;
 
+	$messageBox = "";
+	
 	//if an error exists (ex., sessions is lost...)
-	//show the error message and not the normal tool content
+	//show the error message above the normal tool content
 
-	if(isset($toolContent_ErrorExists)) {
-		$toolContent = $toolContent_ErrorExists;
-		$menuTypeID = 0;
+	if (strlen($extraMessage) > 0) {
+		$messageBox =  "
+					<table>
+				<tbody>
+					<tr>
+						<td class=\"extraMessage\">
+						$extraMessage
+					</td>
+					</tr>
+				</tbody>
+			</table><br/>";
 	}
+	
 	//get the left side menu from tools.php
 	$toolArr = getSideMenu($menuTypeID);
 	$numOfToolGroups = count($toolArr);
@@ -111,9 +136,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 			$t->clear_var('leftNavLink'); //clear inner block
 		}
-		
+
 		$t->set_var('URL_PATH',  $urlServer);
-		
+
+		//If there is a message to display, show it (ex. Session timeout)
+		if (strlen($messageBox) > 1) {
+			$t->set_var('EXTRA_MSG', $messageBox);
+		}
+
 		$t->set_var('TOOL_CONTENT', $toolContent);
 
 		//if we are on the login page we can include two optional html files
@@ -315,6 +345,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		$t->pparse('Output', 'fh');
 
 	}
+	//	session_unregister('errMessage');
 }
 
 /**
