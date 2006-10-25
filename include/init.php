@@ -104,7 +104,7 @@ if (isset($localize)) {
 		default:
 			die("Invalid language parameter passed");
 	}
-	
+
 }
 // Get configuration variables
 if (!isset($webDir)) {
@@ -116,9 +116,9 @@ if (!isset($webDir)) {
 
 	if (!isset($webDir)) {
 		include 'not_installed.php';
-//		die("Unable to open configuration file,
-//			please contact the system administrator");
-	} 
+		//		die("Unable to open configuration file,
+		//			please contact the system administrator");
+	}
 }
 
 //load the correct language (Author: Evelthon Prodromou)
@@ -202,8 +202,7 @@ if (isset($require_prof) and $require_prof) {
 if (isset($require_current_course) and $require_current_course) {
 	// Work around bug in some versions of PHP - session registered
 	// variables aren't immediately available in $HTTP_SESSION_VARS[]
-	if (session_is_registered('dbname') and
-	!isset($_SESSION['dbname'])) {
+	if (session_is_registered('dbname') && !isset($_SESSION['dbname'])) {
 		$HTTP_SESSION['dbname'] = $dbname;
 	}
 	if (!isset($_SESSION['dbname'])) {
@@ -243,6 +242,7 @@ if (isset($require_current_course) and $require_current_course) {
 		$currentCourseDepartmentUrl		= $departmentUrl;
 		$currentCourseDepartmentUrlName	= $departmentUrlName;
 	}
+
 	if (!isset($code_cours) or empty($code_cours)) {
 		$toolContent_ErrorExists = "Το μάθημα δεν υπάρχει. Υπάρχει πρόβλημα στην πλατφόρμα ή εκτελέσατε μια μη επιτρεπτή ενέργεια";
 		$errorMessagePath = "../../";
