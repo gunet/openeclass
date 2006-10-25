@@ -790,9 +790,7 @@ while ($code = mysql_fetch_row($res)) {
 	}
 
 
-	//---------------------------------------------------------------------
-	// Add table EXERCISE_USER_RECORD for EXERCISE module
-	//---------------------------------------------------------------------
+	// exercise tables
 	if (!mysql_table_exists($code[0], 'exercise_user_record'))  {
 		db_query("CREATE TABLE `exercise_user_record` (
 		`eurid` int(11) NOT NULL auto_increment,
@@ -806,6 +804,17 @@ while ($code = mysql_fetch_row($res)) {
 	  PRIMARY KEY  (`eurid`)
 	) ", $code[0]); //TYPE=MyISAM COMMENT='For the exercise module';
 	}
+
+// Upgrading EXERCICES table for new func of EXERCISE module
+  if (!mysql_field_exists("$code[0]",'exercices','StartDate'))
+	    $tool_content .= add_field_after_field('exercices', 'StartDate', 'type', "DATETIME");
+  if (!mysql_field_exists("$code[0]",'exercices','EndDate'))
+	    $tool_content .= add_field_after_field('exercices', 'EndDate', 'StartDate', "DATETIME");
+  if (!mysql_field_exists("$code[0]",'exercices','TimeConstrain'))
+	    $tool_content .= add_field_after_field('exercices', 'TimeConstrain', 'EndDate', "INT(11)");
+  if (!mysql_field_exists("$code[0]",'exercices','AttemptsAllowed'))
+	    $tool_content .= add_field_after_field('exercices', 'AttemptsAllowed', 'TimeConstrain', "INT(11)");
+
 
 // add new document fields
   if (!mysql_field_exists("$code[0]",'document','filename'))
@@ -841,23 +850,14 @@ while ($code = mysql_fetch_row($res)) {
     die("Can't enter document course folder!");
   }
 
-
 //function gia anavathmisi twn arxeiwn se kathe course
   //*** proypothetei oti exei proepilegei h DB tou mathimatos kai pws to CWD einai o fakelos document tou mathimatos (p.x. .../eclass/courses/TMA100/document/) ***
   RecurseDir(getcwd(), $baseFolder);
   //epistrofh sto prohgoumeno getcwd()
   chdir($tmpfldr);
 
-  // Upgrading EXERCICES table for new func of EXERCISE module
-  if (!mysql_field_exists("$code[0]",'exercices','StartDate'))
-    $tool_content .= add_field_after_field('exercices', 'StartDate', 'type', "DATETIME");
-  if (!mysql_field_exists("$code[0]",'exercices','EndDate'))
-    $tool_content .= add_field_after_field('exercices', 'EndDate', 'StartDate', "DATETIME");
-  if (!mysql_field_exists("$code[0]",'exercices','TimeConstrain'))
-    $tool_content .= add_field_after_field('exercices', 'TimeConstrain', 'EndDate', "INT(11)");
-  if (!mysql_field_exists("$code[0]",'exercices','AttemptsAllowed'))
-    $tool_content .= add_field_after_field('exercices', 'AttemptsAllowed', 'TimeConstrain', "INT(11)");
-  // Upgrading VIDEO table for new func of VIDEO module
+
+// Upgrading VIDEO table for new func of VIDEO module
   if (!mysql_field_exists("$code[0]",'video','creator'))
     $tool_content .= add_field_after_field('video', 'creator', 'description', "VARCHAR(255)");
   if (!mysql_field_exists("$code[0]",'video','publisher'))
@@ -876,7 +876,8 @@ while ($code = mysql_fetch_row($res)) {
     die ("Could not rename directory");
   }
 
-	
+// upgrading accueil table
+
 	//  create new column (define_var)
 	$tool_content .= add_field("accueil","define_var", "VARCHAR(50) NOT NULL");
 	$tool_content .= "Προσθήκη πεδίου <i>define_var</i> στον πίνακα <i>".$code[0]."accueil</i><br>";
@@ -952,11 +953,10 @@ $result = db_query( $sql = 'SELECT `define_var` FROM `accueil`'
 
   //remove old statistics module
   db_query("DELETE FROM accueil WHERE rubrique='Στατιστικά'", $code[0]);
-  //... and remove table for the old statistics module
-  db_query("DROP TABLE IF EXISTS stat_accueil");
 
 	//correct agenda link
 	update_field("accueil", "lien", "../../modules/agenda/agenda.php", "id", 1);
+
 	//set define string vars
 	update_field("accueil", "define_var","MODULE_ID_AGENDA", "id", 1);
 	update_field("accueil", "define_var","MODULE_ID_LINKS", "id",	2);
@@ -1026,7 +1026,7 @@ $result = db_query( $sql = 'SELECT `define_var` FROM `accueil`'
 
 	//remove modules import & external (now a part of tool admin)
 	$sql = 'DELETE FROM `accueil` WHERE (`id` = 12 OR `id` = 13)';
-	db_query($sql, $code[0]);
+	db_query($sql);
 
 	// table stat_accueil
 /*	$sql = db_query("SELECT id,request FROM stat_accueil");
@@ -1040,6 +1040,10 @@ $result = db_query( $sql = 'SELECT `define_var` FROM `accueil`'
 			$errors++;
 		}
 	}*/
+
+
+// Remove table for the old statistics module
+  db_query("DROP TABLE IF EXISTS stat_accueil");
 
 	// remove table 'introduction' entries and insert them in table 'cours' (field 'description') in eclass main database
 	// after that drop table introduction
