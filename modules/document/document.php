@@ -35,6 +35,13 @@
       |                     Alexandros Diamantidis <adia@noc.uoa.gr>         |
       +----------------------------------------------------------------------+
 
+      
+/*===========================================================================
+	document.php
+	@last update: 25-10-2006 by Sakis Agorastos
+	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
+==============================================================================        
+
   DESCRIPTION:
   ****
   This PHP script allow user to manage files and directories on a remote http server.
@@ -78,8 +85,9 @@ $require_help = TRUE;
 $helpTopic = 'Doc';
 
 // check for quotas
-$d = mysql_fetch_array(mysql_query("SELECT doc_quota FROM cours
-    WHERE code='$currentCourseID'"));
+mysql_select_db($mysqlMainDb);
+$d = mysql_fetch_array(mysql_query("SELECT doc_quota FROM cours WHERE code='$currentCourseID'"));
+
 $diskQuotaDocument = $d['doc_quota'];
 
 mysql_select_db($currentCourseID);
@@ -1050,7 +1058,7 @@ if($is_adminOfCourse) {
 
     $tool_content .= "
     <div class=\"fileman\" align=\"center\">
-    <table width=\"99%\" border=\"0\" cellspacing=\"2\" cellpadding=\"4\">
+    <table width=\"80%\" border=\"0\" cellspacing=\"2\" cellpadding=\"4\">
     <tr>";
     
     /*------------------------------------------------------------------------------------------------------------------------------
@@ -1107,7 +1115,7 @@ if($is_adminOfCourse) {
     
     <br>
     
-    <table width=\"99%\" border=\"1\" cellspacing=\"2\">";
+    <table width=\"80%\" border=\"1\" cellspacing=\"2\">";
 
 
 
@@ -1413,7 +1421,7 @@ $cmdParentDir  = rawurlencode($parentDir);
 
 $tool_content .= "
 <div class=\"fileman\" align=\"center\">
-<table width=\"600\" border=\"1\" cellspacing=\"2\">";
+<table width=\"99%\" border=\"1\" cellspacing=\"2\">";
 
 
 // -- current dir name -->
