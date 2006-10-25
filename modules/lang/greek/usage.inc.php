@@ -108,4 +108,5 @@ $langFavourite = "Προτίμηση Υποσυστημάτων";
  $langUsersCourse = "Χρήστες ανά μάθημα";
  $langVisitsCourseStats = "Επισκέψεις σε σελίδες μαθημάτων";
  $langUserStats = "Στατιστικά Χρήστη";
+ $langTotalVisitsCourses = "Συνολικές επισκέψεις σε σελίδες μαθημάτων";
 ?>

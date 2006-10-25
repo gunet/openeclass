@@ -107,4 +107,5 @@
  $langUsersCourse = "Users per course";
  $langVisitsCourseStats = "number of visits to course pages";
  $langUserStats = "User Statistics";
+ $langTotalVisitsCourses ="Total visits to course pages";
 ?>

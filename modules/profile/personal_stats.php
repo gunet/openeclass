@@ -62,7 +62,7 @@ if (!extension_loaded('gd')) {
 		}
 		mysql_free_result($result);
 	}
-	$tool_content .= "<p>$langTotalVisits: $totalHits</p>";
+	$tool_content .= "<p>$langTotalVisitsCourses: $totalHits</p>";
 	$chart = new PieChart(500, 300);
 	$chart_content=0;
 	foreach ($hits as $code => $count) {
@@ -72,6 +72,9 @@ if (!extension_loaded('gd')) {
         }
     }
 	$chart->setTitle($langCourseVisits);
+	if (!file_exists("../../temp")) {
+        mkdir("../../temp", 0777);
+    }
 	$chart_path = 'temp/chart_'.md5(serialize($chart)).'.png';
 	$chart->render($webDir.$chart_path);
 	if ($chart_content) {
