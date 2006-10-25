@@ -345,7 +345,7 @@ if($countUser>=50) {
 		</form>";	
 	}
 	$tool_content .= "</td><td valign=\"bottom\" align=\"middle\" width=\"20%\">
-		<form method=post action=\"".$_SERVER[PHP_SELF]."?startList=$startList&numbList=all\">
+		<form method=post action=\"".$_SERVER['PHP_SELF']."?startList=$startList&numbList=all\">
 		<input type=submit value=\"".$langAll."\" name=\"numbering\">
 		</form>
 		</td>
