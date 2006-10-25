@@ -45,6 +45,7 @@ $langBackAdmin = "Επιστροφή στη σελίδα διαχείρισης";
 // Stat
 $langStatistiques = "Στατιστικά";
 
+$langSince = "Από ";
 $langNbProf = "Αριθμός καθηγητών";
 $langNbStudents = "Αριθμός φοιτητών";
 $langNbLogin = "Αριθμός εισόδων";
@@ -64,7 +65,7 @@ $langCoursesPerDept = "Αριθμός μαθημάτων ανα τμήμα";
 $langCoursesPerLang = "Αριθμός μαθημάτων ανά γλώσσα";
 $langCoursesPerVis= "Αριθμός μαθημάτων ανά κατάσταση ορατότητας";
 $langCoursesPerType= "Αριθμός μαθημάτων ανά τύπο μαθημάτων";
-$langUsersPerCourse= "Αριθμός εγγραφών ανά μάθημα";
+$langUsersPerCourse= "Αριθμός χρηστών ανά μάθημα";
 $langErrors = "Σφάλματα:";
 $langMultEnrol = "Πολλαπλές εγγραφές χρηστών";
 $langMultEmail= "Πολλαπλές εμφανίσεις διευθύνσεων e-mail";

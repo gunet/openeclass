@@ -45,8 +45,7 @@ $helpTopic 				= 'Usage';
 
 include '../../include/baseTheme.php';
 include('../../include/action.php');
-$action = new action();
-$action->record('MODULE_ID_USAGE');
+
 
 $tool_content = '';
 $tool_content .= "<a href='usage.php'>".$langUsage."</a> | ";

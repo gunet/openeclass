@@ -74,11 +74,11 @@ $langGenAdmin="Other Tools";
 // Stat
 $langStatistiques = "Statistics";
 
-
+$langSince = "Since";
 $langNbProf = "Number of professors";
 $langNbStudents = "Number of students";
 $langNbVisitors = "Number of visitors";
-$langNbLogin = "Number of login";
+$langNbLogin = "Number of logins";
 $langNbCourses = "Number of courses";
 $langToday   ="Today";
 $langLast7Days ="Last 7 days";
@@ -93,7 +93,7 @@ $langCoursesPerDept = "Number of courses per department";
 $langCoursesPerLang = "Number of courses per language";
 $langCoursesPerVis= "Number of courses with regard to visibility";
 $langCoursesPerType= "Number of courses per type";
-$langUsersPerCourse= "Number of enrollments per course";
+$langUsersPerCourse= "Number of users per course";
 $langErrors = "Errors:";
 $langMultEnrol = "Multiple user registrations";
 $langMultEmail= "Multiple use of the same e-mail address";

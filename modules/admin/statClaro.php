@@ -66,7 +66,7 @@ $tool_content .= "<table width=\"99%\"><caption>".$langNbLogin."</caption><tbody
 $tool_content .= "
 <tr><td>
 <li>
-Από ".list_1Result("select loginout.when from loginout order by loginout.when limit 1 ").": <b>".list_1Result("select count(*) from loginout where loginout.action ='LOGIN' ")."</b></li>
+".$langSince." ".list_1Result("select loginout.when from loginout order by loginout.when limit 1 ").": <b>".list_1Result("select count(*) from loginout where loginout.action ='LOGIN' ")."</b></li>
 <li>
 ".$langLast30Days.": <b>".list_1Result("select count(*) from loginout where action ='LOGIN' and (loginout.when > DATE_SUB(CURDATE(),INTERVAL 30 DAY))")."</b></li>
 <li>
@@ -90,7 +90,7 @@ $tool_content .="</tbody></table>";
 $tool_content .= "<table width=\"99%\"><caption>$langOthers</caption><tbody>";
 $tool_content .= "
 <tr><td>
-<li>Αριθμός μαθημάτων: <b>".list_1Result("select count(*) from cours;")."</b></li>
+<li>".$langNbCourses.": <b>".list_1Result("select count(*) from cours;")."</b></li>
 <li>".$langNbAnnoucement.": <b>".list_1Result("select count(*) from annonces;")."</b></li>
 </td></tr>
 ";
@@ -133,8 +133,8 @@ $tool_content .="</tbody></table>";
 $tool_content .= "<table width=\"99%\"><caption>$langUsersPerCourse</caption><tbody>";
 $tool_content .= "
 <tr><td>
-".tablize(list_ManyResult("select concat(cours.intitule, \" Statut :\" ,statut), count(user_id)
-from cours_user, cours where cours.code=cours_user.code_cours Group by code_cours, statut order by code_cours"))."
+".tablize(list_ManyResult("select cours.intitule, count(user_id)
+from cours_user, cours where cours.code=cours_user.code_cours Group by code_cours order by code_cours"))."
 </td></tr>
 ";
 $tool_content .="</tbody></table>";

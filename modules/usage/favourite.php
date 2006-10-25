@@ -29,11 +29,12 @@
 ===========================================================================
     usage/favourite.php
     @last update: 2006-06-04 by Vangelis Haniotakis
-    @authors list: Vangelis Haniotakis haniotak@ucnet.uoc.gr
+    @authors list: Vangelis Haniotakis haniotak@ucnet.uoc.gr,
+                    Ophelia Neofytou ophelia@ucnet.uoc.gr
 ==============================================================================
-    @Description:
-
-
+    @Description: Creates a pie-chart with the preferences of the users regarding the
+    modules of the specific course in a given time period. Also creates a form which is used by the user to specify the
+    parameters in order for the chart to be made.
 
 ==============================================================================
 */
@@ -46,8 +47,6 @@ $helpTopic 				= 'Usage';
 include '../../include/baseTheme.php';
 include('../../include/action.php');
 
-$action = new action();
-$action->record('MODULE_ID_USAGE');
 
 $tool_content = '';
 $tool_content .= "<a href='usage.php'>".$langUsage."</a> | ";
