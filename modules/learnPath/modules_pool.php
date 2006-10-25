@@ -231,6 +231,22 @@ switch( $cmd )
 					
                  $body_action = "onload=\"initEditor()\"";
             }
+            else 
+            {
+            	$tool_content .= "<form method=\"get\" action=\"".$_SERVER['PHP_SELF']."\">\n"
+                    .'<table><tr><td valign="top">'."\n"
+                    .claro_disp_html_area('comment', '', 20, 70)
+                    ."</td></tr></table>\n"
+                    ."<input type=\"hidden\" name=\"cmd\" value=\"exComment\">\n"
+                    ."<input type=\"hidden\" name=\"module_id\" value=\"".$_REQUEST['module_id']."\">\n"
+                    ."<input type=\"submit\" value=\"".$langOk."\">\n"
+                    ."<br /><br />\n"
+                    ."</form>\n";
+                 
+                 $head_content .= claro_disp_html_area_head("comment");
+					
+                 $body_action = "onload=\"initEditor()\"";
+            }
         } // else no module_id
         break;
 
