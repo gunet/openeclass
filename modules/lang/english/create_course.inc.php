@@ -145,6 +145,10 @@ $langCoursePrereqNote="<i>e.g.: Prerequisites are good knowledge and skills in A
 $langCourseKeywords = "Course Keywords:";
 $langCourseAddon = "Add on Information:";
 
+$langAccessType="Please select an access type for the course.";
+$langSubsystems="Select the modules you want enabled";
+$langLanguageTip="Select the language that will be used in the course's pages";
+
 $langPublic="Open (Free access from the homepage without password)";
 $langPrivOpen="Open by registration (You have to register in order to grant access)";
 $langPrivate="Private (Access is granted only to students added in the Users List)";
