@@ -22,11 +22,11 @@ $tool_content .= "	<form action=\"newprof_second.php\" method=\"post\">
 	</tr>
 	<tr bgcolor=\"".$color2."\">
 	<td width=\"3%\" nowrap><b>".$langUsername."</b></td>
-	<td><input type=\"text\" name=\"uname\" value=\"".@$pu."\">&nbsp;(*)</td>
+	<td><input type=\"text\" name=\"uname\" value=\"".@$pu."\">&nbsp;(*)&nbsp;(**)</td>
 	</tr>
 	<tr bgcolor=\"".$color2."\">
 	<td width=\"3%\" nowrap><b>".$langPass."&nbsp;:</b></td>
-	<td><input type=\"text\" name=\"password\" value=\"".create_pass(5)."\"></td>
+	<td><input type=\"text\" name=\"password\" value=\"".create_pass(5)."\">&nbsp;(**)</td>
 	</tr>
 	<tr bgcolor=\"".$color2."\">
 	<td width=\"3%\" nowrap><b>".$langEmail."</b></td>
@@ -50,7 +50,9 @@ $tool_content .= "	<form action=\"newprof_second.php\" method=\"post\">
         $tool_content .= "</select>
         </td>
         </tr>				
-	<tr><td colspan=\"2\"><small>".$langRequiredFields."</small></td></tr>
+	<tr><td colspan=\"2\"><small>".$langRequiredFields."</small><br>
+	<font size=\"1\">".$star2 . $langCharactersNotAllowed."</font>
+	</td></tr>
 	<tr><td>&nbsp;</td>
 	<td><input type=\"submit\" name=\"submit\" value=\"".$langOk."\" >
 	<input type=\"hidden\" name=\"auth\" value=\"1\" >

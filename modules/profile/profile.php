@@ -44,7 +44,7 @@ if (isset($submit) && (!isset($ldap_submit)))
 {
 	$password_form = isset($_POST['password_form'])?$_POST['password_form']:'';
 	$password_form1 = isset($_POST['password_form1'])?$_POST['password_form1']:'';
-	
+	/*
 	// do not allow the user to have the characters: ',\" or \\ in password
 	$pw = array(); 	$nr = 0;	$pw1 = array();	$nr1 = 0;
 	while (isset($password_form{$nr})) // convert the string $password_form1 into an array $pw
@@ -60,9 +60,14 @@ if (isset($submit) && (!isset($ldap_submit)))
 	
   if( (in_array("'",$pw)) || (in_array("\"",$pw)) || (in_array("\\",$pw)) || (in_array("'",$pw1)) || (in_array("\"",$pw1)) || (in_array("\\",$pw1)) )
 	{
+	*/
+	if( (strstr($password_form, "'")) or (strstr($password_form, '"')) or (strstr($password_form, '\\')) 
+	or (strstr($password_form1, "'")) or (strstr($password_form1, '"')) or (strstr($password_form1, '\\'))
+  or (strstr($username_form, "'")) or (strstr($username_form, '"')) or (strstr($username_form, '\\')) )
+	{
 		$tool_content .= "<tr bgcolor=\"".$color2."\">
 		<td bgcolor=\"$color2\" colspan=\"3\" valign=\"top\">
-		<br>Δεν επιτρέπονται στο password, οι χαρακτήρες: ',\" ή \\	<br /><br />
+		<br>$langCharactersNotAllowed<br /><br />
 		<a href=\"./newuser.php\">".$langAgain."</a></td></tr></table>";
 	}
 	else	// do the other checks

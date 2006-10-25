@@ -57,15 +57,15 @@ $tool_content .= "<table width=\"99%\"><tr>
 <td><input type=\"text\" name=\"nom_form\"><font size=\"1\">&nbsp;(*)</font></td>
 </tr>
 <tr><td>".$langUsername."</td>
-<td><input type=\"text\" name=\"uname\" size=\"20\" maxlength=\"20\"><font size=\"1\">&nbsp;(*)</font></td>
+<td><input type=\"text\" name=\"uname\" size=\"20\" maxlength=\"20\"><font size=\"1\">&nbsp;(*)</font><font size=\"1\">&nbsp;(**)</font></td>
 </tr>
 <tr><td>&nbsp;</td><td><font size=\"1\">".$langUserNotice."</font></td></tr>
 <tr><td>".$langPass."</td>
-<td><input type=\"password\" name=\"password1\" size=\"20\" maxlength=\"20\"><font size=\"1\">&nbsp;(*)</font></td>
+<td><input type=\"password\" name=\"password1\" size=\"20\" maxlength=\"20\"><font size=\"1\">&nbsp;(*)</font><font size=\"1\">&nbsp;(**)</font></td>
 </tr>
 <tr>
 <td>".$langConfirmation."<br /></td>
-<td valign=\"top\"><input type=\"password\" name=\"password\" size=\"20\" maxlength=\"20\"><font size=\"1\">&nbsp;(*)</font></td>
+<td valign=\"top\"><input type=\"password\" name=\"password\" size=\"20\" maxlength=\"20\"><font size=\"1\">&nbsp;(*)</font><font size=\"1\">&nbsp;(**)</font></td>
 </tr>
 <tr><td>&nbsp;</td><td><font size=\"1\">".$langUserNotice."</font></td></tr>
 <tr>
@@ -90,7 +90,8 @@ $tool_content .= "</select></td>
 </form>
 </td>
 </tr>
-<tr><td align=\"right\"><font size=\"1\">".$langRequiredFields."</font>
+<tr><td align=\"right\"><font size=\"1\">".$langRequiredFields."</font><br />
+<font size=\"1\">".$star2 . $langCharactersNotAllowed."</font>
 </td></tr></table>";
 
 draw($tool_content,0);

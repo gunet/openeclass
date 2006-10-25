@@ -22,6 +22,7 @@ if($submit)
 	$institut = isset($_POST['institut'])?$_POST['institut']:'NULL';
 	
 	// do not allow the user to have the characters: ',\" or \\ in password
+	/*
 	$pw = array(); 	$nr = 0;
 	while (isset($password{$nr})) // convert the string $password into an array $pw
 	{
@@ -30,9 +31,13 @@ if($submit)
 	}
   if( (in_array("'",$pw)) || (in_array("\"",$pw)) || (in_array("\\",$pw)) )
 	{
+	*/
+	if( (strstr($password, "'")) or (strstr($password, '"')) or (strstr($password, '\\')) 
+  or (strstr($uname, "'")) or (strstr($uname, '"')) or (strstr($uname, '\\')) )
+	{
 		$tool_content .= "<tr bgcolor=\"".$color2."\">
 		<td bgcolor=\"$color2\" colspan=\"3\" valign=\"top\">
-		<br>Δεν επιτρέπονται στο password, οι χαρακτήρες: ',\" ή \\	<br /><br />
+		<br>$langCharactersNotAllowed<br /><br />
 		<a href=\"./newuser.php\">".$langAgain."</a></td></tr></table>";
 	}
 	else	// do the other checks

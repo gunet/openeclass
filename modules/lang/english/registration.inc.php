@@ -349,4 +349,7 @@ $langUpdateNoChange = "You did not change any user info.";
 $langError = "Error";
 
 $langRegistrationError = "Error! Return to platform home page.";
+
+$langCharactersNotAllowed = "Not allowed characters in username and password:  ',\" or \\";
+$star2 = "Fields with (**): ";
 ?>
