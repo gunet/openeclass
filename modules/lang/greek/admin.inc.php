@@ -59,6 +59,22 @@ $langNbUsers = "Αριθμός χρηστών";
 $langCoursVisible = "Ορατότητα";
 $langCoursType = "Τύπος";
 
+$langOthers = "Διάφορα σύνολα";
+$langCoursesPerDept = "Αριθμός μαθημάτων ανα τμήμα";
+$langCoursesPerLang = "Αριθμός μαθημάτων ανά γλώσσα";
+$langCoursesPerVis= "Αριθμός μαθημάτων ανά κατάσταση ορατότητας";
+$langCoursesPerType= "Αριθμός μαθημάτων ανά τύπο μαθημάτων";
+$langUsersPerCourse= "Αριθμός εγγραφών ανά μάθημα";
+$langErrors = "Σφάλματα:";
+$langMultEnrol = "Πολλαπλές εγγραφές χρηστών";
+$langMultEmail= "Πολλαπλές εμφανίσεις διευθύνσεων e-mail";
+$langMultLoginPass = "Πολλαπλά ζεύγη LOGIN - PASS";
+$langErrors = "Σφάλματα:";
+$langMultEnrol = "Πολλαπλές εγγραφές χρηστών";
+$langMultEmail= "Πολλαπλές εμφανίσεις διευθύνσεων e-mail";
+$langMultLoginPass = "Πολλαπλά ζεύγη LOGIN - PASS";
+
+
 
 $langBaseFound ="Βρέθηκε<br>Έλεγχος πινάκων της βάσης";
 

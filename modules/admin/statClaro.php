@@ -55,7 +55,6 @@ $tool_content = "";
 ******************************************************************************/
 $tool_content .=  "<a href='statClaro.php'>".$langPlatformGenStats."</a> <br> ".
                 "<a href='platformStats.php'>".$langVisitsStats."</a> <br> ".
-             "<a href='usersCourseStats.php'>".$langUsersCourse."</a> <br> ".
              "<a href='visitsCourseStats.php'>".$langVisitsCourseStats."</a> <br> ".
               "<a href='oldStats.php'>".$langOldStats."</a> <br> ".
                "<a href='monthlyReport.php'>".$langMonthlyReport."</a>".
@@ -78,17 +77,17 @@ $tool_content .= "
 ";
 $tool_content .="</tbody></table>";
 
-$tool_content .= "<table width=\"99%\"><caption>Αριθμός Χρηστών</caption><tbody>";
+$tool_content .= "<table width=\"99%\"><caption>$langNbUsers</caption><tbody>";
 $tool_content .= "
 <tr><td>
 <li>".$langNbProf.": <b>".list_1Result("select count(*) from user where statut = 1;")."</b></li>
 <li>".$langNbStudents.": <b>".list_1Result("select count(*) from user where statut = 5;")."</b></li>
-<li>Αριθμός επισκέπτων: <b>".list_1Result("select count(*) from user where statut = 10;")."</b></li>
+<li>$langNbVisitors: <b>".list_1Result("select count(*) from user where statut = 10;")."</b></li>
 </td></tr>
 ";
 $tool_content .="</tbody></table>";
 
-$tool_content .= "<table width=\"99%\"><caption>Διάφορα Σύνολα</caption><tbody>";
+$tool_content .= "<table width=\"99%\"><caption>$langOthers</caption><tbody>";
 $tool_content .= "
 <tr><td>
 <li>Αριθμός μαθημάτων: <b>".list_1Result("select count(*) from cours;")."</b></li>
@@ -97,7 +96,7 @@ $tool_content .= "
 ";
 $tool_content .="</tbody></table>";
 
-$tool_content .= "<table width=\"99%\"><caption>Αριθμός μαθημάτων ανά τμήμα</caption><tbody>";
+$tool_content .= "<table width=\"99%\"><caption>$langCoursesPerDept</caption><tbody>";
 $tool_content .= "
 <tr><td>
 ".tablize(list_ManyResult("select DISTINCT faculte, count(*) from cours Group by faculte "))."
@@ -105,7 +104,7 @@ $tool_content .= "
 ";
 $tool_content .="</tbody></table>";
 
-$tool_content .= "<table width=\"99%\"><caption>Αριθμός μαθημάτων ανά γλώσσα</caption><tbody>";
+$tool_content .= "<table width=\"99%\"><caption>$langCoursesPerLang</caption><tbody>";
 $tool_content .= "
 <tr><td>
 ".tablize(list_ManyResult("select DISTINCT languageCourse, count(*) from cours Group by languageCourse "))."
@@ -113,7 +112,7 @@ $tool_content .= "
 ";
 $tool_content .="</tbody></table>";
 
-$tool_content .= "<table width=\"99%\"><caption>Αριθμός μαθημάτων ανά κατάσταση ορατότητας</caption><tbody>";
+$tool_content .= "<table width=\"99%\"><caption>$langCoursesPerVis</caption><tbody>";
 $tool_content .= "
 <tr><td>
 ".tablize(list_ManyResult("select DISTINCT visible, count(*) 
@@ -122,7 +121,7 @@ from cours Group by visible "))."
 ";
 $tool_content .="</tbody></table>";
 
-$tool_content .= "<table width=\"99%\"><caption>Αριθμός μαθημάτων ανά τύπο μαθημάτων</caption><tbody>";
+$tool_content .= "<table width=\"99%\"><caption>$langCoursesPerType</caption><tbody>";
 $tool_content .= "
 <tr><td>
 ".tablize(list_ManyResult("select DISTINCT type, 
@@ -131,18 +130,18 @@ count(*) from cours Group by type "))."
 ";
 $tool_content .="</tbody></table>";
 
-$tool_content .= "<table width=\"99%\"><caption>Αριθμός εγγραφών ανά μάθημα</caption><tbody>";
+$tool_content .= "<table width=\"99%\"><caption>$langUsersPerCourse</caption><tbody>";
 $tool_content .= "
 <tr><td>
-".tablize(list_ManyResult("select CONCAT(code_cours,\" Statut :\",statut), count(user_id) 
-from cours_user Group by code_cours, statut order by code_cours"))."
+".tablize(list_ManyResult("select concat(cours.intitule, \" Statut :\" ,statut), count(user_id)
+from cours_user, cours where cours.code=cours_user.code_cours Group by code_cours, statut order by code_cours"))."
 </td></tr>
 ";
 $tool_content .="</tbody></table>";
 
-$tool_content .= "<font size=\"+2\" color=\"#FF0000\">Σφάλματα:</font>";
+$tool_content .= "<font size=\"+2\" color=\"#FF0000\">$langErrors</font>";
 
-$tool_content .= "<table width=\"99%\"><caption>Πολλαπλές εγγραφές χρηστών</caption><tbody>";
+$tool_content .= "<table width=\"99%\"><caption>$langMultEnrol</caption><tbody>";
 $tool_content .= "
 <tr><td>";
 
@@ -161,7 +160,7 @@ $tool_content .= "</td></tr>
 ";
 $tool_content .="</tbody></table>";
 
-$tool_content .= "<table width=\"99%\"><caption>Πολλαπλές εμφανίσεις διευθύνσεων e-mail</caption><tbody>";
+$tool_content .= "<table width=\"99%\"><caption>$langMultEmail</caption><tbody>";
 $tool_content .= "
 <tr><td>";
 
@@ -180,7 +179,7 @@ $tool_content .= "</td></tr>
 ";
 $tool_content .="</tbody></table>";
 
-$tool_content .= "<table width=\"99%\"><caption>Πολλαπλά ζεύγη LOGIN - PASS</caption><tbody>";
+$tool_content .= "<table width=\"99%\"><caption>$langMultLoginPass</caption><tbody>";
 $tool_content .= "
 <tr><td>";
 
