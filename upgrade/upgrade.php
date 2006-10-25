@@ -268,7 +268,7 @@ if((!isset($durationAccount)) || (empty($durationAccount))) {
 		}
 	}
 	fclose($f);
-	$tool_content .= "Ενημερώθηκε το config.php για το durationAccount<br />";
+	$tool_content .= "<tr><td><b>Ενημερώθηκε το config.php για το durationAccount</b></td></tr>";
 
 	// update users with no registration date
 	if($res = db_query("SELECT user_id,registered_at,expires_at FROM user
@@ -317,7 +317,7 @@ if((!isset($encryptkey)) || (empty($encryptkey))) {
 		}
 	}
 	fclose($f);
-	$tool_content .= "Ενημερώθηκε το config.php για το encryptkey<br />";
+	$tool_content .= "<tr><td><b>Ενημερώθηκε το config.php για το encryptkey</b></td></tr>";
 
 	// update all the records in user table
 	if($res = db_query("SELECT user_id,password FROM user")) {
@@ -880,17 +880,9 @@ while ($code = mysql_fetch_row($res)) {
 
 	//  create new column (define_var)
 	$tool_content .= add_field("accueil","define_var", "VARCHAR(50) NOT NULL");
-	$tool_content .= "Προσθήκη πεδίου <i>define_var</i> στον πίνακα <i>".$code[0]."accueil</i><br>";
 
 	//BEGIN: Move all external links to id > 100
 
-/*
-$result = db_query( $sql = 'SELECT `define_var` FROM `accueil`'
-	. ' WHERE `id` = 25', $code[0]);
-
-	$item = mysql_fetch_array($result);
-*/
-//	if ($item[0] != "MODULE_ID_TOOLADMIN") {
 		if (db_query("UPDATE IGNORE `accueil`
                     SET `id` = `id` + 80
                     WHERE `id`>20", $code[0])) {
@@ -899,10 +891,8 @@ $result = db_query( $sql = 'SELECT `define_var` FROM `accueil`'
               $tool_content .= "Δεν μετακινήθηκαν οι εξωτερικοί σύνδεσμοι<br>";
              	$GLOBALS['errors']++;
        }
-	//	}
 
 	//END: Move all external links to id > 100
-
 
 	// id νέων υποσυστημάτων
 	$langQuestionnaire = "Ερωτηματολόγιο";
@@ -951,11 +941,8 @@ $result = db_query( $sql = 'SELECT `define_var` FROM `accueil`'
                 'MODULE_ID_TOOLADMIN'
                 )", $code[0]);
 
-  //remove old statistics entry
-/*  db_query("DELETE FROM accueil WHERE id ='11'");
-	//remove videolinks entry 
-  db_query("DELETE FROM accueil WHERE id ='6'");
-	//remove entries modules import & external (now a part of tool admin)  */
+	
+	//remove entries modules import, external, videolinks, old statistics  
 	$sql = 'DELETE FROM accueil WHERE (id = 12 OR id = 13 OR id = 11 OR id=6)';
 	db_query($sql);
 
