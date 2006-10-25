@@ -72,7 +72,7 @@ if (!extension_loaded('gd')) {
         }
     }
 	$chart->setTitle($langCourseVisits);
-	$chart_path = 'courses/chart_'.md5(serialize($chart)).'.png';
+	$chart_path = 'temp/chart_'.md5(serialize($chart)).'.png';
 	$chart->render($webDir.$chart_path);
 	if ($chart_content) {
 	   $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
