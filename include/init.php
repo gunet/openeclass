@@ -181,15 +181,13 @@ else
 $is_admin = FALSE;
 
 if (isset($require_login) and $require_login and !$uid) {
-	$toolContent_ErrorExists = "Session is lost. Please go back to the <a href='$urlServer' "."target='_top'>start page</a>
-and login";
+	$toolContent_ErrorExists = $langSessionIsLost;
 	$errorMessagePath = "../../";
 }
 
 if (isset($require_prof) and $require_prof) {
 	if (!check_prof()) {
-		$toolContent_ErrorExists = "You are not allowed to proceed this action.
-		Please go back to the <a href='$urlServer' "."target='_top'>start page</a> and login";
+		$toolContent_ErrorExists = $langCheckProf;
 		$errorMessagePath = "../../";
 	}
 }
@@ -207,8 +205,7 @@ if (isset($require_current_course) and $require_current_course) {
 	}
 	if (!isset($_SESSION['dbname'])) {
 
-		$toolContent_ErrorExists = "Session is lost. Please go back to the <a href='$urlServer' ".
-		"target='_top'>start page</a> and login";
+		$toolContent_ErrorExists = $langSessionIsLost;
 		$errorMessagePath = "../../";
 	} else {
 		$dbname = $_SESSION['dbname'];
@@ -244,7 +241,7 @@ if (isset($require_current_course) and $require_current_course) {
 	}
 
 	if (!isset($code_cours) or empty($code_cours)) {
-		$toolContent_ErrorExists = "Το μάθημα δεν υπάρχει. Υπάρχει πρόβλημα στην πλατφόρμα ή εκτελέσατε μια μη επιτρεπτή ενέργεια";
+		$toolContent_ErrorExists = $langLessonDoesNotExist;
 		$errorMessagePath = "../../";
 	}
 
