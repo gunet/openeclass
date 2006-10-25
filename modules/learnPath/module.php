@@ -188,7 +188,7 @@ $cmd = ( isset($_REQUEST['cmd']) )? $_REQUEST['cmd'] : '';
 
 if ( $cmd == "updateName" )
 {
-    $tool_content .= "<p>".nameBox(MODULE_, UPDATE_)."</p>";
+    $tool_content .= "<p>".claro_disp_message_box(nameBox(MODULE_, UPDATE_, $langModify))."</p>";
 }
 else
 {

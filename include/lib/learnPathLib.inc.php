@@ -270,12 +270,13 @@ function commentBox($type, $mode)
   *
   * @param string $type MODULE_ , LEARNINGPATH_
   * @param string $mode display(DISPLAY_) or update(UPDATE_) mode, no delete for a name
+  * @param string $formlabel label for displaying in the form
   *
   * @author Thanos Kyritsis <atkyritsis@upnet.gr>
   * @author Piraux Sébastien <pir@cerdecam.be>
   * @author Lederer Guillaume <led@cerdecam.be>
   */
-function nameBox($type, $mode)
+function nameBox($type, $mode, $formlabel = FALSE)
 {
     $tbl_lp_learnPath            = "lp_learnPath";
     $tbl_lp_module               = "lp_module";
@@ -341,12 +342,14 @@ function nameBox($type, $mode)
 
             $oldName = db_query_get_single_value($sql);
 
-            $output .= '<form method="POST" action="' . $_SERVER['PHP_SELF'].'">' . "\n"
-            .    '<input type="text" name="newName" size="50" maxlength="255" value="'.htmlspecialchars($oldName).'" />'
-            .    '<br />' . "\n"
+            $output .= '<form method="POST" action="' . $_SERVER['PHP_SELF'].'">' . "\n";
+            
+            if($formlabel != FALSE)
+            	$output .= '<p><strong><label for="newLabel">'.$formlabel.'</label></strong>&nbsp;&nbsp;';
+            
+            $output .=  '<input type="text" name="newName" size="50" maxlength="255" value="'.htmlspecialchars($oldName).'" />'
             .    '<input type="hidden" name="cmd" value="updateName" />' ."\n"
             .    '<input type="submit" value="' . $langOk . '" />' . "\n"
-            .    '<br />' . "\n"
             .    '</form>' . "\n"
             ;
         }
@@ -1918,12 +1921,13 @@ echo '<textarea '
 }
 
 /**
- * In order for HTMLArea, to work correctly, the area needs a 
+ * In order for HTMLArea to work correctly, the area needs a 
  * specific Javascript code previously loaded in the html header.
  * This function returns that Javascript code.
  *
  * Previously this code was part of the claro_disp_html_area()
- * function code, but it's more clean to split it.
+ * function code, but it's a more clean implementation to split it
+ * into a new function.
  *
  * @param string $name content for name attribute in textarea tag
  *

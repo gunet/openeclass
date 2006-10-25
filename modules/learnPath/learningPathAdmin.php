@@ -76,6 +76,7 @@ $imgRepositoryWeb       = "../../template/classic/img/";
 require_once("../../include/baseTheme.php");
 $head_content = "";
 $tool_content = "";
+$body_action = "";
 $dialogBox = "";
 
 $nameTools = $langLearningPathAdmin;
@@ -376,7 +377,7 @@ $LPDetails = mysql_fetch_array($query);
 $tool_content .= "<p>";
 if ( $cmd == "updateName" )
 {
-    $tool_content .= nameBox(LEARNINGPATH_, UPDATE_);
+    $tool_content .= claro_disp_message_box(nameBox(LEARNINGPATH_, UPDATE_, $langModify));
 }
 else
 {
@@ -389,6 +390,8 @@ $tool_content .= "<br />";
 if ( $cmd == "updatecomment" )
 {
     $tool_content .= commentBox(LEARNINGPATH_, UPDATE_);
+    $head_content .= claro_disp_html_area_head("insertCommentBox");
+    $body_action = "onload=\"initEditor()\"";
 }
 elseif ($cmd == "delcomment" )
 {
@@ -688,5 +691,5 @@ if ($atleastOne == false)
 
 $tool_content .= "</table>";
 
-draw($tool_content, 2, "learnPath", $head_content);
+draw($tool_content, 2, "learnPath", $head_content, $body_action);
 ?>
