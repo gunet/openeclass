@@ -27,7 +27,7 @@
 
 /*===========================================================================
 	create_course2.php
-	@last update: 18-07-2006 by Sakis Agorastos
+	@last update: 25-10-2006 by Sakis Agorastos
 	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
 ==============================================================================        
         @Description: 2nd step for the Create New Course Wizard
@@ -103,8 +103,8 @@ $local_style = "input { font-size: 12px; }";
 	<input type=\"hidden\" name=\"titulaires\" value=\"$titulaires\">
 	<input type=\"hidden\" name=\"type\" value=\"$type\">
 	
-			<tr valign=\"top\"> 
-			<td width=\"100\" align=\"right\"> 
+			<tr> 
+			<td align=\"right\"> 
 			<font face=\"arial, helvetica\" size=\"2\"><b>$langDescrInfo:</b></font>
 			</td>   
 			<td align=\"left\">
@@ -118,7 +118,7 @@ $local_style = "input { font-size: 12px; }";
 				</td>
 			</tr>
 			<tr>
-			<td align=\"top\" align=\"right\">
+			<td align=\"right\">
 		<font face=\"arial, helvetica\" size=\"2\"><b>$langCourseKeywords</b></font>
 		</td>
 <td valign=\"top\">
@@ -132,7 +132,7 @@ $local_style = "input { font-size: 12px; }";
 				</td>
 			</tr>
 			<tr>
-			<td align=\"top\" align=\"right\">
+			<td align=\"right\">
 		<font face=\"arial, helvetica\" size=\"2\"><b>$langCourseAddon</b></font>
 		</td>
 <td valign=\"top\">
