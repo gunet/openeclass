@@ -64,6 +64,7 @@ $imgRepositoryWeb = "../../template/classic/img/";
 require_once("../../include/baseTheme.php");
 $head_content = "";
 $tool_content = "";
+$body_action = "";
 
 $navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPathList);
 if ( ! $is_adminOfCourse ) claro_die($langNotAllowed);
@@ -217,13 +218,18 @@ switch( $cmd )
             {
                 
                 $tool_content .= "<form method=\"get\" action=\"".$_SERVER['PHP_SELF']."\">\n"
-                    .claro_disp_html_area('comment', $comment['comment'], 15, 55)
-                    ."<br />\n"
+                    .'<table><tr><td valign="top">'."\n"
+                    .claro_disp_html_area('comment', $comment['comment'], 20, 70)
+                    ."</td></tr></table>\n"
                     ."<input type=\"hidden\" name=\"cmd\" value=\"exComment\">\n"
                     ."<input type=\"hidden\" name=\"module_id\" value=\"".$_REQUEST['module_id']."\">\n"
                     ."<input type=\"submit\" value=\"".$langOk."\">\n"
                     ."<br /><br />\n"
                     ."</form>\n";
+                 
+                 $head_content .= claro_disp_html_area_head("comment");
+					
+                 $body_action = "onload=\"initEditor()\"";
             }
         } // else no module_id
         break;
@@ -318,6 +324,6 @@ if ($atleastOne == false) {$tool_content .= "<tr><td align=\"center\" colspan=\"
 
 $tool_content .= "</tbody>\n</table>";
 
-draw($tool_content, 2, "learnPath", $head_content);
+draw($tool_content, 2, "learnPath", $head_content, $body_action);
 
 ?>

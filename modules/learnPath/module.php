@@ -68,6 +68,8 @@ $imgRepositoryWeb       = "../../template/classic/img/";
 
 require_once("../../include/baseTheme.php");
 $tool_content = "";
+$head_content = "";
+$body_action = "";
 
 $nameTools = $langModule;
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
@@ -203,6 +205,8 @@ if($module['contentType'] != CTLABEL_ )
     if ( $cmd == "updatecomment" )
     {
         $tool_content .= "<p>".commentBox(MODULE_, UPDATE_)."</p>";
+        $head_content .= claro_disp_html_area_head("insertCommentBox");
+		$body_action = "onload=\"initEditor()\"";
     }
     elseif ($cmd == "delcomment" )
     {
@@ -218,6 +222,8 @@ if($module['contentType'] != CTLABEL_ )
     if ( $cmd == "updatespecificComment" )
     {
         $tool_content .= "<p>".commentBox(LEARNINGPATHMODULE_, UPDATE_)."</p>";
+        $head_content .= claro_disp_html_area_head("insertCommentBox");
+		$body_action = "onload=\"initEditor()\"";
     }
     elseif ($cmd == "delspecificComment" )
     {
@@ -404,6 +410,6 @@ if( $is_adminOfCourse ) // for teacher only
     }
 } // if ($is_adminOfCourse)
 
-draw($tool_content, 2, "learnPath");
+draw($tool_content, 2, "learnPath", $head_content, $body_action);
 
 ?>

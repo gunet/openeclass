@@ -186,7 +186,9 @@ function commentBox($type, $mode)
             $oldComment = db_query_get_single_value($sql);
 
             $output .= '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">' . "\n"
-                .claro_disp_html_area('insertCommentBox', $oldComment, 15, 55).'<br />' . "\n"
+                .'<table><tr><td valign="top">' . "\n"
+                .claro_disp_html_area('insertCommentBox', $oldComment, 20, 70) . "\n"
+                .'</td></tr></table>' ."\n"
                 .'<input type="hidden" name="cmd" value="update' . $col_name . '" />'
                 .'<input type="submit" value="' . $langOk . '" />' . "\n"
                 .'<br />' . "\n"
@@ -1842,15 +1844,11 @@ function claro_disp_progress_bar ($progress, $factor)
 //                              </style>';
 
 function claro_disp_html_area($name, $content = '',
-                              $rows=20,    $cols=80, $optAttrib='')
+                              $rows=20,    $cols=70, $optAttrib='')
 {
-    global $urlAppend, $iso639_2_code, $langTextEditorDisable, $langTextEditorEnable,$langSwitchEditorToTextConfirm;
+    global $langTextEditorDisable, $langTextEditorEnable,$langSwitchEditorToTextConfirm;
+    global $urlAppend;
     $incPath = $urlAppend.'/include/htmlarea';
-    // ugly fix for using gr for greek instead of el
-    // FIXME: use this function everywhere in eclass and then fix it
-    if (strcmp($iso639_2_code, "el") == 0) {
-    	$iso639_2_code = "gr";
-    }
 
     ob_start();
 
@@ -1908,59 +1906,66 @@ function claro_disp_html_area($name, $content = '',
 echo '<textarea '
         .'id="'.$name.'" '
         .'name="'.$name.'" '
-        .'style="width:99%" '
         .'rows="'.$rows.'" '
         .'cols="'.$cols.'" '
         .$optAttrib.' >'
         ."\n".$content."\n"
         .'</textarea>'."\n";
 
-    if ( isset($_SESSION['htmlArea']) && $_SESSION['htmlArea'] != 'disabled' )
-    {
-
-?>
-
-<script type="text/javascript">_editor_url = "<?php echo  $incPath?>";</script>
-<script type="text/javascript" src="<?php echo $incPath; ?>/htmlarea.js"></script>
-<script type="text/javascript" src="<?php echo $incPath; ?>/lang/<?php echo $iso639_2_code; ?>.js"></script>
-<script type="text/javascript" src="<?php echo $incPath; ?>/dialog.js"></script>
-
-<script type="text/javascript">
-var    editor = null;
-function initEditor() {
-  editor = new HTMLArea("<?php echo $name ?>");
-
-  // comment the following two lines to    see    how    customization works
-  editor.generate();
-  return false;
-}
-<?php
-// there is no link or button to use these functions, so do not output them
-/*
-function insertHTML() {
- var html =    prompt("Enter some HTML    code here");
- if    (html) {editor.insertHTML(html);}
-}
-function highlight() {
-  editor.surroundHTML('<span style="background-color: yellow">', '</span>');
-}
-*/
-?>
-</script>
-
-<script type="text/javascript">
-initEditor();
-</script>
-<?php
-    } // end if  $_SESSION['htmlArea'] != 'disabled'
-    else
-    {
-        // noop
-    }
-
     $returnString = ob_get_contents();
     ob_end_clean();
     return $returnString;
+}
+
+/**
+ * In order for HTMLArea, to work correctly, the area needs a 
+ * specific Javascript code previously loaded in the html header.
+ * This function returns that Javascript code.
+ *
+ * Previously this code was part of the claro_disp_html_area()
+ * function code, but it's more clean to split it.
+ *
+ * @param string $name content for name attribute in textarea tag
+ *
+ * @return void
+ *
+ *
+ * @author Thanos Kyritsis <atkyritsis@upnet.gr>
+ * @author Hugues Peeters <hugues.peeters@claroline.net>
+ */
+function claro_disp_html_area_head($name) 
+{
+	global $urlAppend, $iso639_2_code;
+	
+	$incPath = $urlAppend.'/include/htmlarea';
+    
+    // ugly fix for using gr for greek instead of el
+    // FIXME: use this function everywhere in eclass and then fix it
+    if (strcmp($iso639_2_code, "el") == 0) {
+    	$iso639_2_code = "gr";
+    }
+	
+	return '
+		<script type="text/javascript">
+		  _editor_url = "'.$incPath.'";
+		</script>
+		<script type="text/javascript" src="'.$incPath.'/htmlarea.js"></script>
+		<script type="text/javascript" src="'.$incPath.'/lang/'.$iso639_2_code.'.js"></script>
+		<script type="text/javascript" src="'.$incPath.'/dialog.js"></script>
+		
+		<script type="text/javascript">
+		var    editor = null;
+		function initEditor() {
+			var config = new HTMLArea.Config();
+			config.height = "180px";
+			config.hideSomeButtons(" showhelp undo redo popupeditor ");
+			editor = new HTMLArea("'.$name.'", config);
+		
+			// comment the following two lines to    see    how    customization works
+			editor.generate();
+			return false;
+		}
+		</script>';
 }
 
 /**
