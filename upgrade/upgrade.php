@@ -244,8 +244,8 @@ if (!mysql_field_exists("$mysqlMainDb",'user','lang'))
 	$tool_content .= add_field('user', 'lang', "ENUM('el', 'en') DEFAULT 'el' NOT NULL");
 
 // add full text indexes for search operation
-db_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu` ,`code_cours`)");
-db_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_objectives`,`course_prerequisites` ,`course_keywords` ,`course_references`)");
+@$tmp = mysql_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu` ,`code_cours`)");
+@$tmp = mysql_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_objectives`,`course_prerequisites` ,`course_keywords` ,`course_references`)");
 
 
 // encryption of passwords
@@ -1091,15 +1091,18 @@ if (mysql_table_exists($code[0], 'course_description')) {
 
 $tool_content .= "<br><br></td></tr>";
 
-// add full text indexes for search operation
-db_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");
-db_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)");
-db_query("ALTER TABLE `document` ADD FULLTEXT `document` (`filename` ,`comment` ,`title`,`creator`,
+// add full text indexes for search operation (ginetai xrhsh @$tmp = mysql_query(...) giati ean
+// yparxei hdh, to FULL INDEX den mporei na ksanadhmiourgithei. epipleon, den yparxei tropos
+// elegxou gia to an yparxei index, opote o monadikos tropos diekperaiwshs ths ergasias einai
+// dokimh-sfalma.
+@$tmp = mysql_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");
+@$tmp = mysql_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)");
+@$tmp = mysql_query("ALTER TABLE `document` ADD FULLTEXT `document` (`filename` ,`comment` ,`title`,`creator`,
 `subject`,`description`,`author`,`language`)");
-db_query("ALTER TABLE `exercices` ADD FULLTEXT `exercices` (`titre`,`description`)");
-db_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
-db_query("ALTER TABLE `liens` ADD FULLTEXT `liens` (`url` ,`titre` ,`description`)");
-db_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`titre` ,`description`)");
+@$tmp = mysql_query("ALTER TABLE `exercices` ADD FULLTEXT `exercices` (`titre`,`description`)");
+@$tmp = mysql_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
+@$tmp = mysql_query("ALTER TABLE `liens` ADD FULLTEXT `liens` (`url` ,`titre` ,`description`)");
+@$tmp = mysql_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`titre` ,`description`)");
 //db_query("ALTER TABLE `videolinks` ADD FULLTEXT `videolinks` (`url` ,`titre` ,`description`)");
 
 // bogart: Update code for phpbb functionality START
