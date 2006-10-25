@@ -324,6 +324,7 @@ if((!isset($encryptkey)) || (empty($encryptkey))) {
 		while($row = mysql_fetch_array($res)) {
 			$pass = $row["password"];
 			
+			/*
 			// do not allow the user to have the characters: ',\" or \\ in password
 			$pw = array(); 	
 			$nr = 0;
@@ -331,8 +332,9 @@ if((!isset($encryptkey)) || (empty($encryptkey))) {
 			{
   			$pw[$nr] = $pass{$nr};
     		$nr++;
-			}
-  		if((in_array("'",$pw)) || (in_array("\"",$pw)) || (in_array("\\",$pw))) {
+			} */
+//  		if((in_array("'",$pw)) || (in_array("\"",$pw)) || (in_array("\\",$pw))) {
+  		if(strstr($pass, "'") or strstr($pass, '"')) {
 				$tool_content .= "Δεν έγινε κρυπτογράφηση του συνθηματικού του χρήστη με id=".$row["user_id"]." (άκυροι χαρακτήρες στο συνθηματικό)<br />";
 				continue; // get the next one
 			}
