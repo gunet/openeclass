@@ -93,10 +93,10 @@ $diskQuotaDocument = $d['doc_quota'];
 mysql_select_db($currentCourseID);
 
 // -------------------------
-// download action 
+// download action2 
 // --------------------------
 
-if (@$action=="download")
+if (@$action2=="download")
  {
 		$real_file = $webDir."/courses/".$currentCourseID."/document/".$id;
 		if (strpos($real_file, '/../') === FALSE) {
@@ -467,12 +467,27 @@ if($is_adminOfCourse)
     //elegxos gia thn yparksh eggrafh sth vash ginetai sto STEP 1
     if (isset($renameTo2))
     {
-
-		$query =  "UPDATE ".$dbTable." SET filename=\"".$renameTo2."\" WHERE path=\"".$sourceFile."\"";
-		//$tool_content .=  "<br><br>".$query."<br><br>";
-		mysql_query($query);
-		
-		$dialogBox = "<b>$langElRen</b>";
+		if(is_dir("$baseWorkDir/$renameTo2") || is_dir("$baseWorkDir"."$sourceFile"))
+		{
+			echo my_basename("$baseWorkDir"."$sourceFile")."<hr>";
+			$tmp = strlen("$baseWorkDir"."$sourceFile") - strlen(my_basename("$baseWorkDir"."$sourceFile"));
+			$destPath = substr("$baseWorkDir"."$sourceFile", 0, $tmp);
+			
+			//rename("$baseWorkDir"."$sourceFile", "$destPath"."$renameTo2");
+			$tmp = strlen(my_basename($sourceFile));
+			$tmp2 = substr($sourceFile, 0, -$tmp);
+			/////////////////////////////////EDW SYNEXIZW
+		//na checkarw afto	$query =  "UPDATE ".$dbTable." SET filename=\"".$renameTo2."\", path=\"".$tmp2.$renameTo2."\" WHERE path=\"".$sourceFile."\"";
+			
+			
+		}else
+		{
+			$query =  "UPDATE ".$dbTable." SET filename=\"".$renameTo2."\" WHERE path=\"".$sourceFile."\"";
+			//$tool_content .=  "<br><br>".$query."<br><br>";
+			mysql_query($query);
+			
+			$dialogBox = "<b>$langElRen</b>";
+		}
     	
     }
 
@@ -548,6 +563,26 @@ if($is_adminOfCourse)
         else
         {
             mkdir($baseWorkDir.$newDirPath."/".$newDirName, 0700);
+            
+            $query =  "INSERT INTO ".$dbTable." SET
+    			path=\"".$newDirPath."/".$newDirName."\",
+    			filename=\"".$newDirName."\",
+    			visibility=\"v\",
+				comment=\"\",
+				category=\"\",
+				title=\"\",
+				creator=\"".$prenom." ".$nom."\",
+				date=\"".date("Y\-m\-d G\:i\:s")."\",
+				date_modified=\"".date("Y\-m\-d G\:i\:s")."\",
+				subject=\"\",
+				description=\"\",
+				author=\"\",
+				format=\"\",
+				language=\"\",
+				copyrighted=\"\"";
+            
+            mysql_query($query);
+
         }
 
         $dialogBox = "<b>$langDirCr.</b>";
@@ -1310,10 +1345,10 @@ if($is_adminOfCourse) {
             //aferaish tou: kathe arxeio na einai hyperlink me apeftheias URL  -  if(empty($row["filename"])) $tool_content .=  $dspFileName."</a>"; else $tool_content .=  $row["filename"]."</a>";
             if(empty($row["filename"]))
             {
-            	$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action=download&id=".$cmdFileName."' title=\"$langSave\">".$dspFileName."</a>"; 
+            	$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action=2download&id=".$cmdFileName."' title=\"$langSave\">".$dspFileName."</a>"; 
             }else
             {
-            	$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action=download&id=".$cmdFileName."' title=\"$langSave\">".$row["filename"];
+            	$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' title=\"$langSave\">".$row["filename"];
             	if ($row["copyrighted"] == "1") $tool_content .= "<img src=\"./img/copyrighted.jpg\" border=\"0\">";
             	$tool_content .= "</a>";
             }
@@ -1334,7 +1369,7 @@ if($is_adminOfCourse) {
             
             
             
-            //$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action=download&id=".$cmdFileName."' title=\"$langSave\"><img src=\"./img/save.gif\" border=\"0\" align=\"absmiddle\" title=\"$langSave\"></a>"; 
+            //$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' title=\"$langSave\"><img src=\"./img/save.gif\" border=\"0\" align=\"absmiddle\" title=\"$langSave\"></a>"; 
             
             
             
@@ -1470,7 +1505,6 @@ $tool_content .= "
 		<th colspan=\"3\"><h3>$dspCurDirName</h3></th>
 	</tr>";
 
-	if (!empty($dspCurDirName)) $tool_content .= "<tr><th colspan=\"4\"><h3>$dspCurDirName</h3></th></tr>";
 
 $tool_content .= "
 	<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">
@@ -1559,7 +1593,7 @@ if (isset($fileNameList))
             $tool_content .=  "<td align=\"left\">\n";
             $tool_content .=  "<a href=\"".$urlFileName."\"".$style.">\n";
             $tool_content .=  "<img src=\"./img/".$image."\" border=0 hspace=5>\n";
-            $tool_content .=  "<a href='$_SERVER[PHP_SELF]?action=download&id=".$cmdFileName."' title=\"$langSave\">".$dspFileName."</a>";
+            $tool_content .=  "<a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' title=\"$langSave\">".$dspFileName."</a>";
             $tool_content .=  "</a>\n";
 
             
@@ -1579,7 +1613,7 @@ if (isset($fileNameList))
             }
             
             
-            //$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action=download&id=".$cmdFileName."' title=\"$langSave\"></a>";
+            //$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' title=\"$langSave\"></a>";
 
             /*** size ***/
             $tool_content .=  "<td><small>".$size."</small></td>\n";
