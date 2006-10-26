@@ -93,11 +93,13 @@ $tool_content = "";
 if(!isset($_GET["finish_create_course"])) {
     $tool_content .= "
         <table bgcolor=\"$color1\" border=\"2\">
-            <tr valign=\"top\" align=\"middle\">
+            <thead>
+        	<tr valign=\"top\" align=\"middle\">
                 <td colspan=\"3\" valign=\"middle\" align=\"center\">
-                    <font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourseStep&nbsp;1&nbsp;$langCreateCourseStep2&nbsp;3</font>
+                    <font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourseStep&nbsp;3&nbsp;$langCreateCourseStep2&nbsp;3</font>
                 </td>
             </tr>
+            </thead>
             <tr valign=\"top\">
                 <td colspan=\"5\" valign=\"middle\">
                     <font face=\"arial, helvetica\" size=\"3\"><b>$langCreateCourseStep3Title</b></font>
@@ -217,9 +219,7 @@ $tool_content .= "</tr>
         <td align=\"center\">
             <input type=\"Submit\" name=\"submit\" value=\"$langFinalize\">
         </td>
-        <td align=\"right\">
-            &nbsp;
-        </td>
+        
     </tr>
     </table>
     </td>
@@ -1510,11 +1510,11 @@ mysql_query("INSERT INTO group_properties
 mysql_query("CREATE TABLE `lp_module` (
               `module_id` int(11) NOT NULL auto_increment,
               `name` varchar(255) NOT NULL default '',
-              `comment` text NULL,
+              `comment` text NOT NULL,
               `accessibility` enum('PRIVATE','PUBLIC') NOT NULL default 'PRIVATE',
               `startAsset_id` int(11) NOT NULL default '0',
               `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','LABEL','COURSE_DESCRIPTION','LINK') NOT NULL,
-              `launch_data` text NULL,
+              `launch_data` text NOT NULL,
               PRIMARY KEY  (`module_id`)
              ) TYPE=MyISAM DEFAULT CHARSET=greek");
              //COMMENT='List of available modules used in learning paths';
@@ -1537,7 +1537,7 @@ mysql_query("CREATE TABLE `lp_rel_learnPath_module` (
                 `module_id` int(11) NOT NULL default '0',
                 `lock` enum('OPEN','CLOSE') NOT NULL default 'OPEN',
                 `visibility` enum('HIDE','SHOW') NOT NULL default 'SHOW',
-                `specificComment` text NULL,
+                `specificComment` text NOT NULL,
                 `rank` int(11) NOT NULL default '0',
                 `parent` int(11) NOT NULL default '0',
                 `raw_to_pass` tinyint(4) NOT NULL default '50',
@@ -1916,11 +1916,11 @@ mysql_query("INSERT INTO group_properties
 mysql_query("CREATE TABLE `lp_module` (
               `module_id` int(11) NOT NULL auto_increment,
               `name` varchar(255) NOT NULL default '',
-              `comment` text NULL,
+              `comment` text NOT NULL,
               `accessibility` enum('PRIVATE','PUBLIC') NOT NULL default 'PRIVATE',
               `startAsset_id` int(11) NOT NULL default '0',
-              `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','LABEL','COURSE_DESCRIPTION','LINK') NOT NULL,
-              `launch_data` text NULL,
+              `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','LABEL','COURSE_DESCRIPTION') NOT NULL,
+              `launch_data` text NOT NULL,
               PRIMARY KEY  (`module_id`)
              ) TYPE=MyISAM");
              //COMMENT='List of available modules used in learning paths';
@@ -1943,7 +1943,7 @@ mysql_query("CREATE TABLE `lp_rel_learnPath_module` (
                 `module_id` int(11) NOT NULL default '0',
                 `lock` enum('OPEN','CLOSE') NOT NULL default 'OPEN',
                 `visibility` enum('HIDE','SHOW') NOT NULL default 'SHOW',
-                `specificComment` text NULL,
+                `specificComment` text NOT NULL,
                 `rank` int(11) NOT NULL default '0',
                 `parent` int(11) NOT NULL default '0',
                 `raw_to_pass` tinyint(4) NOT NULL default '50',
