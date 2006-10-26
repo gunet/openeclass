@@ -109,11 +109,14 @@ $tool_content .= "
 <tr bgcolor=\"$color1\">
 	<td>
 		<table bgcolor=\"$color1\" border=\"2\" width=\"99%\">
-			<tr valign=\"top\" align=\"middle\">
-				<td colspan=\"3\" valign=\"middle\" align=\"center\">
-					<font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourseStep&nbsp;1&nbsp;$langCreateCourseStep2&nbsp;3</font>
-				</td>
-			</tr>			
+			<thead>
+				<tr valign=\"top\" align=\"middle\">
+					<td colspan=\"3\" valign=\"middle\" align=\"center\">
+						<font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourseStep&nbsp;1&nbsp;$langCreateCourseStep2&nbsp;3</font>
+					</td>
+				</tr>
+			</thead>
+			<tr>
 			<tr valign=\"top\">
 				<td colspan=\"5\" valign=\"middle\">
 					<font face=\"arial, helvetica\" size=\"2\"><b>$langCreateCourseStep1Title</b></font>
@@ -130,9 +133,6 @@ $tool_content .= "
 				<td valign=\"top\">
 					<font face=\"arial, helvetica\" size=\"2\">
 					<input type=\"Text\" name=\"intitule\" size=\"60\">$langFieldsRequAsterisk<br>$langEx</font>
-				</td>
-				<td valign=\"middle\">
-					&nbsp;
 				</td>
 			</tr>
 		</td>
@@ -156,9 +156,6 @@ $tool_content .=  "		<select name=\"faculte\">";
 
 $tool_content .=  "$langFieldsRequAsterisk<br><font face=\"arial, helvetica\" size=\"2\">$langTargetFac</font>
 		</td>
-		<td valign=\"middle\">
-			&nbsp;
-		</td>
 	</tr>";
 
 unset($repertoire);
@@ -172,9 +169,7 @@ $tool_content .=  "<tr valign=\"top\">
 	<td valign=\"top\">
 	<input type=\"Text\" name=\"titulaires\" size=\"60\" value=\"$titulaire_probable\"><font face=\"arial, helvetica\" size=\"2\">$langFieldsRequAsterisk<br>$langProfessorsInfo</font>
 	</td>
-	<td valign=\"middle\">
-		&nbsp;
-	</td>
+
 	</tr>
 	<tr>
 	<td align=\"right\"><font face=\"arial, helvetica\" size=\"2\"><b>$m[type]:</b></font></td>
@@ -190,18 +185,10 @@ $tool_content .=  "<tr valign=\"top\">
 
 $tool_content .=  "
 	<font face=\"arial, helvetica\" size=\"2\">$langFieldsRequAsterisk<br>$langCourseCategory</br></td>
-	<td valign=\"middle\">
-		&nbsp;
-	</td>
 	<tr>
-		<td>
-			&nbsp;
-		</td>
+		<td>&nbsp;</td>
 		<td align=\"center\">
 			<input type=\"Submit\" name=\"submit\" value=\"$langNextStep\">
-		</td>
-		<td align=\"right\">
-			&nbsp;
 		</td>
 	</tr>
 	</table>

@@ -84,11 +84,13 @@ $local_style = "input { font-size: 12px; }";
    @$tool_content .= "
 <!-- S T E P  2   [start] -->    
 		<table bgcolor=\"$color1\" width=\"99%\">
+			<thead>
 			<tr valign=\"top\" align=\"middle\">
 				<td colspan=\"3\" valign=\"middle\" align=\"center\">
 					<font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourseStep&nbsp;2&nbsp;$langCreateCourseStep2&nbsp;3</font>
 				</td>
 			</tr>
+			</thead>
 			<tr valign=\"top\">
 				<td colspan=\"5\" valign=\"middle\">
 					<font face=\"arial, helvetica\" size=\"3\"><b>$langCreateCourseStep2Title</b></font>
@@ -113,9 +115,6 @@ $local_style = "input { font-size: 12px; }";
 			$langFieldsRequAsterisk
 			</font>    
 			</td> 
-				<td valign=\"middle\">
-					&nbsp;
-				</td>
 			</tr>
 			<tr>
 			<td align=\"right\">
@@ -127,9 +126,6 @@ $local_style = "input { font-size: 12px; }";
 			$langFieldsRequAsterisk
 			</font>
 				</td>
-				<td valign=\"middle\">
-					&nbsp;
-				</td>
 			</tr>
 			<tr>
 			<td align=\"right\">
@@ -139,22 +135,13 @@ $local_style = "input { font-size: 12px; }";
 			<font face=\"arial, helvetica\" size=\"2\">
 			<textarea name=\"course_addon\" value=\"$course_addon\" cols=\"40\" rows=\"4\"></textarea></font>
 			</td>
-			<td>
-				&nbsp;
-			</td>
 			</tr>
 			
 	</td>
 	</tr>
 	<tr>
-		<td align=\"center\">
-			&nbsp;
-		</td>
-		<td align=\"center\">
+		<td align=\"center\" colspan=\"2\">
 			<input type=\"Submit\" name=\"submit\" value=\"$langNextStep\">
-		</td>
-		<td>
-			&nbsp;
 		</td>
 	</tr>
 	</table>
