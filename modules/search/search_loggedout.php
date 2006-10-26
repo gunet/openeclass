@@ -181,16 +181,19 @@ function match_arrays($search_terms_array, $mycours_string)
 			//if($ret == 0) echo " MATCH!<br>";
 			//echo "<br> RET: ".$ret;
 			if($ret !== FALSE) return TRUE;
-			
+
 			//echo "<br>";
 		}
-		
+
 	return FALSE;
 }
 
 function my_stripos($string, $word)
 {
-   $retval = false;
+   return strpos(strtolower($string), strtolower($word));
+	
+   // enallaktikh methodos anazhthshs - fainetai na mhn leitourgei se PHP5!
+	/*$retval = false;
    for($i=0;$i<=strlen($string);$i++)
    {
        if (strtolower(substr($string,$i,strlen($word))) == strtolower($word))
@@ -198,6 +201,6 @@ function my_stripos($string, $word)
            $retval = true;
        }
    }
-   return $retval;
+   return $retval;*/
 }
 ?>
