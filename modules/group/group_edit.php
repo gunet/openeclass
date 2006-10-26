@@ -174,7 +174,7 @@ $groupSelect=db_query("SELECT name, tutor, description, maxStudent
 
 while ($myStudentGroup = mysql_fetch_array($groupSelect)) 
 {
-		$tool_content_group_name = $myStudentGroup[name];
+		$tool_content_group_name = $myStudentGroup['name'];
 
 
 	// SELECT TUTORS
@@ -188,7 +188,7 @@ while ($myStudentGroup = mysql_fetch_array($groupSelect))
 	while ($myTutor = mysql_fetch_array($resultTutor))
 	{
 		//  Present tutor appears first in select box
-		if($myStudentGroup[tutor]==$myTutor[user_id])
+		if($myStudentGroup['tutor']==$myTutor['user_id'])
 		{
 			$tutorExists=1;
 			$tool_content_tutor .= "
@@ -224,10 +224,10 @@ while ($myStudentGroup = mysql_fetch_array($groupSelect))
 	}
 	else
 	{
-		$tool_content_max_student =  $myStudentGroup[maxStudent];
+		$tool_content_max_student =  $myStudentGroup['maxStudent'];
 	}
 	
-	$tool_content_group_description = $myStudentGroup[description];
+	$tool_content_group_description = $myStudentGroup['description'];
 
 
 }	// while
@@ -238,7 +238,7 @@ while ($myStudentGroup = mysql_fetch_array($groupSelect))
 // Student registered to the course but inserted in no group
 
 $sqll= "SELECT DISTINCT u.user_id , u.nom, u.prenom 
-			FROM `$mysqlMainDb`.user u, `$mysqlMainDb`.cours_user cu
+			FROM (`$mysqlMainDb`.user u, `$mysqlMainDb`.cours_user cu)
 			LEFT JOIN user_group ug
 			ON u.user_id=ug.user
 			WHERE ug.id IS null
