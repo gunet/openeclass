@@ -280,7 +280,7 @@ if($module['contentType'] != CTLABEL_) //
         //display type of the module
 		$tool_content .= '<tr>'."\n"
             .'<td>'.$langTypeOfModule.'</td>'."\n"
-			.'<td><img src="'.$imgRepositoryWeb.$contentType_img.'" alt="'.$contentType_alt.'" border="0" />'.$contentDescType.'</td>'."\n"
+			.'<td><img src="'.$imgRepositoryWeb.$contentType_img.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" />'.$contentDescType.'</td>'."\n"
 			.'</tr>'."\n\n";
 
         //display total time already spent in the module

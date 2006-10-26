@@ -214,7 +214,7 @@ foreach ($flatElementList as $module)
 		$moduleImg = choose_image(basename($module['path']));
 
 		$contentType_alt = selectAlt($module['contentType']);
-		$tool_content .= '<img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" border="0" />'.$module['name'];
+		$tool_content .= '<img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" />'.$module['name'];
 
 	}
 		

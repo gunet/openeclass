@@ -223,13 +223,13 @@ foreach ($flatElementList as $module)
 				       ";
 				$currentLabel = db_query_get_single_value($sql);
 				
-				$currentName = '<img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" border="0" /> '.$displayedName;
+				$currentName = '<img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" /> '.$displayedName;
 				$displayedName = '<b>'.$displayedName.'</b>';
 				$previousModule = $previous;
 				
 				if($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED')
 				{
-					$imagePassed = '&nbsp;<img src="'.$imgRepositoryWeb.'tick.gif" alt="'.$module['lesson_status'].'" />';
+					$imagePassed = '&nbsp;<img src="'.$imgRepositoryWeb.'tick.gif" alt="'.$module['lesson_status'].'" title="'.$module['lesson_status'].'" />';
 				}
 			}
 			// store next value if user has the right to access it

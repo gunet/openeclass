@@ -252,11 +252,11 @@ function commentBox($type, $mode)
 
                 $output .= '<br />' . "\n"
                 .    '<a href="' . $_SERVER['PHP_SELF'] . '?cmd=update' . $col_name . '">' . "\n"
-                .    '<img src="../../template/classic/img/edit.gif" alt="' . $langModify . '" border="0" />'
+                .    '<img src="../../template/classic/img/edit.gif" alt="' . $langModify . '" title="'.$langModify.'" border="0" />'
                 .    '</a>' . "\n"
                 .    '<a href="' . $_SERVER['PHP_SELF'].'?cmd=del' . $col_name . '" '
                 .    ' onclick="javascript:if(!confirm(\''.clean_str_for_javascript($langConfirmYourChoice).'\')) return false;">' . "\n"
-                .    '<img src="../../template/classic/img/delete.gif" alt="'.$langDelete.'" border="0" /></a>' . "\n"
+                .    '<img src="../../template/classic/img/delete.gif" alt="'.$langDelete.'" title="'.$langDelete.'" border="0" /></a>' . "\n"
                 ;
             }
         }
@@ -380,7 +380,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
 
         if ( $is_adminOfCourse )
             $output .= '<br /><a href="' . $_SERVER['PHP_SELF'] . '?cmd=updateName">'
-            .    '<img src="../../template/classic/img/edit.gif" alt="' . $langModify . '" border="0" />'
+            .    '<img src="../../template/classic/img/edit.gif" alt="' . $langModify . '" title="' . $langModify . '" border="0" />'
             .    '</a>' . "\n";
         $output .= '</strong>'."\n\n";
     }
@@ -607,7 +607,7 @@ function display_path_content()
             	
             $contentType_alt = selectAlt($module['contentType']);
 
-            $output .= '<img src="' . $imgRepositoryWeb . $moduleImg . '" alt="' .$contentType_alt.'" border="0" />'
+            $output .= '<img src="' . $imgRepositoryWeb . $moduleImg . '" alt="' .$contentType_alt.'" title="' .$contentType_alt.'" border="0" />'
             .    $module['name']
             ;
         }
@@ -783,7 +783,7 @@ function display_my_exercises($dialogBox, $style)
 	        .    '</td>'."\n"
 	        .    '<td align="left">'
 	        .    '<label for="check_'.$exercise['id'].'" >'
-	        .    '<img src="' . $imgRepositoryWeb . 'exercise_on.gif" alt="' . $langExercise . '" />'
+	        .    '<img src="' . $imgRepositoryWeb . 'exercise_on.gif" alt="' . $langExercise . '" title="' . $langExercise . '" />'
 	        .    $exercise['title']
 	        .    '</label>'
 	        .    '</td>'."\n"

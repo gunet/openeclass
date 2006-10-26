@@ -550,7 +550,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
         // Modify command / go to other page
         $tool_content .= "<td>\n"
              ."<a href=\"learningPathAdmin.php?path_id=".$list['learnPath_id']."\">\n"
-             ."<img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"$langModify\" />\n"
+             ."<img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"$langModify\" title=\"$langModify\" />\n"
              ."</a>\n"
              ."</td>\n";
 
@@ -563,7 +563,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
             $tool_content .=  "<td>\n"
                   ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=delete&del_path_id=".$list['learnPath_id']."\" "
                   ."onClick=\"return scormConfirmation('".clean_str_for_javascript($list['name'])."');\">\n"
-                  ."<img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"$langDelete\" />\n"
+                  ."<img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"$langDelete\" title=\"$langDelete\" />\n"
                   ."</a>\n"
                   ."</td>\n";
 
@@ -572,7 +572,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
             $tool_content .=  "<td>\n"
                   ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=delete&del_path_id=".$list['learnPath_id']."\" "
                   ."onClick=\"return confirmation('".clean_str_for_javascript($list['name'])."');\">\n"
-                  ."<img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"$langDelete\" />\n"
+                  ."<img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"$langDelete\" title=\"$langDelete\" />\n"
                   ."</a>\n"
                   ."</td>\n";
         }
@@ -583,12 +583,12 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
 
         if ( $list['lock'] == 'OPEN') {
             $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkBlock&cmdid=".$list['learnPath_id']."\">\n"
-                  ."<img src=\"../../template/classic/img/unblock.gif\" alt=\"$langBlock\" border=\"0\">\n"
+                  ."<img src=\"../../template/classic/img/unblock.gif\" alt=\"$langBlock\" title=\"$langBlock\" border=\"0\">\n"
                   ."</a>\n";
         }
         else {
             $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkUnblock&cmdid=".$list['learnPath_id']."\">\n"
-                  ."<img src=\"../../template/classic/img/block.gif\" alt=\"$langAltMakeNotBlocking\" border=\"0\">\n"
+                  ."<img src=\"../../template/classic/img/block.gif\" alt=\"$langAltMakeNotBlocking\" title=\"$langAltMakeNotBlocking\" border=\"0\">\n"
                   ."</a>\n";
         }
         $tool_content .= "</td>\n";
@@ -599,7 +599,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
 
         if ( $list['visibility'] == 'HIDE') {
             $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkVisibl&visibility_path_id=".$list['learnPath_id']."\">\n"
-                  ."<img src=\"../../template/classic/img/invisible.gif\" alt=\"$langAltMakeVisible\" border=\"0\" />\n"
+                  ."<img src=\"../../template/classic/img/invisible.gif\" alt=\"$langAltMakeVisible\" title=\"$langAltMakeVisible\" border=\"0\" />\n"
                   ."</a>";
         }
         else {
@@ -611,7 +611,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
             }
 
             $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkInvisibl&visibility_path_id=".$list['learnPath_id']."\" ".$onclick. " >\n"
-                 ."<img src=\"../../template/classic/img/visible.gif\" alt=\"$langMakeInvisible\" border=\"0\" />\n"
+                 ."<img src=\"../../template/classic/img/visible.gif\" alt=\"$langMakeInvisible\" title=\"$langMakeInvisible\" border=\"0\" />\n"
                  ."</a>\n";
         }
         $tool_content .= "</td>\n";
@@ -622,7 +622,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
         if ($iterator != 1) {
             $tool_content .= "<td>\n"
                   ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=moveUp&move_path_id=".$list['learnPath_id']."\">\n"
-                  ."<img src=\"../../template/classic/img/up.gif\" alt=\"$langAltMoveUp\" border=\"0\" />\n"
+                  ."<img src=\"../../template/classic/img/up.gif\" alt=\"$langAltMoveUp\" title=\"$langAltMoveUp\" border=\"0\" />\n"
                   ."</a>\n"
                   ."</td>\n";
         }
@@ -634,7 +634,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
         if($iterator < $LPNumber) {
             $tool_content .= "<td>\n"
                   ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=moveDown&move_path_id=".$list['learnPath_id']."\">\n"
-                  ."<img src=\"../../template/classic/img/down.gif\" alt=\"$langMoveDown\" border=\"0\" />\n"
+                  ."<img src=\"../../template/classic/img/down.gif\" alt=\"$langMoveDown\" title=\"$langMoveDown\" border=\"0\" />\n"
                   ."</a>\n"
                   ."</td>\n";
         }
@@ -644,15 +644,15 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
         
         // EXPORT links
         $tool_content .= '<td><a href="' . $_SERVER['PHP_SELF'] . '?cmd=export&amp;path_id=' . $list['learnPath_id'] . '" >'
-            .'<img src="../../template/classic/img/export.gif" alt="'.$langExport2004. '" border="0" title="'.$langExport2004.'"></a>' ."\n"
+            .'<img src="../../template/classic/img/export.gif" alt="'.$langExport2004. '" title="'.$langExport2004. '" border="0" title="'.$langExport2004.'"></a>' ."\n"
             .'<a href="' . $_SERVER['PHP_SELF'] . '?cmd=export12&amp;path_id=' . $list['learnPath_id'] . '" >'
-            .'<img src="../../template/classic/img/export.gif" alt="'.$langExport12.'" border="0" title="'.$langExport12.'"></a>' ."\n"
+            .'<img src="../../template/classic/img/export.gif" alt="'.$langExport12.'" title="'.$langExport12.'" border="0" title="'.$langExport12.'"></a>' ."\n"
             .'</td>' . "\n";
         
         // statistics links
         $tool_content .= "<td>\n
           <a href=\"details.php?path_id=".$list['learnPath_id']."\">
-          <img src=\"../../template/classic/img/statistics.gif\" border=\"0\" alt=\"$langTracking\" />
+          <img src=\"../../template/classic/img/statistics.gif\" border=\"0\" alt=\"$langTracking\" title=\"$langTracking\" />
           </a>
           </td>\n";
     }

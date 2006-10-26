@@ -109,7 +109,7 @@ if( $module )
 		.htmlspecialchars($module['name'])
 		.'&nbsp;'."\n"
 		.'<a href="../exercice/admin.php?exerciseId='.$module['exerciseId'].'">'
-		.'<img src="'.$imgRepositoryWeb.'edit.gif" border="0" alt="'.$langModify.'" />'
+		.'<img src="'.$imgRepositoryWeb.'edit.gif" border="0" alt="'.$langModify.'" title="'.$langModify.'" />'
 		.'</a>'."\n"
 		.'</p>'."\n";
 		
