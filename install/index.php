@@ -1,109 +1,78 @@
 <?php
 /*
 =============================================================================
-           GUnet e-Class 2.0
-        E-learning and Course Management Program
+GUnet e-Class 2.0
+E-learning and Course Management Program
 ================================================================================
-        Copyright(c) 2003-2006  Greek Universities Network - GUnet
-        Α full copyright notice can be read in "/info/copyright.txt".
+Copyright(c) 2003-2006  Greek Universities Network - GUnet
+Α full copyright notice can be read in "/info/copyright.txt".
 
-           Authors:     Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-                    Yannis Exidaridis <jexi@noc.uoa.gr>
-                       Alexandros Diamantidis <adia@noc.uoa.gr>
+Authors:     Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+Yannis Exidaridis <jexi@noc.uoa.gr>
+Alexandros Diamantidis <adia@noc.uoa.gr>
 
-        For a full list of contributors, see "credits.txt".
+For a full list of contributors, see "credits.txt".
 
-        This program is a free software under the terms of the GNU
-        (General Public License) as published by the Free Software
-        Foundation. See the GNU License for more details.
-        The full license can be read in "license.txt".
+This program is a free software under the terms of the GNU
+(General Public License) as published by the Free Software
+Foundation. See the GNU License for more details.
+The full license can be read in "license.txt".
 
-        Contact address: GUnet Asynchronous Teleteaching Group,
-        Network Operations Center, University of Athens,
-        Panepistimiopolis Ilissia, 15784, Athens, Greece
-        eMail: eclassadmin@gunet.gr
+Contact address: GUnet Asynchronous Teleteaching Group,
+Network Operations Center, University of Athens,
+Panepistimiopolis Ilissia, 15784, Athens, Greece
+eMail: eclassadmin@gunet.gr
 ==============================================================================
 */
 
-header("Content-type: text/html; charset=iso-8859-7");
-
+//header("Content-type: text/html; charset=iso-8859-7");
+$tool_content = "";
 @include ("../modules/lang/greek/install.inc.php");
+include('install_functions.php');
 
 if (file_exists("../config/config.php")) {
-    echo "
-<html>
-<head>
-    <title>Εγκατάσταση του e-Class</title>
-</head>
-<body bgcolor='white'>
-<center>
-<table cellpadding='6' cellspacing='0' border='0' width='650' bgcolor='#E6E6E6'>
-<tr bgcolor='navy'><td valign='top'>
-<font color='white' face='arial, helvetica'>Εγκατάσταση του e-Class</font>
-</td>
-</tr>
-<tr bgcolor='#E6E6E6'>
-        <td>
+	$tool_content .= "
+<p>
             Προσοχή !! Το αρχείο <tt>config.php</tt> υπάρχει ήδη στο σύστημά σας!!
             Το πρόγραμμα εγκατάστασης δεν πραγματοποιεί αναβάθμιση.
             Αν θέλετε να ξανατρέξετε την εγκατάσταση της πλατφόρμας,
             παρακαλούμε διαγράψτε το <tt>config.php<tt>.
-        </td>
-    </tr>
-</table>";
-exit;
+        </p>
+   ";
+draw($tool_content);exit();
 }
 
 
 //  step 0 initialise variables
 if(!isset($alreadyVisited))
 {
-    $dbHostForm="localhost";
-    $dbUsernameForm="root";
-    $dbNameForm="eclass";
-    $dbMyAdmin="../admin/mysql/";
-    $phpSysInfoURL="../admin/sysinfo/";
+	$dbHostForm="localhost";
+	$dbUsernameForm="root";
+	$dbNameForm="eclass";
+	$dbMyAdmin="../admin/mysql/";
+	$phpSysInfoURL="../admin/sysinfo/";
 
-    // extract the path to append to the url if it is not installed on the web root directory
-    $urlAppendPath = ereg_replace ("/install/index.php", "", $_SERVER['PHP_SELF']);
-       $urlForm = "http://".$_SERVER['SERVER_NAME'].$urlAppendPath."/";
-    $pathForm=realpath("../")."/";
-    $emailForm=$_SERVER['SERVER_ADMIN'];
-    $nameForm="Νίκος";
-    $surnameForm="Παπαδόπουλος";
-    $loginForm="admin";
-    $passForm  		= generePass(8);
-    $campusForm="GUNet e-Class";
-    $helpdeskForm="+30 2xx xxxx xxx";
-    $institutionForm="Ακαδημαϊκό Διαδίκτυο GUNet ";
-    $institutionUrlForm="http://www.gunet.gr/";
+	// extract the path to append to the url if it is not installed on the web root directory
+	$urlAppendPath = ereg_replace ("/install/index.php", "", $_SERVER['PHP_SELF']);
+	$urlForm = "http://".$_SERVER['SERVER_NAME'].$urlAppendPath."/";
+	$pathForm=realpath("../")."/";
+	$emailForm=$_SERVER['SERVER_ADMIN'];
+	$nameForm="Νίκος";
+	$surnameForm="Παπαδόπουλος";
+	$loginForm="admin";
+	$passForm  		= generePass(8);
+	$campusForm="GUNet e-Class";
+	$helpdeskForm="+30 2xx xxxx xxx";
+	$institutionForm="Ακαδημαϊκό Διαδίκτυο GUNet ";
+	$institutionUrlForm="http://www.gunet.gr/";
 
-    $languageCourse = "greek";
-    
-    $encryptkey = "eclass";
+	$languageCourse = "greek";
+
+	$encryptkey = "eclass";
 }
 
-?>
-<html>
-<head>
-    <title>Εγκατάσταση του e-Class</title>
-</head>
-<body bgcolor="white">
-<center>
-<form action="<?php echo $PHP_SELF?>?alreadyVisited=1" method="post">
-<table cellpadding="6" cellspacing="0" border="0" width="650" bgcolor="#E6E6E6">
-    <tr bgcolor="navy">
-        <td valign="top">
-            <font color="white" face="arial, helvetica">
-                 Εγκατάσταση του e-Class
-            </font>
-        </td>
-    </tr>
-    <tr bgcolor="#E6E6E6">
-        <td>
-        <font face="arial, helvetica">
-<?
-echo "
+$tool_content .= "<form action=".$PHP_SELF."?alreadyVisited=1 method=\"post\">";
+$tool_content .= "
             <input type=\"hidden\" name=\"languageCourse\" value=\"$languageCourse\">
             <input type=\"hidden\" name=\"urlAppendPath\" value=\"$urlAppendPath\">
             <input type=\"hidden\" name=\"pathForm\" value=\"".str_replace("\\","/",realpath($pathForm)."/")."\" >
@@ -140,190 +109,100 @@ echo "
 	    <input type=\"hidden\" name=\"encryptkey\" value=\"$encryptkey\">
 ";
 
-switch (PHP_OS)
+/*switch (PHP_OS)
 {
-    case "WIN32" :
-    case "WINNT" :
-        $wizardImage = "windowsWizard.gif";
-        break;
-    case "Linux" :
-        $wizardImage = "linuxWizard.gif";
-        break;
-    default :
-        $wizardImage = "defaultWizard.gif";
-}
+case "WIN32" :
+case "WINNT" :
+$wizardImage = "windowsWizard.gif";
+break;
+case "Linux" :
+$wizardImage = "linuxWizard.gif";
+break;
+default :
+$wizardImage = "defaultWizard.gif";
+}*/
 
-echo "<img src=\"$wizardImage\" align=\"right\" hspace=\"10\" vspace=\"10\">";
+//echo "<img src=\"$wizardImage\" align=\"right\" hspace=\"10\" vspace=\"10\">";
 
 // step 2 license
 
 if(isset($install2) OR isset($back2))
 {
-    echo "<h2>".$langStep2." ".$langLicence."</h2>
-     Tο e-Class είναι ελεύθερη εφαρμογή και διανέμεται σύμφωνα με την άδεια GNU General Public Licence (GPL).
+	$tool_content .= "<h3>".$langStep2." ".$langLicence."</h3>
+     <p>Tο e-Class είναι ελεύθερη εφαρμογή και διανέμεται σύμφωνα με την άδεια GNU General Public Licence (GPL).
      Παρακαλούμε διαβάστε την άδεια και κάνετε κλίκ στην 'Αποδοχή'.
-     <a href=\"../info/license/gpl_print.txt\">(".$langPrintVers.")</a>
-     <br>
-     <br>
-     <br>
+     <a href=\"../info/license/gpl_print.txt\">(".$langPrintVers.")</a></p>
+     
      <textarea wrap=\"virtual\" cols=\"65\" rows=\"15\">";
-    include ('../info/license/gpl.txt');
-    echo "</textarea>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <table width=\"100%\">
-                <tr>
-                    <td>
-                    </td>
-                    <td align=\"right\">
+	$tool_content .= file_get_contents('../info/license/gpl.txt');
+	$tool_content .= "</textarea><br/>
                     <input type=\"submit\" name=\"back\" value=\"< Πίσω\">
                     <input type=\"submit\" name=\"install3\" value=\"Αποδοχή>\">
-                    </td>
-                </tr>
-            </table>";
+                  ";
+	draw($tool_content);
 }
 
 elseif(isset($install3) OR isset($back3)) {
 
-// The two following CHMOD are necessary, 666 for Windows, 0666 for Linux
-@mkdir ("../config", 0777);
-@chmod( "../config/config.php", 666 );
-@chmod( "../config/config.php", 0666 );
-// courses directory
-mkdir("../courses", 0777);
+	// The two following CHMOD are necessary, 666 for Windows, 0666 for Linux
+	@mkdir ("../config", 0777);
+	@chmod( "../config/config.php", 666 );
+	@chmod( "../config/config.php", 0666 );
+	// courses directory
+	mkdir("../courses", 0777);
 
-// step 3 mysql database settings
+	// step 3 mysql database settings
 
-echo "
-                <h2>
-                    ".$langStep3." ".$langDBSetting."
-                </h2>
-                    ".$langDBSettingIntro."
-                <br>
-                <br>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <table width=\"100%\">
-                    <tr>
-                        <td>
-                            <font size=\"2\" face=\"arial, helvetica\">
-                                ".$langDBHost."
-                            </font>
-                        </td>
-                        <td>
-                            <input type=\"text\" size=\"25\" name=\"dbHostForm\" value=\"".$dbHostForm."\">
-                        </td>
-                        <td>
-                            <font size=\"2\" face=\"arial, helvetica\">
-                                ".$langEG." localhost
-                            </font>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <font size=\"2\" face=\"arial, helvetica\">
-                                ".$langDBLogin."
-                            </font>
-                        </td>
-                        <td>
-                            <input type=\"text\"  size=\"25\" name=\"dbUsernameForm\" value=\"".$dbUsernameForm."\">
-                        </td>
-                        <td>
-                            <font size=\"2\" face=\"arial, helvetica\">
-                                ".$langEG." root
-                            </font>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <font size=\"2\" face=\"arial, helvetica\">
-                                ".$langDBPassword."
-                            </font>
-                        </td>
-                        <td>
-                            <input type=\"text\"  size=\"25\" name=\"dbPassForm\" value=\"$dbPassForm\">
-                        </td>
-                        <td>
-                            <font size=\"2\" face=\"arial, helvetica\">
-                                ".$langEG." ".generePass(8)."
-                            </font>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <font size=\"2\" face=\"arial, helvetica\">
-                                ".$langMainDB."
-                            </font>
-                        </td>
-                        <td>
-                            <font size=\"2\" face=\"arial, helvetica\">
-                                <input type=\"text\"  size=\"25\" name=\"dbNameForm\" value=\"$dbNameForm\">
-                            </font>
-                            </td>
-                        <td>
-                            <font size=\"2\" face=\"arial, helvetica\">
-              (αν υπάρχει ήδη κάποια βάση δεδομένων με το όνομα eclass αλλάξτε το)
-             </font>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <font size=\"2\" face=\"arial, helvetica\">
-                                URL του phpMyAdmin
-                            </font>
-                        </td>
-                        <td>
-                            <input type=\"text\" size=\"25\" name=\"dbMyAdmin\" value=\"".$dbMyAdmin."\">
-                        </td>
-                        <td>
-                            <font size=\"2\" face=\"arial, helvetica\">
-                                Δεν χρειάζεται να το αλλάξετε
-                            </font>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <font size=\"2\" face=\"arial, helvetica\">
-                                URL του System info
-                            </font>
-                        </td>
-                        <td>
-                            <input type=\"text\" size=\"25\" name=\"phpSysInfoURL\" value=\"".$phpSysInfoURL."\">
-                        </td>
-                        <td>
-                            <font size=\"2\" face=\"arial, helvetica\">
-                                Δεν χρειάζεται να το αλλάξετε
-                            </font>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            &nbsp;
-                        </td>
-                        <td>
-                            <font size=\"2\" face=\"arial, helvetica\">
-                                ".$langAllFieldsRequired."
-                            </font>
-                        </td>
-                        <td>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input type=\"submit\" name=\"back2\" value=\"< Πίσω\">
-                        </td>
-                        <td>
-                            &nbsp;
-                        </td>
-                        <td align=\"right\">
-                            <input type=\"submit\" name=\"install5\" value=\"Επόμενο >\">
-                        </td>
-                    </tr>
-                </table>";
+	$tool_content .= "
+	<h3>".$langStep3." ".$langDBSetting."</h3>
+		".$langDBSettingIntro.".  ".$langAllFieldsRequired."
+           
+	<table width=\"99%\">
+		<thead>
+			<tr>
+				<th>".$langDBHost."</th>
+				<td>
+					<input type=\"text\" size=\"25\" name=\"dbHostForm\" value=\"".$dbHostForm."\">".$langEG." localhost
+				</td>
+			</tr>
+			<tr>
+				<th>".$langDBLogin."</th>
+				<td>
+					<input type=\"text\"  size=\"25\" name=\"dbUsernameForm\" value=\"".$dbUsernameForm."\">".$langEG." root
+				</td>
+			</tr>
+			<tr>
+				<th>".$langDBPassword."</th>
+				<td>
+					<input type=\"text\"  size=\"25\" name=\"dbPassForm\" value=\"$dbPassForm\">".$langEG." ".generePass(8)."
+				</td>
+			</tr>
+			<tr>
+				<th>".$langMainDB."</th>
+				<td>
+					<input type=\"text\"  size=\"25\" name=\"dbNameForm\" value=\"$dbNameForm\">(αν υπάρχει ήδη κάποια βάση δεδομένων με το όνομα eclass αλλάξτε το)
+				</td>
+			</tr>
+			<tr>
+				<th>URL του phpMyAdmin</th>
+				<td>
+					<input type=\"text\" size=\"25\" name=\"dbMyAdmin\" value=\"".$dbMyAdmin."\">Δεν χρειάζεται να το αλλάξετε
+				</td>
+			</tr>
+			<tr>
+				<th>URL του System info</th>
+				<td>
+					<input type=\"text\" size=\"25\" name=\"phpSysInfoURL\" value=\"".$phpSysInfoURL."\">Δεν χρειάζεται να το αλλάξετε
+				</td>
+			</tr>
+		</thead>
+	</table>
+                   
+	<input type=\"submit\" name=\"back2\" value=\"< Πίσω\">
+	<input type=\"submit\" name=\"install5\" value=\"Επόμενο >\">
+</form>
+                   ";
+	draw($tool_content);
 }	 // install3
 
 // step 4 config settings
@@ -339,213 +218,181 @@ elseif(isset($install5) OR isset($back4))
 		$persoIsActiveSelTrue = "";
 		$persoIsActiveSelFalse = "selected";
 	}
+
+	$tool_content .=  "
+        <h3>".$langStep4." ".$langCfgSetting."</h3>
+        <p>Τα παρακάτω θα γραφτούν στο αρχείο <tt>config.php</tt>.</p>
+        
+		<table width=\"99%\">
+			<thead>
+				<tr>
+					<th>".$langMainLang."</th>
+					<td>
+						 <select name=\"languageForm\">	";
 	
-    echo "
-        <h2>
-            ".$langStep4." ".$langCfgSetting."
-        </h2>
-            Τα παρακάτω θα γραφτούν στο αρχείο <tt>config.php</tt>.
-        </td>
-        </tr>
-        <tr>
-            <td>
-                <table width=\"100%\">
-                    <tr>
-                        <td>
-                            <font size=\"2\" face=\"arial, helvetica\">
-                                ".$langMainLang."
-                            </font>
-                        </td>
-                        <td>
-                            <font size=\"2\" face=\"arial, helvetica\">
-
-    <select name=\"languageForm\">	";
-    $dirname = "../modules/lang/";
-    if($dirname[strlen($dirname)-1]!='/')
-        $dirname.='/';
-    $handle=opendir($dirname);
-    while ($entries = readdir($handle))
-    {
-        if ($entries=='.'||$entries=='..'||$entries=='CVS')
-            continue;
-        if (is_dir($dirname.$entries))
-        {
-            echo "<option value=\"$entries\"";
-            if ($entries == $languageCourse)
-                echo " selected ";
-            echo ">$entries</option>";
-        }
-    }
-    closedir($handle);
-echo "
-      </select>
-                            </font>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <font size=\"2\" face=\"arial, helvetica\">
-                                URL του e-Class
-                                <font color=\"red\">
-                                    *
-                                </font color>
-                            </font>
-                        </td>
-                        <td>
-                            <input type=\"text\" size=\"40\" name=\"urlForm\" value=\"$urlForm\">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <font size=\"2\" face=\"arial, helvetica\">
-                                ".$langLocalPath."
-                                <font color=red>
-                                    *
-                                </font>
-                            </font>
-                        </td>
-                        <td>
-                            <input type=text size=40 name=\"pathForm\" value=\"".realpath($pathForm)."/\">
-                        </td>
-                    </tr>
-                        <tr>
-                            <td>
-                                <font size=\"2\" face=\"arial, helvetica\">
-                                    ".$langAdminName."
-                                </font>
-                            </td>
-                            <td>
-                                <input type=\"text\" size=\"40\" name=\"nameForm\" value=\"$nameForm\">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <font size=\"2\" face=\"arial, helvetica\">
-                                    ".$langAdminSurname."
-                                </font>
-                            </td>
-                            <td>
-                                <input type=\"text\" size=\"40\" name=\"surnameForm\" value=\"$surnameForm\">
-                            </td>
-                        </tr>
+	$dirname = "../modules/lang/";
+	if($dirname[strlen($dirname)-1]!='/')
+	$dirname.='/';
+	$handle=opendir($dirname);
+	while ($entries = readdir($handle))
+	{
+		if ($entries=='.'||$entries=='..'||$entries=='CVS')
+		continue;
+		if (is_dir($dirname.$entries))
+		{
+			$tool_content .= "<option value=\"$entries\"";
+			if ($entries == $languageCourse)
+			$tool_content .= " selected ";
+			$tool_content .= ">$entries</option>";
+		}
+	}
+	closedir($handle);
+	$tool_content .= "
+						</select>
+					 </td>
+				</tr>
+				<tr>
+					<th>URL του e-Class<font color=\"red\">*</font></th>
+					<td>
+						<input type=\"text\" size=\"40\" name=\"urlForm\" value=\"$urlForm\">
+					</td>
+				</tr>
+				<tr>
+					<th>".$langLocalPath."<font color=red>*</font></th>
+					<td>
+						<input type=text size=40 name=\"pathForm\" value=\"".realpath($pathForm)."/\">
+					</td>
+				</tr>
+				<tr>
+					<th>".$langAdminName."</th>
+					<td>
+						<input type=\"text\" size=\"40\" name=\"nameForm\" value=\"$nameForm\">
+					</td>
+				</tr>
+				<tr>
+					<th>".$langAdminSurname."</th>
+					<td>
+						<input type=\"text\" size=\"40\" name=\"surnameForm\" value=\"$surnameForm\">
+					</td>
+				</tr>
 
                         <tr>
-            <td>
-            <font size=\"2\" face=\"arial, helvetica\">
+            <th>
+            
                ".$langAdminEmail."
-            </font>
-            </td>
+           
+            </th>
             <td>
             <input type=text size=40 name=\"emailForm\" value=\"$emailForm\">
             </td>
             </tr>
 
                         <tr>
-                            <td>
-                                <font size=\"2\" face=\"arial, helvetica\">
+                            <th>
+                                
                                     ".$langAdminLogin."
-                                </font>
-                            </td>
+                                
+                            </th>
                             <td>
                                 <input type=\"text\" size=\"40\" name=\"loginForm\" value=\"$loginForm\">
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <font size=\"2\" face=\"arial, helvetica\">
+                            <th>
+                                
                                     ".$langAdminPass."
-                                </font>
-                            </td>
+                               
+                            </th>
                             <td>
                                 <input type=\"text\" size=\"40\" name=\"passForm\" value=\"$passForm\">
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <font size=\"2\" face=\"arial, helvetica\">
+                            <th>
+                                
                                     ".$langCampusName."
-                                </font>
-                            </td>
+                               
+                            </th>
                             <td>
                                 <input type=\"text\" size=\"40\" name=\"campusForm\" value=\"$campusForm\">
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <font size=\"2\" face=\"arial, helvetica\">
+                            <th>
+                                
                                     ".$langHelpDeskPhone."
-                                </font>
-                            </td>
+                                
+                            </th>
                             <td>
                                 <input type=\"text\" size=\"40\" name=\"helpdeskForm\" value=\"$helpdeskForm\">
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <font size=\"2\" face=\"arial, helvetica\">
+                            <th>
+                                
                                     ".$langHelpDeskEmail."
                                     <font color=\"red\">
                                         **
                                     </font color>
-                                </font>
-                            </td>
+                               
+                            </th>
                             <td>
                                 <input type=text size=40 name=\"helpdeskmail\" value=\"$helpdeskmail\">
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <font size=\"2\" face=\"arial, helvetica\">
+                            <th>
+                               
                                     ".$langInstituteShortName."
-                                </font>
-                            </td>
+                                
+                            </th>
                             <td>
                                 <input type=text size=40 name=\"institutionForm\" value=\"$institutionForm\">
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <font size=\"2\" face=\"arial, helvetica\">
+                            <th>
+                               
                                     ".$langInstituteName."
-                                </font>
-                            </td>
+                                
+                            </th>
                             <td>
                                 <input type=\"text\" size=\"40\" name=\"institutionUrlForm\" value=\"$institutionUrlForm\">
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                 <font size=\"2\" face=\"arial, helvetica\">
+                            <th>
+                                 
                                      LDAP εξυπηρέτης του Ιδρύματος
-                                </font>
-                            </td>
+                               
+                            </th>
                             <td>
                                  <input type=\"text\" size=\"40\" name=\"ldapserver\" value=\"$ldapserver\">
                              </td>
                         </tr>
                         <tr>
-                            <td>
-                                <font size=\"2\" face=\"arial, helvetica\">
+                            <th>
+                                
                                     Base dn του LDAP εξυπηρέτη
                                 </font>
-                            </td>
+                            </th>
                             <td>
                                 <input type=\"text\" size=\"40\" name=\"dnldapserver\" value=\"$dnldapserver\">
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <font size=\"2\" face=\"arial, helvetica\">
+                            <th>
+                                
                                    Εξυπηρετητής video streaming 
-                                </font>
-                            </td>
+                               
+                            </th>
                             <td>
 <script>
 function set_video_input()
 	{
 		if(document.getElementById(\"video_check\").checked==true)
 		{
-			document.getElementById(\"video_input_div_text\").innerHTML='<font size=\"2\" face=\"arial, helvetica\">Πρόθεμα του τελικού URL με το οποίο θα σερβίρονται τα αποθηκευμένα στον video streaming εξυπηρετητή αρχεία</font><font color=\"red\">*</font>';
+			document.getElementById(\"video_input_div_text\").innerHTML='Πρόθεμα του τελικού URL με το οποίο θα σερβίρονται τα αποθηκευμένα στον video streaming εξυπηρετητή αρχεία<font color=\"red\">*';
 			document.getElementById(\"video_input_div_input\").innerHTML='<input type=\"text\" size=\"20\" name=\"vodServerForm\" value=\"$vodServer\"><br>Πχ. mms://windows_media.server.gr/, rtsp://real.server.gr';
 		}
 		else{ document.getElementById(\"video_input_div_text\").innerHTML='';
@@ -559,20 +406,20 @@ function set_video_input()
      </td>
      </tr>
 			<tr>
-				<td>
+				<th>
 				 <div id=\"video_input_div_text\">
 				 </div>
-				</td>
+				</th>
 				<td>
 				 <div id=\"video_input_div_input\">
 				</td>
 			</tr>
                         <tr>
-                            <td>
-                                <font size=\"2\" face=\"arial, helvetica\">
+                            <th>
+                                
                                    MCU 
-                                </font>
-                            </td>
+                                
+                            </th>
                             <td>
 <script>
 function set_MCU()
@@ -593,20 +440,20 @@ function set_MCU()
      </td>
      </tr>
 			<tr>
-				<td>
+				<th>
 				 <div id=\"MCU_div_text\">
 				 </div>
-				</td>
+				</th>
 				<td>
 				 <div id=\"MCU_div_input\">
 				</td>
 			</tr>
                         <tr>
-                            <td>
-                                <font size=\"2\" face=\"arial, helvetica\">
+                            <th>
+                                
                                     Personalization
-                                </font>
-                            </td>
+                                
+                            </th>
                             <td>
                             		<select name=\"persoIsActive\">
                             			<option value=\"true\" ".$persoIsActiveSelTrue.">true</option>
@@ -616,44 +463,35 @@ function set_MCU()
                         </tr>
 			
 			<tr>
-			    <td>
-                                <font size=\"2\" face=\"arial, helvetica\">
+			    <th>
+                               
                                     Κλειδί για χρήση απόκριψης
-                                </font>
-                            </td>
+                                
+                            </th>
                             <td>
                                 <input type=\"text\" size=\"40\" name=\"encryptkey\" value=\"$encryptkey\">
                             </td>
                         </tr>
 			
-                        <tr><td colspan=\"2\">&nbsp;</td></tr>
-                        <tr>
-                            <td colspan=\"2\">
-                                <font size=\"2\" face=\"arial, helvetica\">
+                         </thead>
+                    </table>
+                        <p>
                                 <font color=\"red\">*
                                 </font>
-                                  = υποχρεωτικό
-                                </font>
-                            </td>
-                        </tr>
-                        <tr>
-                          <td colspan=\"2\">
+                                  = υποχρεωτικό</p>
+                                
+                        <p>
                             <font color=\"red\">**</font>
-                                <font size=\"2\" face=\"arial, helvetica\">
+                                
                                      ".$langWarnHelpDesk."
-                                </font>
-                            </td>
-                        </tr>
-                        <tr><td colspan=\"2\">&nbsp;</td></tr>
-                        <tr>
-                            <td>
+                                </p><br/>
                                 <input type=\"submit\" name=\"back3\" value=\"< Πίσω \">
-                            </td>
-                            <td align=\"right\">
+                            
                                 <input type=\"submit\" name=\"install6\" value='Επόμενο >'>
-                            </td>
-                        </tr>
-                    </table>";
+                           
+                       ";
+
+	draw($tool_content);
 
 }
 
@@ -661,77 +499,65 @@ function set_MCU()
 
 elseif(isset($install6))
 {
-    $pathForm = str_replace("\\\\", "/", $pathForm);
-    @chmod( "../config/config.php", 666 );
-    @chmod( "../config/config.php", 0666 );
-    echo "
-        <h2>
+	$pathForm = str_replace("\\\\", "/", $pathForm);
+	@chmod( "../config/config.php", 666 );
+	@chmod( "../config/config.php", 0666 );
+	$tool_content .=  "
+        <h3>
             ".$langStep5." ".$langLastCheck."
-        </h2>
-        Τα στοιχεία που δηλώσατε είναι τα παρακάτω:<br>
-        <font color=\"red\">
-            Εκτυπώστε τα αν θέλετε να θυμάστε το συνθηματικό του διαχειριστή και τις άλλες ρυθμίσεις
-        </font>
-        <font size=\"2\" face=\"arial, helvetica\">
+        </h3>
+        <p>
+        Τα στοιχεία που δηλώσατε είναι τα παρακάτω:
+        (Εκτυπώστε τα αν θέλετε να θυμάστε το συνθηματικό του διαχειριστή και τις άλλες ρυθμίσεις)</p>
+        <ul id=\"installBullet\">
+        <li>Γλώσσα : $languageForm</li>
+        <li>Όνομα υπολογιστή : $dbHostForm</li>
+        <li>Όνομα Χρήστη για τη Βάση Δεδομένων : $dbUsernameForm</li>
+        <li>Συνθηματικό για τη Βάση Δεδομένων: $dbPassForm</li>
+        <li>Κύρια Βάση Δεδομένων : $dbNameForm</li>
+        <li>URL του phpMyAdmin : $dbMyAdmin</li>
 
-        <blockquote>Γλώσσα : $languageForm<br>
-        Όνομα υπολογιστή : $dbHostForm<br>
-        Όνομα Χρήστη για τη Βάση Δεδομένων : $dbUsernameForm<br>
-        Συνθηματικό για τη Βάση Δεδομένων: $dbPassForm<br>
-        Κύρια Βάση Δεδομένων : $dbNameForm<br>
-        URL του phpMyAdmin : $dbMyAdmin<br>
+        <li>URL του e-Class : $urlForm</li>
+        <li>Toπικό path : $pathForm</li>
+        <li>Email Διαχειριστή : $emailForm</li>
+        <li>Όνομα Διαχειριστή : $nameForm</li>
 
-        URL του e-Class : $urlForm<br>
-        Toπικό path : $pathForm<br>
-        Email Διαχειριστή : $emailForm<br>
-        Όνομα Διαχειριστή : $nameForm<br>
+        <li>Επώνυμο Διαχειριστή : $surnameForm</li>
+        <li><b>Όνομα Χρήστη του Διαχειριστή : </b>$loginForm</li>
+        <li><b>Συνθηματικό του Διαχειριστή : </b>$passForm</li>
+        <li>Όνομα Πανεπιστημιακού Ιδρύματος : $campusForm</li>
 
-        Επώνυμο Διαχειριστή : $surnameForm<br>
-        <table border=0>
-            <tr>
-                <td>
-                    <font size=\"2\" color=\"red\" face=\"arial, helvetica\">
-                    Όνομα Χρήστη του Διαχειριστή : $loginForm<br>
-                    Συνθηματικό του Διαχειριστή : $passForm
-                    </font>
-                </td>
-            <tr>
-        </table>
-        Όνομα Πανεπιστημιακού Ιδρύματος : $campusForm<br>
-
-        Τηλέφωνο Helpdesk : $helpdeskForm<br>
-        E-mail Helpdesk : $helpdeskmail<br>
-        Σύντομο όνομα του Ιδρύματος : $institutionForm<br>
-        URL του Ιδρύματος : $institutionUrlForm<br>
-         LDAP εξυπηρέτης του Ιδρύματος : $ldapserver<br>
-        Base dn του LDAP Εξυπηρέτη : $dnldapserver <br>
-	MCU: ".@$MCUForm." <br>
-	Vod Server: $vodServerForm <br>
-	Κλειδί για χρήση απόκριψης: $encryptkey <br>
-        </blockquote>
-        <table width=100%>
-            <tr>
-                <td>
+        <li>Τηλέφωνο Helpdesk : $helpdeskForm</li>
+        <li>E-mail Helpdesk : $helpdeskmail</li>
+        <li>Σύντομο όνομα του Ιδρύματος : $institutionForm</li>
+        <li>URL του Ιδρύματος : $institutionUrlForm</li>
+         <li>LDAP εξυπηρέτης του Ιδρύματος : $ldapserver</li>
+        <li>Base dn του LDAP Εξυπηρέτη : $dnldapserver </li>
+	<li>MCU: ".@$MCUForm." </li>
+	<li>Vod Server: ".@$vodServerForm." </li>
+	<li>Κλειδί για χρήση απόκριψης: $encryptkey </li>
+        </ul>
+        
                     <input type=\"submit\" name=\"back4\" value=\"< Πίσω\">
-                </td>
-                <td align=\"right\">
+               
                     <input type=\"submit\" name=\"install7\" value=\"Eγκατάσταση του e-Class >\">
-                </td>
-            </tr>
-        </table>";
+               
+        </form>";
+	
+	draw($tool_content);
 }
 // step 6 installation successful
 
 elseif(isset($install7))
 {
 
-// database creation
+	// database creation
 
-    $db = @mysql_connect("$dbHostForm", "$dbUsernameForm", "$dbPassForm");
-    if (mysql_errno()>0) // problem with server
-    {
-        $no = mysql_errno();     $msg = mysql_error();
-        echo "<HR>[".$no."] - ".$msg."<HR>
+	$db = @mysql_connect("$dbHostForm", "$dbUsernameForm", "$dbPassForm");
+	if (mysql_errno()>0) // problem with server
+	{
+		$no = mysql_errno();     $msg = mysql_error();
+		$tool_content .= "<HR>[".$no."] - ".$msg."<HR>
         Η Mysql  δεν λειτουργεί ή το όνομα χρήστη/συνθηματικό δεν είναι σωστό.<br>
         Παρακαλούμε ελέγξετε τα στοιχεία σας. <br>
         Όνομα Υπολογιστή : ".$dbHostForm."<br>
@@ -739,44 +565,44 @@ elseif(isset($install7))
         Συνθηματικό  : ".$dbPassForm."<br>
         και επιστρέψτε στο βήμα 2
         ";
-        exit();
-    }
-    $mysqlMainDb = $dbNameForm;
-    mysql_query("DROP DATABASE IF EXISTS ".$mysqlMainDb);
-    if (mysql_version()) mysql_query("SET NAMES greek");
-    if (mysql_version())
-        $cdb=mysql_query("CREATE DATABASE $mysqlMainDb CHARACTER SET greek");
-    else
-        $cdb=mysql_query("CREATE DATABASE $mysqlMainDb");
-    mysql_select_db ($mysqlMainDb);
+		draw($tool_content);
+	}
+	$mysqlMainDb = $dbNameForm;
+	mysql_query("DROP DATABASE IF EXISTS ".$mysqlMainDb);
+	if (mysql_version()) mysql_query("SET NAMES greek");
+	if (mysql_version())
+	$cdb=mysql_query("CREATE DATABASE $mysqlMainDb CHARACTER SET greek");
+	else
+	$cdb=mysql_query("CREATE DATABASE $mysqlMainDb");
+	mysql_select_db ($mysqlMainDb);
 
 	// drop old tables (if existed)
-    mysql_query("DROP TABLE IF EXISTS admin");
-		mysql_query("DROP TABLE IF EXISTS admin_announcements");
-		mysql_query("DROP TABLE IF EXISTS agenda");
-    mysql_query("DROP TABLE IF EXISTS annonces");
-		mysql_query("DROP TABLE IF EXISTS auth");
-    mysql_query("DROP TABLE IF EXISTS cours");
-    mysql_query("DROP TABLE IF EXISTS cours_faculte");
-    mysql_query("DROP TABLE IF EXISTS cours_user");
-    mysql_query("DROP TABLE IF EXISTS faculte");
-    mysql_query("DROP TABLE IF EXISTS institution");
-    mysql_query("DROP TABLE IF EXISTS loginout");
-		mysql_query("DROP TABLE IF EXISTS loginout_summary");
-		mysql_query("DROP TABLE IF EXISTS monthly_summary");
-    mysql_query("DROP TABLE IF EXISTS prof_request");
-    mysql_query("DROP TABLE IF EXISTS user");
-		
-    #
-    # table `annonces`
-    #
+	mysql_query("DROP TABLE IF EXISTS admin");
+	mysql_query("DROP TABLE IF EXISTS admin_announcements");
+	mysql_query("DROP TABLE IF EXISTS agenda");
+	mysql_query("DROP TABLE IF EXISTS annonces");
+	mysql_query("DROP TABLE IF EXISTS auth");
+	mysql_query("DROP TABLE IF EXISTS cours");
+	mysql_query("DROP TABLE IF EXISTS cours_faculte");
+	mysql_query("DROP TABLE IF EXISTS cours_user");
+	mysql_query("DROP TABLE IF EXISTS faculte");
+	mysql_query("DROP TABLE IF EXISTS institution");
+	mysql_query("DROP TABLE IF EXISTS loginout");
+	mysql_query("DROP TABLE IF EXISTS loginout_summary");
+	mysql_query("DROP TABLE IF EXISTS monthly_summary");
+	mysql_query("DROP TABLE IF EXISTS prof_request");
+	mysql_query("DROP TABLE IF EXISTS user");
 
-    // if mysql > 4.1 then create tables with charset
+	#
+	# table `annonces`
+	#
 
-if (mysql_version())  {
+	// if mysql > 4.1 then create tables with charset
+
+	if (mysql_version())  {
 
 
-    mysql_query("CREATE TABLE annonces (
+		mysql_query("CREATE TABLE annonces (
       id mediumint(11) NOT NULL auto_increment,
       contenu text,
       temps date default NULL,
@@ -785,11 +611,11 @@ if (mysql_version())  {
       PRIMARY KEY  (id))
       TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
-#---------------------------------------------
+		#---------------------------------------------
 
-#
-# table admin_announcements
-#
+		#
+		# table admin_announcements
+		#
 		mysql_query("CREATE TABLE admin_announcements (
     		id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 		gr_title VARCHAR(255) NULL,
@@ -802,13 +628,13 @@ if (mysql_version())  {
 		visible ENUM('V', 'I') NOT NULL
 		) TYPE = MyISAM DEFAULT CHARACTER SET=greek");
 
-    # --------------------------------------------------------
+		# --------------------------------------------------------
 
-    #
-    # table `agenda`
-    #
+		#
+		# table `agenda`
+		#
 
-    mysql_query("CREATE TABLE `agenda` (
+		mysql_query("CREATE TABLE `agenda` (
   `id` int(11) NOT NULL auto_increment,
   `lesson_event_id` int(11) NOT NULL default '0',
   `titre` varchar(200) NOT NULL default '',
@@ -819,14 +645,14 @@ if (mysql_version())  {
   `lesson_code` varchar(50) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) TYPE=MyISAM DEFAULT CHARACTER SET=greek");
-    
-    # --------------------------------------------------------
-    
-    #
-    # table `cours`
-    #
 
-    mysql_query("CREATE TABLE `cours` (
+		# --------------------------------------------------------
+
+		#
+		# table `cours`
+		#
+
+		mysql_query("CREATE TABLE `cours` (
   `cours_id` int(11) NOT NULL auto_increment,
   `code` varchar(20) default NULL,
   `languageCourse` varchar(15) default NULL,
@@ -857,13 +683,13 @@ if (mysql_version())  {
   PRIMARY KEY  (`cours_id`))
   TYPE=MyISAM DEFAULT CHARACTER SET='greek'");
 
-    # --------------------------------------------------------
+		# --------------------------------------------------------
 
-    #
-    # Table `cours_faculte`
-    #
+		#
+		# Table `cours_faculte`
+		#
 
-    mysql_query("CREATE TABLE cours_faculte (
+		mysql_query("CREATE TABLE cours_faculte (
       id int(11) NOT NULL auto_increment,
       faculte varchar(100) NOT NULL,
       code varchar(20) NOT NULL,
@@ -871,14 +697,14 @@ if (mysql_version())  {
       PRIMARY KEY  (id))
       TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
-    # --------------------------------------------------------
+		# --------------------------------------------------------
 
-    #
-    # Table `cours_user`
-    #
+		#
+		# Table `cours_user`
+		#
 
 
-    mysql_query("CREATE TABLE cours_user (
+		mysql_query("CREATE TABLE cours_user (
       code_cours varchar(30) NOT NULL default '0',
       user_id int(11) unsigned NOT NULL default '0',
       statut tinyint(4) NOT NULL default '0',
@@ -888,11 +714,11 @@ if (mysql_version())  {
       PRIMARY KEY  (code_cours,user_id))
       TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
-    #
-    # Table `faculte`
-    #
+		#
+		# Table `faculte`
+		#
 
-    mysql_query("CREATE TABLE faculte (
+		mysql_query("CREATE TABLE faculte (
       id int(11) NOT NULL auto_increment,
       code varchar(10) NOT NULL,
       name varchar(100) NOT NULL,
@@ -901,21 +727,21 @@ if (mysql_version())  {
       PRIMARY KEY  (id))
       TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
-    # --------------------------------------------------------
+		# --------------------------------------------------------
 
-     mysql_query("INSERT INTO faculte VALUES (1, 'TMA', 'Τμήμα 1', 10, 100)");
-     mysql_query("INSERT INTO faculte VALUES (2, 'TMB', 'Τμήμα 2', 20, 100)");
-     mysql_query("INSERT INTO faculte VALUES (3, 'TMC', 'Τμήμα 3', 30, 100)");
-     mysql_query("INSERT INTO faculte VALUES (4, 'TMD', 'Τμήμα 4', 40, 100)");
-     mysql_query("INSERT INTO faculte VALUES (5, 'TME', 'Τμήμα 5', 50, 100)");
-
-
-    #
-    # Table `user`
-    #
+		mysql_query("INSERT INTO faculte VALUES (1, 'TMA', 'Τμήμα 1', 10, 100)");
+		mysql_query("INSERT INTO faculte VALUES (2, 'TMB', 'Τμήμα 2', 20, 100)");
+		mysql_query("INSERT INTO faculte VALUES (3, 'TMC', 'Τμήμα 3', 30, 100)");
+		mysql_query("INSERT INTO faculte VALUES (4, 'TMD', 'Τμήμα 4', 40, 100)");
+		mysql_query("INSERT INTO faculte VALUES (5, 'TME', 'Τμήμα 5', 50, 100)");
 
 
-    mysql_query("CREATE TABLE user (
+		#
+		# Table `user`
+		#
+
+
+		mysql_query("CREATE TABLE user (
       user_id mediumint unsigned NOT NULL auto_increment,
       nom varchar(60) default NULL,
       prenom varchar(60) default NULL,
@@ -937,12 +763,12 @@ if (mysql_version())  {
      PRIMARY KEY  (user_id))
       TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
-    mysql_query("CREATE TABLE admin (
+		mysql_query("CREATE TABLE admin (
       idUser mediumint unsigned  NOT NULL default '0',
       UNIQUE KEY idUser (idUser))
       TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
-    mysql_query("CREATE TABLE loginout (
+		mysql_query("CREATE TABLE loginout (
       idLog mediumint(9) unsigned NOT NULL auto_increment,
       id_user mediumint(9) unsigned NOT NULL default '0',
       ip char(16) NOT NULL default '0.0.0.0',
@@ -951,10 +777,10 @@ if (mysql_version())  {
       PRIMARY KEY  (idLog))
       TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
-    // haniotak:
-    // table for loginout rollups
-    // only contains LOGIN events summed up by a period (typically weekly)
-    mysql_query("CREATE TABLE loginout_summary (
+		// haniotak:
+		// table for loginout rollups
+		// only contains LOGIN events summed up by a period (typically weekly)
+		mysql_query("CREATE TABLE loginout_summary (
         id mediumint unsigned NOT NULL auto_increment,
         login_sum int(11) unsigned  NOT NULL default '0',
         start_date datetime NOT NULL default '0000-00-00 00:00:00',
@@ -962,8 +788,8 @@ if (mysql_version())  {
         PRIMARY KEY  (id))
         TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
-    //table keeping data for monthly reports
-    mysql_query("CREATE TABLE monthly_summary (
+		//table keeping data for monthly reports
+		mysql_query("CREATE TABLE monthly_summary (
         id mediumint unsigned NOT NULL auto_increment,
         `month` varchar(20)  NOT NULL default '0',
         profesNum int(11) NOT NULL default '0',
@@ -984,20 +810,20 @@ if (mysql_version())  {
 		$pswdlen = "20";
 		$password_encrypted = $crypt->encrypt($key, $passForm, $pswdlen);
 		$exp_time = time() + 140000000;
-    mysql_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`,`registered_at`,`expires_at`)
+		mysql_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`,`registered_at`,`expires_at`)
     VALUES ('$nameForm', '$surnameForm', '$loginForm','$password_encrypted','$emailForm','1',".time().",".$exp_time.")");
-    $idOfAdmin=mysql_insert_id();
-    mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action) VALUES ('', '".$idOfAdmin."', '".$REMOTE_ADDR."', NOW(), 'LOGIN')");
+		$idOfAdmin=mysql_insert_id();
+		mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action) VALUES ('', '".$idOfAdmin."', '".$REMOTE_ADDR."', NOW(), 'LOGIN')");
 
-    #add admin in list of admin
-    mysql_query("INSERT INTO admin VALUES ('".$idOfAdmin."')");
+		#add admin in list of admin
+		mysql_query("INSERT INTO admin VALUES ('".$idOfAdmin."')");
 
 
-  #
-  # Table structure for table `institution`
-  #
+		#
+		# Table structure for table `institution`
+		#
 
- mysql_query("CREATE TABLE institution (
+		mysql_query("CREATE TABLE institution (
             inst_id int(11) NOT NULL auto_increment,
              nom varchar(100) NOT NULL default '',
              ldapserver varchar(30) NOT NULL default '',
@@ -1005,17 +831,17 @@ if (mysql_version())  {
          PRIMARY KEY  (inst_id))
           TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
-#
-# Dumping data for table `institution`
-#
+		#
+		# Dumping data for table `institution`
+		#
 
-mysql_query("INSERT INTO institution (inst_id, nom, ldapserver, basedn) VALUES ('1', '$institutionForm', '$ldapserver', '$dnldapserver')");
+		mysql_query("INSERT INTO institution (inst_id, nom, ldapserver, basedn) VALUES ('1', '$institutionForm', '$ldapserver', '$dnldapserver')");
 
-#
-# Table structure for table `prof_request`
-#
+		#
+		# Table structure for table `prof_request`
+		#
 
-mysql_query("CREATE TABLE `prof_request` (
+		mysql_query("CREATE TABLE `prof_request` (
           `rid` int(11) NOT NULL auto_increment,
             `profname` varchar(255) NOT NULL default '',
               `profsurname` varchar(255) NOT NULL default '',
@@ -1032,9 +858,9 @@ mysql_query("CREATE TABLE `prof_request` (
         TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
 
-    ###############PHPMyAdminTables##################
+		###############PHPMyAdminTables##################
 
-    mysql_query("
+		mysql_query("
     CREATE TABLE `pma_bookmark` (
        id int(11) DEFAULT '0' NOT NULL auto_increment,
        dbase varchar(255) NOT NULL,
@@ -1044,7 +870,7 @@ mysql_query("CREATE TABLE `prof_request` (
        PRIMARY KEY (id))
        TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
-    mysql_query("
+		mysql_query("
 CREATE TABLE `pma_relation` (
        `master_db` varchar(64) NOT NULL default '',
        `master_table` varchar(64) NOT NULL default '',
@@ -1057,7 +883,7 @@ CREATE TABLE `pma_relation` (
        TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
 
-    mysql_query("
+		mysql_query("
     CREATE TABLE `pma_table_info` (
        `db_name` varchar(64) NOT NULL default '',
        `table_name` varchar(64) NOT NULL default '',
@@ -1065,7 +891,7 @@ CREATE TABLE `pma_relation` (
        PRIMARY KEY (`db_name`, `table_name`))
        TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
-    mysql_query("
+		mysql_query("
      CREATE TABLE `pma_table_coords` (
        `db_name` varchar(64) NOT NULL default '',
        `table_name` varchar(64) NOT NULL default '',
@@ -1075,7 +901,7 @@ CREATE TABLE `pma_relation` (
        PRIMARY KEY (`db_name`, `table_name`, `pdf_page_number`))
        TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
-    mysql_query("
+		mysql_query("
      CREATE TABLE `pma_pdf_pages` (
        `db_name` varchar(64) NOT NULL default '',
        `page_nr` int(10) unsigned NOT NULL auto_increment,
@@ -1084,7 +910,7 @@ CREATE TABLE `pma_relation` (
        KEY (db_name))
        TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
-    mysql_query("
+		mysql_query("
 CREATE TABLE `pma_column_comments` (
        id int(5) unsigned NOT NULL auto_increment,
        db_name varchar(64) NOT NULL default '',
@@ -1095,9 +921,9 @@ CREATE TABLE `pma_column_comments` (
        UNIQUE KEY db_name (db_name, table_name, column_name))
        TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
-// New table auth for authentication methods
-// added by kstratos
-    mysql_query("
+		// New table auth for authentication methods
+		// added by kstratos
+		mysql_query("
 CREATE TABLE `auth` (
   `auth_id` int(2) NOT NULL auto_increment,
   `auth_name` varchar(20) NOT NULL default '',
@@ -1107,15 +933,15 @@ CREATE TABLE `auth` (
   PRIMARY KEY  (`auth_id`))
   TYPE=MyISAM DEFAULT CHARACTER SET=greek");
 
-mysql_query("INSERT INTO `auth` VALUES (1, 'eclass', '', '', 1)");
-mysql_query("INSERT INTO `auth` VALUES (2, 'pop3', '', '', 0)");
-mysql_query("INSERT INTO `auth` VALUES (3, 'imap', '', '', 0)");
-mysql_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)");
-mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
+		mysql_query("INSERT INTO `auth` VALUES (1, 'eclass', '', '', 1)");
+		mysql_query("INSERT INTO `auth` VALUES (2, 'pop3', '', '', 0)");
+		mysql_query("INSERT INTO `auth` VALUES (3, 'imap', '', '', 0)");
+		mysql_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)");
+		mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
 
 
- } else {
-     mysql_query("CREATE TABLE annonces (
+	} else {
+		mysql_query("CREATE TABLE annonces (
       id mediumint(11) NOT NULL auto_increment,
       contenu text,
       temps date default NULL,
@@ -1124,10 +950,10 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
       PRIMARY KEY  (id))
       TYPE=MyISAM");
 
-# -------------------------------
-#
-# table admin_announcements
-#
+		# -------------------------------
+		#
+		# table admin_announcements
+		#
 		mysql_query("CREATE TABLE admin_announcements (
     id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 		gr_title VARCHAR(255) NULL ,
@@ -1139,15 +965,15 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
 			date  DATE NOT NULL ,
 			visible ENUM('V', 'I') NOT NULL
 			) TYPE = MYISAM");
-			
 
-    # --------------------------------------------------------
 
-    #
-    # table `agenda`
-    #
-    
-    mysql_query("CREATE TABLE `agenda` (
+		# --------------------------------------------------------
+
+		#
+		# table `agenda`
+		#
+
+		mysql_query("CREATE TABLE `agenda` (
   	`id` int(11) NOT NULL auto_increment,
   	`lesson_event_id` int(11) NOT NULL default '0',
   	`titre` varchar(200) NOT NULL default '',
@@ -1158,14 +984,14 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
   	`lesson_code` varchar(50) NOT NULL default '',
   	PRIMARY KEY  (`id`)
 	) TYPE=MyISAM ");
-    
-    # --------------------------------------------------------
-    
-    #
-    # table `cours`
-    #
 
-    mysql_query("CREATE TABLE `cours` (
+		# --------------------------------------------------------
+
+		#
+		# table `cours`
+		#
+
+		mysql_query("CREATE TABLE `cours` (
   `cours_id` int(11) NOT NULL auto_increment,
   `code` varchar(20) default NULL,
   `languageCourse` varchar(15) default NULL,
@@ -1199,13 +1025,13 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
   PRIMARY KEY  (`cours_id`))
   TYPE=MyISAM");
 
-    # --------------------------------------------------------
+		# --------------------------------------------------------
 
-    #
-    # Table `cours_faculte`
-    #
+		#
+		# Table `cours_faculte`
+		#
 
-    mysql_query("CREATE TABLE cours_faculte (
+		mysql_query("CREATE TABLE cours_faculte (
       id int(11) NOT NULL auto_increment,
       faculte varchar(100) NOT NULL,
       code varchar(20) NOT NULL,
@@ -1213,14 +1039,14 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
       PRIMARY KEY  (id))
       TYPE=MyISAM");
 
-    # --------------------------------------------------------
+		# --------------------------------------------------------
 
-    #
-    # Table `cours_user`
-    #
+		#
+		# Table `cours_user`
+		#
 
 
-    mysql_query("CREATE TABLE cours_user (
+		mysql_query("CREATE TABLE cours_user (
       code_cours varchar(30) NOT NULL default '0',
       user_id int(11) unsigned NOT NULL default '0',
       statut tinyint(4) NOT NULL default '0',
@@ -1230,11 +1056,11 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
       PRIMARY KEY  (code_cours,user_id))
       TYPE=MyISAM");
 
-    #
-    # Table `faculte`
-    #
+		#
+		# Table `faculte`
+		#
 
-    mysql_query("CREATE TABLE faculte (
+		mysql_query("CREATE TABLE faculte (
       id int(11) NOT NULL auto_increment,
       code varchar(10) NOT NULL,
       name varchar(100) NOT NULL,
@@ -1243,21 +1069,21 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
       PRIMARY KEY  (id))
       TYPE=MyISAM");
 
-    # --------------------------------------------------------
+		# --------------------------------------------------------
 
-     mysql_query("INSERT INTO faculte VALUES (1, 'TMA', 'Τμήμα 1', 10, 100)");
-     mysql_query("INSERT INTO faculte VALUES (2, 'TMB', 'Τμήμα 2', 20, 100)");
-     mysql_query("INSERT INTO faculte VALUES (3, 'TMC', 'Τμήμα 3', 30, 100)");
-     mysql_query("INSERT INTO faculte VALUES (4, 'TMD', 'Τμήμα 4', 40, 100)");
-     mysql_query("INSERT INTO faculte VALUES (5, 'TME', 'Τμήμα 5', 50, 100)");
-
-
-    #
-    # Table `user`
-    #
+		mysql_query("INSERT INTO faculte VALUES (1, 'TMA', 'Τμήμα 1', 10, 100)");
+		mysql_query("INSERT INTO faculte VALUES (2, 'TMB', 'Τμήμα 2', 20, 100)");
+		mysql_query("INSERT INTO faculte VALUES (3, 'TMC', 'Τμήμα 3', 30, 100)");
+		mysql_query("INSERT INTO faculte VALUES (4, 'TMD', 'Τμήμα 4', 40, 100)");
+		mysql_query("INSERT INTO faculte VALUES (5, 'TME', 'Τμήμα 5', 50, 100)");
 
 
-    mysql_query("CREATE TABLE user (
+		#
+		# Table `user`
+		#
+
+
+		mysql_query("CREATE TABLE user (
       user_id mediumint unsigned NOT NULL auto_increment,
       nom varchar(60) default NULL,
       prenom varchar(60) default NULL,
@@ -1279,12 +1105,12 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
      PRIMARY KEY  (user_id))
       TYPE=MyISAM");
 
-    mysql_query("CREATE TABLE admin (
+		mysql_query("CREATE TABLE admin (
       idUser mediumint unsigned  NOT NULL default '0',
       UNIQUE KEY idUser (idUser))
       TYPE=MyISAM");
 
-    mysql_query("CREATE TABLE loginout (
+		mysql_query("CREATE TABLE loginout (
       idLog mediumint(9) unsigned NOT NULL auto_increment,
       id_user mediumint(9) unsigned NOT NULL default '0',
       ip char(16) NOT NULL default '0.0.0.0',
@@ -1293,10 +1119,10 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
       PRIMARY KEY  (idLog))
       TYPE=MyISAM");
 
-    // haniotak:
-    // table for loginout rollups
-    // only contains LOGIN events summed up by a period (typically weekly)
-    mysql_query("CREATE TABLE loginout_summary (
+		// haniotak:
+		// table for loginout rollups
+		// only contains LOGIN events summed up by a period (typically weekly)
+		mysql_query("CREATE TABLE loginout_summary (
         id mediumint unsigned NOT NULL auto_increment,
         login_sum int(11) unsigned  NOT NULL default '0',
         start_date datetime NOT NULL default '0000-00-00 00:00:00',
@@ -1312,20 +1138,20 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
 		$password_encrypted = $crypt->encrypt($key, $passForm, $pswdlen);
 		$exp_time = time() + 140000000;
 
-    mysql_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`, `registered_at`,`expires_at`)
+		mysql_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`, `registered_at`,`expires_at`)
     VALUES ('$nameForm', '$surnameForm', '$loginForm','$password_encrypted','$emailForm','1',".time().",".$exp_time.")");
-    $idOfAdmin=mysql_insert_id();
-    mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action) VALUES ('', '".$idOfAdmin."', '".$REMOTE_ADDR."', NOW(), 'LOGIN')");
+		$idOfAdmin=mysql_insert_id();
+		mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action) VALUES ('', '".$idOfAdmin."', '".$REMOTE_ADDR."', NOW(), 'LOGIN')");
 
-    #add admin in list of admin
-    mysql_query("INSERT INTO admin VALUES ('".$idOfAdmin."')");
+		#add admin in list of admin
+		mysql_query("INSERT INTO admin VALUES ('".$idOfAdmin."')");
 
 
-  #
-  # Table structure for table `institution`
-  #
+		#
+		# Table structure for table `institution`
+		#
 
- mysql_query("CREATE TABLE institution (
+		mysql_query("CREATE TABLE institution (
             inst_id int(11) NOT NULL auto_increment,
              nom varchar(100) NOT NULL default '',
              ldapserver varchar(30) NOT NULL default '',
@@ -1333,17 +1159,17 @@ mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
          PRIMARY KEY  (inst_id))
           TYPE=MyISAM");
 
-#
-# Dumping data for table `institution`
-#
+		#
+		# Dumping data for table `institution`
+		#
 
-mysql_query("INSERT INTO institution (inst_id, nom, ldapserver, basedn) VALUES ('1', '$institutionForm', '$ldapserver', '$dnldapserver')");
+		mysql_query("INSERT INTO institution (inst_id, nom, ldapserver, basedn) VALUES ('1', '$institutionForm', '$ldapserver', '$dnldapserver')");
 
-#
-# Table structure for table `prof_request`
-#
+		#
+		# Table structure for table `prof_request`
+		#
 
-mysql_query("CREATE TABLE `prof_request` (
+		mysql_query("CREATE TABLE `prof_request` (
           `rid` int(11) NOT NULL auto_increment,
             `profname` varchar(255) NOT NULL default '',
               `profsurname` varchar(255) NOT NULL default '',
@@ -1360,9 +1186,9 @@ mysql_query("CREATE TABLE `prof_request` (
         TYPE=MyISAM");
 
 
-    ###############PHPMyAdminTables##################
+		###############PHPMyAdminTables##################
 
-    mysql_query("
+		mysql_query("
     CREATE TABLE `pma_bookmark` (
        id int(11) DEFAULT '0' NOT NULL auto_increment,
        dbase varchar(255) NOT NULL,
@@ -1372,7 +1198,7 @@ mysql_query("CREATE TABLE `prof_request` (
        PRIMARY KEY (id))
        TYPE=MyISAM");
 
-    mysql_query("
+		mysql_query("
 CREATE TABLE `pma_relation` (
        `master_db` varchar(64) NOT NULL default '',
        `master_table` varchar(64) NOT NULL default '',
@@ -1385,7 +1211,7 @@ CREATE TABLE `pma_relation` (
        TYPE=MyISAM ");
 
 
-    mysql_query("
+		mysql_query("
     CREATE TABLE `pma_table_info` (
        `db_name` varchar(64) NOT NULL default '',
        `table_name` varchar(64) NOT NULL default '',
@@ -1393,7 +1219,7 @@ CREATE TABLE `pma_relation` (
        PRIMARY KEY (`db_name`, `table_name`))
        TYPE=MyISAM");
 
-    mysql_query("
+		mysql_query("
      CREATE TABLE `pma_table_coords` (
        `db_name` varchar(64) NOT NULL default '',
        `table_name` varchar(64) NOT NULL default '',
@@ -1403,7 +1229,7 @@ CREATE TABLE `pma_relation` (
        PRIMARY KEY (`db_name`, `table_name`, `pdf_page_number`))
        TYPE=MyISAM");
 
-    mysql_query("
+		mysql_query("
      CREATE TABLE `pma_pdf_pages` (
        `db_name` varchar(64) NOT NULL default '',
        `page_nr` int(10) unsigned NOT NULL auto_increment,
@@ -1412,7 +1238,7 @@ CREATE TABLE `pma_relation` (
        KEY (db_name))
        TYPE=MyISAM");
 
-    mysql_query("
+		mysql_query("
 CREATE TABLE `pma_column_comments` (
        id int(5) unsigned NOT NULL auto_increment,
        db_name varchar(64) NOT NULL default '',
@@ -1423,9 +1249,9 @@ CREATE TABLE `pma_column_comments` (
        UNIQUE KEY db_name (db_name, table_name, column_name))
        TYPE=MyISAM");
 
-// New table auth for authentication methods
-// added by kstratos
-    mysql_query("
+		// New table auth for authentication methods
+		// added by kstratos
+		mysql_query("
 CREATE TABLE `auth` (
   `auth_id` int(2) NOT NULL auto_increment,
   `auth_name` varchar(20) NOT NULL default '',
@@ -1435,25 +1261,25 @@ CREATE TABLE `auth` (
   PRIMARY KEY  (`auth_id`))
   TYPE=MyISAM");
 
-mysql_query("INSERT INTO `auth` VALUES (1, 'eclass', '', '', 1)");
-mysql_query("INSERT INTO `auth` VALUES (2, 'pop3', '', '', 0)");
-mysql_query("INSERT INTO `auth` VALUES (3, 'imap', '', '', 0)");
-mysql_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)");
-mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
+		mysql_query("INSERT INTO `auth` VALUES (1, 'eclass', '', '', 1)");
+		mysql_query("INSERT INTO `auth` VALUES (2, 'pop3', '', '', 0)");
+		mysql_query("INSERT INTO `auth` VALUES (3, 'imap', '', '', 0)");
+		mysql_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)");
+		mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
 
 
-//dhmiourgia full text indexes
-mysql_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu` ,`code_cours`)");
-mysql_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_objectives` ,`course_prerequisites` ,`course_keywords` ,`course_references`)");
+		//dhmiourgia full text indexes
+		mysql_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu` ,`code_cours`)");
+		mysql_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_objectives` ,`course_prerequisites` ,`course_keywords` ,`course_references`)");
 
 
- }
+	}
 
-// creation of config.php
+	// creation of config.php
 
-    $fd=@fopen("../config/config.php", "w");
-    if (!$fd) {
-        echo "		<h2>
+	$fd=@fopen("../config/config.php", "w");
+	if (!$fd) {
+		$tool_content .= "		<h2>
                     ".$langStep6." ".$langCfgSetting."
                 </h2>
                 <br>
@@ -1462,10 +1288,10 @@ mysql_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`i
         Δεν είναι δυνατή η δημιουργία του αρχείου config.php.<br><br>
         Παρακαλούμε ελέγξτε τα δικαιώματα πρόσβασης στους υποκαταλόγους του eclass
         και δοκιμάστε ξανά την εγκατάσταση.\n";
-    } else {
+	} else {
 
 
-    $stringConfig='<?php
+		$stringConfig='<?php
 /*
 =============================================================================
            GUnet e-Class 2.0
@@ -1551,10 +1377,10 @@ $durationAccount = "126144000";
 '.($MCU==''?'//':'').'$MCU="'.$MCU.'";
 $encryptkey = "'.$encryptkey.'";
 ?>';
-// write to file
-fwrite($fd, $stringConfig);
-// message
-echo "
+		// write to file
+		fwrite($fd, $stringConfig);
+		// message
+		$tool_content .= "
                 <h2>
                     ".$langStep6." ".$langCfgSetting."
                 </h2>
@@ -1574,69 +1400,69 @@ echo "
                 <br>
     </form>
     <form action=\"../\">
-    <p align=\"right\"><input type=\"submit\" value=\"Είσοδος στο e-Class\"></p>";
-
-    }       // τέλος ελέγχου για δικαιώματα
+    <p align=\"right\"><input type=\"submit\" value=\"Είσοδος στο e-Class\"></p>
+	</form>";
+		draw($tool_content);
+	}       // τέλος ελέγχου για δικαιώματα
 }	// end of step 6
 
 // step 1 requirements
 
 else
 {
-    echo "
-<h2>
+	$tool_content .= "
+<h3>
     ".$langStep1." ".$langRequirements."
-</h2>
-Το πρόγραμμα εγκατάστασης της πλατφόρμας θα κάνει όλες τις απαιτούμενες ρυθμίσεις στο σύστημα,
-    στην κύρια βάση δεδομένων και θα δημιουργήσει το αρχείο <tt>config.php</tt>
-            ";
-    echo "
-    <p></p>
-    <b>Έλεγχος προαπαιτούμενων προγραμμάτων για τη λειτουργία του e-Class :</b>
-    <ul>
-    <li>
-        Webserver (<font size=\"-1\"><em>βρέθηκε <b>".$_SERVER['SERVER_SOFTWARE']."</b></em></font>) <br>
-        με υποστήριξη PHP (<font size=\"-1\"><em>βρέθηκε <b>PHP ".phpversion()."</b></em></font>).<br>
+</h3>
+<p>Το πρόγραμμα εγκατάστασης της πλατφόρμας θα κάνει όλες τις απαιτούμενες ρυθμίσεις στο σύστημα,
+    στην κύρια βάση δεδομένων και θα δημιουργήσει το αρχείο <tt>config.php</tt></p>
+           
+    <u>Έλεγχος προαπαιτούμενων προγραμμάτων για τη λειτουργία του e-Class</u>
+    <p>
+        Webserver (<em>βρέθηκε <b>".$_SERVER['SERVER_SOFTWARE']."</b></em>) 
+        με υποστήριξη PHP (<em>βρέθηκε <b>PHP ".phpversion()."</b></em>).</p>
     ";
-    if (empty($SERVER_SOFTWARE)) {
-        echo "
-        <li><strong>Προσοχή!</strong> Φαίνεται πως η επιλογή register_globals
+	if (empty($SERVER_SOFTWARE)) {
+		$tool_content .= "
+        <p><strong>Προσοχή!</strong> Φαίνεται πως η επιλογή register_globals
         στο αρχείο php.ini δεν είναι ενεργοποιημένη. Χωρίς αυτήν το
         e-class δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το
         αρχείο php.ini ώστε να περιέχει τη γραμμή:<br>
         <pre>register_globals = On</pre><br>
         Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
         τις οδηγίες εγκατάστασης στο αρχείο
-        <a href='../../INSTALL.txt'>INSTALL.txt</a>.</li>";
-    }
-    if (!ini_get('short_open_tag')) {
-        echo "
-        <li><strong>Προσοχή!</strong> Φαίνεται πως η επιλογή short_open_tag
+        <a href='../../INSTALL.txt'>INSTALL.txt</a>.</p>";
+	}
+	if (!ini_get('short_open_tag')) {
+		$tool_content .= "
+        <p><strong>Προσοχή!</strong> Φαίνεται πως η επιλογή short_open_tag
         στο αρχείο php.ini δεν είναι ενεργοποιημένη. Χωρίς αυτήν το
         e-class δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το
         αρχείο php.ini ώστε να περιέχει τη γραμμή:<br>
         <pre>short_open_tag = On</pre><br>
         Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
         τις οδηγίες εγκατάστασης στο αρχείο
-        <a href='../../INSTALL.txt'>INSTALL.txt</a>.</li>";
-    }
-    echo "</ul>";
-    echo "<ul>Απαιτούμενα PHP modules";
-    warnIfExtNotLoaded("standard");
-    warnIfExtNotLoaded("session");
-    warnIfExtNotLoaded("mysql");
-    warnIfExtNotLoaded("gd");
-    warnIfExtNotLoaded("zlib");
-    warnIfExtNotLoaded("pcre");
-    echo "</ul>";
-    echo "<ul>Προαιρετικά PHP modules";
-    warnIfExtNotLoaded("ldap");
-    warnIfExtNotLoaded("mbstring");
-    echo "</ul>";
-    echo "
-    <br>
-    <b>Άλλες απαιτήσεις συστήματος:</b>
-    <ul>
+        <a href='../../INSTALL.txt'>INSTALL.txt</a>.</p>";
+	}
+	//    $tool_content .= "</ul>";
+	$tool_content .= "<u>Απαιτούμενα PHP modules</u>";
+	$tool_content .= "<ul id=\"installBullet\">";
+	warnIfExtNotLoaded("standard");
+	warnIfExtNotLoaded("session");
+	warnIfExtNotLoaded("mysql");
+	warnIfExtNotLoaded("gd");
+	warnIfExtNotLoaded("zlib");
+	warnIfExtNotLoaded("pcre");
+	$tool_content .= "</ul><u>Προαιρετικά PHP modules</u>";
+	$tool_content .= "<ul id=\"installBullet\">";
+	//    $tool_content .= "<ul id=\"installBullet\">Προαιρετικά PHP modules";
+	warnIfExtNotLoaded("ldap");
+	warnIfExtNotLoaded("mbstring");
+	$tool_content .= "</ul>";
+	$tool_content .= "
+    
+    <u>Άλλες απαιτήσεις συστήματος</u>
+    <ul id=\"installBullet\">
     <li>
     Μια βάση δεδομένων MySQL, στην οποία έχετε λογαριασμό με δικαιώματα να δημιουργείτε και να διαγράφετε βάσεις δεδομένων.
     </li>
@@ -1647,40 +1473,32 @@ else
         Δικαιώματα εγγραφής στον κατάλογο όπου το e-class έχει αποσυμπιεστεί.
     </li>
     </ul>
-    <br>
-    <b>Επιπρόσθετη λειτουργικότητα:</b>
-    <ul>
-    	<li>
-    	Εάν επιθυμείτε να υποστηρίζετε streaming για τα αρχεία video που θα αποτελούν μέρος του υλικού των αποθηκευμένων μαθημάτων θα πρέπει να υπάρχει εγκατεστημένος streaming server σύμφωνα με τις οδηγίες που θα βρείτε στο εγχειρίδιο τάδε. 
-    	</li>
-    </ul>
-    <br>
+    
+    <u>Επιπρόσθετη λειτουργικότητα:</u>
+     <ul id=\"installBullet\">
+     <li>Εάν επιθυμείτε να υποστηρίζετε streaming για τα αρχεία video που θα αποτελούν μέρος του υλικού των αποθηκευμένων μαθημάτων θα πρέπει να υπάρχει εγκατεστημένος streaming server σύμφωνα με τις οδηγίες που θα βρείτε στο εγχειρίδιο τάδε. 
+    </li>
+    <li>
 Το e-Class θα εγκαταστήσει το δικό του διαχειριστικό εργαλείο μέσω web των βάσεων δεδομένων MySQL (<a
 href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
 μπορείτε να χρησιμοποιήσετε και το δικό σας.
-<br>
-<br>
+</li></ul>
+<p>
 Πριν προχωρήσετε στην εγκατάσταση τυπώστε και διαβάστε προσεκτικά τις
 <a href=\"../INSTALL.txt\" target=_blank>Οδηγίες Εγκατάστασης</a>.
-<br>
-<br>
+</p>
+<p>
 Επίσης, γενικές οδηγίες για την πλατφόρμα μπορείτε να διαβάσετε <a href=\"../README.txt\" target=_blank>εδώ</a>.
-<br>
+</p>
 <br>
 <p align=\"right\">
-<input type=\"submit\" name=\"install2\" value=\"Επόμενο >\">";
+<input type=\"submit\" name=\"install2\" value=\"Επόμενο >\"></p>
+</form>
 
+";
+	draw($tool_content);
 }
 
-?>
-        </td>
-    </tr>
-</table>
-</form>
-</center>
-</body>
-</html>
-<?
 
 // useful functions
 
@@ -1695,16 +1513,17 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
  */
 function warnIfExtNotLoaded($extentionName) {
 
-        if (extension_loaded ($extentionName)) {
-                echo "<li> $extentionName - <b>ok!</b> </li> ";
-        } else {
-                echo "
+	global $tool_content;
+	if (extension_loaded ($extentionName)) {
+		$tool_content .= "<li> $extentionName - <b>ok!</b> </li> ";
+	} else {
+		$tool_content .= "
                 <li>$extentionName
-                <font color=\"#FF0000\"> - <b>!!λείπει!!</b></font>
+                <font color=\"#FF0000\"> - <b>Δεν είναι εγκατεστημένο!</b></font>
                 (Διαβάστε περισσότερα
                 <a href=\"http://www.php.net/$extentionName\" target=_blank>εδώ)</a>
                 </li>";
-        }
+	}
 }
 
 
@@ -1715,11 +1534,11 @@ function warnIfExtNotLoaded($extentionName) {
 
 function mysql_version() {
 
-$ver = mysql_get_server_info();
-if (version_compare("4.1", $ver) <= 0)
-        return true;
-else
-    return false;
+	$ver = mysql_get_server_info();
+	if (version_compare("4.1", $ver) <= 0)
+	return true;
+	else
+	return false;
 }
 
 /**
@@ -1733,14 +1552,14 @@ else
  */
 
 function generePass($nbcar=5,$lettresseules = false) {
-    $chaine = "abBDEFcdefghijkmnPQRSTUVWXYpqrst23456789"; //possible characters
-    if ($lettresseules)
-        $chaine = "abcdefghijklmnopqrstuvwxyzAZERTYUIOPMLKJHGFDSQWXCVBN"; //possible characters
-    for($i=0; $i<$nbcar; $i++)
-    {
-        @$pass .= $chaine[rand()%strlen($chaine)];
-    }
-    return $pass;
+	$chaine = "abBDEFcdefghijkmnPQRSTUVWXYpqrst23456789"; //possible characters
+	if ($lettresseules)
+	$chaine = "abcdefghijklmnopqrstuvwxyzAZERTYUIOPMLKJHGFDSQWXCVBN"; //possible characters
+	for($i=0; $i<$nbcar; $i++)
+	{
+		@$pass .= $chaine[rand()%strlen($chaine)];
+	}
+	return $pass;
 }
 
 ?>
