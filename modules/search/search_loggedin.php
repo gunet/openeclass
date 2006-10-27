@@ -200,19 +200,15 @@ function match_arrays($search_terms_array, $mycours_string)
 	return FALSE;
 }
 
+
 function my_stripos($string, $word)
 {
-   return strpos(strtolower($string), strtolower($word));
-	
-   // enallaktikh methodos anazhthshs - fainetai na mhn leitourgei se PHP5!
-	/*$retval = false;
-   for($i=0;$i<=strlen($string);$i++)
-   {
-       if (strtolower(substr($string,$i,strlen($word))) == strtolower($word))
-       {
-           $retval = true;
-       }
-   }
-   return $retval;*/
+      $source = array('Ü', 'Ý', 'Þ', 'ß', 'ý', 'ü', 'þ', 'ú', 'û', 'À', 'à');
+      $target = array('á', 'å', 'ç', 'é', 'õ', 'ï', 'ù', 'é', 'õ', 'é', 'õ');
+
+     return strpos(
+       str_replace($source, $target, mb_strtolower($string, 'ISO-8859-7')),
+       str_replace($source, $target, mb_strtolower($word, 'ISO-8859-7')));
 }
+
 ?>
