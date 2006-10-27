@@ -129,15 +129,15 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 	
 	//*****************************************************************************************************
 	//vrogxos gia na diatreksoume ola ta mathimata sta opoia enai anoixta (public OR open for registration)
-    while ($mycours = mysql_fetch_row($result)) 
+    while ($mycours = mysql_fetch_array($result)) 
     {
     	
 		$show_entry = FALSE; //flag gia emfanish apotelesmatwn se mia grammh tou array efoson entopistoun apotelesmata				
 				
-		if (!empty($search_terms_title)) $show_entry = match_arrays($search_terms_title, $mycours[3]);
-		if (!empty($search_terms_keywords)) if($show_entry == FALSE) $show_entry = match_arrays($search_terms_keywords, $mycours[7]);
-		if (!empty($search_terms_instructor)) if($show_entry == FALSE) $show_entry = match_arrays($search_terms_instructor, $mycours[13]);
-		if (!empty($search_terms_coursecode)) if($show_entry == FALSE) $show_entry = match_arrays($search_terms_coursecode, $mycours[1]);
+		if (!empty($search_terms_title)) $show_entry = match_arrays($search_terms_title, $mycours['intitule']);
+		if (!empty($search_terms_keywords)) if($show_entry == FALSE) $show_entry = match_arrays($search_terms_keywords, $mycours['course_keywords']);
+		if (!empty($search_terms_instructor)) if($show_entry == FALSE) $show_entry = match_arrays($search_terms_instructor, $mycours['titulaires']);
+		if (!empty($search_terms_coursecode)) if($show_entry == FALSE) $show_entry = match_arrays($search_terms_coursecode, $mycours['code']);
 		
 		
 		//EMFANISH APOTELESMATOS:
@@ -145,13 +145,12 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 		//$mycours, emfanise thn eggrafh
 		if($show_entry)
 		{			
-			$tool_content .= "<br><table width=\"90%\"><tr><td>".$langTitle.": <strong>".$mycours[3]."</strong>";
-			$tool_content .= " [".$mycours[1]."]<br>";
-			$tool_content .= $langInstructor.": <strong>".$mycours[13]."</strong>, ";
-			$tool_content .= $langKeywords.": ".$mycours[7]."<br>";
-			$tool_content .= "<strong><a href=\"../../courses/".$mycours[1]."/\">&gt; ".$langEnter."</a></strong>";
+			$tool_content .= "<br><table width=\"90%\"><tr><td>".$langTitle.": <strong>".$mycours['intitule']."</strong>";
+			$tool_content .= " [".$mycours['code']."]<br>";
+			$tool_content .= $langInstructor.": <strong>".$mycours['titulaires']."</strong>, ";
+			$tool_content .= $langKeywords.": ".$mycours['course_keywords']."<br>";
+			$tool_content .= "<strong><a href=\"../../courses/".$mycours['code']."/\">&gt; ".$langEnter."</a></strong>";
 			$tool_content .= "</td></tr></table><br>";
-
 			$tool_content .= "";
 			
 			
