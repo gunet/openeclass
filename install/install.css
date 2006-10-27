@@ -1,0 +1,12 @@
+#installBullet { 
+list-style-image: url(../template/classic/img/square_bullet.gif); 
+}
+
+li {
+font-family: Arial, Helvetica, sans-serif;
+	font-size:12px;
+}
+
+body{font-size:12px;}
+
+fieldset { border:1px solid green }
