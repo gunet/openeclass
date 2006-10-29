@@ -116,8 +116,6 @@ if (!isset($webDir)) {
 
 	if (!isset($webDir)) {
 		include 'not_installed.php';
-		//		die("Unable to open configuration file,
-		//			please contact the system administrator");
 	}
 }
 
