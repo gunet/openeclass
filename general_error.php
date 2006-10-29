@@ -33,28 +33,37 @@
  *
  */
 	$tool_content =  "
-	<table cellpadding='6' cellspacing='0' border='0' width='650' bgcolor='#E6E6E6'>
-        <tr bgcolor='navy'>
-        <td valign='top' align='center'>
-        <font color='white' face='arial, helvetica'>Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης e-Class</font>
-        </td></tr>
-        <tr><td>&nbsp;</td></tr>
-        <tr bgcolor='#E6E6E6'><td>
-        <b>Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης δεν λειτουργεί !</b>
-        <p>Πιθανοί λόγοι:
-        <ul><li>Υπάρχει πρόβλημα με την MySQL (επικοινωνήστε με το διαχειριστή του συστήματος).</li>
-        <li>Υπάρχει πρόβλημα στις ρυθμίσεις του αρχείου <tt>config.php</tt></li></ul></p>
-        </td>
-        </tr>
-        <tr bgcolor='#E6E6E6'>
-        <td><p>Ένας πιθανός λόγος, επίσης, είναι ότι χρησιμοποιείτε την πλατφόρμα για πρώτη φορά.</p>
-        Σε αυτή την περίπτωση κάντε κλίκ στον <a href=\"./install/\">Οδηγό Εγκατάστασης</a>
-        για να ξεκινήσετε το πρόγραμμα εγκατάστασης.
-        </td>
-        </tr>
-	</table>";
-	echo $tool_content;
-	exit();
-
-
+	<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\">
+  <head>
+    <title>Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης e-Class</title>
+    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-7\" />
+    <link href=\"./template/classic/tool_content.css\" rel=\"stylesheet\" type=\"text/css\" />
+    <link href=\"./install/install.css\" rel=\"stylesheet\" type=\"text/css\" />
+      
+  </head>
+  <body>
+	<table width = \"99%\">
+				<tbody>
+					<tr>
+						<td class=\"extraMessage\">
+						<b>Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης δεν λειτουργεί !</b>
+        <p>Πιθανοί λόγοι:</p>
+        <ul id=\"installBullet\"><li>Υπάρχει πρόβλημα με την MySQL (επικοινωνήστε με το διαχειριστή του συστήματος).</li>
+        <li>Υπάρχει πρόβλημα στις ρυθμίσεις του αρχείου <b>config.php</b></li>
+        
+        <li>χρησιμοποιείτε την πλατφόρμα για πρώτη φορά 
+        (Σε αυτή την περίπτωση κάντε κλίκ στον <a href=\"./install/\">Οδηγό Εγκατάστασης</a>
+        για να ξεκινήσετε το πρόγραμμα εγκατάστασης).</li>
+						</ul>
+					</td>
+					</tr>
+				</tbody>
+			</table>
+			
+	</body>
+	</html>
+   ";
+	exit($tool_content);
+	
 ?>
