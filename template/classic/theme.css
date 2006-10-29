@@ -419,7 +419,8 @@ body {
 }
 
 #content_main {
-	margin-top:32px;
+	margin-top:22px;
+	//margin-top:8px;
 	margin-left: 190px;
 	padding: 1em;
 	max-width: 100%;
