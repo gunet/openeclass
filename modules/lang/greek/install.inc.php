@@ -60,17 +60,17 @@ $langDBSettingIntro		= "Το πρόγραμμα εγκατάστασης θα δημιουργήσει την κύρια βάση
 				δημιουργηθούν νέες βάσεις δεδομένων (μία για κάθε μάθημα) ";
 
 
-$langStep1 			= "Βήμα 1 από 6 :";
-$langStep2 			= "Βήμα 2 από 6 :";
-$langStep3 			= "Βήμα 3 από 6 :";
-$langStep4 			= "Βήμα 4 από 6 :";
-$langStep5 			= "Βήμα 5 από 6 :";
-$langStep6 			= "Βήμα 6 από 6 :";
+$langStep1 			= "Βήμα 1 από 6";
+$langStep2 			= "Βήμα 2 από 6";
+$langStep3 			= "Βήμα 3 από 6";
+$langStep4 			= "Βήμα 4 από 6";
+$langStep5 			= "Βήμα 5 από 6";
+$langStep6 			= "Βήμα 6 από 6";
 $langCfgSetting		= "Ρυθμίσεις Συστήματος";
 $langDBSetting 		= "Ρυθμίσεις της MySQL";
 $langMainLang 		= "Κύρια Γλώσσα Εγκατάστασης";
-$langLicence		= "¶δεια";
+$langLicence		= "¶δεια Χρήσης";
 $langLastCheck		= "Τελευταίος έλεγχος πριν την εγκατάσταση";
-$langRequirements	= "Απαιτήσεις";
-
+$langRequirements	= "Απαιτήσεις Συστήματος";
+$langInstallEnd   	= "Ολοκλήρωση Εγκατάστασης";
 ?>

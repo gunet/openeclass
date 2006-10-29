@@ -58,17 +58,17 @@ $langDBSettingIntro		= "
 				DB for your website by your Hosting Services, Claroline will not work.";
 
 
-$langStep1 			= "Step 1 of 6 ";
-$langStep2 			= "Step 2 of 6 ";
-$langStep3 			= "Step 3 of 6 ";
-$langStep4 			= "Step 4 of 6 ";
-$langStep5 			= "Step 5 of 6 ";
-$langStep6 			= "Step 6 of 6 ";
+$langStep1 			= "Step 1 of 6";
+$langStep2 			= "Step 2 of 6";
+$langStep3 			= "Step 3 of 6";
+$langStep4 			= "Step 4 of 6";
+$langStep5 			= "Step 5 of 6";
+$langStep6 			= "Step 6 of 6";
 $langCfgSetting		= "Config settings";
 $langDBSetting 		= "MySQL database settings";
 $langMainLang 		= "Main language";
 $langLicence		= "License";
 $langLastCheck		= "Last check before install";
-$langRequirements	= "Requirements";
-
+$langRequirements	= "System Requirements";
+$langInstallEnd   	= "Finilising Installation";
 ?>
