@@ -15,7 +15,7 @@
 <link href="../template/classic/tool_content.css" rel="stylesheet" type="text/css" />
 <link href="./install.css" rel="stylesheet" type="text/css" />
 {TOOL_CSS}
-<link rel="SHORTCUT ICON" href="{URL_PATH}template/classic/img/eclass-icon.ico">
+<link rel="SHORTCUT ICON" href="../template/classic/img/eclass-icon.ico">
 
  {HEAD_EXTRAS}
 
@@ -31,27 +31,12 @@
   </div>
 
   <div id="firstBar"> 
-  	Installation wizard
+  	<span class="user">Οδηγός εγκατάστασης e-Class</span>
 	</div>
 
 	<div id="secondBar"> 
 		<span id="bread">
-			<!-- BEGIN breadCrumbHomeBlock -->
-			<ul>
-				<li class="first">{BREAD_HREF_FRONT}{BREAD_TEXT}{BREAD_HREF_END}		
-				<!-- END breadCrumbHomeBlock -->
-				
-				<!-- BEGIN breadCrumbStartBlock -->
-					<ul>
-						<li>{BREAD_ARROW} {BREAD_HREF_FRONT}{BREAD_TEXT}{BREAD_HREF_END}
-
-							<!-- END breadCrumbStartBlock -->	
-
-							<!-- BEGIN breadCrumbEndBlock -->
-						</li>
-					</ul>
-
-							<!-- END breadCrumbEndBlock -->
+			{BREAD_TEXT}
 		</span>
 		<span class="langSwitch"><a href="{LOCALIZE_LINK}" title="{LANG_LOCALIZE}" accesskey="l" target="_self">{LANG_LOCALIZE}</a></span>
 	</div>
@@ -74,11 +59,11 @@
 
 						<!-- BEGIN leftNavLinkBlock -->
 
-						<li class="{TOOL_ICON}">
+						<li class="{CURRENT_STEP}">
 							<div>
-								<a href="{TOOL_LINK}">
-									<img src="{TOOL_PATH}template/classic/img/{IMG_FILE}" width="16" height="16" border="0" /> {TOOL_TEXT}
-								</a>
+								<p>
+									<img src="../template/classic/img/{IMG_FILE}" width="16" height="16" border="0" /> {TOOL_TEXT}</p>
+								
 							</div>
 						</li>
 
@@ -97,12 +82,13 @@
 
 		<div id="content_main">
 
-			<div id="tool_title">
+		<!--	<div id="tool_title">
 				<span class="tool_name">{TOOL_NAME}</span>
 				<span class="help">{HELP_LINK_ICON} {HELP_LINK}</span>
-			</div>
+			</div>-->
 
 			<!-- ---------- BEGIN TOOL CONTENT ---------- -->
+			<br/>
 				{EXTRA_MSG}
 				{TOOL_CONTENT}
 				
@@ -122,7 +108,7 @@
     	<div class="blank"></div> 
 
 		<p>
-			Copyright 2006 GUnet - <a href="{TOOL_PATH}info/copyright.php">{LANG_COPYRIGHT_NOTICE}</a>
+			Copyright 2006 GUnet
 		</p>
 
     </div>

@@ -24,7 +24,7 @@ Panepistimiopolis Ilissia, 15784, Athens, Greece
 eMail: eclassadmin@gunet.gr
 ==============================================================================
 */
-
+session_start();
 //header("Content-type: text/html; charset=iso-8859-7");
 $tool_content = "";
 @include ("../modules/lang/greek/install.inc.php");
@@ -32,19 +32,37 @@ include('install_functions.php');
 
 if (file_exists("../config/config.php")) {
 	$tool_content .= "
-<p>
-            Προσοχή !! Το αρχείο <tt>config.php</tt> υπάρχει ήδη στο σύστημά σας!!
-            Το πρόγραμμα εγκατάστασης δεν πραγματοποιεί αναβάθμιση.
-            Αν θέλετε να ξανατρέξετε την εγκατάσταση της πλατφόρμας,
-            παρακαλούμε διαγράψτε το <tt>config.php<tt>.
-        </p>
+	<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\">
+  <head>
+    <title>Καλωσορίσατε στον οδηγό εγκατάστασης του e-Class</title>
+    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-7\" />
+    <link href=\"../template/classic/tool_content.css\" rel=\"stylesheet\" type=\"text/css\" />
+    <link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
+      
+  </head>
+  <body>
+	<table width = \"99%\">
+				<tbody>
+					<tr>
+						<td class=\"extraMessage\">
+						Προσοχή !! Το αρχείο <b>config.php</b> υπάρχει ήδη στο σύστημά σας!! Το πρόγραμμα εγκατάστασης δεν πραγματοποιεί αναβάθμιση. Αν θέλετε να ξανατρέξετε την εγκατάσταση της πλατφόρμας,
+            παρακαλούμε διαγράψτε το αρχείο config.php!
+						
+					</td>
+					</tr>
+				</tbody>
+			</table>
+			
+	</body>
+	</html>
    ";
-draw($tool_content);exit();
+	exit($tool_content);
 }
 
 
 //  step 0 initialise variables
-if(!isset($alreadyVisited))
+if(isset($welcomeScreen) )
 {
 	$dbHostForm="localhost";
 	$dbUsernameForm="root";
@@ -71,8 +89,11 @@ if(!isset($alreadyVisited))
 	$encryptkey = "eclass";
 }
 
-$tool_content .= "<form action=".$PHP_SELF."?alreadyVisited=1 method=\"post\">";
-$tool_content .= "
+if (isset($alreadyVisited)) {
+
+
+	$tool_content .= "<form action=".$PHP_SELF."?alreadyVisited=1 method=\"post\">";
+	$tool_content .= "
             <input type=\"hidden\" name=\"languageCourse\" value=\"$languageCourse\">
             <input type=\"hidden\" name=\"urlAppendPath\" value=\"$urlAppendPath\">
             <input type=\"hidden\" name=\"pathForm\" value=\"".str_replace("\\","/",realpath($pathForm)."/")."\" >
@@ -108,36 +129,26 @@ $tool_content .= "
 	    
 	    <input type=\"hidden\" name=\"encryptkey\" value=\"$encryptkey\">
 ";
+}
 
-/*switch (PHP_OS)
-{
-case "WIN32" :
-case "WINNT" :
-$wizardImage = "windowsWizard.gif";
-break;
-case "Linux" :
-$wizardImage = "linuxWizard.gif";
-break;
-default :
-$wizardImage = "defaultWizard.gif";
-}*/
-
-//echo "<img src=\"$wizardImage\" align=\"right\" hspace=\"10\" vspace=\"10\">";
 
 // step 2 license
 
 if(isset($install2) OR isset($back2))
 {
-	$tool_content .= "<h3>".$langStep2." ".$langLicence."</h3>
+	$langStepTitle = $langLicence;
+	$langStep = $langStep2;
+	$_SESSION['step']=2;
+	$tool_content .= "
      <p>Tο e-Class είναι ελεύθερη εφαρμογή και διανέμεται σύμφωνα με την άδεια GNU General Public Licence (GPL).
      Παρακαλούμε διαβάστε την άδεια και κάνετε κλίκ στην 'Αποδοχή'.
      <a href=\"../info/license/gpl_print.txt\">(".$langPrintVers.")</a></p>
      
      <textarea wrap=\"virtual\" cols=\"65\" rows=\"15\">";
 	$tool_content .= file_get_contents('../info/license/gpl.txt');
-	$tool_content .= "</textarea><br/>
-                    <input type=\"submit\" name=\"back\" value=\"< Πίσω\">
-                    <input type=\"submit\" name=\"install3\" value=\"Αποδοχή>\">
+	$tool_content .= "</textarea><br/><br/>
+                    <input type=\"submit\" name=\"back1\" value=\"< Πίσω\">
+                    <input type=\"submit\" name=\"install3\" value=\"Αποδοχή>\"></form>
                   ";
 	draw($tool_content);
 }
@@ -152,10 +163,12 @@ elseif(isset($install3) OR isset($back3)) {
 	mkdir("../courses", 0777);
 
 	// step 3 mysql database settings
-
+	$langStepTitle = $langDBSetting;
+	$langStep = $langStep3;
+	$_SESSION['step']=3;
 	$tool_content .= "
-	<h3>".$langStep3." ".$langDBSetting."</h3>
-		".$langDBSettingIntro.".  ".$langAllFieldsRequired."
+	
+		<p>".$langDBSettingIntro.".  ".$langAllFieldsRequired."</p>
            
 	<table width=\"99%\">
 		<thead>
@@ -197,7 +210,7 @@ elseif(isset($install3) OR isset($back3)) {
 			</tr>
 		</thead>
 	</table>
-                   
+    <br/><br/>              
 	<input type=\"submit\" name=\"back2\" value=\"< Πίσω\">
 	<input type=\"submit\" name=\"install5\" value=\"Επόμενο >\">
 </form>
@@ -218,10 +231,12 @@ elseif(isset($install5) OR isset($back4))
 		$persoIsActiveSelTrue = "";
 		$persoIsActiveSelFalse = "selected";
 	}
-
+	$langStepTitle = $langCfgSetting;
+	$langStep = $langStep4;
+	$_SESSION['step']=4;
 	$tool_content .=  "
-        <h3>".$langStep4." ".$langCfgSetting."</h3>
-        <p>Τα παρακάτω θα γραφτούν στο αρχείο <tt>config.php</tt>.</p>
+        
+        <p>Τα παρακάτω θα γραφτούν στο αρχείο <b>config.php</b>.</p>
         
 		<table width=\"99%\">
 			<thead>
@@ -229,7 +244,7 @@ elseif(isset($install5) OR isset($back4))
 					<th>".$langMainLang."</th>
 					<td>
 						 <select name=\"languageForm\">	";
-	
+
 	$dirname = "../modules/lang/";
 	if($dirname[strlen($dirname)-1]!='/')
 	$dirname.='/';
@@ -502,10 +517,13 @@ elseif(isset($install6))
 	$pathForm = str_replace("\\\\", "/", $pathForm);
 	@chmod( "../config/config.php", 666 );
 	@chmod( "../config/config.php", 0666 );
+
+
+	$langStepTitle = $langLastCheck;
+	$langStep = $langStep5;
+	$_SESSION['step']=5;
 	$tool_content .=  "
-        <h3>
-            ".$langStep5." ".$langLastCheck."
-        </h3>
+        
         <p>
         Τα στοιχεία που δηλώσατε είναι τα παρακάτω:
         (Εκτυπώστε τα αν θέλετε να θυμάστε το συνθηματικό του διαχειριστή και τις άλλες ρυθμίσεις)</p>
@@ -543,7 +561,7 @@ elseif(isset($install6))
                     <input type=\"submit\" name=\"install7\" value=\"Eγκατάσταση του e-Class >\">
                
         </form>";
-	
+
 	draw($tool_content);
 }
 // step 6 installation successful
@@ -552,20 +570,37 @@ elseif(isset($install7))
 {
 
 	// database creation
-
+	$langStepTitle = $langInstallEnd;
+	$langStep = $langStep6;
+	$_SESSION['step']=6;
 	$db = @mysql_connect("$dbHostForm", "$dbUsernameForm", "$dbPassForm");
 	if (mysql_errno()>0) // problem with server
 	{
 		$no = mysql_errno();     $msg = mysql_error();
-		$tool_content .= "<HR>[".$no."] - ".$msg."<HR>
-        Η Mysql  δεν λειτουργεί ή το όνομα χρήστη/συνθηματικό δεν είναι σωστό.<br>
-        Παρακαλούμε ελέγξετε τα στοιχεία σας. <br>
-        Όνομα Υπολογιστή : ".$dbHostForm."<br>
-        Όνομα Χρήστη : ".$dbUsernameForm."<br>
-        Συνθηματικό  : ".$dbPassForm."<br>
-        και επιστρέψτε στο βήμα 2
+		$tool_content .= "
+		<table width = \"99%\">
+				<tbody>
+					<tr>
+						<td class=\"extraMessage\">
+						<u><b>[".$no."] - ".$msg."</b></u><br/>
+						<p>Η MySQL  δεν λειτουργεί ή το όνομα χρήστη/συνθηματικό δεν είναι σωστό.<br/>
+        Παρακαλούμε ελέγξετε τα στοιχεία σας: </p>
+        <ul id=\"installBullet\">
+        <li>Όνομα Υπολογιστή : ".$dbHostForm."</li>
+        <li>Όνομα Χρήστη : ".$dbUsernameForm."</li>
+        <li<Συνθηματικό  : ".$dbPassForm."</li>
+        </ul>
+        <p>Eπιστρέψτε στο βήμα 3 για να τα διορθώσετε.</p>
+						
+					</td>
+					</tr>
+				</tbody>
+			</table><br/>
+			<input type=\"submit\" name=\"install3\" value=\"< Επιστροφή στο βήμα 3\">
+			</form>
+        
         ";
-		draw($tool_content);
+		draw($tool_content);exit();
 	}
 	$mysqlMainDb = $dbNameForm;
 	mysql_query("DROP DATABASE IF EXISTS ".$mysqlMainDb);
@@ -1278,10 +1313,11 @@ CREATE TABLE `auth` (
 	// creation of config.php
 
 	$fd=@fopen("../config/config.php", "w");
+	$langStepTitle = $langInstallEnd;
+	$langStep = $langStep6;
 	if (!$fd) {
-		$tool_content .= "		<h2>
-                    ".$langStep6." ".$langCfgSetting."
-                </h2>
+
+		$tool_content .= "
                 <br>
                 <b>Παρουσιάστηκε σφάλμα!</b>
                 <br><br>
@@ -1380,27 +1416,30 @@ $encryptkey = "'.$encryptkey.'";
 		// write to file
 		fwrite($fd, $stringConfig);
 		// message
+
 		$tool_content .= "
-                <h2>
-                    ".$langStep6." ".$langCfgSetting."
-                </h2>
+               <table width = \"99%\">
+				<tbody>
+					<tr>
+						<td class=\"extraMessageOK\">
+						 
+						<p>Η εγκατάσταση ολοκληρώθηκε με επιτυχία!
+                Κάντε κλίκ παρακάτω για να μπείτε στο e-class.</p>
                 <br>
-                <br>
-                Η εγκατάσταση ολοκληρώθηκε με επιτυχία!
-                Κάντε κλίκ παρακάτω για να μπείτε στο e-class.
-                <br>
-                <br><b>
+                <p><b>
                 Συμβουλή: Για να προστατέψετε το e-class, αλλάξτε τα δικαιώματα πρόσβασης των αρχείων
                 <tt>/config/config.php</tt> και <tt>/install/index.php</tt> και
-                επιτρέψτε μόνο ανάγνωση (CHMOD 444).</b>
+                επιτρέψτε μόνο ανάγνωση (CHMOD 444).</b><p>
+						
+					</td>
+					</tr>
+				</tbody>
+			</table>
                 <br>
-                <br>
-                <br>
-                <br>
-                <br>
+               
     </form>
     <form action=\"../\">
-    <p align=\"right\"><input type=\"submit\" value=\"Είσοδος στο e-Class\"></p>
+    <input type=\"submit\" value=\"Είσοδος στο e-Class\">
 	</form>";
 		draw($tool_content);
 	}       // τέλος ελέγχου για δικαιώματα
@@ -1408,43 +1447,81 @@ $encryptkey = "'.$encryptkey.'";
 
 // step 1 requirements
 
-else
+elseif (isset($install1) || isset($back1))
 {
+	$langStepTitle = $langRequirements;
+	$langStep = $langStep1;
+	$_SESSION['step']=1;
+	$configErrorExists = false;
+	
+	if (empty($SERVER_SOFTWARE)) {
+		$tool_content .= "
+		<table width = \"99%\">
+				<tbody>
+					<tr>
+						<td class=\"extraMessage\">
+						
+        <p><b>Προσοχή!</b> Φαίνεται πως η επιλογή register_globals
+        στο αρχείο php.ini δεν είναι ενεργοποιημένη. Χωρίς αυτήν το
+        e-class δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το
+        αρχείο php.ini ώστε να περιέχει τη γραμμή:<br>
+        <pre>register_globals = On</pre>
+        Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
+        τις οδηγίες εγκατάστασης στο αρχείο
+        <a href='../manuals/manI/INSTALL.txt'>INSTALL.txt</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
+						
+					</td>
+					</tr>
+				</tbody>
+			</table>
+			<br/>
+        ";
+		$configErrorExists = true;
+	}
+	
+	if (!ini_get('short_open_tag')) {
+		$tool_content .= "
+		
+		<table width = \"99%\">
+				<tbody>
+					<tr>
+						<td class=\"extraMessage\">
+						
+        <p><b>Προσοχή!</b> Φαίνεται πως η επιλογή short_open_tag
+        στο αρχείο php.ini δεν είναι ενεργοποιημένη. Χωρίς αυτήν το
+        e-class δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το
+        αρχείο php.ini ώστε να περιέχει τη γραμμή:<br>
+        <pre>short_open_tag = On</pre>
+        Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
+        τις οδηγίες εγκατάστασης στο αρχείο
+        <a href='../manuals/manI/INSTALL.txt'>INSTALL.txt</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
+						
+					</td>
+					</tr>
+				</tbody>
+			</table>
+		";
+		$configErrorExists = true;
+	}
+
+	if($configErrorExists) {
+		$tool_content .= "</form>";
+		draw($tool_content);
+		exit();
+	}
+
 	$tool_content .= "
-<h3>
-    ".$langStep1." ".$langRequirements."
-</h3>
-<p>Το πρόγραμμα εγκατάστασης της πλατφόρμας θα κάνει όλες τις απαιτούμενες ρυθμίσεις στο σύστημα,
-    στην κύρια βάση δεδομένων και θα δημιουργήσει το αρχείο <tt>config.php</tt></p>
+
+	
+<!--<p>Το πρόγραμμα εγκατάστασης της πλατφόρμας θα κάνει όλες τις απαιτούμενες ρυθμίσεις στο σύστημα,
+    στην κύρια βάση δεδομένων και θα δημιουργήσει το αρχείο <tt>config.php</tt></p>-->
            
     <u>Έλεγχος προαπαιτούμενων προγραμμάτων για τη λειτουργία του e-Class</u>
     <p>
         Webserver (<em>βρέθηκε <b>".$_SERVER['SERVER_SOFTWARE']."</b></em>) 
         με υποστήριξη PHP (<em>βρέθηκε <b>PHP ".phpversion()."</b></em>).</p>
     ";
-	if (empty($SERVER_SOFTWARE)) {
-		$tool_content .= "
-        <p><strong>Προσοχή!</strong> Φαίνεται πως η επιλογή register_globals
-        στο αρχείο php.ini δεν είναι ενεργοποιημένη. Χωρίς αυτήν το
-        e-class δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το
-        αρχείο php.ini ώστε να περιέχει τη γραμμή:<br>
-        <pre>register_globals = On</pre><br>
-        Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
-        τις οδηγίες εγκατάστασης στο αρχείο
-        <a href='../../INSTALL.txt'>INSTALL.txt</a>.</p>";
-	}
-	if (!ini_get('short_open_tag')) {
-		$tool_content .= "
-        <p><strong>Προσοχή!</strong> Φαίνεται πως η επιλογή short_open_tag
-        στο αρχείο php.ini δεν είναι ενεργοποιημένη. Χωρίς αυτήν το
-        e-class δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το
-        αρχείο php.ini ώστε να περιέχει τη γραμμή:<br>
-        <pre>short_open_tag = On</pre><br>
-        Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
-        τις οδηγίες εγκατάστασης στο αρχείο
-        <a href='../../INSTALL.txt'>INSTALL.txt</a>.</p>";
-	}
-	//    $tool_content .= "</ul>";
+
 	$tool_content .= "<u>Απαιτούμενα PHP modules</u>";
 	$tool_content .= "<ul id=\"installBullet\">";
 	warnIfExtNotLoaded("standard");
@@ -1491,12 +1568,50 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
 Επίσης, γενικές οδηγίες για την πλατφόρμα μπορείτε να διαβάσετε <a href=\"../README.txt\" target=_blank>εδώ</a>.
 </p>
 <br>
-<p align=\"right\">
-<input type=\"submit\" name=\"install2\" value=\"Επόμενο >\"></p>
+
+<input type=\"submit\" name=\"install2\" value=\"Επόμενο >\">
 </form>
 
 ";
 	draw($tool_content);
+} else {
+	//	$url = $PHP_SELF . "?install1=1";
+	$tool_content .= "
+	<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\">
+  <head>
+    <title>Καλωσορίσατε στον οδηγό εγκατάστασης του e-Class</title>
+    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-7\" />
+    <link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
+
+      
+  </head>
+  <body>
+	
+	<form action=".$PHP_SELF."?alreadyVisited=1 method=\"post\">
+	 <input type=\"hidden\" name=\"welcomeScreen\" value=\"welcomeScreen\">
+	<div class=\"outer\">
+     
+    <div class=\"welcomeImg\"></div>
+   
+    Καλωσορίσατε στον οδηγό εγκατάστασης του e-Class. Ο οδηγός αυτός :
+    <ul id=\"installBullet\">
+    	<li>Θα σας βοηθήσει να όρίσετε τις ρυθμίσεις για τη βάση δεδομένων</li>
+    	<li>Θα σας βοηθήσει να όρίσετε τις ρυθμίσεις της πλατφόρμας</li>
+    	<li>Θα δημιουργήσει το αρχείο config.php</li>
+    </ul>
+    
+    
+	
+	<input type=\"submit\" name=\"install1\" value=\"Επόμενο >\"></p>
+
+ </div>
+  </form>
+  
+  </body>
+</html>";
+
+	echo $tool_content;
 }
 
 

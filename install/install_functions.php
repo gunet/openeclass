@@ -8,6 +8,7 @@ function draw($toolContent, $menuTypeID=null, $tool_css = null, $head_content = 
 	global $page_name, $page_navi,$currentCourseID, $siteName, $navigation;
 	global $homePage, $courseHome, $uid, $webDir, $extraMessage;
 	global $langChangeLang, $langUserBriefcase, $langPersonalisedBriefcase, $langAdmin, $switchLangURL;
+	global $langStep, $langStepTitle;
 
 	$messageBox = "";
 
@@ -28,8 +29,8 @@ function draw($toolContent, $menuTypeID=null, $tool_css = null, $head_content = 
 	}
 
 	//get the left side menu from tools.php
-		$toolArr = installerMenu();
-		$numOfToolGroups = count($toolArr);
+	$toolArr = installerMenu();
+	$numOfToolGroups = count($toolArr);
 
 	$t = new Template();
 
@@ -49,8 +50,9 @@ function draw($toolContent, $menuTypeID=null, $tool_css = null, $head_content = 
 			$numOfTools = count($toolArr[$i][1]);
 
 			for($j=0; $j< $numOfTools; $j++){
-
-				$t->set_var('TOOL_LINK', $toolArr[$i][2][$j]);
+				if ($toolArr[$i][2][$j] == true) $currentStep = "currentStep";
+				else $currentStep = "";
+				$t->set_var('CURRENT_STEP', $currentStep);
 				$t->set_var('TOOL_TEXT', $toolArr[$i][1][$j]);
 
 				$t->set_var('IMG_FILE', $toolArr[$i][3][$j]);
@@ -73,7 +75,7 @@ function draw($toolContent, $menuTypeID=null, $tool_css = null, $head_content = 
 		}
 
 		$t->set_var('TOOL_CONTENT', $toolContent);
-		
+
 		//show user's name and surname on the user bar
 		if (session_is_registered('uid') && strlen($nom) > 0) {
 			$t->set_var('LANG_USER', $langUser);
@@ -81,135 +83,56 @@ function draw($toolContent, $menuTypeID=null, $tool_css = null, $head_content = 
 			$t->set_var('USER_SURNAME', $nom);
 		}
 
-			$langLogout = "Bhma 1/x";
-			$t->set_var('LANG_LOGOUT', $langLogout);
-			$t->set_var('LOGOUT_CLASS_ICON', 'logout_icon');
+		$langLogout = "Bhma 1/x";
+		$t->set_var('LANG_LOGOUT', $langLogout);
+		$t->set_var('LOGOUT_CLASS_ICON', 'logout_icon');
 
 
 		//set the text and icon on the third bar (header)
-		if ($menuTypeID == 2) {
-			$t->set_var('THIRD_BAR_TEXT', $intitule);
-			$t->set_var('THIRDBAR_LEFT_ICON', 'lesson_icon');
+		/*if ($menuTypeID == 2) {
+		$t->set_var('THIRD_BAR_TEXT', $intitule);
+		$t->set_var('THIRDBAR_LEFT_ICON', 'lesson_icon');
 		} elseif (isset($langUserBriefcase) && $menuTypeID > 0 && !session_is_registered('user_perso_active')) {
-			$t->set_var('THIRD_BAR_TEXT', $langUserBriefcase);
-			$t->set_var('THIRDBAR_LEFT_ICON', 'briefcase_icon');
+		$t->set_var('THIRD_BAR_TEXT', $langUserBriefcase);
+		$t->set_var('THIRDBAR_LEFT_ICON', 'briefcase_icon');
 		} elseif (isset($langPersonalisedBriefcase) && $menuTypeID > 0 && session_is_registered('user_perso_active')) {
-			$t->set_var('THIRD_BAR_TEXT', $langPersonalisedBriefcase);
-			$t->set_var('THIRDBAR_LEFT_ICON', 'briefcase_icon');
+		$t->set_var('THIRD_BAR_TEXT', $langPersonalisedBriefcase);
+		$t->set_var('THIRDBAR_LEFT_ICON', 'briefcase_icon');
 		} elseif ($menuTypeID == 3)  {
-			$t->set_var('THIRD_BAR_TEXT', $langAdmin);
-			$t->set_var('THIRDBAR_LEFT_ICON', 'admin_bar_icon');
+		$t->set_var('THIRD_BAR_TEXT', $langAdmin);
+		$t->set_var('THIRDBAR_LEFT_ICON', 'admin_bar_icon');
 		} else {
-			$t->set_var('THIRD_BAR_TEXT', $langEclass);
+		$t->set_var('THIRD_BAR_TEXT', $langEclass);
 		}
+		*/
+		$t->set_var('THIRD_BAR_TEXT',$langStepTitle);
+		
+		
+//		$t->set_var('CURRENT_STEP',"currentStep");
 
-		$t->set_var('TOOL_NAME',  $nameTools);
+		//		$t->set_var('TOOL_NAME',  $nameTools);
 
-		$t->set_var('LOGOUT_LINK',  $relPath);
-/*
+		//		$t->set_var('LOGOUT_LINK',  $relPath);
+		/*
 		if ($menuTypeID != 2) {
-			if (session_is_registered('langswitch')) {
-				$t->set_var('LANG_LOCALIZE',  $langChangeLang);
-				$t->set_var('LOCALIZE_LINK',  $switchLangURL);
-			} else {
-				$t->set_var('LANG_LOCALIZE',  'English');
-				$t->set_var('LOCALIZE_LINK',  '?localize=en');
-			}
+		if (session_is_registered('langswitch')) {
+		$t->set_var('LANG_LOCALIZE',  $langChangeLang);
+		$t->set_var('LOCALIZE_LINK',  $switchLangURL);
 		} else {
-			$t->set_var('LANG_LOCALIZE',  '');
+		$t->set_var('LANG_LOCALIZE',  'English');
+		$t->set_var('LOCALIZE_LINK',  '?localize=en');
+		}
+		} else {
+		$t->set_var('LANG_LOCALIZE',  '');
 		}*/
 
-		//START breadcrumb AND page title
 
-		if (!$page_navi) $page_navi = $navigation;
-		if (!$page_name) $page_name = $nameTools;
+		$t->set_var('BREAD_TEXT',  $langStep);
 
-		$t->set_block('mainBlock', 'breadCrumbHomeBlock', 'breadCrumbHome');
 
-		if(!session_is_registered('uid')) $t->set_var('BREAD_TEXT',  $siteName);
-		elseif(session_is_registered('uid') && session_is_registered('user_perso_active')) {
-			$t->set_var('BREAD_TEXT',  $langPersonalisedBriefcase);
-		} elseif(session_is_registered('uid') && !session_is_registered('user_perso_active')) {
-			$t->set_var('BREAD_TEXT',  $langUserBriefcase);
-		}
-
-		$pageTitle = $siteName;
-		if (!$homePage) {
-			$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_START_LINK}">');
-			$t->set_var('BREAD_START_LINK',  $urlServer);
-			$t->set_var('BREAD_HREF_END',  '</a>');
-		}
-
-		$t->parse('breadCrumbHome', 'breadCrumbHomeBlock',false);
-
-		$breadIterator=1;
-		$t->set_block('mainBlock', 'breadCrumbStartBlock', 'breadCrumbStart');
-
-		if (isset($currentCourseID) && !$courseHome){
-			$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_LINK}">');
-			$t->set_var('BREAD_LINK',  $urlServer.'courses/'.$currentCourseID.'/index.php');
-			$t->set_var('BREAD_TEXT',  $intitule);
-			$t->set_var('BREAD_ARROW', '&#187;');
-			$t->set_var('BREAD_HREF_END',  '</a>');
-			$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
-			$breadIterator++;
-			$pageTitle .= " | " .$intitule;
-
-		} elseif (isset($currentCourseID) && $courseHome) {
-			$t->set_var('BREAD_HREF_FRONT',  '');
-			$t->set_var('BREAD_LINK',  '');
-			$t->set_var('BREAD_TEXT',  $intitule);
-			$t->set_var('BREAD_ARROW', '&#187;');
-			$t->set_var('BREAD_HREF_END',  '');
-			$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
-			$breadIterator++;
-			$pageTitle .= " | " .$intitule;
-
-		}
-
-		if (isset($page_navi) && is_array($page_navi) && !$homePage){
-			foreach ($page_navi as $step){
-
-				$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_LINK}">');
-				$t->set_var('BREAD_LINK',  $step["url"]);
-				$t->set_var('BREAD_TEXT',  $step["name"]);
-				$t->set_var('BREAD_ARROW', '&#187;');
-				$t->set_var('BREAD_HREF_END',  '</a>');
-				$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
-
-				$breadIterator++;
-
-				$pageTitle .= " | " .$step["name"];
-			}
-		}
-
-		if (isset($page_name) && !$homePage) {
-
-			$t->set_var('BREAD_HREF_FRONT',  '');
-			$t->set_var('BREAD_TEXT',  $page_name);
-			$t->set_var('BREAD_ARROW', '&#187;');
-			$t->set_var('BREAD_HREF_END',  '');
-
-			$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
-			$breadIterator++;
-			$pageTitle .= " | " .$page_name;
-
-		}
-
-		$t->set_block('mainBlock', 'breadCrumbEndBlock', 'breadCrumbEnd');
-		for($breadIterator2=0; $breadIterator2 <= $breadIterator; $breadIterator2++){
-
-			$t->parse('breadCrumbEnd', 'breadCrumbEndBlock',true);
-		}
-
-		//END breadcrumb --------------------------------
-
+		$pageTitle = "Οδηγός Εγκατάστασης e-Class - " . $langStepTitle . "(" . $langStep . ")";
 		$t->set_var('PAGE_TITLE',  $pageTitle);
 
-		//Add the optional tool-specific css of the tool, if it's set
-		/*if (isset($tool_css)){
-			$t->set_var('TOOL_CSS', "<link href=\"{TOOL_PATH}modules/$tool_css/tool.css\" rel=\"stylesheet\" type=\"text/css\" />");
-		}*/
 
 		$t->set_var('TOOL_PATH',  $relPath);
 
@@ -242,7 +165,7 @@ function draw($toolContent, $menuTypeID=null, $tool_css = null, $head_content = 
 			$t->set_var('LANG_HELP', '');
 		}
 
-		$t->set_var('LANG_COPYRIGHT_NOTICE', $langCopyrightFooter);
+		//		$t->set_var('LANG_COPYRIGHT_NOTICE', $langCopyrightFooter);
 
 		//		At this point all variables are set and we are ready to send the final output
 		//		back to the browser
@@ -257,6 +180,8 @@ function draw($toolContent, $menuTypeID=null, $tool_css = null, $head_content = 
 
 function installerMenu(){
 	global $webDir, $language, $uid, $is_admin, $urlServer, $mysqlMainDb;
+	global $langRequirements, $langLicence, $langDBSetting;
+	global $langCfgSetting, $langLastCheck, $langInstallEnd;
 
 	//	include("$webDir/modules/lang/$language/index.inc");
 
@@ -267,39 +192,44 @@ function installerMenu(){
 	$sideMenuLink 	= array();
 	$sideMenuImg	= array();
 
-	array_push($sideMenuSubGroup, "Bhmata egkatastashs");
+	array_push($sideMenuSubGroup, "Πορεία Εγκατάστασης");
 
 	// User is not currently in a course - set statut from main database
-$urlServer = "lala";
 
-	array_push($sideMenuText, "<b>menu1</b>");
-	array_push($sideMenuLink, "modules/admin/");
-	array_push($sideMenuImg, "admin-tools.gif");
+	for($i=0; $i<6; $i++) {
+		if($i < $_SESSION['step']-1) {
+			$currentStep[$i] = false;
+			$stepImg[$i] = "tick.gif";
+		} else {
+			if ($i == $_SESSION['step']-1) $currentStep[$i] = true;
+			else $currentStep[$i] = false;
+			$stepImg[$i] = "bullet_bw.gif";
+		}
+	}
 
-	array_push($sideMenuText, "menu2");
-	array_push($sideMenuLink, "modules/create_course/create_course.php");
-	array_push($sideMenuImg, "create_lesson.gif");
+	array_push($sideMenuText, $langRequirements);
+	array_push($sideMenuLink, $currentStep[0]);
+	array_push($sideMenuImg, $stepImg[0]);
 
-	array_push($sideMenuText, "menu3");
-	array_push($sideMenuLink, "modules/auth/courses.php");
-	array_push($sideMenuImg, "enroll.gif");
+	array_push($sideMenuText, $langLicence);
+	array_push($sideMenuLink, $currentStep[1]);
+	array_push($sideMenuImg, $stepImg[1]);
 
-	array_push($sideMenuText, "menu4");
-	array_push($sideMenuLink, $urlServer . "modules/agenda/myagenda.php");
-	array_push($sideMenuImg, "calendar.gif");
+	array_push($sideMenuText, $langDBSetting);
+	array_push($sideMenuLink, $currentStep[2]);
+	array_push($sideMenuImg, $stepImg[2]);
 
-	array_push($sideMenuText, "menu5");
-	array_push($sideMenuLink, $urlServer . "modules/announcements/myannouncements.php");
-	array_push($sideMenuImg, "announcements.gif");
+	array_push($sideMenuText, $langCfgSetting);
+	array_push($sideMenuLink, $currentStep[3]);
+	array_push($sideMenuImg, $stepImg[3]);
 
-	array_push($sideMenuText, "menu6");
-	array_push($sideMenuLink, $urlServer . "modules/profile/profile.php");
-	array_push($sideMenuImg, "profile.gif");
+	array_push($sideMenuText, $langLastCheck);
+	array_push($sideMenuLink, $currentStep[4]);
+	array_push($sideMenuImg, $stepImg[4]);
 
-	array_push($sideMenuText, "menu7");
-	array_push($sideMenuLink, $urlServer . "modules/profile/personal_stats.php");
-	array_push($sideMenuImg, "platform_stats.gif");
-
+	array_push($sideMenuText, $langInstallEnd);
+	array_push($sideMenuLink, $currentStep[5]);
+	array_push($sideMenuImg, $stepImg[5]);
 
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);
