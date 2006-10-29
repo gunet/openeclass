@@ -35,26 +35,37 @@
  */
 $tool_content = "
 	
-	<body bgcolor='white'>
-	<center>
-	<table cellpadding='6' cellspacing='0' border='0' width='650' bgcolor='#E6E6E6'>
-	<tr bgcolor='navy'><td valign='top' align='center'>
-	<font color='white' face='arial, helvetica'>Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης GUNet e-Class</font>
-	</td></tr><tr><td>&nbsp;</td></tr>
-	<tr bgcolor='#E6E6E6'>
-	<td>
-	<b>Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης δεν λειτουργεί !</b>
-	<p>Πιθανοί λόγοι: 
-	<ul>
-	<li>Χρησιμοποιείτε την πλατφόρμα για πρώτη φορά.<br> Σε αυτή την περίπτωση κάντε κλίκ στον 
-	<a href=\"./install/\">Οδηγό Εγκατάστασης</a> για να ξεκινήσετε το πρόγραμμα 
-	εγκατάστασης.</li>
-	<li>Το αρχείο <tt>config.php</tt> δεν υπάρχει ή δεν μπορεί να διαβαστεί.</li>
-	<li>Η MySQL δεν λειτουργεί (επικοινωνήστε με το διαχειριστή του συστήματος).</li>
-	</ul></p> 
-	</td>
-        </tr>
-	</table>";
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\">
+  <head>
+    <title>Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης e-Class</title>
+    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-7\" />
+    <link href=\"./template/classic/tool_content.css\" rel=\"stylesheet\" type=\"text/css\" />
+    <link href=\"./install/install.css\" rel=\"stylesheet\" type=\"text/css\" />
+      
+  </head>
+  <body>
+	<table width = \"99%\">
+				<tbody>
+					<tr>
+						<td class=\"extraMessage\">
+						<b>Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης δεν λειτουργεί !</b>
+        <p>Πιθανοί λόγοι:</p>
+        <ul id=\"installBullet\">
+        <li>Υπάρχει πρόβλημα με την MySQL (επικοινωνήστε με το διαχειριστή του συστήματος).</li>
+        <li>Το αρχείο <b>config.php</b> δεν υπάρχει ή δεν μπορεί να διαβαστεί.</li>
+        <li>Xρησιμοποιείτε την πλατφόρμα για πρώτη φορά 
+        (Σε αυτή την περίπτωση κάντε κλίκ στον <a href=\"./install/\">Οδηγό Εγκατάστασης</a>
+        για να ξεκινήσετε το πρόγραμμα εγκατάστασης).</li>
+						</ul>
+					</td>
+					</tr>
+				</tbody>
+			</table>
+			
+	</body>
+	</html>
+";
 echo $tool_content;
 exit();
 
