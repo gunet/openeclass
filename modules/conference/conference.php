@@ -58,8 +58,9 @@ $head_content='
 <script type="text/javascript" src="js/media_player.js"></script>
 <script>
 
-var video_div="";
-var video_type="";
+var video_URL="";
+var presantation_URL="";
+var conference_set="";
 
 /*Clear in the server side all the chat messages*/
 function clear_chat()
@@ -94,6 +95,7 @@ function init_student()
 	    var url = "refresh_chat.php";
 	    var target = "chat";
 	    var myAjax = new Ajax.Updater(target, url);
+	    refresh_student();
 	}
 /* when teacher page load chat div load*/
 function init_teacher()
@@ -101,47 +103,121 @@ function init_teacher()
 	    var url = "refresh_chat.php";
 	    var target = "chat";
 	    var myAjax = new Ajax.Updater(target, url);
+
+        var set_presantation = function(t) {
+		if(t.responseText==""){
+			document.getElementById("presantation_window").innerHTML="'.$langPresantation_content.'";
+		} else{
+			var presantation=\'<iframe id="iframe" style="height:500px; width:700px;" src="\'+t.responseText+\'"></iframe>\';
+                        document.getElementById("presantation_window").innerHTML=presantation;
+                }
+        }
+        var errFunc = function(t) {
+                alert("Error " + t.status + " -- " + t.statusText);
+        }
+
+
+        var set_video = function(t) {
+		if(t.responseText==""){
+			document.getElementById("video").innerHTML="'.$langVideo_content.'";
+		} else{
+			mediaLink(document.getElementById("video"),t.responseText);
+                }
+        }
+        var errFunc = function(t) {
+                alert("Error " + t.status + " -- " + t.statusText);
+        }
+        var set_conference = function(t) {
+		if(t.responseText=="false"){
+			document.getElementById("conference").innerHTML="'.$langTeleconference_content.'";
+			document.getElementById("conference_control").checked=false;
+		} else if(t.responseText=="true"){
+			var player="<object ID=\'NetMeeting\' CLASSID=\'CLSID:3E9BAF2D-7A79-11d2-9334-0000F875AE17\'>\
+                                            <PARAM NAME =\'MODE\' VALUE =\'RemoteOnly\'>\
+                                             </object>";
+                        document.getElementById("conference").innerHTML=player;
+                        NetMeeting.CallTo("'.$currentCourseID.'@'.$MCU.'");
+			document.getElementById("conference_control").checked=true;
+                }
+        }
+        var errFunc = function(t) {
+                alert("Error " + t.status + " -- " + t.statusText);
+        }
+
+
+
+
+
+       new Ajax.Request("pass_parameters.php", {method:"post", postBody:"variable=video_URL", onSuccess:set_video, onFailure:errFunc});
+
+        new Ajax.Request("pass_parameters.php", {method:"post", postBody:"variable=presantation_URL", onSuccess:set_presantation, onFailure:errFunc});
+        new Ajax.Request("pass_parameters.php", {method:"post", postBody:"variable=netmeeting_show", onSuccess:set_conference, onFailure:errFunc});
+
 	}
 
 /* refresh video div, chat div, page div for student*/
 function refresh_student()
 	{
-	var set_video_type = function(t) {
-		if(t.responseText=="\nvideo" && video_type!=t.responseText){
-			var set_video = function(t1) {
-				document.getElementById("video").innerHTML=t1.responseText;
-				}
-			
-	  		new Ajax.Request("pass_parameters.php", {method:"post", postBody:"variable=video", onSuccess:set_video, onFailure:errFunc});
-		}
-		else if(t.responseText=="\nnetmeeting" && video_type!=t.responseText){
-				var player="<object ID=\'NetMeeting\' CLASSID=\'CLSID:3E9BAF2D-7A79-11d2-9334-0000F875AE17\'>\
-				            <PARAM NAME =\'MODE\' VALUE =\'RemoteOnly\'>\
-					     </object>";
-				document.getElementById("video").innerHTML=player;
-				NetMeeting.CallTo("'.$currentCourseID.'@'.$MCU.'");
-
-		} else if(t.responseText=="\nnone"){
-			document.getElementById("video").innerHTML="'.$langVideoTeleconference_content.'";
-		}
-		
-		video_type=t.responseText;
-	}
-	var set_presantation = function(t) {
-    		if(unescape(t.responseText)!="\n"+document.getElementById("presantation_window").innerHTML){
-		//	alert(">"+document.getElementById("presantation_window").innerHTML+"<"+"\n"+">"+unescape(t.responseText)+"<");
-			document.getElementById("presantation_window").innerHTML=t.responseText;
-    		}
-	}
-	var errFunc = function(t) {
-    		alert("Error " + t.status + " -- " + t.statusText);
-	}
-	new Ajax.Request("pass_parameters.php", {method:"post", postBody:"variable=video_type", onSuccess:set_video_type, onFailure:errFunc});
-
-    	new Ajax.Request("pass_parameters.php", {method:"post", postBody:"variable=presantation", onSuccess:set_presantation, onFailure:errFunc});
 	var url = "refresh_chat.php";
 	var target = "chat";
 	var myAjax = new Ajax.Updater(target, url);
+
+	
+        var set_presantation = function(t) {
+		if(t.responseText==""){
+			presantation_URL="";
+			document.getElementById("presantation_window").innerHTML="'.$langPresantation_content.'";
+		} else if( t.responseText!=presantation_URL){
+			presantation_URL=t.responseText;
+			var presantation=\'<iframe id="iframe" style="height:500px; width:700px;" src="\'+t.responseText+\'"></iframe>\';
+                        document.getElementById("presantation_window").innerHTML=presantation;
+                }
+        }
+        var errFunc = function(t) {
+                alert("Error " + t.status + " -- " + t.statusText);
+        }
+
+
+        var set_video = function(t) {
+		if(t.responseText==""){
+			video_URL="";
+			document.getElementById("video").innerHTML="'.$langVideo_content.'";
+		} else if(t.responseText!=video_URL){
+			video_URL=t.responseText;
+			mediaLink(document.getElementById("video"),t.responseText);
+                }
+        }
+        var errFunc = function(t) {
+                alert("Error " + t.status + " -- " + t.statusText);
+        }
+
+        var set_conference = function(t) {
+		if(t.responseText=="false" || t.responseText==""){
+			conference_set="false";
+			document.getElementById("conference").innerHTML="'.$langTeleconference_content.'";
+			document.getElementById("conference_control").checked=false;
+		} else if(t.responseText=="true" && t.responseText!=conference_set){
+			conference_set="true";
+			var player="<object ID=\'NetMeeting\' CLASSID=\'CLSID:3E9BAF2D-7A79-11d2-9334-0000F875AE17\'>\
+                                            <PARAM NAME =\'MODE\' VALUE =\'RemoteOnly\'>\
+                                             </object>";
+                        document.getElementById("conference").innerHTML=player;
+                        NetMeeting.CallTo("'.$currentCourseID.'@'.$MCU.'");
+			document.getElementById("conference_control").checked=true;
+                }
+        }
+        var errFunc = function(t) {
+                alert("Error " + t.status + " -- " + t.statusText);
+        }
+
+
+
+
+
+       new Ajax.Request("pass_parameters.php", {method:"post", postBody:"variable=video_URL", onSuccess:set_video, onFailure:errFunc});
+
+        new Ajax.Request("pass_parameters.php", {method:"post", postBody:"variable=presantation_URL", onSuccess:set_presantation, onFailure:errFunc});
+        new Ajax.Request("pass_parameters.php", {method:"post", postBody:"variable=netmeeting_show", onSuccess:set_conference, onFailure:errFunc});
 }
 
 
@@ -156,50 +232,33 @@ function refresh_teacher()
 
 /* teacher set netmeeting*/
 function netmeeting()
-	{
-		document.getElementById("video_control").innerHTML="";
-		var player="<object ID=\'NetMeeting\' CLASSID=\'CLSID:3E9BAF2D-7A79-11d2-9334-0000F875AE17\'>\
-		<PARAM NAME =\'MODE\' VALUE =\'RemoteOnly\'>\
-		</object>";
-		document.getElementById("video").innerHTML=player;
-		var netmeeting_number="'.$currentCourseID.'@'.$MCU.'";
-		NetMeeting.CallTo(netmeeting_number);
-		new Ajax.Request("pass_parameters.php", {method:"post", postBody:"video_div="+document.getElementById("video").innerHTML+"&netmeeting_number="+netmeeting_number+"&video_type=netmeeting"});
+	{       
+
+		if(document.getElementById("conference_control").checked)
+			{
+			var player="<object ID=\'NetMeeting\' CLASSID=\'CLSID:3E9BAF2D-7A79-11d2-9334-0000F875AE17\'>\
+			<PARAM NAME =\'MODE\' VALUE =\'RemoteOnly\'>\
+			</object>";
+			document.getElementById("conference").innerHTML=player;
+			var netmeeting_number="'.$currentCourseID.'@'.$MCU.'";
+			NetMeeting.CallTo(netmeeting_number);
+			new Ajax.Request("pass_parameters.php", {method:"post", postBody:"netmeeting_show=true"});
+			}
+		else
+			{
+			document.getElementById("conference").innerHTML="'.$langTeleconference_content.'";
+			new Ajax.Request("pass_parameters.php", {method:"post", postBody:"netmeeting_show=false"});
+			}
 	}
 
-
-
-
-/* teacher set video*/
-function mediaplayer()
-	{
-		document.getElementById("video_control").innerHTML=\''.$langsetvideo.'<br><input type="text" id="Video_URL" size="20"><input type="submit" value=" Play ">\';
-
-
-	}
 
 
 
 /* load media player or netmeeting */
 function play_video()
-	{
-
-	/*	
-		var video_url=document.getElementById("Video_URL").value;
-		var player="<OBJECT id=\'VIDEO\' width=\'199\' height=\'199\' \
-			CLASSID=\'CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6\'\
-			type=\'application/x-oleobject\'>\
-			<PARAM NAME=\'URL\' VALUE=\'"+video_url+"\'>\
-			<PARAM NAME=\'SendPlayStateChangeEvents\' VALUE=\'True\'>\
-			<PARAM NAME=\'AutoStart\' VALUE=\'True\'>\
-			<PARAM name=\'uiMode\' value=\'none\'>\
-			<PARAM name=\'PlayCount\' value=\'9999\'>\
-		</OBJECT>";
-
-		document.getElementById("video").innerHTML=player;
-		*/
+	{	
 		mediaLink(document.getElementById("video"),document.getElementById("Video_URL").value);
-		new Ajax.Request("pass_parameters.php", {method:"post", postBody:"video_div="+document.getElementById("video").innerHTML+"&video_type=video"});
+		new Ajax.Request("pass_parameters.php", {method:"post", postBody:"video_URL="+document.getElementById("Video_URL").value});
 return false;
 
 
@@ -216,15 +275,22 @@ function show_presantation()
 	{
 var presantation_url=\'<iframe style="height:500px; width:700px;" src="\'+document.getElementById("Presantation_URL").value+\'"></iframe>\';
 document.getElementById("presantation_window").innerHTML=presantation_url;
-new Ajax.Request("pass_parameters.php", {method:"post", postBody:"presantation_URL="+escape(document.getElementById("presantation_window").innerHTML)});
+new Ajax.Request("pass_parameters.php", {method:"post", postBody:"presantation_URL="+escape(document.getElementById("Presantation_URL").value)});
 return false;
-	
 	}
-function clean_vars()
-	{
-		new Ajax.Request("pass_parameters.php", {method:"post", postBody:"action=clean"});
+
+function clean_presantation()
+	{	document.getElementById("presantation_window").innerHTML="'.$langPresantation_content.'";
+		new Ajax.Request("pass_parameters.php", {method:"post", postBody:"action=clean_presantation"});
 		
 	}
+function clean_video()
+	{	document.getElementById("video").innerHTML="'.$langVideo_content.'";
+		new Ajax.Request("pass_parameters.php", {method:"post", postBody:"action=clean_video"});
+		
+	}
+
+
 
 var pe;
 if (pe) pe.stop();
@@ -271,46 +337,38 @@ $tool_content = "";//initialise $tool_content
 
 $tool_content.=
 '
-	<div id="video" style="position:absolute;height: 200px;width: 200px;border:groove;top:210px;left:200px;">
-'.$langVideoTeleconference_content.'	
+	<div id="conference" style="position:absolute;height: 200px;width: 200px;border:groove;top:210px;left:200px;">
+'.$langTeleconference_content.'	
+	</div>
+	<div id="video" style="position:absolute;height: 200px;width: 200px;border:groove;top:445px;left:200px;">
+'.$langVideo_content.'	
 	</div>
 
 
 ';
 
 if ($is_adminOfCourse) {
-@$tool_content.='<div  style="position:absolute;height:291px;width: 200px;border:groove;top:420px;left:200px;">
+@$tool_content.='<div  style="position:absolute;height:200px;width: 200px;border:groove;top:685px;left:200px;">
 <form id="video_form" onSubmit="return play_video();">
-<BR>'.$Video_URL.'<BR>
-<table>
-<tr>';
+';
 if($MCU!="") {
 $tool_content.='
-<td>
-    <label>
-      <input type="radio" name="video_type" id="video_type1" value="netmeeting" onclick="javascript:netmeeting();" />
-      <br>'.$langconference.'</label>
-</td>';
+      <p>'.$langconference.'
+      <input type="checkbox" name="conference_control" id="conference_control" onclick="javascript:netmeeting();" /></p>
+';
 }
 $tool_content.='
-<td>
-    <label>
-      <input type="radio" name="video_type" id="video_type2" value="video" onclick="javascript:mediaplayer();" />
-<br>video</label>
-</td>
-</tr>
-</table>
     <br>
-    <div id="video_control"> 
-</div>
+    <p>'.$langsetvideo.'</p><input type="text" id="Video_URL" size="15"><input type="submit" value=" Play ">
+	<a href="javascript:clean_video();">'.$langWashVideo.'</a>
 </form>
 
 <form id="Presantation_form" onSubmit = "return show_presantation();">
 <p>'.$langpresantation.'</p>
-<input type="text" id="Presentation_URL" name="Presantation_URL" size="20">
+<input type="text" id="Presantation_URL" name="Presantation_URL" size="20">
 <input type="submit" value="OK">
+<a href="javascript:clean_presantation();">'.$langWashPresanation.'</a>
 </form>
-<a href="javascript:clean_vars();">'.$langWashValues.'</a>
 </div>
 ';
 
@@ -322,13 +380,13 @@ $tool_content.='
 
 	</div>
 
-	<div align="center" style="position:absolute;border:groove;top:720px;left:200px;width:910px;" >
-		<div align="left" id="chat" style="position: relative;height: 100px;width: 600px; overflow: auto;">
+	<div align="center" style="position:absolute;border:groove;top:720px;left:410px;width:700px;" >
+		<div align="left" id="chat" style="position: relative;height: 100px;width:500px; overflow: auto;">
 		</div>
 
 		<form name = "chatForm" action = "conference.php#bottom" method = "get" target = "conference" onSubmit = "return prepare_message();">
 
-		<div align="center"  style="position: relative; width:750px">
+		<div align="center"  style="position: relative; width:700px">
 			<input type="text" name="msg" size="80">
 			<input type="hidden" name="chatLine">
 			<input type="submit" value=" >> ">';

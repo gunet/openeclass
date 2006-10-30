@@ -39,7 +39,9 @@
  $langsetvideo="Τοποθετήστε τον σύνδεσμο";
  $langconference="Τηλεδιάσκεψη";
  $langpresantation="Σύνδεσμος παρουσίασης";
- $langVideoTeleconference_content="<p align='justify'>Εδώ θα παρουσιαστεί το βίντεο που θα επιλέξειό ο καθηγητής ή το πρόγραμμα netmeeting για ζωντανή κουβέντα με τον καθηγητή.</p>";
+ $langVideo_content="<p align='justify'>Εδώ θα παρουσιαστεί το βίντεο που θα επιλέξειό ο καθηγητής.</p>";
+ $langTeleconference_content="<p align='justify'>Εδώ θα παρουσιαστεί το πρόγραμμα netmeeting για ζωντανή κουβέντα με τον καθηγητή.</p>";
+ $langWashVideo="Καθάρισμα βίντεο";
  $langPresantation_content="<p align='center'>Εδώ θα παρουσιαστεί μία ιστοσελίδα που θα επιλέξει ο καθηγητής.</p>";
- $langWashValues="Καθάρισμα μεταβλητών";
+ $langWashPresanation="Καθάρισμα Παρουσίασης";
 ?>

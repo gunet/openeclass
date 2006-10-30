@@ -31,11 +31,7 @@
  */
 header("Content-type: text/html; charset=ISO-8859-7"); 
 $require_current_course = TRUE;
-$langFiles = 'conference';
-$require_help = TRUE;
-$helpTopic = 'User';
 include '../../include/baseTheme.php';
-
 
 $nameTools = "conference";
 
@@ -55,35 +51,30 @@ if (is_file($fileParameter))
 /* Admin set parameters for conference module*/
 if ($is_adminOfCourse) {
 
-		if(isset($_POST["video_div"]))
+		if(isset($_POST["video_URL"]))
 		{
-		 	$URL["video"]=stripslashes($_POST["video_div"]);
+		 	$URL["video_URL"]=stripslashes($_POST["video_URL"]);
 		}
 		if(isset($_POST["presantation_URL"]))
 		{
-			$URL["presantation"]=stripslashes($_POST["presantation_URL"]);
+			$URL["presantation_URL"]=stripslashes($_POST["presantation_URL"]);
 		}
-		if(isset($_POST["netmeeting_number"]))
+		if(isset($_POST["netmeeting_show"]))
 		{
-			$URL["netmeeting_number"]=$_POST["netmeeting_number"];
+			$URL["netmeeting_show"]=$_POST["netmeeting_show"];
 		}
-		if(isset($_POST["video_type"]))
-		{
-			$URL["video_type"]=$_POST["video_type"];
-		}
+
 		if(isset($_POST["action"]))
 		{
-			if($_POST["action"]=="clean")
+			if($_POST["action"]=="clean_video")
 				{
-				$URL["video"]="";
-				$URL["presantation"]="$langPresantation_content";
-				$URL["netmeeting_number"]="";
-				$URL["video_type"]="none";
+					unset($URL["video_URL"]);
+				}
+			if($_POST["action"]=="clean_presantation")
+				{
+					unset($URL["presantation_URL"]);
 				}
 		}
-
-
-
      		$fp = fopen($fileParameter, 'w+');
 		fwrite($fp,serialize($URL));
 		fclose($fp);
@@ -91,31 +82,26 @@ if ($is_adminOfCourse) {
 
 }
 /*student get parameters for conference module*/
-else
-{
+//else
+//{
 
-               if($_POST["variable"]=="presantation")
+               if($_POST["variable"]=="netmeeting_show")
                 {
-			if(isset($URL["presantation"]))
-                       		echo $URL["presantation"];
+			if(isset($URL["netmeeting_show"]))
+                       		echo $URL["netmeeting_show"];
                 }
-                if($_POST["variable"]=="video")
+                if($_POST["variable"]=="video_URL")
                 {
-			if(isset($URL["video"]))
-                       		echo $URL["video"];
+			if(isset($URL["video_URL"]))
+                       		echo $URL["video_URL"];
                 }
-                if($_POST["variable"]=="netmeeting_number")
+                if($_POST["variable"]=="presantation_URL")
                 {
-			if(isset($URL["netmeeting_number"]))
-                       		echo $URL["netmeeting_number"];
-                }
-                if($_POST["variable"]=="video_type")
-                {
-			if(isset($URL["video_type"]))
-                       		echo $URL["video_type"];
+			if(isset($URL["presantation_URL"]))
+                       		echo $URL["presantation_URL"];
                 }
 
-}
+//}
 
 
 ?>
