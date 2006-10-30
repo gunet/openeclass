@@ -148,7 +148,7 @@ if(isset($install2) OR isset($back2))
 	$tool_content .= file_get_contents('../info/license/gpl.txt');
 	$tool_content .= "</textarea><br/><br/>
                     <input type=\"submit\" name=\"back1\" value=\"< Πίσω\">
-                    <input type=\"submit\" name=\"install3\" value=\"Αποδοχή>\"></form>
+                    <input type=\"submit\" name=\"install3\" value=\"Αποδοχή>\" ></form>
                   ";
 	draw($tool_content);
 }
@@ -1429,7 +1429,7 @@ $encryptkey = "'.$encryptkey.'";
                 <p><b>
                 Συμβουλή: Για να προστατέψετε το e-class, αλλάξτε τα δικαιώματα πρόσβασης των αρχείων
                 <tt>/config/config.php</tt> και <tt>/install/index.php</tt> και
-                επιτρέψτε μόνο ανάγνωση (CHMOD 444).</b><p>
+                επιτρέψτε μόνο ανάγνωση (CHMOD 444).</b></p>
 						
 					</td>
 					</tr>
@@ -1578,7 +1578,7 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
 	//	$url = $PHP_SELF . "?install1=1";
 	$tool_content .= "
 	<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
-<html xmlns=\"http://www.w3.org/1999/xhtml\">
+<html>
   <head>
     <title>Καλωσορίσατε στον οδηγό εγκατάστασης του e-Class</title>
     <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-7\" />
@@ -1588,22 +1588,23 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
   </head>
   <body>
 	
-	<form action=".$PHP_SELF."?alreadyVisited=1 method=\"post\">
-	 <input type=\"hidden\" name=\"welcomeScreen\" value=\"welcomeScreen\">
+	
 	<div class=\"outer\">
-     
+     <form action=".$PHP_SELF."?alreadyVisited=1 method=\"post\">
+	 <input type=\"hidden\" name=\"welcomeScreen\" value=\"welcomeScreen\">
     <div class=\"welcomeImg\"></div>
    
-    Καλωσορίσατε στον οδηγό εγκατάστασης του e-Class. Ο οδηγός αυτός :
+   Καλωσορίσατε στον οδηγό εγκατάστασης του e-Class. Ο οδηγός αυτός :
     <ul id=\"installBullet\">
     	<li>Θα σας βοηθήσει να όρίσετε τις ρυθμίσεις για τη βάση δεδομένων</li>
     	<li>Θα σας βοηθήσει να όρίσετε τις ρυθμίσεις της πλατφόρμας</li>
     	<li>Θα δημιουργήσει το αρχείο config.php</li>
     </ul>
-    
-    
+ 
+  <input type=\"submit\" name=\"install1\" value=\"Επόμενο >\">
+   
+
 	
-	<input type=\"submit\" name=\"install1\" value=\"Επόμενο >\"></p>
 
  </div>
   </form>
