@@ -110,7 +110,7 @@ $l_no		= "Όχι";
 
 $l_click 	= "Πιέστε";
 $l_here 	= "εδώ";
-$l_toreturn	= "για επιστροφή";
+$l_toreturn	= " για επιστροφή";
 $l_returnindex	= "$l_toreturn στο ευρετήριο περιοχών συζητήσεων.";
 $l_returntopic	= "$l_toreturn στον κατάλογο θεμάτων της περιοχής συζητήσεων.";
 
@@ -288,7 +288,7 @@ $l_notedit	= "Δεν μπορείτει να αλλάξετε μήνυμα που δεν είναι δικό σας.";
 $l_permdeny	= "Δεν δώσατε το σωστό $l_password ή δεν έχετε το δικαίωμα να αλλάξετε αυτό το μήνυμα. $l_tryagain";
 $l_editedby	= "Το $l_message διορθώθηκε από:";
 $l_stored	= "Το $l_message αποθηκεύτηκε στη βάση.";
-$l_viewmsg	= "για να εμφανίσετε το $l_message.";
+$l_viewmsg	= " για να εμφανίσετε το $l_message.";
 $l_deleted	= "Το $l_post διαγράφτηκε.";
 $l_nouser	= "Το $l_username δεν υπάρχει.";
 $l_passwdlost	= "Ξέχασα το συνθηματικό μου!";

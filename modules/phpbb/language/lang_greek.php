@@ -70,8 +70,8 @@ $l_off		= "Off";
 $l_yes		= "Ναι";
 $l_no		= "Όχι";
 
-$l_click 	= "Πατήστε";
-$l_here 	= "εδώ";
+$l_click 	= "Πατήστε ";
+$l_here 	= "εδώ ";
 $l_toreturn	= "για επιστροφή";
 $l_returnindex	= "$l_toreturn στο ευρετήριο του φόρουμ";
 $l_returntopic	= "$l_toreturn στη λίστα θεμάτων του φόρουμ.";
