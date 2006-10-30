@@ -193,9 +193,9 @@ elseif(isset($forumgoadd)) {
         '1', '$cat_id', '$forum_type')", $currentCourseID);
         $idforum=db_query("select forum_id from forums where forum_name='$forum_name'", $currentCourseID);
         while ($my_forum_id = mysql_fetch_array($idforum)) {
-        $forid=$my_forum_id[0];
+        	$forid=$my_forum_id[0];
         }
-        db_query("insert into forum_mods (forum_id, user_id) values ('$forid', '1')", $currentCourseID);
+        //db_query("insert into forum_mods (forum_id, user_id) values ('$forid', '1')", $currentCourseID);
          $tool_content .= "<a href=\"$PHP_SELF?forumgo=yes&cat_id=$cat_id&ctg=$ctg\">$langBack</a>";
 
 }
@@ -206,7 +206,7 @@ elseif(isset($forumgoadd)) {
 elseif(isset($forumcatdel)) {
    	$result = db_query("select forum_id from forums where cat_id='$cat_id'", $currentCourseID);
 	while(list($forum_id) = mysql_fetch_row($result)) {
-	db_query("delete from forumtopics where forum_id=$forum_id", $currentCourseID);
+	db_query("delete from topics where forum_id=$forum_id", $currentCourseID);
 	}
 	db_query("delete from forums where cat_id=$cat_id", $currentCourseID);
 	db_query("delete from catagories where cat_id=$cat_id", $currentCourseID);
@@ -223,7 +223,7 @@ elseif(isset($forumcatdel)) {
 
 elseif(isset($forumgodel)){
 
-	db_query("delete from forumtopics where forum_id=$forum_id", $currentCourseID);
+	db_query("delete from topics where forum_id=$forum_id", $currentCourseID);
 	db_query("delete from forums where forum_id=$forum_id", $currentCourseID);
          $tool_content .= "
 	 <a href=\"$PHP_SELF?forumgo=yes&ctg=$ctg&cat_id=$cat_id\">$langBack</a>";
