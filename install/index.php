@@ -160,7 +160,7 @@ elseif(isset($install3) OR isset($back3)) {
 	@chmod( "../config/config.php", 666 );
 	@chmod( "../config/config.php", 0666 );
 	// courses directory
-	mkdir("../courses", 0777);
+	@mkdir("../courses", 0777);
 
 	// step 3 mysql database settings
 	$langStepTitle = $langDBSetting;
