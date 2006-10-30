@@ -171,12 +171,12 @@ cData;
 			if ( $forum_row[$x]["cat_id"] == $categories[$i]["cat_id"] ) {
 				if ( $forum_row[$x]["post_time"] ) {
 					$last_post = $forum_row[$x]["post_time"];
+					$last_post_datetime = $forum_row[$x]["post_time"];
+					list($last_post_date, $last_post_time) = split(" ", $last_post_datetime);
+					list($year, $month, $day) = explode("-", $last_post_date);
+					list($hour, $min) = explode(":", $last_post_time);
+					$last_post_time = mktime($hour, $min, 0, $month, $day, $year);
 				}
-				$last_post_datetime = $forum_row[$x]["post_time"];
-				list($last_post_date, $last_post_time) = split(" ", $last_post_datetime);
-				list($year, $month, $day) = explode("-", $last_post_date);
-				list($hour, $min) = explode(":", $last_post_time);
-				$last_post_time = mktime($hour, $min, 0, $month, $day, $year);
 				if ( empty($last_post) ) {
 					$last_post = "No Posts";
 				}
