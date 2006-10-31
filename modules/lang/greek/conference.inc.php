@@ -50,4 +50,7 @@
  $langWashVideo="Παύση μετάδοσης";
  $langPresantation_content="<p align='center'>Εδώ θα παρουσιαστεί μία ιστοσελίδα που θα επιλέξει ο καθηγητής.</p>";
  $langWashPresanation="Παύση μετάδοσης";
+ $langSaveChat="Αποθήκευση κουβέντας";
+ $langSaveMessage="Η κουβέντα αποθηκεύτηκε στα Έγγραφα.";	
+ $langSaveErrorMessage="Η κουβέντα δεν μπόρεσε να αποθηκευτή";
 ?>

@@ -49,5 +49,8 @@
  $langPresantation_content="<p align='center'>A web page selected by the professor will be presented in this window.</p>";
  $langWashVideo="Clean video";
  $langWashPresanation="clean presantation";
+ $langSaveChat="Save chat";
+ $langSaveMessage="Chat has been saved in Documents.";	
+ $langSaveErrorMessage="Error. Chat has not been saved.";
 ?>
 

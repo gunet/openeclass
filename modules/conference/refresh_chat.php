@@ -52,8 +52,8 @@ $coursePath=$webDir."courses";
   ==========================*/
 
 $fileChatName   = $coursePath.'/'.$currentCourseID.'/.chat.txt';
-$tmpArchiveFile = $coursePath.'/'.$currentCourseID.'.tmpChatArchive.txt';
-$pathToSaveChat = $coursePath.'/document/';
+$tmpArchiveFile = $coursePath.'/'.$currentCourseID.'/.tmpChatArchive.txt';
+$pathToSaveChat = $coursePath.'/'.$currentCourseID.'/document/';
 
 define('MESSAGE_LINE_NB',  40);
 define('MAX_LINE_IN_FILE', 80);
@@ -87,23 +87,19 @@ if (isset($_POST['reset']) && $is_adminOfCourse) {
 /*--------------------------
          STORE COMMAND
   --------------------------*/
-
 if (isset($_POST['store']) && $is_adminOfCourse) {
         $saveIn = "chat.".date("Y-m-j-B").".txt";
 
         // COMPLETE ARCHIVE FILE WITH THE LAST LINES BEFORE STORING
 
         buffer(implode('', file($fileChatName)), $tmpArchiveFile);
-
         if (copy($tmpArchiveFile, $pathToSaveChat.$saveIn) ) {
-                $tool_content .= "<blockquote>".$langIsNowInYourDocDir.
-                        "<br><a href=\"../document/document.php\" target=\"top\">".
-                        "<strong>".$saveIn."</strong>".
-                        "</a> ".$langIsChatDocVisible.
-                        "</blockquote>";
+                $alert_div=$langSaveMessage; 
         } else {
-                $tool_content .= '<blockquote>'.$langCopyFailed.'</blockquote>';
+                $alert_div= $langSaveErrorMessage;
         }
+		echo $alert_div;
+		exit;
 }
 
 /*-----------------------------
@@ -111,10 +107,12 @@ if (isset($_POST['store']) && $is_adminOfCourse) {
   -----------------------------*/
 
 if (isset($chatLine)) {
+	$chatLine=uft8html2utf8(utf8RawUrlDecode($chatLine));
         $fchat = fopen($fileChatName,'a');
         fwrite($fchat,$timeNow.' - '.$nick.' : '.stripslashes($chatLine)."\n");
         fclose($fchat);
 }
+
 
 /*==========================
     DISPLAY MESSAGE LIST
@@ -156,7 +154,7 @@ function buffer($content, $tmpFile) {
         fwrite($fp, $content);
 }
 
-echo "<p>".utf8RawUrlDecode($tool_content)."</p>";
+echo "<p>".$tool_content."</p>";
 
 function utf8RawUrlDecode ($source) {
    $decodedStr = "";
@@ -190,6 +188,25 @@ function utf8RawUrlDecode ($source) {
    return $decodedStr;
 }
 
+function uft8html2utf8( $s ) {
+       if ( !function_exists('uft8html2utf8_callback') ) {
+             function uft8html2utf8_callback($t) {
+                     $dec = $t[1];
+           if ($dec < 128) {
+             $utf = chr($dec);
+           } else if ($dec < 2048) {
+             $utf = chr(192 + (($dec - ($dec % 64)) / 64));
+             $utf .= chr(128 + ($dec % 64));
+           } else {
+             $utf = chr(224 + (($dec - ($dec % 4096)) / 4096));
+             $utf .= chr(128 + ((($dec % 4096) - ($dec % 64)) / 64));
+             $utf .= chr(128 + ($dec % 64));
+           }
+           return mb_convert_encoding($utf,"ISO-8859-7","UTF-8");
+             }
+       }                                
+       return preg_replace_callback('|&#([0-9]{1,});|', 'uft8html2utf8_callback', $s );                                
+}
 
 
 

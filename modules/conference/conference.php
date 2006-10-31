@@ -69,8 +69,12 @@ function clear_chat()
 		return false;
 	}
 function save_chat()
-	{
-	  	new Ajax.Request("refresh_chat.php", {method:"get", postBody:"store=true"});
+	{ 
+	var set_presantation = function(t) {
+		                alert(t.responseText);
+			}
+		
+	  	new Ajax.Request("refresh_chat.php", {method:"post", postBody:"store=true",onSuccess:set_presantation});
 		return false;
 	}
 
@@ -393,7 +397,8 @@ $tool_content.='
 
 		if ($is_adminOfCourse) {
 			$tool_content.=' 
-        		<a href="conference.php?reset=true" onclick="return clear_chat();">'.$langWash.'</a>';
+        		<br><a href="conference.php?reset=true" onclick="return clear_chat();">'.$langWash.'</a> |
+        		<a href="conference.php?save=true" onclick="return save_chat();">'.$langSaveChat.'</a>';
  		}
 
 $tool_content.='
@@ -405,7 +410,7 @@ $tool_content.='
 	</div>
 
 	</div>
-	<div style="height:600px;width:910px;">
+	<div style="height:650px;width:910px;">
 	</div>
 ';
 
