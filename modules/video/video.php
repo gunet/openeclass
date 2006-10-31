@@ -115,7 +115,7 @@ if($is_adminOfCourse) {
 					$iscopy=@copy("$file", "$updir/$file_name");
 					if(!$iscopy)
 					 {$tool_content="<table><tbody><tr><td colspan=2 class=\"caution\">$langFileNot</td></tr></tbody></table><a href=\"$_SERVER[PHP_SELF]\">$langBack</a>";
-					draw($tool_content, 2, 'user', $head_content);}
+					draw($tool_content, 2, 'user', $head_content);exit;}
 				} else {
 					$tool_content="<table><tbody><tr><td colspan=2 class=\"caution\">$langTooBig</td></tr></tbody></table><a href=\"$_SERVER[PHP_SELF]\">$langBack</a>";
 draw($tool_content, 2, 'user', $head_content);
