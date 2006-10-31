@@ -38,24 +38,24 @@ include '../include/baseTheme.php';
 $nameTools = "Διαθέσιμα Εγχειρίδια";
 
 $tool_content = "";
-$urlServer = strrev(substr(strrev($urlServer),1));
+$urlServerTemp = strrev(substr(strrev($urlServer),1));
 
 $tool_content .= <<<tCont
 <p>Στη σελίδα αυτή θα βρείτε χρήσιμα εγχειρίδια που αφορούν την πλατφόρμα e-Class.</p>
 <ul class="listBullet">
 
-<li><a href="$urlServer/manuals/e-Class.pdf" target=_blank>Αναλυτική Περιγραφή e-Class</a></li>
-<li><a href="$urlServer/manuals/e-Class_short.pdf" target=_blank>Σύντομη Περιγραφή e-Class</a></li>
+<li><a href="$urlServerTemp/manuals/e-Class.pdf" target=_blank>Αναλυτική Περιγραφή e-Class</a></li>
+<li><a href="$urlServerTemp/manuals/e-Class_short.pdf" target=_blank>Σύντομη Περιγραφή e-Class</a></li>
 
 
 
-<li>Εγχειρίδιο Χρήστη (Μαθητή/Φοιτητή): σε μορφή <a href="$urlServer/manuals/manS/ManS.pdf" target=_blank>PDF</a>
-ή <a href="$urlServer/manuals/manS/ManS.htm" target=_blank>HTML</a></li>
-<li>Εγχειρίδιο Καθηγητή: σε μορφή <a href="$urlServer/manuals/manT/ManT.pdf" target=_blank>PDF</a>
-ή <a href="$urlServer/manuals/manT/ManT.htm" target=_blank>HTML</a></li>
+<li>Εγχειρίδιο Χρήστη (Μαθητή/Φοιτητή): σε μορφή <a href="$urlServerTemp/manuals/manS/ManS.pdf" target=_blank>PDF</a>
+ή <a href="$urlServerTemp/manuals/manS/ManS.htm" target=_blank>HTML</a></li>
+<li>Εγχειρίδιο Καθηγητή: σε μορφή <a href="$urlServerTemp/manuals/manT/ManT.pdf" target=_blank>PDF</a>
+ή <a href="$urlServerTemp/manuals/manT/ManT.htm" target=_blank>HTML</a></li>
 
 
-<li><a href="$urlServer/manuals/Teleteaching_Std.pdf" target=_blank>Πρότυπα Μαθησιακών Τεχνολογιών</a></li>
+<li><a href="$urlServerTemp/manuals/Teleteaching_Std.pdf" target=_blank>Πρότυπα Μαθησιακών Τεχνολογιών</a></li>
 
 </ul>
 
