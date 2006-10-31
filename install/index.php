@@ -480,7 +480,7 @@ function set_MCU()
 			<tr>
 			    <th>
                                
-                                    Κλειδί για χρήση απόκριψης
+                                    Κλειδί για χρήση απόκρυψης
                                 
                             </th>
                             <td>
@@ -553,7 +553,7 @@ elseif(isset($install6))
         <li>Base dn του LDAP Εξυπηρέτη : $dnldapserver </li>
 	<li>MCU: ".@$MCUForm." </li>
 	<li>Vod Server: ".@$vodServerForm." </li>
-	<li>Κλειδί για χρήση απόκριψης: $encryptkey </li>
+	<li>Κλειδί για χρήση απόκρυψης: $encryptkey </li>
         </ul>
         
                     <input type=\"submit\" name=\"back4\" value=\"< Πίσω\">
