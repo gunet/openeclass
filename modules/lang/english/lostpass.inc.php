@@ -48,7 +48,7 @@ $lang_pass_not_found3 = 'Be sure to provide information that can help determine 
 $lang_student = 'Student';
 $lang_prof = 'Professor';
 $lang_other = 'Other';
-
+$lang_email = 'e-mail';
 $lang_pass_submit = 'Submit';
 
 ?>
