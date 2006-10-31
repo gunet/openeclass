@@ -1345,7 +1345,7 @@ if($is_adminOfCourse) {
             //aferaish tou: kathe arxeio na einai hyperlink me apeftheias URL  -  if(empty($row["filename"])) $tool_content .=  $dspFileName."</a>"; else $tool_content .=  $row["filename"]."</a>";
             if(empty($row["filename"]))
             {
-            	$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action=2download&id=".$cmdFileName."' title=\"$langSave\">".$dspFileName."</a>"; 
+            	$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' title=\"$langSave\">".$dspFileName."</a>"; 
             }else
             {
             	$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' title=\"$langSave\">".$row["filename"];
@@ -1355,22 +1355,7 @@ if($is_adminOfCourse) {
             
             
             
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
             //$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' title=\"$langSave\"><img src=\"./img/save.gif\" border=\"0\" align=\"absmiddle\" title=\"$langSave\"></a>"; 
-            
             
             
             
