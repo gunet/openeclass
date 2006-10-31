@@ -85,7 +85,7 @@ else
 	if (!valid_email($femail)) 
 	{
 		$tool_content .=  $lang_pass_invalid_mail1
-		."<code> ".$femail." </code>"
+		."<code> ".htmlspecialchars($femail)." </code>"
 		.$lang_pass_invalid_mail2
 		." <a href='mailto: $emailhelpdesk'>".$emailhelpdesk."</a>, "
 		.$lang_pass_invalid_mail3;
