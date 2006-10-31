@@ -289,11 +289,11 @@ foreach ($flatElementList as $module)
 
 } // end of foreach ($flatElementList as $module)
 
+$prevNextString = ""/*' - '.$currentName.*//*"&nbsp;&nbsp;&nbsp;"*/;
 
 // display previous and next links only if there is more than one module
 if ( $moduleNb > 1 )
 {
-	$prevNextString = ""/*' - '.$currentName.*//*"&nbsp;&nbsp;&nbsp;"*/;
 	$imgPrevious = '<img src="'.$imgRepositoryWeb.'previous.gif" border="0" title="'.$langPrevious.'">';
 	$imgNext = '<img src="'.$imgRepositoryWeb.'next.gif" border="0" title="'.$langNext.'">';
 	
