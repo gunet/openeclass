@@ -340,7 +340,7 @@ $tool_content.=
 	<div id="conference" style="position:absolute;height: 200px;width: 200px;border:groove;top:210px;left:200px;">
 '.$langTeleconference_content.'	
 	</div>
-	<div id="video" style="position:absolute;height: 200px;width: 200px;border:groove;top:445px;left:200px;">
+	<div id="video" style="position:absolute;height: 200px;width: 200px;border:groove;top:435px;left:200px;">
 '.$langVideo_content.'	
 	</div>
 
@@ -348,7 +348,7 @@ $tool_content.=
 ';
 
 if ($is_adminOfCourse) {
-@$tool_content.='<div  style="position:absolute;height:200px;width: 200px;border:groove;top:685px;left:200px;">
+@$tool_content.='<div  style="position:absolute;height:226px;width: 200px;border:groove;top:659px;left:200px;">
 <form id="video_form" onSubmit="return play_video();">
 ';
 if($MCU!="") {
@@ -359,14 +359,14 @@ $tool_content.='
 }
 $tool_content.='
     <br>
-    <p>'.$langsetvideo.'</p><input type="text" id="Video_URL" size="15"><input type="submit" value=" Play ">
+    <p>'.$langsetvideo.'</p><input type="text" id="Video_URL" size="15"><br><input type="submit" value="'.$langButtonVideo.'">
 	<a href="javascript:clean_video();">'.$langWashVideo.'</a>
 </form>
 
 <form id="Presantation_form" onSubmit = "return show_presantation();">
 <p>'.$langpresantation.'</p>
-<input type="text" id="Presantation_URL" name="Presantation_URL" size="20">
-<input type="submit" value="OK">
+<input type="text" id="Presantation_URL" name="Presantation_URL" size="20"><br>
+<input type="submit" value="'.$langButtonPresantation.'">
 <a href="javascript:clean_presantation();">'.$langWashPresanation.'</a>
 </form>
 </div>
@@ -405,7 +405,7 @@ $tool_content.='
 	</div>
 
 	</div>
-	<div style="height:660px;width:910px;">
+	<div style="height:600px;width:910px;">
 	</div>
 ';
 

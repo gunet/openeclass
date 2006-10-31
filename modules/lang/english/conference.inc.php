@@ -37,11 +37,15 @@
  $langRefresh = "Refresh";
  $langClearedBy = "cleared by";
  $langChatError = "It is not possible to start the live conference";
+ $langButtonVideo="Transmit";
+ $langButtonPresantation="Transmit";
  $langsetvideo="Set URL";
  $langconference="Teleconference";
  $langpresantation="Presentation URL";
  $langVideo_content="<p align='justify'>The video selected by the professor or the net meeting application for live chat will be presented in this window.</p>";
- $langTeleconference_content="<p align='justify'>The video selected by the professor or the net meeting application for live chat will be presented in this window.</p>";
+ $langTeleconference_content="<p align='justify'>Net meeting application for live chat will be presented in this window.</p>";
+ if($browser['browser']!="IE")
+ 	$langTeleconference_content.="<p  align='justify'>Net meeting will be presented only if browser is IE.</p>";
  $langPresantation_content="<p align='center'>A web page selected by the professor will be presented in this window.</p>";
  $langWashVideo="Clean video";
  $langWashPresanation="clean presantation";

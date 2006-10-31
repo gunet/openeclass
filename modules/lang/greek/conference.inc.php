@@ -36,12 +36,18 @@
  $langRefresh = "Ανανέωση";
  $langClearedBy = "καθαρισμός από";
  $langChatError = "Δεν είναι δυνατόν να ξεκινήσει η Ζωντανή Τηλεσυνεργασία";
- $langsetvideo="Τοποθετήστε τον σύνδεσμο";
- $langconference="Τηλεδιάσκεψη";
- $langpresantation="Σύνδεσμος παρουσίασης";
- $langVideo_content="<p align='justify'>Εδώ θα παρουσιαστεί το βίντεο που θα επιλέξειό ο καθηγητής.</p>";
- $langTeleconference_content="<p align='justify'>Εδώ θα παρουσιαστεί το πρόγραμμα netmeeting για ζωντανή κουβέντα με τον καθηγητή.</p>";
- $langWashVideo="Καθάρισμα βίντεο";
+ $langsetvideo="Σύνδεσμος παρουσίασης βίντεο";
+ $langButtonVideo="Μετάδοση";
+ $langButtonPresantation="Μετάδοση";
+ $langconference="Ενεργοποίηση τηλεδιάσκεψης";
+ $langpresantation="Σύνδεσμος παρουσίασης ιστοσελίδας";
+ $langVideo_content="<p align='justify'>Εδώ θα παρουσιαστεί το βίντεο αφού την ενεργοποιήσει ο καθηγητής.</p>";
+ $langTeleconference_content="<p align='justify'>Εδώ θα παρουσιαστεί η τηλεδιάσκεψη αφού την ενεργοποιήσει ο καθηγητής.</p>";
+ $browser = get_browser(null, true);
+ if($browser['browser']!="IE")
+ 	$langTeleconference_content.="<p  align='justify'>Η τηλεδιάσκεψη ενεργοποιείται μόνο αν έχετε IE ως πλοηγό.</p>";
+
+ $langWashVideo="Παύση μετάδοσης";
  $langPresantation_content="<p align='center'>Εδώ θα παρουσιαστεί μία ιστοσελίδα που θα επιλέξει ο καθηγητής.</p>";
- $langWashPresanation="Καθάρισμα Παρουσίασης";
+ $langWashPresanation="Παύση μετάδοσης";
 ?>
