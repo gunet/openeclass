@@ -1,39 +1,38 @@
 <?php
 session_start();
-/*
-+----------------------------------------------------------------------+
-| E-Class - based on CLAROLINE version 1.3.0 $Revision$      |
-+----------------------------------------------------------------------+
-|  $Id$   |
-+----------------------------------------------------------------------+
-| Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
-| Copyright 2003 GUnet                                                 |
-+----------------------------------------------------------------------+
-|    This program is free software; you can redistribute it and/or     |
-|    modify it under the terms of the GNU General Public License       |
-|    as published by the Free Software Foundation; either version 2    |
-|   of the License, or (at your option) any later version.             |
-|                                                                      |
-|   This program is distributed in the hope that it will be useful,    |
-|   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-|   GNU General Public License for more details.                       |
-|                                                                      |
-|   You should have received a copy of the GNU General Public License  |
-|   along with this program; if not, write to the Free Software        |
-|   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-|   02111-1307, USA. The GPL license is also available through the     |
-|   world-wide-web at http://www.gnu.org/copyleft/gpl.html             |
-+----------------------------------------------------------------------+
-| Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-|          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-|          Christophe Gesché <gesche@ipm.ucl.ac.be>                    |
-+----------------------------------------------------------------------+
-| e-Class changes by Alexandros Diamantidis <adia@noc.uoa.gr>          |
-|                    Yannis Exidaridis <jexi@noc.uoa.gr>               |
-|                    Costas Tsibanis <costas@noc.uoa.gr>               |
-+----------------------------------------------------------------------+
-*/
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Á full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
+
+/**
+ * Open courses component
+ * 
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ * 
+ * @abstract This component shows a list of courses
+ *
+ */
 
 $langFiles = 'opencours';
 include '../../include/baseTheme.php';
@@ -42,7 +41,7 @@ $navigation[] = array ("url"=>"listfaculte.php", "name"=> $listfac);
 
 //parse the faculte id in a session
 //This is needed in case the user decides to switch language.
-//echo $fc;
+
 if (isset($fc)) {
 	$_SESSION['fc_memo'] = $fc;
 }
@@ -89,6 +88,7 @@ $numoftypes = mysql_num_rows($typesresult);
 if ( $numoftypes > 1) {
 	//	$tool_content .= "<font class=\"courses\">";
 	$counter = 1;
+	$tool_content .= "<p>";
 	while ($typesArray = mysql_fetch_array($typesresult)) {
 		$t = $typesArray['types'];
 		// make the plural version of type (eg pres, posts, etc)
@@ -100,6 +100,8 @@ if ( $numoftypes > 1) {
 		$tool_content .= "<a href=\"#".$t."\">".$m["$ts"]."</a>";
 		$counter++;
 	}
+	
+	$tool_content .= "</p>";
 }
 
 // now output the legend
@@ -143,7 +145,7 @@ foreach (array("pre" => $m['pres'],
 	<table width=\"99%\">
 		<thead>
 			<tr>
-				<th colspan=\"4\">$message</th>
+				<th colspan=\"4\"><a name=\"$type\">$message</th>
 			</tr>
 			<tr>
 				<th>".$m['type']."</th>
