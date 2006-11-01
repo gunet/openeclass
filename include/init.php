@@ -190,8 +190,12 @@ if (isset($require_prof) and $require_prof) {
 	}
 }
 
-
-
+if (isset($require_admin) && $require_admin) {
+	if(!check_admin()) {
+		$toolContent_ErrorExists = $langCheckAdmin;
+		$errorMessagePath = "../../";
+	}
+}
 
 // If $require_current_course is true, initialise course settings
 // Read properties of current course
