@@ -312,22 +312,27 @@ function selection($entries, $name, $default = '')
 // The check_admin() function is used in the very first place in all scripts in the admin 
 // directory. Just checks that we are really admin users (and not fake!) to proceed...
 // ----------------------------------------------------------------------------
-function check_admin()
-{
-        global $uid, $urlServer, $toolContent_ErrorExists, $errorMessagePath;
+function check_admin() {
+
+global $uid, $urlServer, $toolContent_ErrorExists;
+// just make sure that the $uid variable isn't faked
+				if (isset($_SESSION['uid']))
+					$uid = $_SESSION['uid'];
+				else
+						unset($uid);
+
         if (isset($uid)) {
-                $res = mysql_query("SELECT * FROM admin WHERE idUser='$uid'");
+               // $res = mysql_query("SELECT * FROM admin WHERE idUser='$uid'");
+                $res = db_query("SELECT * FROM admin WHERE idUser='$uid'");
         }
         if (!isset($uid) or !$res or mysql_num_rows($res) == 0) {
-        	
         	$toolContent_ErrorExists = "
         	<h1>Χώρος Ελεγχόμενης Πρόσβασης</h1>
         	<p>Η σελίδα που προσπαθείτε να μπείτε απαιτεί δικαιώματα διαχειριστή.<br>
 			Παρακαλούμε πηγαίνετε στην <a href='".$urlServer."'>αρχική σελίδα</a> και
 			δώστε τα στοιχεία σας.</p>
         	";
-			$errorMessagePath = "../../";
-
+				$errorMessagePath = "../../";
         }
 }
 
