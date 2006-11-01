@@ -467,27 +467,12 @@ if($is_adminOfCourse)
     //elegxos gia thn yparksh eggrafh sth vash ginetai sto STEP 1
     if (isset($renameTo2))
     {
-		if(is_dir("$baseWorkDir/$renameTo2") || is_dir("$baseWorkDir"."$sourceFile"))
-		{
-			echo my_basename("$baseWorkDir"."$sourceFile")."<hr>";
-			$tmp = strlen("$baseWorkDir"."$sourceFile") - strlen(my_basename("$baseWorkDir"."$sourceFile"));
-			$destPath = substr("$baseWorkDir"."$sourceFile", 0, $tmp);
-			
-			//rename("$baseWorkDir"."$sourceFile", "$destPath"."$renameTo2");
-			$tmp = strlen(my_basename($sourceFile));
-			$tmp2 = substr($sourceFile, 0, -$tmp);
-			/////////////////////////////////EDW SYNEXIZW
-		//na checkarw afto	$query =  "UPDATE ".$dbTable." SET filename=\"".$renameTo2."\", path=\"".$tmp2.$renameTo2."\" WHERE path=\"".$sourceFile."\"";
-			
-			
-		}else
-		{
 			$query =  "UPDATE ".$dbTable." SET filename=\"".$renameTo2."\" WHERE path=\"".$sourceFile."\"";
 			//$tool_content .=  "<br><br>".$query."<br><br>";
 			mysql_query($query);
 			
 			$dialogBox = "<b>$langElRen</b>";
-		}
+		
     	
     }
 
