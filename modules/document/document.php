@@ -547,7 +547,7 @@ if($is_adminOfCourse)
         }
         else
         {
-            mkdir($baseWorkDir.$newDirPath."/".$newDirName, 0700);
+            mkdir($baseWorkDir.$newDirPath."/".$newDirName, 0775);
             
             $query =  "INSERT INTO ".$dbTable." SET
     			path=\"".$newDirPath."/".$newDirName."\",
