@@ -130,4 +130,10 @@ $langLessonDoesNotExist = "
 	<p><b>The lesson you are trying to access does not exist.</b><br/>
 	This could have been caused by a not allowed action or a platform error.</p>
 ";
+
+$langCheckAdmin = "
+		<p><b>Your action requires administrator privileges. </b><br/>
+		The system has automatically redirect you to the start page to login (if you are
+		the platform administrator you will be allowed access tou the administration tools).</p>
+";
 ?>
