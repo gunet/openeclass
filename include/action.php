@@ -9,10 +9,10 @@ class action {
         $module_id = $this->get_module_id($module_name);
 
         ###ophelia -28-08-2006 : add duration to previous
+        
         $sql = "SELECT id, NOW()-date_time as diff FROM actions ".
-               "WHERE user_id = '$uid' AND date_time = ".
-               "(SELECT MAX(`date_time`) FROM actions ".
-               "WHERE user_id = '$uid')";
+               "WHERE user_id = '$uid' ".
+               " ORDER BY date_time DESC LIMIT 1 ";
 
         $result = db_query($sql, $currentCourseID);
         $last_id = 0;
