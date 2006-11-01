@@ -1542,13 +1542,12 @@ elseif (isset($install1) || isset($back1))
 	warnIfExtNotLoaded("session");
 	warnIfExtNotLoaded("mysql");
 	warnIfExtNotLoaded("gd");
+	warnIfExtNotLoaded("mbstring");
 	warnIfExtNotLoaded("zlib");
 	warnIfExtNotLoaded("pcre");
 	$tool_content .= "</ul><u>Προαιρετικά PHP modules</u>";
 	$tool_content .= "<ul id=\"installBullet\">";
-	//    $tool_content .= "<ul id=\"installBullet\">Προαιρετικά PHP modules";
 	warnIfExtNotLoaded("ldap");
-	warnIfExtNotLoaded("mbstring");
 	$tool_content .= "</ul>";
 	$tool_content .= "
     
