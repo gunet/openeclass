@@ -6,7 +6,7 @@ if (!isset($language)) {
 	$language = preg_replace('/[^a-z-]/', '', $language);
 }
 
-include("../lang/$language/help.inc");
+include("../lang/$language/help.inc.php");
 
 // Default topic
 if (empty($GLOBALS["lang$_GET[topic]Content"])) {
