@@ -1165,6 +1165,20 @@ CREATE TABLE `auth` (
         PRIMARY KEY  (id))
         TYPE=MyISAM");
 
+		//table keeping data for monthly reports
+    mysql_query("CREATE TABLE monthly_summary (
+        id mediumint unsigned NOT NULL auto_increment,
+        `month` varchar(20)  NOT NULL default '0',
+        profesNum int(11) NOT NULL default '0',
+        studNum int(11) NOT NULL default '0',
+        visitorsNum int(11) NOT NULL default '0',
+        coursNum int(11) NOT NULL default '0',
+        logins int(11) NOT NULL default '0',
+        details text NOT NULL default '',
+        PRIMARY KEY  (id))
+        TYPE=MyISAM");
+
+
 		// encrypt the admin password before storing it, into DB
 		include '../modules/auth/auth.inc.php';
 		$crypt = new Encryption;
