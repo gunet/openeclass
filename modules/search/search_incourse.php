@@ -193,7 +193,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 	//ektypwsh mhnymatwn anazhthshs
 	$tool_content .= "<h2>$langSearchingFor</h2>";//<h3>$langOR: $or_search_terms</h3><br>";
 	if (@!empty($not_search_terms)) $tool_content .= "<h3>$langNOT: $not_search_terms</h3><br>";
-
+	$tool_content .= "<p>";
 	
 	
 	
@@ -291,17 +291,20 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		$myquery = "SELECT * FROM document WHERE MATCH (filename,comment,title,creator,subject,description,author,language)".$query;
 		$result = mysql_query($myquery);
 
+		
+			
 		$c = 0;
-		while(@$res = mysql_fetch_array($result))
+		while($res = mysql_fetch_array($result))
 		{
 			//apokrypsh twn eggrafwn pou exoun dhkwthei san invisible apo ton aplo mathiti
-			if(check_prof())
+			if($is_adminOfCourse)
 			{
 				$c++;
 				$tmp_result .= "<li><b>".$res['filename']."</b>: (".$res['comment'].")<br>";
 
-			}elseif ($res["visibility"] == "v")
+			}elseif ($res['visibility'] == "v")
 			{
+				
 				$c++;
 				$tmp_result .= "<li><b>".$res['filename']."</b>: (".$res['comment'].")<br>";
 			}
@@ -423,7 +426,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 	if(stristr($tool_content, "<hr>") === FALSE) $tool_content .= $langNoResult;
 	
 	//ektypwsh syndesmou gia nea anazhthsh
-	$tool_content .= "<br><br><p align=\"center\"><a href=\"search_incourse.php\">$langNewSearch</a></p>";
+	$tool_content .= "<br><br><p align=\"center\"><a href=\"search_incourse.php\">$langNewSearch</a></p></p>";
 	
 
 }//telos anazhthshs (if empty($search_terms) = false)
