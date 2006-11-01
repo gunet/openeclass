@@ -50,7 +50,7 @@ if(isset($toolContent_ErrorExists)) {
 	
 	$_SESSION['errMessage'] = $toolContent_ErrorExists;
 	session_write_close();
-	header("location:".$urlServer);
+	header("location:".$urlServer."?logout=yes");
 }
 
 if (session_is_registered('errMessage') && strlen($_SESSION['errMessage'])>0) {
@@ -88,7 +88,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 	if (strlen($extraMessage) > 0) {
 		$messageBox =  "
-					<table>
+					<table width=\"99%\">
 				<tbody>
 					<tr>
 						<td class=\"extraMessage\">
