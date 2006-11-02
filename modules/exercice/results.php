@@ -136,7 +136,7 @@ while($row=mysql_fetch_array($result)) {
 	$tool_content .= "<td>".$langYourTotalScore2."</td></tr>";
 	
 	mysql_select_db($currentCourseID);
-	$sql2="SELECT RecordStartDate,RecordEndDate,TotalScore,TotalWeighting  FROM `exercise_user_record` WHERE uid='$sid'";
+	$sql2="SELECT RecordStartDate,RecordEndDate,TotalScore,TotalWeighting  FROM `exercise_user_record` WHERE uid='$sid' AND eid='$exerciseId'";
 	$result2 = mysql_query($sql2);
 	while($row2=mysql_fetch_array($result2)) {
 
