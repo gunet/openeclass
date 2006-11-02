@@ -46,7 +46,7 @@ $action->record('MODULE_ID_CHAT');
 /**************************************/
 
 
-//$nameTools = "conference";
+$nameTools = $langConference;
 
 
 //HEADER
