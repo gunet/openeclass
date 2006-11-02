@@ -210,89 +210,89 @@ if (isset($require_current_course) and $require_current_course) {
 		$toolContent_ErrorExists = $langSessionIsLost;
 		$errorMessagePath = "../../";
 	} else {
-		$dbname = $_SESSION['dbname'];
-	}
-	$currentCourse = $dbname;
 
-	$result = db_query("
+		$dbname = $_SESSION['dbname'];
+		$currentCourse = $dbname;
+
+		$result = db_query("
 		SELECT code, fake_code, intitule, faculte, 
 			titulaires, languageCourse, 
 			departmentUrlName, departmentUrl, visible
 		FROM cours
 		WHERE cours.code='$currentCourse'");
 
-	while ($theCourse = mysql_fetch_array($result)) {
-		$fake_code 	= $theCourse["fake_code"];
-		$code_cours = $theCourse["code"];
-		$intitule 	= $theCourse["intitule"];
-		$fac 		= $theCourse["faculte"];
-		$titulaires	= $theCourse["titulaires"];
-		$languageInterface = $theCourse["languageCourse"];
-		$departmentUrl= $theCourse["departmentUrl"];
-		$departmentUrlName= $theCourse["departmentUrlName"];
-		$visible = $theCourse['visible'];
-		// New variables
-		$currentCourseCode				= $fake_code ;
-		$currentCourseID				= $code_cours;
-		$currentCourseName				= $intitule;
-		$currentCourseDepartment		= $fac;
-		$currentCourseTitular 			= $titulaires;
-		$currentCourseLanguage			= $languageInterface;
-		$currentCourseDepartmentUrl		= $departmentUrl;
-		$currentCourseDepartmentUrlName	= $departmentUrlName;
-	}
+		while ($theCourse = mysql_fetch_array($result)) {
+			$fake_code 	= $theCourse["fake_code"];
+			$code_cours = $theCourse["code"];
+			$intitule 	= $theCourse["intitule"];
+			$fac 		= $theCourse["faculte"];
+			$titulaires	= $theCourse["titulaires"];
+			$languageInterface = $theCourse["languageCourse"];
+			$departmentUrl= $theCourse["departmentUrl"];
+			$departmentUrlName= $theCourse["departmentUrlName"];
+			$visible = $theCourse['visible'];
+			// New variables
+			$currentCourseCode				= $fake_code ;
+			$currentCourseID				= $code_cours;
+			$currentCourseName				= $intitule;
+			$currentCourseDepartment		= $fac;
+			$currentCourseTitular 			= $titulaires;
+			$currentCourseLanguage			= $languageInterface;
+			$currentCourseDepartmentUrl		= $departmentUrl;
+			$currentCourseDepartmentUrlName	= $departmentUrlName;
+		}
 
-	if (!isset($code_cours) or empty($code_cours)) {
-		$toolContent_ErrorExists = $langLessonDoesNotExist;
-		$errorMessagePath = "../../";
-	}
+		if (!isset($code_cours) or empty($code_cours)) {
+			$toolContent_ErrorExists = $langLessonDoesNotExist;
+			$errorMessagePath = "../../";
+		}
 
-	$fac_lower = strtolower($fac);
+		$fac_lower = strtolower($fac);
 
-	// Check for course visibility by current user
-	$statut = 0;
-	if (isset($uid)) {
-		$res2 = mysql_query("
+		// Check for course visibility by current user
+		$statut = 0;
+		if (isset($uid)) {
+			$res2 = mysql_query("
 			SELECT statut FROM cours_user
 			WHERE code_cours = '$dbname' AND user_id='$uid'");
-		if ($row = mysql_fetch_row($res2)) {
-			$statut = $row[0];
+			if ($row = mysql_fetch_row($res2)) {
+				$statut = $row[0];
+			}
 		}
-	}
 
-	if ($visible != 2) {
-		if (!$uid) {
+		if ($visible != 2) {
+			if (!$uid) {
 
-			$toolContent_ErrorExists = $langNoAdminAccess;
-			$errorMessagePath = "../../";
-
-		} elseif ($visible == 1) {
-			if ($statut == 0) {
-
-				$toolContent_ErrorExists = $langLoginRequired;
+				$toolContent_ErrorExists = $langNoAdminAccess;
 				$errorMessagePath = "../../";
 
+			} elseif ($visible == 1) {
+				if ($statut == 0) {
+
+					$toolContent_ErrorExists = $langLoginRequired;
+					$errorMessagePath = "../../";
+
+				}
 			}
 		}
 	}
-
 	# force a specific interface language
 	if (!empty($language_override)) {
 		$languageInterface = $language_override;
-	}
 
-	// If course language is different from global language,
-	// include more messages
-	if ($language != $languageInterface) {
-		@ include("$webDir/modules/lang/$languageInterface/trad4all.inc.php");
-		if (is_array($langFiles)) {
-			foreach ($langFiles as $f) {
-				@ include("$webDir/modules/lang/$languageInterface/$f.inc.php");
+		// If course language is different from global language,
+		// include more messages
+		if ($language != $languageInterface) {
+			@ include("$webDir/modules/lang/$languageInterface/trad4all.inc.php");
+			if (is_array($langFiles)) {
+				foreach ($langFiles as $f) {
+					@ include("$webDir/modules/lang/$languageInterface/$f.inc.php");
+				}
+			} else {
+				@ include("$webDir/modules/lang/$languageInterface/$langFiles.inc.php");
 			}
-		} else {
-			@ include("$webDir/modules/lang/$languageInterface/$langFiles.inc.php");
+			$language = $languageInterface ;
 		}
-		$language = $languageInterface ;
 	}
 }
 
