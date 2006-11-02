@@ -142,7 +142,7 @@ function printMCQuestionForm() {
 			    <input name="MoreQuestions" type="radio" value="3" />
 		      $langPollMoreQuestions</label></td>
 		    <td><label>
-			    <input name="MoreQuestions" type="radio" value="2" />
+			    <input name="MoreQuestions" type="radio" value="2" checked/>
 		      $langPollCreate</label></td>
 			</tr>
 			<tr><td colspan="2" align="right">
@@ -179,7 +179,7 @@ cData;
 			    <input name="MoreQuestions" type="radio" value="3" />
 		      $langPollMoreQuestions</label></td>
 		    <td><label>
-			    <input name="MoreQuestions" type="radio" value="2" />
+			    <input name="MoreQuestions" type="radio" value="2" checked/>
 		      $langPollCreate</label></td>
 			</tr>
 			<tr><td colspan="2" align="right">
@@ -223,7 +223,7 @@ cData;
 			    <input name="MoreQuestions" type="radio" value="3" />
 		      $langPollMoreQuestions</label></td>
 		    <td><label>
-			    <input name="MoreQuestions" type="radio" value="2" />
+			    <input name="MoreQuestions" type="radio" value="2" checked/>
 		      $langPollCreate</label></td>
 			</tr>
 			<tr><td colspan="2" align="right">
@@ -273,7 +273,7 @@ cData;
 			    <input name="MoreQuestions" type="radio" value="1" />
 		      $langPollMoreQuestions</label></td>
 			  <td><label>
-			    <input name="MoreQuestions" type="radio" value="2" />
+			    <input name="MoreQuestions" type="radio" value="2" checked/>
 		      $langPollCreate</label></td>
 			</tr>
 			<tr><td colspan="2" align="right">
