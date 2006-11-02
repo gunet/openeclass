@@ -1,7 +1,7 @@
 <?php
 $langFiles = array('gunet','registration','admin');
+$require_admin = TRUE;
 include '../../include/baseTheme.php';
-@include "check_admin.inc";
 include('../../include/sendMail.inc.php');
 include '../auth/auth.inc.php';
 $nameTools= $langOpenProfessorRequests;

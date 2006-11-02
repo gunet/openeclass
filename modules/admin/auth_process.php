@@ -48,9 +48,9 @@
 
 // LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
 $langFiles = array('admin','registration');
+$require_admin = TRUE;
 include '../../include/baseTheme.php';
 include_once '../auth/auth.inc.php';
-@include "check_admin.inc";			// check if user is administrator
 $nameTools = $langUserAuthentication;
 
 $tool_content = "";			// Initialise $tool_content

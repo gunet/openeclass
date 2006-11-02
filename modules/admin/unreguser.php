@@ -40,8 +40,8 @@
 
 // LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
 $langFiles = array('gunet','admin','registration');
+$require_admin = TRUE;
 include '../../include/baseTheme.php';
-@include "check_admin.inc";
 $nameTools = $langUnregUser;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 

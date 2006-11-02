@@ -1,10 +1,10 @@
 <?php
 $langFiles = array('admin', 'restore_course');
+$require_admin = TRUE;
 include '../../include/baseTheme.php';
 include '../../include/lib/fileUploadLib.inc.php';
 include '../../include/lib/fileManageLib.inc.php';
 include '../../include/pclzip/pclzip.lib.php';
-check_admin();
 $nameTools = $langRestoreCourse;
 $navigation[] = array("url" => "../admin/index.php", "name" => "Εργαλεία Διαχείρισης Πλατφόρμας");
 

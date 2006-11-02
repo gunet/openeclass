@@ -1,7 +1,7 @@
 <?php
 $langFiles = array('registration','admin');
+$require_admin = TRUE;
 include '../../include/baseTheme.php';
-check_admin();
 $nameTools = 'Αναβάθμιση Βάσης Δεδομένων';
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 

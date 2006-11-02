@@ -54,11 +54,11 @@
 ******************************************************************************/
 // Set the langfiles needed
 $langFiles = array('admin','gunet');
-// Include baseTheme
-include '../../include/baseTheme.php';
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
-check_admin();
+$require_admin = TRUE;
+// Include baseTheme
+include '../../include/baseTheme.php';
 // Other includes
 @include 'admin.inc.php';
 // Define $nameTools

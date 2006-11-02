@@ -1,6 +1,6 @@
 <?php
 if (isset($c) && ($c!="")) {
-	@include "check_admin.inc";
+	$require_admin = TRUE;
 	$dbname = $c;
 	session_register("dbname");
 }

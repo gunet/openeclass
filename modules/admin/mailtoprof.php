@@ -50,11 +50,9 @@
 ******************************************************************************/
 // Set the langfiles needed
 $langFiles = array('gunet','registration','admin');
-// Include baseTheme
-include '../../include/baseTheme.php';
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
-check_admin();
+$require_admin = TRUE;
 // Include functions needed to send email
 include('../../include/sendMail.inc.php');
 // Define $nameTools
@@ -75,6 +73,8 @@ if (isset($submit) && ($body_mail!="")) {
 		// All users
 		$sql=mysql_query("SELECT DISTINCT email FROM user");
 	} elseif ($sendTo=="1") {
+// Include baseTheme
+include '../../include/baseTheme.php';
 		// Only professors
 		$sql=mysql_query("SELECT DISTINCT email FROM user where statut='1'");
 	}

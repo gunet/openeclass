@@ -1,8 +1,8 @@
 <?
 $langFiles = array('registration', 'admin', 'gunet');
+$require_admin = TRUE;
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
-check_admin();
 $nameTools = "Εγγραφή Καθηγητή";
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 

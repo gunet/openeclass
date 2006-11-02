@@ -13,12 +13,12 @@
 
 
 $langFiles 				= array('usage', 'admin');
+$require_admin = TRUE;
 $require_help 			= true;
 $helpTopic 				= 'Usage';
 
 include '../../include/baseTheme.php';
 
-@include "check_admin.inc";
 // Define $nameTools
 $nameTools = $langUsersCourse;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);

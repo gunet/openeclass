@@ -1,11 +1,9 @@
 <?
 
 $langFiles = 'admin';
-
+$require_admin = TRUE;
 include '../../include/baseTheme.php';
 include('../../include/lib/textLib.inc.php');
-
-check_admin();
 
 $nameTools = $langAdminAn;
 $tool_content = "";

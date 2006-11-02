@@ -46,9 +46,9 @@
 
 // LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
 $langFiles = array('admin','registration');
+$require_admin = TRUE;
 include '../../include/baseTheme.php';
 include 'admin.inc.php';			
-@include "check_admin.inc";		// check if user is administrator
 $nameTools = $langVersion;
 $tool_content = "";					// Initialise $tool_content
 $nameTools = "Λίστα Χρηστών / Ενέργειες";		// Define $nameTools

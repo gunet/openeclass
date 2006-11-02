@@ -48,11 +48,11 @@
 ******************************************************************************/
 // Set the langfiles needed
 $langFiles = 'admin';
-// Include baseTheme
-include '../../include/baseTheme.php';
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
-@include "check_admin.inc";
+$require_admin = TRUE;
+// Include baseTheme
+include '../../include/baseTheme.php';
 // Define $nameTools
 $nameTools = "Πληροφορίες για την PHP";
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
