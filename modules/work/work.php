@@ -664,18 +664,24 @@ $tool_content .= "\n\n<!-- BEGIN GRAPH -->\n\n";
 					
 		$gradeOccurances = array(); // Named array to hold grade occurances/stats
 		$gradesExists = 0;
+////////////////////////////////////////////////////
 		while ($row = mysql_fetch_array($result)) {
+			
 			$theGrade = $row['grade'];
-			if ($theGrade)
+			
+			if ($theGrade) {
 				$gradesExists = 1;
-			if (!$gradeOccurances[$theGrade]) {
-				$gradeOccurances[$theGrade] = 1;
-			} else {
-				++$gradeOccurances[$theGrade];
-				//$tool_content .= "\n\n".$theGrade.": ".	$gradeOccurances[$theGrade]."\n\n";
+				
+				if (!$gradeOccurances[$theGrade]) {
+					$gradeOccurances[$theGrade] = 1;
+				} else {
+					if ($gradesExists) {
+						++$gradeOccurances[$theGrade];
+					}
+				}
 			}
 		}
-		
+////////////////////////////////////////////////////
 		if ($gradesExists) {
 			foreach ( $gradeOccurances as $gradeValue=>$gradeOccurance ) {
 				$percentage = 100*($gradeOccurance/$num_results);
