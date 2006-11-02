@@ -303,7 +303,7 @@ function new_assignment()
 	$month	= date("m");
 	$year	= date("Y");
 
-	$tool_content .= "<form action=\"work.php\" method=\"post\"><table  width=\"95%\"><tr><td>".
+	$tool_content .= "<form action=\"work.php\" method=\"post\"><table  width=\"95%\"><tbody><tr><td>".
 		$m['title'].":</td><td><input type=\"text\" name=\"title\" size=\"55\"></td></tr><tr><td>".
 		$m['description'].":</td><td>".
 		"<textarea id=\"ta\" name=\"desc\" value=\"$desc\" style=\"width:100%\" rows=\"20\" cols=\"80\">";
@@ -321,7 +321,7 @@ function new_assignment()
 		":</td><td><input type=\"radio\" name=\"group_submissions\" value=\"0\" checked=\"1\">".
 		$m['user_work']."<br><input type=\"radio\" name=\"group_submissions\" value=\"1\">".
 		$m['group_work']."</td></tr><tr><td colspan=2>".
-		"<input type=\"submit\" name=\"new_assign\" value=\"$langAdd\"></tr></table></form>";
+		"<input type=\"submit\" name=\"new_assign\" value=\"$langAdd\"></tr></tbody></table></form>";
 
 }
 
@@ -376,7 +376,7 @@ $tool_content .= <<<cData
 	<form action="work.php" method="post">
 	<input type="hidden" name="id" value="$id">
 	<input type="hidden" name="choice" value="do_edit">
-	<table width="95%" >
+	<table width="95%" ><tbody>
 	<tr><td>${m['title']}:</td>
 	<td><input type="text" name="title" size="55" value="${row['title']}" style="width: 100%"></td></tr>
 <tr><td>${m['description']}:</td>
@@ -404,7 +404,7 @@ cData;
 		$tool_content .= "checked=\"1\"";		
 
 	$tool_content .= $m['group_work']."</td></tr><tr><td colspan=2>".
-		"<input type=\"submit\" name=\"do_edit\" value=\"".$langEdit."\"></td></tr></table>";	
+		"<input type=\"submit\" name=\"do_edit\" value=\"".$langEdit."\"></td></tr></tbody></table>";	
 //////////////////////////////////////////////////////////////////////////////////////
 	$tool_content .= "<p><center><a href='work.php'>$langBack</a></center></p>";
 }
@@ -530,13 +530,13 @@ function show_submission_form($id)
 		$tool_content .= <<<cData
 		<form enctype="multipart/form-data" action="work.php" method="post">
 			<input type="hidden" name="id" value="${id}">
-			<table width="95%">
+			<table width="95%"><tbody>
 			<tr><td colspan='2'><b>${langSendFile}</b></th></tr>
 			<tr><td>${langWorkFile}:</td><td><input type="file" name="userfile"></td></tr>
 			<tr><td>${m['comments']} :</td><td><textarea name="stud_comments" rows="5"
 				cols="55"></textarea></td></tr>
 			<tr><td colspan='2'><input type="submit" value="${langSubmit}" name="work_submit"></td></tr>
-			</table>
+			</tbody></table>
 		</form>
 cData;
 
@@ -685,7 +685,7 @@ $tool_content .= "\n\n<!-- BEGIN GRAPH -->\n\n";
 			$chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
 			$chart->render($webDir.$chart_path);
 					
-			$tool_content .= '<table width="95%"><tr><td><img src="'.$urlServer.$chart_path.'" /></td></tr></table>';
+			$tool_content .= '<table width="95%"><tr><td><img src="'.$urlServer.$chart_path.'" /></td></tr></tbody></table>';
 		}
 $tool_content .= "\n\n<!-- END GRAPH -->\n\n";		
 // end of pie chart /////////////////////////////////////////////////////////////////////////////////
@@ -699,7 +699,7 @@ $tool_content .= "\n\n<!-- END GRAPH -->\n\n";
 			$tool_content .= <<<cData
 				<form action="work.php" method="post">
 				<input type="hidden" name="grades_id" value="${id}">
-				<table border="0" align="center" cellpadding="2" cellspacing="0" width="80%">
+				<table border="0" align="center" cellpadding="2" cellspacing="0" width="80%"><tbody>
 					<tr bgcolor="${colorMedium}">
 cData;
 
@@ -750,7 +750,7 @@ cData;
 		} 
 		$tool_content .= <<<cData
 			<tr><td colspan="5" align="right"><input type="submit" name="submit_grades" value="${langGradeOk}"></td></tr>	
-    	</table>
+    	</tbody></table>
 			</form>
 cData;
 		/* echo "<p><a href=\"work.php?choice=plain&id=$id\">$m[plainview]</a></p>"; */
@@ -775,7 +775,7 @@ function show_student_assignments()
 	if (mysql_num_rows($result)) {
 		
 		$tool_content .= <<<cData
-			<table border="0" align="center" cellpadding="2" cellspacing="2" width="95%">
+			<table border="0" align="center" cellpadding="2" cellspacing="2" width="95%"><tbody>
 				<tr bgcolor="#E6E6E6">
 					<th align="center">${m['title']}</th>
 			  <th align="center">
@@ -820,7 +820,7 @@ cData;
 			}
     $tool_content .= "</td><td width=\"10%\" align=\"center\">${grade}</td></tr>";
 	}
-	$tool_content .= '</table>';
+	$tool_content .= '<tbody></table>';
 	} else {
 		$tool_content .= "<p>$langNoAssign</p>";
 	
@@ -903,9 +903,9 @@ cData;
     	$tool_content .= "<a href=\"work.php?choice=enable&id=${row['id']}\">".
 	  		"<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" alt=\"${activate_temp}\"></a>";
     }
-		$tool_content .= "</td></tr></tbody>";
+		$tool_content .= "</td></tr>";
 	}
-	$tool_content .= '</table>';
+	$tool_content .= '</tbody></table>';
 	} else {
 		$tool_content .= "<p>$langNoAssign</p>";
 	
@@ -993,16 +993,18 @@ function create_zip_index($path, $id, $online = FALSE)
 	</head>
 	<body>
 		<table border="1" width="95%">
-			<tr>
+			<thead><tr>
 				<th>'.$m['username'].'</th>
 				<th>'.$m['am'].'</th>
 				<th>'.$m['filename'].'</th>
 				<th>'.$m['sub_date'].'</th>
 				<th>'.$m['grade'].'</th>
-			</tr>');
+			</tr></thead>');
 	
 	$result = db_query("SELECT * FROM assignment_submit
 		WHERE assignment_id='$id' ORDER BY id");
+
+	$tool_content .= "<tbody>";
 
 	while ($row = mysql_fetch_array($result)) {
 		$filename = basename($row['file_path']);
@@ -1033,7 +1035,7 @@ function create_zip_index($path, $id, $online = FALSE)
 		}
 	}
 	fputs($fp, '
-		</table>
+		</tbody></table>
 	</body>
 </html>
 ');
