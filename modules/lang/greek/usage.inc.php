@@ -33,6 +33,7 @@
  $langUsage = "Στατιστικά Χρήσης";
  $langNoStatistics = "Δεν υπάρχουν επισκέψεις.";
  $langPersonalStats="Τα στατιστικά μου";
+ $langUserLogins="Επισκέψεις χρηστών στο μάθημα";
  
  $langStartDate = "Ημερομηνία Έναρξης";
  $langEndDate = "Ημερομηνία Λήξης";
@@ -103,6 +104,12 @@ $langFavourite = "Προτίμηση Υποσυστημάτων";
  $langVisibles = "Ανοικτά";
  $langEnglish = "Αγγλικά";
  $langGreek = "Ελληνικά";
+ 
+ $langAddress = "Διεύθυνση";
+ $langLoginDate = "Ημερ/νία εισόδου";
+ $langNoLogins = "Δεν έχουν γίνει είσοδοι το συγκεκριμένο χρονικό διάστημα.";
+ $langStatAccueil = "Για το χρονικό διάστημα που ζητήθηκε, διατίθεται και η παρακάτω πληροφορία, για το σύνολο των χρηστών του μαθηματος:";
+ $langHost = "Host";
  
  #for platform Statistics
  $langUsersCourse = "Χρήστες ανά μάθημα";

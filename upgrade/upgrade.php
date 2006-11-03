@@ -771,6 +771,19 @@ while ($code = mysql_fetch_row($res)) {
           duration int(11) NOT NULL,
          	PRIMARY KEY (id))", $code[0]);
 	}
+	
+
+	if (!mysql_table_exists($code[0], 'logins')) {
+		db_query("CREATE TABLE logins (
+	        id int(11) NOT NULL auto_increment,
+            user_id int(11) NOT NULL,
+			ip char(16) NOT NULL default '0.0.0.0',
+            date_time DATETIME NOT NULL default '0000-00-00 00:00:00',
+         	PRIMARY KEY (id))", $code[0]);
+	}
+	
+
+	
 	if (!mysql_table_exists($code[0], 'action_types')) {
 		db_query("CREATE TABLE action_types (
 						id int(11) NOT NULL auto_increment,

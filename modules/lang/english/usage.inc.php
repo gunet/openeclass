@@ -33,6 +33,8 @@
  $langUsage = "Usage Statistics";
  $langNoStatistics = "There are no visits.";
  $langPersonalStats="My statistics";
+ $langUserLogins="User visits";
+ 
  $langStartDate = "Start Date";
  $langEndDate = "End Date";
  $langUser = "User";
@@ -102,6 +104,12 @@
  $langHiddens = "Closed";
  $langVis_enrols = "Open with enrollment";
  $langVisibles = "Open";
+ 
+ $langAddress = "Address";
+ $langLoginDate = "Login date";
+ $langNoLogins = "There are no logins during this period.";
+ $langStatAccueil = "For this period, the following information is available, for all users of course:";
+ $langHost = "Host";
  
  #for platform Statistics
  $langUsersCourse = "Users per course";

@@ -1144,6 +1144,13 @@ db_query("CREATE TABLE actions (
             duration int(11) NOT NULL default 900,
             PRIMARY KEY (id))");
 
+db_query("CREATE TABLE logins (
+	        id int(11) NOT NULL auto_increment,
+            user_id int(11) NOT NULL,
+			ip char(16) NOT NULL default '0.0.0.0',
+            date_time DATETIME NOT NULL default '0000-00-00 00:00:00',
+         	PRIMARY KEY (id))");
+
 db_query("CREATE TABLE actions_summary (
             id int(11) NOT NULL auto_increment,
             module_id int(11) NOT NULL,

@@ -39,6 +39,9 @@ $langFiles = array('course_info', 'create_course', 'opencours', 'course_home');
 $require_help = TRUE;
 $helpTopic = 'course_home';
 
+
+
+
 //$courseHome is used by the breadcrumb logic 
 //See function draw() in baseTheme.php for details
 //$courseHome = true;
@@ -49,6 +52,15 @@ $nameTools = $langIdentity;
 $tool_content = "";
 $main_content = "";
 $bar_content = "";
+
+
+//For statistics: record login
+ global $uid, $currentCourse, $REMOTE_ADDR;
+$sql_log = "INSERT INTO logins SET user_id='$uid', ip='$REMOTE_ADDR', date_time=NOW()";
+db_query($sql_log, $currentCourse);
+///////////
+
+
 
 $sql = 'SELECT `description`,`course_keywords`, `course_addon`,`faculte`,`lastEdit`,`type`, `visible`, `titulaires`, `fake_code` FROM `cours` WHERE `code` = "'.$currentCourse.'"';
 $res = db_query($sql, $mysqlMainDb);
