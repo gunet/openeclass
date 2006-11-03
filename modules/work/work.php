@@ -693,7 +693,7 @@ $tool_content .= "\n\n<!-- BEGIN GRAPH -->\n\n";
 					
 			$tool_content .= '<table width="95%"><tr><td><img src="'.$urlServer.$chart_path.'" /></td></tr></tbody></table>';
 		}
-$tool_content .= "\n\n<!-- END GRAPH -->\n\n";		
+$tool_content .= "\n\n<!-- END GRAPH -->\n\n<br>";		
 // end of pie chart /////////////////////////////////////////////////////////////////////////////////
 
 				$result = db_query("SELECT *
