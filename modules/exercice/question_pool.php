@@ -128,15 +128,22 @@ if($is_allowedToEdit)
 if($is_allowedToEdit)
 {
 
+if (isset($fromExercise)) {
+	$temp_fromExercise = $fromExercise;
+} else {
+	$temp_fromExercise = "";
+	//$fromExercise = 0;
+}
+
 $tool_content .= <<<cData
 	<form method="get" action="${PHP_SELF}">
-	<input type="hidden" name="fromExercise" value="@$fromExercise">
+	<input type="hidden" name="fromExercise" value="$temp_fromExercise">
 	<table border="0" align="center" cellpadding="2" cellspacing="2" width="95%">
 	<tr>
 cData;
 	
 	$tool_content .= "<td colspan=\"";
-	if ($fromExercise)
+	if (isset($fromExercise))
 		$tool_content .= "2";
 	else
 		$tool_content .= "3";
@@ -151,10 +158,16 @@ cData;
 		$tool_content .= "selected=\"selected\""; 
 	$tool_content .= ">-- ".$langOrphanQuestions." --</option>";
 	
-	mysql_select_db($currentCourseID);
-	$sql="SELECT id,titre FROM `$TBL_EXERCICES` WHERE id<>'$fromExercise' ORDER BY id";
-	$result=mysql_query($sql) or die("Error : SELECT at line ".__LINE__);
-
+	if (isset($fromExercise)) {
+		mysql_select_db($currentCourseID);
+		$sql="SELECT id,titre FROM `$TBL_EXERCICES` WHERE id<>'$fromExercise' ORDER BY id";
+		$result=mysql_query($sql) or die("Error : SELECT at line ".__LINE__);
+	} else {
+		mysql_select_db($currentCourseID);
+		$sql="SELECT id,titre FROM `$TBL_EXERCICES` ORDER BY id";
+		$result=mysql_query($sql) or die("Error : SELECT at line ".__LINE__);
+	}
+	
 	// shows a list-box allowing to filter questions
 	while($row=mysql_fetch_array($result))
 	{
@@ -207,7 +220,10 @@ $tool_content .= <<<cData
 cData;
 
 
-$tool_content .= $fromExercise?2:3;
+if (isset($fromExercise))
+	$tool_content .= "2";
+else
+	$tool_content .= "3";
 
 $tool_content .= "\"><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"95%\"><tr><td>";
 
@@ -297,21 +313,20 @@ $tool_content .= "</tr>";
 		if(!isset($fromExercise) || !$objExercise->isInList($row['id']))
 		{
 
-$tool_content .= "<tr><td><a href=\"admin.php?editQuestion=".$row['id'].
-	"&fromExercise=".@$fromExercise."\">".$row['question']."</a></td><td align=\"center\">";
+//$tool_content .= "<tr><td><a href=\"admin.php?editQuestion=".$row['id'].
+//	"&fromExercise=".$fromExercise."\">".$row['question']."</a></td><td align=\"center\">";
 
-			if(!isset($fromExercise))
-			{
-
-	$tool_content .= "<a href=\"admin.php?editQuestion=".$row['id']."\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a>";
-
-			}
-			else
-			{
-
-	$tool_content .= "<a href=\"".$PHP_SELF."?recup=".$row['id'].
-		"&fromExercise=".$fromExercise."\"><img src=\"../../template/classic/img/enroll.gif\" border=\"0\" alt=\"".$langReuse."\"></a>";
-
+			if(!isset($fromExercise)) {
+				//$tool_content .= "<a href=\"admin.php?editQuestion=".$row['id']."\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a>";
+				
+				$tool_content .= "<tr><td><a href=\"admin.php?editQuestion=".$row['id'].
+					"&fromExercise=\"\">".$row['question']."</a></td><td align=\"center\"><a href=\"admin.php?editQuestion=".$row['id']."\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a>";
+			} else {
+				$tool_content .= "<tr><td><a href=\"admin.php?editQuestion=".$row['id'].
+					"&fromExercise=".$fromExercise."\">".$row['question']."</a></td><td align=\"center\">";
+				
+				$tool_content .= "<a href=\"".$PHP_SELF."?recup=".$row['id'].
+					"&fromExercise=".$fromExercise."\"><img src=\"../../template/classic/img/enroll.gif\" border=\"0\" alt=\"".$langReuse."\"></a>";
 			}
 
   $tool_content .= "</td>";

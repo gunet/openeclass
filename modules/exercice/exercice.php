@@ -306,8 +306,18 @@ else
 			"<img src='../../template/classic/img/invisible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
 }
 
+
+////////////////////////////////////////////////////////////////////////////
+$eid = $row['id'];
+$NumOfResults = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record WHERE eid='$eid'", $currentCourseID));
+
+if ($NumOfResults[0]) {
 	$tool_content .= "<td width=\"20%\" align=\"center\">	<nobr><a href=\"results.php?&exerciseId=".$row['id']."\">".
 	$langExerciseScores1."</a> | <a href=\"csv.php?&exerciseId=".$row['id']."\">".$langExerciseScores3."</a></nobr></td></tr>";
+} else {
+	$tool_content .= "<td width=\"20%\" align=\"center\">	</td></tr>";
+}
+////////////////////////////////////////////////////////////////////////////
 	}
 	// student only
 	else
