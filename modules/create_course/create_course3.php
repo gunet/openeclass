@@ -705,7 +705,7 @@ mysql_query("CREATE TABLE questions (
         PRIMARY KEY  (id))
         TYPE=MyISAM DEFAULT CHARSET=greek");
 
-mysql_query("INSERT INTO questions VALUES ( '1', '$langSocraticIrony', '$langManyAnswers', NULL, '1', '1')");
+mysql_query("INSERT INTO questions VALUES ( '1', '$langSocraticIrony', '$langManyAnswers', '10', '1', '2')");
 
 
 // REPONSES
@@ -724,9 +724,9 @@ mysql_query("INSERT INTO reponses VALUES ( '1', '1', '$langRidiculise', '0', '$l
 
 mysql_query("INSERT INTO reponses VALUES ( '2', '1', '$langAdmitError', '0', '$langNoSeduction', '-5', '2')");
 
-mysql_query("INSERT INTO reponses VALUES ( '3', '1', '$langForce', '1', '$langIndeed', '-5', '3')");
+mysql_query("INSERT INTO reponses VALUES ( '3', '1', '$langForce', '1', '$langIndeed', '5', '3')");
 
-mysql_query("INSERT INTO reponses VALUES ( '4', '1', '$langContradiction', '1', '$langNotFalse', '-5', '4')");
+mysql_query("INSERT INTO reponses VALUES ( '4', '1', '$langContradiction', '1', '$langNotFalse', '5', '4')");
 
 // EXERCICE_QUESTION
 mysql_query("CREATE TABLE exercice_question (
@@ -778,7 +778,7 @@ mysql_query("CREATE TABLE questions (
         PRIMARY KEY  (id))
         TYPE=MyISAM");
 
-mysql_query("INSERT INTO questions VALUES ( '1', '$langSocraticIrony', '$langManyAnswers', NULL, '1', '1')");
+mysql_query("INSERT INTO questions VALUES ( '1', '$langSocraticIrony', '$langManyAnswers', '10', '1', '2')");
 
 
 // REPONSES
@@ -797,9 +797,9 @@ mysql_query("INSERT INTO reponses VALUES ( '1', '1', '$langRidiculise', '0', '$l
 
 mysql_query("INSERT INTO reponses VALUES ( '2', '1', '$langAdmitError', '0', '$langNoSeduction', '-5', '2')");
 
-mysql_query("INSERT INTO reponses VALUES ( '3', '1', '$langForce', '1', '$langIndeed', '-5', '3')");
+mysql_query("INSERT INTO reponses VALUES ( '3', '1', '$langForce', '1', '$langIndeed', '5', '3')");
 
-mysql_query("INSERT INTO reponses VALUES ( '4', '1', '$langContradiction', '1', '$langNotFalse', '-5', '4')");
+mysql_query("INSERT INTO reponses VALUES ( '4', '1', '$langContradiction', '1', '$langNotFalse', '5', '4')");
 
 // EXERCICE_QUESTION
 mysql_query("CREATE TABLE exercice_question (
