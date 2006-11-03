@@ -66,7 +66,7 @@ if (!extension_loaded('gd')) {
 } else {
     $made_chart = true;
 
-    $tool_content .= "<p> $langOldStatsLoginsExpl $min_w. </p>";
+    $tool_content .= "<p> $langOldStatsLoginsExpl </p>";
 
     /*****************************************
       start making chart

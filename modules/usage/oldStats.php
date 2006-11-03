@@ -76,7 +76,7 @@ while ($row = mysql_fetch_assoc($result)) {
 @mysql_free_result($result);
 
 $min_t = date("d-m-Y", $min_time);
-$tool_content .= "<p> $langOldStatsExpl $min_t.</p>";
+$tool_content .= "<p> $langOldStatsExpl</p>";
 
 $dateNow = date("d-m-Y / H:i:s",time());
 $nameTools = $langUsage;

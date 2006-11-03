@@ -55,8 +55,8 @@
  $langFavourite = "Module Preferences";
  $langFavouriteExpl = "One user or all users preference for modules in a certain time period.";
  $langOldStats = "Show Old Statistics";
- $langOldStatsExpl = "Monthly statistics older than ";
- $langOldStatsLoginsExpl = "Monthly statistics regarding number of logins older than ";
+ $langOldStatsExpl = "Monthly statistics older than eight months.";
+ $langOldStatsLoginsExpl = "Monthly statistics regarding number of logins older than eight months.";
  $langInterval = "Interval";
  $langDaily = "Daily";
  $langWeekly = "Weekly";
