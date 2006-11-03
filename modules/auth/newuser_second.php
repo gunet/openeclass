@@ -37,7 +37,7 @@
 ==============================================================================
 */
 
-$langFiles = 'registration';
+$langFiles = array('registration', 'opencours');
 include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
 include 'auth.inc.php';
@@ -207,7 +207,8 @@ if(!empty($submit))
 				<form action=\"inscription_third.php\" method=\"post\">";
 				$result=mysql_query("SELECT cours_faculte.faculte f, cours.code k, cours.fake_code c,
 				cours.intitule i,
-				cours.titulaires t
+				cours.titulaires t,
+				cours.password p
 				FROM `$mysqlMainDb`.cours_faculte, `$mysqlMainDb`.cours, `$mysqlMainDb`.faculte 
 				WHERE cours.code=cours_faculte.code 
 				AND cours_faculte.faculte=faculte.name
@@ -230,7 +231,11 @@ if(!empty($submit))
 					{
 						$tool_content .= "<input type='checkbox' name='course[]' value='$mycours[k]'>
 							<font color=\"navy\">$mycours[c]</font> 
-							<b>$mycours[i]</b> ($mycours[t])<br>\n";
+							<b>$mycours[i]</b> ($mycours[t])";
+						if ($mycours['p']!='') {
+							$tool_content .= " (".$m['code'].": <input type=\"password\" name=\"".$mycours['k']."\" value=\"\">)";
+						}
+						$tool_content .= "<br>\n";
 					}
 					$codeOnce=$mycours['k'];
 				}

@@ -48,25 +48,52 @@ if($submit)
 		} else {
 			$courses = $langCourses;
 		}
+		$reg_courses = $nbrElements;
 		for ($i = 0; $i <$nbrElements; $i++)
 		{
-			$inscr_cours=mysql_query("INSERT INTO cours_user
-				(code_cours, user_id, statut, role)
-				VALUES ('$course[$i]', '$uid', '$statut', '')");
+			$sqlcheckpassword = mysql_query("SELECT password FROM cours WHERE code='".$course[$i]."'");
+			$myrow = mysql_fetch_array($sqlcheckpassword);
+			if ($myrow['password']!="" && $myrow['password']==$$course[$i]) {
+				$inscr_cours=mysql_query("INSERT INTO cours_user
+					(code_cours, user_id, statut, role)
+					VALUES ('$course[$i]', '$uid', '$statut', '')");
+			} elseif ($myrow['password']=="") {
+				$inscr_cours=mysql_query("INSERT INTO cours_user
+					(code_cours, user_id, statut, role)
+					VALUES ('$course[$i]', '$uid', '$statut', '')");
+			} else {
+				$reg_courses--;
+			}
 		}
-		$tool_content .= "
+		if ($reg_courses>0) {
+			$tool_content .= "
 			<table>
 				<tbody>
 					<tr>
 						<td class=\"success\">
 							<p>$langCoursesRegistered</p>
-							<p>$langYourRegTo <b>$nbrElements</b> $courses.</p>
+							<p>$langYourRegTo <b>$reg_courses</b> $courses.</p>
 							<p><a href='../../index.php'>$langCanEnter</a></p>
 						</td>
 					</tr>
 				</tbody>
 			</table>	
-		";
+			";
+		} else {
+		$tool_content .= "
+		<table>
+				<tbody>
+					<tr>
+						<td class=\"success\">
+							<p>$langNoCoursesRegistered</p>
+							
+							<p><a href='../../index.php'>$langCanEnter</a></p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+";			
+		}
 	} else {
 		$tool_content .= "
 		<table>
