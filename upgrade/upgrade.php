@@ -1045,7 +1045,7 @@ while ($code = mysql_fetch_row($res)) {
 
 
 // Remove table for the old statistics module
-  db_query("DROP TABLE IF EXISTS stat_accueil");
+ // db_query("DROP TABLE IF EXISTS stat_accueil");
 
 	// remove table 'introduction' entries and insert them in table 'cours' (field 'description') in eclass main database
 	// after that drop table introduction
