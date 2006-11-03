@@ -284,7 +284,7 @@ function expanded_faculte($facid, $uid) {
 							$retString .= "</td><td width=\"100%\" valign=\"top\"><b>".$codelink."</b></td>"
 							."<td align=\"right\">";
 						}
-						
+					
 						if (isset ($myCourses[$mycours["k"]]["subscribed"])) { 
 							if ($myCourses[$mycours["k"]]["statut"]!=1) {
 								$retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]' checked >";
@@ -312,6 +312,7 @@ function expanded_faculte($facid, $uid) {
 							<td colspan=\"2\">$mycours[t]".$contactprof."</td></tr></table>";
 						}
 					}
+					$requirepassword = "";
 					// output a top href link if necessary
                if ( $numoftypes > 1)
 	               $retString .= "<div class=\"courses\" align=\"right\"><a href=\"#top\">".$langBegin."</a></div>";
