@@ -129,7 +129,7 @@ if($is_adminOfCourse)
 		<thead>
 		<tr><th>$langName:</th><td>$langGuestName</td></tr>
 		<tr><th>$langSurname:</th><td>$langGuestSurname</td></tr>
-		<tr><th>$langUsername:</th><td>$langGuestUserName.$currentCourseID</td></tr>
+		<tr><th>$langUsername:</th><td>$langGuestUserName$currentCourseID</td></tr>
 		<tr><th>$langPass:</th><td><input type="text" name="guestpassword"></td></tr>
 		</thead>
 		</table>
