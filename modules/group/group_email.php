@@ -42,7 +42,7 @@ $nameTools = $langGroupMail;
 $navigation[]= array ("url"=>"group.php", "name"=> $langGroupSpace, 
 	"url"=>"group_space.php?userGroupId=$userGroupId", "name"=>$langGroupSpace);
 
-include('../include/sendMail.inc.php');
+include('../../include/sendMail.inc.php');
 
 $tool_content = "";
 
@@ -51,7 +51,8 @@ $currentCourse=$dbname;
 if ($is_adminOfCourse)  {
 
 if (isset($submit)) {
-	$sql=mysql_query("SELECT user FROM user_group WHERE team = '$userGroupId'");
+	
+	$sql=mysql_query("SELECT user FROM `$dbname`.user_group WHERE team = '$userGroupId'");
 	while ($userid = mysql_fetch_array($sql)) {
 		mysql_select_db($mysqlMainDb);
 		$m = mysql_fetch_array(mysql_query("SELECT DISTINCT email FROM user where user_id='$userid[0]'"));
@@ -73,11 +74,12 @@ $tool_content .= <<<tCont
 <h4>$langTypeMessage</h4>
 
 <form action="group_email.php" method="post">
+ <input type="hidden" name="userGroupId" value="$userGroupId">
 <table>
 	<thead>
 		<tr>
 			<th>$langMailSubject</th>
-			<td><input type="text" name="subject" value="$subject" size="69"></input></td>
+			<td><input type="text" name="subject" size="58"></input></td>
 		</tr>
 	</thead>
 </table>
@@ -88,7 +90,7 @@ $tool_content .= <<<tCont
 			<th>$langMailBody</th>
 		</tr>
 		<tr>
-			<td><textarea name="body_mail" rows="10" cols="60"></textarea></td>
+			<td><textarea name="body_mail" rows="10" cols="73"></textarea></td>
 		</tr>
 	</thead>
 </table>
