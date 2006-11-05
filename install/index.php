@@ -1166,7 +1166,7 @@ CREATE TABLE `auth` (
         TYPE=MyISAM");
 
 		//table keeping data for monthly reports
-    mysql_query("CREATE TABLE monthly_summary (
+		mysql_query("CREATE TABLE monthly_summary (
         id mediumint unsigned NOT NULL auto_increment,
         `month` varchar(20)  NOT NULL default '0',
         profesNum int(11) NOT NULL default '0',
@@ -1467,9 +1467,10 @@ elseif (isset($install1) || isset($back1))
 	$langStep = $langStep1;
 	$_SESSION['step']=1;
 	$configErrorExists = false;
-	
+
 	if (empty($SERVER_SOFTWARE)) {
-		$tool_content .= "
+
+		$errorContent[]= "
 		<table width = \"99%\">
 				<tbody>
 					<tr>
@@ -1478,8 +1479,8 @@ elseif (isset($install1) || isset($back1))
         <p><b>Προσοχή!</b> Φαίνεται πως η επιλογή register_globals
         στο αρχείο php.ini δεν είναι ενεργοποιημένη. Χωρίς αυτήν το
         e-class δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το
-        αρχείο php.ini ώστε να περιέχει τη γραμμή:<br>
-        <pre>register_globals = On</pre>
+        αρχείο php.ini ώστε να περιέχει τη γραμμή:</p>
+        <p><b>register_globals = On</b></p>
         Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
         τις οδηγίες εγκατάστασης στο αρχείο
         <a href='../manuals/manI/INSTALL.txt'>INSTALL.txt</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
@@ -1488,14 +1489,12 @@ elseif (isset($install1) || isset($back1))
 					</tr>
 				</tbody>
 			</table>
-			<br/>
         ";
 		$configErrorExists = true;
 	}
-	
+
 	if (!ini_get('short_open_tag')) {
-		$tool_content .= "
-		
+		$errorContent[]= "
 		<table width = \"99%\">
 				<tbody>
 					<tr>
@@ -1504,8 +1503,33 @@ elseif (isset($install1) || isset($back1))
         <p><b>Προσοχή!</b> Φαίνεται πως η επιλογή short_open_tag
         στο αρχείο php.ini δεν είναι ενεργοποιημένη. Χωρίς αυτήν το
         e-class δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το
-        αρχείο php.ini ώστε να περιέχει τη γραμμή:<br>
-        <pre>short_open_tag = On</pre>
+        αρχείο php.ini ώστε να περιέχει τη γραμμή:</p>
+        <p><b>short_open_tag = On</b></p>
+        <p>Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
+        τις οδηγίες εγκατάστασης στο αρχείο
+        <a href='../manuals/manI/INSTALL.txt'>INSTALL.txt</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
+						
+					</td>
+					</tr>
+				</tbody>
+			</table>
+		";
+		$configErrorExists = true;
+	}
+
+	clearstatcache();
+	if (!is_writeable("../config"))  {
+		$errorContent[]= "
+		<table width = \"99%\">
+				<tbody>
+					<tr>
+						<td class=\"extraMessage\">
+						
+        <p><b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει 
+        δικαιώματα εγγραφής στον κατάλογο <b>/config</b>.<br/>
+        Χωρίς δικαιώματα εγγραφής, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει. 
+        Παρακαλούμε διορθώστε τα δικαιώματα εγγραφής.
+        <br/>
         Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
         τις οδηγίες εγκατάστασης στο αρχείο
         <a href='../manuals/manI/INSTALL.txt'>INSTALL.txt</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
@@ -1519,17 +1543,14 @@ elseif (isset($install1) || isset($back1))
 	}
 
 	if($configErrorExists) {
+		$tool_content .= implode("<br/>", $errorContent);
 		$tool_content .= "</form>";
 		draw($tool_content);
 		exit();
 	}
 
 	$tool_content .= "
-
-	
-<!--<p>Το πρόγραμμα εγκατάστασης της πλατφόρμας θα κάνει όλες τις απαιτούμενες ρυθμίσεις στο σύστημα,
-    στην κύρια βάση δεδομένων και θα δημιουργήσει το αρχείο <tt>config.php</tt></p>-->
-           
+     
     <u>Έλεγχος προαπαιτούμενων προγραμμάτων για τη λειτουργία του e-Class</u>
     <p>
         Webserver (<em>βρέθηκε <b>".$_SERVER['SERVER_SOFTWARE']."</b></em>) 
