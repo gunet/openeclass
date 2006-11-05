@@ -152,7 +152,7 @@ function loggedInMenu(){
 	$sideMenuText 	= array();
 	$sideMenuLink 	= array();
 	$sideMenuImg	= array();
-	
+
 	array_push($sideMenuSubGroup, $langMenu);
 
 	// User is not currently in a course - set statut from main database
@@ -174,7 +174,7 @@ function loggedInMenu(){
 	}
 
 	if ($statut != 10) {
-		
+
 		array_push($sideMenuText, $langOtherCourses);
 		array_push($sideMenuLink, $urlServer . "modules/auth/courses.php");
 		array_push($sideMenuImg, "enroll.gif");
@@ -182,8 +182,8 @@ function loggedInMenu(){
 		array_push($sideMenuText, $langMyAgenda);
 		array_push($sideMenuLink, $urlServer . "modules/agenda/myagenda.php");
 		array_push($sideMenuImg, "calendar.gif");
-		
-        
+
+
 		array_push($sideMenuText, $langMyAnnouncements);
 		array_push($sideMenuLink, $urlServer . "modules/announcements/myannouncements.php");
 		array_push($sideMenuImg, "announcements.gif");
@@ -191,7 +191,7 @@ function loggedInMenu(){
 		array_push($sideMenuText, $langModifyProfile);
 		array_push($sideMenuLink, $urlServer . "modules/profile/profile.php");
 		array_push($sideMenuImg, "profile.gif");
-		
+
 		array_push($sideMenuText, $langMyStats);
 		array_push($sideMenuLink, $urlServer . "modules/profile/personal_stats.php");
 		array_push($sideMenuImg, "platform_stats.gif");
@@ -200,6 +200,17 @@ function loggedInMenu(){
 		array_push($sideMenuLink, $urlServer."modules/search/search.php");
 		array_push($sideMenuImg, "search.gif");
 
+	}
+
+	if ($statut == 10) {
+		
+		array_push($sideMenuText, $langManuals);
+		array_push($sideMenuLink, $urlServer."manuals/manual.php");
+		array_push($sideMenuImg, "manual.gif");
+		
+		array_push($sideMenuLink, $urlServer."info/contact.php");
+		array_push($sideMenuImg, "contact.gif");
+		array_push($sideMenuText, $langSearch);	
 	}
 
 	array_push($sideMenuSubGroup, $sideMenuText);
@@ -300,7 +311,7 @@ function adminMenu(){
 	array_push($sideMenuSubGroup, $langAdminProf);
 
 	array_push($sideMenuText, $langProfReg);
-	
+
 	array_push($sideMenuLink, "../auth/newprofadmin.php");
 	array_push($sideMenuImg, "register_prof.gif");
 	array_push($sideMenuText, $langProfOpen);
@@ -448,9 +459,9 @@ function adminMenu(){
 	//array_push($sideMenuLink, "../admin/statClaro.php");
 	//array_push($sideMenuImg, "stat_claro.gif"); // image file does not exist! what does this tool do ?
 	//if (isset($phpMyAdminURL)){
-		//array_push($sideMenuText, $langLogIdentLogout);
-		//array_push($sideMenuLink, $phpMyAdminURL."sql.php?db=".$mysqlMainDb."&table=loginout&goto=db_details.php&sql_query=SELECT+%2A+FROM+%60loginout%60&pos=0");
-		//array_push($sideMenuImg, "logs.gif");
+	//array_push($sideMenuText, $langLogIdentLogout);
+	//array_push($sideMenuLink, $phpMyAdminURL."sql.php?db=".$mysqlMainDb."&table=loginout&goto=db_details.php&sql_query=SELECT+%2A+FROM+%60loginout%60&pos=0");
+	//array_push($sideMenuImg, "logs.gif");
 	//}
 
 	array_push($sideMenuText, $langPlatformStats);
@@ -486,6 +497,7 @@ function lessonToolsMenu(){
 	global $is_admin, $is_adminOfCourse, $uid, $mysqlMainDb;
 	global $webDir, $language;
 	include($webDir."modules/lang/$language/lessonTools.inc.php");
+
 	$sideMenuGroup = array();
 
 	//	------------------------------------------------------------------
@@ -500,7 +512,7 @@ function lessonToolsMenu(){
 	$sideMenuID = array();
 	if($is_adminOfCourse) array_push($sideMenuSubGroup, $langActiveTools);
 	else array_push($sideMenuSubGroup, $langTools);
-	
+
 	while ($toolsRow = mysql_fetch_array($result)) {
 
 		if(!defined($toolsRow["define_var"])) define($toolsRow["define_var"], $toolsRow["id"]);
@@ -530,7 +542,7 @@ function lessonToolsMenu(){
 	if ($row = mysql_fetch_row($res2)) $statut = $row[0];
 
 	if ($is_adminOfCourse) {
-		
+
 		//get course administration tools
 		$result= getToolsArray('courseAdmin');
 
@@ -594,7 +606,7 @@ function lessonToolsMenu(){
 	//	Get platform administrator tools
 	//	------------------------------------------------------------------
 	if (isset($is_admin) and $is_admin) {
-		
+
 		$result= getToolsArray('claroAdmin');
 
 		$sideMenuSubGroup = array();
