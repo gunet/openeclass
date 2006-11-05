@@ -208,9 +208,9 @@ function loggedInMenu(){
 		array_push($sideMenuLink, $urlServer."manuals/manual.php");
 		array_push($sideMenuImg, "manual.gif");
 		
+		array_push($sideMenuText, $langContact);
 		array_push($sideMenuLink, $urlServer."info/contact.php");
 		array_push($sideMenuImg, "contact.gif");
-		array_push($sideMenuText, $langSearch);	
 	}
 
 	array_push($sideMenuSubGroup, $sideMenuText);
