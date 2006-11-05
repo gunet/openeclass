@@ -46,7 +46,7 @@ $helpTopic = 'Group';
 include '../../include/baseTheme.php';
 $nameTools = $langGroupSpace;
 $navigation[] = array ("url"=>"group.php", "name"=> $langGroupManagement);
-
+$tool_content = "";
 if(!session_is_registered('userGroupId')){
 	$_SESSION['userGroupId'] = $_REQUEST['userGroupId'];
 }
@@ -137,7 +137,7 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 					WHERE user.user_id=student_group.tutor
 					AND student_group.id='$userGroupId'");
 	$countTutor = mysql_num_rows($sqlTutor);
-
+	$tool_content_tutor="";
 	if ($countTutor==0)
 	{
 		$tool_content_tutor .=  "$langGroupNoTutor";	
@@ -170,6 +170,7 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 
 	// Show 'none' if no description
 	$countDescription=strlen ($myGroup['description']);
+	$tool_content_description = "";
 	if(($countDescription <= 3))
 	{
 		$tool_content_description .=  "$langGroupNone";
