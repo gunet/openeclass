@@ -1,31 +1,38 @@
 <?php
-/*
-=============================================================================
-GUnet e-Class 2.0
-E-learning and Course Management Program
-================================================================================
-Copyright(c) 2003-2006  Greek Universities Network - GUnet
-Α full copyright notice can be read in "/info/copyright.txt".
-
-Authors:     Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-Yannis Exidaridis <jexi@noc.uoa.gr>
-Alexandros Diamantidis <adia@noc.uoa.gr>
-
-For a full list of contributors, see "credits.txt".
-
-This program is a free software under the terms of the GNU
-(General Public License) as published by the Free Software
-Foundation. See the GNU License for more details.
-The full license can be read in "license.txt".
-
-Contact address: GUnet Asynchronous Teleteaching Group,
-Network Operations Center, University of Athens,
-Panepistimiopolis Ilissia, 15784, Athens, Greece
-eMail: eclassadmin@gunet.gr
-==============================================================================
-*/
+/**===========================================================================
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Α full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
+/**
+ * Installation wizard
+ * 
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ * 
+ * @abstract This is the installation wizard of eclass. 
+ *
+ */
 session_start();
-//header("Content-type: text/html; charset=iso-8859-7");
+
 $tool_content = "";
 @include ("../modules/lang/greek/install.inc.php");
 include('install_functions.php');
@@ -156,11 +163,11 @@ if(isset($install2) OR isset($back2))
 elseif(isset($install3) OR isset($back3)) {
 
 	// The two following CHMOD are necessary, 666 for Windows, 0666 for Linux
-	@mkdir ("../config", 0777);
-	@chmod( "../config/config.php", 666 );
-	@chmod( "../config/config.php", 0666 );
+	//	mkdir ("../config", 0777);
+	//	chmod( "../config/config.php", 666 );
+	//	chmod( "../config/config.php", 0666 );
 	// courses directory
-	@mkdir("../courses", 0777);
+	//	mkdir("../courses", 0777);
 
 	// step 3 mysql database settings
 	$langStepTitle = $langDBSetting;
@@ -515,10 +522,8 @@ function set_MCU()
 elseif(isset($install6))
 {
 	$pathForm = str_replace("\\\\", "/", $pathForm);
-	@chmod( "../config/config.php", 666 );
-	@chmod( "../config/config.php", 0666 );
-
-
+//	chmod( "../config/config.php", 666 );
+//	chmod( "../config/config.php", 0666 );
 	$langStepTitle = $langLastCheck;
 	$langStep = $langStep5;
 	$_SESSION['step']=5;
@@ -1324,6 +1329,9 @@ CREATE TABLE `auth` (
 
 	}
 
+	// create config & courses catalogs
+	mkdir ("../config", 0777);
+	mkdir("../courses", 0777);
 	// creation of config.php
 
 	$fd=@fopen("../config/config.php", "w");
@@ -1517,8 +1525,8 @@ elseif (isset($install1) || isset($back1))
 		$configErrorExists = true;
 	}
 
-	clearstatcache();
-	if (!is_writeable("../config"))  {
+	$mkd=@mkdir("../config", 0777);
+	if(!$mkd){
 		$errorContent[]= "
 		<table width = \"99%\">
 				<tbody>
@@ -1526,9 +1534,9 @@ elseif (isset($install1) || isset($back1))
 						<td class=\"extraMessage\">
 						
         <p><b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει 
-        δικαιώματα εγγραφής στον κατάλογο <b>/config</b>.<br/>
-        Χωρίς δικαιώματα εγγραφής, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει. 
-        Παρακαλούμε διορθώστε τα δικαιώματα εγγραφής.
+        δικαιώματα δημιουργίας του κατάλογου <b>/config</b>.<br/>
+        Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει. 
+        Παρακαλούμε διορθώστε τα δικαιώματα.
         <br/>
         Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
         τις οδηγίες εγκατάστασης στο αρχείο
@@ -1540,7 +1548,35 @@ elseif (isset($install1) || isset($back1))
 			</table>
 		";
 		$configErrorExists = true;
-	}
+
+	} else rmdir("../config");
+
+	// courses directory
+	$mkd = @mkdir("../courses", 0777);
+	if(!$mkd){
+		$errorContent[]= "
+		<table width = \"99%\">
+				<tbody>
+					<tr>
+						<td class=\"extraMessage\">
+						
+        <p><b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει 
+        δικαιώματα δημιουργίας του κατάλογου <b>/courses</b>.<br/>
+        Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει. 
+        Παρακαλούμε διορθώστε τα δικαιώματα.
+        <br/>
+        Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
+        τις οδηγίες εγκατάστασης στο αρχείο
+        <a href='../manuals/manI/INSTALL.txt'>INSTALL.txt</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
+						
+					</td>
+					</tr>
+				</tbody>
+			</table>
+		";
+		$configErrorExists = true;
+	} else rmdir("../courses");
+
 
 	if($configErrorExists) {
 		$tool_content .= implode("<br/>", $errorContent);
@@ -1605,11 +1641,11 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
 
 <input type=\"submit\" name=\"install2\" value=\"Επόμενο >\">
 </form>
-
 ";
 	draw($tool_content);
+	
 } else {
-	//	$url = $PHP_SELF . "?install1=1";
+	
 	$tool_content .= "
 	<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
 <html>
@@ -1636,10 +1672,6 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
     </ul>
  
   <input type=\"submit\" name=\"install1\" value=\"Επόμενο >\">
-   
-
-	
-
  </div>
   </form>
   
