@@ -215,7 +215,7 @@ if(isset($submitAnswers) || isset($buttonBack))
 
 		if(!isset($buttonBack))
 		{
-			if($setWeighting)
+			if(isset($setWeighting)&&($setWeighting))
 			{
 				@$blanks=unserialize($blanks);
 
@@ -473,8 +473,9 @@ if(isset($modifyAnswers))
 
 				$weighting=$temp;
 			}
-			elseif(!$modifyIn)
+			elseif(!isset($modifyIn)||(!$modifyIn))
 			{
+				$tool_content .= $weighting;
 				$weighting=unserialize($weighting);
 			}
 		}
@@ -678,10 +679,15 @@ $tool_content .= <<<cData
 </h3>
 cData;
 
+if(!isset($setWeighting))
+	$tempSW = "";
+else
+	$tempSW = $setWeighting;	
+
 $tool_content .= "<form name=\"formulaire\" method=\"post\" action=\"".$PHP_SELF."?modifyAnswers=".$modifyAnswers."\">";
 $tool_content .= <<<cData
 	<input type="hidden" name="formSent" value="1">
-	<input type="hidden" name="setWeighting" value="${setWeighting}">
+	<input type="hidden" name="setWeighting" value="${tempSW}">
 cData;
 
 			if(!isset($setWeighting))
@@ -689,7 +695,7 @@ cData;
 
 $tool_content .= "<input type=\"hidden\" name=\"weighting\" value=\"";
 
-if ($submitAnswers)
+if (isset($submitAnswers)&&($submitAnswers))
 	$tool_content .= htmlspecialchars($weighting);
 else 
 	$tool_content .= htmlspecialchars(serialize($weighting));
