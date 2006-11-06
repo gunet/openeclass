@@ -206,7 +206,7 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		$password = isset($_POST['password'])?$_POST['password']:'';
 		$email = isset($_POST['email'])?$_POST['email']:'';
 		$phone = isset($_POST['phone'])?$_POST['phone']:'';
-		$department = isset($_POST['department'])?$_POST['department']:'';
+		$department = isset($_POST['department'])?$_POST['department']:'NULL';
 		$registered_at = isset($_POST['registered_at'])?$_POST['registered_at']:'';
 		$datetime = new DATETIME();
 		$datetime->set_timename("hour", "min", "sec");
@@ -214,9 +214,23 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		$expires_at = $datetime->get_timestamp_entered();
 		$auth_methods = array('imap','pop3','ldap','db');
 		// 2. do the database update
+		// do not allow the user to have the characters: ',\" or \\ in password
+		$pw = array(); 	$nr = 0;
+		while (isset($password{$nr})) // convert the string $password into an array $pw
+		{
+	  	$pw[$nr] = $password{$nr};
+	    $nr++;
+		}
 		if($registered_at>$expires_at)
 		{
 			$tool_content .= "<br >$langExpireBeforeRegister. Please <a href=\"edituser.php?u=".$u."\">try again</a><br />";
+		}
+		elseif( (in_array("'",$pw)) || (in_array("\"",$pw)) || (in_array("\\",$pw)) )
+		{
+			$tool_content .= "<tr bgcolor=\"".$color2."\">
+			<td bgcolor=\"$color2\" colspan=\"3\" valign=\"top\">
+			<br>Δεν επιτρέπονται στο password, οι χαρακτήρες: ',\" ή \\	<br /><br />
+			<a href=\"./listusers.php\">".$langAgain."</a></td></tr></table>";
 		}
 		else
 		{
@@ -238,10 +252,11 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 			{
 				$department = 'NULL';
 			}
+			$username = escapeSimple($username);
 			$sql = "UPDATE user 
 				SET nom='".$lname."', prenom='".$fname."', username='".$username."', password='".$password_encrypted."', email='".$email."', phone='".$phone."',department=".$department.", expires_at=".$expires_at.
 				" WHERE user_id = '".$u."'";
-			
+			$tool_content .= $sql . "<br>";
 			$qry = mysql_query($sql);
 			if (!$qry) 
 			{
