@@ -59,7 +59,7 @@ $password = isset($_POST['password'])?$_POST['password']:'';
 if(!empty($submit))
 {
 	$tool_content .= "<table border=\"0\" width=\"99%\">";
-	
+/*	
 	// do not allow the user to have the characters: ',\" or \\ in password
 	$pw = array(); 	$nr = 0;
 	while (isset($password{$nr})) // convert the string $password into an array $pw
@@ -67,6 +67,7 @@ if(!empty($submit))
   	$pw[$nr] = $password{$nr};
     $nr++;
 	}
+	*/
   //if( (in_array("'",$pw)) || (in_array("\"",$pw)) || (in_array("\\",$pw)) )
   if( (strstr($password, "'")) or (strstr($password, '"')) or (strstr($password, '\\')) 
   or (strstr($uname, "'")) or (strstr($uname, '"')) or (strstr($uname, '\\')) )
@@ -134,18 +135,18 @@ if(!empty($submit))
 				$emailsubject = "$langYourReg $siteName";
 				if((!empty($auth_method_settings)) && ($auth!=1))
 				{
-					$emailbody = "$langDestination $prenom_form $nom_form
-					$langYouAreReg$siteName $langSettings $uname $langPassSameLDAP
-					$langAddress $siteName $langIs: $urlServer $langProblem
-					$langFormula,$administratorName $administratorSurname
+					$emailbody = "$langDestination $prenom_form $nom_form 
+					$langYouAreReg$siteName $langSettings $uname $langPassSameLDAP 
+					$langAddress $siteName $langIs: $urlServer $langProblem 
+					$langFormula,$administratorName $administratorSurname 
 					$langManager $siteName $langTel $telephone $langEmail : $emailAdministrator";
 				} 
 				else 
 				{
 					$emailbody = "$langDestination $prenom_form $nom_form
-					$langYouAreReg$siteName $langSettings $uname
-					$langPass : $password $langAddress $siteName $langIs: $urlServer
-					$langProblem	$langFormula,$administratorName $administratorSurname
+					$langYouAreReg$siteName $langSettings $uname 
+					$langPass : $password $langAddress $siteName $langIs: $urlServer 
+					$langProblem	$langFormula,$administratorName $administratorSurname 
 					$langManager $siteName $langTel $telephone $langEmail : $emailAdministrator";
 				}
 	
