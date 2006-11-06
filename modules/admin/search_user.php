@@ -114,8 +114,8 @@ $tool_content .= " <tr>
     <td width=\"3%\" nowrap><b>$langRegistrationDate:</b></td>
     <td>";
 $user_registered_at_flag_data = array();
-$user_registered_at_flag_data[1] = $langBefore;
-$user_registered_at_flag_data[2] = $langAfter;
+$user_registered_at_flag_data[1] = $langAfter;
+$user_registered_at_flag_data[2] = $langBefore;
 $tool_content .= selection2($user_registered_at_flag_data,"user_registered_at_flag",$user_registered_at_flag);
     
 // format the drop-down menu for data

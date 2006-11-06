@@ -230,8 +230,8 @@ if(!empty($user_registered_at_flag))
 	$user_registered_at_qry .= " registered_at";
 	switch($user_registered_at_flag)
 	{
-		case 1:	$user_registered_at_qry .= " <="; break;
-		case 2: $user_registered_at_qry .= " >="; break;
+		case 1:	$user_registered_at_qry .= " >="; break;
+		case 2: $user_registered_at_qry .= " <="; break;
 		default: $user_registered_at_qry .= " <="; break;
 	}
 	if(!empty($user_registered_at))
