@@ -357,7 +357,7 @@ function printMCQuestionForm() {
 			    <input name="MoreQuestions" type="radio" value="3" />
 		      $langSurveyMoreQuestions</label></td>
 		    <td><label>
-			    <input name="MoreQuestions" type="radio" value="2" />
+			    <input name="MoreQuestions" type="radio" value="2" checked/>
 		      $langSurveyCreate</label></td>
 			</tr>
 			<tr><td colspan="2" align="right">

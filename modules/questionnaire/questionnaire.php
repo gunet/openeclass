@@ -85,13 +85,15 @@ $tool_content = "";
 //	$tool_content .= "<a href=\"?questionnaire_type=2\">" . $langQPrefPoll ."</a><br>";
 // }
 	
-$tool_content .= "<table width=\"90%\"><thead>$langNamesSurvey</thead><tbody><tr><td>";
+//$tool_content .= "<table width=\"90%\"><thead>$langNamesSurvey</thead><tbody><tr><td>";
+$tool_content .= "<p><b>$langNamesSurvey</b></p><br>";
 	printSurveys();
-	$tool_content .= "</td></tr></tbody></table>";
+//	$tool_content .= "</td></tr></tbody></table>";
 	
-	$tool_content .= "<table width=\"90%\"><thead>$langNamesPoll</thead><tbody><tr><td>";
+//	$tool_content .= "<table width=\"90%\"><thead>$langNamesPoll</thead><tbody><tr><td>";
+$tool_content .= "<p><b>$langNamesPoll</b></p><br>";
 	printPolls();
-	$tool_content .= "</td></tr></tbody></table>";
+//	$tool_content .= "</td></tr></tbody></table>";
 	
 	draw($tool_content, 2);
 	
@@ -120,9 +122,9 @@ $tool_content .= "<table width=\"90%\"><thead>$langNamesSurvey</thead><tbody><tr
 			}
 		}
 		if (!$survey_check) {
-			$tool_content .= $langSurveyNone . "<br><br>";
+			$tool_content .= "<p>".$langSurveyNone . "</p><br>";
 			if ($is_adminOfCourse) 
-				$tool_content .= '<b><a href="addsurvey.php?UseCase=0">'.$langSurveyCreate.'</a></b><br><br>  ';
+				$tool_content .= '<a href="addsurvey.php?UseCase=0">'.$langSurveyCreate.'</a><br><br>  ';
 			}
 		else {
 			//$tool_content .= $num_rows . " " . $survey_check;
@@ -140,10 +142,20 @@ $tool_content .= "<table width=\"90%\"><thead>$langNamesSurvey</thead><tbody><tr
 				<th>$langSurveyStart</th>
 				<th>$langSurveyEnd</th>
 				<th>$langSurveyType</th>
-				<th>$langSurveyRemove</th>
-				<th>$langSurveyActivate</th>
-				</tr></thead>
+				<th>
 cData;
+				
+				
+				if ($is_adminOfCourse) {
+					$tool_content .= $langSurveyRemove;
+				}
+				
+				if ($is_adminOfCourse) {
+					$tool_content .= "</th><th>$langSurveyActivate</th>";
+				} else {
+					$tool_content .= "</th>";
+				}				
+				$tool_content .= "</tr></thead><tbody>";
 			
 			$active_surveys = db_query("
 				select * from survey", $currentCourse);
@@ -152,69 +164,75 @@ cData;
 				
 				$visibility = $theSurvey["active"];
 				
-				if ($visibility) {
-					$visibility_css = " ";
-					$visibility_gif = "invisible";
-				} else {
-					$visibility_css = " class=\"invisible\"";
-					$visibility_gif = "visible";
-				}
+				if (($visibility)||($is_adminOfCourse)) {
 				
-				$creator_id = $theSurvey["creator_id"];
-				
-				$survey_creator = db_query("
-				select nom,prenom from user 
-				where user_id='$creator_id'", $mysqlMainDb);
-				$theCreator = mysql_fetch_array($survey_creator);
-				
-				$sid = $theSurvey["sid"];
-				$answers = db_query("
-				select * from survey_answer 
-				where sid='$sid'", $currentCourse);
-				$countAnswers = mysql_num_rows($answers);
-				
-				if ($is_adminOfCourse) { 
-					$tool_content .= "<tr><td><a href=\"surveyresults.php?sid=". 
-					$sid ."&type=" . $theSurvey["type"]."\">" . $theSurvey["name"] .
-					"</a></td>";
-				} else {
-					$tool_content .= "<tr><td>" . $theSurvey["name"] . "</td>";
-				}	
-					
-				$tool_content .= "<td>" . $theCreator["nom"]. " " . $theCreator["prenom"] . "</td>";
-				$tool_content .= "<td>" . $theSurvey["creation_date"] . "</td>";
-				$tool_content .= "<td>" . $theSurvey["start_date"] . "</td>";
-				$tool_content .= "<td>" . $theSurvey["end_date"] . "</td>";
-				
-				if ($theSurvey["type"] == 1) {
-					$tool_content .= "<td>" . $langSurveyMC . "</td>";
-				} else {
-					$tool_content .= "<td>" . $langSurveyFillText . "</td>";
-				}
-				if ($is_adminOfCourse)   {
-					$tool_content .= "<td align=center><!--<a href='editsurvey.php?sid={$sid}'>".$langSurveyEdit."</a> | -->".
-						"<a href='deletesurvey.php?sid={$sid}'><img src='../../template/classic/img/delete.gif' border='0'></a></td><td align=center> ".
-						"<a href='deactivatesurvey.php?sid={$sid}'><img src='../../template/classic/img/".$visibility_gif.".gif' border='0'></a>  ".
-						"</td></tr>";
-				} else {
-					////////////////////////////////////////////////////
-						$thesid = $theSurvey["sid"];
-						$has_participated = mysql_fetch_array(
-							mysql_query("SELECT COUNT(*) FROM survey_answer where creator_id='$uid' AND sid='$thesid'"));
-					if ($has_participated[0] == 0) {
-						$tool_content .= "<td><a href='surveyparticipate.php?UseCase=1&sid=". $sid ."'>";
-						$tool_content .= $langSurveyParticipate;
-						$tool_content .= "</a></td></tr>";
-						//$tool_content .= $has_participated[0].$uid;
+					if ($visibility) {
+						$visibility_css = " ";
+						$visibility_gif = "invisible";
+						$visibility_func = "deactivate";
 					} else {
-						$tool_content .= "<td>".$langSurveyHasParticipated."</td></tr>";
+						$visibility_css = " class=\"invisible\"";
+						$visibility_gif = "visible";
+						$visibility_func = "activate";
 					}
-					////////////////////////////////////////////////////
+					
+					$creator_id = $theSurvey["creator_id"];
+					
+					$survey_creator = db_query("
+					select nom,prenom from user 
+					where user_id='$creator_id'", $mysqlMainDb);
+					$theCreator = mysql_fetch_array($survey_creator);
+					
+					$sid = $theSurvey["sid"];
+					$answers = db_query("
+					select * from survey_answer 
+					where sid='$sid'", $currentCourse);
+					$countAnswers = mysql_num_rows($answers);
+					
+					if ($is_adminOfCourse) { 
+						$tool_content .= "\n<tr><td><a href=\"surveyresults.php?sid=". 
+						$sid ."&type=" . $theSurvey["type"]."\">" . $theSurvey["name"] .
+						"</a></td>";
+					} else {
+						$tool_content .= "<tr><td>" . $theSurvey["name"] . "</td>";
+					}	
+						
+					$tool_content .= "<td>" . $theCreator["nom"]. " " . $theCreator["prenom"] . "</td>";
+					$tool_content .= "<td>" . $theSurvey["creation_date"] . "</td>";
+					$tool_content .= "<td>" . $theSurvey["start_date"] . "</td>";
+					$tool_content .= "<td>" . $theSurvey["end_date"] . "</td>";
+					
+					if ($theSurvey["type"] == 1) {
+						$tool_content .= "<td>" . $langSurveyMC . "</td>";
+					} else {
+						$tool_content .= "<td>" . $langSurveyFillText . "</td>";
+					}
+					if ($is_adminOfCourse)   {
+						
+						$tool_content .= "<td align=center><!--<a href='editsurvey.php?sid={$sid}'>".$langSurveyEdit."</a> | -->".
+							"<a href='deletesurvey.php?sid={$sid}'><img src='../../template/classic/img/delete.gif' border='0'></a></td><td align=center> ".
+							"<a href='".$visibility_func."survey.php?sid={$sid}'><img src='../../template/classic/img/".$visibility_gif.".gif' border='0'></a>  ".
+							"</td></tr>\n";
+					} else {
+						////////////////////////////////////////////////////
+							$thesid = $theSurvey["sid"];
+							$has_participated = mysql_fetch_array(
+								mysql_query("SELECT COUNT(*) FROM survey_answer where creator_id='$uid' AND sid='$thesid'"));
+						if ($has_participated[0] == 0) {
+							$tool_content .= "<td><a href='surveyparticipate.php?UseCase=1&sid=". $sid ."'>";
+							$tool_content .= $langSurveyParticipate;
+							$tool_content .= "</a></td></tr>";
+							//$tool_content .= $has_participated[0].$uid;
+						} else {
+							$tool_content .= "<td>".$langSurveyHasParticipated."</td></tr>";
+						}
+						////////////////////////////////////////////////////
+					}
 				}
-			}
-			$tool_content .= "</table><br>";
-			
-
+				//$tool_content .= "sssssssssssss</table><br>";
+				
+		}
+		$tool_content .= "</table><br>";
 		}
 
 	}
@@ -241,9 +259,9 @@ cData;
 			}
 		}
 		if (!$poll_check) {
-			$tool_content .= $langPollNone . "<br><br>";
+			$tool_content .= "<p>".$langPollNone . "</p><br>";
 			if ($is_adminOfCourse) 
-				$tool_content .= '<b><a href="addpoll.php?UseCase=0">'.$langPollCreate.'</a></b><br><br>  ';
+				$tool_content .= '<a href="addpoll.php?UseCase=0">'.$langPollCreate.'</a><br><br>  ';
 			}
 		else {
 		
@@ -260,10 +278,21 @@ cData;
 				<th>$langPollStart</th>
 				<th>$langPollEnd</th>
 				
-				<th>$langPollRemove</th>
-				<th>$langPollActivate</th>
-				</tr></thead><tbody>
+				<th>
 cData;
+				
+				
+				if ($is_adminOfCourse) {
+					$tool_content .= $langPollRemove;
+				}
+				
+				if ($is_adminOfCourse) {
+					$tool_content .= "</th><th>$langPollActivate</th>";
+				} else {
+					$tool_content .= "</th>";
+				}				
+				$tool_content .= "</tr></thead><tbody>";
+
 			
 			$active_polls = db_query("
 				select * from poll", $currentCourse);
@@ -272,12 +301,16 @@ cData;
 				
 				$visibility = $thepoll["active"];
 				
+	if (($visibility)||($is_adminOfCourse)) {
+				
 				if ($visibility) {
 					$visibility_css = " ";
 					$visibility_gif = "invisible";
+					$visibility_func = "deactivate";
 				} else {
 					$visibility_css = " class=\"invisible\"";
 					$visibility_gif = "visible";
+					$visibility_func = "activate";
 				}
 				
 				$creator_id = $thepoll["creator_id"];
@@ -309,7 +342,7 @@ cData;
 				if ($is_adminOfCourse) 
 					$tool_content .= "<td align=center><!--<a href='editpoll.php?pid={$pid}'>".$langPollEdit."</a> | -->".
 						"<a href='deletepoll.php?pid={$pid}'><img src='../../template/classic/img/delete.gif' border='0'></a> </td><td align=center> ".
-						"<a href='deactivatepoll.php?pid={$pid}'><img src='../../template/classic/img/".$visibility_gif.".gif' border='0'></a>  ".
+						"<a href='".$visibility_func."poll.php?pid={$pid}'><img src='../../template/classic/img/".$visibility_gif.".gif' border='0'></a>  ".
 						"</td></tr>";
 				else {
 //					$participant = db_query("
@@ -330,6 +363,8 @@ cData;
 						$tool_content .= "<td>".$langPollHasParticipated."</td></tr>";
 					}
 				}
+/////////////////////////////////////////////
+			}
 			}
 			$tool_content .= "</tbody></table><br>";
 		}

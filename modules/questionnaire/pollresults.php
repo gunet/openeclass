@@ -190,6 +190,7 @@ if ($type == 2) { //TF
 		}
 	}
 	$tool_content .= $langPollTotalAnswers . ": " . $total_answers . "</b><br>";
+	if (isset($q_t_GD)) {
 /*****************************************************************************
 		Print graphs
 ******************************************************************************/
@@ -219,13 +220,7 @@ if ($type == 2) { //TF
    						$q_a_GD[$v] = 1;
 				}
 			}
-			//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-//			$tool_content .= "<br>\$current_q_t = ".$current_q_t."<br>";
-//			$tool_content .= "<br>".count($q_a_GD)."<br>";
-//			foreach ($q_a_GD as $k => $v) {
-//  		 $tool_content .= "<br>\$q_a_GD[$k] => $v.<br>";
-//			}
-			//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 			$chart->setTitle("$q_t_GD[$i]");
 			
 			foreach ($q_a_GD as $k => $v) {
@@ -241,6 +236,7 @@ if ($type == 2) { //TF
 			$tool_content .= '<br><table width="100%"><tr><td><img src="'.$urlServer.$chart_path.'" /></td></tr></table><br>';
 			
 		}
+	}
 
 
 /*****************************************************************************
