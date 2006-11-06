@@ -102,9 +102,10 @@ if(!empty($submit))
 	$result=mysql_query($sqlLogin);
 	$check_passwords = array("pop3","imap","ldap","db");
 	$warning = "";
-	$auth_allow = 0;
+	$auth_allow = 0;	$exists = 0;
 	while ($myrow = mysql_fetch_array($result))
 	{
+		$exists = 1;
 		if(!empty($auth))
 		{
 			if(!in_array($myrow["password"],$check_passwords))
@@ -117,33 +118,40 @@ if(!empty($submit))
 				$errors = $crypt->errors;
 				$myrow["password"] = $password_decrypted;
 				
-				if (($uname == escapeSimpleSelect($myrow["username"])) and ($pass == escapeSimpleSelect($myrow["password"])))
+				if ($uname == escapeSimpleSelect($myrow["username"])) 
 				{
-					// check if his/her account is active
-					$is_active = check_activity($myrow["user_id"]);
-					if($myrow["user_id"]==$myrow["is_admin"])
+					if ($pass == escapeSimpleSelect($myrow["password"]))
 					{
-						$is_active = 1;
-						$auth_allow = 1;
-					}
-					if($is_active==1)
-					{
-						$uid = $myrow["user_id"];
-						$nom = $myrow["nom"];
-						$prenom = $myrow["prenom"];
-						$statut = $myrow["statut"];
-						$email = $myrow["email"];
-						$is_admin = $myrow["is_admin"];
-						$userPerso = $myrow["perso"];//user perso flag
-						$userLanguage = $myrow["lang"];//user preferred language
-						$auth_allow = 1;
+						// check if his/her account is active
+						$is_active = check_activity($myrow["user_id"]);
+						if($myrow["user_id"]==$myrow["is_admin"])
+						{
+							$is_active = 1;
+							$auth_allow = 1;
+						}
+						if($is_active==1)
+						{
+							$uid = $myrow["user_id"];
+							$nom = $myrow["nom"];
+							$prenom = $myrow["prenom"];
+							$statut = $myrow["statut"];
+							$email = $myrow["email"];
+							$is_admin = $myrow["is_admin"];
+							$userPerso = $myrow["perso"];//user perso flag
+							$userLanguage = $myrow["lang"];//user preferred language
+							$auth_allow = 1;
+						}
+						else
+						{
+							// $warning .= "<br />Your account is inactive. <br />Please <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">contact the Eclass Admin.</a><br /><br />";
+							// $warning .= "<br />".$langAccountInactive1." <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">".$langAccountInactive2."</a><br /><br />";
+							$auth_allow = 3;
+							$user = $myrow["user_id"];
+						}
 					}
 					else
 					{
-						// $warning .= "<br />Your account is inactive. <br />Please <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">contact the Eclass Admin.</a><br /><br />";
-						// $warning .= "<br />".$langAccountInactive1." <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">".$langAccountInactive2."</a><br /><br />";
-						$auth_allow = 3;
-						$user = $myrow["user_id"];
+						$auth_allow = 4; // means wrong password
 					}
 				}
 				else
@@ -260,7 +268,12 @@ if(!empty($submit))
 
 
 	}		// while
-
+	
+	if(empty($exists))
+	{
+		$auth_allow = 4;
+	}
+	
 	if (!isset($uid))
 	{
 		switch($auth_allow)
