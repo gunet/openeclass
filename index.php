@@ -89,10 +89,7 @@ $submit = isset($_POST['submit'])?$_POST['submit']:'';
 $auth = get_auth_active_methods();
 $is_eclass_unique = is_eclass_unique();
 
-//$tool_content .= "MAGIC QUOTES: ". get_magic_quotes_gpc() . "<br>";
-//$tool_content .= "POSTED VALUES: <br>username:".$uname . " --- password:".$pass."<br>";
 $uname = escapeSimple($uname);
-//$tool_content .= "POSTED VALUES(after addslashes - escapeSimpleSelect): <br>username:".$uname . " --- password:".$pass."<br>";
 
 if(!empty($submit))
 {
@@ -112,8 +109,6 @@ if(!empty($submit))
 		{
 			if(!in_array($myrow["password"],$check_passwords))
 			{
-				//$tool_content .= "encrypted password taken from db(myrow[password]): ".$myrow["password"]."<br>";
-				//$tool_content .= "encrypted password taken from db(myrow[password]) with stripslashes: ".$myrow["password"]."<br>";
 				// try to authenticate him via eclass
 				$crypt = new Encryption;
 				$key = $encryptkey;
@@ -121,10 +116,7 @@ if(!empty($submit))
 				//$tool_content .= "decrypted password taken from db:".$password_decrypted."<br>";
 				$errors = $crypt->errors;
 				$myrow["password"] = $password_decrypted;
-				//$tool_content .= stripslashes($uname);
-				//$tool_content .= "uname:".$uname
-				//." == myrow[username]:".escapeSimpleSelect($myrow["username"])
-				//."<br>pass:".$pass." == "."myrow[password]:".escapeSimpleSelect($myrow["password"])."<br>";
+				
 				if (($uname == escapeSimpleSelect($myrow["username"])) and ($pass == escapeSimpleSelect($myrow["password"])))
 				{
 					// check if his/her account is active
@@ -153,6 +145,10 @@ if(!empty($submit))
 						$auth_allow = 3;
 						$user = $myrow["user_id"];
 					}
+				}
+				else
+				{
+					$auth_allow = 4; // means wrong username or password
 				}
 			}
 			else
@@ -272,6 +268,7 @@ if(!empty($submit))
 			case 1 : $warning .= ""; break;
 			case 2 : $warning .= "<br />".$langNoConnection."<br />"; break;
 			case 3 : $warning .= $tool_content .= "<br />".$langAccountInactive1." <a href=\"modules/auth/contactadmin.php?userid=".$user."\">".$langAccountInactive2."</a><br /><br />"; break;
+			case 4 : $warning .= "<br />" . $langInvalidId . "<br />"; break;
 			default: break;
 		}
 		//$warning .= $auth_allow . "---". $langInvalidId;
