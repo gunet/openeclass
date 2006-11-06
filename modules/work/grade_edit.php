@@ -85,7 +85,7 @@ function show_edit_form($id, $sid, $assign)
 			<tr><td><b>${m['sub_date']}:</b></td>
 			<td>${sub['submission_date']}</td></tr>
 			<tr><td><b>${m['filename']}:</b></td>
-				<td><a href='work.php?get=${sub[id]}'>${sub[file_name]}</a></td></tr>
+				<td><a href='work.php?get=${sub['id']}'>${sub['file_name']}</a></td></tr>
 cData;
 
 			if (!empty($sub['group_id'])) {

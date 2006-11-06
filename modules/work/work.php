@@ -396,12 +396,12 @@ cData;
 		"<input type=\"radio\" name=\"group_submissions\" value=\"0\"";
 	
 	if ($row['group_submissions'] == '0')
-		$tool_content .= " checked=\"1\" ";
+		$tool_content .= " checked=\"1\" >";
 	
-	$tool_content .= $m['user_work']."<br><input type=\"radio\" name=\"group_submissions\" value=\"1\"";
+	$tool_content .= $m['user_work']."<br><input type=\"radio\" name=\"group_submissions\" value=\"1\" >";
 	
 	if ($row['group_submissions'] != '0')
-		$tool_content .= "checked=\"1\"";		
+		$tool_content .= "checked=\"1\" >";		
 
 	$tool_content .= $m['group_work']."</td></tr><tr><td colspan=2>".
 		"<input type=\"submit\" name=\"do_edit\" value=\"".$langEdit."\"></td></tr></tbody></table>";	
@@ -672,7 +672,8 @@ $tool_content .= "\n\n<!-- BEGIN GRAPH -->\n\n";
 			if ($theGrade) {
 				$gradesExists = 1;
 				
-				if (!$gradeOccurances[$theGrade]) {
+				//if (!$gradeOccurances[$theGrade]) {
+				if (!isset($gradeOccurances[$theGrade])) {
 					$gradeOccurances[$theGrade] = 1;
 				} else {
 					if ($gradesExists) {
@@ -934,17 +935,25 @@ function submit_grade_comments($id, $sid, $grade, $comment)
 // submit grades to students
 function submit_grades($grades_id, $grades)
 {
-	global $tool_content, $REMOTE_ADDR, $langGrades; 
-	
-	foreach ($grades as $sid => $grade) {
-		$val = mysql_fetch_row(db_query("SELECT grade from assignment_submit WHERE id = '$sid'"));
-		if ($val[0] != $grade) {
-			db_query("UPDATE assignment_submit SET grade='$grade', 
-				grade_submission_date=NOW(), grade_submission_ip='$REMOTE_ADDR'
-				WHERE id = '$sid'");
+	global $tool_content, $REMOTE_ADDR, $langGrades, $langWorkWrongInput; 
+		
+		$stupid_user = 0;
+		
+		foreach ($grades as $sid => $grade) {
+			$val = mysql_fetch_row(db_query("SELECT grade from assignment_submit WHERE id = '$sid'"));
+			if ($val[0] != $grade) {
+				if (!is_numeric($grade)) {
+					$tool_content .= $langWorkWrongInput;
+					$stupid_user = 1;
+				} else {
+					db_query("UPDATE assignment_submit SET grade='$grade', 
+						grade_submission_date=NOW(), grade_submission_ip='$REMOTE_ADDR'
+						WHERE id = '$sid'");
+				}
+			}
 		}
-	}
-	show_assignment($grades_id, $langGrades);
+		if (!$stupid_user)
+			show_assignment($grades_id, $langGrades);
 }
 
 // functions for downloading
