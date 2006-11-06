@@ -256,7 +256,6 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 			$sql = "UPDATE user 
 				SET nom='".$lname."', prenom='".$fname."', username='".$username."', password='".$password_encrypted."', email='".$email."', phone='".$phone."',department=".$department.", expires_at=".$expires_at.
 				" WHERE user_id = '".$u."'";
-			$tool_content .= $sql . "<br>";
 			$qry = mysql_query($sql);
 			if (!$qry) 
 			{
