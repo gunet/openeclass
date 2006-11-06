@@ -162,6 +162,7 @@ $langProfOnly = 'This page is only accessible to this course\'s
 	page';
 $langWorksOld = 'Old Submissions';
 $langOldWork = "<p>There are %d <a href='work_old.php'>old student
-	submissions</a>.</p>\n"
+	submissions</a>.</p>\n";
+$langWorkWrongInput = 'The grade must be a number. Please go back an enter the grade again.';
 
 ?>
