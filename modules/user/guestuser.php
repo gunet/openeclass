@@ -29,6 +29,7 @@ $require_help = TRUE;
 $helpTopic = 'User';
 
 include '../../include/baseTheme.php';
+include '../auth/auth.inc.php';		// purpose of include:functions to encrypt guest password
 
 $nameTools = $langAddGuest;
 $navigation[] = array ("url"=>"user.php", "name"=> $langUsers);
@@ -37,10 +38,9 @@ $tool_content = "";
 // IF PROF ONLY
 if($is_adminOfCourse)
 {
-
 	// Create guest account
-	function createguest($c,$p) {
-
+	function createguest($c,$p) 
+	{
 		global $langGuestUserName,$langGuestSurname,$langGuestName, $mysqlMainDb;
 
 		// guest account user name
@@ -49,9 +49,10 @@ if($is_adminOfCourse)
 		mysql_select_db($mysqlMainDb);
 
 		$q=mysql_query("SELECT user_id FROM user WHERE username='$guestusername'");
+		
 		if (mysql_num_rows($q) > 0) {
 			$s = mysql_fetch_array($q);
-
+			
 			mysql_query("UPDATE user SET password='$p' WHERE user_id='$s[0]'")
 			or die ($langGuestFail);
 
@@ -59,11 +60,13 @@ if($is_adminOfCourse)
 			VALUES ('$c','$s[0]','10','Επισκέπτης')")
 			or die ($langGuestFail);
 
-		} else {
+		} 
+		else 
+		{
 			mysql_query("INSERT INTO user (nom,prenom,username,password,statut)
 			VALUES ('$langGuestName','$langGuestSurname','$guestusername','$p','10')")
 			or die ($langGuestFail);
-
+			
 			mysql_query("INSERT INTO cours_user (code_cours,user_id,statut,role)
 			VALUES ('$c','".mysql_insert_id()."','10','Επισκέπτης')")
 			or die ($langGuestFail);
@@ -85,14 +88,22 @@ if($is_adminOfCourse)
 		}
 	}
 
-	if (isset($createguest) and (!guestid($currentCourseID))) {
-
-		createguest($currentCourseID,$guestpassword);
+	if (isset($createguest) and (!guestid($currentCourseID))) 
+	{
+		// encrypt the password
+			$crypt = new Encryption;	$key = $encryptkey;	$pswdlen = "20";
+	 		$guestpassword2 = $crypt->encrypt($key, $guestpassword, $pswdlen);
+		createguest($currentCourseID,$guestpassword2);
 		$tool_content .= "<tr><td>$langGuestSuccess</td></tr>";
-	} elseif (isset($changepass)) {
+	} elseif (isset($changepass)) 
+	{
 
 		$g=guestid($currentCourseID);
-		$uguest=mysql_query("UPDATE user SET password='$guestpassword' WHERE user_id='$g'")
+		// *****************************************************
+		// encrypt the password
+		$crypt = new Encryption;	$key = $encryptkey;	$pswdlen = "20";
+	 	$guestpassword_encrypted = $crypt->encrypt($key, $guestpassword, $pswdlen);
+		$uguest=mysql_query("UPDATE user SET password='$guestpassword_encrypted' WHERE user_id='$g'")
 		or die($langGuestFail);
 		$tool_content .= "<p>$langGuestChange</p>";
 	} else {
@@ -109,8 +120,15 @@ if($is_adminOfCourse)
 			$tool_content .=  "<tr><th>$langName:</th><td>$s[nom]</td></tr>";
 			$tool_content .=  "<tr><th>$langSurname:</th><td>$s[prenom]</td></tr>";
 			$tool_content .=  "<tr><th>$langUsername:</th><td>$s[username]</td></tr>";
-			$tool_content .=  "<tr><th>$langPass:</th><td><input type=\"text\" name=\"guestpassword\" value=\"".
-			htmlspecialchars($s['password'])."\"></td></tr>";
+			$tool_content .=  "<tr><th>$langPass:</th><td><input type=\"text\" name=\"guestpassword\" value=\"";
+			
+				$pw = htmlspecialchars($s['password']);
+				// decrypt the password from db:
+				$crypt = new Encryption;	$key = $encryptkey;		
+				$password_decrypted = $crypt->decrypt($key, $pw);
+			
+			$tool_content .= $password_decrypted;
+			$tool_content .= "\"></td></tr>";
 			$tool_content .= "</thead>";
 			$tool_content .=  "</table>";
 			$tool_content .= "<br>";
