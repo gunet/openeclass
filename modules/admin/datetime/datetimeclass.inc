@@ -122,8 +122,8 @@ if ( !defined("DATETIMECLASS_INC") ) {
 		function get_select($select_name, $select_array_values, $selected_value = "", $select_first_line = "", $select_style = "", $select_size = 1) {
 			$str_select = "";
 			$str_select.= "\n<select name=\"".$select_name."\" size=".$select_size;
-			$str_select.= ($select_style)? " ".$select_style.">\n" : ">\n";
-			$str_select.= ($select_first_line)? "<option value=\"\">".$select_first_line."\n" : "";
+			//$str_select.= ($select_style)? " ".$select_style.">\n" : ">\n";
+			//$str_select.= ($select_first_line)? "<option value=\"\">".$select_first_line."\n" : "";
 			while(list($key,$val) = each($select_array_values))
 			{
 				$str_select.= "<option value=\"".$key."\"";
