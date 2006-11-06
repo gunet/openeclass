@@ -63,8 +63,10 @@ if($is_adminOfCourse)
 		} 
 		else 
 		{
-			mysql_query("INSERT INTO user (nom,prenom,username,password,statut)
-			VALUES ('$langGuestName','$langGuestSurname','$guestusername','$p','10')")
+			$regtime = time();
+			$exptime = 126144000 + $regtime;
+			mysql_query("INSERT INTO user (nom,prenom,username,password,statut,registered_at,expires_at)
+			VALUES ('$langGuestName','$langGuestSurname','$guestusername','$p','10',$regtime,$exptime)")
 			or die ($langGuestFail);
 			
 			mysql_query("INSERT INTO cours_user (code_cours,user_id,statut,role)
