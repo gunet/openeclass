@@ -131,13 +131,15 @@ if (!mysql_field_exists("$mysqlMainDb",'cours','course_addon'))
 
 // kstratos - UOM
 // Add 1 new field into table 'prof_request', after the field 'profuname'
+$reg = time();
+$exp = 126144000 + $reg;
 if (!mysql_field_exists($mysqlMainDb,'prof_request','profpassword'))
 	$tool_content .= add_field('prof_request','profpassword',"VARCHAR(255)");
 // Add 2 new fields into table 'user': registered_at,expires_at
 if (!mysql_field_exists($mysqlMainDb,'user','registered_at'))
-	$tool_content .= add_field('user', 'registered_at', "INT(10)");
+	$tool_content .= add_field('user', 'registered_at', "INT(10) DEFAULT $reg NOT NULL");
 if (!mysql_field_exists($mysqlMainDb,'user','expires_at'))
-	$tool_content .= add_field('user', 'expires_at', "INT(10)");
+	$tool_content .= add_field('user', 'expires_at', "INT(10) DEFAULT $exp NOT NULL");
 
 // Add 2 new fields into table 'cours': password,faculteid
 if (!mysql_field_exists($mysqlMainDb,'cours','password'))
@@ -334,7 +336,8 @@ if((!isset($encryptkey)) || (empty($encryptkey))) {
     		$nr++;
 			} */
 //  		if((in_array("'",$pw)) || (in_array("\"",$pw)) || (in_array("\\",$pw))) {
-  		if(strstr($pass, "'") or strstr($pass, '"')) {
+  		if( (strstr($pass, "'")) or (strstr($pass, '"')) or (strstr($pass, '\\')) )
+  		{
 				$tool_content .= "Δεν έγινε κρυπτογράφηση του συνθηματικού του χρήστη με id=".$row["user_id"]." (άκυροι χαρακτήρες στο συνθηματικό)<br />";
 				continue; // get the next one
 			}
