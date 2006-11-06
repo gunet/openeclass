@@ -310,7 +310,7 @@ $tool_content .= "</tr>";
 	while($row=mysql_fetch_array($result))
 	{
 		// if we come from the exercise administration to get a question, doesn't show the question already used by that exercise
-		if(!isset($fromExercise) || !$objExercise->isInList($row['id']))
+		if(!isset($fromExercise) || !is_object(@$objExercise) || !$objExercise->isInList($row['id']))
 		{
 
 //$tool_content .= "<tr><td><a href=\"admin.php?editQuestion=".$row['id'].
