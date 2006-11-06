@@ -429,7 +429,7 @@ class Question
 		if(!in_array($exerciseId,$this->exerciseList))
 		{
 			$this->exerciseList[]=$exerciseId;
-
+			//echo "<br>-".$TBL_EXERCICE_QUESTION."<br>-".$id."<br>-".$exerciseId."<br>";
 			$sql="INSERT INTO `$TBL_EXERCICE_QUESTION`(question_id,exercice_id) VALUES('$id','$exerciseId')";
 			mysql_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
 		}

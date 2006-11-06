@@ -100,7 +100,8 @@ if($is_allowedToEdit)
 		unset($objQuestionTmp);
 	}
 	// gets an existing question and copies it into a new exercise
-	elseif(isset($recup) && $fromExercise)
+	elseif(isset($recup) && isset($fromExercise))
+	//elseif(isset($recup) && $fromExercise) - why was it like that?!?
 	{
 		// construction of the Question object
 		$objQuestionTmp=new Question();
@@ -108,6 +109,23 @@ if($is_allowedToEdit)
 		// if the question exists
 		if($objQuestionTmp->read($recup))
 		{
+			//$tool_content .= "sssssssss".$fromExercise;
+			
+			// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+					if(!is_object(@$objExercise)) {
+						// construction of the Exercise object
+						$objExercise=new Exercise();
+			
+						// creation of a new exercise if wrong or not specified exercise ID
+						if(isset($exerciseId)) {
+							$objExercise->read($exerciseId);
+						}
+					
+						// saves the object into the session
+						session_register('objExercise');
+				}			
+				$fromExercise=$objExercise->selectId();	
+			// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 			// adds the exercise ID represented by $fromExercise into the list of exercises for the current question
 			$objQuestionTmp->addToList($fromExercise);
 		}
@@ -115,7 +133,28 @@ if($is_allowedToEdit)
 		// destruction of the Question object
 		unset($objQuestionTmp);
 
+
+		//////////////// - 20061106
+		if(!is_object(@$objExercise)) {
+			// construction of the Exercise object
+			$objExercise=new Exercise();
+
+			// creation of a new exercise if wrong or not specified exercise ID
+			if(isset($exerciseId)) {
+				$objExercise->read($exerciseId);
+			}
+		
+			// saves the object into the session
+			session_register('objExercise');
+			
+			
+		}			
+		$exerciseId=$objExercise->selectId();			
+		//$tool_content .= "qqqqqq".$exerciseId."qqqqq";
+		////////////////
+		
 		// adds the question ID represented by $recup into the list of questions for the current exercise
+		
 		$objExercise->addToList($recup);
 
 		header("Location: admin.php?editQuestion=$recup");
@@ -137,7 +176,7 @@ if (isset($fromExercise)) {
 
 $tool_content .= <<<cData
 	<form method="get" action="${PHP_SELF}">
-	<input type="hidden" name="fromExercise" value="$temp_fromExercise">
+	<!--<input type="hidden" name="fromExercise" value="$temp_fromExercise">-->
 	<table border="0" align="center" cellpadding="2" cellspacing="2" width="95%">
 	<tr>
 cData;
@@ -357,7 +396,7 @@ $tool_content .= "</tr>";
 
 $tool_content .= "<tr><td colspan=\"";
 
-if ($fromExercise)
+if (isset($fromExercise)&&($fromExercise))
 	$tool_content .= "2";
 else
 	$tool_content .= "3";	

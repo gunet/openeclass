@@ -238,9 +238,10 @@ if(isset($editQuestion) || isset($modifyQuestion) || isset($newQuestion) || isse
 
 
 // shows a link to go back to the question pool
-if(!$exerciseId && $nameTools != $langExerciseManagement) {
-	$navigation[]=@array("url" => "question_pool.php?fromExercise=$fromExercise","name" => $langQuestionPool);
-}
+//if(((!$exerciseId)||(!isset($exerciseId))) && $nameTools != $langExerciseManagement) {
+//	//$navigation[]=@array("url" => "question_pool.php?fromExercise=$fromExercise","name" => $langQuestionPool);
+//	//$tool_content .= "<a href=\"question_pool.php?fromExercise=$fromExercise\">".$langQuestionPool."</a>";
+//}
 
 // if the question is duplicated, disable the link of tool name
 if(isset($modifyIn) && $modifyIn == 'thisExercise') {
