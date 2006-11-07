@@ -169,12 +169,14 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 						break;
 					case 5:
 						$tool_content .= $langStudent;
-						$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">".
+						//$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">".
+						$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=$u&c=$logs[0]\">".
 						"$langDelete</a></td></tr>\n";
 						break;
 					default:
 						$tool_content .= $langVisitor;
-						$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">".
+						//$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">".
+						$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=$u&c=$logs[0]\">".
 	                    "$langDelete</a></td></tr>\n";
 					break;
 				}
@@ -187,9 +189,11 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		  if ($u > 1) 
 		  {
 				if (isset($logs))
-			    $tool_content .= "<center><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">$langDelete</a></center>";
+			    //$tool_content .= "<center><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">$langDelete</a></center>";
+			    $tool_content .= "<center><a href=\"unreguser.php?u=$u&c=$logs[0]\">$langDelete</a></center>";
 				else 
-			    $tool_content .= "<center><a href=\"unreguser.php?u=$u&un=$info[2]&c=\">$langDelete</a></center>";
+			    //$tool_content .= "<center><a href=\"unreguser.php?u=$u&un=$info[2]&c=\">$langDelete</a></center>";
+			    $tool_content .= "<center><a href=\"unreguser.php?u=$u&c=\">$langDelete</a></center>";
 			} 
 		  else 
 		  {

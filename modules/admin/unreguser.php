@@ -48,14 +48,18 @@ $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 $tool_content = "";
 
 // get the incoming values and initialize them
-$u = isset($_GET['u'])?$_GET['u']:'';
+$u = isset($_GET['u'])?$_GET['u']:'';		// user ID
 $doit = isset($_GET['doit'])?$_GET['doit']:'';
-$c = isset($_GET['c'])?$_GET['c']:'';
+$c = isset($_GET['c'])?$_GET['c']:'';		// course ID
 
-if((!empty($doit)) && ($doit != "yes")) 
+$u_account = (!empty($u))?uid_to_username($u):'';
+$u_realname = (!empty($u))?uid_to_name($u):'';
+$u_statut = get_uid_statut($u);
+
+if(empty($doit))
 {
-	$tool_content .= "<h4>$langConfirmDelete</h4>
-		<p>$langConfirmDeleteQuestion1 <em>$un</em>";
+	//$tool_content .= "<h4>$langConfirmDelete</h4><p>$langConfirmDeleteQuestion1 <em>$un</em>";
+	$tool_content .= "<h4>$langConfirmDelete</h4><p>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em>";
 	if(!empty($c)) 
 	{
 		$tool_content .= " $langConfirmDeleteQuestion2 <em>".$c."</em>";
@@ -63,55 +67,80 @@ if((!empty($doit)) && ($doit != "yes"))
 	$tool_content .= "$langQueryMark</p>
 		<ul>
 		<li>Ναι: <a href=\"unreguser.php?u=$u&c=$c&doit=yes\">$langDelete!</a><br>&nbsp;</li>
-		<li>Όχι: <a href=\"index.php\">$back</a></li>
+		<li>Όχι: <a href=\"edituser.php?u=$u\">Επεξεργασία Χρήστη $u_account</a>&nbsp;&nbsp;&nbsp;<a href=\"index.php\">$back</a></li>
 		</ul>";	
 } 
 else 
 {
-	$conn = mysql_connect($mysqlServer, $mysqlUser, $mysqlPassword);
-	if (!mysql_select_db($mysqlMainDb, $conn))
-                die("Cannot select database");
-	if(empty($c)) 
+	if($doit == "yes")
 	{
-		if ($u == 1) 
+		$conn = mysql_connect($mysqlServer, $mysqlUser, $mysqlPassword);
+		if (!mysql_select_db($mysqlMainDb, $conn))
+	                die("Cannot select database");
+		if(empty($c)) 
 		{
-			$tool_content .= "$langError. $langCannotDeleteAdmin";
+			if ($u == 1) 
+			{
+				$tool_content .= "$langError. $langCannotDeleteAdmin";
+			}
+			else
+			{
+				$sql = mysql_query("DELETE from user WHERE user_id = '$u'");
+			}
+			if (mysql_affected_rows($conn) > 0) 
+			{
+				$tool_content .= "<p>$langUserWithId $u $langWasDeleted.</p>\n";
+			} 
+			else 
+			{
+				$tool_content .= "$langErrorDelete";
+			}
+			if($u!=1)
+			{
+				mysql_query("DELETE from admin WHERE idUser = '$u'");
+			}
+			if (mysql_affected_rows($conn) > 0) 
+			{
+				$tool_content .= "<p>$langUserWithId $u $langWasAdmin.</p>\n";
+			}
+			
+			// delete guest user from cours_user
+			if($u_statut == '10')
+			{
+				$sql = mysql_query("DELETE from cours_user WHERE user_id = '$u'");
+			}
+			
+		} 
+		elseif((!empty($c)) && (!empty($u)))
+		{
+			$sql = mysql_query("DELETE from cours_user WHERE user_id = '$u' and code_cours='$c'");
+			if (mysql_affected_rows($conn) > 0)  
+			{
+				$tool_content .= "<p>$langUserWithId $u $langWasCourseDeleted $c.</p>\n";
+			}
 		}
 		else
 		{
-			$sql = mysql_query("DELETE from user WHERE user_id = '$u'");
+				$tool_content .= "$langErrorDelete";
 		}
-		if (mysql_affected_rows($conn) > 0) 
-		{
-			$tool_content .= "<p>$langUserWithId $u $langWasDeleted.</p>\n";
-		} 
-		else 
-		{
-			$tool_content .= "$langErrorDelete";
-		}
-		if($u!=1)
-		{
-			mysql_query("DELETE from admin WHERE idUser = '$u'");
-		}
-		if (mysql_affected_rows($conn) > 0) 
-		{
-			$tool_content .= "<p>$langUserWithId $u $langWasAdmin.</p>\n";
-		}
-	} 
-	elseif((!empty($c)) && (!empty($u)))
-	{
-		$sql = mysql_query("DELETE from cours_user WHERE user_id = '$u' and code_cours='$c'");
-		if (mysql_affected_rows($conn) > 0)  
-		{
-			$tool_content .= "<p>$langUserWithId $u $langWasCourseDeleted $c.</p>\n";
-		}
+		$tool_content .= "<br>&nbsp;<br><a href=\"edituser.php?u=$u\">Επεξεργασία Χρήστη $u_account</a>&nbsp;&nbsp;&nbsp;
+		<a href=\"./index.php\">$langBackAdmin</a>.<br />\n";
 	}
-	else
-	{
-			$tool_content .= "$langErrorDelete";
-	}
-	$tool_content .= "<br>&nbsp;<br><a href=\"./index.php\">$langBackAdmin</a>.<br />\n";
 }	
+
+function get_uid_statut($u)
+{
+	global $mysqlMainDb;
+
+	if ($r = mysql_fetch_row(db_query("SELECT statut FROM user WHERE user_id = '$uid'",	$mysqlMainDb))) 
+	{
+		return $r[0];
+	} 
+	else 
+	{
+		return FALSE;
+	}
+}
 
 draw($tool_content,3,'admin');
 ?>
