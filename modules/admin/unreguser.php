@@ -132,7 +132,7 @@ function get_uid_statut($u)
 {
 	global $mysqlMainDb;
 
-	if ($r = mysql_fetch_row(db_query("SELECT statut FROM user WHERE user_id = '$uid'",	$mysqlMainDb))) 
+	if ($r = mysql_fetch_row(db_query("SELECT statut FROM user WHERE user_id = '$u'",	$mysqlMainDb))) 
 	{
 		return $r[0];
 	} 
