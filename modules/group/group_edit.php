@@ -265,7 +265,7 @@ $a=0;
 $tool_content_group_members = "";
 while ($myMember = mysql_fetch_array($resultMember))
 	{
-	$userIngroupId=$myMember[user_id];
+	$userIngroupId=$myMember['user_id'];
  	$tool_content_group_members .=  "<option value=\"$userIngroupId\">$myMember[prenom] $myMember[nom]</option>";
 	$a++;
 }
