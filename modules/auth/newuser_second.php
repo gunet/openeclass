@@ -135,19 +135,11 @@ if(!empty($submit))
 				$emailsubject = "$langYourReg $siteName";
 				if((!empty($auth_method_settings)) && ($auth!=1))
 				{
-					$emailbody = "$langDestination $prenom_form $nom_form 
-					$langYouAreReg$siteName $langSettings $uname $langPassSameLDAP 
-					$langAddress $siteName $langIs: $urlServer $langProblem 
-					$langFormula,$administratorName $administratorSurname 
-					$langManager $siteName $langTel $telephone $langEmail : $emailAdministrator";
+					$emailbody = "$langDestination $prenom_form $nom_form \n$langYouAreReg $siteName $langSettings $uname \n$langPassSameLDAP $langAddress $siteName $langIs: $urlServer $langProblem $langFormula $administratorName $administratorSurname $langManager $siteName \n$langTel $telephone \n$langEmail : $emailAdministrator";
 				} 
 				else 
 				{
-					$emailbody = "$langDestination $prenom_form $nom_form
-					$langYouAreReg$siteName $langSettings $uname 
-					$langPass : $password $langAddress $siteName $langIs: $urlServer 
-					$langProblem	$langFormula,$administratorName $administratorSurname 
-					$langManager $siteName $langTel $telephone $langEmail : $emailAdministrator";
+					$emailbody = "$langDestination $prenom_form $nom_form \n$langYouAreReg $siteName $langSettings $uname \n$langPass: $password $langAddress $siteName $langIs: $urlServer $langProblem	$langFormula $administratorName $administratorSurname $langManager $siteName \n$langTel $telephone \n$langEmail : $emailAdministrator";
 				}
 	
 				send_mail($siteName, $emailAdministrator, '', $email,	$emailsubject, $emailbody, $charset);
