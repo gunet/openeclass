@@ -1068,18 +1068,6 @@ mysql_query("CREATE TABLE accueil (
         'MODULE_ID_USERS'
         )");
 
-/*    mysql_query("INSERT INTO accueil VALUES (
-               '11',
-               '$langStatistics',
-               '../../modules/stat/index2.php?table=stat_accueil&reset=0&period=jour',
-               'stat',
-               '".$sbsystems[11]."',
-               '1',
-               '',
-               'MODULE_ID_STAT'
-               )");
-*/
-
 /*
     mysql_query("INSERT INTO accueil VALUES (
                '12',
@@ -1396,24 +1384,6 @@ mysql_query("INSERT INTO group_properties
     (id, self_registration, private, forum, document, wiki, agenda)
     VALUES (NULL, '1', '0', '1', '1', '0', '0')");
 
-####################STATISTIQUES ################################################
-/// old statistics tool
-/*    mysql_query("CREATE TABLE stat_accueil (
-               id int(11) NOT NULL auto_increment,
-               request char(100) NOT NULL,
-               host char(100) NOT NULL,
-               address char(100) NOT NULL,
-               agent char(100) NOT NULL,
-               date datetime,
-               referer char(200) NOT NULL,
-               country char(50) NOT NULL,
-               provider char(100) NOT NULL,
-               os char(50) NOT NULL,
-               wb char(50) NOT NULL,
-               PRIMARY KEY (id),
-               KEY id (id))
-        TYPE=MyISAM DEFAULT CHARSET=greek");
-*/
 #################### QUESTIONNAIRE ###############################################
 
     mysql_query("CREATE TABLE survey (
@@ -1501,15 +1471,6 @@ mysql_query("INSERT INTO group_properties
       pqid bigint(12) NOT NULL default '0',
       answer_text varchar(250) default NULL,
       PRIMARY KEY  (pqaid))
-    TYPE=MyISAM DEFAULT CHARSET=greek");
-
-###########################################################################
-
-    mysql_query("CREATE TABLE liste_domaines (
-               id int(11) NOT NULL auto_increment,
-               domaine char(20) NOT NULL,
-               description char(50) NOT NULL,
-               PRIMARY KEY (id))
     TYPE=MyISAM DEFAULT CHARSET=greek");
 
 ############################# LEARNING PATH ######################################
@@ -1799,25 +1760,6 @@ mysql_query("INSERT INTO group_properties
     (id, self_registration, private, forum, document, wiki, agenda)
     VALUES (NULL, '1', '0', '1', '1', '0', '0')");
 
-####################STATISTIQUES ################################################
-/* old statistics tool
-     mysql_query("CREATE TABLE stat_accueil (
-               id int(11) NOT NULL auto_increment,
-               request char(100) NOT NULL,
-               host char(100) NOT NULL,
-               address char(100) NOT NULL,
-               agent char(100) NOT NULL,
-               date datetime,
-               referer char(200) NOT NULL,
-               country char(50) NOT NULL,
-               provider char(100) NOT NULL,
-               os char(50) NOT NULL,
-               wb char(50) NOT NULL,
-               PRIMARY KEY (id),
-               KEY id (id))
-        TYPE=MyISAM");
-
-*/
 #################### SURVEY ###############################################
 
     mysql_query("CREATE TABLE survey (
@@ -1909,15 +1851,6 @@ mysql_query("INSERT INTO group_properties
       PRIMARY KEY  (pqaid))
     TYPE=MyISAM");
 
-###########################################################################
-
-    mysql_query("CREATE TABLE liste_domaines (
-               id int(11) NOT NULL auto_increment,
-               domaine char(20) NOT NULL,
-               description char(50) NOT NULL,
-               PRIMARY KEY (id))
-               TYPE=MyISAM");
-
 ############################# LEARNING PATH ######################################
 
 mysql_query("CREATE TABLE `lp_module` (
@@ -1988,78 +1921,6 @@ mysql_query("CREATE TABLE `lp_user_module_progress` (
 
 }
 
-###########################################################################
-
-    mysql_query("INSERT INTO liste_domaines VALUES ( '14', 'au', 'Australie')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '20', 'be', 'Belgique')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '28', 'bo', 'Bolivie')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '29', 'br', 'Brasil')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '36', 'ca', 'Canada')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '38', 'cd', 'Congo, (République démocratique du)')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '40', 'cg', 'Congo')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '41', 'ch', 'Suisse')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '44', 'cl', 'Chili')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '45', 'cm', 'Cameroun')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '46', 'cn', 'Chine')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '47', 'co', 'Colombie')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '48', 'cr', 'Costa Rica')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '49', 'cu', 'Cuba')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '53', 'cz', 'Tchéque (République)')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '54', 'de', 'Allemagne')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '56', 'dk', 'Denmark')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '59', 'dz', 'Algerie')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '62', 'eg', 'Egypte')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '65', 'es', 'Espagne')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '66', 'et', 'Ethiopie')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '72', 'fr', 'France')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '76', 'gf', 'Guyane France')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '85', 'gr', 'Greece')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '87', 'gt', 'Guatemala')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '96', 'hu', 'Hungary')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '97', 'id', 'Indonesie')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '98', 'ie', 'Irland')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '99', 'il', 'Israel')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '101', 'in', 'India')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '103', 'iq', 'Iraq')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '104', 'ir', 'Iran (Republique Islamique d\')')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '106', 'it', 'Italie')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '110', 'jp', 'Japon')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '111', 'ke', 'Kenya')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '113', 'kh', 'Cambodge')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '123', 'lb', 'Liban')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '130', 'lu', 'Luxembourg')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '133', 'ma', 'Marooo')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '151', 'mx', 'Mexico')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '159', 'ni', 'Nicaragua')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '160', 'nl', 'Pays Bas')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '161', 'no', 'Norvege')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '165', 'nz', 'New Zealand')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '168', 'pe', 'Perou')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '173', 'pl', 'Pologne')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '177', 'pt', 'Portugal')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '182', 'ro', 'Roumanie')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '183', 'ru', 'Russie')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '184', 'rw', 'Rwanda')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '189', 'se', 'Suede')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '197', 'sn', 'Sénégal')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '212', 'tn', 'Tunisie')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '215', 'tr', 'Turquie')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '218', 'tw', 'Taiwan')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '222', 'uk', 'Royaume Uni')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '223', 'gb', 'Royaume Uni')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '225', 'us', 'Etats Unis')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '228', 'va', 'Vatican')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '230', 've', 'Venezuela')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '239', 'yu', 'Yugoslavie')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '244', 'com', '.COM')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '245', 'net', '.NET')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '246', 'org', '.ORG')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '247', 'edu', 'Education')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '249', 'arpa', '.ARPA')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '250', 'at', 'Autriche')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '251', 'gov', 'Gouvernement')");
-    mysql_query("INSERT INTO liste_domaines VALUES ( '252', 'mil', 'Miltaire')");
-
     
 //dhmiourgia full text indexes gia th diadikasia ths anazhthshs
 mysql_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");
@@ -2078,21 +1939,6 @@ mysql_query("ALTER TABLE `videolinks` ADD FULLTEXT `videolinks` (`url` ,`titre` 
 
 mysql_select_db("$mysqlMainDb");
 
-/*print "INSERT INTO cours SET
-        code = '$code',
-        languageCourse = '$languageCourse',
-        intitule = '$intitule',
-        description = '$description',
-        course_addon = '$course_addon',
-        course_keywords = '$course_keywords',
-        faculte = '$facname',
-        visible = '$formvisible',
-        cahier_charges = '',
-        titulaires = '$titulaires',
-        fake_code = '$code',
-        `type` = '$type',
-        faculteid = '$facid'";
-*/
     mysql_query("INSERT INTO cours SET
         code = '$code',
         languageCourse = '$languageCourse',
