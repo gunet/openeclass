@@ -113,14 +113,16 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 	$tool_content .= "<h2>$langSearchingFor</h2>";
 
 	
-	//elegxos gia ton typo xrhsth
-	if($is_admin == TRUE)
-	{
-		$result = mysql_query("SELECT * FROM cours, cours_user WHERE cours.code=cours_user.code_cours AND cours_user.user_id='".$uid."' AND (cours_user.statut='5' OR cours_user.statut='10' OR cours_user.statut='1')");
-	}else
-	{
-		$result = mysql_query("SELECT * FROM cours, cours_user WHERE cours.code=cours_user.code_cours AND cours_user.user_id='".$uid."' AND (cours_user.statut='5' OR cours_user.statut='10')");
-	}
+	//ektelesh erwthmatos gia to se poia mathimata einai eggegramenos o xrhsths. sta apotelesmata perilamvanontai
+	//kai ola ta anoixta kai anoixta me eggrafh mathimata.
+	$result = mysql_query(" SELECT DISTINCT cours.code, cours.intitule, cours.course_keywords, cours.titulaires
+							FROM `cours` , `cours_user` 
+							WHERE (
+							cours.code = cours_user.code_cours
+							AND cours_user.user_id = '".$uid."'
+							)
+							OR cours.visible = '2'
+							OR cours.visible = '1'");
 	
 	
 	
