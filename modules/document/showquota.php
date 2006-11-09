@@ -93,7 +93,7 @@ $nameTools = $langQuotaBar;
     	</tr>
     </tbody>
     </table>
-    <a href=\"javascript:history.back()\">$langBack</a>";
+    <a href=\"document.php\">$langBack</a>";
 
 $tmp_cwd = getcwd();
 draw($tool_content, 2, '', '');
