@@ -730,7 +730,7 @@ cData;
 					<td align="center">${stud_am[0]}</td>
 					<td align="center"><a href="work.php?get=${row['id']}">${row['file_name']}</a></td>
 				<td align="center">${row['submission_date']}</td>
-					<td align="center"><input type="text" value="${row['grade']} " size="5"
+					<td align="center"><input type="text" value="${row['grade']} " maxlength="3" size="3"
 						name="grades[${row['id']}]"></td>
 				</tr>
 cData;
@@ -923,12 +923,21 @@ cData;
 // submit grade and comment for a student submission
 function submit_grade_comments($id, $sid, $grade, $comment)
 {
-	global $tool_content, $REMOTE_ADDR, $langGrades; 
+	global $tool_content, $REMOTE_ADDR, $langGrades, $langWorkWrongInput; 
 	
-	db_query("UPDATE assignment_submit SET grade='$grade', grade_comments='$comment', 
+	$stupid_user = 0;
+	
+	if (!is_numeric($grade)) {
+		$tool_content .= $langWorkWrongInput;
+		$stupid_user = 1;
+	} else {
+		db_query("UPDATE assignment_submit SET grade='$grade', grade_comments='$comment', 
 		grade_submission_date=NOW(), grade_submission_ip='$REMOTE_ADDR'
 		WHERE id = '$sid'");
-	show_assignment($id, $langGrades);
+	}				
+	if (!$stupid_user) {
+		show_assignment($id, $langGrades);
+	}
 }
 
 

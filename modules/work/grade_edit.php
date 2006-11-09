@@ -96,7 +96,7 @@ cData;
 			
 			$tool_content .= <<<cData
 				<tr><td>${m['grade']}:
-			    <input type="text" name="grade" size="3" value="${sub['grade']}"></td>
+			    <input type="text" name="grade" maxlength="3" size="3" value="${sub['grade']}"></td>
 			</tr>
 		<tr><td colspan="2">${m['gradecomments']}:</td></tr>
 			<tr><td colspan="2"><textarea cols="60" rows="3" name="comments">${sub['grade_comments']}
