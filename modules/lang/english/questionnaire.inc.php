@@ -134,4 +134,6 @@ $langSurveyDeleteNo = "No";
 
 $langSurveyInfo1 ="Please ass the name of the Poll and how logn you wish it to be available to the users (by default 365 days)";
 $langSurveyInfo2 ="Please confirm that the name of the Poll is correct and that the time period is th edesired. Then you may choose from a the list of COLLES/ATTL questions or add your own question in the blank fields.";
+
+$langQQuestionNotGiven ="You have not entered the text for the last question.";
 ?>

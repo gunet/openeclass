@@ -86,6 +86,27 @@ $head_content = <<<hContent
 <script type="text/javascript">
 <!-- Begin
 
+function checkrequired(which, entry) {
+var pass=true;
+if (document.images) {
+	for (i=0;i<which.length;i++) {
+		var tempobj=which.elements[i];
+		if (tempobj.name == entry) {
+			if (tempobj.type=="text"&&tempobj.value=='') {
+				pass=false;
+				break;
+		  }
+	  }
+	}
+}
+if (!pass) {
+	alert("$langQQuestionNotGiven");
+return false;
+} else {
+return true;
+}
+}
+
 function addEvent(SelectedQuestion) {
 	
 //	alert("CRAP "+SelectedQuestion);
@@ -323,7 +344,7 @@ function printMCQuestionForm() {
 		<table><thead>$langSurveyCreate</thead>
 	<tr><td colspan=2>$langSurveyInfo2</td></tr></table>
 	
-		<form action="addsurvey.php" id="survey" method="post" name="SurveyForm">
+		<form action="addsurvey.php" id="survey" method="post" name="SurveyForm" onSubmit="return checkrequired(this, 'question1')">
 		<input type="hidden" value="1" name="UseCase">
 		<table id="QuestionTable">
 			<tr><td>$langSurveyName</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
@@ -408,7 +429,7 @@ cData;
 		++$NumOfQuestions;
 		
 		$tool_content .= <<<cData
-		<form action="addsurvey.php" id="survey" method="post" name="SurveyForm">
+		<form action="addsurvey.php" id="survey" method="post" name="SurveyForm"  onSubmit="return checkrequired(this, 'questionx')">
 		<input type="hidden" value="1" name="UseCase">
 		<table>
 		<tr><td>$langSurveyName</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
