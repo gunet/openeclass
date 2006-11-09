@@ -81,8 +81,40 @@ default:
    printPollCreationForm();
 }
 
-//draw($tool_content, 2); 
+// Get JS  ******************************************************
+$head_content = <<<hContent
+<script type="text/javascript">
+<!-- Begin
+
+function checkrequired(which, entry) {
+var pass=true;
+if (document.images) {
+	for (i=0;i<which.length;i++) {
+		var tempobj=which.elements[i];
+		if (tempobj.name == entry) {
+			if (tempobj.type=="text"&&tempobj.value=='') {
+				pass=false;
+				break;
+		  }
+	  }
+	}
+}
+if (!pass) {
+	alert("$langQQuestionNotGiven");
+return false;
+} else {
+return true;
+}
+}
+//  End -->
+</script>
+hContent;
+
+if ($UseCase ==1)
+	draw($tool_content, 2, '', $head_content); 
+else	
 draw($tool_content, 2, '', $local_head, '');
+
 
 /*****************************************************************************
 		Prints the new poll creation form
@@ -125,7 +157,7 @@ function printMCQuestionForm() {
 		createMCPoll();
 	} elseif(count($_POST)<5) { // Just entered MC poll cretion dialiog ****************************
 		$tool_content .= <<<cData
-		<form action="addpoll.php" id="poll" method="post">
+		<form action="addpoll.php" id="poll" method="post" onSubmit="return checkrequired(this, 'question1')">
 		<input type="hidden" value="1" name="UseCase">
 		<table>
 			<tr><td>$langPollName</td><td colspan="2"><input type="text" size="50" name="PollName" value="$PollName"></td></tr>
@@ -155,7 +187,7 @@ cData;
 		$NumOfQuestions = $_POST['NumOfQuestions'];
 		
 		$tool_content .= <<<cData
-		<form action="addpoll.php" id="poll" method="post">
+		<form action="addpoll.php" id="poll" method="post" onSubmit="return checkrequired(this, 'questionx')">
 		<input type="hidden" value="1" name="UseCase">
 		<table>
 			<tr><td>$langPollName</td><td colspan="2"><input type="text" size="50" name="PollName" value="$PollName"></td></tr>
@@ -193,7 +225,7 @@ cData;
 		++$NumOfQuestions;
 		
 		$tool_content .= <<<cData
-		<form action="addpoll.php" id="poll" method="post">
+		<form action="addpoll.php" id="poll" method="post"  onSubmit="return checkrequired(this, 'questionx')">
 		<input type="hidden" value="1" name="UseCase">
 		<table>
 		<tr><td>$langPollName</td><td colspan="2"><input type="text" size="50" name="PollName" value="$PollName"></td></tr>
