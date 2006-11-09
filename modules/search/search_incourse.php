@@ -217,13 +217,16 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 
 		
 		$c = 0;	
-		while(@$res = mysql_fetch_array($result))
+		if(mysql_num_rows($result) > 0)
 		{
-			//emfanish apotelesmatos mono gia to yparxon mathima
-			if($res["code_cours"] == $dbname)
+			while($res = mysql_fetch_array($result))
 			{
-				$c++;
-				$tmp_result .= "<li>".$res['contenu'].": ".$res['temps']."<br>";
+				//emfanish apotelesmatos mono gia to yparxon mathima
+				if($res["code_cours"] == $dbname)
+				{
+					$c++;
+					$tmp_result .= "<li>".$res['contenu'].": ".$res['temps']."<br>";
+				}
 			}
 		}
 		if ($c != 0) $tool_content .= $tmp_result."<br>";
@@ -248,10 +251,13 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		$result = mysql_query($myquery);	
 		
 		$c = 0;
-		while(@$res = mysql_fetch_array($result))
+		if(mysql_num_rows($result) > 0)
 		{
-			$c++;
-			$tmp_result .= "<li>".$res['titre'].": ".$res['contenu']."<br>";
+			while(@$res = mysql_fetch_array($result))
+			{
+				$c++;
+				$tmp_result .= "<li>".$res['titre'].": ".$res['contenu']."<br>";
+			}
 		}
 		if ($c != 0) $tool_content .= $tmp_result."<br>";
 
@@ -270,10 +276,13 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		$result = mysql_query($myquery);	
 		
 		$c = 0;
-		while(@$res = mysql_fetch_array($result))
+		if(mysql_num_rows($result) > 0)
 		{
-			$c++;
-			$tmp_result .= "<li>".$res['title'].": ".$res['content']."<br>";
+			while(@$res = mysql_fetch_array($result))
+			{
+				$c++;
+				$tmp_result .= "<li>".$res['title'].": ".$res['content']."<br>";
+			}
 		}
 		if ($c != 0) $tool_content .= $tmp_result."<br>";
 	}
@@ -294,19 +303,22 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		
 			
 		$c = 0;
-		while($res = mysql_fetch_array($result))
+		if(mysql_num_rows($result) > 0)
 		{
-			//apokrypsh twn eggrafwn pou exoun dhkwthei san invisible apo ton aplo mathiti
-			if($is_adminOfCourse)
+			while($res = mysql_fetch_array($result))
 			{
-				$c++;
-				$tmp_result .= "<li><b>".$res['filename']."</b>: (".$res['comment'].")<br>";
-
-			}elseif ($res['visibility'] == "v")
-			{
-				
-				$c++;
-				$tmp_result .= "<li><b>".$res['filename']."</b>: (".$res['comment'].")<br>";
+				//apokrypsh twn eggrafwn pou exoun dhkwthei san invisible apo ton aplo mathiti
+				if($is_adminOfCourse)
+				{
+					$c++;
+					$tmp_result .= "<li><b>".$res['filename']."</b>: (".$res['comment'].")<br>";
+	
+				}elseif ($res['visibility'] == "v")
+				{
+					
+					$c++;
+					$tmp_result .= "<li><b>".$res['filename']."</b>: (".$res['comment'].")<br>";
+				}
 			}
 		}
 		if ($c != 0) $tool_content .= $tmp_result."<br>";
@@ -327,10 +339,13 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		$result = mysql_query($myquery);	
 		
 		$c = 0;
-		while(@$res = mysql_fetch_array($result))
+		if(mysql_num_rows($result) > 0)
 		{
-			$c++;
-			$tmp_result .= "<li>".$res['titre'].": ".$res['description']."<br>";
+			while(@$res = mysql_fetch_array($result))
+			{
+				$c++;
+				$tmp_result .= "<li>".$res['titre'].": ".$res['description']."<br>";
+			}
 		}
 		if ($c != 0) $tool_content .= $tmp_result."<br>";
 	
@@ -348,10 +363,13 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		$result = mysql_query($myquery);	
 		
 		$c = 0;
-		while(@$res = mysql_fetch_array($result))
+		if(mysql_num_rows($result) > 0)
 		{
-			$c++;
-			$tmp_result .= "<li>".$res['post_text']."<br>";
+			while(@$res = mysql_fetch_array($result))
+			{
+				$c++;
+				$tmp_result .= "<li>".$res['post_text']."<br>";
+			}
 		}
 		if ($c != 0) $tool_content .= $tmp_result."<br>";
 		
@@ -370,10 +388,13 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		$result = mysql_query($myquery);
 		
 		$c = 0;
-		while(@$res = mysql_fetch_array($result))
+		if(mysql_num_rows($result) > 0)
 		{
-			$c++;
-			$tmp_result .= "<li>".$res['url'].": ".$res['titre']." (".$res['description'].")<br>";
+			while(@$res = mysql_fetch_array($result))
+			{
+				$c++;
+				$tmp_result .= "<li>".$res['url'].": ".$res['titre']." (".$res['description'].")<br>";
+			}
 		}
 		if ($c != 0) $tool_content .= $tmp_result."<br>";
 		
@@ -393,10 +414,13 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		$result = mysql_query($myquery);
 		
 		$c = 0;
-		while(@$res = mysql_fetch_array($result))
+		if(mysql_num_rows($result) > 0)
 		{
-			$c++;
-			$tmp_result .= "<li>".$res['url'].": ".$res['titre']." (".$res['description'].")<br>";
+			while(@$res = mysql_fetch_array($result))
+			{
+				$c++;
+				$tmp_result .= "<li>".$res['url'].": ".$res['titre']." (".$res['description'].")<br>";
+			}
 		}
 		if ($c != 0) $tool_content .= $tmp_result."<br>";
 		
@@ -413,10 +437,13 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		$result = mysql_query($myquery);	
 		
 		$c = 0;
-		while($res = mysql_fetch_array($result))
+		if(mysql_num_rows($result) > 0)
 		{
-			$c++;
-			$tmp_result .= "<li>".$res['url'].": ".$res['titre']." (".$res['description'].")<br>";
+			while($res = mysql_fetch_array($result))
+			{
+				$c++;
+				$tmp_result .= "<li>".$res['url'].": ".$res['titre']." (".$res['description'].")<br>";
+			}
 		}
 		if ($c != 0) $tool_content .= $tmp_result."<br>";
 		
