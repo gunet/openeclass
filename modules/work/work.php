@@ -730,7 +730,7 @@ cData;
 					<td align="center">${stud_am[0]}</td>
 					<td align="center"><a href="work.php?get=${row['id']}">${row['file_name']}</a></td>
 				<td align="center">${row['submission_date']}</td>
-					<td align="center"><input type="text" value="${row['grade']} " maxlength="3" size="3"
+					<td align="center"><input type="text" value="${row['grade']}" maxlength="3" size="3"
 						name="grades[${row['id']}]"></td>
 				</tr>
 cData;
@@ -951,18 +951,24 @@ function submit_grades($grades_id, $grades)
 		foreach ($grades as $sid => $grade) {
 			$val = mysql_fetch_row(db_query("SELECT grade from assignment_submit WHERE id = '$sid'"));
 			if ($val[0] != $grade) {
-				if (!is_numeric($grade)) {
-					$tool_content .= $langWorkWrongInput;
+				if (!is_numeric($grade)) 
 					$stupid_user = 1;
-				} else {
+			}
+		}
+		
+		if (!$stupid_user) {
+			foreach ($grades as $sid => $grade) {
+				$val = mysql_fetch_row(db_query("SELECT grade from assignment_submit WHERE id = '$sid'"));
+				if ($val[0] != $grade) {
 					db_query("UPDATE assignment_submit SET grade='$grade', 
 						grade_submission_date=NOW(), grade_submission_ip='$REMOTE_ADDR'
 						WHERE id = '$sid'");
 				}
 			}
-		}
-		if (!$stupid_user)
 			show_assignment($grades_id, $langGrades);
+		} else {
+			$tool_content .= $langWorkWrongInput;
+		}
 }
 
 // functions for downloading
