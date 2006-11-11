@@ -82,8 +82,8 @@ table.assign, th.assign, td.assign {
 	color: #green;
 }
 
-th.assign {
-	border : 1px solid orange;
+table.assign {
+	border : 1px solid #a2a2a3; !important;
 }
 
 
