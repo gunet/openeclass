@@ -75,7 +75,68 @@ default:
    printSurveyForm();
 }
 
-draw($tool_content, 2); 
+$head_content = <<<hContent
+<script type="text/javascript">
+<!-- Begin
+
+function checkrequired(which, entry) {
+var pass=true;
+temp_name = "answer1";
+pass_temp = false;
+counter_temp = 0;
+if (document.images) {
+	for (i=0;i<which.length;i++) {
+		var tempobj=which.elements[i];
+		if (tempobj.name.substring(0,6) == entry) {
+
+
+			counter_temp++;
+			//alert("Entered for : "+counter_temp+" "+tempobj.name);
+			if (tempobj.checked) {
+				//alert(counter_temp+" "+tempobj.name+"is checked so pass_temp = true");
+				pass_temp = true;
+		  }
+			
+			
+			if (temp_name != tempobj.name) {
+				//alert("Changing group since "+temp_name+" != "+tempobj.name);
+				counter_temp = 0;
+				if (pass_temp == false) {
+					//alert("Last group was empty so pass = false");
+					pass=false;
+					break;
+				} else {
+					//alert("Last grup was cool so just changing names");
+					temp_name = tempobj.name;
+					if (tempobj.checked) {
+						//alert(counter_temp+" "+tempobj.name+"is checked so pass_temp = true");
+						pass_temp = true;
+		  		} else {
+						pass_temp = false;
+				}
+				}
+			}
+			
+			
+		  
+	  }
+	  pass = pass_temp;
+	}
+}
+if (!pass) {
+	alert("$langQFillInAllQs");
+	return false;
+} else {
+	//alert("All went well I'm submitting form");
+	return true;
+}
+}
+//  End -->
+</script>
+hContent;
+
+//draw($tool_content, 2); 
+draw($tool_content, 2, '', $head_content); 
 
 //function isActive($sid) {
 //	
@@ -108,7 +169,7 @@ $temp_EndDate = mktime(substr($temp_EndDate, 11,2),substr($temp_EndDate, 14,2),s
 $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11,2),substr($temp_CurrentDate, 14,2),substr($temp_CurrentDate, 17,2),substr($temp_CurrentDate, 5,2),substr($temp_CurrentDate, 8,2),substr($temp_CurrentDate, 0,4));
 if (($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
 		$tool_content .= <<<cData
-	<form action="surveyparticipate.php" id="survey" method="post">
+	<form action="surveyparticipate.php" id="survey" method="post" onSubmit="return checkrequired(this, 'answer')">
 		<input type="hidden" value="2" name="UseCase">
 		<input type="hidden" value="$sid" name="sid">
 		
@@ -127,7 +188,7 @@ cData;
 		ORDER BY sqid", $currentCourse);
 		while ($theQuestion = mysql_fetch_array($questions)) {	
 			++$CurrentQuestion;
-			$tool_content .= "<br><br>".$theQuestion["question_text"]."<br>\n";
+			$tool_content .= "\n\n<br><br>".$theQuestion["question_text"]."<br>\n";
 			$tool_content .= "<input type=\"hidden\" value=\"". 
 				$theQuestion["question_text"] .
 				"\" name=\"question" . $CurrentQuestion . "\">";
