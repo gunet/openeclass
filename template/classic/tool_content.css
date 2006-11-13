@@ -18,7 +18,7 @@ h5 {
 	font-size:10px;
 }
 
-a, p {
+a, p, ul {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size:12px;
 }
@@ -30,9 +30,11 @@ a:active, a:visited, a:link{
 
 #tool_title {
 	width:99%;
-	margin-top:30px;
-	margin-bottom:70px;
-	//margin-bottom:30px;
+	margin-top:10px;
+	margin-bottom:10px;
+	//margin-bottomM:30px;
+	background-colorR:yellow;
+	height: 30px;
 }
 
 #tool_title .tool_name{
@@ -140,4 +142,8 @@ table a:hover {
 
 tfoot th, tfoot td {
 	font-size: 85%;
+}
+
+ul.listBullet { 
+	list-style-image: url(img/square_bullet.gif); 
 }
