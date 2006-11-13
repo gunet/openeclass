@@ -1,0 +1,10 @@
+td.category {
+	background: #E6EDF5;
+	color: #4F76A3;
+	font-weight:bold;
+	text-align:left;
+}
+.cellpos{
+	vertical-align:top; 
+	text-align:center;
+}
