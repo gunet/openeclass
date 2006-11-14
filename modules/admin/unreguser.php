@@ -180,7 +180,7 @@ else
 						$tool_content .= "Please unregister the user from the following list of courses:<br><br>";
 						$sql = mysql_query("SELECT a.code, a.intitule, b.statut, a.cours_id 
 						FROM cours AS a LEFT JOIN cours_user AS b ON a.code = b.code_cours
-						WHERE b.user_id = '$u' AND b.statut=5 ORDER BY b.statut, a.faculte");
+						WHERE b.user_id = '$u' AND (b.statut=5 OR b.statut=10) ORDER BY b.statut, a.faculte");
 						// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα 
 						if (mysql_num_rows($sql) > 0) 
 						{
