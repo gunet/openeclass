@@ -291,6 +291,9 @@ function expanded_faculte($facid, $uid) {
 							if ($mycours['p']!="" && $mycours['visible'] == 1) {
 								$requirepassword = $m['code'].": <input type=\"password\" name=\"".$mycours['k']."\" value=\"".$mycours['p']."\">";
 								}
+								else {
+								    $requirepassword = "";
+								}
 							} else {
 								$retString .= "[$langTitular]";
 							}
@@ -298,6 +301,8 @@ function expanded_faculte($facid, $uid) {
 						else {
 							if ($mycours['p']!="" && $mycours['visible'] == 1) {
 								$requirepassword = $m['code'].": <input type=\"password\" name=\"".$mycours['k']."\">";
+							} else {
+							    $requirepassword = "";
 							}
 							if ($mycours["visible"]>0  || isset ($myCourses[$mycours["k"]]["subscribed"]))
 								$retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]'>";
