@@ -472,7 +472,6 @@ if($is_adminOfCourse)
 			
 
 	if (is_dir("$baseWorkDir/$sourceFile")) {
-	echo "F=", $baseWorkDir.$sourceFile, "R=", $renameTo2;
 		my_rename($baseWorkDir.$sourceFile, $renameTo2);
 		update_db_info("update", $sourceFile,
 		   dirname($sourceFile).'/'.$renameTo2);
