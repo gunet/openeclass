@@ -60,41 +60,19 @@
  *
  */
 
-function update_db_info($action, $oldPath, $newPath = "", $isdir = FALSE)
+function update_db_info($action, $oldPath, $newPath = "")
 {
 	$dbTable = "document";
 
-	/*** DELETE ***/
 	if ($action == "delete") {
 		mysql_query("DELETE FROM ".$dbTable." 
 			WHERE path LIKE \"".$oldPath."%\"");
-	}
-
-	/*** UPDATE ***/
-	if ($action = "update") {
-		$newPath = preg_replace('/\/\//', '/', $newPath);
+	} elseif ($action = "update") {
+		$newPath = preg_replace('|/+|', '/', $newPath);
 
 		mysql_query("UPDATE document
-			SET path = '$newPath'
+			SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
 			WHERE path LIKE '$oldPath%'");
-
-/* modified by jexi
-			mysql_query("UPDATE document
-			SET path = CONCAT('$newPath',
-			SUBSTRING(path, LENGTH('$oldPath')+1))
-			WHERE path LIKE '$oldPath%'");
-*/
-		if ($isdir) {
-			$res = mysql_query("SELECT path FROM document
-				WHERE path LIKE '$oldPath/%'");
-			while ($p = mysql_fetch_row($res)) {
-				mysql_query("UPDATE document
-		                        SET path = CONCAT('$newPath',
-		                        SUBSTRING(path, LENGTH('$p[0]')+1))
-                		        WHERE path = '$p[0]'");
-
-			}
-		}
 	}
 }
 

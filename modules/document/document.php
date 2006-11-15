@@ -465,15 +465,21 @@ if($is_adminOfCourse)
     
     //nea methodos metonomasias arxeiwn kanontas update sthn eggrafh pou yparxei sth vash
     //elegxos gia thn yparksh eggrafh sth vash ginetai sto STEP 1
-    if (isset($renameTo2))
-    {
-			$query =  "UPDATE ".$dbTable." SET filename=\"".$renameTo2."\" WHERE path=\"".$sourceFile."\"";
-			//$tool_content .=  "<br><br>".$query."<br><br>";
-			mysql_query($query);
+    if (isset($renameTo2)) {
+	$query =  "UPDATE ".$dbTable." SET filename=\"".$renameTo2."\" WHERE path=\"".$sourceFile."\"";
+	//$tool_content .=  "<br><br>".$query."<br><br>";
+	mysql_query($query);
 			
-			$dialogBox = "<b>$langElRen</b>";
-		
-    	
+
+	if (is_dir("$baseWorkDir/$sourceFile")) {
+	echo "F=", $baseWorkDir.$sourceFile, "R=", $renameTo2;
+		my_rename($baseWorkDir.$sourceFile, $renameTo2);
+		update_db_info("update", $sourceFile,
+		   dirname($sourceFile).'/'.$renameTo2);
+	}
+
+
+	$dialogBox = "<b>$langElRen</b>";
     }
 
 
@@ -515,9 +521,7 @@ if($is_adminOfCourse)
 	        $dialogBox .= "</form>\n";
     	}
     	
-    	
-    	
-    	
+    	    	
     }
 
 
@@ -538,7 +542,7 @@ if($is_adminOfCourse)
     --------------------------------------*/
     if (isset($newDirPath) && isset($newDirName))
     {
-        $newDirName = replace_dangerous_char($newDirName);
+        $newDirName = replace_dangerous_char(trim($newDirName));
 
         if ( check_name_exist($baseWorkDir.$newDirPath."/".$newDirName) )
         {
