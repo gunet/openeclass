@@ -443,13 +443,33 @@ $attempt = count($result);
 $row=mysql_fetch_array($result);
 //$RecordStartDate = ($RecordStartTime_temp = $result[count($result)-1]);
 $RecordStartDate = ($RecordStartTime_temp = $row[count($result)-1]);
+//debug
+//$tool_content .= "<br><br>".substr($RecordStartTime_temp, 11,2)."<br>".
+//	substr($RecordStartTime_temp, 14,2)."<br>".
+//	substr($RecordStartTime_temp, 17,2)."<br>".
+//	substr($RecordStartTime_temp, 5,2)."<br>".
+//	substr($RecordStartTime_temp, 8,2)."<br>".
+//	substr($RecordStartTime_temp, 0,4)."<br><br>";
 $RecordStartTime_temp = mktime(substr($RecordStartTime_temp, 11,2),substr($RecordStartTime_temp, 14,2),substr($RecordStartTime_temp, 17,2),substr($RecordStartTime_temp, 5,2),substr($RecordStartTime_temp, 8,2),substr($RecordStartTime_temp, 0,4));	
+//$tool_content .= "".$RecordStartTime_temp."<br>";	
 $exerciseTimeConstrain=$objExercise->selectTimeConstrain();
 $exerciseTimeConstrain = $exerciseTimeConstrain*60;
 $RecordEndDate = ($SubmitDate = date("Y-m-d H:i:s"));
+//debug
+//$tool_content .= "<br>".$RecordStartDate."<br>";
+//$tool_content .= "<br>".$RecordStartTime_temp ."<br>". $SubmitDate."<br>";
+//$tool_content .= "<br><br>".substr($SubmitDate, 11,2)."<br>".
+//	substr($SubmitDate, 14,2)."<br>".
+//	substr($SubmitDate, 17,2)."<br>".
+//	substr($SubmitDate, 5,2)."<br>".
+//	substr($SubmitDate, 8,2)."<br>".
+//	substr($SubmitDate, 0,4)."<br><br>";
 $SubmitDate = mktime(substr($SubmitDate, 11,2),substr($SubmitDate, 14,2),substr($SubmitDate, 17,2),substr($SubmitDate, 5,2),substr($SubmitDate, 8,2),substr($SubmitDate, 0,4));	
+//$tool_content .= "".$SubmitDate."<br><br><br><br><br>";	
 $OnTime = ($SubmitDate - ($RecordStartTime_temp + $exerciseTimeConstrain));
-if ($OnTime) { // exercise time limit hasn't expired
+if ($OnTime < 0) { // exercise time limit hasn't expired
+	//debug
+	//$tool_content .= "$OnTime = ($SubmitDate - ($RecordStartTime_temp + $exerciseTimeConstrain))"; 
 	$sql="SELECT eurid FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
 	$result = mysql_query($sql);
 	$row=mysql_fetch_array($result);
@@ -459,7 +479,9 @@ if ($OnTime) { // exercise time limit hasn't expired
 	$sql="UPDATE `exercise_user_record` SET RecordEndDate='$RecordEndDate',TotalScore='$totalScore', TotalWeighting='$totalWeighting', attempt='$attempt' WHERE eurid='$eurid'";
 	db_query($sql,$currentCourseID);
 } else {  // not allowed begin again
+	//debug
 	header('Location: exercise_redirect.php');
+	//draw($tool_content, 2);
 	exit();
 }
 
