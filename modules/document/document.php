@@ -472,6 +472,7 @@ if($is_adminOfCourse)
 			
 
 	if (is_dir("$baseWorkDir/$sourceFile")) {
+	echo "F=", $baseWorkDir.$sourceFile, "R=", $renameTo2;
 		my_rename($baseWorkDir.$sourceFile, $renameTo2);
 		update_db_info("update", $sourceFile,
 		   dirname($sourceFile).'/'.$renameTo2);
@@ -1190,7 +1191,8 @@ if($is_adminOfCourse) {
     $tool_content .= "<!-- command list -->
     <thead>";
     
-    if (!empty($dspCurDirName)) $tool_content .= "<tr><th colspan=\"4\"><h3>$dspCurDirName</h3></th></tr>";
+    if (!empty($dspCurDirName)) $tool_content .= "<tr><th colspan=\"4\"><h3>".
+    	make_clickable_path($curDirPath) . "</h3></th></tr>";
     
     $tool_content .= "
     	<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">
@@ -1469,13 +1471,12 @@ if ($curDirName) // if the $curDirName is empty, we're in the root point and we 
     $tool_content .=  "</tr>\n";
 }
 
-
 $tool_content .= "
 <!-- command list -->
 </tr>
 <thead>
 	<tr>
-		<th colspan=\"3\"><h3>$dspCurDirName</h3></th>
+		<th colspan=\"3\"><h3>".make_clickable_path($curDirPath)."</h3></th>
 	</tr>";
 
 
@@ -1614,6 +1615,22 @@ chdir($tmp_cwd);
 
 
 //epipleon functions
+
+function make_clickable_path($path)
+{
+	$cur = '';
+	$out = '';
+	$base = $_SERVER['PHP_SELF'];
+	foreach (explode('/', $path) as $component) {
+		if (empty($component)) {
+			$out = "<a href='$base?openDir=/'>root</a>";
+		} else {
+			$cur .= rawurlencode("/$component");
+			$out .= " &raquo; <a href='$base?openDir=$cur'>$component</a>";
+		}
+	}
+	return $out;
+}
 
 
 //function pou epistrefei tyxaious xarakthres. to orisma $length kathorizei to megethos tou apistrefomenou xarakthra
