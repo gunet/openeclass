@@ -192,7 +192,7 @@ cData;
 	            foreach($Select as $key=>$val)
 	            {
 
-			$tool_content .= "<option value=\"${key}\"><${val['Lettre']}</option>";
+			$tool_content .= "<option value=\"${key}\">${val['Lettre']}</option>";
 
 				}  // end foreach()
 
