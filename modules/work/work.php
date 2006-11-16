@@ -381,8 +381,9 @@ $tool_content .= <<<cData
 	<td><input type="text" name="title" size="55" value="${row['title']}" style="width: 100%"></td></tr>
 <tr><td>${m['description']}:</td>
 	<td>
-<textarea id="ta" name="desc" value="${row['description']}" style="width:100%" rows="20" cols="60">
-${row['description']}</textarea>
+<textarea id='ta' name='desc' value='${row['description']}' style='width:100%' rows='20' cols='60'>
+${row['description']}
+</textarea>
 	</td></tr>
 	<tr><td>${m['comments']}:</td>
 	<td><textarea name="comments" rows="5" cols="65">${row['comments']}</textarea></td></tr>
