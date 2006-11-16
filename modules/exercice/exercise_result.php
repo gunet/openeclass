@@ -458,8 +458,32 @@ if ($OnTime < 0) { // exercise time limit hasn't expired
 	$sql="UPDATE `exercise_user_record` SET RecordEndDate='$RecordEndDate',TotalScore='$totalScore', TotalWeighting='$totalWeighting', attempt='$attempt' WHERE eurid='$eurid'";
 	db_query($sql,$currentCourseID);
 } else {  // not allowed begin again
-	header('Location: exercise_redirect.php');
-	exit();
+	//header('Location: exercise_redirect.php');
+	//exit();
+	// if the object is not in the session
+	if(!session_is_registered('objExercise')) {
+		// construction of Exercise
+		$objExercise=new Exercise();
+	
+		// if the specified exercise doesn't exist or is disabled
+		//if(!$objExercise->read($exerciseId) || (!$objExercise->selectStatus() && !$is_allowedToEdit))
+		if(!$objExercise->read($exerciseId) && (!$is_allowedToEdit))
+			{
+			die($langExerciseNotFound);
+		}
+	
+		// saves the object into the session
+		session_register('objExercise');
+}
+
+		$tool_content = <<<cData
+	<h3>${exerciseTitle}</h3>
+	<p>${langExerciseExpired}<a href="exercice.php">${langExerciseLis}</a></p>
+cData;
+
+draw($tool_content, 2);
+exit();
+
 }
 
 
