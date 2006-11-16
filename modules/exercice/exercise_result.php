@@ -443,7 +443,6 @@ $attempt = count($result);
 $row=mysql_fetch_array($result);
 $RecordStartDate = ($RecordStartTime_temp = $row[count($result)-1]);
 $RecordStartTime_temp = mktime(substr($RecordStartTime_temp, 11,2),substr($RecordStartTime_temp, 14,2),substr($RecordStartTime_temp, 17,2),substr($RecordStartTime_temp, 5,2),substr($RecordStartTime_temp, 8,2),substr($RecordStartTime_temp, 0,4));	
-//$tool_content .= "".$RecordStartTime_temp."<br>";	
 $exerciseTimeConstrain=$objExercise->selectTimeConstrain();
 $exerciseTimeConstrain = $exerciseTimeConstrain*60;
 $RecordEndDate = ($SubmitDate = date("Y-m-d H:i:s"));
