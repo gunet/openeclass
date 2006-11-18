@@ -237,11 +237,14 @@ function createQueries($queryParam){
 			$dateVar = $date;
 		}
 
-		$announce_query[$i] = "SELECT contenu, temps FROM " .$mysqlMainDb." . annonces
-									WHERE code_cours='" . $lesson_code[$i] . "'
-									AND DATE_FORMAT(temps,'%Y %m %d') >='" .$dateVar."'
-									ORDER BY temps DESC
-									";
+		$announce_query[$i] = "SELECT contenu, temps 
+								FROM " .$mysqlMainDb." . annonces, ".$lesson_code[$i].".accueil
+								WHERE code_cours='" . $lesson_code[$i] . "'
+								AND DATE_FORMAT(temps,'%Y %m %d') >='" .$dateVar."'
+								AND ".$lesson_code[$i].".accueil.visible =1
+								AND ".$lesson_code[$i].".accueil.id =7
+								ORDER BY temps DESC
+								";
 	}
 
 	return $announce_query;

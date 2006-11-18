@@ -225,7 +225,8 @@ function createForumQueries($dateVar){
 						FROM    	forums,
 									topics,
 									posts,
-									posts_text
+									posts_text,
+									accueil
 			
 						WHERE 	
 						CONCAT(topics.topic_title, posts_text.post_text) != \'\'
@@ -236,6 +237,9 @@ function createForumQueries($dateVar){
 						AND 	posts.topic_id	= topics.topic_id	
 
 						AND	DATE_FORMAT(posts.post_time, \'%Y %m %d\') >= "'.$dateVar.'"
+						
+						AND accueil.visible =1
+						AND accueil.id =9
 			
 						ORDER BY posts.post_time ';
 	return $forum_query;

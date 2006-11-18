@@ -56,12 +56,14 @@ function getUserAssignments($param, $type) {
 
 	for ($i=0;$i<$max_repeat_val;$i++) {
 
-		$assignments_query[$i] = "SELECT assignments.id, assignments.title, assignments.description, assignments.deadline,
+		$assignments_query[$i] = "SELECT DISTINCT assignments.id, assignments.title, assignments.description, assignments.deadline, 
 									cours.intitule,(TO_DAYS(assignments.deadline) - TO_DAYS(NOW())) AS days_left
-										FROM  ".$lesson_code[$i].".assignments, ".$mysqlMainDb.".cours
+										FROM  ".$lesson_code[$i].".assignments, ".$mysqlMainDb.".cours, ".$lesson_code[$i].".accueil
 										WHERE (TO_DAYS(deadline) - TO_DAYS(NOW())) >= '0'
-										AND assignments.active = '1'
+										AND assignments.active = 1
 										AND cours.code = '".$lesson_code[$i]."'
+										AND ".$lesson_code[$i].".accueil.visible =1
+										AND ".$lesson_code[$i].".accueil.id =5
 										ORDER BY deadline";
 
 	}

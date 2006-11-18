@@ -233,9 +233,11 @@ function createDocsQueries($queryParam){
 		}
 
 		$docs_query[$i] = "SELECT path, filename, title, date_modified
-								FROM document
+								FROM document, accueil
 								WHERE visibility = 'v'
 								AND DATE_FORMAT(date_modified,'%Y %m %d') >='" .$dateVar."'
+								AND accueil.visible =1
+								AND accueil.id =3
 								ORDER BY date_modified DESC
 									";
 
