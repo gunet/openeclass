@@ -34,6 +34,7 @@
                   exercice/exercice.php, but it is modified for the 
                   displaying needs of the learning path tool. The core 
                   application logic remains the same.
+                  It also contains a replicate from exercice/exercise.lib.php
 
     @Comments:
  
@@ -436,7 +437,7 @@ cData;
 	            foreach($Select as $key=>$val)
 	            {
 
-			echo "<option value=\"${key}\"><${val['Lettre']}</option>";
+			echo "<option value=\"${key}\">${val['Lettre']}</option>";
 
 				}  // end foreach()
 
