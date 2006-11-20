@@ -59,7 +59,6 @@ $t = 0;
 
 if(empty($doit))
 {
-	//$tool_content .= "<h4>$langConfirmDelete</h4><p>$langConfirmDeleteQuestion1 <em>$un</em>";
 	$tool_content .= "<h4>$langConfirmDelete</h4><p>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em>";
 	if(!empty($c)) 
 	{
@@ -67,8 +66,8 @@ if(empty($doit))
 	}
 	$tool_content .= "$langQueryMark</p>
 		<ul>
-		<li>Ναι: <a href=\"unreguser.php?u=$u&c=$c&doit=yes\">$langDelete!</a><br>&nbsp;</li>
-		<li>Όχι: <a href=\"edituser.php?u=$u\">Επεξεργασία Χρήστη $u_account</a>&nbsp;&nbsp;&nbsp;<a href=\"index.php\">$back</a></li>
+		<li>$langYes: <a href=\"unreguser.php?u=$u&c=$c&doit=yes\">$langDelete!</a><br>&nbsp;</li>
+		<li>$langNo: <a href=\"edituser.php?u=$u\">$langEditUser $u_account</a>&nbsp;&nbsp;&nbsp;<a href=\"index.php\">$back</a></li>
 		</ul>";	
 } 
 else 
@@ -77,7 +76,7 @@ else
 	{
 		$conn = mysql_connect($mysqlServer, $mysqlUser, $mysqlPassword);
 		if (!mysql_select_db($mysqlMainDb, $conn))
-	                die("Cannot select database");
+	                die("Cannot select database");  
 		if(empty($c)) 
 		{
 			if ($u == 1) 
@@ -91,7 +90,7 @@ else
 				$total = mysql_num_rows($q1);
 				if((!empty($total)) && ($total>0))		// means the the user has courses, so it is not allowed to delete
 				{
-					$tool_content .= "You are not allowed to delete the user <em>$u_realname ($u_account)</em><br>";
+					$tool_content .= "$langUnregForbidden <em>$u_realname ($u_account)</em><br>";
 					$v = 0;	$s = 0;
 					for ($p = 0; $p < mysql_num_rows($q1); $p++) 
 				  {
@@ -112,7 +111,7 @@ else
 						if($s>0)
 						{
 							//display list
-							$tool_content .= "Please unregister the user from the following list of courses:<br><br>";
+							$tool_content .= "$langUnregFirst <br><br>";
 							$sql = mysql_query("SELECT a.code, a.intitule, b.statut, a.cours_id, b.tutor 
 							FROM cours AS a LEFT JOIN cours_user AS b ON a.code = b.code_cours
 							WHERE b.user_id = '$u' AND b.tutor=0 ORDER BY b.statut, a.faculte");
@@ -148,7 +147,7 @@ else
 						}
 						else
 						{
-							$tool_content .= "You are not allowed to delete this user. This user is a teacher in this list of courses:<br>";
+							$tool_content .= "$langUnregTeacher<br>";
 							$sql = mysql_query("SELECT a.code, a.intitule, b.statut, a.cours_id 
 							FROM cours AS a LEFT JOIN cours_user AS b ON a.code = b.code_cours
 							WHERE b.user_id = '$u' AND b.statut=1 ORDER BY b.statut, a.faculte");
@@ -177,7 +176,7 @@ else
 					else
 					{
 						// display list
-						$tool_content .= "Please unregister the user from the following list of courses:<br><br>";
+						$tool_content .= "$langUnregFirst <br><br>";
 						$sql = mysql_query("SELECT a.code, a.intitule, b.statut, a.cours_id 
 						FROM cours AS a LEFT JOIN cours_user AS b ON a.code = b.code_cours
 						WHERE b.user_id = '$u' AND (b.statut=5 OR b.statut=10) ORDER BY b.statut, a.faculte");
@@ -273,9 +272,8 @@ else
 				$tool_content .= "$langErrorDelete";
 		}
 		$tool_content .= "<br>&nbsp;";
-		if((isset($m)) && (!empty($m)))
-		{
-			$tool_content .= "<br><a href=\"edituser.php?u=$u\">Επεξεργασία Χρήστη $u_account</a>&nbsp;&nbsp;&nbsp;";
+		if((isset($m)) && (!empty($m))) {
+			$tool_content .= "<br><a href=\"edituser.php?u=$u\">$langEditUser $u_account</a>&nbsp;&nbsp;&nbsp;";
 		}
 		$tool_content .= "<a href=\"./index.php\">$langBackAdmin</a>.<br />\n";
 	}

@@ -352,4 +352,9 @@ $langRegistrationError = "Error! Return to platform home page.";
 
 $langCharactersNotAllowed = "Not allowed characters in username and password:  ',\" or \\";
 $star2 = "Fields with (**): ";
+
+$langEditUser = "Edit User";
+$langUnregForbidden = "You are not allowed to delete the user";
+$langUnregFirst = "You should unregister the user from the following list of courses:";
+$langUnregTeacher = "User is a teacher in the following courses:";
 ?>

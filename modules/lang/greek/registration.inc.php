@@ -155,8 +155,8 @@ $langUserRights="Δικαιώματα χρηστών";
 $langNow="τώρα";
 $langOneByOne="Προσθήκη χρήστη";
 $langUserMany="Εισαγωγή καταλόγου χρηστών μέσω αρχείων κειμένου";
-$langNo="όχι";
-$langYes="ναι";
+$langNo="Όχι";
+$langYes="Ναι";
 $langUserAddExplanation="κάθε γραμμή του αρχείου που θα στείλετε θα περιέχει 5 πεδία:
          <b>Όνομα&nbsp;&nbsp;&nbsp;Επίθετο&nbsp;&nbsp;&nbsp;
         Όνομα Χρήστη&nbsp;&nbsp;&nbsp;Συνθηματικό&nbsp;
@@ -321,5 +321,10 @@ $langRegistrationError = "Λάθος Ενέργεια. Επιστρέψτε στην αρχική σελίδα της πλατ
 
 $langCharactersNotAllowed = "Δεν επιτρέπονται στο password και στο username, οι χαρακτήρες: ',\" ή \\";
 $star2 = "Στα πεδία με (**) ";
+
+$langEditUser = "Επεξεργασία στοιχείων χρήστη";
+$langUnregForbidden = "Δεν επιτρέπεται να διαγράψετε τον χρήστη:";
+$langUnregFirst = "Θα πρέπει να διαγράψετε πρώτα τον χρήστη από τα παρακάτω μαθήματα:";
+$langUnregTeacher = "Είναι εκπαιδευτής στα παρακάτω μαθήματα:";
 
 ?>
