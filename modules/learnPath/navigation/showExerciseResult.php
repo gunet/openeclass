@@ -445,7 +445,6 @@ $sql="SELECT RecordStartDate FROM `exercise_user_record` WHERE eid='$eid' AND ui
 $result=mysql_query($sql);
 $attempt = count($result);
 $row=mysql_fetch_array($result);
-//$RecordStartDate = ($RecordStartTime_temp = $result[count($result)-1]);
 $RecordStartDate = ($RecordStartTime_temp = $row[count($result)-1]);
 $RecordStartTime_temp = mktime(substr($RecordStartTime_temp, 11,2),substr($RecordStartTime_temp, 14,2),substr($RecordStartTime_temp, 17,2),substr($RecordStartTime_temp, 5,2),substr($RecordStartTime_temp, 8,2),substr($RecordStartTime_temp, 0,4));	
 $exerciseTimeConstrain=$objExercise->selectTimeConstrain();
@@ -453,7 +452,7 @@ $exerciseTimeConstrain = $exerciseTimeConstrain*60;
 $RecordEndDate = ($SubmitDate = date("Y-m-d H:i:s"));
 $SubmitDate = mktime(substr($SubmitDate, 11,2),substr($SubmitDate, 14,2),substr($SubmitDate, 17,2),substr($SubmitDate, 5,2),substr($SubmitDate, 8,2),substr($SubmitDate, 0,4));	
 $OnTime = ($SubmitDate - ($RecordStartTime_temp + $exerciseTimeConstrain));
-if ($OnTime) { // exercise time limit hasn't expired
+if ($OnTime < 0) { // exercise time limit hasn't expired
 	$sql="SELECT eurid FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
 	$result = mysql_query($sql);
 	$row=mysql_fetch_array($result);
@@ -463,8 +462,32 @@ if ($OnTime) { // exercise time limit hasn't expired
 	$sql="UPDATE `exercise_user_record` SET RecordEndDate='$RecordEndDate',TotalScore='$totalScore', TotalWeighting='$totalWeighting', attempt='$attempt' WHERE eurid='$eurid'";
 	db_query($sql,$currentCourseID);
 } else {  // not allowed begin again
-	header('Location: ../../exercice/exercise_redirect.php');
-	exit();
+	//header('Location: exercise_redirect.php');
+	//exit();
+	// if the object is not in the session
+	if(!session_is_registered('objExercise')) {
+		// construction of Exercise
+		$objExercise=new Exercise();
+	
+		// if the specified exercise doesn't exist or is disabled
+		//if(!$objExercise->read($exerciseId) || (!$objExercise->selectStatus() && !$is_allowedToEdit))
+		if(!$objExercise->read($exerciseId) && (!$is_allowedToEdit))
+			{
+			die($langExerciseNotFound);
+		}
+	
+		// saves the object into the session
+		session_register('objExercise');
+}
+
+		echo <<<cData
+	<h3>${exerciseTitle}</h3>
+	<p>${langExerciseExpired}<a href="../../exercice/exercice.php">${langExerciseLis}</a></p>
+cData;
+
+//draw($tool_content, 2);
+exit();
+
 }
 
 
