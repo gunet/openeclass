@@ -140,8 +140,7 @@ if($is_adminOfCourse) {
 					<td><input type=\"text\" name=\"title\" size=\"50\" value=\"
 					".@htmlspecialchars($title)."\"></td></tr>";
 		$tool_content .=  	"<tr><th>".$langDescription." :</th>
-					<td><textarea wrap=\"physical\" rows=\"3\" cols=\"50\" name=\"description\">
-					".trim(@htmlspecialchars($description))."</textarea></td></tr>";
+					<td><textarea wrap=\"physical\" rows=\"3\" cols=\"50\" name=\"description\">".trim(@htmlspecialchars($description))."</textarea></td></tr>";
 
 		$tool_content .= 	"<tr><th>".$langCategory." :</th><td>
 					<select name=\"selectcategory\">";
