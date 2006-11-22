@@ -396,7 +396,7 @@ if($is_adminOfCourse) // check teacher status
 			{
 				$tool_content .=  "
 						<a href=\"$_SERVER[PHP_SELF]?up=".$myrow["id"]."\">
-							<img class=\"displayed\" src=../../images/up.gif border=0 alt=\"Up\">
+							<img class=\"displayed\" src=../../template/classic/img/up.gif border=0 alt=\"Up\">
 						</a>";
 			}
 
@@ -406,7 +406,7 @@ if($is_adminOfCourse) // check teacher status
 			{
 				$tool_content .=  "
 						<a href=\"$_SERVER[PHP_SELF]?down=".$myrow["id"]."\">
-							<img class=\"displayed\" src=../../images/down.gif border=0 alt=\"Down\">
+							<img class=\"displayed\" src=../../template/classic/img/down.gif border=0 alt=\"Down\">
 						</a>";
 			}
 
