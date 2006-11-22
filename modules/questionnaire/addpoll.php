@@ -64,6 +64,9 @@ include '../../include/baseTheme.php';
 // For using with th epop-up calendar
 include 'jscalendar.inc.php';
 
+$nameTools = $langPollCreate;
+$navigation[] = array("url"=>"questionnaire.php", "name"=> $langQuestionnaire);
+
 $tool_content = "";
 
 
