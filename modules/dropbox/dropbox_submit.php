@@ -161,8 +161,8 @@ if (isset($_POST["submitWork"]))
     if (!$error)
     {$cwd = getcwd();
 	if (is_dir($dropbox_cnf["sysPath"]))
-		$dropbox_space = dir_total_space($dropbox_cnf["sysPath"]);
-	$dropbox_filename = $_FILES['file']['name'];
+				$dropbox_space = dir_total_space($dropbox_cnf["sysPath"]);
+				$dropbox_filename = $_FILES['file']['name'];
         $dropbox_filesize = $_FILES['file']['size'];
         $dropbox_filetype = $_FILES['file']['type'];
         $dropbox_filetmpname = $_FILES['file']['tmp_name'];
@@ -219,12 +219,6 @@ if (isset($_POST["submitWork"]))
 				$dropbox_filename = $uid . "_" . $dropbox_filename . "_".uniqid(''); 
 			}
                         
-			if ((!is_dir($dropbox_cnf["sysPath"])))
-            {
-		//The dropbox subdir doesn't exist yet so make it
-                mkdir($dropbox_cnf["sysPath"], 0700);
-            }
-
 	if ($error) {}
             elseif ($thisIsAMailing)  // RH: $newWorkRecipients is integer - see class
 			{

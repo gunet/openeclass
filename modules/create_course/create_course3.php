@@ -1973,6 +1973,7 @@ mysql_query("INSERT INTO cours_faculte SET
     mkdir("../../courses/$repertoire", 0777);
     mkdir("../../courses/$repertoire/image", 0777);
     mkdir("../../courses/$repertoire/document", 0777);
+    mkdir("../../courses/$repertoire/dropbox", 0777);
     mkdir("../../courses/$repertoire/page", 0777);
     mkdir("../../courses/$repertoire/work", 0777);
     mkdir("../../courses/$repertoire/group", 0777);
