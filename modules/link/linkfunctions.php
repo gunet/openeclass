@@ -302,14 +302,14 @@ function showlinksofcategory($catid)
 			if ($i!=1)
 			{
 				$tool_content .= 	"<a href=\"$_SERVER[PHP_SELF]?urlview=".$urlview."&up=".$myrow["id"]."\">
-					<img src=../../images/up.gif border=0 alt=\"Up\">
+					<img src=../../template/classic/img/up.gif border=0 alt=\"Up\">
 					</a>\n";
 			}
 			// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link
 			if($i < $numberoflinks)
 			{
 				$tool_content .= 	"<a href=\"$_SERVER[PHP_SELF]?urlview=".$urlview."&down=".$myrow["id"]."\">
-						<img src=\"../../images/down.gif\" border=\"0\" alt=\"Down\">
+						<img src=\"../../template/classic/img/down.gif\" border=\"0\" alt=\"Down\">
 						</a>\n";
 			}
 		}
