@@ -197,7 +197,6 @@ elseif (isset($_REQUEST['fill'])) {
 			while (list(,$idUser)=each($users))
 			{
 				$sqlInsert ="INSERT INTO user_group SET user = '".$idUser."',team = '".$idGroup."';";
-				echo $sqlInsert;
 				db_query($sqlInsert);
 			}
 		}
