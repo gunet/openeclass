@@ -107,7 +107,7 @@ draw($tool_content,3, 'admin');
  *
  * @returns a resource identifier or FALSE if the query was not executed correctly. 
  * @author KilerCris@Mail.com original function from  php manual 
- * @author Christophe Gesché gesche@ipm.ucl.ac.be Claroline Team 
+ * @author Christophe Gesche gesche@ipm.ucl.ac.be Claroline Team 
  * @since  28-Aug-2001 09:12 
  * @param sting		$path 		wanted path 
  * @param boolean	$verbose	fix if comments must be printed

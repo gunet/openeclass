@@ -5,7 +5,7 @@
         E-learning and Course Management Program  
 ================================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
-        Á full copyright notice can be read in "/info/copyright.txt".
+        A full copyright notice can be read in "/info/copyright.txt".
         
        	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
                      Yannis Exidaridis <jexi@noc.uoa.gr> 
@@ -34,7 +34,7 @@
 	      
 	      original file: learnPath.lib.inc.php Revision: 1.41.2.2
 	      
-	Claroline authors: Piraux Sébastien <pir@cerdecam.be>
+	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
                       Lederer Guillaume <led@cerdecam.be>
 ==============================================================================        
     @Description: This functions library is used by most of the pages of the 
@@ -110,7 +110,7 @@ define ( 'LEARNINGPATHMODULE_', 4 );
  * @param string $mode DISPLAY_ , UPDATE_ , DELETE_
  *
  * @author Thanos Kyritsis <atkyritsis@upnet.gr>
- * @author Piraux Sébastien <pir@cerdecam.be>
+ * @author Piraux Sebastien <pir@cerdecam.be>
  * @author Lederer Guillaume <led@cerdecam.be>
  */
 function commentBox($type, $mode)
@@ -273,7 +273,7 @@ function commentBox($type, $mode)
   * @param string $formlabel label for displaying in the form
   *
   * @author Thanos Kyritsis <atkyritsis@upnet.gr>
-  * @author Piraux Sébastien <pir@cerdecam.be>
+  * @author Piraux Sebastien <pir@cerdecam.be>
   * @author Lederer Guillaume <led@cerdecam.be>
   */
 function nameBox($type, $mode, $formlabel = FALSE)
@@ -397,7 +397,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
   * @return string name of the image with extension
   *
   * @author Thanos Kyritsis <atkyritsis@upnet.gr>
-  * @author Piraux Sébastien <pir@cerdecam.be>
+  * @author Piraux Sebastien <pir@cerdecam.be>
   * @author Lederer Guillaume <led@cerdecam.be>
   */
  function selectImage($contentType)
@@ -424,7 +424,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
   *
   * @param  string $contentType type of content in learning path
   * @return string text for the alt
-  * @author Piraux Sébastien <pir@cerdecam.be>
+  * @author Piraux Sebastien <pir@cerdecam.be>
   * @author Lederer Guillaume <led@cerdecam.be>
   */
  function selectAlt($contentType)
@@ -453,7 +453,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
  *
  * @return array an array of the sorted list of ids
  *
- * @author Piraux Sébastien <pir@cerdecam.be>
+ * @author Piraux Sebastien <pir@cerdecam.be>
  * @author Lederer Guillaume <led@cerdecam.be>
  */
 function setOrderTab ( $formValuesTab )
@@ -501,7 +501,7 @@ function setOrderTab ( $formValuesTab )
  * @param string $var input to check
  * @return bool true if $var is a number, false otherwise
  *
- * @author Piraux Sébastien <pir@cerdecam.be>
+ * @author Piraux Sebastien <pir@cerdecam.be>
  */
 function is_num($var)
 {
@@ -726,7 +726,7 @@ function get_learnPath_progress($lpid, $lpUid)
  * @param string $dialogBox Error or confirmation text
  *
  * @author Thanos Kyritsis <atkyritsis@upnet.gr>
- * @author Piraux Sébastien <pir@cerdecam.be>
+ * @author Piraux Sebastien <pir@cerdecam.be>
  * @author Lederer Guillaume <led@cerdecam.be>
  */
 function display_my_exercises($dialogBox, $style)
@@ -853,7 +853,7 @@ function display_my_exercises($dialogBox, $style)
   * @return nothing
   *
   * @author Thanos Kyritsis <atkyritsis@upnet.gr>
-  * @author Piraux Sébastien <pir@cerdecam.be>
+  * @author Piraux Sebastien <pir@cerdecam.be>
   * @author Lederer Guillaume <led@cerdecam.be>
   */
 
@@ -1067,7 +1067,7 @@ function display_my_documents($dialogBox, $style)
  * @param integer $id id_of_module that we are looking for deep
  * @param array $searchInarray of parents of modules in a learning path $searchIn[id_of_module] = parent_of_this_module
  *
- * @author Piraux Sébastien <pir@cerdecam.be>
+ * @author Piraux Sebastien <pir@cerdecam.be>
  */
 function find_deep($id, $searchIn)
 {
@@ -1088,7 +1088,7 @@ function find_deep($id, $searchIn)
  * @param $id learnPath_module_id of the node to build
  * @return tree of the learning path 
  *
- * @author Piraux Sébastien <pir@cerdecam.be>     
+ * @author Piraux Sebastien <pir@cerdecam.be>     
  */
 function build_element_list($list, $parentField, $idField, $id = 0)
 {
@@ -1136,7 +1136,7 @@ function build_element_list($list, $parentField, $idField, $id = 0)
  * @return array containing infos of the learningpath, each module is an element 
     of this array and each one has 'up' and 'down' boolean and deepness added in
  *
- * @author Piraux Sébastien <pir@cerdecam.be>
+ * @author Piraux Sebastien <pir@cerdecam.be>
  */
 function build_display_element_list($elementList, $deepness = 0)
 {
@@ -1186,7 +1186,7 @@ function build_display_element_list($elementList, $deepness = 0)
  * @param $module_tree tree of modules we want to change the visibility
  * @param $visibility ths visibility string as requested by the DB
  *
- * @author Piraux Sébastien <pir@cerdecam.be>
+ * @author Piraux Sebastien <pir@cerdecam.be>
  */
 function set_module_tree_visibility($module_tree, $visibility)
 {
@@ -1213,7 +1213,7 @@ function set_module_tree_visibility($module_tree, $visibility)
  *
  * @param $module_tree tree of modules we want to change the visibility
  *
- * @author Piraux Sébastien <pir@cerdecam.be>
+ * @author Piraux Sebastien <pir@cerdecam.be>
  */
 function delete_module_tree($module_tree)
 {
@@ -1261,7 +1261,7 @@ function delete_module_tree($module_tree)
  * @return array the requesting node (with all its children)
  *
  * @author Thanos Kyritsis <atkyritsis@upnet.gr>
- * @author Piraux Sébastien <pir@cerdecam.be>
+ * @author Piraux Sebastien <pir@cerdecam.be>
  */
 function get_module_tree( $lpModules , $id, $field = 'module_id')
 {
@@ -1285,7 +1285,7 @@ function get_module_tree( $lpModules , $id, $field = 'module_id')
 /**
  * Convert the time recorded in seconds to a scorm type 
  *
- * @author Piraux Sébastien <pir@cerdecam.be>
+ * @author Piraux Sebastien <pir@cerdecam.be>
  * @param $time time in seconds to convert to a scorm type time
  * @return string compatible scorm type (smaller format)
  */
@@ -1550,7 +1550,7 @@ function addScormTime($time1, $time2)
  * @param $str string original string
  * @return string cleaned string
  *
- * @author Piraux Sébastien <pir@cerdecam.be>
+ * @author Piraux Sebastien <pir@cerdecam.be>
  *
  */
 function clean_str_for_javascript( $str )

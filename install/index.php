@@ -4,7 +4,7 @@
 *       E-learning and Course Management Program
 * ===========================================================================
 *	Copyright(c) 2003-2006  Greek Universities Network - GUnet
-*	Á full copyright notice can be read in "/info/copyright.txt".
+*	A full copyright notice can be read in "/info/copyright.txt".
 *
 *  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
 *				Yannis Exidaridis <jexi@noc.uoa.gr>
@@ -1356,7 +1356,7 @@ CREATE TABLE `auth` (
         E-learning and Course Management Program
 ================================================================================
         Copyright(c) 2003-2006  Greek Universities Network - GUnet
-        Á full copyright notice can be read in "/info/copyright.txt".
+        A full copyright notice can be read in "/info/copyright.txt".
 
            Authors:     Costas Tsibanis <k.tsibanis@noc.uoa.gr>
                     Yannis Exidaridis <jexi@noc.uoa.gr>
@@ -1689,7 +1689,7 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) áëëÜ
  *
  * @params string	$extentionName 		name  of  php extention to be checked
  * @params boolean	$echoWhenOk			true => show ok when  extention exist
- * @author Christophe Gesché
+ * @author Christophe Gesche
  * @desc check extention and  write  if exist  in a  <LI></LI>
  *
  */

@@ -5,7 +5,7 @@
         E-learning and Course Management Program  
 ================================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
-        Á full copyright notice can be read in "/info/copyright.txt".
+        A full copyright notice can be read in "/info/copyright.txt".
         
        	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
                      Yannis Exidaridis <jexi@noc.uoa.gr> 
@@ -34,7 +34,7 @@
 	      
 	      original file: tracking/learnPath_detailsAllPath.php Revision: 1.11
 	      
-	Claroline authors: Piraux Sébastien <pir@cerdecam.be>
+	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
                       Gioacchino Poletto <info@polettogioacchino.com>
 ==============================================================================        
     @Description: This script displays the stats of all users of a course 

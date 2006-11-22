@@ -7,7 +7,7 @@
       +----------------------------------------------------------------------+
       | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
       |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-      |          Christophe Gesché <gesche@ipm.ucl.ac.be>                    |
+      |          Christophe Gesche <gesche@ipm.ucl.ac.be>                    |
       +----------------------------------------------------------------------+
  */
 
@@ -87,7 +87,7 @@ function make_clickable($text)
 /**
  * formats the date according to the locale settings
  *
- * @author  Christophe Gesché <gesche@ipm.ucl.ac.be>
+ * @author  Christophe Gesche <gesche@ipm.ucl.ac.be>
  *          originally inspired from from PhpMyAdmin
  *
  * @params  string  $formatOfDate date pattern

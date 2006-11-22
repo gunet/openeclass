@@ -27,7 +27,7 @@
       +----------------------------------------------------------------------+
       | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
       |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-      |          Christophe Gesché <gesche@ipm.ucl.ac.be>                    |
+      |          Christophe Gesche <gesche@ipm.ucl.ac.be>                    |
       +----------------------------------------------------------------------+
       | Translator :                                                         |
       |          Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |

@@ -5,7 +5,7 @@
         E-learning and Course Management Program  
 ================================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
-        Á full copyright notice can be read in "/info/copyright.txt".
+        A full copyright notice can be read in "/info/copyright.txt".
         
        	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
                      Yannis Exidaridis <jexi@noc.uoa.gr> 
@@ -34,7 +34,7 @@
 	      
 	      original file: startModule.php Revision: 1.21.2.1
 	      
-	Claroline authors: Piraux Sébastien <pir@cerdecam.be>
+	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
                       Lederer Guillaume <led@cerdecam.be>
 ==============================================================================        
     @Description: This script is the main page loaded when user start viewing 

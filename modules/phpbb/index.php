@@ -31,7 +31,7 @@
         based on Claroline version 1.7 licensed under GPL
               copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
 
-        Claroline authors: Piraux Sébastien <pir@cerdecam.be>
+        Claroline authors: Piraux Sebastien <pir@cerdecam.be>
                       Lederer Guillaume <led@cerdecam.be>
 
 	based on phpBB version 1.4.1 licensed under GPL

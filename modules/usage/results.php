@@ -1,6 +1,6 @@
 <?php
 /*
- * Created on 1 Ιουν 2006
+ * Created on 1 June 2006
  *
  * To change the template for this generated file go to
  * Window - Preferences - PHPeclipse - PHP - Code Templates
