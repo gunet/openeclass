@@ -50,7 +50,7 @@ $langVisitsStats        = "Visits statistics";
 $langMonthlyReport      = "Monthly reports";
 $langReport             = "Report for month ";
 $langNoReport           = "No data exist for month ";
-
+$langEmailNotSend = "Error sending mail to";
 
 $langUnregUser = "Unregister User";
 $langListCours = "Courses List / Actions";

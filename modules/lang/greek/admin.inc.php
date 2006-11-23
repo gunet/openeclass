@@ -18,6 +18,7 @@ $langVisitsStats        = "Στατιστικά επισκέψεων";
 $langMonthlyReport      = "Μηνιαίες αναφορές";
 $langReport             = "Αναφορά για το μήνα ";
 $langNoReport           = "Δεν υπάρχουν διαθέσιμα στοιχεία για το μήνα ";
+$langEmailNotSend = "Σφάλμα κατά την αποστολή e-mail στη διεύθυνση";
 
 $langListCours = "Λίστα Μαθημάτων / Ενέργειες";
 $langListUsers = "Λίστα Χρηστών / Ενέργειες";
@@ -155,7 +156,6 @@ $langProfessors = "Εκπαιδευτές";
 $langListRegisteredStudents = "Λίστα Εγγεγραμμένων Εκπαιδευομένων";
 $langListRegisteredProfessors = "Λίστα Εγγεγραμμένων Εκπαιδευτών";
 
-// clarconf.php
 $langClaroConf = "Configuration File του e-Class";
 $langFileUpdatedSuccess = "Το αρχείο ρυθμίσεων τροποποιήθηκε με επιτυχία!";
 $langFileEdit = "Επεξεργασία Αρχείου";

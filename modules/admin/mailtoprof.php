@@ -91,7 +91,7 @@ $langEmail : $emailAdministrator
 ";
 		if (!send_mail($siteName, $emailAdministrator, '', $to,
 			$emailsubject, $emailbody, $charset)) {
-				$tool_content .= "<h4>Σφάλμα κατά την αποστολή e-mail στη διεύθυνση '$to'!</h4>";
+				$tool_content .= "<h4>".$langEmailNotSend." ".$to."!</h4>";
 		}
 	}
 	// Display result and close table correctly
