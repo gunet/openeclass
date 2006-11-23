@@ -196,9 +196,9 @@ $langOpenProfessorRequests = "Ανοικτές Αιτήσεις Καθηγητών";
 $langProfessorRequestClosed = "Η αίτηση του καθηγητή έκλεισε !";
 
 // mailtoprof.php
-$langSendMessageTo = "Αποστολή μηνύματος προς";
-$langAllUsers = "Όλους τους χρήστες";
-$langProfOnly = "Μόνο στους εκπαιδευτές";
+$langSendMessageTo = "Αποστολή μηνύματος";
+$langAllUsers = "σε όλους τους χρήστες";
+$langProfOnly = "μόνο στους εκπαιδευτές";
 
 // searchcours.php
 $langSearchCourse = "Αναζήτηση Μαθημάτων";

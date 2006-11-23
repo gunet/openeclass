@@ -212,9 +212,9 @@ $langOpenProfessorRequests = "Open Professors Requests";
 $langProfessorRequestClosed = "Professor request closed !";
 
 // mailtoprof.php
-$langSendMessageTo = "Send mail to";
-$langAllUsers = "All users";
-$langProfOnly = "Just the professors";
+$langSendMessageTo = "Send mail";
+$langAllUsers = "to all users";
+$langProfOnly = "just the professors";
 
 // searchcours.php
 $langSearchCourse = "Search Courses";
