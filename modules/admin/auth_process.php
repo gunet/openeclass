@@ -42,7 +42,6 @@
  	
  	The admin can: - choose a method and define its settings
 
-
 ==============================================================================
 */
 
@@ -52,12 +51,20 @@ $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include_once '../auth/auth.inc.php';
 $nameTools = $langUserAuthentication;
-
 $tool_content = "";			// Initialise $tool_content
 
 // get the values
-$auth = isset($_POST['auth'])?$_POST['auth']:'';
-$auth_submit = isset($_POST['auth_submit'])?$_POST['auth_submit']:'';
+$step = isset($_POST['step'])?$_POST['step']:'';
+if((!empty($step)) && ($step=='1'))
+{
+	$auth = isset($_POST['auth'])?$_POST['auth']:'';
+	$auth_submit = isset($_POST['auth_submit'])?$_POST['auth_submit']:'';
+	
+}
+else
+{
+	$auth = isset($_GET['auth'])?$_GET['auth']:'';
+}
 $test_username = isset($_POST['test_username'])?$_POST['test_username']:'';
 $test_password = isset($_POST['test_password'])?$_POST['test_password']:'';
 
@@ -168,6 +175,7 @@ else
 	$tool_content .= "<form name=\"authmenu\" method=\"post\" action=\"auth_process.php\">
 	<input type=\"hidden\" name=\"auth_submit\" value=\"1\" />
 	<input type=\"hidden\" name=\"auth\" value=\"".$auth."\" />
+	<input type=\"hidden\" name=\"step\" value=\"1\" />
 	$langAuthMethod: <strong>".get_auth_info($auth)."</strong><br /><br /><br />";
 	switch($auth)
 	{

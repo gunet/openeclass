@@ -14,15 +14,23 @@ if(!empty($ldapdata))
     $ldapsettings = $ldapdata['auth_settings'];
     $ldapinstructions = $ldapdata['auth_instructions'];
     // $ldaphost = str_replace("imaphost=","",$imapsettings);
-    $ldap = explode("|",$ldapsettings);
-    //ldaphost
-    $ldaphost = str_replace("ldaphost=","",$ldap[0]);
-    //ldapbase_dn
-    $ldapbind_dn = str_replace("ldapbind_dn=","",$ldap[1]);
-    //ldapbind_user
-    $ldapbind_user = str_replace("ldapbind_user=","",$ldap[2]);
-    // ldapbind_pw
-    $ldapbind_pw = str_replace("ldapbind_pw=","",$ldap[3]);
+    if(!empty($ldapsettings))
+    {
+    	$ldap = explode("|",$ldapsettings);
+    	//ldaphost
+	    $ldaphost = str_replace("ldaphost=","",$ldap[0]);
+	    //ldapbase_dn
+	    $ldapbind_dn = str_replace("ldapbind_dn=","",$ldap[1]);
+	    //ldapbind_user
+	    $ldapbind_user = str_replace("ldapbind_user=","",$ldap[2]);
+	    // ldapbind_pw
+	    $ldapbind_pw = str_replace("ldapbind_pw=","",$ldap[3]);
+    }
+    else
+    {
+    	$ldaphost = ""; $ldapbind_dn = ""; $ldapbind_user = ""; $ldapbind_pw = "";
+    }
+    
 }
 else
 {
@@ -62,7 +70,7 @@ $tool_content .= "<tr valign=\"top\">
 <tr valign=\"top\">
     <td align=\"right\">$langldap_bind_pw:</td>
     <td>
-    <input name=\"ldap_bind_pw\" type=\"password\" size=\"30\" value=\"".$ldapbind_pw."\">
+    <input name=\"ldapbind_pw\" type=\"password\" size=\"30\" value=\"".$ldapbind_pw."\">
     </td><td>
     Password for ldap bind. Leave blank for anonymous binding
     </td>

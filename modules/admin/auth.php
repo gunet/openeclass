@@ -52,15 +52,19 @@ $auth = isset($_GET['auth'])?$_GET['auth']:"";
 $active = isset($_GET['active'])?$_GET['active']:"";
 if((!empty($auth)) && (!empty($active)))
 {
+	$s = get_auth_settings($auth);
+	$settings = $s['auth_settings'];
+	
 	switch($active)
 	{
-		case 'yes': $qry = "UPDATE auth SET auth_default=1 WHERE auth_id=".$auth;
+		case 'yes': $q = empty($settings)?'0':'1';
 		break;
-		case 'no': $qry = "UPDATE auth SET auth_default=0 WHERE auth_id=".$auth;
+		case 'no': $q = '0';
 		break;
-		default:
+		default:	$q = '0';
 		break;
 	}
+	$qry = "UPDATE auth SET auth_default=".$q." WHERE auth_id=".$auth;
 	if(!empty($qry))
 	{
 	$sql = mysql_query($qry,$db);		// do the update as the default method
@@ -68,27 +72,75 @@ if((!empty($auth)) && (!empty($active)))
 }
 $auth_methods = get_auth_active_methods();
 
+$tool_content .= "<table width=\"99%\">
+<tr><td>";
+
+if(empty($auth))
+{
+	$tool_content .= "Ενεργοί τρόποι πιστοποίησης:<br>";
+	if(!empty($auth_methods))
+	{
+		$tool_content .= "<ul>";
+		foreach($auth_methods as $k=>$v)
+		{
+			$tool_content .= "<li>".get_auth_info($v) . "</li>";
+		}
+		$tool_content .= "</ul>";
+	}
+}
+else
+{
+	//$s = get_auth_settings($auth);
+	//$settings = $s['auth_settings'];
+	if(empty($settings))
+	{
+		$tool_content .= "H " . get_auth_info($auth) . " δεν μπορεί να ενεργοποιηθεί,
+		διότι δεν έχετε καθορίσει τα settings αυτού του τρόπου πιστοποίησης. ";
+	}
+	else
+	{
+		if($active == 'yes')
+		{
+			$tool_content .= "Μόλις ενεργοποιήσατε την " . get_auth_info($auth);
+		}
+		else
+		{
+			$tool_content .= "Μόλις απενεργοποιήσατε την " . get_auth_info($auth);
+		}
+	}
+}
+
+$tool_content .= "</td></tr></table><br /><br />";
+
 	
 $tool_content .= "<table width=\"99%\">
 <tr><td>";
 
-$tool_content .= "<form name=\"authmenu\" method=\"post\" action=\"auth_process.php\">
-$langChooseAuthMethod:<br /><br />";
+//$tool_content .= "<form name=\"authmenu\" method=\"post\" action=\"auth_process.php\">
+$tool_content .= $langChooseAuthMethod.":<br /><br />";
 
-$tool_content .= "<input type=\"radio\" name=\"auth\" value=\"2\">POP3&nbsp;&nbsp;";
+//$tool_content .= "<input type=\"radio\" name=\"auth\" value=\"2\">POP3&nbsp;&nbsp;";
+$tool_content .= "POP3&nbsp;&nbsp;";
 $tool_content .= in_array("2",$auth_methods)? "<a href=\"auth.php?auth=2&active=no\">".$langAuthDeactivate."</a>":"<a href=\"auth.php?auth=2&active=yes\">".$langAuthActivate."</a>";
+$tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=2\">Ρυθμίσεις</a>";
 $tool_content .= "<br />";
-$tool_content .= "<input type=\"radio\" name=\"auth\" value=\"3\">IMAP&nbsp;&nbsp;";
+//$tool_content .= "<input type=\"radio\" name=\"auth\" value=\"3\">IMAP&nbsp;&nbsp;";
+$tool_content .= "IMAP&nbsp;&nbsp;";
 $tool_content .= in_array("3",$auth_methods)? "<a href=\"auth.php?auth=3&active=no\">".$langAuthDeactivate."</a>":"<a href=\"auth.php?auth=3&active=yes\">".$langAuthActivate."</a>";
+$tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=3\">Ρυθμίσεις</a>";
 $tool_content .= "<br />";
-$tool_content .= "<input type=\"radio\" name=\"auth\" value=\"4\">LDAP&nbsp;&nbsp;";
+//$tool_content .= "<input type=\"radio\" name=\"auth\" value=\"4\">LDAP&nbsp;&nbsp;";
+$tool_content .= "LDAP&nbsp;&nbsp;";
 $tool_content .= in_array("4",$auth_methods)? "<a href=\"auth.php?auth=4&active=no\">".$langAuthDeactivate."</a>":"<a href=\"auth.php?auth=4&active=yes\">".$langAuthActivate."</a>";
+$tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=4\">Ρυθμίσεις</a>";
 $tool_content .= "<br />";
-$tool_content .= "<input type=\"radio\" name=\"auth\" value=\"5\">EXTERNAL DB&nbsp;&nbsp;";
+//$tool_content .= "<input type=\"radio\" name=\"auth\" value=\"5\">EXTERNAL DB&nbsp;&nbsp;";
+$tool_content .= "EXTERNAL DB&nbsp;&nbsp;";
 $tool_content .= in_array("5",$auth_methods)? "<a href=\"auth.php?auth=5&active=no\">".$langAuthDeactivate."</a>":"<a href=\"auth.php?auth=5&active=yes\">".$langAuthActivate."</a>";
+$tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=5\">Ρυθμίσεις</a>";
 $tool_content .= "<br />";
-$tool_content .= "<br /><input type=\"submit\" name=\"submit\" value=\"$langNextStep\"><br />";
-$tool_content .= "</form><br />";
+//$tool_content .= "<br /><input type=\"submit\" name=\"submit\" value=\"$langNextStep\"><br />";
+//$tool_content .= "</form><br />";
 $tool_content .="<br /></td></tr></table>";
 
 draw($tool_content,3);

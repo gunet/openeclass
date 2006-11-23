@@ -513,6 +513,8 @@ class Encryption
         // first character of the password is also the first character in $scramble1).
         $this->scramble1 = '! #$%&()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~!';
         $this->scramble2 = 'f^jAE]okIOzU[2&q1{3`h5w_794p@6s8?BgP>dFV=m D<TcS%Ze|r:lGK/uCy.Jx)HiQ!#$~(;Lt-R}Ma,NvW+Ynb*0Xf';
+        //$this->scramble1 = '! #$%&()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~!áÜâãäåÝæçÞèéßêëìíîïüðñóòôýõö÷øþùÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÓÔÕÖ×ØÙ';
+        //$this->scramble2 = 'f^jAE]okIOzU[2&q1{3`h5w_794p@6s8?BgP>dFV=m D<TcS%Ze|r:lGK/uCy.Jx)HiQ!#$~(;Lt-R}Ma,NvW+Ynb*0XfÁÜáÂâÃãÄäÅÝåÆæÇÞçÈèÉßéÊêËëÌìÍíÎîÏüïÐðÑñÓòóÔôÕýõÖö×÷ØøÙþù';
         //$this->scramble1 = '! #$%&()*+,-./0123456789:;\'\\\"<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~!';
         //$this->scramble2 = 'f^jAE]okIOzU[2&q1{3`h5w_794\"\'\\p@6s8?BgP>dFV=m D<TcS%Ze|r:lGK/uCy.Jx)HiQ!#$~(;Lt-R}Ma,NvW+Ynb*0Xf';
 
