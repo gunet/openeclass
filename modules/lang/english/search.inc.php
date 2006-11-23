@@ -22,4 +22,11 @@ $langInstructor = "Course Instructors";
 $langCourseCode = "Course Code";
 
 $langCourseInfo = "Course Information";
+
+$langAccessType = "Access Type";
+$langTypeClosed = "Closed";
+$langTypeOpen = "Open";
+$langTypeRegistration = "Open with registration";
+$langAllTypes = "(all access types)";
+$langAllFacultes = "All faculties";
 ?>

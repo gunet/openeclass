@@ -145,7 +145,7 @@ $tool_content .= $datetime->get_select_years("ldigit", "2002", "2029", "year")."
 $tool_content .= "</td>
   </tr>";  
 $tool_content .= "<tr>
-    <td width=\"3%\" nowrap><b>E-mail:</b></td>
+    <td width=\"3%\" nowrap><b>$langEmail:</b></td>
     <td><input type=\"text\" name=\"user_email\" size=\"40\" value=\"".$user_email."\"></td>
 </tr>";
 $tool_content .= "<tr>

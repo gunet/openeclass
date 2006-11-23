@@ -22,4 +22,10 @@ $langInstructor = "Καθηγητής/ές μαθήματος";
 $langCourseCode = "Κωδικός μαθήματος";
 
 $langCourseInfo = "Πληροφορίες Μαθήματος";
+$langAccessType = "Τύπος Πρόσβασης";
+$langTypeClosed = "Κλειστό";
+$langTypeOpen = "Ανοικτό";
+$langTypeRegistration = "Ανοικτό με εγγραφή";
+$langAllTypes = "(όλοι οι τύποι πρόσβασης)";
+$langAllFacultes = "Σε όλες τις σχολές/τμήματα";
 ?>

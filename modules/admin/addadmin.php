@@ -118,7 +118,7 @@ if($r1=db_query("SELECT user_id,prenom,nom,username FROM user,admin WHERE user.u
 		"<td>".htmlspecialchars($row['username'])."</td>";
 		if($row['user_id']!=1)
 		{
-			$tool_content .= "<td><a href=\"addadmin.php?delete=1&aid=".$row['user_id']."\">Διαγραφή</a></td>";
+			$tool_content .= "<td><a href=\"addadmin.php?delete=1&aid=".$row['user_id']."\">$langDelete</a></td>";
 		}
 		$tool_content .= "</tr>";
 	}
