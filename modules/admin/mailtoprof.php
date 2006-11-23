@@ -75,8 +75,6 @@ if (isset($submit) && ($body_mail!="")) {
 		// All users
 		$sql=mysql_query("SELECT DISTINCT email FROM user");
 	} elseif ($sendTo=="1") {
-// Include baseTheme
-include '../../include/baseTheme.php';
 		// Only professors
 		$sql=mysql_query("SELECT DISTINCT email FROM user where statut='1'");
 	}
