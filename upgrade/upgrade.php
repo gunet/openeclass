@@ -2,6 +2,7 @@
 //Flag for fixing relative path
 //See init.php to undestand it's logic
 $path2add=2;
+$require_admin = TRUE;
 include '../include/baseTheme.php';
 include 'document_upgrade.php';
 
@@ -62,8 +63,10 @@ if (isset($_POST['login']) and isset($_POST['password']) and !is_admin($_POST['l
 	die();
 }
 
+/* not needed ????
 if ($fromadmin)
 	include "../modules/admin/check_admin.inc";
+*/
 
 //====================
 // Main body
@@ -326,16 +329,6 @@ if((!isset($encryptkey)) || (empty($encryptkey))) {
 		while($row = mysql_fetch_array($res)) {
 			$pass = $row["password"];
 			
-			/*
-			// do not allow the user to have the characters: ',\" or \\ in password
-			$pw = array(); 	
-			$nr = 0;
-			while (isset($pass{$nr})) // convert the string $password into an array $pw
-			{
-  			$pw[$nr] = $pass{$nr};
-    		$nr++;
-			} */
-//  		if((in_array("'",$pw)) || (in_array("\"",$pw)) || (in_array("\\",$pw))) {
   		if( (strstr($pass, "'")) or (strstr($pass, '"')) or (strstr($pass, '\\')) )
   		{
 				$tool_content .= "Δεν έγινε κρυπτογράφηση του συνθηματικού του χρήστη με id=".$row["user_id"]." (άκυροι χαρακτήρες στο συνθηματικό)<br />";
@@ -1032,24 +1025,6 @@ while ($code = mysql_fetch_row($res)) {
 	update_field("accueil", "image","usage", "id", 24);
 	update_field("accueil", "image","tooladmin", "id", 25);
 
-
-	// table stat_accueil
-/*	$sql = db_query("SELECT id,request FROM stat_accueil");
-	while ($u = mysql_fetch_row($sql))  {
-		$old_request = $u[1];
-		$new_request = str_replace("$code[0]/", "courses/$code[0]/", $old_request);
-		if (db_query("UPDATE stat_accueil SET request='$new_request' WHERE id = '$u[0]'")) {
-			$tool_content .= "Εγγραφή με id $u[0] του πίνακα <b>stat_accueil</b>: $OK<br>";
-		} else {
-			$tool_content .= "Εγγραφή με id $u[0] του πίνακα <b>stat_accueil</b>: $BAD<br>";
-			$errors++;
-		}
-	}*/
-
-
-// Remove table for the old statistics module
- // db_query("DROP TABLE IF EXISTS stat_accueil");
-
 	// remove table 'introduction' entries and insert them in table 'cours' (field 'description') in eclass main database
 	// after that drop table introduction
 	if (mysql_table_exists($code[0], 'introduction')) {
@@ -1125,6 +1100,9 @@ db_query("DROP TABLE IF EXISTS whosonline");
 db_query("DROP TABLE IF EXISTS words");
 // bogart: Update code for phpbb functionality END
 
+// remove tables liste_domains. Used for old statistics module
+db_query("DROP TABLE IF EXISTS liste_domaines");
+
 } // End of 'while' courses
 
 // Fixed by vagpits
@@ -1143,14 +1121,14 @@ if ($errors==0) {
 }
 $tool_content .= "</td></tr></tbody></table>";
 if ($fromadmin)
-$tool_content .= "<br><center><p><a href=\"../modules/admin/index.php\">Επιστροφή</a></p></center>";
+	$tool_content .= "<br><center><p><a href=\"../modules/admin/index.php\">Επιστροφή</a></p></center>";
 else
-$tool_content .= "<br><center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
+	$tool_content .= "<br><center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
 
 if ($fromadmin)
-draw($tool_content,3, 'admin');
+	draw($tool_content,3, 'admin');
 else
-draw($tool_content,0);
+	draw($tool_content,0);
 
 
 //-----------------------------
