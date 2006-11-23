@@ -131,6 +131,7 @@ $langDefineBlanks="Define one blank by tags [...]";
 $langGiveAnswers="Enter answers";
 $langChooseGoodAnswer="Choose a good answer";
 $langChooseGoodAnswers="Choose good answers";
+$langBack = "Back";
 
 // question_list_admin.inc.php
 
