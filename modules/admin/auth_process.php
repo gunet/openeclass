@@ -194,8 +194,8 @@ else
 	}	
 	
 	$tool_content .= "<br />$langTestAccount<br /><br />
-	Username:<input type=\"text\" name=\"test_username\" value=\"".$test_username."\"><br />
-	Password:<input type=\"password\" name=\"test_password\" value=\"".$test_password."\"><br />
+	$langUsername: <input type=\"text\" name=\"test_username\" value=\"".$test_username."\"><br />
+	$langPass: <input type=\"password\" name=\"test_password\" value=\"".$test_password."\"><br />
 	<input type=\"submit\" name=\"submit\" value=\"$langUpdate\"><br />";
 	
 	$tool_content .= "</form>";
