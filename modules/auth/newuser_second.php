@@ -59,17 +59,8 @@ $password = isset($_POST['password'])?$_POST['password']:'';
 if(!empty($submit))
 {
 	$tool_content .= "<table border=\"0\" width=\"99%\">";
-/*	
-	// do not allow the user to have the characters: ',\" or \\ in password
-	$pw = array(); 	$nr = 0;
-	while (isset($password{$nr})) // convert the string $password into an array $pw
-	{
-  	$pw[$nr] = $password{$nr};
-    $nr++;
-	}
-	*/
-  //if( (in_array("'",$pw)) || (in_array("\"",$pw)) || (in_array("\\",$pw)) )
-  if( (strstr($password, "'")) or (strstr($password, '"')) or (strstr($password, '\\')) 
+  
+	if( (strstr($password, "'")) or (strstr($password, '"')) or (strstr($password, '\\')) 
   or (strstr($uname, "'")) or (strstr($uname, '"')) or (strstr($uname, '\\')) )
 	{
 		$tool_content .= "<tr bgcolor=\"".$color2."\">
@@ -161,13 +152,14 @@ if(!empty($submit))
 	 				//$tool_content .= "<br>Password without escape filter<br>password: ".$password."<br>";
 	 				$password_encrypted = $crypt->encrypt($key, $password, $pswdlen);
 	 				//$tool_content .= "<br>Password after encryption<br>password: ".$password_encrypted."<br>";
+		 			$password_decrypted = $crypt->decrypt($key, $password_encrypted);
 	 			}
  				else
 	 			{
 	 				$password_encrypted = $password;
 	 			}
  			
-	 			$password_decrypted = $crypt->decrypt($key, $password_encrypted);
+	// 			$password_decrypted = $crypt->decrypt($key, $password_encrypted);
 	 			$q1 = "INSERT INTO `$mysqlMainDb`.user
 				(user_id, nom, prenom, username, password, email, statut, department, inst_id, am, registered_at, expires_at)
 				VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email','$statut',
