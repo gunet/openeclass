@@ -86,8 +86,6 @@ $langParentDir = "αρχικό κατάλογο";
 $langNoticeGreek = "(*) Προσοχή! Το όνομα του αρχείου δεν πρέπει να περιέχει ελληνικούς χαρακτήρες";
 $langInvalidDir = "Ακυρο ή μη υπαρκτό όνομα καταλόγου";
 
-
-
 //prosthikes gia v2 - metadata
 $langTitle="Τίτλος";
 $langCategory="Κατηγορία";
@@ -103,19 +101,18 @@ $langLanguage="Γλώσσα";
 $langCopyrighted="Πνευματικά Δικαιώματα";
 $langCopyrightedFree="Ελεύθερο";
 $langCopyrightedNotFree="Προστατευμένο";
-$langCopyrightedUnknown="'Αγνωστο";
+$langCopyrightedUnknown="Αγνωστο";
 $langChangeMetadata="Αλλαγή πληροφοριών εγγράφου";
 $langEditMeta="Επεξεργασία<br>Πληροφοριών";
 
-
-$langCategoryExcercise="Aσκηση";
+$langCategoryExcercise="¶σκηση";
 $langCategoryEssay="Εργασία";
 $langCategoryDescription="Περιγραφή μαθήματος";
 $langCategoryExample="Παράδειγμα";
 $langCategoryTheory="Θεωρία";
 $langCategoryLecture="Διάλεξη";
 $langCategoryNotes="Σημειώσεις";
-$langCategoryOther="Aλλο";
+$langCategoryOther="¶λλο";
 
 $langNotRequired = "Η συμπλήρωση των πεδίων είναι προαιρετική";
 $langCommands = "Ενέργειες";
@@ -125,4 +122,12 @@ $langQuotaUsed = "Χρησιμοποιούμενος Χώρος";
 $langQuotaTotal = "Συνολικός Διαθέσιμος Χώρος";
 $langQuotaPercentage = "Ποσοστό χρήσης";
 $langBack = "Επιστροφή";
+
+$langEnglish = "Αγγλικά";
+$langFrench = "Γαλλικά";
+$langGerman = "Γερμανικά";
+$langGreek = "Ελληνικά";
+$langItalian = "Ιταλικά";
+$langSpanish = "Ισπανικά";
+
 ?>

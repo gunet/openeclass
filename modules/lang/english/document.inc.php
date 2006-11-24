@@ -122,4 +122,12 @@ $langQuotaUsed = "Used disk space";
 $langQuotaTotal = "Total available disk space";
 $langQuotaPercentage = "Usage percentage";
 $langBack = "Back";
+
+$langEnglish = "English";
+$langFrench = "French";
+$langGerman = "German";
+$langGreek = "Greek";
+$langItalian = "Italian";
+$langSpanish = "Spanish";
+
 ?>

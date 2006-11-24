@@ -100,6 +100,7 @@ $langMultEmail= "Multiple use of the same e-mail address";
 $langMultLoginPass = "Multiple use of couple LOGIN - PASS";
 $langError = "Attention!";
 $langOk = "Ok!";
+$langActions = "Actions";
 
 
 $langNbAnnoucement = "Number of announcements";
