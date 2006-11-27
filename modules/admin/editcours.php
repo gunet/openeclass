@@ -1,4 +1,5 @@
 <?php
+session_start();
 /**=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
@@ -58,6 +59,14 @@ $langFiles = array('admin','gunet');
 $require_admin = TRUE;
 // Include baseTheme
 include '../../include/baseTheme.php';
+
+if (isset($c))
+	$_SESSION['c_temp']=$c;
+
+if(!isset($c))
+	$c=$_SESSION['c_temp'];
+
+
 // Define $nameTools
 $nameTools = $langCourseEdit;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
