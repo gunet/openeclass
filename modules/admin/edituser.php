@@ -45,9 +45,9 @@ include '../../include/baseTheme.php';
 include 'admin.inc.php';
 include '../auth/auth.inc.php';
 
-if (isset($u))
+if (isset($_GET['u']) or isset($_POST['u']))
   $_SESSION['u_tmp']=$u;
-if(!isset($u))
+if(!isset($_GET['u']) or !isset($_POST['u']))
   $u=$_SESSION['u_tmp'];
 
 // Initialise $tool_content
@@ -55,7 +55,7 @@ $tool_content = "";
 
 $nameTools = $langEditUser;
 
-$u = (string)isset($_GET['u'])?$_GET['u']:(isset($_POST['u'])?$_POST['u']:'');
+//$u = (string)isset($_GET['u'])?$_GET['u']:(isset($_POST['u'])?$_POST['u']:'');
 $u_submitted = isset($_POST['u_submitted'])?$_POST['u_submitted']:'';
 if((!empty($u)) && ctype_digit($u))	// validate the user id
 {
