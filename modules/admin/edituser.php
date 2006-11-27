@@ -1,4 +1,4 @@
-<?
+<? session_start();
 /**=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
@@ -44,10 +44,14 @@ $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include 'admin.inc.php';
 include '../auth/auth.inc.php';
-$nameTools = $langVersion;
+
+if (isset($u))
+  $_SESSION['u_tmp']=$u;
+if(!isset($u))
+  $u=$_SESSION['u_tmp'];
+
 // Initialise $tool_content
 $tool_content = "";
-
 
 $nameTools = $langEditUser;
 
@@ -78,7 +82,7 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		{
 			$password_decrypted = $password;
 		}
-		$tool_content .= "<h4>Επεξεργασία χρήστη $info[2]</h4>";
+		$tool_content .= "<h4>$langEditUser $info[2]</h4>";
 		$tool_content .= "<form name=\"edituser\" method=\"post\" action=\"./edituser.php\">
 	<table width=\"99%\" border=\"0\">
 	<tr><td width=\"20%\">$langSurname: </td><td width=\"80%\"><input type=\"text\" name=\"lname\" size=\"40\" value=\"".$info[0]."\"</td></tr>
@@ -227,13 +231,13 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		}
 		if($registered_at>$expires_at)
 		{
-			$tool_content .= "<br >$langExpireBeforeRegister. Please <a href=\"edituser.php?u=".$u."\">try again</a><br />";
+			$tool_content .= "<br >$langExpireBeforeRegister. $langPlease <a href=\"edituser.php?u=".$u."\">$langAgain</a><br />";
 		}
 		elseif( (in_array("'",$pw)) || (in_array("\"",$pw)) || (in_array("\\",$pw)) )
 		{
 			$tool_content .= "<tr bgcolor=\"".$color2."\">
 			<td bgcolor=\"$color2\" colspan=\"3\" valign=\"top\">
-			<br>Δεν επιτρέπονται στο password, οι χαρακτήρες: ',\" ή \\	<br /><br />
+			<br>$langCharactersNotAllowed<br /><br />
 			<a href=\"./listusers.php\">".$langAgain."</a></td></tr></table>";
 		}
 		else
