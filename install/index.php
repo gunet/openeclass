@@ -141,7 +141,7 @@ if (isset($alreadyVisited)) {
 
 // step 2 license
 
-if(isset($install2) OR isset($back2))
+if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
 {
 	$langStepTitle = $langLicence;
 	$langStep = $langStep2;
@@ -160,14 +160,7 @@ if(isset($install2) OR isset($back2))
 	draw($tool_content);
 }
 
-elseif(isset($install3) OR isset($back3)) {
-
-	// The two following CHMOD are necessary, 666 for Windows, 0666 for Linux
-	//	mkdir ("../config", 0777);
-	//	chmod( "../config/config.php", 666 );
-	//	chmod( "../config/config.php", 0666 );
-	// courses directory
-	//	mkdir("../courses", 0777);
+elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 
 	// step 3 mysql database settings
 	$langStepTitle = $langDBSetting;
@@ -227,7 +220,7 @@ elseif(isset($install3) OR isset($back3)) {
 
 // step 4 config settings
 
-elseif(isset($install5) OR isset($back4))
+elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
 {
 	// Added by vagpits
 	// Global variable persoIsActive
@@ -519,7 +512,7 @@ function set_MCU()
 
 // step 5 last check before install
 
-elseif(isset($install6))
+elseif(isset($_REQUEST['install6']))
 {
 	$pathForm = str_replace("\\\\", "/", $pathForm);
 //	chmod( "../config/config.php", 666 );
@@ -571,7 +564,7 @@ elseif(isset($install6))
 }
 // step 6 installation successful
 
-elseif(isset($install7))
+elseif(isset($_REQUEST['install7']))
 {
 
 	// database creation
@@ -593,7 +586,7 @@ elseif(isset($install7))
         <ul id=\"installBullet\">
         <li>Όνομα Υπολογιστή : ".$dbHostForm."</li>
         <li>Όνομα Χρήστη : ".$dbUsernameForm."</li>
-        <li<Συνθηματικό  : ".$dbPassForm."</li>
+        <li>Συνθηματικό  : ".$dbPassForm."</li>
         </ul>
         <p>Eπιστρέψτε στο βήμα 3 για να τα διορθώσετε.</p>
 						
@@ -1469,7 +1462,7 @@ $encryptkey = "'.$encryptkey.'";
 
 // step 1 requirements
 
-elseif (isset($install1) || isset($back1))
+elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 {
 	$langStepTitle = $langRequirements;
 	$langStep = $langStep1;
