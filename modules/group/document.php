@@ -1,4 +1,57 @@
 <?php
+<<<<<<< document.php
+/*=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        Á full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/*===========================================================================
+	document.php
+	@last update: 27-11-2006 by Dionysios G. Synodinos
+	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
+==============================================================================        
+        @Description: For uploading documents
+
+ 	This is a tool plugin that allows course administrators - or others with the
+ 	same rights
+
+ 	The user can : - navigate through files and directories.
+                       - upload a file
+                       - delete, copy a file or a directory
+                       - edit properties & content (name, comments, 
+			 html content)
+
+ 	@Comments: The script is organised in four sections.
+
+ 	1) Execute the command called by the user
+           Note (March 2004) some editing functions (renaming, commenting)
+           are moved to a separate page, edit_document.php. This is also
+           where xml and other stuff should be added.
+   	2) Define the directory to display
+  	3) Read files and directories from the directory defined in part 2
+  	4) Display all of that on an HTML page
+ 
+==============================================================================
+=======
 /*
   +----------------------------------------------------------------------+
   | CLAROLINE version 1.3.0 $Revision$                             |
@@ -33,11 +86,16 @@
   * 3rd section read files and directories from the directory defined in part 3
 
   * 4th section display all of that on a HTML page
+>>>>>>> 1.2
 */
 
 $langFiles = 'document';
 $require_current_course = TRUE;
-include('../../include/init.php');
+//include('../../include/init.php');
+
+include '../../include/baseTheme.php';
+
+$tool_content = "";
 
 include("../../include/lib/fileDisplayLib.inc.php");
 include ("../../include/lib/fileManageLib.inc.php");
@@ -52,7 +110,7 @@ $diskQuotaGroup = $d['group_quota'];
 
 $nameTools = $langDoc;
 $navigation[] = array ("url" => "group_space.php", "name" => $langGroupSpace);
-begin_page();
+//begin_page();
 
 /**************************************
 FILEMANAGER BASIC VARIABLES DEFINITION
@@ -72,7 +130,7 @@ $baseServUrl = $urlAppend."/";
 $courseDir = "courses/".$dbname."/group/".$secretDirectory;
 $baseWorkDir = $baseServDir.$courseDir;
 
-echo "</td></tr></table></center>";
+$tool_content .=  "</td></tr></table></center>";
 
 
 /*** clean information submited by the user from antislash ***/
@@ -384,17 +442,18 @@ $dspCurDirName = htmlspecialchars($curDirName);
 $cmdCurDirPath = rawurlencode($curDirPath);
 $cmdParentDir  = rawurlencode($parentDir);
 
-?>
+
+$tool_content .= <<<cData
 <div class="fileman" align="center">
 <table width="100%" border="0" cellspacing="2" cellpadding="4">
 <tr>
-<td><h4><? echo $langDoc; ?></h4></td>
+<td><h4>${langDoc}</h4></td>
 
 <td align="right">
 
 <a href="../help/help.php?topic=Doc" 
 onClick="window.open('../help/help.php?topic=Doc','Help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10'); 
-return false;"> <font size=2 face="arial, helvetica"><?= $langHelp ?></font>
+return false;"> <font size=2 face="arial, helvetica">${langHelp}</font>
 </a>
 
 
@@ -402,15 +461,14 @@ return false;"> <font size=2 face="arial, helvetica"><?= $langHelp ?></font>
 </tr>
 
 <tr>
-
-<?php
-
-echo "<td colspan=2>
-		<a href=\"../group/group_space.php\">$langGroupSpaceLink</a>&nbsp;&nbsp;
-		<a href=\"../phpbb/viewforum.php?forum=$forumId\">$langGroupForumLink</a>
+	<td colspan=2>
+	<a href=\"../group/group_space.php\">${langGroupSpaceLink}</a>&nbsp;&nbsp;
+		<a href=\"../phpbb/viewforum.php?forum=${forumId}\">${langGroupForumLink}</a>
 	</td>
 	</tr>
-	<tr>";
+	<tr>
+
+cData;
 
 
 /*----------------------------------------
@@ -418,89 +476,92 @@ echo "<td colspan=2>
 --------------------------------------*/
 if (isset($dialogBox))
 {
-	echo "<td bgcolor=\"#9999FF\">";
-	echo "<!-- dialog box -->";
-	echo $dialogBox;
-	echo "</td>";
+	$tool_content .= <<<cData
+	
+	<td bgcolor=\"#9999FF\">
+	 <!-- dialog box -->
+	 ${dialogBox}
+	 </td>
+cData;
+
 }
 else
 {
-	echo "<td>\n<!-- dialog box -->\n&nbsp;\n</td>\n";
+	$tool_content .=  "<td>\n<!-- dialog box -->\n&nbsp;\n</td>\n";
 }
 
 
 /*----------------------------------------
                UPLOAD SECTION
 --------------------------------------*/
-echo "<!-- upload  -->
-<td align=\"right\">
-<form action=\"$PHP_SELF\" method=\"post\" enctype=\"multipart/form-data\">
-<input type=\"hidden\" name=\"uploadPath\" value=\"$curDirPath\">
-$langDownloadFile&nbsp;:
-<input type=\"file\" name=\"userFile\">
-<input type=\"submit\" value=\"$langDownload\">
-</form>
-</td>\n";
+$tool_content .= <<<cData
 
-?>
+	<!-- upload  -->
+	<td align=\"right\">
+	<form action=\"${PHP_SELF}\" method=\"post\" enctype=\"multipart/form-data\">
+	<input type=\"hidden\" name=\"uploadPath\" value=\"${curDirPath}\">
+${langDownloadFile}&nbsp;:
+	<input type=\"file\" name=\"userFile\">
+	<input type=\"submit\" value=\"${langDownload}\">
+	</form>
+	</td>\n
 
 </tr>
 </table>
 
 <table width="100%" border="0" cellspacing="2">
 
-<?php
+cData;
 
 
 /*----------------------------------------
 	CURRENT DIRECTORY LINE
 --------------------------------------*/
 
-echo "<tr>\n";
-echo "<td colspan=8>\n";
+$tool_content .=  "<tr>\n";
+$tool_content .=  "<td colspan=8>\n";
 
 /*** go to parent directory ***/
 if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
 {
-	echo "<!-- parent dir -->\n";
-	echo "<a href=\"$PHP_SELF?openDir=".$cmdParentDir."\">\n";
-	echo "<IMG src=\"img/parent.gif\" border=0 align=\"absbottom\" hspace=5>\n";
-	echo "<small>$langUp</small>\n";
-	echo "</a>\n";
+	$tool_content .=  "<!-- parent dir -->\n";
+	$tool_content .=  "<a href=\"$PHP_SELF?openDir=".$cmdParentDir."\">\n";
+	$tool_content .=  "<IMG src=\"img/parent.gif\" border=0 align=\"absbottom\" hspace=5>\n";
+	$tool_content .=  "<small>$langUp</small>\n";
+	$tool_content .=  "</a>\n";
 }
 
 
 /*** create directory ***/
-echo "<!-- create dir -->\n";
-echo "<a href=\"$PHP_SELF?createDir=".$cmdCurDirPath."\">";
-echo "<IMG src=\"img/dossier.gif\" border=0 align=\"absbottom\" hspace=5>";
-echo "<small> $langCreateDir</small>";
-echo "</a>";
+$tool_content .=  "<!-- create dir -->\n";
+$tool_content .=  "<a href=\"$PHP_SELF?createDir=".$cmdCurDirPath."\">";
+$tool_content .=  "<IMG src=\"img/dossier.gif\" border=0 align=\"absbottom\" hspace=5>";
+$tool_content .=  "<small> $langCreateDir</small>";
+$tool_content .=  "</a>";
 
-echo "</tr>\n";
-echo "</td>\n";
+$tool_content .=  "</tr>\n";
+$tool_content .=  "</td>\n";
 
 
 if ($curDirName) // if the $curDirName is empty, we're in the root point and there is'nt a dir name to display
 {
 	/*** current directory ***/
-	echo "<!-- current dir name -->\n";
-	echo "<tr>\n";
-	echo "<td colspan=\"7\" align=\"left\" bgcolor=\"#000066\">\n";
-	echo "<img src=\"img/opendir.gif\" align=\"absbottom\" vspace=2 hspace=5>\n";
-	echo "<font color=\"#CCCCCC\">".$dspCurDirName."</font>\n";
-	echo "</td>\n";
-	echo "</tr>\n";
+	$tool_content .=  "<!-- current dir name -->\n";
+	$tool_content .=  "<tr>\n";
+	$tool_content .=  "<td colspan=\"7\" align=\"left\" bgcolor=\"#000066\">\n";
+	$tool_content .=  "<img src=\"img/opendir.gif\" align=\"absbottom\" vspace=2 hspace=5>\n";
+	$tool_content .=  "<font color=\"#CCCCCC\">".$dspCurDirName."</font>\n";
+	$tool_content .=  "</td>\n";
+	$tool_content .=  "</tr>\n";
 }
 
-?>
 
 
-<!-- command list -->
+$tool_content .= "<!-- command list -->";
 
-<tr bgcolor="<?php echo "$color2" ?>"  align="center" valign="top">
-<?
-echo "<td>$langName</td>
+$tool_content .= "<tr bgcolor=\"${color2}\"  align=\"center\" valign=\"top\">";
+
+$tool_content .=  "<td>$langName</td>
 <td>$langSize</td>
 <td>$langDate</td>
 <td>$langDelete</td>
@@ -522,27 +583,27 @@ if (isset($dirNameList))
 		$dspDirName = htmlspecialchars($dirName);
 		$cmdDirName = rawurlencode($curDirPath."/".$dirName);
 
-		echo "<tr align=\"center\">\n";
-		echo "<td align=\"left\">\n";
-		echo "<a href=\"$PHP_SELF?openDir=".$cmdDirName."\"".@$style.">\n";
-		echo "<img src=\"img/dossier.gif\" border=0 hspace=5>\n";
-		echo $dspDirName."\n";
-		echo "</a>\n";
+		$tool_content .= "<tr align=\"center\">\n";
+		$tool_content .= "<td align=\"left\">\n";
+		$tool_content .= "<a href=\"$PHP_SELF?openDir=".$cmdDirName."\"".@$style.">\n";
+		$tool_content .= "<img src=\"img/dossier.gif\" border=0 hspace=5>\n";
+		$tool_content .= $dspDirName."\n";
+		$tool_content .= "</a>\n";
 
 		/*** skip display date and time ***/
-		echo "<td>&nbsp;</td>\n";
-		echo "<td>&nbsp;</td>\n";
+		$tool_content .= "<td>&nbsp;</td>\n";
+		$tool_content .= "<td>&nbsp;</td>\n";
 
 		/*** delete command ***/
-		echo "<td><a href=\"$PHP_SELF?delete=".$cmdDirName."\"><img src=\"./img/supprimer.gif\" border=0></a></td>\n";
+		$tool_content .= "<td><a href=\"$PHP_SELF?delete=".$cmdDirName."\"><img src=\"./img/supprimer.gif\" border=0></a></td>\n";
 		/*** copy command ***/
-		echo "<td><a href=\"$PHP_SELF?move=".$cmdDirName."\"><img src=\"img/deplacer.gif\" border=0></a></td>\n";
+		$tool_content .= "<td><a href=\"$PHP_SELF?move=".$cmdDirName."\"><img src=\"img/deplacer.gif\" border=0></a></td>\n";
 		/*** rename command ***/
-		echo "<td><a href=\"$PHP_SELF?rename=".$cmdDirName."\"><img src=\"img/renommer.gif\" border=0></a></td>\n";
+		$tool_content .= "<td><a href=\"$PHP_SELF?rename=".$cmdDirName."\"><img src=\"img/renommer.gif\" border=0></a></td>\n";
 		/*** comment command ***/
-		echo "<td></td>\n";
+		$tool_content .= "<td></td>\n";
 
-		echo "</tr>\n";
+		$tool_content .=  "</tr>\n";
 	}
 }
 
@@ -564,35 +625,32 @@ if (isset($fileNameList))
 		$cmdFileName = rawurlencode($curDirPath."/".$fileName);
 		$dspFileName = htmlspecialchars($fileName);
 
-		echo "<tr align=\"center\"".@$style.">\n";
-		echo "<td align=\"left\">\n";
-		echo "<a href=\"".$urlFileName."\"".@$style.">\n";
-		echo "<img src=\"./img/".$image."\" border=0 hspace=5>\n";
-		echo $dspFileName."\n";
-		echo "</a>\n";
+		$tool_content .= "<tr align=\"center\"".@$style.">\n";
+		$tool_content .= "<td align=\"left\">\n";
+		$tool_content .= "<a href=\"".$urlFileName."\"".@$style.">\n";
+		$tool_content .= "<img src=\"./img/".$image."\" border=0 hspace=5>\n";
+		$tool_content .= $dspFileName."\n";
+		$tool_content .= "</a>\n";
 
 		/*** size ***/
-		echo "<td><small>".$size."</small></td>\n";
+		$tool_content .= "<td><small>".$size."</small></td>\n";
 		/*** date ***/
-		echo "<td><small>".$date."</small></td>\n";
+		$tool_content .= "<td><small>".$date."</small></td>\n";
 
 		/*** delete command ***/
-		echo "<td><a href=\"$PHP_SELF?delete=".$cmdFileName."\"><img src=\"img/supprimer.gif\" border=0></a></td>\n";
+		$tool_content .= "<td><a href=\"$PHP_SELF?delete=".$cmdFileName."\"><img src=\"img/supprimer.gif\" border=0></a></td>\n";
 		/*** copy command ***/
-		echo "<td><a href=\"$PHP_SELF?move=".$cmdFileName."\"><img src=\"img/deplacer.gif\" border=0></a></td>\n";
+		$tool_content .= "<td><a href=\"$PHP_SELF?move=".$cmdFileName."\"><img src=\"img/deplacer.gif\" border=0></a></td>\n";
 		/*** rename command ***/
-		echo "<td><a href=\"$PHP_SELF?rename=".$cmdFileName."\"><img src=\"img/renommer.gif\" border=0></a></td>\n";
+		$tool_content .= "<td><a href=\"$PHP_SELF?rename=".$cmdFileName."\"><img src=\"img/renommer.gif\" border=0></a></td>\n";
 		/*** submit command ***/
-		echo "<td><a href=\"../work/group_work.php?submit=$urlShortFileName\"><small>$langPublish</small></a></td>\n";
+		$tool_content .= "<td><a href=\"../work/group_work.php?submit=$urlShortFileName\"><small>$langPublish</small></a></td>\n";
 
-		echo "</tr>\n";
+		$tool_content .= "</tr>\n";
 	}
 }
-echo "</table>\n";
-echo "</div>\n";
+$tool_content .= "</table>\n";
+$tool_content .= "</div>\n";
 
-
+draw($tool_content, 2);
 ?>
-
-</body>
-</html>
