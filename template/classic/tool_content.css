@@ -98,10 +98,18 @@ td, th {
 }
 
 td.caution {
-   background-color:#FBEC5D;
+	background-image: url(./img/exclamation.gif);
+	background-repeat: no-repeat;
+	background-position: 4px 4px;
+	padding-left : 24px;
+   	background-color:#FBEC5D;
 }
 td.success {
-   background-color:#CCFF99;
+	background-image: url(./img/tick.gif);
+	background-repeat: no-repeat;
+	background-position: 4px 4px;
+	padding-left : 24px;
+   	background-color:#CCFF99;
 }
 
 td.inactive {
