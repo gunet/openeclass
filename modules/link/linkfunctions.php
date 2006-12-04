@@ -246,7 +246,19 @@ function makedefaultviewcode($locatie)
 // END of function makedefaultviewcode
 
 
-
+/**
+ * Function getNumberOfLinks
+ *
+ * @param unknown_type $catid
+ * @return int number of links
+ */
+function getNumberOfLinks($catid){
+	global $tbl_link, $dbname;
+	$sqlLinks = "SELECT * FROM `".$tbl_link."` WHERE category='".$catid."' ORDER BY ordre DESC";
+	$result = db_query($sqlLinks, $dbname);
+	$numberoflinks=mysql_num_rows($result);
+	return $numberoflinks;
+}
 
 
 
