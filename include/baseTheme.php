@@ -73,7 +73,7 @@ include('tools.php');
  * @param string $head_content (optional) code to be added to the HEAD of the UI
  * @param string $body_action (optional) code to be added to the BODY tag
  */
-function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null){
+function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null){
 	global $langUser, $prenom, $nom, $langLogout, $intitule,  $nameTools, $langHelp, $langAnonUser;
 	global $language, $helpTopic, $require_help, $langEclass, $langCopyrightFooter;
 	global $relPath, $urlServer, $toolContent_ErrorExists;
@@ -111,7 +111,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 	//	BEGIN constructing of left navigation
 	//	----------------------------------------------------------------------
-	$t->set_block('mainBlock', 'leftNavCategoryBlock', 'leftNavCategory');
+	$t->set_block('mainBlock', 'leftNavBlock', 'leftNav');
+	$t->set_block('leftNavBlock', 'leftNavCategoryBlock', 'leftNavCategory');
 	$t->set_block('leftNavCategoryBlock', 'leftNavLinkBlock', 'leftNavLink');
 
 	if (is_array($toolArr)) {
@@ -136,7 +137,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 			$t->clear_var('leftNavLink'); //clear inner block
 		}
-
+		$t->parse('leftNav', 'leftNavBlock',true);
+		if (isset($hideLeftNav)) {
+			$t->clear_var('leftNav');
+			$t->set_var('CONTENT_MAIN_CSS', 'content_main_no_nav');
+		} else {
+			$t->set_var('CONTENT_MAIN_CSS', 'content_main');
+		}
+		
 		$t->set_var('URL_PATH',  $urlServer);
 
 		//If there is a message to display, show it (ex. Session timeout)
