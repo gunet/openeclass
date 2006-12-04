@@ -103,17 +103,23 @@ if($is_adminOfCourse) {
 		unset($catlinkstatus);
 	}
 
+	$tool_content .="
+	<div id=\"operations_container\">
+	<ul id=\"opslist\">";
 
-	$tool_content .= "<div id=\"tool_operations\">";
+
 	if (isset($category))
-	$tool_content .=  "<span class=\"operation\"><a href=\"".$_SERVER['PHP_SELF']."?action=addlink&category=".$category."&urlview=@$urlview\">".$langLinkAdd."</a></span>";
+	$tool_content .=  "<li><a href=\"".$_SERVER['PHP_SELF']."?action=addlink&category=".$category."&urlview=@$urlview\">".$langLinkAdd."</a></li>";
 	else
-	$tool_content .=  "<span class=\"operation\"><a href=\"".$_SERVER['PHP_SELF']."?action=addlink\">".$langLinkAdd."</a> | </span>";
+	$tool_content .=  "<li><a href=\"".$_SERVER['PHP_SELF']."?action=addlink\">".$langLinkAdd."</a></li>";
+	//	$tool_content .= "<li> | </li>";
 	if (isset($urlview))
-	$tool_content .=  "<span class=\"operation\"><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory&urlview=".$urlview."\">".$langCategoryAdd."</a></span>";
+	$tool_content .=  "<li><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory&urlview=".$urlview."\">".$langCategoryAdd."</a></li>";
 	else
-	$tool_content .=  "<span class=\"operation\"><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory\">".$langCategoryAdd."</a></span>";
-	$tool_content .=  "</div>";
+	$tool_content .=  "<li><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory\">".$langCategoryAdd."</a></li>";
+
+	$tool_content .=  "</ul></div>
+	";
 
 
 
@@ -155,10 +161,10 @@ if($is_adminOfCourse) {
 			$tool_content .= 	">".$myrow["categoryname"]."</option>";
 		}
 		$tool_content .= 	"</select></td></tr>";
-		$tool_content .=  	"</thead></table><br>";
+		$tool_content .=  	"</thead></table><br/>";
 		$tool_content .=  	"<input type=\"Submit\" name=\"submitLink\" value=\"".$langAdd."\">";
 
-		$tool_content .=  "</form>";
+		$tool_content .=  "</form><br/>";
 	}
 	elseif(isset($action) and ($action=="addcategory" or $action=="editcategory") and !isset($submitCategory))
 	{
@@ -180,9 +186,9 @@ if($is_adminOfCourse) {
 		$tool_content .=  	"</thead></table>";
 		$tool_content .=  	"<br><input type=\"Submit\" name=\"submitCategory\" value=\"".$langAdd."\">";
 
-		$tool_content .=  "</form>";
+		$tool_content .=  "</form><br/>";
 	}
-	
+
 }
 
 //making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
@@ -274,12 +280,24 @@ if (mysql_num_rows($resultcategories) > 0) {
 	$tool_content .=  "</table>";
 
 } else {   // no category
-	$tool_content .=  "<table>";
-	$tool_content .=  "<tbody><tr><td class=\"category\" colspan=\"2\" >$langLinks</td></tr>";
+	if (getNumberOfLinks(0)>0){
+		$tool_content .=  "<table>";
+		$tool_content .=  "<tbody><tr><td class=\"category\" colspan=\"2\" >$langLinks</td></tr>";
 
-	showlinksofcategory(0);
-	$tool_content .=  "</td></tr>";
-	$tool_content .=  "</tbody></table>";
+		showlinksofcategory(0);
+		$tool_content .=  "</td></tr>";
+		$tool_content .=  "</tbody></table>";
+	} else {
+		if($is_adminOfCourse){
+		//if the user is the course administrator instruct him/her
+		//what he can do to add links	
+		$tool_content .= "<p>$langProfNoLinksExist</p>";
+		} else {
+		//if the user has no course administrator access
+		//inform him/her that no links exist
+		$tool_content .= "<p>$langNoLinksExist</p>";
+		}
+	}
 }
 
 draw($tool_content, 2, 'link');
