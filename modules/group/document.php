@@ -1,29 +1,4 @@
 <?php
-<<<<<<< document.php
-/*=============================================================================
-       	GUnet e-Class 2.0 
-        E-learning and Course Management Program  
-================================================================================
-       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
-        Á full copyright notice can be read in "/info/copyright.txt".
-        
-       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
-      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
-
-        For a full list of contributors, see "credits.txt".  
-     
-        This program is a free software under the terms of the GNU 
-        (General Public License) as published by the Free Software 
-        Foundation. See the GNU License for more details. 
-        The full license can be read in "license.txt".
-     
-       	Contact address: GUnet Asynchronous Teleteaching Group, 
-        Network Operations Center, University of Athens, 
-        Panepistimiopolis Ilissia, 15784, Athens, Greece
-        eMail: eclassadmin@gunet.gr
-==============================================================================*/
-
 /*===========================================================================
 	document.php
 	@last update: 27-11-2006 by Dionysios G. Synodinos
@@ -49,44 +24,6 @@
    	2) Define the directory to display
   	3) Read files and directories from the directory defined in part 2
   	4) Display all of that on an HTML page
- 
-==============================================================================
-=======
-/*
-  +----------------------------------------------------------------------+
-  | CLAROLINE version 1.3.0 $Revision$                             |
-  +----------------------------------------------------------------------+
-  | Copyright (c) 2000, 2001 Universite catholique de Louvain (UCL)      |
-  +----------------------------------------------------------------------+
-  | This source file is subject to the GENERAL PUBLIC LICENSE,           |
-  | available through the world-wide-web at                              |
-  | http://www.gnu.org/copyleft/gpl.html                                 |
-  +----------------------------------------------------------------------+
-  | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-  |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-  |          Christophe Gesche <gesche@ipm.ucl.ac.be>                    |
-  +----------------------------------------------------------------------+
-
-  DESCRIPTION:
-  ****
-  This PHP script allow user to manage files and directories on a remote http server.
-  The user can : - navigate trough files and directories.
-                 - upload a file
-				 - rename, delete, copy a file or a directory
-
-  The script is organised in four sections.
-
-  * 1st section execute the command called by the user
-                Note: somme commands of this section is organised in two step.
-			    The script lines always begin by the second step,
-			    so it allows to return more easily to the first step.
-
-  * 2nd section define the directory to display
-
-  * 3rd section read files and directories from the directory defined in part 3
-
-  * 4th section display all of that on a HTML page
->>>>>>> 1.2
 */
 
 $langFiles = 'document';
@@ -141,9 +78,7 @@ stripSubmitValue($_GET);
 
 
 /*****************************************************************************/
-
 /*>>>>>>>>>>>> MAIN SECTION  <<<<<<<<<<<<*/
-
 
 /**************************************
 			 UPLOAD FILE
