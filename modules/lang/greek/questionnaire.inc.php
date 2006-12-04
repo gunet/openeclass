@@ -120,7 +120,7 @@ $langPollYes = "Ναί";
 $langPollNo = "Όχι";
 $langPollMoreAnswers ="Κι άλλες απαντήσεις";
 $langPollMoreQuestions = "Κι άλλες ερωτήσεις";
-$langPollCreate = "Δημιουργία Δημοσκόπησης!";
+$langPollCreate = "Δημιουργία Δημοσκόπησης";
 $langPollCreated ="Η Δημοσκόπηση δημιουργήθηκε με επιτυχία. Κάντε κλικ <a href=\"poll.php\">εδώ</a> για να επι
 σκευτείτε την σελίδα των δημοσκοπήσεων.";
 $langPollCreator = "Δημιουργός";
