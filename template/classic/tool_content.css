@@ -59,23 +59,44 @@ a:active, a:visited, a:link{
 	overflow:visible;
 }
 
-#tool_operations {
+#tool_operationsS {
 	width:99%;
 	margin-bottom:40px;
 }
 
-#tool_operations .operation{
+#tool_operationsS .operation{
 	margin-right:2px;
 	font-size:12px;
 }
 
-#tool_operations a{
+#tool_operationsS a{
 	margin-right:2px;
 }
 
 #tool_content li { 
 	list-style-type: square; 
 	font-size: 12px;	
+}
+#operations_container {
+margin-bottom: 0.5em;
+overflow: hidden;
+height: 1em;
+}
+
+#opslist
+{
+list-style-type: none;
+margin: 0;
+padding: 0;
+}
+
+#opslist li
+{
+border-left: 1px solid #000;
+float: left;
+line-height: 1.1em;
+margin: 0 .5em 0 -.5em;
+padding: 0 .5em 0 .5em;
 }
 
 table, th, td {
