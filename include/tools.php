@@ -91,12 +91,12 @@ function getToolsArray($cat) {
 				$result = db_query("
                     select * from accueil
                     where visible=1
-                    ORDER BY id", $currentCourse);
+                    ORDER BY rubrique", $currentCourse);
 			} else {
 				$result = db_query("
                     select * from accueil
                     where visible=1 AND lien NOT LIKE '%/user.php'
-                    ORDER BY id", $currentCourse);
+                    ORDER BY rubrique", $currentCourse);
 			}
 
 			break;
@@ -107,14 +107,14 @@ function getToolsArray($cat) {
                     from accueil
                     where visible=0
                     and admin=0
-                    ORDER BY id", $currentCourse);
+                    ORDER BY rubrique", $currentCourse);
 			break;
 		case 'courseAdmin':
 			$result = db_query("
                     select *
                     from accueil
                     where admin=1
-                    ORDER BY id", $currentCourse);
+                    ORDER BY rubrique", $currentCourse);
 			break;
 		case 'claroAdmin':
 			$result = db_query("
