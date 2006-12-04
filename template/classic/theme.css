@@ -426,6 +426,13 @@ body {
 	max-width: 100%;
 }
 
+#content_main_no_nav {
+	margin-top:22px;
+	//margin-top:8px;
+	padding: 1em;
+	max-width: 100%;
+}
+
 #footer	{
 	position:absolute;
 	bottom:0;
