@@ -98,7 +98,7 @@ if($is_adminOfCourse) {
 	//displaying the error / status messages if there is one
 	if (!empty($catlinkstatus))	{
 
-		$tool_content .=  "<table><tbody><tr><td class=\"success\">".$catlinkstatus."</td></tr></tbody></table>";
+		$tool_content .=  "<table width=\"99%\"><tbody><tr><td class=\"success\">".$catlinkstatus."</td></tr></tbody></table>";
 		$tool_content .= "<br>";
 		unset($catlinkstatus);
 	}
