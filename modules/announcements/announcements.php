@@ -42,6 +42,7 @@ $require_current_course = TRUE;
 $require_help = TRUE;
 $langFiles = 'announcements';
 $helpTopic = 'Announce';
+$guest_allowed = true;
 
 include '../../include/baseTheme.php';
 include('../../include/lib/textLib.inc.php');

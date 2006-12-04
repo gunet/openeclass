@@ -38,7 +38,7 @@ $langFiles = array('course_info', 'create_course', 'opencours', 'course_home');
 
 $require_help = TRUE;
 $helpTopic = 'course_home';
-
+$guest_allowed = true;
 
 
 

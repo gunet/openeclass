@@ -37,6 +37,7 @@ $langFiles = 'agenda';
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Agenda';
+$guest_allowed = true;
 
 include '../../include/baseTheme.php';
 

@@ -44,6 +44,7 @@ $require_current_course = TRUE;
 $langFiles = 'link';
 $require_help = TRUE;
 $helpTopic = 'Link';
+$guest_allowed = true;
 
 
 

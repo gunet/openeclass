@@ -46,6 +46,7 @@
 
 $require_current_course = TRUE;
 $langFiles = 'document';
+$guest_allowed = true;
 
 include '../../include/baseTheme.php';
 include 'forcedownload.php';

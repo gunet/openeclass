@@ -65,6 +65,8 @@ $require_current_course = TRUE;
 $langFiles = 'video';
 $require_help = TRUE;
 $helpTopic = 'Video';
+$guest_allowed = true;
+
 include '../../include/baseTheme.php';
 
 

@@ -67,6 +67,7 @@ define('MATCHING', 4);
 
 $require_current_course = TRUE;
 $langFiles='exercice';
+$guest_allowed = true;
 
 //include '../../include/init.php';
 

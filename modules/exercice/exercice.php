@@ -62,6 +62,7 @@ $langFiles='exercice';
 
 $require_help = TRUE;
 $helpTopic = 'Exercise';
+$guest_allowed = true;
 
 //include('../../include/init.php');
 
