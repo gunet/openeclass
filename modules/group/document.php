@@ -32,6 +32,7 @@ $require_current_course = TRUE;
 
 include '../../include/baseTheme.php';
 
+$baseServDir = $webDir;
 $tool_content = "";
 
 include("../../include/lib/fileDisplayLib.inc.php");
@@ -69,15 +70,11 @@ $baseWorkDir = $baseServDir.$courseDir;
 
 $tool_content .=  "</td></tr></table></center>";
 
-
 /*** clean information submited by the user from antislash ***/
 
 stripSubmitValue($_POST);
 stripSubmitValue($_GET);
 
-
-
-/*****************************************************************************/
 /*>>>>>>>>>>>> MAIN SECTION  <<<<<<<<<<<<*/
 
 /**************************************
@@ -159,8 +156,6 @@ if (is_uploaded_file(@$userFile) )
 	}
 
 
-
-
 	/**************************************
 			DELETE FILE OR DIRECTORY
 	**************************************/
@@ -174,9 +169,6 @@ if (is_uploaded_file(@$userFile) )
 		}
 	}
 
-
-
-
 	/*****************************************
 					 RENAME
 	******************************************/
@@ -186,7 +178,6 @@ if (is_uploaded_file(@$userFile) )
 	 * so it allows to return to STEP 1
 	 * if STEP 2 unsucceds
 	 */
-
 
 	/*-------------------------------------
 			  RENAME : STEP 2
@@ -379,6 +370,7 @@ $cmdParentDir  = rawurlencode($parentDir);
 
 
 $tool_content .= <<<cData
+
 <div class="fileman" align="center">
 <table width="100%" border="0" cellspacing="2" cellpadding="4">
 <tr>
@@ -388,7 +380,7 @@ $tool_content .= <<<cData
 
 <a href="../help/help.php?topic=Doc" 
 onClick="window.open('../help/help.php?topic=Doc','Help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10'); 
-return false;"> <font size=2 face="arial, helvetica">${langHelp}</font>
+return false;"> <font size=2 face="arial, helvetica">$langHelp</font>
 </a>
 
 
@@ -397,8 +389,8 @@ return false;"> <font size=2 face="arial, helvetica">${langHelp}</font>
 
 <tr>
 	<td colspan=2>
-	<a href=\"../group/group_space.php\">${langGroupSpaceLink}</a>&nbsp;&nbsp;
-		<a href=\"../phpbb/viewforum.php?forum=${forumId}\">${langGroupForumLink}</a>
+	<a href='group_space.php'>${langGroupSpaceLink}</a>&nbsp;&nbsp;
+		<a href='../phpbb/viewforum.php?forum=$forumId'>$langGroupForumLink</a>
 	</td>
 	</tr>
 	<tr>
@@ -413,7 +405,7 @@ if (isset($dialogBox))
 {
 	$tool_content .= <<<cData
 	
-	<td bgcolor=\"#9999FF\">
+	<td bgcolor='#9999FF'>
 	 <!-- dialog box -->
 	 ${dialogBox}
 	 </td>
@@ -432,12 +424,12 @@ else
 $tool_content .= <<<cData
 
 	<!-- upload  -->
-	<td align=\"right\">
-	<form action=\"${PHP_SELF}\" method=\"post\" enctype=\"multipart/form-data\">
-	<input type=\"hidden\" name=\"uploadPath\" value=\"${curDirPath}\">
+	<td align='right'>
+	<form action='${_SERVER['PHP_SELF']}' method='post' enctype='multipart/form-data'>
+	<input type='hidden' name='uploadPath' value='$curDirPath'>
 ${langDownloadFile}&nbsp;:
-	<input type=\"file\" name=\"userFile\">
-	<input type=\"submit\" value=\"${langDownload}\">
+	<input type='file' name='userFile'>
+	<input type='submit' value='$langDownload'>
 	</form>
 	</td>\n
 
@@ -460,7 +452,7 @@ $tool_content .=  "<td colspan=8>\n";
 if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
 {
 	$tool_content .=  "<!-- parent dir -->\n";
-	$tool_content .=  "<a href=\"$PHP_SELF?openDir=".$cmdParentDir."\">\n";
+	$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdParentDir."\">\n";
 	$tool_content .=  "<IMG src=\"img/parent.gif\" border=0 align=\"absbottom\" hspace=5>\n";
 	$tool_content .=  "<small>$langUp</small>\n";
 	$tool_content .=  "</a>\n";
@@ -469,7 +461,7 @@ if ($curDirName) // if the $curDirName is empty, we're in the root point and we 
 
 /*** create directory ***/
 $tool_content .=  "<!-- create dir -->\n";
-$tool_content .=  "<a href=\"$PHP_SELF?createDir=".$cmdCurDirPath."\">";
+$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?createDir=".$cmdCurDirPath."\">";
 $tool_content .=  "<IMG src=\"img/dossier.gif\" border=0 align=\"absbottom\" hspace=5>";
 $tool_content .=  "<small> $langCreateDir</small>";
 $tool_content .=  "</a>";
@@ -520,7 +512,7 @@ if (isset($dirNameList))
 
 		$tool_content .= "<tr align=\"center\">\n";
 		$tool_content .= "<td align=\"left\">\n";
-		$tool_content .= "<a href=\"$PHP_SELF?openDir=".$cmdDirName."\"".@$style.">\n";
+		$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".@$style.">\n";
 		$tool_content .= "<img src=\"img/dossier.gif\" border=0 hspace=5>\n";
 		$tool_content .= $dspDirName."\n";
 		$tool_content .= "</a>\n";
@@ -530,11 +522,11 @@ if (isset($dirNameList))
 		$tool_content .= "<td>&nbsp;</td>\n";
 
 		/*** delete command ***/
-		$tool_content .= "<td><a href=\"$PHP_SELF?delete=".$cmdDirName."\"><img src=\"./img/supprimer.gif\" border=0></a></td>\n";
+		$tool_content .= "<td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdDirName."\"><img src=\"./img/supprimer.gif\" border=0></a></td>\n";
 		/*** copy command ***/
-		$tool_content .= "<td><a href=\"$PHP_SELF?move=".$cmdDirName."\"><img src=\"img/deplacer.gif\" border=0></a></td>\n";
+		$tool_content .= "<td><a href=\"$_SERVER[PHP_SELF]?move=".$cmdDirName."\"><img src=\"img/deplacer.gif\" border=0></a></td>\n";
 		/*** rename command ***/
-		$tool_content .= "<td><a href=\"$PHP_SELF?rename=".$cmdDirName."\"><img src=\"img/renommer.gif\" border=0></a></td>\n";
+		$tool_content .= "<td><a href=\"$_SERVER[PHP_SELF]?rename=".$cmdDirName."\"><img src=\"img/renommer.gif\" border=0></a></td>\n";
 		/*** comment command ***/
 		$tool_content .= "<td></td>\n";
 
@@ -573,19 +565,21 @@ if (isset($fileNameList))
 		$tool_content .= "<td><small>".$date."</small></td>\n";
 
 		/*** delete command ***/
-		$tool_content .= "<td><a href=\"$PHP_SELF?delete=".$cmdFileName."\"><img src=\"img/supprimer.gif\" border=0></a></td>\n";
+		$tool_content .= "<td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdFileName."\"><img src=\"img/supprimer.gif\" border=0></a></td>\n";
 		/*** copy command ***/
-		$tool_content .= "<td><a href=\"$PHP_SELF?move=".$cmdFileName."\"><img src=\"img/deplacer.gif\" border=0></a></td>\n";
+		$tool_content .= "<td><a href=\"$_SERVER[PHP_SELF]?move=".$cmdFileName."\"><img src=\"img/deplacer.gif\" border=0></a></td>\n";
 		/*** rename command ***/
-		$tool_content .= "<td><a href=\"$PHP_SELF?rename=".$cmdFileName."\"><img src=\"img/renommer.gif\" border=0></a></td>\n";
+		$tool_content .= "<td><a href=\"$_SERVER[PHP_SELF]?rename=".$cmdFileName."\"><img src=\"img/renommer.gif\" border=0></a></td>\n";
 		/*** submit command ***/
-		$tool_content .= "<td><a href=\"../work/group_work.php?submit=$urlShortFileName\"><small>$langPublish</small></a></td>\n";
+//		$tool_content .= "<td><a href=\"../work/group_work.php?submit=$urlShortFileName\"><small>$langPublish</small></a></td>\n";
 
 		$tool_content .= "</tr>\n";
 	}
 }
 $tool_content .= "</table>\n";
 $tool_content .= "</div>\n";
+
+chdir($baseServDir."/modules/group/");
 
 draw($tool_content, 2);
 ?>
