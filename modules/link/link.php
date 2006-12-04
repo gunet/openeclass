@@ -301,4 +301,6 @@ if (mysql_num_rows($resultcategories) > 0) {
 }
 
 draw($tool_content, 2, 'link');
+//call draw as shown below to hide the left nav
+//draw($tool_content, 2, 'link', '', '', true);
 ?>
