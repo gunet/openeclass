@@ -33,9 +33,9 @@
 ==============================================================================
 */
 
-$langQuestionnaire = "Ερωτηματολόγια";
+$langQuestionnaire = "Ερωτηματολόγιo";
 $langSurveysActive = "Ενεργές Έρευνες Μαθησιακού Προφίλ";
-$langSurveysInactive = "Ανεργές Έρευνες Μαθησιακού Προφίλ";
+$langSurveysInactive = "Ανενεργές Έρευνες Μαθησιακού Προφίλ";
 $langSurveyName = "Όνομα";
 $langSurveyNumAnswers = "Απαντήσεις";
 $langSurveyCreation = "Δημιουργία";
@@ -55,70 +55,26 @@ $langSurveyContinue = "Συνέχεια";
 $langSurveyMoreAnswers = "Κι άλλες απαντήσεις";
 $langSurveyYes = "Ναί";
 $langSurveyNo = "Όχι";
-$langSurveyMoreAnswers ="Κι άλλες απαντήσεις";
-$langSurveyMoreQuestions = "Κι άλλες ερωτήσεις";
+$langSurveyMoreAnswers ="Και άλλες απαντήσεις";
+$langSurveyMoreQuestions = "Και άλλες ερωτήσεις";
 $langSurveyCreate = "Δημιουργία Έρευνας Μαθησιακού Προφίλ";
-$langSurveyCreated ="Η Έρευνα Μαθησιακού Προφίλ δημιουργήθηκε με επιτυχώς. Πατήστε <a href=\"questionnaire.php\">εδώ</a> για να επισκευτείτε την σελίδα των ερευνών μαθησιακού προφίλ.";
+$langSurveyCreated ="Η Έρευνα Μαθησιακού Προφίλ δημιουργήθηκε με επιτυχία. Κάντε κλικ <a href=\"questionnaire.php\">εδώ</a> για να επισκεφτείτε την σελίδα των ερευνών μαθησιακού προφίλ.";
 $langSurveyCreator = "Δημιουργός";
 $langSurveyCourse = "Μάθημα";
 $langSurveyCreationError = "Σφάλμα κατά την δημιουργία της Δημοσκόπησης. Παρακαλώ προσπαθήστε ξανά.";
 $langSurveyDeactivate = "Απενεργοποίηση";
 $langSurveyActivate = "Ενεργοποίηση";
 $langSurveyParticipate = "Συμμετοχή";
-$langSurveyDeleted ="Η Έρευνα Μαθησιακού Προφίλ διαγράφηκε επιτυχώς. Πατήστε <a href=\"questionnaire.php\">εδώ</a> για να επισκευτείτε την σελίδα των Ερευνών Μαθησιακού Προφίλ.";
-$langSurveyDeactivated ="Η Έρευνα Μαθησιακού Προφίλ απενεργοποιήθηκε επιτυχώς. Πατήστε <a href=\"questionnaire.php\">εδώ</a> για να επισκευτείτε την σελίδα των Ερευνών Μαθησιακού Προφίλ.";
-$langSurveyActivated ="Η Έρευνα Μαθησιακού Προφίλ ενεργοποιήθηκε επιτυχώς. Πατήστε <a href=\"questionnaire.php\">εδώ</a> για να επισκευτείτε την σελίδα των Ερευνών Μαθησιακού Προφίλ.";
-$langSurveySubmitted ="Η Έρευνα Μαθησιακού Προφίλ απεστάλλει επιτυχώς. Πατήστε <a href=\"questionnaire.php\">εδώ</a> για να επισκευτείτε την σελίδα των Ερευνών Μαθησιακού Προφίλ.";
+$langSurveyDeleted ="Η Έρευνα Μαθησιακού Προφίλ διαγράφηκε με επιτυχία. Κάντε κλικ <a href=\"questionnaire.php\">εδώ</a> για να επισκεφτείτε την σελίδα των Ερευνών Μαθησιακού Προφίλ.";
+$langSurveyDeactivated ="Η Έρευνα Μαθησιακού Προφίλ απενεργοποιήθηκε με επιτυχία. Κάντε κλικ <a href=\"questionnaire.php\">εδώ</a> για να επισκεφτείτε την σελίδα των Ερευνών Μαθησιακού Προφίλ.";
+$langSurveyActivated ="Η Έρευνα Μαθησιακού Προφίλ ενεργοποιήθηκε με επιτυχία. Κάντε κλικ <a href=\"questionnaire.php\">εδώ</a> για να επισκεφτείτε την σελίδα των Ερευνών Μαθησιακού Προφίλ.";
+$langSurveySubmitted ="Η Έρευνα Μαθησιακού Προφίλ στάλθηκε με επιτυχία. Κάντε κλικ <a href=\"questionnaire.php\">εδώ</a> για να επισκεφτείτε την σελίδα των Ερευνών Μαθησιακού Προφίλ.";
 $langSurveyUser = "Χρήστης";
 $langSurveyTotalAnswers = "Συνολικός αριθμός απαντήσεων";
 $langSurveyNone = "Δεν έχουν δημιουργηθεί έρευνες μαθησιακού προφίλ για το μάθημα";
-$langSurveyInactive = "Η Έρευνα Μαθησιακού Προφίλ έχε λήξει ή δεν έχει ενεργοποιηθεί ακόμα.";
+$langSurveyInactive = "Η Έρευνα Μαθησιακού Προφίλ έχει λήξει ή δεν έχει ενεργοποιηθεί ακόμα.";
 $langSurveyCharts = "Συγκεντρωτικά αποτελέσματα";
 $langSurveyIndividuals = "Αποτελέσματα ανά χρήστη";
-
-$langTestEcho = "Δούλεψε το echo";
-$langPollsActive = "Ενεργές Δημοσκοπίσεις";
-$langPollsInactive = "Ανεργές Δημοσκοπίσεις";
-$langPollName = "Όνομα";
-$langPollNumAnswers = "Απαντήσεις";
-$langPollCreation = "Δημιουργία";
-$langPollStart = "Έναρξη";
-$langPollEnd = "Λήξη";
-$langPollOperations = "Λειτουργίες";
-$langPollEdit = "Επεξεργασία";
-$langPollRemove = "Διαγραφή";
-$langPollCreate = "Δημιουργία";
-$langPollQuestion = "Ερώτηση";
-$langPollAnswer = "Απάντηση";
-$langPollAddAnswer = "Προσθήκη Απαντήσεων";
-$langPollType = "Τύπος";
-$langPollMC = "Πολλαπλής Επιλογής";
-$langPollFillText = "Συμπληρώστε το κενό";
-$langPollContinue = "Συνέχεια";
-$langPollMoreAnswers = "Κι άλλες απαντήσεις";
-$langPollYes = "Ναί";
-$langPollNo = "Όχι";
-$langPollMoreAnswers ="Κι άλλες απαντήσεις";
-$langPollMoreQuestions = "Κι άλλες ερωτήσεις";
-$langPollCreate = "Δημιουργία Δημοσκόπισης";
-$langPollCreated ="Η Δημοσκόπιση δημιουργήθηκε με επιτυχώς. Πατήστε <a href=\"questionnaire.php\">εδώ</a> για να επισκευτείτε την σελίδα των δημοσκοπίσεων.";
-$langPollCreator = "Δημιουργός";
-$langPollCourse = "Μάθημα";
-$langPollCreationError = "Σφάλμα κατά την δημιουργία της Δημοσκόπησης. Παρακαλώ προσπαθήστε ξανά.";
-$langPollDeactivate = "Απενεργοποίηση";
-$langPollActivate = "Ενεργοποίηση";
-$test = "<h1>TEST</h1>";
-$langPollParticipate = "Συμμετοχή";
-$langPollDeleted ="Η Δημοσκόπιση διαγράφηκε επιτυχώς. Πατήστε <a href=\"questionnaire.php\">εδώ</a> για να επισκευτείτε την σελίδα των δημοσκοπίσεων.";
-$langPollDeactivated ="Η Δημοσκόπιση απενεργοποιήθηκε επιτυχώς. Πατήστε <a href=\"questionnaire.php\">εδώ</a> για να επισκευτείτε την σελίδα των δημοσκοπίσεων.";
-$langPollActivated ="Η Δημοσκόπιση ενεργοποιήθηκε επιτυχώς. Πατήστε <a href=\"questionnaire.php\">εδώ</a> για να επισκευτείτε την σελίδα των δημοσκοπίσεων.";
-$langPollSubmitted ="Η Δημοσκόπιση απεστάλλει επιτυχώς. Πατήστε <a href=\"questionnaire.php\">εδώ</a> για να επισκευτείτε την σελίδα των δημοσκοπίσεων.";
-$langPollUser = "Χρήστης";
-$langPollTotalAnswers = "Συνολικός αριθμός απαντήσεων";
-$langPollNone = "Δεν υπάρχουν αυτή την στιγμή διαθέσιμες δημοσκοπίσεις.";
-$langPollInactive = "Η Δημοσκόπιση έχε λήξει ή δεν έχει ενεργοποιηθεί ακόμα.";
-$langPollCharts = "Συγκεντρωτικά αποτελέσματα";
-$langPollIndividuals = "Αποτελέσματα ανά χρήστη";
 
 $langQPref = "Τι τύπο ερωτηματολογίου επιθυμείτε;";
 $langQPrefSurvey = "Έρευνα μαθησιακού προφίλ";
@@ -133,10 +89,59 @@ $langPollDeleteMsg = "Είστε σίγουρος ότι θέλετε να διαγράψετε αυτή την Δημοσκόπι
 $langSurveyDeleteYes = "Ναι";
 $langSurveyDeleteNo = "Όχι";
 
-$langSurveyInfo1 ="Παρακαλώ εισάγετε τό όνομα της Δημοσκόπισης που επιθυμείτε καθώς και το χρονικό διάστημα που επιθυμείτε να είναι ενεργή - διαθέσιμη στους χρείστες (εξ ορισμού 365 μέρες)";
-$langSurveyInfo2 ="Παρακαλώ επιβεβαιώστε ότι το όνομα της δημοσκόπισης και το χρονικό διάστημα που θα είναι ενεργή είναι σωστό. Στην συνέχεια επιλέξτε ένα έτοιμο ερώτημα (COLLES/ATTL) ή εισάγεται δικιά σας ερώτηση στα κενά πεδία.";
+$langSurveyInfo1 ="Παρακαλώ εισάγετε τό όνομα της Δημοσκόπισης που επιθυμείτε καθώς και το χρονικό διάστημα που επιθυμείτε να είναι ενεργή - διαθέσιμη στους χρήστες (εξ ορισμού 365 μέρες)";
+$langSurveyInfo2 ="Παρακαλώ επιβεβαιώστε ότι το όνομα της δημοσκόπησης και το χρονικό διάστημα που θα είναι ενεργή είναι σωστό. Στην συνέχεια επιλέξτε ένα έτοιμο ερώτημα (σύμφωνα με το πρότυπο COLLES/ATTL) ή εισάγετε δικιά σας ερώτηση στα κενά πεδία.";
 
 $langQQuestionNotGiven ="Δεν έχετε εισάγει την τελευταία ερώτηση.";
 $langQFillInAllQs ="Παρακαλώ απαντήστε σε όλες τις ερωτήσεις.";
+
+// polls
+
+$langPollsActive = "Ενεργές Δημοσκοπήσεις";
+$langPollsInactive = "Ανενεργές Δημοσκοπήσεις";
+$langPollName = "Όνομα";
+$langPollNumAnswers = "Απαντήσεις";
+$langPollCreation = "Δημιουργία";
+$langPollStart = "Έναρξη";
+$langPollEnd = "Λήξη";
+$langPollOperations = "Λειτουργίες";
+$langPollEdit = "Επεξεργασία";
+$langPollRemove = "Διαγραφή";
+$langPollCreate = "Δημιουργία";
+$langPollQuestion = "Ερώτηση";
+$langPollAnswer = "Απάντηση";
+$langPollAddAnswer = "Προσθήκη απαντήσεων";
+$langPollType = "Τύπος";
+$langPollMC = "Πολλαπλής Επιλογής";
+$langPollFillText = "Συμπληρώστε το κενό";
+$langPollContinue = "Συνέχεια";
+$langPollMoreAnswers = "Κι άλλες απαντήσεις";
+$langPollYes = "Ναί";
+$langPollNo = "Όχι";
+$langPollMoreAnswers ="Κι άλλες απαντήσεις";
+$langPollMoreQuestions = "Κι άλλες ερωτήσεις";
+$langPollCreate = "Δημιουργία Δημοσκόπησης!";
+$langPollCreated ="Η Δημοσκόπηση δημιουργήθηκε με επιτυχία. Κάντε κλικ <a href=\"poll.php\">εδώ</a> για να επι
+σκευτείτε την σελίδα των δημοσκοπήσεων.";
+$langPollCreator = "Δημιουργός";
+$langPollCourse = "Μάθημα";
+$langPollCreationError = "Σφάλμα κατά την δημιουργία της Δημοσκόπησης. Παρακαλώ προσπαθήστε ξανά.";
+$langPollDeactivate = "Απενεργοποίηση";
+$langPollActivate = "Ενεργοποίηση";
+$langPollParticipate = "Συμμετοχή";
+$langPollDeleted ="Η Δημοσκόπηση διαγράφηκε με επιτυχία. Κάντε κλικ <a href=\"poll.php\">εδώ</a> για να επισκε
+φτείτε την σελίδα των δημοσκοπίσεων.";
+$langPollDeactivated ="Η Δημοσκόπηση απενεργοποιήθηκε με επιτυχία. Κάντε κλικ <a href=\"poll.php\">εδώ</a> για
+ να επισκεφτείτε την σελίδα των δημοσκοπήσεων.";
+$langPollActivated ="Η Δημοσκόπηση ενεργοποιήθηκε με επιτυχία. Κάντε κλικ <a href=\"poll.php\">εδώ</a> για να
+ επισκεφτείτε την σελίδα των δημοσκοπήσεων.";
+$langPollSubmitted ="Η Δημοσκόπηση στάλθηκε με επιτυχία. Κάντε κλικ <a href=\"poll.php\">εδώ</a> για να επισκεφτείτε την σελίδα των δημοσκοπήσεων.";
+$langPollUser = "Χρήστης";
+
+$langPollTotalAnswers = "Συνολικός αριθμός απαντήσεων";
+$langPollNone = "Δεν υπάρχουν αυτή την στιγμή διαθέσιμες δημοσκοπήσεις.";
+$langPollInactive = "Η Δημοσκόπηση έχει λήξει ή δεν έχει ενεργοποιηθεί ακόμα.";
+$langPollCharts = "Συγκεντρωτικά αποτελέσματα";
+$langPollIndividuals = "Αποτελέσματα ανά χρήστη";
 
 ?>
