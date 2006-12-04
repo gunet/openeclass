@@ -69,6 +69,7 @@ $langNoCategory="No category";
 // Other
 $showall="Show all";
 $shownone="Show none";
-
+$langProfNoLinksExist = "No links exist. You may use the tool operations to add links.";
+$langNoLinksExist = "The professor has not added any links."
 
 ?>
