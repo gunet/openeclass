@@ -167,13 +167,13 @@ cData;
 				if (($visibility)||($is_adminOfCourse)) {
 				
 					if ($visibility) {
-						$visibility_css = " ";
-						$visibility_gif = "invisible";
-						$visibility_func = "deactivate";
-					} else {
 						$visibility_css = " class=\"invisible\"";
 						$visibility_gif = "visible";
 						$visibility_func = "activate";
+					} else {
+						$visibility_css = " ";
+						$visibility_gif = "invisible";
+						$visibility_func = "deactivate";
 					}
 					
 					$creator_id = $theSurvey["creator_id"];
@@ -304,13 +304,13 @@ cData;
 	if (($visibility)||($is_adminOfCourse)) {
 				
 				if ($visibility) {
-					$visibility_css = " ";
-					$visibility_gif = "invisible";
-					$visibility_func = "deactivate";
-				} else {
 					$visibility_css = " class=\"invisible\"";
 					$visibility_gif = "visible";
 					$visibility_func = "activate";
+				} else {
+					$visibility_css = " ";
+					$visibility_gif = "invisible";
+					$visibility_func = "deactivate";
 				}
 				
 				$creator_id = $thepoll["creator_id"];
