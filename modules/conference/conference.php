@@ -112,7 +112,7 @@ function init_teacher()
 		if(t.responseText==""){
 			document.getElementById("presantation_window").innerHTML="'.$langPresantation_content.'";
 		} else{
-			var presantation=\'<iframe id="iframe" style="height:500px; width:700px;" src="\'+t.responseText+\'"></iframe>\';
+			var presantation=\'<iframe id="iframe" src="\'+t.responseText+\'"></iframe>\';
                         document.getElementById("presantation_window").innerHTML=presantation;
                 }
         }
@@ -173,7 +173,7 @@ function refresh_student()
 			document.getElementById("presantation_window").innerHTML="'.$langPresantation_content.'";
 		} else if( t.responseText!=presantation_URL){
 			presantation_URL=t.responseText;
-			var presantation=\'<iframe id="iframe" style="height:500px; width:700px;" src="\'+t.responseText+\'"></iframe>\';
+			var presantation=\'<iframe id="iframe" src="\'+t.responseText+\'"></iframe>\';
                         document.getElementById("presantation_window").innerHTML=presantation;
                 }
         }
@@ -277,7 +277,7 @@ return false;
 /* load presantation in right iframe*/
 function show_presantation()
 	{
-var presantation_url=\'<iframe style="height:500px; width:700px;" src="\'+document.getElementById("Presantation_URL").value+\'"></iframe>\';
+var presantation_url=\'<iframe src="\'+document.getElementById("Presantation_URL").value+\'"></iframe>\';
 document.getElementById("presantation_window").innerHTML=presantation_url;
 new Ajax.Request("pass_parameters.php", {method:"post", postBody:"presantation_URL="+escape(document.getElementById("Presantation_URL").value)});
 return false;
@@ -341,10 +341,10 @@ $tool_content = "";//initialise $tool_content
 
 $tool_content.=
 '
-	<div id="conference" style="position:absolute;height: 200px;width: 200px;border:groove;top:210px;left:200px;">
+	<div id="conference">
 '.$langTeleconference_content.'	
 	</div>
-	<div id="video" style="position:absolute;height: 200px;width: 200px;border:groove;top:435px;left:200px;">
+	<div id="video">
 '.$langVideo_content.'	
 	</div>
 
@@ -352,7 +352,7 @@ $tool_content.=
 ';
 
 if ($is_adminOfCourse) {
-@$tool_content.='<div  style="position:absolute;height:226px;width: 200px;border:groove;top:659px;left:200px;">
+@$tool_content.='<div  id="video_presantation_control">
 <form id="video_form" onSubmit="return play_video();">
 ';
 if($MCU!="") {
@@ -379,18 +379,18 @@ $tool_content.='
 }
 
 $tool_content.='
-	<div id="presantation_window"  style="position:absolute;height: 500px;width: 700px;border:groove;top:210px;left:410px;" >
+	<div id="presantation_window">
 	'.$langPresantation_content.'
 
 	</div>
 
-	<div align="center" style="position:absolute;border:groove;top:720px;left:410px;width:700px;" >
-		<div align="left" id="chat" style="position: relative;height: 100px;width:500px; overflow: auto;">
+	<div id="chat_div" align="center">
+		<div align="left" id="chat">
 		</div>
 
 		<form name = "chatForm" action = "conference.php#bottom" method = "get" target = "conference" onSubmit = "return prepare_message();">
 
-		<div align="center"  style="position: relative; width:700px">
+		<div align="center"  id="chat_control">
 			<input type="text" name="msg" size="80">
 			<input type="hidden" name="chatLine">
 			<input type="submit" value=" >> ">';
@@ -410,11 +410,11 @@ $tool_content.='
 	</div>
 
 	</div>
-	<div style="height:650px;width:910px;">
+	<div id="background">
 	</div>
 ';
 
 
 //END CONTENT
-draw($tool_content, 2, 'user', $head_content,$body_action);
+draw($tool_content, 2, 'conference', $head_content,$body_action);
 ?>

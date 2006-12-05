@@ -1,0 +1,61 @@
+#conference{
+	position:absolute;
+	height: 200px;
+	width: 200px;
+	border:groove;
+	top:210px;
+	left:200px;
+	}
+
+#video{
+	position:absolute;
+	height: 200px;
+	width: 200px;
+	border:groove;
+	top:435px;
+	left:200px;
+}
+#video_presantation_control{
+	position:absolute;
+	height:203px;
+	width: 200px;
+	border:groove;
+	top:659px;
+	left:200px;
+}
+
+#presantation_window{
+	position:absolute;
+	height: 500px;
+	width: 700px;
+	border:groove;
+	top:210px;
+	left:410px;
+}
+
+#iframe{
+	height:500px;
+	width:700px;
+}
+#chat{
+	position: relative;
+	height: 100px;
+	width:500px;
+	overflow: auto;
+}
+#chat_control{
+	position: relative;
+	width:700px
+}
+#background{
+	height:650px;
+	width:910px;
+}
+
+#chat_div{
+	position:absolute;
+	border:groove;
+	top:720px;
+	left:410px;
+	width:700px;
+}
