@@ -26,7 +26,7 @@
 
 /**===========================================================================
 	detailsAll.php
-	@last update: 30-06-2006 by Thanos Kyritsis
+	@last update: 05-12-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 	               
 	based on Claroline version 1.7 licensed under GPL
@@ -73,12 +73,16 @@ $titleTab['subTitle'] = $langTrackAllPathExplanation;
 $tool_content .= claro_disp_tool_title($titleTab);
 
 // display a list of user and their respective progress
-    
+
 $sql = "SELECT U.`nom`, U.`prenom`, U.`user_id`
-		FROM `".$TABLEUSER."` AS U, `".$TABLECOURSUSER."`	 AS CU
+		FROM `".$TABLEUSER."` AS U, `".$TABLECOURSUSER."` AS CU
 		WHERE U.`user_id`= CU.`user_id`
-		AND CU.`code_cours` = '". addslashes($currentCourseID) ."'";
-$usersList = db_query_fetch_all($sql);
+		AND CU.`code_cours` = '". addslashes($currentCourseID) ."'
+		ORDER BY U.`nom` ASC";
+
+$tool_content .= get_limited_page_links($sql, 30, $langPreviousPage, $langNextPage);
+    
+$usersList = get_limited_list($sql, 30);
 
 // display tab header
 $tool_content .= '<table width="99%" border="0" cellspacing="2">'."\n\n"

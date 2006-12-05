@@ -26,7 +26,7 @@
 
 /**===========================================================================
 	learnPathLib.inc.php
-	@last update: 30-06-2006 by Thanos Kyritsis
+	@last update: 05-12-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 	               
 	based on Claroline version 1.7 licensed under GPL
@@ -2067,6 +2067,125 @@ function claro_is_javascript_enabled()
     {
         return false;
     }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//                              OTHER FUNCTIONS
+//
+//////////////////////////////////////////////////////////////////////////////
+
+/**
+ * This function accepts a sql query and a limiter number as arguments. Then it
+ * limits the query's results into multiple pages and returns html code for
+ * presenting links in order to browse through these pages. Should be used
+ * together with get_limited_list().
+ *
+ * @param string $sql contains the sql query we want to limit
+ * @param int $limiter how many entries we want to limit at
+ * @param string $stringPreviousPage the string for the previous page title
+ * @param string $stringNextPage the string for the next page title
+ * @return string containing the links html code for browsing the pages
+ * @author Thanos Kyritsis <atkyritsis@upnet.gr>
+ */
+
+function get_limited_page_links($sql, $limiter, $stringPreviousPage, $stringNextPage)
+{
+	global $_GET;
+	
+	$totalnum = mysql_num_rows(db_query($sql));
+	$firstpage = 1;
+	$lastpage = ceil($totalnum / $limiter);
+	
+	if (isset( $_GET['page'] )) {
+		$currentpage = $_GET['page'];
+		if ($currentpage < $firstpage || $currentpage > $lastpage) {
+			$currentpage = $firstpage;
+		}
+	}
+	else {
+		$currentpage = $firstpage;
+	}
+	
+	$prevpage = $currentpage - 1;
+	$nextpage = $currentpage + 1;
+	
+	$url = basename($_SERVER['PHP_SELF']);
+	
+	switch($_SERVER['argc']) {
+		case 0:
+			$url .= "?page=";
+			break;
+		case 1:
+			$arguments = ereg_replace('[&|?]page=.*$', "", "?".$_SERVER['argv'][0]);
+			
+			if (!strcmp($arguments, NULL)) {
+				$url .= "?page=";
+			}
+			else {
+				$url .= $arguments."&amp;page=";
+			}
+			break;
+		default:
+			$url .= "?page=";
+			break;
+	}
+	
+	$prevstring = "<a href=\"".$url.$prevpage."\">".$stringPreviousPage."</a> | ";
+	$nextstring = "<a href=\"".$url.$nextpage."\">".$stringNextPage."</a>";
+	
+	if ($currentpage == $firstpage) {
+		$prevstring = $stringPreviousPage." | ";
+	}
+	
+	if ($currentpage == $lastpage) {
+		$nextstring = $stringNextPage;
+	}
+	
+	$wholestring = "<p>".$prevstring.$nextstring."</p>";
+	
+	if ( $lastpage == $firstpage) {
+		$wholestring = "";
+	}
+	
+	return $wholestring;
+}
+
+
+/**
+ * This function accepts a sql query and a limiter number as arguments. Then it
+ * limits the query's results into multiple pages and returns the proper list 
+ * of results for the proper page we are currently browsing. Should be used 
+ * together with get_limited_page_links().
+ *
+ * @param string $sql contains the sql query we want to limit
+ * @param int $limiter how many entries we want to limit at
+ * @return string contains the links' html code for browsing the pages
+ * @author Thanos Kyritsis <atkyritsis@upnet.gr>
+ */
+ 
+function get_limited_list($sql, $limiter)
+{
+	global $_GET;
+	
+	$totalnum = mysql_num_rows(db_query($sql));
+	$firstpage = 1;
+	$lastpage = ceil($totalnum / $limiter);
+	
+	if (isset( $_GET['page'] )) {
+		$currentpage = $_GET['page'];
+		if ($currentpage < $firstpage || $currentpage > $lastpage) {
+			$currentpage = $firstpage;
+		}
+	}
+	else {
+		$currentpage = $firstpage;
+	}
+	
+	$limit = ($currentpage - 1) * $limiter;
+	
+	$sql .= " LIMIT ".$limit.",".$limiter;
+	
+	return db_query_fetch_all($sql);
 }
 
 ?>

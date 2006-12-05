@@ -26,7 +26,7 @@
 
 /**===========================================================================
 	details.php
-	@last update: 30-06-2006 by Thanos Kyritsis
+	@last update: 05-12-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 	               
 	based on Claroline version 1.7 licensed under GPL
@@ -98,9 +98,12 @@ if( $learnPathName )
 			FROM `".$TABLEUSER."` AS U, 
 					`".$TABLECOURSUSER."` AS CU
 			WHERE U.`user_id`= CU.`user_id`
-			AND CU.`code_cours` = '". addslashes($currentCourseID) ."'";
+			AND CU.`code_cours` = '". addslashes($currentCourseID) ."'
+			ORDER BY U.`nom` ASC";
+	
+	$tool_content .= get_limited_page_links($sql, 30, $langPreviousPage, $langNextPage);
 
-	$usersList = db_query_fetch_all($sql);
+	$usersList = get_limited_list($sql, 30);
 	mysql_select_db($currentCourseID);
 
 	// display tab header
