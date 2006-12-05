@@ -136,4 +136,9 @@ $langCheckAdmin = "
 		The system has automatically redirect you to the start page to login (if you are
 		the platform administrator you will be allowed access tou the administration tools).</p>
 ";
+
+$langCheckGuest = "
+		<p><b>The action you attempted to execute is not possible with guest user privileges. </b><br/>
+		For security reasons the system has automatically redirect you to the start page to login again.</p>
+";
 ?>
