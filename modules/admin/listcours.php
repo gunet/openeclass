@@ -60,7 +60,7 @@ $require_admin = TRUE;
 // Include baseTheme
 include '../../include/baseTheme.php';
 // Other includes
-@include 'admin.inc.php';
+include 'admin.inc.php';
 // Define $nameTools
 $nameTools = $langListCours;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
