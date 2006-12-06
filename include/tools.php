@@ -86,19 +86,33 @@ function getToolsArray($cat) {
 
 	switch ($cat) {
 		case 'Public':
-
-			if (isset($_SESSION['uid']) and $_SESSION['uid']) {
-				$result = db_query("
+			if (!check_guest()) {
+				if (isset($_SESSION['uid']) and $_SESSION['uid']) {
+					$result = db_query("
                     select * from accueil
                     where visible=1
                     ORDER BY rubrique", $currentCourse);
-			} else {
-				$result = db_query("
+				} else {
+					$result = db_query("
                     select * from accueil
                     where visible=1 AND lien NOT LIKE '%/user.php'
                     ORDER BY rubrique", $currentCourse);
+				}
+			} else {
+				$result = db_query("
+				SELECT * FROM `accueil` 
+				WHERE `visible` = 1
+				AND (
+				`id` = 1 or 
+				`id` = 2 or 
+				`id` = 3 or 
+				`id` = 4 or 
+				`id` = 7 or 
+				`id` = 10 or 
+				`id` = 20) 
+				ORDER BY rubrique
+				", $currentCourse);
 			}
-
 			break;
 		case 'PublicButHide':
 
@@ -203,11 +217,11 @@ function loggedInMenu(){
 	}
 
 	if ($statut == 10) {
-		
+
 		array_push($sideMenuText, $langManuals);
 		array_push($sideMenuLink, $urlServer."manuals/manual.php");
 		array_push($sideMenuImg, "manual.gif");
-		
+
 		array_push($sideMenuText, $langContact);
 		array_push($sideMenuLink, $urlServer."info/contact.php");
 		array_push($sideMenuImg, "contact.gif");
