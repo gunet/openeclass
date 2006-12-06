@@ -38,6 +38,7 @@ $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Agenda';
 $guest_allowed = true;
+echo "MOD ID:: " .$module_id;
 
 include '../../include/baseTheme.php';
 
