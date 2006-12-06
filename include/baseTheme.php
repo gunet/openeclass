@@ -50,10 +50,11 @@ if(isset($toolContent_ErrorExists)) {
 	
 	$_SESSION['errMessage'] = $toolContent_ErrorExists;
 	session_write_close();
-	header("location:".$urlServer."?logout=yes");
+	header("location:".$urlServer."index.php?logout=yes");
 }
 
 if (session_is_registered('errMessage') && strlen($_SESSION['errMessage'])>0) {
+
 	$extraMessage = $_SESSION['errMessage'];
 	session_unregister('errMessage');
 }
