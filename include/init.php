@@ -197,6 +197,15 @@ if (isset($require_admin) && $require_admin) {
 	}
 }
 
+if (!isset($guest_allowed) || $guest_allowed!= true){
+	if (check_guest()){
+		$toolContent_ErrorExists = $langCheckGuest;
+		$errorMessagePath = "../../";
+	}
+}
+
+
+
 // If $require_current_course is true, initialise course settings
 // Read properties of current course
 if (isset($require_current_course) and $require_current_course) {
@@ -320,4 +329,47 @@ if (isset($_SESSION['status'])) {
 	unset($status);
 }
 
+//Security check:: Users that do not have Professor access for a course must not
+//be able to access inactive tools.
+if(file_exists($module_ini_dir = getcwd() . "/module.ini.php") && !$is_adminOfCourse) {
+	include($module_ini_dir);
+
+	if (!check_guest()) {
+		if (isset($_SESSION['uid']) and $_SESSION['uid']) {
+			$result = db_query("
+                    select `id` from accueil
+                    where visible=1
+                    ORDER BY rubrique", $currentCourse);
+		} else {
+			$result = db_query("
+                    select `id` from accueil
+                    where visible=1 AND lien NOT LIKE '%/user.php'
+                    ORDER BY rubrique", $currentCourse);
+		}
+	} else {
+		$result = db_query("
+				SELECT `id` FROM `accueil` 
+				WHERE `visible` = 1
+				AND (
+				`id` = 1 or 
+				`id` = 2 or 
+				`id` = 3 or 
+				`id` = 4 or 
+				`id` = 7 or 
+				`id` = 10 or 
+				`id` = 20) 
+				ORDER BY rubrique
+				", $currentCourse);
+	}
+
+	$publicModules = array();
+	while ($moduleIDs = mysql_fetch_array($result)) {
+		array_push($publicModules, (int)$moduleIDs["id"]);
+	}
+
+	if (!in_array($module_id, $publicModules, true) && strlen($toolContent_ErrorExists)<1) {
+		$toolContent_ErrorExists = $langCheckPublicTools;
+		$errorMessagePath = "../../";
+	}
+}
 ?>
