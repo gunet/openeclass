@@ -1,23 +1,11 @@
 <?php
 
-/*                 greek                */
-
-
 $iso639_2_code = "el";
 $iso639_1_code = "ell";
 
-$langNameOfLang['brazilian']="Βραζιλιάνικα";
 $langNameOfLang['english']="Αγγλικά";
-$langNameOfLang['finnish']="Φινλανδικά";
 $langNameOfLang['french']="Γαλλλικά";
 $langNameOfLang['german']="Γερμανικά";
-$langNameOfLang['italian']="Ιταλικά";
-$langNameOfLang['japanese']="Ιαπωνικά";
-$langNameOfLang['polish']="Πολωνικά";
-$langNameOfLang['simpl_chinese']="Κινέζικα";
-$langNameOfLang['spanish']="Ισπανικά";
-$langNameOfLang['swedish']="Σουηδικά";
-$langNameOfLang['thai']="Ταϊλανδικά";
 $langNameOfLang['greek']="Ελληνικά";
 
 $charset = 'iso-8859-7';

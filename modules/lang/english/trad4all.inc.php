@@ -6,7 +6,7 @@
       | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
       +----------------------------------------------------------------------+
       |   $Id$           |
-	  |   English Translation                                                |
+		  |   English Translation                                                |
       +----------------------------------------------------------------------+
       |   This program is free software; you can redistribute it and/or      |
       |   modify it under the terms of the GNU General Public License        |
@@ -39,18 +39,8 @@
 $iso639_2_code = "en";
 $iso639_1_code = "eng";
 
-$langNameOfLang['brazilian']="brazilian";
 $langNameOfLang['english']="english";
-$langNameOfLang['finnish']="finnish";
 $langNameOfLang['french']="french";
-$langNameOfLang['german']="german";
-$langNameOfLang['italian']="italian";
-$langNameOfLang['japanese']="japanese";
-$langNameOfLang['polish']="polish";
-$langNameOfLang['simpl_chinese']="simplified chinese";
-$langNameOfLang['spanish']="spanish";
-$langNameOfLang['swedish']="swedish";
-$langNameOfLang['thai']="thai";
 $langNameOfLang['greek']="greek";
 
 $charset = 'iso-8859-7';
@@ -83,7 +73,6 @@ $langCopyright = "Copyright";
 
 $langBack="Back";
 $langBackHome="Back to  home";
-$langPropositions="Suggest better";
 $langMaj="Update";
 $langModify="Modify";
 $langDelete="Delete";
