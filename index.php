@@ -37,8 +37,9 @@
 *               HOME PAGE OF ECLASS		               *
 ****************************************************************
 */
-
+$guest_allowed=true;
 $path2add=0;
+
 include("include/baseTheme.php");
 
 //@include("./include/lib/main.lib.php");
@@ -82,7 +83,7 @@ if ($persoIsActive) session_register("perso_is_active");
 // then authenticate user. First via LDAP then via MyQL
 // -----------------------------------------------------------------------
 $warning = '';
-$uname = isset($_POST['uname'])?$_POST['uname']:'';	
+$uname = isset($_POST['uname'])?$_POST['uname']:'';
 $pass = isset($_POST['pass'])?$_POST['pass']:'';
 $submit = isset($_POST['submit'])?$_POST['submit']:'';
 // $auth = get_auth_id();
@@ -98,7 +99,7 @@ if(!empty($submit))
                 FROM user LEFT JOIN admin
                 ON user.user_id = admin.iduser
                 WHERE username='".$uname."'";
-  //$tool_content .= "<br>QUERY:".$sqlLogin."<br><br>";
+	//$tool_content .= "<br>QUERY:".$sqlLogin."<br><br>";
 	$result=mysql_query($sqlLogin);
 	$check_passwords = array("pop3","imap","ldap","db");
 	$warning = "";
@@ -117,8 +118,8 @@ if(!empty($submit))
 				//$tool_content .= "decrypted password taken from db:".$password_decrypted."<br>";
 				$errors = $crypt->errors;
 				$myrow["password"] = $password_decrypted;
-				
-				if ($uname == escapeSimpleSelect($myrow["username"])) 
+
+				if ($uname == escapeSimpleSelect($myrow["username"]))
 				{
 					if ($pass == escapeSimpleSelect($myrow["password"]))
 					{
@@ -268,12 +269,12 @@ if(!empty($submit))
 
 
 	}		// while
-	
+
 	if(empty($exists))
 	{
 		$auth_allow = 4;
 	}
-	
+
 	if (!isset($uid))
 	{
 		switch($auth_allow)
@@ -328,6 +329,7 @@ if(!empty($submit))
 
 }  // end of user authentication
 
+
 if (isset($_SESSION['uid'])) $uid = $_SESSION['uid'];
 else unset($uid);
 
@@ -345,15 +347,24 @@ $nameTools = $langWelcomeToEclass;
 // --------------------------------------------------------------
 
 if (isset($uid) AND !isset($logout)) {
-
+	
 	$require_help = true;
 	$helpTopic="Clar2";
 
-	
 	if (!session_is_registered("user_perso_active")) {
-		//load classic view
-		include("logged_in_content.php");
-		draw($tool_content,1);
+
+		if (!check_guest()){
+			//if the user is not a guest, load classic view
+			include("logged_in_content.php");
+			draw($tool_content,1);
+		} else {
+			//if the user is a guest send him straight to the corresponding lesson
+			$guestSQL = db_query("SELECT `code_cours` FROM `cours_user` WHERE `user_id` = $uid", $mysqlMainDb);
+			$sql_row = mysql_fetch_row($guestSQL);
+			$dbname=$sql_row[0];
+			session_register("dbname");
+			header("location:".$urlServer."courses/$dbname/index.php");
+		}
 	} else {
 		//load personalised view
 		include("./modules/lang/$language/perso.inc.php");
@@ -367,7 +378,7 @@ if (isset($uid) AND !isset($logout)) {
 // display login  page
 // -------------------------------------------------------------------------------------
 
-elseif ((isset($logout) && $logout) OR (1==1)) {
+elseif ((isset($logout) && $logout && isset($uid)) OR (1==1)) {
 
 	if (isset($logout) && $logout && isset($uid)) {
 		mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user,
