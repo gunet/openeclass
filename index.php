@@ -386,6 +386,7 @@ elseif ((isset($logout) && $logout && isset($uid)) OR (1==1)) {
 			VALUES ('', '$uid', '$REMOTE_ADDR', NOW(), 'LOGOUT')");
 		unset($prenom);
 		unset($nom);
+		unset($statut);
 		session_destroy();
 	}
 
