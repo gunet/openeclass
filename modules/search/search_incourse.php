@@ -38,7 +38,7 @@
 
 $require_current_course = TRUE;
 $langFiles = array('course_info', 'create_course', 'opencours', 'search');
-
+$guest_allowed = true;
 include '../../include/baseTheme.php';
 
 $nameTools = $langSearch;
