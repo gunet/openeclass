@@ -28,7 +28,6 @@
 
 $langFiles = 'document';
 $require_current_course = TRUE;
-//include('../../include/init.php');
 
 include '../../include/baseTheme.php';
 
