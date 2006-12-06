@@ -130,4 +130,9 @@ $langCheckGuest = "
 		<p><b>The action you attempted to execute is not possible with guest user privileges. </b><br/>
 		For security reasons the system has automatically redirect you to the start page to login again.</p>
 ";
+
+$langCheckPublicTools = "
+		<p><b>You tried to gain access to an inactive lesson module. </b><br/>
+		For security reasons the system has automatically redirect you to the start page to login again.</p>
+";
 ?>
