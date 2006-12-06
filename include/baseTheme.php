@@ -47,7 +47,7 @@ if(isset($errorMessagePath)) {
 
 if(isset($toolContent_ErrorExists)) {
 	$toolContent = $toolContent_ErrorExists;
-	
+
 	$_SESSION['errMessage'] = $toolContent_ErrorExists;
 	session_write_close();
 	header("location:".$urlServer."index.php?logout=yes");
@@ -77,13 +77,13 @@ include('tools.php');
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null){
 	global $langUser, $prenom, $nom, $langLogout, $intitule,  $nameTools, $langHelp, $langAnonUser;
 	global $language, $helpTopic, $require_help, $langEclass, $langCopyrightFooter;
-	global $relPath, $urlServer, $toolContent_ErrorExists;
+	global $relPath, $urlServer, $toolContent_ErrorExists, $statut;
 	global $page_name, $page_navi,$currentCourseID, $siteName, $navigation;
 	global $homePage, $courseHome, $uid, $webDir, $extraMessage;
 	global $langChangeLang, $langUserBriefcase, $langPersonalisedBriefcase, $langAdmin, $switchLangURL;
 
 	$messageBox = "";
-	
+
 	//if an error exists (ex., sessions is lost...)
 	//show the error message above the normal tool content
 
@@ -99,7 +99,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 				</tbody>
 			</table><br/>";
 	}
-	
+
 	//get the left side menu from tools.php
 	$toolArr = getSideMenu($menuTypeID);
 	$numOfToolGroups = count($toolArr);
@@ -145,7 +145,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		} else {
 			$t->set_var('CONTENT_MAIN_CSS', 'content_main');
 		}
-		
+
 		$t->set_var('URL_PATH',  $urlServer);
 
 		//If there is a message to display, show it (ex. Session timeout)
@@ -228,22 +228,26 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 		$t->set_block('mainBlock', 'breadCrumbHomeBlock', 'breadCrumbHome');
 
-		if(!session_is_registered('uid')) $t->set_var('BREAD_TEXT',  $siteName);
-		elseif(session_is_registered('uid') && session_is_registered('user_perso_active')) {
-			$t->set_var('BREAD_TEXT',  $langPersonalisedBriefcase);
-		} elseif(session_is_registered('uid') && !session_is_registered('user_perso_active')) {
-			$t->set_var('BREAD_TEXT',  $langUserBriefcase);
-		}
+		if ($statut != 10) {
+			if(!session_is_registered('uid')) $t->set_var('BREAD_TEXT',  $siteName);
+			elseif(session_is_registered('uid') && session_is_registered('user_perso_active')) {
+				$t->set_var('BREAD_TEXT',  $langPersonalisedBriefcase);
+			} elseif(session_is_registered('uid') && !session_is_registered('user_perso_active')) {
+				$t->set_var('BREAD_TEXT',  $langUserBriefcase);
+			}
 
+			
+			if (!$homePage) {
+				$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_START_LINK}">');
+				$t->set_var('BREAD_START_LINK',  $urlServer);
+				$t->set_var('BREAD_HREF_END',  '</a>');
+			}
+
+			$t->parse('breadCrumbHome', 'breadCrumbHomeBlock',false);
+		}
+		
 		$pageTitle = $siteName;
-		if (!$homePage) {
-			$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_START_LINK}">');
-			$t->set_var('BREAD_START_LINK',  $urlServer);
-			$t->set_var('BREAD_HREF_END',  '</a>');
-		}
-
-		$t->parse('breadCrumbHome', 'breadCrumbHomeBlock',false);
-
+		
 		$breadIterator=1;
 		$t->set_block('mainBlock', 'breadCrumbStartBlock', 'breadCrumbStart');
 
@@ -251,11 +255,15 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_LINK}">');
 			$t->set_var('BREAD_LINK',  $urlServer.'courses/'.$currentCourseID.'/index.php');
 			$t->set_var('BREAD_TEXT',  $intitule);
-			$t->set_var('BREAD_ARROW', '&#187;');
+			if ($statut == 10) $t->set_var('BREAD_ARROW', '');
 			$t->set_var('BREAD_HREF_END',  '</a>');
 			$t->parse('breadCrumbStart', 'breadCrumbStartBlock',true);
 			$breadIterator++;
-			$pageTitle .= " | " .$intitule;
+			if(isset($pageTitle)) {
+				$pageTitle .= " | " .$intitule;
+			} else {
+				$pageTitle = $intitule;
+			}
 
 		} elseif (isset($currentCourseID) && $courseHome) {
 			$t->set_var('BREAD_HREF_FRONT',  '');
@@ -299,10 +307,13 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		}
 
 		$t->set_block('mainBlock', 'breadCrumbEndBlock', 'breadCrumbEnd');
+
+
 		for($breadIterator2=0; $breadIterator2 <= $breadIterator; $breadIterator2++){
 
 			$t->parse('breadCrumbEnd', 'breadCrumbEndBlock',true);
 		}
+
 
 		//END breadcrumb --------------------------------
 
