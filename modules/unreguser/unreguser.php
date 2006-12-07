@@ -57,9 +57,9 @@ if (!isset($doit) or $doit != "yes") {
 			$tool_content .=  "</li></ul>";
 			$tool_content .= "</td></tr></tbody></table>";
 		} else {
-			$tool_content .=  "<h3>$langNotice</h3>";
-			$tool_content .=  "<p>$langExplain</p>";
-			$tool_content .=  "<p><a href='../profile/profile.php'>$langBack</a></p><br>";
+			$tool_content .=  "<p><b>$langNotice: </b>";
+			$tool_content .=  "$langExplain</p>";
+			$tool_content .=  "<p><a href='../profile/profile.php'>$langBack</a></p>";
 			$tool_content .= "</td></tr></tbody></table>";
 		}
 	}  //endif is admin
