@@ -87,11 +87,12 @@ $style= "";
 
 $nameTools = $langLearningPathList;
 
-if ( isset($_REQUEST['cmd']) && $_REQUEST['cmd'] == 'export' && $is_adminOfCourse )
+if ( isset($_GET['cmd']) && $_GET['cmd'] == 'export' 
+	&& isset($_GET['path_id']) && is_numeric($_GET['path_id']) && $is_adminOfCourse )
 {
       mysql_select_db($currentCourseID);
       require_once("include/scormExport.inc.php");
-      $scorm = new ScormExport($_REQUEST['path_id']);
+      $scorm = new ScormExport((int)$_GET['path_id']);
       if ( !$scorm->export() )
       {
           $dialogBox = '<b>Error exporting SCORM package</b><br />'."\n".'<ul>'."\n";
@@ -103,11 +104,12 @@ if ( isset($_REQUEST['cmd']) && $_REQUEST['cmd'] == 'export' && $is_adminOfCours
       }
 } // endif $cmd == export
 
-if ( isset($_REQUEST['cmd']) && $_REQUEST['cmd'] == 'export12' && $is_adminOfCourse )
+if ( isset($_GET['cmd']) && $_GET['cmd'] == 'export12' 
+	&& isset($_GET['path_id']) && is_numeric($_GET['path_id']) && $is_adminOfCourse )
 {
       mysql_select_db($currentCourseID);
       require_once("include/scormExport12.inc.php");
-      $scorm = new ScormExport($_REQUEST['path_id']);
+      $scorm = new ScormExport((int)$_GET['path_id']);
       if ( !$scorm->export() )
       {
           $dialogBox = '<b>Error exporting SCORM package</b><br />'."\n".'<ul>'."\n";
@@ -117,7 +119,7 @@ if ( isset($_REQUEST['cmd']) && $_REQUEST['cmd'] == 'export12' && $is_adminOfCou
           }
           $dialogBox .= '<ul>'."\n";
       }
-} // endif $cmd == export
+} // endif $cmd == export12
 
 mysql_select_db($currentCourseID);
 
@@ -268,11 +270,11 @@ if ($is_adminOfCourse) {
 				break;
 			// ORDER COMMAND
 			case "moveUp" :
-				$thisLearningPathId = $_GET['move_path_id'];
+				$thisLearningPathId = (int)$_GET['move_path_id'];
 				$sortDirection = "DESC";
 				break;
 			case "moveDown" :
-				$thisLearningPathId = $_GET['move_path_id'];
+				$thisLearningPathId = (int)$_GET['move_path_id'];
 				$sortDirection = "ASC";
 				break;
 			// CREATE COMMAND
@@ -282,7 +284,7 @@ if ($is_adminOfCourse) {
 					// check if name already exists
 					$sql = "SELECT `name`
 							FROM `".$TABLELEARNPATH."`
-							WHERE `name` = '". addslashes($_POST['newPathName']) ."'";
+							WHERE `name` = '". mysql_real_escape_string($_POST['newPathName']) ."'";
 					$query = db_query($sql);
 					$num = mysql_numrows($query);
 					if($num == 0 ) { // "name" doesn't already exist
@@ -297,7 +299,7 @@ if ($is_adminOfCourse) {
 						$sql = "INSERT
 								INTO `".$TABLELEARNPATH."`
 										(`name`, `comment`, `rank`)
-								VALUES ('". addslashes($_POST['newPathName']) ."','" . addslashes(trim($_POST['newComment']))."',".(int)$order.")";
+								VALUES ('". mysql_real_escape_string($_POST['newPathName']) ."','" . mysql_real_escape_string(trim($_POST['newComment']))."',".(int)$order.")";
 						$lp_id = db_query($sql);
 					}
 					else {

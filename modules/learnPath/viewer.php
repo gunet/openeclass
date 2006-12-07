@@ -71,15 +71,15 @@ if(!empty($intitule))
 }
 $titlePage .= $siteName;
 
-if ( !isset($_GET['fullscreen']) )
+if ( isset($_GET['fullscreen']) && is_numeric($_GET['fullscreen']) )
+{
+    $displayFull = (int) $_GET['fullscreen'];
+}
+else
 {
     // choose default display
     // default display is without fullscreen
     $displayFull = FULL_SCREEN;
-}
-else
-{
-    $displayFull = $_REQUEST['fullscreen'];
 }
 
 if ( $displayFull == 0	) 

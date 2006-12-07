@@ -90,94 +90,92 @@ $head_content .= "<script>
 $tool_content .= "<p>".$langUseOfPool."</p>";
 
 // HANDLE COMMANDS:
-$cmd = ( isset($_REQUEST['cmd']) )? $_REQUEST['cmd'] : '';
+$cmd = ( isset($_REQUEST['cmd']) && is_string($_REQUEST['cmd']) )? (string)$_REQUEST['cmd'] : '';
 
 switch( $cmd )
 {
     // MODULE DELETE
     case "eraseModule" :
-        // used to physically delete the module  from server
-        require_once("../../include/lib/fileManageLib.inc.php");
-
-        $moduleDir   = "courses/".$currentCourseID."/modules";
-        $moduleWorkDir = $webDir.$moduleDir;
-
-        // delete all assets of this module
-        $sql = "DELETE
-                FROM `".$TABLEASSET."`
-                WHERE `module_id` = ". (int)$_REQUEST['cmdid'];
-        db_query($sql);
-
-        // delete from all learning path of this course but keep there id before
-        $sql = "SELECT *
-                FROM `".$TABLELEARNPATHMODULE."`
-                WHERE `module_id` = ". (int)$_REQUEST['cmdid'];
-        $result = db_query($sql);
-
-        $sql = "DELETE
-                FROM `".$TABLELEARNPATHMODULE."`
-                WHERE `module_id` = ". (int)$_REQUEST['cmdid'];
-        db_query($sql);
-
-        // delete the module in modules table
-        $sql = "DELETE
-                FROM `".$TABLEMODULE."`
-                WHERE `module_id` = ". (int)$_REQUEST['cmdid'];
-        db_query($sql);
-
-        //delete all user progression concerning this module
-        $sql = "DELETE
-                FROM `".$TABLEUSERMODULEPROGRESS."`
-                WHERE 1=0 ";
-
-        while ($list = mysql_fetch_array($result))
-        {
-            $sql.=" OR `learnPath_module_id`=". (int)$list['learnPath_module_id'];
+        if (isset($_GET['cmdid']) && is_numeric($_GET['cmdid']) ) {
+			// used to physically delete the module  from server
+			require_once("../../include/lib/fileManageLib.inc.php");
+	
+			$moduleDir   = "courses/".$currentCourseID."/modules";
+			$moduleWorkDir = $webDir.$moduleDir;
+	
+			// delete all assets of this module
+			$sql = "DELETE
+					FROM `".$TABLEASSET."`
+					WHERE `module_id` = ". (int)$_GET['cmdid'];
+			db_query($sql);
+	
+			// delete from all learning path of this course but keep there id before
+			$sql = "SELECT *
+					FROM `".$TABLELEARNPATHMODULE."`
+					WHERE `module_id` = ". (int)$_GET['cmdid'];
+			$result = db_query($sql);
+	
+			$sql = "DELETE
+					FROM `".$TABLELEARNPATHMODULE."`
+					WHERE `module_id` = ". (int)$_GET['cmdid'];
+			db_query($sql);
+	
+			// delete the module in modules table
+			$sql = "DELETE
+					FROM `".$TABLEMODULE."`
+					WHERE `module_id` = ". (int)$_GET['cmdid'];
+			db_query($sql);
+	
+			//delete all user progression concerning this module
+			$sql = "DELETE
+					FROM `".$TABLEUSERMODULEPROGRESS."`
+					WHERE 1=0 ";
+	
+			while ($list = mysql_fetch_array($result))
+			{
+				$sql.=" OR `learnPath_module_id`=". (int)$list['learnPath_module_id'];
+			}
+			db_query($sql);
+	
+			// delete directory and it content
+			claro_delete_file($moduleWorkDir."/module_".(int)$_GET['cmdid']);
         }
-        db_query($sql);
-
-        // This query does the same as the 3 previous queries but does not work with MySQL versions before 4.0.0
-        // delete all asset, all learning path module, and from module table
-        /*
-        db_query("DELETE
-                       FROM `".$TABLEASSET."`, `".$TABLELEARNPATHMODULE."`, `".$TABLEMODULE."`
-                      WHERE `module_id` = ".$_REQUEST['cmdid'] );
-        */
-
-        // delete directory and it content
-        claro_delete_file($moduleWorkDir."/module_".(int)$_REQUEST['cmdid']);
         break;
 
     // COMMAND RENAME :
     //display the form to enter new name
     case "rqRename" :
-        //get current name from DB
-        $query= "SELECT `name`
-                 FROM `".$TABLEMODULE."`
-                 WHERE `module_id` = '". (int)$_REQUEST['module_id']."'";
-        $result = db_query($query);
-        $list = mysql_fetch_array($result);
-        
-        $tool_content .= claro_disp_message_box("
-            <form method=\"post\" name=\"rename\" action=\"".$_SERVER['PHP_SELF']."\">
-            <p><label for=\"newName\">".$langInsertNewModuleName."</label> :
-            <input type=\"text\" name=\"newName\" id=\"newName\" value=\"".htmlspecialchars($list['name'])."\"></input>
-            <input type=\"submit\" value=\"".$langOk."\" name=\"submit\">
-            <input type=\"hidden\" name=\"cmd\" value=\"exRename\">
-            <input type=\"hidden\" name=\"module_id\" value=\"".$_REQUEST['module_id']."\">
-            </p></form>")."<br />";
+    	if (isset($_GET['module_id']) && is_numeric($_GET['module_id']) ) {
+			//get current name from DB
+			$query= "SELECT `name`
+					FROM `".$TABLEMODULE."`
+					WHERE `module_id` = '". (int)$_GET['module_id']."'";
+			$result = db_query($query);
+			$list = mysql_fetch_array($result);
+			
+			$tool_content .= claro_disp_message_box("
+				<form method=\"post\" name=\"rename\" action=\"".$_SERVER['PHP_SELF']."\">
+				<p><label for=\"newName\">".$langInsertNewModuleName."</label> :
+				<input type=\"text\" name=\"newName\" id=\"newName\" value=\"".htmlspecialchars($list['name'])."\"></input>
+				<input type=\"submit\" value=\"".$langOk."\" name=\"submit\">
+				<input type=\"hidden\" name=\"cmd\" value=\"exRename\">
+				<input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">
+				</p></form>")."<br />";
+        }
         break;
 
      //try to change name for selected module
     case "exRename" :
         //check if newname is empty
-        if( isset($_REQUEST["newName"]) && $_REQUEST["newName"] != "" )
+        if( isset($_POST["newName"]) && is_string($_POST["newName"]) 
+        	&& $_POST["newName"] != "" && isset($_POST['module_id']) 
+        	&& is_numeric($_POST['module_id']) )
         {
             //check if newname is not already used in another module of the same course
             $sql="SELECT `name`
                   FROM `".$TABLEMODULE."`
-                  WHERE `name` = '". addslashes($_POST['newName'])."'
-                    AND `module_id` != '". (int)$_REQUEST['module_id']."'";
+                  WHERE `name` = '". mysql_real_escape_string($_POST['newName'])."'
+                    AND `module_id` != '". (int)$_POST['module_id']."'";
 
             $query = db_query($sql);
             $num = mysql_numrows($query);
@@ -185,8 +183,8 @@ switch( $cmd )
             {
                 // if no error occurred, update module's name in the database
                 $query="UPDATE `".$TABLEMODULE."`
-                        SET `name`= '". addslashes($_POST['newName'])."'
-                        WHERE `module_id` = '". (int)$_REQUEST['module_id']."'";
+                        SET `name`= '". mysql_real_escape_string($_POST['newName'])."'
+                        WHERE `module_id` = '". (int)$_POST['module_id']."'";
 
                 $result = db_query($query);
             }
@@ -205,24 +203,24 @@ switch( $cmd )
 
     //display the form to modify the comment
     case "rqComment" :
-        if( isset($_REQUEST['module_id']) )
+        if (isset($_GET['module_id']) && is_numeric($_GET['module_id']) )
         {
             //get current comment from DB
             $query="SELECT `comment`
                     FROM `".$TABLEMODULE."`
-                    WHERE `module_id` = '". (int)$_REQUEST['module_id']."'";
+                    WHERE `module_id` = '". (int)$_GET['module_id']."'";
             $result = db_query($query);
             $comment = mysql_fetch_array($result);
             
             if( isset($comment['comment']) )
             {
                 
-                $tool_content .= "<form method=\"get\" action=\"".$_SERVER['PHP_SELF']."\">\n"
+                $tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">\n"
                     .'<table><tr><td valign="top">'."\n"
                     .claro_disp_html_area('comment', $comment['comment'], 20, 70)
                     ."</td></tr></table>\n"
                     ."<input type=\"hidden\" name=\"cmd\" value=\"exComment\">\n"
-                    ."<input type=\"hidden\" name=\"module_id\" value=\"".$_REQUEST['module_id']."\">\n"
+                    ."<input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">\n"
                     ."<input type=\"submit\" value=\"".$langOk."\">\n"
                     ."<br /><br />\n"
                     ."</form>\n";
@@ -233,12 +231,12 @@ switch( $cmd )
             }
             else 
             {
-            	$tool_content .= "<form method=\"get\" action=\"".$_SERVER['PHP_SELF']."\">\n"
+            	$tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">\n"
                     .'<table><tr><td valign="top">'."\n"
                     .claro_disp_html_area('comment', '', 20, 70)
                     ."</td></tr></table>\n"
                     ."<input type=\"hidden\" name=\"cmd\" value=\"exComment\">\n"
-                    ."<input type=\"hidden\" name=\"module_id\" value=\"".$_REQUEST['module_id']."\">\n"
+                    ."<input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">\n"
                     ."<input type=\"submit\" value=\"".$langOk."\">\n"
                     ."<br /><br />\n"
                     ."</form>\n";
@@ -252,11 +250,12 @@ switch( $cmd )
 
     //make update to change the comment in the database for this module
     case "exComment":
-        if( isset($_REQUEST['module_id']) && isset($_REQUEST['comment']) )
+        if( isset($_POST['comment']) && is_string($_POST['comment']) 
+        	&& isset($_POST['module_id']) && is_numeric($_POST['module_id']) )
         {
             $sql = "UPDATE `".$TABLEMODULE."`
-                    SET `comment` = \"". addslashes($_REQUEST['comment']) ."\"
-                    WHERE `module_id` = '". (int)$_REQUEST['module_id']."'";
+                    SET `comment` = \"". mysql_real_escape_string($_POST['comment']) ."\"
+                    WHERE `module_id` = '". (int)$_POST['module_id']."'";
             db_query($sql);
         }
         break;

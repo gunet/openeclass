@@ -184,7 +184,7 @@ if( !$is_adminOfCourse
 //################################## MODULE NAME BOX #################################\\
 //####################################################################################\\
 
-$cmd = ( isset($_REQUEST['cmd']) )? $_REQUEST['cmd'] : '';
+$cmd = ( isset($_REQUEST['cmd']) && is_string($_REQUEST['cmd']) )? (string)$_REQUEST['cmd'] : '';
 
 if ( $cmd == "updateName" )
 {
