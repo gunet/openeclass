@@ -331,7 +331,7 @@ if (isset($_SESSION['status'])) {
 
 //Security check:: Users that do not have Professor access for a course must not
 //be able to access inactive tools.
-if(file_exists($module_ini_dir = getcwd() . "/module.ini.php") && !$is_adminOfCourse) {
+if(file_exists($module_ini_dir = getcwd() . "/module.ini.php") && !$is_adminOfCourse && @$ignore_module_ini != true) {
 	include($module_ini_dir);
 
 	if (!check_guest()) {
@@ -367,7 +367,7 @@ if(file_exists($module_ini_dir = getcwd() . "/module.ini.php") && !$is_adminOfCo
 		array_push($publicModules, (int)$moduleIDs["id"]);
 	}
 
-	if (!in_array($module_id, $publicModules, true) && strlen($toolContent_ErrorExists)<1) {
+	if (!in_array($module_id, $publicModules, true)) {
 		$toolContent_ErrorExists = $langCheckPublicTools;
 		$errorMessagePath = "../../";
 	}
