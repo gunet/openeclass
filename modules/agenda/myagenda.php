@@ -35,8 +35,9 @@
  */
 
 $require_login = TRUE;
-
 $langFiles="myagenda";
+$ignore_module_ini = true;
+
 include '../../include/baseTheme.php';
 include('../../include/lib/textLib.inc.php');
 
