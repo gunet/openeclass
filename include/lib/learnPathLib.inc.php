@@ -2090,14 +2090,13 @@ function claro_is_javascript_enabled()
 
 function get_limited_page_links($sql, $limiter, $stringPreviousPage, $stringNextPage)
 {
-	global $_GET;
 	
 	$totalnum = mysql_num_rows(db_query($sql));
 	$firstpage = 1;
 	$lastpage = ceil($totalnum / $limiter);
 	
-	if (isset( $_GET['page'] )) {
-		$currentpage = $_GET['page'];
+	if (isset( $_GET['page'] ) && is_numeric( $_GET['page'] )) {
+		$currentpage = (int) $_GET['page'];
 		if ($currentpage < $firstpage || $currentpage > $lastpage) {
 			$currentpage = $firstpage;
 		}
@@ -2165,14 +2164,13 @@ function get_limited_page_links($sql, $limiter, $stringPreviousPage, $stringNext
  
 function get_limited_list($sql, $limiter)
 {
-	global $_GET;
 	
 	$totalnum = mysql_num_rows(db_query($sql));
 	$firstpage = 1;
 	$lastpage = ceil($totalnum / $limiter);
 	
-	if (isset( $_GET['page'] )) {
-		$currentpage = $_GET['page'];
+	if (isset( $_GET['page'] ) && is_numeric( $_GET['page'] )) {
+		$currentpage = (int) $_GET['page'];
 		if ($currentpage < $firstpage || $currentpage > $lastpage) {
 			$currentpage = $firstpage;
 		}
