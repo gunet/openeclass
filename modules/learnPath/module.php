@@ -91,7 +91,7 @@ if ( isset($_GET['path_id']) && $_GET['path_id'] != '' )
 // module_id
 if ( isset($_GET['module_id']) && $_GET['module_id'] != '')
 {
-    $_SESSION['module_id'] = $_GET['module_id'];
+    $_SESSION['lp_module_id'] = $_GET['module_id'];
 }
 
 mysql_select_db($currentCourseID);
@@ -109,7 +109,7 @@ mysql_select_db($currentCourseID);
 
 $sql = "SELECT `comment`, `startAsset_id`, `contentType`
         FROM `".$TABLEMODULE."`
-        WHERE `module_id` = ". (int)$_SESSION['module_id'];
+        WHERE `module_id` = ". (int)$_SESSION['lp_module_id'];
 
 $module = db_query_get_single_row($sql);
 
@@ -136,7 +136,7 @@ else
 // check if there is a specific comment for this module in this path
 $sql = "SELECT `specificComment`
         FROM `".$TABLELEARNPATHMODULE."`
-        WHERE `module_id` = ". (int)$_SESSION['module_id'];
+        WHERE `module_id` = ". (int)$_SESSION['lp_module_id'];
 
 $learnpath_module = db_query_get_single_row($sql);
 
@@ -163,7 +163,7 @@ $sql = "SELECT `contentType`,
         WHERE UMP.`user_id` = '$uid'
           AND UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
           AND LPM.`learnPath_id` = ".(int)$_SESSION['path_id']."
-          AND LPM.`module_id` = ". (int)$_SESSION['module_id']."
+          AND LPM.`module_id` = ". (int)$_SESSION['lp_module_id']."
           AND LPM.`module_id` = M.`module_id`
              ";
 $resultBrowsed = db_query_get_single_row($sql);
@@ -365,7 +365,7 @@ if($module['contentType'] != CTLABEL_) //
     $sql = "SELECT `asset_id`
               FROM `".$TABLEASSET."`
              WHERE `asset_id` = ". (int)$module['startAsset_id']."
-               AND `module_id` = ". (int)$_SESSION['module_id'];
+               AND `module_id` = ". (int)$_SESSION['lp_module_id'];
 
 	$asset = db_query_get_single_row($sql);
 

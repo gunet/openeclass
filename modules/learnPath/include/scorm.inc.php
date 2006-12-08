@@ -50,7 +50,7 @@ if( isset($_POST['newRaw']) && is_num($_POST['newRaw']) && $_POST['newRaw'] <= 1
 {
 	$sql = "UPDATE `" . $TABLELEARNPATHMODULE . "`
 			SET `raw_to_pass` = " . (int) $_POST['newRaw'] . "
-			WHERE `module_id` = " . (int) $_SESSION['module_id'] . "
+			WHERE `module_id` = " . (int) $_SESSION['lp_module_id'] . "
 			AND `learnPath_id` = " . (int) $_SESSION['path_id'];
 	db_query($sql);
 
@@ -69,7 +69,7 @@ if( !empty($dialogBox) )
 // form to change raw needed to pass the exercise
 $sql = "SELECT `lock`, `raw_to_pass`
         FROM `" . $TABLELEARNPATHMODULE."` AS LPM
-       WHERE LPM.`module_id` = " . (int) $_SESSION['module_id'] . "
+       WHERE LPM.`module_id` = " . (int) $_SESSION['lp_module_id'] . "
          AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'];
 
 $learningPath_module = db_query_fetch_all($sql);

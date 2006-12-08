@@ -67,7 +67,7 @@ $TABLEDOCUMENT = "document";
 // Update infos about asset
 $sql = "SELECT `path`
          FROM `".$TABLEASSET."`
-        WHERE `module_id` = ". (int)$_SESSION['module_id'];
+        WHERE `module_id` = ". (int)$_SESSION['lp_module_id'];
 $assetPath = db_query_get_single_value($sql);
 
 $sql = "SELECT `filename`

@@ -533,7 +533,7 @@ if($uid)
 	$sql = "SELECT LPM.`raw_to_pass`, LPM.`learnPath_module_id`, UMP.`total_time`, UMP.`raw`
 				FROM `".$TABLELEARNPATHMODULE."` AS LPM, `".$TABLEUSERMODULEPROGRESS."` AS UMP
 				WHERE LPM.`learnPath_id` = '".(int)$_SESSION['path_id']."'
-				AND LPM.`module_id` = '".(int)$_SESSION['module_id']."'
+				AND LPM.`module_id` = '".(int)$_SESSION['lp_module_id']."'
 				AND LPM.`learnPath_module_id` = UMP.`learnPath_module_id`
 				AND UMP.`user_id` = ".(int)$uid;
 	$query = db_query($sql);

@@ -71,7 +71,7 @@ require_once("../../../include/lib/learnPathLib.inc.php");
 mysql_select_db($currentCourseID);
 
 if(isset ($_GET['viewModule_id']) && $_GET['viewModule_id'] != '')
-	$_SESSION['module_id'] = $_GET['viewModule_id'];
+	$_SESSION['lp_module_id'] = $_GET['viewModule_id'];
 
 // SET USER_MODULE_PROGRESS IF NOT SET
 if($uid) // if not anonymous
@@ -82,13 +82,13 @@ if($uid) // if not anonymous
 	       WHERE UMP.`user_id` = '" . (int)$uid . "'
 	         AND UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
 	         AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
-	         AND LPM.`module_id` = ". (int)$_SESSION['module_id'];
+	         AND LPM.`module_id` = ". (int)$_SESSION['lp_module_id'];
 	$num = db_query_get_single_value($sql);
 
 	$sql = "SELECT `learnPath_module_id`
 	        FROM `".$TABLELEARNPATHMODULE."`
 	       WHERE `learnPath_id` = ". (int)$_SESSION['path_id']."
-	         AND `module_id` = ". (int)$_SESSION['module_id'];
+	         AND `module_id` = ". (int)$_SESSION['lp_module_id'];
 	$learnPathModuleId = db_query_get_single_value($sql);
 
 	// if never intialised : create an empty user_module_progress line
@@ -106,7 +106,7 @@ if($uid) // if not anonymous
 
 $sql = "SELECT `contentType`,`startAsset_id`
           FROM `".$TABLEMODULE."`
-         WHERE `module_id` = ". (int)$_SESSION['module_id'];
+         WHERE `module_id` = ". (int)$_SESSION['lp_module_id'];
 
 $module = db_query_get_single_row($sql);
 

@@ -212,7 +212,7 @@ foreach ($flatElementList as $module)
 				$displayedName = $module['name'];
 				
 			// bold the title of the current displayed module
-			if( $_SESSION['module_id'] == $module['module_id'] )
+			if( $_SESSION['lp_module_id'] == $module['module_id'] )
 			{
 				$sql = "SELECT M.`name`
 				         FROM `".$TABLELEARNPATHMODULE."` AS LPM,
@@ -233,7 +233,7 @@ foreach ($flatElementList as $module)
 				}
 			}
 			// store next value if user has the right to access it
-			if( $previous == $_SESSION['module_id'] )
+			if( $previous == $_SESSION['lp_module_id'] )
 			{
 				$nextModule = $module['module_id'];
 			}

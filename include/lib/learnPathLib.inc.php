@@ -140,7 +140,7 @@ function commentBox($type, $mode)
             }
             else
             {
-                $module_id = $_SESSION['module_id'];
+                $module_id = $_SESSION['lp_module_id'];
             }
             $where_cond = "`module_id` = " . (int) $module_id;  // use backticks ( ` ) for col names and simple quote ( ' ) for string
             break;
@@ -155,7 +155,7 @@ function commentBox($type, $mode)
             $col_name = 'specificComment';
             $tbl_name = $tbl_lp_rel_learnPath_module;
             $where_cond = "`learnPath_id` = " . (int) $_SESSION['path_id'] . "
-                                        AND `module_id` = " . (int) $_SESSION['module_id'];  // use backticks ( ` ) for col names and simple quote ( ' ) for string
+                                        AND `module_id` = " . (int) $_SESSION['lp_module_id'];  // use backticks ( ` ) for col names and simple quote ( ' ) for string
             break;
     }
 
@@ -296,7 +296,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
         case MODULE_ :
             $col_name = 'name';
             $tbl_name = $tbl_lp_module;
-            $where_cond = '`module_id` = ' . (int) $_SESSION['module_id'];
+            $where_cond = '`module_id` = ' . (int) $_SESSION['lp_module_id'];
             break;
         case LEARNINGPATH_ :
             $col_name = 'name';
