@@ -6,10 +6,15 @@ if (!isset($language)) {
 	$language = preg_replace('/[^a-z-]/', '', $language);
 }
 
-include("../lang/$language/help.inc.php");
+if (file_exists("../lang/$language/help.inc.php")) {
+	include("../lang/$language/help.inc.php");
+}
+else {
+	die();
+}
 
 // Default topic
-if (empty($GLOBALS["lang$_GET[topic]Content"])) {
+if (!isset($_GET['topic']) ||  empty($GLOBALS["lang$_GET[topic]Content"])) {
 	$_GET['topic'] = 'Clar';
 }
 
