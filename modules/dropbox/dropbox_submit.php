@@ -261,20 +261,20 @@ if (isset($_POST["submitWork"]))
     	$tool_content .=  $dropbox_lang["docAdd"];
     	$tool_content .=  "</th></tr></thead></table>";
 		$tool_content .=  "<br>";
-		if (isset($origin))  {
+		/* if (isset($origin))  {
 			$tool_content .=  "<p><a href='index.php?origin=$origin'>".$dropbox_lang['backList']."</a></p>";
 			$tool_content .=  "<br>";
-		} else { 
+		} else { */
 			$tool_content .=  "<p><a href='index.php'>".$dropbox_lang['backList']."</a><br></p>";
-		}
+		/* } */
     }
 
     else
     {
 	$tool_content .=  "<b><font color='#FF0000'>".$errormsg."</font></b><br><br>";
-	if (isset($origin))
+	/* if (isset($origin))
 		$tool_content .=  "<a href='index.php?origin=$origin'>".$dropbox_lang['backList']."</a>";
-	else 
+	else */
 		$tool_content .=  "<a href='index.php'>".$dropbox_lang['backList']."</a><br>";
 
     }
@@ -299,7 +299,8 @@ if (isset($_GET['mailingIndex']))  // examine or send
     $mailing_title = $mailing_item->title;
     $mailing_file = $dropbox_cnf["sysPath"] . '/' . $mailing_item->filename;
     $errormsg = '<b>' . $mailing_item->recipients[0]['name'] . ' (' 
-    	. "<a href='dropbox_download.php?origin=$origin&id=".urlencode($mailing_item->id)."'>'"
+    	/*. "<a href='dropbox_download.php?origin=$origin&id=".urlencode($mailing_item->id)."'>'"*/
+    	. "<a href='dropbox_download.php?id=".urlencode($mailing_item->id)."'>'"
 		. $mailing_title . '</a>):</b><br><br>';
     
     if (!preg_match($dropbox_cnf["mailingZipRegexp"], $mailing_title, $nameParts))
@@ -520,17 +521,25 @@ if (isset($_GET['mailingIndex']))  // examine or send
      */
     if ($error)
     {
-        $tool_content.="
+        /* $tool_content.="
 		<b><font color=\"#FF0000\">$errormsg</font></b><br><br>
 		<a href=\"index.php?origin=$origin\">".$dropbox_lang["backList"]."></a><br>
+		"; */
+		$tool_content.="
+		<b><font color=\"#FF0000\">$errormsg</font></b><br><br>
+		<a href=\"index.php\">".$dropbox_lang["backList"]."></a><br>
 		";
     }
 
     else
     {
-        $tool_content .= "
+        /* $tool_content .= "
 		$errormsg<br><br>
 		<a href=\"index.php?origin=$origin\">".$dropbox_lang["backList"]."</a><br>
+		"; */
+		$tool_content .= "
+		$errormsg<br><br>
+		<a href=\"index.php\">".$dropbox_lang["backList"]."</a><br>
 		";
     }
 
@@ -608,9 +617,9 @@ if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent']))
 
 	$tool_content .=  $dropbox_lang["fileDeleted"];
 	$tool_content .=  "<br><br>";
-	if (isset($origin)) 
+	/* if (isset($origin)) 
 		$tool_content .=  "<a href='index.php?origin=$origin'>".$dropbox_lang['backList']."</a><br>";
-	else 
+	else */
 		$tool_content .=  "<a href='index.php'>".$dropbox_lang['backList']."</a><br>";
 
 //    exit();

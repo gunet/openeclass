@@ -114,7 +114,7 @@ $dropbox_cnf["courseId"] = $currentCourseID;
 $dropbox_cnf["sysPath"] = $webDir."courses/".$currentCourseID."/dropbox"; //path to dropbox subdir in course containing the uploaded files
 $dropbox_cnf["webPath"] = $urlServer . $currentCourseID. "/dropbox";
 // get dropbox quotas from database
-$d = mysql_fetch_array(mysql_query("SELECT dropbox_quota FROM cours WHERE code='$currentCourseID'"));
+$d = mysql_fetch_array(db_query("SELECT dropbox_quota FROM `".$mysqlMainDb."`.`cours` WHERE code='$currentCourseID'"));
 $diskQuotaDropbox = $d['dropbox_quota'];
 $dropbox_cnf["allowOverwrite"] = false;
 $dropbox_cnf["allowJustUpload"] = false;
