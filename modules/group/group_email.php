@@ -40,8 +40,8 @@ $require_prof = true;
 
 include '../../include/baseTheme.php';
 $nameTools = $langGroupMail;
-$navigation[]= array ("url"=>"group.php", "name"=> $langGroupSpace, 
-	"url"=>"group_space.php?userGroupId=$userGroupId", "name"=>$langGroupSpace);
+$navigation[]= array ("url"=>"group.php", "name"=> $langGroupSpace,
+"url"=>"group_space.php?userGroupId=$userGroupId", "name"=>$langGroupSpace);
 
 include('../../include/sendMail.inc.php');
 
@@ -51,27 +51,27 @@ $currentCourse=$dbname;
 
 if ($is_adminOfCourse)  {
 
-if (isset($submit)) {
-	
-	$sql=mysql_query("SELECT user FROM `$dbname`.user_group WHERE team = '$userGroupId'");
-	while ($userid = mysql_fetch_array($sql)) {
-		mysql_select_db($mysqlMainDb);
-		$m = mysql_fetch_array(mysql_query("SELECT DISTINCT email FROM user where user_id='$userid[0]'"));
-		mysql_select_db($currentCourse);
-		$prof = mysql_fetch_array(mysql_query("SELECT username, user_email FROM users WHERE user_id='1'"));
-		$emailsubject = $intitule." - ".$subject;
-		$emailbody = "$body_mail\n\n$prof[username]\n$langProfLesson\n";
-		if (!send_mail($prof['username'], $prof['user_email'],
-				'', $m[0], $emailsubject, $emailbody, $charset)) {
-			$tool_content .= "<h4>$langMailError</h4>";
-		}
-	}
-	$tool_content .= "<h4>$langEmailSuccess</h4>";
-	$tool_content .= "&nbsp;";
-	$tool_content .= "<p><a href=\"group.php\">$langBack</a></p>";
-} else {
+	if (isset($submit)) {
 
-$tool_content .= <<<tCont
+		$sql=mysql_query("SELECT user FROM `$dbname`.user_group WHERE team = '$userGroupId'");
+		while ($userid = mysql_fetch_array($sql)) {
+			mysql_select_db($mysqlMainDb);
+			$m = mysql_fetch_array(mysql_query("SELECT DISTINCT email FROM user where user_id='$userid[0]'"));
+			mysql_select_db($currentCourse);
+			$prof = mysql_fetch_array(mysql_query("SELECT username, user_email FROM users WHERE user_id='1'"));
+			$emailsubject = $intitule." - ".$subject;
+			$emailbody = "$body_mail\n\n$prof[username]\n$langProfLesson\n";
+			if (!send_mail($prof['username'], $prof['user_email'],
+			'', $m[0], $emailsubject, $emailbody, $charset)) {
+				$tool_content .= "<h4>$langMailError</h4>";
+			}
+		}
+		$tool_content .= "<h4>$langEmailSuccess</h4>";
+		$tool_content .= "&nbsp;";
+		$tool_content .= "<p><a href=\"group.php\">$langBack</a></p>";
+	} else {
+
+		$tool_content .= <<<tCont
 <h4>$langTypeMessage</h4>
 
 <form action="group_email.php" method="post">
@@ -102,9 +102,9 @@ $tool_content .= <<<tCont
 
 
 tCont;
-	}
+}
 
- }	// if prof
- 
- draw($tool_content, 2, 'group');
+}	// if prof
+
+draw($tool_content, 2, 'group');
 ?>
