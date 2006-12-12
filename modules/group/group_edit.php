@@ -37,10 +37,20 @@ $require_current_course = TRUE;
 $langFiles = 'group';
 $require_help = TRUE;
 $helpTopic = 'Group';
+$require_prof = true;
 
 include '../../include/baseTheme.php';
 $nameTools = $langEditGroup;
 $navigation[]= array ("url"=>"group.php", "name"=> $langGroupManagement);
+
+//check for valid $userGroupId
+if (isset($userGroupId) && is_numeric($userGroupId) /*&& !ereg("^\D", $userGroupId)*/){
+	$userGroupId = (int)$userGroupId;
+	
+} else{
+	die("Wrong user group id / User group id not set");
+}
+
 
 $tool_content ="";
 $head_content = <<<hCont
