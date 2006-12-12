@@ -47,20 +47,25 @@ include '../../include/baseTheme.php';
 $nameTools = $langGroupSpace;
 $navigation[] = array ("url"=>"group.php", "name"=> $langGroupManagement);
 $tool_content = "";
-if(!session_is_registered('userGroupId')){
-	$_SESSION['userGroupId'] = $_REQUEST['userGroupId'];
+if (isset($userGroupId) && is_numeric($userGroupId)){
+	if(!session_is_registered('userGroupId')){
+		$_SESSION['userGroupId'] = (int)$_REQUEST['userGroupId'];
+	}
+} else{
+	die("Wrong user group id / User group id not set");
 }
+
 
 ########################### SQL SELF-REGISTRATION ################################
 
 if(isset($registration) and $statut != 10)
 {
-	 $userGroupId = $_SESSION['userGroupId'];
-	 session_unregister('userGroupId');
+	$userGroupId = $_SESSION['userGroupId'];
+	session_unregister('userGroupId');
 
-	$sqlExist=mysql_query("SELECT id FROM `$dbname`.user_group 
+	$sqlExist=mysql_query("SELECT id FROM `$dbname`.user_group
 				WHERE user='$uid' AND team='$userGroupId'");
-				$countExist = mysql_num_rows($sqlExist);
+	$countExist = mysql_num_rows($sqlExist);
 	if($countExist==0 )
 	{
 		$sqlReg=mysql_query("INSERT INTO `$dbname`.user_group (user, team) VALUES ('$uid', '$userGroupId')");
@@ -71,15 +76,15 @@ if(isset($registration) and $statut != 10)
 
 $currentCourse=$dbname;
 
-if ($is_adminOfCourse) {
+/*if ($is_adminOfCourse) {
 	if (isset($_REQUEST['userGroupId'])) {
 		$userGroupId = $_REQUEST['userGroupId'];
 	}
- }	// if prof
+}*/	// if prof
 
 ############### Secret Directory for Documents #################
 
-$sqlGroup=mysql_query("SELECT secretDirectory 
+$sqlGroup=mysql_query("SELECT secretDirectory
 		FROM `$currentCourse`.student_group 
 			WHERE id='$userGroupId'");
 
@@ -99,23 +104,23 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 {
 	$forumId=$myGroup['forumId'];
 
-	
-	if ($is_adminOfCourse) 
+
+	if ($is_adminOfCourse)
 	{
 		$tool_content .=  "<p><a href=\"group_edit.php?userGroupId=$userGroupId\">$langEditGroup</a> | ";
 
 	}
 	elseif(isset($selfReg) AND ($uid))
 	{
-		$tool_content .=  "<p><a href=\"$_SERVER[PHP_SELF]?registration=1\">$langRegIntoGroup</a>"; 
+		$tool_content .=  "<p><a href=\"$_SERVER[PHP_SELF]?registration=1\">$langRegIntoGroup</a>";
 	}
 	elseif(isset($regDone))
 	{
 		$tool_content .=  "<p>$message";
 	}
-	
+
 	$tool_content .= loadGroupTools()."</p>";
-	
+
 	$tool_content .=  "
 		<table>
 		<thead>
@@ -132,7 +137,7 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 		<br>
 		";
 
-	$sqlTutor=mysql_query("SELECT tutor, user_id, nom, prenom, email, forumId 
+	$sqlTutor=mysql_query("SELECT tutor, user_id, nom, prenom, email, forumId
 					FROM `$mysqlMainDb`.user, student_group
 					WHERE user.user_id=student_group.tutor
 					AND student_group.id='$userGroupId'");
@@ -140,13 +145,13 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 	$tool_content_tutor="";
 	if ($countTutor==0)
 	{
-		$tool_content_tutor .=  "$langGroupNoTutor";	
+		$tool_content_tutor .=  "$langGroupNoTutor";
 	}
-	else 
+	else
 	{
 		while ($myTutor = mysql_fetch_array($sqlTutor))
 		{
-			$tool_content_tutor .=  "$myTutor[nom] $myTutor[prenom] 
+			$tool_content_tutor .=  "$myTutor[nom] $myTutor[prenom]
 				<a href=mailto:$myTutor[email]>$myTutor[email]</a>";
 		}	// while tutor
 
@@ -179,7 +184,7 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 	{
 		$tool_content_description .=  "$myGroup[description]";
 	}	// else
-	
+
 	$tool_content .=  "
 		<table>
 		<thead>
@@ -200,7 +205,7 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 
 ################ MEMBERS ################################
 
-	$tool_content .=  "
+$tool_content .=  "
 	<br>
 		<table>
 		<thead>
@@ -238,7 +243,7 @@ if(($countMember==0))
 else
 {
 	while ($myMember = mysql_fetch_array($resultMember))
-	{	
+	{
 		$tool_content .= "<tr>";
 		$tool_content .= "<td>";
 		$tool_content .=  "$myMember[prenom] $myMember[nom]";
@@ -265,55 +270,55 @@ draw($tool_content, 2, 'group');
 
 
 function loadGroupTools(){
-global $selfReg, $forumId, $langForums, $userGroupId, $langDocuments;
-global $is_adminOfCourse, $userGroupId, $langEmailGroup;
-###################### TOOLS #############################
+	global $selfReg, $forumId, $langForums, $userGroupId, $langDocuments;
+	global $is_adminOfCourse, $userGroupId, $langEmailGroup;
+	###################### TOOLS #############################
 
-// Vars needed to determine group File Manager and group Forum
-// They are unregistered when opening group.php once again.
+	// Vars needed to determine group File Manager and group Forum
+	// They are unregistered when opening group.php once again.
 
-session_register("secretDirectory");
-session_register("userGroupId");
-session_register("forumId");
+	session_register("secretDirectory");
+	session_register("userGroupId");
+	session_register("forumId");
 
-$group_tools = "";
-if(isset($selfReg))
-{
-	$group_tools .=  "&nbsp;</td>";
-}
-else
-{
-	$resultProperties=mysql_query("SELECT id, self_registration, private, forum, document 
-					FROM group_properties WHERE id=1");
-	while ($myProperties = mysql_fetch_array($resultProperties))
+	$group_tools = "";
+	if(isset($selfReg))
 	{
-		// Drive members into their own forum
-		if($myProperties['forum']==1){
-			$group_tools .=  "<a href=\"../phpbb/viewforum.php?forum=$forumId\">$langForums</a> | ";
+		$group_tools .=  "&nbsp;</td>";
+	}
+	else
+	{
+		$resultProperties=mysql_query("SELECT id, self_registration, private, forum, document
+					FROM group_properties WHERE id=1");
+		while ($myProperties = mysql_fetch_array($resultProperties))
+		{
+			// Drive members into their own forum
+			if($myProperties['forum']==1){
+				$group_tools .=  "<a href=\"../phpbb/viewforum.php?forum=$forumId\">$langForums</a> | ";
+			}
+
+			// Drive members into their own File Manager
+			if($myProperties['document']==1){
+				$group_tools .=  "<a href=\"document.php?userGroupId=$userGroupId\">$langDocuments</a>";
+			}
+
+
+		}	// while loop
+
+		if ($is_adminOfCourse)
+		{
+
+			$group_tools .=  " | <a href=\"group_email.php?userGroupId=$userGroupId\">$langEmailGroup</a>";
 		}
 
-		// Drive members into their own File Manager
-		if($myProperties['document']==1){
-			$group_tools .=  "<a href=\"document.php?userGroupId=$userGroupId\">$langDocuments</a>";
-		}
-		
-		
-	}	// while loop
+	}
+	$group_tools .= "</p>";
 
-if ($is_adminOfCourse)
-{
+	session_unregister("secretDirectory");
 
-	$group_tools .=  " | <a href=\"group_email.php?userGroupId=$userGroupId\">$langEmailGroup</a>";
-}
+	session_unregister("forumId");
 
-}
-$group_tools .= "</p>";
-
-session_unregister("secretDirectory");
-
-session_unregister("forumId");
-
-return $group_tools;
+	return $group_tools;
 }
 ?>
 
