@@ -122,10 +122,10 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 	$tool_content .= loadGroupTools()."</p>";
 
 	$tool_content .=  "
-		<table>
+		<table width=\"99%\">
 		<thead>
 		<tr>
-		<th>
+		<th width=\"200\">
 			$langGroupName
 		</th>
 		<td>
@@ -158,10 +158,10 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 	}	// else
 
 	$tool_content .=  "
-		<table>
+		<table width=\"99%\">
 		<thead>
 		<tr>
-		<th>
+		<th width=\"200\">
 			$langGroupTutor
 		</th>
 		<td>
@@ -186,17 +186,21 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 	}	// else
 
 	$tool_content .=  "
-		<table>
+		<table width=\"99%\">
 		<thead>
 		<tr>
 		<th>
 			$langGroupDescription
 		</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
 		<td>
 			$tool_content_description
 		</td>
 		</tr>
-		</thead>
+		</tbody>
 		</table>
 		<br>
 		";
@@ -206,8 +210,8 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 ################ MEMBERS ################################
 
 $tool_content .=  "
-	<br>
-		<table>
+	
+		<table width=\"99%\">
 		<thead>
 		<tr>
 		<th colspan=3>
