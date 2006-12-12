@@ -44,7 +44,7 @@ $nameTools = $langEditGroup;
 $navigation[]= array ("url"=>"group.php", "name"=> $langGroupManagement);
 
 //check for valid $userGroupId
-if (isset($userGroupId) && is_numeric($userGroupId) /*&& !ereg("^\D", $userGroupId)*/){
+if (isset($userGroupId) && is_numeric($userGroupId)){
 	$userGroupId = (int)$userGroupId;
 	
 } else{
