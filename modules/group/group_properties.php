@@ -36,6 +36,7 @@ $require_current_course = TRUE;
 $langFiles = 'group';
 $require_help = TRUE;
 $helpTopic = 'Group';
+$require_prof = true;
 
 include '../../include/baseTheme.php';
 $nameTools = $langGroupProperties;
