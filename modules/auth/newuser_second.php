@@ -25,7 +25,7 @@
 
 /**===========================================================================
 	newuser_second.php
-	@last update: 07-06-2006 by Stratos Karatzidis
+* @version $Id$
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
 ==============================================================================        
@@ -63,18 +63,34 @@ if(!empty($submit))
 	if( (strstr($password, "'")) or (strstr($password, '"')) or (strstr($password, '\\')) 
   or (strstr($uname, "'")) or (strstr($uname, '"')) or (strstr($uname, '\\')) )
 	{
-		$tool_content .= "<tr bgcolor=\"".$color2."\">
-		<td bgcolor=\"$color2\" colspan=\"3\" valign=\"top\">
-		<br>$langCharactersNotAllowed<br /><br />
-		<a href=\"./newuser.php\">".$langAgain."</a></td></tr></table>";
+		$tool_content .= "
+		<table width=\"99%\">
+			<tbody>
+				<tr>
+					<td class=\"caution\">
+					<p>$langCharactersNotAllowed </p>
+					<p><a href=\"./newuser.php\">".$langAgain."</a></p>
+					</td>
+				</tr>
+			</tbody>
+		</table>";
 	}
 	else	// do the other checks
 	{
 		if (empty($nom_form) or empty($prenom_form) or empty($password) or empty($uname)) 	// check if there are empty fields
 		{
-			$tool_content .= "<tr bgcolor=\"".$color2."\" height=\"400\">
-				<td bgcolor=\"$color2\" colspan=\"3\" valign=\"top\">
-				<br>".$langEmptyFields."</td></tr></table>";
+			$tool_content .= "
+			<table width=\"99%\">
+			<tbody>
+				<tr>
+					<td class=\"caution\">
+					<p>$langEmptyFields</p>
+					<p><a href=\"./newuser.php\">".$langAgain."</a></p>
+					</td>
+				</tr>
+			</tbody>
+		</table>";
+			
 		}
 		else
 		{
@@ -82,9 +98,17 @@ if(!empty($submit))
 			$username_check=mysql_query($q2);	// check if the username exist
 			if ($myusername = mysql_fetch_array($username_check)) 
 			{
-				$tool_content .= "<tr bgcolor=\"".$color2."\" height=\"400\">
-	   			<td colspan=\"3\" valign=\"top\"><br />".$langUserFree."</td>
-	   			</tr></table>";
+				$tool_content .= "
+				<table width=\"99%\">
+			<tbody>
+				<tr>
+					<td class=\"caution\">
+					<p>$langUserFree</p>
+					<p><a href=\"./newuser.php\">".$langAgain."</a></p>
+					</td>
+				</tr>
+			</tbody>
+		</table>";
 			}
 			else
 			{
@@ -97,14 +121,18 @@ if(!empty($submit))
 				elseif((strtoupper($password) == strtoupper($uname)) || (strtoupper($password) == strtoupper($nom_form))
 				|| (strtoupper($password) == strtoupper($prenom_form)) || (strtoupper($password) == strtoupper($email))) 
 				{
-					$tool_content .= "<tr bgcolor=\"".$color2."\" height=\"400\">
-					<td colspan=\"3\" valign=\"top\" align=\"center\">
-					<br />".$langPassTooEasy." : 
-					<strong>".substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8)."</strong>
-					<br />
-					<br />
-					<a href=\"./newuser.php\">".$langAgain."</a>
-					</td></tr></table>";
+					$tool_content .= "
+					<table width=\"99%\">
+			<tbody>
+				<tr>
+					<td class=\"caution\">
+					<p>$langPassTooEasy <strong>".substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8)."</strong></p>
+					<p><a href=\"./newuser.php\">".$langAgain."</a></p>
+					</td>
+				</tr>
+			</tbody>
+		</table>";
+
 					//exit();
 				}
 				if (!empty($email)) 	// check if the user email is valid
@@ -114,11 +142,17 @@ if(!empty($submit))
 					$emailtohostname = substr($email, (strrpos($email, "@") +1));
  					if (!eregi($regexp, $email)) 
 					{	
-        		$tool_content .= "<tr bgcolor=\"$color2\" height=\"400\">
-        		<td bgcolor=\"$color2\" colspan=\"3\" valign=\"top\" align=\"center\">
-						<br />".$langEmailWrong."<br /><br />
-						<a href=\"newuser.php\">".$langAgain."</a>
-						</td></tr></table>";
+        		$tool_content .= "
+        		<table width=\"99%\">
+			<tbody>
+				<tr>
+					<td class=\"caution\">
+					<p>$langEmailWrong</p>
+					<p><a href=\"./newuser.php\">".$langAgain."</a></p>
+					</td>
+				</tr>
+			</tbody>
+		</table>";
 					}
 				}
 				
@@ -185,10 +219,14 @@ if(!empty($submit))
 				session_register("uname");
 				
 				// registration form
-				$tool_content .= "<tr bgcolor=\"$color2\">
-				<td colspan=\"3\">
-				<p>$langDear $prenom $nom,</font></p>
+				$tool_content .= "
+				<table width=\"99%\"><tbody><tr><td class=\"success\">
+				<p>$langDear $prenom $nom,</p>
 				<p>$langPersonalSettings</p>
+				</td></tr></tbody></table>
+				<br/>
+				
+				
 				<form action=\"inscription_third.php\" method=\"post\">";
 				$result=mysql_query("SELECT cours_faculte.faculte f, cours.code k, cours.fake_code c,
 				cours.intitule i,
@@ -206,33 +244,34 @@ if(!empty($submit))
 				{	
 					if($mycours['f'] != $facOnce) 
 					{
-						$tool_content .= "<hr noshade size=\"1\">
-						<h3>$langDepartment: <em><font color=\"#f0741e\">$mycours[f]</font></em></h3>
-						<br />";
+						$tool_content .= "
+						<p><b>$langDepartment: </b><em><font color=\"#f0741e\">$mycours[f]</font></em></p>
+						
+						<ul class=\"listBullet\">";
 					}
 					$facOnce = $mycours['f'];
 	
 					if($mycours['k'] != $codeOnce) 
 					{
-						$tool_content .= "<input type='checkbox' name='course[]' value='$mycours[k]'>
+						$tool_content .= "<li><input type='checkbox' name='course[]' value='$mycours[k]'>
 							<font color=\"navy\">$mycours[c]</font> 
 							<b>$mycours[i]</b> ($mycours[t])";
 						if ($mycours['p']!='') {
 							$tool_content .= " (".$m['code'].": <input type=\"password\" name=\"".$mycours['k']."\" value=\"\">)";
 						}
-						$tool_content .= "<br>\n";
+						$tool_content .= "</li>\n";
 					}
 					$codeOnce=$mycours['k'];
 				}
-				$tool_content .= "<br />
+				$tool_content .= "</ul>
 				<input type=\"submit\" name=\"submit\" value=\"$langRegistration\" >
 				</form>
-					<hr noshade size=1></td></tr>";
+					";
 				
 			}	// end of registration accepted
 
 			$already_second=1;
-			$tool_content .= "</table>";
+//			$tool_content .= "</table>";
 		}
 	}
 } // if submit

@@ -28,7 +28,9 @@
 |          Christophe Gesche <gesche@ipm.ucl.ac.be>                    |
 +----------------------------------------------------------------------+
 */
-
+/*
+* @version $Id$
+*/
 $langFiles = 'registration';
 $require_login = TRUE;
 //include('../../include/init.php');
@@ -67,7 +69,7 @@ if($submit)
 		}
 		if ($reg_courses>0) {
 			$tool_content .= "
-			<table>
+			<table width=\"99%\">
 				<tbody>
 					<tr>
 						<td class=\"success\">
@@ -81,7 +83,7 @@ if($submit)
 			";
 		} else {
 		$tool_content .= "
-		<table>
+		<table width=\"99%\">
 				<tbody>
 					<tr>
 						<td class=\"success\">
@@ -96,7 +98,7 @@ if($submit)
 		}
 	} else {
 		$tool_content .= "
-		<table>
+		<table width=\"99%\">
 				<tbody>
 					<tr>
 						<td class=\"success\">
@@ -111,6 +113,5 @@ if($submit)
 	}
 }	// if submit
 
-//end_page();
 draw($tool_content, 0);
 ?>
