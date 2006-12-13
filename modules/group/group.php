@@ -32,8 +32,8 @@
  * @abstract This module is responsible for the user groups of each lesson
  *
  */
-$require_current_course = TRUE;
 
+$require_current_course = TRUE;
 $langFiles = 'group';
 $require_help = TRUE;
 $helpTopic = 'Group';
@@ -62,7 +62,7 @@ $tool_content = "";
 ############## GROUP MODIFICATIONS ###############################
 
 // Group creation
-if(isset($_REQUEST['creation'])) {
+if(isset($_REQUEST['creation']) && $is_adminOfCourse) {
 
 	// For all Group forums, cat_id=2
 
@@ -98,21 +98,21 @@ if(isset($_REQUEST['creation'])) {
 }	// if $submit
 
 
-if(isset($_REQUEST['properties']))
+if(isset($_REQUEST['properties']) && $is_adminOfCourse)
 {
-	@mysql_query("UPDATE group_properties
+	@db_query("UPDATE group_properties
 			SET self_registration='$self_registration', private='$private',
-			forum='$forum', document='$document' WHERE id=1"); 
+			forum='$forum', document='$document' WHERE id=1", $currentCourse); 
 	$message = $langGroupPropertiesModified;
 }	// if $submit
 
 
 // Delete all groups
-elseif (isset($_REQUEST['delete']))
+elseif (isset($_REQUEST['delete']) && $is_adminOfCourse)
 {
-	$result = mysql_query("DELETE FROM student_group");
+	$result = db_query("DELETE FROM student_group", $currentCourse);
 
-	$result = mysql_query("DELETE FROM forums WHERE cat_id='1'");
+	$result = db_query("DELETE FROM forums WHERE cat_id='1'", $currentCourse);
 
 	// Moving all groups to garbage collector and re-creating an empty work directory
 	$groupGarbage=uniqid(20);
@@ -122,44 +122,44 @@ elseif (isset($_REQUEST['delete']))
 	mkdir("../../courses/$currentCourse/group", 0777);
 
 	// Delete all members of this group
-	$delGroupUsers=mysql_query("DELETE FROM user_group");
+	$delGroupUsers=db_query("DELETE FROM user_group", $currentCourse);
 	$message = $langGroupsDeleted;
 }
 
 // Delete one group
-elseif (isset($_REQUEST['delete_one']))
+elseif (isset($_REQUEST['delete_one']) && $is_adminOfCourse)
 {
 
 	// Moving group directory to garbage collector
 	$groupGarbage=uniqid(20);
-	$sqlDir=mysql_query("SELECT secretDirectory, forumId FROM student_group WHERE id='$id'");
+	$sqlDir=db_query("SELECT secretDirectory, forumId FROM student_group WHERE id='$id'", $currentCourse);
 	while ($myDir = mysql_fetch_array($sqlDir))
 	{
 		rename("../../courses/$currentCourse/group/$myDir[secretDirectory]",
 		"../../courses/garbage/$groupGarbage");
 
-		mysql_query("DELETE FROM forums WHERE cat_id='1' AND forum_id='$myDir[forumId]'");
+		db_query("DELETE FROM forums WHERE cat_id='1' AND forum_id='$myDir[forumId]'", $currentCourse);
 	}
 
 	// Deleting group record in table
-	$result = mysql_query("DELETE FROM student_group WHERE id='$id'");
+	$result = db_query("DELETE FROM student_group WHERE id='$id'", $currentCourse);
 
 	// Delete all members of this group
-	$delGroupUsers=mysql_query("DELETE FROM user_group WHERE team='$id'");
+	$delGroupUsers=db_query("DELETE FROM user_group WHERE team='$id'", $currentCourse);
 
 	$message = $langGroupDel;
 }
 
 // Empty all groups
-elseif (isset($_REQUEST['empty'])) {
-	$result = mysql_query("DELETE FROM user_group");
-	$result2 = mysql_query("UPDATE student_group SET tutor='0'");
+elseif (isset($_REQUEST['empty'])  && $is_adminOfCourse) {
+	$result = db_query("DELETE FROM user_group", $currentCourse);
+	$result2 = db_query("UPDATE student_group SET tutor='0'", $currentCourse);
 	$message = $langGroupsEmptied;
 }
 
 
 // Fill all groups
-elseif (isset($_REQUEST['fill'])) {
+elseif (isset($_REQUEST['fill']) && $is_adminOfCourse) {
 	$sqlGroups = "select id, maxStudent from student_group";
 	$resGroups = db_query($sqlGroups);
 	while (list($idGroup,$places) = mysql_fetch_array($resGroups))
@@ -220,7 +220,7 @@ ADMIN AND TUTOR ONLY
 *****************************************/
 
 // Determine if uid is tutor for this course
-$sqlTutor=mysql_query("SELECT tutor FROM `$mysqlMainDb`.cours_user
+$sqlTutor=db_query("SELECT tutor FROM `$mysqlMainDb`.cours_user
 				WHERE user_id='$uid' AND code_cours='$currentCourse'");
 while ($myTutor = mysql_fetch_array($sqlTutor))
 {
@@ -270,7 +270,7 @@ if ($is_adminOfCourse) {
 	</thead>
 tCont3;
 
-	$resultProperties=mysql_query("SELECT id, self_registration, private, forum, document FROM group_properties WHERE id=1");
+	$resultProperties=db_query("SELECT id, self_registration, private, forum, document FROM group_properties WHERE id=1", $currentCourse);
 	while ($myProperties = mysql_fetch_array($resultProperties))
 	{
 		$tool_content .= "<tr><td>";
@@ -353,15 +353,15 @@ tCont3;
 				</tr>
 			</thead>
 			<tbody>";
-	mysql_select_db("$currentCourse");
-	$groupSelect=mysql_query("SELECT id, name, maxStudent FROM student_group");
+//	mysql_select_db("$currentCourse");
+	$groupSelect=db_query("SELECT id, name, maxStudent FROM student_group", $currentCourse);
 
 	$totalRegistered=0;
 	$myIterator=0;
 	while ($group = mysql_fetch_array($groupSelect))
 	{
 		// Count students registered in each group
-		$resultRegistered = mysql_query("SELECT id FROM user_group WHERE team='".$group["id"]."'");
+		$resultRegistered = db_query("SELECT id FROM user_group WHERE team='".$group["id"]."'", $currentCourse);
 		$countRegistered = mysql_num_rows($resultRegistered);
 
 		if ($myIterator%2==0) {
@@ -407,10 +407,10 @@ tCont3;
  
 tCont4;
 
-	mysql_select_db($mysqlMainDb);
-	$coursUsersSelect=mysql_query("
+//	mysql_select_db($mysqlMainDb);
+	$coursUsersSelect=db_query("
 	SELECT user_id FROM cours_user WHERE code_cours='$currentCourse' 
-			AND statut=5 AND tutor=0");
+			AND statut=5 AND tutor=0", $currentCourse);
 	$countUsers = mysql_num_rows($coursUsersSelect);
 	$countNoGroup=($countUsers-$totalRegistered);
 
@@ -435,7 +435,7 @@ tCont5;
 else {
 
 	// Check if Self-registration is allowed. 1=allowed, 0=not allowed
-	$sqlSelfReg=mysql_query("SELECT self_registration FROM group_properties");
+	$sqlSelfReg=db_query("SELECT self_registration FROM group_properties", $currentCourse);
 	while ($mySelfReg = mysql_fetch_array($sqlSelfReg))
 	{
 		$selfRegProp=$mySelfReg['self_registration'];
@@ -447,7 +447,7 @@ else {
 	}
 
 	// Check which group student is a member of
-	$findTeamUser=mysql_query("SELECT team FROM user_group WHERE user='$uid'");
+	$findTeamUser=db_query("SELECT team FROM user_group WHERE user='$uid'", $currentCourse);
 	while ($myTeamUser = mysql_fetch_array($findTeamUser))
 	{
 		$myTeam=$myTeamUser['team'];
@@ -475,15 +475,15 @@ else {
 	</tr></thead>
 	<tbody>";
 
-	mysql_select_db("$currentCourse");
+//	mysql_select_db("$currentCourse");
 
-	$groupSelect=mysql_query("SELECT id, name, maxStudent, tutor FROM student_group");
+	$groupSelect=db_query("SELECT id, name, maxStudent, tutor FROM student_group", $currentCourse);
 
 	$totalRegistered=0;
 
 	while ($group = mysql_fetch_array($groupSelect)) {
 		// Count students registered in each group
-		$resultRegistered = mysql_query("SELECT id FROM user_group WHERE team='".$group["id"]."'");
+		$resultRegistered = db_query("SELECT id FROM user_group WHERE team='".$group["id"]."'", $currentCourse);
 		$countRegistered = mysql_num_rows($resultRegistered);
 		$tool_content .= "<tr><td>";
 
