@@ -39,35 +39,34 @@
 $require_current_course = TRUE;  // flag ασφάλειας
 $langFiles = 'document';  // αρχείο μηνυμάτων
  
-//θέλουμε help
 $require_help = FALSE;
 //$helpTopic = 'User';
  
-// αλλάζουμε το include 'init.php ' και αντικαθιστάται από το baseTheme.php
-//include "../../include/init.php";
- 
-// το API: αρχείο με μεθόδους για τη δημιουργία τμημάτων της διεπαφής (baseTheme.php)
 include "../../include/baseTheme.php";
 $tool_content = "";
  
 $nameTools = $langDownloadFile;
-
-$tool_content .= "<i>$langNotRequired</i><br><br><br>
+$navigation[]= array ("url"=>"document.php", "name"=> $langDoc);
+$tool_content .= "<p><em>$langNotRequired</em></p>
 <form action=\"document.php\" method=\"post\" enctype=\"multipart/form-data\">
     <input type=\"hidden\" name=\"uploadPath\" value=\"$uploadPath\">
-    $langDownloadFile&nbsp;:<br><input type=\"file\" name=\"userFile\" size=\"80\"><br><hr>
-    
-    <table width=\"99%\" border=\"1\">
+     <table width=\"99%\">
+     <thead>
+     <tr>
+     <th>$langDownloadFile:</th>
+     <td><input type=\"file\" name=\"userFile\" size=\"40\"></td>
+     </tr>
+
     	<tr>
-    		<td align=\"right\">$langTitle&nbsp;:</td>
+    		<th>$langTitle:</th>
 			<td><input type=\"text\" name=\"file_title\" value=\"\" size=\"40\"></td>
 		</tr>
 		<tr>
-			<td align=\"right\">$langComment&nbsp;:</td>
+			<th>$langComment:</th>
 			<td><input type=\"text\" name=\"file_comment\" value=\"\" size=\"40\"></td>
 		</tr>
 		<tr>
-			<td align=\"right\">$langCategory&nbsp;:</td>
+			<th>$langCategory:</th>
 			<td>
 			    <select name=\"file_category\">
 					<option selected=\"selected\" value=\"0\">$langCategoryOther<br>
@@ -86,22 +85,22 @@ $tool_content .= "<i>$langNotRequired</i><br><br><br>
 			    <input type=\"hidden\" name=\"file_creator\" value=\"$prenom $nom\" size=\"40\">
 		</tr>
 		<tr>
-			<td align=\"right\">$langSubject&nbsp;:</td>
+			<th>$langSubject:</th>
 			<td><input type=\"text\" name=\"file_subject\" value=\"\" size=\"40\"></td>
 		</tr>
 		<tr>
-			<td align=\"right\">$langDescription&nbsp;:</td>
+			<th>$langDescription:</th>
 			<td><input type=\"text\" name=\"file_description\" value=\"\" size=\"40\"></td>
 		</tr>
 		<tr>
-			<td align=\"right\">$langAuthor&nbsp;:</td>
+			<th>$langAuthor:</th>
 			<td><input type=\"text\" name=\"file_author\" value=\"\" size=\"40\"></td>
 		</tr>
 		<tr>
-			<td align=\"right\"><input type=\"hidden\" name=\"file_date\" value=\"\" size=\"40\">
+			<th><input type=\"hidden\" name=\"file_date\" value=\"\" size=\"40\">
 			    <input type=\"hidden\" name=\"file_format\" value=\"\" size=\"40\">
-			    $langLanguage&nbsp;:
-			</td>
+			    $langLanguage:
+			</th>
 			<td>			    
 			
 			    
@@ -122,22 +121,24 @@ $tool_content .= "<i>$langNotRequired</i><br><br><br>
 			    $tool_content .=  "</td>
 		</tr>
 		<tr>
-			<td align=\"right\">$langCopyrighted&nbsp;:</td>
+			<th>$langCopyrighted:</th>
 			<td>
 				<input name=\"file_copyrighted\" type=\"radio\" value=\"0\" checked=\"checked\" /> $langCopyrightedUnknown<br>
 			    <input name=\"file_copyrighted\" type=\"radio\" value=\"2\" /> $langCopyrightedFree<br>
 			  	<input name=\"file_copyrighted\" type=\"radio\" value=\"1\" /> $langCopyrightedNotFree
 			</td>
 		</tr>
-		<tr>
-			 <td>&nbsp;</td>
-			 <td>
-			 	<input type=\"checkbox\" name=\"uncompress\" value=\"1\">$langUncompress<br>
-			 	<small>$langNoticeGreek</small>
-			 </td>
-		</tr>
+		
+		</thead>
 		</table>
-			    <p align=\"right\"><input type=\"submit\" value=\"$langDownload\"></p>";
+		
+		<ul class=\"listBullet\">
+		<li>
+		<input type=\"checkbox\" name=\"uncompress\" value=\"1\">$langUncompress
+			 	<em>$langNoticeGreek</em>
+		</li>
+		</ul>
+			    <br/><input type=\"submit\" value=\"$langDownload\">";
     $tool_content .=  "</form>";
  
 
