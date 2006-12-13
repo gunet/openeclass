@@ -63,8 +63,10 @@ include '../../include/baseTheme.php';
 
 $tool_content = "";
 
+if(!isset($_REQUEST['UseCase'])) $_REQUEST['UseCase'] = "";
+if(!isset($_REQUEST['sid'])) die();
 
-switch ($UseCase) {
+switch ($_REQUEST['UseCase']) {
 case 1:
    printSurveyForm();
    break;
@@ -147,17 +149,20 @@ draw($tool_content, 2, '', $head_content);
 //}
 
 function printSurveyForm() {
-	global $sid, $currentCourse, $tool_content, $langSurveyName, $langSurveyStart, 
+	global $currentCourse, $tool_content, $langSurveyName, $langSurveyStart, 
 		$langSurveyEnd, $langSurveyContinue, $langSurveyInactive;
-///*****************************************************************************
+		
+	$sid = htmlspecialchars($_REQUEST['sid']);
+	
+// *****************************************************************************
 //		Get survey data
 //******************************************************************************/
 $CurrentQuestion = 0;
 $CurrentAnswer = 0;
 $survey = db_query("
 	select * from survey 
-	where sid=$sid 
-	ORDER BY sid", $currentCourse);
+	where sid='".mysql_real_escape_string($sid)."' "
+	."ORDER BY sid", $currentCourse);
 $theSurvey = mysql_fetch_array($survey);
 
 $temp_CurrentDate = date("Y-m-d H:i:s");
@@ -184,8 +189,8 @@ cData;
 		$tool_content .= "\n<br><input type=\"hidden\" value=\"1\" name=\"SurveyType\"><br>\n";
 		$questions = db_query("
 		select * from survey_question 
-		where sid=$sid 
-		ORDER BY sqid", $currentCourse);
+		where sid='".mysql_real_escape_string($sid)."' "
+		."ORDER BY sqid", $currentCourse);
 		while ($theQuestion = mysql_fetch_array($questions)) {	
 			++$CurrentQuestion;
 			$tool_content .= "\n\n<br><br>".$theQuestion["question_text"]."<br>\n";
@@ -210,8 +215,8 @@ cData;
 		$tool_content .= "<br>\n<input type=\"hidden\" value=\"2\" name=\"SurveyType\"><br>\n";
 		$questions = db_query("
 		select * from survey_question 
-		where sid=$sid
-		", $currentCourse); 
+		where sid='".mysql_real_escape_string($sid)."' "
+		, $currentCourse); 
 		//ORDER BY sqid", $currentCourse);
 		while ($theQuestion = mysql_fetch_array($questions)) {	
 			++$CurrentQuestion;
@@ -240,14 +245,14 @@ function submitSurvey() {
 	// first populate survey_answer
 	$creator_id = $GLOBALS['uid'];
 	$CreationDate = date("Y-m-d H:m:s");
-	$sid = $_POST['sid'];
+	$sid = htmlspecialchars($_POST['sid']);
 	$aid = date("YmdHms"); 
 	mysql_select_db($GLOBALS['currentCourseID']);
 	$result = db_query("INSERT INTO survey_answer VALUES ('".
-	$aid . "','".
-	$creator_id . "','".
-	$sid . "','".
-	$CreationDate ."')");
+	mysql_real_escape_string($aid) . "','".
+	mysql_real_escape_string($creator_id) . "','".
+	mysql_real_escape_string($sid) . "','".
+	mysql_real_escape_string($CreationDate) ."')");
 	if ($_POST["SurveyType"] == 1) { // MC
 		$counter_foreach = 0;
 		$counter_qas = 0;
@@ -264,9 +269,9 @@ function submitSurvey() {
 				$QuestionAnswer = $_POST[$QuestionAnswer];
 				mysql_select_db($GLOBALS['currentCourseID']);
 				$result2 = db_query("INSERT INTO survey_answer_record VALUES ('0','".
-					$aid. "','".
-					$QuestionText. "','".
-					$QuestionAnswer ."')");
+					mysql_real_escape_string($aid). "','".
+					mysql_real_escape_string($QuestionText). "','".
+					mysql_real_escape_string($QuestionAnswer) ."')");
 				}
 			}  
 		
@@ -287,9 +292,9 @@ function submitSurvey() {
 				//$tool_content .= "\$QuestionText = " . $QuestionText . " \$QuestionAnswer = " . $QuestionAnswer . "<br>\n";;
 				mysql_select_db($GLOBALS['currentCourseID']);
 				$result2 = db_query("INSERT INTO survey_answer_record VALUES ('0','".
-					$aid. "','".
-					$QuestionText. "','".
-					$QuestionAnswer ."')");
+					mysql_real_escape_string($aid). "','".
+					mysql_real_escape_string($QuestionText). "','".
+					mysql_real_escape_string($QuestionAnswer) ."')");
 				}
 			}  
 		}

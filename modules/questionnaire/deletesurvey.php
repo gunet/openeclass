@@ -53,6 +53,7 @@
 ==============================================================================
 */
 
+$require_prof = TRUE;
 $require_current_course = TRUE;
 $langFiles = 'questionnaire';
 
@@ -63,10 +64,12 @@ include '../../include/baseTheme.php';
 
 $tool_content = "";
 
+if (!isset($sid)) die();
+
 if (!isset($UseCase)) {
-	$tool_content .= "<p>". $langSurveyDeleteMsg." "."<a href=\"?UseCase=1&sid=$sid\">".$langSurveyDeleteYes."<a/>"." | "."<a href=\"#\" onclick=\"history.back()\">".$langSurveyDeleteNo."</a></p>";
+	$tool_content .= "<p>". $langSurveyDeleteMsg." "."<a href=\"?UseCase=1&sid=".htmlspecialchars($sid)."\">".$langSurveyDeleteYes."<a/>"." | "."<a href=\"#\" onclick=\"history.back()\">".$langSurveyDeleteNo."</a></p>";
 } else {
-	$sql = "DELETE FROM survey WHERE sid=$sid";
+	$sql = "DELETE FROM survey WHERE sid=".mysql_real_escape_string($sid);
 	$result = db_query($sql,$currentCourseID);
 	$GLOBALS["tool_content"] .= "<p>".$GLOBALS["langSurveyDeleted"]."</p>";
 }

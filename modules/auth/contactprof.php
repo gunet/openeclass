@@ -13,11 +13,11 @@ $tool_content = "";
 if (isset($_POST["submit"])) {
 	$tool_content .= "<table width=\"99%\"><tbody><tr><td>";
 
-	$sql=mysql_query("SELECT * FROM cours_user WHERE code_cours='".$_POST['cc']."'");
+	$sql=db_query("SELECT * FROM cours_user WHERE code_cours='".mysql_real_escape_string($_POST['cc'])."'");
 
 	while ($m = mysql_fetch_array($sql)) {
 		
-		$sql1 = mysql_query("SELECT email FROM user WHERE user_id='".$m["user_id"]."'");
+		$sql1 = db_query("SELECT email FROM user WHERE user_id='".$m["user_id"]."'");
 		$m1 = mysql_fetch_array($sql1);
 		$to = $m1["email"];
 		$emailsubject = "Εγγραφή σε κλειστό μάθημα";
@@ -42,6 +42,16 @@ else
 	$sql = "SELECT * FROM user WHERE user_id='".$uid."'";
 	$res = mysql_query($sql);
 	$row = mysql_fetch_array($res);
+	
+	if (!isset($_GET['fc'])) {
+		$_GET['fc'] = "";
+	}
+	$_GET['fc'] = htmlspecialchars($_GET['fc']);
+	
+	if (!isset($_GET['cc'])) {
+		$_GET['cc'] = "";
+	}
+	$_GET['cc'] = htmlspecialchars($_GET['cc']);
 	
 	$tool_content .= "<form action=\"".$_SERVER['PHP_SELF']."?fc=".$_GET['fc']."\" method=\"post\">
 <table width=\"99%\"><caption>Συμπλήρωση Φόρμας</caption><tbody>";

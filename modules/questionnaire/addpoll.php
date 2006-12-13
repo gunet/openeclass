@@ -53,6 +53,7 @@
 ==============================================================================
 */
 
+$require_prof = TRUE;
 $require_current_course = TRUE;
 $langFiles = 'questionnaire';
 
@@ -69,8 +70,9 @@ $navigation[] = array("url"=>"questionnaire.php", "name"=> $langQuestionnaire);
 
 $tool_content = "";
 
+if(!isset($_REQUEST['UseCase'])) $_REQUEST['UseCase'] = "";
 
-switch ($UseCase) {
+switch ($_REQUEST['UseCase']) {
 case 1:
    // handle multi choice polls
    printMCQuestionForm();
@@ -113,7 +115,7 @@ return true;
 </script>
 hContent;
 
-if ($UseCase ==1)
+if ($_REQUEST['UseCase'] ==1)
 	draw($tool_content, 2, '', $head_content); 
 else	
 draw($tool_content, 2, '', $local_head, '');
@@ -129,7 +131,7 @@ function printPollCreationForm() {
 	
 	$CurrentDate = date("Y-m-d H:i:s");
 	$tool_content .= <<<cData
-	<form action="addpoll.php" id="poll">
+	<form action="addpoll.php" id="poll" method="post">
 	<input type="hidden" value="0" name="MoreQuestions">
 	<table><thead>$langPollCreate</thead>
 		<tr><td>$langPollName</td><td colspan="2"><input type="text" size="50" name="PollName"></td></tr>
@@ -152,13 +154,17 @@ cData;
 function printMCQuestionForm() {
 		global $tool_content, $langPollName, $langPollStart, $langPollEnd, 
 		$langPollType, $langPollMC, $langPollFillText, $langPollContinue, 
-		$langPollQuestion, $langPollCreate, $langPollMoreQuestions, $PollName, 
-		$PollStart, $PollEnd, $langPollCreated, $MoreQuestions, $langPollAnswer, 
-		$langPollMoreAnswers, $UseCase;
+		$langPollQuestion, $langPollCreate, $langPollMoreQuestions, 
+		$langPollCreated, $MoreQuestions, $langPollAnswer, 
+		$langPollMoreAnswers;
+		
+		if(isset($_POST['PollName'])) $PollName = htmlspecialchars($_POST['PollName']);
+		if(isset($_POST['PollEnd'])) $PollEnd = htmlspecialchars($_POST['PollEnd']);
+		if(isset($_POST['PollStart'])) $PollStart = htmlspecialchars($_POST['PollStart']);
 		
 	if ($MoreQuestions == 2) { // Create poll ******************************************************
 		createMCPoll();
-	} elseif(count($_POST)<5) { // Just entered MC poll cretion dialiog ****************************
+	} elseif(count($_POST)<7) { // Just entered MC poll cretion dialiog ****************************
 		$tool_content .= <<<cData
 		<form action="addpoll.php" id="poll" method="post" onSubmit="return checkrequired(this, 'question1')">
 		<input type="hidden" value="1" name="UseCase">
@@ -278,8 +284,13 @@ cData;
 function printTFQuestionForm() {
 	global $tool_content, $langPollName, $langPollStart, $langPollEnd, 
 		$langPollType, $langPollMC, $langPollFillText, $langPollContinue, 
-		$langPollQuestion, $langPollCreate, $langPollMoreQuestions, $PollName, 
-		$PollStart, $PollEnd, $langPollCreated, $MoreQuestions;
+		$langPollQuestion, $langPollCreate, $langPollMoreQuestions, 
+		$langPollCreated, $MoreQuestions;
+		
+		if(isset($_POST['PollName'])) $PollName = htmlspecialchars($_POST['PollName']);
+		if(isset($_POST['PollEnd'])) $PollEnd = htmlspecialchars($_POST['PollEnd']);
+		if(isset($_POST['PollStart'])) $PollStart = htmlspecialchars($_POST['PollStart']);
+		
 	if ($MoreQuestions == 2) {
 		createTFPoll();
 	} else {

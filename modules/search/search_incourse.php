@@ -66,8 +66,9 @@ $tool_content = "";
 
 //ean o xrhsths DEN exei ektelesei thn anazhthsh apo thn selida anazhthshs tote oi oroi
 //anazhthshs einai sthn ousia oroi anazhthshs OR
-if(@!empty($search_terms)) $or_search_terms = $search_terms;
+if(@!empty($search_terms)) $or_search_terms = mysql_real_escape_string($search_terms);
 if(@empty($or_search_terms)) $or_search_terms = "";
+else $or_search_terms = mysql_real_escape_string($or_search_terms);
 if(@empty($not_search_terms)) $not_search_terms = ""; //arxikopoihsh ths metavlhths ean einai adeia wste na apaleifthoun ta notices
 
 

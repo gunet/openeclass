@@ -53,6 +53,7 @@
 ==============================================================================
 */
 
+$require_prof = TRUE;
 $require_current_course = TRUE;
 $langFiles = 'questionnaire';
 
@@ -69,8 +70,9 @@ $navigation[] = array("url"=>"questionnaire.php", "name"=> $langQuestionnaire);
 
 $tool_content = "";
 
+if(!isset($_REQUEST['UseCase'])) $_REQUEST['UseCase'] = "";
 
-switch ($UseCase) {
+switch ($_REQUEST['UseCase']) {
 case 1:
    // handle multi choice surveys
    printMCQuestionForm();
@@ -286,7 +288,7 @@ function removeEvent() {
 </script>
 hContent;
 
-if ($UseCase ==1)
+if ($_REQUEST['UseCase'] ==1)
 	draw($tool_content, 2, 'survey', $head_content); 
 else	
 draw($tool_content, 2, '', $local_head, '');
@@ -303,7 +305,7 @@ function printSurveyCreationForm() {
 	$CurrentDate = date("Y-m-d H:i:s");
 	$CurrentDate = htmlspecialchars($CurrentDate);
 	$tool_content .= <<<cData
-	<form action="addsurvey.php" id="survey">
+	<form action="addsurvey.php" id="survey" method="post">
 	<input type="hidden" value="0" name="MoreQuestions">
 	<table><thead>$langSurveyCreate</thead>
 	<tr><td colspan=2>$langSurveyInfo1</td></tr>
@@ -336,13 +338,17 @@ cData;
 function printMCQuestionForm() {
 		global $tool_content, $langSurveyName, $langSurveyStart, $langSurveyEnd, 
 		$langSurveyType, $langSurveyMC, $langSurveyFillText, $langSurveyContinue, 
-		$langSurveyQuestion, $langSurveyCreate, $langSurveyMoreQuestions, $SurveyName, 
-		$SurveyStart, $SurveyEnd, $langSurveyCreated, $MoreQuestions, $langSurveyAnswer, 
-		$langSurveyMoreAnswers, $UseCase, $langSurveyInfo2;
+		$langSurveyQuestion, $langSurveyCreate, $langSurveyMoreQuestions, 
+		$langSurveyCreated, $MoreQuestions, $langSurveyAnswer, 
+		$langSurveyMoreAnswers, $langSurveyInfo2;
+		
+		if(isset($_POST['SurveyName'])) $SurveyName = htmlspecialchars($_POST['SurveyName']);
+		if(isset($_POST['SurveyEnd'])) $SurveyEnd = htmlspecialchars($_POST['SurveyEnd']);
+		if(isset($_POST['SurveyStart'])) $SurveyStart = htmlspecialchars($_POST['SurveyStart']);
 		
 	if ($MoreQuestions == 2) { // Create survey ******************************************************
 		createMCSurvey();
-	} elseif(count($_POST)<5) { // Just entered MC survey cretion dialiog ****************************
+	} elseif(count($_POST)<7) { // Just entered MC survey cretion dialiog ****************************
 		$tool_content .= <<<cData
 		<table><thead>$langSurveyCreate</thead>
 	<tr><td colspan=2>$langSurveyInfo2</td></tr></table>
@@ -501,8 +507,13 @@ cData;
 function printTFQuestionForm() {
 	global $tool_content, $langSurveyName, $langSurveyStart, $langSurveyEnd, 
 		$langSurveyType, $langSurveyMC, $langSurveyFillText, $langSurveyContinue, 
-		$langSurveyQuestion, $langSurveyCreate, $langSurveyMoreQuestions, $SurveyName, 
-		$SurveyStart, $SurveyEnd, $langSurveyCreated, $MoreQuestions;
+		$langSurveyQuestion, $langSurveyCreate, $langSurveyMoreQuestions, 
+		$langSurveyCreated, $MoreQuestions;
+		
+		if(isset($_POST['SurveyName'])) $SurveyName = htmlspecialchars($_POST['SurveyName']);
+		if(isset($_POST['SurveyEnd'])) $SurveyEnd = htmlspecialchars($_POST['SurveyEnd']);
+		if(isset($_POST['SurveyStart'])) $SurveyStart = htmlspecialchars($_POST['SurveyStart']);
+		
 	if ($MoreQuestions == 2) {
 		createTFSurvey();
 	} else {

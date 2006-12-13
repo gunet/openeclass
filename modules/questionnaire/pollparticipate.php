@@ -63,8 +63,10 @@ include '../../include/baseTheme.php';
 
 $tool_content = "";
 
+if(!isset($_REQUEST['UseCase'])) $_REQUEST['UseCase'] = "";
+if(!isset($_REQUEST['pid'])) die();
 
-switch ($UseCase) {
+switch ($_REQUEST['UseCase']) {
 case 1:
    printPollForm();
    break;
@@ -78,17 +80,20 @@ default:
 draw($tool_content, 2); 
 
 function printPollForm() {
-	global $pid, $currentCourse, $tool_content, $langPollName, $langPollStart, 
+	global $currentCourse, $tool_content, $langPollName, $langPollStart, 
 		$langPollEnd, $langPollContinue, $langPollInactive;
-///*****************************************************************************
+	
+	$pid = htmlspecialchars($_REQUEST['pid']);
+	
+// *****************************************************************************
 //		Get poll data
 //******************************************************************************/
 $CurrentQuestion = 0;
 $CurrentAnswer = 0;
 $poll = db_query("
 	select * from poll 
-	where pid=$pid 
-	ORDER BY pid", $currentCourse);
+	where pid='".mysql_real_escape_string($pid)."' "
+	."ORDER BY pid", $currentCourse);
 $thePoll = mysql_fetch_array($poll);
 	
 $temp_CurrentDate = date("Y-m-d H:i:s");
@@ -115,8 +120,8 @@ cData;
 		$tool_content .= "\n<br><input type=\"hidden\" value=\"1\" name=\"PollType\"><br>\n";
 		$questions = db_query("
 		select * from poll_question 
-		where pid=$pid 
-		ORDER BY pqid", $currentCourse);
+		where pid='".mysql_real_escape_string($pid)."' "
+		."ORDER BY pqid", $currentCourse);
 		while ($theQuestion = mysql_fetch_array($questions)) {	
 			++$CurrentQuestion;
 			$tool_content .= "<br><br>".$theQuestion["question_text"]."<br>\n";
@@ -147,8 +152,8 @@ cData;
 		$tool_content .= "<br>\n<input type=\"hidden\" value=\"2\" name=\"PollType\"><br>\n";
 		$questions = db_query("
 		select * from poll_question 
-		where pid=$pid 
-		ORDER BY pqid", $currentCourse);
+		where pid='".mysql_real_escape_string($pid)."' "
+		."ORDER BY pqid", $currentCourse);
 		while ($theQuestion = mysql_fetch_array($questions)) {	
 			++$CurrentQuestion;
 			$tool_content .= "\n\n<input type=\"hidden\" value=\"" . 
@@ -176,13 +181,13 @@ function submitPoll() {
 	// first populate poll_answer
 	$creator_id = $GLOBALS['uid'];
 	$CreationDate = date("Y-m-d H:m:s");
-	$pid = $_POST['pid'];
+	$pid = htmlspecialchars($_POST['pid']);
 	$aid = date("YmdHms"); 
 	mysql_select_db($GLOBALS['currentCourseID']);
 	$result = db_query("INSERT INTO poll_answer VALUES ('".
-	$aid . "','".
-	$creator_id . "','".
-	$pid . "','".
+	mysql_real_escape_string($aid) . "','".
+	mysql_real_escape_string($creator_id) . "','".
+	mysql_real_escape_string($pid) . "','".
 	$CreationDate ."')");
 	if ($_POST["PollType"] == 1) { // MC
 		$counter_foreach = 0;
@@ -200,9 +205,9 @@ function submitPoll() {
 				$QuestionAnswer = $_POST[$QuestionAnswer];
 				mysql_select_db($GLOBALS['currentCourseID']);
 				$result2 = db_query("INSERT INTO poll_answer_record VALUES ('0','".
-					$aid. "','".
-					$QuestionText. "','".
-					$QuestionAnswer ."')");
+					mysql_real_escape_string($aid). "','".
+					mysql_real_escape_string($QuestionText). "','".
+					mysql_real_escape_string($QuestionAnswer) ."')");
 				}
 			}  
 		
@@ -223,9 +228,9 @@ function submitPoll() {
 				//$tool_content .= "\$QuestionText = " . $QuestionText . " \$QuestionAnswer = " . $QuestionAnswer . "<br>\n";;
 				mysql_select_db($GLOBALS['currentCourseID']);
 				$result2 = db_query("INSERT INTO poll_answer_record VALUES ('0','".
-					$aid. "','".
-					$QuestionText. "','".
-					$QuestionAnswer ."')");
+					mysql_real_escape_string($aid). "','".
+					mysql_real_escape_string($QuestionText). "','".
+					mysql_real_escape_string($QuestionAnswer) ."')");
 				}
 			}  
 		}
