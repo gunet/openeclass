@@ -25,7 +25,7 @@
 
 /**===========================================================================
 	lostpass.php
-	@last update: 12-07-2006 by Karatzidis Stratos
+* @version $Id$
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
 ==============================================================================        
@@ -71,11 +71,21 @@ function check_password_editable($password)
 if (!isset($femail)) {
 	/***** Email address entry form *****/
 
-$tool_content .= $lang_pass_intro;
+$tool_content .= "<p>$lang_pass_intro</p>";
 
 $tool_content .= "<form method=\"post\" action=\"".$REQUEST_URI."\">
-	<em style=\"padding-left:5px; font-size:10pt;\">".$lang_email.": </em>
-	<input type=\"text\" name=\"femail\" size=\"40\"><br><br>
+	<table>
+	<thead>
+	<tr>
+	<th>
+	$lang_email: 
+	</th>
+	<td>
+	<input type=\"text\" name=\"femail\" size=\"40\">
+	</td>
+	</thead>
+	</table>
+	<br/>
 	<input type=\"submit\" name=\"doit\" value=\"".$lang_pass_submit."\">
 	</form>";
 
