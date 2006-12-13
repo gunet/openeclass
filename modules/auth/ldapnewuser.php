@@ -25,7 +25,7 @@
 
 /**===========================================================================
 	ldapnewuser.php
-	@last update: 31-05-2006 by Karatzidis Stratos
+* @version $Id$
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
 ==============================================================================        
@@ -61,27 +61,26 @@ if(!empty($msg)) $nameTools = $msg;
 $tool_content .= $settings['auth_instructions']."<br />
 			<form method=\"POST\" action=\"ldapsearch.php\">
 				<table>
-				<tr><td>Δώστε το username σας:</td>
+				<thead>
+				<tr><th>Δώστε το username σας:</th>
 					<td><input type=\"text\" name=\"ldap_email\"></td>
 				</tr>
-				<tr><td>".$langAuthPassword."</td>
+				<tr><th>$langAuthPassword</th>
 					<td><input type=\"password\" name=\"ldap_passwd\"></td>
 				</tr>
 				<tr colspan=2><td><br>";
 				
 					$tool_content .= "</td>
 				</tr>
-				<tr colspan=2>
-					<td><br />
+				</thead>
+				</table>
+				<br/>
 					<input type=\"hidden\" name=\"auth\" value=\"".$auth."\">
 					<input type=\"submit\" name=\"is_submit\" value=\"".$reg."\">
-					<br><br />
-					</td>
-				</tr>
-				<br><br></table>
-			</form><br />";
+					
+			</form>";
 
-$tool_content .= "<br />";
+
 
 draw($tool_content,0);
 ?>
