@@ -41,7 +41,7 @@ $langFiles = 'document';
 include '../../include/baseTheme.php';
 include 'gaugebar.php';
 
-
+$navigation[]= array ("url"=>"document.php", "name"=> $langDoc);
 $tool_content = "";
 $nameTools = $langQuotaBar;
 
@@ -73,7 +73,7 @@ $nameTools = $langQuotaBar;
 	
 	
 	//ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
-	$tool_content .= "<br>
+	$tool_content .= "
 	<table cellpadding = \"0\" cellspacing = \"0\" border = \"1\">
 	<thead>
 		<tr>
@@ -93,7 +93,8 @@ $nameTools = $langQuotaBar;
     	</tr>
     </tbody>
     </table>
-    <a href=\"document.php\">$langBack</a>";
+    
+    <p><a href=\"document.php\">$langBack</a></p>";
 
 $tmp_cwd = getcwd();
 draw($tool_content, 2, '', '');
