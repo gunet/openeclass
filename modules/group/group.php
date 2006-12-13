@@ -233,7 +233,7 @@ if ($is_adminOfCourse) {
 	if(isset($message))
 	{
 		$tool_content .= "
-		<table>
+		<table width=\"99%\">
 		<thead>
 		<tr><td class=\"success\">
 		$message
@@ -410,7 +410,7 @@ tCont4;
 //	mysql_select_db($mysqlMainDb);
 	$coursUsersSelect=db_query("
 	SELECT user_id FROM cours_user WHERE code_cours='$currentCourse' 
-			AND statut=5 AND tutor=0", $currentCourse);
+			AND statut=5 AND tutor=0", $mysqlMainDb);
 	$countUsers = mysql_num_rows($coursUsersSelect);
 	$countNoGroup=($countUsers-$totalRegistered);
 
