@@ -26,7 +26,7 @@
 
 /*===========================================================================
 	create_course.php
-	@last update: 18-07-2006 by Sakis Agorastos
+* @version $Id$
 	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
 ==============================================================================        
         @Description: 1st step for the Create New Course Wizard
@@ -82,7 +82,7 @@ function validate()
 
 include '../../include/baseTheme.php';
 
-$nameTools = $langCreateCourse;
+$nameTools = $langCreateCourse . " (" . $langCreateCourseStep ." 1 " .$langCreateCourseStep2 . " 3 )" ;
 
 $tool_content = "";
 
@@ -104,43 +104,26 @@ $local_style = "input { font-size: 12px; }";
 
 ###################### FORM  #########################################
 $tool_content .= "
-<!-- S T E P  1   [start] -->  
+<p><b>$langCreateCourseStep1Title</b> <em>($langFieldsRequ)</em> </p>
+<form method=\"post\" action=\"create_course2.php\" onsubmit=\"return validate();\">
+	<table width=\"99%\">
+		<thead>
 
-<tr bgcolor=\"$color1\">
-	<td>
-		<table bgcolor=\"$color1\" border=\"2\" width=\"99%\">
-			<thead>
-				<tr valign=\"top\" align=\"middle\">
-					<td colspan=\"3\" valign=\"middle\" align=\"center\">
-						<font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourseStep&nbsp;1&nbsp;$langCreateCourseStep2&nbsp;3</font>
-					</td>
-				</tr>
-			</thead>
 			<tr>
-			<tr valign=\"top\">
-				<td colspan=\"5\" valign=\"middle\">
-					<font face=\"arial, helvetica\" size=\"2\"><b>$langCreateCourseStep1Title</b></font>
-					<hr>
-					<font face=\"arial, helvetica\" size=\"2\">$langFieldsRequ</font>
+				<th>
+					$langTitle:
+				</th>
+				<td>
+					
+					<input type=\"Text\" name=\"intitule\" size=\"60\">$langFieldsRequAsterisk ($langEx)
 				</td>
 			</tr>
-			<tr><td colspan=\"3\">&nbsp;</td></tr>
-			<tr valign=\"top\">
-				<td valign=\"top\" align=\"right\">
-					<form method=\"post\" action=\"create_course2.php\" onsubmit=\"return validate();\">
-					<font face=\"arial, helvetica\" size=\"2\"><b>$langTitle:</b></font>
-				</td>
-				<td valign=\"top\">
-					<font face=\"arial, helvetica\" size=\"2\">
-					<input type=\"Text\" name=\"intitule\" size=\"60\">$langFieldsRequAsterisk<br>$langEx</font>
-				</td>
-			</tr>
-		</td>
+		
 	<tr>
-		<td valign=\"top\" align=\"right\">
-			<font face=\"arial, helvetica\" size=\"2\"><b>$langFac:</b></font>
-		</td>
-		<td valign=\"top\">";
+		<th>
+			$langFac:
+		</th>
+		<td>";
 
 
 $tool_content .=  "		<select name=\"faculte\">";
@@ -154,7 +137,7 @@ $tool_content .=  "		<select name=\"faculte\">";
 		}
 		$tool_content .=  "</select>";
 
-$tool_content .=  "$langFieldsRequAsterisk<br><font face=\"arial, helvetica\" size=\"2\">$langTargetFac</font>
+$tool_content .=  "$langFieldsRequAsterisk ($langTargetFac)
 		</td>
 	</tr>";
 
@@ -162,17 +145,17 @@ unset($repertoire);
 
 /* SAKIS:  edw na valw ta kwdikia gia thn epilogh twn diaxeiristwn!!!!!! */
 
-$tool_content .=  "<tr valign=\"top\">
-	<td width=\"100\" valign=\"top\" align=\"right\">
-	<font face=\"arial, helvetica\" size=\"2\"><b>$langProfessors:</b></font>
+$tool_content .=  "<tr>
+	<th>
+		$langProfessors:
+	</th>
+	<td>
+	<input type=\"Text\" name=\"titulaires\" size=\"60\" value=\"$titulaire_probable\">$langFieldsRequAsterisk ($langProfessorsInfo)
 	</td>
-	<td valign=\"top\">
-	<input type=\"Text\" name=\"titulaires\" size=\"60\" value=\"$titulaire_probable\"><font face=\"arial, helvetica\" size=\"2\">$langFieldsRequAsterisk<br>$langProfessorsInfo</font>
-	</td>
-
 	</tr>
+	
 	<tr>
-	<td align=\"right\"><font face=\"arial, helvetica\" size=\"2\"><b>$m[type]:</b></font></td>
+	<th>$m[type]:</th>
 	<td>
 		<select name = \"type\">
 			<option value=\"pre\">	".$m['pre']."</option>
@@ -184,20 +167,16 @@ $tool_content .=  "<tr valign=\"top\">
 //selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']), 'type');
 
 $tool_content .=  "
-	<font face=\"arial, helvetica\" size=\"2\">$langFieldsRequAsterisk<br>$langCourseCategory</br></td>
-	<tr>
-		<td>&nbsp;</td>
-		<td align=\"center\">
-			<input type=\"Submit\" name=\"submit\" value=\"$langNextStep\">
-		</td>
+	$langFieldsRequAsterisk ($langCourseCategory)</br></td>
 	</tr>
+	</thead>
 	</table>
-	</td>
-	</tr>
-	</table>
-</form>
-</body>
-</html>";
+	<br/>
+			<input type=\"Submit\" name=\"submit\" value=\"$langNextStep >\">
 
-draw($tool_content, '1', '', $local_head);
+	
+</form>
+";
+
+draw($tool_content, 1, '', $local_head);
 ?>

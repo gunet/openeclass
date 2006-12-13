@@ -1,6 +1,4 @@
 <?
-
-
 /**=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
@@ -27,7 +25,7 @@
 
 /*===========================================================================
 	create_course2.php
-	@last update: 25-10-2006 by Sakis Agorastos
+* @version $Id$
 	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
 ==============================================================================        
         @Description: 2nd step for the Create New Course Wizard
@@ -70,88 +68,71 @@ function validate() {
 
 include '../../include/baseTheme.php';
 
-$nameTools = $langCreateCourse;
+$nameTools = $langCreateCourse . " (" . $langCreateCourseStep." 2 " .$langCreateCourseStep2 . " 3 )" ;
 
 $tool_content = "";
 
 $titulaire_probable="$prenom $nom";
-$local_style = "input { font-size: 12px; }";
+//$local_style = "input { font-size: 12px; }";
 
 // ---------------------------------------------
 // ---------------------- form -----------------
 // ---------------------------------------------
 
    @$tool_content .= "
-<!-- S T E P  2   [start] -->    
-		<table bgcolor=\"$color1\" width=\"99%\">
-			<thead>
-			<tr valign=\"top\" align=\"middle\">
-				<td colspan=\"3\" valign=\"middle\" align=\"center\">
-					<font face=\"arial, helvetica\" size=\"4\" color=\"gray\">$langCreateCourseStep&nbsp;2&nbsp;$langCreateCourseStep2&nbsp;3</font>
-				</td>
-			</tr>
-			</thead>
-			<tr valign=\"top\">
-				<td colspan=\"5\" valign=\"middle\">
-					<font face=\"arial, helvetica\" size=\"3\"><b>$langCreateCourseStep2Title</b></font>
-				</td>
-			</tr>
-			<tr><td colspan=\"3\"><font face=\"arial, helvetica\" size=\"2\"><i>$langFieldsOptionalNote</i></font></td></tr>			
-
+<p><b>$langCreateCourseStep2Title</b> <em>($langFieldsOptionalNote)</em> </p>
 <form method=\"post\" action=\"create_course3.php\" onsubmit=\"return validate();\">
 	
 	<input type=\"hidden\" name=\"intitule\" value=\"$intitule\">
 	<input type=\"hidden\" name=\"faculte\" value=\"$faculte\">
 	<input type=\"hidden\" name=\"titulaires\" value=\"$titulaires\">
 	<input type=\"hidden\" name=\"type\" value=\"$type\">
+
+		<table width=\"99%\">
+
+			<thead>
+						
+
+
 	
 			<tr> 
-			<td align=\"right\"> 
-			<font face=\"arial, helvetica\" size=\"2\"><b>$langDescrInfo:</b></font>
-			</td>   
-			<td align=\"left\">
-			<font face=\"arial, helvetica\" size=\"2\">
-			<textarea name=\"description\" cols=\"40\" rows=\"4\"></textarea>
+			<th> 
+			$langDescrInfo:
+			</th>   
+			<td>
+			
+			<textarea name=\"description\" cols=\"50\" rows=\"4\"></textarea>
 			$langFieldsRequAsterisk
-			</font>    
+			   
 			</td> 
 			</tr>
 			<tr>
-			<td align=\"right\">
-		<font face=\"arial, helvetica\" size=\"2\"><b>$langCourseKeywords</b></font>
-		</td>
-<td valign=\"top\">
-			<font face=\"arial, helvetica\" size=\"2\">
-			<textarea name=\"course_keywords\" value=\"$course_keywords\" cols=\"40\" rows=\"2\"></textarea>
+			<th>
+		$langCourseKeywords
+		</th>
+<td>
+			
+			<textarea name=\"course_keywords\" value=\"$course_keywords\" cols=\"50\" rows=\"2\"></textarea>
 			$langFieldsRequAsterisk
-			</font>
+			
 				</td>
 			</tr>
 			<tr>
-			<td align=\"right\">
-		<font face=\"arial, helvetica\" size=\"2\"><b>$langCourseAddon</b></font>
-		</td>
-<td valign=\"top\">
-			<font face=\"arial, helvetica\" size=\"2\">
-			<textarea name=\"course_addon\" value=\"$course_addon\" cols=\"40\" rows=\"4\"></textarea></font>
+			<th>
+		$langCourseAddon
+		</th>
+<td>
+			
+			<textarea name=\"course_addon\" value=\"$course_addon\" cols=\"50\" rows=\"4\"></textarea>
 			</td>
 			</tr>
-			
-	</td>
-	</tr>
-	<tr>
-		<td align=\"center\" colspan=\"2\">
-			<input type=\"Submit\" name=\"submit\" value=\"$langNextStep\">
-		</td>
-	</tr>
-	</table>
-	</td>
-	</tr>
-	</table>
-</form>
-</body>
-</html>";
+			</thead>
+			</table>
+			<br/>
+			<input type=\"Submit\" name=\"submit\" value=\"$langNextStep >\">
+		
+</form>";
 
-draw($tool_content, '1', '', $local_head);
+draw($tool_content, 1, '', $local_head);
 
 ?>
