@@ -10,37 +10,39 @@ $tool_content = "";
 $auth = get_auth_id();
 
 $tool_content .= "	<form action=\"newprof_second.php\" method=\"post\">
+
 	<table width=\"99%\"><caption>".$profpers."</caption><tbody>
-	<tr valign=\"top\" bgcolor=\"".$color2."\">
-	<td width=\"3%\" nowrap><b>".$langSurname."</b></td>
-	<td><input type=\"text\" name=\"nom_form\" value=\"".@$ps."\" >&nbsp;(*)</td>
+	<thead>
+	<tr>
+	<th>$langSurname</th>
+	<td><input type=\"text\" name=\"nom_form\" value=\"".@$ps."\" > (*)</td>
 	</tr>
-	<tr bgcolor=\"".$color2."\">
-	<td width=\"3%\" nowrap><b>".$langName."</b></td>
+	<tr>
+	<th>$langName</th>
 	<td>
-	<input type=\"text\" name=\"prenom_form\" value=\"".@$pn."\">&nbsp;(*)</td>
+	<input type=\"text\" name=\"prenom_form\" value=\"".@$pn."\"> (*)</td>
 	</tr>
-	<tr bgcolor=\"".$color2."\">
-	<td width=\"3%\" nowrap><b>".$langUsername."</b></td>
-	<td><input type=\"text\" name=\"uname\" value=\"".@$pu."\">&nbsp;(*)&nbsp;(**)</td>
+	<tr>
+	<th>$langUsername</th>
+	<td><input type=\"text\" name=\"uname\" value=\"".@$pu."\"> (*) (**)</td>
 	</tr>
-	<tr bgcolor=\"".$color2."\">
-	<td width=\"3%\" nowrap><b>".$langPass."&nbsp;:</b></td>
-	<td><input type=\"text\" name=\"password\" value=\"".create_pass(5)."\">&nbsp;(**)</td>
+	<tr>
+	<th>$langPass</th>
+	<td><input type=\"text\" name=\"password\" value=\"".create_pass(5)."\"> (**)</td>
 	</tr>
-	<tr bgcolor=\"".$color2."\">
-	<td width=\"3%\" nowrap><b>".$langEmail."</b></td>
-	<td><input type=\"text\" name=\"email_form\" value=\"".@$pe."\">&nbsp;(*)</b></td>
+	<tr>
+	<th>$langEmail</th>
+	<td><input type=\"text\" name=\"email_form\" value=\"".@$pe."\"> (*)</td>
 	</tr>
-	<tr bgcolor=\"".$color2."\">
-        <td>".$profcomment."<br><small>".$profreason."</small></td>
+	<tr>
+        <th>$profcomment</td>
 	<td>
         <textarea name=\"usercomment\" COLS=\"35\" ROWS=\"4\" WRAP=\"SOFT\">".@$usercomment."</textarea>
-	<font size=\"1\">&nbsp;(*)</font>
+	 (*) $profreason
         </td>
         </tr>
-	<tr bgcolor=\"".$color2."\">
-        <td>".$langDepartment."</td>
+	<tr>
+        <th>".$langDepartment."</th>
         <td><select name=\"department\">";
         $deps=mysql_query("SELECT name FROM faculte order by id");
         while ($dep = mysql_fetch_array($deps)) 
@@ -49,19 +51,20 @@ $tool_content .= "	<form action=\"newprof_second.php\" method=\"post\">
         }
         $tool_content .= "</select>
         </td>
-        </tr>				
-	<tr><td colspan=\"2\"><small>".$langRequiredFields."</small><br>
-	<font size=\"1\">".$star2 . $langCharactersNotAllowed."</font>
-	</td></tr>
-	<tr><td>&nbsp;</td>
-	<td><input type=\"submit\" name=\"submit\" value=\"".$langOk."\" >
+        </tr>	
+        </thead>
+        </table>
+        <br/>
+        		<input type=\"submit\" name=\"submit\" value=\"".$langOk."\" >
 	<input type=\"hidden\" name=\"auth\" value=\"1\" >
-	</td>
-	</tr>
-</tbody></table></form>
+	</form>	
+	<br/>
+	<p>$langRequiredFields</p>
+	<p>$star2 . $langCharactersNotAllowed</p>
+	
 ";
 
-$tool_content .= "<center><p><a href=\"../admin/index.php\">$langReturn</p></center>";
+//$tool_content .= "<center><p><a href=\"../admin/index.php\">$langReturn</p></center>";
 
 draw($tool_content,0);
 
