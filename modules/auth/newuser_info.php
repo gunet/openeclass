@@ -25,7 +25,7 @@
 
 /**===========================================================================
 	newuser_info.php
-	@last update: 07-06-2006 by Stratos Karatzidis
+* @version $Id$
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
 ==============================================================================        
@@ -53,13 +53,10 @@ $nameTools = $reguser;
 $tool_content = "";		// Initialise $tool_content
 
 // Main body
-$tool_content .= "<table width=\"99%\">
-<tr valign=\"top\" bgcolor=\"".$color2."\">
-<td>";
-// $auth = get_auth_id();
+
 $auth = get_auth_active_methods();
 $e = 1;
-$tool_content .= "<ul>";
+$tool_content .= "<ul class=\"listBullet\">";
 $tool_content .= "<li><a href=\"newuser.php\">Εγγραφή χρήστη με ".get_auth_info($e)."</a><br /></li>";
 if(!empty($auth))
 {
@@ -76,11 +73,6 @@ if(!empty($auth))
 	}
 }
 $tool_content .= "<ul>";
-
-$tool_content .= "</td></tr></table>";
-
-
-$tool_content .= "<br />";
 
 draw($tool_content,0);
 ?>
