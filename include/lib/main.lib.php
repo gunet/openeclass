@@ -405,31 +405,8 @@ function html2text ($string)
 	//    return strtr (strip_tags($string), $trans_tbl);
 }
 
-
-/**
- * handling simple and double apostrofe in order that strings be stored properly in database
- *
- * @author Denes Nagy
- * @param  string variable - the variable to be revised
- */
-
-function domesticate($input) {
-	$input = stripslashes($input);
-	$input = str_replace("'","''",$input);
-	//  $input = str_replace('"',"''",$input);
-	return($input);
-}
-
-
-// ------------------------------------------------------------------------------
-//  Below there are some IMAP authenticated functions. They have used in one special adaptation
-// of the platform.
-// ------------------------------------------------------------------------------
-
 /*
-+----------------------------------------------------------------------+
-| IMAP authentication functions                                        |
-+----------------------------------------------------------------------+
+// IMAP authentication functions                                        |
 */
 
 function imap_auth($server, $username, $password)
@@ -492,7 +469,6 @@ function parse_tex($textext)
 // Useful functions for creating courses
 // -------------------------------------
 
-
 // Returns the code of a faculty given its name
 function find_faculty_by_name($name) {
 	$code = mysql_fetch_row(db_query("SELECT code FROM faculte
@@ -531,6 +507,12 @@ function new_code($fac) {
 // due to a bug (?) to php function basename() our implementation
 function my_basename($path) {
 	return preg_replace('#^.*/#', '', $path);
+}
+
+
+// transform the date format from "date year-month-day" to "day-month-year"
+function greek_format($date) {
+	return implode("-",array_reverse(split("-",$date)));
 }
 
 ?>
