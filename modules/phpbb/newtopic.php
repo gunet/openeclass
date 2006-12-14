@@ -199,26 +199,22 @@ if (isset($submit) && $submit) {
 	// Subtract 1 because we want the nr of replies, not the nr of posts.
 	$forward = 1;
 
-	$tool_content .= "<br>
-		<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACEING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"99%\">
-		<TR><TD>
-			<TABLE BORDER=\"0\" CALLPADDING=\"1\" CELLSPACEING=\"1\" WIDTH=\"100%\">
-			<TR><TD>
-				<P>
-				<P>
-				<BR>
-				<center>
-				$l_stored<P>$l_click
+	$tool_content .= "
+	<table width=\"99%\">
+				<tbody>
+					<tr>
+						<td class=\"success\">
+							<p><b>$l_stored</b></p>
+							<p>$l_click
 				<a href=\"viewtopic.php?topic=$topic_id&forum=$forum&$total_topic\">$l_here</a>$l_viewmsg
-				<p>
-				$l_click <a href=\"viewforum.php?forum=$forum_id&total_forum\">$l_here</a> $l_returntopic
-				</center>
-				<P>
-			</TD></TR>
-			</TABLE>
-		</TD></TR>
-		</TABLE>
-		<br>"; 
+				</p>
+				<p>$l_click <a href=\"viewforum.php?forum=$forum_id&total_forum\">$l_here</a> $l_returntopic</p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+		"; 
 } else {
 	// ADDED BY CLAROLINE: exclude non identified visitors
 	if (!$uid AND !$fakeUid) {
@@ -235,33 +231,30 @@ if (isset($submit) && $submit) {
 	// END ADDED BY CLAROLINE exclude visitors unidentified
 	$tool_content .= "
 		<FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
-		<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"99%\">
-		<TR><TD>
-			<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"1\" WIDTH=\"99%\">
-			<TR><TD width=\"20%\">
-				<b>$l_subject:</b>
-			    </TD>
+		
+			<TABLE WIDTH=\"99%\">
+			<thead>
+			<TR><th>
+				$l_subject:
+			    </th>
 			    <TD>
 				<INPUT TYPE=\"TEXT\" NAME=\"subject\" SIZE=\"50\" MAXLENGTH=\"100\">
 			    </TD>
 			</TR>
-			<TR><TD width=\"20%\">
-				<b>$l_body:</b>
-				<br>
-				<br>
-			    </TD>
+			<TR><th>
+				$l_body:
+				
+			    </th>
 			    <TD>
 				<TEXTAREA NAME=\"message\" ROWS=14 COLS=50 WRAP=\"VIRTUAL\"></TEXTAREA>
 			    </TD>
 			</TR>
-			<TR><TD colspan=2 ALIGN=\"CENTER\">
-				<INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
-				<INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">&nbsp;
-				<INPUT TYPE=\"SUBMIT\" NAME=\"cancel\" VALUE=\"$l_cancelpost\">
-			</TD></TR>
+
 			</TABLE>
-		</TD></TR>
-		</TABLE>
+			<br/>
+			<INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
+			<INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">&nbsp;
+				<INPUT TYPE=\"SUBMIT\" NAME=\"cancel\" VALUE=\"$l_cancelpost\">
 		</FORM>";
 }
 draw($tool_content, 2);
