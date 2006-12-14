@@ -905,11 +905,11 @@ cData;
     	$deactivate_temp = htmlspecialchars($m['deactivate']);
     	$activate_temp = htmlspecialchars($m['activate']);
     	$tool_content .= "<a href=\"work.php?choice=disable&id=${row['id']}\">".
-	  		"<img src=\"../../template/classic/img/visible.gif\" border=\"0\" alt=\"${deactivate_temp}\"></a>";
+	  		"<img src=\"../../template/classic/img/visible.gif\" border=\"0\" title=\"${deactivate_temp}\"></a>";
     } else {
     	$activate_temp = htmlspecialchars($m['activate']);
     	$tool_content .= "<a href=\"work.php?choice=enable&id=${row['id']}\">".
-	  		"<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" alt=\"${activate_temp}\"></a>";
+	  		"<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" title=\"${activate_temp}\"></a>";
     }
 		$tool_content .= "</td></tr>";
 	}
