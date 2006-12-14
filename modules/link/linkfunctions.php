@@ -24,7 +24,6 @@
 ============================================================================*/
 
 
-// FUNCTION addlinkcategory
 // The function used to add a link or a category
 // type = add a link or add a category
 function addlinkcategory($type)
@@ -96,7 +95,6 @@ function addlinkcategory($type)
 		if(empty($categoryname))
 		{
 			$msgErr=$langGiveCategoryName;
-
 			$ok=false;
 		}
 		else
@@ -119,10 +117,8 @@ function addlinkcategory($type)
 	db_query($sql, $dbname);
 	return $ok;
 }
-// End of the function addlinkcategory
 
 
-// function delete link or delete category
 function deletelinkcategory($type)
 {
 	global $tbl_categories;
@@ -151,12 +147,9 @@ function deletelinkcategory($type)
 		unset($id);
 	}
 	db_query($sql, $dbname);
-	// End of the function deletelinkcategory
 }
 
 
-
-// function edit link or delete category
 function editlinkcategory($type)
 {
 	global $tbl_categories;
@@ -226,11 +219,8 @@ function editlinkcategory($type)
 		}
 	}
 }
-// END of function editlinkcat
 
 
-
-// START of function makedefaultviewcode, which creates a correct $view for in the URL.
 function makedefaultviewcode($locatie)
 {
 	global $aantalcategories;
@@ -243,12 +233,10 @@ function makedefaultviewcode($locatie)
 	}
 	$view[intval($locatie)]="1";
 }
-// END of function makedefaultviewcode
 
 
 /**
  * Function getNumberOfLinks
- *
  * @param unknown_type $catid
  * @return int number of links
  */
@@ -261,22 +249,14 @@ function getNumberOfLinks($catid){
 }
 
 
-
-
-
-
-// START of function showlinksofcategory, which displays all the links of a given category.
 function showlinksofcategory($catid)
 {
 	global $tbl_link;
 	global $is_adminOfCourse;
 	global $urlview;
-	global $up;
-	global $down;
+	global $up, $down;
 	global $langLinkDelconfirm;
-	global $langDelete;
-	global $langCategoryDelconfirm;
-	global $langModify, $langLinks;
+	global $langDelete, $langUp, $langDown, $langModify, $langLinks, $langCategoryDelconfirm;
 	global $tool_content;
 	global $dbname;
 
@@ -292,11 +272,10 @@ function showlinksofcategory($catid)
 			<td width=\"20\" class=\"linkimg\">
 			
 			<a href=\"link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">
-			<img src=\"../../images/links.gif\" border=\"0\" alt=\"".$langLinks."\">
+			<img src=\"../../images/links.gif\" border=\"0\" title=\"".$langLinks."\">
 			</td>
-
 			<td  width=\"99%\">
-                        <a href=\"link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">".$myrow[2]."</a>\n
+      <a href=\"link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">".$myrow[2]."</a>\n
 			<br>".$myrow[3]."";
 		if ($is_adminOfCourse)
 		{
@@ -305,23 +284,23 @@ function showlinksofcategory($catid)
 			$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?action=editlink&category=$category&id=$myrow[0]&urlview=$urlview\">";
 			else
 			$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?action=editlink&id=$myrow[0]&urlview=$urlview\">";
-			$tool_content .=  "<img src=\"../../images/edit.gif\" border=\"0\" alt=\"".$langModify."\">
+			$tool_content .=  "<img src=\"../../images/edit.gif\" border=\"0\" title=\"".$langModify."\">
 				</a>
 				<a href=\"".$_SERVER['PHP_SELF']."?action=deletelink&id=".$myrow[0]."&urlview=".$urlview."\" onclick=\"javascript:if(!confirm('".$langLinkDelconfirm."')) return false;\">
-				<img src=\"../../images/delete.gif\" border=\"0\" alt=\"".$langDelete."\">
+				<img src=\"../../images/delete.gif\" border=\"0\" title=\"".$langDelete."\">
 				</a>";
 			// DISPLAY MOVE UP COMMAND only if it is not the top link
 			if ($i!=1)
 			{
 				$tool_content .= 	"<a href=\"$_SERVER[PHP_SELF]?urlview=".$urlview."&up=".$myrow["id"]."\">
-					<img src=../../template/classic/img/up.gif border=0 alt=\"Up\">
+					<img src=../../template/classic/img/up.gif border=0 title=\"".$langUp."\">
 					</a>\n";
 			}
 			// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link
 			if($i < $numberoflinks)
 			{
 				$tool_content .= 	"<a href=\"$_SERVER[PHP_SELF]?urlview=".$urlview."&down=".$myrow["id"]."\">
-						<img src=\"../../template/classic/img/down.gif\" border=\"0\" alt=\"Down\">
+						<img src=\"../../template/classic/img/down.gif\" border=\"0\" title=\"".$langDown."\">
 						</a>\n";
 			}
 		}
@@ -332,47 +311,38 @@ function showlinksofcategory($catid)
 
 }
 
-
-
-// START of function showcategoryadmintools.
 function showcategoryadmintools($categoryid)
 {
 	global $urlview;
 	global $aantalcategories;
 	global $catcounter;
-	global $langDelete;
-	global $langCatDel;
-
-	global $langModify;
+	global $langDelete, $langModify, $langUp, $langDown, $langCatDel;
 	global $tool_content;
 
 	$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?action=editcategory&id=$categoryid&urlview=$urlview\">
-		<img src=\"../../images/edit.gif\" border=\"0\" alt=\"".$langModify."\">
+		<img src=\"../../images/edit.gif\" border=\"0\" title=\"".$langModify."\">
 		</a> \n";
 
-	$tool_content .=  " <a href=\"".$_SERVER['PHP_SELF']."?action=deletecategory&id=".$categoryid."&urlview=".$urlview."\" onclick=\"javascript:if(!confirm('".$langCatDel."')) return false;\">". "<img src=\"../../images/delete.gif\" border=\"0\" alt=\"".$langDelete."\">
+	$tool_content .=  " <a href=\"".$_SERVER['PHP_SELF']."?action=deletecategory&id=".$categoryid."&urlview=".$urlview."\" onclick=\"javascript:if(!confirm('".$langCatDel."')) return false;\">". "<img src=\"../../images/delete.gif\" border=\"0\" title=\"".$langDelete."\">
 </a>";
 
 
 	// DISPLAY MOVE UP COMMAND only if it is not the top link
-	if ($catcounter!=1)
-	{
+	if ($catcounter!=1) {
 		$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?catmove=true&up=".$categoryid."&urlview=$urlview\">
-			<img src=../../images/up.gif border=0 alt=\"Up\">
+			<img src=../../images/up.gif border=0 title=\"".$langUp."\">
 			</a>\n";
 	}
 	// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link
 	if($catcounter < $aantalcategories)
 	{
 		$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?catmove=true&down=".$categoryid."&urlview=$urlview\">
-			<img src=\"../../images/down.gif\" border=\"0\" alt=\"Down\">
+			<img src=\"../../images/down.gif\" border=\"0\" title=\"".$langDown."\">
 			</a>\n";
 	}
 	$catcounter++;
 }
 
-
-//START of function movecatlink
 function movecatlink($catlinkid)
 {
 	global $catmove;
@@ -426,9 +396,7 @@ function movecatlink($catlinkid)
 		$linkresult = db_query($sqlcatlinks, $dbname);
 		while ($sortrow=mysql_fetch_array($linkresult))
 		{
-			// STEP 2 : FOUND THE NEXT ANNOUNCEMENT ID AND ORDER, COMMIT SWAP
-			// This part seems unlogic, but it isn't . We first look for the current link with the querystring ID
-			// and we know the next iteration of the while loop is the next one. These should be swapped.
+			// found the next announcement id and order
 			if (isset($thislinkFound) && $thislinkFound == true)
 			{
 				$nextlinkId=$sortrow["id"];
