@@ -64,43 +64,35 @@ cData;
 
 //$tool_content .= "<tr><td>";
 
-#################### ADMIN SQL FUNCTIONS ########################
-
-// GIVE ADMIN STATUS TO USER FOR THIS COURSE
-
+// give admin status
 if(isset($giveAdmin) && $giveAdmin && $is_adminOfCourse) {
 	$result = db_query("UPDATE cours_user SET statut='1'
 			WHERE user_id=$user_id AND code_cours='$currentCourseID'",$mysqlMainDb);
 }
-// GIVE TUTOR STATUS TO USER FOR THIS COURSE
 
+// give tutor status
 elseif(isset($giveTutor) && $giveTutor) {
 	$result = db_query("UPDATE cours_user SET tutor='1'
 			WHERE user_id=$user_id AND code_cours='$currentCourseID'",$mysqlMainDb);
-
-	// ... AND REMOVIG HIM FROM GROUPS IF HE IS ALREADY MEMBER AS STUDENT
 	$result2=db_query("DELETE FROM user_group WHERE user='$user_id'", $currentCourseID);
 }
 
 
-// REMOVE ADMIN STATUS TO USER FOR THIS COURSE
-
+// remove admin status
 elseif(isset($removeAdmin) && $removeAdmin) {
 	$result = db_query("UPDATE cours_user SET statut='5'
 			WHERE user_id!= $uid AND user_id=$user_id 
 			AND code_cours='$currentCourseID'",$mysqlMainDb);
 }
 
-// REMOVE TUTOR STATUS TO USER FOR THIS COURSE
-
+// remove tutor status
 elseif(isset($removeTutor) && $removeTutor) {
 	$result = db_query("UPDATE cours_user SET tutor='0'
 			WHERE user_id=$user_id 
 			AND code_cours='$currentCourseID'",$mysqlMainDb);
 }
 
-// UNREGISTER USER FROM COURSE (DOES NOT DELETE USER FROM CLAROLINE MAIN USER DB)
-
+// unregister user from courses
 elseif(isset($unregister) && $unregister) {
 		// SECURITY : CANNOT REMOVE MYSELF !
 	$result = db_query("DELETE FROM cours_user WHERE user_id!= $uid
@@ -109,9 +101,9 @@ elseif(isset($unregister) && $unregister) {
 	$delGroupUser=db_query("DELETE FROM user_group WHERE user=$user_id", $currentCourseID);
 }
 
-###################### SHOW LIST OF USERS #######################
+// display list of users
 
-// DEFINE SETTINGS FOR THE 5 NAVIGATION BUTTONS INTO THE USERS LIST: begin, less, all, more and end
+// navigation buttons
 $endList=50;
 
 if(isset ($numbering) && $numbering) {
@@ -181,13 +173,9 @@ if ($countUser>=50) {
 
 }	// Show navigation buttons
 
-############# SHOW FIELD NAMES FOR USERS LIST ##################
 	
 $tool_content .= "<table width=99%>
-
-<thead>
-				<tr>
-					<th></th>
+<thead><tr><th></th>
 					<th scope=\"col\">$langSurname<br>$langName</th>";
 
 if(isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2))  {
@@ -197,8 +185,7 @@ if(isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]=
 $tool_content .= "<th scope=\"col\">$langAm</th>
 					<th scope=\"col\">$langGroup</th>";
 
-// SHOW ADMIN, TUTOR AND UNREGISTER ONLY TO ADMINS
-
+// show admin tutor and unregister only to admins
 if(isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2)) {
 	$tool_content .= "	<th scope=\"col\">$langTutor</th>
 		<th scope=\"col\">$langAdmR</th>
@@ -210,8 +197,7 @@ if(isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]=
 $tool_content .= "</tr>
 			</thead><tbody>";
 
-############## SELECT NAME, SURNAME, EMAIL, STATUS AND GROUP OF USERS ###########
-
+//select name,sunrname, email, status and group of users
 $result = mysql_query("SELECT user.user_id, user.nom, user.prenom, user.email, user.am, cours_user.statut, 
 		cours_user.tutor, user_group.team
 		FROM `$mysqlMainDb`.cours_user, `$mysqlMainDb`.user 
@@ -223,7 +209,7 @@ $result = mysql_query("SELECT user.user_id, user.nom, user.prenom, user.email, u
 
 // ORDER BY cours_user.statut, tutor DESC, nom, prenom
 while ($myrow = mysql_fetch_array($result)) {
-	// BI COLORED TABLE
+	// bi colored table
 	if ($i%2==0) {
 		$tool_content .= "<tr >";
 	}     	
@@ -231,7 +217,7 @@ while ($myrow = mysql_fetch_array($result)) {
 		$tool_content .= "<tr class=\"odd\">";
 	}	
 
-	// SHOW PUBLIC LIST OF USERS
+// show public list of users
 	$tool_content .= "<td valign=\"top\">
 		<font face=\"arial, helvetica\" size=\"2\">$i</font>
 		</td>
@@ -268,66 +254,63 @@ if (isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]
 
 ################## TUTOR, ADMIN AND UNSUBSCRIBE (ADMIN ONLY) ######################
 if(isset($status) && ($status["$currentCourseID"]=='1' OR $status["$currentCourseID"]=='2')) {
-		// TUTOR RIGHT
+// tutor right
 		if ($myrow["tutor"]=='0') {
-			$tool_content .= "<td valign=\"top\">
+			$tool_content .= "<td valign=\"top\" align='center'>
 			
 			<a href=\"$_SERVER[PHP_SELF]?giveTutor=yes&user_id=$myrow[user_id]\">$langGiveTutor</a>
 			</td>";
 		} else {
-			$tool_content .=  "<td class=\"highlight\">
+			$tool_content .=  "<td class=\"highlight\" align='center'>
 			$langTutor
 			<br>
 			<a href=\"$_SERVER[PHP_SELF]?removeTutor=yes&user_id=$myrow[user_id]\">$langRemoveRight</a>
 			</td>";
 		}
 		
-		// ADMIN RIGHT
+		// admin right
 		if ($myrow["user_id"]!=$_SESSION["uid"]) {
 			if ($myrow["statut"]=='1') {
-				$tool_content .= "<td class=\"highlight\">
-					
+				$tool_content .= "<td class=\"highlight\" align='center'>
 					$langAdmR
 					<br><a href=\"$_SERVER[PHP_SELF]?removeAdmin=yes&user_id=$myrow[user_id]\">$langRemoveRight</a>
 				</td>";
 			} else {
-				$tool_content .= "<td valign=\"top\">
+				$tool_content .= "<td valign=\"top\" align='center'>
 					<font face=\"arial, helvetica\" size=\"2\">
 					<a href=\"$_SERVER[PHP_SELF]?giveAdmin=yes&user_id=$myrow[user_id]\">$langGiveAdmin</a>
 					</td>";
 				}		
 		} else {
 			if ($myrow["statut"]=='1') {
-				$tool_content .= "<td valign=\"top\" bgcolor=\"#CCFF99\">
+				$tool_content .= "<td valign=\"top\" bgcolor=\"#CCFF99\" align='center'>
 					<font face=\"arial, helvetica\" size=\"2\">
 						$langAdmR
 					</font>
 				</td>";
 			} else {
-				$tool_content .= "<td valign=\"top\">
+				$tool_content .= "<td valign=\"top\" align='center'>
 					<font face=\"arial, helvetica\" size=\"2\">
 					<a href=\"$_SERVER[PHP_SELF]?giveAdmin=yes&user_id=$myrow[user_id]\">$langGiveAdmin</a>
 					</font>
 				</td>";
 			}
 		}	
-		$tool_content .= "<td valign=\"top\"><font size=2 face='arial, helvetica'>";
+		$tool_content .= "<td valign=\"top\" align='center'>";
 		if ($myrow["user_id"]!=$_SESSION["uid"])
-			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?unregister=yes&user_id=$myrow[user_id]\">$langUnreg</a>";
-		$tool_content .= "</font>";
+			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?unregister=yes&user_id=$myrow[user_id]\"><img src='../../template/classic/img/delete.gif' border='0' title='$langUnreg'></a>";
 					
-	}	// ADMIN ONLY
+	}	// admin only
 	
 	$tool_content .= "</td></tr>";
 
 	$i++;
 
-} 	// END WHILE AND END OF STUDENTS LIST SHOW
+} 	// end of while
 
 $tool_content .= "</tbody></table>";
 
-############ BOTTOM NAVIGATION BUTTONS IF MORE THAN 50 USERS ###############
-
+// navigation buttons
 // Do not show navigation buttons if less than 50 users
 
 if($countUser>=50) {
