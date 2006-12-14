@@ -112,7 +112,7 @@ if (!$result = db_query($sql, $currentCourseID)) {
 $myrow = mysql_fetch_array($result);
 $topic_subject = own_stripslashes($myrow["topic_title"]);
 $lock_state = $myrow["topic_status"];
-
+//$total = 368;
 if ( $total > $posts_per_page ) {
 	$times = 1;
 	$tool_content .= <<<cData
@@ -146,10 +146,11 @@ cData;
 }
 
 $tool_content .= <<<cData
-	<TABLE BORDER="0" CELLPADDING="1" CELLSPACING="0" ALIGN="CENTER" VALIGN="TOP" WIDTH="99%\">
-	<TR><TD>
-		<TABLE BORDER="0" CELLPADDING="3" CELLSPACING="1" WIDTH="99%">
-		<TR><TD WIDTH="20%">$l_author</TD><TD>$topic_subject</TD></TR>
+	<TABLE WIDTH="99%\">
+	<thead>
+		<TR><th>$l_author</th><th>$topic_subject</th></TR>
+		</thead>
+		<tbody>
 cData;
 
 if (isset($start)) {
@@ -176,7 +177,7 @@ do {
 		$row_color = $color2;
 	else 
 		$row_color = $color1;
-	$tool_content .= "<TR BGCOLOR=\"$row_color\" ALIGN=\"LEFT\">\n";
+	$tool_content .= "<TR BGCOLOR=\"$row_color\">\n";
 	$tool_content .= "<TD>" . $myrow["prenom"] . " " . $myrow["nom"] . "</TD>";
 	$tool_content .= "<TD><img src=\"$posticon\">$l_posted: " . $myrow["post_time"] . "&nbsp;&nbsp;&nbsp";
 	$tool_content .= "<HR>\n";
@@ -194,8 +195,8 @@ do {
 $sql = "UPDATE topics SET topic_views = topic_views + 1 WHERE topic_id = '$topic'";
 db_query($sql, $currentCourseID);
 
-$tool_content .= "</TABLE></TD></TR></TABLE>";
-$tool_content .= "<TABLE ALIGN=\"CENTER\" BORDER=\"0\" WIDTH=\"99%\">";
+$tool_content .= "</tbody></TABLE>";
+//$tool_content .= "<TABLE ALIGN=\"CENTER\" BORDER=\"0\" WIDTH=\"99%\">";
 
 if ($total > $posts_per_page) {
 	$times = 1;
@@ -227,14 +228,14 @@ if ($total > $posts_per_page) {
 	</TR>";
 }
 
-$tool_content .= "<TR><TD colspan=\"2\"><a href=\"newtopic.php?forum=$forum\">";
-$tool_content .= "$langNewTopic</a>&nbsp;&nbsp;";
+$tool_content .= "<p><a href=\"newtopic.php?forum=$forum\">";
+$tool_content .= "$langNewTopic</a></p>";
 if($lock_state != 1) {
-	$tool_content .= "<a href=\"reply.php?topic=$topic&forum=$forum\">$langAnswer</a></TD></TR>";
+	$tool_content .= "<p><a href=\"reply.php?topic=$topic&forum=$forum\">$langAnswer</a></p>";
 } else {
 	$tool_content .= "<IMG SRC=\"$reply_locked_image\" BORDER=\"0\"></TD></TR>";
 }
-$tool_content .= "</TD><TD ALIGN=\"RIGHT\" colspan=2><hr noshade size=1></TR></TABLE><CENTER>";
+//$tool_content .= "</TD><TD ALIGN=\"RIGHT\" colspan=2><hr noshade size=1></TR></TABLE><CENTER>";
 
 draw($tool_content,2);
 ?>
