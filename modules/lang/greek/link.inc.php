@@ -65,7 +65,8 @@ $langAllCategoryDeleted = "Όλες οι κατηγορίες και όλοι οι σύνδεσμοι έχουν διαγρα
 $langGiveURL = "Δώστε το URL του συνδέσμου";
 $langGiveCategoryName = "Όνομα κατηγορίας";
 $langNoCategory = "Γενικοί σύνδεσμοι";
-
+$langUp = "Επάνω";
+$langDown = "Κάτω";
 // Other
 $showall = "Εμφάνιση";
 $shownone = "Απόκρυψη";
