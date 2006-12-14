@@ -58,6 +58,7 @@ $langExFac = "If you wish to create course, in another faculty, then contact Asy
 $langEmpty="You left some fields empty.<br>Use the <b>Back</b> button on your browser and try again.<br>";
 $langCodeTaken="This course code is already taken.  <br>Use the <b>Back</b> button on your browser and try again";
 
+$langcourse_keywords="Keywords";
 
 // tables MySQL
 $langFormula="Yours sincerely, your professor";
