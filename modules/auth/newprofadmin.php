@@ -166,15 +166,4 @@ $tool_content .= "<center><p><a href=\"../admin/index.php\">Επιστροφή</p></cente
 }
 draw($tool_content,3,'admin');
 
-// creating passwords automatically
-function create_pass($length) {
-	$res = "";
-	$PASSCHARS="abcdefghijklmnopqrstuvwxyz023456789";
-	$PASSL = 35;
-	srand ((double) microtime() * 1000000);
-	for ($i = 1; $i<=$length ; $i++ ) {
-		$res .= $PASSCHARS[rand(0,$PASSL-1)];
-	}
-	return $res;
-}
 ?>

@@ -55,7 +55,7 @@ $tool_content .= "	<form action=\"newprof_second.php\" method=\"post\">
         </thead>
         </table>
         <br/>
-        		<input type=\"submit\" name=\"submit\" value=\"".$langOk."\" >
+        		<input type=\"submit\" name=\"submit\" value=\"".$langSubmitNew."\" >
 	<input type=\"hidden\" name=\"auth\" value=\"1\" >
 	</form>	
 	<br/>
@@ -64,19 +64,6 @@ $tool_content .= "	<form action=\"newprof_second.php\" method=\"post\">
 	
 ";
 
-//$tool_content .= "<center><p><a href=\"../admin/index.php\">$langReturn</p></center>";
-
 draw($tool_content,0);
 
-// creating passwords automatically
-function create_pass($length) {
-	$res = "";
-	$PASSCHARS="abcdefghijklmnopqrstuvwxyz023456789";
-	$PASSL = 35;
-	srand ((double) microtime() * 1000000);
-	for ($i = 1; $i<=$length ; $i++ ) {
-		$res .= $PASSCHARS[rand(0,$PASSL-1)];
-	}
-	return $res;
-}
 ?>
