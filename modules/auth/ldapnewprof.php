@@ -1,4 +1,4 @@
-<?php 
+<?php session_start();
 /**=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
@@ -42,7 +42,10 @@ $langFiles = array('registration', 'admin', 'gunet');
 include '../../include/baseTheme.php';
 require_once 'auth.inc.php';
 
-$auth = isset($_GET['auth'])?$_GET['auth']:'';
+if (isset($_GET['auth']))
+  $_SESSION['auth_tmp']=$auth;
+if(!isset($_GET['auth']))
+  $auth=$_SESSION['auth_tmp'];
 
 //$auth = get_auth_id();
 $msg = get_auth_info($auth);
