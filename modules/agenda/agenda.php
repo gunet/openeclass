@@ -283,27 +283,23 @@ tContentForm;
 			$day=$dayAncient[2];
 		}
 		$tool_content .= "
-<tbody>
-    <tr>
-        <td>
+<tbody><tr><td align='center'>
             <select name=\"fday\">
-                <option value=\"$day\">[$day]</option>";
+             <option value=\"$day\">[$day]</option>";
 
 		for ($d=1; $d<=31; $d++) $tool_content .= "<option value='$d'>$d</option>";
 
 		$tool_content .= "
     </select>
     </td>
-    <td>
+    <td align='center'>
     <select name=\"fmonth\">
     <option value=\"$month\">[".$langMonthNames['long'][($month-1)]."]</option>";
 
 		for ($i=1; $i<=12; $i++)
-		$tool_content .= "<option value='$i'>".$langMonthNames['long'][$i-1]."</option>";
-		$tool_content .= "
-    </select>
-    </td>
-    <td>
+			$tool_content .= "<option value='$i'>".$langMonthNames['long'][$i-1]."</option>";
+		$tool_content .= "</select></td>
+    <td align='center'>
     <select name=\"fyear\">
     <option value=\"$year\">[$year]</option>";
 
@@ -312,10 +308,8 @@ tContentForm;
 			$tool_content .= "<option value=\"$y\">$y</option>\n";
 		}
 
-		$tool_content .= "
-    </select>
-    </td>
-    <td>
+		$tool_content .= "</select></td>
+    <td align='center'>
     <select name=\"fhour\">
     <option value=\"$hours\">[$hours]</option>
     <option value=\"--\">--</option>";
@@ -323,33 +317,25 @@ tContentForm;
 		for ($h=0; $h<=24; $h++)
 		$tool_content .= "<option value='$h'>$h</option>";
 
-		$tool_content .= "
-    </select>
-    </td>
-    <td>
+		$tool_content .= "</select></td>
+    <td align='center'>
     <select name=\"fminute\">
     <option value=\"$minutes\">[$minutes]</option>
     <option value=\"--\">--</option>";
 
 		for ($m=0; $m<=55; $m=$m+5) $tool_content .=  "<option value='$m'>$m</option>";
 
-		$tool_content .= "
-    </select>
-    </td>
-    <td><input type=\"text\" name=\"lasting\" value=\"".@$myrow['lasting']."\" size=\"8\"></td>
+		$tool_content .= "</select></td>
+    <td align='center'><input type=\"text\" name=\"lasting\" value=\"".@$myrow['lasting']."\" size=\"8\"></td>
     </tr>
     </tbody>
     </table><br>";
 
 		$tool_content .="
     <table width = \"99%\">
-    <thead>
-        <tr>
-            <th>$langTitle :</th>
-            <td colspan=\"5\"><input type=\"text\" size=\"60\" name=\"titre\" value=\"".@$titre."\"></td>
-        </tr>
-    </thead>
-    </table><br>";
+    <thead><tr><th>$langTitle :</th>
+    <td colspan=\"5\"><input type=\"text\" size=\"60\" name=\"titre\" value=\"".@$titre."\"></td>
+    </tr></thead></table><br>";
 
 		if (!isset($contenu)){
 			$contenu="";
@@ -357,29 +343,20 @@ tContentForm;
 
 		$tool_content .= "
     <table width = \"99%\">
-    <thead>
-        <tr>
-            <th colspan=6>$langDetail</th>
-        </tr>
-    </thead>
+    <thead><tr><th colspan=6>$langDetail</th></tr></thead>
     <tbody>
-        <tr>
-            <td colspan=\"6\">
-                <textarea id='ta' name='contenu' value='$contenu' rows='20' cols='78'>".$contenu."</textarea>
-            </td></tr>
-    </tbody>
-</table>
+    <tr>
+    <td colspan=\"6\">
+		<textarea id='ta' name='contenu' value='$contenu' rows='20' cols='78'>".$contenu."</textarea></td></tr>
+    </tbody></table>
     <br>
     <input type=\"Submit\" name=\"submit\" value=\"$langOk\">
-
 </form>
-<br><br><br><br>";
+<br><br>";
 	}
-
 
 	if (@$addEvent != 1) {
 		$tool_content .= "
-
 			<a href=\"".$_SERVER['PHP_SELF']."?addEvent=1\">".$langAddEvent."</a> | 
 				
 ";
@@ -432,21 +409,14 @@ while ($myrow = mysql_fetch_array($result)) {
 			}
 			$nowBarShowed = TRUE;
 			$tool_content .=  "<tr>
-                    <td colspan=2 class=\"today\">
-
-                            <b>$langNow : $dateNow</b>
-
-                    </td>
-
-                </tr>";
+      <td colspan=2 class=\"today\"><b>$langNow : $dateNow</b></td></tr>";
 		}
 	}
-	if ($barreMois!=date("m",strtotime($myrow["day"])))
-	{
+	if ($barreMois!=date("m",strtotime($myrow["day"]))) {
 		$barreMois=date("m",strtotime($myrow["day"]));
 		$tool_content .=  "<tr><td class=\"month\" colspan=\"2\" valign=\"top\">
-            ".$langCalendar."&nbsp;".ucfirst(claro_format_locale_date("%B %Y",strtotime($myrow["day"])))."
-            </td></tr>";
+	   ".$langCalendar."&nbsp;".ucfirst(claro_format_locale_date("%B %Y",strtotime($myrow["day"])))."
+     </td></tr>";
 	}
 	$tool_content .=  "
 <!-- Date -->
