@@ -58,7 +58,7 @@ $langStatus="Action";
 $langRegStudent="Follow courses";
 $langRegAdmin="Create course websites";
 $langUserDetails = "New user information";
-
+$langSubmitNew = "Submit";
 // newuser_second.php
 
 
