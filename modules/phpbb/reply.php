@@ -25,6 +25,7 @@
 
 /**===========================================================================
         phpbb/reply.php
+* @version $Id$
         @last update: 2006-07-23 by Artemios G. Voyiatzis
         @authors list: Artemios G. Voyiatzis <bogart@upnet.gr>
 
@@ -295,11 +296,10 @@ cData;
 	}	
 	$tool_content .= "
 		<FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
-		<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"99%\">
-		<TR><TD>
-			<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"1\" WIDTH=\"99%\">
-			<TR><TD width=\"25%\">
-				<b>$l_body:</b><br><br>";
+		<TABLE>
+		<thead>
+			<TR><th>
+				$l_body:";
 	if (isset($quote) && $quote) {
 		$sql = "SELECT pt.post_text, p.post_time, u.username 
 			FROM posts p, users u, posts_text pt 
@@ -327,20 +327,24 @@ cData;
 		$quote = "";
 	}
 	$tool_content .= "
-			</TD>
+			</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr>
 			<TD>
-				<TEXTAREA NAME=\"message\" ROWS=15 COLS=50 WRAP=\"VIRTUAL\">$reply</TEXTAREA>
+				<TEXTAREA NAME=\"message\" ROWS=15 COLS=70 WRAP=\"VIRTUAL\">$reply</TEXTAREA>
 			</TD></TR>
-			<TR><TD colspan=2>
+			</tbody>
+			</TABLE>
+			<br/>
 				<INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
 				<INPUT TYPE=\"HIDDEN\" NAME=\"topic\" VALUE=\"$topic\">
 				<INPUT TYPE=\"HIDDEN\" NAME=\"quote\" VALUE=\"$quote\">
 				<INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">&nbsp;
 				<INPUT TYPE=\"SUBMIT\" NAME=\"cancel\" VALUE=\"$l_cancelpost\">
-			</TD></TR>
-			</TABLE>
-		</TD></TR>
-		</TABLE>
+			
+		
 		</FORM>";
 	// Topic review
 	$tool_content .= "<BR><CENTER>";
