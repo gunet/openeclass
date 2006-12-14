@@ -324,7 +324,6 @@ if($is_adminOfCourse) // check teacher status
 		$contentToModify ="";
 
 
-
 		$tool_content .=  "<textarea id='ta' name='newContent' value='$contentToModify' rows='20' cols='96'>$contentToModify</textarea>";
 		$tool_content .=  "<br><input type=\"hidden\" name=\"id\" value=\"".$AnnouncementToModify."\">";
 		$tool_content .=  "<input type=\"Submit\" name=\"submitAnnouncement\" value=\"$langOk\"></form>";
@@ -342,7 +341,6 @@ if($is_adminOfCourse) // check teacher status
 			SELECT * FROM annonces WHERE code_cours='$currentCourse' ORDER BY ordre DESC",$mysqlMainDb);
 		$iterator = 1;
 		$bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
-		
 		
 		if (@$addAnnouce !=1) {
 			$tool_content .= "
@@ -365,8 +363,7 @@ if($is_adminOfCourse) // check teacher status
 		$tool_content .=  "<table width=\"99%\">";
 		if ($announcementNumber>0){
 			$tool_content .= "<thead>
-				<tr>
-					<th width=\"99%\">$langAnnouncement</th>";
+				<tr><th width=\"99%\">$langAnnouncement</th>";
 
 			if ($announcementNumber>1){
 				$tool_content .= "<th width=\"21\">$langMove</th>";
@@ -378,15 +375,10 @@ if($is_adminOfCourse) // check teacher status
 			// FORMAT CONTENT
 			$content = make_clickable($myrow['contenu']);
 			$content = nl2br($content);
+			$myrow['temps'] = greek_format($myrow['temps']);
 			$tool_content .=  "<tbody>
 				<tr class=\"odd\"><span></span>
-					<td class=\"arrow\">
-						
-							".$langPubl." 
-							: 
-							".$myrow['temps']."
-						
-					</td>";
+					<td class=\"arrow\">".$langPubl." : ".$myrow['temps']."</td>";
 			if ($announcementNumber>1){
 				$tool_content .= "<td width=21>";
 			}
@@ -396,9 +388,9 @@ if($is_adminOfCourse) // check teacher status
 			if($iterator != 1)
 			{
 				$tool_content .=  "
-						<a href=\"$_SERVER[PHP_SELF]?up=".$myrow["id"]."\">
-							<img class=\"displayed\" src=../../template/classic/img/up.gif border=0 alt=\"Up\">
-						</a>";
+					<a href=\"$_SERVER[PHP_SELF]?up=".$myrow["id"]."\">
+						<img class=\"displayed\" src=../../template/classic/img/up.gif border=0 title=\"".$langUp."\">
+					</a>";
 			}
 
 			// DISPLAY MOVE DOWN COMMAND
@@ -406,47 +398,31 @@ if($is_adminOfCourse) // check teacher status
 			if($iterator < $bottomAnnouncement)
 			{
 				$tool_content .=  "
-						<a href=\"$_SERVER[PHP_SELF]?down=".$myrow["id"]."\">
-							<img class=\"displayed\" src=../../template/classic/img/down.gif border=0 alt=\"Down\">
-						</a>";
+					<a href=\"$_SERVER[PHP_SELF]?down=".$myrow["id"]."\">
+						<img class=\"displayed\" src=../../template/classic/img/down.gif border=0 title=\"".$langDown."\">
+					</a>";
 			}
 
 			// DISPLAY ANNOUNCEMENT CONTENT
-			$tool_content .=  "
-					</td>
-				</tr>
-				<tr>
-					<td colspan=2>
-						
-							".$content."
-							<br>
-							<a href=\"$_SERVER[PHP_SELF]?modify=".$myrow['id']."\">
-			<img src=\"../../images/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a>
-				
-		<a href=\"$_SERVER[PHP_SELF]?delete=".$myrow['id']."\">
-			<img src=\"../../images/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a>
-			
-							
-							<br>
-						
-					</td>
-				</tr>";
+			$tool_content .= "</td></tr>
+				<tr><td colspan=2>".$content."
+				<br>
+				<a href=\"$_SERVER[PHP_SELF]?modify=".$myrow['id']."\">
+				<img src=\"../../images/edit.gif\" border=\"0\" title=\"".$langModify."\"></a>
+				<a href=\"$_SERVER[PHP_SELF]?delete=".$myrow['id']."\">
+				<img src=\"../../images/delete.gif\" border=\"0\" title=\"".$langDelete."\"></a><br>
+				</td></tr>";
 			$iterator ++;
 		}	// end while ($myrow = mysql_fetch_array($result))
 		$tool_content .=  "</tbody>
 			</table>";
-		// DISPLAY DELETE ALL ANNOUNCEMENTS COMMAND
-		
+		// DISPLAY DELETE ALL ANNOUNCEMENTS COMMAND		
 	}	// end: if ($displayAnnoucementList == true)
 } // end: teacher only
 
+// student view
 
-/*****************************************
-STUDENT VIEW
-*****************************************/
-
-else
-{
+else {
 	$result = db_query("SELECT * FROM annonces WHERE code_cours='$currentCourseID'
 				ORDER BY ordre DESC",$mysqlMainDb) OR die("DB problem");
 
@@ -458,20 +434,9 @@ else
 		$content = nl2br($content);
 
 		$tool_content .=  "
-				<tr class=\"odd\">
-					<td >
-						
-							$langPubl : ".$myrow["temps"]."
-						
-					</td>
-				</tr>
-				<tr>
-					<td>
-						
-							$content
-						
-					</td>
-				</tr>";
+		<tr class=\"odd\">
+			<td>$langPubl : ".greek_format($myrow["temps"])."</td></tr>
+			<tr><td>$content</td></tr>";
 
 	}	// while loop
 	$tool_content .=  "</table>";
