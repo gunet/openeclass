@@ -183,17 +183,9 @@ if ($is_adminOfCourse) {
 		unset($id);
 		##[END personalisation modification]############
 
-		$tool_content .=  "
-					<table>
-						<tbody>
-							<tr>
-								<td class=\"success\">
-									$langStoredOK
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					<br/>";
+		$tool_content .=  "<table>
+					<tbody><tr><td class=\"success\">$langStoredOK</td></tr></tbody>
+					</table><br/>";
 
 		unset($addEvent);
 	}
@@ -203,25 +195,15 @@ if ($is_adminOfCourse) {
 
 		##[BEGIN personalisation modification]############
 		$perso_sql= "DELETE FROM $mysqlMainDb.agenda
-                                                WHERE
-                                                        lesson_code= '$currentCourseID'
-                                                AND
-                                                        lesson_event_id='$id' ";
+                      WHERE lesson_code= '$currentCourseID'
+                      AND lesson_event_id='$id' ";
 
 		db_query($perso_sql, $mysqlMainDb);
 		##[END personalisation modification]############
 
-		$tool_content .=  "
-					<table>
-						<tbody>
-							<tr>
-								<td class=\"success\">
-									$langDeleteOK
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					<br/>";
+		$tool_content .= "<table><tbody>
+		<tr><td class=\"success\">$langDeleteOK</td></tr>
+		</tbody></table><br/>";
 		unset($addEvent);
 	}
 
@@ -282,10 +264,9 @@ tContentForm;
 			$month=$dayAncient[1];
 			$day=$dayAncient[2];
 		}
-		$tool_content .= "
-<tbody><tr><td align='center'>
-            <select name=\"fday\">
-             <option value=\"$day\">[$day]</option>";
+		$tool_content .= "<tbody><tr><td align='center'>
+     <select name=\"fday\">
+     <option value=\"$day\">[$day]</option>";
 
 		for ($d=1; $d<=31; $d++) $tool_content .= "<option value='$d'>$d</option>";
 
@@ -422,13 +403,13 @@ while ($myrow = mysql_fetch_array($result)) {
 <!-- Date -->
     ";
 	if($numLine%2 == 0)
-	$tool_content .=  "<tr>";
+			$tool_content .=  "<tr>";
 	elseif($numLine%2 == 1)
-	$tool_content .=  "<tr class=\"odd\">";
+			$tool_content .=  "<tr class=\"odd\">";
 	if ($is_adminOfCourse)
-	$tool_content .=  "<td valign=\"top\">";
+			$tool_content .=  "<td valign=\"top\">";
 	else
-	$tool_content .=  "<td valign=\"top\" colspan=\"2\">";
+			$tool_content .=  "<td valign=\"top\" colspan=\"2\">";
 
 	$tool_content .=  "<p>".ucfirst(claro_format_locale_date($dateFormatLong,strtotime($myrow["day"])))."
         / $langHour:
@@ -442,22 +423,19 @@ while ($myrow = mysql_fetch_array($result)) {
 		$tool_content .=  "<br>".$langLasting.": ".$myrow["lasting"]." ".$message."";
 	}
 
-	$tool_content .=  "<br>
-        <b>".$myrow["titre"]."</b>
-        <br>$contenu</p></td>";
+	$tool_content .=  "<br><b>".$myrow["titre"]."</b><br>$contenu</p></td>";
 
 	//agenda event functions
 	//added icons next to each function
 	//(evelthon, 12/05/2006)
 
 	if ($is_adminOfCourse) {
-		$tool_content .=  "<td >
+		$tool_content .=  "<td align='center'>
         <a href=\"$_SERVER[PHP_SELF]?id=".$myrow["id"]."\">
-            <img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a>
-
+            <img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langModify."\"></a>
+						&nbsp;
         <a href=\"$_SERVER[PHP_SELF]?id=".$myrow[0]."&delete=yes\">
-            <img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a>
-
+            <img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\"></a>
         </td>";
 	}
 	$tool_content .=  "</tr>";
