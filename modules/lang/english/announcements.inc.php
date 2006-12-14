@@ -41,7 +41,6 @@ $langModifAnn="Modify this announcement";
 $langAnnouncement = "Announcement";
 $langMove = "Move";
 
-// ANNOUNCEMENTS
 $langAnnEmpty="Announcements list has been cleared up";
 $langAnnModify="Announcement has been modified";
 $langAnnAdd="Announcement has been added";
@@ -58,9 +57,10 @@ $langNo="No";
 $langYes="Yes";
 $langEmailOption="Send this announcement by email to registered students";
 $langOk = "Ok";
+$langUp = "Up";
+$langDown = "Down";
 
 // my announcements
-
 $langMyAnnouncements = "My announcements";
 $langtheCourse = "Course";
 $langAnn = "Announced at";

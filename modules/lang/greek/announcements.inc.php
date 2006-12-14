@@ -25,6 +25,8 @@ $langNo="Οχι";
 $langYes="Ναι";
 $langEmailOption="Αποστολή (με email) της ανακοίνωσης στους εγγεγραμμένους μαθητές";
 $langOk = "Προσθήκη";
+$langUp = "Επάνω";
+$langDown = "Κάτω";
 
 // my announcements
 
