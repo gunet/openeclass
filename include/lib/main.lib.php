@@ -515,4 +515,16 @@ function greek_format($date) {
 	return implode("-",array_reverse(split("-",$date)));
 }
 
+// creating passwords automatically
+function create_pass($length) {
+  	$res = "";
+	  $PASSCHARS="abcdefghijklmnopqrstuvwxyz023456789";
+	  $PASSL = 35;
+		srand ((double) microtime() * 1000000);
+		 for ($i = 1; $i<=$length ; $i++ ) {
+			    $res .= $PASSCHARS[rand(0,$PASSL-1)];
+			}
+	 return $res;
+	}
+
 ?>
