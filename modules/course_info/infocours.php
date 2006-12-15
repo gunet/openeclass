@@ -1,73 +1,25 @@
-<?
-
-/*
-      +----------------------------------------------------------------------+
-      | CLAROLINE version 1.6.0 $Revision$                            |
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
-      +----------------------------------------------------------------------+
-      |   $Id$        |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
-      |                                                                      |
-      |   This program is distributed in the hope that it will be useful,    |
-      |   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-      |   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-      |   GNU General Public License for more details.                       |
-      |                                                                      |
-      |   You should have received a copy of the GNU General Public License  |
-      |   along with this program; if not, write to the Free Software        |
-      |   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-      |   02111-1307, USA. The GNU GPL license is also available through     |
-      |   the world-wide-web at http://www.gnu.org/copyleft/gpl.html         |
-      +----------------------------------------------------------------------+
-      | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-      |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-      |          Christophe Gesche <gesche@ipm.ucl.ac.be>                    |
-      +----------------------------------------------------------------------+
- */
-
-/******************************************************
-*                  MODIFY COURSE INFO                 *
-*******************************************************
-
-
-Modify course settings like:
-    1. Course title
-    2. Department
-    3. Course description URL in the university web
-
-*/
-
-// If course language was changed, we need to include message files for the new language
-if(isset($submit)) {
-	$language_override=$lanCourseForm;
-}
+<? 
 
 $require_current_course = TRUE;
 $langFiles = array('course_info', 'create_course', 'opencours');
 include '../../include/baseTheme.php';
 $nameTools = $langModifInfo;
-
 $tool_content = "";
 
-####################### SUBMIT #################################
-// check if prof logged
+// submit
+
 if($is_adminOfCourse) {
-	// check if form submitted
 	if (isset($submit)) {
-		@include("../lang/english/create_course.inc");
-		@include("../lang/$default_language/create_course.inc");
-		@include("../lang/$languageInterface/create_course.inc");
-		// UPDATE course settings
+		// update course settings
 		if (isset($checkpassword) && $checkpassword=="on" && $formvisible=="1") {
 			$password = $password;
 		} else {
 			$password = "";
 		}
+		if ($localize == 'el') 
+					$newlang = 'greek';
+		else 
+				$newlang = 'english';
 		list($facid, $facname) = split("--", $facu);
 		$sql = "UPDATE $mysqlMainDb.cours 
 			SET intitule='$int', 
@@ -77,7 +29,7 @@ if($is_adminOfCourse) {
 				course_keywords='$course_keywords', 
 				visible='$formvisible', 
 				titulaires='$titulary', 
-				languageCourse='$lanCourseForm',
+				languageCourse='$newlang',
 				type='$type',
 				password='$password',
 				faculteid='$facid'
@@ -133,7 +85,7 @@ if($is_adminOfCourse) {
 	  $password = $leCours['password'];
 	  if ($password!="") $checkpasssel = "checked"; else $checkpasssel="";
 	    
-	  @$tool_content .="<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
+	  @$tool_content .="<form method='post' action='$_SERVER[PHP_SELF]'>
 		<table width=\"99%\"><caption>$langGeneralInfo</caption><tbody>
 		<tr><td valign=\"top\"><b>$langCode:</b></td>
 		<td valign=\"top\">$fake_code</td></tr>
@@ -178,32 +130,17 @@ if($is_adminOfCourse) {
 		<tr><td align=\"right\"><input type=\"radio\" name=\"formvisible\" value=\"0\"".@$visibleChecked[0]."></td>
 		<td>$langPrivate</td></tr>
 		</tbody></table><br><table width=\"99%\"><caption>$langLanguage</caption><tbody>
-		<tr><td><i>$langTipLang</i></td></tr>
-		<tr><td>		
-		<select name=\"lanCourseForm\">";
-
-		// determine past language of the course 
-
-		$dirname = "../lang/";
-		if($dirname[strlen($dirname)-1]!='/') $dirname.='/';
-		$handle=opendir($dirname);
-		while ($entries = readdir($handle)) {
-			if ($entries=='.'||$entries=='..'||$entries=='CVS')
-			continue;
-			if (is_dir($dirname.$entries)) {
-				$tool_content .= "<option value=\"$entries\"";
-				if ($entries == $languageCourse) 
-					$tool_content .= " selected ";
-				$tool_content .= ">$entries"; 
-				if (!empty($langNameOfLang[$entries]) && $langNameOfLang[$entries]!="" && $langNameOfLang[$entries]!=$entries)
-					$tool_content .= " - $langNameOfLang[$entries]";
-				$tool_content .= "</option>";
-			}
-		}	
-		closedir($handle);
-		$tool_content .= "</select></td></tr>
-		</tbody></table><br><p><input type=\"Submit\" name=\"submit\" value=\"$langOk\"></p><br>
-		<table width=\"99%\"><caption>Αλλες Ενέργειες</caption><tbody>
+		<tr><td>";		
+		if ($leCours['languageCourse'] == 'english') 
+				$curLang = 'en';
+		else 
+				$curLang = 'el';
+		$tool_content .= selection(array('el' => $langNameOfLang['greek'],
+								'en' => $langNameOfLang['english']),'localize', $curLang);
+		
+		$tool_content .= "</td></tr>";
+		$tool_content .= "</tbody></table><br><p><input type=\"Submit\" name=\"submit\" value=\"$langSubmit\"></p><br>
+		<table width=\"99%\"><caption>$langOtherActions</caption><tbody>
 		<tr><td><a href=\"archive_course.php\">$langBackupCourse</a></td></tr>
 		<tr><td><a href=\"delete_course.php\">$langDelCourse</a>	</td></tr>
 		<tr><td><a href=\"refresh_course.php\">$langRefreshCourse</a></td></tr>
