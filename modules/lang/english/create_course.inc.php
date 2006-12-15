@@ -59,6 +59,8 @@ $langEmpty="You left some fields empty.<br>Use the <b>Back</b> button on your br
 $langCodeTaken="This course code is already taken.  <br>Use the <b>Back</b> button on your browser and try again";
 
 $langcourse_keywords="Keywords";
+$langcourse_references = "Addons";
+
 
 // tables MySQL
 $langFormula="Yours sincerely, your professor";

@@ -5,7 +5,6 @@ $iso639_1_code = "ell";
 
 $langNameOfLang['english']="Αγγλικά";
 $langNameOfLang['french']="Γαλλλικά";
-$langNameOfLang['german']="Γερμανικά";
 $langNameOfLang['greek']="Ελληνικά";
 
 $charset = 'iso-8859-7';
