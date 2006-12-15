@@ -27,11 +27,11 @@ $langDelCourse="Delete the whole course website";
 $langCourse="The website ";
 $langHasDel="has been deleted";
 $langBackHome="Back to Home Page of ";
-$langByDel="Deleting this course website will permanently delete all the documents it contains and unregister all its students (not remove them from other courses).<p>Do you really want to delete the course?";
+$langByDel="Deleting the course will permanently delete all the documents it contains and unregister all its students (will not unregister them from other courses).<p>Do you really want to delete the course?";
 $langY="YES";
 $langN="NO";
 $langBack="Back";
-
+$langConfirmDel = "Confirmation of course deleting";
 $langModifGroups="Groups";
 
 $langArchiveCourse = "Course backuping ";
