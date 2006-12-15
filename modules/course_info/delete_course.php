@@ -25,8 +25,8 @@ if($is_adminOfCourse) {
 		rename("../../courses/$currentCourseID", "../../courses/garbage/$currentCourseID");
 		exit();
 	} else {
-		$tool_content .= "<table width=\"99%\"><caption>Επιβεβαίωση Διαγραφής Μαθήματος</caption><tbody><tr><td><p>$langByDel $currentCourseID $intitule&nbsp;?</p><p><a href=\"".$_SERVER['PHP_SELF']."?delete=yes\">$langY</a>&nbsp;|&nbsp;<a href=\"infocours.php\">$langN</a></p></td></tr></tbody></table><br>";
-		$tool_content .= "<center><p><a href=\"infocours.php\">Επιστροφή</p></center>";
+		$tool_content .= "<table width=\"99%\"><caption>$langConfirmDel</caption><tbody><tr><td><p>$langByDel $currentCourseID $intitule&nbsp;?</p><p><a href=\"".$_SERVER['PHP_SELF']."?delete=yes\">$langY</a>&nbsp;|&nbsp;<a href=\"infocours.php\">$langN</a></p></td></tr></tbody></table><br>";
+		$tool_content .= "<center><p><a href=\"infocours.php\">$langBack</p></center>";
 	} // else
 } else  {
 	$tool_content .= "<center><p>$langForbidden</p></center>";
