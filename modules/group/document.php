@@ -28,20 +28,20 @@
 
 $langFiles = 'document';
 $require_current_course = TRUE;
-
+$require_help = TRUE;
+$helpTopic = 'Doc';
 include '../../include/baseTheme.php';
 
 $baseServDir = $webDir;
 $tool_content = "";
 
-include("../../include/lib/fileDisplayLib.inc.php");
+include ("../../include/lib/fileDisplayLib.inc.php");
 include ("../../include/lib/fileManageLib.inc.php");
 include ("../../include/lib/fileUploadLib.inc.php");
 
 if (isset($uncompress) && $uncompress == 1)
 		include("../../include/pclzip/pclzip.lib.php");
 
-// added by jexi
 $d = mysql_fetch_array(mysql_query("SELECT group_quota FROM cours WHERE code='$currentCourseID'"));
 $diskQuotaGroup = $d['group_quota'];
 
@@ -50,7 +50,7 @@ $navigation[] = array ("url" => "group_space.php", "name" => $langGroupSpace);
 //begin_page();
 
 /**************************************
-FILEMANAGER BASIC VARIABLES DEFINITION
+/FILEMANAGER BASIC VARIABLES DEFINITION
 **************************************/
 
 if ($is_adminOfCourse) {
@@ -74,12 +74,10 @@ $tool_content .=  "</td></tr></table></center>";
 stripSubmitValue($_POST);
 stripSubmitValue($_GET);
 
-/*>>>>>>>>>>>> MAIN SECTION  <<<<<<<<<<<<*/
 
 /**************************************
 			 UPLOAD FILE
 **************************************/
-
 
 if (is_uploaded_file(@$userFile) )
 {
@@ -141,16 +139,12 @@ if (is_uploaded_file(@$userFile) )
 			$move = $source;
 			unset ($moveTo);
 		}
-		
-	}
-
+}
 
 	/*-------------------------------------
 		MOVE FILE OR DIRECTORY : STEP 1
 	--------------------------------------*/
-
-	if (isset($move))
-	{
+	if (isset($move)) {
 		@$dialogBox .= form_dir_list("source", $move, "moveTo", $baseWorkDir);
 	}
 
@@ -171,16 +165,6 @@ if (is_uploaded_file(@$userFile) )
 	/*****************************************
 					 RENAME
 	******************************************/
-
-	/*
-	 * The code begin with STEP 2
-	 * so it allows to return to STEP 1
-	 * if STEP 2 unsucceds
-	 */
-
-	/*-------------------------------------
-			  RENAME : STEP 2
-	--------------------------------------*/
 
 	if (isset($renameTo))
 	{
@@ -216,25 +200,13 @@ if (is_uploaded_file(@$userFile) )
 	}
 
 
-
-
 	/*****************************************
 	           CREATE DIRECTORY
 	*****************************************/
 
-	/*
-	 * The code begin with STEP 2
-	 * so it allows to return to STEP 1
-	 * if STEP 2 unsucceds
-	 */
-
-	/*-------------------------------------
-		STEP 2
-	--------------------------------------*/
 	if (isset($newDirPath) && isset($newDirName))
 	{
 		$newDirName = replace_dangerous_char($newDirName);
-
 		if ( check_name_exist($baseWorkDir.$newDirPath."/".$newDirName) )
 		{
 			@$dialogBox .= "<b>$langFileExists!</b>";
@@ -307,21 +279,12 @@ if ($parentDir == "/" || $parentDir == "\\")
 }
 
 
-
-
 /**************************************
 	READ CURRENT DIRECTORY CONTENT
 **************************************/
 
-/*----------------------------------------
-LOAD FILES AND DIRECTORIES INTO ARRAYS
---------------------------------------*/
-
-//echo $baseWorkDir." --- ".$curDirPath;
 chdir ($baseWorkDir.$curDirPath);
-
 $handle = opendir(".");
-
 
 while ($file = readdir($handle))
 {
@@ -369,23 +332,8 @@ $cmdParentDir  = rawurlencode($parentDir);
 
 
 $tool_content .= <<<cData
-
 <div class="fileman" align="center">
 <table width="100%" border="0" cellspacing="2" cellpadding="4">
-<tr>
-<td><h4>${langDoc}</h4></td>
-
-<td align="right">
-
-<a href="../help/help.php?topic=Doc" 
-onClick="window.open('../help/help.php?topic=Doc','Help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10'); 
-return false;"> <font size=2 face="arial, helvetica">$langHelp</font>
-</a>
-
-
-	</td>
-</tr>
-
 <tr>
 	<td colspan=2>
 	<a href='group_space.php'>${langGroupSpaceLink}</a>&nbsp;&nbsp;
@@ -393,7 +341,6 @@ return false;"> <font size=2 face="arial, helvetica">$langHelp</font>
 	</td>
 	</tr>
 	<tr>
-
 cData;
 
 
@@ -415,7 +362,6 @@ else
 {
 	$tool_content .=  "<td>\n<!-- dialog box -->\n&nbsp;\n</td>\n";
 }
-
 
 /*----------------------------------------
                UPLOAD SECTION
