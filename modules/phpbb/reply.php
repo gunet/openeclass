@@ -235,23 +235,20 @@ if (isset($submit) && $submit) {
 	$total_topic = get_total_posts($topic, $currentCourseID, "topic")-1;  
 	// Subtract 1 because we want the nr of replies, not the nr of posts.
 	$forward = 1;
-	$tool_content .= <<<cData
-		<br>
-		<TABLE BORDER="0" CELLPADDING="1" CELLSPACEING="0" ALIGN="CENTER" VALIGN="TOP" WIDTH="99%">
-		<TR><TD>
-			<TABLE BORDER="0" CELLPADDING="1" CELLSPACING="1" WIDTH="100%">
-			<TR><TD><P><P><BR><center>
-cData;
-	$tool_content .= "$l_stored <ul>$l_click <a href=\"viewtopic.php?topic=$topic&forum=$forum&$total_topic\">$l_here</a> $l_viewmsg<P>";
-	$tool_content .= "$l_click <a href=\"viewforum.php?forum=$forum&$total_forum\">$l_here</a> $l_returntopic</ul>";
-	$tool_content .= <<<cData
-			</center><P>
-			</TD></TR>
-			</TABLE>
-		</TD></TR>
-		</TABLE>
-		<br>
-cData;
+	$tool_content .= "
+	<table width=\"99%\">
+				<tbody>
+					<tr>
+						<td class=\"success\">
+							<p><b>$l_stored</b></p>
+							
+							<p>$l_click <a href=\"viewtopic.php?topic=$topic&forum=$forum&$total_topic\">$l_here</a> $l_viewmsg</p>
+				<p>$l_click <a href=\"viewforum.php?forum=$forum&$total_forum\">$l_here</a> $l_returntopic</p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+	";
 } else {
 	// Private forum logic here.
 	if (($forum_type == 1) && !$user_logged_in && !$logging_in) {
