@@ -148,7 +148,7 @@ cData;
 $tool_content .= <<<cData
 	<TABLE WIDTH="99%\">
 	<thead>
-		<TR><th>$l_author</th><th>$topic_subject</th></TR>
+		<TR><th>$l_author</th><th>$l_message</th></TR>
 		</thead>
 		<tbody>
 cData;
@@ -179,10 +179,15 @@ do {
 		$row_color = $color1;
 	$tool_content .= "<TR BGCOLOR=\"$row_color\">\n";
 	$tool_content .= "<TD>" . $myrow["prenom"] . " " . $myrow["nom"] . "</TD>";
-	$tool_content .= "<TD><img src=\"$posticon\">$l_posted: " . $myrow["post_time"] . "&nbsp;&nbsp;&nbsp";
-	$tool_content .= "<HR>\n";
 	$message = own_stripslashes($myrow["post_text"]);
-	$tool_content .= "$message<BR><HR>";
+	if ($count == 0) $postTitle = "<p><img src=\"$posticon\"><b>$topic_subject</b></p>";
+	else $postTitle = "";
+	$tool_content .= "<TD>$postTitle<p>$message</p><br/>
+	
+	<p><em>$l_posted: " . $myrow["post_time"] . "</em></p>";
+//	$tool_content .= "<HR>\n";
+	
+//	$tool_content .= "$message<BR><HR>";
 	if ($status[$dbname]==1 OR $status[$dbname]==2) { // course admin
 		$tool_content .= "<a href=\"editpost.php?post_id=" . 
 					$myrow["post_id"] . 
