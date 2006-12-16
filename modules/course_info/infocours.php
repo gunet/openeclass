@@ -1,6 +1,7 @@
 <? 
 
 $require_current_course = TRUE;
+$require_prof = true;
 $langFiles = array('course_info', 'create_course', 'opencours');
 include '../../include/baseTheme.php';
 $nameTools = $langModifInfo;
@@ -85,17 +86,19 @@ if($is_adminOfCourse) {
 	  $password = $leCours['password'];
 	  if ($password!="") $checkpasssel = "checked"; else $checkpasssel="";
 	    
-	  @$tool_content .="<form method='post' action='$_SERVER[PHP_SELF]'>
-		<table width=\"99%\"><caption>$langGeneralInfo</caption><tbody>
-		<tr><td valign=\"top\"><b>$langCode:</b></td>
-		<td valign=\"top\">$fake_code</td></tr>
-		<tr><td><b>$langProfessors:</b></td>
+	  @$tool_content .="
+	  
+	  <form method='post' action='$_SERVER[PHP_SELF]'>
+		<table width=\"99%\"><caption>$langGeneralInfo</caption><thead>
+		<tr><th>$langCode:</th>
+		<td>$fake_code</td></tr>
+		<tr><th>$langProfessors:</th>
 		<td><input type=\"text\" name=\"titulary\" value=\"$titulary\" size=\"60\"></td></tr>
-		<tr><td><b>$langTitle:</b></td>
+		<tr><th>$langTitle:</th>
 		<td><input type=\"Text\" name=\"int\" value=\"$int\" size=\"60\"></td></tr>
-		<tr><td><b>$langDescription:</b></td>
+		<tr><th>$langDescription:</th>
 		<td><textarea name=\"description\" value=\"$leCours[description]\" cols=\"40\" rows=\"4\">$leCours[description]</textarea></td></tr>
-		<tr><td><b>$langFaculty:</b></td>
+		<tr><th>$langFaculty:</th>
 		<td>
 		<select name=\"facu\">";
 	    
@@ -107,30 +110,42 @@ if($is_adminOfCourse) {
 				$tool_content .= "<option value=\"".$myfac['id']."--".$myfac['name']."\">$myfac[name]</option>";
 		}
 		$tool_content .= "</select></td></tr>
-		<tr><td><b>$m[type]:</b></td><td>";
+		<tr><th>$m[type]:</th><td>";
 
 		$tool_content .= selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']),'type', $type);
 		
 		$tool_content .= "</td></tr>";
 		
 		@$tool_content .= "<tr>
-			<td><b>$langcourse_references:</b></td>
+			<th>$langcourse_references:</th>
 			<td><textarea name=\"course_addon\" value=\"$leCours[course_addon]\" cols=\"40\" rows=\"4\">$leCours[course_addon]</textarea></td>
 		</tr>
 		<tr>
-			<td><b>$langcourse_keywords:</b></td>
+			<th>$langcourse_keywords:</th>
 			<td><input type='text' name=\"course_keywords\" value=\"$leCours[course_keywords]\" size=\"60\"></td>
 		</tr>		
-		</tbody></table><br><table width=\"99%\"><caption>$langConfidentiality</caption><tbody>
-		<tr><td colspan=\"2\"><i>$langConfTip</i></td></tr>
-		<tr><td align=\"right\"><input type=\"radio\" name=\"formvisible\" value=\"2\"".@$visibleChecked[2]."></td>
-		<td>$langPublic</td></tr>
-		<tr><td align=\"right\" valign=\"top\"><input type=\"radio\" name=\"formvisible\" value=\"1\"".@$visibleChecked[1]."></td>
-		<td>$langPrivOpen<br>&nbsp;&nbsp;<input type=\"checkbox\" name=\"checkpassword\" ".$checkpasssel.">$langOptPassword<input type=\"text\" name=\"password\" value=\"".$password."\"></td></tr>
-		<tr><td align=\"right\"><input type=\"radio\" name=\"formvisible\" value=\"0\"".@$visibleChecked[0]."></td>
-		<td>$langPrivate</td></tr>
-		</tbody></table><br><table width=\"99%\"><caption>$langLanguage</caption><tbody>
-		<tr><td>";		
+		</thead></table>
+		
+		<br>
+		
+		<table width=\"99%\"><caption>$langConfidentiality</caption><thead>
+		
+		<tr><th>$langPublic</th><td><input type=\"radio\" name=\"formvisible\" value=\"2\"".@$visibleChecked[2]."></td>
+		</tr>
+		<tr><th>$langPrivOpen</th>
+		<td><input type=\"radio\" name=\"formvisible\" value=\"1\"".@$visibleChecked[1].">
+		<br><input type=\"checkbox\" name=\"checkpassword\" ".$checkpasssel.">$langOptPassword<input type=\"text\" name=\"password\" value=\"".$password."\"></td></tr>
+		<tr><th>$langPrivate</th><td><input type=\"radio\" name=\"formvisible\" value=\"0\"".@$visibleChecked[0]."></td>
+		</tr>
+		</thead></table>
+		<p><em>$langConfTip</em></p>
+		<br>
+		
+		<table width=\"99%\">
+		<thead>
+		<tr >
+		<th width=\"200\">$langLanguage</th>
+		<td>";		
 		if ($leCours['languageCourse'] == 'english') 
 				$curLang = 'en';
 		else 
@@ -139,12 +154,20 @@ if($is_adminOfCourse) {
 								'en' => $langNameOfLang['english']),'localize', $curLang);
 		
 		$tool_content .= "</td></tr>";
-		$tool_content .= "</tbody></table><br><p><input type=\"Submit\" name=\"submit\" value=\"$langSubmit\"></p><br>
-		<table width=\"99%\"><caption>$langOtherActions</caption><tbody>
-		<tr><td><a href=\"archive_course.php\">$langBackupCourse</a></td></tr>
-		<tr><td><a href=\"delete_course.php\">$langDelCourse</a>	</td></tr>
-		<tr><td><a href=\"refresh_course.php\">$langRefreshCourse</a></td></tr>
-		</tbody></table></form>";
+		$tool_content .= "</thead></table>
+		
+		<br>
+		
+		<p><input type=\"Submit\" name=\"submit\" value=\"$langSubmit\"></p><br>
+		
+		<p><b>$langOtherActions</b></p>
+		<ul class=\"listBullet\">
+		<li><a href=\"archive_course.php\">$langBackupCourse</a></li>
+		<li><a href=\"delete_course.php\">$langDelCourse</a>	</li>
+		<li><a href=\"refresh_course.php\">$langRefreshCourse</a></li>
+		</ul>
+		
+		</form>";
 	}     // else
 }   // if uid==prof_id
 
