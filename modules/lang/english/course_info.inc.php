@@ -72,6 +72,9 @@ $langAgendaDel = "Delete course agenda data";
 $langHideDocuments = "Hide course documents";
 $langHideWork = "Hide course assignments";
 $langSubmit = "Submit actions";
+$langActions = "Actions";
+$langOptions = "Options";
+$langRefreshSuccess = "The lesson refresh operation was successful. The following actions took place:";
 
 $langUsersDeleted="Users deleted from course";
 $langAnnDeleted="Announcements deleted from course";
