@@ -65,6 +65,9 @@ $local_style = 'textarea, input { font-size: 10pt; font-family: monospace; }';
 
 include '../../include/baseTheme.php';
 
+// For using with the pop-up calendar
+include 'jscalendar.inc.php';
+
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
 $action = new action();
@@ -145,7 +148,8 @@ if ($is_adminOfCourse) {
 		show_submission($sid);
 	} elseif (isset($new_assign)) {
 		//begin_page();
-		add_assignment($title, $comments, $desc, "$fyear-$fmonth-$fday",
+		//echo $WorkEnd;
+		add_assignment($title, $comments, $desc, "$WorkEnd",
 			$group_submissions);
 		show_assignments();
 	} elseif (isset($grades)) {
@@ -194,7 +198,7 @@ if ($is_adminOfCourse) {
 }
 
 //end_page();
-draw($tool_content, 2, 'work', $head_content, $body_action);
+draw($tool_content, 2, 'work', $head_content."\n\n".$local_head, $body_action);
 
 //-------------------------------------
 // end of main program
@@ -298,6 +302,7 @@ function new_assignment()
 	global $tool_content, $m, $langAdd;
 	global $urlAppend;
 	global $desc;
+	global $end_cal_Work;
 
 	$day	= date("d");
 	$month	= date("m");
@@ -313,11 +318,7 @@ function new_assignment()
 
 	$tool_content .=	"</textarea></td></tr><tr><td>".$m['comments'].":</td><td>".
 		"<textarea name=\"comments\" rows=\"5\" cols=\"55\"></textarea></td></tr><tr><td>".
-		$m['deadline'].":</td><td>";
-
-	date_form($day, $month, $year);
-	
-	$tool_content .= "</td></tr><tr><td>".$m['group_or_user'].
+		$m['deadline'].":</td><td>$end_cal_Work</td></tr><tr><td>".$m['group_or_user'].
 		":</td><td><input type=\"radio\" name=\"group_submissions\" value=\"0\" checked=\"1\">".
 		$m['user_work']."<br><input type=\"radio\" name=\"group_submissions\" value=\"1\">".
 		$m['group_work']."</td></tr><tr><td colspan=2>".
