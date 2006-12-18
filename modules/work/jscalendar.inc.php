@@ -58,25 +58,8 @@ if ($language == 'greek') {
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-win2k-2', false);
 $local_head = $jscalendar->get_load_files_code();
 
-//$u_date_start = strftime('%Y-%m-%d %H:%M:%S', strtotime('now -0 day'));
 $u_date_end = strftime('%Y-%m-%d', strtotime('now +1 year'));
 
-//$start_cal_Poll = $jscalendar->make_input_field(
-//           array('showsTime'      => true,
-//                 'showOthers'     => true,
-//                 'ifFormat'       => '%Y-%m-%d %H:%M:%S',
-//                 'timeFormat'     => '24'),
-//           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
-//                 'name'        => 'PollStart',
-//                 'value'       => $u_date_start));
-//$start_cal_Survey = $jscalendar->make_input_field(
-//           array('showsTime'      => true,
-//                 'showOthers'     => true,
-//                 'ifFormat'       => '%Y-%m-%d %H:%M:%S',
-//                 'timeFormat'     => '24'),
-//           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
-//                 'name'        => 'SurveyStart',
-//                 'value'       => $u_date_start));
 
 $end_cal_Work = $jscalendar->make_input_field(
            array('showsTime'      => false,
@@ -86,14 +69,22 @@ $end_cal_Work = $jscalendar->make_input_field(
            array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
                  'name'        => 'WorkEnd',
                  'value'       => $u_date_end));
-//$end_cal_Poll = $jscalendar->make_input_field(
-//           array('showsTime'      => true,
-//                 'showOthers'     => true,
-//                 'ifFormat'       => '%Y-%m-%d %H:%M:%S',
-//                 'timeFormat'     => '24'),
-//           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
-//                 'name'        => 'PollEnd',
-//                 'value'       => $u_date_end));
+
+function getJsDeadline($deadline) {
+	global $language, $lang, $jscalendar, $local_head;
+	
+	$end_cal_Work_db = $jscalendar->make_input_field(
+  	array('showsTime'      => false,
+    	'showOthers'     => true,
+      'ifFormat'       => '%Y-%m-%d',
+      'timeFormat'     => '24'),
+    array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+    	'name'        => 'WorkEnd',
+      'value'       => $deadline));
+	
+	return $end_cal_Work_db;
+	
+}
                  
  
 ?>

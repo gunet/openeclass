@@ -359,6 +359,7 @@ function show_edit_assignment($id) {
 
 	global $tool_content, $m, $langEdit, $langWorks, $langBack;
 	global $urlAppend;
+	global $end_cal_Work_db;
 	
 	$res = db_query("SELECT * FROM assignments WHERE id = '$id'");
 	$row = mysql_fetch_array($res);
@@ -367,10 +368,14 @@ function show_edit_assignment($id) {
 	$nav[] = array("url"=>"work.php?id=$id", "name"=> $row['title']);
 	//begin_page($langEdit, $nav);
 
-	$deadline = explode('-', $row['deadline']);
-	$day = $deadline[2];
-	$month = $deadline[1];
-	$year = $deadline[0];
+		$deadline = $row['deadline'];
+	
+
+                 
+//	$deadline = explode('-', $row['deadline']);
+//	$day = $deadline[2];
+//	$month = $deadline[1];
+//	$year = $deadline[0];
 //////////////////////////////////////////////////////////////////////////////////////
 
 $tool_content .= <<<cData
@@ -392,9 +397,9 @@ ${row['description']}
 
 cData;
 
-	date_form($day, $month, $year);
+	//date_form($day, $month, $year);
 
-	$tool_content .= "</td></tr><tr><td>".$m['group_or_user'].":</td><td>".
+	$tool_content .= getJsDeadline($deadline)."</td></tr><tr><td>".$m['group_or_user'].":</td><td>".
 		"<input type=\"radio\" name=\"group_submissions\" value=\"0\"";
 	
 	if ($row['group_submissions'] == '0')
@@ -422,7 +427,7 @@ function edit_assignment($id)
 
 	if (db_query("UPDATE assignments SET title='$_POST[title]',
 		description='$_POST[desc]', group_submissions='$_POST[group_submissions]',
-		comments='$_POST[comments]', deadline='$_POST[fyear]-$_POST[fmonth]-$_POST[fday]' WHERE id='$id'")) {
+		comments='$_POST[comments]', deadline='$_POST[WorkEnd]' WHERE id='$id'")) {
 		$tool_content .= "<p><center>$langEditSuccess</p></center>";
 	} else {
 		$tool_content .= "<p><center>$langEditError</p></center>";	
