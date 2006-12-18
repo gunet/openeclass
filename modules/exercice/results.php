@@ -141,7 +141,7 @@ while($row=mysql_fetch_array($result)) {
 	while($row2=mysql_fetch_array($result2)) {
 
 		$RecordEndDate = $row2['RecordEndDate'];
-		$tool_content .= "<tr><td>".$row2['RecordEndDate']."</td>";
+		$tool_content .= "<tr><td>".$row2['RecordStartDate']."</td>";
 	
 		if ($RecordEndDate != "0000-00-00 00:00:00") { 
 			$tool_content .= "<td>".$RecordEndDate."</td>";

@@ -168,28 +168,53 @@ $exerciseTimeConstrain=$objExercise->selectTimeConstrain();
 $exerciseAllowedAttemtps=$objExercise->selectAttemptsAllowed();
 
 $eid_temp = $objExercise->selectId();
-$exerciseTimeConstrainSecs = time() + ($exerciseTimeConstrain*60);
+if (!$exerciseTimeConstrain) {
+	$noTimeLimit = true;
+	$exerciseTimeConstrainSecs = time() + (7 * 24 * 60 * 60);
+} else {
+	$noTimeLimit = false;
+	$exerciseTimeConstrainSecs = time() + ($exerciseTimeConstrain*60);
+}
+
 $RecordStartDate = date("Y-m-d H:i:s",time());
 
 
 if ((!$is_adminOfCourse)&&(isset($uid))) { //if registered student
 $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record WHERE eid='$eid_temp' AND uid='$uid'", $currentCourseID));
 ++$CurrentAttempt[0];
-	if (!isset($_COOKIE['marvelous_cookie'])) { // either expired or begin again
-		if ((!$exerciseAllowedAttemtps)||($CurrentAttempt[0] <= $exerciseAllowedAttemtps)) { // if it is allowed begin again
-			if (!$exerciseTimeConstrainSecs)
-				$exerciseTimeConstrainSecs = 9999999;
-				$CookieLife=time()+$exerciseTimeConstrainSecs;
-			if (!setcookie("marvelous_cookie", $eid_temp, $CookieLife, "/")) {
-				header('Location: exercise_redirect.php');
+	
+		if (!isset($HTTP_COOKIE_VARS['marvelous_cookie_control'])) {
+			if (!setcookie("marvelous_cookie_control", $eid_temp, time()+(7 * 24 * 60 * 60), "/")) {
+					header('Location: exercise_redirect.php');
 				exit();
 			}
-			// record start of exercise
+		}
+		
+		if ((isset($HTTP_COOKIE_VARS['marvelous_cookie_control']))&&(!isset($HTTP_COOKIE_VARS['marvelous_cookie']))) {
+			header('Location: exercise_redirect.php');
+			exit();
+		}
+	
+	if (!isset($HTTP_COOKIE_VARS['marvelous_cookie'])) { // either expired or begin again
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		if ((!$exerciseAllowedAttemtps)||($CurrentAttempt[0] <= $exerciseAllowedAttemtps)) { // if it is allowed begin again
+			
+			$CookieLife = $exerciseTimeConstrainSecs;
+			
+			
+			if (!setcookie("marvelous_cookie", $eid_temp, $CookieLife, "/")) {
+					header('Location: exercise_redirect.php');
+				exit();
+			}
+//echo "FIRST GO";
+
+
 			mysql_select_db($currentCourseID);
 			$sql="INSERT INTO `exercise_user_record` (eurid,eid,uid,RecordStartDate,RecordEndDate,".
 				"TotalScore,TotalWeighting,attempt) VALUES".
 				"(0,'$eid_temp','$uid','$RecordStartDate','','','',1)";
 			$result=mysql_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);		
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		} else {  // not allowed begin again
 			header('Location: exercise_redirect.php');
 			exit();

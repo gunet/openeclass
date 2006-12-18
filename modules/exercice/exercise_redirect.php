@@ -109,6 +109,9 @@ if(!session_is_registered('objExercise')) {
 	session_register('objExercise');
 }
 
+setcookie("marvelous_cookie", "", time() - 3600, "/");
+setcookie("marvelous_cookie_control", "", time() - 3600, "/");
+
 $exerciseTitle=$objExercise->selectTitle();
 //$exerciseDescription=$objExercise->selectDescription();
 //$randomQuestions=$objExercise->isRandom();
