@@ -97,7 +97,7 @@ cData;
 		{
 
 	$tool_content .= "<tr><td align=\"center\" colspan=\"2\"><img src=\"".
-		${picturePath}."/quiz-".${questionId}."\" border=\"0\"></td></tr>";
+		${'picturePath'}."/quiz-".${'questionId'}."\" border=\"0\"></td></tr>";
 
 		}
 	}  // end if(!$onlyAnswers)

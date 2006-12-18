@@ -81,7 +81,7 @@ $nameTools = $langExercice;
 
 include('../../include/lib/textLib.inc.php');
 
-$picturePath='../../'.$currentCourseID.'/image';
+$picturePath='../../courses/'.$currentCourseID.'/image';
 
 $is_allowedToEdit=$is_adminOfCourse;
 $dbNameGlu=$currentCourseID;
