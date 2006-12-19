@@ -58,4 +58,7 @@ $langNbFor="Number of forums";
 $langFunctions="Functions";
 $langAddCategory="Add a category";
 $langNotAllowed = "Not allowed";
+$langForumDataChanged = "Forum data changed";
+$langForumCategoryAdded = "A forum was added to the category";
+$langForumDelete = "Forum was deleted";
 ?>

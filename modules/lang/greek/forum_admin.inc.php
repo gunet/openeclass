@@ -58,5 +58,7 @@ $langNbFor="Αριθμός περιοχών συζητήσεων";
 $langFunctions="Λειτουργίες";
 $langAddCategory="Προσθήκη κατηγορίας";
 $langNotAllowed = "Μη επιτρεπτή ενέργεια";
-
+$langForumDataChanged = "Τα στοιχεία του φόρουμ έχουν αλλάξει";
+$langForumCategoryAdded = "Προστέθηκε νέο φόρουμ στην κατηγορία που επιλέξατε";
+$langForumDelete = "Η περιοχή συζητήσεων έχει διαγραφεί";
 ?>
