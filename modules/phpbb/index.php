@@ -185,7 +185,7 @@ cData;
 				if ( !isset($last_visit) ) {
 					$last_visit = 0;
 				}
-				if($last_post_time > $last_visit && $last_post != "No posts") {
+				if(@$last_post_time > $last_visit && $last_post != "No posts") {
 					$tool_content .= "<TD WIDTH=5%><IMG SRC=\"$newposts_image\"></TD>";
 				} else {
 					$tool_content .= "<TD WIDTH=5%><IMG SRC=\"$folder_image\"></TD>";
