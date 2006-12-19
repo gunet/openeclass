@@ -140,27 +140,20 @@ if (isset($submit) && $submit) {
 				$tool_content .= "Unable to update the topic subject in the database";
 			}
 		}
-		$tool_content .= "<br>
-		<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"99%\">
-		<TR><TD>
-			<TABLE BORDER=\"0\" CALLPADDING=\"1\" CELLSPACEING=\"1\" WIDTH=\"100%\">
-			<TR><TD>
-				<P>
-				<P>
-				<BR>
-				<center>$l_stored
-				<ul>$l_click 
-				<a href=\"viewtopic.php?topic=$topic_id&forum=$forum_id\">$l_here</a> $l_viewmsg
-				<P>
-				$l_click <a href=\"viewforum.php?forum=$forum_id\">$l_here</a> $l_returntopic
-				</ul>
-				</center>
-				<P>
-			</TD></TR>
-			</TABLE>
-		</TD></TR>
-		</TABLE>
-		<br>";
+		$tool_content .= "
+		<table width=\"99%\">
+				<tbody>
+					<tr>
+						<td class=\"success\">
+							<p><b>$l_stored</b></p>
+							
+							<p>$l_click <a href=\"viewtopic.php?topic=$topic_id&forum=$forum_id\">$l_here</a> $l_viewmsg</p>
+				<p>	$l_click <a href=\"viewforum.php?forum=$forum_id\">$l_here</a> $l_returntopic</p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		";
 	 } else {
 		$now_hour = date("H");
 		$now_min = date("i");
@@ -201,30 +194,25 @@ if (isset($submit) && $submit) {
 	 		$topic_removed = TRUE;
 		}
 		sync($currentCourseID, $forum, 'forum');
-		if (!$topic_removed) {
+		if (@!$topic_removed) {
 			sync($currentCourseID, $topic_id, 'topic');
 		}
 		$tool_content .= "
-		<br>
-		<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACECING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"99%\">
-		<TR><TD>
-			<TABLE BORDER=\"0\" CALLPADDING=\"1\" CELLSPACEING=\"1\" WIDTH=\"100%\">
-			<TR><TD>
-				<P>
-				<P>
-				<BR>
-				<center>$l_deleted
-				<ul>$l_click <a href=\"viewforum.php?forum=$forum_id\">$l_here</a> $l_returntopic
-				<p>
-				$l_click <a href=\"index.php\">$l_here</a>$l_returnindex
-				</ul>
-				</center>
-				<P>
-			</TD></TR>
-			</TABLE>
-		</TD></TR>
-		</TABLE>
-		<br>";
+		
+		<table width=\"99%\">
+				<tbody>
+					<tr>
+						<td class=\"success\">
+							<p><b>$l_deleted</b></p>
+							
+							<p>$l_click <a href=\"viewforum.php?forum=$forum_id\">$l_here</a> $l_returntopic</p>
+				<p>	$l_click <a href=\"index.php\">$l_here</a>$l_returnindex</p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		
+		";
 	}	
 } else {
 	// Gotta handle private forums right here. They're naturally covered on submit, but not in this part.
@@ -236,18 +224,20 @@ if (isset($submit) && $submit) {
 		draw($tool_content, 2);
 		exit();
 	}
+	
 	if (!$myrow = mysql_fetch_array($result)) {
 		$tool_content .= "Error - The forum/topic you selected does not exist. Please go back and try again.";
 		draw($tool_content, 2);
 		exit();
 	}
+	
 	if (($myrow["forum_type"] == 1) && !$user_logged_in && !$logging_in) {
 		// Private forum, no valid session, and login form not submitted...
 		$tool_content .= "
 			<FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
 			<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"99%\">
 			<TR><TD>
-				<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"1\" WIDTH=\"100%\">
+			
 				<TR><TD>$l_private</TD></TR>
 				<TR><TD>
 					<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\">
@@ -260,8 +250,7 @@ if (isset($submit) && $submit) {
 					<INPUT TYPE=\"HIDDEN\" NAME=\"post_id\" VALUE=\"$post_id\">
 					<INPUT TYPE=\"SUBMIT\" NAME=\"logging_in\" VALUE=\"$l_enter\">
 				</TD></TR>
-				</TABLE>
-			</TD></TR>
+				
 			</TABLE>
 			</FORM>";
 		draw($tool_content, 2);
@@ -278,11 +267,13 @@ if (isset($submit) && $submit) {
 			// Ok, looks like we're good.
 		}
 	}	
+	
 	$sql = "SELECT p.*, pt.post_text, u.username, u.user_id, u.user_sig, t.topic_title, t.topic_notify 
 		FROM posts p, users u, topics t, posts_text pt 
-		WHERE (p.post_id = '$post_id') AND pt.post_id = p.post_id AND (p.topic_id = t.topic_id) AND (p.poster_id = u.user_id)";
+		WHERE (p.post_id = '$post_id') AND (pt.post_id = p.post_id) AND (p.topic_id = t.topic_id) AND (p.poster_id = u.user_id)";
+
 	if (!$result = db_query($sql, $currentCourseID)) {
-		$tool_content .= "Couldn't get user and topic information from the database.<br>";
+		$tool_content .= "<p>Couldn't get user and topic information from the database.</p>";
 		draw($tool_content, 2);
 		exit();
 	}
@@ -301,6 +292,7 @@ if (isset($submit) && $submit) {
 		}
 	}
 	$message = $myrow["post_text"];
+	
 	if (eregi("\[addsig]$", $message)) {
 		$addsig = 1;
 	} else {
@@ -315,43 +307,42 @@ if (isset($submit) && $submit) {
 	// Special handling for </textarea> tags in the message, which can break the editing form..
 	$message = preg_replace('#</textarea>#si', '&lt;/TEXTAREA&gt;', $message);
 	list($day, $time) = split(" ", $myrow["post_time"]);
+	
 	$tool_content .= "
+	<a href=\"viewtopic.php?topic=$topic&forum=$forum\" target=\"_blank\">$l_topicreview</a><br/><br/>
 		<FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
-		<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"99%\">
-		<TR><TD>
-			<TABLE BORDER=\"0\" CELLPADDING=\"3\" CELLSPACING=\"1\" WIDTH=\"100%\">
-			<TR><TD COLSPAN=\"2\">
-				<b>$l_forums</b>
-			</TD></TR>";
+		<TABLE WIDTH=\"99%\">
+		<thead>
+		";
+	 	
 	$first_post = is_first_post($topic, $post_id, $currentCourseID);
 	if($first_post) {
 		$tool_content .= "
 			<TR>
-			<TD width=25%><b>$l_subject:</b></TD>
+			<th>$l_subject:</th>
 			<TD>
 				<INPUT TYPE=\"TEXT\" NAME=\"subject\" SIZE=\"50\" MAXLENGTH=\"100\" VALUE=\"" . stripslashes($myrow["topic_title"]) . "\"></TD>
 			</TR>";
 	}
 	$tool_content .= "
 			<TR>
-				<TD width=25%>
-					<b>$l_body:</b>
-					<br>
-					<br>
-				</TD>
+				<th>
+					$l_body:
+					
+				</th>
 				<TD>
 					<TEXTAREA NAME=\"message\" ROWS=10 COLS=45 WRAP=\"VIRTUAL\">$message</TEXTAREA>
 				</TD>
 			</TR>
-			<TR>
-				<TD width=25%>&nbsp;</TD>
-				<TD>
-					<INPUT TYPE=\"CHECKBOX\" NAME=\"delete\">$l_delete
-					<BR>
-				</TD>
-			</TR>
-			<TR>
-				<TD colspan=2 ALIGN=\"CENTER\">";
+			</thead>
+			</table>
+			
+			<p>		<INPUT TYPE=\"CHECKBOX\" NAME=\"delete\">$l_delete</p>
+			
+					
+			
+					";
+
 	if (isset($user_logged_in) && $user_logged_in) {
 		$tool_content .= "<INPUT TYPE=\"HIDDEN\" NAME=\"username\" VALUE=\"" . $userdata["username"] . "\">";
 	}
@@ -363,16 +354,7 @@ if (isset($submit) && $submit) {
 					<INPUT TYPE=\"HIDDEN\" NAME=\"poster_id\" VALUE=\"" . $myrow["poster_id"] ."\">
 					-->
 					<INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">
-				</TD>
-			</TR>
-			</TABLE>
-		</TD></TR>
-		</TABLE>
-		<BR>
-		<CENTER>
-			<a href=\"viewtopic.php?topic=$topic&forum=$forum\" target=\"_blank\"><b>$l_topicreview</b></a>
-		</CENTER>
-		<BR>";
+";
 	       
 }
 draw($tool_content,2);
