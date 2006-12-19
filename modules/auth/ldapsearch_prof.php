@@ -21,7 +21,7 @@ $errormessage2 = "<p>Επιστροφή στην <a href=\"ldapnewprof.php\">προηγούμενη σελί
 $is_submit = isset($_POST['is_submit'])?$_POST['is_submit']:'';
 $ldap_email = isset($_POST['ldap_email'])?$_POST['ldap_email']:'';
 $ldap_passwd = isset($_POST['ldap_passwd'])?$_POST['ldap_passwd']:'';
-$auth = isset($_POST['auth'])?$_POST['auth']:'';
+$auth = isset($_POST['auth'])?$_POST['auth']:0;
 
 if(!empty($is_submit))
 {
@@ -148,7 +148,7 @@ function user_exists($login)
 {
 	global $mysqlMainDb;
 	global $db;
-	$username_check = mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='$login'",$db);
+	$username_check = mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='".mysql_real_escape_string($login)."'",$db);
 	if (mysql_num_rows($username_check) > 0) 
 	{
 		return TRUE;
@@ -165,7 +165,7 @@ function user_exists_request($login)
 	global $mysqlMainDb;
 	global $db;
 	$username_check = mysql_query("SELECT profuname FROM `$mysqlMainDb`.prof_request 
-	WHERE profuname='$login'",$db);
+	WHERE profuname='".mysql_real_escape_string($login)."'",$db);
 	if (mysql_num_rows($username_check) > 0) 
 	{
 		return TRUE;

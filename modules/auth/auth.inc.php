@@ -199,7 +199,7 @@ return $auth_row : an associative array
 ****************************************************************/
 function get_auth_settings($auth)
 {
-	$qry = "SELECT * FROM auth WHERE auth_id = ".$auth;
+	$qry = "SELECT * FROM auth WHERE auth_id = ".mysql_real_escape_string($auth);
   $result = db_query($qry);
   if($result)
   {
@@ -235,7 +235,7 @@ function auth_user_login ($auth,$test_username, $test_password)
     {
 	case '1':
 	    // Returns true if the username and password work and false if they don't
-	    $sql = "SELECT user_id FROM user WHERE username='".$test_username."' AND password='".$test_password."'";
+	    $sql = "SELECT user_id FROM user WHERE username='".mysql_real_escape_string($test_username)."' AND password='".mysql_real_escape_string($test_password)."'";
 	    $result = db_query($sql);
 	    if(mysql_num_rows($result)==1)
 	    {
@@ -380,7 +380,7 @@ function auth_user_login ($auth,$test_username, $test_password)
 				$db_ext = mysql_select_db($dbname,$link);
 				if($db_ext)
 				{
-		    	$qry = "SELECT * FROM ".$dbname.".".$dbtable." WHERE ".$dbfielduser."='".$test_username."' AND ".$dbfieldpass."='".$test_password."'";
+		    	$qry = "SELECT * FROM ".$dbname.".".$dbtable." WHERE ".$dbfielduser."='".mysql_real_escape_string($test_username)."' AND ".$dbfieldpass."='".mysql_real_escape_string($test_password)."'";
 		    	$res = mysql_query($qry,$link);
 		    	if($res)
 		    	{

@@ -44,8 +44,10 @@ require_once 'auth.inc.php';
 
 if (isset($_GET['auth']))
   $_SESSION['auth_tmp']=$auth;
-if(!isset($_GET['auth']))
+if(!isset($_GET['auth']) && isset($_SESSION['auth_tmp']))
   $auth=$_SESSION['auth_tmp'];
+else if (!isset($_GET['auth']) && !isset($_SESSION['auth_tmp']))
+  $auth=0;
 
 //$auth = get_auth_id();
 $msg = get_auth_info($auth);
