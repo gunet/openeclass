@@ -55,7 +55,6 @@ if (!($fac = $fac[0])) {
 	die("ERROR: no faculty with id $fc");
 } 
 
-//begin_page();
 $tool_content = "";
 $tool_content .= "
 	<table width=\"99%\">
