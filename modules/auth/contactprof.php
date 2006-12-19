@@ -1,12 +1,11 @@
 <?php
 $require_login = TRUE;
 $langFiles = array('registration', 'opencours');
-
+$guest_allowed = true;
 include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
 $nameTools = "Αποστολή ενημερωτικού email στον διδάσκοντα";
 
-check_guest();
 
 $tool_content = "";
 
