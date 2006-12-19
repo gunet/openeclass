@@ -213,10 +213,10 @@ cData;
 				} elseif ( $status[$dbname] == 1 OR $status[$dbname] == 2 ) { // ADMIN VIEW
 					$tool_content .= "<a href=\"viewforum.php?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>";
 				} elseif ( $catNum == 1 ) { // STUDENT VIEW
-					if ( $forum == $myGroupForum ) {
+					if ( @$forum == @$myGroupForum ) {
 						$tool_content .= "<a href=\"viewforum.php?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>&nbsp;&nbsp;($langMyGroup)";
 					} else {
-						if($privProp==1) {
+						if(@$privProp==1) {
 							$tool_content .= "$name";
 						} else {
 							$tool_content .= "<a href=\"viewforum.php?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>";
