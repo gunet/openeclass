@@ -53,6 +53,7 @@
 ==============================================================================
 */
 
+$require_prof = TRUE;
 $require_current_course = TRUE;
 $langFiles = 'questionnaire';
 
@@ -63,7 +64,9 @@ include '../../include/baseTheme.php';
 
 $tool_content = "";
 
-$sql = "UPDATE poll set active='1' WHERE pid=$pid";
+if (!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
+
+$sql = "UPDATE poll set active='1' WHERE pid='".mysql_real_escape_string($_GET['pid'])."'";
 $result = db_query($sql,$currentCourseID);
 $GLOBALS["tool_content"] .= $GLOBALS["langPollActivated"];
 

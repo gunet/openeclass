@@ -207,8 +207,8 @@ if (!($table_cont || $table2_cont)) {
         $letterlinks .= '<a href="?first='.$first_letter.'">'.$first_letter.'</a> ';
     }
 
-    if ($_GET['first']) {
-        $firstletter = $_GET['first'];
+    if (isset($_GET['first'])) {
+        $firstletter = mysql_real_escape_string($_GET['first']);
         $qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, b.statut
             FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
             WHERE b.code_cours='".$currentCourseID."' AND LEFT(a.nom,1) = '$firstletter'";

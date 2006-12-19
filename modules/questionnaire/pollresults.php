@@ -94,24 +94,28 @@ $questions = array();
 //$tool_content .= "</table>";
 //////////////////////////////////////////////////////
 
+if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
+
 	$tool_content = "\n<!-- BEGIN POLL -->\n";
 	$current_poll = db_query("
 		select * from poll 
-		where pid=$pid 
-		ORDER BY pid", $currentCourse);
+		where pid=".mysql_real_escape_string($_GET['pid'])." "
+		."ORDER BY pid", $currentCourse);
 	$thePoll = mysql_fetch_array($current_poll);
 	$tool_content .= "<b>" . $thePoll["name"] . "</b></b><br>";
 	$tool_content .= $langPollCreation . ":" . $thePoll["creation_date"] . "<br>";
 	$tool_content .= $langPollStart . ":" . $thePoll["start_date"] . "<br>";
 	$tool_content .= $langPollEnd . ":" . $thePoll["end_date"] . "<br>";
 
-if ($type == 2) { //TF
+if(!isset($_GET['type']) || !is_numeric($_GET['type'])) $_GET['type'] = 0;
+
+if ($_GET['type'] == 2) { //TF
 	$tool_content .= "\n<!-- BEGIN TF -->\n";
 
 	$answers = db_query("
 	select * from poll_answer 
-	where pid=$pid 
-	ORDER BY pid", $currentCourse);
+	where pid=".mysql_real_escape_string($_GET['pid'])." "
+	."ORDER BY pid", $currentCourse);
 	
 	while ($theAnswer = mysql_fetch_array($answers)) {
 		++$total_answers;	
@@ -149,8 +153,8 @@ if ($type == 2) { //TF
 	
 	$answers = db_query("
 		select * from poll_answer 
-		where pid=$pid 
-		ORDER BY pid", $currentCourse);
+		where pid=".mysql_real_escape_string($_GET['pid'])." "
+		."ORDER BY pid", $currentCourse);
 		
 	while ($theAnswer = mysql_fetch_array($answers)) {
 		++$total_answers;
@@ -246,8 +250,8 @@ if ($type == 2) { //TF
 	
 	$answers = db_query("
 		select * from poll_answer 
-		where pid=$pid 
-		ORDER BY pid", $currentCourse);
+		where pid=".mysql_real_escape_string($_GET['pid'])." "
+		."ORDER BY pid", $currentCourse);
 	
 	while ($theAnswer = mysql_fetch_array($answers)) {
 		//++$total_answers;	

@@ -44,12 +44,16 @@ $require_help = FALSE;
  
 include "../../include/baseTheme.php";
 $tool_content = "";
+
+if(!isset($_REQUEST['uploadPath'])) {
+	$_REQUEST['uploadPath'] = "";
+}
  
 $nameTools = $langDownloadFile;
 $navigation[]= array ("url"=>"document.php", "name"=> $langDoc);
 $tool_content .= "<p><em>$langNotRequired</em></p>
 <form action=\"document.php\" method=\"post\" enctype=\"multipart/form-data\">
-    <input type=\"hidden\" name=\"uploadPath\" value=\"$uploadPath\">
+    <input type=\"hidden\" name=\"uploadPath\" value=\"".htmlspecialchars($_REQUEST['uploadPath'])."\">
      <table width=\"99%\">
      <thead>
      <tr>

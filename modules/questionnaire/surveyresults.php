@@ -65,24 +65,28 @@ include '../../include/baseTheme.php';
 $tool_content = "";
 $total_answers = 0;
 
+if(!isset($_GET['sid']) || !is_numeric($_GET['sid'])) die();
+
 	$tool_content = "\n<!-- BEGIN SURVEY -->\n";
 	$current_survey = db_query("
 		select * from survey 
-		where sid=$sid 
-		ORDER BY sid", $currentCourse);
+		where sid=".mysql_real_escape_string($_GET['sid'])." "
+		."ORDER BY sid", $currentCourse);
 	$theSurvey = mysql_fetch_array($current_survey);
 	$tool_content .= "<b>" . $theSurvey["name"] . "</b></b><br>";
 	$tool_content .= $langSurveyCreation . ":" . $theSurvey["creation_date"] . "<br>";
 	$tool_content .= $langSurveyStart . ":" . $theSurvey["start_date"] . "<br>";
 	$tool_content .= $langSurveyEnd . ":" . $theSurvey["end_date"] . "<br><br>";
 
-if ($type == 2) { //TF
+if(!isset($_GET['type']) || !is_numeric($_GET['type'])) $_GET['type'] = 0;
+
+if ($_GET['type'] == 2) { //TF
 	$tool_content .= "\n<!-- BEGIN TF -->\n";
 
 	$answers = db_query("
 	select * from survey_answer 
-	where sid=$sid 
-	ORDER BY sid", $currentCourse);
+	where sid=".mysql_real_escape_string($_GET['sid'])." "
+	."ORDER BY sid", $currentCourse);
 	
 	while ($theAnswer = mysql_fetch_array($answers)) {
 		++$total_answers;	
@@ -119,8 +123,8 @@ if ($type == 2) { //TF
 	
 	$answers = db_query("
 		select * from survey_answer 
-		where sid=$sid 
-		ORDER BY sid", $currentCourse);
+		where sid=".mysql_real_escape_string($_GET['sid'])." "
+		."ORDER BY sid", $currentCourse);
 		
 	while ($theAnswer = mysql_fetch_array($answers)) {
 		++$total_answers;
@@ -217,8 +221,8 @@ if ($type == 2) { //TF
 
 	$answers = db_query("
 	select * from survey_answer 
-	where sid=$sid 
-	ORDER BY sid", $currentCourse);
+	where sid=".mysql_real_escape_string($_GET['sid'])." "
+	."ORDER BY sid", $currentCourse);
 	while ($theAnswer = mysql_fetch_array($answers)) {
 		++$total_answers;	
 		$creator_id = $theAnswer["creator_id"];

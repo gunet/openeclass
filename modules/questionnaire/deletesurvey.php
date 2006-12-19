@@ -64,12 +64,12 @@ include '../../include/baseTheme.php';
 
 $tool_content = "";
 
-if (!isset($sid)) die();
+if (!isset($_GET['sid']) || !is_numeric($_GET['sid'])) die();
 
 if (!isset($UseCase)) {
-	$tool_content .= "<p>". $langSurveyDeleteMsg." "."<a href=\"?UseCase=1&sid=".htmlspecialchars($sid)."\">".$langSurveyDeleteYes."<a/>"." | "."<a href=\"#\" onclick=\"history.back()\">".$langSurveyDeleteNo."</a></p>";
+	$tool_content .= "<p>". $langSurveyDeleteMsg." "."<a href=\"?UseCase=1&sid=".htmlspecialchars($_GET['sid'])."\">".$langSurveyDeleteYes."<a/>"." | "."<a href=\"#\" onclick=\"history.back()\">".$langSurveyDeleteNo."</a></p>";
 } else {
-	$sql = "DELETE FROM survey WHERE sid=".mysql_real_escape_string($sid);
+	$sql = "DELETE FROM survey WHERE sid=".mysql_real_escape_string($_GET['sid']);
 	$result = db_query($sql,$currentCourseID);
 	$GLOBALS["tool_content"] .= "<p>".$GLOBALS["langSurveyDeleted"]."</p>";
 }

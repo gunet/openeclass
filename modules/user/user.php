@@ -67,38 +67,38 @@ cData;
 // give admin status
 if(isset($giveAdmin) && $giveAdmin && $is_adminOfCourse) {
 	$result = db_query("UPDATE cours_user SET statut='1'
-			WHERE user_id=$user_id AND code_cours='$currentCourseID'",$mysqlMainDb);
+			WHERE user_id='".mysql_real_escape_string($_GET['user_id'])."' AND code_cours='$currentCourseID'",$mysqlMainDb);
 }
 
 // give tutor status
 elseif(isset($giveTutor) && $giveTutor) {
 	$result = db_query("UPDATE cours_user SET tutor='1'
-			WHERE user_id=$user_id AND code_cours='$currentCourseID'",$mysqlMainDb);
-	$result2=db_query("DELETE FROM user_group WHERE user='$user_id'", $currentCourseID);
+			WHERE user_id='".mysql_real_escape_string($_GET['user_id'])."' AND code_cours='$currentCourseID'",$mysqlMainDb);
+	$result2=db_query("DELETE FROM user_group WHERE user='".mysql_real_escape_string($_GET['user_id'])."'", $currentCourseID);
 }
 
 
 // remove admin status
 elseif(isset($removeAdmin) && $removeAdmin) {
 	$result = db_query("UPDATE cours_user SET statut='5'
-			WHERE user_id!= $uid AND user_id=$user_id 
-			AND code_cours='$currentCourseID'",$mysqlMainDb);
+			WHERE user_id!= $uid AND user_id='".mysql_real_escape_string($_GET['user_id'])."' "
+			."AND code_cours='$currentCourseID'",$mysqlMainDb);
 }
 
 // remove tutor status
 elseif(isset($removeTutor) && $removeTutor) {
 	$result = db_query("UPDATE cours_user SET tutor='0'
-			WHERE user_id=$user_id 
-			AND code_cours='$currentCourseID'",$mysqlMainDb);
+			WHERE user_id='".mysql_real_escape_string($_GET['user_id'])."' "
+			."AND code_cours='$currentCourseID'",$mysqlMainDb);
 }
 
 // unregister user from courses
 elseif(isset($unregister) && $unregister) {
 		// SECURITY : CANNOT REMOVE MYSELF !
 	$result = db_query("DELETE FROM cours_user WHERE user_id!= $uid
-			AND user_id=$user_id 
-			AND code_cours='$currentCourseID'", $mysqlMainDb);
-	$delGroupUser=db_query("DELETE FROM user_group WHERE user=$user_id", $currentCourseID);
+			AND user_id='".mysql_real_escape_string($_GET['user_id'])."' "
+			."AND code_cours='$currentCourseID'", $mysqlMainDb);
+	$delGroupUser=db_query("DELETE FROM user_group WHERE user='".mysql_real_escape_string($_GET['user_id'])."'", $currentCourseID);
 }
 
 // display list of users

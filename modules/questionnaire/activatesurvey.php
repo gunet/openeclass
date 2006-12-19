@@ -53,6 +53,7 @@
 ==============================================================================
 */
 
+$require_prof = TRUE;
 $require_current_course = TRUE;
 $langFiles = 'questionnaire';
 
@@ -63,7 +64,9 @@ include '../../include/baseTheme.php';
 
 $tool_content = "";
 
-$sql = "UPDATE survey set active='1' WHERE sid=$sid";
+if (!isset($_GET['sid']) || !is_numeric($_GET['sid'])) die();
+
+$sql = "UPDATE survey set active='1' WHERE sid='".mysql_real_escape_string($_GET['sid'])."'";
 $result = db_query($sql,$currentCourseID);
 $GLOBALS["tool_content"] .= $GLOBALS["langSurveyActivated"];
 
