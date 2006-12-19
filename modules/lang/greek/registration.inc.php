@@ -330,4 +330,6 @@ $langUnregTeacher = "Είναι εκπαιδευτής στα παρακάτω μαθήματα:";
 
 $langPlease = "Παρακαλούμε";
 
+$langOtherDepartments = "Εγγραφή σε μαθήματα άλλων τμημάτων/σχολών";
+$langNoLessonsAvailable = "Δεν υπάρχουν Διαθέσιμα Μαθήματα.";
 ?>

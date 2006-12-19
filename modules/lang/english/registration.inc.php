@@ -360,4 +360,6 @@ $langUnregTeacher = "User is a teacher in the following courses:";
 
 $langPlease = "Please";
 
+$langOtherDepartments = "Enroll to lessons from other departments";
+$langNoLessonsAvailable = "No lessons available.";
 ?>

@@ -7,7 +7,7 @@ $langDepartmentsList = "A list of this institution's departments apprears below.
 $avlesson="course available";
 $avlessons="courses available";
 $langWrongPassCourse = "Wrong Course Password";
-
+$langAvCourses = "Available courses";
 
 $m['department'] = 'Department';
 $m['tomeis'] = 'Divisions';
@@ -36,5 +36,8 @@ $m['type']="Type";
 $m['name']="Course";
 $m['code']="Course code";
 $m['prof']="Professor(s)";
+
+$m['mailprof'] = "To enroll to this lesson you need to send an email to the professor by clicking ";
+$m['here'] = "here.";
 $m['unsub'] = "Course is closed. Unregistration is not allowed";
 ?>
