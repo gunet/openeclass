@@ -41,7 +41,9 @@ $langFiles = 'document';  // αρχείο μηνυμάτων
  
 $require_help = FALSE;
 //$helpTopic = 'User';
- 
+$require_login = true;
+$require_prof = true;
+
 include "../../include/baseTheme.php";
 $tool_content = "";
 
