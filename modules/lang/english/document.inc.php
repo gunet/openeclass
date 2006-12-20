@@ -130,4 +130,6 @@ $langGreek = "Greek";
 $langItalian = "Italian";
 $langSpanish = "Spanish";
 
+$langDirectory = "Folder";
+
 ?>

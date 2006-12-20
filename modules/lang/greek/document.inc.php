@@ -130,4 +130,5 @@ $langGreek = "Ελληνικά";
 $langItalian = "Ιταλικά";
 $langSpanish = "Ισπανικά";
 
+$langDirectory = "Κατάλογος";
 ?>
