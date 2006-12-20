@@ -514,14 +514,21 @@ function form_dir_list($sourceType, $sourceComponent, $command, $baseWorkDir)
 //afth h function (opws kai h prohgoumenh) dhmiourgei mia lista se combo box me tous fakelous enos path. sth sygkekrimenh exei prostethei to orisma $entryToExclude prokeimenou na mhn emfanizetai mia eggrafh
 function form_dir_list_exclude($sourceType, $sourceComponent, $command, $baseWorkDir, $entryToExclude)
 {
-	global $PHP_SELF, $langParentDir, $langTo, $langMoveFrom, $langMove;
+	global $PHP_SELF, $langParentDir, $langTo, $langMoveFrom, $langMove, $moveFileNameAlias;
 
 	$dirList = index_and_sort_dir($baseWorkDir);
 
 	$dialogBox .= "<form action=\"".$PHP_SELF."\" method=\"post\">\n" ;
 	$dialogBox .= "<input type=\"hidden\" name=\"".$sourceType."\" value=\"".$sourceComponent."\">\n" ;
 	//palios tropos emfanishs entolhs + onomatos arxeiou --       $dialogBox .= " ".$langMoveFrom." ".$sourceComponent." ".$langTo.":\n" ;
-	$dialogBox .= " ".$langMoveFrom." ".$langTo.":\n" ;
+	$dialogBox .="
+	<table><caption>$langMove</caption>
+	<thead>
+	<tr>
+	<th>$langMoveFrom <em>$moveFileNameAlias</em> $langTo: </th>
+	<td>
+	";
+//	$dialogBox .= " ".$langMoveFrom." ".$langTo.":\n" ;
 	$dialogBox .= "<select name=\"".$command."\">\n" ;
 	$dialogBox .= "<option value=\"\" style=\"color:#999999\">".$langParentDir."\n";
 
@@ -551,7 +558,7 @@ function form_dir_list_exclude($sourceType, $sourceComponent, $command, $baseWor
 		}
 	}
 
-	$dialogBox .= "</select>\n";
+	$dialogBox .= "</select></td></tr></thead></table><br/>";
 	$dialogBox .= "<input type=\"submit\" value=\"$langMove\">";
 	$dialogBox .= "</form>\n";
 
