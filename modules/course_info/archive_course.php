@@ -5,6 +5,7 @@ if (isset($c) && ($c!="")) {
 	session_register("dbname");
 }
 $require_current_course = TRUE;
+$require_prof;
 $langFiles = 'archive_course';
 include '../../include/baseTheme.php';
 
@@ -60,8 +61,6 @@ if($is_adminOfCourse) {
 ";
 
 	$tool_content .= "<tr><td align=\"center\"><ol>";
-	echo "
-	<ol>";
 
 // if dir is missing, first we create it. mkpath is a recursive function
 

@@ -42,7 +42,7 @@ $require_current_course = TRUE;
 $langFiles = array('toolManagement', 'create_course', 'external_module', 'import');
 $require_help = TRUE;
 $helpTopic = 'courseTools';
-
+$require_prof = true;
 include '../../include/baseTheme.php';
 $require_login = true;
 
