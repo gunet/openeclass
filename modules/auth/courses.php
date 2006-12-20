@@ -26,7 +26,7 @@ eMail: eclassadmin@gunet.gr
 */
 
 /**
- * Open courses component
+ * Lesson enrollment component
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
@@ -70,14 +70,16 @@ if (isset($_POST["submit"])) {
 				AND statut <> 10 AND user_id = '$uid' AND code_cours = '$value'");
 		}
 	}
+	
+	$errorExists = false;
 	if (isset($selectCourse) and is_array($selectCourse)) {
-		$errorExists = false;
+		
 		while (list($key,$contenu) = each ($selectCourse)) {
 			$sqlcheckpassword = mysql_query("SELECT password FROM cours WHERE code='".$contenu."'");
 			$myrow = mysql_fetch_array($sqlcheckpassword);
 			if ($myrow['password']!="" && $myrow['password']!=$$contenu) {
 				$errorExists = true;
-//				$tool_content .= "<p>".$langWrongPassCourse." ".$contenu."</p>";
+				//				$tool_content .= "<p>".$langWrongPassCourse." ".$contenu."</p>";
 			} else {
 				$sqlInsertCourse =
 				"INSERT INTO `cours_user`
@@ -89,8 +91,8 @@ if (isset($_POST["submit"])) {
 		}
 	}
 	if (!$errorExists)	{
-	
-	$tool_content .="
+
+		$tool_content .="
 	<table width=\"99%\">
 				<tbody>
 					<tr>
@@ -102,7 +104,7 @@ if (isset($_POST["submit"])) {
 				</tbody>
 			</table>";
 	} else {
-		
+
 		$tool_content .="
 	<table width=\"99%\">
 				<tbody>
@@ -257,7 +259,7 @@ function expanded_faculte($facid, $uid) {
 			// just concatenate the s char in the end of the string
 			$ts = $t."s";
 			//type the seperator in front of the types except the 1st
-//			if ($counter != 1) $retString .= " | ";S
+			//			if ($counter != 1) $retString .= " | ";S
 			$retString .= "<li><a href=\"#".$t."\">".$m["$ts"]."</a></li>";
 			$counter++;
 		}
@@ -339,18 +341,24 @@ function expanded_faculte($facid, $uid) {
 				$retString .= $codelink;
 			}
 
-			if ($mycours["visible"]>0 || isset ($myCourses[$mycours["k"]]["subscribed"])) {
+			if ($mycours["visible"]>0 && (isset ($myCourses[$mycours["k"]]["subscribed"]) || !isset ($myCourses[$mycours["k"]]["subscribed"]))) {
 				$retString .= "<input type='hidden' name='changeCourse[]' value='$mycours[k]'>\n";
 				@$retString .= "<td>".$mycours['t']."</td>";
+				
+			} elseif ($mycours["visible"]== 0 && isset ($myCourses[$mycours["k"]]["subscribed"])) {
+				$retString .= "<td>".$mycours['t']."</td>";
+				
 			} else {
 				$retString .= "<td>$mycours[t]</td><td>".$contactprof."</td>";
+				
 			}
 
 			if (isset ($myCourses[$mycours["k"]]["subscribed"])) {
 
 				if ($myCourses[$mycours["k"]]["statut"]!=1) {
-
-					$retString .= "<td><input type='checkbox' name='selectCourse[]' value='$mycours[k]' checked ></td>";
+					if($mycours["visible"]==0) $disabled = "disabled";
+					else $disabled = "";
+					$retString .= "<td><input type='checkbox' name='selectCourse[]' value='$mycours[k]' checked $disabled></td>";
 					if ($mycours['p']!="" && $mycours['visible'] == 1) {
 						$requirepassword = $m['code'].": <input type=\"password\" name=\"".$mycours['k']."\" value=\"".$mycours['p']."\">";
 
@@ -382,7 +390,7 @@ function expanded_faculte($facid, $uid) {
 			}
 
 			$rowCounter++;
-			
+
 			if ($rowCounter%15==0) {
 				$retString .= "
 				<tr>
@@ -393,7 +401,7 @@ function expanded_faculte($facid, $uid) {
 				<th>$langRegistration</th>
 			</tr>
 				";
-				
+
 			}
 
 
