@@ -56,7 +56,7 @@
 
 $langFiles="work";
 $require_current_course = TRUE;
-//include('../../include/init.php');
+$require_login = true;
 
 include('work_functions.php');
 
@@ -111,13 +111,16 @@ function show_assignments()
 $tool_content .= <<<cData
 	<form action="group_work.php" method="post">
 	<input type="hidden" name="file" value="${_GET['submit']}">
-	<table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
+	<table width="99%">
+	<thead
 		<tr bgcolor="#E6E6E6">
 		<th align="center">${m['title']}</th>
 		<th align="center">${m['deadline']}</th>
 		<th align="center" width="10%">${m['submitted']}</th>
 		<th align="center" width="10%">${m['select']}</th>
 		</tr>
+	</thead>
+	<tbody>
 cData;
 
 
@@ -127,7 +130,7 @@ cData;
 		}
 		
 $tool_content .= "<tr><td><a href=\"work.php?id=".$row['id']."\">".htmlspecialchars($row['title']).
-	"</a></td><td width=\"30%\">".$row['deadline'];
+	"</a></td><td>".$row['deadline'];
 
 				if ($row['days'] > 1) {
 					$tool_content .=  " ($m[in]&nbsp;$row[days]&nbsp;$langDays";
@@ -139,7 +142,7 @@ $tool_content .= "<tr><td><a href=\"work.php?id=".$row['id']."\">".htmlspecialch
 					$tool_content .=  " ($m[today])";
 				}
 				
-				$tool_content .= "</td><td width=\"10%\" align=\"center\">";
+				$tool_content .= "</td><td align=\"center\">";
 					
 						$subm = was_submitted($uid, user_group($uid), $row['id']);
 						if ($subm == 'user') {
@@ -164,10 +167,18 @@ $tool_content .= "<tr><td><a href=\"work.php?id=".$row['id']."\">".htmlspecialch
 					$tool_content .= "</td></tr>";
 
 	}
+	
 
-		$tool_content .= "<tr><td colspan=\"4\"><strong>".$m['comments'].
-			":</strong><br><textarea name=\"comments\" rows=\"4\" cols=\"60\">".
-			"</textarea></table><input type=\"submit\" name=\"submit\" value=\"".
+		$tool_content .= "</tbody></table><br/>
+		<table>
+		<thead>
+		<tr>
+		<th>".$m['comments'].
+			":
+			</th>
+			</tr>
+			<tr><td><textarea name=\"comments\" rows=\"4\" cols=\"60\">".
+			"</textarea></td></thead></table><br/><input type=\"submit\" name=\"submit\" value=\"".
 			$langSubmit."\"></form>";
 
 }
