@@ -38,6 +38,8 @@ $require_current_course = TRUE;
 $langFiles = array('course_description','pedaSuggest');
 $require_help = TRUE;
 $helpTopic = 'Coursedescription';
+$require_login = true;
+$require_prof = true;
 
 include '../../include/baseTheme.php';
 include('../../include/lib/textLib.inc.php'); 
