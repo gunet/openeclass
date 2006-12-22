@@ -102,7 +102,7 @@ $m['plainview'] = 'Concise list of submissions and grades';
 
 $langGroupWorkIntro = '
 	Below appear the assignments available in this course. Please select
-	an assignment to which to submit the file "%s" as group work, and
+	an assignment to which to submit the file as group work, and
 	add any comments you would like. Please note that if you submit a new
 	file when a file has been already been submitted by you or a member of
 	your team, the old file will be deleted and replaced by the new.
@@ -164,5 +164,8 @@ $langWorksOld = 'Old Submissions';
 $langOldWork = "<p>There are %d <a href='work_old.php'>old student
 	submissions</a>.</p>\n";
 $langWorkWrongInput = 'The grade must be a number. Please go back an enter the grade again.';
-
+$langWarnForSubmissions = "If any assignments were submitted, they will be deleted";
+$langAssignmentActivated = "The assignment was activated";
+$langAssignmentDeactivated = "The assignment was deactivated";
+$langSaved = "The assignment details were saved";
 ?>
