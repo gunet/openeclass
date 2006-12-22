@@ -26,8 +26,9 @@
 
 /*===========================================================================
 	work_functions.php
-	@last update: 17-4-2006 by Costas Tsibanis
-	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
+	@version $Id$
+	@author: Dionysios G. Synodinos <synodinos@gmail.com>
+	@author: Evelthon Prodromou	<eprodromou@upnet.gr>
 ==============================================================================        
         @Description: Main script for the work tool
 
@@ -60,7 +61,7 @@ function table_row($title, $content)
 {
 	global $tool_content;
 	if (trim($content) != '') {
-		$tool_content .= "<tr><td><b>$title:</b></td><td>".
+		$tool_content .= "<tr><th>$title:</b></th><td>".
 			htmlspecialchars($content)."</td></tr>";
 	}
 }
@@ -117,21 +118,22 @@ function is_group_assignment($id)
 function delete_submissions_by_uid($uid, $gid, $id)
 {
 	global $m, $tool_content;
-
+	$return="";
 	$res = db_query("SELECT * FROM assignment_submit WHERE
 		uid = '$uid' AND assignment_id = '$id'");
 	while ($row = mysql_fetch_array($res)) {
 		@unlink("$GLOBALS[workPath]/$row[file_path]");
 		db_query("DELETE FROM assignment_submit WHERE id = '$row[id]'");
-		$tool_content .= "<p>$m[deleted_work_by_user] \"$row[file_name]\".</p>";
+		$return .= "$m[deleted_work_by_user] \"$row[file_name]\"";
 	}
 	$res = db_query("SELECT * FROM assignment_submit WHERE
 		group_id = '$gid' AND assignment_id = '$id'");
 	while ($row = mysql_fetch_array($res)) {
 		@unlink("$GLOBALS[workPath]/$row[file_path]");
 		db_query("DELETE FROM assignment_submit WHERE id = '$row[id]'");
-		$tool_content .= "<p>$m[deleted_work_by_group] \"$row[file_name]\".</p>";
+		$return .= "$m[deleted_work_by_group] \"$row[file_name]\".";
 	}
+	return $return;
 }
 
 
@@ -284,18 +286,21 @@ function show_submission_details($id)
 		$graded = FALSE;
 		$notice = $GLOBALS['langSubmitted'];
 	}
-	$tool_content .= "<p><b>$notice</b></p><table>";
+	
+	if ($sub['uid'] != $uid) {
+		$sub_notice = "$m[submitted_by_other_member] ".
+			"<a href='../group/group_space.php?userGroupId=$sub[group_id]'>".
+			"$m[your_group]</a> (".uid_to_name($sub['uid']).")";
+	} else $sub_notice = "";
+	
+	$tool_content .= "<p><b>$notice</b> </p><table><thead>";
 	table_row($m['grade'], $sub['grade']);
 	table_row($m['gradecomments'], $sub['grade_comments']);
 	table_row($m['sub_date'], $sub['submission_date']);
 	table_row($m['filename'], $sub['file_name']);
 	table_row($m['comments'], $sub['comments']);
-	if ($sub['uid'] != $uid) {
-		$tool_content .= "<tr><td colspan='2'>$m[submitted_by_other_member] ".
-			"<a href='../group/group_space.php?userGroupId=$sub[group_id]'>".
-			"$m[your_group]</a> (".uid_to_name($sub['uid']).")</td></tr>\n";
-	}
-	$tool_content .= "</table>";
+	
+	$tool_content .= "</thead></table><p>$sub_notice</p>";
 	mysql_select_db($currentCourseID);
 }
 

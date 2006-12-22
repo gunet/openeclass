@@ -26,8 +26,9 @@
 
 /*===========================================================================
 	grade_edit.php
-	@last update: 17-4-2006 by Costas Tsibanis
-	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
+ * @version $Id$
+	@author: Dionysios G. Synodinos <synodinos@gmail.com>
+	@author: Evelthon Prodromou <eprodromou@upnet.gr>
 ==============================================================================        
 */
 
@@ -74,35 +75,40 @@ function show_edit_form($id, $sid, $assign)
 	if ($sub = mysql_fetch_array(db_query("SELECT * FROM assignment_submit WHERE id = '$sid'"))) {
 		
 		$uid_2_name = uid_to_name($sub['uid']);
-		
+		if (!empty($sub['group_id'])) {
+					$group_submission = "($m[groupsubmit] ".
+						"<a href='../group/group_space.php?userGroupId=$sub[group_id]'>".
+						"$m[ofgroup] $sub[group_id]</a>)";
+			} else $group_submission = "";
 		$tool_content .= <<<cData
 			<form method="post" action="work.php">
 			<input type="hidden" name="assignment" value="${id}">
 			<input type="hidden" name="submission" value="${sid}">
 			<table>
-		<tr><td><b>${m['username']}:</b></td>
-			<td>${uid_2_name}</td></tr>
-			<tr><td><b>${m['sub_date']}:</b></td>
+			<thead>
+			<tr><th>${m['username']}:</th>
+			<td>${uid_2_name} $group_submission</td></tr>
+			<tr><th>${m['sub_date']}:</th>
 			<td>${sub['submission_date']}</td></tr>
-			<tr><td><b>${m['filename']}:</b></td>
+			<tr><th>${m['filename']}:</th>
 				<td><a href='work.php?get=${sub['id']}'>${sub['file_name']}</a></td></tr>
 cData;
 
-			if (!empty($sub['group_id'])) {
-					$tool_content .= "<tr><td colspan='2'><b>$m[groupsubmit] ".
-						"<a href='../group/group_space.php?userGroupId=$sub[group_id]'>".
-						"$m[ofgroup] $sub[group_id]</a></b></td></tr>\n";
-			}
+//			if (!empty($sub['group_id'])) {
+//					$tool_content .= "<tr><td colspan='2'><b>$m[groupsubmit] ".
+//						"<a href='../group/group_space.php?userGroupId=$sub[group_id]'>".
+//						"$m[ofgroup] $sub[group_id]</a></b></td></tr>\n";
+//			}
 			
 			$tool_content .= <<<cData
-				<tr><td>${m['grade']}:
-			    <input type="text" name="grade" maxlength="3" size="3" value="${sub['grade']}"></td>
+				<tr><th>${m['grade']}:</th>
+			   <td> <input type="text" name="grade" maxlength="3" size="3" value="${sub['grade']}"></td>
 			</tr>
-		<tr><td colspan="2">${m['gradecomments']}:</td></tr>
-			<tr><td colspan="2"><textarea cols="60" rows="3" name="comments">${sub['grade_comments']}
+		<tr><th>${m['gradecomments']}:</th>
+			<td><textarea cols="60" rows="3" name="comments">${sub['grade_comments']}
 				</textarea></td></tr>
-			<tr><td colspan="2"><input type="submit" name="grade_comments" value="${langGradeOk}"></td></tr>
-			</table>
+				</thead></table><br/>
+			<input type="submit" name="grade_comments" value="${langGradeOk}">
 			</form>
 cData;
 

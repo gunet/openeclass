@@ -26,8 +26,9 @@
 
 /*===========================================================================
 	work.php
-	@last update: 17-4-2006 by Costas Tsibanis
-	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
+    @version $Id$
+	@author : Dionysios G. Synodinos <synodinos@gmail.com>
+	@author : Evelthon Prodromou <eprodromou@upnet.gr>
 ==============================================================================        
         @Description: Main script for the work tool
 
@@ -199,17 +200,42 @@ function submit_work($uid, $id, $file) {
 	$destination = work_secret($id)."/$local_name";
 
 	if (copy($source, "$workPath/$destination")) {
-		$tool_content .=  "<p>$langUpload</p>";
+//		$tool_content .=  "<p>$langUpload</p>";
 		delete_submissions_by_uid($uid, $group, $id);
 		db_query("INSERT INTO assignment_submit (uid, assignment_id, submission_date,
 			submission_ip, file_path, file_name, comments, group_id) 
 			VALUES ('$uid','$id', NOW(), '$REMOTE_ADDR', '$destination',
 				'".basename($file)."', '$_POST[comments]', '$group')", $currentCourseID);
-		$tool_content .=  "<p>$m[the_file] \"".basename($file)."\" $m[was_submitted]</p>";
+//		$tool_content .=  "<p>$m[the_file] \"".basename($file)."\" $m[was_submitted]</p>";
+		
+		$tool_content .="
+	<table width=\"99%\">
+				<tbody>
+					<tr>
+						<td class=\"success\">
+							<p><b>$langUpload</b></p>
+							<p>$m[the_file] \"".basename($file)."\" $m[was_submitted]</p>
+							<p><a href='work.php'>$langBack</a></p>
+						</td>
+					</tr>
+				</tbody>
+			</table>";
 	} else {
-		$tool_content .=  "<p>$langUploadError</p>";
+		$tool_content .="
+	<table width=\"99%\">
+				<tbody>
+					<tr>
+						<td class=\"caution\">
+							<p><b>$langUploadError</b></p>
+							
+							<p><a href='work.php'>$langBack</a></p>
+						</td>
+					</tr>
+				</tbody>
+			</table>";
+//		$tool_content .=  "<p>$langUploadError</p>";
 	}
-	$tool_content .=  "<p><center><a href='work.php'>$langBack</a></center></p>";	
+//	$tool_content .=  "<p><center><a href='work.php'>$langBack</a></center></p>";	
 }
 
 ?>
