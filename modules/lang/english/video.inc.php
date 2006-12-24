@@ -34,8 +34,8 @@ $langVideo="Video";
 $langVideoLinks = "Video Links";
 $langFileNot="The file could not be sent";
 $langTooBig="You didn't choose any file or the file is too big.";
-$langFAdd="Το αρχείο προστέθηκε";
-$langDelF="Το αρχείο διαγράφηκε";
+$langFAdd="The file was added";
+$langDelF="The file was deleted";
 $langListDel="The whole list has been deleted.";
 $langBList="Back to list";
 $langTitleMod="Video title modified";
@@ -58,5 +58,7 @@ $langURL="Video Server URL";
 $langcreator="Creator";
 $langpublisher="Publisher";
 $langdate="Date";
+$langActions = "Actions";
+$langAreYouSureToDelete = "Are you sure you want to delete the file";
 
 ?>

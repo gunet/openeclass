@@ -142,4 +142,7 @@ $hour51="No specific time";
 
 $langStoredOK="The event was stored";
 $langDeleteOK="The event was deleted";
+
+$langNoEvents = "No events exist";
+$langSureToDel = "Are you sure you want to delete the event titled";
 ?>
