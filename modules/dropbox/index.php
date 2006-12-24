@@ -44,9 +44,16 @@ $action = new action();
 $action->record('MODULE_ID_DROPBOX');
 /**************************************/
 
+$tool_content .="
+<div id=\"operations_container\">
+		<ul id=\"opslist\">
+		<li><a href=\"".$_SERVER['PHP_SELF']."?upload=1\">".$dropbox_lang['uploadFile']."</a></li>
+		</ul>
+		</div>
+		";
 /* if (isset($_GET['origin'])) {
-	$origin = htmlspecialchars($_GET['origin']);
-	$_GET['origin'] = $origin;
+$origin = htmlspecialchars($_GET['origin']);
+$_GET['origin'] = $origin;
 } */
 
 /*
@@ -55,7 +62,7 @@ $action->record('MODULE_ID_DROPBOX');
 */
 
 if (isset($_GET["sentOrder"]) && in_array($_GET["sentOrder"], array("lastDate", "firstDate", "title", "size", "author", "recipient"))) {
-    $sentOrder = $_GET["sentOrder"];
+	$sentOrder = $_GET["sentOrder"];
 } else {
 	if (isset($_SESSION["sentOrder"]) && in_array($_SESSION["sentOrder"], array("lastDate", "firstDate", "title", "size", "author", "recipient"))) {
 		$sentOrder = $_SESSION["sentOrder"];
@@ -71,7 +78,7 @@ session_register("sentOrder");
 * The sessionvar receivedOrder keeps preference of user to by what field to order the received files list by
 */
 if (isset($_GET["receivedOrder"]) && in_array($_GET["receivedOrder"], array("lastDate", "firstDate", "title", "size", "author", "sender"))) {
-    $receivedOrder = $_GET["receivedOrder"];
+	$receivedOrder = $_GET["receivedOrder"];
 } else {
 	if (isset($_SESSION["receivedOrder"]) && in_array($_SESSION["receivedOrder"], array("lastDate", "firstDate", "title", "size", "author", "sender"))) {
 		$receivedOrder = $_SESSION["receivedOrder"];
@@ -101,7 +108,7 @@ $dropbox_person->orderReceivedWork ($receivedOrder);
 $dropbox_person->orderSentWork ($sentOrder);
 
 $dropbox_unid = md5(uniqid(rand(), true));	//this var is used to give a unique value to every
-					//page request. This is to prevent resubmiting data
+//page request. This is to prevent resubmiting data
 
 /**
  * ========================================
@@ -114,24 +121,24 @@ if (isset($_GET['mailing']))  // RH: Mailing detail: no form upload
 	/* $tool_content .= "<a href='index.php?origin=$origin'>".$dropbox_lang["mailingBackToDropbox"].'</a><br><br>'; */
 	$tool_content .= "<a href='index.php'>".$dropbox_lang["mailingBackToDropbox"].'</a><br><br>';
 }
-else
+elseif(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1)
 {
 
-/* if (isset($origin)) {  
+	/* if (isset($origin)) {
 	$tool_content .= <<<tCont
 	<form method="post" action="dropbox_submit.php?origin=$origin" enctype="multipart/form-data" onsubmit="return checkForm(this)">
-tCont;
- } else { */
- 	$tool_content .= <<<tCont2
+	tCont;
+	} else { */
+	$tool_content .= <<<tCont2
 	<form method="post" action="dropbox_submit.php" enctype="multipart/form-data" onsubmit="return checkForm(this)">
 tCont2;
-/* } */
-if ($dropbox_cnf["allowOverwrite"]) {
-	$jsCheckFile = 'onChange="checkfile(this.value)"'; 
-} else {
-	$jsCheckFile ="";
-}
-$tool_content .= "
+	/* } */
+	if ($dropbox_cnf["allowOverwrite"]) {
+		$jsCheckFile = 'onChange="checkfile(this.value)"';
+	} else {
+		$jsCheckFile ="";
+	}
+	$tool_content .= "
 <table>
 <thead>
 	<tr>
@@ -141,15 +148,15 @@ $tool_content .= "
 		<td>
 			<input type=\"file\" name=\"file\" size=\"\" $jsCheckFile>
 			<input type=\"hidden\" name=\"dropbox_unid\" value=\"$dropbox_unid\">";
-		
-			/* if (isset($origin) and $origin=='learnpath') 
-				 $tool_content .= "<input type='hidden' name='origin' value='learnpath'>"; */
-		$tool_content .= "
+
+	/* if (isset($origin) and $origin=='learnpath')
+	$tool_content .= "<input type='hidden' name='origin' value='learnpath'>"; */
+	$tool_content .= "
 		</td>
 	</tr>";
 
 	if ($dropbox_cnf["allowOverwrite"]) {
-$tool_content .= "
+		$tool_content .= "
 	<tr id=\"overwrite\" style=\"display: none\">
 		<td>
 		</td>
@@ -159,17 +166,17 @@ $tool_content .= "
 	</tr>";
 
 	}
-	
-if ($dropbox_person -> isCourseTutor || $dropbox_person -> isCourseAdmin)
-{
-    $reciepientsSize= 5;
-}
-else
-{
-    $reciepientsSize = 3;
-}
 
-$tool_content .= "
+	if ($dropbox_person -> isCourseTutor || $dropbox_person -> isCourseAdmin)
+	{
+		$reciepientsSize= 5;
+	}
+	else
+	{
+		$reciepientsSize = 3;
+	}
+
+	$tool_content .= "
 	<tr>
 	<th >
 		".$dropbox_lang["authors"]." :
@@ -195,50 +202,50 @@ $tool_content .= "
 
 
 
-/*
-*  if current user is a teacher then show all users of current course
-*/
-if ($dropbox_person -> isCourseTutor || $dropbox_person -> isCourseAdmin 
+	/*
+	*  if current user is a teacher then show all users of current course
+	*/
+	if ($dropbox_person -> isCourseTutor || $dropbox_person -> isCourseAdmin
 	|| $dropbox_cnf["allowStudentToStudent"])  // RH: also if option is set
 
-{
-	// select all users except yourself
-    $sql = "SELECT DISTINCT u.user_id , CONCAT(u.nom,' ', u.prenom) AS name
+	{
+		// select all users except yourself
+		$sql = "SELECT DISTINCT u.user_id , CONCAT(u.nom,' ', u.prenom) AS name
         	FROM `" . $dropbox_cnf["userTbl"] . "` u, `" . $dropbox_cnf["courseUserTbl"] . "` cu
         	WHERE cu.code_cours='" . $dropbox_cnf["courseId"] . "'
         	AND cu.user_id=u.user_id AND u.user_id != '" .$uid. "'
         	ORDER BY UPPER(u.nom), UPPER(u.prenom)";
-}
-/*
-* if current user is student then show all teachers of current course
-*/
-else
-{
-    // select all the teachers except yourself
-    $sql = "SELECT DISTINCT u.user_id , CONCAT(u.nom,' ', u.prenom) AS name
+	}
+	/*
+	* if current user is student then show all teachers of current course
+	*/
+	else
+	{
+		// select all the teachers except yourself
+		$sql = "SELECT DISTINCT u.user_id , CONCAT(u.nom,' ', u.prenom) AS name
         	FROM `" . $dropbox_cnf["userTbl"] . "` u, `" . $dropbox_cnf["courseUserTbl"] . "` cu
         	WHERE cu.code_cours='" . $dropbox_cnf["courseId"] . "'
         	AND cu.user_id=u.user_id AND (cu.statut!=5 OR cu.tutor=1) AND u.user_id != '" .$uid. "'
         	ORDER BY UPPER(u.nom), UPPER(u.prenom)";
-}
-$result = db_query($sql);
-while ($res = mysql_fetch_array($result))
-{
-	$tool_content .= "<option value=".$res['user_id'].">".$res['name']."</option>";
-}
-if ($dropbox_person -> isCourseTutor || $dropbox_person -> isCourseAdmin)
-{
-    if ( $dropbox_cnf["allowMailing"])  // RH: Mailing starting point
-    {
-	    $tool_content .= '<option value="'.$dropbox_cnf["mailingIdBase"].'">'.$dropbox_lang["mailingInSelect"].'</option>';
-    }
-}
-    if ($dropbox_cnf["allowJustUpload"])  // RH
-    {
-	    $tool_content .= '<option value="0">'.$dropbox_lang["justUploadInSelect"].'</option>';
-    }
+	}
+	$result = db_query($sql);
+	while ($res = mysql_fetch_array($result))
+	{
+		$tool_content .= "<option value=".$res['user_id'].">".$res['name']."</option>";
+	}
+	if ($dropbox_person -> isCourseTutor || $dropbox_person -> isCourseAdmin)
+	{
+		if ( $dropbox_cnf["allowMailing"])  // RH: Mailing starting point
+		{
+			$tool_content .= '<option value="'.$dropbox_cnf["mailingIdBase"].'">'.$dropbox_lang["mailingInSelect"].'</option>';
+		}
+	}
+	if ($dropbox_cnf["allowJustUpload"])  // RH
+	{
+		$tool_content .= '<option value="0">'.$dropbox_lang["justUploadInSelect"].'</option>';
+	}
 
-$tool_content .= "
+	$tool_content .= "
         	</select>
 		</td>
 	</tr>
@@ -247,9 +254,9 @@ $tool_content .= "
 		<input type=\"Submit\" name=\"submitWork\" value=\"".$dropbox_lang["ok"]."\">
 </form>
 <br>";
-//==========================================================================
-//END of send_file form
-//==========================================================================
+	//==========================================================================
+	//END of send_file form
+	//==========================================================================
 }  // RH: Mailing: end of 'Mailing detail: no form upload'
 
 /**
@@ -268,115 +275,115 @@ tCont3;
  */
 if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
 {
-$numberDisplayed = count($dropbox_person -> receivedWork);  
-$tool_content .= <<<tCont4
+	$numberDisplayed = count($dropbox_person -> receivedWork);
+	$tool_content .= <<<tCont4
 	<table width="99%">
 	<thead>
 	<tr>
 	<th>
 tCont4;
-$tool_content .= "
+	$tool_content .= "
  	".strtoupper($dropbox_lang["receivedTitle"])."";
-$tool_content .= <<<tCont5
+	$tool_content .= <<<tCont5
 	</th>
 	
 	
 	<td>
 	
 tCont5;
-/* if (!isset($origin)) {
+	/* if (!isset($origin)) {
 	$origin="";
-} */
-/* $tool_content .= "
-<div>
-		<form class=\"sort\" name=\"formReceived\" method=\"get\" action=\"index.php?origin=$origin\">
-		".$dropbox_lang["orderBy"].""; */
-$tool_content .= "
+	} */
+	/* $tool_content .= "
+	<div>
+	<form class=\"sort\" name=\"formReceived\" method=\"get\" action=\"index.php?origin=$origin\">
+	".$dropbox_lang["orderBy"].""; */
+	$tool_content .= "
 <div>
 		<form class=\"sort\" name=\"formReceived\" method=\"get\" action=\"index.php\">
 		".$dropbox_lang["orderBy"]."";
-		
-		 /* if (isset($origin) and $origin=='learnpath') 
-			 $tool_content .= "<input type='hidden' name='origin' value='learnpath'>"; */
-			 
-		 
-		$tool_content .= "
+
+	/* if (isset($origin) and $origin=='learnpath')
+	$tool_content .= "<input type='hidden' name='origin' value='learnpath'>"; */
+
+
+	$tool_content .= "
 		<select name=\"receivedOrder\" onchange=\"javascript: this.form.submit()\">";
-		
-		if ($receivedOrder=="lastDate") {
-			$tool_content .= "<option value=\"lastDate\" selected>";
-		}	else {
-			$tool_content .= "<option value=\"lastDate\">";
+
+	if ($receivedOrder=="lastDate") {
+		$tool_content .= "<option value=\"lastDate\" selected>";
+	}	else {
+		$tool_content .= "<option value=\"lastDate\">";
+	}
+
+	$tool_content .= "".$dropbox_lang['lastDate']."</option>";
+
+	if ($dropbox_cnf["allowOverwrite"]) {
+		if ($receivedOrder=="firstDate") {
+			$tool_content .= "<option value=\"firstDate\" selected>";
+		} else {
+			$tool_content .= "<option value=\"firstDate\">";
 		}
-		
-		$tool_content .= "".$dropbox_lang['lastDate']."</option>";
-		
-		if ($dropbox_cnf["allowOverwrite"]) { 
-			if ($receivedOrder=="firstDate") {
-				$tool_content .= "<option value=\"firstDate\" selected>";	
-			} else {
-				$tool_content .= "<option value=\"firstDate\">";
-			}
-		}
-			$tool_content .= "".$dropbox_lang['firstDate']."</option>";
-			
-			if ($receivedOrder=="title"){
-				$tool_content .="<option value=\"title\" selected>";
-			} else {
-				$tool_content .="<option value=\"title\">";
-			}
-			$tool_content .= "".$dropbox_lang['title']."</option>";
-			
-			if ($receivedOrder=="size"){
-				$tool_content .="option value=\"size\" selected>";
-			} else {
-				$tool_content .="<option value=\"size\">";
-			}
-			$tool_content .= "".$dropbox_lang['size']."</option>";
-			
-			if ($receivedOrder=="author"){
-				$tool_content .="option value=\"author\" selected>";
-			} else {
-				$tool_content .="<option value=\"author\">";
-			}
-			
-			$tool_content .= "".$dropbox_lang['author']."</option>";
-			
-			if ($receivedOrder=="sender"){
-				$tool_content .="option value=\"sender\" selected>";
-			} else {
-				$tool_content .="<option value=\"ender\">";
-			}
-			$tool_content .= "".$dropbox_lang['sender']."</option>";
-			
-			$tool_content .= "
+	}
+	$tool_content .= "".$dropbox_lang['firstDate']."</option>";
+
+	if ($receivedOrder=="title"){
+		$tool_content .="<option value=\"title\" selected>";
+	} else {
+		$tool_content .="<option value=\"title\">";
+	}
+	$tool_content .= "".$dropbox_lang['title']."</option>";
+
+	if ($receivedOrder=="size"){
+		$tool_content .="option value=\"size\" selected>";
+	} else {
+		$tool_content .="<option value=\"size\">";
+	}
+	$tool_content .= "".$dropbox_lang['size']."</option>";
+
+	if ($receivedOrder=="author"){
+		$tool_content .="option value=\"author\" selected>";
+	} else {
+		$tool_content .="<option value=\"author\">";
+	}
+
+	$tool_content .= "".$dropbox_lang['author']."</option>";
+
+	if ($receivedOrder=="sender"){
+		$tool_content .="option value=\"sender\" selected>";
+	} else {
+		$tool_content .="<option value=\"ender\">";
+	}
+	$tool_content .= "".$dropbox_lang['sender']."</option>";
+
+	$tool_content .= "
 			</select>
 			</form>
 			</div>
 		</td>
 		<td ><div class=\"cellpos\">";
 
-// check if there are received documents. If yes then display the icon deleteall
-$dr_unid = urlencode( $dropbox_unid);
-if ($numberDisplayed > 0) {
-	
-	$dr_lang_all = addslashes( $dropbox_lang["all"]);
-	/* if (isset($origin)) { $tool_content .= <<<tCont6
-	<a href="dropbox_submit.php?origin=$origin&deleteReceived=all&dropbox_unid=$dr_unid" onClick="return confirmationall('$dr_lang_all');">
+	// check if there are received documents. If yes then display the icon deleteall
+	$dr_unid = urlencode( $dropbox_unid);
+	if ($numberDisplayed > 0) {
+
+		$dr_lang_all = addslashes( $dropbox_lang["all"]);
+		/* if (isset($origin)) { $tool_content .= <<<tCont6
+		<a href="dropbox_submit.php?origin=$origin&deleteReceived=all&dropbox_unid=$dr_unid" onClick="return confirmationall('$dr_lang_all');">
 		<img src="../../images/delete.gif" border="0" title="$langDelete"></a>
-tCont6;
-} else { */
-	$tool_content .= "
+		tCont6;
+		} else { */
+		$tool_content .= "
 	<a href=\"dropbox_submit.php?deleteReceived=all&dropbox_unid=$dr_unid\" onClick=\"return confirmationall('".$dropbox_lang["all"]."');\">
 	<img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
 
-	/* } */
-} 
+		/* } */
+	}
 
- /* if (isset($origin) and $origin=='learnpath')
-	  $tool_content .= "<input type='hidden' name='origin' value='learnpath'>"; */
+	/* if (isset($origin) and $origin=='learnpath')
+	$tool_content .= "<input type='hidden' name='origin' value='learnpath'>"; */
 
-$tool_content .= "
+	$tool_content .= "
 		</div></td>
 		</tr>
 		</thead>
@@ -397,36 +404,36 @@ $tool_content .= "
 
 ";
 
-/**
+	/**
  * --------------------------------------
  *       RECEIVED FILES LIST
  * --------------------------------------
  */
 
-$numberDisplayed = count($dropbox_person -> receivedWork);  // RH
-$i = 0;
-foreach ($dropbox_person -> receivedWork as $w)
-{
-	if ($w -> uploaderId == $uid)  // RH: justUpload
+	$numberDisplayed = count($dropbox_person -> receivedWork);  // RH
+	$i = 0;
+	foreach ($dropbox_person -> receivedWork as $w)
 	{
-		$numberDisplayed -= 1; continue;
-	}
+		if ($w -> uploaderId == $uid)  // RH: justUpload
+		{
+			$numberDisplayed -= 1; continue;
+		}
 
-	$tool_content .= "
+		$tool_content .= "
 	<tr>";
-	
-	
-	$tool_content .= <<<tCont8
+
+
+		$tool_content .= <<<tCont8
 		<td>
 tCont8;
 
-	/* if (isset($origin)) 
-		$tool_content .= "<a href='dropbox_download.php?origin=$origin&id=".urlencode($w->id)."' target=_blank'>".$w->title."</a>"; 
-	else */
-		$tool_content .= "<a href='dropbox_download.php?id=".urlencode($w->id)."' target=_blank>".$w->title."</a>"; 
+		/* if (isset($origin))
+		$tool_content .= "<a href='dropbox_download.php?origin=$origin&id=".urlencode($w->id)."' target=_blank'>".$w->title."</a>";
+		else */
+		$tool_content .= "<a href='dropbox_download.php?id=".urlencode($w->id)."' target=_blank>".$w->title."</a>";
 
-$fSize = ceil(($w->filesize)/1024);
-$tool_content .= <<<tCont9
+		$fSize = ceil(($w->filesize)/1024);
+		$tool_content .= <<<tCont9
 	</td>
 	<td>
 	$fSize kB
@@ -434,56 +441,56 @@ $tool_content .= <<<tCont9
 	
 tCont9;
 
-	$tool_content .= "<td >
+		$tool_content .= "<td >
 		$w->author
 		</td>
 		
 		<td>$w->uploadDate";
-		
-		if ($w->uploadDate != $w->lastUploadDate)
-	{
 
-$tool_content .= "
+		if ($w->uploadDate != $w->lastUploadDate)
+		{
+
+			$tool_content .= "
 	
 	(".$dropbox_lang['lastUpdated']." $w->lastUploadDate)
 	";
-	
 
-	}
-		
-		
-	$tool_content .= "	</td>
+
+		}
+
+
+		$tool_content .= "	</td>
 		
 	<td >$w->description</td>
 	<td><div class=\"cellpos\">
 
 	";
 
-/* if (isset($origin)) { $tool_content .= "
-	<a href=\"dropbox_submit.php?origin=$origin\"&deleteReceived=".urlencode($w->id)."&dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation(\"$w->title\");'>
-	<img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
- } else { */
- 	$tool_content .= "
+		/* if (isset($origin)) { $tool_content .= "
+		<a href=\"dropbox_submit.php?origin=$origin\"&deleteReceived=".urlencode($w->id)."&dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation(\"$w->title\");'>
+		<img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
+		} else { */
+		$tool_content .= "
 	<a href=\"dropbox_submit.php?deleteReceived=".urlencode($w->id)."&dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation(\"$w->title\");'>
 	<img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
- 
-	/* } */
 
-$tool_content .="
+		/* } */
+
+		$tool_content .="
 	</div>
 	</td>
 	</tr>";
-    	$i++;
+		$i++;
 	} //end of foreach
 	if ($numberDisplayed == 0) {  // RH
-$tool_content .= "
+		$tool_content .= "
 <tr>
 <td colspan=\"6\">".$dropbox_lang['tableEmpty']."
 </td>
 </tr>";
-	
+
 	}
-$tool_content .= "
+	$tool_content .= "
 </tbody>
 </table>";
 
@@ -507,59 +514,59 @@ $tool_content .= strtoupper($dropbox_lang["sentTitle"]);
 $tool_content .="
 	</th>
 	<td>";	
-/* $tool_content .= "	
-	<form class=\"sort\" name=\"formSent\" method=\"get\" action=\"index.php?origin=$origin\">"; */
-$tool_content .= "	
+/* $tool_content .= "
+<form class=\"sort\" name=\"formSent\" method=\"get\" action=\"index.php?origin=$origin\">"; */
+$tool_content .= "
 	<form class=\"sort\" name=\"formSent\" method=\"get\" action=\"index.php\">";
 
-		 /* if (isset($origin) and $origin=='learnpath') 
-			 $tool_content .= "<input type='hidden' name='origin' value='learnpath'>"; */
+/* if (isset($origin) and $origin=='learnpath')
+$tool_content .= "<input type='hidden' name='origin' value='learnpath'>"; */
 $tool_content .= "
 	<span class=\"dropbox_listTitle\">".$dropbox_lang["orderBy"]."</span>
 	<select name=\"sentOrder\" onchange=\"javascript: this.form.submit()\">";
 
-	if ($sentOrder=="lastDate") {
-		$tool_content .= "<option value=\"lastDate\" selected>";
-	} else {
-		$tool_content .= "<option value=\"lastDate\">";
-	}
-	$tool_content .= "".$dropbox_lang['lastDate']."</option>";
-	
-	if ($dropbox_cnf["allowOverwrite"]) {
-		$tool_content .= "<option value=\"firstDate\" selected>";
-	} else {
-		$tool_content .= "<option value=\"firstDate\">";
-	}
-	$tool_content .= "".$dropbox_lang['firstDate']."</option>";
+if ($sentOrder=="lastDate") {
+	$tool_content .= "<option value=\"lastDate\" selected>";
+} else {
+	$tool_content .= "<option value=\"lastDate\">";
+}
+$tool_content .= "".$dropbox_lang['lastDate']."</option>";
 
-	if ($sentOrder=="title") {
-		$tool_content .= "<option value=\"title\" selected>";
-	} else {
-		$tool_content .= "<option value=\"title\">";
-	}
-	$tool_content .= "".$dropbox_lang['title']."</option>";
+if ($dropbox_cnf["allowOverwrite"]) {
+	$tool_content .= "<option value=\"firstDate\" selected>";
+} else {
+	$tool_content .= "<option value=\"firstDate\">";
+}
+$tool_content .= "".$dropbox_lang['firstDate']."</option>";
 
-	if ($sentOrder=="size") {
-		$tool_content .= "<option value=\"size\" selected>";
-	} else {
-		$tool_content .= "<option value=\"size\">";
-	}
-	$tool_content .= "".$dropbox_lang['size']."</option>";
+if ($sentOrder=="title") {
+	$tool_content .= "<option value=\"title\" selected>";
+} else {
+	$tool_content .= "<option value=\"title\">";
+}
+$tool_content .= "".$dropbox_lang['title']."</option>";
 
-	if ($sentOrder=="author") {
-		$tool_content .= "<option value=\"author\" selected>";
-	} else {
-		$tool_content .= "<option value=\"author\">";
-	}
-	$tool_content .= "".$dropbox_lang['author']."</option>";
-	
-	if ($sentOrder=="recipient") {
-		$tool_content .= "<option value=\"recipient\" selected>";
-	} else {
-		$tool_content .= "<option value=\"recipient\">";
-	}
-	$tool_content .= "".$dropbox_lang['recipient']."</option>";
-	
+if ($sentOrder=="size") {
+	$tool_content .= "<option value=\"size\" selected>";
+} else {
+	$tool_content .= "<option value=\"size\">";
+}
+$tool_content .= "".$dropbox_lang['size']."</option>";
+
+if ($sentOrder=="author") {
+	$tool_content .= "<option value=\"author\" selected>";
+} else {
+	$tool_content .= "<option value=\"author\">";
+}
+$tool_content .= "".$dropbox_lang['author']."</option>";
+
+if ($sentOrder=="recipient") {
+	$tool_content .= "<option value=\"recipient\" selected>";
+} else {
+	$tool_content .= "<option value=\"recipient\">";
+}
+$tool_content .= "".$dropbox_lang['recipient']."</option>";
+
 $tool_content .= "
 	</select>
 	</form>
@@ -568,14 +575,14 @@ $tool_content .= "
 
 <div class=\"cellpos\">";
 // if the user has sent files then display the icon deleteall
-if ($numSent > 0) { 
+if ($numSent > 0) {
 
-/* if (isset($origin)) { $tool_content .= "
+	/* if (isset($origin)) { $tool_content .= "
 	<a href=\"dropbox_submit.php?origin=$origin&deleteSent=all&dropbox_unid=".urlencode( $dropbox_unid).$mailingInUrl."\"
 	onClick=\"return confirmationall('".addslashes($dropbox_lang["all"])."');\">
 	<img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
- } else { */
- 	$tool_content .= "
+	} else { */
+	$tool_content .= "
 	<a href=\"dropbox_submit.php?deleteSent=all&dropbox_unid=".urlencode( $dropbox_unid).$mailingInUrl."\"
 	onClick=\"return confirmationall('".addslashes($dropbox_lang["all"])."');\">
 	<img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
@@ -618,22 +625,22 @@ foreach ($dropbox_person -> sentWork as $w)
 
 	if ( $w->recipients[0]['id'] > $dropbox_cnf["mailingIdBase"])
 	{
-		/* if (isset($origin)) 
-			$ahref = "index.php?origin=$origin&mailing=" . urlencode($w->recipients[0]['id']); 
+		/* if (isset($origin))
+		$ahref = "index.php?origin=$origin&mailing=" . urlencode($w->recipients[0]['id']);
 		else */
-			$ahref = "index.php?mailing=" . urlencode($w->recipients[0]['id']);
+		$ahref = "index.php?mailing=" . urlencode($w->recipients[0]['id']);
 		$imgsrc = '../../images/folder.gif';
 	}
 	else
 	{
 		/* if (isset($origin))
-			$ahref = "dropbox_download.php?origin=$origin&id=" . urlencode($w->id) . $mailingInUrl;
+		$ahref = "dropbox_download.php?origin=$origin&id=" . urlencode($w->id) . $mailingInUrl;
 		else */
-			$ahref = "dropbox_download.php?id=" . urlencode($w->id) . $mailingInUrl;
+		$ahref = "dropbox_download.php?id=" . urlencode($w->id) . $mailingInUrl;
 		$imgsrc = '../../images/travaux.gif';
 	}
-$fSize = ceil(($w->filesize)/1024);
-$tool_content .= <<<tCont12
+	$fSize = ceil(($w->filesize)/1024);
+	$tool_content .= <<<tCont12
 		<tr>
 		<td >
 		<a href="$ahref" target="_blank">
@@ -643,16 +650,16 @@ $tool_content .= <<<tCont12
 		$fSize kB
 		</td>
 tCont12;
-$tool_content .="
+	$tool_content .="
 		<td>";
-		
-			foreach($w -> recipients as $r)
-			{
-				$tool_content .=  $r["name"] . ", <br>\n";
-			}
-			$tool_content = strrev(substr(strrev($tool_content), 7));
-			
-			$tool_content .= "
+
+	foreach($w -> recipients as $r)
+	{
+		$tool_content .=  $r["name"] . ", <br>\n";
+	}
+	$tool_content = strrev(substr(strrev($tool_content), 7));
+
+	$tool_content .= "
 		</td>
 		<td>
 		
@@ -662,48 +669,48 @@ $tool_content .="
 		$w->description
 		</td>
 		<td><div class=\"cellpos\">";
-		//<!--	Users cannot delete their own sent files -->
+	//<!--	Users cannot delete their own sent files -->
 
 	/* if (isset($origin)) {
-$tool_content .= "
-		<a href=\"dropbox_submit.php?origin=$origin&deleteSent=".urlencode($w->id)."&dropbox_unid=".urlencode($dropbox_unid) . $mailingInUrl."\"
-		onClick='return confirmation(\"$w->title\");'>
-		<img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
+	$tool_content .= "
+	<a href=\"dropbox_submit.php?origin=$origin&deleteSent=".urlencode($w->id)."&dropbox_unid=".urlencode($dropbox_unid) . $mailingInUrl."\"
+	onClick='return confirmation(\"$w->title\");'>
+	<img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
 
 	} else { */
-$tool_content .= "		
+	$tool_content .= "
 	<a href=\"dropbox_submit.php?deleteSent=".urlencode($w->id)."&dropbox_unid=".urlencode($dropbox_unid) . $mailingInUrl."\"
 		onClick='return confirmation(\"$w->title\");'>
 		<img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
 
 	/* } */ //if delete...
-		
-		$tool_content .= "</div>
+
+	$tool_content .= "</div>
 		</td>
 		</tr>
 		";
 
 
- // RH: Mailing: clickable images for examine and send
+	// RH: Mailing: clickable images for examine and send
 
 	if ($w -> uploadDate != $w->lastUploadDate) {
-$tool_content .= "
+		$tool_content .= "
 		<tr>
 		<td colspan=\"2\"><span class=\"dropbox_detail\">".$dropbox_lang["lastResent"]." <span class=\"dropbox_date\">$w->lastUploadDate</span></span></td>
 		</tr>";
 
 	}
 
-    $i++;
-	} //end of foreach
-	if (count($dropbox_person->sentWork)==0) {
-$tool_content .= "
+	$i++;
+} //end of foreach
+if (count($dropbox_person->sentWork)==0) {
+	$tool_content .= "
 	<tr>
 	<td colspan=\"6\">".$dropbox_lang['tableEmpty']."
 	</td>
 	</tr>";
 
-	}
+}
 $tool_content .= "
 </tbody>
 	</table>
