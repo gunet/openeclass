@@ -55,7 +55,7 @@ $action->record('MODULE_ID_ANNOUNCE');
 /**************************************/
 
 $nameTools = $langAn;
-$tool_content = "";
+$tool_content = $head_content = "";
 
 if ($is_adminOfCourse && (@$addAnnouce==1 || isset($modify))) {
 	if ($language == 'greek')
@@ -100,7 +100,42 @@ TEACHER ONLY
 *****************************************/
 if($is_adminOfCourse) // check teacher status
 {
+	$head_content .= '
+	
+<script>
+function confirmation (name)
+{
+	if (name != "all") {
+    	if (confirm("'.$langSureToDelAnnounce.' "+ name + " ?"))
+        	{return true;}
+    	else
+        	{return false;}
+	} else {
+		if (confirm("'.$langSureToDelAnnounceAll.' "+" ?"))
+        	{return true;}
+    	else
+        	{return false;}
+	}
+}
+</script>
+';
+	
+	$result = db_query("
+			SELECT * FROM annonces WHERE code_cours='$currentCourse' ",$mysqlMainDb);
+	$announcementNumber = mysql_num_rows($result);
+	unset($result);
+	$tool_content .= "
+		<div id=\"operations_container\">
+		<ul id=\"opslist\">
+		<li><a href=\"".$_SERVER['PHP_SELF']."?addAnnouce=1\">".$langAddAnn."</a></li>";
 
+
+	if ($announcementNumber > 1 || isset($_REQUEST['submitAnnouncement'])) {
+		$tool_content .=  "
+				<li><a href=\"$_SERVER[PHP_SELF]?deleteAllAnnouncement=1\" onClick=\"return confirmation('all');\">$langEmptyAnn</a></li>
+				";
+	}
+	$tool_content .="</ul></div>";
 	/*----------------------------------------
 	DEFAULT DISPLAY SETTINGS
 	--------------------------------------*/
@@ -153,7 +188,7 @@ if($is_adminOfCourse) // check teacher status
 	if (isset($delete) && $delete)
 	{
 		$result =  db_query("DELETE FROM annonces WHERE id='$delete'", $mysqlMainDb);
-		$message = $langAnnDel;
+		$message = "<p><b>$langAnnDel</b</b>";
 	}
 
 	/*----------------------------------------
@@ -162,7 +197,7 @@ if($is_adminOfCourse) // check teacher status
 
 	if (isset($deleteAllAnnouncement) && $deleteAllAnnouncement) {
 		db_query("DELETE FROM annonces WHERE code_cours='$currentCourseID'",$mysqlMainDb);
-		$message = $langAnnEmpty;
+		$message = "<p><b>$langAnnEmpty</b</b>";
 	}
 
 
@@ -193,7 +228,7 @@ if($is_adminOfCourse) // check teacher status
 		if($id) {
 			db_query("UPDATE annonces SET contenu='$newContent', temps=NOW()
 				WHERE id=$id",$mysqlMainDb);
-			$message = $langAnnModify;
+			$message = "<p><b>$langAnnModify</b</b>";
 		}
 
 		/*** ADD NEW ANNOUNCEMENT ***/
@@ -235,7 +270,7 @@ if($is_adminOfCourse) // check teacher status
 				while ( $myrow = mysql_fetch_array($result) )
 				{
 					$emailTo=$myrow["email"];
-					// echo "emailTo : $emailTo<br>";	// testing
+
 					// check email syntax validity
 					if(!eregi( $regexp, $emailTo )) {
 						$unvalid++;
@@ -248,22 +283,15 @@ if($is_adminOfCourse) // check teacher status
 					}
 				}
 				$messageUnvalid=" $langOn $countEmail $langRegUser, $unvalid $langUnvalid";
-				$message = " $langAnnAdd $langEmailSent.
-				<br>
-				<b>
+				$message = "<p><b>$langAnnAdd $langEmailSent</b></p>
+				<p>
 					$messageUnvalid
-				</b>";
-				/*
-				for ($i = 1; $i <= $countUser; $i++) {
-				// $myrow = mysql_fetch_array($result);
-				// $emailArray[$i]="$myrow[email]";
-				}
-				$emailList = implode(",", $emailArray);
-				*/
+				</p>";
+
 			}       // if $emailOption==1
 			else
 			{
-				$message = "$langAnnAdd";
+				$message = "<p><b>$langAnnAdd</b></p>";
 			}	// else
 		}	// else
 	}	// if $submit Announcement
@@ -279,7 +307,7 @@ if($is_adminOfCourse) // check teacher status
 	if (isset($message) && $message)
 	{
 		$tool_content .=  "
-					<table>
+					<table width=\"99%\">
 				<tbody>
 					<tr>
 						<td class=\"success\">
@@ -288,7 +316,7 @@ if($is_adminOfCourse) // check teacher status
 					</tr>
 				</tbody>
 			</table><br/>";
-		
+
 		$displayAnnouncementList = true;//do not show announcements
 		$displayForm             = false;//do not show form
 	}
@@ -308,11 +336,12 @@ if($is_adminOfCourse) // check teacher status
 	<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">\n";
 		// should not send email if updating old message
 		if (isset ($modify) && $modify) {
-			$tool_content .=   "$langModifAnn";
+			$tool_content .=   "<p><b>$langModifAnn</b></p>";
+			$langOk = $langModifAnn;
 		} else {
 			$tool_content .=  "<p><b>
 			".$langAddAnn."</b></p>
-			<br>
+			
 			
 				<p>$langEmailOption : 
 				<input type=checkbox value=\"1\" name=\"emailOption\"></p>";
@@ -341,25 +370,7 @@ if($is_adminOfCourse) // check teacher status
 			SELECT * FROM annonces WHERE code_cours='$currentCourse' ORDER BY ordre DESC",$mysqlMainDb);
 		$iterator = 1;
 		$bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
-		
-		if (@$addAnnouce !=1) {
-			$tool_content .= "
 
-			<a href=\"".$_SERVER['PHP_SELF']."?addAnnouce=1\">".$langAddAnn."</a>";
-		}
-		if (@$addAnnouce!=1 && $announcementNumber >1) {
-			$tool_content .= " | ";
-		}
-		
-		if ($announcementNumber > 1)
-		{
-			$tool_content .=  "
-				<a href=\"$_SERVER[PHP_SELF]?deleteAllAnnouncement=1\">$langEmptyAnn</a>
-				";
-		}	// if announcementNumber > 1
-		if (@$addAnnouce !=1 || $announcementNumber > 1) {
-			$tool_content .= "<br/><br/>";
-		}
 		$tool_content .=  "<table width=\"99%\">";
 		if ($announcementNumber>0){
 			$tool_content .= "<thead>
@@ -408,16 +419,29 @@ if($is_adminOfCourse) // check teacher status
 				<tr><td colspan=2>".$content."
 				<br>
 				<a href=\"$_SERVER[PHP_SELF]?modify=".$myrow['id']."\">
-				<img src=\"../../images/edit.gif\" border=\"0\" title=\"".$langModify."\"></a>
-				<a href=\"$_SERVER[PHP_SELF]?delete=".$myrow['id']."\">
-				<img src=\"../../images/delete.gif\" border=\"0\" title=\"".$langDelete."\"></a><br>
+				<img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langModify."\"></a>
+				<a href=\"$_SERVER[PHP_SELF]?delete=".$myrow['id']."\" onClick=\"return confirmation('');\">
+				<img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\"></a><br>
 				</td></tr>";
 			$iterator ++;
 		}	// end while ($myrow = mysql_fetch_array($result))
 		$tool_content .=  "</tbody>
 			</table>";
-		// DISPLAY DELETE ALL ANNOUNCEMENTS COMMAND		
+		// DISPLAY DELETE ALL ANNOUNCEMENTS COMMAND
 	}	// end: if ($displayAnnoucementList == true)
+
+	if ($announcementNumber <1) {
+		$no_content = true;
+		if(isset($_REQUEST['addAnnouce'])) {
+			$no_content = false;
+		}
+
+		if(isset($_REQUEST['modify'])) {
+			$no_content = false;
+		}
+
+		if ($no_content) $tool_content .= "<p>$langNoAnnounce</p>";
+	}
 } // end: teacher only
 
 // student view
@@ -425,25 +449,28 @@ if($is_adminOfCourse) // check teacher status
 else {
 	$result = db_query("SELECT * FROM annonces WHERE code_cours='$currentCourseID'
 				ORDER BY ordre DESC",$mysqlMainDb) OR die("DB problem");
+	if (mysql_num_rows($result) > 0) {
+		$tool_content .=  "<table width=\"99%\"";
+		while ($myrow = mysql_fetch_array($result))
+		{
+			$content = $myrow[1];
+			$content = make_clickable($content);
+			$content = nl2br($content);
 
-	$tool_content .=  "<table width=\"99%\"";
-	while ($myrow = mysql_fetch_array($result))
-	{
-		$content = $myrow[1];
-		$content = make_clickable($content);
-		$content = nl2br($content);
-
-		$tool_content .=  "
+			$tool_content .=  "
 		<tr class=\"odd\">
 			<td>$langPubl : ".greek_format($myrow["temps"])."</td></tr>
 			<tr><td>$content</td></tr>";
 
-	}	// while loop
-	$tool_content .=  "</table>";
+		}	// while loop
+		$tool_content .=  "</table>";
+	} else {
+		$tool_content .= "<p>$langNoAnnounce</p>";
+	}
 }
 
-if($is_adminOfCourse && (@$addAnnouce == 1 || isset($modify))) {
-	draw($tool_content, 2, 'announcements', $head_content, $body_action);
+if($is_adminOfCourse) {
+	draw($tool_content, 2, 'announcements', $head_content, @$body_action);
 } else {
 	draw($tool_content, 2, 'announcements');
 }
