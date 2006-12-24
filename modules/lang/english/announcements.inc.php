@@ -60,6 +60,9 @@ $langOk = "Ok";
 $langUp = "Up";
 $langDown = "Down";
 
+$langNoAnnounce = "No announcements exist";
+$langSureToDelAnnounce = "Are you sure you want to delete this announcement";
+$langSureToDelAnnounceAll = "Are you sure you want to delete all the announcements";
 // my announcements
 $langMyAnnouncements = "My announcements";
 $langtheCourse = "Course";

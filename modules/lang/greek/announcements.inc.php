@@ -28,6 +28,9 @@ $langOk = "Προσθήκη";
 $langUp = "Επάνω";
 $langDown = "Κάτω";
 
+$langNoAnnounce = "Δεν υπάρχουν ανακοινώσεις";
+$langSureToDelAnnounce = "Είστε σίγουρος ότι θέλετε να διαγράψετε την ανακοίνωση";
+$langSureToDelAnnounceAll = "Είστε σίγουρος ότι θέλετε να διαγράψετε όλες τις ανακοινώσεις";
 // my announcements
 
 $langMyAnnouncements = "Οι ανακοινώσεις μου ";
