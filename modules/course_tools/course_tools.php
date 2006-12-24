@@ -43,8 +43,9 @@ $langFiles = array('toolManagement', 'create_course', 'external_module', 'import
 $require_help = TRUE;
 $helpTopic = 'courseTools';
 $require_prof = true;
-include '../../include/baseTheme.php';
 $require_login = true;
+include '../../include/baseTheme.php';
+
 
 $nameTools = $langToolManagement;
 
@@ -174,11 +175,11 @@ if ($is_adminOfCourse){
 		unset($sql);
 
 		$tool_content .= "
-		<table>
+		<table width=\"99%\">
 			<tbody>
 				<tr>
 					<td class=\"success\">
-					<p>$deleteSuccess</p>
+					<p><b>$deleteSuccess</b></p>
 					
 					</td>
 				</tr>
@@ -197,7 +198,7 @@ if ($is_adminOfCourse){
 			<tbody>
 				<tr>
 					<td class=\"caution\">
-					<p>$langInvalidLink</p>
+					<p><b>$langInvalidLink</b></p>
 					<a href=\"../../courses/$currentCourseID/index.php\">$langHome</a>
 					</td>
 				</tr>
@@ -230,11 +231,11 @@ if ($is_adminOfCourse){
 					)");
 
 		$tool_content .= "
-		<table>
+		<table width=\"99%\">
 			<tbody>
 				<tr>
 					<td class=\"success\">
-					<p>$langAdded</p>
+					<p><b>$langAdded</b></p>
 					
 					</td>
 				</tr>
@@ -285,11 +286,11 @@ if ($is_adminOfCourse){
 					)", $currentCourse);
 
 			$tool_content .=  "
-					<table>
+					<table width=\"99%\">
 				<tbody>
 					<tr>
 						<td class=\"success\">
-						$langOkSent
+						<p><b>$langOkSent</b></p>
 					</td>
 					</tr>
 				</tbody>
@@ -301,7 +302,7 @@ if ($is_adminOfCourse){
 					<tr>
 						<td class=\"caution\">
 					
-						$langTooBig
+						<p><b>$langTooBig</b></p>
 					
 						</td>
 					</tr>
@@ -437,11 +438,12 @@ if ($is_adminOfCourse) {
 
 	//output tool content
 	$tool_content .= "
-<a href=\"".$_SERVER['PHP_SELF']."?action=1\">".$langUploadPage."</a>
- | 
-<a href=\"".$_SERVER['PHP_SELF']."?action=2\">".$langAddExtLink."</a>
-<br>
-<br>
+	<div id=\"operations_container\">
+	<ul id=\"opslist\">
+	<li><a href=\"".$_SERVER['PHP_SELF']."?action=1\">".$langUploadPage."</a></li>
+	<li><a href=\"".$_SERVER['PHP_SELF']."?action=2\">".$langAddExtLink."</a></li>
+	</ul>
+	</div>
 ";
 	$tool_content .= <<<tForm
 <form action="$_SERVER[PHP_SELF]" method="post" enctype="multipart/form-data">
@@ -514,7 +516,9 @@ tForm;
 					$tool_content .= "
 				      <tr $rowClass>
 				         <td>".$toolArr[$i][1][$j]." $delLink</td>
-				         <td><input name=\"toolStat[]\" type=\"checkbox\" value=\"".$toolArr[$i][4][$j]."\"></td>";
+				         <td><input name=\"toolStat[]\" type=\"checkbox\" value=\"".$toolArr[$i][4][$j]."\"></td>
+				         
+				         ";unset($delLink);
 
 					if ($is_admin){
 						$tool_content .= "
