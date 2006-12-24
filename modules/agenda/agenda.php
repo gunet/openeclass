@@ -49,10 +49,10 @@ $action->record('MODULE_ID_AGENDA');
 
 $dateNow = date("d-m-Y / H:i:s",time());
 $nameTools = $langAgenda;
-$tool_content = "";
+$tool_content = $head_content = "";
 
 mysql_select_db($dbname);
-if (@$addEvent == 1 || (isset($id) && $id)) {
+if ((@$addEvent == 1 || (isset($id) && $id)) &&$is_adminOfCourse) {
 	if ($language == 'greek')
 	$lang_editor='gr';
 	else
@@ -89,17 +89,54 @@ function initEditor() {
 </script>
 hContent;
 
+	
+
 	$body_action = "onload=\"initEditor()\"";
 }
-/*
-$tool_content .= <<<tContent1
-<div id="tool_operations">
-<span class="operation">$langDateNow : $dateNow</span>
-</div>
 
-tContent1;
-*/
+//Make top tool links
 if ($is_adminOfCourse) {
+	
+	$head_content .= '
+	
+<script>
+function confirmation (name)
+{
+    if (confirm("'.$langSureToDel.' "+ name + " ?"))
+        {return true;}
+    else
+        {return false;}
+}
+</script>
+';
+	
+	$tool_content .= "<div id=\"operations_container\">
+		<ul id=\"opslist\">";
+	if ((!isset($addEvent) && @$addEvent != 1) || isset($_REQUEST['submit'])) {
+		$tool_content .= "
+			<li><a href=\"".$_SERVER['PHP_SELF']."?addEvent=1\">".$langAddEvent."</a></li>";
+	}
+
+	$sens =" ASC";
+	$result = db_query("SELECT id FROM agenda", $currentCourseID);
+	if (mysql_num_rows($result) > 1) {
+
+		if (isset($_GET["sens"]) && $_GET["sens"]=="d")
+		{
+			$tool_content .=  "<li><a href=\"".$_SERVER['PHP_SELF']."?sens=\" >$langOldToNew</a></li>";
+			$sens=" DESC ";
+		}
+		else
+		{
+			$tool_content .=  "<li><a href=\"".$_SERVER['PHP_SELF']."?sens=d\" >$langNewToOld</a></li>";
+		}
+	}
+	$tool_content .= "</ul></div>";
+}
+
+if ($is_adminOfCourse) {
+
+
 
 	if (isset($submit)&&$submit) {
 		$date_selection = $fyear."-".$fmonth."-".$fday;
@@ -183,7 +220,7 @@ if ($is_adminOfCourse) {
 		unset($id);
 		##[END personalisation modification]############
 
-		$tool_content .=  "<table>
+		$tool_content .=  "<table width=\"99%\">
 					<tbody><tr><td class=\"success\">$langStoredOK</td></tr></tbody>
 					</table><br/>";
 
@@ -201,7 +238,7 @@ if ($is_adminOfCourse) {
 		db_query($perso_sql, $mysqlMainDb);
 		##[END personalisation modification]############
 
-		$tool_content .= "<table><tbody>
+		$tool_content .= "<table width=\"99%\"><tbody>
 		<tr><td class=\"success\">$langDeleteOK</td></tr>
 		</tbody></table><br/>";
 		unset($addEvent);
@@ -278,7 +315,7 @@ tContentForm;
     <option value=\"$month\">[".$langMonthNames['long'][($month-1)]."]</option>";
 
 		for ($i=1; $i<=12; $i++)
-			$tool_content .= "<option value='$i'>".$langMonthNames['long'][$i-1]."</option>";
+		$tool_content .= "<option value='$i'>".$langMonthNames['long'][$i-1]."</option>";
 		$tool_content .= "</select></td>
     <td align='center'>
     <select name=\"fyear\">
@@ -336,116 +373,112 @@ tContentForm;
 <br><br>";
 	}
 
-	if (@$addEvent != 1) {
-		$tool_content .= "
-			<a href=\"".$_SERVER['PHP_SELF']."?addEvent=1\">".$langAddEvent."</a> | 
-				
-";
+	//	if (@$addEvent != 1) {
+	//		$tool_content .= "
+	//			<a href=\"".$_SERVER['PHP_SELF']."?addEvent=1\">".$langAddEvent."</a> |
+	//
+	//";
 
-	}
+	//	}
 }
 
 /*---------------------------------------------
 *  End  of  prof only
 *-------------------------------------------*/
-$sens =" ASC";
-if (isset($_GET["sens"]) && $_GET["sens"]=="d")
-{
-	$tool_content .=  "<a href=\"".$_SERVER['PHP_SELF']."?sens=\" >$langOldToNew</a><br/><br/>";
-	$sens=" DESC ";
-}
-else
-{
-	$tool_content .=  "<a href=\"".$_SERVER['PHP_SELF']."?sens=d\" >$langNewToOld</a><br/><br/>";
-}
-$tool_content .=  "<table width=\"99%\" cellpadding=\"2\" cellspacing=\"0\" border=\"0\">";
-$tool_content .=  "<thead><tr><th>$langEvents</th>";
-if ($is_adminOfCourse) {
-	$tool_content .=  "<th>$langActions</th>";
-}
-$tool_content .= "</tr></thead>";
-$tool_content .= "<tbody>";
-$numLine=0;
+if (!isset($sens)) $sens =" ASC";
 $result = db_query("SELECT id, titre, contenu, day, hour, lasting FROM agenda ORDER BY day ".$sens.", hour ".$sens,$currentCourseID);
-$barreMois ="";
-$nowBarShowed = FALSE;
+if (mysql_num_rows($result) > 0) {
+	$tool_content .=  "<table width=\"99%\">";
+	$tool_content .=  "<thead><tr><th>$langEvents</th>";
+	if ($is_adminOfCourse) {
+		$tool_content .=  "<th>$langActions</th>";
+	}
+	$tool_content .= "</tr></thead>";
+	$tool_content .= "<tbody>";
 
-while ($myrow = mysql_fetch_array($result)) {
-	$contenu = $myrow["contenu"];
-	$contenu = nl2br($contenu);
-	$contenu = make_clickable($contenu);
-	if (!$nowBarShowed)
-	{
-		// Following order
-		if (((strtotime($myrow["day"]." ".$myrow["hour"]) > time()) && ($sens==" ASC")) ||
-		((strtotime($myrow["day"]." ".$myrow["hour"]) < time()) && ($sens==" DESC "))) {
-			if ($barreMois!=date("m",time())) {
-				$barreMois=date("m",time());
-				$tool_content .=  "
+	$numLine=0;
+	//$result = db_query("SELECT id, titre, contenu, day, hour, lasting FROM agenda ORDER BY day ".$sens.", hour ".$sens,$currentCourseID);
+	$barreMois ="";
+	$nowBarShowed = FALSE;
+
+	while ($myrow = mysql_fetch_array($result)) {
+		$contenu = $myrow["contenu"];
+		$contenu = nl2br($contenu);
+		$contenu = make_clickable($contenu);
+		if (!$nowBarShowed)
+		{
+			// Following order
+			if (((strtotime($myrow["day"]." ".$myrow["hour"]) > time()) && ($sens==" ASC")) ||
+			((strtotime($myrow["day"]." ".$myrow["hour"]) < time()) && ($sens==" DESC "))) {
+				if ($barreMois!=date("m",time())) {
+					$barreMois=date("m",time());
+					$tool_content .=  "
                 <tr>
                     <td class=\"month\" colspan=\"2\" valign=\"top\">
                         ".$langCalendar."&nbsp;".ucfirst(claro_format_locale_date("%B %Y",time()))."
                     </td>
                 </tr>";
-			}
-			$nowBarShowed = TRUE;
-			$tool_content .=  "<tr>
+				}
+				$nowBarShowed = TRUE;
+				$tool_content .=  "<tr>
       <td colspan=2 class=\"today\"><b>$langNow : $dateNow</b></td></tr>";
+			}
 		}
-	}
-	if ($barreMois!=date("m",strtotime($myrow["day"]))) {
-		$barreMois=date("m",strtotime($myrow["day"]));
-		$tool_content .=  "<tr><td class=\"month\" colspan=\"2\" valign=\"top\">
+		if ($barreMois!=date("m",strtotime($myrow["day"]))) {
+			$barreMois=date("m",strtotime($myrow["day"]));
+			$tool_content .=  "<tr><td class=\"month\" colspan=\"2\" valign=\"top\">
 	   ".$langCalendar."&nbsp;".ucfirst(claro_format_locale_date("%B %Y",strtotime($myrow["day"])))."
      </td></tr>";
-	}
-	$tool_content .=  "
+		}
+		$tool_content .=  "
 <!-- Date -->
     ";
-	if($numLine%2 == 0)
-			$tool_content .=  "<tr>";
-	elseif($numLine%2 == 1)
-			$tool_content .=  "<tr class=\"odd\">";
-	if ($is_adminOfCourse)
-			$tool_content .=  "<td valign=\"top\">";
-	else
-			$tool_content .=  "<td valign=\"top\" colspan=\"2\">";
+		if($numLine%2 == 0)
+		$tool_content .=  "<tr>";
+		elseif($numLine%2 == 1)
+		$tool_content .=  "<tr class=\"odd\">";
+		if ($is_adminOfCourse)
+		$tool_content .=  "<td valign=\"top\">";
+		else
+		$tool_content .=  "<td valign=\"top\" colspan=\"2\">";
 
-	$tool_content .=  "<p>".ucfirst(claro_format_locale_date($dateFormatLong,strtotime($myrow["day"])))."
+		$tool_content .=  "<p>".ucfirst(claro_format_locale_date($dateFormatLong,strtotime($myrow["day"])))."
         / $langHour:
         ".ucfirst(date("H:i",strtotime($myrow["hour"])))." ";
 
-	if ($myrow["lasting"] !="") {
-		if ($myrow["lasting"] == 1)
-		$message = $langHour;
-		else
-		$message = $langHours;
-		$tool_content .=  "<br>".$langLasting.": ".$myrow["lasting"]." ".$message."";
-	}
+		if ($myrow["lasting"] !="") {
+			if ($myrow["lasting"] == 1)
+			$message = $langHour;
+			else
+			$message = $langHours;
+			$tool_content .=  "<br>".$langLasting.": ".$myrow["lasting"]." ".$message."";
+		}
 
-	$tool_content .=  "<br><b>".$myrow["titre"]."</b><br>$contenu</p></td>";
+		$tool_content .=  "<br><b>".$myrow["titre"]."</b><br>$contenu</p></td>";
 
-	//agenda event functions
-	//added icons next to each function
-	//(evelthon, 12/05/2006)
+		//agenda event functions
+		//added icons next to each function
+		//(evelthon, 12/05/2006)
 
-	if ($is_adminOfCourse) {
-		$tool_content .=  "<td align='center'>
+		if ($is_adminOfCourse) {
+			$tool_content .=  "<td align='center'>
         <a href=\"$_SERVER[PHP_SELF]?id=".$myrow["id"]."\">
             <img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langModify."\"></a>
 						&nbsp;
-        <a href=\"$_SERVER[PHP_SELF]?id=".$myrow[0]."&delete=yes\">
+        <a href=\"$_SERVER[PHP_SELF]?id=".$myrow[0]."&delete=yes\" onClick=\"return confirmation('".addslashes($myrow["titre"])."');\">
             <img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\"></a>
         </td>";
-	}
-	$tool_content .=  "</tr>";
-	$numLine++;
-} 	// while
-$tool_content .= "</tbody>";
-$tool_content .=  "</table>";
-
+		}
+		$tool_content .=  "</tr>";
+		$numLine++;
+	} 	// while
+	$tool_content .= "</tbody>";
+	$tool_content .=  "</table>";
+} else  {
+	$tool_content .= "<p>$langNoEvents</p>";
+}
 if($is_adminOfCourse && isset($head_content)) {
-	draw($tool_content, 2, 'agenda', $head_content, $body_action);
+	draw($tool_content, 2, 'agenda', $head_content, @$body_action);
 } else {
 	draw($tool_content, 2, 'agenda');
 }
