@@ -38,6 +38,7 @@
 $langLinks="Σύνδεσμοι";
 $langListDeleted="Ο κατάλογος έχει διαγραφεί";
 $langLinkMod="Ο σύνδεσμος τροποποιήθηκε";
+$langLinkModify = "Αλλαγή σύνδεσμου";
 $langLinkDeleted="Ο σύνδεσμος διαγράφηκε";
 $langLinkName="Όνομα συνδέσμου";
 $langDescription="Περιγραφή";
@@ -65,6 +66,7 @@ $langAllCategoryDeleted = "Όλες οι κατηγορίες και όλοι οι σύνδεσμοι έχουν διαγρα
 $langGiveURL = "Δώστε το URL του συνδέσμου";
 $langGiveCategoryName = "Όνομα κατηγορίας";
 $langNoCategory = "Γενικοί σύνδεσμοι";
+$langCategorisedLinks = "Κατηγοριοποιημένοι σύνδεσμοι";
 $langUp = "Επάνω";
 $langDown = "Κάτω";
 // Other

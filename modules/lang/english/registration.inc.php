@@ -129,8 +129,10 @@ $langUnreg = "Unregister";
 $langAddHereSomeCourses = "<br><blockquote><p>To register / unregister to / from a lesson,
 choose the faculty and then select / unselect the desired lesson.</p>
 <p>To save your preferences click on 'Submit changes'</p></blockquote><br>";
-
 $langTitular = "Author";
+$langDeleteUser = "Are you sure you want to delete the user";
+$langDeleteUser2 = "from this lesson";
+
 
 $langGroup="group";
 $langUserNoneMasc="-";

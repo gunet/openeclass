@@ -38,6 +38,7 @@
 $langLinks="Links";
 $langListDeleted="The list has been deleted";
 $langLinkMod="Link modified";
+$langLinkModify = "Modify link";
 $langLinkDel="Link deleted";
 $langLinkName="Link name";
 $langDescription="Description";
@@ -65,6 +66,7 @@ $langAllCategoryDeleted="All categories and all links have been deleted";
 $langGiveURL="Please give the link URL";
 $langGiveCategoryName="Please give the category name";
 $langNoCategory="No category";
+$langCategorisedLinks = "Categorised links";
 $langUp = "Up";
 $langDown = "Down";
 // Other
