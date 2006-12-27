@@ -45,6 +45,9 @@ $langExistingGroups="Ομάδες Χρηστών";
 $langRegistered="Εγγεγραμμένοι";
 $langEdit="Διόρθωση";
 $langDelete="Διαγραφή";
+$langDeleteGroupWarn = "Είστε σίγουρος ότι θέλετε να διαγράψετε αυτή την ομάδα χρηστών";
+$langDeleteGroupAllWarn = "Είστε σίγουρος ότι θέλετε να διαγράψετε όλες τις ομάδες χρηστών";
+$langEmptyGroupAllWarn = "Είστε σίγουρος ότι θέλετε να διαγράψετε όλες τις ομάδες χρηστών";
 
 // Group Properties
 $langGroupProperties="Ρυθμίσεις ομάδων χρηστών";

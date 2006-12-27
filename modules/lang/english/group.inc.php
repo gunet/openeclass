@@ -44,8 +44,9 @@ $langExistingGroups="Groups";
 $langRegistered="Registered";
 $langEdit="Edit";
 $langDelete="Delete";
-
-
+$langDeleteGroupWarn = "Are you sure you want to delete this group";
+$langDeleteGroupAllWarn = "Are you sure you want to delete all groups";
+$langEmptyGroupAllWarn = "Are you sure you want to empty all groups";
 
 // Group Properties
 $langGroupProperties="Groups settings";
