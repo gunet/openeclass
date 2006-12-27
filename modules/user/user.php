@@ -36,8 +36,22 @@ $require_current_course = TRUE;
 $langFiles = 'registration';
 $require_help = TRUE;
 $helpTopic = 'User';
+$require_login = true;
+$require_prof = true;
 
 include '../../include/baseTheme.php';
+
+$head_content = '
+<script>
+function confirmation (name)
+{
+    if (confirm("'.$langDeleteUser.' "+ name + " '.$langDeleteUser2.' ?"))
+        {return true;}
+    else
+        {return false;}
+}
+</script>
+';
 
 $sqlUserOfCourse = "SELECT user.user_id
 		FROM cours_user, user
@@ -61,8 +75,6 @@ $tool_content .= <<<cData
 	
 cData;
 }	// if prof
-
-//$tool_content .= "<tr><td>";
 
 // give admin status
 if(isset($giveAdmin) && $giveAdmin && $is_adminOfCourse) {
@@ -298,7 +310,8 @@ if(isset($status) && ($status["$currentCourseID"]=='1' OR $status["$currentCours
 		}	
 		$tool_content .= "<td valign=\"top\" align='center'>";
 		if ($myrow["user_id"]!=$_SESSION["uid"])
-			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?unregister=yes&user_id=$myrow[user_id]\"><img src='../../template/classic/img/delete.gif' border='0' title='$langUnreg'></a>";
+		$alert_uname = $myrow['nom'] . " " . $myrow['prenom'];
+			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?unregister=yes&user_id=$myrow[user_id]\" onClick=\"return confirmation('".addslashes($alert_uname)."');\"><img src='../../template/classic/img/delete.gif' border='0' title='$langUnreg'></a>";
 					
 	}	// admin only
 	
@@ -347,5 +360,5 @@ if($countUser>=50) {
 		</table>";
 
 }	// navigation buttons
-draw($tool_content, 2, 'user');
+draw($tool_content, 2, 'user', $head_content);
 ?>

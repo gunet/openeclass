@@ -209,11 +209,6 @@ elseif (isset($_REQUEST['fill']) && $is_adminOfCourse) {
 }	// FILL
 
 ######################## TITLE AND HELP ##########################
-$tool_content .= "
-		</td>
-	</tr>
-<tr><td>&nbsp;</td></tr>";
-
 
 /*****************************************
 ADMIN AND TUTOR ONLY
@@ -245,13 +240,14 @@ if ($is_adminOfCourse) {
 	}
 	unset($message);
 	$tool_content .= "
-
-	<p><a href=\"group_creation.php\">$langNewGroupCreate</a></p>
-	<p><a href=\"".$_SERVER['PHP_SELF']."?delete=yes\">$langDeleteGroups</a><p>
-	<p><a href=\"".$_SERVER['PHP_SELF']."?fill=yes\">$langFillGroups</a></p>
-	<p><a href=\"".$_SERVER['PHP_SELF']."?empty=yes\">$langEmtpyGroups</a></p>
-
-	<br>";
+<div id=\"operations_container\">
+	<ul id=\"opslist\">
+	<li><a href=\"group_creation.php\">$langNewGroupCreate</a></li>
+	<li><a href=\"".$_SERVER['PHP_SELF']."?delete=yes\">$langDeleteGroups</a>/<li>
+	<li><a href=\"".$_SERVER['PHP_SELF']."?fill=yes\">$langFillGroups</a></li>
+	<li><a href=\"".$_SERVER['PHP_SELF']."?empty=yes\">$langEmtpyGroups</a></li>
+	</ul></div>
+	";
 
 	#################### SHOW PROPERTIES ######################
 	$tool_content .= <<<tCont3

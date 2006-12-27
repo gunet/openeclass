@@ -28,7 +28,8 @@
 /*
 ===========================================================================
     usage/oldStats.php
-    @last update: 2006-09-04 by Ophelia Neofytou
+     * @version $Id$
+    @last update: 2006-12-27 by Evelthon Prodromou <eprodromou@upnet.gr>
     @authors list: Vangelis Haniotakis haniotak@ucnet.uoc.gr
                 Ophelia Neofytou    ophelia@ucnet.uoc.gr
 ==============================================================================
@@ -42,16 +43,19 @@ $require_current_course = TRUE;
 $langFiles 				= 'usage';
 $require_help 			= true;
 $helpTopic 				= 'Usage';
+$require_login = true;
+$require_prof = true;
 
 include '../../include/baseTheme.php';
 include('../../include/action.php');
 
-
 $tool_content = '';
-$tool_content .= "<a href='usage.php'>".$langUsage."</a> | ";
-$tool_content .= "<a href='favourite.php?first='>".$langFavourite."</a> | ";
-$tool_content .= "<a href='userlogins.php?first='>".$langUserLogins."</a> | ";
-$tool_content .= "<a href='oldStats.php'>".$langOldStats."</a><p>&nbsp</p>";
+$tool_content .= "<div id=\"operations_container\">
+	<ul id=\"opslist\">";
+$tool_content .= "<li><a href='usage.php'>".$langUsage."</a></li>";
+$tool_content .= "<li><a href='favourite.php?first='>".$langFavourite."</a></li>";
+$tool_content .= "<li><a href='userlogins.php?first='>".$langUserLogins."</a></li>";
+$tool_content .= "<li><a href='oldStats.php'>".$langOldStats."</a></li></ul></div>";
 
 
 $query = "SELECT MIN(date_time) as min_time FROM actions";
@@ -225,28 +229,29 @@ $local_head = $jscalendar->get_load_files_code();
     <form method="post">
     &nbsp;&nbsp;
         <table>
+        <thead>
         <tr>
-            <td>'.$langValueType.'</td>
+            <th>'.$langValueType.'</th>
             <td><select name="u_stats_value">'.$statsValueOptions.'</select></td>
         </tr>
 
         <tr>
-            <td>'.$langStartDate.'</td>
+            <th>'.$langStartDate.'</th>
             <td>'."$start_cal".'</td>
         </tr>
         <tr>
-            <td>'.$langEndDate.'</td>
+            <th>'.$langEndDate.'</th>
             <td>'."$end_cal".'</td>
         </tr>
         <tr>
-            <td>'.$langModule.'</td>
+            <th>'.$langModule.'</th>
             <td><select name="u_module_id">'.$mod_opts.'</select></td>
         </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
-        </tr>
+        </thead>
         </table>
+        <br/>
+            <input type="submit" name="btnUsage" value="'.$langSubmit.'">
+        
     </form>';
         
     }

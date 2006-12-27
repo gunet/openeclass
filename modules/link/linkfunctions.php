@@ -159,7 +159,7 @@ function editlinkcategory($type)
 	global $submitLink;
 	global $submitCategory;
 	global $tool_content;
-	global $dbname;
+	global $dbname, $langLinkMod;
 
 	if ($type=="link")
 	{
@@ -189,7 +189,7 @@ function editlinkcategory($type)
 
 			$sql="UPDATE `".$tbl_link."` set url='$urllink', titre='$title', description='$description', category='$selectcategory' WHERE id='".$id."'";
 			db_query($sql, $dbname);
-			$catlinkstatus=$langLinkModded;
+			$catlinkstatus=$langLinkMod;
 
 		}
 	}
@@ -272,7 +272,7 @@ function showlinksofcategory($catid)
 			<td width=\"20\" class=\"linkimg\">
 			
 			<a href=\"link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">
-			<img src=\"../../images/links.gif\" border=\"0\" title=\"".$langLinks."\">
+			<img src=\"../../template/classic/img/links.gif\" border=\"0\" title=\"".$langLinks."\">
 			</td>
 			<td  width=\"99%\">
       <a href=\"link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">".$myrow[2]."</a>\n
@@ -284,16 +284,16 @@ function showlinksofcategory($catid)
 			$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?action=editlink&category=$category&id=$myrow[0]&urlview=$urlview\">";
 			else
 			$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?action=editlink&id=$myrow[0]&urlview=$urlview\">";
-			$tool_content .=  "<img src=\"../../images/edit.gif\" border=\"0\" title=\"".$langModify."\">
+			$tool_content .=  "<img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langModify."\">
 				</a>
 				<a href=\"".$_SERVER['PHP_SELF']."?action=deletelink&id=".$myrow[0]."&urlview=".$urlview."\" onclick=\"javascript:if(!confirm('".$langLinkDelconfirm."')) return false;\">
-				<img src=\"../../images/delete.gif\" border=\"0\" title=\"".$langDelete."\">
+				<img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\">
 				</a>";
 			// DISPLAY MOVE UP COMMAND only if it is not the top link
 			if ($i!=1)
 			{
 				$tool_content .= 	"<a href=\"$_SERVER[PHP_SELF]?urlview=".$urlview."&up=".$myrow["id"]."\">
-					<img src=../../template/classic/img/up.gif border=0 title=\"".$langUp."\">
+					<img src=\"../../template/classic/img/up.gif\" border=0 title=\"".$langUp."\">
 					</a>\n";
 			}
 			// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link
@@ -320,24 +320,24 @@ function showcategoryadmintools($categoryid)
 	global $tool_content;
 
 	$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?action=editcategory&id=$categoryid&urlview=$urlview\">
-		<img src=\"../../images/edit.gif\" border=\"0\" title=\"".$langModify."\">
+		<img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langModify."\">
 		</a> \n";
 
-	$tool_content .=  " <a href=\"".$_SERVER['PHP_SELF']."?action=deletecategory&id=".$categoryid."&urlview=".$urlview."\" onclick=\"javascript:if(!confirm('".$langCatDel."')) return false;\">". "<img src=\"../../images/delete.gif\" border=\"0\" title=\"".$langDelete."\">
+	$tool_content .=  " <a href=\"".$_SERVER['PHP_SELF']."?action=deletecategory&id=".$categoryid."&urlview=".$urlview."\" onclick=\"javascript:if(!confirm('".$langCatDel."')) return false;\">". "<img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\">
 </a>";
 
 
 	// DISPLAY MOVE UP COMMAND only if it is not the top link
 	if ($catcounter!=1) {
 		$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?catmove=true&up=".$categoryid."&urlview=$urlview\">
-			<img src=../../images/up.gif border=0 title=\"".$langUp."\">
+			<img src=\"../../template/classic/img/up.gif\" border=0 title=\"".$langUp."\">
 			</a>\n";
 	}
 	// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link
 	if($catcounter < $aantalcategories)
 	{
 		$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?catmove=true&down=".$categoryid."&urlview=$urlview\">
-			<img src=\"../../images/down.gif\" border=\"0\" title=\"".$langDown."\">
+			<img src=\"../../template/classic/img/down.gif\" border=\"0\" title=\"".$langDown."\">
 			</a>\n";
 	}
 	$catcounter++;

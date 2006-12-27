@@ -28,7 +28,8 @@
 /*
 ===========================================================================
     usage/userlogins.php
-    @last update: 2006-11-01 by Ophelia Neofytou
+ * @version $Id$
+    @last update: 2006-12-27 by Evelthon Prodromou <eprodromou@upnet.gr>
     @authors list: Vangelis Haniotakis haniotak@ucnet.uoc.gr,
                     Ophelia Neofytou ophelia@ucnet.uoc.gr
 ==============================================================================
@@ -42,16 +43,20 @@ $require_current_course = TRUE;
 $langFiles 				= 'usage';
 $require_help 			= true;
 $helpTopic 				= 'Usage';
+$require_login = true;
+$require_prof = true;
 
 include '../../include/baseTheme.php';
 include('../../include/action.php');
 
 
 $tool_content = '';
-$tool_content .= "<a href='usage.php'>".$langUsage."</a> | ";
-$tool_content .= "<a href='favourite.php?first='>".$langFavourite."</a> | ";
-$tool_content .= "<a href='userlogins.php?first='>".$langUserLogins."</a> | ";
-$tool_content .= "<a href='oldStats.php'>".$langOldStats."</a><p>&nbsp</p>";
+$tool_content .= "<div id=\"operations_container\">
+	<ul id=\"opslist\">";
+$tool_content .= "<li><a href='usage.php'>".$langUsage."</a></li>";
+$tool_content .= "<li><a href='favourite.php?first='>".$langFavourite."</a></li>";
+$tool_content .= "<li><a href='userlogins.php?first='>".$langUserLogins."</a></li>";
+$tool_content .= "<li><a href='oldStats.php'>".$langOldStats."</a></li></ul></div>";
 
 
 
@@ -158,15 +163,15 @@ if ($exist_stat_accueil){
 
 //Records exist?
 if ($table_cont) {
-    $tool_content .=  '<table>
+    $tool_content .=  '<table><thead>
         <tr> <th>'.$langUser.'</th> <th>'.$langAddress.' </th> <th>'.$langLoginDate.'</th>'.
-        $table_cont.'</table>';
+        $table_cont.'</thead></table>';
         
 }
 if ($table2_cont) {
-    $tool_content .=  '<br><p>'.$langStatAccueil.'</p><table>
+    $tool_content .=  '<br><p>'.$langStatAccueil.'</p><table><thead>
         <tr> <th>'.$langHost.'</th> <th>'.$langAddress.' </th> <th>'.$langLoginDate.'</th>'.
-        $table2_cont.'</table>';
+        $table2_cont.'</thead></table>';
 
 }
 if (!($table_cont || $table2_cont)) {
@@ -231,35 +236,27 @@ if (!($table_cont || $table2_cont)) {
     <form method="post">
     &nbsp;&nbsp;
         <table>
-        
+        <thead>
         <tr>
-            <td>'.$langStartDate.'</td>
+            <th>'.$langStartDate.'</th>
             <td>'."$start_cal".'</td>
         </tr>
         <tr>
-            <td>'.$langEndDate.'</td>
+            <th>'.$langEndDate.'</th>
             <td>'."$end_cal".'</td>
         </tr>
         <tr>
-            <td>'.$langUser.'</td>
+            <th>'.$langUser.'</th>
             <td>'.$langFirstLetterUser.':<br/>'.$letterlinks.'<br />
             <select name="u_user_id">'.$user_opts.'</select></td>
         </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
-        </tr>
+        </thead>
         </table>
+        <br/>
+            <input type="submit" name="btnUsage" value="'.$langSubmit.'">
     </form>';
 
 
-
-
-
-
-
-
 draw($tool_content, 2, '', $local_head, '');
-
 
 ?>

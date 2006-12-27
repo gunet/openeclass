@@ -1,4 +1,9 @@
 <?php
+// * @version $Id$
+ //   @last update: 2006-12-27 by Evelthon Prodromou <eprodromou@upnet.gr>
+$require_current_course=true;
+$require_login = true;
+$require_prof = true;
 
 $start_cal = $jscalendar->make_input_field(
            array('showsTime'      => false,
@@ -46,36 +51,32 @@ $tool_content .= '
 <form method="post">
 &nbsp;&nbsp;
     <table>
-        
+        <thead>
         <tr>
-            <td>'.$langValueType.'</td>
+            <th>'.$langValueType.'</th>
             <td><select name="u_stats_value">'.$statsValueOptions.'</select></td>
         </tr>
 
         <tr>
-            <td>'.$langStartDate.'</td>
+            <th>'.$langStartDate.'</th>
             <td>'."$start_cal".'</td>
         </tr>
         <tr>
-            <td>'.$langEndDate.'</td>
+            <th>'.$langEndDate.'</th>
             <td>'."$end_cal".'</td>
         </tr>
         <tr>
-            <td>'.$langModule.'</td>
+            <th>'.$langModule.'</th>
             <td><select name="u_module_id">'.$mod_opts.'</select></td>
         </tr>
         <tr>
-            <td>'.$langInterval.'</td>
+            <th>'.$langInterval.'</th>
             <td><select name="u_interval">'.$statsIntervalOptions.'</select></td>
         </tr>
-        
-        <tr>
-            <td>&nbsp;</td>
-            <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
-        </tr>
-       
-        
-</table>
-</form>';
+        </thead>
+        </table>
+       <br/>
+           <input type="submit" name="btnUsage" value="'.$langSubmit.'">
+           </form>';
 
 ?>

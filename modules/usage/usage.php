@@ -28,7 +28,8 @@
 /*
 ===========================================================================
     usage/usage.php
-    @last update: 2006-06-04 by Vangelis Haniotakis
+ * @version $Id$
+    @last update: 2006-12-27 by Evelthon Prodromou <eprodromou@upnet.gr>
     @authors list: Vangelis Haniotakis haniotak@ucnet.uoc.gr
 ==============================================================================
     @Description: Main script for the usage statistics module
@@ -42,7 +43,8 @@ $require_current_course = TRUE;
 $langFiles 				= 'usage';
 $require_help 			= true;
 $helpTopic 				= 'Usage';
-
+$require_login = true;
+$require_prof = true;
 include '../../include/baseTheme.php';
 
 //include('../../include/action.php');
@@ -51,10 +53,14 @@ include '../../include/baseTheme.php';
 
 $tool_content = '';
 
-$tool_content .= "<a href=".$_SERVER['PHP_SELF'].">".$langUsage."</a> | ";
-$tool_content .= "<a href='favourite.php?first='>".$langFavourite."</a> | ";
-$tool_content .= "<a href='userlogins.php?first='>".$langUserLogins."</a> | ";
-$tool_content .= "<a href='oldStats.php'>".$langOldStats."</a><p>&nbsp</p>";
+$tool_content .= "
+<div id=\"operations_container\">
+	<ul id=\"opslist\"><li><a href=".$_SERVER['PHP_SELF'].">".$langUsage."</a></li>";
+$tool_content .= "<li><a href='favourite.php?first='>".$langFavourite."</a></li>";
+$tool_content .= "<li><a href='userlogins.php?first='>".$langUserLogins."</a></li>";
+$tool_content .= "<li><a href='oldStats.php'>".$langOldStats."</a></li>
+</ul></div>
+";
 
 
 
