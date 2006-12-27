@@ -1,4 +1,5 @@
 <?
+ //* @version $Id$
 /*****************************************************************************
         DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
 ******************************************************************************/
@@ -73,25 +74,27 @@ $c=mysql_fetch_array(db_query("SELECT COUNT(*) FROM user where statut='5'"));
 $d=mysql_fetch_array(db_query("SELECT COUNT(*) FROM user where statut='10'"));
 
 // Constract a table with platform identification info
-$tool_content .= "<table width=\"99%\"><caption>Ταυτότητα Πλατφόρμας</caption><tbody><tr><td>
-<p>$langAboutText <b>".$siteName." ".$langEclassVersion."</b></p>
-<p>".$langHostName."<b>".$SERVER_NAME."</b></p>
-<p>".$langWebVersion."<b>".$SERVER_SOFTWARE."</b></p>";
+$tool_content .= "<p><b>Ταυτότητα Πλατφόρμας</b></p>
+<ul class=\"listBullet\">
+<li>$langAboutText <b>".$siteName." ".$langEclassVersion."</b></li>
+<li>".$langHostName."<b>".$SERVER_NAME."</b></li>
+<li>".$langWebVersion."<b>".$SERVER_SOFTWARE."</b></li>";
 // Check if we have mysql database to display its information
 if (extension_loaded('mysql'))
-    $tool_content .= "<p>$langMySqlVersion<b>".mysql_get_server_info()."</b></p>";
+    $tool_content .= "<li>$langMySqlVersion<b>".mysql_get_server_info()."</b></li>";
 else // If not display message no MySQL
-    $tool_content .= "<p font color=\"red\">".$langNoMysql."</p>";
-$tool_content .= "</td></tr></tbody></table><br>";
+    $tool_content .= "<li font color=\"red\">".$langNoMysql."</li>";
+$tool_content .= "</ul>";
 
 // Constract a table with platform statistical info
-$tool_content .= "<table width=\"99%\"><caption>Στοιχεία Πλατφόρμας</caption><tbody><tr><td>
-<p>".$langAboutCourses." <b>".$a[0]."</b> ".$langCourses." (<i><b>".$a1[0]."</b> ".$langOpen.", <b>".$a2[0]."</b> ".$langSemiopen.", <b>".$a3[0]."</b> ".$langClosed."</i>)</p>
-<p>".$langAboutUsers." <b>".$e[0]."</b> ".$langUsers." (<i><b>".$b[0]."</b> ".$langProf.", <b>".$c[0]."</b> ".$langStud." ".$langAnd." <b>".$d[0]."</b> ".$langGuest."</i>)</p>
-<p>".$langTotalHits.": <b>".$totalHits."</b></p>
-<p>".$langUptime.": <b>".$uptime."</b></p>";
+$tool_content .= "<p><b>Στοιχεία Πλατφόρμας</b><p>
+<ul class=\"listBullet\">
+<li>".$langAboutCourses." <b>".$a[0]."</b> ".$langCourses." (<i><b>".$a1[0]."</b> ".$langOpen.", <b>".$a2[0]."</b> ".$langSemiopen.", <b>".$a3[0]."</b> ".$langClosed."</i>)</li>
+<li>".$langAboutUsers." <b>".$e[0]."</b> ".$langUsers." (<i><b>".$b[0]."</b> ".$langProf.", <b>".$c[0]."</b> ".$langStud." ".$langAnd." <b>".$d[0]."</b> ".$langGuest."</i>)</li>
+<li>".$langTotalHits.": <b>".$totalHits."</b></li>
+<li>".$langUptime.": <b>".$uptime."</b></li></ul>";
 
-$tool_content .= "</td></tr></tbody></table><br>";
+//$tool_content .= "</td></tr></tbody></table><br>";
 
 // Count prof requests with status = 1
 $sql = "SELECT COUNT(*) AS cnt FROM prof_request WHERE status = 1";
@@ -140,14 +143,13 @@ $result = mysql_query($sql);
 $myrow = mysql_fetch_array($result);
 $lastregisteredstuds = $myrow['cnt'];
 
-$tool_content .= "<table width=\"99%\"><caption>Ενημερωτικά Στοιχεία για τον Διαχειριστή</caption><tbody><tr><td>
-<p>Ανοικτές αιτήσεις καθηγητών: <b>".$prof_request_msg."</b></p>
-<p>Τελευταίο μάθημα που δημιουργήθηκε: ".$last_course_info."</p>
-<p>Τελευταία εγγραφή εκπαιδευτή: ".$last_prof_info."</p>
-<p>Τελευταία εγγραφή εκπαιδευομένου: ".$last_stud_info."</p>
-<p>Μετά το τελευταίο σας login έχουν εγγραφεί στην πλατφόρμα: <i><b>".$lastregisteredprofs."</b> Εκπαιδευτές και <b>".$lastregisteredstuds."</b> Εκπαιδευόμενοι</i></p>";
-
-$tool_content .= "</td></tr></tbody></table><br>";
+$tool_content .= "<p><b><caption>Ενημερωτικά Στοιχεία για τον Διαχειριστή</b></p>
+<ul class=\"listBullet\">
+<li>Ανοικτές αιτήσεις καθηγητών: <b>".$prof_request_msg."</b></li>
+<li>Τελευταίο μάθημα που δημιουργήθηκε: ".$last_course_info."</li>
+<li>Τελευταία εγγραφή εκπαιδευτή: ".$last_prof_info."</li>
+<li>Τελευταία εγγραφή εκπαιδευομένου: ".$last_stud_info."</li>
+<li>Μετά το τελευταίο σας login έχουν εγγραφεί στην πλατφόρμα: <i><b>".$lastregisteredprofs."</b> Εκπαιδευτές και <b>".$lastregisteredstuds."</b> Εκπαιδευόμενοι</i></li>";
 
 /*****************************************************************************
         DISPLAY HTML
