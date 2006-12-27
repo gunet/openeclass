@@ -97,12 +97,7 @@ if (isset($action)) {
 if($is_adminOfCourse) {
 
 	//displaying the error / status messages if there is one
-	if (!empty($catlinkstatus))	{
 
-		$tool_content .=  "<table width=\"99%\"><tbody><tr><td class=\"success\">".$catlinkstatus."</td></tr></tbody></table>";
-		$tool_content .= "<br>";
-		unset($catlinkstatus);
-	}
 
 	$tool_content .="
 	<div id=\"operations_container\">
@@ -122,7 +117,12 @@ if($is_adminOfCourse) {
 	$tool_content .=  "</ul></div>
 	";
 
+	if (!empty($catlinkstatus))	{
 
+		$tool_content .=  "<table width=\"99%\"><tbody><tr><td class=\"success\"><p><b>".$catlinkstatus."</b></td></tr></tbody></table>";
+		$tool_content .= "<br>";
+		unset($catlinkstatus);
+	}
 
 	// Displaying the correct title and the form for adding a category or link.
 	//This is only shown when nothing has been submitted yet, hence !isset($submitLink)
@@ -132,7 +132,10 @@ if($is_adminOfCourse) {
 		if ($action=="addlink")
 		{$tool_content .=  $langLinkAdd;}
 		else
-		{$tool_content .=  $langLinkMod;}
+		{
+			$tool_content .=  $langLinkModify;
+			$langAdd = $langLinkModify;
+		}
 		$tool_content .=  "</h4>\n\n";
 		if (isset($category) and $category=="")
 		{$category=0;}
@@ -192,29 +195,6 @@ if($is_adminOfCourse) {
 
 }
 
-//making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
-//number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).
-$sqlcategories="SELECT * FROM `".$tbl_categories."` ORDER BY `ordre` DESC";
-$resultcategories=db_query($sqlcategories, $dbname);
-$aantalcategories = @mysql_num_rows($resultcategories);
-if ($aantalcategories > 0) {
-	$tool_content .= "<p>";
-
-	$tool_content .=  "<a href=\"".$_SERVER['PHP_SELF']."?urlview=";
-	for($j = 1; $j <= $aantalcategories; $j++)
-	{
-		$tool_content .=  "0";
-	}
-	$tool_content .=  "\">$shownone</a>";
-	$tool_content .=  " | <a href=\"".$_SERVER['PHP_SELF']."?urlview=";
-	for($j = 1; $j <= $aantalcategories; $j++)
-	{
-		$tool_content .=  "1";
-	}
-	$tool_content .=  "\">$showall</a>";
-	$tool_content .= "</p>";
-}
-
 if (isset($down))
 movecatlink($down);
 if (isset($up))
@@ -231,12 +211,39 @@ if (mysql_num_rows($resultcategories) > 0) {
 	$sqlLinks = "SELECT * FROM `".$tbl_link."` WHERE category=0 or category IS NULL";
 	$result = db_query($sqlLinks, $dbname);
 	$numberofzerocategory=mysql_num_rows($result);
+
+	//making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
+	//number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).
+	$sqlcategories="SELECT * FROM `".$tbl_categories."` ORDER BY `ordre` DESC";
+	$resultcategories=db_query($sqlcategories, $dbname);
+	$aantalcategories = @mysql_num_rows($resultcategories);
+	if ($aantalcategories > 0) {
+		$more_less = "  <div id=\"operations_container\">
+	<ul id=\"opslist\">";
+
+		$more_less .=  "<li><b>$langCategorisedLinks</b></li><li><a href=\"".$_SERVER['PHP_SELF']."?urlview=";
+		for($j = 1; $j <= $aantalcategories; $j++)
+		{
+			$more_less .=  "0";
+		}
+		$more_less .=  "\">$shownone</a></li>";
+		$more_less .=  "<li><a href=\"".$_SERVER['PHP_SELF']."?urlview=";
+		for($j = 1; $j <= $aantalcategories; $j++)
+		{
+			$more_less .=  "1";
+		}
+		$more_less .=  "\">$showall</a></li>";
+		$more_less .= "</ul></div>";
+	}
+
 	if ($numberofzerocategory!==0)
 	{
-		$tool_content .=  "<thead><tr><td class=\"category\" colspan=\"2\">$langNoCategory</td></tr></thead>";
+		$tool_content .=  "<thead><tr><td class=\"category\" colspan=\"2\"><b>$langNoCategory</b></td></tr></thead>";
 
 		showlinksofcategory(0);
 	}
+
+	$tool_content .= "</table><br/>$more_less<table width=\"99%\">";
 	$i=0;
 	$catcounter=1;
 	$view="0";
@@ -283,20 +290,20 @@ if (mysql_num_rows($resultcategories) > 0) {
 } else {   // no category
 	if (getNumberOfLinks(0)>0){
 		$tool_content .=  "<table>";
-		$tool_content .=  "<tbody><tr><td class=\"category\" colspan=\"2\" >$langLinks</td></tr>";
+		$tool_content .=  "<tbody><tr><td class=\"category\" colspan=\"2\" ><b>$langLinks</b></td></tr>";
 
 		showlinksofcategory(0);
 		$tool_content .=  "</td></tr>";
 		$tool_content .=  "</tbody></table>";
 	} else {
 		if($is_adminOfCourse){
-		//if the user is the course administrator instruct him/her
-		//what he can do to add links	
-		$tool_content .= "<p>$langProfNoLinksExist</p>";
+			//if the user is the course administrator instruct him/her
+			//what he can do to add links
+			$tool_content .= "<p>$langProfNoLinksExist</p>";
 		} else {
-		//if the user has no course administrator access
-		//inform him/her that no links exist
-		$tool_content .= "<p>$langNoLinksExist</p>";
+			//if the user has no course administrator access
+			//inform him/her that no links exist
+			$tool_content .= "<p>$langNoLinksExist</p>";
 		}
 	}
 }
