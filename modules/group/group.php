@@ -58,7 +58,31 @@ mysql_select_db("$currentCourse");
 $nameTools = $langGroupManagement;
 
 $tool_content = "";
-
+if ($is_adminOfCourse) {
+	$head_content = '
+<script>
+function confirmation (name)
+{
+	if (name == "delall") {
+		if(confirm("'.$langDeleteGroupAllWarn.' ?"))
+		{return true;}
+		else
+		{return false;}
+	} else if (name == "emptyall") {
+		if (confirm("'.$langEmptyGroupAllWarn.' ?"))
+		{return true;}
+		else 
+		{return false;}
+	} else {
+		if (confirm("'.$langDeleteGroupWarn.' ("+ name + ") ?"))
+        {return true;}
+    	else
+        {return false;}
+    }
+}
+</script>
+';
+}
 ############## GROUP MODIFICATIONS ###############################
 
 // Group creation
@@ -224,6 +248,16 @@ while ($myTutor = mysql_fetch_array($sqlTutor))
 
 if ($is_adminOfCourse) {
 
+
+	$tool_content .= "
+<div id=\"operations_container\">
+	<ul id=\"opslist\">
+	<li><a href=\"group_creation.php\">$langNewGroupCreate</a></li>
+	<li><a href=\"".$_SERVER['PHP_SELF']."?delete=yes\" onClick=\"return confirmation('delall');\">$langDeleteGroups</a></li>
+	<li><a href=\"".$_SERVER['PHP_SELF']."?fill=yes\">$langFillGroups</a></li>
+	<li><a href=\"".$_SERVER['PHP_SELF']."?empty=yes\" onClick=\"return confirmation('emptyall');\">$langEmtpyGroups</a></li>
+	</ul></div>
+	";
 	// Show DB messages
 	if(isset($message))
 	{
@@ -231,7 +265,8 @@ if ($is_adminOfCourse) {
 		<table width=\"99%\">
 		<thead>
 		<tr><td class=\"success\">
-		$message
+		<p><b>$message</b></p>
+		
 		</td>
 		</tr>
 		</thead>
@@ -239,16 +274,6 @@ if ($is_adminOfCourse) {
 		<br>";
 	}
 	unset($message);
-	$tool_content .= "
-<div id=\"operations_container\">
-	<ul id=\"opslist\">
-	<li><a href=\"group_creation.php\">$langNewGroupCreate</a></li>
-	<li><a href=\"".$_SERVER['PHP_SELF']."?delete=yes\">$langDeleteGroups</a>/<li>
-	<li><a href=\"".$_SERVER['PHP_SELF']."?fill=yes\">$langFillGroups</a></li>
-	<li><a href=\"".$_SERVER['PHP_SELF']."?empty=yes\">$langEmtpyGroups</a></li>
-	</ul></div>
-	";
-
 	#################### SHOW PROPERTIES ######################
 	$tool_content .= <<<tCont3
 	<table width="99%">
@@ -349,7 +374,7 @@ tCont3;
 				</tr>
 			</thead>
 			<tbody>";
-//	mysql_select_db("$currentCourse");
+	//	mysql_select_db("$currentCourse");
 	$groupSelect=db_query("SELECT id, name, maxStudent FROM student_group", $currentCourse);
 
 	$totalRegistered=0;
@@ -383,12 +408,12 @@ tCont3;
 		}
 		$tool_content .= "
 			<td><div class=\"cellpos\">
-	<a href=\"group_edit.php?userGroupId=".$group["id"]."\"><img src=\"../../images/edit.gif\" border=\"0\" alt=\"".$langEdit."\"></a>
+	<a href=\"group_edit.php?userGroupId=".$group["id"]."\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"".$langEdit."\"></a>
 	</div>
 	</td>
 	<td><div class=\"cellpos\">
-	<a href=\"".$_SERVER['PHP_SELF']."?delete_one=yes&id=".$group["id"]."\">
-	<img src=\"../../images/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a>
+	<a href=\"".$_SERVER['PHP_SELF']."?delete_one=yes&id=".$group["id"]."\" onClick=\"return confirmation('".addslashes($group["name"])."');\">
+	<img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a>
 	</div>
 	</td>
 	</tr>";
@@ -403,7 +428,7 @@ tCont3;
  
 tCont4;
 
-//	mysql_select_db($mysqlMainDb);
+	//	mysql_select_db($mysqlMainDb);
 	$coursUsersSelect=db_query("
 	SELECT user_id FROM cours_user WHERE code_cours='$currentCourse' 
 			AND statut=5 AND tutor=0", $mysqlMainDb);
@@ -471,7 +496,7 @@ else {
 	</tr></thead>
 	<tbody>";
 
-//	mysql_select_db("$currentCourse");
+	//	mysql_select_db("$currentCourse");
 
 	$groupSelect=db_query("SELECT id, name, maxStudent, tutor FROM student_group", $currentCourse);
 
@@ -541,6 +566,9 @@ else {
 	$tool_content .= "</tbody></table>";
 
 } 	// else student view
-
-draw($tool_content, 2, 'group');
+if ($is_adminOfCourse) {
+	draw($tool_content, 2, 'group', $head_content);
+} else {
+	draw($tool_content, 2, 'group');
+}
 ?>
