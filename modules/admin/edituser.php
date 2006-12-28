@@ -113,7 +113,7 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		$tool_content .= convert_time($difference)."<br /><br />";
 		
 		// format the drop-down menu for data
-		$datetime = new DATETIME();
+		$datetime = new DATETIMEC();
 		$datetime->set_timename("hour", "min", "sec");
 		$datetime->set_datetime_byvar2($info[8]);
 		if ($datetime->get_date_error())
@@ -216,7 +216,7 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		$phone = isset($_POST['phone'])?$_POST['phone']:'';
 		$department = isset($_POST['department'])?$_POST['department']:'NULL';
 		$registered_at = isset($_POST['registered_at'])?$_POST['registered_at']:'';
-		$datetime = new DATETIME();
+		$datetime = new DATETIMEC();
 		$datetime->set_timename("hour", "min", "sec");
 		$datetime->set_datetime_byglobal("HTTP_POST_VARS");
 		$expires_at = $datetime->get_timestamp_entered();

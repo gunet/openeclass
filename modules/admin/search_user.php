@@ -119,7 +119,7 @@ $user_registered_at_flag_data[2] = $langBefore;
 $tool_content .= selection2($user_registered_at_flag_data,"user_registered_at_flag",$user_registered_at_flag);
     
 // format the drop-down menu for data
-$datetime = new DATETIME();
+$datetime = new DATETIMEC();
 $datetime->set_timename("hour", "min", "sec");
 $datetime->set_datetime_byvar2($user_registered_at);
 $mytime = $datetime->get_timestamp_entered();

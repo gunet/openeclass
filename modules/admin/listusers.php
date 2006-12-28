@@ -79,7 +79,7 @@ if($view==2)				// coming from search_user.php(search with criteria)
 		$user_type = isset($_POST['user_type'])?$_POST['user_type']:'';
 		$user_registered_at_flag = isset($_POST['user_registered_at_flag'])?$_POST['user_registered_at_flag']:'';
 		// format the date/time filter
-		$datetime = new DATETIME();
+		$datetime = new DATETIMEC();
 		//$datetime->set_datetime_byglobal("HTTP_POST_VARS");
 		$datetime->set_datetime_byglobal("GLOBALS['_POST']");
 		$mytime = $datetime->get_timestamp_entered();

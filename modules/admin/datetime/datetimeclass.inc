@@ -12,7 +12,7 @@ if ( !defined("DATETIMECLASS_INC") ) {
 
 	define("DATETIMECLASS_INC",1);
 
-	class DATETIME {
+	class DATETIMEC {
 	    var $current_names = array( 'yearname' => 'year',
 	    							'monthname' => 'month',
 	    							'dayname' => 'day',
