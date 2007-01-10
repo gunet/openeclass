@@ -83,10 +83,10 @@ $titulaire_probable="$prenom $nom";
 <p><b>$langCreateCourseStep2Title</b> <em>($langFieldsOptionalNote)</em> </p>
 <form method=\"post\" action=\"create_course3.php\" onsubmit=\"return validate();\">
 	
-	<input type=\"hidden\" name=\"intitule\" value=\"$intitule\">
-	<input type=\"hidden\" name=\"faculte\" value=\"$faculte\">
-	<input type=\"hidden\" name=\"titulaires\" value=\"$titulaires\">
-	<input type=\"hidden\" name=\"type\" value=\"$type\">
+	<input type=\"hidden\" name=\"intitule\" value=\"".htmlspecialchars($_POST['intitule'])."\">
+	<input type=\"hidden\" name=\"faculte\" value=\"".htmlspecialchars($_POST['faculte'])."\">
+	<input type=\"hidden\" name=\"titulaires\" value=\"".htmlspecialchars($_POST['titulaires'])."\">
+	<input type=\"hidden\" name=\"type\" value=\"".htmlspecialchars($_POST['type'])."\">
 
 		<table width=\"99%\">
 

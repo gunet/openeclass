@@ -99,15 +99,15 @@ if(!isset($_GET["finish_create_course"])) {
   <form method=\"post\" action=\"$_SERVER[PHP_SELF]?finish_create_course\">
 
 <!-- S T E P  1   [form data] -->
-<input type=\"hidden\" name=\"intitule\" value=\"$intitule\">
-<input type=\"hidden\" name=\"faculte\" value=\"$faculte\">
-<input type=\"hidden\" name=\"titulaires\" value=\"$titulaires\">
-<input type=\"hidden\" name=\"type\" value=\"$type\">
+<input type=\"hidden\" name=\"intitule\" value=\"".htmlspecialchars($_POST['intitule'])."\">
+<input type=\"hidden\" name=\"faculte\" value=\"".htmlspecialchars($_POST['faculte'])."\">
+<input type=\"hidden\" name=\"titulaires\" value=\"".htmlspecialchars($_POST['titulaires'])."\">
+<input type=\"hidden\" name=\"type\" value=\"".htmlspecialchars($_POST['type'])."\">
 
 <!-- S T E P  2   [form data] -->
-<input type=\"hidden\" name=\"description\" value=\"$description\">
-<input type=\"hidden\" name=\"course_addon\" value=\"$course_addon\">
-<input type=\"hidden\" name=\"course_keywords\" value=\"$course_keywords\">
+<input type=\"hidden\" name=\"description\" value=\"".htmlspecialchars($_POST['description'])."\">
+<input type=\"hidden\" name=\"course_addon\" value=\"".htmlspecialchars($_POST['course_addon'])."\">
+<input type=\"hidden\" name=\"course_keywords\" value=\"".htmlspecialchars($_POST['course_keywords'])."\">
   
         <table width=\"99%\">
             <thead>
