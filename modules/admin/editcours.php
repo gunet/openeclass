@@ -60,8 +60,10 @@ $require_admin = TRUE;
 // Include baseTheme
 include '../../include/baseTheme.php';
 
-if (isset($c))
+if (isset($_GET['c'])) {
+	$c = $_GET['c'];
 	$_SESSION['c_temp']=$c;
+}
 
 if(!isset($c))
 	$c=$_SESSION['c_temp'];
@@ -106,10 +108,10 @@ if (isset($c)) {
 	}
 	// Get information about selected course
 	$sql = mysql_query(
-		"SELECT * FROM cours WHERE code = '".$c."'");
+		"SELECT * FROM cours WHERE code = '".mysql_real_escape_string($c)."'");
 	$row = mysql_fetch_array($sql);
 	// Display course information and link to edit
-	$tool_content .= "<table width=\"99%\"><caption>".$langCourseInfo." (<a href=\"infocours.php?c=".$c."".$searchurl."\">".$langChange."</a>)</caption><tbody>";
+	$tool_content .= "<table width=\"99%\"><caption>".$langCourseInfo." (<a href=\"infocours.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langChange."</a>)</caption><tbody>";
 	$tool_content .= "  <tr>
     <td width=\"3%\" nowrap><b>".$langDepartment.":</b></td>
     <td>".$row['faculte']."</td>
@@ -128,10 +130,10 @@ if (isset($c)) {
 </tr>";
 	$tool_content .= "</tbody></table><br>\n";
 	// Display course quota and link to edit
-	$tool_content .= "<table width=\"99%\"><caption>".$langQuota." (<a href=\"quotacours.php?c=$c".$searchurl."\">".$langChange."</a>)</caption><tbody>";
+	$tool_content .= "<table width=\"99%\"><caption>".$langQuota." (<a href=\"quotacours.php?c=".htmlspecialchars($c).$searchurl."\">".$langChange."</a>)</caption><tbody>";
 	// Get information about course quota
 	$q = mysql_fetch_array(mysql_query("SELECT code,intitule,doc_quota,video_quota,group_quota,dropbox_quota 
-			FROM cours WHERE code='$c'"));
+			FROM cours WHERE code='".mysql_real_escape_string($c)."'"));
 	$tool_content .= "  <tr>
     <td colspan=\"2\"><i>$langTheCourse <b>$q[intitule]</b> $langMaxQuota</i><br></td>
   </tr>";			
@@ -157,7 +159,7 @@ if (isset($c)) {
 </tr>";
 	$tool_content .= "</tbody></table><br>\n";
 	// Display course type and link to edit
-	$tool_content .= "<table width=\"99%\"><caption>".$langCourseStatus." (<a href=\"statuscours.php?c=".$c."".$searchurl."\">".$langChange."</a>)</caption><tbody>";
+	$tool_content .= "<table width=\"99%\"><caption>".$langCourseStatus." (<a href=\"statuscours.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langChange."</a>)</caption><tbody>";
 	$tool_content .= "  <tr>
     <td width=\"3%\" nowrap><b>".$langCurrentStatus.":</b></td>
     <td>";
@@ -178,11 +180,11 @@ if (isset($c)) {
 	$tool_content .= "<table width=\"99%\"><caption>".$langOtherActions."</caption><tbody>";
 	// Users list
 	$tool_content .= "  <tr>
-    <td><a href=\"listusers.php?c=".$c."\">".$langListUsers."</a></td>
+    <td><a href=\"listusers.php?c=".htmlspecialchars($c)."\">".$langListUsers."</a></td>
   </tr>";
   // Register unregister users
 	$tool_content .= "  <tr>
-    <td><a href=\"addusertocours.php?c=".$c."".$searchurl."\">".$langQuickAddDelUserToCours."</a></td>
+    <td><a href=\"addusertocours.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langQuickAddDelUserToCours."</a></td>
   </tr>";
   // Course statistics
 	$tool_content .= "  <tr>
@@ -190,11 +192,11 @@ if (isset($c)) {
   </tr>";
   // Backup course
 	$tool_content .= "  <tr>
-    <td><a href=\"../course_info/archive_course.php?c=".$c."".$searchurl."\">".$langTakeBackup."<a/></td>
+    <td><a href=\"../course_info/archive_course.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langTakeBackup."<a/></td>
   </tr>";
   // Delete course
 	$tool_content .= "  <tr>
-    <td><a href=\"delcours.php?c=".$c."".$searchurl."\">".$langCourseDelFull."</a></td>
+    <td><a href=\"delcours.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langCourseDelFull."</a></td>
   </tr>";
 	$tool_content .= "</tbody></table>";
 

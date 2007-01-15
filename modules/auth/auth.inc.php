@@ -199,7 +199,7 @@ return $auth_row : an associative array
 ****************************************************************/
 function get_auth_settings($auth)
 {
-	$qry = "SELECT * FROM auth WHERE auth_id = ".mysql_real_escape_string($auth);
+	$qry = "SELECT * FROM auth WHERE auth_id = '".mysql_real_escape_string($auth)."'";
   $result = db_query($qry);
   if($result)
   {

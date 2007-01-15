@@ -59,11 +59,12 @@ $langFiles = 'admin';
 $require_admin = TRUE;
 // Include baseTheme
 include '../../include/baseTheme.php';
+if(!isset($_GET['c'])) { die(); }
 // Define $nameTools
 $nameTools = $langCourseInfo;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "listcours.php", "name" => $langListCours);
-$navigation[] = array("url" => "editcours.php?c=$c", "name" => $langCourseEdit);
+$navigation[] = array("url" => "editcours.php?c=".htmlspecialchars($_GET['c']), "name" => $langCourseEdit);
 // Initialise $tool_content
 $tool_content = "";
 
@@ -80,10 +81,10 @@ if (isset($submit))  {
   // $faculte example: 12--Tmima 1
   list($facid, $facname) = split("--", $faculte);
   // Update query
-	$sql = mysql_query("UPDATE cours SET faculte='$facname', titulaires='$titulaires', intitule='$intitule', faculteid='$facid' WHERE code='$c'");
+	$sql = mysql_query("UPDATE cours SET faculte='$facname', titulaires='$titulaires', intitule='$intitule', faculteid='$facid' WHERE code='".mysql_real_escape_string($_GET['c'])."'");
 	// Some changes happened
 	if (mysql_affected_rows() > 0) {
-		$sql = mysql_query("UPDATE cours_faculte SET faculte='$facname', facid='$facid' WHERE code='$c'");
+		$sql = mysql_query("UPDATE cours_faculte SET faculte='$facname', facid='$facid' WHERE code='".mysql_real_escape_string($_GET['c'])."'");
 		$tool_content .= "<p>".$langCourseEditSuccess."</p>";
 	}
 	// Nothing updated
@@ -95,9 +96,9 @@ if (isset($submit))  {
 // Display edit form for course basic information
 else {
 	// Get course information
-	$row = mysql_fetch_array(mysql_query("SELECT * FROM cours WHERE code='$c'"));
+	$row = mysql_fetch_array(mysql_query("SELECT * FROM cours WHERE code='".mysql_real_escape_string($_GET['c'])."'"));
 	// Constract the edit form
-	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".$c."".$searchurl." method=\"post\">";	
+	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."".$searchurl." method=\"post\">";	
 	$tool_content .= "<table width=\"99%\"><caption>".$langCourseInfoEdit."</caption><tbody>";
 	$tool_content .= "  <tr>
     <td colspan=\"2\"><b><u>".$langCourseInfos."</u></b><br><br></td>
@@ -135,8 +136,8 @@ else {
 	$tool_content .= "</tbody></table></form>\n";
 }
 // If course selected go back to editcours.php
-if (isset($c)) {
-	$tool_content .= "<center><p><a href=\"editcours.php?c=".$c."".$searchurl."\">".$langReturn."</a></p></center>";
+if (isset($_GET['c'])) {
+	$tool_content .= "<center><p><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\">".$langReturn."</a></p></center>";
 }
 // Else go back to index.php directly
 else {

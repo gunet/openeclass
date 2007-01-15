@@ -158,7 +158,7 @@ elseif ($a == 1)  {
 	}
 // Delete faculte
 elseif ($a == 2) {
-	$s=mysql_query("SELECT * from cours WHERE faculteid='$c'");
+	$s=mysql_query("SELECT * from cours WHERE faculteid='".mysql_real_escape_string($_GET['c'])."'");
 	// Check for existing courses of a faculte
 	if (mysql_num_rows($s) > 0)  {
 		// The faculte cannot be deleted
@@ -199,7 +199,7 @@ elseif ($a == 3)  {
 			}
 	} else {
 		// Get faculte information
-		$sql = "SELECT code, name FROM faculte WHERE id='".$c."'";
+		$sql = "SELECT code, name FROM faculte WHERE id='".mysql_real_escape_string($_GET['c'])."'";
 		$result = mysql_query($sql);
 		$myrow = mysql_fetch_array($result);
 		// Display form for edit faculte information
@@ -209,7 +209,7 @@ elseif ($a == 3)  {
 		<tr><td>&nbsp;</td><td><i>".$langCodeFaculte2."</i></td></tr>
 		<tr><td width=\"3%\" nowrap>".$langFaculte1.":</td><td><input type=\"text\" name=\"faculte\" value=\"".$myrow['name']."\"></td></tr>
 		<tr><td>&nbsp;</td><td><i>".$langFaculte2."</i></td></tr>
-		<tr><td colspan=\"2\"><input type=\"hidden\" name=\"c\" value=\"".$c."\"><input type=\"submit\" name=\"edit\" value=\"Επικύρωση\"></td</tr>
+		<tr><td colspan=\"2\"><input type=\"hidden\" name=\"c\" value=\"".htmlspecialchars($_GET['c'])."\"><input type=\"submit\" name=\"edit\" value=\"Επικύρωση\"></td</tr>
 		</tbody></table></form>";
 		}
 		// Display link back to addfaculte.php

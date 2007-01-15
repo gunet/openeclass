@@ -55,11 +55,12 @@ $langFiles = array('course_info', 'create_course', 'opencours','admin');
 $require_admin = TRUE;
 // Include baseTheme
 include '../../include/baseTheme.php';
+if(!isset($_GET['c'])) { die(); }
 // Define $nameTools
 $nameTools = $langCourseDel;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "listcours.php", "name" => $langListCours);
-$navigation[] = array("url" => "editcours.php?c=$c", "name" => $langCourseEdit);
+$navigation[] = array("url" => "editcours.php?c=".htmlspecialchars($_GET['c']), "name" => $langCourseEdit);
 // Initialise $tool_content
 $tool_content = "";
 
@@ -74,33 +75,33 @@ if (isset($search) && ($search=="yes")) {
 	$searchurl = "&search=yes";
 }
 // Delete course
-if (isset($delete) && isset($c))  {
-	mysql_query("DROP DATABASE `$c`");
-	mysql_query("DELETE FROM `$mysqlMainDb`.cours WHERE code='$c'");
-	mysql_query("DELETE FROM `$mysqlMainDb`.cours_user WHERE code_cours='$c'");
-	mysql_query("DELETE FROM `$mysqlMainDb`.cours_faculte WHERE code='$c'");
-	mysql_query("DELETE FROM `$mysqlMainDb`.annonces WHERE code_cours='$c'");
+if (isset($delete) && isset($_GET['c']))  {
+	mysql_query("DROP DATABASE `".mysql_real_escape_string($_GET['c'])."`");
+	mysql_query("DELETE FROM `$mysqlMainDb`.cours WHERE code='".mysql_real_escape_string($_GET['c'])."'");
+	mysql_query("DELETE FROM `$mysqlMainDb`.cours_user WHERE code_cours='".mysql_real_escape_string($_GET['c'])."'");
+	mysql_query("DELETE FROM `$mysqlMainDb`.cours_faculte WHERE code='".mysql_real_escape_string($_GET['c'])."'");
+	mysql_query("DELETE FROM `$mysqlMainDb`.annonces WHERE code_cours='".mysql_real_escape_string($_GET['c'])."'");
 	@mkdir("../../courses/garbage");
-	rename("../../courses/$c", "../../courses/garbage/$c");
+	rename("../../courses/".$_GET['c'], "../../courses/garbage/".$_GET['c']);
 	$tool_content .= "<p>".$langCourseDelSuccess."</p>";
 }
 // Display confirmationm message for course deletion
 else {
-	$row = mysql_fetch_array(mysql_query("SELECT * FROM cours WHERE code='$c'"));
+	$row = mysql_fetch_array(mysql_query("SELECT * FROM cours WHERE code='".mysql_real_escape_string($_GET['c'])."'"));
 	
 	$tool_content .= "<table width=\"99%\"><caption>".$langCourseDelConfirm."</caption><tbody>";
 	$tool_content .= "  <tr>
-    <td><br>".$langCourseDelConfirm2." <em>$c</em>;<br><br><i><b>Προσοχή!</b> Η διαγραφή του μαθήματος θα διαγράψει επίσης τους εγγεγραμμένους φοιτητές από το μάθημα, την αντιστοιχία του μαθήματος στο Τμήμα, καθώς και όλο το υλικό του μαθήματος.</i><br><br></td>
+    <td><br>".$langCourseDelConfirm2." <em>".htmlspecialchars($_GET['c'])."</em>;<br><br><i><b>Προσοχή!</b> Η διαγραφή του μαθήματος θα διαγράψει επίσης τους εγγεγραμμένους φοιτητές από το μάθημα, την αντιστοιχία του μαθήματος στο Τμήμα, καθώς και όλο το υλικό του μαθήματος.</i><br><br></td>
   </tr>";
 	$tool_content .= "  <tr>
-    <td><ul><li><a href=\"".$_SERVER['PHP_SELF']."?c=".$c."&delete=yes".$searchurl."\"><b>Ναι</b></a><br>&nbsp;</li>
-              <li><a href=\"editcours.php?c=".$c."".$searchurl."\"><b>Όχι</b></a></li></ul></td>
+    <td><ul><li><a href=\"".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."&delete=yes".$searchurl."\"><b>Ναι</b></a><br>&nbsp;</li>
+              <li><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\"><b>Όχι</b></a></li></ul></td>
   </tr>";
 	$tool_content .= "</tbody></table><br>";
 }
 // If course deleted go back to editcours.php
-if (isset($c) && !isset($delete)) {
-	$tool_content .= "<center><p><a href=\"editcours.php?c=".$c."".$searchurl."\">".$langReturn."</a></p></center>";
+if (isset($_GET['c']) && !isset($delete)) {
+	$tool_content .= "<center><p><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\">".$langReturn."</a></p></center>";
 }
 // Go back to listcours.php
 else {

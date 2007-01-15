@@ -64,7 +64,7 @@ if((!empty($auth)) && (!empty($active)))
 		default:	$q = '0';
 		break;
 	}
-	$qry = "UPDATE auth SET auth_default=".$q." WHERE auth_id=".$auth;
+	$qry = "UPDATE auth SET auth_default=".$q." WHERE auth_id='".mysql_real_escape_string($auth)."'";
 	if(!empty($qry))
 	{
 	$sql = mysql_query($qry,$db);		// do the update as the default method

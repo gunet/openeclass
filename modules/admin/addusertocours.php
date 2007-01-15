@@ -56,11 +56,12 @@ $langFiles = 'admin';
 $require_admin = TRUE;
 // Include baseTheme
 include '../../include/baseTheme.php';
+if(!isset($_GET['c'])) { die(); }
 // Define $nameTools
 $nameTools = $langQuickAddDelUserToCours;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "listcours.php", "name" => $langListCours);
-$navigation[] = array("url" => "editcours.php?c=$c", "name" => $langCourseEdit);
+$navigation[] = array("url" => "editcours.php?c=".htmlspecialchars($_GET['c']), "name" => $langCourseEdit);
 // Initialise $tool_content
 $tool_content = "";
 
@@ -81,19 +82,19 @@ if (isset($submit))  {
 	$numberProfs = @count($regprofs);
 	
 	// Wash out all course users
-	$sql = mysql_query("DELETE FROM cours_user WHERE code_cours = '".$c."' AND user_id != '".$uid."'");
+	$sql = mysql_query("DELETE FROM cours_user WHERE code_cours = '".mysql_real_escape_string($_GET['c'])."' AND user_id != '".$uid."'");
 	
 	for ($i=0; $i < $numberStuds; $i++) {
 		// Insert student
 		$sqlInsertStud = "INSERT INTO `cours_user` (`code_cours`, `user_id`, `statut`, `role`)
-			VALUES ('".$c."', '".$regstuds[$i]."', '5', ' ')"; 
+			VALUES ('".mysql_real_escape_string($_GET['c'])."', '".$regstuds[$i]."', '5', ' ')"; 
 		mysql_query($sqlInsertStud) ;
 	}
 
 	for ($i=0; $i < $numberProfs; $i++) {
 		// Insert professor
 		$sqlInsertProf = "INSERT INTO `cours_user` (`code_cours`, `user_id`, `statut`, `role`)
-			VALUES ('".$c."', '".$regprofs[$i]."', '1', 'Καθηγητής')"; 
+			VALUES ('".mysql_real_escape_string($_GET['c'])."', '".$regprofs[$i]."', '1', 'Καθηγητής')"; 
 		mysql_query($sqlInsertProf) ;
 	}
 
@@ -167,7 +168,7 @@ function reverseAll(cbList) {
 
 </script>';
 	
-	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".$c."".$searchurl." method=\"post\">";
+	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."".$searchurl." method=\"post\">";
 	$tool_content .= "<table width=\"99%\"><caption>".$langFormUserManage."</caption><tbody>";
 
 	$tool_content .= "<tr valign=top align=center> 
@@ -179,7 +180,7 @@ function reverseAll(cbList) {
 	
 	$sqll= "SELECT DISTINCT u.user_id , u.nom, u.prenom 
 				FROM user u
-				LEFT JOIN cours_user cu ON u.user_id = cu.user_id AND cu.code_cours = '".$c."'
+				LEFT JOIN cours_user cu ON u.user_id = cu.user_id AND cu.code_cours = '".mysql_real_escape_string($_GET['c'])."'
 				WHERE cu.user_id is null";
 	
 	$resultAll=mysql_query($sqll);
@@ -231,7 +232,7 @@ function reverseAll(cbList) {
 	// Students registered in the selected course
 	$resultStud=mysql_query("SELECT DISTINCT u.user_id , u.nom, u.prenom 
 				FROM user u, cours_user cu
-				WHERE cu.code_cours='$c'
+				WHERE cu.code_cours='".mysql_real_escape_string($_GET['c'])."'
 				AND cu.user_id=u.user_id
 				AND cu.statut=5");
 	
@@ -252,7 +253,7 @@ function reverseAll(cbList) {
 	// Administrator is excluded
 	$resultProf=mysql_query("SELECT DISTINCT u.user_id , u.nom, u.prenom 
 				FROM user u, cours_user cu
-				WHERE cu.code_cours='$c'
+				WHERE cu.code_cours='".mysql_real_escape_string($_GET['c'])."'
 				AND cu.user_id=u.user_id
 				AND cu.statut=1
 				AND u.user_id!='".$uid."'");
@@ -273,8 +274,8 @@ function reverseAll(cbList) {
 	
 }
 // If course selected go back to editcours.php
-if (isset($c)) {
-	$tool_content .= "<center><p><a href=\"editcours.php?c=".$c."".$searchurl."\">".$langReturn."</a></p></center>";
+if (isset($_GET['c'])) {
+	$tool_content .= "<center><p><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\">".$langReturn."</a></p></center>";
 }
 // Else go back to index.php directly
 else {

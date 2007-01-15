@@ -56,11 +56,12 @@ $langFiles = 'admin';
 $require_admin = TRUE;
 // Include baseTheme
 include '../../include/baseTheme.php';
+if(!isset($_GET['c'])) { die(); }
 // Define $nameTools
 $nameTools = $langQuota;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "listcours.php", "name" => $langListCours);
-$navigation[] = array("url" => "editcours.php?c=$c", "name" => $langCourseEdit);
+$navigation[] = array("url" => "editcours.php?c=".htmlspecialchars($_GET['c']), "name" => $langCourseEdit);
 // Initialise $tool_content
 $tool_content = "";
 
@@ -82,7 +83,7 @@ if (isset($submit))  {
         $gq = $gq * 1000000;
         $drq = $drq * 1000000;
   // Update query
-	$sql = mysql_query("UPDATE cours SET doc_quota='$dq',video_quota='$vq',group_quota='$gq',dropbox_quota='$drq' 			WHERE code='$c'");
+	$sql = mysql_query("UPDATE cours SET doc_quota='$dq',video_quota='$vq',group_quota='$gq',dropbox_quota='$drq' 			WHERE code='".mysql_real_escape_string($_GET['c'])."'");
 	// Some changes occured
 	if (mysql_affected_rows() > 0) {
 		$tool_content .= "<p>".$langQuotaSuccess."</p>";
@@ -97,14 +98,14 @@ if (isset($submit))  {
 else {
 	// Get course information
 	$q = mysql_fetch_array(mysql_query("SELECT code,intitule,doc_quota,video_quota,group_quota,dropbox_quota 
-			FROM cours WHERE code='$c'"));
+			FROM cours WHERE code='".mysql_real_escape_string($_GET['c'])."'"));
 	$quota_info .= "<i>".$langTheCourse." <b>".$q['intitule']."</b> ".$langMaxQuota;
 	$dq = $q['doc_quota'] / 1000000;
 	$vq = $q['video_quota'] / 1000000;
 	$gq = $q['group_quota'] / 1000000;
 	$drq = $q['dropbox_quota'] / 1000000;
 	// Constract the edit form
-	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".$c."".$searchurl." method=\"post\">
+	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."".$searchurl." method=\"post\">
 <table width=\"99%\"><caption>".$langQuotaAdmin."</caption><tbody>
   <tr>
     <td colspan=\"2\">".$quota_info."</td>
@@ -125,7 +126,7 @@ else {
     <td width=\"3%\" nowrap>$langLegend <b>$langDropbox</b>:</td>
     <td><input type='text' name='drq' value='$drq' size='4' maxlength='4'> Mb.</td>
   </tr>
-  <input type='hidden' name='c' value='$c'>
+  <input type='hidden' name='c' value='".htmlspecialchars($_GET['c'])."'>
   <tr>
     <td colspan=\"2\"><input type='submit' name='submit' value='$langModify'></td>
   </tr>
@@ -133,8 +134,8 @@ else {
 </form>\n";
 }
 // If course selected go back to editcours.php
-if (isset($c)) {
-	$tool_content .= "<center><p><a href=\"editcours.php?c=".$c."".$searchurl."\">".$langReturn."</a></p></center>";
+if (isset($_GET['c'])) {
+	$tool_content .= "<center><p><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\">".$langReturn."</a></p></center>";
 }
 // Else go back to index.php directly
 else {

@@ -29,10 +29,10 @@ $end_cal = $jscalendar->make_input_field(
         $letterlinks .= '<a href="?first='.$first_letter.'">'.$first_letter.'</a> ';
     }
 
-    if ($_GET['first']) {
+    if (isset($_GET['first'])) {
         $firstletter = $_GET['first'];
         $qry = "SELECT user_id, nom, prenom, username, email
-                FROM user WHERE LEFT(nom,1) = '$firstletter'";
+                FROM user WHERE LEFT(nom,1) = '".mysql_real_escape_string($firstletter)."'";
     } else {
         $qry = "SELECT user_id, nom, prenom, username, email FROM user";
     }

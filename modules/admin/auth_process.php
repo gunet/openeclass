@@ -174,7 +174,7 @@ else
 	<tr><td>";
 	$tool_content .= "<form name=\"authmenu\" method=\"post\" action=\"auth_process.php\">
 	<input type=\"hidden\" name=\"auth_submit\" value=\"1\" />
-	<input type=\"hidden\" name=\"auth\" value=\"".$auth."\" />
+	<input type=\"hidden\" name=\"auth\" value=\"".htmlspecialchars($auth)."\" />
 	<input type=\"hidden\" name=\"step\" value=\"1\" />
 	$langAuthMethod: <strong>".get_auth_info($auth)."</strong><br /><br /><br />";
 	switch($auth)
