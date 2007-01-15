@@ -291,10 +291,10 @@ if (!extension_loaded('gd')) {
         $letterlinks .= '<a href="?first='.$first_letter.'">'.$first_letter.'</a> ';
     }
 
-    if ($_GET['first']) {
+    if (isset($_GET['first'])) {
         $firstletter = $_GET['first'];
         $qry = "SELECT code, intitule
-                FROM cours WHERE LEFT(intitule,1) = '$firstletter'";
+                FROM cours WHERE LEFT(intitule,1) = '".mysql_real_escape_string($firstletter)."'";
     } else {
         $qry = "SELECT code, intitule FROM cours";
     }

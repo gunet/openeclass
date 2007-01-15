@@ -207,7 +207,7 @@ function uid_to_username($uid)
 	global $mysqlMainDb;
 
 	if ($r = mysql_fetch_row(db_query(
-	"SELECT username FROM user WHERE user_id = '$uid'",
+	"SELECT username FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'",
 	$mysqlMainDb))) {
 		return $r[0];
 	} else {
@@ -221,7 +221,7 @@ function uid_to_name($uid)
 	global $mysqlMainDb;
 
 	if ($r = mysql_fetch_row(db_query("SELECT CONCAT(nom, ' ', prenom)
-						FROM user WHERE user_id = '$uid'", $mysqlMainDb))) {
+						FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'", $mysqlMainDb))) {
 	return $r[0];
 						} else {
 							return FALSE;

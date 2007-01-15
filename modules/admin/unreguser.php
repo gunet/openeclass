@@ -62,12 +62,12 @@ if(empty($doit))
 	$tool_content .= "<h4>$langConfirmDelete</h4><p>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em>";
 	if(!empty($c)) 
 	{
-		$tool_content .= " $langConfirmDeleteQuestion2 <em>".$c."</em>";
+		$tool_content .= " $langConfirmDeleteQuestion2 <em>".htmlspecialchars($c)."</em>";
 	}
 	$tool_content .= "$langQueryMark</p>
 		<ul>
-		<li>$langYes: <a href=\"unreguser.php?u=$u&c=$c&doit=yes\">$langDelete!</a><br>&nbsp;</li>
-		<li>$langNo: <a href=\"edituser.php?u=$u\">$langEditUser $u_account</a>&nbsp;&nbsp;&nbsp;<a href=\"index.php\">$back</a></li>
+		<li>$langYes: <a href=\"unreguser.php?u=".htmlspecialchars($u)."&c=".htmlspecialchars($c)."&doit=yes\">$langDelete!</a><br>&nbsp;</li>
+		<li>$langNo: <a href=\"edituser.php?u=".htmlspecialchars($u)."\">$langEditUser $u_account</a>&nbsp;&nbsp;&nbsp;<a href=\"index.php\">$back</a></li>
 		</ul>";	
 } 
 else 
@@ -86,7 +86,7 @@ else
 			else
 			{
 				// now check if the user has registered courses...
-				$q1 = mysql_query("SELECT * FROM cours_user WHERE user_id=".$u);
+				$q1 = mysql_query("SELECT * FROM cours_user WHERE user_id='".mysql_real_escape_string($u)."'");
 				$total = mysql_num_rows($q1);
 				if((!empty($total)) && ($total>0))		// means the the user has courses, so it is not allowed to delete
 				{
@@ -114,7 +114,7 @@ else
 							$tool_content .= "$langUnregFirst <br><br>";
 							$sql = mysql_query("SELECT a.code, a.intitule, b.statut, a.cours_id, b.tutor 
 							FROM cours AS a LEFT JOIN cours_user AS b ON a.code = b.code_cours
-							WHERE b.user_id = '$u' AND b.tutor=0 ORDER BY b.statut, a.faculte");
+							WHERE b.user_id = '".mysql_real_escape_string($u)."' AND b.tutor=0 ORDER BY b.statut, a.faculte");
 							// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα 
 							if (mysql_num_rows($sql) > 0) 
 							{
@@ -134,11 +134,11 @@ else
 											break;
 										case '0':
 											$tool_content .= $langStudent;
-											$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=$u&c=$logs[0]\">$langDelete</a></td></tr>\n";
+											$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=".htmlspecialchars($u)."&c=$logs[0]\">$langDelete</a></td></tr>\n";
 											break;
 										default:
 											$tool_content .= $langVisitor;
-											$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=$u&c=$logs[0]\">$langDelete</a></td></tr>\n";
+											$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=".htmlspecialchars($u)."&c=$logs[0]\">$langDelete</a></td></tr>\n";
 											break;
 									}
 								}
@@ -150,7 +150,7 @@ else
 							$tool_content .= "$langUnregTeacher<br>";
 							$sql = mysql_query("SELECT a.code, a.intitule, b.statut, a.cours_id 
 							FROM cours AS a LEFT JOIN cours_user AS b ON a.code = b.code_cours
-							WHERE b.user_id = '$u' AND b.statut=1 ORDER BY b.statut, a.faculte");
+							WHERE b.user_id = '".mysql_real_escape_string($u)."' AND b.statut=1 ORDER BY b.statut, a.faculte");
 							// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα 
 							if (mysql_num_rows($sql) > 0) 
 							{
@@ -179,7 +179,7 @@ else
 						$tool_content .= "$langUnregFirst <br><br>";
 						$sql = mysql_query("SELECT a.code, a.intitule, b.statut, a.cours_id 
 						FROM cours AS a LEFT JOIN cours_user AS b ON a.code = b.code_cours
-						WHERE b.user_id = '$u' AND (b.statut=5 OR b.statut=10) ORDER BY b.statut, a.faculte");
+						WHERE b.user_id = '".mysql_real_escape_string($u)."' AND (b.statut=5 OR b.statut=10) ORDER BY b.statut, a.faculte");
 						// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα 
 						if (mysql_num_rows($sql) > 0) 
 						{
@@ -199,11 +199,11 @@ else
 									break;
 								case 5:
 									$tool_content .= $langStudent;
-									$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=$u&c=$logs[0]\">$langDelete</a></td></tr>\n";
+									$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=".htmlspecialchars($u)."&c=$logs[0]\">$langDelete</a></td></tr>\n";
 									break;
 								default:
 									$tool_content .= $langVisitor;
-									$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=$u&c=$logs[0]\">$langDelete</a></td></tr>\n";
+									$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=".htmlspecialchars($u)."&c=$logs[0]\">$langDelete</a></td></tr>\n";
 									break;
 							}
 						}
@@ -220,7 +220,7 @@ else
 				}
 				else
 				{
-					$sql = mysql_query("DELETE from user WHERE user_id = '$u'");
+					$sql = mysql_query("DELETE from user WHERE user_id = '".mysql_real_escape_string($u)."'");
 					if (mysql_affected_rows($conn) > 0)
 					{
 						$t = 2;
@@ -243,27 +243,27 @@ else
 			
 				if($u!=1)
 				{
-					mysql_query("DELETE from admin WHERE idUser = '$u'");
+					mysql_query("DELETE from admin WHERE idUser = '".mysql_real_escape_string($u)."'");
 				}
 				if (mysql_affected_rows($conn) > 0) 
 				{
-					$tool_content .= "<p>$langUserWithId $u $langWasAdmin.</p>\n";
+					$tool_content .= "<p>$langUserWithId ".htmlspecialchars($u)." $langWasAdmin.</p>\n";
 				}
 				
 				// delete guest user from cours_user 
 				if($u_statut == '10')
 				{
-					$sql = mysql_query("DELETE from cours_user WHERE user_id = '$u'");
+					$sql = mysql_query("DELETE from cours_user WHERE user_id = '".mysql_real_escape_string($u)."'");
 				}
 			}
 			
 		} 
 		elseif((!empty($c)) && (!empty($u)))
 		{
-			$sql = mysql_query("DELETE from cours_user WHERE user_id = '$u' and code_cours='$c'");
+			$sql = mysql_query("DELETE from cours_user WHERE user_id = '".mysql_real_escape_string($u)."' and code_cours='".mysql_real_escape_string($c)."'");
 			if (mysql_affected_rows($conn) > 0)  
 			{
-				$tool_content .= "<p>$langUserWithId $u $langWasCourseDeleted $c.</p>\n";
+				$tool_content .= "<p>$langUserWithId ".htmlspecialchars($u)." $langWasCourseDeleted ".htmlspecialchars($c).".</p>\n";
 				$m = 1;
 			}
 		}
@@ -273,7 +273,7 @@ else
 		}
 		$tool_content .= "<br>&nbsp;";
 		if((isset($m)) && (!empty($m))) {
-			$tool_content .= "<br><a href=\"edituser.php?u=$u\">$langEditUser $u_account</a>&nbsp;&nbsp;&nbsp;";
+			$tool_content .= "<br><a href=\"edituser.php?u=".htmlspecialchars($u)."\">$langEditUser $u_account</a>&nbsp;&nbsp;&nbsp;";
 		}
 		$tool_content .= "<a href=\"./index.php\">$langBackAdmin</a>.<br />\n";
 	}
@@ -283,7 +283,7 @@ function get_uid_statut($u)
 {
 	global $mysqlMainDb;
 
-	if ($r = mysql_fetch_row(db_query("SELECT statut FROM user WHERE user_id = '$u'",	$mysqlMainDb))) 
+	if ($r = mysql_fetch_row(db_query("SELECT statut FROM user WHERE user_id = '".mysql_real_escape_string($u)."'",	$mysqlMainDb))) 
 	{
 		return $r[0];
 	} 
