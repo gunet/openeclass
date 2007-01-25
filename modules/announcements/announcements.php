@@ -130,7 +130,7 @@ function confirmation (name)
 		<li><a href=\"".$_SERVER['PHP_SELF']."?addAnnouce=1\">".$langAddAnn."</a></li>";
 
 
-	if ($announcementNumber > 1 || isset($_REQUEST['submitAnnouncement'])) {
+	if ($announcementNumber > 1 || isset($_POST['submitAnnouncement'])) {
 		$tool_content .=  "
 				<li><a href=\"$_SERVER[PHP_SELF]?deleteAllAnnouncement=1\" onClick=\"return confirmation('all');\">$langEmptyAnn</a></li>
 				";
@@ -221,13 +221,13 @@ function confirmation (name)
 	SUBMIT ANNOUNCEMENT COMMAND
 	--------------------------------------*/
 
-	if (isset($submitAnnouncement) && $submitAnnouncement)
+	if (isset($_POST['submitAnnouncement']))
 	{
 		/*** MODIFY ANNOUNCEMENT ***/
 
 		if($id) {
-			db_query("UPDATE annonces SET contenu='$newContent', temps=NOW()
-				WHERE id=$id",$mysqlMainDb);
+			db_query("UPDATE annonces SET contenu='".mysql_real_escape_string($newContent)."', temps=NOW()
+				WHERE id='".mysql_real_escape_string($id)."'",$mysqlMainDb);
 			$message = "<p><b>$langAnnModify</b</b>";
 		}
 
@@ -244,12 +244,12 @@ function confirmation (name)
 
 			// INSERT ANNOUNCEMENT
 
-			db_query("INSERT INTO annonces SET contenu = '$newContent', temps = NOW(),
+			db_query("INSERT INTO annonces SET contenu = '".mysql_real_escape_string($newContent)."', temps = NOW(),
 				code_cours = '$currentCourseID', ordre = '$order'");
 
 			// SEND EMAIL (OPTIONAL)
 			// THIS FUNCTION ADDED BY THOMAS MAY 2002
-			if(isset($emailOption) && $emailOption==1)
+			if(isset($_POST['emailOption']) && is_numeric($_POST['emailOption']) && $_POST['emailOption'] == 1)
 			{
 				$emailContent=stripslashes($newContent);
 				$emailSubject = "$professorMessage ($currentCourseID - $intitule)";

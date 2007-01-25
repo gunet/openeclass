@@ -348,22 +348,22 @@ function createTFPoll() {
 			$pid = date("YmdHms"); 
 			mysql_select_db($GLOBALS['currentCourseID']);
 			$result1 = db_query("INSERT INTO poll VALUES ('".
-				$pid. "','".
+				mysql_real_escape_string($pid). "','".
 				$GLOBALS['uid']. "','".
 				$GLOBALS['currentCourseID']. "','".
-				$PollName 	. "','".
-				$CreationDate . "','".
-				$StartDate 		. "','".
-				$EndDate 			. "','".
-				$PollType 	. "','".
-				$PollActive ."')");
+				mysql_real_escape_string($PollName) 	. "','".
+				mysql_real_escape_string($CreationDate) . "','".
+				mysql_real_escape_string($StartDate) 		. "','".
+				mysql_real_escape_string($EndDate) 			. "','".
+				mysql_real_escape_string($PollType) 	. "','".
+				mysql_real_escape_string($PollActive) ."')");
 				//$GLOBALS["tool_content"] .= $result1;
 		} elseif (($counter > 4)&&($counter <= count($_POST)-2)) {
 			$QuestionText = $$key;
 			mysql_select_db($GLOBALS['currentCourseID']);
 			$result2 = db_query("INSERT INTO poll_question VALUES ('0','".
-				$pid. "','".
-				$QuestionText ."')");
+				mysql_real_escape_string($pid). "','".
+				mysql_real_escape_string($QuestionText) ."')");
 		}
 	}	  
     
@@ -396,15 +396,15 @@ function createMCPoll() {
 				$pid = date("YmdHms"); 
 				mysql_select_db($GLOBALS['currentCourseID']);
 				$result3 = db_query("INSERT INTO poll VALUES ('".
-					$pid. "','".
+					mysql_real_escape_string($pid). "','".
 					$GLOBALS['uid']. "','".
 					$GLOBALS['currentCourseID']. "','".
-					$PollName 	. "','".
-					$CreationDate . "','".
-					$StartDate 		. "','".
-					$EndDate 			. "','".
-					$PollType 	. "','".
-					$PollActive ."')");
+					mysql_real_escape_string($PollName) 	. "','".
+					mysql_real_escape_string($CreationDate) . "','".
+					mysql_real_escape_string($StartDate) 		. "','".
+					mysql_real_escape_string($EndDate) 			. "','".
+					mysql_real_escape_string($PollType) 	. "','".
+					mysql_real_escape_string($PollActive) ."')");
 			}	
 			if (($counter >= 5)&&($counter <= (count($_POST)-3) )) { // question or anwser
 				//$tool_content .= "<br>Began iterating QAs";
@@ -421,8 +421,8 @@ function createMCPoll() {
 					mysql_select_db($GLOBALS['currentCourseID']);
 					$result4 = db_query("INSERT INTO poll_question VALUES ('".
 					$sqid . "','".
-					$pid . "','".
-					$QuestionText ."')");
+					mysql_real_escape_string($pid) . "','".
+					mysql_real_escape_string($QuestionText) ."')");
 
 				} else { //answer
 					// insert into poll_question_answer //////////////////////////////////////////////////////////////
@@ -433,7 +433,7 @@ function createMCPoll() {
 						mysql_select_db($GLOBALS['currentCourseID']);
 						$result5 = db_query("INSERT INTO poll_question_answer VALUES ('0','".
 							$sqid. "','".
-							$AnwserText ."')");
+							mysql_real_escape_string($AnwserText) ."')");
 					}
 				}
 			}

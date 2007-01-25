@@ -105,19 +105,19 @@ function confirmation (name)
 						<ul id=\"opslist\">
 			<li><a href=\"$PHP_SELF?form_input=file\">$langAddV</a></li><li><a href=\"$PHP_SELF?form_input=url\">$langAddVideoLink</a></li>
 			</ul></div>";
-	if (isset($submit)) {
+	if (isset($_POST['submit'])) {
 		if (isset($tout)) {
 			$sql="DELETE FROM video";
 		}
 		elseif($id) {
-			$sql = "UPDATE $table SET titre='$titre', description='$description',creator='$creator',publisher='$publisher', date='$date' WHERE id=$id";
+			$sql = "UPDATE $table SET titre='".mysql_real_escape_string($titre)."', description='".mysql_real_escape_string($description)."',creator='".mysql_real_escape_string($creator)."',publisher='".mysql_real_escape_string($publisher)."', date='".mysql_real_escape_string($date)."' WHERE id='".mysql_real_escape_string($id)."'";
 		}
 		else {
 			if(isset($URL))
 			{
 				if ($titre == "") $titre = $URL;
 				$url=$URL;
-				$sql = "INSERT INTO videolinks (url,titre,description,creator,publisher,date) VALUES ('$url','$titre','$description','$creator','$publisher','$date')";
+				$sql = "INSERT INTO videolinks (url,titre,description,creator,publisher,date) VALUES ('$url','".mysql_real_escape_string($titre)."','".mysql_real_escape_string($description)."','".mysql_real_escape_string($creator)."','".mysql_real_escape_string($publisher)."','".mysql_real_escape_string($date)."')";
 			}else{
 				$updir = "$webDir/video/$currentCourseID/"; //path to upload directory
 				if (($file_name != "") && ($file_size <= $diskQuotaVideo )) {
@@ -143,7 +143,7 @@ function confirmation (name)
 
 
 				$url="$file_name";
-				$sql = "INSERT INTO video (url,titre,description,creator,publisher,date) VALUES ('$url','$titre','$description','$creator','$publisher','$date')";
+				$sql = "INSERT INTO video (url,titre,description,creator,publisher,date) VALUES ('$url','".mysql_real_escape_string($titre)."','".mysql_real_escape_string($description)."','".mysql_real_escape_string($creator)."','".mysql_real_escape_string($publisher)."','".mysql_real_escape_string($date)."')";
 			}
 		}	// else
 		$result = db_query($sql,$currentCourseID);
@@ -191,13 +191,13 @@ function confirmation (name)
 	}	// if submit
 
 	elseif (isset($delete)) {
-		$sql_select="SELECT url FROM $table WHERE id=$id";
+		$sql_select="SELECT url FROM $table WHERE id='".mysql_real_escape_string($id)."'";
 		$result = db_query($sql_select,$currentCourseID);
 		$myrow = mysql_fetch_array($result);
 		$nom_document=$myrow[0];
 		if($table=="video")
 		unlink("$webDir/video/$currentCourseID/".$myrow[0]);
-		$sql = "DELETE FROM $table WHERE id=$id";
+		$sql = "DELETE FROM $table WHERE id='".mysql_real_escape_string($id)."'";
 		$result = db_query($sql,$currentCourseID);
 		$tool_content.="
 			<table width=\"99%\">
@@ -279,7 +279,7 @@ function confirmation (name)
 if (isset($id)) {
 		if($id!="")
 		{
-			$sql = "SELECT * FROM $table_edit WHERE id=$id ORDER BY titre";
+			$sql = "SELECT * FROM $table_edit WHERE id='".mysql_real_escape_string($id)."' ORDER BY titre";
 			$result = db_query($sql,$currentCourseID);
 			$myrow = mysql_fetch_array($result);
 			$id = $myrow[0];

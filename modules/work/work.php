@@ -158,7 +158,7 @@ if ($is_adminOfCourse) {
 		new_assignment();
 	} elseif (isset($sid)) {
 		show_submission($sid);
-	} elseif (isset($new_assign)) {
+	} elseif (isset($_POST['new_assign'])) {
 		//begin_page();
 		//echo $WorkEnd;
 		add_assignment($title, $comments, $desc, "$WorkEnd",
@@ -251,8 +251,8 @@ function add_assignment($title, $comments, $desc, $deadline, $group_submissions)
 	db_query("INSERT INTO assignments
 		(title, description, comments, deadline, submission_date, secret_directory,
 			group_submissions) VALUES
-		('$title', '$desc', '$comments', '$deadline', NOW(), '$secret',
-			'$group_submissions')");
+		('".mysql_real_escape_string($title)."', '".mysql_real_escape_string($desc)."', '".mysql_real_escape_string($comments)."', '$deadline', NOW(), '$secret',
+			'".mysql_real_escape_string($group_submissions)."')");
 	mkdir("$workPath/$secret",0777);
 }
 
@@ -472,9 +472,9 @@ function edit_assignment($id)
 	$nav[] = array("url"=>"work.php?id=$id", "name"=> $_POST['title']);
 	//begin_page($langEdit, $nav);
 
-	if (db_query("UPDATE assignments SET title='$_POST[title]',
-		description='$_POST[desc]', group_submissions='$_POST[group_submissions]',
-		comments='$_POST[comments]', deadline='$_POST[WorkEnd]' WHERE id='$id'")) {
+	if (db_query("UPDATE assignments SET title='".mysql_real_escape_string($_POST[title])."',
+		description='".mysql_real_escape_string($_POST[desc])."', group_submissions='".mysql_real_escape_string($_POST[group_submissions])."',
+		comments='".mysql_real_escape_string($_POST[comments])."', deadline='".mysql_real_escape_string($_POST[WorkEnd])."' WHERE id='$id'")) {
 
 	$tool_content .="
 	<table width=\"99%\">

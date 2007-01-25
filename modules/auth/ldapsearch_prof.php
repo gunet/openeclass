@@ -130,7 +130,7 @@ if(!empty($is_submit))
 						</table>   
 						<input type=\"hidden\" name=\"uname\" value=\"".$ldap_email."\">
 						<input type=\"hidden\" name=\"password\" value=\"".$ldap_passwd."\">
-						<input type=\"hidden\" name=\"auth\" value=\"".$auth."\">
+						<input type=\"hidden\" name=\"auth\" value=\"".htmlspecialchars($auth)."\">
 						</form>";
 		}
 		else

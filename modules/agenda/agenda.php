@@ -112,7 +112,7 @@ function confirmation (name)
 	
 	$tool_content .= "<div id=\"operations_container\">
 		<ul id=\"opslist\">";
-	if ((!isset($addEvent) && @$addEvent != 1) || isset($_REQUEST['submit'])) {
+	if ((!isset($addEvent) && @$addEvent != 1) || isset($_POST['submit'])) {
 		$tool_content .= "
 			<li><a href=\"".$_SERVER['PHP_SELF']."?addEvent=1\">".$langAddEvent."</a></li>";
 	}
@@ -138,7 +138,7 @@ if ($is_adminOfCourse) {
 
 
 
-	if (isset($submit)&&$submit) {
+	if (isset($_POST['submit'])) {
 		$date_selection = $fyear."-".$fmonth."-".$fday;
 		$hour = $fhour.":".$fminute.":00";
 		if(isset($tout)&&$tout)
@@ -147,25 +147,25 @@ if ($is_adminOfCourse) {
 		}
 		elseif(isset($id) && $id) {
 			$sql = "UPDATE agenda
-                SET titre='".trim($titre)."',
-                contenu='".trim($contenu)."',
-                day='$date_selection',
-                hour='$hour',
-                lasting='$lasting'
-                WHERE id='$id'";
+                SET titre='".mysql_real_escape_string(trim($titre))."',
+                contenu='".mysql_real_escape_string(trim($contenu))."',
+                day='".mysql_real_escape_string($date_selection)."',
+                hour='".mysql_real_escape_string($hour)."',
+                lasting='".mysql_real_escape_string($lasting)."'
+                WHERE id='".mysql_real_escape_string($id)."'";
 
 			##[BEGIN personalisation modification]############
 			$perso_sql = "UPDATE $mysqlMainDb.agenda
                                                         SET
-                                                                titre=        '".trim($titre)."',
-                                                                contenu='".trim($contenu)."',
-                                                                day=        '$date_selection',
-                                                                hour=        '$hour',
-                                                                lasting='$lasting'
+                                                                titre=        '".mysql_real_escape_string(trim($titre))."',
+                                                                contenu='".mysql_real_escape_string(trim($contenu))."',
+                                                                day=        '".mysql_real_escape_string($date_selection)."',
+                                                                hour=        '".mysql_real_escape_string($hour)."',
+                                                                lasting='".mysql_real_escape_string($lasting)."'
                                                         WHERE
                                                                 lesson_code= '$currentCourseID'
                                                         AND
-                                                                lesson_event_id='$id' ";
+                                                                lesson_event_id='".mysql_real_escape_string($id)."' ";
 			##[END personalisation modification]############
 
 			unset($id);
@@ -175,7 +175,7 @@ if ($is_adminOfCourse) {
 		else
 		{
 			$sql = "INSERT INTO agenda (id, titre,contenu, day, hour, lasting)
-        VALUES (NULL, '".trim($titre)."','".trim($contenu)."', '$date_selection','$hour', '$lasting')";
+        VALUES (NULL, '".mysql_real_escape_string(trim($titre))."','".mysql_real_escape_string(trim($contenu))."', '".mysql_real_escape_string($date_selection)."','".mysql_real_escape_string($hour)."', '".mysql_real_escape_string($lasting)."')";
 			unset($id);
 			unset($contenu);
 			unset($titre);

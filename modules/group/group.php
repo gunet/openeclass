@@ -99,7 +99,7 @@ if(isset($_REQUEST['creation']) && $is_adminOfCourse) {
 
 		// Write group description in student_group table. Contains path to group document dir.
 		db_query("INSERT INTO student_group (maxStudent, secretDirectory)
-				VALUES ('$group_max', '$secretDirectory')");
+				VALUES ('".mysql_real_escape_string($group_max)."', '$secretDirectory')");
 
 		$lastId=mysql_insert_id();
 
@@ -125,8 +125,8 @@ if(isset($_REQUEST['creation']) && $is_adminOfCourse) {
 if(isset($_REQUEST['properties']) && $is_adminOfCourse)
 {
 	@db_query("UPDATE group_properties
-			SET self_registration='$self_registration', private='$private',
-			forum='$forum', document='$document' WHERE id=1", $currentCourse); 
+			SET self_registration='".mysql_real_escape_string($self_registration)."', private='".mysql_real_escape_string($private)."',
+			forum='".mysql_real_escape_string($forum)."', document='".mysql_real_escape_string($document)."' WHERE id=1", $currentCourse); 
 	$message = $langGroupPropertiesModified;
 }	// if $submit
 

@@ -270,21 +270,21 @@ if($is_adminOfCourse)
 
 
 				$query = "INSERT INTO ".$dbTable." SET
-		            	path			=		'$uploadPath2',
+		            	path			=		'".mysql_real_escape_string($uploadPath2)."',
 		            	filename		=		'$fileName',
 		            	visibility		=		'v',
-		            	comment			=		'$file_comment',
-		            	category		=		'$file_category',
-		            	title			=		'$file_title',
-		            	creator			=		'$file_creator',
-		            	date			=		'$file_date',
-		            	date_modified	=		'$file_date',
-		            	subject			=		'$file_subject',
-		            	description		=		'$file_description',            	
-		            	author			=		'$file_author',
-		            	format			=		'$file_format',
-		            	language		=		'$file_language',
-		            	copyrighted		=		'$file_copyrighted'";
+		            	comment			=		'".mysql_real_escape_string($file_comment)."',
+		            	category		=		'".mysql_real_escape_string($file_category)."',
+		            	title			=		'".mysql_real_escape_string($file_title)."',
+		            	creator			=		'".mysql_real_escape_string($file_creator)."',
+		            	date			=		'".mysql_real_escape_string($file_date)."',
+		            	date_modified	=		'".mysql_real_escape_string($file_date)."',
+		            	subject			=		'".mysql_real_escape_string($file_subject)."',
+		            	description		=		'".mysql_real_escape_string($file_description)."',            	
+		            	author			=		'".mysql_real_escape_string($file_author)."',
+		            	format			=		'".mysql_real_escape_string($file_format)."',
+		            	language		=		'".mysql_real_escape_string($file_language)."',
+		            	copyrighted		=		'".mysql_real_escape_string($file_copyrighted)."'";
 
 				mysql_query($query);
 
@@ -612,15 +612,15 @@ if($is_adminOfCourse)
 			if (empty($file_language)) $file_language = $file_oldLanguage;
 
 			$query =  "UPDATE ".$dbTable." SET
-    						comment=\"".$file_comment."\",
-								category=\"".$file_category."\",
-  	 						title=\"".$file_title."\",							    				
+    						comment=\"".mysql_real_escape_string($file_comment)."\",
+								category=\"".mysql_real_escape_string($file_category)."\",
+  	 						title=\"".mysql_real_escape_string($file_title)."\",							    				
 								date_modified=\"".date("Y\-m\-d G\:i\:s")."\",
-    						subject=\"".$file_subject."\",
-    						description=\"".$file_description."\",
-    						author=\"".$file_author."\",
-    						language=\"".$file_language."\",
-    						copyrighted=\"".$file_copyrighted."\"    						
+    						subject=\"".mysql_real_escape_string($file_subject)."\",
+    						description=\"".mysql_real_escape_string($file_description)."\",
+    						author=\"".mysql_real_escape_string($file_author)."\",
+    						language=\"".mysql_real_escape_string($file_language)."\",
+    						copyrighted=\"".mysql_real_escape_string($file_copyrighted)."\"    						
     				  WHERE path=\"".$commentPath."\"";
 
 
@@ -636,18 +636,18 @@ if($is_adminOfCourse)
     			path=\"".$commentPath."\",
     			filename=\"".$file_filename."\",
     			visibility=\"v\",
-					comment=\"".$file_comment."\",
-					category=\"".$file_category."\",
-					title=\"".$file_title."\",
+					comment=\"".mysql_real_escape_string($file_comment)."\",
+					category=\"".mysql_real_escape_string($file_category)."\",
+					title=\"".mysql_real_escape_string($file_title)."\",
 					creator=\"".$prenom." ".$nom."\",
 					date=\"".date("Y\-m\-d G\:i\:s")."\",
 					date_modified=\"".date("Y\-m\-d G\:i\:s")."\",
-					subject=\"".$file_subject."\",
-					description=\"".$file_description."\",
-					author=\"".$file_author."\",
-					format=\"$file_format\",
-					language=\"".$file_language."\",
-					copyrighted=\"".$file_copyrighted."\"";
+					subject=\"".mysql_real_escape_string($file_subject)."\",
+					description=\"".mysql_real_escape_string($file_description)."\",
+					author=\"".mysql_real_escape_string($file_author)."\",
+					format=\"".mysql_real_escape_string($file_format)."\",
+					language=\"".mysql_real_escape_string($file_language)."\",
+					copyrighted=\"".mysql_real_escape_string($file_copyrighted)."\"";
 		}
 		mysql_query($query);
 	}

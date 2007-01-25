@@ -323,6 +323,8 @@ if ($is_adminOfCourse) {
 						."<br /><br /></p></form>";
 				}
 				break;
+			default:
+				break;
 		} // end of switch
 	} // end of if(isset)
 } // end of if

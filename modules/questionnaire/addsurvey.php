@@ -571,15 +571,15 @@ function createTFSurvey() {
 			$sid = date("YmdHms"); 
 			mysql_select_db($GLOBALS['currentCourseID']);
 			$result1 = db_query("INSERT INTO survey VALUES ('".
-				$sid. "','".
+				mysql_real_escape_string($sid). "','".
 				$GLOBALS['uid']. "','".
 				$GLOBALS['currentCourseID']. "','".
-				$SurveyName 	. "','".
-				$CreationDate . "','".
-				$StartDate 		. "','".
-				$EndDate 			. "','".
-				$SurveyType 	. "','".
-				$SurveyActive ."')");
+				mysql_real_escape_string($SurveyName) 	. "','".
+				mysql_real_escape_string($CreationDate) . "','".
+				mysql_real_escape_string($StartDate) 		. "','".
+				mysql_real_escape_string($EndDate) 			. "','".
+				mysql_real_escape_string($SurveyType) 	. "','".
+				mysql_real_escape_string($SurveyActive) ."')");
 				//$GLOBALS["tool_content"] .= $result1;
 		} elseif (($counter > 4)&&($counter <= count($_POST)-2)) {
 			$QuestionText = $$key;
@@ -592,8 +592,8 @@ function createTFSurvey() {
 			mysql_select_db($GLOBALS['currentCourseID']);
 			$result2 = db_query("INSERT INTO survey_question VALUES ('".
 				$sqid. "','".
-				$sid. "','".
-				$QuestionText ."')");
+				mysql_real_escape_string($sid). "','".
+				mysql_real_escape_string($QuestionText) ."')");
 		}
 	}	  
     
@@ -627,15 +627,15 @@ function createMCSurvey() {
 				//$tool_content .= "<br>About to create SURVEY entry<br>";
 				mysql_select_db($GLOBALS['currentCourseID']);
 				$result3 = db_query("INSERT INTO survey VALUES ('".
-					$sid. "','".
+					mysql_real_escape_string($sid). "','".
 					$GLOBALS['uid']. "','".
 					$GLOBALS['currentCourseID']. "','".
-					$SurveyName 	. "','".
-					$CreationDate . "','".
-					$StartDate 		. "','".
-					$EndDate 			. "','".
-					$SurveyType 	. "','".
-					$SurveyActive ."')");
+					mysql_real_escape_string($SurveyName) 	. "','".
+					mysql_real_escape_string($CreationDate) . "','".
+					mysql_real_escape_string($StartDate) 		. "','".
+					mysql_real_escape_string($EndDate) 			. "','".
+					mysql_real_escape_string($SurveyType) 	. "','".
+					mysql_real_escape_string($SurveyActive) ."')");
 			}	
 			if (($counter >= 5)&&($counter <= (count($_POST)-3) )) { // question or anwser
 				//$tool_content .= "<br>Began iterating QAs";
@@ -652,8 +652,8 @@ function createMCSurvey() {
 					mysql_select_db($GLOBALS['currentCourseID']);
 					$result4 = db_query("INSERT INTO survey_question VALUES ('".
 					$sqid . "','".
-					$sid . "','".
-					$QuestionText ."')");
+					mysql_real_escape_string($sid) . "','".
+					mysql_real_escape_string($QuestionText) ."')");
 
 				} else { //answer
 					// insert into survey_question_answer //////////////////////////////////////////////////////////////
@@ -664,7 +664,7 @@ function createMCSurvey() {
 						mysql_select_db($GLOBALS['currentCourseID']);
 						$result5 = db_query("INSERT INTO survey_question_answer VALUES ('0','".
 							$sqid. "','".
-							$AnwserText ."')");
+							mysql_real_escape_string($AnwserText) ."')");
 					}
 				}
 			}

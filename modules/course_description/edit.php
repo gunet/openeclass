@@ -167,7 +167,7 @@ if ($is_adminOfCourse) {
 //Edit action
 	elseif(isset($numBloc)) {
 		if (is_numeric($numBloc)) {
-			$sql = "SELECT * FROM `course_description` where id = '".$numBloc."'";
+			$sql = "SELECT * FROM `course_description` where id = '".mysql_real_escape_string($numBloc)."'";
 			$res = db_query($sql,$db);
 			$blocs = mysql_fetch_array($res);
 			if (is_array($blocs))
