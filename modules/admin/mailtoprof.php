@@ -69,20 +69,21 @@ $tool_content = "";
 // Constract a table for display
 $tool_content .= "<table width=\"99%\"><tbody><tr><td>";
 // Send email after form post
-if (isset($submit) && ($body_mail!="")) {
+if (isset($_POST['submit']) && ($_POST['body_mail'] != "") && ($_POST['submit'] == $langSend)) {
 	// Where to send the email
-	if ($sendTo=="0") {
+	if ($_POST['sendTo'] == "0") {
 		// All users
-		$sql=mysql_query("SELECT DISTINCT email FROM user");
-	} elseif ($sendTo=="1") {
+		$sql = mysql_query("SELECT DISTINCT email FROM user");
+	} elseif ($_POST['sendTo'] == "1") {
 		// Only professors
-		$sql=mysql_query("SELECT DISTINCT email FROM user where statut='1'");
-	}
+		$sql = mysql_query("SELECT DISTINCT email FROM user where statut='1'");
+	} else { die(); } // invalid sendTo var
+	
 	// Send email to all addresses
 	while ($m = mysql_fetch_array($sql)) {
 		$to = $m[0];
 		$emailsubject = $infoabouteclass;
-		$emailbody = "$body_mail 
+		$emailbody = "".$_POST['body_mail']." 
 
 $langManager $siteName
 $administratorName $administratorSurname

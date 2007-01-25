@@ -69,20 +69,20 @@ $encodeLogin = isset($_POST['encodeLogin'])?$_POST['encodeLogin']:'';
 ******************************************************************************/
 if(!empty($encodeLogin)) 	// Check if a username has been posted
 {
-	$res = mysql_query("SELECT user_id FROM user WHERE username='$encodeLogin'");		// Search username in database
+	$res = mysql_query("SELECT user_id FROM user WHERE username='".mysql_real_escape_string($encodeLogin)."'");		// Search username in database
 	if (mysql_num_rows($res) == 1) 	// Check that username exists
 	{
 		// If username exists insert userid to admin table and make the user administrator
 		$row = mysql_fetch_row($res);
 		if (mysql_query("INSERT INTO admin VALUES('$row[0]')")) 
-			$tool_content .= "<p>$langUser $encodeLogin $langWith  id='$row[0]' $langDone</p>";
+			$tool_content .= "<p>$langUser ".htmlspecialchars($encodeLogin)." $langWith  id='$row[0]' $langDone</p>";
 		else // If mysql_query failed print message
 			$tool_content .= "<p>$langError</p>";
 	} 
 	else 
 	{
 		// If username does not exist in database, inform user about the result
-		$tool_content .= "<p>$langUser $encodeLogin $langNotFound.</p>";
+		$tool_content .= "<p>$langUser ".htmlspecialchars($encodeLogin)." $langNotFound.</p>";
 		$tool_content .= printform($langLogin);		// Display form again
 	}
 } 
