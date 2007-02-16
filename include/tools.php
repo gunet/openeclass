@@ -158,7 +158,7 @@ function getToolsArray($cat) {
 function loggedInMenu(){
 	global $webDir, $language, $uid, $is_admin, $urlServer, $mysqlMainDb;
 
-	include("$webDir/modules/lang/$language/index.inc");
+	include("$webDir/modules/lang/$language/index.inc.php");
 
 	$sideMenuGroup = array();
 
@@ -247,7 +247,7 @@ function loggedOutMenu(){
 
 	global $webDir, $language, $urlServer, $is_eclass_unique, $mysqlMainDb;
 
-	include("$webDir/modules/lang/$language/index.inc");
+	include("$webDir/modules/lang/$language/index.inc.php");
 
 	$sideMenuGroup = array();
 

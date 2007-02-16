@@ -50,7 +50,7 @@ $homePage = true;
 
 $tool_content = "";
 
-@include("./modules/lang/$language/index.inc");
+@include("./modules/lang/$language/index.inc.php");
 @include("./modules/lang/$language/trad4all.inc.php");
 
 // first check
