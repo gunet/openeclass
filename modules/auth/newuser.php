@@ -58,7 +58,7 @@ $tool_content .= "
 <td><input type=\"text\" name=\"nom_form\">(*)</td>
 </tr>
 <tr><th>$langUsername</th>
-<td><input type=\"text\" name=\"uname\" size=\"20\" maxlength=\"20\">(*) (**) $langUserNotice hhh</td>
+<td><input type=\"text\" name=\"uname\" size=\"20\" maxlength=\"20\">(*) (**) $langUserNotice</td>
 </tr>
 
 <tr><th>$langPass</th>

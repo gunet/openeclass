@@ -57,14 +57,14 @@ $tool_content = "";		// Initialise $tool_content
 $auth = get_auth_active_methods();
 $e = 1;
 $tool_content .= "<ul class=\"listBullet\">";
-$tool_content .= "<li><a href=\"newuser.php\">Εγγραφή χρήστη με ".get_auth_info($e)."</a><br /></li>";
+$tool_content .= "<li><a href=\"newuser.php\">$langAuthReg".get_auth_info($e)."</a><br /></li>";
 if(!empty($auth))
 {
 	foreach($auth as $k=>$v)
 	{
 		if($v!=1)
 		{
-			$tool_content .= "<li><a href=\"ldapnewuser.php?auth=".$v."\">Εγγραφή χρήστη με ".get_auth_info($v)."</a></li>";
+			$tool_content .= "<li><a href=\"ldapnewuser.php?auth=".$v."\">$langAuthReg".get_auth_info($v)."</a></li>";
 		}
 		else
 		{

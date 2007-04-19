@@ -319,6 +319,7 @@ $langAuthPassword = "Please type your password:";
 $langAuthenticateVia = "Authenticate via";
 $langAuthenticateVia2 = "Available authentication methods of the institution";
 $langCannotUseAuthMethods = "You cannot use the platform at the moment. Please inform the platform admin";
+$langAuthReg = "User registration ";
 
 // LIST REQUESTS
 $langDateRequest = "Date of Request";

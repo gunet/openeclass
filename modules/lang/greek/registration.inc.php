@@ -28,8 +28,8 @@ $langAm = "Αριθμός μητρώου";
 $langDepartment="Σχολή / Τμήμα";
 $langUserDetails = "Στοιχεία νέου χρήστη";
 $langSubmitNew = "Υποβολή Αίτησης";
-// newuser_second.php
 
+// newuser_second.php
 $langPassTwice="Πληκτρολογήσατε δύο διαφορετικά συνθηματικά. Χρησιμοποιήστε το πλήκτρο «επιστροφή» του browser σας και ξαναδοκιμάστε.";
 
 $langEmptyFields="Αφήσατε μερικά πεδία κενά. Χρησιμοποιήστε το πλήκτρο «επιστροφή» του browser σας και ξαναδοκιμάστε.";
@@ -58,9 +58,8 @@ $langChoice="Επιλογή";
 $langLessonName="Όνομα μαθήματος";
 $langLessonCode="Κωδικός μαθήματος";
 $langProfessors="Καθηγητής(ες)";
+
 // profile.php
-
-
 $langModifProfile="Αλλαγή του προφίλ μου";
 $langPassTwo="Έχετε πληκτρολογήσει δύο διαφορετικά συνθηματικά";
 $langAgain="Ξαναπροσπαθήστε!";
@@ -73,7 +72,6 @@ $langChange="Αλλαγή";
 $langUnregUser = "Διαγραφή Λογαριασμού";
 
 // user.php
-
 $langUsers="Χρήστες";
 $langModRight="Αλλαγή των δικαιωμάτων διαχειριστή του";
 $langNone="κανένας";
@@ -290,6 +288,7 @@ $langAuthPassword = "Δώστε το συνθηματικό σας:";
 $langAuthenticateVia = "Πιστοποίηση μέσω";
 $langAuthenticateVia2 = "Διαθέσιμοι τρόποι πιστοποίησης στο ίδρυμα";
 $langCannotUseAuthMethods = "Η εγγραφή στην πλατφόρμα, πρός το παρόν δεν επιτρέπεται. Παρακαλούμε, ενημερώστε το διαχειριστή του συστήματος";
+$langAuthReg = "Εγγραφή χρήστη με ";
 
 // LIST REQUESTS
 $langDateRequest = "Ημ/νια αίτησης";

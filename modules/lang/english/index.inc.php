@@ -84,9 +84,7 @@ $langSearch = "Search";
 
 $langPlatformAnnounce = "Announcements";
 $langEclass = "e-Class learning management system";
-$langInfo = "<b>GUNet e-Class</b> platform is a ... <b>edit /lang/english/index.inc and fix this!!</b> είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και αποτελεί την πρόταση του Ακαδημαϊκού Διαδικτύου για την υποστήριξη της 
-Υπηρεσίας Ασύγχρονης Τηλεκπαίδευσης. Έχει σχεδιαστεί με προσανατολισμό την ενίσχυση 
-της κλασσικής διδασκαλίας και είναι προσαρμοσμένη στις ανάγκες τις τριτοβάθμιας εκπαίδευσης. 
-Υποστηρίζεται κεντρικά από το GUnet και διανέμεται ελεύθερα σε όλα τα Ακαδημαϊκά Ιδρύματα της χώρας. 
-Πληροφορίες για τη λειτουργία της πλατφόρμας μπορείτε να βρείτε στα διαθέσιμα εγχειρίδια.";
+$langInfo = "<b>GUNet e-Class</b> platform is a complete Electronic Courses Management System and is the proposal of Gunet for supporting Asynchronous Teleteaching. 
+It is designed with target to support classical teaching and is adapted to Greek Universities Educational System. It is supported by GUnet and given free to all Academical Institutes of country. 
+More info about platform operation can be found to available manuals.";
 ?>
