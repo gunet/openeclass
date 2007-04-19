@@ -77,7 +77,7 @@ $tool_content .= "<table width=\"99%\">
 
 if(empty($auth))
 {
-	$tool_content .= "Ενεργοί τρόποι πιστοποίησης:<br>";
+	$tool_content .= "$langMethods<br>";
 	if(!empty($auth_methods))
 	{
 		$tool_content .= "<ul>";
@@ -94,18 +94,17 @@ else
 	//$settings = $s['auth_settings'];
 	if(empty($settings))
 	{
-		$tool_content .= "H " . get_auth_info($auth) . " δεν μπορεί να ενεργοποιηθεί,
-		διότι δεν έχετε καθορίσει τα settings αυτού του τρόπου πιστοποίησης. ";
+		$tool_content .= "$langThe" . get_auth_info($auth) . "$langActFailure";
 	}
 	else
 	{
 		if($active == 'yes')
 		{
-			$tool_content .= "Μόλις ενεργοποιήσατε την " . get_auth_info($auth);
+			$tool_content .= "$langActSuccess" . get_auth_info($auth);
 		}
 		else
 		{
-			$tool_content .= "Μόλις απενεργοποιήσατε την " . get_auth_info($auth);
+			$tool_content .= "$langDeactSuccess" . get_auth_info($auth);
 		}
 	}
 }
@@ -122,22 +121,22 @@ $tool_content .= $langChooseAuthMethod.":<br /><br />";
 //$tool_content .= "<input type=\"radio\" name=\"auth\" value=\"2\">POP3&nbsp;&nbsp;";
 $tool_content .= "POP3&nbsp;&nbsp;";
 $tool_content .= in_array("2",$auth_methods)? "<a href=\"auth.php?auth=2&active=no\">".$langAuthDeactivate."</a>":"<a href=\"auth.php?auth=2&active=yes\">".$langAuthActivate."</a>";
-$tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=2\">Ρυθμίσεις</a>";
+$tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=2\">$langSettings</a>";
 $tool_content .= "<br />";
 //$tool_content .= "<input type=\"radio\" name=\"auth\" value=\"3\">IMAP&nbsp;&nbsp;";
 $tool_content .= "IMAP&nbsp;&nbsp;";
 $tool_content .= in_array("3",$auth_methods)? "<a href=\"auth.php?auth=3&active=no\">".$langAuthDeactivate."</a>":"<a href=\"auth.php?auth=3&active=yes\">".$langAuthActivate."</a>";
-$tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=3\">Ρυθμίσεις</a>";
+$tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=3\">$langSettings</a>";
 $tool_content .= "<br />";
 //$tool_content .= "<input type=\"radio\" name=\"auth\" value=\"4\">LDAP&nbsp;&nbsp;";
 $tool_content .= "LDAP&nbsp;&nbsp;";
 $tool_content .= in_array("4",$auth_methods)? "<a href=\"auth.php?auth=4&active=no\">".$langAuthDeactivate."</a>":"<a href=\"auth.php?auth=4&active=yes\">".$langAuthActivate."</a>";
-$tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=4\">Ρυθμίσεις</a>";
+$tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=4\">$langSettings</a>";
 $tool_content .= "<br />";
 //$tool_content .= "<input type=\"radio\" name=\"auth\" value=\"5\">EXTERNAL DB&nbsp;&nbsp;";
 $tool_content .= "EXTERNAL DB&nbsp;&nbsp;";
 $tool_content .= in_array("5",$auth_methods)? "<a href=\"auth.php?auth=5&active=no\">".$langAuthDeactivate."</a>":"<a href=\"auth.php?auth=5&active=yes\">".$langAuthActivate."</a>";
-$tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=5\">Ρυθμίσεις</a>";
+$tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=5\">$langSettings</a>";
 $tool_content .= "<br />";
 //$tool_content .= "<br /><input type=\"submit\" name=\"submit\" value=\"$langNextStep\"><br />";
 //$tool_content .= "</form><br />";

@@ -19,15 +19,15 @@ $show = isset($_GET['show'])?$_GET['show']:(isset($_POST['show'])?$_POST['show']
 switch ($show) {
 	case "closed":
 		$navigation[] = array("url" => "listreq.php", "name" => $langOpenProfessorRequests);
-		$nameTools = "Προβολή Αιτήσεων που έχουν Κλείσει";
+		$nameTools = $langReqHaveClosed;
 		break;
 	case "rejected":
 		$navigation[] = array("url" => "listreq.php", "name" => $langOpenProfessorRequests);
-		$nameTools = "Προβολή Αιτήσεων που έχουν Απορριφθεί";
+		$nameTools = $langReqHaveBlocked;
 		break;
 	case "accepted":
 		$navigation[] = array("url" => "listreq.php", "name" => $langOpenProfessorRequests);
-		$nameTools = "Προβολή Αιτήσεων που έχουν Ικανοποιηθεί";
+		$nameTools = $langReqHaveFinished;
 		break;
 }
 
@@ -40,15 +40,15 @@ if (!empty($show) && ($show=="closed")) {
 	} else {
 		// Show only closed forms
 		$tool_content .= "<table width=\"99%\"><caption>Λίστα Αιτήσεων</caption><thead><tr>
-		<th scope=\"col\">Όνομα</th>
-		<th scope=\"col\">Επώνυμο</th>
+		<th scope=\"col\">$langName</th>
+		<th scope=\"col\">$langSurname</th>
 		<th scope=\"col\">Username</th>
-		<th scope=\"col\">E-mail</th>
-		<th scope=\"col\">Τμήμα</th>
+		<th scope=\"col\">$langEmail</th>
+		<th scope=\"col\">$langDeparment</th>
 		<th scope=\"col\">Τηλ.</th>
 		<th scope=\"col\">Ημερ. Αιτ.</th>
 		<th scope=\"col\">Ημερ. Κλεισ.</th>
-		<th scope=\"col\">Σχόλια</th>
+		<th scope=\"col\">$langComments</th>
 		<th scope=\"col\">Ενέργειες</th>
 		</tr></thead><tbody>";
 
@@ -84,15 +84,15 @@ if (!empty($show) && ($show=="closed")) {
 	} else {
 		// Show only closed forms
 		$tool_content .= "<table width=\"99%\"><caption>Λίστα Αιτήσεων</caption><thead><tr>
-		<th scope=\"col\">Όνομα</th>
-		<th scope=\"col\">Επώνυμο</th>
+		<th scope=\"col\">$langName</th>
+		<th scope=\"col\">$langSurname</th>
 		<th scope=\"col\">Username</th>
-		<th scope=\"col\">E-mail</th>
-		<th scope=\"col\">Τμήμα</th>
+		<th scope=\"col\">$langEmail</th>
+		<th scope=\"col\">$langDepartment</th>
 		<th scope=\"col\">Τηλ.</th>
 		<th scope=\"col\">Ημερ. Αιτ.</th>
 		<th scope=\"col\">Ημερ. Απορ.</th>
-		<th scope=\"col\">Σχόλια</th>
+		<th scope=\"col\">$langComments</th>
 		<th scope=\"col\">Ενέργειες</th>
 		</tr></thead><tbody>";
 
@@ -175,9 +175,9 @@ switch($close)
 		    	{
 						if (isset($sendmail) and ($sendmail == 1)) 
 						{
-    			    $emailsubject = "Απόρριψη αίτησης εγγραφής στην Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης";
-			    		$emailbody = "Η αίτησή σας για εγγραφή στην πλατφόρμα e-Class απορρίφθηκε.
-			    		Σχόλια:> $comment
+    			    $emailsubject = $langemailsubjectBlocked;
+			    		$emailbody = $langemailbodyBlocked
+			    		$langComments:> $comment
 			    		$langManager $siteName
 			    		$administratorName $administratorSurname
 			    		Τηλ. $telephone
@@ -186,7 +186,7 @@ switch($close)
 						}
 						$tool_content .= "<p>Η αίτηση του καθηγητή απορρίφθηκε";
 						$tool_content .= " και στάλθηκε ενημερωτικό μήνυμα στη"." διεύθυνση $prof_email";
-						$tool_content .= ". <br><br>Σχόλια:<br><pre>$comment</pre></p>\n";
+						$tool_content .= ". <br><br>$langComments:<br><pre>$comment</pre></p>\n";
 		    	}
 				}
 	    }

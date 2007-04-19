@@ -43,6 +43,17 @@ $langRefresh="Ανανέωση Μαθήματος";
 $langGenAdmin="¶λλα Εργαλεία";
 $langBackAdmin = "Επιστροφή στη σελίδα διαχείρισης";
 
+$langPlatformIdentity = "Ταυτότητα Πλατφόρμας";
+$langStoixeia = "Στοιχεία Πλατφόρμας";
+$langThereAre = "Υπάρχουν";
+$langOpenRequests = "Ανοικτές αιτήσεις καθηγητών";
+$langNoOpenRequests = "Δεν βρέθηκαν ανοικτές αιτήσεις καθηγητών";
+$langInfoAdmin  = "Ενημερωτικά Στοιχεία για τον Διαχειριστή";
+$langLastLesson = "Τελευταίο μάθημα που δημιουργήθηκε:";
+$langLastProf = "Τελευταία εγγραφή εκπαιδευτή:";
+$langLastStud = "Τελευταία εγγραφή εκπαιδευομένου:";
+$langAfterLastLogin = "Μετά την τελευταία σας είσοδο έχουν εγγραφεί στην πλατφόρμα:";
+
 // Stat
 $langStatistiques = "Στατιστικά";
 
@@ -194,6 +205,12 @@ $langEdit = "Επεξεργασία";
 // listreq.php
 $langOpenProfessorRequests = "Ανοικτές Αιτήσεις Καθηγητών";
 $langProfessorRequestClosed = "Η αίτηση του καθηγητή έκλεισε !";
+$langReqHaveClosed = "Αιτήσεις που έχουν κλείσει";
+$langReqHaveBlocked = "Προβολή Αιτήσεων που έχουν Απορριφθεί";
+$langReqHaveFinished = "Προβολή Αιτήσεων που έχουν Ικανοποιηθεί";
+$langemailsubjectBlocked = "Απόρριψη αίτησης εγγραφής στην Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης";
+$langemailbodyBlocked = "Η αίτησή σας για εγγραφή στην πλατφόρμα e-Class απορρίφθηκε.";
+
 
 // mailtoprof.php
 $langSendMessageTo = "Αποστολή μηνύματος";
@@ -212,6 +229,7 @@ $langCourseStatusChange = "Αλλαγή τύπου πρόσβασης μαθήματος";
 
 
 // authentication
+$langMethods = "Ενεργοί τρόποι πιστοποίησης:";
 $langAuthActivate = "Ενεργοποίηση";
 $langAuthDeactivate = "Απενεργοποίηση";
 $langChooseAuthMethod = "Επιλέξτε τον τρόπο πιστοποίησης χρηστών και καθορίστε τις ρυθμίσεις του";
@@ -240,7 +258,11 @@ $langldap_bind_user = "Username για LDAP binding";
 $langldap_bind_pw = "Password για LDAP binding";
 $langUserAuthentication = "Πιστοποίηση Χρηστών";
 $langSearchCourses = "Αναζήτηση μαθημάτων";
-
+$langSettings = "Ρυθμίσεις";
+$langActSuccess = "Μόλις ενεργοποιήσατε την ";
+$langDeactSuccess = "Μόλις απενεργοποιήσατε την ";
+$langThe = "Η ";
+$langActFailure = "δεν μπορεί να ενεργοποιηθεί, διότι δεν έχετε καθορίσει τις ρυθμίσεις του τρόπου πιστοποίησης";
 // other
 $langTeachers = "Εκπαιδευτές";
 $langStudents = "Εκπαιδευόμενοι";
@@ -248,7 +270,7 @@ $langVisitors = "Επισκέπτες";
 $langTeacher = "Εκπαιδευτής";
 $langStudent = "Εκπαιδευόμενος";
 $langVisitor = "Επισκέπτης";
-$langOther = "Άλλο";
+$langOther = "¶λλο";
 $langUsers = "Χρήστες";
 $langThereAre = "Υπάρχουν";
 $langTotal = "Σύνολο";

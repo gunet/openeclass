@@ -71,6 +71,18 @@ $langAdminUsers = "Admin Users";
 $langAdminCours = "Admin Courses";
 $langGenAdmin="Other Tools";
 
+$langPlatformIdentity = "Platform Identification";
+$langStoixeia = "Platform Information";
+$langThereAre = "There are";
+$langOpenRequests = "Teachers Open Requests";
+$langNoOpenRequests = "There are no teachers open requests";
+$langInfoAdmin  = "Info for Administrator";
+$langLastLesson = "Last created course:";
+$langLastProf = "Last professor registration:";
+$langLastStud = "Last user registration:";
+$langAfterLastLogin = "After your last login, there have been registered:";
+
+
 // Stat
 $langStatistiques = "Statistics";
 
@@ -209,8 +221,13 @@ $langUsers = "Users";
 $langEdit = "Edit";
 
 // listreq.php
-$langOpenProfessorRequests = "Open Professors Requests";
+$langOpenProfessorRequests = "Professors Open Requests";
 $langProfessorRequestClosed = "Professor request closed !";
+$langReqHaveClosed = "Closed Requests";
+$langReqHaveBlocked = "Blocked Requests";
+$langReqHaveFinished = "Completed Requests";
+$langemailsubjectBlocked = "Reject registration request";
+$langemailbodyBlocked = "Your registration request has been rejected.";
 
 // mailtoprof.php
 $langSendMessageTo = "Send mail";
@@ -229,13 +246,14 @@ $langCourseStatusChange = "Change course type";
 
 
 // authentication
+$langMethods = "Authentication Methods:";
 $langAuthActivate = "Activate";
 $langAuthDeactivate = "Deactivate";
 $langChooseAuthMethod = "Choose an authentication Method and define the method settings";
 $langNextStep = "Next step";
 $langConnYes = "SUCCESSFUL CONNECTION";
 $langConnNo = "THE CONNECTION DOES NOT WORK PROPERLY";
-$langAuthNoValidUser = "NO VALID USER in the auth method.Cannot register the user";
+$langAuthNoValidUser = "NO VALID USER in the auth method. Cannot register the user";
 $langConnTest = "Trying to establish a connection...";
 $langAuthMethod = "User Authentication Method";
 $langdbhost = "Database Host";
@@ -257,6 +275,11 @@ $langldap_bind_user = "LDAP bind username";
 $langldap_bind_pw = "LDAP bind password";
 $langUserAuthentication = "User Authentication";
 $langSearchCourses = "Search Courses";
+$langSettings = "Settings";
+$langActSuccess = "You have just activated the ";
+$langDeactSuccess = "You have just deactivated the ";
+$langThe = "The ";
+$langActFailure = "cannot be activated, because you have no authentication settings defined";
 
 // other
 $langTeachers = "Teachers";

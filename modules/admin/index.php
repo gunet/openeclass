@@ -74,7 +74,7 @@ $c=mysql_fetch_array(db_query("SELECT COUNT(*) FROM user where statut='5'"));
 $d=mysql_fetch_array(db_query("SELECT COUNT(*) FROM user where statut='10'"));
 
 // Constract a table with platform identification info
-$tool_content .= "<p><b>Ταυτότητα Πλατφόρμας</b></p>
+$tool_content .= "<p><b>$langPlatformIdentity</b></p>
 <ul class=\"listBullet\">
 <li>$langAboutText <b>".$siteName." ".$langEclassVersion."</b></li>
 <li>".$langHostName."<b>".$SERVER_NAME."</b></li>
@@ -87,7 +87,7 @@ else // If not display message no MySQL
 $tool_content .= "</ul>";
 
 // Constract a table with platform statistical info
-$tool_content .= "<p><b>Στοιχεία Πλατφόρμας</b><p>
+$tool_content .= "<p><b>$langStoixeia</b><p>
 <ul class=\"listBullet\">
 <li>".$langAboutCourses." <b>".$a[0]."</b> ".$langCourses." (<i><b>".$a1[0]."</b> ".$langOpen.", <b>".$a2[0]."</b> ".$langSemiopen.", <b>".$a3[0]."</b> ".$langClosed."</i>)</li>
 <li>".$langAboutUsers." <b>".$e[0]."</b> ".$langUsers." (<i><b>".$b[0]."</b> ".$langProf.", <b>".$c[0]."</b> ".$langStud." ".$langAnd." <b>".$d[0]."</b> ".$langGuest."</i>)</li>
@@ -102,9 +102,9 @@ $result = mysql_query($sql);
 $myrow = mysql_fetch_array($result);
 $count_prof_requests = $myrow['cnt'];
 if ($count_prof_requests > 0) {
-    $prof_request_msg = "Υπάρχουν ".$count_prof_requests." ανοικτές αιτήσεις καθηγητών";
+    $prof_request_msg = "$langThereAre $count_prof_requests $langOpenRequests";
 } else {
-    $prof_request_msg = "Δεν βρέθηκαν ανοικτές αιτήσεις καθηγητών";
+    $prof_request_msg = $langNoOpenRequests;
 }
 
 // Find last course created
@@ -143,13 +143,13 @@ $result = mysql_query($sql);
 $myrow = mysql_fetch_array($result);
 $lastregisteredstuds = $myrow['cnt'];
 
-$tool_content .= "<p><b><caption>Ενημερωτικά Στοιχεία για τον Διαχειριστή</b></p>
+$tool_content .= "<p><b><caption>$langInfoAdmin</b></p>
 <ul class=\"listBullet\">
-<li>Ανοικτές αιτήσεις καθηγητών: <b>".$prof_request_msg."</b></li>
-<li>Τελευταίο μάθημα που δημιουργήθηκε: ".$last_course_info."</li>
-<li>Τελευταία εγγραφή εκπαιδευτή: ".$last_prof_info."</li>
-<li>Τελευταία εγγραφή εκπαιδευομένου: ".$last_stud_info."</li>
-<li>Μετά το τελευταίο σας login έχουν εγγραφεί στην πλατφόρμα: <i><b>".$lastregisteredprofs."</b> Εκπαιδευτές και <b>".$lastregisteredstuds."</b> Εκπαιδευόμενοι</i></li>";
+<li>$langOpenRequests: <b>".$prof_request_msg."</b></li>
+<li>$langLastLesson $last_course_info</li>
+<li>$langLastProf $last_prof_info</li>
+<li>$langLastStud $last_stud_info</li>
+<li>$langAfterLastLogin <i><b>".$lastregisteredprofs."</b> $langProf<b> ".$lastregisteredstuds."</b> $langUsers </i></li>";
 
 /*****************************************************************************
         DISPLAY HTML
