@@ -44,7 +44,7 @@ if (!empty($show) && ($show=="closed")) {
 		<th scope=\"col\">$langSurname</th>
 		<th scope=\"col\">Username</th>
 		<th scope=\"col\">$langEmail</th>
-		<th scope=\"col\">$langDeparment</th>
+		<th scope=\"col\">$langDepartment</th>
 		<th scope=\"col\">Τηλ.</th>
 		<th scope=\"col\">Ημερ. Αιτ.</th>
 		<th scope=\"col\">Ημερ. Κλεισ.</th>
@@ -176,7 +176,7 @@ switch($close)
 						if (isset($sendmail) and ($sendmail == 1)) 
 						{
     			    $emailsubject = $langemailsubjectBlocked;
-			    		$emailbody = $langemailbodyBlocked
+			    		$emailbody = "$langemailbodyBlocked
 			    		$langComments:> $comment
 			    		$langManager $siteName
 			    		$administratorName $administratorSurname
@@ -326,9 +326,9 @@ else
 	$tool_content .= "</tbody></table>";
 	// Display other actions
 	$tool_content .= "<br><table width=\"99%\"><caption>¶λλες Ενέργειες</caption><tbody>
-		<tr><td><a href=\"listreq.php?show=closed\">Προβολή αιτήσεων που έχουν κλείσει</a><br>
-		<a href=\"listreq.php?show=rejected\">Προβολή αιτήσεων που έχουν απορριφθεί</a><br>
-		<a href=\"listreq.php?show=accepted\">Προβολή αιτήσεων που έχουν ικανοποιηθεί</a></td></tr>
+		<tr><td><a href=\"listreq.php?show=closed\">$langReqHaveClosed</a><br>
+		<a href=\"listreq.php?show=rejected\">$langReqHaveBlocked</a><br>
+		<a href=\"listreq.php?show=accepted\">$langReqHaveFinished</a></td></tr>
 	</tbody></table>";
 		
 }

@@ -206,8 +206,8 @@ $langEdit = "Επεξεργασία";
 $langOpenProfessorRequests = "Ανοικτές Αιτήσεις Καθηγητών";
 $langProfessorRequestClosed = "Η αίτηση του καθηγητή έκλεισε !";
 $langReqHaveClosed = "Αιτήσεις που έχουν κλείσει";
-$langReqHaveBlocked = "Προβολή Αιτήσεων που έχουν Απορριφθεί";
-$langReqHaveFinished = "Προβολή Αιτήσεων που έχουν Ικανοποιηθεί";
+$langReqHaveBlocked = "Αιτήσεις που έχουν Απορριφθεί";
+$langReqHaveFinished = "Αιτήσεις που έχουν Ικανοποιηθεί";
 $langemailsubjectBlocked = "Απόρριψη αίτησης εγγραφής στην Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης";
 $langemailbodyBlocked = "Η αίτησή σας για εγγραφή στην πλατφόρμα e-Class απορρίφθηκε.";
 
