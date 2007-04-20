@@ -118,16 +118,16 @@ if (isset($search) && $search=="yes") {
 	$query=join(' AND ',$searchcours);
 	if (!empty($query)) {
 		$sql=mysql_query("SELECT faculte, code, intitule,titulaires,visible FROM cours WHERE $query ORDER BY faculte");
-		$caption .= "Βρέθηκαν ".mysql_num_rows($sql)." μαθήματα";
+		$caption .= "$langFound ".mysql_num_rows($sql)." $langCourses ";
 	} else {
 		$sql=mysql_query("SELECT faculte, code, intitule,titulaires,visible FROM cours ORDER BY faculte");
-		$caption .= "Βρέθηκαν ".mysql_num_rows($sql)." μαθήματα";			
+		$caption .= "$langFound ".mysql_num_rows($sql)." $langCourses ";			
 	}
 }
 // Normal list, no search, select all courses
 else {
 	$a=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours"));		
-	$caption .= "".$langManyExist." ".$a[0]." μαθήματα";
+	$caption .= "".$langManyExist." ".$a[0]." $langCourses";
 	$sql = mysql_query("SELECT faculte, code, intitule,titulaires,visible FROM cours ORDER BY faculte,code LIMIT ".$limit.",".$listsize."");
 	
 	if ($fulllistsize > $listsize ) {
@@ -159,13 +159,13 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	// Define course type
 	switch ($logs[4]) {
 	case 2:
-		$tool_content .= "    <td>Ανοιχτό</td>\n";
+		$tool_content .= "    <td>$langOpenCourse</td>\n";
 		break;
 	case 1:
-		$tool_content .= "    <td>Απαιτείται Εγγραφή</td>\n";
+		$tool_content .= "    <td>$langRegCourse</td>\n";
 		break;
 	case 0:
-		$tool_content .= "    <td>Κλειστό</td>\n";
+		$tool_content .= "    <td>$langClosedCourse</td>\n";
 		break;
 	}
 	// Add links to course users, delete course and course edit

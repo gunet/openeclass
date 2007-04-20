@@ -19,6 +19,8 @@ $langMonthlyReport      = "Μηνιαίες αναφορές";
 $langReport             = "Αναφορά για το μήνα ";
 $langNoReport           = "Δεν υπάρχουν διαθέσιμα στοιχεία για το μήνα ";
 $langEmailNotSend = "Σφάλμα κατά την αποστολή e-mail στη διεύθυνση";
+$langCourses = "μαθήματα";
+$langFound = "Βρέθηκαν";
 
 $langListCours = "Λίστα Μαθημάτων / Ενέργειες";
 $langListUsers = "Λίστα Χρηστών / Ενέργειες";
@@ -53,6 +55,7 @@ $langLastLesson = "Τελευταίο μάθημα που δημιουργήθηκε:";
 $langLastProf = "Τελευταία εγγραφή εκπαιδευτή:";
 $langLastStud = "Τελευταία εγγραφή εκπαιδευομένου:";
 $langAfterLastLogin = "Μετά την τελευταία σας είσοδο έχουν εγγραφεί στην πλατφόρμα:";
+$langOtherActions = "¶λλες Ενέργειες";
 
 // Stat
 $langStatistiques = "Στατιστικά";
@@ -123,6 +126,11 @@ $langPreced50 = "Προηγούμενοι 50";
 $langFollow50 = "Επόμενοι 50";
 $langEnd = "τέλος";
 $langAll="όλοι";
+
+// listcours.php
+$langOpenCourse = "Ανοιχτό";
+$langClosedCourse = "Κλειστό";
+$langRegCourse = "Απαιτείται Εγγραφή";
 
 // quotacours
 $langQuotaAdmin = "Διαχείριση Αποθηκευτικού Χώρου Μαθήματος";
@@ -206,8 +214,8 @@ $langEdit = "Επεξεργασία";
 $langOpenProfessorRequests = "Ανοικτές Αιτήσεις Καθηγητών";
 $langProfessorRequestClosed = "Η αίτηση του καθηγητή έκλεισε !";
 $langReqHaveClosed = "Αιτήσεις που έχουν κλείσει";
-$langReqHaveBlocked = "Αιτήσεις που έχουν Απορριφθεί";
-$langReqHaveFinished = "Αιτήσεις που έχουν Ικανοποιηθεί";
+$langReqHaveBlocked = "Αιτήσεις που έχουν απορριφθεί";
+$langReqHaveFinished = "Αιτήσεις που έχουν ολοκληρωθεί";
 $langemailsubjectBlocked = "Απόρριψη αίτησης εγγραφής στην Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης";
 $langemailbodyBlocked = "Η αίτησή σας για εγγραφή στην πλατφόρμα e-Class απορρίφθηκε.";
 

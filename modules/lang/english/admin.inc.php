@@ -81,7 +81,9 @@ $langLastLesson = "Last created course:";
 $langLastProf = "Last professor registration:";
 $langLastStud = "Last user registration:";
 $langAfterLastLogin = "After your last login, there have been registered:";
-
+$langOtherActions = "Other Actions";
+$langCourses = "courses";
+$langFound = "Found";
 
 // Stat
 $langStatistiques = "Statistics";
@@ -228,6 +230,11 @@ $langReqHaveBlocked = "Blocked Requests";
 $langReqHaveFinished = "Completed Requests";
 $langemailsubjectBlocked = "Reject registration request";
 $langemailbodyBlocked = "Your registration request has been rejected.";
+
+// listcours.php
+$langOpenCourse = "Open";
+$langClosedCourse = "Closed";
+$langRegCourse = "Registration Required";
 
 // mailtoprof.php
 $langSendMessageTo = "Send mail";

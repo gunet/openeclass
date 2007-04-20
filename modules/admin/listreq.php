@@ -325,7 +325,7 @@ else
 	}
 	$tool_content .= "</tbody></table>";
 	// Display other actions
-	$tool_content .= "<br><table width=\"99%\"><caption>¶λλες Ενέργειες</caption><tbody>
+	$tool_content .= "<br><table width=\"99%\"><caption>$langOtherActions</caption><tbody>
 		<tr><td><a href=\"listreq.php?show=closed\">$langReqHaveClosed</a><br>
 		<a href=\"listreq.php?show=rejected\">$langReqHaveBlocked</a><br>
 		<a href=\"listreq.php?show=accepted\">$langReqHaveFinished</a></td></tr>
