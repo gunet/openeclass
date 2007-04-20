@@ -58,4 +58,5 @@ $langAndGoBack ="Επιστροφή";
 $langAlreadySubscribe ="Είστε ήδη εγγεγραμμένος";
 $langRole = "ρόλος:";
 $langAs = "ως";
+
 ?>

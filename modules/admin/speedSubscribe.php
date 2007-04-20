@@ -125,7 +125,7 @@ if (!$firstfac) {
 
 $tool_content .= "<br><p><input type=\"submit\" name=\"submit\" value=\"".$langSubscribe."\"></p></form>";
 // Display link to go back to index.php
-$tool_content .= "<br><center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
+$tool_content .= "<br><center><p><a href=\"index.php\">$langBack</a></p></center>";
 
 /*****************************************************************************
 		DISPLAY HTML

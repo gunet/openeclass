@@ -49,7 +49,7 @@
 		DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
 ******************************************************************************/
 // Set the langfiles needed
-$langFiles = array('course_info', 'create_course', 'opencours','admin');
+$langFiles = 'admin';
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
@@ -91,11 +91,11 @@ else {
 	
 	$tool_content .= "<table width=\"99%\"><caption>".$langCourseDelConfirm."</caption><tbody>";
 	$tool_content .= "  <tr>
-    <td><br>".$langCourseDelConfirm2." <em>".htmlspecialchars($_GET['c'])."</em>;<br><br><i><b>Προσοχή!</b> Η διαγραφή του μαθήματος θα διαγράψει επίσης τους εγγεγραμμένους φοιτητές από το μάθημα, την αντιστοιχία του μαθήματος στο Τμήμα, καθώς και όλο το υλικό του μαθήματος.</i><br><br></td>
+    <td><br>".$langCourseDelConfirm2." <em>".htmlspecialchars($_GET['c'])."</em>;<br><br><i><b>".$langWarning."</b> ".$langNoticeDel."</i><br><br></td>
   </tr>";
 	$tool_content .= "  <tr>
-    <td><ul><li><a href=\"".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."&delete=yes".$searchurl."\"><b>Ναι</b></a><br>&nbsp;</li>
-              <li><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\"><b>Όχι</b></a></li></ul></td>
+    <td><ul><li><a href=\"".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."&delete=yes".$searchurl."\"><b>$langYes</b></a><br>&nbsp;</li>
+              <li><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\"><b>$langNo</b></a></li></ul></td>
   </tr>";
 	$tool_content .= "</tbody></table><br>";
 }

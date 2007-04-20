@@ -43,7 +43,7 @@ $dateTimeFormatLong  = '%d %B %Y / Ώρα: %R';
 $timeNoSecFormat = '%R';
 
 // GENERIC 
-
+$langBack = "Επιστροφή";
 $langModify="Αλλαγή";
 $langDelete="Διαγραφή";
 $langTitle="Τίτλος";

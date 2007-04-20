@@ -187,7 +187,7 @@ $langListRegisteredStudents = "Registered Students List";
 $langListRegisteredProfessors = "Registered Professors List";
 
 // clarconf.php
-$langClaroConf = "Configuration File of e-Class";
+$langClaroConf = "Configuration File of eClass";
 $langFileUpdatedSuccess = "Config file edited with success!";
 $langFileEdit = "File Edit";
 $langFileError = "Unable to write config.php!. Please check persmissions!";
@@ -196,29 +196,34 @@ $langReplaceBackupFile = "Replace config_backup.php.";
 // delcours.php
 $langCourseDel = "Delete course";
 $langCourseDelSuccess = "Course deleted with success!";
-$langCourseDelConfirm = "Course Deletion Confirm";
+$langCourseDelConfirm = "Course Deletion Confirmation";
 $langCourseDelConfirm2 = "are you sure you want to delete course with code";
+$langWarning = "Warning!";
+$langNoticeDel = " Course deletion will unregister students from course. Also all the course teaching stuff will be deleted.";
+$langYes = "Yes";
+$langNo = "No";
+
 
 // editcours.php
 $langCourseEdit = "Course Edit";
 $langCourseInfo = "Course Information";
-$langDepartment = "Faculte";
+$langDepartment = "Faculty";
 $langCourseCode = "Code";
 $langTitle = "Title";
 $langDidaskon = "Professor";
-$langQuota = "Quota course";
+$langQuota = "Course Quota";
 $langCourseStatus = "Course Status";
 $langCurrentStatus = "Current situation";
 $langListUsers = "User List";
-$langCourseDelFull = "Full Course Deletion";
+$langCourseDelFull = "Course Deletion";
 $langTakeBackup = "Backup";
 $langStatsCourse = "Course Statistics";
 
 // infocours.php
-$langCourseEditSuccess = "Course information changed with success!";
-$langCourseInfoEdit = "Change Course Information";
+$langCourseEditSuccess = "Course information modified with success!";
+$langCourseInfoEdit = "Modify Course Information";
 $langCourseInfos = "Course Information";
-$langDepartment = "Faculte";
+$langDepartment = "Faculty";
 $langUsers = "Users";
 $langEdit = "Edit";
 
@@ -226,14 +231,14 @@ $langEdit = "Edit";
 $langOpenProfessorRequests = "Professors Open Requests";
 $langProfessorRequestClosed = "Professor request closed !";
 $langReqHaveClosed = "Closed Requests";
-$langReqHaveBlocked = "Blocked Requests";
+$langReqHaveBlocked = "Rejected Requests";
 $langReqHaveFinished = "Completed Requests";
 $langemailsubjectBlocked = "Reject registration request";
 $langemailbodyBlocked = "Your registration request has been rejected.";
 
 // listcours.php
 $langOpenCourse = "Open";
-$langClosedCourse = "Closed";
+$langClosedCourse = "Close";
 $langRegCourse = "Registration Required";
 
 // mailtoprof.php
@@ -258,9 +263,9 @@ $langAuthActivate = "Activate";
 $langAuthDeactivate = "Deactivate";
 $langChooseAuthMethod = "Choose an authentication Method and define the method settings";
 $langNextStep = "Next step";
-$langConnYes = "SUCCESSFUL CONNECTION";
-$langConnNo = "THE CONNECTION DOES NOT WORK PROPERLY";
-$langAuthNoValidUser = "NO VALID USER in the auth method. Cannot register the user";
+$langConnYes = "Successful Connection!";
+$langConnNo = "The connection does not work properly!";
+$langAuthNoValidUser = "No valid user in the auth method. Cannot register user";
 $langConnTest = "Trying to establish a connection...";
 $langAuthMethod = "User Authentication Method";
 $langdbhost = "Database Host";
@@ -310,7 +315,7 @@ $langContactAdmin = "Send a message to the Administrator";
 $langActivateAccount = "Please activate my account";
 
 // unregister
-$langConfirmDelete = "Confirm of Delete action";
+$langConfirmDelete = "Delete Confirmation";
 $langConfirmDeleteQuestion1 = "Are you sure that you want to delete the user";
 $langConfirmDeleteQuestion2 = "from the course with id";
 $langQueryMark = "?";
