@@ -161,7 +161,7 @@ $tool_content .= "</tbody></table></form>";
 // end form
 
 
-$tool_content .= "<br /><center><p><a href=\"index.php\">$back</a></p></center>";
+$tool_content .= "<br /><center><p><a href=\"index.php\">$langReturn</a></p></center>";
 
 // 3: display administrator menu
 draw($tool_content,3);

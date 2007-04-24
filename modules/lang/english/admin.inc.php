@@ -63,8 +63,8 @@ $langListFaculte = "Facult list / Actions";
 $langPHPInfo = "PHP information";
 $langManuals = "Available Manuals";
 $langAdminManual = "Admin Manual";
-$langVersion = "e-Class Version";
-$langConfigFile = "e-Class Configuration file";
+$langVersion = "eClass Version";
+$langConfigFile = "eClass Configuration file";
 $langDBaseAdmin = "phpMyAdmin";
 $langAdminProf = "Admin Professors";
 $langAdminUsers = "Admin Users";
@@ -132,8 +132,6 @@ $langCheckingCourses ="Checking courses";
 $langMissing   ="missing";
 $langExist     ="exists";
 $langRestoreCourse = "Restore Course";
-
-$langRestoreCourse = "Restore Course";
 $langServerStatus ="MySql servet status : ";
 $langDataBase = "Database ";
 $langRun = "work";
@@ -141,8 +139,6 @@ $langClient = "MySql Client ";
 $langServer = "MySql Server ";
 $langLanguage ="Language";
 $langUpgradeBase = "Upgrade database";
-
-
 
 $langQuotaAdmin = "Quota Admin";
 $langQuotaSuccess = "Quota modified";

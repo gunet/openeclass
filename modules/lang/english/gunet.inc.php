@@ -32,8 +32,8 @@ $contact8="teledu@gunet.gr";
 
 $gunet="GUnet Asynchronous Teleteaching Group";
 
-$sendinfomail="Send information e-mail to e-Class professors";
-$infoabouteclass="Update information about e-Class";
+$sendinfomail="Send information e-mail to professors";
+$infoabouteclass="Update information about eClass";
 
 $langCopyrightNotice = '
 e-Class © 2002 - 2003 <a href="http://www.gunet.gr/">GUnet<a><br>&nbsp;<br>

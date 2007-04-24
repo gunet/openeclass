@@ -39,17 +39,17 @@ if (!empty($show) && ($show=="closed")) {
 		
 	} else {
 		// Show only closed forms
-		$tool_content .= "<table width=\"99%\"><caption>Λίστα Αιτήσεων</caption><thead><tr>
+		$tool_content .= "<table width=\"99%\"><caption>$langListRequests</caption><thead><tr>
 		<th scope=\"col\">$langName</th>
 		<th scope=\"col\">$langSurname</th>
-		<th scope=\"col\">Username</th>
+		<th scope=\"col\">$langUsername</th>
 		<th scope=\"col\">$langEmail</th>
 		<th scope=\"col\">$langDepartment</th>
-		<th scope=\"col\">Τηλ.</th>
-		<th scope=\"col\">Ημερ. Αιτ.</th>
-		<th scope=\"col\">Ημερ. Κλεισ.</th>
+		<th scope=\"col\">$langphone</th>
+		<th scope=\"col\">$langDateRequest</th>
+		<th scope=\"col\">$langDateClosed</th>
 		<th scope=\"col\">$langComments</th>
-		<th scope=\"col\">Ενέργειες</th>
+		<th scope=\"col\">$langActions</th>
 		</tr></thead><tbody>";
 
  		$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,date_closed,comment 
@@ -83,17 +83,17 @@ if (!empty($show) && ($show=="closed")) {
 		
 	} else {
 		// Show only closed forms
-		$tool_content .= "<table width=\"99%\"><caption>Λίστα Αιτήσεων</caption><thead><tr>
+		$tool_content .= "<table width=\"99%\"><caption>$langListRequest</caption><thead><tr>
 		<th scope=\"col\">$langName</th>
 		<th scope=\"col\">$langSurname</th>
-		<th scope=\"col\">Username</th>
+		<th scope=\"col\">$langUsername</th>
 		<th scope=\"col\">$langEmail</th>
 		<th scope=\"col\">$langDepartment</th>
-		<th scope=\"col\">Τηλ.</th>
-		<th scope=\"col\">Ημερ. Αιτ.</th>
-		<th scope=\"col\">Ημερ. Απορ.</th>
+		<th scope=\"col\">$langphone</th>
+		<th scope=\"col\">$langDateRequest</th>
+		<th scope=\"col\">$langDateReject</th>
 		<th scope=\"col\">$langComments</th>
-		<th scope=\"col\">Ενέργειες</th>
+		<th scope=\"col\">$langActions</th>
 		</tr></thead><tbody>";
 
  		$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,date_closed,comment 
@@ -120,16 +120,16 @@ if (!empty($show) && ($show=="closed")) {
 	$tool_content .= "</tbody></table>";
 } elseif (!empty($show) && ($show=="accepted")) {
 	// Show only accepted forms
-	$tool_content .= "<table width=\"99%\"><caption>Λίστα Αιτήσεων</caption><thead><tr>
-		<th scope=\"col\">Όνομα</th>
-		<th scope=\"col\">Επώνυμο</th>
-		<th scope=\"col\">Username</th>
-		<th scope=\"col\">E-mail</th>
-		<th scope=\"col\">Τμήμα</th>
-		<th scope=\"col\">Τηλ.</th>
-		<th scope=\"col\">Ημερ. Αιτ.</th>
-		<th scope=\"col\">Ημερ. Ικανοπ.</th>
-		<th scope=\"col\">Σχόλια</th>
+	$tool_content .= "<table width=\"99%\"><caption>$langListRequest</caption><thead><tr>
+		<th scope=\"col\">$langName</th>
+		<th scope=\"col\">$langSurname</th>
+		<th scope=\"col\">$langUsername</th>
+		<th scope=\"col\">$langEmail</th>
+		<th scope=\"col\">$langDepartment</th>
+		<th scope=\"col\">$langphone</th>
+		<th scope=\"col\">$langDateRequest</th>
+		<th scope=\"col\">$langDateCompleted</th>
+		<th scope=\"col\">$langComments</th>
 		</tr></thead><tbody>";
 
  	$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,date_closed,comment 
@@ -180,12 +180,12 @@ switch($close)
 			    		$langComments:> $comment
 			    		$langManager $siteName
 			    		$administratorName $administratorSurname
-			    		Τηλ. $telephone
+			    		$langphone : $telephone
 			    		$langEmail : $emailAdministrator";
 			    		send_mail($siteName, $emailAdministrator, "$prof_name $prof_surname",	$prof_email, $emailsubject, $emailbody, $charset);
 						}
-						$tool_content .= "<p>Η αίτηση του καθηγητή απορρίφθηκε";
-						$tool_content .= " και στάλθηκε ενημερωτικό μήνυμα στη"." διεύθυνση $prof_email";
+						$tool_content .= "<p>$langTeacherRequestHasRejected";
+						$tool_content .= " $langRequestMessageHasSent $prof_email";
 						$tool_content .= ". <br><br>$langComments:<br><pre>$comment</pre></p>\n";
 		    	}
 				}
@@ -198,18 +198,18 @@ switch($close)
 				$d = mysql_fetch_assoc($r);
 				$tool_content .= "
 					<br><br>
-					<center><p>Πρόκειται να απορρίψετε την αίτηση καθηγητή με στοιχεία:<br><br>".$d['profname']." ".$d['profsurname']." &lt;".$d['profemail']."&gt;
-					<br><br>Σχόλια:	<form action=\"listreq.php\" method=\"post\">
+					<center><p>$langGoingRejectRequest:<br><br>".$d['profname']." ".$d['profsurname']." &lt;".$d['profemail']."&gt;
+					<br><br>$langComments:	<form action=\"listreq.php\" method=\"post\">
 					<input type=\"hidden\" name=\"id\" value=\"".$id."\">
 					<input type=\"hidden\" name=\"close\" value=\"2\">
 					<input type=\"hidden\" name=\"prof_name\" value=\"".$d['profname']."\">
 					<input type=\"hidden\" name=\"prof_surname\" value=\"".$d['profsurname']."\">
 					<textarea name=\"comment\" rows=\"5\" cols=\"40\">".$d['comment']."</textarea>
 					<br><input type=\"checkbox\" name=\"sendmail\" value=\"1\"
-					checked=\"yes\">&nbsp;Αποστολή μηνύματος στο χρήστη, στη διεύθυνση:
+					checked=\"yes\">&nbsp;$langRequestSendMessage:
 					<input type=\"text\" name=\"prof_email\" value=\"".$d['profemail']."\">
-					<br><br>(στο μήνυμα θα αναφέρεται και το παραπάνω σχόλιο)
-					<br><br><input type=\"submit\" name=\"submit\" value=\"Απόρριψη\"></form></p></center>";
+					<br><br>($langRequestDisplayMessage)
+					<br><br><input type=\"submit\" name=\"submit\" value=\"$langRejectRequest\"></form></p></center>";
 	    }	
 	    break;
     case '3':
@@ -290,16 +290,16 @@ switch($close)
 else
 {
 
-	$tool_content .= "<table width=\"99%\"><caption>Λίστα Αιτήσεων</caption><thead><tr>
-		<th scope=\"col\">Όνομα</th>
-		<th scope=\"col\">Επώνυμο</th>
-		<th scope=\"col\">Username</th>
-		<th scope=\"col\">E-mail</th>
-		<th scope=\"col\">Τμήμα</th>
-		<th scope=\"col\">Τηλ.</th>
-		<th scope=\"col\">Ημερ. Αιτ.</th>
-		<th scope=\"col\">Σχόλια</th>
-		<th scope=\"col\">Ενέργειες</th>
+	$tool_content .= "<table width=\"99%\"><caption>$langListRequest</caption><thead><tr>
+		<th scope=\"col\">$langName</th>
+		<th scope=\"col\">$langSurname</th>
+		<th scope=\"col\">$langUsername</th>
+		<th scope=\"col\">$langEmail</th>
+		<th scope=\"col\">$langDepartment</th>
+		<th scope=\"col\">$langphone</th>
+		<th scope=\"col\">$langDateRequest</th>
+		<th scope=\"col\">$langComments</th>
+		<th scope=\"col\">$langActions</th>
 		</tr></thead><tbody>";
 
  	$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,comment 

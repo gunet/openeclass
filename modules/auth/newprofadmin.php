@@ -3,7 +3,7 @@ $langFiles = array('registration', 'admin', 'gunet');
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
-$nameTools = "Εγγραφή Καθηγητή";
+$nameTools = "$regprof";
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 
 // Initialise $tool_content
@@ -112,7 +112,7 @@ if($submit)
 else
 {
 $tool_content .= "	<form action=\"newprofadmin.php\" method=\"post\">
-	<table width=\"99%\"><caption>Εισαγωγή Στοιχείων Καθηγητή</caption><tbody>
+	<table width=\"99%\"><caption>$langNewProf</caption><tbody>
 	<tr valign=\"top\" bgcolor=\"".$color2."\">
 	<td width=\"3%\" nowrap><b>".$langSurname."</b></td>
 	<td><input type=\"text\" name=\"nom_form\" value=\"".@$ps."\" >&nbsp;(*)</td>
@@ -162,7 +162,7 @@ $tool_content .= "	<form action=\"newprofadmin.php\" method=\"post\">
 </tbody></table></form>
 ";
 
-$tool_content .= "<center><p><a href=\"../admin/index.php\">Επιστροφή</p></center>";
+$tool_content .= "<center><p><a href=\"../admin/index.php\">$langReturn</p></center>";
 }
 draw($tool_content,3,'admin');
 

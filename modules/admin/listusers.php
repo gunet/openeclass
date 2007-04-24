@@ -576,7 +576,7 @@ else
 	$tool_content .= "<br />$langNoUserList<br />";
 }
 
-$tool_content .= "<p><center><a href=\"index.php\">$back</a></p></center>";
+$tool_content .= "<p><center><a href=\"index.php\">$langReturn</a></p></center>";
 
 // 3: display administrator menu
 draw($tool_content,3);

@@ -81,9 +81,9 @@ $langYourRegTo="Your are registered to";
 $langIsReg="has been updated";
 $langCanEnter="Enter the classroom";
 $langChoice="Επιλογή";
-$langLessonName="Όνομα μαθήματος";
-$langLessonCode="Κωδικός μαθήματος";
-$langProfessors="Καθηγητής(ες)";
+$langLessonName="Course Name";
+$langLessonCode="Course Code";
+$langProfessors="Professor(s)";
 
 // profile.php
 $langUnregUser = "Delete account";
@@ -98,7 +98,6 @@ $langHome="Back to Home Page";
 $langChange="Modify";
 
 // user.php
-
 $langUsers="Users";
 $langModRight="Modify admin rights of";
 $langNone="None";
@@ -132,7 +131,6 @@ choose the faculty and then select / unselect the desired lesson.</p>
 $langTitular = "Author";
 $langDeleteUser = "Are you sure you want to delete the user";
 $langDeleteUser2 = "from this lesson";
-
 
 $langGroup="group";
 $langUserNoneMasc="-";
@@ -309,10 +307,7 @@ $langLogOut = 'Logout';
 $langDate = 'Date';
 $langAction = 'Action';
 $langRequiredFields = '(fields marked by (*) are required)';
-
 $langCourseVisits = "Course Visits";
-
-
 
 // USER REGISTRATION
 $langAuthPassword = "Please type your password:";
@@ -323,6 +318,9 @@ $langAuthReg = "User registration ";
 
 // LIST REQUESTS
 $langDateRequest = "Date of Request";
+$langDateReject = "Date of reject request";
+$langDateClosed = "Date of close request";
+$langDateCompleted = "Date of completed request";
 $langDeleteRequest = "Delete";
 $langRejectRequest = "Reject";
 $langAcceptRequest = "Register";

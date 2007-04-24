@@ -1,6 +1,4 @@
 <?php
-
-
 $langSee = "Προεπισκόπηση";
 $langNoSee = "Απαιτείται εγγραφή";
 $langSubscribe = "Υποβολή αλλαγών";
@@ -279,7 +277,6 @@ $langLogOut = 'Αποσύνδεση';
 $langDate = 'Ημερομηνία';
 $langAction = 'Ενέργεια';
 $langRequiredFields = '(Τα πεδία με (*) είναι υποχρεωτικά)';
-
 $langCourseVisits = "Επισκέψεις ανά μάθημα";
 
 
@@ -291,7 +288,10 @@ $langCannotUseAuthMethods = "Η εγγραφή στην πλατφόρμα, πρός το παρόν δεν επιτρέπ
 $langAuthReg = "Εγγραφή χρήστη με ";
 
 // LIST REQUESTS
-$langDateRequest = "Ημ/νια αίτησης";
+$langDateRequest = "Ημ/νία αίτησης";
+$langDateReject = "Ημ/νία απόρριψης";
+$langDateClosed = "Ημ/νια κλεισίματος";
+$langDateCompleted = "Ημ/νία ολοκλήρωσης";
 $langDeleteRequest = "Διαγραφή";
 $langRejectRequest = "Απόρριψη";
 $langAcceptRequest = "Εγγραφή";
