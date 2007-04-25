@@ -286,8 +286,8 @@ if (isset($require_current_course) and $require_current_course) {
 		}
 	}
 	# force a specific interface language
-	if (!empty($language_override)) {
-		$languageInterface = $language_override;
+	if (!empty($currentCourseLanguage)) {
+		$languageInterface = $currentCourseLanguage;
 
 		// If course language is different from global language,
 		// include more messages
