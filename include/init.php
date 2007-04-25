@@ -88,14 +88,14 @@ if (isset($localize)) {
 	switch ($localize) {
 
 		case "en":
-
+			
 			$_SESSION['langswitch'] = "english";
 			$_SESSION['langLinkText'] = 'Greek';
 			$_SESSION['langLinkURL'] = "?localize=el";
 			break;
 
 		case "el":
-
+			
 			$_SESSION['langswitch'] = "greek";
 			$_SESSION['langLinkText'] = 'Αγγλικά';
 			$_SESSION['langLinkURL'] = "?localize=en";
