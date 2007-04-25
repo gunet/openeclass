@@ -104,6 +104,7 @@ $langModifyInfo="Lesson Admin";
 $langConference ="Tele cooperation";
 $langDropBox = "DropBox";
 $langLearnPath = "Learning Path";
+$langWiki = "Wiki";
 $langToolManagement = "Tool management";
 $langUsage ="Usage statistics";
 $langGroups="Groups";

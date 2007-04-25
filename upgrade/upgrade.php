@@ -654,6 +654,51 @@ while ($code = mysql_fetch_row($res)) {
               PRIMARY KEY  (`user_module_progress_id`)
             ) ", $code[0]); //TYPE=MyISAM COMMENT='Record the last known status of the user in the course';
 	}
+	
+// Wiki tables
+
+	$langWiki = "Wiki";
+	if (!mysql_table_exists($code[0], 'wiki_properties'))  {
+		db_query("CREATE TABLE `wiki_properties` (
+              `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+              `title` VARCHAR(255) NOT NULL DEFAULT '',
+              `description` TEXT NULL,
+              `group_id` INT(11) NOT NULL DEFAULT 0,
+              PRIMARY KEY(`id`)
+             ) ", $code[0]);
+	}
+	
+	if (!mysql_table_exists($code[0], 'wiki_acls'))  {
+		db_query("CREATE TABLE `wiki_acls` (
+              `wiki_id` INT(11) UNSIGNED NOT NULL,
+              `flag` VARCHAR(255) NOT NULL,
+              `value` ENUM('false','true') NOT NULL DEFAULT 'false'
+             ) ", $code[0]);
+	}
+	
+	if (!mysql_table_exists($code[0], 'wiki_pages'))  {
+		db_query("CREATE TABLE `wiki_pages` (
+              `id` int(11) unsigned NOT NULL auto_increment,
+              `wiki_id` int(11) unsigned NOT NULL default '0',
+              `owner_id` int(11) unsigned NOT NULL default '0',
+              `title` varchar(255) NOT NULL default '',
+              `ctime` datetime NOT NULL default '0000-00-00 00:00:00',
+              `last_version` int(11) unsigned NOT NULL default '0',
+              `last_mtime` datetime NOT NULL default '0000-00-00 00:00:00',
+              PRIMARY KEY  (`id`)
+             ) ", $code[0]);
+	}
+	
+	if (!mysql_table_exists($code[0], 'wiki_pages_content'))  {
+		db_query("CREATE TABLE `wiki_pages_content` (
+              `id` int(11) unsigned NOT NULL auto_increment,
+              `pid` int(11) unsigned NOT NULL default '0',
+              `editor_id` int(11) NOT NULL default '0',
+              `mtime` datetime NOT NULL default '0000-00-00 00:00:00',
+              `content` text NOT NULL,
+              PRIMARY KEY  (`id`)
+             ) ", $code[0]);
+	}
 
 // questionnaire tables
 	if (!mysql_table_exists($code[0], 'survey'))  {
@@ -949,6 +994,17 @@ while ($code = mysql_fetch_row($res)) {
                 '../../../images/pastillegris.png',
                 'MODULE_ID_TOOLADMIN'
                 )", $code[0]);
+                
+	db_query("INSERT IGNORE INTO accueil VALUES (
+                26,
+                '$langWiki',
+                '../../modules/wiki/wiki.php',
+                '../../../images/wiki.gif',
+                '1',
+                '0',
+                '../../../images/pastillegris.png',
+                'MODULE_ID_WIKI'
+         )", $code[0]);
 
 	
 	//remove entries modules import, external, videolinks, old statistics  
@@ -1024,6 +1080,7 @@ while ($code = mysql_fetch_row($res)) {
 	update_field("accueil", "image","lp", "id", 23);
 	update_field("accueil", "image","usage", "id", 24);
 	update_field("accueil", "image","tooladmin", "id", 25);
+	update_field("accueil", "image","wiki", "id", 26);
 
 	// remove table 'introduction' entries and insert them in table 'cours' (field 'description') in eclass main database
 	// after that drop table introduction

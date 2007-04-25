@@ -164,6 +164,7 @@ $tool_content .= "
       <tr>
       <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"21\" />$langQuestionnaire</td>
       <td><input type=\"checkbox\" name=\"subsystems[]\"  value=\"23\" checked=\"checked\" />$langLearnPath</td>
+      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"26\" checked=\"checked\"/>$langWiki</td>
       <td></td>
       </tr>
       </table>
@@ -1034,6 +1035,17 @@ mysql_query("CREATE TABLE accueil (
                '../../../images/pastillegris.png',
                'MODULE_ID_TOOLADMIN'
                )");
+               
+    mysql_query("INSERT INTO accueil VALUES (
+               '26',
+               '$langWiki',
+               '../../modules/wiki/wiki.php',
+               'wiki',
+               '".$sbsystems[26]."',
+               '0',
+               '../../../images/pastillegris.png',
+               'MODULE_ID_WIKI'
+               )");
 
 
 // --------------------- prof only ------------------------------------------
@@ -1521,6 +1533,42 @@ mysql_query("CREATE TABLE `lp_user_module_progress` (
               PRIMARY KEY  (`user_module_progress_id`)
             ) TYPE=MyISAM DEFAULT CHARSET=greek");
             //COMMENT='Record the last known status of the user in the course';
+            
+############################# WIKI ######################################
+
+mysql_query("CREATE TABLE `wiki_properties` (
+              `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+              `title` VARCHAR(255) NOT NULL DEFAULT '',
+              `description` TEXT NULL,
+              `group_id` INT(11) NOT NULL DEFAULT 0,
+              PRIMARY KEY(`id`)
+            ) TYPE=MyISAM DEFAULT CHARSET=greek");
+            
+mysql_query("CREATE TABLE `wiki_acls` (
+              `wiki_id` INT(11) UNSIGNED NOT NULL,
+              `flag` VARCHAR(255) NOT NULL,
+              `value` ENUM('false','true') NOT NULL DEFAULT 'false'
+            ) TYPE=MyISAM DEFAULT CHARSET=greek");
+            
+mysql_query("CREATE TABLE `wiki_pages` (
+              `id` int(11) unsigned NOT NULL auto_increment,
+              `wiki_id` int(11) unsigned NOT NULL default '0',
+              `owner_id` int(11) unsigned NOT NULL default '0',
+              `title` varchar(255) NOT NULL default '',
+              `ctime` datetime NOT NULL default '0000-00-00 00:00:00',
+              `last_version` int(11) unsigned NOT NULL default '0',
+              `last_mtime` datetime NOT NULL default '0000-00-00 00:00:00',
+              PRIMARY KEY  (`id`)
+            ) TYPE=MyISAM DEFAULT CHARSET=greek");
+            
+mysql_query("CREATE TABLE `wiki_pages_content` (
+              `id` int(11) unsigned NOT NULL auto_increment,
+              `pid` int(11) unsigned NOT NULL default '0',
+              `editor_id` int(11) NOT NULL default '0',
+              `mtime` datetime NOT NULL default '0000-00-00 00:00:00',
+              `content` text NOT NULL,
+              PRIMARY KEY  (`id`)
+            ) TYPE=MyISAM DEFAULT CHARSET=greek");
 
 } else {
 
@@ -1899,6 +1947,42 @@ mysql_query("CREATE TABLE `lp_user_module_progress` (
               PRIMARY KEY  (`user_module_progress_id`)
             ) TYPE=MyISAM");
             //COMMENT='Record the last known status of the user in the course';
+            
+############################# WIKI ######################################
+
+mysql_query("CREATE TABLE `wiki_properties` (
+              `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+              `title` VARCHAR(255) NOT NULL DEFAULT '',
+              `description` TEXT NULL,
+              `group_id` INT(11) NOT NULL DEFAULT 0,
+              PRIMARY KEY(`id`)
+            ) TYPE=MyISAM");
+            
+mysql_query("CREATE TABLE `wiki_acls` (
+              `wiki_id` INT(11) UNSIGNED NOT NULL,
+              `flag` VARCHAR(255) NOT NULL,
+              `value` ENUM('false','true') NOT NULL DEFAULT 'false'
+            ) TYPE=MyISAM");
+            
+mysql_query("CREATE TABLE `wiki_pages` (
+              `id` int(11) unsigned NOT NULL auto_increment,
+              `wiki_id` int(11) unsigned NOT NULL default '0',
+              `owner_id` int(11) unsigned NOT NULL default '0',
+              `title` varchar(255) NOT NULL default '',
+              `ctime` datetime NOT NULL default '0000-00-00 00:00:00',
+              `last_version` int(11) unsigned NOT NULL default '0',
+              `last_mtime` datetime NOT NULL default '0000-00-00 00:00:00',
+              PRIMARY KEY  (`id`)
+            ) TYPE=MyISAM");
+            
+mysql_query("CREATE TABLE `wiki_pages_content` (
+              `id` int(11) unsigned NOT NULL auto_increment,
+              `pid` int(11) unsigned NOT NULL default '0',
+              `editor_id` int(11) NOT NULL default '0',
+              `mtime` datetime NOT NULL default '0000-00-00 00:00:00',
+              `content` text NOT NULL,
+              PRIMARY KEY  (`id`)
+            ) TYPE=MyISAM");
 
 }
 

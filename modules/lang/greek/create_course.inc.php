@@ -114,6 +114,7 @@ $langModifyInfo="Διαχείριση Μαθήματος";
 $langConference ="Τηλεσυνεργασία";
 $langDropBox = "Χώρος Ανταλλαγής Αρχείων";
 $langLearnPath = "Γραμμή Μάθησης";
+$langWiki = "Wiki";
 $langToolManagement = "Διαχείριση εργαλείων";
 $langUsage = "Στατιστικά Χρήσης";
 $langPoll="Δημοσκόπηση";
