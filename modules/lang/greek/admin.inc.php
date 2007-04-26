@@ -3,7 +3,7 @@
 // index
 $langAdmin = "Εργαλεία Διαχείρισης Πλατφόρμας";
 $langAdminBy = "Διαχείριση από ";
-$langTools = "Διαχείριση πλατφόρμας e-Class";
+$langTools = "Διαχείριση πλατφόρμας eClass";
 $langState = "Διαχείριση Εξυπηρετητή";
 $langDevAdmin ="Διαχείριση Βάσης Δεδομένων";
 $langNomPageAdmin 		= "Διαχείριση";
@@ -32,8 +32,8 @@ $langListFaculte = "Λίστα Σχολών / Ενέργειες";
 $langPHPInfo = "Πληροφορίες για την PHP";
 $langManuals = "Διαθέσιμα Εγχειρίδια";
 $langAdminManual = "Εγχειρίδιο Διαχειριστή";
-$langVersion = "Έκδοση του e-Class";
-$langConfigFile = "Config file e-Class";
+$langVersion = "Έκδοση του eClass";
+$langConfigFile = "Config file eClass";
 $langDBaseAdmin = "Διαχείριση Β.Δ. (phpMyAdmin)";
 $langUnregUser = "Διαγραφή Χρήστη";
 $langActions = "Ενέργειες";
@@ -58,8 +58,6 @@ $langAfterLastLogin = "Μετά την τελευταία σας είσοδο έχουν εγγραφεί στην πλατφόρ
 $langOtherActions = "Άλλες Ενέργειες";
 
 // Stat
-$langStatistiques = "Στατιστικά";
-
 $langSince = "Από ";
 $langNbProf = "Αριθμός καθηγητών";
 $langNbStudents = "Αριθμός φοιτητών";
@@ -74,9 +72,8 @@ $langProf = "Καθηγητές";
 $langNbUsers = "Αριθμός χρηστών";
 $langCoursVisible = "Ορατότητα";
 $langCoursType = "Τύπος";
-
 $langOthers = "Διάφορα σύνολα";
-$langCoursesPerDept = "Αριθμός μαθημάτων ανα τμήμα";
+$langCoursesPerDept = "Αριθμός μαθημάτων ανά τμήμα";
 $langCoursesPerLang = "Αριθμός μαθημάτων ανά γλώσσα";
 $langCoursesPerVis= "Αριθμός μαθημάτων ανά κατάσταση ορατότητας";
 $langCoursesPerType= "Αριθμός μαθημάτων ανά τύπο μαθημάτων";
@@ -92,42 +89,24 @@ $langMultLoginPass = "Πολλαπλά ζεύγη LOGIN - PASS";
 $langError = "Προσοχή!";
 $langOk = "Εντάξει!";
 
-
-$langBaseFound ="Βρέθηκε<br>Έλεγχος πινάκων της βάσης";
-
-$langDataBase = "Βάση δεδομένων";
-$langNotNeeded = "δεν απαιτείται";
-$langNeeded = "απαιτείται";
-$langArchive   ="αποθήκευση";
-$langUsed      ="χρησιμοποιείται";
-$langPresent   ="Εντάξει";
-$langCreateMissingNow = "Θέλετε να δημιουργήσετε τώρα πίνακες?";
-$langCheckingCourses ="Έλεγχος μαθημάτων";
-$langMissing   ="λείπει";
-$langExist     ="υπάρχει";
-
 $langAddAdminInApache ="Προσθήκη Διαχειριστή";
 $langAddFaculties ="Προσθήκη σχολών / τμημάτων";
 $langRestoreCourse = "Ανάκτηση μαθήματος";
 
 $langServerStatus ="Κατάσταση του εξυπηρέτη Mysql : ";
 $langDataBase = "Βάση δεδομένων ";
-$langRun = "εργασία";
-$langClient = "Πελάτης MySql";
-$langServer = "Εξυπηρέτης MySql";
 $langLanguage ="Γλώσσα";
 $langUpgradeBase = "Αναβάθμιση βάσης Δεδομένων";
 
-$langEditUser="Επεξεργασία Χρήστη";
-
 // listusers
 $langBegin="αρχή";
+$langEnd = "τέλος";
+$langEditUser="Επεξεργασία Χρήστη";
 $langPreced50 = "Προηγούμενοι 50";
 $langFollow50 = "Επόμενοι 50";
-$langEnd = "τέλος";
 $langAll="όλοι";
 
-// listcours.php
+// listcours
 $langOpenCourse = "Ανοιχτό";
 $langClosedCourse = "Κλειστό";
 $langRegCourse = "Απαιτείται Εγγραφή";
@@ -145,7 +124,6 @@ $langVideo = "Βίντεο";
 $langGroup = "Ομάδες Χρηστών";
 
 // Added by vagpits
-
 // General
 $langReturn = "Επιστροφή";
 $langReturnToSearch = "Επιστροφή στα αποτελέσματα αναζήτησης";
@@ -156,7 +134,7 @@ $langAdd = "Προσθήκη";
 $langChange = "Αλλαγή";
 $langNoChangeHappened = "Δεν πραγματοποιήθηκε καμία αλλαγή!";
 
-// addfaculte.php
+// addfaculte
 $langFaculteCatalog = "Κατάλογος Σχολών";
 $langFaculteDepartment = "Σχολή / Τμήμα";
 $langFaculteDepartments = "Σχολές / Τμήματα";
@@ -165,7 +143,7 @@ $langReturnToAddFaculte = "Επιστροφή στην προσθήκη τμήματος";
 $langFaculteAdd = "Προσθήκη Τμήματος";
 $langAcceptChanges = "Επικύρωση Αλλαγών";
 
-// addusertocours.php
+// addusertocours
 $langQuickAddDelUserToCours = "Γρήγορη εγγραφή - διαγραφή εκπαιδευομένων - εκπαιδευτών";
 $langQuickAddDelUserToCoursSuccess = "Η διαχείριση χρηστών ολοκληρώθηκε με επιτυχία!";
 $langFormUserManage = "Φόρμα Διαχείρισης Χρηστών";
@@ -181,7 +159,7 @@ $langFileEdit = "Επεξεργασία Αρχείου";
 $langFileError = "Το αρχείο config.php δεν μπόρεσε να διαβαστεί!. Ελέγξτε τα δικαιώματα πρόσβασης.";
 $langReplaceBackupFile = "Αντικατάσταση του config_backup.php.";
 
-// delcours.php
+// delcours
 $langCourseDel = "Διαγραφή μαθήματος";
 $langCourseDelSuccess = "Το μάθημα διαγράφηκε με επιτυχία!";
 $langCourseDelConfirm = "Επιβεβαίωση Διαγραφής Μαθήματος";
@@ -191,7 +169,7 @@ $langNoticeDel = " Η διαγραφή του μαθήματος θα διαγράψει επίσης τους εγγεγραμμέν
 $langYes = "Ναι";
 $langNo = "Οχι";
 
-// editcours.php
+// editcours
 $langCourseEdit = "Επεξεργασία Μαθήματος";
 $langCourseInfo = "Στοιχεία Μαθήματος";
 $langDepartment = "Τμήμα";
@@ -202,7 +180,7 @@ $langQuota = "Όρια αποθηκευτικού χώρου";
 $langCourseStatus = "Κατάσταση Μαθήματος";
 $langCurrentStatus = "Τρέχουσα κατάσταση";
 $langListUsers = "Λίστα Χρηστών";
-$langCourseDelFull = "Συνολική Διαγραφή Μαθήματος";
+$langCourseDelFull = "Διαγραφή Μαθήματος";
 $langTakeBackup = "Λήψη Αντιγράφου Ασφαλείας";
 $langStatsCourse = "Στατιστικά Μαθήματος";
 
@@ -223,7 +201,6 @@ $langReqHaveFinished = "Αιτήσεις που έχουν ολοκληρωθεί";
 $langemailsubjectBlocked = "Απόρριψη αίτησης εγγραφής στην Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης";
 $langemailbodyBlocked = "Η αίτησή σας για εγγραφή στην πλατφόρμα e-Class απορρίφθηκε.";
 
-
 // mailtoprof.php
 $langSendMessageTo = "Αποστολή μηνύματος";
 $langAllUsers = "σε όλους τους χρήστες";
@@ -238,7 +215,6 @@ $langSearch = "Αναζήτηση";
 // statuscours.php
 $langCourseStatusChangedSuccess = "Ο τύπος πρόσβασης του μαθήματος άλλαξε με επιτυχία!";
 $langCourseStatusChange = "Αλλαγή τύπου πρόσβασης μαθήματος";
-
 
 // authentication
 $langMethods = "Ενεργοί τρόποι πιστοποίησης:";
@@ -275,6 +251,7 @@ $langActSuccess = "Μόλις ενεργοποιήσατε την ";
 $langDeactSuccess = "Μόλις απενεργοποιήσατε την ";
 $langThe = "Η ";
 $langActFailure = "δεν μπορεί να ενεργοποιηθεί, διότι δεν έχετε καθορίσει τις ρυθμίσεις του τρόπου πιστοποίησης";
+
 // other
 $langTeachers = "Εκπαιδευτές";
 $langStudents = "Εκπαιδευόμενοι";

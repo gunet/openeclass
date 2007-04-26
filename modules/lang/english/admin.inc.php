@@ -51,7 +51,6 @@ $langMonthlyReport      = "Monthly reports";
 $langReport             = "Report for month ";
 $langNoReport           = "No data exist for month ";
 $langEmailNotSend = "Error sending mail to";
-
 $langUnregUser = "Unregister User";
 $langListCours = "Courses List / Actions";
 $langListUsers = "Users List / Actions";
@@ -70,7 +69,6 @@ $langAdminProf = "Admin Professors";
 $langAdminUsers = "Admin Users";
 $langAdminCours = "Admin Courses";
 $langGenAdmin="Other Tools";
-
 $langPlatformIdentity = "Platform Identification";
 $langStoixeia = "Platform Information";
 $langThereAre = "There are";
@@ -86,8 +84,6 @@ $langCourses = "courses";
 $langFound = "Found";
 
 // Stat
-$langStatistiques = "Statistics";
-
 $langSince = "Since";
 $langNbProf = "Number of professors";
 $langNbStudents = "Number of students";
@@ -101,7 +97,6 @@ $langProf = "Professors";
 $langNbUsers = "Number of users";
 $langCoursVisible = "Visibility";
 $langCoursType = "Type";
-
 $langOthers = "Other sets";
 $langCoursesPerDept = "Number of courses per department";
 $langCoursesPerLang = "Number of courses per language";
@@ -115,30 +110,7 @@ $langMultLoginPass = "Multiple use of couple LOGIN - PASS";
 $langError = "Attention!";
 $langOk = "Ok!";
 $langActions = "Actions";
-
-
 $langNbAnnoucement = "Number of announcements";
-
-$langBaseFound ="Found
-<br>
-Checking tables of this base";
-$langNotNeeded = "not needed";
-$langNeeded = "needed";
-$langArchive   ="archive";
-$langUsed      ="used";
-$langPresent   ="Ok";
-$langCreateMissingNow = "Do you want to create tables now ?";
-$langCheckingCourses ="Checking courses";
-$langMissing   ="missing";
-$langExist     ="exists";
-$langRestoreCourse = "Restore Course";
-$langServerStatus ="MySql servet status : ";
-$langDataBase = "Database ";
-$langRun = "work";
-$langClient = "MySql Client ";
-$langServer = "MySql Server ";
-$langLanguage ="Language";
-$langUpgradeBase = "Upgrade database";
 
 $langQuotaAdmin = "Quota Admin";
 $langQuotaSuccess = "Quota modified";
@@ -152,7 +124,6 @@ $langVideo = "Video";
 $langGroup = "User Groups";
 
 // Added by vagpits
-
 // General
 $langReturn = "Back";
 $langReturnToSearch = "Return to search results";
@@ -182,7 +153,6 @@ $langProfessors = "Professors";
 $langListRegisteredStudents = "Registered Students List";
 $langListRegisteredProfessors = "Registered Professors List";
 
-// clarconf.php
 $langClaroConf = "Configuration File of eClass";
 $langFileUpdatedSuccess = "Config file edited with success!";
 $langFileEdit = "File Edit";
@@ -198,7 +168,6 @@ $langWarning = "Warning!";
 $langNoticeDel = " Course deletion will unregister students from course. Also all the course teaching stuff will be deleted.";
 $langYes = "Yes";
 $langNo = "No";
-
 
 // editcours.php
 $langCourseEdit = "Course Edit";
@@ -346,13 +315,10 @@ $langAdminAnVis = "Visible";
 $langAdminAnnAdd = "Announcement added";
 $langAdminAnnDel = "Announcement deleted";
 $langAdminAnnMes = "announced in";
-
 $langAdminAnnTitleEn = "Title";
 $langAdminAnnBodyEn = "Announcement";
 $langAdminAnnCommEn = "Comment";
-
 $langAdminAnnTitleGr = "Title (in greek) ";
 $langAdminAnnBodyGr = "Announcement (in greek)";
 $langAdminAnnCommGr = "Comment (in greek)";
-
 ?>
