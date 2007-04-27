@@ -133,11 +133,18 @@ table.assign {
 }
 
 .title_pos {
+	display: block;
 	padding-left: 16px;
 	color: #045bb3;
 	font-weight: bold;
 }
+
 .content_pos {
+	display: block;
+	padding-left: 14px;
+}
+
+.content_pos_announce {
 	padding-left: 14px;
 }
 
@@ -222,7 +229,7 @@ table {
 }
 
 .announce_date{
-	font-weight: bold;
+	color: #045bb3;
 }
 
 //---------------
