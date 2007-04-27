@@ -176,12 +176,12 @@ agCont;
 
 				if(strlen($data[$i][$j][1]) > 150) {
 					$data[$i][$j][1] = substr($data[$i][$j][1], 0, 150);
-					$data[$i][$j][1] .= " <span class=\"announce_date\">$langMore</span>";
+					$data[$i][$j][1] .= " <strong class=\"announce_date\">$langMore</strong>";
 				}
 				$agenda_content .= "
-		<li><a class=\"square_bullet\" href=\"$url\"><div class=\"title_pos\">".$data[$i][$j][6]." - ".$data[$i][$j][3]." ($langDuration: ".$data[$i][$j][4].")</div>
-			<div class=\"content_pos\"><span class=\"announce_date\">".$data[$i][$j][0]."</span></div>
-			<div class=\"content_pos\">".$data[$i][$j][1].autoCloseTags($data[$i][$j][1])."</div>
+		<li><a class=\"square_bullet\" href=\"$url\"><strong class=\"title_pos\">".$data[$i][$j][6]." - ".$data[$i][$j][3]." ($langDuration: ".$data[$i][$j][4].")</strong>
+			<cite class=\"content_pos\"><span class=\"announce_date\">".$data[$i][$j][0]."</span></cite>
+			<quote class=\"content_pos\">".$data[$i][$j][1].autoCloseTags($data[$i][$j][1])."</quote>
 		</a></li>
 		";
 			}

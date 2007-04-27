@@ -118,6 +118,7 @@ function getUserAnnouncements($param = null, $type) {
 
 
 	if ($getNewAnnounce) {
+		$announceGroup = array();
 		array_push($announceGroup, $announceSubGroup);
 		$sqlNowDate = eregi_replace(" ", "-",$usr_lst_login);
 		$sql = "UPDATE `user` SET `announce_flag` = '$sqlNowDate' WHERE `user_id` = $uid ";
@@ -186,12 +187,12 @@ aCont;
 			for ($j=0; $j < $iterator; $j++){
 				if(strlen($data[$i][2][$j][0]) > 150) {
 					$data[$i][2][$j][0] = substr($data[$i][2][$j][0], 0, 150);
-					$data[$i][2][$j][0] .= " <span class=\"announce_date\">$langMore</span>
+					$data[$i][2][$j][0] .= " <strong class=\"announce_date\">$langMore</strong>
 					";
 				}
 				$assign_content .= "
 		<li><a class=\"square_bullet\" href=\"$url\">
-		<div class=\"content_pos\"><span class=\"announce_date\">".$data[$i][2][$j][1]." : </span>".$data[$i][2][$j][0].autoCloseTags($data[$i][2][$j][0])."</div></a>
+		<quote class=\"content_pos\"><strong><span class=\"announce_date\">".$data[$i][2][$j][1]." : </span></strong>".$data[$i][2][$j][0].autoCloseTags($data[$i][2][$j][0])."</quote></a>
 			
 		</li>
 		";

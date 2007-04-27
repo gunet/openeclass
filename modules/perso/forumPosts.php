@@ -172,15 +172,15 @@ fCont;
 				
 				if(strlen($data[$i][2][0][$j][8]) > 150) {
 					$data[$i][2][0][$j][8] = substr($data[$i][2][0][$j][8], 0, 150);
-					$data[$i][2][0][$j][8] .= " <span class=\"announce_date\">$langMore</span>
+					$data[$i][2][0][$j][8] .= " <strong><span class=\"announce_date\">$langMore</span></strong>
 					";
 				}
 				
 				$content .= "
 		<li><a class=\"square_bullet\" href=\"$url\">
-		<div class=\"title_pos\">".$data[$i][2][0][$j][3]." (".$data[$i][2][0][$j][5].")</div>
-		<div class=\"content_pos\">".$data[$i][2][0][$j][8]."</div>
-		<div class=\"content_pos\">$langSender: ".$data[$i][2][0][$j][6]." ".$data[$i][2][0][$j][7]."</div>
+		<strong class=\"title_pos\">".$data[$i][2][0][$j][3]." (".$data[$i][2][0][$j][5].")</strong>
+		<quote class=\"content_pos\">".$data[$i][2][0][$j][8]."</quote>
+		<cite class=\"content_pos\">$langSender: ".$data[$i][2][0][$j][6]." ".$data[$i][2][0][$j][7]."</cite>
 		</a></li>
 		";
 			}

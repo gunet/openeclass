@@ -116,7 +116,7 @@ function getUserDocuments($param = null, $type) {
 	}
 
 	if ($getNewDocs) {
-
+		$docsGroup = array();
 		array_push($docsGroup, $docsSubGroup);
 		$sqlNowDate = eregi_replace(" ", "-",$usr_lst_login);
 		$sql = "UPDATE `user` SET `doc_flag` = '$sqlNowDate' WHERE `user_id` = $uid ";
@@ -185,7 +185,7 @@ aCont;
 			for ($j=0; $j < $iterator; $j++){
 				$url = $_SERVER['PHP_SELF'] . "?perso=6&c=" .$data[$i][1]."&p=".$data[$i][2][$j][0];
 				$content .= "
-		<li><a class=\"square_bullet\" href=\"$url\"><div class=\"content_pos\">".$data[$i][2][$j][2]." ( ".$data[$i][2][$j][3].")</div></a>
+		<li><a class=\"square_bullet\" href=\"$url\"><quote class=\"content_pos\">".$data[$i][2][$j][2]." (".$data[$i][2][$j][3].")</quote></a>
 			
 		</li>
 		";

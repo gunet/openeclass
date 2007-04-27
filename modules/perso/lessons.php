@@ -151,8 +151,8 @@ lCont;
 	<li>
 	<a class=\"square_bullet\" href=\"courses/".$data[2][$i]."\">
 	
-	<div class=\"title_pos\">".$lesson_fCode[$i]." - ".$data[1][$i]."</div>
-	<div class=\"content_pos\">".$data[3][$i]."</div>
+	<strong class=\"title_pos\">".$lesson_fCode[$i]." - ".$data[1][$i]."</strong>
+	<cite class=\"content_pos\">".$data[3][$i]."</cite>
 	</a>
 	</li>
 	";
