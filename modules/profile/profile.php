@@ -39,9 +39,7 @@ $nameTools = $langModifProfile;
 
 check_guest();
 
-//if (isset($submit) && ($ldap_submit != "ON")) {
-if (isset($submit) && (!isset($ldap_submit))) 
-{
+if (isset($submit) && (!isset($ldap_submit))) {
 	$password_form = isset($_POST['password_form'])?$_POST['password_form']:'';
 	$password_form1 = isset($_POST['password_form1'])?$_POST['password_form1']:'';
 	/*
@@ -76,16 +74,14 @@ if (isset($submit) && (!isset($ldap_submit)))
 		$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
 	
 		// check if username exists
-	
-		$username_check=mysql_query("SELECT username FROM user WHERE username='".escapeSimple($username_form)."'");
-		while ($myusername = mysql_fetch_array($username_check)) 
-		{
+			$username_check=mysql_query("SELECT username FROM user 
+					WHERE username='".escapeSimple($username_form)."'");
+		while ($myusername = mysql_fetch_array($username_check))  {
 			$user_exist=$myusername[0];
 		}
 	
 		// check if passwds are the same
-	
-		if ($password_form1 !== $password_form) {
+	 if ($password_form1 !== $password_form) {
 			header("location:". $_SERVER['PHP_SELF']."?msg=2");
 		}
 	
@@ -225,7 +221,7 @@ if(isset($msg))
 			</table><br/>";
 
 }
-/**************************************************************************************/
+
 // inst_id added by adia for LDAP users
 $sqlGetInfoUser ="SELECT nom, prenom, username, password, email, inst_id, am, perso, lang
     FROM user WHERE user_id='".$uid."'";
@@ -369,20 +365,14 @@ else		// Not LDAP user:
     <table width=\"99%\">
     <thead>
     <tr>
-        <th width=\"150\">
-            $langName
-        </th>
-        <td>
+        <th width=\"150\">$langName</th>
+     <td>
             <input type=\"text\" size=\"40\" name=\"prenom_form\" value=\"$prenom_form\">
         </td>
     </tr>
     <tr>
-        <th width=\"150\">
-            $langSurname
-        </th>
-        <td>
-            <input type=\"text\" size=\"40\" name=\"nom_form\" value=\"$nom_form\">
-        </td>
+    <th width=\"150\">$langSurname</th>
+    <td><input type=\"text\" size=\"40\" name=\"nom_form\" value=\"$nom_form\"></td>
     </tr>";
     
     $authmethods = array("imap","pop3","ldap","db");
@@ -390,12 +380,8 @@ if(!in_array($password_form,$authmethods))
 {
 	$tool_content .= "
 	<tr>
-        <th width=\"150\">
-            $langUsername
-        </th>
-        <td>
-            <input type=\"text\" size=\"40\" name=\"username_form\" value=\"$username_form\">
-        </td>
+        <th width=\"150\">$langUsername</th>
+        <td><input type=\"text\" size=\"40\" name=\"username_form\" value=\"$username_form\"></td>
     </tr>
     <tr>
         <th width=\"150\">
@@ -461,9 +447,7 @@ else		// means that it is external auth method, so the user cannot change this p
 		$tool_content .="
                 <tr>
                     <th width=\"150\">
-
                             eClass Personalised
-
                     </th>
                      <td>
                         <input type=checkbox name='persoStatus' value=\"yes\" $checkedPerso>
@@ -475,7 +459,7 @@ else		// means that it is external auth method, so the user cannot change this p
         <tr>
             <th>$langLanguage</th>
             <td><input type='radio' name='userLanguage' value='el' $checkedLangEl>$langGreek<br>
-				<input type='radio' name='userLanguage' value='en'  $checkedLangEn>$langEnglish
+						<input type='radio' name='userLanguage' value='en'  $checkedLangEn>$langEnglish
             </td>
         </tr>";
 	$tool_content .= "
@@ -484,12 +468,7 @@ else		// means that it is external auth method, so the user cannot change this p
     </form>
     <br><p><a href='../unreguser/unreguser.php'>$langUnregUser</a></p><br>";
 //}		// End of LDAP user added by adia
-#############################################################
-//$tool_content .=  "</td></tr><tr><td><br><hr noshade size=\"1\">";
-
 
 draw($tool_content, 1);
-
-
 
 ?>

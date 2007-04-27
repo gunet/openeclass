@@ -34,24 +34,13 @@ $langFiles = 'opencours';
 include '../../include/baseTheme.php';
 $nameTools = $listfac;
 $tool_content = "";
-//$local_style = "
-//	p { line-height: 25pt; font-size: 11pt; padding: 1em; background: $color2; }
-//";
-//begin_page();
 
 $tool_content .= "<table width='99%'><thead>";
-$tool_content .= "	<tr>
-						<th>
-							Τμήμα
-						</th>
-						<th>
-							$avlessons
-						</th>
-					</tr>
-					</thead>
-					<tbody>
-						
-";
+$tool_content .= "<tr>
+						<th>$m[department]</th>
+						<th>$langAvCourses</th>
+						</tr></thead><tbody>
+						";
 $result=mysql_query("SELECT id, name FROM faculte ORDER BY name");
 $numrows = mysql_num_rows($result);
 while ($fac = mysql_fetch_array($result)) {
@@ -60,13 +49,10 @@ while ($fac = mysql_fetch_array($result)) {
 	$n=mysql_query("SELECT COUNT(*) FROM cours_faculte WHERE facid='$fac[id]'");
 	$r=mysql_fetch_array($n);
 	$tool_content .= "<td>$r[0] "
-	. /*($r[0] == 1? $avlesson: $avlessons) .*/ "</td>";
+	. /*($r[0] == 1? $$langAvCourse: $$langAvCourses) .*/ "</td>";
 	$tool_content .= "</tr>";
 }
 
 $tool_content .= "</tbody></table>";
-
 draw($tool_content, 0);
-
 ?>
-

@@ -1,17 +1,18 @@
 <?
-$langUnregUser = "Διαγραφή από την πλατφόρμα";
-$langBackHome = "Επιστροφή στην αρχική σελίδα";
-$langAdminNo = "Ο λογαριασμός του διαχειριστή της πλατφόρμας δεν μπορεί να διαγραφεί!";
-$langConfirm = "Θέλετε σίγουρα να διαγραφτείτε από την πλατφόρμα?";
-$langYes = "Ναι";
-$langNo = "Όχι";
-$langDelete = "Διαγραφή!";
-$langBack = "Επιστροφή";
-$langExplain = "Για να διαγραφτείτε από την πλατφόρμα, πρέπει πρώτα να απεγγραφείτε από τα μαθήματα που είστε εγγεγραμμένος.";
-$langConfirm = "Επιβεβαίωση διαγραφής λογαριασμού";
-$langDelSuccess = "Ο λογαριασμός σας στην πλατφόρμα έχει διαγραφεί.";
-$langThanks = "Ευχαριστούμε για τη χρήση της πλατφόρμας!";
-$langError = "Σφάλμα κατά τη διαγραφή του χρήστη!";
-$langLogout = "Έξοδος";
-$langNotice = "Σημείωση";
+$langUnregUser = "Delete User";
+$langBackHome = "Back to home page";
+$langAdminNo = "Admin account cannot be deleted!";
+$langConfirm = "Are you sure you want to delete from platform?";
+$langYes = "Yes";
+$langNo = "No";
+$langDelete = "Delete!";
+$langBack = "Back";
+$langExplain = "In order to delete your account, you must unregister from your courses.";
+$langConfirm = "Delete account confirmation";
+$langDelSuccess = "Your account has been deleted.";
+$langThanks = "Thank you for using platform!";
+$langError = "Error while deleting user!";
+$langLogout = "Logout";
+$langNotice = "Notice";
+$langModifProfile="Modify my profile";
 ?>
