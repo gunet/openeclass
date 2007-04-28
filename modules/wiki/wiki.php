@@ -407,11 +407,11 @@
         }
     }
 
-    echo claro_disp_tool_title( $toolTitle, "../wiki/help_wiki.php?help=admin" ) . "\n";
+    $tool_content .= claro_disp_tool_title( $toolTitle) . "\n";
 
     if ( ! empty( $message ) )
     {
-        echo claro_disp_message_box( $message ) . "\n";
+        $tool_content .= claro_disp_message_box( $message ) ."\n";
     }
 
     switch( $action )
@@ -424,7 +424,7 @@
         // edit form
         case "rqEdit":
         {
-            echo claro_disp_wiki_properties_form( $wikiId, $wikiTitle
+            $tool_content .= claro_disp_wiki_properties_form( $wikiId, $wikiTitle
                 , $wikiDesc, $groupId, $wikiACL );
             
             break;
@@ -432,20 +432,20 @@
         // delete form
         case "rqDelete":
         {
-            echo '<form method="POST" action="'
+            $tool_content .= '<form method="POST" action="'
                 . $_SERVER['PHP_SELF']
                 . '" id="rqDelete">'
                 . "\n"
                 ;
                 
-            echo '<div style="padding: 5px">'
+            $tool_content .= '<div style="padding: 5px">'
                 . '<input type="hidden" name="wikiId" value="' . $wikiId . '" />' . "\n"
                 . '<input type="submit" name="action[exDelete]" value="' . $langContinue . '" />' . "\n"
                 . claro_disp_button ($_SERVER['PHP_SELF'], $langCancel )
                 . '</div>'
                 ;
 
-            echo '</form>' . "\n";
+            $tool_content .= '</form>' . "\n";
             
             break;
         }
@@ -468,11 +468,11 @@
             
             if ( $is_allowedToAdmin )
             {
-                echo '<p><a href="'
+                $tool_content .= '<p><a href="'
                     . $_SERVER['PHP_SELF']
                     . '?action=rqEdit'
                     . '" class="claroCmd">'
-                    . '<img src="' . $imgRepositoryWeb . '/wiki.gif" alt="'.$langWikiCreateNewWiki.'" />&nbsp;'
+                    . '<img src="' . $imgRepositoryWeb . '/wiki.gif" border="0"  alt="'.$langWikiCreateNewWiki.'" title="'.$langWikiCreateNewWiki.'" />&nbsp;'
                     . $langWikiCreateNewWiki
                     . '</a></p>'
                     . "\n"
@@ -481,12 +481,12 @@
             
             // display list in a table
             
-            echo '<table class="claroTable emphaseLine" style="width: 100%">' . "\n";
+            $tool_content .= '<table class="claroTable emphaseLine" style="width: 100%">' . "\n";
             
             // if admin, display title, edit and delete
             if ( $is_allowedToAdmin )
             {
-                echo '<thead>' . "\n"
+                $tool_content .= '<thead>' . "\n"
                     . '<tr class="headerX" style="text-align: center;">' . "\n"
                     . '<th>'.$langTitle.'</th>' . "\n"
                     . '<th>'.$langWikiNumberOfPages.'</th>' . "\n"
@@ -500,7 +500,7 @@
             // else display title only
             else
             {
-                echo '<thead>' . "\n"
+                $tool_content .= '<thead>' . "\n"
                     . '<tr class="headerX" style="text-align: center;">' . "\n"
                     . '<th>'.$langTitle.'</th>' . "\n"
                     . '<th>'.$langWikiNumberOfPages.'</th>' . "\n"
@@ -510,7 +510,7 @@
                     ;
             }
             
-            echo '<tbody>' . "\n";
+            $tool_content .= '<tbody>' . "\n";
             
             // wiki list not empty
             if ( is_array( $wikiList ) && count( $wikiList ) > 0 )
@@ -518,7 +518,7 @@
                 
                 foreach ( $wikiList as $entry )
                 {
-                    echo '<tr>' . "\n";
+                    $tool_content .= '<tr>' . "\n";
                 
                     // display title for all users
                                  
@@ -534,43 +534,43 @@
                     }
                     
 
-                    echo '<td style="text-align: left;">';
+                    $tool_content .= '<td style="text-align: left;">';
                     
                     // display direct link to main page
                     
-                    echo '<a class="item'.$classItem.'" href="page.php?wikiId='  
+                    $tool_content .= '<a class="item'.$classItem.'" href="page.php?wikiId='  
                         . $entry['id'].'&amp;action=show'
                         . '">'
-                        . '<img src="' . $imgRepositoryWeb . '/wiki.gif" alt="'.$langWiki.'" />&nbsp;'
+                        . '<img src="' . $imgRepositoryWeb . '/wiki.gif" alt="'.$langWiki.'" title="'.$langWiki.'" border="0" />&nbsp;'
                         . $entry['title'] . '</a>'
                         ;
                         ;
                     
-                    echo '</td>' . "\n";
+                    $tool_content .= '</td>' . "\n";
                     
-                    echo '<td style="text-align: center;">';
+                    $tool_content .= '<td style="text-align: center;">';
                     
-                    echo '<a href="page.php?wikiId=' . $entry['id'] . '&amp;action=all">';
+                    $tool_content .= '<a href="page.php?wikiId=' . $entry['id'] . '&amp;action=all">';
                     
-                    echo $wikiStore->getNumberOfPagesInWiki( $entry['id'] );
+                    $tool_content .= $wikiStore->getNumberOfPagesInWiki( $entry['id'] );
                     
-                    echo '</a>';
+                    $tool_content .= '</a>';
                     
-                    echo '</td>' . "\n";
+                    $tool_content .= '</td>' . "\n";
                     
-                    echo '<td style="text-align: center;">';
+                    $tool_content .= '<td style="text-align: center;">';
 
                     // display direct link to main page
 
-                    echo '<a href="page.php?wikiId='
+                    $tool_content .= '<a href="page.php?wikiId='
                         . $entry['id'].'&amp;action=recent'
                         . '">'
-                        . '<img src="' . $imgRepositoryWeb . '/history.gif" border="0" alt="'.$langWikiRecentChanges.'" />'
+                        . '<img src="' . $imgRepositoryWeb . '/history.gif" border="0" alt="'.$langWikiRecentChanges.'" title="'.$langWikiRecentChanges.'" />'
                         . '</a>'
                         ;
                         ;
                         
-                    echo '</td>' . "\n";
+                    $tool_content .= '</td>' . "\n";
                     
                     // if admin, display edit and delete links
                     
@@ -578,53 +578,53 @@
                     {
                         // edit link
                         
-                        echo '<td style="text-align:center;">';
-                        echo '<a href="'.$_SERVER['PHP_SELF'].'?wikiId='
+                        $tool_content .= '<td style="text-align:center;">';
+                        $tool_content .= '<a href="'.$_SERVER['PHP_SELF'].'?wikiId='
                             . $entry['id'].'&amp;action=rqEdit'
                             . '">'
-                            . '<img src="'.$imgRepositoryWeb.'/edit.gif" border="0" alt="'.$langWikiEditProperties.'" />'
+                            . '<img src="'.$imgRepositoryWeb.'/edit.gif" border="0" alt="'.$langWikiEditProperties.'" title="'.$langWikiEditProperties.'" />'
                             . '</a>'
                             ;
-                        echo '</td>' . "\n";
+                        $tool_content .= '</td>' . "\n";
                 
                         // delete link
                         
-                        echo '<td style="text-align:center;">';
-                        echo '<a href="'.$_SERVER['PHP_SELF'].'?wikiId='
+                        $tool_content .= '<td style="text-align:center;">';
+                        $tool_content .= '<a href="'.$_SERVER['PHP_SELF'].'?wikiId='
                             . $entry['id'].'&amp;action=rqDelete'
                             . '">'
-                            . '<img src="'.$imgRepositoryWeb.'/delete.gif" border="0" alt="'.$langDelete.'" />'
+                            . '<img src="'.$imgRepositoryWeb.'/delete.gif" border="0" alt="'.$langDelete.'" title="'.$langDelete.'" />'
                             . '</a>'
                             ;
-                        echo '</td>' . "\n";
+                        $tool_content .= '</td>' . "\n";
                     }
                     
-                    echo '</tr>' . "\n";
+                    $tool_content .= '</tr>' . "\n";
                     
                     if ( ! empty( $entry['description'] ) )
                     {                    
-                        echo '<tr>' . "\n";           
+                        $tool_content .= '<tr>' . "\n";           
                         
                         $colspan = ( $is_allowedToAdmin ) ? 5 : 3;
                         
-                        echo '<td colspan="'
+                        $tool_content .= '<td colspan="'
                             . $colspan.'"><div class="comment">'
                             . $entry['description'].'</div></td>'
                             . "\n"
                             ;
                         
-                        echo '</tr>' . "\n";
+                        $tool_content .= '</tr>' . "\n";
                     }
                 }
             }
             // wiki list empty
             else
             {
-                echo '<tr><td colspan="5" style="text-align: center;">'.$langWikiNoWiki.'</td></tr>' . "\n";
+                $tool_content .= '<tr><td colspan="5" style="text-align: center;">'.$langWikiNoWiki.'</td></tr>' . "\n";
             }
             
-            echo '</tbody>' . "\n";
-            echo '</table>' . "\n" . "\n";
+            $tool_content .= '</tbody>' . "\n";
+            $tool_content .= '</table>' . "\n" . "\n";
             
             break;
         }
@@ -638,5 +638,6 @@
 
     // ------------ End of display ---------------
 
+draw($tool_content, 2, "wiki", $head_content);
 
 ?>
