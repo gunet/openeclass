@@ -1,0 +1,46 @@
+(X)HTML		: (eXtensible) HyperText Markup Language
+AFNOR		: Association Française de NORmalisation
+ANSI			: American National Standard Institute
+ASCII		: American Standard Code for Information Interchange
+ASP			: Active Server Pages
+CSS			: Cascading Style Sheets
+DHTML		: Dynamic HyperText Markup Language
+DOM			: Document Object Model
+DTD			: Document Type Definition
+ECMA			: European Computer Manufacturer Association
+FAI			: Fournisseur d'Acces à Internet
+FAQ			: Foire Aux Questions
+FTP			: File Transfer Protocol
+FIDEV		: Formation et Insertion pour DEficients Visuels
+HTML			: HyperText Markup Language
+HTTP			: HyperText Transfer Protocol
+IP			: Internet Protocol
+IRC			: Internet Relay Chat
+ISO			: International Standard Organization
+JS			: JavaScript
+MIME			: Multipurpose Internet Mail Extension
+P3P			: Platform for Privacy Preferences Project
+PC			: Personnal Computer
+PHP			: PHP: Hypertext Preprocessor
+PICS			: Platform for Internet Content Selection
+PNG			: Portable Network Graphics
+RDF			: Resource Description Framework
+RFC			: Request For Comment
+RSS			: RDF Site Summary
+SGML			: Standard Generalized Markup Language
+SMIL			: Synchronized Multimedia Integration Language
+SSII			: Société de Service et d'Ingénierie Informatique
+SVG			: Scalable Vector Graphics
+TAG			: Technical Architecture Group
+TCP			: Transmission Control Protocol
+URI			: Universal Resource Identifier
+URL			: Uniform Resource Locator
+URN			: Universal Resource Name
+W3C			: World Wide Web Consortium
+WAI			: Web Accessibility Initiative
+WYSIWYG		: What You See Is What You Get
+WWW			: World Wide Web
+XHTML		: eXtensible HyperText Markup Language
+XML			: eXtensible Markup Language
+XSL			: eXtensible Stylesheet Language
+XSLT			: eXtensible Stylesheet Language Transformation
