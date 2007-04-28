@@ -101,7 +101,7 @@ $langWikiConflictHowTo = "<p><strong>Αλλάξτε τη σύγκρουση</strong> : Η σελίδα πο
 </ul></p>";
 $langWikiContentEmpty = " Αυτή η σελίδα είναι κενή, κάνε κλικ στο 'Edit this page' για να προσθεσεις περιεχομενο";
 $langWikiCourseMembers = " Μέλη μαθήματος ";
-$langWikiCreateNewWiki = " Δημιουργήστε έναν νέο Wiki";
+$langWikiCreateNewWiki = " Δημιουργήστε ένα νέο Wiki";
 $langWikiCreatePrivilege = " Δημιουργήστε σελίδες ";
 $langWikiCreationSucceed = "Η δημιουργία του Wiki ήταν επιτυχημένη";
 $langWikiDefaultDescription = " Εισάγετε την περιγραφή του νέου σας wiki έδω";
@@ -215,7 +215,7 @@ $langWikiNotAllowedToEdit = " Δεν επιτρέπεται να αλλάξεις αυτή τη σελίδα";
 $langWikiNotAllowedToRead = "Δεν επιτρέπεται να διαβάσεις αυτή τη σελίδα";
 $langWikiNumberOfPages = "Αριθμός σελίδων";
 $langWikiOtherUsers = "¶λλοι χρήστες (*)";
-$langWikiOtherUsersText = "ανώνυμοι χρήστες και χρήστες που δεν είναι μέλη αυτού του μαθήματος...";
+$langWikiOtherUsersText = "(*) ανώνυμοι χρήστες και χρήστες που δεν είναι μέλη αυτού του μαθήματος...";
 $langWikiPageHistory = "Ιστορικό σελίδας";
 $langWikiPageSaved = "Η σελίδα αποθηκεύτηκε";
 $langWikiPreviewTitle = "Προεπισκόπηση : ";
