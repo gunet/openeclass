@@ -81,7 +81,9 @@ if (!isset($colorDark)) {
 if (!isset($bannerPath)) {
 	$bannerPath = 'images/gunet/banner.jpg';
 }
-
+if (!isset($table_border)) {
+        $table_border = "#DCDCDC;";
+}
 // Set user desired language (Author: Evelthon Prodromou)
 if (isset($localize)) {
 

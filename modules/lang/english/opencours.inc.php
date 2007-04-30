@@ -1,6 +1,6 @@
 <?
 $opencours="Courses List";
-$listfac="Departments List";
+$listfac="Select faculty";
 $listtomeis = "Division";
 $langDepartmentsList = "A list of this institution's departments apprears below. Please click on
 	any of them to view a list of its available courses."; 
@@ -10,6 +10,7 @@ $langWrongPassCourse = "Wrong Course Password";
 $langAvCourses = "Available courses";
 
 $m['department'] = 'Department';
+$m['lessoncode'] = 'Course Name (code)';
 $m['tomeis'] = 'Divisions';
 $m['tomeas'] = 'Division';
 $m['open'] = 'Open Courses (Free Access)';
@@ -31,6 +32,7 @@ $m['legend'] = 'Legend';
 $m['legopen'] = 'Open Course';
 $m['legrestricted'] = 'Registration required';
 $m['legclosed'] = 'Closed Course';
+$m['nolessons'] = 'There are no available courses!';
 
 $m['type']="Type";
 $m['name']="Course";

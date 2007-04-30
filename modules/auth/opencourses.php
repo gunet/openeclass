@@ -41,14 +41,14 @@ $navigation[] = array ("url"=>"listfaculte.php", "name"=> $listfac);
 
 //parse the faculte id in a session
 //This is needed in case the user decides to switch language.
-
 if (isset($fc)) {
 	$_SESSION['fc_memo'] = $fc;
 }
-
 if (!isset($fc)) {
 	$fc = $_SESSION['fc_memo'];
 }
+
+// security check
 $fc = intval($fc);
 $fac = mysql_fetch_row(mysql_query("SELECT name FROM faculte WHERE id = ".$fc));
 if (!($fac = $fac[0])) {
@@ -56,26 +56,32 @@ if (!($fac = $fac[0])) {
 } 
 
 $tool_content = "";
-$tool_content .= "
-	<table width=\"99%\">
-		<thead>
-			<tr>
-				<th width=150>$m[department]:</th>
-				<td>$fac</td>
-			</tr>
-		</thead>
-	</table>
-	<br>";
-
-
 
 // upatras.gr patch begin, atkyritsis@upnet.gr, daskalou@upnet.gr
 // use the following array for the legend icons
+/*
 $icons = array(
 2 => "<img src=\"../../template/classic/img/OpenCourse.gif\" alt=\"\">",
 1 => "<img src=\"../../template/classic/img/Registration.gif\" alt=\"\">",
 0 => "<img src=\"../../template/classic/img/ClosedCourse.gif\" alt=\"\">"
 );
+*/
+$icons = array(
+ 2 => "<img src=\"../../images/OpenCourse.gif\" alt=\"".$m['legopen']."\" title=\"".$m['legopen']."\" width=\"25\" height=\"25\">",
+ 1 => "<img src=\"../../images/Registration.gif\" alt=\"".$m['legrestricted']."\" title=\"".$m['legrestricted']."\" width=\"25\" height=\"25\">",
+0 => "<img src=\"../../images/ClosedCourse.gif\" alt=\"".$m['legclosed']."\" title=\"".$m['legclosed']."\" width=\"25\" height=\"25\">"
+);
+
+$tool_content .= "
+            <table border=0' width=96% align=center cellspacing='0' cellpadding='0'>
+            <tr>
+            <td align='left' style='border-top: 1px solid $table_border; border-right: 1px solid $table_border; border-left: 1px solid $table_border;' class='td_NewDir'>
+                <a name='top'>'$m[department]':</a>
+                <b><em>$fac</em></b>
+                </td>
+            </tr>
+            <tr>
+            <td align=right valign='middle' class=td_NewDir style='border-bottom: 1px solid $table_border; border-right: 1px solid $table_border; border-left: 1px solid $table_border;' height=20>&nbsp;";
 
 // get the different course types available for this faculte
 $typesresult = mysql_query("SELECT DISTINCT cours.type types FROM cours WHERE cours.faculte = '$fac' ORDER BY cours.type");
@@ -100,31 +106,21 @@ if ( $numoftypes > 1) {
 		$counter++;
 	}
 	
-	$tool_content .= "</p>";
+	$tool_content .= "</td></tr><tr><td align=right valign=middle>";
 }
 
-// now output the legend
-$tool_content .= "
-	<table width=\"99%\">
-		<thead>
-			<tr>
-				<th width=150>".$m['legend'].":</th>
-				<td>".$icons[2]." ".$m['legopen']."</td>
-				<td>".$icons[1]." ".$m['legrestricted']."</td>
-				<td>".$icons[0]." ".$m['legclosed']."</td>
-			</tr>
-		</thead>
-	</table>
-	<br>";
+$tool_content .= "<div class='courses'>";
 
 // changed this foreach statement a bit
 // this way we sort by the course types
 // then we just select visible
 // and finally we do the secondary sort by course title and but teacher's name
+
 foreach (array("pre" => $m['pres'],
-"post" => $m['posts'],
-"other" => $m['others']) as $type => $message) {
-	$result=mysql_query("SELECT
+				"post" => $m['posts'],
+				"other" => $m['others']) as $type => $message) {
+
+			$result=mysql_query("SELECT
 						cours.code k,
 						cours.fake_code c,
 						cours.intitule i,
@@ -140,62 +136,64 @@ foreach (array("pre" => $m['pres'],
 		continue;
 	}
 
-	$tool_content .= "
-	<table width=\"99%\">
-		<thead>
-			<tr>
-				<th colspan=\"4\"><a name=\"$type\">$message</th>
-			</tr>
-			<tr>
-				<th>".$m['type']."</th>
-				<th>".$m['name']."</th>
-				<th>".$m['code']."</th>
-				<th>".$m['prof']."</th>
-			</tr>
-		</thead>
-		<tbody>
-	";
+$tool_content .= "<br><script type='text/javascript' src='sorttable.js'></script>
+          <table width='100%' border=0 cellpadding='0' cellspacing='0' align=center>
+          <tr><td align=left class=kk><b><font color=#004571>";
+
 	// We changed the style a bit here and we output types as the title
-	//	$tool_content .= "<a name=\"$type\" class=\"largeorange\">fgdfg$message</a>\n";
+$tool_content .= "<a name='$type'>$message</a></font></b></td>\n";
 
-	// output a top href link if necessary
-	//	if ( $numoftypes > 1)
-	//	$tool_content .= "<div class=\"courses\" align=\"right\"><a href=\"#top\">αρχή</a></div>";
-	//	// or a space for beautifying reasons
-	//	else
-	//	$tool_content .=  "<div class=\"courses\" align=\"right\">&nbsp;</div>";
-	$i=0;
-	while ($mycours = mysql_fetch_array($result)) {
-		// changed the variable because of the previous change in the select argument
-		if ($mycours['visible'] == 2) {
-			$codelink = "<a href='../../courses/$mycours[k]/'>$mycours[c]</a>";
-		} else {
-			$codelink = $mycours['c'];
-		}
+          // output a top href link if necessary
+          if ( $numoftypes > 1)
+            $tool_content .= "<td align=\"right\" class=kk><a href=\"#top\" class='mainpage'>αρχή</a></td>";
+          // or a space for beautifying reasons
+          else
+            $tool_content .= "<td class=kk align=\"right\">&nbsp;</td>";
+	          $tool_content .= "</tr>";
+						$tool_content .= "</table>";
 
-		// output each course as a table for beautifying reasons
+		        $tool_content .= "<table border='0' bgcolor=white class=\"sortable\" id=\"t1\" cellspacing=\"1\" cellpadding=\"0\" style=\"border: 1px solid $table_border\">";
+           $tool_content .= "<tr>";
+	         $tool_content .= "<td class='td_small_HeaderRow' style=\"border: 1px solid $table_border\">$m[lessoncode]</td>";
+           $tool_content .= "<td class='td_small_HeaderRow' style=\"border: 1px solid $table_border\">$m[professor]</td>";
+					 $tool_content .= "<td class='td_small_HeaderRow' align='center' style=\"border: 1px solid $table_border\">Τύπος</td>";
+					 $tool_content .=" </tr>";
 
-		if ($i%2==0) $tool_content .=  '<tr>';
-		else $tool_content .= '<tr class="odd">';
-		// show the necessary access icon
-		foreach ( $icons as $visible => $image) {
-			if ( $visible == $mycours['visible'] ) {
-				$tool_content .= "<td>$image</td>";
-			}
-		}
 
-		$tool_content .= "<td>$mycours[i]</td>
-		<td>".$codelink."</td>";
+		while ($mycours = mysql_fetch_array($result)) {
+          // changed the variable because of the previous change in the select argument
+            if ($mycours['visible'] == 2) {
+              $codelink = "<a href='../../courses/$mycours[k]/' class='CourseLink'>$mycours[i]</a>&nbsp;<span class='explanationtext'><font color=#4175B9>(".$mycours['c'].")</font></span>";
+            } else {
+              $codelink = "<font color=#A9A9A9>$mycours[i]&nbsp;<span class='explanationtext'>(".$mycours['c'].")</font></span>";
+            }
 
-		$tool_content .= "<td>$mycours[t]</td>
-							</tr>";
-		$i++;
-	}
+            // output each course as a table for beautifying reasons
+            $tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#F5F5F5'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
+            $tool_content .= "<td width='65%' class=kkk>".$codelink."</td>";
+            $tool_content .= "<td class=kkk><span class='explanationtext'>$mycours[t]</span></td>";
+            $tool_content .= "<td width='5%' align='center' class=kkk>";
+            // show the necessary access icon
+                      foreach ($icons as $visible => $image) {
+                          if ($visible == $mycours['visible'] ) {
+                              $tool_content .= $image;
+                          }
+                        }
+            $tool_content .= "</td>";
+            $tool_content .= "</tr>";
+          }
 
-	$tool_content .= "</tbody></table>";
-	// that's it!
-	// upatras.gr patch end here, atkyritsis@upnet.gr, daskalou@upnet.gr
-}
+				$tool_content .= "</table>";
+        $tool_content .= "<br>";
+          // that's it!
+          // upatras.gr patch end here, atkyritsis@upnet.gr, daskalou@upnet.gr
+        }
+         if ($numoftypes == 0) {
+             $tool_content .= "<br>";
+             $tool_content .= "<div class=alert1>$m[nolessons]</div>";
+         }
 
-draw($tool_content, 0);
+$tool_content .= "<br></td></tr></table></div>";
+
+draw($tool_content, 0, 'auth');
 ?>
