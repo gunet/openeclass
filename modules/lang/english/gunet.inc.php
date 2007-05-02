@@ -8,7 +8,6 @@ $regprofldap="Registration for professors with account in the LDAP Directory Ser
 $regldap="Registration for users with account in the LDAP Directory Service of their institution";
 $regprofnoldap="Registration for professors without an account in the LDAP Directory Service of their institution";
 $regnoldap="Registration for professors without an account in the LDAP Directory Service of their institution";
-
 $mailbody1="\nGUnet Academic Network\n\n";
 $mailbody2="User\n\n";
 $mailbody3="desires access ";
@@ -16,22 +15,8 @@ $mailbody4="to Asynchronous Teleteaching Service ";
 $mailbody5="of GUnet ";
 $mailbody6="as a professor.";
 $mailbody7="Faculty / Department:";
-
 $logo= "GUnet e-Class Asynchronous Teleteaching Platform";
-
-$introcontact = "You can contact with the GUNet e-Class Asynchronous Teleteaching Team using the following ways:";
-$contact="<b>Post Office Address:</b>";
-$contact2="GUnet Academic Network";
-$contact9="(Asynchronous Teleteaching Group)";
-$contact3="National And Kapodistrian University of Athens";
-$contact4="Network Operations Center";
-$contact5="University Campus, Ilisia , 15784";
-$contact6="<b>Tel:</b> +30 210 7275611";
-$contact7="<b>Fax:</b> +30 210 7275601";
-$contact8="teledu@gunet.gr";
-
 $gunet="GUnet Asynchronous Teleteaching Group";
-
 $sendinfomail="Send information e-mail to professors";
 $infoabouteclass="Update information about eClass";
 
@@ -45,5 +30,10 @@ republication of the content please contact the maintainers of each
 course.
 ';
 
-
+// contact.php
+$introcontact = "You can contact with the GUNet e-Class Asynchronous Teleteaching Team of <b>".$siteName."</b> using the
+ following ways:";
+$langPostMail="<b>Post Office Address:</b>";
+$langPhone = "<b>Tel:</b>";
+$langFax = "<b>Fax:</b>";
 ?>

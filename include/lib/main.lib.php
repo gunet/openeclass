@@ -527,4 +527,27 @@ function create_pass($length) {
 	 return $res;
 	}
 
+
+// Create a JavaScript-escaped mailto: link
+function mailto($address, $alternative='(e-mail address hidden)')
+{
+        if (empty($address)) {
+                echo '&nbsp;';
+        } else {
+                $prog = urlenc("var a='" . urlenc(str_replace('@', '&#64;', $address)) .
+                      "';document.write('<a href=\"mailto:'+unescape(a)+'\">'+unescape(a)+'</a>');");
+                return "<script type='text/javascript'>eval(unescape('" .
+                      $prog . "'));</script><noscript>$alternative</noscript>";
+        }
+}
+
+
+function urlenc($string)
+{
+        $out = '';
+        for ($i = 0; $i < strlen($string); $i++) {
+                $out .= sprintf("%%%02x", ord(substr($string, $i, 1)));
+        }
+        return $out;
+}
 ?>

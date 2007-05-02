@@ -31,32 +31,38 @@ include '../include/baseTheme.php';
 
 $nameTools = $contactpoint;
 $tool_content = "";
-$tool_content .= <<<tCont
-	
-	
-	<p>$introcontact</p>
-	<h4>$contact</h4>
-	<p>
-	$contact2
-        <br>				
-	$contact9
-	<br>
-	$contact3
-	<br>
-	$contact4
-	<br>
-	$contact5
-	</p>
-	<br>
-	<p>
-	$contact6
-	<br>
-	$contact7
-	<br>
-	</p>
-	<p><b>$langEmail: </b><a href="mailto:$emailAdministrator">
-	$emailAdministrator</a>		</p>
-		
-tCont;
+//$tool_content .= <<<tCont
+$tool_content .= "
+	<div align=justify class=td_main>$introcontact</div>
+        <blockquote>
+        <table>
+        <tr>
+          <td valign=top>
+          <img src='../images/env.gif'>&nbsp;&nbsp;
+          </td>
+          <td>
+          $langPostMail<br>
+          $Institution<br>
+          $postaddress<br>
+     </td>
+      </tr>
+      <tr><td colspan=2>&nbsp;</td></tr>
+    <tr>
+    <td valign=top><img src='../images/phone.gif'>&nbsp;&nbsp;</td>
+    <td>$langPhone
+         $telephone<br>
+         $langFax
+         $fax<br>
+    </td></tr>
+    <tr><td colspan=2>&nbsp;</td></tr>
+        <tr>
+          <td><img src=../images/email.gif>&nbsp;&nbsp;</td>
+          <td>
+          <br>
+          <b>$langEmail : </b>".mailto($emailAdministrator, str_replace('@', ' &lt;at> ', $emailAdministrator))."
+          </td>
+        </tr>
+        </table></blockquote>";
+//tCont;
 draw($tool_content, 0);
 ?>
