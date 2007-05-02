@@ -59,7 +59,7 @@ $tool_content .= <<<tCont
 ='Μορφή HTML' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/manS/ManS.htm" target=_blank class=mainpage>$langManS</a></img></div>
 
 <div class='td_main'>
-  <div class='explanationtext'><b>$langNote: </b>$langAcrobat <img src=../images/acrobat.png width=15 height=15> που θα βρείτε <a href="http://www.adobe.com/products/acrobat/readstep2.html" target=_blank><span class='explanationtext'>$langHere</span></a>.</div></div>
+  <div class='explanationtext'><b>$langNote: </b>$langAcrobat <img src='../images/acrobat.png' width=15 height=15> $langWhere <a href="http://www.adobe.com/products/acrobat/readstep2.html" target=_blank><span class='explanationtext'>$langHere</span></a>.</div></div>
 
 tCont;
 

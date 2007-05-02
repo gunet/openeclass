@@ -6,7 +6,8 @@ $langShortDesc = "Short Description of eClass";
 $langManS = "Student Manual";
 $langManT = "Teacher Manual";
 $langOr = "or";
-$langAcrobat = "In order to read PDF files, you can use Acrobat Reader which you can find";
+$langAcrobat = "In order to read PDF files, you can use Acrobat Reader";
+$langWhere = "which you can find";
 $langHere = "here";
 $langNote = "Note";
 ?>
