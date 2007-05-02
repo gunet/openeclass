@@ -41,46 +41,46 @@ include '../../include/baseTheme.php';
 include('../../include/lib/textLib.inc.php');
 $nameTools = $langMyAnnouncements;
 $tool_content = "";
-$result = db_query("SELECT * FROM annonces,cours_user
-			WHERE annonces.code_cours=cours_user.code_cours 
-			AND cours_user.user_id='$uid' 
-			ORDER BY temps DESC",$mysqlMainDb) OR die("DB problem");
+$result = db_query("SELECT annonces.id, annonces.title, annonces.contenu,
+                        DATE_FORMAT(temps, '%e-%c-%Y') AS temps,
+                         cours_user.code_cours,
+                         annonces.ordre
+                        FROM annonces,cours_user
+                        WHERE annonces.code_cours=cours_user.code_cours
+                        AND cours_user.user_id='$uid'
+                        ORDER BY annonces.temps DESC", $mysqlMainDb)
+                                OR die("Πρόβλημα στην βάση δεδομένων!");
 
-$tool_content .= "<table width=\"99%\">
-						<thead>
-							<tr>
-								<th width=\"200\">$langtheCourse</th>
-								<th>$langAnn</th>
-								<th>$langAnnouncement</th>
-							</tr>
-						</thead>
-						<tbody>
-	
-	";
-$i=0;
-while ($myrow = mysql_fetch_array($result))
-{
-	$content = $myrow['contenu'];
-	$content = make_clickable($content);
-	$content = nl2br($content);
-	$row = mysql_fetch_array(db_query("SELECT intitule,titulaires FROM cours WHERE code='$myrow[code_cours]'"));
-	if($i%2 ==0) {
-		$tool_content .= "<tr>";
-	} else {
-		$tool_content .= "<tr class=\"odd\">";
-	}
+$tool_content .= "<table width=\"100%\" cellpadding=\"0\" align=center cellspacing=\"0\" border=\"0\">\n";
 
-	$tool_content .= "
-				<td>$row[intitule]</td>
-				<td>".$myrow['temps']."</td>
-				<td>$content</td>
-			</tr>
-		";
-	$i++;
+        if (mysql_num_rows($result) > 0)  {    // found announcements ?
+        while ($myrow = mysql_fetch_array($result)) {
+                $content = $myrow['contenu'];
+                $content = make_clickable($content);
+                $content = nl2br($content);
+                $row = mysql_fetch_array(db_query("SELECT intitule,titulaires FROM cours 
+											WHERE code='$myrow[code_cours]'"));
+                $tool_content .= "<tr><td>";
+                $tool_content .= "<table width=96% align=center style=\"border: 1px solid silver;\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
+                $tool_content .= "<tr><td class=color2><b>$row[intitule]</b></td>\n";
+                $tool_content .= "<td class=color2 align=right valign=middle>$row[titulaires]</td>";
+                $tool_content .= "<td class=color2 align=right width=1% valign=middle><img src='../../images/teacher.gif' title=$langTitulaire></td>\n";
+                $tool_content .= "</tr>";
+                $tool_content .= "<tr>";
+                $tool_content .= "<td colspan=3 class=\"color1\"><i>($langAnn : ".$myrow['temps'].")</i><br><br>\n";
+                $tool_content .= "$content</td>";
+                $tool_content .= "</tr>";
+                $tool_content .= "</table>";
 
-}	// while loop
-$tool_content .= "
-	</tbody></table>";
+								$tool_content .= "<br>";
+        }       // while loop
+
+} else {  // no announcements
+        $tool_content .= "<tr><td>&nbsp;</td></tr>\n";
+        $tool_content .= "<tr><td class=alert1><em>".$langNoAnnouncements."</em></td></tr>\n";
+}
+
+$tool_content .= "</table>";
+
 draw($tool_content, 1);
 ?>
-	
