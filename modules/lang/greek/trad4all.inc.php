@@ -1,5 +1,8 @@
 <?php
 
+$langYes = "Íáé";
+$langNo = "¼÷é";
+
 $iso639_2_code = "el";
 $iso639_1_code = "ell";
 
