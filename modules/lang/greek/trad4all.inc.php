@@ -42,7 +42,6 @@ $dateTimeFormatLong  = '%d %B %Y / Ώρα: %R';
 //$timeNoSecFormat = '%I:%M %p';
 $timeNoSecFormat = '%R';
 
-// GENERIC 
 $langBack = "Επιστροφή";
 $langModify="Αλλαγή";
 $langDelete="Διαγραφή";
@@ -52,6 +51,7 @@ $langOk="Επικύρωση";
 $langAddIntro="Προσθήκη εισαγωγικού κειμένου";
 $langBackList="Επιστροφή στη λίστα";
 $langUser = "Χρήστης:";
+$langProfessor = "Καθηγητής";
 $langLogout = "Έξοδος";
 $langNoAdminAccess = '
 		<p><b>Η σελίδα
@@ -104,7 +104,7 @@ $langCheckPublicTools = "
 
 $langUserBriefcase = "Χαρτοφυλάκιο χρήστη";
 $langPersonalisedBriefcase = "Προσωπικό χαρτοφυλάκιο";
-$langEclass = "Πλατφόρμα ασύγχρονης τηλεκπαίδευσης e-Class";
+$langEclass = "Πλατφόρμα ασύγχρονης τηλεκπαίδευσης eClass";
 $langCopyrightFooter="Πληροφορίες πνευματικών δικαιωμάτων";
 
 $langGreek="Ελληνικά";

@@ -65,11 +65,9 @@ $dateFormatLong  = '%A %B %d, %Y';
 $dateTimeFormatLong  = '%B %d, %Y at %I:%M %p';
 $timeNoSecFormat = '%I:%M %p';
 
-// copyright
 
 $langCopyright = "Copyright";
 
-// GENERIC 
 
 $langBack="Back";
 $langBackHome="Back to  home";
@@ -82,6 +80,7 @@ $langOk="Ok";
 $langAddIntro="Add introduction text";
 $langBackList="Return to the list";
 $langUser = "User:";
+$langProfessor = "Professor";
 $langLogout = "Logout";
 
 $langUserBriefcase = "User portfolio";

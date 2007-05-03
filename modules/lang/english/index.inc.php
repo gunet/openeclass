@@ -78,10 +78,12 @@ $langUnregUser = "Unregister";
 $langListFaculte = "Faculte";
 $langInfoPlat = "Platform infornation";
 $langUserLogin = "User login";
-$langWelcomeToEclass = "Welcome to e-Class!";
-
+$langWelcomeToEclass = "Welcome to eClass!";
+$langUnregCourse = "Course Unregister";
+$langUnCourse = "Unregister";
+$langCourseCode = "Course (Code)";
 $langSearch = "Search";
-
+$langManagement="Administration";
 $langPlatformAnnounce = "Announcements";
 $langEclass = "e-Class learning management system";
 $langInfo = "<b>GUNet e-Class</b> platform is a complete Electronic Courses Management System and is the proposal of Gunet for supporting Asynchronous Teleteaching. 
