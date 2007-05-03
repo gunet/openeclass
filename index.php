@@ -398,21 +398,4 @@ elseif ((isset($logout) && $logout && isset($uid)) OR (1==1)) {
 
 } // end of display
 
-// check for new announcements
-function check_new_announce() {
-
-	global $uid;
-
-	$row = mysql_fetch_array(mysql_query("SELECT * FROM loginout WHERE id_user='$uid' AND action = 'LOGIN' ORDER BY idLog DESC"));
-	$lastlogin = $row['when'];
-	$sql = "SELECT * FROM annonces,cours_user
-                WHERE annonces.code_cours=cours_user.code_cours
-                AND cours_user.user_id='$uid' AND annonces.temps >= '$lastlogin'
-                ORDER BY temps DESC";
-	if (mysql_num_rows(mysql_query($sql)) > 0)
-	return TRUE;
-	else
-	return FALSE;
-
-}
 ?>
