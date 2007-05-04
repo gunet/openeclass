@@ -1,4 +1,32 @@
 <?
+/*
+      +----------------------------------------------------------------------+
+      | GUnet eClass 2.0                                                     |
+      | Asychronous Teleteaching Platform                                    |
+      +----------------------------------------------------------------------+
+      | Copyright (c) 2003-2007  GUnet                                       |
+      +----------------------------------------------------------------------+
+      |                                                                      |
+      | GUnet eClass 2.0 is an open platform distributed in the hope that    |
+      | it will be useful (without any warranty), under the terms of the     |
+      | GNU License (General Public License) as published by the Free        |
+      | Software Foundation. The full license can be read in "license.txt".  |
+      |                                                                      |
+      | Main Developers Group: Costas Tsibanis <k.tsibanis@noc.uoa.gr>       |
+      |                        Yannis Exidaridis <jexi@noc.uoa.gr>           |
+      |                        Alexandros Diamantidis <adia@noc.uoa.gr>      |
+      |                        Tilemachos Raptis <traptis@noc.uoa.gr>        |
+      |                                                                      |
+      | For a full list of contributors, see "credits.txt".                  |
+      |                                                                      |
+      +----------------------------------------------------------------------+
+      | Contact address: Asynchronous Teleteaching Group (eclass@gunet.gr),  |
+      |                  Network Operations Center, University of Athens,    |
+      |                  Panepistimiopolis Ilissia, 15784, Athens, Greece    |
+      +----------------------------------------------------------------------+
+*/
+
+
  $msgAdminPanel = "Administrator Panel";
  $msgStats = "Statistics";
  $msgStatsBy = "Statistics by";
@@ -56,9 +84,9 @@
  $msgInstall3 = "You can now open the main interface";
  $msgInstall4 = "In order to fill your table when pages are loaded, you must put a tag in monitored pages.";
 
- $msgUpgradeComments ="This new version of ezBOO WebStats uses the same table <b>logezboo</b> as previous 
+ $msgUpgradeComments ="This new version of ezBOO WebStats uses the same table <b>logezboo</b> as previous
   						versions.<br>
-  						If countries are not written in english, you must erase table <b>liste_domaine</b> 
+  						If countries are not written in english, you must erase table <b>liste_domaine</b>
   						et launch setup.<br>
   						This will have no effect on the table <b>logezboo</b> .<br>
   						Error message is normal. :-)";

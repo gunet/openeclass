@@ -19,7 +19,8 @@
  *
  ***************************************************************************/
 
-// ONLY IN CLAROLINE
+
+
 $langAdm="Administer";
 $langQuote="Quote";
 $langEditDel="Edit/delete";

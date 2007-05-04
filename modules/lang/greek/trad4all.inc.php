@@ -1,4 +1,30 @@
-<?php
+<?
+/*
+      +----------------------------------------------------------------------+
+      | GUnet eClass 2.0                                                     |
+      | Asychronous Teleteaching Platform                                    |
+      +----------------------------------------------------------------------+
+      | Copyright (c) 2003-2007  GUnet                                       |
+      +----------------------------------------------------------------------+
+      |                                                                      |
+      | GUnet eClass 2.0 is an open platform distributed in the hope that    |
+      | it will be useful (without any warranty), under the terms of the     |
+      | GNU License (General Public License) as published by the Free        |
+      | Software Foundation. The full license can be read in "license.txt".  |
+      |                                                                      |
+      | Main Developers Group: Costas Tsibanis <k.tsibanis@noc.uoa.gr>       |
+      |                        Yannis Exidaridis <jexi@noc.uoa.gr>           |
+      |                        Alexandros Diamantidis <adia@noc.uoa.gr>      |
+      |                        Tilemachos Raptis <traptis@noc.uoa.gr>        |
+      |                                                                      |
+      | For a full list of contributors, see "credits.txt".                  |
+      |                                                                      |
+      +----------------------------------------------------------------------+
+      | Contact address: Asynchronous Teleteaching Group (eclass@gunet.gr),  |
+      |                  Network Operations Center, University of Athens,    |
+      |                  Panepistimiopolis Ilissia, 15784, Athens, Greece    |
+      +----------------------------------------------------------------------+
+*/
 
 $langYes = "Ναι";
 $langNo = "Όχι";
@@ -25,17 +51,17 @@ $langDay_of_weekNames['long'] = array('Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 
 $langMonthNames['init']  = array('Ι', 'Φ', 'Μ', 'Α', 'Μ', 'Ι', 'Ι', 'Α', 'Σ', 'Ο', 'Ν', 'Δ');
 $langMonthNames['short'] = array('Ιαν', 'Φεβ', 'Μαρ', 'Απρ', 'Μάι', 'Ιουν', 'Ιουλ', 'Αυγ', 'Σεπ', 'Οκτ', 'Νοε', 'Δεκ');
 $langMonthNames['long'] = array('Ιανουάριος', 'Φεβρουάριος', 'Μάρτιος', 'Απρίλιος', 'Μάιος', 'Ιούνιος', 'Ιούλιος', 'Αύγουστος', 'Σεπτέμβριος', 'Οκτώβριος', 'Νοέμβριος', 'Δεκέμβριος');
-$langMonthNames['fine'] = array('Ιανουαρίου', 
-				'Φεβρουαρίου', 
-				'Μαρτίου', 
-				'Απριλίου', 
-				'Μαΐου', 
-				'Ιουνίου', 
-				'Ιουλίου', 
-				'Αυγούστου', 
-				'Σεπτεμβρίου', 
-				'Οκτωβρίου', 
-				'Νοεμβρίου', 
+$langMonthNames['fine'] = array('Ιανουαρίου',
+				'Φεβρουαρίου',
+				'Μαρτίου',
+				'Απριλίου',
+				'Μαΐου',
+				'Ιουνίου',
+				'Ιουλίου',
+				'Αυγούστου',
+				'Σεπτεμβρίου',
+				'Οκτωβρίου',
+				'Νοεμβρίου',
 				'Δεκεμβρίου');
 
 
@@ -58,9 +84,9 @@ $langProfessor = "Καθηγητής";
 $langLogout = "Έξοδος";
 $langNoAdminAccess = '
 		<p><b>Η σελίδα
-		που προσπαθείτε να μπείτε απαιτεί όνομα 
+		που προσπαθείτε να μπείτε απαιτεί όνομα
 		χρήστη και συνθηματικό.</b> <br/>Το σύστημα σας ανακατεύθυνε αυτόματα στην αρχική σελίδα
-		για να συνδεθείτε πρωτού προχωρήσετε σε άλλες ενέργειες. Αυτό μπορεί να συνέβηκε 
+		για να συνδεθείτε πρωτού προχωρήσετε σε άλλες ενέργειες. Αυτό μπορεί να συνέβηκε
 		λόγω εσφαλμένου URL ή λόγω λήξης της συνόδου σας (time-out).</p>
 ';
 

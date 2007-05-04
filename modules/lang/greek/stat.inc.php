@@ -1,4 +1,31 @@
 <?
+/*
+      +----------------------------------------------------------------------+
+      | GUnet eClass 2.0                                                     |
+      | Asychronous Teleteaching Platform                                    |
+      +----------------------------------------------------------------------+
+      | Copyright (c) 2003-2007  GUnet                                       |
+      +----------------------------------------------------------------------+
+      |                                                                      |
+      | GUnet eClass 2.0 is an open platform distributed in the hope that    |
+      | it will be useful (without any warranty), under the terms of the     |
+      | GNU License (General Public License) as published by the Free        |
+      | Software Foundation. The full license can be read in "license.txt".  |
+      |                                                                      |
+      | Main Developers Group: Costas Tsibanis <k.tsibanis@noc.uoa.gr>       |
+      |                        Yannis Exidaridis <jexi@noc.uoa.gr>           |
+      |                        Alexandros Diamantidis <adia@noc.uoa.gr>      |
+      |                        Tilemachos Raptis <traptis@noc.uoa.gr>        |
+      |                                                                      |
+      | For a full list of contributors, see "credits.txt".                  |
+      |                                                                      |
+      +----------------------------------------------------------------------+
+      | Contact address: Asynchronous Teleteaching Group (eclass@gunet.gr),  |
+      |                  Network Operations Center, University of Athens,    |
+      |                  Panepistimiopolis Ilissia, 15784, Athens, Greece    |
+      +----------------------------------------------------------------------+
+*/
+
  $msgAdminPanel = "Πίνακας Διαχείρισης";
  $msgStats = "Στατιστικά";
  $msgStatsBy = "Στατιστικά σύμφωνα με";
@@ -59,10 +86,10 @@
          <li>δημιουργία ενός πίνακα που ονομάζεται <b>logezboo</b><br>
            Αυτός ο πίνακας θα αποθηκεύει τα logs</li>
        </ul>
-       <font color=\"#FF3333\">Πρέπει να έχετε τροποποιήσει κατάλληλα το αρχείο<ul><li><b>config_sql.php3</b> με το  
+       <font color=\"#FF3333\">Πρέπει να έχετε τροποποιήσει κατάλληλα το αρχείο<ul><li><b>config_sql.php3</b> με το
 <b>όνομα χρήστη</b>, <b>συνθηματικό</b> και τη<b>βάση δεδομένων </b> για τη σύνδεση με τον SQL εξυπηρέτη.</li><br><li>Το αρχείο
-<b>config.inc.php3</b> 
-πρέπει να έχει τροποποιηθεί για την επιλογή κατάλληλης γλώσσας.</font></li></ul><br>Μπορείτε να χρησιμοποιήσετε για αυτόν το σκοπό 
+<b>config.inc.php3</b>
+πρέπει να έχει τροποποιηθεί για την επιλογή κατάλληλης γλώσσας.</font></li></ul><br>Μπορείτε να χρησιμοποιήσετε για αυτόν το σκοπό
 οποιοδήποτε επεξεργαστή κειμένου (π.χ. Notepad).";
  $msgInstallAbort = "Εγκατάλειψη του SETUP";
  $msgInstall1 = "Αν δεν υπάρχει μήνυμα λάθους παραπάνω, η εγκατάσταση είναι επιτυχημένη.";
@@ -71,7 +98,7 @@
  $msgInstall4 = "Για να συμπληρώσετε το πίνακά σας όταν οι σελίδες φορτωθούν, πρέπει να τοποθετήσετε μία ετικέτα στις σελίδες που θέλετε να παρακολουθείτε.";
 
  $msgUpgradeComments ="Η νέα έκδοση του ezBOO WebStats χρησιμοποιεί τον ίδιο πίνακα <b>logezboo</b> όπως οι προηγούμενες εκδόσεις.<br>
-  						Αν οι χώρες δεν είναι στα Αγγλικά, πρέπει να διαγράψετε τον πίνακα <b>liste_domaine</b> 
+  						Αν οι χώρες δεν είναι στα Αγγλικά, πρέπει να διαγράψετε τον πίνακα <b>liste_domaine</b>
   						και να ξεκινήσετε την εγκατάσταση.<br>
   						Αυτό δεν θα έχει αποτέλεσμα στον πίνακα <b>logezboo</b> .<br>
   						Το μήνυμα λάθους ειναι φυσιολογικό. :-)";

@@ -1,39 +1,30 @@
-<?php
+<?
 /*
       +----------------------------------------------------------------------+
-      | CLAROLINE version 1.3.0 $Revision$                            |
+      | GUnet eClass 2.0                                                     |
+      | Asychronous Teleteaching Platform                                    |
       +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
+      | Copyright (c) 2003-2007  GUnet                                       |
       +----------------------------------------------------------------------+
-      |   $Id$     |
-	  |   English Translation                                                |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
       |                                                                      |
-      |   This program is distributed in the hope that it will be useful,    |
-      |   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-      |   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-      |   GNU General Public License for more details.                       |
+      | GUnet eClass 2.0 is an open platform distributed in the hope that    |
+      | it will be useful (without any warranty), under the terms of the     |
+      | GNU License (General Public License) as published by the Free        |
+      | Software Foundation. The full license can be read in "license.txt".  |
       |                                                                      |
-      |   You should have received a copy of the GNU General Public License  |
-      |   along with this program; if not, write to the Free Software        |
-      |   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-      |   02111-1307, USA. The GNU GPL license is also available through     |
-      |   the world-wide-web at http://www.gnu.org/copyleft/gpl.html         |
+      | Main Developers Group: Costas Tsibanis <k.tsibanis@noc.uoa.gr>       |
+      |                        Yannis Exidaridis <jexi@noc.uoa.gr>           |
+      |                        Alexandros Diamantidis <adia@noc.uoa.gr>      |
+      |                        Tilemachos Raptis <traptis@noc.uoa.gr>        |
+      |                                                                      |
+      | For a full list of contributors, see "credits.txt".                  |
+      |                                                                      |
       +----------------------------------------------------------------------+
-      | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-      |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-      |          Christophe Gesche <gesche@ipm.ucl.ac.be> 					 |
-      |			 Sakis Agorastos <th_agorastos@hotmail.com>		(v2 changes) |
+      | Contact address: Asynchronous Teleteaching Group (eclass@gunet.gr),  |
+      |                  Network Operations Center, University of Athens,    |
+      |                  Panepistimiopolis Ilissia, 15784, Athens, Greece    |
       +----------------------------------------------------------------------+
-      | Translator :                                                         |
-      |          Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-      |          Andrew Lynn       <Andrew.Lynn@strath.ac.uk>                |
-      +----------------------------------------------------------------------+
- */
+*/
 
 // create_course.php
 $langLn="Γλώσσα";
@@ -49,15 +40,15 @@ $langTitle="Τίτλος μαθήματος";
 $langEx="π.χ. <i>Ιστορία της Τέχνης</i>";
 $langFac="Σχολή / Τμήμα";
 $langDivision = "Τομέας";
-$langTargetFac="Η σχολή ή το τμήμα που υπάγεται το μάθημα"; 
+$langTargetFac="Η σχολή ή το τμήμα που υπάγεται το μάθημα";
 $langCode="Κωδικός Μαθήματος";
 $langMax="με λατινικά γράμματα μέχρι 12 χαρακτήρες, π.χ. <i>FYS1234</i>";
 $langDoubt="Αν δεν ξέρετε το κωδικό του μαθήματος συμβουλευτείτε";
 $langProgram="το Πρόγραμμα Μαθημάτων. Αν το μάθημα δεν έχει κωδικό βάλτε ένα της αρεσκεία σας. Για παράδειγμα<i>ΑΛΓΕΒΡΑ</i>";
 $langProfessors="Εκπαιδευτής(ές)";
-$langExplanation="Οταν πατήσετε «Δημιουργία», θα δημιουργηθεί η ιστοσελίδα του μαθήματος με Περιοχή συζητήσεων, 
+$langExplanation="Οταν πατήσετε «Δημιουργία», θα δημιουργηθεί η ιστοσελίδα του μαθήματος με Περιοχή συζητήσεων,
 Ατζέντα, κ.λπ. την οποία μπορείτε να τροποποιήσετε αργότερα σύμφωνα με τις απαιτήσεις σας.";
-$langExFac = "* Αν επιθυμείτε να δημιουργήσετε μάθημα, σε άλλο τμήμα από αυτό που ανήκετε, τότε επικοινωνήστε με 
+$langExFac = "* Αν επιθυμείτε να δημιουργήσετε μάθημα, σε άλλο τμήμα από αυτό που ανήκετε, τότε επικοινωνήστε με
 την Ομάδα Ασύγχρονης Τηλεκπαίδευσης";
 $langEmpty="Αφήσατε μερικά πεδία κενά.<br>Πατήστε το πλήκτρο «Επιστροφή» του browser και ξαναδοκιμάστε.";
 $langCodeTaken="Αυτός ο κωδικός μαθήματος χρησιμοποιείται ήδη. Παρακαλούμε επιλέξτε κάποιον άλλο.";
@@ -106,7 +97,7 @@ $langCourseProgram="Πρόγραμμα Μαθήματος";
 $langAnnouncements="Ανακοινώσεις";
 $langUsers="Χρήστες";
 $langForums="Περιοχή συζητήσεων";
-$langExercices="Ασκήσεις"; 
+$langExercices="Ασκήσεις";
 $langStatistics="Στατιστικά";
 $langAddPageHome="Ανέβασμα Ιστοσελίδας";
 $langLinkSite="Προσθήκη συνδέσμου στην αρχική σελίδα";

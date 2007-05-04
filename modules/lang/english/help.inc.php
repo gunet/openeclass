@@ -1,38 +1,32 @@
 <?
 /*
       +----------------------------------------------------------------------+
-      | CLAROLINE version 1.3.0 $Revision$                               |
+      | GUnet eClass 2.0                                                     |
+      | Asychronous Teleteaching Platform                                    |
       +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
+      | Copyright (c) 2003-2007  GUnet                                       |
       +----------------------------------------------------------------------+
-      |   $Id$           |
-      |   English Translation                                                |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
       |                                                                      |
-      |   This program is distributed in the hope that it will be useful,    |
-      |   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-      |   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-      |   GNU General Public License for more details.                       |
+      | GUnet eClass 2.0 is an open platform distributed in the hope that    |
+      | it will be useful (without any warranty), under the terms of the     |
+      | GNU License (General Public License) as published by the Free        |
+      | Software Foundation. The full license can be read in "license.txt".  |
       |                                                                      |
-      |   You should have received a copy of the GNU General Public License  |
-      |   along with this program; if not, write to the Free Software        |
-      |   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-      |   02111-1307, USA. The GNU GPL license is also available through     |
-      |   the world-wide-web at http://www.gnu.org/copyleft/gpl.html         |
+      | Main Developers Group: Costas Tsibanis <k.tsibanis@noc.uoa.gr>       |
+      |                        Yannis Exidaridis <jexi@noc.uoa.gr>           |
+      |                        Alexandros Diamantidis <adia@noc.uoa.gr>      |
+      |                        Tilemachos Raptis <traptis@noc.uoa.gr>        |
+      |                                                                      |
+      | For a full list of contributors, see "credits.txt".                  |
+      |                                                                      |
       +----------------------------------------------------------------------+
-      | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-      |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-      |          Christophe Gesche <gesche@ipm.ucl.ac.be>                    |
+      | Contact address: Asynchronous Teleteaching Group (eclass@gunet.gr),  |
+      |                  Network Operations Center, University of Athens,    |
+      |                  Panepistimiopolis Ilissia, 15784, Athens, Greece    |
       +----------------------------------------------------------------------+
-      | Translator :                                                         |
-      |          Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-      |          Andrew Lynn       <Andrew.Lynn@strath.ac.uk>                |
-      +----------------------------------------------------------------------+
- */
+*/
+
+
 // help_forums.php
 
 $langClose="Close window";
@@ -306,17 +300,17 @@ members list.</li>
 
 // Help survey
 $langHSurvey="Help";
-$langSurveyContent="<p>This tool allows the teacher to create and 
+$langSurveyContent="<p>This tool allows the teacher to create and
 manage Surveys.</p>";
 
 // Help poll.php
 $langHPoll="Help";
-$langPollContent="<p>This tool allows the teacher to create and 
+$langPollContent="<p>This tool allows the teacher to create and
 manage Polls.</p>";
 
 // Help questionnaire.php
 $langHQuestionnaire="Help";
-$langQuestionnaireContent="<p>This tool allows the teacher to create and 
+$langQuestionnaireContent="<p>This tool allows the teacher to create and
 manage Questionnaires.</p>";;
 
 // Help exercise.php
@@ -556,31 +550,31 @@ $langConferenceContent = "
        <li>Presentation and URL sharing</li>
        <li>Chat</li>
 </ul>
-<b><u>Video Conferencing</u></b> 
+<b><u>Video Conferencing</u></b>
 <p><b><u>Instructor Options</u></b></p>
 <p>
-Regarding the video conferencing functionality, the instructor may select this option on entrance to the subsystem and automatically all participants who have entered the same subsystem are given the ability to connect. Each course on the eClass platform automatically utilizes a separate \"virtual conferencing room\" for all its participants. Technically, the instructor does not have speech control over the students, so he must make sure he establishes the rules of conduct for participation in the video conferences. Best practices include: a) the suggestion of keeping muted microphones for all participants until the need to speak arises, so that inadvertent noise will not be transmitted to other participants, and b) organizing test conferences before the needed date and time of an actual conference, so that all participants may familiarize themselves with the conferencing environment and equipment. 
-The equipment requirements for conferencing are just a set of speakers and a microphone (a camera is optional), while software requirements are the exclusive use of Microsoft Internet Explorer, along with NetMeeting version 3.0.1 on the personal computer of the participants. NetMeeting comes preinstalled in WinXP, while there is an installer available for Win2000, Win98, WinNT etc. Default settings on NM will work fine with this subsystem, but if NM \"Advanced Calling\" options have been configured before, users will need to disable Gatekeeper Use. To avoid last minute problems, it is best to require that all participants go through the \"Audio Tuning Wizard\" steps before the scheduled conference time. This option which is found on the \"Tools\" menu of NM will offer the participants a simple way to confirm the reliability of the speakers (to play back conference audio) and of the local microphone (to send local audio to the conference). 
+Regarding the video conferencing functionality, the instructor may select this option on entrance to the subsystem and automatically all participants who have entered the same subsystem are given the ability to connect. Each course on the eClass platform automatically utilizes a separate \"virtual conferencing room\" for all its participants. Technically, the instructor does not have speech control over the students, so he must make sure he establishes the rules of conduct for participation in the video conferences. Best practices include: a) the suggestion of keeping muted microphones for all participants until the need to speak arises, so that inadvertent noise will not be transmitted to other participants, and b) organizing test conferences before the needed date and time of an actual conference, so that all participants may familiarize themselves with the conferencing environment and equipment.
+The equipment requirements for conferencing are just a set of speakers and a microphone (a camera is optional), while software requirements are the exclusive use of Microsoft Internet Explorer, along with NetMeeting version 3.0.1 on the personal computer of the participants. NetMeeting comes preinstalled in WinXP, while there is an installer available for Win2000, Win98, WinNT etc. Default settings on NM will work fine with this subsystem, but if NM \"Advanced Calling\" options have been configured before, users will need to disable Gatekeeper Use. To avoid last minute problems, it is best to require that all participants go through the \"Audio Tuning Wizard\" steps before the scheduled conference time. This option which is found on the \"Tools\" menu of NM will offer the participants a simple way to confirm the reliability of the speakers (to play back conference audio) and of the local microphone (to send local audio to the conference).
 </p>
 <p><b><u>Student Options</u></b></p>
 <p>
-Regarding the video conferencing functionality, the student will be given the ability to connect to the conference throught the web pages of this subsystem, once the instructor has activated this option. Each course on the eClass platform automatically utilizes a separate \"virtual conferencing room\" for all its participants. A good practice is for participants to keep all microphones muted, until the need to speak arises, so that inadvertent noise will not be transmitted to other participants. The use of headphones with integrated microphones is the best option for avoiding echo problems during the conferences. 
+Regarding the video conferencing functionality, the student will be given the ability to connect to the conference throught the web pages of this subsystem, once the instructor has activated this option. Each course on the eClass platform automatically utilizes a separate \"virtual conferencing room\" for all its participants. A good practice is for participants to keep all microphones muted, until the need to speak arises, so that inadvertent noise will not be transmitted to other participants. The use of headphones with integrated microphones is the best option for avoiding echo problems during the conferences.
 </p>
 
-<b><u>Video</u></b> 
-<p><b><u>Instructor Options</u></b></p> 
+<b><u>Video</u></b>
+<p><b><u>Instructor Options</u></b></p>
 <p>When the instructor selects the \"video\" option, a field is activated allowing the placement of a URL for the streaming video. After completion of the URL and the selection of \"Play\", video is loaded in the window above the controls with the embedded use of the appropriate media player, as set in the OS to handle the correct file extensions. The instructor must have informed the students ahead of time that they will need to have installed the media player that the material he presents will require.</p>
 <p><b><u>Student Options</u></b></p>
 <p>The students do not need to make any selections. The video material will load automatically on their browsers (assuming the correct media player is installed) as soon as the instructor selects the video streaming option.</p>
 
 
-<b><u>Presentation </u></b> 
+<b><u>Presentation </u></b>
 <p><b><u>Instructor Options</u></b></p>
 <p>The instructor uses the field \"Presentation URL\" to specify the web page (URL) that he wishes to distribute to all the student browsers and selects \"OK\". The web page is then loaded on his presentation window on the right. The same web page get loaded in the student presentation window on his browsers. Note that once the initial URL is loaded, the instructor's view of the loaded page is not synchronized with that of the student's. E.g. if the instructor clicks on any link on that page, he will have to instruct the students to do the same on their browser manually. Only web pages that are loaded through the \"Presentation URL\" field are synched to the student browsers. </p>
 <b><u>Student Options</u></b>
 <p>The student is presented with the web page that the instructor has placed in his browser. From then on, he must follow the instructor's oral guidance in order to browse through the same links from this web page on.</p>
 
-<b><u>Chat</u></b> 
+<b><u>Chat</u></b>
 <p><b><u>Instructor Options</u></b></p>
 <p>The instructor has the ability to exchange messages with the students that are using the Conference Module by typing the message on text field at the bottom of the page and then pressing \">>\". The instructor also has the option to clear all past messages from appearing on the page by selecting \"Clear\". </p>
 <p><b><u>Student Options</u></b></p>
@@ -628,14 +622,14 @@ The Learning Path tool has four functions:
 
 <p><b>What is a Learning Path ?</b></p>
 
-<p>A Learning Path is a sequence of learning steps included in modules. It can be 
-content-based (looking like a table of contents) or activities-based, looking like 
-an agenda or a programme of what you need to do in order to understand and practice a 
+<p>A Learning Path is a sequence of learning steps included in modules. It can be
+content-based (looking like a table of contents) or activities-based, looking like
+an agenda or a programme of what you need to do in order to understand and practice a
 certain knowledge or know-how.</p>
 
-<p>In addition to being structured, a learning path can 
-also be sequenced. This means that some steps will constitute pre-requisites for the steps 
-after them (\"you cannot go to step 2 before step 1\"). Your sequence can only be suggestive 
+<p>In addition to being structured, a learning path can
+also be sequenced. This means that some steps will constitute pre-requisites for the steps
+after them (\"you cannot go to step 2 before step 1\"). Your sequence can only be suggestive
 (you show steps one after the other).</p>
 
 <p><b>How to create our own Learning Path ?</b></p>
@@ -647,7 +641,7 @@ empty, till you add modules and steps to them.</p>
 
 <p><b>What are the steps for these paths ? (What are the items that can be added ?)</b></p>
 
-<p>Some of the Eclass tools, activities and contents that you consider to be useful 
+<p>Some of the Eclass tools, activities and contents that you consider to be useful
 and connected to your imagined path can be added:</p>
 
 <ul>
@@ -660,9 +654,9 @@ and connected to your imagined path can be added:</p>
 
 <p><b>Other features of Learning Path</b></p>
 
-<p>Students can be asked to follow (read) your path in a given order. This means 
-that for example students cannot go to Quiz 2 till they have read Document 1. 
-All items have a status: completed or incomplete, so the progress of students is 
+<p>Students can be asked to follow (read) your path in a given order. This means
+that for example students cannot go to Quiz 2 till they have read Document 1.
+All items have a status: completed or incomplete, so the progress of students is
 clearly available through the <i>Tracking</i> tool.</p>
 
 <p>If you alter the original title of a step, the new title will appear in
@@ -678,8 +672,8 @@ to give new titles to links as they are too long.</p>
 <p>The learning path tool allows you to upload SCORM and IMS compliant course
 contents.</p>
 
-<p>SCORM (<i>Sharable Content Object Reference Model</i>) is a public standard 
-followed by major e-Learning actors like NETg, Macromedia, Microsoft, Skillsoft, 
+<p>SCORM (<i>Sharable Content Object Reference Model</i>) is a public standard
+followed by major e-Learning actors like NETg, Macromedia, Microsoft, Skillsoft,
 etc. and acting at three levels:</p>
 
 <ul>
@@ -699,9 +693,9 @@ time did John spent in chapter 1 ?\").</li>
 
 <p><b>How to create a SCORM compliant learning path ?</b></p>
 
-<p>The most natural way is to use the Eclass Learning Path Builder. However, you may want to 
-create complete Scorm compliant websites locally on your own computer before uploading it 
-onto your eclass platform. In this case, we recommend the use of a sophisticated tool like 
+<p>The most natural way is to use the Eclass Learning Path Builder. However, you may want to
+create complete Scorm compliant websites locally on your own computer before uploading it
+onto your eclass platform. In this case, we recommend the use of a sophisticated tool like
 Lectora&reg; or Reload&reg;</p>
 
 <p><b>Useful links</b></p>

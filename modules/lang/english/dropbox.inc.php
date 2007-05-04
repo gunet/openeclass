@@ -1,18 +1,18 @@
 <?php
 /**
- * Dropbox module for Dokeos/Claroline
- * language file in English language. 
+ * Dropbox module
+ * language file in English language.
  * To make a version in your own language, you have 2 options:
  * 		- if you want to make use of the multilanguage tool in Claroline (this way you
  * 		can make 2 seperate courses in 2 different languages and Claroline will take
  * 		care of the translations) this file must be placed in the .../claroline/lang/English/
- * 		directory and the copy of this file that contains the translations must be placed in 
- * 		the .../claroline/lang/YourLang/ directory. Be sure to give the translated version the same 
+ * 		directory and the copy of this file that contains the translations must be placed in
+ * 		the .../claroline/lang/YourLang/ directory. Be sure to give the translated version the same
  * 		name as this one.
  * 		- if you're sure you will only need the dropbox module in 1 language, you can just leave this
  * 		file in the current directory (.../claroline/plugin/dropbox/) and translate each variable into
  * 		the correct language.
- * 
+ *
  * @version 1.20
  * @copyright 2004
  * @author Jan Bols <jan@ivpv.UGent.be>
@@ -59,7 +59,7 @@ $dropbox_lang["tooBig"] = "You didn't choose a file or the file is too big.";
 $dropbox_lang["uploadError"] = "Error uploading file. Please contact your system administrator.";
 $dropbox_lang["errorCreatingDir"] = "Can't create the dropbox directory. Please contact your system administrator.";
 $dropbox_lang["installError"] = "Can't install the necessary tables for the dropbox module. Please contact your system administrator.";
-$dropbox_lang['quotaError'] = "There is not enough disk space because of dropbox quota restrictions! File 
+$dropbox_lang['quotaError'] = "There is not enough disk space because of dropbox quota restrictions! File
 uploading failed!";
 
 /**

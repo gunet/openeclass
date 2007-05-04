@@ -1,13 +1,30 @@
-<?php
-
-/***************************************************************
-*                   Language translation
-****************************************************************
-GOAL
-****
-Translate the interface in chosen language
-
-*****************************************************************/
+<?
+/*
+      +----------------------------------------------------------------------+
+      | GUnet eClass 2.0                                                     |
+      | Asychronous Teleteaching Platform                                    |
+      +----------------------------------------------------------------------+
+      | Copyright (c) 2003-2007  GUnet                                       |
+      +----------------------------------------------------------------------+
+      |                                                                      |
+      | GUnet eClass 2.0 is an open platform distributed in the hope that    |
+      | it will be useful (without any warranty), under the terms of the     |
+      | GNU License (General Public License) as published by the Free        |
+      | Software Foundation. The full license can be read in "license.txt".  |
+      |                                                                      |
+      | Main Developers Group: Costas Tsibanis <k.tsibanis@noc.uoa.gr>       |
+      |                        Yannis Exidaridis <jexi@noc.uoa.gr>           |
+      |                        Alexandros Diamantidis <adia@noc.uoa.gr>      |
+      |                        Tilemachos Raptis <traptis@noc.uoa.gr>        |
+      |                                                                      |
+      | For a full list of contributors, see "credits.txt".                  |
+      |                                                                      |
+      +----------------------------------------------------------------------+
+      | Contact address: Asynchronous Teleteaching Group (eclass@gunet.gr),  |
+      |                  Network Operations Center, University of Athens,    |
+      |                  Panepistimiopolis Ilissia, 15784, Athens, Greece    |
+      +----------------------------------------------------------------------+
+*/
 
 $langGroupManagement="Ομάδες χρηστών";
 $langHelp="Βοήθεια";
@@ -17,7 +34,7 @@ $langCreate="Δημιουργία";
 $langNewGroups="Αριθμός ομάδων χρηστών";
 $langMax="Μέγ.";
 $langPlaces="συμμετέχοντες στην ομάδα χρηστών (προαιρετικό)";
-$langGroupPlacesThis="συμμετέχοντες (προαιρετικό)"; 
+$langGroupPlacesThis="συμμετέχοντες (προαιρετικό)";
 $langCreate="Δημιουργία";
 $langDeleteGroups="Διαγραφή όλων των ομάδων χρηστών";
 $langGroupsAdded="ομάδες χρηστών έχουν προστεθεί";
@@ -80,7 +97,7 @@ $langGroupStudentsInGroup="φοιτητές εγγεγραμμένοι σε ομάδες χρηστών";
 $langGroupStudentsRegistered="φοιτητές εγγεγραμμένοι στο μάθημα";
 $langGroupNoGroup="μη εγγεγραμμένοι φοιτητές";
 $langGroupUsersList="Βλέπε <a href=../user/user.php>Χρήστες</a>";
-$langGroupTooMuchMembers="Ο αριθμός που προτάθηκε υπερβαίνει το μέγιστο επιτρεπόμενο (μπορείτε να το αλλάξετε παρακάτω). 
+$langGroupTooMuchMembers="Ο αριθμός που προτάθηκε υπερβαίνει το μέγιστο επιτρεπόμενο (μπορείτε να το αλλάξετε παρακάτω).
 	Η σύνθεση της ομάδας δεν άλλαξε";
 $langGroupTutor="Διδάσκοντας";
 $langGroupNoTutor="κανένας";

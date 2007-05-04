@@ -1,4 +1,32 @@
-<?php
+<?
+/*
+      +----------------------------------------------------------------------+
+      | GUnet eClass 2.0                                                     |
+      | Asychronous Teleteaching Platform                                    |
+      +----------------------------------------------------------------------+
+      | Copyright (c) 2003-2007  GUnet                                       |
+      +----------------------------------------------------------------------+
+      |                                                                      |
+      | GUnet eClass 2.0 is an open platform distributed in the hope that    |
+      | it will be useful (without any warranty), under the terms of the     |
+      | GNU License (General Public License) as published by the Free        |
+      | Software Foundation. The full license can be read in "license.txt".  |
+      |                                                                      |
+      | Main Developers Group: Costas Tsibanis <k.tsibanis@noc.uoa.gr>       |
+      |                        Yannis Exidaridis <jexi@noc.uoa.gr>           |
+      |                        Alexandros Diamantidis <adia@noc.uoa.gr>      |
+      |                        Tilemachos Raptis <traptis@noc.uoa.gr>        |
+      |                                                                      |
+      | For a full list of contributors, see "credits.txt".                  |
+      |                                                                      |
+      +----------------------------------------------------------------------+
+      | Contact address: Asynchronous Teleteaching Group (eclass@gunet.gr),  |
+      |                  Network Operations Center, University of Athens,    |
+      |                  Panepistimiopolis Ilissia, 15784, Athens, Greece    |
+      +----------------------------------------------------------------------+
+*/
+
+
 
 $langGeneralInfo = "General Info";
 $langModifInfo="Course Admin";
@@ -17,7 +45,7 @@ $langPrivOpen="Private access, registration open";
 $langPrivate="Private access, registration closed (site accessible only to people on the <a href=../user/user.php>Users list</a>)";
 $langForbidden="Not allowed";
 $langLanguage="Language";
-$langConfTip="By default, you course is accessed by all users. If you want some access control, 
+$langConfTip="By default, you course is accessed by all users. If you want some access control,
 the simplest way is to open registration, ask the students to register themselves, then close registration and check for possible intruders in the users list.";
 $langOtherActions = "Other Actions";
 $langOptPassword = "Optional Password: ";
@@ -63,7 +91,7 @@ $langUsersDeleted="All users have been unregistered from the course";
 // refresh course.php
 $langRefreshCourse = "Refresh Course";
 
-$langRefresh="If you want to create a course for a new academic year, you can delete the old data courses. Choose the 
+$langRefresh="If you want to create a course for a new academic year, you can delete the old data courses. Choose the
 appropriate actions.";
 $langUserDelCourse="Delete users from course";
 $langUserDelNotice = "Notice: Users will not unregistered from other courses";
