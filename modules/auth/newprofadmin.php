@@ -2,8 +2,8 @@
 $langFiles = array('registration', 'admin', 'gunet');
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
-include 'auth.inc.php';
-$nameTools = "$regprof";
+//include 'auth.inc.php';
+$nameTools = $regprof;
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 
 // Initialise $tool_content
@@ -22,16 +22,7 @@ if($submit)
 	$institut = isset($_POST['institut'])?$_POST['institut']:'NULL';
 	
 	// do not allow the user to have the characters: ',\" or \\ in password
-	/*
-	$pw = array(); 	$nr = 0;
-	while (isset($password{$nr})) // convert the string $password into an array $pw
-	{
-  	$pw[$nr] = $password{$nr};
-    $nr++;
-	}
-  if( (in_array("'",$pw)) || (in_array("\"",$pw)) || (in_array("\\",$pw)) )
-	{
-	*/
+	
 	if( (strstr($password, "'")) or (strstr($password, '"')) or (strstr($password, '\\')) 
   or (strstr($uname, "'")) or (strstr($uname, '"')) or (strstr($uname, '\\')) )
 	{
@@ -87,10 +78,7 @@ if($submit)
 	 		
 	 		if($auth==1)
 	 		{		
-				$crypt = new Encryption;
-				$key = $encryptkey;
-				$pswdlen = "20";
-				$password_encrypted = $crypt->encrypt($key, $password, $pswdlen);
+				$password_encrypted = md5($password);
 			}
 			else
 			{
