@@ -1,4 +1,4 @@
-<?
+<?php
 /*
 =============================================================================
 GUnet e-Class 2.0
@@ -27,6 +27,7 @@ eMail: eclassadmin@gunet.gr
 
 $langFiles = array('registration','usage');
 $require_help = TRUE;
+$require_login = true;
 $helpTopic = 'Profile';
 include '../../include/baseTheme.php';
 include "../auth/auth.inc.php";
@@ -37,111 +38,71 @@ check_uid();
 
 $nameTools = $langModifProfile;
 
+
+
 check_guest();
 
-if (isset($submit) && (!isset($ldap_submit))) {
-	$password_form = isset($_POST['password_form'])?$_POST['password_form']:'';
-	$password_form1 = isset($_POST['password_form1'])?$_POST['password_form1']:'';
-	/*
-	// do not allow the user to have the characters: ',\" or \\ in password
-	$pw = array(); 	$nr = 0;	$pw1 = array();	$nr1 = 0;
-	while (isset($password_form{$nr})) // convert the string $password_form1 into an array $pw
+if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
+	$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
+
+	// check if username exists
+	$username_check=mysql_query("SELECT username FROM user WHERE username='".escapeSimple($username_form)."'");
+	while ($myusername = mysql_fetch_array($username_check))
 	{
-  	$pw[$nr] = $password_form{$nr};
-    $nr++;
+		$user_exist=$myusername[0];
 	}
-	while (isset($password_form1{$nr1})) // convert the string $password_form1 into an array $pw1
-	{
-  	$pw[$nr1] = $password_form1{$nr1};
-    $nr1++;
+
+	// check if there are empty fields
+	if (empty($nom_form) OR empty($prenom_form) OR empty($username_form) OR empty($email_form)) {
+		header("location:". $_SERVER['PHP_SELF']."?msg=4");
+		exit();
 	}
-	
-  if( (in_array("'",$pw)) || (in_array("\"",$pw)) || (in_array("\\",$pw)) || (in_array("'",$pw1)) || (in_array("\"",$pw1)) || (in_array("\\",$pw1)) )
-	{
-	*/
-	if( (strstr($password_form, "'")) or (strstr($password_form, '"')) or (strstr($password_form, '\\')) 
-	or (strstr($password_form1, "'")) or (strstr($password_form1, '"')) or (strstr($password_form1, '\\'))
-  or (strstr($username_form, "'")) or (strstr($username_form, '"')) or (strstr($username_form, '\\')) )
-	{
-		$tool_content .= "<tr bgcolor=\"".$color2."\">
-		<td bgcolor=\"$color2\" colspan=\"3\" valign=\"top\">
-		<br>$langCharactersNotAllowed<br /><br />
-		<a href=\"./newuser.php\">".$langAgain."</a></td></tr></table>";
+
+	elseif (strstr($username_form, "'") or strstr($username_form, '"') or strstr($username_form, '\\')){
+		header("location:". $_SERVER['PHP_SELF']."?msg=10");
+		exit();
 	}
-	else	// do the other checks
-	{
-	
-		$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
-	
-		// check if username exists
-			$username_check=mysql_query("SELECT username FROM user 
-					WHERE username='".escapeSimple($username_form)."'");
-		while ($myusername = mysql_fetch_array($username_check))  {
-			$user_exist=$myusername[0];
-		}
-	
-		// check if passwds are the same
-	 if ($password_form1 !== $password_form) {
-			header("location:". $_SERVER['PHP_SELF']."?msg=2");
-		}
-	
-		// check if passwd is too easy
-	
-		elseif ((strtoupper($password_form1) == strtoupper($username_form))
-		|| (strtoupper($password_form1) == strtoupper($nom_form))
-		|| (strtoupper($password_form1) == strtoupper($prenom_form))
-		|| (strtoupper($password_form1) == strtoupper($email_form))) {
-			header("location:". $_SERVER['PHP_SELF']."?msg=3");
-		}
-	
-		// check if there are empty fields
-	
-		elseif (empty($nom_form) OR empty($prenom_form) OR empty($password_form1)
-		OR empty($password_form) OR empty($username_form) OR empty($email_form)) {
-			header("location:". $_SERVER['PHP_SELF']."?msg=4");
-		}
-	
-		// check if username is free
-		elseif(isset($user_exist) AND ($username_form==$user_exist) AND ($username_form!=$uname)) {
-			header("location:". $_SERVER['PHP_SELF']."?msg=5");
-		}
-	
-		// check if user email is valid
-	
-		elseif (!eregi($regexp, $email_form)) {
-			header("location:". $_SERVER['PHP_SELF']."?msg=6");
-		}
-	
-		// everything is ok
-		else {
+
+	// check if username is free
+	elseif(isset($user_exist) AND ($username_form==$user_exist) AND ($username_form!=$uname)) {
+		header("location:". $_SERVER['PHP_SELF']."?msg=5");
+		exit();
+	}
+
+	// check if user email is valid
+	elseif (!eregi($regexp, $email_form)) {
+		header("location:". $_SERVER['PHP_SELF']."?msg=6");
+		exit();
+	}
+
+
+	// everything is ok
+	else {
 		##[BEGIN personalisation modification]############
 		if (!isset($persoStatus) || $persoStatus == "") $persoStatus = "no";
 		else  $persoStatus = "yes";
 		$userLanguage = $_REQUEST['userLanguage'];
-		
-		// encrypt the password
-		$crypt = new Encryption;
-	 	$key = $encryptkey;
-	 	$pswdlen = "20";
-	 	$password_encrypted = $crypt->encrypt($key, $password_form, $pswdlen);
+
+
 		$username_form = escapeSimple($username_form);
 		if(mysql_query("UPDATE user
 	        SET nom='$nom_form', prenom='$prenom_form',
-	        username='$username_form', password='$password_encrypted', email='$email_form', am='$am_form',
+	        username='$username_form', email='$email_form', am='$am_form',
 	            perso='$persoStatus', lang='$userLanguage'
 	        WHERE user_id='".$_SESSION["uid"]."'")){
 		header("location:". $_SERVER['PHP_SELF']."?msg=1");
+		exit();
 	        }
-	        
-		}
+
 	}
+
 }	// if submit
 
 ##[BEGIN personalisation modification - For LDAP users]############
 if (isset($submit) && isset($ldap_submit) && ($ldap_submit == "ON")) {
 
 	$userLanguage = $_REQUEST['userLanguage'];
-	echo $userLanguage;
+
 	if (!isset($persoStatus) || $persoStatus == "") $persoStatus = "no";
 	else  $persoStatus = "yes";
 	mysql_query(" UPDATE user SET perso = '$persoStatus', lang = '$userLanguage' WHERE user_id='".$_SESSION["uid"]."' ");
@@ -157,59 +118,57 @@ if (isset($submit) && isset($ldap_submit) && ($ldap_submit == "ON")) {
 	}
 
 	header("location:". $_SERVER['PHP_SELF']."?msg=1");
+	exit();
 }
 ##[END personalisation modification]############
 
+
 //Show message if exists
-if(isset($msg)) 
+if(isset($msg))
 {
 
 	switch ($msg){
-		case 1: { //logged out
+		case 1: { //profile information changed successfully (not the password data!)
 			$message = $langProfileReg;
 			$urlText = $langHome;
 			$type = "success";
 			break;
 		}
 
-		case 2: {//logged in
-			$message = $langPassTwo;
-			$urlText = $langAgain;
-			$type = "caution";
-			break;
-		}
-
-		case 3: { //course home (lesson tools)
+		case 3: { //pass too easy
 			$message = $langPassTooEasy .": <strong>".substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8)."</strong>";
-			$urlText = $langAgain;
+			$urlText = "";
 			$type = "caution";
 			break;
 		}
 
-		case 4: { // admin tools
+		case 4: { // empty fields check
 			$message = $langFields;
-			$urlText = $langAgain;
+			$urlText = "";
 			$type = "caution";
 			break;
 		}
 
-		case 5: {
+		case 5: {//username already exists
 			$message = $langUserTaken;
-			$urlText = $langAgain;
+			$urlText = "";
 			$type = "caution";
 			break;
 		}
 
-		case 6: {
+		case 6: {//email not valid
 			$message = $langEmailWrong;
-			$urlText = $langAgain;
+			$urlText = "";
 			$type = "caution";
 			break;
 		}
+		
+		default:die("invalid message id");
+
 	}
 
 	$tool_content .=  "
-			<table>
+			<table width=\"99%\">
 				<tbody>
 					<tr>
 						<td class=\"$type\">
@@ -280,87 +239,29 @@ if ($userLang == "el") {
 }
 ##[END personalisation modification]############
 
-/*
-// if LDAP user - added by adia
-if ($myrow['inst_id'] > 0) 	// LDAP user:
-{		
-	$tool_content .= "
-    <form method=\"post\" action=\"$PHP_SELF?submit=yes\">
-    <input type=hidden name=\"ldap_submit\" value=\"ON\">
 
-    <table>
-    <thead>
-    <tr>
-        <th>
-        $langName
-        </th>
-        <td>$prenom_form</td>
-    </tr>
-    <tr>
-        <th>
-        $langSurname
-        </th>
-        <td>$nom_form</td>
-    </tr>
-        <tr>
-        <th>
-        $langUsername
-        </th>
-        <td>$username_form</td>
-        </tr>
-        <tr>
-        <th>
-        $langEmail
-        </th>
-        <td>$email_form</td>
-        </tr>
-        ";
+if (!isset($urlSecure)) {
+	$sec = $urlServer.'modules/profile/profile.php';
+	$passurl = $urlServer.'modules/profile/password.php';
+} else {
+	$sec = $urlSecure.'modules/profile/profile.php';
+	$passurl = $urlServer.'modules/profile/password.php';
+}
 
-	##[BEGIN personalisation modification]############
+if ((!isset($changePass)) || isset($_POST['submit'])) {
 
-	if (session_is_registered("perso_is_active")) 
-	{
-		$tool_content .= "
-        <tr>
-            <th>eClass Personalised</th>
-            <td>
-                <input type=checkbox name='persoStatus' value=\"yes\" $checkedPerso>
-            </td>
-        </tr>";
-	}
-	##[END personalisation modification]############
-	$tool_content .= "
-        <tr>
-            <th>$langLanguage</th>
-            <td>
-                <input type='radio' name='userLanguage' value='el' $checkedLangEl>$langGreek<br>
-				<input type='radio' name='userLanguage' value='en'  $checkedLangEn>$langEnglish
-            </td>
-        </tr>";
+	$tool_content .= "<div id=\"operations_container\">
+		<ul id=\"opslist\">";
 
 	$tool_content .= "
-        <tr>
-        <td colspan=\"2\" class=\"caution\">$langLDAPUser</td>
-        </tr>
-        </thead></table><br>
-
-        <input type=\"Submit\" name=\"submit\" value=\"$langChange\">
-
-                </form><br><br>";
+			<li><a href=\"".$passurl."\">".$langChangePass."</a></li>";
 
 
-} 
-else		// Not LDAP user: 
-{		
-*/
-	if (!isset($urlSecure)) 
-	{
-		$sec = $urlServer.'modules/profile/profile.php';
-	} 
-	else 
-	{
-		$sec = $urlSecure.'modules/profile/profile.php';
-	}
+	$tool_content .= " <li><a href='../unreguser/unreguser.php'>$langUnregUser</a></li>";
+	$tool_content .= "</ul></div>";
+
+
+
 	$tool_content .= "<form method=\"post\" action=\"$sec?submit=yes\">
     <table width=\"99%\">
     <thead>
@@ -374,59 +275,41 @@ else		// Not LDAP user:
     <th width=\"150\">$langSurname</th>
     <td><input type=\"text\" size=\"40\" name=\"nom_form\" value=\"$nom_form\"></td>
     </tr>";
-    
-    $authmethods = array("imap","pop3","ldap","db");
-if(!in_array($password_form,$authmethods))
-{
-	$tool_content .= "
+
+	$authmethods = array("imap","pop3","ldap","db");
+	if(!in_array($password_form,$authmethods))
+	{
+		$tool_content .= "
 	<tr>
         <th width=\"150\">$langUsername</th>
         <td><input type=\"text\" size=\"40\" name=\"username_form\" value=\"$username_form\"></td>
     </tr>
-    <tr>
-        <th width=\"150\">
-            $langPass
-        </th>
-        <td>";
-        	$crypt = new Encryption;
-					$key = $encryptkey;
-					$password_decrypted = $crypt->decrypt($key, $password_form);
-					$tool_content .= "<input type=\"password\" size=\"40\" name=\"password_form\" value=\"$password_decrypted\">
-					</td>
-		</tr>
-    <tr>
-        <th width=\"150\">
-            $langConfirmation
-        </th>
-        <td>       		
-            <input type=\"password\" size=\"40\" name=\"password_form1\" value=\"$password_decrypted\">
-        </td>
-    </tr>";
-}
-else		// means that it is external auth method, so the user cannot change this password
-{
-    switch($password_form)
-    {
-    	case "pop3": $auth=2;break; 
-    	case "imap": $auth=3;break; 
-    	case "ldap": $auth=4;break; 
-    	case "db": $auth=5;break; 
-    	default: $auth=1;break;
-    }
-    $auth_text = get_auth_info($auth);
-    $tool_content .= "
+    ";
+	}
+	else		// means that it is external auth method, so the user cannot change this password
+	{
+		switch($password_form)
+		{
+			case "pop3": $auth=2;break;
+			case "imap": $auth=3;break;
+			case "ldap": $auth=4;break;
+			case "db": $auth=5;break;
+			default: $auth=1;break;
+		}
+		$auth_text = get_auth_info($auth);
+		$tool_content .= "
     <tr>
     <th width=\"150\">".$langUsername.
-        "</th>
-        <td class=\"caution\">".$username_form." &nbsp;&nbsp;[".$auth_text."]
+    "</th>
+        <td class=\"caution\">".$username_form." [".$auth_text."]
         <input type=\"hidden\" name=\"password_form\" value=\"$password_form\">
         <input type=\"hidden\" name=\"password_form1\" value=\"$password_form\">
         <input type=\"hidden\" name=\"username_form\" value=\"$username_form\">
         </td>
     </tr>";
-}
-    
-    $tool_content .= "<tr>
+	}
+
+	$tool_content .= "<tr>
         <th width=\"150\">
             $langEmail
         </th>
@@ -466,7 +349,8 @@ else		// means that it is external auth method, so the user cannot change this p
     </thead></table>
     <br><input type=\"Submit\" name=\"submit\" value=\"$langChange\">
     </form>
-    <br><p><a href='../unreguser/unreguser.php'>$langUnregUser</a></p><br>";
+   ";
+}
 //}		// End of LDAP user added by adia
 
 draw($tool_content, 1);
