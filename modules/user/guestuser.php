@@ -29,7 +29,7 @@ $require_help = TRUE;
 $helpTopic = 'User';
 
 include '../../include/baseTheme.php';
-include '../auth/auth.inc.php';		// purpose of include:functions to encrypt guest password
+
 
 $nameTools = $langAddGuest;
 $navigation[] = array ("url"=>"user.php", "name"=> $langUsers);
@@ -93,9 +93,7 @@ if($is_adminOfCourse)
 	if (isset($createguest) and (!guestid($currentCourseID))) 
 	{
 		// encrypt the password
-			$crypt = new Encryption;	$key = $encryptkey;	$pswdlen = "20";
-	 		$guestpassword2 = $crypt->encrypt($key, $guestpassword, $pswdlen);
-		createguest($currentCourseID,$guestpassword2);
+		createguest($currentCourseID,md5($guestpassword));
 		$tool_content .= "<tr><td>$langGuestSuccess</td></tr>";
 	} elseif (isset($changepass)) 
 	{
@@ -103,8 +101,8 @@ if($is_adminOfCourse)
 		$g=guestid($currentCourseID);
 		// *****************************************************
 		// encrypt the password
-		$crypt = new Encryption;	$key = $encryptkey;	$pswdlen = "20";
-	 	$guestpassword_encrypted = $crypt->encrypt($key, $guestpassword, $pswdlen);
+
+	 	$guestpassword_encrypted = md5($guestpassword);
 		$uguest=mysql_query("UPDATE user SET password='$guestpassword_encrypted' WHERE user_id='$g'")
 		or die($langGuestFail);
 		$tool_content .= "<p>$langGuestChange</p>";
@@ -113,7 +111,7 @@ if($is_adminOfCourse)
 		if ($id) {
 			$tool_content .=  "<p>$langGuestExist</p>";
 			
-			$q1=mysql_query("SELECT nom,prenom,username,password FROM user where user_id='$id'");
+			$q1=mysql_query("SELECT nom,prenom,username FROM user where user_id='$id'");
 			$s=mysql_fetch_array($q1);
 			
 			$tool_content .=  "<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">";
@@ -122,15 +120,7 @@ if($is_adminOfCourse)
 			$tool_content .=  "<tr><th>$langName:</th><td>$s[nom]</td></tr>";
 			$tool_content .=  "<tr><th>$langSurname:</th><td>$s[prenom]</td></tr>";
 			$tool_content .=  "<tr><th>$langUsername:</th><td>$s[username]</td></tr>";
-			$tool_content .=  "<tr><th>$langPass:</th><td><input type=\"text\" name=\"guestpassword\" value=\"";
-			
-				$pw = htmlspecialchars($s['password']);
-				// decrypt the password from db:
-				$crypt = new Encryption;	$key = $encryptkey;		
-				$password_decrypted = $crypt->decrypt($key, $pw);
-			
-			$tool_content .= $password_decrypted;
-			$tool_content .= "\"></td></tr>";
+			$tool_content .=  "<tr><th>$langPass:</th><td><input type=\"text\" name=\"guestpassword\" value=\"\"></td></tr>";
 			$tool_content .= "</thead>";
 			$tool_content .=  "</table>";
 			$tool_content .= "<br>";
