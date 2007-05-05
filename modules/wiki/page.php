@@ -38,6 +38,13 @@
 	// temporary
 	$_gid = null;
 	
+	if (isset($_SESSION['statut']) && $_SESSION['statut'] != 0 ) {
+		$is_courseMember = true;
+	}
+	else {
+		$is_courseMember = false;
+	}
+	
 	$nameTools = $langWiki;
 	
 	mysql_select_db($currentCourseID);
