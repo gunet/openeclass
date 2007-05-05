@@ -20,8 +20,27 @@
      */
      
     $tlabelReq = 'CLWIKI__';
-
-    require_once "../inc/claro_init_global.inc.php";
+    
+    require_once("../../include/lib/learnPathLib.inc.php");
+    
+    $require_current_course = TRUE;
+	$langFiles              = "wiki";
+	$require_help           = TRUE;
+	$helpTopic              = "Wiki";
+	
+	require_once("../../include/baseTheme.php");
+	
+	$head_content = "";
+	$tool_content = "";
+	$style= "";
+	
+	$imgRepositoryWeb = "../../template/classic/img";
+	// temporary
+	$_gid = null;
+	
+	$nameTools = $langWiki;
+	
+	mysql_select_db($currentCourseID);
     
     /*if ( ! $is_toolAllowed )
     {
@@ -35,10 +54,8 @@
         }
     }*/
     
-    if ( ! $_cid || ! $is_courseAllowed ) claro_disp_auth_form(true);
-    
     // config file
-    require_once $includePath . "/conf/CLWIKI.conf.php";
+    //require_once $includePath . "/conf/CLWIKI.conf.php";
     
     // check and set user access level for the tool
     
@@ -50,7 +67,7 @@
     
     // set admin mode and groupId
     
-    $is_allowedToAdmin = claro_is_allowed_to_edit();
+    $is_allowedToAdmin = $is_adminOfCourse;
     
 
     if ( $_gid && $is_groupAllowed )
@@ -58,21 +75,17 @@
         // group context
         $grouId = $_gid;
         
-        $interbredcrump[]  = array ('url' => '../group/group.php', 'name' => $langGroups);
-        $interbredcrump[]= array ('url' => '../group/group_space.php', 'name' => $_group['name']);
+        $navigation[]  = array ('url' => '../group/group.php', 'name' => $langGroups);
+        $navigation[]= array ('url' => '../group/group_space.php', 'name' => $_group['name']);
     }
     elseif ( $_gid && ! $is_groupAllowed )
     {
         claro_die($langNotAllowed);
     }
-    elseif ( $is_courseAllowed )
+    else
     {
         // course context
         $groupId = 0;
-    }
-    else
-    {
-        claro_disp_auth_form();
     }
     
     // Wiki specific classes and libraries
@@ -94,7 +107,11 @@
 
         // Database nitialisation
 
-        $tblList = claro_sql_get_course_tbl();
+        $tblList = array();
+    	$tblList["wiki_properties"] = "wiki_properties";
+    	$tblList["wiki_pages"] = "wiki_pages";
+    	$tblList["wiki_pages_content"] = "wiki_pages_content";
+    	$tblList["wiki_acls"] = "wiki_acls";
 
         $con = new ClarolineDatabaseConnection();
 
@@ -118,17 +135,15 @@
     }
     
     // Claroline libraries
-    
-    require_once $includePath . '/lib/user.lib.php';
+// TOCHANGE    
+    //require_once $includePath . '/lib/user.lib.php';
     
     // set request variables
     
     $wikiId = ( isset( $_REQUEST['wikiId'] ) ) ? (int) $_REQUEST['wikiId'] : 0;
     
     // Database nitialisation
-    
-    $tblList = claro_sql_get_course_tbl();
-    
+
     $config = array();
     $config["tbl_wiki_properties"] = $tblList[ "wiki_properties" ];
     $config["tbl_wiki_pages"] = $tblList[ "wiki_pages" ];
@@ -238,7 +253,7 @@
     
     // get request variables
     
-    $creatorId = $_uid;
+    $creatorId = $uid;
     
     $versionId = ( isset( $_REQUEST['versionId'] ) ) ? (int) $_REQUEST['versionId'] : 0;
 
@@ -616,10 +631,6 @@
         }
     }
     
-    // Claroline Header and Banner
-
-    require_once $includePath . "/claro_init_header.inc.php";
-    
     // tool title
     
     $toolTitle = array();
@@ -692,7 +703,7 @@
         . '&amp;action=show'
         . '&amp;title=__MainPage__'
         . '">'
-        . '<img src="'.$imgRepositoryWeb.'wiki.gif" border="0" alt="edit" />&nbsp;'
+        . '<img src="'.$imgRepositoryWeb.'/wiki.gif" border="0" alt="edit" />&nbsp;'
         . $langWikiMainPage.'</a>'
         ;
     
@@ -701,7 +712,7 @@
         . '?wikiId=' . $wiki->getWikiId()
         . '&amp;action=recent'
         . '">'
-        . '<img src="'.$imgRepositoryWeb.'history.gif" border="0" alt="recent changes" />&nbsp;'
+        . '<img src="'.$imgRepositoryWeb.'/history.gif" border="0" alt="recent changes" />&nbsp;'
         . $langWikiRecentChanges.'</a>'
         ;
 
@@ -710,14 +721,14 @@
         . '?wikiId=' . $wiki->getWikiId()
         . '&amp;action=all'
         . '">'
-        . '<img src="'.$imgRepositoryWeb.'book.gif" border="0" alt="all pages" />&nbsp;'
+        . '<img src="'.$imgRepositoryWeb.'/book.gif" border="0" alt="all pages" />&nbsp;'
         . $langWikiAllPages.'</a>'
         ;
         
     echo '&nbsp;|&nbsp;<a class="claroCmd" href="'
         . 'wiki.php'
         . '">'
-        . '<img src="'.$imgRepositoryWeb.'info.gif" border="0" alt="all pages" />&nbsp;'
+        . '<img src="'.$imgRepositoryWeb.'/info.gif" border="0" alt="all pages" />&nbsp;'
         . $langWikiList .'</a>'
         ;
     
@@ -736,14 +747,14 @@
             . '&amp;action=show'
             . '&amp;title=' . rawurlencode($title)
             . '">'
-            . '<img src="'.$imgRepositoryWeb.'back.gif" border="0" alt="back" />&nbsp;'
+            . '<img src="'.$imgRepositoryWeb.'/back.gif" border="0" alt="back" />&nbsp;'
             . $langWikiBackToPage.'</a>'
             ;
     }
     else
     {
         echo '<span class="claroCmdDisabled">'
-            . '<img src="'.$imgRepositoryWeb.'back.gif" border="0" alt="back" />&nbsp;'
+            . '<img src="'.$imgRepositoryWeb.'/back.gif" border="0" alt="back" />&nbsp;'
             . $langWikiBackToPage.'</span>'
             ;
     }
@@ -760,7 +771,7 @@
                 . '&amp;title=' . rawurlencode( $title )
                 . '&amp;versionId=' . $versionId
                 . '">'
-                . '<img src="'.$imgRepositoryWeb.'edit.gif" border="0" alt="edit" />&nbsp;'
+                . '<img src="'.$imgRepositoryWeb.'/edit.gif" border="0" alt="edit" />&nbsp;'
                 . $langWikiEditPage.'</a>'
                 ;
         }
@@ -768,7 +779,7 @@
         else
         {
             echo '&nbsp;|&nbsp;<span class="claroCmdDisabled">'
-                . '<img src="'.$imgRepositoryWeb.'edit.gif" border="0" alt="edit" />&nbsp;'
+                . '<img src="'.$imgRepositoryWeb.'/edit.gif" border="0" alt="edit" />&nbsp;'
                 . $langWikiEditPage . '</span>'
                 ;
         }
@@ -776,7 +787,7 @@
     else
     {
         echo '&nbsp;|&nbsp;<span class="claroCmdDisabled">'
-            . '<img src="'.$imgRepositoryWeb.'edit.gif" border="0" alt="edit" />&nbsp;'
+            . '<img src="'.$imgRepositoryWeb.'/edit.gif" border="0" alt="edit" />&nbsp;'
             . $langWikiEditPage . '</span>'
             ;
     }
@@ -790,7 +801,7 @@
                 . '&amp;action=history'
                 . '&amp;title=' . rawurlencode( $title )
                 . '">'
-                . '<img src="'.$imgRepositoryWeb.'version.gif" border="0" alt="history" />&nbsp;'
+                . '<img src="'.$imgRepositoryWeb.'/version.gif" border="0" alt="history" />&nbsp;'
                 . $langWikiPageHistory.'</a>'
                 ;
     }
@@ -798,7 +809,7 @@
     {
         // inactive
         echo '&nbsp;|&nbsp;<span class="claroCmdDisabled">'
-            . '<img src="'.$imgRepositoryWeb.'version.gif" border="0" alt="history" />&nbsp;'
+            . '<img src="'.$imgRepositoryWeb.'/version.gif" border="0" alt="history" />&nbsp;'
             . $langWikiPageHistory . '</span>'
             ;
     }
@@ -809,7 +820,7 @@
             . 'help_wiki.php?help=syntax'
             . '\',\'MyWindow\',\'toolbar=no,location=no,directories=no,status=yes,menubar=no'
             . ',scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10\'); return false;">'
-            . '<img src="'.$imgRepositoryWeb.'help_little.gif" border="0" alt="history" />&nbsp;'
+            . '<img src="'.$imgRepositoryWeb.'/help_little.gif" border="0" alt="history" />&nbsp;'
             . $langWikiHelpSyntax . '</a>'
             ;
     }
@@ -1230,7 +1241,4 @@
     
     // ------------ End of wiki script ---------------
 
-    // Claroline footer
-    
-    require_once $includePath . "/claro_init_footer.inc.php";
 ?>
