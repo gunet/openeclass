@@ -90,6 +90,15 @@ $langEmailWrong="The email address is not complete or contains some unvalid char
 $langProfileReg="Your new profile has been saved";
 $langHome="Back to Home Page";
 $langChange="Modify";
+$langPassChanged="Your password has been modified";
+$langPassOldWrong="Your current password is wrong";
+$langNewPass1="New password";
+$langNewPass2="New password (again)";
+$langInvalidCharsPass="You have used invalid characters in your password";
+$langInvalidCharsUsername="You have used invalid characters in your username";
+$langProfileReg="Your profile has been modified";
+$langOldPass="Current password";
+$langChangePass="Modify password";
 
 // user.php
 $langUsers="Users";
