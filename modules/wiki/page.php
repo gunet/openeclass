@@ -883,6 +883,7 @@
                         ;
                         
             $userInfo = user_get_data( $oldEditor );
+            mysql_select_db($currentCourseID);
             $oldEditorStr = $userInfo['firstname'] . "&nbsp;" . $userInfo['lastname'];
 
             $newTime = claro_disp_localised_date( $dateTimeFormatLong
@@ -890,6 +891,7 @@
                         ;
                         
             $userInfo = user_get_data( $newEditor );
+            mysql_select_db($currentCourseID);
             $newEditorStr = $userInfo['firstname'] . "&nbsp;" . $userInfo['lastname'];
 
             $versionInfo = '('
@@ -1064,21 +1066,11 @@
                 if ( $versionId != 0 )
                 {
                     $editorInfo = user_get_data( $wikiPage->getEditorId() );
+                    mysql_select_db($currentCourseID);
 
                     $editorStr = $editorInfo['firstname'] . "&nbsp;" . $editorInfo['lastname'];
 
-                    if ( $is_courseMember )
-                    {
-                        $editorUrl = '&nbsp;-&nbsp;<a href="'. $clarolineRepositoryWeb
-                            . 'user/userInfo.php?uInfo='
-                            . $wikiPage->getEditorId() .'">'
-                            . $editorStr.'</a>'
-                            ;
-                    }
-                    else
-                    {
-                        $editorUrl = '&nbsp;-&nbsp;' . $editorStr;
-                    }
+                    $editorUrl = '&nbsp;-&nbsp;' . $editorStr;
                     
                     $mtime = claro_disp_localised_date( $dateTimeFormatLong
                         , strtotime($wikiPage->getCurrentVersionMtime()) )
@@ -1173,21 +1165,11 @@
                         ;
 
                     $userInfo = user_get_data( $version['editor_id'] );
+                    mysql_select_db($currentCourseID);
 
                     $userStr = $userInfo['firstname'] . "&nbsp;" . $userInfo['lastname'];
                     
-                    if ( $is_courseMember )
-                    {
-                        $userUrl = '<a href="'. $clarolineRepositoryWeb
-                            . 'user/userInfo.php?uInfo='
-                            . $version['editor_id'].'">'
-                            .$userStr.'</a>'
-                            ;
-                    }
-                    else
-                    {
-                        $userUrl = $userStr;
-                    }
+                    $userUrl = $userStr;
                     
                     $versionUrl = '<a href="' . $_SERVER['PHP_SELF'] . '?wikiId='
                         . $wikiId . '&amp;title=' . rawurlencode( $title )
