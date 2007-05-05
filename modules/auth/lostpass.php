@@ -1,58 +1,74 @@
 <?php
-/**=============================================================================
-       	GUnet e-Class 2.0 
-        E-learning and Course Management Program  
-================================================================================
-       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
-        A full copyright notice can be read in "/info/copyright.txt".
-        
-       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
-      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
-
-        For a full list of contributors, see "credits.txt".  
-     
-        This program is a free software under the terms of the GNU 
-        (General Public License) as published by the Free Software 
-        Foundation. See the GNU License for more details. 
-        The full license can be read in "license.txt".
-     
-       	Contact address: GUnet Asynchronous Teleteaching Group, 
-        Network Operations Center, University of Athens, 
-        Panepistimiopolis Ilissia, 15784, Athens, Greece
-        eMail: eclassadmin@gunet.gr
-==============================================================================*/
-
 /**===========================================================================
-	lostpass.php
-* @version $Id$
-	@authors list: Karatzidis Stratos <kstratos@uom.gr>
-		       Vagelis Pitsioygas <vagpits@uom.gr>
-==============================================================================        
-  @Description: Send a user's password via e-mail
+*              GUnet e-Class 2.0
+*       E-learning and Course Management Program
+* ===========================================================================
+*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	A full copyright notice can be read in "/info/copyright.txt".
+*
+*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
 
- 	
-==============================================================================
-*/
+/**
+ * Password reset component
+ * 
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
+ * @version $Id$
+ * 
+ * @abstract This component resets the user's password after verifying 
+ * his/hers  information through a challenge/response system.
+ *
+ */
 
+$sql = 'CREATE TABLE `passwd_reset` ('
+. ' `user_id` INT NOT NULL, '
+. ' `hash` VARCHAR(40) NOT NULL'
+. ' )'
+. ' TYPE = myisam';
 //LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
 $langFiles = array('lostpass');
+// Initialise $tool_content
+$tool_content = "";
+
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
 include('../../include/sendMail.inc.php');
-
-// Initialise $tool_content
-$tool_content = ""; 
-
-
 $nameTools = $lang_remind_pass;
 
+
 function valid_email($e) {
-	$elements = explode('@', $e);
-	if (sizeof($elements) != 2) {
+	$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
+	if (!eregi($regexp, $e)) {
 		return FALSE;
+	} else {
+		//		 Reverse magic_quotes_gpc effects on these vars if ON.
+		//		  if(get_magic_quotes_gpc()) {
+		//            $product_name        = stripslashes($_REQUEST['userName']);
+		//            $product_description = stripslashes($_REQUEST['email']);
+		//        } else {
+		//            $product_name        = $_REQUEST['userName'];
+		//            $product_description = $_REQUEST['email'];
+		//        }
+		//
+		//        $userName = mysql_real_escape_string($product_name, $link);
+		//        $email= mysql_real_escape_string($product_description, $link);
+		return TRUE;
 	}
-	return TRUE;
+
 }
 
 function check_password_editable($password)
@@ -68,20 +84,105 @@ function check_password_editable($password)
 	}
 }
 
-if (!isset($femail)) {
+function createPassword ($length = 8) {
+
+	// initialise password var
+	$password = "";
+
+	// define possible characters
+	$possible = "abcdefghjklmnopqrstvwxyz0123456789";
+
+	$i = 0;
+
+	// add random characters to $password until $length is reached
+	while ($i < $length) {
+
+		// pick a random character from the $possible pool
+		$char = substr($possible, mt_rand(0, strlen($possible)-1), 1);
+
+		// do not allow dublicate characters in the password
+		if (!strstr($password, $char)) {
+			$password .= $char;
+			$i++;
+		}
+
+	}
+
+	return $password;
+
+}
+//TODO place some sort of clear-out function to delete reset-pass entries older than 2 hours (link validity window)
+if (isset($_REQUEST['do']) && $_REQUEST['do'] == "go") {
+	$userUID = (int)$_REQUEST['u'];
+	$hash = $_REQUEST['h'];
+
+	$res = db_query("SELECT `user_id`, `hash`, `password`, `datetime` FROM passwd_reset
+							WHERE `user_id` = '" . mysql_escape_string($userUID) . "'
+							AND `hash` = '" . mysql_escape_string($hash) . "'
+							AND TIMESTAMPDIFF(MINUTE, `datetime`,NOW()) < 60
+							", $mysqlMainDb);
+
+	if (mysql_num_rows($res) == 1) {
+		$myrow = mysql_fetch_array($res);
+		//copy pass hash (md5) from reset_pass to user table
+		$sql = "UPDATE `user` SET `password` = '".$myrow['hash']."' WHERE `user_id` = ".$myrow['user_id']."";
+		
+		if(db_query($sql, $mysqlMainDb)) {
+			//send email to the user of his new pass (not hashed)
+
+			$res = db_query("SELECT `email` FROM user WHERE `user_id` = ".$myrow['user_id']."", $mysqlMainDb);
+			$myrow2 = mysql_fetch_array($res);
+
+			$text = $langPassEmail1 . $myrow['password'] . $langPassEmail2;
+
+			$emailheaders = "From: $siteName <$emailAdministrator>\n".
+			"MIME-Version: 1.0\n".
+			"Content-Type: text/plain; charset=$charset\n".
+			"Content-Transfer-Encoding: 8bit";
+			$emailsubject = "e-Class - $langAccountResetSuccess1";
+			send_mail($siteName, $emailAdministrator, '', $myrow2['email'],	$emailsubject, $text, $charset);
+			$tool_content .= "
+				<table width=\"99%\">
+				<tbody>
+					<tr>
+						<td class=\"success\">
+						<p><strong>$langAccountResetSuccess1</strong></p>
+						<p>$langAccountResetSuccess2 (".$myrow2['email']."), $langAccountResetSuccess3</p>
+    					<p><a href=\"../../index.php\">$langHome</a></p>
+					</td>
+					</tr>
+				</tbody>
+			</table>";
+
+			$sql = "DELETE FROM `passwd_reset` WHERE `user_id` = ".$myrow['user_id']."";
+			db_query($sql, $mysqlMainDb);
+		}
+
+		//advice him to change his pass once logged in
+	}
+}
+
+if ((!isset($email) || !isset($userName)) && !isset($_REQUEST['do'])) {
 	/***** Email address entry form *****/
 
-$tool_content .= "<p>$lang_pass_intro</p>";
+	$tool_content .= "$lang_pass_intro";
 
-$tool_content .= "<form method=\"post\" action=\"".$REQUEST_URI."\">
+	$tool_content .= "<form method=\"post\" action=\"".$REQUEST_URI."\">
 	<table>
 	<thead>
+	<tr>
+	<th>
+	$lang_username: 
+	</th>
+	<td>
+	<input type=\"text\" name=\"userName\" size=\"40\">
+	</td>
 	<tr>
 	<th>
 	$lang_email: 
 	</th>
 	<td>
-	<input type=\"text\" name=\"femail\" size=\"40\">
+	<input type=\"text\" name=\"email\" size=\"40\">
 	</td>
 	</thead>
 	</table>
@@ -89,13 +190,10 @@ $tool_content .= "<form method=\"post\" action=\"".$REQUEST_URI."\">
 	<input type=\"submit\" name=\"doit\" value=\"".$lang_pass_submit."\">
 	</form>";
 
-} 
-else 
-{
-	if (!valid_email($femail)) 
-	{
+} elseif (!isset($_REQUEST['do'])) {
+	if (!valid_email($email)) {
 		$tool_content .=  $lang_pass_invalid_mail1
-		."<code> ".htmlspecialchars($femail)." </code>"
+		."<code> ".htmlspecialchars($email)." </code>"
 		.$lang_pass_invalid_mail2
 		." <a href='mailto: $emailhelpdesk'>".$emailhelpdesk."</a>, "
 		.$lang_pass_invalid_mail3;
@@ -105,92 +203,122 @@ else
 		<input type=\"submit\" name=\"doit\" value=\"".$lang_pass_submit."\">
 		</form>";
 
-	} 
-	else 
-	{
+	} else {
 		/***** If valid e-mail address was entered, find user and send email *****/
-		$res = mysql_query("SELECT nom, prenom, username, password, statut, inst_id FROM user
-			WHERE email = '" . mysql_escape_string($femail) . "'");
-		if (mysql_num_rows($res) > 0) 
-		{
-			$text = $lang_pass_email_intro. $emailhelpdesk;
-			
-			
-			
-			if (mysql_num_rows($res) == 1) 
-			{
-				$text .= "\n$lang_pass_email_account\n";
-			} 
-			else 
-			{
-				$text .= "\n$lang_pass_email_many_accounts\n";
-			}
-			while ($s = mysql_fetch_array($res, MYSQL_ASSOC)) 
-			{
+		$res = db_query("SELECT user_id, nom, prenom, username, password, statut FROM user
+							WHERE email = '" . mysql_escape_string($email) . "'
+							AND username = '$userName'", $mysqlMainDb);
+
+		if (mysql_num_rows($res) == 1) {
+			$text = $langPassResetIntro. $emailhelpdesk;
+			$text .= "$langHowToResetTitle";
+
+			while ($s = mysql_fetch_array($res, MYSQL_ASSOC)) {
 				$is_editable = check_password_editable($s['password']);
-				if(!empty($is_editable))
-				{
-					// decrypt now, the password from db
-					$crypt = new Encryption;
-					$key = $encryptkey;
-					$password_decrypted = $crypt->decrypt($key, $s['password']);
-					
-					$text .= "
-					$lang_pass_email_name " . htmlspecialchars($s['prenom']." ".$s['nom']) . "
-					$lang_pass_email_status " . (($s['statut'] == 1)? "$lang_prof": (
-						($s['statut'] == 5)? "$lang_student": "$lang_other")) . "
-						$lang_pass_email_username " . htmlspecialchars($s['username']);
-						//($s['inst_id']? $lang_pass_email_ldap:$lang_pass_email_password . htmlspecialchars($password_decrypted) . "\n");
-						$text .= $lang_pass_email_password . htmlspecialchars($password_decrypted) . "\n";
-				}
-				else
-				{
-					switch($s['password'])
-					{
-						case 'pop3':$auth=2;break; case 'imap':$auth=3;break; case 'ldap':$auth=4;break; case 'db':$auth=5;break; default:$auth=1;break;
+				if(!empty($is_editable)) {
+
+					//insert an md5 key to the db
+					$new_pass = createPassword();
+					//TODO: add a query to check if the newly generated password already exists in the
+					//reset-pass table. If yes, attempt to generate another one.
+					$sql = "INSERT INTO `passwd_reset` (`user_id`, `hash`, `password`, `datetime`) VALUES ('".$s['user_id']."',  '".md5($new_pass)."', '$new_pass', NOW())";
+					db_query($sql, $mysqlMainDb);
+					//prepare instruction for password reset
+					$text .= $langPassResetGoHere;
+					$text .= $urlServer . "modules/auth/lostpass.php?do=go&u=".$s['user_id']."&h=" .md5($new_pass);
+
+				} else { //other type of auth...
+					switch($s['password'])  {
+						case 'pop3':{
+							$auth=2;
+							break;
+						}
+						case 'imap':{
+							$auth=3;
+							break;
+						}
+						case 'ldap':{
+							$auth=4;
+							break;
+						}
+						case 'db':{
+							$auth=5;
+							break;
+						}
+						default:{
+							$auth=1;
+							break;
+						}
 					}
-					$text .= "Το συνθηματικό αυτού του λογαριασμού δεν μπορεί να αλλαχθεί,
-					διότι ανήκει σε εξωτερική μέθοδο πιστοποίησης\n
-					Παρακαλούμε, επικοινωνήστε με το διαχειριστή για την ".get_auth_info($auth);
+
+					$tool_content = "
+				<table width=\"99%\">
+				<tbody>
+					<tr>
+						<td class=\"caution\">
+						<p><strong>Το συνθηματικό αυτού του λογαριασμού δεν μπορεί να αλλαχθεί.</strong></p>
+						<p>Ο λογαριασμός αυτός ανήκει σε εξωτερική μέθοδο πιστοποίησης. Παρακαλούμε, επικοινωνήστε με το διαχειριστή στην διεύθυνση <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a> για την ".get_auth_info($auth).".</p>
+						<p><a href=\"../../index.php\">$langHome</a></p>
+					</td>
+					</tr>
+				</tbody>
+			</table>";
+
 				}
 			}
 			/***** Account details found, now send e-mail *****/
 			$emailheaders = "From: $siteName <$emailAdministrator>\n".
-					"MIME-Version: 1.0\n".
-					"Content-Type: text/plain; charset=$charset\n".
-					"Content-Transfer-Encoding: 8bit";
-			$emailsubject = "Account information";
-			if (!send_mail($siteName, $emailAdministrator, '', $femail,
-				   $emailsubject, $text, $charset)) 
-			{
-				$tool_content .= $lang_pass_email_error1
-					."<code> ".$femail." </code>"
-					.$lang_pass_email_error2
-					."<a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.";
-			} 
-			else 
-			{
-				$tool_content .= $lang_pass_email_ok
-				."<code> ".$femail." </code>.";
+			"MIME-Version: 1.0\n".
+			"Content-Type: text/plain; charset=$charset\n".
+			"Content-Transfer-Encoding: 8bit";
+			$emailsubject = "e-Class account information";
+			if (!send_mail($siteName, $emailAdministrator, '', $email,	$emailsubject, $text, $charset)) {
+				$tool_content = "
+				<table width=\"99%\">
+				<tbody>
+					<tr>
+						<td class=\"caution\">
+						<p><strong>$langAccountEmailError1</strong></p>
+						<p>$langAccountEmailError2 $email.</p>
+						<p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p>
+						<p><a href=\"../../index.php\">$langHome</a></p>
+					</td>
+					</tr>
+				</tbody>
+			</table>";
+
+			} elseif (!isset($auth)) {
+				$tool_content .= "
+				<table width=\"99%\">
+				<tbody>
+					<tr>
+						<td class=\"success\">
+						$lang_pass_email_ok <strong>$email</strong><br/><br/>
+    					<a href=\"../../index.php\">$langHome</a>
+					</td>
+					</tr>
+				</tbody>
+			</table><br/>";
+
 			}
-			
-			
-			
-			
-		} 
-		else 
-		{
-			$tool_content .= $lang_pass_not_found1
-			."<code> ".$femail." </code>."
-			.$lang_pass_not_found2
-			."<a href='mailto: $emailhelpdesk'>$emailhelpdesk</a>"
-			.$lang_pass_not_found3;
+
+		} else {
+			$tool_content .= "
+				<table width=\"99%\">
+				<tbody>
+					<tr>
+						<td class=\"caution\">
+						<p><strong>$langAccountNotFound1 ($email)</strong></p>
+						<p>$langAccountNotFound2 <a href='mailto: $emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p>
+    					<p><a href=\"../../index.php\">$langHome</a></p>
+					</td>
+					</tr>
+				</tbody>
+			</table>";
 		}
 	}
 }
 
-$tool_content .= "<br />";
 
 draw($tool_content,0);
-
 ?>
