@@ -515,8 +515,8 @@ function set_MCU()
 elseif(isset($_REQUEST['install6']))
 {
 	$pathForm = str_replace("\\\\", "/", $pathForm);
-//	chmod( "../config/config.php", 666 );
-//	chmod( "../config/config.php", 0666 );
+	//	chmod( "../config/config.php", 666 );
+	//	chmod( "../config/config.php", 0666 );
 	$langStepTitle = $langLastCheck;
 	$langStep = $langStep5;
 	$_SESSION['step']=5;
@@ -837,11 +837,7 @@ elseif(isset($_REQUEST['install7']))
 
 
 		// encrypt the admin password into DB
-		include '../modules/auth/auth.inc.php';
-		$crypt = new Encryption;
-		$key = $encryptkey;
-		$pswdlen = "20";
-		$password_encrypted = $crypt->encrypt($key, $passForm, $pswdlen);
+		$password_encrypted = md5($passForm);
 		$exp_time = time() + 140000000;
 		mysql_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`,`registered_at`,`expires_at`)
     VALUES ('$nameForm', '$surnameForm', '$loginForm','$password_encrypted','$emailForm','1',".time().",".$exp_time.")");
@@ -972,6 +968,18 @@ CREATE TABLE `auth` (
 		mysql_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)");
 		mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
 
+
+		#
+		# Table passwd_reset (used by the password reset module)
+		#
+
+		mysql_query("
+			CREATE TABLE `passwd_reset` (
+  			`user_id` int(11) NOT NULL,
+  			`hash` varchar(40) NOT NULL,
+  			`password` varchar(8) NOT NULL,
+  			`datetime` datetime NOT NULL
+			) TYPE=MyISAM DEFAULT CHARSET=greek");
 
 	} else {
 		mysql_query("CREATE TABLE annonces (
@@ -1314,6 +1322,17 @@ CREATE TABLE `auth` (
 		mysql_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)");
 		mysql_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
 
+		#
+		# Table passwd_reset (used by the password reset module)
+		#
+
+		mysql_query("
+			CREATE TABLE `passwd_reset` (
+  			`user_id` int(11) NOT NULL,
+  			`hash` varchar(40) NOT NULL,
+  			`password` varchar(8) NOT NULL,
+  			`datetime` datetime NOT NULL
+			) TYPE=MyISAM");
 
 		//dhmiourgia full text indexes
 		mysql_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu` ,`code_cours`)");
@@ -1636,9 +1655,9 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) блл№
 </form>
 ";
 	draw($tool_content);
-	
+
 } else {
-	
+
 	$tool_content .= "
 	<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
 <html>
