@@ -1,4 +1,3 @@
-<?
 /*
       +----------------------------------------------------------------------+
       | GUnet eClass 2.0                                                     |
@@ -25,58 +24,68 @@
       |                  Panepistimiopolis Ilissia, 15784, Athens, Greece    |
       +----------------------------------------------------------------------+
 */
+<?php
+$lang_remind_pass = 'Reset password';
+$lang_pass_intro = '<p>If you have forgotten you passwrd, please fill in your <em>username</em>
+and email.
+(<em>CAUTION: This email must much the one set in your user profile</em>).</p> <p>After submitting these data you will receive an email with instruction on how to reset your password.</p>';
+$lang_pass_submit = 'Send';
 
 
-$lang_remind_pass = 'Password reminder';
-$lang_pass_intro = 'If you have forgotten your account password or login name,
-	from this web page you can have them sent to you by e-mail.
-	Please enter your e-mail address in the following field:';
 
-$lang_pass_invalid_mail1 = 'The e-mail address you have entered,';
-$lang_pass_invalid_mail2 = 'is not valid. If you have mistyped it, please
-	try again. Otherwise, and in case you are sure you have an account in
-	this system, please contact the administrators through the following
-	address:';
-$lang_pass_invalid_mail3 = 'Be sure to provide information
-	that can help determine your account, such as full name, faculty or
-	department, etc.';
+$lang_pass_invalid_mail1 = 'The email address,';
+$lang_pass_invalid_mail2 = 'in invalid. If this was due to a mistake on your behalf, try again. 
+	If this was not a mistake, and yet you are certain you already have an account on the platform, 
+	please contact the platform administrator at this email';
+$lang_pass_invalid_mail3 = 'giving any clues that can help in finding your account like name, surname, department etc.';
 
-$lang_pass_email_intro =
-'There has been a request for your account details in the asynchronous
-teleteaching platform to be sent to you via e-mail. If you have not
-requested this, you can simply ignore this message, or report it to
-the following administrative address if you want: ';
+$langPassResetIntro ="
+Someone has asked to reset your access password on the $siteName platform.
+If this was not yourself, ignore the instructions of this email and report this incident to the system administrator, at the address: ";
 
-$lang_pass_email_account = 'Your account details follow:';
-$lang_pass_email_many_accounts =
-'There are more that one accounts with your e-mail address
-listed in the system. Here are the details for all these
-accounts:';
-$lang_pass_email_ldap =
-'This account is authenticated through LDAP, and the password is
-the same with the one used by the LDAP (directory) service of
-your institution.';
-$lang_pass_email_name = 'Full name: ';
-$lang_pass_email_status = 'Status: ';
-$lang_pass_email_username = 'Username: ';
-$lang_pass_email_password = 'Password: ';
-$lang_pass_email_error1 = 'An error has occured while sending your account
-	details to the e-mail address';
-$lang_pass_email_error2 = 'In case of difficulties, you can contact the system administrators through e-mail at
-	the following address: ';
-$lang_pass_email_ok = 'Your account details were found and sent via e-mail
-	to the address you have given: ';
 
-$lang_pass_not_found1 = 'No accounts have been found in the system with the e-mail address you have given,';
-$lang_pass_not_found2 = 'If, nevertheless, you are sure that you already have an account, please contact the
-	administrators through the following address: ';
-$lang_pass_not_found3 = 'Be sure to provide information that can help determine your account, such as full name,
-	faculty ordepartment, etc.';
+$langHowToResetTitle = "
 
-$lang_student = 'Student';
-$lang_prof = 'Professor';
-$lang_other = 'Other';
+===============================================================================
+			Password reset instructions
+===============================================================================
+";
+
+$langPassResetGoHere = "
+To reset your password go to the following address through your web browser. If you cannot click on the address, copy & paste it on your browser's address bar.
+This address is valid for one (1) hour. Beyond this time limit, you wiil need to repeat the password-reset process from the beginning.
+
+
+";
+
+$langPassEmail1 = "Your password has been reset. Your new password is
+
+";
+			
+$langPassEmail2 = "
+
+
+For security reasons, please change your password to something else, as soon as you login.
+";
+
+
+$langAccountResetSuccess1="Your password has been reset";
+$langAccountResetSuccess2="In your email's inbox";
+$langAccountResetSuccess3="you will find an email with your new password.";
+
+$langAccountEmailError1 = 'An error occured while sending your data';
+$langAccountEmailError2 = "It was not feasible to send password reset instructions at";
+$langAccountEmailError3 = 'If necessarry, you may contact the platform administrator at';
+$lang_pass_email_ok = 'Your account information were found and send to the folowing email address';
+
+$langAccountNotFound1 = 'No account was found with the email address you entered'; 
+$langAccountNotFound2 = 'However, if you are certain you already have an account, please contact the site administrator at ';
+$langAccountNotFound3 = 'giving clues that can help in finding your account like name, surname, department etc.';
+
+$langHome = "Return to home page";
+
 $lang_email = 'e-mail';
-$lang_pass_submit = 'Submit';
+$lang_send = 'Send';
+$lang_username="User name";
 
 ?>
