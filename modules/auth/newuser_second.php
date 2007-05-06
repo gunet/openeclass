@@ -1,38 +1,38 @@
 <?
- /**=============================================================================
-       	GUnet e-Class 2.0 
-        E-learning and Course Management Program  
+/**=============================================================================
+GUnet e-Class 2.0
+E-learning and Course Management Program
 ================================================================================
-       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
-        A full copyright notice can be read in "/info/copyright.txt".
-        
-       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
-      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
+Copyright(c) 2003-2006  Greek Universities Network - GUnet
+A full copyright notice can be read in "/info/copyright.txt".
 
-        For a full list of contributors, see "credits.txt".  
-     
-        This program is a free software under the terms of the GNU 
-        (General Public License) as published by the Free Software 
-        Foundation. See the GNU License for more details. 
-        The full license can be read in "license.txt".
-     
-       	Contact address: GUnet Asynchronous Teleteaching Group, 
-        Network Operations Center, University of Athens, 
-        Panepistimiopolis Ilissia, 15784, Athens, Greece
-        eMail: eclassadmin@gunet.gr
+Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+Yannis Exidaridis <jexi@noc.uoa.gr>
+Alexandros Diamantidis <adia@noc.uoa.gr>
+
+For a full list of contributors, see "credits.txt".
+
+This program is a free software under the terms of the GNU
+(General Public License) as published by the Free Software
+Foundation. See the GNU License for more details.
+The full license can be read in "license.txt".
+
+Contact address: GUnet Asynchronous Teleteaching Group,
+Network Operations Center, University of Athens,
+Panepistimiopolis Ilissia, 15784, Athens, Greece
+eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
 /**===========================================================================
-	newuser_second.php
+newuser_second.php
 * @version $Id$
-	@authors list: Karatzidis Stratos <kstratos@uom.gr>
-		       Vagelis Pitsioygas <vagpits@uom.gr>
-==============================================================================        
-        @Description: Second step in new user registration
+@authors list: Karatzidis Stratos <kstratos@uom.gr>
+Vagelis Pitsioygas <vagpits@uom.gr>
+==============================================================================
+@Description: Second step in new user registration
 
- 	Purpose: The file checks for user provided information and after that makes 
- 	the registration in the platform.
+Purpose: The file checks for user provided information and after that makes
+the registration in the platform.
 
 ==============================================================================
 */
@@ -59,9 +59,9 @@ $password = isset($_POST['password'])?$_POST['password']:'';
 if(!empty($submit))
 {
 	$tool_content .= "<table border=\"0\" width=\"99%\">";
-  
-	if( (strstr($password, "'")) or (strstr($password, '"')) or (strstr($password, '\\')) 
-  or (strstr($uname, "'")) or (strstr($uname, '"')) or (strstr($uname, '\\')) )
+
+	if( (strstr($password, "'")) or (strstr($password, '"')) or (strstr($password, '\\'))
+	or (strstr($uname, "'")) or (strstr($uname, '"')) or (strstr($uname, '\\')) )
 	{
 		$tool_content .= "
 		<table width=\"99%\">
@@ -90,13 +90,13 @@ if(!empty($submit))
 				</tr>
 			</tbody>
 		</table>";
-			
+
 		}
 		else
 		{
 			$q2 = "SELECT username FROM `$mysqlMainDb`.user WHERE username='".escapeSimple($uname)."'";
 			$username_check=mysql_query($q2);	// check if the username exist
-			if ($myusername = mysql_fetch_array($username_check)) 
+			if ($myusername = mysql_fetch_array($username_check))
 			{
 				$tool_content .= "
 				<table width=\"99%\">
@@ -119,7 +119,7 @@ if(!empty($submit))
 				}
 				// check if the passwd is too easy
 				elseif((strtoupper($password) == strtoupper($uname)) || (strtoupper($password) == strtoupper($nom_form))
-				|| (strtoupper($password) == strtoupper($prenom_form)) || (strtoupper($password) == strtoupper($email))) 
+				|| (strtoupper($password) == strtoupper($prenom_form)) || (strtoupper($password) == strtoupper($email)))
 				{
 					$tool_content .= "
 					<table width=\"99%\">
@@ -140,9 +140,9 @@ if(!empty($submit))
 					// Don't worry about figuring this regular expression out quite yet...It will test for address@domainname and address@ip
 					$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
 					$emailtohostname = substr($email, (strrpos($email, "@") +1));
- 					if (!eregi($regexp, $email)) 
-					{	
-        		$tool_content .= "
+					if (!eregi($regexp, $email))
+					{
+						$tool_content .= "
         		<table width=\"99%\">
 			<tbody>
 				<tr>
@@ -155,69 +155,62 @@ if(!empty($submit))
 		</table>";
 					}
 				}
-				
+
 				// registration accepted
 				$emailsubject = "$langYourReg $siteName";
 				if((!empty($auth_method_settings)) && ($auth!=1))
 				{
 					$emailbody = "$langDestination $prenom_form $nom_form \n$langYouAreReg $siteName $langSettings $uname \n$langPassSameLDAP $langAddress $siteName $langIs: $urlServer $langProblem $langFormula $administratorName $administratorSurname $langManager $siteName \n$langTel $telephone \n$langEmail : $emailAdministrator";
-				} 
-				else 
+				}
+				else
 				{
 					$emailbody = "$langDestination $prenom_form $nom_form \n$langYouAreReg $siteName $langSettings $uname \n$langPass: $password $langAddress $siteName $langIs: $urlServer $langProblem	$langFormula $administratorName $administratorSurname $langManager $siteName \n$langTel $telephone \n$langEmail : $emailAdministrator";
 				}
-	
+
 				send_mail($siteName, $emailAdministrator, '', $email,	$emailsubject, $emailbody, $charset);
- 				$registered_at = time();
- 				$expires_at = time() + $durationAccount;	//$expires_at = time() + 31536000;
- 				$institut = 0;
- 			
- 				// manage the store/encrypt process of password into database
- 				$authmethods = array("2","3","4","5");
- 				//$tool_content .= "POSTED values:<br>uname:".$uname."<br>password:".$password."<br>";
- 				$uname = escapeSimple($uname);	// escape the characters: simple and double quote
- 				//$tool_content .= "<br>Username after escape filter:<br>".$uname."<br>";
- 				if(!in_array($auth,$authmethods))
- 				{
- 					$crypt = new Encryption;
- 					$key = $encryptkey;
-	 				$pswdlen = "20";
-	 				//$password = escapeSimple($password);
-	 				//$tool_content .= "<br>Password without escape filter<br>password: ".$password."<br>";
-	 				$password_encrypted = $crypt->encrypt($key, $password, $pswdlen);
-	 				//$tool_content .= "<br>Password after encryption<br>password: ".$password_encrypted."<br>";
-		 			$password_decrypted = $crypt->decrypt($key, $password_encrypted);
-	 			}
- 				else
-	 			{
-	 				$password_encrypted = $password;
-	 			}
- 			
-	// 			$password_decrypted = $crypt->decrypt($key, $password_encrypted);
-	 			$q1 = "INSERT INTO `$mysqlMainDb`.user
+				$registered_at = time();
+				$expires_at = time() + $durationAccount;	//$expires_at = time() + 31536000;
+				$institut = 0;
+
+				// manage the store/encrypt process of password into database
+				$authmethods = array("2","3","4","5");
+				//$tool_content .= "POSTED values:<br>uname:".$uname."<br>password:".$password."<br>";
+				$uname = escapeSimple($uname);	// escape the characters: simple and double quote
+				//$tool_content .= "<br>Username after escape filter:<br>".$uname."<br>";
+				if(!in_array($auth,$authmethods))
+				{
+					$password_encrypted = md5($password);
+				}
+				else
+				{
+					$password_encrypted = $password;
+				}
+
+				
+				$q1 = "INSERT INTO `$mysqlMainDb`.user
 				(user_id, nom, prenom, username, password, email, statut, department, inst_id, am, registered_at, expires_at)
 				VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email','$statut',
 					'$department','$institut','$am',".$registered_at.",".$expires_at.")";
-			
+
 				//$tool_content .= "<br>QUERY:<br>".$q1."<br>";
-				
+
 				$inscr_user=mysql_query($q1);
 				$last_id=mysql_insert_id();
 				$result=mysql_query("SELECT user_id, nom, prenom FROM `$mysqlMainDb`.user WHERE user_id='$last_id'");
-				while ($myrow = mysql_fetch_array($result)) 
+				while ($myrow = mysql_fetch_array($result))
 				{
 					$uid=$myrow[0];
 					$nom=$myrow[1];
 					$prenom=$myrow[2];
 				}
-			
+
 				mysql_query("INSERT INTO `$mysqlMainDb`.loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action) VALUES ('', '".$uid."', '".$REMOTE_ADDR."', NOW(), 'LOGIN')");
 				session_register("uid");
 				session_register("statut");
 				session_register("prenom");
 				session_register("nom");
 				session_register("uname");
-				
+
 				// registration form
 				$tool_content .= "
 				<table width=\"99%\"><tbody><tr><td class=\"success\">
@@ -240,9 +233,9 @@ if(!empty($submit))
 
 				$facOnce = '';
 				$codeOnce = '';
-				while ($mycours = mysql_fetch_array($result)) 
-				{	
-					if($mycours['f'] != $facOnce) 
+				while ($mycours = mysql_fetch_array($result))
+				{
+					if($mycours['f'] != $facOnce)
 					{
 						$tool_content .= "
 						<p><b>$langDepartment: </b><em><font color=\"#f0741e\">$mycours[f]</font></em></p>
@@ -250,8 +243,8 @@ if(!empty($submit))
 						<ul class=\"listBullet\">";
 					}
 					$facOnce = $mycours['f'];
-	
-					if($mycours['k'] != $codeOnce) 
+
+					if($mycours['k'] != $codeOnce)
 					{
 						$tool_content .= "<li><input type='checkbox' name='course[]' value='$mycours[k]'>
 							<font color=\"navy\">$mycours[c]</font> 
@@ -267,11 +260,11 @@ if(!empty($submit))
 				<input type=\"submit\" name=\"submit\" value=\"$langRegistration\" >
 				</form>
 					";
-				
+
 			}	// end of registration accepted
 
 			$already_second=1;
-//			$tool_content .= "</table>";
+			//			$tool_content .= "</table>";
 		}
 	}
 } // if submit
