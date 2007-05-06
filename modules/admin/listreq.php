@@ -241,10 +241,7 @@ switch($close)
 					
 					if(($m['profpassword']!='imap') || ($m['profpassword']!='pop3') || ($m['profpassword']!='ldap') || ($m['profpassword']!='db'))
 					{			 		
-			 		$crypt = new Encryption;
-		 			$key = $encryptkey;
-		 			$pswdlen = "20";
-		 			$password_encrypted = $crypt->encrypt($key, $m['profpassword'], $pswdlen);
+					$password_encrypted = md5($m['profpassword']);
 			 	}
 			 		else
 			 		{

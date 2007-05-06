@@ -112,16 +112,10 @@ if(!empty($submit))
 			if(!in_array($myrow["password"],$check_passwords))
 			{
 				// try to authenticate him via eclass
-				$crypt = new Encryption;
-				$key = $encryptkey;
-				$password_decrypted = $crypt->decrypt($key, $myrow["password"]);
-				//$tool_content .= "decrypted password taken from db:".$password_decrypted."<br>";
-				$errors = $crypt->errors;
-				$myrow["password"] = $password_decrypted;
 
 				if ($uname == escapeSimpleSelect($myrow["username"]))
 				{
-					if ($pass == escapeSimpleSelect($myrow["password"]))
+					if (md5($pass) == escapeSimpleSelect($myrow["password"]))
 					{
 						// check if his/her account is active
 						$is_active = check_activity($myrow["user_id"]);
