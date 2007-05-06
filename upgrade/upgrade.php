@@ -1,72 +1,41 @@
 <?php
+session_start();
 //Flag for fixing relative path
 //See init.php to undestand it's logic
 $path2add=2;
 $require_admin = TRUE;
-include '../include/baseTheme.php';
-include 'document_upgrade.php';
-
-// encryption
-include '../modules/auth/auth.inc.php';
-$crypt = new Encryption;
-if((!isset($encryptkey)) || (empty($encryptkey)))
-{
-	$key1 = "eclass";
-}
-else
-{
-	$key1 = $encryptkey;
-}
-$pswdlen = "20";
-$auth_methods = array("imap","pop3","ldap","db");
-
 
 $nameTools = "Αναβάθμιση των βάσεων δεδομένων του e-Class";
+
+$auth_methods = array("imap","pop3","ldap","db");
+
 // Initialise $tool_content
 $tool_content = "";
-
 $fromadmin = true;
 
 if (isset($_POST['submit_upgrade'])) {
+	include('../config/config.php');
 	$fromadmin = false;
 }
 
-if((isset($_POST['password'])) && (!in_array($_POST['password'],$auth_methods))) {
-	if((isset($encryptkey)) || (!empty($encryptkey)))
-	$newpass = $crypt->encrypt($key1, $_POST['password'], $pswdlen);
-	else
-	$newpass = $_POST['password'];
-} else {
-	if((isset($uid)) && ($uid==1)) 	// means he is the main admin, doing the upgrade from the admin panel
-	{
-		// now get his password from DB
-		if($res = db_query("SELECT password FROM user WHERE user_id='1'"));
-		{
-			$row = mysql_fetch_array($res);
-			$passdb = $row[0]; // it is the encrypted password, do the decrypt process
-			$passdb_decrypted = $crypt->decrypt($key1, $row[0]);
-			$newpass = $passdb_decrypted;
-		}
-	}
-	else	// doing the upgrade from the url (not admin)
-	{
-		$newpass = $_POST['password'];
-	}
-}
 
-// error message
-if (isset($_POST['login']) and isset($_POST['password']) and !is_admin($_POST['login'], $newpass)) {
-	$tool_content .= "<p>Τα στοιχεία που δώσατε δεν αντιστοιχούν στο διαχειριστή του
+if((isset($_REQUEST['password'])) && (!in_array($_REQUEST['password'],$auth_methods))) {
+	//if $encryptedPasswd = true, then the passwords are hashed
+	if((isset($encryptedPasswd)) || (!empty($encryptedPasswd))) {
+		$newpass = md5($_REQUEST['password']);
+	} else { //else use plain text password since the passwords are not hashed
+		$newpass = $_REQUEST['password'];
+	}
+
+	if (!is_admin($_REQUEST['login'], $newpass, $mysqlMainDb)) {
+		die("<p>Τα στοιχεία που δώσατε δεν αντιστοιχούν στο διαχειριστή του
         συστήματος! Παρακαλούμε επιστρέψτε στην προηγούμενη σελίδα και ξαναδοκιμάστε.</p>
-        <center><a href=\"index.php\">Επιστροφή</a></center>";
-	draw($tool_content,0);
-	die();
+        <center><a href=\"index.php\">Επιστροφή</a></center>");
+	}
 }
 
-/* not needed ????
-if ($fromadmin)
-	include "../modules/admin/check_admin.inc";
-*/
+include '../include/baseTheme.php';
+include 'document_upgrade.php';
 
 //====================
 // Main body
@@ -102,51 +71,51 @@ if (!isset($diskQuotaDropbox)) {
 //  **********************
 //upgrade queries from 1.2 --> 1.4
 if (!mysql_field_exists("$mysqlMainDb", 'user', 'am'))
-	$tool_content .= add_field('user', 'am', "VARCHAR( 20 ) NOT NULL");
+$tool_content .= add_field('user', 'am', "VARCHAR( 20 ) NOT NULL");
 if (mysql_table_exists($mysqlMainDb, 'todo'))
-		db_query("DROP TABLE `todo`");
+db_query("DROP TABLE `todo`");
 // upgrade queries to 1.4
 if (!mysql_field_exists("$mysqlMainDb",'cours','type'))
-	$tool_content .= add_field('cours', 'type', "ENUM('pre', 'post', 'other') DEFAULT 'pre' NOT NULL");
+$tool_content .= add_field('cours', 'type', "ENUM('pre', 'post', 'other') DEFAULT 'pre' NOT NULL");
 if (!mysql_field_exists("$mysqlMainDb",'cours','doc_quota'))
-	$tool_content .= add_field('cours', 'doc_quota', "FLOAT DEFAULT '$diskQuotaDocument' NOT NULL");
+$tool_content .= add_field('cours', 'doc_quota', "FLOAT DEFAULT '$diskQuotaDocument' NOT NULL");
 if (!mysql_field_exists("$mysqlMainDb",'cours','video_quota'))
-	$tool_content .= add_field('cours', 'video_quota', "FLOAT DEFAULT '$diskQuotaVideo' NOT NULL");
+$tool_content .= add_field('cours', 'video_quota', "FLOAT DEFAULT '$diskQuotaVideo' NOT NULL");
 if (!mysql_field_exists("$mysqlMainDb",'cours','group_quota'))
-	$tool_content .= add_field('cours', 'group_quota', "FLOAT DEFAULT '$diskQuotaGroup' NOT NULL");
+$tool_content .= add_field('cours', 'group_quota', "FLOAT DEFAULT '$diskQuotaGroup' NOT NULL");
 // upgrade query to 1.6
 if (!mysql_field_exists("$mysqlMainDb",'cours','dropbox_quota'))
-	$tool_content .= add_field('cours', 'dropbox_quota', "FLOAT DEFAULT '$diskQuotaDropbox' NOT NULL");
+$tool_content .= add_field('cours', 'dropbox_quota', "FLOAT DEFAULT '$diskQuotaDropbox' NOT NULL");
 
 // ************************************
 // new queries - upgrade queries to 2.0
 // ************************************
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_objectives'))
-	$tool_content .= add_field('cours', 'course_objectives', "TEXT");
+$tool_content .= add_field('cours', 'course_objectives', "TEXT");
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_prerequisites'))
-	$tool_content .= add_field('cours', 'course_prerequisites', "TEXT");
+$tool_content .= add_field('cours', 'course_prerequisites', "TEXT");
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_references'))
-	$tool_content .= add_field('cours', 'course_references', "TEXT");
+$tool_content .= add_field('cours', 'course_references', "TEXT");
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_keywords'))
-	$tool_content .= add_field('cours', 'course_keywords', "TEXT");
+$tool_content .= add_field('cours', 'course_keywords', "TEXT");
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_addon'))
-	$tool_content .= add_field('cours', 'course_addon', "TEXT");
+$tool_content .= add_field('cours', 'course_addon', "TEXT");
 
 // kstratos - UOM
 // Add 1 new field into table 'prof_request', after the field 'profuname'
 $reg = time();
 $exp = 126144000 + $reg;
 if (!mysql_field_exists($mysqlMainDb,'prof_request','profpassword'))
-	$tool_content .= add_field('prof_request','profpassword',"VARCHAR(255)");
+$tool_content .= add_field('prof_request','profpassword',"VARCHAR(255)");
 // Add 2 new fields into table 'user': registered_at,expires_at
 if (!mysql_field_exists($mysqlMainDb,'user','registered_at'))
-	$tool_content .= add_field('user', 'registered_at', "INT(10) DEFAULT $reg NOT NULL");
+$tool_content .= add_field('user', 'registered_at', "INT(10) DEFAULT $reg NOT NULL");
 if (!mysql_field_exists($mysqlMainDb,'user','expires_at'))
-	$tool_content .= add_field('user', 'expires_at', "INT(10) DEFAULT $exp NOT NULL");
+$tool_content .= add_field('user', 'expires_at', "INT(10) DEFAULT $exp NOT NULL");
 
 // Add 2 new fields into table 'cours': password,faculteid
 if (!mysql_field_exists($mysqlMainDb,'cours','password'))
-	$tool_content .= add_field('cours', 'password', "VARCHAR(50)");
+$tool_content .= add_field('cours', 'password', "VARCHAR(50)");
 
 // vagpits: update cours.faculteid with id from faculte
 if (!mysql_field_exists($mysqlMainDb,'cours','faculteid')) {
@@ -236,24 +205,37 @@ if (!mysql_table_exists($mysqlMainDb, 'admin_announcements'))  {
 		) TYPE = MYISAM ", $mysqlMainDb);
 }
 
+
+#
+# Table passwd_reset (used by the password reset module)
+#
+if (!mysql_table_exists($mysqlMainDb, 'passwd_reset'))  {
+	db_query("
+			CREATE TABLE `passwd_reset` (
+  			`user_id` int(11) NOT NULL,
+  			`hash` varchar(40) NOT NULL,
+  			`password` varchar(8) NOT NULL,
+  			`datetime` datetime NOT NULL
+			) TYPE=MyISAM", $mysqlMainDb);
+}
+
 // add 5 new fields to table users
 if (!mysql_field_exists("$mysqlMainDb",'user','perso'))
-	$tool_content .= add_field('user', 'perso', "enum('yes','no') NOT NULL default 'no'");
+$tool_content .= add_field('user', 'perso', "enum('yes','no') NOT NULL default 'no'");
 if (!mysql_field_exists("$mysqlMainDb",'user','announce_flag'))
-	$tool_content .= add_field('user', 'announce_flag', "date NOT NULL default '0000-00-00'");
+$tool_content .= add_field('user', 'announce_flag', "date NOT NULL default '0000-00-00'");
 if (!mysql_field_exists("$mysqlMainDb",'user','doc_flag'))
-	$tool_content .= add_field('user', 'doc_flag', "date NOT NULL default '0000-00-00'");
+$tool_content .= add_field('user', 'doc_flag', "date NOT NULL default '0000-00-00'");
 if (!mysql_field_exists("$mysqlMainDb",'user','forum_flag'))
-	$tool_content .= add_field('user', 'forum_flag', "date NOT NULL default '0000-00-00'");
+$tool_content .= add_field('user', 'forum_flag', "date NOT NULL default '0000-00-00'");
 if (!mysql_field_exists("$mysqlMainDb",'user','lang'))
-	$tool_content .= add_field('user', 'lang', "ENUM('el', 'en') DEFAULT 'el' NOT NULL");
+$tool_content .= add_field('user', 'lang', "ENUM('el', 'en') DEFAULT 'el' NOT NULL");
 
 // add full text indexes for search operation
 @$tmp = mysql_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu` ,`code_cours`)");
 @$tmp = mysql_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_objectives`,`course_prerequisites` ,`course_keywords` ,`course_references`)");
 
 
-// encryption of passwords
 // Orismos $durationAccount sto config.php
 if((!isset($durationAccount)) || (empty($durationAccount))) {
 	@chmod( "../config",777 );
@@ -283,31 +265,32 @@ if((!isset($durationAccount)) || (empty($durationAccount))) {
 		OR registered_at='\N' OR registered_at=\N 
 		OR registered_at=''"))  {
 
-		while($row = mysql_fetch_array($res)) {
-			$registered_at = $row["registered_at"];
-			// do the update
-			$regtime = 126144000+time();
-			if(db_query("UPDATE user SET registered_at=".time().",expires_at=".$regtime)) {
-				$tool_content .= "Ενημέρωση του χρόνου λήξης λογαριασμού για τον χρήστη με id=".$row["user_id"].".Το κρυπτογραφημένο συνθηματικό είναι:".$newpass."<br />";
-			} else {
-				$tool_content .= "Δεν έγινε ενημέρωση για τον χρήστη με id=".$row["user_id"]."<br />";
-			}
+	while($row = mysql_fetch_array($res)) {
+		$registered_at = $row["registered_at"];
+		// do the update
+		$regtime = 126144000+time();
+		if(db_query("UPDATE user SET registered_at=".time().",expires_at=".$regtime)) {
+			$tool_content .= "Ενημέρωση του χρόνου λήξης λογαριασμού για τον χρήστη με id=".$row["user_id"].".Το κρυπτογραφημένο συνθηματικό είναι:".$newpass."<br />";
+		} else {
+			$tool_content .= "Δεν έγινε ενημέρωση για τον χρήστη με id=".$row["user_id"]."<br />";
 		}
 	}
-	else
-	{
-		die("Δεν έγινε ενημέρωση σε κανένα λογαριασμό χρήστη σχετικά με το χρόνο λήξης λογαριασμού. Η ενημέρωση θα συνεχιστεί κανονικά.");
-	}
+		}
+		else
+		{
+			die("Δεν έγινε ενημέρωση σε κανένα λογαριασμό χρήστη σχετικά με το χρόνο λήξης λογαριασμού. Η ενημέρωση θα συνεχιστεί κανονικά.");
+		}
 }  //end of duration account
 
 
-// Orismos $encryptkey sto config.php
-if((!isset($encryptkey)) || (empty($encryptkey))) {
+// Orismos $encryptdPasswd sto config.php so that hashed passwords do not get hashed more than once during
+//repitive upgrades
+if((!isset($encryptedPasswd)) || (empty($encryptedPasswd))) {
 	@chmod( "../config",777 );
 	@chmod( "../config", 0777 );
 	$has_encryption = 0;
 	$remove_this = "?>";
-	$text2 = "\$encryptkey = \"eclass\";\n";
+	$text2 = "\$encryptedPasswd = true;\n";
 	$fc=@file("../config/config.php");		//load file into $fc array
 	$f=fopen("../config/config.php","w");		//open same file and use "w" to clear file
 	foreach($fc as $line)		//loop through array using foreach
@@ -322,20 +305,21 @@ if((!isset($encryptkey)) || (empty($encryptkey))) {
 		}
 	}
 	fclose($f);
-	$tool_content .= "<tr><td><b>Ενημερώθηκε το config.php για το encryptkey</b></td></tr>";
+	$tool_content .= "<tr><td><b>Ενημερώθηκε το config.php για το encryptedPasswd (κρυπογραφηση συνθηματικών)</b></td></tr>";
 
 	// update all the records in user table
 	if($res = db_query("SELECT user_id,password FROM user")) {
 		while($row = mysql_fetch_array($res)) {
 			$pass = $row["password"];
-			
-  		if( (strstr($pass, "'")) or (strstr($pass, '"')) or (strstr($pass, '\\')) )
-  		{
+
+			if( (strstr($pass, "'")) or (strstr($pass, '"')) or (strstr($pass, '\\')) )
+			{
 				$tool_content .= "Δεν έγινε κρυπτογράφηση του συνθηματικού του χρήστη με id=".$row["user_id"]." (άκυροι χαρακτήρες στο συνθηματικό)<br />";
 				continue; // get the next one
 			}
-			$newpass = $crypt->encrypt($key1, $pass, $pswdlen);
+			//			$newpass = md5($pass);
 			if(!in_array($pass,$auth_methods)) {
+				$newpass = md5($pass);
 				// do the update
 				if(db_query("UPDATE user SET password = '".$newpass."' WHERE user_id=".$row["user_id"])) {
 					$tool_content .= "Το συνθηματικό του χρήστη με id=".$row["user_id"].".ενημερώθηκε. Το κρυπτογραφημένο συνθηματικό είναι:".$newpass."<br />";
@@ -385,9 +369,9 @@ while ($code = mysql_fetch_row($res)) {
 	$newfilecontents = preg_replace('#../claroline/#','../../modules/',$filecontents);
 	$fp = @fopen("index.php","w");
 	if (!$fp)
-		die ("To αρχείο δεν μπόρεσε να διαβαστεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
+	die ("To αρχείο δεν μπόρεσε να διαβαστεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
 	if (!@fwrite($fp, $newfilecontents))
-		die ("Το αρχείο δεν μπόρεσε να τροποποιηθεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
+	die ("Το αρχείο δεν μπόρεσε να τροποποιηθεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
 	fclose($fp);
 	// Fixed By vagpits
 	if (!@chdir("$webDir/upgrade")) {
@@ -397,17 +381,17 @@ while ($code = mysql_fetch_row($res)) {
 	$tool_content .= "<tr><td><b>Αναβάθμιση μαθήματος $code[0]</b><br>";
 	mysql_select_db($code[0]);
 
-// *******************
-// old upgrade queries 
-// ***********************
-// upgrade queries from 1.2 --> 1.4
+	// *******************
+	// old upgrade queries
+	// ***********************
+	// upgrade queries from 1.2 --> 1.4
 
 	if (!mysql_field_exists('$code[0]','exercices','type'))
-		$tool_content .= add_field('exercices','type',"TINYINT( 4 ) UNSIGNED DEFAULT '1' NOT NULL AFTER `description`");
+	$tool_content .= add_field('exercices','type',"TINYINT( 4 ) UNSIGNED DEFAULT '1' NOT NULL AFTER `description`");
 	if (!mysql_field_exists('$code[0]','exercices','random'))
-		$tool_content .= add_field('exercices','random',"SMALLINT( 6 ) DEFAULT '0' NOT NULL AFTER `type`");
+	$tool_content .= add_field('exercices','random',"SMALLINT( 6 ) DEFAULT '0' NOT NULL AFTER `type`");
 	if (!mysql_field_exists('$code[0]','reponses','ponderation'))
-		$tool_content .= add_field('reponses','ponderation',"SMALLINT( 5 ) NOT NULL AFTER `comment`");
+	$tool_content .= add_field('reponses','ponderation',"SMALLINT( 5 ) NOT NULL AFTER `comment`");
 	$s = db_query("SELECT type FROM questions",$code[0]);
 	while ($f = mysql_fetch_row($s)) {
 		if (empty($f[0]))  {
@@ -464,7 +448,7 @@ while ($code = mysql_fetch_row($res)) {
                description text,
                visibility CHAR(1) DEFAULT '1' NOT NULL,
                PRIMARY KEY (id))", $code[0]);
-	db_query("UPDATE accueil SET
+		db_query("UPDATE accueil SET
                rubrique='$langVideoLinks',
                lien='.././modules/video/videolinks.php',
                image='../../../images/videos.png',
@@ -504,7 +488,7 @@ while ($code = mysql_fetch_row($res)) {
 	// for dropbox
 	$langDropbox = "Χώρος Ανταλλαγής Αρχείων";
 	if (!mysql_table_exists($code[0], 'dropbox_file'))  {
-			db_query("INSERT INTO accueil VALUES (
+		db_query("INSERT INTO accueil VALUES (
                 16,
 								'$langDropbox',
 								'../../modules/dropbox/index.php',
@@ -540,10 +524,10 @@ while ($code = mysql_fetch_row($res)) {
           PRIMARY KEY  (fileId,recipientId))", $code[0]);
 	}
 
-// ******************************
-// new queries
-// *****************************
-// upgrade queries for e-Class 2.0
+	// ******************************
+	// new queries
+	// *****************************
+	// upgrade queries for e-Class 2.0
 
 	$sql = 'SELECT id, titre, contenu, day, hour, lasting
                 FROM  agenda WHERE CONCAT(titre,contenu) != \'\'
@@ -581,7 +565,7 @@ while ($code = mysql_fetch_row($res)) {
 	// end of agenda
 
 
-// Learning Path tables
+	// Learning Path tables
 
 	$langLearnPath = "Γραμμή Μάθησης";
 	if (!mysql_table_exists($code[0], 'lp_module'))  {
@@ -654,8 +638,8 @@ while ($code = mysql_fetch_row($res)) {
               PRIMARY KEY  (`user_module_progress_id`)
             ) ", $code[0]); //TYPE=MyISAM COMMENT='Record the last known status of the user in the course';
 	}
-	
-// Wiki tables
+
+	// Wiki tables
 
 	$langWiki = "Wiki";
 	if (!mysql_table_exists($code[0], 'wiki_properties'))  {
@@ -667,7 +651,7 @@ while ($code = mysql_fetch_row($res)) {
               PRIMARY KEY(`id`)
              ) ", $code[0]);
 	}
-	
+
 	if (!mysql_table_exists($code[0], 'wiki_acls'))  {
 		db_query("CREATE TABLE `wiki_acls` (
               `wiki_id` INT(11) UNSIGNED NOT NULL,
@@ -675,7 +659,7 @@ while ($code = mysql_fetch_row($res)) {
               `value` ENUM('false','true') NOT NULL DEFAULT 'false'
              ) ", $code[0]);
 	}
-	
+
 	if (!mysql_table_exists($code[0], 'wiki_pages'))  {
 		db_query("CREATE TABLE `wiki_pages` (
               `id` int(11) unsigned NOT NULL auto_increment,
@@ -688,7 +672,7 @@ while ($code = mysql_fetch_row($res)) {
               PRIMARY KEY  (`id`)
              ) ", $code[0]);
 	}
-	
+
 	if (!mysql_table_exists($code[0], 'wiki_pages_content'))  {
 		db_query("CREATE TABLE `wiki_pages_content` (
               `id` int(11) unsigned NOT NULL auto_increment,
@@ -700,7 +684,7 @@ while ($code = mysql_fetch_row($res)) {
              ) ", $code[0]);
 	}
 
-// questionnaire tables
+	// questionnaire tables
 	if (!mysql_table_exists($code[0], 'survey'))  {
 		db_query("CREATE TABLE `survey` (
 		`sid` bigint(14) NOT NULL auto_increment,
@@ -801,7 +785,7 @@ while ($code = mysql_fetch_row($res)) {
 	}
 
 
-//  usage tables
+	//  usage tables
 	if (!mysql_table_exists($code[0], 'actions')) {
 		db_query("CREATE TABLE actions (
 	        id int(11) NOT NULL auto_increment,
@@ -812,7 +796,7 @@ while ($code = mysql_fetch_row($res)) {
           duration int(11) NOT NULL,
          	PRIMARY KEY (id))", $code[0]);
 	}
-	
+
 
 	if (!mysql_table_exists($code[0], 'logins')) {
 		db_query("CREATE TABLE logins (
@@ -822,9 +806,9 @@ while ($code = mysql_fetch_row($res)) {
             date_time DATETIME NOT NULL default '0000-00-00 00:00:00',
          	PRIMARY KEY (id))", $code[0]);
 	}
-	
 
-	
+
+
 	if (!mysql_table_exists($code[0], 'action_types')) {
 		db_query("CREATE TABLE action_types (
 						id int(11) NOT NULL auto_increment,
@@ -859,98 +843,98 @@ while ($code = mysql_fetch_row($res)) {
 	) ", $code[0]); //TYPE=MyISAM COMMENT='For the exercise module';
 	}
 
-// Upgrading EXERCICES table for new func of EXERCISE module
-  if (!mysql_field_exists("$code[0]",'exercices','StartDate'))
-	    $tool_content .= add_field_after_field('exercices', 'StartDate', 'type', "DATETIME");
-  if (!mysql_field_exists("$code[0]",'exercices','EndDate'))
-	    $tool_content .= add_field_after_field('exercices', 'EndDate', 'StartDate', "DATETIME");
-  if (!mysql_field_exists("$code[0]",'exercices','TimeConstrain'))
-	    $tool_content .= add_field_after_field('exercices', 'TimeConstrain', 'EndDate', "INT(11)");
-  if (!mysql_field_exists("$code[0]",'exercices','AttemptsAllowed'))
-	    $tool_content .= add_field_after_field('exercices', 'AttemptsAllowed', 'TimeConstrain', "INT(11)");
+	// Upgrading EXERCICES table for new func of EXERCISE module
+	if (!mysql_field_exists("$code[0]",'exercices','StartDate'))
+	$tool_content .= add_field_after_field('exercices', 'StartDate', 'type', "DATETIME");
+	if (!mysql_field_exists("$code[0]",'exercices','EndDate'))
+	$tool_content .= add_field_after_field('exercices', 'EndDate', 'StartDate', "DATETIME");
+	if (!mysql_field_exists("$code[0]",'exercices','TimeConstrain'))
+	$tool_content .= add_field_after_field('exercices', 'TimeConstrain', 'EndDate', "INT(11)");
+	if (!mysql_field_exists("$code[0]",'exercices','AttemptsAllowed'))
+	$tool_content .= add_field_after_field('exercices', 'AttemptsAllowed', 'TimeConstrain', "INT(11)");
 
 
-// add new document fields
-  if (!mysql_field_exists("$code[0]",'document','filename'))
-    $tool_content .= add_field('document', 'filename', "TEXT");
-  if (!mysql_field_exists("$code[0]",'document','category'))
-    $tool_content .= add_field('document', 'category', "TEXT");
-  if (!mysql_field_exists("$code[0]",'document','title'))
-    $tool_content .= add_field('document', 'title', "TEXT");
-  if (!mysql_field_exists("$code[0]",'document','creator'))
-    $tool_content .= add_field('document', 'creator', "TEXT");
-  if (!mysql_field_exists("$code[0]",'document','date'))
-    $tool_content .= add_field('document', 'date', "DATETIME");
-  if (!mysql_field_exists("$code[0]",'document','date_modified'))
-    $tool_content .= add_field('document', 'date_modified', "DATETIME");
-  if (!mysql_field_exists("$code[0]",'document','subject'))
-    $tool_content .= add_field('document', 'subject', "TEXT");
-  if (!mysql_field_exists("$code[0]",'document','description'))
-    $tool_content .= add_field('document', 'description', "TEXT");
-  if (!mysql_field_exists("$code[0]",'document','author'))
-    $tool_content .= add_field('document', 'author', "TEXT");
-  if (!mysql_field_exists("$code[0]",'document','format'))
-    $tool_content .= add_field('document', 'format', "TEXT");
-  if (!mysql_field_exists("$code[0]",'document','language'))
-    $tool_content .= add_field('document', 'language', "TEXT");
-  if (!mysql_field_exists("$code[0]",'document','copyrighted'))
-    $tool_content .= add_field('document', 'copyrighted', "TEXT");
+	// add new document fields
+	if (!mysql_field_exists("$code[0]",'document','filename'))
+	$tool_content .= add_field('document', 'filename', "TEXT");
+	if (!mysql_field_exists("$code[0]",'document','category'))
+	$tool_content .= add_field('document', 'category', "TEXT");
+	if (!mysql_field_exists("$code[0]",'document','title'))
+	$tool_content .= add_field('document', 'title', "TEXT");
+	if (!mysql_field_exists("$code[0]",'document','creator'))
+	$tool_content .= add_field('document', 'creator', "TEXT");
+	if (!mysql_field_exists("$code[0]",'document','date'))
+	$tool_content .= add_field('document', 'date', "DATETIME");
+	if (!mysql_field_exists("$code[0]",'document','date_modified'))
+	$tool_content .= add_field('document', 'date_modified', "DATETIME");
+	if (!mysql_field_exists("$code[0]",'document','subject'))
+	$tool_content .= add_field('document', 'subject', "TEXT");
+	if (!mysql_field_exists("$code[0]",'document','description'))
+	$tool_content .= add_field('document', 'description', "TEXT");
+	if (!mysql_field_exists("$code[0]",'document','author'))
+	$tool_content .= add_field('document', 'author', "TEXT");
+	if (!mysql_field_exists("$code[0]",'document','format'))
+	$tool_content .= add_field('document', 'format', "TEXT");
+	if (!mysql_field_exists("$code[0]",'document','language'))
+	$tool_content .= add_field('document', 'language', "TEXT");
+	if (!mysql_field_exists("$code[0]",'document','copyrighted'))
+	$tool_content .= add_field('document', 'copyrighted', "TEXT");
 
 
-// upgrade course documents directory
-  $baseFolder = "$webDir/courses/".$code[0]."/document";
-  $tmpfldr = getcwd();
-  if (!@chdir("$webDir/courses/".$code[0]."/document")) {
-    die("Can't enter document course folder!");
-  }
+	// upgrade course documents directory
+	$baseFolder = "$webDir/courses/".$code[0]."/document";
+	$tmpfldr = getcwd();
+	if (!@chdir("$webDir/courses/".$code[0]."/document")) {
+		die("Can't enter document course folder!");
+	}
 
-//function gia anavathmisi twn arxeiwn se kathe course
-  //*** proypothetei oti exei proepilegei h DB tou mathimatos kai pws to CWD einai o fakelos document tou mathimatos (p.x. .../eclass/courses/TMA100/document/) ***
-  RecurseDir(getcwd(), $baseFolder);
-  //epistrofh sto prohgoumeno getcwd()
-  chdir($tmpfldr);
+	//function gia anavathmisi twn arxeiwn se kathe course
+	//*** proypothetei oti exei proepilegei h DB tou mathimatos kai pws to CWD einai o fakelos document tou mathimatos (p.x. .../eclass/courses/TMA100/document/) ***
+	RecurseDir(getcwd(), $baseFolder);
+	//epistrofh sto prohgoumeno getcwd()
+	chdir($tmpfldr);
 
 
-// Upgrading VIDEO table for new func of VIDEO module
-  if (!mysql_field_exists("$code[0]",'video','creator'))
-    $tool_content .= add_field_after_field('video', 'creator', 'description', "VARCHAR(255)");
-  if (!mysql_field_exists("$code[0]",'video','publisher'))
-    $tool_content .= add_field_after_field('video', 'publisher', 'creator',"VARCHAR(255)");
-  if (!mysql_field_exists("$code[0]",'video','date'))
-    $tool_content .= add_field_after_field('video', 'date', 'publisher',"DATETIME");
-  if (!mysql_field_exists("$code[0]",'videolinks','creator'))
-    $tool_content .= add_field_after_field('videolinks', 'creator', 'description', "VARCHAR(255)");
-  if (!mysql_field_exists("$code[0]",'videolinks','publisher'))
-    $tool_content .= add_field_after_field('videolinks', 'publisher', 'creator',"VARCHAR(255)");
-  if (!mysql_field_exists("$code[0]",'videolinks','date'))
-    $tool_content .= add_field_after_field('videolinks', 'date', 'publisher',"DATETIME");
+	// Upgrading VIDEO table for new func of VIDEO module
+	if (!mysql_field_exists("$code[0]",'video','creator'))
+	$tool_content .= add_field_after_field('video', 'creator', 'description', "VARCHAR(255)");
+	if (!mysql_field_exists("$code[0]",'video','publisher'))
+	$tool_content .= add_field_after_field('video', 'publisher', 'creator',"VARCHAR(255)");
+	if (!mysql_field_exists("$code[0]",'video','date'))
+	$tool_content .= add_field_after_field('video', 'date', 'publisher',"DATETIME");
+	if (!mysql_field_exists("$code[0]",'videolinks','creator'))
+	$tool_content .= add_field_after_field('videolinks', 'creator', 'description', "VARCHAR(255)");
+	if (!mysql_field_exists("$code[0]",'videolinks','publisher'))
+	$tool_content .= add_field_after_field('videolinks', 'publisher', 'creator',"VARCHAR(255)");
+	if (!mysql_field_exists("$code[0]",'videolinks','date'))
+	$tool_content .= add_field_after_field('videolinks', 'date', 'publisher',"DATETIME");
 
-  if (is_dir("$webDir/$code[0]/video")) {
-    rename ("$webDir/$code[0]/video", "$webDir/video/$code[0]") or
-    die ("Could not rename directory");
-  }
+	if (is_dir("$webDir/$code[0]/video")) {
+		rename ("$webDir/$code[0]/video", "$webDir/video/$code[0]") or
+		die ("Could not rename directory");
+	}
 
-// upgrading accueil table
+	// upgrading accueil table
 
 	//  create new column (define_var)
 	$tool_content .= add_field("accueil","define_var", "VARCHAR(50) NOT NULL");
 
 	//BEGIN: Move all external links to id > 100
 
-		if (db_query("UPDATE IGNORE `accueil`
+	if (db_query("UPDATE IGNORE `accueil`
                     SET `id` = `id` + 80
                     WHERE `id`>20", $code[0])) {
-							$tool_content .= "Όλοι οι εξωτερικοί (με id >= 20) σύνδεσμοι μετακινήθηκαν με id >=101<br>";
-	    } else {
-              $tool_content .= "Δεν μετακινήθηκαν οι εξωτερικοί σύνδεσμοι<br>";
-             	$GLOBALS['errors']++;
-       }
+	$tool_content .= "Όλοι οι εξωτερικοί (με id >= 20) σύνδεσμοι μετακινήθηκαν με id >=101<br>";
+                    } else {
+                    	$tool_content .= "Δεν μετακινήθηκαν οι εξωτερικοί σύνδεσμοι<br>";
+                    	$GLOBALS['errors']++;
+                    }
 
-	//END: Move all external links to id > 100
+                    //END: Move all external links to id > 100
 
-	// id νέων υποσυστημάτων
-	$langQuestionnaire = "Ερωτηματολόγιο";
-	db_query("INSERT IGNORE INTO accueil VALUES (
+                    // id νέων υποσυστημάτων
+                    $langQuestionnaire = "Ερωτηματολόγιο";
+                    db_query("INSERT IGNORE INTO accueil VALUES (
                 21,																
                 '$langQuestionnaire',
                 '../../modules/questionnaire/questionnaire.php',
@@ -960,8 +944,8 @@ while ($code = mysql_fetch_row($res)) {
                 '../../../images/pastillegris.png',
                 'MODULE_ID_QUESTIONNAIRE'
          )", $code[0]);
-	
-	db_query("INSERT IGNORE INTO accueil VALUES (
+
+                    db_query("INSERT IGNORE INTO accueil VALUES (
                 23,
                 '$langLearnPath',
                 '../../modules/learnPath/learningPathList.php',
@@ -972,8 +956,8 @@ while ($code = mysql_fetch_row($res)) {
                 'MODULE_ID_LP'
          )", $code[0]);
 
-	$langUsageModule = "Στατιστικά Χρήσης";
-	db_query("INSERT IGNORE INTO accueil VALUES (
+                    $langUsageModule = "Στατιστικά Χρήσης";
+                    db_query("INSERT IGNORE INTO accueil VALUES (
                 '24',
                 '$langUsageModule',
                 '../../modules/usage/usage.php',
@@ -983,8 +967,8 @@ while ($code = mysql_fetch_row($res)) {
                 '../../../images/pastillegris.png',
                 'MODULE_ID_USAGE')", $code[0]);
 
-	$langToolManagement = "Διαχείριση εργαλείων";
-	db_query("INSERT IGNORE INTO accueil VALUES (
+                    $langToolManagement = "Διαχείριση εργαλείων";
+                    db_query("INSERT IGNORE INTO accueil VALUES (
                 25,
                 '$langToolManagement',
                 '../../modules/course_tools/course_tools.php',
@@ -994,8 +978,8 @@ while ($code = mysql_fetch_row($res)) {
                 '../../../images/pastillegris.png',
                 'MODULE_ID_TOOLADMIN'
                 )", $code[0]);
-                
-	db_query("INSERT IGNORE INTO accueil VALUES (
+
+                    db_query("INSERT IGNORE INTO accueil VALUES (
                 26,
                 '$langWiki',
                 '../../modules/wiki/wiki.php',
@@ -1006,159 +990,159 @@ while ($code = mysql_fetch_row($res)) {
                 'MODULE_ID_WIKI'
          )", $code[0]);
 
-	
-	//remove entries modules import, external, videolinks, old statistics  
-	$sql = 'DELETE FROM accueil WHERE (id = 12 OR id = 13 OR id = 11 OR id=6)';
-	db_query($sql);
 
-	//correct agenda link
-	update_field("accueil", "lien", "../../modules/agenda/agenda.php", "id", 1);
+                    //remove entries modules import, external, videolinks, old statistics
+                    $sql = 'DELETE FROM accueil WHERE (id = 12 OR id = 13 OR id = 11 OR id=6)';
+                    db_query($sql);
 
-	//set define string vars
-	update_field("accueil", "define_var","MODULE_ID_AGENDA", "id", 1);
-	update_field("accueil", "define_var","MODULE_ID_LINKS", "id",	2);
-	update_field("accueil", "define_var","MODULE_ID_DOCS", "id", 3);
-	update_field("accueil", "define_var","MODULE_ID_VIDEO", "id", 4);
-	update_field("accueil", "define_var","MODULE_ID_ASSIGN", "id", 5);
-	update_field("accueil", "define_var","MODULE_ID_ANNOUNCE", "id", 7);
-	update_field("accueil", "define_var","MODULE_ID_USERS", "id",	8);
-	update_field("accueil", "define_var","MODULE_ID_FORUM", "id", 9);
-	update_field("accueil", "define_var","MODULE_ID_EXERCISE", "id", 10);
-	update_field("accueil", "define_var","MODULE_ID_STAT", "id", 11);
-	update_field("accueil", "define_var","MODULE_ID_IMPORT", "id", 12);
-	update_field("accueil", "define_var","MODULE_ID_EXTERNAL", "id", 13);
-	update_field("accueil", "define_var","MODULE_ID_COURSEINFO", "id", 14);
-	update_field("accueil", "define_var","MODULE_ID_GROUPS", "id", 15);
-	update_field("accueil", "define_var","MODULE_ID_DROPBOX", "id", 16);
-	update_field("accueil", "define_var","MODULE_ID_CHAT", "id", 	19);
-	update_field("accueil", "define_var","MODULE_ID_DESCRIPTION","id", 20);
+                    //correct agenda link
+                    update_field("accueil", "lien", "../../modules/agenda/agenda.php", "id", 1);
 
-	$sql = db_query("SELECT id,lien,image,address FROM accueil");
-	while ($u = mysql_fetch_row($sql))  {
-		$oldlink_lien = $u[1];
-		$newlink_lien = preg_replace('#../claroline/#','../../modules/',$oldlink_lien);
-		$oldlink_image = $u[2];
-		$newlink_image = preg_replace('#../claroline/image/#','../../images/',$oldlink_image);
-		$oldlink_address = $u[3];
-		$newlink_address = preg_replace('#../claroline/image/#','../../images/',$oldlink_address);
-		if (db_query("UPDATE accueil SET lien='$newlink_lien', image='$newlink_image', address='$newlink_address'
+                    //set define string vars
+                    update_field("accueil", "define_var","MODULE_ID_AGENDA", "id", 1);
+                    update_field("accueil", "define_var","MODULE_ID_LINKS", "id",	2);
+                    update_field("accueil", "define_var","MODULE_ID_DOCS", "id", 3);
+                    update_field("accueil", "define_var","MODULE_ID_VIDEO", "id", 4);
+                    update_field("accueil", "define_var","MODULE_ID_ASSIGN", "id", 5);
+                    update_field("accueil", "define_var","MODULE_ID_ANNOUNCE", "id", 7);
+                    update_field("accueil", "define_var","MODULE_ID_USERS", "id",	8);
+                    update_field("accueil", "define_var","MODULE_ID_FORUM", "id", 9);
+                    update_field("accueil", "define_var","MODULE_ID_EXERCISE", "id", 10);
+                    update_field("accueil", "define_var","MODULE_ID_STAT", "id", 11);
+                    update_field("accueil", "define_var","MODULE_ID_IMPORT", "id", 12);
+                    update_field("accueil", "define_var","MODULE_ID_EXTERNAL", "id", 13);
+                    update_field("accueil", "define_var","MODULE_ID_COURSEINFO", "id", 14);
+                    update_field("accueil", "define_var","MODULE_ID_GROUPS", "id", 15);
+                    update_field("accueil", "define_var","MODULE_ID_DROPBOX", "id", 16);
+                    update_field("accueil", "define_var","MODULE_ID_CHAT", "id", 	19);
+                    update_field("accueil", "define_var","MODULE_ID_DESCRIPTION","id", 20);
+
+                    $sql = db_query("SELECT id,lien,image,address FROM accueil");
+                    while ($u = mysql_fetch_row($sql))  {
+                    	$oldlink_lien = $u[1];
+                    	$newlink_lien = preg_replace('#../claroline/#','../../modules/',$oldlink_lien);
+                    	$oldlink_image = $u[2];
+                    	$newlink_image = preg_replace('#../claroline/image/#','../../images/',$oldlink_image);
+                    	$oldlink_address = $u[3];
+                    	$newlink_address = preg_replace('#../claroline/image/#','../../images/',$oldlink_address);
+                    	if (db_query("UPDATE accueil SET lien='$newlink_lien', image='$newlink_image', address='$newlink_address'
                     WHERE id='$u[0]'")) {
-		$tool_content .= "Εγγραφή με id $u[0] του πίνακα <b>accueil</b>: $OK<br>";
+                    	$tool_content .= "Εγγραφή με id $u[0] του πίνακα <b>accueil</b>: $OK<br>";
                     } else {
                     	$tool_content .= "Εγγραφή με id $u[0] του πίνακα <b>accueil</b>: $BAD<br>";
                     	$errors++;
                     }
-	}
+                    }
 
-	//Move Users module from public to course-admin tools
-	$sql = 'UPDATE `accueil` SET `visible` = \'0\', `admin` = \'1\' WHERE `id` = 8 LIMIT 1';
-	db_query($sql);
+                    //Move Users module from public to course-admin tools
+                    $sql = 'UPDATE `accueil` SET `visible` = \'0\', `admin` = \'1\' WHERE `id` = 8 LIMIT 1';
+                    db_query($sql);
 
-	// update menu entries with new messages
-	$langModifyInfoNew = "Διαχείριση Μαθήματος";
-	$langAddPageHomeNew= "Ανέβασμα Ιστοσελίδας";
-	update_field("accueil", "rubrique", "$langModifyInfoNew", "id", 14);
-	update_field("accueil", "rubrique", "$langAddPageHomeNew", "id", 12);
+                    // update menu entries with new messages
+                    $langModifyInfoNew = "Διαχείριση Μαθήματος";
+                    $langAddPageHomeNew= "Ανέβασμα Ιστοσελίδας";
+                    update_field("accueil", "rubrique", "$langModifyInfoNew", "id", 14);
+                    update_field("accueil", "rubrique", "$langAddPageHomeNew", "id", 12);
 
-	//set the new images for the icons of lesson modules
-	update_field("accueil", "image","calendar", "id", 1);
-	update_field("accueil", "image","links", "id",	2);
-	update_field("accueil", "image","docs", "id",	 3);
-	update_field("accueil", "image","video", "id",	4);
-	update_field("accueil", "image","assignments", "id",5);
-	update_field("accueil", "image","announcements", "id",7);
-	update_field("accueil", "image","users", "id", 8);
-	update_field("accueil", "image","forum", "id", 9);
-	update_field("accueil", "image","exercise", "id", 10);
-	update_field("accueil", "image","stat", "id", 11);
-	update_field("accueil", "image","course_info", "id",	14);
-	update_field("accueil", "image","groups", "id", 15);
-	update_field("accueil", "image","dropbox", "id", 16);
-	update_field("accueil", "image","chat", "id", 19);
-	update_field("accueil", "image","description", "id",	20);
-	update_field("accueil", "image","questionnaire", "id", 21);
-	update_field("accueil", "image","lp", "id", 23);
-	update_field("accueil", "image","usage", "id", 24);
-	update_field("accueil", "image","tooladmin", "id", 25);
-	update_field("accueil", "image","wiki", "id", 26);
+                    //set the new images for the icons of lesson modules
+                    update_field("accueil", "image","calendar", "id", 1);
+                    update_field("accueil", "image","links", "id",	2);
+                    update_field("accueil", "image","docs", "id",	 3);
+                    update_field("accueil", "image","video", "id",	4);
+                    update_field("accueil", "image","assignments", "id",5);
+                    update_field("accueil", "image","announcements", "id",7);
+                    update_field("accueil", "image","users", "id", 8);
+                    update_field("accueil", "image","forum", "id", 9);
+                    update_field("accueil", "image","exercise", "id", 10);
+                    update_field("accueil", "image","stat", "id", 11);
+                    update_field("accueil", "image","course_info", "id",	14);
+                    update_field("accueil", "image","groups", "id", 15);
+                    update_field("accueil", "image","dropbox", "id", 16);
+                    update_field("accueil", "image","chat", "id", 19);
+                    update_field("accueil", "image","description", "id",	20);
+                    update_field("accueil", "image","questionnaire", "id", 21);
+                    update_field("accueil", "image","lp", "id", 23);
+                    update_field("accueil", "image","usage", "id", 24);
+                    update_field("accueil", "image","tooladmin", "id", 25);
+                    update_field("accueil", "image","wiki", "id", 26);
 
-	// remove table 'introduction' entries and insert them in table 'cours' (field 'description') in eclass main database
-	// after that drop table introduction
-	if (mysql_table_exists($code[0], 'introduction')) {
-		$sql = db_query("SELECT texte_intro FROM introduction", $code[0]);
-		while ($text = mysql_fetch_array($sql)) {
-			if (db_query("UPDATE cours SET description='$text[0]' WHERE code='$code[0]'", $mysqlMainDb)) {
-				$tool_content .= "Μεταφορά του εισαγωγικού κειμένου <b>$text[0]</b> στον πίνακα <b>cours</b>: $OK<br>";
-				db_query("DROP TABLE introduction", $code[0]);
-			} else {
-				$tool_content .= "Μεταφορά του εισαγωγικού κειμένου <b>$text[0]</b> στον πίνακα <b>cours</b>: $BAD<br>";
-				$errors++;
-			}
-		}
-	} // end of table introduction
-	
-// remove table 'cours_description' entries and insert them in table 'cours' 
-// after that drop table cours_description
-/*
-if (mysql_table_exists($code[0], 'course_description')) {
-	// description
-	$sql = db_query("SELECT content FROM course_description WHERE id='0'", $code[0]);
-	while ($cdesc = mysql_fetch_array($sql))  
-		db_query("UPDATE cours SET description='$cdesc[0]' WHERE code='$code[0]'", $mysqlMainDb)); 
-	$sql = db_query("SELECT content FROM course_description WHERE id='1'", $code[0]);
-	while ($cdesc = mysql_fetch_array($sql))  
-		db_query("UPDATE cours SET cours_objectives='$cdesc[0]' WHERE code='$code[0]'", $mysqlMainDb); 
-	$sql = db_query("SELECT content FROM course_description WHERE id='2'", $code[0]);
-	while ($cdesc = mysql_fetch_array($sql))  
-		db_query("UPDATE cours SET cours_prerequisites='$cdesc[0]' WHERE code='$code[0]'", $mysqlMainDb); 
-	$sql = db_query("SELECT content FROM course_description WHERE id='3'", $code[0]);
-	while ($cdesc = mysql_fetch_array($sql))  
-		db_query("UPDATE cours SET course_keywords='$cdesc[0]' WHERE code='$code[0]'", $mysqlMainDb); 
-	$sql = db_query("SELECT content FROM course_description WHERE id='4'", $code[0]);
-	while ($cdesc = mysql_fetch_array($sql)) 
-		db_query("UPDATE cours SET course_references='$cdesc[0]' WHERE code='$code[0]'", $mysqlMainDb); 
+                    // remove table 'introduction' entries and insert them in table 'cours' (field 'description') in eclass main database
+                    // after that drop table introduction
+                    if (mysql_table_exists($code[0], 'introduction')) {
+                    	$sql = db_query("SELECT texte_intro FROM introduction", $code[0]);
+                    	while ($text = mysql_fetch_array($sql)) {
+                    		if (db_query("UPDATE cours SET description='$text[0]' WHERE code='$code[0]'", $mysqlMainDb)) {
+                    			$tool_content .= "Μεταφορά του εισαγωγικού κειμένου <b>$text[0]</b> στον πίνακα <b>cours</b>: $OK<br>";
+                    			db_query("DROP TABLE introduction", $code[0]);
+                    		} else {
+                    			$tool_content .= "Μεταφορά του εισαγωγικού κειμένου <b>$text[0]</b> στον πίνακα <b>cours</b>: $BAD<br>";
+                    			$errors++;
+                    		}
+                    	}
+                    } // end of table introduction
 
-	db_query("DROP TABLE course_description", $code[0]);	
+                    // remove table 'cours_description' entries and insert them in table 'cours'
+                    // after that drop table cours_description
+                    /*
+                    if (mysql_table_exists($code[0], 'course_description')) {
+                    // description
+                    $sql = db_query("SELECT content FROM course_description WHERE id='0'", $code[0]);
+                    while ($cdesc = mysql_fetch_array($sql))
+                    db_query("UPDATE cours SET description='$cdesc[0]' WHERE code='$code[0]'", $mysqlMainDb));
+                    $sql = db_query("SELECT content FROM course_description WHERE id='1'", $code[0]);
+                    while ($cdesc = mysql_fetch_array($sql))
+                    db_query("UPDATE cours SET cours_objectives='$cdesc[0]' WHERE code='$code[0]'", $mysqlMainDb);
+                    $sql = db_query("SELECT content FROM course_description WHERE id='2'", $code[0]);
+                    while ($cdesc = mysql_fetch_array($sql))
+                    db_query("UPDATE cours SET cours_prerequisites='$cdesc[0]' WHERE code='$code[0]'", $mysqlMainDb);
+                    $sql = db_query("SELECT content FROM course_description WHERE id='3'", $code[0]);
+                    while ($cdesc = mysql_fetch_array($sql))
+                    db_query("UPDATE cours SET course_keywords='$cdesc[0]' WHERE code='$code[0]'", $mysqlMainDb);
+                    $sql = db_query("SELECT content FROM course_description WHERE id='4'", $code[0]);
+                    while ($cdesc = mysql_fetch_array($sql))
+                    db_query("UPDATE cours SET course_references='$cdesc[0]' WHERE code='$code[0]'", $mysqlMainDb);
 
-} // end of table 'cours_description'
-	
-	*/
+                    db_query("DROP TABLE course_description", $code[0]);
 
-$tool_content .= "<br><br></td></tr>";
+                    } // end of table 'cours_description'
 
-// add full text indexes for search operation (ginetai xrhsh @$tmp = mysql_query(...) giati ean
-// yparxei hdh, to FULL INDEX den mporei na ksanadhmiourgithei. epipleon, den yparxei tropos
-// elegxou gia to an yparxei index, opote o monadikos tropos diekperaiwshs ths ergasias einai
-// dokimh-sfalma.
-@$tmp = mysql_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");
-@$tmp = mysql_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)");
-@$tmp = mysql_query("ALTER TABLE `document` ADD FULLTEXT `document` (`filename` ,`comment` ,`title`,`creator`,
+                    */
+
+                    $tool_content .= "<br><br></td></tr>";
+
+                    // add full text indexes for search operation (ginetai xrhsh @$tmp = mysql_query(...) giati ean
+                    // yparxei hdh, to FULL INDEX den mporei na ksanadhmiourgithei. epipleon, den yparxei tropos
+                    // elegxou gia to an yparxei index, opote o monadikos tropos diekperaiwshs ths ergasias einai
+                    // dokimh-sfalma.
+                    @$tmp = mysql_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");
+                    @$tmp = mysql_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)");
+                    @$tmp = mysql_query("ALTER TABLE `document` ADD FULLTEXT `document` (`filename` ,`comment` ,`title`,`creator`,
 `subject`,`description`,`author`,`language`)");
-@$tmp = mysql_query("ALTER TABLE `exercices` ADD FULLTEXT `exercices` (`titre`,`description`)");
-@$tmp = mysql_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
-@$tmp = mysql_query("ALTER TABLE `liens` ADD FULLTEXT `liens` (`url` ,`titre` ,`description`)");
-@$tmp = mysql_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`titre` ,`description`)");
-//db_query("ALTER TABLE `videolinks` ADD FULLTEXT `videolinks` (`url` ,`titre` ,`description`)");
+                    @$tmp = mysql_query("ALTER TABLE `exercices` ADD FULLTEXT `exercices` (`titre`,`description`)");
+                    @$tmp = mysql_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
+                    @$tmp = mysql_query("ALTER TABLE `liens` ADD FULLTEXT `liens` (`url` ,`titre` ,`description`)");
+                    @$tmp = mysql_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`titre` ,`description`)");
+                    //db_query("ALTER TABLE `videolinks` ADD FULLTEXT `videolinks` (`url` ,`titre` ,`description`)");
 
-// bogart: Update code for phpbb functionality START
-// Remove tables banlist, disallow, headermetafooter, priv_msgs, ranks, sessions, themes, whosonline, words
-db_query("DROP TABLE IF EXISTS access");
-db_query("DROP TABLE IF EXISTS banlist");
-db_query("DROP TABLE IF EXISTS config");
-db_query("DROP TABLE IF EXISTS disallow");
-db_query("DROP TABLE IF EXISTS forum_access");
-db_query("DROP TABLE IF EXISTS forum_mods");
-db_query("DROP TABLE IF EXISTS headermetafooter");
-db_query("DROP TABLE IF EXISTS priv_msgs");
-db_query("DROP TABLE IF EXISTS ranks");
-db_query("DROP TABLE IF EXISTS sessions");
-db_query("DROP TABLE IF EXISTS themes");
-db_query("DROP TABLE IF EXISTS whosonline");
-db_query("DROP TABLE IF EXISTS words");
-// bogart: Update code for phpbb functionality END
+                    // bogart: Update code for phpbb functionality START
+                    // Remove tables banlist, disallow, headermetafooter, priv_msgs, ranks, sessions, themes, whosonline, words
+                    db_query("DROP TABLE IF EXISTS access");
+                    db_query("DROP TABLE IF EXISTS banlist");
+                    db_query("DROP TABLE IF EXISTS config");
+                    db_query("DROP TABLE IF EXISTS disallow");
+                    db_query("DROP TABLE IF EXISTS forum_access");
+                    db_query("DROP TABLE IF EXISTS forum_mods");
+                    db_query("DROP TABLE IF EXISTS headermetafooter");
+                    db_query("DROP TABLE IF EXISTS priv_msgs");
+                    db_query("DROP TABLE IF EXISTS ranks");
+                    db_query("DROP TABLE IF EXISTS sessions");
+                    db_query("DROP TABLE IF EXISTS themes");
+                    db_query("DROP TABLE IF EXISTS whosonline");
+                    db_query("DROP TABLE IF EXISTS words");
+                    // bogart: Update code for phpbb functionality END
 
-// remove tables liste_domains. Used for old statistics module
-db_query("DROP TABLE IF EXISTS liste_domaines");
+                    // remove tables liste_domains. Used for old statistics module
+                    db_query("DROP TABLE IF EXISTS liste_domaines");
 
 } // End of 'while' courses
 
@@ -1178,14 +1162,18 @@ if ($errors==0) {
 }
 $tool_content .= "</td></tr></tbody></table>";
 if ($fromadmin)
-	$tool_content .= "<br><center><p><a href=\"../modules/admin/index.php\">Επιστροφή</a></p></center>";
+$tool_content .= "<br><center><p><a href=\"../modules/admin/index.php\">Επιστροφή</a></p></center>";
 else
-	$tool_content .= "<br><center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
+$tool_content .= "<br><center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
 
 if ($fromadmin)
-	draw($tool_content,3, 'admin');
-else
+draw($tool_content,3, 'admin');
+else {
+	$_SESSION['uid'] = null;
+	session_destroy();
 	draw($tool_content,0);
+}
+
 
 
 //-----------------------------
@@ -1284,7 +1272,7 @@ function rename_field($table, $field, $new_field, $type)
 		$retString .= "Υπάρχει ήδη. $OK<br>";
 	}
 	return $retString;
-	
+
 
 }
 
@@ -1310,21 +1298,21 @@ function merge_tables($table_destination,$table_source,$fields_destination,$fiel
 	$query = "INSERT INTO $table_destination (";
 	foreach($fields_destination as $val)
 	{
-			$query.=$val.",";
-		}
+		$query.=$val.",";
+	}
 	$query=substr($query,0,-1).") SELECT ";
 	foreach($fields_source as $val)
 	{
-			$query.=$val.",";
-		}
+		$query.=$val.",";
+	}
 	$query=substr($query,0,-1)." FROM ".$table_source;
-		if (db_query($query)) {
-			$retString .= " $OK<br>";
-		} else {
-			$retString .= " $BAD<br>";
-			$GLOBALS['errors']++;
-		}
-	
+	if (db_query($query)) {
+		$retString .= " $OK<br>";
+	} else {
+		$retString .= " $BAD<br>";
+		$GLOBALS['errors']++;
+	}
+
 	return $retString;
 
 }
@@ -1340,7 +1328,7 @@ function mysql_table_exists($db, $table)
 
 function mysql_field_exists($db,$table,$field)
 {
-	$fields = db_query("SHOW COLUMNS from $table LIKE '$field'",'$db');
+	$fields = db_query("SHOW COLUMNS from $table LIKE '$field'",$db);
 	if (mysql_num_rows($fields) > 0)
 	return TRUE;
 
@@ -1348,13 +1336,19 @@ function mysql_field_exists($db,$table,$field)
 
 // checks if admin user
 
-function is_admin($username, $password)
+function is_admin($username, $password, $mysqlMainDb)
 {
-	$r = db_query("SELECT * FROM user, admin WHERE admin.idUser = user.user_id
+	
+	mysql_select_db($mysqlMainDb);
+	$r = mysql_query("SELECT * FROM user, admin WHERE admin.idUser = user.user_id
             AND user.username = '$username' AND user.password = '$password'");
 	if (mysql_num_rows($r) == 0) {
 		return FALSE;
 	} else {
+		$row = mysql_fetch_array($r);
+		$_SESSION['uid'] = $row['user_id'];
+		//we need to return the user id
+		//or setup session UID with the admin's User ID so that it validates @ init.php
 		return TRUE;
 	}
 }
