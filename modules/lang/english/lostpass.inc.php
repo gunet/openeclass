@@ -1,3 +1,4 @@
+<?php
 /*
       +----------------------------------------------------------------------+
       | GUnet eClass 2.0                                                     |
@@ -24,7 +25,7 @@
       |                  Panepistimiopolis Ilissia, 15784, Athens, Greece    |
       +----------------------------------------------------------------------+
 */
-<?php
+
 $lang_remind_pass = 'Reset password';
 $lang_pass_intro = '<p>If you have forgotten you passwrd, please fill in your <em>username</em>
 and email.
