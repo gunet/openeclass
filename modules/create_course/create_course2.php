@@ -40,98 +40,70 @@
 $require_login = TRUE;
 $require_prof = TRUE;
 
-$langFiles = array('create_course', 'opencours');
+$langFiles = 'create_course';
 
 $require_help = TRUE;
 $helpTopic = 'CreateCourse';
 
+include '../../include/baseTheme.php';
+$nameTools = $langCreateCourse . " (" . $langCreateCourseStep." 2 " .$langCreateCourseStep2 . " 3 )" ;
 
 $local_head = "<script language=\"javascript\">
 function previous_step()
 {
 	document.location.href = \"./create_course.php\";
 }
+</script>";
 
+/*
 function validate() {
-
 		if (document.forms[0].description.value==\"\") {
 				alert(\"Παρακαλώ συμπληρώστε μια σύντομη περιγραφή για το μάθημα!\");	
-				return false;																																																	}
-
-     if (document.forms[0].course_keywords.value==\"\") {
+				return false;																																											
+		}
+	    if (document.forms[0].course_keywords.value==\"\") {
 					alert(\"Παρακαλώ συμπληρώστε τις λέξεις κλειδιά του μαθήματος!\");
 					return false;
 		}
-	return true;																																																}
-
-</script>";
-
-include '../../include/baseTheme.php';
-
-$nameTools = $langCreateCourse . " (" . $langCreateCourseStep." 2 " .$langCreateCourseStep2 . " 3 )" ;
-
+	return true;		
+}
+*/
 $tool_content = "";
 
-$titulaire_probable="$prenom $nom";
-//$local_style = "input { font-size: 12px; }";
+//  display form
+$tool_content .= "
+<FIELDSET style=\"PADDING-RIGHT: 7px; PADDING-LEFT: 7px; PADDING-BOTTOM: 7px; PADDING-TOP: 7px\">
+        <LEGEND>$langCreateCourseStep2Title</LEGEND>
+        <table border=0><tr valign=\"top\">
+			<td colspan=\"2\" valign=\"top\">
+        <span class='explanationtext' style='font-weight:bold;'>$langFieldsOptionalNote</span></td>
+        </tr>
 
-// ---------------------------------------------
-// ---------------------- form -----------------
-// ---------------------------------------------
-
-   @$tool_content .= "
-<p><b>$langCreateCourseStep2Title</b> <em>($langFieldsOptionalNote)</em> </p>
-<form method=\"post\" action=\"create_course3.php\" onsubmit=\"return validate();\">
-	
-	<input type=\"hidden\" name=\"intitule\" value=\"".htmlspecialchars($_POST['intitule'])."\">
-	<input type=\"hidden\" name=\"faculte\" value=\"".htmlspecialchars($_POST['faculte'])."\">
-	<input type=\"hidden\" name=\"titulaires\" value=\"".htmlspecialchars($_POST['titulaires'])."\">
-	<input type=\"hidden\" name=\"type\" value=\"".htmlspecialchars($_POST['type'])."\">
-
-		<table width=\"99%\">
-
-			<thead>
-						
-
-
-	
-			<tr> 
-			<th> 
-			$langDescrInfo:
-			</th>   
+		<form method=\"post\" action=\"create_course3.php\" onsubmit=\"return validate();\">
+		<input type=\"hidden\" name=\"intitule\" value=\"".htmlspecialchars($_POST['intitule'])."\">
+		<input type=\"hidden\" name=\"faculte\" value=\"".htmlspecialchars($_POST['faculte'])."\">
+		<input type=\"hidden\" name=\"titulaires\" value=\"".htmlspecialchars($_POST['titulaires'])."\">
+		<input type=\"hidden\" name=\"type\" value=\"".htmlspecialchars($_POST['type'])."\">
+			<tr><th>$langDescrInfo:</th>   
 			<td>
-			
-			<textarea name=\"description\" cols=\"50\" rows=\"4\"></textarea>
-			$langFieldsRequAsterisk
-			   
-			</td> 
+			<textarea name=\"description\" value='".@$description."' cols=\"50\" rows=\"4\"></textarea>
+			</td> </tr>
+			<tr>
+			<th>$langCourseKeywords</th><td>
+			<textarea name=\"course_keywords\" value='".@$course_keywords."' cols=\"50\" rows=\"2\"></textarea>
+		 </td>
 			</tr>
 			<tr>
-			<th>
-		$langCourseKeywords
-		</th>
-<td>
-			
-			<textarea name=\"course_keywords\" value=\"$course_keywords\" cols=\"50\" rows=\"2\"></textarea>
-			$langFieldsRequAsterisk
-			
-				</td>
-			</tr>
-			<tr>
-			<th>
-		$langCourseAddon
-		</th>
-<td>
-			
-			<textarea name=\"course_addon\" value=\"$course_addon\" cols=\"50\" rows=\"4\"></textarea>
+			<th>$langCourseAddon</th>
+			<td>
+			<textarea name=\"course_addon\" value='".@$course_addon."' cols=\"50\" rows=\"4\"></textarea>
 			</td>
 			</tr>
-			</thead>
-			</table>
+			</table></fieldset>
 			<br/>
-			<input type=\"Submit\" name=\"submit\" value=\"$langNextStep >\">
-		
-</form>";
+			<input type='submit' name='submit' value='< $langPreviousStep '>
+			<input type='submit' name='submit' value='$langNextStep >'>
+		</form>";
 
 draw($tool_content, 1, '', $local_head);
 
