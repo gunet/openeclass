@@ -45,7 +45,7 @@ $helpTopic = 'CreateCourse';
 include '../../include/baseTheme.php';
 $nameTools = $langCreateCourse . " (" . $langCreateCourseStep ." 1 " .$langCreateCourseStep2 . " 3 )" ;
 
-/*$local_head = '
+$local_head = '
 <script type="text/javascript">
 function validate()
 {
@@ -62,7 +62,7 @@ function validate()
     return true;
 }
 </script>
-';*/
+';
 
 /*
 function validate() {
@@ -82,8 +82,8 @@ $tool_content = "";
 $titulaire_probable="$prenom $nom";
 $local_style = "input { font-size: 12px; }";
 
-$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]' onsubmit=\"return validate();'>";
-$tool_content .= "<input type='hidden' name='intitule' value='".htmlspecialchars($_POST['intitule'])."'>
+$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]' onsubmit='return validate();'>";
+@$tool_content .= "<input type='hidden' name='intitule' value='".htmlspecialchars($_POST['intitule'])."'>
       <input type='hidden' name='faculte' value='".htmlspecialchars($_POST['faculte'])."'>
       <input type='hidden' name='titulaires' value='".htmlspecialchars($_POST['titulaires'])."'>
       <input type='hidden' name='type' value='".htmlspecialchars($_POST['type'])."'>
@@ -92,7 +92,7 @@ $tool_content .= "<input type='hidden' name='intitule' value='".htmlspecialchars
       <input type='hidden' name='course_addon' value='".htmlspecialchars($_POST['course_addon'])."'>
       <input type='hidden' name='course_keywords' value='".htmlspecialchars($_POST['course_keywords'])."'>";
 
-$tool_content .= "<input type='hidden' name='visit' value='".htmlspecialchars($_POST['visit'])."'>";
+@$tool_content .= "<input type='hidden' name='visit' value='".htmlspecialchars($_POST['visit'])."'>";
 
 if (isset($back1) or !isset($visit)) {
 
@@ -110,30 +110,22 @@ $tool_content .= "
         </td>
         <td valign=top>
         <span class=a>
-        <input type='text' name='intitule' size='60' class='auth_input' value='$intitule'>&nbsp;
+        <input type='text' name='intitule' size='60' class='auth_input' value='".@$intitule."'>&nbsp;
 				<span class='explanationtext'>$langEx</span>
         </td></tr>
         <tr>
         <td valign=top><span class='labeltext'>$langFac&nbsp;:</span></td>
         <td valign=\"top\">";
 
-$tool_content .= "<select name=\"faculte\" class=auth_input>";
-
-/*
-$resultFac=mysql_query("SELECT name FROM faculte ORDER BY number");
-while ($myfac = mysql_fetch_array($resultFac)) {
-        if($myfac['name'] == $facu)
-                $tool_content .= "<option selected>$myfac[name]</option>";
-        else
-                $tool_content .= "<option>$myfac[name]</option>";
-}
-$tool_content .= "</select>&nbsp;<span class='explanationtext'>$langTargetFac</span></td></tr>";
-*/
-
-  		$resultFac=mysql_query("SELECT id,name FROM `$mysqlMainDb`.faculte ORDER BY number");
-			while ($myfac = mysql_fetch_array($resultFac)) {	
-				$tool_content .= "<option value=\"".$myfac['id']."--".$myfac['name']."\">$myfac[name]</option>";
-			}
+// selection of faculty
+  		$resultFac=db_query("SELECT id,name FROM faculte ORDER BY number");
+			$tool_content .= "<select name='faculte' class=auth_input>";
+			while ($myfac = mysql_fetch_array($resultFac)) {
+					if(implode('--',array($myfac['id'],$myfac['name'])) == $faculte)	
+							$tool_content .= "<option selected value='".$myfac['id']."--".$myfac['name']."'>$myfac[name]</option>";
+					else
+							$tool_content .= "<option value='".$myfac['id']."--".$myfac['name']."'>$myfac[name]</option>";
+				}
 			$tool_content .= "</select>";
 
 unset($repertoire);
@@ -146,16 +138,17 @@ $tool_content .= "<tr valign='top'><td width='100' valign='top'>
   	    	  <tr>
     	    	<td><span class='labeltext'>$m[type]&nbsp;:</span></td>
 	    	    <td>";
-$tool_content .= " ".selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']), 'type', $type)." ";
+@$tool_content .= " ".selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']), 'type', $type)." ";
 $tool_content .= "</td></tr>
                 <tr><td><span class='labeltext'>$langLn&nbsp;:</span></td>
                 <td>";
 
-$tool_content .= " ".selection(array('greek' => $langNameOfLang['greek'], 
+@$tool_content .= " ".selection(array('greek' => $langNameOfLang['greek'], 
 																		'english' => $langNameOfLang['english']), 'languageCourse', $languageCourse)." ";
 
 $tool_content .= "</td></tr></table></FIELDSET><br/>";
 $tool_content .= "<input type='hidden' name='visit' value='true'>";
+
 $tool_content .= "<input type='submit' name='create2' value='$langNextStep >'>";
 }
 
@@ -206,7 +199,7 @@ $tool_content .= "<input type='submit' name='create2' value='$langNextStep >'>";
    	</fieldset>
 		<tr><th>$langAccess</th>
     <td>
-    <fieldset>
+		<FIELDSET style=\"PADDING-RIGHT: 7px; PADDING-LEFT: 7px; PADDING-BOTTOM: 7px; PADDING-TOP: 7px\"
     <legend>$langAvailableTypes</legend>
     <p>
     <input name=\"formvisible\" type=\"radio\" value=\"2\" checked=\"checked\" />$langPublic<br />
@@ -220,7 +213,7 @@ $tool_content .= "<input type='submit' name='create2' value='$langNextStep >'>";
 $tool_content .= "</tr><tr>
       <th>$langModules</th>
       <td>
-			<fieldset>
+			<FIELDSET style=\"PADDING-RIGHT: 7px; PADDING-LEFT: 7px; PADDING-BOTTOM: 7px; PADDING-TOP: 7px\"
     	<legend>$langSubsystems</legend>
       <table width=\"99%\">
       <tr>
@@ -254,8 +247,6 @@ $tool_content .= "</tr><tr>
 			
 //       help("CreateCourse_subsystems");
 			 
-$tool_content .= "<tr><td><span class='labeltext'>$langLn&nbsp;:</span></td></tr>";
-
 // help("CreateCourse_lang");
 
 $tool_content .= "</tr>
@@ -272,7 +263,7 @@ if (isset($create_course)) {
    //h metavlhth faculte periexei to fac_id kai to onoma tou tmhmatos xwrismena me dyo dashes
     //to $facid pairnei timh apo thn $faculte
     list($facid, $facname) = split("--", $faculte);
-    //to $faculte ksanapairnei thn timh mono tou onomatos tou tmhmatos gia logous compability
+    //to $faculte ksanapairnei thn timh mono tou onomatos tou tmhmatos gia logous compatibility
     $faculte = $facname;
 
     $repertoire = new_code(find_faculty_by_name($faculte));
@@ -281,10 +272,8 @@ if (isset($create_course)) {
     if(empty($intitule) OR empty($repertoire)) {
         $tool_content .= "<tr bgcolor=\"$color2\" height=\"400\">
         <td bgcolor=\"$color2\" colspan=\"2\" valign=\"top\">
-            <br>
-            <font face=\"arial, helvetica\" size=\"2\">
-            $langEmpty
-            </font>
+        <br>
+        <span class='labeltext'>$langEmpty</span>
         </td>
     </tr>";
     } else {	// if all form fields fulfilled
@@ -314,15 +303,12 @@ if (isset($create_course)) {
             $cnt++;
         }				// end while ($cnt < $dbNumbert)
 
-
 // ---------------------------------------------------------
 //  all the course db queries are inside the following script
 // ---------------------------------------------------------
 require "create_course_db.php";
 
-
 // ------------- update main Db------------
-
 mysql_select_db("$mysqlMainDb");
 
     mysql_query("INSERT INTO cours SET
@@ -385,17 +371,16 @@ fwrite($fd, "$string");
 $status[$repertoire]=1;
 session_register("status");
 
-$tool_content .= "<tr bgcolor=$color2>
-    <td colspan=3>
-    <font face='arial, helvetica' size=2>
-    $langJustCreated <b>$intitule</b><br><br><br>
-    <a href=\"../../courses/$repertoire/index.php\">$langEnter</a><br><br><br>
-    $langEnterMetadata
-    </font><br>
-    </td></tr>";
-		
- } // else
+$tool_content .= "
+				<tr>
+        <td colspan=3 height=363 class=td_main valign=top>
+        $langJustCreated $intitule<br><br><br>
+        <div class=alert1><a href='../../courses/$repertoire/index.php' class=mainpage>$langEnter</a><br><br>
+				$langEnterMetadata
+				</div><br>
+        </td></tr>";
 
+	 } // else
 } // end of submit
 
 $tool_content .= "</table>";

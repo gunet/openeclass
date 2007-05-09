@@ -748,7 +748,7 @@ db_query("CREATE TABLE `assignment_submit` (
       fileId int(11) unsigned NOT NULL default '0',
       recipientId int(11) unsigned NOT NULL default '0',
       PRIMARY KEY  (fileId,recipientId))
-    TYPE=MyISAM $charset_speck");
+    TYPE=MyISAM $charset_spec");
 
 /*
 ############################## INTRODUCTION #######################################
@@ -799,7 +799,7 @@ mysql_query("CREATE TABLE group_properties (
     agenda tinyint(4) default '0',
     PRIMARY KEY  (id)
     )
-    TYPE=MyISAM $charset_speck");
+    TYPE=MyISAM $charset_spec");
 
 mysql_query("INSERT INTO group_properties
     (id, self_registration, private, forum, document, wiki, agenda)
