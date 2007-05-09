@@ -50,8 +50,6 @@ $langProfessors="Professor(s)";
 $langExplanation="Once you click OK, a site with Forum, Agenda, Document manager etc. will be created. Your login, as creator of the site, allows you to modify it along your own requirements.";
 $langExFac = "If you wish to create course, in another faculty, then contact Asynchronous Teleteaching Team";
 $langEmpty="You left some fields empty.<br>Use the <b>Back</b> button on your browser and try again.<br>";
-$langCodeTaken="This course code is already taken.  <br>Use the <b>Back</b> button on your browser and try again";
-
 $langcourse_keywords="Keywords";
 $langcourse_references = "Addons";
 
@@ -76,8 +74,6 @@ $langForce="Compell one\'s interlocutor, by a series of questions and sub-questi
 $langIndeed="Indeed. Socratic irony is an interrogative method. The Greek \"eirotao\" means \"ask questions\"";
 $langContradiction="Use the Principle of Non Contradiction to force one\'s interlocutor into a dead end.";
 $langNotFalse="This answer is not false. It is true that the revelation of the interlocutor\'s ignorance means showing the contradictory conclusions where lead his premisses.";
-
-
 
 // Home Page MySQL Table "accueil"
 $langAgenda="Agenda";
@@ -154,5 +150,6 @@ $langPrivate="Private (Access is granted only to students added in the Users Lis
 $langAccess = "Choose your access type:";
 $langAvailableTypes = "Available Access Types";
 $langModules = "Modules:";
-
+$langAlertTitle = "Please fill the course title!";
+$langAlertProf = "Please fill the course professor!";
 ?>
