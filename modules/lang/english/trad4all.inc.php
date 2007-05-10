@@ -40,8 +40,6 @@ $langNameOfLang['greek']="greek";
 
 $charset = 'iso-8859-7';
 $text_dir = 'ltr'; // ('ltr' for left to right, 'rtl' for right to left)
-$left_font_family = 'verdana, helvetica, arial, geneva, sans-serif';
-$right_font_family = 'helvetica, arial, geneva, sans-serif';
 $number_thousands_separator = ',';
 $number_decimal_separator = '.';
 $byteUnits = array('Bytes', 'KB', 'MB', 'GB');
@@ -60,20 +58,16 @@ $dateFormatLong  = '%A %B %d, %Y';
 $dateTimeFormatLong  = '%B %d, %Y at %I:%M %p';
 $timeNoSecFormat = '%I:%M %p';
 
-
-$langCopyright = "Copyright";
-
-
 $langBack="Back";
-$langBackHome="Back to  home";
-$langMaj="Update";
+$langBackHome="Back to home";
+$langBackList="Return to the list";
+
 $langModify="Modify";
 $langDelete="Delete";
 $langTitle="Title";
 $langHelp="Help";
 $langOk="Ok";
 $langAddIntro="Add introduction text";
-$langBackList="Return to the list";
 $langUser = "User:";
 $langProfessor = "Professor";
 $langLogout = "Logout";

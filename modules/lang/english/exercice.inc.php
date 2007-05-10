@@ -73,7 +73,6 @@ $langCancel="Cancel";
 $langQImage="Picture-question";
 $langAddQ="Add Question";
 $langAmong = "among";
-$langYes = "Yes";
 $langTake = "Take";
 
 // admin.php

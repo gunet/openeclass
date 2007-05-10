@@ -174,9 +174,8 @@ $langUserAlready = "Ο χρήστης είναι ήδη γραμμένος στο μάθημά σας";
 $langUserFile = "Όνομα αρχείου χρηστών";
 $langOk = "Προσθήκη";
 
-// search_user.php - added by jexi Feb 26 2003
+// search_user.php 
 $langphone= "Τηλέφωνο";
-
 $langGroup="Ομάδα χρηστών";
 $langUserNoneMasc="-";
 $langTutor="Διδάσκων";
@@ -189,8 +188,6 @@ $langUserRights="Δικαιώματα χρηστών";
 $langNow="τώρα";
 $langOneByOne="Προσθήκη χρήστη";
 $langUserMany="Εισαγωγή καταλόγου χρηστών μέσω αρχείων κειμένου";
-$langNo="Όχι";
-$langYes="Ναι";
 $langUserAddExplanation="κάθε γραμμή του αρχείου που θα στείλετε θα περιέχει 5 πεδία:
          <b>Όνομα&nbsp;&nbsp;&nbsp;Επίθετο&nbsp;&nbsp;&nbsp;
         Όνομα Χρήστη&nbsp;&nbsp;&nbsp;Συνθηματικό&nbsp;

@@ -27,10 +27,6 @@
 */
 
 
-$langNo="No";
-$langYes="Yes";
-
-$langHelp="Help";
 $langAdminOnly="Administrators only";
 $langInLnk="Deactivated links";
 

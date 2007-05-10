@@ -47,8 +47,6 @@ $langEmptyAnn="Clear up list of announcements";
 $professorMessage="Professor message";
 $langEmailSent=" and emailed to registered students";
 
-$langNo="No";
-$langYes="Yes";
 $langEmailOption="Send this announcement by email to registered students";
 $langOk = "Ok";
 $langUp = "Up";
@@ -62,7 +60,5 @@ $langMyAnnouncements = "My announcements";
 $langtheCourse = "Course";
 $langAnn = "Announced at";
 $langTitulaire = "Professor";
-
-
 
 ?>

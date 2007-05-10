@@ -85,17 +85,14 @@ $langCancel="Ακύρωση";
 $langQImage="Ερώτηση-Εικόνα";
 $langAddQ="Προσθήκη ερώτησης";
 $langAmong = "μεταξύ";
-$langYes = "Ναι";
 $langTake = "διάλεξε";
 
 // admin.php
-
 $langExerciseManagement="Διαχείριση Ασκήσεων";
 $langQuestionManagement="Διαχείριση Ερωτήσεων / Απαντήσεων";
 $langQuestionNotFound="Δεν βρέθηκε η ερώτηση";
 
 // question_admin.inc.php
-
 $langNoAnswer="Δεν υπάρχει απάντηση αυτή την στιγμή";
 $langGoBackToQuestionPool="Επιστροφή στις δισθέσιμες ερωτήσεις";
 $langGoBackToQuestionList="Επιστροφή στη λίστα ερωτήσεων";
@@ -141,16 +138,13 @@ $langChooseGoodAnswers="Διαλέξτε μια ή περισσότερες καλές απαντήσεις";
 $langBack = "Επιστροφή";
 
 // question_list_admin.inc.php
-
 $langNewQu="Καινούρια Ερώτηση";
 $langQuestionList="Κατάλογος ερωτήσεων της άσκησης";
 $langMoveUp="Μετακίνηση πάνω";
 $langMoveDown="Μετακίνηση κάτω";
 $langGetExistingQuestion="Ερώτηση από άλλη άσκηση";
 
-
 // question_pool.php
-
 $langQuestionPool="Διαθέσιμες Ερωτήσεις";
 $langOrphanQuestions="Ερωτήσεις χωρίς απάντηση";
 $langNoQuestion="Δεν υπάρχει ερώτηση αυτή την στιγμή";
@@ -160,7 +154,6 @@ $langGoBackToEx="Επιστροφή στην άσκηση";
 $langReuse="Επαναχρησιμοποίηση";
 
 // exercise_result.php
-
 $langElementList="Το στοιχείο";
 $langResult="Αποτέλεσμα";
 $langScore="Βαθμολογία";
@@ -170,7 +163,6 @@ $langYourTotalScore="Η συνολική σου βαθμολογία είναι";
 $langYourTotalScore2="Βαθμολογία";
 
 // exercice_submit.php
-
 $langDoAnEx="Κάντε μια άσκηση";
 $langGenerator="Γεννήτρια ασκήσεων";
 $langResult="Βαθμολογία";
@@ -181,7 +173,6 @@ $langExerciseNotFound="Η απάντηση δεν βρέθηκε";
 $langAlreadyAnswered="Απαντήσατε ήδη στην ερώτηση";
 
 // scoring.php & scoring_student.php
-
 $langPossAnsw="Αριθμός πιθανών απαντήσεων για μια ερώτηση";
 $langStudAnsw="αριθμός λαθών από φοιτητή";
 $langDetermine="Ορίστε τους βαθμούς-βάρη των απαντήσεων συμπληρώνοντας τον παρακάτω πίνακα. Στη συνέχεια πατήστε \"Εντάξει\"";

@@ -147,8 +147,6 @@ $langUserRights="Users rights";
 $langNow="now";
 $langOneByOne="Add user manually";
 $langUserMany="Import users list through textfile";
-$langNo="no";
-$langYes="yes";
 $langUserAddExplanation="every line of file to send will necessarily an only
         include 5 fields: <b>Name&nbsp;&nbsp;&nbsp;Surname&nbsp;&nbsp;&nbsp;
         Login&nbsp;&nbsp;&nbsp;Password&nbsp;

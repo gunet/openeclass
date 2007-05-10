@@ -28,7 +28,6 @@
 
 
 $langAdmin = "Administration Tools";
-$langAdminBy = "Admin by ";
 $langTools = "Tools";
 $langState = "State";
 $langDevAdmin ="Development Administration";
@@ -160,8 +159,6 @@ $langCourseDelConfirm = "Course Deletion Confirmation";
 $langCourseDelConfirm2 = "are you sure you want to delete course with code";
 $langWarning = "Warning!";
 $langNoticeDel = " Course deletion will unregister students from course. Also all the course teaching stuff will be deleted.";
-$langYes = "Yes";
-$langNo = "No";
 
 // editcours.php
 $langCourseEdit = "Course Edit";

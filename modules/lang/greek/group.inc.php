@@ -27,7 +27,6 @@
 */
 
 $langGroupManagement="Ομάδες χρηστών";
-$langHelp="Βοήθεια";
 $langNewGroupCreate="Δημιουργία καινούριας ομάδας χρηστών";
 $langGroupCreation="Δημιουργία καινούριας ομάδας χρηστών";
 $langCreate="Δημιουργία";
@@ -42,7 +41,6 @@ $langGroupAdded = "ομάδα χρηστών έχει προστεθεί";
 $langGroupsDeleted="Ολες οι ομάδες χρηστών έχουν διαγραφεί";
 $langGroupDel="Η ομάδα χρηστών διαγράφτηκε";
 $langMove="Μετακίνηση";
-
 
 $langGroupsEmptied="Όλες οι ομάδες χρηστών είναι άδειες";
 $langEmtpyGroups="Εκκαθάριση όλων των ομάδων χρηστών";
@@ -113,18 +111,13 @@ $langGroupSelfRegistration="Εγγραφή";
 $langGroupSelfRegInf="εγγραφή";
 $langRegIntoGroup="Προσθέστε με στην ομάδα";
 $langGroupNowMember="Είσαι τώρα μέλος της ομάδας";
-$langYes="ναι";
-$langNo="όχι";
-
 
 $langPrivate="κλειστό";
 $langPublic="ανοικτό";
 $langForumType="Τύπος περιοχής συζητήσεων";
 $langPropModify="Αλλαγή ρυθμίσεων";
 $langState="Κατάσταση";
-
 $langGroupFilledGroups="Οι ομάδες χρηστών έχουν συμπληρωθεί από φοιτητές που βρίσκονται στον κατάλογο «Χρήστες».";
-
 
 // group - email
 
@@ -139,5 +132,4 @@ $langGroupMail = "Mail στην Ομάδα Χρηστών";
 $langMailSubject = "Θέμα :";
 $langMailBody = "Μήνυμα :";
 $langProfLesson = "Διδάσκων του μαθήματος";
-
 ?>

@@ -47,18 +47,15 @@ $langEmptyAnn="Διαγραφή καταλόγου ανακοινώσεων";
 $professorMessage="Μήνυμα καθηγητή";
 $langEmailSent=" και στάλθηκε στους εγγεγραμμένους μαθητές";
 
-$langNo="Οχι";
-$langYes="Ναι";
 $langEmailOption="Αποστολή (με email) της ανακοίνωσης στους εγγεγραμμένους μαθητές";
 $langOk = "Προσθήκη";
 $langUp = "Επάνω";
 $langDown = "Κάτω";
-
 $langNoAnnounce = "Δεν υπάρχουν ανακοινώσεις";
 $langSureToDelAnnounce = "Είστε σίγουρος ότι θέλετε να διαγράψετε την ανακοίνωση";
 $langSureToDelAnnounceAll = "Είστε σίγουρος ότι θέλετε να διαγράψετε όλες τις ανακοινώσεις";
-// my announcements
 
+// my announcements
 $langMyAnnouncements = "Οι ανακοινώσεις μου ";
 $langtheCourse = "Μάθημα";
 $langAnn = "Ανακοινώθηκε την";

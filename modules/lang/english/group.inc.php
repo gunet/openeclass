@@ -29,7 +29,6 @@
 
 
 $langGroupManagement="Groups";
-$langHelp="Help";
 $langNewGroupCreate="Create new group(s)";
 $langGroupCreation="New groups creation";
 $langCreate="Create";
@@ -117,9 +116,6 @@ $langGroupSelfRegistration="Registration";
 $langGroupSelfRegInf="register";
 $langRegIntoGroup="Add me to this group";
 $langGroupNowMember="You are now member of this group";
-$langYes="yes";
-$langNo="no";
-
 
 $langPrivate="private";
 $langPublic="public";
