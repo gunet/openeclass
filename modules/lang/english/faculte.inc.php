@@ -43,7 +43,6 @@ $langNoSuccess="An error occured !";
 $langProErase="There are courses in the faculty !";
 $langNoErase="Faculty cannot be deleted.";
 $langErase="Faculty deleted!";
-$langBackToIndex="Back";
 
 $langFCodeExists= "Code already exists! Try Again.";
 $langFaculteExists="Faculty / Department already exists! Try Again.";

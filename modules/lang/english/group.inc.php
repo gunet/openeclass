@@ -61,7 +61,6 @@ $langGroup="Group";
 $langExistingGroups="Groups";
 $langRegistered="Registered";
 $langEdit="Edit";
-$langDelete="Delete";
 $langDeleteGroupWarn = "Are you sure you want to delete this group";
 $langDeleteGroupAllWarn = "Are you sure you want to delete all groups";
 $langEmptyGroupAllWarn = "Are you sure you want to empty all groups";
@@ -76,9 +75,7 @@ $langGroupDocument="Documents";
 $langValidate="validate";
 $langGroupPropertiesModified="Groiup settings have been modified";
 
-
 // Group space
-
 $langGroupSpace="Group area";
 $langGroupThisSpace="Area for this group";
 $langGroupName="Group name";
@@ -125,20 +122,14 @@ $langState="State";
 
 $langGroupFilledGroups="Groups have been filled (or completed) by students present in the 'Users' list.";
 
-
 // group - email
-
 $langEmailGroup = "Email to group";
-
 $langTypeMessage = "Type your message below";
 $langSend = "Send";
 $langEmailSuccess = "E-mail sent succesfully !";
-$langBack = "Back";
 $langMailError = "Error during sending e-mail !";
 $langGroupMail = "Group email";
 $langMailSubject = "Subject :";
 $langMailBody = "Body message :";
 $langProfLesson = "Professor";
-
-
 ?>

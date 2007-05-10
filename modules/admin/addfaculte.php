@@ -108,7 +108,7 @@ if (!isset($a)) {
 	$tool_content .= "<table width=\"99%\"><caption>".$langOtherActions."</caption><tbody>
 	<tr><td><a href=\"addfaculte.php?a=1\">".$langAdd."</a></td></tr></tbody></table>";
 	// Display link back to index.php
-	$tool_content .= "<br><center><p><a href=\"index.php\">".$langBackToIndex."</a></p></center>";
+	$tool_content .= "<br><center><p><a href=\"index.php\">".$langBack."</a></p></center>";
 }
 // Add a new faculte
 elseif ($a == 1)  {
@@ -154,7 +154,7 @@ elseif ($a == 1)  {
 		</tbody></table></form>";
 		}
 		// Display link back to addfaculte.php
-		$tool_content .= "<br><center><p><a href=\"addfaculte.php\">".$langBackToIndex."</a></p></center>";
+		$tool_content .= "<br><center><p><a href=\"addfaculte.php\">".$langBack."</a></p></center>";
 	}
 // Delete faculte
 elseif ($a == 2) {
@@ -170,7 +170,7 @@ elseif ($a == 2) {
 		$tool_content .= "<p>".$langErase."</p><br>";
 	}
 	// Display link back to addfaculte.php
-	$tool_content .= "<br><center><p><a href=\"addfaculte.php\">".$langBackToIndex."</a></p></center>";
+	$tool_content .= "<br><center><p><a href=\"addfaculte.php\">".$langBack."</a></p></center>";
 }
 // Edit a faculte
 elseif ($a == 3)  {
@@ -213,7 +213,7 @@ elseif ($a == 3)  {
 		</tbody></table></form>";
 		}
 		// Display link back to addfaculte.php
-		$tool_content .= "<br><center><p><a href=\"addfaculte.php\">".$langBackToIndex."</a></p></center>";
+		$tool_content .= "<br><center><p><a href=\"addfaculte.php\">".$langBack."</a></p></center>";
 	}
 
 /*****************************************************************************

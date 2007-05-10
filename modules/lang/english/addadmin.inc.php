@@ -32,7 +32,6 @@ $langNomPageAddHtPass = "Add admin";
 $langLogin = "User Name";
 $langPassword = "Password";
 $langAdd = "Add";
-$langBack = "Back";
 $langUser = "User";
 $langNotFound = "not found";
 $langWith = "with";

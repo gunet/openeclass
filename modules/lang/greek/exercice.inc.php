@@ -135,7 +135,6 @@ $langDefineBlanks="Ορίστε τουλάχιστον ένα κενό με αγκύλες [...]";
 $langGiveAnswers="Δώστε τις απαντήσεις στις ερωτήσεις";
 $langChooseGoodAnswer="Διαλέξτε μια καλή απάντηση";
 $langChooseGoodAnswers="Διαλέξτε μια ή περισσότερες καλές απαντήσεις";
-$langBack = "Επιστροφή";
 
 // question_list_admin.inc.php
 $langNewQu="Καινούρια Ερώτηση";

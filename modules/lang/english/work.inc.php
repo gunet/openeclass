@@ -27,16 +27,12 @@
 */
 
 
- // GENERIC
 
-$langHelp="Help";
 $langSubmit='Submit';
 $langBackAssignment = "Back to work";
-$langBack = "Back";
 
 // ------------------
 // new messages
-
 
 $m['title'] = "Title";
 $m['description'] = "Description";
@@ -102,7 +98,6 @@ $langGroupWorkIntro = '
 	been graded.';
 
 $langModify="Modify";
-$langDelete="Delete";
 $langEdit = "Edit";
 $langAdd = "Add";
 $langEditSuccess = "Successful editing!";

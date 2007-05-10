@@ -27,16 +27,11 @@
 */
 
 
-// GENERIC
-
-$langHelp="Βοήθεια";
 $langSubmit='Αποστολή';
 $langBackAssignment = "Επιστροφή στη σελίδα της εργασίας";
-$langBack = "Επιστροφή";
 
 // ------------------
 // new messages
-
 
 $m['title'] = "Εργασία";
 $m['description'] = "Περιγραφή";
@@ -103,7 +98,6 @@ $langGroupWorkIntro = '
 	από τον διδάσκοντα.';
 
 $langModify="Τροποποίηση";
-$langDelete="Διαγραφή";
 $langEdit = "Διόρθωση";
 $langAdd = "Προσθήκη";
 $langEditSuccess = "Η διόρθωση των στοιχείων της εργασίας έγινε με επιτυχία!";

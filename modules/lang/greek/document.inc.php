@@ -80,7 +80,6 @@ $langNoticeGreek = "(*) Προσοχή! Το όνομα του αρχείου δεν πρέπει να περιέχει ελλ
 $langInvalidDir = "Ακυρο ή μη υπαρκτό όνομα καταλόγου";
 
 //prosthikes gia v2 - metadata
-$langTitle="Τίτλος";
 $langCategory="Κατηγορία";
 //$langCreator=""; //den xrhsimopoieitai giati o creator einai o diaxeirisths pou kanei upload
 $langCreatorEmail="Ηλ. Διεύθυνση Συγγραφέα";
@@ -114,7 +113,6 @@ $langQuotaBar = "Επισκόπηση αποθηκευτικού χώρου";
 $langQuotaUsed = "Χρησιμοποιούμενος Χώρος";
 $langQuotaTotal = "Συνολικός Διαθέσιμος Χώρος";
 $langQuotaPercentage = "Ποσοστό χρήσης";
-$langBack = "Επιστροφή";
 
 $langEnglish = "Αγγλικά";
 $langFrench = "Γαλλικά";

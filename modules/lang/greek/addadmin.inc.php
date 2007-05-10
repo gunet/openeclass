@@ -30,7 +30,6 @@ $langNomPageAddHtPass = "Προσθήκη διαχειριστή";
 $langLogin = "Όνομα Χρήστη";
 $langPassword = "Συνθηματικό";
 $langAdd = "Προσθήκη";
-$langBack = "Επιστροφή";
 $langUser = "Ο χρήστης";
 $langNotFound = "δεν βρέθηκε";
 $langWith = "με";

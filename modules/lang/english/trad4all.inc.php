@@ -40,9 +40,6 @@ $langNameOfLang['greek']="greek";
 
 $charset = 'iso-8859-7';
 $text_dir = 'ltr'; // ('ltr' for left to right, 'rtl' for right to left)
-$number_thousands_separator = ',';
-$number_decimal_separator = '.';
-$byteUnits = array('Bytes', 'KB', 'MB', 'GB');
 
 $langDay_of_weekNames['init'] = array('S', 'M', 'T', 'W', 'T', 'F', 'S');
 $langDay_of_weekNames['short'] = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');

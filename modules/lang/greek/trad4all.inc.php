@@ -38,11 +38,6 @@ $langNameOfLang['greek']="Ελληνικά";
 
 $charset = 'iso-8859-7';
 $text_dir = 'ltr'; // ('ltr' for left to right, 'rtl' for right to left)
-$left_font_family = 'verdana, helvetica, arial, geneva, sans-serif';
-$right_font_family = 'helvetica, arial, geneva, sans-serif';
-$number_thousands_separator = ',';
-$number_decimal_separator = '.';
-$byteUnits = array('Bytes', 'KB', 'MB', 'GB');
 
 $langDay_of_weekNames['init'] = array('Κ', 'Δ', 'Τ', 'Τ', 'Π', 'Π', 'Σ');
 $langDay_of_weekNames['short'] = array('Κυρ', 'Δευ', 'Τρι', 'Τετ', 'Πεμ', 'Παρ', 'Σαβ');
@@ -68,17 +63,17 @@ $langMonthNames['fine'] = array('Ιανουαρίου',
 $dateFormatShort =  "%b %d, %y";
 $dateFormatLong  = '%A, %d %B %Y';
 $dateTimeFormatLong  = '%d %B %Y / Ώρα: %R';
-//$timeNoSecFormat = '%I:%M %p';
 $timeNoSecFormat = '%R';
 
 $langBack = "Επιστροφή";
+$langBackList="Επιστροφή στη λίστα";
+
 $langModify="Αλλαγή";
 $langDelete="Διαγραφή";
 $langTitle="Τίτλος";
 $langHelp="Βοήθεια";
 $langOk="Επικύρωση";
 $langAddIntro="Προσθήκη εισαγωγικού κειμένου";
-$langBackList="Επιστροφή στη λίστα";
 $langUser = "Χρήστης:";
 $langProfessor = "Καθηγητής";
 $langLogout = "Έξοδος";

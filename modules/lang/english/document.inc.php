@@ -80,7 +80,6 @@ $langInvalidDir = "Invalid Directory or Directory not exists";
 
 
 //prosthikes gia v2 - metadata
-$langTitle="Title";
 $langCategory="Category";
 //$langCreator=""; //den xrhsimopoieitai giati o creator einai o diaxeirisths pou kanei upload
 $langCreatorEmail="Author's email";
@@ -115,7 +114,6 @@ $langQuotaBar = "View available disk space";
 $langQuotaUsed = "Used disk space";
 $langQuotaTotal = "Total available disk space";
 $langQuotaPercentage = "Usage percentage";
-$langBack = "Back";
 
 $langEnglish = "English";
 $langFrench = "French";

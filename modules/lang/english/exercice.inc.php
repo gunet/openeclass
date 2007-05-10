@@ -124,19 +124,15 @@ $langDefineBlanks="Define one blank by tags [...]";
 $langGiveAnswers="Enter answers";
 $langChooseGoodAnswer="Choose a good answer";
 $langChooseGoodAnswers="Choose good answers";
-$langBack = "Back";
 
 // question_list_admin.inc.php
-
 $langNewQu="New Question";
 $langQuestionList="Question List";
 $langMoveUp="Move Up";
 $langMoveDown="Move Down";
 $langGetExistingQuestion="Get Existing Question";
 
-
 // question_pool.php
-
 $langQuestionPool="Question Pool";
 $langOrphanQuestions="Orphan Questions";
 $langNoQuestion="There is no question";
@@ -146,7 +142,6 @@ $langGoBackToEx="Back to exercise";
 $langReuse="Reuse";
 
 // exercise_result.php
-
 $langElementList="Element List";
 $langResult="Result";
 $langScore="Score";

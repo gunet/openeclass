@@ -58,7 +58,6 @@ $langAdd = "Add";
 
 $langVideoAdd = "Video Link added";
 $langVideoDel = "Video link deleted";
-$langBack = "Back";
 $langVideoMod = "Video link modified";
 $langVideoDeleted = "All video links deleted";
 $langURL="Video Server URL";
