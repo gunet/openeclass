@@ -1,4 +1,11 @@
 <? 
+// if we come from the home page
+if (isset($from_home) and ($from_home == TRUE) and isset($_GET['cid'])) {
+        session_start();
+        $dbname = $cid;
+        session_register("dbname");
+}
+
 $require_current_course = TRUE;
 $require_prof = true;
 $langFiles = array('course_info', 'create_course', 'opencours');
