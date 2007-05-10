@@ -39,19 +39,17 @@
 */
 $guest_allowed=true;
 $path2add=0;
-
 include("include/baseTheme.php");
-
 //@include("./include/lib/main.lib.php");
-@include("./modules/auth/auth.inc.php");
+include("./modules/auth/auth.inc.php");
 
 //$homePage is used by baseTheme.php to parse correctly the breadcrumb
 $homePage = true;
 
 $tool_content = "";
 
-@include("./modules/lang/$language/index.inc.php");
-@include("./modules/lang/$language/trad4all.inc.php");
+include("./modules/lang/$language/index.inc.php");
+include("./modules/lang/$language/trad4all.inc.php");
 
 // first check
 // check if we can connect to database. If not then eclass is most likely not installed
@@ -330,8 +328,8 @@ else unset($uid);
 //if the user logged in include the correct language files
 //in case he has a different language set in his/her profile
 if (isset($language)) {
-	@include("./modules/lang/$language/index.inc");
-	@include("./modules/lang/$language/trad4all.inc.php");
+	include("./modules/lang/$language/index.inc.php");
+	include("./modules/lang/$language/trad4all.inc.php");
 }
 $nameTools = $langWelcomeToEclass;
 

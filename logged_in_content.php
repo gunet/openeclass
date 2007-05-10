@@ -96,7 +96,6 @@ $tool_content .= "<tr><th>".$langInfo."</th></tr></thead><tbody>".
  $tool_content .= "</td></tr></tbody></table><br>";
 ###### end of table with platform information
  */
-
 $tool_content .= "<table cellpadding='4' width='100%' border='0' cellspacing='0'>";
 $result2 = mysql_query("SELECT cours.code k, cours.fake_code c, cours.intitule i, cours.titulaires t, cours_user.statut s
 		FROM cours, cours_user WHERE cours.code=cours_user.code_cours AND cours_user.user_id='".$uid."'
@@ -110,7 +109,7 @@ if (mysql_num_rows($result2) > 0) {
            </tr></table></td></tr>";
 
 			$tool_content .= "<tr><td>
-            <table width='100%' class='sortable' id='t1' border='0' cellpadding='0' cellspacing='0' align=center style='border: 1px solid #F1F1F1;'>
+      <table width='100%' class='sortable' id='t1' border='0' cellpadding='0' cellspacing='0' align=center style='border: 1px solid #F1F1F1;'>
             <tr><td class='td_small_HeaderRow' align='left' width='65%'>$langCourseCode</td>
                 <td class='td_small_HeaderRow' align='left' width='30%'>$langProfessor</td>
                 <td class='td_small_HeaderRow' align='center' width='5%'>$langUnCourse</td>

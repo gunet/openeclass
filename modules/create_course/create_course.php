@@ -121,7 +121,7 @@ $tool_content .= "
   		$resultFac=db_query("SELECT id,name FROM faculte ORDER BY number");
 			$tool_content .= "<select name='faculte' class=auth_input>";
 			while ($myfac = mysql_fetch_array($resultFac)) {
-					if(implode('--',array($myfac['id'],$myfac['name'])) == $faculte)	
+					if(isset($faculte) and implode('--',array($myfac['id'],$myfac['name'])) == $faculte)	
 							$tool_content .= "<option selected value='".$myfac['id']."--".$myfac['name']."'>$myfac[name]</option>";
 					else
 							$tool_content .= "<option value='".$myfac['id']."--".$myfac['name']."'>$myfac[name]</option>";

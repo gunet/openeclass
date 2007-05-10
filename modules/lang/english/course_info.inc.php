@@ -26,9 +26,7 @@
       +----------------------------------------------------------------------+
 */
 
-
-
-$langGeneralInfo = "General Info";
+$langCourseIden = "Course Info";
 $langModifInfo="Course Admin";
 $langModifDone="The information has been modified";
 $langHome="Back to HomePage";
@@ -45,20 +43,17 @@ $langPrivOpen="Private access, registration open";
 $langPrivate="Private access, registration closed (site accessible only to people on the <a href=../user/user.php>Users list</a>)";
 $langForbidden="Not allowed";
 $langLanguage="Language";
-$langConfTip="By default, you course is accessed by all users. If you want some access control,
-the simplest way is to open registration, ask the students to register themselves, then close registration and check for possible intruders in the users list.";
+$langConfTip="Select users course access.";
 $langOtherActions = "Other Actions";
 $langOptPassword = "Optional Password: ";
+$langTipLang="Choose the course language.";
 
 // delete_course.php
-$langDelCourse="Delete the whole course website";
+$langDelCourse="Delete the whole course";
 $langCourse="The website ";
 $langHasDel="has been deleted";
 $langBackHome="Back to Home Page of ";
 $langByDel="Deleting the course will permanently delete all the documents it contains and unregister all its students (will not unregister them from other courses).<p>Do you really want to delete the course?";
-$langY="YES";
-$langN="NO";
-$langBack="Back";
 $langConfirmDel = "Confirmation of course deleting";
 $langModifGroups="Groups";
 

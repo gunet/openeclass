@@ -3,7 +3,7 @@ session_start();
 //Flag for fixing relative path
 //See init.php to undestand it's logic
 $path2add=2;
-$require_admin = TRUE;
+//$require_admin = TRUE;
 
 $nameTools = "Αναβάθμιση των βάσεων δεδομένων του e-Class";
 
@@ -86,6 +86,9 @@ $tool_content .= add_field('cours', 'group_quota', "FLOAT DEFAULT '$diskQuotaGro
 // upgrade query to 1.6
 if (!mysql_field_exists("$mysqlMainDb",'cours','dropbox_quota'))
 $tool_content .= add_field('cours', 'dropbox_quota', "FLOAT DEFAULT '$diskQuotaDropbox' NOT NULL");
+// upgrade query to 1.7
+if (!mysql_field_exists("$mysqlMainDb", 'annonces','title'))
+ db_query("ALTER TABLE annonces ADD title VARCHAR(255) NULL AFTER id");
 
 // ************************************
 // new queries - upgrade queries to 2.0

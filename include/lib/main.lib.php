@@ -569,4 +569,38 @@ function urlenc($string)
         }
         return $out;
 }
+
+
+/*
+* Default Scoring function
+* Goal : compute a default scoring for a grouped multiple choise.
+*/
+
+function DefaultScoring($ChoiceCount,$Z,$weight) {
+
+    if ($Z==0)
+    {
+        $score = 10;
+    }
+    else{
+
+        $m=20;
+        $n=-0.2;
+        $o=8;
+        $p=-1.3;
+
+        //intermediate computations
+
+        $a=$m*pow($ChoiceCount,$n);
+        $b=$o*pow($ChoiceCount,$p);
+
+        //Scoring computation
+
+        $score=(round(($a*exp(-$b*$Z))*2))/2;
+    }
+
+    return $score/10*$weight;
+
+} //End of function DefaultScoring
+
 ?>
