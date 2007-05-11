@@ -277,14 +277,10 @@ if (isset($require_current_course) and $require_current_course) {
 				$toolContent_ErrorExists = $langNoAdminAccess;
 				$errorMessagePath = "../../";
 
-			} elseif ($visible == 1) {
-				if ($statut == 0) {
-
+			} elseif ($statut == 0 and ($visible == 1 or $visible == 0)) {
 					$toolContent_ErrorExists = $langLoginRequired;
 					$errorMessagePath = "../../";
-
 				}
-			}
 		}
 	}
 	# force a specific interface language
