@@ -64,8 +64,24 @@ if (isset($_POST["submit"])) {
                                         AND statut <> 10 AND user_id = '$uid' AND code_cours = '$value'");
                 }
         }
+				
+				$errorExists = false;
         if (isset($selectCourse) and is_array($selectCourse)) {
                 while (list($key,$contenu) = each ($selectCourse)) { 
+												 $sqlcheckpassword = mysql_query("SELECT password FROM cours WHERE code='".$contenu."'");
+                        $myrow = mysql_fetch_array($sqlcheckpassword);
+                        if ($myrow['password']!="" && $myrow['password']!=$$contenu) {
+                                $errorExists = true;
+                        } else {
+                                $sqlInsertCourse =
+                                "INSERT INTO `cours_user`
+                                                (`code_cours`, `user_id`, `statut`, `role`)
+                                                VALUES ('".$contenu."', '".$uid."', '5', ' ')";
+                                mysql_query($sqlInsertCourse) ;
+                                if (mysql_errno() > 0) echo mysql_errno().": ".mysql_error()."<br>";
+                        }
+
+									/*
                         if(!is_restricted($contenu)) { //DUKE
                                 $sqlInsertCourse = 
                                         "INSERT INTO `cours_user` 
@@ -75,8 +91,8 @@ if (isset($_POST["submit"])) {
                                 if (mysql_errno() > 0) echo mysql_errno().": ".mysql_error()."<br>";
                         } else { //DUKE
                                 $restrictedCourses[$i]=$contenu;
-                        } //DUKE
-                }
+                        } //DUKE */
+                } 
         }
         $tool_content .= "<table width=96% height=363 border=0><tr><td valign=top>";
         $tool_content .= "<div class=alert1>$langIsReg</div><br><br><br><br>";
@@ -265,7 +281,8 @@ function expanded_faculte($fac, $uid) {
 						cours.fake_code c,
 						cours.intitule i,
 						cours.visible visible,
-						cours.titulaires t
+						cours.titulaires t,
+					  cours.password p
 			        FROM cours_faculte, cours
 			        WHERE cours.code = cours_faculte.code
 							      AND cours.type = '$type'
@@ -312,16 +329,56 @@ function expanded_faculte($fac, $uid) {
             $retString .= "<tr onMouseOver=\"this.style.backgroundColor='#F1F1F1'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
 					  $retString .= "<td class='kkk' align='center' width='10%'>";
 						
+//----- needed ?????????????
+					 if ($mycours["visible"]==0 && !isset ($myCourses[$mycours["k"]]["subscribed"])) {
+							        $contactprof = $m['mailprof']."<a href=\"contactprof.php?fc=".$facid."&cc=".$mycours['k']."\">".$m['here']."</a>";
+						        $retString .= $codelink;
+			      } else {
+						        $retString .= $codelink;
+					      }
+
+				      if ($mycours["visible"]>0 && 
+											(isset ($myCourses[$mycours["k"]]["subscribed"]) 
+											|| !isset ($myCourses[$mycours["k"]]["subscribed"]))) {
+									        $retString .= "<input type='hidden' name='changeCourse[]' value='$mycours[k]'>\n";
+									        @$retString .= "<td>".$mycours['t']."</td>";
+					      } elseif ($mycours["visible"]== 0 && isset ($myCourses[$mycours["k"]]["subscribed"])) {
+								        $retString .= "<td>".$mycours['t']."</td>";
+					      } else {
+					        $retString .= "<td>$mycours[t]</td><td>".$contactprof."</td>";
+								}
+
+// ---------------------------------------
+
 						if (isset ($myCourses[$mycours["k"]]["subscribed"])) { 
 							if ($myCourses[$mycours["k"]]["statut"]!=1) {
+										// password needed
+										if ($mycours['p']!="" && $mycours['visible'] == 1) {
+									            $requirepassword = $m['code'].": 
+															<input type=\"password\" name=\"".$mycours['k']."\" value=\"".$mycours['p']."\">";
+										} else {
+					            $requirepassword = "";
+          					}
+				
 								$retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]' checked >";
-							} else {
-                $retString .= "<img src=../../images/teacher.gif title=$langTitular>";
-							}
+								} else {
+                	$retString .= "<img src=../../images/teacher.gif title=$langTitular>";
+								}
+						} else {
+
+									if ($mycours['p']!="" && $mycours['visible'] == 1) {
+						          $requirepassword = $m['code'].": <input type=\"password\" name=\"".$mycours['k']."\">";
+					        } else {
+						          $requirepassword = "";
+					        }
+    			    if ($mycours["visible"]>0  || isset ($myCourses[$mycours["k"]]["subscribed"])) {
+		      		    $retString .= "<td>
+									<input type='checkbox' name='selectCourse[]' value='$mycours[k]'> $requirepassword</td>";
+       				 }
+ 
+//							$retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]'>";
 						}
-						else { 
-							$retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]'>";
-						}
+
 						$retString .= "<input type='hidden' name='changeCourse[]' value='$mycours[k]'>";
 						$retString .= "</td>\n";
 						$retString .= "<td class='kkk'  valign='top' width=60%><b>$codelink</b> <font color=#4175B9>(".$mycours['k'].")</font> </td>\n";
