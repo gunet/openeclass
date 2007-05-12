@@ -724,4 +724,41 @@ Write Help Text Here.
 //Help Create Course Wizard
 $langHCreateCourse = "Create Course Wizard";
 $langCreateCourseContent = "<p>The Create Course Wizard is one of the most important tools of the platform. By using this, the user-instructor is able to create new courses in the platform and configure them.</p><p>The wizards consists of 3 steps. Filling in every field with an asterisk, is mandatory. Under some fields, lie exemplary information to help the user with the filling-in.</p><p>In case the user enters invalid data in a field, the system informs the user and prompts him to correct the error so as to be able to continue to the next step.</p>";
+
+// Wiki Help
+
+$langHWiki = "Help - Wiki";
+$langWikiContent = "<h3>Wiki administration help</h3>
+<dl class=\"wikiHelp\">
+<dt>How to create a new Wiki ?</dt>
+<dd>Click on the link 'Create a new Wiki'. Then enter the properties of the Wiki :
+<ul>
+<li><b>Title of the Wiki</b> : choose a title for the Wiki</li>
+<li><b>Description of the Wiki</b> : choose a description for the Wiki</li>
+<li><b>Access control management</b> : set the access ontrol of the Wiki by checking/uncheking the box (see below)</li>
+</ul>
+</dd>
+<dt>How to enter a Wiki ?</dt>
+<dd>Click on the title of the Wiki in the list.</dd>
+<dt>How to change the properties of a Wiki ?</dt>
+<dd>Click on the icon in the 'Properties' column in the Wiki list to go to the Wiki properties form.</dd>
+<dt>How to use the Access control management options ?</dt>
+<dd>You can set the access rights for users by checking/unchecking the box in the 'Access control management' section of Wiki properties.
+ You can grant/ungrant access to three types of users :<ul>
+<li><b>Course members</b> : users enroll to the course (except the course managers)</li>
+<li><b>Group members</b> (only available whithin a group) : users which are members of the group (expect the group's tutors)</li>
+<li><b>Other users</b> : anonymous users or users which are not course members</li></ul>
+For each user type, you can grant three type of privileges to the Wiki(*) :<ul>
+<li><b>Read pages</b> : the user of the given type can read the pages of the Wiki</li>
+<li><b>Edit pages</b> : the user of the given type can modify the content of th pages of the Wiki</li>
+<li><b>Create pages</b> : the user of the given type can create new pages in the Wiki</li>
+</ul><small><em>(*) Note that if a user cannot read the pages of a Wiki, he cannot edit or modify them. Note that if a user cannot edit the pages of a Wiki, he cannot create new pages.</em></small></dd>
+<dt>How to delete a Wiki ?</dt>
+<dd>Click on the icon in the 'Delete' column to delete a Wiki and all its pages.</dd>
+<dt>How to get the list of the pages in a Wiki ?</dt>
+<dd>Click on the number of pages of this Wiki in the Wiki list.</dd>
+<dt>How to get the list of the last modified pages in a Wiki ?</dt>
+<dd>Click on the icon in the 'Recent changes' column in the Wiki list.</dd>
+</dl>";
+
 ?>

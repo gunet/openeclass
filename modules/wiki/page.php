@@ -26,8 +26,8 @@
     
     $require_current_course = TRUE;
 	$langFiles              = "wiki";
-	$require_help           = TRUE;
-	$helpTopic              = "Wiki";
+	$require_help           = FALSE;
+	//$helpTopic              = "Wiki";
 	
 	require_once("../../include/baseTheme.php");
 	
