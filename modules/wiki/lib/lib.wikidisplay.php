@@ -60,13 +60,13 @@
         
         if ( $showWikiToolBar === true )
         {
-            $wikiarea = new Wiki2xhtmlArea( $content, 'content', 80, 15, null );
+            $wikiarea = new Wiki2xhtmlArea( $content, 'wiki_content', 80, 15, null );
             $out .= $wikiarea->toHTML();
         }
         else
         {
             $out .= '<label>Texte :</label><br />' . "\n";
-            $out .= '<textarea name="content" id="content"'
+            $out .= '<textarea name="wiki_content" id="wiki_content"'
                  . ' cols="80" rows="15" wrap="virtual">'
                  ;
             $out .= $content;
@@ -171,7 +171,7 @@
         $out = '<div style="clear:both;"><form method="POST" action="' . $script
             . '" name="previewform" id="previewform">' . "\n"
             ;
-        $out .= '<input type="hidden" name="content" value="'
+        $out .= '<input type="hidden" name="wiki_content" value="'
             . htmlspecialchars($content) . '" />' . "\n"
             ;
             

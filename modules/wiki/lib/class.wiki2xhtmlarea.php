@@ -41,7 +41,7 @@
          */
         function Wiki2xhtmlArea(
             $content = ''
-            , $name = 'content'
+            , $name = 'wiki_content'
             , $cols = 80
             , $rows = 30
             , $extraAttributes = null )

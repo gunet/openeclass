@@ -277,9 +277,9 @@
     
     if ( $action == "edit" )
     {
-        if ( isset( $_REQUEST['content'] ) )
+        if ( isset( $_REQUEST['wiki_content'] ) )
         {
-            $content = ( $_REQUEST['content'] == '' ) ? "__CONTENT__EMPTY__" : $_REQUEST['content'];
+            $content = ( $_REQUEST['wiki_content'] == '' ) ? "__CONTENT__EMPTY__" : $_REQUEST['wiki_content'];
         }
         else
         {
@@ -288,7 +288,7 @@
     }
     else
     {
-        $content = ( isset( $_REQUEST['content'] ) ) ? $_REQUEST['content'] : '';
+        $content = ( isset( $_REQUEST['wiki_content'] ) ) ? $_REQUEST['wiki_content'] : '';
     }
     
     // use __MainPage__ if empty title
@@ -848,7 +848,7 @@
             $tool_content .= claro_disp_message_box ( $message ) . '<br />' . "\n";
             
             $tool_content .= '<form id="editConflict" action="'.$_SERVER['PHP_SELF'].'" method="POST">';
-            $tool_content .= '<textarea name="conflictContent" id="content"'
+            $tool_content .= '<textarea name="conflictContent" id="wiki_content"'
                  . ' cols="80" rows="15" wrap="virtual">'
                  ;
             $tool_content .= $content;
