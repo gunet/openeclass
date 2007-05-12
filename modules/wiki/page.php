@@ -1,24 +1,49 @@
-<?php // $Id$
+<?php 
 
-    // vim: expandtab sw=4 ts=4 sts=4:
+/**=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2007  Greek Universities Network - GUnet
+        A full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+                     Yannis Exidaridis <jexi@noc.uoa.gr> 
+                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
-    /**
-     * CLAROLINE
-     *
-     * @version 1.7 $Revision$
-     *
-     * @copyright 2001-2005 Universite catholique de Louvain (UCL)
-     *
-     * @license http://www.gnu.org/copyleft/gpl.html (GPL) GENERAL PUBLIC LICENSE
-     * This program is under the terms of the GENERAL PUBLIC LICENSE (GPL)
-     * as published by the FREE SOFTWARE FOUNDATION. The GPL is available
-     * through the world-wide-web at http://www.gnu.org/copyleft/gpl.html
-     *
-     * @author Frederic Minne <zefredz@gmail.com>
-     *
-     * @package Wiki
-     */
+        For a full list of contributors, see "credits.txt".  
      
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
+
+/**===========================================================================
+	page.php
+	@last update: 15-05-2007 by Thanos Kyritsis
+	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+	               
+	based on Claroline version 1.7.9 licensed under GPL
+	      copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
+	      
+	      original file: page Revision: 1.61.2.4
+	      
+	Claroline authors: Frederic Minne <zefredz@gmail.com>
+==============================================================================        
+    @Description: 
+
+    @Comments:
+ 
+    @todo: 
+==============================================================================
+*/
+
     $tlabelReq = 'CLWIKI__';
     
     require_once("../../include/lib/learnPathLib.inc.php");

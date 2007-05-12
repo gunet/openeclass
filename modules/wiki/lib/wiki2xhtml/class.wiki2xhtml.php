@@ -1,97 +1,54 @@
-<?php // $Id$
+<?php
 
-# ***** BEGIN LICENSE BLOCK *****
-# This file is part of DotClear.
-# Copyright (c) 2004 Olivier Meunier and contributors. All rights
-# reserved.
-#
-# DotClear is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# DotClear is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with DotClear; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-#
-# ***** END LICENSE BLOCK *****
-#
-# Contributor(s):
-# Stephanie Booth
-# Mathieu Pillard
-# Christophe Bonijol
-# Jean-Charles Bagneris
-# Nicolas Chachereau
-# J�r�me Lipowicz
-#
-# Version : 3.1d
-# Release date : Monday 2004-06-06
+/**=============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+================================================================================
+       	Copyright(c) 2003-2007  Greek Universities Network - GUnet
+        A full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+                     Yannis Exidaridis <jexi@noc.uoa.gr> 
+                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
-# History :
-#
-# 3.1d
-# J�r�me Lipowicz
-#			=> antispam
-# Olivier
-#			=> centrage d'image
-#
-# 3.1c
-# Olivier
-#			=> Possibilit� d'�chaper les | dans les marqueurs avec \
-#
-# 3.1b
-# Nicolas Chachereau
-#			=> Changement de regexp pour la correction syntaxique
-#
-# 3.1a
-# Olivier
-#			=> Bug du Call-time pass-by-reference
-#
-# 3.1
-# Olivier
-#			=> Ajout des macros ���..���
-#			=> Ajout des blocs vides ���
-#			=> Ajout du niveau de titre param�trable
-#			=> Option de blocage du parseur dans les <pre>
-#			=> Titres au format setext (experimental, d�sactiv�)
-#
-# 3.0
-# Olivier		=> R�criture du parseur inline, plus d'erreur XHTML
-#			=> Ajout d'une v�rification d'int�grit� pour les listes
-#			=> Les acronymes sont maintenant dans un fichier texte
-#			=> Ajout d'un tag images ((..)), del --..-- et ins ++..++
-#			=> Plus possible de faire des liens JS [lien|javascript:...]
-#			=> Ajout des notes de bas de page ��...��
-#			=> Ajout des mots wiki
-#
-# 2.5
-# Olivier		=> R�criture du code, plus besoin du saut de ligne entre blocs !=
-#
-# 2.0
-# Stephanie	=> correction des PCRE et ajout de fonctionnalit�s
-# Mathieu 	=> ajout du strip-tags, implementation des options, reconnaissance automatique d'url, etc.
-# Olivier		=> chagement de active_link en active_urls
-#			=> ajout des options pour les blocs
-#			=> int�gration de l'aide dans le code, avec les options
-#			=> d�but de quelque chose pour la reconnaissance auto d'url (avec Mat)
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
 
-# TODO :
-# Mathieu	=> active_wiki_urls (modifier wikiParseUrl ?)
-# 		=> active_auto_urls
-#
-# *		=> ajouter des options.
-# 		=> trouver un meilleur nom pour active_link ? (pour le jour ou ca sera tellement une usine
-#		   a gaz que on generera des tags <link> :)
-#
+/**===========================================================================
+	class.wiki2xhtml.php
+	@last update: 15-05-2007 by Thanos Kyritsis
+	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+	               
+	based on DotClear version 3.1d licensed under GPL
+	      copyright (c) 2004 Olivier Meunier and contributors.
+	      
+	      original file: class.wiki2xhtml Revision: 1.1.2.2
+	      
+	DotClear contributors: Stephanie Booth
+                           Mathieu Pillard
+                           Christophe Bonijol
+                           Jean-Charles Bagneris
+                           Nicolas Chachereau
+                           J�r�me Lipowicz
+==============================================================================        
+    @Description: 
 
+    @Comments:
+ 
+    @todo: 
+==============================================================================
+*/
 
-
-# Wiki2xhtml
 
 class wiki2xhtml
 {
