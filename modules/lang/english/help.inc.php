@@ -489,12 +489,12 @@ $langHImport = "Upload page";
 $langImportContent = "<p>You can add your personal pages in lesson home page.
 The page must be in HTML format and can be created with a word processor or
 an editor for creating Web sites and pages. If you want to add a page upload the file .html
-by pressing the button ¡browse¢ , type the title of the page and press button 'Add'.
+by pressing the button ï¿½browseï¿½ , type the title of the page and press button 'Add'.
 Your page will be linked from Homepage. If you want to send non HTML documents
 (PDF, Word, Power Point, Video, etc.) use 'Documents tool'
 These links can be deactivated and deleted.</p>";
 
-$langHModule = "Ádd link in home page";
+$langHModule = "ï¿½dd link in home page";
 $langModuleContent = "<p>If you want to add links in lesson home page, just type the title and the address of the
 link and press button 'Add'. These links can be deactivated and deleted.</p>";
 
@@ -601,7 +601,7 @@ After entering the information you want press the button 'Add'. If, for some rea
 the information press 'Return and Cancel'. Whenever you want, you can modify the information you have entered by
 clicking 'Modify' or deleting it by clicking on 'Delete'.</p>";
 
-$langHModule = "Ádd link in home page";
+$langHModule = "ï¿½dd link in home page";
 $langModuleContent = "<p>If you want to add links in lesson home page, just type the title and the address of the
 link and press button 'Add'. These links can be deactivated and deleted.</p>";
 
@@ -759,6 +759,53 @@ For each user type, you can grant three type of privileges to the Wiki(*) :<ul>
 <dd>Click on the number of pages of this Wiki in the Wiki list.</dd>
 <dt>How to get the list of the last modified pages in a Wiki ?</dt>
 <dd>Click on the icon in the 'Recent changes' column in the Wiki list.</dd>
+</dl>";
+
+$langHWikiSyntax = "Help - Wiki Syntax";
+$langWikiSyntaxContent = "<h1>Wiki Syntax</h1>
+<h2>1. Basic syntax</h2>
+<dl class=\"wikiHelp\">
+<dt>Creating wiki pages and links between them</dt>
+<dd><strong>Wiki words</strong> : Wiki words are words written like <em>WikiWord</em>. Wiki2xhtml automaticaly recognise them as Wiki page links. To create a wiki page or to create a link to a wiki page, edit an existing one and add the title of the page in WikiWord syntax, for example <em>MyPage</em>, then save the page. Wiki2xhtml will automaticaly replace the Wiki Word <em>MyPage</em> with a link to the Wiki page <em>MyPage</em>&nbsp;;</dd>
+<dd><strong>Wiki links</strong> : Wiki links are like Hyperlinks (see below) expect that they do not contain any protocol scheme (like <em>http://</em> or <em>ftp://</em>) and thatthey are automaticaly recognise as links to Wiki pages. To create a new page or create a link to an existing one using Wiki links, edit a page and add <code>[page title]</code> or <code>[name of link|title of page]</code> to its content. You can also use this syntax to change the text of a WikiWord link : <code>[name of link|WikiWord]</code>.</dd>
+<dt>Hyperlinks</dt>
+<dd><code>[url]</code>, <code>[name|url]</code>, <code>[name|url|language]</code> or <code>[name|url|language|title]</code>.&nbsp;;</dd>
+<dt>Image inclusion</dt>
+<dd><code>((url|alternate text))</code>, <code>((url|alternate text|position))</code> ou <code>((url|alternate text|position|long description))</code>. <br />The position argument can take the following values : L (left), R (right) or C (centerï¿½).&nbsp;;</dd>
+<dd>You can use the syntax as Hyperlinks. For example <code>[title|image.gif]</code>. This syntax is deprecated, consider to use the preceding one&nbsp;;</dd>
+<dt>Link to an image</dt>
+<dd>same as Hyperlinks but put a 0 in fourth argument to avoid image recognition and get an hyperlink to an image. For example <code>[image|image.gif||0]</code> will display a link to image.gif instead of display the imge itself</dd>
+<dt>Layout</dt>
+<dd><strong>Italic</strong> : surround your text with two single quotes <code>''text''</code>&nbsp;;</dd>
+<dd><strong>Bold</strong> : surround your text with three single quotes underscores <code>'''text'''</code>&nbsp;;</dd>
+<dd><strong>Underline</strong> : surround your text with two underscores <code>__text__</code>&nbsp;;</dd>
+<dd><strong>Stroke</strong> : surround your text with two minus symbols <code>--text--</code>&nbsp;;</dd>
+<dd><strong>Title</strong> : <code>!!!</code>, <code>!!</code>, <code>!</code> respectively for titles, sub-titles and sub-sub-titles&nbsp;;</dd>
+<dt>List</dt>
+<dd>line starting with <code>*</code> (unordered list) or <code>#</code> (ordered list). You can mix lists (<code>*#*</code>) to create multi-level lists.&nbsp;;</dd>
+<dt>Paragraph</dt>
+<dd>Separate paragraphs with one or more new lines&nbsp;;</dd>
+</dl>
+<h2>2. Advanced syntax</h2>
+<dl class=\"wikiHelp\">
+<dt>Footnote</dt>
+<dd><code>\$\$footnote text\$\$</code>&nbsp;;</dd>
+<dt>Preformated text</dt>
+<dd>begin each line of preformated text with a blank space&nbsp;;</dd>
+<dt>Cite block</dt>
+<dd><code>&gt;</code> or <code>;:</code> before each line&nbsp;;</dd>
+<dt>Horizontal line</dt>
+<dd><code>----</code>&nbsp;;</dd>
+<dt>Forced line break</dt>
+<dd><code>%%%</code>&nbsp;;</dd>
+<dt>Acronym</dt>
+<dd><code>??acronym??</code> or <code>??acronym|definition??</code>&nbsp;;</dd>
+<dt>Inline cite</dt>
+<dd><code>{{cite}}</code>, <code>{{cite|language}}</code> or <code>{{cite|language|url}}</code>&nbsp;;</dd>
+<dt>Code</dt>
+<dd><code>@@your code here@@</code>&nbsp;;</dd>
+<dt>Named anchor</dt>
+<dd><code>~anchor~</code>&nbsp;;</dd>
 </dl>";
 
 ?>
