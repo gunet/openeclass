@@ -96,7 +96,10 @@ if (isset($_POST["submit"])) {
                 } 
         }
         $tool_content .= "<table width=96% height=363 border=0><tr><td valign=top>";
-        $tool_content .= "<div class=alert1>$langIsReg</div><br><br><br><br>";
+				if (!$errorExists)
+	        $tool_content .= "<div class=alert1>$langIsReg</div><br><br><br><br>";
+				else 
+						$tool_content .= "<div class=alert1>$langWrongPassCourse $contenu</div><br><br><br><br>";
         if($restrictedCourses!=null) { //DUKE
                 $tool_content .= "<div class=alert1>(Μη επιτρεπτή ενέργεια)</div><br><br><br><br>";
         } //DUKE
