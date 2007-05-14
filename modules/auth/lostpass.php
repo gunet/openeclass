@@ -51,7 +51,7 @@ $nameTools = $lang_remind_pass;
 
 
 function valid_email($e) {
-	$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
+	$regexp = '^[0-9a-z_\.-\+]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$';
 	if (!eregi($regexp, $e)) {
 		return FALSE;
 	} else {

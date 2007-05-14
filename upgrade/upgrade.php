@@ -1345,7 +1345,7 @@ function is_admin($username, $password, $mysqlMainDb)
 	mysql_select_db($mysqlMainDb);
 	$r = mysql_query("SELECT * FROM user, admin WHERE admin.idUser = user.user_id
             AND user.username = '$username' AND user.password = '$password'");
-	if (mysql_num_rows($r) == 0) {
+	if (!$r or mysql_num_rows($r) == 0) {
 		return FALSE;
 	} else {
 		$row = mysql_fetch_array($r);
