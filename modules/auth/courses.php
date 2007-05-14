@@ -72,6 +72,7 @@ if (isset($_POST["submit"])) {
                         $myrow = mysql_fetch_array($sqlcheckpassword);
                         if ($myrow['password']!="" && $myrow['password']!=$$contenu) {
                                 $errorExists = true;
+													//			$tool_content .= "<p>".$langWrongPassCourse." ".$contenu."</p>";
                         } else {
                                 $sqlInsertCourse =
                                 "INSERT INTO `cours_user`
@@ -114,7 +115,6 @@ else
         } else {
                 // get faculte name from user's department column
                 $fac = getfacfromuid($uid);
-                //	echo $fac;
         }
 
         if (!$fac) {
@@ -152,32 +152,22 @@ else
                 // department exists
 
                 $tool_content .= "<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">";
-                $formend = "<tr>
-                        <td colspan=\"6\" ><br>&nbsp;&nbsp;
-                <input type=\"submit\" name=\"submit\" value=\"$langSubscribe\"><br><br>
-                        </td>
-                        </tr>\n";
-
                 $numofcourses = getdepnumcourses($fac);
 
                 // display all the facultes collapsed
                 $tool_content .= collapsed_facultes_horiz($fac);
                 if ($numofcourses > 0) {
                         $tool_content .= expanded_faculte($fac, $uid);
-                }
-
-        } // end of else (department exists)
-
-        if (isset($formend)) {
-                $numofcourses = getdepnumcourses($fac);
-                if ($numofcourses > 0) {
-                        $tool_content .= $formend;
-                } else {
+												$tool_content .= "<tr><td colspan=\"6\" ><br>&nbsp;&nbsp;
+  			                  <input type=\"submit\" name=\"submit\" value=\"$langSubscribe\"><br><br></td></tr>\n";
+                				$tool_content .= "</div></table></form>";
+								} else {
                         if ($fac) {
                                 $tool_content .= "<div class=alert1>$langNoCourses</div></td></tr></table>\n";
                         }
                 }
-        }
+									
+        } // end of else (department exists)
 }
 
 draw($tool_content,1,'admin');
@@ -347,13 +337,13 @@ function expanded_faculte($fac, $uid) {
 								}
 */
 // ---------------------------------------
-
+						$requirepassword = "";
 						if (isset ($myCourses[$mycours["k"]]["subscribed"])) { 
 							if ($myCourses[$mycours["k"]]["statut"]!=1) {
 										// password needed
 										if ($mycours['p']!="" && $mycours['visible'] == 1) {
 							            $requirepassword = $m['code'].": 
-													<input type=\"password\" name=\"".$mycours['k']."\" value=\"".$mycours['p']."\">";
+														<input type=\"password\" name=\"".$mycours['k']."\" value=\"".$mycours['p']."\">";
 										} else {
 					            $requirepassword = "";
           					}
@@ -363,15 +353,13 @@ function expanded_faculte($fac, $uid) {
                 	$retString .= "<img src=../../images/teacher.gif title=$langTitular>";
 								}
 						} else {
-
 									if ($mycours['p']!="" && $mycours['visible'] == 1) {
-						          $requirepassword = $m['code'].": <input type=\"password\" name=\"".$mycours['k']."\">";
+						          $requirepassword = "<br>".$m['code'].": <input type=\"password\" name=\"".$mycours['k']."\">";
 					        } else {
 						          $requirepassword = "";
 					        }
-    			    if ($mycours["visible"]>0  || isset ($myCourses[$mycours["k"]]["subscribed"])) {
-		      		    $retString .= "<td>
-									<input type='checkbox' name='selectCourse[]' value='$mycours[k]'> $requirepassword</td>";
+   			    if ($mycours["visible"]>0  || isset ($myCourses[$mycours["k"]]["subscribed"])) {
+	      		    $retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]'></td>";
        				 }
  
 //							$retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]'>";
@@ -379,7 +367,7 @@ function expanded_faculte($fac, $uid) {
 
 						$retString .= "<input type='hidden' name='changeCourse[]' value='$mycours[k]'>";
 						$retString .= "</td>\n";
-						$retString .= "<td class='kkk'  valign='top' width=60%><b>$codelink</b> <font color=#4175B9>(".$mycours['k'].")</font> </td>\n";
+						$retString .= "<td class='kkk'  valign='top' width=60%><b>$codelink</b> <font color=#4175B9>(".$mycours['k'].")</font>$requirepassword </td>\n";
 					  $retString .= "<td class=kkk width=23%><span class='explanationtext'>$mycours[t]</span></td>\n";	
 						$retString .= "<td class='kkk' valign='top' align='center' width='7%'>";
             // show the necessary access icon
@@ -398,12 +386,12 @@ function expanded_faculte($fac, $uid) {
 					
 					// that's it!
 					// upatras.gr patch end
-				}
+
+			}
 				
       $retString .= "</td>\n";
       $retString .= "</tr>\n";
       $retString .= "</table>\n";
-			$retString .= "</div>";
 
 return $retString;
 }
