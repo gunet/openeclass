@@ -35,9 +35,7 @@
  */
 
 require_once("dropbox_init1.inc.php");
-
 $nameTools = $dropbox_lang["dropbox"];
-//begin_page();
 
 /**
  * ========================================
@@ -60,8 +58,6 @@ if (isset($_POST["dropbox_unid"])) {
 }
 
 if (isset($_SESSION["dropbox_uniqueid"]) && isset($_GET["dropbox_unid"]) && $dropbox_unid == $_SESSION["dropbox_uniqueid"]) {
-	//resubmit : go to index.php
-	// only prevent resending of data for GETS, not POSTS because this gives annoying results
 
 	if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"]=="on") {
 		$mypath = "https";
@@ -80,7 +76,6 @@ session_register("dropbox_uniqueid");
 
 require_once("dropbox_class.inc.php");
 
-
 /**
  * ========================================
  * FORM SUBMIT
@@ -96,12 +91,7 @@ if (isset($_POST["submitWork"]))
 	$errormsg = '';
 
 
-	/**
-     * --------------------------------------
-     *      FORM SUBMIT : VALIDATE POSTED DATA
-     * --------------------------------------
-     */
-	if ( !isset( $_POST['authors']) || !isset( $_POST['description']))
+if (!isset( $_POST['authors']) || !isset( $_POST['description']))
 	{
 		$error = TRUE;
 		$errormsg = $dropbox_lang["badFormData"];
@@ -172,7 +162,7 @@ if (isset($_POST["submitWork"]))
 		$errormsg = $dropbox_lang["quotaError"];
 
 		$error = TRUE;
-	}elseif (!is_uploaded_file($dropbox_filetmpname)) // check user fraud : no clean error msg.
+	} elseif (!is_uploaded_file($dropbox_filetmpname)) // check user fraud : no clean error msg.
 	{
 		die ($dropbox_lang["badFormData"]);
 	}
@@ -250,13 +240,7 @@ if (isset($_POST["submitWork"]))
 	} //end if(!$error)
 
 
-	/**
-     * ========================================
-     * SUBMIT FORM FEEDBACK
-     * ========================================
-     */
-	if (!$error)
-	{
+	if (!$error) {
 		$tool_content .= "<table width=\"99%\">
 		<tbody>
 		<tr>
@@ -267,18 +251,9 @@ if (isset($_POST["submitWork"]))
 		</tr>
 		</tbody>
 		</table><br/>";
-
-		/* if (isset($origin))  {
-		$tool_content .=  "<p><a href='index.php?origin=$origin'>".$dropbox_lang['backList']."</a></p>";
-		$tool_content .=  "<br>";
-		} else { */
-		//			$tool_content .=  "<p><a href='index.php'>".$dropbox_lang['backList']."</a><br></p>";
-		/* } */
 	}
-
 	else
 	{
-
 		$tool_content .= "<table width=\"99%\">
 		<tbody>
 		<tr>
@@ -291,13 +266,7 @@ if (isset($_POST["submitWork"]))
 		</table><br/>";
 
 		$tool_content .=  "<b><font color='#FF0000'>".$errormsg."</font></b><br><br>";
-		/* if (isset($origin))
-		$tool_content .=  "<a href='index.php?origin=$origin'>".$dropbox_lang['backList']."</a>";
-		else */
-		//		$tool_content .=  "<a href='index.php'>".$dropbox_lang['backList']."</a><br>";
-
 	}
-	//    exit();
 }
 
 
@@ -318,7 +287,6 @@ if (isset($_GET['mailingIndex']))  // examine or send
 	$mailing_title = $mailing_item->title;
 	$mailing_file = $dropbox_cnf["sysPath"] . '/' . $mailing_item->filename;
 	$errormsg = '<b>' . $mailing_item->recipients[0]['name'] . ' ('
-	/*. "<a href='dropbox_download.php?origin=$origin&id=".urlencode($mailing_item->id)."'>'"*/
 	. "<a href='dropbox_download.php?id=".urlencode($mailing_item->id)."'>'"
 	. $mailing_title . '</a>):</b><br><br>';
 
@@ -333,13 +301,10 @@ if (isset($_GET['mailingIndex']))  // examine or send
 
 		function getUser($thisRecip)
 		{
-			// string result = error message, array result = [user_id, nom, prenom]
-
 			global $dropbox_lang, $var, $sel;
 			unset($students);
 
 			$result = db_query($sel);
-			//        $result = db_query($sel . $thisRecip . "'");
 			while (($res = mysql_fetch_array($result))) {$students[] = $res;}
 			mysql_free_result($result);
 
@@ -362,8 +327,6 @@ if (isset($_GET['mailingIndex']))  // examine or send
 
 		function findRecipient($thisFile)
 		{
-			// string result = error message, array result = [user_id, nom, prenom, statut]
-
 			global $dropbox_cnf, $dropbox_lang, $nameParts, $preFix, $preLen, $postFix, $postLen;
 
 			if ( preg_match($dropbox_cnf["mailingFileRegexp"], $thisFile, $matches))
@@ -504,7 +467,6 @@ if (isset($_GET['mailingIndex']))  // examine or send
 					}
 					else
 					{
-						//        $newName = getLoginFromId( $uid) . "_" . $thisFile . "_" . uniqid('');
 						$newName = $uid . "_" . $thisFile . "_" . uniqid('');
 						if ( rename($dropbox_cnf["sysPath"] . '/' . $thisFile, $dropbox_cnf["sysPath"] . '/' . $newName))
 						new Dropbox_SentWork( $mailingPseudoId, $thisFile, $mailing_item->description, $mailing_item->author, $newName, $thisContent['size'], array($thisRecip[0]));
@@ -540,29 +502,18 @@ if (isset($_GET['mailingIndex']))  // examine or send
      */
 	if ($error)
 	{
-		/* $tool_content.="
-		<b><font color=\"#FF0000\">$errormsg</font></b><br><br>
-		<a href=\"index.php?origin=$origin\">".$dropbox_lang["backList"]."></a><br>
-		"; */
 		$tool_content.="
 		<b><font color=\"#FF0000\">$errormsg</font></b><br><br>
 		<a href=\"index.php\">".$dropbox_lang["backList"]."></a><br>
 		";
 	}
-
 	else
 	{
-		/* $tool_content .= "
-		$errormsg<br><br>
-		<a href=\"index.php?origin=$origin\">".$dropbox_lang["backList"]."</a><br>
-		"; */
 		$tool_content .= "
 		$errormsg<br><br>
 		<a href=\"index.php\">".$dropbox_lang["backList"]."</a><br>
 		";
 	}
-
-	//    exit();
 }
 
 
@@ -643,14 +594,6 @@ if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent']))
 		</tr>
 		</tbody>
 		</table><br/>";
-
-	/* if (isset($origin))
-	$tool_content .=  "<a href='index.php?origin=$origin'>".$dropbox_lang['backList']."</a><br>";
-	else */
-
-	//    exit();
 }
-
-
 draw($tool_content, 2, 'dropbox', $head_content);
 ?>

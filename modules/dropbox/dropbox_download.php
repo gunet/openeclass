@@ -34,10 +34,8 @@
  * 
  */
  
-
-require_once("dropbox_init1.inc.php");	//only call init1 because init2 outputs data
+require_once("dropbox_init1.inc.php");
 require_once("dropbox_class.inc.php");
-
 
 /**
  * ========================================
@@ -79,8 +77,7 @@ if ( !is_file( $path))
  * SEND HEADERS
  * ========================================
  */
-require_once("mime.inc.php"); //import mimetype array with mimetype info	
-
+require_once("mime.inc.php"); 
 
 $fileparts = explode( '.', $file);
 $filepartscount = count( $fileparts);
@@ -98,8 +95,6 @@ else
 	header( "Content-Disposition: inline; filename=$file\n");
 }
 
-
-
 /**
  * Note that if you use these two headers from a previous example:
  * header('Cache-Control: no-cache, must-revalidate');
@@ -115,7 +110,6 @@ header("Content-Description: " . trim(htmlentities($file)) . "\n");
 header("Content-Transfer-Encoding: binary\n");
 header("Content-Length: " . filesize( $path)."\n" );
 
-
 /**
  * ========================================
  * SEND FILE
@@ -124,5 +118,4 @@ header("Content-Length: " . filesize( $path)."\n" );
 $fp = fopen($path, "rb");
 fpassthru($fp);
 exit( );
-
 ?>

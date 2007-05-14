@@ -207,5 +207,38 @@ echo "<tr><td>\n";
 // end of function begin_page
 // ---------------------------------------------
 
+function start_toolbar()
+{
+        echo "   <table align='center' width=96% border='0' cellspacing='0' cellpadding='0'  style=\"border: 1px so
+lid #DCDCDC;\">\n";
+        echo "   <tr>\n";
+        echo "      <td align=right class='tool_bar' valign=middle height=25>";
+
+}
+
+function end_toolbar()
+{
+                                echo "   </td>\n";
+        echo "   </tr>\n";
+        echo "   </table>\n\n";
+        echo "   </br>\n\n";
+}
+
+function start_AdminToolbar()
+{
+        echo "   <table align='center' width=96% border='0' cellspacing='0' cellpadding='0'  style=\"border: 1px so
+lid #DCDCDC;\">\n";
+        echo "   <tr>\n";
+        echo "      <td align=right class='tool_bar_Admin' valign=middle height=25>";
+
+}
+
+function end_AdminToolbar()
+{
+                                echo "   </td>\n";
+        echo "   </tr>\n";
+        echo "   </table>\n\n";
+        echo "   </br>\n\n";
+}
 
 ?>

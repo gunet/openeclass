@@ -51,10 +51,6 @@ $tool_content .="
 		</ul>
 		</div>
 		";
-/* if (isset($_GET['origin'])) {
-$origin = htmlspecialchars($_GET['origin']);
-$_GET['origin'] = $origin;
-} */
 
 /*
 * get order status of sent list.
@@ -118,21 +114,14 @@ $dropbox_unid = md5(uniqid(rand(), true));	//this var is used to give a unique v
 if (isset($_GET['mailing']))  // RH: Mailing detail: no form upload
 {
 	$tool_content .= "<h3>". htmlspecialchars(getUserNameFromId($_GET['mailing'])). "</h3>";
-	/* $tool_content .= "<a href='index.php?origin=$origin'>".$dropbox_lang["mailingBackToDropbox"].'</a><br><br>'; */
 	$tool_content .= "<a href='index.php'>".$dropbox_lang["mailingBackToDropbox"].'</a><br><br>';
 }
 elseif(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1)
 {
 
-	/* if (isset($origin)) {
-	$tool_content .= <<<tCont
-	<form method="post" action="dropbox_submit.php?origin=$origin" enctype="multipart/form-data" onsubmit="return checkForm(this)">
-	tCont;
-	} else { */
 	$tool_content .= <<<tCont2
 	<form method="post" action="dropbox_submit.php" enctype="multipart/form-data" onsubmit="return checkForm(this)">
 tCont2;
-	/* } */
 	if ($dropbox_cnf["allowOverwrite"]) {
 		$jsCheckFile = 'onChange="checkfile(this.value)"';
 	} else {
@@ -149,11 +138,7 @@ tCont2;
 			<input type=\"file\" name=\"file\" size=\"\" $jsCheckFile>
 			<input type=\"hidden\" name=\"dropbox_unid\" value=\"$dropbox_unid\">";
 
-	/* if (isset($origin) and $origin=='learnpath')
-	$tool_content .= "<input type='hidden' name='origin' value='learnpath'>"; */
-	$tool_content .= "
-		</td>
-	</tr>";
+	$tool_content .= "</td></tr>";
 
 	if ($dropbox_cnf["allowOverwrite"]) {
 		$tool_content .= "
@@ -291,21 +276,9 @@ tCont4;
 	<td>
 	
 tCont5;
-	/* if (!isset($origin)) {
-	$origin="";
-	} */
-	/* $tool_content .= "
-	<div>
-	<form class=\"sort\" name=\"formReceived\" method=\"get\" action=\"index.php?origin=$origin\">
-	".$dropbox_lang["orderBy"].""; */
-	$tool_content .= "
-<div>
+	$tool_content .= "<div>
 		<form class=\"sort\" name=\"formReceived\" method=\"get\" action=\"index.php\">
 		".$dropbox_lang["orderBy"]."";
-
-	/* if (isset($origin) and $origin=='learnpath')
-	$tool_content .= "<input type='hidden' name='origin' value='learnpath'>"; */
-
 
 	$tool_content .= "
 		<select name=\"receivedOrder\" onchange=\"javascript: this.form.submit()\">";
@@ -368,20 +341,11 @@ tCont5;
 	if ($numberDisplayed > 0) {
 
 		$dr_lang_all = addslashes( $dropbox_lang["all"]);
-		/* if (isset($origin)) { $tool_content .= <<<tCont6
-		<a href="dropbox_submit.php?origin=$origin&deleteReceived=all&dropbox_unid=$dr_unid" onClick="return confirmationall('$dr_lang_all');">
-		<img src="../../images/delete.gif" border="0" title="$langDelete"></a>
-		tCont6;
-		} else { */
 		$tool_content .= "
 	<a href=\"dropbox_submit.php?deleteReceived=all&dropbox_unid=$dr_unid\" onClick=\"return confirmationall('".$dropbox_lang["all"]."');\">
 	<img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
 
-		/* } */
 	}
-
-	/* if (isset($origin) and $origin=='learnpath')
-	$tool_content .= "<input type='hidden' name='origin' value='learnpath'>"; */
 
 	$tool_content .= "
 		</div></td>
@@ -466,15 +430,9 @@ tCont9;
 
 	";
 
-		/* if (isset($origin)) { $tool_content .= "
-		<a href=\"dropbox_submit.php?origin=$origin\"&deleteReceived=".urlencode($w->id)."&dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation(\"$w->title\");'>
-		<img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
-		} else { */
 		$tool_content .= "
 	<a href=\"dropbox_submit.php?deleteReceived=".urlencode($w->id)."&dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation(\"$w->title\");'>
 	<img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
-
-		/* } */
 
 		$tool_content .="
 	</div>
@@ -514,13 +472,9 @@ $tool_content .= strtoupper($dropbox_lang["sentTitle"]);
 $tool_content .="
 	</th>
 	<td>";	
-/* $tool_content .= "
-<form class=\"sort\" name=\"formSent\" method=\"get\" action=\"index.php?origin=$origin\">"; */
 $tool_content .= "
 	<form class=\"sort\" name=\"formSent\" method=\"get\" action=\"index.php\">";
 
-/* if (isset($origin) and $origin=='learnpath')
-$tool_content .= "<input type='hidden' name='origin' value='learnpath'>"; */
 $tool_content .= "
 	<span class=\"dropbox_listTitle\">".$dropbox_lang["orderBy"]."</span>
 	<select name=\"sentOrder\" onchange=\"javascript: this.form.submit()\">";
@@ -577,17 +531,11 @@ $tool_content .= "
 // if the user has sent files then display the icon deleteall
 if ($numSent > 0) {
 
-	/* if (isset($origin)) { $tool_content .= "
-	<a href=\"dropbox_submit.php?origin=$origin&deleteSent=all&dropbox_unid=".urlencode( $dropbox_unid).$mailingInUrl."\"
-	onClick=\"return confirmationall('".addslashes($dropbox_lang["all"])."');\">
-	<img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
-	} else { */
 	$tool_content .= "
 	<a href=\"dropbox_submit.php?deleteSent=all&dropbox_unid=".urlencode( $dropbox_unid).$mailingInUrl."\"
 	onClick=\"return confirmationall('".addslashes($dropbox_lang["all"])."');\">
 	<img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
 
-	/* } */
 }
 $tool_content .= "
  	</div></td>
@@ -625,17 +573,11 @@ foreach ($dropbox_person -> sentWork as $w)
 
 	if ( $w->recipients[0]['id'] > $dropbox_cnf["mailingIdBase"])
 	{
-		/* if (isset($origin))
-		$ahref = "index.php?origin=$origin&mailing=" . urlencode($w->recipients[0]['id']);
-		else */
 		$ahref = "index.php?mailing=" . urlencode($w->recipients[0]['id']);
 		$imgsrc = '../../images/folder.gif';
 	}
 	else
 	{
-		/* if (isset($origin))
-		$ahref = "dropbox_download.php?origin=$origin&id=" . urlencode($w->id) . $mailingInUrl;
-		else */
 		$ahref = "dropbox_download.php?id=" . urlencode($w->id) . $mailingInUrl;
 		$imgsrc = '../../images/travaux.gif';
 	}
@@ -671,19 +613,11 @@ tCont12;
 		<td><div class=\"cellpos\">";
 	//<!--	Users cannot delete their own sent files -->
 
-	/* if (isset($origin)) {
-	$tool_content .= "
-	<a href=\"dropbox_submit.php?origin=$origin&deleteSent=".urlencode($w->id)."&dropbox_unid=".urlencode($dropbox_unid) . $mailingInUrl."\"
-	onClick='return confirmation(\"$w->title\");'>
-	<img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
-
-	} else { */
 	$tool_content .= "
 	<a href=\"dropbox_submit.php?deleteSent=".urlencode($w->id)."&dropbox_unid=".urlencode($dropbox_unid) . $mailingInUrl."\"
 		onClick='return confirmation(\"$w->title\");'>
 		<img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
 
-	/* } */ //if delete...
 
 	$tool_content .= "</div>
 		</td>

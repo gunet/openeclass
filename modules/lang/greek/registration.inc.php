@@ -32,6 +32,8 @@ $langSubscribe = "Υποβολή αλλαγών";
 $langCourseName = "Τίτλος Μαθήματος";
 $langLanguage = "Γλώσσα";
 $langCoursesLabel = 'Τμήματα';
+$langFaculte = "Τμήμα";
+$langNoCourses = "Δεν υπάρχουν διαθέσιμα μαθήματα για εγγραφή";
 
 $langOtherCourses = "Εγγραφή σε μάθημα";
 $langRegistration="Εγγραφή";

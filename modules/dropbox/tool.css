@@ -14,3 +14,21 @@ form.sort {
  	margin: 0 auto;
 	text-align:right;
 }
+
+.dropbox_detail {  
+		font-size: 10px; 
+		font-family: Verdana, Arial, Helvetica; 
+}
+
+.dropbox_date {  
+		font-style: italic;
+}
+
+.dropbox_person {  
+		font-weight: bold;
+}
+
+.dropbox_listTitle { 
+		font-style: bold; 
+		color: black;
+}

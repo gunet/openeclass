@@ -34,6 +34,9 @@ $langSubscribe = "Submit changes";
 $langCourseName = "Course name";
 $langLanguage = "Language";
 $langCoursesLabel = 'Courses';
+$langFaculte = "Faculty";
+$langNoCourses = "There are no available courses to register";
+
 
 $langOtherCourses = "Course Registration";
 $langRegistration="Registration";
@@ -53,9 +56,10 @@ $langRegStudent="Follow courses";
 $langRegAdmin="Create course websites";
 $langUserDetails = "New user information";
 $langSubmitNew = "Submit";
+
+
+
 // newuser_second.php
-
-
 $langPassTwice="You typed two different passwords. Use your browser's back button and try again.";
 $langEmptyFields="You left some fields empty. Use your browser's back button and try again.";
 

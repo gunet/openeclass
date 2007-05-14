@@ -1,13 +1,13 @@
 <?php
 /*
       +----------------------------------------------------------------------+
-      | GUnet eClass 1.7                                                    |
+      | GUnet eClass 1.7                                                     |
       | Asychronous Teleteaching Platform                                    |
       +----------------------------------------------------------------------+
       | Copyright (c) 2003-2007  GUnet                                       |
       +----------------------------------------------------------------------+
       |                                                                      |
-      | GUnet eClass 1.7 is an open platform distributed in the hope that   |
+      | GUnet eClass 1.7 is an open platform distributed in the hope that    |
       | it will be useful (without any warranty), under the terms of the     |
       | GNU License (General Public License) as published by the Free        |
       | Software Foundation. The full license can be read in "license.txt".  |
@@ -142,8 +142,7 @@ else
                                   </td>
                                   </tr>\n";
                                 }
-                        
-                        $tool_content .= "</table>";
+                      $tool_content .= "</table>";
 
                 }
                 $tool_content .= "<br>\n";
@@ -210,8 +209,6 @@ function getdepnumcourses($fac) {
 	WHERE faculte='$fac'" ));
 	return $res[0];
 }
-
-
 
 function expanded_faculte($fac, $uid) {
 	global $m, $icons, $langTitular, $langBegin, $mysqlMainDb, $table_border;
@@ -330,6 +327,7 @@ function expanded_faculte($fac, $uid) {
 					  $retString .= "<td class='kkk' align='center' width='10%'>";
 						
 //----- needed ?????????????
+/*
 					 if ($mycours["visible"]==0 && !isset ($myCourses[$mycours["k"]]["subscribed"])) {
 							        $contactprof = $m['mailprof']."<a href=\"contactprof.php?fc=".$facid."&cc=".$mycours['k']."\">".$m['here']."</a>";
 						        $retString .= $codelink;
@@ -347,15 +345,15 @@ function expanded_faculte($fac, $uid) {
 					      } else {
 					        $retString .= "<td>$mycours[t]</td><td>".$contactprof."</td>";
 								}
-
+*/
 // ---------------------------------------
 
 						if (isset ($myCourses[$mycours["k"]]["subscribed"])) { 
 							if ($myCourses[$mycours["k"]]["statut"]!=1) {
 										// password needed
 										if ($mycours['p']!="" && $mycours['visible'] == 1) {
-									            $requirepassword = $m['code'].": 
-															<input type=\"password\" name=\"".$mycours['k']."\" value=\"".$mycours['p']."\">";
+							            $requirepassword = $m['code'].": 
+													<input type=\"password\" name=\"".$mycours['k']."\" value=\"".$mycours['p']."\">";
 										} else {
 					            $requirepassword = "";
           					}

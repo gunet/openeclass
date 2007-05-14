@@ -61,6 +61,7 @@ $langOtherCourses="Εγγραφή σε μάθημα";
 $langSupportForum="Περιοχή Υποστήριξης";
 $langNewUser = 'Εγγραφή Χρήστη';
 $langProfReq = 'Εγγραφή Καθηγητή';
+$langReg = "Εγγραφή";
 $langUser = 'Χρήστης:';
 $langManuals = 'Εγχειρίδια';
 $langContact = 'Επικοινωνία';

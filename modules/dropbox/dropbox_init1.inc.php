@@ -22,22 +22,17 @@
 *						Panepistimiopolis Ilissia, 15784, Athens, Greece
 *						eMail: eclassadmin@gunet.gr
 ============================================================================*/
-/**
- * First initialisation file with initialisation of variables and without outputting anything to browser.
- * 1. Calls claro_init_global.inc.php and lang file
- * 2. Initialises $dropbox_cnf array with all relevant vars
- * 3. Often used functions
- *
- */
 
 $require_login = TRUE;
 $require_current_course = TRUE;
+$guest_allowed = FALSE;
 $langFiles = "dropbox";	
 $require_help = TRUE;
 $helpTopic = 'Dropbox';
-
 include_once '../../include/baseTheme.php';
+
 $tool_content = "";
+
 // javascript functions
 
 $head_content ='<script>
@@ -82,18 +77,6 @@ $head_content ='<script>
         </script>';
 
 /**
- * ========================================
- *       Initialises $dropbox_cnf array with all relevant vars
- * ========================================
- *
- * --------------------------------------
- *       DEBUGGING VARS
- * --------------------------------------
- */
-$DEBUG = TRUE;
-
-
-/**
  * --------------------------------------
  *       DATABASE TABLE VARIABLES
  * --------------------------------------
@@ -112,7 +95,6 @@ $dropbox_cnf["courseUserTbl"] = "cours_user";
  */
 $dropbox_cnf["courseId"] = $currentCourseID;
 $dropbox_cnf["sysPath"] = $webDir."courses/".$currentCourseID."/dropbox"; //path to dropbox subdir in course containing the uploaded files
-$dropbox_cnf["webPath"] = $urlServer . $currentCourseID. "/dropbox";
 // get dropbox quotas from database
 $d = mysql_fetch_array(db_query("SELECT dropbox_quota FROM `".$mysqlMainDb."`.`cours` WHERE code='$currentCourseID'"));
 $diskQuotaDropbox = $d['dropbox_quota'];
