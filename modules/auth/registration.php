@@ -40,16 +40,12 @@ Purpose: TDisplay all the available auth methods for user registration
 $langFiles = 'index';
 include '../../include/baseTheme.php';
 
-mysql_select_db($dbname);
-
+//mysql_select_db($dbname);
 
 $nameTools = $langReg;
 
-
-
-
+$tool_content = "";
 $tool_content .= "
-
 <table border='0' cellspacing='0' cellpadding='0' width='70%' align='center'>
 <tr>
 	<td width='100%' colspan='4' align='center' class='color1' style='border: 1px solid silver;'>".$langSelection."</td>

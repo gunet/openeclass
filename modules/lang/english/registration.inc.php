@@ -80,7 +80,6 @@ $langIsReg="has been updated";
 $langCanEnter="Enter the classroom";
 $langChoice="Επιλογή";
 $langLessonName="Course Name";
-$langLessonCode="Course Code";
 $langProfessors="Professor(s)";
 
 // profile.php

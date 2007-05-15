@@ -83,7 +83,6 @@ $langIsReg="έχει ενημερωθεί";
 $langCanEnter="Είσοδος στην ψηφιακή αίθουσα.";
 $langChoice="Επιλογή";
 $langLessonName="Όνομα μαθήματος";
-$langLessonCode="Κωδικός μαθήματος";
 $langProfessors="Καθηγητής(ες)";
 
 // profile.php

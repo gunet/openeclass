@@ -44,7 +44,6 @@ $m['tomeas'] = 'Division';
 $m['open'] = 'Open Courses (Free Access)';
 $m['restricted'] = 'Open Courses with Registration (Account Required)';
 $m['closed'] = 'Closed Courses';
-$m['code'] = 'Code';
 $m['title'] = 'Title';
 $m['description'] = 'Description';
 $m['professor'] = 'Professor';
