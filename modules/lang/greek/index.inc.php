@@ -52,6 +52,7 @@ $langUserName="Όνομα χρήστη (username)";
 $langPass="Συνθηματικό (password)";
 $langEnter="Είσοδος";
 $langHelp="Βοήθεια";
+$langSelection="Επιλογή";
 $langManager="Διαχειριστής";
 $langManagement="Διαχείριση";
 $langReg="Εγγραφή";

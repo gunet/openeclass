@@ -54,6 +54,7 @@ $langUserName="Username";
 $langPass="Password";
 $langEnter="Enter";
 $langHelp="Help";
+$langSelection="Selection";
 $langManager="Manager";
 $langPlatform="Powered by";
 $langReg="Registration";
