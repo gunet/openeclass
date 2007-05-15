@@ -144,6 +144,15 @@ table.assign {
 	padding-left: 14px;
 }
 
+p.content_pos {
+	display: block;
+	padding-left: 11px;
+}
+
+cite.content_pos {
+	padding-left: 15px;
+}
+
 .content_pos_announce {
 	padding-left: 14px;
 }
@@ -188,6 +197,12 @@ table.assign {
 	background-image: url(img/square_bullet.gif);
 	background-repeat: no-repeat;
 	background-position: 4px 8px;
+}
+
+.square_bullet2 {
+	background-image: url(img/square_bullet.gif);
+	background-repeat: no-repeat;
+	background-position: 4px 9px;
 }
 
 .enroll_icon {
@@ -248,8 +263,10 @@ table {
 	padding-top: 3px;
 	padding-bottom: 3px;
 	margin-left:1px;
+	<!--[if lte IE 6]>
 	//width: 99.9%;
-	//margin-right:14px;
+	<![endif]-->
+	
 }
 
 #assigncontainer a:link, #assignlist a:visited {
@@ -257,12 +274,13 @@ table {
 }
 
 #assigncontainer a:hover {
+	display:block;
+	padding-top: 3px;
+	padding-bottom: 3px;
 	background-color: #fbcb1b;
 	color: #0066cc;
 	text-decoration: none;
-	padding-top: 3px;
-	padding-bottom: 3px;
-	margin-left:1px;
+	
 }
 
 #assigncontainer li.category {
