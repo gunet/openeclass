@@ -40,15 +40,63 @@ Purpose: TDisplay all the available auth methods for user registration
 $langFiles = 'index';
 include '../../include/baseTheme.php';
 
+mysql_select_db($dbname);
+
+
 $nameTools = $langReg;
 
-$tool_content = "";
 
-$tool_content .= "<ul class=\"listBullet\">";
-$tool_content .= "<li><a href=\"newuser_info.php\">".$langNewUser."</a><br /></li><br>";
-$tool_content .= "<li><a href=\"newprof_info.php\">".$langProfReq."</a><br /></li>";
-$tool_content .= "</ul>";
 
-draw($tool_content, 0);
+
+$tool_content .= "
+
+<table border='0' cellspacing='0' cellpadding='0' width='70%' align='center'>
+<tr>
+	<td width='100%' colspan='4' align='center' class='color1' style='border: 1px solid silver;'>".$langSelection."</td>
+</tr>
+<tr>
+	<td width='25%'>&nbsp;</td>
+	<td width='25%' style='border-right: 1px solid silver; border-bottom: 1px solid silver;'>&nbsp;</td>
+	<td width='25%' style='border-bottom: 1px solid silver;'>&nbsp;</td>
+	<td width='25%'>&nbsp;</td>
+</tr>
+<tr>
+	<td width='25%' style='border-right: 1px solid silver;'>&nbsp;</td>
+	<td width='25%'>&nbsp;</td>
+	<td width='25%' style='border-right: 1px solid silver;'>&nbsp;</td>
+	<td width='25%'>&nbsp;</td>
+</tr>
+<tr>
+	<td width='50%' colspan='2' align='center'>
+	
+	<table width='100%' border='0' cellspacing='0' cellpadding='0' align='center'>
+    <tr>
+	   <td width='5%'>&nbsp;</td>
+	   <td width='90%' align='center' class='tidy' style='border: 1px solid silver;' onMouseOver='this.style.backgroundColor=\"#F1F1F1\"'; onMouseOut='this.style.backgroundColor=\"transparent\"'>
+       <a href=\"newuser_info.php\">".$langNewUser."</a></td>
+	   <td width='5%'>&nbsp;</td>
+    </tr>
+    </table>
+
+	</td>
+	<td width='50%' colspan='2' align='center'>
+
+	<table width='100%' border='0' cellspacing='0' cellpadding='0' align='center'>
+    <tr>
+	   <td width='5%'>&nbsp;</td>
+	   <td width='90%' align='center' class='tidy' style='border: 1px solid silver;' onMouseOver='this.style.backgroundColor=\"#F1F1F1\"'; onMouseOut='this.style.backgroundColor=\"transparent\"'>
+       <a href=\"newprof_info.php\">".$langProfReq."</a></td>
+	   <td width='5%'>&nbsp;</td>
+    </tr>
+    </table>
+	
+	</td>
+</tr>
+</table>
+
+";
+	 
+	 
+draw($tool_content, 0, 'auth');
 
 ?>

@@ -60,10 +60,22 @@ $auth = get_auth_active_methods();
 
 if(!empty($auth))
 {
-	$tool_content .= "<p>$dearprof</p>
-					<p>$langAuthenticateVia2:</p>";
-	$tool_content .= "<ul class=\"listBullet\">";
-	$tool_content .= "<li><a href=\"newprof.php\">".$regprofnoldap."</a><br /></li>";
+	$tool_content .= "
+<table border='0' cellspacing='0' cellpadding='0' align=center width='70%'>
+<tr>
+	<td colspan='2' style='border: 1px solid silver;' class=color1>".$langAuthenticateVia2."</td>
+</tr>
+<tr>
+	<td style='border-left: 1px solid silver;'>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td style='border-left: 1px solid silver; border-bottom: 1px solid silver;'>&nbsp;</td>
+	<td rowspan='2' style='border: 1px solid silver;' onMouseOver='this.style.backgroundColor=\"#F1F1F1\"'; onMouseOut='this.style.backgroundColor=\"transparent\"'><a href=\"newprof.php\">".$regprofnoldap."</a></td>
+</tr>
+
+";
+	
 	foreach($auth as $k=>$v)
 	{
 		if($v==1)		// bypass the eclass auth method, as it has already been displayed
@@ -73,16 +85,29 @@ if(!empty($auth))
 		else
 		{
 			$auth_method_settings = get_auth_settings($v);
-			$tool_content .= "<li><a href=\"ldapnewprof.php?auth=".$v."\">$langAuthenticateVia ".$auth_method_settings['auth_name']."</a>";
+			
+			$tool_content .= "
+			<tr>
+	<td style='border-left: 1px solid silver;'>&nbsp;</td>
+</tr>
+<tr>
+	<td style='border-left: 1px solid silver;'>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td style='border-left: 1px solid silver; border-bottom: 1px solid silver;'>&nbsp;</td>
+	<td rowspan='2' style='border: 1px solid silver;' onMouseOver='this.style.backgroundColor=\"#F1F1F1\"'; onMouseOut='this.style.backgroundColor=\"transparent\"'>
+    <a href=\"ldapnewprof.php?auth=".$v."\">$langAuthenticateVia ".$auth_method_settings['auth_name']."</a>
+	</td>
+</tr>	
+";
+
 			if(!empty($auth_method_settings))
 			{
 				$tool_content .= "<br />".$auth_method_settings['auth_instructions'];
-			}
-			$tool_content .= "</li>";
+			}		
 		}
-		//}
 	}
-	$tool_content .= "</ul>";
 }
 else
 {
@@ -99,12 +124,13 @@ else
 		</table>";
 }
 
-/*				$tool_content .= "<br /><br /></td>
+$tool_content .= "
+<tr>
+	<td>&nbsp;</td>
 </tr>
-</table>";*/
+</table>
+";
 
-
-
-draw($tool_content,0);
+draw($tool_content,0,'auth');
 
 ?>

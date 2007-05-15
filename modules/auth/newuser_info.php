@@ -37,7 +37,7 @@
 ==============================================================================
 */
 
-$langFiles = array('registration','gunet');
+$langFiles = array('registration','gunet','index');
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
 if(isset($already_second)) {
@@ -56,15 +56,45 @@ $tool_content = "";		// Initialise $tool_content
 
 $auth = get_auth_active_methods();
 $e = 1;
-$tool_content .= "<ul class=\"listBullet\">";
-$tool_content .= "<li><a href=\"newuser.php\">$langAuthReg".get_auth_info($e)."</a><br /></li>";
+
+
+$tool_content .= "
+<table border='0' cellspacing='0' cellpadding='0' align=center width='50%'>
+<tr>
+	<td colspan='2' style='border: 1px solid silver;' class=color1>".$langSelection."</td>
+</tr>
+<tr>
+	<td style='border-left: 1px solid silver;'>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td style='border-left: 1px solid silver; border-bottom: 1px solid silver;'>&nbsp;</td>
+	<td rowspan='2' style='border: 1px solid silver;' onMouseOver='this.style.backgroundColor=\"#F1F1F1\"'; onMouseOut='this.style.backgroundColor=\"transparent\"'><a href=\"newuser.php\">$langAuthReg".get_auth_info($e)."</a></td>
+</tr>
+
+";
+
 if(!empty($auth))
 {
 	foreach($auth as $k=>$v)
 	{
 		if($v!=1)
 		{
-			$tool_content .= "<li><a href=\"ldapnewuser.php?auth=".$v."\">$langAuthReg".get_auth_info($v)."</a></li>";
+			$tool_content .= "
+			<tr>
+	<td style='border-left: 1px solid silver;'>&nbsp;</td>
+</tr>
+<tr>
+	<td style='border-left: 1px solid silver;'>&nbsp;</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td style='border-left: 1px solid silver; border-bottom: 1px solid silver;'>&nbsp;</td>
+	<td rowspan='2' style='border: 1px solid silver;' onMouseOver='this.style.backgroundColor=\"#F1F1F1\"'; onMouseOut='this.style.backgroundColor=\"transparent\"'><a href=\"ldapnewuser.php?auth=".$v."\">$langAuthReg".get_auth_info($v)."</a></td>
+</tr>
+
+			
+";
 		}
 		else
 		{
@@ -72,7 +102,15 @@ if(!empty($auth))
 		}
 	}
 }
-$tool_content .= "<ul>";
 
-draw($tool_content,0);
+$tool_content .= "
+
+<tr>
+	<td>&nbsp;</td>
+</tr>
+</table>
+
+";
+
+draw($tool_content,0,'auth');
 ?>

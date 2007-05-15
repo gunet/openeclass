@@ -1,0 +1,16 @@
+.tidy {
+        vertical-align: middle;
+        padding : 2px;
+        font-size: 8pt;
+        word-wrap: break-word;
+        word-break: break-all;
+        }
+
+.color1 {
+        background : #F5F5F5;
+        vertical-align: middle;
+        padding : 5px;
+        font-size: 8pt;
+        word-wrap: break-word;
+        word-break: break-all;
+        }
