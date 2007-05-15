@@ -30,7 +30,7 @@ a:active, a:visited, a:link{
 
 #tool_title {
 	width:99%;
-	margin-top:35px;
+	margin-top:10px;
 	margin-bottom:10px;
 	height: 30px;
 }
@@ -49,7 +49,7 @@ a:active, a:visited, a:link{
 }
 
 #help_icon {
-    float: right;
+	float: right;
 	width: 14px;
 	height: 14px;
 	margin-top:0.1em;
@@ -98,8 +98,8 @@ margin: 0 .5em 0 -.5em;
 padding: 0 .5em 0 .5em;
 }
 
-table {
-	border: 0px solid #a2a2a3;
+table, th, td {
+	border: 1px solid #a2a2a3;
 	border-collapse: collapse;
 	font-family: Verdana, Arial, sans-serif;
 	font-size:12px;
@@ -115,10 +115,6 @@ caption {
 
 td, th {
 	padding: 4px;
-	border-collapse: collapse;
-	font-family: Verdana, Arial, sans-serif;
-	font-size:12px;
-	color: #555;
 }
 
 td.caution {
@@ -176,4 +172,3 @@ tfoot th, tfoot td {
 
 ul.listBullet { 
 	list-style-image: url(img/square_bullet.gif); 
-}
