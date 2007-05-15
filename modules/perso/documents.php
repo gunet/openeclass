@@ -185,7 +185,7 @@ aCont;
 			for ($j=0; $j < $iterator; $j++){
 				$url = $_SERVER['PHP_SELF'] . "?perso=6&c=" .$data[$i][1]."&p=".$data[$i][2][$j][0];
 				$content .= "
-		<li><a class=\"square_bullet\" href=\"$url\"><quote class=\"content_pos\">".$data[$i][2][$j][2]." (".$data[$i][2][$j][3].")</quote></a>
+		<li><a class=\"square_bullet2\" href=\"$url\"><p class=\"content_pos\">".$data[$i][2][$j][2]." (".$data[$i][2][$j][3].")</p></a>
 			
 		</li>
 		";

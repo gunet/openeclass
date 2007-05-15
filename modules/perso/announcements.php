@@ -191,8 +191,8 @@ aCont;
 					";
 				}
 				$assign_content .= "
-		<li><a class=\"square_bullet\" href=\"$url\">
-		<quote class=\"content_pos\"><strong><span class=\"announce_date\">".$data[$i][2][$j][1]." : </span></strong>".$data[$i][2][$j][0].autoCloseTags($data[$i][2][$j][0])."</quote></a>
+		<li><a class=\"square_bullet2\" href=\"$url\">
+		<p class=\"content_pos\"><strong><span class=\"announce_date\">".$data[$i][2][$j][1]." : </span></strong>".$data[$i][2][$j][0].autoCloseTags($data[$i][2][$j][0])."</p></a>
 			
 		</li>
 		";

@@ -130,7 +130,7 @@ function assignHtmlInterface($data) {
 				<th class="assign">$langLesson</th>
 				<th class="assign">$langAssignment</th>
 				<th class="assign">$langDeadline</th>
-			<tr>
+			</tr>
 		</thead>
 		<tbody>
 aCont;
@@ -146,10 +146,11 @@ aCont;
 			}
 			$url = $_SERVER['PHP_SELF'] . "?perso=1&c=" .$data[$i][6]."&i=".$data[$i][0];
 			$assign_content .= "
-		<tr >
+		<tr>
 			<td class=\"assign\"><p>".$data[$i][4]."</p></td>
 			
 			<td class=\"assign\">
+			
 				<div id=\"assigncontainer\">
 					<ul id=\"assignlist\">
 						<li>

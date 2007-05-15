@@ -179,7 +179,7 @@ fCont;
 				$content .= "
 		<li><a class=\"square_bullet\" href=\"$url\">
 		<strong class=\"title_pos\">".$data[$i][2][0][$j][3]." (".$data[$i][2][0][$j][5].")</strong>
-		<quote class=\"content_pos\">".$data[$i][2][0][$j][8]."</quote>
+		<p class=\"content_pos\">".$data[$i][2][0][$j][8]."gggggg</p>
 		<cite class=\"content_pos\">$langSender: ".$data[$i][2][0][$j][6]." ".$data[$i][2][0][$j][7]."</cite>
 		</a></li>
 		";
