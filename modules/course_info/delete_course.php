@@ -46,7 +46,7 @@ if($is_adminOfCourse) {
 						<td class=\"caution\">
 							<p><b>$langConfirmDel</b></p>
 							
-							<p>$langByDel $currentCourseID $intitule&nbsp;? <a href=\"".$_SERVER['PHP_SELF']."?delete=yes\">$langY</a>&nbsp;|&nbsp;<a href=\"infocours.php\">$langN</a></p>
+							<p>$langByDel $currentCourseID $intitule&nbsp;? <a href=\"".$_SERVER['PHP_SELF']."?delete=yes\">$langYes</a>&nbsp;|&nbsp;<a href=\"infocours.php\">$langNo</a></p>
 				<p><a href=\"infocours.php\">$langBack</p>
 						</td>
 					</tr>
