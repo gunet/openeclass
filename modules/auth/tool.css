@@ -20,11 +20,27 @@ table{
 	font-family: Verdana, Arial, sans-serif !important;
 }
 
-td, th {
+th {
+	padding: 4px;
+    border: 0px;
+    background-color: #ffffff;
+    text-align: left;
+
+    font-family: Verdana, Arial, sans-serif !important;
+}
+
+td {
 	padding: 4px;
     border: 0px;
     background-color: #ffffff;
     font-family: Verdana, Arial, sans-serif !important;
+}
+
+thead th {
+	text-align: left;
+	background: #E6EDF5;
+	color: #4F76A3;
+	font-size: 90% !important;
 }
 
 .b-right {
@@ -42,5 +58,3 @@ td, th {
 .b-bottom {
     border-bottom: 1px solid silver;
 }
-
-

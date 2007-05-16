@@ -57,7 +57,7 @@ $tool_content .= "
 	<td width='25%'>&nbsp;</td>
 </tr>
 <tr>
-	<td width='25%' style='border-right: 1px solid silver;'>&nbsp;</td>
+	<td width='25%' class='b-right'>&nbsp;</td>
 	<td width='25%'>&nbsp;</td>
 	<td width='25%' style='border-right: 1px solid silver;'>&nbsp;</td>
 	<td width='25%'>&nbsp;</td>
