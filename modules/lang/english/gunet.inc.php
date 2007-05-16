@@ -43,6 +43,7 @@ $mailbody4="to Asynchronous Teleteaching Service ";
 $mailbody5="of GUnet ";
 $mailbody6="as a professor.";
 $mailbody7="Faculty / Department:";
+$mailbody8="as a student.";
 $logo= "GUnet e-Class Asynchronous Teleteaching Platform";
 $gunet="GUnet Asynchronous Teleteaching Group";
 $sendinfomail="Send information e-mail to professors";

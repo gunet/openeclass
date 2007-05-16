@@ -57,16 +57,11 @@ $langRegAdmin="Create course websites";
 $langUserDetails = "New user information";
 $langSubmitNew = "Submit";
 
-
-
 // newuser_second.php
 $langPassTwice="You typed two different passwords. Use your browser's back button and try again.";
-$langEmptyFields="You left some fields empty. Use your browser's back button and try again.";
-
 $langUserFree="This username is already taken. Use your browser's back button and choose another.";
 
 $langYourReg="Your registration on";
-$langDear="Dear";
 $langYouAreReg="\nYou are registered on";
 $langSettings="with the following settings:\nUsername:";
 $langAddress="\n\nThe address of ";
@@ -365,6 +360,34 @@ $langUnregTeacher = "User is a teacher in the following courses:";
 
 $langPlease = "Please";
 
-$langOtherDepartments = "Enroll to lessons from other departments";
-$langNoLessonsAvailable = "No lessons available.";
+$langOtherDepartments = "Enroll to courses from other departments";
+$langNoLessonsAvailable = "No courses available.";
+
+// formuser.php
+$langUserRequest = "Αίτηση Δημιουργίας Λογαριασμού Φοιτητή";
+$langInfoProfReq = "Αν επιθυμείτε να έχετε πρόβαση στην πλατφόρμα με δικαιώματα χρήστη - καθηγητή, παρακαλώ συμπλ
+ηρώστε την παρακάτω αίτηση. Η αίτηση θα σταλεί στον υπεύθυνο διαχειριστή ο οποίος θα δημιουργήσει το λογαριασμό κ
+αι θα σας στείλει τα στοιχεία μέσω ηλεκτρονικού ταχυδρομείου.";
+$langInfoStudReg = "Αν επιθυμείτε να έχετε πρόσβαση στην πλατφόρμα με δικαιώματα χρήστη - φοιτητή, παρακαλώ συμπλ
+ηρώστε τα στοιχεία σας στην παρακάτω φόρμα. Ο λογαριασμός σας θα δημιουργηθεί αυτόματα.";
+$langReason = "Αναφέρατε τους λόγους χρήσης της πλατφόρμας";
+$langInfoStudReq = "Αν επιθυμείτε να έχετε πρόβαση στην πλατφόρμα με δικαιώματα χρήστη - φοιτητή, παρακαλώ συμπλη
+ρώστε την παρακάτω αίτηση. Η αίτηση θα σταλεί στον υπεύθυνο διαχειριστή ο οποίος θα δημιουργήσει το λογαριασμό κα
+ι θα σας στείλει τα στοιχεία μέσω ηλεκτρονικού ταχυδρομείου.";
+$langReason = "Αναφέρατε τους λόγους χρήσης της πλατφόρμας";
+$langInfoProf = "Σύντομα θα σας σταλεί mail από την Ομάδα Διαχείρισης της Πλατφόρμας Ασύγχρονης Τηλεκπαίδευσης, μ
+ε τα στοιχεία του λογαριασμού σας.";
+$langBackHome = "για να επιστρέψετε στην αρχική σελίδα.";
+$langDearUser = "Dear user";
+$langMailErrorMessage = "Παρουσιάστηκε σφάλμα κατά την αποστολή του μηνύματος - η αίτησή σας καταχωρήθηκε, αλλά δ
+εν στάλθηκε. Παρακαλούμε επικοινωνήστε με το διαχειριστή του συστήματος στη διεύθυνση";
+
+$langUserSuccess = "New User Account";
+$usersuccess="Η δημιουργία νέου λογαριασμού φοιτητή πραγματοποιήθηκε με επιτυχία!";
+$langAsUser = "(User Account)";
+
+$langForbidden = "Action not allowedΜη επιτρεπτή ενέργεια";
+$langChooseReg = "Choose registration method";
+$langTryAgain = "Try Again!";
+
 ?>

@@ -42,12 +42,13 @@ $mailbody4="στην υπηρεσία Ασύγχρονης Τηλεκπαίδευσης ";
 $mailbody5="του GUNet ";
 $mailbody6="σαν καθηγητής.";
 $mailbody7="Σχολή / Τμήμα:";
+$mailbody8="ως φοιτητής.";
 
 $logo= "eClass Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης GUNet";
 
 $gunet="Ομάδα Ασύγχρονης Τηλεκπαίδευσης GUNet";
-$sendinfomail="Αποστολή ενημερωτικού e-mail στους καθηγητές του e-Class";
-$infoabouteclass="Ενημερωτικό δελτίο πλατφόρμας e-Class";
+$sendinfomail="Αποστολή ενημερωτικού e-mail στους καθηγητές του eClass";
+$infoabouteclass="Ενημερωτικό δελτίο πλατφόρμας eClass";
 
 // contact.php
 $introcontact = "Μπορείτε να επικοινωνείτε με την Ομάδα Υποστήριξης της πλατφόρμας <b>".$siteName."</b> με τους παρακάτω

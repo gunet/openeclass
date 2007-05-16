@@ -41,9 +41,8 @@ $tool_content .= "<table cellpadding='3' cellspacing='0' border='0' width='100%'
 $tool_content .= "<tr valign='top'>";
 
 // ------------------- Update table prof_request ------------------------------
-//mysql_select_db($mysqlMainDb,$db);
 
-$upd=mysql_query("INSERT INTO prof_request(profname,profsurname,profuname,profemail,proftmima,profcomm,status,date_open,comment,statut) VALUES('$name','$surname','$username','$usermail','$department','$userphone','1',NOW(),'$usercomment','5')");
+$upd=db_query("INSERT INTO prof_request(profname,profsurname,profuname,profemail,proftmima,profcomm,status,date_open,comment,statut) VALUES('$name','$surname','$username','$usermail','$department','$userphone','1',NOW(),'$usercomment','5')");
 
 //----------------------------- Email Message --------------------------
     $MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" .
@@ -55,7 +54,6 @@ $upd=mysql_query("INSERT INTO prof_request(profname,profsurname,profuname,profem
 	if (!send_mail($gunet, $emailhelpdesk, '', $emailhelpdesk, $mailsubject2, $MailMessage, $charset)) {
 		$tool_content .= "<table border='0' align='center' cellpadding='0' cellspacing='0'>";
     $tool_content .= "<tr><td><div class='labeltext'>$MailErrorMessage<div class=alert1><a href=\"mailto:$emailhelpdesk\" class=mainpage>$emailhelpdesk</a>.</div></div><br>";
-		exit();
 	}
 
 $tool_content .= "<td width='75%' class=td_main>";
@@ -69,28 +67,28 @@ $tool_content .= "<div class='Subsystem_Label'>$nameTools</div>\n";
                 </div><br></td>
          </tr></table>";
 				$tool_content .= "</td></tr></table>";
-        exit();
+				draw($tool_content, 0, 'auth');
+    	  exit();
 
 } else {
 
 $tool_content = "";
 $nameTools = $langUserRequest;
 
-if (isset($Add) and (empty($usercomment) or empty($name) or empty($surname) or empty($username) or empty($userphone) or empty($usermail))) {
-				$tool_content .= "<br><div align='center' class='td_main'>$langEmptyFields</div><br>
-			    <div class='alert1'><a href='$_SERVER[PHP_SELF]' class=mainpage>$langTryAgain</a></div>";
+if (isset($Add) and (empty($usercomment) or empty($name) 
+		or empty($surname) or empty($username) or empty($userphone) or empty($usermail))) {
+				$tool_content .= "<br><div align='center' class='td_main'>$langFieldsMissing<br>
+			  <a href='$_SERVER[PHP_SELF]' class=mainpage>$langTryAgain</a></div>";
 	      $tool_content .= "</td></tr></table>";
+				draw($tool_content, 0, 'auth');
     	  exit;
       }
-
 /*
 if (!isset($close_user_registration) or $close_user_registration == FALSE) {
 			$tool_content .= "<div class='td_main'>$langForbidden</div></td></tr></table>";
-//			end_page();
 			exit;
 			}
 */
-
 $tool_content .= "<table width='95%' align='center'><tbody><tr><td>
            <form action='$_SERVER[PHP_SELF]' method='post'>
            $langRegistration<table border='0' align='center' cellpadding='3' cellspacing='0' class=td_main>
