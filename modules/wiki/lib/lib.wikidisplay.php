@@ -293,7 +293,9 @@
             . '<textarea id="wikiDesc" name="desc" cols="80" rows="10">'.$desc.'</textarea>' . "\n"
             . '</div>' . "\n"
             . '</fieldset>' . "\n"
-            . '<fieldset id="acl" style="padding: 10px;margin: 10px;">' . "\n"
+;// atkyritsis, for the moment we skip wiki ACL
+// commenting below and hardwiring the default ACL properties            
+/*            . '<fieldset id="acl" style="padding: 10px;margin: 10px;">' . "\n"
             . '<legend>' . $langWikiAccessControl . '</legend>' . "\n"
             . '<p style="font-style: italic;">'.$langWikiAccessControlText.'</p>' . "\n"
             . '<table style="text-align: center; padding: 5px;" id="wikiACL">' . "\n"
@@ -332,7 +334,16 @@
             . '</table>' . "\n"
             . '<p style="font-style: italic;">'.$langWikiOtherUsersText.'</p>' . "\n"
             . '</fieldset>' . "\n"
-            ;
+            ;*/
+// atkyritsis
+// hardwiring
+		$form .= '<input type="hidden" name="acl[course_read]" value="on" />' ."\n";
+		$form .= '<input type="hidden" name="acl[course_edit]" value="on" />' ."\n";
+		$form .= '<input type="hidden" name="acl[course_create]" value="on" />' ."\n";
+		$form .= '<input type="hidden" name="acl[other_read]" value="on" />' ."\n";
+		$form .= '<input type="hidden" name="acl[other_edit]" value="off" />' ."\n";
+		$form .= '<input type="hidden" name="acl[other_create]" value="off" />' ."\n";
+// hardwiring over
         
         $form .= '<div style="padding: 10px">' . "\n" ;
         
