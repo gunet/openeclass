@@ -157,8 +157,8 @@
         
         $out .= '</div>' . "\n";
         
-        $out .= claro_disp_message_box( '<small>'.$langWikiPreviewWarning.'</small>' )
-            . "\n";
+        $out .= claro_disp_message_box( '<small>'.$langWikiPreviewWarning.'</small>', "caution" )
+            ."<br />". "\n";
 
         $out .= '<div class="wiki2xhtml">' . "\n";
         
