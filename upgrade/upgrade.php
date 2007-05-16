@@ -634,7 +634,7 @@ while ($code = mysql_fetch_row($res)) {
 
         // Wiki tables
 
-        $langWiki = "Wiki";
+        $langWiki = "Σύστημα Wiki";
         if (!mysql_table_exists($code[0], 'wiki_properties'))  {
                 db_query("CREATE TABLE `wiki_properties` (
                         `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,

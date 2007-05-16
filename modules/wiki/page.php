@@ -552,10 +552,10 @@
         .wikiTitle h1{
             color: Black;
             background: none;
-            font-size: 200%;
+            font-size: 175%;
             font-weight: bold;
             /*font-weight: normal;*/
-            border-bottom: 2px solid #aaaaaa;
+            border-bottom: 1px solid #000000;
         }
         .wiki2xhtml{
             margin-left: 5px;

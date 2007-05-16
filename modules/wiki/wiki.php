@@ -383,7 +383,7 @@
         case "list":
         default:
         {
-            $nameTools = 'Wiki';
+            $nameTools = $langWiki;
         }
     }
     
