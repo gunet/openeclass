@@ -44,11 +44,14 @@
 ==============================================================================
 */
 
+
+  
+
     require_once dirname(__FILE__) . '/wiki2xhtml/class.wiki2xhtml.php';
     require_once dirname(__FILE__) . '/class.wikistore.php';
     require_once dirname(__FILE__) . '/class.wikipage.php';
      
-    define ("WIKI_WORD_PATTERN", '((?<![A-Za-z0-9ï¿½ï¿½-ï¿½ï¿½-ï¿½ï¿½-ï¿½])([A-Zï¿½-ï¿½ï¿½-ï¿½][a-zï¿½ï¿½-ï¿½ï¿½-ï¿½]+){2,}(?![A-Za-z0-9ï¿½ï¿½-ï¿½ï¿½-ï¿½ï¿½-ï¿½]))' );
+    define ("WIKI_WORD_PATTERN", '((?<![A-Za-z0-9µÀ-ÖØ-öø-ÿ])([A-ZÀ-ÖØ-Þ][a-zµß-öø-ÿ]+){2,}(?![A-Za-z0-9µÀ-ÖØ-öø-ÿ]))' );
      
     /**
     * Wiki2xhtml rendering engine
@@ -165,7 +168,7 @@
                 && !$no_image && $this->getOpt('active_auto_img' ) )
             {
                 # On ajoute les dimensions de l'image si locale
-                # Idï¿½e de Stephanie
+                # Idée de Stephanie
                 $img_size = NULL;
                 if (!ereg('[a-zA-Z]+://', $url ) )
                 {
@@ -250,7 +253,7 @@
             // allow links to use wikiwords for wiki page locations
             if ($this->getOpt('active_wikiwords') && $this->getOpt('words_pattern'))
             {
-                $pageName = preg_replace('/ï¿½ï¿½ï¿½'.$this->getOpt('words_pattern').'ï¿½ï¿½ï¿½/msU', '$1', $pageName);
+                $pageName = preg_replace('/¶¶¶'.$this->getOpt('words_pattern').'¶¶¶/msU', '$1', $pageName);
             }
              
             if ($this->wiki->pageExists( $pageName ) )
@@ -287,7 +290,7 @@
 			'ins' => array('++','++'),
 			'u' => array('__','__'),
 			'note' => array('$$','$$'),
-			'word' => array('ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½'),
+			'word' => array('¶¶¶','¶¶¶'),
 			'macro' => array('"""','"""')
 		  );
 
