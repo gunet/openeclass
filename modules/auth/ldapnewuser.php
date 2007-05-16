@@ -60,7 +60,7 @@ if(!empty($msg)) $nameTools = $msg;
 
 $tool_content .= $settings['auth_instructions']."<br />
 			<form method=\"POST\" action=\"ldapsearch.php\">
-				<table>
+				<table cellspacing='1' cellpadding='1'>
 				<thead>
 				<tr><th>Δώστε το username σας:</th>
 					<td><input type=\"text\" name=\"ldap_email\"></td>
@@ -73,14 +73,18 @@ $tool_content .= $settings['auth_instructions']."<br />
 					$tool_content .= "</td>
 				</tr>
 				</thead>
-				</table>
-				<br/>
+				<tr><td>&nbsp;</td>
+				    <td>
 					<input type=\"hidden\" name=\"auth\" value=\"".$auth."\">
 					<input type=\"submit\" name=\"is_submit\" value=\"".$reg."\">
+					</td>
+				</tr>
+				</table>
+				
 					
 			</form>";
 
 
 
-draw($tool_content,0);
+draw($tool_content,0,'auth');
 ?>

@@ -11,7 +11,12 @@ $auth = get_auth_id();
 
 $tool_content .= "	<form action=\"newprof_second.php\" method=\"post\">
 
-	<table width=\"99%\"><caption>".$profpers."</caption><tbody>
+	<table width=\"99%\" cellspacing='1' cellpadding='1'>
+	";
+	//<caption>".$profpers."</caption>
+
+$tool_content .= "		
+	<tbody>
 	<thead>
 	<tr>
 	<th>$langSurname</th>
@@ -53,17 +58,24 @@ $tool_content .= "	<form action=\"newprof_second.php\" method=\"post\">
         </td>
         </tr>	
         </thead>
+		<tr><td>&nbsp;</td>
+		    <td>
+			<input type=\"submit\" name=\"submit\" value=\"".$langSubmitNew."\" >
+	        <input type=\"hidden\" name=\"auth\" value=\"1\" >
+			<br/><br/>
+			<p>$langRequiredFields<br>
+	           $star2 . $langCharactersNotAllowed</p>
+			</td>
+		</tr>
         </table>
-        <br/>
-        		<input type=\"submit\" name=\"submit\" value=\"".$langSubmitNew."\" >
-	<input type=\"hidden\" name=\"auth\" value=\"1\" >
+        
+        		
 	</form>	
 	<br/>
-	<p>$langRequiredFields</p>
-	<p>$star2 . $langCharactersNotAllowed</p>
+	
 	
 ";
 
-draw($tool_content,0);
+draw($tool_content,0,'auth');
 
 ?>
