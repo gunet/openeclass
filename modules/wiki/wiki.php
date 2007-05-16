@@ -227,12 +227,14 @@
                 // die( $langWikiInvalidWikiId );
                 $message = $langWikiInvalidWikiId;
                 $action = "error";
+                $style = "caution";
             }
             else
             {
                 $wiki = $wikiStore->loadWiki( $wikiId );
                 $wikiTitle = $wiki->getTitle();
                 $message = $langWikiDeleteWikiWarning;
+                $style = "caution";
             }
             
             break;
@@ -248,6 +250,7 @@
             {
                 $message = $langWikiInvalidWikiId;
                 $action = "error";
+                $style = "caution";
             }
 
             if ( $groupId === 0 )
@@ -260,6 +263,7 @@
             }
 
             $message = $langWikiDeletionSucceed;
+            $style = "success";
 
 
             $action = 'list';
@@ -288,6 +292,7 @@
             {
                 $message = $langWikiInvalidWikiId;
                 $action = "error";
+                $style = "caution";
             }
             break;
         }
@@ -310,6 +315,7 @@
                     , $mainPageContent, date( "Y-m-d H:i:s" ), true );
             
                 $message = $langWikiCreationSucceed;
+                $style = "success";
             }
             elseif ( $wikiStore->wikiIdExists( $wikiId ) )
             {
@@ -321,11 +327,13 @@
                 $wikiId = $wiki->save();
                 
                 $message = $langWikiEditionSucceed;
+                $style = "success";
             }
             else
             {
                 $message = $langWikiInvalidWikiId;
                 $action = "error";
+                $style = "caution";
             }
             
             $action = 'list';
@@ -436,7 +444,7 @@
 
     if ( ! empty( $message ) )
     {
-        $tool_content .= claro_disp_message_box( $message ) ."\n";
+        $tool_content .= claro_disp_message_box( $message, $style ) ."<br />" . "\n";
     }
 
     switch( $action )

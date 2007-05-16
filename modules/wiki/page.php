@@ -419,6 +419,7 @@
                 if ( $content == '' )
                 {
                     $message = "This page is empty, use the editor to add content.";
+                    $style = "caution";
                 }
             }
             break;
@@ -446,6 +447,7 @@
             else
             {
                 $message = "Page " . $title . " not found";
+                $style = "caution";
             }
             break;
         }
@@ -465,6 +467,7 @@
                         unset( $_SESSION['wikiLastVersion'] );
 
                         $message = $langWikiIdenticalContent;
+                        $style = "caution";
                         
                         $action = 'show';
                     }
@@ -484,10 +487,12 @@
                             if ( $wikiPage->hasError() )
                             {
                                 $message = "Database error : " . $wikiPage->getError();
+                                $style = "caution";
                             }
                             else
                             {
                                 $message = $langWikiPageSaved;
+                                $style = "success";
                             }
                             
                             $action = 'show';
@@ -502,10 +507,12 @@
                     if ( $wikiPage->hasError() )
                     {
                         $message = "Database error : " . $wikiPage->getError();
+                        $style = "caution";
                     }
                     else
                     {
                         $message = $langWikiPageSaved;
+                        $style = "success";
                     }
                     
                     $action = 'show';
@@ -693,7 +700,7 @@
     
     if ( !empty($message) )
     {
-        $tool_content .= claro_disp_message_box($message) . "\n";
+        $tool_content .= claro_disp_message_box($message, $style) ."<br />" ."\n";
     }
     
     // Check javascript
