@@ -22,11 +22,9 @@ table{
 
 th {
 	padding: 4px;
-    border: 0px;
-    background-color: #ffffff;
-    text-align: left;
-
-    font-family: Verdana, Arial, sans-serif !important;
+	background-color: #ffffff;
+  border: 0px;
+  font-family: Verdana, Arial, sans-serif !important;
 }
 
 td {

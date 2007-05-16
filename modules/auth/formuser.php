@@ -55,7 +55,6 @@ $upd=mysql_query("INSERT INTO prof_request(profname,profsurname,profuname,profem
 	if (!send_mail($gunet, $emailhelpdesk, '', $emailhelpdesk, $mailsubject2, $MailMessage, $charset)) {
 		$tool_content .= "<table border='0' align='center' cellpadding='0' cellspacing='0'>";
     $tool_content .= "<tr><td><div class='labeltext'>$MailErrorMessage<div class=alert1><a href=\"mailto:$emailhelpdesk\" class=mainpage>$emailhelpdesk</a>.</div></div><br>";
-//		end_page();
 		exit();
 	}
 
@@ -69,22 +68,18 @@ $tool_content .= "<div class='Subsystem_Label'>$nameTools</div>\n";
 	        $click <a href=\"$urlServer\" class=mainpage>$here</a> $backpage
                 </div><br></td>
          </tr></table>";
-	$tool_content .= "</td></tr></table>";
-//        end_page();
+				$tool_content .= "</td></tr></table>";
         exit();
 
 } else {
 
 $tool_content = "";
 $nameTools = $langUserRequest;
-$tool_content .= "<table cellpadding='3' cellspacing='0' border='0' width='100%'><tr valign='top'>";
-$tool_content .= "<td class='menu'><img src='../../images/arrow.gif' alt='arrow bullet'>";
 
 if (isset($Add) and (empty($usercomment) or empty($name) or empty($surname) or empty($username) or empty($userphone) or empty($usermail))) {
 				$tool_content .= "<br><div align='center' class='td_main'>$langEmptyFields</div><br>
 			    <div class='alert1'><a href='$_SERVER[PHP_SELF]' class=mainpage>$langTryAgain</a></div>";
 	      $tool_content .= "</td></tr></table>";
-//		    end_page();
     	  exit;
       }
 
@@ -96,66 +91,62 @@ if (!isset($close_user_registration) or $close_user_registration == FALSE) {
 			}
 */
 
-$tool_content .= "<table border='0' width=100% align=center cellspacing='0' cellpadding='0'>
-					 <tr><td><table width='95%' align='center'><tr><td>
+$tool_content .= "<table width='95%' align='center'><tbody><tr><td>
            <form action='$_SERVER[PHP_SELF]' method='post'>
            $langRegistration<table border='0' align='center' cellpadding='3' cellspacing='0' class=td_main>
 	   			<tr><td colspan='2'><small>$langInfoStudReq</small></td></tr>
 			  	 <tr>
-	  		  <td class='labeltext'>$langName</td>
+	  		  <th class='labeltext'>$langName</th>
            <td><input type='text' name='name' value='".@$name."' class='auth_input'><small>&nbsp;(*)</small></td>
            </tr>
 	   <tr valign='top'>
-	    <td class='labeltext'>$langSurname</td>
+	    <th class='labeltext'>$langSurname</th>
 	    <td><input type='text' name='surname' value='".@$surname."' class='auth_input'>
 			<small>&nbsp;(*)</small></td>
 		  </tr>
 		  <tr>
-	    <td class='labeltext'>$langphone</td>
+	    <th class='labeltext'>$langphone</th>
 	    <td><input type='text' name='userphone' value='".@$userphone."' class='auth_input'>
 			<small>&nbsp;(*)</small></td>
 		  </tr>
 		  <tr>
-	    <td class='labeltext'>$profuname</td>
+	    <th class='labeltext'>$profuname</th>
 	    <td><input type='text' name='username' size='20' maxlength='20' value='".@$username."' class='auth_input'>
 			<small>&nbsp;(*)</small></td>
 		  </tr>
 		  <tr>
 	    <td class='labeltext'>&nbsp;</td>
-	    <td><small>$langUserNotice</small></td>
+	    <th><small>$langUserNotice</small></th>
 	  </tr>
-	  <tr><td class='labeltext'>$profemail</td>
+	  <tr><th class='labeltext'>$profemail</th>
      <td><input type='text' name='usermail' value='".@$usermail."' class='auth_input'>
 			<small>&nbsp;(*)</small></td>
       </tr>	
 	  <tr>
-  	 <td class='labeltext'>$langComments<br><span class='explanationtext'>$profreason</td>
-     <td><textarea name='usercomment' COLS='30' ROWS='4' WRAP='SOFT' class='auth_input'>'".@$usercomment."' </textarea>
+  	 <th class='labeltext'>$langComments<br><span class='explanationtext'>$profreason</th>
+     <td><textarea name='usercomment' COLS='30' ROWS='4' WRAP='SOFT' class='auth_input'>".@$usercomment."</textarea>
 	    <small>&nbsp;(*)</small></td>
 	  </tr>
 	  <tr>
-   <td class='labeltext'>$langDepartment&nbsp;:</td>
+   <th class='labeltext'>$langDepartment&nbsp;:</th>
    <td><select name='department' class='auth_input'>";
-
 
     $deps=mysql_query("SELECT name FROM faculte order by name");
     while ($dep = mysql_fetch_array($deps)) {
            $tool_content .= "\n<option value='$dep[0]'>$dep[0]</option>\n";
-        }
+    }
 
 	 $tool_content .= "</select></td>
 	  </tr>				
 	  <tr>
 	    <td>&nbsp;</td>
 	    <td><input type='submit' class='ButtonSubmit' name='Add' value='$langSend'>&nbsp;&nbsp;&nbsp;&nbsp;
-				<small>$langRequiredFields</small></td>
-	  </tr>
+			<small>$langRequiredFields</small></td>
+	  </tr></tbody>
 	  </table>
      </form>
-     </td></tr></table>
-     </td></tr></table>
      </td></tr></table>"; 
 }   // end of else if
 
-draw($tool_content,0);
+draw($tool_content, 0, 'auth');
 ?>
