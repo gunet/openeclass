@@ -190,25 +190,24 @@ else {
       </tr>";
 
 	$sql = db_query("SELECT rid,profname,profsurname,proftmima,profcomm,profuname,profemail,date_open,comment 
-		FROM prof_request WHERE status='1' and statut='5'");
+								FROM prof_request WHERE status='1' and statut='5'");
 
 	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 		$req = mysql_fetch_array($sql);
-		 $tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#F1F1F1'\" onMouseOut=\"this.style.backgroundColor='transparent'\>";
-     $tool_content .= "<td class=kk title='".htmlspecialchars($req[3])."'><small>".htmlspecialchars($req[1])."<br>";
+$tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#F1F1F1'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
+     $tool_content .= "<td class=kk title=".htmlspecialchars($req[3])."><small>".htmlspecialchars($req[1])."<br>";
      $tool_content .= htmlspecialchars($req[2])."</small></td>";
 		for ($i = 5; $i < mysql_num_fields($sql); $i++) {
-			if ($i == 5 and $req[$i] != "") {
-				$tool_content .= "<td class=kk><small><a href='mailto:".htmlspecialchars($req[$i])." class=small_tools> ".htmlspecialchars($req[$i])." </a></small></td>";
+			if ($i == 6 and $req[$i] != "") {
+				$tool_content .= "<td class=kk><small><a href=\"mailto:".htmlspecialchars($req[$i])."\" class=small_tools>".htmlspecialchars($req[$i])."</a></small></td>";
 			} else {
-				$tool_content .= "<td class=kk><small>".
-						htmlspecialchars($req[$i])."</small></td>";
+				$tool_content .= "<td class=kk><small>".htmlspecialchars($req[$i])."</small></td>";
 			}
 		}
-			$tool_content .= "<td align=center class=kk><small>
-      <a href=\"listrequsers.php?id=$req[rid]&"."close=1\" class=small_tools onclick='return confirmation();'>Κλείσιμο</a>
-			<br><a href=\"$_SERVER[PHP_SELF]?id=$req[rid]&"."close=2\" class=small_tools>Απόρριψη</a>
-			<br><a href=\"../auth/newuserreq.php?".
+
+			$tool_content .= "<td align=center class=kk><small><a href=\"listrequsers.php?id=$req[rid]&close=1\" class=small_tools onclick=\"return confirmation();\">Κλείσιμο</a><br><a href=\"$_SERVER[PHP_SELF]?id=$req[rid]&close=2\" class=small_tools>Απόρριψη</a>";
+			
+			$tool_content .= "<br><a href=\"../auth/newuserreq.php?".
 			"id=".urlencode($req['rid']).
 			"&pn=".urlencode($req['profname']).
 			"&ps=".urlencode($req['profsurname']).
