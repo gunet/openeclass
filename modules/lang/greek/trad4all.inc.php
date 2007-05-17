@@ -133,4 +133,7 @@ $langCopyrightFooter="Πληροφορίες πνευματικών δικαιωμάτων";
 
 $langGreek="Ελληνικά";
 $langEnglish="Αγγλικά";
+
+$langSearch="Αναζήτηση";
+$langAdvancedSearch="Σύνθετη αναζήτηση";
 ?>

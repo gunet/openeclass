@@ -77,6 +77,9 @@ $langCopyrightFooter="Copyright notice";
 $langGreek="Greek";
 $langEnglish="English";
 
+$langSearch="Search";
+$langAdvancedSearch="Advanced search";
+
 $langNoAdminAccess = '
 		<p><b>The page you tried to access requires a valid username and password.</b><br/>
 		The system has automatically redirect you to the start page to login. This could have been caused
