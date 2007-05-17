@@ -26,16 +26,37 @@
 
   <div id="header"> 
 	<a id="logo" href="{URL_PATH}" title="e-Class home"></a>
-	<a id="gunet_logo" href="http://www.gunet.gr" title="GUnet"></a>
+	<!--<a id="gunet_logo" href="http://www.gunet.gr" title="GUnet"></a>-->
+	<div id="fbar_info">
+	<div class="user">{LANG_USER} {USER_NAME} {USER_SURNAME}
+   <a href="{LOGOUT_LINK}index.php?logout=yes" title="{LANG_LOGOUT}" >{LANG_LOGOUT}</a></div>
+    
+
+		<div class="langSwitch"><a href="{LOCALIZE_LINK}" title="{LANG_LOCALIZE}" accesskey="l" target="_self">{LANG_LOCALIZE}</a></div>
+		</div>
   </div>
 
-  <div id="firstBar"> 
+  <!--<div id="firstBar"> 
   	<span class="user">{LANG_USER} {USER_NAME} {USER_SURNAME}</span>
     <span class="logout"><a class="{LOGOUT_CLASS_ICON}" href="{TOOL_PATH}index.php?logout=yes" title="{LANG_LOGOUT}"></a><a href="{LOGOUT_LINK}index.php?logout=yes" title="{LANG_LOGOUT}" >{LANG_LOGOUT}</a></span>
-	</div>
+	</div>-->
 
-	<div id="secondBar"> 
-		<span id="bread">
+	
+	
+	<div id="thirdBar">
+	<div id="tbar_info">
+		<div id="search">
+		<p class="title">{SEARCH_TITLE}</p>
+		<form name="form1" id="form1" method="post" action="{URL_PATH}modules/search/search.php">
+					
+					<input type="text" name="search_terms" size="14"/>
+					<input value="OK" name="submit" type="submit">
+					</form> 
+					<p><a href="{URL_PATH}modules/search/search.php" title="advanced search" accesskey="l" target="_self">{SEARCH_ADVANCED}</a></p>
+					
+		</div>
+		
+		    <div id="bread">
 			<!-- BEGIN breadCrumbHomeBlock -->
 			<ul>
 				<li class="first">{BREAD_HREF_FRONT}{BREAD_TEXT}{BREAD_HREF_END}		
@@ -52,19 +73,11 @@
 					</ul>
 
 							<!-- END breadCrumbEndBlock -->
-		</span>
-		<span class="langSwitch"><a href="{LOCALIZE_LINK}" title="{LANG_LOCALIZE}" accesskey="l" target="_self">{LANG_LOCALIZE}</a></span>
-	</div>
+		</div>
 	
-	<div id="thirdBar">
-		<span class="{THIRDBAR_LEFT_ICON}"></span><span class="lesson">{THIRD_BAR_TEXT}</span>
+		<div><span class="{THIRDBAR_LEFT_ICON}"></span><span class="lesson">{THIRD_BAR_TEXT}</span></DIV>
+		</div>
 
-		{INV1} 	<form name="form1" id="form1" method="post" action="../../modules/search/search_incourse.php">
-					<input type="text" name="search_terms" />
-					<input type="image" name="Submit" src="{TOOL_PATH}template/classic/img/search_icon.gif" alt="Search" width="14" WIDTH="13" BORDER="0">
-				</form>  
-
-		{INV2}
 	</div>
 
 	<div id="content"> 
@@ -105,8 +118,7 @@
 		<div id="{CONTENT_MAIN_CSS}">
 
 			<div id="tool_title">
-				<span class="tool_name">{TOOL_NAME}</span>
-				<span class="help">{HELP_LINK_ICON} {HELP_LINK}</span>
+				{TOOL_NAME}{HELP_LINK_ICON}
 			</div>
 
 			<!-- ---------- BEGIN TOOL CONTENT ---------- -->
