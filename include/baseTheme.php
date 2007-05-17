@@ -82,6 +82,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	global $page_name, $page_navi,$currentCourseID, $siteName, $navigation;
 	global $homePage, $courseHome, $uid, $webDir, $extraMessage;
 	global $langChangeLang, $langUserBriefcase, $langPersonalisedBriefcase, $langAdmin, $switchLangURL;
+	global $langSearch, $langAdvancedSearch;
 
 	$messageBox = "";
 
@@ -175,7 +176,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		if (session_is_registered('uid') && strlen($nom) > 0) {
 			$t->set_var('LANG_USER', $langUser);
 			$t->set_var('USER_NAME', $prenom);
-			$t->set_var('USER_SURNAME', $nom);
+			$t->set_var('USER_SURNAME', $nom.", ");
 		}
 
 		//if user is logged in display the logout option
@@ -188,7 +189,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		if ($menuTypeID == 2) {
 			$t->set_var('THIRD_BAR_TEXT', $intitule);
 			$t->set_var('THIRDBAR_LEFT_ICON', 'lesson_icon');
-		} elseif (isset($langUserBriefcase) && $menuTypeID > 0 && !session_is_registered('user_perso_active')) {
+		} elseif (isset($langUserBriefcase) && $menuTypeID > 0 && $menuTypeID <3 && !session_is_registered('user_perso_active')) {
 			$t->set_var('THIRD_BAR_TEXT', $langUserBriefcase);
 			$t->set_var('THIRDBAR_LEFT_ICON', 'briefcase_icon');
 		} elseif (isset($langPersonalisedBriefcase) && $menuTypeID > 0 && session_is_registered('user_perso_active')) {
@@ -199,7 +200,18 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var('THIRDBAR_LEFT_ICON', 'admin_bar_icon');
 		} else {
 			$t->set_var('THIRD_BAR_TEXT', $langEclass);
+			$t->set_var('THIRDBAR_LEFT_ICON', 'logo_icon');
 		}
+		
+		//set the appropriate search action for the searchBox form
+//		if ($menuTypeID==2) {
+//			$searchAction = "search_incourse.php";
+//		} elseif ($menuTypeID == 1 || $menuTypeID == 3) {
+//			$searchAction = "search_loggedin.php";
+//		} else {
+//			$searchAction = "search_loggedout.php";
+//		}
+//		$t->set_var('SEARCH_ACTION', $searchAction);
 
 		$t->set_var('TOOL_NAME',  $nameTools);
 
@@ -335,20 +347,16 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var('BODY_ACTION', $body_action);
 		}
 
+		$t->set_var('SEARCH_TITLE', $langSearch);
+		$t->set_var('SEARCH_ADVANCED', $langAdvancedSearch);
+		
 		//if $require_help is true (set by each tool) display the help link
 		if ($require_help == true){
-			$help_link = "
-		 <a href=\"".$relPath."modules/help/help.php?topic=$helpTopic&language=$language>\" 
+
+			$help_link_icon = " <a  href=\"".$relPath."modules/help/help.php?topic=$helpTopic&language=$language>\"
         onClick=\"window.open('".$relPath."modules/help/help.php?topic=$helpTopic&language=$language','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10'); 
-        return false;\">$langHelp</a>
-";
+        return false;\"> <img src=\"".$relPath."template/classic/img/help_icon.gif\" width=\"14\" height=\"14\" border=\"0\" alt=\"$langHelp\"/> </a>";
 
-			$help_link_icon = " <a id=\"help_icon\" href=\"".$relPath."modules/help/help.php?topic=$helpTopic&language=$language>\"
-        onClick=\"window.open('".$relPath."modules/help/help.php?topic=$helpTopic&language=$language','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10'); 
-        return false;\"></a>";
-
-
-			$t->set_var('HELP_LINK', $help_link);
 			$t->set_var('HELP_LINK_ICON', $help_link_icon);
 			$t->set_var('LANG_HELP', $langHelp);
 		} else {
