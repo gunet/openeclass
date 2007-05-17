@@ -29,34 +29,14 @@ a:active, a:visited, a:link{
 
 
 #tool_title {
-	width:99%;
+	width:100%;
 	margin-top:10px;
 	margin-bottom:10px;
 	height: 30px;
-}
-
-#tool_title .tool_name{
 	font-size:15px;
 	font-family: Arial, Helvetica, sans-serif;
-	position:absolute;
 	font-weight:bold;
-}
-
-#tool_title .help a{
-	float:right;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size:12px;
-}
-
-#help_icon {
-	float: right;
-	width: 14px;
-	height: 14px;
-	margin-top:0.1em;
-	margin-left:0.1em;
-	background-image: url(img/help_icon.gif);
-	background-repeat: no-repeat;
-	overflow:visible;
+	text-align: left;
 }
 
 #tool_operationsS {
