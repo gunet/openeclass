@@ -202,16 +202,16 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var('THIRD_BAR_TEXT', $langEclass);
 			$t->set_var('THIRDBAR_LEFT_ICON', 'logo_icon');
 		}
-		
+
 		//set the appropriate search action for the searchBox form
-//		if ($menuTypeID==2) {
-//			$searchAction = "search_incourse.php";
-//		} elseif ($menuTypeID == 1 || $menuTypeID == 3) {
-//			$searchAction = "search_loggedin.php";
-//		} else {
-//			$searchAction = "search_loggedout.php";
-//		}
-//		$t->set_var('SEARCH_ACTION', $searchAction);
+		//		if ($menuTypeID==2) {
+		//			$searchAction = "search_incourse.php";
+		//		} elseif ($menuTypeID == 1 || $menuTypeID == 3) {
+		//			$searchAction = "search_loggedin.php";
+		//		} else {
+		//			$searchAction = "search_loggedout.php";
+		//		}
+		//		$t->set_var('SEARCH_ACTION', $searchAction);
 
 		$t->set_var('TOOL_NAME',  $nameTools);
 
@@ -249,7 +249,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 				$t->set_var('BREAD_TEXT',  $langUserBriefcase);
 			}
 
-			
+
 			if (!$homePage) {
 				$t->set_var('BREAD_HREF_FRONT',  '<a href="{BREAD_START_LINK}">');
 				$t->set_var('BREAD_START_LINK',  $urlServer);
@@ -258,9 +258,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 			$t->parse('breadCrumbHome', 'breadCrumbHomeBlock',false);
 		}
-		
+
 		$pageTitle = $siteName;
-		
+
 		$breadIterator=1;
 		$t->set_block('mainBlock', 'breadCrumbStartBlock', 'breadCrumbStart');
 
@@ -349,7 +349,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 		$t->set_var('SEARCH_TITLE', $langSearch);
 		$t->set_var('SEARCH_ADVANCED', $langAdvancedSearch);
-		
+
 		//if $require_help is true (set by each tool) display the help link
 		if ($require_help == true){
 
@@ -397,6 +397,7 @@ function drawPerso($toolContent){
 	global $langMyPersoAnnouncements, $langMyPersoDocs, $langMyPersoAgenda, $langMyPersoForum;
 	global $langModifyProfile, $langSearch, $langAdminTool;
 	global $langChangeLang, $switchLangURL;
+	global $langSearch, $langAdvancedSearch;
 
 	//get blocks content from $toolContent array
 	$lesson_content 	= $toolContent['lessons_content'];
@@ -414,27 +415,35 @@ function drawPerso($toolContent){
 
 	$t->set_var('LANG_USER', $langUser);
 	$t->set_var('USER_NAME', $prenom);
-	$t->set_var('USER_SURNAME', $nom);
+	$t->set_var('USER_SURNAME', $nom.", ");
 	$t->set_var('LANG_LOGOUT', $langLogout);
 	$t->set_var('LOGOUT_LINK',  $relPath);
 
-	$otherLinks = "| <a class=\"create_course_icon\" href=".$urlServer."modules/profile/profile.php>$langModifyProfile</a> ";
-	if ($is_admin) {
-		$otherLinks .= "| <a class=\"admin_icon\" href=".$urlServer."modules/admin/>$langAdminTool</a> ";
+	if (session_is_registered('langswitch')) {
+		$lang_localize = $langChangeLang;
+		$localize_link = $switchLangURL;
+	} else {
+		$lang_localize = 'English';
+		$localize_link =  '?localize=en';
 	}
-	$otherLinks .= "| <a class=\"search_icon\" href=".$urlServer."modules/search/search.php>$langSearch</a>";
+	
+	$otherLinks = "";
+	if ($is_admin) {
+		$otherLinks = "<a class=\"admin_icon\" href=".$urlServer."modules/admin/>$langAdminTool</a> | ";
+	}
+	
+	$otherLinks .= "<a class=\"create_course_icon\" href=".$urlServer."modules/profile/profile.php>$langModifyProfile</a> | ";
+	$otherLinks .= "<a href=".$localize_link.">$lang_localize</a>";
 	$t->set_var('OTHER_LINKS',  $otherLinks);
 
 	$t->set_var('THIRD_BAR_TEXT', $langPersonalisedBriefcase);
 	$t->set_var('THIRDBAR_LEFT_ICON', 'briefcase_icon');
 
-	if (session_is_registered('langswitch')) {
-		$t->set_var('LANG_LOCALIZE',  $langChangeLang);
-		$t->set_var('LOCALIZE_LINK',  $switchLangURL);
-	} else {
-		$t->set_var('LANG_LOCALIZE',  'English');
-		$t->set_var('LOCALIZE_LINK',  '?localize=en');
-	}
+	
+
+	$t->set_var('SEARCH_TITLE', $langSearch);
+	$t->set_var('SEARCH_ADVANCED', $langAdvancedSearch);
+
 	$t->set_var('LANG_MY_PERSO_LESSONS', $langMyPersoLessons);
 	$t->set_var('LANG_MY_PERSO_DEADLINES', $langMyPersoDeadlines);
 	$t->set_var('LANG_MY_PERSO_ANNOUNCEMENTS', $langMyPersoAnnouncements);

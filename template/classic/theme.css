@@ -229,7 +229,7 @@ float: left;
 	margin-top:0.5em;
 	margin-right:2px;
 	overflow:visible;
-	max-width:300px;
+	max-width:370px;
 	text-align:right;
 }
 #fbar_info .logout a{
@@ -264,7 +264,7 @@ float: left;
 color: #ffffff
 }
 
-#fbar_info .langSwitch a {
+#fbar_info .langSwitch {
 	clear:right;
 	margin-top:2.4em;
 	margin-right:0.2em;
@@ -293,6 +293,8 @@ color: #ffffff
 #content {
 	width: 100%;
 	padding:0 ;
+	borderXX:2px solid black;
+	margin-top:81px;
 }
 
 #content p, #sidebar p, #mainnav p, #header p,#footer p  {margin:2px 5px 5px 5px;}		

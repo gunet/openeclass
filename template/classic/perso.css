@@ -1,14 +1,29 @@
+html,body {
+	margin: 0;
+	padding: 0;
+	font-family: Verdana, Arial, sans-serif;
+	background-image: none;
+}
+
+#content {
+	width: 100%;
+	padding:0 ;
+	border-top: 1px solid #ff9900;
+	margin-top:81px;
+}
+
 #leftnav_perso {
 	float: left;
-	width: 49%;
+	width: 48.4%;
 	margin: 0;
+	margin-left:1%;
 	padding-top: 1em;
 }
 
 #content_main_perso {
-	margin-left:50%;
-	margin-top:32px;
-	//margin-top:0px;
+	width:48.5%;
+	margin:0;
+	margin-left:50.5%;
 	padding-top: 1em;
 }
 
@@ -83,7 +98,7 @@ table.assign, th.assign, td.assign {
 }
 
 table.assign {
-	border : 1px solid #a2a2a3; !important;
+	border : 1px solid #a2a2a3 !important;
 }
 
 
