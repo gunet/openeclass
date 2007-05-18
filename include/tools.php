@@ -271,8 +271,8 @@ function loggedOutMenu(){
 	$newuser = ($is_eclass_unique==1)?'newuser.php':'newuser_info.php';
 	$newprof = ($is_eclass_unique==1)?'newprof.php':'newprof_info.php';
 
-//	array_push($sideMenuText, $langNewUser);
-	array_push($sideMenuText, $langReg);
+	array_push($sideMenuText, $langNewUser);
+//	array_push($sideMenuText, $langReg);
 //	array_push($sideMenuLink, $urlServer."modules/auth/$newuser");
 	array_push($sideMenuLink, $urlServer."modules/auth/registration.php");
 	array_push($sideMenuImg, "user_reg.gif");
