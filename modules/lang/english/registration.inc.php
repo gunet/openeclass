@@ -26,8 +26,6 @@
       +----------------------------------------------------------------------+
 */
 
-
-
 $langSee = "Preview";
 $langNoSee = "Registration required";
 $langSubscribe = "Submit changes";
@@ -278,10 +276,7 @@ $star="(Fields with (*) are required)";
 $mailsubject="Professor Application - Asynchronous Teleteaching Service";
 
 $contactphone="Contact Tel.";
-
 $contactpoint="Contact";
-
-$admin="Administration Tools";
 
 $opencours="List Of Open Courses";
 
@@ -365,6 +360,7 @@ $langNoLessonsAvailable = "No courses available.";
 
 // formuser.php
 $langUserRequest = "Αίτηση Δημιουργίας Λογαριασμού Φοιτητή";
+$langNewUser = "New User Details";
 $langInfoProfReq = "Αν επιθυμείτε να έχετε πρόβαση στην πλατφόρμα με δικαιώματα χρήστη - καθηγητή, παρακαλώ συμπλ
 ηρώστε την παρακάτω αίτηση. Η αίτηση θα σταλεί στον υπεύθυνο διαχειριστή ο οποίος θα δημιουργήσει το λογαριασμό κ
 αι θα σας στείλει τα στοιχεία μέσω ηλεκτρονικού ταχυδρομείου.";
