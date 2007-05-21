@@ -14,7 +14,7 @@
 <link href="../template/classic/theme.css" rel="stylesheet" type="text/css" />
 <link href="../template/classic/tool_content.css" rel="stylesheet" type="text/css" />
 <link href="./install.css" rel="stylesheet" type="text/css" />
-{TOOL_CSS}
+
 <link rel="SHORTCUT ICON" href="../template/classic/img/eclass-icon.ico" />
 
  {HEAD_EXTRAS}
@@ -26,23 +26,32 @@
 <div id="container"> 
 
   <div id="header"> 
-	<a id="logo" href="{URL_PATH}" title="eClass home"></a>
-	<a id="gunet_logo" href="http://www.gunet.gr" title="eClass home"></a>
-  </div>
-
-  <div id="firstBar"> 
-  	<span class="user">Οδηγός εγκατάστασης e-Class</span>
-	</div>
-
-	<div id="secondBar"> 
-		<span id="bread">
-			{BREAD_TEXT}
-		</span>
-		<span class="langSwitch"><a href="{LOCALIZE_LINK}" title="{LANG_LOCALIZE}" accesskey="l" target="_self">{LANG_LOCALIZE}</a></span>
-	</div>
+		<a id="logo" href="{URL_PATH}" title="e-Class home"></a>
+	
+		<div id="fbar_info">
+			<div class="user">{LANG_USER} {USER_NAME} {USER_SURNAME}
+   				<a href="{LOGOUT_LINK}index.php?logout=yes" title="{LANG_LOGOUT}" >{LANG_LOGOUT}</a>
+   			</div>
+    		<div class="langSwitch">
+    			<a href="{LOCALIZE_LINK}" title="{LANG_LOCALIZE}">{LANG_LOCALIZE}</a>
+    		</div>
+		</div>
+  	</div>
 	
 	<div id="thirdBar">
-		<span class="{THIRDBAR_LEFT_ICON}"></span><span class="lesson">{THIRD_BAR_TEXT}</span>
+		<div id="tbar_info">
+			<div id="search">
+				<p class="title">Πορεία Εγκατάστασης</p>
+			</div>
+		
+		    <div id="bread">
+		    {BREAD_TEXT}
+			</div>
+	
+			<div>
+				<span class="logo_icon"></span><span class="lesson">Οδηγός Εγκατάστασης e-Class</span>
+			</div>
+		</div>
 
 	</div>
 
@@ -82,10 +91,9 @@
 
 		<div id="content_main">
 
-		<!--	<div id="tool_title">
-				<span class="tool_name">{TOOL_NAME}</span>
-				<span class="help">{HELP_LINK_ICON} {HELP_LINK}</span>
-			</div>-->
+		<div id="tool_title">
+				{CURRENT_STEP_TITLE}
+			</div>
 
 			<!-- ---------- BEGIN TOOL CONTENT ---------- -->
 			<br/>
