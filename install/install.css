@@ -55,3 +55,10 @@ DIV.welcomeImg {
 	padding-left : 24px;
 	background-color:#CCFF99;
 }
+
+#search p.title {
+	font-weight:bold;
+	font-size: 15px;
+	margin-top:30px;
+	margin-left:20px;
+}

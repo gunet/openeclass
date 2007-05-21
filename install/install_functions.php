@@ -30,58 +30,43 @@ function draw($toolContent){
 			$numOfTools = count($toolArr[$i][1]);
 
 			for($j=0; $j< $numOfTools; $j++){
-				if ($toolArr[$i][2][$j] == true) $currentStep = "currentStep";
+				if ($toolArr[$i][1][$j] == true) $currentStep = "currentStep";
 				else $currentStep = "";
 				$t->set_var('CURRENT_STEP', $currentStep);
-				$t->set_var('TOOL_TEXT', $toolArr[$i][1][$j]);
+				$t->set_var('TOOL_TEXT', $toolArr[$i][0][$j]);
 
-				$t->set_var('IMG_FILE', $toolArr[$i][3][$j]);
+				$t->set_var('IMG_FILE', $toolArr[$i][2][$j]);
 				$t->parse('leftNavLink', 'leftNavLinkBlock', true);
 
+				//memorise current step to show it as title
+				if ($currentStep != '') {
+					$i_var = $i;
+					$j_var = $j;
+				}
 			}
 
-			$t->set_var('ACTIVE_TOOLS', $toolArr[$i][0]);
-			$t->set_var('NAV_CSS_CAT_CLASS', 'category');
+//			$t->set_var('ACTIVE_TOOLS', $toolArr[$i][0]);
+//			$t->set_var('NAV_CSS_CAT_CLASS', 'category');
 			$t->parse('leftNavCategory', 'leftNavCategoryBlock',true);
 
 			$t->clear_var('leftNavLink'); //clear inner block
 		}
 
+		$t->set_var('CURRENT_STEP_TITLE', $toolArr[$i_var][0][$j_var]);
+		
 		$t->set_var('URL_PATH',  $urlServer);
 
 		$t->set_var('TOOL_CONTENT', $toolContent);
 
-//		$langLogout = "Bhma 1/x";
-//		$t->set_var('LANG_LOGOUT', $langLogout);
-//		$t->set_var('LOGOUT_CLASS_ICON', 'logout_icon');
-
-
-		//set the text and icon on the third bar (header)
-		/*if ($menuTypeID == 2) {
-		$t->set_var('THIRD_BAR_TEXT', $intitule);
-		$t->set_var('THIRDBAR_LEFT_ICON', 'lesson_icon');
-		} elseif (isset($langUserBriefcase) && $menuTypeID > 0 && !session_is_registered('user_perso_active')) {
-		$t->set_var('THIRD_BAR_TEXT', $langUserBriefcase);
-		$t->set_var('THIRDBAR_LEFT_ICON', 'briefcase_icon');
-		} elseif (isset($langPersonalisedBriefcase) && $menuTypeID > 0 && session_is_registered('user_perso_active')) {
-		$t->set_var('THIRD_BAR_TEXT', $langPersonalisedBriefcase);
-		$t->set_var('THIRDBAR_LEFT_ICON', 'briefcase_icon');
-		} elseif ($menuTypeID == 3)  {
-		$t->set_var('THIRD_BAR_TEXT', $langAdmin);
-		$t->set_var('THIRDBAR_LEFT_ICON', 'admin_bar_icon');
-		} else {
-		$t->set_var('THIRD_BAR_TEXT', $langEclass);
-		}
-		*/
 		$t->set_var('THIRD_BAR_TEXT',$langStepTitle);
-	
+
 		$t->set_var('BREAD_TEXT',  $langStep);
 
 		$pageTitle = "Οδηγός Εγκατάστασης e-Class - " . $langStepTitle . " (" . $langStep . ")";
 		$t->set_var('PAGE_TITLE',  $pageTitle);
 
 
-//		$t->set_var('TOOL_PATH',  $relPath);
+		//		$t->set_var('TOOL_PATH',  $relPath);
 
 		if (isset($head_content)){
 			$t->set_var('HEAD_EXTRAS', $head_content);
@@ -113,7 +98,7 @@ function installerMenu(){
 	$sideMenuLink 	= array();
 	$sideMenuImg	= array();
 
-	array_push($sideMenuSubGroup, "Πορεία Εγκατάστασης");
+//	array_push($sideMenuSubGroup, "Πορεία Εγκατάστασης");
 
 	for($i=0; $i<6; $i++) {
 		if($i < $_SESSION['step']-1) {

@@ -477,16 +477,7 @@ function set_MCU()
                             </td>
                         </tr>
 			
-			<tr>
-			    <th>
-                               
-                                    Κλειδί για χρήση απόκρυψης
-                                
-                            </th>
-                            <td>
-                                <input type=\"text\" size=\"40\" name=\"encryptkey\" value=\"$encryptkey\">
-                            </td>
-                        </tr>
+			
 			
                          </thead>
                     </table>
@@ -551,7 +542,7 @@ elseif(isset($_REQUEST['install6']))
         <li>Base dn του LDAP Εξυπηρέτη : $dnldapserver </li>
 	<li>MCU: ".@$MCUForm." </li>
 	<li>Vod Server: ".@$vodServerForm." </li>
-	<li>Κλειδί για χρήση απόκρυψης: $encryptkey </li>
+	
         </ul>
         
                     <input type=\"submit\" name=\"back4\" value=\"< Πίσω\">
@@ -1445,7 +1436,7 @@ $durationAccount = "126144000";
 
 '.($vodServer==''?'//':'').'$vodServer="'.$vodServer.'";
 '.($MCU==''?'//':'').'$MCU="'.$MCU.'";
-$encryptkey = "'.$encryptkey.'";
+$encryptedPasswd = true;
 ?>';
 		// write to file
 		fwrite($fd, $stringConfig);
