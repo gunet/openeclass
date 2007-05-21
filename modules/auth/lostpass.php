@@ -76,11 +76,11 @@ function check_password_editable($password)
 	$authmethods = array("pop3","imap","ldap","db");
 	if(in_array($password,$authmethods))
 	{
-		return 0; // it is not editable, because it belongs in external auth method
+		return false; // it is not editable, because it belongs in external auth method
 	}
 	else
 	{
-		return 1; // is editable
+		return true; // is editable
 	}
 }
 
@@ -162,7 +162,7 @@ if (isset($_REQUEST['do']) && $_REQUEST['do'] == "go") {
 	}
 }
 
-if ((!isset($email) || !isset($userName)) && !isset($_REQUEST['do'])) {
+if ((!isset($email) || !isset($userName) || empty($email) || empty($userName)) && !isset($_REQUEST['do'])) {
 	/***** Email address entry form *****/
 
 	$tool_content .= "$lang_pass_intro";
@@ -191,23 +191,11 @@ if ((!isset($email) || !isset($userName)) && !isset($_REQUEST['do'])) {
 	</form>";
 
 } elseif (!isset($_REQUEST['do'])) {
-	if (!valid_email($email)) {
-		$tool_content .=  $lang_pass_invalid_mail1
-		."<code> ".htmlspecialchars($email)." </code>"
-		.$lang_pass_invalid_mail2
-		." <a href='mailto: $emailhelpdesk'>".$emailhelpdesk."</a>, "
-		.$lang_pass_invalid_mail3;
-
-		$tool_content .= "<form method=\"post\" action=\"".$REQUEST_URI."\">
-		<input type=\"text\" name=\"femail\" size=\"50\"><br>
-		<input type=\"submit\" name=\"doit\" value=\"".$lang_pass_submit."\">
-		</form>";
-
-	} else {
+	if (valid_email($email)) {
 		/***** If valid e-mail address was entered, find user and send email *****/
 		$res = db_query("SELECT user_id, nom, prenom, username, password, statut FROM user
 							WHERE email = '" . mysql_escape_string($email) . "'
-							AND username = '$userName'", $mysqlMainDb);
+							AND username = '" . mysql_escape_string($userName) . "'", $mysqlMainDb);
 
 		if (mysql_num_rows($res) == 1) {
 			$text = $langPassResetIntro. $emailhelpdesk;
@@ -215,7 +203,7 @@ if ((!isset($email) || !isset($userName)) && !isset($_REQUEST['do'])) {
 
 			while ($s = mysql_fetch_array($res, MYSQL_ASSOC)) {
 				$is_editable = check_password_editable($s['password']);
-				if(!empty($is_editable)) {
+				if($is_editable) {
 
 					//insert an md5 key to the db
 					$new_pass = createPassword();
