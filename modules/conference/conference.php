@@ -416,5 +416,6 @@ $tool_content.='
 
 
 //END CONTENT
-draw($tool_content, 2, 'conference', $head_content,$body_action,true);
+//draw($tool_content, 2, 'conference', $head_content, $body_action,true);
+draw($tool_content, 2, 'conference', $head_content, $body_action);
 ?>

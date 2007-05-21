@@ -4,7 +4,7 @@
 	width: 200px;
 	border:groove;
 	top:210px;
-	left:0px;
+	left:220px;
 	}
 
 #video{
@@ -13,7 +13,7 @@
 	width: 200px;
 	border:groove;
 	top:435px;
-	left:0px;
+	left:220px;
 }
 #video_presantation_control{
 	position:absolute;
@@ -21,7 +21,7 @@
 	width: 200px;
 	border:groove;
 	top:659px;
-	left:0px;
+	left:220px;
 }
 
 #presantation_window{
@@ -30,7 +30,7 @@
 	width: 700px;
 	border:groove;
 	top:210px;
-	left:210px;
+	left:430px;
 }
 
 #iframe{
@@ -49,13 +49,13 @@
 }
 #background{
 	height:650px;
-	width:710px;
+	width:930px;
 }
 
 #chat_div{
 	position:absolute;
 	border:groove;
 	top:720px;
-	left:210px;
+	left:430px;
 	width:700px;
 }

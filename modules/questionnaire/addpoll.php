@@ -69,6 +69,17 @@ $nameTools = $langPollCreate;
 $navigation[] = array("url"=>"questionnaire.php", "name"=> $langQuestionnaire);
 
 $tool_content = "";
+if (isset($_POST['PollCreate']))
+	 createMCPoll();
+
+if (isset($_POST['MoreQuestions'])) 
+		$questions++;
+
+if (isset($_POST['MoreAnswers']))
+		$answers++;
+
+$tool_content .= "<div><b>$questions</b></div>";
+$tool_content .= "<div><b>$answers</b></div>";
 
 if(!isset($_REQUEST['UseCase'])) $_REQUEST['UseCase'] = "";
 
@@ -118,7 +129,7 @@ hContent;
 if ($_REQUEST['UseCase'] ==1)
 	draw($tool_content, 2, '', $head_content); 
 else	
-draw($tool_content, 2, '', $local_head, '');
+	draw($tool_content, 2, '', $local_head, '');
 
 
 /*****************************************************************************
@@ -129,10 +140,11 @@ function printPollCreationForm() {
 		$langPollEnd, $langPollType, $langPollMC, $langPollFillText, $langPollContinue, $langPollCreate, 
 		$start_cal_Poll, $end_cal_Poll;
 	
+//	<input type="hidden" value="0" name="MoreQuestions">
+
 	$CurrentDate = date("Y-m-d H:i:s");
 	$tool_content .= <<<cData
 	<form action="addpoll.php" id="poll" method="post">
-	<input type="hidden" value="0" name="MoreQuestions">
 	<table><thead>$langPollCreate</thead>
 		<tr><td>$langPollName</td><td colspan="2"><input type="text" size="50" name="PollName"></td></tr>
 		<tr><td>$langPollStart</td><td colspan="2">
@@ -143,6 +155,8 @@ function printPollCreationForm() {
 		<input name="UseCase" type="hidden" value="1" />
 		<tr><td colspan="3" align="right">
 		  <input name="$langPollContinue" type="submit" value="$langPollContinue -&gt;"></td>
+			<input type="hidden" value="1" name="questions">
+			<input type="hidden" value="2" name="answers">
 	</table>
 	</form>
 cData;
@@ -156,15 +170,42 @@ function printMCQuestionForm() {
 		$langPollType, $langPollMC, $langPollFillText, $langPollContinue, 
 		$langPollQuestion, $langPollCreate, $langPollMoreQuestions, 
 		$langPollCreated, $MoreQuestions, $langPollAnswer, 
-		$langPollMoreAnswers;
+	  $langPollMoreAnswers, $questions, $answers;
 		
 		if(isset($_POST['PollName'])) $PollName = htmlspecialchars($_POST['PollName']);
 		if(isset($_POST['PollEnd'])) $PollEnd = htmlspecialchars($_POST['PollEnd']);
 		if(isset($_POST['PollStart'])) $PollStart = htmlspecialchars($_POST['PollStart']);
 		
+		$tool_content .= "<form action='$_SERVER[PHP_SELF]' id='poll' method='post'>
+    <input type='hidden' value='1' name='UseCase'>
+    <table>
+      <tr><th>$langPollName</th><td colspan='2'><input type='text' size='50' name='PollName' value='$PollName'></td></tr>
+      <tr><th>$langPollStart</th><td colspan='2'><input type='text' size='17' name='PollStart' value='$PollStart'></td></tr>
+      <tr><th>$langPollEnd</th><td colspan='2'><input type='text' size='17' name='PollEnd' value='$PollEnd'></td></tr>";
+
+			for ($i=1; $i<=$questions; $i++) {
+				$tool_content .= "<tr><td>$langPollQuestion #".$i."</td>
+												<td><input type='text' name='question".$i."' size='50'></td></tr>";
+					for ($j=$i; $j<=$answers; $j++) {
+				    $tool_content .= "
+								<tr><td>$langPollAnswer #".$j."</td><td><input type='text' name='answer".$j.".1' size='50'></td></tr>";
+							}
+				}
+      $tool_content .= "<tr>
+	      <td><input type='submit' name='MoreAnswers' value='$langPollMoreAnswers'></td>
+        <td><input type='submit' name='MoreQuestions' value='$langPollMoreQuestions'></td>
+        <td><input type='submit' name='PollCreate' value='$langPollCreate'></td>
+      </tr>
+    </table>
+    <input type='hidden' value='1' name='NumOfQuestions'>
+    <input type='hidden' value='$questions' name='questions'>
+    <input type='hidden' value='$answers' name='answers'>
+    </form>";
+
+/*
 	if ($MoreQuestions == 2) { // Create poll ******************************************************
 		createMCPoll();
-	} elseif(count($_POST)<7) { // Just entered MC poll cretion dialiog ****************************
+	} elseif(count($_POST)<7) { // Just entered MC poll creation dialiog ****************************
 		$tool_content .= <<<cData
 		<form action="addpoll.php" id="poll" method="post" onSubmit="return checkrequired(this, 'question1')">
 		<input type="hidden" value="1" name="UseCase">
@@ -176,18 +217,10 @@ function printMCQuestionForm() {
 			<tr><td>$langPollAnswer #1</td><td><input type="text" name="answer1.1" size="50"></td></tr>
 			<tr><td>$langPollAnswer #2</td><td><input type="text" name="answer2.1" size="50"></td></tr>
 			<tr>
-			  <td><label>
-			    <input name="MoreQuestions" type="radio" value="1" />
-		      $langPollMoreAnswers</label></td>
-			  <td><label>
-			    <input name="MoreQuestions" type="radio" value="3" />
-		      $langPollMoreQuestions</label></td>
-		    <td><label>
-			    <input name="MoreQuestions" type="radio" value="2" checked/>
-		      $langPollCreate</label></td>
+			  <td><input name="MoreAnswers" type="submit" value="$langPollMoreAnswers" ></td>
+			  <td><input name="MoreQuestions" type="submit" value="$langPollMoreQuestions" ></td>
+		    <td><input name="MoreQuestions" type="submit" value="$langPollCreate" ></td>
 			</tr>
-			<tr><td colspan="2" align="right">
-			  <input name="$langPollContinue" type="submit" value="$langPollContinue -&gt;"></td>
 		</table>
 		<input type="hidden" value="1" name="NumOfQuestions">
 		</form>
@@ -273,7 +306,7 @@ cData;
 		<input type="hidden" value="{$NumOfQuestions}" name="NumOfQuestions">
 		</form>
 cData;
-	}
+	}  */
 }
 
 
@@ -465,7 +498,6 @@ function printAllQA() {
 					}
 					
 				}
-				
 				
 			}
 			

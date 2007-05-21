@@ -98,7 +98,6 @@ $langQQuestionNotGiven ="Δεν έχετε εισάγει την τελευταία ερώτηση.";
 $langQFillInAllQs ="Παρακαλώ απαντήστε σε όλες τις ερωτήσεις.";
 
 // polls
-
 $langPollsActive = "Ενεργές Δημοσκοπήσεις";
 $langPollsInactive = "Ανενεργές Δημοσκοπήσεις";
 $langPollName = "Όνομα";
@@ -120,8 +119,8 @@ $langPollContinue = "Συνέχεια";
 $langPollMoreAnswers = "Κι άλλες απαντήσεις";
 $langPollYes = "Ναί";
 $langPollNo = "Όχι";
-$langPollMoreAnswers ="Κι άλλες απαντήσεις";
-$langPollMoreQuestions = "Κι άλλες ερωτήσεις";
+$langPollMoreAnswers ="+ απαντήσεις";
+$langPollMoreQuestions = "+ ερωτήσεις";
 $langPollCreate = "Δημιουργία Δημοσκόπησης";
 $langPollCreated ="Η Δημοσκόπηση δημιουργήθηκε με επιτυχία. Κάντε κλικ <a href=\"poll.php\">εδώ</a> για να επισκεφτείτε την σελίδα των δημοσκοπήσεων.";
 $langPollCreator = "Δημιουργός";
