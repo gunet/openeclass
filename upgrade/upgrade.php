@@ -88,7 +88,7 @@ $tool_content .= add_field('cours', 'dropbox_quota', "FLOAT DEFAULT '$diskQuotaD
 // upgrade query to 1.7
 if (!mysql_field_exists("$mysqlMainDb", 'annonces','title'))
  db_query("ALTER TABLE annonces ADD title VARCHAR(255) NULL AFTER id");
-f (!mysql_field_exists("$mysqlMainDb", 'prof_request','statut'))
+if (!mysql_field_exists("$mysqlMainDb", 'prof_request','statut'))
 $tool_content .= add_field('prof_request', 'statut', 'tinyint(4) NOT NULL default 1');
 
 // ************************************
