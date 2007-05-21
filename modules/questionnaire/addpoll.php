@@ -69,8 +69,11 @@ $nameTools = $langPollCreate;
 $navigation[] = array("url"=>"questionnaire.php", "name"=> $langQuestionnaire);
 
 $tool_content = "";
-if (isset($_POST['PollCreate']))
-	 createMCPoll();
+
+if (isset($_POST['PollCreate']))  {
+ 	  createMCPoll();
+		printAllQA();
+}
 
 if (isset($_POST['MoreQuestions'])) 
 		$questions++;
@@ -402,9 +405,10 @@ function createTFPoll() {
     
 	$GLOBALS["tool_content"] .= $GLOBALS["langPollCreated"];
 }
+
 function createMCPoll() {
 	
-	global $tool_content,$langPollQuestion,$langPollAnswer ;
+	global $tool_content, $langPollQuestion, $langPollAnswer ;
 
 	// insert into poll as above //////////////////////////////////////////////////////////////
 	

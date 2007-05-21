@@ -69,35 +69,44 @@ $action->record('MODULE_ID_QUESTIONNAIRE');
 $nameTools = $langQuestionnaire;
 $tool_content = "";
 
-//if ((isset($questionnaire_type))&&($questionnaire_type == 1)) {
-//	// It is a SURVEY
-//	header("Location: survey.php");
-//	exit();
-//} elseif ((isset($questionnaire_type))&&($questionnaire_type == 2)) {
-//	// It is a POLL
-//	header("Location: poll.php");
-//	exit();
-//} else {
-//	// Just entered page
-//	$tool_content .= "<b>" . $langQPref ."</b><br><br>";
-//	
-//	$tool_content .= "<a href=\"?questionnaire_type=1\">" . $langQPrefSurvey ."</a><br>";
-//	$tool_content .= "<a href=\"?questionnaire_type=2\">" . $langQPrefPoll ."</a><br>";
-// }
-	
-//$tool_content .= "<table width=\"90%\"><thead>$langNamesSurvey</thead><tbody><tr><td>";
+$head_content = '
+<script>
+function confirmation ()
+{
+    if (confirm("'.$langPollDeleteMsg.'"))
+        {return true;}
+    else
+        {return false;}
+}
+</script>
+';
+
+
 $tool_content .= "<p><b>$langNamesSurvey</b></p><br>";
-	printSurveys();
-//	$tool_content .= "</td></tr></tbody></table>";
-	
-//	$tool_content .= "<table width=\"90%\"><thead>$langNamesPoll</thead><tbody><tr><td>";
+
+if (isset($delete))  {
+				db_query("DELETE FROM poll WHERE pid=".mysql_real_escape_string($_GET['pid']));
+				$ad = mysql_fetch_array(db_query("SELECT aid FROM poll_answer 
+																				WHERE pid=".mysql_real_escape_string($_GET['pid'])));
+				db_query("DELETE FROM poll_answer_record WHERE aid='$ad[aid]'");
+				db_query("DELETE FROM poll_answer WHERE pid=".mysql_real_escape_string($_GET['pid']));
+				$pd = mysql_fetch_array(db_query("SELECT pqid FROM poll_question 
+																				WHERE pid=".mysql_real_escape_string($_GET['pid'])));	
+				db_query("DELETE FROM poll_question_answer WHERE pqid='$pq[pqid]'");
+				db_query("DELETE FROM poll_question WHERE pid=".mysql_real_escape_string($_GET['pid']));
+			
+        $GLOBALS["tool_content"] .= "<p>".$GLOBALS["langPollDeleted"]."</p>";
+				draw($tool_content, 2, ' ', $head_content);
+				exit();
+}
+
+printSurveys();
+
 $tool_content .= "<p><b>$langNamesPoll</b></p><br>";
-	printPolls();
-//	$tool_content .= "</td></tr></tbody></table>";
+printPolls();
 	
-	draw($tool_content, 2);
-	
-	
+draw($tool_content, 2, ' ', $head_content);
+		
  /***************************************************************************************************
  * printSurveys()
  ****************************************************************************************************/
@@ -212,7 +221,8 @@ cData;
 					if ($is_adminOfCourse)   {
 						
 						$tool_content .= "<td align=center><!--<a href='editsurvey.php?sid={$sid}'>".$langSurveyEdit."</a> | -->".
-							"<a href='deletesurvey.php?sid={$sid}'><img src='../../template/classic/img/delete.gif' border='0'></a></td><td align=center> ".
+						"<a href='deletesurvey.php?sid={$sid}' onClick='return confirmation();'>
+								<img src='../../template/classic/img/delete.gif' border='0'></a></td><td align=center> ".
 							"<a href='".$visibility_func."survey.php?sid={$sid}'><img src='../../template/classic/img/".$visibility_gif.".gif' border='0'></a>  ".
 							"</td></tr>\n";
 					} else {
@@ -231,8 +241,6 @@ cData;
 						////////////////////////////////////////////////////
 					}
 				}
-				//$tool_content .= "sssssssssssss</table><br>";
-				
 		}
 		$tool_content .= "</table><br>";
 		}
@@ -343,7 +351,8 @@ cData;
 				
 				if ($is_adminOfCourse) 
 					$tool_content .= "<td align=center><!--<a href='editpoll.php?pid={$pid}'>".$langPollEdit."</a> | -->".
-						"<a href='deletepoll.php?pid={$pid}'><img src='../../template/classic/img/delete.gif' border='0'></a> </td><td align=center> ".
+						"<a href='$_SERVER[PHP_SELF]?delete=yes&pid={$pid}' onClick='return confirmation();'>
+						<img src='../../template/classic/img/delete.gif' border='0'></a> </td><td align=center> ".
 						"<a href='".$visibility_func."poll.php?pid={$pid}'><img src='../../template/classic/img/".$visibility_gif.".gif' border='0'></a>  ".
 						"</td></tr>";
 				else {
