@@ -25,7 +25,7 @@
 
 /*===========================================================================
 	search_incourse.php
-	@last update: 18-07-2006 by Sakis Agorastos
+	@version $Id$
 	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
 ==============================================================================        
         @Description: Search function that searches data within a course.
@@ -59,7 +59,7 @@ exit;
 */
 
 $tool_content = "";
-
+if(isset($_POST['search_terms'])) $search_terms = $_POST['search_terms'];
 // ---------------------- Diasikasia domhshs tou query! -------------------------------
 // afto to kommati kwdika analyei tous orous anazhthshs kai tous metatrepei se gekimevmeno erwthma SQL
 // to erwthma periexetai sthn $query (den einai sthn telikh tou morfh alla xrhsimopoieitai san suffix parakatw)
@@ -82,9 +82,6 @@ if(!@empty($not_search_terms))
 }
 
 $query .= "' IN BOOLEAN MODE)";
-//$tool_content .= "το μέγα ερώτημα είναι: ".$query."<br><br><hr>";
-
-
 //------------------------- Telos diadikasias domhshs tou query !----------------------
 
 
@@ -98,11 +95,12 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		$tool_content .= "
 			<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
 			<table width=\"99%\">
+			<thead>
 			<tr>
-				<td valign=\"middle\" align=\"right\">
-					<b>$langOR</b>
-				</td>				
-				<td valign=\"middle\">
+				<th>
+					$langOR
+				</t>				
+				<td colspan=\"4\">
 					<input name=\"or_search_terms\" type=\"text\" size=\"80\"/>
 				</td>
 				</tr>
@@ -116,10 +114,10 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 				</tr>
 			</tr> -->
 			<tr>
-				<td valign=\"middle\" align=\"right\"><b>$langSearchIn</b></td>
-				<td>
-					<table width=\"99%\">
-					<tr>
+				
+				
+					
+					<th rowspan=\"2\">$langSearchIn</th>
 						<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"7\" checked=\"checked\" />
 						$langAnnouncements</td>
 						<td><input name=\"subsystems[]\" type=\"checkbox\" value=\"1\" checked=\"checked\" />
@@ -139,17 +137,16 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 						<td><input name=\"subsystems[]\" type=\"checkbox\" value=\"2\" checked=\"checked\" />
 						$langLinks</td>
 					</tr>					
-					</table>													
-				</td>
-			</tr>			
-			<tr>
-				<td colspan=\"2\" align=\"center\">
+																	
+				
+			
+			</thead>
+			</table		
+			<br/>
 					<input type=\"Submit\" name=\"submit\" value=\"$langDoSearch\" />
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					&nbsp;
 					<input type=\"Submit\" name=\"submit\" value=\"$langNewSearch\" />
-				</td>
-			</tr>
-			</table>
+				
 			</form>
 		";
 	
@@ -454,7 +451,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 	if(stristr($tool_content, "<hr>") === FALSE) $tool_content .= $langNoResult;
 	
 	//ektypwsh syndesmou gia nea anazhthsh
-	$tool_content .= "<br><br><p align=\"center\"><a href=\"search_incourse.php\">$langNewSearch</a></p></p>";
+	$tool_content .= "<br/><br/><p align=\"center\"><a href=\"search_incourse.php\">$langNewSearch</a></p></p>";
 	
 
 }//telos anazhthshs (if empty($search_terms) = false)

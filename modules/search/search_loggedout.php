@@ -25,7 +25,7 @@
 
 /*===========================================================================
 	search_loggedout.php
-	@last update: 05-10-2006 by Sakis Agorastos
+	@version $Id$
 	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
 ==============================================================================        
     @Description: Search function that searches data within public courses
@@ -47,54 +47,50 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 ***********************************************************************************************/
 	
 		$tool_content .= "
+		<p>$langSearchWith</p>
 			<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
 			<table width=\"99%\">
 			<thead>
+			
 				<tr>
-					<th colspan=\"2\">$langSearchWith</th>
-				</tr>
-			</thead>
-				<tr>
-				<td valign=\"middle\" align=\"right\">
-					<b>$langTitle</b>
-				</td>				
-				<td valign=\"middle\">
+				<th>$langTitle
+				</th>				
+				<td>
 					<input name=\"search_terms_title\" type=\"text\" size=\"80\" />
 				</td>
 				</tr>
 				<tr>
-				<td valign=\"middle\" align=\"right\">
-					<b>$langKeywords</b>
-				</td>				
-				<td valign=\"middle\">
+				<th>
+					$langKeywords
+				</th>				
+				<td>
 					<input name=\"search_terms_keywords\" type=\"text\" size=\"80\" />
 				</td>
 				</tr>
 				<tr>
-				<td valign=\"middle\" align=\"right\">
-					<b>$langInstructor</b>
-				</td>				
-				<td valign=\"middle\">
+				<th>
+					$langInstructor
+				</th>				
+				<td>
 					<input name=\"search_terms_instructor\" type=\"text\" size=\"80\" />
 				</td>
 				</tr>
 				<tr>
-				<td valign=\"middle\" align=\"right\">
-					<b>$langCourseCode</b>
-				</td>				
-				<td valign=\"middle\">
+				<th>
+					$langCourseCode
+				</th>				
+				<td>
 					<input name=\"search_terms_coursecode\" type=\"text\" size=\"80\" />
 				</td>
 				</tr>
 			</tr>								
-			<tr>
-				<td colspan=\"2\" align=\"center\">
-					<input type=\"Submit\" name=\"submit\" value=\"$langDoSearch\" />
-					&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-					<input type=\"Reset\" name=\"reset\" value=\"$langNewSearch\" />
-				</td>
-			</tr>
+			</thead>
 			</table>
+				<br/>
+					<input type=\"Submit\" name=\"submit\" value=\"$langDoSearch\" />
+					&nbsp;
+					<input type=\"Reset\" name=\"reset\" value=\"$langNewSearch\" />
+				
 			</form>
 		";
 	
