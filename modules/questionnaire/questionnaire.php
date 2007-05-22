@@ -92,7 +92,7 @@ if (isset($delete))  {
 				db_query("DELETE FROM poll_answer WHERE pid=".mysql_real_escape_string($_GET['pid']));
 				$pd = mysql_fetch_array(db_query("SELECT pqid FROM poll_question 
 																				WHERE pid=".mysql_real_escape_string($_GET['pid'])));	
-				db_query("DELETE FROM poll_question_answer WHERE pqid='$pq[pqid]'");
+				db_query("DELETE FROM poll_question_answer WHERE pqid='$pd[pqid]'");
 				db_query("DELETE FROM poll_question WHERE pid=".mysql_real_escape_string($_GET['pid']));
 			
         $GLOBALS["tool_content"] .= "<p>".$GLOBALS["langPollDeleted"]."</p>";
