@@ -204,14 +204,21 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		}
 
 		//set the appropriate search action for the searchBox form
-		//		if ($menuTypeID==2) {
-		//			$searchAction = "search_incourse.php";
-		//		} elseif ($menuTypeID == 1 || $menuTypeID == 3) {
-		//			$searchAction = "search_loggedin.php";
-		//		} else {
-		//			$searchAction = "search_loggedout.php";
-		//		}
-		//		$t->set_var('SEARCH_ACTION', $searchAction);
+		if ($menuTypeID==2) {
+			$searchAction = "search_incourse.php";
+			$searchAdvancedURL = $searchAction;
+		} elseif ($menuTypeID == 1 || $menuTypeID == 3) {
+			$searchAction = "search.php";
+			$searchAdvancedURL = $searchAction;
+		} else {//$menuType == 0
+			$searchAction = "search.php";
+			$searchAdvancedURL = $searchAction;
+		}
+
+		$t->set_var('SEARCH_ACTION', $searchAction);
+		$t->set_var('SEARCH_ADVANCED_URL', $searchAdvancedURL);
+		$t->set_var('SEARCH_TITLE', $langSearch);
+		$t->set_var('SEARCH_ADVANCED', $langAdvancedSearch);
 
 		$t->set_var('TOOL_NAME',  $nameTools);
 
@@ -347,9 +354,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var('BODY_ACTION', $body_action);
 		}
 
-		$t->set_var('SEARCH_TITLE', $langSearch);
-		$t->set_var('SEARCH_ADVANCED', $langAdvancedSearch);
-
 		//if $require_help is true (set by each tool) display the help link
 		if ($require_help == true){
 
@@ -426,12 +430,12 @@ function drawPerso($toolContent){
 		$lang_localize = 'English';
 		$localize_link =  '?localize=en';
 	}
-	
+
 	$otherLinks = "";
 	if ($is_admin) {
 		$otherLinks = "<a class=\"admin_icon\" href=".$urlServer."modules/admin/>$langAdminTool</a> | ";
 	}
-	
+
 	$otherLinks .= "<a class=\"create_course_icon\" href=".$urlServer."modules/profile/profile.php>$langModifyProfile</a> | ";
 	$otherLinks .= "<a href=".$localize_link.">$lang_localize</a>";
 	$t->set_var('OTHER_LINKS',  $otherLinks);
@@ -439,7 +443,7 @@ function drawPerso($toolContent){
 	$t->set_var('THIRD_BAR_TEXT', $langPersonalisedBriefcase);
 	$t->set_var('THIRDBAR_LEFT_ICON', 'briefcase_icon');
 
-	
+
 
 	$t->set_var('SEARCH_TITLE', $langSearch);
 	$t->set_var('SEARCH_ADVANCED', $langAdvancedSearch);
