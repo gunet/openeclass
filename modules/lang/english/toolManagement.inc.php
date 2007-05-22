@@ -38,4 +38,16 @@ $langAddExtLink = "Add external link to the left menu";
 $langSubmit = "Submit changes";
 
 $deleteSuccess = "The link has been deleted";
+
+$langDeleteLink = "Are you sure you want to delete this link";
+$langToolTitle = "Title";
+$langEdit="Edit";
+$langDelete="Delete";
+$langOperations="Operations on external links";
+
+$langInactiveTools = "Inactive tools";
+$langActiveTools = "Active tools";
+$langMove = "Move";
+
+$langSubmitChanges = "Submit changes";
 ?>

@@ -35,4 +35,16 @@ $langAddExtLink = "Προσθήκη εξωτερικού σύνδεσμου στο αριστερό μενού";
 
 $langSubmit = "Αποθήκευση αλλαγών";
 $deleteSuccess = "Ο σύνδεσμος διαγράφηκε";
+
+$langDeleteLink = "Είστε βέβαιος/η ότι θέλετε να διαγράψετε αυτό τον σύνδεσμο";
+$langToolTitle = "Τίτλος";
+$langEdit="Αλλαγή";
+$langDelete="Διαγραφή";
+$langOperations="Ενέργειες σε εξωτερικούς σύνδεσμους";
+
+$langInactiveTools = "Ανενεργά εργαλεία";
+$langActiveTools = "Ενεργά εργαλεία";
+$langMove = "Μετακίνηση";
+
+$langSubmitChanges = "Υποβολή αλλαγών";
 ?>
