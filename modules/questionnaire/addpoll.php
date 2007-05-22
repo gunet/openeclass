@@ -72,7 +72,7 @@ $tool_content = "";
 
 if (isset($_POST['PollCreate']))  {
  	  createMCPoll();
-		printAllQA();
+//		printAllQA();
 }
 
 if (isset($_POST['MoreQuestions'])) 
@@ -80,9 +80,6 @@ if (isset($_POST['MoreQuestions']))
 
 if (isset($_POST['MoreAnswers']))
 		$answers++;
-
-$tool_content .= "<div><b>$questions</b></div>";
-$tool_content .= "<div><b>$answers</b></div>";
 
 if(!isset($_REQUEST['UseCase'])) $_REQUEST['UseCase'] = "";
 
@@ -410,9 +407,6 @@ function createMCPoll() {
 	
 	global $tool_content, $langPollQuestion, $langPollAnswer ;
 
-	// insert into poll as above //////////////////////////////////////////////////////////////
-	
-
 		$counter = 0;
 		$CurrentQuestion = 0;
 		$CurrentAnswer = 0;
@@ -446,8 +440,6 @@ function createMCPoll() {
 			if (($counter >= 5)&&($counter <= (count($_POST)-3) )) { // question or anwser
 				//$tool_content .= "<br>Began iterating QAs";
 				if (substr($key, 0, 8) == "question") { //question
-					//$tool_content .= "<br>Is Q";
-					// insert into poll_question //////////////////////////////////////////////////////////////
 					$QuestionText = $$key;
 					$sqid = "";
 					$pattern = "1234567890";
@@ -462,11 +454,8 @@ function createMCPoll() {
 					mysql_real_escape_string($QuestionText) ."')");
 
 				} else { //answer
-					// insert into poll_question_answer //////////////////////////////////////////////////////////////
-					//$tool_content .= "<br>Is A";
 					if ($$key != '') {
 						$AnwserText = $$key;	
-						//$tool_content .= "<br>About to create SURVEY_QUESTION_ANSWER entry<br>";
 						mysql_select_db($GLOBALS['currentCourseID']);
 						$result5 = db_query("INSERT INTO poll_question_answer VALUES ('0','".
 							$sqid. "','".
@@ -485,26 +474,23 @@ function printAllQA() {
 		$CurrentAnswer = 0;
 		foreach (array_keys($_POST) as $key) {
 			$$key = $_POST[$key];
-			//$tool_content .= "$key = " . $key . " | $$key = " . $$key . "<br>\n\n"; 
 			++$counter;
 			if (($counter >= 5)&&($counter <= (count($_POST)-3) )) { // question or anwser
 				if (substr($key, 0, 8) == "question") { //question
 					++$CurrentQuestion;
-					$tool_content .= "<tr><td colspan=3><hr></td></tr> <tr><td>" . $langPollQuestion . 
-						" </td><td><input size='50' type='text' name='question{$CurrentQuestion}' value='".
-						$$key."'></td></tr>\n";
+					$tool_content .= "<tr><td colspan=3><hr></td></tr> 
+								<tr><td>" . $langPollQuestion . 
+							" </td><td><input size='50' type='text' name='question{$CurrentQuestion}' value='".$$key."'>
+								</td></tr>\n";
 				} else { //answer
 					if ($$key != '') {
 						++$CurrentAnswer;
 						$tool_content .= " <tr><td>" . $langPollAnswer . 
 						" </td><td><input size='50' type='text' name='answer{$CurrentQuestion}.{$CurrentAnswer}' ".
 						"value='{$$key}'></td></tr>\n";
-					}
-					
+						}
 				}
-				
 			}
-			
-		}
+	}
 }
 ?>
