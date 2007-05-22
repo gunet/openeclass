@@ -342,7 +342,6 @@ cData;
 		  if (($counter > 4 )&($counter < count($_POST)-1)) {
 				$tool_content .= "<tr><td>$langPollQuestion</td><td><input type='text' name='question{$counter}' value='${$key}'></td></tr>"; 
 			}
-			//$tool_content .= $$key ."|". $key ."<br>"; 
 		}
 			
 		$tool_content .= <<<cData
@@ -437,16 +436,13 @@ function createMCPoll() {
 					mysql_real_escape_string($PollType) 	. "','".
 					mysql_real_escape_string($PollActive) ."')");
 			}	
-			if (($counter >= 5)&&($counter <= (count($_POST)-3) )) { // question or anwser
-				//$tool_content .= "<br>Began iterating QAs";
+			if (($counter >= 5)&&($counter <= (count($_POST)-4) )) { // question or anwser
 				if (substr($key, 0, 8) == "question") { //question
 					$QuestionText = $$key;
 					$sqid = "";
 					$pattern = "1234567890";
 					for($i=0;$i<12;$i++)
 						$sqid .= $pattern{rand(0,9)};
-					//$tool_content .= "<br>sqid " . $sqid ."<br>";
-					//$tool_content .= "<br>About to create SURVEY_QUESTION entry<br>";
 					mysql_select_db($GLOBALS['currentCourseID']);
 					$result4 = db_query("INSERT INTO poll_question VALUES ('".
 					$sqid . "','".
@@ -455,15 +451,15 @@ function createMCPoll() {
 
 				} else { //answer
 					if ($$key != '') {
-						$AnwserText = $$key;	
+						$AnswerText = $$key;	
 						mysql_select_db($GLOBALS['currentCourseID']);
 						$result5 = db_query("INSERT INTO poll_question_answer VALUES ('0','".
 							$sqid. "','".
-							mysql_real_escape_string($AnwserText) ."')");
+							mysql_real_escape_string($AnswerText) ."')");
 					}
 				}
 			}
-	}
+	 }
 	$GLOBALS["tool_content"] .= $GLOBALS["langPollCreated"];
 }
 function printAllQA() {
@@ -490,7 +486,7 @@ function printAllQA() {
 						"value='{$$key}'></td></tr>\n";
 						}
 				}
-			}
+		}
 	}
 }
 ?>

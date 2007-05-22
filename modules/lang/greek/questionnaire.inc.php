@@ -117,28 +117,24 @@ $langPollMC = "Πολλαπλής Επιλογής";
 $langPollFillText = "Συμπληρώστε το κενό";
 $langPollContinue = "Συνέχεια";
 $langPollMoreAnswers = "Κι άλλες απαντήσεις";
-$langPollYes = "Ναί";
-$langPollNo = "Όχι";
 $langPollMoreAnswers ="+ απαντήσεις";
 $langPollMoreQuestions = "+ ερωτήσεις";
 $langPollCreate = "Δημιουργία Δημοσκόπησης";
-$langPollCreated ="Η Δημοσκόπηση δημιουργήθηκε με επιτυχία. Κάντε κλικ <a href=\"poll.php\">εδώ</a> για να επισκεφτείτε την σελίδα των δημοσκοπήσεων.";
+$langPollCreated ="Η Δημοσκόπηση δημιουργήθηκε με επιτυχία. <a href=\"questionaire.php\">Επιστροφή</a>.";
 $langPollCreator = "Δημιουργός";
 $langPollCourse = "Μάθημα";
 $langPollCreationError = "Σφάλμα κατά την δημιουργία της Δημοσκόπησης. Παρακαλώ προσπαθήστε ξανά.";
 $langPollDeactivate = "Απενεργοποίηση";
 $langPollActivate = "Ενεργοποίηση";
 $langPollParticipate = "Συμμετοχή";
-$langPollDeleted ="Η Δημοσκόπηση διαγράφηκε με επιτυχία. <a href=\"poll.php\">Επιστροφή</a>.";
+$langPollDeleted ="Η Δημοσκόπηση διαγράφηκε με επιτυχία. <a href=\"questionaire.php\">Επιστροφή</a>.";
 $langPollDeactivated ="Η Δημοσκόπηση απενεργοποιήθηκε με επιτυχία!";
 $langPollActivated ="Η Δημοσκόπηση ενεργοποιήθηκε με επιτυχία!";
 $langPollSubmitted ="Η Δημοσκόπηση στάλθηκε με επιτυχία. <a href=\"questionnaire.php\">Επιστροφή</a>.";
-$langPollUser = "Χρήστης";
 
 $langPollTotalAnswers = "Συνολικός αριθμός απαντήσεων";
 $langPollNone = "Δεν υπάρχουν αυτή την στιγμή διαθέσιμες δημοσκοπήσεις.";
 $langPollInactive = "Η Δημοσκόπηση έχει λήξει ή δεν έχει ενεργοποιηθεί ακόμα.";
 $langPollCharts = "Συγκεντρωτικά αποτελέσματα";
 $langPollIndividuals = "Αποτελέσματα ανά χρήστη";
-
 ?>
