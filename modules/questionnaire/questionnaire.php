@@ -83,6 +83,21 @@ function confirmation ()
 
 
 $tool_content .= "<p><b>$langNamesSurvey</b></p><br>";
+if (isset($visibility)) {
+		switch ($visibility) {
+
+		case 'activate':  
+						$sql = "UPDATE poll set active='1' WHERE pid='".mysql_real_escape_string($_GET['pid'])."'";
+						$result = db_query($sql,$currentCourseID);
+						$GLOBALS["tool_content"] .= $GLOBALS["langPollActivated"]."<br><br>";
+						break;
+		case 'deactivate':  
+					$sql = "UPDATE poll set active='0' WHERE pid='".mysql_real_escape_string($_GET['pid'])."'";
+					$result = db_query($sql, $currentCourseID);
+					$GLOBALS["tool_content"] .= $GLOBALS["langPollDeactivated"]."<br><br>";
+					break;
+		}
+}
 
 if (isset($delete))  {
 				db_query("DELETE FROM poll WHERE pid=".mysql_real_escape_string($_GET['pid']));
@@ -353,7 +368,8 @@ cData;
 					$tool_content .= "<td align=center><!--<a href='editpoll.php?pid={$pid}'>".$langPollEdit."</a> | -->".
 						"<a href='$_SERVER[PHP_SELF]?delete=yes&pid={$pid}' onClick='return confirmation();'>
 						<img src='../../template/classic/img/delete.gif' border='0'></a> </td><td align=center> ".
-						"<a href='".$visibility_func."poll.php?pid={$pid}'><img src='../../template/classic/img/".$visibility_gif.".gif' border='0'></a>  ".
+						"<a href='$_SERVER[PHP_SELF]?visibility=$visibility_func&pid={$pid}'>
+							<img src='../../template/classic/img/".$visibility_gif.".gif' border='0'></a>  ".
 						"</td></tr>";
 				else {
 //					$participant = db_query("
