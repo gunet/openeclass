@@ -89,4 +89,8 @@ $lang_email = 'e-mail';
 $lang_send = 'Send';
 $lang_username="User name";
 
+
+$langPassCannotChange1="The password for this account cannot be changed";
+$langPassCannotChange2="This account belongs to an external authentication mechanism. Please contact the administrator at";
+$langPassCannotChange3="for more information";
 ?>

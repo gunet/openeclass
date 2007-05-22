@@ -244,8 +244,8 @@ if ((!isset($email) || !isset($userName) || empty($email) || empty($userName)) &
 				<tbody>
 					<tr>
 						<td class=\"caution\">
-						<p><strong>Το συνθηματικό αυτού του λογαριασμού δεν μπορεί να αλλαχθεί.</strong></p>
-						<p>Ο λογαριασμός αυτός ανήκει σε εξωτερική μέθοδο πιστοποίησης. Παρακαλούμε, επικοινωνήστε με το διαχειριστή στην διεύθυνση <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a> για την ".get_auth_info($auth).".</p>
+						<p><strong>$langPassCannotChange1</strong></p>
+						<p$langPassCannotChange2 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a> $langPassCannotChange3</p>
 						<p><a href=\"../../index.php\">$langHome</a></p>
 					</td>
 					</tr>
