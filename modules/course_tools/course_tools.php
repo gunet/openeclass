@@ -264,10 +264,12 @@ if ($is_adminOfCourse){
 		";
 	}
 
-	//--add external link
 	
+
+	//--add external link
+
 	if(isset($submit) &&  @$action ==2){
-		
+
 		if (($link == "http://") or ($link == "ftp://") or empty($link))  {
 			$tool_content .= "
 		<table>
@@ -583,50 +585,45 @@ if ($is_adminOfCourse) {
  </form>
 tForm;
 
-$extToolsCount = count($externalLinks) ;
-if ($extToolsCount>0)  {
-	//show table to edit/delete external links
-	$tool_content .= "
+	$extToolsCount = count($externalLinks) ;
+	if ($extToolsCount>0)  {
+		//show table to edit/delete external links
+		$tool_content .= "
 			<br/>
-			<table width=\"600\"><caption>$langOperations</caption>
+			<table width=\"500\"><caption>$langOperations</caption>
 			<thead>
 				<tr> 
 					<th align=\"left\">
 						$langToolTitle
 					</th>
-					<th>
-						$langEdit
-					</th>
-					<th>
+					
+					<th  width=\"100\">
 						$langDelete
 					</th>
 				</tr>
 			</thead>
 			<tbody>";
-	
-	
-	
-	for ($i=0; $i <$extToolsCount; $i++) {
-	
-		if ($i%2==0) {
-			$tool_content .= "<tr>";
-		}
-		elseif ($i%2==1) {
-			$tool_content .= "<tr class=\"odd\">";
-		}
-		$tool_content .= "
+
+
+
+		for ($i=0; $i <$extToolsCount; $i++) {
+
+			if ($i%2==0) {
+				$tool_content .= "<tr>";
+			}
+			elseif ($i%2==1) {
+				$tool_content .= "<tr class=\"odd\">";
+			}
+			$tool_content .= "
 				
 					<td><div class=\"cellpos\">
 						".$externalLinks[$i]['text']."
 					</div>
 					</td>
 					";
-		
-		$tool_content .= "
-			<td><div class=\"cellpos\">
-	<a href=\"".$_SERVER['PHP_SELF'] . "?edit=" . $externalLinks[$i]['id']."\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\"></a>
-	</div>
-	</td>
+
+			$tool_content .= "
+			
 	<td><div class=\"cellpos\">
 	<a href=\"".$_SERVER['PHP_SELF'] . "?delete=" . $externalLinks[$i]['id']."\" onClick=\"return confirmation('".addslashes($externalLinks[$i]['text'])."');\">
 	<img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a>
@@ -634,9 +631,9 @@ if ($extToolsCount>0)  {
 	</td>
 	</tr>";
 
-		
-	}	// for loop
-	$tool_content .= <<<tCont4
+
+		}	// for loop
+		$tool_content .= <<<tCont4
 	</tbody>
 	</table>
 tCont4;
