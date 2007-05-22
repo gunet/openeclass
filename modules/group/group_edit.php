@@ -332,7 +332,7 @@ $tool_content .="
 			<td>
 				<select name=\"nogroup[]\" size=20 multiple>
 					$tool_content_not_Member
-				</select
+				</select>
 			</td>
 			<td>
 				<input type=\"button\" onClick=\"move(this.form.elements[4],this.form.elements[7])\" value=\"   >>   \">
