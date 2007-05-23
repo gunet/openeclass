@@ -143,15 +143,30 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 		//$mycours, emfanise thn eggrafh
 		if($show_entry)
 		{			
-			$tool_content .= "<br><table width=\"90%\"><tr><td>".$langTitle.": <strong>".$mycours['intitule']."</strong>";
-			$tool_content .= " [".$mycours['code']."]<br>";
-			$tool_content .= $langInstructor.": <strong>".$mycours['titulaires']."</strong>, ";
-			$tool_content .= $langKeywords.": ".$mycours['course_keywords']."<br>";
-			$tool_content .= "<strong><a href=\"../../courses/".$mycours['code']."/\">&gt; ".$langEnter."</a></strong>";
-			$tool_content .= "</td></tr></table><br>";
-			$tool_content .= "";
 			
-			
+			$tool_content .= "
+			<div id=\"marginForm\">
+			<fieldset>
+				<legend>
+					
+						".$langLesson.": ".$mycours['intitule']."
+				</legend>
+				<label>
+				<ul class=\"listBullet\">
+				<li>
+					$langLessonCode : ".$mycours['code']."</li>
+					
+				<li>
+					$langInstructor : ".$mycours['titulaires']."
+				</li><li>
+					$langKeywords : ".$mycours['course_keywords']."
+				</li>
+				<li><a href=\"../../courses/".$mycours['code']."/\"> ".$langEnter."</a></li>
+				</label>
+				<div class=\"clearer\"></div>
+			</fieldset>
+			</div>
+			";
 			
 			//afkhsh tou arithmou apotelesmatwn
 			$results_found++;			
@@ -160,14 +175,14 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
     }
     
     //elegxos tou arithmou twn apotelesmatwn pou exoun emfanistei. ean den emfanistike kanena apotelesma, ektypwsh analogou mhnymatos
-    if($results_found == 0) $tool_content .= "<br>".$langNoResult;
+   if($results_found == 0) $tool_content .= "<p>$langNoResult</p>";
     
     //ektypwsh syndesmou gia nea anazhthsh
     $tool_content .= "<p align=\"center\"><a href=\"search.php\">$langNewSearch</a></p>";
     
 }
 
-draw($tool_content, 1);
+draw($tool_content, 1,'search');
 
 
 //katharisma twn orwn anazhthshs gia apofygh lathwn
