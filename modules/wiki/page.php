@@ -559,7 +559,7 @@
         .wikiTitle h1{
             color: Black;
             background: none;
-            font-size: 175%;
+            font-size: 16px;
             font-weight: bold;
             /*font-weight: normal;*/
             border-bottom: 1px solid #000000;
@@ -573,16 +573,16 @@
         }
         .wiki2xhtml h2{
             border-bottom: 1px solid #aaaaaa;
-            font-size:175%;
+            font-size: 16px;
             font-weight:bold;
         }
         .wiki2xhtml h3{
             border-bottom: 1px groove #aaaaaa;
-            font-size:150%;
+            font-size: 13px;
             font-weight:bold;
         }
         .wiki2xhtml h4{
-            font-size:125%;
+            font-size: 11px;
             font-weight:bold;
         }
         
