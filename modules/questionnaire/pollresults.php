@@ -62,13 +62,15 @@ $helpTopic = 'Questionnaire';
 
 include '../../include/baseTheme.php';
 
+$nameTools = $langPollCharts;
+$navigation[] = array("url"=>"questionnaire.php", "name"=> $langQuestionnaire);
+
 $tool_content = "";
 $total_answers = 0;
 $questions = array();
 
 if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
 
-	$tool_content = "";
 	$current_poll = db_query("
 		select * from poll 
 		where pid=".mysql_real_escape_string($_GET['pid'])." "

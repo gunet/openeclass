@@ -163,7 +163,7 @@ draw($tool_content, 2, ' ', $head_content);
  			$langSurveyOperations, $is_adminOfCourse, $langSurveysActive, $mysqlMainDb, 
  			$langSurveyMC, $langSurveyEdit, $langSurveyRemove, $langSurveyDeactivate,
  			$langSurveysInactive, $langSurveyActivate, $langSurveyParticipate, 
- 			$langSurveyHasParticipated, $uid;
+ 			$langHasParticipated, $uid;
 
 		$survey_check = 0;
 		$result = mysql_list_tables($currentCourse);
@@ -281,9 +281,8 @@ cData;
 							$tool_content .= "</a></td></tr>";
 							//$tool_content .= $has_participated[0].$uid;
 						} else {
-							$tool_content .= "<td>".$langSurveyHasParticipated."</td></tr>";
+							$tool_content .= "<td>".$langHasParticipated."</td></tr>";
 						}
-						////////////////////////////////////////////////////
 					}
 				}
 		}
@@ -301,7 +300,7 @@ cData;
 			$langPollEnd, $langPollOperations, $langPollNone, $is_adminOfCourse, $langNamesPoll,
 			$langNamesSurvey, $mysqlMainDb, $langPollEdit, $langPollRemove, 
 			$langPollDeactivate, $langPollsInactive, $langPollActivate, $langPollParticipate, 
-			$user_id, $langPollHasParticipated, $uid;
+			$user_id, $langHasParticipated, $uid;
 		
 		$poll_check = 0;
 		$result = mysql_list_tables($currentCourse);
@@ -417,10 +416,9 @@ cData;
 						$tool_content .= "</a></td></tr>";
 						//$tool_content .= $has_participated[0].$uid;
 					} else {
-						$tool_content .= "<td>".$langPollHasParticipated."</td></tr>";
+						$tool_content .= "<td>".$langHasParticipated."</td></tr>";
 					}
 				}
-/////////////////////////////////////////////
 			}
 			}
 			$tool_content .= "</tbody></table><br>";
