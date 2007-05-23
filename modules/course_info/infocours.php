@@ -199,5 +199,5 @@ else {
 	$tool_content .= "<p>$langForbidden</p>";
 }
 
-draw($tool_content,2,'admin');
+draw($tool_content,2,'course_info');
 ?>

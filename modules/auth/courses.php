@@ -173,7 +173,7 @@ else
         } // end of else (department exists)
 }
 
-draw($tool_content,1,'admin');
+draw($tool_content, 1, 'auth');
 
 // functions
 function getfacfromfc( $dep_id) {

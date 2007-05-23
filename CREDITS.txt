@@ -1,0 +1,62 @@
+      +----------------------------------------------------------------------+
+      | GUnet eClass 1.7                                                     |
+      | Asychronous Teleteaching Platform                                    |
+      +----------------------------------------------------------------------+
+      | Copyright 2001-2002 Universite catholique de Louvain (UCL)           |
+      | Copyright 2003-2007 GUnet                                            |
+      +----------------------------------------------------------------------+
+      |                                                                      |
+      | GUnet eClass 1.7 is an open platform distributed in the hope that    |
+      | it will be useful (without any warranty), under the terms of the     |
+      | GNU License (General Public License) as published by the Free        |
+      | Software Foundation. The full license can be read in "license.txt".  |
+      |                                                                      |
+      | Main Developers Group: Costas Tsibanis <k.tsibanis@noc.uoa.gr>       |
+      |                            Yannis Exidaridis <jexi@noc.uoa.gr>       |
+      |                       Alexandros Diamantidis <adia@noc.uoa.gr>       |
+      |                         Tilemachos Raptis <traptis@noc.uoa.gr>       |
+      |                                                                      |
+      +----------------------------------------------------------------------+
+      | Contact address: Asynchronous Teleteaching Group (eclass@gunet.gr),  |
+      |                  Network Operations Center, University of Athens,    |
+      |                  Panepistimiopolis Ilissia, 15784, Athens, Greece    |
+      +----------------------------------------------------------------------+  
+
+      GUnet eClass was initially based on Claroline 1.3.0, by:
+          Thomas De Praetere <depraetere@ipm.ucl.ac.be>
+          Hugues Peeters    <peeters@ipm.ucl.ac.be>
+          Christophe Gesche <gesche@ipm.ucl.ac.be>
+          Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)
+
+      Special Credits to:
+
+         Dimitra Kralli <d.kralli@di.uoa.gr>
+         Stevy Georgiadi <stevy@gunet.gr>
+                
+         Michalis Psaltakis (Aegean University)
+         Victoria Daskalou (University of Patras)
+         Vangelis Chaniotakis (University of Crete)
+         Konstantinidis K. (Aristotele University of Thessaloniki)
+
+      htmlArea:
+          Copyright (c) 2002-2004, interactivetools.com, inc.
+          Copyright (c) 2003-2004 dynarch.com
+
+      PclZip: Vincent Blavet <vincent@phpconcept.net>
+
+      phpBB Copyright (c) 2001 The phpBB Group
+
+      PEAR: Copyright (c) 1997-2004 The PHP Group
+
+      phpSysInfo:
+          Copyright (c), 1999-2001, Uriah Welcome (precision@devrandom.net)
+          Copyright (c), 1999-2001, Matthew Snelham (infinite@valinux.com)
+
+      DHTML Calendar: Copyright Mihai Bazon, 2002-2005
+
+      LaTeX Rendering: Copyright (c) 2003/2004 Benjamin Zeiss <zeiss@math.uni-goettingen.de>
+
+      Dropbox module: Copyright 2004 Jan Bols <jan@ivpv.UGent.be>
+      
+      Exercise module: Copyright Olivier Brouckaert <oli.brouckaert@skynet.be>
+
