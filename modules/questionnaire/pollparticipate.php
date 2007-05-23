@@ -99,10 +99,11 @@ $thePoll = mysql_fetch_array($poll);
 $temp_CurrentDate = date("Y-m-d H:i:s");
 $temp_StartDate = $thePoll["start_date"];
 $temp_EndDate = $thePoll["end_date"];
-//$tool_content .= $temp_StartDate."<br>".$temp_CurrentDate."<br>".$temp_EndDate."<br>";
+
 $temp_StartDate = mktime(substr($temp_StartDate, 11,2),substr($temp_StartDate, 14,2),substr($temp_StartDate, 17,2),substr($temp_StartDate, 5,2),substr($temp_StartDate, 8,2),substr($temp_StartDate, 0,4));
 $temp_EndDate = mktime(substr($temp_EndDate, 11,2),substr($temp_EndDate, 14,2),substr($temp_EndDate, 17,2),substr($temp_EndDate, 5,2),substr($temp_EndDate, 8,2),substr($temp_EndDate, 0,4));
 $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11,2),substr($temp_CurrentDate, 14,2),substr($temp_CurrentDate, 17,2),substr($temp_CurrentDate, 5,2),substr($temp_CurrentDate, 8,2),substr($temp_CurrentDate, 0,4));
+
 if (($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
 	$tool_content .= <<<cData
 	<form action="pollparticipate.php" id="poll" method="post">
@@ -110,9 +111,8 @@ if (($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate
 		<input type="hidden" value="$pid" name="pid">
 		
 cData;
-			$tool_content .= "<b>".$thePoll["name"]."</b>\n<br><br>";
-			$tool_content .= $langPollStart." : ".$thePoll["start_date"]."<br>\n";
-			$tool_content .= $langPollEnd." : ".$thePoll["end_date"]."<br>\n";
+			$tool_content .= "<b>".$thePoll["name"]."</b>\n<br>";
+
 ///*****************************************************************************
 //		Get answers + questions
 //******************************************************************************/
@@ -124,7 +124,7 @@ cData;
 		."ORDER BY pqid", $currentCourse);
 		while ($theQuestion = mysql_fetch_array($questions)) {	
 			++$CurrentQuestion;
-			$tool_content .= "<br><br>".$theQuestion["question_text"]."<br>\n";
+			$tool_content .= "<br><br>".$theQuestion["question_text"]."<br><br>\n";
 			$tool_content .= "<input type=\"hidden\" value=\"". 
 				$theQuestion["question_text"] .
 				"\" name=\"question" . $CurrentQuestion . "\">";
@@ -134,11 +134,10 @@ cData;
 				where pqid=$pqid 
 				ORDER BY pqaid", $currentCourse);
 				while ($theAnswer = mysql_fetch_array($answers)) {
-					//++$CurrentQuestion;
 					$tool_content .= "\n<label><input type=\"radio\" ";
 					$tool_content .= " name=\"answer" . $CurrentQuestion . "\" ";
 					$tool_content .= " value=\"" . $theAnswer["answer_text"] . "\" ";
-					$tool_content .= "> " . $theAnswer["answer_text"] . "</label>\n";
+					$tool_content .= "> " . $theAnswer["answer_text"] . "</label><br>\n";
 				}
 				$tool_content .= "\n<label><input type=\"radio\" ";
 				$tool_content .= " name=\"answer" . $CurrentQuestion . "\" ";
@@ -147,7 +146,7 @@ cData;
 				$tool_content .= "> " . "Δεν γνωρίζω/Δεν απαντώ" . "</label>\n";				
 				
 		}
-		$tool_content .= "<br><br>";
+		$tool_content .= "<br><br><br>";
 	} else { //TF
 		$tool_content .= "<br>\n<input type=\"hidden\" value=\"2\" name=\"PollType\"><br>\n";
 		$questions = db_query("
@@ -175,8 +174,6 @@ cData;
 }
 function submitPoll() {
 	global $tool_content,$langPollQuestion,$langPollAnswer, $user_id ;
-	
-	//$tool_content .= " uid=" . $GLOBALS['uid'] . " user_id=" . $GLOBALS['user_id'] . " user=" . $GLOBALS['user'] ;
 	
 	// first populate poll_answer
 	$creator_id = $GLOBALS['uid'];
@@ -235,7 +232,7 @@ function submitPoll() {
 			}  
 		}
 	
-	$GLOBALS["tool_content"] .= $GLOBALS["langPollSubmitted"];
+	$GLOBALS["tool_content"] .= "<center>".$GLOBALS["langPollSubmitted"]."</center>";
 }
 
 ?>

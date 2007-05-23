@@ -113,7 +113,7 @@ $langPollParticipate = "Participate";
 $langPollDeleted = "The Survey was deleted successfully. <a href=\"questionnaire.php\">Back</a>.";
 $langPollDeactivated = "The Survey was deactivated successfully. <a href=\"questionnaire.php\">Back</a>.";
 $langPollActivated = "The Survey was activated successfully. <a href=\"questionnaire.php\">Back</a>.";
-$langPollSubmitted = "The Survey was activated successfully. <a href=\"questionnaire.php\">Back</a>.";
+$langPollSubmitted = "Thanks for your participating!<br><br><a href=\"questionnaire.php\">Back</a>.";
 $langPollTotalAnswers = "Total number of answers";
 $langPollNone = "There are no polls for the current course.";
 $langPollInactive = "The poll has expired or is not active yet.";

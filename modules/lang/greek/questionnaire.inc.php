@@ -127,11 +127,10 @@ $langPollCreationError = "Σφάλμα κατά την δημιουργία της Δημοσκόπησης. Παρακαλώ 
 $langPollDeactivate = "Απενεργοποίηση";
 $langPollActivate = "Ενεργοποίηση";
 $langPollParticipate = "Συμμετοχή";
-$langPollDeleted ="Η Δημοσκόπηση διαγράφηκε με επιτυχία. <a href=\"questionaire.php\">Επιστροφή</a>.";
+$langPollDeleted ="Η Δημοσκόπηση διαγράφηκε με επιτυχία. <br><a href=\"questionaire.php\">Επιστροφή</a>.";
 $langPollDeactivated ="Η Δημοσκόπηση απενεργοποιήθηκε με επιτυχία!";
 $langPollActivated ="Η Δημοσκόπηση ενεργοποιήθηκε με επιτυχία!";
-$langPollSubmitted ="Η Δημοσκόπηση στάλθηκε με επιτυχία. <a href=\"questionnaire.php\">Επιστροφή</a>.";
-
+$langPollSubmitted ="Ευχαριστούμε για την συμμετοχή σας!<br><br><a href=\"questionnaire.php\">Επιστροφή</a>";
 $langPollTotalAnswers = "Συνολικός αριθμός απαντήσεων";
 $langPollNone = "Δεν υπάρχουν αυτή την στιγμή διαθέσιμες δημοσκοπήσεις.";
 $langPollInactive = "Η Δημοσκόπηση έχει λήξει ή δεν έχει ενεργοποιηθεί ακόμα.";
