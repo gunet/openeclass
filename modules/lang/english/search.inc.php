@@ -57,4 +57,7 @@ $langTypeOpen = "Open";
 $langTypeRegistration = "Open with registration";
 $langAllTypes = "(all access types)";
 $langAllFacultes = "All faculties";
+
+$langLesson = "Lesson";
+$langLessonCode = "Lesson code";
 ?>

@@ -54,4 +54,7 @@ $langTypeOpen = "Ανοικτό";
 $langTypeRegistration = "Ανοικτό με εγγραφή";
 $langAllTypes = "(όλοι οι τύποι πρόσβασης)";
 $langAllFacultes = "Σε όλες τις σχολές/τμήματα";
+
+$langLesson = "Μάθημα";
+$langLessonCode = "Κωδικός μαθήματος";
 ?>
