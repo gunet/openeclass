@@ -73,7 +73,7 @@ $head_content = '
 <script>
 function confirmation ()
 {
-    if (confirm("'.$langPollDeleteMsg.'"))
+    if (confirm("'.$langDelConf.'"))
         {return true;}
     else
         {return false;}
@@ -82,10 +82,22 @@ function confirmation ()
 ';
 
 
-$tool_content .= "<p><b>$langNamesSurvey</b></p><br>";
 if (isset($visibility)) {
 		switch ($visibility) {
 
+// activate / dectivate surveys
+		case 'sactivate':
+					$sql = "UPDATE survey set active='1' WHERE sid='".mysql_real_escape_string($_GET['sid'])."'";
+					$result = db_query($sql,$currentCourseID);
+					$GLOBALS["tool_content"] .= $GLOBALS["langSurveyActivated"];
+					break;
+		case 'sdeactivate':
+						$sql = "UPDATE survey set active='0' WHERE sid='".mysql_real_escape_string($_GET['sid'])."'";
+						$result = db_query($sql,$currentCourseID);
+						$GLOBALS["tool_content"] .= $GLOBALS["langSurveyDeactivated"];
+					break;
+
+// activate / dectivate polls
 		case 'activate':  
 						$sql = "UPDATE poll set active='1' WHERE pid='".mysql_real_escape_string($_GET['pid'])."'";
 						$result = db_query($sql,$currentCourseID);
@@ -99,7 +111,8 @@ if (isset($visibility)) {
 		}
 }
 
-if (isset($delete))  {
+// delete polls
+if (isset($delete) and $delete='yes')  {
 				db_query("DELETE FROM poll WHERE pid=".mysql_real_escape_string($_GET['pid']));
 				$ad = mysql_fetch_array(db_query("SELECT aid FROM poll_answer 
 																				WHERE pid=".mysql_real_escape_string($_GET['pid'])));
@@ -115,6 +128,24 @@ if (isset($delete))  {
 				exit();
 }
 
+// delete surveys
+if (isset($sdelete) and $sdelete='yes') {
+				db_query("DELETE FROM survey WHERE sid=".mysql_real_escape_string($_GET['sid']));
+        $sd = mysql_fetch_array(db_query("SELECT aid FROM survey_answer
+                                        WHERE sid=".mysql_real_escape_string($_GET['sid'])));
+        db_query("DELETE FROM survey_answer_record WHERE aid='$sd[aid]'");
+        db_query("DELETE FROM survey_answer WHERE sid=".mysql_real_escape_string($_GET['sid']));
+        $sd = mysql_fetch_array(db_query("SELECT sqid FROM survey_question
+                                        WHERE sid=".mysql_real_escape_string($_GET['sid'])));
+        db_query("DELETE FROM survey_question_answer WHERE sqid='$sd[sqid]'");
+        db_query("DELETE FROM survey_question WHERE sid=".mysql_real_escape_string($_GET['sid']));
+
+       $GLOBALS["tool_content"] .= "<p>".$GLOBALS["langSurveyDeleted"]."</p>";
+       draw($tool_content, 2, ' ', $head_content);
+			 exit();
+}
+
+$tool_content .= "<p><b>$langNamesSurvey</b></p><br>";
 printSurveys();
 
 $tool_content .= "<p><b>$langNamesPoll</b></p><br>";
@@ -193,11 +224,11 @@ cData;
 					if ($visibility) {
 						$visibility_css = " ";
 						$visibility_gif = "invisible";
-						$visibility_func = "deactivate";
+						$visibility_func = "sdeactivate";
 					} else {
 						$visibility_css = " class=\"invisible\"";
 						$visibility_gif = "visible";
-						$visibility_func = "activate";
+						$visibility_func = "sactivate";
 						
 
 					}
@@ -236,12 +267,11 @@ cData;
 					if ($is_adminOfCourse)   {
 						
 						$tool_content .= "<td align=center><!--<a href='editsurvey.php?sid={$sid}'>".$langSurveyEdit."</a> | -->".
-						"<a href='deletesurvey.php?sid={$sid}' onClick='return confirmation();'>
+						"<a href='$_SERVER[PHP_SELF]?sdelete=yes&sid={$sid}' onClick='return confirmation();'>
 								<img src='../../template/classic/img/delete.gif' border='0'></a></td><td align=center> ".
-							"<a href='".$visibility_func."survey.php?sid={$sid}'><img src='../../template/classic/img/".$visibility_gif.".gif' border='0'></a>  ".
+							"<a href='$_SERVER[PHP_SELF]?visibility=$visibility_func&sid={$sid}'><img src='../../template/classic/img/".$visibility_gif.".gif' border='0'></a>  ".
 							"</td></tr>\n";
 					} else {
-						////////////////////////////////////////////////////
 							$thesid = $theSurvey["sid"];
 							$has_participated = mysql_fetch_array(
 								mysql_query("SELECT COUNT(*) FROM survey_answer where creator_id='$uid' AND sid='$thesid'"));
