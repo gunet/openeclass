@@ -291,14 +291,14 @@ hContent;
 if ($_REQUEST['UseCase'] ==1)
 	draw($tool_content, 2, 'survey', $head_content); 
 else	
-draw($tool_content, 2, '', $local_head, '');
+	draw($tool_content, 2, '', $local_head, '');
 
 /*****************************************************************************
 		Prints the new survey creation form
 ******************************************************************************/
 function printSurveyCreationForm() {
-	global $tool_content, $langSurveyName, $langSurveyStart, 
-		$langSurveyEnd, $langSurveyType, $langSurveyMC, $langSurveyFillText, 
+	global $tool_content, $langSurveyName, $langPollStart, 
+		$langPollEnd, $langSurveyType, $langSurveyMC, $langSurveyFillText, 
 		$langSurveyContinue, $langSurveyCreate, $start_cal_Survey, $end_cal_Survey;
 	
 	$CurrentDate = date("Y-m-d H:i:s");
@@ -308,11 +308,11 @@ function printSurveyCreationForm() {
 	<input type="hidden" value="0" name="MoreQuestions">
 	<table><thead></thead>
 		<tr><td>$langSurveyName</td><td colspan="2"><input type="text" size="50" name="SurveyName"></td></tr>
-		<tr><td>$langSurveyStart</td><td colspan="2">
+		<tr><td>$langPollStart</td><td colspan="2">
 			<!--<input type="text" size="17" name="SurveyStart" value="$CurrentDate">-->
 			$start_cal_Survey
 		</td></tr>
-		<tr><td>$langSurveyEnd</td><td colspan="2"><!--<input type="text" size="17" name="SurveyEnd">-->$end_cal_Survey</td></tr>
+		<tr><td>$langPollEnd</td><td colspan="2"><!--<input type="text" size="17" name="SurveyEnd">-->$end_cal_Survey</td></tr>
 		<!--<tr>
 		  <td>$langSurveyType</td>
 		  <td><label>
