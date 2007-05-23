@@ -65,52 +65,23 @@ include '../../include/baseTheme.php';
 $tool_content = "";
 $total_answers = 0;
 $questions = array();
-/////////////////////////////////////////////////////
-//$tool_content .= "<table>";
-//
-//$total_answers_query = db_query("
-//	select * from poll_answer 
-//	where pid=$pid", $currentCourse);
-//while ($totalAnswer = mysql_fetch_array($total_answers_query)) {
-//	++$total_answers;
-//}
-//$results = db_query("
-//	select * from poll_answer 
-//	where pid=$pid", $currentCourse);
-//while ($qas = mysql_fetch_array($results)) {
-//	$count = count($questions);
-//	$check = 0;
-//	for ($i = 0; $i < $count; $i++) {
-//		if ($questions[$i] == $question_text) {
-//			$check = 1;
-//		}
-//	}
-//	if (!$check) 
-//		$questions[$question_text] = 0;  
-//}
-//	
-//$tool_content .= $totalAnswer;
-////$tool_content .= $questions;
-//$tool_content .= "</table>";
-//////////////////////////////////////////////////////
 
 if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
 
-	$tool_content = "\n<!-- BEGIN POLL -->\n";
+	$tool_content = "";
 	$current_poll = db_query("
 		select * from poll 
 		where pid=".mysql_real_escape_string($_GET['pid'])." "
 		."ORDER BY pid", $currentCourse);
 	$thePoll = mysql_fetch_array($current_poll);
-	$tool_content .= "<b>" . $thePoll["name"] . "</b></b><br>";
-	$tool_content .= $langPollCreation . ":" . $thePoll["creation_date"] . "<br>";
-	$tool_content .= $langPollStart . ":" . $thePoll["start_date"] . "<br>";
-	$tool_content .= $langPollEnd . ":" . $thePoll["end_date"] . "<br>";
+	$tool_content .= "<b>" . $thePoll["name"] . "</b></b><br><br>";
+	$tool_content .= "$langPollCreateDate: <b>" . $thePoll["creation_date"] . "</b><br><br>";
+	$tool_content .= $langPollStarted . " <b>" . $thePoll["start_date"] . "</b> ";
+	$tool_content .= $langPollEnded. " <b>" . $thePoll["end_date"] . "</b><br><br>";
 
 if(!isset($_GET['type']) || !is_numeric($_GET['type'])) $_GET['type'] = 0;
 
 if ($_GET['type'] == 2) { //TF
-	$tool_content .= "\n<!-- BEGIN TF -->\n";
 
 	$answers = db_query("
 	select * from poll_answer 
@@ -141,15 +112,11 @@ if ($_GET['type'] == 2) { //TF
 } else { //MC
 	$tool_content .= "\n<!-- BEGIN MC -->\n";
 
-	
-		
+			
 	$total_answers = 0;
 	
-// Get data to print pie chart ////////////////////////////////////////////////////
-
+// Get data to print pie chart
 	require_once '../../include/libchart/libchart.php';
-	//$chart = new PieChart(600, 300);
-	//$chart->setTitle("Αποτελέσματα Δημοσκόπισης");
 	
 	$answers = db_query("
 		select * from poll_answer 
@@ -193,12 +160,10 @@ if ($_GET['type'] == 2) { //TF
 			}
 		}
 	}
-	$tool_content .= $langPollTotalAnswers . ": " . $total_answers . "</b><br>";
+	$tool_content .= $langPollTotalAnswers . ": <b>" . $total_answers . "</b><br>";
 	if (isset($q_t_GD)) {
-/*****************************************************************************
-		Print graphs
-******************************************************************************/
-			//$chart->reset();
+
+// display graphs
 			$tool_content .= "<br><br><b>" . $langPollCharts . "</b><br>";
 			for ($i = 0; $i < count($q_t_GD); $i++) {
    		
@@ -214,7 +179,6 @@ if ($_GET['type'] == 2) { //TF
 			$q_a_GD = array();
 			while ($theQ_As = mysql_fetch_array($q_as)) {
 				$v = $theQ_As["question_answer"];
-				//$tool_content .= "<br>".$v."<br>";
 				if (!count($q_a_GD)) {
 					$q_a_GD[$v] = 1; 
 				} else {
@@ -228,7 +192,6 @@ if ($_GET['type'] == 2) { //TF
 			$chart->setTitle("$q_t_GD[$i]");
 			
 			foreach ($q_a_GD as $k => $v) {
-   			//echo "\$a[$k] => $v.\n";
    			$percentage = 100*($v/$total_answers);
    			$label = $q_a_GD["$k"]; 
    			$chart->addPoint(new Point("$k ($percentage)", $percentage));
@@ -242,10 +205,7 @@ if ($_GET['type'] == 2) { //TF
 		}
 	}
 
-
-/*****************************************************************************
- Print individual results 
-******************************************************************************/
+// display individual results 
 	$tool_content .= "<br><br><b>" . $langPollIndividuals . "</b><br><br>";
 	
 	$answers = db_query("
@@ -254,7 +214,6 @@ if ($_GET['type'] == 2) { //TF
 		."ORDER BY pid", $currentCourse);
 	
 	while ($theAnswer = mysql_fetch_array($answers)) {
-		//++$total_answers;	
 		$creator_id = $theAnswer["creator_id"];
 		$aid = $theAnswer["aid"];
 		$answer_creator = db_query("
@@ -268,18 +227,13 @@ if ($_GET['type'] == 2) { //TF
 			where aid=$aid 
 			ORDER BY aid", $currentCourse);
 			while ($theQAs = mysql_fetch_array($qas)) {	
-				$tool_content .= "<br>" . $theQAs["question_text"]. ": <br>" . $theQAs["question_answer"] . "<br>";
+				$tool_content .= "<br><b>" . $theQAs["question_text"]. "</b>: <br>" . $theQAs["question_answer"] . "<br>";
 			}
 			$tool_content .= "<br>";
 			$tool_content .= "</td></tr></table><br><br>";
-			
-	}
+		}
 }
-$tool_content .= "<b>" . $langPollTotalAnswers . ": " . $total_answers . "</b><br>";
-/*****************************************************************************
-		Print the page
-******************************************************************************/
+
+// display page
 draw($tool_content, 2); 
-
-
 ?>
