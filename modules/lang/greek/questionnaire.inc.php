@@ -41,8 +41,9 @@ $langSurveysInactive = "Ανενεργές Έρευνες Μαθησιακού Προφίλ";
 $langSurveyName = "Όνομα";
 $langSurveyNumAnswers = "Απαντήσεις";
 $langSurveyCreation = "Δημιουργία";
-$langSurveyStart = "Έναρξη";
-$langSurveyEnd = "Λήξη";
+$langSurveyDateCreated = "Δημιουργήθηκε την";
+$langSurveyStart = "Ξεκίνησε την";
+$langSurveyEnd = "και τελείωσε την";
 $langSurveyOperations = "Λειτουργίες";
 $langSurveyEdit = "Επεξεργασία";
 $langSurveyRemove = "Διαγραφή";
@@ -73,8 +74,7 @@ $langSurveyUser = "Χρήστης";
 $langSurveyTotalAnswers = "Συνολικός αριθμός απαντήσεων";
 $langSurveyNone = "Δεν έχουν δημιουργηθεί έρευνες μαθησιακού προφίλ για το μάθημα";
 $langSurveyInactive = "Η Έρευνα Μαθησιακού Προφίλ έχει λήξει ή δεν έχει ενεργοποιηθεί ακόμα.";
-$langSurveyCharts = "Συγκεντρωτικά αποτελέσματα";
-$langSurveyIndividuals = "Αποτελέσματα ανά χρήστη";
+$langSurveyCharts = "Αποτελέσματα έρευνας";
 
 $langQPref = "Τι τύπο ερωτηματολογίου επιθυμείτε;";
 $langQPrefSurvey = "Έρευνα μαθησιακού προφίλ";
@@ -84,8 +84,7 @@ $langNamesPoll = "Δημοσκοπήσεις";
 $langNamesSurvey = "Έρευνες Μαθησιακού Προφίλ";
 $langHasParticipated = "Έχετε ήδη συμμετάσχει";
 
-$langSurveyInfo1 ="Παρακαλώ εισάγετε το όνομα της Δημοσκόπισης που επιθυμείτε καθώς και το χρονικό διάστημα που επιθυμείτε να είναι ενεργή - διαθέσιμη στους χρήστες (εξ ορισμού 365 μέρες)";
-$langSurveyInfo2 ="Παρακαλώ επιβεβαιώστε ότι το όνομα της δημοσκόπησης και το χρονικό διάστημα που θα είναι ενεργή είναι σωστό. Στην συνέχεια επιλέξτε ένα έτοιμο ερώτημα (σύμφωνα με το πρότυπο COLLES/ATTL) ή εισάγετε δικιά σας ερώτηση στα κενά πεδία.";
+$langSurveyInfo ="Επιλέξτε ένα έτοιμο ερώτημα (σύμφωνα με το πρότυπο COLLES/ATTL) ή εισάγετε δικιά σας ερώτηση στα κενά πεδία.";
 
 $langQQuestionNotGiven ="Δεν έχετε εισάγει την τελευταία ερώτηση.";
 $langQFillInAllQs ="Παρακαλώ απαντήστε σε όλες τις ερωτήσεις.";
@@ -129,8 +128,10 @@ $langPollSubmitted ="Ευχαριστούμε για την συμμετοχή σας!<br><br><a href=\"questi
 $langPollTotalAnswers = "Συνολικός αριθμός απαντήσεων";
 $langPollNone = "Δεν υπάρχουν αυτή την στιγμή διαθέσιμες δημοσκοπήσεις.";
 $langPollInactive = "Η Δημοσκόπηση έχει λήξει ή δεν έχει ενεργοποιηθεί ακόμα.";
-$langPollCharts = "Συγκεντρωτικά αποτελέσματα";
-$langPollIndividuals = "Αποτελέσματα ανά χρήστη";
+$langPollCharts = "Αποτελέσματα δημοσκόπησης";
+$langIndividuals = "Αποτελέσματα ανά χρήστη";
 
 $langDelConf = "Επιβεβαίωση διαγραφής";
+
+$langCollectiveCharts = "Συγκεντρωτικά αποτελέσματα";
 ?>

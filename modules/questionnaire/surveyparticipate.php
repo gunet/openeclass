@@ -61,6 +61,9 @@ $helpTopic = 'Questionnaire';
 
 include '../../include/baseTheme.php';
 
+$nameTools = $langSurveyCharts;
+$navigation[] = array("url"=>"questionnaire.php", "name"=> $langQuestionnaire);
+
 $tool_content = "";
 
 if(!isset($_REQUEST['UseCase'])) $_REQUEST['UseCase'] = "";
@@ -140,14 +143,6 @@ hContent;
 //draw($tool_content, 2); 
 draw($tool_content, 2, '', $head_content); 
 
-//function isActive($sid) {
-//	
-//	if (survey active) 
-//		return TRUE;
-//	else
-//		return FALSE;
-//}
-
 function printSurveyForm() {
 	global $currentCourse, $tool_content, $langSurveyName, $langSurveyStart, 
 		$langSurveyEnd, $langSurveyContinue, $langSurveyInactive;
@@ -168,11 +163,14 @@ $theSurvey = mysql_fetch_array($survey);
 $temp_CurrentDate = date("Y-m-d H:i:s");
 $temp_StartDate = $theSurvey["start_date"];
 $temp_EndDate = $theSurvey["end_date"];
-//$tool_content .= $temp_StartDate."<br>".$temp_CurrentDate."<br>".$temp_EndDate."<br>";
+
 $temp_StartDate = mktime(substr($temp_StartDate, 11,2),substr($temp_StartDate, 14,2),substr($temp_StartDate, 17,2),substr($temp_StartDate, 5,2),substr($temp_StartDate, 8,2),substr($temp_StartDate, 0,4));
+
 $temp_EndDate = mktime(substr($temp_EndDate, 11,2),substr($temp_EndDate, 14,2),substr($temp_EndDate, 17,2),substr($temp_EndDate, 5,2),substr($temp_EndDate, 8,2),substr($temp_EndDate, 0,4));
+
 $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11,2),substr($temp_CurrentDate, 14,2),substr($temp_CurrentDate, 17,2),substr($temp_CurrentDate, 5,2),substr($temp_CurrentDate, 8,2),substr($temp_CurrentDate, 0,4));
 if (($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
+
 		$tool_content .= <<<cData
 	<form action="surveyparticipate.php" id="survey" method="post" onSubmit="return checkrequired(this, 'answer')">
 		<input type="hidden" value="2" name="UseCase">
@@ -180,8 +178,8 @@ if (($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate
 		
 cData;
 			$tool_content .= "<b>".$theSurvey["name"]."</b>\n<br><br>";
-			$tool_content .= $langSurveyStart." : ".$theSurvey["start_date"]."<br>\n";
-			$tool_content .= $langSurveyEnd." : ".$theSurvey["end_date"]."<br>\n";
+			$tool_content .= "$langSurveyStart : <b>".$theSurvey["start_date"]."</b><br>\n";
+			$tool_content .= "$langSurveyEnd : <b>".$theSurvey["end_date"]."</b><br>";
 ///*****************************************************************************
 //		Get answers + questions
 //******************************************************************************/
@@ -203,7 +201,7 @@ cData;
 				where sqid=$sqid 
 				ORDER BY sqaid", $currentCourse);
 				while ($theAnswer = mysql_fetch_array($answers)) {
-					//++$CurrentQuestion;
+					$tool_content .= "<br>";
 					$tool_content .= "\n<label><input type=\"radio\" ";
 					$tool_content .= " name=\"answer" . $CurrentQuestion . "\" ";
 					$tool_content .= " value=\"" . $theAnswer["answer_text"] . "\" ";
@@ -217,7 +215,6 @@ cData;
 		select * from survey_question 
 		where sid='".mysql_real_escape_string($sid)."' "
 		, $currentCourse); 
-		//ORDER BY sqid", $currentCourse);
 		while ($theQuestion = mysql_fetch_array($questions)) {	
 			++$CurrentQuestion;
 			$tool_content .= "\n\n<input type=\"hidden\" value=\"" . 
@@ -239,8 +236,6 @@ cData;
 }
 function submitSurvey() {
 	global $tool_content,$langSurveyQuestion,$langSurveyAnswer, $user_id ;
-	
-	//$tool_content .= " uid=" . $GLOBALS['uid'] . " user_id=" . $GLOBALS['user_id'] . " user=" . $GLOBALS['user'] ;
 	
 	// first populate survey_answer
 	$creator_id = $GLOBALS['uid'];

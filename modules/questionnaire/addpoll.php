@@ -145,7 +145,7 @@ function printPollCreationForm() {
 	$CurrentDate = date("Y-m-d H:i:s");
 	$tool_content .= <<<cData
 	<form action="addpoll.php" id="poll" method="post">
-	<table><thead>$langPollCreate</thead>
+	<table><thead></thead>
 		<tr><td>$langPollName</td><td colspan="2"><input type="text" size="50" name="PollName"></td></tr>
 		<tr><td>$langPollStart</td><td colspan="2">
 			<!--<input type="text" size="17" name="PollStart" value="$CurrentDate">-->

@@ -42,13 +42,14 @@ $langSurveysActive = "Active Surveys";
 $langSurveysInactive = "Inactive Surveys";
 $langSurveyName = "Íame";
 $langSurveyNumAnswers = "Number of Answers";
-$langSurveyCreation = "Creation Date";
-$langSurveyStart = "Start Date";
-$langSurveyEnd = "End Date";
+$langSurveyDateCreated = "Created on";
+$langSurveyStart = "Started on";
+$langSurveyEnd = "and ended on";
 $langSurveyOperations = "Operations";
 $langSurveyEdit = "Edit";
 $langSurveyRemove = "Delete";
 $langSurveyCreate = "Create";
+$langSurveyCreated = "Created";
 $langSurveyQuestion = "Question";
 $langSurveyAnswer = "Answer";
 $langSurveyAddAnswer = "Add Answers";
@@ -74,8 +75,7 @@ $langSurveyUser = "User";
 $langSurveyTotalAnswers = "Total number of answers";
 $langSurveyNone = "There are no surveys for the current course.";
 $langSurveyInactive = "The survey has expired or has not started yet.";
-$langSurveyCharts = "Collective Results";
-$langSurveyIndividuals = "Results per user";
+$langSurveyCharts = "Survey results";
 
 $langTestEcho = "The worked";
 $langPollsActive = "Active Polls";
@@ -117,8 +117,8 @@ $langPollSubmitted = "Thanks for your participating!<br><br><a href=\"questionna
 $langPollTotalAnswers = "Total number of answers";
 $langPollNone = "There are no polls for the current course.";
 $langPollInactive = "The poll has expired or is not active yet.";
-$langPollCharts = "Collective Results";
-$langPollIndividuals = "Results per user";
+$langPollCharts = "Poll results";
+$langIndividuals = "Results per user";
 
 $langQPref = "What type of questionnaire do you prefer?";
 $langQPrefSurvey = "Survey";
@@ -129,11 +129,12 @@ $langNamesSurvey = "Surveys";
 
 $langHasParticipated = "Already participated";
 
-$langSurveyInfo1 ="Please type the name of the Poll and how long you wish to be available to the users (by default 365 days)";
-$langSurveyInfo2 ="Please confirm that the name of the Poll is correct and that the time period is the desired. Then you may choose from a the list of COLLES/ATTL questions or add your own question in the blank fields.";
+$langSurveyInfo ="You may choose from a the list of the following COLLES/ATTL questions or add your own questions in the blank fields.";
 
 $langQQuestionNotGiven ="You have not entered the text for the last question.";
 $langQFillInAllQs ="Please answer all questions.";
 
 $langDelConf = "Delete confirmation";
+
+$langCollectiveCharts = "Collective results";
 ?>

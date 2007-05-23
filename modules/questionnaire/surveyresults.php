@@ -62,6 +62,9 @@ $helpTopic = 'Questionnaire';
 
 include '../../include/baseTheme.php';
 
+$nameTools = $langSurveyCharts;
+$navigation[] = array("url"=>"questionnaire.php", "name"=> $langQuestionnaire);
+
 $tool_content = "";
 $total_answers = 0;
 
@@ -73,15 +76,14 @@ if(!isset($_GET['sid']) || !is_numeric($_GET['sid'])) die();
 		where sid=".mysql_real_escape_string($_GET['sid'])." "
 		."ORDER BY sid", $currentCourse);
 	$theSurvey = mysql_fetch_array($current_survey);
-	$tool_content .= "<b>" . $theSurvey["name"] . "</b></b><br>";
-	$tool_content .= $langSurveyCreation . ":" . $theSurvey["creation_date"] . "<br>";
-	$tool_content .= $langSurveyStart . ":" . $theSurvey["start_date"] . "<br>";
-	$tool_content .= $langSurveyEnd . ":" . $theSurvey["end_date"] . "<br><br>";
+	$tool_content .= "<b>" . $theSurvey["name"] . "</b></b><br><br>";
+	$tool_content .= "$langSurveyDateCreated : <b>" . $theSurvey["creation_date"] . "</b><br><br>";
+	$tool_content .= "$langSurveyStart <b>" . $theSurvey["start_date"] . "</b> ";
+	$tool_content .= "$langSurveyEnd <b>" . $theSurvey["end_date"] . "</b><br><br>";
 
 if(!isset($_GET['type']) || !is_numeric($_GET['type'])) $_GET['type'] = 0;
 
 if ($_GET['type'] == 2) { //TF
-	$tool_content .= "\n<!-- BEGIN TF -->\n";
 
 	$answers = db_query("
 	select * from survey_answer 
@@ -170,7 +172,7 @@ if ($_GET['type'] == 2) { //TF
 		Print graphs
 ******************************************************************************/
 			//$chart->reset();
-			$tool_content .= "<br><br><b>" . $langSurveyCharts . "</b><br>";
+			$tool_content .= "<br><br><b>" . $langCollectiveCharts . "</b><br>";
 			for ($i = 0; $i < count($q_t_GD); $i++) {
    		
    			$chart = new PieChart(600, 300);
@@ -217,7 +219,9 @@ if ($_GET['type'] == 2) { //TF
 /*****************************************************************************
  Print individual results 
 ******************************************************************************/
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// display individual results
+  $tool_content .= "<br><br><b>" . $langIndividuals . "</b><br><br>";
 
 	$answers = db_query("
 	select * from survey_answer 
@@ -245,11 +249,9 @@ if ($_GET['type'] == 2) { //TF
 			
 	}
 }
-//$tool_content .= "<b>" . $langSurveyTotalAnswers . ": " . $total_answers . "</b><br>";
 /*****************************************************************************
 		Print the page
 ******************************************************************************/
 draw($tool_content, 2); 
-
 
 ?>

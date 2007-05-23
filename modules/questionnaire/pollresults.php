@@ -114,7 +114,6 @@ if ($_GET['type'] == 2) { //TF
 } else { //MC
 	$tool_content .= "\n<!-- BEGIN MC -->\n";
 
-			
 	$total_answers = 0;
 	
 // Get data to print pie chart
@@ -166,7 +165,7 @@ if ($_GET['type'] == 2) { //TF
 	if (isset($q_t_GD)) {
 
 // display graphs
-			$tool_content .= "<br><br><b>" . $langPollCharts . "</b><br>";
+			$tool_content .= "<br><br><b>" . $langCollectiveCharts . "</b><br>";
 			for ($i = 0; $i < count($q_t_GD); $i++) {
    		
    			$chart = new PieChart(600, 300);
@@ -208,7 +207,7 @@ if ($_GET['type'] == 2) { //TF
 	}
 
 // display individual results 
-	$tool_content .= "<br><br><b>" . $langPollIndividuals . "</b><br><br>";
+	$tool_content .= "<br><br><b>" . $langIndividuals . "</b><br><br>";
 	
 	$answers = db_query("
 		select * from poll_answer 

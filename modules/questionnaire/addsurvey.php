@@ -299,16 +299,14 @@ draw($tool_content, 2, '', $local_head, '');
 function printSurveyCreationForm() {
 	global $tool_content, $langSurveyName, $langSurveyStart, 
 		$langSurveyEnd, $langSurveyType, $langSurveyMC, $langSurveyFillText, 
-		$langSurveyContinue, $langSurveyCreate, $start_cal_Survey, $end_cal_Survey, 
-		$langSurveyInfo1;
+		$langSurveyContinue, $langSurveyCreate, $start_cal_Survey, $end_cal_Survey;
 	
 	$CurrentDate = date("Y-m-d H:i:s");
 	$CurrentDate = htmlspecialchars($CurrentDate);
 	$tool_content .= <<<cData
 	<form action="addsurvey.php" id="survey" method="post">
 	<input type="hidden" value="0" name="MoreQuestions">
-	<table><thead>$langSurveyCreate</thead>
-	<tr><td colspan=2>$langSurveyInfo1</td></tr>
+	<table><thead></thead>
 		<tr><td>$langSurveyName</td><td colspan="2"><input type="text" size="50" name="SurveyName"></td></tr>
 		<tr><td>$langSurveyStart</td><td colspan="2">
 			<!--<input type="text" size="17" name="SurveyStart" value="$CurrentDate">-->
@@ -340,7 +338,7 @@ function printMCQuestionForm() {
 		$langSurveyType, $langSurveyMC, $langSurveyFillText, $langSurveyContinue, 
 		$langSurveyQuestion, $langSurveyCreate, $langSurveyMoreQuestions, 
 		$langSurveyCreated, $MoreQuestions, $langSurveyAnswer, 
-		$langSurveyMoreAnswers, $langSurveyInfo2;
+		$langSurveyMoreAnswers, $langSurveyInfo;
 		
 		if(isset($_POST['SurveyName'])) $SurveyName = htmlspecialchars($_POST['SurveyName']);
 		if(isset($_POST['SurveyEnd'])) $SurveyEnd = htmlspecialchars($_POST['SurveyEnd']);
@@ -350,19 +348,19 @@ function printMCQuestionForm() {
 		createMCSurvey();
 	} elseif(count($_POST)<7) { // Just entered MC survey cretion dialiog ****************************
 		$tool_content .= <<<cData
-		<table><thead>$langSurveyCreate</thead>
-	<tr><td colspan=2>$langSurveyInfo2</td></tr></table>
+		<table><thead></thead>
+	<tr><td colspan=2>$langSurveyInfo</td></tr></table>
 	
 		<form action="addsurvey.php" id="survey" method="post" name="SurveyForm" onSubmit="return checkrequired(this, 'question1')">
 		<input type="hidden" value="1" name="UseCase">
 		<table id="QuestionTable">
 			<tr><td>$langSurveyName</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
-			<tr><td>$langSurveyStart</td><td colspan="2"><input type="text" size="10" name="SurveyStart" value="$SurveyStart"></td></tr>
-			<tr><td>$langSurveyEnd</td><td colspan="2"><input type="text" size="10" name="SurveyEnd" value="$SurveyEnd"></td></tr>
+			<tr><td>$langSurveyStart</td><td colspan="2"><input type="text" size="20" name="SurveyStart" value="$SurveyStart"></td></tr>
+			<tr><td>$langSurveyEnd</td><td colspan="2"><input type="text" size="20" name="SurveyEnd" value="$SurveyEnd"></td></tr>
 			<!--///////////////-->
 			<tr><td colspan=3>
 				<SELECT NAME="questionx" onChange="addEvent(this.selectedIndex);this.parentNode.removeChild(this);" id="QuestionSelector">
-				<OPTION> Επιλέξτε μία από τις προκαθόρισμένες ερωτήσεις (πρότυπα COLLES/ATTL)...
+				<OPTION> Επιλέξτε μία από τις προκαθορισμένες ερωτήσεις (πρότυπα COLLES/ATTL)...
 				<OPTION VALUE="question1"> Σε αυτή την ενότητα, η προσπάθια μου επικεντρώθηκε σε θέματα που με ενδιέφεραν
 				<OPTION VALUE="question2"> Σε αυτή την ενότητα, αυτά που μαθαίνω έχουν να κάνουν με το επάγγελμά μου.
 				<OPTION VALUE="question3"> Σε αυτή την ενότητα, ασκώ κριτική σκέψη.
