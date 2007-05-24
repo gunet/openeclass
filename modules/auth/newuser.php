@@ -44,6 +44,12 @@ $nameTools = $langUserDetails;
 
 $tool_content = "";		// Initialise $tool_content
 
+if (isset($close_user_registration) and $close_user_registration == TRUE) {
+			 $tool_content .= "<div class='td_main'>$langForbidden</div>";
+       draw($tool_content,0,'auth');
+	     exit;
+ }
+
 // Main body
 $tool_content .= "
 
