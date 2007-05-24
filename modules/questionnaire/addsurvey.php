@@ -344,7 +344,8 @@ function printMCQuestionForm() {
 		if(isset($_POST['SurveyEnd'])) $SurveyEnd = htmlspecialchars($_POST['SurveyEnd']);
 		if(isset($_POST['SurveyStart'])) $SurveyStart = htmlspecialchars($_POST['SurveyStart']);
 		
-	if ($MoreQuestions == 2) { // Create survey ******************************************************
+//	if ($MoreQuestions == 2) { // Create survey ******************************************************
+	if ($MoreQuestions == $langSurveyCreate) { // Create survey
 		createMCSurvey();
 	} elseif(count($_POST)<7) { // Just entered MC survey cretion dialiog ****************************
 		$tool_content .= <<<cData
@@ -378,15 +379,12 @@ function printMCQuestionForm() {
 			<tr><td>$langSurveyAnswer #1</td><td><input type="text" name="answer1.1" size="50" id="NewAnswer1"></td></tr>
 			<tr><td>$langSurveyAnswer #2</td><td><input type="text" name="answer1.2" size="50" id="NewAnswer2"></td></tr>
 			<tr id="NextLine">
-			  <td><label>
-			    <input name="MoreQuestions" type="radio" value="1" />
-		      $langSurveyMoreAnswers</label></td>
-			  <td><label>
-			    <input name="MoreQuestions" type="radio" value="3" />
-		      $langSurveyMoreQuestions</label></td>
-		    <td><label>
-			    <input name="MoreQuestions" type="radio" value="2" checked/>
-		      $langSurveyCreate</label></td>
+			  <td>
+			    <input name="MoreQuestions" type="submit" value="$langSurveyMoreAnswers" /></td>
+			  <td>
+			    <input name="MoreQuestions" type="submit" value="$langSurveyMoreQuestions" /></td>
+		    <td>
+					<input name="MoreQuestions" type="submit" value="$langSurveyCreate"></td>
 			</tr>
 			<tr><td colspan="2" align="right">
 			  <input name="$langSurveyContinue" type="submit" value="$langSurveyContinue -&gt;"></td>
@@ -394,7 +392,8 @@ function printMCQuestionForm() {
 		<input type="hidden" value="1" name="NumOfQuestions">
 		</form>
 cData;
-	} elseif ($MoreQuestions == 1) {  // Print more answers ***************************************************
+//	} elseif ($MoreQuestions == 1) {  // Print more answers ***************************************************
+	} elseif ($MoreQuestions == $langSurveyMoreAnswers) {  // Print more answers 
 		$NumOfQuestions = $_POST['NumOfQuestions'];
 		
 		$tool_content .= <<<cData
@@ -415,15 +414,15 @@ cData;
 		$tool_content .= <<<cData
 					<tr><td>$langSurveyAnswer</td><td colspan="2"><input type="text" size="10" name="answer" value=""></td></tr>
 						<tr>
-			  <td><label>
-			    <input name="MoreQuestions" type="radio" value="1" />
-		      $langSurveyMoreAnswers</label></td>
-			  <td><label>
-			    <input name="MoreQuestions" type="radio" value="3" />
-		      $langSurveyMoreQuestions</label></td>
-		    <td><label>
-			    <input name="MoreQuestions" type="radio" value="2" />
-		      $langSurveyCreate</label></td>
+			  <td>
+			    <input name="MoreQuestions" type="submit" value="$langSurveyMoreAnswers" />
+		     </td>
+			  <td>
+			    <input name="MoreQuestions" type="submit" value="$langSurveyMoreQuestions" />
+		     </td>
+		    <td>
+			    <input name="MoreQuestions" type="submit" value="$langSurveyCreate" />
+		     </td>
 			</tr>
 			<tr><td colspan="2" align="right">
 			  <input name="$langSurveyContinue" type="submit" value="$langSurveyContinue -&gt;"></td>
@@ -440,8 +439,8 @@ cData;
 		<input type="hidden" value="1" name="UseCase">
 		<table>
 		<tr><td>$langSurveyName</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
-			<tr><td>$langSurveyStart</td><td colspan="2"><input type="text" size="10" name="SurveyStart" value="$SurveyStart"></td></tr>
-			<tr><td>$langSurveyEnd</td><td colspan="2"><input type="text" size="10" name="SurveyEnd" value="$SurveyEnd"></td></tr>
+			<tr><td>$langSurveyStart</td><td colspan="2"><input type="text" size="20" name="SurveyStart" value="$SurveyStart"></td></tr>
+			<tr><td>$langSurveyEnd</td><td colspan="2"><input type="text" size="20" name="SurveyEnd" value="$SurveyEnd"></td></tr>
 			
 cData;
 		
@@ -478,15 +477,15 @@ cData;
 		$tool_content .= <<<cData
 				<tr id="NextLine"><td colspan=3><hr></td></tr>
 				<tr>
-			  <td><label>
-			    <input name="MoreQuestions" type="radio" value="1" />
-		      $langSurveyMoreAnswers</label></td>
-			  <td><label>
-			    <input name="MoreQuestions" type="radio" value="3" />
-		      $langSurveyMoreQuestions</label></td>
-		    <td><label>
-			    <input name="MoreQuestions" type="radio" value="2" checked="checked" />
-		      $langSurveyCreate</label></td>
+			  <td>
+			    <input name="MoreQuestions" type="submit" value="$langSurveyMoreAnswers" />
+		     </td>
+			  <td>
+			    <input name="MoreQuestions" type="submit" value="$langSurveyMoreQuestions" />
+		    </td>
+		    <td>
+			    <input name="MoreQuestions" type="submit" value="$langSurveyCreate" />
+		     </td>
 			</tr>
 			<tr><td colspan="2" align="right">
 			  <input name="$langSurveyContinue" type="submit" value="$langSurveyContinue -&gt;"></td>
@@ -512,7 +511,8 @@ function printTFQuestionForm() {
 		if(isset($_POST['SurveyEnd'])) $SurveyEnd = htmlspecialchars($_POST['SurveyEnd']);
 		if(isset($_POST['SurveyStart'])) $SurveyStart = htmlspecialchars($_POST['SurveyStart']);
 		
-	if ($MoreQuestions == 2) {
+//	if ($MoreQuestions == 2) {
+	if ($MoreQuestions == $langSurveyCreate) {
 		createTFSurvey();
 	} else {
 		$tool_content .= <<<cData
@@ -520,8 +520,8 @@ function printTFQuestionForm() {
 		<input type="hidden" value="2" name="UseCase">
 		<table>
 			<tr><td>$langSurveyName</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
-			<tr><td>$langSurveyStart</td><td colspan="2"><input type="text" size="10" name="SurveyStart" value="$SurveyStart"></td></tr>
-			<tr><td>$langSurveyEnd</td><td colspan="2"><input type="text" size="10" name="SurveyEnd" value="$SurveyEnd"></td></tr>
+			<tr><td>$langSurveyStart</td><td colspan="2"><input type="text" size="20" name="SurveyStart" value="$SurveyStart"></td></tr>
+			<tr><td>$langSurveyEnd</td><td colspan="2"><input type="text" size="20" name="SurveyEnd" value="$SurveyEnd"></td></tr>
 cData;
 		$counter = 0;
 		foreach (array_keys($_POST) as $key) {
@@ -536,12 +536,12 @@ cData;
 		$tool_content .= <<<cData
 			<tr><td>$langSurveyQuestion</td><td><input type='text' name='question'></td></tr>
 			<tr>
-			  <td><label>
-			    <input name="MoreQuestions" type="radio" value="1" />
-		      $langSurveyMoreQuestions</label></td>
-			  <td><label>
-			    <input name="MoreQuestions" type="radio" value="2" checked="checked" />
-		      $langSurveyCreate</label></td>
+			  <td>
+			    <input name="MoreQuestions" type="submit" value="$langSurveyMoreQuestions" />
+		      </td>
+			  <td>
+			    <input name="MoreQuestions" type="submit" value="$langSurveyCreate" />
+		      </td>
 			</tr>
 			<tr><td colspan="2" align="right">
 			  <input name="$langSurveyContinue" type="submit" value="$langSurveyContinue -&gt;"></td>
