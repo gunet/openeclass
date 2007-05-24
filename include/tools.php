@@ -306,7 +306,7 @@ function loggedOutMenu(){
 function adminMenu(){
 
 	global $webDir, $urlAppend, $language, $phpSysInfoURL, $phpMyAdminURL;
-	global $siteName, $is_admin, $urlServer, $mysqlMainDb;
+	global $siteName, $is_admin, $urlServer, $mysqlMainDb, $close_user_registration;
 
 	include($webDir."modules/lang/$language/admin.inc.php");
 	/* Check for LDAP server entries */
@@ -332,6 +332,8 @@ function adminMenu(){
 	array_push($sideMenuImg, "register_prof.gif");
 	array_push($sideMenuText, $langProfOpen);
 	array_push($sideMenuLink, "../admin/listreq.php");
+
+
 	array_push($sideMenuImg, "open_prof.gif");
 	array_push($sideMenuText, $langInfoMail);
 	array_push($sideMenuLink, "../admin/mailtoprof.php");
@@ -342,7 +344,6 @@ function adminMenu(){
 	array_push($sideMenuSubGroup, $sideMenuImg);
 	array_push($sideMenuGroup, $sideMenuSubGroup);
 
-
 	//user administration
 	//reset sub-arrays so that we do not have duplicate entries
 	$sideMenuSubGroup = array();
@@ -352,6 +353,12 @@ function adminMenu(){
 
 	array_push($sideMenuSubGroup, $langAdminUsers);
 
+// check for close user registration
+if (isset($close_user_registration) and $close_user_registration == TRUE) {
+	array_push($sideMenuText, $langUserOpen);
+	array_push($sideMenuLink, "../admin/listrequsers.php");
+	array_push($sideMenuImg, "register_prof.gif");
+}
 	array_push($sideMenuText, $langListUsers);
 	array_push($sideMenuLink, "../admin/listusers.php");
 	array_push($sideMenuImg, "user_list.gif");

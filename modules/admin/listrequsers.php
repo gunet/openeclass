@@ -42,11 +42,11 @@ $local_head = '
 <script type="text/javascript">
 function confirmation ()
 {
-   if (confirm("'.$langDelConf.'")) {
+   if (confirm("'.$langCloseConf.'")) {
                 return true;
    } else {
           return false;
-                }
+  }
 }
 </script>';
 

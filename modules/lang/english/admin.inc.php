@@ -51,6 +51,7 @@ $langSearchUser = "Search User";
 $langInfoMail = "Info email";
 $langProfReg = "Professor registration";
 $langProfOpen = "Professor open requests";
+$langUserOpen = "Students open requests";
 $langListFaculte = "Facult list / Actions";
 $langPHPInfo = "PHP information";
 $langManuals = "Available Manuals";
@@ -189,6 +190,7 @@ $langReqHaveBlocked = "Rejected Requests";
 $langReqHaveFinished = "Completed Requests";
 $langemailsubjectBlocked = "Reject registration request";
 $langemailbodyBlocked = "Your registration request has been rejected.";
+$langCloseConf = "Closing Request Confirmation";
 
 // listcours.php
 $langOpenCourse = "Open";

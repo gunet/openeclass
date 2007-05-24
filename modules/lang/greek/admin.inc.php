@@ -54,6 +54,7 @@ $langSearchUser = "Αναζήτηση Χρήστη";
 $langInfoMail = "Ενημερωτικό email";
 $langProfReg = "Εγγραφή Καθηγητή";
 $langProfOpen = "Αιτήσεις Καθηγητών";
+$langUserOpen = "Αιτήσεις Φοιτητών";
 $langListFaculte = "Λίστα Σχολών / Ενέργειες";
 $langPHPInfo = "Πληροφορίες για την PHP";
 $langManuals = "Διαθέσιμα Εγχειρίδια";
@@ -222,7 +223,7 @@ $langReqHaveBlocked = "Αιτήσεις που έχουν απορριφθεί";
 $langReqHaveFinished = "Αιτήσεις που έχουν ολοκληρωθεί";
 $langemailsubjectBlocked = "Απόρριψη αίτησης εγγραφής στην Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης";
 $langemailbodyBlocked = "Η αίτησή σας για εγγραφή στην πλατφόρμα e-Class απορρίφθηκε.";
-
+$langCloseConf = "Επιβεβαίωση κλεισίματος αίτησης";
 // mailtoprof.php
 $langSendMessageTo = "Αποστολή μηνύματος";
 $langAllUsers = "σε όλους τους χρήστες";
