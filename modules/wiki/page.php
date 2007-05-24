@@ -304,7 +304,12 @@
     {
         if ( isset( $_REQUEST['wiki_content'] ) )
         {
-            $content = ( $_REQUEST['wiki_content'] == '' ) ? "__CONTENT__EMPTY__" : $_REQUEST['wiki_content'];
+        	if (!get_magic_quotes_gpc()) {
+            	$content = ( $_REQUEST['wiki_content'] == '' ) ? "__CONTENT__EMPTY__" : $_REQUEST['wiki_content'];
+            }
+            else {
+            	$content = ( $_REQUEST['wiki_content'] == '' ) ? "__CONTENT__EMPTY__" : stripslashes($_REQUEST['wiki_content']);
+            }
         }
         else
         {
@@ -313,7 +318,12 @@
     }
     else
     {
-        $content = ( isset( $_REQUEST['wiki_content'] ) ) ? $_REQUEST['wiki_content'] : '';
+    	if (!get_magic_quotes_gpc()) {
+        	$content = ( isset( $_REQUEST['wiki_content'] ) ) ? $_REQUEST['wiki_content'] : '';
+        }
+        else {
+        	$content = ( isset( $_REQUEST['wiki_content'] ) ) ? stripslashes($_REQUEST['wiki_content']) : '';
+        }
     }
     
     // use __MainPage__ if empty title
@@ -931,7 +941,7 @@
                 . ')'
                 ;
                 
-            $versionInfo = '&nbsp;<span style="font-size: 40%; font-weight: normal; color: red;">'
+            $versionInfo = '&nbsp;<span style="font-size: 10px; font-weight: normal; color: red;">'
                         . $versionInfo . '</span>'
                         ;
 
@@ -1110,7 +1120,7 @@
                         
                     $versionInfo = sprintf( $langWikiVersionInfoPattern, $mtime, $editorUrl );
                         
-                    $versionInfo = '&nbsp;<span style="font-size: 40%; font-weight: normal; color: red;">'
+                    $versionInfo = '&nbsp;<span style="font-size: 10px; font-weight: normal; color: red;">'
                         . $versionInfo . '</span>'
                         ;
                 }
