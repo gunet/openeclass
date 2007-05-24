@@ -387,8 +387,17 @@ color: #ffffff
 
 
 #navcontainer a:link, #navlist a:visited {
-	color: black;
+	color: #000000;
 	text-decoration: none;
+	margin-top: 1px;
+	margin-left: 1px;
+	width: 190px;
+	padding:3px;
+	border: 1px solid #e5edf9;
+}
+
+#navcontaner a.inactive {
+	color: #a9a9a9;
 }
 
 #navcontainer a:hover {
@@ -402,13 +411,27 @@ color: #ffffff
 }
 
 #navcontainer li.category {
-	margin-top: 1px;
-	margin-left: 1px;
+	margin-top: 8px;
+	margin-left: 4px;
+	margin-bottom:8px;
 	display: block;
 	padding: 3px;
-	width: 192px;
+	width: 185px;
 	color:#FFFFFF;
-	background-color: #6699cc;
+	background-color: #238ef1;
+
+}
+
+#navcontainer li.split {
+	margin-top: 8px;
+	margin-left: 3px;
+	margin-bottom:8px;
+	border: 1px solid #a2a2a3;
+	display: block;
+	padding: 0px;
+	height:2px;
+	width: 192px;
+	background-color: #afafaf;
 }
 
 #navcontainer li.category_off {
