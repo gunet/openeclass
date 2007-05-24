@@ -38,7 +38,8 @@ foreach ($course_codes as $course_code) {
     mysql_free_result($result);
 
 }
-$uptime = date("Y-m-d H:i:s", $first_date_time);
+
+$uptime = date("G:i d-n-Y", $first_date_time);
 
 //find number of logins
 mysql_select_db($mysqlMainDb);
@@ -68,9 +69,9 @@ $tool_content .= "<blockquote>
           <img src='../images/arrow_red.gif'>&nbsp;&nbsp;<i><b>$b[0]</b> $langProf, <br>
           <img src='../images/arrow_red.gif'>&nbsp;&nbsp;<b>$c[0]</b> $langStud $langAnd<br>
           <img src='../images/arrow_red.gif'>&nbsp;&nbsp;<b>$d[0]</b> $langGuest </i>
-          </blockquote></div>";
+          </blockquote>";
 
-$tool_content .= "<blockquote>$langUptime<b> ".$uptime."</b> $langLast30daysLogins1 <b>".$total_logins[0]."</b>.</blockquote>";
+$tool_content .= "$langUptime<b> ".$uptime."</b> $langLast30daysLogins1 <b>".$total_logins[0]."</b>.</div>";
 
 $tool_content .= "<div style='text-align: justify; padding-left: 15px; font-size:10pt;'>$langSupportUser <i> $administratorName $administratorSurname </i></div>";
 draw($tool_content, 0);

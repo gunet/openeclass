@@ -353,7 +353,7 @@ function expanded_faculte($fac, $uid) {
 				
 								$retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]' checked >";
 								} else {
-                	$retString .= "<img src=../../images/teacher.gif title=$langTitular>";
+                	$retString .= "<img src=../../template/classic/img/teacher.gif title=$langTitular>";
 								}
 						} else {
 									if ($mycours['p']!="" && $mycours['visible'] == 1) {
