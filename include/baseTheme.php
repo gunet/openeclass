@@ -116,14 +116,31 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	//	----------------------------------------------------------------------
 	$t->set_block('mainBlock', 'leftNavBlock', 'leftNav');
 	$t->set_block('leftNavBlock', 'leftNavCategoryBlock', 'leftNavCategory');
+	$t->set_block('leftNavCategoryBlock', 'leftNavCategoryTitleBlock', 'leftNavCategoryTitle');
+
 	$t->set_block('leftNavCategoryBlock', 'leftNavLinkBlock', 'leftNavLink');
 
 	if (is_array($toolArr)) {
 
 		for($i=0; $i< $numOfToolGroups; $i++){
 
-			$numOfTools = count($toolArr[$i][1]);
+			if($toolArr[$i][0]['type'] == 'none') {
+				$t->set_var('ACTIVE_TOOLS', '');
+				$t->set_var('NAV_CSS_CAT_CLASS', 'category');
+				$t->parse('leftNavCategoryTitle', 'leftNavCategoryTitleBlock',false);
+				$t->clear_var('leftNavCategoryTitle'); //clear inner block
+			} elseif ($toolArr[$i][0]['type'] == 'split') {
+				$t->set_var('ACTIVE_TOOLS', '');
+				$t->set_var('NAV_CSS_CAT_CLASS', 'split');
+				$t->parse('leftNavCategoryTitle', 'leftNavCategoryTitleBlock',false);
+				
+			} elseif ($toolArr[$i][0]['type'] == 'text') {
+				$t->set_var('ACTIVE_TOOLS', $toolArr[$i][0]['text']);
+				$t->set_var('NAV_CSS_CAT_CLASS', 'category');
+				$t->parse('leftNavCategoryTitle', 'leftNavCategoryTitleBlock',false);
+			}
 
+			$numOfTools = count($toolArr[$i][1]);
 			for($j=0; $j< $numOfTools; $j++){
 
 				$t->set_var('TOOL_LINK', $toolArr[$i][2][$j]);
@@ -134,13 +151,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 			}
 
-			$t->set_var('ACTIVE_TOOLS', $toolArr[$i][0]);
-			$t->set_var('NAV_CSS_CAT_CLASS', 'category');
+
+
 			$t->parse('leftNavCategory', 'leftNavCategoryBlock',true);
 
 			$t->clear_var('leftNavLink'); //clear inner block
 		}
 		$t->parse('leftNav', 'leftNavBlock',true);
+
 		if (isset($hideLeftNav)) {
 			$t->clear_var('leftNav');
 			$t->set_var('CONTENT_MAIN_CSS', 'content_main_no_nav');
