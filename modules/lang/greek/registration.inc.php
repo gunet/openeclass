@@ -314,7 +314,7 @@ $langAuthPassword = "Δώστε το συνθηματικό σας:";
 $langAuthenticateVia = "Πιστοποίηση μέσω";
 $langAuthenticateVia2 = "Διαθέσιμοι τρόποι πιστοποίησης στο ίδρυμα";
 $langCannotUseAuthMethods = "Η εγγραφή στην πλατφόρμα, πρός το παρόν δεν επιτρέπεται. Παρακαλούμε, ενημερώστε το διαχειριστή του συστήματος";
-$langAuthReg = "Εγγραφή χρήστη με ";
+$langAuthReg = "Εγγραφή χρήστη ";
 
 // LIST REQUESTS
 $langDateRequest = "Ημ/νία αίτησης";
@@ -391,4 +391,11 @@ $langAsUser = "(Λογαριασμός Φοιτητή)";
 $langForbidden = "Μη επιτρεπτή ενέργεια";
 $langChooseReg = "Επιλογή τρόπου εγγραφής";
 $langTryAgain = "Δοκιμάστε ξανά!";
+
+$langViaeClass = "μέσω eClass";
+$langViaPop = "με πιστοποίηση μέσω POP3";
+$langViaImap = "με πιστοποίηση μέσω IMAP";
+$langViaLdap = "με πιστοποίηση μέσω LDAP";
+$langViaDB = "με πιστοποίηση μέσω άλλης Βάσης Δεδομένων";
+
 ?>

@@ -35,7 +35,6 @@ $langCoursesLabel = 'Courses';
 $langFaculte = "Faculty";
 $langNoCourses = "There are no available courses to register";
 
-
 $langOtherCourses = "Course Registration";
 $langRegistration="Registration";
 $langName="First Name";
@@ -359,31 +358,29 @@ $langOtherDepartments = "Enroll to courses from other departments";
 $langNoLessonsAvailable = "No courses available.";
 
 // formuser.php
-$langUserRequest = "Αίτηση Δημιουργίας Λογαριασμού Φοιτητή";
+$langUserRequest = "Request for new user account";
 $langNewUser = "New User Details";
-$langInfoProfReq = "Αν επιθυμείτε να έχετε πρόβαση στην πλατφόρμα με δικαιώματα χρήστη - καθηγητή, παρακαλώ συμπλ
-ηρώστε την παρακάτω αίτηση. Η αίτηση θα σταλεί στον υπεύθυνο διαχειριστή ο οποίος θα δημιουργήσει το λογαριασμό κ
-αι θα σας στείλει τα στοιχεία μέσω ηλεκτρονικού ταχυδρομείου.";
-$langInfoStudReg = "Αν επιθυμείτε να έχετε πρόσβαση στην πλατφόρμα με δικαιώματα χρήστη - φοιτητή, παρακαλώ συμπλ
-ηρώστε τα στοιχεία σας στην παρακάτω φόρμα. Ο λογαριασμός σας θα δημιουργηθεί αυτόματα.";
-$langReason = "Αναφέρατε τους λόγους χρήσης της πλατφόρμας";
-$langInfoStudReq = "Αν επιθυμείτε να έχετε πρόβαση στην πλατφόρμα με δικαιώματα χρήστη - φοιτητή, παρακαλώ συμπλη
-ρώστε την παρακάτω αίτηση. Η αίτηση θα σταλεί στον υπεύθυνο διαχειριστή ο οποίος θα δημιουργήσει το λογαριασμό κα
-ι θα σας στείλει τα στοιχεία μέσω ηλεκτρονικού ταχυδρομείου.";
-$langReason = "Αναφέρατε τους λόγους χρήσης της πλατφόρμας";
-$langInfoProf = "Σύντομα θα σας σταλεί mail από την Ομάδα Διαχείρισης της Πλατφόρμας Ασύγχρονης Τηλεκπαίδευσης, μ
-ε τα στοιχεία του λογαριασμού σας.";
-$langBackHome = "για να επιστρέψετε στην αρχική σελίδα.";
+$langInfoProfReq = "If you wish to have access in platform as a user - professor, please complete the form below. Your request will be sent to administrator who will create your account and send you an informational email.";
+$langInfoStudReg = " If you wish to have access in platform as a user - student, please complete the form below. Your account will be created automatically.";
+$langInfoStudReq = "If you wish to have access in platforma as a user - student please complete the form below. Your request will be sent to administrator who will create your account and send you an informational email.";
+$langReason = "Describe your reasons of using platform";
+$langInfoProf = "Soon an informational email will be sent to you by the administrator of the platform.";
+$langBackHome = "to return to home page.";
 $langDearUser = "Dear user";
-$langMailErrorMessage = "Παρουσιάστηκε σφάλμα κατά την αποστολή του μηνύματος - η αίτησή σας καταχωρήθηκε, αλλά δ
-εν στάλθηκε. Παρακαλούμε επικοινωνήστε με το διαχειριστή του συστήματος στη διεύθυνση";
+$langMailErrorMessage = "An error occured during sending message - your request recorded, but not sent. Please contact system administrator in email address";
 
 $langUserSuccess = "New User Account";
-$usersuccess="Η δημιουργία νέου λογαριασμού φοιτητή πραγματοποιήθηκε με επιτυχία!";
+$usersuccess="New user account created with success!";
 $langAsUser = "(User Account)";
 
 $langForbidden = "Action not allowedΜη επιτρεπτή ενέργεια";
 $langChooseReg = "Choose registration method";
 $langTryAgain = "Try Again!";
+
+$langViaeClass = "using eClass";
+$langViaPop = "using a POP3 mail account";
+$langViaImap = "using an IMAP mail account";
+$langViaLdap = "using an LDAP account";
+$langViaDB = "using an external Database";
 
 ?>

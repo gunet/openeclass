@@ -53,7 +53,7 @@ else if (!isset($_GET['auth']) && !isset($_SESSION['auth_tmp']))
 $msg = get_auth_info($auth);
 $settings = get_auth_settings($auth);
 if(!empty($msg)) $nameTools = $msg;
-$navigation[] = array("url"=>"../admin/", "name"=> $admin);
+$navigation[] = array("url"=>"../admin/", "name"=> $langAdmin);
 $navigation[] = array("url"=>"newprof_info.php", "name"=> $regprof);
 
 $tool_content = "";

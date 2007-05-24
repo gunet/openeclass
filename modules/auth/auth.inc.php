@@ -166,19 +166,21 @@ return $m (string)
 ****************************************************************/
 function get_auth_info($auth)
 {
+	global $langViaeClass, $langViaPop, $langViaImap, $langViaLdap, $langViaDB;
+
 	if(!empty($auth))
 	{
 		switch($auth)
 		{
-			case '1': $m = "Πιστοποίηση μέσω ECLASS";
+			case '1': $m = $langViaeClass;
 				break;
-			case '2': $m = "Πιστοποίηση μέσω POP3";
+			case '2': $m = $langViaPop;
 				break;
-			case '3': $m = "Πιστοποίηση μέσω IMAP";
+			case '3': $m = $langViaImap;
 				break;
-			case '4':	$m = "Πιστοποίηση μέσω LDAP";
+			case '4':	$m = $langViaLdap;
 				break;
-			case '5': $m = "Πιστοποίηση μέσω External DB";
+			case '5': $m = $langViaDB;
 				break;
 			default:	$m = 0;
 				break;

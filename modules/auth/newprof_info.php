@@ -39,19 +39,12 @@ Purpose: TDisplay all the available auth methods for user registration
 
 $langFiles = array('registration', 'admin', 'gunet');
 include '../../include/baseTheme.php';
+
 // added by jexi - adia
 session_register("prof");
 $prof=1;
 include 'auth.inc.php';
 
-if(isset($already_second))
-{
-	session_register("uid");
-	session_unregister("statut");
-	session_unregister("prenom");
-	session_unregister("nom");
-	session_unregister("uname");
-}
 $nameTools = $regprof;
 
 $tool_content = "";
@@ -73,7 +66,6 @@ if(!empty($auth))
 	<td style='border-left: 1px solid silver; border-bottom: 1px solid silver;'>&nbsp;</td>
 	<td rowspan='2' style='border: 1px solid silver;' onMouseOver='this.style.backgroundColor=\"#F1F1F1\"'; onMouseOut='this.style.backgroundColor=\"transparent\"'><a href=\"newprof.php\">".$regprofnoldap."</a></td>
 </tr>
-
 ";
 	
 	foreach($auth as $k=>$v)
@@ -117,20 +109,13 @@ else
 					<td class=\"caution\">
 					<p>Η εγγραφή στην πλατφόρμα, πρός το παρόν δεν επιτρέπεται.</p>
 							<p>Παρακαλούμε, ενημερώστε το διαχειριστή του συστήματος</p>
-					
 					</td>
 				</tr>
 			</tbody>
 		</table>";
 }
 
-$tool_content .= "
-<tr>
-	<td>&nbsp;</td>
-</tr>
-</table>
-";
-
+$tool_content .= "<tr><td>&nbsp;</td></tr></table>";
 draw($tool_content,0,'auth');
 
 ?>

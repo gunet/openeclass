@@ -83,15 +83,16 @@ if (isset($Add) and (empty($usercomment) or empty($name)
 				draw($tool_content, 0, 'auth');
     	  exit;
       }
-/*
+
 if (!isset($close_user_registration) or $close_user_registration == FALSE) {
 			$tool_content .= "<div class='td_main'>$langForbidden</div></td></tr></table>";
+			draw($tool_content, 0, 'auth');
 			exit;
 			}
-*/
-$tool_content .= "<table width='95%' align='center'><tbody><tr><td>
+
+$tool_content .= "<table width='95%' align='center'><tbody><thead><tr><td>
            <form action='$_SERVER[PHP_SELF]' method='post'>
-           $langRegistration<table border='0' align='center' cellpadding='3' cellspacing='0' class=td_main>
+           <table border='0' align='center' cellpadding='3' cellspacing='0' class=td_main>
 	   			<tr><td colspan='2'><small>$langInfoStudReq</small></td></tr>
 			  	 <tr>
 	  		  <th class='labeltext'>$langName</th>
@@ -108,14 +109,10 @@ $tool_content .= "<table width='95%' align='center'><tbody><tr><td>
 			<small>&nbsp;(*)</small></td>
 		  </tr>
 		  <tr>
-	    <th class='labeltext'>$profuname</th>
+	    <th class='labeltext'>$profuname <small>$langUserNotice</small></th>
 	    <td><input type='text' name='username' size='20' maxlength='20' value='".@$username."' class='auth_input'>
 			<small>&nbsp;(*)</small></td>
 		  </tr>
-		  <tr>
-	    <td class='labeltext'>&nbsp;</td>
-	    <th><small>$langUserNotice</small></th>
-	  </tr>
 	  <tr><th class='labeltext'>$profemail</th>
      <td><input type='text' name='usermail' value='".@$usermail."' class='auth_input'>
 			<small>&nbsp;(*)</small></td>
@@ -140,7 +137,7 @@ $tool_content .= "<table width='95%' align='center'><tbody><tr><td>
 	    <td>&nbsp;</td>
 	    <td><input type='submit' class='ButtonSubmit' name='Add' value='$langSend'>&nbsp;&nbsp;&nbsp;&nbsp;
 			<small>$langRequiredFields</small></td>
-	  </tr></tbody>
+	  </tr></thead></tbody>
 	  </table>
      </form>
      </td></tr></table>"; 

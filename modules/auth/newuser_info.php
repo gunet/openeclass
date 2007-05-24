@@ -37,19 +37,11 @@
 ==============================================================================
 */
 
-$langFiles = array('registration','gunet','index');
+$langFiles = array('registration','index');
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
-if(isset($already_second)) {
-	session_register("uid");
-	session_unregister("statut");
-	session_unregister("prenom");
-	session_unregister("nom");
-	session_unregister("uname");
-}
 
 $nameTools = $reguser;
-
 $tool_content = "";		// Initialise $tool_content
 
 // Main body
@@ -57,6 +49,11 @@ $tool_content = "";		// Initialise $tool_content
 $auth = get_auth_active_methods();
 $e = 1;
 
+// check for close user registration 
+if (isset($close_user_registration) and $close_user_registration == TRUE)
+    $newuser = "formuser.php";
+  else
+    $newuser = "newuser.php";
 
 $tool_content .= "
 <table border='0' cellspacing='0' cellpadding='0' align=center width='50%'>
@@ -69,9 +66,8 @@ $tool_content .= "
 </tr>
 <tr>
 	<td style='border-left: 1px solid silver; border-bottom: 1px solid silver;'>&nbsp;</td>
-	<td rowspan='2' style='border: 1px solid silver;' onMouseOver='this.style.backgroundColor=\"#F1F1F1\"'; onMouseOut='this.style.backgroundColor=\"transparent\"'><a href=\"newuser.php\">$langAuthReg".get_auth_info($e)."</a></td>
+	<td rowspan='2' style='border: 1px solid silver;' onMouseOver='this.style.backgroundColor=\"#F1F1F1\"'; onMouseOut='this.style.backgroundColor=\"transparent\"'><a href=\"$newuser\">$langAuthReg".get_auth_info($e)."</a></td>
 </tr>
-
 ";
 
 if(!empty($auth))
@@ -93,7 +89,6 @@ if(!empty($auth))
 	<td rowspan='2' style='border: 1px solid silver;' onMouseOver='this.style.backgroundColor=\"#F1F1F1\"'; onMouseOut='this.style.backgroundColor=\"transparent\"'><a href=\"ldapnewuser.php?auth=".$v."\">$langAuthReg".get_auth_info($v)."</a></td>
 </tr>
 
-			
 ";
 		}
 		else
@@ -103,14 +98,7 @@ if(!empty($auth))
 	}
 }
 
-$tool_content .= "
-
-<tr>
-	<td>&nbsp;</td>
-</tr>
-</table>
-
-";
+$tool_content .= "<tr><td>&nbsp;</td></tr></table>";
 
 draw($tool_content,0,'auth');
 ?>
