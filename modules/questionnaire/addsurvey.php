@@ -299,7 +299,7 @@ else
 function printSurveyCreationForm() {
 	global $tool_content, $langSurveyName, $langPollStart, 
 		$langPollEnd, $langSurveyType, $langSurveyMC, $langSurveyFillText, 
-		$langSurveyContinue, $langSurveyCreate, $start_cal_Survey, $end_cal_Survey;
+		$langSurveyCreate, $langSurveyContinue,  $start_cal_Survey, $end_cal_Survey;
 	
 	$CurrentDate = date("Y-m-d H:i:s");
 	$CurrentDate = htmlspecialchars($CurrentDate);
@@ -324,7 +324,7 @@ function printSurveyCreationForm() {
 		</tr>-->
 		<input name="UseCase" type="hidden" value="1" />
 		<tr><td colspan="3" align="right">
-		  <input name="$langSurveyContinue" type="submit" value="$langSurveyContinue -&gt;"></td>
+      <input name="$langSurveyContinue" type="submit" value="$langSurveyContinue -&gt;"></td></tr>
 	</table>
 	</form>
 cData;
@@ -335,7 +335,7 @@ cData;
 ******************************************************************************/
 function printMCQuestionForm() {
 		global $tool_content, $langSurveyName, $langSurveyStart, $langSurveyEnd, 
-		$langSurveyType, $langSurveyMC, $langSurveyFillText, $langSurveyContinue, 
+		$langSurveyType, $langSurveyMC, $langSurveyFillText, 
 		$langSurveyQuestion, $langSurveyCreate, $langSurveyMoreQuestions, 
 		$langSurveyCreated, $MoreQuestions, $langSurveyAnswer, 
 		$langSurveyMoreAnswers, $langSurveyInfo;
@@ -386,8 +386,6 @@ function printMCQuestionForm() {
 		    <td>
 					<input name="MoreQuestions" type="submit" value="$langSurveyCreate"></td>
 			</tr>
-			<tr><td colspan="2" align="right">
-			  <input name="$langSurveyContinue" type="submit" value="$langSurveyContinue -&gt;"></td>
 		</table>
 		<input type="hidden" value="1" name="NumOfQuestions">
 		</form>
@@ -424,8 +422,6 @@ cData;
 			    <input name="MoreQuestions" type="submit" value="$langSurveyCreate" />
 		     </td>
 			</tr>
-			<tr><td colspan="2" align="right">
-			  <input name="$langSurveyContinue" type="submit" value="$langSurveyContinue -&gt;"></td>
 		</table>
 		<input type="hidden" value="{$NumOfQuestions}" name="NumOfQuestions">
 		</form>
@@ -487,8 +483,6 @@ cData;
 			    <input name="MoreQuestions" type="submit" value="$langSurveyCreate" />
 		     </td>
 			</tr>
-			<tr><td colspan="2" align="right">
-			  <input name="$langSurveyContinue" type="submit" value="$langSurveyContinue -&gt;"></td>
 		</table>
 		<input type="hidden" value="{$NumOfQuestions}" name="NumOfQuestions">
 		</form>
@@ -503,7 +497,7 @@ cData;
 ******************************************************************************/
 function printTFQuestionForm() {
 	global $tool_content, $langSurveyName, $langSurveyStart, $langSurveyEnd, 
-		$langSurveyType, $langSurveyMC, $langSurveyFillText, $langSurveyContinue, 
+		$langSurveyType, $langSurveyMC, $langSurveyFillText, 
 		$langSurveyQuestion, $langSurveyCreate, $langSurveyMoreQuestions, 
 		$langSurveyCreated, $MoreQuestions;
 		
@@ -543,8 +537,6 @@ cData;
 			    <input name="MoreQuestions" type="submit" value="$langSurveyCreate" />
 		      </td>
 			</tr>
-			<tr><td colspan="2" align="right">
-			  <input name="$langSurveyContinue" type="submit" value="$langSurveyContinue -&gt;"></td>
 		</table>
 		</form>
 cData;
