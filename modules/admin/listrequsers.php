@@ -30,7 +30,7 @@ $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
 
-$nameTools= "Ανοικτές Αιτήσεις Φοιτητών";
+$nameTools= $langUserOpenRequests;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 $local_style = " th {font-size:12px; font-family:Verdana, Arial, Helvetica;  } ";
 $sendmail =0;
@@ -50,12 +50,9 @@ function confirmation ()
 }
 </script>';
 
-$tool_content .= "<table width=100% border='0' height=316 cellspacing='0' align=center cellpadding='0'>\n";
+$tool_content .= "<table width=100% border='0' cellspacing='0' align=center cellpadding='0'>\n";
 $tool_content . "<tr>\n";
 $tool_content . "<td valign=top>\n";
-
-$tool_content . "<table height=300 width='96%' align='center' class='admin'><tr>
-<td valign=top><br>";
 
 if (isset($close) && $close == 1) {
 	$sql = db_query("UPDATE prof_request set status='2', date_closed=NOW() WHERE rid='$id'");
@@ -96,41 +93,37 @@ $langEmail : $emailAdministrator
 $tool_content .= "<table width=85% align=center><tr><td>
       <form action='listrequsers.php' method='post'>
         <table border='0' width='100%' cellspacing='0'>
-        <tr>
-       <td>&nbsp;</td>
-        </tr>
+        <tr><td>&nbsp;</td></tr>
         <tr>
        <td class=td_label2 style='border : 1px solid $table_border'>Πρόκειται να απορρίψετε την αίτηση Φοιτητή <b>'$d[profname] $d[profsurname] &lt;$d[profemail]&gt;'</b> με στοιχεία:</td>
         </tr>
-        <tr>
-           <td>&nbsp;</td>
-        </tr>
+        <tr><td>&nbsp;</td></tr>
         <tr>
         <td>";
         
         $tool_content .= "<table align=center width=50% border=\"0\" cellspacing=1 cellpading=1 style=\"border: 1px solid $table_border;\">
            <tr>
-             <td class=color1 style=\"border: 1px solid $table_border;\"><b>Επώνυμο</b>:</td>
+             <td class=color1 style=\"border: 1px solid $table_border;\"><b>$langSurname</b>:</td>
              <td class=stat2 style=\"border: 1px solid $table_border;\">$d[profsurname]</td>
            </tr>
            <tr>
-             <td class=color1 style=\"border: 1px solid $table_border;\"><b>Όνομα</b>:</td>
+             <td class=color1 style=\"border: 1px solid $table_border;\"><b>$langName</b>:</td>
              <td class=stat2 style=\"border: 1px solid $table_border;\">$d[profname]</td>
            </tr>
            <tr>
-             <td class=color1 style=\"border: 1px solid $table_border;\"><b>E-mail</b>:</td>
+             <td class=color1 style=\"border: 1px solid $table_border;\"><b>$langEmail</b>:</td>
              <td class=stat2 style=\"border: 1px solid $table_border;\">$d[profemail]</td>
            </tr>
            <tr>
-             <td class=color1 style=\"border: 1px solid $table_border;\"><b>Τμήμα</b>:</td>
+             <td class=color1 style=\"border: 1px solid $table_border;\"><b>$langFaculte</b>:</td>
              <td class=stat2 style=\"border: 1px solid $table_border;\">$d[proftmima]</td>
            </tr>
            <tr>
-             <td class=color1 style=\"border: 1px solid $table_border;\"><b>Ημ/νία Αίτησης</b>:</td>
+             <td class=color1 style=\"border: 1px solid $table_border;\"><b>$langDateRequest</b>:</td>
              <td class=stat2 style=\"border: 1px solid $table_border;\">$d[date_open]</td>
            </tr>
            <tr>
-             <td class=color1 style=\"border: 1px solid $table_border;\"><b>Τηλεφ.</b>:</td>
+             <td class=color1 style=\"border: 1px solid $table_border;\"><b>$langphone</b>:</td>
              <td class=stat2 style=\"border: 1px solid $table_border;\">$d[profcomm]</td>
            </tr>
            </table>
@@ -174,19 +167,17 @@ $tool_content .= "<table width=85% align=center><tr><td>
       </form>
       </td></tr></table>";
 	}
-}
 
-else {
+} else {
 
-      $tool_content .= "<table align=center width=98% border='0' bgcolor=white cellspacing=0 cellpadding=0 style='border: 1px solid gold;'><tr><td>
-      <table align=center width=100% border='0' cellspacing=2 cellpadding=1>
+      $tool_content .= "<table align=center width=98% border='0' bgcolor=white cellspacing=0 cellpadding=0 style='border: 1px solid gold;'>
       <tr>
-         <td class=td_label2 style='border: 1px solid $table_border' width=15%><small>Όνομα<br>Επώνυμο</small></td>
-         <td class=td_label2 style='border: 1px solid $table_border' width=10%><small>Username</small></td>
-         <td class=td_label2 style='border: 1px solid $table_border' width=20%><small>E-mail</small></td>
+         <td class=td_label2 style='border: 1px solid $table_border' width=15%><small>$langName<br>$langSurname</small></td>
+         <td class=td_label2 style='border: 1px solid $table_border' width=10%><small>$langUsername</small></td>
+         <td class=td_label2 style='border: 1px solid $table_border' width=20%><small>$langEmail</small></td>
          <td class=td_label2 style='border: 1px solid $table_border' width=20%><small>Ημ/νία Αιτ.</small></td>
-         <td class=td_label2 style='border: 1px solid $table_border' width=20%><small>Σχόλια</small></td>
-         <td class=td_label2 style='border: 1px solid $table_border' width=15% align=center><small>Ενέργειες</small></td>
+         <td class=td_label2 style='border: 1px solid $table_border' width=20%><small>$langComments</small></td>
+         <td class=td_label2 style='border: 1px solid $table_border' width=15% align=center><small>$langActions</small></td>
       </tr>";
 
 	$sql = db_query("SELECT rid,profname,profsurname,proftmima,profcomm,profuname,profemail,date_open,comment 
@@ -205,7 +196,7 @@ $tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#F1F1F1'\" onMou
 			}
 		}
 
-			$tool_content .= "<td align=center class=kk><small><a href=\"listrequsers.php?id=$req[rid]&close=1\" class=small_tools onclick=\"return confirmation();\">Κλείσιμο</a><br><a href=\"$_SERVER[PHP_SELF]?id=$req[rid]&close=2\" class=small_tools>Απόρριψη</a>";
+			$tool_content .= "<td align=center class=kk><small><a href=\"listrequsers.php?id=$req[rid]&close=1\" class=small_tools onclick=\"return confirmation();\">Κλείσιμο</a><br><a href=\"$_SERVER[PHP_SELF]?id=$req[rid]&close=2\" class=small_tools>$langRejectRequest</a>";
 			
 			$tool_content .= "<br><a href=\"../auth/newuserreq.php?".
 			"id=".urlencode($req['rid']).
@@ -214,7 +205,7 @@ $tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#F1F1F1'\" onMou
 			"&pu=".urlencode($req['profuname']).
 			"&pe=".urlencode($req['profemail']).
 			"&pt=".urlencode($req['proftmima']).
-			"\" class=small_tools>Εγγραφή</a>";	
+			"\" class=small_tools>$langAcceptRequest</a>";	
 		// check for ldap server
      /*if (check_ldap_entries())
 		   $tool_content .= "<br><a href='../auth/ldapnewuser.php?id=$req[rid]&m=$req[profemail]&tmima=".urlencode($req['proftmima'])."' class=small_tools>Εγγραφή LDAP</a>"; */
@@ -222,21 +213,16 @@ $tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#F1F1F1'\" onMou
 	}
   
         if (mysql_num_rows($sql) == 0 ) {
-             $tool_content .= "<tr><td colspan=9 class=kk align=center><br>Δεν Υπάρχουν Ανοικτές Αιτήσεις Φοιτητών !<br><br></td></tr>";
+             $tool_content .= "<tr><td colspan=9 class=kk align=center><br>$langUserNoRequests<br><br></td></tr>";
         }
         $tool_content .= "</table>";
-        $tool_content .= "</td></tr></table>";
 }
 
 $tool_content .= "<tr><td>&nbsp;</td></tr>";
-
-$tool_content .= "</td></tr>
-   <tr><td align=right>
-    <a href=\"../admin/index.php\" class=mainpage>$langBackAdmin&nbsp;</a>
-    </td></tr></table>
-	</td></tr>
-	<tr><td>&nbsp;</td></tr>
-</table>";
+$tool_content .= "<tr><td align=right>
+   <a href=\"../admin/index.php\" class=mainpage>$langBackAdmin&nbsp;</a>
+	 </td></tr>
+	<tr><td>&nbsp;</td></tr></table>";
 
 draw($tool_content,3,'admin');
 ?>

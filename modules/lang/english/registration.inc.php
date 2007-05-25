@@ -342,6 +342,7 @@ $langNoUpdate = "Unable to do the update for user with id";
 $langUpdateNoChange = "You did not change any user info.";
 $langError = "Error";
 
+$langUserOpenRequests = "Students Open Requests";
 $langRegistrationError = "Error! Return to platform home page.";
 
 $langCharactersNotAllowed = "Not allowed characters in username and password:  ',\" or \\";
@@ -353,7 +354,7 @@ $langUnregFirst = "You should unregister the user from the following list of cou
 $langUnregTeacher = "User is a teacher in the following courses:";
 
 $langPlease = "Please";
-
+$langUserNoRequests = "There are no students open requests !";
 $langOtherDepartments = "Enroll to courses from other departments";
 $langNoLessonsAvailable = "No courses available.";
 
