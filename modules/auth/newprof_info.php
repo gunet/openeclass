@@ -64,7 +64,7 @@ if(!empty($auth))
 </tr>
 <tr>
 	<td style='border-left: 1px solid silver; border-bottom: 1px solid silver;'>&nbsp;</td>
-	<td rowspan='2' style='border: 1px solid silver;' onMouseOver='this.style.backgroundColor=\"#F1F1F1\"'; onMouseOut='this.style.backgroundColor=\"transparent\"'><a href=\"newprof.php\">".$regprofnoldap."</a></td>
+	<td rowspan='2' style='border: 1px solid silver;' onMouseOver='this.style.backgroundColor=\"#F1F1F1\"'; onMouseOut='this.style.backgroundColor=\"transparent\"'><a href=\"newprof.php\">$langRegistration ".get_auth_info(1)."</a></td>
 </tr>
 ";
 	
