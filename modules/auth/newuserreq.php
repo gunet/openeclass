@@ -21,34 +21,34 @@ $tool_content .= "
     <td>
     <form action='newuserreq_second.php' method='post'>
     <table  border=0 cellpadding='1' cellspacing='2' border='0' width='100%' align=center>
+		<thead>
     <tr valign='top'>
-    <td class=color1 style='border : 1px solid $table_border;' width=50%>$langSurname</td>
+    <th class=color1 style='border : 1px solid $table_border;' width=50%>$langSurname</th>
 	  <td><input type='text' class=auth_input_admin name='nom_form' value='".@$ps."' >
 		<small>&nbsp;(*)</small></td>
 	  </tr>
 	  <tr>
-	  <td class=color1 style='border : 1px solid $table_border;' width=50%>$langName</td>
+	  <th class=color1 style='border : 1px solid $table_border;' width=50%>$langName</th>
 	  <td><input type='text' class=auth_input_admin name='prenom_form' value='".@$pn."' >
 		<small>&nbsp;(*)</small></td>
 	  </tr>
 	  <tr>
-	  <td class=color1 style='border : 1px solid $table_border;' width=50%>$langUsername</td>
+	  <th class=color1 style='border : 1px solid $table_border;' width=50%>$langUsername</th>
 	  <td><input type='text' class=auth_input_admin name='uname' value='".@$pu."'>
 		<small>&nbsp;(*)</small></td>
 	  </tr>
 	  <tr>
-	  <td class=color1 style='border : 1px solid $table_border;' width=50%>$langPass&nbsp;:</td>
+	  <th class=color1 style='border : 1px solid $table_border;' width=50%>$langPass&nbsp;:</th>
 	  <td><input type='text' class=auth_input_admin name='password' value=".create_pass(5)."></td>
 	  </tr>
 	  <tr>
-    <td class=color1 style='border : 1px solid $table_border;' width=50%>$langEmail</td>
+    <th class=color1 style='border : 1px solid $table_border;' width=50%>$langEmail</th>
 	  <td><input type='text' class=auth_input_admin name='email_form' value='".@$pe."'>
 		<small>&nbsp;(*)</small></td>
 	  </tr>
 	  <tr>
-	  <td class=color1 style='border : 1px solid $table_border;' width=50%>$langDepartment &nbsp;
-		</span></td>
-	  <td>";
+	  <th class=color1 style='border : 1px solid $table_border;' width=50%>$langDepartment &nbsp;
+		</span></th><td>";
 
 		$dep = array();
         $deps=db_query("SELECT name FROM faculte order by id");
@@ -63,18 +63,17 @@ $tool_content .= "
 	   	$tool_content .= "</td></tr>
 	  		<tr><td>&nbsp;</td>
 			 	<td><input type='submit' name='submit' value='$langOk' ></td>
-		    </tr></table>
+		    </tr></thead></table>
 				<input type='hidden' name='rid' value='$id'>
     		</form>
 				</td></tr>
     <tr><td align='right'><span class='explanationtext'>$langRequiredFields</span></td></tr>
     </table></td></tr>
-    <tr><td>&nbsp;</td></tr>
     <tr><td align=right>";
 		        
    	$tool_content .= "<a href=\"../admin/index.php\" class=mainpage>$langBackAdmin&nbsp;</a>";
 		$tool_content .= "<tr><td>&nbsp;</td></tr>";
 		$tool_content .= "</table>\n";
 
-		draw($tool_content,3);
+		draw($tool_content,3, 'auth');
 ?>

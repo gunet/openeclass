@@ -35,13 +35,9 @@ $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 $local_style = " th {font-size:12px; font-family:Verdana, Arial, Helvetica;  } ";
 $sendmail =0;
 
-// Initialise $tool_content
-$tool_content = "";
-
 $local_head = '
 <script type="text/javascript">
-function confirmation ()
-{
+function confirmation() {
    if (confirm("'.$langCloseConf.'")) {
                 return true;
    } else {
@@ -50,14 +46,16 @@ function confirmation ()
 }
 </script>';
 
+// Initialise $tool_content
+$tool_content = "";
+
 $tool_content .= "<table width=100% border='0' cellspacing='0' align=center cellpadding='0'>\n";
-$tool_content . "<tr>\n";
-$tool_content . "<td valign=top>\n";
+$tool_content .= "<tr>\n";
+$tool_content .= "<td valign=top>\n";
 
 if (isset($close) && $close == 1) {
 	$sql = db_query("UPDATE prof_request set status='2', date_closed=NOW() WHERE rid='$id'");
-
-	$tool_content . "<br><br><center>Η αίτηση του φοιτητή έκλεισε !</center>";
+	$tool_content .= "<br><br><center>Η αίτηση του φοιτητή έκλεισε !</center>";
 } elseif (isset($close) && $close == 2) {
 	if (!empty($comment)) {
 		if (db_query("UPDATE prof_request set status = '2',
@@ -90,12 +88,10 @@ $langEmail : $emailAdministrator
 					     FROM prof_request WHERE rid = '$id'");
 		$d = mysql_fetch_assoc($r);
 
-$tool_content .= "<table width=85% align=center><tr><td>
-      <form action='listrequsers.php' method='post'>
+$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
         <table border='0' width='100%' cellspacing='0'>
-        <tr><td>&nbsp;</td></tr>
         <tr>
-       <td class=td_label2 style='border : 1px solid $table_border'>Πρόκειται να απορρίψετε την αίτηση Φοιτητή <b>'$d[profname] $d[profsurname] &lt;$d[profemail]&gt;'</b> με στοιχεία:</td>
+       <td class=td_label2 style='border : 1px solid $table_border'>$langWarnReject <b>'$d[profname] $d[profsurname] &lt;$d[profemail]&gt;'</b> $langWithDetails:</td>
         </tr>
         <tr><td>&nbsp;</td></tr>
         <tr>
@@ -130,10 +126,8 @@ $tool_content .= "<table width=85% align=center><tr><td>
         ";
         
          $tool_content .= "</td></tr>
-        <tr><td>&nbsp;</td>
-        </tr>
         <tr>
-         <td class=color1 style='border : 1px solid $table_border'>Σχόλια:</td>
+         <td class=color1 style='border : 1px solid $table_border'>$langComments:</td>
         </tr>
         <tr>
            <td><input type='hidden' name='id' value='$id'>
@@ -148,24 +142,19 @@ $tool_content .= "<table width=85% align=center><tr><td>
         </tr>
         <tr>
            <td class=color1 style='border : 1px solid $table_border'>
-                <table width=100%><tr><td class=kk>
                 <input type='checkbox' name='sendmail' value='1' checked='yes'>
-                &nbsp;Αποστολή μηνύματος στο χρήστη, στη διεύθυνση:</td><td align=left>
-                <input type='text' name='prof_email' class=auth_input_admin value='$d[profemail] '></td>
-								<td align=right>
-                <input type='submit' name='submit' value='Απόρριψη'></td></tr></table>
+                &nbsp;$langRequestSendMessage &nbsp;&nbsp;
+								<input type='text' name='prof_email' class=auth_input_admin value='$d[profemail] '></td></tr>
+								<tr>
+								<td align='center'>
+                <input type='submit' name='submit' value='$langRejectRequest'>
             </td>
         </tr>
         <tr>
-           <td class=kk align=right><small>(στο μήνυμα θα αναφέρεται και το παραπάνω σχόλιο)</small></td>
-        </tr>
-        <tr>
-           <td>&nbsp;</td>
+           <td class=kk align=right><small>($langRequestDisplayMessage)</small></td>
         </tr>
         </table>
-      </FIELDSET>
-      </form>
-      </td></tr></table>";
+      </form>";
 	}
 
 } else {
@@ -196,7 +185,7 @@ $tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#F1F1F1'\" onMou
 			}
 		}
 
-			$tool_content .= "<td align=center class=kk><small><a href=\"listrequsers.php?id=$req[rid]&close=1\" class=small_tools onclick=\"return confirmation();\">Κλείσιμο</a><br><a href=\"$_SERVER[PHP_SELF]?id=$req[rid]&close=2\" class=small_tools>$langRejectRequest</a>";
+			$tool_content .= "<td align=center class=kk><small><a href='$_SERVER[PHP_SELF]?id=$req[rid]&close=1' class=small_tools onclick='return confirmation();'>Κλείσιμο</a><br><a href='$_SERVER[PHP_SELF]?id=$req[rid]&close=2' class=small_tools>$langRejectRequest</a>";
 			
 			$tool_content .= "<br><a href=\"../auth/newuserreq.php?".
 			"id=".urlencode($req['rid']).
@@ -218,11 +207,9 @@ $tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#F1F1F1'\" onMou
         $tool_content .= "</table>";
 }
 
-$tool_content .= "<tr><td>&nbsp;</td></tr>";
 $tool_content .= "<tr><td align=right>
    <a href=\"../admin/index.php\" class=mainpage>$langBackAdmin&nbsp;</a>
-	 </td></tr>
-	<tr><td>&nbsp;</td></tr></table>";
+	 </td></tr></table>";
 
 draw($tool_content,3,'admin');
 ?>

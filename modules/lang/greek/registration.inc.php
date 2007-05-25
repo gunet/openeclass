@@ -329,7 +329,7 @@ $langComments = "Σχόλια";
 $langTeacherRequestHasDeleted = "Η αίτηση του καθηγητή διαγράφηκε!";
 $langRejectRequestSubject = "Απόρριψη αίτησης εγγραφής στην Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης";
 $langGoingRejectRequest = "Πρόκειται να απορρίψετε την αίτηση καθηγητή με στοιχεία:";
-$langRequestSendMessage = "Αποστολή μηνύματος στο χρήστη - e-mail διεύθυνση:";
+$langRequestSendMessage = "Αποστολή μηνύματος στο χρήστη στην διεύθυνση:";
 $langRequestDisplayMessage = "στο μήνυμα θα αναφέρεται και το παραπάνω σχόλιο";
 $langNoSuchRequest = "Δεν υπάρχει κάποια σχετική αίτηση με αυτό το ID. Δεν είναι δυνατή η επεξεργασία της αίτησης.";
 $langTeacherRequestHasRejected = "Η αίτηση του καθηγητή απορρίφθηκε";
@@ -365,6 +365,8 @@ $langNoLessonsAvailable = "Δεν υπάρχουν Διαθέσιμα Μαθήματα.";
 // formuser.php
 $langUserRequest = "Αίτηση Δημιουργίας Λογαριασμού Φοιτητή";
 $langUserOpenRequests = "Ανοικτές αιτήσεις φοιτητών";
+$langWarnReject = "Πρόκειται να απορρίψετε την αίτηση φοιτητή";
+$langWithDetails = "με στοιχεία";
 
 $langSubmit = "Αποστολή Αίτησης";
 $langNewUser = "Στοιχεία Λογαριασμού Χρήστη-Φοιτητή";
