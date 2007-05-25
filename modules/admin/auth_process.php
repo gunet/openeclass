@@ -45,12 +45,13 @@
 ==============================================================================
 */
 
-// LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-$langFiles = array('admin','registration');
+$langFiles = array('admin','registration', 'authmethods');
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include_once '../auth/auth.inc.php';
-$nameTools = $langUserAuthentication;
+$nameTools = $langAuthSettings;
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$navigation[] = array("url" => "auth.php", "name" => $langUserAuthentication);
 $tool_content = "";			// Initialise $tool_content
 
 // get the values
@@ -59,7 +60,6 @@ if((!empty($step)) && ($step=='1'))
 {
 	$auth = isset($_POST['auth'])?$_POST['auth']:'';
 	$auth_submit = isset($_POST['auth_submit'])?$_POST['auth_submit']:'';
-	
 }
 else
 {
@@ -80,20 +80,18 @@ if((!empty($auth_submit)) && ($auth_submit==1))
 	    $is_valid = auth_user_login($auth,$test_username,$test_password);
 	    if($is_valid)
 	    {
-				$auth_allow = 1;	
-				//$tool_content .= "<span style=\"color:green;font-weight:bold;\">$langConnYes</span><br /><br />";
-				$tool_content .= "<table><tbody><tr><td class=\"success\">$langConnYes</td></tr></tbody></table><br /><br />";
+			$auth_allow = 1;	
+			$tool_content .= "<table><tbody><tr><td class=\"success\">$langConnYes</td></tr></tbody></table><br /><br />";
 	    }
 	    else
 	    {
-				//$tool_content .= "<span style=\"color:red;font-weight:bold;\">$langConnNo</span><br /><br />";
-				$tool_content .= "<table><tbody><tr><td class=\"caution\">$langConnNo</td></tr></tbody></table><br /><br />";
+			$tool_content .= "<table><tbody><tr><td class=\"caution\">$langConnNo</td></tr></tbody></table><br /><br />";
 				$auth_allow = 0;
 	    }	
 		}
 		else
 		{
-	    $tool_content .= "<br />You did not provide a valid pair of username/password<br />";
+	    $tool_content .= "<br />$langWrongAuth<br />";
 	    $auth_allow = 0;
 		}
 	
@@ -146,16 +144,16 @@ if((!empty($auth_submit)) && ($auth_submit==1))
 			{
 				if(mysql_affected_rows($db)==1)
 				{
-					$tool_content .= "<br />O τρόπος πιστοποίησης που επιλέξατε, έχει ενεργοποιηθεί<br />";
+					$tool_content .= "<br />$langHasActivate<br />";
 				}
 				else
 				{
-					$tool_content .= "<br />O τρόπος πιστοποίησης που επιλέξατε, είναι ήδη ενεργοποιημένος<br />";
+					$tool_content .= "<br />$langAlreadyActiv<br />";
 				}
 			}
 			else
 			{
-				$tool_content .= "ΣΦΑΛΜΑ. Ο τρόπος πιστοποίησης δεν μπορεί να ενεργοποιηθεί<br />";
+				$tool_content .= "<br>$langErrActiv<br />";
 			}
 		
 		}
@@ -176,7 +174,7 @@ else
 	<input type=\"hidden\" name=\"auth_submit\" value=\"1\" />
 	<input type=\"hidden\" name=\"auth\" value=\"".htmlspecialchars($auth)."\" />
 	<input type=\"hidden\" name=\"step\" value=\"1\" />
-	$langAuthMethod: <strong>".get_auth_info($auth)."</strong><br /><br /><br />";
+	<strong>".get_auth_info($auth)."</strong><br /><br /><br />";
 	switch($auth)
 	{
 		case 1: include_once '../auth/methods/eclassform.php';
