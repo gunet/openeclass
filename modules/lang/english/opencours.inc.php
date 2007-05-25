@@ -37,6 +37,7 @@ $avlessons="courses available";
 $langWrongPassCourse = "Wrong Course Password";
 $langAvCourses = "Available courses";
 
+$m['begin'] = 'begin';
 $m['department'] = 'Department';
 $m['lessoncode'] = 'Course Name (code)';
 $m['tomeis'] = 'Divisions';

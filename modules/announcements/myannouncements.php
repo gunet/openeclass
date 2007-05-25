@@ -82,5 +82,5 @@ $tool_content .= "<table width=\"100%\" cellpadding=\"0\" align=center cellspaci
 
 $tool_content .= "</table>";
 
-draw($tool_content, 1);
+draw($tool_content, 1, 'announcements');
 ?>

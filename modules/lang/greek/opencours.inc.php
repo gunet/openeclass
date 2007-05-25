@@ -35,6 +35,7 @@ $langWrongPassCourse = "Λάθος συνθηματικό για το μάθημα";
 $langAvCourses = "Διαθέσιμα μαθήματα";
 $langAvCourse = "Διαθέσιμο μάθημα";
 
+$m['begin'] = 'αρχή';
 $m['department'] = 'Σχολή/Τμήμα';
 $m['lessoncode'] = 'Όνομα Μαθήματος (κωδικός)';
 $m['tomeis'] = 'Τομείς';
