@@ -38,6 +38,7 @@ $langThanks = "Thank you for using platform!";
 $langError = "Error while deleting user!";
 $langLogout = "Logout";
 $langNotice = "Notice";
+$langModifProfile="Modify my profile";
 
 //unregcours.php
 $langUnregCours = "Unregister from Course";

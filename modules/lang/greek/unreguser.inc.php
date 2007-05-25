@@ -37,6 +37,7 @@ $langThanks = "Ευχαριστούμε για τη χρήση της πλατφόρμας!";
 $langError = "Σφάλμα κατά τη διαγραφή του χρήστη!";
 $langLogout = "Έξοδος";
 $langNotice = "Σημείωση";
+$langModifProfile="Αλλαγή του προφίλ μου";
 
 //unregcours.php
 $langUnregCours = "Απεγγραφή από μάθημα";
