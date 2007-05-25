@@ -41,10 +41,11 @@ $langAdminSurname		= "Administrator surname";
 $langAdminLogin			= "Administrator login";
 $langAdminPass			= "Administrator password";
 $langHelpDeskPhone		= "Helpdesk telephone";
+$langHelpDeskFax                = "Helpdeski fax number";
 $langCampusName			= "Your campus' name";
-$langInstituteShortName = "Institution short name";
+$langInstituteShortName         = "Institution short name";
 $langInstituteName		= "URL of this institution";
-
+$langInstitutePostAddress       = "Institution postal address";
 
 $langDBSettingIntro		= "
 				Install script will create claroline main DB. Please note that Claroline

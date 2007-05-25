@@ -80,16 +80,18 @@ if(isset($welcomeScreen) )
 	// extract the path to append to the url if it is not installed on the web root directory
 	$urlAppendPath = ereg_replace ("/install/index.php", "", $_SERVER['PHP_SELF']);
 	$urlForm = "http://".$_SERVER['SERVER_NAME'].$urlAppendPath."/";
-	$pathForm=realpath("../")."/";
-	$emailForm=$_SERVER['SERVER_ADMIN'];
-	$nameForm="Νίκος";
-	$surnameForm="Παπαδόπουλος";
-	$loginForm="admin";
-	$passForm  		= generePass(8);
-	$campusForm="GUNet e-Class";
-	$helpdeskForm="+30 2xx xxxx xxx";
-	$institutionForm="Ακαδημαϊκό Διαδίκτυο GUNet ";
-	$institutionUrlForm="http://www.gunet.gr/";
+	$pathForm = realpath("../")."/";
+	$emailForm = $_SERVER['SERVER_ADMIN'];
+	$nameForm = "Νίκος";
+	$surnameForm = "Παπαδόπουλος";
+	$loginForm = "admin";
+	$passForm = generePass(8);
+	$campusForm = "GUNet e-Class";
+	$helpdeskForm = "+30 2xx xxxx xxx";
+	$faxForm = "";
+	$postaddressForm = "";
+	$institutionForm = "Ακαδημαϊκό Διαδίκτυο GUNet ";
+	$institutionUrlForm = "http://www.gunet.gr/";
 
 	$languageCourse = "greek";
 
@@ -128,6 +130,8 @@ if (isset($alreadyVisited)) {
             <input type=\"hidden\" name=\"helpdeskmail\" value=\"".@$helpdeskmail."\">
             <input type=\"hidden\" name=\"institutionForm\" value=\"$institutionForm\">
             <input type=\"hidden\" name=\"institutionUrlForm\" value=\"$institutionUrlForm\">
+            <input type=\"hidden\" name=\"faxForm\" value=\"".@$faxForm."\">
+            <input type=\"hidden\" name=\"postaddressForm\" value=\"".@$postaddressForm."\">
             <input type=\"hidden\" name=\"ldapserver\" value=\"".@$ldapserver."\">
             <input type=\"hidden\" name=\"dnldapserver\" value=\"".@$dnldapserver."\">
             <input type=\"hidden\" name=\"vodServer\" value=\"".@$vodServerForm."\">
@@ -345,6 +349,16 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
                         <tr>
                             <th>
                                 
+                                    ".$langHelpDeskFax."
+                                
+                            </th>
+                            <td>
+                                <input type=\"text\" size=\"40\" name=\"faxForm\" value=\"$faxForm\">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                
                                     ".$langHelpDeskEmail."
                                     <font color=\"red\">
                                         **
@@ -363,6 +377,26 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
                             </th>
                             <td>
                                 <input type=text size=40 name=\"institutionForm\" value=\"$institutionForm\">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                               
+                                    ".$langInstituteName."
+                                
+                            </th>
+                            <td>
+                                <input type=\"text\" size=\"40\" name=\"institutionUrlForm\" value=\"$institutionUrlForm\">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                               
+                                    ".$langInstitutePostAddress."
+                                
+                            </th>
+                            <td>
+                                <input type=text size=40 name=\"postaddressForm\" value=\"$postaddressForm\">
                             </td>
                         </tr>
                         <tr>
@@ -432,7 +466,7 @@ function set_video_input()
                         <tr>
                             <th>
                                 
-                                   MCU 
+                                   MCU (μονάδα ελέγχου για τηλεδιάσκεψη)
                                 
                             </th>
                             <td>
@@ -441,7 +475,7 @@ function set_MCU()
 	{
 		if(document.getElementById(\"MCU_check\").checked==true)
 		{
-			document.getElementById(\"MCU_div_text\").innerHTML='<font size=\"2\" face=\"arial, helvetica\">MCU</font><font color=\"red\">*</font>';
+			document.getElementById(\"MCU_div_text\").innerHTML='<font size=\"2\" face=\"arial, helvetica\">Διεύθυνση MCU</font><font color=\"red\">*</font>';
 			document.getElementById(\"MCU_div_input\").innerHTML='<input type=\"text\" size=\"20\" name=\"MCUForm\" value=\"$MCU\"><br>Πχ. rts.grnet.gr';
 		}
 		else{ document.getElementById(\"MCU_div_text\").innerHTML='';
@@ -535,11 +569,13 @@ elseif(isset($_REQUEST['install6']))
         <li>Όνομα Πανεπιστημιακού Ιδρύματος : $campusForm</li>
 
         <li>Τηλέφωνο Helpdesk : $helpdeskForm</li>
+        <li>Αριθμός Fax Helpdesk : $faxForm</li>
         <li>E-mail Helpdesk : $helpdeskmail</li>
         <li>Σύντομο όνομα του Ιδρύματος : $institutionForm</li>
         <li>URL του Ιδρύματος : $institutionUrlForm</li>
-         <li>LDAP εξυπηρέτης του Ιδρύματος : $ldapserver</li>
-        <li>Base dn του LDAP Εξυπηρέτη : $dnldapserver </li>
+        <li>Ταχ. διεύθυνση του Ιδρύματος : $postaddressForm</li>
+        <li>Εξυπηρετητής LDAP του Ιδρύματος : $ldapserver</li>
+        <li>Base DN του εξυπηρετητή LDAP : $dnldapserver </li>
 	<li>MCU: ".@$MCUForm." </li>
 	<li>Vod Server: ".@$vodServerForm." </li>
 	
@@ -1412,9 +1448,12 @@ $administratorSurname="'.$surnameForm.'";
 $siteName="'.$campusForm.'";
 
 $telephone="'.$helpdeskForm.'";
+$fax="'.$faxForm.'";
+
 $emailhelpdesk="'.$helpdeskmail.'";
 $Institution="'.$institutionForm.'";
 $InstitutionUrl="'.$institutionUrlForm.'";
+$postaddress="'.$postaddressForm.'";
 $color1="#F5F5F5"; // light grey
 $color2="#E6E6E6"; // less light grey for bicolored tables
 

@@ -41,10 +41,12 @@ $langAdminSurname		= "Επώνυμο Διαχειριστή";
 $langAdminLogin			= "Όνομα Χρήστη του Διαχειριστή";
 $langAdminPass			= "Συνθηματικό του Διαχειριστή";
 $langHelpDeskPhone		= "Τηλέφωνο Helpdesk";
+$langHelpDeskFax		= "Αριθμός Fax Helpdesk";
 $langHelpDeskEmail		= "Email Helpdesk";
 $langCampusName			= "Όνομα Πλατφόρμας";
-$langInstituteShortName = "Όνομα Ιδρύματος - Οργανισμού";
+$langInstituteShortName         = "Όνομα Ιδρύματος - Οργανισμού";
 $langInstituteName		= "Website Ιδρύματος - Οργανισμού";
+$langInstitutePostAddress       = "Ταχ. Διεύθυνση Ιδρύματος - Οργανισμού";
 
 $langWarnHelpDesk		= "Προσοχή: στο \"Email helpdesk\" στέλνονται οι αιτήσεις καθηγητών για λογαριασμό στην πλατφόρμα";
 
