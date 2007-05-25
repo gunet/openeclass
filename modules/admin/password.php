@@ -155,7 +155,7 @@ if(isset($msg))
 					<tr>
 						<td class=\"$type\">
 						$message<br>
-    <a href=\"../../index.php\">$urlText</a>
+    <a href=\"$urlServer\">$urlText</a>
 					</td>
 					</tr>
 				</tbody>

@@ -44,11 +44,7 @@ $navigation[]= array ("url"=>"../profile/profile.php", "name"=> $langModifProfil
 check_uid();
 $tool_content = "";
 
-if (!isset($urlSecure)) {
-	$passurl = $urlServer.'modules/profile/password.php';
-} else {
-	$passurl = $urlSecure.'modules/profile/password.php';
-}
+$passurl = $urlSecure.'modules/profile/password.php';
 
 if (isset($submit) && isset($changePass) && ($changePass == "do")) {
 
@@ -168,7 +164,7 @@ if(isset($msg))
 					<tr>
 						<td class=\"$type\">
 						$message<br>
-    <a href=\"../../index.php\">$urlText</a>
+    <a href=\"$urlServer\">$urlText</a>
 					</td>
 					</tr>
 				</tbody>

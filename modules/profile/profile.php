@@ -239,14 +239,8 @@ if ($userLang == "el") {
 }
 ##[END personalisation modification]############
 
-
-if (!isset($urlSecure)) {
-	$sec = $urlServer.'modules/profile/profile.php';
-	$passurl = $urlServer.'modules/profile/password.php';
-} else {
-	$sec = $urlSecure.'modules/profile/profile.php';
-	$passurl = $urlServer.'modules/profile/password.php';
-}
+$sec = $urlSecure.'modules/profile/profile.php';
+$passurl = $urlSecure.'modules/profile/password.php';
 
 if ((!isset($changePass)) || isset($_POST['submit'])) {
 

@@ -53,7 +53,7 @@ $u=$_SESSION['u_tmp'];
 // Initialise $tool_content
 $tool_content = "";
 
-$nameTools = $langEditUser."lala";
+$nameTools = $langEditUser;
 
 //$u = (string)isset($_GET['u'])?$_GET['u']:(isset($_POST['u'])?$_POST['u']:'');
 $u_submitted = isset($_POST['u_submitted'])?$_POST['u_submitted']:'';

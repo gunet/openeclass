@@ -160,6 +160,7 @@ if (mysql_num_rows($result) > 0) {
 			</tbody>
 		</table>";
 }
+
 $tool_content .= <<<lCont2
 </div>
 </div>
@@ -174,7 +175,7 @@ $tool_content .= <<<lCont2
       <tbody>
       	<tr class="odd">
       		<td>
-      			<form action="index.php" method="post">
+      			<form action="${urlSecure}index.php" method="post">
       		  $langUserName <br>
         			<input  name="uname" size="20"><br>
        			 $langPass <br>

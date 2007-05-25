@@ -117,7 +117,6 @@ $langError = "Προσοχή!";
 $langOk = "Εντάξει!";
 
 $langAddAdminInApache ="Προσθήκη Διαχειριστή";
-$langAddFaculties ="Προσθήκη σχολών / τμημάτων";
 $langRestoreCourse = "Ανάκτηση μαθήματος";
 
 $langServerStatus ="Κατάσταση του εξυπηρέτη Mysql : ";
@@ -294,6 +293,7 @@ $langStat = "Στατιστικά";
 $langNoUserList = "Δεν υπάρχουν αποτελέσματα πρός εμφάνιση";
 $langContactAdmin = "Αποστολή ενημερωτικού email στον Διαχειριστή";
 $langActivateAccount = "Παρακαλώ να ενεργοποιήσετε το λογαριασμό μου";
+$langLessonCode = "Κωδικός μαθήματος";
 
 // unregister
 $langConfirmDelete = "Επιβεβαίωση διαγραφής";

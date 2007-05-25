@@ -52,7 +52,7 @@ $langInfoMail = "Info email";
 $langProfReg = "Professor registration";
 $langProfOpen = "Professor open requests";
 $langUserOpen = "Students open requests";
-$langListFaculte = "Facult list / Actions";
+$langListFaculte = "Faculty list / Actions";
 $langPHPInfo = "PHP information";
 $langManuals = "Available Manuals";
 $langAdminManual = "Admin Manual";
@@ -129,11 +129,11 @@ $langNoChangeHappened = "No change performed!";
 
 // addfaculte.php
 $langFaculteCatalog = "Department Catalogue";
-$langFaculteDepartment = "Faculte / Department";
-$langFaculteDepartments = "Facultes / Departments";
+$langFaculteDepartment = "Faculty / Department";
+$langFaculteDepartments = "Faculties / Departments";
 $langManyExist = "Exist";
-$langReturnToAddFaculte = "Return to add faculte";
-$langFaculteAdd = "Add Faculte";
+$langReturnToAddFaculte = "Return to add faculty";
+$langFaculteAdd = "Add Faculty";
 $langAcceptChanges = "Confirm Changes";
 
 // addusertocours.php
@@ -268,6 +268,7 @@ $langStat = "Statistics";
 $langNoUserList = "No listing results";
 $langContactAdmin = "Send a message to the Administrator";
 $langActivateAccount = "Please activate my account";
+$langLessonCode = "Course code";
 
 // unregister
 $langConfirmDelete = "Delete Confirmation";
@@ -287,6 +288,7 @@ $langStudent2 = "Student";
 
 // other
 $langAddAdminInApache = "Add a user in the Admin Group";
+$langRestoreCourse = "Restore Course";
 
 // search
 $langSearchUsers = "Search Users";

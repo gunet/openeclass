@@ -121,6 +121,10 @@ if (!isset($webDir)) {
 	}
 }
 
+if (!isset($urlSecure)) {
+        $urlSecure = $urlServer;
+}
+
 //load the correct language (Author: Evelthon Prodromou)
 if (session_is_registered('langswitch')) {
 	$language 		= $_SESSION['langswitch'];
