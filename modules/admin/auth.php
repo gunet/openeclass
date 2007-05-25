@@ -39,8 +39,7 @@
 ==============================================================================
 */
 
-// LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-$langFiles = array('admin','about');
+$langFiles = array('admin','about','authmethods');
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include_once '../auth/auth.inc.php';
@@ -111,35 +110,26 @@ else
 
 $tool_content .= "</td></tr></table><br /><br />";
 
-	
-$tool_content .= "<table width=\"99%\">
-<tr><td>";
+$tool_content .= "<table width=\"99%\"><tr><td>";
 
-//$tool_content .= "<form name=\"authmenu\" method=\"post\" action=\"auth_process.php\">
 $tool_content .= $langChooseAuthMethod.":<br /><br />";
 
-//$tool_content .= "<input type=\"radio\" name=\"auth\" value=\"2\">POP3&nbsp;&nbsp;";
 $tool_content .= "POP3&nbsp;&nbsp;";
 $tool_content .= in_array("2",$auth_methods)? "<a href=\"auth.php?auth=2&active=no\">".$langAuthDeactivate."</a>":"<a href=\"auth.php?auth=2&active=yes\">".$langAuthActivate."</a>";
 $tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=2\">$langSettings</a>";
 $tool_content .= "<br />";
-//$tool_content .= "<input type=\"radio\" name=\"auth\" value=\"3\">IMAP&nbsp;&nbsp;";
 $tool_content .= "IMAP&nbsp;&nbsp;";
 $tool_content .= in_array("3",$auth_methods)? "<a href=\"auth.php?auth=3&active=no\">".$langAuthDeactivate."</a>":"<a href=\"auth.php?auth=3&active=yes\">".$langAuthActivate."</a>";
 $tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=3\">$langSettings</a>";
 $tool_content .= "<br />";
-//$tool_content .= "<input type=\"radio\" name=\"auth\" value=\"4\">LDAP&nbsp;&nbsp;";
 $tool_content .= "LDAP&nbsp;&nbsp;";
 $tool_content .= in_array("4",$auth_methods)? "<a href=\"auth.php?auth=4&active=no\">".$langAuthDeactivate."</a>":"<a href=\"auth.php?auth=4&active=yes\">".$langAuthActivate."</a>";
 $tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=4\">$langSettings</a>";
 $tool_content .= "<br />";
-//$tool_content .= "<input type=\"radio\" name=\"auth\" value=\"5\">EXTERNAL DB&nbsp;&nbsp;";
-$tool_content .= "EXTERNAL DB&nbsp;&nbsp;";
+$tool_content .= "External DB&nbsp;&nbsp;";
 $tool_content .= in_array("5",$auth_methods)? "<a href=\"auth.php?auth=5&active=no\">".$langAuthDeactivate."</a>":"<a href=\"auth.php?auth=5&active=yes\">".$langAuthActivate."</a>";
 $tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=5\">$langSettings</a>";
 $tool_content .= "<br />";
-//$tool_content .= "<br /><input type=\"submit\" name=\"submit\" value=\"$langNextStep\"><br />";
-//$tool_content .= "</form><br />";
 $tool_content .="<br /></td></tr></table>";
 
 draw($tool_content,3);

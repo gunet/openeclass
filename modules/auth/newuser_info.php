@@ -37,7 +37,7 @@
 ==============================================================================
 */
 
-$langFiles = array('registration','index');
+$langFiles = array('registration','index','authmethods');
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
 

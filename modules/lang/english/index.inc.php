@@ -84,10 +84,8 @@ $langInfo = "Platform <b>GUNet eClass</b> is a complete Courses Management Syste
 It is mainly designed to aid the classical way of  teaching and is adapted to th Greek Academic Educational System. It is an open platform technically supported by GUnet.
 More information about platform can be found in the available manuals.";
 
-$langWelcomeStud = "Welcome to the <b>GUNet eClass</b> platform.<br><br>
-                    Select \"Courses list\" to review the available courses.";
-$langWelcomeProf = "Welcome to the <b>GUNet eClass</b> platform.<br><br>
-                    Select \"Create course site\" to create your on-line courses.";
+$langWelcomeStud = "Select \"Courses list\" to review the available courses.";
+$langWelcomeProf = "Select \"Create course site\" to create your on-line courses.";
 
 
 ?>
