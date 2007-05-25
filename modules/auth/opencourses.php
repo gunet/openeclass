@@ -75,13 +75,13 @@ $icons = array(
 $tool_content .= "
             <table border=0' width=96% align=center cellspacing='0' cellpadding='0'>
             <tr>
-            <td align='left' style='border-top: 1px solid $table_border; border-right: 1px solid $table_border; border-left: 1px solid $table_border;' class='td_NewDir'>
-                <a name='top'>'$m[department]':</a>
+            <td align='left' style='border-top: 0px solid $table_border; border-right: 0px solid $table_border; border-left: 0px solid $table_border;' class='td_NewDir'>
+                <a name='top'>$m[department]:</a>
                 <b><em>$fac</em></b>
                 </td>
             </tr>
             <tr>
-            <td align=right valign='middle' class=td_NewDir style='border-bottom: 1px solid $table_border; border-right: 1px solid $table_border; border-left: 1px solid $table_border;' height=20>&nbsp;";
+            <td align=right valign='middle' class=td_NewDir style='border-bottom: 0px solid $table_border; border-right: 0px solid $table_border; border-left: 0px solid $table_border;' height=20>&nbsp;";
 
 // get the different course types available for this faculte
 $typesresult = mysql_query("SELECT DISTINCT cours.type types FROM cours WHERE cours.faculte = '$fac' ORDER BY cours.type");
@@ -91,7 +91,6 @@ $numoftypes = mysql_num_rows($typesresult);
 // output the nav bar only if we have more than 1 types of courses
 
 if ( $numoftypes > 1) {
-	//	$tool_content .= "<font class=\"courses\">";
 	$counter = 1;
 	$tool_content .= "<p>";
 	while ($typesArray = mysql_fetch_array($typesresult)) {
@@ -129,7 +128,7 @@ foreach (array("pre" => $m['pres'],
 			        FROM cours_faculte, cours
 			        WHERE cours.code = cours_faculte.code
 							      AND cours.type = '$type'
-                		AND cours_faculte.facid='$fc'
+   	             		AND cours_faculte.facid='$fc'
 		                ORDER BY cours.intitule, cours.titulaires");
 
 	if (mysql_num_rows($result) == 0) {
@@ -138,14 +137,15 @@ foreach (array("pre" => $m['pres'],
 
 $tool_content .= "<br><script type='text/javascript' src='sorttable.js'></script>
           <table width='100%' border=0 cellpadding='0' cellspacing='0' align=center>
-          <tr><td align=left class=kk><b><font color=#004571>";
+          <tr><th align=left style='background: #E6EDF5; color: #4F76A3;'><b>";
 
 	// We changed the style a bit here and we output types as the title
-$tool_content .= "<a name='$type'>$message</a></font></b></td>\n";
+$tool_content .= "<a name='$type'>$message</a></b></th>\n";
 
           // output a top href link if necessary
           if ( $numoftypes > 1)
-            $tool_content .= "<td align=\"right\" class=kk><a href=\"#top\" class='mainpage'>αρχή</a></td>";
+            $tool_content .= "<th align=\"right\" style='background: #E6EDF5; color: #4F76A3;'>
+								<a href=\"#top\" class='mainpage'>$m[begin]</a></th>";
           // or a space for beautifying reasons
           else
             $tool_content .= "<td class=kk align=\"right\">&nbsp;</td>";
@@ -158,7 +158,6 @@ $tool_content .= "<a name='$type'>$message</a></font></b></td>\n";
            $tool_content .= "<td class='td_small_HeaderRow' style=\"border: 1px solid $table_border\">$m[professor]</td>";
 					 $tool_content .= "<td class='td_small_HeaderRow' align='center' style=\"border: 1px solid $table_border\">Τύπος</td>";
 					 $tool_content .=" </tr>";
-
 
 		while ($mycours = mysql_fetch_array($result)) {
           // changed the variable because of the previous change in the select argument
@@ -175,7 +174,7 @@ $tool_content .= "<a name='$type'>$message</a></font></b></td>\n";
             $tool_content .= "<td width='5%' align='center' class=kkk>";
             // show the necessary access icon
                       foreach ($icons as $visible => $image) {
-                          if ($visible == $mycours['visible'] ) {
+                          if ($visible == $mycours['visible']) {
                               $tool_content .= $image;
                           }
                         }

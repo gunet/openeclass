@@ -30,29 +30,29 @@
 */
 
 $langFiles = 'opencours';
-//include('../../include/init.php');
 include '../../include/baseTheme.php';
 $nameTools = $listfac;
+
 $tool_content = "";
 
-$tool_content .= "<td width='75%' class=td_main valign='top'>
-            <div class='td_main_left'>";
+$tool_content .= "<div class='td_main_left'>";
 
 $result=mysql_query("SELECT id, name, code FROM faculte ORDER BY name");
-    $numrows = mysql_num_rows($result);
+$numrows = mysql_num_rows($result);
 
 if (isset($result))  {
 
-	$tool_content .= "<script type='text/javascript' src='sorttable.js'></script>
-            <table width='95%' class='sortable' id='t1' cellspacing='0' cellpadding='10' border='0' 
+$tool_content .= "<script type='text/javascript' src='sorttable.js'></script>
+        <table width='95%' class='sortable' id='t1' cellspacing='0' cellpadding='10' border='0' 
 				style='border: 1px solid $table_border'>
-        <tr>
-        	<td class=td_small_HeaderRow height=25><b>$m[department]</b></td>
-        </tr>";
+        <tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3;' height=25>
+					<b>$m[department]</b></th></tr>";
 
  while ($fac = mysql_fetch_array($result)) {
 	$tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#F1F1F1'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
-  $tool_content .= "<td class='kk' height=25>&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<a href='opencourses.php?fc=$fac[id]' class='mainpage'>$fac[name] </a> <small><font color=#4175B9>($fac[code]) </font></small>";
+  $tool_content .= "<td class='kk' height=25>&nbsp;<img src='../../images/arrow_blue.gif'>
+	&nbsp;<a href='opencourses.php?fc=$fac[id]' class='mainpage'>$fac[name] </a>
+	<small><font color=#4175B9>($fac[code])</font></small>";
 
      $n=mysql_query("SELECT COUNT(*) FROM cours_faculte WHERE faculte='$fac[name]'");
      $r=mysql_fetch_array($n);
@@ -65,7 +65,7 @@ if (isset($result))  {
       $tool_content .= "</table>";
   }
 
-$tool_content .= "</div></td></tr>";
+$tool_content .= "</div>";
 
 draw($tool_content, 0, 'auth');
 ?>
