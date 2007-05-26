@@ -350,7 +350,7 @@ color: #ffffff
 	background-color: #84b3fa;
 	color:#ffffff;
 	}
-#search p, form {
+#search p, #search form {
 	margin-top:5px;
 	margin-left: 10px;
 	margin-bottom:2px;
