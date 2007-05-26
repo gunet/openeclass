@@ -509,9 +509,9 @@ if ($is_adminOfCourse) {
 					}
 
 
-				}  elseif ($i ==  1) {//admin tools
+				}  elseif ($i ==  2) {//admin tools
 
-				} elseif ($i == 2){//inactive tools
+				} elseif ($i == 1){//inactive tools
 
 					//					if ($toolArr[$i][4][$j] > 100) {//if it's not a core tool give the ability to delete it
 					//						$deleteExternLink = $_SERVER['PHP_SELF'] . "?delete=" . $toolArr[$i][4][$j];
