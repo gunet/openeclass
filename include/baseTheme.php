@@ -126,9 +126,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 			if($toolArr[$i][0]['type'] == 'none') {
 				$t->set_var('ACTIVE_TOOLS', '');
-				$t->set_var('NAV_CSS_CAT_CLASS', 'category');
+				$t->set_var('NAV_CSS_CAT_CLASS', 'spacer');
 				$t->parse('leftNavCategoryTitle', 'leftNavCategoryTitleBlock',false);
-				$t->clear_var('leftNavCategoryTitle'); //clear inner block
+//				$t->clear_var('leftNavCategoryTitle'); //clear inner block
 			} elseif ($toolArr[$i][0]['type'] == 'split') {
 				$t->set_var('ACTIVE_TOOLS', '');
 				$t->set_var('NAV_CSS_CAT_CLASS', 'split');
