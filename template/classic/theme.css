@@ -295,6 +295,7 @@ color: #ffffff
 	padding:0 ;
 	borderXX:2px solid black;
 	margin-top:81px;
+	//margin-top:0px;
 }
 
 #content p, #sidebar p, #mainnav p, #header p,#footer p  {margin:2px 5px 5px 5px;}		
