@@ -526,9 +526,15 @@ function lessonToolsMenu(){
 	$sideMenuImg = array();
 	$sideMenuID = array();
 
+
 	$arrMenuType = array();
-	$arrMenuType['type'] = 'none';
-	$arrMenuType['text'] = 'none';
+	if ($is_adminOfCourse) {
+		$arrMenuType['type'] = 'text';
+		$arrMenuType['text'] = $langActiveTools;
+	} else  {
+		$arrMenuType['type'] = 'none';
+		$arrMenuType['text'] = 'none';
+	}
 	array_push($sideMenuSubGroup, $arrMenuType);
 	//	if($is_adminOfCourse) array_push($sideMenuSubGroup, $langActiveTools);
 	//	else array_push($sideMenuSubGroup, $langTools);
@@ -572,8 +578,8 @@ function lessonToolsMenu(){
 		$sideMenuID = array();
 
 		$arrMenuType = array();
-		$arrMenuType['type'] = 'split';
-		$arrMenuType['text'] = 'none';
+		$arrMenuType['type'] = 'text';
+		$arrMenuType['text'] = $langInactiveTools;
 		array_push($sideMenuSubGroup, $arrMenuType);
 		//		array_push($sideMenuSubGroup, $langInactiveTools);
 
