@@ -435,14 +435,10 @@ color: #ffffff
 	background-color: #afafaf;
 }
 
-#navcontainer li.category_off {
-	margin-top: 1px;
-	margin-left: 1px;
+#navcontainer li.spacer {
 	display: block;
-	padding: 3px;
+	height:8px;
 	width: 192px;
-	color:#FFFFFF;
-	background-color: #a2a2a3;
 }
 
 #navcontainer li.toolAdmin {
