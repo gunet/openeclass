@@ -117,7 +117,7 @@ $langError = "Προσοχή!";
 $langOk = "Εντάξει!";
 
 $langAddAdminInApache ="Προσθήκη Διαχειριστή";
-$langRestoreCourse = "Ανάκτηση μαθήματος";
+$langRestoreCourse = "Ανάκτηση Μαθήματος";
 
 $langServerStatus ="Κατάσταση του εξυπηρέτη Mysql : ";
 $langDataBase = "Βάση δεδομένων ";
@@ -267,7 +267,7 @@ $langldap_bind_dn = "Ορίσματα για LDAP binding";
 $langldap_bind_user = "Username για LDAP binding";
 $langldap_bind_pw = "Password για LDAP binding";
 $langUserAuthentication = "Πιστοποίηση Χρηστών";
-$langSearchCourses = "Αναζήτηση μαθημάτων";
+$langSearchCourses = "Αναζήτηση Μαθημάτων";
 $langSettings = "Ρυθμίσεις";
 $langActSuccess = "Μόλις ενεργοποιήσατε την ";
 $langDeactSuccess = "Μόλις απενεργοποιήσατε την ";
