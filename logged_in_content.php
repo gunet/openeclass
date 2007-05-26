@@ -25,18 +25,18 @@
 
 /**
  * Logged In Component
- * 
+ *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * 
- * @abstract This component creates the content of the start page when the 
+ *
+ * @abstract This component creates the content of the start page when the
  * user is logged in
- * 
+ *
  */
 
 
-$tool_content .= "<table cellpadding='4' width='100%' border='0' cellspacing='0'>";
-$result2 = mysql_query("SELECT cours.code k, cours.fake_code c, 
+$tool_content .= "<table cellpadding='4' width='99%' border='0' cellspacing='0'>";
+$result2 = mysql_query("SELECT cours.code k, cours.fake_code c,
 								cours.intitule i, cours.titulaires t, cours_user.statut s
 								FROM cours, cours_user WHERE cours.code=cours_user.code_cours AND cours_user.user_id='".$uid."'
 								AND (cours_user.statut='5' OR cours_user.statut='10')");
@@ -60,7 +60,7 @@ while ($mycours = mysql_fetch_array($result2)) {
          $tool_content .= "<td height=25 style='border: 2px solid #FFFFFF;'>
                 <a href='${urlServer}courses/$mycours[k]' class=CourseLink>$mycours[i]</a>
                 <span class='explanationtext'><font color=#4175B9> ($mycours[c]) </font></span>
-                </td><td style='border: 2px solid #FFFFFF;'><span class='explanationtext'>$mycours[t]</span></td> 
+                </td><td style='border: 2px solid #FFFFFF;'><span class='explanationtext'>$mycours[t]</span></td>
                 <td style='border: 2px solid #FFFFFF;' align=center><a href='${urlServer}modules/unreguser/unregcours.php?cid=$mycours[c]&u=$uid'>
 								<img src='template/classic/img/cunregister.gif' border='0' title='$langUnregCourse'></a></td>
                 </tr>";
@@ -73,7 +73,7 @@ while ($mycours = mysql_fetch_array($result2)) {
 } // end of if (if we are student)
 
 // second case check in which courses are registered as a professeror
-     $result2 = mysql_query("SELECT cours.code k, cours.fake_code c, cours.intitule i, cours.titulaires t, cours_user.statut s FROM cours, cours_user WHERE cours.code=cours_user.code_cours 
+     $result2 = mysql_query("SELECT cours.code k, cours.fake_code c, cours.intitule i, cours.titulaires t, cours_user.statut s FROM cours, cours_user WHERE cours.code=cours_user.code_cours
 				AND cours_user.user_id='".$uid."' AND cours_user.statut='1'");
         if (mysql_num_rows($result2) > 0) {
          $tool_content .= "<tr><td><br>
