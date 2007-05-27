@@ -39,24 +39,11 @@ a:active, a:visited, a:link{
 	text-align: left;
 }
 
-#tool_operationsS {
-	width:99%;
-	margin-bottom:40px;
-}
-
-#tool_operationsS .operation{
-	margin-right:2px;
-	font-size:12px;
-}
-
-#tool_operationsS a{
-	margin-right:2px;
-}
-
 #tool_content li { 
 	list-style-type: square; 
 	font-size: 12px;	
 }
+
 #operations_container {
 margin-bottom: 0.5em;
 overflow: hidden;
@@ -71,12 +58,41 @@ padding: 0;
 
 #opslist li
 {
-border-left: 1px solid #000;
-float: left;
-line-height: 1.1em;
-margin: 0 .5em 0 -.5em;
-padding: 0 .5em 0 .5em;
+display: inline;
+padding: 0;
+margin: 0;
 }
+
+#opslist li:before { content: " | "; }
+#opslist li:first-child:before { content: ""; }
+
+/*IE workaround*/
+/*All IE browsers*/
+* html #opslist li
+{
+border-left: 1px solid black;
+padding: 0 0.4em 0 0.4em;
+margin: 0 0.4em 0 -0.4em;
+}
+/*IE7 only*/
+html>body #opslist li {
+*border-left: 1px solid black;
+*padding: 0 0.4em 0 0.4em;
+*margin: 0 0.4em 0 -0.4em;
+}
+
+/*Win IE browsers - hide from Mac IE\*/
+* html #opslist { height: 1%; }
+
+* html #opslist li
+{
+display: block;
+float: left;
+}
+/*End hide*/
+
+/*Mac IE 5*/
+* html #opslist li:first-child { border-left: 0; }
 
 table, th, td {
 	border: 1px solid #a2a2a3;
