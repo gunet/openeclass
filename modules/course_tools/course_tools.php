@@ -34,7 +34,7 @@
  * 1. Activate/De-activate tools
  * 2. Upload external html page
  * 3. Add external links
- * 4. Delete the last two when inactive
+ * 4. Delete the last two
  *
  */
 
