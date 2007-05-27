@@ -290,6 +290,7 @@ if(!empty($submit))
 		session_register('statut');
 		session_register('is_admin');
 		$_SESSION['uid'] = $uid;
+		
 		mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action)
                 VALUES ('', '".$uid."', '".$REMOTE_ADDR."', NOW(), 'LOGIN')");
 
@@ -306,12 +307,13 @@ if(!empty($submit))
 	//check user language preferences
 	if (isset($userLanguage) && $userLanguage == "en") {
 		$_SESSION['langswitch'] = "english";
-		$_SESSION['langLinkText'] = "Greek";
-		$_SESSION['langLinkURL'] = "?localize=el";
+		$langChangeLang = $_SESSION['langLinkText'] = "Ελληνικά";
+		$switchLangURL = $_SESSION['langLinkURL'] = "?localize=el";
+		
 	} elseif(isset($userLanguage) && $userLanguage == "el") {
 		$_SESSION['langswitch'] = "greek";
-		$_SESSION['langLinkText'] = "Αγγλικά";
-		$_SESSION['langLinkURL'] = "?localize=en";
+		$langChangeLang = $_SESSION['langLinkText'] = "English";
+		$switchLangURL = $_SESSION['langLinkURL'] = "?localize=en";
 	}
 	if(session_is_registered('langswitch')) {
 		$language = $_SESSION['langswitch'];

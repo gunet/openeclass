@@ -92,14 +92,14 @@ if (isset($localize)) {
 		case "en":
 			
 			$_SESSION['langswitch'] = "english";
-			$_SESSION['langLinkText'] = 'Greek';
+			$_SESSION['langLinkText'] = 'Ελληνικά';
 			$_SESSION['langLinkURL'] = "?localize=el";
 			break;
 
 		case "el":
 			
 			$_SESSION['langswitch'] = "greek";
-			$_SESSION['langLinkText'] = 'Αγγλικά';
+			$_SESSION['langLinkText'] = 'English';
 			$_SESSION['langLinkURL'] = "?localize=en";
 			break;
 
@@ -140,6 +140,7 @@ mysql_select_db($mysqlMainDb, $db);
 //if the user is logged in, get this preferred language set in his
 //profile (Author: Evelthon Prodromou)
 if(session_is_registered('uid') && !session_is_registered('langswitch')) {
+	
 	$sqlLang= "SELECT lang
                 FROM user 
                 WHERE user_id='".$_SESSION['uid']."'";
@@ -147,11 +148,11 @@ if(session_is_registered('uid') && !session_is_registered('langswitch')) {
 	while ($myrow = mysql_fetch_array($result)) {
 		if ($myrow[0]== "el") {
 			$language = "greek";
-			$_SESSION['langLinkText'] = "Αγγλικά";
+			$_SESSION['langLinkText'] = "English";
 			$_SESSION['langLinkURL'] = "?localize=en";
 		} else {
 			$language = "english";
-			$_SESSION['langLinkText'] = "Greek";
+			$_SESSION['langLinkText'] = "Ελληνικά";
 			$_SESSION['langLinkURL'] = "?localize=el";
 		}
 	}
