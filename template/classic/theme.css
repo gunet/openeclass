@@ -267,6 +267,7 @@ color: #ffffff
 #fbar_info .langSwitch {
 	clear:right;
 	margin-top:2.4em;
+	//margin-top:1.2em;
 	margin-right:0.2em;
 	font-family: Verdana, Arial, sans-serif;
 	font-size:11px;
