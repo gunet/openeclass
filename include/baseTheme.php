@@ -200,7 +200,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		//if user is logged in display the logout option
 		if (session_is_registered('uid')) {
 			$t->set_var('LANG_LOGOUT', $langLogout);
-			$t->set_var('LOGOUT_CLASS_ICON', 'logout_icon');
+//			$t->set_var('LOGOUT_CLASS_ICON', 'logout_icon');
 		}
 
 		//set the text and icon on the third bar (header)
@@ -246,17 +246,15 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			if (session_is_registered('langswitch')) {
 				$t->set_var('LANG_LOCALIZE',  $langChangeLang);
 				$t->set_var('LOCALIZE_LINK',  $switchLangURL);
+
 			} else {
 				$t->set_var('LANG_LOCALIZE',  'English');
 				$t->set_var('LOCALIZE_LINK',  '?localize=en');
+				
 			}
 		} else {
 			$t->set_var('LANG_LOCALIZE',  '');
-		}
-
-		if ($menuTypeID !=2) {
-			$t->set_var('INV1',  '<!--');
-			$t->set_var('INV2',  '-->');
+			$t->set_var('LOCALIZE_LINK',  '');
 		}
 
 		//START breadcrumb AND page title
