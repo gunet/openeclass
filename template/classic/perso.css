@@ -1,7 +1,4 @@
 html,body {
-	margin: 0;
-	padding: 0;
-	font-family: Verdana, Arial, sans-serif;
 	background-image: none;
 }
 
@@ -10,6 +7,7 @@ html,body {
 	padding:0 ;
 	border-top: 1px solid #ff9900;
 	margin-top:81px;
+	//margin-top:0px;
 }
 
 #leftnav_perso {
