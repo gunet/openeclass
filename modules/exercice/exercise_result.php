@@ -59,8 +59,6 @@ include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
 
-//session_start();
-
 // answer types
 define('UNIQUE_ANSWER',	1);
 define('MULTIPLE_ANSWER', 2);
@@ -91,10 +89,8 @@ if (!setcookie("marvelous_cookie", "", time() - 3600, "/")) {
 }
 if (!setcookie("marvelous_cookie_control", "", time() - 3600, "/")) {
 	header('Location: exercise_redirect.php');
-	//print_r($_COOKIE);
 	exit();
 }
-//begin_page($nameTools);
 
 // latex support
 include_once "$webDir"."/modules/latexrender/latex.php";
@@ -436,9 +432,7 @@ cData;
 
 		$totalWeighting+=$questionWeighting;
 	}	// end foreach()
-?>
 
-<?
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -461,7 +455,8 @@ if (!$exerciseTimeConstrain) {
 	$exerciseTimeConstrain = (7 * 24 * 60 * 60);
 }
 $OnTime = $RecordStartTime_temp + $exerciseTimeConstrain - $SubmitDate;
-if ($OnTime > 0) { // exercise time limit hasn't expired
+
+if (($OnTime > 0 or $is_adminOfCourse)) { // exercise time limit hasn't expired
 	$sql="SELECT eurid FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
 	$result = mysql_query($sql);
 	$row=mysql_fetch_array($result);
@@ -471,8 +466,6 @@ if ($OnTime > 0) { // exercise time limit hasn't expired
 	$sql="UPDATE `exercise_user_record` SET RecordEndDate='$RecordEndDate',TotalScore='$totalScore', TotalWeighting='$totalWeighting', attempt='$attempt' WHERE eurid='$eurid'";
 	db_query($sql,$currentCourseID);
 } else {  // not allowed begin again
-	//header('Location: exercise_redirect.php');
-	//exit();
 	// if the object is not in the session
 	if(!session_is_registered('objExercise')) {
 		// construction of Exercise
