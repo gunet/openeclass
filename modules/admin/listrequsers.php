@@ -49,7 +49,7 @@ function confirmation() {
 // Initialise $tool_content
 $tool_content = "";
 
-$tool_content .= "<table width=100% border='0' cellspacing='0' align=center cellpadding='0'>\n";
+$tool_content .= "<table width=99% border='0' cellspacing='0' align=center cellpadding='0'>\n";
 $tool_content .= "<tr>\n";
 $tool_content .= "<td valign=top>\n";
 
