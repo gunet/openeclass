@@ -34,6 +34,11 @@
  $langPersonalStats="My statistics";
  $langUserLogins="User visits";
 
+ $langProf = "Professors";
+ $langGuest = "Guests";
+ $langStudents = "Students";
+ $langOther = "Other";
+
  $langStartDate = "Start Date";
  $langEndDate = "End Date";
  $langUser = "User";

@@ -78,7 +78,7 @@ $langCourses = "courses";
 $langFound = "Found";
 
 // Stat
-$langSince = "Since";
+$langStat4eClass = "Platform Statistics";
 $langNbProf = "Number of professors";
 $langNbStudents = "Number of students";
 $langNbVisitors = "Number of visitors";
@@ -87,7 +87,7 @@ $langNbCourses = "Number of courses";
 $langToday   ="Today";
 $langLast7Days ="Last 7 days";
 $langLast30Days ="Last 30 days";
-$langProf = "Professors";
+
 $langNbUsers = "Number of users";
 $langCoursVisible = "Visibility";
 $langCoursType = "Type";
@@ -98,13 +98,28 @@ $langCoursesPerVis= "Number of courses with regard to visibility";
 $langCoursesPerType= "Number of courses per type";
 $langUsersPerCourse= "Number of users per course";
 $langErrors = "Errors:";
-$langMultEnrol = "Multiple user registrations";
-$langMultEmail= "Multiple use of the same e-mail address";
-$langMultLoginPass = "Multiple use of couple LOGIN - PASS";
-$langError = "Attention!";
 $langOk = "Ok!";
 $langActions = "Actions";
 $langNbAnnoucement = "Number of announcements";
+$langStatCour = "Course statistics";
+$langCourses = "Courses";
+$langNumCourses = "Number of courses";
+$langNumEachCourse = "Courses per faculty";
+$langNumEachLang = "Courses per language";
+$langNunEachAccess = "Courses per access type";
+$langNumEachCat = "Courses per course type";
+$langAnnouncements = "Announcements";
+$langNumEachRec = "Records pre course";
+$langFrom = "From";
+$langNotExist = "doesn't Exist !";
+$langExist = "Exist !";
+$langResult = "Result";
+$langMultiplePairs = "Multiple use of couple";
+$langMultipleAddr = "Multiple use of the same";
+$langMultipleUsers = "Multiple user registrations";
+$langAlert = "Attention ";
+$langNumUsers = "Number of users";
+$langNumGuest = "Number of Guests";
 
 $langQuotaAdmin = "Quota Admin";
 $langQuotaSuccess = "Quota modified";
@@ -313,4 +328,6 @@ $langAdminAnnCommEn = "Comment";
 $langAdminAnnTitleGr = "Title (in greek) ";
 $langAdminAnnBodyGr = "Announcement (in greek)";
 $langAdminAnnCommGr = "Comment (in greek)";
+
+$langBackAdmin = "Back to admin page";
 ?>

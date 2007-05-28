@@ -45,15 +45,14 @@ $require_admin = TRUE;
 include '../../include/baseTheme.php';
 
 // Define $nameTools
-$langStat4Claroline = "Στατιστικά πλατφόρμας";
-$nameTools = $langPlatformGenStats;
+$nameTools = $langStat4eClass;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 // Initialise $tool_content
 $tool_content = "";
 
 /*****************************************************************************
-        MAIN BODY
+        general statistics
 ******************************************************************************/
 $tool_content .=  "<a href='statClaro.php'>".$langPlatformGenStats."</a> <br> ".
                 "<a href='platformStats.php?first='>".$langVisitsStats."</a> <br> ".
@@ -74,8 +73,8 @@ $tool_content .= "<td valign=top>
  <table border='0' width=100% align=center cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
     <tr><td class='stat1' colspan='3'>$langNbLogin</td></tr>
    <tr>
-  <td class='stat2'>".list_1Result("select loginout.when from loginout order by loginout.when limit 1").": </td>
-<td class='stat2' align=right width='25%'><b>".
+  <td class='stat2'>$langFrom ".list_1Result("select loginout.when from loginout order by loginout.when limit 1").": </td>
+	<td class='stat2' align=right width='25%'><b>".
 list_1Result("select count(*) from loginout where loginout.action ='LOGIN'")."</b></td></tr>
  <tr><td class='stat2'>$langLast30Days :</td><td class='stat2' align=right><b>
 ".list_1Result("select count(*) from loginout where action ='LOGIN' and (loginout.when > DATE_SUB(CURDATE(),INTERVAL 30 DAY))")."</b></td></tr>
@@ -88,7 +87,7 @@ list_1Result("select count(*) from loginout where loginout.action ='LOGIN'")."</
 </td><td width=2%>&nbsp;</td>";
 
 $tool_content .= "<td valign=top width=49%><table border='0' width=100% align=center cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
- <tr><td class='stat1' colspan='3'>Αριθμοί συμμετεχόντων στην πλατφόρμα</td></tr>
+ <tr><td class='stat1' colspan='3'>$langNumUsers</td></tr>
  <tr>
  <td class='stat2'>$langNbProf :</td><td class='stat2' align=right width='25%'>
 <b>".list_1Result("select count(*) from user where statut = 1;")."</b></td>
@@ -96,17 +95,15 @@ $tool_content .= "<td valign=top width=49%><table border='0' width=100% align=ce
   <tr>
   <td class='stat2'>$langNbStudents :</td><td class='stat2' align=right><b>
 ".list_1Result("select count(*) from user where statut = 5;")."</b></td></tr>
- <tr><td class='stat2'>Αριθμός επισκέπτων :</td><td class='stat2' align=right>
+ <tr><td class='stat2'>$langNumGuest :</td><td class='stat2' align=right>
 <b>".list_1Result("select count(*) from user where statut = 10;")."</b></td></tr>
-  <tr><td class='stat2' colspan=3>&nbsp;</td></tr>
-  </table>
-    </td></tr></table>";
-
+  <tr><td class='stat2' colspan=3>&nbsp;</td></tr></table>
+  </td></tr></table>";
 
           
 // Constract some tables with statistical information
 $tool_content .= "<table border='0' width=90% align=center cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
- <tr><td class='stat1' colspan='2'><caption>Ποσοτικά στοιχεία μαθημάτων</caption></td>
+ <tr><td class='stat1' colspan='2'>$langStatCour</td>
  </tr>
    <tr><td class='stat2'>&nbsp;</td></tr>
      <tr>
@@ -114,31 +111,31 @@ $tool_content .= "<table border='0' width=90% align=center cellspacing='0' cellp
         <table width=100% align=center border=0 cellspacing='0' cellpadding='0'>
         <tr><td valign=top width=49% align=center>
      <table border='0' width='75%' border=1 align=center cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
-      <tr><td class='color2'>Μαθήματα:</td></tr>
+      <tr><td  style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langCourses :</td></tr>
      <tr>
-      <td class='stat2'>Αριθμός μαθημάτων : <b>".list_1Result("select count(*) from cours;")."</b></td>
+      <td class='stat2'>$langNumCourses : <b>".list_1Result("select count(*) from cours;")."</b></td>
     </tr></table>
 
       <br>
     <table border='0' width='75%' border=1 align=center cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
-     <tr><td class='color2'>Αριθμός μαθημάτων ανά τμήμα:</td></tr>
+     <tr><td  style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langNumEachCourse :</td></tr>
     <tr>
-   <td class='stat2'>".tablize(list_ManyResult("select DISTINCT faculte, count(*) from cours Group by faculte "), $language)."</td>
+   <td class='stat2'>".tablize(list_ManyResult("select DISTINCT faculte, count(*) from cours Group by faculte"), $language)."</td>
        </tr>
        </table>";
 
 $tool_content .= "<br><table border='0' align=center width='75%' cellspacing='0' cellpadding='1' style='border: 1px solid  $table_border'>
-    <tr><td class='color2'>Αριθμός μαθημάτων ανά γλώσσα:</td></tr>
+    <tr><td style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langNumEachLang :</td></tr>
   <tr>
   <td class='stat2'>".tablize(list_ManyResult("select DISTINCT languageCourse, count(*) from cours Group by languageCourse "), $language)."</td></tr></table>
  <br>
 
   <table border='0' align=center width='75%' cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
    <tr>
-   <td class='color2'>Αριθμός μαθημάτων ανά τύπο πρόσβασης:</td>
+   <td  style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langNunEachAccess :</td>
     </tr>
       <tr>
-  <td class='stat2'>".tablize(list_ManyResult("select DISTINCT visible, count(*) from cours Group by visible "), $language)."</td>
+  <td class='stat2'>".tablize(list_ManyResult("select DISTINCT visible, count(*) from cours GROUP BY visible "), $language)."</td>
         </tr>
         </table>
 
@@ -146,15 +143,15 @@ $tool_content .= "<br><table border='0' align=center width='75%' cellspacing='0'
 
   <table border='0' align=center width='75%' cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
         <tr>
-          <td class='color2'>Αριθμός μαθημάτων ανά τύπο μαθημάτων:</td>
+          <td style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langNumEachCat :</td>
         </tr>
         <tr>
- <td class='stat2'>".tablize(list_ManyResult("select DISTINCT type, count(*) from cours Group by type"),$language)."</td></tr>
+ <td class='stat2'>".tablize(list_ManyResult("select DISTINCT type, count(*) from cours GROUP BY type"),$language)."</td></tr>
         </table>";
 
 
-$tool_content .= "<table border='0' width='75%' border=1 align=center cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
-   <tr><td class='color2'>Ανακοινώσεις:</td></tr>
+$tool_content .= "<table width='75%' border=1 align=center cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
+   <tr><td style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langAnnouncements :</td></tr>
    <tr>
   <td class='stat2'>$langNbAnnoucement :<b>".list_1Result("select count(*) from annonces;")."</b></td>
         </tr>
@@ -165,11 +162,11 @@ $tool_content .= "<table border='0' width='75%' border=1 align=center cellspacin
 
  <table border='0' align=center width='75%' cellspacing='0' cellpadding='1' style='border: 1px solid  $table_border'>
         <tr>
-          <td class='color2' colspan='2'>Αριθμός εγγραφών ανά μάθημα:</td>
+          <td style='background: #E6EDF5; color: #4F76A3; font-size: 90%' colspan='2'>$langNumEachRec :</td>
         </tr>
         <tr>
- <td class='stat2'>".tablize(list_ManyResult("select CONCAT(code_cours,\" Statut :\",statut), count(user_id) from cours_user 
-									Group by code_cours, statut order by code_cours"), $language)."</td>
+ <td class='stat2'>".tablize(list_ManyResult("select CONCAT(code_cours,\" Statut :\",statut), count(user_id) 
+				from cours_user GROUP BY code_cours, statut order by code_cours"), $language)."</td>
         </tr></table>
 </td></tr></table>";
 
@@ -177,21 +174,17 @@ $tool_content .= "<table border='0' width='75%' border=1 align=center cellspacin
 $tool_content .= " </td></tr>
 <tr><td class='stat2'>&nbsp;</td></tr></table>";
 
-
-
-$tool_content .=" <table border='0' width=90% align=center cellspacing='0' cellpadding='1' style='border: 1px solid $table_border
-     <tr>
-    <td class=stat1 width=80%><b>Σημεία Προσοχής !</b></td>
-    </tr>
+$tool_content .= "<table width=90% align=center cellspacing='0' cellpadding='1' style='border: 1px solid $table_border' > 
+	<tr><td class=stat1 width=80%><b>$langAlert !</b></td></tr>
     <tr><td>
  <table border='0' width=100% align=center cellspacing='0' cellpadding='1'  style='border: 1px solid $table_border'>";
 
-$sqlLoginDouble = "select DISTINCT username, count(*) as nb from user group by username HAVING nb > 1 order by nbdesc ";
+$sqlLoginDouble = "select DISTINCT username, count(*) as nb from user group by username HAVING nb > 1 order by nb desc";
 $loginDouble = list_ManyResult($sqlLoginDouble);
 
-
-$tool_content .= "<tr><td class=stat2 width=80%><strong>Πολλαπλές εγγραφές χρηστών:</strong><br>
-<span class='explanationtext'>(".$sqlLoginDouble.")</span></td><td class=color2 align=center><strong>Αποτέλεσμα</strong></td>
+$tool_content .= "<tr><td class=stat2 width=80%><strong>$langMultipleUsers :</strong><br>
+<span class='explanationtext'>(".$sqlLoginDouble.")</span></td>
+<td class=color2 align=center><strong>$langResult</strong></td>
     </tr>
     <tr><td class=stat2>";
 
@@ -209,9 +202,9 @@ $loginDouble = list_ManyResult($sqlLoginDouble);
 
 $tool_content .= "<tr><td><table border='0' width=100% align=center cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
      <tr>
-       <td class='stat2' width=80%><strong>Πολλαπλές εμφανίσεις διευθύνσεων e-mail:</strong>
+       <td class='stat2' width=80%><strong>$langMultipleAddr e-mail:</strong>
        <br><span class='explanationtext'>(".$sqlLoginDouble.")</span></td>
-       <td class=color2 align=center><strong>Αποτέλεσμα</strong></td>
+       <td class=color2 align=center><strong>$langResult</strong></td>
      </tr>
      <tr>
        <td class=stat2>";
@@ -224,11 +217,10 @@ if (count($loginDouble) > 0) {
 else
 {
  $tool_content .=  "</td><td class=color2 align=center>";
-	$tool_content .=  ok_message();
+ $tool_content .=  ok_message();
 }
 $tool_content .= "</td></tr></table>";
 $tool_content .=  "</td></tr>";
-
 
 $sqlLoginDouble = "select DISTINCT CONCAT(username, \" -- \", password) as paire, count(*) as nb from user group by paire 
 					HAVING nb > 1 order by nb desc";
@@ -237,9 +229,9 @@ $loginDouble = list_ManyResult($sqlLoginDouble);
 $tool_content .= "<tr><td>
  <table border='0' width=100% align=center cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
    <tr>
-    <td class='stat2' width=80%><strong>Πολλαπλά ζεύγη LOGIN - PASS</strong>
+    <td class='stat2' width=80%><strong>$langMultiplePairs LOGIN - PASS</strong>
      <br><span class='explanationtext'>(".$sqlLoginDouble.")</td>
-      <td class='color2' align=center><strong>Αποτέλεσμα</strong></td>
+      <td class='color2' align=center><strong>$langResult</strong></td>
     </tr>
     <tr><td class=stat2>";
 
@@ -282,18 +274,18 @@ function tablize($tableau, $lang) {
 				case '0': $key = $langHiddens; break;
 				case '1'; $key = $langVis_enrols; break;
 				case '2': $key = $langVisibles; break;
-				case '5': $key = 'Φοιτητές'; break;
-				case '10': $key = 'Επισκέπτες'; break;
+				case '5': $key = $langStudents; break;
+				case '10': $key = $langGuest; break;
 				case 'pre': $key = $langPre; break;
 				case 'post': $key = $langPost; break;
-				case 'other': $key = 'Άλλο'; break;
+				case 'other': $key = $langOther; break;
 				case 'english': $key = $langEnglish; break;
 				case 'greek': $key = $langGreek; break;
 			}
-			if (strpos($key, 'Statut :10')) $key = substr_replace($key, 'Επισκέπτες', strlen($key)-10);
-			if (strpos($key, 'Statut :1')) $key = substr_replace($key, 'Καθηγητές', strlen($key)-9);
-			if (strpos($key, 'Statut :5')) $key = substr_replace($key, 'Φοιτητές', strlen($key)-9);
-			$ret .= "<td bgcolor=\"#e6e6e6\">".$key."</td>";
+			if (strpos($key, 'Statut :10')) $key = substr_replace($key, $langGuest, strlen($key)-10);
+			if (strpos($key, 'Statut :1')) $key = substr_replace($key, $langProf, strlen($key)-9);
+			if (strpos($key, 'Statut :5')) $key = substr_replace($key, $langStudents, strlen($key)-9);
+			$ret .= "<td bgcolor=\"#e6e6e6\" style=\"font-size: 90%\">".$key."</td>";
 			$ret .= "<td bgcolor=\"#f5f5f5\"><strong>".$laValeur."</strong></td>";
 			$ret .= "</tr>";
 		}
@@ -303,16 +295,22 @@ function tablize($tableau, $lang) {
 }
 
 function ok_message() {
-	return " <b><span style=\"color: #00FF00\">Δεν υπάρχουν!</span></b>";
+
+	global $langNotExist;
+
+	return " <b><span style=\"color: #00FF00\">$langNotExist</span></b>";
 }
 
 function error_message() {
-	return " <b><span style=\"color: #FF0000\">Υπάρχουν!</span></b>";
+	global $langExist;
+
+	return " <b><span style=\"color: #FF0000\">$langExist</span></b>";
 } 
 
 
 function list_1Result($sql) {
 	global $db;
+
 	$res = mysql_query($sql ,$db);
 	$res = mysql_fetch_array($res);
 	return $res[0];
@@ -322,7 +320,7 @@ function list_ManyResult($sql) {
 	global $db;
 	$resu=array();
 
-	$res = mysql_query($sql ,$db);
+	$res =db_query($sql ,$db);
 	while ($resA = mysql_fetch_array($res))
 	{ 
 		$resu[$resA[0]]=$resA[1];

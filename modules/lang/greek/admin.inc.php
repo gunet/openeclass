@@ -85,7 +85,7 @@ $langAfterLastLogin = "Μετά την τελευταία σας είσοδο έχουν εγγραφεί στην πλατφόρ
 $langOtherActions = "Άλλες Ενέργειες";
 
 // Stat
-$langSince = "Από ";
+$langStat4eClass = "Στατιστικά πλατφόρμας";
 $langNbProf = "Αριθμός καθηγητών";
 $langNbStudents = "Αριθμός φοιτητών";
 $langNbLogin = "Αριθμός εισόδων";
@@ -115,9 +115,27 @@ $langMultEmail= "Πολλαπλές εμφανίσεις διευθύνσεων e-mail";
 $langMultLoginPass = "Πολλαπλά ζεύγη LOGIN - PASS";
 $langError = "Προσοχή!";
 $langOk = "Εντάξει!";
-
+$langNumUsers = "Αριθμός συμμετεχόντων στην πλατφόρμα";
+$langNumGuest = "Αριθμός επισκεπτών";
 $langAddAdminInApache ="Προσθήκη Διαχειριστή";
 $langRestoreCourse = "Ανάκτηση Μαθήματος";
+$langStatCour = "Ποσοτικά στοιχεία μαθημάτων";
+$langCourses = "Μαθήματα";
+$langNumCourses = "Αριθμός μαθημάτων";
+$langNumEachCourse = "Αριθμός μαθημάτων ανά τμήμα";
+$langNumEachLang = "Αριθμός μαθημάτων ανά γλώσσα";
+$langNunEachAccess = "Αριθμός μαθημάτων ανά τύπο πρόσβασης";
+$langNumEachCat = "Αριθμός μαθημάτων ανά τύπο μαθημάτων";
+$langAnnouncements = "Ανακοινώσεις";
+$langNumEachRec = "Αριθμός εγγραφών ανά μάθημα";
+$langFrom = "Από";
+$langNotExist = "Δεν υπάρχουν!";
+$langExist = "Υπάρχουν!";
+$langResult =" Αποτέλεσμα";
+$langMultiplePairs = "Πολλαπλά ζεύγη";
+$langMultipleAddr = "Πολλαπλές εμφανίσεις διευθύνσεων";
+$langMultipleUsers = "Πολλαπλές εγγραφές χρηστών";
+$langAlert = "Σημεία Προσοχής";
 
 $langServerStatus ="Κατάσταση του εξυπηρέτη Mysql : ";
 $langDataBase = "Βάση δεδομένων ";

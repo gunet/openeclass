@@ -461,7 +461,6 @@ if (!$exerciseTimeConstrain) {
 	$exerciseTimeConstrain = (7 * 24 * 60 * 60);
 }
 $OnTime = $RecordStartTime_temp + $exerciseTimeConstrain - $SubmitDate;
-//echo $OnTime;
 if ($OnTime > 0) { // exercise time limit hasn't expired
 	$sql="SELECT eurid FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
 	$result = mysql_query($sql);
