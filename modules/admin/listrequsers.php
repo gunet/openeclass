@@ -159,14 +159,14 @@ $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
 
 } else {
 
-      $tool_content .= "<table align=center width=98% border='0' bgcolor=white cellspacing=0 cellpadding=0 style='border: 1px solid gold;'>
+      $tool_content .= "<table align=center width=98% bgcolor=white cellspacing=0 cellpadding=0 style='border: 1px solid #E6EDF5;'>
       <tr>
-         <td class=td_label2 style='border: 1px solid $table_border' width=15%><small>$langName<br>$langSurname</small></td>
-         <td class=td_label2 style='border: 1px solid $table_border' width=10%><small>$langUsername</small></td>
-         <td class=td_label2 style='border: 1px solid $table_border' width=20%><small>$langEmail</small></td>
-         <td class=td_label2 style='border: 1px solid $table_border' width=20%><small>«Ï/Ìﬂ· ¡ÈÙ.</small></td>
-         <td class=td_label2 style='border: 1px solid $table_border' width=20%><small>$langComments</small></td>
-         <td class=td_label2 style='border: 1px solid $table_border' width=15% align=center><small>$langActions</small></td>
+         <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=15%>$langName<br>$langSurname</th>
+         <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langUsername</th>
+         <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=20%>$langEmail</th>
+         <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=20%>$langDateRequest</th>
+         <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=20%>$langComments</th>
+         <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=15%>$langActions</th>
       </tr>";
 
 	$sql = db_query("SELECT rid,profname,profsurname,proftmima,profcomm,profuname,profemail,date_open,comment 
