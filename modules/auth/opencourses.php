@@ -73,7 +73,7 @@ $icons = array(
 );
 
 $tool_content .= "
-            <table border=0' width=96% align=center cellspacing='0' cellpadding='0'>
+            <table border='0' width=99% align=center cellspacing='2' cellpadding='2'>
             <tr>
             <td align='left' style='border-top: 0px solid $table_border; border-right: 0px solid $table_border; border-left: 0px solid $table_border;' class='td_NewDir'>
                 <a name='top'>$m[department]:</a>
@@ -136,7 +136,7 @@ foreach (array("pre" => $m['pres'],
 	}
 
 $tool_content .= "<br><script type='text/javascript' src='sorttable.js'></script>
-          <table width='100%' border=0 cellpadding='0' cellspacing='0' align=center>
+          <table width='100%' border=0 cellpadding='2' cellspacing='0' align=center style=\"border: 1px solid $table_border\">
           <tr><th align=left style='background: #E6EDF5; color: #4F76A3;'><b>";
 
 	// We changed the style a bit here and we output types as the title
@@ -148,15 +148,16 @@ $tool_content .= "<a name='$type'>$message</a></b></th>\n";
 								<a href=\"#top\" class='mainpage'>$m[begin]</a></th>";
           // or a space for beautifying reasons
           else
-            $tool_content .= "<td class=kk align=\"right\">&nbsp;</td>";
-	          $tool_content .= "</tr>";
-						$tool_content .= "</table>";
+            $tool_content .= "<th align=\"right\" style='background: #E6EDF5; color: #4F76A3;'>&nbsp;</th>";
+	        $tool_content .= "</tr>";
+			$tool_content .= "</table><br>";
 
-		        $tool_content .= "<table border='0' bgcolor=white class=\"sortable\" id=\"t1\" cellspacing=\"1\" cellpadding=\"0\" style=\"border: 1px solid $table_border\">";
+		    $tool_content .= "
+			<table border='0' width='100%' align='center' bgcolor=white class=\"sortable\" id=\"t1\" cellspacing=\"1\" cellpadding=\"2\" style=\"border: 1px solid $table_border\">";
            $tool_content .= "<tr>";
-	         $tool_content .= "<td class='td_small_HeaderRow' style=\"border: 1px solid $table_border\">$m[lessoncode]</td>";
-           $tool_content .= "<td class='td_small_HeaderRow' style=\"border: 1px solid $table_border\">$m[professor]</td>";
-					 $tool_content .= "<td class='td_small_HeaderRow' align='center' style=\"border: 1px solid $table_border\">Τύπος</td>";
+	       $tool_content .= "<td align=left style=\"border: 1px solid $table_border\">$m[lessoncode]</td>";
+           $tool_content .= "<td align=left class='td_small_HeaderRow' style=\"border: 1px solid $table_border\">$m[professor]</td>";
+					 $tool_content .= "<td align=center class='td_small_HeaderRow' align='center' style=\"border: 1px solid $table_border\">Τύπος</td>";
 					 $tool_content .=" </tr>";
 
 		while ($mycours = mysql_fetch_array($result)) {
@@ -169,9 +170,9 @@ $tool_content .= "<a name='$type'>$message</a></b></th>\n";
 
             // output each course as a table for beautifying reasons
             $tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#F5F5F5'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
-            $tool_content .= "<td width='65%' class=kkk>".$codelink."</td>";
-            $tool_content .= "<td class=kkk><span class='explanationtext'>$mycours[t]</span></td>";
-            $tool_content .= "<td width='5%' align='center' class=kkk>";
+            $tool_content .= "<td align=left width='65%' class=kk>".$codelink."</td>";
+            $tool_content .= "<td align=left class=kk><span class='explanationtext'>$mycours[t]</span></td>";
+            $tool_content .= "<td align=center width='5%' align='center' class=kk>";
             // show the necessary access icon
                       foreach ($icons as $visible => $image) {
                           if ($visible == $mycours['visible']) {
