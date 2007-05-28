@@ -58,11 +58,9 @@ $tool_content .=  "<a href='statClaro.php'>".$langPlatformGenStats."</a> <br> ".
                 "<a href='platformStats.php?first='>".$langVisitsStats."</a> <br> ".
              "<a href='visitsCourseStats.php?first='>".$langVisitsCourseStats."</a> <br> ".
               "<a href='oldStats.php'>".$langOldStats."</a> <br> ".
-               "<a href='monthlyReport.php'>".$langMonthlyReport."</a>".
-          "<p>&nbsp</p>";
+               "<a href='monthlyReport.php'>".$langMonthlyReport."</a>";
 
-
-$tool_content .= "<table width=100% border='0' height=316 cellspacing='0' align=center cellpadding='0'>\n";
+$tool_content .= "<table width=99% border='0' height=316 cellspacing='0' align=center cellpadding='0'>\n";
 $tool_content .= "<tr>\n";
 $tool_content .= "<td valign=top>
  <table width='96%' align='center' class='admin'>
