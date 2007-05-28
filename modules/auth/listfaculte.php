@@ -43,7 +43,7 @@ $numrows = mysql_num_rows($result);
 if (isset($result))  {
 
 $tool_content .= "<script type='text/javascript' src='sorttable.js'></script>
-        <table width='95%' class='sortable' id='t1' cellspacing='0' cellpadding='10' border='0' 
+        <table width='99%' class='sortable' id='t1' cellspacing='2' cellpadding='10' border='0' 
 				style='border: 1px solid $table_border'>
         <tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3;' height=25>
 					<b>$m[department]</b></th></tr>";
@@ -51,8 +51,8 @@ $tool_content .= "<script type='text/javascript' src='sorttable.js'></script>
  while ($fac = mysql_fetch_array($result)) {
 	$tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#F1F1F1'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
   $tool_content .= "<td class='kk' height=25>&nbsp;<img src='../../images/arrow_blue.gif'>
-	&nbsp;<a href='opencourses.php?fc=$fac[id]' class='mainpage'>$fac[name] </a>
-	<small><font color=#4175B9>($fac[code])</font></small>";
+	&nbsp;<a href='opencourses.php?fc=$fac[id]' class='mainpage'>$fac[name]</a>
+	<small><font color=#4175B9>($fac[code])</font></small>&nbsp;";
 
      $n=mysql_query("SELECT COUNT(*) FROM cours_faculte WHERE faculte='$fac[name]'");
      $r=mysql_fetch_array($n);

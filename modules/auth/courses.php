@@ -129,18 +129,18 @@ else
                 if (isset($result))  {
                       $tool_content .= "
                          <script type=\"text/javascript\" src=\"sorttable.js\"></script>
-                         <table width='90%' align=center class=\"sortable\" id=\"t1\" cellspacing='0' cellpadding='10' border='0' style=\"border: 1px solid $table_border\">
+                         <table width='99%' align=center class=\"sortable\" id=\"t1\" cellspacing='2'  cellpadding='10' border='0' style=\"border: 1px solid $table_border\">
                        <tr>
-                       <td class=td_small_HeaderRow height=25><b>$langFaculte</b></td>
+                         <th style='text-align: left; background: #E6EDF5; color: #4F76A3;' height=25><b>$langFaculte</b></th>
                        </tr>";
                          
                        while ($fac = mysql_fetch_array($result)) {
                            $tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#F1F1F1'\" onMouseOut=\"this.style.backgroundColor='transparent'\">
-                             <td class='kk' height=25>&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<a href='courses.php?fc=$fac[id]' class='mainpage'>$fac[name]</a> &nbsp;<small>
+                             <td class='kk' height=25>&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<a href='courses.php?fc=$fac[id]' class='mainpage'>$fac[name]</a> <small>
 															<font color=#4175B9>($fac[code])</font></small>";
                                $n=db_query("SELECT COUNT(*) FROM cours_faculte WHERE faculte='$fac[name]'");
                                 $r=mysql_fetch_array($n);
-                              $tool_content .= "<small><font color=#AAAAAA>($r[0]  "
+                              $tool_content .= "&nbsp;<small><font color=#AAAAAA>($r[0]  "
                                                  . ($r[0] == 1? $avlesson: $avlessons) . ")</font><small>
                                   </td>
                                   </tr>\n";
@@ -315,7 +315,7 @@ function expanded_faculte($fac, $uid) {
 	
 						// output each course as a table for beautifying reasons
 						$retString .= "\n\n";
-						$retString .= "<table border='0 'width=100% align=center cellspacing='1' cellpadding='0'>\n";
+						$retString .= "<table border='0' width=100% align=center cellspacing='1' cellpadding='0'>\n";
             $retString .= "<tr onMouseOver=\"this.style.backgroundColor='#F1F1F1'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
 					  $retString .= "<td class='kkk' align='center' width='10%'>";
 						
@@ -471,7 +471,7 @@ $result = db_query("SELECT DISTINCT faculte.id id, faculte.name f
   //      end_toolbar();
                // o pinakas autos stoixizei tin kartela
 
-    $retString .= "<table border='0' height=283 width=96% align=center cellspacing='1' cellpadding='0'>\n";
+    $retString .= "<table border='0' height=283 width=99% align=center cellspacing='1' cellpadding='0'>\n";
     $retString .= "<tr>\n";
     $retString .= "<td valign=top height=1 class=kk>\n";
 

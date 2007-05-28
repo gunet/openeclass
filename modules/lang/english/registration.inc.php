@@ -123,9 +123,9 @@ $langFollow50 = "Next 50";
 $langEnd = "end";
 $langAdmR="Admin. rights";
 $langUnreg = "Unregister";
-$langAddHereSomeCourses = "<br><blockquote><p>To register / unregister to / from a lesson,
+$langAddHereSomeCourses = "<p>To register / unregister to / from a lesson,
 choose the faculty and then select / unselect the desired lesson.</p>
-<p>To save your preferences click on 'Submit changes'</p></blockquote><br>";
+<p>To save your preferences click on 'Submit changes'</p><br>";
 $langTitular = "Author";
 $langDeleteUser = "Are you sure you want to delete the user";
 $langDeleteUser2 = "from this lesson";
