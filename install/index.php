@@ -82,11 +82,11 @@ if(isset($welcomeScreen) )
 	$urlForm = "http://".$_SERVER['SERVER_NAME'].$urlAppendPath."/";
 	$pathForm = realpath("../")."/";
 	$emailForm = $_SERVER['SERVER_ADMIN'];
-	$nameForm = "Νίκος";
-	$surnameForm = "Παπαδόπουλος";
+	$nameForm = "Διαχειριστής";
+	$surnameForm = "Πλατφόρμας";
 	$loginForm = "admin";
 	$passForm = generePass(8);
-	$campusForm = "GUNet e-Class";
+	$campusForm = "GUNet eClass";
 	$helpdeskForm = "+30 2xx xxxx xxx";
 	$faxForm = "";
 	$postaddressForm = "";
