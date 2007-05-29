@@ -190,8 +190,8 @@ mysql_select_db($currentCourseID);
 
 if ($is_adminOfCourse and isset($require_help) and $require_help) {
 	echo "<tr><td colspan=\"4\" align=\"right\">
-        <a href='../help/help.php?topic=$helpTopic&language=$language' 
-	onClick=\"window.open('../help/help.php?topic=$helpTopic&language=$language','Help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=450,height=550,left='+((screen.width-400)/2)+',top='+((screen.height-450)/2));
+        <a href='../help/help.php?topic=$helpTopic&amp;language=$language' 
+	onClick=\"window.open('../help/help.php?topic=$helpTopic&amp;language=$language','Help','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=450,height=550,left='+((screen.width-400)/2)+',top='+((screen.height-450)/2));
 	return false; \">
         <font size=\"2\" face=\"arial, helvetica\">$langHelp</font>
          </a>
