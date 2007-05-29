@@ -401,16 +401,6 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
                         </tr>
                         <tr>
                             <th>
-                               
-                                    ".$langInstituteName."
-                                
-                            </th>
-                            <td>
-                                <input type=\"text\" size=\"40\" name=\"institutionUrlForm\" value=\"$institutionUrlForm\">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
                                  
                                      LDAP εξυπηρέτης του Ιδρύματος
                                
