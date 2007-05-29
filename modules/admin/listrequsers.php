@@ -91,7 +91,7 @@ $langEmail : $emailAdministrator
 $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
         <table border='0' width='100%' cellspacing='0'>
         <tr>
-       <td class=td_label2 style='border : 1px solid $table_border'>$langWarnReject <b>'$d[profname] $d[profsurname] &lt;$d[profemail]&gt;'</b> $langWithDetails:</td>
+       <td class=td_label2 style='border: 0px solid $table_border'>$langWarnReject <b>'$d[profname] $d[profsurname] &lt;$d[profemail]&gt;'</b> $langWithDetails:</td>
         </tr>
         <tr><td>&nbsp;</td></tr>
         <tr>
@@ -127,7 +127,7 @@ $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
         
          $tool_content .= "</td></tr>
         <tr>
-         <td class=color1 style='border : 1px solid $table_border'>$langComments:</td>
+         <td class=color1 style='border : 0px solid $table_border'>$langComments:</td>
         </tr>
         <tr>
            <td><input type='hidden' name='id' value='$id'>
@@ -141,17 +141,14 @@ $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
            <td>&nbsp;</td>
         </tr>
         <tr>
-           <td class=color1 style='border : 1px solid $table_border'>
+           <td class=color1 style='border : 0px solid $table_border'>
                 <input type='checkbox' name='sendmail' value='1' checked='yes'>
                 &nbsp;$langRequestSendMessage &nbsp;&nbsp;
-								<input type='text' name='prof_email' class=auth_input_admin value='$d[profemail] '></td></tr>
+								<input type='text' name='prof_email' class=auth_input_admin value='$d[profemail] '>&nbsp;&nbsp;<small>($langRequestDisplayMessage)</small></td></tr>
 								<tr>
 								<td align='center'>
                 <input type='submit' name='submit' value='$langRejectRequest'>
             </td>
-        </tr>
-        <tr>
-           <td class=kk align=right><small>($langRequestDisplayMessage)</small></td>
         </tr>
         </table>
       </form>";
@@ -166,7 +163,7 @@ $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
          <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=20%>$langEmail</th>
          <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=20%>$langDateRequest</th>
          <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=20%>$langComments</th>
-         <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=15%>$langActions</th>
+         <th style='text-align: center; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=15%>$langActions</th>
       </tr>";
 
 	$sql = db_query("SELECT rid,profname,profsurname,proftmima,profcomm,profuname,profemail,date_open,comment 
