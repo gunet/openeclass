@@ -5,6 +5,7 @@ session_start();
 $path2add=2;
 //$require_admin = TRUE;
 
+include '../include/baseTheme.php';
 $nameTools = "Αναβάθμιση των βάσεων δεδομένων του e-Class";
 $auth_methods = array("imap","pop3","ldap","db");
 
@@ -18,21 +19,18 @@ if (isset($_POST['submit_upgrade'])) {
 }
 
 
-if((isset($_REQUEST['password'])) && (!in_array($_REQUEST['password'],$auth_methods))) {
-        //if $encryptedPasswd = true, then the passwords are hashed
-        if((isset($encryptedPasswd)) || (!empty($encryptedPasswd))) {
-                $newpass = md5($_REQUEST['password']);
-        } else { //else use plain text password since the passwords are not hashed
-                $newpass = $_REQUEST['password'];
-        }
-        if (!is_admin($_REQUEST['login'], $newpass, $mysqlMainDb)) {
+	if((isset($encryptedPasswd)) || (!empty($encryptedPasswd))) {
+           $newpass = md5($_REQUEST['password']);
+	 } else { //else use plain text password since the passwords are not hashed
+             $newpass = $_REQUEST['password'];
+   }
+
+    if (!is_admin($_REQUEST['login'], $newpass, $mysqlMainDb)) {
                 die("<p>Τα στοιχεία που δώσατε δεν αντιστοιχούν στο διαχειριστή του
                         συστήματος! Παρακαλούμε επιστρέψτε στην προηγούμενη σελίδα και ξαναδοκιμάστε.</p>
                         <center><a href=\"index.php\">Επιστροφή</a></center>");
-        }
-}
+   }
 
-include '../include/baseTheme.php';
 include 'document_upgrade.php';
 
 //====================
@@ -317,25 +315,24 @@ if((!isset($encryptedPasswd)) || (empty($encryptedPasswd))) {
                 }
         }
         fclose($f);
-        $tool_content .= "<tr><td><b>Ενημερώθηκε το config.php για το encryptedPasswd (κρυπογραφηση συνθηματικών)</b></td></tr>";
+        $tool_content .= "<tr><td><b>Ενημερώθηκε το config.php για το encryptedPasswd (κρυπτογράφηση συνθηματικών)</b></td></tr>";
 
         // update all the records in user table
         if($res = db_query("SELECT user_id,password FROM user")) {
                 while($row = mysql_fetch_array($res)) {
                         $pass = $row["password"];
 
-                        if( (strstr($pass, "'")) or (strstr($pass, '"')) or (strstr($pass, '\\')) )
+                       if ((strstr($pass, "'")) or (strstr($pass, '"')) or (strstr($pass, '\\')))
                         {
-                                $tool_content .= "Δεν έγινε κρυπτογράφηση του συνθηματικού του χρήστη με id=".$row["user_id"]." (άκυροι χαρακτήρες στο συνθηματικό)<br />";
+                        $tool_content .= "Δεν έγινε κρυπτογράφηση του συνθηματικού του χρήστη με id=".$row["user_id"]." (άκυροι χαρακτήρες στο συνθηματικό)<br />";
                                 continue; // get the next one
                         }
-                        //			$newpass = md5($pass);
                         if(!in_array($pass,$auth_methods)) {
                                 $newpass = md5($pass);
-                                // do the update
-                                if(db_query("UPDATE user SET password = '".$newpass."' WHERE user_id=".$row["user_id"])) {
-                                        $tool_content .= "Το συνθηματικό του χρήστη με id=".$row["user_id"].".ενημερώθηκε. Το κρυπτογραφημένο συνθηματικό είναι:".$newpass."<br />";
-                                } else {
+                             // do the update
+                         if(db_query("UPDATE user SET password = '".$newpass."' WHERE user_id=".$row["user_id"])) {
+                         $tool_content .= "Το συνθηματικό του χρήστη με id=".$row["user_id"].".ενημερώθηκε. Το κρυπτογραφημένο συνθηματικό είναι:".$newpass."<br />";
+                           } else {
                                         $tool_content .= "Δεν έγινε ενημέρωση για τον χρήστη με id=".$row["user_id"]."<br />";
                                 }
                         }
@@ -1038,13 +1035,8 @@ while ($code = mysql_fetch_row($res)) {
                 $newlink_image = preg_replace('#../claroline/image/#','../../images/',$oldlink_image);
                 $oldlink_address = $u[3];
                 $newlink_address = preg_replace('#../claroline/image/#','../../images/',$oldlink_address);
-                if (db_query("UPDATE accueil
-                              SET lien='$newlink_lien', image='$newlink_image', address='$newlink_address'
-                              WHERE id='$u[0]'")) {
-                        $tool_content .= "Εγγραφή με id $u[0] του πίνακα <b>accueil</b>: $OK<br>";
-                } else {
-                        $tool_content .= "Εγγραφή με id $u[0] του πίνακα <b>accueil</b>: $BAD<br>";
-                }
+               db_query("UPDATE accueil SET lien='$newlink_lien', 
+												image='$newlink_image', address='$newlink_address' WHERE id='$u[0]'"); 
         }
 
         //set the new images for the icons of lesson modules
@@ -1327,6 +1319,7 @@ function mysql_field_exists($db,$table,$field)
 
 // checks if admin user
 function is_admin($username, $password, $mysqlMainDb) {
+
 	mysql_select_db($mysqlMainDb);
 	$r = mysql_query("SELECT * FROM user, admin WHERE admin.idUser = user.user_id
             AND user.username = '$username' AND user.password = '$password'");
