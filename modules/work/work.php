@@ -263,11 +263,47 @@ function submit_work($id) {
 	global $tool_content, $workPath, $uid, $stud_comments, $group_sub, $REMOTE_ADDR,
 	$langUpload, $langBack, $langWorks, $langUploadError, $currentCourseID;
 
-	$res = db_query("SELECT title FROM assignments WHERE id = '$id'");
+	//DUKE Work submission bug fix.
+	//Do not allow work submission if:
+	//	> after work deadline
+	//	> user not registered to lesson
+	//	> user is guest 
+	if(isset($_SESSION["status"])) {
+		$status=$_SESSION["status"];
+	} else {
+		unset($status);
+	}
+	$invalid_submission_message='Η υποβολή της εργασίας δεν είναι δυνατή.';
+	$submit_ok = FALSE; //Default do not allow submission
+	if(isset($uid) && $uid) { //check if loged-in
+		if ($GLOBALS['statut'] == 10) { //user is guest
+			$submit_ok = FALSE;
+		} else { //user NOT guest
+			if(isset($status) && isset($status[$_SESSION["dbname"]])) {
+				//user is registered to this lesson
+				$res = db_query("SELECT (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days 
+					FROM assignments WHERE id = '$id'");
+				$row = mysql_fetch_array($res);
+				if ($row['days'] < 0) {
+					$submit_ok = FALSE; //after assignment deadline
+				} else { 
+					$submit_ok = TRUE; //before deadline
+				}
+			} else {
+				//user NOT registered to this lesson
+				$submit_ok = FALSE; 
+			}
+			
+		}
+	} //checks for submission validity end here
+	
+  	$res = db_query("SELECT title FROM assignments WHERE id = '$id'");
 	$row = mysql_fetch_array($res);
 
 	$nav[] = array("url"=>"work.php", "name"=> $langWorks);
 	$nav[] = array("url"=>"work.php?id=$id", "name"=> $row['title']);
+
+  if($submit_ok) { //only if passed the above validity checks...
 
 	$msg1 = delete_submissions_by_uid($uid, -1, $id);
 
@@ -324,6 +360,20 @@ function submit_work($id) {
 		
 	}
 //	$tool_content .= "<p><center><a href='work.php'>$langBack</a></center></p>";
+
+  } else { // not submit_ok
+  	$tool_content .="
+	<table width=\"99%\">
+				<tbody>
+					<tr>
+						<td class=\"success\">
+							<p><b>$invalid_submission_message</b></p>
+							<p><a href='work.php'>$langBack</a></p>
+						</td>
+					</tr>
+				</tbody>
+			</table>";
+  }
 }
 
 
