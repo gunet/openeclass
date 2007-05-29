@@ -52,7 +52,7 @@ $langExFac = "If you wish to create course, in another faculty, then contact Asy
 $langEmpty="You left some fields empty.<br>Use the <b>Back</b> button on your browser and try again.<br>";
 $langcourse_keywords="Keywords";
 $langcourse_references = "Addons";
-
+$langErrorDir = "Unable to create course subdirectory. The course was not created! <br><br>Please check <em>courses</em> directory access permissions.";
 
 // tables MySQL
 $langFormula="Yours sincerely, your professor";

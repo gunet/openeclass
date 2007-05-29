@@ -75,6 +75,7 @@ function  getUserLessonInfo($uid, $type) {
 	$repeat_val = 0;
 
 	$lesson_titles = array();
+        $lesson_fakeCode = array();
 
 	//getting user's lesson info
 	while ($mycourses = mysql_fetch_row($mysql_query_result)) {

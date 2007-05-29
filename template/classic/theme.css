@@ -513,3 +513,6 @@ color: #ffffff
 	font-size: 10pt;
 }
 
+fieldset {
+        padding: 7px;
+}
