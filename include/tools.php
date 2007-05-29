@@ -480,7 +480,7 @@ function adminMenu(){
 	//}
 
 	array_push($sideMenuText, $langPlatformStats);
-	array_push($sideMenuLink, "../admin/statClaro.php");
+	array_push($sideMenuLink, "../admin/stateclass.php");
 	array_push($sideMenuImg, "platform_stats.gif");
 
 	//array_push($sideMenuText, $langManuals);
