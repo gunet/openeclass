@@ -927,7 +927,7 @@ while ($code = mysql_fetch_row($res)) {
         // Move all external links to id > 100
         if (db_query("UPDATE IGNORE `accueil`
                                 SET `id` = `id` + 80
-                                WHERE `id`>20", $code[0])) {
+                                WHERE `id`>20 AND `id`<100", $code[0])) {
                 $tool_content .= "Όλοι οι εξωτερικοί (με id >= 20) σύνδεσμοι μετακινήθηκαν με id >=101<br>";
         } else {
                 $tool_content .= "Δεν μετακινήθηκαν οι εξωτερικοί σύνδεσμοι<br>";
