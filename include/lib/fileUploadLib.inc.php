@@ -145,49 +145,100 @@ function add_ext_on_mime($fileName)
 {
 	/*** check if the file has an extension AND if the browser has send a MIME Type ***/
 
-	if(!ereg("\.[[:alnum:]]+$", $fileName)
-		&& $_FILES['userFile']['type'])
-	{
+	if(!ereg("\.[[:alnum:]]+$", $fileName) and @$_FILES['userFile']['type']) {
 		/*** Build a "MIME-types/extensions" connection table ***/
 
 		static $mimeType = array();
 
-		$mimeType[] = "application/msword";				$extension[] =".doc";
-		$mimeType[] = "application/rtf";				$extension[] =".rtf";
-		$mimeType[] = "application/vnd.ms-powerpoint";	$extension[] =".ppt";
-		$mimeType[] = "application/vnd.ms-excel";		$extension[] =".xls";
-		$mimeType[] = "application/pdf";				$extension[] =".pdf";
-		$mimeType[] = "application/postscript";			$extension[] =".ps";
-		$mimeType[] = "application/mac-binhex40";		$extension[] =".hqx";
-		$mimeType[] = "application/x-gzip";				$extension[] ="tar.gz";
-		$mimeType[] = "application/x-shockwave-flash";	$extension[] =".swf";
-		$mimeType[] = "application/x-stuffit";			$extension[] =".sit";
-		$mimeType[] = "application/x-tar";				$extension[] =".tar";
-		$mimeType[] = "application/zip";				$extension[] =".zip";
-		$mimeType[] = "application/x-tar";				$extension[] =".tar";
-		$mimeType[] = "text/html";						$extension[] =".htm";
-		$mimeType[] = "text/plain";						$extension[] =".txt";
-		$mimeType[] = "text/rtf";						$extension[] =".rtf";
-		$mimeType[] = "image/gif";						$extension[] =".gif";
-		$mimeType[] = "image/jpeg";						$extension[] =".jpg";
-		$mimeType[] = "image/png";						$extension[] =".png";
-		$mimeType[] = "audio/midi";						$extension[] =".mid";
-		$mimeType[] = "audio/mpeg";						$extension[] =".mp3";
-		$mimeType[] = "audio/x-aiff";					$extension[] =".aif";
-		$mimeType[] = "audio/x-pn-realaudio";			$extension[] =".rm";
-		$mimeType[] = "audio/x-pn-realaudio-plugin";	$extension[] =".rpm";
-		$mimeType[] = "audio/x-wav";					$extension[] =".wav";
-		$mimeType[] = "video/mpeg";						$extension[] =".mpg";
-		$mimeType[] = "video/quicktime";				$extension[] =".mov";
-		$mimeType[] = "video/x-msvideo";				$extension[] =".avi";
+		$mimeType[] = "application/msword";
+		$extension[] =".doc";
+
+		$mimeType[] = "application/rtf";
+		$extension[] =".rtf";
+
+		$mimeType[] = "application/vnd.ms-powerpoint";
+        	$extension[] =".ppt";
+
+		$mimeType[] = "application/vnd.ms-excel";
+		$extension[] =".xls";
+
+		$mimeType[] = "application/pdf";
+                $extension[] =".pdf";
+
+		$mimeType[] = "application/postscript";
+		$extension[] =".ps";
+
+		$mimeType[] = "application/mac-binhex40";
+		$extension[] =".hqx";
+
+		$mimeType[] = "application/x-gzip";
+		$extension[] ="tar.gz";
+
+		$mimeType[] = "application/x-shockwave-flash";
+        	$extension[] =".swf";
+
+		$mimeType[] = "application/x-stuffit";
+		$extension[] =".sit";
+
+		$mimeType[] = "application/x-tar";
+		$extension[] =".tar";
+
+		$mimeType[] = "application/zip";
+		$extension[] =".zip";
+
+		$mimeType[] = "application/x-tar";
+		$extension[] =".tar";
+
+		$mimeType[] = "text/html";
+		$extension[] =".htm";
+
+		$mimeType[] = "text/plain";
+		$extension[] =".txt";
+
+		$mimeType[] = "text/rtf";
+		$extension[] =".rtf";
+
+		$mimeType[] = "image/gif";
+        	$extension[] =".gif";
+
+		$mimeType[] = "image/jpeg";
+		$extension[] =".jpg";
+
+		$mimeType[] = "image/png";
+		$extension[] =".png";
+
+		$mimeType[] = "audio/midi";
+		$extension[] =".mid";
+
+		$mimeType[] = "audio/mpeg";
+		$extension[] =".mp3";
+
+		$mimeType[] = "audio/x-aiff";
+		$extension[] =".aif";
+
+		$mimeType[] = "audio/x-pn-realaudio";
+		$extension[] =".rm";
+
+		$mimeType[] = "audio/x-pn-realaudio-plugin";
+        	$extension[] =".rpm";
+
+		$mimeType[] = "audio/x-wav";
+		$extension[] =".wav";
+
+		$mimeType[] = "video/mpeg";
+		$extension[] =".mpg";
+
+		$mimeType[] = "video/quicktime";
+		$extension[] =".mov";
+
+		$mimeType[] = "video/x-msvideo";
+		$extension[] =".avi";
 
 
 		/*** Check if the MIME type send by the browser is in the table ***/
 
-		foreach($mimeType as $key=>$type)
-		{
-			if ($type == $_FILES['userFile']['type'])
-			{
+		foreach($mimeType as $key=>$type) {
+			if ($type == $_FILES['userFile']['type']) {
 				$fileName .=  $extension[$key];
 				break;
 			}
