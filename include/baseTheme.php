@@ -345,7 +345,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		$t->set_block('mainBlock', 'breadCrumbEndBlock', 'breadCrumbEnd');
 
 
-		for($breadIterator2=0; $breadIterator2 <= $breadIterator; $breadIterator2++){
+		for($breadIterator2=0; $breadIterator2 < $breadIterator; $breadIterator2++){
 
 			$t->parse('breadCrumbEnd', 'breadCrumbEndBlock',true);
 		}
