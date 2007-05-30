@@ -1,12 +1,12 @@
       +----------------------------------------------------------------------+
-      | GUnet eClass 1.7                                                     |
+      | GUnet eClass 2.0                                                     |
       | Asychronous Teleteaching Platform                                    |
       +----------------------------------------------------------------------+
       | Copyright 2001-2002 Universite catholique de Louvain (UCL)           |
       | Copyright 2003-2007 GUnet                                            |
       +----------------------------------------------------------------------+
       |                                                                      |
-      | GUnet eClass 1.7 is an open platform distributed in the hope that    |
+      | GUnet eClass 2.0 is an open platform distributed in the hope that    |
       | it will be useful (without any warranty), under the terms of the     |
       | GNU License (General Public License) as published by the Free        |
       | Software Foundation. The full license can be read in "license.txt".  |
@@ -33,9 +33,30 @@
          Dimitra Kralli <d.kralli@di.uoa.gr>
          Stevy Georgiadi <stevy@gunet.gr>
                 
+         Victoria Daskalou <daskalou@upnet.gr> (University of Patras)
+				 Thanos Kyritsis <atkyritsis@upnet.gr> (University of Patras)
+				 Evelthon Prodromou <eprodromou@upnet.gr> (University of Patras)		
+				 Artemios Vogiatzis <bogart@upatras.gr (University of Patras)
+
+				 Stratos Karatzidis <kstratos@uom.gr> (University of Macedonia)
+				 Pitsiougas Vagelis <vagpits@uom.gr> (University of Macedonia)
+				 Dimitris Kiziridis	<kyzdim@uom.gr> (University of Macedonia)
+
+				 Ophelia Neofytou <ophelia@ucnet.uoc.gr> (Universify of Crete)
+         Vangelis Chaniotakis <haniotak@ucnet.uoc.gr> (University of Crete)
+
+				 Sakis Agorastos <th_agorastos@hotmail.com> (University of Piraeus)
+
+				 Dimitris Daskopoulos <dimitris@ccf.auth.gr> (Aristotele University of Thessaloniki)
+				 Savvas Anastasiadis <sanastas@ccf.auth.gr> (Aristotele University of Thessaloniki)				
+				 Dimitris Tsachalis <ditsa@ccf.auth.gr> (Aristotele University of Thessaloniki)
+	
+				 Ilias Mpertsimas	<mhlias@noc.teilam.gr> (Technological Educational Institute of Lamia)
+
+				 Dionysios G. Synodinos <dsin@noc.ntua.gr> (National Technical University of Athens)
+
+			Also Credits to:
          Michalis Psaltakis (Aegean University)
-         Victoria Daskalou (University of Patras)
-         Vangelis Chaniotakis (University of Crete)
          Konstantinidis K. (Aristotele University of Thessaloniki)
 
       htmlArea:
