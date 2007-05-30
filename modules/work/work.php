@@ -92,13 +92,15 @@ include('work_functions.php');
 
 $workPath = $webDir."courses/".$currentCourseID."/work";
 
-if (isset($get)) {
+if ($is_adminOfCourse) { //Only course admins can download assignments
+  if (isset($get)) {
 	send_file($get);
-}
+  }
 
-if (isset($download)) {
+  if (isset($download)) {
 	include "../../include/pclzip/pclzip.lib.php";
 	download_assignments($download);
+  }
 }
 
 $nameTools = $langWorks;
@@ -273,7 +275,6 @@ function submit_work($id) {
 	} else {
 		unset($status);
 	}
-	$invalid_submission_message='Η υποβολή της εργασίας δεν είναι δυνατή.';
 	$submit_ok = FALSE; //Default do not allow submission
 	if(isset($uid) && $uid) { //check if loged-in
 		if ($GLOBALS['statut'] == 10) { //user is guest
@@ -366,8 +367,8 @@ function submit_work($id) {
 	<table width=\"99%\">
 				<tbody>
 					<tr>
-						<td class=\"success\">
-							<p><b>$invalid_submission_message</b></p>
+						<td class=\"caution\">
+							<p><b>Η υποβολή της εργασίας δεν επιτρέπεται!<br>The submission of the assignment is forbidden!</b></p>
 							<p><a href='work.php'>$langBack</a></p>
 						</td>
 					</tr>
