@@ -598,7 +598,7 @@ if (isset($fileNameList))
 		$tool_content .= "<td>".$date."</td>\n";
 
 		/*** delete command ***/
-		$tool_content .= "<td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdFileName."\" onClick=\"return confirmation('".addslashes($dspDirName)."');\"><img src=\"../../template/classic/img/delete.gif\" border=0></a></td>\n";
+		@$tool_content .= "<td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdFileName."\" onClick=\"return confirmation('".addslashes($dspDirName)."');\"><img src=\"../../template/classic/img/delete.gif\" border=0></a></td>\n";
 		/*** copy command ***/
 		$tool_content .= "<td><a href=\"$_SERVER[PHP_SELF]?move=".$cmdFileName."\"><img src=\"../../template/classic/img/move_doc.gif\" border=0></a></td>\n";
 		/*** rename command ***/

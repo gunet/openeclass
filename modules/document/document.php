@@ -894,7 +894,7 @@ if (@chdir(realpath($baseWorkDir.$curDirPath))) {
 					$dirCommentList[$keyDir] = $attribute['comment'][$keyAttribute];
 					$dirVisibilityList[$keyDir] = $attribute['visibility'][$keyAttribute];
 				}
-			}
+			} 
 		}
 
 		if(is_file($file))
@@ -1106,7 +1106,7 @@ if($is_adminOfCourse) {
 			$tool_content .=  "<td>-</td>";
 
 			/*** delete command ***/
-			$tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdDirName."\" onClick=\"return confirmation('".addslashes($dspDirName)."');\">
+			@$tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdDirName."\" onClick=\"return confirmation('".addslashes($dspDirName)."');\">
 		<img src=\"../../template/classic/img/delete.gif\" border=0 title=\"$langDelete\"></a>";
 			/*** copy command ***/
 			$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?move=".$cmdDirName."\">
