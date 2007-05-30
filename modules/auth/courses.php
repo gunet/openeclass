@@ -30,8 +30,8 @@ $require_login = TRUE;
 $langFiles = array('registration', 'opencours');
 include '../../include/baseTheme.php';
 
-$nameTools = $langOtherCourses;
-
+$nameTools = $langChoiceLesson;
+$navigation[] = array ("url"=>"courses.php", "name"=> $langOtherCourses);
 $tool_content = "";
 
 $icons = array(
@@ -158,7 +158,7 @@ else
                 $numofcourses = getdepnumcourses($fac);
 
                 // display all the facultes collapsed
-                $tool_content .= collapsed_facultes_horiz($fac);
+//                $tool_content .= collapsed_facultes_horiz($fac);
                 if ($numofcourses > 0) {
                         $tool_content .= expanded_faculte($fac, $uid);
 												$tool_content .= "<tr><td colspan=\"6\" ><br>&nbsp;&nbsp;
@@ -223,7 +223,7 @@ function expanded_faculte($fac, $uid) {
 	}
 	
 	$retString .= "</td></tr><tr><td valign=top height=1 class=kk style=\"border: 1px dotted $table_border\">
-					<a name=\"top\">$m[department]:</a> <b><em>$fac</em></b>&nbsp;&nbsp;\n";
+					<a name=\"top\">$m[department]:</a> <b><em style='font-size: 12px'>$fac</em></b>&nbsp;&nbsp;\n";
 	
 	// get the different course types available for this faculte
 		$typesresult = db_query(
@@ -445,7 +445,7 @@ $retString = "";
 //start_toolbar();
 
 	$retString .= "</td><td class=tool_bar align=left width=20%>
-						<span class=\"small\"><b>$listfac:</b></span></td><td class=tool_bar align=right width=80%>\n";
+					<span class=\"small\"><b>$listfac:</b></span></td><td class=tool_bar align=right width=80%>\n";
 
 $result = db_query("SELECT DISTINCT faculte.id id, faculte.name f
                 FROM faculte
@@ -457,6 +457,7 @@ $result = db_query("SELECT DISTINCT faculte.id id, faculte.name f
 		WHERE (cours.visible = '1' OR cours.visible = '2') 
 			AND faculte.name = cours.faculte
 		ORDER BY cours.faculte"); */
+
 	$counter = 1;
 	while ($facs = mysql_fetch_array($result)) {
 		if ($counter != 1) $retString .= "<font class=\"small\"> | </font>";
