@@ -37,6 +37,7 @@
 				 Thanos Kyritsis <atkyritsis@upnet.gr> (University of Patras)
 				 Evelthon Prodromou <eprodromou@upnet.gr> (University of Patras)		
 				 Artemios Vogiatzis <bogart@upatras.gr (University of Patras)
+				 George Doukas <geodoukas@upatras.gr> (University of Patras)
 
 				 Stratos Karatzidis <kstratos@uom.gr> (University of Macedonia)
 				 Pitsiougas Vagelis <vagpits@uom.gr> (University of Macedonia)
