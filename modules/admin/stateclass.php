@@ -54,7 +54,7 @@ $tool_content = "";
 /*****************************************************************************
         general statistics
 ******************************************************************************/
-$tool_content .=  "<a href='statClaro.php'>".$langPlatformGenStats."</a> <br> ".
+$tool_content .=  "<a href='stateclass.php'>".$langPlatformGenStats."</a> <br> ".
                 "<a href='platformStats.php?first='>".$langVisitsStats."</a> <br> ".
              "<a href='visitsCourseStats.php?first='>".$langVisitsCourseStats."</a> <br> ".
               "<a href='oldStats.php'>".$langOldStats."</a> <br> ".

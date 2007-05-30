@@ -24,7 +24,7 @@ $nameTools = $langUsersCourse;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 $tool_content = '';
-$tool_content .=  "<a href='statClaro.php'>".$langPlatformGenStats."</a> <br> ".
+$tool_content .=  "<a href='stateclass.php'>".$langPlatformGenStats."</a> <br> ".
                 "<a href='platformStats.php'>".$langVisitsStats."</a> <br> ".
              "<a href='usersCourseStats.php'>".$langUsersCourse."</a> <br> ".
              "<a href='visitsCourseStats.php'>".$langVisitsCourseStats."</a> <br> ".
