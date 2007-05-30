@@ -459,7 +459,7 @@ else {
 
 			$tool_content .=  "
 		<tr class=\"odd\">
-			<td>$langPubl: ".greek_format($myrow["temps"])."</td></tr>
+			<th>$langPubl: ".greek_format($myrow["temps"])."</th></tr>
 			<tr><td>$content</td></tr>";
 
 		}	// while loop
