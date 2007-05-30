@@ -354,7 +354,6 @@ if((!isset($encryptedPasswd)) || (empty($encryptedPasswd))) {
 $sql = 'TRUNCATE TABLE `agenda`'; //empty main agenda table so that we do not have multiple entries
 db_query($sql);
 
-
 // add indexes
     add_index('i_cours', 'code', 'cours');
     add_index('i_loginout', 'id_user', 'loginout');
@@ -579,8 +578,6 @@ while ($code = mysql_fetch_row($res)) {
 
 
         // Learning Path tables
-
-        $langLearnPath = "Γραμμή Μάθησης";
         if (!mysql_table_exists($code[0], 'lp_module'))  {
                 db_query("CREATE TABLE `lp_module` (
                         `module_id` int(11) NOT NULL auto_increment,
@@ -886,12 +883,11 @@ while ($code = mysql_fetch_row($res)) {
         if (!mysql_field_exists("$code[0]",'document','copyrighted'))
                 $tool_content .= add_field('document', 'copyrighted', "TEXT");
 
-
         // upgrade course documents directory
         $baseFolder = "$webDir/courses/".$code[0]."/document";
         $tmpfldr = getcwd();
         if (!@chdir("$webDir/courses/".$code[0]."/document")) {
-                die("Can't enter document course folder!");
+                die("Δεν είναι δυνατή η πρόσβαση στον κατάλογο των εγγράφων (documents)!");
         }
 
         //function gia anavathmisi twn arxeiwn se kathe course
@@ -925,22 +921,18 @@ while ($code = mysql_fetch_row($res)) {
         $tool_content .= add_field("accueil","define_var", "VARCHAR(50) NOT NULL");
 
         // Move all external links to id > 100
-        if (db_query("UPDATE IGNORE `accueil`
-                                SET `id` = `id` + 80
-                                WHERE `id`>20 AND `id`<100", $code[0])) {
-                $tool_content .= "Όλοι οι εξωτερικοί (με id >= 20) σύνδεσμοι μετακινήθηκαν με id >=101<br>";
-        } else {
-                $tool_content .= "Δεν μετακινήθηκαν οι εξωτερικοί σύνδεσμοι<br>";
-        }
+        db_query("UPDATE IGNORE `accueil`
+                    SET `id` = `id` + 80
+                    WHERE `id`>20 AND `id`<100", $code[0]);
 
         // id νέων υποσυστημάτων
         if (accueil_tool_missing('MODULE_ID_QUESTIONNAIRE')) {
                 db_query("INSERT IGNORE INTO accueil VALUES (
-                        21,
+                        '21',
                         '$langQuestionnaire[$lang]',
                         '../../modules/questionnaire/questionnaire.php',
                         'questionnaire',
-                        '1',
+                        '0',
                         '0',
                         '../../../images/pastillegris.png',
                         'MODULE_ID_QUESTIONNAIRE'
@@ -949,11 +941,11 @@ while ($code = mysql_fetch_row($res)) {
 
         if (accueil_tool_missing('MODULE_ID_LP')) {
                 db_query("INSERT IGNORE INTO accueil VALUES (
-                        23,
+                        '23',
                         '$langLearnPath[$lang]',
                         '../../modules/learnPath/learningPathList.php',
                         'lp',
-                        '1',
+                        '0',
                         '0',
                         '../../../images/pastillegris.png',
                         'MODULE_ID_LP'
@@ -974,7 +966,7 @@ while ($code = mysql_fetch_row($res)) {
 
         if (accueil_tool_missing('MODULE_ID_TOOLADMIN')) {
                 db_query("INSERT IGNORE INTO accueil VALUES (
-                        25,
+                        '25',
                         '$langToolManagement[$lang]',
                         '../../modules/course_tools/course_tools.php',
                         'tooladmin',
@@ -987,11 +979,11 @@ while ($code = mysql_fetch_row($res)) {
 
         if (accueil_tool_missing('MODULE_ID_WIKI')) {
                 db_query("INSERT IGNORE INTO accueil VALUES (
-                        26,
+                        '26',
                         '$langWiki[$lang]',
                         '../../modules/wiki/wiki.php',
                         'wiki',
-                        '1',
+                        '0',
                         '0',
                         '../../../images/pastillegris.png',
                         'MODULE_ID_WIKI'
@@ -1209,7 +1201,6 @@ function add_field($table, $field, $type)
 			$retString .= " $OK<br>";
 		} else {
 			$retString .= " $BAD<br>";
-			$GLOBALS['errors']++;
 		}
 	} else {
 		$retString .= "Υπάρχει ήδη. $OK<br>";
@@ -1230,7 +1221,6 @@ function add_field_after_field($table, $field, $after_field, $type)
 			$retString .= " $OK<br>";
 		} else {
 			$retString .= " $BAD<br>";
-			$GLOBALS['errors']++;
 		}
 	} else {
 		$retString .= "Υπάρχει ήδη. $OK<br>";
@@ -1249,7 +1239,6 @@ function rename_field($table, $field, $new_field, $type)
 			$retString .= " $OK<br>";
 		} else {
 			$retString .= " $BAD<br>";
-			$GLOBALS['errors']++;
 		}
 	} else {
 		$retString .= "Υπάρχει ήδη. $OK<br>";
@@ -1268,7 +1257,6 @@ function delete_table($table)
 		$retString .= " $OK<br>";
 	} else {
 		$retString .= " $BAD<br>";
-		$GLOBALS['errors']++;
 	}
 	return $retString;
 }
@@ -1293,7 +1281,6 @@ function merge_tables($table_destination,$table_source,$fields_destination,$fiel
 		$retString .= " $OK<br>";
 	} else {
 		$retString .= " $BAD<br>";
-		$GLOBALS['errors']++;
 	}
 
 	return $retString;
