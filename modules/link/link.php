@@ -69,7 +69,7 @@ $tool_content = "";
 include("linkfunctions.php");
 
 // treating the post date by calling the relevant function depending of the action querystring.
-if (isset($action)) {
+if (isset($action) && ($is_adminOfCourse)) { //allow link management actions only for course admin
 	switch($action)
 	{
 		case "addlink":	if(isset($submitLink)) {
