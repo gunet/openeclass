@@ -448,18 +448,18 @@ function confirmation (name)
 
 else {
 	$result = db_query("SELECT * FROM annonces WHERE code_cours='$currentCourseID'
-				ORDER BY ordre DESC",$mysqlMainDb) OR die("DB problem");
+				ORDER BY ordre DESC", $mysqlMainDb) OR die("DB problem");
 	if (mysql_num_rows($result) > 0) {
 		$tool_content .=  "<table width=\"99%\"";
 		while ($myrow = mysql_fetch_array($result))
 		{
-			$content = $myrow[1];
+			$content = $myrow['contenu'];
 			$content = make_clickable($content);
 			$content = nl2br($content);
 
 			$tool_content .=  "
 		<tr class=\"odd\">
-			<td>$langPubl : ".greek_format($myrow["temps"])."</td></tr>
+			<td>$langPubl: ".greek_format($myrow["temps"])."</td></tr>
 			<tr><td>$content</td></tr>";
 
 		}	// while loop
