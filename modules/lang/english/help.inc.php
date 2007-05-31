@@ -386,16 +386,16 @@ Give a weighting to each correct matching, and save your answer.</p>
 <b>Exercise modification</b>
 <p>In order to modify an exercise, the principle is the same as for the creation. Just click on the picture <img
 src=\"
-../img/edit.gif\" border=\"0\" align=\"absmiddle\"> beside the exercise to modify, and follow instructions
+../../template/classic/img/edit.gif\" border=\"0\" align=\"absmiddle\"> beside the exercise to modify, and follow instructions
 above.</p>
 <hr>
 <b>Exercise deleting</b>
-<p>In order to delete an exercise, click on the picture <img src=\"../img/delete.gif\" border=\"0\"
+<p>In order to delete an exercise, click on the picture <img src=\"../../template/classic/img/delete.gif\" border=\"0\"
 align=\"absmiddle\"> beside the exercise to delete.</p>
 <hr>
 <b>Exercise enabling</b>
 <p>So as for an exercise to be used, you have to enable it by clicking on the picture
-<img src=\"../img/invisible.gif\" border=\"0\" align=\"absmiddle\"> beside the exercise to enable.</p>
+<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" align=\"absmiddle\"> beside the exercise to enable.</p>
 <hr>
 <b>Exercise running</b>
 <p>You can test your exercise by clicking on its name in the exercise list.</p>
@@ -426,10 +426,10 @@ $langWorkContent = "
 <p>As a professor, you can create an assignment by clicking on <b>\"New Assignment\"</b>.
 Fill in the title of the assignment, define a deadline and optionally add a comment.</p>
 <p>When the assignment has completed, do not forget to activate it by clicking on the icon
-<img src=\"../../images/invisible.gif\" border=\"0\" align=\"absmiddle\">. The assignment will be visible
+<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" align=\"absmiddle\">. The assignment will be visible
 and accessible by the students only when it is activated.
-You can edit the assignment by clicking on the icon <img src=\"../../images/edit.gif\" border=\"0\" align=\"middle\">
-or deleting it by clicking on the icon <img src=\"../../images/delete.gif\" border=\"0\" align=\"middle\">.
+You can edit the assignment by clicking on the icon <img src=\"../../template/classic/img/edit.gif\" border=\"0\" align=\"middle\">
+or deleting it by clicking on the icon <img src=\"../../template/classic/img/delete.gif\" border=\"0\" align=\"middle\">.
 Clicking on the title of the assignment, you have access to the students submissions.
 The corresponding details are the submission date and the filename.
 Clicking on \"Download assignments (in .zip format)\" you will download all the submitted files by the students
