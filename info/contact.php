@@ -40,15 +40,14 @@ $tool_content .= "
           $postaddress<br>
 				</blockquote>
 		<blockquote><img src='../images/phone.gif' align='absbottom'>&nbsp;&nbsp;
-		    $langPhone
-         $telephone<br>
+		    $langPhone $telephone<br>
          $langFax
          $fax
 			</blockquote>
 			<blockquote>
 			<img src='../images/email.gif' align='absbottom'>&nbsp;&nbsp;
           <b>$langEmail : </b>".mailto($emailAdministrator, str_replace('@', ' &lt;at> ', $emailAdministrator))."
-       </blockquote></div>";
+       </blockquote>";
 
 draw($tool_content, 0);
 ?>

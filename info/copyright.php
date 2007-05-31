@@ -34,10 +34,7 @@ include '../include/baseTheme.php';
 $nameTools = $langCopyright;
 $tool_content = "";
 
-$tool_content .= "<blockquote><font size='2' face='arial, helvetica'>
-<p align=justify>$langCopyrightNotice</p>
-</font>
-</blockquote>";
+$tool_content .= "<p align=justify>$langCopyrightNotice</p>";
 
 if(session_is_registered('uid')) draw($tool_content,1);
 else draw($tool_content, 0);
