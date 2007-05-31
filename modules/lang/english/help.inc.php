@@ -273,7 +273,7 @@ many ways to fill them:
 <li>manually ('Edit'),</li>
 <li>self-registration by students (Groups settings: 'Self registration allowed...').</li>
 </ul>
-These three ways can be combined. You can, for instance, ask students to self-register first.
+<p>These three ways can be combined. You can, for instance, ask students to self-register first.
 Then discover that some of them didn't and decide then to fill groups automatically in
 order to complete them. You can also edit each group to compose membership one student
 at a time after or before self-registration and/or automatical filling.</p>
