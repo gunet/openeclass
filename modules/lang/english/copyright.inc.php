@@ -30,10 +30,18 @@
 $langCopyright = "Copyright Notice";
 
 $langCopyrightNotice = '
-GUNet e-Class © 2003 - 2006, <a href="http://www.uoa.gr/">National and Kapodistrian University of Athens<a>.<br>&nbsp;<br>
-Platform η-Τάξη is based in platform <a href="http://eclass.gunet.gr">GUnet e-Class</a>,
-which developed by the Asynchronous Teleteaching Team of GUNet.<br>&nbsp;<br>
-Lessons content belongs to their authors and Network Operations Center has no rights to them.
-For any use or reproduction of their content please contact the corresponding authors.';
+eClass © 2003 - 2007 <a href="http://www.gunet.gr/" target=_blank>Greek Universities Network GUnet</a>.<br>&nbsp;<br>
+The <a href="http://portal.eclass.gunet.gr" target=_blank>eClass platform</a>
+is a complete Electronic Course Management System and constitutes GUnet\'s
+proposition for an Asynchronous Teleteaching Service infrastructure.
+It was developed and is actively supported by the GUnet Asynchronous
+Teleteaching Team, and is <a
+href="http://download.eclass.gunet.gr" target="_blank">distributed freely</a>
+as Open Source Software under the GNU General Public License (GNU GPL).<br><br>
+
+The content of Electronic Courses hosted on the eClass platform, as well as
+all copyrights of this content, belongs to the authors of the courses and
+GUnet claims no rights on it. For every use or republication of course
+content, please contact the persons in charge of the respective course.';
 
 ?>
