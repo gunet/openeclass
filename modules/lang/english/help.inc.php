@@ -718,7 +718,18 @@ and all uploaded <i>Scorm format Learning Paths</i>, as well.</p>
 $langHUsage = "Usage Statistics";
 $langUsageContent =
 "
-Write Help Text Here.
+<p>The usage statistics modules allows the professor to see statistics about his lesson. They are presented in the form of charts or lists.</p>
+<p><strong>Statistics categories</strong></p>
+<ul>
+<li>Usage statistics</li>
+<li>Favorite modules</li>
+<li>User visits</li>
+<li>Old statistics</li>
+</ul>
+<p>Usage statistics can be grouped by number of visits or visit duration. Additionally, the professor is able to choose the modules he wants to see and the timeframe.</p>
+<p>The favorite modules statistics can be grouped by number of visits or visit duration. Additionally, the professor is able to choose the modules he wants to see.</p>
+<p>The user visits statistics can be grouped by users, either all, or by letter.</p>
+<p>Old statistics can be grouped by number of visits or visit duration. Additionally, the professor is able to choose the modules he wants to see and the timeframe.</p>
 ";
 
 //Help Create Course Wizard
