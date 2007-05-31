@@ -584,7 +584,7 @@ $langVideoContent = "<b><u>Περιγραφή</u></b>
 
 // Help Conference
 
-$langConference = "Τηλεσυνεργασία";
+$langHConference = "Τηλεσυνεργασία";
 $langConferenceContent = "
 <b><u>Περιγραφή</u></b>
 <p>Δίνει την δυνατότητα επικοινωνίας σε πραγματικό χρόνο μεταξύ των εκπαιδευτών και των εκπαιδευόμενων.<br></p>
