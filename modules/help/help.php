@@ -23,9 +23,61 @@ if (!isset($_GET['topic']) ||  empty($GLOBALS["lang$_GET[topic]Content"])) {
 	<head>
 		<title><?= $GLOBALS["langH$_GET[topic]"] ?></title>
 		<link href="../../template/classic/tool_content.css" rel="stylesheet" type="text/css" />
+
 		<style type='text/css'>
-			body, h1 { background-color: white; font-family: Arial, Helvetica, sans-serif; }
-			ul, li {font-size:12px;}
+					html {
+                                background-color: #575656;
+                                padding: 5px 5px 5px 5px;
+                           }	
+                      body {
+                                background-color: #ffffff;
+                                color: #575656;
+                                font-size: 11px; font-family: Verdana, Arial;
+                                line-height: 1.3;
+                           }
+
+                        h3 {
+                                color: #004571;
+                                background : #F1F1F1;
+                                font-size : 14pt;
+                                border-bottom : 1px solid Silver;
+                                border-right : 1px solid Silver;
+                                border-top : 1px solid Silver;
+                                border-left : 1px solid Silver;
+                                padding : 8px;
+                                font-variant : normal;
+                                font-weight : bold;
+                           }
+                        
+                        p {
+                           padding: 10px;
+                            text-align:justify;
+                        }
+
+			h4 {
+				background-color: white; 
+                                font-family: Verdana, Arial, Helvetica;
+                                color: #004571;
+				font-size: 12px;
+                                padding: 10px;
+                                border-bottom : 1px dotted silver;
+			   }
+			.helptopic {
+				font-size: 11px; font-family: Verdana, Arial;
+				text-align:justify;
+				line-height: 1.3;
+				margin-right: 10px;
+				margin-left: 10px;
+				}
+			.lihelptopic {
+				font-size: 11px; font-family: Verdana, Arial;
+				text-align:justify;
+				line-height: 1.3;
+				margin-right: 10px;
+				margin-left: 10px;
+				list-style-type: square;
+                                }
+
 		</style>
 	</head>
 	<body>
