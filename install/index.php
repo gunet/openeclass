@@ -1203,11 +1203,14 @@ CREATE TABLE `auth` (
 
 
 		// encrypt the admin password before storing it, into DB
+		/*
 		include '../modules/auth/auth.inc.php';
 		$crypt = new Encryption;
 		$key = $encryptkey;
 		$pswdlen = "20";
 		$password_encrypted = $crypt->encrypt($key, $passForm, $pswdlen);
+		*/
+		$password_encrypted = md5($passForm);
 		$exp_time = time() + 140000000;
 
 		mysql_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`, `registered_at`,`expires_at`)
