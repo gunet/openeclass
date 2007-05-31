@@ -74,25 +74,18 @@ if (isset($_POST["submit"])) {
                                 $errorExists = true;
 													//			$tool_content .= "<p>".$langWrongPassCourse." ".$contenu."</p>";
                         } else {
+                        	if(!is_restricted($contenu)) { //do not allow registration to restricted course
                                 $sqlInsertCourse =
                                 "INSERT INTO `cours_user`
                                                 (`code_cours`, `user_id`, `statut`, `role`)
                                                 VALUES ('".$contenu."', '".$uid."', '5', ' ')";
                                 mysql_query($sqlInsertCourse) ;
                                 if (mysql_errno() > 0) echo mysql_errno().": ".mysql_error()."<br>";
+                        	} else { //DUKE
+                                $restrictedCourses[$i]=$contenu;
+                        	}
                         }
 
-									/*
-                        if(!is_restricted($contenu)) { //DUKE
-                                $sqlInsertCourse = 
-                                        "INSERT INTO `cours_user` 
-                                        (`code_cours`, `user_id`, `statut`, `role`)
-                                        VALUES ('".$contenu."', '".$uid."', '5', ' ')"; 
-                                        db_query($sqlInsertCourse) ;
-                                if (mysql_errno() > 0) echo mysql_errno().": ".mysql_error()."<br>";
-                        } else { //DUKE
-                                $restrictedCourses[$i]=$contenu;
-                        } //DUKE */
                 } 
         }
         $tool_content .= "<table width=96% height=363 border=0><tr><td valign=top>";
@@ -100,9 +93,9 @@ if (isset($_POST["submit"])) {
 	        $tool_content .= "<div class=alert1>$langIsReg</div><br><br><br><br>";
 				else 
 						$tool_content .= "<div class=alert1>$langWrongPassCourse $contenu</div><br><br><br><br>";
-        if($restrictedCourses!=null) { //DUKE
-                $tool_content .= "<div class=alert1>(Μη επιτρεπτή ενέργεια)</div><br><br><br><br>";
-        } //DUKE
+        //if($restrictedCourses!=null) { 
+        //        $tool_content .= "<div class=alert1>(Μη επιτρεπτή ενέργεια)</div><br><br><br><br>";
+        //} 
         $tool_content .= "<div align=right><a href=\"../../index.php\" class=mainpage>$langHome</a></div>";
         $tool_content .= "</td></tr></table>";
 }
