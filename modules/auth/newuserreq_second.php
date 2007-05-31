@@ -97,27 +97,31 @@ send_mail($siteName, $emailAdministrator, '', $email_form, $emailsubject, $email
 		if (!isset($institut)) {
 			$institut = "NULL";
 		}
+		$registered_at = time();
+    $expires_at = time() + $durationAccount;  
+
+		$password_encrypted = md5($password);
 		$s = mysql_query("SELECT id FROM faculte WHERE name='$department'");
 		$dep = mysql_fetch_array($s);
 		$inscr_user=mysql_query("INSERT INTO `$mysqlMainDb`.user
-			(user_id, nom, prenom, username, password, email, statut, department, inst_id)
-			VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password', '$email_form', '5', '$dep[id]', '$institut')");
+			(user_id, nom, prenom, username, password, email, statut, department, inst_id, registered_at, expires_at)
+			VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email_form', '5', '$dep[id]', '$institut', '$registered_at', '$expires_at')");
 		
 		// close request
         $rid = intval($_POST['rid']);
         db_query("UPDATE prof_request set status = '2',
          date_closed = NOW() WHERE rid = '$rid'");
 
-    $tool_content .= "<tr><td>&nbsp;</td></tr>
+    $tool_content .= "
 		<tr><td valign='top' align='center' class=alert1>$usersuccess
-		<br><br>
-		<a href='../admin/listrequsers.php' class=mainpage>$langBackReqUsers</a>
+		<br>
+		<a href='../admin/listrequsers.php' class=mainpage>$langBackAdmin</a>
 		<br>&nbsp;<br>&nbsp;<br>&nbsp;<br>";
     $tool_content .= end_tables();
 	}
 }
 
-draw($tool_content,3);
+draw($tool_content, 3);
 
 
 // -----------------
