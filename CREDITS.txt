@@ -29,34 +29,26 @@
           Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)
 
       Special Credits to:
-
-         Dimitra Kralli <d.kralli@di.uoa.gr>
-         Stevy Georgiadi <stevy@gunet.gr>
-                
+         Dimitra Kralli <d.kralli@di.uoa.gr> (University of Athens)
+         Stevy Georgiadi <stevy@gunet.gr> (University of Athens)
          Victoria Daskalou <daskalou@upnet.gr> (University of Patras)
-				 Thanos Kyritsis <atkyritsis@upnet.gr> (University of Patras)
-				 Evelthon Prodromou <eprodromou@upnet.gr> (University of Patras)		
-				 Artemios Vogiatzis <bogart@upatras.gr (University of Patras)
-				 George Doukas <geodoukas@upatras.gr> (University of Patras)
-
-				 Stratos Karatzidis <kstratos@uom.gr> (University of Macedonia)
-				 Pitsiougas Vagelis <vagpits@uom.gr> (University of Macedonia)
-				 Dimitris Kiziridis	<kyzdim@uom.gr> (University of Macedonia)
-
-				 Ophelia Neofytou <ophelia@ucnet.uoc.gr> (Universify of Crete)
+	 Evelthon Prodromou <eprodromou@upnet.gr> (University of Patras)
+	 Thanos Kyritsis <atkyritsis@upnet.gr> (University of Patras)
+			
+      
+      Also Credits to:	 
+	 Artemios Vogiatzis <bogart@upatras.gr (University of Patras)
+	 George Doukas <geodoukas@upatras.gr> (University of Patras)
+	 Stratos Karatzidis <kstratos@uom.gr> (University of Macedonia)
+	 Pitsiougas Vagelis <vagpits@uom.gr> (University of Macedonia)
+	 Ophelia Neofytou <ophelia@ucnet.uoc.gr> (Universify of Crete)
          Vangelis Chaniotakis <haniotak@ucnet.uoc.gr> (University of Crete)
-
-				 Sakis Agorastos <th_agorastos@hotmail.com> (University of Piraeus)
-
-				 Dimitris Daskopoulos <dimitris@ccf.auth.gr> (Aristotele University of Thessaloniki)
-				 Savvas Anastasiadis <sanastas@ccf.auth.gr> (Aristotele University of Thessaloniki)				
-				 Dimitris Tsachalis <ditsa@ccf.auth.gr> (Aristotele University of Thessaloniki)
-	
-				 Ilias Mpertsimas	<mhlias@noc.teilam.gr> (Technological Educational Institute of Lamia)
-
-				 Dionysios G. Synodinos <dsin@noc.ntua.gr> (National Technical University of Athens)
-
-			Also Credits to:
+	 Sakis Agorastos <th_agorastos@hotmail.com> (University of Piraeus)
+	 Dimitris Daskopoulos <dimitris@ccf.auth.gr> (Aristotele University of Thessaloniki)
+	 Savvas Anastasiadis <sanastas@ccf.auth.gr> (Aristotele University of Thessaloniki)				
+	 Dimitris Tsachalis <ditsa@ccf.auth.gr> (Aristotele University of Thessaloniki)
+	 Ilias Mpertsimas <mhlias@noc.teilam.gr> (Technological Educational Institute of Lamia)
+	 Dionysios G. Synodinos <dsin@noc.ntua.gr> (National Technical University of Athens)
          Michalis Psaltakis (Aegean University)
          Konstantinidis K. (Aristotele University of Thessaloniki)
 
