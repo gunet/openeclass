@@ -431,9 +431,7 @@ cData;
 
 		$totalWeighting+=$questionWeighting;
 	}	// end foreach()
-?>
 
-<?
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -451,8 +449,8 @@ $exerciseTimeConstrain=$objExercise->selectTimeConstrain();
 $exerciseTimeConstrain = $exerciseTimeConstrain*60;
 $RecordEndDate = ($SubmitDate = date("Y-m-d H:i:s"));
 $SubmitDate = mktime(substr($SubmitDate, 11,2),substr($SubmitDate, 14,2),substr($SubmitDate, 17,2),substr($SubmitDate, 5,2),substr($SubmitDate, 8,2),substr($SubmitDate, 0,4));	
-$OnTime = ($SubmitDate - ($RecordStartTime_temp + $exerciseTimeConstrain));
-if ($OnTime < 0) { // exercise time limit hasn't expired
+$OnTime = $RecordStartTime_temp + $exerciseTimeConstrain - $SubmitDate;
+if ($OnTime > 0 or $is_adminOfCourse) { // exercise time limit hasn't expired
 	$sql="SELECT eurid FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
 	$result = mysql_query($sql);
 	$row=mysql_fetch_array($result);
@@ -462,8 +460,6 @@ if ($OnTime < 0) { // exercise time limit hasn't expired
 	$sql="UPDATE `exercise_user_record` SET RecordEndDate='$RecordEndDate',TotalScore='$totalScore', TotalWeighting='$totalWeighting', attempt='$attempt' WHERE eurid='$eurid'";
 	db_query($sql,$currentCourseID);
 } else {  // not allowed begin again
-	//header('Location: exercise_redirect.php');
-	//exit();
 	// if the object is not in the session
 	if(!session_is_registered('objExercise')) {
 		// construction of Exercise
