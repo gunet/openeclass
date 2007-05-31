@@ -89,20 +89,20 @@ $tool_content .= "<a href=\"listusers.php?c=4\">".$langInactiveUsers."</a><br><b
 $tool_content .= "<form action=\"listusers.php?search=".$new."\" method=\"post\" name=\"user_search\">";
 $tool_content .= "<table width=\"99%\"><tbody>";
 $tool_content .= "<tr>
-    <td width=\"3%\" nowrap><b>$langSurname</b>:</td>
+    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langSurname</b>:</th>
     <td><input type=\"text\" name=\"user_sirname\" size=\"40\" value=\"".$user_sirname."\"></td>
 </tr>
 <tr>
-    <td width=\"3%\" nowrap><b>$langName</b>:</td>
+    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langName</b>:</th>
     <td><input type=\"text\" name=\"user_firstname\" size=\"40\" value=\"".$user_firstname."\"></td>
 </tr>
 ";
 $tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>$langAm:</b></td>
+    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langAm:</b></th>
     <td><input type=\"text\" name=\"user_am\" size=\"30\" value=\"".$user_am."\"></td>
 </tr>";
 $tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>$langUserType ($langStudent2/$langTeacher):</b></td>
+    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langUserType ($langStudent2/$langTeacher):</b></th>
     <td>";
 $usertype_data = array();
 $usertype_data[5] = $langStudent2;
@@ -111,7 +111,7 @@ $tool_content .= selection2($usertype_data,"user_type",$user_type);
 $tool_content .= "</td>
 </tr>";
 $tool_content .= " <tr>
-    <td width=\"3%\" nowrap><b>$langRegistrationDate:</b></td>
+    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langRegistrationDate:</b></th>
     <td>";
 $user_registered_at_flag_data = array();
 $user_registered_at_flag_data[1] = $langAfter;
@@ -139,17 +139,16 @@ $tool_content .= $datetime->get_select_years("ldigit", "2002", "2029", "year")."
 	. $datetime->get_select_days(1, "day")."&nbsp;&nbsp;&nbsp;"
 	. $datetime->get_select_hours(1, 12, "hour")
 	. $datetime->get_select_minutes(1, "min")
-		. $datetime->get_select_seconds(1, "sec")
+	. $datetime->get_select_seconds(1, "sec")
 	. $datetime->get_select_ampm();
 	
-$tool_content .= "</td>
-  </tr>";  
+$tool_content .= "</td></tr>";  
 $tool_content .= "<tr>
-    <td width=\"3%\" nowrap><b>$langEmail:</b></td>
+    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langEmail:</b></th>
     <td><input type=\"text\" name=\"user_email\" size=\"40\" value=\"".$user_email."\"></td>
 </tr>";
 $tool_content .= "<tr>
-    <td width=\"3%\" nowrap><b>$langUsername:</b></td>
+    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langUsername:</b></th>
     <td><input type=\"text\" name=\"user_username\" size=\"40\" value=\"".$user_username."\"></td>
 </tr>";
 $tool_content .= "  <tr>
@@ -164,5 +163,5 @@ $tool_content .= "</tbody></table></form>";
 $tool_content .= "<br /><center><p><a href=\"index.php\">$langReturn</a></p></center>";
 
 // 3: display administrator menu
-draw($tool_content,3);
+draw($tool_content,3, 'admin');
 ?>

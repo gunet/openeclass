@@ -55,7 +55,6 @@ $tool_content = "";
 
 $nameTools = $langEditUser;
 
-//$u = (string)isset($_GET['u'])?$_GET['u']:(isset($_POST['u'])?$_POST['u']:'');
 $u_submitted = isset($_POST['u_submitted'])?$_POST['u_submitted']:'';
 if((!empty($u)) && ctype_digit($u) )	// validate the user id
 {
@@ -68,7 +67,7 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
 		if (!$sql)
 		{
 			die("Unable to query database (user_id='$u')!");
-		}
+		}	
 		$info = mysql_fetch_array($sql);
 
 		$tool_content .= "<div id=\"operations_container\">
@@ -83,14 +82,14 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
 		$tool_content .= "<h4>$langEditUser $info[2]</h4>";
 		$tool_content .= "<form name=\"edituser\" method=\"post\" action=\"./edituser.php\">
 	<table width=\"99%\" border=\"0\">
-	<tr><td width=\"20%\">$langSurname: </td><td width=\"80%\"><input type=\"text\" name=\"lname\" size=\"40\" value=\"".$info[0]."\"</td></tr>
-	<tr><td width=\"20%\">$langName: </td><td width=\"80%\"><input type=\"text\" name=\"fname\" size=\"40\" value=\"".$info[1]."\"</td></tr>
-	<tr><td width=\"20%\">$langUsername: </td><td width=\"80%\"><input type=\"text\" name=\"username\" size=\"30\" value=\"".$info[2]."\"</td></tr>
+	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langSurname: </th><td width=\"80%\"><input type=\"text\" name=\"lname\" size=\"40\" value=\"".$info[0]."\"</td></tr>
+	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langName: </th><td width=\"80%\"><input type=\"text\" name=\"fname\" size=\"40\" value=\"".$info[1]."\"</td></tr>
+	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'  width=\"20%\">$langUsername: </th><td width=\"80%\"><input type=\"text\" name=\"username\" size=\"30\" value=\"".$info[2]."\"</td></tr>
 	
-	<tr><td width=\"20%\">E-mail: </td><td width=\"80%\"><input type=\"text\" name=\"email\" size=\"50\" value=\"".$info[4]."\"</td></tr>
-	<tr><td width=\"20%\">$langTel: </td><td width=\"80%\"><input type=\"text\" name=\"phone\" size=\"30\" value=\"".$info[5]."\"</td></tr>";
+	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">E-mail: </th><td width=\"80%\"><input type=\"text\" name=\"email\" size=\"50\" value=\"".$info[4]."\"</td></tr>
+	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langTel: </th><td width=\"80%\"><input type=\"text\" name=\"phone\" size=\"30\" value=\"".$info[5]."\"</td></tr>";
 
-		$tool_content .= "<tr><td width=\"20%\">$langDepartment: </td><td width=\"80%\">";
+		$tool_content .= "<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langDepartment: </th><td width=\"80%\">";
 		if(!empty($info[6]))
 		{
 			$department_select_box = list_departments($info[6]);
@@ -103,8 +102,8 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
 		$tool_content .= $department_select_box
 		."</td></tr>";
 
-		$tool_content .= "<tr><td width=\"20%\">$langRegistrationDate: </td><td width=\"80%\"><span style=\"color:green;font-weight:bold;\">".date("j/n/Y H:i",$info[7])."</span></td></tr>
-		<tr><td width=\"20%\">$langExpirationDate: </td><td width=\"80%\">";
+		$tool_content .= "<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langRegistrationDate: </th><td width=\"80%\"><span style=\"color:green;font-weight:bold;\">".date("j/n/Y H:i",$info[7])."</span></td></tr>
+		<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langExpirationDate: </th><td width=\"80%\">";
 
 		$difference = abs($info[8]-$info[7]);		// Calculate the difference between registration and expiration
 
@@ -131,7 +130,7 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
 		. $datetime->get_select_ampm();		// end format date-menu
 
 		$tool_content .= "</td></tr>
-		<tr><td width=\"20%\">$langUserID: </td><td width=\"80%\">$u</td></tr>
+		<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langUserID: </th><td width=\"80%\">$u</td></tr>
 		</table>
 		<br /><input type=\"hidden\" name=\"u\" value=\"".$u."\">
 		<input type=\"hidden\" name=\"u_submitted\" value=\"1\">

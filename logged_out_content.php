@@ -67,56 +67,8 @@ lCont;
 
 $tool_content .='<br>';
 
- /*
-  * Make table with general platform information
-  * ophelia neofytou - 2006/09/26
-  */
  @include("./modules/lang/$language/admin.inc.php");
  @include("./modules/lang/$language/about.inc.php");
-/*
-//find uptime
-$sql_stats = "SELECT code FROM cours";
-$result = db_query($sql_stats);
-$course_codes = array();
-while ($row = mysql_fetch_assoc($result)) {
-    $course_codes[] = $row['code'];
-}
-mysql_free_result($result);
-
-$first_date_time = time();
-
-foreach ($course_codes as $course_code) {
-    $sql_stats = "SELECT UNIX_TIMESTAMP(MIN(date_time)) AS first FROM actions";
-    $result = db_query($sql_stats, $course_code);
-    while ($row = mysql_fetch_assoc($result)) {
-        $tmp = $row['first'];
-        if ($tmp < $first_date_time and $tmp !=0 ) {
-            $first_date_time = $tmp;
-
-        }
-    }
-    mysql_free_result($result);
-
-}
-$uptime = date("Y-m-d H:i:s", $first_date_time);
-
-//find number of logins
-mysql_select_db($mysqlMainDb);
-$lastMonth = date("Y-m-d H:i:s", time()-24*3600*30);
-$total_logins = mysql_fetch_array(db_query("SELECT COUNT(idLog) FROM loginout WHERE action='LOGIN' AND `when`> '$lastMonth'"));
-
-//$tool_content .= "<table width=\"99%\"><thead>";
-$tool_content .= "<p>".$langAboutCourses1." <b>".$a[0]."</b> ".$langCourses." (<i><b>".$a1[0].
-        "</b> ".$langOpen.", <b>".$a2[0]."</b> ".$langSemiopen.", <b>".$a3[0]."</b> ".$langClosed."</i>). ".
-        $langAboutUsers1." <b>".$e[0]."</b> (<i><b>".$b[0]."</b> ".$langProf.", <b>".$c[0]."</b> ".$langStud." ".$langAnd." <b>".$d[0]."</b> ".$langGuest."</i>). ".
-
-        $langUptime." <b>".$uptime."</b> ".
-        $langLast30daysLogins1." <b>".$total_logins[0]."</b>.<p>";
-*/
-// $tool_content .= "</td></tr></tbody></table><br>";
-###### end of table with platform information
-
-
 
 $result = db_query($sql, $mysqlMainDb);
 if (mysql_num_rows($result) > 0) {
@@ -135,7 +87,6 @@ if (mysql_num_rows($result) > 0) {
 		</tr>
 	</thead>
 	<tbody>";
-
 
 	$numOfAnnouncements = count($announceArr);
 
@@ -156,9 +107,7 @@ if (mysql_num_rows($result) > 0) {
 
 	}
 
-	$tool_content .= "
-			</tbody>
-		</table>";
+	$tool_content .= "</tbody></table>";
 }
 
 $tool_content .= <<<lCont2

@@ -34,7 +34,7 @@ $langLanguage = "Language";
 $langCoursesLabel = 'Courses';
 $langFaculte = "Faculty";
 $langNoCourses = "There are no available courses to register";
-
+$langEmptyFields = "Some fields are blank!";
 $langOtherCourses = "Course Registration";
 $langRegistration="Registration";
 $langName="First Name";

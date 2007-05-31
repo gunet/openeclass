@@ -192,5 +192,5 @@ $tool_content .= "<br><center><p><a href=\"index.php\">".$langReturn."</a></p></
 // $tool_content: the content to display
 // 3: display administrator menu
 // admin: use tool.css from admin folder
-draw($tool_content,3,'admin');
+draw($tool_content,3);
 ?>

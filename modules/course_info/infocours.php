@@ -28,6 +28,7 @@ $tool_content = "";
 // submit
 
 if($is_adminOfCourse) {
+
 	if (isset($submit)) {
 		if(isset($newlang)) {
 			$inclPath =  $webDir."modules/lang/$newlang/create_course.inc.php";
@@ -67,9 +68,6 @@ if($is_adminOfCourse) {
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langUsers' WHERE id='8'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langForums' WHERE id='9'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langExercices' WHERE id='10'");
-		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langStatistics' WHERE id='11'");
-		//		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langAddPageHome' WHERE id='12'");
-		//		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langLinkSite' WHERE id='13'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langModifyInfo' WHERE id='14'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langGroups' WHERE id='15'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langDropBox' WHERE id='16'");
@@ -85,6 +83,12 @@ if($is_adminOfCourse) {
 		<center><p><a href=\"".$_SERVER['PHP_SELF']."\">$langBack</a></p></center><br>
 		<center><p><a href=\"../../courses/".$currentCourseID."/index.php\">".$langHome."</a></p></center>";
 	} else {
+
+		$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
+		 $tool_content .= "<li><a href=\"archive_course.php\">$langBackupCourse</a></li>
+    <li><a href=\"delete_course.php\">$langDelCourse</a></li>
+    <li><a href=\"refresh_course.php\">$langRefreshCourse</a></li></ul></div>";
+
 		$sql = "SELECT cours_faculte.faculte,
 			cours.intitule, cours.description, course_keywords, course_addon,
 			cours.visible, cours.fake_code, cours.titulaires, cours.languageCourse, 
@@ -115,13 +119,13 @@ if($is_adminOfCourse) {
     <LEGEND><span class='labeltext'><b>$langCourseIden</b></span></LEGEND>
 		<table width=\"100%\" align=center cellpadding=\"1\" cellspacing=\"0\" border=\"0\">		
 
-		<tr><td valign=\"top\"><span class='labeltext'>$langCode&nbsp;:</span></td>
+		<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' valign=\"top\">$langCode&nbsp;:</th>
     <td valign=\"top\">$fake_code</td></tr>
-    <tr><td><span class='labeltext'>$langProfessors&nbsp;:</span></td>
+    <tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langProfessors&nbsp;:</th>
     <td><input type=\"text\" name=\"titulary\" value=\"$titulary\" size=\"60\" class=auth_input></td></tr>
-    <tr><td><span class='labeltext'>$langTitle:</span></td>
+    <tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langTitle:</th>
     <td><input type=\"Text\" name=\"int\" value=\"$int\" size=\"60\" class=auth_input></td></tr>
-    <tr><td><span class='labeltext'>$langFaculty :</span></td>
+    <tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langFaculty :</th>
 		<td>
 		<select name=\"facu\">";
 
@@ -133,23 +137,24 @@ if($is_adminOfCourse) {
 				$tool_content .= "<option value=\"".$myfac['id']."--".$myfac['name']."\">$myfac[name]</option>";
 		}
 		$tool_content .= "</select></td></tr>
-		<tr><th>$m[type]:</th><td>";
+		<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>$m[type]:</th><td>";
 
 		$tool_content .= selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']),'type', $type);
 
 		$tool_content .= "</td></tr>";
 
- 		@$tool_content .= "<tr><th>$langDescription:</th>
+ 		@$tool_content .= "<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langDescription:</th>
 		<td><textarea name=\"description\" value=\"$leCours[description]\" cols=\"40\" rows=\"4\">$leCours[description]</textarea></td></tr>
 		<tr>
-			<th>$langcourse_references:</th>
+			<th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langcourse_references:</th>
 			<td><textarea name=\"course_addon\" value=\"$leCours[course_addon]\" cols=\"40\" rows=\"4\">$leCours[course_addon]</textarea></td>
 		</tr>
 		<tr>
-			<th>$langcourse_keywords:</th>
+			<th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langcourse_keywords:</th>
 			<td><input type='text' name=\"course_keywords\" value=\"$leCours[course_keywords]\" size=\"60\"></td>
 		</tr>		
 		</thead></table></fieldset>
+		<br>
 		<FIELDSET>
     <LEGEND><span class='labeltext'><b>$langConfidentiality</b></span></LEGEND>
 		<table>
@@ -166,7 +171,7 @@ if($is_adminOfCourse) {
     </td></tr>
     </table>
     </FIELDSET>
-		
+		<br>
 		<FIELDSET>
     <LEGEND><span class='labeltext'><b>$langLanguage</b></span></LEGEND>
     <table>
@@ -182,14 +187,9 @@ if($is_adminOfCourse) {
 		$tool_content .= "</td></tr>";
 		$tool_content .= "</table></fieldset>
 
-		<br><div align=center><input type=\"Submit\" name=\"submit\" value=\"$langSubmit\"></div>
-		<p><b>$langOtherActions</b></p>
-		<ul class=\"listBullet\">
-		<li><a href=\"archive_course.php\">$langBackupCourse</a></li>
-		<li><a href=\"delete_course.php\">$langDelCourse</a>	</li>
-		<li><a href=\"refresh_course.php\">$langRefreshCourse</a></li>
-		</ul>
-		
+		<br>
+
+		<div align=center><input type=\"Submit\" name=\"submit\" value=\"$langSubmit\"></div>
 		</form>";
 	}     // else
 }   // if uid==prof_id

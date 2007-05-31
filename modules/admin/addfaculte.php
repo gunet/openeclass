@@ -146,10 +146,8 @@ elseif ($a == 1)  {
 		// Display form for new faculte information
 		$tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?a=1\">";
 		$tool_content .= "<table width=\"99%\"><caption>Εισαγωγή Στοιχείων Τμήματος</caption><tbody>";
-		$tool_content .= "		<tr><td width=\"3%\" nowrap>".$langCodeFaculte1.":</td><td><input type=\"text\" name=\"codefaculte\" value=\"".@$codefaculte."\"></td></tr>
-		<tr><td>&nbsp;</td><td><i>".$langCodeFaculte2."</i></td></tr>
-		<tr><td width=\"3%\" nowrap>".$langFaculte1.":</td><td><input type=\"text\" name=\"faculte\" value=\"".@$faculte."\"></td></tr>
-		<tr><td>&nbsp;</td><td><i>".$langFaculte2."</i></td></tr>
+		$tool_content .= "<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap>".$langCodeFaculte1.":</th><td><input type=\"text\" name=\"codefaculte\" value=\"".@$codefaculte."\"></td><td><i>".$langCodeFaculte2."</i></td></tr>
+		<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap>".$langFaculte1.":</th><td><input type=\"text\" name=\"faculte\" value=\"".@$faculte."\"></td><td><i>".$langFaculte2."</i></td></tr>
 		<tr><td colspan=\"2\"><input type=\"submit\" name=\"add\" value=\"".$langAddYes."\"></td</tr>
 		</tbody></table></form>";
 		}
@@ -204,7 +202,7 @@ elseif ($a == 3)  {
 		$myrow = mysql_fetch_array($result);
 		// Display form for edit faculte information
 		$tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?a=3\">";
-		$tool_content .= "<table width=\"99%\"><caption>Επεξεργασία Στοιχειών Τμήματος</caption><tbody>";
+		$tool_content .= "<table width=\"99%\"><caption>Επεξεργασία Στοιχείωνν Τμήματος</caption><tbody>";
 		$tool_content .= "		<tr><td width=\"3%\" nowrap>".$langCodeFaculte1.":</td><td><input type=\"text\" name=\"codefaculte\" value=\"".$myrow['code']."\" readonly></td></tr>
 		<tr><td>&nbsp;</td><td><i>".$langCodeFaculte2."</i></td></tr>
 		<tr><td width=\"3%\" nowrap>".$langFaculte1.":</td><td><input type=\"text\" name=\"faculte\" value=\"".$myrow['name']."\"></td></tr>
@@ -223,5 +221,5 @@ elseif ($a == 3)  {
 // $tool_content: the content to display
 // 3: display administrator menu
 // admin: use tool.css from admin folder
-draw($tool_content,3,'admin');
+draw($tool_content,3);
 ?>

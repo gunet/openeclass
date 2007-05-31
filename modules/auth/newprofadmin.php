@@ -29,7 +29,7 @@ if($submit)
 		$tool_content .= "<tr bgcolor=\"".$color2."\">
 		<td bgcolor=\"$color2\" colspan=\"3\" valign=\"top\">
 		<br>$langCharactersNotAllowed<br /><br />
-		<a href=\"./newuser.php\">".$langAgain."</a></td></tr></table>";
+		<a href=\"./newprofadmin.php\">".$langAgain."</a></td></tr></table>";
 	}
 	else	// do the other checks
 	{
@@ -48,17 +48,17 @@ if($submit)
 		if (empty($nom_form) or empty($prenom_form) or empty($password) or empty($usercomment) or empty($department) or empty($uname) or (empty($email_form) && !$userMailCanBeEmpty)) 
 		{
 			$tool_content .= "<p>$langEmptyFields</p>
-			<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
+			<br><br><center><p><a href=\"./newprofadmin.php\">$langAgain</a></p></center>";
 		}
 		elseif(isset($user_exist) and $uname==$user_exist) 
 		{
 			$tool_content .= "<p>$langUserFree</p>
-			<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
+			<br><br><center><p><a href=\"./newprofadmin.php\">$langAgain</a></p></center>";
 	  }
 		elseif(!$userMailCanBeEmpty &&!eregi($regexp,$email)) // check if email syntax is valid
 		{
 	        $tool_content .= "<p>$langEmailWrong.</p>
-			<br><br><center><p><a href=\"./newprof.php\">$langAgain</a></p></center>";
+			<br><br><center><p><a href=\"./newprofadmin.php\">$langAgain</a></p></center>";
 		}
 		else
 		{
@@ -102,36 +102,37 @@ else
 $tool_content .= "	<form action=\"newprofadmin.php\" method=\"post\">
 	<table width=\"99%\"><caption>$langNewProf</caption><tbody>
 	<tr valign=\"top\" bgcolor=\"".$color2."\">
-	<td width=\"3%\" nowrap><b>".$langSurname."</b></td>
+	<th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>".$langSurname."</b></th>
 	<td><input type=\"text\" name=\"nom_form\" value=\"".@$ps."\" >&nbsp;(*)</td>
 	</tr>
 	<tr bgcolor=\"".$color2."\">
-	<td width=\"3%\" nowrap><b>".$langName."</b></td>
+	<th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>".$langName."</b></th>
 	<td>
 	<input type=\"text\" name=\"prenom_form\" value=\"".@$pn."\">&nbsp;(*)</td>
 	</tr>
 	<tr bgcolor=\"".$color2."\">
-	<td width=\"3%\" nowrap><b>".$langUsername."</b></td>
+	<th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>".$langUsername."</b></th>
 	<td><input type=\"text\" name=\"uname\" value=\"".@$pu."\">&nbsp;(*)</td>
 	</tr>
 	<tr bgcolor=\"".$color2."\">
-	<td width=\"3%\" nowrap><b>".$langPass."&nbsp;:</b></td>
+	<th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>".$langPass."&nbsp;:</b></th>
 	<td><input type=\"text\" name=\"password\" value=\"".create_pass(5)."\"></td>
 	</tr>
 	<tr bgcolor=\"".$color2."\">
-	<td width=\"3%\" nowrap><b>".$langEmail."</b></td>
+	<th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>".$langEmail."</b></th>
 	<td><input type=\"text\" name=\"email_form\" value=\"".@$pe."\">&nbsp;(*)</b></td>
 	</tr>
 	<tr bgcolor=\"".$color2."\">
-        <td>".$profcomment."<br><font size=\"1\">".$profreason."
-       	</td>
+        <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>".$profcomment."<br>
+							<font size=\"1\">".$profreason."
+       	</th>
 	<td>
         <textarea name=\"usercomment\" COLS=\"35\" ROWS=\"4\" WRAP=\"SOFT\">".@$usercomment."</textarea>
 	<font size=\"1\">&nbsp;(*)</font>
         </td>
         </tr>
 	<tr bgcolor=\"".$color2."\">
-        <td>".$langDepartment.":</td>
+        <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>".$langDepartment.":</th>
         <td><select name=\"department\">";
         $deps=mysql_query("SELECT name FROM faculte order by id");
         while ($dep = mysql_fetch_array($deps)) 
@@ -152,6 +153,6 @@ $tool_content .= "	<form action=\"newprofadmin.php\" method=\"post\">
 
 $tool_content .= "<center><p><a href=\"../admin/index.php\">$langReturn</p></center>";
 }
-draw($tool_content,3,'admin');
 
+draw($tool_content, 3, 'admin');
 ?>

@@ -31,6 +31,8 @@
  $langStudents = "Φοιτητές";
  $langOther = "Άλλο";
 
+ $langUsage = "Στατιστικά Χρήσης";
+
  $langGDRequired = "Απαιτείται η βιβιλιοθήκη GD!";
  $langPersonalStats="Τα στατιστικά μου";
  $langUserLogins="Επισκέψεις χρηστών στο μάθημα";

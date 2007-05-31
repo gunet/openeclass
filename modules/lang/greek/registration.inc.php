@@ -35,6 +35,7 @@ $langCoursesLabel = 'Τμήματα';
 $langFaculte = "Τμήμα";
 $langNoCourses = "Δεν υπάρχουν διαθέσιμα μαθήματα για εγγραφή";
 
+$langEmptyFields = "Αφήσατε μερικά πεδία κενά!";
 $langOtherCourses = "Εγγραφή σε μάθημα";
 $langRegistration="Εγγραφή";
 $langName="Όνομα";

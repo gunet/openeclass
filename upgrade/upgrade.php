@@ -1063,7 +1063,7 @@ while ($code = mysql_fetch_row($res)) {
                 while ($text = mysql_fetch_array($sql)) {
                         if (db_query("UPDATE cours SET description='$text[0]' WHERE code='$code[0]'", $mysqlMainDb)) {
                                 $tool_content .= "Μεταφορά του εισαγωγικού κειμένου <b>$text[0]</b> στον πίνακα <b>cours</b>: $OK<br>";
-                                db_query("DROP TABLE introduction", $code[0]);
+                                db_query("DROP TABLE IF EXISTS introduction", $code[0]);
                         } else {
                                 $tool_content .= "Μεταφορά του εισαγωγικού κειμένου <b>$text[0]</b> στον πίνακα <b>cours</b>: $BAD<br>";
                         }
