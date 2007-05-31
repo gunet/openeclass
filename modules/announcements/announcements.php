@@ -321,8 +321,6 @@ function confirmation (name)
 		$displayForm             = false;//do not show form
 	}
 
-
-
 	/*----------------------------------------
 	DISPLAY FORM TO FILL AN ANNOUNCEMENT
 	(USED FOR ADD AND MODIFY)
@@ -389,7 +387,7 @@ function confirmation (name)
 			$myrow['temps'] = greek_format($myrow['temps']);
 			$tool_content .=  "<tbody>
 				<tr class=\"odd\"><span></span>
-					<td class=\"arrow\">".$langPubl." : ".$myrow['temps']."</td>";
+					<th>".$langPubl." : ".$myrow['temps']."</th>";
 			if ($announcementNumber>1){
 				$tool_content .= "<td width=21>";
 			}
@@ -416,7 +414,7 @@ function confirmation (name)
 
 			// DISPLAY ANNOUNCEMENT CONTENT
 			$tool_content .= "</td></tr>
-				<tr><td colspan=2>".$content."
+				<tr><td class='color1' colspan=2>".$content."
 				<br>
 				<a href=\"$_SERVER[PHP_SELF]?modify=".$myrow['id']."\">
 				<img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langModify."\"></a>
@@ -425,9 +423,7 @@ function confirmation (name)
 				</td></tr>";
 			$iterator ++;
 		}	// end while ($myrow = mysql_fetch_array($result))
-		$tool_content .=  "</tbody>
-			</table>";
-		// DISPLAY DELETE ALL ANNOUNCEMENTS COMMAND
+		$tool_content .=  "</tbody></table>";
 	}	// end: if ($displayAnnoucementList == true)
 
 	if ($announcementNumber <1) {
@@ -460,7 +456,7 @@ else {
 			$tool_content .=  "
 		<tr class=\"odd\">
 			<th>$langPubl: ".greek_format($myrow["temps"])."</th></tr>
-			<tr><td>$content</td></tr>";
+			<tr><td class='color1'>$content</td></tr>";
 
 		}	// while loop
 		$tool_content .=  "</table>";
