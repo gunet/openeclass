@@ -468,10 +468,10 @@ the description field may ask the student to study the difference between synthe
 // Help announcements
 
 $langHAnnounce = "Announcements";
-$langAnnounceContent = "You can add announcements in a course typing a description of announcements and pressing 'Ok'.
+$langAnnounceContent = "<p>You can add announcements in a course typing a description of announcements and pressing 'Ok'.</p><p>
 Also, you can change the announcement clicking on 'Modify' or delete an announcement clicking on 'Delete'. If you want
 to mail your announcement to the registered students in your lesson, just check 'Send this announcement by email to
-registered students'";
+registered students'</p>";
 
 // Help profile
 
