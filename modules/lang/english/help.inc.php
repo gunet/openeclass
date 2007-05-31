@@ -512,14 +512,9 @@ The link will open in a new browser window.</p>
 
 //Help Course tools
 $langHcourseTools = "Tools Administraion";
-$langcourseToolsContent = "<p>This module is used to activate or deactivate lesson tools. Each tool's status is presented on the second column named 'Status'. (active or not).</p>
-<p>Each tool can be in three possible states:</p>
-<ul>
-	<li><input type=\"checkbox\" checked> Active</li>
-	<li><input type=\"checkbox\" checked disabled> Permanently active (this refers tou the lesson's administration tools)</li>
-	<li><input type=\"checkbox\"> Inactive</li>
-</ul>
-<p>In order to change the status of a tool click on the checkbox next to it and then click  on 'Save changes' ath the end of the table.</p>
+$langcourseToolsContent = "<p>This module is used to activate or deactivate lesson tools. Each tool's status is presented on one of the two columns and can be active or not.</p>
+
+<p>In order to change the status of a tool click on the tools name to it and then click on '>>' to change it's status. You can move multiple tools by using CTRL+click. Finally, click  on 'Save changes' at the end of the table to save your changes.</p>
 ";
 
 $langHInfocours = "Modify course info";
