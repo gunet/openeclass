@@ -154,7 +154,7 @@ $langDocContent="<p>Το εργαλείο αρχείων είναι όμοιο σε λειτουργία με τον Διαχειρ
 </ul>
 <h4>Μετονομάστε ένα έγγραφο (ένα κατάλογο)</h4>
 <ul>
-  <li>κάντε κλίκ στο <img src=../document/img/renommer.gif width=20 height=20
+  <li>κάντε κλίκ στο <img src=../../template/classic/img/renommer.gif width=20 height=20
  align=baseline> πλήκτρο στη
   στήλη Μετονομασία</li>
   <li>Πληκτρολογήστε το καινούριο όνομα στο πεδίο (πάνω αριστερά)</li>
@@ -163,36 +163,36 @@ $langDocContent="<p>Το εργαλείο αρχείων είναι όμοιο σε λειτουργία με τον Διαχειρ
     <h4>Διαγραφή ενός αρχείου (ή ενος καταλόγου)</h4>
     <ul>
 
-  <li>Κάντε κλίκ <img src=../document/img/supprimer.gif width=20 height=20>
+  <li>Κάντε κλίκ <img src=../../template/classic/img/supprimer.gif width=20 height=20>
     στη στήλη 'Διαγραφή'.</li>
     </ul>
     <h4>Μετατροπή ενός αρχείου (ή καταλόγου) σε αόρατο για τους φοιτητές</h4>
     <ul>
 
-  <li>Κάντε κλίκ <img src=../document/img/visible.gif width=20 height=20>
+  <li>Κάντε κλίκ <img src=../../template/classic/img/visible.gif width=20 height=20>
  στη στήλη 'Ορατό/Αόρατο'.</li>
       <li>Το αρχείου (ή κατάλογο) υπάρχει αλλά δεν είναι ορατό από τους φοιτητές πλέον.</li>
   <li>Γα να το κάνετε αόρατο ξανά, κάντε κλίκ στη <img
- src=../document/../document/img/invisible.gif width=24 height=20>
+ src=../../template/classic/img/invisible.gif width=24 height=20>
     στήλη 'Ορατό/Αόρατο'</li>
     </ul>
     <h4>Προσθήκη ή τροποποίηση σχολίου σε ένα αρχείο (ή ενός καταλόγου)</h4>
     <ul>
-  <li>Κάντε κλίκ <img src=../document/../document/img/comment.gif width=20
+  <li>Κάντε κλίκ <img src=../../template/classic/img/comment.gif width=20
  height=20>
     στη στήλη 'Σχόλιο'</li>
       <li>Πληκτρολογήστε καινούριο σχόλιο στο αντίστοιχο πεδίο (πάνω δεξιά).</li>
       <li>Επιβεβαιώστε το κάντε κλίκ στο <input type=submit value=OK name=submit2>.</li>
     </ul>
     <p>Για να διαγράψετε ένα σχόλιο, κάντε κλίκ στο <img
- src=../document/../document/img/comment.gif width=20 height=20>,
+ src=../../template/classic/img/comment.gif width=20 height=20>,
      για να διαγράψετε το παλιό σχόλιο στο πεδίο κα κάντε κλίκ στο<input type=submit
  value=OK name=submit22>.
     <hr>
     <p>Μπορείτε να οργανώσετε το περιεχόμενό σας μέσο αρχειοθέτησης. Για το σκοπό αυτό:</p>
     <h4><b>Δημιουργήστε ένα κατάλογο</b></h4>
     <ul>
-      <li>Κάντε κλίκ στο <img src=../document/../document/img/dossier.gif width=20
+      <li>Κάντε κλίκ στο <img src=../../template/classic/img/dossier.gif width=20
  height=20> 'Δημιουργία ενός καταλόγου' (πάνω αριστερά)</li>
       <li>Πληκτρολογήστε το όνομα του καινούριου σας καταλόγου στο αντίστοιχο πεδίο (πάνω αριστερά)</li>
       <li>Επιβεβαιώστε το κάνοντας κλίκ στο<input type=submit value=OK
@@ -200,7 +200,7 @@ $langDocContent="<p>Το εργαλείο αρχείων είναι όμοιο σε λειτουργία με τον Διαχειρ
     </ul>
     <h4>Μετακίνηση ενός αρχείου (ή καταλόγου)</h4>
     <ul>
-      <li>Κάντε κλικ στο πλήκτρο <img src=../document/../document/img/deplacer.gif
+      <li>Κάντε κλικ στο πλήκτρο <img src=../../template/classic/img/deplacer.gif
  width=34 height=16>
         στη στήλη 'Μετακίνηση'</li>
       <li>Επιλέξτε τον κατάλογο μέσα στον οποίο θέλετε να μετακινήσετε το έγγραφο (ή το κατάλογο) στο
