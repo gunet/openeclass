@@ -15,7 +15,7 @@ else {
 
 // Default topic
 if (!isset($_GET['topic']) ||  empty($GLOBALS["lang$_GET[topic]Content"])) {
-	$_GET['topic'] = 'Clar';
+	$_GET['topic'] = 'Default';
 }
 
 ?>

@@ -1,6 +1,6 @@
 <?PHP
 /**===========================================================================
-*              GUnet e-Class 2.0
+*              GUnet eClass 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
 *	Copyright(c) 2003-2006  Greek Universities Network - GUnet
@@ -38,7 +38,7 @@ $tool_content = "
 <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
 <html xmlns=\"http://www.w3.org/1999/xhtml\">
   <head>
-    <title>Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης e-Class</title>
+    <title>Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης eClass</title>
     <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-7\" />
     <link href=\"./template/classic/tool_content.css\" rel=\"stylesheet\" type=\"text/css\" />
     <link href=\"./install/install.css\" rel=\"stylesheet\" type=\"text/css\" />

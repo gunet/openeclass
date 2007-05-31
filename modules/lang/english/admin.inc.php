@@ -143,7 +143,7 @@ $langChange = "Edit";
 $langNoChangeHappened = "No change performed!";
 
 // addfaculte.php
-$langFaculteCatalog = "Department Catalogue";
+$langFaculteCatalog = "Faculty Catalogue";
 $langFaculteDepartment = "Faculty / Department";
 $langFaculteDepartments = "Faculties / Departments";
 $langManyExist = "Exist";

@@ -1,6 +1,6 @@
 <?php session_start(); 
 /**===========================================================================
-*              GUnet e-Class 2.0
+*              GUnet eClass 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
 *	Copyright(c) 2003-2006  Greek Universities Network - GUnet
@@ -343,7 +343,7 @@ $nameTools = $langWelcomeToEclass;
 if (isset($uid) AND !isset($logout)) {
 	
 	$require_help = true;
-	$helpTopic="Clar2";
+	$helpTopic="Portfolio";
 
 	if (!session_is_registered("user_perso_active")) {
 
@@ -385,7 +385,7 @@ elseif ((isset($logout) && $logout && isset($uid)) OR (1==1)) {
 	}
 
 	$require_help = true;
-	$helpTopic="Clar";
+	$helpTopic="Init";
 	include("logged_out_content.php");
 
 	draw($tool_content, 0,'index');

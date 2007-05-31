@@ -36,11 +36,7 @@
 $require_current_course = TRUE;
 $langFiles = array('course_info', 'create_course', 'opencours', 'course_home');
 
-$require_help = TRUE;
-$helpTopic = 'course_home';
 $guest_allowed = true;
-
-
 
 //$courseHome is used by the breadcrumb logic 
 //See function draw() in baseTheme.php for details
@@ -111,7 +107,11 @@ $bar_content .= "<p><b>".$langProfessors."</b>: ".$professor."</p>";
 $bar_content .= "<p><b>".$langFaculty."</b>: ".$faculte."</p>";
 $bar_content .= "<p><b>".$m['type']."</b>: ".$lessonType."</p>";
 
+$require_help = TRUE;
+$helpTopic = $is_adminOfCourse? 'course_home_prof': 'course_home_stud';
+
 if ($is_adminOfCourse) {
+
 	$sql = "SELECT COUNT(user_id) AS numUsers
 			FROM cours_user
 			WHERE code_cours = '$currentCourse'";

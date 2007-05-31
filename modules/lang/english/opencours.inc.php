@@ -35,10 +35,11 @@ $langDepartmentsList = "A list of this institution's departments apprears below.
 $avlesson="course available";
 $avlessons="courses available";
 $langWrongPassCourse = "Wrong Course Password";
-$langAvCourses = "Available courses";
+$langAvCourses = "courses available";
+$langAvCourse = "course available";
 
 $m['begin'] = 'begin';
-$m['department'] = 'Department';
+$m['department'] = 'Faculty / Department';
 $m['lessoncode'] = 'Course Name (code)';
 $m['tomeis'] = 'Divisions';
 $m['tomeas'] = 'Division';

@@ -284,7 +284,7 @@ $searchuser='Search for users / professors';
 $typeyourmessage="Type your message below";
 $emailsuccess="E-mail has been sent!";
 
-$langDepartment='Department';
+$langDepartment='Faculty / Department';
 
 $langTheTeacher = 'The professor';
 $langTheUser = 'The user';
@@ -355,7 +355,7 @@ $langUnregTeacher = "User is a teacher in the following courses:";
 
 $langPlease = "Please";
 $langUserNoRequests = "There are no students open requests !";
-$langOtherDepartments = "Enroll to courses from other departments";
+$langOtherDepartments = "Enroll to courses from other faculties";
 $langNoLessonsAvailable = "No courses available.";
 
 // formuser.php

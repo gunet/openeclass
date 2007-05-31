@@ -31,6 +31,11 @@
 
 $langClose="Close window";
 
+$langHDefault='Help non available';
+$langDefaultContent='<p>There is no help text available for the page you
+are currently viewing.</p>';
+
+
 $langHFor="Help Forums";
 $langForContent="<p>The forum is a written asynchronous discussion tool.
  Where email allows one-to-one dialogue, forums allow public or semi-public
