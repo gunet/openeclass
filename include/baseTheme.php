@@ -79,7 +79,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	global $langUser, $prenom, $nom, $langLogout, $intitule,  $nameTools, $langHelp, $langAnonUser;
 	global $language, $helpTopic, $require_help, $langEclass, $langCopyrightFooter;
 	global $relPath, $urlServer, $toolContent_ErrorExists, $statut;
-	global $page_name, $page_navi,$currentCourseID, $siteName, $navigation;
+	global $page_name, $page_navi,$currentCourseID, $langHomePage, $siteName, $navigation;
 	global $homePage, $courseHome, $uid, $webDir, $extraMessage;
 	global $langChangeLang, $langUserBriefcase, $langPersonalisedBriefcase, $langAdmin, $switchLangURL;
 	global $langSearch, $langAdvancedSearch;
@@ -265,7 +265,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		$t->set_block('mainBlock', 'breadCrumbHomeBlock', 'breadCrumbHome');
 
 		if ($statut != 10) {
-			if(!session_is_registered('uid')) $t->set_var('BREAD_TEXT',  $siteName);
+			if(!session_is_registered('uid')) $t->set_var('BREAD_TEXT',  $langHomePage);
 			elseif(session_is_registered('uid') && session_is_registered('user_perso_active')) {
 				$t->set_var('BREAD_TEXT',  $langPersonalisedBriefcase);
 			} elseif(session_is_registered('uid') && !session_is_registered('user_perso_active')) {

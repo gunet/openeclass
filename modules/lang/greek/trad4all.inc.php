@@ -136,4 +136,5 @@ $langEnglish="Αγγλικά";
 
 $langSearch="Αναζήτηση";
 $langAdvancedSearch="Σύνθετη αναζήτηση";
+$langHomePage = "Αρχική σελίδα";
 ?>

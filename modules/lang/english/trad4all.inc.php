@@ -79,6 +79,7 @@ $langEnglish="English";
 
 $langSearch="Search";
 $langAdvancedSearch="Advanced search";
+$langHomePage = "Home page";
 
 $langNoAdminAccess = '
 		<p><b>The page you tried to access requires a valid username and password.</b><br/>
