@@ -602,7 +602,7 @@ Choose the video file you want to playback. If there is a streaming server integ
 $langHCoursedescription = "Course Description";
 $langCoursedescriptionContent = "<p>You can add some additional info about the course, when you click in 'Create
 and Edit'. You can add a category, selecting it from the drop down box and click in the button 'Add'.
-After entering the information you want press the button 'Add'. If, for some reason, you decide that don't want to enter
+After entering the information you want press the button 'Add'. </p><p>If, for some reason, you decide that don't want to enter
 the information press 'Return and Cancel'. Whenever you want, you can modify the information you have entered by
 clicking 'Modify' or deleting it by clicking on 'Delete'.</p>";
 
