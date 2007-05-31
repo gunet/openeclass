@@ -2,35 +2,47 @@
 	position:absolute;
 	height: 200px;
 	width: 200px;
-	border:groove;
+	/*border:groove;*/
 	top:210px;
 	left:220px;
+	
+	border:1px solid #a2a2a3;
+	background:#e5edf9;
 	}
 
 #video{
 	position:absolute;
 	height: 200px;
 	width: 200px;
-	border:groove;
+	/*border:groove;*/
 	top:435px;
 	left:220px;
+	
+	border:1px solid #a2a2a3;
+	background:#e5edf9;
 }
 #video_presantation_control{
 	position:absolute;
 	height:203px;
 	width: 200px;
-	border:groove;
+	/*border:groove;*/
 	top:659px;
 	left:220px;
+	
+	border:1px solid #a2a2a3;
+	background:#e5edf9;
 }
 
 #presantation_window{
 	position:absolute;
 	height: 500px;
 	width: 700px;
-	border:groove;
+	/*border:groove;*/
 	top:210px;
 	left:430px;
+	
+	border:1px solid #a2a2a3;
+	background:#e5edf9;
 }
 
 #iframe{
@@ -42,6 +54,13 @@
 	height: 100px;
 	width:500px;
 	overflow: auto;
+	
+	border:2px inset #a2a2a3;
+	background:#ffffff;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	/*margin-left: 10px;*/
+	/*margin-right: 10px;*/
 }
 #chat_control{
 	position: relative;
@@ -54,8 +73,11 @@
 
 #chat_div{
 	position:absolute;
-	border:groove;
+	/*border:groove;*/
 	top:720px;
 	left:430px;
 	width:700px;
+	
+	border:1px solid #a2a2a3;
+	background:#e5edf9;
 }
