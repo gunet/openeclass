@@ -367,15 +367,19 @@ db_query($sql);
 
 $res = db_query("SELECT code, languageCourse FROM cours");
 while ($code = mysql_fetch_row($res)) {
-
-				// get course language
-				$lang = $code[1];
+        // get course language
+        $lang = $code[1];
 
         // modify course_code/index.php
         $tool_content .= "<tr><td><b>Τροποποίηση αρχείου index.php του μαθήματος $code[0]</td></tr>";
         if (!@chdir("$webDir/courses/$code[0]")) {
                 die ("Δεν πραγματοποιήθηκε η αλλαγή στον κατάλογο των μαθημάτων! Ελέγξτε τα δικαιώματα πρόσβασης.");
         }
+
+        if (!file_exists("temp")) {
+                mkdir("temp", 0777);
+        }
+
         $filecontents = file_get_contents("index.php");
         if (!$filecontents)
                 die ("To αρχείο δεν μπόρεσε να διαβαστεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
