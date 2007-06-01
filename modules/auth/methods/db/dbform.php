@@ -77,7 +77,7 @@ $tool_content .= "<tr valign=\"top\">
 <tr valign=\"top\">
     <td align=\"right\">$langdbpass:</td>
     <td>
-    <input name=\"dbpass\" type=\"text\" size=\"30\" value=\"$dbpass\" />
+    <input name=\"dbpass\" type=\"password\" size=\"30\" value=\"$dbpass\" />
     </td>
     <td>
 	The password of user
