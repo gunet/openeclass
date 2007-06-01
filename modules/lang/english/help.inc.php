@@ -36,16 +36,16 @@ $langDefaultContent='<p>There is no help text available for the page you
 are currently viewing.</p>';
 
 
-$langHFor="Help Forums";
+$langHFor="Forums help";
 $langForContent="<p>The forum is a written asynchronous discussion tool.
  Where email allows one-to-one dialogue, forums allow public or semi-public
  dialogue.</p><p>Technically speaking, the students need only their
- browser to use claroline forums.</P><p>To organise forums, click on
+ browser to use eClass forums.</P><p>To organise forums, click on
  'Administer'. Discussions are organised in sets and subsets as
  following:</p><p><b>Category > Forum > Topic > Answers</b></p>To structure
  your students discussions, it is necessary to organise catgories and
  forums beforehand, leaving the creation of topics and answers to them. By
- default, the claroline forum contains only the category 'Public', a sample
+ default, the eClass forum contains only the category 'Public', a sample
  forum ans a sample topic.</p><p>The first thing you should do is deleting
  the sample topic and modify the first forum's name. Then, you can
  create, in the 'public' category, other forums, by groups or by themes, to
@@ -58,41 +58,46 @@ $langForContent="<p>The forum is a written asynchronous discussion tool.
 
 // help_home.php
 
-$langHHome="Help Home Page";
-$langHomeContent="<p>For more convenience, claroline tools contain default entries.
- There is a small example in every tool to help you grasp quickly how it
- works. It is up to you to modify the example or to delete it.</p><p>For
- instance, here on the Home Page of your course website,there is a small
- introduction text saying 'This is the introduction text of your course. To
- replace it by your own text, click below on modify.' Click on modify, edit
- it and Ok. It's that simple. Every tool has the same logic:
- add, delete, modify, which is the logic of dynamic websites.</p><p>When
- you first create your website, most of the tools are active. Here again,
- it is up to you to deactivate the ones you don't need. You just have to
- click on 'deactivate'. Then it goes down to the grey section of your
- homepage an becomes invisible to your students.  However, you can
- reactivate it whenever you want, making it visible to the students once more.</p>
-<p>You can add your own pages to your
- Home Page. These pages must be HTML pages (which can be created by any
- Word Processor or Web Composer). Use 'Upload page and link to Homepage' to
- send your page to the server. The standard header of your website will be
- automatically merged with your new document, so that you just need to
- concentrate on the content. If you want to link from your Home towards
- existaing websites or pages existing anywhere on the web (even inside your
- own site), use 'Add link on Homepage' The pages you have added to the Home
- page can deactivated then deleted, where the standard tools can be
- deactivated, but not deleted.</p><p>Once your course website is ready, go
- to 'Modify course info' and decide what level of confidentiality you want.
- By default, your course is hidden (because you work on it).</p>";
+$langHHome="Home Page Help";
+$langHomeContent="<p>For more convenience, eClass tools contain default
+entries.  There is a small example in every tool to help you grasp quickly how
+it works. It is up to you to modify the example or to delete it.</p>
+
+<p>For instance, here on the Home Page of your course website,there is a small
+introduction text saying 'This is the introduction text of your course. To
+replace it by your own text, click below on modify.' Click on modify, edit it
+and Ok. It's that simple. Every tool has the same logic: add, delete, modify,
+which is the logic of dynamic websites.</p>
+
+<p>When you first create your website, most of the tools are active. Here
+again, it is up to you to deactivate the ones you don't need. You just have to
+click on 'deactivate'.  Then it goes down to the grey section of your homepage
+an becomes invisible to your students.  However, you can reactivate it whenever
+you want, making it visible to the students once more.</p> <p>You can add your
+own pages to your Home Page. These pages must be HTML pages (which can be
+created by any Word Processor or Web Composer). Use 'Upload page and link to
+Homepage' to send your page to the server. The standard header of your website
+will be automatically merged with your new document, so that you just need to
+concentrate on the content. If you want to link from your Home towards
+existaing websites or pages existing anywhere on the web (even inside your own
+site), use 'Add link on Homepage' The pages you have added to the Home page can
+deactivated then deleted, where the standard tools can be deactivated, but not
+deleted.</p>
+
+<p>Once your course website is ready, go to 'Modify course info' and decide
+what level of confidentiality you want.  By default, your course is hidden
+(because you work on it).</p>";
 
 
+$langHInit="Start Page Help";
+$langInitContent="<p>You are currently in the eClass platfotm's Start Page.
+Type your username and password to login to the platform. In case you
+have forgotten your login information, click on 'Forgot your password?' and
+in the form that appears enter your e-mail address, in order to recover
+your username and password.</p>
 
-// help_claroline.php
-
-$langHClar="Start Help";
-$langClarContent="<p>Type your username and password to login in platform.</p>
- <p>
-<b>New user registration</b></p><p>If you are a student you have to register, by clicking in 'New user
+<p><b>New user registration</b></p>
+<p>If you are a student you have to register, by clicking in 'New user
 registration', and then you have to choose your desired courses. </p>
 <b>Professor acount request</b>
 <p>If you are a professor, you also have to register by clicking in 'Professor account request'.
@@ -104,11 +109,35 @@ registration', and then you have to choose your desired courses. </p>
  and you will be directed in your newly created course home page.</p>";
 
 
-$langHClar2="Courses home page";
-$langClar2Content="<b>Courses home page </b><p>In this page there are all the courses in which you are
-registered (as a student) or you
-have created (as a professor). If you wish you can click in 'Modify my profile' to modify your personal
-informations. </p>";
+$langHPortfolio="User portfolio";
+$langClar2Content="<p>Here you can find all courses you are registered to
+(as a student), as well as all the courses you have created (as a professor).
+You can enter any one of them by clicking on its title.</p>
+
+<p>Using the options of the side menu, you can register to additional
+courses or unregister from your currently selected courses, change
+your profile information (such as name, password and preferred language),
+or find an aggregation page with the announcements and agenda of your
+courses.</p>";
+
+$langHcourse_home_stud='Main course page';
+$langcourse_home_studContent='<p>You are currently in the on-line course\'s
+main page. From the side menu options, you can enter any of the course
+modules that have been activated by the course instructors.
+</p>';
+
+$langHcourse_home_prof='Main course page';
+$langcourse_home_profContent='<p class="helptopic">You are currently
+in the main page of your on-line course. From the side menu options,
+you can enter any of the modules where you can add your course\'s
+content. Active tools are visible to the visitors and students of
+your course, while inactive tools are only visible and accessible to
+you.</p>
+<p class="helptopic">Using the administration tools you can
+activate or deactivate course modules, review and administer registered
+users, change various options (such as course title, access control, etc.),
+and view usage statistics.</p>';
+
 
 // help_document.php
 
