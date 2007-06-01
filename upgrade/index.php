@@ -3,30 +3,61 @@ $langFiles = 'registration';
 $path2add=2;
 include '../include/baseTheme.php';
 
-$nameTools = 'Αναβάθμιση';
+$nameTools = 'Αναβάθμιση των βάσεων δεδομένων του eClass';
 
 // Initialise $tool_content
 $tool_content = "";
+
 // Main body
-//====================
+$tool_content .= "<table cellpadding='8' cellspacing='0' width='90%' align='center'>
+  <tr>
+  <td colspan='2' align='justify' style='border: 1px solid #FFFFFF;'>
+  <center><b><u>ΠΡΟΣΟΧΗ</u>!</b></center><br>
+  Το πρόγραμμα αναβάθμισης θα τροποποιήσει το αρχείο ρυθμίσεων <em>config.php</em>. 
+	Επομένως πριν προχωρήσετε στην αναβάθμιση βεβαιωθείτε ότι ο web server μπορεί να έχει πρόσβαση στο <em>config.php</em>.
+  </td></tr>
+   <tr><td colspan='2' style='border: 1px solid #FFFFFF;' class='labeltext'>
+   Επίσης για λόγους ασφαλείας βεβαιωθείτε ότι έχετε κρατήσει αντίγραφα ασφαλείας των βάσεων δεδομένων.</td></tr>
+  <tr><td colspan='2' align='justify' style='border: 1px solid #FFFFFF;'>
+    Για να δείτε τις αλλαγές-βελτιώσεις της καινούριας έκδοσης του eClass κάντε κλικ <a href='CHANGES.txt'>εδώ</a>.
+  </td></tr>
+  <tr><td colspan='2' align='justify' style='border: 1px solid #FFFFFF;'>Για να προχωρήσετε στην αναβάθμιση της βάσης δεδομένων, δώστε το όνομα χρήστη και το συνθηματικό του διαχειριστή της πλατφόρμας:</td></tr>
+   <tr><td style='border: 1px solid #FFFFFF;'>
+    <form method='post' action='upgrade.php'>
+     <table width=70% align=center>
+    <tr><td style=\"border: 1px solid #FFFFFF;\">
+     <FIELDSET>
+     <LEGEND><b>Στοιχεία Εισόδου</b></LEGEND>
+			<table cellpadding='1' cellspacing='2' width='99%'>
+      <tr>
+     <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'> $langUsername :</th>
+   <td style=\"border: 1px solid #FFFFFF;\">&nbsp;<input class='auth_input_admin' style='width:150px; heigth:20px;' type='text' name='login' size='20'></td>
+    </tr>
+    <tr>
+    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langPass :</th>
+    <td style=\"border: 1px solid #FFFFFF;\">&nbsp;<input class='auth_input_admin' type='password' style='width:150px; heigth:20px;' name='password' size='20'></td>
+    </tr>
+     <tr>
+     <td colspan='2' style=\"border: 1px solid #FFFFFF;\" align='center'>
+					<input type='submit' name='submit_upgrade' value='Αναβάθμιση Βάσης Δεδομένων'></td>
+     </tr>
+     </table>
+    </FIELDSET>
+     </td></tr></table>";
 
-$tool_content .= "<form method=\"post\" action=\"upgrade.php\">
-<table width=\"99%\"><caption>Πληροφορίες Αναβάθμισης</caption><tbody>
-<tr><td valign=\"center\" width=\"15%\" nowrap><b>ΒΗΜΑ 1:</b></td>
-<td valign=\"center\">Διαβάστε τις οδηγίες αναβάθμισης του e-Class κάνοντας κλικ <b><a href=\"UPGRADE.txt\" target=\"blank\">ΕΔΩ</a></b>.</td></tr>
-<tr><td valign=\"top\" width=\"15%\" nowrap><b>ΒΗΜΑ 2:</b></td>
-<td valign=\"center\">Δείτε τις αλλαγές - βελτιώσεις της καινούργιας έκδοσης του e-Class κάνοντας κλικ <b><a href=\"CHANGES.txt\" target=\"blank\">ΕΔΩ</a></b>.</td></tr>
-<tr><td valign=\"top\" width=\"15%\" nowrap><b>ΒΗΜΑ 3:</b></td>
-<td valign=\"center\">Για να προχωρήσετε στην αναβάθμιση της βάσης δεδομένων,
-	δώστε το όνομα χρήστη και το συνθηματικό του διαχειριστή της πλατφόρμας:
-	</td></tr>
-	<tr><td valign=\"top\" width=\"15%\">$langUsername : </td><td valign=\"top\"><input type=\"text\" name=\"login\" size=\"20\"></td></tr>
-	<tr><td valign=\"top\ width=\"15%\">$langPass : </td><td valign=\"top\"><input type=\"password\" name=\"password\" size=\"20\"></td></tr>
-	<tr><td>&nbsp;</td><td valign=\"top\"><input type=\"submit\" name=\"submit_upgrade\" value=\"Αναβάθμιση Βάσης Δεδομένων\"></td></tr>
-</tbody></table></form>";
-
-$tool_content .= "<br><center><p><a href=\"../index.php\">Επιστροφή</a></p></center>";
+    if (isset($from_admin)) {
+            $tool_content .= "<input type='hidden' name='from_admin' value='$from_admin'>";
+     }
+                
+     $tool_content .= "</form></td></tr><tr><td style=\"border: 1px solid #FFFFFF;\" colspan=2>";
+    
+     if (isset($from_admin)) {
+        $tool_content .= "<p align=right><a href='../modules/admin/index.php' class=mainpage>Επιστροφή στη σελίδα διαχείρισης</a></p>";
+          }
+     else 
+					$tool_content .= "&nbsp;";
+ 
+     $tool_content .= "</td></tr></table>";
 
 draw($tool_content,0);
-
 ?>
