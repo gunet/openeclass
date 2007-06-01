@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 //Flag for fixing relative path
 //See init.php to undestand it's logic
 $path2add=2;
@@ -18,7 +19,6 @@ if (isset($_POST['submit_upgrade'])) {
 	$fromadmin = false;
 }
 
-
 	if((isset($encryptedPasswd)) || (!empty($encryptedPasswd))) {
            $newpass = md5($_REQUEST['password']);
 	 } else { //else use plain text password since the passwords are not hashed
@@ -26,9 +26,11 @@ if (isset($_POST['submit_upgrade'])) {
    }
 
     if (!is_admin($_REQUEST['login'], $newpass, $mysqlMainDb)) {
-                die("<p>Τα στοιχεία που δώσατε δεν αντιστοιχούν στο διαχειριστή του
+                $tool_content .= "<p>Τα στοιχεία που δώσατε δεν αντιστοιχούν στο διαχειριστή του
                         συστήματος! Παρακαλούμε επιστρέψτε στην προηγούμενη σελίδα και ξαναδοκιμάστε.</p>
-                        <center><a href=\"index.php\">Επιστροφή</a></center>");
+                        <center><a href=\"index.php\">Επιστροφή</a></center>";
+								draw($tool_content,0);
+								exit;
    }
 
 include 'document_upgrade.php';
@@ -454,8 +456,6 @@ while ($code = mysql_fetch_row($res)) {
         update_assignment_submit();
 
         // upgrade queries for e-Class 1.5
-
-        $langVideoLinks = "Βιντεοσκοπημένα Μαθήματα";
         if (!mysql_table_exists($code[0], 'videolinks'))  {
                 db_query("CREATE TABLE videolinks (
                         id int(11) NOT NULL auto_increment,
@@ -465,7 +465,7 @@ while ($code = mysql_fetch_row($res)) {
                            visibility CHAR(1) DEFAULT '1' NOT NULL,
                            PRIMARY KEY (id))", $code[0]);
                 db_query("UPDATE accueil SET
-                                rubrique='$langVideoLinks',
+                                rubrique='$langVideoLinks[$lang]',
                                 lien='.././modules/video/videolinks.php',
                                 image='../../../images/videos.png',
                                 visible='0',
@@ -488,25 +488,18 @@ while ($code = mysql_fetch_row($res)) {
         }
 
         // correct link entries to correctly appear in a blank window
-        $tool_content .= "<b>Διόρθωση συνδέσμων</b><br>";
         $sql = db_query("SELECT url FROM `liens` WHERE url REGEXP '\"target=_blank$'");
         while ($u = mysql_fetch_row($sql))  {
                 $temp = $u[0];
                 $newurl = preg_replace('#\s*"target=_blank#','',$temp);
-                $tool_content .= "<b>Παλιός σύνδεσμος: </b>";
-                $tool_content .=  $temp;
-                $tool_content .= "<br><b>Καινούριος σύνδεσμος: </b>";
-                $tool_content .= $newurl;
-                $tool_content .= "<br>";
                 db_query("UPDATE liens SET url='$newurl' WHERE url='$temp'");
         }
 
         // for dropbox
-        $langDropbox = "Χώρος Ανταλλαγής Αρχείων";
         if (!mysql_table_exists($code[0], 'dropbox_file'))  {
                 db_query("INSERT INTO accueil VALUES (
                         16,
-                        '$langDropbox',
+                        '$langDropbox[$lang]',
                         '../../modules/dropbox/index.php',
                         '../../../images/dropbox.png',
                         '0',
@@ -551,7 +544,6 @@ while ($code = mysql_fetch_row($res)) {
 
         //  Get all agenda events from each table & parse them to arrays
         $mysql_query_result = db_query($sql, $code[0]);
-        //$total_agenda_events_counter = 0;
         $event_counter=0;
         while ($myAgenda = mysql_fetch_array($mysql_query_result)) {
                 $lesson_agenda[$event_counter]['id']                  = $myAgenda[0];
@@ -561,8 +553,6 @@ while ($code = mysql_fetch_row($res)) {
                 $lesson_agenda[$event_counter]['time']                = $myAgenda[4];
                 $lesson_agenda[$event_counter]['duree']               = $myAgenda[5];
                 $lesson_agenda[$event_counter]['lesson_code']         = $code[0];
-                //		$lesson_agenda[$i][$event_counter]['lesson_title']        = $lesson_details[1];
-                //		$lesson_agenda[$i][$event_counter]['lesson_prof']         = $lesson_details[2];
                 $event_counter++;
         }
 
@@ -925,9 +915,12 @@ while ($code = mysql_fetch_row($res)) {
         $tool_content .= add_field("accueil","define_var", "VARCHAR(50) NOT NULL");
 
         // Move all external links to id > 100
-        db_query("UPDATE IGNORE `accueil`
+        db_query("UPDATE `accueil`
                     SET `id` = `id` + 80
-                    WHERE `id`>20 AND `id`<100", $code[0]);
+                    WHERE `id`>20 AND `id`<100 
+										AND `define_var` <> 'MODULE_ID_QUESTIONNAIRE' AND `define_var` <> 'MODULE_ID_LP'
+											AND `define_var` <> 'MODULE_ID_USAGE' AND `define_var` <> 'MODULE_ID_TOOLADMIN'
+											AND `define_var` <> 'MODULE_ID_WIKI'", $code[0]);
 
         // id νέων υποσυστημάτων
         if (accueil_tool_missing('MODULE_ID_QUESTIONNAIRE')) {
