@@ -347,7 +347,7 @@ function printMCQuestionForm() {
 //	if ($MoreQuestions == 2) { // Create survey ******************************************************
 	if ($MoreQuestions == $langSurveyCreate) { // Create survey
 		createMCSurvey();
-	} elseif(count($_POST)<7) { // Just entered MC survey cretion dialiog ****************************
+	} elseif(count($_POST)<7) { // Just entered MC survey creation dialiog ****************************
 		$tool_content .= <<<cData
 		<table><thead></thead>
 	<tr><td colspan=2>$langSurveyInfo</td></tr></table>
@@ -358,7 +358,6 @@ function printMCQuestionForm() {
 			<tr><td>$langSurveyName</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
 			<tr><td>$langSurveyStart</td><td colspan="2"><input type="text" size="20" name="SurveyStart" value="$SurveyStart"></td></tr>
 			<tr><td>$langSurveyEnd</td><td colspan="2"><input type="text" size="20" name="SurveyEnd" value="$SurveyEnd"></td></tr>
-			<!--///////////////-->
 			<tr><td colspan=3>
 				<SELECT NAME="questionx" onChange="addEvent(this.selectedIndex);this.parentNode.removeChild(this);" id="QuestionSelector">
 				<OPTION> Επιλέξτε μία από τις προκαθορισμένες ερωτήσεις (πρότυπα COLLES/ATTL)...
@@ -374,7 +373,6 @@ function printMCQuestionForm() {
 				<OPTION VALUE="question10"> Μου αρέσει να παίρνω τον ρόλο του συνήγορου του διαβόλου.
 				</SELECT>
 			</td></tr>
-			<!--//////////////-->
 			<tr><td>$langSurveyQuestion</td><td><input type="text" name="question1" size="50" id="NewQuestion"></td></tr> 
 			<tr><td>$langSurveyAnswer #1</td><td><input type="text" name="answer1.1" size="50" id="NewAnswer1"></td></tr>
 			<tr><td>$langSurveyAnswer #2</td><td><input type="text" name="answer1.2" size="50" id="NewAnswer2"></td></tr>
@@ -390,7 +388,7 @@ function printMCQuestionForm() {
 		<input type="hidden" value="1" name="NumOfQuestions">
 		</form>
 cData;
-//	} elseif ($MoreQuestions == 1) {  // Print more answers ***************************************************
+//	} elseif ($MoreQuestions == 1) {  // Print more answers
 	} elseif ($MoreQuestions == $langSurveyMoreAnswers) {  // Print more answers 
 		$NumOfQuestions = $_POST['NumOfQuestions'];
 		
@@ -434,9 +432,12 @@ cData;
 		<form action="addsurvey.php" id="survey" method="post" name="SurveyForm"  onSubmit="return checkrequired(this, 'questionx')">
 		<input type="hidden" value="1" name="UseCase">
 		<table>
-		<tr><td>$langSurveyName</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
-			<tr><td>$langSurveyStart</td><td colspan="2"><input type="text" size="20" name="SurveyStart" value="$SurveyStart"></td></tr>
-			<tr><td>$langSurveyEnd</td><td colspan="2"><input type="text" size="20" name="SurveyEnd" value="$SurveyEnd"></td></tr>
+		<tr><td>$langSurveyName</td><td colspan="2">
+				<input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
+		<tr><td>$langSurveyStart</td><td colspan="2">
+					<input type="text" size="20" name="SurveyStart" value="$SurveyStart"></td></tr>
+		<tr><td>$langSurveyEnd</td><td colspan="2">
+					<input type="text" size="20" name="SurveyEnd" value="$SurveyEnd"></td></tr>
 			
 cData;
 		
@@ -446,7 +447,6 @@ cData;
 		
 		$tool_content .= <<<cData
 		<tr><td colspan=3><hr></td></tr>
-		<!--///////////////-->
 			<tr><td colspan=3>
 				<SELECT NAME="questionx" onChange="addEvent(this.selectedIndex);this.parentNode.removeChild(this);" id="QuestionSelector">
 				<OPTION> Επιλέξτε μία από τις προκαθόρισμένες ερωτήσεις (πρότυπα COLLES/ATTL)...
@@ -462,7 +462,6 @@ cData;
 				<OPTION VALUE="question10"> Μου αρέσει να παίρνω τον ρόλο του συνήγορου του διαβόλου.
 				</SELECT>
 			</td></tr>
-			<!--//////////////-->
 cData;
 		
 		$tool_content .= "<tr> <td>" . 
@@ -489,7 +488,6 @@ cData;
 cData;
 	}
 }
-
 
 
 /*****************************************************************************
@@ -570,15 +568,12 @@ function createTFSurvey() {
 				mysql_real_escape_string($EndDate) 			. "','".
 				mysql_real_escape_string($SurveyType) 	. "','".
 				mysql_real_escape_string($SurveyActive) ."')");
-				//$GLOBALS["tool_content"] .= $result1;
 		} elseif (($counter > 4)&&($counter <= count($_POST)-2)) {
 			$QuestionText = $$key;
-			///////////
 			$sqid = "";
 			$pattern = "1234567890";
 			for($i=0;$i<12;$i++)
 				$sqid .= $pattern{rand(0,9)};
-			///////////
 			mysql_select_db($GLOBALS['currentCourseID']);
 			$result2 = db_query("INSERT INTO survey_question VALUES ('".
 				$sqid. "','".
@@ -591,11 +586,10 @@ function createTFSurvey() {
 }
 function createMCSurvey() {
 	
-	global $tool_content,$langSurveyQuestion,$langSurveyAnswer ;
+	global $tool_content, $langSurveyQuestion, $langSurveyAnswer ;
 
-	// insert into survey as above //////////////////////////////////////////////////////////////
+	// insert into survey as above
 	
-
 		$counter = 0;
 		$CurrentQuestion = 0;
 		$CurrentAnswer = 0;
@@ -614,7 +608,6 @@ function createMCSurvey() {
 				$SurveyType = 1;
 				$SurveyActive = 1;
 				$sid = date("YmdHms"); 
-				//$tool_content .= "<br>About to create SURVEY entry<br>";
 				mysql_select_db($GLOBALS['currentCourseID']);
 				$result3 = db_query("INSERT INTO survey VALUES ('".
 					mysql_real_escape_string($sid). "','".
@@ -627,18 +620,14 @@ function createMCSurvey() {
 					mysql_real_escape_string($SurveyType) 	. "','".
 					mysql_real_escape_string($SurveyActive) ."')");
 			}	
-			if (($counter >= 5)&&($counter <= (count($_POST)-3) )) { // question or anwser
-				//$tool_content .= "<br>Began iterating QAs";
+			if (($counter >= 5) && ($counter <= (count($_POST)-2) )) { // question or anwser
 				if (substr($key, 0, 8) == "question") { //question
-					//$tool_content .= "<br>Is Q";
 					// insert into survey_question //////////////////////////////////////////////////////////////
 					$QuestionText = $$key;
 					$sqid = "";
 					$pattern = "1234567890";
 					for($i=0;$i<12;$i++)
 						$sqid .= $pattern{rand(0,9)};
-					//$tool_content .= "<br>sqid " . $sqid ."<br>";
-					//$tool_content .= "<br>About to create SURVEY_QUESTION entry<br>";
 					mysql_select_db($GLOBALS['currentCourseID']);
 					$result4 = db_query("INSERT INTO survey_question VALUES ('".
 					$sqid . "','".
@@ -647,10 +636,8 @@ function createMCSurvey() {
 
 				} else { //answer
 					// insert into survey_question_answer //////////////////////////////////////////////////////////////
-					//$tool_content .= "<br>Is A";
 					if ($$key != '') {
 						$AnwserText = $$key;	
-						//$tool_content .= "<br>About to create SURVEY_QUESTION_ANSWER entry<br>";
 						mysql_select_db($GLOBALS['currentCourseID']);
 						$result5 = db_query("INSERT INTO survey_question_answer VALUES ('0','".
 							$sqid. "','".
