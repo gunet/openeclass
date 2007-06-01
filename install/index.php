@@ -1526,7 +1526,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
         <p><b>register_globals = On</b></p>
        <p>Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
         τις οδηγίες εγκατάστασης στο αρχείο
-        <a href='../manuals/manI/INSTALL.txt'>INSTALL.txt</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
+        <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
 						
 					</td>
 					</tr>
@@ -1550,7 +1550,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
         <p><b>short_open_tag = On</b></p>
         <p>Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
         τις οδηγίες εγκατάστασης στο αρχείο
-        <a href='../manuals/manI/INSTALL.txt'>INSTALL.txt</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
+        <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
 						
 					</td>
 					</tr>
@@ -1575,7 +1575,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
         <br/>
         Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
         τις οδηγίες εγκατάστασης στο αρχείο
-        <a href='../manuals/manI/INSTALL.txt'>INSTALL.txt</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
+        <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
 						
 					</td>
 					</tr>
@@ -1602,7 +1602,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
         <br/>
         Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
         τις οδηγίες εγκατάστασης στο αρχείο
-        <a href='../manuals/manI/INSTALL.txt'>INSTALL.txt</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
+        <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
 						
 					</td>
 					</tr>
@@ -1667,7 +1667,7 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
 </li></ul>
 <p>
 Πριν προχωρήσετε στην εγκατάσταση τυπώστε και διαβάστε προσεκτικά τις
-<a href=\"../INSTALL.txt\" target=_blank>Οδηγίες Εγκατάστασης</a>.
+<a href=\"install.html\" target=_blank>Οδηγίες Εγκατάστασης</a>.
 </p>
 <p>
 Επίσης, γενικές οδηγίες για την πλατφόρμα μπορείτε να διαβάσετε <a href=\"../README.txt\" target=_blank>εδώ</a>.

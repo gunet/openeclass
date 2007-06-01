@@ -466,8 +466,7 @@ function adminMenu(){
 	//array_push($sideMenuImg, "eclass_version.gif");
 	array_push($sideMenuText, $langConfigFile);
 	// Changed by vagpits
-	//array_push($sideMenuLink, "phpInfo.php?to=clarconf");
-	array_push($sideMenuLink, "../admin/clarconf.php");
+	array_push($sideMenuLink, "../admin/eclassconf.php");
 	array_push($sideMenuImg, "config_file.gif");
 	// End
 	//array_push($sideMenuText, $siteName);
@@ -483,11 +482,8 @@ function adminMenu(){
 	array_push($sideMenuLink, "../admin/stateclass.php");
 	array_push($sideMenuImg, "platform_stats.gif");
 
-	//array_push($sideMenuText, $langManuals);
-	//array_push($sideMenuLink, $urlServer . "manuals/manual.php");
-	//array_push($sideMenuImg, "available_manuals.gif");
 	array_push($sideMenuText, $langAdminManual);
-	array_push($sideMenuLink, $urlServer . "manuals/manA/admin.txt");
+	array_push($sideMenuLink, $urlServer . "manuals/manA/ManA.pdf");
 	array_push($sideMenuImg, "administrator_manual.gif");
 
 	array_push($sideMenuSubGroup, $sideMenuText);
