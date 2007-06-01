@@ -192,5 +192,5 @@ $table_title = 'en_title';
 
 
 // display everything 
-draw($tool_content, 3, 'admin');
+draw($tool_content, 3);
 ?>			

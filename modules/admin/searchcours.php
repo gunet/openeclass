@@ -85,11 +85,11 @@ if (isset($searchtitle) && isset($searchcode) && isset($searchtype) && isset($se
 	$tool_content .= "<form action=\"listcours.php?search=yes\" method=\"post\">";
 	$tool_content .= "<table width=\"99%\"><caption>".$langSearchCriteria." ".@$newsearch."</caption><tbody>";
 	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>$langTitle:</b></td>
+    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langTitle:</b></th>
     <td><input type=\"text\" name=\"formsearchtitle\" size=\"40\" value=\"".@$searchtitle."\"></td>
 </tr>";
 	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>$langCourseCode:</b></td>
+    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langCourseCode:</b></th>
     <td><input type=\"text\" name=\"formsearchcode\" size=\"40\" value=\"".@$searchcode."\"></td>
 </tr>";
 	switch (@$searchcode) {
@@ -107,7 +107,7 @@ if (isset($searchtitle) && isset($searchcode) && isset($searchtype) && isset($se
 			break;
 	}
 	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>Τύπος πρόσβασης:</b></td>
+    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>Τύπος πρόσβασης:</b></td>
     <td>
       <select name=\"formsearchtype\">
       	<option value=\"-1\" ".$typeSel[-1].">$langAllTypes</option>
@@ -118,7 +118,7 @@ if (isset($searchtitle) && isset($searchcode) && isset($searchtype) && isset($se
     </td>
 </tr>";
 	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>".$langDepartment.":</b></td>
+     <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>".$langDepartment.":</b></th>
     <td><select name=\"formsearchfaculte\">
     	<option value=\"0\">$langAllFacultes</option>\n";
   

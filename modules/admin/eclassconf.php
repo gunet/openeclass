@@ -24,7 +24,7 @@
 ==============================================================================*/
 
 /**===========================================================================
-	clarconf.php
+	eclassconf.php
 	@last update: 31-05-2006 by Pitsiougas Vagelis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Pitsiougas Vagelis <vagpits@uom.gr>
@@ -390,7 +390,7 @@ $tool_content .= "  <tr>
   	// Give option to restore values from backup file
   	$tool_content .= "<table width=\"99%\"><caption>".$langOtherActions."</caption><tbody>";
 		$tool_content .= "  <tr>
-    <td colspan=\"2\"><a href=\"clarconf.php?restore=yes\">Restore values from backup</a></td>
+    <td colspan=\"2\"><a href=\"eclassconf.php?restore=yes\">Restore values from backup</a></td>
   </tr>";
 		$tool_content .= "</tbody></table>";
 	}

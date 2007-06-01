@@ -337,6 +337,6 @@ if (!empty($show)) {
 	$tool_content .= "<br><center><p><a href=\"index.php\">$langReturn</a></p></center>";
 }
 
-draw($tool_content,3,'admin');
+draw($tool_content,3);
 
 ?>
