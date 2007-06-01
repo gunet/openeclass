@@ -46,9 +46,9 @@ $tool_content .= <<<tCont
 <p>$langIntroMan</p>
 <ul class="listBullet">
 
-<div style='margin-left: 30px; padding-bottom:10px;'><img src='../images/pdf.gif' border='0' title='Μορφή PDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/e-Class.pdf" target=_blank class=mainpage>$langFinalDesc</a></img></div>
+<div style='margin-left: 30px; padding-bottom:10px;'><img src='../images/pdf.gif' border='0' title='Μορφή PDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/eClass.pdf" target=_blank class=mainpage>$langFinalDesc</a></img></div>
            <div style='margin-left: 30px; padding-bottom:10px;'><img src='../images/pdf.gif' border='0' title=
-'Μορφή PDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/e-Class_short.pdf" target=_blank class=mainpage>$langShortDesc</a></img></div>
+'Μορφή PDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/eClass_short.pdf" target=_blank class=mainpage>$langShortDesc</a></img></div>
             <div style='margin-left: 30px; padding-bottom:10px;'><img src='../images/pdf.gif' border='0
 ' title='Μορφή PDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/manT/ManT.pdf" target=_blank class=mainpage>$langManT</a></img></div>
            <div style='margin-left: 30px; padding-bottom:10px;'><img src='../images/pdf.gif' border='0' title=
