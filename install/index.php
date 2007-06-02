@@ -1361,11 +1361,12 @@ CREATE TABLE `auth` (
 
 	}
 
-	// create config & courses catalogs
+	// create config, courses and video catalogs
 	mkdir ("../config", 0777);
 	mkdir("../courses", 0777);
-	// creation of config.php
+	mkdir("../video", 0777);
 
+	// creation of config.php
 	$fd=@fopen("../config/config.php", "w");
 	$langStepTitle = $langInstallEnd;
 	$langStep = $langStep6;
