@@ -514,7 +514,7 @@
             
             // display list in a table
             
-            $tool_content .= '<table class="claroTable emphaseLine" style="width: 100%">' . "\n";
+            $tool_content .= '<table class="claroTable emphaseLine" style="width: 99%">' . "\n";
             
             // if admin, display title, edit and delete
             if ( $is_allowedToAdmin )
