@@ -37,7 +37,7 @@ $langContenuPlan = "";
 $langNewBloc = "Other";
 $langAddCat = "add category";
 $langAdd ="Add";
-$langValid ="Valid";
-$langBackAndForget ="Back and forget";
+$langValid ="Submit";
+$langBackAndForget ="Cancel changes and return";
 $langBlockDeleted = "Description Deleted!";
 ?>
