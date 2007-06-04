@@ -28,15 +28,15 @@ class LatexRender {
     // ====================================================================================
     // Variable Definitions
     // ====================================================================================
-    var $_picture_path = latex_picture_path;
-    var $_picture_path_httpd = latex_picture_path_httpd;
-    var $_tmp_dir = latex_tmp_dir; // without trailing slash! replace with a custom directory if necessary!
+    var $_picture_path = 'latex_picture_path';
+    var $_picture_path_httpd = 'latex_picture_path_httpd';
+    var $_tmp_dir = 'latex_tmp_dir'; // without trailing slash! replace with a custom directory if necessary!
     // i was too lazy to write mutator functions for every single program used
     // just access it outside the class or change it here if nescessary
-    var $_latex_path = latex_path;
-    var $_dvips_path = dvips_path;
-    var $_convert_path = convert_path;
-    var $_identify_path = identify_path;
+    var $_latex_path = 'latex_path';
+    var $_dvips_path = 'dvips_path';
+    var $_convert_path = 'convert_path';
+    var $_identify_path = 'identify_path';
     var $_formula_density = 120;
     var $_xsize_limit = 500;
     var $_ysize_limit = 500;

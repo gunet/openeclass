@@ -30,19 +30,12 @@ function latex_content($text) {
     if (!isset($have_latex) or !$have_latex) {
 			return $text;
 		}
-
-    // --------------------------------------------------------------------------------------------------
-    // adjust this to match your system configuration
-    $latexrender_path = "$webDir"."/modules/latexrender";
-    $latexrender_path_http = "$urlAppend"."/modules/latexrender";
-
-    // --------------------------------------------------------------------------------------------------
-
-    include_once($latexrender_path."/class.latexrender.php");
+    
+		include_once("class.latexrender.php");
 
     preg_match_all("#\[tex\](.*?)\[/tex\]#si",$text,$tex_matches);
 
-    $latex = new LatexRender($latexrender_path."/pictures",$latexrender_path_http."/pictures");
+		$latex = new LatexRender('latex_picture_path', 'latex_picture_path_httpd');
 
     for ($i=0; $i < count($tex_matches[0]); $i++) {
         $pos = strpos($text, $tex_matches[0][$i]);
