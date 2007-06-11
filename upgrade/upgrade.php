@@ -7,39 +7,14 @@ $path2add=2;
 //$require_admin = TRUE;
 
 include '../include/baseTheme.php';
+include 'document_upgrade.php';
+
 $nameTools = "Αναβάθμιση των βάσεων δεδομένων του e-Class";
 $auth_methods = array("imap","pop3","ldap","db");
 
-// Initialise $tool_content
 $tool_content = "";
-$fromadmin = true;
-
-if (isset($_POST['submit_upgrade'])) {
-	include('../config/config.php');
-	$fromadmin = false;
-}
-
-	if((isset($encryptedPasswd)) || (!empty($encryptedPasswd))) {
-           $newpass = md5($_REQUEST['password']);
-	 } else { //else use plain text password since the passwords are not hashed
-             $newpass = $_REQUEST['password'];
-   }
-
-    if (!is_admin($_REQUEST['login'], $newpass, $mysqlMainDb)) {
-                $tool_content .= "<p>Τα στοιχεία που δώσατε δεν αντιστοιχούν στο διαχειριστή του
-                        συστήματος! Παρακαλούμε επιστρέψτε στην προηγούμενη σελίδα και ξαναδοκιμάστε.</p>
-                        <center><a href=\"index.php\">Επιστροφή</a></center>";
-								draw($tool_content,0);
-								exit;
-   }
-
-include 'document_upgrade.php';
-
-//====================
-// Main body
-//====================
-
 $tool_content .= "<table width=\"99%\"><tbody>";
+
 $OK = "[<font color='green'> Επιτυχία </font>]";
 $BAD = "[<font color='red'> Σφάλμα ή δεν χρειάζεται τροποποίηση</font>]";
 
@@ -49,7 +24,7 @@ $diskQuotaGroup = 40000000;
 $diskQuotaVideo = 20000000;
 $diskQuotaDropbox = 40000000;
 
-// new titles for table accueill
+// new titles for table accueil
 $langVideoLinks['greek'] = "Βιντεοσκοπημένα Μαθήματα";
 $langDropBox['greek'] = "Ανταλλαγή Αρχείων";
 $langCourseAdmin['greek'] = "Διαχείριση Μαθήματος";
@@ -76,13 +51,178 @@ $langQuestionnaire['english'] = "Questionnaire";
 $langConference['english'] = "Conference";
 $langLearnPath['english'] = "Learning Path";
 
+// Initialise $tool_content
+$tool_content = "";
+$fromadmin = true;
+
+if (isset($_POST['submit_upgrade'])) {
+	include('../config/config.php');
+	$fromadmin = false;
+}
+
+if (!isset($submit2)) {
+	if((isset($encryptedPasswd)) || (!empty($encryptedPasswd))) {
+           $newpass = md5($_REQUEST['password']);
+	 } else { //else use plain text password since the passwords are not hashed
+             $newpass = $_REQUEST['password'];
+   }
+    
+  if (!is_admin($_REQUEST['login'], $newpass, $mysqlMainDb)) {
+                $tool_content .= "<p>Τα στοιχεία που δώσατε δεν αντιστοιχούν στο διαχειριστή του
+                        συστήματος! Παρακαλούμε επιστρέψτε στην προηγούμενη σελίδα και ξαναδοκιμάστε.</p>
+                        <center><a href=\"index.php\">Επιστροφή</a></center>";
+								draw($tool_content,0);
+								exit;
+   }
+}
+
+// ********************************************
+// upgrade config.php
+// *******************************************
+if (!@chdir("../config/"))
+     die ("Δεν ήταν δυνατή η πρόσβαση στον κατάλογο του αρχείο ρυθμίσεων config.php! Ελέγξτε τα δικαιώματα πρόσβασης.");
+ 
+    if (!isset($submit2)) {
+          $closeregdefault = $close_user_registration? ' checked="checked"': '';
+             // get old contact values
+          $tool_content .= "<div class='kk'>";
+          $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>";
+          $tool_content .= "<table width=99%>";
+          $tool_content .= "<tr><td align='justify' style='border: 1px solid #FFFFFF;'>
+							Βρεθήκανε τα παρακάτω στοιχεία επικοινωνίας στο αρχείο ρυθμίσεων <tt>config.php</tt>. 
+						<br>Μπορείτε να τα αλλάξετε / συμπληρώσετε.</td></tr>";
+          $tool_content .= "<tr><td align='justify' style='border: 1px solid #FFFFFF;'>&nbsp;</td></tr>";
+          $tool_content .= "<tr><td align='justify' style='border: 1px solid #FFFFFF;'>";
+          $tool_content .= "<table border=0 align=center>
+          	<tr><td style=\"border: 1px solid #FFFFFF;\">
+            <FIELDSET>
+            <LEGEND>Στοιχεία Εισόδου</LEGEND>
+            <table cellpadding='1' cellspacing='2' border='0'>
+            <tr>
+             <td style='border: 1px solid #FFFFFF;'>Όνομα Ιδρύματος: </td>
+             <td style='border: 1px solid #FFFFFF;'>&nbsp;<input class=auth_input_admin type='text' size='40' name='Institution' value='".@$Institution."'></td>
+            </tr>
+            <tr>
+              <td style='border: 1px solid #FFFFFF;'>Διεύθυνση Ιδρύματος: </td>
+              <td style='border: 1px solid #FFFFFF;'>&nbsp;<textarea rows='3' cols='40' class=auth_input_admin name='postaddress'>".@$postaddress."</textarea></td>
+            </tr>
+            <tr>
+              <td style='border: 1px solid #FFFFFF;'>Τηλ. Επικοινωνίας: </td>
+              <td style='border: 1px solid #FFFFFF;'>&nbsp;
+  						<input class=auth_input_admin type='text' name='telephone' value='".@$telephone."'></td>
+            </tr>
+            <tr>
+              <td style='border: 1px solid #FFFFFF;'>Fax: </td>
+              <td style='border: 1px solid #FFFFFF;'>&nbsp;
+									<input class=auth_input_admin type='text' name='fax' value='".@$fax."'></td>
+            </tr></table>
+            </FIELDSET>
+            </td></tr>
+						<tr><td style='border: 1px solid #FFFFFF;'>
+            <FIELDSET>
+            <LEGEND>Εγγραφή Χρηστών</LEGEND>
+            <table cellpadding='1' cellspacing='2' border='0' width='99%'>
+            <tr><td style='border: 1px solid #FFFFFF;''>
+            <span class='explanationtext'>Εγγραφή χρηστών μέσω αίτησης</span></td>
+            <td style='border: 1px solid #FFFFFF;'><input type='checkbox' name='reguser' $closeregdefault></td>
+            </tr>
+           <tr><td colspan='2' style='border: 1px solid #FFFFFF;'><input type='submit' name='submit2' value='Συνέχεια'>
+							</td></tr>
+           </table></FIELDSET>
+					</td></tr></table>
+					</td></tr><table>
+        </form>
+        </div>";
+
+} else {
+
+
+		$conf = file_get_contents("config.php");
+       if (!$conf)
+         die ("Το αρχείο ρυθμίσεων config.php δεν μπόρεσε να διαβαστεί! Ελέγξτε τα δικαιώματα πρόσβασης.");
+
+       // for upgrading 1.5 --> 1.7
+       $lines_to_add = "";
+       if (!strstr($conf, '$bannerPath')) {
+         $lines_to_add .= "\$bannerPath = 'images/gunet/banner.jpg';\n";
+       }
+       if (!strstr($conf, '$colorLight')) {
+         $lines_to_add .= "\$colorLight = '#F5F5F5';\n";
+       }
+       if (!strstr($conf, '$colorMedium')) {
+         $lines_to_add .= "\$colorMedium = '#004571';\n";
+       }
+       if (!strstr($conf, '$colorDark')) {
+         $lines_to_add .= "\$colorDark = '#000066';\n";
+       }
+       if (!strstr($conf, '$table_border')) {
+         $lines_to_add .= "\$table_border = '#DCDCDC';\n";
+       }
+       if (!strstr($conf, '$postaddress')) {
+         $lines_to_add .= "\$postaddress = '$_POST[postaddress]';\n";
+       }
+       if (!strstr($conf, '$fax')) {
+         $lines_to_add .= "\$fax = '$_POST[fax]';\n";
+       }
+
+       if (@(!$_POST['reguser'])) {
+         $user_reg = 'FALSE';
+       } else {
+         $user_reg = 'TRUE';
+       }
+
+       if (!strstr($conf, '$close_user_registration')) {
+         $lines_to_add .= "\$close_user_registration = $user_reg;\n";
+       }
+
+       if (!strstr($conf, '$durationAccount')) {
+					$lines_to_add .= "\$durationAccount = \"126144000\";\n";
+			 }
+
+       if (!strstr($conf, '$encryptedPasswd')) {
+				$lines_to_add = "\$encryptedPasswd = true;\n";
+			 }
+		
+		$new_copyright = file_get_contents('../info/license/header.txt');
+
+       $new_conf = preg_replace(
+         array(
+      '#\$postaddress\b[^;]*;#sm',
+      '#\$fax\b[^;]*;#',
+      '#\$close_user_registration\b[^;]*;#',
+      '#\?\>#',
+      '#mainInterfaceWidth\s*=\s*"600";#',
+      '#\$Institution\b[^;]*;#',
+      '#\$telephone\b[^;]*;#',
+      '#claroline/image/gunet/banner.jpg#',
+      '#^/\*$.*^\*/$#sm',
+      '#\/\/ .*^\/\/ HTTP_COOKIE[^\n]+$#sm'),
+         array(
+      "\$postaddress = '$_POST[postaddress]';",
+      "\$fax = '$_POST[fax]';",
+      "\$close_user_registration = $user_reg;",
+      $lines_to_add."\n\n?>",
+      'mainInterfaceWidth = 800;',
+      "\$Institution = '$_POST[Institution]';",
+      "\$telephone = '$_POST[telephone]';",
+      'images/gunet/banner.jpg',
+      $new_copyright,
+      ''),
+         $conf);
+
+       $fp = @fopen("config.php","w");
+       if (!$fp)
+         die ("Δεν πραγματοποιήθηκε η εγγραφή των αλλαγών στο αρχείο ρυθμίσεων config.php! Ελέγξτε τα δικαιώματα πρόσβασης.");
+       fwrite($fp, $new_conf);
+       fclose($fp);
+
+
 // **************************************
 // 		upgrade eclass main database
 // **************************************
-
-// ***********************
+// **************************************
 // old queries
-//  **********************
+//  *************************************
 //upgrade queries from 1.2 --> 1.4
 if (!mysql_field_exists("$mysqlMainDb", 'user', 'am'))
 $tool_content .= add_field('user', 'am', "VARCHAR( 20 ) NOT NULL");
@@ -252,103 +392,44 @@ $tool_content .= add_field('user', 'lang', "ENUM('el', 'en') DEFAULT 'el' NOT NU
 @$tmp = mysql_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_objectives`,`course_prerequisites` ,`course_keywords` ,`course_references`)");
 
 
-// Orismos $durationAccount sto config.php
-if((!isset($durationAccount)) || (empty($durationAccount))) {
-        @chmod( "../config",777 );
-        @chmod( "../config", 0777 );
-        $remove_this = "?>";
-        $text1 = "\$durationAccount = \"126144000\";\n";		//load file into $fc array
-        $fc=@file("../config/config.php");	//open same file and use "w" to clear file
-        $f=fopen("../config/config.php","w");
-        foreach($fc as $line)			//loop through array using foreach
-        {
-                if(!strstr($line,$remove_this)) //look for $key in each line
-                        fputs($f,$line); //place $line back in file
-                else
-                {
-                        fwrite($f, $text1);
-                        fwrite($f, $remove_this);
-                }
-        }
-        fclose($f);
-        $tool_content .= "<tr><td><b>Ενημερώθηκε το config.php για το durationAccount</b></td></tr>";
+ // encrypt passwords in users table
+  if ($res = db_query("SELECT user_id,password FROM user")) {
+         while($row = mysql_fetch_array($res)) {
+               $pass = $row["password"];
 
-        // update users with no registration date
-        if($res = db_query("SELECT user_id,registered_at,expires_at FROM user
-                                WHERE registered_at='0'
-                                OR registered_at='NULL' OR registered_at=NULL
-                                OR registered_at='null' OR registered_at=null
-                                OR registered_at='\N' OR registered_at=\N
-                                OR registered_at=''"))  {
+/*                if ((strstr($pass, "'")) or (strstr($pass, '"')) or (strstr($pass, '\\'))) {
+                $tool_content .= "Δεν έγινε κρυπτογράφηση του συνθηματικού του χρήστη με id=".$row["user_id"]." 
+										(άκυροι χαρακτήρες στο συνθηματικό)<br />";
+                    continue; // get the next one
+                 }  */
 
-                while($row = mysql_fetch_array($res)) {
-                        $registered_at = $row["registered_at"];
-                        // do the update
-                        $regtime = 126144000+time();
-                        if(db_query("UPDATE user SET registered_at=".time().",expires_at=".$regtime)) {
-                                $tool_content .= "Ενημέρωση του χρόνου λήξης λογαριασμού για τον χρήστη με id=".$row["user_id"].".Το κρυπτογραφημένο συνθηματικό είναι:".$newpass."<br />";
-                        } else {
-                                $tool_content .= "Δεν έγινε ενημέρωση για τον χρήστη με id=".$row["user_id"]."<br />";
-                        }
-                }
-        } else {
-                die("Δεν έγινε ενημέρωση σε κανένα λογαριασμό χρήστη σχετικά με το χρόνο λήξης λογαριασμού. Η ενημέρωση θα συνεχιστεί κανονικά.");
-        }
-}  //end of duration account
+                 if(!in_array($pass,$auth_methods)) {
+                    $newpass = md5($pass);
+								     // do the update
+        						 db_query("UPDATE user SET password = '".$newpass."' WHERE user_id=".$row["user_id"]); 
+                  }
+                  else {
+                       continue; // move to the next one
+                  }
+         } // of while
+    } else {
+        die("ΠΡΟΣΟΧΗ! Τα passwords στη ΒΔ δεν είναι κρυπτογραφημένα και η πλατφόρμα δεν μπορεί να λειτουργήσει");
+     }
 
+ // update users with no registration date
+  $res = db_query("SELECT user_id,registered_at,expires_at FROM user
+                    WHERE registered_at='0'
+                    OR registered_at='NULL' OR registered_at=NULL
+                    OR registered_at='null' OR registered_at=null
+                    OR registered_at='\N' OR registered_at=\N
+                    OR registered_at=''");  
 
-// Orismos $encryptdPasswd sto config.php so that hashed passwords do not get hashed more than once during
-//repitive upgrades
-if((!isset($encryptedPasswd)) || (empty($encryptedPasswd))) {
-        @chmod( "../config",777 );
-        @chmod( "../config", 0777 );
-        $has_encryption = 0;
-        $remove_this = "?>";
-        $text2 = "\$encryptedPasswd = true;\n";
-        $fc=@file("../config/config.php");		//load file into $fc array
-        $f=fopen("../config/config.php","w");		//open same file and use "w" to clear file
-        foreach($fc as $line) {
-                if(!strstr($line,$remove_this)) {       //look for $key in each line
-                        fputs($f,$line);                //place $line back in file
-                } else {
-                        fwrite($f, $text2);
-                        fwrite($f, $remove_this);
-                        $has_encryption = 1;
-                }
-        }
-        fclose($f);
-        $tool_content .= "<tr><td><b>Ενημερώθηκε το config.php για το encryptedPasswd (κρυπτογράφηση συνθηματικών)</b></td></tr>";
+  while ($row = mysql_fetch_array($res)) {
+          $registered_at = $row["registered_at"];
+          $regtime = 126144000+time();
+          db_query("UPDATE user SET registered_at=".time().",expires_at=".$regtime);
+    }
 
-        // update all the records in user table
-        if($res = db_query("SELECT user_id,password FROM user")) {
-                while($row = mysql_fetch_array($res)) {
-                        $pass = $row["password"];
-
-                       if ((strstr($pass, "'")) or (strstr($pass, '"')) or (strstr($pass, '\\')))
-                        {
-                        $tool_content .= "Δεν έγινε κρυπτογράφηση του συνθηματικού του χρήστη με id=".$row["user_id"]." (άκυροι χαρακτήρες στο συνθηματικό)<br />";
-                                continue; // get the next one
-                        }
-                        if(!in_array($pass,$auth_methods)) {
-                                $newpass = md5($pass);
-                             // do the update
-                         if(db_query("UPDATE user SET password = '".$newpass."' WHERE user_id=".$row["user_id"])) {
-                         $tool_content .= "Το συνθηματικό του χρήστη με id=".$row["user_id"].".ενημερώθηκε. Το κρυπτογραφημένο συνθηματικό είναι:".$newpass."<br />";
-                           } else {
-                                        $tool_content .= "Δεν έγινε ενημέρωση για τον χρήστη με id=".$row["user_id"]."<br />";
-                                }
-                        }
-                        else
-                        {
-                                continue; // move to the next one
-                        }
-                }
-        } else {
-                die("ΠΡΟΣΟΧΗ! Τα passwords στη ΒΔ δεν είναι κρυπτογραφημένα και η πλατφόρμα δεν μπορεί να λειτουργήσει");
-        }
-} else {
-	$tool_content .= "Τα συνθηματικά στην πλατφόρμα είναι ήδη κρυπτογραφημένα";
-}
 
 //Empty table 'agenda' in the main database so that we do not have multiple entries
 //in case we run the upgrade script twice. This has to be done at this point and NOT
@@ -1140,6 +1221,8 @@ if ($fromadmin)
 	$tool_content .= "<br><center><p><a href=\"../modules/admin/index.php\">Επιστροφή</a></p></center>";
 else
 	$tool_content .= "<br><center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
+
+} // end of if not submit
 
 if ($fromadmin)
 	draw($tool_content,3, 'admin');
