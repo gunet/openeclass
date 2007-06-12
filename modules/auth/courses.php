@@ -151,7 +151,7 @@ else
                 $numofcourses = getdepnumcourses($fac);
 
                 // display all the facultes collapsed
-//                $tool_content .= collapsed_facultes_horiz($fac);
+                $tool_content .= collapsed_facultes_horiz($fac);
                 if ($numofcourses > 0) {
                         $tool_content .= expanded_faculte($fac, $uid);
 												$tool_content .= "<tr><td colspan=\"6\" ><br>&nbsp;&nbsp;
