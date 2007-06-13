@@ -86,6 +86,21 @@ if (isset($submit))  {
 	if (!$fd) {
 		$tool_content .= $langFileError;
 	} else {
+
+if ($_POST['formcloseuserregistration'] == 'false') {
+                     $user_reg = 'FALSE';
+             } else {
+                     $user_reg = 'TRUE';
+    }
+
+
+if ($_POST['formhavelatex'] == 'false') {
+                     $latex = 'FALSE';
+             } else {
+                     $latex = 'TRUE';
+		    }
+
+
 		// Prepare config.php content
 		$stringConfig='<?php
 
@@ -148,10 +163,10 @@ $colorDark = "'.$_POST['formcolorDark'].'";
 
 $postaddress = "'.$_POST['formpostaddress'].'";
 $fax = "'.$_POST['formfax'].'";
-$have_latex = "'.$_POST['formhavelatex'].'";
+$have_latex = '.$latex.';
 
 $table_border = "'.$_POST['formtableborder'].'";
-$close_user_registration = "'.$_POST['formcloseuserregistration'].'";
+$close_user_registration = '.$user_reg.';
 $encryptedPasswd = "true";
 $persoIsActive = "'.$_POST['formpersoIsActive'].'";
 
@@ -343,6 +358,7 @@ if ($close_user_registration=="true") {
     $close_user_registrationSelTrue = "";
     $close_user_registrationSelFalse = "selected";
   }
+
 $tool_content .= "  <tr>
     <td width=\"3%\" nowrap><b>\$close_user_registration:</b></td>
     <td><select name=\"formcloseuserregistration\">
