@@ -94,42 +94,25 @@ if (isset($submit))  {
 	GUnet e-Class 2.0
 	E-learning and Course Management Program
 	================================================================================
-	Copyright(c) 2003-2006  Greek Universities Network - GUnet
-	A full copyright notice can be read in "/info/copyright.txt".
+	Copyright(c) 2003-2007  - GUnet
 
-	Authors:  Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-		Yannis Exidaridis <jexi@noc.uoa.gr>
- 		Alexandros Diamantidis <adia@noc.uoa.gr>	
-	For a full list of contributors, see "credits.txt".
+	GUnet eClass 2.0 is an open platform distributed in the hope that    
+  it will be useful (without any warranty), under the terms of the     
+  GNU License (General Public License) as published by the Free        
+  Software Foundation. The full license can be read in "license.txt".  
+                                                                            
+       Main Developers Group: Costas Tsibanis <k.tsibanis@noc.uoa.gr>       
+                                  Yannis Exidaridis <jexi@noc.uoa.gr>       
+                             Alexandros Diamantidis <adia@noc.uoa.gr>       
+                               Tilemachos Raptis <traptis@noc.uoa.gr>       
+                                                                            
+       For a full list of contributors, see "CREDITS.txt".
 
-	 This program is a free software under the terms of the GNU
-	(General Public License) as published by the Free Software Foundation. 
-	See the GNU License for more details.
-	The full license can be read in "license.txt".
-	Contact address: GUnet Asynchronous Teleteaching Group,
-	Network Operations Center, University of Athens,	
-	Panepistimiopolis Ilissia, 15784, Athens, Greece
-	
-	eMail: eclassadmin@gunet.gr		
-	==============================================================================
-	
-	***************************************************************
-  *           config file of e-Class
-	****************************************************************
-	File has been chmoded 0444 by install.php.
-	chmod 0666 (Win: remove read-only file property) to edit manually
-	*****************************************************************
-																																																													
+	Contact address: Asynchronous Teleteaching Group (eclass@gunet.gr),  
+                     Network Operations Center, University of Athens,    
+                    Panepistimiopolis Ilissia, 15784, Athens, Greece
+
 */
-
-// This file was generate by script /install/index.php
-// on '.date("r").'
-// REMOTE_ADDR : 		'.$_SERVER['REMOTE_ADDR'].' = '.gethostbyaddr($_SERVER['REMOTE_ADDR']).'
-// REMOTE_PORT : 		'.$_SERVER['REMOTE_PORT'].'
-// HTTP_USER_AGENT : 	'.$_SERVER['HTTP_USER_AGENT'].'
-// SERVER_NAME :		'.$_SERVER['SERVER_NAME'].'
-// HTTP_COOKIE :		'.$_SERVER['HTTP_COOKIE'].'
-
 
 $urlServer	=	"'.$_POST['formurlServer'].'";
 $urlAppend	=	"'.$_POST['formurlAppend'].'";
@@ -157,16 +140,20 @@ $color2="'.$_POST['formcolor2'].'"; // less light grey for bicolored tables
 $language = "'.$_POST['formlanguage'].'";
 
 $userMailCanBeEmpty = "'.$_POST['formuserMailCanBeEmpty'].'";
-$mainInterfaceWidth ="'.$_POST['formmainInterfaceWidth'].'";
 
 $bannerPath = "'.$_POST['formbannerPath'].'";
 $colorLight = "'.$_POST['formcolorLight'].'";
 $colorMedium = "'.$_POST['formcolorMedium'].'";
 $colorDark = "'.$_POST['formcolorDark'].'";
 
-$have_latex = "'.$_POST['formhave_latex'].'";
+$postaddress = "'.$_POST['formpostaddress'].'";
+$fax = "'.$_POST['formfax'].'";
+$have_latex = "'.$_POST['formhavelatex'].'";
 
-$persoIsActive = '.$_POST['formpersoIsActive'].';
+$table_border = "'.$_POST['formtableborder'].'";
+$close_user_registration = "'.$_POST['formcloseuserregistration'].'";
+$encryptedPasswd = "true";
+$persoIsActive = "'.$_POST['formpersoIsActive'].'";
 
 $durationAccount = "'.$_POST['formdurationAccount'].'";
 
@@ -192,7 +179,7 @@ else {
 	// Check if restore has been selected
 	if (isset($restore) && $restore=="yes") {
 		// Substitute variables with those from backup file
-		$titleextra = " (Restored Values)";
+		$titleextra = " ($langRestoredValues)";
 		@include("../../config/config_backup.php");
 	}
 	// Constract the form
@@ -237,28 +224,36 @@ else {
     <td width=\"3%\" nowrap><b>\$phpSysInfoURL:</b></td>
     <td><input type=\"text\" name=\"formphpSysInfoURL\" size=\"40\" value=\"".$phpSysInfoURL."\"></td>
 </tr>";
-	$tool_content .= "  <tr>
+	$tool_content .= " <tr>
     <td width=\"3%\" nowrap><b>\$emailAdministrator:</b></td>
     <td><input type=\"text\" name=\"formemailAdministrator\" size=\"40\" value=\"".$emailAdministrator."\"></td>
 </tr>";
-	$tool_content .= "  <tr>
+	$tool_content .= " <tr>
     <td width=\"3%\" nowrap><b>\$administratorName:</b></td>
     <td><input type=\"text\" name=\"formadministratorName\" size=\"40\" value=\"".$administratorName."\"></td>
 </tr>";
-	$tool_content .= "  <tr>
+	$tool_content .= " <tr>
     <td width=\"3%\" nowrap><b>\$administratorSurname:</b></td>
     <td><input type=\"text\" name=\"formadministratorSurname\" size=\"40\" value=\"".$administratorSurname."\"></td>
 </tr>";
-	$tool_content .= "  <tr>
+	$tool_content .= " <tr>
     <td width=\"3%\" nowrap><b>\$siteName:</b></td>
     <td><input type=\"text\" name=\"formsiteName\" size=\"40\" value=\"".$siteName."\"></td>
 </tr>";
-	$tool_content .= "  <tr>
+	$tool_content .= " <tr>
     <td colspan=\"2\"><hr></td>
   </tr>";
-	$tool_content .= "  <tr>
+$tool_content .= " <tr>
+    <td width=\"3%\" nowrap><b>\$postaddress:</b></td>
+		<td><textarea rows='3' cols='40' name='formpostaddress'>$postaddress</textarea></td>
+</tr>";
+$tool_content .= " <tr>
     <td width=\"3%\" nowrap><b>\$telephone:</b></td>
     <td><input type=\"text\" name=\"formtelephone\" size=\"40\" value=\"".$telephone."\"></td>
+</tr>";
+ $tool_content .= "  <tr>
+    <td width=\"3%\" nowrap><b>\$fax:</b></td>
+    <td><input type=\"text\" name=\"formfax\" size=\"40\" value=\"".$fax."\"></td>
 </tr>";
 	$tool_content .= "  <tr>
     <td width=\"3%\" nowrap><b>\$emailhelpdesk:</b></td>
@@ -315,10 +310,6 @@ else {
     </select></td>
 </tr>";
 	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>\$mainInterfaceWidth:</b></td>
-    <td><input type=\"text\" name=\"formmainInterfaceWidth\" size=\"40\" value=\"".$mainInterfaceWidth."\"></td>
-</tr>";
-	$tool_content .= "  <tr>
     <td colspan=\"2\"><hr></td>
   </tr>";
   	$tool_content .= "  <tr>
@@ -337,9 +328,29 @@ else {
     <td width=\"3%\" nowrap><b>\$colorDark:</b></td>
     <td><input type=\"text\" name=\"formcolorDark\" size=\"40\" value=\"".$colorDark."\"></td>
 </tr>";
+$tool_content .= "  <tr>
+    <td width=\"3%\" nowrap><b>\$table_border:</b></td>
+    <td><input type=\"text\" name=\"formtableborder\" size=\"40\" value=\"".$table_border."\"></td>
+</tr>";
 	$tool_content .= "  <tr>
     <td colspan=\"2\"><hr></td>
   </tr>";
+
+if ($close_user_registration=="true") {
+    $close_user_registrationSelTrue = "selected";
+    $close_user_registrationSelFalse = "";
+  } else {
+    $close_user_registrationSelTrue = "";
+    $close_user_registrationSelFalse = "selected";
+  }
+$tool_content .= "  <tr>
+    <td width=\"3%\" nowrap><b>\$close_user_registration:</b></td>
+    <td><select name=\"formcloseuserregistration\">
+      <option value=\"true\" ".$close_user_registrationSelTrue.">true</option>
+      <option value=\"false\" ".$close_user_registrationSelFalse.">false</option>
+    </select></td>
+</tr>";
+
 	if ($have_latex=="true") {
 		$have_latexSelTrue = "selected";
 		$have_latexSelFalse = "";
@@ -349,7 +360,7 @@ else {
 	}
 	$tool_content .= "  <tr>
     <td width=\"3%\" nowrap><b>\$have_latex:</b></td>
-    <td><select name=\"formhave_latex\">
+    <td><select name=\"formhavelatex\">
       <option value=\"true\" ".$have_latexSelTrue.">true</option>
       <option value=\"false\" ".$have_latexSelFalse.">false</option>
     </select></td>
@@ -375,7 +386,12 @@ $tool_content .= "  <tr>
     <td><input type=\"text\" name=\"formdurationAccount\" size=\"40\" value=\"".$durationAccount."\"></td>
 </tr>";
 
-	$tool_content .= "  <tr>
+$tool_content .= "  <tr>
+    <td width=\"3%\" nowrap><b>\$encryptedPasswd:</b></td>
+    <td><input type=\"checkbox\" checked disabled> ".$langencryptedPasswd."</td>
+</tr>";
+
+	$tool_content .= " <tr>
     <td colspan=\"2\"><hr></td>
   </tr>";
 	$tool_content .= "  <tr>
@@ -390,7 +406,7 @@ $tool_content .= "  <tr>
   	// Give option to restore values from backup file
   	$tool_content .= "<table width=\"99%\"><caption>".$langOtherActions."</caption><tbody>";
 		$tool_content .= "  <tr>
-    <td colspan=\"2\"><a href=\"eclassconf.php?restore=yes\">Restore values from backup</a></td>
+    <td colspan=\"2\"><a href=\"eclassconf.php?restore=yes\">$langRestoredValues</a></td>
   </tr>";
 		$tool_content .= "</tbody></table>";
 	}
