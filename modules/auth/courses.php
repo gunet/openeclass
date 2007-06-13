@@ -435,8 +435,6 @@ function collapsed_facultes_horiz($fac) {
 global $listfac;
 $retString = "";
 
-//start_toolbar();
-
 	$retString .= "</td><td class=tool_bar align=left width=20%>
 					<span class=\"small\"><b>$listfac:</b></span></td><td class=tool_bar align=right width=80%>\n";
 
@@ -462,7 +460,6 @@ $result = db_query("SELECT DISTINCT faculte.id id, faculte.name f
 		$retString .= $codelink;
 		$counter++;
 	}
-  //      end_toolbar();
                // o pinakas autos stoixizei tin kartela
 
     $retString .= "<table border='0' height=283 width=99% align=center cellspacing='1' cellpadding='0'>\n";
