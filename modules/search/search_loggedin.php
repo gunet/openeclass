@@ -51,51 +51,76 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 ***********************************************************************************************/
 
 		$tool_content .= "
-		<p>$langSearchWith</p>
+		
 			<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
+			<FIELDSET>
+			<LEGEND><p>$langSearchWith</p></LEGEND>
 			<table width=\"99%\">
-			<thead>
-				<tr>
-				<th>
-					<b>$langTitle</b>
-				</th>				
-				<td>
-					<input name=\"search_terms_title\" type=\"text\" size=\"80\" />
+
+			    <tr>
+				<td colspan=3>
+				   &nbsp;
 				</td>
 				</tr>
 				<tr>
-				<th>
-					<b>$langKeywords</b>
-				</th>				
-				<td>
-					<input name=\"search_terms_keywords\" type=\"text\" size=\"80\" />
+				<td width=\"90\" valign=top>
+					<p><b>$langTitle</b></p>
+				</td>
+				<td valign=top width=\"250\">
+					<p><input name=\"search_terms_title\" type=\"text\" size=\"50\" /></p>
+				</td>
+				<td valign=top>
+					<p>$langTitle_Descr</p>
+				</td>	
+				</tr>
+				<tr>
+				<td valign=top>
+					<p><b>$langKeywords</b></p>
+				</td>				
+				<td valign=top>
+					<p><input name=\"search_terms_keywords\" type=\"text\" size=\"50\" /></p>
+				</td>
+				<td valign=top>
+					<p>$langKeywords_Descr</p>
+				</td>	
+				</tr>
+				<tr>
+				<td valign=top>
+					<p><b>$langInstructor</b></p>
+				</td>					
+				<td valign=top>
+					<p><input name=\"search_terms_instructor\" type=\"text\" size=\"50\" /></p>
+				</td>
+				<td valign=top>
+					<p>$langInstructor_Descr</p>
 				</td>
 				</tr>
 				<tr>
-				<th>
-					<b>$langInstructor</b>
-				</th>				
+				<td valign=top>
+					<p><b>$langCourseCode</b></p>
+				</td>					
 				<td>
-					<input name=\"search_terms_instructor\" type=\"text\" size=\"80\" />
+					<p><input name=\"search_terms_coursecode\" type=\"text\" size=\"50\" /></p>
+				</td>
+				<td valign=top>
+					<p>$langCourseCode_Descr</p>
 				</td>
 				</tr>
 				<tr>
-				<th>
-					<b>$langCourseCode</b>
-				</th>				
 				<td>
-					<input name=\"search_terms_coursecode\" type=\"text\" size=\"80\" />
+					&nbsp;
+				</td>	
+				<td colspan=2>
+					<p><input type=\"Submit\" name=\"submit\" value=\"$langDoSearch\" />&nbsp;
+					&nbsp;<input type=\"Reset\" name=\"reset\" value=\"$langNewSearch\" /></p>
 				</td>
-				</tr>
-			</tr>
-			</thead>								
+			    </tr>
+											
 			</table>
 			<br/>
 				
-					<input type=\"Submit\" name=\"submit\" value=\"$langDoSearch\" />
-					&nbsp;
-					<input type=\"Reset\" name=\"reset\" value=\"$langNewSearch\" />
-				</form>
+			</FIELDSET>
+			</form>
 		";
 	
 }else 

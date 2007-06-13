@@ -31,7 +31,7 @@ $langDoSearch = "Εκτέλεση Αναζήτησης";
 $langNewSearch = "Νέα Αναζήτηση";
 $langSearch_terms = "Όροι Αναζήτησης: ";
 $langSearchIn = "Αναζήτηση σε: ";
-$langSearchWith = "Αναζήτηση με βάση τα παρακάτω κριτήρια:";
+$langSearchWith = "Αναζήτηση με κριτήρια:";
 
 $langSearchingFor = "";
 $langNoResult = "Δεν βρέθηκαν αποτελέσματα...";
@@ -42,10 +42,14 @@ $langForum = "Περιοχή συζητήσεων";
 $langOR = "Τουλάχιστον έναν από τους όρους";
 $langNOT = "Κανέναν από τους ακόλουθους όρους";
 
-$langTitle = "Τίτλος μαθήματος";
-$langKeywords = "Λέξεις κλειδιά μαθήματος";
-$langInstructor = "Καθηγητής/ές μαθήματος";
-$langCourseCode = "Κωδικός μαθήματος";
+$langTitle = "Τίτλος";
+$langKeywords = "Λέξεις κλειδιά";
+$langInstructor = "Καθηγητής/ές";
+$langCourseCode = "Κωδικός";
+$langTitle_Descr = "αφορά τον τίτλο ή τμήμα από τον τίτλο του μαθήματος";
+$langKeywords_Descr = "κάποια λέξη ή οι λέξεις κλειδιά που προσδιορίζουν τη θεματική περιοχή του μαθήματος";
+$langInstructor_Descr = "το όνομα ή τα ονόματα των καθηγητών του μαθήματος";
+$langCourseCode_Descr = "ο κωδικός του μαθήματος";
 
 $langCourseInfo = "Πληροφορίες Μαθήματος";
 $langAccessType = "Τύπος Πρόσβασης";

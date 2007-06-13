@@ -33,7 +33,7 @@ $langDoSearch = "Proceed with search";
 $langNewSearch = "New search";
 $langSearch_terms = "Search criteria: ";
 $langSearchIn = "Search in: ";
-$langSearchWith = "Searching with the following criteria";
+$langSearchWith = "Searching with criteria";
 
 $langSearchingFor = "Searching data...";
 $langNoResult = "No results...";
@@ -44,10 +44,14 @@ $langForum = "Forum";
 $langOR = "At least one of the terms";
 $langNOT = "None of the following terms";
 
-$langTitle = "Course Title";
-$langKeywords = "Course Keywords";
-$langInstructor = "Course Instructors";
-$langCourseCode = "Course Code";
+$langTitle = "Title";
+$langKeywords = "Keywords";
+$langInstructor = "Instructors";
+$langCourseCode = "Code";
+$langTitle_Descr = "course title or part of this";
+$langKeywords_Descr = "one or more course keywords";
+$langInstructor_Descr = "Instructor name";
+$langCourseCode_Descr = "course code";
 
 $langCourseInfo = "Course Information";
 
