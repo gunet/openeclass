@@ -14,10 +14,10 @@ $tool_content .= "<table cellpadding='8' cellspacing='0' width='90%' align='cent
   <td colspan='2' align='justify' style='border: 1px solid #FFFFFF;'>
   <center><b><u>ΠΡΟΣΟΧΗ</u>!</b></center><br>
   Το πρόγραμμα αναβάθμισης θα τροποποιήσει το αρχείο ρυθμίσεων <em>config.php</em>. 
-	Επομένως πριν προχωρήσετε στην αναβάθμιση βεβαιωθείτε ότι ο web server μπορεί να έχει πρόσβαση στο <em>config.php</em>.
+	Επομένως πριν προχωρήσετε στην αναβάθμιση βεβαιωθείτε ότι ο web server μπορεί να έχει πρόσβαση στο <em>config.php</em>. Για λόγους ασφαλείας, οι τωρινές ρυθμίσεις του <em>config.php</em> θα κρατηθούν στο αρχείο <em>config_backup.php</em>.
   </td></tr>
    <tr><td colspan='2' style='border: 1px solid #FFFFFF;' class='labeltext'>
-   Επίσης για λόγους ασφαλείας βεβαιωθείτε ότι έχετε κρατήσει αντίγραφα ασφαλείας των βάσεων δεδομένων.</td></tr>
+  Επίσης για λόγους ασφαλείας βεβαιωθείτε ότι έχετε κρατήσει αντίγραφα ασφαλείας των βάσεων δεδομένων.</td></tr>
   <tr><td colspan='2' align='justify' style='border: 1px solid #FFFFFF;'>
     Για να δείτε τις αλλαγές-βελτιώσεις της καινούριας έκδοσης του eClass κάντε κλικ <a href='CHANGES.txt'>εδώ</a>.
   </td></tr>

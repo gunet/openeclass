@@ -135,6 +135,10 @@ if (!@chdir("../config/"))
         </div>";
 
 } else {
+		
+		// backup of config file 
+   		if (!copy("config.php","config_backup.php"))
+						die ("Δεν ήταν δυνατή η λειτουργία αντιγράφου ασφαλείας του config.php! Ελέγξτε τα δικαιώματα πρόσβασης.");
 
 
 		$conf = file_get_contents("config.php");
@@ -215,7 +219,6 @@ if (!@chdir("../config/"))
          die ("Δεν πραγματοποιήθηκε η εγγραφή των αλλαγών στο αρχείο ρυθμίσεων config.php! Ελέγξτε τα δικαιώματα πρόσβασης.");
        fwrite($fp, $new_conf);
        fclose($fp);
-
 
 // **************************************
 // 		upgrade eclass main database
