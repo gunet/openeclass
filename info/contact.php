@@ -34,20 +34,20 @@ $tool_content = "";
 
 $tool_content .= "
 <div style='text-align: justify; padding: 15px; font-size:10pt;'>$introcontact</div>
-        <blockquote><img src='../images/env.gif' align='absbottom'>&nbsp;&nbsp;
+        <blockquote><p><img src='../images/env.gif' align='absbottom'></img>&nbsp;&nbsp;
           $langPostMail<br>
           $Institution<br>
           $postaddress<br>
-				</blockquote>
-		<blockquote><img src='../images/phone.gif' align='absbottom'>&nbsp;&nbsp;
+				</p></blockquote>
+		<blockquote><p><img src='../images/phone.gif' align='absbottom'></img>&nbsp;&nbsp;
 		    $langPhone $telephone<br>
          $langFax
          $fax
-			</blockquote>
-			<blockquote>
+			</p></blockquote>
+			<blockquote><p>
 			<img src='../images/email.gif' align='absbottom'>&nbsp;&nbsp;
           <b>$langEmail : </b>".mailto($emailAdministrator, str_replace('@', ' &lt;at> ', $emailAdministrator))."
-       </blockquote>";
+       </p></blockquote>";
 
 draw($tool_content, 0);
 ?>

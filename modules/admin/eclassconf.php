@@ -59,8 +59,7 @@ $langFiles = 'admin';
 $require_admin = TRUE;
 // Include baseTheme
 include '../../include/baseTheme.php';
-// Define $nameTools
-$nameTools = $langClaroConf;
+$nameTools = $langEclassConf;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 // Initialise $tool_content
 $tool_content = "";

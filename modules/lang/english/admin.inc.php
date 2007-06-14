@@ -57,7 +57,7 @@ $langPHPInfo = "PHP information";
 $langManuals = "Available Manuals";
 $langAdminManual = "Admin Manual";
 $langVersion = "eClass Version";
-$langConfigFile = "eClass Configuration file";
+$langConfigFile = "Configuration File";
 $langDBaseAdmin = "phpMyAdmin";
 $langAdminProf = "Admin Professors";
 $langAdminUsers = "Admin Users";
@@ -161,11 +161,15 @@ $langProfessors = "Professors";
 $langListRegisteredStudents = "Registered Students List";
 $langListRegisteredProfessors = "Registered Professors List";
 
-$langClaroConf = "Configuration File of eClass";
+
+// eclassconf
+$langEclassConf = "Configuration File of eClass";
 $langFileUpdatedSuccess = "Config file edited with success!";
 $langFileEdit = "File Edit";
-$langFileError = "Unable to write config.php!. Please check persmissions!";
+$langFileError = "Unable to write config.php! Please check persmissions!";
 $langReplaceBackupFile = "Replace config_backup.php.";
+$langRestoredValues = "Restore old values";
+$langencryptedPasswd = "Passwords are encrypted";
 
 // delcours.php
 $langCourseDel = "Delete course";

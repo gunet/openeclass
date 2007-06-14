@@ -60,7 +60,7 @@ $langPHPInfo = "Πληροφορίες για την PHP";
 $langManuals = "Διαθέσιμα Εγχειρίδια";
 $langAdminManual = "Εγχειρίδιο Διαχειριστή";
 $langVersion = "Έκδοση του eClass";
-$langConfigFile = "Config file eClass";
+$langConfigFile = "Αρχείο ρυθμίσεων";
 $langDBaseAdmin = "Διαχείριση Β.Δ. (phpMyAdmin)";
 $langUnregUser = "Διαγραφή Χρήστη";
 $langActions = "Ενέργειες";
@@ -196,12 +196,6 @@ $langProfessors = "Εκπαιδευτές";
 $langListRegisteredStudents = "Λίστα Εγγεγραμμένων Εκπαιδευομένων";
 $langListRegisteredProfessors = "Λίστα Εγγεγραμμένων Εκπαιδευτών";
 
-$langClaroConf = "Configuration File του e-Class";
-$langFileUpdatedSuccess = "Το αρχείο ρυθμίσεων τροποποιήθηκε με επιτυχία!";
-$langFileEdit = "Επεξεργασία Αρχείου";
-$langFileError = "Το αρχείο config.php δεν μπόρεσε να διαβαστεί!. Ελέγξτε τα δικαιώματα πρόσβασης.";
-$langReplaceBackupFile = "Αντικατάσταση του config_backup.php.";
-
 // delcours
 $langCourseDel = "Διαγραφή μαθήματος";
 $langCourseDelSuccess = "Το μάθημα διαγράφηκε με επιτυχία!";
@@ -239,7 +233,7 @@ $langReqHaveClosed = "Αιτήσεις που έχουν κλείσει";
 $langReqHaveBlocked = "Αιτήσεις που έχουν απορριφθεί";
 $langReqHaveFinished = "Αιτήσεις που έχουν ολοκληρωθεί";
 $langemailsubjectBlocked = "Απόρριψη αίτησης εγγραφής στην Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης";
-$langemailbodyBlocked = "Η αίτησή σας για εγγραφή στην πλατφόρμα e-Class απορρίφθηκε.";
+$langemailbodyBlocked = "Η αίτησή σας για εγγραφή στην πλατφόρμα eClass απορρίφθηκε.";
 $langCloseConf = "Επιβεβαίωση κλεισίματος αίτησης";
 // mailtoprof.php
 $langSendMessageTo = "Αποστολή μηνύματος";
@@ -337,6 +331,15 @@ $langAddSixMonths = "Προσθήκη χρόνου:6 μήνες";
 // list requests
 $langListRequests = "Ανοικτές Αιτήσεις Καθηγητών";
 
+// eclassconf
+$langRestoredValues = "Επαναφορά προηγούμενων τιμών";
+$langEclassConf = "Αρχείο ρυθμίσεων του eClass";
+$langFileUpdatedSuccess = "Το αρχείο ρυθμίσεων τροποποιήθηκε με επιτυχία!";
+$langFileEdit = "Επεξεργασία Αρχείου";
+$langFileError = "Το αρχείο config.php δεν μπόρεσε να διαβαστεί! Ελέγξτε τα δικαιώματα πρόσβασης.";
+$langReplaceBackupFile = "Αντικατάσταση του config_backup.php.";
+$langencryptedPasswd = "Υποχρεωτική κρυπτογράφηση των συνθηματικών";
+
 // admin announcements
 $langAdminAn = "Ανακοινώσεις Διαχειριστή";
 $langAdminAddAnn = "Προσθήκη ανακοίνωσης διαχειριστή";
@@ -354,4 +357,5 @@ $langAdminAnnComm = "Σχόλια";
 $langAdminAnnTitleEn = "Τίτλος (Αγγλικά)";
 $langAdminAnnBodyEn = "Ανακοίνωση (Αγγλικά)";
 $langAdminAnnCommEn = "Σχόλια (Αγγλικά)";
+
 ?>
