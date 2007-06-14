@@ -793,6 +793,7 @@ elseif(isset($_REQUEST['install7']))
         `date_open` datetime default NULL,
         `date_closed` datetime default NULL,
         `comment` text default NULL,
+				`statut`  tinyint(4) NOT NULL default 1,
         PRIMARY KEY  (`rid`))
         TYPE=MyISAM $charset_spec");
 
