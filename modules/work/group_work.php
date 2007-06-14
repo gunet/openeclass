@@ -78,16 +78,12 @@ $groupPath = $coursePath."/group/".group_secret($gid);
 $nameTools = $langGroupSubmit;
 
 if (isset($_GET['submit'])) {
-	//begin_page();
 	//printf("<p>$langGroupWorkIntro</p>", basename($_GET['submit']));
 	$tool_content .= "<p>$langGroupWorkIntro</p>"; 
 	show_assignments();	
-	//end_page();
 	draw($tool_content, 2);
 } elseif (isset($_POST['assign'])) {
-	//begin_page();
 	submit_work($uid, $_POST['assign'], $_POST['file']);
-	//end_page();
 	draw($tool_content, 2);
 } else {
 	header("Location: work.php");

@@ -251,8 +251,6 @@ if($is_adminOfCourse) {
 		db_query("delete from forums where cat_id=$cat_id", $currentCourseID);
 		db_query("delete from catagories where cat_id=$cat_id", $currentCourseID);
 		$tool_content .= "<a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a>";
-		// 	$tool_content .= "</TD></TR></TABLE></TD></TR></TABLE>";
-		//include("footer.php");
 
 	}
 

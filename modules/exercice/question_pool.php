@@ -60,16 +60,12 @@ include('answer.class.php');
 $require_current_course = TRUE;
 $langFiles='exercice';
 
-//include('../../include/init.php');
-
 include '../../include/baseTheme.php';
 
 $tool_content = "";
 
 $nameTools=$langQuestionPool;
 $navigation[]=array("url" => "exercice.php","name" => $langExercices);
-
-//begin_page($nameTools);
 
 $is_allowedToEdit=$is_adminOfCourse;
 

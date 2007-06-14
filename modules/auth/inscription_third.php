@@ -33,10 +33,8 @@
 */
 $langFiles = 'registration';
 $require_login = TRUE;
-//include('../../include/init.php');
 include '../../include/baseTheme.php';
 $nameTools = $langChoiceLesson;
-//begin_page();
 $tool_content = "";
 # This file registers only students
 $statut = 5;

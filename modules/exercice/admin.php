@@ -62,8 +62,6 @@ include('exercise.lib.php');
 $require_current_course = TRUE;
 $langFiles='exercice';
 
-//include ('../../include/init.php');
-
 include '../../include/baseTheme.php';
 
 // For using with th epop-up calendar
@@ -253,8 +251,6 @@ if(isset($modifyIn) && $modifyIn == 'thisExercise') {
 		$noPHP_SELF=true;
 	}
 }
-
-//begin_page();
 
 if(isset($newQuestion) || isset($modifyQuestion)) {
 	// statement management

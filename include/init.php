@@ -52,14 +52,10 @@ if (isset($path2add) && $path2add == 0){
 	$relPathLib = "";
 	$relPath = "../../";
 }
+
 //------------------------------------
 // include the following necessary files
 // ---------------------------------
-
-// header
-include "header.php";
-// footer
-include "footer.php";
 
 // function library
 include $relPathLib . "lib/main.lib.php";

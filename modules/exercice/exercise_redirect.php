@@ -70,8 +70,6 @@ $langFiles='exercice';
 $require_help = TRUE;
 $helpTopic = 'Exercise';
 
-//include('../../include/init.php');
-
 include '../../include/baseTheme.php';
 
 $tool_content = "";
@@ -91,7 +89,6 @@ $TBL_QUESTIONS='questions';
 $TBL_REPONSES='reponses';
 
 $navigation[]=array("url" => "exercice.php","name" => $langExercices);
-//begin_page($nameTools);
 
 // if the object is not in the session
 if(!session_is_registered('objExercise')) {

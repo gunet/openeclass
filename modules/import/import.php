@@ -48,13 +48,11 @@ DETAIL
 
 $require_current_course = TRUE;
 $langFiles = 'import';
-//include('../../include/init.php');
 include '../../include/baseTheme.php';
 
 $nameTools = $langAddPage;
 
 $tool_content = "";
-//begin_page();
 
 // Check if user=prof or assistant
 

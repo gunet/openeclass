@@ -64,8 +64,6 @@ $require_help = TRUE;
 $helpTopic = 'Exercise';
 $guest_allowed = true;
 
-//include('../../include/init.php');
-
 include '../../include/baseTheme.php';
 
 /**** The following is added for statistics purposes ***/
@@ -77,7 +75,6 @@ $action->record('MODULE_ID_EXERCISE');
 $tool_content = "";
 
 $nameTools = $langExercices;
-//begin_page($nameTools);
 
 /*******************************/
 /* Clears the exercise session */

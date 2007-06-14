@@ -143,13 +143,6 @@ $langGroupSubmit = "Group work submission";
 $langUserOnly = "To submit an assignment you must first log in.";
 $langGradeWork = "Grading comments";
 
-// work-old.php messages
-$langProfOnly = 'This page is only accessible to this course\'s
-	instructor. Please return to the <a href="work.php">student work</a>
-	page';
-$langWorksOld = 'Old Submissions';
-$langOldWork = "<p>There are %d <a href='work_old.php'>old student
-	submissions</a>.</p>\n";
 $langWorkWrongInput = 'The grade must be a number. Please go back an enter the grade again.';
 $langWarnForSubmissions = "If any assignments were submitted, they will be deleted";
 $langAssignmentActivated = "The assignment was activated";

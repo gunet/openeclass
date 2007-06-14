@@ -71,8 +71,6 @@ $require_help = TRUE;
 $helpTopic = 'Exercise';
 $guest_allowed = true;
 
-//include('../../include/init.php');
-
 include '../../include/baseTheme.php';
 
 $tool_content = "";
@@ -142,7 +140,6 @@ if(isset($_POST['formSent'])) {
 }
 
 $navigation[]=array("url" => "exercice.php","name" => $langExercices);
-//begin_page($nameTools);
 
 // if the object is not in the session
 if(!session_is_registered('objExercise')) {

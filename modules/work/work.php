@@ -156,13 +156,10 @@ if ($is_adminOfCourse) {
 	} elseif (isset($add)) {
 		$nameTools = $langNewAssign;
 		$navigation[] = array("url"=>"work.php", "name"=> $langWorks);
-		//begin_page();
 		new_assignment();
 	} elseif (isset($sid)) {
 		show_submission($sid);
 	} elseif (isset($_POST['new_assign'])) {
-		//begin_page();
-		//echo $WorkEnd;
 		add_assignment($title, $comments, $desc, "$WorkEnd",
 		$group_submissions);
 		show_assignments();
@@ -171,11 +168,9 @@ if ($is_adminOfCourse) {
 	} elseif (isset($id)) {
 		if (isset($choice)) {
 			if ($choice == 'disable') {
-				//begin_page();
 				db_query("UPDATE assignments SET active = '0' WHERE id = '$id'");
 				show_assignments($langAssignmentDeactivated);
 			} elseif ($choice == 'enable') {
-				//begin_page();
 				db_query("UPDATE assignments SET active = '1' WHERE id = '$id'");
 				show_assignments($langAssignmentActivated);
 			} elseif ($choice == 'delete') {
@@ -183,7 +178,6 @@ if ($is_adminOfCourse) {
 				die("invalid option");
 			} elseif ($choice == "do_delete") {
 				$navigation[] = array("url"=>"work.php", "name"=> $langWorks);
-				//begin_page($langDelAssign);
 				delete_assignment($id);
 			} elseif ($choice == 'edit') {
 				show_edit_assignment($id);
@@ -196,7 +190,6 @@ if ($is_adminOfCourse) {
 			show_assignment($id);
 		}
 	} else {
-		//begin_page();
 		show_assignments();
 	}
 } else {
@@ -207,7 +200,6 @@ if ($is_adminOfCourse) {
 			show_student_assignment($id);
 		}
 	} else {
-		//begin_page();
 		show_student_assignments();
 	}
 }
@@ -457,7 +449,6 @@ function show_edit_assignment($id) {
 
 	$nav[] = array("url"=>"work.php", "name"=> $langWorks);
 	$nav[] = array("url"=>"work.php?id=$id", "name"=> $row['title']);
-	//begin_page($langEdit, $nav);
 
 	$deadline = $row['deadline'];
 
@@ -521,7 +512,6 @@ function edit_assignment($id)
 
 	$nav[] = array("url"=>"work.php", "name"=> $langWorks);
 	$nav[] = array("url"=>"work.php?id=$id", "name"=> $_POST['title']);
-	//begin_page($langEdit, $nav);
 
 	if (db_query("UPDATE assignments SET title='".mysql_real_escape_string($_POST[title])."',
 		description='".mysql_real_escape_string($_POST[desc])."', group_submissions='".mysql_real_escape_string($_POST[group_submissions])."',
@@ -568,10 +558,6 @@ $info = mysql_fetch_array(db_query("SELECT * FROM assignments
 WHERE id = '$id'"));
 $subs = mysql_num_rows(db_query("SELECT * FROM assignment_submit
 WHERE assignment_id = '$id'"));
-
-//	$nav[] = array("url"=>"work.php", "name"=> $langWorks);
-//	$nav[] = array("url"=>"work.php?id=$id", "name"=> $info['title']);
-//begin_page($langDelAssign, $nav);
 
 //	$tool_content .= "<h4>".$langDelAssign."</h4><p>".$langDelWarn1." ".$info['title'].". ".$langDelSure." </p>";
 
@@ -1042,8 +1028,6 @@ function show_assignments($message = null)
 {
 	global $tool_content, $m, $langNoAssign, $langNewAssign;
 
-	old_work_check();
-
 	$result = db_query("SELECT * FROM assignments ORDER BY id");
 
 	$tool_content .= "<p><a href='work.php?add=1'>$langNewAssign</a></p>";
@@ -1288,15 +1272,6 @@ function create_zip_index($path, $id, $online = FALSE)
 	fclose($fp);
 }
 
-// Check for old assignments and show link to work-old.php
-function old_work_check()
-{
-	global $tool_content, $langOldWork;
-	$work = mysql_fetch_array(db_query("SELECT COUNT(*) FROM work"));
-	if ($work[0] > 0) {
-		printf($langOldWork, $work[0]);
-	}
-}
 
 // Show a simple html page with grades and submissions
 function show_plain_view($id)
