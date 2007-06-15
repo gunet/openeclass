@@ -80,7 +80,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		$tool_content .= "
 			<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
 			<FIELDSET>
-			<LEGEND><p>$langSearchWith</p></LEGEND>
+			<LEGEND>$langSearchWith</LEGEND>
 			<table width=\"99%\">
 			
 			<tr>

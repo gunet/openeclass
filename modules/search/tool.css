@@ -44,6 +44,11 @@ p{
   font-size: 9pt;
 }
 
+LEGEND{
+  font-size: 10pt;
+  padding : 4px;
+}
+
 table{
     border: 0px;
 	font-family: Verdana, Arial, sans-serif !important;

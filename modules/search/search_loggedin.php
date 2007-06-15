@@ -54,7 +54,7 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 		
 			<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
 			<FIELDSET>
-			<LEGEND><p>$langSearchWith</p></LEGEND>
+			<LEGEND>$langSearchWith</LEGEND>
 			<table width=\"99%\">
 
 			    <tr>
