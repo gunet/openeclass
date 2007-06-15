@@ -110,11 +110,11 @@ switch ($u_stats_type) {
 }
 mysql_free_result($result);
 
-if (!file_exists("../../temp")) {
-    mkdir("../../temp", 0777);
+if (!file_exists("../../courses/temp")) {
+    mkdir("../../courses/temp", 0777);
 }
 
-$chart_path = 'temp/chart_'.md5(serialize($chart)).'.png';
+$chart_path = 'courses/temp/chart_'.md5(serialize($chart)).'.png';
 //$tool_content .= $query."<br />";
 $chart->render($webDir.$chart_path);
 

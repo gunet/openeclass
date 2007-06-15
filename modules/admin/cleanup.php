@@ -20,13 +20,11 @@ $tool_content .= "<table width='96%' align='center' class='admin'>
 							   <tr><td valign=top><br>";
 
 if (isset($_POST['submit'])) {
-	foreach (array('garbage' => 5, 'archive' => 1, 'tmpUnzipping' => 1) as $dir => $days) {
+	foreach (array('temp' => 2, 'garbage' => 5, 'archive' => 1, 'tmpUnzipping' => 1) as $dir => $days) {
 		$tool_content .= sprintf("<p class=kk>$langCleaningUp</p>", $days,
 			($days == 1)? $langDaySing: $langDayPlur, $dir);
 		cleanup("${webDir}courses/$dir", $days);
 	}
-		cleanup("${webDir}temp", 2);
-		$tool_content .= sprintf("<p class=kk>$langCleaningUp</p>", "2", $langDayPlur, "temp");
 } else {
 	$tool_content .= "<p class=kk>$langCleanupInfo,</p><br><div align=center>";
 	$tool_content .= "<form method='post' action='cleanup.php'>

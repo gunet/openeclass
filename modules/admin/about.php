@@ -59,7 +59,7 @@ $nameTools = $langVersion;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 // Initialise $tool_content
 $tool_content = "";
-$totalHits = "";
+$totalHits = 0;
 /*****************************************************************************
         MAIN BODY
 ******************************************************************************/

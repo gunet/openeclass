@@ -66,16 +66,5 @@ $local_head = $jscalendar->get_load_files_code();
 
 draw($tool_content, 3, 'admin', $local_head, '');
 
-/*if ($made_chart) {
-		while (ob_get_level() > 0) {
-     ob_end_flush();
-  	} 
-    ob_flush();
-    flush();
-    sleep(5);
-    unlink ($webDir.$chart_path);
-}
-*/
-
 
 ?>

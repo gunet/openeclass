@@ -72,10 +72,10 @@ if (!extension_loaded('gd')) {
         }
     }
 	$chart->setTitle($langCourseVisits);
-	if (!file_exists("../../temp")) {
-        mkdir("../../temp", 0777);
+	if (!file_exists("../../courses/temp")) {
+        mkdir("../../courses/temp", 0777);
     }
-	$chart_path = 'temp/chart_'.md5(serialize($chart)).'.png';
+	$chart_path = 'courses/temp/chart_'.md5(serialize($chart)).'.png';
 	$chart->render($webDir.$chart_path);
 	if ($chart_content) {
 	   $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
