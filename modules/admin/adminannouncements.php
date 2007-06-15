@@ -4,7 +4,7 @@ $langFiles = 'admin';
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include('../../include/lib/textLib.inc.php');
-
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $nameTools = $langAdminAn;
 $tool_content = "";
 

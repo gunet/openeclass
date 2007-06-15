@@ -76,6 +76,8 @@ $langAfterLastLogin = "After your last login, there have been registered:";
 $langOtherActions = "Other Actions";
 $langCourses = "courses";
 $langFound = "Found";
+$langCleanUp = "Cleanup Old Files";
+$langUpgradeBase = "Upgrade Database";
 
 // Stat
 $langStat4eClass = "Platform Statistics";
@@ -98,7 +100,6 @@ $langCoursesPerVis= "Number of courses with regard to visibility";
 $langCoursesPerType= "Number of courses per type";
 $langUsersPerCourse= "Number of users per course";
 $langErrors = "Errors:";
-$langOk = "Ok!";
 $langActions = "Actions";
 $langNbAnnoucement = "Number of announcements";
 $langStatCour = "Course statistics";
@@ -160,7 +161,6 @@ $langStudents = "Students";
 $langProfessors = "Professors";
 $langListRegisteredStudents = "Registered Students List";
 $langListRegisteredProfessors = "Registered Professors List";
-
 
 // eclassconf
 $langEclassConf = "Configuration File of eClass";
@@ -333,5 +333,15 @@ $langAdminAnnTitleGr = "Title (in greek) ";
 $langAdminAnnBodyGr = "Announcement (in greek)";
 $langAdminAnnCommGr = "Comment (in greek)";
 
+// cleanup.php
+
+$langCleanupOldFiles = 'Old files clean-up';
+$langCleaningUp = 'Cleaning up files older than %s %s from directory %s';
+$langDaySing = 'day';
+$langDayPlur = 'days';
+$langCleanupInfo = 'This will clean up old files from the "temp", "archive", "garbage", and "tmpUnzipping" directories. Are you sure?';
+$langCleanup = 'Proceed with clean-up';
+
 $langBackAdmin = "Back to admin page";
+
 ?>

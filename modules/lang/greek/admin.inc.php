@@ -141,6 +141,7 @@ $langServerStatus ="Κατάσταση του εξυπηρέτη Mysql : ";
 $langDataBase = "Βάση δεδομένων ";
 $langLanguage ="Γλώσσα";
 $langUpgradeBase = "Αναβάθμιση βάσης Δεδομένων";
+$langCleanUp = "Διαγραφή παλιών αρχείων";
 
 // listusers
 $langBegin="αρχή";
@@ -357,5 +358,13 @@ $langAdminAnnComm = "Σχόλια";
 $langAdminAnnTitleEn = "Τίτλος (Αγγλικά)";
 $langAdminAnnBodyEn = "Ανακοίνωση (Αγγλικά)";
 $langAdminAnnCommEn = "Σχόλια (Αγγλικά)";
+
+// cleanup.php
+$langCleanupOldFiles = 'Εκκαθάριση παλαιών αρχείων';
+$langCleaningUp = 'Εκκαθάριση αρχείων παλαιότερων από %s %s στον υποκατάλογο %s';
+$langDaySing = 'ημέρα';
+$langDayPlur = 'ημέρες';
+$langCleanupInfo = 'Η λειτουργία αυτή θα διαγράψει τα παλιά αρχεία από τους υποκαταλόγους "temp", "archive", "garbage", και"tmpUnzipping". Είστε βέβαιοι?';
+$langCleanup = 'Εκκαθάριση';
 
 ?>

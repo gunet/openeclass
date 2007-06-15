@@ -56,9 +56,10 @@ $require_admin = TRUE;
 include '../../include/baseTheme.php';
 // Define $nameTools
 $nameTools = $langVersion;
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
 // Initialise $tool_content
 $tool_content = "";
-
+$totalHits = "";
 /*****************************************************************************
         MAIN BODY
 ******************************************************************************/

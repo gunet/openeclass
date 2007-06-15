@@ -298,9 +298,6 @@ function loggedOutMenu(){
 	array_push($sideMenuText, $langContact);
 	array_push($sideMenuLink, $urlServer."info/contact.php");
 	array_push($sideMenuImg, "contact.gif");
-	//	array_push($sideMenuText, $langSearch);
-	//	array_push($sideMenuLink, $urlServer."modules/search/search.php");
-	//	array_push($sideMenuImg, "search.gif");
 
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);
@@ -342,7 +339,6 @@ function adminMenu(){
 	array_push($sideMenuImg, "register_prof.gif");
 	array_push($sideMenuText, $langProfOpen);
 	array_push($sideMenuLink, "../admin/listreq.php");
-
 
 	array_push($sideMenuImg, "open_prof.gif");
 	array_push($sideMenuText, $langInfoMail);
@@ -389,11 +385,9 @@ function adminMenu(){
 	array_push($sideMenuText, $langListCours);
 	array_push($sideMenuLink, "../admin/listcours.php");
 	array_push($sideMenuImg, "lessons_list.gif");
-	// Added by vagpits
 	array_push($sideMenuText, $langSearchCourses);
 	array_push($sideMenuLink, "../admin/searchcours.php");
 	array_push($sideMenuImg, "lessons_search.gif");
-	// End
 	array_push($sideMenuText, $langRestoreCourse);
 	array_push($sideMenuLink, "../course_info/restore_course.php");
 	array_push($sideMenuImg, "lesson_recovery.gif");
@@ -421,7 +415,11 @@ function adminMenu(){
 	$arrMenuType['text'] = $langState;
 	array_push($sideMenuSubGroup, $arrMenuType);
 
-	if (isset($phpSysInfoURL)&&PHP_OS!="WIN32"&&PHP_OS!="WINNT") {
+	array_push($sideMenuText, $langCleanUp);
+  array_push($sideMenuLink, "../admin/cleanup.php");
+  array_push($sideMenuImg, "clean.gif");
+
+	if (isset($phpSysInfoURL) && PHP_OS!="WIN32" && PHP_OS!="WINNT") {
 		array_push($sideMenuText, $langSysInfo);
 		array_push($sideMenuLink, $phpSysInfoURL);
 		array_push($sideMenuImg, "system_info.gif");
@@ -435,8 +433,7 @@ function adminMenu(){
 		array_push($sideMenuLink, $phpMyAdminURL);
 		array_push($sideMenuImg, "db_admin.gif");
 	}
-	// Added by vagpits
-	array_push($sideMenuText, "Αναβάθμιση Βάσης Δεδομένων");
+	array_push($sideMenuText, $langUpgradeBase);
 	array_push($sideMenuLink, "../admin/upgrade.php");
 	array_push($sideMenuImg, "db_upgrade.gif");
 
@@ -461,22 +458,12 @@ function adminMenu(){
 	array_push($sideMenuLink, "../admin/adminannouncements.php");
 	array_push($sideMenuImg, "announcements.gif");
 
-	//array_push($sideMenuText, $langVersion);
-	//array_push($sideMenuLink, "../admin/about.php");
-	//array_push($sideMenuImg, "eclass_version.gif");
+	array_push($sideMenuText, $langVersion);
+	array_push($sideMenuLink, "../admin/about.php");
+	array_push($sideMenuImg, "eclass_version.gif");
 	array_push($sideMenuText, $langConfigFile);
-	// Changed by vagpits
 	array_push($sideMenuLink, "../admin/eclassconf.php");
 	array_push($sideMenuImg, "config_file.gif");
-	// End
-	//array_push($sideMenuText, $siteName);
-	//array_push($sideMenuLink, "../admin/statClaro.php");
-	//array_push($sideMenuImg, "stat_claro.gif"); // image file does not exist! what does this tool do ?
-	//if (isset($phpMyAdminURL)){
-	//array_push($sideMenuText, $langLogIdentLogout);
-	//array_push($sideMenuLink, $phpMyAdminURL."sql.php?db=".$mysqlMainDb."&table=loginout&goto=db_details.php&sql_query=SELECT+%2A+FROM+%60loginout%60&pos=0");
-	//array_push($sideMenuImg, "logs.gif");
-	//}
 
 	array_push($sideMenuText, $langPlatformStats);
 	array_push($sideMenuLink, "../admin/stateclass.php");
