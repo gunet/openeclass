@@ -170,3 +170,13 @@ tfoot th, tfoot td {
 ul.listBullet { 
 	list-style-image: url(img/square_bullet.gif); 
 }
+
+table.htmlarea tr {
+        background: none;
+}
+
+table.htmlarea td {
+        padding: 0;
+        background: none;
+}
+

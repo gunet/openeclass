@@ -65,33 +65,13 @@ if ($is_adminOfCourse && (@$addAnnouce==1 || isset($modify))) {
 
 	$head_content = <<<hContent
 <script type="text/javascript">
-  _editor_url = '$urlAppend/include/htmlarea/';
-  _css_url='$urlAppend/css/';
-  _image_url='$urlAppend/include/htmlarea/images/';
-  _editor_lang = '$lang_editor';
+        _editor_url  = "$urlAppend/include/xinha/";
+        _editor_lang = "en";
+        _editor_skin = "silva";
 </script>
-<script type="text/javascript" src='$urlAppend/include/htmlarea/htmlarea.js'></script>
-
-<script type="text/javascript">
-var editor = null;
-
-function initEditor() {
-
-  var config = new HTMLArea.Config();
-  config.height = '220px';
-  config.hideSomeButtons(" showhelp undo redo popupeditor ");
-
-  editor = new HTMLArea("ta",config);
-
-  // comment the following two lines to see how customization works
-  editor.generate();
-  return false;
-}
-
-</script>
+<script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
+<script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
 hContent;
-
-	$body_action = "onload=\"initEditor()\"";
 
 }
 
@@ -351,7 +331,7 @@ function confirmation (name)
 		$contentToModify ="";
 
 
-		$tool_content .=  "<textarea id='ta' name='newContent' value='$contentToModify' rows='20' cols='96'>$contentToModify</textarea>";
+		$tool_content .=  "<textarea id='xinha' name='newContent' value='$contentToModify' rows='20' cols='96'>$contentToModify</textarea>";
 		$tool_content .=  "<br><input type=\"hidden\" name=\"id\" value=\"".$AnnouncementToModify."\">";
 		$tool_content .=  "<input type=\"Submit\" name=\"submitAnnouncement\" value=\"$langOk\"></form>";
 
