@@ -45,9 +45,30 @@ a:active, a:visited, a:link{
 }
 
 #operations_container {
-margin-bottom: 0.5em;
-overflow: hidden;
+	margin-bottom: 0.5em;
+	overflow: hidden;
+	border: 1px dotted #CCCCCC;
+	padding: 6px;
+	background: #FFFFCC;
+	text-align: right
 }
+
+#operations_container a{
+   color: black;
+   font-size: 8pt;
+   font-weight: normal;
+   text-decoration: none;
+   vertical-align: middle;
+}
+
+#operations_container a:hover{
+	text-decoration: none;
+	color: #FF9900;
+	vertical-align: middle;
+	border-bottom: 1px dotted  silver;
+}
+
+
 
 #opslist
 {
