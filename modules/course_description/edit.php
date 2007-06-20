@@ -60,30 +60,12 @@ else
 $head_content = <<<hCont
 
 <script type="text/javascript">
-  _editor_url = '$urlAppend/include/htmlarea/';
-  _css_url='$urlAppend/css/';
-  _image_url='$urlAppend/include/htmlarea/images/';
-  _editor_lang = '$lang_editor';
+        _editor_url  = "$urlAppend/include/xinha/";
+        _editor_lang = "en";
+        _editor_skin = "silva";
 </script>
-<script type="text/javascript" src='$urlAppend/include/htmlarea/htmlarea.js'></script>
-
-<script type="text/javascript">
-var editor = null;
-
-function initEditor() {
-
-  var config = new HTMLArea.Config();
-  config.height = '180px';
-  config.hideSomeButtons(" showhelp undo redo popupeditor ");
-
-  editor = new HTMLArea("ta",config);
-
-  // comment the following two lines to see how customization works
-  editor.generate();
-  return false;
-}
-
-</script>
+<script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
+<script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
 hCont;
 
 $body_action = "onload=\"initEditor()\"";
@@ -93,9 +75,6 @@ if ($is_adminOfCourse) {
 //Save  actions
 	if (isset($save))
 	{
-	// it's second  submit,  data  must be write in db
-	// if edIdBloc contain Id  was edited
-	// So  if  it's add,   line  must be created
 	
 		if($_POST["edIdBloc"]=="add")
 		{
@@ -206,7 +185,7 @@ if ($is_adminOfCourse) {
 		}
 		$tool_content .=  "</p><table><tr><td valign=\"top\">";
 		
-	$tool_content .=  "<textarea id='ta' name='edContentBloc' value='".@$contentBloc."' rows='20' cols='70'>".@$contentBloc."</textarea>";
+	$tool_content .=  "<textarea id='xinha' name='edContentBloc' value='".@$contentBloc."' rows='20' cols='70'>".@$contentBloc."</textarea>";
 	$tool_content .=  "</td>";
 	
 	if ($showPedaSuggest) {
