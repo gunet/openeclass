@@ -63,35 +63,14 @@ if ((@$addEvent == 1 || (isset($id) && $id)) &&$is_adminOfCourse) {
 	//--if add event
 	$head_content = <<<hContent
 <script type="text/javascript">
-  _editor_url = '$urlAppend/include/htmlarea/';
-  _css_url='$urlAppend/css/';
-  _image_url='$urlAppend/include/htmlarea/images/';
-  _editor_lang = '$lang_editor';
+        _editor_url  = "$urlAppend/include/xinha/";
+        _editor_lang = "en";
+        _editor_skin = "silva";
 </script>
-<script type="text/javascript" src='$urlAppend/include/htmlarea/htmlarea.js'></script>
-
-<script type="text/javascript">
-var editor = null;
-
-function initEditor() {
-
-  var config = new HTMLArea.Config();
-  config.height = '180px';
-  config.hideSomeButtons(" showhelp undo redo popupeditor ");
-
-  editor = new HTMLArea("ta",config);
-
-  // comment the following two lines to see how customization works
-  editor.generate();
-  return false;
-}
-
-</script>
+<script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
+<script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
 hContent;
 
-	
-
-	$body_action = "onload=\"initEditor()\"";
 }
 
 //Make top tool links
@@ -365,7 +344,7 @@ tContentForm;
     <tbody>
     <tr>
     <td colspan=\"6\">
-		<textarea id='ta' name='contenu' value='$contenu' rows='20' cols='78'>".$contenu."</textarea></td></tr>
+		<textarea id='xinha' name='contenu' value='$contenu' rows='20' cols='78'>".$contenu."</textarea></td></tr>
     </tbody></table>
     <br>
     <input type=\"Submit\" name=\"submit\" value=\"$langOk\">
