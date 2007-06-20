@@ -59,11 +59,13 @@ $tool_content = "";
 
 if ($is_adminOfCourse) {
 	$tool_content .= "
-			<a href=\"edit.php\">
-				".$langEditCourseProgram."
-			</a>";
+		<div id=\"operations_container\">
+		<ul id=\"opslist\">
+			<li><a href=\"edit.php\">".$langEditCourseProgram."</a></li>
+		</ul>
+		</div>
+		";
 }
-
 
 $sql = "SELECT `id`,`title`,`content` FROM `course_description` order by id";
 $res = db_query($sql, $currentCourseID);
