@@ -386,13 +386,16 @@ if($is_adminOfCourse) {
 		$tool_content .= claro_disp_message_box($dialogBox, $style) ."<br />";
 	}
 
-	$tool_content .=
-	   "<p>"
-      ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=create\">".$langCreateNewLearningPath."</a> | "
-      ."<a href=\"importLearningPath.php\">".$langimportLearningPath."</a> | "
-      ."<a href=\"modules_pool.php\">".$langModulesPoolToolName."</a> | "
-      ."<a href=\"detailsAll.php\">".$langTrackAllPath."</a>"
-      ."</p>";
+  
+	  $tool_content .= "
+		<div id=\"operations_container\">
+		<ul id=\"opslist\">
+		  <li><a href=\"".$_SERVER['PHP_SELF']."?cmd=create\">".$langCreateNewLearningPath."</a></li>
+		  <li><a href=\"importLearningPath.php\">".$langimportLearningPath."</a></li>
+		  <li><a href=\"modules_pool.php\">".$langModulesPoolToolName."</a></li>
+		  <li><a href=\"detailsAll.php\">".$langTrackAllPath."</a></li>
+        </ul></div>";
+	
 }
 
 $tool_content .= "<table width=\"99%\">
