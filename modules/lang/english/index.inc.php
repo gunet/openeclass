@@ -64,6 +64,7 @@ $langOtherCourses="Courses list";
 $langSupportForum="Support forum";
 $langNewUser = 'New user registration';
 $langProfReq = 'Professor account request';
+
 $langUser = 'User:';
 $langManuals = 'Available manuals';
 $langContact = 'Contact';

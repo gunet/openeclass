@@ -240,6 +240,15 @@ $regprofldap="LDAP Professor Registration";
 $langByLdap="LDAP authentication";
 $langNewProf="New progessor account details";
 
+$langUserAccount = 'User Account';
+$langNewAccount = 'New Account';
+$langProfAccount = 'Professor Account';
+$langUserAccountInfo1 = '(Application form)&nbsp;';
+$langUserAccountInfo2 = '(Creation)&nbsp;';
+$langUserAccountInfo3 = 'Alternative Selection';
+$langNewAccount¡ctivation = 'Account ¡ctivation';
+
+
 $profsuccess="Professor new account has been created succesfully!";
 
 $dearprof="Dear Professor !";
@@ -361,6 +370,7 @@ $langNoLessonsAvailable = "No courses available.";
 // formuser.php
 $langUserRequest = "Request for new user account";
 $langNewUser = "New User Details";
+$langUserFillData = "User Details";
 $langInfoProfReq = "If you wish to have access in platform as a user - professor, please complete the form below. Your request will be sent to administrator who will create your account and send you an informational email.";
 $langInfoStudReg = " If you wish to have access in platform as a user - student, please complete the form below. Your account will be created automatically.";
 $langInfoStudReq = "If you wish to have access in platforma as a user - student please complete the form below. Your request will be sent to administrator who will create your account and send you an informational email.";
