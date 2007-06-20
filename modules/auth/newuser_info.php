@@ -56,18 +56,9 @@ if (isset($close_user_registration) and $close_user_registration == TRUE)
     $newuser = "newuser.php";
 
 $tool_content .= "
-<table border='0' cellspacing='0' cellpadding='0' align=center width='50%'>
-<tr>
-	<td colspan='2' style='border: 1px solid silver;' class=color1>".$langSelection."</td>
-</tr>
-<tr>
-	<td style='border-left: 1px solid silver;'>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td style='border-left: 1px solid silver; border-bottom: 1px solid silver;'>&nbsp;</td>
-	<td rowspan='2' style='border: 1px solid silver;' onMouseOver='this.style.backgroundColor=\"#F1F1F1\"'; onMouseOut='this.style.backgroundColor=\"transparent\"'><a href=\"$newuser\">$langAuthReg".get_auth_info($e)."</a></td>
-</tr>
+$langSelection
+<br>
+<a href=\"$newuser\">$langAuthReg".get_auth_info($e)."</a>
 ";
 
 if(!empty($auth))
@@ -77,18 +68,7 @@ if(!empty($auth))
 		if($v!=1)
 		{
 			$tool_content .= "
-			<tr>
-	<td style='border-left: 1px solid silver;'>&nbsp;</td>
-</tr>
-<tr>
-	<td style='border-left: 1px solid silver;'>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td style='border-left: 1px solid silver; border-bottom: 1px solid silver;'>&nbsp;</td>
-	<td rowspan='2' style='border: 1px solid silver;' onMouseOver='this.style.backgroundColor=\"#F1F1F1\"'; onMouseOut='this.style.backgroundColor=\"transparent\"'><a href=\"ldapnewuser.php?auth=".$v."\">$langAuthReg".get_auth_info($v)."</a></td>
-</tr>
-
+			<a href=\"ldapnewuser.php?auth=".$v."\">$langAuthReg".get_auth_info($v)."</a>
 ";
 		}
 		else
@@ -98,7 +78,7 @@ if(!empty($auth))
 	}
 }
 
-$tool_content .= "<tr><td>&nbsp;</td></tr></table>";
+$tool_content .= "";
 
 draw($tool_content,0,'auth');
 ?>

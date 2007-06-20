@@ -54,18 +54,11 @@ $auth = get_auth_active_methods();
 if(!empty($auth))
 {
 	$tool_content .= "
-<table border='0' cellspacing='0' cellpadding='0' align=center width='70%'>
-<tr>
-	<td colspan='2' style='border: 1px solid silver;' class=color1>".$langAuthenticateVia2."</td>
-</tr>
-<tr>
-	<td style='border-left: 1px solid silver;'>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td style='border-left: 1px solid silver; border-bottom: 1px solid silver;'>&nbsp;</td>
-	<td rowspan='2' style='border: 1px solid silver;' onMouseOver='this.style.backgroundColor=\"#F1F1F1\"'; onMouseOut='this.style.backgroundColor=\"transparent\"'><a href=\"newprof.php\">$langRegistration ".get_auth_info(1)."</a></td>
-</tr>
+$langAuthenticateVia2
+
+
+<br>
+	<a href=\"newprof.php\">$langRegistration ".get_auth_info(1)."</a>
 ";
 	
 	foreach($auth as $k=>$v)
@@ -79,19 +72,8 @@ if(!empty($auth))
 			$auth_method_settings = get_auth_settings($v);
 			
 			$tool_content .= "
-			<tr>
-	<td style='border-left: 1px solid silver;'>&nbsp;</td>
-</tr>
-<tr>
-	<td style='border-left: 1px solid silver;'>&nbsp;</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td style='border-left: 1px solid silver; border-bottom: 1px solid silver;'>&nbsp;</td>
-	<td rowspan='2' style='border: 1px solid silver;' onMouseOver='this.style.backgroundColor=\"#F1F1F1\"'; onMouseOut='this.style.backgroundColor=\"transparent\"'>
-    <a href=\"ldapnewprof.php?auth=".$v."\">$langAuthenticateVia ".$auth_method_settings['auth_name']."</a>
-	</td>
-</tr>	
+			    <a href=\"ldapnewprof.php?auth=".$v."\">$langAuthenticateVia ".$auth_method_settings['auth_name']."</a>
+	
 ";
 
 			if(!empty($auth_method_settings))
@@ -103,19 +85,13 @@ if(!empty($auth))
 }
 else
 {
-	$tool_content .= "<table width=\"99%\">
-			<tbody>
-				<tr>
-					<td class=\"caution\">
+	$tool_content .= "
 					<p>Η εγγραφή στην πλατφόρμα, πρός το παρόν δεν επιτρέπεται.</p>
 							<p>Παρακαλούμε, ενημερώστε το διαχειριστή του συστήματος</p>
-					</td>
-				</tr>
-			</tbody>
-		</table>";
+					";
 }
 
-$tool_content .= "<tr><td>&nbsp;</td></tr></table>";
+$tool_content .= "";
 draw($tool_content,0,'auth');
 
 ?>

@@ -52,46 +52,52 @@ if (isset($close_user_registration) and $close_user_registration == TRUE) {
 
 // Main body
 $tool_content .= "
-
+<FIELDSET>
+<LEGEND>$langUserFillData</LEGEND>
 <form action=\"newuser_second.php\" method=\"post\" name=\"newusersecond\">
 
-<table width=\"96%\" cellspacing='1' cellpadding='1'>
-<thead>
-
-<th>$langName</th>
-<td><input type=\"text\" name=\"prenom_form\">(*)</td>
-</tr>
-<tr><th>$langSurname</th>
-<td><input type=\"text\" name=\"nom_form\">(*)</td>
-</tr>
-<tr><th>$langUsername</th>
-<td><input type=\"text\" name=\"uname\" size=\"20\" maxlength=\"20\">(*) (**) $langUserNotice</td>
-</tr>
-
-<tr><th>$langPass</th>
-<td><input type=\"password\" name=\"password1\" size=\"20\" maxlength=\"20\">(*) (**)</td>
+<table cellspacing='1' cellpadding='1'>
+<tr>
+	<th>$langName</th>
+	<td><input type=\"text\" name=\"prenom_form\"><small>&nbsp;(*)</small></td>
 </tr>
 <tr>
-<th>$langConfirmation</th>
-<td valign=\"top\"><input type=\"password\" name=\"password\" size=\"20\" maxlength=\"20\">(*) (**) $langUserNotice</td>
+	<th>$langSurname</th>
+	<td><input type=\"text\" name=\"nom_form\"><small>&nbsp;(*)</small></td>
+</tr>
+<tr>
+	<th>$langUsername</th>
+	<td><input type=\"text\" name=\"uname\" size=\"20\" maxlength=\"20\"><small>&nbsp;(*) (**) $langUserNotice</small></td>
 </tr>
 
 <tr>
-<th>$langEmail</th>
-<td><input type=\"text\" name=\"email\"> $langEmailNotice</td>
+	<th>$langPass</th>
+	<td><input type=\"password\" name=\"password1\" size=\"20\" maxlength=\"20\"><small>&nbsp;(*) (**)</small></td>
+</tr>
+<tr>
+	<th>$langConfirmation</th>
+	<td valign=\"top\"><input type=\"password\" name=\"password\" size=\"20\" maxlength=\"20\"><small>&nbsp;(*) (**) $langUserNotice</small></td>
 </tr>
 
-<tr><th>$langAm</th>
-<td><input type=\"text\" name=\"am\"></td>
+<tr>
+	<th>$langEmail</th>
+	<td><input type=\"text\" name=\"email\"> $langEmailNotice</td>
 </tr>
-<tr><th>$langDepartment</th>
-<td><select name=\"department\">";
+
+<tr>
+	<th>$langAm</th>
+	<td><input type=\"text\" name=\"am\"></td>
+</tr>
+<tr>
+	<th>$langDepartment</th>
+	<td><select name=\"department\">";
 $deps=mysql_query("SELECT name, id FROM faculte ORDER BY id");
 while ($dep = mysql_fetch_array($deps)) 
 	$tool_content .= "\n<option value=\"".$dep[1]."\">".$dep[0]."</option>";
-$tool_content .= "</select></td>
+$tool_content .= "</select>
+	</td>
 </tr>
-</thead>
+
 <tr><td>&nbsp;</td>
     <td>
 	<input type=\"hidden\" name=\"auth\" value=\"1\">
@@ -105,7 +111,7 @@ $tool_content .= "</select></td>
 </td></tr>
 
 </form>
-
+</FIELDSET>
 
 ";
 

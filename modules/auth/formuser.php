@@ -57,7 +57,7 @@ $upd=db_query("INSERT INTO prof_request(profname,profsurname,profuname,profemail
 	}
 
 $tool_content .= "<td width='75%' class=td_main>";
-$tool_content .= "<div class='Subsystem_Label'>$nameTools</div>\n";
+$tool_content .= "$nameTools\n";
 
 //  User Message 
 	$tool_content .= "<table border='0' align='center' height=300 cellpadding='0' cellspacing='0'>";
@@ -90,41 +90,45 @@ if (!isset($close_user_registration) or $close_user_registration == FALSE) {
 			exit;
 			}
 
-$tool_content .= "<table width='95%' align='center'><tbody><thead><tr><td>
+$tool_content .= "
+	  <p>$langInfoStudReq</p>
+	  <table><tr><td>
+	       <FIELDSET>
+	       <LEGEND>$langUserFillData</LEGEND>
            <form action='$_SERVER[PHP_SELF]' method='post'>
-           <table border='0' align='center' cellpadding='3' cellspacing='0' class=td_main>
-	   			<tr><td colspan='2'><small>$langInfoStudReq</small></td></tr>
-			  	 <tr>
-	  		  <th class='labeltext'>$langName</th>
-           <td><input type='text' name='name' value='".@$name."' class='auth_input'><small>&nbsp;(*)</small></td>
+           <table align='left' cellpadding='2' cellspacing='0'>
+		   <tr>
+	  	   	<th>$langName</th>
+           	<td><input type='text' name='name' value='".@$name."' class='auth_input'>
+			<small>&nbsp;(*)</small></td>
            </tr>
-	   <tr valign='top'>
-	    <th class='labeltext'>$langSurname</th>
-	    <td><input type='text' name='surname' value='".@$surname."' class='auth_input'>
+	   	   <tr>
+	     	<th>$langSurname</th>
+	   		<td><input type='text' name='surname' value='".@$surname."' class='auth_input'>
 			<small>&nbsp;(*)</small></td>
 		  </tr>
 		  <tr>
-	    <th class='labeltext'>$langphone</th>
-	    <td><input type='text' name='userphone' value='".@$userphone."' class='auth_input'>
+	    	<th>$langphone</th>
+	    	<td><input type='text' name='userphone' value='".@$userphone."' class='auth_input'>
 			<small>&nbsp;(*)</small></td>
 		  </tr>
 		  <tr>
-	    <th class='labeltext'>$profuname <small>$langUserNotice</small></th>
-	    <td><input type='text' name='username' size='20' maxlength='20' value='".@$username."' class='auth_input'>
-			<small>&nbsp;(*)</small></td>
+	       	<th>$profuname</th>
+	    	<td><input type='text' name='username' size='20' maxlength='20' value='".@$username."' class='auth_input'>
+			<small>&nbsp;(*)&nbsp;$langUserNotice</small></td>
 		  </tr>
-	  <tr><th class='labeltext'>$profemail</th>
-     <td><input type='text' name='usermail' value='".@$usermail."' class='auth_input'>
+	  	  <tr>
+		  	<th>$profemail</th>
+     		<td><input type='text' name='usermail' value='".@$usermail."' class='auth_input'>
 			<small>&nbsp;(*)</small></td>
-      </tr>	
-	  <tr>
-  	 <th class='labeltext'>$langComments<br><span class='explanationtext'>$profreason</th>
-     <td><textarea name='usercomment' COLS='30' ROWS='4' WRAP='SOFT' class='auth_input'>".@$usercomment."</textarea>
-	    <small>&nbsp;(*)</small></td>
-	  </tr>
-	  <tr>
-   <th class='labeltext'>$langDepartment&nbsp;:</th>
-   <td><select name='department' class='auth_input'>";
+          </tr>	
+	      <tr>
+  	 		<th>$langComments<br><small>$profreason</small></th>
+     		<td><textarea name='usercomment' COLS='30' ROWS='4' WRAP='SOFT' class='auth_input'>".@$usercomment."</textarea><small>&nbsp;(*)</small></td>
+	      </tr>
+	      <tr>
+   			<th>$langDepartment&nbsp;</th>
+   			<td><select name='department' class='auth_input'>";
 
     $deps=mysql_query("SELECT name FROM faculte order by name");
     while ($dep = mysql_fetch_array($deps)) {
@@ -135,11 +139,12 @@ $tool_content .= "<table width='95%' align='center'><tbody><thead><tr><td>
 	  </tr>				
 	  <tr>
 	    <td>&nbsp;</td>
-	    <td><input type='submit' class='ButtonSubmit' name='Add' value='$langSend'>&nbsp;&nbsp;&nbsp;&nbsp;
+	    <td><input type='submit' class='ButtonSubmit' name='Add' value='$langSubmitNew'>&nbsp;&nbsp;&nbsp;&nbsp;
 			<small>$langRequiredFields</small></td>
 	  </tr></thead></tbody>
 	  </table>
      </form>
+	 </FIELDSET>
      </td></tr></table>"; 
 }   // end of else if
 

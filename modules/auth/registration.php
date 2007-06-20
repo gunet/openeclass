@@ -37,8 +37,9 @@ Purpose: TDisplay all the available auth methods for user registration
 ==============================================================================
 */
 
-$langFiles = 'index';
+$langFiles = array('registration','index','authmethods');
 include '../../include/baseTheme.php';
+include 'auth.inc.php';
 
 //mysql_select_db($dbname);
 
@@ -46,50 +47,136 @@ $nameTools = $langReg;
 
 $tool_content = "";
 $tool_content .= "
-<table border='0' cellspacing='0' cellpadding='0' width='70%' align='center'>
-<tr>
-	<td width='100%' colspan='4' align='center' class='color1' style='border: 1px solid silver;'>".$langSelection."</td>
-</tr>
-<tr>
-	<td width='25%'>&nbsp;</td>
-	<td width='25%' style='border-right: 1px solid silver; border-bottom: 1px solid silver;'>&nbsp;</td>
-	<td width='25%' style='border-bottom: 1px solid silver;'>&nbsp;</td>
-	<td width='25%'>&nbsp;</td>
-</tr>
-<tr>
-	<td width='25%' class='b-right'>&nbsp;</td>
-	<td width='25%'>&nbsp;</td>
-	<td width='25%' style='border-right: 1px solid silver;'>&nbsp;</td>
-	<td width='25%'>&nbsp;</td>
-</tr>
-<tr>
-	<td width='50%' colspan='2' align='center'>
+<!--
+<p>Οι παρακάτω επιλογές οδηγούν στην εγγραφή χρήστη - <u>Εκπαιδευόμενου</u> ή χρήστη - <u>Εκπαιδευτή</u> στην πλατφόρμα eClass. 
+<br>
+Μπορείτε να κάνετε αίτηση για τη δημιουργία ένος τέτοιου λογαριασμού, επιλέγοντας τον τρόπο της πιστοποίησης σας σύστημα. <br>
+Πιο αναλυτικά:</p>
+<ul>
+<li>εντοπίστε την κατηγορία του χρήστη που επιθυμείτε να εγγραφείτε και στη συνέχεια </li>
+<li>επιλέξτε τον τρόπο της πιστοποίηση σας στην πλατφόρμα eClass.</li>
+</ul>
+-->
+
+  <table width=50% cellpading=0 cellspacing=0>
+  <tr>
+    <td>
+    <FIELDSET>
+	  <LEGEND>$langUserAccount
+	  ";
+	  
+      //$tool_content .= "<a href=\"newuser_info.php\">".$langNewUser."</a>";
+	  $auth = get_auth_active_methods();
+      $e = 1;
+
+      // check for close user registration 
+      if (isset($close_user_registration) and $close_user_registration == TRUE)
+	  {
+          $newuser = "formuser.php";
+		  $tool_content .= "$langUserAccountInfo1";
+      } else {
+          $newuser = "newuser.php";
+		  $tool_content .= "$langUserAccountInfo2";
+	  }
+
+$tool_content .= "
+      </LEGEND>
+	  <br>
+	  
+      <p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
+	  <!-- <a href=\"$newuser\">$langAuthReg</a> -->
+	  <a href=\"$newuser\">$langNewAccount</a>
+	  </p>
+      ";
+
+if(!empty($auth))
+{
+
+	if ($auth[1] > 1) {
+       $tool_content .= "<br><p><span style=\"border-bottom: 1px dotted silver;\">$langUserAccountInfo3</span>&nbsp;:</p>";
+    }
 	
-	<table width='100%' border='0' cellspacing='0' cellpadding='0' align='center'>
-    <tr>
-	   <td width='5%'>&nbsp;</td>
-	   <td width='90%' align='center' class='tidy' style='border: 1px solid silver;' onMouseOver='this.style.backgroundColor=\"#F1F1F1\"'; onMouseOut='this.style.backgroundColor=\"transparent\"'>
-       <a href=\"newuser_info.php\">".$langNewUser."</a></td>
-	   <td width='5%'>&nbsp;</td>
-    </tr>
-    </table>
+	foreach($auth as $k=>$v)
+	{
+		if($v!=1)
+		{
+			$tool_content .= "
+			<p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
+			$langNewAccountΑctivation 
+			&nbsp;(<a href=\"ldapnewuser.php?auth=".$v."\">".get_auth_info($v)."</a>)</p>
+		";
+		}
+		else
+		{
+			continue;
+		}
+	}
+}
 
+$tool_content .= "
+    
+    <br>
+    </FIELDSET>
 	</td>
-	<td width='50%' colspan='2' align='center'>
+  </tr>
+  </table>
 
-	<table width='100%' border='0' cellspacing='0' cellpadding='0' align='center'>
-    <tr>
-	   <td width='5%'>&nbsp;</td>
-	   <td width='90%' align='center' class='tidy' style='border: 1px solid silver;' onMouseOver='this.style.backgroundColor=\"#F1F1F1\"'; onMouseOut='this.style.backgroundColor=\"transparent\"'>
-       <a href=\"newprof_info.php\">".$langProfReq."</a></td>
-	   <td width='5%'>&nbsp;</td>
-    </tr>
-    </table>
-	
+  <br><br>
+  <table width=50% cellpading=0 cellspacing=0>
+  <tr>
+    <td>
+    <FIELDSET>
+	  <LEGEND>".$langProfAccount." ".$langUserAccountInfo1."</LEGEND>
+	  <br>
+	  ";
+	  
+	  if(!empty($auth))
+{
+	$tool_content .= "
+	<p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
+	<a href=\"newprof.php\">$langNewAccount</a>
+	</p>
+";
+	if ($auth[1] > 1) {
+       $tool_content .= "<br><p><span style=\"border-bottom: 1px dotted silver;\">$langUserAccountInfo3</span>&nbsp;:</p>";
+    }
+	foreach($auth as $k=>$v)
+	{
+		if($v==1)		// bypass the eclass auth method, as it has already been displayed
+		{
+			continue;
+		}
+		else
+		{
+			$auth_method_settings = get_auth_settings($v);
+			$tool_content .= "
+			<p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
+			$langNewAccountΑctivation 
+			&nbsp;(<a href=\"ldapnewprof.php?auth=".$v."\">".get_auth_info($v)."</a>)</p>
+		    ";
+
+			if(!empty($auth_method_settings))
+			{
+				$tool_content .= "<p>&nbsp;&nbsp;&nbsp;&nbsp;<small>".$auth_method_settings['auth_instructions'];
+			}		
+		}
+	}
+}
+else
+{
+	$tool_content .= "
+					<p>Η εγγραφή στην πλατφόρμα, πρός το παρόν δεν επιτρέπεται.</p>
+							<p>Παρακαλούμε, ενημερώστε το διαχειριστή του συστήματος</p>
+					";
+}
+
+$tool_content .= "
+    <br>
+    </FIELDSET>
 	</td>
-</tr>
-</table>
-
+  </tr>
+  </table>
+  
 ";
 	 
 	 
