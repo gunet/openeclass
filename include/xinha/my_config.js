@@ -59,12 +59,11 @@ xinha_init = xinha_init ? xinha_init : function()
 	 // Dimitris
 	xinha_config.toolbar =
 	[
-			["popupeditor"],
 			["separator","formatblock","bold","italic","underline","strikethrough"],
 			["separator","forecolor","hilitecolor","textindicator"],
 			["linebreak","separator","justifyleft","justifycenter","justifyright","justifyfull"],
 			["separator","insertorderedlist","insertunorderedlist","outdent","indent"],
-			["separator","inserthorizontalrule","createlink","insertimage","inserttable"],
+			["separator","inserthorizontalrule","createlink","inserttable"],
 			["linebreak","separator","undo","redo","selectall"],
 			["separator","killword", "removeformat", "htmlmode"]
 	];
