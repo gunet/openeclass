@@ -324,6 +324,7 @@ $langUserAccountInfo2 = '(Δημιουργία)&nbsp;';
 $langUserAccountInfo3 = 'Εναλλακτικά, μπορείτε να επιλέξετε';
 $langNewAccount = 'Νέος Λογαριασμός';
 $langNewAccountΑctivation = 'Ενεργοποίση Λογαριασμού';
+$langNewAccountΑctivation1 = 'την ενεργοποίση λογαριασμού σας';
 $langUserExistingAccount = 'Στοιχεία Εισόδου';
 
 
