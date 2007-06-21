@@ -38,10 +38,12 @@
 */
 
 //LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-$langFiles = array('registration','gunet');
+$langFiles = array('registration','index','authmethods');
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
-$navigation[]= array ("url"=>"newuser_info.php", "name"=> "$reguser");
+
+$navigation[]= array ("url"=>"registration.php", "name"=> "$langReg");
+
 
 // Initialise $tool_content
 $tool_content = "";
@@ -56,33 +58,53 @@ if(!in_array($auth,$authmethods))		// means try to hack,attack
 }
 $msg = get_auth_info($auth);
 $settings = get_auth_settings($auth);
-if(!empty($msg)) $nameTools = $msg;
+if(!empty($msg)) $nameTools = "$langNewAccountÁctivation ($msg)";
 
-$tool_content .= $settings['auth_instructions']."<br />
-			<form method=\"POST\" action=\"ldapsearch.php\">
-				<table cellspacing='1' cellpadding='1'>
-				<thead>
-				<tr><th>Äþóôå ôï username óáò:</th>
+$tool_content .= "
+			
+			<table cellspacing='0' cellpadding='0' width=\"50%\">
+			<tr>
+				<td>
+				<FIELDSET>
+	  			<LEGEND>$langUserExistingAccount</LEGEND>
+				<form method=\"POST\" action=\"ldapsearch.php\">
+				<table cellspacing='1' cellpadding='1' width=\"100%\">
+				<tr>
+					<td width=\"45%\">$langAuthUserName</td>
 					<td><input type=\"text\" name=\"ldap_email\"></td>
 				</tr>
-				<tr><th>$langAuthPassword</th>
+				<tr>
+					<td>$langAuthPassword</td>
 					<td><input type=\"password\" name=\"ldap_passwd\"></td>
 				</tr>
-				<tr colspan=2><td><br>";
-				
-					$tool_content .= "</td>
+				<tr colspan=2>
+					<td>
+					<br>
+				";
+
+$tool_content .= "
+					</td>
 				</tr>
-				</thead>
-				<tr><td>&nbsp;</td>
+				<tr>
+					<td>&nbsp;</td>
 				    <td>
 					<input type=\"hidden\" name=\"auth\" value=\"".$auth."\">
 					<input type=\"submit\" name=\"is_submit\" value=\"".$reg."\">
 					</td>
 				</tr>
+				<tr>
+					<td colspan=\"2\">&nbsp;</td>
+				</tr>
+				<tr>
+					<th colspan=\"2\" align=center>".$settings['auth_instructions']."</th>
 				</table>
 				
-					
-			</form>";
+			</form>
+			</FIELDSET>
+			</td>
+		</tr>
+		</table>
+			";
 
 
 

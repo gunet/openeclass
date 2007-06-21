@@ -42,7 +42,8 @@ include 'auth.inc.php';
 $auth = isset($_POST['auth'])?$_POST['auth']:'';
 
 $nameTools = get_auth_info($auth);
-$navigation[]= array ("url"=>"newuser_info.php", "name"=> "$reguser");
+$navigation[]= array ("url"=>"registration.php", "name"=> "$langNewAccount¡ctivation");
+$nameTools = "$langUserData";
 
 // Initialise $tool_content
 $tool_content = "";
@@ -128,42 +129,65 @@ if(!empty($is_submit))
 		}	
 		if($auth_allow==1)
 		{	
-			$tool_content .= "<table><tr>
-				<td width=\"600\">
-				<form action=\"newuser_second.php\" method=\"post\">
-				<table cellpadding=\"3\" cellspacing=\"0\" border=\"0\" width=\"100%\" bgcolor=\"".$color2."\">
-				<tr valign=\"top\">
-				<td>".$langName."</td>
-				<td><input type=\"text\" name=\"prenom_form\"><font size=\"1\">&nbsp;(*)</font></td>
-				</tr>
-				<tr><td>".$langSurname."</td>
-				<td><input type=\"text\" name=\"nom_form\"><font size=\"1\">&nbsp;(*)</font></td>
-				</tr>
+			$tool_content .= "
+				<table>
 				<tr>
-				<td>".$langEmail."</td>
-				<td><input type=\"text\" name=\"email\"></td>
-				</tr>
-				<tr><td>&nbsp;</td><td><font size=\"1\">".$langEmailNotice."</font></td></tr>
-				<tr><td>".$langAm."</td>
-				<td><input type=\"text\" name=\"am\"></td>
-				</tr>
-				<tr><td>".$langDepartment."</td>
-				<td>
-				<select name=\"department\">";
+					<td width=\"600\">
+					<FIELDSET>
+	  				<LEGEND>$langUserAccount</LEGEND>
+					<form action=\"newuser_second.php\" method=\"post\">
+					<table cellpadding=\"3\" cellspacing=\"0\" border=\"0\" width=\"100%\">
+					<tr valign=\"top\">
+						<td>".$langName."</td>
+						<td><input type=\"text\" name=\"prenom_form\"><font size=\"1\">&nbsp;(*)</font></td>
+					</tr>
+					<tr>
+						<td>".$langSurname."</td>
+						<td><input type=\"text\" name=\"nom_form\"><font size=\"1\">&nbsp;(*)</font></td>
+					</tr>
+					<tr>
+						<td>".$langEmail."</td>
+						<td><input type=\"text\" name=\"email\"></td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td><font size=\"1\">".$langEmailNotice."</font></td>
+					</tr>
+					<tr>
+						<td>".$langAm."</td>
+					<td><input type=\"text\" name=\"am\"></td>
+					</tr>
+					<tr>
+						<td>".$langDepartment."</td>
+						<td>
+						<select name=\"department\">
+			";
 			$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id",$db);
 			while ($dep = mysql_fetch_array($deps)) 
-					$tool_content .= "\n<option value=\"$dep[1]\">$dep[0]</option>";
-			$tool_content .= "</select></td></tr>
-				<tr><td>&nbsp;</td><td><input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\"></td></tr>
-				<input type=\"hidden\" name=\"uname\" value=\"".$ldap_email."\">
-				<input type=\"hidden\" name=\"password\" value=\"".$ldap_passwd."\">
-				<input type=\"hidden\" name=\"auth\" value=\"".$auth."\">
-				</table>
-				</form>
-				</td>
+			$tool_content .= "\n
+							<option value=\"$dep[1]\">$dep[0]</option>
+			";
+			
+			$tool_content .= "
+						</select></td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td><input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\"></td>
+					</tr>
+						<input type=\"hidden\" name=\"uname\" value=\"".$ldap_email."\">
+						<input type=\"hidden\" name=\"password\" value=\"".$ldap_passwd."\">
+						<input type=\"hidden\" name=\"auth\" value=\"".$auth."\">
+					</table>
+					</form>
+					</FIELDSET>
+					</td>
 				</tr>
-				<tr><td  align='right'><font size=\"1\">".$langRequiredFields."</font>
-				</td></tr></table>";
+				<tr>
+					<td  align='right'><font size=\"1\">".$langRequiredFields."</font></td>
+				</tr>
+				</table>
+			";
 		
 		}
 		else
@@ -193,5 +217,5 @@ function user_exists($login)
 $tool_content .= "</table>";
 $tool_content .= "<br />";
 
-draw($tool_content,0);
+draw($tool_content,0,'auth');
 ?>
