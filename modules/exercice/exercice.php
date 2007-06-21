@@ -70,7 +70,6 @@ include '../../include/baseTheme.php';
 include('../../include/action.php');
 $action = new action();
 $action->record('MODULE_ID_EXERCISE');
-/**************************************/
 
 $tool_content = "";
 
@@ -101,6 +100,7 @@ db_query($sql,$currentCourseID);
 
 // selects $limitExPage exercises at the same time
 @$from=$page*$limitExPage;
+
 
 // only for administrator
 if($is_allowedToEdit)
@@ -143,26 +143,21 @@ else
 {
 	$sql="SELECT id,titre,type,StartDate,EndDate,TimeConstrain,AttemptsAllowed ".
 		"FROM `$TBL_EXERCICES` WHERE active='1' ORDER BY id LIMIT $from,".($limitExPage+1);
-	$result=mysql_query($sql) or die("Error : SELECT at line ".__LINE__);
+	$result=db_query($sql);
 }
 
 $nbrExercises=mysql_num_rows($result);
 
-
-//$tool_content .= "<table border=\"0\" align=\"center\" cellpadding=\"2\" cellspacing=\"2\" width=\"95%\"><tr>";
-
-
-if($is_allowedToEdit)
-{
+if($is_allowedToEdit) {
+	$tool_content .= "<div id=\"operations_container\">
+      <ul id=\"opslist\">";
 
   $tool_content .= <<<cData
-  	<!--<td width="80%">aaaaaa-->
-		<p><a href="admin.php">${langNewEx}</a> |
-	<a href="question_pool.php">${langQuestionPool}</a></p>
-  <!--</td>
-  <td width="50%" align="right">-->
+		<li><a href="admin.php">${langNewEx}</a> |
+	<a href="question_pool.php">${langQuestionPool}</a></li>
 cData;
 
+$tool_content .= "</ul></div>";
 }
 else 
 { 
@@ -171,10 +166,9 @@ else
 
 if(isset($page))
 {
-
 	$page_temp = $page-1;
 	$tool_content .= <<<cData
-		<small><a href="${PHP_SELF}?page=${page_temp}">
+		<small><a href="$_SERVER[PHP_SELF]?page=${page_temp}">
 	&lt;&lt; ${langPreviousPage}</a></small> |
 cData;
 
@@ -199,20 +193,16 @@ elseif(isset($page))
 }
 
 $tool_content .= <<<cData
-	<!--</td>
-	</tr>
-	</table>--><br>
-	<table border="0" align="center" cellpadding="2" cellspacing="2" width="95%">
+	<br>
+	<table border="0" align="left" cellpadding="2" cellspacing="2" width="99%">
 		<thead>
    		<tr>
 cData;
 
 // shows the title bar only for the administrator
-if($is_allowedToEdit)
-{
+if($is_allowedToEdit) {
 
 $tool_content .= <<<cData
-	<!--<tr bgcolor="#E6E6E6">-->
 	  <th>
 			${langExerciseName}
 	  </th>
@@ -229,6 +219,18 @@ $tool_content .= <<<cData
 			${langResults}
 	  </th>
 	</tr></thead>
+cData;
+
+} else {
+
+// student view
+$tool_content .= <<<cData
+    <th>$langExerciseName</th>
+    <th width='150'>$langExerciseStart</th>
+    <th width='150'>$langExerciseEnd</th>
+    <th width='50'>$langExerciseConstrain</th>
+    <th width='50'>$langExerciseAttemptsAllowed</th>
+    </tr></thead>
 cData;
 
 }
@@ -256,10 +258,9 @@ $tool_content .= "<tr>";
 	$page_temp = ($i+(@$page*$limitExPage)).'.';
   $tool_content .= <<<cData
 	  <td width="60%">
-		<!--<table border="0" cellpadding="0" cellspacing="0" width="95%"><tr>
-		<td width="20" align="right">-->${page_temp}<!--</td>-->
-		  <!--<td width="1">-->&nbsp;<!--</td>-->
-		  <!--<td>--><a href="exercice_submit.php?exerciseId=${row['id']}" 
+		${page_temp}
+		  &nbsp;
+		  <a href="exercice_submit.php?exerciseId=${row['id']}" 
 cData;
 
 	if(!$row['active']) 
@@ -274,7 +275,7 @@ cData;
 	  <td width="10%" align="center"><a href="admin.php?exerciseId=${row['id']}">
 	  <img src="../../template/classic/img/edit.gif" border="0" alt="${langModify_temp}"></a></td>
 	  <td width="10%" align="center">
-	  <a href="${PHP_SELF}?choice=delete&exerciseId=${row['id']}" 
+	  <a href="$_SERVER[PHP_SELF]?choice=delete&exerciseId=${row['id']}" 
 	  onclick="javascript:if(!confirm('${langConfirmYourChoice_temp}')) return false;">
 	  <img src="../../template/classic/img/delete.gif" border="0" alt="${langDelete_temp}"></a></td>
 cData;
@@ -283,76 +284,65 @@ cData;
 		if($row['active'])
 		{
 
-			if (isset($page))	
+	if (isset($page))	
 				$tool_content .= "<td width='20%' align='center'>".
-					"<a href=\"${PHP_SELF}?choice=disable&page=${page}&exerciseId=".$row['id']."\">".
+					"<a href=\"$_SERVER[PHP_SELF]?choice=disable&page=${page}&exerciseId=".$row['id']."\">".
 					"<img src=\"../../template/classic/img/visible.gif\" border=\"0\" alt=\"".htmlspecialchars($langDeactivate)."\"></a></td>";
 			else
-				$tool_content .= "<td width='20%' align='center'><a href='${PHP_SELF}?choice=disable&exerciseId=".$row['id']."'>".
-					"<img src='../../template/classic/img/visible.gif' border='0' alt='".htmlspecialchars($langDeactivate)."'></a></td>";
+				$tool_content .= "<td width='20%' align='center'><a href='$_SERVER[PHP_SELF]?choice=disable&exerciseId=".$row['id']."'>".
+				"<img src='../../template/classic/img/visible.gif' border='0' alt='".htmlspecialchars($langDeactivate)."'></a></td>";
 }
 // else if not active
 else
 {
 	if (isset($page))
 		$tool_content .= "<td width='20%' align='center'>".
-			"<a href='${PHP_SELF}?choice=enable&page=${page}&exerciseId=".$row['id']."'>".
+			"<a href='$_SERVER[PHP_SELF]?choice=enable&page=${page}&exerciseId=".$row['id']."'>".
 			"<img src='../../template/classic/img/invisible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
 	else
 		$tool_content .= "<td width='20%' align='center'>".
-			"<a href='${PHP_SELF}?choice=enable&exerciseId=".$row['id']."'>".
+			"<a href='$_SERVER[PHP_SELF]?choice=enable&exerciseId=".$row['id']."'>".
 			"<img src='../../template/classic/img/invisible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
 }
 
 
-////////////////////////////////////////////////////////////////////////////
 $eid = $row['id'];
 $NumOfResults = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record WHERE eid='$eid'", $currentCourseID));
 
 if ($NumOfResults[0]) {
-	$tool_content .= "<td width=\"20%\" align=\"center\">	<nobr><a href=\"results.php?&exerciseId=".$row['id']."\">".
+	$tool_content .= "<td width=\"20%\" align=\"center\"><nobr><a href=\"results.php?&exerciseId=".$row['id']."\">".
 	$langExerciseScores1."</a> | <a href=\"csv.php?&exerciseId=".$row['id']."\">".$langExerciseScores3."</a></nobr></td></tr>";
 } else {
 	$tool_content .= "<td width=\"20%\" align=\"center\">	</td></tr>";
 }
-////////////////////////////////////////////////////////////////////////////
 	}
 	// student only
-	else
-	{
+	else {
 	$page_offset_temp = @($i+($page*$limitExPage)).'.';
-	$tool_content .= <<<cData
-	  <td width="100%">
-		<table border="0" cellpadding="0" cellspacing="0" width="95%"><tbody>
-		<tr>
-			<td width="20" align="right">${page_offset_temp}</td>
-		  <td width="1">&nbsp;</td>
-		  <td>
-cData;
-
 	$CurrentDate = time();
 
 	$temp_StartDate = mktime(substr($row['StartDate'], 11,2),substr($row['StartDate'], 14,2),substr($row['StartDate'], 17,2),substr($row['StartDate'], 5,2),substr($row['StartDate'], 8,2),substr($row['StartDate'], 0,4));
 	$temp_EndDate = mktime(substr($row['EndDate'], 11,2),substr($row['EndDate'], 14,2),substr($row['EndDate'], 17,2),substr($row['EndDate'], 5,2),substr($row['EndDate'], 8,2),substr($row['EndDate'], 0,4));
 	if (($CurrentDate >= $temp_StartDate) && ($CurrentDate < $temp_EndDate)) {
-		$tool_content .= "<a href=\"exercice_submit.php?exerciseId=".$row['id']."\">".$row['titre']."</a>";
+		$tool_content .= "<tr><td><a href=\"exercice_submit.php?exerciseId=".$row['id']."\">".$row['titre']."</a>";
 	} else {
 		$tool_content .= $row['titre'];
 	}
-	  $tool_content .= "<br>".$langExerciseStart.": ".$row['StartDate'].
-	  	"<br>".$langExerciseEnd.": ".$row['EndDate'];
+	  $tool_content .= "</td><td align='center'>$row[StartDate]</td><td align='center'>$row[EndDate]</td>";
 	  if ($row['TimeConstrain']>0)
-	  	$tool_content .= "<br>".$langExerciseConstrain.": ".$row['TimeConstrain']." ".$langExerciseConstrainUnit;
+		  	$tool_content .= "<td>$row[TimeConstrain] $langExerciseConstrainUnit</td>";
+		else 	
+				$tool_content .= "<td align='center'> - </td>";
 	  if ($row['AttemptsAllowed']>0)	
-	   $tool_content .= "<br>".$langExerciseAttemptsAllowed.": ".$row['AttemptsAllowed']; 
+		   $tool_content .= "<td align='center'>$row[AttemptsAllowed]</td>"; 
+		else
+			 $tool_content .= "<td align='center'> - </td>";
 	  
-	  $tool_content .= "</td></tr></table></td></tr>";
-
+	  $tool_content .= "</tr>";
 	}
 
 	// skips the last exercise, that is only used to know if we have or not to create a link "Next page"
-	if($i == $limitExPage)
-	{
+	if ($i == $limitExPage) {
 		break;
 	}
 
@@ -370,7 +360,6 @@ if(isset($is_trackingEnabled)):
 
 	$tool_content .= <<<cData
 		<br><br>
-
 		<table cellpadding="2" cellspacing="2" border="0" width="80%">
 		<tr bgcolor="#E6E6E6" align="center">
 		  <td width="50%">${langExercice}</td>
@@ -387,18 +376,12 @@ $sql="SELECT `ce`.`titre`, `te`.`exe_result` , `te`.`exe_weighting`, UNIX_TIMEST
 
 $results=getManyResultsXCol($sql,4);
 
-if(is_array($results))
-{
-	for($i = 0; $i < sizeof($results); $i++)
-	{
-
-/////////////////////////////////////////////////////////////////////////////////
-	$date_strftime = strftime($dateTimeFormatLong,$results[$i][3]);
-	$tool_content .= "<tr><td class=\"content\">".$results[$i][0]."></td>".
+if(is_array($results)) {
+	for($i = 0; $i < sizeof($results); $i++) {
+		$date_strftime = strftime($dateTimeFormatLong,$results[$i][3]);
+		$tool_content .= "<tr><td class=\"content\">".$results[$i][0]."></td>".
   	"<td class=\"content\" align=\"center\"><small>".$date_strftime."</small></td>".
   	"<td class=\"content\" align=\"center\">".$results[$i][1]." / ".$results[$i][2]."</td></tr>";
-
-/////////////////////////////////////////////////////////////////////////////////
 	}
 }
 else

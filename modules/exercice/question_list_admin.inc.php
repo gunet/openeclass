@@ -64,11 +64,13 @@ if(isset($deleteQuestion))
 	unset($objQuestionTmp);
 }
 
+
+$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
+
 $tool_content .= <<<cData
-	<hr size="1" noshade="noshade">
-	
-	<a href="${PHP_SELF}?newQuestion=yes">${langNewQu}</a> | <a href="question_pool.php?fromExercise=${exerciseId}">
-		${langGetExistingQuestion}</a>
+		<li><a href="${PHP_SELF}?newQuestion=yes">${langNewQu}</a> | <a href="question_pool.php?fromExercise=${exerciseId}">
+		${langGetExistingQuestion}</a></li>
+</ul></div>
 	<br><br>
 	<b>${langQuestionList}</b>
 	
@@ -81,54 +83,45 @@ if($nbrQuestions)
 
 	$i=1;
 
-	foreach($questionList as $id)
-	{
-		$objQuestionTmp=new Question();
+	foreach($questionList as $id) {
 
+		$objQuestionTmp=new Question();
 		$objQuestionTmp->read($id);
 
 $tool_content .= "<tr><td>".$i." ".$objQuestionTmp->selectTitle()."<br><small>".
 	$aType[$objQuestionTmp->selectType()-1]."</small></td>";
 	
-$tool_content .= "</tr><tr><td><a href=\"".$PHP_SELF."?editQuestion=".$id."\">".
+$tool_content .= "</tr><tr><td><a href=\"".$_SERVER['PHP_SELF']."?editQuestion=".$id."\">".
 	"<img src=\"../../template/classic/img/edit.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langModify."\"></a>".
-	" <a href=\"".$PHP_SELF."?deleteQuestion=".$id."\" ".
+	" <a href=\"".$_SERVER['PHP_SELF']."?deleteQuestion=".$id."\" ".
 	"onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice))."')) return false;\">".
 	"<img src=\"../../template/classic/img/delete.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langDelete."\"></a>";
 
-		if($i != 1)
-		{
+		if($i != 1) {
 
-	$tool_content .= "<a href=\"".$PHP_SELF."?moveUp=".$id.
+	$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?moveUp=".$id.
 		"\"><img src=\"../../template/classic/img/up.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langMoveUp."\"></a>";
 
 		}
 
-		if($i != $nbrQuestions)
-		{
+		if($i != $nbrQuestions)		{
 
-	$tool_content .= "<a href=\"".$PHP_SELF."?moveDown=".$id.
+		$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?moveDown=".$id.
 		"\"><img src=\"../../template/classic/img/down.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langMoveDown."\"></a>";
-
 		}
 
   $tool_content .= "</td></tr>";
-
 		$i++;
-
 		unset($objQuestionTmp);
 	}
 }
 
-if(!isset($i))
-{
+if(!isset($i)) {
 $tool_content .= <<<cData
-	<tr>
-	  <td>${langNoQuestion}</td>
+	<tr><td>${langNoQuestion}</td>
 	</tr>
 cData;
 }
-
 
 $tool_content .= "</table>";
 ?>

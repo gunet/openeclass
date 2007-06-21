@@ -111,8 +111,7 @@ class Exercise
 		global $TBL_EXERCICES, $TBL_EXERCICE_QUESTION, $TBL_QUESTIONS, $currentCourseID;
 		mysql_select_db($currentCourseID);
 		$sql="SELECT titre,description,type,StartDate,EndDate,TimeConstrain,AttemptsAllowed,random,active FROM `$TBL_EXERCICES` WHERE id='$id'";
-		$result=mySqlQueryShowError($sql);
-		$result=mysql_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);
+		$result=db_query($sql);
 
 		// if the exercise has been found
 		if($object=mysql_fetch_object($result))
@@ -121,17 +120,15 @@ class Exercise
 			$this->exercise=$object->titre;
 			$this->description=$object->description;
 			$this->type=$object->type;
-			////////////////////////////////////////////////////////////////////
 			$this->StartDate=$object->StartDate;
 			$this->EndDate=$object->EndDate;
 			$this->TimeConstrain=$object->TimeConstrain;
 			$this->AttemptsAllowed=$object->AttemptsAllowed;
-			////////////////////////////////////////////////////////////////////
 			$this->random=$object->random;
 			$this->active=$object->active;
 
 			$sql="SELECT question_id,q_position FROM `$TBL_EXERCICE_QUESTION`,`$TBL_QUESTIONS` WHERE question_id=id AND exercice_id='$id' ORDER BY q_position";
-			$result=mysql_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);
+			$result=db_query($sql);
 
 			// fills the array with the question ID for this exercise
 			// the key of the array is the question position
@@ -196,7 +193,6 @@ class Exercise
 	{
 		return $this->type;
 	}
-/////////////////////////////////////////////////////////
 	function selectStartDate()
 	{
 		return $this->StartDate;
@@ -213,7 +209,6 @@ class Exercise
 	{
 		return $this->AttemptsAllowed;
 	}
-/////////////////////////////////////////////////////////
 	/**
 	 * tells if questions are selected randomly, and if so returns the draws
 	 *
@@ -363,7 +358,7 @@ class Exercise
 	{
 		$this->type=$type;
 	}
-////////////////////////////////////////////////////////////////
+	
 	function updateStartDate($StartDate)
 	{
 		$this->StartDate=$StartDate;
@@ -380,7 +375,6 @@ class Exercise
 	{
 		$this->AttemptsAllowed=$AttemptsAllowed;
 	}
-////////////////////////////////////////////////////////////////
 	/**
 	 * sets to 0 if questions are not selected randomly
 	 * if questions are selected randomly, sets the draws
@@ -450,7 +444,7 @@ class Exercise
 			$sql="INSERT INTO `$TBL_EXERCICES` VALUES(".
 				"0,'$exercise','$description',$type,'$StartDate','$EndDate',$TimeConstrain,$AttemptsAllowed,".
 				"$random,$active)";
-			mysql_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
+			db_query($sql);
 
 			$this->id=mysql_insert_id();
 		}
@@ -459,7 +453,7 @@ class Exercise
 		foreach($this->questionList as $position=>$questionId)
 		{
 			$sql="UPDATE `$TBL_QUESTIONS` SET q_position='$position' WHERE id='$questionId'";
-			mysql_query($sql) or die("Error : UPDATE in file ".__FILE__." at line ".__LINE__);
+			db_query($sql);
 		}
 	}
 
@@ -626,32 +620,6 @@ class Exercise
 }
 
 endif;
-
-// mysql query
-function mySqlQueryShowError($sql,$db="###")
-{
-	global $tool_content;
-	
-    if ($db=="###")
-	{
-		$val =  @mysql_query($sql);
-	}
-	else
-	{
-		$val =  @mysql_query($sql,$db);
-	}
-	if (mysql_errno())
-	{
-		$tool_content .= "<HR>".mysql_errno().": ".mysql_error()."<br><PRE>$sql</PRE><HR>";
-	}
-    else
-	{
-		$tool_content .= "<!-- \n$sql\n-->";
-	}
-	return $val;
-}
-
-
 
 
 ?>

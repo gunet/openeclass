@@ -72,12 +72,12 @@ $helpTopic = 'Exercise';
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';
+include '../../include/lib/textLib.inc.php';
 
 $tool_content = "";
 
 $nameTools = $langExercice;
 
-include('../../include/lib/textLib.inc.php');
 
 $picturePath='../../courses/'.$currentCourseID.'/image';
 
@@ -106,22 +106,17 @@ if(isset($_POST['formSent'])) {
 	}
 
 	// if the user has answered at least one question
-	if(@is_array($choice))
-	{
-		if($exerciseType == 1)
-		{
+	if(@is_array($choice)) {
+		if($exerciseType == 1) {
 			// $exerciseResult receives the content of the form.
 			// Each choice of the student is stored into the array $choice
 			$exerciseResult=$choice;
-		}
-		else
-		{
+		} else {
 			// gets the question ID from $choice. It is the key of the array
 			list($key)=array_keys($choice);
 
 			// if the user didn't already answer this question
-			if(!isset($exerciseResult[$key]))
-			{
+			if(!isset($exerciseResult[$key])) {
 				// stores the user answer into the array
 				$exerciseResult[$key]=$choice[$key];
 			}
@@ -193,7 +188,6 @@ $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user
 		}
 	
 	if (!isset($HTTP_COOKIE_VARS['marvelous_cookie'])) { // either expired or begin again
-		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		if ((!$exerciseAllowedAttemtps)||($CurrentAttempt[0] <= $exerciseAllowedAttemtps)) { // if it is allowed begin again
 			
 			$CookieLife = $exerciseTimeConstrainSecs;
@@ -203,15 +197,12 @@ $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user
 					header('Location: exercise_redirect.php');
 				exit();
 			}
-//echo "FIRST GO";
-
 
 			mysql_select_db($currentCourseID);
 			$sql="INSERT INTO `exercise_user_record` (eurid,eid,uid,RecordStartDate,RecordEndDate,".
 				"TotalScore,TotalWeighting,attempt) VALUES".
 				"(0,'$eid_temp','$uid','$RecordStartDate','','','',1)";
-			$result=mysql_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);		
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			$result=db_query($sql);		
 		} else {  // not allowed begin again
 			header('Location: exercise_redirect.php');
 			exit();
@@ -250,33 +241,25 @@ if(@$_POST['questionNum']) {
 		<p>${exerciseDescription_temp}</p>
 		
 		<table width="100%" border="0" cellpadding="1" cellspacing="0">
-		<form method="post" action="${_SERVER['PHP_SELF']}" autocomplete="off">
+		<form method="post" action="$_SERVER[PHP_SELF]" autocomplete="off">
 		<input type="hidden" name="formSent" value="1">
-		<input type="hidden" name="exerciseType" value="${exerciseType}">
-		<input type="hidden" name="questionNum" value="${questionNum}">
-		<input type="hidden" name="nbrQuestions" value="${nbrQuestions}">
-		<tr>
-		<td>
+		<input type="hidden" name="exerciseType" value="$exerciseType">
+		<input type="hidden" name="questionNum" value="$questionNum">
+		<input type="hidden" name="nbrQuestions" value="$nbrQuestions">
+		<tr><td>
 		<table width="100%" cellpadding="4" cellspacing="2" border="0">
 cData;
-
 
 $i=0;
 foreach($questionList as $questionId) {
 	$i++;
-	//$tool_content .= "<h1>".$i."</h1>";
 
 	// for sequential exercises
-	if($exerciseType == 2)
-	{
-		//$tool_content .= "<h1>"."type=2"."</h1>";
+	if($exerciseType == 2) {
 		// if it is not the right question, goes to the next loop iteration
-		if($questionNum != $i)
-		{
+		if($questionNum != $i) {
 			continue;
-		}
-		else
-		{
+		} else {
 			// if the user has already answered this question
 			if(isset($exerciseResult[$questionId])) {
 				// construction of the Question object
@@ -305,21 +288,18 @@ foreach($questionList as $questionId) {
 	showQuestion($questionId);
 
 	// for sequential exercises
-	if($exerciseType == 2)
-	{
+	if($exerciseType == 2) {
 		// quits the loop
 		break;
 	}
 }	// end foreach()
-/////////////////////////////////////////////////////////////////////////////////
 	$tool_content .= "</table></td></tr><tr><td align=\"center\"><br><input type=\"submit\" value=\"";
 	if ($exerciseType == 1 || $nbrQuestions == $questionNum)
 		$tool_content .= $langOk." &gt;"."\">";
 	else	
 		$tool_content .= $langNext." &gt;"."\">";
 
- 	$tool_content .= " <input type=\"submit\" name=\"buttonCancel\" value=\"${langCancel}\">";
+ 	$tool_content .= " <input type=\"submit\" name=\"buttonCancel\" value=\"$langCancel\">";
 	$tool_content .= "</td></tr></form></table>";
-/////////////////////////////////////////////////////////////////////////////////
 draw($tool_content, 2);
 ?>
