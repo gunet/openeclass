@@ -247,6 +247,7 @@ $langUserAccountInfo1 = '(Application form)&nbsp;';
 $langUserAccountInfo2 = '(Creation)&nbsp;';
 $langUserAccountInfo3 = 'Alternative Selection';
 $langNewAccount¡ctivation = 'Account ¡ctivation';
+$langNewAccount¡ctivation1 = '(existing account)';
 
 
 $profsuccess="Professor new account has been created succesfully!";
