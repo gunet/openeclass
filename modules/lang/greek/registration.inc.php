@@ -310,11 +310,13 @@ $langCourseVisits = "Επισκέψεις ανά μάθημα";
 
 
 // USER REGISTRATION
+$langAuthUserName = "Δώστε το όνομα χρήστη:";
 $langAuthPassword = "Δώστε το συνθηματικό σας:";
 $langAuthenticateVia = "πιστοποίηση μέσω";
 $langAuthenticateVia2 = "Διαθέσιμοι τρόποι πιστοποίησης στο ίδρυμα";
 $langCannotUseAuthMethods = "Η εγγραφή στην πλατφόρμα, πρός το παρόν δεν επιτρέπεται. Παρακαλούμε, ενημερώστε το διαχειριστή του συστήματος";
 $langAuthReg = "Εγγραφή χρήστη";
+$langUserData = "Στοιχεία χρήστη";
 $langUserAccount = 'Λογαριασμός Εκπαιδευόμενου';
 $langProfAccount = 'Λογαριασμός Εκπαιδευτή';
 $langUserAccountInfo1 = '(Αίτηση)&nbsp;';
@@ -322,9 +324,7 @@ $langUserAccountInfo2 = '(Δημιουργία)&nbsp;';
 $langUserAccountInfo3 = 'Εναλλακτικά, μπορείτε να επιλέξετε';
 $langNewAccount = 'Νέος Λογαριασμός';
 $langNewAccountΑctivation = 'Ενεργοποίση Λογαριασμού';
-
-
-
+$langUserExistingAccount = 'Στοιχεία Εισόδου';
 
 
 // LIST REQUESTS

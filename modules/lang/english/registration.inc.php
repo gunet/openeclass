@@ -312,11 +312,14 @@ $langRequiredFields = '(fields marked by (*) are required)';
 $langCourseVisits = "Course Visits";
 
 // USER REGISTRATION
+$langAuthUserName = "Please type your user name:";
 $langAuthPassword = "Please type your password:";
 $langAuthenticateVia = "Authenticate via";
 $langAuthenticateVia2 = "Available authentication methods of the institution";
 $langCannotUseAuthMethods = "You cannot use the platform at the moment. Please inform the platform admin";
 $langAuthReg = "User registration ";
+$langUserData = "User Personal Data";
+$langUserExistingAccount = 'Login';
 
 // LIST REQUESTS
 $langDateRequest = "Date of Request";
