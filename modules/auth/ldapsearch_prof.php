@@ -2,10 +2,11 @@
 $langFiles = array('registration', 'admin', 'gunet');
 include '../../include/baseTheme.php';
 require_once 'auth.inc.php';
-$nameTools = $langByLdap;
 
-$navigation[]= array ("url"=>"../admin/", "name"=> $admin);
-$navigation[]= array ("url"=>"ldapnewprof.php", "name"=> $regprof);
+
+$nameTools = get_auth_info($auth);
+$navigation[]= array ("url"=>"registration.php", "name"=> "$langNewProfAccountÁctivation");
+$nameTools = "$langUserData";
 
 $found = 0;
 $tool_content = "";
@@ -86,52 +87,71 @@ if(!empty($is_submit))
 		}	
 		if($auth_allow==1)
 		{	
-			$tool_content .= "<form name=\"registration\" action=\"newprof_second.php\" method=\"post\">
-						<table width=\"99%\">
-							<tr>
-								<td>$langSurname:</td>   
-								<td><input type=\"text\" name=\"nom_form\" size=\"30\" value=\"\"><font size=\"1\">&nbsp;(*)</font></td>
-							</tr>
-							<tr>
-								<td>$langName:</td>   
-								<td><input type=\"text\" name=\"prenom_form\" size=\"30\" value=\"\"><font size=\"1\">&nbsp;(*)</font></td>
-							</tr>
-							<tr>
-								<td>E-mail:</td>   
-								<td><input type=\"text\" name=\"email_form\" size=\"30\" value=\"\"></td>
-							</tr>		
-							<tr>
-								<td>$langTel:</td>   
-								<td><input type=\"text\" name=\"userphone\" size=\"30\" value=\"\"></td>
-							</tr>		
-							<tr bgcolor=\"".$color2."\">
-        <td>".$profcomment."<br><font size=\"1\">".$profreason."
-       	</td>
-	<td>
-        <textarea name=\"usercomment\" COLS=\"35\" ROWS=\"4\" WRAP=\"SOFT\">".@$usercomment."</textarea>
-	<font size=\"1\">&nbsp;(*)</font>
-        </td>
-        </tr>
-	<tr bgcolor=\"".$color2."\">
-        <td>".$langDepartment.":</td>
-        <td><select name=\"department\">";
+			$tool_content .= "
+				<table>
+				<tr>
+					<td width=\"700\">
+					<FIELDSET>
+	  				<LEGEND>$langProfAccount</LEGEND>
+					<form action=\"newuser_second.php\" method=\"post\">
+					<table cellpadding=\"3\" cellspacing=\"0\" border=\"0\" width=\"100%\">
+					<tr>
+						<td>$langSurname:</td>   
+						<td><input type=\"text\" name=\"nom_form\" size=\"30\" value=\"\"><font size=\"1\">&nbsp;(*)</font></td>
+					</tr>
+					<tr>
+						<td>$langName:</td>   
+						<td><input type=\"text\" name=\"prenom_form\" size=\"30\" value=\"\"><font size=\"1\">&nbsp;(*)</font></td>
+					</tr>
+					<tr>
+						<td>E-mail:</td>   
+						<td><input type=\"text\" name=\"email_form\" size=\"30\" value=\"\"></td>
+					</tr>		
+					<tr>
+						<td>$langTel:</td>   
+						<td><input type=\"text\" name=\"userphone\" size=\"30\" value=\"\"></td>
+					</tr>		
+					<tr>
+        				<td>".$profcomment."<br><font size=\"1\">".$profreason."</td>
+						<td><textarea name=\"usercomment\" COLS=\"35\" ROWS=\"4\" WRAP=\"SOFT\">".@$usercomment."</textarea>
+						<font size=\"1\">&nbsp;(*)</font>
+        				</td>
+        			</tr>
+					<tr>
+        				<td>".$langDepartment.":</td>
+       					<td><select name=\"department\">";
         $deps=mysql_query("SELECT name FROM faculte order by id",$db);
         while ($dep = mysql_fetch_array($deps)) 
         {
-        	$tool_content .= "<option value=\"$dep[0]\">$dep[0]</option>\n";
+        	$tool_content .= "
+						<option value=\"$dep[0]\">$dep[0]</option>\n";
         }
-        $tool_content .= "</select><font size=\"1\">&nbsp;(*)</font>
-        </td>
-        </tr>														
-							<tr>
-								<td><font size=\"1\">&nbsp;(*): Õðï÷ñåùôéêÞ óõìðëÞñùóç</font></td>
-								<td><input type=\"submit\" name=\"submit\" value=\"".$langOk."\"></td>
-							</tr>
-						</table>   
-						<input type=\"hidden\" name=\"uname\" value=\"".$ldap_email."\">
-						<input type=\"hidden\" name=\"password\" value=\"".$ldap_passwd."\">
-						<input type=\"hidden\" name=\"auth\" value=\"".htmlspecialchars($auth)."\">
-						</form>";
+        $tool_content .= "
+						</select>
+						<font size=\"1\">&nbsp;(*)</font>
+        				</td>
+        			</tr>	
+					<tr>
+						<td colspan=\"2\">&nbsp;</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td><input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\"></td>
+					</tr>
+					</table>   
+					<input type=\"hidden\" name=\"uname\" value=\"".$ldap_email."\">
+					<input type=\"hidden\" name=\"password\" value=\"".$ldap_passwd."\">
+					<input type=\"hidden\" name=\"auth\" value=\"".htmlspecialchars($auth)."\">
+					</form>		
+					</FIELDSET>
+					</td>
+				</tr>
+				<tr>
+					<td  align='right'><font size=\"1\">".$langRequiredFields."</font></td>
+				</tr>
+				</table>
+			";
+
 		}
 		else
 		{
@@ -176,9 +196,7 @@ function user_exists_request($login)
 	}
 }
 	
-	
-$tool_content .= "</table>";
 
-draw($tool_content,0);
+draw($tool_content,0,'auth');
 
 ?>

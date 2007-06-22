@@ -47,17 +47,6 @@ $nameTools = $langReg;
 
 $tool_content = "";
 $tool_content .= "
-<!--
-<p>Οι παρακάτω επιλογές οδηγούν στην εγγραφή χρήστη - <u>Εκπαιδευόμενου</u> ή χρήστη - <u>Εκπαιδευτή</u> στην πλατφόρμα eClass. 
-<br>
-Μπορείτε να κάνετε αίτηση για τη δημιουργία ένος τέτοιου λογαριασμού, επιλέγοντας τον τρόπο της πιστοποίησης σας σύστημα. <br>
-Πιο αναλυτικά:</p>
-<ul>
-<li>εντοπίστε την κατηγορία του χρήστη που επιθυμείτε να εγγραφείτε και στη συνέχεια </li>
-<li>επιλέξτε τον τρόπο της πιστοποίηση σας στην πλατφόρμα eClass.</li>
-</ul>
--->
-
   <table width=50% cellpading=0 cellspacing=0>
   <tr>
     <td>
@@ -93,7 +82,7 @@ if(!empty($auth))
 {
 
 	if ($auth[1] > 1) {
-       $tool_content .= "<br><p><span style=\"border-bottom: 1px dotted silver;\">$langUserAccountInfo3</span>&nbsp;:</p>";
+       $tool_content .= "<br><p><span style=\"border-bottom: 1px dotted silver;\">$langUserAccountInfo3&nbsp;</span>:</p>";
     }
 	
 	foreach($auth as $k=>$v)
@@ -102,8 +91,8 @@ if(!empty($auth))
 		{
 			$tool_content .= "
 			<p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
-			$langNewAccountΑctivation 
-			&nbsp;(<a href=\"ldapnewuser.php?auth=".$v."\">".get_auth_info($v)."</a>)</p>
+			$langNewAccountΑctivation&nbsp;
+			(<a href=\"ldapnewuser.php?auth=".$v."\">".get_auth_info($v)."</a>)</p>
 		";
 		}
 		else
@@ -157,7 +146,7 @@ $tool_content .= "
 
 			if(!empty($auth_method_settings))
 			{
-				$tool_content .= "<p>&nbsp;&nbsp;&nbsp;&nbsp;<small>".$auth_method_settings['auth_instructions'];
+				//$tool_content .= "<p>&nbsp;&nbsp;&nbsp;&nbsp;<small>".$auth_method_settings['auth_instructions'];
 			}		
 		}
 	}

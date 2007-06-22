@@ -58,7 +58,7 @@ if(!in_array($auth,$authmethods))		// means try to hack,attack
 }
 $msg = get_auth_info($auth);
 $settings = get_auth_settings($auth);
-if(!empty($msg)) $nameTools = "$langNewAccount¡ctivation ($msg)";
+if(!empty($msg)) $nameTools = "$langNewUserAccount¡ctivation ($msg)";
 
 $tool_content .= "
 			

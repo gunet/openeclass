@@ -38,7 +38,7 @@
 */
 
 //LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-$langFiles = array('registration', 'admin', 'gunet');
+$langFiles = array('registration', 'admin', 'index', 'gunet', 'authmethods');
 include '../../include/baseTheme.php';
 require_once 'auth.inc.php';
 
@@ -50,32 +50,74 @@ else if (!isset($_GET['auth']) && !isset($_SESSION['auth_tmp']))
   $auth=0;
 
 //$auth = get_auth_id();
+
+//$msg = get_auth_info($auth);
+//$settings = get_auth_settings($auth);
+//if(!empty($msg)) $nameTools = $msg;
+//$navigation[] = array("url"=>"../admin/", "name"=> $langAdmin);
+//$navigation[] = array("url"=>"newprof_info.php", "name"=> $regprof);
+
+$auth = isset($_GET['auth'])?$_GET['auth']:'';
+$authmethods = get_auth_active_methods();
+
+$navigation[]= array ("url"=>"registration.php", "name"=> "$langReg");
+
+if(!in_array($auth,$authmethods))		// means try to hack,attack
+{
+	die("INVALID AUTHENTICATION METHOD");
+}
 $msg = get_auth_info($auth);
 $settings = get_auth_settings($auth);
-if(!empty($msg)) $nameTools = $msg;
-$navigation[] = array("url"=>"../admin/", "name"=> $langAdmin);
-$navigation[] = array("url"=>"newprof_info.php", "name"=> $regprof);
+if(!empty($msg)) $nameTools = "$langNewProfAccount¡ctivation ($msg)";
 
 $tool_content = "";
 
-$tool_content .= $settings['auth_instructions']."<br />
-			<form method=\"POST\" action=\"ldapsearch_prof.php\">
-				<table>
-				<tr><td>Username</td>
+$tool_content .= "
+			
+			<table cellspacing='0' cellpadding='0' width=\"50%\">
+			<tr>
+				<td>
+				<FIELDSET>
+	  			<LEGEND>$langUserExistingAccount</LEGEND>
+				<form method=\"POST\" action=\"ldapsearch_prof.php\">
+				<table cellspacing='1' cellpadding='1' width=\"100%\">
+				<tr>
+					<td width=\"45%\">$langAuthUserName</td>
 					<td><input type=\"text\" name=\"ldap_email\" value=\"".@$m."\"></td>
 				</tr>
-				<tr><td>Password</td>
-				<td><input type=\"password\" name=\"ldap_passwd\" value=\"".@$m."\"></td>
+				<tr>
+					<td>$langAuthPassword</td>
+					<td><input type=\"password\" name=\"ldap_passwd\" value=\"".@$m."\"></td>
 				</tr>
 				<tr colspan=2>
-					<td><br><input type=\"submit\" name=\"is_submit\" value=\"".$reg."\">
-					<input type=\"hidden\" name=\"auth\" value=\"".$auth."\">
-					<br /><br />
+					<td>
+					<br>
+				";
+
+$tool_content .= "
 					</td>
 				</tr>
-			</table>
-		</form><br />";
+				<tr>
+					<td>&nbsp;</td>
+				    <td>
+					<input type=\"hidden\" name=\"auth\" value=\"".$auth."\">
+					<input type=\"submit\" name=\"is_submit\" value=\"".$reg."\">
+					</td>
+				</tr>
+				<tr>
+					<td colspan=\"2\">&nbsp;</td>
+				</tr>
+				<tr>
+					<th colspan=\"2\" align=center>".$settings['auth_instructions']."</th>
+				</table>
+				
+			</form>
+			</FIELDSET>
+			</td>
+		</tr>
+		</table>
+			";
 		
-draw($tool_content,0);
+draw($tool_content,0,'auth');
 
 ?>

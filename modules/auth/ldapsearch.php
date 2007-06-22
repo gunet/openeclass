@@ -42,7 +42,7 @@ include 'auth.inc.php';
 $auth = isset($_POST['auth'])?$_POST['auth']:'';
 
 $nameTools = get_auth_info($auth);
-$navigation[]= array ("url"=>"registration.php", "name"=> "$langNewAccount¡ctivation");
+$navigation[]= array ("url"=>"registration.php", "name"=> "$langNewUserAccount¡ctivation");
 $nameTools = "$langUserData";
 
 // Initialise $tool_content
