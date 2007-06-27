@@ -93,7 +93,7 @@ if(!empty($is_submit))
 					<td width=\"700\">
 					<FIELDSET>
 	  				<LEGEND>$langProfAccount</LEGEND>
-					<form action=\"newuser_second.php\" method=\"post\">
+					<form name=\"registration\" action=\"newprof_second.php\" method=\"post\">
 					<table cellpadding=\"3\" cellspacing=\"0\" border=\"0\" width=\"100%\">
 					<tr>
 						<td>$langSurname:</td>   

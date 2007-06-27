@@ -66,7 +66,13 @@ $langIs="is";
 $langProblem="\nIn case of problems, contact us.";
 $langFormula="\n\nYours sincerely,\n";
 $langManager="\nManager";
-$langPersonalSettings="Your personnal settings have been registered and an email has been sent to help you remember your username and password.</p>Select now in the list the courses you want to access.";
+$langPersonalSettings="Your personnal settings have been registered and an email has been sent to help you remember your username and password.</p>";
+$langPersonalSettingsMore="	Click <a href='../../index.php'>here</a> to navigate your User Portfolio.<br>
+							You can also: 
+							<ul>
+								<li>navigate the platform and your personal selections,</li>
+								<li>select \"Courses List\" to review the available courses.</li>
+							<ul>";
 $langYourRegTo="Your are registered to";
 $langIsReg="has been updated";
 $langCanEnter="Enter the classroom";

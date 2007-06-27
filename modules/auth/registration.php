@@ -47,12 +47,11 @@ $nameTools = $langReg;
 
 $tool_content = "";
 $tool_content .= "
-  <table width=50% cellpading=0 cellspacing=0>
+  <table width=60% cellpading=0 cellspacing=0>
   <tr>
     <td>
     <FIELDSET>
-	  <LEGEND>$langUserAccount
-	  ";
+	  <LEGEND>$langUserAccount";
 	  
       //$tool_content .= "<a href=\"newuser_info.php\">".$langNewUser."</a>";
 	  $auth = get_auth_active_methods();
@@ -68,21 +67,20 @@ $tool_content .= "
 		  $tool_content .= "$langUserAccountInfo2";
 	  }
 
-$tool_content .= "
-      </LEGEND>
+$tool_content .= "</LEGEND>
 	  <br>
-	  
-      <p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
-	  <!-- <a href=\"$newuser\">$langAuthReg</a> -->
+	  <p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
 	  <a href=\"$newuser\">$langNewAccount</a>
-	  </p>
-      ";
+	  </p>";
 
 if(!empty($auth))
 {
 
 	if ($auth[1] > 1) {
-       $tool_content .= "<br><p><span style=\"border-bottom: 1px dotted silver;\">$langUserAccountInfo3&nbsp;</span>:</p>";
+       $tool_content .= "
+	  <br>
+	  <p><span style=\"border-bottom: 1px dotted silver;\">$langUserAccountInfo3&nbsp;</span>:
+	  </p>";
     }
 	
 	foreach($auth as $k=>$v)
@@ -90,10 +88,10 @@ if(!empty($auth))
 		if($v!=1)
 		{
 			$tool_content .= "
-			<p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
-			$langNewAccountΑctivation&nbsp;
-			(<a href=\"ldapnewuser.php?auth=".$v."\">".get_auth_info($v)."</a>)</p>
-		";
+	  <p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
+		$langNewAccountΑctivation&nbsp;
+		(<a href=\"ldapnewuser.php?auth=".$v."\">".get_auth_info($v)."</a>)
+	  </p>";
 		}
 		else
 		{
@@ -103,31 +101,30 @@ if(!empty($auth))
 }
 
 $tool_content .= "
-    
-    <br>
+	  <br>
     </FIELDSET>
-	</td>
+    </td>
   </tr>
   </table>
 
   <br><br>
-  <table width=50% cellpading=0 cellspacing=0>
+  <table width=60% cellpading=0 cellspacing=0>
   <tr>
     <td>
     <FIELDSET>
 	  <LEGEND>".$langProfAccount." ".$langUserAccountInfo1."</LEGEND>
-	  <br>
-	  ";
+	  <br>";
 	  
 	  if(!empty($auth))
 {
 	$tool_content .= "
-	<p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
-	<a href=\"newprof.php\">$langNewAccount</a>
-	</p>
-";
+	  <p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
+	  <a href=\"newprof.php\">$langNewAccount</a>
+	  </p>";
 	if ($auth[1] > 1) {
-       $tool_content .= "<br><p><span style=\"border-bottom: 1px dotted silver;\">$langUserAccountInfo3</span>&nbsp;:</p>";
+       $tool_content .= "
+	  <br>
+	  <p><span style=\"border-bottom: 1px dotted silver;\">$langUserAccountInfo3</span>&nbsp;:</p>";
     }
 	foreach($auth as $k=>$v)
 	{
@@ -139,10 +136,9 @@ $tool_content .= "
 		{
 			$auth_method_settings = get_auth_settings($v);
 			$tool_content .= "
-			<p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
-			$langNewAccountΑctivation 
-			&nbsp;(<a href=\"ldapnewprof.php?auth=".$v."\">".get_auth_info($v)."</a>)</p>
-		    ";
+	  <p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
+	  $langNewAccountΑctivation 
+	  &nbsp;(<a href=\"ldapnewprof.php?auth=".$v."\">".get_auth_info($v)."</a>)</p>";
 
 			if(!empty($auth_method_settings))
 			{
@@ -154,18 +150,16 @@ $tool_content .= "
 else
 {
 	$tool_content .= "
-					<p>Η εγγραφή στην πλατφόρμα, πρός το παρόν δεν επιτρέπεται.</p>
-							<p>Παρακαλούμε, ενημερώστε το διαχειριστή του συστήματος</p>
-					";
+	  <p>Η εγγραφή στην πλατφόρμα, πρός το παρόν δεν επιτρέπεται.</p>
+	  <p>Παρακαλούμε, ενημερώστε το διαχειριστή του συστήματος</p>";
 }
 
 $tool_content .= "
-    <br>
-    </FIELDSET>
+	  <br>
+	  </FIELDSET>
 	</td>
   </tr>
   </table>
-  
 ";
 	 
 	 

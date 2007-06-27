@@ -218,49 +218,10 @@ if(!empty($submit))
 				<p>$langPersonalSettings</p>
 				</td></tr></tbody></table>
 				<br/>
+				<p>$langPersonalSettingsMore</p>
+				";
 				
-				
-				<form action=\"inscription_third.php\" method=\"post\">";
-				$result=mysql_query("SELECT cours_faculte.faculte f, cours.code k, cours.fake_code c,
-				cours.intitule i,
-				cours.titulaires t,
-				cours.password p
-				FROM `$mysqlMainDb`.cours_faculte, `$mysqlMainDb`.cours, `$mysqlMainDb`.faculte 
-				WHERE cours.code=cours_faculte.code 
-				AND cours_faculte.faculte=faculte.name
-				AND (cours.visible='1' OR cours.visible='2')
-				ORDER BY faculte.number, cours.code");	
-
-				$facOnce = '';
-				$codeOnce = '';
-				while ($mycours = mysql_fetch_array($result))
-				{
-					if($mycours['f'] != $facOnce)
-					{
-						$tool_content .= "
-						<p><b>$langDepartment: </b><em><font color=\"#f0741e\">$mycours[f]</font></em></p>
-						
-						<ul class=\"listBullet\">";
-					}
-					$facOnce = $mycours['f'];
-
-					if($mycours['k'] != $codeOnce)
-					{
-						$tool_content .= "<li><input type='checkbox' name='course[]' value='$mycours[k]'>
-							<font color=\"navy\">$mycours[c]</font> 
-							<b>$mycours[i]</b> ($mycours[t])";
-						if ($mycours['p']!='') {
-							$tool_content .= " (".$m['code'].": <input type=\"password\" name=\"".$mycours['k']."\" value=\"\">)";
-						}
-						$tool_content .= "</li>\n";
-					}
-					$codeOnce=$mycours['k'];
-				}
-				$tool_content .= "</ul>
-				<input type=\"submit\" name=\"submit\" value=\"$langRegistration\" >
-				</form>
-					";
-
+								
 			}	// end of registration accepted
 
 			$already_second=1;
