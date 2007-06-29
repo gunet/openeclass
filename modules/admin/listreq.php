@@ -239,13 +239,11 @@ switch($close)
 					$registered_at = time();
 			 		$expires_at = time() + $durationAccount;
 					
-					if(($m['profpassword']!='imap') || ($m['profpassword']!='pop3') || ($m['profpassword']!='ldap') || ($m['profpassword']!='db'))
+					if(($m['profpassword']!='imap') && ($m['profpassword']!='pop3') && ($m['profpassword']!='ldap') && ($m['profpassword']!='db'))
 					{			 		
-					$password_encrypted = md5($m['profpassword']);
-			 	}
-			 		else
-			 		{
-			 				$password_encrypted = $m['profpassword'];
+						$password_encrypted = md5($m['profpassword']);
+			 		}else{
+			 			$password_encrypted = $m['profpassword'];
 			 		}
 			 		
 			 		
