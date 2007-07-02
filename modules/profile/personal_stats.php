@@ -87,7 +87,7 @@ if (!extension_loaded('gd')) {
 
 
 $sql = "SELECT * FROM loginout
-    WHERE id_user = '".$_SESSION["uid"]."' ORDER by idLog DESC LIMIT 15";
+    WHERE id_user = '".$_SESSION["uid"]."' ORDER by idLog DESC LIMIT 10";
 
 $leResultat = db_query($sql, $mysqlMainDb);
 $tool_content .= " <br>
