@@ -64,25 +64,38 @@ if ($is_adminOfCourse) {
 			<li><a href=\"edit.php\">".$langEditCourseProgram."</a></li>
 		</ul>
 		</div>
+		<br>
 		";
 }
 
 $sql = "SELECT `id`,`title`,`content` FROM `course_description` order by id";
 $res = db_query($sql, $currentCourseID);
 if (mysql_num_rows($res) > 0) {
-	$tool_content .= "<hr noshade size=\"1\">";
+	$tool_content .= "
+		<table width=\"99%\" align=\"center\">
+		<tbody>
+		<tr class=\"odd\">
+			<td>
+	";
 	while ($bloc = mysql_fetch_array($res))
 	{
 		$tool_content .= "
-			<h4>
+			<br><p><b><u>
 				".$bloc["title"]."
-			</h4>
+			</u>: </b></p>
 			<p>
 				".make_clickable(nl2br($bloc["content"]))."
-			</p>";
+			</p><br>";
 	}
+	$tool_content .= "	
+			</td>
+		</tr>
+		</tbody>
+		</table>
+	";
+				
 } else {
-	$tool_content .= "<br><h4>$langThisCourseDescriptionIsEmpty</h4>";
+	$tool_content .= "<br><p class=\"alert1\">$langThisCourseDescriptionIsEmpty</p>";
 }
 
 

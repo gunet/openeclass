@@ -155,17 +155,11 @@ if ($is_adminOfCourse) {
 				$contentBloc = $blocs["content"];
 			}
 		}
-	$tool_content .=  "<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
-				
-		<p>
-		<b>
-		
-			".@$titreBloc[$numBloc]."
-		
-		</b>
-		<br><br>";
+	$tool_content .=  "
+		<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">		
+		<p><b>".@$titreBloc[$numBloc]."</b><br><br>";
 		if (isset($delete) and $delete == "ask") {
-			$tool_content .=  "<input type=\"submit\" name=\"deleteOK\" value=\"".$langDelete."\"><br>";
+			$tool_content .=  "<div id=\"operations_container\"><input type=\"submit\" name=\"deleteOK\" value=\"".$langDelete."\"></div><br>";
 		}
 
 		if (($numBloc =="add") || @(!$titreBlocNotEditable[$numBloc])) { 
@@ -216,52 +210,46 @@ if ($is_adminOfCourse) {
 			$titreBloc[$bloc["id"]]	= $bloc["title"];
 			$contentBloc[$bloc["id"]] = $bloc["content"];
 		}
-		$tool_content .=  "<table width=\"99%\">
-		<thead>
-		<tr>
-		<th width=\"200\">
-		$langAddCat
-		</th>
-		<td>
-		
+		$tool_content .=  "
 		<form class=\"category\" method=\"post\" action=\"$_SERVER[PHP_SELF]\">
+		<div id=\"operations_container\">
+		<small><b>$langAddCat :</small></b>&nbsp;&nbsp;&nbsp;
 		<select name=\"numBloc\" size=\"1\">";
 		while (list($numBloc,) = each($titreBloc)) { 
 			if (!isset($blocState[$numBloc])||$blocState[$numBloc]!="used")
 			$tool_content .=  "<option value=\"".$numBloc."\">".$titreBloc[$numBloc]."</option>";
 		}
-		$tool_content .=  "</select>
-		<input type=\"submit\" name=\"add\" value=\"".$langAdd."\"></form>
-		</td></tr></thead></table>";
-		$tool_content .= "<br><br>";
+		$tool_content .=  "</select>&nbsp;&nbsp;
+		<input type=\"submit\" name=\"add\" value=\"".$langAdd."\">
+		</div>	
+		</form>
+
+		";
+		$tool_content .= "<br>";
 		
 		reset($titreBloc);		
 		while (list($numBloc,) = each($titreBloc)) { 
 			if (isset($blocState[$numBloc])&&$blocState[$numBloc]=="used") {
 
-				$tool_content .=  "<table width=\"99%\">";
 				$tool_content .=  "
-				<thead>
-					<tr>
-						<th width=\"20%\">".$titreBloc[$numBloc]."</th>
-						<td>
-						<div class=\"cellpos\">
-							<a href=\"".$_SERVER['PHP_SELF']."?numBloc=".$numBloc."\">
+				<table width=\"99%\" align=\"center\">
+				<tbody>
+				<tr class=\"odd\">
+					<td>
+					<b>".$titreBloc[$numBloc]."&nbsp;&nbsp;&nbsp;</b>
+							<a href=\"".$_SERVER['PHP_SELF']."?numBloc=".$numBloc."\" >
 								<img src=\"../../images/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a>
-					 
 							<a href=\"".$_SERVER['PHP_SELF']."?delete=ask&numBloc=".$numBloc."\">
 								<img src=\"../../images/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a>
-						</div>
-						</td>
-					</tr>
-					<tr>
-						<td  colspan=\"2\">
-					
+					<br><br>
+					<p>
 						".make_clickable(nl2br($contentBloc[$numBloc]))."
-					
-						</td>
-					</tr>";
-				$tool_content .=  "</thead></table><br>";
+					</p>
+					</td>
+				</tr>
+				</tbody>
+				</table>
+				<br>";
 			}
 		}
 		
