@@ -516,3 +516,17 @@ color: #ffffff
 fieldset {
         padding: 7px;
 }
+
+fieldset {
+        font-size: 10pt;
+		font-weight: bold;
+}
+
+.alert1 {
+	FONT-WEIGHT: normal;
+	COLOR: #000000;
+    FONT-WEIGHT: bold;
+	text-align: center;
+	padding: 5px;
+	font-size: 10pt;
+       }
