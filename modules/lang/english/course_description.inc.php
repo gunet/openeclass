@@ -32,12 +32,10 @@ $langThisCourseDescriptionIsEmpty = "This course is presently not described";
 $langEditCourseProgram = "Create and edit with forms";
 $langQuestionPlan = "Question to professor";
 $langInfo2Say = "Information to give to students";
-$langOuAutreTitre = "Title";
 $langContenuPlan = "";
 $langNewBloc = "Other";
 $langAddCat = "add category";
 $langAdd ="Add";
-$langValid ="Submit";
 $langBackAndForget ="Cancel changes and return";
-$langBlockDeleted = "Description Deleted!";
+$langBlockDeleted = "Description deleted!";
 ?>

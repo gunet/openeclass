@@ -31,12 +31,9 @@ $langThisCourseDescriptionIsEmpty = "Το μάθημα δεν διαθέτει περιγραφή";
 $langEditCourseProgram = "Δημιουργία και διόρθωση";
 $langQuestionPlan = "Ερώτηση στον διδάσκοντα";
 $langInfo2Say = "Πληροφορία για τους φοιτητές";
-$langOuAutreTitre = "Τίτλος";
 $langContenuPlan = "";
 $langAddCat = "Κατηγορία";
 $langAdd ="Προσθήκη";
-$langValid ="Προσθήκη";
 $langBackAndForget ="Ακύρωση και επιστροφή";
-$langBack = "Επιστροφή";
-$langBlockDeleted = "Η παρακάτω περιγραφή διαγράφτηκε!";
+$langBlockDeleted = "Η παρακάτω περιγραφή διαγράφηκε!";
 ?>
