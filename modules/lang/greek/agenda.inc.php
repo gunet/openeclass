@@ -44,15 +44,15 @@ $langMinute ="Λεπτά";
 $langLasting="Διάρκεια";
 $langDateNow = "Σημερινή ημερομηνία:";
 $langCalendar = "Ημερολόγιο";
-$langNow = "Τώρα";
+$langNow = "Σημερινή Ημερομηνία";
 $langAddEvent="Προσθήκη ενός γεγονότος";
 $langDetail="Λεπτομέρειες";
-
+$langChooseDate = "Επιλέξτε Ημερομηνία";
 $langOldToNew = "Αντιστροφή σειράς παρουσίασης";
 $langNewToOld = "Αντιστροφή σειράς παρουσίασης";
 
 $langStoredOK="Το γεγονός αποθηκεύτηκε";
-$langDeleteOK="Το γεγονός διαγράφτηκε";
+$langDeleteOK="Το γεγονός διαγράφηκε";
 
 $langNoEvents = "Δεν υπάρχουν γεγονότα";
 $langSureToDel = "Είστε σίγουρος ότι θέλετε να διαγράψετε το γεγονός με τίτλο";

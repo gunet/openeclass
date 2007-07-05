@@ -61,7 +61,7 @@ $langMonthNames['fine'] = array('Ιανουαρίου',
 
 
 $dateFormatShort =  "%b %d, %y";
-$dateFormatLong  = '%A, %d %B %Y';
+$dateFormatLong  = '%A, %e %B %Y';
 $dateTimeFormatLong  = '%d %B %Y / Ώρα: %R';
 $timeNoSecFormat = '%R';
 
