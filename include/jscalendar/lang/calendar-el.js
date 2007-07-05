@@ -1,92 +1,127 @@
-ο»Ώ// ** I18N
+// ** I18N
+
+// Calendar EN language
+// Author: Mihai Bazon, <mihai_bazon@yahoo.com>
+// Encoding: any
+// Distributed under the same terms as the calendar itself.
+
+// For translators: please use UTF-8 if possible.  We strongly believe that
+// Unicode is the answer to a real internationalized world.  Also please
+// include your contact information in the header, as can be seen above.
+
+// full day names
 Calendar._DN = new Array
-("ΞΟ…ΟΞΉΞ±ΞΊΞ®",
- "Ξ”ΞµΟ…Ο„Ξ­ΟΞ±",
- "Ξ¤ΟΞ―Ο„Ξ·",
- "Ξ¤ΞµΟ„Ξ¬ΟΟ„Ξ·",
- "Ξ Ξ­ΞΌΟ€Ο„Ξ·",
- "Ξ Ξ±ΟΞ±ΟƒΞΊΞµΟ…Ξ®",
- "Ξ£Ξ¬Ξ²Ξ²Ξ±Ο„ΞΏ",
- "ΞΟ…ΟΞΉΞ±ΞΊΞ®");
+("Κυριακή",
+ "Δευτέρα",
+ "Τρίτη",
+ "Τετάρτη",
+ "Πέμπτη",
+ "Παρασκευή",
+ "Σάββατο",
+ "Κυριακή");
 
+// Please note that the following array of short day names (and the same goes
+// for short month names, _SMN) isn't absolutely necessary.  We give it here
+// for exemplification on how one can customize the short day names, but if
+// they are simply the first N letters of the full name you can simply say:
+//
+//   Calendar._SDN_len = N; // short day name length
+//   Calendar._SMN_len = N; // short month name length
+//
+// If N = 3 then this is not needed either since we assume a value of 3 if not
+// present, to be compatible with translation files that were written before
+// this feature.
+
+// short day names
 Calendar._SDN = new Array
-("ΞΟ…",
- "Ξ”Ξµ",
- "TΟ",
- "Ξ¤Ξµ",
- "Ξ Ξµ",
- "Ξ Ξ±",
- "Ξ£Ξ±",
- "ΞΟ…");
+("Κυρ",
+ "Δευ",
+ "Τρ",
+ "Τετ",
+ "Πεμ",
+ "Παρ",
+ "Σαβ",
+ "Κυρ");
 
-Calendar._MN = new Array
-("Ξ™Ξ±Ξ½ΞΏΟ…Ξ¬ΟΞΉΞΏΟ‚",
- "Ξ¦ΞµΞ²ΟΞΏΟ…Ξ¬ΟΞΉΞΏΟ‚",
- "ΞΞ¬ΟΟ„ΞΉΞΏΟ‚",
- "Ξ‘Ο€ΟΞ―Ξ»ΞΉΞΏΟ‚",
- "ΞΞ¬ΟΞΏΟ‚",
- "Ξ™ΞΏΟΞ½ΞΉΞΏΟ‚",
- "Ξ™ΞΏΟΞ»ΞΉΞΏΟ‚",
- "Ξ‘ΟΞ³ΞΏΟ…ΟƒΟ„ΞΏΟ‚",
- "Ξ£ΞµΟ€Ο„Ξ­ΞΌΞ²ΟΞΉΞΏΟ‚",
- "ΞΞΊΟ„ΟΞ²ΟΞΉΞΏΟ‚",
- "ΞΞΏΞ­ΞΌΞ²ΟΞΉΞΏΟ‚",
- "Ξ”ΞµΞΊΞ­ΞΌΞ²ΟΞΉΞΏΟ‚");
-
-Calendar._SMN = new Array
-("Ξ™Ξ±Ξ½",
- "Ξ¦ΞµΞ²",
- "ΞΞ±Ο",
- "Ξ‘Ο€Ο",
- "ΞΞ±ΞΉ",
- "Ξ™ΞΏΟ…Ξ½",
- "Ξ™ΞΏΟ…Ξ»",
- "Ξ‘Ο…Ξ³",
- "Ξ£ΞµΟ€",
- "ΞΞΊΟ„",
- "ΞΞΏΞµ",
- "Ξ”ΞµΞΊ");
-
+// First day of the week. "0" means display Sunday first, "1" means display
+// Monday first, etc.
 Calendar._FD = 1;
+
+// full month names
+Calendar._MN = new Array
+("Ιανουάριος",
+ "Φεβρουάριος",
+ "Μάρτιος",
+ "Απρίλιος",
+ "Μάιος",
+ "Ιούνιος",
+ "Ιούλιος",
+ "Αύγουστος",
+ "Σεπτέμβριος",
+ "Οκτώβριος",
+ "Νοέμβριος",
+ "Δεκέμβριος");
+
+// short month names
+Calendar._SMN = new Array
+("Ιαν",
+ "Φεβ",
+ "Μαρ",
+ "Απρ",
+ "Μάι",
+ "Ιούν",
+ "Ιούλ",
+ "Αύγ",
+ "Σεπ",
+ "Οκτ",
+ "Νοέ",
+ "Δεκ");
 
 // tooltips
 Calendar._TT = {};
-Calendar._TT["INFO"] = "Ξ“ΞΉΞ± Ο„ΞΏ Ξ·ΞΌΞµΟΞΏΞ»ΟΞ³ΞΉΞΏ";
+Calendar._TT["INFO"] = "Πληροφορίες για το Ημερολόγιο";
 
 Calendar._TT["ABOUT"] =
-"Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ­Ξ±Ο‚ Ξ·ΞΌΞµΟΞΏΞΌΞ·Ξ½Ξ―Ξ±Ο‚/ΟΟΞ±Ο‚ ΟƒΞµ DHTML\n" +
+"DHTML Date/Time Selector\n" +
 "(c) dynarch.com 2002-2005 / Author: Mihai Bazon\n" + // don't translate this this ;-)
-"Ξ“ΞΉΞ± Ο„ΞµΞ»ΞµΟ…Ο„Ξ±Ξ―Ξ± Ξ­ΞΊΞ΄ΞΏΟƒΞ·: http://www.dynarch.com/projects/calendar/\n" +
+"For latest version visit: http://www.dynarch.com/projects/calendar/\n" +
 "Distributed under GNU LGPL.  See http://gnu.org/licenses/lgpl.html for details." +
 "\n\n" +
-"Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® Ξ·ΞΌΞµΟΞΏΞΌΞ·Ξ½Ξ―Ξ±Ο‚:\n" +
-"- Ξ§ΟΞ·ΟƒΞΉΞΌΞΏΟ€ΞΏΞΉΞµΞ―ΟƒΟ„Ξµ Ο„Ξ± ΞΊΞΏΟ…ΞΌΟ€ΞΉΞ¬ \xab, \xbb Ξ³ΞΉΞ± ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ® Ξ­Ο„ΞΏΟ…Ο‚\n" +
-"- Ξ§ΟΞ·ΟƒΞΉΞΌΞΏΟ€ΞΏΞΉΞµΞ―ΟƒΟ„Ξµ Ο„Ξ± ΞΊΞΏΟ…ΞΌΟ€ΞΉΞ¬ " + String.fromCharCode(0x2039) + ", " + String.fromCharCode(0x203a) + " Ξ³ΞΉΞ± ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ® ΞΌΞ®Ξ½Ξ±\n" +
-"- ΞΟΞ±Ο„Ξ®ΟƒΟ„Ξµ ΞΊΞΏΟ…ΞΌΟ€Ξ― Ο€ΞΏΞ½Ο„ΞΉΞΊΞΏΟ Ο€Ξ±Ο„Ξ·ΞΌΞ­Ξ½ΞΏ ΟƒΟ„Ξ± Ο€Ξ±ΟΞ±Ο€Ξ¬Ξ½Ο‰ ΞΊΞΏΟ…ΞΌΟ€ΞΉΞ¬ Ξ³ΞΉΞ± Ο€ΞΉΞΏ Ξ³ΟΞ®Ξ³ΞΏΟΞ· ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®.";
+"Date selection:\n" +
+"- Use the \xab, \xbb buttons to select year\n" +
+"- Use the " + String.fromCharCode(0x2039) + ", " + String.fromCharCode(0x203a) + " buttons to select month\n" +
+"- Hold mouse button on any of the above buttons for faster selection.";
 Calendar._TT["ABOUT_TIME"] = "\n\n" +
-"Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® ΟΟΞ±Ο‚:\n" +
-"- ΞΞ¬Ξ½Ο„Ξµ ΞΊΞ»ΞΉΞΊ ΟƒΞµ Ξ­Ξ½Ξ± Ξ±Ο€Ο Ο„Ξ± ΞΌΞ­ΟΞ· Ο„Ξ·Ο‚ ΟΟΞ±Ο‚ Ξ³ΞΉΞ± Ξ±ΟΞΎΞ·ΟƒΞ·\n" +
-"- Ξ® Shift-ΞΊΞ»ΞΉΞΊ Ξ³ΞΉΞ± ΞΌΞµΞ―Ο‰ΟƒΞ·\n" +
-"- Ξ® ΞΊΞ»ΞΉΞΊ ΞΊΞ±ΞΉ ΞΌΞµΟ„Ξ±ΞΊΞ―Ξ½Ξ·ΟƒΞ· Ξ³ΞΉΞ± Ο€ΞΉΞΏ Ξ³ΟΞ®Ξ³ΞΏΟΞ· ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®.";
-Calendar._TT["TOGGLE"] = "ΞΟ€Ξ¬ΟΞ± Ο€ΟΟΟ„Ξ·Ο‚ Ξ·ΞΌΞ­ΟΞ±Ο‚ Ο„Ξ·Ο‚ ΞµΞ²Ξ΄ΞΏΞΌΞ¬Ξ΄Ξ±Ο‚";
-Calendar._TT["PREV_YEAR"] = "Ξ ΟΞΏΞ·Ξ³. Ξ­Ο„ΞΏΟ‚ (ΞΊΟΞ±Ο„Ξ®ΟƒΟ„Ξµ Ξ³ΞΉΞ± Ο„ΞΏ ΞΌΞµΞ½ΞΏΟ)";
-Calendar._TT["PREV_MONTH"] = "Ξ ΟΞΏΞ·Ξ³. ΞΌΞ®Ξ½Ξ±Ο‚ (ΞΊΟΞ±Ο„Ξ®ΟƒΟ„Ξµ Ξ³ΞΉΞ± Ο„ΞΏ ΞΌΞµΞ½ΞΏΟ)";
-Calendar._TT["GO_TODAY"] = "Ξ£Ξ®ΞΌΞµΟΞ±";
-Calendar._TT["NEXT_MONTH"] = "Ξ•Ο€ΟΞΌΞµΞ½ΞΏΟ‚ ΞΌΞ®Ξ½Ξ±Ο‚ (ΞΊΟΞ±Ο„Ξ®ΟƒΟ„Ξµ Ξ³ΞΉΞ± Ο„ΞΏ ΞΌΞµΞ½ΞΏΟ)";
-Calendar._TT["NEXT_YEAR"] = "Ξ•Ο€ΟΞΌΞµΞ½ΞΏ Ξ­Ο„ΞΏΟ‚ (ΞΊΟΞ±Ο„Ξ®ΟƒΟ„Ξµ Ξ³ΞΉΞ± Ο„ΞΏ ΞΌΞµΞ½ΞΏΟ)";
-Calendar._TT["SEL_DATE"] = "Ξ•Ο€ΞΉΞ»Ξ­ΞΎΟ„Ξµ Ξ·ΞΌΞµΟΞΏΞΌΞ·Ξ½Ξ―Ξ±";
-Calendar._TT["DRAG_TO_MOVE"] = "Ξ£ΟΟΟ„Ξµ Ξ³ΞΉΞ± Ξ½Ξ± ΞΌΞµΟ„Ξ±ΞΊΞΉΞ½Ξ®ΟƒΞµΟ„Ξµ";
-Calendar._TT["PART_TODAY"] = " (ΟƒΞ®ΞΌΞµΟΞ±)";
-Calendar._TT["DAY_FIRST"] = "Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· %s Ο€ΟΟΟ„Ξ±";
+"Time selection:\n" +
+"- Click on any of the time parts to increase it\n" +
+"- or Shift-click to decrease it\n" +
+"- or click and drag for faster selection.";
 
-Calendar._TT["CLOSE"] = "ΞΞ»ΞµΞ―ΟƒΞΉΞΌΞΏ";
-Calendar._TT["TODAY"] = "Ξ£Ξ®ΞΌΞµΟΞ±";
-Calendar._TT["TIME_PART"] = "(Shift-)ΞΊΞ»ΞΉΞΊ Ξ® ΞΌΞµΟ„Ξ±ΞΊΞ―Ξ½Ξ·ΟƒΞ· Ξ³ΞΉΞ± Ξ±Ξ»Ξ»Ξ±Ξ³Ξ®";
+Calendar._TT["PREV_YEAR"] = "Προηγ. έτος";
+Calendar._TT["PREV_MONTH"] = "Προηγ. μήνας";
+Calendar._TT["GO_TODAY"] = "Σήμερα";
+Calendar._TT["NEXT_MONTH"] = "Επόμ. μήνας";
+Calendar._TT["NEXT_YEAR"] = "Επόμ. έτος";
+Calendar._TT["SEL_DATE"] = "Επιλέξτε ημερομηνία";
+Calendar._TT["DRAG_TO_MOVE"] = "Σύρετε με το ποντίκι για μετακίνηση";
+Calendar._TT["PART_TODAY"] = " (σήμερα)";
+
+// the following is to inform that "%s" is to be the first day of week
+// %s will be replaced with the day name.
+Calendar._TT["DAY_FIRST"] = "Εμφάνισε πρώτα την %s ";
+
+// This may be locale-dependent.  It specifies the week-end days, as an array
+// of comma-separated numbers.  The numbers are from 0 to 6: 0 means Sunday, 1
+// means Monday, etc.
 Calendar._TT["WEEKEND"] = "0,6";
 
-// date formats
-Calendar._TT["DEF_DATE_FORMAT"] = "dd-mm-y";
-Calendar._TT["TT_DATE_FORMAT"] = "D, d M";
+Calendar._TT["CLOSE"] = "Κλείσιμο";
+Calendar._TT["TODAY"] = "Σήμερα";
+Calendar._TT["TIME_PART"] = "(Shift-) Κλικ για να αλλάξετε τιμή";
 
-Calendar._TT["WK"] = "ΞµΞ²Ξ΄";
-Calendar._TT["TIME"] = "ΞΟΞ±:";
+// date formats
+Calendar._TT["DEF_DATE_FORMAT"] = "%Y-%m-%d";
+Calendar._TT["TT_DATE_FORMAT"] = "%a, %b %e";
+
+Calendar._TT["WK"] = "εβδ.";
+Calendar._TT["TIME"] = "Ώρα:";
