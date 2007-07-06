@@ -61,7 +61,6 @@ $require_current_course = TRUE;
 $require_login = true;
 $require_help = TRUE;
 $helpTopic = 'Work';
-//$local_style = 'textarea, input { font-size: 10pt; font-family: monospace; }';
 
 include '../../include/baseTheme.php';
 
@@ -116,39 +115,17 @@ $lang_editor='en';
 
 $head_content .= <<<hContent
 <script type="text/javascript">
-  _editor_url = '$urlAppend/include/htmlarea/';
-  _css_url='$urlAppend/css/';
-  _image_url='$urlAppend/include/htmlarea/images/';
-  _editor_lang = '$lang_editor';
+        _editor_url  = "$urlAppend/include/xinha/";
+        _editor_lang = "en";
+        _editor_skin = "silva";
 </script>
-<script type="text/javascript" src='$urlAppend/include/htmlarea/htmlarea.js'></script>
-
-<script type="text/javascript">
-var editor = null;
-
-function initEditor() {
-
-  var config = new HTMLArea.Config();
-  config.height = '180px';
-  config.hideSomeButtons(" showhelp undo redo popupeditor ");
-
-  editor = new HTMLArea("ta",config);
-
-  // comment the following two lines to see how customization works
-  editor.generate();
-  return false;
-}
-
-</script>
+<script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
+<script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
 hContent;
-
-$body_action = "onload=\"initEditor()\"";
-
 
 //-------------------------------------------
 // main program
 //-------------------------------------------
-
 
 if ($is_adminOfCourse) {
 	if (isset($grade_comments)) {
@@ -205,7 +182,7 @@ if ($is_adminOfCourse) {
 }
 
 
-draw($tool_content, 2, 'work', $head_content.$local_head, $body_action);
+draw($tool_content, 2, 'work', $head_content.$local_head);
 
 //-------------------------------------
 // end of main program
@@ -390,10 +367,10 @@ function new_assignment()
 	<table width=\"99%\"><thead>
 	<tr><th>".
 	$m['description'].":</th></tr><tbody><tr><td>".
-	"<textarea id=\"ta\" name=\"desc\" value=\"$desc\" rows=\"20\" cols=\"80\">";
+	"<textarea id=\"xinha\" name=\"desc\" value=\"$desc\" style='width:100%' rows=\"20\" cols=\"80\">";
 
 	if ($desc)
-	$tool_content .= $desc;
+		$tool_content .= $desc;
 
 	$tool_content .=	"</textarea></td></tr></tbody></table><br/>
 	<table width=\"99%\"><thead>
@@ -452,14 +429,6 @@ function show_edit_assignment($id) {
 
 	$deadline = $row['deadline'];
 
-
-
-	//	$deadline = explode('-', $row['deadline']);
-	//	$day = $deadline[2];
-	//	$month = $deadline[1];
-	//	$year = $deadline[0];
-	//////////////////////////////////////////////////////////////////////////////////////
-
 	$tool_content .= <<<cData
 	<form action="work.php" method="post">
 	<input type="hidden" name="id" value="$id">
@@ -472,7 +441,7 @@ function show_edit_assignment($id) {
 	<thead>
 <tr><th>${m['description']}:</th></tr></thead><tbody>
 	<tr><td>
-<textarea id='ta' name='desc' value='${row['description']}' style='width:100%' rows='20' cols='60'>
+<textarea id='xinha' name='desc' value='${row['description']}' style='width:100%' rows='20' cols='60'>
 ${row['description']}
 </textarea>
 	</td></tr>
@@ -483,8 +452,6 @@ ${row['description']}
 <tr><th>${m['deadline']}:</th><td>
 
 cData;
-
-	//date_form($day, $month, $year);
 
 	$tool_content .= getJsDeadline($deadline)."</td></tr><tr><th>".$m['group_or_user'].":</th><td>".
 	"<input type=\"radio\" name=\"group_submissions\" value=\"0\"";
