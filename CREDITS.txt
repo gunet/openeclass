@@ -52,9 +52,12 @@
          Michalis Psaltakis (Aegean University)
          Konstantinidis K. (Aristotele University of Thessaloniki)
 
-      htmlArea:
-          Copyright (c) 2002-2004, interactivetools.com, inc.
-          Copyright (c) 2003-2004 dynarch.com
+			Xinha: 
+					 Xinha was originally based on work by Mihai Bazon who produced htmlArea for Interactive Tools.
+					 Currently leading the Xinha project is James Sleeman.
+					 Raimund Meyer (ray) has contributed somewhat to the advancement of Xinha recently. 
+			     Copyright (c) 2003-2004 dynarch.com.
+    	     Copyright (c) 2002-2003 interactivetools.com, inc.
 
       PclZip: Vincent Blavet <vincent@phpconcept.net>
 
