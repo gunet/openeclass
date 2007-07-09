@@ -560,6 +560,7 @@ elseif(isset($_REQUEST['install7']))
 
 		mysql_query("CREATE TABLE annonces (
       id mediumint(11) NOT NULL auto_increment,
+			title varchar(255) default NULL,
       contenu text,
       temps date default NULL,
       code_cours varchar(20) default NULL,

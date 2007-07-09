@@ -48,13 +48,16 @@ $professorMessage="Professor message";
 $langEmailSent=" and emailed to registered students";
 
 $langEmailOption="Send this announcement by email to registered students";
-$langOk = "Ok";
 $langUp = "Up";
 $langDown = "Down";
+
+$langAnnTitle = "Announcement Title";
+$langAnnBody = "Main Body of Announcement";
 
 $langNoAnnounce = "No announcements exist";
 $langSureToDelAnnounce = "Are you sure you want to delete this announcement";
 $langSureToDelAnnounceAll = "Are you sure you want to delete all the announcements";
+
 // my announcements
 $langMyAnnouncements = "My announcements";
 $langtheCourse = "Course";

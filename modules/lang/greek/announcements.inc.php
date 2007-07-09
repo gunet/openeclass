@@ -34,14 +34,15 @@ $langModifAnn="Αλλαγή της ανακοίνωσης";
 $langAnnouncement = "Ανακοίνωση";
 $langMove = "Μετακίνηση";
 
-// ANNOUNCEMENTS
 $langAnnEmpty="Τα περιεχόμενα του καταλόγου ανακοινώσεων διαγράφτηκαν";
 $langAnnModify="η ανακοίνωση άλλαξε";
 $langAnnAdd="Η ανακοίνωση προστέθηκε";
 $langAnnDel="η ανακοίνωση διαγράφηκε";
-$langPubl="Τοποθετήθηκε την";
+$langPubl="αναρτήθηκε την";
 $langAddAnn="Προσθήκη Ανακοίνωσης";
 $langContent="Περιεχόμενο";
+$langAnnTitle = "Τίτλος Ανακοίνωσης";
+$langAnnBody = "Σώμα Ανακοίνωσης";
 $langEmptyAnn="Διαγραφή καταλόγου ανακοινώσεων";
 
 $professorMessage="Μήνυμα καθηγητή";
@@ -60,5 +61,4 @@ $langMyAnnouncements = "Οι ανακοινώσεις μου ";
 $langtheCourse = "Μάθημα";
 $langAnn = "Ανακοινώθηκε την";
 $langTitulaire = "Διδάσκων";
-
 ?>

@@ -193,6 +193,7 @@ function confirmation (name)
 		if ($myrow) {
 			$AnnouncementToModify = $myrow['id'];
 			$contentToModify = $myrow['contenu'];
+			$titleToModify = $myrow['title'];
 			$displayAnnouncementList = true;
 		}
 
@@ -206,8 +207,9 @@ function confirmation (name)
 		/*** MODIFY ANNOUNCEMENT ***/
 
 		if($id) {
-			db_query("UPDATE annonces SET contenu='".mysql_real_escape_string($newContent)."', temps=NOW()
-				WHERE id='".mysql_real_escape_string($id)."'",$mysqlMainDb);
+			db_query("UPDATE annonces SET contenu='".mysql_real_escape_string($newContent)."', 
+								title='".mysql_real_escape_string($antitle)."', temps=NOW()
+								WHERE id='".mysql_real_escape_string($id)."'",$mysqlMainDb);
 			$message = "<p><b>$langAnnModify</b</b>";
 		}
 
@@ -223,9 +225,9 @@ function confirmation (name)
 			$order = $orderMax + 1;
 
 			// INSERT ANNOUNCEMENT
-
-			db_query("INSERT INTO annonces SET contenu = '".mysql_real_escape_string($newContent)."', temps = NOW(),
-				code_cours = '$currentCourseID', ordre = '$order'");
+			db_query("INSERT INTO annonces SET contenu = '".mysql_real_escape_string($newContent)."', 
+					title='".mysql_real_escape_string($antitle)."', temps = NOW(),
+					code_cours = '$currentCourseID', ordre = '$order'");
 
 			// SEND EMAIL (OPTIONAL)
 			// THIS FUNCTION ADDED BY THOMAS MAY 2002
@@ -284,19 +286,10 @@ function confirmation (name)
 	DISPLAY ACTION MESSAGE
 	--------------------------------------*/
 
-	if (isset($message) && $message)
-	{
+	if (isset($message) && $message) {
 		$tool_content .=  "
-					<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"success\">
-						$message
-					</td>
-					</tr>
-				</tbody>
+			<table width=\"99%\"><tbody><tr><td class=\"success\">$message</td></tr></tbody>
 			</table><br/>";
-
 		$displayAnnouncementList = true;//do not show announcements
 		$displayForm             = false;//do not show form
 	}
@@ -310,40 +303,34 @@ function confirmation (name)
 
 		// DISPLAY ADD ANNOUNCEMENT COMMAND
 
-		$tool_content .=  "
-	<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">\n";
+		$tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">\n";
 		// should not send email if updating old message
 		if (isset ($modify) && $modify) {
-			$tool_content .=   "<p><b>$langModifAnn</b></p>";
+			$tool_content .= "<p><b>$langModifAnn</b></p>";
 			$langOk = $langModifAnn;
 		} else {
-			$tool_content .=  "<p><b>
-			".$langAddAnn."</b></p>
-			
-			
-				<p>$langEmailOption : 
-				<input type=checkbox value=\"1\" name=\"emailOption\"></p>";
+			$tool_content .= "<p><b>".$langAddAnn."</b></p>";
 		}
 
-		if (!isset($AnnouncementToModify) )
-		$AnnouncementToModify ="";
-		if (!isset($contentToModify) )
-		$contentToModify ="";
+		if (!isset($AnnouncementToModify)) $AnnouncementToModify ="";
+		if (!isset($contentToModify)) $contentToModify ="";
+		if (!isset($titleToModify)) $titleToModify ="";
 
-
-		$tool_content .=  "<textarea id='xinha' name='newContent' value='$contentToModify' rows='20' cols='96'>$contentToModify</textarea>";
-		$tool_content .=  "<br><input type=\"hidden\" name=\"id\" value=\"".$AnnouncementToModify."\">";
-		$tool_content .=  "<input type=\"Submit\" name=\"submitAnnouncement\" value=\"$langOk\"></form>";
-
-		$tool_content .= "<br><br><br>";
+	  $tool_content .= "<table border=0 cellspacing=2 cellpadding=0>";
+		$tool_content .= "<tr><td>$langAnnTitle:</td>";
+	 	$tool_content .= "<td><input type='text' name='antitle' value='$titleToModify' size='50'></td></tr>";
+		$tool_content .= "<tr><td>$langAnnBody:</td>";
+		$tool_content .= "<td><textarea id='xinha' name='newContent' value='$contentToModify' rows='20' cols='96'>$contentToModify</textarea></td></tr>";
+		$tool_content .= "<input type=\"hidden\" name=\"id\" value=\"".$AnnouncementToModify."\">";
+		$tool_content .= "<tr><td colspan='2'>$langEmailOption : <input type=checkbox value=\"1\" name=\"emailOption\"></td></tr>";
+		$tool_content .= "<tr><td colspan='2'><input type=\"Submit\" name=\"submitAnnouncement\" value=\"$langOk\"></td></tr></form>";
+		$tool_content .= "<br>";
 	}
 
 	/*----------------------------------------
 	DISPLAY ANNOUNCEMENT LIST
 	--------------------------------------*/
-
-	if ($displayAnnouncementList == true)
-	{
+	if ($displayAnnouncementList == true) {
 		$result = db_query("
 			SELECT * FROM annonces WHERE code_cours='$currentCourse' ORDER BY ordre DESC",$mysqlMainDb);
 		$iterator = 1;
@@ -359,23 +346,20 @@ function confirmation (name)
 			}
 			$tool_content .= "</tr></thead>";
 		}
-		while ( $myrow = mysql_fetch_array($result) )
-		{
+		while ($myrow = mysql_fetch_array($result)) {
 			// FORMAT CONTENT
 			$content = make_clickable($myrow['contenu']);
 			$content = nl2br($content);
 			$myrow['temps'] = greek_format($myrow['temps']);
 			$tool_content .=  "<tbody>
-				<tr class=\"odd\"><span></span>
-					<th>".$langPubl." : ".$myrow['temps']."</th>";
+				<tr class=\"odd\"><th>".$myrow["title"]." (".$langPubl." : ".$myrow['temps'].")</th>";
 			if ($announcementNumber>1){
 				$tool_content .= "<td width=21>";
 			}
 			/*** DISPLAY MOVE UP AND MOVE DOWN COMMANDS ***/
 			// DISPLAY MOVE UP COMMAND
 			//condition: only if it is not the top announcement
-			if($iterator != 1)
-			{
+			if($iterator != 1) {
 				$tool_content .=  "
 					<a href=\"$_SERVER[PHP_SELF]?up=".$myrow["id"]."\">
 						<img class=\"displayed\" src=../../template/classic/img/up.gif border=0 title=\"".$langUp."\">
@@ -383,9 +367,7 @@ function confirmation (name)
 			}
 
 			// DISPLAY MOVE DOWN COMMAND
-			// condition: only if it is not the bottom announcement
-			if($iterator < $bottomAnnouncement)
-			{
+			if($iterator < $bottomAnnouncement) {
 				$tool_content .=  "
 					<a href=\"$_SERVER[PHP_SELF]?down=".$myrow["id"]."\">
 						<img class=\"displayed\" src=../../template/classic/img/down.gif border=0 title=\"".$langDown."\">
@@ -434,8 +416,8 @@ else {
 			$content = nl2br($content);
 
 			$tool_content .=  "
-		<tr class=\"odd\">
-			<th>$langPubl: ".greek_format($myrow["temps"])."</th></tr>
+		<tr class=\"odd\"><th>".$myrow["title"]." (
+			$langPubl: ".greek_format($myrow["temps"]).")</th></tr>
 			<tr><td class='color1'>$content</td></tr>";
 
 		}	// while loop
