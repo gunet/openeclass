@@ -184,49 +184,44 @@ elseif (isset($_REQUEST['empty'])  && $is_adminOfCourse) {
 
 // Fill all groups
 elseif (isset($_REQUEST['fill']) && $is_adminOfCourse) {
-	$sqlGroups = "select id, maxStudent from student_group";
-	$resGroups = db_query($sqlGroups);
-	while (list($idGroup,$places) = mysql_fetch_array($resGroups))
-	{
-		$placeAivailableInGroups[$idGroup]= $places;
+	$resGroups = db_query("SELECT id, maxStudent FROM student_group");
+	while (list($idGroup,$places) = mysql_fetch_array($resGroups)) {
+		$placeAvailableInGroups[$idGroup]= $places;
 	}
 
-	$sqlUsers = "select user, team from user_group";
-	$resUsers = db_query($sqlUsers);
-	while (list($idUser, $idGroup) = mysql_fetch_array($resUsers))
-	{
-		$placeAivailableInGroups[$idGroup]--;
+	$resUsers = db_query($sqlUsers = "select user, team from user_group");
+	while (list($idUser, $idGroup) = mysql_fetch_array($resUsers)) {
+		$placeAvailableInGroups[$idGroup]--;
+		if ($placeAvailableInGroups[$idGroup] <= 0) {
+        		unset($placeAvailableInGroups[$idGroup]);
+                }
 	}
 	$sqlUserSansGroupe= "SELECT cu.user_id FROM `$mysqlMainDb`.cours_user cu
 			LEFT JOIN `$currentCourse`.user_group ug on ug.user = cu.user_id
 			WHERE cu.code_cours='$currentCourse'
 			AND cu.statut=5 AND ug.user is null AND cu.tutor=0";		
 	$resUserSansGroupe= db_query($sqlUserSansGroupe);
-	while (isset($placeAivailableInGroups) and is_array($placeAivailableInGroups) and (!empty($placeAivailableInGroups)) and list($idUser) = mysql_fetch_array($resUserSansGroupe))
+	while (isset($placeAvailableInGroups) and is_array($placeAvailableInGroups) and (!empty($placeAvailableInGroups)) and list($idUser) = mysql_fetch_array($resUserSansGroupe))
 	{
-		$idGroupChoisi = array_keys($placeAivailableInGroups,max($placeAivailableInGroups));
+		$idGroupChoisi = array_keys($placeAvailableInGroups, max($placeAvailableInGroups));
 		$idGroupChoisi = $idGroupChoisi[0];
-		$userOfGroups[$idGroupChoisi][]=$idUser;
-		$placeAivailableInGroups[$idGroupChoisi]--;
-		if ($placeAivailableInGroups[$idGroupChoisi] <= 0)
-		unset($placeAivailableInGroups[$idGroupChoisi]);
+		$userOfGroups[$idGroupChoisi][] = $idUser;
+		$placeAvailableInGroups[$idGroupChoisi]--;
+		if ($placeAvailableInGroups[$idGroupChoisi] <= 0) {
+        		unset($placeAvailableInGroups[$idGroupChoisi]);
+                }
 	}
 
-	// NOW we have $userOfGroups containing new affectation. We must  write this in database
-	if (isset($userOfGroups) and is_array($userOfGroups))
-	{
+	// NOW we have $userOfGroups containing new affectation. We must write this in database
+	if (isset($userOfGroups) and is_array($userOfGroups)) {
 		reset($userOfGroups);
-		while (list($idGroup,$users)=each($userOfGroups))
-		{
-			while (list(,$idUser)=each($users))
-			{
-				$sqlInsert ="INSERT INTO user_group SET user = '".$idUser."',team = '".$idGroup."';";
+		while (list($idGroup,$users) = each($userOfGroups)) {
+			while (list(,$idUser) = each($users)) {
+				$sqlInsert = "INSERT INTO user_group SET user='$idUser', team='$idGroup'";
 				db_query($sqlInsert);
 			}
 		}
-	}
-	else
-	{
+	} else {
 		// no student without groups
 	}
 	$message = $langGroupFilledGroups;
