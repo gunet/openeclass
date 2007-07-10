@@ -76,37 +76,27 @@ return $auth_methods (array with all the values of the defined/active methods)
 ****************************************************************/
 function get_auth_active_methods()
 {
-	global $db;
-	$sql = "SELECT auth_id,auth_settings FROM auth WHERE auth_default=1";
-  $auth_method = mysql_query($sql,$db);
-  if($auth_method)
-  {
-		$auth_methods = array();
-		while($authrow = mysql_fetch_row($auth_method))
-		{
-			// get only those with valid,not empty settings
-			if(($authrow[0]!=1) && (empty($authrow[1])))
-			{
-				continue;
-			}
-			else
-			{
-				$auth_methods[] = $authrow[0];
-			}
-		}
-		if(!empty($auth_methods))
-		{
-			return $auth_methods;
-		}
-		else
-		{
-	    return 0;
-		}
-	}
-  else
-  {
-		return 0;
-	}
+        global $db;
+        $sql = "SELECT auth_id,auth_settings FROM auth WHERE auth_default=1";
+        $auth_method = mysql_query($sql,$db);
+        if($auth_method) {
+                $auth_methods = array();
+                while($authrow = mysql_fetch_row($auth_method)) {
+                        // get only those with valid,not empty settings
+                        if(($authrow[0]!=1) && (empty($authrow[1]))) {
+                                continue;
+                        } else {
+                                $auth_methods[] = $authrow[0];
+                        }
+                }
+                if(!empty($auth_methods)) {
+                        return $auth_methods;
+                } else {
+                        return 0;
+                }
+        } else {
+                return 0;
+        }
 }
 
 /****************************************************************
