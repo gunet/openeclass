@@ -844,8 +844,8 @@ while ($code = mysql_fetch_row($res)) {
                         PRIMARY KEY  (`aid`)
                                 ) ", $code[0]); //TYPE=MyISAM COMMENT='For the poll module';
         }
-        if (!mysql_table_exists($code[0], 'pollpoll_answer_record'))  {
-                db_query("CREATE TABLE `pollpoll_answer_record` (
+        if (!mysql_table_exists($code[0], 'poll_answer_record'))  {
+                db_query("CREATE TABLE `poll_answer_record` (
                         `arid` int(11) NOT NULL auto_increment,
                         `aid` bigint(12) NOT NULL default '0',
                         `question_text` varchar(250) NOT NULL default '',
