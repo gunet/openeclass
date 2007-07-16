@@ -352,7 +352,7 @@ function confirmation (name)
 			$content = nl2br($content);
 			$myrow['temps'] = greek_format($myrow['temps']);
 			$tool_content .=  "<tbody>
-				<tr class=\"odd\"><th>".$myrow["title"]." (".$langPubl." : ".$myrow['temps'].")</th>";
+				<tr class=\"color1\"><td>".$myrow["title"]." (".$langPubl." : ".$myrow['temps'].")</td>";
 			if ($announcementNumber>1){
 				$tool_content .= "<td width=21>";
 			}
@@ -376,7 +376,7 @@ function confirmation (name)
 
 			// DISPLAY ANNOUNCEMENT CONTENT
 			$tool_content .= "</td></tr>
-				<tr><td class='color1' colspan=2>".$content."
+				<tr><td class=\"odd\" colspan=2>".$content."
 				<br>
 				<a href=\"$_SERVER[PHP_SELF]?modify=".$myrow['id']."\">
 				<img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langModify."\"></a>
@@ -416,9 +416,8 @@ else {
 			$content = nl2br($content);
 
 			$tool_content .=  "
-		<tr class=\"odd\"><th>".$myrow["title"]." (
-			$langPubl: ".greek_format($myrow["temps"]).")</th></tr>
-			<tr><td class='color1'>$content</td></tr>";
+		    <tr><th class=\"color1\" valign=\"top\"><img class=\"displayed\" src=../../template/classic/img/announcements_on.gif border=0 title=\"".$myrow["title"]."\"> ".$myrow["title"]."($langPubl: ".greek_format($myrow["temps"]).")</th></tr>
+			<tr><td class=\"odd\">$content</td></tr>";
 
 		}	// while loop
 		$tool_content .=  "</table>";

@@ -338,7 +338,7 @@ tContentForm;
 if (!isset($sens)) $sens =" ASC";
 $result = db_query("SELECT id, titre, contenu, day, hour, lasting FROM agenda ORDER BY day ".$sens.", hour ".$sens,$currentCourseID);
 if (mysql_num_rows($result) > 0) {
-	$tool_content .=  "<table width=\"99%\">";
+	$tool_content .=  "<table width=\"99%\" align=\"center\">";
 	$tool_content .=  "<thead><tr><th>$langEvents</th>";
 	if ($is_adminOfCourse) {
 		$tool_content .=  "<th>$langActions</th>";

@@ -15,10 +15,19 @@
         word-break: break-all;
         }
 		
-table{
-    border: 0px;
-	font-family: Verdana, Arial, sans-serif !important;
+LEGEND{
+  font-size: 10pt;
+  padding : 4px;
 }
+
+table {
+	border: 1px dotted #a2a2a3;
+	border-collapse: collapse;
+	font-family: Verdana, Arial, sans-serif !important;
+	font-size:12px;
+	color: #555;
+}
+
 
 th {
 	padding: 4px;
@@ -30,7 +39,6 @@ th {
 td {
 	padding: 4px;
     border: 0px;
-    background-color: #ffffff;
     font-family: Verdana, Arial, sans-serif !important;
 }
 
@@ -41,18 +49,10 @@ thead th {
 	font-size: 90% !important;
 }
 
-.b-right {
-    border-right: 1px solid silver;
+tbody th {
+	font-weight: bold;
 }
 
-.b-left {
-    border-left: 1px solid silver;
-}
+tbody tr { background: #FCFDFE; font-size:12px;}
 
-.b-top {
-    border-top: 1px solid silver;
-}
-
-.b-bottom {
-    border-bottom: 1px solid silver;
-}
+tbody tr.odd { background: #F7F9FC; }
