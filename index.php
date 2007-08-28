@@ -81,7 +81,7 @@ if ($persoIsActive) session_register("perso_is_active");
 // then authenticate user. First via LDAP then via MyQL
 // -----------------------------------------------------------------------
 $warning = '';
-$uname = isset($_POST['uname'])?$_POST['uname']:'';
+$uname = preg_replace('/\s+/', ' ', trim(isset($_POST['uname'])?$_POST['uname']:''));
 $pass = isset($_POST['pass'])?$_POST['pass']:'';
 $submit = isset($_POST['submit'])?$_POST['submit']:'';
 // $auth = get_auth_id();

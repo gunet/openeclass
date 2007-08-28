@@ -53,7 +53,7 @@ $statut=5;		// This file registers only students
 // Get the incoming variables and initialize them
 $submit = isset($_POST['submit'])?$_POST['submit']:'';
 $auth = isset($_POST['auth'])?$_POST['auth']:'';
-$uname = isset($_POST['uname'])?$_POST['uname']:'';
+$uname = preg_replace('/\s+/', ' ', trim(isset($_POST['uname'])?$_POST['uname']:''));
 $password = isset($_POST['password'])?$_POST['password']:'';
 
 if(!empty($submit))
