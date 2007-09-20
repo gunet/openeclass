@@ -48,11 +48,15 @@
  $langconference="Ενεργοποίηση τηλεδιάσκεψης";
  $langpresantation="Σύνδεσμος παρουσίασης ιστοσελίδας";
  $langVideo_content="<p align='justify'>Εδώ θα παρουσιαστεί το βίντεο αφού την ενεργοποιήσει ο καθηγητής.</p>";
- $langTeleconference_content="<p align='justify'>Εδώ θα παρουσιαστεί η τηλεδιάσκεψη αφού την ενεργοποιήσει ο καθηγητής.</p>";
+
+ $langTeleconference_content1 = "<p align='justify'>Εδώ θα παρουσιαστεί η τηλεδιάσκεψη αφού την ενεργοποιήσει ο καθηγητής.</p>";
+ $langTeleconference_content_noIE="<p align='justify'>Η τηλεδιάσκεψη ενεργοποιείται μόνο αν έχετε IE ως πλοηγό.</p>";
+
+/*
  $browser = get_browser(null, true);
  if($browser['browser']!="IE")
  	$langTeleconference_content.="<p  align='justify'>Η τηλεδιάσκεψη ενεργοποιείται μόνο αν έχετε IE ως πλοηγό.</p>";
-
+*/
  $langWashVideo="Παύση μετάδοσης";
  $langPresantation_content="<p align='center'>Εδώ θα παρουσιαστεί μία ιστοσελίδα που θα επιλέξει ο καθηγητής.</p>";
  $langWashPresanation="Παύση μετάδοσης";
