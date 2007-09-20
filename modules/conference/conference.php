@@ -48,6 +48,10 @@ $action->record('MODULE_ID_CHAT');
 
 $nameTools = $langConference;
 
+$browser = get_browser(null, true);                                                                           if($browser['browser']!="IE")                                                                                  $langTeleconference_content = $langTeleconference_content_noIE;
+else
+ $langTeleconference_content = $langTeleconference_content1;
+
 
 //HEADER
 $head_content='

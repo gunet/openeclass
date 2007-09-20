@@ -164,7 +164,7 @@ else
 				</thead>
 				</table>
 				<br>
-						<input type=\"Submit\" name=\"submit\" value=\"$langAddOk\">
+						<input type=\"Submit\" name=\"submit\" value=\"$langAdd\">
 				
 </form>";
 	}	// else

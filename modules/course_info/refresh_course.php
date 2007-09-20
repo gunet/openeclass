@@ -94,7 +94,7 @@ if(isset($submit)) {
 	$tool_content .="<p><a href='infocours.php'>$langBack</a></p>";
 
 } else {
-	$tool_content .= "<p><em>$langRefresh</em></p>";
+	$tool_content .= "<p><em>$langRefreshInfo</em></p>";
 	$tool_content .= "<form action='refresh_course.php' method='post'>
 		<table width=\"99%\">
 		<thead>
@@ -115,7 +115,7 @@ if(isset($submit)) {
 				</tbody>
 		</table>
 		<br>
-		<input type='submit' value='$langSubmit' name='submit'>
+		<input type='submit' value='$langSubmitActions' name='submit'>
 		</form>";
 
 }

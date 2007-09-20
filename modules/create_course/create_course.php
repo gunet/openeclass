@@ -139,7 +139,7 @@ if (isset($back1) or !isset($visit)) {
                 <td>";
         @$tool_content .= " ".selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']), 'type', $type)." ";
         $tool_content .= "</td></tr>
-                <tr><td><span class='labeltext'>$langLn&nbsp;:</span></td>
+                <tr><td><span class='labeltext'>$langLanguage&nbsp;:</span></td>
                 <td>";
 
         @$tool_content .= " ".selection(array('greek' => $langNameOfLang['greek'], 

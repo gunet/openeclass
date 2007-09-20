@@ -67,7 +67,7 @@ tCont;
 		<td><input type="file" name="users_file"></td></tr> 
 	</thead>
 	</table>
-	<br><input type="submit" value="$langOk">
+	<br><input type="submit" value="$langAdd">
 	</form>
 		
 	

@@ -325,7 +325,7 @@ tContentForm;
 		<textarea id='xinha' name='contenu' value='$contenu' rows='20' cols='78'>".$contenu."</textarea></td></tr>
     </tbody></table>
     <br>
-    <input type=\"Submit\" name=\"submit\" value=\"$langOk\">
+    <input type=\"Submit\" name=\"submit\" value=\"$langAddModify\">
 </form>
 <br><br>";
 

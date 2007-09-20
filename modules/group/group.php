@@ -280,7 +280,7 @@ if ($is_adminOfCourse) {
 	</th>
 	<th>
 
-	$langState
+	$langGroupAccess
 	</th>
 	</tr>
 	</thead>

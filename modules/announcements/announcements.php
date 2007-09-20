@@ -307,7 +307,7 @@ function confirmation (name)
 		// should not send email if updating old message
 		if (isset ($modify) && $modify) {
 			$tool_content .= "<p><b>$langModifAnn</b></p>";
-			$langOk = $langModifAnn;
+			$langAdd = $langModifAnn;
 		} else {
 			$tool_content .= "<p><b>".$langAddAnn."</b></p>";
 		}
@@ -323,7 +323,7 @@ function confirmation (name)
 		$tool_content .= "<td><textarea id='xinha' name='newContent' value='$contentToModify' rows='20' cols='96'>$contentToModify</textarea></td></tr>";
 		$tool_content .= "<input type=\"hidden\" name=\"id\" value=\"".$AnnouncementToModify."\">";
 		$tool_content .= "<tr><td colspan='2'>$langEmailOption : <input type=checkbox value=\"1\" name=\"emailOption\"></td></tr>";
-		$tool_content .= "<tr><td colspan='2'><input type=\"Submit\" name=\"submitAnnouncement\" value=\"$langOk\"></td></tr></form>";
+		$tool_content .= "<tr><td colspan='2'><input type=\"Submit\" name=\"submitAnnouncement\" value=\"$langAdd\"></td></tr></form>";
 		$tool_content .= "<br>";
 	}
 

@@ -155,6 +155,11 @@ if(session_is_registered('uid') && !session_is_registered('langswitch')) {
 }
 
 // Include messages
+
+// include("$webDir/modules/lang/english/messages.inc.php");
+@ include("$webDir/modules/lang/$language/messages.inc.php");
+
+/*
 @ include("$webDir/modules/lang/english/trad4all.inc.php");
 @ include("$webDir/modules/lang/$language/trad4all.inc.php");
 if (isset($langFiles)) {
@@ -168,6 +173,7 @@ if (isset($langFiles)) {
 		@ include("$webDir/modules/lang/$language/$langFiles.inc.php");
 	}
 }
+*/
 
 // Make sure that the $uid variable isn't faked
 if (isset($_SESSION['uid'])) {
@@ -290,7 +296,12 @@ if (isset($require_current_course) and $require_current_course) {
 
 		// If course language is different from global language,
 		// include more messages
+
+
 		if ($language != $languageInterface) {
+@ include("$webDir/modules/lang/greek/$languageInterface.inc.php");
+    $language = $languageInterface ;
+/*
 			@ include("$webDir/modules/lang/$languageInterface/trad4all.inc.php");
 			if (is_array($langFiles)) {
 				foreach ($langFiles as $f) {
@@ -299,7 +310,7 @@ if (isset($require_current_course) and $require_current_course) {
 			} else {
 				@ include("$webDir/modules/lang/$languageInterface/$langFiles.inc.php");
 			}
-			$language = $languageInterface ;
+			$language = $languageInterface ;*/
 		}
 	}
 }
