@@ -168,7 +168,7 @@ switch ($u_stats_value) {
          break;
        }
    
-    $chart->setTitle("$langDuration");
+    $chart->setTitle("$langDurationVisits");
     $tool_content .= "<p> $langDurationExpl</p>";
      
     break;

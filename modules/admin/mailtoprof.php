@@ -106,7 +106,7 @@ else {
 <textarea name=\"body_mail\" rows=\"10\" cols=\"60\"></textarea>
 <br><br>
 $langSendMessageTo <select name=\"sendTo\">
-<option value=\"0\">".$langAllUsers."</option>
+<option value=\"0\">".$langToAllUsers."</option>
 <option value=\"1\">".$langProfOnly."</option></select><br><br>
 <input type=\"submit\" name=\"submit\" value=\"$langSend\"></input>
 </form></td></tr></tbody></table>";

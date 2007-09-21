@@ -75,21 +75,21 @@ if(!empty($encodeLogin)) 	// Check if a username has been posted
 		// If username exists insert userid to admin table and make the user administrator
 		$row = mysql_fetch_row($res);
 		if (mysql_query("INSERT INTO admin VALUES('$row[0]')")) 
-			$tool_content .= "<p>$langUser ".htmlspecialchars($encodeLogin)." $langWith  id='$row[0]' $langDone</p>";
+			$tool_content .= "<p>$langTheUser ".htmlspecialchars($encodeLogin)." $langWith  id='$row[0]' $langDone</p>";
 		else // If mysql_query failed print message
 			$tool_content .= "<p>$langError</p>";
 	} 
 	else 
 	{
 		// If username does not exist in database, inform user about the result
-		$tool_content .= "<p>$langUser ".htmlspecialchars($encodeLogin)." $langNotFound.</p>";
-		$tool_content .= printform($langLogin);		// Display form again
+		$tool_content .= "<p>$langTheUser ".htmlspecialchars($encodeLogin)." $langNotFound.</p>";
+		$tool_content .= printform($langUserName);		// Display form again
 	}
 } 
 else 	// No form post has been done
 { 
 	// Display form
-	$tool_content .= printform($langLogin);
+	$tool_content .= printform($langUserName);
 }
 
 // delete the admin
