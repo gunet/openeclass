@@ -190,7 +190,7 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 		<thead>
 		<tr>
 		<th>
-			$langGroupDescription
+			$langDescription
 		</th>
 		</tr>
 		</thead>

@@ -70,7 +70,6 @@ $langSupportUser = "Υπεύθυνος Υποστήριξης:";
 $langNomPageAddHtPass = "Προσθήκη διαχειριστή";
 $langPassword = "Συνθηματικό";
 $langAdd = "Προσθήκη";
-$langTheUser = "Ο χρήστης";
 $langNotFound = "δεν βρέθηκε";
 $langWith = "με";
 $langDone = "έγινε διαχειριστής.";
@@ -83,7 +82,6 @@ $langInsertUserInfo = "Εισαγωγή στοιχείων χρήστη";
 // index
 $langAdmin = "Εργαλεία Διαχείρισης Πλατφόρμας";
 $langAdminBy = "Διαχείριση από ";
-$langTools = "Διαχείριση πλατφόρμας eClass";
 $langState = "Διαχείριση Εξυπηρετητή";
 $langDevAdmin ="Διαχείριση Βάσης Δεδομένων";
 $langNomPageAdmin 		= "Διαχείριση";
@@ -601,7 +599,7 @@ $langHome="Επιστροφή στην αρχική σελίδα";
 $langCode="Κωδικός Μαθήματος";
 $langDelCourse="Διαγραφή του μαθήματος";
 $langDelUsers="Διαγραφή χρηστών από το μάθημα";
-$langTitle="Τίτλος Μαθήματος";
+$langCourseTitle="Τίτλος Μαθήματος";
 $langFaculty="Τμήμα";
 $langDescription="Περιγραφή";
 $langConfidentiality="Πρόσβαση στο μάθημα";
@@ -715,7 +713,6 @@ $langVideoText="Παράδειγμα ενός αρχείου RealVideo. Μπορείτε να ανεβάσετε οποιοδή
 $langGoogle="Γρήγορη και Πανίσχυρη μηχανής αναζήτησης";
 $langIntroductionText="Εισαγωγικό κείμενο του μαθήματος. Αντικαταστήτε το με το δικό σας, κάνοντας κλίκ στην <b>Αλλαγή</b>.";
 $langIntroductionTwo="Αυτή η σελίδα επιτρέπει οποιοδήποτε φοιτητή να ανεβάσει ένα αρχείο στο μάθημα. Μπορείτε να στείλετε αρχεία HTML, μόνο αν δεν έχουν εικόνες.";
-$langCourseDescription="Γράψτε μια περιγραφή η οποία θα εμφανίζεται στο κατάλογο μαθημάτων .";
 $langProfessor="Καθηγητής";
 $langAnnouncementEx="Παράδειγμα ανακοίνωσης. Μόνο ο καθηγητής και τυχόν άλλοι διαχειριστές του μαθήματος μπορεί να εισαγάγουν ανακοινώσεις.";
 $langJustCreated="Μόλις δημιουργήσατε με επιτυχία το μάθημα με τίτλο ";
@@ -777,7 +774,6 @@ $langComMod="Τα σχόλια τροποποιήθηκαν";
 $langIn="στο";
 $langNewDir="Όνομα του καινούριου καταλόγου";
 $langImpossible="Δεν είναι δυνατή η λειτουργία";
-$langAddComment="Προσθήκη / αλλαγή πληροφοριών στο έγγραφο: ";
 $langViMod="Η ορατότητα του εγγράφου άλλαξε";
 $langElRen="Το αντικείμενο μετονομάστηκε";
 $langMoveOK="Μεταφορά επιτυχής!";
@@ -938,8 +934,6 @@ $langActivate="Ενεργοποίηση";
 $langDeactivate="Απενεργοποίηση";
 $langNoEx="Αυτή τη στιγμή δεν υπάρχει άσκηση";
 $langNewEx="Καινούρια άσκηση";
-$langPreviousPage = "Προηγούμενη";
-$langNextPage = "Επόμενη";
 $langExerciseType="Τύπος Ασκήσεων";
 $langExerciseName="'Ονομα Άσκησης";
 $langExerciseDescription="Περιγραφή Άσκησης";
@@ -1091,7 +1085,6 @@ $langExerciseSurname="Επώνυμο";
 * external_module.inc.php
 ***********************************************/
 
-$langLinkSite="Σύνδεση σε ένα site";
 $langSubTitle="<br><strong>Συμβουλή: </strong>Αν θέλετε να προσθέσετε ένα σύνδεσμο σε μια σελίδα,
 	πηγαίνετε σε αυτή τη σελίδα, κάντε αποκοπή και επικόλληση τη διεύθυνσή της στη μπάρα των URL
 	στο πάνω μέρος του browser και εισάγετέ το στο πεδίο \"Σύνδεσμος\" παρακάτω.<br><br>";
@@ -1162,9 +1155,8 @@ $m['grades'] = "Βαθμολογία";
 * group.inc.php
 *************************************************************/
 
-$langGroupManagement="Ομάδες χρηστών";
+$langGroupManagement="Διαχείριση ομάδων χρηστών";
 $langNewGroupCreate="Δημιουργία καινούριας ομάδας χρηστών";
-$langGroupCreation="Δημιουργία καινούριας ομάδας χρηστών";
 $langNewGroups="Αριθμός ομάδων χρηστών";
 $langMax="Μέγ.";
 $langPlaces="συμμετέχοντες στην ομάδα χρηστών (προαιρετικό)";
@@ -1173,7 +1165,7 @@ $langDeleteGroups="Διαγραφή όλων των ομάδων χρηστών";
 $langGroupsAdded="ομάδες χρηστών έχουν προστεθεί";
 $langGroupAdded = "ομάδα χρηστών έχει προστεθεί";
 $langGroupsDeleted="Ολες οι ομάδες χρηστών έχουν διαγραφεί";
-$langGroupDel="Η ομάδα χρηστών διαγράφτηκε";
+$langGroupDel="Η ομάδα χρηστών διαγράφηκε";
 
 $langGroupsEmptied="Όλες οι ομάδες χρηστών είναι άδειες";
 $langEmtpyGroups="Εκκαθάριση όλων των ομάδων χρηστών";
@@ -1182,30 +1174,23 @@ $langFillGroups="Συμπλήρωση των ομάδων χρηστών";
 $langGroupsProperties="Ρυθμίσεις ομάδες χρηστών";
 $langStudentRegAllowed="Οι φοιτητές επιτρέπεται να γραφτούν στις ομάδες";
 $langStudentRegNotAllowed="Οι φοιτητές δεν επιτρέπεται να γραφτούν στις ομάδες";
-$langPrivateAccess="Οι περιοχές συζητήσεων των ομάδων χρηστών είναι κλειστά";
-$langNoPrivateAccess="Οι περιοχές συζητήσεων των ομάδων χρηστών είναι κλειστά";
 $langTools="Εργαλεία";
-$langGroup="Ομάδα Χρηστών";
-$langExistingGroups="Ομάδες Χρηστών";
+$langExistingGroups="Υπάρχουσες Ομάδες Χρηστών";
 $langEdit="Διόρθωση";
-$langDeleteGroupWarn = "Είστε σίγουρος ότι θέλετε να διαγράψετε αυτή την ομάδα χρηστών";
-$langDeleteGroupAllWarn = "Είστε σίγουρος ότι θέλετε να διαγράψετε όλες τις ομάδες χρηστών";
-$langEmptyGroupAllWarn = "Είστε σίγουρος ότι θέλετε να διαγράψετε όλες τις ομάδες χρηστών";
+$langDeleteGroupWarn = "Επιβεβαίωση διαγραφής της ομάδας χρηστών";
+$langDeleteGroupAllWarn = "Επιβεβαίωση διαγραφής όλων των ομάδων χρηστών";
 
 // Group Properties
 $langGroupProperties="Ρυθμίσεις ομάδων χρηστών";
 $langGroupAllowStudentRegistration="Οι φοιτητές επιτρέπονται να εγγραφούν στις ομάδες χρηστών";
 $langGroupPrivatise="Κλειστές περιοχές συζητήσεων ομάδων χρηστών";
-$langGroupTools="Εργαλεία";
 $langGroupForum="Περιοχή συζητήσεων";
-$langGroupDocument="Έγγραφα";
 $langValidate="Αλλαγή";
 $langGroupPropertiesModified="Αλλάχτηκαν οι ρυθμίσεις της ομάδας χρηστών";
 
 // Group space
 $langGroupThisSpace="Περιοχή για την ομάδα χρηστών";
 $langGroupName="Όνομα ομάδας χρηστών";
-$langGroupDescription="Περιγραφή";
 $langEditGroup="Διόρθωση της ομάδας χρηστών";
 $langUncompulsory="(προαιρετικό)";
 $langNoGroupStudents="Μη εγγεγραμμένοι φοιτητές";
@@ -2276,7 +2261,6 @@ $langUserName="Όνομα χρήστη (username)";
 $langPass="Συνθηματικό (password)";
 $langHelp="Βοήθεια";
 $langSelection="Επιλογή";
-$langManager="Διαχειριστής";
 $langManagement="Διαχείριση";
 $langReg="Εγγραφή";
 $langMenu ="Μενού";
@@ -2450,7 +2434,6 @@ $langFileName = "Όνομα αρχείου";
 $langFirstName = "Όνομα";
 $langFullScreen = "Μεγάλη/γεμάτη οθόνη ";
 $langGlobalProgress = "Πρόοδος της γραμμής μάθησης: ";
-$langGroups = "Ομάδες Εκπαιδευόμενων";
 $langImport = "Εισαγωγή";
 $langInFrames = "Σε πλαίσια";
 $langInfoProgNameTitle = "Πληροφορία";
@@ -2496,7 +2479,6 @@ $langNoEmail = "Δεν έχει οριστεί email";
 $langNoLearningPath = "Καμία γραμμή μάθησης";
 $langNoModule = "Καμία ενότητα";
 $langNoMoreModuleToAdd = "Όλες οι ενότητες αυτού του μαθήματος ήδη χρησιμοποιήθηκαν σε αυτή τη γραμμή μάθησης.";
-$langNoSpace = "Το ανέβασμα του αρχείου απέτυχε. Δεν υπάρχει αρκετός χώρος στον κατάλογο σας";
 $langNoStartAsset = "Δεν υπάρχει κανένα απόκτημα/στοιχείο έναρξης που να ορίζεται για αυτή την ενότητα.";
 $langNotAttempted = "Δεν έχει επιχειρηθεί";
 $langNotInstalled = "Προέκυψε σφάλμα.  Η εισαγωγή της γραμμής μάθησης απέτυχε.";
@@ -2551,7 +2533,6 @@ $langVisibility = "Ορατό / Αόρατο";
 $langWork = "Εργασίες Εκπαιδευόμενων";
 $langWrongOperation = "Λανθασμένη λειτουργία";
 $langYourBestScore = "Η καλύτερη σου βαθμολογία";
-$langZipNoPhp = "Το αρχείο zip δεν πρέπει να περιέχει αρχεία .php";
 $lang_enroll = "Eγγραφή";
 $langimportLearningPath = "Εισαγωγή γραμμής μάθησης";
 
@@ -2563,7 +2544,7 @@ $langimportLearningPath = "Εισαγωγή γραμμής μάθησης";
 $langActiveTools="Ενεργά εργαλεία";
 $langAdministrationTools="Εργαλεία διαχείρισης";
 $langAdministratorTools="Εργαλεία διαχειριστή";
-$langTools="Εργαλεία μαθήματος";
+$langCourseTools="Εργαλεία μαθήματος";
 
 /**************************************************
 * link.inc.php
@@ -2581,8 +2562,6 @@ $langLinkDelconfirm = "Θέλετε να διαγράψετε τον σύνδεσμο;";
 
 // Category language variables
 $langCategoryName="Όνομα κατηγορίας";
-$langDescriptionGR="Περιγραφή";
-
 $langCategoryAdd = "Προσθήκη κατηγορίας";
 $langCategoryAdded = "Η κατηγορία προστέθηκε";
 $langCategoryMod = "Αλλαγή κατηγορίας";
@@ -3011,7 +2990,6 @@ $l_storecookie	= "Αποθήκευση του ονόματός σας σε ένα «cookie» για ένα χρόνο.";
 
 // Prefs
 $l_prefupdated	= "Οι προτιμήσεις ενημερώθηκαν. <a href=\"index.php\">Πιέστε εδώ για να επιστρέψετε</a> στην κεντρική σελίδα";
-$l_editprefs	= "Αλλαγή των προτιμήσεών σας";
 $l_themecookie	= "ΣΗΜΕΙΩΣΗ: για να αλλάξετε την εμφάνιση των σελίδων πρέπει να έχετε τα cookies ενεργά.";
 $l_alwayssig	= "Προσθήκη υπογραφής σε όλα τα μηνύματα";
 $l_alwaysdisable= "Απενεργοποίηση παντού "; // Only used for next three strings
@@ -3579,7 +3557,6 @@ $langTryAgain = "Δοκιμάστε ξανά!";
 *************************************************************/
 
 // restore_course.php
-$langAdmin = "Εργαλεία Διαχείρισης";
 $langRequest1 = "Κάντε κλικ στο Browse για να αναζητήσετε το αντίγραφο ασφαλείας του μαθήματος που θέλετε να επαναφέρετε. Μετά κάντε κλίκ στο 'Αποστολή'. ";
 $langRestore = "Επαναφορά";
 
@@ -3877,7 +3854,6 @@ $langAdvancedSearch="Σύνθετη αναζήτηση";
 ****************************************************************/
 $langBackHome = "Επιστροφή στην αρχική σελίδα";
 $langAdminNo = "Ο λογαριασμός του διαχειριστή της πλατφόρμας δεν μπορεί να διαγραφεί!";
-$langConfirm = "Θέλετε σίγουρα να διαγραφείτε από την πλατφόρμα?";
 $langExplain = "Για να διαγραφείτε από την πλατφόρμα, πρέπει πρώτα να απεγγραφείτε από τα μαθήματα που είστε εγγεγραμμένος.";
 $langConfirm = "Επιβεβαίωση διαγραφής λογαριασμού";
 $langDelSuccess = "Ο λογαριασμός σας στην πλατφόρμα έχει διαγραφεί.";
@@ -4024,7 +4000,6 @@ $langGroups = "Ομάδες Χρηστών";
 $langIs = "είναι";
 $langLastname = "Επώνυμο";
 $langLegendRequiredFields = "<span class=\"required\">*</span> δείχνει απαραίτητο πεδίο ";
-$langManager = "Διαχειριστής";
 $langMemorizeYourPassord = "Αποστήθισε τα, θα τα χρειαστείς την επόμενη φορά που θα μπεις σε αυτή τη σελίδα.";
 $langModifyProfile = "Αλλαγή του προφίλ μου";
 $langNameOfLang = "Διάταξη";

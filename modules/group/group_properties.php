@@ -82,7 +82,7 @@ tCont;
 		<thead>
 		<tr>
 		<th>
-		$langGroupTools
+		$langTools
 		</th>
 		</tr>
 		<tr>
@@ -119,7 +119,7 @@ tCont;
 		{
 			$tool_content .=  "<input type=checkbox name=\"document\" value=1>";
 		}
-		$tool_content .=  "$langGroupDocument";
+		$tool_content .=  "$langDocument";
 	}
 
 	$tool_content .= <<<tCont2

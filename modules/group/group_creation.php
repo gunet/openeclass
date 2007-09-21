@@ -44,7 +44,7 @@ if (!$is_adminOfCourse) {
 	die("You are not a professor for this lesson");
 }
 
-$nameTools = $langGroupCreation;
+$nameTools = $langNewGroupCreate;
 $navigation[]= array ("url"=>"group.php", "name"=> $langGroupManagement);
 
 $tool_content = <<<tCont

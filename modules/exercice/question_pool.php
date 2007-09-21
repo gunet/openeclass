@@ -283,13 +283,13 @@ $tool_content .= "\"><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" wid
 	$tool_content .= "<small><a href=\"".$PHP_SELF.
 		"?exerciseId=".$exerciseId.
 		"&fromExercise=".$fromExercise.
-		"&page=".($page-1)."\">&lt;&lt; ".$langPreviousPage."</a></small> |";
+		"&page=".($page-1)."\">&lt;&lt; ".$langPrevious."</a></small> |";
 
 	}
 	elseif($nbrQuestions > $limitQuestPage)
 	{
 
-	$tool_content .= "<small>&lt;&lt; $langPreviousPage |</small>";
+	$tool_content .= "<small>&lt;&lt; $langPrevious |</small>";
 
 	}
 
@@ -299,14 +299,14 @@ $tool_content .= "\"><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" wid
 	$tool_content .= "<small><a href=\"".$PHP_SELF.
 	"?exerciseId=".$exerciseId.
 	"&fromExercise=".$fromExercise.
-	"&page=".($page+1)."\">".$langNextPage.
+	"&page=".($page+1)."\">".$langNext.
 	" &gt;&gt;</a></small>";
 
 	}
 	elseif(isset($page))
 	{
 
-	$tool_content .= "<small>$langNextPage &gt;&gt;</small>";
+	$tool_content .= "<small>$langNext &gt;&gt;</small>";
 
 	}
 

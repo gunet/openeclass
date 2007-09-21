@@ -123,7 +123,7 @@ if($is_adminOfCourse) {
     <td valign=\"top\">$fake_code</td></tr>
     <tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langProfessors&nbsp;:</th>
     <td><input type=\"text\" name=\"titulary\" value=\"$titulary\" size=\"60\" class=auth_input></td></tr>
-    <tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langTitle:</th>
+    <tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langCourseTitle:</th>
     <td><input type=\"Text\" name=\"int\" value=\"$int\" size=\"60\" class=auth_input></td></tr>
     <tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langFaculty :</th>
 		<td>

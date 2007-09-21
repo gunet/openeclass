@@ -520,7 +520,7 @@ function lessonToolsMenu(){
 	}
 	array_push($sideMenuSubGroup, $arrMenuType);
 	//	if($is_adminOfCourse) array_push($sideMenuSubGroup, $langActiveTools);
-	//	else array_push($sideMenuSubGroup, $langTools);
+	//	else array_push($sideMenuSubGroup, $langCourseTools);
 
 	while ($toolsRow = mysql_fetch_array($result)) {
 

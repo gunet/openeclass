@@ -69,7 +69,7 @@ function confirmation (name)
 		else
 		{return false;}
 	} else if (name == "emptyall") {
-		if (confirm("'.$langEmptyGroupAllWarn.' ?"))
+		if (confirm("'.$langDeleteGroupAllWarn.' ?"))
 		{return true;}
 		else 
 		{return false;}
@@ -330,11 +330,11 @@ tCont3;
 
 		if($myProperties['document']==1)
 		{
-			$tool_content .= "$langGroupDocument</td><td >$langYes";
+			$tool_content .= "$langDocument</td><td >$langYes";
 		}
 		else
 		{
-			$tool_content .= "$langGroupDocument</td>
+			$tool_content .= "$langDocument</td>
 				<td >$langNo";
 		}
 		$tool_content .= "</td></tr>";

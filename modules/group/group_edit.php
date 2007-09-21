@@ -313,7 +313,7 @@ $tool_content .="
 <table>
 	<thead>
 		<tr>
-			<th>$langGroupDescription $langUncompulsory</th>
+			<th>$langDescription $langUncompulsory</th>
 		</tr>
 		<tr>
 			<td><textarea name=\"description\" rows=6 cols=60 wrap=virtual>$tool_content_group_description</textarea></td>

@@ -169,13 +169,13 @@ if(isset($page))
 	$page_temp = $page-1;
 	$tool_content .= <<<cData
 		<small><a href="$_SERVER[PHP_SELF]?page=${page_temp}">
-	&lt;&lt; ${langPreviousPage}</a></small> |
+	&lt;&lt; ${langPrevious}</a></small> |
 cData;
 
 }
 elseif($nbrExercises > $limitExPage)
 {
-	$tool_content .= "<small>&lt;&lt; ${langPreviousPage} |</small>";
+	$tool_content .= "<small>&lt;&lt; ${langPrevious} |</small>";
 }
 
 if($nbrExercises > $limitExPage)
@@ -183,13 +183,13 @@ if($nbrExercises > $limitExPage)
 
 	$page_temp = $page+1;
 	$tool_content .= <<<cData
-	<small><a href="${PHP_SELF}?page=${page_temp}>">${langNextPage} &gt;&gt;</a></small>
+	<small><a href="${PHP_SELF}?page=${page_temp}>">${langNext} &gt;&gt;</a></small>
 cData;
 
 }
 elseif(isset($page))
 {
-	$tool_content .= "<small>${langNextPage} &gt;&gt;</small>";
+	$tool_content .= "<small>${langNext} &gt;&gt;</small>";
 }
 
 $tool_content .= <<<cData
