@@ -220,8 +220,8 @@ function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) 
 	<tr><td align="justify" colspan="2"><?= $langWarning ?></td></tr>
 	<tr><td>&nbsp;</td></tr>
 	<tr><td><?= $langCourseCode?>:</td><td><input type="text" name="course_code" value="<?= $code ?>"></td></tr>
-	<tr><td><?= $langCourseLang?>:</td><td><? selection($languages, 'course_lang', $lang) ?></td></tr>
-	<tr><td><?= $langCourseTitle?>:</td><td><input type="text" name="course_title" value="<?= $title ?>" size="50"></td></tr>
+	<tr><td><?= $langLang?>:</td><td><? selection($languages, 'course_lang', $lang) ?></td></tr>
+	<tr><td><?= $langTitle?>:</td><td><input type="text" name="course_title" value="<?= $title ?>" size="50"></td></tr>
 	<tr><td><?= $langCourseDesc?>:</td><td><input type="text" name="course_desc" value="<?= $desc ?>" size="50"></td></tr>
 	<tr><td><?= $langCourseFac?>:</td><td><? echo faculty_select($fac) ?></td></tr>
 	<tr><td><?= $langCourseOldFac?>:</td><td><? echo $fac ?></td></tr>

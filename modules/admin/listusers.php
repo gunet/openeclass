@@ -51,7 +51,7 @@ include '../../include/baseTheme.php';
 include 'admin.inc.php';			
 $nameTools = $langVersion;
 $tool_content = "";					// Initialise $tool_content
-$nameTools = $langListUsers;		// Define $nameTools
+$nameTools = $langListUsersActions;		// Define $nameTools
 
 // initalize the incoming variables
 $search = isset($_GET['search'])?$_GET['search']:'';

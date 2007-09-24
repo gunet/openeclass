@@ -158,8 +158,6 @@ function getToolsArray($cat) {
 function loggedInMenu(){
 	global $webDir, $language, $uid, $is_admin, $urlServer, $mysqlMainDb;
 
-	include("$webDir/modules/lang/$language/index.inc.php");
-
 	$sideMenuGroup = array();
 
 	$sideMenuSubGroup = array();
@@ -186,47 +184,43 @@ function loggedInMenu(){
 	if ($row = mysql_fetch_row($res2)) $statut = $row[0];
 
 	if ($statut==1) {
-		array_push($sideMenuText, $langCourseCreate);
+		array_push($sideMenuText, $GLOBALS['langCourseCreate']);
 		array_push($sideMenuLink, $urlServer . "modules/create_course/create_course.php");
 		array_push($sideMenuImg, "create_lesson.gif");
 	}
 
 	if ($statut != 10) {
 
-		array_push($sideMenuText, $langOtherCourses);
+		array_push($sideMenuText, $GLOBALS['langOtherCourses']);
 		array_push($sideMenuLink, $urlServer . "modules/auth/courses.php");
 		array_push($sideMenuImg, "enroll.gif");
 
-		array_push($sideMenuText, $langMyAgenda);
+		array_push($sideMenuText, $GLOBALS['langMyAgenda']);
 		array_push($sideMenuLink, $urlServer . "modules/agenda/myagenda.php");
 		array_push($sideMenuImg, "calendar.gif");
 
 
-		array_push($sideMenuText, $langMyAnnouncements);
+		array_push($sideMenuText, $GLOBALS['langMyAnnouncements']);
 		array_push($sideMenuLink, $urlServer . "modules/announcements/myannouncements.php");
 		array_push($sideMenuImg, "announcements.gif");
 
-		array_push($sideMenuText, $langModifyProfile);
+		array_push($sideMenuText, $GLOBALS['langModifyProfile']);
 		array_push($sideMenuLink, $urlServer . "modules/profile/profile.php");
 		array_push($sideMenuImg, "profile.gif");
 
-		array_push($sideMenuText, $langMyStats);
+		array_push($sideMenuText, $GLOBALS['langMyStats']);
 		array_push($sideMenuLink, $urlServer . "modules/profile/personal_stats.php");
 		array_push($sideMenuImg, "platform_stats.gif");
-
-		//		array_push($sideMenuText, $langSearch);
-		//		array_push($sideMenuLink, $urlServer."modules/search/search.php");
-		//		array_push($sideMenuImg, "search.gif");
 
 	}
 
 	if ($statut == 10) {
 
-		array_push($sideMenuText, $langManuals);
+		array_push($sideMenuText, $GLOBALS['langManuals']);
 		array_push($sideMenuLink, $urlServer."manuals/manual.php");
 		array_push($sideMenuImg, "manual.gif");
 
-		array_push($sideMenuText, $langContact);
+		array_push($sideMenuText, $GLOBALS['langContact']);
 		array_push($sideMenuLink, $urlServer."info/contact.php");
 		array_push($sideMenuImg, "contact.gif");
 	}
@@ -251,8 +245,6 @@ function loggedOutMenu(){
 
 	global $webDir, $language, $urlServer, $is_eclass_unique, $mysqlMainDb;
 
-	include("$webDir/modules/lang/$language/index.inc.php");
-
 	$sideMenuGroup = array();
 
 	$sideMenuSubGroup = array();
@@ -265,7 +257,7 @@ function loggedOutMenu(){
 	$arrMenuType['text'] = 'none';
 	array_push($sideMenuSubGroup, $arrMenuType);
 
-	array_push($sideMenuText, $langListFaculte);
+	array_push($sideMenuText, $GLOBALS['langListFaculte']);
 	array_push($sideMenuLink, $urlServer."modules/auth/listfaculte.php");
 	array_push($sideMenuImg, "faculte.gif");
 
@@ -278,24 +270,16 @@ function loggedOutMenu(){
 	$newuser = ($is_eclass_unique==1)?'newuser.php':'newuser_info.php';
 	$newprof = ($is_eclass_unique==1)?'newprof.php':'newprof_info.php';
 
-	array_push($sideMenuText, $langNewUser);
-	//	array_push($sideMenuText, $langReg);
-	//	array_push($sideMenuLink, $urlServer."modules/auth/$newuser");
+	array_push($sideMenuText, $GLOBALS['langNewUser']);
 	array_push($sideMenuLink, $urlServer."modules/auth/registration.php");
 	array_push($sideMenuImg, "user_reg.gif");
-	//	array_push($sideMenuText, $langProfReq);
-	//	array_push($sideMenuLink, $urlServer."modules/auth/$newprof");
-	//	array_push($sideMenuImg, "prof_reg.gif");
-	array_push($sideMenuText, $langManuals);
+	array_push($sideMenuText, $GLOBALS['langManuals']);
 	array_push($sideMenuLink, $urlServer."manuals/manual.php");
 	array_push($sideMenuImg, "manual.gif");
-	array_push($sideMenuText, $langInfoPlat);
+	array_push($sideMenuText, $GLOBALS['langInfoPlat']);
 	array_push($sideMenuLink, $urlServer."info/about.php");
 	array_push($sideMenuImg, "plat_id.gif");
-	//	array_push($sideMenuText, $langSupportForum);
-	//	array_push($sideMenuLink, "http://eclass.gunet.gr/teledu/index.htm");
-	//	array_push($sideMenuImg, "support.gif");
-	array_push($sideMenuText, $langContact);
+	array_push($sideMenuText, $GLOBALS['langContact']);
 	array_push($sideMenuLink, $urlServer."info/contact.php");
 	array_push($sideMenuImg, "contact.gif");
 
@@ -312,7 +296,6 @@ function adminMenu(){
 	global $webDir, $urlAppend, $language, $phpSysInfoURL, $phpMyAdminURL;
 	global $siteName, $is_admin, $urlServer, $mysqlMainDb, $close_user_registration;
 
-	include($webDir."modules/lang/$language/admin.inc.php");
 	/* Check for LDAP server entries */
 	$ldap_entries = mysql_fetch_array(db_query("SELECT ldapserver FROM institution",$mysqlMainDb));
 	if ($ldap_entries['ldapserver'] <> NULL)
@@ -333,35 +316,35 @@ function adminMenu(){
 	$arrMenuType['text'] = $langAdminUsers;
 	array_push($sideMenuSubGroup, $arrMenuType);
 
-	array_push($sideMenuText, $langProfReg);
+	array_push($sideMenuText, $GLOBALS['langProfReg']);
 
 	array_push($sideMenuLink, "../auth/newprofadmin.php");
 	array_push($sideMenuImg, "register_prof.gif");
-	array_push($sideMenuText, $langProfOpen);
+	array_push($sideMenuText, $GLOBALS['langProfOpen']);
 	array_push($sideMenuLink, "../admin/listreq.php");
 
 	array_push($sideMenuImg, "open_prof.gif");
-	array_push($sideMenuText, $langInfoMail);
+	array_push($sideMenuText, $GLOBALS['langInfoMail']);
 	array_push($sideMenuLink, "../admin/mailtoprof.php");
 	array_push($sideMenuImg, "email_prof.gif");
 
 	// check for close user registration
 	if (isset($close_user_registration) and $close_user_registration == TRUE) {
-		array_push($sideMenuText, $langUserOpen);
+		array_push($sideMenuText, $GLOBALS['langUserOpen']);
 		array_push($sideMenuLink, "../admin/listrequsers.php");
 		array_push($sideMenuImg, "register_prof.gif");
 	}
 
-	array_push($sideMenuText, $langListUsers);
+	array_push($sideMenuText, $GLOBALS['langListUsers']);
 	array_push($sideMenuLink, "../admin/listusers.php");
 	array_push($sideMenuImg, "user_list.gif");
-	array_push($sideMenuText, $langSearchUser);
+	array_push($sideMenuText, $GLOBALS['langSearchUser']);
 	array_push($sideMenuLink, "../admin/search_user.php");
 	array_push($sideMenuImg, "user_search.gif");
-	array_push($sideMenuText, $langAddAdminInApache);
+	array_push($sideMenuText, $GLOBALS['langAddAdminInApache']);
 	array_push($sideMenuLink, "../admin/addadmin.php");
 	array_push($sideMenuImg, "user_add_admin.gif");
-	array_push($sideMenuText, $langUserAuthentication);
+	array_push($sideMenuText, $GLOBALS['langUserAuthentication']);
 	array_push($sideMenuLink, "../admin/auth.php");
 	array_push($sideMenuImg, "user_auth.gif");
 
@@ -382,19 +365,19 @@ function adminMenu(){
 	$arrMenuType['text'] = $langAdminCours;
 	array_push($sideMenuSubGroup, $arrMenuType);
 
-	array_push($sideMenuText, $langListCours);
+	array_push($sideMenuText, $GLOBALS['langListCours']);
 	array_push($sideMenuLink, "../admin/listcours.php");
 	array_push($sideMenuImg, "lessons_list.gif");
-	array_push($sideMenuText, $langSearchCourses);
+	array_push($sideMenuText, $GLOBALS['langSearchCourses']);
 	array_push($sideMenuLink, "../admin/searchcours.php");
 	array_push($sideMenuImg, "lessons_search.gif");
-	array_push($sideMenuText, $langRestoreCourse);
+	array_push($sideMenuText, $GLOBALS['langRestoreCourse']);
 	array_push($sideMenuLink, "../course_info/restore_course.php");
 	array_push($sideMenuImg, "lesson_recovery.gif");
-	array_push($sideMenuText, $langSpeeSubscribe);
+	array_push($sideMenuText, $GLOBALS['langSpeeSubscribe']);
 	array_push($sideMenuLink, "../admin/speedSubscribe.php");
 	array_push($sideMenuImg, "quick_reg.gif");
-	array_push($sideMenuText, $langListFaculte);
+	array_push($sideMenuText, $GLOBALS['langListFaculte']);
 	array_push($sideMenuLink, "../admin/addfaculte.php");
 	array_push($sideMenuImg, "schools_list.gif");
 
@@ -494,7 +477,6 @@ function adminMenu(){
 function lessonToolsMenu(){
 	global $is_admin, $is_adminOfCourse, $uid, $mysqlMainDb;
 	global $webDir, $language;
-	include($webDir."modules/lang/$language/lessonTools.inc.php");
 
 	$sideMenuGroup = array();
 

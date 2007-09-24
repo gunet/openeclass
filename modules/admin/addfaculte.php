@@ -60,20 +60,20 @@ $require_admin = TRUE;
 // Include baseTheme
 include '../../include/baseTheme.php';
 // Define $nameTools
-$nameTools=$langListFaculte;
+$nameTools=$langListFaculteActions;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 if (isset($a)) {
 	switch ($a) {
 		case 1:
-			$navigation[] = array("url" => "addfaculte.php", "name" => $langListFaculte);
+			$navigation[] = array("url" => "addfaculte.php", "name" => $langListFaculteActions);
 			$nameTools = $langFaculteAdd;
 			break;
 		case 2:
-			$navigation[] = array("url" => "addfaculte.php", "name" => $langListFaculte);
+			$navigation[] = array("url" => "addfaculte.php", "name" => $langListFaculteActions);
 			$nameTools = "Διαγραφή Τμήματος";
 			break;
 		case 3:
-			$navigation[] = array("url" => "addfaculte.php", "name" => $langListFaculte);
+			$navigation[] = array("url" => "addfaculte.php", "name" => $langListFaculteActions);
 			$nameTools = "Επεξεργασία Τμήματος";
 			break;
 	}
@@ -89,7 +89,7 @@ if (!isset($a)) {
 	$a=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM faculte"));
 	// Constrant a table
 	$tool_content .= "<table width=\"99%\"><caption>".$langFaculteCatalog."</caption><thead>
-	<tr><th scope=\"col\">$langCodeF</th><th scope=\"col\">".$langFaculteDepartment."</th scope=\"col\"><th>".$langActions."</th></tr></thead></tbody>";
+	<tr><th scope=\"col\">$langCode</th><th scope=\"col\">".$langFaculteDepartment."</th scope=\"col\"><th>".$langActions."</th></tr></thead></tbody>";
 	$tool_content .= "<tr><td colspan=\"3\"><i>".$langManyExist." $a[0] ".$langFaculteDepartments."</i></td</tr>";
 	$sql=mysql_query("SELECT code,name,id FROM faculte");
 	// For all facultes display some info

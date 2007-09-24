@@ -117,7 +117,7 @@ if (isset($c)) {
     <td>".$row['faculte']."</td>
 </tr>";
 	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>".$langCourseCode.":</b></td>
+    <td width=\"3%\" nowrap><b>".$langCode.":</b></td>
     <td>".$row['code']."</td>
 </tr>";
 	$tool_content .= "  <tr>
@@ -180,7 +180,7 @@ if (isset($c)) {
 	$tool_content .= "<table width=\"99%\"><caption>".$langOtherActions."</caption><tbody>";
 	// Users list
 	$tool_content .= "  <tr>
-    <td><a href=\"listusers.php?c=".htmlspecialchars($c)."\">".$langListUsers."</a></td>
+    <td><a href=\"listusers.php?c=".htmlspecialchars($c)."\">".$langListUsersActions."</a></td>
   </tr>";
   // Register unregister users
 	$tool_content .= "  <tr>

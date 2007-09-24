@@ -100,13 +100,12 @@ $langEmailNotSend = "Σφάλμα κατά την αποστολή e-mail στη διεύθυνση";
 $langFound = "Βρέθηκαν";
 
 $langListCours = "Λίστα Μαθημάτων / Ενέργειες";
-$langListUsers = "Λίστα Χρηστών / Ενέργειες";
+$langListUsersActions = "Λίστα Χρηστών / Ενέργειες";
 $langSearchUser = "Αναζήτηση Χρήστη";
 $langInfoMail = "Ενημερωτικό email";
 $langProfReg = "Εγγραφή Καθηγητή";
 $langProfOpen = "Αιτήσεις Καθηγητών";
 $langUserOpen = "Αιτήσεις Φοιτητών";
-$langListFaculte = "Λίστα Σχολών / Ενέργειες";
 $langPHPInfo = "Πληροφορίες για την PHP";
 $langManuals = "Διαθέσιμα Εγχειρίδια";
 $langAdminManual = "Εγχειρίδιο Διαχειριστή";
@@ -232,7 +231,6 @@ $langQuickAddDelUserToCoursSuccess = "Η διαχείριση χρηστών ολοκληρώθηκε με επιτυ
 $langFormUserManage = "Φόρμα Διαχείρισης Χρηστών";
 $langListNotRegisteredUsers = "Λίστα Μη Εγγεγραμμένων Χρηστών";
 $langStudents = "Εκπαιδευόμενοι";
-$langProfessors = "Εκπαιδευτές";
 $langListRegisteredStudents = "Λίστα Εγγεγραμμένων Εκπαιδευομένων";
 $langListRegisteredProfessors = "Λίστα Εγγεγραμμένων Εκπαιδευτών";
 
@@ -248,7 +246,6 @@ $langNoticeDel = " Η διαγραφή του μαθήματος θα διαγράψει επίσης τους εγγεγραμμέν
 $langCourseEdit = "Επεξεργασία Μαθήματος";
 $langCourseInfo = "Στοιχεία Μαθήματος";
 $langDepartment = "Τμήμα";
-$langCourseCode = "Κωδικός";
 $langDidaskon = "Διδάσκων";
 $langQuota = "Όρια αποθηκευτικού χώρου";
 $langCourseStatus = "Κατάσταση Μαθήματος";
@@ -315,7 +312,6 @@ $langldap_bind_user = "Username για LDAP binding";
 $langldap_bind_pw = "Password για LDAP binding";
 $langUserAuthentication = "Πιστοποίηση Χρηστών";
 $langSearchCourses = "Αναζήτηση Μαθημάτων";
-$langSettings = "Ρυθμίσεις";
 $langActSuccess = "Μόλις ενεργοποιήσατε την ";
 $langDeactSuccess = "Μόλις απενεργοποιήσατε την ";
 $langThe = "Η ";
@@ -596,7 +592,7 @@ $langBackupCourse="Αντίγραφο ασφαλείας του μαθήματος";
 $langModifInfo="Διαχείριση Μαθήματος";
 $langModifDone="Η πληροφορία έχει αλλάξει";
 $langHome="Επιστροφή στην αρχική σελίδα";
-$langCode="Κωδικός Μαθήματος";
+$langCode="Κωδικός";
 $langDelCourse="Διαγραφή του μαθήματος";
 $langDelUsers="Διαγραφή χρηστών από το μάθημα";
 $langCourseTitle="Τίτλος Μαθήματος";
@@ -652,7 +648,6 @@ $langEx="π.χ. <i>Ιστορία της Τέχνης</i>";
 $langFac="Σχολή / Τμήμα";
 $langDivision = "Τομέας";
 $langTargetFac="Η σχολή ή το τμήμα που υπάγεται το μάθημα";
-$langMax="με λατινικά γράμματα μέχρι 12 χαρακτήρες, π.χ. <i>FYS1234</i>";
 $langDoubt="Αν δεν ξέρετε το κωδικό του μαθήματος συμβουλευτείτε";
 $langExplanation="Οταν πατήσετε «Δημιουργία», θα δημιουργηθεί η ιστοσελίδα του μαθήματος με Περιοχή συζητήσεων,
 Ατζέντα, κ.λπ. την οποία μπορείτε να τροποποιήσετε αργότερα σύμφωνα με τις απαιτήσεις σας.";
@@ -775,12 +770,10 @@ $langIn="στο";
 $langNewDir="Όνομα του καινούριου καταλόγου";
 $langImpossible="Δεν είναι δυνατή η λειτουργία";
 $langViMod="Η ορατότητα του εγγράφου άλλαξε";
-$langElRen="Το αντικείμενο μετονομάστηκε";
 $langMoveOK="Μεταφορά επιτυχής!";
 $langMoveNotOK="Μεταφορά ανεπιτυχής";
 
 // Special for group documents
-$langGroupManagement="Διαχείριση Ομάδας Χρηστών";
 $langGroupSpace="Περιοχή ομάδας χρηστών";
 $langGroupSpaceLink="Ομάδα χρηστών";
 $langGroupForumLink="Περιοχή συζητήσεων ομάδας χρηστών";
@@ -1098,8 +1091,7 @@ $langNotAllowed = "Μη επιτρεπτή ενέργεια";
 * faculte.inc.php
 ***********************************************/
 
-$langCodeF="Κωδικός";
-$langListFaculte="Κατάλογος Σχολών / Τμημάτων - Ενέργειες";
+$langListFaculteActions="Κατάλογος Σχολών / Τμημάτων - Ενέργειες";
 $langCodeFaculte1="Κωδικός Σχολής / Τμήματος";
 $langCodeFaculte2="(με λατινικούς χαρακτήρες μόνο, π.χ. MATH)";
 $langAddFaculte="Προσθήκη Σχολών / Τμημάτων";
@@ -2463,11 +2455,9 @@ $langLogin = "Είσοδος";
 $langMakeInvisible = "Μετατροπή σε αόρατο";
 $langMaxFileSize = "Μέγιστο μέγεθος αρχείου: ";
 $langMinuteShort = "ελαχ.";
-$langModule = "Ενότητα";
 $langModuleMoved = "Μετακίνηση ενότητας";
 $langModuleOfMyCourse = "Χρήση ενότητας αυτού του μαθήματος";
 $langModuleStillInPool = "Ενότητες αυτής της γραμμής θα είναι ακόμα διαθέσιμες στο σύνολο των ενοτήτων";
-$langModules = "Ενότητες";
 $langModulesPoolToolName = "Σύνολο ενοτήτων";
 $langMyCourses = "Τα μαθήματά μου";
 $langNameOfLang = "Διάταξη";
@@ -2814,7 +2804,6 @@ $langLoginBeforePost3 = "κάνετε login στην Τάξη";
 // page_header.php
 
 $langNewTopic="Νέο θέμα";
-$langGroupForumLink="Περιοχή συζητήσεων ομάδας";
 $langGroupDocumentsLink="Έγγραφα ομάδας ";
 $l_forum 	= "Περιοχή συζητήσεων";
 $l_forums	= "Περιοχές συζητήσεων";
@@ -3595,9 +3584,6 @@ $langUName = "Ονομάζεται";
 
 $langInfo1 = "Το αντίγραφο ασφαλείας που στείλατε, περιείχε τις παρακάτω πληροφορίες για το μάθημα.";
 $langInfo2 = "Μπορείτε να αλλάξετε τον κωδικό του μαθήματος και ότι άλλο θέλετε (π.χ. περιγραφή, καθηγητής κ.λπ.)";
-$langCourseCode = "Κωδικός";
-$langCourseLang = "Γλώσσα";
-$langCourseTitle = "Τίτλος";
 $langCourseDesc = "Περιγραφή";
 $langCourseFac = "Σχολή / τμήμα ";
 $langCourseOldFac = "Παλιά σχολή / τμήμα";
@@ -4009,10 +3995,6 @@ $langOtherCourses = "Λίστα Μαθημάτων";
 $langPersonalCourseList = "Προσωπική λίστα μαθήματος";
 $langPreview = "Παρουσίαση/προβολή";
 $langSaveChanges = "Αποθήκευση αλλαγών";
-$langSettings = "δημιουργήθηκε με επιτυχία!
- Τα προσωπικά στοιχεία του λογαριασμού σας είναι τα εξής:
-
-Όνομα χρήστη:";
 $langTheSystemIsCaseSensitive = "(γίνεται διάκριση μεταξύ κεφαλαίων και πεζών γραμμάτων.)";
 $langUpdateImage = "Αλλαγή εικόνας";
 $langUserIsPlaformAdmin = "είναι διαχειριστής της πλατφόρμας ";
