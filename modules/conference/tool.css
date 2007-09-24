@@ -7,7 +7,7 @@
 	left:220px;
 	
 	border:1px solid #a2a2a3;
-	background:#e5edf9;
+	background: #edecdf;
 	}
 
 #video{
@@ -19,7 +19,7 @@
 	left:220px;
 	
 	border:1px solid #a2a2a3;
-	background:#e5edf9;
+	background: #edecdf;
 }
 #video_presantation_control{
 	position:absolute;
@@ -30,7 +30,7 @@
 	left:220px;
 	
 	border:1px solid #a2a2a3;
-	background:#e5edf9;
+	background: #edecdf;
 }
 
 #presantation_window{
@@ -40,9 +40,9 @@
 	/*border:groove;*/
 	top:210px;
 	left:430px;
-	
+
 	border:1px solid #a2a2a3;
-	background:#e5edf9;
+	background: #edecdf;
 }
 
 #iframe{
@@ -79,5 +79,5 @@
 	width:700px;
 	
 	border:1px solid #a2a2a3;
-	background:#e5edf9;
+	background: #edecdf;
 }

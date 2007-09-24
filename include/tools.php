@@ -259,7 +259,7 @@ function loggedOutMenu(){
 
 	array_push($sideMenuText, $GLOBALS['langListFaculte']);
 	array_push($sideMenuLink, $urlServer."modules/auth/listfaculte.php");
-	array_push($sideMenuImg, "faculte.gif");
+	array_push($sideMenuImg, "black-arrow1.gif");
 
 	/* Check for LDAP server entries */
 	$ldap_entries = mysql_fetch_array(db_query("SELECT ldapserver FROM institution", $mysqlMainDb));
@@ -272,16 +272,19 @@ function loggedOutMenu(){
 
 	array_push($sideMenuText, $GLOBALS['langNewUser']);
 	array_push($sideMenuLink, $urlServer."modules/auth/registration.php");
+	array_push($sideMenuImg, "black-arrow1.gif");
 	array_push($sideMenuImg, "user_reg.gif");
 	array_push($sideMenuText, $GLOBALS['langManuals']);
 	array_push($sideMenuLink, $urlServer."manuals/manual.php");
-	array_push($sideMenuImg, "manual.gif");
+
+	array_push($sideMenuImg, "black-arrow1.gif");
 	array_push($sideMenuText, $GLOBALS['langInfoPlat']);
 	array_push($sideMenuLink, $urlServer."info/about.php");
+	array_push($sideMenuImg, "black-arrow1.gif");
 	array_push($sideMenuImg, "plat_id.gif");
 	array_push($sideMenuText, $GLOBALS['langContact']);
 	array_push($sideMenuLink, $urlServer."info/contact.php");
-	array_push($sideMenuImg, "contact.gif");
+	array_push($sideMenuImg, "black-arrow1.gif");
 
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);

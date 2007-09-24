@@ -42,30 +42,31 @@ $numrows = mysql_num_rows($result);
 
 if (isset($result))  {
 
-$tool_content .= "<script type='text/javascript' src='sorttable.js'></script>
-        <table width='99%' class='sortable' id='t1' cellspacing='2' cellpadding='10' border='0' 
-				style='border: 1px solid $table_border'>
-        <tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3;' height=25>
-					<b>$m[department]</b></th></tr>";
+$tool_content .= "
+    <script type='text/javascript' src='sorttable.js'></script>
+    <table width='99%' class='sortable' id='t1'>
+    <thead>
+    <tr>
+	  <th height=25><b>$m[department]</b></th>
+    </tr>\n";
 
  while ($fac = mysql_fetch_array($result)) {
-	$tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#F1F1F1'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
-  $tool_content .= "<td class='kk' height=25>&nbsp;<img src='../../images/arrow_blue.gif'>
-	&nbsp;<a href='opencourses.php?fc=$fac[id]' class='mainpage'>$fac[name]</a>
-	<small><font color=#4175B9>($fac[code])</font></small>&nbsp;";
+	$tool_content .= "    <tr onMouseOver=\"this.style.backgroundColor='#edecdf'\" onMouseOut=\"this.style.backgroundColor='transparent'\">\n";
+  	$tool_content .= "      <td height=25>&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<a href='opencourses.php?fc=$fac[id]'>$fac[name]</a><small>($fac[code])</small>&nbsp;";
 
      $n=mysql_query("SELECT COUNT(*) FROM cours_faculte WHERE faculte='$fac[name]'");
      $r=mysql_fetch_array($n);
 
-    $tool_content .= "<small><font color=#AAAAAA>($r[0]  "
-      .  ($r[0] == 1? $langAvCourse: $langAvCourses) . ")</font><small>
-              </td>
-        		</tr>\n";
+    $tool_content .= "<small>($r[0]  "
+      .  ($r[0] == 1? $langAvCourse: $langAvCourses) . ")<small></td>
+    </tr>\n";
         }
-      $tool_content .= "</table>";
+      $tool_content .= "
+    </thead>\n
+	</table>";
   }
 
 $tool_content .= "</div>";
 
-draw($tool_content, 0, 'auth');
+draw($tool_content, 0);
 ?>
