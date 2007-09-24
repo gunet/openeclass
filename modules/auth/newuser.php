@@ -46,50 +46,50 @@ $tool_content = "";		// Initialise $tool_content
 
 if (isset($close_user_registration) and $close_user_registration == TRUE) {
 			 $tool_content .= "<div class='td_main'>$langForbidden</div>";
-       draw($tool_content,0,'auth');
+       draw($tool_content,0);
 	     exit;
  }
 
 // Main body
 $tool_content .= "
-<FIELDSET>
-<LEGEND>$langUserFillData</LEGEND>
 <form action=\"newuser_second.php\" method=\"post\" name=\"newusersecond\">
 
-<table cellspacing='1' cellpadding='1'>
+
+<table width=\"99%\">
+<thead>
 <tr>
-	<th>$langName</th>
+	<th class='left' width='20%'>$langName</th>
 	<td><input type=\"text\" name=\"prenom_form\"><small>&nbsp;(*)</small></td>
 </tr>
 <tr>
-	<th>$langSurname</th>
+	<th class='left'>$langSurname</th>
 	<td><input type=\"text\" name=\"nom_form\"><small>&nbsp;(*)</small></td>
 </tr>
 <tr>
-	<th>$langUsername</th>
+	<th class='left'>$langUsername</th>
 	<td><input type=\"text\" name=\"uname\" size=\"20\" maxlength=\"20\"><small>&nbsp;(*) (**) $langUserNotice</small></td>
 </tr>
 
 <tr>
-	<th>$langPass</th>
+	<th class='left'>$langPass</th>
 	<td><input type=\"password\" name=\"password1\" size=\"20\" maxlength=\"20\"><small>&nbsp;(*) (**)</small></td>
 </tr>
 <tr>
-	<th>$langConfirmation</th>
+	<th class='left'>$langConfirmation</th>
 	<td valign=\"top\"><input type=\"password\" name=\"password\" size=\"20\" maxlength=\"20\"><small>&nbsp;(*) (**) $langUserNotice</small></td>
 </tr>
 
 <tr>
-	<th>$langEmail</th>
+	<th class='left'>$langEmail</th>
 	<td><input type=\"text\" name=\"email\"> $langEmailNotice</td>
 </tr>
 
 <tr>
-	<th>$langAm</th>
+	<th class='left'>$langAm</th>
 	<td><input type=\"text\" name=\"am\"></td>
 </tr>
 <tr>
-	<th>$langDepartment</th>
+	<th class='left'>$langDepartment</th>
 	<td><select name=\"department\">";
 $deps=mysql_query("SELECT name, id FROM faculte ORDER BY id");
 while ($dep = mysql_fetch_array($deps)) 
@@ -106,15 +106,15 @@ $tool_content .= "</select>
 <p>$langRequiredFields <br/>$star2 $langCharactersNotAllowed</p>
 	</td>
 </tr>
+</thead>
 </table>
 
-</td></tr>
 
 </form>
-</FIELDSET>
+
 
 ";
 
-draw($tool_content,0,'auth');
+draw($tool_content,0);
 
 ?>

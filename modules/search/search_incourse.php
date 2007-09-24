@@ -77,69 +77,42 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 				emfanish formas anahzthshs ean oi oroi anazhthshs einai kenoi 
 ***********************************************************************************************/
 	
-		$tool_content .= "
-			<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
-			<FIELDSET>
-			<LEGEND>$langSearchWith</LEGEND>
-			<table width=\"99%\">
-			
-			<tr>
-			   <td colspan=\"2\">
-			   &nbsp;
-			   </td>
-			</tr>
-			<tr>
-				<td valign=\"top\">
-					<p><b>$langOR</b></p>
-				</td>				
-				<td valign=\"top\" colspan=\"2\">
-					<input name=\"or_search_terms\" type=\"text\" size=\"80\"/>
-				</td>
-			</tr>
-				
-				<!-- <tr>
-				<td valign=\"middle\" align=\"right\">
-					<b>$langNOT</b>
-				</td>				
-				<td valign=\"middle\">
-					<input name=\"not_search_terms\" type=\"text\" size=\"80\" />
-				</td>
-				</tr> -->
-			<tr>
-				<td valign=\"top\" rowspan=\"4\">
-				     <p><b>$langSearchIn</b></p>
-			    </td>
-				<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"7\" checked=\"checked\" />$langAnnouncements</td>
-			    <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"1\" checked=\"checked\" />$langAgenda</td>
-            </tr>
-			<tr>
-				<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" checked=\"checked\" />$langCourseDesc</td>
-        		<td><input name=\"subsystems[]\" type=\"checkbox\" value=\"3\" checked=\"checked\" />$langDoc</td>
-            </tr>
-			<tr>
-			    <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"9\" checked=\"checked\" />$langForums</td>
-                <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"10\" checked=\"checked\" />$langExercices</td>
-            </tr>
-			<tr>
-				<td><input name=\"subsystems[]\" type=\"checkbox\" value=\"4\" checked=\"checked\" />$langVideo</td>
-                <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"2\" checked=\"checked\" />$langLinks</td>
-            </tr>
-			<tr>
-				<td colspan=\"3\">&nbsp;</td>
-            </tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td colspan=\"2\"><input type=\"Submit\" name=\"submit\" value=\"$langDoSearch\" />
-					&nbsp;
-					<input type=\"Submit\" name=\"submit\" value=\"$langNewSearch\" /></td>
-            </tr>
-			
-			</table>		
-			<br/>
-					
-				
-			</FIELDSET>
-			</form>
+	$tool_content .= "
+	<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
+	<table width=\"99%\">
+	<thead>
+	<tr>
+		<th class='left'>$langOR</td>				
+		<td colspan=\"2\"><input name=\"or_search_terms\" type=\"text\" size=\"80\"/></td>
+	</tr>
+	<tr>
+		<th width=\"30%\" class='left' valign=\"top\" rowspan=\"4\">$langSearchIn</td>
+		<td width=\"35%\"><input type=\"checkbox\" name=\"subsystems[]\" value=\"7\" checked=\"checked\" />$langAnnouncements</td>
+		<td width=\"35%\"><input name=\"subsystems[]\" type=\"checkbox\" value=\"1\" checked=\"checked\" />$langAgenda</td>
+    </tr>
+	<tr>
+		<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" checked=\"checked\" />$langCourseDesc</td>
+        <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"3\" checked=\"checked\" />$langDoc</td>
+    </tr>
+	<tr>
+		<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"9\" checked=\"checked\" />$langForums</td>
+        <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"10\" checked=\"checked\" />$langExercices</td>
+    </tr>
+	<tr>
+		<td><input name=\"subsystems[]\" type=\"checkbox\" value=\"4\" checked=\"checked\" />$langVideo</td>
+        <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"2\" checked=\"checked\" />$langLinks</td>
+    </tr>
+	<tr>
+		<td colspan=\"3\">&nbsp;</td>
+    </tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td colspan=\"2\"><input type=\"Submit\" name=\"submit\" value=\"$langDoSearch\" />&nbsp;<input type=\"Submit\" name=\"submit\" value=\"$langNewSearch\" /></td>
+    </tr>
+	</thead>		
+	</table>		
+
+	</form>
 		";
 	
 }else 
@@ -545,7 +518,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 
 }//telos anazhthshs (if empty($search_terms) = false)
 
-draw($tool_content, 2, 'search');
+draw($tool_content, 0);
 
 
 //katharisma ths $search_terms gia apofygh lathwn

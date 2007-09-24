@@ -121,7 +121,7 @@ float: left;
 * html #opslist li:first-child { border-left: 0; }
 
 table, th, td {
-	border-collapse: collapse;
+	border-collapse: separate;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
 }
@@ -168,13 +168,15 @@ thead th {
 	font-size: 90% !important;
 }
 
+.left{
+	text-align: left;
+}
+
 thead td {
 	text-align: left;
-    border: 1px dotted #edecdf;
 	padding: 6px;
 	font-size: 90% !important;
 }
-
 
 
 tbody th {
