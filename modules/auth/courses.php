@@ -134,7 +134,7 @@ else
                                $n=db_query("SELECT COUNT(*) FROM cours_faculte WHERE faculte='$fac[name]'");
                                 $r=mysql_fetch_array($n);
                               $tool_content .= "&nbsp;<small><font color=#AAAAAA>($r[0]  "
-                                                 . ($r[0] == 1? $avlesson: $avlessons) . ")</font><small>
+                                                 . ($r[0] == 1? $langAvCours: $langAvCourses) . ")</font><small>
                                   </td>
                                   </tr>\n";
                                 }
@@ -394,7 +394,7 @@ return $retString;
 
 function collapsed_facultes_vert($fac) {
 	
-	global $avlesson, $avlessons;
+	global $langAvCourse, $langAvCourses;
 	$retString = "";
 /*
 $result = mysql_query(
@@ -422,7 +422,7 @@ $result = mysql_query(
 			WHERE cours.faculte='$fac[f]' AND cours.visible <> '0'");
                 $r = mysql_fetch_array($n);
                 $retString .= " <span style='font-size: 10pt'>($r[0] "
-                        . ($r[0] == 1? $avlesson: $avlessons) . ")</span><br>\n";
+                        . ($r[0] == 1? $langAvLesson: $langAvCourses) . ")</span><br>\n";
 		$retString .= "</blockquote>";
 	}
 		$retString .= "<br>";

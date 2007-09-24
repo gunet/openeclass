@@ -169,12 +169,10 @@ function loggedInMenu(){
 	$arrMenuType['type'] = 'none';
 	$arrMenuType['text'] = 'none';
 	array_push($sideMenuSubGroup, $arrMenuType);
-	//	array_push($sideMenuSubGroup, $langMenu);
-
 	// User is not currently in a course - set statut from main database
 
 	if (isset($is_admin) and $is_admin) {
-		array_push($sideMenuText, "<b>$langAdminTool</b>");
+		array_push($sideMenuText, "<b>$GLOBALS[langAdminTool]</b>");
 		array_push($sideMenuLink, $urlServer . "modules/admin/");
 		array_push($sideMenuImg, "admin-tools.gif");
 	}
@@ -314,7 +312,7 @@ function adminMenu(){
 	//user administration
 	$arrMenuType = array();
 	$arrMenuType['type'] = 'text';
-	$arrMenuType['text'] = $langAdminUsers;
+	$arrMenuType['text'] = $GLOBALS['langAdminUsers'];
 	array_push($sideMenuSubGroup, $arrMenuType);
 
 	array_push($sideMenuText, $GLOBALS['langProfReg']);
@@ -363,7 +361,7 @@ function adminMenu(){
 
 	$arrMenuType = array();
 	$arrMenuType['type'] = 'text';
-	$arrMenuType['text'] = $langAdminCours;
+	$arrMenuType['text'] = $GLOBALS['langAdminCours'];
 	array_push($sideMenuSubGroup, $arrMenuType);
 
 	array_push($sideMenuText, $GLOBALS['langListCours']);
@@ -396,28 +394,28 @@ function adminMenu(){
 
 	$arrMenuType = array();
 	$arrMenuType['type'] = 'text';
-	$arrMenuType['text'] = $langState;
+	$arrMenuType['text'] = $GLOBALS['langState'];
 	array_push($sideMenuSubGroup, $arrMenuType);
 
-	array_push($sideMenuText, $langCleanUp);
+	array_push($sideMenuText, $GLOBALS['langCleanUp']);
   array_push($sideMenuLink, "../admin/cleanup.php");
   array_push($sideMenuImg, "clean.gif");
 
 	if (isset($phpSysInfoURL) && PHP_OS!="WIN32" && PHP_OS!="WINNT") {
-		array_push($sideMenuText, $langSysInfo);
+		array_push($sideMenuText, $GLOBALS['langSysInfo']);
 		array_push($sideMenuLink, $phpSysInfoURL);
 		array_push($sideMenuImg, "system_info.gif");
 	}
-	array_push($sideMenuText, $langPHPInfo);
+	array_push($sideMenuText, $GLOBALS['langPHPInfo']);
 	array_push($sideMenuLink, "../admin/phpInfo.php?to=phpinfo");
 	array_push($sideMenuImg, "php_info.gif");
 
 	if (isset($phpMyAdminURL)){
-		array_push($sideMenuText, $langDBaseAdmin);
+		array_push($sideMenuText, $GLOBALS['langDBaseAdmin']);
 		array_push($sideMenuLink, $phpMyAdminURL);
 		array_push($sideMenuImg, "db_admin.gif");
 	}
-	array_push($sideMenuText, $langUpgradeBase);
+	array_push($sideMenuText, $GLOBALS['langUpgradeBase']);
 	array_push($sideMenuLink, "../admin/upgrade.php");
 	array_push($sideMenuImg, "db_upgrade.gif");
 
@@ -435,25 +433,25 @@ function adminMenu(){
 
 	$arrMenuType = array();
 	$arrMenuType['type'] = 'text';
-	$arrMenuType['text'] = $langGenAdmin;
+	$arrMenuType['text'] = $GLOBALS['langGenAdmin'];
 	array_push($sideMenuSubGroup, $arrMenuType);
 
-	array_push($sideMenuText, $langAdminAn);
+	array_push($sideMenuText, $GLOBALS['langAdminAn']);
 	array_push($sideMenuLink, "../admin/adminannouncements.php");
 	array_push($sideMenuImg, "announcements.gif");
 
-	array_push($sideMenuText, $langVersion);
+	array_push($sideMenuText, $GLOBALS['langVersion']);
 	array_push($sideMenuLink, "../admin/about.php");
 	array_push($sideMenuImg, "eclass_version.gif");
-	array_push($sideMenuText, $langConfigFile);
+	array_push($sideMenuText, $GLOBALS['langConfigFile']);
 	array_push($sideMenuLink, "../admin/eclassconf.php");
 	array_push($sideMenuImg, "config_file.gif");
 
-	array_push($sideMenuText, $langPlatformStats);
+	array_push($sideMenuText, $GLOBALS['langPlatformStats']);
 	array_push($sideMenuLink, "../admin/stateclass.php");
 	array_push($sideMenuImg, "platform_stats.gif");
 
-	array_push($sideMenuText, $langAdminManual);
+	array_push($sideMenuText, $GLOBALS['langAdminManual']);
 	array_push($sideMenuLink, $urlServer . "manuals/manA/ManA.pdf");
 	array_push($sideMenuImg, "administrator_manual.gif");
 
@@ -496,7 +494,7 @@ function lessonToolsMenu(){
 	$arrMenuType = array();
 	if ($is_adminOfCourse) {
 		$arrMenuType['type'] = 'text';
-		$arrMenuType['text'] = $langActiveTools;
+		$arrMenuType['text'] = $GLOBALS['langActiveTools'];
 	} else  {
 		$arrMenuType['type'] = 'none';
 		$arrMenuType['text'] = 'none';
@@ -545,9 +543,8 @@ function lessonToolsMenu(){
 
 		$arrMenuType = array();
 		$arrMenuType['type'] = 'text';
-		$arrMenuType['text'] = $langInactiveTools;
+		$arrMenuType['text'] = $GLOBALS['langInactiveTools'];
 		array_push($sideMenuSubGroup, $arrMenuType);
-		//		array_push($sideMenuSubGroup, $langInactiveTools);
 
 		while ($toolsRow = mysql_fetch_array($result)) {
 
@@ -578,9 +575,8 @@ function lessonToolsMenu(){
 
 		$arrMenuType = array();
 		$arrMenuType['type'] = 'text';
-		$arrMenuType['text'] = $langAdministrationTools;
+		$arrMenuType['text'] = $GLOBALS['langAdministrationTools'];
 		array_push($sideMenuSubGroup, $arrMenuType);
-		//		array_push($sideMenuSubGroup, $langAdministrationTools);
 		while ($toolsRow = mysql_fetch_array($result)) {
 
 			if(!defined($toolsRow["define_var"])) define($toolsRow["define_var"], $toolsRow["id"]);

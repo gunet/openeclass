@@ -77,7 +77,7 @@ $tool_content .= "<table width=\"100%\" cellpadding=\"0\" align=center cellspaci
 
 } else {  // no announcements
         $tool_content .= "<tr><td>&nbsp;</td></tr>\n";
-        $tool_content .= "<tr><td class=alert1><em>".$langNoAnnouncements."</em></td></tr>\n";
+        $tool_content .= "<tr><td class=alert1><em>".$langNoAnnounce."</em></td></tr>\n";
 }
 
 $tool_content .= "</table>";
