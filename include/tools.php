@@ -273,7 +273,6 @@ function loggedOutMenu(){
 	array_push($sideMenuText, $GLOBALS['langNewUser']);
 	array_push($sideMenuLink, $urlServer."modules/auth/registration.php");
 	array_push($sideMenuImg, "black-arrow1.gif");
-	array_push($sideMenuImg, "user_reg.gif");
 	array_push($sideMenuText, $GLOBALS['langManuals']);
 	array_push($sideMenuLink, $urlServer."manuals/manual.php");
 
@@ -281,7 +280,6 @@ function loggedOutMenu(){
 	array_push($sideMenuText, $GLOBALS['langInfoPlat']);
 	array_push($sideMenuLink, $urlServer."info/about.php");
 	array_push($sideMenuImg, "black-arrow1.gif");
-	array_push($sideMenuImg, "plat_id.gif");
 	array_push($sideMenuText, $GLOBALS['langContact']);
 	array_push($sideMenuLink, $urlServer."info/contact.php");
 	array_push($sideMenuImg, "black-arrow1.gif");
