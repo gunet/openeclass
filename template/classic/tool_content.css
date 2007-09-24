@@ -18,9 +18,14 @@ h5 {
 	font-size:10px;
 }
 
-a, p, ul {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size:12px;
+a {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size:11px;
+}
+
+p, ul {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
 }
 
 a:active, a:visited, a:link{
@@ -29,45 +34,45 @@ a:active, a:visited, a:link{
 
 
 #tool_title {
-	width:99%;
-	margin-top:10px;
-	margin-bottom:10px;
+	width: 99%;
+	margin-top: 10px;
+	margin-bottom: 10px;
 	height: 30px;
-	font-size:15px;
-	font-family: Arial, Helvetica, sans-serif;
-	font-weight:bold;
+	font-size: 14px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-weight: bold;
+    color: #727266;
 	text-align: left;
 }
 
-#tool_content li { 
+#tool_content li {
 	list-style-type: square; 
-	font-size: 12px;	
+	font-size: 11px;
 }
 
 #operations_container {
 	margin-bottom: 0.5em;
 	overflow: hidden;
-	border: 1px dotted #CCCCCC;
+	border: 1px dotted #a33033;
 	padding: 6px;
-	background: #FFFFCC;
-	text-align: right
+	background: #CAC3B5;
+	text-align: right;
+    font-size: 10px;
 }
 
 #operations_container a{
    color: black;
-   font-size: 8pt;
+   font-size: 11px;
    font-weight: normal;
-   text-decoration: none;
    vertical-align: middle;
+   text-decoration: none;
 }
 
 #operations_container a:hover{
-	text-decoration: none;
-	color: #FF9900;
+	text-decoration: underline;
+	color: #a33033;
 	vertical-align: middle;
-	border-bottom: 1px dotted  silver;
 }
-
 
 
 #opslist
@@ -116,15 +121,13 @@ float: left;
 * html #opslist li:first-child { border-left: 0; }
 
 table, th, td {
-	border: 1px solid #a2a2a3;
 	border-collapse: collapse;
-	font-family: Verdana, Arial, sans-serif;
-	font-size:12px;
-	color: #555;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
 }
 
 caption {
-	font-size: 13px;
+	font-size: 1px;
 	font-weight: bold;
 	margin: 5px;
 	text-align: left;
@@ -133,6 +136,7 @@ caption {
 td, th {
 	padding: 4px;
 }
+
 
 .caution {
 	background-image: url(./img/exclamation.gif);
@@ -157,17 +161,40 @@ td, th {
 thead th {
 	text-align: center;
 	background: #E6EDF5;
-	color: #4F76A3;
+	color: #727266;
+    border: 1px dotted #727266;
+	padding: 6px;
+	background: #edecdf;
 	font-size: 90% !important;
 }
 
-tbody th {
-	font-weight: bold;
+thead td {
+	text-align: left;
+    border: 1px dotted #edecdf;
+	padding: 6px;
+	font-size: 90% !important;
 }
 
-tbody tr { background: #FCFDFE; font-size:12px;}
 
-tbody tr.odd { background: #F7F9FC; }
+
+tbody th {
+	font-weight: normal;
+}
+
+tbody tr {
+    background: #FFFFCC;
+    font-size: 11px;
+}
+
+tbody td {
+    background: #F5F5F5;
+    font-size: 11px;
+    border-bottom: 1px dotted #a33033;
+}
+
+tbody tr.odd {
+    background: #F7F9FC;
+}
 
 table a:link {
 	color: #718ABE;
@@ -188,8 +215,8 @@ tfoot th, tfoot td {
 	font-size: 85%;
 }
 
-ul.listBullet { 
-	list-style-image: url(img/square_bullet.gif); 
+ul.listBullet {
+	list-style-image: url(img/square_bullet.gif);
 }
 
 table.htmlarea tr {

@@ -1,20 +1,20 @@
-/* commented backslash hack v2 \*/ 
-html, body{height:100%;} 
-/* end hack */ 
+/* commented backslash hack v2 \*/
+html, body{height:100%;}
+/* end hack */
 
 html,body {
 	margin: 0;
 	padding: 0;
-	font-family: Verdana, Arial, sans-serif;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
 	background-image: url(img/menu_bg.gif);
 	background-repeat: repeat-y;
 }
 
-body {		
-	font-family: Verdana, Arial, sans-serif;
+body {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
 	text-align: center;
 	color: #505367;
-	background-colorR: white;	
+	background-colorR: white;
 	background-colorR:green;
 }
 				
@@ -22,14 +22,14 @@ body {
 	margin-left:auto;
 	margin-right:auto;
 	//margin-leftT: 5px;
-	width: 100%; 
+	width: 100%;
 	min-height:100%;
 	text-align: left;
 	position:relative;
 }
 
 /* commented backslash hack v2 \*/ 
-* html #container {height:100%;}		
+* html #container {height:100%;}
 * html #container {width:100%;w\idth:100%;}
 * html body{font-size:xx-small;f\ont-size:x-small}
 /* end hack */ 
@@ -37,9 +37,9 @@ body {
 #header {
 	height: 60px;
 	width:100%;
-	background-color: #6699cc;
+	background-color: #edecdf;
 	margin: 0px 0px 0px 0px;
-	border-bottom: 3px solid #ff9900;
+	border-bottom: 3px solid #a33033;
 	position:relative;
 	z-index:2;
 	overflow:hidden;	
@@ -50,8 +50,8 @@ body {
 
 #logo {
 	float: left;
-	width: 150px;
-	height: 50px;
+	width: 231px;
+	height: 45px;
 	margin-top:5px;
 	margin-left:5px;
 	background-image: url(img/logo_bg_50.gif);
@@ -145,7 +145,7 @@ body {
 }
 
 .lesson_icon {
-float: left;
+    float: left;
 	width: 16px;
 	height: 16px;
 	margin-top: 50px;
@@ -189,56 +189,84 @@ float: left;
 }
 
 #bread {
-	padding:0.6em;
-	color: black;
-	position:absolute;
-	font-size:10px;
-	margin-left:210px;
-	margin-right:1em;
+	padding: 0.6em;
+	position: absolute;
+	font-size: 10px;
+	margin-left: 210px;
+	margin-right: 1em;
 	widthH: 99%;
 	display: block;
-	background-colorX:red;
-	height:68px;
+	background-colorX: red;
+	height: 68px;
 }
+
+
+#bread a, bread a:link, bread a:active, bread a:visited {
+        color: #575656;
+        font-size: 10px;
+        text-decoration: none;
+	    vertical-align: middle;
+        font-weight: normal;
+}
+
+#bread a:hover {
+	text-decoration: underline;
+    color: #a33033;
+	vertical-align: middle;
+    font-weight: normal;
+}
+
 
 #bread ul {
 	margin-left: 0;
 	padding-left: 0;
 	display: inline;
 	border: none;
+    font-size: 10px;
 } 
 
-#bread ul li {
+#bread li {
 	margin-left: 0;
 	padding-left: 2px;
 	border: none;
 	list-style: none;
 	display: inline;
+    font-size: 10px;
+    font-weight: bold;
 }
 
 #firstBar {
 	width:100%;
 	height: 25px;
-	background-color: #fbcb1b;
+	background-color: #CAC3B5;
 	position:relative;
-	z-index:2;	
+	z-index:2;
 }
 
 #fbar_info {
 	float: right;
-	margin-top:0.5em;
-	margin-right:2px;
-	overflow:visible;
-	max-width:370px;
-	text-align:right;
+	margin-top: 0.5em;
+	margin-right: 2px;
+	overflow: visible;
+	max-width: 370px;
+	text-align: right;
 }
 #fbar_info .logout a{
 	float:right;
 	margin-top:0.4em;
 	margin-right:2px;
-	font-family: Verdana, Arial, sans-serif;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size:11px;
-	color:#000;
+    text-decoration: none;
+    vertical-align: middle;
+    font-weight: normal;
+}
+
+#fbar_info .logout a:hover{
+	text-decoration: underline;
+    color: #a33033;
+	vertical-align: middle;
+    font-weight: normal;
 }
 
 #secondBar {
@@ -250,40 +278,68 @@ float: left;
 }
 
 #fbar_info .user {
-	float:right;
-	font-family: Verdana, Arial, sans-serif;
-	font-size:11px;
-	color:#FFFFFF;
-	margin-top:0.4em;
-	text-align:right;
-	display:block;
-	clear:right;
+	float: right;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #727266;
+    margin-right: 0.2em;
+	margin-top: 0.1em;
+	text-align: right;
+	display: block;
+	clear: right;
 }
 
-#fbar_info a {
-color: #ffffff
+#fbar_info .user a{
+    text-decoration: none;
+    color: #727266;
+    font-weight: bold;
+    font-size: 9px;
 }
+
+#fbar_info .user a:hover{
+    text-decoration: underline;
+    color: red;
+    font-weight: bold;
+    font-size: 9px;
+}
+
 
 #fbar_info .langSwitch {
-	clear:right;
-	margin-top:2.4em;
-	//margin-top:1.2em;
-	margin-right:0.2em;
-	font-family: Verdana, Arial, sans-serif;
-	font-size:11px;
-	display:block;
-	text-align:right;
+	clear: right;
+	margin-top: 2.4em;
+	//margin-top: 1.2em;
+	margin-right: 0.2em;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	display: block;
+	text-align: right;
 }
+
+#fbar_info .langSwitch a{
+	text-decoration: none;
+    font-size: 10px;
+    color: #727266;
+    font-weight: bold;
+}
+
+#fbar_info .langSwitch a:hover{
+	text-decoration: underline;
+    font-size: 10px;
+    color: #727266;
+    font-weight: bold;
+}
+
+
 
 #secondBar p {
 	position:absolute;
 	padding-left:10px;
 	padding-top:-5px;
-	font-family: Verdana, Arial, sans-serif;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size:11px;
 }
 	
-* html #mainnav{height:22px;he\ight:20px}	
+* html #mainnav{height:22px;he\ight:20px}
 	
 #sidebar {
 	float: right;
@@ -306,7 +362,7 @@ color: #ffffff
 	width: 200px;
 	margin: 0;
 	padding:0;
-	background-color: #e5edf9;
+	background-color: #CAC3B5;
 }
 
 #leftSub {
@@ -318,15 +374,15 @@ color: #ffffff
 #thirdBar {
 	float: left;
 	width: 100%;
-	height:81px;
+	height:71px;
 	min-height:81px;
 	background-colorX: #e5edf9;
 	color:black;
-	font-family: Verdana, Arial, sans-serif;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
 #tbar_info .lesson {
-	font-family: Verdana, Arial, sans-serif;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size:16px;
 	color:black;
 	margin-top: 47px;
@@ -343,14 +399,16 @@ color: #ffffff
 	margin-left:0px;
 
 }
+
 #search {
 	position:absolute;
 	top:0px;
 	height:81px;
 	width:200px;
-	background-color: #84b3fa;
+	background-color: #727266;
 	color:#ffffff;
 	}
+
 #search p, #search form {
 	margin-top:5px;
 	margin-left: 10px;
@@ -361,11 +419,42 @@ color: #ffffff
 
 #search p.title {
 	font-weight:bold;
-	font-size: 13px;
+	font-size: 11px;
+    margin-top: 12px;
+    color: #edecdf;
 }
 
 #search a {
-color: #ffffff
+    color: #edecdf;
+    font-size: 10px;
+    font-weight: bold;
+    text-decoration: none;
+	vertical-align: middle;
+}
+
+#search a:hover {
+	text-decoration: underline;
+	vertical-align: middle;
+    font-size: 10px;
+}
+
+#search input.ok{
+	border: none;
+	vertical-align: middle;
+	margin-top: 0px;
+	margin-right:0px;
+}
+
+#search input.key{
+    vertical-align:middle;
+	margin-top: 0px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	padding: 1px 0px 1px 5px;
+	border: 1px solid #666666;
+    background-color: #edecdf;
+	color: #666666;
+	width: 129px;
 }
 
 #navcontainer { width: 200px; }
@@ -374,7 +463,7 @@ color: #ffffff
 	margin:0;
 	padding:0px 0px 1px 0px;
 	list-style-type: none;
-	font-family: Verdana, Arial, sans-serif;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size:11px;
 }
 
@@ -395,7 +484,7 @@ color: #ffffff
 	margin-left: 1px;
 	width: 190px;
 	padding:3px;
-	border: 1px solid #e5edf9;
+	border: 1px solid #CAC3B5;
 }
 
 #navcontaner a.inactive {
@@ -404,7 +493,7 @@ color: #ffffff
 
 #navcontainer a:hover {
 	color:black;
-	background-color:#fbcb1b;
+	background-color: #c1c1b5;
 	margin-top: 1px;
 	margin-left: 1px;
 	width: 190px;
@@ -415,13 +504,14 @@ color: #ffffff
 #navcontainer li.category {
 	margin-top: 8px;
 	margin-left: 4px;
-	margin-bottom:8px;
+	margin-bottom: 8px;
+    font-size: 11px;
 	display: block;
-	padding: 3px;
-	width: 185px;
-	color:#FFFFFF;
-	background-color: #84b3fa;
-
+	padding: 4px;
+	width: 183px;
+	color: #FFFFFF;
+	background-color: #727266;
+    font-weight: normal;
 }
 
 #navcontainer li.split {
@@ -465,7 +555,7 @@ color: #ffffff
 	margin-right:10px;
 	padding: 1em;
 	max-width: 100%;
-	border-top: 1px solid #ff9900;
+	border-top: 1px solid #a33033;
 }
 
 #content_main_no_nav {
@@ -480,8 +570,8 @@ color: #ffffff
 	bottom:0;
 	width:100%;
 	height: 28px;
-	background-color: #e5edf9;
-	border-top: 3px solid #ff9900;
+	background-color: #edecdf;
+	border-top: 3px solid #a33033;
 }
 
 #footer p {
@@ -510,17 +600,23 @@ color: #ffffff
 .headers {
 	font-weight: bold;
 	font-style: italic;
-	font-size: 10pt;
+	font-size: 10px;
 }
+
 
 fieldset {
         padding: 7px;
+        font-size: 11px;
+		font-weight: normal;
 }
 
-fieldset {
-        font-size: 10pt;
-		font-weight: bold;
+legend {
+     font-size: 11px;
+     color: #000000;
+     padding: 5px;
+
 }
+
 
 .alert1 {
 	FONT-WEIGHT: normal;
@@ -528,5 +624,5 @@ fieldset {
     FONT-WEIGHT: bold;
 	text-align: center;
 	padding: 5px;
-	font-size: 10pt;
+	font-size: 11px;
        }

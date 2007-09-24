@@ -42,10 +42,11 @@
 			<div id="search">
 				<p class="title">{SEARCH_TITLE}</p>
 				<form name="form1" id="form1" method="post" action="{URL_PATH}modules/search/{SEARCH_ACTION}">
-					<input type="text" name="search_terms" size="14"/>
-					<input value="OK" name="submit" type="submit" />
-				</form> 
-				<p><a href="{URL_PATH}modules/search/{SEARCH_ADVANCED_URL}" title="advanced search" >{SEARCH_ADVANCED}</a></p>
+					<input type="text" class="key" name="search_terms" size="14"/>
+                    <input type="image" name="submit" class="ok" alt="Ok"  src="{URL_PATH}template/classic/img/go_button.gif" border="0" WIDTH="18" HEIGHT="17" /
+                    <br />
+				    <a href="{URL_PATH}modules/search/{SEARCH_ADVANCED_URL}" title="advanced search" >{SEARCH_ADVANCED}</a>
+                </form>
 			</div>
 		
 		    <div id="bread">
