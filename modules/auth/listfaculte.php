@@ -33,8 +33,6 @@ $langFiles = 'opencours';
 include '../../include/baseTheme.php';
 $nameTools = $listfac;
 
-//$tool_content .= "<div class='td_main_left'>";
-
 $result=mysql_query("SELECT id, name, code FROM faculte ORDER BY name");
 $numrows = mysql_num_rows($result);
 
@@ -74,7 +72,6 @@ $tool_content .= "
 	</table>";
   }
 
-//$tool_content .= "</div>";
 
 draw($tool_content, 0);
 ?>

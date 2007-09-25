@@ -25,7 +25,6 @@
 /**
  * Index
  * 
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
  * 
  * @abstract This file serves as the home page of eclass when the user

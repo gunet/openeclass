@@ -40,6 +40,16 @@ a:hover {
     font-weight: normal;
 }
 
+.Login{
+    vertical-align:middle;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    padding: 2px;
+	border: 1px solid #666666;
+    background-color: #edecdf;
+	color: #666666;
+}
+
 #tool_title {
 	width: 99%;
 	margin-top: 10px;
@@ -133,17 +143,39 @@ table, th, td {
 	font-size: 11px;
 }
 
-caption {
-	font-size: 1px;
-	font-weight: bold;
-	margin: 5px;
-	text-align: left;
+table a:link {
+	text-decoration: none;
+}
+
+table a:visited {
+	text-decoration: none;
+}
+
+table a:hover {
+	text-decoration: underline !important;
 }
 
 td, th {
 	padding: 4px;
 }
 
+.LoginHead {
+   	color: #ffffff;
+	background: #a33033;
+    border: 1px solid #727266;
+}
+
+.LoginData {
+    border-bottom: 2px solid #a33033;
+}
+
+
+caption {
+	font-size: 1px;
+	font-weight: bold;
+	margin: 5px;
+	text-align: left;
+}
 
 .caution {
 	background-image: url(./img/exclamation.gif);
@@ -165,6 +197,10 @@ td, th {
    background-color:#B0C4DE;
 }
 
+.left{
+	text-align: left;
+}
+
 thead th {
 	text-align: center;
 	color: #727266;
@@ -172,10 +208,6 @@ thead th {
 	padding: 6px;
 	background: #edecdf;
 	font-size: 90% !important;
-}
-
-.left{
-	text-align: left;
 }
 
 thead td {
@@ -205,31 +237,14 @@ tbody tr.odd {
 tfoot tr {
     background: #FFFFFF;
     font-size: 11px;
+    font-size: 85%;
 }
 
 tfoot td {
     background: #edecdf;
     font-size: 11px;
+    font-size: 85%;
     border: 1px dotted #edecdf;
-}
-
-table a:link {
-	color: #718ABE;
-	text-decoration: none;
-}
-
-table a:visited {
-	color: #718ABE;
-	text-decoration: none;
-}
-
-table a:hover {
-	color: #718ABE;
-	text-decoration: underline !important;
-}
-
-tfoot th, tfoot td {
-	font-size: 85%;
 }
 
 ul.listBullet {

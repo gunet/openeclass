@@ -116,27 +116,25 @@ $tool_content .= <<<lCont2
 <div id="navigation">
 
  <table width="99%">
-      <thead>
-      	<tr>
-      		<th> $langUserLogin </th>
-      	</tr>
-      </thead>
-      <tbody>
-      	<tr class="odd">
-      		<td>
-      			<form action="${urlSecure}index.php" method="post">
-      		  $langUserName <br>
-        			<input  name="uname" size="20"><br>
-       			 $langPass <br>
-        			<input name="pass" type="password" size="20"><br><br>
-       			 <input value="$langEnter" name="submit" type="submit"><br>
-				$warning<br>
-				<a href="modules/auth/lostpass.php">$lang_forgot_pass</a>
-     			 </form>
-     		</td>
-     	</tr>
-      </tbody>
-      </table>
+ <thead>
+ <tr>
+   <th class="LoginHead"> $langUserLogin </th>
+ </tr>
+ </thead>
+ <tr>
+   <td class="LoginData">
+   <form action="${urlSecure}index.php" method="post">
+   $langUserName <br>
+   <input class="Login" name="uname" size="20"><br>
+   $langPass <br>
+   <input class="Login" name="pass" type="password" size="20"><br><br>
+   <input class="Login" value="$langEnter" name="submit" type="submit"><br>
+   $warning<br>
+   <a href="modules/auth/lostpass.php">$lang_forgot_pass</a>
+   </form>
+   </td>
+ </tr>
+</table>
 
 
 </div>
