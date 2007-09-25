@@ -279,7 +279,7 @@ class Answer
 	 */
 	function duplicate($newQuestionId)
 	{
-		global $TBL_REPONSES;
+		global $TBL_REPONSES, $currentCourseID;
 
 		// if at least one answer
 		if($this->nbrAnswers)
@@ -299,8 +299,7 @@ class Answer
 			}
 
 			$sql=substr($sql,0,-1);
-			db_query($sql);
-//			mysql_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
+			db_query($sql, $currentCourseID);
 		}
 	}
 }
