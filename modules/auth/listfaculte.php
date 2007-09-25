@@ -36,9 +36,10 @@ $nameTools = $listfac;
 $result=mysql_query("SELECT id, name, code FROM faculte ORDER BY name");
 $numrows = mysql_num_rows($result);
 
+$tool_content = "";
+
 if (isset($result))  {
 
-$tool_content = "";
 $tool_content .= "
     <script type='text/javascript' src='sorttable.js'></script>
     <table width='99%' class='sortable' id='t1'>
@@ -50,27 +51,27 @@ $tool_content .= "
 
    while ($fac = mysql_fetch_array($result)) {
 	$tool_content .= "
-	<tbody>
-	<tr onMouseOver=\"this.style.backgroundColor='#edecdf'\" onMouseOut=\"this.style.backgroundColor='transparent'\">\n";
+    <tbody>
+    <tr onMouseOver=\"this.style.backgroundColor='#edecdf'\" onMouseOut=\"this.style.backgroundColor='transparent'\">\n";
   	$tool_content .= "
-	<td>&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<a href='opencourses.php?fc=$fac[id]'>$fac[name]</a>&nbsp;
-	<small>($fac[code])</small>&nbsp;";
+    <td>&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<a href='opencourses.php?fc=$fac[id]'>$fac[name]</a>&nbsp;
+    <small>($fac[code])</small>&nbsp;";
 
      $n=mysql_query("SELECT COUNT(*) FROM cours_faculte WHERE faculte='$fac[name]'");
      $r=mysql_fetch_array($n);
 
     $tool_content .= "
-	<small><font color=\"#aaaaaa\">($r[0]  ".  ($r[0] == 1? $langAvCourse: $langAvCourses) . ")</font><small></td>
+    <small><font color=\"#aaaaaa\">($r[0]  ".  ($r[0] == 1? $langAvCourse: $langAvCourses) . ")</font><small></td>
     </tr>\n";
         }
       $tool_content .= "
-	</tbody>\n
-	<tfoot>
-	<tr>
-	   <td>&nbsp;</td>
-	<tr>
-	<tfoot>
-	</table>";
+     </tbody>\n
+     <tfoot>
+     <tr>
+       <td>&nbsp;</td>
+     </tr>
+     </tfoot>
+    </table>";
   }
 
 
