@@ -514,7 +514,7 @@ class Question
 	 */
 	function duplicate()
 	{
-		global $TBL_QUESTIONS, $picturePath;
+		global $TBL_QUESTIONS, $picturePath, $currentCourseID;
 
 		$question=addslashes($this->question);
 		$description=addslashes($this->description);
@@ -523,7 +523,7 @@ class Question
 		$type=$this->type;
 
 		$sql="INSERT INTO `$TBL_QUESTIONS`(question,description,ponderation,q_position,type) VALUES('$question','$description','$weighting','$position','$type')";
-		mysql_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
+	db_query($sql,$currentCourseID);
 
 		$id=mysql_insert_id();
 

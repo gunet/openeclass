@@ -60,8 +60,7 @@ if(!defined('ALLOWED_TO_INCLUDE'))
 }
 
 // the question form has been submitted
-if(isset($submitQuestion))
-{
+if(isset($submitQuestion)) {
 	$questionName=trim($questionName);
 	$questionDescription=trim($questionDescription);
 
@@ -181,8 +180,8 @@ else
 	}
 }
 
-if((isset($newQuestion) || isset($modifyQuestion)) && !isset($usedInSeveralExercises))
-{
+if((isset($newQuestion) || isset($modifyQuestion)) && !isset($usedInSeveralExercises)) {
+
 	// is picture set ?
 	$okPicture=file_exists($picturePath.'/quiz-'.$questionId)?true:false;
 
@@ -191,11 +190,10 @@ $tool_content .= "<h3>$questionName</h3>";
 $tool_content .= "<form enctype=\"multipart/form-data\" method=\"post\" action=\"".$PHP_SELF.
 	"?modifyQuestion=".@$modifyQuestion."&newQuestion=".@$newQuestion."\"><table border=\"0\" cellpadding=\"5\">";
 
-	if($okPicture)
-	{
+	if($okPicture) {
 
-$tool_content .= "<tr><td colspan=\"2\" align=\"center\"><img src=\"".$picturePath.
-	"/quiz-".$questionId."\" border=\"0\"></td></tr>";
+		$tool_content .= "<tr><td colspan=\"2\" align=\"center\"><img src=\"".$picturePath.
+		"/quiz-".$questionId."\" border=\"0\"></td></tr>";
 
 	}
 
@@ -252,7 +250,26 @@ $tool_content .= " :</td> <td><input type=\"file\" name=\"imageUpload\" size=\"3
 		  <td valign="top">${langAnswerType} :</td>
 cData;
 
-
+if (@$modifyQuestion) {
+	$answerType = intval($answerType);
+	$tool_content .= "<td><input type='hidden' name='answerType' value='$answerType'>
+												<input type='hidden' name='modifyIn' value='thisExercise'>";
+	switch ($answerType) {
+		case 1:
+			$tool_content .= $langUniqueSelect;
+			break;
+		case 2:
+			$tool_content .= $langMultipleSelect;
+			break;
+		case 3:
+			$tool_content .= $langMatching;
+			break;
+		case 4:
+			$tool_content .= $langFillBlanks;
+			break;
+	}
+	$tool_content .= "</td>\n";
+} else {
   $tool_content .= "<td><input type=\"radio\" name=\"answerType\" value=\"1\" "; 
   	if ($answerType <= 1) 
   		$tool_content .= 'checked="checked"'; 
@@ -268,7 +285,9 @@ cData;
 	$tool_content .= "<input type=\"radio\" name=\"answerType\" value=\"3\" ";
 		if ($answerType == 3) 
 			$tool_content .= 'checked="checked"';
-		$tool_content .= "> ".$langFillBlanks;
+		$tool_content .= "> ".$langFillBlanks; 
+}
+
 $tool_content .= <<<cData
 
 	  </td>

@@ -243,7 +243,7 @@ if(isset($editQuestion) || isset($modifyQuestion) || isset($newQuestion) || isse
 
 // if the question is duplicated, disable the link of tool name
 if(isset($modifyIn) && $modifyIn == 'thisExercise') {
-	if($buttonBack) {
+	if (@$buttonBack) {
 		$modifyIn='allExercises';
 	}
 	else
@@ -253,6 +253,7 @@ if(isset($modifyIn) && $modifyIn == 'thisExercise') {
 }
 
 if(isset($newQuestion) || isset($modifyQuestion)) {
+
 	// statement management
 	include('statement_admin.inc.php');
 }
