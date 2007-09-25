@@ -73,15 +73,12 @@ $icons = array(
 );
 
 $tool_content .= "
-            <table border='0' width=99% align=center cellspacing='2' cellpadding='2'>
-            <tr>
-            <td align='left' style='border-top: 0px solid $table_border; border-right: 0px solid $table_border; border-left: 0px solid $table_border;' class='td_NewDir'>
-                <a name='top'>$m[department]:</a>
-                <b><em>$fac</em></b>
-                </td>
-            </tr>
-            <tr>
-            <td align=right valign='middle' class=td_NewDir style='border-bottom: 0px solid $table_border; border-right: 0px solid $table_border; border-left: 0px solid $table_border;' height=20>&nbsp;";
+   <table width=99% align=center>
+   <tr>
+     <td><a name='top'>$m[department]:</a>&nbsp;&nbsp;<b>$fac</b></td>
+   </tr>
+   <tr>
+     <td>";
 
 // get the different course types available for this faculte
 $typesresult = mysql_query("SELECT DISTINCT cours.type types FROM cours WHERE cours.faculte = '$fac' ORDER BY cours.type");
@@ -105,10 +102,14 @@ if ( $numoftypes > 1) {
 		$counter++;
 	}
 	
-	$tool_content .= "</td></tr><tr><td align=right valign=middle>";
+	$tool_content .= "
+     </td>
+   </tr>
+   <tr>
+     <td>";
 }
 
-$tool_content .= "<div class='courses'>";
+//$tool_content .= "<div class='courses'>";
 
 // changed this foreach statement a bit
 // this way we sort by the course types
@@ -135,44 +136,64 @@ foreach (array("pre" => $m['pres'],
 		continue;
 	}
 
-$tool_content .= "<br><script type='text/javascript' src='sorttable.js'></script>
-          <table width='100%' border=0 cellpadding='2' cellspacing='0' align=center style=\"border: 1px solid $table_border\">
-          <tr><th align=left style='background: #E6EDF5; color: #4F76A3;'><b>";
-
-	// We changed the style a bit here and we output types as the title
-$tool_content .= "<a name='$type'>$message</a></b></th>\n";
+$tool_content .= "
+     <br>
+	 <script type='text/javascript' src='sorttable.js'></script>
+     <table width='100%'>
+	 <thead>
+     <tr>
+       <td class='LoginData'>";
+	 // We changed the style a bit here and we output types as the title
+$tool_content .= "
+       <a name='$type'>$message</a>
+	   </td>\n";
 
           // output a top href link if necessary
           if ( $numoftypes > 1)
-            $tool_content .= "<th align=\"right\" style='background: #E6EDF5; color: #4F76A3;'>
-								<a href=\"#top\" class='mainpage'>$m[begin]</a></th>";
+            $tool_content .= "
+	   <td class='LoginData'>
+	   <a href=\"#top\" class='mainpage'>$m[begin]</a>
+	   </td>";
           // or a space for beautifying reasons
           else
-            $tool_content .= "<th align=\"right\" style='background: #E6EDF5; color: #4F76A3;'>&nbsp;</th>";
-	        $tool_content .= "</tr>";
-			$tool_content .= "</table><br>";
+            $tool_content .= "
+	   <td class='LoginData'>&nbsp;</td>";
+	        $tool_content .= "
+	 </tr>
+     </thead>";
+			$tool_content .= "
+     </table>
+	 <br>";
 
 		    $tool_content .= "
-			<table border='0' width='100%' align='center' bgcolor=white class=\"sortable\" id=\"t1\" cellspacing=\"1\" cellpadding=\"2\" style=\"border: 1px solid $table_border\">";
-           $tool_content .= "<tr>";
-	       $tool_content .= "<td align=left style=\"border: 1px solid $table_border\">$m[lessoncode]</td>";
-           $tool_content .= "<td align=left class='td_small_HeaderRow' style=\"border: 1px solid $table_border\">$m[professor]</td>";
-					 $tool_content .= "<td align=center class='td_small_HeaderRow' align='center' style=\"border: 1px solid $table_border\">Τύπος</td>";
-					 $tool_content .=" </tr>";
+     <table width='100%' align='center' class=\"sortable\" id=\"t1\">";
+           $tool_content .= "
+     <thead>
+	 <tr>";
+	       $tool_content .= "
+     <th class='left'>$m[lessoncode]</th>";
+           $tool_content .= "
+     <th class='left'>$m[professor]</th>";
+					 $tool_content .= "
+     <th>Τύπος</th>";
+					 $tool_content .="
+	 </tr>
+	 </thead>";
 
 		while ($mycours = mysql_fetch_array($result)) {
-          // changed the variable because of the previous change in the select argument
             if ($mycours['visible'] == 2) {
-              $codelink = "<a href='../../courses/$mycours[k]/' class='CourseLink'>$mycours[i]</a>&nbsp;<span class='explanationtext'><font color=#4175B9>(".$mycours['c'].")</font></span>";
+              $codelink = "<a href='../../courses/$mycours[k]/'>$mycours[i]</a>&nbsp;(".$mycours['c'].")";
             } else {
-              $codelink = "<font color=#A9A9A9>$mycours[i]&nbsp;<span class='explanationtext'>(".$mycours['c'].")</font></span>";
+              $codelink = "$mycours[i]&nbsp;(".$mycours['c'].")";
             }
 
             // output each course as a table for beautifying reasons
-            $tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#F5F5F5'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
-            $tool_content .= "<td align=left width='65%' class=kk>".$codelink."</td>";
-            $tool_content .= "<td align=left class=kk><span class='explanationtext'>$mycours[t]</span></td>";
-            $tool_content .= "<td align=center width='5%' align='center' class=kk>";
+            $tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#edecde'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
+            // changed the variable because of the previous change in the select argument
+
+            $tool_content .= "<td width='65%'>".$codelink."</td>";
+            $tool_content .= "<td>$mycours[t]</td>";
+            $tool_content .= "<td width='5%'>";
             // show the necessary access icon
                       foreach ($icons as $visible => $image) {
                           if ($visible == $mycours['visible']) {
@@ -181,10 +202,14 @@ $tool_content .= "<a name='$type'>$message</a></b></th>\n";
                         }
             $tool_content .= "</td>";
             $tool_content .= "</tr>";
+			$tool_content .= "
+			<tfoot><tr><td colspan='3'></td></tr></tfoot>
+	 ";
           }
 
-				$tool_content .= "</table>";
-        $tool_content .= "<br>";
+				$tool_content .= "
+	 </table>";
+        $tool_content .= "";
           // that's it!
           // upatras.gr patch end here, atkyritsis@upnet.gr, daskalou@upnet.gr
         }
@@ -193,7 +218,8 @@ $tool_content .= "<a name='$type'>$message</a></b></th>\n";
              $tool_content .= "<div class=alert1>$m[nolessons]</div>";
          }
 
-$tool_content .= "<br></td></tr></table></div>";
+$tool_content .= "<br></td></tr></table>";
+//$tool_content .= "</div>";
 
-draw($tool_content, 0, 'auth');
+draw($tool_content, 0);
 ?>
