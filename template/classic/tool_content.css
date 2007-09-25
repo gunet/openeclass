@@ -138,7 +138,7 @@ float: left;
 * html #opslist li:first-child { border-left: 0; }
 
 table, th, td {
-	border-collapse: separate;
+	border-collapse: collapse;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
 }
@@ -162,7 +162,6 @@ td, th {
 .LoginHead {
    	color: #ffffff;
 	background: #a33033;
-    border: 1px solid #727266;
 }
 
 .LoginData {

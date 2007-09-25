@@ -38,6 +38,7 @@ $numrows = mysql_num_rows($result);
 
 if (isset($result))  {
 
+$tool_content .= "";
 $tool_content .= "
     <script type='text/javascript' src='sorttable.js'></script>
     <table width='99%' class='sortable' id='t1'>

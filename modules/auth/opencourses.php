@@ -202,10 +202,11 @@ $tool_content .= "
                         }
             $tool_content .= "</td>";
             $tool_content .= "</tr>";
-			$tool_content .= "
-			<tfoot><tr><td colspan='3'></td></tr></tfoot>
-	 ";
+			
           }
+		  $tool_content .= "
+	<tfoot><tr><td colspan='3'>&nbsp;</td></tr></tfoot>
+	 ";
 
 				$tool_content .= "
 	 </table>";
