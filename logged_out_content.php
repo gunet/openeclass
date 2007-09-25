@@ -116,11 +116,9 @@ $tool_content .= <<<lCont2
 <div id="navigation">
 
  <table width="99%">
- <thead>
  <tr>
-   <th class="LoginHead"> $langUserLogin </th>
+   <th class="LoginHead"> <b>$langUserLogin </b></th>
  </tr>
- </thead>
  <tr>
    <td class="LoginData">
    <form action="${urlSecure}index.php" method="post">
