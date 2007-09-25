@@ -18,20 +18,27 @@ h5 {
 	font-size:10px;
 }
 
-a {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size:11px;
-}
-
 p, ul {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
 }
 
-a:active, a:visited, a:link{
-	color:blue;
+a, a:link, a:active, a:visited {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size:11px;
+    color: #575656;
+    text-decoration: none;
+    vertical-align: middle;
+    font-weight: normal;
 }
 
+a:hover {
+	text-decoration: underline;
+    font-size: 11px;
+    color: #a33033;
+	vertical-align: middle;
+    font-weight: normal;
+}
 
 #tool_title {
 	width: 99%;
@@ -160,7 +167,6 @@ td, th {
 
 thead th {
 	text-align: center;
-	background: #E6EDF5;
 	color: #727266;
     border: 1px dotted #727266;
 	padding: 6px;
@@ -178,24 +184,33 @@ thead td {
 	font-size: 90% !important;
 }
 
-
 tbody th {
 	font-weight: normal;
 }
 
 tbody tr {
-    background: #FFFFCC;
+    background: #FFFFFF;
     font-size: 11px;
 }
 
 tbody td {
-    background: #F5F5F5;
     font-size: 11px;
-    border-bottom: 1px dotted #a33033;
+    border-bottom: 1px dotted #edecdf;
 }
 
 tbody tr.odd {
     background: #F7F9FC;
+}
+
+tfoot tr {
+    background: #FFFFFF;
+    font-size: 11px;
+}
+
+tfoot td {
+    background: #edecdf;
+    font-size: 11px;
+    border: 1px dotted #edecdf;
 }
 
 table a:link {

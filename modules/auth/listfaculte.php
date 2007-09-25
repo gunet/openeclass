@@ -33,8 +33,6 @@ $langFiles = 'opencours';
 include '../../include/baseTheme.php';
 $nameTools = $listfac;
 
-$tool_content = "";
-
 $tool_content .= "<div class='td_main_left'>";
 
 $result=mysql_query("SELECT id, name, code FROM faculte ORDER BY name");
@@ -47,22 +45,32 @@ $tool_content .= "
     <table width='99%' class='sortable' id='t1'>
     <thead>
     <tr>
-	  <th height=25><b>$m[department]</b></th>
-    </tr>\n";
+	  <th class='left'>$m[department]</th>
+    </tr>
+	</thead>\n";
 
- while ($fac = mysql_fetch_array($result)) {
-	$tool_content .= "    <tr onMouseOver=\"this.style.backgroundColor='#edecdf'\" onMouseOut=\"this.style.backgroundColor='transparent'\">\n";
-  	$tool_content .= "      <td height=25>&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<a href='opencourses.php?fc=$fac[id]'>$fac[name]</a><small>($fac[code])</small>&nbsp;";
+   while ($fac = mysql_fetch_array($result)) {
+	$tool_content .= "
+	<tbody>
+	<tr onMouseOver=\"this.style.backgroundColor='#edecdf'\" onMouseOut=\"this.style.backgroundColor='transparent'\">\n";
+  	$tool_content .= "
+	<td>&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<a href='opencourses.php?fc=$fac[id]'>$fac[name]</a>&nbsp;
+	<small>($fac[code])</small>&nbsp;";
 
      $n=mysql_query("SELECT COUNT(*) FROM cours_faculte WHERE faculte='$fac[name]'");
      $r=mysql_fetch_array($n);
 
-    $tool_content .= "<small>($r[0]  "
-      .  ($r[0] == 1? $langAvCourse: $langAvCourses) . ")<small></td>
+    $tool_content .= "
+	<small><font color=\"#aaaaaa\">($r[0]  ".  ($r[0] == 1? $langAvCourse: $langAvCourses) . ")</font><small></td>
     </tr>\n";
         }
       $tool_content .= "
-    </thead>\n
+	</tbody>\n
+	<tfoot>
+	<tr>
+	   <td>&nbsp;</td>
+	<tr>
+	<tfoot>
 	</table>";
   }
 
