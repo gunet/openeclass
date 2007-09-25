@@ -144,7 +144,7 @@ $tool_content .= "<p><em>$langNotRequired</em></p>
 			 	<em>$langNoticeGreek</em>
 		</li>
 		</ul>
-			    <br/><input type=\"submit\" value=\"$langDownload\">";
+			    <br/><input type=\"submit\" value=\"$langUpload\">";
     $tool_content .=  "</form>";
  
 

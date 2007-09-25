@@ -183,7 +183,7 @@ $tool_content .= "<tr><td><a href=\"work.php?id=".$row['id']."\">".htmlspecialch
 
 // Insert a group work submitted by user uid to assignment id
 function submit_work($uid, $id, $file) {
-	global $groupPath, $REMOTE_ADDR, $langUploadError, $langUpload,
+	global $groupPath, $REMOTE_ADDR, $langUploadError, $langUploadSuccess,
 		$langBack, $m, $currentCourseID, $tool_content, $workPath;
 
 	$group = user_group($uid);
@@ -196,7 +196,6 @@ function submit_work($uid, $id, $file) {
 	$destination = work_secret($id)."/$local_name";
 
 	if (copy($source, "$workPath/$destination")) {
-//		$tool_content .=  "<p>$langUpload</p>";
 		delete_submissions_by_uid($uid, $group, $id);
 		db_query("INSERT INTO assignment_submit (uid, assignment_id, submission_date,
 			submission_ip, file_path, file_name, comments, group_id) 
@@ -209,7 +208,7 @@ function submit_work($uid, $id, $file) {
 				<tbody>
 					<tr>
 						<td class=\"success\">
-							<p><b>$langUpload</b></p>
+							<p><b>$langUploadSuccess</b></p>
 							<p>$m[the_file] \"".basename($file)."\" $m[was_submitted]</p>
 							<p><a href='work.php'>$langBack</a></p>
 						</td>
@@ -229,9 +228,7 @@ function submit_work($uid, $id, $file) {
 					</tr>
 				</tbody>
 			</table>";
-//		$tool_content .=  "<p>$langUploadError</p>";
 	}
-//	$tool_content .=  "<p><center><a href='work.php'>$langBack</a></center></p>";	
 }
 
 ?>

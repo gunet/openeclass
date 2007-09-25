@@ -324,7 +324,7 @@ tCont3;
 		else
 		{
 			$tool_content .= "$langForumType</td>
-				<td >$langPublic";
+				<td >$langPublicAccess";
 		}
 		$tool_content .= "</td></tr><tr ><td>";
 

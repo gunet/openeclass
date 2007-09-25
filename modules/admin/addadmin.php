@@ -77,7 +77,7 @@ if(!empty($encodeLogin)) 	// Check if a username has been posted
 		if (mysql_query("INSERT INTO admin VALUES('$row[0]')")) 
 			$tool_content .= "<p>$langTheUser ".htmlspecialchars($encodeLogin)." $langWith  id='$row[0]' $langDone</p>";
 		else // If mysql_query failed print message
-			$tool_content .= "<p>$langError</p>";
+			$tool_content .= "<p>$langErrorAddAdmin</p>";
 	} 
 	else 
 	{

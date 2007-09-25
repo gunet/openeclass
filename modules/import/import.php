@@ -30,21 +30,6 @@
       +----------------------------------------------------------------------+
  */
 
-/*******************************************************************
-*         IMPORT A PAGE INTO THE WEBSITE
-********************************************************************
-
-GOALS
-*****
-Allow professor to send quickly a page that will be integrated under the website header.
-
-DETAIL
-*********
-
-1. Send a HTML file to /courseName/page directory
-2. Insert document name / title correspondence in "accueil" SQL table
-
-************************************************************/
 
 $require_current_course = TRUE;
 $langFiles = 'import';

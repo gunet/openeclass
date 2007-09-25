@@ -81,7 +81,7 @@ else
 		{
 			if ($u == 1) 
 			{
-				$tool_content .= "$langError. $langCannotDeleteAdmin";
+				$tool_content .= $langTryDeleteAdmin";
 			}
 			else
 			{

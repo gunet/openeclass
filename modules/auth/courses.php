@@ -90,7 +90,7 @@ if (isset($_POST["submit"])) {
         }
         $tool_content .= "<table width=96% height=363 border=0><tr><td valign=top>";
 				if (!$errorExists)
-	        $tool_content .= "<div class=alert1>$langIsReg</div><br><br><br><br>";
+	        $tool_content .= "<div class=alert1>$langRegDone</div><br><br><br><br>";
 				else 
 						$tool_content .= "<div class=alert1>$langWrongPassCourse $contenu</div><br><br><br><br>";
         //if($restrictedCourses!=null) { 
@@ -155,11 +155,11 @@ else
                 if ($numofcourses > 0) {
                         $tool_content .= expanded_faculte($fac, $uid);
 												$tool_content .= "<tr><td colspan=\"6\" ><br>&nbsp;&nbsp;
-  			                  <input type=\"submit\" name=\"submit\" value=\"$langSubscribe\"><br><br></td></tr>\n";
+  			                  <input type=\"submit\" name=\"submit\" value=\"$langSubmitChanges\"><br><br></td></tr>\n";
                 				$tool_content .= "</div></table></form>";
 								} else {
                         if ($fac) {
-                                $tool_content .= "<div class=alert1>$langNoCourses</div></td></tr></table>\n";
+                                $tool_content .= "<div class=alert1>$langNoCoursesAvailable</div></td></tr></table>\n";
                         }
                 }
 									

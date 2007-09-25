@@ -28,7 +28,7 @@ if($is_adminOfCourse) {
 				<tbody>
 					<tr>
 						<td class=\"success\">
-							<p><b>$langCourse $currentCourseID $intitule $langHasDel</b></p>
+							<p><b>$langTheCourse $currentCourseID $intitule $langHasDel</b></p>
 							
 							<p><a href=\"../../index.php\">".$langBackHome." ".$siteName."</a></p>
 						</td>

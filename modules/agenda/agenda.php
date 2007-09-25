@@ -367,7 +367,7 @@ if (mysql_num_rows($result) > 0) {
 				}
 				$nowBarShowed = TRUE;
 				$tool_content .=  "<tr>
-      <td colspan=2 class=\"today\"><b>$langNow : $dateNow</b></td></tr>";
+      <td colspan=2 class=\"today\"><b>$langDateNow : $dateNow</b></td></tr>";
 			}
 		}
 		if ($barreMois!=date("m",strtotime($myrow["day"]))) {

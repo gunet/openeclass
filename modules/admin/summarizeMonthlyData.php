@@ -100,13 +100,13 @@
             }
             //declare visibility
             if ($row['visible'] == 0) {
-              $cvisible = $langHidden;
+              $cvisible = $langClosed;
             }
             else if ($row['visible']==1) {
-              $cvisible = $langVis_enrol;
+              $cvisible = $langTypesRegistration;
             }
             else {
-                $cvisible = $langVisible;
+                $cvisible = $langOpen;
             }
             
             $mtext .= "<tr><td>".$row['name']."</td><td> ".$cvisible."</td><td> ".$ctype."</td><td> ".$row['dept']."</td><td>".$row['proff']."</td><td>".$row['cnt']."</td></tr>";

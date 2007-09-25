@@ -96,7 +96,7 @@ $tool_content .=  "<p>$langSubTitle</p>";
 			<tbody>
 				<tr>
 					<td class=\"success\">
-					<p>$langAdded</p>
+					<p>$langLinkAdded</p>
 					<a href=\"../../courses/$currentCourseID/index.php\">$langHome</a>
 					</td>
 				</tr>

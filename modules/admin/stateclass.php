@@ -269,9 +269,9 @@ function tablize($tableau, $lang) {
     	while ( list( $key, $laValeur ) = each($tableau)) { 
 			$ret .= "<tr>"; 
 			switch ($key) {
-				case '0': $key = $langHiddens; break;
-				case '1'; $key = $langVis_enrols; break;
-				case '2': $key = $langVisibles; break;
+				case '0': $key = $langClosed; break;
+				case '1'; $key = $langTypesRegistration; break;
+				case '2': $key = $langOpen; break;
 				case '5': $key = $langStudents; break;
 				case '10': $key = $langGuest; break;
 				case 'pre': $key = $langPre; break;

@@ -101,14 +101,14 @@ tCont;
 			$tool_content .=  "<input type=radio name=\"private\" value=1 checked>
 		&nbsp;$langPrivate&nbsp;
 		<input type=radio name=\"private\" value=0>
-		&nbsp;$langPublic";
+		&nbsp;$langPublicAccess";
 		}
 		else
 		{
 			$tool_content .=  "<input type=radio name=\"private\" value=1>
 		&nbsp;$langPrivate&nbsp;
 		<input type=radio name=\"private\" value=0 checked>
-		&nbsp;$langPublic";
+		&nbsp;$langPublicAccess";
 		}
 		$tool_content .=  "</td></tr><tr><td>";
 		if($myProperties['document'])

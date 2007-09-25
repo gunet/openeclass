@@ -281,7 +281,7 @@ INSERT IGNORE INTO user SET ";
 if (extension_loaded("zlib")) {
 	$zipCourse = new PclZip("../..".$archiveDir."/../archive.".$currentCourseID.".".$shortDateBackuping.".zip");
 	$zipCourse->create("../..".$archiveDir."/");
-	$tool_content .= "".$langBackupSuccesfull." <a href=\"".$urlServer."/".$archiveDir."/../archive.".$currentCourseID.".".$shortDateBackuping.".zip\">".$langDownload."</a>";
+	$tool_content .= "".$langBackupSuccesfull." <a href=\"".$urlServer."/".$archiveDir."/../archive.".$currentCourseID.".".$shortDateBackuping.".zip\">".$langDownloadIt."</a>";
 } else {
 		$tool_content .= $langBackupSuccesfull;
 	}

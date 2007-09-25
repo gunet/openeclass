@@ -545,7 +545,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
     if( !isset($_FILES['uploadedPackage']) || !is_uploaded_file($_FILES['uploadedPackage']['tmp_name']))
     {
         $errorFound = true;
-        array_push ($errorMsgs, $langFileError.'<br />'.$langNotice.' : '.$langMaxFileSize.' '.get_cfg_var('upload_max_filesize') );
+        array_push ($errorMsgs, $langFileScormError.'<br />'.$langNotice.' : '.$langMaxFileSize.' '.get_cfg_var('upload_max_filesize') );
     }
 
     /*
