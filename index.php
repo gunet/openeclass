@@ -361,7 +361,6 @@ if (isset($uid) AND !isset($logout)) {
 		}
 	} else {
 		//load personalised view
-		include("./modules/lang/$language/perso.inc.php");
 		include("perso.php");
 		drawPerso($tool_content);
 	}
