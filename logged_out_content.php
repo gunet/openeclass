@@ -62,7 +62,7 @@ $tool_content .= <<<lCont
 
 <div id="wrapper">
 <div id="content_login">
-<p>$langInfoAbout</p>
+<p align='justify'>$langInfoAbout</p>
 lCont;
 
 $tool_content .='<br>';
