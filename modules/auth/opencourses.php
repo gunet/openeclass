@@ -207,7 +207,10 @@ $tool_content .= "<a name='$type'>&nbsp;</a>$message</th>";
         }
          if ($numoftypes == 0) {
              $tool_content .= "<br/>";
-             $tool_content .= "<div class=alert1>$m[nolessons]</div>";
+             $tool_content .= "
+       </th>
+     </tr>
+     </table><br/><p class='alert1'>$m[nolessons]</p>";
          }
 
 $tool_content .= "<br>";
