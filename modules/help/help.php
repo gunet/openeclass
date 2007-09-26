@@ -84,7 +84,7 @@ if (!isset($_GET['topic']) ||  empty($GLOBALS["lang$_GET[topic]Content"])) {
 		<h3><?= $GLOBALS["langH$_GET[topic]"] ?></h3>
 		<?= $GLOBALS["lang$_GET[topic]Content"] ?>	
 		<center><p>
-			<a href='javascript:window.close();'><?= $langCloseHelp ?></a>
+			<a href='javascript:window.close();'><?= $langClose ?></a>
 		</p></center>
 	</body>
 </html>

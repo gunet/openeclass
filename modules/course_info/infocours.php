@@ -18,9 +18,9 @@ if (isset($localize)) {
 }
 
 include '../../include/baseTheme.php';
+
 if(isset($newlang)) {
-			$inclPath =  $webDir."modules/lang/$newlang/course_info.inc.php";
-			include($inclPath);
+			include ($webDir."modules/lang/$newlang/messages.inc.php");
 		}
 $nameTools = $langModifInfo;
 $tool_content = "";
@@ -31,8 +31,7 @@ if($is_adminOfCourse) {
 
 	if (isset($submit)) {
 		if(isset($newlang)) {
-			$inclPath =  $webDir."modules/lang/$newlang/create_course.inc.php";
-			include($inclPath);
+			include ($webDir."modules/lang/$newlang/messages.inc.php");
 		}
 		// update course settings
 		if (isset($checkpassword) && $checkpassword=="on" && $formvisible=="1") {
@@ -72,7 +71,7 @@ if($is_adminOfCourse) {
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langGroups' WHERE id='15'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langDropBox' WHERE id='16'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langConference' WHERE id='19'");
-		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langCourseDesc' WHERE id='20'");
+		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langCourseDescription' WHERE id='20'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langQuestionnaire' WHERE id='21'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langLearnPath' WHERE id='23'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langUsage' WHERE id='24'");

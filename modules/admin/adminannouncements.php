@@ -25,7 +25,7 @@ $table_title = 'en_title';
 } else {
 	$_lang_title_ = $langAdminAnnTitle;
 	$_lang_body_ = $langAdminAnnBody;
-	$_lang_comment_ = $langAdminAnnComm;
+	$_lang_comment_ = $langComments;
 	$_lang_titleen_ = $langAdminAnnTitleEn;
 	$_lang_bodyen_ = $langAdminAnnBodyEn;
 	$_lang_commenten_ = $langAdminAnnCommEn;

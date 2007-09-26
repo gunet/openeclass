@@ -123,7 +123,7 @@ $tool_content .= "	<form action=\"newprofadmin.php\" method=\"post\">
 	<td><input type=\"text\" name=\"email_form\" value=\"".@$pe."\">&nbsp;(*)</b></td>
 	</tr>
 	<tr bgcolor=\"".$color2."\">
-        <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>".$profcomment."<br>
+        <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>".$langComments."<br>
 							<font size=\"1\">".$profreason."
        	</th>
 	<td>

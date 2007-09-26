@@ -2686,14 +2686,10 @@ $langFillAgain="Please fill again the";
 $langFillAgainLink="form";
 
 $reqregprof="Professor Registration Application ";
-$profpers="Professor Information";
-$profsname="Professor Last Name";
-$profname="Professor First Name";
-$profphone="Professor Tel.";
-$profuname="Professor User Name";
-$profcomment="Comments";
+$langProfUname="Professor User Name";
+
 $profreason="(Describe the reasons for using the platform)";
-$profemail="User E-mail";
+$langProfEmail="User E-mail";
 
 $reg="Registration";
 $reguser="User Registration";
@@ -2714,13 +2710,11 @@ $langNewUserAccount¡ctivation = 'Student Account ¡ctivation';
 $langNewProfAccount¡ctivation = 'Professor Account ¡ctivation';
 $langNewAccount¡ctivation1 = '(existing account)';
 
-
 $profsuccess="Professor new account has been created succesfully!";
 
-$dearprof="Dear Professor !";
+$langDearProf="Dear Professor !";
 $success="Your personal info have been sent succesfully!";
 $click="Click";
-$here="here";
 $backpage="to return to home page.";
 
 $emailprompt="Type your e-mail address:";

@@ -26,14 +26,6 @@ $userphone = isset($_POST['userphone'])?$_POST['userphone']:'';
 
 if(!empty($submit)) 
 {
-	// do not allow the user to have the characters: ',\" or \\ in password
-	//$pw = array(); 	$nr = 0;
-	//while (isset($password{$nr})) // convert the string $password into an array $pw
-	//{
-  //	$pw[$nr] = $password{$nr};
-  //  $nr++;
-	//}
-  //if( (in_array("'",$pw)) || (in_array("\"",$pw)) || (in_array("\\",$pw)) )
   if( (strstr($password, "'")) or (strstr($password, '"')) or (strstr($password, '\\')) 
   or (strstr($uname, "'")) or (strstr($uname, '"')) or (strstr($uname, '\\')) )
 	{
@@ -162,8 +154,8 @@ if(!empty($submit))
 			$upd=mysql_query($sql,$db);
 			//----------------------------- Email Message --------------------------
 		    $MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" . $mailbody3 
-		    . $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langDepartment: $department\n$profcomment: $usercomment\n" 
-		    . "$profuname : $username\n$profemail : $usermail\n" . "$contactphone : $userphone\n\n\n$logo\n\n";
+		    . $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langDepartment: $department\n$langComments: $usercomment\n" 
+		    . "$langProfUname : $username\n$langProfEmail : $usermail\n" . "$contactphone : $userphone\n\n\n$logo\n\n";
 		if (!send_mail($gunet, $emailhelpdesk, '', $emailhelpdesk, $mailsubject, $MailMessage, $charset)) 
 			{
 				$tool_content .= "
@@ -188,9 +180,9 @@ if(!empty($submit))
 				<tbody>
 					<tr>
 						<td class=\"success\">
-							<p>$dearprof</p><p>$success</p><p>$infoprof</p>
+							<p>$langDearProf</p><p>$success</p><p>$infoprof</p>
 							
-							<p>$click <a href=\"$urlServer\">$here</a> $backpage</p>
+							<p>$click <a href=\"$urlServer\">$langHere</a> $backpage</p>
 						</td>
 					</tr>
 				</tbody>

@@ -13,7 +13,6 @@ $tool_content .= "	<form action=\"newprof_second.php\" method=\"post\">
 
 	<table width=\"99%\">
 	";
-	//<caption>".$profpers."</caption>
 
 $tool_content .= "		
 	<thead>
@@ -39,7 +38,7 @@ $tool_content .= "
 	<td><input type=\"text\" name=\"email_form\" value=\"".@$pe."\"> (*)</td>
 	</tr>
 	<tr>
-    <th class='left'>$profcomment</td>
+    <th class='left'>$langComments</td>
 	<td>
         <textarea name=\"usercomment\" COLS=\"35\" ROWS=\"4\" WRAP=\"SOFT\">".@$usercomment."</textarea>
 	 (*) $profreason

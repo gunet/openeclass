@@ -47,8 +47,8 @@ $upd=db_query("INSERT INTO prof_request(profname,profsurname,profuname,profemail
 //----------------------------- Email Message --------------------------
     $MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" .
 			$mailbody3 . $mailbody4 . $mailbody5 . "$mailbody8\n\n" .
-			"$langDepartment: $department\n$profcomment: $usercomment\n" .
-			"$profuname : $username\n$profemail : $usermail\n" .
+			"$langDepartment: $department\n$langComments: $usercomment\n" .
+			"$langProfUname : $username\n$langProfEmail : $usermail\n" .
 			"$contactphone : $userphone\n\n\n$logo\n\n";
 
 	if (!send_mail($gunet, $emailhelpdesk, '', $emailhelpdesk, $mailsubject2, $MailMessage, $charset)) {
@@ -113,12 +113,12 @@ $tool_content .= "
 			<small>&nbsp;(*)</small></td>
 		  </tr>
 		  <tr>
-	       	<th>$profuname</th>
+	       	<th>$langProfUname</th>
 	    	<td><input type='text' name='username' size='20' maxlength='20' value='".@$username."' class='auth_input'>
 			<small>&nbsp;(*)&nbsp;$langUserNotice</small></td>
 		  </tr>
 	  	  <tr>
-		  	<th>$profemail</th>
+		  	<th>$langProfEmail</th>
      		<td><input type='text' name='usermail' value='".@$usermail."' class='auth_input'>
 			<small>&nbsp;(*)</small></td>
           </tr>	

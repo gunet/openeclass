@@ -81,6 +81,7 @@ $langInsertUserInfo = "Εισαγωγή στοιχείων χρήστη";
 * admin.inc.php
 ****************************************************/
 // index
+$langComments = "Σχόλια";
 $langAdmin = "Εργαλεία Διαχείρισης Πλατφόρμας";
 $langAdminBy = "Διαχείριση από ";
 $langState = "Διαχείριση Εξυπηρετητή";
@@ -374,7 +375,6 @@ $langAdminAnnMes = "τοποθετήθηκε την";
 
 $langAdminAnnTitle = "Τίτλος";
 $langAdminAnnBody = "Ανακοίνωση";
-$langAdminAnnComm = "Σχόλια";
 
 $langAdminAnnTitleEn = "Τίτλος (Αγγλικά)";
 $langAdminAnnBodyEn = "Ανακοίνωση (Αγγλικά)";
@@ -1522,7 +1522,6 @@ $langModuleOfMyCourse = "Χρήση ενότητας αυτού του μαθήματος";
 $langModuleStillInPool = "Ενότητες αυτής της γραμμής θα είναι ακόμα διαθέσιμες στο σύνολο των ενοτήτων";
 $langModulesPoolToolName = "Σύνολο ενοτήτων";
 $langMyCourses = "Τα μαθήματά μου";
-$langNameOfLang = "Διάταξη";
 $langNeverBrowsed = "Δεν έχει ολοκληρωθεί";
 $langNewLabel = "Δημιουργία νέας ετικέτας";
 $langNext = "Επόμενο";
@@ -2435,14 +2434,10 @@ $langFillAgain="Παρακαλούμε ξανασυμπληρώστε την";
 $langFillAgainLink="αίτηση";
 
 $reqregprof="Αίτηση Εγγραφής Καθηγητή";
-$profpers="Στοιχεία Καθηγητή";
-$profsname="Επίθετο Καθηγητή";
-$profname="Όνομα Καθηγητή";
-$profphone="Τηλέφωνο Καθηγητή";
-$profuname="Επιθυμητό Όνομα Χρήστη (Username)";
-$profcomment="Σχόλια";
+$langProfUname="Επιθυμητό Όνομα Χρήστη (Username)";
+
 $profreason="(Αναφέρατε τους λόγους χρήσης της πλατφόρμας)";
-$profemail="E-mail Χρήστη";
+$langProfEmail="E-mail Χρήστη";
 
 $reg="Εγγραφή";
 $reguserldap="Εγγραφή Χρήστη μέσω LDAP";
@@ -2451,10 +2446,9 @@ $langByLdap="Μέσω LDAP";
 $langNewProf="Εισαγωγή στοιχείων νέου λογαριασμού καθηγητή";
 $profsuccess="Η δημιουργία νέου λογαριασμού καθηγητή πραγματοποιήθηκε με επιτυχία!";
 
-$dearprof="Αγαπητέ διδάσκοντα!";
+$langDearProf="Αγαπητέ διδάσκοντα!";
 $success="Η αποστολή των στοιχείων σας έγινε με επιτυχία!";
 $click="Κάντε κλίκ";
-$here="εδώ";
 $backpage="για να επιστρέψετε στην αρχική σελίδα.";
 
 $emailprompt="Δώστε την διεύθυνση e-mail σας:";
@@ -2797,9 +2791,9 @@ $langNo = "Όχι";
 $iso639_2_code = "el";
 $iso639_1_code = "ell";
 
+$langNameOfLang['greek']="Ελληνικά";
 $langNameOfLang['english']="Αγγλικά";
 $langNameOfLang['french']="Γαλλλικά";
-$langNameOfLang['greek']="Ελληνικά";
 
 $charset = 'iso-8859-7';
 $text_dir = 'ltr'; // ('ltr' for left to right, 'rtl' for right to left)
@@ -3034,7 +3028,6 @@ $langLastname = "Επώνυμο";
 $langLegendRequiredFields = "<span class=\"required\">*</span> δείχνει απαραίτητο πεδίο ";
 $langMemorizeYourPassord = "Αποστήθισε τα, θα τα χρειαστείς την επόμενη φορά που θα μπεις σε αυτή τη σελίδα.";
 $langModifyProfile = "Αλλαγή του προφίλ μου";
-$langNameOfLang = "Διάταξη";
 $langOfficialCode = "Κωδικός διαχείρισης";
 $langOneResp = "Ενας από τους διαχειριστές του μαθήματος";
 $langPersonalCourseList = "Προσωπική λίστα μαθήματος";

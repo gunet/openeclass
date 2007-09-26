@@ -112,7 +112,7 @@ if(!empty($is_submit))
 						<td><input type=\"text\" name=\"userphone\" size=\"30\" value=\"\"></td>
 					</tr>		
 					<tr>
-        				<td>".$profcomment."<br><font size=\"1\">".$profreason."</td>
+        				<td>".$langComments."<br><font size=\"1\">".$profreason."</td>
 						<td><textarea name=\"usercomment\" COLS=\"35\" ROWS=\"4\" WRAP=\"SOFT\">".@$usercomment."</textarea>
 						<font size=\"1\">&nbsp;(*)</font>
         				</td>
