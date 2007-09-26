@@ -91,7 +91,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		<td width=\"35%\"><input name=\"subsystems[]\" type=\"checkbox\" value=\"1\" checked=\"checked\" />$langAgenda</td>
     </tr>
 	<tr>
-		<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" checked=\"checked\" />$langCourseDesc</td>
+		<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" checked=\"checked\" />$langCourseDescription</td>
         <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"3\" checked=\"checked\" />$langDoc</td>
     </tr>
 	<tr>
@@ -260,8 +260,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		<div id=\"marginForm\">
 			<fieldset>
 				<legend>
-					
-						$langCourseDesc
+				$langCourseDescription
 				</legend>
 				<label>
 		<ul class=\"listBullet\">";	
