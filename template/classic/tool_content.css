@@ -68,18 +68,20 @@ a:hover {
 }
 
 #operations_container {
-	margin-bottom: 0.5em;
+    text-align: right;
+    padding: 6px;
+    background: #CAC3B5;
+    font-size: 11px;
+    color: #000000;
+    border-top: 2px solid #a33033;
+    border-bottom: 2px solid #a33033;
+    margin-bottom: 0.8em;
 	overflow: hidden;
-	border: 1px dotted #a33033;
-	padding: 6px;
-	background: #CAC3B5;
-	text-align: right;
-    font-size: 10px;
 }
 
 #operations_container a{
-   color: black;
-   font-size: 11px;
+   color: #000000;
+   font-size: 10px;
    font-weight: normal;
    vertical-align: middle;
    text-decoration: none;
@@ -87,7 +89,8 @@ a:hover {
 
 #operations_container a:hover{
 	text-decoration: underline;
-	color: #a33033;
+	color: #edecdf;
+    font-size: 10px;
 	vertical-align: middle;
 }
 
@@ -281,7 +284,7 @@ table.CourseListTitle td {
 
 table.DepTitle {
     background: none;
-    
+
 }
 
 table.DepTitle th{
