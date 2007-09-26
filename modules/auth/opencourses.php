@@ -171,9 +171,9 @@ $tool_content .= "<a name='$type'>&nbsp;</a>$message</th>";
 
 		while ($mycours = mysql_fetch_array($result)) {
             if ($mycours['visible'] == 2) {
-              $codelink = "<a href='../../courses/$mycours[k]/'>$mycours[i]</a>&nbsp;(".$mycours['c'].")";
+              $codelink = "&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<a href='../../courses/$mycours[k]/'>$mycours[i]</a>&nbsp;(".$mycours['c'].")";
             } else {
-              $codelink = "$mycours[i]&nbsp;(".$mycours['c'].")";
+              $codelink = "&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;$mycours[i]&nbsp;(".$mycours['c'].")";
             }
 
             // output each course as a table for beautifying reasons
@@ -186,7 +186,7 @@ $tool_content .= "<a name='$type'>&nbsp;</a>$message</th>";
        $tool_content .= "
        <td>$mycours[t]</td>";
        $tool_content .= "
-       <td width='5%'>";
+       <td width='5%' align='center'>";
             // show the necessary access icon
                       foreach ($icons as $visible => $image) {
                           if ($visible == $mycours['visible']) {
