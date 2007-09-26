@@ -171,9 +171,9 @@ $tool_content .= "<a name='$type'>&nbsp;</a>$message</th>";
 
 		while ($mycours = mysql_fetch_array($result)) {
             if ($mycours['visible'] == 2) {
-              $codelink = "&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<a href='../../courses/$mycours[k]/'>$mycours[i]</a>&nbsp;(".$mycours['c'].")";
+              $codelink = "&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<a href='../../courses/$mycours[k]/'>$mycours[i]</a>&nbsp;<font color='#a9a9a9'>(".$mycours['c'].")</font>";
             } else {
-              $codelink = "&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;$mycours[i]&nbsp;(".$mycours['c'].")";
+              $codelink = "&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<font color='#a9a9a9'>$mycours[i]&nbsp;(".$mycours['c'].")</font>";
             }
 
             // output each course as a table for beautifying reasons
