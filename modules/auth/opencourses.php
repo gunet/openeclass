@@ -73,13 +73,10 @@ $icons = array(
 );
 
 $tool_content .= "
-   <table width=99% align=center>
-   <tr>
-     <td><a name='top'>$m[department]:</a>&nbsp;&nbsp;<b>$fac</b></td>
-   </tr>
-   <tr>
-     <td>";
-
+     <table width=99% align=center class='DepTitle'>
+     <tr>
+       <th><a name='top'>&nbsp;</a>$m[department]:&nbsp;<b>$fac</b></th>
+       <th><div align='right'>";
 // get the different course types available for this faculte
 $typesresult = mysql_query("SELECT DISTINCT cours.type types FROM cours WHERE cours.faculte = '$fac' ORDER BY cours.type");
 
@@ -87,9 +84,8 @@ $typesresult = mysql_query("SELECT DISTINCT cours.type types FROM cours WHERE co
 $numoftypes = mysql_num_rows($typesresult);
 // output the nav bar only if we have more than 1 types of courses
 
-if ( $numoftypes > 1) {
+if ($numoftypes > 1) {
 	$counter = 1;
-	$tool_content .= "<p>";
 	while ($typesArray = mysql_fetch_array($typesresult)) {
 		$t = $typesArray['types'];
 		// make the plural version of type (eg pres, posts, etc)
@@ -101,12 +97,10 @@ if ( $numoftypes > 1) {
 		$tool_content .= "<a href=\"#".$t."\">".$m["$ts"]."</a>";
 		$counter++;
 	}
-	
 	$tool_content .= "
-     </td>
-   </tr>
-   <tr>
-     <td>";
+       </div></th>
+     </tr>
+     </table>";
 }
 
 //$tool_content .= "<div class='courses'>";
@@ -138,47 +132,42 @@ foreach (array("pre" => $m['pres'],
 
 $tool_content .= "
      <br>
-	 <script type='text/javascript' src='sorttable.js'></script>
-     <table width='100%'>
-	 <thead>
+	 
+     <table width=99% align='center' class='CourseListTitle'>
      <tr>
-       <td class='LoginData'>";
+       <th>";
 	 // We changed the style a bit here and we output types as the title
-$tool_content .= "
-       <a name='$type'>$message</a>
-	   </td>\n";
+$tool_content .= "<a name='$type'>&nbsp;</a>$message</th>";
 
           // output a top href link if necessary
           if ( $numoftypes > 1)
-            $tool_content .= "
-	   <td class='LoginData'>
-	   <a href=\"#top\" class='mainpage'>$m[begin]</a>
-	   </td>";
+       $tool_content .= "
+       <td><a href=\"#top\" class='mainpage'>$m[begin]</a></td>";
           // or a space for beautifying reasons
           else
-            $tool_content .= "
-	   <td class='LoginData'>&nbsp;</td>";
-	        $tool_content .= "
-	 </tr>
-     </thead>";
-			$tool_content .= "
+       $tool_content .= "
+       <td>&nbsp;</td>";
+	 $tool_content .= "
+     </tr>";
+	 $tool_content .= "
      </table>
-	 <br>";
+	 ";
 
-		    $tool_content .= "
-     <table width='100%' align='center' class=\"sortable\" id=\"t1\">";
-           $tool_content .= "
+     $tool_content .= "
+     <script type='text/javascript' src='sorttable.js'></script>
+     <table width=99% align='center' class=\"sortable\" id=\"t1\">";
+     $tool_content .= "
      <thead>
-	 <tr>";
-	       $tool_content .= "
-     <th class='left'>$m[lessoncode]</th>";
-           $tool_content .= "
-     <th class='left'>$m[professor]</th>";
-					 $tool_content .= "
-     <th>Τύπος</th>";
-					 $tool_content .="
-	 </tr>
-	 </thead>";
+     <tr>";
+	 $tool_content .= "
+       <th class='left'>$m[lessoncode]</th>";
+     $tool_content .= "
+       <th class='left'>$m[professor]</th>";
+     $tool_content .= "
+       <th>Τύπος</th>";
+     $tool_content .="
+     </tr>
+     </thead>";
 
 		while ($mycours = mysql_fetch_array($result)) {
             if ($mycours['visible'] == 2) {
@@ -188,38 +177,40 @@ $tool_content .= "
             }
 
             // output each course as a table for beautifying reasons
-            $tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#edecde'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
+            $tool_content .= "
+     <tr onMouseOver=\"this.style.backgroundColor='#edecde'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
             // changed the variable because of the previous change in the select argument
 
-            $tool_content .= "<td width='65%'>".$codelink."</td>";
-            $tool_content .= "<td>$mycours[t]</td>";
-            $tool_content .= "<td width='5%'>";
+       $tool_content .= "
+       <td width='65%'>".$codelink."</td>";
+       $tool_content .= "
+       <td>$mycours[t]</td>";
+       $tool_content .= "
+       <td width='5%'>";
             // show the necessary access icon
                       foreach ($icons as $visible => $image) {
                           if ($visible == $mycours['visible']) {
                               $tool_content .= $image;
                           }
                         }
-            $tool_content .= "</td>";
-            $tool_content .= "</tr>";
-			
+       $tool_content .= "</td>";
+     $tool_content .= "
+     </tr>";
           }
-		  $tool_content .= "
-	<tfoot><tr><td colspan='3'>&nbsp;</td></tr></tfoot>
-	 ";
-
-				$tool_content .= "
-	 </table>";
+	 $tool_content .= "
+     </table>
+	 
+     <br/>";
         $tool_content .= "";
           // that's it!
           // upatras.gr patch end here, atkyritsis@upnet.gr, daskalou@upnet.gr
         }
          if ($numoftypes == 0) {
-             $tool_content .= "<br>";
+             $tool_content .= "<br/>";
              $tool_content .= "<div class=alert1>$m[nolessons]</div>";
          }
 
-$tool_content .= "<br></td></tr></table>";
+$tool_content .= "<br>";
 //$tool_content .= "</div>";
 
 draw($tool_content, 0);

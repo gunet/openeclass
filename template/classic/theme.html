@@ -1,13 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <!-- BEGIN mainBlock -->
-
 <html>
 <head>
 <title>{PAGE_TITLE}</title>
-
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-7" />
-<meta name="author" content="Evelthon Prodromou - http://www.prodromou.eu" />
 <meta name="copyright" content="Copyright 2007 GUnet - http://www.gunet.gr" />
 <meta name="keywords" content="elearning, lms, eclass, e-class, learning, management, system, asynchronous, synchronous" />
 <meta name="robots" content="NOFOLLOW,INDEX" />
@@ -15,129 +12,97 @@
 <link href="{TOOL_PATH}template/classic/tool_content.css" rel="stylesheet" type="text/css" />
 {TOOL_CSS}
 <link rel="SHORTCUT ICON" href="{URL_PATH}template/classic/img/eclass-icon.ico" />
-
- {HEAD_EXTRAS}
-
+{HEAD_EXTRAS}
 </head>
 
 <body {BODY_ACTION}>
+<div id="container">
+  <!-- BEGIN HeaderBlock -->
+  <div id="header">
+    <a id="logo" href="{URL_PATH}" title="e-Class home"></a>
+    <div id="fbar_info">
+      <div class="user">{LANG_USER} {USER_NAME} {USER_SURNAME}
+      <a href="{LOGOUT_LINK}index.php?logout=yes" title="{LANG_LOGOUT}" >{LANG_LOGOUT}</a>
+      </div>
+      <div class="langSwitch">
+      <a href="{LOCALIZE_LINK}" title="{LANG_LOCALIZE}">{LANG_LOCALIZE}</a>
+      </div>
+    </div>
+  </div>
+  <!-- END HeaderBlock -->
 
-<div id="container"> 
+  <div id="thirdBar">
+    <div id="tbar_info">
+      <div id="search">
+      <p class="title">{SEARCH_TITLE}</p>
+      <form name="form1" id="form1" method="post" action="{URL_PATH}modules/search/{SEARCH_ACTION}">
+      <input type="text" class="key" name="search_terms" size="14"/>
+      <input type="image" name="submit" class="ok" alt="Ok"  src="{URL_PATH}template/classic/img/go_button.gif" border="0" WIDTH="18" HEIGHT="17" />
+      <br />
+      <a href="{URL_PATH}modules/search/{SEARCH_ADVANCED_URL}" title="advanced search" >{SEARCH_ADVANCED}</a>
+      </form>
+      </div>
 
-	<div id="header"> 
-		<a id="logo" href="{URL_PATH}" title="e-Class home"></a>
-	
-		<div id="fbar_info">
-			<div class="user">{LANG_USER} {USER_NAME} {USER_SURNAME}
-   				<a href="{LOGOUT_LINK}index.php?logout=yes" title="{LANG_LOGOUT}" >{LANG_LOGOUT}</a>
-   			</div>
-    		<div class="langSwitch">
-    			<a href="{LOCALIZE_LINK}" title="{LANG_LOCALIZE}">{LANG_LOCALIZE}</a>
-    		</div>
-		</div>
-  	</div>
-	
-	<div id="thirdBar">
-		<div id="tbar_info">
-			<div id="search">
-				<p class="title">{SEARCH_TITLE}</p>
-				<form name="form1" id="form1" method="post" action="{URL_PATH}modules/search/{SEARCH_ACTION}">
-					<input type="text" class="key" name="search_terms" size="14"/>
-                    <input type="image" name="submit" class="ok" alt="Ok"  src="{URL_PATH}template/classic/img/go_button.gif" border="0" WIDTH="18" HEIGHT="17" /
-                    <br />
-				    <a href="{URL_PATH}modules/search/{SEARCH_ADVANCED_URL}" title="advanced search" >{SEARCH_ADVANCED}</a>
-                </form>
-			</div>
-		
-		    <div id="bread">
-			<!-- BEGIN breadCrumbHomeBlock -->
-				<ul>
-					<li class="first">{BREAD_HREF_FRONT}{BREAD_TEXT}{BREAD_HREF_END}		
-					<!-- END breadCrumbHomeBlock -->
-				
-					<!-- BEGIN breadCrumbStartBlock -->
-						<ul>
-							<li>{BREAD_ARROW} {BREAD_HREF_FRONT}{BREAD_TEXT}{BREAD_HREF_END}
+      <div id="bread">
+      <!-- BEGIN breadCrumbHomeBlock -->
+      <ul>
+        <li class="first">{BREAD_HREF_FRONT}{BREAD_TEXT}{BREAD_HREF_END}</li>
+      <!-- END breadCrumbHomeBlock -->
+      <!-- BEGIN breadCrumbStartBlock -->
+        <li>{BREAD_ARROW} {BREAD_HREF_FRONT}{BREAD_TEXT}{BREAD_HREF_END}</li>
+      <!-- END breadCrumbStartBlock -->
+      <!-- BEGIN breadCrumbEndBlock -->
+      <!-- END breadCrumbEndBlock -->
+      </ul>
+      </div>
 
-							<!-- END breadCrumbStartBlock -->	
+      <div><span class="{THIRDBAR_LEFT_ICON}">&nbsp;</span><span class="lesson">{THIRD_BAR_TEXT}</span></div>
 
-							<!-- BEGIN breadCrumbEndBlock -->
-							</li>
-						</ul>
+   </div>
+  </div>
 
-							<!-- END breadCrumbEndBlock -->
-			</div>
-	
-			<div>
-				<span class="{THIRDBAR_LEFT_ICON}">&nbsp;</span><span class="lesson">{THIRD_BAR_TEXT}</span>
-			</div>
-		</div>
-
-	</div>
-
-	<div id="content"> 
-		<!-- BEGIN leftNavBlock -->
-		<div id="leftSub">
-	  		<div id="leftnav"> 
-				<div id="navcontainer">
-					<ul id="navlist">
-
-					<!-- BEGIN leftNavCategoryBlock -->
-						<!-- BEGIN leftNavCategoryTitleBlock -->	
-  						<li class="{NAV_CSS_CAT_CLASS}">{ACTIVE_TOOLS}</li>
-						<!-- END leftNavCategoryTitleBlock -->
-						<!-- BEGIN leftNavLinkBlock -->
-
-						<li class="{TOOL_ICON}">
-							<div>
-								<a href="{TOOL_LINK}"><img src="{TOOL_PATH}template/classic/img/{IMG_FILE}" width="16" height="16" border="0" alt="" /> {TOOL_TEXT}</a>
-							</div>
-						</li>
-
-						<!-- END leftNavLinkBlock -->
-
-					<!-- END leftNavCategoryBlock -->
-
-					</ul>
-
-				</div>
-
-			</div>
-	
-	  		{ECLASS_HOME_EXTRAS_LEFT}
-	  		
-		</div>
-		<!-- END leftNavBlock -->
-		<div id="{CONTENT_MAIN_CSS}">
-
-			<div id="tool_title">
-				{TOOL_NAME}{HELP_LINK_ICON}
-			</div>
-
-			<!-- BEGIN TOOL CONTENT -->
-				{EXTRA_MSG}
-				{TOOL_CONTENT}
-				
-			<!-- END TOOL CONTENT -->
-			
-	</div>
+  <div id="content">
+    <!-- BEGIN leftNavBlock -->
+    <div id="leftSub">
+      <div id="leftnav">
+        <div id="navcontainer">
+          <ul id="navlist">
+          <!-- BEGIN leftNavCategoryBlock -->
+          <!-- BEGIN leftNavCategoryTitleBlock -->
+          <li class="{NAV_CSS_CAT_CLASS}">{ACTIVE_TOOLS}</li>
+          <!-- END leftNavCategoryTitleBlock -->
+          <!-- BEGIN leftNavLinkBlock -->
+          <li class="{TOOL_ICON}">
+           <div><a href="{TOOL_LINK}"><img src="{TOOL_PATH}template/classic/img/{IMG_FILE}" width="16" height="16" border="0" alt="" /> {TOOL_TEXT}</a></div>
+          </li>
+          <!-- END leftNavLinkBlock -->
+          <!-- END leftNavCategoryBlock -->
+          </ul>
+        </div>
+     </div>
+     {ECLASS_HOME_EXTRAS_LEFT}
+    </div>
+    <!-- END leftNavBlock -->
+    <div id="{CONTENT_MAIN_CSS}">
+      <div id="tool_title">{TOOL_NAME}{HELP_LINK_ICON}</div>
+      <!-- BEGIN TOOL CONTENT -->
+      {EXTRA_MSG}
+      {TOOL_CONTENT}
+      <!-- END TOOL CONTENT -->
+    </div>
 
   	<div id="clearfooter"></div>
 
-  	<div id="footer"> 
+  	<div id="footer">
 		<a id="eu_flag" href="#" title="EU"></a>
 		<a id="gr_flag" href="#" title="GR"></a>
 		<a id="other_flag" href="#" title=""></a>
 		<a id="epeaek_flag" href="http://www.epeaek.gr/" title="EPEAEK"></a>
 		<a id="infosoc_flag" href="http://www.infosoc.gr/" title="INFOSOC"></a>
-
-    	<div class="blank"></div> 
-
-		<p>
-			Copyright 2007 GUnet - <a href="{TOOL_PATH}info/copyright.php">{LANG_COPYRIGHT_NOTICE}</a>
-		</p>
-        </div>
-    </div>
+    	<div class="blank"></div>
+		<p>Copyright 2007 GUnet - <a href="{TOOL_PATH}info/copyright.php">{LANG_COPYRIGHT_NOTICE}</a></p>
+  	</div>
+  </div>
 </div>
 
 <!-- END mainBlock -->

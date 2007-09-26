@@ -264,3 +264,49 @@ table.htmlarea td {
         background: none;
 }
 
+table.CourseListTitle {
+    background: none;
+}
+
+table.CourseListTitle th{
+    text-align: left;
+    color: #a33033;
+    font-weight: bold;
+    font-size:12px;
+}
+
+table.CourseListTitle td {
+    text-align: right;
+}
+
+table.DepTitle {
+    background: none;
+}
+
+table.DepTitle th{
+    text-align: left;
+    background: #727266;
+    font-size:11px;
+    color: #edecdf;
+}
+
+table.DepTitle td {
+    text-align: right;
+    background: #727266;
+    font-size:11px;
+    color: #edecdf;
+}
+
+table.DepTitle a {
+    color: #edecdf;
+    font-size: 10px;
+    font-weight: bold;
+    text-decoration: none;
+	vertical-align: middle;
+}
+
+table.DepTitle a:hover {
+	text-decoration: underline;
+	vertical-align: middle;
+    font-size: 10px;
+}
