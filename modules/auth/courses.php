@@ -123,10 +123,12 @@ else
     $tool_content .= "
     <br/>
     <script type=\"text/javascript\" src=\"sorttable.js\"></script>
-    <table width='99%' align=center class=\"sortable\" id=\"t1\">
+    <table width='99%' class=\"sortable\" id=\"t1\">
+    <thead>
     <tr>
       <th><b>$langFaculte</b></th>
-    </tr>";
+    </tr>
+    </thead>";
                          
       while ($fac = mysql_fetch_array($result)) {
       $tool_content .= "
