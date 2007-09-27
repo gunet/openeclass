@@ -88,22 +88,23 @@ if (isset($_POST["submit"])) {
 
                 } 
         }
-        $tool_content .= "<table width=96% height=363 border=0><tr><td valign=top>";
-				if (!$errorExists)
-	        $tool_content .= "<div class=alert1>$langRegDone</div><br><br><br><br>";
-				else 
-						$tool_content .= "<div class=alert1>$langWrongPassCourse $contenu</div><br><br><br><br>";
+
+		if (!$errorExists)
+	      $tool_content .= "
+    <div class=alert1>$langRegDone</div>
+    <br/><br/><br/><br/>";
+		else 
+		  $tool_content .= "
+    <div class=alert1>$langWrongPassCourse $contenu</div>
+    <br/><br/><br/><br/>";
         //if($restrictedCourses!=null) { 
         //        $tool_content .= "<div class=alert1>(Μη επιτρεπτή ενέργεια)</div><br><br><br><br>";
         //} 
-        $tool_content .= "<div align=right><a href=\"../../index.php\" class=mainpage>$langHome</a></div>";
-        $tool_content .= "</td></tr></table>";
+        $tool_content .= "
+    <div align=right><a href=\"../../index.php\">$langHome</a></div>";
 }
 else
 {
-        $tool_content .= "</td></tr>";
-        $tool_content .= "<tr><td valign=top height=355>";
-
         // check if user requested a specific faculte
         if (isset( $_GET['fc'] ) ) { 
                 // get faculte name from db
@@ -113,60 +114,67 @@ else
                 $fac = getfacfromuid($uid);
         }
 
-        if (!$fac) {
-
-                $tool_content .= "$langAddHereSomeCourses";
-
-                $result=db_query("SELECT id, name, code FROM faculte ORDER BY name");
-                $numrows = mysql_num_rows($result);
-                if (isset($result))  {
-                      $tool_content .= "
-                         <script type=\"text/javascript\" src=\"sorttable.js\"></script>
-                         <table width='99%' align=center class=\"sortable\" id=\"t1\" cellspacing='2'  cellpadding='10' border='0' style=\"border: 1px solid $table_border\">
-                       <tr>
-                         <th style='text-align: left; background: #E6EDF5; color: #4F76A3;' height=25><b>$langFaculte</b></th>
-                       </tr>";
+  if (!$fac) {
+    $tool_content .= "
+    $langAddHereSomeCourses";
+    $result=db_query("SELECT id, name, code FROM faculte ORDER BY name");
+    $numrows = mysql_num_rows($result);
+    if (isset($result))  {
+    $tool_content .= "
+    <br/>
+    <script type=\"text/javascript\" src=\"sorttable.js\"></script>
+    <table width='99%' align=center class=\"sortable\" id=\"t1\">
+    <tr>
+      <th><b>$langFaculte</b></th>
+    </tr>";
                          
-                       while ($fac = mysql_fetch_array($result)) {
-                           $tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#F1F1F1'\" onMouseOut=\"this.style.backgroundColor='transparent'\">
-                             <td class='kk' height=25>&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<a href='courses.php?fc=$fac[id]' class='mainpage'>$fac[name]</a> <small>
-															<font color=#4175B9>($fac[code])</font></small>";
-                               $n=db_query("SELECT COUNT(*) FROM cours_faculte WHERE faculte='$fac[name]'");
-                                $r=mysql_fetch_array($n);
-                              $tool_content .= "&nbsp;<small><font color=#AAAAAA>($r[0]  "
-                                                 . ($r[0] == 1? $langAvCours: $langAvCourses) . ")</font><small>
-                                  </td>
-                                  </tr>\n";
-                                }
-                      $tool_content .= "</table>";
-
-                }
+      while ($fac = mysql_fetch_array($result)) {
+      $tool_content .= "
+    <tr onMouseOver=\"this.style.backgroundColor='#edecdf'\" onMouseOut=\"this.style.backgroundColor='transparent'\">
+    <td>&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;
+        <a href='courses.php?fc=$fac[id]'>$fac[name]</a> <small><font color='#a5a5a5'>($fac[code])</font></small>";
+      $n=db_query("SELECT COUNT(*) FROM cours_faculte WHERE faculte='$fac[name]'");
+      $r=mysql_fetch_array($n);
+      $tool_content .= "
+       &nbsp;<small><font color=#a5a5a5>($r[0]  ". ($r[0] == 1? $langAvCours: $langAvCourses) . ")</font><small>
+    </td>
+  </tr>
+      ";
+      }
+      $tool_content .= "
+  </table>\n";
+    }
                 $tool_content .= "<br>\n";
                 $tool_content .= "<br>\n";
-        }
-        else {
-                // department exists
+  } else {
+  // department exists
+  $tool_content .= "
+    <form action=\"$_SERVER[PHP_SELF]\" method=\"post\">";
+  $numofcourses = getdepnumcourses($fac);
 
-                $tool_content .= "<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">";
-                $numofcourses = getdepnumcourses($fac);
+  // display all the facultes collapsed
+  $tool_content .= collapsed_facultes_horiz($fac);
+  if ($numofcourses > 0) {
+  $tool_content .= expanded_faculte($fac, $uid);
+  $tool_content .= "\n
+    <br>
+    <input type=\"submit\" name=\"submit\" value=\"$langSubmitChanges\">
+    </form>
+  ";
+  
 
-                // display all the facultes collapsed
-                $tool_content .= collapsed_facultes_horiz($fac);
-                if ($numofcourses > 0) {
-                        $tool_content .= expanded_faculte($fac, $uid);
-												$tool_content .= "<tr><td colspan=\"6\" ><br>&nbsp;&nbsp;
-  			                  <input type=\"submit\" name=\"submit\" value=\"$langSubmitChanges\"><br><br></td></tr>\n";
-                				$tool_content .= "</div></table></form>";
-								} else {
-                        if ($fac) {
-                                $tool_content .= "<div class=alert1>$langNoCoursesAvailable</div></td></tr></table>\n";
-                        }
-                }
+  } else {
+  if ($fac) {
+    $tool_content .= "
+    <br/><br/><br/>
+    <div class=alert1>$langNoCoursesAvailable</div>\n";
+    }
+  }
 									
-        } // end of else (department exists)
+  } // end of else (department exists)
 }
 
-draw($tool_content, 1, 'auth');
+draw($tool_content, 0);
 
 // functions
 function getfacfromfc( $dep_id) {
@@ -215,9 +223,14 @@ function expanded_faculte($fac, $uid) {
 	 	$myCourses[$rowMyCourses["cc"]]["statut"]= $rowMyCourses["ss"]; 
 	}
 	
-	$retString .= "</td></tr><tr><td valign=top height=1 class=kk style=\"border: 1px dotted $table_border\">
-					<a name=\"top\">$m[department]:</a> <b><em style='font-size: 12px'>$fac</em></b>&nbsp;&nbsp;\n";
+	$retString .= "
+    <br/>
 	
+    <table class=\"DepTitle\" align=\"center\" width=\"99%\">
+    <tbody>
+    <tr>
+      <th><a name=\"top\"> </a>$m[department]: <b>$fac</b>&nbsp;&nbsp;";
+	  
 	// get the different course types available for this faculte
 		$typesresult = db_query(
 		"SELECT DISTINCT cours.type types 
@@ -230,7 +243,8 @@ function expanded_faculte($fac, $uid) {
 
 		// output the nav bar only if we have more than 1 types of courses
 		if ($numoftypes > 1) {
-         $retString .= "<span style=\"float: right\">";
+         $retString .= "
+      <th><div align=\"right\">";
 			$counter = 1;
 			while ($typesArray = mysql_fetch_array($typesresult)) {
 				$t = $typesArray['types'];
@@ -243,14 +257,16 @@ function expanded_faculte($fac, $uid) {
 				$retString .= "<a href=\"#".$t."\" class=\"sortheader\">".$m["$ts"]."</a>";
 				$counter++;
 			}
-			$retString .= "</span></td><tr><tr><td><br>";
-		}
-                else
-                {
-                        $retString .= "<div class='courses' align=right>";
-                        $retString .= "&nbsp;";
-                        $retString .= "</div></td></tr><tr><td height=1>&nbsp;</td></tr>";
-                }
+			$retString .= "</div></th>
+    </tr>
+    </tbody>
+    </table>\n
+    <br/>";
+		} else {
+          $retString .= "<div class='courses' align=right>";
+          $retString .= "&nbsp;";
+          $retString .= "</div></td></tr><tr><td height=1>&nbsp;</td></tr>";
+        }
 		
 		// changed this foreach statement a bit
 				// this way we sort by the course types
@@ -278,116 +294,103 @@ function expanded_faculte($fac, $uid) {
 					}
 					
 					// We changed the style a bit here and we output types as the title
-					$retString .= "<tr><td class=kk height=20 valign=top style=\"border: 1px solid #DCDCDC;\">
-                            <table width=100% cellpading=0 cellspacing=1>
-                            <tr><td colspan=4 class=td_small_HeaderRow style=\"border: 1px solid #DCDCDC;\">
-                            <table width=100% border=0 cellpading=0 cellspacing=0>
-                            <tr><td class=td_small_HeaderRow><a name=\"$type\" class='alert1'>$message</a></td>";
-                if ($numoftypes > 1) {
-                          $retString .= "<td align=right class=td_small_HeaderRow>
-													<a href=\"#top\" class=sortheader>".$langBegin."</a></td>";
-                            }
-                         $retString .= "</tr></table>";
-                         $retString .= "</td><tr><tr><td>";
+	$retString .= "\n
+    <br/>
+    <table class=\"CourseListTitle\" align=\"center\" width=\"99%\">
+    <tr>
+      <th><a name=\"$type\" class='alert1'> </a>$message</th>";
+    if ($numoftypes > 1) {
+    $retString .= "
+      <td><a href=\"#top\">".$langBegin."</a></td>";
+    }
+    $retString .= "
+    </tr>
+    </table>\n";
 
-			// legend
-              $retString .= "<tr>\n";
-              $retString .= "<td class='color1' align='center' width='10%' style=\"border: 1px solid #DCDCDC;\"><b>Εγγραφή</b></td>";
-              $retString .= "<td class='color1' align='left' width='60%' style=\"border: 1px solid #DCDCDC;\"><b>Μάθημα (κωδικός)</b></td>";
-              $retString .= "<td class='color1' align='left' width='23%' style=\"border: 1px solid #DCDCDC;\"><b>Καθηγητής</b></td>";
-              $retString .= "<td class='color1' align='center' width='7%' style=\"border: 1px solid #DCDCDC;\"><b>Τύπος</b></td>";
-              $retString .= "</tr>\n";
-              $retString .= "</table>\n";
-					while ($mycours = mysql_fetch_array($result)) {
-					// changed the variable because of the previous change in the select argument
-						if ($mycours['visible'] == 2) {
-							$codelink = "<a href='../../courses/$mycours[k]/' target=_blank class='CourseLink'>$mycours[i]</a>";
-						} else {
-							$codelink = $mycours['i'];
-						}
+
+	// legend
+    $retString .= "
+    <script type=\"text/javascript\" src=\"sorttable.js\"></script>
+    <table class=\"sortable\" id=\"t1\" align=\"center\" width=\"99%\">
+    <thead>
+    <tr>";
+    $retString .= "
+      <th width='10%'>Εγγραφή</th>";
+    $retString .= "
+      <th class='left' width='60%'>Μάθημα (κωδικός)</th>";
+    $retString .= "
+      <th class='left' width='23%'>Καθηγητής</th>";
+    $retString .= "
+      <th width='7%'><b>Τύπος</b></th>";
+    $retString .= "
+    </tr>
+    </thead>";
+
+	while ($mycours = mysql_fetch_array($result)) {
+      if ($mycours['visible'] == 2) {
+		$codelink = "<a href='../../courses/$mycours[k]/' target=_blank>$mycours[i]</a>";
+	  } else {
+		$codelink = $mycours['i'];
+	  }
 	
-						// output each course as a table for beautifying reasons
-						$retString .= "\n\n";
-						$retString .= "<table border='0' width=100% align=center cellspacing='1' cellpadding='0'>\n";
-            $retString .= "<tr onMouseOver=\"this.style.backgroundColor='#F1F1F1'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
-					  $retString .= "<td class='kkk' align='center' width='10%'>";
+    $retString .= "
+    <tr onMouseOver=\"this.style.backgroundColor='#edecde'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
+	$retString .= "
+      <td width='10%' align='center'>";
 						
-//----- needed ?????????????
-/*
-					 if ($mycours["visible"]==0 && !isset ($myCourses[$mycours["k"]]["subscribed"])) {
-							        $contactprof = $m['mailprof']."<a href=\"contactprof.php?fc=".$facid."&cc=".$mycours['k']."\">".$m['here']."</a>";
-						        $retString .= $codelink;
-			      } else {
-						        $retString .= $codelink;
-					      }
-
-				      if ($mycours["visible"]>0 && 
-											(isset ($myCourses[$mycours["k"]]["subscribed"]) 
-											|| !isset ($myCourses[$mycours["k"]]["subscribed"]))) {
-									        $retString .= "<input type='hidden' name='changeCourse[]' value='$mycours[k]'>\n";
-									        @$retString .= "<td>".$mycours['t']."</td>";
-					      } elseif ($mycours["visible"]== 0 && isset ($myCourses[$mycours["k"]]["subscribed"])) {
-								        $retString .= "<td>".$mycours['t']."</td>";
-					      } else {
-					        $retString .= "<td>$mycours[t]</td><td>".$contactprof."</td>";
-								}
-*/
-// ---------------------------------------
-						$requirepassword = "";
-						if (isset ($myCourses[$mycours["k"]]["subscribed"])) { 
-							if ($myCourses[$mycours["k"]]["statut"]!=1) {
-										// password needed
-										if ($mycours['p']!="" && $mycours['visible'] == 1) {
-							            $requirepassword = $m['code'].": 
-														<input type=\"password\" name=\"".$mycours['k']."\" value=\"".$mycours['p']."\">";
-										} else {
-					            $requirepassword = "";
-          					}
+      if (isset ($myCourses[$mycours["k"]]["subscribed"])) { 
+        if ($myCourses[$mycours["k"]]["statut"]!=1) {
+		// password needed
+          if ($mycours['p']!="" && $mycours['visible'] == 1) {
+			$requirepassword = $m['code'].": <input type=\"password\" name=\"".$mycours['k']."\" value=\"".$mycours['p']."\">";
+          } else {
+            $requirepassword = "";
+          }
 				
-								$retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]' checked >";
-								} else {
-                	$retString .= "<img src=../../template/classic/img/teacher.gif title=$langTitular>";
+          $retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]' checked >";
+	    } else {
+          $retString .= "<img src=../../template/classic/img/teacher.gif title=$langTitular>";
 								}
-						} else {
-									if ($mycours['p']!="" && $mycours['visible'] == 1) {
-						          $requirepassword = "<br>".$m['code'].": <input type=\"password\" name=\"".$mycours['k']."\">";
-					        } else {
-						          $requirepassword = "";
-					        }
-   			    if ($mycours["visible"]>0  || isset ($myCourses[$mycours["k"]]["subscribed"])) {
-	      		    $retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]'></td>";
-       				 }
- 
-//							$retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]'>";
-						}
+      } else {
+			if ($mycours['p']!="" && $mycours['visible'] == 1) {
+			  $requirepassword = "<br>".$m['code'].": <input type=\"password\" name=\"".$mycours['k']."\">";
+			} else {
+			  $requirepassword = "";
+			}
+			
+   			if ($mycours["visible"]>0  || isset ($myCourses[$mycours["k"]]["subscribed"])) {
+	      	  $retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]'></td>";
+       		}
+      }
 
-						$retString .= "<input type='hidden' name='changeCourse[]' value='$mycours[k]'>";
-						$retString .= "</td>\n";
-						$retString .= "<td class='kkk'  valign='top' width=60%><b>$codelink</b> <font color=#4175B9>(".$mycours['k'].")</font>$requirepassword </td>\n";
-					  $retString .= "<td class=kkk width=23%><span class='explanationtext'>$mycours[t]</span></td>\n";	
-						$retString .= "<td class='kkk' valign='top' align='center' width='7%'>";
+	$retString .= "<input type='hidden' name='changeCourse[]' value='$mycours[k]'>";
+	$retString .= "</td>";
+	$retString .= "
+      <td width=60%><b>$codelink</b> <font color='#a5a5a5'>(".$mycours['k'].")</font>$requirepassword </td>";
+	$retString .= "
+      <td width=23%>$mycours[t]</td>";	
+	$retString .= "
+      <td align='center' width='7%'>";
             // show the necessary access icon
             foreach ($icons as $visible => $image) {
               if ($visible == $mycours['visible']) {
                 $retString .= $image;
               }
             }
-            $retString .= "</td>\n\n";
-		
-					$retString .= "</tr>\n";
-					$retString .= "</table>\n";
-
-					}
-          $retString .= "</td><tr><tr><td><br>";
-					
-					// that's it!
-					// upatras.gr patch end
-
+    $retString .= "</td>";
+	$retString .= "
+    </tr>";
+	
+   }
+   // END of while
+   	$retString .= "
+    </table>
+    <br/>";
 			}
 				
-      $retString .= "</td>\n";
-      $retString .= "</tr>\n";
-      $retString .= "</table>\n";
+     // $retString .= "</td>\n";
+     // $retString .= "</tr>\n";
+     // $retString .= "</table>\n";
 
 return $retString;
 }
@@ -435,14 +438,17 @@ function collapsed_facultes_horiz($fac) {
 global $listfac;
 $retString = "";
 
-	$retString .= "</td><td class=tool_bar align=left width=20%>
-					<span class=\"small\"><b>$listfac:</b></span></td><td class=tool_bar align=right width=80%>\n";
+	$retString .= "\n
+    <table class=\"DepTitle\" align=\"center\" width=\"99%\">
+    <tr>
+      <th>$listfac:</th>
+      <th><div align=\"right\">";
 
 $result = db_query("SELECT DISTINCT faculte.id id, faculte.name f
                 FROM faculte
                 ORDER BY name");
 
-/*	$result = db_query(
+    /*	$result = db_query(
 		"SELECT DISTINCT cours.faculte f, faculte.id id
 		FROM cours, faculte 
 		WHERE (cours.visible = '1' OR cours.visible = '2') 
@@ -451,20 +457,21 @@ $result = db_query("SELECT DISTINCT faculte.id id, faculte.name f
 
 	$counter = 1;
 	while ($facs = mysql_fetch_array($result)) {
-		if ($counter != 1) $retString .= "<font class=\"small\"> | </font>";
+		if ($counter != 1) $retString .= " | ";
 		if ($facs['f'] != $fac)
-			$codelink = "<a href=\"?fc=$facs[id]\" class=\"small\">$facs[f]</a>"; 
+			$codelink = "<a href=\"?fc=$facs[id]\">$facs[f]</a>"; 
 		else
-			$codelink = "<font class=\"small\">$facs[f]</font>";
+			$codelink = "$facs[f]";
 
 		$retString .= $codelink;
 		$counter++;
 	}
                // o pinakas autos stoixizei tin kartela
+    $retString .= "</div></th>
+    </tr>
+    </table>
+    ";
 
-    $retString .= "<table border='0' height=283 width=99% align=center cellspacing='1' cellpadding='0'>\n";
-    $retString .= "<tr>\n";
-    $retString .= "<td valign=top height=1 class=kk>\n";
 
 return $retString;
 }
