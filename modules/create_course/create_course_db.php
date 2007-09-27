@@ -427,7 +427,7 @@ mysql_query("INSERT INTO accueil VALUES (
 
     mysql_query("INSERT INTO accueil VALUES (
                '20',
-               '$langCourseDesc',
+               '$langCourseDescription',
                '../../modules/course_description/',
                'description',
                '".$sbsystems[20]."',

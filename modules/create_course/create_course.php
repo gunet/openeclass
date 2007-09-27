@@ -37,7 +37,6 @@
 
 $require_login = TRUE;
 $require_prof = TRUE;
-$langFiles = array('create_course', 'opencours');
 
 $require_help = TRUE;
 $helpTopic = 'CreateCourse';
@@ -229,7 +228,7 @@ $tool_content .= "</tr><tr>
       <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"15\" />$langDropBox</td>
       <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"16\" />$langGroups</td>
       <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"19\" />$langConference</td>
-      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" />$langCourseDesc</td>
+      <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" />$langCourseDescription</td>
       </tr>
       <tr>
       <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"21\" />$langQuestionnaire</td>
@@ -267,7 +266,7 @@ if (isset($create_course)) {
 
         $repertoire = new_code(find_faculty_by_name($faculte));
         $language=$languageCourse;
-        include("../lang/$language/create_course.inc.php");
+        include("../lang/$language/messages.inc.php");
         if(empty($intitule) OR empty($repertoire)) {
                 $tool_content .= "<tr bgcolor=\"$color2\" height=\"400\">
                         <td bgcolor=\"$color2\" colspan=\"2\" valign=\"top\">
