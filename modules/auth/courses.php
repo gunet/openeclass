@@ -226,8 +226,7 @@ function expanded_faculte($fac, $uid) {
 	}
 	
 	$retString .= "
-    
-	
+    	
     <table class=\"DepTitle\" align=\"center\" width=\"99%\">
     <tbody>
     <tr>
@@ -265,9 +264,9 @@ function expanded_faculte($fac, $uid) {
     </table>\n
     <br/><br/>";
 		} else {
-          $retString .= "<div class='courses' align=right>";
-          $retString .= "&nbsp;";
-          $retString .= "</div></td></tr><tr><td height=1>&nbsp;</td></tr>";
+          //$retString .= "<div align=right>";
+          //$retString .= "&nbsp;";
+          //$retString .= "</div></td></tr><tr><td height=1>&nbsp;</td></tr>";
         }
 		
 		// changed this foreach statement a bit
