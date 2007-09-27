@@ -226,7 +226,7 @@ function expanded_faculte($fac, $uid) {
 	}
 	
 	$retString .= "
-    <br/>
+    
 	
     <table class=\"DepTitle\" align=\"center\" width=\"99%\">
     <tbody>
@@ -263,7 +263,7 @@ function expanded_faculte($fac, $uid) {
     </tr>
     </tbody>
     </table>\n
-    <br/>";
+    <br/><br/>";
 		} else {
           $retString .= "<div class='courses' align=right>";
           $retString .= "&nbsp;";
@@ -297,7 +297,7 @@ function expanded_faculte($fac, $uid) {
 					
 					// We changed the style a bit here and we output types as the title
 	$retString .= "\n
-    <br/>
+    
     <table class=\"CourseListTitle\" align=\"center\" width=\"99%\">
     <tr>
       <th><a name=\"$type\" class='alert1'> </a>$message</th>";
@@ -391,10 +391,6 @@ function expanded_faculte($fac, $uid) {
     <br/>";
 			}
 				
-     // $retString .= "</td>\n";
-     // $retString .= "</tr>\n";
-     // $retString .= "</table>\n";
-
 return $retString;
 }
 
@@ -421,7 +417,7 @@ $result = mysql_query(
 		ORDER BY cours.faculte");
 	
 	while ($fac = mysql_fetch_array($result)) {
-		$retString .= "<blockquote>";
+		//$retString .= "<blockquote>";
 		$retString .= "<a href=\"?fc=$fac[id]\" class=\"normal\">$fac[f]</a>";
 		
 		$n = db_query("SELECT COUNT(*) FROM cours
@@ -429,7 +425,7 @@ $result = mysql_query(
                 $r = mysql_fetch_array($n);
                 $retString .= " <span style='font-size: 10pt'>($r[0] "
                         . ($r[0] == 1? $langAvLesson: $langAvCourses) . ")</span><br>\n";
-		$retString .= "</blockquote>";
+		//$retString .= "</blockquote>";
 	}
 		$retString .= "<br>";
 
