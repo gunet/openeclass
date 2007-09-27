@@ -37,13 +37,10 @@
 ==============================================================================
 */
 
-//LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-$langFiles = array('registration','index','authmethods');
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
 
 $navigation[]= array ("url"=>"registration.php", "name"=> "$langReg");
-
 
 // Initialise $tool_content
 $tool_content = "";
@@ -54,7 +51,7 @@ $authmethods = get_auth_active_methods();
 
 if(!in_array($auth,$authmethods))		// means try to hack,attack
 {
-	die("INVALID AUTHENTICATION METHOD");
+	die("$langInvalidAuth");
 }
 $msg = get_auth_info($auth);
 $settings = get_auth_settings($auth);
@@ -98,15 +95,12 @@ $tool_content .= "
 				<tr>
 					<th colspan=\"2\" align=center>".$settings['auth_instructions']."</th>
 				</table>
-				
 			</form>
 			</FIELDSET>
 			</td>
 		</tr>
 		</table>
 			";
-
-
 
 draw($tool_content,0,'auth');
 ?>

@@ -35,8 +35,6 @@
 ==============================================================================
 */
 
-//LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-$langFiles = array('registration','gunet','admin');
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
 $auth = isset($_POST['auth'])?$_POST['auth']:'';
@@ -48,7 +46,6 @@ $nameTools = "$langUserData";
 // Initialise $tool_content
 $tool_content = "";
 // Main body
-
 
 $found = 0;
 
@@ -198,21 +195,6 @@ if(!empty($is_submit))
 
 
 }   // end of initial if
-
-// Check if a user with usename $login already exists
-function user_exists($login) 
-{
-	global $mysqlMainDb;
-	$username_check = mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='$login'");
-	if (mysql_num_rows($username_check) > 0) 
-	{
-		return TRUE;
-	} 
-	else 
-	{
-		return FALSE;
-	}
-}
 
 $tool_content .= "</table>";
 $tool_content .= "<br />";

@@ -387,6 +387,20 @@ function check_uid() {
 	}
 
 }
+// -------------------------------------------------------
+// Check if a user with username $login already exists
+// ------------------------------------------------------
+
+function user_exists($login) {
+  global $mysqlMainDb;
+
+  $username_check = mysql_query("SELECT username FROM `$mysqlMainDb`.user 
+								WHERE username='".mysql_real_escape_string($login)."'");
+  if (mysql_num_rows($username_check) > 0)
+    return TRUE;
+  else 
+    return FALSE;
+}
 
 // Convert HTML to plain text
 

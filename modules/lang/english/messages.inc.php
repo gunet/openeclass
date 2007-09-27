@@ -1435,10 +1435,10 @@ $langLinks = "HTML page";
 * index.inc.php
 **************************************************************/
 
-$langInvalidId = '<font color="red" size="1" face="arial, helvetica">
+$langInvalidId = "<font color='red'>
 	Login failed.<br>If you are not registered, create a new account
-	using the <a href=module/auth/newuser_info.php>registration form</a>.
-	</font><br>&nbsp;<br>';
+	using the <a href='modules/auth/registration.php'>registration form</a>.
+	</font><br>&nbsp;<br>";
 $langAccountInactive1 = "Inactive Account.";
 $langAccountInactive2 = "Please cont the admin to activate your account.";
 $langMyCourses="My courses";
@@ -1487,7 +1487,6 @@ $langUnCourse = "Unregister";
 $langCourseCode = "Course (Code)";
 $langSearch = "Search";
 $langManagement="Administration";
-$langPlatformAnnounce = "Announcements";
 $langInfoAbout = "Platform <b>GUNet eClass</b> is a complete Courses Management System. It is GUnet's proposal for supporting Asynchronous Teleteaching. It is mainly designed to aid the classical way of  teaching and is adapted to th Greek Academic Educational System. It is an open platform technically supported by GUnet.
 More information about platform can be found in the available manuals.";
 $langWelcomeStud = "Select \"Courses list\" to review the available courses.";
@@ -2510,7 +2509,7 @@ $langRegStudent="Follow courses";
 $langRegAdmin="Create course websites";
 $langUserDetails = "New user information";
 $langSubmitNew = "Submit";
-
+$langInvalidAuth = "Invalid auth method";
 // newuser_second.php
 $langPassTwice="You typed two different passwords. Use your browser's back button and try again.";
 $langUserFree="This username is already taken. Use your browser's back button and choose another.";
@@ -2685,7 +2684,7 @@ $langFieldsMissing="You left one or more required fields empty!";
 $langFillAgain="Please fill again the";
 $langFillAgainLink="form";
 
-$reqregprof="Professor Registration Application ";
+$langReqRegProf="Professor Registration Application ";
 $langProfUname="Professor User Name";
 
 $profreason="(Describe the reasons for using the platform)";

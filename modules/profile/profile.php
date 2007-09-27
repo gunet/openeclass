@@ -25,7 +25,6 @@ eMail: eclassadmin@gunet.gr
 ==============================================================================
 */
 
-$langFiles = array('registration','usage');
 $require_help = TRUE;
 $require_login = true;
 $helpTopic = 'Profile';
@@ -37,7 +36,6 @@ $tool_content = "";
 check_uid();
 
 $nameTools = $langModifProfile;
-
 
 
 check_guest();

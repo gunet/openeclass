@@ -83,7 +83,7 @@ if (mysql_num_rows($result) > 0) {
 <table width=\"99%\">
 	<thead>
 		<tr>
-			<th> $langPlatformAnnounce </th>
+			<th>$langAnnouncements </th>
 		</tr>
 	</thead>
 	<tbody>";

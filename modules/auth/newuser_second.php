@@ -37,16 +37,15 @@ the registration in the platform.
 ==============================================================================
 */
 
-$langFiles = array('registration', 'opencours');
 include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
 include 'auth.inc.php';
-$nameTools = $reguser;
+$nameTools = $langRegistration;
 
 $tool_content = "";		// Initialise $tool_content
 
 // Main body
-$navigation[] = array("url"=>"newuser.php", "name"=> $langRegistration);
+$navigation[] = array("url"=>"newuser.php", "name"=> $langAuthReg);
 
 $statut=5;		// This file registers only students
 
@@ -174,9 +173,7 @@ if(!empty($submit))
 
 				// manage the store/encrypt process of password into database
 				$authmethods = array("2","3","4","5");
-				//$tool_content .= "POSTED values:<br>uname:".$uname."<br>password:".$password."<br>";
 				$uname = escapeSimple($uname);	// escape the characters: simple and double quote
-				//$tool_content .= "<br>Username after escape filter:<br>".$uname."<br>";
 				if(!in_array($auth,$authmethods))
 				{
 					$password_encrypted = md5($password);
@@ -191,8 +188,6 @@ if(!empty($submit))
 				(user_id, nom, prenom, username, password, email, statut, department, inst_id, am, registered_at, expires_at)
 				VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email','$statut',
 					'$department','$institut','$am',".$registered_at.",".$expires_at.")";
-
-				//$tool_content .= "<br>QUERY:<br>".$q1."<br>";
 
 				$inscr_user=mysql_query($q1);
 				$last_id=mysql_insert_id();
@@ -220,15 +215,10 @@ if(!empty($submit))
 				<br/>
 				<p>$langPersonalSettingsMore</p>
 				";
-				
 								
 			}	// end of registration accepted
-
-			$already_second=1;
-			//			$tool_content .= "</table>";
 		}
 	}
 } // if submit
 draw($tool_content,0);
-
 ?>

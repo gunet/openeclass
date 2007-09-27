@@ -1296,10 +1296,10 @@ $langPgTitle="Τίτλος σελίδας";
 ***************************************************************/
 
 $langHomePage = "Αρχική Σελίδα";
-$langInvalidId = '<font color="red" size="1" face="arial, helvetica">
+$langInvalidId = "<font color='red'>
         Λάθος στοιχεία.<br>Αν δεν είστε γραμμένος, συμπληρώστε τη
-        <a href=modules/auth/newuser_info.php>φόρμα εγγραφής</a>.
-        </font><br>&nbsp;<br>';
+        <a href='modules/auth/registration.php'>φόρμα εγγραφής</a>.
+        </font><br>&nbsp;<br>";
 $langAccountInactive1 = "Μη ενεργός λογαριασμός.";
 $langAccountInactive2 = "Παρακαλώ επικοινωνήστε με τον διαχειριστή για την ενεργοποίηση του λογαριασμού σας";
 $langMyCoursesProf="Τα μαθήματα που υποστηρίζω (Καθηγητής)";
@@ -1324,7 +1324,7 @@ $langMenu ="Μενού";
 $langLogout="Έξοδος";
 $langSupportForum="Περιοχή Υποστήριξης";
 $langProfReq = 'Εγγραφή Καθηγητή';
-
+$langInvalidAuth = "Λάθος τρόπος πιστοποίησης";
 $langContact = 'Επικοινωνία';
 $langInfoPlat = 'Ταυτότητα Πλατφόρμας';
 $lang_forgot_pass = "Ξεχάσατε το συνθηματικό σας;";
@@ -1334,7 +1334,6 @@ $langListFaculte = "Κατάλογος Μαθημάτων";
 $langAsynchronous = "Ομάδα Ασύγχρονης Τηλεκπαίδευσης";
 $langUserLogin = "Σύνδεση χρήστη";
 $langWelcomeToEclass = "Καλωσορίσατε στο eClass!";
-$langPlatformAnnounce = "Ανακοινώσεις";
 $langUnregCourse = "Απεγγραφή από μάθημα";
 $langUnCourse = "Απεγγραφή";
 $langCourseCode = "Μάθημα (Κωδικός)";
@@ -2433,7 +2432,7 @@ $langFieldsMissing="Αφήσατε κάποιο(α) από τα υποχρεωτικά πεδία κενό(ά) !";
 $langFillAgain="Παρακαλούμε ξανασυμπληρώστε την";
 $langFillAgainLink="αίτηση";
 
-$reqregprof="Αίτηση Εγγραφής Καθηγητή";
+$langReqRegProf="Αίτηση Εγγραφής Καθηγητή";
 $langProfUname="Επιθυμητό Όνομα Χρήστη (Username)";
 
 $profreason="(Αναφέρατε τους λόγους χρήσης της πλατφόρμας)";

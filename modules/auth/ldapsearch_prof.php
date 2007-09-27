@@ -163,22 +163,6 @@ if(!empty($is_submit))
 
 }   // end of initial if
 
-// Check if a user with usename $login already exists
-function user_exists($login) 
-{
-	global $mysqlMainDb;
-	global $db;
-	$username_check = mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='".mysql_real_escape_string($login)."'",$db);
-	if (mysql_num_rows($username_check) > 0) 
-	{
-		return TRUE;
-	} 
-	else 
-	{
-		return FALSE;
-	}
-}
-
 // Check if a user with usename $login already exists in the requests(prof_request)
 function user_exists_request($login) 
 {

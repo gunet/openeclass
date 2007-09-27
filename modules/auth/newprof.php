@@ -1,16 +1,13 @@
 <?
-$langFiles = array('registration', 'admin', 'gunet');
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
-$nameTools = $reqregprof;
+$nameTools = $langReqRegProf;
 
 // Initialise $tool_content
 $tool_content = "";
 
 $auth = get_auth_id();
-
 $tool_content .= "	<form action=\"newprof_second.php\" method=\"post\">
-
 	<table width=\"99%\">
 	";
 
@@ -67,14 +64,8 @@ $tool_content .= "
 	</tr>
 	</thead>
     </table>
-        
-        		
 	</form>	
 	<br/>
-	
-	
 ";
-
 draw($tool_content,0,'auth');
-
 ?>

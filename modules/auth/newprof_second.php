@@ -1,8 +1,4 @@
 <?php
-/*
-* @version $Id$
-*/
-$langFiles = array('registration', 'admin', 'gunet');
 include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
 require_once 'auth.inc.php';
@@ -29,7 +25,6 @@ if(!empty($submit))
   if( (strstr($password, "'")) or (strstr($password, '"')) or (strstr($password, '\\')) 
   or (strstr($uname, "'")) or (strstr($uname, '"')) or (strstr($uname, '\\')) )
 	{
-	
 		$tool_content .= "
 		<table width=\"99%\">
 				<tbody>
