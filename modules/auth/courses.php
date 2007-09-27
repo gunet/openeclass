@@ -176,7 +176,7 @@ else
   } // end of else (department exists)
 }
 
-draw($tool_content, 0);
+draw($tool_content, 1);
 
 // functions
 function getfacfromfc( $dep_id) {
@@ -440,7 +440,7 @@ function collapsed_facultes_horiz($fac) {
 
 global $listfac;
 $retString = "";
-
+/*
 	$retString .= "\n
     <table class=\"DepTitle\" align=\"center\" width=\"99%\">
     <tr>
@@ -450,13 +450,6 @@ $retString = "";
 $result = db_query("SELECT DISTINCT faculte.id id, faculte.name f
                 FROM faculte
                 ORDER BY name");
-
-    /*	$result = db_query(
-		"SELECT DISTINCT cours.faculte f, faculte.id id
-		FROM cours, faculte 
-		WHERE (cours.visible = '1' OR cours.visible = '2') 
-			AND faculte.name = cours.faculte
-		ORDER BY cours.faculte"); */
 
 	$counter = 1;
 	while ($facs = mysql_fetch_array($result)) {
@@ -475,7 +468,7 @@ $result = db_query("SELECT DISTINCT faculte.id id, faculte.name f
     </table>
     ";
 
-
+*/
 return $retString;
 }
 
