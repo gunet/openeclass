@@ -339,7 +339,8 @@ function expanded_faculte($fac, $uid) {
     <tr onMouseOver=\"this.style.backgroundColor='#edecde'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
 	$retString .= "
       <td width='10%' align='center'>";
-						
+	
+	$requirepassword = "";				
       if (isset ($myCourses[$mycours["k"]]["subscribed"])) { 
         if ($myCourses[$mycours["k"]]["statut"]!=1) {
 		// password needed
