@@ -126,7 +126,7 @@ else
     <table width='99%' class=\"sortable\" id=\"t1\">
     <thead>
     <tr>
-      <th><b>$langFaculte</b></th>
+      <th class='left'><b>$langFaculte</b></th>
     </tr>
     </thead>";
                          
