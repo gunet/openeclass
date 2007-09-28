@@ -66,11 +66,6 @@ $tool_content .= "
         }
       $tool_content .= "
      </tbody>\n
-     <tfoot>
-     <tr>
-       <td>&nbsp;</td>
-     </tr>
-     </tfoot>
     </table>";
   }
 

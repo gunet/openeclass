@@ -101,6 +101,11 @@ if ($numoftypes > 1) {
        </div></th>
      </tr>
      </table>";
+} else {
+	$tool_content .= "
+       </div></th>
+     </tr>
+     </table>";
 }
 
 //$tool_content .= "<div class='courses'>";
