@@ -61,7 +61,7 @@ $tool_content .= "
      $r=mysql_fetch_array($n);
 
     $tool_content .= "
-    <small><font color=\"#aaaaaa\">($r[0]  ".  ($r[0] == 1? $langAvCourse: $langAvCourses) . ")</font><small></td>
+    <small><font color=\"#aaaaaa\">($r[0]  ".  ($r[0] == 1? $langAvCours: $langAvCourses) . ")</font><small></td>
     </tr>\n";
         }
       $tool_content .= "

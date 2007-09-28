@@ -31,7 +31,7 @@ $langFiles = array('registration', 'opencours');
 include '../../include/baseTheme.php';
 
 $nameTools = $langChoiceLesson;
-$navigation[] = array ("url"=>"courses.php", "name"=> $langOtherCourses);
+$navigation[] = array ("url"=>"courses.php", "name"=> $langChoiceDepartment);
 $tool_content = "";
 
 $icons = array(
@@ -116,12 +116,11 @@ else
 
   if (!$fac) {
     $tool_content .= "
-    $langAddHereSomeCourses";
+    <p align='justify'>$langAddHereSomeCourses</p>";
     $result=db_query("SELECT id, name, code FROM faculte ORDER BY name");
     $numrows = mysql_num_rows($result);
     if (isset($result))  {
     $tool_content .= "
-    <br/>
     <script type=\"text/javascript\" src=\"sorttable.js\"></script>
     <table width='99%' class=\"sortable\" id=\"t1\">
     <thead>
@@ -168,8 +167,15 @@ else
 
   } else {
   if ($fac) {
+  
     $tool_content .= "
-    <br/><br/><br/>
+     <table width=99% class='DepTitle'>
+     <tr>
+       <th><a name='top'>&nbsp;</a>$m[department]:&nbsp;<b>$fac</b></th>
+     </tr>
+     </table>";
+    $tool_content .= "
+    <br/><br/>
     <div class=alert1>$langNoCoursesAvailable</div>\n";
     }
   }
@@ -228,7 +234,7 @@ function expanded_faculte($fac, $uid) {
 	
 	$retString .= "
     	
-    <table class=\"DepTitle\" align=\"center\" width=\"99%\">
+    <table class=\"DepTitle\" width=\"99%\">
     <tbody>
     <tr>
       <th><a name=\"top\"> </a>$m[department]: <b>$fac</b>&nbsp;&nbsp;</th>";  
@@ -264,9 +270,12 @@ function expanded_faculte($fac, $uid) {
     </table>\n
     <br/><br/>";
 		} else {
-          //$retString .= "<div align=right>";
-          //$retString .= "&nbsp;";
-          //$retString .= "</div></td></tr><tr><td height=1>&nbsp;</td></tr>";
+		  $retString .= "</div></th>
+    </tr>
+    </tbody>
+    </table>\n
+    <br/><br/>";
+
         }
 		
 		  // changed this foreach statement a bit

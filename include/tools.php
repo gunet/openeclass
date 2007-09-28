@@ -189,7 +189,7 @@ function loggedInMenu(){
 
 	if ($statut != 10) {
 
-		array_push($sideMenuText, $GLOBALS['langOtherCourses']);
+		array_push($sideMenuText, $GLOBALS['langRegCourses']);
 		array_push($sideMenuLink, $urlServer . "modules/auth/courses.php");
 		array_push($sideMenuImg, "enroll.gif");
 

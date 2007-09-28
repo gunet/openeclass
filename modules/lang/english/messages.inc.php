@@ -1930,7 +1930,7 @@ $avlesson="course available";
 $avlessons="courses available";
 $langWrongPassCourse = "Wrong Course Password";
 $langAvCourses = "courses available";
-$langAvCourse = "course available";
+$langAvCours = "course available";
 
 $m['begin'] = 'begin';
 $m['department'] = 'Faculty / Department';
@@ -2672,6 +2672,8 @@ $langAskUserFile = "Users File";
 $langAddManyUsers  = "Add many users";
 
 $langChoiceLesson ="Course Selection";
+$langRegCourses = "Course Registration";
+$langChoiceDepartment ="Department Selection";
 $langCoursesRegistered="You were successfully registered to the selected courses!";
 $langNoCoursesRegistered="<p>You didn't registered to any course.</p><p> You can always register next time you enter in the platform</p>";
 $langGuestUser="Add guest user";
