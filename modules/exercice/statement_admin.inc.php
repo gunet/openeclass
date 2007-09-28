@@ -83,58 +83,64 @@ if(isset($submitQuestion)) {
 	}
 	else
 	{
-        // if the user has chosed to modify the question only in the current exercise
-        if(isset($modifyIn) && $modifyIn == 'thisExercise')
-        {
-        	// duplicates the question
-        	$questionId=$objQuestion->duplicate();
+//        // if the user has chosed to modify the question only in the current exercise
+//        if(isset($modifyIn) && $modifyIn == 'thisExercise')
+//        {
+//				print_r($objQuestion);
+//
+//        	// duplicates the question
+//        	$questionId=$objQuestion->duplicate();
+//            
+//					// deletes the old question
+//            $objQuestion->delete($exerciseId);
+//
+//            // removes the old question ID from the question list of the Exercise object
+//            $objExercise->removeFromList($modifyQuestion);
+//
+//            $nbrQuestions--;
+//
+//            // construction of the duplicated Question
+//            $objQuestion=new Question();
+//
+//            $objQuestion->read($questionId);
+//
+//			// adds the exercise ID into the exercise list of the Question object
+//            $objQuestion->addToList($exerciseId);
+//
+//            // construction of the Answer object
+//            $objAnswerTmp=new Answer($modifyQuestion);
+//
+//            // copies answers from $modifyQuestion to $questionId
+//            $objAnswerTmp->duplicate($questionId);
+//
+//            // destruction of the Answer object
+//            unset($objAnswerTmp);
+//        }
 
-            // deletes the old question
-            $objQuestion->delete($exerciseId);
-
-            // removes the old question ID from the question list of the Exercise object
-            $objExercise->removeFromList($modifyQuestion);
-
-            $nbrQuestions--;
-
-            // construction of the duplicated Question
-            $objQuestion=new Question();
-
-            $objQuestion->read($questionId);
-
-			// adds the exercise ID into the exercise list of the Question object
-            $objQuestion->addToList($exerciseId);
-
-            // construction of the Answer object
-            $objAnswerTmp=new Answer($modifyQuestion);
-
-            // copies answers from $modifyQuestion to $questionId
-            $objAnswerTmp->duplicate($questionId);
-
-            // destruction of the Answer object
-            unset($objAnswerTmp);
-        }
-
+		$objQuestion->read($modifyQuestion);
 		$objQuestion->updateTitle($questionName);
 		$objQuestion->updateDescription($questionDescription);
 		$objQuestion->updateType($answerType);
-		$objQuestion->save($exerciseId);
 
 		$questionId=$objQuestion->selectId();
+
+		$objQuestion->save();
 
 		// if a picture has been set or checkbox "delete" has been checked
 		if($imageUpload_size || isset($deletePicture))
 		{
 			// we remove the picture
 			$objQuestion->removePicture();
-
 			// if we add a new picture
 			if($imageUpload_size)
 			{
                 // image is already saved in a temporary file
                 if($modifyIn)
                 {
-                    $objQuestion->getTmpPicture();
+								// saves the picture into a temporary file
+            		$objQuestion->setTmpPicture($imageUpload);
+							  $objQuestion->getTmpPicture();
+
                 }
                 // saves the picture coming from POST FILE
                 else
@@ -144,13 +150,11 @@ if(isset($submitQuestion)) {
 			}
 		}
 
-		if($exerciseId)
-		{
+		if($exerciseId)  {
 			// adds the question ID into the question list of the Exercise object
 			if($objExercise->addToList($questionId))
 			{
 				$objExercise->save();
-
 				$nbrQuestions++;
 			}
 		}
@@ -191,10 +195,8 @@ $tool_content .= "<form enctype=\"multipart/form-data\" method=\"post\" action=\
 	"?modifyQuestion=".@$modifyQuestion."&newQuestion=".@$newQuestion."\"><table border=\"0\" cellpadding=\"5\">";
 
 	if($okPicture) {
-
 		$tool_content .= "<tr><td colspan=\"2\" align=\"center\"><img src=\"".$picturePath.
 		"/quiz-".$questionId."\" border=\"0\"></td></tr>";
-
 	}
 
 	// if there is an error message

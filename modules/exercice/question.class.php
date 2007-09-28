@@ -364,7 +364,7 @@ class Question
 		// if the question has got an ID and if the picture exists
 		if($this->id && file_exists($picturePath.'/tmp'))
 		{
-			return @rename($picturePath.'/tmp',$picturePath.'/quiz-'.$this->id)?true:false;
+			return rename($picturePath.'/tmp',$picturePath.'/quiz-'.$this->id)?true:false;
 		}
 
 		return false;
@@ -462,7 +462,8 @@ class Question
 			unset($this->exerciseList[$pos]);
 
 			$sql="DELETE FROM `$TBL_EXERCICE_QUESTION` WHERE question_id='$id' AND exercice_id='$exerciseId'";
-			mysql_query($sql) or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
+			db_query($sql); 
+//or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
 
 			return true;
 		}
@@ -480,19 +481,22 @@ class Question
 	{
 		global $TBL_EXERCICE_QUESTION, $TBL_QUESTIONS, $TBL_REPONSES;
 
-		$id=$this->id;
+//die($id);
 
-		// if the question must be removed from all exercises
-		if(!$deleteFromEx)
+		$id=$this->id;
+		
+	// if the question must be removed from all exercises
+//		if(!$deleteFromEx)
+		if($deleteFromEx != 0)
 		{
 			$sql="DELETE FROM `$TBL_EXERCICE_QUESTION` WHERE question_id='$id'";
-			mysql_query($sql) or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
+			db_query($sql); 
 
 			$sql="DELETE FROM `$TBL_QUESTIONS` WHERE id='$id'";
-			mysql_query($sql) or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
+			db_query($sql); 
 
 			$sql="DELETE FROM `$TBL_REPONSES` WHERE question_id='$id'";
-			mysql_query($sql) or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
+			db_query($sql);
 
 			$this->removePicture();
 
@@ -522,11 +526,11 @@ class Question
 		$position=$this->position;
 		$type=$this->type;
 
-		$sql="INSERT INTO `$TBL_QUESTIONS`(question,description,ponderation,q_position,type) VALUES('$question','$description','$weighting','$position','$type')";
-	db_query($sql,$currentCourseID);
+		$sql="INSERT INTO `$TBL_QUESTIONS`(question,description,ponderation,q_position,type) 
+						VALUES('$question','$description','$weighting','$position','$type')";
+		db_query($sql,$currentCourseID);
 
 		$id=mysql_insert_id();
-
 		// duplicates the picture
 		$this->exportPicture($id);
 
