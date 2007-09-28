@@ -154,8 +154,8 @@ else
   $numofcourses = getdepnumcourses($fac);
 
   // display all the facultes collapsed
-  //$tool_content .= collapsed_facultes_horiz($fac);
-  //$tool_content .= "<br/>";
+  $tool_content .= collapsed_facultes_horiz($fac);
+  $tool_content .= "<br/>";
   if ($numofcourses > 0) {
   $tool_content .= expanded_faculte($fac, $uid);
   $tool_content .= "\n
@@ -306,7 +306,7 @@ function expanded_faculte($fac, $uid) {
     if ($numoftypes > 1) {
 	$retString .= "\n
 
-    <table class=\"CourseListTitle\" align=\"center\" width=\"99%\">
+    <table class=\"CourseListTitle\" width=\"99%\">
     <tr>
       <th><a name=\"$type\" class='alert1'> </a>$message</th>";
     $retString .= "
@@ -330,7 +330,7 @@ function expanded_faculte($fac, $uid) {
 	// legend
     $retString .= "
     <script type=\"text/javascript\" src=\"sorttable.js\"></script>
-    <table class=\"sortable\" id=\"t1\" align=\"center\" width=\"99%\">
+    <table class=\"sortable\" id=\"t1\" width=\"99%\">
     <thead>
     <tr>";
     $retString .= "
@@ -455,10 +455,10 @@ global $listfac;
 $retString = "";
 
 	$retString .= "\n
-    <table class=\"DepTitle\" align=\"center\" width=\"99%\">
+    <table class=\"Deps\" width=\"99%\">
     <tr>
       <th>$listfac:</th>
-      <th><div align=\"right\">";
+      <td>";
 
 $result = db_query("SELECT DISTINCT faculte.id id, faculte.name f
                 FROM faculte
@@ -476,7 +476,7 @@ $result = db_query("SELECT DISTINCT faculte.id id, faculte.name f
 		$counter++;
 	}
                // o pinakas autos stoixizei tin kartela
-    $retString .= "</div></th>
+    $retString .= "</td>
     </tr>
     </table>
     ";

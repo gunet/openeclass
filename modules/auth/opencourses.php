@@ -73,7 +73,7 @@ $icons = array(
 );
 
 $tool_content .= "
-     <table width=99% align=center class='DepTitle'>
+     <table width=99% class='DepTitle'>
      <tr>
        <th><a name='top'>&nbsp;</a>$m[department]:&nbsp;<b>$fac</b></th>
        <th><div align='right'>";
@@ -138,7 +138,7 @@ foreach (array("pre" => $m['pres'],
 $tool_content .= "
      <br>
 	 
-     <table width=99% align='center' class='CourseListTitle'>
+     <table width=99% class='CourseListTitle'>
      <tr>
        <th>";
 	 // We changed the style a bit here and we output types as the title
@@ -160,7 +160,7 @@ $tool_content .= "<a name='$type'>&nbsp;</a>$message</th>";
 
      $tool_content .= "
      <script type='text/javascript' src='sorttable.js'></script>
-     <table width=99% align='center' class=\"sortable\" id=\"t1\">";
+     <table width=99% class=\"sortable\" id=\"t1\">";
      $tool_content .= "
      <thead>
      <tr>";
