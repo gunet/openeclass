@@ -143,9 +143,9 @@ function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $mont
 
 	$tool_content .=  "<table  width=99% ><thead>";
   	$tool_content .=  "<tr>";
-	$tool_content .=  "<th width=13%><a href=$backwardsURL>&lt;&lt;</a></th>";
-	$tool_content .=  "<th width=65%>$monthName $year</td>";
-	$tool_content .=  "<th width=13%><a href=$forewardsURL>&gt;&gt;</a></td>";
+	$tool_content .=  "<th width=12%><a href=$backwardsURL>&lt;&lt;</a></th>";
+	$tool_content .=  "<th width=66%>$monthName $year</td>";
+	$tool_content .=  "<th width=12%><a href=$forewardsURL>&gt;&gt;</a></td>";
 	$tool_content .=  "</tr>";
 	$tool_content .=  "</thead></table><br>";
 
@@ -170,14 +170,14 @@ function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $mont
 			{
 				$bgcolor = $ii<5 ? "class=\"cautionk\"" : "class=\"odd\"";
 				$dayheader = "$curday";
-				$class_style = "";
+				$class_style = "class=odd";
 		  		if (($curday==$today['mday'])&&($year ==$today['year'])&&($month == $today['mon']))
 				{
-		  			$dayheader = "<b><font size=-1 color=#CC3300>$curday - $langToday</font></b>";
+		  			$dayheader = "<b><font color=#CC3300>$curday - $langToday</font></b>";
 		  			$class_style = "class=\"success\"";
 				}
-	      		$tool_content .=  "<td height=50 width=12%  valign=top $class_style>$dayheader";
-				$tool_content .=  "<font size=-2>$agendaitems[$curday]</font></td>\n";
+	      		$tool_content .=  "<td height=50 width=12% valign=top $class_style>$dayheader";
+				$tool_content .=  "$agendaitems[$curday]</td>\n";
 	      		$curday++;
 	    	}
 	  		else

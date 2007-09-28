@@ -157,8 +157,8 @@ $tool_content .= <<<lCont
 
   <table width="99%">
   <tbody>
-  <tr class="odd">
-    <td>
+  <tr>
+    <td class="odd">
     $bar_content
     </td>
   </tr>

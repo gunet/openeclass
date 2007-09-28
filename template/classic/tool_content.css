@@ -89,7 +89,7 @@ a:hover {
 
 #operations_container a:hover{
 	text-decoration: underline;
-	color: #edecdf;
+	color: #ffffff;
     font-size: 10px;
 	vertical-align: middle;
 }
@@ -192,11 +192,11 @@ caption {
 	background-repeat: no-repeat;
 	background-position: 4px 4px;
 	padding-left : 24px;
-   	background-color:#CCFF99;
+   	background-color:#E4FFCA;
 }
 
 .inactive {
-   background-color:#B0C4DE;
+   background-color: #CAC3B5;
 }
 
 .left{
@@ -238,8 +238,14 @@ tbody td {
 }
 
 tbody tr.odd {
-    background: #edecdf;
+    background: #FBFBFB;
 }
+
+tbody td.odd {
+    background: #edecdf;
+    border: 1px dotted #ffffff;
+}
+
 
 tfoot tr {
     background: #FFFFFF;
@@ -364,4 +370,9 @@ table.Deps a:hover {
 	vertical-align: middle;
     font-size: 10px;
     vertical-align: middle;
+}
+
+.month {
+    background: #edecdf;
+    text-align: center;
 }

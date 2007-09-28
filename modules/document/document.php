@@ -1027,7 +1027,7 @@ if($is_adminOfCourse) {
 	//    }
 	//	$tool_content .="</tr></table><br>";
 
-	$tool_content .= "<table width=\"99%\">";
+	$tool_content .= "<br/><table width=\"99%\">";
 
 	// Current Directory Line
 
@@ -1057,10 +1057,10 @@ if($is_adminOfCourse) {
 
 	$tool_content .= "
     	<tr>
-			<th>$langName</th>
-		    <th>$langSize</th>
-		    <th>$langDate</th>
-		    <th>$langCommands</th>
+			<th class='left'>&nbsp;$langName</th>
+		    <th width='100'>$langSize</th>
+		    <th width='100'>$langDate</th>
+		    <th width='100'>$langCommands</th>
     	</tr>
     </thead>";
 
@@ -1198,12 +1198,12 @@ if($is_adminOfCourse) {
 			$tool_content .=  "</td>";
 
 			/*** size ***/
-			$tool_content .=  "<td>".$size."</td>\n";
+			$tool_content .=  "<td align='center'>".$size."</td>\n";
 			/*** date ***/
-			$tool_content .=  "<td>".$date."</td>\n";
+			$tool_content .=  "<td align='center'>".$date."</td>\n";
 
 			/*** delete command ***/
-			$tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdFileName."\" onClick=\"return confirmation('".addslashes($row["filename"])."');\">
+			$tool_content .=  "<td align='right'><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdFileName."\" onClick=\"return confirmation('".addslashes($row["filename"])."');\">
 		<img src=\"../../template/classic/img/delete.gif\" border=0  title=\"$langDelete\"></a>";
 			/*** copy command ***/
 			$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?move=".$cmdFileName."\">

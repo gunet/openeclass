@@ -251,10 +251,10 @@ if ($is_adminOfCourse) {
     <p>$langAddEvent</p>
 	<form method="post" action="".$_SERVER[PHP_SELF]."">
     <input type="hidden" name="id" value="$id">
-    <table width = "99%">
+    <table width="99%">
     <thead>
     <tr>
-				<th>$langChooseDate</th>
+		<th>$langChooseDate</th>
         <th>$langHour</th>
         <th>$langMinute</th>
         <th>$langLasting</th>
@@ -341,7 +341,7 @@ if (mysql_num_rows($result) > 0) {
 	$tool_content .=  "<table width=\"99%\" align=\"center\">";
 	$tool_content .=  "<thead><tr><th>$langEvents</th>";
 	if ($is_adminOfCourse) {
-		$tool_content .=  "<th>$langActions</th>";
+		$tool_content .=  "<th width=60>$langActions</th>";
 	}
 	$tool_content .= "</tr></thead>";
 	$tool_content .= "<tbody>";
@@ -405,7 +405,7 @@ if (mysql_num_rows($result) > 0) {
 		//(evelthon, 12/05/2006)
 
 		if ($is_adminOfCourse) {
-			$tool_content .=  "<td align='center'>
+			$tool_content .=  "<td align='right'>
         <a href=\"$_SERVER[PHP_SELF]?id=".$myrow["id"]."\">
             <img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langModify."\"></a>
 						&nbsp;
