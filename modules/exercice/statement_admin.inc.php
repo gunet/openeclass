@@ -135,7 +135,7 @@ if(isset($submitQuestion)) {
 			if($imageUpload_size)
 			{
                 // image is already saved in a temporary file
-                if($modifyIn)
+                if(isset($modifyIn))
                 {
 								// saves the picture into a temporary file
             		$objQuestion->setTmpPicture($imageUpload);

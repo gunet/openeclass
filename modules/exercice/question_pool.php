@@ -84,7 +84,7 @@ if($is_allowedToEdit)
 	{
 		// construction of the Question object
 		$objQuestionTmp=new Question();
-
+		
 		// if the question exists
 		if($objQuestionTmp->read($delete))
 		{
@@ -105,9 +105,6 @@ if($is_allowedToEdit)
 		// if the question exists
 		if($objQuestionTmp->read($recup))
 		{
-			//$tool_content .= "sssssssss".$fromExercise;
-			
-			// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 					if(!is_object(@$objExercise)) {
 						// construction of the Exercise object
 						$objExercise=new Exercise();
