@@ -65,7 +65,7 @@ if (isset($_POST["submit"])) {
                 }
         }
 				
-				$errorExists = false;
+		$errorExists = false;
         if (isset($selectCourse) and is_array($selectCourse)) {
                 while (list($key,$contenu) = each ($selectCourse)) { 
 												 $sqlcheckpassword = mysql_query("SELECT password FROM cours WHERE code='".$contenu."'");
@@ -146,8 +146,8 @@ else
       $tool_content .= "
   </table>\n";
     }
-                $tool_content .= "<br>\n";
-                $tool_content .= "<br>\n";
+      $tool_content .= "<br>\n";
+      $tool_content .= "<br>\n";
   } else {
   // department exists
   $tool_content .= "
@@ -155,7 +155,8 @@ else
   $numofcourses = getdepnumcourses($fac);
 
   // display all the facultes collapsed
-  $tool_content .= collapsed_facultes_horiz($fac);
+  //$tool_content .= collapsed_facultes_horiz($fac);
+  //$tool_content .= "<br/>";
   if ($numofcourses > 0) {
   $tool_content .= expanded_faculte($fac, $uid);
   $tool_content .= "\n
@@ -230,8 +231,7 @@ function expanded_faculte($fac, $uid) {
     <table class=\"DepTitle\" align=\"center\" width=\"99%\">
     <tbody>
     <tr>
-      <th><a name=\"top\"> </a>$m[department]: <b>$fac</b>&nbsp;&nbsp;";
-	  
+      <th><a name=\"top\"> </a>$m[department]: <b>$fac</b>&nbsp;&nbsp;</th>";  
 	// get the different course types available for this faculte
 		$typesresult = db_query(
 		"SELECT DISTINCT cours.type types 
@@ -255,7 +255,7 @@ function expanded_faculte($fac, $uid) {
 				$ts = $t."s";
 				//type the seperator in front of the types except the 1st
 				if ($counter != 1) $retString .= " | ";
-				$retString .= "<a href=\"#".$t."\" class=\"sortheader\">".$m["$ts"]."</a>";
+				$retString .= "<a href=\"#".$t."\">".$m["$ts"]."</a>";
 				$counter++;
 			}
 			$retString .= "</div></th>
@@ -269,10 +269,10 @@ function expanded_faculte($fac, $uid) {
           //$retString .= "</div></td></tr><tr><td height=1>&nbsp;</td></tr>";
         }
 		
-		// changed this foreach statement a bit
-				// this way we sort by the course types
-				// then we just select visible
-				// and finally we do the secondary sort by course title and but teacher's name
+		  // changed this foreach statement a bit
+		  // this way we sort by the course types
+		  // then we just select visible
+		  // and finally we do the secondary sort by course title and but teacher's name
 				foreach (array("pre" => $m['pres'],
 				               "post" => $m['posts'],
 				               "other" => $m['others']) as $type => $message) {
@@ -282,10 +282,10 @@ function expanded_faculte($fac, $uid) {
 						cours.intitule i,
 						cours.visible visible,
 						cours.titulaires t,
-					  cours.password p
+					    cours.password p
 			        FROM cours_faculte, cours
 			        WHERE cours.code = cours_faculte.code
-							      AND cours.type = '$type'
+						AND cours.type = '$type'
                 		AND cours_faculte.faculte='$fac'
 						AND cours.visible <> '0'
 		                ORDER BY cours.intitule, cours.titulaires");
@@ -293,21 +293,30 @@ function expanded_faculte($fac, $uid) {
 					if (mysql_num_rows($result) == 0) {
 						continue;
 					}
-					
-					// We changed the style a bit here and we output types as the title
+						
+    if ($numoftypes > 1) {
+	$retString .= "\n
+
+    <table class=\"CourseListTitle\" align=\"center\" width=\"99%\">
+    <tr>
+      <th><a name=\"$type\" class='alert1'> </a>$message</th>";
+    $retString .= "
+      <td><a href=\"#top\">".$langBegin."</a></td>";
+	$retString .= "
+    </tr>
+    </table>\n";  
+    } else {
 	$retString .= "\n
     
     <table class=\"CourseListTitle\" align=\"center\" width=\"99%\">
     <tr>
       <th><a name=\"$type\" class='alert1'> </a>$message</th>";
-    if ($numoftypes > 1) {
-    $retString .= "
-      <td><a href=\"#top\">".$langBegin."</a></td>";
-    }
     $retString .= "
     </tr>
-    </table>\n";
-
+    </table>\n
+    ";
+	}
+	
 
 	// legend
     $retString .= "
@@ -435,7 +444,7 @@ function collapsed_facultes_horiz($fac) {
 
 global $listfac;
 $retString = "";
-/*
+
 	$retString .= "\n
     <table class=\"DepTitle\" align=\"center\" width=\"99%\">
     <tr>
@@ -463,7 +472,7 @@ $result = db_query("SELECT DISTINCT faculte.id id, faculte.name f
     </table>
     ";
 
-*/
+
 return $retString;
 }
 
