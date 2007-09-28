@@ -144,14 +144,31 @@ if ($is_adminOfCourse) {
 
 
 $tool_content .= <<<lCont
-<div style="margin-right:100px;">
-<table width="99%">
-<tbody><tr class="odd"><td>$bar_content</td></tr></tbody>
-</table>
-<p>&nbsp;</p>
-</div>
+<div id="container_login">
+
+<div id="wrapper">
 <div id="content_login">
-$main_content
+<p>$main_content</p>
+
+
+</div>
+</div>
+<div id="navigation">
+
+  <table width="99%">
+  <tbody>
+  <tr class="odd">
+    <td>
+    $bar_content
+    </td>
+  </tr>
+  </tbody>
+  </table>
+
+
+</div>
+
+
 </div>
 
 lCont;
