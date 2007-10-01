@@ -48,6 +48,7 @@ $nameTools = $langReg;
 $tool_content = "";
 $tool_content .= "
 <table width=75%>
+<thead>
 <tr>
 <td>
 <fieldset>
@@ -96,10 +97,12 @@ $tool_content .= "
 </FIELDSET>
 </td>
 </tr>
+</thead>
 </table>
 
 <br><br>
 <table width=75%>
+<thead>
 <tr>
 <td>
 <FIELDSET>
@@ -142,6 +145,7 @@ $tool_content .= "
 </FIELDSET>
 </td>
 </tr>
+</thead>
 </table>
 ";
 

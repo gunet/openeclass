@@ -33,21 +33,54 @@ $nameTools = $contactpoint;
 $tool_content = "";
 
 $tool_content .= "
-<div style='text-align: justify; padding: 15px; font-size:10pt;'>$introcontact</div>
-        <blockquote><p><img src='../images/env.gif' align='absbottom'></img>&nbsp;&nbsp;
-          $langPostMail<br>
-          $Institution<br>
-          $postaddress<br>
-				</p></blockquote>
-		<blockquote><p><img src='../images/phone.gif' align='absbottom'></img>&nbsp;&nbsp;
-		    $langPhone $telephone<br>
-         $langFax
-         $fax
-			</p></blockquote>
-			<blockquote><p>
-			<img src='../images/email.gif' align='absbottom'>&nbsp;&nbsp;
-          <b>$langEmail : </b>".mailto($emailAdministrator, str_replace('@', ' &lt;at> ', $emailAdministrator))."
-       </p></blockquote>";
+  <p>$introcontact</p>
+
+  <table width='300'>
+  <tr>
+    <td width='30'>&nbsp;</td>
+    <td width='270'>&nbsp;</td>
+  </tr>
+  <tr>
+    <td valign='top'><img src='../images/env.gif' align='absbottom'></img>&nbsp;&nbsp;</td>
+    <td>
+        $langPostMail<br>
+        $Institution<br>
+        $postaddress<br>
+    </td>
+  </tr>
+  </table>
+  <br/>
+   
+  <table width='300'>
+  <tr>
+    <td width='30'>&nbsp;</td>
+    <td width='270'>&nbsp;</td>
+  </tr>
+  <tr>
+    <td valign='top'><img src='../images/phone.gif' align='absbottom'></img>&nbsp;&nbsp;</td>
+    <td>
+        $langPhone $telephone<br>
+        $langFax
+        $fax
+    </td>
+  </tr>
+  </table>
+  <br/>
+
+  
+    <table width='300'>
+  <tr>
+    <td width='30'>&nbsp;</td>
+    <td width='270'>&nbsp;</td>
+  </tr>
+  <tr>
+    <td valign='top'><img src='../images/email.gif' align='absbottom'></img>&nbsp;&nbsp;</td>
+    <td valign='middle'>
+        <b>$langEmail : </b>".mailto($emailAdministrator, str_replace('@', ' &lt;at> ', $emailAdministrator))."
+    </td>
+  </tr>
+  </table>
+  ";
 
 draw($tool_content, 0);
 ?>

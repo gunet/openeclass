@@ -5,3 +5,7 @@
         word-wrap: break-word;
         word-break: break-all;
         }
+
+tbody td {
+    font-size: 11px !important;
+}

@@ -211,8 +211,10 @@ caption {
 thead th {
 	text-align: center;
 	color: #727266;
-    border: 1px dotted #727266;
+    border: 1px solid #ffffff;
 	padding: 6px;
+    font-weight: bold;
+    font-size: 11px;
 	background: #edecdf;
 	font-size: 90% !important;
 }
@@ -224,7 +226,14 @@ thead td {
 }
 
 tbody th {
-	font-weight: normal;
+    text-align: center;
+	color: #727266;
+    border: 1px solid #ffffff;
+	padding: 6px;
+    font-weight: bold;
+    font-size: 11px;
+	background: #edecdf;
+	font-size: 90% !important;
 }
 
 tbody tr {
@@ -371,6 +380,40 @@ table.Deps a:hover {
     font-size: 10px;
     vertical-align: middle;
 }
+
+table.FormData {
+    background: none;
+    vertical-align: middle;
+    padding: 2px;
+}
+
+table.FormData tr {
+    padding: 4px;
+    font-size: 11px;
+}
+
+table.FormData th {
+    padding: 4px;
+    font-size: 11px;
+}
+
+table.FormData td {
+    padding: 4px;
+    font-size: 11px;
+}
+
+table.FormData input{
+    vertical-align:middle;
+	margin-top: 0px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	padding: 1px 0px 1px 5px;
+	border: 1px solid #727266;
+    background-color: #fbfbfb;
+	color: #666666;
+}
+
+
 
 .month {
     background: #edecdf;

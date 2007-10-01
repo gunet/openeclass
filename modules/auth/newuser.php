@@ -52,11 +52,15 @@ if (isset($close_user_registration) and $close_user_registration == TRUE) {
 
 // Main body
 $tool_content .= "
+<table width=\"99%\" class='FormData'>
+<thead>
+<tr>
+<td>
 <form action=\"newuser_second.php\" method=\"post\" name=\"newusersecond\">
 
 
-<table width=\"99%\">
-<thead>
+<table width=\"100%\">
+<tbody>
 <tr>
 	<th class='left' width='20%'>$langName</th>
 	<td><input type=\"text\" name=\"prenom_form\"><small>&nbsp;(*)</small></td>
@@ -98,18 +102,21 @@ $tool_content .= "</select>
 	</td>
 </tr>
 
-<tr><td>&nbsp;</td>
+<tr><th class='left'>&nbsp;</th>
     <td>
 	<input type=\"hidden\" name=\"auth\" value=\"1\">
     <input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\">
-     <br/><br/>
-<p>$langRequiredFields <br/>$star2 $langCharactersNotAllowed</p>
+    <br/><br/>
+    <p>$langRequiredFields <br/>$star2 $langCharactersNotAllowed</p>
 	</td>
+</tr>
+</tbody>
+</table>
+
+</td>
 </tr>
 </thead>
 </table>
-
-
 </form>
 
 
