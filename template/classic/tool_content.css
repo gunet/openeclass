@@ -26,17 +26,15 @@ p, ul {
 a, a:link, a:active, a:visited {
     font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size:11px;
-    color: #575656;
+    color: #a33033;
     text-decoration: none;
-    vertical-align: middle;
     font-weight: normal;
 }
 
 a:hover {
 	text-decoration: underline;
     font-size: 11px;
-    color: #a33033;
-	vertical-align: middle;
+    color: #E47274;
     font-weight: normal;
 }
 
@@ -73,8 +71,8 @@ a:hover {
     background: #CAC3B5;
     font-size: 11px;
     color: #000000;
-    border-top: 2px solid #a33033;
-    border-bottom: 2px solid #a33033;
+    border-top: 1px solid #a33033;
+    border-bottom: 1px solid #a33033;
     margin-bottom: 0.8em;
 	overflow: hidden;
 }
@@ -284,15 +282,33 @@ table.htmlarea td {
 
 table.CourseListTitle {
     background: none;
+    font-size:12px;
+    border-top: 1px solid #a33033;
+    border-bottom: 1px solid #a33033;
+    border-left: 0px solid #a33033;
+    border-right: 0px solid #a33033;
+}
+
+table.CourseListTitle tr{
+    text-align: left;
+    color: #a33033;
+    background: #edecdf;
+    font-weight: bold;
+    font-size:12px;
+    border-top: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+    border-left: 0px solid #ffffff;
+    border-right: 0px solid #ffffff;
 }
 
 table.CourseListTitle th{
     text-align: left;
     color: #a33033;
+    background: #edecdf;
     font-weight: bold;
     font-size:12px;
-    border-top: 0px solid #ffffff;
-    border-bottom: 0px solid #ffffff;
+    border-top: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
     border-left: 0px solid #ffffff;
     border-right: 0px solid #ffffff;
 }
@@ -300,7 +316,13 @@ table.CourseListTitle th{
 table.CourseListTitle td {
     text-align: right;
     background: #edecdf;
-
+    color: #a33033;
+    font-weight: bold;
+    font-size:12px;
+    border-top: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+    border-left: 0px solid #ffffff;
+    border-right: 0px solid #ffffff;
 }
 
 table.DepTitle {
@@ -418,7 +440,7 @@ table.FormData input{
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	padding: 1px 0px 1px 5px;
-	border: 1px solid #727266;
+	border: 1px dotted #727266;
     background-color: #fbfbfb;
 	color: #666666;
 }

@@ -5,7 +5,10 @@ include '../include/baseTheme.php';
 $nameTools = $langInfo;
 $tool_content ="";
 
-$tool_content .= "<div style='text-align: justify; padding: 15px; font-size:10pt;'>$langIntro<br><br>$langAboutText:&nbsp;<b>$langEClass $langEclassVersion</b>&nbsp;&nbsp;<a href='http://portal.eclass.gunet.gr/' title='Portal eClass' target='_blank' border=0><img src='../images/about.gif' width=16 height=16 align=absbottom border=0></a><br><br>";
+$tool_content .= "
+<p align='justify'>$langIntro
+<br><br>
+$langAboutText:&nbsp;<b>$langEClass $langEclassVersion</b>&nbsp;&nbsp;<a href='http://portal.eclass.gunet.gr/' title='Portal eClass' target='_blank' border=0><img src='../images/about.gif' width=16 height=16 align=absbottom border=0></a><br><br>";
 
 /*
   * Make table with general platform information
@@ -53,26 +56,30 @@ $a2=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours WHERE visible='1'"
 $a3=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours WHERE visible='0'"));
 
 $tool_content .= "$langAboutCourses <b>$a[0]</b> $langCourses<br>";
-$tool_content .= "<blockquote>
-        <img src='../images/arrow_red.gif'>&nbsp;&nbsp;<i><b>$a1[0]</b> $langOpen,<br>
-        <img src='../images/arrow_red.gif'>&nbsp;&nbsp;<b>$a2[0]</b> $langSemiopen,<br>
-        <img src='../images/arrow_red.gif'>&nbsp;&nbsp;<b>$a3[0]</b> $langClosed </i><br>
-       </blockquote>";
+$tool_content .= "
+        <ul>
+        <li><b>$a1[0]</b> $langOpen,</li>
+        <li><b>$a2[0]</b> $langSemiopen,</li>
+        <li><b>$a3[0]</b> $langClosed </li>
+        </ul>
+       ";
 
 $e=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user"));
 $b=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='1'"));
 $c=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='5'"));
 $d=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='10'"));
-$tool_content .= "$langAboutUsers <b>$e[0]</b> $langUsers";
+$tool_content .= "<p>$langAboutUsers <b>$e[0]</b> $langUsers</p>";
 
-$tool_content .= "<blockquote>
-          <img src='../images/arrow_red.gif'>&nbsp;&nbsp;<i><b>$b[0]</b> $langProf, <br>
-          <img src='../images/arrow_red.gif'>&nbsp;&nbsp;<b>$c[0]</b> $langStud $langAnd<br>
-          <img src='../images/arrow_red.gif'>&nbsp;&nbsp;<b>$d[0]</b> $langGuest </i>
-          </blockquote>";
+$tool_content .= "
+          <ul>
+          <li><b>$b[0]</b> $langProf, </li>
+          <li><b>$c[0]</b> $langStud $langAnd </li>
+          <li><b>$d[0]</b> $langGuest </li>
+          </ul>
+          ";
 
-$tool_content .= "$langUptime<b> ".$uptime."</b> $langLast30daysLogins1 <b>".$total_logins[0]."</b>.</div>";
+$tool_content .= "<p>$langUptime<b> ".$uptime."</b> $langLast30daysLogins1 <b>".$total_logins[0]."</b>.</p><br/><br/>";
 
-$tool_content .= "<div style='text-align: justify; padding-left: 15px; font-size:10pt;'>$langSupportUser <i> $administratorName $administratorSurname </i></div>";
+$tool_content .= "<p align='justify'>$langSupportUser <i> $administratorName $administratorSurname </i></p>";
 draw($tool_content, 0);
 ?>

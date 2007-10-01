@@ -46,15 +46,22 @@ $tool_content .= <<<tCont
 <p>$langIntroMan</p>
 <ul class="listBullet">
 
-<div style='margin-left: 30px; padding-bottom:10px;'><img src='../images/pdf.gif' border='0' title='Μορφή PDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/eClass.pdf" target=_blank class=mainpage>$langFinalDesc</a></img></div>
-           <div style='margin-left: 30px; padding-bottom:10px;'><img src='../images/pdf.gif' border='0' title=
-'Μορφή PDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/eClass_short.pdf" target=_blank class=mainpage>$langShortDesc</a></img></div>
-            <div style='margin-left: 30px; padding-bottom:10px;'><img src='../images/pdf.gif' border='0
-' title='Μορφή PDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/manT/ManT.pdf" target=_blank class=mainpage>$langManT</a></img></div>
-           <div style='margin-left: 30px; padding-bottom:10px;'><img src='../images/pdf.gif' border='0' title=
-'Μορφή PDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/manS/ManS.pdf" target=_blank class=mainpage>$langManS</a></img></div>
-<div class='td_main'>
-  <div class='explanationtext'><b>$langNote: </b>$langAcrobat <img src='../images/acrobat.png' width=15 height=15> $langWhere <a href="http://www.adobe.com/products/acrobat/readstep2.html" target=_blank><span class='explanationtext'>$langHere</span></a>.</div></div>
+<img src='../images/pdf.gif' border='0' title='Μορφή PDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/eClass.pdf" target=_blank class=mainpage>$langFinalDesc</a></img>
+<br/><br/>
+<img src='../images/pdf.gif' border='0' title=
+'Μορφή PDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/eClass_short.pdf" target=_blank class=mainpage>$langShortDesc</a></img>
+<br/><br/>
+<img src='../images/pdf.gif' border='0
+' title='Μορφή PDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/manT/ManT.pdf" target=_blank class=mainpage>$langManT</a></img>
+<br/><br/>
+<img src='../images/pdf.gif' border='0' title=
+'Μορφή PDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/manS/ManS.pdf" target=_blank class=mainpage>$langManS</a></img>
+<br/>
+
+</ul>
+
+<br/>
+<p><b>$langNote: </b><br/>$langAcrobat <img src='../images/acrobat.png' width=15 height=15> $langWhere <a href="http://www.adobe.com/products/acrobat/readstep2.html" target=_blank><span class='explanationtext'>$langHere</span></a>.</p>
 
 tCont;
 

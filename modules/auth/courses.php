@@ -270,7 +270,7 @@ function expanded_faculte($fac, $uid) {
     </table>\n
     <br/><br/>";
 		} else {
-		  $retString .= "</div></th>
+		  $retString .= "<th>&nbsp;</th>
     </tr>
     </tbody>
     </table>\n
@@ -310,16 +310,18 @@ function expanded_faculte($fac, $uid) {
     <tr>
       <th><a name=\"$type\" class='alert1'> </a>$message</th>";
     $retString .= "
-      <td><a href=\"#top\">".$langBegin."</a></td>";
+      <td><a href=\"#top\">".$langBegin."</a>&nbsp;</td>";
 	$retString .= "
     </tr>
     </table>\n";  
     } else {
 	$retString .= "\n
     
-    <table class=\"CourseListTitle\" align=\"center\" width=\"99%\">
+    <table class=\"CourseListTitle\" width=\"99%\">
     <tr>
       <th><a name=\"$type\" class='alert1'> </a>$message</th>";
+	$retString .= "
+      <td>&nbsp;</td>";
     $retString .= "
     </tr>
     </table>\n

@@ -34,52 +34,31 @@ $tool_content = "";
 
 $tool_content .= "
   <p>$introcontact</p>
-
-  <table width='300'>
+ <br/>
+  <table width='500'>
+  <tbody>
   <tr>
-    <td width='30'>&nbsp;</td>
-    <td width='270'>&nbsp;</td>
-  </tr>
-  <tr>
-    <td valign='top'><img src='../images/env.gif' align='absbottom'></img>&nbsp;&nbsp;</td>
-    <td>
-        $langPostMail<br>
+    <td class='left' width='20'><img src='../images/env.gif' align='absbottom'></img></td>
+    <th class='left' width='180'>$langPostMail</th>
+    <td width='300'>
         $Institution<br>
-        $postaddress<br>
+        $postaddress
     </td>
   </tr>
-  </table>
-  <br/>
-   
-  <table width='300'>
   <tr>
-    <td width='30'>&nbsp;</td>
-    <td width='270'>&nbsp;</td>
+    <td class='left' width='20'><img src='../images/phone.gif' align='absbottom'></img></td>
+	<th class='left' width='180'>$langPhone<br/>$langFax</th>
+    <td width='300'>$telephone<br/>$fax</td>
   </tr>
   <tr>
-    <td valign='top'><img src='../images/phone.gif' align='absbottom'></img>&nbsp;&nbsp;</td>
-    <td>
-        $langPhone $telephone<br>
-        $langFax
-        $fax
+    <td class='left' width='20'><img src='../images/email.gif' align='absbottom'></img></td>
+    <th class='left' width='180'>$langEmail:</th>
+    <td width='300'>".mailto($emailAdministrator, str_replace('@', ' &lt;at> ', $emailAdministrator))."
     </td>
   </tr>
+  </tbody>
   </table>
-  <br/>
 
-  
-    <table width='300'>
-  <tr>
-    <td width='30'>&nbsp;</td>
-    <td width='270'>&nbsp;</td>
-  </tr>
-  <tr>
-    <td valign='top'><img src='../images/email.gif' align='absbottom'></img>&nbsp;&nbsp;</td>
-    <td valign='middle'>
-        <b>$langEmail : </b>".mailto($emailAdministrator, str_replace('@', ' &lt;at> ', $emailAdministrator))."
-    </td>
-  </tr>
-  </table>
   ";
 
 draw($tool_content, 0);
