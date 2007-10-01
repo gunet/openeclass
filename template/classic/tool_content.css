@@ -291,10 +291,16 @@ table.CourseListTitle th{
     color: #a33033;
     font-weight: bold;
     font-size:12px;
+    border-top: 0px solid #ffffff;
+    border-bottom: 0px solid #ffffff;
+    border-left: 0px solid #ffffff;
+    border-right: 0px solid #ffffff;
 }
 
 table.CourseListTitle td {
     text-align: right;
+    background: #edecdf;
+
 }
 
 table.DepTitle {
@@ -307,8 +313,10 @@ table.DepTitle th{
     background: #CAC3B5;
     font-size:11px;
     color: #000000;
-    border-top: 2px solid #a33033;
-    border-bottom: 2px solid #a33033;
+    border-top: 1px solid #a33033;
+    border-bottom: 1px solid #a33033;
+    border-left: 0px solid #a33033;
+    border-right: 0px solid #a33033;
 }
 
 table.DepTitle td {
@@ -318,6 +326,8 @@ table.DepTitle td {
     color: #edecdf;
     border-top: 2px solid #a33033;
     border-bottom: 2px solid #a33033;
+    border-left: 2px solid #a33033;
+    border-right: 2px solid #a33033;
 }
 
 table.DepTitle a {
