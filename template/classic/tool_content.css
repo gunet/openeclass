@@ -25,17 +25,17 @@ p, ul {
 
 a, a:link, a:active, a:visited {
     font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size:11px;
-    color: #a33033;
+	font-size:10px;
+    color: #727266;
     text-decoration: none;
-    font-weight: normal;
+    font-weight: bold;
 }
 
 a:hover {
 	text-decoration: underline;
-    font-size: 11px;
-    color: #E47274;
-    font-weight: normal;
+    font-size: 10px;
+    color: #a33033;
+    font-weight: bold;
 }
 
 .Login{
@@ -242,6 +242,9 @@ tbody tr {
 tbody td {
     font-size: 11px;
     border-bottom: 1px dotted #edecdf;
+    border-left: 1px dotted #ffffff;
+    border-right: 1px dotted #ffffff;
+    border-top: 1px dotted #ffffff;
 }
 
 tbody tr.odd {
@@ -283,10 +286,10 @@ table.htmlarea td {
 table.CourseListTitle {
     background: none;
     font-size:12px;
-    border-top: 1px solid #a33033;
-    border-bottom: 1px solid #a33033;
-    border-left: 0px solid #a33033;
-    border-right: 0px solid #a33033;
+    border-top: 0px solid #ffffff;
+    border-bottom: 0px solid #ffffff;
+    border-left: 0px solid #ffffff;
+    border-right: 0px solid #ffffff;
 }
 
 table.CourseListTitle tr{
@@ -295,10 +298,10 @@ table.CourseListTitle tr{
     background: #edecdf;
     font-weight: bold;
     font-size:12px;
-    border-top: 1px solid #ffffff;
-    border-bottom: 1px solid #ffffff;
-    border-left: 0px solid #ffffff;
-    border-right: 0px solid #ffffff;
+    border-top:    0px solid #ffffff;
+    border-bottom: 0px solid #ffffff;
+    border-left:   0px solid #ffffff;
+    border-right:  0px solid #ffffff;
 }
 
 table.CourseListTitle th{
@@ -307,10 +310,10 @@ table.CourseListTitle th{
     background: #edecdf;
     font-weight: bold;
     font-size:12px;
-    border-top: 1px solid #ffffff;
-    border-bottom: 1px solid #ffffff;
-    border-left: 0px solid #ffffff;
-    border-right: 0px solid #ffffff;
+    border-top:    0px solid #ffffff;
+    border-bottom: 0px solid #ffffff;
+    border-left:   1px solid #ffffff;
+    border-right:  0px solid #ffffff;
 }
 
 table.CourseListTitle td {
@@ -319,10 +322,23 @@ table.CourseListTitle td {
     color: #a33033;
     font-weight: bold;
     font-size:12px;
-    border-top: 1px solid #ffffff;
-    border-bottom: 1px solid #ffffff;
-    border-left: 0px solid #ffffff;
-    border-right: 0px solid #ffffff;
+    border-top:    0px solid #ffffff;
+    border-bottom: 0px solid #ffffff;
+    border-left:   0px solid #ffffff;
+    border-right:  1px solid #ffffff;
+}
+
+table.CourseListTitle a {
+    color: #727266;
+    font-size: 10px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+table.CourseListTitle a:hover {
+	text-decoration: underline;
+    color: #a33033;
+    font-size: 10px;
 }
 
 table.DepTitle {
@@ -332,24 +348,25 @@ table.DepTitle {
 table.DepTitle th{
     text-align: left;
     padding: 8px;
+    font-weight: normal;
     background: #CAC3B5;
     font-size:11px;
     color: #000000;
     border-top: 1px solid #a33033;
     border-bottom: 1px solid #a33033;
-    border-left: 0px solid #a33033;
-    border-right: 0px solid #a33033;
+    border-left: 0px solid #ffffff;
+    border-right: 0px solid #ffffff;
 }
 
 table.DepTitle td {
     text-align: right;
-    background: #727266;
+    background: #CAC3B5;
     font-size:11px;
     color: #edecdf;
-    border-top: 2px solid #a33033;
-    border-bottom: 2px solid #a33033;
-    border-left: 2px solid #a33033;
-    border-right: 2px solid #a33033;
+    border-top: 1px solid #a33033;
+    border-bottom: 1px solid #a33033;
+    border-left: 0px solid #ffffff;
+    border-right: 0px solid #ffffff;
 }
 
 table.DepTitle a {
@@ -375,6 +392,7 @@ table.Deps {
 table.Deps th{
     text-align: left;
     padding: 8px;
+    font-weight: normal;
     background: #FBFBFB;
     font-size:11px;
     color: #727266;
@@ -398,19 +416,16 @@ table.Deps td {
 }
 
 table.Deps a {
-    color: #000000;
+    color: #727266;
     font-size: 10px;
     font-weight: bold;
     text-decoration: none;
-	vertical-align: middle;
 }
 
 table.Deps a:hover {
 	text-decoration: underline;
-    color: #727266;
-	vertical-align: middle;
+    color: #a33033;
     font-size: 10px;
-    vertical-align: middle;
 }
 
 table.FormData {
@@ -446,8 +461,40 @@ table.FormData input{
 }
 
 
-
 .month {
     background: #edecdf;
     text-align: center;
 }
+
+table.sortable a.sortheader {
+    background-color: #edecdf;
+    color: #727266;
+    font-size: 11px;
+    font-weight: normal;
+    text-decoration: none;
+    padding : 2px;
+    display: block;
+}
+
+a.sortheader, a.sortheader:link, a.sortheader:active, a.sortheader:visited {
+    background-color: #edecdf;
+    color: #727266;
+    font-size: 11px;
+    font-weight: nolmal;
+    text-decoration: none;
+        }
+
+a.sortheader:hover {
+    background-color: #edecdf;
+    color: #CAC3B5;
+    font-size: 11px;
+    font-weight: normal;
+    text-decoration: underline;
+        }
+
+
+table.sortable span.sortarrow {
+    color: #727266;
+    text-decoration: none;
+}
+

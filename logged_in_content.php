@@ -64,7 +64,7 @@ while ($mycours = mysql_fetch_array($result2)) {
          $dbname = $mycours["k"];
          $status[$dbname] = $mycours["s"];
          $tool_content .= "
-     <tr onMouseOver=\"this.style.backgroundColor='#edecde'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
+     <tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
     $tool_content .= "
        <td>
        &nbsp;<img src='images/arrow_blue.gif'>&nbsp;
@@ -112,7 +112,7 @@ while ($mycours = mysql_fetch_array($result2)) {
              $dbname = $mycours["k"];
              $status[$dbname] = $mycours["s"];
         $tool_content .= "
-     <tr onMouseOver=\"this.style.backgroundColor='#edecde'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
+     <tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
         $tool_content .= "
        <td>&nbsp;<img src='images/arrow_blue.gif'>&nbsp;<a class='CourseLink' href='${urlServer}courses/$mycours[k]'>$mycours[i]</a><font color=#a9a9a9> ($mycours[c])</font></td>
        <td>$mycours[t]</span></td>

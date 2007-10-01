@@ -52,7 +52,7 @@ $tool_content .= "
    while ($fac = mysql_fetch_array($result)) {
 	$tool_content .= "
     <tbody>
-    <tr onMouseOver=\"this.style.backgroundColor='#edecdf'\" onMouseOut=\"this.style.backgroundColor='transparent'\">\n";
+    <tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">\n";
   	$tool_content .= "
     <td>&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<a href='opencourses.php?fc=$fac[id]'>$fac[name]</a>&nbsp;
     <small>($fac[code])</small>&nbsp;";

@@ -76,7 +76,7 @@ $tool_content .= "
      <table width=99% class='DepTitle'>
      <tr>
        <th><a name='top'>&nbsp;</a>$m[department]:&nbsp;<b>$fac</b></th>
-       <th><div align='right'>";
+       <td><div align='right'>";
 // get the different course types available for this faculte
 $typesresult = mysql_query("SELECT DISTINCT cours.type types FROM cours WHERE cours.faculte = '$fac' ORDER BY cours.type");
 
@@ -94,16 +94,16 @@ if ($numoftypes > 1) {
 		$ts = $t."s";
 		//type the seperator in front of the types except the 1st
 		if ($counter != 1) $tool_content .= " | ";
-		$tool_content .= "<a href=\"#".$t."\">".$m["$ts"]."</a>";
+		$tool_content .= "<a href=\"#".$t."\">".$m["$ts"]."</a>&nbsp;";
 		$counter++;
 	}
 	$tool_content .= "
-       </div></th>
+       </div></td>
      </tr>
      </table>";
 } else {
 	$tool_content .= "
-       </div></th>
+       &nbsp;</div></td>
      </tr>
      </table>";
 }
@@ -147,7 +147,7 @@ $tool_content .= "<a name='$type'>&nbsp;</a>$message</th>";
           // output a top href link if necessary
           if ( $numoftypes > 1)
        $tool_content .= "
-       <td><a href=\"#top\" class='mainpage'>$m[begin]</a></td>";
+       <td><a href=\"#top\" class='mainpage'>$m[begin]</a>&nbsp;</td>";
           // or a space for beautifying reasons
           else
        $tool_content .= "
@@ -183,7 +183,7 @@ $tool_content .= "<a name='$type'>&nbsp;</a>$message</th>";
 
             // output each course as a table for beautifying reasons
             $tool_content .= "
-     <tr onMouseOver=\"this.style.backgroundColor='#edecde'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
+     <tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
             // changed the variable because of the previous change in the select argument
 
        $tool_content .= "

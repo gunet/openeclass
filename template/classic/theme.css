@@ -205,14 +205,12 @@ body {
         color: #575656;
         font-size: 10px;
         text-decoration: none;
-	    vertical-align: middle;
         font-weight: normal;
 }
 
 #bread a:hover {
 	text-decoration: underline;
     color: #a33033;
-	vertical-align: middle;
     font-weight: normal;
 }
 
@@ -258,14 +256,12 @@ body {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size:11px;
     text-decoration: none;
-    vertical-align: middle;
     font-weight: normal;
 }
 
 #fbar_info .logout a:hover{
 	text-decoration: underline;
     color: #a33033;
-	vertical-align: middle;
     font-weight: normal;
 }
 
@@ -457,7 +453,10 @@ body {
 	width: 129px;
 }
 
-#navcontainer { width: 200px; }
+#navcontainer {
+   width: 200px;
+   font-family: Verdana, Arial, Helvetica, sans-serif;
+}
 
 #navcontainer ul {
 	margin:0;
@@ -474,6 +473,9 @@ body {
 	border-bottom: 1px solid #eee;
 	margin-top: 2px;
 	margin-left: 2px;
+    color: #727266;
+    text-decoration: none;
+    font-weight: normal;
 }
 
 
@@ -492,13 +494,15 @@ body {
 }
 
 #navcontainer a:hover {
-	color:black;
-	background-color: #c1c1b5;
+	color: #fbfbfb;
+	background-color: #727266;
 	margin-top: 1px;
 	margin-left: 1px;
 	width: 190px;
 	padding:3px;
 	border: 1px solid #a2a2a3;
+    text-decoration: none;
+    font-weight: normal;
 }
 
 #navcontainer li.category {

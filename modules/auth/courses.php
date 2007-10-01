@@ -131,7 +131,7 @@ else
                          
       while ($fac = mysql_fetch_array($result)) {
       $tool_content .= "
-    <tr onMouseOver=\"this.style.backgroundColor='#edecdf'\" onMouseOut=\"this.style.backgroundColor='transparent'\">
+    <tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">
     <td>&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;
         <a href='courses.php?fc=$fac[id]'>$fac[name]</a> <small><font color='#a5a5a5'>($fac[code])</font></small>";
       $n=db_query("SELECT COUNT(*) FROM cours_faculte WHERE faculte='$fac[name]'");
@@ -235,7 +235,7 @@ function expanded_faculte($fac, $uid) {
 	$retString .= "
     	
     <table class=\"DepTitle\" width=\"99%\">
-    <tbody>
+    <thead>
     <tr>
       <th><a name=\"top\"> </a>$m[department]: <b>$fac</b>&nbsp;&nbsp;</th>";  
 	// get the different course types available for this faculte
@@ -266,13 +266,13 @@ function expanded_faculte($fac, $uid) {
 			}
 			$retString .= "</div></th>
     </tr>
-    </tbody>
+    </thead>
     </table>\n
-    <br/><br/>";
+    &nbsp;";
 		} else {
 		  $retString .= "<th>&nbsp;</th>
     </tr>
-    </tbody>
+    </thead>
     </table>\n
     <br/><br/>";
 
@@ -355,7 +355,7 @@ function expanded_faculte($fac, $uid) {
 	  }
 	
     $retString .= "
-    <tr onMouseOver=\"this.style.backgroundColor='#edecde'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
+    <tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
 	$retString .= "
       <td width='10%' align='center'>";
 	
