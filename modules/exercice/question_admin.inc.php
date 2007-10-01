@@ -63,7 +63,7 @@ if(!defined('ALLOWED_TO_INCLUDE'))
 if(isset($usedInSeveralExercises))
 {
 
-$tool_content .= <<<cData
+@$tool_content .= <<<cData
 	<h3>
 		${questionName}
 	</h3>
@@ -76,7 +76,7 @@ $tool_content .= <<<cData
 cData;
 
 	// submit question
-	if($submitQuestion)
+	if(isset($submitQuestion))
 	{
 
 		$tool_content .= "<input type=\"hidden\" name=\"questionName\" value=\"".htmlspecialchars($questionName)."\">";
@@ -144,7 +144,7 @@ cData;
 cData;
     
       $tool_content .= "<input type=\"submit\" name=\"";
-      if ($submitQuestion)
+      if (isset($submitQuestion))
       	$tool_content .= "submitQuestion \" ";
       else	
       	$tool_content .= "submitAnswers \" ";

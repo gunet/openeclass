@@ -59,12 +59,16 @@ if(!defined('ALLOWED_TO_INCLUDE'))
 	exit();
 }
 
+$objQuestion->read($questionId);
+
+$questionId=$objQuestion->selectId();
+
 $questionName=$objQuestion->selectTitle();
 $answerType=$objQuestion->selectType();
 
 $okPicture=file_exists($picturePath.'/quiz-'.$questionId)?true:false;
 
-// if we come from the warning box "this question is used in serveral exercises"
+// if we come from the warning box "this question is used in several exercises"
 if(isset($modifyIn))
 {
 	// if the user has chosed to modify the question only in the current exercise
@@ -125,6 +129,7 @@ if(isset($modifyIn))
 // the answer form has been submitted
 if(isset($submitAnswers) || isset($buttonBack))
 {
+
 	if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
 	{
 		$questionWeighting=$nbrGoodAnswers=0;
@@ -509,13 +514,6 @@ if(isset($modifyAnswers))
 			}
 			elseif(!isset($modifyIn)||(!$modifyIn))
 			{
-				// debug
-				//$test = array();
-				//$test_s = serialize($test);
-				//$test_s_u = unserialize($test_s);
-				//$tool_content .= $test_s ."|". $test_s_u."<br><br>";
-				//var_dump(debug_backtrace());
-				//$tool_content .= "\$weighting: \"".$weighting."\"";
 				$weighting=unserialize(base64_decode($weighting));
 			}
 		}
@@ -732,46 +730,8 @@ cData;
 
 			if(!isset($setWeighting))
 			{
-/////////////////////////////////////////////////////////////////////////				
-// DEBUG
-/////////////////////////////////////////////////////////////////////////
-//$tool_content .= "<h1>weighting = ".$weighting."</h1>";
-//$tmp_w_s = serialize($weighting);
-//if (is_string($tmp_w_s)) $tool_content .= "<h2>(serialize(weighting) is string)</h2>";
-//$tool_content .= "<h1>serialize(weighting) = ".serialize($weighting)."</h1>";
-//$tool_content .= "<h1>unserialize(serialize(weighting)) = ".unserialize($tmp_w_s)."</h1>";
-//$tool_content .= "<h1>htmlspecialchars(serialize(weighting)) = ".htmlspecialchars(serialize($weighting))."</h1>";
-//$test_import = "a:1:";
-//if (is_string($test_import)) $tool_content .= "<h2>(test_import is string)</h2>";
-//if (strcmp($test_import,$tmp_w_s)) $tool_content .= "<h1>------- test_import tmp_w_s aren't the same?!?</h1>";
-//$tool_content .= "<h1>--\"".$test_import."\" != \"".$tmp_w_s."\"--</h1>";
-//echo "<h1>--\"".$test_import."\" != \"".$tmp_w_s."\"--</h1>";
-//$test_import_u = unserialize($test_import);
-//$tool_content .= "<h1>test_import_u = ".$test_import_u."</h1>";
-//$tool_content .= "<h1>count_chars(tmp_w_s) = ".count_chars($tmp_w_s)."</h1>";
-//$tool_content .= "<h1>count_chars(test_import) = ".count_chars($test_import)."</h1>";
-//$thanassis = "";
 
-//$tool_content .= "<h1>weighting = ".$weighting."</h1>";
-//$weighting_serialized = serialize($weighting);
-//$weighting_serialized_base64 = base64_encode($weighting_serialized);
-//$tool_content .= "<h1>weighting_serialized_base64 = ".$weighting_serialized_base64."</h1>";
-//$weighting2_serialized = base64_decode($weighting_serialized_base64);
-//$weighting2 = unserialize($weighting2_serialized);
-
-//for ($i=0; $i < strlen($test_import);$i++){
-//	$tool_content .=  "<br>$i = ".$test_import[$i];
-//} 
-//for ($i=0; $i < strlen($tmp_w_s);$i++){
-//	$tool_content .=  "<br>$i = ".$tmp_w_s[$i];
-//	//$thanassis .= $tmp_w_s[$i];
-//}
-//$tool_content .= $thanassis;
-/////////////////////////////////////////////////////////////////////////				
-// end of DEBUG
-/////////////////////////////////////////////////////////////////////////
-
-$tool_content .= "\n<!-- WEIGHT -->\n<input type=\"hidden\" name=\"weighting\" value=\"";
+$tool_content .= "\n\n<input type=\"hidden\" name=\"weighting\" value=\"";
 
 if (isset($submitAnswers)&&($submitAnswers)) {
 	$tool_content .= htmlspecialchars($weighting);
@@ -823,7 +783,7 @@ cData;
   if(!isset($submitAnswers) && empty($reponse)) 
   	$tool_content .= $langDefaultTextInBlanks; 
   else 
-  	$tool_content .=htmlspecialchars($reponse);
+  	$tool_content .= htmlspecialchars($reponse);
 
 $tool_content .= <<<cData
 </textarea></td>
@@ -885,11 +845,6 @@ if (isset($weighting[$i])) {
 				$tool_content .= "<tr><td width=\"50%\">".$blank." :</td>".
 					"<td width=\"50%\"><input type=\"text\" name=\"weighting[".$i."]\" ".
 					"size=\"5\" value=\"".$temp_weighting."\"></td></tr>";
-	//}
-//	$tool_content .= "----------X". $weighting. "X-----<br>";
-//	$tool_content .= "----------X". $weighting[1]. "X-----<br>";
-//	$tool_content .= "----------X". $blanks[$i]. "X-----<br>";
-
 	    		}
 
 $tool_content .= <<<cData

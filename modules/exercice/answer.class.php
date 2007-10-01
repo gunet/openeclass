@@ -232,7 +232,7 @@ class Answer
 	function save()
 	{
 		global $TBL_REPONSES, $currentCourseID;
-		
+
 		mysql_select_db($currentCourseID);
 
 		$questionId=$this->questionId;
