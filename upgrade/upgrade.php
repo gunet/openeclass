@@ -263,6 +263,14 @@ $tool_content .= add_field('cours', 'course_keywords', "TEXT");
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_addon'))
 $tool_content .= add_field('cours', 'course_addon', "TEXT");
 
+// delete useless fields
+if (!mysql_field_exists("$mysqlMainDb",'cours','cahier_charges'))
+$tool_content .= delete_field('cours', 'cahier_charges');
+if (!mysql_field_exists("$mysqlMainDb",'cours','versionDb'))
+$tool_content .= delete_field('cours', 'versionDb');
+if (!mysql_field_exists("$mysqlMainDb",'cours','versionClaro'))
+$tool_content .= delete_field('cours', 'versionClaro');
+
 // kstratos - UOM
 // Add 1 new field into table 'prof_request', after the field 'profuname'
 $reg = time();
@@ -1236,9 +1244,9 @@ else {
 }
 
 
-//-----------------------------
+//-------------------------------------------------
 // end of main script
-// ---------------------------
+// ------------------------------------------------
 
 // ----------------------------------------------------------------
 // Function list
@@ -1331,6 +1339,19 @@ function rename_field($table, $field, $new_field, $type)
 
 }
 
+function delete_field($table, $field) {
+	global $OK, $BAD;
+	
+	$retString = "";
+	$retString .= "Διαγραφή πεδίου <b>$field</b> του πίνακα <b>$table</b>";
+	if (db_query("ALTER TABLE `$table` DROP `$field`")) {
+			$retString .= "$OK<br>";
+	} else {
+			$retString .= "$BAD<br>";
+	}
+	return $retString;
+}
+
 function delete_table($table)
 {
 	global $OK, $BAD;
@@ -1343,6 +1364,7 @@ function delete_table($table)
 	}
 	return $retString;
 }
+
 
 function merge_tables($table_destination,$table_source,$fields_destination,$fields_source)
 {
