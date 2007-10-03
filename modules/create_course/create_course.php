@@ -335,11 +335,11 @@ if (isset($create_course)) {
                                 course_keywords = '$course_keywords',
                                 faculte = '$facname',
                                 visible = '$formvisible',
-                                cahier_charges = '',
                                 titulaires = '$titulaires',
                                 fake_code = '$code',
-                                `type` = '$type',
-                                faculteid = '$facid'");
+                                type = '$type',
+                                faculteid = '$facid',
+																first_create = NOW()");
 
                 mysql_query("INSERT INTO cours_user SET
                                 code_cours = '$repertoire',
