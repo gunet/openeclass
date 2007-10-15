@@ -2788,8 +2788,6 @@ $langSubmitChanges = "Υποβολή αλλαγών";
 * trad4all.inc.php
 *********************************************************************/
 
-$langYes = "Ναι";
-$langNo = "Όχι";
 $iso639_2_code = "el";
 $iso639_1_code = "ell";
 
@@ -2799,29 +2797,6 @@ $langNameOfLang['french']="Γαλλλικά";
 
 $charset = 'iso-8859-7';
 $text_dir = 'ltr'; // ('ltr' for left to right, 'rtl' for right to left)
-
-$langDay_of_weekNames = array();
-$langDay_of_weekNames['init'] = array('Κ', 'Δ', 'Τ', 'Τ', 'Π', 'Π', 'Σ');
-$langDay_of_weekNames['short'] = array('Κυρ', 'Δευ', 'Τρι', 'Τετ', 'Πεμ', 'Παρ', 'Σαβ');
-$langDay_of_weekNames['long'] = array('Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο');
-
-$langMonthNames = array();
-$langMonthNames['init']  = array('Ι', 'Φ', 'Μ', 'Α', 'Μ', 'Ι', 'Ι', 'Α', 'Σ', 'Ο', 'Ν', 'Δ');
-$langMonthNames['short'] = array('Ιαν', 'Φεβ', 'Μαρ', 'Απρ', 'Μάι', 'Ιουν', 'Ιουλ', 'Αυγ', 'Σεπ', 'Οκτ', 'Νοε', 'Δεκ');
-$langMonthNames['long'] = array('Ιανουάριος', 'Φεβρουάριος', 'Μάρτιος', 'Απρίλιος', 'Μάιος', 'Ιούνιος', 'Ιούλιος', 'Αύγουστος', 'Σεπτέμβριος', 'Οκτώβριος', 'Νοέμβριος', 'Δεκέμβριος');
-$langMonthNames['fine'] = array('Ιανουαρίου',
-				'Φεβρουαρίου',
-				'Μαρτίου',
-				'Απριλίου',
-				'Μαΐου',
-				'Ιουνίου',
-				'Ιουλίου',
-				'Αυγούστου',
-				'Σεπτεμβρίου',
-				'Οκτωβρίου',
-				'Νοεμβρίου',
-				'Δεκεμβρίου');
-
 
 $dateFormatShort =  "%b %d, %y";
 $dateFormatLong  = '%A, %e %B %Y';

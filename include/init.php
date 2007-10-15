@@ -157,6 +157,7 @@ if(session_is_registered('uid') && !session_is_registered('langswitch')) {
 // Include messages
 
 // include("$webDir/modules/lang/english/messages.inc.php");
+@ include("$webDir/modules/lang/$language/common.inc.php");
 @ include("$webDir/modules/lang/$language/messages.inc.php");
 
 /*

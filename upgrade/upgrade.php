@@ -262,6 +262,8 @@ if (!mysql_field_exists("$mysqlMainDb",'cours','course_keywords'))
 $tool_content .= add_field('cours', 'course_keywords', "TEXT");
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_addon'))
 $tool_content .= add_field('cours', 'course_addon', "TEXT");
+if (!mysql_field_exists("$mysqlMainDb",'cours','first_create'))
+$tool_content .= add_field('cours', 'first_create', "datetime not null default '0000-00-00 00:00:00'");
 
 // delete useless fields
 if (!mysql_field_exists("$mysqlMainDb",'cours','cahier_charges'))

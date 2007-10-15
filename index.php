@@ -327,6 +327,7 @@ else unset($uid);
 //in case he has a different language set in his/her profile
 if (isset($language)) {
 
+	include("./modules/lang/$language/common.inc.php");
 	include("./modules/lang/$language/messages.inc.php");
 /*
 	include("./modules/lang/$language/index.inc.php");
