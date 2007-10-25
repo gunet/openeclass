@@ -90,7 +90,7 @@ $TBL_QUESTIONS='questions';
 $TBL_REPONSES='reponses';
 
 // if the user has clicked on the "Cancel" button
-if(isset($_POST['buttonCancel'])) {
+if(isset($buttonCancel)) {
 	// returns to the exercise list
 	header('Location: exercice.php');
 	exit();
@@ -99,7 +99,7 @@ if(isset($_POST['buttonCancel'])) {
 
 
 // if the user has submitted the form
-if(isset($_POST['formSent'])) {
+if(isset($formSent)) {
 	// initializing
 	if(!is_array(@$exerciseResult)) {
 		$exerciseResult=array();
@@ -231,7 +231,8 @@ if(!isset($questionNum) || $_POST['questionNum']) {
 }
 
 if(@$_POST['questionNum']) {
-	$QUERY_STRING="questionNum='".mysql_real_escape_string($questionNum)."'";
+	//$QUERY_STRING="questionNum='".mysql_real_escape_string($questionNum)."'";
+	$QUERY_STRING="questionNum=$questionNum";
 }
 
 	$exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));

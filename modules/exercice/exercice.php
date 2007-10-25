@@ -166,9 +166,8 @@ else
 
 if(isset($page))
 {
-	$page_temp = $page-1;
 	$tool_content .= <<<cData
-		<small><a href="$_SERVER[PHP_SELF]?page=${page_temp}">
+		<small><a href="$_SERVER[PHP_SELF]?page=$page-1">
 	&lt;&lt; ${langPrevious}</a></small> |
 cData;
 
@@ -181,9 +180,8 @@ elseif($nbrExercises > $limitExPage)
 if($nbrExercises > $limitExPage)
 {
 
-	$page_temp = $page+1;
 	$tool_content .= <<<cData
-	<small><a href="${PHP_SELF}?page=${page_temp}>">${langNext} &gt;&gt;</a></small>
+	<small><a href="${PHP_SELF}?page=$page+1>">${langNext} &gt;&gt;</a></small>
 cData;
 
 }

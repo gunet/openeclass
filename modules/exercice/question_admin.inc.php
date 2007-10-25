@@ -76,45 +76,30 @@ if(isset($usedInSeveralExercises))
 cData;
 
 	// submit question
-	if(isset($submitQuestion))
-	{
-
-		$tool_content .= "<input type=\"hidden\" name=\"questionName\" value=\"".htmlspecialchars($questionName)."\">";
-    $tool_content .= "<input type=\"hidden\" name=\"questionDescription\"".
-    	"value=\"".htmlspecialchars($questionDescription)."\">";
-    $tool_content .= <<<cData
-    	<input type="hidden" name="imageUpload_size" value="${imageUpload_size}">
-    	<input type="hidden" name="deletePicture" value="${deletePicture}">
-cData;
-
+	if(isset($submitQuestion)) {
+       	    $tool_content .= "<input type=\"hidden\" name=\"questionName\" value=\"".htmlspecialchars($questionName)."\">";
+	    $tool_content .= "<input type=\"hidden\" name=\"questionDescription\""."value=\"".htmlspecialchars($questionDescription)."\">";
+	    $tool_content .= "<input type='hidden' name='imageUpload_size' value='$imageUpload_size'>
+		    	<input type='hidden' name='deletePicture' value='$deletePicture'>";
 	}
 	// submit answers
-	else
-	{
-		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
-		{
-
-	$tool_content .= "<input type=\"hidden\" name=\"correct\" value=\"".	  htmlspecialchars(serialize($correct))	.		"\">";
-	$tool_content .= "<input type=\"hidden\" name=\"reponse\" value=\"".	  htmlspecialchars(serialize($reponse))	.		"\">";
-	$tool_content .= "<input type=\"hidden\" name=\"comment\" value=\"".	  htmlspecialchars(serialize($comment))	.		"\">";
-	$tool_content .= "<input type=\"hidden\" name=\"weighting\" value=\"".  htmlspecialchars(serialize($weighting)).	"\">";
+	else {
+	if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
+	$tool_content .= "<input type=\"hidden\" name=\"correct\" value=\"". htmlspecialchars(serialize($correct))."\">";
+	$tool_content .= "<input type=\"hidden\" name=\"reponse\" value=\"". htmlspecialchars(serialize($reponse))."\">";
+	$tool_content .= "<input type=\"hidden\" name=\"comment\" value=\"". htmlspecialchars(serialize($comment))."\">";
+	$tool_content .= "<input type=\"hidden\" name=\"weighting\" value=\"". htmlspecialchars(serialize($weighting))."\">";
 	$tool_content .= "<input type=\"hidden\" name=\"nbrAnswers\" value=\"". $nbrAnswers."\">";
+	}
+	elseif($answerType == MATCHING) {
 
-		}
-		elseif($answerType == MATCHING)
-		{
-
-	$tool_content .= "<input type=\"hidden\" name=\"option\" value=\"".	htmlspecialchars(serialize($option)).				"\">";
-	$tool_content .= "<input type=\"hidden\" name=\"match\" value=\"".	htmlspecialchars(serialize($match)). 				"\">";
-	$tool_content .= "<input type=\"hidden\" name=\"sel\" value=\"".		htmlspecialchars(serialize($sel)). 					"\">";
+	$tool_content .= "<input type=\"hidden\" name=\"option\" value=\"".htmlspecialchars(serialize($option))."\">";
+	$tool_content .= "<input type=\"hidden\" name=\"match\" value=\"".htmlspecialchars(serialize($match)). "\">";
+	$tool_content .= "<input type=\"hidden\" name=\"sel\" value=\"".htmlspecialchars(serialize($sel))."\">";
 	$tool_content .= "<input type=\"hidden\" name=\"weighting\" value=\"".htmlspecialchars(serialize($weighting)).	"\">";
-	$tool_content .= "<input type=\"hidden\" name=\"nbrOptions\" value=\"".$nbrOptions.															"\">";
-	$tool_content .= "<input type=\"hidden\" name=\"nbrMatches\" value=\"".$nbrMatches.															"\">";
-
-		}
-		else
-		{
-
+	$tool_content .= "<input type=\"hidden\" name=\"nbrOptions\" value=\"".$nbrOptions."\">";
+	$tool_content .= "<input type=\"hidden\" name=\"nbrMatches\" value=\"".$nbrMatches."\">";
+	} else {
 	$tool_content .= "<input type=\"hidden\" name=\"reponse\" value=\"".htmlspecialchars(serialize($reponse))."\">";
 	$tool_content .= "<input type=\"hidden\" name=\"comment\" value=\"".htmlspecialchars(serialize($comment))."\">";
 	$tool_content .= "<input type=\"hidden\" name=\"blanks\" value=\"".htmlspecialchars(serialize($blanks))."\">";
@@ -177,7 +162,7 @@ $tool_content .= "<h3>$questionName</h3>";
 	if($okPicture)
 	{
 
-$tool_content .= "<center><img src=\"".$picturePath."/quiz-".$questionId."\" border=\"0\"></center>";
+$tool_content .= "<center><img src='$picturePath/quiz-$questionId' border='0'></center>";
 
 	}
 
@@ -191,6 +176,50 @@ $tool_content .= "<a href=\"".$PHP_SELF."?modifyQuestion=".$questionId.
 	"\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langModify."\"></a>";
 
 	}
+
+
+
+$tool_content .= "<br>$questionName</td></tr>";
+
+if($okPicture) {
+        $tool_content .= "<tr><td valign=middle class=td_QuestionHeader align=center>
+          <img src=$picturePath.'/quiz-'.$questionId;' border='0'>
+          </td>
+        </tr>";
+	 }
+
+     // Question Description
+  if($questionDescription) {
+  $tool_content .= "<tr> <td valign=middle class=td_QuestionHeader align=left><b><i>$langDesCom:</i></b><br/>".nl2br($questionDescription)."</td></tr>";
+        }
+
+$tool_content .= "</table>";
+
+$tool_content .= "<br><table align='center' width='96%'  border='0' cellspacing='0' cellpadding='0' style='border: 1px solid $table_border;'>
+<tr>
+   <td colspan='2' class='td_QuestionBody'>
+   <b><u>$langQuestionAnswers</u>:</b>";
+
+   // doesn't show the edit link if we come from the question pool to pick a question for an exercise
+        if(!isset($fromExercise)) {
+ 
+        $tool_content .= "<a href='$PHP_SELF?modifyAnswers=$questionId'><img src='../../images/edit.gif' border='0' align='absmiddle' alt='$langModify'></a>";
+}
+
+$tool_content .= "<br/>";
+
+      // shows answers of the question. 'true' means that we don't show the question, only answers
+        if(!showQuestion($questionId,true))
+        {
+        $tool_content .= "<font color='red'>$langNoAnswer</font>";	 
+        }
+   
+
+$tool_content .= "</td></tr></table><br>";
+
+
+
+/*
 
 $tool_content .= "<hr size=\"1\" noshade=\"noshade\">";
 
@@ -245,6 +274,6 @@ $tool_content .= "</form></table><br>";
 $tool_content .= "<a href=\"".$PHP_SELF."?modifyAnswers=\"".$questionId.
 	"\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langModify."\"></a>";
 
-	}
+	} */
 }
 ?>

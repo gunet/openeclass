@@ -53,6 +53,7 @@
 ==============================================================================
 */
 
+error_reporting('E_ALL ^ E_NOTICE');
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
@@ -137,12 +138,12 @@ if($REQUEST_METHOD == 'POST') {
 }
 
 // intializes the Exercise object
-if(!is_object(@$objExercise)) {
+if(!is_object($objExercise)) {
 	// construction of the Exercise object
 	$objExercise=new Exercise();
 
 	// creation of a new exercise if wrong or not specified exercise ID
-	if(isset($exerciseId)) {
+	if($exerciseId) {
 		$objExercise->read($exerciseId);
 	}
 
@@ -161,8 +162,10 @@ if(!isset($fromExercise)) {
 $nbrQuestions=$objExercise->selectNbrQuestions();
 
 // intializes the Question object
-if(isset($editQuestion) || isset($newQuestion) || isset($modifyQuestion) || isset($modifyAnswers)) {
-	if(isset($editQuestion) || isset($newQuestion)) {
+if($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
+
+if($editQuestion || $newQuestion) {
+
 		// construction of the Question object
 		$objQuestion=new Question();
 
@@ -170,7 +173,7 @@ if(isset($editQuestion) || isset($newQuestion) || isset($modifyQuestion) || isse
 		session_register('objQuestion');
 
 		// reads question data
-		if(isset($editQuestion)) {
+		if($editQuestion) {
 			// question not found
 			if(!$objQuestion->read($editQuestion)) {
 				die($langQuestionNotFound);
@@ -191,7 +194,7 @@ if(isset($editQuestion) || isset($newQuestion) || isset($modifyQuestion) || isse
 }
 
 // if cancelling an exercise
-if(isset($cancelExercise)) {
+if($cancelExercise) {
 	// existing exercise
 	if($exerciseId) {
 		unset($modifyExercise);
@@ -205,7 +208,7 @@ if(isset($cancelExercise)) {
 }
 
 // if cancelling question creation/modification
-if(isset($cancelQuestion)) {
+if($cancelQuestion) {
 	// if we are creating a new question from the question pool
 	if(!$exerciseId && !$questionId) {
 		// goes back to the question pool
@@ -219,16 +222,16 @@ if(isset($cancelQuestion)) {
 }
 
 // if cancelling answer creation/modification
-if(isset($cancelAnswers)) {
+if($cancelAnswers) {
 	// goes back to the question viewing
 	$editQuestion=$modifyAnswers;
 	unset($modifyAnswers);
 }
 
 // modifies the query string that is used in the link of tool name
-if(isset($editQuestion) || isset($modifyQuestion) || isset($newQuestion) || isset($modifyAnswers)) {
+if($editQuestion || $modifyQuestion || $newQuestion || $modifyAnswers) {
 	$nameTools=$langQuestionManagement;
-	@$QUERY_STRING=$questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
+	$QUERY_STRING=$questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
 } else {
 	$nameTools=$langExerciseManagement;
 	$QUERY_STRING='';
@@ -242,8 +245,8 @@ if(isset($editQuestion) || isset($modifyQuestion) || isset($newQuestion) || isse
 //}
 
 // if the question is duplicated, disable the link of tool name
-if(isset($modifyIn) && $modifyIn == 'thisExercise') {
-	if (@$buttonBack) {
+if($modifyIn == 'thisExercise') {
+	if ($buttonBack) {
 		$modifyIn='allExercises';
 	}
 	else
@@ -252,27 +255,27 @@ if(isset($modifyIn) && $modifyIn == 'thisExercise') {
 	}
 }
 
-if(isset($newQuestion) || isset($modifyQuestion)) {
+if($newQuestion || $modifyQuestion) {
 
 	// statement management
 	include('statement_admin.inc.php');
 }
 
-if(isset($modifyAnswers)) {
+if($modifyAnswers) {
 	// answer management
 	include('answer_admin.inc.php');
 }
 
-if(isset($editQuestion) || isset($usedInSeveralExercises)) {
+if($editQuestion || $usedInSeveralExercises) {
 	// question management
 	include('question_admin.inc.php');
 }
 
-if(!isset($newQuestion) && !isset($modifyQuestion) && !isset($editQuestion) && !isset($modifyAnswers)) {
+if(!$newQuestion && !$modifyQuestion && !$editQuestion && !$modifyAnswers) {
 	// exercise management
 	include('exercise_admin.inc.php');
 
-	if(!isset($modifyExercise))
+	if(!$modifyExercise)
 	{
 		// question list management
 		include('question_list_admin.inc.php');

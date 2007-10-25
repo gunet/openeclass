@@ -96,8 +96,7 @@ if($is_allowedToEdit)
 		unset($objQuestionTmp);
 	}
 	// gets an existing question and copies it into a new exercise
-	elseif(isset($recup) && isset($fromExercise))
-	//elseif(isset($recup) && $fromExercise) - why was it like that?!?
+	elseif(isset($recup) && $fromExercise)
 	{
 		// construction of the Question object
 		$objQuestionTmp=new Question();
@@ -105,6 +104,7 @@ if($is_allowedToEdit)
 		// if the question exists
 		if($objQuestionTmp->read($recup))
 		{
+/*
 					if(!is_object(@$objExercise)) {
 						// construction of the Exercise object
 						$objExercise=new Exercise();
@@ -118,16 +118,15 @@ if($is_allowedToEdit)
 						session_register('objExercise');
 				}			
 				$fromExercise=$objExercise->selectId();	
-			// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ */
 			// adds the exercise ID represented by $fromExercise into the list of exercises for the current question
 			$objQuestionTmp->addToList($fromExercise);
 		}
 
 		// destruction of the Question object
 		unset($objQuestionTmp);
+/*
 
-
-		//////////////// - 20061106
 		if(!is_object(@$objExercise)) {
 			// construction of the Exercise object
 			$objExercise=new Exercise();
@@ -135,23 +134,18 @@ if($is_allowedToEdit)
 			// creation of a new exercise if wrong or not specified exercise ID
 			if(isset($exerciseId)) {
 				$objExercise->read($exerciseId);
-			}
-		
+			}	
 			// saves the object into the session
-			session_register('objExercise');
-			
-			
+			session_register('objExercise');					
 		}			
 		$exerciseId=$objExercise->selectId();			
-		//$tool_content .= "qqqqqq".$exerciseId."qqqqq";
-		////////////////
-		
-		// adds the question ID represented by $recup into the list of questions for the current exercise
+*/	
+// adds the question ID represented by $recup into the list of questions for the current exercise
 		
 		$objExercise->addToList($recup);
 
-		header("Location: admin.php?editQuestion=$recup");
-		exit();
+//		header("Location: admin.php?editQuestion=$recup");
+//		exit();
 	}
 }
 

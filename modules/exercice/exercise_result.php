@@ -78,13 +78,11 @@ $tool_content = "";
 $nameTools = $langExercices;
 $navigation[]= array ("url"=>"exercice.php", "name"=> $langExercices);
 
-/////////////////////////////////////////////////////////////////////////////
+
 // Destroy cookie
-/////////////////////////////////////////////////////////////////////////////
 
 if (!setcookie("marvelous_cookie", "", time() - 3600, "/")) {
 	header('Location: exercise_redirect.php');
-	//print_r($_COOKIE);
 	exit();
 }
 if (!setcookie("marvelous_cookie_control", "", time() - 3600, "/")) {
@@ -110,7 +108,6 @@ if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExer
 }
 
 $exerciseTitle=$objExercise->selectTitle();
-$exerciseId=$objExercise->selectId();
 
 $tool_content .= "<h3>".stripslashes($exerciseTitle)." : ".$langResult."</h3>".
 	"<form method=\"GET\" action=\"exercice.php\">";
@@ -148,7 +145,7 @@ $tool_content .= "<h3>".stripslashes($exerciseTitle)." : ".$langResult."</h3>".
 		{
 			$colspan=1;
 		}
-$iplus = $i+1;
+$iplus=$i+1;
 $tool_content .= <<<cData
 	<table width="95%" border="0" cellpadding="3" cellspacing="2">
 		<tr bgcolor="#E6E6E6">
@@ -472,7 +469,6 @@ if (($OnTime > 0 or $is_adminOfCourse)) { // exercise time limit hasn't expired
 		$objExercise=new Exercise();
 	
 		// if the specified exercise doesn't exist or is disabled
-		//if(!$objExercise->read($exerciseId) || (!$objExercise->selectStatus() && !$is_allowedToEdit))
 		if(!$objExercise->read($exerciseId) && (!$is_allowedToEdit))
 			{
 			die($langExerciseNotFound);

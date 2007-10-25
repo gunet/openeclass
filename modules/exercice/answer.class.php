@@ -1,18 +1,5 @@
-<?php // $Id$
-/*
-      +----------------------------------------------------------------------+
-      | CLAROLINE version 1.3.2 $Revision$                             |
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2003 Universite catholique de Louvain (UCL)      |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
-      +----------------------------------------------------------------------+
-      | Authors: Olivier Brouckaert <oli.brouckaert@skynet.be>               |
-      +----------------------------------------------------------------------+
-*/
+<?php 
+
 
 if(!class_exists('Answer')):
 
@@ -95,15 +82,11 @@ class Answer
 	{
 		global $TBL_REPONSES, $currentCourseID;
 		
-		mysql_select_db($currentCourseID);
-
 		$questionId=$this->questionId;
-
-		$sql="SELECT reponse,correct,comment,ponderation,r_position FROM `$TBL_REPONSES` WHERE question_id='$questionId' ORDER BY r_position";
+		mysql_select_db($currentCourseID);
+		$sql="SELECT reponse,correct,comment,ponderation,r_position FROM `$TBL_REPONSES` WHERE question_id='$questionId' ORDER BY r_position;";
 		$result=mysql_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);
-
 		$i=1;
-
 		// while a record is found
 		while($object=mysql_fetch_object($result))
 		{
@@ -115,7 +98,6 @@ class Answer
 
 			$i++;
 		}
-
 		$this->nbrAnswers=$i-1;
 	}
 
@@ -150,7 +132,7 @@ class Answer
 	 */
 	function selectAnswer($id)
 	{
-		return @$this->answer[$id];
+		return $this->answer[$id];
 	}
 
 	/**
@@ -233,13 +215,12 @@ class Answer
 	{
 		global $TBL_REPONSES, $currentCourseID;
 
-		mysql_select_db($currentCourseID);
-
 		$questionId=$this->questionId;
 
 		// removes old answers before inserting of new ones
 		$sql="DELETE FROM `$TBL_REPONSES` WHERE question_id='$questionId'";
-		mysql_query($sql) or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
+		db_query($sql, $currentCourseID);
+//		mysql_query($sql) or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
 
 		// inserts new answers into data base
 		$sql="INSERT INTO `$TBL_REPONSES`(id,question_id,reponse,correct,comment,ponderation,r_position) VALUES";
@@ -257,6 +238,7 @@ class Answer
 
 		$sql=substr($sql,0,-1);
 		mysql_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
+
 
 		// moves $new_* arrays
 		$this->answer=$this->new_answer;
@@ -279,7 +261,7 @@ class Answer
 	 */
 	function duplicate($newQuestionId)
 	{
-		global $TBL_REPONSES, $currentCourseID;
+		global $TBL_REPONSES;
 
 		// if at least one answer
 		if($this->nbrAnswers)
@@ -299,7 +281,8 @@ class Answer
 			}
 
 			$sql=substr($sql,0,-1);
-			db_query($sql, $currentCourseID);
+			mysql_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
+			
 		}
 	}
 }

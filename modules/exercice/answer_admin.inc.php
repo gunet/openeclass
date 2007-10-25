@@ -59,9 +59,6 @@ if(!defined('ALLOWED_TO_INCLUDE'))
 	exit();
 }
 
-$objQuestion->read($questionId);
-
-$questionId=$objQuestion->selectId();
 
 $questionName=$objQuestion->selectTitle();
 $answerType=$objQuestion->selectType();
@@ -197,7 +194,7 @@ if(isset($submitAnswers) || isset($buttonBack))
 			// checks if the question is used in several exercises
 			elseif($exerciseId && !isset($modifyIn) && $objQuestion->selectNbrExercises() > 1)
 			{
-				$usedInSeveralExercises=1;
+//				$usedInSeveralExercises=1;
 			}
 			else
 			{
@@ -220,14 +217,14 @@ if(isset($submitAnswers) || isset($buttonBack))
 
 		if(!isset($buttonBack))
 		{
-			if(isset($setWeighting)&&($setWeighting))
+			if($setWeighting)
 			{
 				@$blanks=unserialize($blanks);
 
 				// checks if the question is used in several exercises
 				if($exerciseId && !isset($modifyIn) && $objQuestion->selectNbrExercises() > 1)
 				{
-					$usedInSeveralExercises=1;
+//					$usedInSeveralExercises=1;
 				}
 				else
 				{
@@ -291,35 +288,12 @@ if(isset($submitAnswers) || isset($buttonBack))
 				// the loop will stop at the end of the text
 				while(1)
 				{
-					//DEBUG
-//					$tool_content .= "<h1>-------------------------------</h1>";
-//					$tool_content .= "<h1>TEMP = ".$temp."</h1>";
-					//DEBUG
-					//$pos = strpos("LALA",'[');
-					//DEBUG
-					//$tool_content .= "<h1> POS = ".$pos."</h1>";
-					//DEBUG 
-//					if (!$pos)
-//						$tool_content .= "<h1> HOOLY SHIT</h1>";
-					
-					
-					// quits the loop if there are no more blanks
-//					if(($pos = strpos($temp,'[')) === false)
-//					{
-//						// DEBUG
-//						$tool_content .= "<h1>FUCK</h1>";
-//						break;
-//					}
-						$pos = strpos($temp,'[');
-					//DEBUG
-					//$tool_content .= "<h1> POS = ".$pos."</h1>";
-						
-					if(!$pos)
-					{
-						// DEBUG
-						//$tool_content .= "<h1>FUCK</h1>";
+
+
+					if(($pos = strpos($temp,'[')) === false)
+						{
 						break;
-					}
+						}
 
 					// removes characters till '['
 					$temp=substr($temp,$pos+1);
@@ -331,21 +305,12 @@ if(isset($submitAnswers) || isset($buttonBack))
 					}
 
 					// stores the found blank into the array
-					$temp_i = $i++;
-					$blanks[$temp_i]=substr($temp,0,$pos);
-					//DEBUG
-					//$temp_i = $i++;
-//					$tool_content .= "<h1>BLANKS ARRAY [$temp_i] = ".$blanks[$temp_i]."</h1>";
-//					$tool_content .= "<h1>substr = ".substr($temp,0,$pos)."</h1>";
-
+					$blanks[$i++]=substr($temp,0,$pos);
+					
+					
 					// removes the character ']'
 					$temp=substr($temp,$pos+1);
 				}
-//				//DEBUG
-//				$tool_content .= "<h1>-------------------------------</h1>";
-//				$tool_content .= "<h1>BLANKS = ".$blanks."</h1>";
-//				$tool_content .= "<h1>SIZEOF BLANKS = ".sizeof($blanks)."</h1>";
-//				$tool_content .= "<h1>===============================</h1>";
 			} 
 		}
 		else
@@ -411,7 +376,7 @@ if(isset($submitAnswers) || isset($buttonBack))
 			// checks if the question is used in several exercises
 			if($exerciseId && !isset($modifyIn) && $objQuestion->selectNbrExercises() > 1)
 			{
-				$usedInSeveralExercises=1;
+//				$usedInSeveralExercises=1;
 			}
 			else
 			{
@@ -512,9 +477,10 @@ if(isset($modifyAnswers))
 
 				$weighting=$temp;
 			}
-			elseif(!isset($modifyIn)||(!$modifyIn))
+			elseif(!$modifyIn)
 			{
-				$weighting=unserialize(base64_decode($weighting));
+//				$weighting=unserialize(base64_decode($weighting));
+				$weighting=unserialize($weighting);
 			}
 		}
 	}
@@ -733,12 +699,11 @@ cData;
 
 $tool_content .= "\n\n<input type=\"hidden\" name=\"weighting\" value=\"";
 
-if (isset($submitAnswers)&&($submitAnswers)) {
+/*if (isset($submitAnswers)&&($submitAnswers)) {
 	$tool_content .= htmlspecialchars($weighting);
 } else {
 	$tool_content .= htmlspecialchars(base64_encode(serialize($weighting)));
-}
-
+}*/
 
 
 $tool_content .= "\">\n";
@@ -836,15 +801,15 @@ cData;
 
 				foreach($blanks as $i=>$blank)
 				{
-if (isset($weighting[$i])) {
+/*if (isset($weighting[$i])) {
 	$temp_weighting = $weighting[$i];
 } else {
 	$temp_weighting = "";
-}
+}*/
 				//$tool_content .= $i;
 				$tool_content .= "<tr><td width=\"50%\">".$blank." :</td>".
 					"<td width=\"50%\"><input type=\"text\" name=\"weighting[".$i."]\" ".
-					"size=\"5\" value=\"".$temp_weighting."\"></td></tr>";
+					"size=\"5\" value=\"".intval($weighting[$i])."\"></td></tr>";
 	    		}
 
 $tool_content .= <<<cData

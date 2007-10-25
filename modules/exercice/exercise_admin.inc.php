@@ -129,9 +129,6 @@ cData;
 			</tr>
 cData;
 	}
-/////////////////////////////////////////////////////////////////////////////////
-//$tool_content .= "<tr><td>".$langExerciseName." :</td><td><input type=\"text\" name=\"exerciseTitle\" ".
-//	"size=\"50\" maxlength=\"200\" value=\"".htmlspecialchars($exerciseTitle)." style=\"width:400px;\"></td></tr>";
 
 $tool_content .= "<tr><td>".$langExerciseName." :</td><td><input type=\"text\" name=\"exerciseTitle\" ".
 	"size=\"50\" maxlength=\"200\" value=\"".htmlspecialchars($exerciseTitle)."\" style=\"width:400px;\"></td></tr>";
@@ -151,18 +148,10 @@ if($exerciseType >= 2)
 	$tool_content .= 'checked="checked"';
 $tool_content .= "> ".$langSequentialExercise."</td></tr>";
 
-//$tool_content .= "<td valign=\"top\">".$langExerciseStart." :</td><td><input type=\"text\" name=\"exerciseStartDate\" ".
-//	"value=\"".htmlspecialchars($exerciseStartDate)."\" size=\"22\" maxlength=\"19\"> ".
-//  "(".$langExerciseEg." 1977-06-29 12:00:00)</td></tr>";
 
 $tool_content .= "<td valign=\"top\">".$langExerciseStart." :</td>".
 	"<td>$start_cal_Excercise</td></tr>";
   
-//$tool_content .= "<tr><td valign=\"top\">".$langExerciseEnd." :</td>".
-//	"<td><input type=\"text\" name=\"exerciseEndDate\" value=\"".htmlspecialchars($exerciseEndDate)."\" ". 
-// 	"size=\"22\" maxlength=\"19\">". 
-//  "(".$langExerciseEg." 1977-06-29 12:00:00)</td></tr>";
-
 $tool_content .= "<td valign=\"top\">".$langExerciseEnd." :</td>".
 	"<td>$end_cal_Excercise</td></tr>";
   
@@ -175,7 +164,7 @@ $tool_content .= "<tr><td valign=\"top\">".$langExerciseAttemptsAllowed." :</td>
 	"<td><input type=\"text\" name=\"exerciseAttemptsAllowed\" size=\"2\" maxlength=\"2\"". 
   "value=\"".htmlspecialchars($exerciseAttemptsAllowed)."\">". 
   $langExerciseAttemptsAllowedUnit." (".$langExerciseAttemptsAllowedExplanation.")</td></tr>";
-/////////////////////////////////////////////////////////////////////////////////
+
 	if($exerciseId && $nbrQuestions)
 	{
 

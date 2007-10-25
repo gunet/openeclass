@@ -484,7 +484,8 @@ class Question
 		$id=$this->id;
 		
 	// if the question must be removed from all exercises
-		if($deleteFromEx === 0)
+		//if($deleteFromEx === 0)
+		if(!$deleteFromEx)
 		{
 			$sql="DELETE FROM `$TBL_EXERCICE_QUESTION` WHERE question_id='$id'";
 			db_query($sql); 

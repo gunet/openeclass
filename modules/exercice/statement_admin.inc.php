@@ -60,7 +60,7 @@ if(!defined('ALLOWED_TO_INCLUDE'))
 }
 
 // the question form has been submitted
-if(isset($submitQuestion)) {
+if($submitQuestion) {
 	$questionName=trim($questionName);
 	$questionDescription=trim($questionDescription);
 
@@ -70,83 +70,76 @@ if(isset($submitQuestion)) {
 		$msgErr=$langGiveQuestion;
 	}
 	// checks if the question is used in several exercises
-	elseif($exerciseId && !isset($modifyIn) && $objQuestion->selectNbrExercises() > 1)
+	elseif($exerciseId && !$modifyIn && $objQuestion->selectNbrExercises() > 1)
 	{
-		$usedInSeveralExercises=1;
-
-        // if a picture has been set
-        if($imageUpload_size)
-        {
-            // saves the picture into a temporary file
-            $objQuestion->setTmpPicture($imageUpload);
-        }
+//		$usedInSeveralExercises=1;
+	        // if a picture has been set
+        	if($imageUpload_size)
+	        {
+        	    // saves the picture into a temporary file
+	            $objQuestion->setTmpPicture($imageUpload);
+        	}
 	}
 	else
 	{
-//        // if the user has chosed to modify the question only in the current exercise
-//        if(isset($modifyIn) && $modifyIn == 'thisExercise')
-//        {
-//				print_r($objQuestion);
-//
-//        	// duplicates the question
-//        	$questionId=$objQuestion->duplicate();
-//            
-//					// deletes the old question
-//            $objQuestion->delete($exerciseId);
-//
-//            // removes the old question ID from the question list of the Exercise object
-//            $objExercise->removeFromList($modifyQuestion);
-//
-//            $nbrQuestions--;
-//
-//            // construction of the duplicated Question
-//            $objQuestion=new Question();
-//
-//            $objQuestion->read($questionId);
-//
-//			// adds the exercise ID into the exercise list of the Question object
-//            $objQuestion->addToList($exerciseId);
-//
-//            // construction of the Answer object
-//            $objAnswerTmp=new Answer($modifyQuestion);
-//
-//            // copies answers from $modifyQuestion to $questionId
-//            $objAnswerTmp->duplicate($questionId);
-//
-//            // destruction of the Answer object
-//            unset($objAnswerTmp);
-//        }
+        // if the user has chosed to modify the question only in the current exercise
+        if(isset($modifyIn) && $modifyIn == 'thisExercise')
+        {	
+  	// duplicates the question
+        $questionId=$objQuestion->duplicate();
+
+	// deletes the old question
+            $objQuestion->delete($exerciseId);
+
+	// removes the old question ID from the question list of the Exercise object
+            $objExercise->removeFromList($modifyQuestion);
+
+            $nbrQuestions--;
+
+	// construction of the duplicated Question
+            $objQuestion=new Question();
+
+            $objQuestion->read($questionId);
+
+	// adds the exercise ID into the exercise list of the Question object
+            $objQuestion->addToList($exerciseId);
+
+	// construction of the Answer object
+            $objAnswerTmp=new Answer($modifyQuestion);
+
+	// copies answers from $modifyQuestion to $questionId
+            $objAnswerTmp->duplicate($questionId);
+
+	// destruction of the Answer object
+            unset($objAnswerTmp);
+        }
 
 		$objQuestion->read($modifyQuestion);
 		$objQuestion->updateTitle($questionName);
 		$objQuestion->updateDescription($questionDescription);
 		$objQuestion->updateType($answerType);
-
+		$objQuestion->save($exerciseId);
 		$questionId=$objQuestion->selectId();
 
-		$objQuestion->save();
-
 		// if a picture has been set or checkbox "delete" has been checked
-		if($imageUpload_size || isset($deletePicture))
+		if($imageUpload_size || $deletePicture)
 		{
 			// we remove the picture
 			$objQuestion->removePicture();
 			// if we add a new picture
 			if($imageUpload_size)
 			{
-                // image is already saved in a temporary file
-                if(isset($modifyIn))
-                {
-								// saves the picture into a temporary file
-            		$objQuestion->setTmpPicture($imageUpload);
-							  $objQuestion->getTmpPicture();
-
-                }
-                // saves the picture coming from POST FILE
-                else
-                {
-                    $objQuestion->uploadPicture($imageUpload);
-                }
+		               // image is already saved in a temporary file
+		                if($modifyIn) {
+				// saves the picture into a temporary file
+            			// $objQuestion->setTmpPicture($imageUpload);
+				  $objQuestion->getTmpPicture();
+				}
+		                // saves the picture coming from POST FILE
+                		else
+ 	 	              	{
+                		    $objQuestion->uploadPicture($imageUpload);
+		                }
 			}
 		}
 
@@ -169,14 +162,13 @@ if(isset($submitQuestion)) {
 			// goes to exercise viewing
 			$editQuestion=$questionId;
 		}
-
 		unset($newQuestion,$modifyQuestion);
 	}
 }
 else
 {
-	// if we don't come here after having cancelled the warning message "used in serveral exercises"
-	if(!isset($buttonBack))
+// if we don't come here after having cancelled the warning message "used in serveral exercises"
+	if(!($buttonBack))
 	{
 		$questionName=$objQuestion->selectTitle();
 		$questionDescription=$objQuestion->selectDescription();
@@ -184,19 +176,18 @@ else
 	}
 }
 
-if((isset($newQuestion) || isset($modifyQuestion)) && !isset($usedInSeveralExercises)) {
+//if(($newQuestion || $modifyQuestion) && !$usedInSeveralExercises) {
+if(($newQuestion || $modifyQuestion)) {
 
 	// is picture set ?
 	$okPicture=file_exists($picturePath.'/quiz-'.$questionId)?true:false;
 
-$tool_content .= "<h3>$questionName</h3>";
-
-$tool_content .= "<form enctype=\"multipart/form-data\" method=\"post\" action=\"".$PHP_SELF.
-	"?modifyQuestion=".@$modifyQuestion."&newQuestion=".@$newQuestion."\"><table border=\"0\" cellpadding=\"5\">";
+	$tool_content .= "<h3>$questionName</h3>";
+	@$tool_content .= "<form enctype='multipart/form-data' method='post' action='$_SERVER[PHP_SELF]?modifyQuestion=$modifyQuestion&newQuestion=$newQuestion'><table border='0' cellpadding='5'>";
 
 	if($okPicture) {
-		$tool_content .= "<tr><td colspan=\"2\" align=\"center\"><img src=\"".$picturePath.
-		"/quiz-".$questionId."\" border=\"0\"></td></tr>";
+		$tool_content .= "<tr><td colspan='2' align='center'>
+			<img src='$picturePath/quiz-$questionId' border='0'></td></tr>";
 	}
 
 	// if there is an error message
@@ -252,10 +243,28 @@ $tool_content .= " :</td> <td><input type=\"file\" name=\"imageUpload\" size=\"3
 		  <td valign="top">${langAnswerType} :</td>
 cData;
 
-if (@$modifyQuestion) {
+$tool_content .= "<td><input type=\"radio\" name=\"answerType\" value=\"1\" ";
+        if ($answerType <= 1)
+                $tool_content .= 'checked="checked"';
+        $tool_content .= "> ".$langUniqueSelect."<br>";
+        $tool_content .= "<input type=\"radio\" name=\"answerType\" value=\"2\" ";
+                if ($answerType == 2)
+                        $tool_content .= 'checked="checked"';
+                $tool_content .= "> ".$langMultipleSelect."<br>";
+        $tool_content .= "<input type=\"radio\" name=\"answerType\" value=\"4\" ";
+                if ($answerType >= 4)
+                        $tool_content .= 'checked="checked"';
+                $tool_content .= "> ".$langMatching."<br>";
+        $tool_content .= "<input type=\"radio\" name=\"answerType\" value=\"3\" ";
+                if ($answerType == 3)
+                        $tool_content .= 'checked="checked"';
+                $tool_content .= "> ".$langFillBlanks;
+
+/*
+if ($modifyQuestion) {
 	$answerType = intval($answerType);
 	$tool_content .= "<td><input type='hidden' name='answerType' value='$answerType'>
-												<input type='hidden' name='modifyIn' value='thisExercise'>";
+	<input type='hidden' name='modifyIn' value='thisExercise'>";
 	switch ($answerType) {
 		case 1:
 			$tool_content .= $langUniqueSelect;
@@ -289,15 +298,12 @@ if (@$modifyQuestion) {
 			$tool_content .= 'checked="checked"';
 		$tool_content .= "> ".$langFillBlanks; 
 }
-
+*/
 $tool_content .= <<<cData
-
-	  </td>
-	</tr>
 	<tr>
 	  <td colspan="2" align="center">
-		<input type="submit" name="submitQuestion" value="${langOk}">
-		&nbsp;&nbsp;<input type="submit" name="cancelQuestion" value="${langCancel}">
+		<input type="submit" name="submitQuestion" value="{$langOk}">
+		&nbsp;&nbsp;<input type="submit" name="cancelQuestion" value="{$langCancel}">
 	  </td>
 	</tr>
 	</table>
