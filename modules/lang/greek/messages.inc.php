@@ -128,8 +128,8 @@ $langOpenRequests = "Ανοικτές αιτήσεις καθηγητών";
 $langNoOpenRequests = "Δεν βρέθηκαν ανοικτές αιτήσεις καθηγητών";
 $langInfoAdmin  = "Ενημερωτικά Στοιχεία για τον Διαχειριστή";
 $langLastLesson = "Τελευταίο μάθημα που δημιουργήθηκε:";
-$langLastProf = "Τελευταία εγγραφή εκπαιδευτή:";
-$langLastStud = "Τελευταία εγγραφή εκπαιδευομένου:";
+$langLastProf = "Τελευταία εγγραφή ".$langsOfTeacher.":";
+$langLastStud = "Τελευταία εγγραφή ".$langsOfStudent.":";
 $langAfterLastLogin = "Μετά την τελευταία σας είσοδο έχουν εγγραφεί στην πλατφόρμα:";
 $langOtherActions = "’λλες Ενέργειες";
 
@@ -230,7 +230,6 @@ $langQuickAddDelUserToCours = "Γρήγορη εγγραφή - διαγραφή εκπαιδευομένων - εκπαι
 $langQuickAddDelUserToCoursSuccess = "Η διαχείριση χρηστών ολοκληρώθηκε με επιτυχία!";
 $langFormUserManage = "Φόρμα Διαχείρισης Χρηστών";
 $langListNotRegisteredUsers = "Λίστα Μη Εγγεγραμμένων Χρηστών";
-$langStudents = "Εκπαιδευόμενοι";
 $langListRegisteredStudents = "Λίστα Εγγεγραμμένων Εκπαιδευομένων";
 $langListRegisteredProfessors = "Λίστα Εγγεγραμμένων Εκπαιδευτών";
 
@@ -316,9 +315,7 @@ $langThe = "Η ";
 $langActFailure = "δεν μπορεί να ενεργοποιηθεί, διότι δεν έχετε καθορίσει τις ρυθμίσεις του τρόπου πιστοποίησης";
 
 // other
-$langTeachers = "Εκπαιδευτές";
 $langVisitors = "Επισκέπτες";
-$langTeacher = "Εκπαιδευτής";
 $langVisitor = "Επισκέπτης";
 $langOther = "Άλλο";
 $langTotal = "Σύνολο";
@@ -344,7 +341,6 @@ $langErrorDelete = "Σφάλμα κατά τη διαγραφή του χρήστη";
 $langAfter = "Μετά από";
 $langBefore = "Πρίν από";
 $langUserType = "Τύπος χρήστη";
-$langStudent2 = "Εκπαιδευόμενος";
 
 // search
 $langSearchUsers = "Αναζήτηση Χρηστών";
@@ -420,6 +416,30 @@ $langDeleteOK="Το γεγονός διαγράφηκε";
 $langNoEvents = "Δεν υπάρχουν γεγονότα";
 $langSureToDel = "Είστε σίγουρος ότι θέλετε να διαγράψετε το γεγονός με τίτλο";
 $langDelete = "Διαγραφή";
+
+// week days
+$langDay_of_weekNames = array();
+$langDay_of_weekNames['init'] = array('Κ', 'Δ', 'Τ', 'Τ', 'Π', 'Π', 'Σ');
+$langDay_of_weekNames['short'] = array('Κυρ', 'Δευ', 'Τρι', 'Τετ', 'Πεμ', 'Παρ', 'Σαβ');
+$langDay_of_weekNames['long'] = array('Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο');
+
+// month names
+$langMonthNames = array();
+$langMonthNames['init']  = array('Ι', 'Φ', 'Μ', 'Α', 'Μ', 'Ι', 'Ι', 'Α', 'Σ', 'Ο', 'Ν', 'Δ');
+$langMonthNames['short'] = array('Ιαν', 'Φεβ', 'Μαρ', 'Απρ', 'Μάι', 'Ιουν', 'Ιουλ', 'Αυγ', 'Σεπ', 'Οκτ', 'Νοε', 'Δεκ');
+$langMonthNames['long'] = array('Ιανουάριος', 'Φεβρουάριος', 'Μάρτιος', 'Απρίλιος', 'Μάιος', 'Ιούνιος', 'Ιούλιος', 'Αύγουστος', 'Σεπτέμβριος', 'Οκτώβριος', 'Νοέμβριος', 'Δεκέμβριος');
+$langMonthNames['fine'] = array('Ιανουαρίου',
+        'Φεβρουαρίου',
+        'Μαρτίου',
+        'Απριλίου',
+        'Μαΐου',
+        'Ιουνίου',
+        'Ιουλίου',
+        'Αυγούστου',
+        'Σεπτεμβρίου',
+        'Οκτωβρίου',
+        'Νοεμβρίου',
+        'Δεκεμβρίου');
 
 /***********************************************************
 * announcements.inc.php
@@ -1152,8 +1172,8 @@ $langEmtpyGroups="Εκκαθάριση όλων των ομάδων χρηστών";
 $langGroupsFilled="Όλες οι ομάδες χρηστών έχουν συμπληρωθεί";
 $langFillGroups="Συμπλήρωση των ομάδων χρηστών";
 $langGroupsProperties="Ρυθμίσεις ομάδες χρηστών";
-$langStudentRegAllowed="Οι φοιτητές επιτρέπεται να γραφτούν στις ομάδες";
-$langStudentRegNotAllowed="Οι φοιτητές δεν επιτρέπεται να γραφτούν στις ομάδες";
+$langStudentRegAllowed="Οι χρήστες επιτρέπεται να γραφτούν στις ομάδες";
+$langStudentRegNotAllowed="Οι χρήστες δεν επιτρέπεται να γραφτούν στις ομάδες";
 $langTools="Εργαλεία";
 $langExistingGroups="Υπάρχουσες Ομάδες Χρηστών";
 $langEdit="Διόρθωση";
@@ -1560,7 +1580,6 @@ $langScormIntroTextForDummies = "Τα εισαγόμενα πακέτα πρεπει να αποτελούνται απο
 $langSecondShort = "δευτ.";
 $langStartModule = "Έναρξη ενότητας";
 $langStatsOfLearnPath = "Παρακολούθηση γραμμής μάθησης";
-$langStudent = "Εκπαιδευόμενος";
 $langSwitchEditorToTextConfirm = "Η εντολή θα αφαιρέσει τη τρέχουσα διάταξη κειμένου. Θέλετε να συνεχίσετε?";
 $langTextEditorDisable = "Απενεργοποίηση επεξεργαστή κειμένου";
 $langTextEditorEnable = "Ενεργοποίηση επεξεργαστή κειμένου";
@@ -1629,7 +1648,7 @@ $langCategorisedLinks = "Κατηγοριοποιημένοι σύνδεσμοι";
 $showall = "Εμφάνιση";
 $shownone = "Απόκρυψη";
 $langProfNoLinksExist = "Δεν υπάρχουν σύνδεσμοι. Μπορείτε να χρησιμοποιήσετε τις λειτουργίες του εργαλείου για να προσθέσετε σύνδεσμους.";
-$langNoLinksExist = "Δεν έχουν προστεθεί σύνδεσμοι από τον εκπαιδευτή του μαθήματος.";
+$langNoLinksExist = "Δεν έχουν προστεθεί σύνδεσμοι.";
 
 
 /*****************************************************************
@@ -2550,7 +2569,7 @@ $langStudentParticipation = "Μαθήματα στα οποία συμμετέχει ο χρήστης";
 $langNoStudentParticipation = "Ο χρήστης δεν συμμετέχει σε κανένα μάθημα";
 $langCannotDeleteAdmin = "Ο χρήστης αυτός (με user id = 1) είναι ο βασικός διαχειριστής της πλατφόρμας και δε διαγράφεται.";
 $langExpireBeforeRegister = "Σφάλμα: H ημ/νια λήξης είναι πρίν την ημ/νια εγγραφής";
-$langSuccessfulUpdate = "Μόλις ενημερώθηκε η Βάση Δεδομένων της πλατφόρμας E-Class με τα νέα στοιχεία για τον χρήστη με ID";
+$langSuccessfulUpdate = "Μόλις ενημερώθηκε η Βάση Δεδομένων της πλατφόρμας ".$siteName." με τα νέα στοιχεία για τον χρήστη με ID";
 $langNoUpdate = "Δεν είναι εφικτή η ενημέρωση των στοιχείων για το χρήστη με id";
 $langUpdateNoChange = "Δεν αλλάξατε κάποιο/κάποια από τα στοιχεία του χρήστη.";
 $langError = "Σφάλμα";
@@ -2563,7 +2582,7 @@ $star2 = "Στα πεδία με (**) ";
 $langEditUser = "Επεξεργασία στοιχείων χρήστη";
 $langUnregForbidden = "Δεν επιτρέπεται να διαγράψετε τον χρήστη:";
 $langUnregFirst = "Θα πρέπει να διαγράψετε πρώτα τον χρήστη από τα παρακάτω μαθήματα:";
-$langUnregTeacher = "Είναι εκπαιδευτής στα παρακάτω μαθήματα:";
+$langUnregTeacher = "Είναι ".$langsTeacher." στα παρακάτω μαθήματα:";
 $langPlease = "Παρακαλούμε";
 
 $langOtherDepartments = "Εγγραφή σε μαθήματα άλλων τμημάτων/σχολών";

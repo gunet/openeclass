@@ -7,29 +7,24 @@
 $langYes = "Ναι";
 $langNo = "Όχι";
 
-// week days
-$langDay_of_weekNames = array();
-$langDay_of_weekNames['init'] = array('Κ', 'Δ', 'Τ', 'Τ', 'Π', 'Π', 'Σ');
-$langDay_of_weekNames['short'] = array('Κυρ', 'Δευ', 'Τρι', 'Τετ', 'Πεμ', 'Παρ', 'Σαβ');
-$langDay_of_weekNames['long'] = array('Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο');
+$langTeacher = "Εκπαιδευτής";
+$langOfTeacher = "Εκπαιδευτή";
+$langTeachers = "Εκπαιδευτές";
+$langOfTeachers = "Εκπαιδευτών";
 
-// month names
-$langMonthNames = array();
-$langMonthNames['init']  = array('Ι', 'Φ', 'Μ', 'Α', 'Μ', 'Ι', 'Ι', 'Α', 'Σ', 'Ο', 'Ν', 'Δ');
-$langMonthNames['short'] = array('Ιαν', 'Φεβ', 'Μαρ', 'Απρ', 'Μάι', 'Ιουν', 'Ιουλ', 'Αυγ', 'Σεπ', 'Οκτ', 'Νοε', 'Δεκ');
-$langMonthNames['long'] = array('Ιανουάριος', 'Φεβρουάριος', 'Μάρτιος', 'Απρίλιος', 'Μάιος', 'Ιούνιος', 'Ιούλιος', 'Αύγουστο
-ς', 'Σεπτέμβριος', 'Οκτώβριος', 'Νοέμβριος', 'Δεκέμβριος');
-$langMonthNames['fine'] = array('Ιανουαρίου',
-        'Φεβρουαρίου',
-        'Μαρτίου',
-        'Απριλίου',
-        'Μαΐου',
-        'Ιουνίου',
-        'Ιουλίου',
-        'Αυγούστου',
-        'Σεπτεμβρίου',
-        'Οκτωβρίου',
-        'Νοεμβρίου',
-        'Δεκεμβρίου');
+$langsTeacher = "εκπαιδευτής";
+$langsOfTeacher = "εκπαιδευτή";
+$langsTeachers = "εκπαιδευτές";
+$langsOfTeachers = "εκπαιδευτών";
+
+$langStudent = "Εκπαιδευόμενος";
+$langOfStudent = "Εκπαιδευόμενου";
+$langStudents = "Εκπαιδευόμενοι";
+$langOfStudents = "Εκπαιδευόμενων";
+
+$langsStudent = "εκπαιδευόμενος";
+$langsOfStudent = "εκπαιδευόμενου";
+$langsStudents = "εκπαιδευόμενοι";
+$langsOfStudents = "εκπαιδευόμενων";
 
 ?>
