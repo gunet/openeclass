@@ -34,7 +34,6 @@ $langIntro = "Η πλατφόρμα <b>$siteName</b> είναι ένα ολοκληρωμένο Σύστημα Διαχεί
 $langVersion="Έκδοση του eClass";
 $langAboutText="Η έκδοση της πλατφόρμας είναι";
 $langEclassVersion="2.0";
-$langEClass = "eClass";
 $langHostName="Ο υπολογιστής στον οποίο βρίσκεται η πλατφόρμα είναι ο ";
 $langWebVersion="Xρησιμοποιεί ";
 $langMySqlVersion="και MySql  ";
@@ -105,16 +104,16 @@ $langListCours = "Λίστα Μαθημάτων / Ενέργειες";
 $langListUsersActions = "Λίστα Χρηστών / Ενέργειες";
 $langSearchUser = "Αναζήτηση Χρήστη";
 $langInfoMail = "Ενημερωτικό email";
-$langProfReg = "Εγγραφή Καθηγητή";
-$langProfOpen = "Αιτήσεις Καθηγητών";
-$langUserOpen = "Αιτήσεις Φοιτητών";
+$langProfReg = "Εγγραφή ".$langOfTeacher;
+$langProfOpen = "Αιτήσεις ".$langOfTeachers;
+$langUserOpen = "Αιτήσεις ".$langOfStudents;
 $langPHPInfo = "Πληροφορίες για την PHP";
 $langManuals = "Διαθέσιμα Εγχειρίδια";
 $langAdminManual = "Εγχειρίδιο Διαχειριστή";
 $langConfigFile = "Αρχείο ρυθμίσεων";
 $langDBaseAdmin = "Διαχείριση Β.Δ. (phpMyAdmin)";
 $langActions = "Ενέργειες";
-$langAdminProf = "Διαχείριση Καθηγητών";
+$langAdminProf = "Διαχείριση ".$langOfTeachers;
 $langAdminUsers = "Διαχείριση Χρηστών";
 $langAdminCours = "Διαχείριση Μαθημάτων";
 
@@ -124,18 +123,18 @@ $langBackAdmin = "Επιστροφή στη σελίδα διαχείρισης";
 $langPlatformIdentity = "Ταυτότητα Πλατφόρμας";
 $langStoixeia = "Στοιχεία Πλατφόρμας";
 $langThereAre = "Υπάρχουν";
-$langOpenRequests = "Ανοικτές αιτήσεις καθηγητών";
-$langNoOpenRequests = "Δεν βρέθηκαν ανοικτές αιτήσεις καθηγητών";
+$langOpenRequests = "Ανοικτές αιτήσεις ".$langsOfTeachers;
+$langNoOpenRequests = "Δεν βρέθηκαν ανοικτές αιτήσεις ."$langsOfTeachers;
 $langInfoAdmin  = "Ενημερωτικά Στοιχεία για τον Διαχειριστή";
 $langLastLesson = "Τελευταίο μάθημα που δημιουργήθηκε:";
 $langLastProf = "Τελευταία εγγραφή ".$langsOfTeacher.":";
 $langLastStud = "Τελευταία εγγραφή ".$langsOfStudent.":";
 $langAfterLastLogin = "Μετά την τελευταία σας είσοδο έχουν εγγραφεί στην πλατφόρμα:";
-$langOtherActions = "’λλες Ενέργειες";
+$langOtherActions = "'Αλλες Ενέργειες";
 
 // Stat
 $langStat4eClass = "Στατιστικά πλατφόρμας";
-$langNbProf = "Αριθμός καθηγητών";
+$langNbProf = "Αριθμός ".$langsOfTeachers;
 $langNbStudents = "Αριθμός φοιτητών";
 $langNbLogin = "Αριθμός εισόδων";
 $langNbCourses = "Αριθμός μαθημάτων";
@@ -226,12 +225,12 @@ $langFaculteAdd = "Προσθήκη Τμήματος";
 $langAcceptChanges = "Επικύρωση Αλλαγών";
 
 // addusertocours
-$langQuickAddDelUserToCours = "Γρήγορη εγγραφή - διαγραφή εκπαιδευομένων - εκπαιδευτών";
+$langQuickAddDelUserToCours = "Γρήγορη εγγραφή - διαγραφή ".$langsOfStudents." - ".$langsOfTeachers;
 $langQuickAddDelUserToCoursSuccess = "Η διαχείριση χρηστών ολοκληρώθηκε με επιτυχία!";
 $langFormUserManage = "Φόρμα Διαχείρισης Χρηστών";
 $langListNotRegisteredUsers = "Λίστα Μη Εγγεγραμμένων Χρηστών";
-$langListRegisteredStudents = "Λίστα Εγγεγραμμένων Εκπαιδευομένων";
-$langListRegisteredProfessors = "Λίστα Εγγεγραμμένων Εκπαιδευτών";
+$langListRegisteredStudents = "Λίστα Εγγεγραμμένων ".$langOfStudents;
+$langListRegisteredProfessors = "Λίστα Εγγεγραμμένων ".$langOfTeachers;
 
 // delcours
 $langCourseDel = "Διαγραφή μαθήματος";
@@ -257,8 +256,8 @@ $langCourseEditSuccess = "Τα στοιχεία του μαθήματος άλλαξαν με επιτυχία!";
 $langCourseInfoEdit = "Αλλαγή Στοιχείων Μαθήματος";
 
 // listreq.php
-$langOpenProfessorRequests = "Ανοικτές Αιτήσεις Καθηγητών";
-$langProfessorRequestClosed = "Η αίτηση του καθηγητή έκλεισε !";
+$langOpenProfessorRequests = "Ανοικτές Αιτήσεις ".$langOfTeachers;
+$langProfessorRequestClosed = "Η αίτηση του ".$langsOfTeacher." έκλεισε!";
 $langReqHaveClosed = "Αιτήσεις που έχουν κλείσει";
 $langReqHaveBlocked = "Αιτήσεις που έχουν απορριφθεί";
 $langReqHaveFinished = "Αιτήσεις που έχουν ολοκληρωθεί";
@@ -331,7 +330,6 @@ $langLessonCode = "Κωδικός μαθήματος";
 $langConfirmDelete = "Επιβεβαίωση διαγραφής";
 $langConfirmDeleteQuestion1 = "Θέλετε σίγουρα να διαγράψετε τον χρήστη";
 $langConfirmDeleteQuestion2 = "από το μάθημα με κωδικό";
-$langQueryMark = ";";
 $langTryDeleteAdmin = "Προσπαθήσατε να διαγράψετε τον χρήστη με user id = 1(Admin)!";
 $langUserWithId = "Ο χρήστης με id";
 $langWasDeleted = "διαγράφηκε";
@@ -347,12 +345,9 @@ $langSearchUsers = "Αναζήτηση Χρηστών";
 $langInactiveUsers = "Μη ενεργοί χρήστες";
 $langAddSixMonths = "Προσθήκη χρόνου:6 μήνες";
 
-// list requests
-$langListRequests = "Ανοικτές Αιτήσεις Καθηγητών";
-
 // eclassconf
 $langRestoredValues = "Επαναφορά προηγούμενων τιμών";
-$langEclassConf = "Αρχείο ρυθμίσεων του eClass";
+$langEclassConf = "Αρχείο ρυθμίσεων του ".$siteName;
 $langFileUpdatedSuccess = "Το αρχείο ρυθμίσεων τροποποιήθηκε με επιτυχία!";
 $langFileEdit = "Επεξεργασία Αρχείου";
 $langFileError = "Το αρχείο config.php δεν μπόρεσε να διαβαστεί! Ελέγξτε τα δικαιώματα πρόσβασης.";
@@ -369,7 +364,6 @@ $langAdminAnnAdd = "Η ανακοίνωση διαχειριστή προστέθηκε";
 $langAdminAnnDel = "Η ανακοίνωση διαχειριστή διαγράφτηκε";
 $langAdminAnnMes = "τοποθετήθηκε την";
 
-$langAdminAnnTitle = "Τίτλος";
 $langAdminAnnBody = "Ανακοίνωση";
 
 $langAdminAnnTitleEn = "Τίτλος (Αγγλικά)";
@@ -1322,8 +1316,8 @@ $langInvalidId = "<font color='red'>
         </font><br>&nbsp;<br>";
 $langAccountInactive1 = "Μη ενεργός λογαριασμός.";
 $langAccountInactive2 = "Παρακαλώ επικοινωνήστε με τον διαχειριστή για την ενεργοποίηση του λογαριασμού σας";
-$langMyCoursesProf="Τα μαθήματα που υποστηρίζω (Καθηγητής)";
-$langMyCoursesUser="Τα μαθήματα που παρακολουθώ (Εγγεγραμμένος)";
+$langMyCoursesProf="Τα μαθήματα που υποστηρίζω (".$langTeacher.")";
+$langMyCoursesUser="Τα μαθήματα που παρακολουθώ (".$langStudent.")";
 $langNoCourses="Δεν υπάρχουν μαθήματα";
 $langCourseCreate="Δημιουργία Μαθήματος";
 $langMyAgenda = "Το Ημερολόγιό μου";
@@ -1587,8 +1581,8 @@ $langTimeInLearnPath = "Χρόνος στη γραμμή μάθησης";
 $langTo = "στο";
 $langTotalTimeSpent = "Σύνολο χρόνου";
 $langTrackAllPath = "Παρακολούθηση γραμμών μάθησης";
-$langTrackAllPathExplanation = "Πρόοδος εκπαιδευόμενων σε όλες τις διαδρομές μάθησης";
-$langTrackUser = "Πρόοδος Εκπαιδευόμενου";
+$langTrackAllPathExplanation = "Πρόοδος ".$langsOfStudents." σε όλες τις διαδρομές μάθησης";
+$langTrackUser = "Πρόοδος ".$langOfStudent;
 $langTracking = "Παρακολούθηση";
 $langTypeOfModule = "Τύπος ενότητας";
 $langUnamedModule = "Ενότητα χωρίς όνομα";
@@ -1598,7 +1592,7 @@ $langUsedInLearningPaths = "Αριθμός διαδρομών μάθησης που χρησιμοποιούν αυτή την
 $langView = "Εμφάνιση";
 $langViewMode = "Παρουσίαση τρόπου";
 $langVisibility = "Ορατό / Αόρατο";
-$langWork = "Εργασίες Εκπαιδευόμενων";
+$langWork = "Εργασίες ".$langOfStudents;
 $langWrongOperation = "Λανθασμένη λειτουργία";
 $langYourBestScore = "Η καλύτερη σου βαθμολογία";
 $lang_enroll = "Eγγραφή";
@@ -1865,7 +1859,6 @@ $langDuration="Διάρκεια";
 * phpbb.inc.php
 ************************************************************/
 
-$langTitle="Τίτλος";
 
 $langAdm="διαχείριση";
 $langQuote="quote";
@@ -2797,7 +2790,6 @@ $langUploadPage = "Ανέβασμα ιστοσελίδας";
 $langAddExtLink = "Προσθήκη εξωτερικού σύνδεσμου στο αριστερό μενού";
 $deleteSuccess = "Ο σύνδεσμος διαγράφηκε";
 $langDeleteLink = "Είστε βέβαιος/η ότι θέλετε να διαγράψετε αυτό τον σύνδεσμο";
-$langToolTitle = "Τίτλος";
 $langOperations="Ενέργειες σε εξωτερικούς σύνδεσμους";
 $langInactiveTools = "Ανενεργά εργαλεία";
 $langSubmitChanges = "Υποβολή αλλαγών";
@@ -2876,7 +2868,7 @@ $langPersonalisedBriefcase = "Προσωπικό χαρτοφυλάκιο";
 $langEclass = "Πλατφόρμα ασύγχρονης τηλεκπαίδευσης eClass";
 $langCopyrightFooter="Πληροφορίες πνευματικών δικαιωμάτων";
 $langAdvancedSearch="Σύνθετη αναζήτηση";
-
+$langTitle="Τίτλος";
 
 /***************************************************************
 * unreguser.inc.php

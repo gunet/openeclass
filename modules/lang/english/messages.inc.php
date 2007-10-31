@@ -186,7 +186,6 @@ $langQuickAddDelUserToCours = "Quick register - unregister students - professors
 $langQuickAddDelUserToCoursSuccess = "User management finished with success!";
 $langFormUserManage = "User Management Form";
 $langListNotRegisteredUsers = "Unregistered Users List";
-$langStudents = "Students";
 $langProfessors = "Professors";
 $langListRegisteredStudents = "Registered Students List";
 $langListRegisteredProfessors = "Registered Professors List";
@@ -299,10 +298,8 @@ $langActFailure = "cannot be activated, because you have no authentication setti
 
 // other
 $langTeachers = "Teachers";
-$langStudents = "Students";
 $langVisitors = "Visitors";
 $langTeacher = "Teacher";
-$langStudent = "Student";
 $langVisitor = "Visitor";
 $langOther = "Other";
 $langUsers = "Users";
@@ -332,7 +329,6 @@ $langErrorDelete = "Error during the delete action";
 $langAfter = "After";
 $langBefore = "Before";
 $langUserType = "User type";
-$langStudent2 = "Student";
 
 // other
 $langAddAdminInApache = "Add a user in the Admin Group";
@@ -1736,7 +1732,6 @@ $langSecondShort = "sec.";
 $langSize = "Size";
 $langStartModule = "Start Module";
 $langStatsOfLearnPath = "Statistics";
-$langStudent = "Student";
 $langSwitchEditorToTextConfirm = "This command is going to remove the current text layout. Do you want to continue ?";
 $langTextEditorDisable = "Disable text editor";
 $langTextEditorEnable = "Enable text editor";
@@ -2578,7 +2573,6 @@ $langAddedU="has been added. An email has been sent to give him his username ";
 $langAndP="and his password";
 $langDereg="has been unregistered from this course";
 $langAddAU="Add a user";
-$langStudent="student";
 $langBegin="begin.";
 $langPreced50 = "Previous 50";
 $langFollow50 = "Next 50";
@@ -3072,10 +3066,6 @@ $langSubmitChanges = "Submit changes";
 * trad4all.inc.php
 *******************************************************************/
 
-
-$langYes = "Yes";
-$langNo = "No";
-
 $iso639_2_code = "en";
 $iso639_1_code = "eng";
 
@@ -3211,7 +3201,6 @@ $langConfirmUnregCours = "Are you sure you want to unregister from course with c
 
  $langProf = "Professors";
  $langGuest = "Guests";
- $langStudents = "Students";
  $langOther = "Other";
 
  $langStartDate = "Start Date";
@@ -3406,7 +3395,6 @@ $langSearch = "Search";
 $langSecondShort = "sec.";
 $langSettings = "with the following settings:
 User name:";
-$langStudent = "Student";
 $langSwitchEditorToTextConfirm = "This command is going to remove the current text layout. Do you want to continue ?";
 $langTextEditorDisable = "Disable text editor";
 $langTextEditorEnable = "Enable text editor";

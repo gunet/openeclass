@@ -64,7 +64,7 @@ if(empty($doit))
 	{
 		$tool_content .= " $langConfirmDeleteQuestion2 <em>".htmlspecialchars($c)."</em>";
 	}
-	$tool_content .= "$langQueryMark</p>
+	$tool_content .= ";</p>
 		<ul>
 		<li>$langYes: <a href=\"unreguser.php?u=".htmlspecialchars($u)."&c=".htmlspecialchars($c)."&doit=yes\">$langDelete!</a><br>&nbsp;</li>
 		<li>$langNo: <a href=\"edituser.php?u=".htmlspecialchars($u)."\">$langEditUser $u_account</a>&nbsp;&nbsp;&nbsp;<a href=\"index.php\">$back</a></li>

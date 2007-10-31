@@ -39,7 +39,7 @@ if (!empty($show) && ($show=="closed")) {
 		
 	} else {
 		// Show only closed forms
-		$tool_content .= "<table width=\"99%\"><caption>$langListRequests</caption><thead><tr>
+		$tool_content .= "<table width=\"99%\"><caption>$langOpenProfessorRequests</caption><thead><tr>
 		<th scope=\"col\">$langName</th>
 		<th scope=\"col\">$langSurname</th>
 		<th scope=\"col\">$langUsername</th>
@@ -83,7 +83,7 @@ if (!empty($show) && ($show=="closed")) {
 		
 	} else {
 		// Show only closed forms
-		$tool_content .= "<table width=\"99%\"><caption>$langListRequest</caption><thead><tr>
+		$tool_content .= "<table width=\"99%\"><caption>$langOpenProfessorRequests</caption><thead><tr>
 		<th scope=\"col\">$langName</th>
 		<th scope=\"col\">$langSurname</th>
 		<th scope=\"col\">$langUsername</th>
@@ -120,7 +120,7 @@ if (!empty($show) && ($show=="closed")) {
 	$tool_content .= "</tbody></table>";
 } elseif (!empty($show) && ($show=="accepted")) {
 	// Show only accepted forms
-	$tool_content .= "<table width=\"99%\"><caption>$langListRequest</caption><thead><tr>
+	$tool_content .= "<table width=\"99%\"><caption>$langOpenProfessorRequests</caption><thead><tr>
 		<th scope=\"col\">$langName</th>
 		<th scope=\"col\">$langSurname</th>
 		<th scope=\"col\">$langUsername</th>
@@ -285,7 +285,7 @@ switch($close)
 else
 {
 
-	$tool_content .= "<table width=\"99%\"><caption>$langListRequest</caption><thead><tr>
+	$tool_content .= "<table width=\"99%\"><caption>$langOpenProfessorRequests</caption><thead><tr>
 		<th scope=\"col\">$langName</th>
 		<th scope=\"col\">$langSurname</th>
 		<th scope=\"col\">$langUsername</th>

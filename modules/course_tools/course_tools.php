@@ -601,9 +601,8 @@ tForm;
 			<thead>
 				<tr> 
 					<th align=\"left\">
-						$langToolTitle
+						$langTitle
 					</th>
-					
 					<th  width=\"100\">
 						$langDelete
 					</th>
