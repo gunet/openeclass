@@ -53,8 +53,6 @@ $u = (string)isset($_GET['u'])?$_GET['u']:(isset($_POST['u'])?$_POST['u']:'');
 if((!empty($u)) && ctype_digit($u))	// validate the user id
 {
 	$u = (int)$u;
-#  if(empty($u_submitted)) // if the form was not submitted
- # {
 		$sql = mysql_query("
 		SELECT nom, prenom, username, password, email, phone, department, registered_at, expires_at FROM user
 		WHERE user_id = '$u'");
@@ -63,25 +61,10 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 	    die("Unable to query database (user_id='$u')!");
 		}
 		$info = mysql_fetch_array($sql);
-		$password = $info[3];
-		$authmethods = array("pop3","imap","ldap","db");
-		if(!in_array($password,$authmethods))
-		{
-			$crypt = new Encryption;
-			$key = $encryptkey;
-			$password_decrypted = $crypt->decrypt($key, $info[3]);
-		}
-		else
-		{
-			$password_decrypted = $password;
-		}
-
-        $tool_content .= "<h4>Στατιστικά χρήστη $info[2]</h4>";
-		
-		
+    $tool_content .= "<h4>Στατιστικά χρήστη $info[2]</h4>";
+				
 		$sql = mysql_query("
-			SELECT nom, prenom, username FROM user
-			WHERE user_id = '$u'");
+			SELECT nom, prenom, username FROM user WHERE user_id = '$u'");
 		if (!$sql) 
 		{
 		    die("Unable to query database (user_id='$u')!");
@@ -174,34 +157,19 @@ if (!extension_loaded('gd')) {
 }
 // End of chart display; chart unlinked at end of script.
 
-
-
-$sql = "SELECT * FROM loginout
-    WHERE id_user = '".$_SESSION["uid"]."' ORDER by idLog DESC LIMIT 15";
+$sql = "SELECT * FROM loginout WHERE id_user = '".$_SESSION["uid"]."' ORDER by idLog DESC LIMIT 15";
 
 $leResultat = db_query($sql, $mysqlMainDb);
 $tool_content .= " &nbsp;
     <table width=\"99%\">
-        <thead>
-            <tr>
-                <th>$langLastUserVisits $info[2]</th>
-            </tr>
-        </thead>
+       <thead><tr><th>$langLastUserVisits $info[2]</th></tr></thead>
     </table>
     <br>
-
     <table width=\"99%\">
-        <thead>
-            <tr>
-                <th>$langDate</th>
-                <th>$langAction</th>
-            </tr>
-        </thead>
+        <thead><tr><th>$langDate</th><th>$langAction</th></tr></thead>
         <tbody>
-            ";
+         ";
 $i = 0;
-//$color[]=$color1;
-//$color[]=$color2;
 
 $nomAction["LOGIN"] = "<font color=\"#008000\">$langLogIn</font>";
 $nomAction["LOGOUT"] = "<font color=\"#FF0000\">$langLogOut</font>";
@@ -214,24 +182,12 @@ while ($leRecord = mysql_fetch_array($leResultat)) {
 	} else {
 		$tool_content .= "<tr class=\"odd\">";
 	}
-	$tool_content .= "
-    <td>
-        ".strftime("%Y-%m-%d %H:%M:%S ", strtotime($when))."
-    </td>
-    <td>".$nomAction[$action]."</td>
-    </tr>";
+	$tool_content .= "<td>".strftime("%Y-%m-%d %H:%M:%S ", strtotime($when))."</td>
+    <td>".$nomAction[$action]."</td></tr>";
 	$i++;
 }
 
 $tool_content .= "</tbody></table>";
-
-
-
-
-
-
-
-
 
 } 
 else 
@@ -242,10 +198,10 @@ else
 
 $tool_content .= "<center><p><a href=\"listusers.php\">$back</a></p></center>";
 draw($tool_content,3);
+
 // Unlink chart file - haniotak
 if ($made_chart) {
-	ob_end_flush();
-	ob_flush();
+//	ob_flush();
 	flush();
 	sleep(5);
 	unlink($webDir.$chart_path);

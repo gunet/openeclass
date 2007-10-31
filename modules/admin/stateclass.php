@@ -257,9 +257,10 @@ $tool_content .= "</td></tr></table></td></tr></table>";
  */
  
 function tablize($tableau, $lang) {
-    if ($lang) {
-        include "../lang/".$lang."/usage.inc.php";
-    }
+
+	global $langClosed, $langTypesRegistration, $langOpen, $langStudents, $langGuest, 
+	   		 $langPre, $langPost, $langOther, $langEnglish, $langGreek, $langProf; 
+
     $ret = "";
 	if (is_array($tableau)) { 
 		$ret .= "<table ";
@@ -325,7 +326,6 @@ function list_ManyResult($sql) {
 	}
 	return $resu;
 }
-
 
 /*****************************************************************************
         DISPLAY HTML

@@ -102,10 +102,10 @@ $tool_content .= "  <tr>
     <td><input type=\"text\" name=\"user_am\" size=\"30\" value=\"".$user_am."\"></td>
 </tr>";
 $tool_content .= "  <tr>
-    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langUserType ($langStudent2/$langTeacher):</b></th>
+    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langUserType ($langStudent/$langTeacher):</b></th>
     <td>";
 $usertype_data = array();
-$usertype_data[5] = $langStudent2;
+$usertype_data[5] = $langStudent;
 $usertype_data[1] = $langTeacher;
 $tool_content .= selection2($usertype_data,"user_type",$user_type);
 $tool_content .= "</td>
