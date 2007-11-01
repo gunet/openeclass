@@ -34,7 +34,7 @@
 session_start();
 
 $tool_content = "";
-include "../modules/lang/greek/install.inc.php";
+include "../modules/lang/greek/messages.inc.php";
 include('install_functions.php');
 
 if (file_exists("../config/config.php")) {
