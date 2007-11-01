@@ -1,5 +1,4 @@
 <?
-$langFiles = 'about';
 $path2add=2;
 include '../include/baseTheme.php';
 $nameTools = $langInfo;
@@ -8,14 +7,12 @@ $tool_content ="";
 $tool_content .= "
 <p align='justify'>$langIntro
 <br><br>
-$langAboutText:&nbsp;<b>$langEClass $langEclassVersion</b>&nbsp;&nbsp;<a href='http://portal.eclass.gunet.gr/' title='Portal eClass' target='_blank' border=0><img src='../images/about.gif' width=16 height=16 align=absbottom border=0></a><br><br>";
+$langAboutText:&nbsp;<b>$siteName $langEclassVersion</b>&nbsp;&nbsp;<a href='http://portal.eclass.gunet.gr/' title='Portal eClass' target='_blank' border=0><img src='../images/about.gif' width=16 height=16 align=absbottom border=0></a><br><br>";
 
 /*
   * Make table with general platform information
   * ophelia neofytou - 2006/09/26
   */
- @include("./modules/lang/$language/admin.inc.php");
- @include("./modules/lang/$language/about.inc.php");
 
 //find uptime
 $sql_stats = "SELECT code FROM cours";
@@ -72,8 +69,8 @@ $tool_content .= "<p>$langAboutUsers <b>$e[0]</b> $langUsers</p>";
 
 $tool_content .= "
           <ul>
-          <li><b>$b[0]</b> $langProf, </li>
-          <li><b>$c[0]</b> $langStud $langAnd </li>
+          <li><b>$b[0]</b> $langTeachers, </li>
+          <li><b>$c[0]</b> $langStudents $langAnd </li>
           <li><b>$d[0]</b> $langGuest </li>
           </ul>
           ";
