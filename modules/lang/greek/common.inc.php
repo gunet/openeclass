@@ -1,7 +1,7 @@
 <?
 
 /*******************************************************
-* General Messages. 
+* General Messages - Feel free to suit them in your needs
 *******************************************************/
 
 $langYes = "Íáé";

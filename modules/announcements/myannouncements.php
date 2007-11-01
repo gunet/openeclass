@@ -64,7 +64,7 @@ $tool_content .= "<table width=\"100%\" cellpadding=\"0\" align=center cellspaci
                 $tool_content .= "<table width=96% align=center style=\"border: 1px solid silver;\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
                 $tool_content .= "<tr><td class=color2><b>$row[intitule]</b></td>\n";
                 $tool_content .= "<td class=color2 align=right valign=middle>$row[titulaires]</td>";
-                $tool_content .= "<td class=color2 align=right width=1% valign=middle><img src='../../images/teacher.gif' title=$langTitulaire></td>\n";
+                $tool_content .= "<td class=color2 align=right width=1% valign=middle><img src='../../images/teacher.gif' title=$langTutor></td>\n";
                 $tool_content .= "</tr>";
                 $tool_content .= "<tr>";
                 $tool_content .= "<td colspan=3 class=\"color1\"><i>($langAnn : ".$myrow['temps'].")</i><br><br>\n";

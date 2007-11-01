@@ -33,7 +33,6 @@
  *
  */
 
-$langFiles = 'agenda';
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Agenda';
@@ -118,7 +117,7 @@ function confirmation (name)
 			$tool_content .=  "<li><a href=\"".$_SERVER['PHP_SELF']."?sens=\" >$langOldToNew</a></li>";
 			$sens=" DESC ";
 		} else {
-			$tool_content .=  "<li><a href=\"".$_SERVER['PHP_SELF']."?sens=d\" >$langNewToOld</a></li>";
+			$tool_content .=  "<li><a href=\"".$_SERVER['PHP_SELF']."?sens=d\" >$langOldToNew</a></li>";
 		}
 	}
 	$tool_content .= "</ul></div>";

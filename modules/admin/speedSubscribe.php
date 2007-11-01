@@ -64,7 +64,7 @@ $tool_content = "";
 		MAIN BODY
 ******************************************************************************/
 // Register administrator to selected courses
-if (isset($submit) && $submit == "$langSubscribe") {
+if (isset($submit) && $submit == "$langRegistration") {
 	// Constract a display table
 	$tool_content .= "<table width=\"99%\"><caption>".$lang_subscribe_processing."</caption></tbody>";
 

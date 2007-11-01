@@ -1,9 +1,8 @@
 <?
-$langFiles = array('registration', 'admin', 'gunet');
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 //include 'auth.inc.php';
-$nameTools = $regprof;
+$nameTools = $langProfReg;
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 
 // Initialise $tool_content

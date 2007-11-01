@@ -37,7 +37,6 @@ Purpose: TDisplay all the available auth methods for user registration
 ==============================================================================
 */
 
-$langFiles = array('registration', 'admin', 'gunet');
 include '../../include/baseTheme.php';
 
 // added by jexi - adia
@@ -45,7 +44,7 @@ session_register("prof");
 $prof=1;
 include 'auth.inc.php';
 
-$nameTools = $regprof;
+$nameTools = $langProfReg;
 
 $tool_content = "";
 

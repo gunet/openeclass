@@ -125,7 +125,7 @@ if (isset($c)) {
     <td>".$row['intitule']."</td>
 </tr>";
 	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>".$langDidaskon.":</b></td>
+    <td width=\"3%\" nowrap><b>".$langTutor.":</b></td>
     <td>".$row['titulaires']."</td>
 </tr>";
 	$tool_content .= "</tbody></table><br>\n";

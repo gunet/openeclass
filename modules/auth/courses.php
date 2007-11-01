@@ -214,7 +214,7 @@ function getdepnumcourses($fac) {
 }
 
 function expanded_faculte($fac, $uid) {
-	global $m, $icons, $langTitular, $langBegin, $mysqlMainDb, $table_border;
+	global $m, $icons, $langTutor, $langBegin, $mysqlMainDb, $table_border;
 
 	$retString = "";
 
@@ -371,7 +371,7 @@ function expanded_faculte($fac, $uid) {
 				
           $retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]' checked >";
 	    } else {
-          $retString .= "<img src=../../template/classic/img/teacher.gif title=$langTitular>";
+          $retString .= "<img src=../../template/classic/img/teacher.gif title=$langTutor>";
 								}
       } else {
 			if ($mycours['p']!="" && $mycours['visible'] == 1) {

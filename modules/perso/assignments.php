@@ -117,7 +117,7 @@ function getUserAssignments($param, $type) {
  * @see getUserAssignments()
  */
 function assignHtmlInterface($data) {
-	global  $langLesson, $langAssignment, $langDeadline, $langNoAssignmentsExist;
+	global  $langCourse, $langAssignment, $langDeadline, $langNoAssignmentsExist;
 	$assign_content = "";
 	$iterator =  count($data);
 
@@ -127,7 +127,7 @@ function assignHtmlInterface($data) {
 	<table  width="100%" class="assign">
 		<thead>
 			<tr>
-				<th class="assign">$langLesson</th>
+				<th class="assign">$langCourse</th>
 				<th class="assign">$langAssignment</th>
 				<th class="assign">$langDeadline</th>
 			</tr>

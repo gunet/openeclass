@@ -39,7 +39,6 @@ session_unregister("forumId");
 
 $require_login = TRUE;
 $require_current_course = TRUE;
-$langFiles = 'group';
 $require_help = TRUE;
 $helpTopic = 'Group';
 
@@ -56,7 +55,6 @@ if (isset($userGroupId) && is_numeric($userGroupId)){
 }
 
 
-########################### SQL SELF-REGISTRATION ################################
 
 if(isset($registration) and $statut != 10)
 {
@@ -314,14 +312,11 @@ function loadGroupTools(){
 
 			$group_tools .=  " | <a href=\"group_email.php?userGroupId=$userGroupId\">$langEmailGroup</a>";
 		}
-
 	}
 	$group_tools .= "</p>";
 
 	session_unregister("secretDirectory");
-
 	session_unregister("forumId");
-
 	return $group_tools;
 }
 ?>

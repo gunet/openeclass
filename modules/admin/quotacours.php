@@ -111,7 +111,7 @@ else {
     <td colspan=\"2\">".$quota_info."</td>
   </tr>
   <tr>
-    <td width=\"3%\" nowrap>$langLegend <b>$langDocument</b>:</td>
+    <td width=\"3%\" nowrap>$langLegend <b>$langDoc</b>:</td>
     <td><input type='text' name='dq' value='$dq' size='4' maxlength='4'> Mb.</td>
   </tr>
   <tr>

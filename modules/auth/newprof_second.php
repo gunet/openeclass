@@ -2,7 +2,7 @@
 include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
 require_once 'auth.inc.php';
-$nameTools = $regprof;
+$nameTools = $langRegProf;
 
 // Initialise $tool_content
 $tool_content = "";
@@ -31,7 +31,6 @@ if(!empty($submit))
 					<tr>
 						<td class=\"caution\">
 							<p>$langCharactersNotAllowed</p>
-							
 							<p><a href=\"./newprof.php\">$langAgain</a></p>
 						</td>
 					</tr>

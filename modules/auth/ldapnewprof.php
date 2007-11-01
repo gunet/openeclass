@@ -45,17 +45,10 @@ if(!isset($_GET['auth']) && isset($_SESSION['auth_tmp']))
 else if (!isset($_GET['auth']) && !isset($_SESSION['auth_tmp']))
   $auth=0;
 
-//$auth = get_auth_id();
-//$msg = get_auth_info($auth);
-//$settings = get_auth_settings($auth);
-//if(!empty($msg)) $nameTools = $msg;
-//$navigation[] = array("url"=>"../admin/", "name"=> $langAdmin);
-//$navigation[] = array("url"=>"newprof_info.php", "name"=> $regprof);
-
 $auth = isset($_GET['auth'])?$_GET['auth']:'';
 $authmethods = get_auth_active_methods();
 
-$navigation[]= array ("url"=>"registration.php", "name"=> "$langReg");
+$navigation[]= array ("url"=>"registration.php", "name"=> "$langRegistration");
 
 if(!in_array($auth,$authmethods))		// means try to hack,attack
 {

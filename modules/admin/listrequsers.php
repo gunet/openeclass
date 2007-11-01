@@ -25,7 +25,6 @@
       |                  Panepistimiopolis Ilissia, 15784, Athens, Greece    |
       +----------------------------------------------------------------------+
 */
-$langFiles = array('gunet','registration','admin');
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
@@ -191,7 +190,8 @@ $tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#F1F1F1'\" onMou
 			"&pu=".urlencode($req['profuname']).
 			"&pe=".urlencode($req['profemail']).
 			"&pt=".urlencode($req['proftmima']).
-			"\" class=small_tools>$langAcceptRequest</a>";	
+			"\" class=small_tools>$langRegistration</a>";	
+
 		// check for ldap server
      /*if (check_ldap_entries())
 		   $tool_content .= "<br><a href='../auth/ldapnewuser.php?id=$req[rid]&m=$req[profemail]&tmima=".urlencode($req['proftmima'])."' class=small_tools>Εγγραφή LDAP</a>"; */

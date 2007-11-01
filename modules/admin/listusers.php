@@ -517,7 +517,7 @@ if($sql)
 					 "<th scope=\"col\">$langEmail</th>".
 					 "<th scope=\"col\"><a href=\"listusers.php?ord=s&startList=$_REQUEST[startList]&numbList=$_REQUEST[numbList]\">$langProperty</a></th>".
 					 "<th scope=\"col\">$langActions</th>".
-					 "<th scope=\"col\">$langUnreg $langUser2</th>".
+					 "<th scope=\"col\">$langUnreg $langUser</th>".
 					 "<th scope=\"col\">$langStats</th>".
 					 "</tr></thead><tbody>";
 		} 
@@ -530,7 +530,7 @@ if($sql)
 					 "<th scope=\"col\">$langEmail</th>".
 					 "<th scope=\"col\"><a href=\"listusers.php?ord=s\">$langProperty</a></th>".
 					 "<th scope=\"col\">$langActions</th>".
-					 "<th scope=\"col\">$langUnreg $langUser2</th>".
+					 "<th scope=\"col\">$langUnreg $langUser</th>".
 					 "<th scope=\"col\">$langStats</th>".
 					 "</tr></thead><tbody>";
 		}

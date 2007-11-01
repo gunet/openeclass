@@ -40,7 +40,6 @@
 
 $require_current_course = TRUE;
 $require_help = TRUE;
-$langFiles = 'announcements';
 $helpTopic = 'Announce';
 $guest_allowed = true;
 
@@ -54,7 +53,7 @@ $action = new action();
 $action->record('MODULE_ID_ANNOUNCE');
 /**************************************/
 
-$nameTools = $langAn;
+$nameTools = $langAnnouncements;
 $tool_content = $head_content = "";
 
 if ($is_adminOfCourse && (@$addAnnouce==1 || isset($modify))) {
