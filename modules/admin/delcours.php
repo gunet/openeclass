@@ -101,7 +101,7 @@ else {
 }
 // If course deleted go back to editcours.php
 if (isset($_GET['c']) && !isset($delete)) {
-	$tool_content .= "<center><p><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\">".$langReturn."</a></p></center>";
+	$tool_content .= "<center><p><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\">".$langBack."</a></p></center>";
 }
 // Go back to listcours.php
 else {
@@ -110,7 +110,7 @@ else {
 		$tool_content .= "<center><p><a href=\"listcours.php?search=yes\">".$langReturnToSearch."</a></p></center>";
 	}
 	// Display link to listcours.php
-	$tool_content .= "<center><p><a href=\"listcours.php\">$langReturn</a></p></center>";
+	$tool_content .= "<center><p><a href=\"listcours.php\">$langBack</a></p></center>";
 }
 
 /*****************************************************************************

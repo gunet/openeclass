@@ -66,7 +66,7 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 				<td>$langKeywords_Descr</td>	
 			</tr>
 			<tr>
-				<th width=\"120\" class='left'>$langInstructor</td>					
+				<th width=\"120\" class='left'>$langTeacher</td>					
 				<td><input name=\"search_terms_instructor\" type=\"text\" size=\"50\" /></td>
 				<td>$langInstructor_Descr</td>
 			</tr>
@@ -92,9 +92,6 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 						 emfanish arikown mhnymatwn anazhthshs
 ***********************************************************************************************/
 	
-	//ektypwsh mhnymatos anazhthshs
-	$tool_content .= "<h2>$langSearchingFor</h2>";
-
 	
 	//ektelesh erwthmatos gia to se poia mathimata einai eggegramenos o xrhsths. sta apotelesmata perilamvanontai
 	//kai ola ta anoixta kai anoixta me eggrafh mathimata.
@@ -144,7 +141,7 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 					$langLessonCode : ".$mycours['code']."</li>
 					
 				<li>
-					$langInstructor : ".$mycours['titulaires']."
+					$langTeacher : ".$mycours['titulaires']."
 				</li><li>
 					$langKeywords : ".$mycours['course_keywords']."
 				</li>

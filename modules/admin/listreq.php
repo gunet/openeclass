@@ -330,9 +330,9 @@ else
 
 // If show is set then we return to listereq, else return to admin index.php
 if (!empty($show)) {
-	$tool_content .= "<br><center><p><a href=\"listreq.php\">$langReturn</a></p></center>";
+	$tool_content .= "<br><center><p><a href=\"listreq.php\">$langBack</a></p></center>";
 } else {
-	$tool_content .= "<br><center><p><a href=\"index.php\">$langReturn</a></p></center>";
+	$tool_content .= "<br><center><p><a href=\"index.php\">$langBack</a></p></center>";
 }
 
 draw($tool_content,3);

@@ -31,7 +31,6 @@
  * @abstract Password change component
  *
  */
-$langFiles = array('registration','usage');
 $require_login = true;
 $helpTopic = 'Profile';
 $require_valid_uid = TRUE;
@@ -203,7 +202,7 @@ if (!isset($changePass)) {
     </tr>";
 	$tool_content .= "
     </thead></table>
-    <br><input type=\"Submit\" name=\"submit\" value=\"$langChange\">
+    <br><input type=\"Submit\" name=\"submit\" value=\"$langModify\">
     </form>
    ";
 }

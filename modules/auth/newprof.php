@@ -59,7 +59,7 @@ $tool_content .= "
 	        <input type=\"hidden\" name=\"auth\" value=\"1\" >
 			<br/><br/>
 			<p>$langRequiredFields<br>
-	           $star2 . $langCharactersNotAllowed</p>
+	           $langStar2 . $langCharactersNotAllowed</p>
 	</td>
 	</tr>
 	</thead>

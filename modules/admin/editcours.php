@@ -111,7 +111,7 @@ if (isset($c)) {
 		"SELECT * FROM cours WHERE code = '".mysql_real_escape_string($c)."'");
 	$row = mysql_fetch_array($sql);
 	// Display course information and link to edit
-	$tool_content .= "<table width=\"99%\"><caption>".$langCourseInfo." (<a href=\"infocours.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langChange."</a>)</caption><tbody>";
+	$tool_content .= "<table width=\"99%\"><caption>".$langCourseInfo." (<a href=\"infocours.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langModify."</a>)</caption><tbody>";
 	$tool_content .= "  <tr>
     <td width=\"3%\" nowrap><b>".$langDepartment.":</b></td>
     <td>".$row['faculte']."</td>
@@ -130,7 +130,7 @@ if (isset($c)) {
 </tr>";
 	$tool_content .= "</tbody></table><br>\n";
 	// Display course quota and link to edit
-	$tool_content .= "<table width=\"99%\"><caption>".$langQuota." (<a href=\"quotacours.php?c=".htmlspecialchars($c).$searchurl."\">".$langChange."</a>)</caption><tbody>";
+	$tool_content .= "<table width=\"99%\"><caption>".$langQuota." (<a href=\"quotacours.php?c=".htmlspecialchars($c).$searchurl."\">".$langModify."</a>)</caption><tbody>";
 	// Get information about course quota
 	$q = mysql_fetch_array(mysql_query("SELECT code,intitule,doc_quota,video_quota,group_quota,dropbox_quota 
 			FROM cours WHERE code='".mysql_real_escape_string($c)."'"));
@@ -159,7 +159,7 @@ if (isset($c)) {
 </tr>";
 	$tool_content .= "</tbody></table><br>\n";
 	// Display course type and link to edit
-	$tool_content .= "<table width=\"99%\"><caption>".$langCourseStatus." (<a href=\"statuscours.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langChange."</a>)</caption><tbody>";
+	$tool_content .= "<table width=\"99%\"><caption>".$langCourseStatus." (<a href=\"statuscours.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langModify."</a>)</caption><tbody>";
 	$tool_content .= "  <tr>
     <td width=\"3%\" nowrap><b>".$langCurrentStatus.":</b></td>
     <td>";
@@ -205,7 +205,7 @@ if (isset($c)) {
 		$tool_content .= "<br><center><p><a href=\"listcours.php?search=yes\">".$langReturnToSearch."</a></p></center>";
 	}
 	// Display link to go back to listcours.php
-	$tool_content .= "<br><center><p><a href=\"listcours.php\">".$langReturn."</a></p></center>";
+	$tool_content .= "<br><center><p><a href=\"listcours.php\">".$langBack."</a></p></center>";
 }
 // If $c is not set we have a problem
 else {

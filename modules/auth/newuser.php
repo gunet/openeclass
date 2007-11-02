@@ -107,7 +107,7 @@ $tool_content .= "</select>
 	<input type=\"hidden\" name=\"auth\" value=\"1\">
     <input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\">
     <br/><br/>
-    <p>$langRequiredFields <br/>$star2 $langCharactersNotAllowed</p>
+    <p>$langRequiredFields <br/>$langStar2 $langCharactersNotAllowed</p>
 	</td>
 </tr>
 </tbody>

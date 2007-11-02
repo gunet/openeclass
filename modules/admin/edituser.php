@@ -38,8 +38,7 @@ This script allows the admin to :
 ==============================================================================
 */
 
-// LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-$langFiles = array('admin','registration');
+// BASETHEME, OTHER INCLUDES AND NAMETOOLS
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include 'admin.inc.php';
@@ -281,7 +280,7 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
     </tr>";
 		$tool_content .= "
     </thead></table>
-    <br><input type=\"Submit\" name=\"submit\" value=\"$langChange\">
+    <br><input type=\"Submit\" name=\"submit\" value=\"$langModify\">
     </form>
    ";
 	} elseif (isset($changePass) && ($changePass == "do")) {

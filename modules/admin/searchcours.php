@@ -139,7 +139,7 @@ $resultFac=mysql_query("SELECT name FROM faculte ORDER BY number");
 	$tool_content .= "</tbody></table></form>";
 
 	// Display link to go back to index.php
-	$tool_content .= "<center><p><a href=\"index.php\">".$langReturn."</a></p></center>";
+	$tool_content .= "<center><p><a href=\"index.php\">".$langBack."</a></p></center>";
 
 /*****************************************************************************
 		DISPLAY HTML

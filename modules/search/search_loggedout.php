@@ -62,7 +62,7 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 				<td>$langKeywords_Descr</td>	
 			</tr>
 			<tr>
-				<th class='left'>$langInstructor</td>					
+				<th class='left'>$langTeacher</td>					
 				<td><input name=\"search_terms_instructor\" type=\"text\" size=\"50\" /></td>
 				<td>$langInstructor_Descr</td>
 			</tr>
@@ -87,9 +87,6 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 					ektelesh anazhthshs afou yparxoun oroi anazhthshs
 						 emfanish arikown mhnymatwn anazhthshs
 ***********************************************************************************************/
-	
-	//ektypwsh mhnymatos anazhthshs
-	$tool_content .= "<h2>$langSearchingFor</h2>";
 	
 	//to pedio visible exei times 2 kai 1 gia Public kai Open mathimata
 	$result = mysql_query("SELECT * FROM cours WHERE visible='2' OR visible='1'");
@@ -128,7 +125,7 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 					$langLessonCode : ".$mycours['code']."</li>
 					
 				<li>
-					$langInstructor : ".$mycours['titulaires']."
+					$langTeacher : ".$mycours['titulaires']."
 				</li><li>
 					$langKeywords : ".$mycours['course_keywords']."
 				</li>

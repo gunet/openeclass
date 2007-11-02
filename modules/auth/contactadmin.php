@@ -106,8 +106,6 @@ if(!empty($userid))
 	
 }
 
-$tool_content .= "<center><p><a href=\"../../index.php\">$back</a></p></center>";
-
+$tool_content .= "<center><p><a href=\"../../index.php\">$langBackHome</a></p></center>";
 draw($tool_content,0);
-
 ?>

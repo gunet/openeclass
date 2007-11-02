@@ -183,7 +183,7 @@ if (isset($search) && $search=="yes") {
 	$tool_content .= show_paging($limit, $listsize, $fulllistsize, "listcours.php");
 }
 // Display link to index.php	
-$tool_content .= "<br><center><p><a href=\"index.php\">".$langReturn."</a></p></center>";
+$tool_content .= "<br><center><p><a href=\"index.php\">".$langBack."</a></p></center>";
 
 /*****************************************************************************
 		DISPLAY HTML

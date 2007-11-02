@@ -31,7 +31,6 @@
  * @abstract Password change component (for platform administrator)
  *
  */
-$langFiles = array('admin','registration','usage');
 $require_login = true;
 $require_admin = TRUE;
 $helpTopic = 'Profile';
@@ -187,7 +186,7 @@ if (!isset($changePass)) {
     </tr>";
 	$tool_content .= "
     </thead></table>
-    <br><input type=\"Submit\" name=\"submit\" value=\"$langChange\">
+    <br><input type=\"Submit\" name=\"submit\" value=\"$langModify\">
     </form>
    ";
 }

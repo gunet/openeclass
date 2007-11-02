@@ -184,7 +184,7 @@ $durationAccount = "'.$_POST['formdurationAccount'].'";
 	
 }
 	// Display link to go back to index.php
-	$tool_content .= "<center><p><a href=\"index.php\">".$langReturn."</a></p></center>";
+	$tool_content .= "<center><p><a href=\"index.php\">".$langBack."</a></p></center>";
 
 }
 // Display config.php edit form
@@ -426,7 +426,7 @@ $tool_content .= "  <tr>
 		$tool_content .= "</tbody></table>";
 	}
 	// Display link to index.php
-	$tool_content .= "<br><center><p><a href=\"index.php\">".$langReturn."</a></p></center>";
+	$tool_content .= "<br><center><p><a href=\"index.php\">".$langBack."</a></p></center>";
 	// After restored values have been inserted into form then bring back
 	// values from original config.php, so the rest of the page can be played correctly
 	if (isset($restore) && $restore=="yes") {

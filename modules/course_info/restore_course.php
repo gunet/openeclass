@@ -225,7 +225,7 @@ function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) 
 	<tr><td><?= $langCourseFac?>:</td><td><? echo faculty_select($fac) ?></td></tr>
 	<tr><td><?= $langCourseOldFac?>:</td><td><? echo $fac ?></td></tr>
 	<tr><td><?= $langCourseVis?>:</td><td><? echo visibility_select($vis) ?></td></tr>
-	<tr><td><?= $langCourseProf?>:</td><td><input type="text" name="course_prof" value="<?= $prof ?>" size="50"></td></tr>
+	<tr><td><?= $langTeacher?>:</td><td><input type="text" name="course_prof" value="<?= $prof ?>" size="50"></td></tr>
 	<tr><td><?= $langCourseType?>:</td><td><?= type_select($type) ?></td></tr>
 	<tr><td>&nbsp;</td></tr>
 	<tr><td colspan="2"><input type="checkbox" name="course_addusers" checked><?= $langUsersWillAdd ?></td></tr>

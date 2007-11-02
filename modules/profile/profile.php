@@ -339,7 +339,7 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
         </tr>";
 	$tool_content .= "
     </thead></table>
-    <br><input type=\"Submit\" name=\"submit\" value=\"$langChange\">
+    <br><input type=\"Submit\" name=\"submit\" value=\"$langModify\">
     </form>
    ";
 }

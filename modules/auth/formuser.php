@@ -63,7 +63,7 @@ $tool_content .= "$nameTools\n";
 	$tool_content .= "<table border='0' align='center' height=300 cellpadding='0' cellspacing='0'>";
 	$tool_content .= "<tr><td valign=top><div class='td_main'>		       
                 <br>$langDearUser!<br><br>$success<br><br>$infoprof<br><br>				
-	        $click <a href=\"$urlServer\" class=mainpage>$here</a> $backpage
+	        $click <a href=\"$urlServer\" class=mainpage>$langHere</a> $langBackPage
                 </div><br></td>
          </tr></table>";
 				$tool_content .= "</td></tr></table>";
