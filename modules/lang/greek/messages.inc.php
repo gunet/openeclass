@@ -51,7 +51,6 @@ $langAboutCourses1 = "Αυτή τη στιγμή, η πλατφόρμα διαθέτει συνολικά";
 $langAboutUsers1 = "Οι εγγεγραμένοι χρήστες είναι ";
 $langLast30daysLogins1 = "και οι συνολικές προσβάσεις στην πλατφόρμα τις τελευταίες 30 μέρες είναι ";
 
-$langGuest = "Επισκέπτες Φοιτητές";
 $langAnd = "και";
 $langCourses = "μαθήματα";
 $langClosed = "κλειστά";
@@ -2345,7 +2344,6 @@ $langIfYouWantToAddManyUsers="Αν θέλετε να προσθέσετε ένα κατάλογο με χρήστες στ
 $langCourse="Μάθημα";
 $langLastVisits="Οι τελευταίες μου επισκέψεις";
 $langLastUserVisits= "Οι τελευταίες επισκέψεις του χρήστη ";
-$langGuestUser="Προσθήκη χρήστη επισκέπτη";
 $langDumpUser="Κατάλογος χρηστών:";
 $langExcel="α) σε αρχείο Excel";
 $langCsv="β) σε αρχείο csv";
