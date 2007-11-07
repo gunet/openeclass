@@ -33,7 +33,6 @@
  *
  */
 $require_current_course = TRUE;
-$langFiles = 'registration';
 $require_help = TRUE;
 $helpTopic = 'User';
 $require_login = true;

@@ -25,7 +25,6 @@
 
 /* This script allows a course admin to add users to the course. */
 
-$langFiles = 'registration';
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'User';

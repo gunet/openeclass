@@ -23,7 +23,6 @@
 *						eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-$langFiles = array('registration','guest');
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'User';

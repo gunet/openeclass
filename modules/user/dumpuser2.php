@@ -24,7 +24,6 @@
 *						eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-$langFiles = 'registration';
 $require_current_course = TRUE;
 
 include '../../include/init.php';
