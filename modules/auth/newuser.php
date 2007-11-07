@@ -63,34 +63,34 @@ $tool_content .= "
 <tbody>
 <tr>
 	<th class='left' width='20%'>$langName</th>
-	<td><input type=\"text\" name=\"prenom_form\"><small>&nbsp;(*)</small></td>
+	<td><input type=\"text\" name=\"prenom_form\" class='FormData_InputText'><small>&nbsp;(*)</small></td>
 </tr>
 <tr>
 	<th class='left'>$langSurname</th>
-	<td><input type=\"text\" name=\"nom_form\"><small>&nbsp;(*)</small></td>
+	<td><input type=\"text\" name=\"nom_form\" class='FormData_InputText'><small>&nbsp;(*)</small></td>
 </tr>
 <tr>
 	<th class='left'>$langUsername</th>
-	<td><input type=\"text\" name=\"uname\" size=\"20\" maxlength=\"20\"><small>&nbsp;(*) (**) $langUserNotice</small></td>
+	<td><input type=\"text\" name=\"uname\" size=\"20\" maxlength=\"20\" class='FormData_InputText'><small>&nbsp;(*) (**) $langUserNotice</small></td>
 </tr>
 
 <tr>
 	<th class='left'>$langPass</th>
-	<td><input type=\"password\" name=\"password1\" size=\"20\" maxlength=\"20\"><small>&nbsp;(*) (**)</small></td>
+	<td><input type=\"password\" name=\"password1\" size=\"20\" maxlength=\"20\" class='FormData_InputText'><small>&nbsp;(*) (**)</small></td>
 </tr>
 <tr>
 	<th class='left'>$langConfirmation</th>
-	<td valign=\"top\"><input type=\"password\" name=\"password\" size=\"20\" maxlength=\"20\"><small>&nbsp;(*) (**) $langUserNotice</small></td>
+	<td valign=\"top\"><input type=\"password\" name=\"password\" size=\"20\" maxlength=\"20\" class='FormData_InputText'><small>&nbsp;(*) (**) $langUserNotice</small></td>
 </tr>
 
 <tr>
 	<th class='left'>$langEmail</th>
-	<td><input type=\"text\" name=\"email\"> $langEmailNotice</td>
+	<td><input type=\"text\" name=\"email\" class='FormData_InputText'> $langEmailNotice</td>
 </tr>
 
 <tr>
 	<th class='left'>$langAm</th>
-	<td><input type=\"text\" name=\"am\"></td>
+	<td><input type=\"text\" name=\"am\" class='FormData_InputText'></td>
 </tr>
 <tr>
 	<th class='left'>$langDepartment</th>
@@ -107,17 +107,18 @@ $tool_content .= "</select>
 	<input type=\"hidden\" name=\"auth\" value=\"1\">
     <input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\">
     <br/><br/>
-    <p>$langRequiredFields <br/>$langStar2 $langCharactersNotAllowed</p>
+    <p align='right'>$langRequiredFields <br/>$langStar2 $langCharactersNotAllowed</p>
 	</td>
 </tr>
 </tbody>
 </table>
 
+</form>
 </td>
 </tr>
 </thead>
 </table>
-</form>
+
 
 
 ";

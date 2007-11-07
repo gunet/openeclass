@@ -449,12 +449,11 @@ table.FormData td {
     font-size: 11px;
 }
 
-table.FormData input{
-    vertical-align:middle;
+.FormData_InputText{
 	margin-top: 0px;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	padding: 1px 0px 1px 5px;
+	font-size: 12px;
+	padding: 3px 3px 3px 3px;
 	border: 1px dotted #727266;
     background-color: #fbfbfb;
 	color: #666666;
