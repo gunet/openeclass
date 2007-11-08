@@ -2298,7 +2298,7 @@ $langCsv="β) σε αρχείο csv";
 $langFieldsMissing="Αφήσατε κάποιο(α) από τα υποχρεωτικά πεδία κενό(ά) !";
 $langFillAgain="Παρακαλούμε ξανασυμπληρώστε την";
 $langFillAgainLink="αίτηση";
-$langReqRegProf="Αίτηση Εγγραφής Καθηγητή";
+$langReqRegProf="Αίτηση Εγγραφής $langOfTeacher";
 $langProfUname="Επιθυμητό Όνομα Χρήστη (Username)";
 
 $profreason="(Αναφέρατε τους λόγους χρήσης της πλατφόρμας)";
@@ -2360,7 +2360,7 @@ $langAuthPassword = "Δώστε το συνθηματικό σας:";
 $langAuthenticateVia = "πιστοποίηση μέσω";
 $langAuthenticateVia2 = "Διαθέσιμοι τρόποι πιστοποίησης στο ίδρυμα";
 $langCannotUseAuthMethods = "Η εγγραφή στην πλατφόρμα, πρός το παρόν δεν επιτρέπεται. Παρακαλούμε, ενημερώστε το διαχειριστή του συστήματος";
-$langAuthReg = "Εγγραφή χρήστη";
+$langAuthReg = "Εγγραφή Χρήστη";
 $langUserData = "Στοιχεία χρήστη";
 $langUserAccount = "Λογαριασμός $langOfStudent";
 $langProfAccount = "Λογαριασμός $langOfTeacher";

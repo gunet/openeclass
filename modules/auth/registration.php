@@ -37,13 +37,10 @@
  ==============================================================================
  */
 
-$langFiles = array('registration','index','authmethods');
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
 
-//mysql_select_db($dbname);
-
-$nameTools = $langReg;
+$nameTools = $langAuthReg;
 
 $tool_content = "";
 $tool_content .= "
@@ -149,7 +146,5 @@ $tool_content .= "
 </table>
 ";
 
-
 draw($tool_content, 0, 'auth');
-
 ?>

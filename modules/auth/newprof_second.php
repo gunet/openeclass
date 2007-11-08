@@ -2,7 +2,7 @@
 include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
 require_once 'auth.inc.php';
-$nameTools = $langRegProf;
+$nameTools = $langReqRegProf;
 
 // Initialise $tool_content
 $tool_content = "";
