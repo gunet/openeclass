@@ -40,7 +40,7 @@
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
 
-$navigation[]= array ("url"=>"registration.php", "name"=> "$langReg");
+$navigation[]= array ("url"=>"registration.php", "name"=> "$langNewUser");
 
 // Initialise $tool_content
 $tool_content = "";
@@ -86,7 +86,7 @@ $tool_content .= "
 					<td>&nbsp;</td>
 				    <td>
 					<input type=\"hidden\" name=\"auth\" value=\"".$auth."\">
-					<input type=\"submit\" name=\"is_submit\" value=\"".$reg."\">
+					<input type=\"submit\" name=\"is_submit\" value=\"".$langSubmit."\">
 					</td>
 				</tr>
 				<tr>

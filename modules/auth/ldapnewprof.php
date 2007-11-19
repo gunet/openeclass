@@ -87,7 +87,7 @@ $tool_content .= "
 					<td>&nbsp;</td>
 				    <td>
 					<input type=\"hidden\" name=\"auth\" value=\"".$auth."\">
-					<input type=\"submit\" name=\"is_submit\" value=\"".$reg."\">
+					<input type=\"submit\" name=\"is_submit\" value=\"".$langSubmit."\">
 					</td>
 				</tr>
 				<tr>

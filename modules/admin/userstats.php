@@ -33,8 +33,7 @@
 ==============================================================================
 */
 
-// LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-$langFiles = array('admin', 'registration', 'usage');
+// BASETHEME, OTHER INCLUDES AND NAMETOOLS
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include 'admin.inc.php';
@@ -42,7 +41,6 @@ include '../auth/auth.inc.php';
 $nameTools = $langVersion;
 // Initialise $tool_content
 $tool_content = "";
-
 
 $nameTools = $langUserStats;
 
@@ -193,10 +191,10 @@ $tool_content .= "</tbody></table>";
 else 
 {
     // Αλλιώς... τι γίνεται;
-    $tool_content .= "<h1>$langError</h1>\n<p><a href=\"listcours.php\">$back</p>\n";
+    $tool_content .= "<h1>$langError</h1>\n<p><a href=\"listcours.php\">$langBack</p>\n";
 }
 
-$tool_content .= "<center><p><a href=\"listusers.php\">$back</a></p></center>";
+$tool_content .= "<center><p><a href=\"listusers.php\">$langBack</a></p></center>";
 draw($tool_content,3);
 
 // Unlink chart file - haniotak

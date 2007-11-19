@@ -38,8 +38,7 @@
 ==============================================================================
 */
 
-// LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-$langFiles = array('gunet','admin','registration');
+// BASETHEME, OTHER INCLUDES AND NAMETOOLS
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 $nameTools = $langUnregUser;
@@ -67,7 +66,7 @@ if(empty($doit))
 	$tool_content .= ";</p>
 		<ul>
 		<li>$langYes: <a href=\"unreguser.php?u=".htmlspecialchars($u)."&c=".htmlspecialchars($c)."&doit=yes\">$langDelete!</a><br>&nbsp;</li>
-		<li>$langNo: <a href=\"edituser.php?u=".htmlspecialchars($u)."\">$langEditUser $u_account</a>&nbsp;&nbsp;&nbsp;<a href=\"index.php\">$back</a></li>
+		<li>$langNo: <a href=\"edituser.php?u=".htmlspecialchars($u)."\">$langEditUser $u_account</a>&nbsp;&nbsp;&nbsp;<a href=\"index.php\">$langBack</a></li>
 		</ul>";	
 } 
 else 
@@ -81,7 +80,7 @@ else
 		{
 			if ($u == 1) 
 			{
-				$tool_content .= $langTryDeleteAdmin";
+				$tool_content .= $langTryDeleteAdmin;
 			}
 			else
 			{
@@ -211,11 +210,7 @@ else
 						}
 						
 					}
-					
-					
-					
-					
-					
+																									
 					$t = 1;
 				}
 				else
