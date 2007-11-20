@@ -964,7 +964,6 @@ $color1="#F5F5F5"; // light grey
 $color2="#E6E6E6"; // less light grey for bicolored tables
 
 $language = "greek";
-$userMailCanBeEmpty = true;
 
 $Institution="'.$institutionForm.'";
 $InstitutionUrl="'.$institutionUrlForm.'";

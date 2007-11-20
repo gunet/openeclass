@@ -127,7 +127,7 @@ tCont;
 </tbody>
 	</table>
 	<br>
-	<input type="submit" name="properties" value="$langValidate">
+	<input type="submit" name="properties" value="$langModify">
 
 </form>
 

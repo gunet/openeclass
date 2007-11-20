@@ -44,14 +44,14 @@
 ==============================================================================
 */
 
-// LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-$langFiles = array('admin','registration');
+// BASETHEME, OTHER INCLUDES AND NAMETOOLS
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include 'admin.inc.php';			
 $nameTools = $langVersion;
-$tool_content = "";					// Initialise $tool_content
-$nameTools = $langListUsersActions;		// Define $nameTools
+$tool_content = "";				
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$nameTools = $langListUsersActions;	
 
 // initalize the incoming variables
 $search = isset($_GET['search'])?$_GET['search']:'';
@@ -529,8 +529,7 @@ if($sql)
 					 "<a href=\"listusers.php?ord=u\">$langUsername</a></th>".
 					 "<th scope=\"col\">$langEmail</th>".
 					 "<th scope=\"col\"><a href=\"listusers.php?ord=s\">$langProperty</a></th>".
-					 "<th scope=\"col\">$langActions</th>".
-					 "<th scope=\"col\">$langUnreg $langUser</th>".
+					 "<th scope=\"col\" colspan='2'>$langActions</th>".
 					 "<th scope=\"col\">$langStats</th>".
 					 "</tr></thead><tbody>";
 		}
@@ -564,12 +563,9 @@ if($sql)
 	}
 	else
 	{
-		$tool_content .= "Δέν υπάρχουν χρήστες σύμφωνα με τα κριτήρια που ορίσατε";
+		$tool_content .= $langNoSuchUsers;
 	}
 
-	
-	
-		
 }
 else
 {

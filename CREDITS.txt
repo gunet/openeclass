@@ -70,6 +70,8 @@
           Copyright (c), 1999-2001, Matthew Snelham (infinite@valinux.com)
 
       DHTML Calendar: Copyright Mihai Bazon, 2002-2005
+	
+			Datetime class: Viatcheslav Ivanov <ivanov@e-witness.ca>, <v_iv@hotmail.com>
 
       LaTeX Rendering: Copyright (c) 2003/2004 Benjamin Zeiss <zeiss@math.uni-goettingen.de>
 

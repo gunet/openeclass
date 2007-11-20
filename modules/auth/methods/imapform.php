@@ -24,18 +24,13 @@ $tool_content .= "
     <td>
         <input name=\"imaphost\" type=\"text\" size=\"30\" value=\"".$imaphost."\" />
     </td>
-    <td>The imap server address. (IP number or the domain name)
-    </td>
+    <td>&nbsp;</td>
 </tr>
 
 <tr valign=\"top\">
     <td align=\"right\">$langimapport:</td>
-    <td>
-	143
-    </td>
-    <td>
-	Server port: 143 is the most common and is set by default
-    </td>
+    <td>143</td>
+    <td>&nbsp;</td>
 </tr>
 
 <tr valign=\"top\">
@@ -43,11 +38,7 @@ $tool_content .= "
     <td>
 	<textarea name=\"imapinstructions\" cols=\"30\" rows=\"10\" wrap=\"virtual\">".$imapinstructions."</textarea> 
     </td>
-    <td> 
-	Here you can provide instructions for your users, so they know which username and password they should be using. 
-	The text you enter here will appear on the login page. 
-	If you leave this blank then no instructions will be printed.
-    </td>
+    <td>&nbsp; </td>
 </tr>
 </table>";
 

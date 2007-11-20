@@ -44,7 +44,7 @@ if($submit)
 		}
 	
 		// check if there are empty fields
-		if (empty($nom_form) or empty($prenom_form) or empty($password) or empty($usercomment) or empty($department) or empty($uname) or (empty($email_form) && !$userMailCanBeEmpty)) 
+		if (empty($nom_form) or empty($prenom_form) or empty($password) or empty($usercomment) or empty($department) or empty($uname) or (empty($email_form))) 
 		{
 			$tool_content .= "<p>$langEmptyFields</p>
 			<br><br><center><p><a href=\"./newprofadmin.php\">$langAgain</a></p></center>";
@@ -54,7 +54,7 @@ if($submit)
 			$tool_content .= "<p>$langUserFree</p>
 			<br><br><center><p><a href=\"./newprofadmin.php\">$langAgain</a></p></center>";
 	  }
-		elseif(!$userMailCanBeEmpty &&!eregi($regexp,$email)) // check if email syntax is valid
+		elseif(!eregi($regexp,$email)) // check if email syntax is valid
 		{
 	        $tool_content .= "<p>$langEmailWrong.</p>
 			<br><br><center><p><a href=\"./newprofadmin.php\">$langAgain</a></p></center>";
@@ -92,9 +92,7 @@ if($submit)
 							<br><br>
 							<center><p><a href='../admin/listreq.php'>$langBackReq</a></p></center>";
 		}
-	
 	}
-	
 }
 else
 {
@@ -152,6 +150,5 @@ $tool_content .= "	<form action=\"newprofadmin.php\" method=\"post\">
 
 $tool_content .= "<center><p><a href=\"../admin/index.php\">$langReturn</p></center>";
 }
-
 draw($tool_content, 3, 'admin');
 ?>

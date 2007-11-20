@@ -24,18 +24,13 @@ $tool_content .= "
     <td>
         <input name=\"pop3host\" type=\"text\" size=\"30\" value=\"".$pop3host."\" />
     </td>
-    <td>The POP3 server address. (IP number or the domain name)
-    </td>
+    <td>&nbsp;</td>
 </tr>
 
 <tr valign=\"top\">
     <td align=\"right\">$langpop3port:</td>
-    <td>
-	110
-    </td>
-    <td>
-	Server port (110 is the most common and is set by default).
-    </td>
+    <td>110</td>
+    <td>&nbsp </td>
 </tr>
 
 <tr valign=\"top\">
@@ -43,11 +38,9 @@ $tool_content .= "
     <td>
 	<textarea name=\"pop3instructions\" cols=\"30\" rows=\"10\" wrap=\"virtual\">".$pop3instructions."</textarea> 
     </td>
-    <td> 
-	Here you can provide instructions for your users, so they know which username and password they should be using. The text you enter here will appear on the login page. If you leave this blank then no instructions will be printed.
+    <td>&nbsp; 
     </td>
 </tr>
 </table>";
-
 
 ?>

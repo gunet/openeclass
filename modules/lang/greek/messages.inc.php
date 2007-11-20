@@ -185,6 +185,7 @@ $langEnd = "τέλος";
 $langPreced50 = "Προηγούμενοι 50";
 $langFollow50 = "Επόμενοι 50";
 $langAll="όλοι";
+$langNoSuchUsers = "Δεν υπάρχουν χρήστες σύμφωνα με τα κριτήρια που ορίσατε";
 
 // listcours
 $langOpenCourse = "Ανοιχτό";
@@ -256,6 +257,7 @@ $langReqHaveFinished = "Αιτήσεις που έχουν ολοκληρωθεί";
 $langemailsubjectBlocked = "Απόρριψη αίτησης εγγραφής στην Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης";
 $langemailbodyBlocked = "Η αίτησή σας για εγγραφή στην πλατφόρμα ".$siteName." απορρίφθηκε.";
 $langCloseConf = "Επιβεβαίωση κλεισίματος αίτησης";
+
 // mailtoprof.php
 $langSendMessageTo = "Αποστολή μηνύματος";
 $langToAllUsers = "σε όλους τους χρήστες";
@@ -304,6 +306,7 @@ $langActSuccess = "Μόλις ενεργοποιήσατε την ";
 $langDeactSuccess = "Μόλις απενεργοποιήσατε την ";
 $langThe = "Η ";
 $langActFailure = "δεν μπορεί να ενεργοποιηθεί, διότι δεν έχετε καθορίσει τις ρυθμίσεις του τρόπου πιστοποίησης";
+$langLdapNotWork = "Προειδοποίση: Η php δεν υποστηρίζει ldap. Βεβαιωθείτε ότι η ldap υποστήριξη είναι εγκατεστημένη και ενεργοποιημένη.";
 
 // other
 $langVisitors = "Επισκέπτες";
@@ -1108,7 +1111,6 @@ $langGroupProperties="Ρυθμίσεις ομάδων χρηστών";
 $langGroupAllowStudentRegistration="Οι φοιτητές επιτρέπονται να εγγραφούν στις ομάδες χρηστών";
 $langGroupPrivatise="Κλειστές περιοχές συζητήσεων ομάδων χρηστών";
 $langGroupForum="Περιοχή συζητήσεων";
-$langValidate="Αλλαγή";
 $langGroupPropertiesModified="Αλλάχτηκαν οι ρυθμίσεις της ομάδας χρηστών";
 
 // Group space
@@ -1170,8 +1172,6 @@ $langGuestName="Επισκέπτης";
 $langGuestSurname="Μαθήματος";
 $langGuestUserName="guest";
 
-$langGuestAdd="Προσθήκη";
-$langChangeGuestPasswd="Αλλαγή";
 $langGuestExist="Υπάρχει ήδη ο λογαριασμός Επισκέπτη! Μπορείτε όμως αν θέλετε να αλλάξετε το συνθηματικό του.";
 $langGuestSuccess="Ο λογαριασμός επισκέπτη (guest account) δημιουργήθηκε με επιτυχία !";
 $langGuestFail="Πρόβλημα κατά την δημιουργία λογαριασμού επισκέπτη";
@@ -2345,7 +2345,7 @@ $langDestination = 'Παραλήπτης:';
 $langAsProf = 'ως καθηγητής';
 $langTel = 'Τηλ.';
 $langPassSameLDAP = 'Το συνθηματικό σας είναι αυτό της υπηρεσίας καταλόγου (LDAP).';
-
+$langLdapRequest = 'Υπάρχει ήδη μια αίτηση για τον χρήστη';
 $langLDAPUser = 'Χρήστης LDAP';
 $langLogIn = 'Σύνδεση';
 $langLogOut = 'Αποσύνδεση';
@@ -2392,7 +2392,7 @@ $langRequestMessageHasSent = " και στάλθηκε ενημερωτικό μήνυμα στη διεύθυνση ";
 $langRequestHasRejected = "Η αίτησή σας για εγγραφή στην πλατφόρμα $siteName απορρίφθηκε.";
 $langRegistrationDate = "Ημ/νια εγγραφής";
 $langExpirationDate = "Ημ/νια λήξης";
-$langUserID = "Κωδικός χρήστη(ID)";
+$langUserID = "Αριθμός χρήστη";
 $langStudentParticipation = "Μαθήματα στα οποία συμμετέχει ο χρήστης";
 $langNoStudentParticipation = "Ο χρήστης δεν συμμετέχει σε κανένα μάθημα";
 $langCannotDeleteAdmin = "Ο χρήστης αυτός (με user id = 1) είναι ο βασικός διαχειριστής της πλατφόρμας και δε διαγράφεται.";
@@ -2873,7 +2873,7 @@ $langWikiGroupMembers = "Μέλη ομάδας";
 $langWikiHelpAdminContent = "<h3>Βοήθεια διαχείρισης Wiki</h3>
 <dl class=\"Βοήθεια wiki\">
 <dt> Πώς να δημιουργήσετε έναν νέο Wiki ?</dt>
-<dd> Κάντε κλίκ στη σύνδεση 'Create a new Wiki'. Μετά εισαγετε τις ιδιότητες του Wiki :
+<dd> Κάντε κλίκ στη σύνδεση 'Create a new Wiki'. Μετά εισάγετε τις ιδιότητες του Wiki :
 <ul>
 <li><b> Τίτλος του Wiki</b> : επιλέξτε έναν τίτλο για το Wiki</li>
 <li><b> Περιγραφή του  Wiki</b> : επιλέξτε μια περιγραφή για το Wiki</li>

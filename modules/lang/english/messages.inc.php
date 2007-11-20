@@ -171,6 +171,7 @@ $langOtherActions = "Other Actions";
 $langAdd = "Add";
 $langChange = "Edit";
 $langNoChangeHappened = "No change performed!";
+$langNoSuchUsers = "Thera are no users with such criteria";
 
 // addfaculte.php
 $langFaculteCatalog = "Faculty Catalogue";
@@ -259,7 +260,6 @@ $langSearch = "Search";
 $langCourseStatusChangedSuccess = "Course type changed with success!";
 $langCourseStatusChange = "Change course type";
 
-
 // authentication
 $langMethods = "Authentication Methods:";
 $langAuthActivate = "Activate";
@@ -295,6 +295,7 @@ $langActSuccess = "You have just activated the ";
 $langDeactSuccess = "You have just deactivated the ";
 $langThe = "The ";
 $langActFailure = "cannot be activated, because you have no authentication settings defined";
+$langLdapNotWork = "Warning: The PHP LDAP module does not seem to be present. Please ensure it is installed and enabled";
 
 // other
 $langTeachers = "Teachers";

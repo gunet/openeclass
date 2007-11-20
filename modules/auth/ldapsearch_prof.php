@@ -1,8 +1,6 @@
 <?
-$langFiles = array('registration', 'admin', 'gunet');
 include '../../include/baseTheme.php';
 require_once 'auth.inc.php';
-
 
 $nameTools = get_auth_info($auth);
 $navigation[]= array ("url"=>"registration.php", "name"=> "$langNewProfAccountÁctivation");
@@ -11,14 +9,9 @@ $nameTools = "$langUserData";
 $found = 0;
 $tool_content = "";
 
-if (!isset($userMailCanBeEmpty)) 
-{	
-	$userMailCanBeEmpty = true;
-} 
-
 $errormessage1 = "<tr valign=\"top\" bgcolor=\"$color2\"><td><font size=\"2\" face=\"arial, helvetica\"><p>&nbsp;</p>";
 $errormessage3 = "</font><p>&nbsp;</p><br><br><br></td></tr>";
-$errormessage2 = "<p>ÅğéóôñïöŞ óôçí <a href=\"ldapnewprof.php\">ğñïçãïıìåíç óåëßäá</a></p>$errormessage3";
+$errormessage2 = "<p>$ldapback<a href=\"ldapnewprof.php\">$ldaplastpage</a></p>$errormessage3";
 $is_submit = isset($_POST['is_submit'])?$_POST['is_submit']:'';
 $ldap_email = isset($_POST['ldap_email'])?$_POST['ldap_email']:'';
 $ldap_passwd = isset($_POST['ldap_passwd'])?$_POST['ldap_passwd']:'';
@@ -26,8 +19,6 @@ $auth = isset($_POST['auth'])?$_POST['auth']:0;
 
 if(!empty($is_submit))
 {
-	
-	//$auth = get_auth_id();
 	if (empty($ldap_email) or empty($ldap_passwd)) // check for empty username-password
 	{
 		$tool_content .= $errormessage1 . $ldapempty . $errormessage2;
@@ -40,7 +31,7 @@ if(!empty($is_submit))
 	} 
 	elseif (user_exists_request($ldap_email)) // check if the user already exists in prof_request
 	{
-		$tool_content .= "There is already a request for user:$ldap_email<br>Cannot Proceed<br>";
+		$tool_content .= "$langLdapRequest: $ldap_email<br>";
 		$auth_allow = 0;
 	}
 	else 
@@ -75,7 +66,6 @@ if(!empty($is_submit))
 		}
 		
 		$is_valid = auth_user_login($auth,$ldap_email,$ldap_passwd);
-		//$tool_content .= "is_valid: ".$is_valid."<br />";
 		if($is_valid)
 		{
 			$auth_allow = 1;		// Successfully connected
@@ -159,8 +149,6 @@ if(!empty($is_submit))
 		}
 	}
 		
-
-
 }   // end of initial if
 
 // Check if a user with usename $login already exists in the requests(prof_request)
@@ -180,7 +168,5 @@ function user_exists_request($login)
 	}
 }
 	
-
 draw($tool_content,0,'auth');
-
 ?>

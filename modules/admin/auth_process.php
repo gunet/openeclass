@@ -45,7 +45,6 @@
 ==============================================================================
 */
 
-$langFiles = array('admin','registration', 'authmethods');
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include_once '../auth/auth.inc.php';
@@ -194,7 +193,7 @@ else
 	$tool_content .= "<br />$langTestAccount<br /><br />
 	$langUsername: <input type=\"text\" name=\"test_username\" value=\"".$test_username."\"><br />
 	$langPass: <input type=\"password\" name=\"test_password\" value=\"".$test_password."\"><br />
-	<input type=\"submit\" name=\"submit\" value=\"$langUpdate\"><br />";
+	<input type=\"submit\" name=\"submit\" value=\"$langModify\"><br />";
 	
 	$tool_content .= "</form>";
 	$tool_content .="<br /></td></tr></table>";

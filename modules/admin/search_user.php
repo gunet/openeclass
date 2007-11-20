@@ -41,11 +41,12 @@
 ==============================================================================
 */
 
-// LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-$langFiles = array('gunet','admin','registration');
+//  BASETHEME, OTHER INCLUDES AND NAMETOOLS
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include 'admin.inc.php';
+
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $nameTools = $langSearchUser;		// Define $nameTools
 $tool_content = "";		// Initialise $tool_content
 

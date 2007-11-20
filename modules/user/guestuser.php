@@ -123,7 +123,7 @@ if($is_adminOfCourse)
 			$tool_content .= "</thead>";
 			$tool_content .=  "</table>";
 			$tool_content .= "<br>";
-			$tool_content .=  "<input type=\"submit\" name=\"changepass\" value=\"$langChangeGuestPasswd\">";
+			$tool_content .=  "<input type=\"submit\" name=\"changepass\" value=\"$langModify\">";
 			$tool_content .=  "</form>";
 
 		} else {
@@ -143,7 +143,7 @@ if($is_adminOfCourse)
 		</thead>
 		</table>
 		<br>
-		<input type="submit" name="createguest" value="$langGuestAdd">
+		<input type="submit" name="createguest" value="$langAdd">
 		</form>
 tCont;
 		}

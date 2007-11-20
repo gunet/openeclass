@@ -54,14 +54,8 @@ $ldap_email = isset($_POST['ldap_email'])?$_POST['ldap_email']:'';
 $ldap_passwd = isset($_POST['ldap_passwd'])?$_POST['ldap_passwd']:'';
 $is_submit = isset($_POST['is_submit'])?$_POST['is_submit']:'';
 
-if (!isset($userMailCanBeEmpty)) 
-{	
-	$userMailCanBeEmpty = true;
-} 
-
-	$lastpage = 'ldapnewuser.php?auth='.$auth;
-	$userdescr = $langTheUser;
-
+$lastpage = 'ldapnewuser.php?auth='.$auth;
+$userdescr = $langTheUser;
 
 $errormessage1 = "<tr valign=\"top\" align=\"center\" bgcolor=\"$color2\"><td><font size=\"2\" face=\"arial, helvetica\"><p>&nbsp;</p>";
 $errormessage3 = "</font><p>&nbsp;</p><br><br><br></td></tr>";

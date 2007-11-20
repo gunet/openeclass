@@ -350,7 +350,7 @@ $tool_content .="
 </table>
 <br>
 
-<input type=submit value=\"$langValidate\"  name=\"modify\" onClick=\"selectAll(this.form.elements[7],true)\">
+<input type=submit value=\"$langModify\"  name=\"modify\" onClick=\"selectAll(this.form.elements[7],true)\">
 <br>
 
 

@@ -153,8 +153,6 @@ $color2="'.$_POST['formcolor2'].'"; // less light grey for bicolored tables
 // available: greek and english
 $language = "'.$_POST['formlanguage'].'";
 
-$userMailCanBeEmpty = "'.$_POST['formuserMailCanBeEmpty'].'";
-
 $bannerPath = "'.$_POST['formbannerPath'].'";
 $colorLight = "'.$_POST['formcolorLight'].'";
 $colorMedium = "'.$_POST['formcolorMedium'].'";
@@ -309,20 +307,6 @@ $tool_content .= " <tr>
 	$tool_content .= "  <tr>
     <td colspan=\"2\"><hr></td>
   </tr>";
-	if ($userMailCanBeEmpty=="true") {
-		$userMailSelTrue = "selected";
-		$userMailSelFalse = "";
-	} else {
-		$userMailSelTrue = "";
-		$userMailSelFalse = "selected";
-	}
-	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>\$userMailCanBeEmpty:</b></td>
-    <td><select name=\"formuserMailCanBeEmpty\">
-      <option value=\"true\" ".$userMailSelTrue.">true</option>
-      <option value=\"false\" ".$userMailSelFalse.">false</option>
-    </select></td>
-</tr>";
 	$tool_content .= "  <tr>
     <td colspan=\"2\"><hr></td>
   </tr>";

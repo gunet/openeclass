@@ -51,7 +51,8 @@ $u=$_SESSION['u_tmp'];
 
 // Initialise $tool_content
 $tool_content = "";
-
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$navigation[] = array("url" => "listusers.php", "name" => $langListUsersActions);
 $nameTools = $langEditUser;
 
 $u_submitted = isset($_POST['u_submitted'])?$_POST['u_submitted']:'';
@@ -79,7 +80,7 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
 		$tool_content .= " <li><a href='./listusers.php'>$langBack</a></li>";
 		$tool_content .= "</ul></div>";
 		$tool_content .= "<h4>$langEditUser $info[2]</h4>";
-		$tool_content .= "<form name=\"edituser\" method=\"post\" action=\"./edituser.php\">
+		$tool_content .= "<form name=\"edituser\" method=\"post\" action=\"$_SERVER[PHP_SELF]\">
 	<table width=\"99%\" border=\"0\">
 	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langSurname: </th><td width=\"80%\"><input type=\"text\" name=\"lname\" size=\"40\" value=\"".$info[0]."\"</td></tr>
 	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langName: </th><td width=\"80%\"><input type=\"text\" name=\"fname\" size=\"40\" value=\"".$info[1]."\"</td></tr>
@@ -169,13 +170,11 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
 						break;
 					case 5:
 						$tool_content .= $langStudent;
-						//$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">".
 						$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=$u&c=$logs[0]\">".
 						"$langDelete</a></td></tr>\n";
 						break;
 					default:
 						$tool_content .= $langVisitor;
-						//$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">".
 						$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=$u&c=$logs[0]\">".
 						"$langDelete</a></td></tr>\n";
 						break;
@@ -189,11 +188,9 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
 			if ($u > 1)
 			{
 				if (isset($logs))
-				//$tool_content .= "<center><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">$langDelete</a></center>";
-				$tool_content .= "<center><a href=\"unreguser.php?u=$u&c=$logs[0]\">$langDelete</a></center>";
+					$tool_content .= "<center><a href=\"unreguser.php?u=$u&c=$logs[0]\">$langDelete</a></center>";
 				else
-				//$tool_content .= "<center><a href=\"unreguser.php?u=$u&un=$info[2]&c=\">$langDelete</a></center>";
-				$tool_content .= "<center><a href=\"unreguser.php?u=$u&c=\">$langDelete</a></center>";
+					$tool_content .= "<center><a href=\"unreguser.php?u=$u&c=\">$langDelete</a></center>";
 			}
 			else
 			{
@@ -258,7 +255,7 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
 			</table><br/>";
 
 		}
-		$tool_content .= "<form method=\"post\" action=\"$PHP_SELF?submit=yes&changePass=do\">
+		$tool_content .= "<form method=\"post\" action=\"$_SERVER[PHP_SELF]?submit=yes&changePass=do\">
     <table width=\"99%\">
     <thead>
     <tr>
@@ -313,9 +310,6 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
 		|| (strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['username']))
 		|| (strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['email']))
 		|| (strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['am']))) {
-			//		echo strtoupper($_REQUEST['password_form1']);
-			//		echo strtoupper($myrow['am']);
-			//		die();
 			header("location:". $_SERVER['PHP_SELF']."?changePass=1&msg=3");
 			exit();
 		}
@@ -347,7 +341,8 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
 		$auth_methods = array('imap','pop3','ldap','db');
 		// 2. do the database update
 		// do not allow the user to have the characters: ',\" or \\ in password
-		$pw = array(); 	$nr = 0;
+		$pw = array(); 	
+		$nr = 0;
 		while (isset($password{$nr})) // convert the string $password into an array $pw
 		{
 			$pw[$nr] = $password{$nr};
@@ -411,7 +406,5 @@ else
 	$tool_content .= "<h1>$langError</h1>\n<p><a href=\"listcours.php\">$back</p>\n";
 }
 
-
 draw($tool_content,3);
-
 ?>
