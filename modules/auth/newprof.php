@@ -8,41 +8,47 @@ $tool_content = "";
 
 $auth = get_auth_id();
 $tool_content .= "	
-<table width=\"99%\" class='FormData'>
+<table width=\"99%\" class='FormData' align='left'>
 <thead>
 <tr>
 <td>
 <form action=\"newprof_second.php\" method=\"post\">
 
-  <table width=\"100%\">
+  <table width=\"100%\" align='left'>
   <tbody>
   <tr>
     <th class='left' width='20%'>$langSurname</th>
-    <td><input type=\"text\" name=\"nom_form\" value=\"".@$ps."\" class='FormData_InputText'> (*)</td>
+    <td width='10%'><input size='35' type=\"text\" name=\"nom_form\" value=\"".@$ps."\" class='FormData_InputText'></td>
+	<td>(*)</td>
   </tr>
   <tr>
     <th class='left'>$langName</th>
-    <td><input type=\"text\" name=\"prenom_form\" value=\"".@$pn."\" class='FormData_InputText'> (*)</td>
+    <td><input size='35' type=\"text\" name=\"prenom_form\" value=\"".@$pn."\" class='FormData_InputText'></td>
+	<td>(*)</td>
   </tr>
   <tr>
     <th class='left'>$langUsername</th>
-    <td><input type=\"text\" name=\"uname\" value=\"".@$pu."\" class='FormData_InputText'> (*) (**)</td>
+    <td><input size='35' type=\"text\" name=\"uname\" value=\"".@$pu."\" class='FormData_InputText'></td>
+	<td>(*) (**)</td>
   </tr>
   <tr>
     <th class='left'>$langPass</th>
-    <td><input type=\"text\" name=\"password\" value=\"".create_pass(5)."\" class='FormData_InputText'> (**)</td>
+    <td><input size='35' type=\"text\" name=\"password\" value=\"".create_pass(5)."\" class='FormData_InputText'></td>
+	<td>(**)</td>
   </tr>
   <tr>
     <th class='left'>$langEmail</th>
-    <td><input type=\"text\" name=\"email_form\" value=\"".@$pe."\" class='FormData_InputText'> (*)</td>
+    <td><input size='35' type=\"text\" name=\"email_form\" value=\"".@$pe."\" class='FormData_InputText'></td>
+	<td>(*)</td>
   </tr>
   <tr>
     <th class='left'>$langComments</td>
-    <td><textarea name=\"usercomment\" COLS=\"35\" ROWS=\"4\" WRAP=\"SOFT\" class='FormData_InputText'>".@$usercomment."</textarea> (*) $profreason</td>
+    <td><textarea name=\"usercomment\" COLS=\"32\" ROWS=\"4\" WRAP=\"SOFT\" class='FormData_InputText'>".@$usercomment."</textarea></td>
+	<td>(*) $profreason</td>
   </tr>
   <tr>
     <th class='left'>".$langDepartment."</th>
-    <td><select name=\"department\">";
+    <td colspan='2'><select name=\"department\">";
         $deps=mysql_query("SELECT name FROM faculte order by id");
         while ($dep = mysql_fetch_array($deps)) 
         {
@@ -55,8 +61,8 @@ $tool_content .= "
     <th>&nbsp;</th>
     <td>
     <input type=\"submit\" name=\"submit\" value=\"".$langSubmitNew."\" >
-    <input type=\"hidden\" name=\"auth\" value=\"1\" >
-    <br/><br/>
+    <input type=\"hidden\" name=\"auth\" value=\"1\" ></td>
+	<td>
     <p align='right'>$langRequiredFields<br>$langStar2 . $langCharactersNotAllowed</p>
     </td>
   </tr>

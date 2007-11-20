@@ -163,6 +163,8 @@ td, th {
 .LoginHead {
     border-top: 2px solid #a33033;
     border-bottom: 2px solid #a33033;
+    border-left: 2px solid #edecdf;
+    border-right: 2px solid #edecdf;
 }
 
 .LoginData {

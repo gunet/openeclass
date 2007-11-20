@@ -58,48 +58,39 @@ $settings = get_auth_settings($auth);
 if(!empty($msg)) $nameTools = "$langNewUserAccount¡ctivation ($msg)";
 
 $tool_content .= "
-			
-			<table cellspacing='0' cellpadding='0' width=\"50%\">
-			<tr>
-				<td>
-				<FIELDSET>
-	  			<LEGEND>$langUserExistingAccount</LEGEND>
-				<form method=\"POST\" action=\"ldapsearch.php\">
-				<table cellspacing='1' cellpadding='1' width=\"100%\">
-				<tr>
-					<td width=\"45%\">$langAuthUserName</td>
-					<td><input type=\"text\" name=\"ldap_email\"></td>
-				</tr>
-				<tr>
-					<td>$langAuthPassword</td>
-					<td><input type=\"password\" name=\"ldap_passwd\"></td>
-				</tr>
-				<tr colspan=2>
-					<td>
-					<br>
-				";
+<table width=\"99%\" class='FormData' align='left'>
+<thead>
+<tr>
+<td>			
+<form method=\"POST\" action=\"ldapsearch.php\">
 
-$tool_content .= "
-					</td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
-				    <td>
-					<input type=\"hidden\" name=\"auth\" value=\"".$auth."\">
-					<input type=\"submit\" name=\"is_submit\" value=\"".$langSubmit."\">
-					</td>
-				</tr>
-				<tr>
-					<td colspan=\"2\">&nbsp;</td>
-				</tr>
-				<tr>
-					<th colspan=\"2\" align=center>".$settings['auth_instructions']."</th>
-				</table>
-			</form>
-			</FIELDSET>
-			</td>
-		</tr>
-		</table>
+  <table width=\"100%\" align='left'>
+  <tbody>
+  <tr>
+    <th class='left' width='25%'>$langAuthUserName</th>
+    <td><input type=\"text\" name=\"ldap_email\" class='FormData_InputText'></td>
+  </tr>
+  <tr>
+    <th class='left'>$langAuthPassword</th>
+    <td><input type=\"password\" name=\"ldap_passwd\" class='FormData_InputText'></td>
+  </tr>
+  <tr>
+    <th>&nbsp;</th>
+    <td>
+    <input type=\"hidden\" name=\"auth\" value=\"".$auth."\">
+    <input type=\"submit\" name=\"is_submit\" value=\"".$langSubmit."\">
+	<br/><br/>
+    ".$settings['auth_instructions']."
+	</td>
+  </tr>	
+  </tbody>
+  </table>
+			
+</form>
+</td>
+</tr>
+</thead>
+</table>
 			";
 
 draw($tool_content,0,'auth');
