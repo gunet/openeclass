@@ -255,7 +255,7 @@ function loggedOutMenu(){
 	$arrMenuType['text'] = 'none';
 	array_push($sideMenuSubGroup, $arrMenuType);
 
-	array_push($sideMenuText, $GLOBALS['langListFaculte']);
+	array_push($sideMenuText, $GLOBALS['langListCourses']);
 	array_push($sideMenuLink, $urlServer."modules/auth/listfaculte.php");
 	array_push($sideMenuImg, "black-arrow1.gif");
 

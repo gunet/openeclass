@@ -401,23 +401,24 @@ if($sql)
 
 		if ($countUser >= 50)	// Do not show navigation buttons if less than 50 users
 		{
-			$tool_content .= "
-	                <table width=99%><tr>
-	                      	  <td valign=bottom align=left width=20%><form method=post action=\"$PHP_SELF?numbList=begin\"><input type=submit value=\"$langBegin<<\" name=\"numbering\"></form></td>
+			$tool_content .= "<table width=99%><tr>
+      	  <td valign=bottom align=left width=20%>
+					<form method=post action=\"$_SERVER[PHP_SELF]?numbList=begin\">
+					<input type=submit value=\"$langBegin<<\" name=\"numbering\"></form></td>
 	                          <td valign=bottom align=middle width=20%>";
 	    if($startList!=0)		// if beginning of list or complete listing, do not show "previous" button
 	    {
 				if (isset($_REQUEST['ord'])) 
 				{
-	       	$tool_content .= "<form method=post action=\"$PHP_SELF?startList=$startList&numbList=less&ord=$_REQUEST[ord]\">
-	                	       <input type=submit value=\"$langPreced50<\" name=\"numbering\">
-	                       		</form>";
+	       	$tool_content .= "<form method=post action=\"$_SERVER[PHP_SELF]?startList=$startList&numbList=less&ord=$_REQUEST[ord]\">
+        	       <input type=submit value=\"$langPreced50<\" name=\"numbering\">
+              		</form>";
 				} 
 				else 
 				{
-			  	$tool_content .= "<form method=post action=\"$PHP_SELF?startList=$startList&numbList=less\">
-	                       <input type=submit value=\"$langPreced50<\" name=\"numbering\">
-	                       </form>";
+			  	$tool_content .= "<form method=post action=\"$_SERVER[PHP_SELF]?startList=$startList&numbList=less\">
+                    <input type=submit value=\"$langPreced50<\" name=\"numbering\">
+                    </form>";
 				}
 			}
 
@@ -426,7 +427,7 @@ if($sql)
 	    	$tool_content .= "
 	                     </td>
 	                     <td valign=bottom align=middle width=20%>
-	                     <form method=post action=\"$PHP_SELF?startList=$startList&numbList=all&ord=$_REQUEST[ord]\">
+	                     <form method=post action=\"$_SERVER[PHP_SELF]?startList=$startList&numbList=all&ord=$_REQUEST[ord]\">
 	                         <input type=submit value=\"$langAll\" name=numbering>
 	                     </form>
 	                     </td>
@@ -448,24 +449,22 @@ if($sql)
 			{
 				if (isset($_REQUEST['ord'])) 
 				{
-	      	$tool_content .= " <form method=post action=\"$PHP_SELF?startList=$startList&numbList=more&ord=$_REQUEST[ord]\">
+	      	$tool_content .= "<form method=post action=\"$_SERVER[PHP_SELF]?startList=$startList&numbList=more&ord=$_REQUEST[ord]\">
 	                                   <input type=submit value=\"$langFollow50>\" name=numbering>
 	                              </form>";
 				} 
 				else 
 				{
-	      	$tool_content .= " <form method=post action=\"$PHP_SELF?startList=$startList&numbList=more\">
+	      	$tool_content .= "<form method=post action=\"$_SERVER[PHP_SELF]?startList=$startList&numbList=more\">
 	                                   <input type=submit value=\"$langFollow50>\" name=numbering>
 	                              </form>";
 				}
 			}
 			if (isset($_REQUEST['ord'])) 
 			{
-	    	$tool_content .= "
-	                     </td>
-	                     <td valign=bottom align=right width=20%>
-	                      <form method=post action=\"$PHP_SELF?numbList=final&ord=$_REQUEST[ord]\">
-	                           <input type=submit value=\"$langEnd>>\" name=numbering>
+	    	$tool_content .= "</td><td valign=bottom align=right width=20%>
+	                      <form method=post action=\"$_SERVER[PHP_SELF]?numbList=final&ord=$_REQUEST[ord]\">
+                        <input type=submit value=\"$langEnd>>\" name=numbering>
 	                      </form>
 	                      </td>
 	                      </tr>
@@ -475,7 +474,7 @@ if($sql)
 			{
 	    	$tool_content .= "</td>
 	                          <td valign=bottom align=right width=20%>
-	                               <form method=post action=\"$PHP_SELF?numbList=final\">
+	                               <form method=post action=\"$_SERVER[PHP_SELF]?numbList=final\">
 	                                <input type=submit value=\"$langEnd>>\" name=numbering>
 	                              </form>
 	                              </td>
@@ -494,7 +493,10 @@ if($sql)
 		else
 		{
 			$qry = "SELECT user_id,nom,prenom,username,email,statut FROM user";
-			if((!empty($user_sirname_qry)) || (!empty($user_firstname_qry)) || (!empty($user_username_qry)) || (!empty($user_am_qry)) || (!empty($user_type_qry)) || (!empty($user_registered_at_qry)) || (!empty($user_email_qry)) || (!empty($users_active_qry)) )
+			if((!empty($user_sirname_qry)) || (!empty($user_firstname_qry)) 
+				|| (!empty($user_username_qry)) || (!empty($user_am_qry)) 
+				|| (!empty($user_type_qry)) || (!empty($user_registered_at_qry)) 
+				|| (!empty($user_email_qry)) || (!empty($users_active_qry)) )
 			{
 				$qry .= " WHERE".$user_sirname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$user_registered_at_qry.$user_email_qry.$users_active_qry;
 			}		
@@ -550,15 +552,14 @@ if($sql)
 					case 10:	$tool_content .= "<td>$langVisitor</td>";break;
 	   			default:	$tool_content .= "<td>$langOther ($logs[6])</td>";break;
 				}
-				$tool_content .= "<td><a href=\"edituser.php?u=".$logs['user_id']."\">$langEdit</a></td>
-					<td><a href=\"unreguser.php?u=".$logs['user_id']."\">$langDelete</a></td>
+				$tool_content .= "<td><a href=\"edituser.php?u=".$logs['user_id']."\"><img src='../../images/edit.gif' title='$langEdit' border='0'></a></td>
+					<td><a href=\"unreguser.php?u=".$logs['user_id']."\"><img src='../../images/delete.gif' title='$langDelete' border='0'></img></a></td>
 					<td><a href=\"userstats.php?u=".$logs['user_id']."\">$langStat</a></td>\n";
 				$tool_content .= "</tr>";
 			}
 		}
-		// end format / dispaly
+		// end format / display
 		$tool_content .= "</tbody></table>";
-		/* Show users - Format the table for display - END */	
 	
 	}
 	else

@@ -50,10 +50,8 @@
 ==============================================================================*/
 
 /*****************************************************************************
-		DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
+		DEAL WITH  BASETHEME, OTHER INCLUDES AND NAMETOOLS
 ******************************************************************************/
-// Set the langfiles needed
-$langFiles = array('admin','gunet');
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
@@ -141,11 +139,10 @@ $tool_content .= "<table width=\"99%\"><caption>".$caption."</caption>
   <tr>
     <th scope=\"col\">".$langDepartment."</th>
     <th scope=\"col\">".$langCourseCode."</th>
-    <th scope=\"col\">".$langTitle." (".$langDidaskon.")</th>
-    <th scope=\"col\">".$langCourseStatus."</th>
+    <th scope=\"col\">".$langTitle." (".$langTeacher.")</th>
+    <th scope=\"col\">".$langCourseVis."</th>
     <th scope=\"col\">".$langUsers."</th>
-    <th scope=\"col\">".$langCourseDel."</th>
-    <th scope=\"col\">".$langActions."</th>
+    <th scope=\"col\" colspan='2'>".$langActions."</th>
   </tr>
 </thead><tbody>\n";
 
@@ -170,8 +167,8 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	}
 	// Add links to course users, delete course and course edit
 	$tool_content .= "    <td><a href=\"listusers.php?c=".$logs[1]."\">".$langUsers."</a></td>
-    <td><a href=\"delcours.php?c=".$logs[1]."\">".$langDelete."</a></td>
-    <td><a href=\"editcours.php?c=".$logs[1]."".$searchurl."\">".$langEdit."</a></td>\n";
+    <td><a href=\"delcours.php?c=".$logs[1]."\"><img src='../../images/delete.gif' title='$langDelete' border='0'></img></a></td>
+    <td><a href=\"editcours.php?c=".$logs[1]."".$searchurl."\"><img src='../../images/edit.gif' title='$langEdit' border='0'></img></a></td>\n";
 }
 // Close table correctly
 $tool_content .= "</tbody></table>\n";

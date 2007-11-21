@@ -179,8 +179,13 @@ $langFaculteDepartment = "Faculty / Department";
 $langFaculteDepartments = "Faculties / Departments";
 $langManyExist = "Exist";
 $langReturnToAddFaculte = "Return to add faculty";
+$langReturnToEditFaculte = "Return to edit faculty";
 $langFaculteAdd = "Add Faculty";
+$langFaculteDel = "Delete Faculty";
+$langFaculteEdit = "Edit Faculty";
+$langFaculteIns = "Insert new Faculty";
 $langAcceptChanges = "Confirm Changes";
+$langEditFacSucces = "Editing of faculty completed successfully!";
 
 // addusertocours.php
 $langQuickAddDelUserToCours = "Quick register - unregister students - professors";
@@ -1475,7 +1480,8 @@ $langContact = 'Contact';
 $lang_forgot_pass = 'Forgot your password?';
 $langNewAnnounce = "New !";
 $langUnregUser = "Unregister";
-$langListFaculte = "Courses list";
+$langListFaculte = "Faculties List";
+$langListCourses = "Courses List";
 $langInfoPlat = "Platform infornation";
 $langUserLogin = "User login";
 $langWelcomeToEclass = "Welcome to eClass!";

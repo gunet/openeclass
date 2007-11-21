@@ -215,8 +215,13 @@ $langFaculteDepartment = "Σχολή / Τμήμα";
 $langFaculteDepartments = "Σχολές / Τμήματα";
 $langManyExist = "Υπάρχουν";
 $langReturnToAddFaculte = "Επιστροφή στην προσθήκη τμήματος";
+$langReturnToEditFaculte = "Επιστροφή στην Επεξεργασία Τμήματος";
 $langFaculteAdd = "Προσθήκη Τμήματος";
+$langFaculteDel = "Διαγραφή Τμήματος";
+$langFaculteEdit = "Επεξεργασία στοιχείων Τμήματος";
+$langFaculteIns = "Εισαγωγή Στοιχείων Τμήματος";
 $langAcceptChanges = "Επικύρωση Αλλαγών";
+$langEditFacSucces = "Η επεξεργασία του μαθήματος ολοκληρώθηκε με επιτυχία!";
 
 // addusertocours
 $langQuickAddDelUserToCours = "Γρήγορη εγγραφή - διαγραφή ".$langsOfStudents." - ".$langsOfTeachers;
@@ -1265,7 +1270,8 @@ $langInfoPlat = 'Ταυτότητα Πλατφόρμας';
 $lang_forgot_pass = "Ξεχάσατε το συνθηματικό σας;";
 $langNewAnnounce = "Νέα !";
 $langUnregUser = "Διαγραφή λογαριασμού";
-$langListFaculte = "Κατάλογος Μαθημάτων";
+$langListFaculte = "Κατάλογος Τμημάτων";
+$langListCourses = "Kατάλογος Μαθημάτων";
 $langAsynchronous = "Ομάδα Ασύγχρονης Τηλεκπαίδευσης";
 $langUserLogin = "Σύνδεση χρήστη";
 $langWelcomeToEclass = "Καλωσορίσατε στο ".$siteName."!";
@@ -1641,7 +1647,6 @@ $langHere = "εδώ";
 /*********************************************************
 * opencours.inc.php
 *********************************************************/
-$opencours="Κατάλογος Μαθημάτων";
 $listfac="Επιλογή Τμήματος";
 $listtomeis = "Τομείς";
 $langDepartmentsList = "Ακολουθεί ο κατάλογος τμημάτων του ιδρύματος.

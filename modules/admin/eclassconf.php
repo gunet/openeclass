@@ -50,10 +50,8 @@
 ==============================================================================*/
 
 /*****************************************************************************
-		DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
+		DEAL WITH  BASETHEME, OTHER INCLUDES AND NAMETOOLS
 ******************************************************************************/
-// Set the langfiles needed
-$langFiles = 'admin';
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
@@ -304,9 +302,6 @@ $tool_content .= " <tr>
       <option value=\"english\" ".$enSel.">english</option>
     </select></td>
 </tr>";
-	$tool_content .= "  <tr>
-    <td colspan=\"2\"><hr></td>
-  </tr>";
 	$tool_content .= "  <tr>
     <td colspan=\"2\"><hr></td>
   </tr>";

@@ -36,7 +36,7 @@ session_start();
 
 $langFiles = 'opencours';
 include '../../include/baseTheme.php';
-$nameTools = $opencours;
+$nameTools = $langListCourses;
 $navigation[] = array ("url"=>"listfaculte.php", "name"=> $listfac);
 
 //parse the faculte id in a session

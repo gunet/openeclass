@@ -50,10 +50,8 @@
 ==============================================================================*/
 
 /*****************************************************************************
-		DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
+		DEAL WITH  BASETHEME, OTHER INCLUDES AND NAMETOOLS
 ******************************************************************************/
-// Set the langfiles needed
-$langFiles = array('admin','gunet','faculte');
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
@@ -65,16 +63,16 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 if (isset($a)) {
 	switch ($a) {
 		case 1:
-			$navigation[] = array("url" => "addfaculte.php", "name" => $langListFaculteActions);
+			$navigation[] = array("url" => "$_SERVER[PHP_SELF]", "name" => $langListFaculteActions);
 			$nameTools = $langFaculteAdd;
 			break;
 		case 2:
-			$navigation[] = array("url" => "addfaculte.php", "name" => $langListFaculteActions);
-			$nameTools = "Διαγραφή Τμήματος";
+			$navigation[] = array("url" => "$_SERVER[PHP_SELF]", "name" => $langListFaculteActions);
+			$nameTools = $langFaculteDel;
 			break;
 		case 3:
-			$navigation[] = array("url" => "addfaculte.php", "name" => $langListFaculteActions);
-			$nameTools = "Επεξεργασία Τμήματος";
+			$navigation[] = array("url" => "$_SERVER[PHP_SELF]", "name" => $langListFaculteActions);
+			$nameTools = $langFaculteEdit;
 			break;
 	}
 }
@@ -83,31 +81,36 @@ $tool_content = "";
 /*****************************************************************************
 		MAIN BODY
 ******************************************************************************/
-// Display all available facultes
+// Display all available faculties
 if (!isset($a)) {
-	// Count available facultes
+	// Count available faculties
 	$a=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM faculte"));
-	// Constrant a table
-	$tool_content .= "<table width=\"99%\"><caption>".$langFaculteCatalog."</caption><thead>
-	<tr><th scope=\"col\">$langCode</th><th scope=\"col\">".$langFaculteDepartment."</th scope=\"col\"><th>".$langActions."</th></tr></thead></tbody>";
+	// Construct a table
+	$tool_content .= "<table width=\"99%\"><caption>".$langFaculteCatalog."</caption><tbody>";
 	$tool_content .= "<tr><td colspan=\"3\"><i>".$langManyExist." $a[0] ".$langFaculteDepartments."</i></td</tr>";
+	$tool_content .= "<tr><th scope=\"col\">$langCode</th><th scope=\"col\">".$langFaculteDepartment."</th scope=\"col\"><th>".$langActions."</th></tr>";
 	$sql=mysql_query("SELECT code,name,id FROM faculte");
-	// For all facultes display some info
+
+	// For all faculties display some info
 	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 		$logs = mysql_fetch_array($sql);
 		$tool_content .= "<tr>";
 		for ($i = 0; $i < 2; $i++) {
-			$tool_content .= "<td width='500'>".htmlspecialchars($logs[$i])."</td>";
+			$tool_content .= "<td>".htmlspecialchars($logs[$i])."</td>";
 		}
-		// Give administrator a link to delete or edit a faculte
-    $tool_content .= "<td width=\"3%\" nowrap><a href=\"addfaculte.php?a=2&c=".$logs['id']."\">".$langDelete."</a> | <a href=\"addfaculte.php?a=3&c=".$logs['id']."\">".$langEdit."</a></td></tr>\n";
+
+		// Give administrator a link to delete or edit a faculty
+    $tool_content .= "<td width=\"3%\" nowrap><a href=\"$_SERVER[PHP_SELF]?a=2&c=".$logs['id']."\">
+				<img src='../../images/delete.gif' border='0' title='$langDelete'></img></a> 
+			  &nbsp;&nbsp;<a href=\"$_SERVER[PHP_SELF]?a=3&c=".$logs['id']."\">
+			  <img src='../../images/edit.gif' border='0' title='$langEdit'></img> 
+			  </a></td></tr>\n"; 
 	}
 	// Close table correctly
 	$tool_content .= "</tbody></table><br>";
-	// Give administrator a link to add a new faculte
+	// Give administrator a link to add a new faculty
 	$tool_content .= "<table width=\"99%\"><caption>".$langOtherActions."</caption><tbody>
-	<tr><td><a href=\"addfaculte.php?a=1\">".$langAdd."</a></td></tr></tbody></table>";
-	// Display link back to index.php
+	<tr><td><a href=\"$_SERVER[PHP_SELF]?a=1\">".$langAdd."</a></td></tr></tbody></table>";
 	$tool_content .= "<br><center><p><a href=\"index.php\">".$langBack."</a></p></center>";
 }
 // Add a new faculte
@@ -116,28 +119,24 @@ elseif ($a == 1)  {
 		// Check for empty fields
 		if (empty($codefaculte) or empty($faculte)) {
 			$tool_content .= "<p>".$langEmptyFaculte."</p><br>";
-			// Display link back to addfaculte.php
-			$tool_content .= "<center><p><a href=\"addfaculte.php?a=1\">".$langReturnToAddFaculte."</a></p></center>";
+			$tool_content .= "<center><p><a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddFaculte."</a></p></center>";
 			}
-		// Check for greeks
+		// Check for greek letters
 		elseif (!preg_match("/^[A-Z0-9a-z_-]+$/", $codefaculte)) {
 			$tool_content .= "<p>".$langGreekCode."</p><br>";
-			// Display link back to addfaculte.php
-			$tool_content .= "<center><p><a href=\"addfaculte.php?a=1\">".$langReturnToAddFaculte."</a></p></center>";
+			$tool_content .= "<center><p><a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddFaculte."</a></p></center>";
 			}
-		// Check if faculte code already exists
+		// Check if faculty code already exists
 		elseif (mysql_num_rows(mysql_query("SELECT * from faculte WHERE code='$codefaculte'")) > 0) {
 			$tool_content .= "<p>".$langFCodeExists."</p><br>";
-			// Display link back to addfaculte.php
-			$tool_content .= "<center><p><a href=\"addfaculte.php?a=1\">".$langReturnToAddFaculte."</a></p></center>";
+			$tool_content .= "<center><p><a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddFaculte."</a></p></center>";
 			} 
-		// Check if faculte name already exists
+		// Check if faculty name already exists
 		elseif (mysql_num_rows(mysql_query("SELECT * from faculte WHERE name='$faculte'")) > 0) {
 			$tool_content .= "<p>".$langFaculteExists."</p><br>";
-			// Display link back to addfaculte.php
-			$tool_content .= "<center><p><a href=\"addfaculte.php?a=1\">".$langReturnToAddFaculte."</a></p></center>";
+			$tool_content .= "<center><p><a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddFaculte."</a></p></center>";
 		} else {
-		// OK Create the new faculte
+		// OK Create the new faculty
 			mysql_query("INSERT into faculte(code,name,generator,number) VALUES('$codefaculte','$faculte','100','1000')") 
 				or die ($langNoSuccess);
 			$tool_content .= "<p>".$langAddSuccess."</p><br>";
@@ -145,30 +144,28 @@ elseif ($a == 1)  {
 	} else {
 		// Display form for new faculte information
 		$tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?a=1\">";
-		$tool_content .= "<table width=\"99%\"><caption>Εισαγωγή Στοιχείων Τμήματος</caption><tbody>";
+		$tool_content .= "<table width=\"99%\"><caption>$langFaculteIns</caption><tbody>";
 		$tool_content .= "<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap>".$langCodeFaculte1.":</th><td><input type=\"text\" name=\"codefaculte\" value=\"".@$codefaculte."\"></td><td><i>".$langCodeFaculte2."</i></td></tr>
 		<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap>".$langFaculte1.":</th><td><input type=\"text\" name=\"faculte\" value=\"".@$faculte."\"></td><td><i>".$langFaculte2."</i></td></tr>
 		<tr><td colspan=\"2\"><input type=\"submit\" name=\"add\" value=\"".$langAddYes."\"></td</tr>
 		</tbody></table></form>";
 		}
-		// Display link back to addfaculte.php
-		$tool_content .= "<br><center><p><a href=\"addfaculte.php\">".$langBack."</a></p></center>";
+		$tool_content .= "<br><center><p><a href=\"$_SERVER[PHP_SELF]\">".$langBack."</a></p></center>";
 	}
-// Delete faculte
+// Delete faculty
 elseif ($a == 2) {
 	$s=mysql_query("SELECT * from cours WHERE faculteid='".mysql_real_escape_string($_GET['c'])."'");
-	// Check for existing courses of a faculte
+	// Check for existing courses of a faculty
 	if (mysql_num_rows($s) > 0)  {
-		// The faculte cannot be deleted
+		// The faculty cannot be deleted
 		$tool_content .= "<p>".$langProErase."</p><br>";
 		$tool_content .= "<p>".$langNoErase."</p><br>";
 	} else {
-		// The faculte can be deleted
+		// The faculty can be deleted
 		mysql_query("DELETE from faculte WHERE id='$c'");
-		$tool_content .= "<p>".$langErase."</p><br>";
+		$tool_content .= "<p>$langErase</p><br>";
 	}
-	// Display link back to addfaculte.php
-	$tool_content .= "<br><center><p><a href=\"addfaculte.php\">".$langBack."</a></p></center>";
+	$tool_content .= "<br><center><p><a href=\"$_SERVER[PHP_SELF]\">".$langBack."</a></p></center>";
 }
 // Edit a faculte
 elseif ($a == 3)  {
@@ -176,14 +173,12 @@ elseif ($a == 3)  {
 		// Check for empty fields
 		if (empty($faculte)) {
 			$tool_content .= "<p>".$langEmptyFaculte."</p><br>";
-			// Display link back to addfaculte.php
-			$tool_content .= "<center><p><a href=\"addfaculte.php?a=3&c=$c\">Επιστροφή στην Επεξεργασία Τμήματος</a></p></center>";
+			$tool_content .= "<center><p><a href=\"$_SERVER[PHP_SELF]?a=3&c=$c\">$langReturnToEditFaculte</a></p></center>";
 			} 
 		// Check if faculte name already exists
 		elseif (mysql_num_rows(mysql_query("SELECT * from faculte WHERE name='$faculte'")) > 0) {
 			$tool_content .= "<p>".$langFaculteExists."</p><br>";
-			// Display link back to addfaculte.php
-			$tool_content .= "<center><p><a href=\"addfaculte.php?a=3&c=$c\">Επιστροφή στην Επεξεργασία Τμήματος</a></p></center>";
+			$tool_content .= "<center><p><a href=\"$_SERVER[PHP_SELF]?a=3&c=$c\">$langReturnToEditFaculte</a></p></center>";
 		} else {
 		// OK Update the faculte
 			mysql_query("UPDATE faculte SET name = '$faculte' WHERE id='$c'") 
@@ -193,7 +188,7 @@ elseif ($a == 3)  {
 				or die ($langNoSuccess);
 			mysql_query("UPDATE cours_faculte SET faculte = '$faculte' WHERE facid='$c'") 
 				or die ($langNoSuccess);
-			$tool_content .= "<p>Η επεξεργασία του μαθήματος ολοκληρώθηκε με επιτυχία!</p><br>";
+			$tool_content .= "<p>$langEditFacSucces</p><br>";
 			}
 	} else {
 		// Get faculte information
@@ -202,16 +197,18 @@ elseif ($a == 3)  {
 		$myrow = mysql_fetch_array($result);
 		// Display form for edit faculte information
 		$tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?a=3\">";
-		$tool_content .= "<table width=\"99%\"><caption>Επεξεργασία Στοιχείωνν Τμήματος</caption><tbody>";
-		$tool_content .= "		<tr><td width=\"3%\" nowrap>".$langCodeFaculte1.":</td><td><input type=\"text\" name=\"codefaculte\" value=\"".$myrow['code']."\" readonly></td></tr>
-		<tr><td>&nbsp;</td><td><i>".$langCodeFaculte2."</i></td></tr>
-		<tr><td width=\"3%\" nowrap>".$langFaculte1.":</td><td><input type=\"text\" name=\"faculte\" value=\"".$myrow['name']."\"></td></tr>
-		<tr><td>&nbsp;</td><td><i>".$langFaculte2."</i></td></tr>
-		<tr><td colspan=\"2\"><input type=\"hidden\" name=\"c\" value=\"".htmlspecialchars($_GET['c'])."\"><input type=\"submit\" name=\"edit\" value=\"Επικύρωση\"></td</tr>
-		</tbody></table></form>";
+		$tool_content .= "<table width=\"99%\"><caption>$langFaculteEdit</caption><tbody>";
+		$tool_content .= "<tr><td width=\"3%\" nowrap>".$langCodeFaculte1.":</td>
+				<td><input type=\"text\" name=\"codefaculte\" value=\"".$myrow['code']."\" readonly></td></tr>
+				<tr><td>&nbsp;</td><td><i>".$langCodeFaculte2."</i></td></tr>
+				<tr><td width=\"3%\" nowrap>".$langFaculte1.":</td>
+				<td><input type=\"text\" name=\"faculte\" value=\"".$myrow['name']."\"></td></tr>
+				<tr><td>&nbsp;</td><td><i>".$langFaculte2."</i></td></tr>
+				<tr><td colspan=\"2\"><input type=\"hidden\" name=\"c\" value=\"".htmlspecialchars($_GET['c'])."\">
+				<input type=\"submit\" name=\"edit\" value=\"$langAcceptChanges\"></td</tr>
+				</tbody></table></form>";
 		}
-		// Display link back to addfaculte.php
-		$tool_content .= "<br><center><p><a href=\"addfaculte.php\">".$langBack."</a></p></center>";
+		$tool_content .= "<br><center><p><a href=\"$_SERVER[PHP_SELF]\">".$langBack."</a></p></center>";
 	}
 
 /*****************************************************************************
