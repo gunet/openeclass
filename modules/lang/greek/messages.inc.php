@@ -204,7 +204,6 @@ $langGroup = "Ομάδες Χρηστών";
 
 // Added by vagpits
 // General
-$langReturn = "Επιστροφή";
 $langReturnToSearch = "Επιστροφή στα αποτελέσματα αναζήτησης";
 $langReturnSearch = "Επιστροφή στην αναζήτηση";
 $langNoChangeHappened = "Δεν πραγματοποιήθηκε καμία αλλαγή!";
@@ -224,19 +223,18 @@ $langAcceptChanges = "Επικύρωση Αλλαγών";
 $langEditFacSucces = "Η επεξεργασία του μαθήματος ολοκληρώθηκε με επιτυχία!";
 
 // addusertocours
-$langQuickAddDelUserToCours = "Γρήγορη εγγραφή - διαγραφή ".$langsOfStudents." - ".$langsOfTeachers;
 $langQuickAddDelUserToCoursSuccess = "Η διαχείριση χρηστών ολοκληρώθηκε με επιτυχία!";
 $langFormUserManage = "Φόρμα Διαχείρισης Χρηστών";
 $langListNotRegisteredUsers = "Λίστα Μη Εγγεγραμμένων Χρηστών";
 $langListRegisteredStudents = "Λίστα Εγγεγραμμένων ".$langOfStudents;
 $langListRegisteredProfessors = "Λίστα Εγγεγραμμένων ".$langOfTeachers;
-
+$langErrChoose = "Παρουσιάστηκε σφάλμα στην επιλογή μαθήματος!";
 // delcours
 $langCourseDel = "Διαγραφή μαθήματος";
 $langCourseDelSuccess = "Το μάθημα διαγράφηκε με επιτυχία!";
 $langCourseDelConfirm = "Επιβεβαίωση Διαγραφής Μαθήματος";
 $langCourseDelConfirm2 = "Θέλετε σίγουρα να διαγράψετε το μάθημα με κωδικό";
-$langNoticeDel = " Η διαγραφή του μαθήματος θα διαγράψει επίσης τους εγγεγραμμένους φοιτητές από το μάθημα, την αντιστοιχία του μαθήματος στο Τμήμα, καθώς και όλο το υλικό του μαθήματος.";
+$langNoticeDel = "ΣΗΜΕΙΩΣΗ: Η διαγραφή του μαθήματος θα διαγράψει επίσης τους εγγεγραμμένους φοιτητές από το μάθημα, την αντιστοιχία του μαθήματος στο Τμήμα, καθώς και όλο το υλικό του μαθήματος.";
 
 // editcours
 $langCourseEdit = "Επεξεργασία Μαθήματος";
@@ -1142,7 +1140,6 @@ $langGroupTutor="Διδάσκοντας";
 $langGroupNoTutor="κανένας";
 $langGroupNone="δεν υπάρχει";
 $langGroupNoneMasc="κανένας";
-$langGroupUManagement="Διαχείριση Χρηστών";
 $langAddTutors="Διαχείριση καταλόγου χρηστών";
 $langForumGroup="Περιοχή συζητήσεων της ομάδας";
 $langMyGroup="η ομάδα μου";

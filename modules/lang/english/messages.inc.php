@@ -195,6 +195,7 @@ $langListNotRegisteredUsers = "Unregistered Users List";
 $langProfessors = "Professors";
 $langListRegisteredStudents = "Registered Students List";
 $langListRegisteredProfessors = "Registered Professors List";
+$langErrChoose = "An error occured!";
 
 // eclassconf
 $langEclassConf = "Configuration File of eClass";

@@ -50,10 +50,8 @@ session_start();
 ==============================================================================*/
 
 /*****************************************************************************
-		DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
+		DEAL WITH BASETHEME, OTHER INCLUDES AND NAMETOOLS
 ******************************************************************************/
-// Set the langfiles needed
-$langFiles = array('admin','gunet');
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
@@ -67,7 +65,6 @@ if (isset($_GET['c'])) {
 
 if(!isset($c))
 	$c=$_SESSION['c_temp'];
-
 
 // Define $nameTools
 $nameTools = $langCourseEdit;
@@ -142,7 +139,7 @@ if (isset($c)) {
 	$gq = $q['group_quota'] / 1000000;
 	$drq = $q['dropbox_quota'] / 1000000;
 	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap>$langLegend <b>$langDocument</b>:</td>
+    <td width=\"3%\" nowrap>$langLegend <b>$langDoc</b>:</td>
     <td>".$dq." Mb.</td>
 </tr>";
 	$tool_content .= "  <tr>
@@ -165,13 +162,13 @@ if (isset($c)) {
     <td>";
 	switch ($row['visible']) {
 	case 2:
-		$tool_content .= "Ανοιχτό";
+		$tool_content .= $langOpenCourse;
 		break;
 	case 1:
-		$tool_content .= "Απαιτείται Εγγραφή";
+		$tool_content .= $langRegCourse;
 		break;
 	case 0:
-		$tool_content .= "Κλειστό";
+		$tool_content .= $langClosedCourse;
 		break;
 	}	
     $tool_content .= "</td>
@@ -184,7 +181,7 @@ if (isset($c)) {
   </tr>";
   // Register unregister users
 	$tool_content .= "  <tr>
-    <td><a href=\"addusertocours.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langQuickAddDelUserToCours."</a></td>
+    <td><a href=\"addusertocours.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langAdminUsers."</a></td>
   </tr>";
   // Course statistics
 	$tool_content .= "  <tr>
@@ -210,9 +207,9 @@ if (isset($c)) {
 // If $c is not set we have a problem
 else {
 	// Print an error message
-	$tool_content .= "<br><center><p>Παρουσιάστηκε σφάλμα στην επιλογή μαθήματος!</p></center>";
+	$tool_content .= "<br><center><p>$langErrChoose</p></center>";
 	// Display link to go back to listcours.php
-	$tool_content .= "<br><center><p><a href=\"listcours.php\">Επιστροφή</a></p></center>";
+	$tool_content .= "<br><center><p><a href=\"listcours.php\">$langBack</a></p></center>";
 }
 
 /*****************************************************************************

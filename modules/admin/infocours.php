@@ -52,8 +52,6 @@
 // Initialize some variables
 $searchurl = "";
 
-// Set the langfiles needed
-$langFiles = 'admin';
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
@@ -100,10 +98,7 @@ else {
 	// Constract the edit form
 	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."".$searchurl." method=\"post\">";	
 	$tool_content .= "<table width=\"99%\"><caption>".$langCourseInfoEdit."</caption><tbody>";
-	$tool_content .= "  <tr>
-    <td colspan=\"2\"><b><u>".$langCourseInfos."</u></b><br><br></td>
-  </tr>";
-	$tool_content .= "  <tr>
+	$tool_content .= "<tr>
     <td width=\"3%\" nowrap><b>".$langDepartment.":</b></td>
     <td><select name=\"faculte\">\n";
   // Construct select object for facultes
@@ -111,9 +106,9 @@ else {
 
 	while ($myfac = mysql_fetch_array($resultFac)) {	
 		if($myfac['id'] == $row['faculteid']) 
-			$tool_content .= "      <option value=\"".$myfac['id']."--".$myfac['name']."\" selected>$myfac[name]</option>";
+			$tool_content .= "<option value=\"".$myfac['id']."--".$myfac['name']."\" selected>$myfac[name]</option>";
 		else 
-			$tool_content .= "      <option value=\"".$myfac['id']."--".$myfac['name']."\">$myfac[name]</option>";
+			$tool_content .= "<option value=\"".$myfac['id']."--".$myfac['name']."\">$myfac[name]</option>";
 	}
 	$tool_content .= "</select>
     </td>
@@ -127,7 +122,7 @@ else {
     <td><input type=\"text\" name=\"intitule\" value=\"".$row['intitule']."\" size=\"60\"></td>
   </tr>";
 	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>".$langDidaskon.":</b></td>
+    <td width=\"3%\" nowrap><b>".$langTeacher.":</b></td>
     <td><input type=\"text\" name=\"titulaires\" value=\"".$row['titulaires']."\" size=\"60\"></td>
   </tr>";
 	$tool_content .= "  <tr>
@@ -137,7 +132,7 @@ else {
 }
 // If course selected go back to editcours.php
 if (isset($_GET['c'])) {
-	$tool_content .= "<center><p><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\">".$langReturn."</a></p></center>";
+	$tool_content .= "<center><p><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\">".$langBack."</a></p></center>";
 }
 // Else go back to index.php directly
 else {

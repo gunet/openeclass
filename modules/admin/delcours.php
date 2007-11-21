@@ -46,10 +46,8 @@
 ==============================================================================*/
 
 /*****************************************************************************
-		DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
+		DEAL WITH BASETHEME, OTHER INCLUDES AND NAMETOOLS
 ******************************************************************************/
-// Set the langfiles needed
-$langFiles = 'admin';
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
@@ -60,7 +58,6 @@ if(!isset($_GET['c'])) { die(); }
 $nameTools = $langCourseDel;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "listcours.php", "name" => $langListCours);
-$navigation[] = array("url" => "editcours.php?c=".htmlspecialchars($_GET['c']), "name" => $langCourseEdit);
 // Initialise $tool_content
 $tool_content = "";
 
@@ -85,23 +82,23 @@ if (isset($delete) && isset($_GET['c']))  {
 	rename("../../courses/".$_GET['c'], "../../courses/garbage/".$_GET['c']);
 	$tool_content .= "<p>".$langCourseDelSuccess."</p>";
 }
-// Display confirmationm message for course deletion
+// Display confirmatiom message for course deletion
 else {
 	$row = mysql_fetch_array(mysql_query("SELECT * FROM cours WHERE code='".mysql_real_escape_string($_GET['c'])."'"));
 	
 	$tool_content .= "<table width=\"99%\"><caption>".$langCourseDelConfirm."</caption><tbody>";
 	$tool_content .= "  <tr>
-    <td><br>".$langCourseDelConfirm2." <em>".htmlspecialchars($_GET['c'])."</em>;<br><br><i><b>".$langWarning."</b> ".$langNoticeDel."</i><br><br></td>
+    <td><br>".$langCourseDelConfirm2." <em>".htmlspecialchars($_GET['c'])."</em>;<br><br><i>".$langNoticeDel."</i><br><br></td>
   </tr>";
 	$tool_content .= "  <tr>
     <td><ul><li><a href=\"".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."&delete=yes".$searchurl."\"><b>$langYes</b></a><br>&nbsp;</li>
-              <li><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\"><b>$langNo</b></a></li></ul></td>
+  <li><a href=\"listcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\"><b>$langNo</b></a></li></ul></td>
   </tr>";
 	$tool_content .= "</tbody></table><br>";
 }
-// If course deleted go back to editcours.php
+// If course deleted go back to listcours.php
 if (isset($_GET['c']) && !isset($delete)) {
-	$tool_content .= "<center><p><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\">".$langBack."</a></p></center>";
+	$tool_content .= "<center><p><a href=\"listcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\">".$langBack."</a></p></center>";
 }
 // Go back to listcours.php
 else {
