@@ -182,17 +182,19 @@ caption {
 .caution {
 	background-image: url(../../images/important.gif);
 	background-repeat: no-repeat;
-	background-position: 4px 4px;
-	padding-left : 24px;
-   	background-color:#FBEC5D;
+	background-position: 7px 7px;
+	padding-left : 60px;
+   	background-color: #fff;
+    border-color: #E0E0E0
 }
 
 .success {
 	background-image: url(./img/tick.gif);
 	background-repeat: no-repeat;
-	background-position: 4px 4px;
-	padding-left : 24px;
-   	background-color:#E4FFCA;
+	background-position: 7px 7px;
+	padding-left : 60px;
+   	background-color: #fff;
+    border-color: #E0E0E0;
 }
 
 .inactive {

@@ -66,7 +66,7 @@ if(!empty($submit))
 		<table width=\"99%\">
 			<tbody>
 				<tr>
-					<td class=\"caution\">
+					<td class=\"caution\" height='60'>
 					<p>$langCharactersNotAllowed </p>
 					<p><a href=\"./newuser.php\">".$langAgain."</a></p>
 					</td>
@@ -82,14 +82,13 @@ if(!empty($submit))
 			<table width=\"99%\">
 			<tbody>
 				<tr>
-					<td class=\"caution\">
+					<td class=\"caution\" height='60'>
 					<p>$langEmptyFields</p>
 					<p><a href=\"./newuser.php\">".$langAgain."</a></p>
 					</td>
 				</tr>
 			</tbody>
 		</table>";
-
 		}
 		else
 		{
@@ -101,13 +100,14 @@ if(!empty($submit))
 				<table width=\"99%\">
 			<tbody>
 				<tr>
-					<td class=\"caution\">
+					<td class=\"caution\" height='60'>
 					<p>$langUserFree</p>
 					<p><a href=\"./newuser.php\">".$langAgain."</a></p>
 					</td>
 				</tr>
 			</tbody>
 		</table>";
+		
 			}
 			else
 			{
@@ -124,7 +124,7 @@ if(!empty($submit))
 					<table width=\"99%\">
 			<tbody>
 				<tr>
-					<td class=\"caution\">
+					<td class=\"caution\" height='60'>
 					<p>$langPassTooEasy <strong>".substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8)."</strong></p>
 					<p><a href=\"./newuser.php\">".$langAgain."</a></p>
 					</td>
@@ -145,7 +145,7 @@ if(!empty($submit))
         		<table width=\"99%\">
 			<tbody>
 				<tr>
-					<td class=\"caution\">
+					<td class=\"caution\" height='60'>
 					<p>$langEmailWrong</p>
 					<p><a href=\"./newuser.php\">".$langAgain."</a></p>
 					</td>
@@ -208,7 +208,7 @@ if(!empty($submit))
 
 				// registration form
 				$tool_content .= "
-				<table width=\"99%\"><tbody><tr><td class=\"success\">
+				<table width=\"99%\"><tbody><tr><td class=\"success\" height='60'>
 				<p>$langDear $prenom $nom,</p>
 				<p>$langPersonalSettings</p>
 				</td></tr></tbody></table>

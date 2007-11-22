@@ -57,9 +57,9 @@ $is_submit = isset($_POST['is_submit'])?$_POST['is_submit']:'';
 $lastpage = 'ldapnewuser.php?auth='.$auth;
 $userdescr = $langTheUser;
 
-$errormessage1 = "<tr valign=\"top\" align=\"center\" bgcolor=\"$color2\"><td><font size=\"2\" face=\"arial, helvetica\"><p>&nbsp;</p>";
-$errormessage3 = "</font><p>&nbsp;</p><br><br><br></td></tr>";
-$errormessage2 = "<p>$ldapback <a href=\"$lastpage\">$ldaplastpage</a></p>$errormessage3";
+//$errormessage1 = "<p>&nbsp;</p>";
+//$errormessage3 = "<p>&nbsp;</p><br><br><br>";
+$errormessage2 = "<br/><p>$ldapback <a href=\"$lastpage\">$ldaplastpage</a></p>$errormessage3";
 
 if(!empty($is_submit))
 {
@@ -69,11 +69,26 @@ if(!empty($is_submit))
 	
 	if (empty($ldap_email) or empty($ldap_passwd)) // check for empty username-password
 	{
-		$tool_content .= $errormessage1 . $ldapempty . $errormessage2;
+		$tool_content .= "
+		<table width=\"99%\">
+		<tbody>
+		<tr>
+		  <td class=\"caution\" height='60'><p>$ldapempty  $errormessage2 </p></td>
+		</tr>
+		</tbody>
+		</table>";
 	} 
 	elseif (user_exists($ldap_email)) // check if the user already exists
 	{
-		$tool_content .= $errormessage1 . $ldapuserexists . $errormessage2;
+		$tool_content .= "
+		<table width=\"99%\">
+		<tbody>
+		<tr>
+		  <td class=\"caution\" height='60'><p>$ldapuserexists $errormessage2</p></td>
+		</tr>
+		</tbody>
+		</table>";
+		//$tool_content .= $errormessage1 . $ldapuserexists . $errormessage2;
 	} 
 	else 
 	{
