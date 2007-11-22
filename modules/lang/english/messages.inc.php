@@ -2844,7 +2844,7 @@ $langReason = "Describe your reasons of using platform";
 $langInfoProf = "Soon an informational email will be sent to you by the administrator of the platform.";
 $langBackHome = "to return to home page.";
 $langDearUser = "Dear user";
-$langMailErrorMessage = "An error occured during sending message - your request recorded, but not sent. Please contact system administrator in email address";
+$langMailErrorMessage = "An error occured during sending message.<br/> Your request recorded, but not sent. Please contact system administrator in email address: ";
 
 $langUserSuccess = "New User Account";
 $usersuccess="New user account created with success!";

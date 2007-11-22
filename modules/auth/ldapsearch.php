@@ -135,63 +135,64 @@ if(!empty($is_submit))
 		if($auth_allow==1)
 		{	
 			$tool_content .= "
-				<table>
-				<tr>
-					<td width=\"600\">
-					<FIELDSET>
-	  				<LEGEND>$langUserAccount</LEGEND>
-					<form action=\"newuser_second.php\" method=\"post\">
-					<table cellpadding=\"3\" cellspacing=\"0\" border=\"0\" width=\"100%\">
-					<tr valign=\"top\">
-						<td>".$langName."</td>
-						<td><input type=\"text\" name=\"prenom_form\"><font size=\"1\">&nbsp;(*)</font></td>
-					</tr>
-					<tr>
-						<td>".$langSurname."</td>
-						<td><input type=\"text\" name=\"nom_form\"><font size=\"1\">&nbsp;(*)</font></td>
-					</tr>
-					<tr>
-						<td>".$langEmail."</td>
-						<td><input type=\"text\" name=\"email\"></td>
-					</tr>
-					<tr>
-						<td>&nbsp;</td>
-						<td><font size=\"1\">".$langEmailNotice."</font></td>
-					</tr>
-					<tr>
-						<td>".$langAm."</td>
-					<td><input type=\"text\" name=\"am\"></td>
-					</tr>
-					<tr>
-						<td>".$langDepartment."</td>
-						<td>
-						<select name=\"department\">
-			";
+    <table width=\"99%\" align='left' class='FormData'>
+    <thead>
+    <tr>
+      <td>
+      <form action=\"newuser_second.php\" method=\"post\">
+      <table width=\"100%\">
+       <tbody>
+       <tr>  
+         <th class='left' width='20%'>".$langName."</th>
+         <td width='10%'><input class='FormData_InputText' type=\"text\" name=\"prenom_form\"></td>
+         <td><small>(*)</small></td>
+       </tr>
+       <tr>
+         <th class='left'>".$langSurname."</th>
+         <td><input type=\"text\" name=\"nom_form\" class='FormData_InputText'></td>
+         <td><small>(*)</small></td>
+       </tr>
+       <tr>
+         <th class='left'>".$langEmail."</th>
+         <td><input type=\"text\" name=\"email\" class='FormData_InputText'></td>
+         <td><small>".$langEmailNotice."</small></td>
+       </tr>
+       <tr>
+         <th class='left'>".$langAm."</th>
+         <td><input type=\"text\" name=\"am\" class='FormData_InputText'></td>
+         <td>&nbsp;</td>
+       </tr>
+       <tr>
+         <th class='left'>".$langDepartment."</th>
+         <td>
+         <select name=\"department\">
+         ";
 			$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id",$db);
 			while ($dep = mysql_fetch_array($deps)) 
 			$tool_content .= "\n
-							<option value=\"$dep[1]\">$dep[0]</option>
+         <option value=\"$dep[1]\">$dep[0]</option>
 			";
 			
 			$tool_content .= "
-						</select></td>
-					</tr>
-					<tr>
-						<td>&nbsp;</td>
-						<td><input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\"></td>
-					</tr>
-						<input type=\"hidden\" name=\"uname\" value=\"".$ldap_email."\">
-						<input type=\"hidden\" name=\"password\" value=\"".$ldap_passwd."\">
-						<input type=\"hidden\" name=\"auth\" value=\"".$auth."\">
-					</table>
-					</form>
-					</FIELDSET>
-					</td>
-				</tr>
-				<tr>
-					<td  align='right'><font size=\"1\">".$langRequiredFields."</font></td>
-				</tr>
-				</table>
+         </select>
+         </td>
+       </tr>
+       <tr>
+         <th class='left'>&nbsp;</th>
+         <td><input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\">
+             <input type=\"hidden\" name=\"uname\" value=\"".$ldap_email."\">
+             <input type=\"hidden\" name=\"password\" value=\"".$ldap_passwd."\">
+             <input type=\"hidden\" name=\"auth\" value=\"".$auth."\">
+         </td>
+         <td><p align='right'>".$langRequiredFields."</p></td>
+         </tr>
+         </tbody>
+         </table>
+         </form>
+         </td>
+       </tr>
+       </thead>
+       </table>
 			";
 		
 		}

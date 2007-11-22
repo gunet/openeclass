@@ -26,16 +26,16 @@ if(!empty($submit))
   or (strstr($uname, "'")) or (strstr($uname, '"')) or (strstr($uname, '\\')) )
 	{
 		$tool_content .= "
-		<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"caution\">
-							<p>$langCharactersNotAllowed</p>
-							<p><a href=\"./newprof.php\">$langAgain</a></p>
-						</td>
-					</tr>
-				</tbody>
-			</table>";
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"caution\" height='60'>
+      <p>$langCharactersNotAllowed</p>
+      <p><a href=\"./newprof.php\">$langAgain</a></p>
+      </td>
+    </tr>
+    </tbody>
+    </table>";
 	}
 	else	// do the other checks
 	{
@@ -57,62 +57,59 @@ if(!empty($submit))
 			|| (strtoupper($password) == strtoupper($prenom_form))) 
 		{
 				$tool_content .= "
-				<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"caution\">
-							<p>$langPassTooEasy: <strong>".substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8)."</strong></p>
-							<p><a href=\"./newprof.php\">$langAgain</a></p>
-						</td>
-					</tr>
-				</tbody>
-			</table>";
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"caution\" height='60'>
+      <p>$langPassTooEasy: <strong>".substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8)."</strong></p>
+      <p><a href=\"./newprof.php\">$langAgain</a></p>
+      </td>
+    </tr>
+    </tbody>
+    </table>";
 		}
 		// check if there are empty fields
 		elseif (empty($nom_form) or empty($prenom_form) or empty($password) or empty($usercomment) or empty($department) or empty($uname) or (empty($email_form))) 
 		{
 			$tool_content .= "
-			<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"caution\">
-							<p>$langEmptyFields</p>
-							
-							<p><a href=\"./newprof.php\">$langAgain</a></p>
-						</td>
-					</tr>
-				</tbody>
-			</table>";
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"caution\" height='60'>
+      <p>$langEmptyFields</p>
+    <p><a href=\"./newprof.php\">$langAgain</a></p>
+    </td>
+    </tr>
+    </tbody>
+    </table>";
 		}
 		elseif(isset($user_exist) and $uname==$user_exist) 
 		{
 			$tool_content .= "
-			<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"caution\">
-							<p>$langUserFree</p>
-							
-							<p><a href=\"./newprof.php\">$langAgain</a></p>
-						</td>
-					</tr>
-				</tbody>
-			</table>";
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"caution\" height='60'>
+      <p>$langUserFree</p>
+      <p><a href=\"./newprof.php\">$langAgain</a></p>
+      </td>
+    </tr>
+    </tbody>
+    </table>";
 	  }
 		elseif(!eregi($regexp,$email_form)) // check if email syntax is valid
 		{
 	        $tool_content .= "
-	        <table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"caution\">
-							<p>$langEmailWrong</p>
-							
-							<p><a href=\"./newprof.php\">$langAgain</a></p>
-						</td>
-					</tr>
-				</tbody>
-			</table>";
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"caution\" height='60'>
+      <p>$langEmailWrong</p>
+      <p><a href=\"./newprof.php\">$langAgain</a></p>
+      </td>
+    </tr>
+    </tbody>
+    </table>";
 		}
 		else 		// registration is ok
 		{
@@ -153,34 +150,31 @@ if(!empty($submit))
 		if (!send_mail($gunet, $emailhelpdesk, '', $emailhelpdesk, $mailsubject, $MailMessage, $charset)) 
 			{
 				$tool_content .= "
-				<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"caution\">
-							<p>$langMailErrorMessage</p>
-							
-							<p><a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></p>
-						</td>
-					</tr>
-				</tbody>
-			</table>";
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"caution\" height='60'>
+      <p>$langMailErrorMessage &nbsp; <a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></p>
+      </td>
+    </tr>
+    </tbody>
+    </table>";
 				draw($tool_content,0);
 				exit();
 			}
 	
 			//------------------------------------User Message ----------------------------------------
 			$tool_content .= "
-			<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"success\">
-							<p>$langDearProf</p><p>$success</p><p>$infoprof</p>
-							
-							<p>$click <a href=\"$urlServer\">$langHere</a> $backpage</p>
-						</td>
-					</tr>
-				</tbody>
-			</table>";
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"success\" height='60'>
+      <p>$langDearProf</p><p>$success</p><p>$infoprof</p>
+      <p>$click <a href=\"$urlServer\">$langHere</a> $backpage</p>
+    </td>
+    </tr>
+    </tbody>
+    /table>";
 		} 
 	}
 }

@@ -62,33 +62,35 @@ if(!empty($submit))
 	if( (strstr($password, "'")) or (strstr($password, '"')) or (strstr($password, '\\'))
 	or (strstr($uname, "'")) or (strstr($uname, '"')) or (strstr($uname, '\\')) )
 	{
-		$tool_content .= "
-		<table width=\"99%\">
-			<tbody>
-				<tr>
-					<td class=\"caution\" height='60'>
-					<p>$langCharactersNotAllowed </p>
-					<p><a href=\"./newuser.php\">".$langAgain."</a></p>
-					</td>
-				</tr>
-			</tbody>
-		</table>";
+$tool_content .= "
+  <table width=\"99%\">
+  <tbody>
+  <tr>
+    <td class=\"caution\" height='60'>
+    <p>$langCharactersNotAllowed </p>
+    <p><a href=\"./newuser.php\">".$langAgain."</a></p>
+  </td>
+  </tr>
+  </tbody>
+  </table>
+  <br><br/>";
 	}
 	else	// do the other checks
 	{
 		if (empty($nom_form) or empty($prenom_form) or empty($password) or empty($uname)) 	// check if there are empty fields
 		{
 			$tool_content .= "
-			<table width=\"99%\">
-			<tbody>
-				<tr>
-					<td class=\"caution\" height='60'>
-					<p>$langEmptyFields</p>
-					<p><a href=\"./newuser.php\">".$langAgain."</a></p>
-					</td>
-				</tr>
-			</tbody>
-		</table>";
+  <table width=\"99%\">
+  <tbody>
+  <tr>
+    <td class=\"caution\" height='60'>
+    <p>$langEmptyFields</p>
+    <p><a href=\"./newuser.php\">".$langAgain."</a></p>
+    </td>
+  </tr>
+  </tbody>
+  </table>
+  <br><br/>";
 		}
 		else
 		{
@@ -97,17 +99,17 @@ if(!empty($submit))
 			if ($myusername = mysql_fetch_array($username_check))
 			{
 				$tool_content .= "
-				<table width=\"99%\">
-			<tbody>
-				<tr>
-					<td class=\"caution\" height='60'>
-					<p>$langUserFree</p>
-					<p><a href=\"./newuser.php\">".$langAgain."</a></p>
-					</td>
-				</tr>
-			</tbody>
-		</table>";
-		
+  <table width=\"99%\">
+  <tbody>
+  <tr>
+    <td class=\"caution\" height='60'>
+    <p>$langUserFree</p>
+    <p><a href=\"./newuser.php\">".$langAgain."</a></p>
+    </td>
+  </tr>
+  </tbody>
+  </table>
+  <br><br/>";	
 			}
 			else
 			{
@@ -121,16 +123,18 @@ if(!empty($submit))
 				|| (strtoupper($password) == strtoupper($prenom_form)) || (strtoupper($password) == strtoupper($email)))
 				{
 					$tool_content .= "
-					<table width=\"99%\">
-			<tbody>
-				<tr>
-					<td class=\"caution\" height='60'>
-					<p>$langPassTooEasy <strong>".substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8)."</strong></p>
-					<p><a href=\"./newuser.php\">".$langAgain."</a></p>
-					</td>
-				</tr>
-			</tbody>
-		</table>";
+  <table width=\"99%\">
+  <tbody>
+  <tr>
+    <td class=\"caution\" height='60'>
+    <p>$langPassTooEasy <strong>".substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8)."</strong></p>
+    <p><a href=\"./newuser.php\">".$langAgain."</a></p>
+    </td>
+  </tr>
+  </tbody>
+  </table>
+  <br><br/>
+  ";
 
 					//exit();
 				}
@@ -142,16 +146,17 @@ if(!empty($submit))
 					if (!eregi($regexp, $email))
 					{
 						$tool_content .= "
-        		<table width=\"99%\">
-			<tbody>
-				<tr>
-					<td class=\"caution\" height='60'>
-					<p>$langEmailWrong</p>
-					<p><a href=\"./newuser.php\">".$langAgain."</a></p>
-					</td>
-				</tr>
-			</tbody>
-		</table>";
+  <table width=\"99%\">
+  <tbody>
+  <tr>
+    <td class=\"caution\" height='60'>
+    <p>$langEmailWrong</p>
+    <p><a href=\"./newuser.php\">".$langAgain."</a></p>
+    </td>
+  </tr>
+  </tbody>
+  </table>
+  <br><br/>";
 					}
 				}
 
@@ -208,12 +213,18 @@ if(!empty($submit))
 
 				// registration form
 				$tool_content .= "
-				<table width=\"99%\"><tbody><tr><td class=\"success\" height='60'>
-				<p>$langDear $prenom $nom,</p>
-				<p>$langPersonalSettings</p>
-				</td></tr></tbody></table>
-				<br/>
-				<p>$langPersonalSettingsMore</p>
+  <table width=\"99%\">
+  <tbody>
+  <tr>
+    <td class=\"success\" height='60'>
+    <p>$langDear $prenom $nom,</p>
+    <p>$langPersonalSettings</p>
+    </td>
+  </tr>
+  </tbody>
+  </table>
+  <br><br/>
+  <p>$langPersonalSettingsMore</p>
 				";
 								
 			}	// end of registration accepted
