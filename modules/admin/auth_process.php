@@ -168,7 +168,7 @@ else
 	}
 	
 	$tool_content .= "<table width=\"99%\">
-	<tr><td>";
+	<tr><td colspan='2'>";
 	$tool_content .= "<form name=\"authmenu\" method=\"post\" action=\"auth_process.php\">
 	<input type=\"hidden\" name=\"auth_submit\" value=\"1\" />
 	<input type=\"hidden\" name=\"auth\" value=\"".htmlspecialchars($auth)."\" />
@@ -176,8 +176,6 @@ else
 	<strong>".get_auth_info($auth)."</strong><br /><br /><br />";
 	switch($auth)
 	{
-		case 1: include_once '../auth/methods/eclassform.php';
-			break;
 		case 2: include_once '../auth/methods/pop3form.php';
 			break;
 		case 3: include_once '../auth/methods/imapform.php';
@@ -190,13 +188,13 @@ else
 			break;		
 	}	
 	
-	$tool_content .= "<br />$langTestAccount<br /><br />
-	$langUsername: <input type=\"text\" name=\"test_username\" value=\"".$test_username."\"><br />
-	$langPass: <input type=\"password\" name=\"test_password\" value=\"".$test_password."\"><br />
-	<input type=\"submit\" name=\"submit\" value=\"$langModify\"><br />";
+	$tool_content .= "</td></tr>";
+	$tool_content .= "<tr><td colspan='2'>$langTestAccount</td></tr>
+	<tr><td>$langUsername: </td><td><input type=\"text\" name=\"test_username\" value=\"".$test_username."\"></td></tr>
+	<tr><td>$langPass: </td><td><input type=\"password\" name=\"test_password\" value=\"".$test_password."\"></td></tr>
+	<tr><td colspan='2'><input type=\"submit\" name=\"submit\" value=\"$langModify\"></form></td></tr>";
 	
-	$tool_content .= "</form>";
-	$tool_content .="<br /></td></tr></table>";
+	$tool_content .="<br /></table>";
 }
 
 draw($tool_content,3);

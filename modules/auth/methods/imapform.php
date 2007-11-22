@@ -24,13 +24,11 @@ $tool_content .= "
     <td>
         <input name=\"imaphost\" type=\"text\" size=\"30\" value=\"".$imaphost."\" />
     </td>
-    <td>&nbsp;</td>
 </tr>
 
 <tr valign=\"top\">
     <td align=\"right\">$langimapport:</td>
     <td>143</td>
-    <td>&nbsp;</td>
 </tr>
 
 <tr valign=\"top\">
@@ -38,8 +36,6 @@ $tool_content .= "
     <td>
 	<textarea name=\"imapinstructions\" cols=\"30\" rows=\"10\" wrap=\"virtual\">".$imapinstructions."</textarea> 
     </td>
-    <td>&nbsp; </td>
 </tr>
 </table>";
-
 ?>

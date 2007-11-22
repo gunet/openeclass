@@ -24,21 +24,17 @@ $tool_content .= "
     <td>
         <input name=\"pop3host\" type=\"text\" size=\"30\" value=\"".$pop3host."\" />
     </td>
-    <td>&nbsp;</td>
 </tr>
 
 <tr valign=\"top\">
     <td align=\"right\">$langpop3port:</td>
     <td>110</td>
-    <td>&nbsp </td>
 </tr>
 
 <tr valign=\"top\">
     <td align=\"right\">$langInstructions:</td>
     <td>
 	<textarea name=\"pop3instructions\" cols=\"30\" rows=\"10\" wrap=\"virtual\">".$pop3instructions."</textarea> 
-    </td>
-    <td>&nbsp; 
     </td>
 </tr>
 </table>";

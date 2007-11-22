@@ -58,8 +58,7 @@ $lastpage = 'ldapnewuser.php?auth='.$auth;
 $userdescr = $langTheUser;
 
 //$errormessage1 = "<p>&nbsp;</p>";
-//$errormessage3 = "<p>&nbsp;</p><br><br><br>";
-$errormessage2 = "<br/><p>$ldapback <a href=\"$lastpage\">$ldaplastpage</a></p>$errormessage3";
+$errormessage2 = "<br/><p>$ldapback <a href=\"$lastpage\">$ldaplastpage</a></p>";
 
 if(!empty($is_submit))
 {

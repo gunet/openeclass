@@ -49,29 +49,28 @@ $tool_content .= "<tr valign=\"top\">
     <td align=\"right\">$langldap_bind_dn:</td>
     <td>
     <input name=\"ldapbind_dn\" type=\"text\" size=\"30\" value=\"".$ldapbind_dn."\">
-    </td><td>&nbsp;</td>
+    </td>
 </tr>
 
 <tr valign=\"top\">
     <td align=\"right\">$langldap_bind_user:</td>
     <td>
     <input name=\"ldapbind_user\" type=\"text\" size=\"30\" value=\"".$ldapbind_user."\">
-    </td><td>&nbsp;</td>
+    </td>
 </tr>
 
 <tr valign=\"top\">
     <td align=\"right\">$langldap_bind_pw:</td>
     <td>
     <input name=\"ldapbind_pw\" type=\"password\" size=\"30\" value=\"".$ldapbind_pw."\">
-		</td><td>&nbsp;</td>
+		</td>
 </tr>
 
 <tr valign=\"top\">
     <td align=\"right\">$langInstructions:</td>
     <td>
 	<textarea name=\"ldapinstructions\" cols=\"30\" rows=\"10\" wrap=\"virtual\">".$ldapinstructions."</textarea> 
-    </td><td>&nbsp;</td>
+    </td>
 </tr>
 </table>";
-
 ?>

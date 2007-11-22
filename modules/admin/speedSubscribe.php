@@ -123,7 +123,7 @@ if (!$firstfac) {
 	$tool_content .= "</tbody></table>";
 }
 
-$tool_content .= "<br><p><input type=\"submit\" name=\"submit\" value=\"".$langSubscribe."\"></p></form>";
+$tool_content .= "<br><p><input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\"></p></form>";
 // Display link to go back to index.php
 $tool_content .= "<br><center><p><a href=\"index.php\">$langBack</a></p></center>";
 

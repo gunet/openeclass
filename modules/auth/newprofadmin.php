@@ -148,7 +148,7 @@ $tool_content .= "	<form action=\"newprofadmin.php\" method=\"post\">
 </tbody></table></form>
 ";
 
-$tool_content .= "<center><p><a href=\"../admin/index.php\">$langReturn</p></center>";
+$tool_content .= "<center><p><a href=\"../admin/index.php\">$langBack</p></center>";
 }
 draw($tool_content, 3, 'admin');
 ?>
