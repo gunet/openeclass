@@ -37,8 +37,8 @@ $tool_content = "";
 
 $MailErrorMessage = $langMailErrorMessage;
 
-$tool_content .= "<table cellpadding='3' cellspacing='0' border='0' width='100%'>";
-$tool_content .= "<tr valign='top'>";
+//$tool_content .= "<table cellpadding='3' cellspacing='0' border='0' width='100%'>";
+//$tool_content .= "<tr valign='top'>";
 
 // ------------------- Update table prof_request ------------------------------
 
@@ -52,36 +52,66 @@ $upd=db_query("INSERT INTO prof_request(profname,profsurname,profuname,profemail
 			"$contactphone : $userphone\n\n\n$logo\n\n";
 
 	if (!send_mail($gunet, $emailhelpdesk, '', $emailhelpdesk, $mailsubject2, $MailMessage, $charset)) {
-		$tool_content .= "<table border='0' align='center' cellpadding='0' cellspacing='0'>";
-    $tool_content .= "<tr><td><div class='labeltext'>$MailErrorMessage<div class=alert1><a href=\"mailto:$emailhelpdesk\" class=mainpage>$emailhelpdesk</a>.</div></div><br>";
+		$tool_content .= "
+  <table width=\"99%\">
+  <tbody>
+  <tr>
+    <td class=\"caution\" height='60'>
+    <p>$MailErrorMessage&nbsp; <a href=\"mailto:$emailhelpdesk\" class=mainpage>$emailhelpdesk</a>.</p>
+    </td>
+  </tr>
+  </tbody>
+  </table>
+  <br><br/>";
+
 	}
 
-$tool_content .= "<td width='75%' class=td_main>";
-$tool_content .= "$nameTools\n";
 
-//  User Message 
-	$tool_content .= "<table border='0' align='center' height=300 cellpadding='0' cellspacing='0'>";
-	$tool_content .= "<tr><td valign=top><div class='td_main'>		       
-                <br>$langDearUser!<br><br>$success<br><br>$infoprof<br><br>				
-	        $click <a href=\"$urlServer\" class=mainpage>$langHere</a> $langBackPage
-                </div><br></td>
-         </tr></table>";
-				$tool_content .= "</td></tr></table>";
-				draw($tool_content, 0, 'auth');
-    	  exit();
+    //  User Message
+	$tool_content .= "
+  <table width=\"99%\">
+  <tbody>
+  <tr>
+    <td class=\"success\" height='60'>
+    <p>$langDearUser!<br/><br/>$success</p>
+    </td>
+  </tr>
+  </tbody>
+  </table>
+  <p>
+    <br/><br/>$infoprof<br/><br/>				
+	$click <a href=\"$urlServer\" class=mainpage>$langHere</a> $langBackPage
+  </p>
+  <br><br/>
+	";
+     
+
+  $tool_content .= "</td></tr></table>";
+  draw($tool_content, 0);
+  exit();
 
 } else {
 
 $tool_content = "";
 $nameTools = $langUserRequest;
 
-if (isset($Add) and (empty($usercomment) or empty($name) 
-		or empty($surname) or empty($username) or empty($userphone) or empty($usermail))) {
-				$tool_content .= "<br><div align='center' class='td_main'>$langFieldsMissing<br>
-			  <a href='$_SERVER[PHP_SELF]' class=mainpage>$langTryAgain</a></div>";
-	      $tool_content .= "</td></tr></table>";
-				draw($tool_content, 0, 'auth');
-    	  exit;
+if (isset($Add) and (empty($usercomment) or empty($name) or empty($surname) or empty($username) or empty($userphone) or empty($usermail))) {
+	$tool_content .= "
+  <table width=\"99%\">
+  <tbody>
+  <tr>
+    <td class=\"caution\" height='60'>
+    <p>$langFieldsMissing</p>
+    <p><a href=\"javascript:history.go(-1)\">".$langAgain."</a></p>
+    </td>
+  </tr>
+  </tbody>
+  </table>
+  <br><br/>
+  ";
+  
+  draw($tool_content, 0, 'auth');
+  exit;
       }
 
 if (!isset($close_user_registration) or $close_user_registration == FALSE) {
@@ -91,62 +121,72 @@ if (!isset($close_user_registration) or $close_user_registration == FALSE) {
 			}
 
 $tool_content .= "
-	  <p>$langInfoStudReq</p>
-	  <table><tr><td>
-	       <FIELDSET>
-	       <LEGEND>$langUserFillData</LEGEND>
-           <form action='$_SERVER[PHP_SELF]' method='post'>
-           <table align='left' cellpadding='2' cellspacing='0'>
-		   <tr>
-	  	   	<th>$langName</th>
-           	<td><input type='text' name='name' value='".@$name."' class='auth_input'>
-			<small>&nbsp;(*)</small></td>
-           </tr>
-	   	   <tr>
-	     	<th>$langSurname</th>
-	   		<td><input type='text' name='surname' value='".@$surname."' class='auth_input'>
-			<small>&nbsp;(*)</small></td>
-		  </tr>
-		  <tr>
-	    	<th>$langphone</th>
-	    	<td><input type='text' name='userphone' value='".@$userphone."' class='auth_input'>
-			<small>&nbsp;(*)</small></td>
-		  </tr>
-		  <tr>
-	       	<th>$langProfUname</th>
-	    	<td><input type='text' name='username' size='20' maxlength='20' value='".@$username."' class='auth_input'>
-			<small>&nbsp;(*)&nbsp;$langUserNotice</small></td>
-		  </tr>
-	  	  <tr>
-		  	<th>$langProfEmail</th>
-     		<td><input type='text' name='usermail' value='".@$usermail."' class='auth_input'>
-			<small>&nbsp;(*)</small></td>
-          </tr>	
-	      <tr>
-  	 		<th>$langComments<br><small>$profreason</small></th>
-     		<td><textarea name='usercomment' COLS='30' ROWS='4' WRAP='SOFT' class='auth_input'>".@$usercomment."</textarea><small>&nbsp;(*)</small></td>
-	      </tr>
-	      <tr>
-   			<th>$langDepartment&nbsp;</th>
-   			<td><select name='department' class='auth_input'>";
+    <p>$langInfoStudReq</p>
+    <table width=\"99%\" align='left' class='FormData'>
+    <thead>
+    <tr>
+      <td>
+      <form action='$_SERVER[PHP_SELF]' method='post'>
+      <table width=\"100%\">
+       <tbody>
+       <tr>
+         <th class='left' width='20%'>$langName</th>
+         <td width='10%'><input type='text' name='name' value='".@$name."' class='FormData_InputText' size=\"33\"></td>
+         <td><small>(*)</small></td>
+       </tr>
+       <tr>
+         <th class='left'>$langSurname</th>
+         <td><input type='text' name='surname' value='".@$surname."' class='FormData_InputText' size=\"33\"></td>
+         <td><small>(*)</small></td>
+       </tr>
+       <tr>
+         <th class='left'>$langphone</th>
+         <td><input type='text' name='userphone' value='".@$userphone."' class='FormData_InputText' size=\"33\"></td>
+         <td><small>(*)</small></td>
+       </tr>
+       <tr>
+         <th class='left'>$langProfUname</th>
+         <td><input type='text' name='username' size=\"33\" maxlength='20' value='".@$username."' class='FormData_InputText'></td>
+         <td><small>(*)&nbsp;$langUserNotice</small></td>
+       </tr>
+       <tr>
+         <th class='left'>$langProfEmail</th>
+         <td><input type='text' name='usermail' value='".@$usermail."' class='FormData_InputText' size=\"33\"></td>
+         <td><small>(*)</small></td>
+       </tr>	
+       <tr>
+         <th class='left'>$langComments<br><small>$profreason</small></th>
+         <td>
+         <textarea name='usercomment' COLS='30' ROWS='4' WRAP='SOFT'  class='FormData_InputText'>".@$usercomment."</textarea>
+         </td>
+         <td><small>(*)</small></td>
+       </tr>
+       <tr>
+         <th class='left'>$langDepartment&nbsp;</th>
+         <td><select name='department'>";
 
     $deps=mysql_query("SELECT name FROM faculte order by name");
     while ($dep = mysql_fetch_array($deps)) {
-           $tool_content .= "\n<option value='$dep[0]'>$dep[0]</option>\n";
+           $tool_content .= "
+         <option value='$dep[0]'>$dep[0]</option>\n";
     }
 
-	 $tool_content .= "</select></td>
-	  </tr>				
-	  <tr>
-	    <td>&nbsp;</td>
-	    <td><input type='submit' class='ButtonSubmit' name='Add' value='$langSubmitNew'>&nbsp;&nbsp;&nbsp;&nbsp;
-			<small>$langRequiredFields</small></td>
-	  </tr></thead></tbody>
-	  </table>
-     </form>
-	 </FIELDSET>
-     </td></tr></table>"; 
+	 $tool_content .= "
+         </select></td>
+       </tr>				
+       <tr>
+         <th class='left'>&nbsp;</th>
+         <td><input type='submit' class='ButtonSubmit' name='Add' value='$langSubmitNew'></td>
+         <td><small><p align='right'>$langRequiredFields</p></small></td>
+       </tr>
+       </tbody>
+       </table>
+       </form>
+       </td>
+     </tr>
+     </thead>
+     </table>"; 
 }   // end of else if
 
-draw($tool_content, 0, 'auth');
+draw($tool_content, 0);
 ?>

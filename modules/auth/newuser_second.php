@@ -68,7 +68,7 @@ $tool_content .= "
   <tr>
     <td class=\"caution\" height='60'>
     <p>$langCharactersNotAllowed </p>
-    <p><a href=\"./newuser.php\">".$langAgain."</a></p>
+    <p><a href=\"javascript:history.go(-1)\">".$langAgain."</a></p>
   </td>
   </tr>
   </tbody>
@@ -85,7 +85,7 @@ $tool_content .= "
   <tr>
     <td class=\"caution\" height='60'>
     <p>$langEmptyFields</p>
-    <p><a href=\"./newuser.php\">".$langAgain."</a></p>
+    <p><a href=\"javascript:history.go(-1)\">".$langAgain."</a></p>
     </td>
   </tr>
   </tbody>
@@ -104,7 +104,7 @@ $tool_content .= "
   <tr>
     <td class=\"caution\" height='60'>
     <p>$langUserFree</p>
-    <p><a href=\"./newuser.php\">".$langAgain."</a></p>
+    <p><a href=\"javascript:history.go(-1)\">".$langAgain."</a></p>
     </td>
   </tr>
   </tbody>
@@ -128,7 +128,7 @@ $tool_content .= "
   <tr>
     <td class=\"caution\" height='60'>
     <p>$langPassTooEasy <strong>".substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8)."</strong></p>
-    <p><a href=\"./newuser.php\">".$langAgain."</a></p>
+    <p><a href=\"javascript:history.go(-1)\">".$langAgain."</a></p>
     </td>
   </tr>
   </tbody>
@@ -151,7 +151,7 @@ $tool_content .= "
   <tr>
     <td class=\"caution\" height='60'>
     <p>$langEmailWrong</p>
-    <p><a href=\"./newuser.php\">".$langAgain."</a></p>
+    <p><a href=\"javascript:history.go(-1)\">".$langAgain."</a></p>
     </td>
   </tr>
   </tbody>

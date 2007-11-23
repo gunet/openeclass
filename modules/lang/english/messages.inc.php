@@ -2691,7 +2691,7 @@ $langFillAgainLink="form";
 $langReqRegProf="Professor Registration Application ";
 $langProfUname="Professor User Name";
 
-$profreason="(Describe the reasons for using the platform)";
+$profreason="Describe the reasons for using the platform";
 $langProfEmail="User E-mail";
 
 $reg="Registration";

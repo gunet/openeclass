@@ -2302,7 +2302,7 @@ $langFillAgainLink="αίτηση";
 $langReqRegProf="Αίτηση Εγγραφής $langOfTeacher";
 $langProfUname="Επιθυμητό Όνομα Χρήστη (Username)";
 
-$profreason="(Αναφέρατε τους λόγους χρήσης της πλατφόρμας)";
+$profreason="Αναφέρατε τους λόγους χρήσης της πλατφόρμας";
 $langProfEmail="e-mail Χρήστη";
 $reguserldap="Εγγραφή Χρήστη μέσω LDAP";
 
