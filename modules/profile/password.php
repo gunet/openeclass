@@ -174,35 +174,38 @@ if(isset($msg))
 if (!isset($changePass)) {
 	$tool_content .= "<form method=\"post\" action=\"$passurl?submit=yes&changePass=do\">
     <table width=\"99%\">
-    <thead>
+    <tbody>
     <tr>
-        <th width=\"150\">
+        <th width=\"150\" class='left'>
             $langOldPass
         </th>
         <td>
-            <input type=\"password\" size=\"40\" name=\"old_pass\" value=\"\">
+            <input class='FormData_InputText' type=\"password\" size=\"40\" name=\"old_pass\" value=\"\">
         </td>
     </tr>
    <tr>
-        <th width=\"150\">
+        <th width=\"150\" class='left'>
             $langNewPass1
         </th>
         <td>";
 
-	$tool_content .= "<input type=\"password\" size=\"40\" name=\"password_form\" value=\"\">
+	$tool_content .= "<input class='FormData_InputText' type=\"password\" size=\"40\" name=\"password_form\" value=\"\">
 					</td>
 		</tr>
     <tr>
-        <th width=\"150\">
+        <th width=\"150\" class='left'>
             $langNewPass2
         </th>
         <td>       		
-            <input type=\"password\" size=\"40\" name=\"password_form1\" value=\"\">
+            <input class='FormData_InputText' type=\"password\" size=\"40\" name=\"password_form1\" value=\"\">
         </td>
-    </tr>";
-	$tool_content .= "
-    </thead></table>
-    <br><input type=\"Submit\" name=\"submit\" value=\"$langModify\">
+    </tr>
+	<tr>
+        <th>&nbsp;</th>
+        <td><input type=\"Submit\" name=\"submit\" value=\"$langModify\"></td>
+    </tr>
+	</tbody></table>
+    <br>
     </form>
    ";
 }

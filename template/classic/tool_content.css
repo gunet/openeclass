@@ -188,6 +188,13 @@ caption {
     border-color: #E0E0E0
 }
 
+.caution_small {
+	background-image: url(img/exclamation.gif);
+	background-repeat: no-repeat;
+	background-position: 4px 4px;
+    padding-left : 10px; 
+}
+
 .success {
 	background-image: url(./img/tick.gif);
 	background-repeat: no-repeat;

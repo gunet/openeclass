@@ -254,27 +254,25 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
 
 
 
-	$tool_content .= "<form method=\"post\" action=\"$sec?submit=yes\">
+	$tool_content .= "<form method=\"post\" action=\"$sec?submit=yes\"><br/>
     <table width=\"99%\">
-    <thead>
+    <tbody>
     <tr>
-        <th width=\"150\">$langName</th>
-     <td>
-            <input type=\"text\" size=\"40\" name=\"prenom_form\" value=\"$prenom_form\">
-        </td>
+       <th width=\"150\" class='left'>$langName</th>
+       <td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"prenom_form\" value=\"$prenom_form\"></td>
     </tr>
     <tr>
-    <th width=\"150\">$langSurname</th>
-    <td><input type=\"text\" size=\"40\" name=\"nom_form\" value=\"$nom_form\"></td>
+       <th width=\"150\" class='left'>$langSurname</th>
+       <td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"nom_form\" value=\"$nom_form\"></td>
     </tr>";
 
 	$authmethods = array("imap","pop3","ldap","db");
 	if(!in_array($password_form,$authmethods))
 	{
 		$tool_content .= "
-	<tr>
-        <th width=\"150\">$langUsername</th>
-        <td><input type=\"text\" size=\"40\" name=\"username_form\" value=\"$username_form\"></td>
+    <tr>
+       <th width=\"150\" class='left'>$langUsername</th>
+       <td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"username_form\" value=\"$username_form\"></td>
     </tr>
     ";
 	}
@@ -291,55 +289,47 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
 		$auth_text = get_auth_info($auth);
 		$tool_content .= "
     <tr>
-    <th width=\"150\">".$langUsername.
-    "</th>
-        <td class=\"caution\">".$username_form." [".$auth_text."]
+      <th width=\"150\" class='left'>".$langUsername. "</th>
+      <td class=\"caution_small\">&nbsp;&nbsp;&nbsp;&nbsp;<b>".$username_form."</b> [".$auth_text."]
         <input type=\"hidden\" name=\"password_form\" value=\"$password_form\">
         <input type=\"hidden\" name=\"password_form1\" value=\"$password_form\">
         <input type=\"hidden\" name=\"username_form\" value=\"$username_form\">
-        </td>
+      </td>
     </tr>";
 	}
 
-	$tool_content .= "<tr>
-        <th width=\"150\">
-            $langEmail
-        </th>
-        <td>
-            <input type=\"text\" size=\"40\" name=\"email_form\" value=\"$email_form\">
-        </td>
+	$tool_content .= "
     <tr>
-        <th width=\"150\">
-            $langAm
-        </th>
-        <td>
-            <input type=\"text\" size=\"20\" name=\"am_form\" value=\"$am_form\">
-        </td>
+        <th width=\"150\" class='left'>$langEmail</th>
+        <td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"email_form\" value=\"$email_form\"></td>
+    <tr>
+        <th width=\"150\" class='left'>$langAm</th>
+        <td><input class='FormData_InputText' type=\"text\" size=\"20\" name=\"am_form\" value=\"$am_form\"></td>
     </tr>";
 	##[BEGIN personalisation modification]############
 	if (session_is_registered("perso_is_active")) {
 
 		$tool_content .="
-                <tr>
-                    <th width=\"150\">
-                            eClass Personalised
-                    </th>
-                     <td>
-                        <input type=checkbox name='persoStatus' value=\"yes\" $checkedPerso>
-                    </td>
-                </tr>";
+    <tr>
+      <th width=\"150\" class='left'>eClass Personalised</th>
+      <td><input class='FormData_InputText' type=checkbox name='persoStatus' value=\"yes\" $checkedPerso></td>
+    </tr>";
 	}
 	##[END personalisation modification]############
 	$tool_content .= "
-        <tr>
-            <th>$langLanguage</th>
-            <td><input type='radio' name='userLanguage' value='el' $checkedLangEl>$langGreek<br>
-						<input type='radio' name='userLanguage' value='en'  $checkedLangEn>$langEnglish
-            </td>
-        </tr>";
-	$tool_content .= "
-    </thead></table>
-    <br><input type=\"Submit\" name=\"submit\" value=\"$langModify\">
+    <tr>
+      <th class='left'>$langLanguage</th>
+      <td>
+        <input type='radio' name='userLanguage' value='el' $checkedLangEl>$langGreek<br>
+        <input type='radio' name='userLanguage' value='en'  $checkedLangEn>$langEnglish
+      </td>
+    </tr>
+	<tr>
+      <th>&nbsp;</th>
+      <td><input type=\"Submit\" name=\"submit\" value=\"$langModify\"></td>
+    </tr>
+    </tbody></table>
+
     </form>
    ";
 }

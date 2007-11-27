@@ -53,33 +53,34 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 		$tool_content .= "
 		
 			<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
+			
 			<table width=\"99%\">
-			<thead>
+			<tbody>
 		    <tr>
 				<th width=\"120\" class='left'>$langTitle</th>
-				<td width=\"250\"><input name=\"search_terms_title\" type=\"text\" size=\"50\" /></td>
-				<td>$langTitle_Descr</td>	
+				<td width=\"250\"><input class='FormData_InputText' name=\"search_terms_title\" type=\"text\" size=\"50\" /></td>
+				<td><small>$langTitle_Descr</small></td>	
 			</tr>
 			<tr>
 				<th width=\"120\" class='left'>$langKeywords</th>				
-				<td><input name=\"search_terms_keywords\" type=\"text\" size=\"50\" /></td>
-				<td>$langKeywords_Descr</td>	
+				<td><input class='FormData_InputText' name=\"search_terms_keywords\" type=\"text\" size=\"50\" /></td>
+				<td><small>$langKeywords_Descr</small></td>	
 			</tr>
 			<tr>
 				<th width=\"120\" class='left'>$langTeacher</td>					
-				<td><input name=\"search_terms_instructor\" type=\"text\" size=\"50\" /></td>
-				<td>$langInstructor_Descr</td>
+				<td><input class='FormData_InputText' name=\"search_terms_instructor\" type=\"text\" size=\"50\" /></td>
+				<td><small>$langInstructor_Descr</small></td>
 			</tr>
 			<tr>
 				<th width=\"120\" class='left'>$langCourseCode</td>					
-				<td><input name=\"search_terms_coursecode\" type=\"text\" size=\"50\" /></td>
-				<td>$langCourseCode_Descr</td>
+				<td><input class='FormData_InputText' name=\"search_terms_coursecode\" type=\"text\" size=\"50\" /></td>
+				<td><small>$langCourseCode_Descr</small></td>
 			</tr>
 			<tr>
-				<td>&nbsp;</td>	
-				<td colspan=2><p><input type=\"Submit\" name=\"submit\" value=\"$langDoSearch\" />&nbsp;&nbsp;<input type=\"Reset\" name=\"reset\" value=\"$langNewSearch\" /></td>
+				<th>&nbsp;</th>	
+				<td colspan=2><input type=\"Submit\" name=\"submit\" value=\"$langDoSearch\" />&nbsp;&nbsp;<input type=\"Reset\" name=\"reset\" value=\"$langNewSearch\" /></td>
 			</tr>
-			</thead>							
+			</tbody>							
 			</table>
 
 			</form>

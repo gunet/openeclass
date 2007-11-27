@@ -80,13 +80,13 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 	$tool_content .= "
 	<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
 	<table width=\"99%\">
-	<thead>
+	<tbody>
 	<tr>
-		<th class='left'>$langOR</td>				
-		<td colspan=\"2\"><input name=\"or_search_terms\" type=\"text\" size=\"80\"/></td>
+		<th class='left'>$langOR</th>				
+		<td colspan=\"2\"><input class='FormData_InputText' name=\"or_search_terms\" type=\"text\" size=\"80\"/></td>
 	</tr>
 	<tr>
-		<th width=\"30%\" class='left' valign=\"top\" rowspan=\"4\">$langSearchIn</td>
+		<th width=\"30%\" class='left' valign=\"top\" rowspan=\"4\">$langSearchIn</th>
 		<td width=\"35%\"><input type=\"checkbox\" name=\"subsystems[]\" value=\"7\" checked=\"checked\" />$langAnnouncements</td>
 		<td width=\"35%\"><input name=\"subsystems[]\" type=\"checkbox\" value=\"1\" checked=\"checked\" />$langAgenda</td>
     </tr>
@@ -95,7 +95,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
         <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"3\" checked=\"checked\" />$langDoc</td>
     </tr>
 	<tr>
-		<td><input type=\"checkbox\" name=\"subsystems[]\" value=\"9\" checked=\"checked\" />$langForums</td>
+		<td><input class='FormData_InputText' type=\"checkbox\" name=\"subsystems[]\" value=\"9\" checked=\"checked\" />$langForums</td>
         <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"10\" checked=\"checked\" />$langExercices</td>
     </tr>
 	<tr>
@@ -103,13 +103,10 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
         <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"2\" checked=\"checked\" />$langLinks</td>
     </tr>
 	<tr>
-		<td colspan=\"3\">&nbsp;</td>
-    </tr>
-	<tr>
-		<td>&nbsp;</td>
+		<th>&nbsp;</th>
 		<td colspan=\"2\"><input type=\"Submit\" name=\"submit\" value=\"$langDoSearch\" />&nbsp;<input type=\"Submit\" name=\"submit\" value=\"$langNewSearch\" /></td>
     </tr>
-	</thead>		
+	</tbody>		
 	</table>		
 
 	</form>
@@ -175,8 +172,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		<div id=\"marginForm\">
 			<fieldset>
 				<legend>
-					
-						$langAnnouncements
+					$langAnnouncements
 				</legend>
 				<label>
 		<ul class=\"listBullet\">";		
