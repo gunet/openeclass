@@ -49,7 +49,7 @@
 				 Dimitris Tsachalis <ditsa@ccf.auth.gr> (Aristotele University of Thessaloniki)
 				 Ilias Mpertsimas <mhlias@noc.teilam.gr> (Technological Educational Institute of Lamia)
 				 Dionysios G. Synodinos <dsin@noc.ntua.gr> (National Technical University of Athens)
-         Michalis Psaltakis (Aegean University)
+         Michalis Psaltakis <mpsaltakis@aegean.gr> (University of the Aegean)
          Konstantinidis K. (Aristotele University of Thessaloniki)
 
 			Xinha: 
@@ -72,6 +72,8 @@
       DHTML Calendar: Copyright Mihai Bazon, 2002-2005
 	
 			Datetime class: Viatcheslav Ivanov <ivanov@e-witness.ca>, <v_iv@hotmail.com>
+		
+			POP3 class : Manuel Lemos (http://www.manuellemos.net)  <WebMaster@E-na.Net>
 
       LaTeX Rendering: Copyright (c) 2003/2004 Benjamin Zeiss <zeiss@math.uni-goettingen.de>
 

@@ -74,7 +74,7 @@ Calendar.setup = function (params) {
 	param_default("dateText",       null);
 	param_default("firstDay",       null);
 	param_default("align",          "Br");
-	param_default("range",          [1900, 2999]);
+	param_default("range",          [1999, 2015]);
 	param_default("weekNumbers",    true);
 	param_default("flat",           null);
 	param_default("flatCallback",   null);

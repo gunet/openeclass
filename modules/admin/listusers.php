@@ -445,7 +445,7 @@ if($sql)
 	                      <td valign=bottom align=middle width=20%>";
 			}		
 
-			if(!((($countUser-$startList) <= 50) OR ($endList == $countUser)))		// if end of list or complete listing, do not show "next" button
+			if(!((($countUser-$startList) <= 50) OR ($endList == $countUser)))	// if end of list or complete listing, do not show "next" button
 			{
 				if (isset($_REQUEST['ord'])) 
 				{
@@ -483,7 +483,6 @@ if($sql)
 			}	
 		}       // Show navigation buttons if ($countUser >= 50)
 
-	
 		if($view==3)
 		{
 			$qry = "SELECT a.user_id,a.nom, a.prenom, a.username, a.email, b.statut 
@@ -536,10 +535,8 @@ if($sql)
 					 "</tr></thead><tbody>";
 		}
 		
-		for ($j = 0; $j < mysql_num_rows($sql); $j++) 
-		{
-			while($logs = mysql_fetch_array($sql,MYSQL_ASSOC))
-	  	{
+		for ($j = 0; $j < mysql_num_rows($sql); $j++) {
+			while($logs = mysql_fetch_array($sql,MYSQL_ASSOC)) {
 				$tool_content .= ("<tr>");
 				$tool_content .= "<td>".htmlspecialchars($logs['nom'])."</td>".
 					"<td>".htmlspecialchars($logs['prenom'])."</td>".
@@ -554,19 +551,17 @@ if($sql)
 				}
 				$tool_content .= "<td><a href=\"edituser.php?u=".$logs['user_id']."\"><img src='../../images/edit.gif' title='$langEdit' border='0'></a></td>
 					<td><a href=\"unreguser.php?u=".$logs['user_id']."\"><img src='../../images/delete.gif' title='$langDelete' border='0'></img></a></td>
-					<td><a href=\"userstats.php?u=".$logs['user_id']."\">$langStat</a></td>\n";
+					<td align='center'><a href=\"userstats.php?u=".$logs['user_id']."\"><img src='../../template/classic/img/platform_stats.gif' border='0' title='$langStat'></img></a></td>\n";
 				$tool_content .= "</tr>";
 			}
 		}
 		// end format / display
 		$tool_content .= "</tbody></table>";
-	
 	}
 	else
 	{
 		$tool_content .= $langNoSuchUsers;
 	}
-
 }
 else
 {

@@ -43,14 +43,28 @@ $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include 'admin.inc.php';
 include '../auth/auth.inc.php';
+include '../../include/jscalendar/calendar.php';
 
 if (isset($_GET['u']) or isset($_POST['u']))
 $_SESSION['u_tmp']=$u;
 if(!isset($_GET['u']) or !isset($_POST['u']))
 $u=$_SESSION['u_tmp'];
 
+$tool_content = $head_content = "";
+
+if ($language == 'greek') {
+    $lang_editor='gr';
+    $lang_jscalendar = 'el';
+}
+  else {
+    $lang_editor='en';
+    $lang_jscalendar = $lang_editor;
+}
+
+$jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
+$head_content .= $jscalendar->get_load_files_code();
+
 // Initialise $tool_content
-$tool_content = "";
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "listusers.php", "name" => $langListUsersActions);
 $nameTools = $langEditUser;
@@ -61,22 +75,12 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
 	$u = (int)$u;
 	if(empty($u_submitted) && !isset($_REQUEST['changePass'])) // if the form was not submitted
 	{
-		$sql = mysql_query("
-		SELECT nom, prenom, username, password, email, phone, department, registered_at, expires_at FROM user
-		WHERE user_id = '$u'");
-		if (!$sql)
-		{
-			die("Unable to query database (user_id='$u')!");
-		}	
+		$sql = mysql_query("SELECT nom, prenom, username, password, email, phone, department, registered_at, expires_at 
+										FROM user	WHERE user_id = '$u'");
 		$info = mysql_fetch_array($sql);
 
-		$tool_content .= "<div id=\"operations_container\">
-		<ul id=\"opslist\">";
-
-		$tool_content .= "
-			<li><a href=\"./password.php\">".$langChangePass."</a></li>";
-
-
+		$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
+		$tool_content .= "<li><a href=\"./password.php\">".$langChangePass."</a></li>";
 		$tool_content .= " <li><a href='./listusers.php'>$langBack</a></li>";
 		$tool_content .= "</ul></div>";
 		$tool_content .= "<h4>$langEditUser $info[2]</h4>";
@@ -85,67 +89,60 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
 	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langSurname: </th><td width=\"80%\"><input type=\"text\" name=\"lname\" size=\"40\" value=\"".$info[0]."\"</td></tr>
 	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langName: </th><td width=\"80%\"><input type=\"text\" name=\"fname\" size=\"40\" value=\"".$info[1]."\"</td></tr>
 	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'  width=\"20%\">$langUsername: </th><td width=\"80%\"><input type=\"text\" name=\"username\" size=\"30\" value=\"".$info[2]."\"</td></tr>
-	
 	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">E-mail: </th><td width=\"80%\"><input type=\"text\" name=\"email\" size=\"50\" value=\"".$info[4]."\"</td></tr>
 	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langTel: </th><td width=\"80%\"><input type=\"text\" name=\"phone\" size=\"30\" value=\"".$info[5]."\"</td></tr>";
 
 		$tool_content .= "<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langDepartment: </th><td width=\"80%\">";
-		if(!empty($info[6]))
-		{
+		if(!empty($info[6])) {
 			$department_select_box = list_departments($info[6]);
-		}
-		else
-		{
+		} else {
 			$department_select_box = "";
 		}
 
-		$tool_content .= $department_select_box
-		."</td></tr>";
+		$tool_content .= $department_select_box."</td></tr>";
+		$tool_content .= "<tr>
+			<th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langRegistrationDate: </th>
+			<td width=\"80%\"><span style=\"color:green;font-weight:bold;\">".date("j/n/Y H:i",$info[7])."</span></td></tr>
+			<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langExpirationDate: </th>
+			<td width=\"80%\">";
 
-		$tool_content .= "<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langRegistrationDate: </th><td width=\"80%\"><span style=\"color:green;font-weight:bold;\">".date("j/n/Y H:i",$info[7])."</span></td></tr>
-		<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langExpirationDate: </th><td width=\"80%\">";
+		$dateregistration = date("j-n-Y", $info[8]);
+		$hour = date("H", $info[8]);
+		$minute = date("i", $info[8]);
+		
+// -- jscalendar ------
+		$start_cal = $jscalendar->make_input_field(
+       array('showOthers' => true,
+                'align' => 'Tl',
+                 'ifFormat' => '%d-%m-%Y'),
+       array('style' => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+                 'name' => 'date',
+                 'value' => $dateregistration));
+		
+		$tool_content .= $start_cal."&nbsp;&nbsp;&nbsp;";
+		$tool_content .= "<select name='hour'>
+        <option value='$hour'>$hour</option>
+        <option value='--'>--</option>";
+    for ($h=0; $h<=24; $h++)
+			 $tool_content .= "<option value='$h'>$h</option>";
+    $tool_content .= "</select>&nbsp;&nbsp;&nbsp;";
+	  $tool_content .= "<select name=\"minute\">
+	    <option value=\"$minute\">$minute</option>
+  	  <option value=\"--\">--</option>";
+    for ($m=0; $m<=55; $m=$m+5)
+          $tool_content .= "<option value='$m'>$m</option>";
+    $tool_content .= "</select></td>";
 
-		$difference = abs($info[8]-$info[7]);		// Calculate the difference between registration and expiration
-
-		$tool_content .= convert_time($difference)."<br /><br />";
-
-		// format the drop-down menu for data
-		$datetime = new DATETIMEC();
-		$datetime->set_timename("hour", "min", "sec");
-		$datetime->set_datetime_byvar2($info[8]);
-		if ($datetime->get_date_error())
-		{
-			$tool_content .= "<b><font color=red>".$datetime->get_date_error()."</font>";
-		}
-		else
-		{
-			$tool_content .= "";
-		}
-		$tool_content .= $datetime->get_select_years("ldigit", "2002", "2029", "year")." "
-		. $datetime->get_select_months(1, "sword", "month")." "
-		. $datetime->get_select_days(1, "day")."&nbsp;&nbsp;&nbsp;"
-		. $datetime->get_select_hours(1, 12, "hour")
-		. $datetime->get_select_minutes(1, "min")
-		. $datetime->get_select_seconds(1, "sec")
-		. $datetime->get_select_ampm();		// end format date-menu
-
-		$tool_content .= "</td></tr>
+		$tool_content .= "</tr>
 		<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langUserID: </th><td width=\"80%\">$u</td></tr>
 		</table>
 		<br /><input type=\"hidden\" name=\"u\" value=\"".$u."\">
 		<input type=\"hidden\" name=\"u_submitted\" value=\"1\">
 		<input type=\"hidden\" name=\"registered_at\" value=\"".$info[7]."\">
-		<input type=\"submit\" name=\"submit_edituser\" value=\"$langUpdate\"><br /><br />
+		<input type=\"submit\" name=\"submit_edituser\" value=\"$langModify\"><br /><br />
 		</form>";
 
-		$sql = mysql_query("
-			SELECT nom, prenom, username FROM user
-			WHERE user_id = '$u'");
-		if (!$sql)
-		{
-			die("Unable to query database (user_id='$u')!");
-		}
-
+		$sql = mysql_query("SELECT nom, prenom, username FROM user WHERE user_id = '$u'");
 		$sql = mysql_query("SELECT a.code, a.intitule, b.statut, a.cours_id
 			FROM cours AS a LEFT JOIN cours_user AS b ON a.code = b.code_cours
 			WHERE b.user_id = '$u' ORDER BY b.statut, a.faculte");
@@ -293,8 +290,12 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
 		}
 
 		//check for not acceptable characters in password
-		if( (strstr($_REQUEST['password_form'], "'")) or (strstr($_REQUEST['password_form'], '"')) or (strstr($_REQUEST['password_form'], '\\'))
-		or (strstr($_REQUEST['password_form1'], "'")) or (strstr($_REQUEST['password_form1'], '"')) or (strstr($_REQUEST['password_form1'], '\\')))
+		if ((strstr($_REQUEST['password_form'], "'")) 
+				or (strstr($_REQUEST['password_form'], '"')) 
+				or (strstr($_REQUEST['password_form'], '\\'))
+				or (strstr($_REQUEST['password_form1'], "'")) 
+				or (strstr($_REQUEST['password_form1'], '"')) 
+					or (strstr($_REQUEST['password_form1'], '\\')))
 		{
 			header("location:". $_SERVER['PHP_SELF']."?changePass=1&msg=9");
 			exit();
@@ -334,10 +335,16 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
 		$phone = isset($_POST['phone'])?$_POST['phone']:'';
 		$department = isset($_POST['department'])?$_POST['department']:'NULL';
 		$registered_at = isset($_POST['registered_at'])?$_POST['registered_at']:'';
-		$datetime = new DATETIMEC();
-		$datetime->set_timename("hour", "min", "sec");
-		$datetime->set_datetime_byglobal("HTTP_POST_VARS");
-		$expires_at = $datetime->get_timestamp_entered();
+		$date = isset($_POST['date'])?$_POST['date']:'';
+		$hour = isset($_POST['hour'])?$_POST['hour']:'';
+		$minute = isset($_POST['minute'])?$_POST['minute']:'';
+		
+		$date = split("-",  $date);
+    $day=$date[0];
+    $year=$date[2];
+    $month=$date[1];
+		$expires_at = mktime($hour, $minute, 0, $month, $day, $year);
+	
 		$auth_methods = array('imap','pop3','ldap','db');
 		// 2. do the database update
 		// do not allow the user to have the characters: ',\" or \\ in password
@@ -350,7 +357,7 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
 		}
 		if($registered_at>$expires_at)
 		{
-			$tool_content .= "<br >$langExpireBeforeRegister. $langPlease <a href=\"edituser.php?u=".$u."\">$langAgain</a><br />";
+			$tool_content .= "<br >$langExpireBeforeRegister <br><br>$langPlease <a href=\"edituser.php?u=".$u."\">$langAgain</a><br />";
 		}
 		elseif( (in_array("'",$pw)) || (in_array("\"",$pw)) || (in_array("\\",$pw)) )
 		{
@@ -378,7 +385,7 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
 			}
 			$username = escapeSimple($username);
 			$sql = "UPDATE user
-				SET nom='".$lname."', prenom='".$fname."', username='".$username."', password='".$password_encrypted."', email='".$email."', phone='".$phone."',department=".$department.", expires_at=".$expires_at.
+								SET nom='".$lname."', prenom='".$fname."', username='".$username."', password='".$password_encrypted."', email='".$email."', phone='".$phone."',department=".$department.", expires_at=".$expires_at.
 				" WHERE user_id = '".$u."'";
 				$qry = mysql_query($sql);
 				if (!$qry)
@@ -390,11 +397,13 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
 					$num_update = mysql_affected_rows();
 					if($num_update==1)
 					{
-						$tool_content .= "<br /><br />$langSuccessfulUpdate:".$u."<br /><br />";
+						$tool_content .= "<center><br><b>$langSuccessfulUpdate<br><br>";
+						$tool_content .= "<a href='listusers.php'>$langBack</a></center>";	
 					}
 					else
 					{
-						$tool_content .= "$langUpdateNoChange<br />";
+						$tool_content .= "<center>$langUpdateNoChange<br><br>";
+						$tool_content .= "<a href='listusers.php'>$langBack</a></center>";	
 					}
 				}
 		}
@@ -406,5 +415,5 @@ else
 	$tool_content .= "<h1>$langError</h1>\n<p><a href=\"listcours.php\">$back</p>\n";
 }
 
-draw($tool_content,3);
+draw($tool_content, 3, ' ', $head_content);
 ?>
