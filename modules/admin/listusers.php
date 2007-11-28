@@ -78,22 +78,22 @@ if($view==2)				// coming from search_user.php(search with criteria)
 		$user_am = isset($_POST['user_am'])?$_POST['user_am']:'';
 		$user_type = isset($_POST['user_type'])?$_POST['user_type']:'';
 		$user_registered_at_flag = isset($_POST['user_registered_at_flag'])?$_POST['user_registered_at_flag']:'';
-		// format the date/time filter
-		$datetime = new DATETIMEC();
-		//$datetime->set_datetime_byglobal("HTTP_POST_VARS");
-		$datetime->set_datetime_byglobal("GLOBALS['_POST']");
-		$mytime = $datetime->get_timestamp_entered();
-		if(!empty($mytime))
-		{
+		
+		$date = split("-",  $_POST['date']);
+    $day=$date[0];
+    $month=$date[1];
+    $year=$date[2];
+    $mytime = mktime($hour, $minute, 0, $month, $day, $year);
+
+		if(!empty($mytime)) {
 			$user_registered_at = $mytime;
-		}
-		else
-		{
+		} else {
 			$user_registered_at = "";
 		}
 		// end format date/time
+
 		$user_email = isset($_POST['user_email'])?$_POST['user_email']:'';
-	
+
 		// unregister their values from session variables
 		session_unregister('user_sirname');
 		session_unregister('user_firstname');

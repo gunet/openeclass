@@ -1,10 +1,8 @@
 <?
  //* @version $Id$
 /*****************************************************************************
-        DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
+        DEAL WITH  BASETHEME, OTHER INCLUDES AND NAMETOOLS
 ******************************************************************************/
-// Set the langfiles needed
-$langFiles = array('gunet','admin','about', 'usage');
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = true;
@@ -25,7 +23,6 @@ $tool_content = "";
 //ensure correct (up-to-date) information on the table.
 require_once "summarizeMonthlyData.php";
 /****************************************/
-
 
 $sql = "SELECT code FROM cours";
 $result = db_query($sql);
@@ -57,7 +54,7 @@ foreach ($course_codes as $course_code) {
     mysql_free_result($result);
 
 }
-$uptime = date("Y-m-d H:i:s", $first_date_time);
+$uptime = date("d-m-Y / H:i", $first_date_time);
 
 mysql_select_db($mysqlMainDb);
 

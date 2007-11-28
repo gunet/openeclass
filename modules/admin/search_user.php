@@ -45,16 +45,29 @@
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include 'admin.inc.php';
+include '../../include/jscalendar/calendar.php';
+
+$tool_content = $head_content = "";
+
+if ($language == 'greek') {
+    $lang_editor='gr';
+    $lang_jscalendar = 'el';
+}
+  else {
+    $lang_editor='en';
+    $lang_jscalendar = $lang_editor;
+}
+
+$jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
+$head_content .= $jscalendar->get_load_files_code();
 
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
-$nameTools = $langSearchUser;		// Define $nameTools
-$tool_content = "";		// Initialise $tool_content
+$nameTools = $langSearchUser;		
 
 // Main body
 $new = isset($_GET['new'])?$_GET['new']:'yes';		//variable of declaring a new search
 
-if((!empty($new)) && ($new=="yes")) 
-{
+if((!empty($new)) && ($new=="yes")) {
 	// It is a new search, so unregister the search terms/filters in session variables
 	session_unregister('user_sirname');
 	session_unregister('user_firstname');
@@ -68,7 +81,7 @@ if((!empty($new)) && ($new=="yes"))
 	unset($user_firstname);
 	unset($user_username);
 	unset($user_am);
-	unset($user_type);
+				unset($user_type);
 	unset($user_registered_at_flag);
 	unset($user_registered_at);
 	unset($user_email);
@@ -84,6 +97,7 @@ $user_registered_at_flag = isset($_SESSION['user_registered_at_flag'])?$_SESSION
 $user_registered_at = isset($_SESSION['user_registered_at'])?$_SESSION['user_registered_at']:time();
 $user_email = isset($_SESSION['user_email'])?$_SESSION['user_email']:'';
 
+// display link to inactive users
 $tool_content .= "<a href=\"listusers.php?c=4\">".$langInactiveUsers."</a><br><br>";
 
 // display the search form
@@ -91,26 +105,20 @@ $tool_content .= "<form action=\"listusers.php?search=".$new."\" method=\"post\"
 $tool_content .= "<table width=\"99%\"><tbody>";
 $tool_content .= "<tr>
     <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langSurname</b>:</th>
-    <td><input type=\"text\" name=\"user_sirname\" size=\"40\" value=\"".$user_sirname."\"></td>
-</tr>
+ <td><input type=\"text\" name=\"user_sirname\" size=\"40\" value=\"".$user_sirname."\"></td></tr>
 <tr>
-    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langName</b>:</th>
-    <td><input type=\"text\" name=\"user_firstname\" size=\"40\" value=\"".$user_firstname."\"></td>
-</tr>
-";
+ <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langName</b>:</th>
+<td><input type=\"text\" name=\"user_firstname\" size=\"40\" value=\"".$user_firstname."\"></td></tr>";
 $tool_content .= "  <tr>
     <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langAm:</b></th>
-    <td><input type=\"text\" name=\"user_am\" size=\"30\" value=\"".$user_am."\"></td>
-</tr>";
-$tool_content .= "  <tr>
-    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langUserType ($langStudent/$langTeacher):</b></th>
-    <td>";
+   <td><input type=\"text\" name=\"user_am\" size=\"30\" value=\"".$user_am."\"></td></tr>";
+$tool_content .= "<tr>
+    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langUserType ($langStudent/$langTeacher):</b></th><td>";
 $usertype_data = array();
 $usertype_data[5] = $langStudent;
 $usertype_data[1] = $langTeacher;
 $tool_content .= selection2($usertype_data,"user_type",$user_type);
-$tool_content .= "</td>
-</tr>";
+$tool_content .= "</td></tr>";
 $tool_content .= " <tr>
     <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langRegistrationDate:</b></th>
     <td>";
@@ -118,51 +126,45 @@ $user_registered_at_flag_data = array();
 $user_registered_at_flag_data[1] = $langAfter;
 $user_registered_at_flag_data[2] = $langBefore;
 $tool_content .= selection2($user_registered_at_flag_data,"user_registered_at_flag",$user_registered_at_flag);
-    
-// format the drop-down menu for data
-$datetime = new DATETIMEC();
-$datetime->set_timename("hour", "min", "sec");
-$datetime->set_datetime_byvar2($user_registered_at);
-$mytime = $datetime->get_timestamp_entered();
-$user_registered_at = $mytime;
 
-if ($datetime->get_date_error())
-{
-	$tool_content .= "<b><font color=red>".$datetime->get_date_error()."</font>";
-}
-else 
-{
-	$tool_content .= "&nbsp;";
-}
+    $start_cal = $jscalendar->make_input_field(
+       array('showOthers' => true,
+                'align' => 'Tl',
+                 'ifFormat' => '%d-%m-%Y'),
+       array('style' => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+                 'name' => 'date',
+                 'value' => ' '));
 
-$tool_content .= $datetime->get_select_years("ldigit", "2002", "2029", "year")." "
-	. $datetime->get_select_months(1, "sword", "month")." "
-	. $datetime->get_select_days(1, "day")."&nbsp;&nbsp;&nbsp;"
-	. $datetime->get_select_hours(1, 12, "hour")
-	. $datetime->get_select_minutes(1, "min")
-	. $datetime->get_select_seconds(1, "sec")
-	. $datetime->get_select_ampm();
-	
-$tool_content .= "</td></tr>";  
+    $tool_content .= $start_cal."&nbsp;&nbsp;&nbsp;";
+    @$tool_content .= "<select name='hour'>
+        <option value='$hour'>$hour</option>
+        <option value='--'>--</option>";
+    for ($h=0; $h<=24; $h++)
+       $tool_content .= "<option value='$h'>$h</option>";
+    $tool_content .= "</select>&nbsp;&nbsp;&nbsp;";
+    @$tool_content .= "<select name=\"minute\">
+      <option value=\"$minute\">$minute</option>
+      <option value=\"--\">--</option>";
+    for ($m=0; $m<=55; $m=$m+5)
+          $tool_content .= "<option value='$m'>$m</option>";
+    $tool_content .= "</select></td>";
+
+    $tool_content .= "</tr>";
+
 $tool_content .= "<tr>
-    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langEmail:</b></th>
-    <td><input type=\"text\" name=\"user_email\" size=\"40\" value=\"".$user_email."\"></td>
-</tr>";
+<th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langEmail:</b></th><td><input type=\"text\" name=\"user_email\" size=\"40\" value=\"".$user_email."\"></td></tr>";
+$tool_content .= "<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langUsername:</b></th>
+<td><input type=\"text\" name=\"user_username\" size=\"40\" value=\"".$user_username."\"></td></tr>";
 $tool_content .= "<tr>
-    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langUsername:</b></th>
-    <td><input type=\"text\" name=\"user_username\" size=\"40\" value=\"".$user_username."\"></td>
-</tr>";
-$tool_content .= "  <tr>
-    <td colspan=\"2\"><br />
+    <td colspan=\"2\"><br>
     <input type=\"hidden\" name=\"c\" value=\"searchlist\">
     <input type=\"submit\" name=\"search_submit\" value=\"$langSearch\"></td>
   </tr>";
 $tool_content .= "</tbody></table></form>";
 // end form
 
-
 $tool_content .= "<br /><center><p><a href=\"index.php\">$langBack</a></p></center>";
 
 // 3: display administrator menu
-draw($tool_content,3, 'admin');
+draw($tool_content,3, 'admin', $head_content);
 ?>
