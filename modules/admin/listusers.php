@@ -57,12 +57,11 @@ $nameTools = $langListUsersActions;
 $search = isset($_GET['search'])?$_GET['search']:'';
 $c = isset($_GET['c'])?$_GET['c']:(isset($_POST['c'])?$_POST['c']:'');
 
-
 switch($c)		// get the case for each different listing
 {
 	case '0': $view = 1;		break;		// normal listing
 	case '':	$view = 1;		break;		// normal listing
-	case '4': $view = 1; break; // normal listing. Dispaly the inactive accounts
+	case '4': $view = 1; break; // normal listing. Display the inactive accounts
 	case 'searchlist': $view = 2;		break;		// search listing (search_user.php)
 	default:	$view = 3;	break;		// list per course
 }
@@ -79,11 +78,15 @@ if($view==2)				// coming from search_user.php(search with criteria)
 		$user_type = isset($_POST['user_type'])?$_POST['user_type']:'';
 		$user_registered_at_flag = isset($_POST['user_registered_at_flag'])?$_POST['user_registered_at_flag']:'';
 		
-		$date = split("-",  $_POST['date']);
-    $day=$date[0];
-    $month=$date[1];
-    $year=$date[2];
-    $mytime = mktime($hour, $minute, 0, $month, $day, $year);
+	  $date = split("-",  $_POST['date']);
+		if (array_key_exists(1, $date)) {			
+    		$day=$date[0];
+		    $month=$date[1];
+    		$year=$date[2];
+		    $mytime = mktime($hour, $minute, 0, $month, $day, $year);
+		 } else {
+		    $mytime = mktime($hour, $minute, 0, 0, 0, 0);
+		}
 
 		if(!empty($mytime)) {
 			$user_registered_at = $mytime;
@@ -285,7 +288,6 @@ else
 }
 // end filter/criteria
 
-
 $ord = isset($_GET['ord'])?$_GET['ord']:'';
 if(!empty($ord)) 
 {
@@ -297,23 +299,17 @@ if(!empty($ord))
 		case "u":		$order = "username,statut,prenom"; break;
 		default:		$order = "statut,prenom,nom"; break;
     }
-} 
-else 
-{
+} else {
 	$order = "statut";
 }
 
 $caption ="";
-	
-	
-if($view==3)
-{
+		
+if($view==3) {
 	$qry = "SELECT a.user_id,a.nom, a.prenom, a.username, a.email, b.statut 
 		FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
 		WHERE b.code_cours='".$c."'";
-}
-else
-{
+} else {
 	// Count users, with or without criteria/filters
 	$qry = "SELECT user_id,nom,prenom,username,email,statut FROM user";
 	if((!empty($user_sirname_qry)) || (!empty($user_firstname_qry)) || (!empty($user_username_qry)) || (!empty($user_am_qry)) || (!empty($user_type_qry)) || (!empty($user_registered_at_qry)) || (!empty($user_email_qry)) || (!empty($users_active_qry)) )
@@ -321,7 +317,6 @@ else
 		$qry .= " WHERE".$user_sirname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$user_type_qry.$user_registered_at_qry.$user_email_qry.$users_active_qry;
 	}		
 }
-//$tool_content .= $qry . "<br>";
 $sql = mysql_query($qry);
 if($sql)
 {
@@ -345,14 +340,14 @@ if($sql)
 	if($countUser>0)
 	{
 		$caption = "";
-		$caption .= "<p><i>$langThereAre <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents και <b>$visitors</b> $langVisitors</i></p>";
-		$caption .= "<p><i>$langTotal <b>$countUser</b> $langUsers</i>";
+		$caption .= "<p><i>$langThereAre: <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents και <b>$visitors</b> $langVisitors</i></p>";
+		$caption .= "<p><i>$langTotal: <b>$countUser</b> $langUsers</i>";
 
 		if($countUser>0)
 		{
 			if($c==4)
 			{
-				$caption .= " ως μη ενεργοί</p>";
+				$caption .= "$langAsInactive</p>";
 				$caption .= "</p><p><a href=\"updatetheinactive.php?activate=1\">".$langAddSixMonths."</a></p>";
 			}
 			else
@@ -405,14 +400,14 @@ if($sql)
       	  <td valign=bottom align=left width=20%>
 					<form method=post action=\"$_SERVER[PHP_SELF]?numbList=begin\">
 					<input type=submit value=\"$langBegin<<\" name=\"numbering\"></form></td>
-	                          <td valign=bottom align=middle width=20%>";
+	        <td valign=bottom align=middle width=20%>";
 	    if($startList!=0)		// if beginning of list or complete listing, do not show "previous" button
 	    {
 				if (isset($_REQUEST['ord'])) 
 				{
 	       	$tool_content .= "<form method=post action=\"$_SERVER[PHP_SELF]?startList=$startList&numbList=less&ord=$_REQUEST[ord]\">
-        	       <input type=submit value=\"$langPreced50<\" name=\"numbering\">
-              		</form>";
+       	       <input type=submit value=\"$langPreced50<\" name=\"numbering\">
+           		 </form>";
 				} 
 				else 
 				{
@@ -422,24 +417,18 @@ if($sql)
 				}
 			}
 
-			if (isset($_REQUEST['ord'])) 
-			{
-	    	$tool_content .= "
-	                     </td>
-	                     <td valign=bottom align=middle width=20%>
+			if (isset($_REQUEST['ord']))  {
+	    	$tool_content .= "</td><td valign=bottom align=middle width=20%>
 	                     <form method=post action=\"$_SERVER[PHP_SELF]?startList=$startList&numbList=all&ord=$_REQUEST[ord]\">
 	                         <input type=submit value=\"$langAll\" name=numbering>
 	                     </form>
 	                     </td>
 	                     <td valign=bottom align=middle width=20%>";
-			} 
-			else 
-			{
-				$tool_content .= "
-	                      </td>
+			} else 	{
+				$tool_content .= "</td>
 	                      <td valign=bottom align=middle width=20%>
 	                      <form method=post action=\"$PHP_SELF?startList=$startList&numbList=all\">
-	                           <input type=submit value=\"$langAll\" name=numbering>
+	                       <input type=submit value=\"$langAll\" name=numbering>
 	                      </form>
 	                      </td>
 	                      <td valign=bottom align=middle width=20%>";
@@ -473,24 +462,21 @@ if($sql)
 			else 
 			{
 	    	$tool_content .= "</td>
-	                          <td valign=bottom align=right width=20%>
-	                               <form method=post action=\"$_SERVER[PHP_SELF]?numbList=final\">
-	                                <input type=submit value=\"$langEnd>>\" name=numbering>
-	                              </form>
-	                              </td>
-	                              </tr>
+	                        <td valign=bottom align=right width=20%>
+	                         <form method=post action=\"$_SERVER[PHP_SELF]?numbList=final\">
+	                         <input type=submit value=\"$langEnd>>\" name=numbering>
+	                         </form>
+	                         </td>
+	                         </tr>
 	                	</table>"; 
 			}	
 		}       // Show navigation buttons if ($countUser >= 50)
 
-		if($view==3)
-		{
+		if($view==3) {
 			$qry = "SELECT a.user_id,a.nom, a.prenom, a.username, a.email, b.statut 
 			FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
 			WHERE b.code_cours='".$c."'";
-		}
-		else
-		{
+		} else {
 			$qry = "SELECT user_id,nom,prenom,username,email,statut FROM user";
 			if((!empty($user_sirname_qry)) || (!empty($user_firstname_qry)) 
 				|| (!empty($user_username_qry)) || (!empty($user_am_qry)) 
@@ -503,7 +489,6 @@ if($sql)
 	
 		$qry .= "	ORDER BY $order LIMIT $startList, $endList";
 		mysql_free_result($sql);
-	
 		$sql = mysql_query($qry);
 	
 		/****************************************
@@ -530,8 +515,7 @@ if($sql)
 					 "<a href=\"listusers.php?ord=u\">$langUsername</a></th>".
 					 "<th scope=\"col\">$langEmail</th>".
 					 "<th scope=\"col\"><a href=\"listusers.php?ord=s\">$langProperty</a></th>".
-					 "<th scope=\"col\" colspan='2'>$langActions</th>".
-					 "<th scope=\"col\">$langStats</th>".
+					 "<th scope=\"col\" colspan='3'>$langActions</th>".
 					 "</tr></thead><tbody>";
 		}
 		
@@ -541,15 +525,15 @@ if($sql)
 				$tool_content .= "<td>".htmlspecialchars($logs['nom'])."</td>".
 					"<td>".htmlspecialchars($logs['prenom'])."</td>".
 					"<td>".htmlspecialchars($logs['username'])."</td>".
-					"<td>".htmlspecialchars($logs['email'])."</td>";
+					"<td>".htmlspecialchars($logs['email'])."</td><td align='center'>";
 				switch ($logs['statut']) 
 				{
-					case 1:		$tool_content .= "<td>$langTeacher</td>";break;
-	   			case 5:		$tool_content .= "<td>$langStudent</td>";break;
-					case 10:	$tool_content .= "<td>$langVisitor</td>";break;
-	   			default:	$tool_content .= "<td>$langOther ($logs[6])</td>";break;
+					case 1:		$tool_content .= "<img src='../../template/classic/img/teacher.gif' title='$langTeacher'></img>";break;
+	   			case 5:		$tool_content .= "<img src='../../template/classic/img/student.gif' title='$langStudent'></img>";break;
+					case 10:	$tool_content .= "<img src='../../template/classic/img/guest.gif' title='$langVisitor'></img>";break;
+	   			default:	$tool_content .= "$langOther ($logs[6])";break;
 				}
-				$tool_content .= "<td><a href=\"edituser.php?u=".$logs['user_id']."\"><img src='../../images/edit.gif' title='$langEdit' border='0'></a></td>
+				$tool_content .= "</td><td><a href=\"edituser.php?u=".$logs['user_id']."\"><img src='../../images/edit.gif' title='$langEdit' border='0'></a></td>
 					<td><a href=\"unreguser.php?u=".$logs['user_id']."\"><img src='../../images/delete.gif' title='$langDelete' border='0'></img></a></td>
 					<td align='center'><a href=\"userstats.php?u=".$logs['user_id']."\"><img src='../../template/classic/img/platform_stats.gif' border='0' title='$langStat'></img></a></td>\n";
 				$tool_content .= "</tr>";
@@ -567,10 +551,8 @@ else
 {
 	$tool_content .= "<br />$langNoUserList<br />";
 }
-
 $tool_content .= "<p><center><a href=\"index.php\">$langBack</a></p></center>";
 
 // 3: display administrator menu
 draw($tool_content,3);
-
 ?>

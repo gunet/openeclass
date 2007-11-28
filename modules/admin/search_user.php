@@ -136,19 +136,14 @@ $tool_content .= selection2($user_registered_at_flag_data,"user_registered_at_fl
                  'value' => ' '));
 
     $tool_content .= $start_cal."&nbsp;&nbsp;&nbsp;";
-    @$tool_content .= "<select name='hour'>
-        <option value='$hour'>$hour</option>
-        <option value='--'>--</option>";
+    @$tool_content .= "<select name='hour'>";
     for ($h=0; $h<=24; $h++)
        $tool_content .= "<option value='$h'>$h</option>";
     $tool_content .= "</select>&nbsp;&nbsp;&nbsp;";
-    @$tool_content .= "<select name=\"minute\">
-      <option value=\"$minute\">$minute</option>
-      <option value=\"--\">--</option>";
+    @$tool_content .= "<select name=\"minute\">";
     for ($m=0; $m<=55; $m=$m+5)
           $tool_content .= "<option value='$m'>$m</option>";
     $tool_content .= "</select></td>";
-
     $tool_content .= "</tr>";
 
 $tool_content .= "<tr>

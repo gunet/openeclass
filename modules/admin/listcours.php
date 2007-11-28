@@ -150,23 +150,23 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	$logs = mysql_fetch_array($sql);
 	$tool_content .= "  <tr>\n";
 	 for ($i = 0; $i < 2; $i++) {
-	 	$tool_content .= "    <td width=\"500\">".htmlspecialchars($logs[$i])."</td>\n";
+	 	$tool_content .= "<td width=\"500\">".htmlspecialchars($logs[$i])."</td>\n";
 	}
-	$tool_content .= "    <td width='500'>".htmlspecialchars($logs[2])." (".$logs[3].")</td>\n";
+	$tool_content .= "<td width='500'>".htmlspecialchars($logs[2])." (".$logs[3].")</td>\n";
 	// Define course type
 	switch ($logs[4]) {
 	case 2:
-		$tool_content .= "    <td>$langOpenCourse</td>\n";
+		$tool_content .= "<td align='center'><img src='../../images/OpenCourse.gif' title='$langOpenCourse'></img></td>\n";
 		break;
 	case 1:
-		$tool_content .= "    <td>$langRegCourse</td>\n";
+		$tool_content .= "<td align='center'><img src='../../images/Registration.gif' title='$langRegCourse'></img></td>\n";
 		break;
 	case 0:
-		$tool_content .= "    <td>$langClosedCourse</td>\n";
+		$tool_content .= "<td align='center'><img src='../../images/ClosedCourse.gif' title='$langClosedCourse'></img></td>\n";
 		break;
 	}
 	// Add links to course users, delete course and course edit
-	$tool_content .= "    <td><a href=\"listusers.php?c=".$logs[1]."\">".$langUsers."</a></td>
+	$tool_content .= "<td align='center'><a href=\"listusers.php?c=".$logs[1]."\"><img src='../../template/classic/img/user_list.gif' title='$langUsers' border='0'></img></a></td>
     <td><a href=\"delcours.php?c=".$logs[1]."\"><img src='../../images/delete.gif' title='$langDelete' border='0'></img></a></td>
     <td><a href=\"editcours.php?c=".$logs[1]."".$searchurl."\"><img src='../../images/edit.gif' title='$langEdit' border='0'></img></a></td>\n";
 }
