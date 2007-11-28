@@ -62,8 +62,42 @@ $helpTopic = 'Questionnaire';
 
 include '../../include/baseTheme.php';
 
-// For using with th epop-up calendar
-include 'jscalendar.inc.php';
+$local_style = '
+    .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
+     padding-left: 15px; padding-right : 15px; }
+    .content {position: relative; left: 25px; }';
+
+include('../../include/jscalendar/calendar.php');
+
+if ($language == 'greek') {
+    $lang = 'el';
+} else if ($language == 'english') {
+    $lang = 'en';
+}
+
+$jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
+$local_head = $jscalendar->get_load_files_code();
+
+$u_date_start = strftime('%Y-%m-%d %H:%M:%S', strtotime('now -0 day'));
+$u_date_end = strftime('%Y-%m-%d %H:%M:%S', strtotime('now +1 year'));
+
+$start_cal_Survey = $jscalendar->make_input_field(
+           array('showsTime'      => true,
+                 'showOthers'     => true,
+                 'ifFormat'       => '%Y-%m-%d %H:%M:%S',
+                 'timeFormat'     => '24'),
+           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+                 'name'        => 'SurveyStart',
+                 'value'       => $u_date_start));
+
+$end_cal_Survey = $jscalendar->make_input_field(
+           array('showsTime'      => true,
+                 'showOthers'     => true,
+                 'ifFormat'       => '%Y-%m-%d %H:%M:%S',
+                 'timeFormat'     => '24'),
+           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+                 'name'        => 'SurveyEnd',
+                 'value'       => $u_date_end));
 
 $nameTools = $langSurveyCreate;
 $navigation[] = array("url"=>"questionnaire.php", "name"=> $langQuestionnaire);
