@@ -330,7 +330,7 @@ if (isset($back1) or !isset($visit)) {
     </tr>
     <tr>
       <th>&nbsp;</th>
-      <td width='350'><input type='submit' name='back2' value='< $langPreviousStep '>&nbsp;<input type='submit' name='create_course' value=\"$langFinalize\"></td>
+      <td width='400'><input type='submit' name='back2' value='< $langPreviousStep '>&nbsp;<input type='submit' name='create_course' value=\"$langFinalize\"></td>
       <td><p align='right'><small>$langFieldsOptionalNote</small></p></td>
     </tr>
     </tbody>
