@@ -233,7 +233,6 @@ $langCourseEditSuccess = "Course information modified with success!";
 $langCourseInfoEdit = "Modify Course Information";
 $langCourseInfos = "Course Information";
 $langDepartment = "Faculty";
-$langUsers = "Users";
 $langEdit = "Edit";
 
 // listreq.php
@@ -309,7 +308,6 @@ $langVisitors = "Visitors";
 $langTeacher = "Teacher";
 $langVisitor = "Visitor";
 $langOther = "Other";
-$langUsers = "Users";
 $langThereAre = "There are";
 $langTotal = "Total";
 $langProperty = "Property";
@@ -321,7 +319,7 @@ $langNoUserList = "No listing results";
 $langContactAdmin = "Send a message to the Administrator";
 $langActivateAccount = "Please activate my account";
 $langLessonCode = "Course code";
-
+$langAsInactive = "as inactive";
 // unregister
 $langConfirmDelete = "Delete Confirmation";
 $langConfirmDeleteQuestion1 = "Are you sure that you want to delete the user";
@@ -566,19 +564,16 @@ $langDelLk="Do you really want to delete this link?";
 $langRemove="Remove";
 $langDeactivate="Deactivate";
 $langActivate="Activate";
-
 $langCourseCreate = "Create a web Course";
 $langEnter = "Enter";
 $langNameOfTheLink = "Name of the link";
 $langModify = "Modify";
 $langUpdate = "Modify Link";
 $langIcon = "Icon";
-
-$langUsers = "Users";
 $langRegistered = "registered";
 $langLessonCode = "Lesson code";
 $langIdentity = "Identity";
-
+$langAdminUsers = "Users Administration";
 
 /*******************************************************
 * course_info.inc.php
@@ -719,7 +714,6 @@ $langVideo="Video";
 $langVideoLinks="Video Links";
 $langWorks="Students Papers";
 $langAnnouncements="Announcements";
-$langUsers="Users";
 $langForums="Forums";
 $langExercices="Exercices";
 $langAddPageHome="Upload Webpage";
@@ -1758,7 +1752,6 @@ $langUp = "Up";
 $langUseOfPool = "This page allows you to view all the modules available in this course. <br /> Any exercise or document that has been added in a learning path will also appear in this list.";
 $langUsedInLearningPaths = "Number of learning paths using this module : ";
 $langUser = "User";
-$langUsers = "Users";
 $langView = "View";
 $langViewMode = "View mode";
 $langVisibility = "Visibility";
@@ -2561,7 +2554,6 @@ $langOldPass="Current password";
 $langChangePass="Modify password";
 
 // user.php
-$langUsers="Users";
 $langModRight="Modify admin rights of";
 $langNone="None";
 $langAll="All";
@@ -3412,7 +3404,6 @@ $langUserIsPlaformAdmin = "Is platform admin";
 $langUserName = "User name";
 $langUserTaken = "This user name is already taken";
 $langUserid = "User Id";
-$langUsers = "Users";
 $langViewMode = "View mode";
 $langWarning = "Warning.";
 $langWiki = "Wiki";

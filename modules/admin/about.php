@@ -47,8 +47,6 @@
 /*****************************************************************************
         DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
 ******************************************************************************/
-// Set the langfiles needed
-$langFiles = array('admin','about');
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
@@ -97,10 +95,7 @@ foreach ($course_codes as $course_code) {
     }
     mysql_free_result($result);
 }
-$uptime = date("Y-m-d H:i:s", $first_date_time);
-
-
-
+$uptime = date("d-m-Y H:i", $first_date_time);
 
 // Constract a table with all information
 $tool_content .= "<table width=\"99%\">
@@ -110,25 +105,21 @@ $tool_content .= "<table width=\"99%\">
 <p align=center><b>".$langEclassVersion."</b></p>
 <p align=center>".$langHostName."<b>".$SERVER_NAME."</b></p>
 <p align=center>".$langWebVersion."<b>".$SERVER_SOFTWARE."</b></p>";
+
 // Check if we have mysql database to display its information
 if (extension_loaded('mysql'))
     $tool_content .= "<p align=center>$langMySqlVersion<b>".mysql_get_server_info()."</b></p>";
 else // If not display message no MySQL
     $tool_content .= "<p align=center font color=\"red\">".$langNoMysql."</p>";
+
 // Close table correctly
+$tool_content .= "<p align=center>".$langTotalCourses.": <b>".$totalCourses."</b></p>
+									<p align=center>".$langTotalHits.": <b>".$totalHits."</b></p>
+									<p align=center>".$langUptime.": <b>".$uptime."</b></p>";
+$tool_content .= "<br></tbody></td></tr></table>";
 
-$tool_content .=
-"<p align=center>".$langTotalCourses.": <b>".$totalCourses."</b></p>
-<p align=center>".$langTotalHits.": <b>".$totalHits."</b></p>
-<p align=center>".$langUptime.": <b>".$uptime."</b></p>";
-
-$tool_content .="
-<br></tbody></td></tr></table>";
 // Display link back to index.php
 $tool_content .= "<br><center><p><a href=\"index.php\">".$langBack."</a></p></center>";
-
-
-
 
 /*****************************************************************************
         DISPLAY HTML

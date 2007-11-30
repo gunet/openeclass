@@ -58,7 +58,7 @@ $langSemiopen = "απαιτούν εγγραφή";
 $langUsers = "χρήστες";
 $langUser = "χρήστης";
 $langSupportUser = "Υπεύθυνος Υποστήριξης:";
-
+$langAdminUsers = "Διαχείριση Χρηστών";
 /********************************************
 * addadmin.inc.php
 *********************************************/
@@ -109,7 +109,6 @@ $langConfigFile = "Αρχείο ρυθμίσεων";
 $langDBaseAdmin = "Διαχείριση Β.Δ. (phpMyAdmin)";
 $langActions = "Ενέργειες";
 $langAdminProf = "Διαχείριση $langOfTeachers";
-$langAdminUsers = "Διαχείριση Χρηστών";
 $langAdminCours = "Διαχείριση Μαθημάτων";
 $langGenAdmin="Άλλα Εργαλεία";
 $langBackAdmin = "Επιστροφή στη σελίδα διαχείρισης";
@@ -183,6 +182,7 @@ $langPreced50 = "Προηγούμενοι 50";
 $langFollow50 = "Επόμενοι 50";
 $langAll="όλοι";
 $langNoSuchUsers = "Δεν υπάρχουν χρήστες σύμφωνα με τα κριτήρια που ορίσατε";
+$langAsInactive = "ως μη ενεργοί";
 
 // listcours
 $langOpenCourse = "Ανοιχτό";
