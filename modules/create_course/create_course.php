@@ -181,17 +181,17 @@ if (isset($back1) or !isset($visit)) {
     </tr>
     <tr>
       <th class='left' width=\"160\">$langDescrInfo&nbsp;:</th>
-      <td width=\"160\"><textarea name='description' cols='50' rows='4' class='FormData_InputText'>$description</textarea></td>
+      <td width=\"160\"><textarea name='description' cols='50' rows='6' class='FormData_InputText' wrap=\"soft\">$description</textarea></td>
       <td>&nbsp;</td>
     </tr>
     <tr>
       <th class='left' width=\"160\">$langCourseKeywords&nbsp;:</th>
-      <td width=\"160\"><textarea name='course_keywords' cols='50' rows='2' class='FormData_InputText'>$course_keywords</textarea></td>
+      <td width=\"160\"><textarea name='course_keywords' cols='50' rows='6' class='FormData_InputText'>$course_keywords</textarea></td>
       <td>&nbsp;</td>
     </tr>
     <tr>
       <th class='left' width=\"160\">$langCourseAddon&nbsp;:</th>
-      <td width=\"160\"><textarea name='course_addon' cols='50' rows='4' class='FormData_InputText'>$course_addon</textarea></td>
+      <td width=\"160\"><textarea name='course_addon' cols='50' rows='6' class='FormData_InputText'>$course_addon</textarea></td>
       <td>&nbsp;</td>
     </tr>
     <tr>
@@ -223,21 +223,21 @@ if (isset($back1) or !isset($visit)) {
       <table>
       <tr>
          <td width='30'><img src=\"../../images/OpenCourse.gif\" alt=\"".$m['legopen']."\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\"></td>
-         <td width='160'>".$m['legopen']."</td>
-         <td width='30' ><input name=\"formvisible\" type=\"radio\" value=\"2\" checked=\"checked\" /></td>
-         <td><p align='right'><small>$langPublic</small></p></td>
+         <td width='200'>".$m['legopen']."</td>
+         <td width='5' ><input name=\"formvisible\" type=\"radio\" value=\"2\" checked=\"checked\" /></td>
+         <td width='325'><p align='right'><small>$langPublic</small></p></td>
       </tr>
       <tr>
-         <td><img src=\"../../images/Registration.gif\" alt=\"".$m['legrestricted']."\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\"></td>
-         <td>".$m['legrestricted']."</td>
-         <td><input name=\"formvisible\" type=\"radio\" value=\"1\" /></td>
-         <td><p align='right'><small>$langPrivOpen</small></p></td>
+         <td width='30'><img src=\"../../images/Registration.gif\" alt=\"".$m['legrestricted']."\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\"></td>
+         <td width='200'>".$m['legrestricted']."</td>
+         <td width='5'><input name=\"formvisible\" type=\"radio\" value=\"1\" /></td>
+         <td width='325'><p align='right'><small>$langPrivOpen</small></p></td>
       </tr>
       <tr>
-         <td><img src=\"../../images/ClosedCourse.gif\" alt=\"".$m['legclosed']."\" title=\"".$m['legclosed']."\" width=\"16\" height=\"16\"></td>
-         <td>".$m['legclosed']."</td>
-         <td><input name=\"formvisible\" type=\"radio\" value=\"0\" /></td>
-         <td><p align='right'><small>$langPrivate</small></p></td>
+         <td width='30'><img src=\"../../images/ClosedCourse.gif\" alt=\"".$m['legclosed']."\" title=\"".$m['legclosed']."\" width=\"16\" height=\"16\"></td>
+         <td width='200'>".$m['legclosed']."</td>
+         <td width='5'><input name=\"formvisible\" type=\"radio\" value=\"0\" /></td>
+         <td width='325'><p align='right'><small>$langPrivate</small></p></td>
       </tr>
       </table>
 
@@ -253,11 +253,11 @@ if (isset($back1) or !isset($visit)) {
       <table>
       <tr>
         <td width='30' ><img src=\"../../template/classic/img/calendar_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
-        <td width='160'>$langAgenda</td>
+        <td width='200'>$langAgenda</td>
         <td width='30' ><input name=\"subsystems[]\" type=\"checkbox\" value=\"1\" checked=\"checked\" /></td>
         <th width='2' >&nbsp;</th>
         <td width='30' >&nbsp;<img src=\"../../template/classic/img/dropbox_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
-        <td width='160'>$langDropBox</td>
+        <td width='200'>$langDropBox</td>
         <td width='30' ><input type=\"checkbox\" name=\"subsystems[]\" value=\"15\" /></td>
       </tr>
       <tr>
@@ -460,13 +460,13 @@ if (isset($create_course)) {
   <tbody>
   <tr>
     <td class=\"success\" height='60'>
-    <p>$langJustCreated: &nbsp;<b>$intitule</b></p>
-    <p><a href='../../courses/$repertoire/index.php' class=mainpage>$langEnter</a></p>
-    <p align='right'><small>$langEnterMetadata</small></p>
+    <p>$langJustCreated: &nbsp;<b>$intitule</b></p><br />
+    <p align='center'><a href='../../courses/$repertoire/index.php' class=mainpage>$langEnter</a></p>
     </td>
   </tr>
   </tbody>
-  </table>
+  </table><br /><br />
+  <p align='right'><small>$langEnterMetadata</small></p>
   
 ";
 
