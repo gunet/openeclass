@@ -181,8 +181,8 @@ mysql_query("INSERT INTO users VALUES (
 ####################### EXERCICES ###########################################
 // Scoring table for grouped True/False
 mysql_query("CREATE TABLE mc_scoring
-                (id INT  not null AUTO_INCREMENT, choice_count INT  not null , false_count INT  not null , score INT  not null  ,
-                PRIMARY KEY (id, choice_count, false_count))
+           (id INT  not null AUTO_INCREMENT, choice_count INT  not null , false_count INT  not null , score INT  not null  ,
+            PRIMARY KEY (id, choice_count, false_count))
             TYPE=MyISAM $charset_spec");
 
     $maxChoiceCount=8;
@@ -207,11 +207,11 @@ mysql_query("CREATE TABLE exercices (
       TimeConstrain int(11) default '0',
       AttemptsAllowed int(11) default '0',
       random smallint(6) NOT NULL default '0',
-        active tinyint(4) default NULL,
-        PRIMARY KEY  (id))
-        TYPE=MyISAM $charset_spec");
+      active tinyint(4) default NULL,
+      PRIMARY KEY  (id))
+      TYPE=MyISAM $charset_spec");
 
-    mysql_query("INSERT INTO exercices VALUES ( '1', '$langExerciceEx', '$langAntique', '1', NULL, NULL, '0', '0', '0', NULL)");
+mysql_query("INSERT INTO exercices VALUES ( '1', '$langExerciceEx', '$langAntique', '1', NULL, NULL, '0', '0', '0', NULL)");
 
 
  mysql_query("CREATE TABLE exercise_user_record (
@@ -237,7 +237,6 @@ mysql_query("CREATE TABLE questions (
         PRIMARY KEY  (id))
         TYPE=MyISAM $charset_spec");
 mysql_query("INSERT INTO questions VALUES ( '1', '$langSocraticIrony', '$langManyAnswers', '10', '1', '1')");
-
 
 // REPONSES
 mysql_query("CREATE TABLE reponses (
@@ -288,7 +287,7 @@ TYPE=MyISAM $charset_spec");
     }
 
     //allagh timwn sto array analoga me to poio checkbox exei epilegei
-    foreach ( $subsystems as $sb )
+    foreach ($subsystems as $sb )
     {
         $sbsystems[$sb] = 1;
     }
@@ -370,7 +369,6 @@ mysql_query("INSERT INTO accueil VALUES (
                'MODULE_ID_ANNOUNCE'
                )");
 
-
     mysql_query("INSERT INTO accueil VALUES (
                '9',
                '$langForums',
@@ -414,6 +412,7 @@ mysql_query("INSERT INTO accueil VALUES (
         '../../../images/pastillegris.png',
         'MODULE_ID_DROPBOX'
         )");
+
     mysql_query("INSERT INTO accueil VALUES (
                 '19',
                 '$langConference',
@@ -479,11 +478,10 @@ mysql_query("INSERT INTO accueil VALUES (
                '../../../images/pastillegris.png',
                'MODULE_ID_WIKI'
                )");
-// --------------------- prof only ------------------------------------------
 
         mysql_query("INSERT INTO accueil VALUES (
         '8',
-        '$langUsers',
+        '$langAdminUsers',
         '../../modules/user/user.php',
         'users',
         '0',
@@ -491,32 +489,6 @@ mysql_query("INSERT INTO accueil VALUES (
         '',
         'MODULE_ID_USERS'
         )");
-
-/*
-    mysql_query("INSERT INTO accueil VALUES (
-               '12',
-               '$langAddPageHome',
-               '../../modules/import/import.php?',
-               'import',
-               '".$sbsystems[12]."',
-               '1',
-               '',
-               'MODULE_ID_IMPORT'
-               )");
-
-    mysql_query("INSERT INTO accueil VALUES (
-               '13',
-               '$langLinkSite',
-               '../../modules/external_module/external_module.php?',
-               'external',
-               '".$sbsystems[13]."',
-               '1',
-               '',
-               'MODULE_ID_EXTERNAL'
-               )");
-
-*/
-
 
 mysql_query("INSERT INTO accueil VALUES (
                '14',
@@ -529,7 +501,7 @@ mysql_query("INSERT INTO accueil VALUES (
                'MODULE_ID_COURSEINFO'
                )");
 
-    mysql_query("INSERT INTO accueil VALUES (
+mysql_query("INSERT INTO accueil VALUES (
                 '24',
                 '".$langUsage."',
                 '../../modules/usage/usage.php',
@@ -542,7 +514,6 @@ mysql_query("INSERT INTO accueil VALUES (
 
 
 #################################### USAGE ################################
-// no db version specific stuff
 db_query("CREATE TABLE action_types (
             id int(11) NOT NULL auto_increment,
             name varchar(200),
@@ -586,7 +557,6 @@ mysql_query("CREATE TABLE agenda (
     TYPE=MyISAM $charset_spec");
 
 ############################# PAGES ###########################################
-
     mysql_query("CREATE TABLE pages (
                id int(11) NOT NULL auto_increment,
                url varchar(200),
@@ -596,7 +566,6 @@ mysql_query("CREATE TABLE agenda (
         TYPE=MyISAM $charset_spec");
 
 ############################# DOCUMENTS ###########################################
-
 mysql_query ("CREATE TABLE document (id int(4) NOT NULL auto_increment,
     path varchar(255) NOT NULL,
     filename text,
@@ -662,7 +631,6 @@ mysql_query("CREATE TABLE work_student (
     PRIMARY KEY (work_id,uname))
     TYPE=MyISAM $charset_spec");
 
-// new queries
 db_query("CREATE TABLE `assignments` (
     `id` int(11) NOT NULL auto_increment,
     `title` varchar(200) NOT NULL default '',
@@ -675,7 +643,6 @@ db_query("CREATE TABLE `assignments` (
     `group_submissions` CHAR(1) DEFAULT '0' NOT NULL,
     UNIQUE KEY `id` (`id`))
     TYPE=MyISAM $charset_spec");
-
 
 db_query("CREATE TABLE `assignment_submit` (
     `id` int(11) NOT NULL auto_increment,
@@ -695,7 +662,7 @@ db_query("CREATE TABLE `assignment_submit` (
     TYPE=MyISAM $charset_spec");
 
 
-############################## LIENS #############################################
+############################## LINKS #############################################
 
     mysql_query("CREATE TABLE liens (
                id int(11) NOT NULL auto_increment,
@@ -750,24 +717,7 @@ db_query("CREATE TABLE `assignment_submit` (
       PRIMARY KEY  (fileId,recipientId))
     TYPE=MyISAM $charset_spec");
 
-/*
-############################## INTRODUCTION #######################################
-
-    mysql_query("CREATE TABLE introduction (
-               id int(11) NOT NULL default '1',
-               texte_intro text,
-               PRIMARY KEY (id))
-        TYPE=MyISAM DEFAULT CHARSET=greek");
-
-    mysql_query("INSERT INTO introduction SET texte_intro = '$course_intronote'");
-
-############################## GROUPS ###########################################
-
-*/
-
-mysql_query("
-CREATE TABLE student_group
-(
+mysql_query("CREATE TABLE student_group (
     id int(11) NOT NULL auto_increment,
     name varchar(100) default NULL,
     description text,
@@ -775,8 +725,7 @@ CREATE TABLE student_group
     forumId int(11) default NULL,
     maxStudent int(11) NOT NULL default '0',
     secretDirectory varchar(30) NOT NULL default '0',
-    PRIMARY KEY  (id)
-)
+    PRIMARY KEY  (id))
 TYPE=MyISAM $charset_spec");
 
 mysql_query("CREATE TABLE user_group (
@@ -785,8 +734,7 @@ mysql_query("CREATE TABLE user_group (
     team int(11) NOT NULL default '0',
     status int(11) NOT NULL default '0',
     role varchar(50) NOT NULL default '',
-    PRIMARY KEY  (id)
-    )
+    PRIMARY KEY  (id))
     TYPE=MyISAM $charset_spec");
 
 mysql_query("CREATE TABLE group_properties (
@@ -797,14 +745,12 @@ mysql_query("CREATE TABLE group_properties (
     document tinyint(4) default '1',
     wiki tinyint(4) default '0',
     agenda tinyint(4) default '0',
-    PRIMARY KEY  (id)
-    )
+    PRIMARY KEY  (id))
     TYPE=MyISAM $charset_spec");
 
 mysql_query("INSERT INTO group_properties
     (id, self_registration, private, forum, document, wiki, agenda)
     VALUES (NULL, '1', '0', '1', '1', '0', '0')");
-
 
 #################### QUESTIONNAIRE ###############################################
 
@@ -821,9 +767,8 @@ mysql_query("INSERT INTO group_properties
       PRIMARY KEY  (sid))
     TYPE=MyISAM $charset_spec");
 
-
     mysql_query("CREATE TABLE survey_answer (
-        aid bigint(12) NOT NULL default '0',
+      aid bigint(12) NOT NULL default '0',
       creator_id mediumint(8) unsigned NOT NULL default '0',
       sid bigint(12) NOT NULL default '0',
       date datetime NOT NULL default '0000-00-00 00:00:00',
@@ -937,8 +882,6 @@ mysql_query("CREATE TABLE `lp_rel_learnPath_module` (
               //COMMENT='This table links module to the learning path using them';
 
 
-
-
 mysql_query("CREATE TABLE `lp_asset` (
               `asset_id` int(11) NOT NULL auto_increment,
               `module_id` int(11) NOT NULL default '0',
@@ -966,7 +909,6 @@ mysql_query("CREATE TABLE `lp_user_module_progress` (
               PRIMARY KEY  (`user_module_progress_id`)
             ) TYPE=MyISAM $charset_spec");
             //COMMENT='Record the last known status of the user in the course';
-
 
 ############################# WIKI ######################################
 
@@ -1004,7 +946,6 @@ mysql_query("CREATE TABLE `wiki_pages_content` (
               PRIMARY KEY  (`id`)
             ) TYPE=MyISAM $charset_spec");
 
-
 //dhmiourgia full text indexes gia th diadikasia ths anazhthshs
 mysql_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");
 mysql_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)");
@@ -1014,6 +955,4 @@ mysql_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
 mysql_query("ALTER TABLE `liens` ADD FULLTEXT `liens` (`url` ,`titre` ,`description`)");
 mysql_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`titre` ,`description`)");
 mysql_query("ALTER TABLE `videolinks` ADD FULLTEXT `videolinks` (`url` ,`titre` ,`description`)");
-
-
 ?>

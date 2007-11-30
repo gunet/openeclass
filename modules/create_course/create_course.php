@@ -281,14 +281,14 @@ if (isset($back1) or !isset($visit)) {
       <tr>
         <td><img src=\"../../template/classic/img/video_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
         <td>$langVideo</td>
-        <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"4\" checked=\"checked\" /></td>
+        <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"4\"  /></td>
         <th>&nbsp;</th>
         <td>&nbsp;<img src=\"../../template/classic/img/description_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
         <td>$langCourseDescription</td>
-        <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" /></td>
+        <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" checked=\"checked\" /></td>
       </tr>
       <tr>
-        <td><img src=\"../../template/classic/img/assignments_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
+      <td><img src=\"../../template/classic/img/assignments_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
         <td>$langWorks</td>
         <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"5\" /></td>
         <th>&nbsp;</th>
@@ -299,11 +299,11 @@ if (isset($back1) or !isset($visit)) {
       <tr>
         <td><img src=\"../../template/classic/img/announcements_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
         <td>$langAnnouncements</td>
-        <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"7\" /></td>
+        <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"7\" checked=\"checked\"/></td>
         <th>&nbsp;</th>
         <td>&nbsp;<img src=\"../../template/classic/img/lp_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
         <td>$langLearnPath</td>
-        <td><input type=\"checkbox\" name=\"subsystems[]\"  value=\"23\" checked=\"checked\" /></td>
+        <td><input type=\"checkbox\" name=\"subsystems[]\"  value=\"23\" /></td>
       </tr>
       <tr>
         <td><img src=\"../../template/classic/img/forum_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
@@ -312,7 +312,7 @@ if (isset($back1) or !isset($visit)) {
         <th>&nbsp;</th>
         <td>&nbsp;<img src=\"../../template/classic/img/wiki_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
         <td>$langWiki</td>
-        <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"26\" checked=\"checked\"/></td>
+        <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"26\" /></td>
       </tr>
       <tr>
         <td><img src=\"../../template/classic/img/exercise_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
