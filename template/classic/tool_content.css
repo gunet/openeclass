@@ -192,7 +192,7 @@ caption {
 	background-image: url(img/exclamation.gif);
 	background-repeat: no-repeat;
 	background-position: 4px 4px;
-    padding-left : 10px; 
+    padding-left : 10px;
 }
 
 .success {
@@ -466,6 +466,16 @@ table.FormData td {
 	font-size: 12px;
 	padding: 3px 3px 3px 3px;
 	border: 1px dotted #727266;
+    background-color: #fbfbfb;
+	color: #666666;
+}
+
+.auth_input{
+	margin-top: 0px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	padding: 1px 1px 1px 1px;
+	border: 1px solid #C0C0C0;
     background-color: #fbfbfb;
 	color: #666666;
 }
