@@ -820,6 +820,7 @@ $langAddComment="Add/modify a comment to";
 $langUp="Up";
 $langViMod="Visibility modified";
 $langElRen="Element renamed";
+$langRoot = "Root directory";
 
 // Special for group documents
 $langGroupManagement="Group management";

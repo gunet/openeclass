@@ -54,8 +54,10 @@ if(session_is_registered('langswitch')) {
 	$language = $_SESSION['langswitch'];
 }
 
-if ($language == "greek") $sql = $sql_el;
-else $sql = $sql_en;
+if ($language == "greek") 
+		$sql = $sql_el;
+else 
+		$sql = $sql_en;
 
 $tool_content .= <<<lCont
 <div id="container_login">
@@ -76,37 +78,31 @@ if (mysql_num_rows($result) > 0) {
 	while ($eclassAnnounce = mysql_fetch_array($result)) {
 		array_push($announceArr, $eclassAnnounce);
 	}
-
 	$tool_content .= "
 <br/>
 
 <table width=\"99%\">
-	<thead>
-		<tr>
-			<th>$langAnnouncements </th>
-		</tr>
-	</thead>
+	<thead><tr><th>$langAnnouncements </th></tr></thead>
 	<tbody>";
 
 	$numOfAnnouncements = count($announceArr);
 
 	for($i=0; $i < $numOfAnnouncements; $i++) {
-
-		if ($i%2 == 0) $rowClass = "class=\"odd\"";
-		else $rowClass = "";
+		if ($i%2 == 0) 
+				$rowClass = "class=\"odd\"";
+		else 
+				$rowClass = "";
 
 		$tool_content .= "
 		<tr $rowClass>
 			<td>
-				<p><b>".$announceArr[$i][0].":</b> <u>".$announceArr[$i][1]."</u></p>
+				<p><b>".greek_format($announceArr[$i][0]).":</b> <u>".$announceArr[$i][1]."</u></p>
 				<p>".$announceArr[$i][2]."</p>
 				<p><i>".$announceArr[$i][3]."</i></p>
 			</td>
 		</tr>
 		";
-
 	}
-
 	$tool_content .= "</tbody></table>";
 }
 
@@ -134,7 +130,6 @@ $tool_content .= <<<lCont2
  </tr>
 </table>
 
-
 </div>
 <div id="extra">
 <p>{ECLASS_HOME_EXTRAS_RIGHT}</p>
@@ -143,7 +138,5 @@ $tool_content .= <<<lCont2
 </div>
 
 lCont2;
-
-
 
 ?>

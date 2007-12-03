@@ -1400,12 +1400,14 @@ chdir($tmp_cwd);
 
 function make_clickable_path($path)
 {
+	global $langRoot;
+
 	$cur = '';
 	$out = '';
 	$base = $_SERVER['PHP_SELF'];
 	foreach (explode('/', $path) as $component) {
 		if (empty($component)) {
-			$out = "<a href='$base?openDir=/'>root</a>";
+			$out = "<a href='$base?openDir=/'>$langRoot</a>";
 		} else {
 			$cur .= rawurlencode("/$component");
 			$out .= " &raquo; <a href='$base?openDir=$cur'>$component</a>";

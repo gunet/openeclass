@@ -46,8 +46,6 @@ $require_help = TRUE;
 $helpTopic = 'Link';
 $guest_allowed = true;
 
-
-
 include '../../include/baseTheme.php';
 $dbname = $_SESSION['dbname'];
 $tbl_link = "liens";
@@ -59,12 +57,8 @@ $action_stats = new action();
 $action_stats->record('MODULE_ID_LINKS');
 /**************************************/
 
-
 $nameTools = $langLinks;
-
 $tool_content = "";
-
-
 
 include("linkfunctions.php");
 
@@ -98,11 +92,9 @@ if($is_adminOfCourse) {
 
 	//displaying the error / status messages if there is one
 
-
 	$tool_content .="
 	<div id=\"operations_container\">
 	<ul id=\"opslist\">";
-
 
 	if (isset($category))
 	$tool_content .=  "<li><a href=\"".$_SERVER['PHP_SELF']."?action=addlink&category=".$category."&urlview=@$urlview\">".$langLinkAdd."</a></li>";
@@ -146,11 +138,11 @@ if($is_adminOfCourse) {
 					<th>URL :</th><td><input type=\"text\" name=\"urllink\" size=\"50\" value=\"
 					".@htmlspecialchars($urllink)."\"></td>
 					</tr>";
-		$tool_content .=  	"<tr><th>".$langLinkName." :</th>
+		$tool_content .=  "<tr><th>".$langLinkName." :</th>
 					<td><input type=\"text\" name=\"title\" size=\"50\" value=\"
 					".@htmlspecialchars($title)."\"></td></tr>";
-		$tool_content .=  	"<tr><th>".$langDescription." :</th>
-					<td><textarea wrap=\"physical\" rows=\"3\" cols=\"50\" name=\"description\">".trim(@htmlspecialchars($description))."</textarea></td></tr>";
+		$tool_content .= "<tr><th>".$langDescription." :</th>
+		<td><textarea wrap=\"physical\" rows=\"3\" cols=\"50\" name=\"description\">".trim(@htmlspecialchars($description))."</textarea></td></tr>";
 
 		$tool_content .= 	"<tr><th>".$langCategory." :</th><td>
 					<select name=\"selectcategory\">";
@@ -189,10 +181,8 @@ if($is_adminOfCourse) {
 				".@htmlspecialchars($description)."</textarea></td></tr>";
 		$tool_content .=  	"</thead></table>";
 		$tool_content .=  	"<br><input type=\"Submit\" name=\"submitCategory\" value=\"".$langAdd."\">";
-
 		$tool_content .=  "</form><br/>";
 	}
-
 }
 
 if (isset($down))
@@ -239,7 +229,6 @@ if (mysql_num_rows($resultcategories) > 0) {
 	if ($numberofzerocategory!==0)
 	{
 		$tool_content .=  "<thead><tr><td class=\"category\" colspan=\"2\"><b>$langNoCategory</b></td></tr></thead>";
-
 		showlinksofcategory(0);
 	}
 

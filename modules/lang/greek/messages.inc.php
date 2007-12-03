@@ -741,6 +741,7 @@ $langImpossible="Δεν είναι δυνατή η λειτουργία";
 $langViMod="Η ορατότητα του εγγράφου άλλαξε";
 $langMoveOK="Μεταφορά επιτυχής!";
 $langMoveNotOK="Μεταφορά ανεπιτυχής";
+$langRoot = "Αρχικός κατάλογος";
 
 // Special for group documents
 $langGroupSpace="Περιοχή ομάδας χρηστών";

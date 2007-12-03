@@ -58,9 +58,9 @@ $tool_content = $head_content = "";
 
 if ($is_adminOfCourse && (@$addAnnouce==1 || isset($modify))) {
 	if ($language == 'greek')
-	$lang_editor='gr';
+		$lang_editor='gr';
 	else
-	$lang_editor='en';
+		$lang_editor='en';
 
 	$head_content = <<<hContent
 <script type="text/javascript">
@@ -110,9 +110,8 @@ function confirmation (name)
 
 
 	if ($announcementNumber > 1 || isset($_POST['submitAnnouncement'])) {
-		$tool_content .=  "
-				<li><a href=\"$_SERVER[PHP_SELF]?deleteAllAnnouncement=1\" onClick=\"return confirmation('all');\">$langEmptyAnn</a></li>
-				";
+		$tool_content .= "<li>	
+			<a href=\"$_SERVER[PHP_SELF]?deleteAllAnnouncement=1\" onClick=\"return confirmation('all');\">$langEmptyAnn</a></li>";
 	}
 	$tool_content .="</ul></div>";
 	/*----------------------------------------
@@ -351,7 +350,7 @@ function confirmation (name)
 			$content = nl2br($content);
 			$myrow['temps'] = greek_format($myrow['temps']);
 			$tool_content .=  "<tbody>
-				<tr class=\"color1\"><td>".$myrow["title"]." (".$langPubl." : ".$myrow['temps'].")</td>";
+				<tr class=\"color1\"><td>".$myrow["title"]." (".$langPubl.": ".$myrow['temps'].")</td>";
 			if ($announcementNumber>1){
 				$tool_content .= "<td width=21>";
 			}
