@@ -168,7 +168,7 @@ if(!empty($submit))
     <table width=\"99%\">
     <tbody>
     <tr>
-      <td class=\"success\" height='60'>
+      <td class=\"well-done\" height='60'>
       <p>$langDearProf</p><p>$success</p><p>$infoprof</p>
       <p>$click <a href=\"$urlServer\">$langHere</a> $backpage</p>
     </td>

@@ -216,7 +216,7 @@ $tool_content .= "
   <table width=\"99%\">
   <tbody>
   <tr>
-    <td class=\"success\" height='60'>
+    <td class=\"well-done\" height='60'>
     <p>$langDear $prenom $nom,</p>
     <p>$langPersonalSettings</p>
     </td>

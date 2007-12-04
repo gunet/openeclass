@@ -72,7 +72,7 @@ $upd=db_query("INSERT INTO prof_request(profname,profsurname,profuname,profemail
   <table width=\"99%\">
   <tbody>
   <tr>
-    <td class=\"success\" height='60'>
+    <td class=\"well-done\" height='60'>
     <p>$langDearUser!<br/><br/>$success</p>
     </td>
   </tr>

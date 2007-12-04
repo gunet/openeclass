@@ -195,13 +195,25 @@ caption {
     padding-left : 10px;
 }
 
-.success {
+.well-done {
 	background-image: url(./img/tick.gif);
 	background-repeat: no-repeat;
 	background-position: 7px 7px;
 	padding-left : 60px;
    	background-color: #fff;
     border-color: #E0E0E0;
+}
+
+.success {
+	background-image: url(img/well-done.gif);
+    background-repeat: no-repeat;
+	background-position: 1px 1px;
+	padding-left : 27px;
+   	background-color: #fff;
+  color: #2CC23C;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: bold
 }
 
 .inactive {
