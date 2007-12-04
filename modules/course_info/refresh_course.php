@@ -94,29 +94,39 @@ if(isset($submit)) {
 	$tool_content .="<p><a href='infocours.php'>$langBack</a></p>";
 
 } else {
-	$tool_content .= "<p><em>$langRefreshInfo</em></p>";
-	$tool_content .= "<form action='refresh_course.php' method='post'>
-		<table width=\"99%\">
-		<thead>
-			<tr>
-				<th>$langOptions</th>
-				<th>$langActions</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr><td align='center'><input type='checkbox' name='delusers'></td>
-				<td>$langUserDelCourse</td></tr>
-			<tr><td align='center'><input type='checkbox' name='delannounces'></td>
-				<td>$langAnnouncesDel</td></tr>
-			<tr><td align='center'><input type='checkbox' name='delagenda'></td>
-				<td>$langAgendaDel</td></tr>
-			<tr><td align='center'><input type='checkbox' name='hideworks'></td>
-				<td>$langHideWork</td></tr>
-				</tbody>
-		</table>
-		<br>
-		<input type='submit' value='$langSubmitActions' name='submit'>
-		</form>";
+	
+	$tool_content .= "
+<form action='refresh_course.php' method='post'>
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <th width='20%'>&nbsp;</th>
+      <td colspan='2'><small><b>$langRefreshInfo</b></small></td>
+    </tr>
+    <tr>
+      <th rowspan='4' class='left'>$langActions</th>
+      <td width='1%'><input type='checkbox' name='delusers'></td>
+      <td>$langUserDelCourse</td>
+    </tr>
+    <tr>
+      <td><input type='checkbox' name='delannounces'></td>
+      <td>$langAnnouncesDel</td>
+    </tr>
+    <tr>
+      <td><input type='checkbox' name='delagenda'></td>
+      <td>$langAgendaDel</td>
+    </tr>
+    <tr>
+      <td><input type='checkbox' name='hideworks'></td>
+      <td>$langHideWork</td>
+    </tr>
+    <tr>
+      <th>&nbsp;</th>
+      <td colspan='2'><input type='submit' value='$langSubmitActions' name='submit'></td>
+    </tr>
+    </tbody>
+    </table>
+</form>";
 
 }
 

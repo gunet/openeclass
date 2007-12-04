@@ -78,13 +78,29 @@ if($is_adminOfCourse) {
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langToolManagement' WHERE id='25'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langWiki' WHERE id='26'");
 		
-		$tool_content .= "<p>$langModifDone.</p>
-		<center><p><a href=\"".$_SERVER['PHP_SELF']."\">$langBack</a></p></center><br>
-		<center><p><a href=\"../../courses/".$currentCourseID."/index.php\">".$langHome."</a></p></center>";
+  $tool_content .= "
+  <div id=\"operations_container\">
+  <ul id=\"opslist\">
+    <li><a href=\"".$_SERVER['PHP_SELF']."\">$langModifInfo</a></li>
+    <li><a href=\"../../courses/".$currentCourseID."/index.php\">".$langHome."</a></li>
+  </ul>
+  </div>";
+  $tool_content .= "
+  <table width=\"99%\">
+  <tbody>
+  <tr>
+    <td class=\"success\">$langModifDone.</td>
+  </tr>
+  </tbody>
+  </table><br />
+";
+		$tool_content .= "
+		<center><p></center><br>
+		<center><p></p></center>";
 	} else {
 
 		$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
-		 $tool_content .= "<li><a href=\"archive_course.php\">$langBackupCourse</a></li>
+		$tool_content .= "<li><a href=\"archive_course.php\">$langBackupCourse</a></li>
     <li><a href=\"delete_course.php\">$langDelCourse</a></li>
     <li><a href=\"refresh_course.php\">$langRefreshCourse</a></li></ul></div>";
 
@@ -112,70 +128,110 @@ if($is_adminOfCourse) {
 		if ($password!="") $checkpasssel = "checked"; else $checkpasssel="";
 
 		@$tool_content .="
-	  
-	  <form method='post' action='$_SERVER[PHP_SELF]'>
-		<FIELDSET>
-    <LEGEND><span class='labeltext'><b>$langCourseIden</b></span></LEGEND>
-		<table width=\"100%\" align=center cellpadding=\"1\" cellspacing=\"0\" border=\"0\">		
-
-		<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' valign=\"top\">$langCode&nbsp;:</th>
-    <td valign=\"top\">$fake_code</td></tr>
-    <tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langProfessors&nbsp;:</th>
-    <td><input type=\"text\" name=\"titulary\" value=\"$titulary\" size=\"60\" class=auth_input></td></tr>
-    <tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langCourseTitle:</th>
-    <td><input type=\"Text\" name=\"int\" value=\"$int\" size=\"60\" class=auth_input></td></tr>
-    <tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langFaculty :</th>
-		<td>
-		<select name=\"facu\">";
-
+  <table width=\"99%\" align='left' class='FormData'>
+  <thead>
+  <tr>
+    <td>
+    <form method='post' action='$_SERVER[PHP_SELF]'>
+  
+    <table width=\"100%\">
+    <tbody>
+    <tr>
+      <th class='left' width='20%'>&nbsp;</th>
+      <td width='10%'><b>$langCourseIden</b></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th class='left'>$langCode&nbsp;:</th>
+      <td>$fake_code</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th class='left'>$langProfessors&nbsp;:</th>
+      <td><input type=\"text\" name=\"titulary\" value=\"$titulary\" size=\"60\" class='FormData_InputText'></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th class='left'>$langCourseTitle&nbsp;:</th>
+      <td><input type=\"Text\" name=\"int\" value=\"$int\" size=\"60\" class='FormData_InputText'></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th class='left'>$langFaculty&nbsp;:</th>
+      <td>
+        <select name=\"facu\" class='auth_input'>";
 		$resultFac=mysql_query("SELECT id,name FROM `$mysqlMainDb`.faculte ORDER BY number");
 		while ($myfac = mysql_fetch_array($resultFac)) {
 			if($myfac['name']==$facu)
-				$tool_content .= "<option value=\"".$myfac['id']."--".$myfac['name']."\" selected>$myfac[name]</option>";
+				$tool_content .= "
+        <option value=\"".$myfac['id']."--".$myfac['name']."\" selected>$myfac[name]</option>";
 			else
-				$tool_content .= "<option value=\"".$myfac['id']."--".$myfac['name']."\">$myfac[name]</option>";
+				$tool_content .= "
+        <option value=\"".$myfac['id']."--".$myfac['name']."\">$myfac[name]</option>";
 		}
-		$tool_content .= "</select></td></tr>
-		<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>$m[type]:</th><td>";
+		$tool_content .= "
+        </select>
+      </td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th class='left'>$m[type]&nbsp;:</th>
+      <td>";
+      $tool_content .= selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']),'type', $type);
+      $tool_content .= "
+      </td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th class='left'>$langDescription&nbsp;:</th>
+      <td><textarea name=\"description\" value=\"$leCours[description]\" cols=\"40\" rows=\"4\" class='FormData_InputText'>$leCours[description]</textarea></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th class='left'>$langcourse_keywords&nbsp;:</th>
+      <td><input type='text' name=\"course_keywords\" value=\"$leCours[course_keywords]\" size=\"60\" class='FormData_InputText'></td>
+      <td>&nbsp;</td>
+    </tr>
+    </tbody>
+    </table><br />
 
-		$tool_content .= selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']),'type', $type);
+    <table width=\"100%\">
+    <tbody>
+    <tr>
+      <th class='left' width='20%'>&nbsp;</th>
+      <td colspan='2'><b>$langConfidentiality</b></td>
+    </tr>
+    <tr>
+      <th class='left'><img src=\"../../images/OpenCourse.gif\" alt=\"".$m['legopen']."\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\">&nbsp;".$m['legopen']."&nbsp;:</th>
+      <td width='2%'><input type=\"radio\" name=\"formvisible\" value=\"2\"".@$visibleChecked[2]."></td>
+      <td>$langPublic&nbsp;</td>
+    </tr>
+    <tr>
+      <th class='left'><img src=\"../../images/Registration.gif\" alt=\"".$m['legrestricted']."\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\">&nbsp;".$m['legrestricted']."&nbsp;:</th>
+      <td><input type=\"radio\" name=\"formvisible\" value=\"1\"".@$visibleChecked[1]."></td>
+      <td>$langPrivOpen<br />
+            <p align='right'><input type=\"checkbox\" name=\"checkpassword\" ".$checkpasssel.">&nbsp;
+            $langOptPassword&nbsp;
+            <input type=\"text\" name=\"password\" value=\"".$password."\" class='FormData_InputText'></p></td>
+      </td> 
+    </tr>
+    <tr>
+      <th class='left'><img src=\"../../images/ClosedCourse.gif\" alt=\"".$m['legclosed']."\" title=\"".$m['legclosed']."\" width=\"16\" height=\"16\">&nbsp;".$m['legclosed']."&nbsp;:</th>
+      <td><input type=\"radio\" name=\"formvisible\" value=\"0\"".@$visibleChecked[0]."></td>
+      <td>$langPrivate&nbsp;</td>
+    </tr>
+    </tbody>
+    </table><br />
 
-		$tool_content .= "</td></tr>";
-
- 		@$tool_content .= "<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langDescription:</th>
-		<td><textarea name=\"description\" value=\"$leCours[description]\" cols=\"40\" rows=\"4\">$leCours[description]</textarea></td></tr>
-		<tr>
-			<th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langcourse_references:</th>
-			<td><textarea name=\"course_addon\" value=\"$leCours[course_addon]\" cols=\"40\" rows=\"4\">$leCours[course_addon]</textarea></td>
-		</tr>
-		<tr>
-			<th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langcourse_keywords:</th>
-			<td><input type='text' name=\"course_keywords\" value=\"$leCours[course_keywords]\" size=\"60\"></td>
-		</tr>		
-		</thead></table></fieldset>
-		<br>
-		<FIELDSET>
-    <LEGEND><span class='labeltext'><b>$langConfidentiality</b></span></LEGEND>
-		<table>
-		<tr>
-    <td colspan=\"2\"><span class='explanationtext'>$langConfTip</span></td></tr>
-    <tr><td align=\"right\"><input type=\"radio\" name=\"formvisible\" value=\"2\"".@$visibleChecked[2]."></td>
-    <td><span class='labeltext'>$langPublic</span></td></tr>
-	  <tr><td align=\"right\"><input type=\"radio\" name=\"formvisible\" value=\"1\"".@$visibleChecked[1]."></td>
-    <td><span class='labeltext'>$langPrivOpen</span>
-		<br><input type=\"checkbox\" name=\"checkpassword\" ".$checkpasssel.">$langOptPassword
-		<input type=\"text\" name=\"password\" value=\"".$password."\"></td>
-    <tr><td align=\"right\"><input type=\"radio\" name=\"formvisible\" value=\"0\"".@$visibleChecked[0]."></td>
-    <td><span class='labeltext'>$langPrivate</span>
-    </td></tr>
-    </table>
-    </FIELDSET>
-		<br>
-		<FIELDSET>
-    <LEGEND><span class='labeltext'><b>$langLanguage</b></span></LEGEND>
-    <table>
-		<tr><td><span class='explanationtext'>$langTipLang</span></td>
-		<td><span class='labeltext'>";
+    <table width=\"100%\">
+    <tbody>
+    <tr>
+      <th class='left' width='20%'>&nbsp;</th>
+      <td colspan='2'><b>$langLanguage</b></td>
+    </tr>
+    <tr>
+      <th class='left'>$langOptions&nbsp;:</th>
+      <td width='1%'>";
 		if ($leCours['languageCourse'] == 'english')
 			$curLang = 'en';
 		else
@@ -183,13 +239,29 @@ if($is_adminOfCourse) {
 		$tool_content .= selection(array('el' => $langNameOfLang['greek'],
 			'en' => $langNameOfLang['english']),'localize', $curLang);
 
-		$tool_content .= "</td></tr>";
-		$tool_content .= "</table></fieldset>
+		$tool_content .= "
+      </td>
+      <td><p align='right'><small>$langTipLang&nbsp;</small></p></td>
+    </tr>
+    </tbody>
+    </table>
 
-		<br>
+    <table width=\"100%\">
+    <tbody>
+    <tr>
+      <th class='left' width='20%'>&nbsp;</th>
+      <td><input type=\"Submit\" name=\"submit\" value=\"$langSubmit\"></td>
+      <td>&nbsp;</td>
+    </tr>
+    </tbody>
+    </table>
 
-		<div align=center><input type=\"Submit\" name=\"submit\" value=\"$langSubmit\"></div>
-		</form>";
+    </form>
+    </td>
+  </tr>
+  </thead>
+  </table>
+";
 	}     // else
 }   // if uid==prof_id
 
