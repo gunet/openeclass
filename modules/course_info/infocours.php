@@ -137,8 +137,8 @@ if($is_adminOfCourse) {
     <table width=\"100%\">
     <tbody>
     <tr>
-      <th class='left' width='20%'>&nbsp;</th>
-      <td width='10%'><b>$langCourseIden</b></td>
+      <th class='left' width='150'>&nbsp;</th>
+      <td><b>$langCourseIden</b></td>
       <td>&nbsp;</td>
     </tr>
     <tr>
@@ -198,12 +198,12 @@ if($is_adminOfCourse) {
     <table width=\"100%\">
     <tbody>
     <tr>
-      <th class='left' width='20%'>&nbsp;</th>
+      <th class='left' width='150'>&nbsp;</th>
       <td colspan='2'><b>$langConfidentiality</b></td>
     </tr>
     <tr>
       <th class='left'><img src=\"../../images/OpenCourse.gif\" alt=\"".$m['legopen']."\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\">&nbsp;".$m['legopen']."&nbsp;:</th>
-      <td width='2%'><input type=\"radio\" name=\"formvisible\" value=\"2\"".@$visibleChecked[2]."></td>
+      <td width='1'><input type=\"radio\" name=\"formvisible\" value=\"2\"".@$visibleChecked[2]."></td>
       <td>$langPublic&nbsp;</td>
     </tr>
     <tr>
@@ -226,12 +226,12 @@ if($is_adminOfCourse) {
     <table width=\"100%\">
     <tbody>
     <tr>
-      <th class='left' width='20%'>&nbsp;</th>
+      <th class='left' width='150'>&nbsp;</th>
       <td colspan='2'><b>$langLanguage</b></td>
     </tr>
     <tr>
       <th class='left'>$langOptions&nbsp;:</th>
-      <td width='1%'>";
+      <td width='1'>";
 		if ($leCours['languageCourse'] == 'english')
 			$curLang = 'en';
 		else
@@ -249,7 +249,7 @@ if($is_adminOfCourse) {
     <table width=\"100%\">
     <tbody>
     <tr>
-      <th class='left' width='20%'>&nbsp;</th>
+      <th class='left' width='150'>&nbsp;</th>
       <td><input type=\"Submit\" name=\"submit\" value=\"$langSubmit\"></td>
       <td>&nbsp;</td>
     </tr>
