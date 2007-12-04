@@ -464,8 +464,8 @@ $langCreatedIn = "δημιουργήθηκε την";
 $langCreateMissingDirectories ="Δημιουργία των καταλόγων που λείπουν";
 $langCopyDirectoryCourse = "Αντιγραφή των αρχείων του μαθήματος";
 $langDisk_free_space = "Ελεύθερος χώρος";
-$langBuildTheCompressedFile ="2ο - Δημιουργία του αρχείου αντίγραφου ασφαλείας";
-$langFileCopied = "αρχεία αντιγράφτηκαν";
+$langBuildTheCompressedFile ="Δημιουργία του αρχείου αντίγραφου ασφαλείας";
+$langFileCopied = "αρχεία αντιγράφηκαν";
 $langArchiveLocation="Τοποθεσία";
 $langSizeOf ="Μέγεθος του";
 $langArchiveName ="Όνομα";
@@ -474,7 +474,7 @@ $langBUCourseDataOfMainBase = "Αντίγραφο ασφαλείας των δεδομένων του μαθήματος";
 $langBUUsersInMainBase = "Αντίγραφο ασφαλείας των χρηστών του μαθήματος";
 $langBUAnnounceInMainBase="Αντίγραφο ασφαλείας των ανακοινώσεων του μαθήματος";
 $langBackupOfDataBase="Αντίγραφο ασφαλείας της βάσης δεδομένων του μαθήματος";
-$langDownloadIt = "Κατεβάστε το ";
+$langDownloadIt = "Κατεβάστε το";
 $langBackupEnd = "Ολοκληρώθηκε το αντίγραφο ασφαλείας σε μορφή";
 
 /*********************************************
@@ -1207,14 +1207,15 @@ $langPageTitleModified="Ο τίτλος της σελίδας άλλαξε";
 $langSendPage="Όνομα αρχείου της σελίδας";
 $langCouldNotSendPage="Το αρχείο δεν είναι σε μορφή HTML και δεν ήταν δυνατόν να σταλεί. Αν θέλετε να στείλετε αρχεία που
 δεν είναι σε μορφή HTML (π.χ. PDF, Word, Power Point, Video, κ.λπ.)
-χρησιμοποιήστε τα <a href=../document/document.php>Έγγραφα</a>";
+χρησιμοποιήστε τα <a href='../document/document.php'>Έγγραφα</a>.";
 $langAddPageToSite="Προσθήκη μιας σελίδας σε ένα site";
 $langCouldNot="Το αρχείο δεν ήταν δυνατόν να σταλεί";
 $langOkSent="<p><b>Η σελίδα σας στάλθηκε</b><br/><br/>Δημιουργήθηκε σύνδεσμος προς αυτήν στο αριστερό μενού</p>";
 $langTooBig="Δεν διαλέξατε κάποιο αρχείο για να στείλετε,ή είναι πολύ μεγάλο";
 $langExplanation="Η σελίδα πρέπει να είναι σε μορφή HTML (π.χ. \"my_page.htm\"). Θα δημιουργηθεί σύνδεσμος στην αρχική
 σελίδα προς αυτήν. Αν θέλετε να στείλετε αρχεία που δεν είναι σε μορφή HTML (π.χ. PDF, Word, Power Point, Video, κ.λπ.)
-χρησιμοποιήστε τα <a href=../document/document.php>Έγγραφα</a>";
+χρησιμοποιήστε τα <a href='../document/document.php'>Έγγραφα</a>.";
+$langNoticeExpl = "Σημ: Το μέγιστο επιτρεπτό μέγεθος του αρχείου της σελίδας είναι 20MB.";
 $langPgTitle="Τίτλος σελίδας";
 
 /***************************************************************
@@ -1673,7 +1674,7 @@ unset($questionPlan);
 unset($info2Say);
 */
 $titreBloc[] = "Περιγραφή";
-$titreBlocNotEditable[] = FALSE;
+$titreBlocNotEditable[] = TRUE;
 $questionPlan[] = "Σε τι αναφέρεται το μάθημα? Χρειάζονται τυχόν προαπαιτούμενα μαθήματα?";
 $info2Say[] = "Πληροφορίες σχετικά με το μάθημα θα δωθούν απο τον διδάσκοντα";
 $titreBloc[] = "Στόχοι";
@@ -2553,8 +2554,7 @@ $langAs = "ως";
 $langTool = "Εργαλείο";
 $langUploadPage = "Ανέβασμα ιστοσελίδας";
 $langAddExtLink = "Προσθήκη εξωτερικού σύνδεσμου στο αριστερό μενού";
-$deleteSuccess = "Ο σύνδεσμος διαγράφηκε";
-$langDeleteLink = "Είστε βέβαιος/η ότι θέλετε να διαγράψετε αυτό τον σύνδεσμο";
+$langDeleteLink = "Είστε βέβαιος/η ότι θέλετε να διαγράψετε τον σύνδεσμο";
 $langOperations="Ενέργειες σε εξωτερικούς σύνδεσμους";
 $langInactiveTools = "Ανενεργά εργαλεία";
 $langSubmitChanges = "Υποβολή αλλαγών";
@@ -2733,10 +2733,8 @@ $langDescr="Περιγραφή";
 $langDelList="Διαγραφή όλων";
 
 // videolinks
-$langVideoAdd = "Ο σύνδεσμος προστέθηκε";
-$langVideoDel = "Ο σύνδεσμος διαγράφτηκε";
 $langVideoMod = "Τα στοιχεία του συνδέσμου τροποποιήθηκαν";
-$langVideoDeleted = "Όλοι οι σύνδεσμοι διαγράφτηκαν";
+$langVideoDeleted = "Όλοι οι σύνδεσμοι διαγράφηκαν";
 $langURL="Εξωτερικός σύνδεσμος προς τον εξυπηρετητή ήχου ή βίντεο";
 $langcreator="Δημιουργός";
 $langpublisher="Εκδότης";

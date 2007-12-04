@@ -39,13 +39,11 @@
  */
 
 $require_current_course = TRUE;
-$langFiles = array('toolManagement', 'create_course', 'external_module', 'import');
 $require_help = TRUE;
 $helpTopic = 'courseTools';
 $require_prof = true;
 $require_login = true;
 include '../../include/baseTheme.php';
-
 
 $nameTools = $langToolManagement;
 
@@ -116,7 +114,7 @@ function reverseAll(cbList) {
 <script>
 function confirmation (name)
 {
-		if (confirm("'.$langDeleteLink.' ("+ name + ") ?"))
+		if (confirm("$langDeleteLink " + name + "?"))
         {return true;}
     	else
         {return false;}
@@ -167,9 +165,7 @@ if ($is_adminOfCourse){
 		db_query($hideSql, $dbname);
 		//and activate the ones the professor wants active, if any
 		if ($loopCount >0) {
-			$publicSql = "UPDATE  `accueil`
-								SET
-								`visible` = 1 WHERE $tool_id";
+			$publicSql = "UPDATE accueil SET visible = 1 WHERE $tool_id";
 
 			db_query($publicSql, $dbname);
 		}
@@ -222,34 +218,22 @@ if ($is_adminOfCourse){
 					//and the agenda module was active before, we need to delete this lesson's events
 					//from the main agenda table (main database)
 
-					$perso_sql= "DELETE FROM $mysqlMainDb.agenda
-                             WHERE
-                             lesson_code= '$currentCourseID'";
-
+					$perso_sql= "DELETE FROM $mysqlMainDb.agenda WHERE lesson_code= '$currentCourseID'";
 					db_query($perso_sql, $mysqlMainDb);
-
+					}
 				}
-
-			}
-
 		}
-
 	}
 
 	if (isset($delete)) {
-		$sql = "SELECT `lien`, `define_var`
-				FROM accueil
-				WHERE `id` = ". $delete ." ";
+		$sql = "SELECT lien, define_var FROM accueil WHERE `id` = ". $delete ." ";
 		$result = db_query($sql, $dbname);
 		while ($res = mysql_fetch_row($result)){
-			//			dumpArray($res);
 			if($res[1] == "HTML_PAGE") {
 				$link = explode(" ", $res[0]);
 				$path = substr($link[0], 6);
 				$file2Delete = $webDir . $path;
-				//			echo $file2Delete;
 				@unlink($file2Delete);
-
 			}
 		}
 		$sql = "DELETE FROM `accueil` WHERE `id` = " . $delete ." ";
@@ -258,25 +242,15 @@ if ($is_adminOfCourse){
 
 		$tool_content .= "
 		<table width=\"99%\">
-			<tbody>
-				<tr>
-					<td class=\"success\">
-					<p><b>$deleteSuccess</b></p>
-					
-					</td>
-				</tr>
-			</tbody>
+			<tbody><tr><td class=\"success\"><p><b>$langLinkDeleted</b></p></td></tr></tbody>
 		</table>
-		<br/><br/>
-		";
+		<br/><br/>";
 	}
-
 
 
 	//--add external link
 
 	if(isset($submit) &&  @$action ==2){
-
 		if (($link == "http://") or ($link == "ftp://") or empty($link))  {
 			$tool_content .= "
 		<table>
@@ -304,7 +278,6 @@ if ($is_adminOfCourse){
 		if($mID<101) $mID = 101;
 		else $mID = $mID+1;
 
-
 		mysql_query("INSERT INTO accueil VALUES ($mID,
 					'$name_link',
 					'$link \"target=_blank',
@@ -317,14 +290,9 @@ if ($is_adminOfCourse){
 
 		$tool_content .= "
 		<table width=\"99%\">
-			<tbody>
-				<tr>
-					<td class=\"success\">
-					<p><b>$langAdded</b></p>
-					
-					</td>
-				</tr>
-			</tbody>
+		<tbody>
+			<tr><td class=\"success\"><p><b>$langLinkAdded</b></p></td></tr>
+		</tbody>
 		</table>
 		<br/><br/>
 		";
@@ -335,7 +303,7 @@ if ($is_adminOfCourse){
 		// UPLOAD FILE TO "documents" DIRECTORY + INSERT INTO documents TABLE
 		$updir = "$webDir/courses/$currentCourseID/page/"; //path to upload directory
 		$size = "20000000"; //file size ex: 5000000 bytes = 5 megabytes
-		if (($file_name != "") && ($file_size <= "$size" )) {
+		if (isset($file_name) and ($file_name != "") && ($file_size <= "$size")) {
 
 			$file_name = str_replace(" ", "", $file_name);
 			$file_name = str_replace("é", "e", $file_name);
@@ -344,12 +312,8 @@ if ($is_adminOfCourse){
 			$file_name = str_replace("à", "a", $file_name);
 
 			@copy("$file", "$updir/$file_name")
-			or die("
-		
-			<p>
-				$langCouldNot
-			</p>
-	</tr>");
+			or die("<p>$langCouldNot</p></tr>");
+
 			$sql = 'SELECT MAX(`id`) FROM `accueil` ';
 			$res = db_query($sql,$dbname);
 			while ($maxID = mysql_fetch_row($res)) {
@@ -386,9 +350,7 @@ if ($is_adminOfCourse){
 				<tbody>
 					<tr>
 						<td class=\"caution\">
-					
 						<p><b>$langTooBig</b></p>
-					
 						</td>
 					</tr>
 				</tbody>
@@ -396,10 +358,8 @@ if ($is_adminOfCourse){
 			";
 			draw($tool_content, 2);
 		}	// else
-
 		unset($action);
 	}
-
 }
 
 //------------------------------------------------------
@@ -409,29 +369,19 @@ if ($is_adminOfCourse && @$action == 1) {//upload html file
 	$navigation[]= array ("url"=>"course_tools.php", "name"=> $langToolManagement);
 	$helpTopic = 'Import';
 
-	$tool_content .=  "
-		<p>$langExplanation</p>
-			
-			
-		<form method=\"POST\" action=\"$PHP_SELF?submit=yes&action=1\" enctype=\"multipart/form-data\">
+	$tool_content .= "<p>$langExplanation</p>
+		<p>$langNoticeExpl</p>			
+		<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes&action=1\" enctype=\"multipart/form-data\">
 			<table>
 			<thead>
 				<tr>
-					<th>
-						
-							$langSendPage :
-						
-					</th>
+					<th>$langSendPage :</th>
 					<td>
 						<input type=\"file\" name=\"file\" size=\"35\" accept=\"text/html\">
 					</td>
 				</tr>
 				<tr>
-					<th>
-						
-							$langPgTitle :
-						
-					</th>
+					<th>$langPgTitle :</th>
 					<td>
 						<input type=\"Text\" name=\"link_name\" size=\"50\">
 					</td>
@@ -439,9 +389,8 @@ if ($is_adminOfCourse && @$action == 1) {//upload html file
 				</thead>
 				</table>
 				<br>
-						<input type=\"Submit\" name=\"submit\" value=\"$langAddOk\">
-				
-</form>";
+			<input type=\"Submit\" name=\"submit\" value=\"$langAdd\">
+		</form>";
 
 	draw($tool_content, 2);
 	exit();
@@ -459,7 +408,6 @@ if ($is_adminOfCourse && @$action == 2) {//add external link
 				<thead>
 				<tr>
 					<th>
-						
 							$langLink&nbsp;:
 					</th>
 					<td>
@@ -494,10 +442,7 @@ if ($is_adminOfCourse) {
 	if (is_array($toolArr)){
 		$externalLinks = array();//array used to populate the external tools table afterwards
 		for($i=0; $i< $numOfToolGroups; $i++){
-
 			$numOfTools = count($toolArr[$i][1]);
-
-
 			for($j=0; $j< $numOfTools; $j++){
 
 				if ($i  == 0){//active tools
@@ -515,15 +460,9 @@ if ($is_adminOfCourse) {
 						array_push($externalLinks, $arr);
 					}
 
-
-				}  elseif ($i ==  2) {//admin tools
+					}  elseif ($i ==  2) {//admin tools
 
 				} elseif ($i == 1){//inactive tools
-
-					//					if ($toolArr[$i][4][$j] > 100) {//if it's not a core tool give the ability to delete it
-					//						$deleteExternLink = $_SERVER['PHP_SELF'] . "?delete=" . $toolArr[$i][4][$j];
-					//						$delLink = " (<a href=\"$deleteExternLink\">$langDelete</a>)";
-					//					}
 
 					if ($toolArr[$i][4][$j] < 100) {
 						$inactiveTools .= "<option value=\"".$toolArr[$i][4][$j]."\">
@@ -538,14 +477,9 @@ if ($is_adminOfCourse) {
 						$arr['id'] = $toolArr[$i][4][$j];
 						array_push($externalLinks, $arr);
 					}
-
 				}
-
 			}
-
-
 		}
-
 	}
 
 	//output tool content
@@ -610,8 +544,6 @@ tForm;
 			</thead>
 			<tbody>";
 
-
-
 		for ($i=0; $i <$extToolsCount; $i++) {
 
 			if ($i%2==0) {
@@ -637,14 +569,12 @@ tForm;
 	</td>
 	</tr>";
 
-
 		}	// for loop
 		$tool_content .= <<<tCont4
 	</tbody>
 	</table>
 tCont4;
 }
-
 draw($tool_content, 2,'course_tools', $head_content);
 }
 ?>

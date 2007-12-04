@@ -35,7 +35,6 @@
  */
 
 $require_current_course = TRUE;
-$langFiles = array('course_description','pedaSuggest');
 $require_help = TRUE;
 $helpTopic = 'Coursedescription';
 $require_login = true;
@@ -165,19 +164,20 @@ if (isset($delete) and $delete == "ask") {
 			$tool_content .= " ".$langTitle."<br>
 			<input type=\"text\" name=\"edTitleBloc\" size=\"50\" value=\"".@$titreBloc[$numBloc]."\" >";
 		} else {
-			$tool_content .=  "<input type=\"hidden\" name=\"edTitleBloc\" value=\"".$titreBloc[$numBloc]."\" >";
+			$tool_content .= "<input type=\"hidden\" name=\"edTitleBloc\" value=\"".$titreBloc[$numBloc]."\" >";
 		}
 
 		if ($numBloc =="add") { 
-			$tool_content .=  "<input type=\"hidden\" name=\"edIdBloc\" value=\"add\">";
+			$tool_content .= "<input type=\"hidden\" name=\"edIdBloc\" value=\"add\">";
 		} else {
-			$tool_content .=  "<input type=\"hidden\" name=\"edIdBloc\" value=\"".$numBloc."\">";
+			$tool_content .= "<input type=\"hidden\" name=\"edIdBloc\" value=\"".$numBloc."\">";
 		}
-		$tool_content .=  "</p><table><tr><td valign=\"top\">";
+		$tool_content .= "</p><table><tr><td valign=\"top\">";
 		
-	$tool_content .=  "<textarea id='xinha' name='edContentBloc' value='".@$contentBloc."' rows='20' cols='70'>".@$contentBloc."</textarea>";
-	$tool_content .=  "</td>";
+	$tool_content .= "<textarea id='xinha' name='edContentBloc' value='".@$contentBloc."' rows='20' cols='70'>".@$contentBloc."</textarea>";
+	$tool_content .= "</td>";
 	
+// display explanation
 	if ($showPedaSuggest) {
 		if (isset($questionPlan[$numBloc])) {
 			$tool_content .=  "<td valign=\"top\">		
@@ -194,6 +194,7 @@ if (isset($delete) and $delete == "ask") {
 				</td></tr></table></td>";
 			}
 		}
+
 		$tool_content .=  "</tr></table>
 		<input type=\"submit\" name=\"save\" value=\"".$langAdd."\">
 		<input type=\"submit\" name=\"ignore\" value=\"".$langBackAndForget ."\"></form>";

@@ -6,11 +6,9 @@ if (isset($c) && ($c!="")) {
 }
 $require_current_course = TRUE;
 $require_prof;
-$langFiles = 'archive_course';
 include '../../include/baseTheme.php';
 
 $nameTools = $langArchiveCourse;
-
 $tool_content = "";
 
 $verboseBackup = FALSE; 
@@ -28,16 +26,6 @@ if($is_adminOfCourse) {
 	$shortDateBackuping  = date("YzBs"); // YEAR - Day in Year - Swatch - second 
 	$archiveDir .= "/".$currentCourseID."/".$dateBackuping;
 	$systemFileNameOfArchive = realpath("../..").$archiveDir."/claroBak-".$currentCourseID."-".$dateBackuping.".".$ext;
-
-	$tool_content .= "<table width=\"99%\"><caption>Αποτελέσματα Διαδικασίας</caption<tbody>
-<tr><td><u>".$langArchiveName."</u>: ".basename($systemFileNameOfArchive)."</td></tr>
-<tr><td><u>".$langArchiveLocation."</u>: ".realpath($systemFileNameOfArchive)."</td></tr>
-<tr><td><u>".$langSizeOf." ".realpath("../../".$currentCourseID."/")."</u>: ".DirSize("../../".$currentCourseID."/")."</td></tr>
-	";
-	if (function_exists('diskfreespace')) {
-		$tool_content .= "<tr><td><u>".$langDisk_free_space."</u>: ".diskfreespace("/")." bytes</td></tr>";
-	}
-
 	
 // ********************************************************************
 // build config file
@@ -276,12 +264,12 @@ INSERT IGNORE INTO user SET ";
 	$fdesc = fopen($systemFileNameOfArchive, "w");
 	fwrite($fdesc,$stringConfig);
 	fclose($fdesc);
-	$tool_content .=  ")</li></ol><br>".$langBuildTheCompressedFile."<br>";
+	$tool_content .=  ")</li></ol>";
 	
 if (extension_loaded("zlib")) {
 	$zipCourse = new PclZip("../..".$archiveDir."/../archive.".$currentCourseID.".".$shortDateBackuping.".zip");
 	$zipCourse->create("../..".$archiveDir."/");
-	$tool_content .= "".$langBackupSuccesfull." <a href=\"".$urlServer."/".$archiveDir."/../archive.".$currentCourseID.".".$shortDateBackuping.".zip\">".$langDownloadIt."</a>";
+	$tool_content .= "".$langBackupSuccesfull." <a href=\"".$urlServer."/".$archiveDir."/../archive.".$currentCourseID.".".$shortDateBackuping.".zip\"><br><br>".$langDownloadIt."</a>.";
 } else {
 		$tool_content .= $langBackupSuccesfull;
 	}
