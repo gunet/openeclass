@@ -29,7 +29,6 @@
 $require_login = TRUE;
 $langFiles = array('registration', 'opencours');
 include '../../include/baseTheme.php';
-
 $nameTools = $langChoiceLesson;
 $navigation[] = array ("url"=>"courses.php", "name"=> $langChoiceDepartment);
 $tool_content = "";
@@ -214,7 +213,7 @@ function getdepnumcourses($fac) {
 }
 
 function expanded_faculte($fac, $uid) {
-	global $m, $icons, $langTutor, $langBegin, $mysqlMainDb, $table_border;
+	global $m, $icons, $langTutor, $langBegin,$langRegistration, $mysqlMainDb, $table_border;
 
 	$retString = "";
 
@@ -330,19 +329,21 @@ function expanded_faculte($fac, $uid) {
 	
 
 	// legend
+
+global $langRegistration,$langCourseCode,$langProfessor,$langCoursType;
     $retString .= "
     <script type=\"text/javascript\" src=\"sorttable.js\"></script>
     <table class=\"sortable\" id=\"t1\" width=\"99%\">
     <thead>
     <tr>";
     $retString .= "
-      <th width='10%'>Εγγραφή</th>";
+      <th width='10%'>$langRegistration</th>";
     $retString .= "
-      <th class='left' width='60%'>Μάθημα (κωδικός)</th>";
+      <th class='left' width='60%'>$langCourseCode</th>";
     $retString .= "
-      <th class='left' width='23%'>Καθηγητής</th>";
+      <th class='left' width='23%'>$langProfessor</th>";
     $retString .= "
-      <th width='7%'><b>Τύπος</b></th>";
+      <th width='7%'><b>$langCoursType</b></th>";
     $retString .= "
     </tr>
     </thead>";

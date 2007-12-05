@@ -5,7 +5,7 @@ $guest_allowed = true;
 include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
 $nameTools = "Αποστολή ενημερωτικού email στον διδάσκοντα";
-
+globals $langReturn,$langEmailNotSend;
 
 $tool_content = "";
 
@@ -35,7 +35,7 @@ $errorExists = false;
 				<table width=\"99%\">
 	<tbody>
 	<tr>
-	<td class=\"caution\">Σφάλμα κατά την αποστολή e-mail στη διεύθυνση '$to'!
+	<td class=\"caution\">'$langEmailNotSend' '$to'!
 	</td>
 	</tr>
 	</tbody>";
@@ -69,7 +69,7 @@ else
 		$_GET['cc'] = "";
 	}
 	$_GET['cc'] = htmlspecialchars($_GET['cc']);
-	$tool_content .= "<p><a href=\"courses.php?fc=".$_GET['fc']."\">Επιστροφή</a></p>";
+	$tool_content .= "<p><a href=\"courses.php?fc=".$_GET['fc']."\">$langReturn</a></p>";
 	$tool_content .= "<form action=\"".$_SERVER['PHP_SELF']."?fc=".$_GET['fc']."\" method=\"post\">
 <table width=\"99%\"><thead>";
 	$tool_content .= "<tr><th>Όνομα:</th><td><input type=\"text\" name=\"firstname\" value=\"".$row["nom"]."\" readonly></td></tr>";

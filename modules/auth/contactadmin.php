@@ -44,6 +44,7 @@
 include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
 $nameTools = $langContactAdmin;
+globals $langEmailNotSend,$langForm;
 $tool_content = "";
 
 
@@ -76,7 +77,7 @@ if(!empty($userid))
 		Σχόλια: $body";
 		if (!send_mail($siteName, $emailAdministrator, '', $to,	$emailsubject, $emailbody, $charset)) 
 		{
-				$tool_content .= "<h4>Σφάλμα κατά την αποστολή e-mail στη διεύθυνση '$to'!</h4>";
+				$tool_content .= "<h4>'$langEmailNotSend' '$to'!</h4>";
 		}
 		else
 		{
@@ -87,7 +88,7 @@ if(!empty($userid))
 	else
 	{
 		$tool_content .= "<form action=\"./contactadmin.php?userid=".$userid."\" method=\"post\">
-	<table width=\"99%\"><caption>Συμπλήρωση Φόρμας</caption><tbody>";
+	<table width=\"99%\"><caption>$langForm</caption><tbody>";
 		$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\"><b>$langName:</b></td><td>".$firstname."</td></tr>";	
 		$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\"><b>$langSurname:</b></td><td>".$sirname."</td></tr>";	
 		$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\"><b>Email:</b></td><td>".$email."</td></tr>";
