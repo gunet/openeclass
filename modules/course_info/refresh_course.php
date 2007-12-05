@@ -94,29 +94,38 @@ if(isset($submit)) {
 	$tool_content .="<p><a href='infocours.php'>$langBack</a></p>";
 
 } else {
-	
-	$tool_content .= "
+  $tool_content .= "
+  <div id=\"operations_container\">
+  <ul id=\"opslist\">
+    <li><a href=\"infocours.php\">$langBack</a></li>
+  </ul>
+  </div>";
+	$tool_content .= "<br />
 <form action='refresh_course.php' method='post'>
+    
     <table width=\"99%\">
     <tbody>
     <tr>
       <th width='20%'>&nbsp;</th>
-      <td colspan='2'><small><b>$langRefreshInfo</b></small></td>
+      <td colspan='2'><p>$langRefreshInfo</p><br /><p>$langRefreshInfo_A :</ p></td>
     </tr>
     <tr>
-      <th rowspan='4' class='left'>$langActions</th>
+      <th class='left'><img src=\"../../template/classic/img/users_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langUsers_1</th>
       <td width='1%'><input type='checkbox' name='delusers'></td>
       <td>$langUserDelCourse</td>
     </tr>
     <tr>
+      <th class='left'><img src=\"../../template/classic/img/announcements_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langAnnouncements</th>
       <td><input type='checkbox' name='delannounces'></td>
       <td>$langAnnouncesDel</td>
     </tr>
     <tr>
+      <th class='left'><img src=\"../../template/classic/img/calendar_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langAgenda</th>
       <td><input type='checkbox' name='delagenda'></td>
       <td>$langAgendaDel</td>
     </tr>
     <tr>
+      <th class='left'><img src=\"../../template/classic/img/assignments_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langWorks</th>
       <td><input type='checkbox' name='hideworks'></td>
       <td>$langHideWork</td>
     </tr>

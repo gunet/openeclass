@@ -33,6 +33,7 @@ $langClosed = "closed";
 $langOpen = "opened";
 $langSemiopen = "require registration";
 $langUsers = "users";
+$langUsers_1 = "Users";
 $langSupportUser = "Support Person:";
 
 
@@ -607,7 +608,8 @@ $langDelCourse="Delete the whole course";
 $langCourse="The website ";
 $langHasDel="has been deleted";
 $langBackHome="Back to Home Page of ";
-$langByDel="Deleting the course will permanently delete all the documents it contains and unregister all its students (will not unregister them from other courses).<p>Do you really want to delete the course?";
+$langByDel="Deleting the course will permanently delete all the documents it contains and unregister all its students (will not unregister them from other courses).";
+$langByDel_A="Do you really want to delete the course: ";
 $langConfirmDel = "Confirmation of course deleting";
 $langModifGroups="Groups";
 
@@ -638,7 +640,8 @@ $langUsersDeleted="All users have been unregistered from the course";
 // refresh course.php
 $langRefreshCourse = "Refresh Course";
 
-$langRefreshInfo="If you want to create a course for a new academic year, you can delete the old data courses. Choose the appropriate actions.";
+$langRefreshInfo="If you want to create a course for a new academic year, you can delete the old data courses.";
+$langRefreshInfo_A="Choose the appropriate actions";
 $langUserDelCourse="Delete users from course";
 $langUserDelNotice = "Notice: Users will not unregistered from other courses";
 $langAnnouncesDel = "Delete course announcements";

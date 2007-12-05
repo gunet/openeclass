@@ -94,9 +94,7 @@ if($is_adminOfCourse) {
   </tbody>
   </table><br />
 ";
-		$tool_content .= "
-		<center><p></center><br>
-		<center><p></p></center>";
+
 	} else {
 
 		$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";

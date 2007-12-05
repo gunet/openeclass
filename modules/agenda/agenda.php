@@ -193,7 +193,7 @@ if ($is_adminOfCourse) {
 		unset($id);
 		##[END personalisation modification]############
 
-		$tool_content .=  "<table width=\"99%\">
+		$tool_content .=  "<table width=\"99%\" align=\"center\">
 					<tbody><tr><td class=\"success\">$langStoredOK</td></tr></tbody>
 					</table><br/>";
 

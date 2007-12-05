@@ -40,20 +40,39 @@ if($is_adminOfCourse) {
 
 		exit();
 	} else {
-		$tool_content .= "<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"caution\">
-							<p><b>$langConfirmDel</b></p>
-							
-							<p>$langByDel $currentCourseID $intitule&nbsp;? <a href=\"".$_SERVER['PHP_SELF']."?delete=yes\">$langYes</a>&nbsp;|&nbsp;<a href=\"infocours.php\">$langNo</a></p>
-				<p><a href=\"infocours.php\">$langBack</p>
-						</td>
-					</tr>
-				</tbody>
-			</table>";
-//		$tool_content .= "<table width=\"99%\"><caption>$langConfirmDel</caption><tbody><tr><td><p>$langByDel $currentCourseID $intitule&nbsp;?</p><p><a href=\"".$_SERVER['PHP_SELF']."?delete=yes\">$langY</a>&nbsp;|&nbsp;<a href=\"infocours.php\">$langN</a></p></td></tr></tbody></table><br>";
-//		$tool_content .= "<center><p><a href=\"infocours.php\">$langBack</p></center>";
+
+  $tool_content .= "
+  <div id=\"operations_container\">
+  <ul id=\"opslist\">
+    <li><a href=\"infocours.php\">$langBack</a></li>
+  </ul>
+  </div>";
+
+  $tool_content .= "
+  <br />
+";
+
+  $tool_content .= "
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+    <th>&nbsp;</th>
+    <td class=\"caution_NoBorder\" height='60' colspan='2'>
+    <p>$langByDel_A <b>$intitule ($currentCourseID) </b>&nbsp;?  </p>
+    </td>
+  </tr>
+    <tr>
+      <th rowspan='2' class='left' width='150'>$langConfirmDel :</th>
+      <td width='52' align='center'><a href=\"".$_SERVER['PHP_SELF']."?delete=yes\">$langYes</a></td>
+      <td><small>$langByDel</small></td>
+    </tr>
+    <tr>
+      <td align='center'><a href=\"infocours.php\">$langNo</a></td>
+      <td>&nbsp;</td>
+    </tr>
+    </tbody>
+    </table>";
+
 	} // else
 } else  {
 	$tool_content .= "<center><p>$langForbidden</p></center>";

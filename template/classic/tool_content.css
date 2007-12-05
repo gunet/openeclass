@@ -188,6 +188,14 @@ caption {
     border-color: #E0E0E0
 }
 
+.caution_NoBorder {
+	background-image: url(../../images/important.gif);
+	background-repeat: no-repeat;
+	background-position: 7px 7px;
+	padding-left : 60px;
+   	background-color: #fff;
+}
+
 .caution_small {
 	background-image: url(img/exclamation.gif);
 	background-repeat: no-repeat;
