@@ -40,10 +40,7 @@
 ==============================================================================
 */
 
-//LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-//$require_login = TRUE;
-$langFiles = array('registration', 'admin','gunet');
-
+// BASETHEME, OTHER INCLUDES AND NAMETOOLS
 include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
 $nameTools = $langContactAdmin;
@@ -98,11 +95,10 @@ if(!empty($userid))
 		$langActivateAccount
 		</textarea></td></tr>";
 		$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\">&nbsp;</td><td>
-		<input type=\"submit\" name=\"submit\" value=\"Αποστολή\">
+		<input type=\"submit\" name=\"submit\" value=\"".$langSend."\">
 		<input type=\"hidden\" name=\"userid\" value=\"".$userid."\"</td></tr>";
 		$tool_content .= "</tbody></table></form>";
 	}
-
 	
 }
 
