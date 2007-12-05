@@ -40,7 +40,6 @@
 */
 
 $require_current_course = TRUE;
-$langFiles 				= 'usage';
 $require_help 			= true;
 $helpTopic 				= 'Usage';
 $require_login = true;
@@ -57,18 +56,14 @@ $tool_content .= "<li><a href='favourite.php?first='>".$langFavourite."</a></li>
 $tool_content .= "<li><a href='userlogins.php?first='>".$langUserLogins."</a></li>";
 $tool_content .= "<li><a href='oldStats.php'>".$langOldStats."</a></li></ul></div>";
 
-
 $query = "SELECT MIN(date_time) as min_time FROM actions";
 $result = db_query($query, $currentCourseID);
 while ($row = mysql_fetch_assoc($result)) {
-    
-    $min_time = strtotime($row['min_time']);
-    
-}
+        $min_time = strtotime($row['min_time']);
+    }
 
 @mysql_free_result($result);
- 
-if ( $min_time + 243*24*3600 < time()) { #actions more than eight months old
+ if ($min_time + 243*24*3600 < time()) { #actions more than eight months old
     $action->summarize();     #move data to action_summary
 }
 
@@ -189,27 +184,25 @@ $local_head = $jscalendar->get_load_files_code();
     }
     $tool_content .= '<br>';
 
-
     //make form
     $start_cal = $jscalendar->make_input_field(
            array('showsTime'      => false,
                  'showOthers'     => true,
                  'ifFormat'       => '%Y-%m-%d',
                  'timeFormat'     => '24'),
-           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
-                 'name'        => 'u_date_start',
-                 'value'       => $u_date_start));
+           array('style'  => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+                 'name'   => 'u_date_start',
+                 'value'  => $u_date_start));
 
     $end_cal = $jscalendar->make_input_field(
            array('showsTime'      => false,
                  'showOthers'     => true,
                  'ifFormat'       => '%Y-%m-%d',
                  'timeFormat'     => '24'),
-           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
-                 'name'        => 'u_date_end',
-                 'value'       => $u_date_end));
+           array('style'  => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+                 'name'   => 'u_date_end',
+                 'value' => $u_date_end));
 
-  
     $qry = "SELECT id, rubrique AS name FROM accueil WHERE define_var != '' AND visible = 1 ORDER BY name ";
 
     $mod_opts = '<option value="-1">'.$langAllModules."</option>\n";
@@ -223,7 +216,6 @@ $local_head = $jscalendar->get_load_files_code();
     $statsValueOptions =
         '<option value="visits" '.	 (($u_stats_value=='visits')?('selected'):(''))	  .'>'.$langVisits."</option>\n".
         '<option value="duration" '.(($u_stats_value=='duration')?('selected'):('')) .'>'.$langDuration."</option>\n";
-
   
     $tool_content .= '
     <form method="post">
@@ -234,7 +226,6 @@ $local_head = $jscalendar->get_load_files_code();
             <th>'.$langValueType.'</th>
             <td><select name="u_stats_value">'.$statsValueOptions.'</select></td>
         </tr>
-
         <tr>
             <th>'.$langStartDate.'</th>
             <td>'."$start_cal".'</td>
@@ -251,11 +242,8 @@ $local_head = $jscalendar->get_load_files_code();
         </table>
         <br/>
             <input type="submit" name="btnUsage" value="'.$langSubmit.'">
-        
-    </form>';
-        
-    }
-
+         </form>';
+     }
 
 draw($tool_content, 2, '', $local_head, '');
 /*

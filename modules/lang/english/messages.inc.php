@@ -452,7 +452,8 @@ $langTitulaire = "Professor";
 
 $langArchiveCourse = "Course backuping ";
 $langCreatedIn = "created in";
-$langCreateMissingDirectories ="Creation of missing directories";
+$langCreateDirMainBase ="Creation of directory for restoring main database";
+$langCreateDirCourseBase ="Creation of directory for restoring courses databases";
 $langCopyDirectoryCourse = "Copy of course's files";
 $langDisk_free_space = "free space";
 $langBuildTheCompressedFile ="2° - Creation of backup file";
@@ -3192,7 +3193,6 @@ $langConfirmUnregCours = "Are you sure you want to unregister from course with c
 /******************************************************************
 * usage.inc.php
 ******************************************************************/
-
 
  $langGDRequired = "The GD library is required!";
  $langUsage = "Usage Statistics";

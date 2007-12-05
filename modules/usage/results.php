@@ -23,18 +23,16 @@ foreach ($usage_defaults as $key => $val) {
     }
 }
 
-
 if ($u_module_id != -1) {
     $mod_where = " (module_id = '$u_module_id') ";
 } else {
     $mod_where = " (1) ";
 }
 
-
-$date_fmt = '%Y-%m-%d';
+//$date_fmt = '%Y-%m-%d';
+$date_fmt = '%d-%m-%Y';
 $date_where = "(date_time BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
 $date_what  = "DATE_FORMAT(MIN(date_time), '$date_fmt') AS date_start, DATE_FORMAT(MAX(date_time), '$date_fmt') AS date_end ";
-
 
 switch ($u_interval) {
     case "summary":
@@ -67,12 +65,9 @@ $chart_content=0;
 switch ($u_stats_value) {
     case "visits":
 
-            $chart = new VerticalChart(200, 300);
-
-
-            $query = "SELECT ".$date_what.", COUNT(*) AS cnt FROM actions WHERE $date_where AND $mod_where GROUP BY module_id ORDER BY date_time ASC";
+     $chart = new VerticalChart(200, 300);
+     $query = "SELECT ".$date_what.", COUNT(*) AS cnt FROM actions WHERE $date_where AND $mod_where GROUP BY module_id ORDER BY date_time ASC";
             $result = db_query($query, $currentCourseID);
-
     
         switch ($u_interval) {
             case "summary":
@@ -83,13 +78,11 @@ switch ($u_stats_value) {
                     }
             break;
             case "daily":
-                
                     while ($row = mysql_fetch_assoc($result)) {
                         $chart->addPoint(new Point($row['date'], $row['cnt']));
                         $chart->width += 25;
                         $chart_content=1;
                     }
-               
             break;
             case "weekly":
                 while ($row = mysql_fetch_assoc($result)) {
@@ -177,7 +170,6 @@ mysql_free_result($result);
 
 
 $chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
-//$tool_content .= $query."<br />";
 $chart->render($webDir.$chart_path);
 
  if ($chart_content) {
@@ -187,7 +179,5 @@ $chart->render($webDir.$chart_path);
       $tool_content .='<br><p>'.$langNoStatistics.'</p>';
  }
  $tool_content .= '<br>';
-
-
 
 ?>

@@ -51,10 +51,9 @@ if($is_adminOfCourse) {
 	$tool_content .= "<tr><td align=\"center\"><ol>";
 
 // if dir is missing, first we create it. mkpath is a recursive function
-
     $dirCourBase = realpath("../..").$archiveDir."/courseBase";
 	if (!is_dir($dirCourBase)) {
-		$tool_content .= "<li>".$langCreateMissingDirectories."</li>";
+		$tool_content .= "<li>".$langCreateDirCourseBase."</li>";
 		mkpath($dirCourBase,$verboseBackup);
 	}
 
@@ -62,7 +61,7 @@ if($is_adminOfCourse) {
     
     $dirMainBase = realpath("../..").$archiveDir."/mainBase";
 	if (!is_dir($dirMainBase)) {
-		$tool_content .= "<li>".$langCreateMissingDirectories."</li>";
+		$tool_content .= "<li>".$langCreateDirMainBase."</li>";
 		mkpath($dirMainBase,$verboseBackup);
 	}
     $dirhtml = realpath("../..").$archiveDir."/html";
@@ -109,9 +108,8 @@ INSERT INTO cours SET ";
 // ********************************************************************
 	$tool_content .= "<li>".$langBUUsersInMainBase." ".$currentCourseID."";
 	
-	$sqlUserOfTheCourse ="
-SELECT user.* FROM `$mysqlMainDb`.user, `$mysqlMainDb`.cours_user
-	WHERE user.user_id=cours_user.user_id
+	$sqlUserOfTheCourse ="SELECT user.* FROM `$mysqlMainDb`.user, `$mysqlMainDb`.cours_user
+		WHERE user.user_id=cours_user.user_id
 		AND cours_user.code_cours='$currentCourseID'";
 
 		$resUsers = mySqlQueryShowError($sqlUserOfTheCourse,$db);
@@ -132,18 +130,13 @@ SELECT user.* FROM `$mysqlMainDb`.user, `$mysqlMainDb`.cours_user
 		while($users = mysql_fetch_array($resUsers))
 		{
 			$htmlInsertUsers .= "\t<TR>\n";
-			$sqlInsertUsers .= "
-INSERT IGNORE INTO user SET ";
+			$sqlInsertUsers .= "INSERT IGNORE INTO user SET ";
 			$csvInsertUsers .= "\n";
 			for($noField=0; $noField < $nbFields; $noField++)
 			{
 				if ($noField>0)
 					$sqlInsertUsers .= ", ";
 				$nameField = mysql_field_name($resUsers,$noField);
-				/*echo "
-				<BR>
-				$nameField ->  ".$users["$nameField"]." ";
-				*/
 				$sqlInsertUsers .= "$nameField = '".$users["$nameField"]."' ";
 				$csvInsertUsers .= "'".addslashes($users["$nameField"])."';";
 				$htmlInsertUsers .= "\t\t<td>".$users["$nameField"]."</td>\n";				
@@ -204,10 +197,6 @@ INSERT IGNORE INTO user SET ";
 				if ($noField>0)
 					$sqlInsertAnn .= ", ";
 				$nameField = mysql_field_name($resAnn,$noField);
-				/*echo "
-				<BR>
-				$nameField ->  ".$users["$nameField"]." ";
-				*/
 				$sqlInsertAnn .= "$nameField = '".addslashes($announce["$nameField"])."' ";
 				$csvInsertAnn .= "'".addslashes($announce["$nameField"])."';";
 				$htmlInsertAnn .= "\t\t<td>".$announce["$nameField"]."</td>\n";				
@@ -317,16 +306,6 @@ function DirSize($path , $recursive=TRUE) {
 
 /** 
  * Backup a db to a file 
- *
- * @param ressource	$link			lien vers la base de donnees 
- * @param string	$db_name		nom de la base de donnees 
- * @param boolean	$structure		true => sauvegarde de la structure des tables 
- * @param boolean	$donnees		true => sauvegarde des donnes des tables 
- * @param boolean	$format			format des donnees 
- 									'INSERT' => des clauses SQL INSERT
-									'CSV' => donnees separees par des virgules
- * @param boolean	$insertComplet	true => clause INSERT avec nom des champs 
- * @param boolean	$verbose 		true => comment are printed
  */ 
 function backupDatabase($link , $db_name , $structure , $donnees , $format="SQL" , $whereSave=".", $insertComplet="",$verbose=false)
 { 
@@ -356,7 +335,6 @@ function backupDatabase($link , $db_name , $structure , $donnees , $format="SQL"
 				fwrite($fp, "\");");
 			if ($format=="PHP")
 				fwrite($fp, "mysql_query(\"");
-			// requete de creation de la table 
 			$query = "SHOW CREATE TABLE $tablename"; 
 			$resCreate = mysql_query($query); 
 			$row = mysql_fetch_array($resCreate); 
@@ -435,19 +413,15 @@ function copydir($origine,$destination,$verbose=false) {
 			{
 				copy("$origine/$fichier", "$destination/$fichier");
 				if ($verbose)
-					echo "
-			<li>
-				$fichier";
+					echo "<li>$fichier";
 				$total++;
 			}
 			if ($verbose)
-				echo "
-			</li>";
+				echo "</li>";
 		}
 	}
 	if ($verbose)
-		echo "
-		</ol>";
+		echo "</ol>";
 	return $total;
 }
 function getextension($fichier) { 
@@ -540,9 +514,7 @@ function mySqlQueryShowError($sql,$db="###")
 }
 
 
-
 // adia function
-
 function create_backup_file($file) {
 	global $currentCourseID;
 
@@ -729,5 +701,4 @@ function backup_course_details($f, $course) {
 		quote($q['titulaires']).",\t// Professor\n\t".
 		quote($q['type']).");\t// Type\n");
 }
-
 ?>

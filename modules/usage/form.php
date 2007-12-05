@@ -19,21 +19,18 @@ $end_cal = $jscalendar->make_input_field(
                  'showOthers'     => true,
                  'ifFormat'       => '%Y-%m-%d',
                  'timeFormat'     => '24'),
-           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
-                 'name'        => 'u_date_end',
-                 'value'       => $u_date_end));
-
+           array('style' => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+                 'name'  => 'u_date_end',
+                 'value' => $u_date_end));
 
 
 $qry = "SELECT id, rubrique AS name FROM accueil WHERE define_var != '' AND visible = 1 ORDER BY name ";
-
 $mod_opts = '<option value="-1">'.$langAllModules."</option>\n";
 $result = db_query($qry, $currentCourseID);
 while ($row = mysql_fetch_assoc($result)) {
     if ($u_module_id == $row['id']) { $selected = 'selected'; } else { $selected = ''; }
     $mod_opts .= '<option '.$selected.' value="'.$row["id"].'">'.$row['name']."</option>\n";
 }
-
 
 $statsValueOptions =
     '<option value="visits" '.	 (($u_stats_value=='visits')?('selected'):(''))	  .'>'.$langVisits."</option>\n".
@@ -46,9 +43,7 @@ $statsIntervalOptions =
     '<option value="yearly"  '.(($u_interval=='yearly')?('selected'):('')) .'>'.$langYearly."</option>\n".
     '<option value="summary" '.(($u_interval=='summary')?('selected'):('')).'>'.$langSummary."</option>\n";
 
-//die($out);
-$tool_content .= '
-<form method="post">
+$tool_content .= '<form method="post">
 &nbsp;&nbsp;
     <table>
         <thead>
@@ -56,7 +51,6 @@ $tool_content .= '
             <th>'.$langValueType.'</th>
             <td><select name="u_stats_value">'.$statsValueOptions.'</select></td>
         </tr>
-
         <tr>
             <th>'.$langStartDate.'</th>
             <td>'."$start_cal".'</td>
@@ -78,5 +72,4 @@ $tool_content .= '
        <br/>
            <input type="submit" name="btnUsage" value="'.$langSubmit.'">
            </form>';
-
 ?>
