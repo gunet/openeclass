@@ -21,6 +21,22 @@ if (extension_loaded("zlib")) {
 		
 // check if you are admin
 if($is_adminOfCourse) {
+  $tool_content .= "
+  <div id=\"operations_container\">
+  <ul id=\"opslist\">
+    <li>";
+if (isset($c) && ($c!="")) {
+	if (isset($search) && ($search=="yes")) $searchurl = "&search=yes";
+	else $searchurl = "";
+	$tool_content .= "<a href=\"../admin/editcours.php?c=".$c."".$searchurl."\">$langBack</a></li>";
+} else {
+	$tool_content .= "<a href=\"infocours.php\">$langBack</a></li>";
+}
+	
+
+  $tool_content .= "
+  </ul>
+  </div>";
 	
 	$dateBackuping  = date("Y-m-d-H-i-(B)-s");
 	$shortDateBackuping  = date("YzBs"); // YEAR - Day in Year - Swatch - second 
@@ -48,7 +64,28 @@ if($is_adminOfCourse) {
 
 ";
 
-	$tool_content .= "<tr><td align=\"center\"><ol>";
+
+if (extension_loaded("zlib")) {
+	$zipCourse = new PclZip("../..".$archiveDir."/../archive.".$currentCourseID.".".$shortDateBackuping.".zip");
+	$zipCourse->create("../..".$archiveDir."/");
+    
+
+} else {
+		$tool_content .= $langBackupSuccesfull;
+
+	}
+	
+	$tool_content .= "<br />
+    <table width='99%'>
+    <tbody>
+    <tr>
+      <td class=\"success\">$langBackupSuccesfull&nbsp;</td>
+      <td><div align='right'>
+          <a href=\"".$urlServer."/".$archiveDir."/../archive.".$currentCourseID.".".$shortDateBackuping.".zip\">".$langDownloadIt."</a></div>
+      </td>
+      <td width='1'><img src=\"../../template/classic/img/export.gif\" alt=\"".$langDownloadIt."\" title=\"".$langDownloadIt."\" width=\"20\" height=\"16\"></td>
+    </tr>
+    <tr><td align=\"left\" colspan='3'><ol>";
 
 // if dir is missing, first we create it. mkpath is a recursive function
     $dirCourBase = realpath("../..").$archiveDir."/courseBase";
@@ -253,15 +290,9 @@ INSERT INTO cours SET ";
 	$fdesc = fopen($systemFileNameOfArchive, "w");
 	fwrite($fdesc,$stringConfig);
 	fclose($fdesc);
-	$tool_content .=  ")</li></ol>";
+	$tool_content .=  ")</li></ol></tbody></table>";
 	
-if (extension_loaded("zlib")) {
-	$zipCourse = new PclZip("../..".$archiveDir."/../archive.".$currentCourseID.".".$shortDateBackuping.".zip");
-	$zipCourse->create("../..".$archiveDir."/");
-	$tool_content .= "".$langBackupSuccesfull." <a href=\"".$urlServer."/".$archiveDir."/../archive.".$currentCourseID.".".$shortDateBackuping.".zip\"><br><br>".$langDownloadIt."</a>.";
-} else {
-		$tool_content .= $langBackupSuccesfull;
-	}
+
 	
 	$tool_content .= "</td></tr></tbody></table><br>";
 
@@ -271,13 +302,7 @@ else
 	$tool_content .= "<center><p>$langNotAllowed</p></center>";
 }
 
-if (isset($c) && ($c!="")) {
-	if (isset($search) && ($search=="yes")) $searchurl = "&search=yes";
-	else $searchurl = "";
-	$tool_content .= "<center><p><a href=\"../admin/editcours.php?c=".$c."".$searchurl."\">Επιστροφή</p></center>";
-} else {
-	$tool_content .= "<center><p><a href=\"infocours.php\">Επιστροφή</p></center>";
-}
+
 
 draw($tool_content, 2, 'course_info');
 

@@ -222,19 +222,19 @@ if (isset($back1) or !isset($visit)) {
 
       <table>
       <tr>
-         <td width='30'><img src=\"../../images/OpenCourse.gif\" alt=\"".$m['legopen']."\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\"></td>
+         <td width='30'><img src=\"../../template/classic/img/OpenCourse.gif\" alt=\"".$m['legopen']."\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\"></td>
          <td width='200'>".$m['legopen']."</td>
          <td width='5' ><input name=\"formvisible\" type=\"radio\" value=\"2\" checked=\"checked\" /></td>
          <td width='325'><p align='right'><small>$langPublic</small></p></td>
       </tr>
       <tr>
-         <td width='30'><img src=\"../../images/Registration.gif\" alt=\"".$m['legrestricted']."\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\"></td>
+         <td width='30'><img src=\"../../template/classic/img/Registration.gif\" alt=\"".$m['legrestricted']."\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\"></td>
          <td width='200'>".$m['legrestricted']."</td>
          <td width='5'><input name=\"formvisible\" type=\"radio\" value=\"1\" /></td>
          <td width='325'><p align='right'><small>$langPrivOpen</small></p></td>
       </tr>
       <tr>
-         <td width='30'><img src=\"../../images/ClosedCourse.gif\" alt=\"".$m['legclosed']."\" title=\"".$m['legclosed']."\" width=\"16\" height=\"16\"></td>
+         <td width='30'><img src=\"../../template/classic/img/ClosedCourse.gif\" alt=\"".$m['legclosed']."\" title=\"".$m['legclosed']."\" width=\"16\" height=\"16\"></td>
          <td width='200'>".$m['legclosed']."</td>
          <td width='5'><input name=\"formvisible\" type=\"radio\" value=\"0\" /></td>
          <td width='325'><p align='right'><small>$langPrivate</small></p></td>

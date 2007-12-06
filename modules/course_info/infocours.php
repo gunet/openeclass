@@ -81,8 +81,7 @@ if($is_adminOfCourse) {
   $tool_content .= "
   <div id=\"operations_container\">
   <ul id=\"opslist\">
-    <li><a href=\"".$_SERVER['PHP_SELF']."\">$langModifInfo</a></li>
-    <li><a href=\"../../courses/".$currentCourseID."/index.php\">".$langHome."</a></li>
+    <li><a href=\"".$_SERVER['PHP_SELF']."\">$langBack</a></li>
   </ul>
   </div>";
   $tool_content .= "
@@ -182,7 +181,7 @@ if($is_adminOfCourse) {
     </tr>
     <tr>
       <th class='left'>$langDescription&nbsp;:</th>
-      <td><textarea name=\"description\" value=\"$leCours[description]\" cols=\"40\" rows=\"4\" class='FormData_InputText'>$leCours[description]</textarea></td>
+      <td><textarea name=\"description\" value=\"$leCours[description]\" cols=\"57\" rows=\"4\" class='FormData_InputText'>$leCours[description]</textarea></td>
       <td>&nbsp;</td>
     </tr>
     <tr>
@@ -200,21 +199,24 @@ if($is_adminOfCourse) {
       <td colspan='2'><b>$langConfidentiality</b></td>
     </tr>
     <tr>
-      <th class='left'><img src=\"../../images/OpenCourse.gif\" alt=\"".$m['legopen']."\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\">&nbsp;".$m['legopen']."&nbsp;:</th>
+      <th class='left'><img src=\"../../template/classic/img/OpenCourse.gif\" alt=\"".$m['legopen']."\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\">&nbsp;".$m['legopen']."&nbsp;:</th>
       <td width='1'><input type=\"radio\" name=\"formvisible\" value=\"2\"".@$visibleChecked[2]."></td>
       <td>$langPublic&nbsp;</td>
     </tr>
     <tr>
-      <th class='left'><img src=\"../../images/Registration.gif\" alt=\"".$m['legrestricted']."\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\">&nbsp;".$m['legrestricted']."&nbsp;:</th>
+      <th rowspan='2' class='left'><img src=\"../../template/classic/img/Registration.gif\" alt=\"".$m['legrestricted']."\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\">&nbsp;".$m['legrestricted']."&nbsp;:</th>
       <td><input type=\"radio\" name=\"formvisible\" value=\"1\"".@$visibleChecked[1]."></td>
-      <td>$langPrivOpen<br />
-            <p align='right'><input type=\"checkbox\" name=\"checkpassword\" ".$checkpasssel.">&nbsp;
+      <td>$langPrivOpen</td> 
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td bgcolor='#F8F8F8'><input type=\"checkbox\" name=\"checkpassword\" ".$checkpasssel.">&nbsp;
             $langOptPassword&nbsp;
-            <input type=\"text\" name=\"password\" value=\"".$password."\" class='FormData_InputText'></p></td>
+            <input type=\"text\" name=\"password\" value=\"".$password."\" class='FormData_InputText'>
       </td> 
     </tr>
     <tr>
-      <th class='left'><img src=\"../../images/ClosedCourse.gif\" alt=\"".$m['legclosed']."\" title=\"".$m['legclosed']."\" width=\"16\" height=\"16\">&nbsp;".$m['legclosed']."&nbsp;:</th>
+      <th class='left'><img src=\"../../template/classic/img/ClosedCourse.gif\" alt=\"".$m['legclosed']."\" title=\"".$m['legclosed']."\" width=\"16\" height=\"16\">&nbsp;".$m['legclosed']."&nbsp;:</th>
       <td><input type=\"radio\" name=\"formvisible\" value=\"0\"".@$visibleChecked[0]."></td>
       <td>$langPrivate&nbsp;</td>
     </tr>
@@ -239,7 +241,7 @@ if($is_adminOfCourse) {
 
 		$tool_content .= "
       </td>
-      <td><p align='right'><small>$langTipLang&nbsp;</small></p></td>
+      <td><small>$langTipLang</p></td>
     </tr>
     </tbody>
     </table>
