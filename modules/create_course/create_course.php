@@ -63,20 +63,6 @@ function validate()
 </script>
 ';
 
-/*
-function validate() {
-    if (document.forms[0].description.value==\"\") {
-        alert(\"Παρακαλώ συμπληρώστε μια σύντομη περιγραφή για το μάθημα!\");
-        return false;
-    }
-      if (document.forms[0].course_keywords.value==\"\") {
-          alert(\"Παρακαλώ συμπληρώστε τις λέξεις κλειδιά του μαθήματος!\");
-          return false;
-    }
-  return true;
-}
-*/
-
 $tool_content = "";
 $titulaire_probable="$prenom $nom";
 $local_style = "input { font-size: 12px; }";
