@@ -328,6 +328,7 @@ if (isset($back1) or !isset($visit)) {
 // create the course and the course database
 if (isset($create_course)) {
 
+	$nameTools = $langCourseCreate;
         // H metavlhth faculte periexei to fac_id kai to
         // onoma tou tmhmatos xwrismena me dyo dashes
         // to $facid pairnei timh apo thn $faculte
@@ -445,14 +446,14 @@ if (isset($create_course)) {
   <table width=\"99%\">
   <tbody>
   <tr>
-    <td class=\"success\" height='60'>
-    <p>$langJustCreated: &nbsp;<b>$intitule</b></p><br />
-    <p align='center'><a href='../../courses/$repertoire/index.php' class=mainpage>$langEnter</a></p>
-    </td>
+    <td class=\"success\" width='1'>&nbsp;</td>
+    <td>$langJustCreated: &nbsp;<b>$intitule</b><br/><small>$langEnterMetadata</small></td>
   </tr>
   </tbody>
   </table><br /><br />
-  <p align='right'><small>$langEnterMetadata</small></p>
+  
+  <p align='center'><a href='../../courses/$repertoire/index.php' class=mainpage><img src=\"../../template/classic/img/go.gif\" alt=\"\" border=\"0\" height=\"46\" width=\"46\"></a><p>
+  <p align='center'>&nbsp;<a href='../../courses/$repertoire/index.php' class=mainpage>$langEnter</a>&nbsp;</p>
   
 ";
 

@@ -144,16 +144,16 @@ if($is_adminOfCourse) {
       <td>&nbsp;</td>
     </tr>
     <tr>
-      <th class='left'>$langProfessors&nbsp;:</th>
-      <td><input type=\"text\" name=\"titulary\" value=\"$titulary\" size=\"60\" class='FormData_InputText'></td>
-      <td>&nbsp;</td>
-    </tr>
-    <tr>
       <th class='left'>$langCourseTitle&nbsp;:</th>
       <td><input type=\"Text\" name=\"int\" value=\"$int\" size=\"60\" class='FormData_InputText'></td>
       <td>&nbsp;</td>
     </tr>
     <tr>
+    <tr>
+      <th class='left'>$langProfessors&nbsp;:</th>
+      <td><input type=\"text\" name=\"titulary\" value=\"$titulary\" size=\"60\" class='FormData_InputText'></td>
+      <td>&nbsp;</td>
+    </tr>
       <th class='left'>$langFaculty&nbsp;:</th>
       <td>
         <select name=\"facu\" class='auth_input'>";

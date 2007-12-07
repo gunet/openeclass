@@ -79,18 +79,28 @@ if (extension_loaded("zlib")) {
     <table width='99%'>
     <tbody>
     <tr>
-      <td class=\"success\">$langBackupSuccesfull&nbsp;</td>
+      <td class=\"success\" width='1'></td>
+      <td class=\"left\"><b>$langBackupSuccesfull</b></td>
       <td><div align='right'>
           <a href=\"".$urlServer."/".$archiveDir."/../archive.".$currentCourseID.".".$shortDateBackuping.".zip\">".$langDownloadIt."</a></div>
       </td>
-      <td width='1'><img src=\"../../template/classic/img/export.gif\" alt=\"".$langDownloadIt."\" title=\"".$langDownloadIt."\" width=\"20\" height=\"16\"></td>
+      <td width='1'><img src=\"../../template/classic/img/download.gif\" alt=\"".$langDownloadIt."\" title=\"".$langDownloadIt."\" width=\"30\" height=\"29\"></td>
     </tr>
-    <tr><td align=\"left\" colspan='3'><ol>";
+    </tbody>
+    </table>
+
+    <br />
+
+    <table class='Deps' align='center'>
+    <tbody>
+    <tr>
+      <th align=\"left\">
+      <ol>\n";
 
 // if dir is missing, first we create it. mkpath is a recursive function
     $dirCourBase = realpath("../..").$archiveDir."/courseBase";
 	if (!is_dir($dirCourBase)) {
-		$tool_content .= "<li>".$langCreateDirCourseBase."</li>";
+		$tool_content .= "       <li>".$langCreateDirCourseBase."</li>\n";
 		mkpath($dirCourBase,$verboseBackup);
 	}
 
@@ -98,7 +108,7 @@ if (extension_loaded("zlib")) {
     
     $dirMainBase = realpath("../..").$archiveDir."/mainBase";
 	if (!is_dir($dirMainBase)) {
-		$tool_content .= "<li>".$langCreateDirMainBase."</li>";
+		$tool_content .= "       <li>".$langCreateDirMainBase."</li>\n";
 		mkpath($dirMainBase,$verboseBackup);
 	}
     $dirhtml = realpath("../..").$archiveDir."/html";
@@ -110,7 +120,7 @@ if (extension_loaded("zlib")) {
 //  info  about cours
 // ********************************************************************
 
-	$tool_content .= "<li>".$langBUCourseDataOfMainBase."  ".$currentCourseID."";
+	$tool_content .= "       <li>".$langBUCourseDataOfMainBase."  ".$currentCourseID."</li>\n";
 	$sqlInsertCourse = "
 INSERT INTO cours SET ";
 	$csvInsertCourse ="\n";
@@ -143,7 +153,7 @@ INSERT INTO cours SET ";
 // ********************************************************************
 //  info  about users
 // ********************************************************************
-	$tool_content .= "<li>".$langBUUsersInMainBase." ".$currentCourseID."";
+	$tool_content .= "       <li>".$langBUUsersInMainBase." ".$currentCourseID."</li>\n";
 	
 	$sqlUserOfTheCourse ="SELECT user.* FROM `$mysqlMainDb`.user, `$mysqlMainDb`.cours_user
 		WHERE user.user_id=cours_user.user_id
@@ -207,7 +217,7 @@ INSERT INTO cours SET ";
 // ********************************************************************
 //  info  about announcment
 // ********************************************************************
-	$tool_content .= "<li>".$langBUAnnounceInMainBase." ".$currentCourseID."";
+	$tool_content .= "       <li>".$langBUAnnounceInMainBase." ".$currentCourseID."</li>\n";
 	
 	$sqlAnnounceOfTheCourse ="SELECT a.* FROM  `$mysqlMainDb`.annonces a WHERE a.code_cours='$currentCourseID'";
 
@@ -266,20 +276,20 @@ INSERT INTO cours SET ";
 /*  End  of  backup Annonces */
 
 	// we can copy file of course
-	$tool_content .= "<li>".$langCopyDirectoryCourse."<br>(";
+	$tool_content .= "       <li>".$langCopyDirectoryCourse."<br>(";
 	$nbFiles = copydir(realpath("../../courses/".$currentCourseID."/"), $dirhtml,$verboseBackup);
-	$tool_content .= "<strong>".$nbFiles."</strong> ".$langFileCopied.")</li>";
+	$tool_content .= "<strong>".$nbFiles."</strong> ".$langFileCopied.")</li>\n";
 	$stringConfig .= "// ".$nbFiles." was in ".realpath("../../courses/".$currentCourseID."/");
 
 // ********************************************************************
 // Copy of  DB course
 // with mysqldump
 // ********************************************************************
-	$tool_content .= "<li>".$langBackupOfDataBase." ".$currentCourseID."  (SQL)<br>(";
+	$tool_content .= "       <li>".$langBackupOfDataBase." ".$currentCourseID."  (SQL)<br>(";
 	$tool_content .= backupDatabase($db , $currentCourseID , true, true , 'SQL' , realpath("../..".$archiveDir."/courseBase/"),true,$verboseBackup);
-	$tool_content .= ")</li><li>".$langBackupOfDataBase." ".$currentCourseID."  (PHP)<br>(";
+	$tool_content .= ")</li>\n       <li>".$langBackupOfDataBase." ".$currentCourseID."  (PHP)<br>(";
 	$tool_content .= backupDatabase($db , $currentCourseID , true, true , 'PHP' , realpath("../..".$archiveDir."/courseBase/"),true,$verboseBackup);
-	$tool_content .= ")</li><li>".$langBackupOfDataBase." ".$currentCourseID."  (CSV)<br>(";
+	$tool_content .= ")</li>\n       <li>".$langBackupOfDataBase." ".$currentCourseID."  (CSV)<br>(";
 	$tool_content .= backupDatabase($db , $currentCourseID , true, true , 'CSV' , realpath("../..".$archiveDir."/courseBase/"),true,$verboseBackup);
 
 // ********************************************************************
@@ -290,11 +300,8 @@ INSERT INTO cours SET ";
 	$fdesc = fopen($systemFileNameOfArchive, "w");
 	fwrite($fdesc,$stringConfig);
 	fclose($fdesc);
-	$tool_content .=  ")</li></ol></tbody></table>";
+	$tool_content .=  ")</li>\n     </ol>\n     </th>\n     <td>&nbsp;</td>\n     </tr>\n   </tbody>\n   </table>\n";
 	
-
-	
-	$tool_content .= "</td></tr></tbody></table><br>";
 
 }	// end of isadminOfCourse
 else 
