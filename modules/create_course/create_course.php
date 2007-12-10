@@ -341,12 +341,18 @@ if (isset($create_course)) {
         $language=$languageCourse;
         include("../lang/$language/messages.inc.php");
         if(empty($intitule) OR empty($repertoire)) {
-                $tool_content .= "<tr bgcolor=\"$color2\" height=\"400\">
-                        <td bgcolor=\"$color2\" colspan=\"2\" valign=\"top\">
-                        <br>
-                        <span class='labeltext'>$langEmpty</span>
-                        </td>
-                        </tr>";
+                $tool_content .= "
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"caution\" height='60'>
+      <p>$langEmptyFields</p>
+      <p><a href=\"javascript:history.go(-1)\">$langAgain</a></p>
+      </td>
+    </tr>
+    </tbody>
+    </table>\n";
+
         } else {	// if all form fields fulfilled
                 // replace lower case letters by upper case in code_cours
                 $repertoire=strtoupper($repertoire);

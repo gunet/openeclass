@@ -369,27 +369,37 @@ if ($is_adminOfCourse && @$action == 1) {//upload html file
 	$navigation[]= array ("url"=>"course_tools.php", "name"=> $langToolManagement);
 	$helpTopic = 'Import';
 
-	$tool_content .= "<p>$langExplanation</p>
-		<p>$langNoticeExpl</p>			
-		<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes&action=1\" enctype=\"multipart/form-data\">
-			<table>
-			<thead>
-				<tr>
-					<th>$langSendPage :</th>
-					<td>
-						<input type=\"file\" name=\"file\" size=\"35\" accept=\"text/html\">
-					</td>
-				</tr>
-				<tr>
-					<th>$langPgTitle :</th>
-					<td>
-						<input type=\"Text\" name=\"link_name\" size=\"50\">
-					</td>
-				</tr>
-				</thead>
-				</table>
-				<br>
-			<input type=\"Submit\" name=\"submit\" value=\"$langAdd\">
+	$tool_content .= "
+  <p>$langExplanation</p>
+  <form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes&action=1\" enctype=\"multipart/form-data\">
+
+  <br>
+  <table width=\"99%\" align='left' class='FormData'>
+  <tbody>
+  <tr>
+    <th class='left' width='20%'>&nbsp;</th>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <th class='left'>$langSendPage</th>
+    <td><input type=\"file\" name=\"file\" size=\"35\" accept=\"text/html\" class='auth_input'></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <th class='left'>$langPgTitle</th>
+    <td><input type=\"Text\" name=\"link_name\" size=\"40\" class='FormData_InputText'></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <th class='left'>&nbsp;</th>
+    <td><input type=\"Submit\" name=\"submit\" value=\"$langAdd\"></td>
+    <td><p align='right'><small>$langNoticeExpl</small></p></td>
+  </tr>
+  </tbody>
+  </table>
+  <br>
+			
 		</form>";
 
 	draw($tool_content, 2);
@@ -403,29 +413,33 @@ if ($is_adminOfCourse && @$action == 2) {//add external link
 	$helpTopic = 'Module';
 
 	$tool_content .=  "
-			<form method=\"post\" action=\"$_SERVER[PHP_SELF]?submit=yes&action=2\">
-			<table>
-				<thead>
-				<tr>
-					<th>
-							$langLink&nbsp;:
-					</th>
-					<td>
-						<input type=\"text\" name=\"link\" size=\"50\" value=\"http://\">
-					</td>
-				</tr>
-				<tr>
-					<th>
-							$langName&nbsp;:
-					</th>
-					<td>
-						<input type=\"Text\" name=\"name_link\" size=\"50\">
-					</td>
-				</tr>
-				</thead></table>
-				<br>
-					<input type=\"Submit\" name=\"submit\" value=\"$langAdd\">
-				
+  <form method=\"post\" action=\"$_SERVER[PHP_SELF]?submit=yes&action=2\">
+  <br>
+  <table width=\"99%\" align='left' class='FormData'>
+  <tbody>
+  <tr>
+    <th class='left' width='20%'>&nbsp;</th>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <th class='left'>$langLink&nbsp;:</th>
+    <td><input type=\"text\" name=\"link\" size=\"50\" value=\"http://\" class='FormData_InputText'></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <th class='left'>$langName&nbsp;:</th>
+    <td><input type=\"Text\" name=\"name_link\" size=\"50\" class='FormData_InputText'></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <th class='left'>&nbsp;</th>
+    <td><input type=\"Submit\" name=\"submit\" value=\"$langAdd\"></td>
+    <td>&nbsp;</td>
+  </tr>
+  </thead>
+  </table>
+
 			</form>
 			";
 	draw($tool_content, 2);
@@ -447,14 +461,10 @@ if ($is_adminOfCourse) {
 
 				if ($i  == 0){//active tools
 					if ($toolArr[$i][4][$j] < 100) {
-						$activeTools .= "<option value=\"".$toolArr[$i][4][$j]."\">
-										".$toolArr[$i][1][$j]."
-										</option>";
+						$activeTools .= "        <option value=\"".$toolArr[$i][4][$j]."\">".$toolArr[$i][1][$j]."</option>\n";
 					} else {
 
-						$activeTools .= "<option class=\"emphasised\" value=\"".$toolArr[$i][4][$j]."\">
-										".$toolArr[$i][1][$j]."
-										</option>";
+						$activeTools .= "<option class=\"emphasised\" value=\"".$toolArr[$i][4][$j]."\">".$toolArr[$i][1][$j]."</option>\n";
 						$arr['text']=$toolArr[$i][1][$j];
 						$arr['id'] = $toolArr[$i][4][$j];
 						array_push($externalLinks, $arr);
@@ -465,14 +475,10 @@ if ($is_adminOfCourse) {
 				} elseif ($i == 1){//inactive tools
 
 					if ($toolArr[$i][4][$j] < 100) {
-						$inactiveTools .= "<option value=\"".$toolArr[$i][4][$j]."\">
-										".$toolArr[$i][1][$j]."
-										</option>";
+						$inactiveTools .= "        <option value=\"".$toolArr[$i][4][$j]."\">".$toolArr[$i][1][$j]."</option>\n";
 					} else {
 
-						$inactiveTools .= "<option class=\"emphasised\" value=\"".$toolArr[$i][4][$j]."\">
-										".$toolArr[$i][1][$j]."
-										</option>";
+						$inactiveTools .= "<option class=\"emphasised\" value=\"".$toolArr[$i][4][$j]."\">".$toolArr[$i][1][$j]."</option>\n";
 						$arr['text']=$toolArr[$i][1][$j];
 						$arr['id'] = $toolArr[$i][4][$j];
 						array_push($externalLinks, $arr);
@@ -494,71 +500,75 @@ if ($is_adminOfCourse) {
 
 	$tool_content .= <<<tForm
 <form name="courseTools" action="$_SERVER[PHP_SELF]" method="post" enctype="multipart/form-data">
-<table>
-	<thead>
-		<tr>
-			<th>$langInactiveTools</th>
-			<th>$langMove</th>
-			<th>$langActiveTools</th>
-		</tr>
-		<tr>
-			<td>
-				<select name="toolStatInactive[]" size=17 multiple>
-					$inactiveTools
-				</select>
-			</td>
-			<td align="center">
-				<input type="button" onClick="move(this.form.elements[0],this.form.elements[3])" value="   >>   " />
-				<br>
-				<input type="button" onClick="move(this.form.elements[3],this.form.elements[0])" value="   <<   " /></td>
-			<td>
-			
-			<select name="toolStatActive[]" size="17" multiple>
-				$activeTools
-			</select>
-			
-			</td>
-		</tr>
-	</thead>
-</table>
-<br />
-<input type=submit value="$langSubmitChanges"  name="toolStatus" onClick="selectAll(this.form.elements[3],true)">
- </form>
+<div align="center">
+  <br/>
+  <table class='FormData' align=\"center\">
+  <tbody>
+  <tr>
+    <th width='33%'>$langInactiveTools</th>
+    <th width='33%'>$langMove</th>
+    <th width='33%'>$langActiveTools</th>
+  </tr>
+  <tr>
+    <td><div align="center">
+        <select name="toolStatInactive[]" size=17 multiple class='FormData_InputText'>\n$inactiveTools        </select>
+        </div>
+    </td>
+    <td><div align="center">
+        <input type="button" onClick="move(this.form.elements[0],this.form.elements[3])" value="   >>   " /><br/>
+        <input type="button" onClick="move(this.form.elements[3],this.form.elements[0])" value="   <<   " />
+        </div>
+    </td>
+    <td><div align="center">
+        <select name="toolStatActive[]" size="17" multiple class='FormData_InputText'>\n$activeTools        </select>
+        </div>
+    </td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td><div align="center">
+        <input type=submit value="$langSubmitChanges"  name="toolStatus" onClick="selectAll(this.form.elements[3],true)">
+        </div>
+        </td>
+    <td>&nbsp;</td>
+  </tr>
+  </tbody>
+  </table>
+</div>
+</form>
 tForm;
 
 	$extToolsCount = count($externalLinks) ;
 	if ($extToolsCount>0)  {
 		//show table to edit/delete external links
 		$tool_content .= "
-			<br/>
-			<table width=\"500\"><caption>$langOperations</caption>
-			<thead>
-				<tr> 
-					<th align=\"left\">
-						$langTitle
-					</th>
-					<th  width=\"100\">
-						$langDelete
-					</th>
-				</tr>
-			</thead>
-			<tbody>";
+
+  <br/>
+
+  <table width=\"550\" align='center'>
+  <thead>
+  <tr> 
+    <th align=\"left\" colspan='2'>$langOperations</th>
+  </tr>
+  <tr> 
+    <th align=\"left\">$langTitle</th>
+    <th width=\"100\">$langDelete</th>
+  </tr>
+  </thead>
+  <tbody>";
 
 		for ($i=0; $i <$extToolsCount; $i++) {
 
 			if ($i%2==0) {
-				$tool_content .= "<tr>";
+				$tool_content .= "
+  <tr>\n";
 			}
 			elseif ($i%2==1) {
-				$tool_content .= "<tr class=\"odd\">";
+				$tool_content .= "
+  <tr class=\"odd\">\n";
 			}
 			$tool_content .= "
-				
-					<td><div class=\"cellpos\">
-						".$externalLinks[$i]['text']."
-					</div>
-					</td>
-					";
+    <td><div class=\"cellpos\">".$externalLinks[$i]['text']."</div></td>\n";
 
 			$tool_content .= "
 			
