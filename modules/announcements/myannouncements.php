@@ -36,7 +36,7 @@
 $require_login = TRUE;
 $langFiles = 'announcements';
 $ignore_module_ini = true;
-
+global $langDatabaseProblem;
 include '../../include/baseTheme.php';
 include('../../include/lib/textLib.inc.php');
 $nameTools = $langMyAnnouncements;
@@ -49,7 +49,7 @@ $result = db_query("SELECT annonces.id, annonces.title, annonces.contenu,
                         WHERE annonces.code_cours=cours_user.code_cours
                         AND cours_user.user_id='$uid'
                         ORDER BY annonces.temps DESC", $mysqlMainDb)
-                                OR die("Πρόβλημα στην βάση δεδομένων!");
+                                OR die("$langDatabaseProblem");
 
 $tool_content .= "<table width=\"100%\" cellpadding=\"0\" align=center cellspacing=\"0\" border=\"0\">\n";
 

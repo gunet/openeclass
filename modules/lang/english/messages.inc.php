@@ -3683,4 +3683,57 @@ $langAssignmentActivated = "The assignment was activated";
 $langAssignmentDeactivated = "The assignment was deactivated";
 $langSaved = "The assignment details were saved";
 
+
+
+/***************************
+conactadmin.php
+***************************/
+$langForm="Completion Form";
+
+
+
+
+
+
+
+/*************************************************************
+* addadmin.php
+**************************************************************/
+
+
+$langDeleteAdmin="The deletion of administrator by id:";
+$langNotFeasible="it is not feasible";
+
+/*************************************************************
+* listerq.php
+**************************************************************/
+
+
+$langReintroductionApplication="The reintroduction of application was completed with success";
+
+/*************************************************************
+* listerqusers.php
+**************************************************************/
+$langRequestStudent="The application of student closed!";
+$langRequestReject="The application was rejected";
+$langInformativeEmail="It was sent informative message in the address";
+
+/*************************************************************
+* myannouncements.php
+**************************************************************/
+
+$langDatabaseProblem="Problem in the base of data!";
+/*************************************************************
+* admin.php
+**************************************************************/
+$langAlertAdmin="Please supplement at least administrator for the course!";
+
+
+
+/*************************************************************
+* work.php
+**************************************************************/
+
+
+$langExerciseNotPermit="The submission of the assignment is forbidden!";
 ?>

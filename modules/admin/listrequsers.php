@@ -28,6 +28,7 @@
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
+global $langRequestStudent,$langRequestReject,$langInformativeEmail;
 
 $nameTools= $langUserOpenRequests;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
@@ -54,7 +55,7 @@ $tool_content .= "<td valign=top>\n";
 
 if (isset($close) && $close == 1) {
 	$sql = db_query("UPDATE prof_request set status='2', date_closed=NOW() WHERE rid='$id'");
-	$tool_content .= "<br><br><center>Η αίτηση του φοιτητή έκλεισε !</center>";
+	$tool_content .= "<br><br><center>$langRequestStudent</center>";
 } elseif (isset($close) && $close == 2) {
 	if (!empty($comment)) {
 		if (db_query("UPDATE prof_request set status = '2',
@@ -78,8 +79,8 @@ $langEmail : $emailAdministrator
 				send_mail($siteName, $emailAdministrator, "$prof_name $prof_surname",
 					$prof_email, $emailsubject, $emailbody, $charset);
 			}
-                        $tool_content .= "<div class=alert1>Η αίτηση απορρίφθηκε!</div><br>";
-                        if ($sendmail == 1) $tool_content .= "<div class=kk align=center>Στάλθηκε ενημερωτικό μήνυμα στη διεύθυνση <b>$prof_email</b></div>.";
+                        $tool_content .= "<div class=alert1>$langRequestReject</div><br>";
+                        if ($sendmail == 1) $tool_content .= "<div class=kk align=center>$langInformativeEmail <b>$prof_email</b></div>.";
                         $tool_content .= "<br><table width=80% align=center style=\"border: 1px solid $table_border;\"><tr><td class=color1><h4>Σχόλια:</h4><pre>$comment</pre></td></tr></table>\n";
 		}
 	} else {

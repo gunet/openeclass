@@ -97,7 +97,7 @@ if((!empty($delete)) && ($delete=='1') && (!empty($aid)) && ($aid!='1'))
 {
 	if(!$r=db_query("DELETE FROM admin WHERE admin.idUser='".$aid."'"))
 	{
-		$tool_content .= "<center><br />Η διαγραφή του διαχειριστή με id:".$aid." δεν είναι εφικτή<br /></center>";
+		$tool_content .= "<center><br />$langDeleteAdmin".$aid." $langNotFeasible  <br /></center>";
 	}
 }
 
@@ -152,7 +152,7 @@ draw($tool_content,3);
   $ret: (String) The constracted form
 ******************************************************************************/
 function printform ($message) { 
-	global $langAdd, $langInsertUserInfo;
+	global $langAdd, $langInsertUserInfo,$langDeleteAdmin,$langNotFeasible;
 	// Initialize $ret
 	$ret = "";
 	// Constract the display form

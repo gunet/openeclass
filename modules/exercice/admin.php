@@ -57,11 +57,10 @@ error_reporting('E_ALL ^ E_NOTICE');
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
-
 include('exercise.lib.php');
-
 $require_current_course = TRUE;
 $langFiles='exercice';
+global $langAlertTitle,$langAlertAdmin;
 
 include '../../include/baseTheme.php';
 
@@ -73,11 +72,11 @@ $local_head .= "
 <script language=\"JavaScript\">
 function validate() {
 	if (document.forms[0].intitule.value==\"\") {
-   		alert(\"Παρακαλώ συμπληρώστε τον τίτλο του μαθήματος!\"); 
+   		alert(\"$langAlertTitle\"); 
    		return false;
  	}
  	if (document.forms[0].titulaires.value==\"\") {
-   		alert(\"Παρακαλώ συμπληρώστε τουλάχιστον έναν διαχειριστή για το μάθημα!\"); 
+   		alert(\"$langAlertAdmin\"); 
    		return false;
  	}
  	return true;

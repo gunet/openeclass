@@ -337,7 +337,7 @@ function submit_work($id) {
 				<tbody>
 					<tr>
 						<td class=\"caution\">
-							<p><b>Η υποβολή της εργασίας δεν επιτρέπεται!<br>The submission of the assignment is forbidden!</b></p>
+							<p><b>$langExerciseNotPermit<br>$langExerciseNotPermit</b></p>
 							<p><a href='work.php'>$langBack</a></p>
 						</td>
 					</tr>

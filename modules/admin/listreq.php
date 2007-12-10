@@ -6,7 +6,7 @@ include('../../include/sendMail.inc.php');
 include '../auth/auth.inc.php';
 $nameTools= $langOpenProfessorRequests;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
-
+global $langRejectRequest,$langRegistration,$langReintroductionApplication;
 // Initialise $tool_content
 $tool_content = "";
 // Main body
@@ -35,7 +35,7 @@ if (!empty($show) && ($show=="closed")) {
 	if (!empty($id) && ($id>0)) {
 		// Epanafora aitisis
 		$sql = db_query("UPDATE prof_request set status='1', date_closed=NULL WHERE rid='$id'");
-		$tool_content = "<table><tbody><tr><td class=\"success\">Η επαναφορά της αίτησης ολοκληρώθηκε με επιτυχία!</td></tr></tbody></table>";
+		$tool_content = "<table><tbody><tr><td class=\"success\">$langReintroductionApplication</td></tr></tbody></table>";
 		
 	} else {
 		// Show only closed forms
@@ -314,8 +314,8 @@ else
 			}
 		}
 		$tool_content .= "<td align=center><font size=\"2\"><a href=\"listreq.php?id=$req[rid]&"."close=1\">Κλείσιμο</a>
-			<br><a href=\"listreq.php?id=$req[rid]&"."close=2\">Απόρριψη</a>
-			<br><a href=\"listreq.php?id=$req[rid]&close=3"."\">Εγγραφή</a>
+			<br><a href=\"listreq.php?id=$req[rid]&"."close=2\">$langRejectRequest</a>
+			<br><a href=\"listreq.php?id=$req[rid]&close=3"."\">$langRegistration</a>
 			</td></tr>";
 	}
 	$tool_content .= "</tbody></table>";

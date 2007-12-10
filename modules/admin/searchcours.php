@@ -57,6 +57,7 @@ $require_admin = TRUE;
 // Include baseTheme
 include '../../include/baseTheme.php';
 // Define $nameTools
+global $langCourseVis;
 $nameTools = $langSearchCourse;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 // Initialise $tool_content
@@ -107,7 +108,7 @@ if (isset($searchtitle) && isset($searchcode) && isset($searchtype) && isset($se
 			break;
 	}
 	$tool_content .= "  <tr>
-    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>Τύπος πρόσβασης:</b></td>
+    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langCourseVis:</b></td>
     <td>
       <select name=\"formsearchtype\">
       	<option value=\"-1\" ".$typeSel[-1].">$langAllTypes</option>
