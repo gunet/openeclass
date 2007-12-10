@@ -5,8 +5,6 @@ $guest_allowed = true;
 include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
 $nameTools = "Αποστολή ενημερωτικού email στον διδάσκοντα";
-
-
 $tool_content = "";
 
 if (isset($_POST["submit"])) {
