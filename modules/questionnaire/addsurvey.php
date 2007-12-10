@@ -387,17 +387,17 @@ function printMCQuestionForm() {
 	<tr><td>$langSurveyEnd</td><td colspan="2"><input type="text" size="20" name="SurveyEnd" value="$SurveyEnd"></td></tr>
 	<tr><td colspan=3>
 	<SELECT NAME="questionx" onChange="addEvent(this.selectedIndex);this.parentNode.removeChild(this);" id="QuestionSelector">
-				<OPTION> Επιλέξτε μία από τις προκαθορισμένες ερωτήσεις (πρότυπα COLLES/ATTL)...
-				<OPTION VALUE="question1"> Σε αυτή την ενότητα, η προσπάθια μου επικεντρώθηκε σε θέματα που με ενδιέφεραν
-				<OPTION VALUE="question2"> Σε αυτή την ενότητα, αυτά που μαθαίνω έχουν να κάνουν με το επάγγελμά μου.
-				<OPTION VALUE="question3"> Σε αυτή την ενότητα, ασκώ κριτική σκέψη.
-				<OPTION VALUE="question4"> Σε αυτή την ενότητα, συνεργάζομαι με τους συμφοιτητές μου.
-				<OPTION VALUE="question5"> Σε αυτή την ενότητα, η διδασκαλία κρίνεται ικανοποιητική.
-				<OPTION VALUE="question6"> Σε αυτή την ενότητα, υπάρχει σωστή επικοινωνία με τον διδάσκοντα.
-				<OPTION VALUE="question7"> Προσπαθώ να βρίσκω λάθη στο σκεπτικό του συνομιλητή μου.
-				<OPTION VALUE="question8"> Όταν συζητώ μπαίνω στην θέση του συνομιλητή μου.
-				<OPTION VALUE="question9"> Μένω αντικειμενικός κατά την ανάλυση καταστάσεων.
-				<OPTION VALUE="question10"> Μου αρέσει να παίρνω τον ρόλο του συνήγορου του διαβόλου.
+				<OPTION> $langSelectValues
+				<OPTION VALUE="question1"> $langUnitInterested
+				<OPTION VALUE="question2"> $langUnitProfession
+				<OPTION VALUE="question3"> $langUnitCritic
+				<OPTION VALUE="question4"> $langUnitColleges
+				<OPTION VALUE="question5"> $langUnitTeaching
+				<OPTION VALUE="question6"> $langUnitCommunication
+				<OPTION VALUE="question7"> $langUnitThought
+				<OPTION VALUE="question8"> $langUnitPlace
+				<OPTION VALUE="question9"> $langUnitDiscuss
+				<OPTION VALUE="question10">$langUnitAnalice
 				</SELECT>
 			</td></tr>
 			<tr><td>$langSurveyQuestion</td><td><input type="text" name="question1" size="50" id="NewQuestion"></td></tr> 
