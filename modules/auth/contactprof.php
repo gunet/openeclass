@@ -5,7 +5,7 @@ $guest_allowed = true;
 include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
 $nameTools = "Αποστολή ενημερωτικού email στον διδάσκοντα";
-globals $langReturn,$langEmailNotSend;
+
 
 $tool_content = "";
 
