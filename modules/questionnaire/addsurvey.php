@@ -55,19 +55,15 @@
 
 $require_prof = TRUE;
 $require_current_course = TRUE;
-$langFiles = 'questionnaire';
-
 $require_help = TRUE;
 $helpTopic = 'Questionnaire';
 
 include '../../include/baseTheme.php';
-
+include('../../include/jscalendar/calendar.php');
 $local_style = '
     .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
      padding-left: 15px; padding-right : 15px; }
     .content {position: relative; left: 25px; }';
-
-include('../../include/jscalendar/calendar.php');
 
 if ($language == 'greek') {
     $lang = 'el';
@@ -147,8 +143,6 @@ return true;
 }
 
 function addEvent(SelectedQuestion) {
-	
-//	alert("CRAP "+SelectedQuestion);
 	
 	var CurrentQuestion = new Array(6);
 
@@ -385,15 +379,14 @@ function printMCQuestionForm() {
 		$tool_content .= <<<cData
 		<table><thead></thead>
 	<tr><td colspan=2>$langSurveyInfo</td></tr></table>
-	
-		<form action="addsurvey.php" id="survey" method="post" name="SurveyForm" onSubmit="return checkrequired(this, 'question1')">
-		<input type="hidden" value="1" name="UseCase">
-		<table id="QuestionTable">
-			<tr><td>$langSurveyName</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
-			<tr><td>$langSurveyStart</td><td colspan="2"><input type="text" size="20" name="SurveyStart" value="$SurveyStart"></td></tr>
-			<tr><td>$langSurveyEnd</td><td colspan="2"><input type="text" size="20" name="SurveyEnd" value="$SurveyEnd"></td></tr>
-			<tr><td colspan=3>
-				<SELECT NAME="questionx" onChange="addEvent(this.selectedIndex);this.parentNode.removeChild(this);" id="QuestionSelector">
+	<form action="addsurvey.php" id="survey" method="post" name="SurveyForm" onSubmit="return checkrequired(this, 'question1')">
+	<input type="hidden" value="1" name="UseCase">
+	<table id="QuestionTable">
+	<tr><td>$langSurveyName</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
+	<tr><td>$langSurveyStart</td><td colspan="2"><input type="text" size="20" name="SurveyStart" value="$SurveyStart"></td></tr>
+	<tr><td>$langSurveyEnd</td><td colspan="2"><input type="text" size="20" name="SurveyEnd" value="$SurveyEnd"></td></tr>
+	<tr><td colspan=3>
+	<SELECT NAME="questionx" onChange="addEvent(this.selectedIndex);this.parentNode.removeChild(this);" id="QuestionSelector">
 				<OPTION> Επιλέξτε μία από τις προκαθορισμένες ερωτήσεις (πρότυπα COLLES/ATTL)...
 				<OPTION VALUE="question1"> Σε αυτή την ενότητα, η προσπάθια μου επικεντρώθηκε σε θέματα που με ενδιέφεραν
 				<OPTION VALUE="question2"> Σε αυτή την ενότητα, αυτά που μαθαίνω έχουν να κάνουν με το επάγγελμά μου.
