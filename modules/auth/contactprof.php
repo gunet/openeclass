@@ -1,6 +1,5 @@
 <?php
 $require_login = TRUE;
-$langFiles = array('registration', 'opencours');
 $guest_allowed = true;
 include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
@@ -23,9 +22,7 @@ if (isset($_POST["submit"])) {
 $lastname $firstname
 Email: $email
 
-Σχόλια: $body
-
-";
+Σχόλια: $body";
 $errorExists = false;
 		if (!send_mail($siteName, $emailAdministrator, '', $to,
 		$emailsubject, $emailbody, $charset)) {

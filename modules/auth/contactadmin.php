@@ -44,11 +44,10 @@
 include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
 $nameTools = $langContactAdmin;
-globals $langEmailNotSend,$langForm;
 $tool_content = "";
 
 
-// MAIN BODY
+// MAINa BODY
 
 // get the incoming values and initialize them
 $userid = isset($_GET['userid'])?$_GET['userid']:(isset($_POST['id'])?$_POST['id']:'');
@@ -105,4 +104,5 @@ if(!empty($userid))
 
 $tool_content .= "<center><p><a href=\"../../index.php\">$langBackHome</a></p></center>";
 draw($tool_content,0);
+echo";a;a;";
 ?>

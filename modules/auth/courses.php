@@ -84,7 +84,6 @@ if (isset($_POST["submit"])) {
                                 $restrictedCourses[$i]=$contenu;
                         	}
                         }
-
                 } 
         }
 
@@ -331,7 +330,7 @@ function expanded_faculte($fac, $uid) {
 	// legend
 
 global $langRegistration,$langCourseCode,$langProfessor,$langCoursType;
-    $retString .= "
+  $retString .= "
     <script type=\"text/javascript\" src=\"sorttable.js\"></script>
     <table class=\"sortable\" id=\"t1\" width=\"99%\">
     <thead>
