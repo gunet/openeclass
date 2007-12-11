@@ -744,7 +744,7 @@ elseif(isset($_REQUEST['install7']))
         visitorsNum int(11) NOT NULL default '0',
         coursNum int(11) NOT NULL default '0',
         logins int(11) NOT NULL default '0',
-        details text NOT NULL default '',
+        details text,
         PRIMARY KEY  (id))
         TYPE=MyISAM $charset_spec");
 
