@@ -870,8 +870,8 @@ CREATE TABLE `pma_relation` (
 CREATE TABLE `auth` (
   `auth_id` int(2) NOT NULL auto_increment,
   `auth_name` varchar(20) NOT NULL default '',
-  `auth_settings` text NOT NULL default '',
-  `auth_instructions` text NOT NULL default '',
+  `auth_settings` text ,
+  `auth_instructions` text ,
   `auth_default` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`auth_id`))
   TYPE=MyISAM $charset_spec");
