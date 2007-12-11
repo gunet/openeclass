@@ -7,8 +7,8 @@
 *	A full copyright notice can be read in "/info/copyright.txt".
 *
 *  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-*				Yannis Exidaridis <jexi@noc.uoa.gr>
-*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*		Yannis Exidaridis <jexi@noc.uoa.gr>
+*		Alexandros Diamantidis <adia@noc.uoa.gr>
 *
 *	For a full list of contributors, see "credits.txt".
 *
@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 /**
  * Installation wizard
@@ -34,6 +34,10 @@
 session_start();
 
 $tool_content = "";
+if (!isset($siteName)) $siteName = "";
+if (!isset($InstitutionUrl)) $InstitutionUrl = "";
+if (!isset($Institution)) $Institution = ""; 
+include "../modules/lang/greek/common.inc.php";
 include "../modules/lang/greek/messages.inc.php";
 include('install_functions.php');
 
@@ -42,7 +46,7 @@ if (file_exists("../config/config.php")) {
 	<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
 <html xmlns=\"http://www.w3.org/1999/xhtml\">
   <head>
-    <title>Καλωσορίσατε στον οδηγό εγκατάστασης του e-Class</title>
+    <title>Καλωσορίσατε στον οδηγό εγκατάστασης του eClass</title>
     <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-7\" />
     <link href=\"../template/classic/tool_content.css\" rel=\"stylesheet\" type=\"text/css\" />
     <link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
@@ -137,7 +141,7 @@ if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
 	$langStep = $langStep2;
 	$_SESSION['step']=2;
 	$tool_content .= "
-     <p>Tο e-Class είναι ελεύθερη εφαρμογή και διανέμεται σύμφωνα με την άδεια GNU General Public Licence (GPL).
+     <p>Tο eClass είναι ελεύθερη εφαρμογή και διανέμεται σύμφωνα με την άδεια GNU General Public Licence (GPL).
      Παρακαλούμε διαβάστε την άδεια και κάνετε κλίκ στην 'Αποδοχή'.
      <a href=\"../info/license/gpl_print.txt\">(".$langPrintVers.")</a></p>
      
@@ -231,7 +235,7 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
 		<table width=\"99%\">
 			<thead>
 				<tr>
-					<th>URL του e-Class<font color=\"red\">*</font></th>
+					<th>URL του eClass<font color=\"red\">*</font></th>
 					<td>
 						<input type=\"text\" size=\"40\" name=\"urlForm\" value=\"$urlForm\">
 					</td>
@@ -478,7 +482,7 @@ elseif(isset($_REQUEST['install6']))
 				<li>Vod Server: ".@$vodServerForm." </li>
         </ul>     
         <input type=\"submit\" name=\"back4\" value=\"< Πίσω\">               
-        <input type=\"submit\" name=\"install7\" value=\"Eγκατάσταση του e-Class >\">               
+        <input type=\"submit\" name=\"install7\" value=\"Eγκατάσταση του eClass >\">               
         </form>";
 
 draw($tool_content);
@@ -916,7 +920,7 @@ CREATE TABLE `auth` (
 		$stringConfig='<?php
 /*
 =============================================================================
-           GUnet e-Class 2.0
+           GUnet eClass 2.0
         E-learning and Course Management Program
 =============================================================================
         Copyright(c) 2003-2007  Greek Universities Network - GUnet
@@ -1007,7 +1011,7 @@ $encryptedPasswd = true;
         <br>
        </form>
     <form action=\"../\">
-    <input type=\"submit\" value=\"Είσοδος στο e-Class\">
+    <input type=\"submit\" value=\"Είσοδος στο eClass\">
 	</form>";
 		draw($tool_content);
 	}       // τέλος ελέγχου για δικαιώματα
@@ -1159,7 +1163,7 @@ if(!$mkd){
 
 	$tool_content .= "
      
-    <u>Έλεγχος προαπαιτούμενων προγραμμάτων για τη λειτουργία του e-Class</u>
+    <u>Έλεγχος προαπαιτούμενων προγραμμάτων για τη λειτουργία του eClass</u>
     <p>
         Webserver (<em>βρέθηκε <b>".$_SERVER['SERVER_SOFTWARE']."</b></em>) 
         με υποστήριξη PHP (<em>βρέθηκε <b>PHP ".phpversion()."</b></em>).</p>
@@ -1198,7 +1202,7 @@ if(!$mkd){
      <li>Εάν επιθυμείτε να υποστηρίζετε streaming για τα αρχεία video που θα αποτελούν μέρος του υλικού των αποθηκευμένων μαθημάτων θα πρέπει να υπάρχει εγκατεστημένος streaming server σύμφωνα με τις οδηγίες που θα βρείτε στο εγχειρίδιο τάδε. 
     </li>
     <li>
-Το e-Class θα εγκαταστήσει το δικό του διαχειριστικό εργαλείο μέσω web των βάσεων δεδομένων MySQL (<a
+Το eClass θα εγκαταστήσει το δικό του διαχειριστικό εργαλείο μέσω web των βάσεων δεδομένων MySQL (<a
 href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
 μπορείτε να χρησιμοποιήσετε και το δικό σας.
 </li></ul>
@@ -1222,7 +1226,7 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
 	<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
 <html>
   <head>
-    <title>Καλωσορίσατε στον οδηγό εγκατάστασης του e-Class</title>
+    <title>Καλωσορίσατε στον οδηγό εγκατάστασης του eClass</title>
     <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-7\" />
     <link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
 
@@ -1236,7 +1240,7 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
 	 <input type=\"hidden\" name=\"welcomeScreen\" value=\"welcomeScreen\">
     <div class=\"welcomeImg\"></div>
    
-   Καλωσορίσατε στον οδηγό εγκατάστασης του e-Class. Ο οδηγός αυτός :
+   Καλωσορίσατε στον οδηγό εγκατάστασης του eClass. Ο οδηγός αυτός :
     <ul id=\"installBullet\">
     	<li>Θα σας βοηθήσει να όρίσετε τις ρυθμίσεις για τη βάση δεδομένων</li>
     	<li>Θα σας βοηθήσει να όρίσετε τις ρυθμίσεις της πλατφόρμας</li>
