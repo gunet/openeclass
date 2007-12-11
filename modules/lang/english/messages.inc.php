@@ -1428,7 +1428,15 @@ $langExercices="Exercices";
 $langCouldNot="File could not be sent";
 $langOkSent="<p><b>Your page has been sent</b><br/><br/>A link has been created on the left menu</p>";
 $langTooBig="You didn't choose any file to send, or it is too big";
-$langExplanation="The page must be in HTML format (e.g. \"my_page.htm\"). It will be linked from Homepage. If you want to send non HTML documents (PDF, Word, Power Point, Video, etc.) use <a href='../document/document.php'>Documents tool</a>";
+
+$langExplanation_0="The page must be in HTML format (e.g. \"my_page.htm\"). It will be linked from Homepage.";
+$langExplanation_1="Page info";
+$langExplanation_2="The name that will be presented in the left side menu.";
+$langExplanation_3="If you want to send non HTML documents (PDF, Word, Power Point, Video, etc.) use <a href='../document/document.php'>Documents tool</a>";
+$langExplanation_4="External link info";
+$langPgTitle="Page title";
+
+
 $langPgTitle="Title of the page";
 $langNoticeExpl = "Note: Maximum size allowed is 20MB";
 $langAdd = "Add";

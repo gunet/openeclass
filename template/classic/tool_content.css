@@ -490,6 +490,27 @@ table.FormData td {
 	color: #666666;
 }
 
+.FormData_InactiveTools{
+	margin-top: 0px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	padding: 3px 3px 3px 3px;
+	border: 1px dotted #727266;
+    background-color: #fbfbfb;
+	color: #9F9F9F;
+}
+
+.FormData_ActiveTools{
+	margin-top: 0px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	padding: 3px 3px 3px 3px;
+	border: 1px dotted #727266;
+    background-color: #fbfbfb;
+	color: #000000;
+  font-weight: bold
+}
+
 .auth_input{
 	margin-top: 0px;
 	font-family: Verdana, Arial, Helvetica, sans-serif;

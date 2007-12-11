@@ -370,31 +370,31 @@ if ($is_adminOfCourse && @$action == 1) {//upload html file
 	$helpTopic = 'Import';
 
 	$tool_content .= "
-  <p>$langExplanation</p>
   <form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes&action=1\" enctype=\"multipart/form-data\">
-
+  <p>$langExplanation_0</p>
+  <p>$langExplanation_3</p>
   <br>
   <table width=\"99%\" align='left' class='FormData'>
   <tbody>
   <tr>
     <th class='left' width='20%'>&nbsp;</th>
-    <td>&nbsp;</td>
+    <td><b>$langExplanation_1</b></td>
     <td>&nbsp;</td>
   </tr>
   <tr>
     <th class='left'>$langSendPage</th>
     <td><input type=\"file\" name=\"file\" size=\"35\" accept=\"text/html\" class='auth_input'></td>
-    <td>&nbsp;</td>
+    <td><p align='right'><small>$langNoticeExpl</small></p></td>
   </tr>
   <tr>
     <th class='left'>$langPgTitle</th>
     <td><input type=\"Text\" name=\"link_name\" size=\"40\" class='FormData_InputText'></td>
-    <td>&nbsp;</td>
+    <td><p align='right'><small>$langExplanation_2</small></p></td>
   </tr>
   <tr>
     <th class='left'>&nbsp;</th>
     <td><input type=\"Submit\" name=\"submit\" value=\"$langAdd\"></td>
-    <td><p align='right'><small>$langNoticeExpl</small></p></td>
+    <td>&nbsp;</td>
   </tr>
   </tbody>
   </table>
@@ -419,7 +419,7 @@ if ($is_adminOfCourse && @$action == 2) {//add external link
   <tbody>
   <tr>
     <th class='left' width='20%'>&nbsp;</th>
-    <td>&nbsp;</td>
+    <td><b>$langExplanation_4</b></td>
     <td>&nbsp;</td>
   </tr>
   <tr>
@@ -500,18 +500,17 @@ if ($is_adminOfCourse) {
 
 	$tool_content .= <<<tForm
 <form name="courseTools" action="$_SERVER[PHP_SELF]" method="post" enctype="multipart/form-data">
-<div align="center">
   <br/>
-  <table class='FormData' align=\"center\">
+  <table class='FormData' align=\"center\" width='500'>
   <tbody>
   <tr>
-    <th width='33%'>$langInactiveTools</th>
-    <th width='33%'>$langMove</th>
-    <th width='33%'>$langActiveTools</th>
+    <th>$langInactiveTools</th>
+    <th>$langMove</th>
+    <th>$langActiveTools</th>
   </tr>
   <tr>
     <td><div align="center">
-        <select name="toolStatInactive[]" size=17 multiple class='FormData_InputText'>\n$inactiveTools        </select>
+        <select name="toolStatInactive[]" size=17 multiple class='FormData_InactiveTools'>\n$inactiveTools        </select>
         </div>
     </td>
     <td><div align="center">
@@ -520,21 +519,20 @@ if ($is_adminOfCourse) {
         </div>
     </td>
     <td><div align="center">
-        <select name="toolStatActive[]" size="17" multiple class='FormData_InputText'>\n$activeTools        </select>
+        <select name="toolStatActive[]" size="17" multiple class='FormData_ActiveTools'>\n$activeTools        </select>
         </div>
     </td>
   </tr>
   <tr>
-    <td>&nbsp;</td>
-    <td><div align="center">
+    <th>&nbsp;</th>
+    <th><div align="center">
         <input type=submit value="$langSubmitChanges"  name="toolStatus" onClick="selectAll(this.form.elements[3],true)">
         </div>
-        </td>
-    <td>&nbsp;</td>
+        </th>
+    <th>&nbsp;</th>
   </tr>
   </tbody>
   </table>
-</div>
 </form>
 tForm;
 
@@ -544,18 +542,18 @@ tForm;
 		$tool_content .= "
 
   <br/>
-
-  <table width=\"550\" align='center'>
-  <thead>
+  <br/>
+  <table width=\"500\">
+  <tbody>
   <tr> 
-    <th align=\"left\" colspan='2'>$langOperations</th>
+    <th rowspan='2'>&nbsp;</th>
+    <td colspan='2'><b>$langOperations</b></td>
   </tr>
   <tr> 
-    <th align=\"left\">$langTitle</th>
-    <th width=\"100\">$langDelete</th>
+    <td class=\"left\"><b>$langTitle</b></td>
+    <td class=\"left\" width=\"20\"><b>$langDelete</b></td>
   </tr>
-  </thead>
-  <tbody>";
+";
 
 		for ($i=0; $i <$extToolsCount; $i++) {
 
@@ -568,21 +566,21 @@ tForm;
   <tr class=\"odd\">\n";
 			}
 			$tool_content .= "
-    <td><div class=\"cellpos\">".$externalLinks[$i]['text']."</div></td>\n";
+    <th class=\"left\" width='1'><img src=\"../../template/classic/img/external_link_on.gif\" border=\"0\" title='$langTitle' alt=\"".$langTitle."\"></th>
+    <td class=\"left\">".$externalLinks[$i]['text']."</td>\n";
 
 			$tool_content .= "
 			
-	<td><div class=\"cellpos\">
-	<a href=\"".$_SERVER['PHP_SELF'] . "?delete=" . $externalLinks[$i]['id']."\" onClick=\"return confirmation('".addslashes($externalLinks[$i]['text'])."');\">
-	<img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a>
-	</div>
-	</td>
-	</tr>";
+    <td align='center'>
+    <a href=\"".$_SERVER['PHP_SELF'] . "?delete=" . $externalLinks[$i]['id']."\" onClick=\"return confirmation('".addslashes($externalLinks[$i]['text'])."');\">
+    <img src=\"../../template/classic/img/delete.gif\" border=\"0\" title='$langDelete' alt=\"".$langDelete."\"></a>
+    </td>
+  </tr>";
 
 		}	// for loop
 		$tool_content .= <<<tCont4
-	</tbody>
-	</table>
+  </tbody>
+  </table>
 tCont4;
 }
 draw($tool_content, 2,'course_tools', $head_content);
