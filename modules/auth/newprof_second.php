@@ -22,8 +22,8 @@ $userphone = isset($_POST['userphone'])?$_POST['userphone']:'';
 
 if(!empty($submit)) 
 {
-  if( (strstr($password, "'")) or (strstr($password, '"')) or (strstr($password, '\\')) 
-  or (strstr($uname, "'")) or (strstr($uname, '"')) or (strstr($uname, '\\')) )
+  if ((strstr($password, "'")) or (strstr($password, '"')) or (strstr($password, '\\')) 
+		or (strstr($uname, "'")) or (strstr($uname, '"')) or (strstr($uname, '\\')) )
 	{
 		$tool_content .= "
     <table width=\"99%\">
@@ -164,17 +164,13 @@ if(!empty($submit))
 			}
 	
 			//------------------------------------User Message ----------------------------------------
-			$tool_content .= "
-    <table width=\"99%\">
-    <tbody>
-    <tr>
+		$tool_content .= " <table width=\"99%\"><tbody>
+  		<tr>
       <td class=\"well-done\" height='60'>
       <p>$langDearProf</p><p>$success</p><p>$infoprof</p>
-      <p>$click <a href=\"$urlServer\">$langHere</a> $backpage</p>
+      <p><a href=\"$urlServer\">$langBack</a></p>
     </td>
-    </tr>
-    </tbody>
-    /table>";
+    </tr></tbody></table>";
 		} 
 	}
 }
@@ -182,6 +178,5 @@ else
 {
 	$tool_content .= "<br />$langRegistrationError<br>";
 }
-
 draw($tool_content,0);
 ?>

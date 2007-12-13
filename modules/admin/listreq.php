@@ -1,5 +1,4 @@
 <?php
-$langFiles = array('gunet','registration','admin');
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
@@ -53,7 +52,7 @@ if (!empty($show) && ($show=="closed")) {
 		</tr></thead><tbody>";
 
  		$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,date_closed,comment 
-		FROM prof_request WHERE (status='2' AND statut<>'5')");
+											FROM prof_request WHERE (status='2' AND statut<>'5')");
 
 		for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 			$req = mysql_fetch_array($sql);
@@ -113,7 +112,7 @@ if (!empty($show) && ($show=="closed")) {
 				}
 			}
 			$tool_content .= "<td align=center>
-			<a href=\"listreq.php?id=$req[rid]&"."show=closed\">Επαναφορά</a>
+			<a href=\"listreq.php?id=$req[rid]&"."show=closed\">$langRestore</a>
 			</td></tr>";
 		}
 	}
@@ -155,12 +154,10 @@ if (!empty($show) && ($show=="closed")) {
 switch($close)
 {
     case '1':
-	    //$tool_content .= "TOTAL DELETE OF REQUEST";
 	    $sql = db_query("UPDATE prof_request set status='2', date_closed=NOW() WHERE rid='$id'");
 	    $tool_content .= "<p><center>$langProfessorRequestClosed</p>";
 	    break;
     case '2':
-	    //$tool_content .= "DELETE OF REQUEST AND SENDING A MESSAGE";
 	    $submit = isset($_POST['submit'])?$_POST['submit']:'';
 	    if(!empty($submit))
 	    {
@@ -215,7 +212,6 @@ switch($close)
     case '3':
 	    $r = "SELECT profname,profsurname,profuname,profpassword,profemail,proftmima,profcomm,comment
 	    FROM prof_request WHERE rid='$id'";
-	    //$tool_content .= $r."<br>";
 	    $d = db_query($r);
 		  if($d)
 		  {
@@ -245,7 +241,6 @@ switch($close)
 			 		}else{
 			 			$password_encrypted = $m['profpassword'];
 			 		}
-			 		
 			 		
 					$inscr_user=mysql_query("INSERT INTO `$mysqlMainDb`.user
 						(user_id, nom, prenom, username, password, email, statut, 
@@ -313,10 +308,15 @@ else
 				htmlspecialchars($req[$i])."</td>";
 			}
 		}
-		$tool_content .= "<td align=center><font size=\"2\"><a href=\"listreq.php?id=$req[rid]&"."close=1\">Κλείσιμο</a>
-			<br><a href=\"listreq.php?id=$req[rid]&"."close=2\">$langRejectRequest</a>
-			<br><a href=\"listreq.php?id=$req[rid]&close=3"."\">$langRegistration</a>
-			</td></tr>";
+		$tool_content .= "<td align=center><font size='2'><a href='listreq.php?id=$req[rid]&close=1'>$langClose</a>
+			<br><a href='listreq.php?id=$req[rid]&close=2'>$langRejectRequest</a>
+			<br><a href='../auth/newprofadmin.php?id=".urlencode($req['rid']).
+											"&pn=".urlencode($req['profname']).
+											"&ps=".urlencode($req['profsurname']).
+											"&pu=".urlencode($req['profuname']).
+											"&pe=".urlencode($req['profemail']).
+											"&pt=".urlencode($req['proftmima']).
+											"'>$langRegistration</a></td></tr>";
 	}
 	$tool_content .= "</tbody></table>";
 	// Display other actions
@@ -325,7 +325,6 @@ else
 		<a href=\"listreq.php?show=rejected\">$langReqHaveBlocked</a><br>
 		<a href=\"listreq.php?show=accepted\">$langReqHaveFinished</a></td></tr>
 	</tbody></table>";
-		
 }
 
 // If show is set then we return to listereq, else return to admin index.php
@@ -334,7 +333,5 @@ if (!empty($show)) {
 } else {
 	$tool_content .= "<br><center><p><a href=\"index.php\">$langBack</a></p></center>";
 }
-
 draw($tool_content,3);
-
 ?>

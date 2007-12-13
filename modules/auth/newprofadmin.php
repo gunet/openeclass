@@ -1,7 +1,6 @@
 <?
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
-//include 'auth.inc.php';
 $nameTools = $langProfReg;
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 
@@ -16,7 +15,6 @@ if($submit)
 	$uname = isset($_POST['uname'])?$_POST['uname']:'';
 	$password = isset($_POST['password'])?$_POST['password']:'';
 	$email_form = isset($_POST['email_form'])?$_POST['email_form']:'';
-	$usercomment = isset($_POST['usercomment'])?$_POST['usercomment']:'';
 	$department = isset($_POST['department'])?$_POST['department']:'';
 	$institut = isset($_POST['institut'])?$_POST['institut']:'NULL';
 	
@@ -44,7 +42,7 @@ if($submit)
 		}
 	
 		// check if there are empty fields
-		if (empty($nom_form) or empty($prenom_form) or empty($password) or empty($usercomment) or empty($department) or empty($uname) or (empty($email_form))) 
+		if (empty($nom_form) or empty($prenom_form) or empty($password) or empty($department) or empty($uname) or (empty($email_form))) 
 		{
 			$tool_content .= "<p>$langEmptyFields</p>
 			<br><br><center><p><a href=\"./newprofadmin.php\">$langAgain</a></p></center>";
@@ -61,7 +59,6 @@ if($submit)
 		}
 		else
 		{
-		
 			$s = mysql_query("SELECT id FROM faculte WHERE name='$department'");
 			$dep = mysql_fetch_array($s);
 			$registered_at = time();
@@ -88,15 +85,18 @@ if($submit)
 				(user_id, nom, prenom, username, password, email, statut, department, inst_id, registered_at, expires_at)
 				VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email_form','$statut','$dep[id]', '$institut', '$registered_at', '$expires_at')");
 			$last_id=mysql_insert_id();
-		        $tool_content .= "<p>$profsuccess</p>
-							<br><br>
-							<center><p><a href='../admin/listreq.php'>$langBackReq</a></p></center>";
+
+		// close request
+	  $rid = intval($_POST['rid']);
+  	db_query("UPDATE prof_request set status = '2',date_closed = NOW() WHERE rid = '$rid'");
+       $tool_content .= "<p>$profsuccess</p><br><br><center><p>
+					<a href='../admin/listreq.php'>$langBackReq</a></p></center>";
 		}
 	}
 }
 else
 {
-$tool_content .= "	<form action=\"newprofadmin.php\" method=\"post\">
+$tool_content .= "	<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
 	<table width=\"99%\"><caption>$langNewProf</caption><tbody>
 	<tr valign=\"top\" bgcolor=\"".$color2."\">
 	<th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>".$langSurname."</b></th>
@@ -120,15 +120,6 @@ $tool_content .= "	<form action=\"newprofadmin.php\" method=\"post\">
 	<td><input type=\"text\" name=\"email_form\" value=\"".@$pe."\">&nbsp;(*)</b></td>
 	</tr>
 	<tr bgcolor=\"".$color2."\">
-        <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>".$langComments."<br>
-							<font size=\"1\">".$profreason."
-       	</th>
-	<td>
-        <textarea name=\"usercomment\" COLS=\"35\" ROWS=\"4\" WRAP=\"SOFT\">".@$usercomment."</textarea>
-	<font size=\"1\">&nbsp;(*)</font>
-        </td>
-        </tr>
-	<tr bgcolor=\"".$color2."\">
         <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>".$langDepartment.":</th>
         <td><select name=\"department\">";
         $deps=mysql_query("SELECT name FROM faculte order by id");
@@ -145,6 +136,7 @@ $tool_content .= "	<form action=\"newprofadmin.php\" method=\"post\">
 	<input type=\"hidden\" name=\"auth\" value=\"1\" >
 	</td>
 	</tr>
+	<input type='hidden' name='rid' value='$id'>	
 </tbody></table></form>
 ";
 

@@ -41,7 +41,6 @@ include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
 include 'auth.inc.php';
 $nameTools = $langRegistration;
-
 $tool_content = "";		// Initialise $tool_content
 
 // Main body
@@ -140,7 +139,7 @@ $tool_content .= "
 				}
 				if (!empty($email)) 	// check if the user email is valid
 				{
-					// Don't worry about figuring this regular expression out quite yet...It will test for address@domainname and address@ip
+		// Don't worry about figuring this regular expression out quite yet...It will test for address@domainname and address@ip
 					$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
 					$emailtohostname = substr($email, (strrpos($email, "@") +1));
 					if (!eregi($regexp, $email))

@@ -37,7 +37,6 @@
 ==============================================================================
 */
 
-$langFiles = array('registration','gunet');
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
 $nameTools = $langUserDetails;
@@ -57,7 +56,6 @@ $tool_content .= "
 <tr>
 <td>
 <form action=\"newuser_second.php\" method=\"post\" name=\"newusersecond\">
-
 
 <table width=\"100%\">
 <tbody>
@@ -117,20 +115,10 @@ $tool_content .= "</select>
 	<td>
     <p align='right'>$langRequiredFields <br/>$langStar2 $langCharactersNotAllowed</p>
 	</td>
-</tr>
-</tbody>
-</table>
+</tr></tbody></table>
 
 </form>
-</td>
-</tr>
-</thead>
-</table>
-
-
-
-";
+</td></tr></thead></table>";
 
 draw($tool_content,0);
-
 ?>
