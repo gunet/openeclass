@@ -113,7 +113,8 @@ if (!isset($webDir)) {
 	@include($relPath . "config/config.php");
 
 	if (!isset($webDir)) {
-		include 'not_installed.php';
+		@include 'not_installed.php';
+                die("Unable to find configuration file, please contact the system administrator");
 	}
 }
 
