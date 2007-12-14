@@ -145,7 +145,7 @@ for ( $i = 0 ; $i < sizeof($flatElementList) ; $i++ )
 $tool_content .= ucfirst(strtolower($langUser)).': <br />'."\n"
 	.'<ul>'."\n"
 	.'<li>'.$langLastName.': '.$uDetails['lastname'].'</li>'."\n"
-	.'<li>'.$langFirstName.': '.$uDetails['firstname'].'</li>'."\n"
+	.'<li>'.$langName.': '.$uDetails['firstname'].'</li>'."\n"
 	.'<li>'.$langEmail.': '.$uDetails['email'].'</li>'."\n"
 	.'</ul>'."\n\n";
 

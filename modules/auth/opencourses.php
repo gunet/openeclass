@@ -169,7 +169,7 @@ $tool_content .= "<a name='$type'>&nbsp;</a>$message</th>";
      $tool_content .= "
        <th class='left'>$m[professor]</th>";
      $tool_content .= "
-       <th>Τύπος</th>";
+       <th>$langFileSentType</th>";
      $tool_content .="
      </tr>
      </thead>";

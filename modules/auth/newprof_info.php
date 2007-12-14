@@ -85,8 +85,8 @@ $langAuthenticateVia2
 else
 {
 	$tool_content .= "
-					<p>Η εγγραφή στην πλατφόρμα, πρός το παρόν δεν επιτρέπεται.</p>
-							<p>Παρακαλούμε, ενημερώστε το διαχειριστή του συστήματος</p>
+					<p> $langCannotUseAuthMethods </p>
+							
 					";
 }
 

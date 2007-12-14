@@ -101,7 +101,7 @@ $trackedUser = $results[0];
 $tool_content .= ucfirst(strtolower($langUser)).': <br />'."\n"
 	.'<ul>'."\n"
 	.'<li>'.$langLastName.': '.$trackedUser['lastname'].'</li>'."\n"
-	.'<li>'.$langFirstName.': '.$trackedUser['firstname'].'</li>'."\n"
+	.'<li>'.$langName.': '.$trackedUser['firstname'].'</li>'."\n"
 	.'<li>'.$langEmail.': ';
 if( empty($trackedUser['email']) )	$tool_content .= $langNoEmail;
 else 								$tool_content .= $trackedUser['email'];

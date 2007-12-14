@@ -144,7 +144,7 @@ hContent;
 draw($tool_content, 2, '', $head_content); 
 
 function printSurveyForm() {
-	global $currentCourse, $tool_content, $langSurveyName, $langSurveyStart, 
+	global $currentCourse, $tool_content, $langName, $langSurveyStart, 
 		$langSurveyEnd, $langSurveyContinue, $langSurveyInactive;
 		
 	$sid = htmlspecialchars($_REQUEST['sid']);
@@ -235,7 +235,7 @@ cData;
 
 }
 function submitSurvey() {
-	global $tool_content,$langSurveyQuestion,$langSurveyAnswer, $user_id ;
+	global $tool_content,$langQuestion,$langAnswer,$user_id ;
 	
 	// first populate survey_answer
 	$creator_id = $GLOBALS['uid'];

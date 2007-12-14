@@ -84,7 +84,7 @@
         
         
         $mtext = "<table>";
-        $mtext .= "<tr><th>".$langCourse."</th><th>".$langCoursVisible."</th><th>".$langCoursType."</th><th>".$langDepartment."</th><th>".$langProf. "</th><th>".$langNbUsers."</th></tr>";
+        $mtext .= "<tr><th>".$langCourse."</th><th>".$langCoursVisible."</th><th>".$langType."</th><th>".$langDepartment."</th><th>".$langProf. "</th><th>".$langNbUsers."</th></tr>";
 
         
         $sql = "SELECT cours.intitule AS name, cours.visible as visible, cours.type as type, cours.faculte as dept, cours.titulaires as proff, count(user_id) AS cnt FROM cours_user LEFT JOIN cours ON ".

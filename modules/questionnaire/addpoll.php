@@ -103,14 +103,13 @@ $end_cal_Poll = $jscalendar->make_input_field(
                  'value'       => $u_date_end));
 
 
-$nameTools = $langPollCreate;
+$nameTools = $langCreate;
 $navigation[] = array("url"=>"questionnaire.php", "name"=> $langQuestionnaire);
 
 $tool_content = "";
 
 if (isset($_POST['PollCreate']))  {
  	  createMCPoll();
-//		printAllQA();
 }
 
 if (isset($_POST['MoreQuestions'])) 
@@ -174,17 +173,15 @@ else
 		Prints the new poll creation form
 ******************************************************************************/
 function printPollCreationForm() {
-	global $tool_content, $langPollName, $langPollStart, 
-		$langPollEnd, $langPollType, $langPollMC, $langPollFillText, $langPollContinue, $langPollCreate, 
+	global $tool_content, $langName, $langPollStart, 
+		$langPollEnd, $langType, $langPollMC, $langPollFillText, $langPollContinue, $langCreate, 
 		$start_cal_Poll, $end_cal_Poll;
 	
-//	<input type="hidden" value="0" name="MoreQuestions">
-
 	$CurrentDate = date("Y-m-d H:i:s");
 	$tool_content .= <<<cData
 	<form action="addpoll.php" id="poll" method="post">
 	<table><thead></thead>
-		<tr><td>$langPollName</td><td colspan="2"><input type="text" size="50" name="PollName"></td></tr>
+		<tr><td>$langName</td><td colspan="2"><input type="text" size="50" name="PollName"></td></tr>
 		<tr><td>$langPollStart</td><td colspan="2">
 			<!--<input type="text" size="17" name="PollStart" value="$CurrentDate">-->
 			$start_cal_Poll
@@ -204,10 +201,10 @@ cData;
 		Prints new multiple choice question and 2 answers
 ******************************************************************************/
 function printMCQuestionForm() {
-		global $tool_content, $langPollName, $langPollStart, $langPollEnd, 
-		$langPollType, $langPollMC, $langPollFillText, $langPollContinue, 
-		$langPollQuestion, $langPollCreate, $langPollMoreQuestions, 
-		$langPollCreated, $MoreQuestions, $langPollAnswer, 
+		global $tool_content, $langName, $langPollStart, $langPollEnd, 
+		$langType, $langPollMC, $langPollFillText, $langPollContinue, 
+		$langQuestion, $langCreate, $langPollMoreQuestions, 
+		$langPollCreated, $MoreQuestions, $langAnswer, 
 	  $langPollMoreAnswers, $questions, $answers;
 		
 		if(isset($_POST['PollName'])) $PollName = htmlspecialchars($_POST['PollName']);
@@ -217,145 +214,37 @@ function printMCQuestionForm() {
 		$tool_content .= "<form action='$_SERVER[PHP_SELF]' id='poll' method='post'>
     <input type='hidden' value='1' name='UseCase'>
     <table>
-      <tr><th>$langPollName</th><td colspan='2'><input type='text' size='50' name='PollName' value='$PollName'></td></tr>
+      <tr><th>$langName</th><td colspan='2'><input type='text' size='50' name='PollName' value='$PollName'></td></tr>
       <tr><th>$langPollStart</th><td colspan='2'><input type='text' size='17' name='PollStart' value='$PollStart'></td></tr>
       <tr><th>$langPollEnd</th><td colspan='2'><input type='text' size='17' name='PollEnd' value='$PollEnd'></td></tr>";
 
 			for ($i=1; $i<=$questions; $i++) {
-				$tool_content .= "<tr><td>$langPollQuestion #".$i."</td>
+				$tool_content .= "<tr><td>$langQuestion #".$i."</td>
 												<td><input type='text' name='question".$i."' size='50'></td></tr>";
 					for ($j=$i; $j<=$answers; $j++) {
 				    $tool_content .= "
-								<tr><td>$langPollAnswer #".$j."</td><td><input type='text' name='answer".$j.".1' size='50'></td></tr>";
+								<tr><td>$langAnswer #".$j."</td><td><input type='text' name='answer".$j.".1' size='50'></td></tr>";
 							}
 				}
       $tool_content .= "<tr>
 	      <td><input type='submit' name='MoreAnswers' value='$langPollMoreAnswers'></td>
         <td><input type='submit' name='MoreQuestions' value='$langPollMoreQuestions'></td>
-        <td><input type='submit' name='PollCreate' value='$langPollCreate'></td>
+        <td><input type='submit' name='PollCreate' value='$langCreate'></td>
       </tr>
     </table>
     <input type='hidden' value='1' name='NumOfQuestions'>
     <input type='hidden' value='$questions' name='questions'>
     <input type='hidden' value='$answers' name='answers'>
     </form>";
-
-/*
-	if ($MoreQuestions == 2) { // Create poll ******************************************************
-		createMCPoll();
-	} elseif(count($_POST)<7) { // Just entered MC poll creation dialiog ****************************
-		$tool_content .= <<<cData
-		<form action="addpoll.php" id="poll" method="post" onSubmit="return checkrequired(this, 'question1')">
-		<input type="hidden" value="1" name="UseCase">
-		<table>
-			<tr><td>$langPollName</td><td colspan="2"><input type="text" size="50" name="PollName" value="$PollName"></td></tr>
-			<tr><td>$langPollStart</td><td colspan="2"><input type="text" size="17" name="PollStart" value="$PollStart"></td></tr>
-			<tr><td>$langPollEnd</td><td colspan="2"><input type="text" size="17" name="PollEnd" value="$PollEnd"></td></tr>
-			<tr><td>$langPollQuestion</td><td><input type="text" name="question1" size="50"></td></tr> 
-			<tr><td>$langPollAnswer #1</td><td><input type="text" name="answer1.1" size="50"></td></tr>
-			<tr><td>$langPollAnswer #2</td><td><input type="text" name="answer2.1" size="50"></td></tr>
-			<tr>
-			  <td><input name="MoreAnswers" type="submit" value="$langPollMoreAnswers" ></td>
-			  <td><input name="MoreQuestions" type="submit" value="$langPollMoreQuestions" ></td>
-		    <td><input name="MoreQuestions" type="submit" value="$langPollCreate" ></td>
-			</tr>
-		</table>
-		<input type="hidden" value="1" name="NumOfQuestions">
-		</form>
-cData;
-	} elseif ($MoreQuestions == 1) {  // Print more answers ***************************************************
-		$NumOfQuestions = $_POST['NumOfQuestions'];
-		
-		$tool_content .= <<<cData
-		<form action="addpoll.php" id="poll" method="post" onSubmit="return checkrequired(this, 'questionx')">
-		<input type="hidden" value="1" name="UseCase">
-		<table>
-			<tr><td>$langPollName</td><td colspan="2"><input type="text" size="50" name="PollName" value="$PollName"></td></tr>
-			<tr><td>$langPollStart</td><td colspan="2"><input type="text" size="17" name="PollStart" value="$PollStart"></td></tr>
-			<tr><td>$langPollEnd</td><td colspan="2"><input type="text" size="17" name="PollEnd" value="$PollEnd"></td></tr>
-			
-cData;
-
-		$tool_content .= "\n<!-- BEGIN printAllQA() -->\n\n";
-		printAllQA();
-		$tool_content .= "\n\n<!-- END printAllQA() -->\n\n";
-		
-			
-		$tool_content .= <<<cData
-					<tr><td>$langPollAnswer</td><td colspan="2"><input type="text" size="10" name="answer" value=""></td></tr>
-						<tr>
-			  <td><label>
-			    <input name="MoreQuestions" type="radio" value="1" />
-		      $langPollMoreAnswers</label></td>
-			  <td><label>
-			    <input name="MoreQuestions" type="radio" value="3" />
-		      $langPollMoreQuestions</label></td>
-		    <td><label>
-			    <input name="MoreQuestions" type="radio" value="2" checked/>
-		      $langPollCreate</label></td>
-			</tr>
-			<tr><td colspan="2" align="right">
-			  <input name="$langPollContinue" type="submit" value="$langPollContinue -&gt;"></td>
-		</table>
-		<input type="hidden" value="{$NumOfQuestions}" name="NumOfQuestions">
-		</form>
-cData;
-	} else {  // Print more questions ******************************************************
-		$NumOfQuestions = $_POST['NumOfQuestions'];
-		++$NumOfQuestions;
-		
-		$tool_content .= <<<cData
-		<form action="addpoll.php" id="poll" method="post"  onSubmit="return checkrequired(this, 'questionx')">
-		<input type="hidden" value="1" name="UseCase">
-		<table>
-		<tr><td>$langPollName</td><td colspan="2"><input type="text" size="50" name="PollName" value="$PollName"></td></tr>
-			<tr><td>$langPollStart</td><td colspan="2"><input type="text" size="17" name="PollStart" value="$PollStart"></td></tr>
-			<tr><td>$langPollEnd</td><td colspan="2"><input type="text" size="17" name="PollEnd" value="$PollEnd"></td></tr>
-			
-cData;
-		
-		$tool_content .= "\n<!-- BEGIN printAllQA() -->\n\n";
-		printAllQA();
-		$tool_content .= "\n\n<!-- END printAllQA() -->\n\n";
-		
-		$tool_content .= "<tr><td colspan=3><hr></td></tr> <tr> <td>" . 
-//			$langPollQuestion . "	</td><td><input type='text' name='question" .
-//			($answer_num + 1) . "'></td></tr>";
-				$langPollQuestion . "	</td><td><input type='text' name='questionx' size='50'></td></tr>".
-				"<tr><td>$langPollAnswer #1</td><td><input type='text' name='answerx1' size='50'></td></tr>".
-				"<tr><td>$langPollAnswer #2</td><td><input type='text' name='answerx2' size='50'></td></tr>";
-			
-		$tool_content .= <<<cData
-				<tr><td colspan=3><hr></td></tr>
-				<tr>
-			  <td><label>
-			    <input name="MoreQuestions" type="radio" value="1" />
-		      $langPollMoreAnswers</label></td>
-			  <td><label>
-			    <input name="MoreQuestions" type="radio" value="3" />
-		      $langPollMoreQuestions</label></td>
-		    <td><label>
-			    <input name="MoreQuestions" type="radio" value="2" checked/>
-		      $langPollCreate</label></td>
-			</tr>
-			<tr><td colspan="2" align="right">
-			  <input name="$langPollContinue" type="submit" value="$langPollContinue -&gt;"></td>
-		</table>
-		<input type="hidden" value="{$NumOfQuestions}" name="NumOfQuestions">
-		</form>
-cData;
-	}  */
 }
-
-
 
 /*****************************************************************************
 		Prints new text fill question
 ******************************************************************************/
 function printTFQuestionForm() {
-	global $tool_content, $langPollName, $langPollStart, $langPollEnd, 
-		$langPollType, $langPollMC, $langPollFillText, $langPollContinue, 
-		$langPollQuestion, $langPollCreate, $langPollMoreQuestions, 
+	global $tool_content, $langName, $langPollStart, $langPollEnd, 
+		$langType, $langPollMC, $langPollFillText, $langPollContinue, 
+		$langQuestion, $langCreate, $langPollMoreQuestions, 
 		$langPollCreated, $MoreQuestions;
 		
 		if(isset($_POST['PollName'])) $PollName = htmlspecialchars($_POST['PollName']);
@@ -369,7 +258,7 @@ function printTFQuestionForm() {
 		<form action="addpoll.php" id="poll" method="post">
 		<input type="hidden" value="2" name="UseCase">
 		<table>
-			<tr><td>$langPollName</td><td colspan="2"><input type="text" size="50" name="PollName" value="$PollName"></td></tr>
+			<tr><td>$langName</td><td colspan="2"><input type="text" size="50" name="PollName" value="$PollName"></td></tr>
 			<tr><td>$langPollStart</td><td colspan="2"><input type="text" size="10" name="PollStart" value="$PollStart"></td></tr>
 			<tr><td>$langPollEnd</td><td colspan="2"><input type="text" size="10" name="PollEnd" value="$PollEnd"></td></tr>
 cData;
@@ -378,12 +267,12 @@ cData;
 			++$counter;
 		  $$key = $_POST[$key];
 		  if (($counter > 4 )&($counter < count($_POST)-1)) {
-				$tool_content .= "<tr><td>$langPollQuestion</td><td><input type='text' name='question{$counter}' value='${$key}'></td></tr>"; 
+				$tool_content .= "<tr><td>$langQuestion</td><td><input type='text' name='question{$counter}' value='${$key}'></td></tr>"; 
 			}
 		}
 			
 		$tool_content .= <<<cData
-			<tr><td>$langPollQuestion</td><td><input type='text' name='question'></td></tr>
+			<tr><td>$langQuestion</td><td><input type='text' name='question'></td></tr>
 			<tr>
 			  <td><label>
 			    <input name="MoreQuestions" type="radio" value="1" />
@@ -442,7 +331,7 @@ function createTFPoll() {
 
 function createMCPoll() {
 	
-	global $tool_content, $langPollQuestion, $langPollAnswer ;
+	global $tool_content, $langQuestion, $langAnswer ;
 
 		$counter = 0;
 		$CurrentQuestion = 0;
@@ -501,7 +390,8 @@ function createMCPoll() {
 	$GLOBALS["tool_content"] .= $GLOBALS["langPollCreated"];
 }
 function printAllQA() {
-	global $tool_content,$langPollQuestion,$langPollAnswer ;
+
+	global $tool_content,$langQuestion,$langAnswer;
 
 		$counter = 0;
 		$CurrentQuestion = 0;
@@ -513,13 +403,13 @@ function printAllQA() {
 				if (substr($key, 0, 8) == "question") { //question
 					++$CurrentQuestion;
 					$tool_content .= "<tr><td colspan=3><hr></td></tr> 
-								<tr><td>" . $langPollQuestion . 
+								<tr><td>" . $langQuestion . 
 							" </td><td><input size='50' type='text' name='question{$CurrentQuestion}' value='".$$key."'>
 								</td></tr>\n";
 				} else { //answer
 					if ($$key != '') {
 						++$CurrentAnswer;
-						$tool_content .= " <tr><td>" . $langPollAnswer . 
+						$tool_content .= " <tr><td>" . $langAnswer . 
 						" </td><td><input size='50' type='text' name='answer{$CurrentQuestion}.{$CurrentAnswer}' ".
 						"value='{$$key}'></td></tr>\n";
 						}

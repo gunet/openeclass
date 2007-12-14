@@ -199,7 +199,7 @@ $tool_content .= "<th scope=\"col\">$langAm</th>
 if(isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2)) {
 	$tool_content .= "	<th scope=\"col\">$langTutor</th>
 		<th scope=\"col\">$langAdmR</th>
-		<th scope=\"col\">$langUnreg</th>";
+		<th scope=\"col\">$langDelete</th>";
 			
 }	// ADMIN ONLY
 
@@ -304,7 +304,7 @@ if(isset($status) && ($status["$currentCourseID"]=='1' OR $status["$currentCours
 		}	
 		$tool_content .= "<td valign=\"top\" align='center'>";
 		$alert_uname = $myrow['prenom'] . " " . $myrow['nom'];
-		$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?unregister=yes&user_id=$myrow[user_id]\" onClick=\"return confirmation('".addslashes($alert_uname)."');\"><img src='../../template/classic/img/delete.gif' border='0' title='$langUnreg'></a>";
+		$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?unregister=yes&user_id=$myrow[user_id]\" onClick=\"return confirmation('".addslashes($alert_uname)."');\"><img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></a>";
 					
 	}	// admin only
 	

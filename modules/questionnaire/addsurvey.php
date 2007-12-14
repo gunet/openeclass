@@ -49,7 +49,6 @@
   	3) Read files and directories from the directory defined in part 2
   	4) Display all of that on an HTML page
  
-  	@TODO: eliminate code duplication between document/document.php, scormdocument.php
 ==============================================================================
 */
 
@@ -95,7 +94,7 @@ $end_cal_Survey = $jscalendar->make_input_field(
                  'name'        => 'SurveyEnd',
                  'value'       => $u_date_end));
 
-$nameTools = $langSurveyCreate;
+$nameTools = $langCreate;
 $navigation[] = array("url"=>"questionnaire.php", "name"=> $langQuestionnaire);
 
 $tool_content = "";
@@ -234,9 +233,6 @@ function addEvent(SelectedQuestion) {
 	
 	var NewQuestion = document.getElementById('NewQuestion');
 	
-	//var question = "question"+SelectedQuestion;
-	//var question = "question";
-	
 	switch(SelectedQuestion) {
       case 1:   CurrentQuestion = question1; break
       case 2:   CurrentQuestion = question2; break
@@ -252,17 +248,12 @@ function addEvent(SelectedQuestion) {
    }
 	
 	NewQuestion.value = CurrentQuestion[0];
-	//alert(SelectedQuestion);
 	
 	var NewAnswer; 
 	var OldAnswer;
-	//alert('Length: '+CurrentQuestion.length);
 	for(var i=1; i < CurrentQuestion.length; i++ ){
-		//alert('i: '+i);
 		if (CurrentQuestion[i] != "") {
-			//var NewAnswer;
 			if (i<3) {
-				//alert('NewAnswer'+i);
 				NewAnswer = document.getElementById('NewAnswer'+i);
 				NewAnswer.value = CurrentQuestion[i];
 			} else {
@@ -271,7 +262,7 @@ function addEvent(SelectedQuestion) {
 				NewAnswer.value = CurrentQuestion[i];
 				NewAnswer.setAttribute('id','NewAnswer'+i);
 				NewAnswer.setAttribute('type','text');
-				NewAnswer.setAttribute('size','50');
+				NewAnswer.setAttribute('size','70');
 				NewAnswer.setAttribute('name','answerx.'+i);
 				
 				TheTABLE = document.getElementById('QuestionTable');
@@ -287,20 +278,9 @@ function addEvent(SelectedQuestion) {
 				NewTR.appendChild(NewTD);
 				OldTR = document.getElementById('NextLine');
 				OldTR.parentNode.insertBefore(NewTR,OldTR);
-				
-				
-				//NewAnswer = document.createElement('input');
-				//NewAnswer.value = CurrentQuestion[i];
-				//NewAnswer.setAttribute('id','NewAnswer'+i);
-				//OldAnswer = document.getElementById('NewAnswer'+(i-1));
-				//alert('Adding: '+NewAnswer.value);
-				//alert('OldAnswer: '+OldAnswer.value);
-				//OldAnswer.parentNode.insertBefore(NewAnswer,OldAnswer.nextSibling);
 			}
 		}
 	}
-	//removeEvent();
-	
 }
 
 function removeEvent() {
@@ -312,7 +292,6 @@ function removeEvent() {
 		alert("ERROR: "+err);
 	}
 }
-//  End -->
 </script>
 hContent;
 
@@ -325,9 +304,9 @@ else
 		Prints the new survey creation form
 ******************************************************************************/
 function printSurveyCreationForm() {
-	global $tool_content, $langSurveyName, $langPollStart, 
-		$langPollEnd, $langSurveyType, $langSurveyMC, $langSurveyFillText, 
-		$langSurveyCreate, $langSurveyContinue,  $start_cal_Survey, $end_cal_Survey;
+	global $tool_content, $langName, $langPollStart, 
+		$langPollEnd, $langType, $langSurveyMC, $langSurveyFillText, 
+		$langCreate, $langSurveyContinue,  $start_cal_Survey, $end_cal_Survey;
 	
 	$CurrentDate = date("Y-m-d H:i:s");
 	$CurrentDate = htmlspecialchars($CurrentDate);
@@ -335,14 +314,13 @@ function printSurveyCreationForm() {
 	<form action="addsurvey.php" id="survey" method="post">
 	<input type="hidden" value="0" name="MoreQuestions">
 	<table><thead></thead>
-		<tr><td>$langSurveyName</td><td colspan="2"><input type="text" size="50" name="SurveyName"></td></tr>
+		<tr><td>$langName</td><td colspan="2"><input type="text" size="50" name="SurveyName"></td></tr>
 		<tr><td>$langPollStart</td><td colspan="2">
-			<!--<input type="text" size="17" name="SurveyStart" value="$CurrentDate">-->
 			$start_cal_Survey
 		</td></tr>
-		<tr><td>$langPollEnd</td><td colspan="2"><!--<input type="text" size="17" name="SurveyEnd">-->$end_cal_Survey</td></tr>
+		<tr><td>$langPollEnd</td><td colspan="2">$end_cal_Survey</td></tr>
 		<!--<tr>
-		  <td>$langSurveyType</td>
+		  <td>$langType</td>
 		  <td><label>
 		    <input name="UseCase" type="radio" value="1" />
 	      $langSurveyMC</label></td>
@@ -362,18 +340,20 @@ cData;
 		Prints new multiple choice question and 2 answers
 ******************************************************************************/
 function printMCQuestionForm() {
-		global $tool_content, $langSurveyName, $langSurveyStart, $langSurveyEnd, 
-		$langSurveyType, $langSurveyMC, $langSurveyFillText, 
-		$langSurveyQuestion, $langSurveyCreate, $langSurveyMoreQuestions, 
-		$langSurveyCreated, $MoreQuestions, $langSurveyAnswer, 
-		$langSurveyMoreAnswers, $langSurveyInfo;
+		global $tool_content, $langName, $langSurveyStart, $langSurveyEnd, 
+		$langType, $langSurveyMC, $langSurveyFillText, 
+		$langQuestion, $langCreate, $langSurveyMoreQuestions, 
+		$langSurveyCreated, $MoreQuestions, $langAnswer, 
+		$langSurveyMoreAnswers, $langSurveyInfo,
+		$langQuestion1, $langQuestion2, $langQuestion3, $langQuestion4, $langQuestion5, $langQuestion6,
+		$langQuestion7, $langQuestion8,$langQuestion9, $langQuestion10;
 		
 		if(isset($_POST['SurveyName'])) $SurveyName = htmlspecialchars($_POST['SurveyName']);
 		if(isset($_POST['SurveyEnd'])) $SurveyEnd = htmlspecialchars($_POST['SurveyEnd']);
 		if(isset($_POST['SurveyStart'])) $SurveyStart = htmlspecialchars($_POST['SurveyStart']);
 		
 //	if ($MoreQuestions == 2) { // Create survey ******************************************************
-	if ($MoreQuestions == $langSurveyCreate) { // Create survey
+	if ($MoreQuestions == $langCreate) { // Create survey
 		createMCSurvey();
 	} elseif(count($_POST)<7) { // Just entered MC survey creation dialiog ****************************
 		$tool_content .= <<<cData
@@ -382,34 +362,34 @@ function printMCQuestionForm() {
 	<form action="addsurvey.php" id="survey" method="post" name="SurveyForm" onSubmit="return checkrequired(this, 'question1')">
 	<input type="hidden" value="1" name="UseCase">
 	<table id="QuestionTable">
-	<tr><td>$langSurveyName</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
+	<tr><td>$langName</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
 	<tr><td>$langSurveyStart</td><td colspan="2"><input type="text" size="20" name="SurveyStart" value="$SurveyStart"></td></tr>
 	<tr><td>$langSurveyEnd</td><td colspan="2"><input type="text" size="20" name="SurveyEnd" value="$SurveyEnd"></td></tr>
 	<tr><td colspan=3>
 	<SELECT NAME="questionx" onChange="addEvent(this.selectedIndex);this.parentNode.removeChild(this);" id="QuestionSelector">
-				<OPTION> $langSelectValues
-				<OPTION VALUE="question1"> $langUnitInterested
-				<OPTION VALUE="question2"> $langUnitProfession
-				<OPTION VALUE="question3"> $langUnitCritic
-				<OPTION VALUE="question4"> $langUnitColleges
-				<OPTION VALUE="question5"> $langUnitTeaching
-				<OPTION VALUE="question6"> $langUnitCommunication
-				<OPTION VALUE="question7"> $langUnitThought
-				<OPTION VALUE="question8"> $langUnitPlace
-				<OPTION VALUE="question9"> $langUnitDiscuss
-				<OPTION VALUE="question10">$langUnitAnalice
+				<OPTION>$langSurveyInfo</option>
+				<OPTION VALUE="question1">$langQuestion1[0]</option>
+        <OPTION VALUE="question2">$langQuestion2[0]</option>
+        <OPTION VALUE="question3">$langQuestion3[0]</option>
+        <OPTION VALUE="question4">$langQuestion4[0]</option>
+        <OPTION VALUE="question5">$langQuestion5[0]</option>
+        <OPTION VALUE="question6">$langQuestion6[0]</option>
+        <OPTION VALUE="question7">$langQuestion7[0]</option>
+        <OPTION VALUE="question8">$langQuestion8[0]</option>
+        <OPTION VALUE="question9">$langQuestion9[0]</option>
+        <OPTION VALUE="question10">$langQuestion10[0]</option>
 				</SELECT>
 			</td></tr>
-			<tr><td>$langSurveyQuestion</td><td><input type="text" name="question1" size="50" id="NewQuestion"></td></tr> 
-			<tr><td>$langSurveyAnswer #1</td><td><input type="text" name="answer1.1" size="50" id="NewAnswer1"></td></tr>
-			<tr><td>$langSurveyAnswer #2</td><td><input type="text" name="answer1.2" size="50" id="NewAnswer2"></td></tr>
+			<tr><td>$langQuestion</td><td><input type="text" name="question1" size="70" id="NewQuestion"></td></tr> 
+			<tr><td>$langAnswer #1</td><td><input type="text" name="answer1.1" size="70" id="NewAnswer1"></td></tr>
+			<tr><td>$langAnswer #2</td><td><input type="text" name="answer1.2" size="70" id="NewAnswer2"></td></tr>
 			<tr id="NextLine">
 			  <td>
 			    <input name="MoreQuestions" type="submit" value="$langSurveyMoreAnswers" /></td>
 			  <td>
 			    <input name="MoreQuestions" type="submit" value="$langSurveyMoreQuestions" /></td>
 		    <td>
-					<input name="MoreQuestions" type="submit" value="$langSurveyCreate"></td>
+					<input name="MoreQuestions" type="submit" value="$langCreate"></td>
 			</tr>
 		</table>
 		<input type="hidden" value="1" name="NumOfQuestions">
@@ -423,19 +403,15 @@ cData;
 		<form action="addsurvey.php" id="survey" method="post">
 		<input type="hidden" value="1" name="UseCase">
 		<table>
-			<tr><td>$langSurveyName</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
+			<tr><td>$langName</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
 			<tr><td>$langSurveyStart</td><td colspan="2"><input type="text" size="10" name="SurveyStart" value="$SurveyStart"></td></tr>
 			<tr><td>$langSurveyEnd</td><td colspan="2"><input type="text" size="10" name="SurveyEnd" value="$SurveyEnd"></td></tr>
 			
 cData;
 
-		$tool_content .= "\n<!-- BEGIN printAllQA() -->\n\n";
 		printAllQA();
-		$tool_content .= "\n\n<!-- END printAllQA() -->\n\n";
-		
-			
 		$tool_content .= <<<cData
-					<tr><td>$langSurveyAnswer</td><td colspan="2"><input type="text" size="10" name="answer" value=""></td></tr>
+					<tr><td>$langAnswer</td><td colspan="2"><input type="text" size="10" name="answer" value=""></td></tr>
 						<tr>
 			  <td>
 			    <input name="MoreQuestions" type="submit" value="$langSurveyMoreAnswers" />
@@ -444,7 +420,7 @@ cData;
 			    <input name="MoreQuestions" type="submit" value="$langSurveyMoreQuestions" />
 		     </td>
 		    <td>
-			    <input name="MoreQuestions" type="submit" value="$langSurveyCreate" />
+			    <input name="MoreQuestions" type="submit" value="$langCreate" />
 		     </td>
 			</tr>
 		</table>
@@ -459,7 +435,7 @@ cData;
 		<form action="addsurvey.php" id="survey" method="post" name="SurveyForm"  onSubmit="return checkrequired(this, 'questionx')">
 		<input type="hidden" value="1" name="UseCase">
 		<table>
-		<tr><td>$langSurveyName</td><td colspan="2">
+		<tr><td>$langName</td><td colspan="2">
 				<input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
 		<tr><td>$langSurveyStart</td><td colspan="2">
 					<input type="text" size="20" name="SurveyStart" value="$SurveyStart"></td></tr>
@@ -468,33 +444,31 @@ cData;
 			
 cData;
 		
-		$tool_content .= "\n<!-- BEGIN printAllQA() -->\n\n";
 		printAllQA();
-		$tool_content .= "\n\n<!-- END printAllQA() -->\n\n";
 		
 		$tool_content .= <<<cData
 		<tr><td colspan=3><hr></td></tr>
 			<tr><td colspan=3>
 				<SELECT NAME="questionx" onChange="addEvent(this.selectedIndex);this.parentNode.removeChild(this);" id="QuestionSelector">
-				<OPTION> Επιλέξτε μία από τις προκαθόρισμένες ερωτήσεις (πρότυπα COLLES/ATTL)...
-				<OPTION VALUE="question1"> Σε αυτή την ενότητα, η προσπάθια μου επικεντρώθηκε σε θέματα που με ενδιέφεραν
-				<OPTION VALUE="question2"> Σε αυτή την ενότητα, αυτά που μαθαίνω έχουν να κάνουν με το επάγγελμά μου.
-				<OPTION VALUE="question3"> Σε αυτή την ενότητα, ασκώ κριτική σκέψη.
-				<OPTION VALUE="question4"> Σε αυτή την ενότητα, συνεργάζομαι με τους συμφοιτητές μου.
-				<OPTION VALUE="question5"> Σε αυτή την ενότητα, η διδασκαλία κρίνεται ικανοποιητική.
-				<OPTION VALUE="question6"> Σε αυτή την ενότητα, υπάρχει σωστή επικοινωνία με τον διδάσκοντα.
-				<OPTION VALUE="question7"> Προσπαθώ να βρίσκω λάθη στο σκεπτικό του συνομιλητή μου.
-				<OPTION VALUE="question8"> Όταν συζητώ μπαίνω στην θέση του συνομιλητή μου.
-				<OPTION VALUE="question9"> Μένω αντικειμενικός κατά την ανάλυση καταστάσεων.
-				<OPTION VALUE="question10"> Μου αρέσει να παίρνω τον ρόλο του συνήγορου του διαβόλου.
+				<OPTION>$langSurveyInfo</option>
+				<OPTION VALUE="question1">$langQuestion1[0]</option>
+				<OPTION VALUE="question2">$langQuestion2[0]</option>
+				<OPTION VALUE="question3">$langQuestion3[0]</option>
+				<OPTION VALUE="question4">$langQuestion4[0]</option>
+				<OPTION VALUE="question5">$langQuestion5[0]</option>
+				<OPTION VALUE="question6">$langQuestion6[0]</option>
+				<OPTION VALUE="question7">$langQuestion7[0]</option>
+				<OPTION VALUE="question8">$langQuestion8[0]</option>
+				<OPTION VALUE="question9">$langQuestion9[0]</option>
+				<OPTION VALUE="question10">$langQuestion10[0]</option>
 				</SELECT>
 			</td></tr>
 cData;
 		
 		$tool_content .= "<tr> <td>" . 
-				$langSurveyQuestion . "	</td><td><input type='text' name='questionx' id='NewQuestion'></td></tr>".
-				"<tr><td>$langSurveyAnswer #1</td><td><input type='text' name='answerx.1' size='50' id='NewAnswer1'></td></tr>".
-				"<tr><td>$langSurveyAnswer #2</td><td><input type='text' name='answerx.2' size='50' id='NewAnswer2'></td></tr>";
+				$langQuestion . "	</td><td><input type='text' name='questionx' size='70' id='NewQuestion'></td></tr>".
+				"<tr><td>$langAnswer #1</td><td><input type='text' name='answerx.1' size='70' id='NewAnswer1'></td></tr>".
+				"<tr><td>$langAnswer #2</td><td><input type='text' name='answerx.2' size='70' id='NewAnswer2'></td></tr>";
 			
 		$tool_content .= <<<cData
 				<tr id="NextLine"><td colspan=3><hr></td></tr>
@@ -506,7 +480,7 @@ cData;
 			    <input name="MoreQuestions" type="submit" value="$langSurveyMoreQuestions" />
 		    </td>
 		    <td>
-			    <input name="MoreQuestions" type="submit" value="$langSurveyCreate" />
+			    <input name="MoreQuestions" type="submit" value="$langCreate" />
 		     </td>
 			</tr>
 		</table>
@@ -521,9 +495,9 @@ cData;
 		Prints new text fill question
 ******************************************************************************/
 function printTFQuestionForm() {
-	global $tool_content, $langSurveyName, $langSurveyStart, $langSurveyEnd, 
-		$langSurveyType, $langSurveyMC, $langSurveyFillText, 
-		$langSurveyQuestion, $langSurveyCreate, $langSurveyMoreQuestions, 
+	global $tool_content, $langName, $langSurveyStart, $langSurveyEnd, 
+		$langType, $langSurveyMC, $langSurveyFillText, 
+		$langQuestion, $langCreate, $langSurveyMoreQuestions, 
 		$langSurveyCreated, $MoreQuestions;
 		
 		if(isset($_POST['SurveyName'])) $SurveyName = htmlspecialchars($_POST['SurveyName']);
@@ -531,14 +505,14 @@ function printTFQuestionForm() {
 		if(isset($_POST['SurveyStart'])) $SurveyStart = htmlspecialchars($_POST['SurveyStart']);
 		
 //	if ($MoreQuestions == 2) {
-	if ($MoreQuestions == $langSurveyCreate) {
+	if ($MoreQuestions == $langCreate) {
 		createTFSurvey();
 	} else {
 		$tool_content .= <<<cData
 		<form action="addsurvey.php" id="survey" method="post">
 		<input type="hidden" value="2" name="UseCase">
 		<table>
-			<tr><td>$langSurveyName</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
+			<tr><td>$langName</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
 			<tr><td>$langSurveyStart</td><td colspan="2"><input type="text" size="20" name="SurveyStart" value="$SurveyStart"></td></tr>
 			<tr><td>$langSurveyEnd</td><td colspan="2"><input type="text" size="20" name="SurveyEnd" value="$SurveyEnd"></td></tr>
 cData;
@@ -547,19 +521,18 @@ cData;
 			++$counter;
 		  $$key = $_POST[$key];
 		  if (($counter > 4 )&($counter < count($_POST)-1)) {
-				$tool_content .= "<tr><td>$langSurveyQuestion</td><td><input type='text' name='question{$counter}' value='${$key}'></td></tr>"; 
+				$tool_content .= "<tr><td>$langQuestion</td><td><input type='text' name='question{$counter}' value='${$key}'></td></tr>"; 
 			}
-			//$tool_content .= $$key ."|". $key ."<br>"; 
 		}
 			
 		$tool_content .= <<<cData
-			<tr><td>$langSurveyQuestion</td><td><input type='text' name='question'></td></tr>
+			<tr><td>$langQuestion</td><td><input type='text' name='question'></td></tr>
 			<tr>
 			  <td>
 			    <input name="MoreQuestions" type="submit" value="$langSurveyMoreQuestions" />
 		      </td>
 			  <td>
-			    <input name="MoreQuestions" type="submit" value="$langSurveyCreate" />
+			    <input name="MoreQuestions" type="submit" value="$langCreate" />
 		      </td>
 			</tr>
 		</table>
@@ -613,7 +586,7 @@ function createTFSurvey() {
 }
 function createMCSurvey() {
 	
-	global $tool_content, $langSurveyQuestion, $langSurveyAnswer ;
+	global $tool_content, $langQuestion, $langAnswer;
 
 	// insert into survey as above
 	
@@ -649,7 +622,6 @@ function createMCSurvey() {
 			}	
 			if (($counter >= 5) && ($counter <= (count($_POST)-2) )) { // question or anwser
 				if (substr($key, 0, 8) == "question") { //question
-					// insert into survey_question //////////////////////////////////////////////////////////////
 					$QuestionText = $$key;
 					$sqid = "";
 					$pattern = "1234567890";
@@ -662,7 +634,6 @@ function createMCSurvey() {
 					mysql_real_escape_string($QuestionText) ."')");
 
 				} else { //answer
-					// insert into survey_question_answer //////////////////////////////////////////////////////////////
 					if ($$key != '') {
 						$AnwserText = $$key;	
 						mysql_select_db($GLOBALS['currentCourseID']);
@@ -676,35 +647,30 @@ function createMCSurvey() {
 	$GLOBALS["tool_content"] .= $GLOBALS["langSurveyCreated"];
 }
 function printAllQA() {
-	global $tool_content,$langSurveyQuestion,$langSurveyAnswer ;
+
+	global $tool_content, $langQuestion, $langAnswer;
 
 		$counter = 0;
 		$CurrentQuestion = 0;
 		$CurrentAnswer = 0;
 		foreach (array_keys($_POST) as $key) {
 			$$key = $_POST[$key];
-			//$tool_content .= "$key = " . $key . " | $$key = " . $$key . "<br>\n\n"; 
 			++$counter;
 			if (($counter >= 5)&&($counter <= (count($_POST)-3) )) { // question or anwser
 				if (substr($key, 0, 8) == "question") { //question
 					++$CurrentQuestion;
-					$tool_content .= "<tr><td colspan=3><hr></td></tr> <tr><td>" . $langSurveyQuestion . 
-						" </td><td><input type='text' size='50' name='question{$CurrentQuestion}' value='".
+					$tool_content .= "<tr><td colspan=3><hr></td></tr> <tr><td>" . $langQuestion . 
+						" </td><td><input type='text' size='70' name='question{$CurrentQuestion}' value='".
 						$$key."'></td></tr>\n";
 				} else { //answer
 					if ($$key != '') {
 						++$CurrentAnswer;
-						$tool_content .= " <tr><td>" . $langSurveyAnswer . 
-						" </td><td><input type='text' size='50' name='answer{$CurrentQuestion}.{$CurrentAnswer}' ".
+						$tool_content .= " <tr><td>" . $langAnswer . 
+						" </td><td><input type='text' size='70' name='answer{$CurrentQuestion}.{$CurrentAnswer}' ".
 						"value='{$$key}'></td></tr>\n";
 					}
-					
 				}
-				
-				
 			}
-			
-		}
+	 }
 }
-
 ?>

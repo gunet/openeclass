@@ -78,7 +78,7 @@ default:
 draw($tool_content, 2); 
 
 function printPollForm() {
-	global $currentCourse, $tool_content, $langPollName, $langPollStart, 
+	global $currentCourse, $tool_content, $langName, $langPollStart, 
 		$langPollEnd, $langPollContinue, $langPollInactive;
 	
 	$pid = htmlspecialchars($_REQUEST['pid']);
@@ -171,7 +171,7 @@ cData;
 	
 }
 function submitPoll() {
-	global $tool_content,$langPollQuestion,$langPollAnswer, $user_id ;
+	global $tool_content, $user_id ;
 	
 	// first populate poll_answer
 	$creator_id = $GLOBALS['uid'];

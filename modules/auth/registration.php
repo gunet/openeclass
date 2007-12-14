@@ -80,7 +80,7 @@ if(!empty($auth)) {
                 if($v!=1) {
                         $tool_content .= "
                                 <p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
-                        $langNewAccountΑctivation&nbsp;
+                       $langNewAccount&nbsp;
                         (<a href=\"ldapnewuser.php?auth=".$v."\">".get_auth_info($v)."</a>)
                                 </p>";
                 } else {
@@ -123,7 +123,7 @@ if(!empty($auth)) {
                         $auth_method_settings = get_auth_settings($v);
                         $tool_content .= "
                                 <p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
-                        $langNewAccountΑctivation 
+                        $langNewAccount 
                                 &nbsp;(<a href=\"ldapnewprof.php?auth=".$v."\">".get_auth_info($v)."</a>)</p>";
 
                         if(!empty($auth_method_settings)) {
@@ -133,8 +133,7 @@ if(!empty($auth)) {
         }
 } else {
         $tool_content .= "
-                <p>Η εγγραφή στην πλατφόρμα, πρός το παρόν δεν επιτρέπεται.</p>
-                <p>Παρακαλούμε, ενημερώστε το διαχειριστή του συστήματος</p>";
+                <p>$langCannotUseAuthMethods </p>";
 }
 
 $tool_content .= "
@@ -145,6 +144,7 @@ $tool_content .= "
 </thead>
 </table>
 ";
+
 
 draw($tool_content, 0, 'auth');
 ?>

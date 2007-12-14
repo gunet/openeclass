@@ -48,20 +48,14 @@
    	2) Define the directory to display
   	3) Read files and directories from the directory defined in part 2
   	4) Display all of that on an HTML page
- 
-  	@todo: eliminate code duplication between
- 	document/document.php, scormdocument.php
 ==============================================================================
 */
 
 $require_current_course = TRUE;
-$langFiles = 'questionnaire';
-
 $require_help = TRUE;
 $helpTopic = 'Questionnaire';
 
 include '../../include/baseTheme.php';
-
 $tool_content = "";
 
 /*****************************************************************************
@@ -84,8 +78,6 @@ if (!$survey_check) {
 		$tool_content .= '<b><a href="addsurvey.php?UseCase=0">'.$langSurveyCreate.'</a></b><br><br>  ';
 	}
 else {
-	//$tool_content .= $num_rows . " " . $survey_check;
-//////////////////////////////////////////////////////////////////////////////
 
 	if ($is_adminOfCourse) 
 		$tool_content .= '<b><a href="addsurvey.php?UseCase=0">'.$langSurveyCreate.'</a></b><br><br>  ';
@@ -96,12 +88,12 @@ else {
 	$tool_content .= <<<cData
 		<b>$langSurveysActive</b>
 		<table border="1"><tr>
-		<td>$langSurveyName</td>
+		<td>$langyName</td>
 		<td>$langSurveyCreator</td>
-		<td>$langSurveyCreation</td>
+		<td>$langCreate</td>
 		<td>$langSurveyStart</td>
 		<td>$langSurveyEnd</td>
-		<td>$langSurveyType</td>
+		<td>$langType</td>
 		<td>$langSurveyOperations</td>
 		</tr>
 cData;
@@ -144,9 +136,9 @@ cData;
 			$tool_content .= "<td>" . $langSurveyFillText . "</td>";
 		}
 		if ($is_adminOfCourse) 
-			$tool_content .= "<td><!--<a href='editsurvey.php?sid={$sid}'>".$langSurveyEdit."</a> | -->".
-				"<a href='deletesurvey.php?sid={$sid}'>".$langSurveyRemove."</a> | ".
-				"<a href='deactivatesurvey.php?sid={$sid}'>".$langSurveyDeactivate."</a> | ".
+			$tool_content .= "<td><!--<a href='editsurvey.php?sid={$sid}'>".$langEdit."</a> | -->".
+				"<a href='deletesurvey.php?sid={$sid}'>".$langDelete."</a> | ".
+				"<a href='deactivatesurvey.php?sid={$sid}'>".$langDeactivate."</a> | ".
 				"</td></tr>";
 		else
 			$tool_content .= "<td><a href='surveyparticipate.php?UseCase=1&sid=". $sid ."'>".$langSurveyParticipate."</a></td></tr>";
@@ -161,12 +153,12 @@ cData;
 		$tool_content .= <<<cData
 			<b>$langSurveysInactive</b>
 			<table border="1"><tr>
-			<td>$langSurveyName</td>
+			<td>$langName</td>
 			<td>$langSurveyCreator</td>
-			<td>$langSurveyCreation</td>
+			<td>$langCreate</td>
 			<td>$langSurveyStart</td>
 			<td>$langSurveyEnd</td>
-			<td>$langSurveyType</td>
+			<td>$langType</td>
 			<td>$langSurveyOperations</td>
 			</tr>
 cData;
@@ -190,7 +182,6 @@ cData;
 			where sid='$sid'", $currentCourse);
 			$countAnswers = mysql_num_rows($answers);
 			
-			//$tool_content .= "<tr><td>" . $theSurvey["name"] . "</td>";
 			if ($is_adminOfCourse) { 
 				$tool_content .= "<tr><td><a href=\"surveyresults.php?sid=". 
 				$sid ."&type=" . $theSurvey["type"]."\">" . $theSurvey["name"] .
@@ -198,7 +189,6 @@ cData;
 			} else {
 				$tool_content .= "<tr><td>" . $theSurvey["name"] . "</td>";
 			}
-			//$tool_content .= "<td>" . $countAnswers . "</td>";
 			$tool_content .= "<td>" . $theCreator["nom"]. " " . $theCreator["prenom"] . "</td>";
 			$tool_content .= "<td>" . $theSurvey["creation_date"] . "</td>";
 			$tool_content .= "<td>" . $theSurvey["start_date"] . "</td>";
@@ -209,9 +199,9 @@ cData;
 			} else {
 				$tool_content .= "<td>" . $langSurveyFillText . "</td>";
 			}
-			$tool_content .= "<td><!--<a href='editsurvey.php?sid={$sid}'>".$langSurveyEdit."</a> | -->".
-			"<a href='deletesurvey.php?sid={$sid}'>".$langSurveyRemove."</a> | ".
-			"<a href='activatesurvey.php?sid={$sid}'>".$langSurveyActivate."</a> | ".
+			$tool_content .= "<td><!--<a href='editsurvey.php?sid={$sid}'>".$langEdit."</a> | -->".
+			"<a href='deletesurvey.php?sid={$sid}'>".$langDelete."</a> | ".
+			"<a href='activatesurvey.php?sid={$sid}'>".$langActivate."</a> | ".
 			"</td></tr>";
 		}
 		$tool_content .= "</table><br>";
@@ -221,6 +211,4 @@ cData;
 		Print the page
 ******************************************************************************/
 draw($tool_content, 2); 
-
-
 ?>

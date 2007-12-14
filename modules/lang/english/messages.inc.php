@@ -122,7 +122,6 @@ $langLast30Days ="Last 30 days";
 
 $langNbUsers = "Number of users";
 $langCoursVisible = "Visibility";
-$langCoursType = "Type";
 $langOthers = "Other sets";
 $langCoursesPerDept = "Number of courses per department";
 $langCoursesPerLang = "Number of courses per language";
@@ -999,8 +998,6 @@ $langEvalSet="Scoring settings";
 $langExercice="Exercise";
 $langActive="Active";
 $langInactive="Inactive";
-$langActivate="Activate";
-$langDeactivate="Deactivate";
 $langNoEx="There is no exercise for the moment";
 $langNewEx="New exercise";
 
@@ -2392,20 +2389,16 @@ $langHelp	="Help";
 $langQuestionnaire = "Questionnaire";
 $langSurveysActive = "Active Surveys";
 $langSurveysInactive = "Inactive Surveys";
-$langSurveyName = "Íame";
+$langSurvey = "Survey";
+$langSurveys = "Surveys";
 $langSurveyNumAnswers = "Number of Answers";
 $langSurveyDateCreated = "Created on";
 $langSurveyStart = "Started on";
 $langSurveyEnd = "and ended on";
 $langSurveyOperations = "Operations";
-$langSurveyEdit = "Edit";
-$langSurveyRemove = "Delete";
-$langSurveyCreate = "Create";
 $langSurveyCreated = "Created";
 $langSurveyQuestion = "Question";
-$langSurveyAnswer = "Answer";
 $langSurveyAddAnswer = "Add Answers";
-$langSurveyType = "Type";
 $langSurveyMC = "Multiple Choice";
 $langSurveyFillText = "Fill in the text";
 $langSurveyContinue = "Continue";
@@ -2416,8 +2409,6 @@ $langSurveyCreated = "The Survey was created succefully.<br><br>Click <a href=\"
 $langSurveyCreator = "Creator";
 $langSurveyCourse = "Course";
 $langSurveyCreationError = "Survey creation error. Please try again.";
-$langSurveyDeactivate = "Deactivate";
-$langSurveyActivate = "Activate";
 $langSurveyParticipate = "Participate";
 $langSurveyDeleted = "The Survey was deleted successfully.<br><br><a href=\"questionnaire.php\">Back</a>";
 $langSurveyDeactivated = "The Survey was deactivated successfully.";
@@ -2428,11 +2419,9 @@ $langSurveyTotalAnswers = "Total number of answers";
 $langSurveyNone = "There are no surveys for the current course.";
 $langSurveyInactive = "The survey has expired or has not started yet.";
 $langSurveyCharts = "Survey results";
-
 $langTestEcho = "The worked";
 $langPollsActive = "Active Polls";
 $langPollsInactive = "Inactive Polls";
-$langPollName = "Íame";
 $langPollNumAnswers = "Number of Answers";
 $langPollCreation = "Creation Date";
 $langPollStart = "Start Date";
@@ -2440,27 +2429,18 @@ $langPollStarted =" Poll started on";
 $langPollEnd = "End Date";
 $langPollEnded = "and ended on";
 $langPollOperations = "Operations";
-$langPollEdit = "Edit";
-$langPollRemove = "Delete";
-$langPollCreate = "Create";
-$langPollQuestion = "Question";
-$langPollAnswer = "Answer";
 $langPollAddAnswer = "Add Answers";
-$langPollType = "Type";
 $langPollMC = "Multiple Choice";
 $langPollFillText = "Fill in the text";
 $langPollContinue = "Continue";
 $langPollMoreAnswers = "More answers";
 $langPollMoreAnswers ="More answers";
 $langPollMoreQuestions = "More questions";
-$langPollCreate = "Create Survey";
 $langPollCreated = "The Survey was created successfully.<br><br><a href=\"questionnaire.php\">Back</a>.";
 $langPollCreator = "Creator";
 $langPollCreateDate = "Survey created on";
 $langPollCourse = "Course";
 $langPollCreationError = "Survey creation error. Please try again.";
-$langPollDeactivate = "Deactivate";
-$langPollActivate = "Activate";
 $langPollParticipate = "Participate";
 $langPollDeleted = "The Survey was deleted successfully.<br><br><a href=\"questionnaire.php\">Back</a>.";
 $langPollDeactivated = "The Survey was deactivated successfully.";
@@ -2471,20 +2451,13 @@ $langPollNone = "There are no polls for the current course.";
 $langPollInactive = "The poll has expired or is not active yet.";
 $langPollCharts = "Poll results";
 $langIndividuals = "Results per user";
-
 $langQPref = "What type of questionnaire do you prefer?";
-$langQPrefSurvey = "Survey";
 $langQPrefPoll = "Poll";
 $langNamesPoll = "Polls";
-$langNamesSurvey = "Surveys";
-
 $langHasParticipated = "Already participated";
-
 $langSurveyInfo ="You may choose from a the list of the following COLLES/ATTL questions or add your own questions in the blank fields.";
-
 $langQQuestionNotGiven ="You have not entered the text for the last question.";
 $langQFillInAllQs ="Please answer all questions.";
-
 $langDelConf = "Delete confirmation";
 $langCollectiveCharts = "Collective results";
 
@@ -2520,10 +2493,10 @@ $langRegAdmin="Create course websites";
 $langUserDetails = "New user information";
 $langSubmitNew = "Submit";
 $langInvalidAuth = "Invalid auth method";
+
 // newuser_second.php
 $langPassTwice="You typed two different passwords. Use your browser's back button and try again.";
 $langUserFree="This username is already taken. Use your browser's back button and choose another.";
-
 $langYourReg="Your registration on";
 $langYouAreReg="\nYou are registered on";
 $langSettings="with the following settings:\nUsername:";
@@ -3086,10 +3059,8 @@ $iso639_1_code = "eng";
 $langNameOfLang['english']="english";
 $langNameOfLang['french']="french";
 $langNameOfLang['greek']="greek";
-
 $charset = 'iso-8859-7';
 $text_dir = 'ltr'; // ('ltr' for left to right, 'rtl' for right to left)
-
 $langDay_of_weekNames = array();
 $langDay_of_weekNames['init'] = array('S', 'M', 'T', 'W', 'T', 'F', 'S');
 $langDay_of_weekNames['short'] = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
@@ -3109,7 +3080,7 @@ $timeNoSecFormat = '%I:%M %p';
 $langBack="Back";
 $langBackHome="Back to home";
 $langBackList="Return to the list";
-
+$langType = "Type";
 $langModify="Modify";
 $langDelete="Delete";
 $langTitle="Title";
@@ -3124,10 +3095,8 @@ $langUserBriefcase = "User portfolio";
 $langPersonalisedBriefcase = "Personalised portfolio";
 $langEclass = "e-Class learning management system";
 $langCopyrightFooter="Copyright notice";
-
 $langGreek="Greek";
 $langEnglish="English";
-
 $langSearch="Search";
 $langAdvancedSearch="Advanced search";
 $langHomePage = "Home page";

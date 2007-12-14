@@ -96,7 +96,7 @@ if (isset($_POST["submit"])) {
     <div class=alert1>$langWrongPassCourse $contenu</div>
     <br/><br/><br/><br/>";
         //if($restrictedCourses!=null) { 
-        //        $tool_content .= "<div class=alert1>(Μη επιτρεπτή ενέργεια)</div><br><br><br><br>";
+        //        $tool_content .= "<div class=alert1>($langForbidden)</div><br><br><br><br>";
         //} 
         $tool_content .= "
     <div align=right><a href=\"../../index.php\">$langHome</a></div>";
@@ -329,7 +329,7 @@ function expanded_faculte($fac, $uid) {
 
 	// legend
 
-global $langRegistration,$langCourseCode,$langProfessor,$langCoursType;
+global $langRegistration,$langCourseCode,$langProfessor,$langType;
   $retString .= "
     <script type=\"text/javascript\" src=\"sorttable.js\"></script>
     <table class=\"sortable\" id=\"t1\" width=\"99%\">
@@ -342,7 +342,7 @@ global $langRegistration,$langCourseCode,$langProfessor,$langCoursType;
     $retString .= "
       <th class='left' width='23%'>$langProfessor</th>";
     $retString .= "
-      <th width='7%'><b>$langCoursType</b></th>";
+      <th width='7%'><b>$langType</b></th>";
     $retString .= "
     </tr>
     </thead>";

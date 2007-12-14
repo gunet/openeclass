@@ -3,7 +3,7 @@ include '../../include/baseTheme.php';
 require_once 'auth.inc.php';
 
 $nameTools = get_auth_info($auth);
-$navigation[]= array ("url"=>"registration.php", "name"=> "$langNewProfAccountÁctivation");
+$navigation[]= array ("url"=>"registration.php", "name"=> "$langNewProfAccountActivation");
 $nameTools = "$langUserData";
 
 $found = 0;

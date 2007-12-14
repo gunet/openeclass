@@ -63,7 +63,6 @@ include '../../include/baseTheme.php';
 
 $tool_content = "";
 
-
 switch ($UseCase) {
 case 1:
    // handle multi choice surveys
