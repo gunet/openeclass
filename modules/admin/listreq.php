@@ -68,7 +68,7 @@ if (!empty($show) && ($show=="closed")) {
 				}
 			}
 			$tool_content .= "<td align=center>
-			<a href=\"listreq.php?id=$req[rid]&"."show=closed\">$langRestore</a>
+			<a href=\"listreq.php?id=$req[rid]&"."show=closed\">Επαναφορά</a>
 			</td></tr>";
 		}
 	}
