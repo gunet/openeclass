@@ -8,8 +8,8 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 global $langRejectRequest,$langRegistration,$langReintroductionApplication;
 // Initialise $tool_content
 $tool_content = "";
-// Main body
 
+// Main body
 $close = isset($_GET['close'])?$_GET['close']:(isset($_POST['close'])?$_POST['close']:'');
 $id = isset($_GET['id'])?$_GET['id']:(isset($_POST['id'])?$_POST['id']:'');
 $show = isset($_GET['show'])?$_GET['show']:(isset($_POST['show'])?$_POST['show']:'');
@@ -82,7 +82,9 @@ if (!empty($show) && ($show=="closed")) {
 		
 	} else {
 		// Show only closed forms
-		$tool_content .= "<table width=\"99%\"><caption>$langOpenProfessorRequests</caption><thead><tr>
+		$tool_content .= "<table width=\"99%\">
+		<caption>$langOpenProfessorRequests</caption>
+		<thead><tr>
 		<th scope=\"col\">$langName</th>
 		<th scope=\"col\">$langSurname</th>
 		<th scope=\"col\">$langUsername</th>
@@ -208,70 +210,6 @@ switch($close)
 					<br><br>($langRequestDisplayMessage)
 					<br><br><input type=\"submit\" name=\"submit\" value=\"$langRejectRequest\"></form></p></center>";
 	    }	
-	    break;
-    case '3':
-	    $r = "SELECT profname,profsurname,profuname,profpassword,profemail,proftmima,profcomm,comment
-	    FROM prof_request WHERE rid='$id'";
-	    $d = db_query($r);
-		  if($d)
-		  {
-		  	$m = mysql_fetch_assoc($d);
-		  	// check if user name exists
-				$username_check=mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='".addslashes($m['profuname'])."'");
-				while ($myusername = mysql_fetch_array($username_check)) 
-				{
-					$user_exist=$myusername[0];
-				}
-				if((!empty($user_exist)) and ($m['profuname'] == $user_exist))
-				{
-					$tool_content .= "<p>$langUserFree</p>
-					<br><br><center><p><a href=\"./listreq.php\">$langAgain</a></p></center>";
-			  }
-			  else
-			  {
-			  	// do the insert
-			  	$s = mysql_query("SELECT id FROM faculte WHERE name='".$m['proftmima']."'");
-					$dep = mysql_fetch_array($s);
-					$registered_at = time();
-			 		$expires_at = time() + $durationAccount;
-					
-					if(($m['profpassword']!='imap') && ($m['profpassword']!='pop3') && ($m['profpassword']!='ldap') && ($m['profpassword']!='db'))
-					{			 		
-						$password_encrypted = md5($m['profpassword']);
-			 		}else{
-			 			$password_encrypted = $m['profpassword'];
-			 		}
-			 		
-					$inscr_user=mysql_query("INSERT INTO `$mysqlMainDb`.user
-						(user_id, nom, prenom, username, password, email, statut, 
-						department, inst_id, registered_at, expires_at)
-						VALUES ('NULL', '".$m['profsurname']."', '".$m['profname']."', '".addslashes($m['profuname'])."', '".$password_encrypted."', '".$m['profemail']."','1',
-						'".$dep[0]."', '0', '".$registered_at."', '".$expires_at."')");
-					$last_id = mysql_insert_id();
-					if($inscr_user)
-					{
-						$sql = "UPDATE prof_request set status = '0',date_closed = NOW() WHERE rid = '$id'";
-			    	if (db_query($sql)) 
-			    	{
-					  	$tool_content .= "<p>$profsuccess</p><br /><br />
-										<center><p><a href='../admin/listreq.php'>$langBackReq</a></p></center>";
-						}
-						else
-						{
-							$tool_content .= "The user is now a professor, but the request is still active<br>";
-						}
-					}
-					else
-					{
-						$tool_content .= "Error.Cannot proceed<br />";
-					}
-			  }
-		  }
-		  else
-		  {
-		  	$tool_content .= "<br>No such prof request with ID:".$id."<br>Cannot Proceed<br>";
-		  }
-	    
 	    break;
     default:
 	    break;
