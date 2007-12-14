@@ -68,7 +68,7 @@ if (!empty($show) && ($show=="closed")) {
 				}
 			}
 			$tool_content .= "<td align=center>
-			<a href=\"listreq.php?id=$req[rid]&"."show=closed\">Επαναφορά</a>
+			<a href=\"listreq.php?id=$req[rid]&"."show=closed\">$langRestore</a>
 			</td></tr>";
 		}
 	}
@@ -78,7 +78,7 @@ if (!empty($show) && ($show=="closed")) {
 	if (!empty($id) && ($id>0)) {
 		// Epanafora aitisis
 		$sql = db_query("UPDATE prof_request set status='1', date_closed=NULL WHERE rid='$id'");
-		$tool_content = "<table><tbody><tr><td class=\"success\">Η επαναφορά της αίτησης ολοκληρώθηκε με επιτυχία!</td></tr></tbody></table>";
+		$tool_content = "<table><tbody><tr><td class=\"success\">$langReintroductionApplication</td></tr></tbody></table>";
 		
 	} else {
 		// Show only closed forms
