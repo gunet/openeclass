@@ -8,7 +8,6 @@ if (isset($from_home) and ($from_home == TRUE) and isset($_GET['cid'])) {
 
 $require_current_course = TRUE;
 $require_prof = true;
-$langFiles = array('course_info', 'create_course', 'opencours');
 if (isset($localize)) {
 	if ($localize == 'el')
 		$newlang = 'greek';
@@ -26,11 +25,10 @@ $nameTools = $langModifInfo;
 $tool_content = "";
 
 // submit
-
 if($is_adminOfCourse) {
-
 	if (isset($submit)) {
-		if(isset($newlang)) {
+		if (!empty($int)) {
+			if(isset($newlang)) {
 			include ($webDir."modules/lang/$newlang/messages.inc.php");
 		}
 		// update course settings
@@ -56,7 +54,8 @@ if($is_adminOfCourse) {
 			WHERE code='$currentCourseID'";
 		mysql_query($sql);
 		mysql_query("UPDATE `$mysqlMainDb`.cours_faculte SET faculte='$facname', facid='$facid' WHERE code='$currentCourseID'");
-		// UPDATE Home Page Menu Titles for new language
+
+		// update Home Page Menu Titles for new language
 		mysql_select_db("$currentCourseID",$db);
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langAgenda' WHERE id='1'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langLinks' WHERE id='2'");
@@ -78,22 +77,25 @@ if($is_adminOfCourse) {
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langToolManagement' WHERE id='25'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langWiki' WHERE id='26'");
 		
-  $tool_content .= "
-  <div id=\"operations_container\">
-  <ul id=\"opslist\">
-    <li><a href=\"".$_SERVER['PHP_SELF']."\">$langBack</a></li>
-  </ul>
-  </div>";
-  $tool_content .= "
-  <table width=\"99%\">
+  $tool_content .= "<div id=\"operations_container\">
+		<ul id=\"opslist\"><li><a href=\"".$_SERVER['PHP_SELF']."\">$langBack</a></li></ul>
+	  </div>";
+  $tool_content .= "<table width=\"99%\">
   <tbody>
-  <tr>
-    <td class=\"success\">$langModifDone.</td>
-  </tr>
+  <tr><td class=\"success\">$langModifDone.</td></tr>
   </tbody>
-  </table><br />
-";
+  </table><br />";
 
+	} else {
+				$tool_content .= "<table width=\"99%\">
+			  <tbody>
+				<tr><td class=\"caution\" height='60'><p>$langNoCourseTitle</p>
+    		<p><a href=\"$_SERVER[PHP_SELF]\">$langAgain</a></p>
+		    </td>
+		  </tr>
+		  </tbody>
+		  </table>";
+		}
 	} else {
 
 		$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
@@ -124,20 +126,16 @@ if($is_adminOfCourse) {
 		$password = $leCours['password'];
 		if ($password!="") $checkpasssel = "checked"; else $checkpasssel="";
 
-		@$tool_content .="
-  <table width=\"99%\" align='left' class='FormData'>
-  <thead>
-  <tr>
-    <td>
-    <form method='post' action='$_SERVER[PHP_SELF]'>
-  
-    <table width=\"100%\">
-    <tbody>
-    <tr>
+		@$tool_content .=" <table width=\"99%\" align='left' class='FormData'>
+								  <thead><tr><td>
+   		<form method='post' action='$_SERVER[PHP_SELF]'>
+		  <table width=\"100%\">
+    	<tbody>
+	    <tr>
       <th class='left' width='150'>&nbsp;</th>
       <td><b>$langCourseIden</b></td>
       <td>&nbsp;</td>
-    </tr>
+  	  </tr>
     <tr>
       <th class='left'>$langCode&nbsp;:</th>
       <td>$fake_code</td>
@@ -145,7 +143,7 @@ if($is_adminOfCourse) {
     </tr>
     <tr>
       <th class='left'>$langCourseTitle&nbsp;:</th>
-      <td><input type=\"Text\" name=\"int\" value=\"$int\" size=\"60\" class='FormData_InputText'></td>
+      <td><input type=\"text\" name=\"int\" value=\"$int\" size=\"60\" class='FormData_InputText'></td>
       <td>&nbsp;</td>
     </tr>
     <tr>
@@ -166,32 +164,29 @@ if($is_adminOfCourse) {
 				$tool_content .= "
         <option value=\"".$myfac['id']."--".$myfac['name']."\">$myfac[name]</option>";
 		}
-		$tool_content .= "
-        </select>
-      </td>
-      <td>&nbsp;</td>
-    </tr>
-    <tr>
-      <th class='left'>$m[type]&nbsp;:</th>
-      <td>";
+		$tool_content .= "</select>
+      </td><td>&nbsp;</td></tr>
+		   <tr><th class='left'>$m[type]&nbsp;:</th><td>";
+
       $tool_content .= selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']),'type', $type);
-      $tool_content .= "
-      </td>
-      <td>&nbsp;</td>
-    </tr>
-    <tr>
+      $tool_content .= "</td><td>&nbsp;</td></tr>
+	    <tr>
       <th class='left'>$langDescription&nbsp;:</th>
       <td><textarea name=\"description\" value=\"$leCours[description]\" cols=\"57\" rows=\"4\" class='FormData_InputText'>$leCours[description]</textarea></td>
       <td>&nbsp;</td>
+    </tr>";
+		$tool_content .= "<tr><th class='left'>$langCourseKeywords&nbsp;</th> 
+		<td><input type='text' name='course_keywords' value='$leCours[course_keywords]' size='60' class='FormData_InputText'></td>
+			<td>&nbsp;</td>
     </tr>
-    <tr>
-      <th class='left'>$langcourse_keywords&nbsp;:</th>
-      <td><input type='text' name=\"course_keywords\" value=\"$leCours[course_keywords]\" size=\"60\" class='FormData_InputText'></td>
-      <td>&nbsp;</td>
+		<tr>
+     <th class='left'>$langCourseAddon&nbsp;</th>
+     <td><textarea name=\"course_addon\" value='$leCours[course_addon]' cols='57' rows='2' class='FormData_InputText'>$leCours[course_addon]</textarea></td><td>&nbsp;</td>
     </tr>
     </tbody>
-    </table><br />
+    </table><br />";
 
+	$tool_content .= "
     <table width=\"100%\">
     <tbody>
     <tr>
@@ -199,10 +194,10 @@ if($is_adminOfCourse) {
       <td colspan='2'><b>$langConfidentiality</b></td>
     </tr>
     <tr>
-      <th class='left'><img src=\"../../template/classic/img/OpenCourse.gif\" alt=\"".$m['legopen']."\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\">&nbsp;".$m['legopen']."&nbsp;:</th>
+      <th class='left'><img src='../../template/classic/img/OpenCourse.gif' alt='$m[legopen]' title='$m[legopen]' width='16' height='16'>&nbsp;$m[legopen]&nbsp;:</th>
       <td width='1'><input type=\"radio\" name=\"formvisible\" value=\"2\"".@$visibleChecked[2]."></td>
       <td>$langPublic&nbsp;</td>
-    </tr>
+    <tr>
     <tr>
       <th rowspan='2' class='left'><img src=\"../../template/classic/img/Registration.gif\" alt=\"".$m['legrestricted']."\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\">&nbsp;".$m['legrestricted']."&nbsp;:</th>
       <td><input type=\"radio\" name=\"formvisible\" value=\"1\"".@$visibleChecked[1]."></td>

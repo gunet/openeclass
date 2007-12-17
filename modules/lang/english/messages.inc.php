@@ -601,6 +601,7 @@ $langConfTip="Select users course access.";
 $langOtherActions = "Other Actions";
 $langOptPassword = "Optional Password: ";
 $langTipLang="Choose the course language.";
+$langNoCourseTitle = "You didn't type course title";
 
 // delete_course.php
 $langDelCourse="Delete the whole course";
@@ -685,8 +686,6 @@ $langExplanation="Once you click OK, a site with Forum, Agenda, Document manager
 $langExFac = "If you wish to create course, in another faculty, then contact Asynchronous Teleteaching Team";
 $langEmpty="You left some fields empty.<br>Use the <b>Back</b> button on your browser and try again.<br>";
 $langEmptyFields="You left some fields empty.";
-$langcourse_keywords="Keywords";
-$langcourse_references = "Addons";
 $langErrorDir = "Unable to create course subdirectory. The course was not created! <br><br>Please check <em>courses</em> directory access permissions.";
 
 // tables MySQL
@@ -2461,6 +2460,81 @@ $langQFillInAllQs ="Please answer all questions.";
 $langDelConf = "Delete confirmation";
 $langCollectiveCharts = "Collective results";
 
+$langQuestion1= array('In this unit, my effort was focused in subjects that interested me.'
+                                        ,'Almost never.'
+                                        ,'Seldom.'
+                                        ,'Sometimes.'
+                                        ,'Often.'
+                                        ,'Almost always.'
+                                        );
+$langQuestion2= array('In this unit, what I learn have they make with my profession.'
+                                        ,'Almost never.'
+                                        ,'Seldom.'
+                                        ,'Sometimes.'
+                                        ,'Often.'
+                                        ,'Almost always.'
+                                        );
+$langQuestion3= array('In this unit, I practise critical thought.'
+                                        ,'Almost never.'
+                                        ,'Seldom.'
+                                        ,'Sometimes.'
+                                        ,'Often.'
+                                        ,'Almost always.'
+                                        );
+
+
+$langQuestion4= array('In this unit, I collaborate with my colleagues'
+                                        ,'Almost never.'
+                                        ,'Seldom.'
+                                        ,'Sometimes.'
+                                        ,'Often.'
+                                        ,'Almost always.'
+                                        );
+
+$langQuestion5= array('In this unit, the teaching is judged satisfactory.'
+                                        ,'Almost never.'
+                                        ,'Seldom.'
+                                        ,'Sometimes.'
+                                        ,'Often.'
+                                        ,'Almost always.'
+                                        );
+$langQuestion6= array('In this unit, exists right communication with the teacher.'
+                                        ,'Almost never.'
+                                        ,'Seldom.'
+                                        ,'Sometimes.'
+                                        ,'Often.'
+                                        ,'Almost always.'
+                                        );
+$langQuestion7= array('Try to find errors in  my interlocutor thoughts'
+                                        ,'Almost never.'
+                                        ,'Seldom.'
+                                        ,'Sometimes.'
+                                        ,'Often.'
+                                        ,'Almost always.'
+                                        );
+$langQuestion8= array('When I discuss I enter in the place of my interlocutor.'
+                                        ,'Almost never.'
+                                        ,'Seldom.'
+                                        ,'Sometimes.'
+                                        ,'Often.'
+                                        ,'Almost always.'
+                                        );
+
+$langQuestion9= array('I remain objective at the analysis of situations.'
+                                        ,'Almost never.'
+                                        ,'Seldom.'
+                                        ,'Sometimes.'
+                                        ,'Often.'
+                                        ,'Almost always.'
+                                        );
+$langQuestion10= array('I like  taking  the role of advocate of devil.'
+                                        ,'Almost never.'
+                                        ,'Seldom.'
+                                        ,'Sometimes.'
+                                        ,'Often.'
+                                        ,'Almost always.'
+                                        );
+
 /***********************************************************
 * registration.inc.php
 ***********************************************************/
@@ -3714,4 +3788,26 @@ $langAlertAdmin="Please supplement at least administrator for the course!";
 
 
 $langExerciseNotPermit="The submission of the assignment is forbidden!";
+
+
+                     
+                                                                            
+                                       
+                                                                                                                                            
+                                       
+                                       
+                                       
+
+
+                                       
+                                                                            
+                                                                           
+                                       
+                                       
+                                       
+                                       
+                                                                                                
+
+
+
 ?>

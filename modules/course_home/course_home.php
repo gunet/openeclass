@@ -34,8 +34,6 @@
  */
 
 $require_current_course = TRUE;
-$langFiles = array('course_info', 'create_course', 'opencours', 'course_home');
-
 $guest_allowed = true;
 
 //$courseHome is used by the breadcrumb logic 
@@ -54,9 +52,6 @@ $bar_content = "";
  global $uid, $currentCourse, $REMOTE_ADDR;
 $sql_log = "INSERT INTO logins SET user_id='$uid', ip='$REMOTE_ADDR', date_time=NOW()";
 db_query($sql_log, $currentCourse);
-///////////
-
-
 
 $sql = 'SELECT `description`,`course_keywords`, `course_addon`,`faculte`,`lastEdit`,`type`, `visible`, `titulaires`, `fake_code` FROM `cours` WHERE `code` = "'.$currentCourse.'"';
 $res = db_query($sql, $mysqlMainDb);
@@ -77,11 +72,11 @@ if(strlen($description) > 0) {
 }
 
 if (strlen($keywords) > 0) {
-	$main_content .= "<p><b>$langcourse_keywords: </b>$keywords</p>";
+	$main_content .= "<p><b>$langCourseKeywords </b>$keywords</p>";
 }
 
 if(strlen($addon) > 0) {
-	$main_content .= "<div id=\"course_home_id\">$langcourse_references</div><p>". nl2br($addon)."</p>";
+	$main_content .= "<div id=\"course_home_id\">$langCourseAddon</div><p>". nl2br($addon)."</p>";
 }
 
 
