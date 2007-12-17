@@ -30,9 +30,7 @@
  *
  */
 
-
 $require_current_course = TRUE;
-$langFiles = 'conference';
 $require_help = TRUE;
 $helpTopic = 'Conference';
 include '../../include/baseTheme.php';
@@ -45,19 +43,16 @@ $action = new action();
 $action->record('MODULE_ID_CHAT');
 /**************************************/
 
-
 $nameTools = $langConference;
 
-$browser = get_browser(null, true);                                                                           if($browser['browser']!="IE")                                                                                  $langTeleconference_content = $langTeleconference_content_noIE;
+$browser = get_browser(null, true);   
+if($browser['browser']!="IE")   
+     $langTeleconference_content = $langTeleconference_content_noIE;
 else
- $langTeleconference_content = $langTeleconference_content1;
-
+		 $langTeleconference_content = $langTeleconference_content1;
 
 //HEADER
 $head_content='
-
-
-
 <script type="text/javascript" src="js/prototype-1.4.0.js"></script>
 <script type="text/javascript" src="js/media_player.js"></script>
 <script>
@@ -299,7 +294,6 @@ function clean_video()
 	}
 
 
-
 var pe;
 if (pe) pe.stop();
 ';
@@ -312,20 +306,13 @@ else{
 	$head_content.='pe = new PeriodicalExecuter(refresh_student, '.$refreshtime.');';
 }
 
-
 $head_content.='
-
-
-
-
 </script>
 ';
 
 //END HEADERS
 
 //BODY
-
-
 
 if ($is_adminOfCourse) {
 $body_action='onload=init_teacher();';

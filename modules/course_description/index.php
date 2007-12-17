@@ -36,9 +36,7 @@
  *
  */
 
-
 $require_current_course = TRUE;
-$langFiles = array('course_description','pedaSuggest');
 $require_help = TRUE;
 $helpTopic = 'Coursedescription';
 $guest_allowed = true;
@@ -52,9 +50,7 @@ $action = new action();
 $action->record('MODULE_ID_DESCRIPTION');
 /**************************************/
 
-
 $nameTools = $langCourseProgram;
-
 $tool_content = "";
 
 if ($is_adminOfCourse) {
@@ -64,8 +60,7 @@ if ($is_adminOfCourse) {
 			<li><a href=\"edit.php\">".$langEditCourseProgram."</a></li>
 		</ul>
 		</div>
-		<br>
-		";
+		<br>";
 }
 
 $sql = "SELECT `id`,`title`,`content` FROM `course_description` order by id";
@@ -75,30 +70,17 @@ if (mysql_num_rows($res) > 0) {
 		<table width=\"99%\" align=\"center\">
 		<tbody>
 		<tr class=\"odd\">
-			<td>
-	";
+		<td>";
 	while ($bloc = mysql_fetch_array($res))
 	{
-		$tool_content .= "
-			<br><p><b><u>
-				".$bloc["title"]."
-			</u>: </b></p>
-			<p>
-				".make_clickable(nl2br($bloc["content"]))."
-			</p><br>";
+		$tool_content .= "<br><p><b><u>".$bloc["title"]."</u>:</b></p>
+			<p>".make_clickable(nl2br($bloc["content"]))."</p><br>";
 	}
-	$tool_content .= "	
-			</td>
-		</tr>
-		</tbody>
-		</table>
-	";
+	$tool_content .= "</td></tr></tbody></table>";
 				
 } else {
 	$tool_content .= "<br><p class=\"alert1\">$langThisCourseDescriptionIsEmpty</p>";
 }
 
-
 draw($tool_content, 2);
 ?>
-
