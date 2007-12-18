@@ -140,17 +140,23 @@ if(!empty($is_submit))
        <tbody>
        <tr>  
          <th class='left' width='20%'>".$langName."</th>
-         <td width='10%'><input class='FormData_InputText' type=\"text\" name=\"prenom_form\"></td>
+         <td width='10%'><input class='FormData_InputText' type=\"text\" name=\"prenom_form\"" .
+        (isset($GLOBALS['auth_user_info'])?
+                (' value="' . $GLOBALS['auth_user_info']['firstname'] . '"'): '') . "></td>
          <td><small>(*)</small></td>
        </tr>
        <tr>
          <th class='left'>".$langSurname."</th>
-         <td><input type=\"text\" name=\"nom_form\" class='FormData_InputText'></td>
+         <td><input type=\"text\" name=\"nom_form\" class='FormData_InputText'" .
+        (isset($GLOBALS['auth_user_info'])?
+                (' value="' . $GLOBALS['auth_user_info']['lastname'] . '"'): '') . "></td>
          <td><small>(*)</small></td>
        </tr>
        <tr>
          <th class='left'>".$langEmail."</th>
-         <td><input type=\"text\" name=\"email\" class='FormData_InputText'></td>
+         <td><input type=\"text\" name=\"email\" class='FormData_InputText'" .
+        (isset($GLOBALS['auth_user_info'])?
+                (' value="' . $GLOBALS['auth_user_info']['lastname'] . '"'): '') . "></td>
          <td><small>".$langEmailNotice."</small></td>
        </tr>
        <tr>
