@@ -156,7 +156,7 @@ if(!empty($is_submit))
          <th class='left'>".$langEmail."</th>
          <td><input type=\"text\" name=\"email\" class='FormData_InputText'" .
         (isset($GLOBALS['auth_user_info'])?
-                (' value="' . $GLOBALS['auth_user_info']['lastname'] . '"'): '') . "></td>
+                (' value="' . $GLOBALS['auth_user_info']['email'] . '"'): '') . "></td>
          <td><small>".$langEmailNotice."</small></td>
        </tr>
        <tr>

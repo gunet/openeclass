@@ -219,6 +219,12 @@ $auth an integer-value for auth method(1:eclass, 2:pop3, 3:imap, 4:ldap, 5:db)
 $test_username
 $test_password
 return $testauth (boolean: true-is authenticated, false-is not)
+
+Sets the global variable $auth_user_info to an array with the following
+keys, if available from the current auth method:
+firstname (LDAP attribute: givenname)
+lastname (LDAP attribute: sn)
+email (LDAP attribute: mail)
 ****************************************************************/
 function auth_user_login ($auth,$test_username, $test_password) 
 {
