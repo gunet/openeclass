@@ -53,12 +53,10 @@
 ==============================================================================
 */
 
-error_reporting(E_ALL);
 /*
  * GUNET eclass 2.0 standard stuff
  */
 $require_current_course = TRUE;
-$langFiles = 'phpbb';
 $require_help = FALSE;
 include '../../include/baseTheme.php';
 $nameTools = $l_forums;
@@ -173,10 +171,9 @@ if (isset($submit) && $submit) {
 	$message = str_replace("</r>", "</font color>", $message);
 	$message = addslashes($message);
 	$time = date("Y-m-d H:i");
-	// ADDED BY Thomas 20.2.2002
 	$nom = addslashes($nom);
 	$prenom = addslashes($prenom);
-	// END ADDED BY THOMAS
+
 
 	//to prevent [addsig] from getting in the way, let's put the sig insert down here.
 	if (isset($sig) && $sig && $userdata["user_id"] != -1) {

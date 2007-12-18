@@ -52,12 +52,10 @@ existing (phpBB-based) to a new eclass forum :-(
 ==============================================================================
 */
 
-error_reporting(E_ALL);
 /*
 * GUNET eclass 2.0 standard stuff
 */
 $require_current_course = TRUE;
-$langFiles = 'phpbb';
 $require_help = FALSE;
 include '../../include/baseTheme.php';
 $nameTools = $l_forums;
@@ -68,7 +66,6 @@ include('../../include/action.php');
 $action = new action();
 $action->record('MODULE_ID_FORUM');
 /**************************************/
-
 
 /*
 * Tool-specific includes
