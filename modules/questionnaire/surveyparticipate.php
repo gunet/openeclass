@@ -49,12 +49,10 @@
   	3) Read files and directories from the directory defined in part 2
   	4) Display all of that on an HTML page
  
-  	@TODO: eliminate code duplication between document/document.php, scormdocument.php
 ==============================================================================
 */
 
 $require_current_course = TRUE;
-$langFiles = 'questionnaire';
 
 $require_help = TRUE;
 $helpTopic = 'Questionnaire';
@@ -114,7 +112,6 @@ if (document.images) {
 					//alert("Last grup was cool so just changing names");
 					temp_name = tempobj.name;
 					if (tempobj.checked) {
-						//alert(counter_temp+" "+tempobj.name+"is checked so pass_temp = true");
 						pass_temp = true;
 		  		} else {
 						pass_temp = false;
@@ -132,7 +129,6 @@ if (!pass) {
 	alert("$langQFillInAllQs");
 	return false;
 } else {
-	//alert("All went well I'm submitting form");
 	return true;
 }
 }
@@ -140,7 +136,6 @@ if (!pass) {
 </script>
 hContent;
 
-//draw($tool_content, 2); 
 draw($tool_content, 2, '', $head_content); 
 
 function printSurveyForm() {
@@ -293,8 +288,6 @@ function submitSurvey() {
 				}
 			}  
 		}
-	
 	$GLOBALS["tool_content"] .= $GLOBALS["langSurveySubmitted"];
 }
-
 ?>

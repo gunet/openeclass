@@ -381,8 +381,8 @@ function printMCQuestionForm() {
 				</SELECT>
 			</td></tr>
 			<tr><td>$langQuestion</td><td><input type="text" name="question1" size="70" id="NewQuestion"></td></tr> 
-			<tr><td>$langAnswer #1</td><td><input type="text" name="answer1.1" size="70" id="NewAnswer1"></td></tr>
-			<tr><td>$langAnswer #2</td><td><input type="text" name="answer1.2" size="70" id="NewAnswer2"></td></tr>
+			<tr><td>$langAnswer 1</td><td><input type="text" name="answer1.1" size="70" id="NewAnswer1"></td></tr>
+			<tr><td>$langAnswer 2</td><td><input type="text" name="answer1.2" size="70" id="NewAnswer2"></td></tr>
 			<tr id="NextLine">
 			  <td>
 			    <input name="MoreQuestions" type="submit" value="$langSurveyMoreAnswers" /></td>
@@ -467,8 +467,8 @@ cData;
 		
 		$tool_content .= "<tr> <td>" . 
 				$langQuestion . "	</td><td><input type='text' name='questionx' size='70' id='NewQuestion'></td></tr>".
-				"<tr><td>$langAnswer #1</td><td><input type='text' name='answerx.1' size='70' id='NewAnswer1'></td></tr>".
-				"<tr><td>$langAnswer #2</td><td><input type='text' name='answerx.2' size='70' id='NewAnswer2'></td></tr>";
+				"<tr><td>$langAnswer 1</td><td><input type='text' name='answerx.1' size='70' id='NewAnswer1'></td></tr>".
+				"<tr><td>$langAnswer 2</td><td><input type='text' name='answerx.2' size='70' id='NewAnswer2'></td></tr>";
 			
 		$tool_content .= <<<cData
 				<tr id="NextLine"><td colspan=3><hr></td></tr>

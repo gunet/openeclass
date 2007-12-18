@@ -53,11 +53,9 @@
 */
 
 $require_current_course = TRUE;
-$langFiles = 'questionnaire';
 
 $require_help = TRUE;
 $helpTopic = 'Questionnaire';
-
 include '../../include/baseTheme.php';
 
 /**** The following is added for statistics purposes ***/
@@ -158,10 +156,10 @@ draw($tool_content, 2, ' ', $head_content);
  ****************************************************************************************************/
 	function printSurveys() {
  		global $tool_content, $currentCourse, $langSurveyNone,
- 			$langCreate, $langName, $langSurveyCreator, 
+ 			$langYes, $langCreate, $langName, $langSurveyCreator, 
  			$langSurveyStart, $langSurveyEnd, $langType, 
  			$langSurveyOperations, $is_adminOfCourse, $langSurveysActive, $mysqlMainDb, $langActions, 
- 			$langSurveyMC, $langEdit, $langDelete, $langActivate, $langDeactivate, $langSurveysInactive, $langSurveyParticipate, 
+ 			$langSurveyMC, $langEdit, $langDelete, $langActivate, $langDeactivate, $langSurveysInactive, $langParticipate, 
  			$langHasParticipated, $uid;
 
 		$survey_check = 0;
@@ -196,6 +194,8 @@ cData;
 				
 				if ($is_adminOfCourse) {
 					$tool_content .= "<th colspan='2'>$langActions</th>";
+				} else {
+					$tool_content .= "<th>$langParticipate</th>";
 				}
 				$tool_content .= "</tr></thead><tbody>";
 			
@@ -256,8 +256,8 @@ cData;
 							$has_participated = mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM survey_answer 
 										WHERE creator_id='$uid' AND sid='$thesid'"));
 						if ($has_participated[0] == 0) {
-							$tool_content .= "<td><a href='surveyparticipate.php?UseCase=1&sid=". $sid ."'>";
-							$tool_content .= $langSurveyParticipate;
+							$tool_content .= "<td align='center'><a href='surveyparticipate.php?UseCase=1&sid=". $sid ."'>";
+							$tool_content .= $langYes;
 							$tool_content .= "</a></td></tr>";
 						} else {
 							$tool_content .= "<td>".$langHasParticipated."</td></tr>";
@@ -274,10 +274,10 @@ cData;
  ****************************************************************************************************/
 	function printPolls() {
 		global $tool_content, $currentCourse, $langCreate, $langPollsActive, 
-			$langName, $langPollCreator, $langPollCreation, $langPollStart, 
+			$langYes, $langName, $langPollCreator, $langPollCreation, $langPollStart, 
 			$langPollEnd, $langPollOperations, $langPollNone, $is_adminOfCourse, $langSurveys,
 			$langNamesSurvey, $mysqlMainDb, $langEdit, $langDelete, $langActions,
-			$langDeactivate, $langPollsInactive, $langActivate, $langPollParticipate, 
+			$langDeactivate, $langPollsInactive, $langActivate, $langParticipate, 
 			$user_id, $langHasParticipated, $uid;
 		
 		$poll_check = 0;
@@ -313,7 +313,9 @@ cData;
 				
 				if ($is_adminOfCourse) {
 					$tool_content .= "<th colspan='2'>$langActions</th>";
-				}
+				} else {
+					$tool_content .= "<th>$langParticipate</th>";
+					}
 				
 			$tool_content .= "</tr></thead><tbody>";
 			$active_polls = db_query("SELECT * FROM poll", $currentCourse);
@@ -370,13 +372,13 @@ cData;
 							mysql_query("SELECT COUNT(*) FROM poll_answer where creator_id='$uid' AND pid='$thepid'"));
 					if ( $has_participated[0] == 0) {
 						$tool_content .= "<td><a href='pollparticipate.php?UseCase=1&pid=". $pid ."'>";
-						$tool_content .= $langPollParticipate;
+						$tool_content .= $langYes;
 						$tool_content .= "</a></td></tr>";
 					} else {
 						$tool_content .= "<td>".$langHasParticipated."</td></tr>";
+						}
 					}
 				}
-			}
 			}
 			$tool_content .= "</tbody></table><br>";
 		}

@@ -3789,3 +3789,20 @@ $langAlertAdmin="Please supplement at least administrator for the course!";
 
 
 $langExerciseNotPermit="The submission of the assignment is forbidden!";
+$langListUsersActions="List of Users of/Energies";
+
+
+/*************************************************************
+editpost.php
+**************************************************************/
+	
+$langErrorDataOne="Error retrieving data from database (1)"; 
+$langErrorDataTwo="Error retrieving data from database (2)";
+$langUnableUpadatePost="Unable to update the posting in the database";
+$langUnableUpadateTopic="Unable to update the topic subject in the database";
+$langUnableDeletePost="Couldn't delete post from database";	
+$langPostRemoved="Couldn't update to previous post time - last post has been removed";
+$langUnableDeleteTopic="Couldn't delete topic from database";
+$langTopicInformation="Couldn't get forum and topic information from the database.";
+$langErrorTopicSelect="Error - The forum/topic you selected does not exist. Please go back and try again.";
+$langUserTopicInformation="<p>Couldn't get user and topic information from the database.</p>";
