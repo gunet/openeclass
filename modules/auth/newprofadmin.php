@@ -52,7 +52,7 @@ if($submit)
 			$tool_content .= "<p>$langUserFree</p>
 			<br><br><center><p><a href=\"./newprofadmin.php\">$langAgain</a></p></center>";
 	  }
-		elseif(!eregi($regexp,$email)) // check if email syntax is valid
+		elseif(!eregi($regexp,$email_form)) // check if email syntax is valid
 		{
 	        $tool_content .= "<p>$langEmailWrong.</p>
 			<br><br><center><p><a href=\"./newprofadmin.php\">$langAgain</a></p></center>";
@@ -137,8 +137,7 @@ $tool_content .= "	<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
 	</td>
 	</tr>
 	<input type='hidden' name='rid' value='$id'>	
-</tbody></table></form>
-";
+	</tbody></table></form>";
 
 $tool_content .= "<center><p><a href=\"../admin/index.php\">$langBack</p></center>";
 }

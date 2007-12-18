@@ -178,7 +178,6 @@ function confirmation (name)
 		$message = "<p><b>$langAnnEmpty</b</b>";
 	}
 
-
 	/*----------------------------------------
 	MODIFY COMMAND
 	--------------------------------------*/
@@ -194,7 +193,6 @@ function confirmation (name)
 			$titleToModify = $myrow['title'];
 			$displayAnnouncementList = true;
 		}
-
 	}
 	/*----------------------------------------
 	SUBMIT ANNOUNCEMENT COMMAND
@@ -203,7 +201,6 @@ function confirmation (name)
 	if (isset($_POST['submitAnnouncement']))
 	{
 		/*** MODIFY ANNOUNCEMENT ***/
-
 		if($id) {
 			db_query("UPDATE annonces SET contenu='".mysql_real_escape_string($newContent)."', 
 								title='".mysql_real_escape_string($antitle)."', temps=NOW()
@@ -215,7 +212,6 @@ function confirmation (name)
 		else
 		{
 			// DETERMINE THE ORDER OF THE NEW ANNOUNCEMENT
-
 			$result = db_query("SELECT MAX(ordre) FROM annonces
 				WHERE code_cours = '$currentCourseID'",$mysqlMainDb);
 
@@ -227,17 +223,18 @@ function confirmation (name)
 					title='".mysql_real_escape_string($antitle)."', temps = NOW(),
 					code_cours = '$currentCourseID', ordre = '$order'");
 
+			
+		}	// else
 			// SEND EMAIL (OPTIONAL)
-			// THIS FUNCTION ADDED BY THOMAS MAY 2002
-			if(isset($_POST['emailOption']) && is_numeric($_POST['emailOption']) && $_POST['emailOption'] == 1)
+		if(isset($_POST['emailOption']) && is_numeric($_POST['emailOption']) && $_POST['emailOption'] == 1)
 			{
 				$emailContent=stripslashes($newContent);
 				$emailSubject = "$professorMessage ($currentCourseID - $intitule)";
 
 				// Select students email list
 				$sqlUserOfCourse = "SELECT user.email
-			FROM cours_user, user WHERE code_cours='$currentCourseID'
-				AND cours_user.user_id = user.user_id";
+					FROM cours_user, user WHERE code_cours='$currentCourseID'
+					AND cours_user.user_id = user.user_id";
 				$result = db_query($sqlUserOfCourse,$mysqlMainDb);
 
 				$countEmail = mysql_num_rows($result);
@@ -247,7 +244,7 @@ function confirmation (name)
 
 				$unvalid=0;
 				// send email one by one to avoid antispam
-				while ( $myrow = mysql_fetch_array($result) )
+				while ($myrow = mysql_fetch_array($result) )
 				{
 					$emailTo=$myrow["email"];
 
@@ -272,8 +269,7 @@ function confirmation (name)
 			else
 			{
 				$message = "<p><b>$langAnnAdd</b></p>";
-			}	// else
-		}	// else
+			}	
 	}	// if $submit Announcement
 
 	/*****************************************

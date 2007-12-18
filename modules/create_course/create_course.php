@@ -171,12 +171,12 @@ if (isset($back1) or !isset($visit)) {
       <td>&nbsp;</td>
     </tr>
     <tr>
-      <th class='left' width=\"160\">$langCourseKeywords&nbsp;:</th>
+      <th class='left' width=\"160\">$langCourseKeywords&nbsp;</th>
       <td width=\"160\"><textarea name='course_keywords' cols='50' rows='6' class='FormData_InputText'>$course_keywords</textarea></td>
       <td>&nbsp;</td>
     </tr>
     <tr>
-      <th class='left' width=\"160\">$langCourseAddon&nbsp;:</th>
+      <th class='left' width=\"160\">$langCourseAddon&nbsp;</th>
       <td width=\"160\"><textarea name='course_addon' cols='50' rows='6' class='FormData_InputText'>$course_addon</textarea></td>
       <td>&nbsp;</td>
     </tr>
