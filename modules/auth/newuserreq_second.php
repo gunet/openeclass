@@ -17,9 +17,7 @@ $tool_content = "<table height=300 width='96%' align='center' class='admin'>
 								<tr><td valign=top><br>";
 
 if($submit) {
-	$regexp = "^[0-9a-z_\.-\+]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
-
-// check if user name exists
+        // check if user name exists
 	$username_check=mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='$uname'");
 	while ($myusername = mysql_fetch_array($username_check)) {
 		$user_exist=$myusername[0];
@@ -45,14 +43,14 @@ if($submit) {
 	elseif(isset($user_exist) and $uname==$user_exist) {
 			$tool_content .= error_screen($langUserFree);	
   	  $tool_content .= end_tables();
-    }
+ }
 
 // check if email syntax is valid
    
- elseif(!eregi($regexp,$email_form)) {
-		$tool_content .= error_screen($langEmailWrong);
-    $tool_content .= end_tables();
-	}
+ elseif(!email_seems_valid($email_form)) {
+        $tool_content .= error_screen($langEmailWrong);
+        $tool_content .= end_tables();
+ }
 
 
 // registration accepted

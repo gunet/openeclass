@@ -39,11 +39,6 @@ if(!empty($submit))
 	}
 	else	// do the other checks
 	{
-		if (isset($email_form)) 
-		{
-			// Don't worry about figuring this regular expression out quite yet...// It will test for address@domainname and address@ip
-			$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
-		}
 		// check if user name exists
 		$q1 = "SELECT username FROM `$mysqlMainDb`.user WHERE username='".escapeSimple($uname)."'";
 		$username_check=mysql_query($q1);
@@ -97,7 +92,7 @@ if(!empty($submit))
     </tbody>
     </table>";
 	  }
-		elseif(!eregi($regexp,$email_form)) // check if email syntax is valid
+		elseif(!email_seems_valid($email_form)) // check if email syntax is valid
 		{
 	        $tool_content .= "
     <table width=\"99%\">

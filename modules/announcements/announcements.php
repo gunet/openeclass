@@ -239,9 +239,6 @@ function confirmation (name)
 
 				$countEmail = mysql_num_rows($result);
 
-				// Email syntax test
-				$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,5})$";
-
 				$unvalid=0;
 				// send email one by one to avoid antispam
 				while ($myrow = mysql_fetch_array($result) )
@@ -249,7 +246,7 @@ function confirmation (name)
 					$emailTo=$myrow["email"];
 
 					// check email syntax validity
-					if(!eregi( $regexp, $emailTo )) {
+					if(!email_seems_valid($emailTo )) {
 						$unvalid++;
 					} else {
 						//avoid antispam by varying string

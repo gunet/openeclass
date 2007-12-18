@@ -30,10 +30,6 @@ if($submit)
 	}
 	else	// do the other checks
 	{
-		// Don't worry about figuring this regular expression out quite yet...// It will test for address@domainname and address@ip
-		$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
-		$emailtohostname = substr($email, (strrpos($email, "@") +1));
-		
 		// check if user name exists
 		$username_check=mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='".escapeSimple($uname)."'");
 		while ($myusername = mysql_fetch_array($username_check)) 
@@ -52,7 +48,7 @@ if($submit)
 			$tool_content .= "<p>$langUserFree</p>
 			<br><br><center><p><a href=\"./newprofadmin.php\">$langAgain</a></p></center>";
 	  }
-		elseif(!eregi($regexp,$email_form)) // check if email syntax is valid
+		elseif(!email_seems_valid($email_form)) // check if email syntax is valid
 		{
 	        $tool_content .= "<p>$langEmailWrong.</p>
 			<br><br><center><p><a href=\"./newprofadmin.php\">$langAgain</a></p></center>";

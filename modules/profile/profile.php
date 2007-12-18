@@ -41,8 +41,6 @@ $nameTools = $langModifProfile;
 check_guest();
 
 if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
-	$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
-
 	// check if username exists
 	$username_check=mysql_query("SELECT username FROM user WHERE username='".escapeSimple($username_form)."'");
 	while ($myusername = mysql_fetch_array($username_check))
@@ -68,7 +66,7 @@ if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
 	}
 
 	// check if user email is valid
-	elseif (!eregi($regexp, $email_form)) {
+	elseif (!email_seems_valid($email_form)) {
 		header("location:". $_SERVER['PHP_SELF']."?msg=6");
 		exit();
 	}

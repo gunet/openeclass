@@ -336,13 +336,20 @@ function auth_user_login ($auth,$test_username, $test_password)
             // try an authenticated bind. use this to confirm that the user/password pair
             if(ldap_bind($ldap, $dn, $pass))
             {
-		
-							$testauth = true;
-
+                    $testauth = true;
+                    $search = $all_ldap_user_attrib[$idx] . "=" . $user;
+                    $userinforequest = ldap_search($ldap, $base_dn, $search);
+                    $userinfo = ldap_get_entries($ldap, $userinforequest);
+                    if ($userinfo["count"] == 1) {
+                        $GLOBALS['auth_user_info'] = array(
+                                'firstname' => get_ldap_attribute($userinfo, 'givenname'),
+                                'lastname' => get_ldap_attribute($userinfo, 'sn'),
+                                'email' => get_ldap_attribute($userinfo, 'mail'));
+                    }
             } // end if
             else
             {
-            	$testauth = false;
+                    $testauth = false;
             }
         } // foreach
         @ldap_unbind($ldap);
@@ -739,4 +746,18 @@ class Encryption
 } // end Encryption
 // ****************************************************************************
 
-?>
+
+
+/****************************************************************
+Return the value of an attribute from the result of an
+LDAP search, converted to the current charset.
+****************************************************************/
+function get_ldap_attribute($search_result, $attribute)
+{
+        if (isset($search_result[0][$attribute][0])) {
+                return iconv("UTF-8", $GLOBALS['charset'], $search_result[0][$attribute][0]);
+        } else {
+                return '';
+        }
+}
+

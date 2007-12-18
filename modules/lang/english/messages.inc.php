@@ -2818,7 +2818,7 @@ $langTheUser = 'The user';
 $langDestination = 'Destination:';
 $langAsProf = 'as a professor';
 $langTel = 'Tel.';
-$langPassSameLDAP = 'To login, use the password you use in the directory (LDAP) service.';
+$langPassSameAuth = 'Your password is provided by the authentication service you are using.';
 
 $langLDAPUser = 'LDAP user';
 $langLogIn = 'Login';

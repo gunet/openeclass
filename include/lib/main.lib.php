@@ -81,6 +81,13 @@ function db_query($sql, $db = FALSE) {
 }
 
 
+// Check if a string looks like a valid email address
+function email_seems_valid($email)
+{
+        return (preg_match('#^[0-9a-z_\.\+-]+@([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,}$#i', $email)
+                and !preg_match('#@.*--#', $email));
+}
+
 
 // Eclass SQL query wrapper returning only a single result value.
 // Useful in some cases because, it avoid nested arrays of results.

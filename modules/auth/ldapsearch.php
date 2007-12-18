@@ -62,10 +62,6 @@ $errormessage2 = "<br/><p>$ldapback <a href=\"$lastpage\">$ldaplastpage</a></p>"
 
 if(!empty($is_submit))
 {
-	$regexp = "^[0-9a-z_\.-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$";
-	@$emailtohostname = substr( $email, ( strrpos( $email, "@" ) +1 ));
-	$emailtohostname = substr( $ldap_email, ( strrpos( $ldap_email, "@" ) +1 ));
-	
 	if (empty($ldap_email) or empty($ldap_passwd)) // check for empty username-password
 	{
 		$tool_content .= "
