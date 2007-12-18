@@ -77,7 +77,7 @@ $sql = "SELECT forum_name, forum_access, forum_type
 	WHERE (forum_id = '$forum')";
 if (!$result = db_query($sql, $currentCourseID)) {
 	//XXX: Error message in specified language
-	$tool_content .= "Can't get forum data.";
+	$tool_content .= $langErrorDataForum;
 	draw($tool_content,2);
 	exit;
 }
@@ -89,7 +89,7 @@ $forum_id = $forum;
 
 if (!does_exists($forum, $currentCourseID, "forum")) {
 	//XXX: Error message in specified language
-	$tool_content .= "The forum you are attempting to post to does not exist. Please try again.";
+	$tool_content .= $langErrorPost;
 }
 
 if (isset($submit) && $submit) {
@@ -150,7 +150,7 @@ if (isset($submit) && $submit) {
 	$sql = "INSERT INTO topics (topic_title, topic_poster, forum_id, topic_time, topic_notify, nom, prenom)
 			VALUES ('$subject', '" . $userdata["user_id"] . "', '$forum', '$time', 1, '$nom', '$prenom')";
 	if (!$result = db_query($sql, $currentCourseID)) {
-		$tool_content .= "Couldn't enter topic in database.";
+		$tool_content .= $langErrorEnterTopic;
 		draw($tool_content, 2);
 		exit();
 	}
@@ -159,7 +159,7 @@ if (isset($submit) && $submit) {
 	$sql = "INSERT INTO posts (topic_id, forum_id, poster_id, post_time, poster_ip, nom, prenom)
 			VALUES ('$topic_id', '$forum', '" . $userdata["user_id"] . "', '$time', '$poster_ip', '$nom', '$prenom')";
 	if (!$result = db_query($sql, $currentCourseID)) {
-		$tool_content .= "Couldn't enter post in database.";
+		$tool_content .= $langErrorEnterPost;
 		draw($tool_content, 2);
 		exit();
 	} else {
@@ -168,7 +168,7 @@ if (isset($submit) && $submit) {
 			$sql = "INSERT INTO posts_text (post_id, post_text)
 					VALUES ($post_id, '$message')";
 			if (!$result = db_query($sql, $currentCourseID)) {
-				$tool_content .= "Could not enter post text!";
+				$tool_content .= $langErrorEnterTextPost;
 				draw($tool_content, 2);
 				exit();
 			}
@@ -176,7 +176,7 @@ if (isset($submit) && $submit) {
 				SET topic_last_post_id = $post_id
 				WHERE topic_id = '$topic_id'";
 			if (!$result = db_query($sql, $currentCourseID)) {
-				$tool_content .= "Could not update topics table!";
+				$tool_content .= $langErrorEnterTopicTable;
 				draw($tool_content, 2);
 				exit();
 			}
@@ -187,7 +187,7 @@ if (isset($submit) && $submit) {
 		WHERE forum_id = '$forum'";
 	$result = db_query($sql, $currentCourseID);
 	if (!$result) {
-		$tool_content .= "Couldn't update forums post count.";
+		$tool_content .= $langErrorUpdatePostCoun;
 		draw($tool_content, 2);
 		exit();
 	}                              

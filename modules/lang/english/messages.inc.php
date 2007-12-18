@@ -492,7 +492,6 @@ $langWrongAuth = "You did not provide a valid pair of username/password";
  * conference
  *
  * @author Dimitris Tsachalis <ditsa@ccf.auth.gr>
- * @version $Id$
  */
 
  $langConference = "Tele cooperation";
@@ -2818,7 +2817,7 @@ $langTheUser = 'The user';
 $langDestination = 'Destination:';
 $langAsProf = 'as a professor';
 $langTel = 'Tel.';
-$langPassSameAuth = 'Your password is provided by the authentication service you are using.';
+$langPassSameLDAP = 'To login, use the password you use in the directory (LDAP) service.';
 
 $langLDAPUser = 'LDAP user';
 $langLogIn = 'Login';
@@ -3806,3 +3805,58 @@ $langUnableDeleteTopic="Couldn't delete topic from database";
 $langTopicInformation="Couldn't get forum and topic information from the database.";
 $langErrorTopicSelect="Error - The forum/topic you selected does not exist. Please go back and try again.";
 $langUserTopicInformation="<p>Couldn't get user and topic information from the database.</p>";
+
+
+
+/*************************************************************
+newtopic.php
+**************************************************************/
+
+$langErrorDataForum="Can't get forum data.";
+$langErrorPost="The forum you are attempting to post to does not exist. Please try again.";
+$langErrorEnterTopic="Couldn't enter topic in database.";
+$langErrorEnterPost="Couldn't enter post in database.";
+$langErrorEnterTextPost="Could not enter post text!";
+$langErrorEnterTopicTable="Could not update topics table!";
+$langErrorUpdatePostCount="Couldn't update forums post count.";
+
+
+/*************************************************************
+viewforum.php
+**************************************************************/
+
+$langErrorConnectForumDatabase="An Error Occured. Could not connect to the forums database.";
+$langErrorForumSelect= "Error - The forum you selected does not exist. Please go back and try again.";
+$langErrorTopicsQuery="An Error Occured. Could not query the topics database.<br>";
+$langErrorTopicsQueryDatabase="An Error Occured. Could not query the topics database.";
+
+/*************************************************************
+index.php
+**************************************************************/
+
+$langUnableGetCategories="Unable to get categories from database";
+$langErrorGetForumData="Error getting forum data";
+$langErrorGettingForumData="Error getting forum data.";
+$langErrorConnectForumDatabase="Could not connect to the forums database.";
+$langErrorTopicSelect="Error - The forum/topic you selected does not exist. Please go back and try again.";
+$langUnableEnterData="Error - Could not enter data into the database. Please go back and try again";
+$langUnableEnterText="Could not enter post text!<br>Reason";
+$langErrorUpadatePostCount="Error updating forums post count.";
+
+
+/*************************************************************
+reply.php
+**************************************************************/
+$langErrorConnectForumDatabase="An Error Occured. Could not connect to the forums database.";
+
+
+
+
+/*************************************************************
+vietopic.php
+**************************************************************/
+$langErrorConnectPostDatabase="An Error Occured. Could not connect to the Posts database.";
+
+
+
+

@@ -77,12 +77,12 @@ if (isset($submit) && $submit) {
 		FROM posts
 		WHERE post_id = '$post_id'";
 	if (!$result = db_query($sql, $currentCourseID)) {
-		$tool_content .= "Error retrieving data from database (1)";
+		$tool_content .= $langErrorDataOne;
 		draw($tool_content, 2);
 		exit();
 	}
 	if (mysql_num_rows($result) <= 0) {
-		$tool_content .= "Error retrieving data from database (2)";
+		$tool_content .= $langErrorDataTwo;
 		draw($tool_content, 2);
 		exit();
 	}
@@ -120,7 +120,7 @@ if (isset($submit) && $submit) {
 			SET post_text = '$message'
 			WHERE (post_id = '$post_id')";
 		if (!$result = db_query($sql, $currentCourseID)) {
-			$tool_content .= "Unable to update the posting in the database";
+			$tool_content .= $langUnableUpadatePost;
 			draw($tool_content, 2);
 			exit();
 		}
@@ -136,7 +136,7 @@ if (isset($submit) && $submit) {
 				SET topic_title = '$subject', topic_notify = '$notify'
 				WHERE topic_id = '$topic_id'";
 			if (!$result = db_query($sql, $currentCourseID)) {
-				$tool_content .= "Unable to update the topic subject in the database";
+				$tool_content .= $langUnableUpadateTopic;
 			}
 		}
 		$tool_content .= "
@@ -161,14 +161,14 @@ if (isset($submit) && $submit) {
 		$sql = "DELETE FROM posts
 			WHERE post_id = '$post_id'";
 		if (!$r = db_query($sql, $currentCourseID)){
-			$tool_content .= "Couldn't delete post from database";
+			$tool_content .= $langUnableDeletePost;
 			draw($tool_content, 2);
 			exit();
 		}
 		$sql = "DELETE FROM posts_text
 			WHERE post_id = '$post_id'";
 		if (!$r = db_query($sql, $currentCourseID)) {
-			$tool_content .= "Couldn't delete post from database";
+			$tool_content .= $langUnableDeletePost;
 			draw($tool_content, 2);
 			exit();
 		} else if ($last_post_in_thread == $this_post_time) {
@@ -177,7 +177,7 @@ if (isset($submit) && $submit) {
 				SET topic_time = '$topic_time_fixed'
 				WHERE topic_id = '$topic_id'";
 			if (!$r = db_query($sql, $currentCourseID)) {
-				$tool_content .= "Couldn't update to previous post time - last post has been removed";
+				$tool_content .= $langPostRemoved;
 				draw($tool_content, 2);
 				exit();
 			}
@@ -186,7 +186,7 @@ if (isset($submit) && $submit) {
 			$sql = "DELETE FROM topics
 				WHERE topic_id = '$topic_id'";
 			if (!$r = db_query($sql, $currentCourseID)) {
-				$tool_content .= "Couldn't delete topic from database";
+				$tool_content .= $langUnableDeleteTopic;
 				draw($tool_content, 2);
 				exit();
 			}
@@ -219,13 +219,13 @@ if (isset($submit) && $submit) {
 		FROM forums f, topics t
 		WHERE (f.forum_id = '$forum') AND (t.topic_id = $topic) AND (t.forum_id = f.forum_id)";
 	if (!$result = db_query($sql, $currentCourseID)) {
-		$tool_content .= "Couldn't get forum and topic information from the database.";
+		$tool_content .= "$langTopicInformation";
 		draw($tool_content, 2);
 		exit();
 	}
 	
 	if (!$myrow = mysql_fetch_array($result)) {
-		$tool_content .= "Error - The forum/topic you selected does not exist. Please go back and try again.";
+		$tool_content .= "$langErrorTopicSelect";
 		draw($tool_content, 2);
 		exit();
 	}
