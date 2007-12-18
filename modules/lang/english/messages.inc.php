@@ -1834,6 +1834,7 @@ $langNoLinksExist = "The professor has not added any links.";
 *******************************************************/
 
 $lang_remind_pass = 'Reset password';
+$lang_pass_invalid_mail = 'The email address you entered is not valid.';
 $lang_pass_intro = '<p>If you have forgotten you passwrd, please fill in your <em>username</em>
 and email.
 (<em>CAUTION: This email must much the one set in your user profile</em>).</p> <p>After submitting these data you will receive an email with instruction on how to reset your password.</p>';
@@ -3788,26 +3789,3 @@ $langAlertAdmin="Please supplement at least administrator for the course!";
 
 
 $langExerciseNotPermit="The submission of the assignment is forbidden!";
-
-
-                     
-                                                                            
-                                       
-                                                                                                                                            
-                                       
-                                       
-                                       
-
-
-                                       
-                                                                            
-                                                                           
-                                       
-                                       
-                                       
-                                       
-                                                                                                
-
-
-
-?>
