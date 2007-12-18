@@ -50,27 +50,6 @@ include('../../include/sendMail.inc.php');
 $nameTools = $lang_remind_pass;
 
 
-function valid_email($e) {
-	$regexp = '^[0-9a-z_\.-\+]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,4})$';
-	if (!eregi($regexp, $e)) {
-		return FALSE;
-	} else {
-		//		 Reverse magic_quotes_gpc effects on these vars if ON.
-		//		  if(get_magic_quotes_gpc()) {
-		//            $product_name        = stripslashes($_REQUEST['userName']);
-		//            $product_description = stripslashes($_REQUEST['email']);
-		//        } else {
-		//            $product_name        = $_REQUEST['userName'];
-		//            $product_description = $_REQUEST['email'];
-		//        }
-		//
-		//        $userName = mysql_real_escape_string($product_name, $link);
-		//        $email= mysql_real_escape_string($product_description, $link);
-		return TRUE;
-	}
-
-}
-
 function check_password_editable($password)
 {
 	$authmethods = array("pop3","imap","ldap","db");
@@ -162,10 +141,19 @@ if (isset($_REQUEST['do']) && $_REQUEST['do'] == "go") {
 	}
 }
 
-if ((!isset($email) || !isset($userName) || empty($email) || empty($userName)) && !isset($_REQUEST['do'])) {
+if ((!isset($email) || !email_seems_valid($email)
+     || !isset($userName) || empty($userName))
+    && !isset($_REQUEST['do'])) {
 	/***** Email address entry form *****/
 
-	$tool_content .= "$lang_pass_intro";
+        if (isset($email) and !email_seems_valid($email)) {
+                $tool_content .= '<table width="99%"><tbody><tr><td class="caution">' .
+                                '<p><strong>' . $lang_pass_invalid_mail . '<br />&nbsp;<br />' .
+                                '&nbsp;<br />&nbsp;<br /></strong></p>' .
+				'</td></tr></tbody></table>';
+        }
+
+	$tool_content .= $lang_pass_intro;
 
 	$tool_content .= "<form method=\"post\" action=\"".$REQUEST_URI."\">
 	<table>
@@ -175,71 +163,70 @@ if ((!isset($email) || !isset($userName) || empty($email) || empty($userName)) &
 	$lang_username: 
 	</th>
 	<td>
-	<input type=\"text\" name=\"userName\" size=\"40\">
+	<input type=\"text\" name=\"userName\" size=\"40\" />
 	</td>
 	<tr>
 	<th>
 	$lang_email: 
 	</th>
 	<td>
-	<input type=\"text\" name=\"email\" size=\"40\">
+	<input type=\"text\" name=\"email\" size=\"40\" />
 	</td>
 	</thead>
 	</table>
 	<br/>
-	<input type=\"submit\" name=\"doit\" value=\"".$lang_pass_submit."\">
+	<input type=\"submit\" name=\"doit\" value=\"".$lang_pass_submit."\" />
 	</form>";
 
 } elseif (!isset($_REQUEST['do'])) {
-	if (valid_email($email)) {
-		/***** If valid e-mail address was entered, find user and send email *****/
-		$res = db_query("SELECT user_id, nom, prenom, username, password, statut FROM user
-							WHERE email = '" . mysql_escape_string($email) . "'
-							AND username = '" . mysql_escape_string($userName) . "'", $mysqlMainDb);
+	/***** If valid e-mail address was entered, find user and send email *****/
+	$res = db_query("SELECT user_id, nom, prenom, username, password, statut FROM user
+				WHERE email = '" . mysql_escape_string($email) . "'
+				AND username = '" . mysql_escape_string($userName) . "'", $mysqlMainDb);
 
-		if (mysql_num_rows($res) == 1) {
-			$text = $langPassResetIntro. $emailhelpdesk;
-			$text .= "$langHowToResetTitle";
+	if (mysql_num_rows($res) == 1) {
+		$text = $langPassResetIntro. $emailhelpdesk;
+		$text .= "$langHowToResetTitle";
 
-			while ($s = mysql_fetch_array($res, MYSQL_ASSOC)) {
-				$is_editable = check_password_editable($s['password']);
-				if($is_editable) {
+		while ($s = mysql_fetch_array($res, MYSQL_ASSOC)) {
+			$is_editable = check_password_editable($s['password']);
+			if($is_editable) {
 
-					//insert an md5 key to the db
-					$new_pass = createPassword();
-					//TODO: add a query to check if the newly generated password already exists in the
-					//reset-pass table. If yes, attempt to generate another one.
-					$sql = "INSERT INTO `passwd_reset` (`user_id`, `hash`, `password`, `datetime`) VALUES ('".$s['user_id']."',  '".md5($new_pass)."', '$new_pass', NOW())";
-					db_query($sql, $mysqlMainDb);
-					//prepare instruction for password reset
-					$text .= $langPassResetGoHere;
-					$text .= $urlServer . "modules/auth/lostpass.php?do=go&u=".$s['user_id']."&h=" .md5($new_pass);
+				//insert an md5 key to the db
+				$new_pass = createPassword();
+				//TODO: add a query to check if the newly generated password already exists in the
+				//reset-pass table. If yes, attempt to generate another one.
+				$sql = "INSERT INTO `passwd_reset` (`user_id`, `hash`, `password`, `datetime`) VALUES ('".$s['user_id']."',  '".md5($new_pass)."', '$new_pass', NOW())";
+				db_query($sql, $mysqlMainDb);
+				//prepare instruction for password reset
+				$text .= $langPassResetGoHere;
+				$text .= $urlServer . "modules/auth/lostpass.php?do=go&u=".$s['user_id']."&h=" .md5($new_pass);
 
-				} else { //other type of auth...
-					switch($s['password'])  {
-						case 'pop3':{
-							$auth=2;
-							break;
-						}
-						case 'imap':{
-							$auth=3;
-							break;
-						}
-						case 'ldap':{
-							$auth=4;
-							break;
-						}
-						case 'db':{
-							$auth=5;
-							break;
-						}
-						default:{
-							$auth=1;
-							break;
-						}
+			} else { //other type of auth...
+				switch($s['password'])  {
+					case 'pop3':{
+						$auth=2;
+						break;
 					}
+					case 'imap':{
+						$auth=3;
+						break;
+					}
+					case 'ldap':{
+						$auth=4;
+						break;
+					}
+					case 'db':{
+						$auth=5;
+						break;
+					}
+					default:{
+						$auth=1;
+						break;
+					}
+				}
 
-					$tool_content = "
+				$tool_content = "
 				<table width=\"99%\">
 				<tbody>
 					<tr>
@@ -252,59 +239,72 @@ if ((!isset($email) || !isset($userName) || empty($email) || empty($userName)) &
 				</tbody>
 			</table>";
 
-				}
-			}
-			/***** Account details found, now send e-mail *****/
-			$emailheaders = "From: $siteName <$emailAdministrator>\n".
-			"MIME-Version: 1.0\n".
-			"Content-Type: text/plain; charset=$charset\n".
-			"Content-Transfer-Encoding: 8bit";
-			$emailsubject = "e-Class account information";
-			if (!send_mail($siteName, $emailAdministrator, '', $email,	$emailsubject, $text, $charset)) {
-				$tool_content = "
-				<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"caution\">
-						<p><strong>$langAccountEmailError1</strong></p>
-						<p>$langAccountEmailError2 $email.</p>
-						<p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p>
-						<p><a href=\"../../index.php\">$langHome</a></p>
-					</td>
-					</tr>
-				</tbody>
-			</table>";
-
-			} elseif (!isset($auth)) {
-				$tool_content .= "
-				<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"success\">
-						$lang_pass_email_ok <strong>$email</strong><br/><br/>
-    					<a href=\"../../index.php\">$langHome</a>
-					</td>
-					</tr>
-				</tbody>
-			</table><br/>";
-
-			}
-
-		} else {
-			$tool_content .= "
-				<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"caution\">
-						<p><strong>$langAccountNotFound1 ($email)</strong></p>
-						<p>$langAccountNotFound2 <a href='mailto: $emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p>
-    					<p><a href=\"../../index.php\">$langHome</a></p>
-					</td>
-					</tr>
-				</tbody>
-			</table>";
 		}
 	}
+	/***** Account details found, now send e-mail *****/
+	$emailheaders = "From: $siteName <$emailAdministrator>\n".
+        	"MIME-Version: 1.0\n".
+        	"Content-Type: text/plain; charset=$charset\n".
+        	"Content-Transfer-Encoding: 8bit";
+	$emailsubject = "e-Class account information";
+	if (!send_mail($siteName, $emailAdministrator, '', $email, $emailsubject, $text, $charset)) {
+		$tool_content = "
+			<table width=\"99%\">
+			<tbody>
+				<tr>
+					<td class=\"caution\">
+					<p><strong>$langAccountEmailError1</strong></p>
+					<p>$langAccountEmailError2 $email.</p>
+					<p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p>
+					<p><a href=\"../../index.php\">$langHome</a></p>
+				</td>
+				</tr>
+			</tbody>
+		</table>";
+
+	} elseif (!isset($auth)) {
+                        $tool_content .= "
+                        <table width=\"99%\">
+                        <tbody>
+                                <tr>
+                                        <td class=\"success\">
+                                        $lang_pass_email_ok <strong>$email</strong><br/><br/>
+                                <a href=\"../../index.php\">$langHome</a>
+                                </td>
+                                </tr>
+                        </tbody>
+                </table><br/>";
+
+                }
+
+        } else {
+                $tool_content .= "
+                        <table width=\"99%\">
+                        <tbody>
+                                <tr>
+                                        <td class=\"caution\">
+                                        <p><strong>$langAccountNotFound1 ($email)</strong></p>
+                                        <p>$langAccountNotFound2 <a href='mailto: $emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p>
+                                <p><a href=\"../../index.php\">$langHome</a></p>
+                                </td>
+                                </tr>
+                        </tbody>
+                </table>";
+        }
+} else {
+                        $tool_content = "
+                        <table width=\"99%\">
+                        <tbody>
+                                <tr>
+                                        <td class=\"caution\">
+                                        <p><strong>$langAccountEmailError1</strong></p>
+                                        <p>$langAccountEmailError2 $email.</p>
+                                        <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p>
+                                        <p><a href=\"../../index.php\">$langHome</a></p>
+                                </td>
+                                </tr>
+                        </tbody>
+                </table>";
 }
 
 
