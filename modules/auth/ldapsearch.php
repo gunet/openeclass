@@ -3,13 +3,9 @@
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
-       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+       	Copyright(c) 2003-2007  Greek Universities Network - GUnet
         A full copyright notice can be read in "/info/copyright.txt".
         
-       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-        	    Yannis Exidaridis <jexi@noc.uoa.gr> 
-      		    Alexandros Diamantidis <adia@noc.uoa.gr> 
-
         For a full list of contributors, see "credits.txt".  
      
         This program is a free software under the terms of the GNU 
@@ -25,7 +21,6 @@
 
 /**===========================================================================
 	ldapsearch.php
-	@last update: 27-06-2006 by Karatzidis Stratos
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
 ==============================================================================        
@@ -36,18 +31,14 @@
 */
 
 include '../../include/baseTheme.php';
-include 'auth.inc.php';
-$auth = isset($_POST['auth'])?$_POST['auth']:'';
+require_once 'auth.inc.php';
 
 $nameTools = get_auth_info($auth);
 $navigation[]= array ("url"=>"registration.php", "name"=> "$langNewUserAccount¡ctivation");
 $nameTools = "$langUserData";
 
-// Initialise $tool_content
-$tool_content = "";
-// Main body
-
 $found = 0;
+$tool_content = "";
 
 // get the values from ldapnewuser.php
 $ldap_email = isset($_POST['ldap_email'])?$_POST['ldap_email']:'';
@@ -83,13 +74,13 @@ if(!empty($is_submit))
 		</tr>
 		</tbody>
 		</table>";
-		//$tool_content .= $errormessage1 . $ldapuserexists . $errormessage2;
+
 	} 
 	else 
 	{
 		// try to authenticate him
 		$auth_method_settings = get_auth_settings($auth);		// get the db settings of the authentication method defined
-		
+
 		switch($auth)			// now get the connection settings
 		{
 			case '2':	$pop3host = str_replace("pop3host=","",$auth_method_settings['auth_settings']);
@@ -118,7 +109,7 @@ if(!empty($is_submit))
 		}
 		
 		$is_valid = auth_user_login($auth,$ldap_email,$ldap_passwd);
-		
+
 		if($is_valid)
 		{
 			$auth_allow = 1;		// Successfully connected
@@ -204,11 +195,6 @@ if(!empty($is_submit))
 		}
 	}
 
-
 }   // end of initial if
 
-$tool_content .= "</table>";
-$tool_content .= "<br />";
-
 draw($tool_content,0,'auth');
-?>

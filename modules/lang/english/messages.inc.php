@@ -2762,10 +2762,10 @@ $langProfAccount = 'Professor Account';
 $langUserAccountInfo1 = '(Application form)&nbsp;';
 $langUserAccountInfo2 = '(Creation)&nbsp;';
 $langUserAccountInfo3 = 'Alternative Selection';
-$langNewAccount¡ctivation = 'Account ¡ctivation';
-$langNewUserAccount¡ctivation = 'Student Account ¡ctivation';
-$langNewProfAccount¡ctivation = 'Professor Account ¡ctivation';
-$langNewAccount¡ctivation1 = '(existing account)';
+$langNewAccountActivation = 'Account ¡ctivation';
+$langNewUserAccountActivation = 'Student Account ¡ctivation';
+$langNewProfAccountActivation = 'Professor Account ¡ctivation';
+$langNewAccountActivation1 = '(existing account)';
 
 $profsuccess="Professor new account has been created succesfully!";
 

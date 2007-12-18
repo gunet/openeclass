@@ -2365,10 +2365,10 @@ $langUserAccountInfo1 = '(Αίτηση)&nbsp;';
 $langUserAccountInfo2 = '(Δημιουργία)&nbsp;';
 $langUserAccountInfo3 = 'Εναλλακτικά, μπορείτε να επιλέξετε';
 $langNewAccount = 'Νέος Λογαριασμός';
-$langNewAccountΑctivation = 'Ενεργοποίηση Λογαριασμού';
-$langNewUserAccountΑctivation = "Ενεργοποίηση Λογαριασμού $langOfStudent";
-$langNewProfAccountΑctivation = "Ενεργοποίηση Λογαριασμού $langOfTeacher";
-$langNewAccountΑctivation1 = "την ενεργοποίηση λογαριασμού σας";
+$langNewAccountActivation = 'Ενεργοποίηση Λογαριασμού';
+$langNewUserAccountActivation = "Ενεργοποίηση Λογαριασμού $langOfStudent";
+$langNewProfAccountActivation = "Ενεργοποίηση Λογαριασμού $langOfTeacher";
+$langNewAccountActivation1 = "την ενεργοποίηση λογαριασμού σας";
 $langUserExistingAccount = "Στοιχεία Εισόδου";
 
 // list requests
