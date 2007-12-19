@@ -78,13 +78,13 @@ $sql = "SELECT f.forum_type, f.forum_name
 	WHERE (f.forum_id = '$forum') AND (t.topic_id = $topic) AND (t.forum_id = f.forum_id)";
 if (!$result = db_query($sql, $currentCourseID)) {
 	//XXX: Error message in specified language.
-	$tool_content .= "An Error Occured. Could not connect to the forums database.";
+	$tool_content .= $langErrorConnectForumDatabase;
 	draw($tool_content, 2);
 	exit();
 }
 if (!$myrow = mysql_fetch_array($result)) {
 	//XXX: Error message in specified language.
-	$tool_content .= "Error - The forum/topic you selected does not exist. Please go back and try again.";
+	$tool_content .= $langErrorTopicSelect;
 	draw($tool_content, 2);
 	exit();
 }
@@ -104,7 +104,7 @@ if ($total > $posts_per_page) {
 }
 
 if (!$result = db_query($sql, $currentCourseID)) {
-	$tool_content .= "An Error Occured. Could not connect to the forums database.";
+	$tool_content .= $langErrorConnectForumDatabase;
 	draw($tool_content, 2);
 	exit();
 }
@@ -164,7 +164,7 @@ if (isset($start)) {
 		ORDER BY post_id LIMIT $posts_per_page";
 }
 if (!$result = db_query($sql, $currentCourseID)) {
-	$tool_content .= "An Error Occured. Could not connect to the Posts database. $sql";
+	$tool_content .= "$langErrorConnectPostDatabase. $sql";
 	draw($tool_content, 2);
 	exit();
 }

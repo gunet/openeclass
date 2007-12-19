@@ -86,12 +86,12 @@ if ( isset($post_id) && $post_id) {
 }
 
 if(!$result = db_query($sql, $currentCourseID)) {
-	$tool_content .= "Could not connect to the forums database.";
+	$tool_content .= $langErrorConnectForumDatabase;
 	draw($tool_content, 2);
 	exit();
 }
 if (!$myrow = mysql_fetch_array($result)) {
-	$tool_content .= "The forum/topic you selected does not exist.";
+	$tool_content .= $langErrorTopicSelect;
 	draw($tool_content, 2);
 	exit();
 }
@@ -102,7 +102,7 @@ $forum_type = $myrow["forum_type"];
 $forum_id = $forum;
 
 if (!does_exists($forum, $currentCourseID, "forum") || !does_exists($topic, $currentCourseID, "topic")) {
-	$tool_content .= "The forum or topic you are attempting to post to does not exist. Please try again.";
+	$tool_content .= $langErrorTopicSelect;
 	draw($tool_content, 2);
 	exit();
 }
@@ -182,7 +182,7 @@ if (isset($submit) && $submit) {
 	$sql = "INSERT INTO posts (topic_id, forum_id, poster_id, post_time, poster_ip, nom, prenom)
 			VALUES ('$topic', '$forum', '" . $userdata["user_id"] . "','$time', '$poster_ip', '$nom', '$prenom')";
 	if (!$result = db_query($sql, $currentCourseID)) {
-		$tool_content .= "Error - Could not enter data into the database. Please go back and try again";
+		$tool_content .= $langUnableEnterData;
 		draw($tool_content, 2);
 		exit();
 	}
@@ -190,7 +190,7 @@ if (isset($submit) && $submit) {
 	if ($this_post) {
 		$sql = "INSERT INTO posts_text (post_id, post_text) VALUES ($this_post, '$message')";
 		if (!$result = db_query($sql, $currentCourseID)) {
-			$tool_content .= "Could not enter post text!<br>Reason:" . mysql_error();
+			$tool_content .= $langUnableEnterText;
 			draw($tool_content, 2);
 			exit();
 		}
@@ -199,7 +199,7 @@ if (isset($submit) && $submit) {
 		SET topic_replies = topic_replies+1, topic_last_post_id = $this_post, topic_time = '$time' 
 		WHERE topic_id = '$topic'";
 	if (!$result = db_query($sql, $currentCourseID)) {
-		$tool_content .= "Error - Could not enter data into the database. Please go back and try again";
+		$tool_content .= $langUnableEnterData;
 		draw($tool_content, 2);
 		exit();
 	}
@@ -208,7 +208,7 @@ if (isset($submit) && $submit) {
 		WHERE forum_id = '$forum'";
 	$result = db_query($sql, $currentCourseID);
 	if (!$result) {
-		$tool_content .= "Error updating forums post count.";
+		$tool_content .= $langErrorUpadatePostCount;
 		draw($tool_content, 2);
 		exit();
 	}    
@@ -216,7 +216,7 @@ if (isset($submit) && $submit) {
 		FROM topics t, users u 
 		WHERE t.topic_id = '$topic' AND t.topic_poster = u.user_id";
 	if (!$result = db_query($sql, $currentCourseID)) {
-		$tool_content .= "Couldn't get topic and user information from database.";
+		$tool_content .= $langUserTopicInformation;
 		draw($tool_content, 2);
 		exit();
 	}
@@ -309,7 +309,7 @@ if (isset($submit) && $submit) {
 			$syslang_quotemsg = get_syslang_string($sys_lang, "l_quotemsg");
 			eval("\$reply = \"$syslang_quotemsg\";");
 		} else {
-			$tool_content .= "Error Contacting database. Please try again.\n";
+			$tool_content .= $langErrorConnectForumDatabase;
 			draw($tool_content, 2);
 			exit();
 		}

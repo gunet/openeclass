@@ -32,8 +32,12 @@ $langCourses = "courses";
 $langClosed = "closed";
 $langOpen = "opened";
 $langSemiopen = "require registration";
-$langUsers = "users";
-$langUsers_1 = "Users";
+
+$langUsers = "Users";
+$langUsersS = "users";
+$langUser = "User";
+$langUserS = "user";
+
 $langSupportUser = "Support Person:";
 
 
@@ -254,6 +258,7 @@ $langRegCourse = "Registration Required";
 $langSendMessageTo = "Send mail";
 $langAllUsers = "to all users";
 $langProfOnly = "just the professors";
+$langToAllUsers="to all users";
 
 // searchcours.php
 $langSearchCourse = "Search Courses";
@@ -267,8 +272,8 @@ $langCourseStatusChange = "Change course type";
 
 // authentication
 $langMethods = "Authentication Methods:";
-$langAuthActivate = "Activate";
-$langAuthDeactivate = "Deactivate";
+$langActivate = "Activate";
+$langDeactivate = "Deactivate";
 $langChooseAuthMethod = "Choose an authentication Method and define the method settings";
 $langNextStep = "Next step";
 $langConnYes = "Successful Connection!";
@@ -2413,7 +2418,6 @@ $langSurveyDeleted = "The Survey was deleted successfully.<br><br><a href=\"ques
 $langSurveyDeactivated = "The Survey was deactivated successfully.";
 $langSurveyActivated = "The Survey was activated successfully.";
 $langSurveySubmitted = "Thanks for your participating!<br><br><a href=\"questionnaire.php\">Back</a>.";
-$langSurveyUser = "User";
 $langSurveyTotalAnswers = "Total number of answers";
 $langSurveyNone = "There are no surveys for the current course.";
 $langSurveyInactive = "The survey has expired or has not started yet.";
@@ -3841,22 +3845,17 @@ $langErrorConnectForumDatabase="Could not connect to the forums database.";
 $langErrorTopicSelect="Error - The forum/topic you selected does not exist. Please go back and try again.";
 $langUnableEnterData="Error - Could not enter data into the database. Please go back and try again";
 $langUnableEnterText="Could not enter post text!<br>Reason";
-$langErrorUpadatePostCount="Error updating forums post count.";
-
-
-/*************************************************************
-reply.php
-**************************************************************/
-$langErrorConnectForumDatabase="An Error Occured. Could not connect to the forums database.";
-
-
-
 
 /*************************************************************
 vietopic.php
 **************************************************************/
 $langErrorConnectPostDatabase="An Error Occured. Could not connect to the Posts database.";
 
+/*************************************************************
+updatetheinactive.php
+**************************************************************/
 
-
-
+$langAddTime="Add time in the inactive accounts";
+$langRealised="have been made";
+$langUpdates="updates";
+$langNoChanges="Error! Inactive accounts were not updated";

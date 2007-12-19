@@ -35,9 +35,7 @@ Pitsiougas Vagelis <vagpits@uom.gr>
 
 $require_current_course=TRUE;
 $require_login=TRUE;
-$langFiles="course_info";
 $require_prof = true;
-//include '../../include/init.php';
 
 include '../../include/baseTheme.php';
 
@@ -110,7 +108,7 @@ if(isset($submit)) {
       <td colspan='2'><p>$langRefreshInfo</p><br /><p>$langRefreshInfo_A :</ p></td>
     </tr>
     <tr>
-      <th class='left'><img src=\"../../template/classic/img/users_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langUsers_1</th>
+      <th class='left'><img src=\"../../template/classic/img/users_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langUsers</th>
       <td width='1%'><input type='checkbox' name='delusers'></td>
       <td>$langUserDelCourse</td>
     </tr>

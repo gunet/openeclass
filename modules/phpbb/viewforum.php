@@ -53,12 +53,13 @@ existing (phpBB-based) to a new eclass forum :-(
 ==============================================================================
 */
 
-
+error_reporting(E_ALL);
 /*
 * GUNET eclass 2.0 standard stuff
 */
 $require_current_course = TRUE;
 $require_login = TRUE;
+$langFiles = 'phpbb';
 $require_help = FALSE;
 include '../../include/baseTheme.php';
 $navigation[]= array ("url"=>"index.php", "name"=> $l_forums);
@@ -93,13 +94,13 @@ $sql = "SELECT f.forum_type, f.forum_name
 	WHERE forum_id = '$forum'";
 if (!$result = db_query($sql, $currentCourseID)) {
 	//XXX: Error message in specified language.
-	$tool_content .= "An Error Occured. Could not connect to the forums database.";
+	$tool_content .= $langErrorConnectForumDatabase;
 	draw($tool_content, 2);
 	exit();
 }
 if (!$myrow = mysql_fetch_array($result)) {
 	//XXX: Error message in specified language.
-	$tool_content .= "Error - The forum you selected does not exist. Please go back and try again.";
+	$tool_content .= $langErrorForumSelect;
 	draw($tool_content, 2);
 	exit();
 }
@@ -147,7 +148,7 @@ if(!$result = db_query($sql, $currentCourseID)) {
 </TABLE>
 cData;
 	//	$tool_content .= "An Error Occured. Could not query the topics database.<br>$sql";
-	$tool_content .= "<p>An Error Occured. Could not query the topics database.</p>";
+	$tool_content .=$langErrorTopicsQueryDatabase;
 	draw($tool_content, 2);
 	exit();
 }

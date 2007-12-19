@@ -102,11 +102,9 @@ else
 $tool_content .= "<p><b>$langStoixeia</b><p>
 <ul class=\"listBullet\">
 <li>".$langAboutCourses." <b>".$a[0]."</b> ".$langCourses." (<i><b>".$a1[0]."</b> ".$langOpen.", <b>".$a2[0]."</b> ".$langSemiopen.", <b>".$a3[0]."</b> ".$langClosed."</i>)</li>
-<li>".$langAboutUsers." <b>".$e[0]."</b> ".$langUsers." (<i><b>".$b[0]."</b> ".$mes_teacher.", <b>".$c[0]."</b> ".$mes_student." ".$langAnd." <b>".$d[0]."</b> ".$mes_guest."</i>)</li>
+<li>".$langAboutUsers." <b>".$e[0]."</b> ".$langUsersS." (<i><b>".$b[0]."</b> ".$mes_teacher.", <b>".$c[0]."</b> ".$mes_student." ".$langAnd." <b>".$d[0]."</b> ".$mes_guest."</i>)</li>
 <li>".$langTotalHits.": <b>".$totalHits."</b></li>
 <li>".$langUptime.": <b>".$uptime."</b></li></ul>";
-
-//$tool_content .= "</td></tr></tbody></table><br>";
 
 // Count prof requests with status = 1
 $sql = "SELECT COUNT(*) AS cnt FROM prof_request WHERE status = 1";
@@ -161,7 +159,7 @@ $tool_content .= "<p><b><caption>$langInfoAdmin</b></p>
 <li>$langLastLesson $last_course_info</li>
 <li>$langLastProf $last_prof_info</li>
 <li>$langLastStud $last_stud_info</li>
-<li>$langAfterLastLogin <i><b>".$lastregisteredprofs."</b> $langTeachers<b> ".$lastregisteredstuds."</b> $langUsers </i></li>";
+<li>$langAfterLastLogin <i><b>".$lastregisteredprofs."</b> $langTeachers<b> ".$lastregisteredstuds."</b> $langUsersS </i></li>";
 
 /*****************************************************************************
         DISPLAY HTML

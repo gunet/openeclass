@@ -110,7 +110,7 @@ if ( !$result = db_query($sql, $currentCourseID) ) {
 			
 		</TABLE>
 cData;
-	$tool_content .= "Unable to get categories from database<br>$sql";
+	$tool_content .= "$langUnableGetCategories  <br>$sql";
 	draw($tool_content, 2);
 	exit();
 }
@@ -142,7 +142,7 @@ if ( $total_categories ) {
 			
 			</TABLE>
 cData;
-		//		$tool_content .= "Error getting forum data<br>$sql";
+		//		$tool_content .= "$langErrorGetForumData <br>$sql";
 		$tool_content .= "Error getting forum data.";
 		draw($tool_content, 2);
 		exit();
