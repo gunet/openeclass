@@ -39,21 +39,19 @@ include '../../include/baseTheme.php';
 include 'admin.inc.php';
 include '../auth/auth.inc.php';
 $nameTools = $langVersion;
+$navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
+
 // Initialise $tool_content
 $tool_content = "";
-
 $nameTools = $langUserStats;
 
 $u = (string)isset($_GET['u'])?$_GET['u']:(isset($_POST['u'])?$_POST['u']:'');
 
-#$u_submitted = isset($_POST['u_submitted'])?$_POST['u_submitted']:'';
-
 if((!empty($u)) && ctype_digit($u))	// validate the user id
 {
 	$u = (int)$u;
-		$sql = mysql_query("
-		SELECT nom, prenom, username, password, email, phone, department, registered_at, expires_at FROM user
-		WHERE user_id = '$u'");
+		$sql = mysql_query("SELECT nom, prenom, username, password, email, phone, department, registered_at, expires_at 
+					FROM user WHERE user_id = '$u'");
 		if (!$sql) 
 		{
 	    die("Unable to query database (user_id='$u')!");
@@ -61,8 +59,7 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		$info = mysql_fetch_array($sql);
     $tool_content .= "<h4>Στατιστικά χρήστη $info[2]</h4>";
 				
-		$sql = mysql_query("
-			SELECT nom, prenom, username FROM user WHERE user_id = '$u'");
+		$sql = mysql_query("SELECT nom, prenom, username FROM user WHERE user_id = '$u'");
 		if (!$sql) 
 		{
 		    die("Unable to query database (user_id='$u')!");
@@ -119,7 +116,6 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 				$tool_content .= $langCannotDeleteAdmin;
 		  }
 		}
-#	}
 
 // Chart display added - haniotak
 if (!extension_loaded('gd')) {
@@ -184,9 +180,7 @@ while ($leRecord = mysql_fetch_array($leResultat)) {
     <td>".$nomAction[$action]."</td></tr>";
 	$i++;
 }
-
 $tool_content .= "</tbody></table>";
-
 } 
 else 
 {

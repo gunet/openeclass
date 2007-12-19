@@ -347,7 +347,7 @@ if($sql)
 		{
 			if($c==4)
 			{
-				$caption .= "$langAsInactive</p>";
+				$caption .= "&nbsp;$langAsInactive</p>";
 				$caption .= "</p><p><a href=\"updatetheinactive.php?activate=1\">".$langAddSixMonths."</a></p>";
 			}
 			else
@@ -439,8 +439,8 @@ if($sql)
 				if (isset($_REQUEST['ord'])) 
 				{
 	      	$tool_content .= "<form method=post action=\"$_SERVER[PHP_SELF]?startList=$startList&numbList=more&ord=$_REQUEST[ord]\">
-	                                   <input type=submit value=\"$langFollow50>\" name=numbering>
-	                              </form>";
+            <input type=submit value=\"$langFollow50>\" name=numbering>
+            </form>";
 				} 
 				else 
 				{

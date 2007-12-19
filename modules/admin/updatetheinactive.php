@@ -35,20 +35,19 @@
 ==============================================================================
 */
 
-// LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-$langFiles = array('gunet','admin','registration');
+// BASETHEME, OTHER INCLUDES AND NAMETOOLS
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include 'admin.inc.php';
-$nameTools = "Προσθήκη ενεργού χρόνου στους απενεργοποιημένους λογαριασμούς";		// Define $nameTools
+$nameTools = $langAddTime;		// Define $nameTools
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $tool_content = "";		// Initialise $tool_content
 
 // Main body
 $activate = isset($_GET['activate'])?$_GET['activate']:'';		//variable of declaring the activation update
 
 // update process for all the inactive records/users
-if((!empty($activate)) && ($activate==1))
-{
+if((!empty($activate)) && ($activate==1)) {
 	// do the update
 	$newtime = time() + 15552000;
 	$qry = "UPDATE user SET expires_at=".$newtime." WHERE expires_at<=".time();		
@@ -58,17 +57,16 @@ if((!empty($activate)) && ($activate==1))
 		$countinactive = mysql_affected_rows();
 		if($countinactive>0)
 		{
-			$tool_content .= "Πραγματοποιήθηκαν ".$countinactive." ενημερώσεις<br><br>";
+			$tool_content .= " ".$langRealised." ".$countinactive." ".$langUpdate." <br><br>";
+			$tool_content .= "<a href='index.php'>$langBack</a>";
 		}
 	}
 	else
 	{
-		$tool_content .= "Δεν πραγματοποιήθηκε καμία αλλαγή";
+		$tool_content .=$langNoChanges;
+		$tool_content .= "<a href='index.php'>$langBack</a>";
 	}
-	
 }
-	
-	
 // 3: display administrator menu
 draw($tool_content,3);
 ?>

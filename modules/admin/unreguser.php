@@ -43,7 +43,6 @@ $require_admin = TRUE;
 include '../../include/baseTheme.php';
 $nameTools = $langUnregUser;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
-
 $tool_content = "";
 
 // get the incoming values and initialize them
@@ -65,8 +64,8 @@ if(empty($doit))
 	}
 	$tool_content .= ";</p>
 		<ul>
-		<li>$langYes: <a href=\"unreguser.php?u=".htmlspecialchars($u)."&c=".htmlspecialchars($c)."&doit=yes\">$langDelete!</a><br>&nbsp;</li>
-		<li>$langNo: <a href=\"edituser.php?u=".htmlspecialchars($u)."\">$langEditUser $u_account</a>&nbsp;&nbsp;&nbsp;<a href=\"index.php\">$langBack</a></li>
+		<li>$langYes: <a href=\"unreguser.php?u=".htmlspecialchars($u)."&c=".htmlspecialchars($c)."&doit=yes\">$langDelete</a><br>&nbsp;</li>
+		<li>$langNo: <a href=\"edituser.php?u=".htmlspecialchars($u)."\">$langBack</a></li>
 		</ul>";	
 } 
 else 

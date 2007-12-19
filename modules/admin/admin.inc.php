@@ -38,9 +38,6 @@
 ==============================================================================
 */
 
-// a class to format date/time for managing the account activity
-include 'datetime/datetimeclass.inc';
-
 /*******************************************************
 	eclass replacement for php stripslashes() function
 	The standard php stripslashes() removes ALL backslashes
@@ -150,7 +147,6 @@ function convert_time($seconds)
     $r = "";					        
     if ($i_days > 0) 
     {
-        //$r .= $i_days."<br>".$r_minutes."<br>";
 	if($i_days >= 365)
 	{
 	    $i_years = floor($i_days / 365);    
@@ -176,7 +172,6 @@ function convert_time($seconds)
     }
     if ($r_hours > 0) $r .= "$r_hours hours ";
     if ($r_minutes > 0) $r .= "$r_minutes min";
-    //else $r .= "less than a minute";
         								    
     return $r;
 }
