@@ -83,18 +83,18 @@ if(!empty($submit))
         $auth_method_settings = get_auth_settings($auth);
         if (!empty($auth_method_settings) and $auth != 1) {
                 $password = $auth_method_settings['auth_name'];
-        }
-
-        // check if the two passwords match
-        if ($password != $_POST['password1']) {
-                $registration_errors[] = $langPassTwice;
-        } elseif (strtoupper($password) == strtoupper($uname)
-                  or strtoupper($password) == strtoupper($nom_form)
-                  or strtoupper($password) == strtoupper($prenom_form)
-                  or strtoupper($password) == strtoupper($email)) {
-                // if the passwd is too easy offer a password sugestion
-                $registration_errors[] = $langPassTooEasy . ': <strong>' .
-                        substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8) . '</strong>';
+        } else {
+                // check if the two passwords match
+                if ($password != $_POST['password1']) {
+                        $registration_errors[] = $langPassTwice;
+                } elseif (strtoupper($password) == strtoupper($uname)
+                          or strtoupper($password) == strtoupper($nom_form)
+                          or strtoupper($password) == strtoupper($prenom_form)
+                          or strtoupper($password) == strtoupper($email)) {
+                        // if the passwd is too easy offer a password sugestion
+                        $registration_errors[] = $langPassTooEasy . ': <strong>' .
+                                substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8) . '</strong>';
+                }
         }
 
         if (count($registration_errors) == 0) {
