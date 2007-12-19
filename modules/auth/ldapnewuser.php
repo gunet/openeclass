@@ -55,7 +55,7 @@ if(!in_array($auth,$authmethods))		// means try to hack,attack
 }
 $msg = get_auth_info($auth);
 $settings = get_auth_settings($auth);
-if(!empty($msg)) $nameTools = "$langNewUserAccount¡ctivation ($msg)";
+if(!empty($msg)) $nameTools = "$langNewUserAccountActivation ($msg)";
 
 $tool_content .= "
 <table width=\"99%\" class='FormData' align='left'>
