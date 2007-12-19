@@ -268,7 +268,7 @@ if(!empty($submit))
 		switch($auth_allow)
 		{
 			case 1 : $warning .= ""; break;
-			case 2 : $warning .= "<br />".$langNoConnection."<br />"; break;
+			case 2 : $warning .= "<br />".$langInvalidId ."<br />"; break;
 			case 3 : $warning .= $tool_content .= "<br />".$langAccountInactive1." <a href=\"modules/auth/contactadmin.php?userid=".$user."\">".$langAccountInactive2."</a><br /><br />"; break;
 			case 4 : $warning .= "<br />" . $langInvalidId . "<br />"; break;
 			default: break;

@@ -340,7 +340,7 @@ function auth_user_login ($auth,$test_username, $test_password)
             $dn = $all_ldap_user_attrib[$idx] . "=" . $user . "," . $base_dn;
 
             // try an authenticated bind. use this to confirm that the user/password pair
-            if(ldap_bind($ldap, $dn, $pass))
+            if(@ldap_bind($ldap, $dn, $pass))
             {
                     $testauth = true;
                     $search = $all_ldap_user_attrib[$idx] . "=" . $user;
