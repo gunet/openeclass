@@ -330,7 +330,6 @@ if($is_adminOfCourse)
 					<tr>
 						<td class=\"success\">
 							<p><b>$langDirMv</b></p>
-							
 						</td>
 					</tr>
 				</tbody>
@@ -481,17 +480,19 @@ if($is_adminOfCourse)
 			@$dialogBox .= "<!-- rename -->\n";
 			$dialogBox .= "<form>\n";
 			$dialogBox .= "<input type=\"hidden\" name=\"sourceFile\" value=\"$rename\">\n
-	        <table><caption>$langRename</caption>
-        <thead>
-        	<tr>
-        		<th>$langRename ".htmlspecialchars($fileName)." $langIn: </th>
-        		<td><input type=\"text\" name=\"renameTo\" value=\"$fileName\"></td>
-        	</tr>
-        </thead>
+
+        <table class='FormData' width=\"99%\">
+        <tbody>
+        <tr>
+          <th class='left' width='200'>$langRename:</th>
+          <td class='left'>$langRename ".htmlspecialchars($fileName)." $langIn: </td>
+          <td class='left'><input type=\"text\" name=\"renameTo\" value=\"$fileName\" class='FormData_InputText'></td>
+          <td class='left'><input type=\"submit\" value=\"$langRename\"></td>
+        </tr>
+        </tbody>
         </table>
-	       <br/>
-	        <input type=\"submit\" value=\"$langRename\">
-	        </form>";
+        </form>";
+		
 		}else
 		{//yparxei eggrafh sth vash gia to arxeio opote xrhsimopoihse thn nea methodo metonomasias (ginetai sto STEP 2)
 
@@ -502,17 +503,16 @@ if($is_adminOfCourse)
 			$dialogBox .= "<input type=\"hidden\" name=\"sourceFile\" value=\"$rename\">
 	        
 	        
-	        <table><caption>$langRename</caption>
-        <thead>
-        	<tr>
-        		<th>$langRename ".htmlspecialchars($fileName)." $langIn: </th>
-        		<td><input type=\"text\" name=\"renameTo2\" value=\"$fileName\"></td>
-        	</tr>
-        </thead>
+        <table class='FormData' width=\"99%\">
+        <tbody>
+        <tr>
+          <th class='left' width='200'>$langRename:</th>
+          <td class='left'>$langRename ".htmlspecialchars($fileName)." $langIn: <input type=\"text\" name=\"renameTo2\" value=\"$fileName\" class='FormData_InputText' size='50'></td>
+          <td class='left' width='1'><input type=\"submit\" value=\"$langRename\"></td>
+        </tr>
+        </tbody>
         </table>
-	       <br/>
-	        <input type=\"submit\" value=\"$langRename\">";
-			$dialogBox .= "</form>\n";
+        </form>";
 		}
 	}
 
@@ -583,16 +583,15 @@ if($is_adminOfCourse)
 		$dialogBox .= "<form>\n";
 		$dialogBox .= "<input type=\"hidden\" name=\"newDirPath\" value=\"$createDir\">\n";
 		$dialogBox .= "
-        <table><caption>$langCreateDir</caption>
-        <thead>
-        	<tr>
-        		<th>$langNameDir:</th>
-        		<td><input type=\"text\" name=\"newDirName\"></td>
-        	</tr>
-        </thead>
+        <table class='FormData' width=\"99%\">
+        <tbody>
+        <tr>
+          <th class='left' width='200'>$langNameDir:</th>
+          <td class='left' width='1'><input type=\"text\" name=\"newDirName\" class='FormData_InputText'></td>
+          <td class='left'><input type=\"submit\" value=\"$langCreateDir\"></td>
+        </tr>
+        </tbody>
         </table>
-        <br/>
-        <input type=\"submit\" value=\"$langCreateDir\">
         </form>";
 	}
 
@@ -690,28 +689,31 @@ if($is_adminOfCourse)
 		@$dialogBox .="<!-- comment -->\n";
 		$dialogBox .="	<form method=\"post\" action=\"$_SERVER[PHP_SELF]?edit_metadata\">
         					<input type=\"hidden\" name=\"commentPath\" value=\"$comment\">
-        					<p><b>$langAddComment : </b>".htmlspecialchars($oldFilename)."
-        					 (<em>$langNotRequired</em>)</p>
+        					
         					<input type=\"hidden\" size=\"80\" name=\"file_filename\" value=\"$oldFilename\">
-        					<table width =\"99%\">
-        					<thead>
+        					<table  class='FormData' width=\"99%\">
+        					<tbody>
         						<tr>
-        							<th>$langComment:</th>
-        							<td><input type=\"text\" size=\"60\" name=\"file_comment\" value=\"$oldComment\"></td>
+        							<th>&nbsp;</th>
+        							<td><b>$langAddComment: </b>".htmlspecialchars($oldFilename)."</td>
         						</tr>
         						<tr>
-        							<th>$langTitle:</th>
-        							<td><input type=\"text\" size=\"60\" name=\"file_title\" value=\"$oldTitle\"></td>
+        							<th class='left'>$langComment:</th>
+        							<td><input type=\"text\" size=\"60\" name=\"file_comment\" value=\"$oldComment\" class='FormData_InputText'></td>
         						</tr>
         						<tr>
-        							<th>$langCategory:</th>
+        							<th class='left'>$langTitle:</th>
+        							<td><input type=\"text\" size=\"60\" name=\"file_title\" value=\"$oldTitle\" class='FormData_InputText'></td>
+        						</tr>
+        						<tr>
+        							<th class='left'>$langCategory:</th>
         							<td>
         					
         					";
 		//ektypwsh tou combobox gia thn epilogh kathgorias tou eggrafou
 		$dialogBox .= "
 	
-							<select name=\"file_category\">
+							<select name=\"file_category\" class='auth_input'>
 									<option"; if($oldCategory=="0") $dialogBox .= " selected=\"selected\""; $dialogBox .= " value=\"0\">$langCategoryOther<br>";
 		$dialogBox .= "		<option"; if($oldCategory=="1") $dialogBox .= " selected=\"selected\""; $dialogBox .= " value=\"1\">$langCategoryExcercise<br>
 									<option"; if($oldCategory=="1") $dialogBox .= " selected=\"selected\""; $dialogBox .= " value=\"2\">$langCategoryLecture<br>
@@ -726,27 +728,27 @@ if($is_adminOfCourse)
 		$dialogBox .= "<input type=\"hidden\" size=\"80\" name=\"file_creator\" value=\"$oldCreator\">
     						<input type=\"hidden\" size=\"80\" name=\"file_date\" value=\"$oldDate\">
     						<tr>
-    							<th>$langSubject : </th>
+    							<th class='left'>$langSubject : </th>
     							<td>
-    							<input type=\"text\" size=\"60\" name=\"file_subject\" value=\"$oldSubject\">
+    							<input type=\"text\" size=\"60\" name=\"file_subject\" value=\"$oldSubject\" class='FormData_InputText'>
     							</td>
     						</tr>
     						<tr>
-    							<th>$langDescription : </th>
+    							<th class='left'>$langDescription : </th>
     							<td>
-    							<input type=\"text\" size=\"60\" name=\"file_description\" value=\"$oldDescription\">
+    							<input type=\"text\" size=\"60\" name=\"file_description\" value=\"$oldDescription\" class='FormData_InputText'>
     							</td>
     						</tr>
     						<tr>
-    							<th>$langAuthor : </th>
+    							<th class='left'>$langAuthor : </th>
     							<td>
-    							<input type=\"text\" size=\"60\" name=\"file_author\" value=\"$oldAuthor\">
+    							<input type=\"text\" size=\"60\" name=\"file_author\" value=\"$oldAuthor\" class='FormData_InputText'>
     							</td>
     						</tr>";
 
 
 		$dialogBox .= "		<tr>
-    							<th>$langCopyrighted : </th>
+    							<th class='left'>$langCopyrighted : </th>
     							<td>
     							<input name=\"file_copyrighted\" type=\"radio\" value=\"0\" "; if ($oldCopyrighted=="0" || empty($oldCopyrighted)) $dialogBox .= " checked=\"checked\" "; $dialogBox .= " /> $langCopyrightedUnknown <input name=\"file_copyrighted\" type=\"radio\" value=\"2\" "; if ($oldCopyrighted=="2") $dialogBox .= " checked=\"checked\" "; $dialogBox .= " /> $langCopyrightedFree <input name=\"file_copyrighted\" type=\"radio\" value=\"1\" "; 
 
@@ -759,11 +761,11 @@ if($is_adminOfCourse)
 
 		//ektypwsh tou combox gia epilogh glwssas
 		$dialogBox .= "	<tr>
-    							<th>$langLanguage : ($oldLanguage)</th>
+    							<th class='left'>$langLanguage :</th>
     							<td>
     							
 									
-								<select name=\"file_language\">
+								<select name=\"file_language\" class='auth_input'>
 									</option><option value=\"en\">$langEnglish
 									</option><option value=\"fr\">$langFrench
 									</option><option value=\"de\">$langGerman
@@ -772,13 +774,15 @@ if($is_adminOfCourse)
 								  </option><option value=\"es\">$langSpanish
 									</option>
 								</select>
-								    							</td>
+								</td>
     						</tr>	
-								</thead>
+							<tr>
+							  <th>&nbsp;</th>
+							  <td><input type=\"submit\" value=\"$langOkComment\">&nbsp;&nbsp;&nbsp;$langNotRequired</td>
+							</tr>
+							</tbody>
         					</table>
-								<br><br>
-		   					<input type=\"submit\" value=\"$langOkComment\">
-        				</form>";
+        				</form><br>";
 	}
 
 	// Visibility commands
@@ -996,7 +1000,8 @@ if($is_adminOfCourse) {
 
 	$tool_content .=  "<!-- upload  -->
     <div id=\"operations_container\">
-	<ul id=\"opslist\">
+	<ul id=\"opslist\">";
+	$tool_content .=  "
     <li>
     	<a href=\"upload.php?uploadPath=$curDirPath\">$langDownloadFile</a>
    	</li>";
@@ -1018,7 +1023,7 @@ if($is_adminOfCourse) {
 	{
 		//        $tool_content .=  "<td class=\"success\" colspan=\"2\">";
 		//        $tool_content .=  "<!-- dialog box -->";
-		$tool_content .=  $dialogBox . "<br/>";
+		$tool_content .=  $dialogBox . " ";
 		//        $tool_content .=  "</td>";
 	}
 	//    else
@@ -1027,37 +1032,30 @@ if($is_adminOfCourse) {
 	//    }
 	//	$tool_content .="</tr></table><br>";
 
-	$tool_content .= "<br/><table width=\"99%\">";
-
-	// Current Directory Line
-
-
-
-	/*** go to parent directory ***/
-	if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
-	{
-		$tool_content .=  "<!-- parent dir -->\n";
-		$tool_content .=  "<tr>\n";
-		$tool_content .=  "<td colspan=8>";
-		$tool_content .=  "<img src=\"img/parent.gif\" border=0 align=\"absmiddle\" hspace=5>\n";
-		$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdParentDir."\">\n";
-		$tool_content .=  "<small>$langUp</small>\n";
-		$tool_content .=  "</a>\n";
-		$tool_content .=  "</tr>\n";
-		//    $tool_content .=  "</td>\n";
-	}
-
-
-
-	$tool_content .= "<!-- command list -->
+	
+	
+	$tool_content .= "
+    <table width=\"99%\" align='left'>
     <thead>";
 
-	if (!empty($dspCurDirName)) $tool_content .= "<p><b>$langDirectory: </b>".
-	make_clickable_path($curDirPath) . "</p>";
+       $tool_content .= "
+     <tr>
+         <td class='left' height='18' colspan='4' style='border-top: 1px solid #edecdf; background: #fff;'>$langDirectory: ".	make_clickable_path($curDirPath) . "</td>
+         <td style='border-top: 1px solid #edecdf; background: #fff;' height='28'><div align='right'>";
+         /*** go to parent directory ***/
+		 if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
+	     {
+		    $tool_content .=  "<!-- parent dir -->\n";
+		    $tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdParentDir."\">$langUp</a>\n";
+		    $tool_content .=  "<img src=\"img/parent.gif\" border=0 align=\"absmiddle\" height='12' width='12'>\n";
+	     }
+		  $tool_content .= "
+       </div></td>
+     </tr>";
 
 	$tool_content .= "
     	<tr>
-			<th class='left'>&nbsp;$langName</th>
+			<th class='left' colspan='2'>&nbsp;$langName</th>
 		    <th width='100'>$langSize</th>
 		    <th width='100'>$langDate</th>
 		    <th width='100'>$langCommands</th>
@@ -1085,9 +1083,12 @@ if($is_adminOfCourse) {
 			}
 
 			$tool_content .=  "<tr $style2>\n";
-			$tool_content .=  "<td>\n";
+			$tool_content .=  "<td width='1'>\n";
 			$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style.">\n";
-			$tool_content .=  "<img src=\"../../template/classic/img/folder.gif\" border=0 hspace=5>\n";
+			$tool_content .=  "<img src=\"../../template/classic/img/folder.gif\" border=0></a>\n";
+			$tool_content .=  "</td>\n";
+			$tool_content .=  "<td class='left'>\n";
+            $tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style.">\n";
 			$tool_content .=  $dspDirName."\n";
 			$tool_content .=  "</a>";
 
@@ -1102,11 +1103,11 @@ if($is_adminOfCourse) {
 			}
 
 			/*** skip display date and time ***/
-			$tool_content .=  "</td><td>-</td>";
-			$tool_content .=  "<td>-</td>";
+			$tool_content .=  "</td><td>&nbsp;</td>";
+			$tool_content .=  "<td>&nbsp;</td>";
 
 			/*** delete command ***/
-			@$tool_content .=  "<td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdDirName."\" onClick=\"return confirmation('".addslashes($dspDirName)."');\">
+			@$tool_content .=  "<td align='right'><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdDirName."\" onClick=\"return confirmation('".addslashes($dspDirName)."');\">
 		<img src=\"../../template/classic/img/delete.gif\" border=0 title=\"$langDelete\"></a>";
 			/*** copy command ***/
 			$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?move=".$cmdDirName."\">
@@ -1160,7 +1161,7 @@ if($is_adminOfCourse) {
 
 			$tool_content .=  "<tr ".$style2.">\n";
 			$tool_content .=  "<td >\n";
-			$tool_content .=  "<img src=\"./img/".$image."\" align='absmiddle' border=0 hspace=5>\n";
+			$tool_content .=  "<img src=\"./img/".$image."\" align='absmiddle' border=0>\n";
 
 			//h $dspFileName periexei to onoma tou arxeiou sto filesystem
 
@@ -1169,7 +1170,8 @@ if($is_adminOfCourse) {
 			$query = "SELECT filename, copyrighted FROM document WHERE path LIKE '%".$curDirPath."/".$fileName."%'";
 			$result = mysql_query ($query);
 			$row = mysql_fetch_array($result);
-
+			$tool_content .=  "</td>\n";
+			$tool_content .=  "<td class='left'>\n";
 			//ektypwsh tou onomatos tou arxeiou ean yparxei eggrafh sth vash, alliws typwse to onoma tou filesystem (gia logous compability)
 			if(empty($row["filename"]))
 			{
@@ -1306,6 +1308,8 @@ $tool_content .= "<table width=\"99%\">
 				$tool_content .=  "<td>\n";
 				$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style.">\n";
 				$tool_content .=  "<img src=\"../../template/classic/img/folder.gif\" border=0 hspace=5>\n";
+				$tool_content .=  "</a>\n";
+				$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style.">\n";
 				$tool_content .=  $dspDirName."\n";
 				$tool_content .=  "</a>\n";
 

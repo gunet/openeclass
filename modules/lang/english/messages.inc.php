@@ -794,6 +794,7 @@ $langAlertProf = "Please fill the course professor!";
 
 $langDoc="Documents";
 $langDownloadFile= "Upload file to the server";
+$langPathUploadFile= "File path";
 $langDownload="Upload";
 $langCreateDir="Create a directory";
 $langName="Name";

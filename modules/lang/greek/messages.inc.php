@@ -716,9 +716,10 @@ $langAlertProf = "Παρακαλώ συμπληρώστε τον διδάσκοντα του μαθήματος!";
 ******************************************************/
 $langUpload = "Ανέβασμα";
 $langDownloadFile= "Ανέβασμα αρχείου στον εξυπηρέτη";
+$langPathUploadFile= "Εντοπισμός θέσης του αρχείου στον Η/Υ σας (τοπικά)";
 $langCreateDir="Δημιουργία καταλόγου";
 $langName="Όνομα";
-$langNameDir="Όνομα του καινούριου καταλόγου";
+$langNameDir="Όνομα νέου καταλόγου";
 $langSize="Μέγεθος";
 $langDate="Ημερομηνία";
 $langMoveFrom = "Μετακίνηση του αρχείου";
@@ -754,7 +755,7 @@ $langUncompress="αποσυμπίεση του αρχείου (.zip) στον εξυπηρέτη <small>(*)</small
 $langDownloadAndZipEnd="Το αρχείο .zip ανέβηκε και αποσυμπιέστηκε";
 $langPublish = "Δημοσίευση";
 $langParentDir = "αρχικό κατάλογο";
-$langNoticeGreek = "(*) Προσοχή! Το όνομα του αρχείου δεν πρέπει να περιέχει ελληνικούς χαρακτήρες";
+$langNoticeGreek = "<u>Προσοχή</u>! Το όνομα του αρχείου δεν πρέπει να περιέχει ελληνικούς χαρακτήρες";
 $langInvalidDir = "Ακυρο ή μη υπαρκτό όνομα καταλόγου";
 
 //prosthikes gia v2 - metadata
@@ -1468,7 +1469,7 @@ $langProgInModuleTitle = "Η πρόοδος σου σε αυτή την ενότητα";
 $langProgress = "Πρόοδος";
 $langQuitViewer = "Επιστροφή στη λίστα";
 $langRawHasBeenChanged = "Ο ελάχιστος βαθμός για προαγωγή έχει αλλαχθεί";
-$langRoot = "Αρχικό κατάλογο";
+$langRoot = "Αρχικός κατάλογος";
 $langSCORMTypeDesc = "SCORM προσαρμοσμένο περιεχόμενο";
 $langScormIntroTextForDummies = "Τα εισαγόμενα πακέτα πρεπει να αποτελούνται απο ένα zip αρχείο και να είναι συμβατά με το SCORM 2004 ή με το SCORM 1.2.";
 $langSecondShort = "δευτ.";

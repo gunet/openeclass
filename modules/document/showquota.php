@@ -74,27 +74,25 @@ $nameTools = $langQuotaBar;
 	
 	//ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
 	$tool_content .= "
-	<table cellpadding = \"0\" cellspacing = \"0\" border = \"1\">
-	<thead>
-		<tr>
-			<th>$langQuotaUsed</td>
-			<th>$langQuotaPercentage</td>
-			<th>$langQuotaTotal</td>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td align=\"center\">$diskUsed</td>
-			<td align=\"center\">";
+    <table>
+    <tbody>
+    <tr>
+      <th class='left' width='170'>$langQuotaUsed</td>
+      <td width='110' align='center'>$diskUsed</td>
+    </tr>
+    <tr>
+      <th class='left'>$langQuotaPercentage</td>
+      <td align='center'>";
     		$tool_content .= $oGauge->display();
-    		$tool_content .= "$diskUsedPercentage
-    		</td>
-    		<td align=\"center\">$diskQuotaDocument</td>
-    	</tr>
+    		$tool_content .= "$diskUsedPercentage</td>
+    </tr>
+    <tr>
+      <th class='left'>$langQuotaTotal</td>
+      <td align='center'>$diskQuotaDocument</td>
+    </tr>
     </tbody>
     </table>
-    
-    <p><a href=\"document.php\">$langBack</a></p>";
+";
 
 $tmp_cwd = getcwd();
 draw($tool_content, 2, '', '');
