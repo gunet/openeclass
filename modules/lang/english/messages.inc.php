@@ -3,7 +3,7 @@
 /********************************************************
 * about.inc.php
 *********************************************************/
-$lang="ena";
+$lang="ena dio tria";
 $langIntro = "The <b>$siteName</b> is a complete Asynchronous Teleteaching Platform in <a href=\"$InstitutionUrl\" target=\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion="eClass version";
 $langAboutText="Platform version is";
