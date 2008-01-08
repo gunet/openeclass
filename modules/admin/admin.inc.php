@@ -190,13 +190,13 @@ function show_paging($limit, $listsize, $fulllistsize, $page) {
 	// Page numbers of navigation
 	$pn = 15;
 	
-	$retString .= "<br><table width=\"99%\"><tbody><tr><td width=\"3%\" nowrap><b>Σελίδα:</b></td><td align=\"center\">";
+	$retString .= "<br><table width=\"99%\"><tbody><tr><td width=\"3%\" nowrap>$langPage</b></td><td align=\"center\">";
 	// Deal with previous page
 	if ($limit!=0) {
 		$newlimit = $limit - $listsize;
-		$retString .= "<a href=\"".$page."?limit=".$newlimit."\"><b>Προηγούμενη</b></a>&nbsp;|&nbsp;";
+		$retString .= "<a href=\"".$page."?limit=".$newlimit."\"><b>$langBeforePage</b></a>&nbsp;|&nbsp;";
 	} else {
-		$retString .= "<b>Προηγούμενη</b>&nbsp;|&nbsp;";
+		$retString .= "<b>$langBeforePage</b>&nbsp;|&nbsp;";
 	}
 	// Deal with pages
 	if (ceil($fulllistsize / $listsize) <= $pn/3)

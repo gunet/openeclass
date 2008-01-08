@@ -57,7 +57,7 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 	    die("Unable to query database (user_id='$u')!");
 		}
 		$info = mysql_fetch_array($sql);
-    $tool_content .= "<h4>Στατιστικά χρήστη $info[2]</h4>";
+    $tool_content .= "<h4>$langUserStats $info[2]</h4>";
 				
 		$sql = mysql_query("SELECT nom, prenom, username FROM user WHERE user_id = '$u'");
 		if (!$sql) 

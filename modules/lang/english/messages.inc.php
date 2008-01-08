@@ -49,12 +49,15 @@ $langNomPageAddHtPass = "Add admin";
 $langLogin = "User Name";
 $langPassword = "Password";
 $langAdd = "Add";
-$langUser = "User";
 $langNotFound = "not found";
 $langWith = "with";
 $langDone = "became admin.";
 $langError = "Error: User didn't become admin. Probably he is already admin.";
 $langInsertUserInfo = "Insert user information";
+$langPage="Page:";
+$langBeforePage="Last";
+$langAfterPage="Next";
+
 
 
 /**********************************************************

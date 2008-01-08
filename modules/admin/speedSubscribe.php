@@ -90,7 +90,7 @@ if (isset($submit) && $submit == "$langRegistration") {
 		}
 	} // End while
 	// Close table correctly
-	$tool_content .= "<tr><td><b>Ολοκληρώθηκε</b></td></tr></tbody></table><br>";
+	$tool_content .= "<tr><td><b>$langAlreadyBrowsed</b></td></tr></tbody></table><br>";
 }
 // Display list of courses
 $tool_content .= "<form name=\"speedSub\" action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">";
