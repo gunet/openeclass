@@ -348,11 +348,11 @@ function confirmation (name)
                     <tbody>
                     <tr>
                       <th class='left'>$langAnnouncement</th>
-                      <th width='70'>$langTools</th>";
+                      <th width='70' align='center'>$langTools</th>";
 
             if ($announcementNumber > 1) {
                 $tool_content .= "
-                      <th width='70'>$langMove</th>";
+                      <th width='70' align='center'>$langMove</th>";
             } 
             $tool_content .= "
                     </tr>";
