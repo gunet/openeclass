@@ -47,7 +47,7 @@ $tool_content = "";		// Initialise $tool_content
 // Main body
 $navigation[] = array("url"=>"newuser.php", "name"=> $langAuthReg);
 
-$statut=5;		// This file registers only students
+$statut=5;		// student registration
 
 // Get the incoming variables and initialize them
 $submit = isset($_POST['submit'])?$_POST['submit']:'';
@@ -57,7 +57,7 @@ $password = isset($_POST['password'])?$_POST['password']:'';
 
 if(!empty($submit))
 {
-        $registration_errors = array();
+  $registration_errors = array();
 
 	if ((strstr($password, "'")) or (strstr($password, '"')) or (strstr($password, '\\'))
             or (strstr($uname, "'")) or (strstr($uname, '"')) or (strstr($uname, '\\'))) {
@@ -127,10 +127,11 @@ if(!empty($submit))
 		// manage the store/encrypt process of password into database
 		$authmethods = array("2","3","4","5");
 		$uname = escapeSimple($uname);	// escape the characters: simple and double quote
+
 		if(!in_array($auth,$authmethods)) {
 			$password_encrypted = md5($password);
 		} else {
-                        $password_encrypted = $password;
+           $password_encrypted = $password;
 		}
 			
 		$q1 = "INSERT INTO `$mysqlMainDb`.user
@@ -147,7 +148,8 @@ if(!empty($submit))
 			$prenom=$myrow[2];
 		}
 
-		mysql_query("INSERT INTO `$mysqlMainDb`.loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action) VALUES ('', '".$uid."', '".$REMOTE_ADDR."', NOW(), 'LOGIN')");
+		mysql_query("INSERT INTO `$mysqlMainDb`.loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action) 
+			VALUES ('', '".$uid."', '".$REMOTE_ADDR."', NOW(), 'LOGIN')");
 		session_register("uid");
 		session_register("statut");
 		session_register("prenom");

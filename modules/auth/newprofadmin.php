@@ -132,7 +132,7 @@ $tool_content .= "	<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
 	<input type=\"hidden\" name=\"auth\" value=\"1\" >
 	</td>
 	</tr>
-	<input type='hidden' name='rid' value='$id'>	
+	<input type='hidden' name='rid' value='".@$id."'>	
 	</tbody></table></form>";
 
 $tool_content .= "<center><p><a href=\"../admin/index.php\">$langBack</p></center>";
