@@ -29,7 +29,6 @@
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
 ==============================================================================        
-        @Description: First step in new user registration
 
  	Purpose: The file displays the form that that the candidate user must fill
  	in with all the basic information.
@@ -76,17 +75,17 @@ if (!isset($submit)) {
 	<tr>
 	<th class='left'>$langUsername</th>
 	<td><input type=\"text\" name=\"uname\" value=\"$uname\" size=\"20\" maxlength=\"20\" class='FormData_InputText'></td>
-	<td><small>(*) (**) $langUserNotice</small></td>
+	<td><small>(*) $langUserNotice</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langPass</th>
 	<td><input type=\"password\" name=\"password1\" size=\"20\" maxlength=\"20\" class='FormData_InputText'></td>
-	<td><small>(*) (**)</small></td>
+	<td><small>(*)</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langConfirmation</th>
 	<td valign=\"top\"><input type=\"password\" name=\"password\" size=\"20\" maxlength=\"20\" class='FormData_InputText'></td>
-	<td><small>(*) (**) $langUserNotice</small></td>
+	<td><small>(*) $langUserNotice</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langEmail</th>
@@ -113,7 +112,7 @@ $tool_content .= "</select>
 		<input type=\"hidden\" name=\"auth\" value=\"1\">
     <input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\">
     </td>
-	<td><p align='right'>$langRequiredFields <br/>$langStar2 $langCharactersNotAllowed</p></td>
+	<td><p align='right'>$langRequiredFields <br/></p></td>
 </tr></tbody></table>
 </form>
 </td></tr></thead></table>";
@@ -125,11 +124,6 @@ $uname = preg_replace('/\s+/', ' ', trim(isset($_POST['uname'])?$_POST['uname']:
 
 // registration
 $registration_errors = array();
-
-  if ((strstr($password, "'")) or (strstr($password, '"')) or (strstr($password, '\\'))
-            or (strstr($uname, "'")) or (strstr($uname, '"')) or (strstr($uname, '\\'))) {
-                $registration_errors[] = $langCharactersNotAllowed;
-  }
 
 // check if there are empty fields
         if (empty($nom_form) or empty($prenom_form) or empty($password) or empty($uname)) {
@@ -166,6 +160,8 @@ $auth_method_settings = get_auth_settings($auth);
 
 if (count($registration_errors) == 0) {
     $emailsubject = "$langYourReg $siteName";
+		$uname = unescapeSimple($uname); // un-escape the characters: simple and double quote
+		$password = unescapeSimple($password);
                 if((!empty($auth_method_settings)) && ($auth!=1)) {
                         $emailbody = "$langDestination $prenom_form $nom_form\n" .
                                 "$langYouAreReg $siteName $langSettings $uname\n" .
@@ -194,7 +190,7 @@ send_mail($siteName, $emailAdministrator, '', $email, $emailsubject, $emailbody,
     // manage the store/encrypt process of password into database
     $authmethods = array("2","3","4","5");
     $uname = escapeSimple($uname);  // escape the characters: simple and double quote
-
+    $password = escapeSimpleSelect($password);  // escape the characters: simple and double quote
     if(!in_array($auth,$authmethods)) {
       $password_encrypted = md5($password);
     } else {

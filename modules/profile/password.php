@@ -42,7 +42,6 @@ $navigation[]= array ("url"=>"../profile/profile.php", "name"=> $langModifProfil
 
 check_uid();
 $tool_content = "";
-
 $passurl = $urlSecure.'modules/profile/password.php';
 
 if (isset($submit) && isset($changePass) && ($changePass == "do")) {
@@ -57,14 +56,6 @@ if (isset($submit) && isset($changePass) && ($changePass == "do")) {
 		exit();
 	}
 
-	//check for not acceptable characters in password
-	if( (strstr($_REQUEST['password_form'], "'")) or (strstr($_REQUEST['password_form'], '"')) or (strstr($_REQUEST['password_form'], '\\'))
-	or (strstr($_REQUEST['password_form1'], "'")) or (strstr($_REQUEST['password_form1'], '"')) or (strstr($_REQUEST['password_form1'], '\\')))
-	{
-		header("location:". $passurl."?msg=6");
-		exit();
-	}
-
 	// check if passwd is too easy
 	$sql = "SELECT `nom`,`prenom` ,`username`,`email`,`am` FROM `user`WHERE `user_id`=".$_SESSION["uid"]." ";
 	$result = db_query($sql, $mysqlMainDb);
@@ -75,13 +66,9 @@ if (isset($submit) && isset($changePass) && ($changePass == "do")) {
 	|| (strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['username']))
 	|| (strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['email']))
 	|| (strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['am']))) {
-		//		echo strtoupper($_REQUEST['password_form1']);
-		//		echo strtoupper($myrow['am']);
-		//		die();
 		header("location:". $passurl."?msg=2");
 		exit();
 	}
-
 
 	//all checks ok. Change password!
 	$sql = "SELECT `password` FROM `user` WHERE `user_id`=".$_SESSION["uid"]." ";
@@ -106,8 +93,7 @@ if (isset($submit) && isset($changePass) && ($changePass == "do")) {
 }
 
 //Show message if exists
-if(isset($msg))
-{
+if(isset($msg)) {
 
 	switch ($msg){
 
@@ -157,18 +143,11 @@ if(isset($msg))
 
 	}
 
-	$tool_content .=  "
-			<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"$type\">
-						$message<br>
-    <a href=\"$urlServer\">$urlText</a>
-					</td>
-					</tr>
-				</tbody>
+	$tool_content .= "<table width=\"99%\">
+			<tbody><tr><td class=\"$type\">$message<br>
+		    <a href=\"$urlServer\">$urlText</a>
+					</td></tr></tbody>
 			</table><br/>";
-
 }
 
 if (!isset($changePass)) {
@@ -176,9 +155,7 @@ if (!isset($changePass)) {
     <table width=\"99%\">
     <tbody>
     <tr>
-        <th width=\"150\" class='left'>
-            $langOldPass
-        </th>
+        <th width=\"150\" class='left'>$langOldPass</th>
         <td>
             <input class='FormData_InputText' type=\"password\" size=\"40\" name=\"old_pass\" value=\"\">
         </td>
@@ -191,11 +168,9 @@ if (!isset($changePass)) {
 
 	$tool_content .= "<input class='FormData_InputText' type=\"password\" size=\"40\" name=\"password_form\" value=\"\">
 					</td>
-		</tr>
-    <tr>
-        <th width=\"150\" class='left'>
-            $langNewPass2
-        </th>
+					</tr>
+			    <tr>
+        <th width=\"150\" class='left'>$langNewPass2</th>
         <td>       		
             <input class='FormData_InputText' type=\"password\" size=\"40\" name=\"password_form1\" value=\"\">
         </td>
@@ -211,5 +186,4 @@ if (!isset($changePass)) {
 }
 
 draw($tool_content, 1);
-
 ?>

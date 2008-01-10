@@ -192,7 +192,6 @@ function escapeSimple($str)
 
 function escapeSimpleSelect($str)
 {
-	global $db;
 	if (get_magic_quotes_gpc())
 	{
 		return addslashes($str);
@@ -201,6 +200,17 @@ function escapeSimpleSelect($str)
 	{
 		return $str;
 	}
+}
+
+
+function unescapeSimple($str) {
+
+if (get_magic_quotes_gpc()) {
+		return stripslashes($str);
+	} else {
+	return $str;
+	}
+
 }
 
 // ------------------------------------------------------

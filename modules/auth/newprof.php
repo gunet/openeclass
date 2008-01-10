@@ -40,12 +40,12 @@ if (!isset($submit)) {
   <tr>
     <th class='left'>$langUsername</th>
     <td><input size='35' type=\"text\" name=\"uname\" value=\"$uname\" class='FormData_InputText'></td>
-	<td>(*) (**)</td>
+	<td>(*)</td>
   </tr>
   <tr>
     <th class='left'>$langPass</th>
     <td><input size='35' type=\"text\" name=\"password\" value=\"".create_pass(5)."\" class='FormData_InputText'></td>
-	<td>(**)</td>
+	<td></td>
   </tr>
   <tr>
     <th class='left'>$langEmail</th>
@@ -74,7 +74,7 @@ if (!isset($submit)) {
     <input type=\"submit\" name=\"submit\" value=\"".$langSubmitNew."\" >
     <input type=\"hidden\" name=\"auth\" value=\"1\" ></td>
 		<td>
-    <p align='right'>$langRequiredFields<br>$langStar2 . $langCharactersNotAllowed</p>
+    <p align='right'>$langRequiredFields<br></p>
     </td>
   </tr>
   </tbody></table></form>
@@ -85,11 +85,6 @@ if (!isset($submit)) {
 
 // registration
 $registration_errors = array();
-
-if ((strstr($password, "'")) or (strstr($password, '"')) or (strstr($password, '\\'))
-    or (strstr($uname, "'")) or (strstr($uname, '"')) or (strstr($uname, '\\'))) {
-					$registration_errors[] = $langCharactersNotAllowed;
-		  }
 
     // check if there are empty fields
     if (empty($nom_form) or empty($prenom_form) or empty($userphone) or empty($password) 
