@@ -42,7 +42,6 @@ $ldap_email = isset($_POST['ldap_email'])?$_POST['ldap_email']:'';
 $ldap_passwd = isset($_POST['ldap_passwd'])?$_POST['ldap_passwd']:'';
 $is_submit = isset($_POST['is_submit'])?$_POST['is_submit']:'';
 
-//$lastpage = 'ldapnewuser.php?auth='.$auth;
 $lastpage = 'ldapnewuser.php?auth='.$auth.'&ldap_email='.$ldap_email.'&ldap_passwd='.$ldap_passwd;
 $userdescr = $langTheUser;
 

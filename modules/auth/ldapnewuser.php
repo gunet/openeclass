@@ -45,14 +45,11 @@ $navigation[]= array ("url"=>"registration.php", "name"=> "$langNewUser");
 // Initialise $tool_content
 $tool_content = "";
 
-// Main body
-$auth = isset($_GET['auth'])?$_GET['auth']:'';
+// for security
+$auth = isset($_GET['auth'])?intval($_GET['auth']):0;
+
 $authmethods = get_auth_active_methods();
 
-if(!in_array($auth,$authmethods))		// means try to hack,attack
-{
-	die("$langInvalidAuth");
-}
 $msg = get_auth_info($auth);
 $settings = get_auth_settings($auth);
 if(!empty($msg)) $nameTools = "$langNewUserAccountActivation ($msg)";

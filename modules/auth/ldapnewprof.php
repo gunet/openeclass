@@ -38,6 +38,12 @@
 include '../../include/baseTheme.php';
 require_once 'auth.inc.php';
 
+$navigation[]= array ("url"=>"registration.php", "name"=> "$langRegistration");
+$tool_content = "";
+
+// for security
+$auth = isset($_GET['auth'])?intval($_GET['auth']):0;
+
 if (isset($_GET['auth']))
   $_SESSION['auth_tmp']=$auth;
 if(!isset($_GET['auth']) && isset($_SESSION['auth_tmp']))
@@ -45,36 +51,27 @@ if(!isset($_GET['auth']) && isset($_SESSION['auth_tmp']))
 else if (!isset($_GET['auth']) && !isset($_SESSION['auth_tmp']))
   $auth=0;
 
-$auth = isset($_GET['auth'])?$_GET['auth']:'';
 $authmethods = get_auth_active_methods();
 
-$navigation[]= array ("url"=>"registration.php", "name"=> "$langRegistration");
-
-if(!in_array($auth,$authmethods))		// means try to hack,attack
-{
-	die("$langInvalidAuth");
-}
 $msg = get_auth_info($auth);
 $settings = get_auth_settings($auth);
 if(!empty($msg)) $nameTools = "$langNewProfAccountActivation ($msg)";
 
-$tool_content = "";
-$tool_content .= "
+@$tool_content .= "
 <table width=\"99%\" class='FormData' align='left'>
 <thead>
 <tr>
 <td>			
 <form method=\"POST\" action=\"ldapsearch_prof.php\">
-				
-  <table width=\"100%\" align='left'>
+	 <table width=\"100%\" align='left'>
   <tbody>
   <tr>
     <th class='left' width='25%'>$langAuthUserName</th>
-    <td><input type=\"text\" name=\"ldap_email\" class='FormData_InputText'></td>
+    <td><input type='text' name='ldap_email' value='$ldap_email' class='FormData_InputText'></td>
   </tr>
   <tr>
     <th class='left'>$langAuthPassword</th>
-    <td><input type=\"password\" name=\"ldap_passwd\" class='FormData_InputText'></td>
+    <td><input type='password' name='ldap_passwd' value='$ldap_passwd' class='FormData_InputText'></td>
   </tr>
   <tr>
     <th>&nbsp;</th>
@@ -87,13 +84,7 @@ $tool_content .= "
   </tr>	
   </tbody>
   </table>
-
-</form>
-</td>
-</tr>
-</thead>
-</table>
-";
+</form></td></tr></thead></table>";
 		
 draw($tool_content,0,'auth');
 ?>

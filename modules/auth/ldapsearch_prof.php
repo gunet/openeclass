@@ -35,43 +35,37 @@ require_once 'auth.inc.php';
 
 $nameTools = get_auth_info($auth);
 $navigation[]= array ("url"=>"registration.php", "name"=> "$langNewProfAccountActivation");
-$nameTools = "$langUserData";
+$nameTools = $langUserData;
 
-$found = 0;
 $tool_content = "";
 
+// for security
 $auth = isset($_POST['auth'])?intval($_POST['auth']):0;
-$errormessage1 = "<tr valign=\"top\" bgcolor=\"$color2\"><td><font size=\"2\" face=\"arial, helvetica\"><p>&nbsp;</p>";
-$errormessage3 = "</font><p>&nbsp;</p><br><br><br></td></tr>";
-$errormessage2 = "<p>$ldapback <a href='ldapnewprof.php?auth=$auth'>$ldaplastpage</a></p>$errormessage3";
+
+// get the values from ldapnewprof.php
 $is_submit = isset($_POST['is_submit'])?$_POST['is_submit']:'';
 $ldap_email = isset($_POST['ldap_email'])?$_POST['ldap_email']:'';
 $ldap_passwd = isset($_POST['ldap_passwd'])?$_POST['ldap_passwd']:'';
+
+$lastpage = 'ldapnewprof.php?auth='.$auth.'&ldap_email='.$ldap_email.'&ldap_passwd='.$ldap_passwd;
+$errormessage = "<br/><p>$ldapback <a href=\"$lastpage\">$ldaplastpage</a></p>";
 
 if(!empty($is_submit))
 {
 	if (empty($ldap_email) or empty($ldap_passwd)) // check for empty username-password
 	{
-		$tool_content .= "
-		<table width=\"99%\">
-		<tbody>
+		$tool_content .= "<table width=\"99%\"><tbody>
 		<tr>
-		  <td class=\"caution\" height='60'><p>$ldapempty  $errormessage2 </p></td>
-		</tr>
-		</tbody>
-		</table>";
+		  <td class=\"caution\" height='60'><p>$ldapempty  $errormessage </p></td>
+		</tr></tbody></table>";
 		$auth_allow = 0;
 	} 
 	elseif (user_exists($ldap_email)) // check if the user already exists
 	{
-		$tool_content .= "
-		<table width=\"99%\">
-		<tbody>
+		$tool_content .= "<table width=\"99%\"><tbody>
 		<tr>
-		  <td class=\"caution\" height='60'><p>$ldapuserexists $errormessage2</p></td>
-		</tr>
-		</tbody>
-		</table>";
+		  <td class=\"caution\" height='60'><p>$ldapuserexists $errormessage</p></td>
+		</tr></tbody></table>";
 		$auth_allow = 0;
 	} 
 	else 
@@ -108,17 +102,7 @@ if(!empty($is_submit))
 		
 		$is_valid = auth_user_login($auth,$ldap_email,$ldap_passwd);
 
-		if($is_valid)
-		{
-			$auth_allow = 1;		// Successfully connected
-		}
-		else
-		{
-			$tool_content .= "<br />$langConnNo!<br />";
-			$auth_allow = 0;
-		}	
-		if($auth_allow==1)
-		{	
+		if($is_valid) { // connection successful	
 			$tool_content .= "
     <table width=\"99%\" align='left' class='FormData'>
     <thead>
@@ -189,11 +173,12 @@ if(!empty($is_submit))
        </thead>
        </table>
 			";
-		
-		}
-		else
+	}
+		else // not connected
 		{
-			$tool_content .= "<br />$langAuthNoValidUser<br />";
+      $tool_content .= "<br />$langConnNo<br />";
+      $tool_content .= "<br />$langAuthNoValidUser<br />";
+      $tool_content .= "<br><center><a href='$lastpage'>$langBack</a></center></br>";
 		}
 	}
 
