@@ -1,3 +1,17 @@
 .invisible_doc {
-   font-style: italic;
-   background-color: #c0c0c0; }
+	font-style: italic;
+	background-color: #F1F1F1;
+	color: silver;
+}
+
+.invisible_doc td{
+	font-style: italic;
+	background-color: #F1F1F1;
+	color: silver;
+}
+
+.invisible_doc a {
+	font-style: italic;
+	background-color: #F1F1F1;
+	color: silver;
+}

@@ -1014,7 +1014,7 @@ if($is_adminOfCourse) {
 	$diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
 	//$tool_content .= "<a href=\"showquota.php?diskQuotaDocument=$diskQuotaDocument&diskUsed=$diskUsed\" target=\"blank\">$langQuotaBar</a>";
 	$tool_content .= "<li><a href=\"showquota.php?diskQuotaDocument=$diskQuotaDocument&diskUsed=$diskUsed\">$langQuotaBar</a></li>
-    </ul></div>";
+    </ul></div><br />";
 	//  	$tool_content .= "</tr>"; //mphke sto meros ths palias 'voitheias'
 
 	// Dialog Box
@@ -1040,8 +1040,8 @@ if($is_adminOfCourse) {
 
        $tool_content .= "
      <tr>
-         <td class='left' height='18' colspan='4' style='border-top: 1px solid #edecdf; background: #fff;'>$langDirectory: ".	make_clickable_path($curDirPath) . "</td>
-         <td style='border-top: 1px solid #edecdf; background: #fff;' height='28'><div align='right'>";
+         <td class='left' colspan='4' style='border-top: 1px solid #edecdf; border-bottom: 1px solid #edecdf; border-left: 1px solid #edecdf; background: #fff;'>$langDirectory: ".	make_clickable_path($curDirPath) . "</td>
+         <td style='border-top: 1px solid #edecdf; background: #fff; border-bottom: 1px solid #edecdf; border-right: 1px solid #edecdf;'><div align='right'>";
          /*** go to parent directory ***/
 		 if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
 	     {
@@ -1055,10 +1055,11 @@ if($is_adminOfCourse) {
 
 	$tool_content .= "
     	<tr>
-			<th class='left' colspan='2'>&nbsp;$langName</th>
+		    <th width='1' style='border-left: 1px solid #edecdf;'>".$m['type']."</th>
+			<th class='left'>&nbsp;$langName</th>
 		    <th width='100'>$langSize</th>
 		    <th width='100'>$langDate</th>
-		    <th width='100'>$langCommands</th>
+		    <th width='100' style='border-right: 1px solid #edecdf;'>$langCommands</th>
     	</tr>
     </thead>";
 
@@ -1083,10 +1084,7 @@ if($is_adminOfCourse) {
 			}
 
 			$tool_content .=  "<tr $style2>\n";
-			$tool_content .=  "<td width='1'>\n";
-			$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style.">\n";
-			$tool_content .=  "<img src=\"../../template/classic/img/folder.gif\" border=0></a>\n";
-			$tool_content .=  "</td>\n";
+			$tool_content .=  "<td width='1' style='border-left: 1px solid #edecdf;' align='center'><a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style."><img src=\"../../template/classic/img/folder.gif\" border=0 align='absmiddle'></a></td>\n";
 			$tool_content .=  "<td class='left'>\n";
             $tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style.">\n";
 			$tool_content .=  $dspDirName."\n";
@@ -1098,7 +1096,7 @@ if($is_adminOfCourse) {
 				$dirCommentList[$dirKey] = htmlspecialchars($dirCommentList[$dirKey]);
 				$dirCommentList[$dirKey] = nl2br($dirCommentList[$dirKey]);
 				$tool_content .=  "<span class=\"comment\">";
-				$tool_content .=  "(".$dirCommentList[$dirKey].")";
+				$tool_content .=  " (".$dirCommentList[$dirKey].")";
 				$tool_content .=  "</span>\n";
 			}
 
@@ -1107,7 +1105,7 @@ if($is_adminOfCourse) {
 			$tool_content .=  "<td>&nbsp;</td>";
 
 			/*** delete command ***/
-			@$tool_content .=  "<td align='right'><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdDirName."\" onClick=\"return confirmation('".addslashes($dspDirName)."');\">
+			@$tool_content .=  "<td align='center' style='border-right: 1px solid #edecdf;'><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdDirName."\" onClick=\"return confirmation('".addslashes($dspDirName)."');\">
 		<img src=\"../../template/classic/img/delete.gif\" border=0 title=\"$langDelete\"></a>";
 			/*** copy command ***/
 			$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?move=".$cmdDirName."\">
@@ -1131,7 +1129,7 @@ if($is_adminOfCourse) {
 			<img src=\"../../template/classic/img/visible.gif\" border=0 title=\"$langVisible\"></a>";
 			}
 
-			$tool_content .=  "</td></td></tr>";
+			$tool_content .=  "</td></tr>";
 		}
 	}
 
@@ -1160,8 +1158,7 @@ if($is_adminOfCourse) {
 			}
 
 			$tool_content .=  "<tr ".$style2.">\n";
-			$tool_content .=  "<td >\n";
-			$tool_content .=  "<img src=\"./img/".$image."\" align='absmiddle' border=0>\n";
+			$tool_content .=  "<td style='border-left: 1px solid #edecdf;' align='center'><img src=\"./img/".$image."\" align='absmiddle' border=0>\n";
 
 			//h $dspFileName periexei to onoma tou arxeiou sto filesystem
 
@@ -1193,7 +1190,7 @@ if($is_adminOfCourse) {
 				$fileCommentList[$fileKey] = nl2br($fileCommentList[$fileKey]);
 
 				$tool_content .=  "&nbsp;<span class=\"comment\">";
-				$tool_content .=  "(".$fileCommentList[$fileKey].")";
+				$tool_content .=  " (".$fileCommentList[$fileKey].")";
 				$tool_content .=  "</span>\n";
 			}
 
@@ -1205,7 +1202,7 @@ if($is_adminOfCourse) {
 			$tool_content .=  "<td align='center'>".$date."</td>\n";
 
 			/*** delete command ***/
-			$tool_content .=  "<td align='right'><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdFileName."\" onClick=\"return confirmation('".addslashes($row["filename"])."');\">
+			$tool_content .=  "<td align='center' style='border-right: 1px solid #edecdf;'><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdFileName."\" onClick=\"return confirmation('".addslashes($row["filename"])."');\">
 		<img src=\"../../template/classic/img/delete.gif\" border=0  title=\"$langDelete\"></a>";
 			/*** copy command ***/
 			$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?move=".$cmdFileName."\">
@@ -1231,6 +1228,22 @@ if($is_adminOfCourse) {
 			$tool_content .=  "</td></td></tr>\n";
 		}
 	}
+	
+	$tool_content .= "
+    <tr>
+      <td style='border-left: 1px solid #edecdf;'>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td style='border-right: 1px solid #edecdf;'>&nbsp;</td>
+    </tr>
+    <tr>
+      <th style='border-left: 1px solid #edecdf;' class='left'>&nbsp;</th>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+      <th style='border-right: 1px solid #edecdf;'>&nbsp;</th>
+    </tr>\n";
 	$tool_content .=  "</table>";
 
 	//emfanish link gia to quota bar
@@ -1253,39 +1266,55 @@ else
 	$cmdParentDir  = rawurlencode($parentDir);
 
 	$tool_content .= "
-<div class=\"fileman\">";
+    <div class=\"fileman\">";
 
-	$tool_content .= "
-<!-- command list -->
-<p><b>$langDirectory: </b>".make_clickable_path($curDirPath)."</p>";
 	// Current Directory Line
 	// go to parent directory
-$tool_content .= "<table width=\"99%\">
-	<thead>
-	<tr>
-		<th>$langName</th>
-		<th>$langSize</th>
-		<th>$langDate</th>
-	</tr>
-</thead>";
-	if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
-	{
-		$tool_content .=  "<tr>\n";
-		$tool_content .=  "<td colspan=\"3\" align=\"left\">\n";
-		$tool_content .=  "<!-- parent dir -->\n";
-		$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdParentDir."\">\n";
-		$tool_content .=  "<IMG src=\"img/parent.gif\" border=0 align=\"absbottom\" hspace=5>\n";
-		$tool_content .=  "<small>$langUp</small>\n";
-		$tool_content .=  "</a>\n";
-		$tool_content .=  "</td>\n";
-		$tool_content .=  "</tr>\n";
-	}
+
+	$tool_content .= "
+    <table width=\"99%\" align='left'>
+    <thead>";
+    $tool_content .= "
+    <tr>
+      <td class='left' height='18' colspan='3' style='border-top: 1px solid #edecdf; border-bottom: 1px solid #edecdf; border-left: 1px solid #edecdf; background: #fff;'>$langDirectory: ".	make_clickable_path($curDirPath) . "</td>
+      <td style='border-top: 1px solid #edecdf; background: #fff; border-bottom: 1px solid #edecdf; border-right: 1px solid #edecdf;'><div align='right'>";
+         /*** go to parent directory ***/
+	 if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
+	 {
+	  $tool_content .=  "
+      <!-- parent dir -->\n";
+	  $tool_content .=  "
+      <a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdParentDir."\">$langUp</a>\n";
+	  $tool_content .=  "<img src=\"img/parent.gif\" border=0 align=\"absmiddle\" height='12' width='12'>\n";
+	 }
+	  $tool_content .= "
+      </td>
+    </tr>";
 
 
+$tool_content .= "
+    <tr>
+      <th style='border-left: 1px solid #edecdf;' class='left'>".$m['type']."</th>
+      <th class='left'>$langName</th>
+      <th width='100' >$langSize</th>
+      <th width='100' style='border-right: 1px solid #edecdf;' >$langDate</th>
+    </tr>
+    </thead>";
+	//if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
+	//{
+		//$tool_content .=  "<tr>\n";
+		//$tool_content .=  "<td colspan=\"3\" align=\"left\">\n";
+		//$tool_content .=  "<!-- parent dir -->\n";
+		//$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdParentDir."\">\n";
+		//$tool_content .=  "<IMG src=\"img/parent.gif\" border=0 align=\"absbottom\" hspace=5>\n";
+		//$tool_content .=  "<small>$langUp</small>\n";
+		//$tool_content .=  "</a>\n";
+		//$tool_content .=  "</td>\n";
+		//$tool_content .=  "</tr>\n";
+	//}
 
-	
 
-	// Display Directories
+    // Display Directories
 
 	if (isset($dirNameList))
 	{
@@ -1304,14 +1333,10 @@ $tool_content .= "<table width=\"99%\">
 					$style = '';
 				}
 
-				$tool_content .=  "<tr>\n";
-				$tool_content .=  "<td>\n";
-				$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style.">\n";
-				$tool_content .=  "<img src=\"../../template/classic/img/folder.gif\" border=0 hspace=5>\n";
-				$tool_content .=  "</a>\n";
-				$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style.">\n";
-				$tool_content .=  $dspDirName."\n";
-				$tool_content .=  "</a>\n";
+	$tool_content .=  "
+    <tr>
+      <td width='1' style='border-left: 1px solid #edecdf;' align='center'><div align='center'><a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style."><img src=\"../../template/classic/img/folder.gif\" border=0 align='absmiddle'></a></div></td>
+      <td class='left'><a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style.">$dspDirName</a>";
 
 				/*** comments ***/
 				if (@$dirCommentList[$dirKey] != "" )
@@ -1320,19 +1345,21 @@ $tool_content .= "<table width=\"99%\">
 					$dirCommentList[$dirKey] = nl2br($dirCommentList[$dirKey]);
 
 					$tool_content .=  "<span class=\"comment\">";
-					$tool_content .=  "(".$dirCommentList[$dirKey].")";
+					$tool_content .=  " (".$dirCommentList[$dirKey].")";
 					$tool_content .=  "</span>\n";
 				}
 
 				/*** skip display date and time ***/
-				$tool_content .=  "</td><td>-</td>\n";
-				$tool_content .=  "<td>-</td>\n";
-				$tool_content .=  "</tr>\n";
+	$tool_content .=  "
+      </td>
+      <td>&nbsp;</td>
+      <td style='border-right: 1px solid #edecdf;'>&nbsp;</td>
+    </tr>\n";
 			}
 		}
-	}
+	} 
 
-	//            Display Files
+	//  Display Files
 
 	if (isset($fileNameList))
 	{
@@ -1351,10 +1378,9 @@ $tool_content .= "<table width=\"99%\">
 
 			{
 				$style='';
-				$tool_content .=  "<tr ".$style.">\n";
-				$tool_content .=  "<td>\n";
-				$tool_content .=  "<a href=\"".$urlFileName."\"".$style.">\n";
-				$tool_content .=  "<img src=\"./img/".$image."\" align='absmiddle' border=0 hspace=5>\n";
+				$tool_content .=  "    <tr ".$style.">\n";
+				$tool_content .=  "      <td width='1' align='center' style='border-left: 1px solid #edecdf;'><div align='center'><a href=\"".$urlFileName."\"".$style."><img src=\"./img/".$image."\" border=0 align='absmiddle'></a></div></td>\n";
+				$tool_content .=  "      <td class='left'>\n";
 
 				$query = "SELECT filename, copyrighted FROM document
 											WHERE path LIKE '%".$curDirPath."/".$fileName."%'";
@@ -1362,11 +1388,11 @@ $tool_content .= "<table width=\"99%\">
 				$row = mysql_fetch_array($result);
 
 				if(empty($row["filename"])) {
-					$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' title=\"$langSave\">".$dspFileName."</a>";
+					$tool_content .=  "      <a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' title=\"$langSave\">".$dspFileName."</a>";
 				} else {
-					$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' title=\"$langSave\">".$row["filename"];
+					$tool_content .=  "      <a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' title=\"$langSave\">".$row["filename"];
 					if ($row["copyrighted"] == "1") $tool_content .= " <img src=\"./img/copyrighted.jpg\" align='absmiddle' border=\"0\">";
-					$tool_content .= "</a>";
+					$tool_content .= "</a>\n";
 				}
 
 				/*** comments ***/
@@ -1375,21 +1401,37 @@ $tool_content .= "<table width=\"99%\">
 					$fileCommentList[$fileKey] = htmlspecialchars($fileCommentList[$fileKey]);
 					$fileCommentList[$fileKey] = nl2br($fileCommentList[$fileKey]);
 					$tool_content .=  "<span class=\"comment\">";
-					$tool_content .=  "(".$fileCommentList[$fileKey].")";
-					$tool_content .=  "</span>\n";
+					$tool_content .=  " (".$fileCommentList[$fileKey].")";
+					$tool_content .=  "</span>";
 				}
 
+				$tool_content .= "      </td>\n";
+				
 				//$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' title=\"$langSave\"></a>";
 				/*** size ***/
-				$tool_content .=  "<td>".$size."</td>\n";
+				$tool_content .=  "      <td align='center'>".$size."</td>\n";
 				/*** date ***/
-				$tool_content .=  "<td>".$date."</td>\n";
-				$tool_content .=  "</tr>\n";
+				$tool_content .=  "      <td align='center' style='border-right: 1px solid #edecdf;'>".$date."</td>\n";
+				$tool_content .=  "    </tr>\n";
 			}
 		}
-	}
-	$tool_content .=  "</table>";
-	$tool_content .=  "</div>";
+	} 
+	
+	$tool_content .= "
+    <tr>
+      <td style='border-left: 1px solid #edecdf;'>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td style='border-right: 1px solid #edecdf;'>&nbsp;</td>
+    </tr>
+    <tr>
+      <th style='border-left: 1px solid #edecdf;' class='left'>&nbsp;</th>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+      <th style='border-right: 1px solid #edecdf;'>&nbsp;</th>
+    </tr>\n";
+	$tool_content .=  "    </table>\n";
+	$tool_content .=  "    </div>\n";
 }
 
 // end of student view

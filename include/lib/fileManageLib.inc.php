@@ -524,14 +524,17 @@ function form_dir_list_exclude($sourceType, $sourceComponent, $command, $baseWor
 	$dialogBox .= "<input type=\"hidden\" name=\"".$sourceType."\" value=\"".$sourceComponent."\">\n" ;
 	//palios tropos emfanishs entolhs + onomatos arxeiou --       $dialogBox .= " ".$langMoveFrom." ".$sourceComponent." ".$langTo.":\n" ;
 	$dialogBox .="
-	<table><caption>$langMove</caption>
-	<thead>
-	<tr>
-	<th>$langMoveFrom <em>$moveFileNameAlias</em> $langTo: </th>
-	<td>
+	    <table class='FormData' width=\"99%\">
+        <tbody>
+        <tr>
+          <th class='left' width='200'>$langMove:</th>
+          <td class='left'>$langMoveFrom <em>$moveFileNameAlias</em> $langTo:</td>
+          <td class='left'>
 	";
+	
+		
 //	$dialogBox .= " ".$langMoveFrom." ".$langTo.":\n" ;
-	$dialogBox .= "<select name=\"".$command."\">\n" ;
+	$dialogBox .= "<select name=\"".$command."\" class='auth_input'>\n" ;
 	$dialogBox .= "<option value=\"\" style=\"color:#999999\">".$langParentDir."\n";
 
 	$bwdLen = strlen($baseWorkDir) ;	// base directories lenght, used under
@@ -560,8 +563,12 @@ function form_dir_list_exclude($sourceType, $sourceComponent, $command, $baseWor
 		}
 	}
 
-	$dialogBox .= "</select></td></tr></thead></table><br/>";
-	$dialogBox .= "<input type=\"submit\" value=\"$langMove\">";
+	$dialogBox .= "
+          </select></td>
+		  <td class='left'><input type=\"submit\" value=\"$langMove\"></td>
+        </tr>
+        </tbody>
+        </table><br/>";
 	$dialogBox .= "</form>\n";
 
 	return $dialogBox;
