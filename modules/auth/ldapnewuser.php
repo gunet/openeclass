@@ -63,7 +63,6 @@ $tool_content .= "
 <tr>
 <td>			
 <form method=\"POST\" action=\"ldapsearch.php\">
-
   <table width=\"100%\" align='left'>
   <tbody>
   <tr>
@@ -79,19 +78,13 @@ $tool_content .= "
     <td>
     <input type=\"hidden\" name=\"auth\" value=\"".$auth."\">
     <input type=\"submit\" name=\"is_submit\" value=\"".$langSubmit."\">
-	<br/><br/>
+		<br/><br/>
     ".$settings['auth_instructions']."
 	</td>
   </tr>	
   </tbody>
   </table>
-			
-</form>
-</td>
-</tr>
-</thead>
-</table>
-			";
+	</form></td></tr></thead></table>";
 
 draw($tool_content,0,'auth');
 ?>

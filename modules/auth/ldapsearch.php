@@ -26,7 +26,6 @@
 ==============================================================================        
   @Description: This script/file tries to authenticate the user, using
   his user/pass pair and the authentication method defined by the admin
-  
 ==============================================================================
 */
 
