@@ -405,29 +405,25 @@ $tool_content .= add_field('user', 'lang', "ENUM('el', 'en') DEFAULT 'el' NOT NU
 @$tmp = mysql_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_objectives`,`course_prerequisites` ,`course_keywords` ,`course_references`)");
 
 
- // encrypt passwords in users table
-  if ($res = db_query("SELECT user_id,password FROM user")) {
-         while($row = mysql_fetch_array($res)) {
-               $pass = $row["password"];
-
-/*                if ((strstr($pass, "'")) or (strstr($pass, '"')) or (strstr($pass, '\\'))) {
-                $tool_content .= "Δεν έγινε κρυπτογράφηση του συνθηματικού του χρήστη με id=".$row["user_id"]." 
-										(άκυροι χαρακτήρες στο συνθηματικό)<br />";
-                    continue; // get the next one
-                 }  */
-
-                 if(!in_array($pass,$auth_methods)) {
-                    $newpass = md5($pass);
-								     // do the update
-        						 db_query("UPDATE user SET password = '".$newpass."' WHERE user_id=".$row["user_id"]); 
-                  }
-                  else {
-                       continue; // move to the next one
-                  }
-         } // of while
-    } else {
-        die("ΠΡΟΣΟΧΗ! Τα passwords στη ΒΔ δεν είναι κρυπτογραφημένα και η πλατφόρμα δεν μπορεί να λειτουργήσει");
-     }
+// encrypt passwords in users table
+if (!$encryptedPasswd) {
+        if ($res = db_query("SELECT user_id,password FROM user")) {
+                while ($row = mysql_fetch_array($res)) {
+                        $pass = $row["password"];
+                        if (!in_array($pass,$auth_methods)) {
+                                $newpass = md5($pass);
+                                // do the update
+                                db_query("UPDATE user SET password = '$newpass'
+                                          WHERE user_id = $row[user_id]"); 
+                        }
+                }
+        } else {
+                die("ΠΡΟΣΟΧΗ! Η διαδικασία αναβάθμισης δέν μπόρεσε να " .
+                    "κρυπτογραφήσει τα password και η πλατφόρμα δεν μπορεί " .
+                    "να λειτουργήσει. Αφαιρέστε τη γραμμή " .
+                    "«\$encryptedPasswd = true;»");
+        }
+}
 
  // update users with no registration date
   $res = db_query("SELECT user_id,registered_at,expires_at FROM user
