@@ -364,8 +364,6 @@ function auth_user_login ($auth,$test_username, $test_password)
 			break;    
 
 	case '5':
-	    
-	    //$dbtype = $GLOBALS['dbtype'];
 	    $dbhost = $GLOBALS['dbhost'];
 	    $dbname = $GLOBALS['dbname'];
 	    $dbuser = $GLOBALS['dbuser'];

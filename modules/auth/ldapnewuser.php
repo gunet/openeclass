@@ -57,7 +57,7 @@ $msg = get_auth_info($auth);
 $settings = get_auth_settings($auth);
 if(!empty($msg)) $nameTools = "$langNewUserAccountActivation ($msg)";
 
-$tool_content .= "
+@$tool_content .= "
 <table width=\"99%\" class='FormData' align='left'>
 <thead>
 <tr>
@@ -67,11 +67,11 @@ $tool_content .= "
   <tbody>
   <tr>
     <th class='left' width='25%'>$langAuthUserName</th>
-    <td><input type=\"text\" name=\"ldap_email\" class='FormData_InputText'></td>
+    <td><input type='text' name='ldap_email' value='$ldap_email' class='FormData_InputText'></td>
   </tr>
   <tr>
     <th class='left'>$langAuthPassword</th>
-    <td><input type=\"password\" name=\"ldap_passwd\" class='FormData_InputText'></td>
+    <td><input type='password' name='ldap_passwd' value='$ldap_passwd' class='FormData_InputText'></td>
   </tr>
   <tr>
     <th>&nbsp;</th>

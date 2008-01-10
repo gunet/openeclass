@@ -43,17 +43,9 @@ include 'auth.inc.php';
 $nameTools = $langAuthReg;
 
 $tool_content = "";
-$tool_content .= "
-<table width=75%>
-<thead>
-<tr>
-<td>
-<fieldset>
-<legend>$langUserAccount ";
+$tool_content .= "<table width=75%><thead><tr><td><fieldset><legend>$langUserAccount ";
 
-//$tool_content .= "<a href=\"newuser_info.php\">".$langNewUser."</a>";
 $auth = get_auth_active_methods();
-
 $e = 1;
 
 // check for close user registration 
@@ -65,11 +57,8 @@ if (isset($close_user_registration) and $close_user_registration == TRUE) {
         $tool_content .= "$langUserAccountInfo2";
 }
 
-$tool_content .= "</legend>
-<br>
-<p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
-<a href=\"$newuser\">$langNewAccount</a>
-</p>";
+$tool_content .= "</legend><br><p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
+								<a href=\"$newuser\">$langNewAccount</a></p>";
 
 if(!empty($auth)) {
         if (count($auth) > 1) {
@@ -89,62 +78,34 @@ if(!empty($auth)) {
         }
 }
 
-$tool_content .= "
-<br>
-</FIELDSET>
-</td>
-</tr>
-</thead>
-</table>
-
-<br><br>
-<table width=75%>
-<thead>
-<tr>
-<td>
-<FIELDSET>
-<LEGEND>".$langProfAccount." ".$langUserAccountInfo1."</LEGEND>
-<br>";
+$tool_content .= "<br></FIELDSET>
+		</td></tr></thead></table>
+		<br><br>
+		<table width=75%>
+		<thead>
+		<tr><td><FIELDSET><LEGEND>".$langProfAccount." ".$langUserAccountInfo1."</LEGEND>
+		<br>";
 
 if(!empty($auth)) {
-        $tool_content .= "
-                <p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
-        <a href=\"newprof.php\">$langNewAccount</a>
-                </p>";
+        $tool_content .= "<p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
+				        <a href=\"newprof.php\">$langNewAccount</a></p>";
         if (count($auth) > 1) {
-                $tool_content .= "
-                        <br>
-                        <p><span style=\"border-bottom: 1px dotted silver;\">$langUserAccountInfo3</span>&nbsp;:</p>";
+                $tool_content .= "<br><p><span style=\"border-bottom: 1px dotted silver;\">$langUserAccountInfo3</span>&nbsp;:</p>";
         }
         foreach($auth as $k=>$v) {
                 if ($v == 1) {	// bypass the eclass auth method, as it has already been displayed
                         continue;
                 } else {
                         $auth_method_settings = get_auth_settings($v);
-                        $tool_content .= "
-                                <p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
+                        $tool_content .= "<p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
                         $langNewAccount 
                                 &nbsp;(<a href=\"ldapnewprof.php?auth=".$v."\">".get_auth_info($v)."</a>)</p>";
-
-                        if(!empty($auth_method_settings)) {
-                                //$tool_content .= "<p>&nbsp;&nbsp;&nbsp;&nbsp;<small>".$auth_method_settings['auth_instructions'];
-                        }		
                 }
         }
 } else {
-        $tool_content .= "
-                <p>$langCannotUseAuthMethods </p>";
+        $tool_content .= "<p>$langCannotUseAuthMethods </p>";
 }
 
-$tool_content .= "
-<br>
-</FIELDSET>
-</td>
-</tr>
-</thead>
-</table>
-";
-
-
+$tool_content .= "<br></FIELDSET></td></tr></thead></table>";
 draw($tool_content, 0, 'auth');
 ?>

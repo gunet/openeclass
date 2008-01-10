@@ -34,9 +34,7 @@ require_once 'auth.inc.php';
 
 $nameTools = get_auth_info($auth);
 $navigation[]= array ("url"=>"registration.php", "name"=> "$langNewUserAccountActivation");
-$nameTools = "$langUserData";
-
-$found = 0;
+$nameTools = $langUserData;
 $tool_content = "";
 
 // get the values from ldapnewuser.php
@@ -44,36 +42,25 @@ $ldap_email = isset($_POST['ldap_email'])?$_POST['ldap_email']:'';
 $ldap_passwd = isset($_POST['ldap_passwd'])?$_POST['ldap_passwd']:'';
 $is_submit = isset($_POST['is_submit'])?$_POST['is_submit']:'';
 
-$lastpage = 'ldapnewuser.php?auth='.$auth;
+//$lastpage = 'ldapnewuser.php?auth='.$auth;
+$lastpage = 'ldapnewuser.php?auth='.$auth.'&ldap_email='.$ldap_email.'&ldap_passwd='.$ldap_passwd;
 $userdescr = $langTheUser;
 
-//$errormessage1 = "<p>&nbsp;</p>";
-$errormessage2 = "<br/><p>$ldapback <a href=\"$lastpage\">$ldaplastpage</a></p>";
+$errormessage = "<br/><p>$ldapback <a href=\"$lastpage\">$ldaplastpage</a></p>";
 
 if(!empty($is_submit))
 {
 	if (empty($ldap_email) or empty($ldap_passwd)) // check for empty username-password
 	{
-		$tool_content .= "
-		<table width=\"99%\">
-		<tbody>
-		<tr>
-		  <td class=\"caution\" height='60'><p>$ldapempty  $errormessage2 </p></td>
-		</tr>
-		</tbody>
-		</table>";
+		$tool_content .= "<table width=\"99%\"><tbody><tr>
+		  <td class=\"caution\" height='60'><p>$ldapempty  $errormessage</p></td>
+		</tr></tbody></table>";
 	} 
 	elseif (user_exists($ldap_email)) // check if the user already exists
 	{
-		$tool_content .= "
-		<table width=\"99%\">
-		<tbody>
-		<tr>
-		  <td class=\"caution\" height='60'><p>$ldapuserexists $errormessage2</p></td>
-		</tr>
-		</tbody>
-		</table>";
-
+		$tool_content .= "<table width=\"99%\"><tbody><tr>
+		  <td class=\"caution\" height='60'><p>$ldapuserexists $errormessage</p></td>
+			</tr></tbody></table>";
 	} 
 	else 
 	{
@@ -109,21 +96,11 @@ if(!empty($is_submit))
 		
 		$is_valid = auth_user_login($auth,$ldap_email,$ldap_passwd);
 
-		if($is_valid)
-		{
-			$auth_allow = 1;		// Successfully connected
-		}
-		else
-		{
-			$tool_content .= "<br />$langConnNo!<br />";
-			$auth_allow = 0;
-		}	
-		if($auth_allow==1)
-		{	
+		if($is_valid) {  // Successfully connected
 			$tool_content .= "
-    <table width=\"99%\" align='left' class='FormData'>
-    <thead>
-    <tr>
+    	<table width=\"99%\" align='left' class='FormData'>
+	    <thead>
+  	  <tr>
       <td>
       <form action=\"newuser_second.php\" method=\"post\">
       <table width=\"100%\">
@@ -162,13 +139,10 @@ if(!empty($is_submit))
 			$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id",$db);
 			while ($dep = mysql_fetch_array($deps)) 
 			$tool_content .= "\n
-         <option value=\"$dep[1]\">$dep[0]</option>
+			    <option value=\"$dep[1]\">$dep[0]</option>
 			";
 			
-			$tool_content .= "
-         </select>
-         </td>
-       </tr>
+			$tool_content .= "</select></td></tr>
        <tr>
          <th class='left'>&nbsp;</th>
          <td><input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\">
@@ -181,16 +155,13 @@ if(!empty($is_submit))
          </tbody>
          </table>
          </form>
-         </td>
-       </tr>
-       </thead>
-       </table>
-			";
-		
+         </td></tr></thead></table>";
 		}
-		else
+		else // not connected
 		{
+			$tool_content .= "<br />$langConnNo<br />";
 			$tool_content .= "<br />$langAuthNoValidUser<br />";
+			$tool_content .= "<br><center><a href='$lastpage'>$langBack</a></center></br>";
 		}
 	}
 
