@@ -200,7 +200,8 @@ caption {
 	background-image: url(img/exclamation.gif);
 	background-repeat: no-repeat;
 	background-position: 4px 4px;
-    padding-left : 10px;
+    padding-left : 20px;
+    color: #E36154;
 }
 
 .well-done {
@@ -217,11 +218,11 @@ caption {
     background-repeat: no-repeat;
 	background-position: 1px 1px;
 	padding-left : 27px;
-   	background-color: #fff;
-    color: #2CC23C;
+   	background-color: #FFF8DC;
+    color: #646664;
     font-size: 10px;
     font-style: normal;
-    font-weight: bold
+    font-weight: bold;
 }
 
 .inactive {

@@ -66,7 +66,7 @@ $tool_content .= "
      <tr>
        <th class='left'>$langPathUploadFile:</th>
        <td><input type=\"file\" name=\"userFile\" size=\"35\" class='FormData_InputText'></td>
-       <td><small><div align='right'>$langNoticeGreek</div></small></td>
+       <td>&nbsp;</td>
      </tr>
      <tr>
        <th class='left'>$langTitle:</th>
@@ -138,7 +138,7 @@ $tool_content .= "
      <tr>
        <th class='left'>$langUncompress</th>
        <td><input type=\"checkbox\" name=\"uncompress\" value=\"1\"> </td>
-       <td>&nbsp;</td>
+       <td><small><div align='right'>$langNoticeGreek</div></small></td>
      </tr>
      <tr>
        <th class='left'>&nbsp;</th>

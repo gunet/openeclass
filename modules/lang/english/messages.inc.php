@@ -845,7 +845,7 @@ $langAreYouSureToDelete = "Are you sure to delete";
 
 $langPublish = "Publish";
 $langParentDir = "parent directory";
-$langNoticeGreek = "Be aware that filename cannot have greek characters!";
+$langNoticeGreek = "Be aware that includes filenames in (.zip) cannot have greek characters!";
 $langInvalidDir = "Invalid Directory or Directory not exists";
 
 

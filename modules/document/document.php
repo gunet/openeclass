@@ -341,7 +341,7 @@ if($is_adminOfCourse)
 				$dialogBox = "<table width=\"99%\">
 				<tbody>
 					<tr>
-						<td class=\"caution\">
+						<td class=\"caution_small\">
 							<p><b>$langImpossible</b></p>
 							
 						</td>
@@ -417,7 +417,7 @@ if($is_adminOfCourse)
 			$dialogBox = "<table width=\"99%\">
 				<tbody>
 					<tr>
-						<td class=\"caution\">
+						<td class=\"caution_small\">
 							<p><b>$langFileExists</b></p>
 							
 						</td>
@@ -512,7 +512,7 @@ if($is_adminOfCourse)
         </tr>
         </tbody>
         </table>
-        </form>";
+        </form><br />";
 		}
 	}
 
@@ -529,7 +529,7 @@ if($is_adminOfCourse)
 			$dialogBox .= "<table width=\"99%\">
 				<tbody>
 					<tr>
-						<td class=\"caution\">
+						<td class=\"caution_small\">
 							<p><b>$langFileExists</b></p>
 							
 						</td>
@@ -800,16 +800,13 @@ if($is_adminOfCourse)
 		mysql_query ("UPDATE $dbTable SET visibility='".$newVisibilityStatus."' WHERE path LIKE '%".$visibilityPath."%'");
 
 		$dialogBox = "
-	<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"success\">
-							<p><b>$langViMod</b></p>
-							
-						</td>
-					</tr>
-				</tbody>
-			</table>";
+           <table width=\"99%\">
+           <tbody>
+           <tr>
+             <td class=\"success\" style='border-left: 1px solid #edecdf; border-right: 1px solid #edecdf; border-top: 1px solid #edecdf;'><p><b>$langViMod</b></p></td>
+           </tr>
+           </tbody>
+           </table>";
 	}
 } // teacher only
 
