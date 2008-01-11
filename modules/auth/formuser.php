@@ -1,47 +1,14 @@
 <?
-/*
-      +----------------------------------------------------------------------+
-      | GUnet eClass 1.7                                                    |
-      | Asychronous Teleteaching Platform                                    |
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2003-2007  GUnet                                       |
-      +----------------------------------------------------------------------+
-      |                                                                      |
-      | GUnet eClass 1.7 is an open platform distributed in the hope that   |
-      | it will be useful (without any warranty), under the terms of the     |
-      | GNU License (General Public License) as published by the Free        |
-      | Software Foundation. The full license can be read in "license.txt".  |
-      |                                                                      |
-      | Main Developers Group: Costas Tsibanis <k.tsibanis@noc.uoa.gr>       |
-      |                        Yannis Exidaridis <jexi@noc.uoa.gr>           |
-      |                        Alexandros Diamantidis <adia@noc.uoa.gr>      |
-      |                        Tilemachos Raptis <traptis@noc.uoa.gr>        |
-      |                                                                      |
-      | For a full list of contributors, see "credits.txt".                  |
-      |                                                                      |
-      +----------------------------------------------------------------------+
-      | Contact address: Asynchronous Teleteaching Group (eclass@gunet.gr),  |
-      |                  Network Operations Center, University of Athens,    |
-      |                  Panepistimiopolis Ilissia, 15784, Athens, Greece    |
-      +----------------------------------------------------------------------+
-*/
-$langFiles = array('registration','gunet');
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 
 if (@$usercomment != "" AND $name != "" AND $surname != "" AND $username != "" 
 		AND $userphone != "" AND $usermail != "")  {
 
-$nameTools = $langUserRequest;
-$tool_content = "";
-
-$MailErrorMessage = $langMailErrorMessage;
-
-//$tool_content .= "<table cellpadding='3' cellspacing='0' border='0' width='100%'>";
-//$tool_content .= "<tr valign='top'>";
+	$nameTools = $langUserRequest;
+	$tool_content = "";
 
 // ------------------- Update table prof_request ------------------------------
-
 $upd=db_query("INSERT INTO prof_request(profname,profsurname,profuname,profemail,proftmima,profcomm,status,date_open,comment,statut) VALUES('$name','$surname','$username','$usermail','$department','$userphone','1',NOW(),'$usercomment','5')");
 
 //----------------------------- Email Message --------------------------
@@ -57,35 +24,27 @@ $upd=db_query("INSERT INTO prof_request(profname,profsurname,profuname,profemail
   <tbody>
   <tr>
     <td class=\"caution\" height='60'>
-    <p>$MailErrorMessage&nbsp; <a href=\"mailto:$emailhelpdesk\" class=mainpage>$emailhelpdesk</a>.</p>
+    <p>$langMailErrorMessage&nbsp; <a href=\"mailto:$emailhelpdesk\" class=mainpage>$emailhelpdesk</a>.</p>
     </td>
   </tr>
   </tbody>
   </table>
   <br><br/>";
-
 	}
 
-
     //  User Message
-	$tool_content .= "
-  <table width=\"99%\">
+	$tool_content .= "<table width=\"99%\">
   <tbody>
   <tr>
     <td class=\"well-done\" height='60'>
     <p>$langDearUser!<br/><br/>$success</p>
     </td>
   </tr>
-  </tbody>
-  </table>
-  <p>
-    <br/><br/>$infoprof<br/><br/>				
-	$click <a href=\"$urlServer\" class=mainpage>$langHere</a> $langBackPage
-  </p>
+  </tbody></table>
+  <p><br/><br/>$infoprof<br/><br/>$click <a href=\"$urlServer\" class=mainpage>$langHere</a> $langBackPage</p>
   <br><br/>
 	";
      
-
   $tool_content .= "</td></tr></table>";
   draw($tool_content, 0);
   exit();
@@ -95,33 +54,31 @@ $upd=db_query("INSERT INTO prof_request(profname,profsurname,profuname,profemail
 $tool_content = "";
 $nameTools = $langUserRequest;
 
-if (isset($Add) and (empty($usercomment) or empty($name) or empty($surname) or empty($username) or empty($userphone) or empty($usermail))) {
-	$tool_content .= "
-  <table width=\"99%\">
-  <tbody>
+	if (isset($Add) and (empty($usercomment) or empty($name) or empty($surname) or empty($username) or empty($userphone) or empty($usermail))) {
+	$tool_content .= "<table width=\"99%\"> <tbody>
   <tr>
     <td class=\"caution\" height='60'>
     <p>$langFieldsMissing</p>
     <p><a href=\"javascript:history.go(-1)\">".$langAgain."</a></p>
     </td>
-  </tr>
-  </tbody>
-  </table>
-  <br><br/>
+  </tr></tbody>
+  </table><br><br/>
   ";
   
   draw($tool_content, 0, 'auth');
   exit;
-      }
+   }
 
+// security
 if (!isset($close_user_registration) or $close_user_registration == FALSE) {
+			$navigation[] = array("url"=>"registration.php", "name"=> $langAuthReg);
 			$tool_content .= "<div class='td_main'>$langForbidden</div></td></tr></table>";
 			draw($tool_content, 0, 'auth');
 			exit;
 			}
 
-$tool_content .= "
-    <p>$langInfoStudReq</p>
+$navigation[] = array("url"=>"registration.php", "name"=> $langAuthReg);
+$tool_content .= "<p>$langInfoStudReq</p>
     <table width=\"99%\" align='left' class='FormData'>
     <thead>
     <tr>
@@ -145,9 +102,9 @@ $tool_content .= "
          <td><small>(*)</small></td>
        </tr>
        <tr>
-         <th class='left'>$langProfUname</th>
-         <td><input type='text' name='username' size=\"33\" maxlength='20' value='".@$username."' class='FormData_InputText'></td>
-         <td><small>(*)&nbsp;$langUserNotice</small></td>
+      <th class='left'>$langProfUname</th>
+      <td><input type='text' name='username' size=\"33\" maxlength='20' value='".@$username."' class='FormData_InputText'></td>
+       <td><small>(*)&nbsp;$langUserNotice</small></td>
        </tr>
        <tr>
          <th class='left'>$langProfEmail</th>
@@ -171,21 +128,13 @@ $tool_content .= "
          <option value='$dep[0]'>$dep[0]</option>\n";
     }
 
-	 $tool_content .= "
-         </select></td>
-       </tr>				
+	 $tool_content .= "</select></td></tr>				
        <tr>
          <th class='left'>&nbsp;</th>
          <td><input type='submit' class='ButtonSubmit' name='Add' value='$langSubmitNew'></td>
          <td><small><p align='right'>$langRequiredFields</p></small></td>
-       </tr>
-       </tbody>
-       </table>
-       </form>
-       </td>
-     </tr>
-     </thead>
-     </table>"; 
+       </tr></tbody></table>
+       </form></td></tr></thead></table>"; 
 }   // end of else if
 
 draw($tool_content, 0);
