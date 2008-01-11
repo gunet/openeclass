@@ -341,20 +341,13 @@ cData;
 ******************************************************************************/
 function printMCQuestionForm() {
 
-		global $tool_content, $langSurveyName, $langSurveyStart, $langSurveyEnd, 
-		$langSurveyType, $langSurveyMC, $langSurveyFillText, 
-		$langSurveyQuestion, $langSurveyCreate, $langSurveyMoreQuestions, 
-		$langSurveyCreated, $MoreQuestions, $langSurveyAnswer, 
-		$langSurveyMoreAnswers, $langSurveyInfo,$langUnitInterested,$langSelectValues, $langUnitProfession,$langUnitCritic,$langUnitColleges,$langUnitTeaching,$langUnitCommunication,$langUnitThought,$langUnitPlace,$langUnitDiscuss,$langUnitAnalice;
-=======
-		global $tool_content, $langName, $langSurveyStart, $langSurveyEnd, 
+	global $tool_content, $langName, $langSurveyStart, $langSurveyEnd, 
 		$langType, $langSurveyMC, $langSurveyFillText, 
 		$langQuestion, $langCreate, $langSurveyMoreQuestions, 
 		$langSurveyCreated, $MoreQuestions, $langAnswer, 
 		$langSurveyMoreAnswers, $langSurveyInfo,
 		$langQuestion1, $langQuestion2, $langQuestion3, $langQuestion4, $langQuestion5, $langQuestion6,
 		$langQuestion7, $langQuestion8,$langQuestion9, $langQuestion10;
->>>>>>> 1.21
 		
 		if(isset($_POST['SurveyName'])) $SurveyName = htmlspecialchars($_POST['SurveyName']);
 		if(isset($_POST['SurveyEnd'])) $SurveyEnd = htmlspecialchars($_POST['SurveyEnd']);
@@ -458,19 +451,6 @@ cData;
 		<tr><td colspan=3><hr></td></tr>
 			<tr><td colspan=3>
 				<SELECT NAME="questionx" onChange="addEvent(this.selectedIndex);this.parentNode.removeChild(this);" id="QuestionSelector">
-<<<<<<< addsurvey.php
-				<OPTION> $langSelectValues
-				<OPTION VALUE="question1"> $langUnitInterested
-				<OPTION VALUE="question2"> $langUnitProfession
-				<OPTION VALUE="question3"> $langUnitCritic
-				<OPTION VALUE="question4"> $langUnitColleges
-				<OPTION VALUE="question5"> $langUnitTeaching
-				<OPTION VALUE="question6"> $langUnitCommunication
-				<OPTION VALUE="question7"> $langUnitThought
-				<OPTION VALUE="question8"> $langUnitPlace
-				<OPTION VALUE="question9"> $langUnitAnalice
-				<OPTION VALUE="question10">$langUnitAdvocate
-=======
 				<OPTION>$langSurveyInfo</option>
 				<OPTION VALUE="question1">$langQuestion1[0]</option>
 				<OPTION VALUE="question2">$langQuestion2[0]</option>
@@ -482,7 +462,6 @@ cData;
 				<OPTION VALUE="question8">$langQuestion8[0]</option>
 				<OPTION VALUE="question9">$langQuestion9[0]</option>
 				<OPTION VALUE="question10">$langQuestion10[0]</option>
->>>>>>> 1.21
 				</SELECT>
 			</td></tr>
 cData;
