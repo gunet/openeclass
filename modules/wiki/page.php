@@ -43,17 +43,13 @@
     @todo: 
 ==============================================================================
 */
-
     $tlabelReq = 'CLWIKI__';
     
     require_once("../../include/lib/learnPathLib.inc.php");
-    require_once("../../include/lib/claroPortedLib.inc.php");
+    require_once("../../include/lib/textLib.inc.php");
     
-    $require_current_course = TRUE;
-	$langFiles              = "wiki";
+  $require_current_course = TRUE;
 	$require_help           = FALSE;
-	//$helpTopic              = "Wiki";
-	
 	require_once("../../include/baseTheme.php");
 	
 	$head_content = "";
@@ -61,7 +57,6 @@
 	$style= "";
 	
 	$imgRepositoryWeb = "../../template/classic/img";
-	// temporary
 	$_gid = null;
 	
 	if (isset($_SESSION['statut']) && $_SESSION['statut'] != 0 ) {
@@ -75,23 +70,8 @@
 	
 	mysql_select_db($currentCourseID);
     
-    /*if ( ! $is_toolAllowed )
-    {
-        if ( is_null( $_cid ) )
-        {
-            claro_disp_auth_form( true );
-        }
-        else
-        {
-            claro_die($langNotAllowed);
-        }
-    }*/
-    
-    // config file
-    //require_once $includePath . "/conf/CLWIKI.conf.php";
     
     // check and set user access level for the tool
-    
     if ( ! isset( $_REQUEST['wikiId'] ) )
     {
         header( "Location: wiki.php" );
@@ -101,19 +81,17 @@
     // set admin mode and groupId
     
     $is_allowedToAdmin = $is_adminOfCourse;
-    
 
     if ( $_gid && $is_groupAllowed )
     {
         // group context
         $grouId = $_gid;
-        
         $navigation[]  = array ('url' => '../group/group.php', 'name' => $langGroups);
         $navigation[]= array ('url' => '../group/group_space.php', 'name' => $_group['name']);
     }
-    elseif ( $_gid && ! $is_groupAllowed )
+    elseif ($_gid && ! $is_groupAllowed )
     {
-        claro_die($langNotAllowed);
+        die($langNotAllowed);
     }
     else
     {
@@ -167,16 +145,10 @@
         }
     }
     
-    // Claroline libraries
-// TOCHANGE    
-    //require_once $includePath . '/lib/user.lib.php';
-    
     // set request variables
-    
     $wikiId = ( isset( $_REQUEST['wikiId'] ) ) ? (int) $_REQUEST['wikiId'] : 0;
     
     // Database nitialisation
-
     $config = array();
     $config["tbl_wiki_properties"] = $tblList[ "wiki_properties" ];
     $config["tbl_wiki_pages"] = $tblList[ "wiki_pages" ];
@@ -192,7 +164,6 @@
     }
     
     // Objects instantiation
-    
     $wikiStore = new WikiStore( $con, $config );
     
     if ( ! $wikiStore->wikiIdExists( $wikiId ) )
@@ -385,8 +356,6 @@
         // recent changes
         case "recent":
         {
-        	// TOCHANGE
-            //require_once $includePath . '/lib/user.lib.php';
             $recentChanges = $wiki->recentChanges();
             break;
         }
@@ -700,8 +669,6 @@
                 : $title
                 ;
                 
-            // $toolTitle['subTitle'] = $subTitle;
-                
             break;
         }
     }
@@ -920,7 +887,7 @@
                 $displaytitle = $title;
             }
             
-            $oldTime = claro_disp_localised_date( $dateTimeFormatLong
+            $oldTime = claro_format_locale_date($dateTimeFormatLong
                         , strtotime($oldTime) )
                         ;
                         
@@ -928,7 +895,7 @@
             mysql_select_db($currentCourseID);
             $oldEditorStr = $userInfo['firstname'] . "&nbsp;" . $userInfo['lastname'];
 
-            $newTime = claro_disp_localised_date( $dateTimeFormatLong
+            $newTime = claro_format_locale_date( $dateTimeFormatLong
                         , strtotime($newTime) )
                         ;
                         
@@ -961,9 +928,7 @@
             $tool_content .= '- <span class="diffDeleted" >'.$langWikiDiffDeletedLine.'</span><br />';
             $tool_content .= 'M <span class="diffMoved" >'.$langWikiDiffMovedLine.'</span><br />';
             $tool_content .= '</div>' . "\n";
-            
             $tool_content .= '<strong>'.$langWikiDifferenceTitle.'</strong>';
-
             $tool_content .= '<div class="diff">' . "\n";
             $tool_content .= $diff;
             $tool_content .= '</div>' . "\n";
@@ -989,7 +954,7 @@
                         . '>'.$pgtitle.'</a></strong>'
                         ;
                         
-                    $time = claro_disp_localised_date( $dateTimeFormatLong
+                    $time = claro_format_locale_date( $dateTimeFormatLong
                         , strtotime($recentChange['last_mtime']) )
                         ;
                         
@@ -997,9 +962,7 @@
                     mysql_select_db($currentCourseID);
                     
                     $userStr = $userInfo['firstname'] . "&nbsp;" . $userInfo['lastname'];
-                    
                     $userUrl = $userStr;
-                        
                     $tool_content .= '<li>'
                         . sprintf( $langWikiRecentChangesPattern, $entry, $time, $userUrl )
                         . '</li>'
@@ -1081,9 +1044,7 @@
             }
 
             $tool_content .= claro_disp_wiki_preview( $wikiRenderer, $title, $content );
-            
             $tool_content .= claro_disp_wiki_preview_buttons( $wikiId, $title, $content );
-
             break;
         }
         // view page
@@ -1114,7 +1075,7 @@
 
                     $editorUrl = '&nbsp;-&nbsp;' . $editorStr;
                     
-                    $mtime = claro_disp_localised_date( $dateTimeFormatLong
+                    $mtime = claro_format_locale_date( $dateTimeFormatLong
                         , strtotime($wikiPage->getCurrentVersionMtime()) )
                         ;
                         
@@ -1217,7 +1178,7 @@
                         . $wikiId . '&amp;title=' . rawurlencode( $title )
                         . '&amp;action=show&amp;versionId=' . $version['id']
                         . '">'
-                        . claro_disp_localised_date( $dateTimeFormatLong
+                        . claro_format_locale_date( $dateTimeFormatLong
                             , strtotime($version['mtime']) )
                         . '</a>'
                         ;
@@ -1233,9 +1194,7 @@
             }
             
             $tool_content .= '</table>' . "\n";
-            
             $tool_content .= '</form>';
-            
             break;
         }
         default:
@@ -1245,7 +1204,6 @@
                 );
         }
     }
-    
     // ------------ End of wiki script ---------------
 
 draw($tool_content, 2, "wiki", $head_content);

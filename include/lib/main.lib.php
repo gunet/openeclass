@@ -621,17 +621,47 @@ function DefaultScoring($ChoiceCount,$Z,$weight) {
         $p=-1.3;
 
         //intermediate computations
-
         $a=$m*pow($ChoiceCount,$n);
         $b=$o*pow($ChoiceCount,$p);
 
         //Scoring computation
-
         $score=(round(($a*exp(-$b*$Z))*2))/2;
     }
 
     return $score/10*$weight;
+} 
 
-} //End of function DefaultScoring
+/**
+ * Get user data on the platform
+ * @param $user_id integer
+ * @return  array( `user_id`, `lastname`, `firstname`, `username`, `email`, `picture`, `officialCode`, `phone`, `status` ) with user data
+ * @author Mathieu Laurent <laurent@cerdecam.be>
+ */
+
+function user_get_data($user_id)
+{
+		global $mysqlMainDb;
+		mysql_select_db($mysqlMainDb);
+	
+    $sql = 'SELECT  `user_id`,
+                    `nom` AS `lastname` ,
+                    `prenom`  AS `firstname`,
+                    `username`,
+                    `email`,
+                    `phone` AS `phone`,
+                    `statut` AS `status`
+				            	FROM   `user`
+			            WHERE `user_id` = "' . (int) $user_id . '"';
+    $result = db_query($sql);
+
+    if (mysql_num_rows($result)) {
+        $data = mysql_fetch_array($result);
+        return $data;
+    }
+    else
+    {
+        return null;
+    }
+}
 
 ?>
