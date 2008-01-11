@@ -120,7 +120,19 @@ if($is_adminOfCourse) {
 	//This is only shown when nothing has been submitted yet, hence !isset($submitLink)
 	if (isset($action) and ($action=="addlink" or $action=="editlink") and !isset($submitLink))
 	{
-		$tool_content .=  "<h4>";
+
+		if (isset($category) and $category=="")
+		{$category=0;}
+		$tool_content .=  "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?action=".$action."&urlview=".@$urlview."\">";
+		if ($action=="editlink")
+		{$tool_content .=  "<input type=\"hidden\" name=\"id\" value=\"".$id."\">";}
+
+		$tool_content .=  "
+          <table width='99%' class='FormData'>
+          <tbody>
+          <tr>
+            <th class='left'>&nbsp;</th>
+            <td><b>";
 		if ($action=="addlink")
 		{$tool_content .=  $langLinkAdd;}
 		else
@@ -128,60 +140,92 @@ if($is_adminOfCourse) {
 			$tool_content .=  $langLinkModify;
 			$langAdd = $langLinkModify;
 		}
-		$tool_content .=  "</h4>\n\n";
-		if (isset($category) and $category=="")
-		{$category=0;}
-		$tool_content .=  "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?action=".$action."&urlview=".@$urlview."\">";
-		if ($action=="editlink")
-		{$tool_content .=  "<input type=\"hidden\" name=\"id\" value=\"".$id."\">";}
-		$tool_content .=  	"<table><thead><tr>
-					<th>URL :</th><td><input type=\"text\" name=\"urllink\" size=\"50\" value=\"
-					".@htmlspecialchars($urllink)."\"></td>
-					</tr>";
-		$tool_content .=  "<tr><th>".$langLinkName." :</th>
-					<td><input type=\"text\" name=\"title\" size=\"50\" value=\"
-					".@htmlspecialchars($title)."\"></td></tr>";
-		$tool_content .= "<tr><th>".$langDescription." :</th>
-		<td><textarea wrap=\"physical\" rows=\"3\" cols=\"50\" name=\"description\">".trim(@htmlspecialchars($description))."</textarea></td></tr>";
 
-		$tool_content .= 	"<tr><th>".$langCategory." :</th><td>
-					<select name=\"selectcategory\">";
-		$tool_content .=  	"<option value=\"0\">--</option>";
+		$tool_content .=  "</b>
+            </td>
+          </tr>
+          <tr>
+            <th class='left'>URL :</th>
+            <td><input type=\"text\" name=\"urllink\" size=\"53\" value=\"".@htmlspecialchars($urllink)."\" class='FormData_InputText'></td>
+          </tr>
+          <tr>
+            <th class='left'>".$langLinkName." :</th>
+            <td><input type=\"text\" name=\"title\" size=\"53\" value=\"".@htmlspecialchars($title)."\" class='FormData_InputText'></td>
+          </tr>
+          <tr>
+            <th class='left'>".$langDescription." :</th>
+            <td><textarea wrap=\"physical\" rows=\"3\" cols=\"50\" name=\"description\" class='FormData_InputText'>".trim(@htmlspecialchars($description))."</textarea></td>
+          </tr>
+          <tr>
+            <th class='left'>".$langCategory." :</th>
+            <td><select name=\"selectcategory\" class='auth_input'>
+                <option value=\"0\">--</option>
+            ";
 		$sqlcategories="SELECT * FROM `".$tbl_categories."` ORDER BY ordre DESC";
 		$resultcategories = db_query($sqlcategories, $dbname);
 		while ($myrow = mysql_fetch_array($resultcategories))
 		{
-			$tool_content .=  "<option value=\"".$myrow["id"]."\"";
+			$tool_content .=  "                <option value=\"".$myrow["id"]."\"";
 			if (isset($category) and $myrow["id"]==$category)
 			$tool_content .=  " selected";
-			$tool_content .= 	">".$myrow["categoryname"]."</option>";
+			$tool_content .= 	">".$myrow["categoryname"]."</option>\n";
 		}
-		$tool_content .= 	"</select></td></tr>";
-		$tool_content .=  	"</thead></table><br/>";
-		$tool_content .=  	"<input type=\"Submit\" name=\"submitLink\" value=\"".$langAdd."\">";
-
-		$tool_content .=  "</form><br/>";
+		$tool_content .=  "
+                </select>
+             </td>
+          </tr>";
+		$tool_content .=  "
+          <tr>
+            <th class='left'>&nbsp;</th>
+            <td><input type=\"Submit\" name=\"submitLink\" value=\"".$langAdd."\"></td>
+          </tr>
+          </tbody>
+          </table>
+          <br/>
+          </form>
+          <br/>";
 	}
 	elseif(isset($action) and ($action=="addcategory" or $action=="editcategory") and !isset($submitCategory))
 	{
-		$tool_content .=  "<h4>";
-		if ($action=="addcategory")
-		{$tool_content .=  $langCategoryAdd;}
-		else
-		{$tool_content .=  $langCategoryMod;}
-		$tool_content .=  "</h4>\n\n";
-		$tool_content .=  "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?action=".$action."&urlview=".@$urlview."\">";
+		$tool_content .=  "
+          <form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?action=".$action."&urlview=".@$urlview."\">";
+		$tool_content .=  "
+          <table width='99%' class='FormData'>
+          <tbody>
+          <tr>
+            <th class='left'>&nbsp;</th>
+            <td><b>";
+			
+		if ($action=="addcategory") {
+		   $tool_content .=  $langCategoryAdd;
+		} else {
+		   $tool_content .=  $langCategoryMod;
+        }
+
 		if ($action=="editcategory")
 		{$tool_content .=  "<input type=\"hidden\" name=\"id\" value=\"".$id."\">";}
-		$tool_content .=  	"<table><thead><th>".$langCategoryName." :</th>
-				<td><input type=\"text\" name=\"categoryname\" size=\"50\" value=\"
-				".@htmlspecialchars($categoryname)."\"></td></tr>";
-		$tool_content .=  	"<tr><th>".$langDescription." :</th>
-				<td><textarea wrap=\"physical\" rows=\"3\" cols=\"50\" name=\"description\">
-				".@htmlspecialchars($description)."</textarea></td></tr>";
-		$tool_content .=  	"</thead></table>";
-		$tool_content .=  	"<br><input type=\"Submit\" name=\"submitCategory\" value=\"".$langAdd."\">";
-		$tool_content .=  "</form><br/>";
+
+		$tool_content .=  "</b>
+            </td>
+          </tr>
+          <tr>
+            <th class='left'>".$langCategoryName." :</th>
+            <td><input type=\"text\" name=\"categoryname\" size=\"53\" value=\"".@htmlspecialchars($categoryname)."\" class='FormData_InputText'></td>
+          </tr>
+          <tr>
+            <th class='left'>".$langDescription." :</th>
+            <td><textarea wrap=\"physical\" rows=\"3\" cols=\"50\" name=\"description\" class='FormData_InputText'>
+				".@htmlspecialchars($description)."</textarea></td>
+          </tr>
+          <tr>
+            <th>&nbsp;	</th>
+            <td><input type=\"Submit\" name=\"submitCategory\" value=\"".$langAdd."\"></td>
+          </tr>
+          </tbody>
+          </table>
+          <br>
+          </form>
+          <br/>";
 	}
 }
 
@@ -228,7 +272,7 @@ if (mysql_num_rows($resultcategories) > 0) {
 
 	if ($numberofzerocategory!==0)
 	{
-		$tool_content .=  "<thead><tr><td class=\"category\" colspan=\"2\"><b>$langNoCategory</b></td></tr></thead>";
+		$tool_content .=  "<tbody><tr><th class=\"left\" colspan=\"2\"><b>$langNoCategory</b></td></tr></tbody>";
 		showlinksofcategory(0);
 	}
 
@@ -254,22 +298,22 @@ if (mysql_num_rows($resultcategories) > 0) {
 		if ((isset($urlview[$i]) and $urlview[$i]=="1")) {
 			$newurlview=$urlview;
 			$newurlview[$i]="0";
-			$tool_content .=  "<tr><td class=\"category\" colspan=\"2\" ><b>- <a href=\"".$_SERVER['PHP_SELF']."?urlview=".$newurlview."\">".$myrow["categoryname"]."</a></b><br>&nbsp;&nbsp;&nbsp;";
+			$tool_content .=  "<tr><th class=\"left\" colspan=\"2\" ><b>- <a href=\"".$_SERVER['PHP_SELF']."?urlview=".$newurlview."\">".$myrow["categoryname"]."</a></b><br>&nbsp;&nbsp;&nbsp;";
 			$tool_content .=  "<font size=\"2\">".$myrow["description"]."</font>";
 			if ($is_adminOfCourse)
 			showcategoryadmintools($myrow["id"]);
-			$tool_content .=  "</td></tr>";
+			$tool_content .=  "</th></tr>";
 
 			showlinksofcategory($myrow["id"]);
 			$tool_content .=  "</td></tr>";
 		} else {
-			$tool_content .=  "<tr><td class=\"category\" colspan=\"2\" ><b>+ <a href=\"".$_SERVER['PHP_SELF']."?urlview=";
+			$tool_content .=  "<tr><th class=\"left\" colspan=\"2\" ><b>+ <a href=\"".$_SERVER['PHP_SELF']."?urlview=";
 			$tool_content .=  is_array($view)?implode('',$view):$view;
 			$tool_content .=  "\">".$myrow["categoryname"]."</a></b><br>&nbsp;&nbsp;&nbsp;";
 			$tool_content .=  "<font size=\"2\">".$myrow["description"]."</font>";
 			if ($is_adminOfCourse)
 			showcategoryadmintools($myrow["id"]);
-			$tool_content .=  "</td></tr>";
+			$tool_content .=  "</th></tr>";
 		}
 		// displaying the link of the category
 		$i++;
@@ -279,7 +323,7 @@ if (mysql_num_rows($resultcategories) > 0) {
 } else {   // no category
 	if (getNumberOfLinks(0)>0){
 		$tool_content .=  "<table>";
-		$tool_content .=  "<tbody><tr><td class=\"category\" colspan=\"2\" ><b>$langLinks</b></td></tr>";
+		$tool_content .=  "<tbody><tr><th class=\"left\" colspan=\"2\" ><b>$langLinks</b></th></tr>";
 
 		showlinksofcategory(0);
 		$tool_content .=  "</td></tr>";
