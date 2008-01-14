@@ -103,25 +103,8 @@ class myGauge {
            $this->Height . " bgcolor=" . $this->BgColor . "><img src=\"./img/shim.gif\"></td>";
        }
        $RenderHtml = $RenderHtml . "</tr></table>";
-       
        return $RenderHtml;
-       
    }
-
 }
 
-
-
 ?>
-
-<!-- Display the gauge 
-<table cellpadding=0 cellspacing=2 border="1">
-   <tr>
-       <td>
-			 // echo $tmp = $oGauge->display(); 
-			 </td>
-   </tr>
-</table>
-
-</body>
-</html>-->

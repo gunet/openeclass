@@ -36,7 +36,6 @@
 ==============================================================================*/
 
 $require_current_course = TRUE;
-$langFiles = 'document';
 
 include '../../include/baseTheme.php';
 include 'gaugebar.php';
@@ -47,7 +46,7 @@ $nameTools = $langQuotaBar;
 
 
 //diamorfwsh ths grafikhs mparas xrhsimopoioumenou kai eleftherou xwrou (me vash ta quotas) + ypologismos statistikwn stoixeiwn
-    $oGauge = new myGauge(); //vrisketai sto arxeio 'gaugebar.php' & ginetai include parapanw
+   $oGauge = new myGauge(); //vrisketai sto arxeio 'gaugebar.php' & ginetai include parapanw
     
     // apodosh timwn gia thn mpara
 	$fc = "#E6E6E6"; //foreground color
@@ -116,6 +115,4 @@ function format_bytesize ($kbytes, $dec_places = 2)
     }
     return $result;
 }
-
-
 ?>    		

@@ -1,64 +1,46 @@
 <?php
+/*===========================================================================
+				GUNet e-Class 2.0
+        E-learning and Course Management Program
+================================================================================
+        Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        A full copyright notice can be read in "/info/copyright.txt".
 
-/*
-+----------------------------------------------------------------------+
-| e-class version 1.0                                                  |
-| based on CLAROLINE version 1.3.0 $Revision$                |
-+----------------------------------------------------------------------+
-|   $Id$		 |
-+----------------------------------------------------------------------+
-| Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
-| Copyright (c) 2003 GUNet                                             |
-+----------------------------------------------------------------------+
-|   This program is free software; you can redistribute it and/or      |
-|   modify it under the terms of the GNU General Public License        |
-|   as published by the Free Software Foundation; either version 2     |
-|   of the License, or (at your option) any later version.             |
-|                                                                      |
-|   This program is distributed in the hope that it will be useful,    |
-|   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-|   GNU General Public License for more details.                       |
-|                                                                      |
-|   You should have received a copy of the GNU General Public License  |
-|   along with this program; if not, write to the Free Software        |
-|   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-|   02111-1307, USA. The GNU GPL license is also available through     |
-|   the world-wide-web at http://www.gnu.org/copyleft/gpl.html         |
-+----------------------------------------------------------------------+
-| Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-|          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-|          Christophe Gesche <gesche@ipm.ucl.ac.be>                    |
-|                                                                      |
-| e-class changes by: Costas Tsibanis <costas@noc.uoa.gr>              |
-|                     Yannis Exidaridis <jexi@noc.uoa.gr>              |
-|                     Alexandros Diamantidis <adia@noc.uoa.gr>         |
-+----------------------------------------------------------------------+
+        Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+                     Yannis Exidaridis <jexi@noc.uoa.gr>
+                     Alexandros Diamantidis <adia@noc.uoa.gr>
 
+        For a full list of contributors, see "credits.txt".
+
+        This program is a free software under the terms of the GNU
+        (General Public License) as published by the Free Software
+        Foundation. See the GNU License for more details.
+        The full license can be read in "license.txt".
+
+        Contact address: GUnet Asynchronous Teleteaching Group,
+        Network Operations Center, University of Athens,
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+==============================================================================*/
 
 /*===========================================================================
 document.php
  * @version $Id$
 @last update: 20-12-2006 by Evelthon Prodromou
 @authors list: Agorastos Sakis <th_agorastos@hotmail.com>
-==============================================================================
-
 */
 
 $require_current_course = TRUE;
-$langFiles = 'document';
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';
 include 'forcedownload.php';
-//include 'gaugebar.php';
 
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
 $action = new action();
 $action->record('MODULE_ID_DOCS');
 /**************************************/
-
 
 $tool_content = "";
 $nameTools = $langDoc;
@@ -70,9 +52,7 @@ $helpTopic = 'Doc';
 // check for quotas
 mysql_select_db($mysqlMainDb);
 $d = mysql_fetch_array(mysql_query("SELECT doc_quota FROM cours WHERE code='$currentCourseID'"));
-
 $diskQuotaDocument = $d['doc_quota'];
-
 mysql_select_db($currentCourseID);
 
 // -------------------------
@@ -109,14 +89,12 @@ if($is_adminOfCourse)  {
 	include("../../include/pclzip/pclzip.lib.php");
 }
 
-
 // file manager basic variables definition
 
 $baseServDir = $webDir;
 $baseServUrl = $urlAppend."/";
 $courseDir = "courses/$currentCourseID/document";
 $baseWorkDir = $baseServDir.$courseDir;
-
 $diskUsed = dir_total_space($baseWorkDir);
 
 $local_head = '
@@ -140,7 +118,6 @@ stripSubmitValue($_GET);
 
 if($is_adminOfCourse)
 {       // teacher only
-
 
 	/*********************************************************************
 	UPLOAD FILE
@@ -501,8 +478,7 @@ if($is_adminOfCourse)
 			@$dialogBox .= "<!-- rename -->\n";
 			$dialogBox .= "<form>\n";
 			$dialogBox .= "<input type=\"hidden\" name=\"sourceFile\" value=\"$rename\">
-	        
-	        
+	        	        
         <table class='FormData' width=\"99%\">
         <tbody>
         <tr>
@@ -520,23 +496,22 @@ if($is_adminOfCourse)
 
 	//step 2
 
-	if (isset($newDirPath) && isset($newDirName))
+	if (isset($newDirPath) and !empty($newDirName)) 
 	{
 		$newDirName = replace_dangerous_char(trim($newDirName));
-
-		if ( check_name_exist($baseWorkDir.$newDirPath."/".$newDirName) )
+		if (check_name_exist($baseWorkDir.$newDirPath."/".$newDirName) )
 		{
 			$dialogBox .= "<table width=\"99%\">
 				<tbody>
 					<tr>
 						<td class=\"caution_small\">
 							<p><b>$langFileExists</b></p>
-							
 						</td>
 					</tr>
 				</tbody>
 			</table>";
-			$createDir = $newDirPath; unset($newDirPath);// return to step 1
+			$createDir = $newDirPath; 
+			unset($newDirPath);
 		}
 		else
 		{
@@ -596,9 +571,7 @@ if($is_adminOfCourse)
 	}
 
 	//	add/update/remove comment
-
 	//	h $commentPath periexei to path tou arxeiou gia to opoio tha epikyrothoun ta metadata
-
 	if (isset($edit_metadata))
 	{
 		//elegxos ean yparxei eggrafh sth vash gia to arxeio
@@ -677,7 +650,6 @@ if($is_adminOfCourse)
 		$oldLanguage = $row['language'];
 		$oldCopyrighted = $row['copyrighted'];
 
-
 		//filsystem compability: ean gia to arxeio den yparxoun dedomena sto pedio filename
 		//(ara to arxeio den exei safe_filename (=alfarithmitiko onoma)) xrhsimopoihse to
 		//$fileName gia thn provolh tou onomatos arxeiou
@@ -747,14 +719,12 @@ if($is_adminOfCourse)
     						</tr>";
 
 
-		$dialogBox .= "		<tr>
+		$dialogBox .= "<tr>
     							<th class='left'>$langCopyrighted : </th>
     							<td>
     							<input name=\"file_copyrighted\" type=\"radio\" value=\"0\" "; if ($oldCopyrighted=="0" || empty($oldCopyrighted)) $dialogBox .= " checked=\"checked\" "; $dialogBox .= " /> $langCopyrightedUnknown <input name=\"file_copyrighted\" type=\"radio\" value=\"2\" "; if ($oldCopyrighted=="2") $dialogBox .= " checked=\"checked\" "; $dialogBox .= " /> $langCopyrightedFree <input name=\"file_copyrighted\" type=\"radio\" value=\"1\" "; 
 
 		if ($oldCopyrighted=="1") $dialogBox .= " checked=\"checked\" "; $dialogBox .= "/> $langCopyrightedNotFree
-  						   							  						   							
-  		
     							</td>
     						</tr
     						<input type=\"hidden\" size=\"80\" name=\"file_oldLanguage\" value=\"$oldLanguage\">";    						
@@ -763,7 +733,6 @@ if($is_adminOfCourse)
 		$dialogBox .= "	<tr>
     							<th class='left'>$langLanguage :</th>
     							<td>
-    							
 									
 								<select name=\"file_language\" class='auth_input'>
 									</option><option value=\"en\">$langEnglish
@@ -811,7 +780,6 @@ if($is_adminOfCourse)
 } // teacher only
 
 // Common for teachers and students
-
 // define current directory
 
 if (isset($openDir)  || isset($moveTo) || isset($createDir) || isset($newDirPath) || isset($uploadPath) ) // $newDirPath is from createDir command (step 2) and $uploadPath from upload command
@@ -849,11 +817,8 @@ if ($parentDir == "/" || $parentDir == "\\")
 	$parentDir =""; // manage the root directory problem
 }
 
-
 // Read current Directory content
-
 // Searching files and directories info in database
-
 
 /*** Search infos in the DB about the current directory the user is in ***/
 $result = db_query("SELECT * FROM $dbTable
@@ -921,11 +886,9 @@ if (@chdir(realpath($baseWorkDir.$curDirPath))) {
 	} // end while ($file = readdir($handle))
 
 
-
 	/*----------------------------------------
 	CHECK BASE INTEGRITY
 	--------------------------------------*/
-
 
 	if (isset($attribute))
 	{
@@ -977,18 +940,12 @@ if (@chdir(realpath($baseWorkDir.$curDirPath))) {
 // end of common to teachers and students
 
 // Teacher View
-
 if($is_adminOfCourse) {
 
 	// Display
-
 	$dspCurDirName = htmlspecialchars($curDirName);
 	$cmdCurDirPath = rawurlencode($curDirPath);
 	$cmdParentDir  = rawurlencode($parentDir);
-
-	//    $tool_content .= "
-	//    <div class=\"fileman\" align=\"center\">
-	//    ";
 
 	/*----------------------------------------------------------------
 	UPLOAD SECTION (ektypwnei th forma me ta stoixeia gia upload eggrafou + ola ta pedia
@@ -998,10 +955,7 @@ if($is_adminOfCourse) {
 	$tool_content .=  "<!-- upload  -->
     <div id=\"operations_container\">
 	<ul id=\"opslist\">";
-	$tool_content .=  "
-    <li>
-    	<a href=\"upload.php?uploadPath=$curDirPath\">$langDownloadFile</a>
-   	</li>";
+	$tool_content .= "<li><a href=\"upload.php?uploadPath=$curDirPath\">$langDownloadFile</a></li>";
 
 	/*----------------------------------------
 	Create new folder
@@ -1012,31 +966,16 @@ if($is_adminOfCourse) {
 	//$tool_content .= "<a href=\"showquota.php?diskQuotaDocument=$diskQuotaDocument&diskUsed=$diskUsed\" target=\"blank\">$langQuotaBar</a>";
 	$tool_content .= "<li><a href=\"showquota.php?diskQuotaDocument=$diskQuotaDocument&diskUsed=$diskUsed\">$langQuotaBar</a></li>
     </ul></div><br />";
-	//  	$tool_content .= "</tr>"; //mphke sto meros ths palias 'voitheias'
 
 	// Dialog Box
-
 	if (!empty($dialogBox))
 	{
-		//        $tool_content .=  "<td class=\"success\" colspan=\"2\">";
-		//        $tool_content .=  "<!-- dialog box -->";
 		$tool_content .=  $dialogBox . " ";
-		//        $tool_content .=  "</td>";
 	}
-	//    else
-	//    {
-	//        $tool_content .=  "<td colspan=\"2\">\n<!-- dialog box -->\n&nbsp;\n</td>\n";
-	//    }
-	//	$tool_content .="</tr></table><br>";
-
 	
-	
-	$tool_content .= "
-    <table width=\"99%\" align='left'>
-    <thead>";
+	$tool_content .= "<table width=\"99%\" align='left'><thead>";
 
-       $tool_content .= "
-     <tr>
+       $tool_content .= "<tr>
          <td class='left' colspan='4' style='border-top: 1px solid #edecdf; border-bottom: 1px solid #edecdf; border-left: 1px solid #edecdf; background: #fff;'>$langDirectory: ".	make_clickable_path($curDirPath) . "</td>
          <td style='border-top: 1px solid #edecdf; background: #fff; border-bottom: 1px solid #edecdf; border-right: 1px solid #edecdf;'><div align='right'>";
          /*** go to parent directory ***/
@@ -1046,9 +985,7 @@ if($is_adminOfCourse) {
 		    $tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdParentDir."\">$langUp</a>\n";
 		    $tool_content .=  "<img src=\"img/parent.gif\" border=0 align=\"absmiddle\" height='12' width='12'>\n";
 	     }
-		  $tool_content .= "
-       </div></td>
-     </tr>";
+		  $tool_content .= "</div></td></tr>";
 
 	$tool_content .= "
     	<tr>
@@ -1083,7 +1020,7 @@ if($is_adminOfCourse) {
 			$tool_content .=  "<tr $style2>\n";
 			$tool_content .=  "<td width='1' style='border-left: 1px solid #edecdf;' align='center'><a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style."><img src=\"../../template/classic/img/folder.gif\" border=0 align='absmiddle'></a></td>\n";
 			$tool_content .=  "<td class='left'>\n";
-            $tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style.">\n";
+      $tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style.">\n";
 			$tool_content .=  $dspDirName."\n";
 			$tool_content .=  "</a>";
 
@@ -1177,8 +1114,6 @@ if($is_adminOfCourse) {
 				$tool_content .= "</a>";
 			}
 
-			//$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' title=\"$langSave\"><img src=\"./img/save.gif\" border=\"0\" align=\"absmiddle\" title=\"$langSave\"></a>";
-
 			//ektypwsh twn sxoliwn dipla sto onoma tou arxeiou
 			/*** comments ***/
 			if ( @$fileCommentList[$fileKey] != "" )
@@ -1190,7 +1125,6 @@ if($is_adminOfCourse) {
 				$tool_content .=  " (".$fileCommentList[$fileKey].")";
 				$tool_content .=  "</span>\n";
 			}
-
 			$tool_content .=  "</td>";
 
 			/*** size ***/
@@ -1242,19 +1176,12 @@ if($is_adminOfCourse) {
       <th style='border-right: 1px solid #edecdf;'>&nbsp;</th>
     </tr>\n";
 	$tool_content .=  "</table>";
-
-	//emfanish link gia to quota bar
-	//    $diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
-	//$tool_content .= "<a href=\"showquota.php?diskQuotaDocument=$diskQuotaDocument&diskUsed=$diskUsed\" target=\"blank\">$langQuotaBar</a>";
-	//    $tool_content .= "<a href=\"showquota.php?diskQuotaDocument=$diskQuotaDocument&diskUsed=$diskUsed\">$langQuotaBar</a>";
 	$tool_content .=  "</div>";
 
 }
-
 // end of Teacher View
 
 // Student View
-
 else
 {
 	// Display
@@ -1262,8 +1189,7 @@ else
 	$cmdCurDirPath = rawurlencode($curDirPath);
 	$cmdParentDir  = rawurlencode($parentDir);
 
-	$tool_content .= "
-    <div class=\"fileman\">";
+	$tool_content .= "<div class=\"fileman\">";
 
 	// Current Directory Line
 	// go to parent directory
@@ -1288,7 +1214,6 @@ else
       </td>
     </tr>";
 
-
 $tool_content .= "
     <tr>
       <th style='border-left: 1px solid #edecdf;' class='left'>".$m['type']."</th>
@@ -1297,22 +1222,8 @@ $tool_content .= "
       <th width='100' style='border-right: 1px solid #edecdf;' >$langDate</th>
     </tr>
     </thead>";
-	//if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
-	//{
-		//$tool_content .=  "<tr>\n";
-		//$tool_content .=  "<td colspan=\"3\" align=\"left\">\n";
-		//$tool_content .=  "<!-- parent dir -->\n";
-		//$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdParentDir."\">\n";
-		//$tool_content .=  "<IMG src=\"img/parent.gif\" border=0 align=\"absbottom\" hspace=5>\n";
-		//$tool_content .=  "<small>$langUp</small>\n";
-		//$tool_content .=  "</a>\n";
-		//$tool_content .=  "</td>\n";
-		//$tool_content .=  "</tr>\n";
-	//}
-
 
     // Display Directories
-
 	if (isset($dirNameList))
 	{
 		while (list($dirKey, $dirName) = each($dirNameList))
@@ -1438,7 +1349,6 @@ chdir($baseServDir."/modules/document/");
 draw($tool_content, 2, "document", $local_head);
 chdir($tmp_cwd);
 
-
 //epipleon functions
 
 function make_clickable_path($path)
@@ -1459,7 +1369,6 @@ function make_clickable_path($path)
 	return $out;
 }
 
-
 //function pou epistrefei tyxaious xarakthres. to orisma $length kathorizei to megethos tou apistrefomenou xarakthra
 function randomkeys($length)
 {
@@ -1472,7 +1381,6 @@ function randomkeys($length)
 	return $key;
 
 }
-
 
 // A helper function, when passed a number representing KB,
 // and optionally the number of decimal places required,

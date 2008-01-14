@@ -52,10 +52,6 @@ function send_file_to_client($real_filename,$filename)
   return false;
   }
  
- //$content_type=get_mime_type($real_filename);
- // we use an unknown mimetype to force the download
- //$content_type="unknown";
- 
  if(isset($content_type))
  {
   header( "Content-type: $content_type\n");
