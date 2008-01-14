@@ -33,8 +33,6 @@
 /*******************************************************************
 *			   VIDEO UPLOADER AND DOWNLOADER
 ********************************************************************
-GOALS
-*****
 Allow professor to send quickly video immediately
 visible on his site.
 
@@ -313,8 +311,8 @@ if (isset($id)) {
 					", $videoURL, $myrow[2], $myrow[3],$myrow[4], $myrow[5],$myrow[6]);
 			$tool_content.=sprintf("<td align='center'>
 			 <a href=\"%s?id=%s&table_edit=%s&action=edit\">
-					<img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"$langModify\"></a> ", $_SERVER['PHP_SELF'], $myrow[0],$table);
-			$tool_content.=sprintf("<a href=\"%s?id=%s&delete=yes&table=%s\" onClick=\"return confirmation('".addslashes($myrow[2])."');\"><img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"$langDelete\"></a>
+					<img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"$langModify\"></a> ", $_SERVER['PHP_SELF'], $myrow[0],$table);
+			$tool_content.=sprintf("<a href=\"%s?id=%s&delete=yes&table=%s\" onClick=\"return confirmation('".addslashes($myrow[2])."');\"><img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"$langDelete\"></a>
 					</td>
 				</tr>
 			", $_SERVER['PHP_SELF'], $myrow[0],$table);
@@ -329,9 +327,9 @@ if (isset($id)) {
 							", $videoURL, $myrow[2], $myrow[3],$myrow[4], $myrow[5],$myrow[6]);
 				$tool_content.=sprintf("<td align='center'>
 					<a href=\"%s?id=%s&table_edit=%s&action=edit\">
-					<img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"$langModify\"></a> ", $_SERVER['PHP_SELF'], $myrow[0],$table);
+					<img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"$langModify\"></a> ", $_SERVER['PHP_SELF'], $myrow[0],$table);
 				$tool_content.=sprintf("<a href=\"%s?id=%s&delete=yes&table=%s\" onClick=\"return confirmation('".addslashes($myrow[2])."');\">
-					<img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"$langDelete\"></a>						
+					<img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"$langDelete\"></a>						
 					</td>
 				</tr>
 			", $_SERVER['PHP_SELF'], $myrow[0],$table);
