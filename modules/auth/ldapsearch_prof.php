@@ -31,13 +31,18 @@
 */
 
 include '../../include/baseTheme.php';
+include '../../include/sendMail.inc.php';
 require_once 'auth.inc.php';
 
-$nameTools = get_auth_info($auth);
-$navigation[]= array ("url"=>"registration.php", "name"=> "$langNewProfAccountActivation");
-$nameTools = $langUserData;
+$msg = "$langReqRegProf (".(get_auth_info($auth)).")";
+
+$nameTools = $msg;
+$navigation[]= array ("url"=>"registration.php", "name"=> "$langAuthReg");
+$navigation[]= array ("url"=>"ldapnewprof.php", "name"=> "$langConfirmUser");
 
 $tool_content = "";
+
+$auth = get_auth_id();
 
 // for security
 $auth = isset($_POST['auth'])?intval($_POST['auth']):0;
@@ -50,29 +55,20 @@ $ldap_passwd = isset($_POST['ldap_passwd'])?$_POST['ldap_passwd']:'';
 $lastpage = 'ldapnewprof.php?auth='.$auth.'&ldap_email='.$ldap_email.'&ldap_passwd='.$ldap_passwd;
 $errormessage = "<br/><p>$ldapback <a href=\"$lastpage\">$ldaplastpage</a></p>";
 
-if(!empty($is_submit))
-{
+if(!empty($is_submit)) {
 	if (empty($ldap_email) or empty($ldap_passwd)) // check for empty username-password
 	{
 		$tool_content .= "<table width=\"99%\"><tbody>
 		<tr>
 		  <td class=\"caution\" height='60'><p>$ldapempty  $errormessage </p></td>
 		</tr></tbody></table>";
-		$auth_allow = 0;
-	} 
-	elseif (user_exists($ldap_email)) // check if the user already exists
-	{
-		$tool_content .= "<table width=\"99%\"><tbody>
-		<tr>
-		  <td class=\"caution\" height='60'><p>$ldapuserexists $errormessage</p></td>
-		</tr></tbody></table>";
-		$auth_allow = 0;
+		draw($tool_content,0);
+		exit();
 	} 
 	else 
 	{
-		// try to authenticate him
-		$auth_method_settings = get_auth_settings($auth);		// get the db settings of the authentication method defined
-
+		// try to authenticate user
+		$auth_method_settings = get_auth_settings($auth);		// get the settings of the authentication method defined
 		switch($auth)			// now get the connection settings
 		{
 			case '2':	$pop3host = str_replace("pop3host=","",$auth_method_settings['auth_settings']);
@@ -98,39 +94,37 @@ if(!empty($is_submit))
 							break;
 			default:
 							break;
-		}
-		
+			}
 		$is_valid = auth_user_login($auth,$ldap_email,$ldap_passwd);
+	}	
 
-		if($is_valid) { // connection successful	
+if ($is_valid) { // connection successful	
 			$tool_content .= "
     <table width=\"99%\" align='left' class='FormData'>
     <thead>
     <tr>
       <td>
-      <form name=\"registration\" action=\"newprof_second.php\" method=\"post\">
+      <form action=\"$_SERVER[PHP_SELF]\" method=\"post\">" .
+        (isset($GLOBALS['auth_user_info'])?
+                ('<input type="hidden" name="prenom_form" value="' . $GLOBALS['auth_user_info']['firstname'] .
+                 '"><input type="hidden" name="nom_form" value="' . $GLOBALS['auth_user_info']['lastname'] .
+                 '"><input type="hidden" name="email" value="' . $GLOBALS['auth_user_info']['email'] . '">'): '') . "
       <table width=\"100%\">
        <tbody>
        <tr>  
          <th class='left' width='20%'>".$langName."</th>
-         <td width='10%'><input class='FormData_InputText' type=\"text\" name=\"prenom_form\"" .
-        (isset($GLOBALS['auth_user_info'])?
-                (' value="' . $GLOBALS['auth_user_info']['firstname'] . '"'): '') . "></td>
-         <td><small>(*)</small></td>
+         <td width='10%'>".(isset($GLOBALS['auth_user_info'])?
+                $GLOBALS['auth_user_info']['firstname']: '<input class="FormData_InputText" type="text" name="prenom_form" size="38">')."</td>
        </tr>
        <tr>
          <th class='left'>".$langSurname."</th>
-         <td><input type=\"text\" name=\"nom_form\" class='FormData_InputText'" .
-        (isset($GLOBALS['auth_user_info'])?
-                (' value="' . $GLOBALS['auth_user_info']['lastname'] . '"'): '') . "></td>
-         <td><small>(*)</small></td>
+         <td width='10%'>".(isset($GLOBALS['auth_user_info'])?
+                $GLOBALS['auth_user_info']['lastname']: '<input class="FormData_InputText" type="text" name="nom_form" size="38">')."</td>
        </tr>
        <tr>
          <th class='left'>".$langEmail."</th>
-         <td><input type=\"text\" name=\"email\" class='FormData_InputText'" .
-        (isset($GLOBALS['auth_user_info'])?
-                (' value="' . $GLOBALS['auth_user_info']['email'] . '"'): '') . "></td>
-         <td><small>".$langEmailNotice."</small></td>
+         <td width='10%'>".(isset($GLOBALS['auth_user_info'])?
+                $GLOBALS['auth_user_info']['email']: '<input class="FormData_InputText" type="text" name="email" size="38">')."</td>
        </tr>
        <tr>
          <th class='left'>".$langTel."</th>
@@ -140,30 +134,24 @@ if(!empty($is_submit))
        <tr>
          <th class='left'>".$langComments."</th>
          <td><textarea name=\"usercomment\" COLS=\"35\" ROWS=\"4\" WRAP=\"SOFT\" class='FormData_InputText'>".@$usercomment."</textarea>
-         <td><small>(*)&nbsp; ".$profreason."</small></td>
+         <td><small>&nbsp; ".$profreason."</small></td>
        </tr>
        <tr>
          <th class='left'>".$langDepartment.":</th>
          <td><select name=\"department\">";
         $deps=mysql_query("SELECT name FROM faculte order by id",$db);
-        while ($dep = mysql_fetch_array($deps)) 
-        {
-        $tool_content .= "
-          <option value=\"$dep[0]\">$dep[0]</option>\n";
+        while ($dep = mysql_fetch_array($deps)) {
+		        $tool_content .= "<option value=\"$dep[0]\">$dep[0]</option>\n";
         }
-        $tool_content .= "
-         </select>
-         <td><small>(*)</small></td>
-       </tr>	
-
-       <tr>
+        $tool_content .= "</select></td>
+	       </tr>	
+  	     <tr>
          <th class='left'>&nbsp;</th>
          <td><input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\">
              <input type=\"hidden\" name=\"uname\" value=\"".$ldap_email."\">
              <input type=\"hidden\" name=\"password\" value=\"".$ldap_passwd."\">
              <input type=\"hidden\" name=\"auth\" value=\"".$auth."\">
          </td>
-         <td><p align='right'>".$langRequiredFields."</p></td>
          </tr>
          </tbody>
          </table>
@@ -171,17 +159,79 @@ if(!empty($is_submit))
          </td>
        </tr>
        </thead>
-       </table>
-			";
-	}
-		else // not connected
-		{
+       </table>";
+	}  else // not connected
+    {
       $tool_content .= "<br />$langConnNo<br />";
       $tool_content .= "<br />$langAuthNoValidUser<br />";
       $tool_content .= "<br><center><a href='$lastpage'>$langBack</a></center></br>";
-		}
-	}
+    }
 
-}   // end of initial if
+draw($tool_content,0);
+exit();
+} // end of if(is_submit)
+
+// ----------------------------
+// registration
+// ----------------------------
+if (isset($submit))  {
+     $uname = escapeSimple($uname);  // escape the characters: simple and double quote
+      // ------------------- Update table prof_request ------------------------------
+      $username = $uname;
+      $auth = $_POST['auth'];
+      if($auth!=1)
+      {
+        switch($auth)
+        {
+          case '2': $password = "pop3";
+            break;
+          case '3': $password = "imap";
+            break;
+          case '4': $password = "ldap";
+            break;
+          case '5': $password = "db";
+            break;
+          default:  $password = "";
+            break;
+        }
+      }
+
+      $usermail = $email;
+      $surname = $nom_form;
+      $name = $prenom_form;
+
+			mysql_select_db($mysqlMainDb,$db);
+      $sql = "INSERT INTO prof_request(profname,profsurname,profuname,profpassword,
+      profemail,proftmima,profcomm,status,date_open,comment) VALUES(
+      '$name','$surname','$username','$password','$usermail','$department','$userphone','1',NOW(),'$usercomment')";
+      $upd=mysql_query($sql,$db);
+      
+			//----------------------------- email message --------------------------
+        $MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" . $mailbody3
+        . $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langDepartment: $department\n$langComments: $usercomment\n"
+        . "$langProfUname : $username\n$langProfEmail : $usermail\n" . "$contactphone : $userphone\n\n\n$logo\n\n";
+    if (!send_mail($gunet, $emailhelpdesk, '', $emailhelpdesk, $mailsubject, $MailMessage, $charset))
+      {
+        $tool_content .= "
+        <table width=\"99%\">
+        <tbody>
+        <tr>
+        <td class=\"caution\" height='60'>
+        <p>$langMailErrorMessage &nbsp; <a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></p>
+        </td>
+        </tr></tbody></table>";
+        draw($tool_content,0);
+        exit();
+      }
+
+      //------------------------------------User Message ----------------------------------------
+    $tool_content .= "<table width=\"99%\"><tbody>
+      <tr>
+      <td class=\"well-done\" height='60'>
+      <p>$langDearProf</p><p>$success</p><p>$infoprof</p>
+      <p><a href=\"$urlServer\">$langBack</a></p>
+      </td>
+      </tr></tbody></table>";
+	}
 
 draw($tool_content,0);

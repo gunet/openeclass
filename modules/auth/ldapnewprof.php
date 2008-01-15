@@ -55,7 +55,7 @@ $authmethods = get_auth_active_methods();
 
 $msg = get_auth_info($auth);
 $settings = get_auth_settings($auth);
-if(!empty($msg)) $nameTools = "$langNewProfAccountActivation ($msg)";
+if(!empty($msg)) $nameTools = "$langConfirmUser ($msg)";
 
 @$tool_content .= "
 <table width=\"99%\" class='FormData' align='left'>
