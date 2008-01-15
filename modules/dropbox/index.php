@@ -242,7 +242,7 @@ tCont2;
 	//==========================================================================
 	//END of send_file form
 	//==========================================================================
-}  // RH: Mailing: end of 'Mailing detail: no form upload'
+} 
 
 /**
  * ========================================
@@ -632,25 +632,19 @@ tCont12;
 		<tr>
 		<td colspan=\"2\"><span class=\"dropbox_detail\">".$dropbox_lang["lastResent"]." <span class=\"dropbox_date\">$w->lastUploadDate</span></span></td>
 		</tr>";
-
 	}
-
 	$i++;
 } //end of foreach
+
 if (count($dropbox_person->sentWork)==0) {
 	$tool_content .= "
 	<tr>
 	<td colspan=\"6\">".$dropbox_lang['tableEmpty']."
 	</td>
 	</tr>";
-
 }
-$tool_content .= "
-</tbody>
-	</table>
-";
 
+$tool_content .= "</tbody></table>";
 
 draw($tool_content, 2, 'dropbox', $head_content);
 ?>
-

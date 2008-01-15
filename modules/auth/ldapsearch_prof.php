@@ -109,6 +109,7 @@ if ($is_valid) { // connection successful
                 ('<input type="hidden" name="prenom_form" value="' . $GLOBALS['auth_user_info']['firstname'] .
                  '"><input type="hidden" name="nom_form" value="' . $GLOBALS['auth_user_info']['lastname'] .
                  '"><input type="hidden" name="email" value="' . $GLOBALS['auth_user_info']['email'] . '">'): '') . "
+			<p>$langTheUser $ldapfound </p>
       <table width=\"100%\">
        <tbody>
        <tr>  
@@ -171,9 +172,9 @@ draw($tool_content,0);
 exit();
 } // end of if(is_submit)
 
-// ----------------------------
+// -----------------------------------------
 // registration
-// ----------------------------
+// -----------------------------------------
 if (isset($submit))  {
      $uname = escapeSimple($uname);  // escape the characters: simple and double quote
       // ------------------- Update table prof_request ------------------------------

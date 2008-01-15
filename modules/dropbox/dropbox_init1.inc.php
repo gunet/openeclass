@@ -26,7 +26,6 @@
 $require_login = TRUE;
 $require_current_course = TRUE;
 $guest_allowed = FALSE;
-$langFiles = "dropbox";	
 $require_help = TRUE;
 $helpTopic = 'Dropbox';
 include_once '../../include/baseTheme.php';
@@ -34,7 +33,6 @@ include_once '../../include/baseTheme.php';
 $tool_content = "";
 
 // javascript functions
-
 $head_content ='<script>
                 function confirmation (name) {
                 if (confirm("'.$dropbox_lang['confirmDelete1'].'" + name + "'.$dropbox_lang['confirmDelete2'].'" )) {
@@ -248,5 +246,4 @@ function removeMoreIfMailing($fileId)
         }
     }
 }
-
 ?>

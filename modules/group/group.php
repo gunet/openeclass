@@ -133,7 +133,6 @@ if(isset($_REQUEST['properties']) && $is_adminOfCourse)
 elseif (isset($_REQUEST['delete']) && $is_adminOfCourse)
 {
 	$result = db_query("DELETE FROM student_group", $currentCourse);
-
 	$result = db_query("DELETE FROM forums WHERE cat_id='1'", $currentCourse);
 
 	// Moving all groups to garbage collector and re-creating an empty work directory
@@ -369,12 +368,12 @@ tCont3;
 		}
 		$tool_content .= "
 			<td><div class=\"cellpos\">
-	<a href=\"group_edit.php?userGroupId=".$group["id"]."\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"".$langEdit."\"></a>
+	<a href=\"group_edit.php?userGroupId=".$group["id"]."\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langEdit."\"></a>
 	</div>
 	</td>
 	<td><div class=\"cellpos\">
 	<a href=\"".$_SERVER['PHP_SELF']."?delete_one=yes&id=".$group["id"]."\" onClick=\"return confirmation('".addslashes($group["name"])."');\">
-	<img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a>
+	<img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\"></a>
 	</div>
 	</td>
 	</tr>";

@@ -40,14 +40,7 @@
                       Hugues Peeters    <peeters@ipm.ucl.ac.be>
                       Christophe Gesche <gesche@ipm.ucl.ac.be>
 ==============================================================================        
-    @Description: 
-
-    @Comments:
- 
-    @todo: 
-==============================================================================
 */
-
 
 /**
  * Update the file or directory path in the document db document table
@@ -516,24 +509,20 @@ function form_dir_list($sourceType, $sourceComponent, $command, $baseWorkDir)
 //afth h function (opws kai h prohgoumenh) dhmiourgei mia lista se combo box me tous fakelous enos path. sth sygkekrimenh exei prostethei to orisma $entryToExclude prokeimenou na mhn emfanizetai mia eggrafh
 function form_dir_list_exclude($sourceType, $sourceComponent, $command, $baseWorkDir, $entryToExclude)
 {
-	global $PHP_SELF, $langParentDir, $langTo, $langMoveFrom, $langMove, $moveFileNameAlias;
+	global $langParentDir, $langTo, $langMoveFrom, $langMove, $moveFileNameAlias;
 
 	$dirList = index_and_sort_dir($baseWorkDir);
 
-	$dialogBox .= "<form action=\"".$PHP_SELF."\" method=\"post\">\n" ;
+	$dialogBox .= "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">\n" ;
 	$dialogBox .= "<input type=\"hidden\" name=\"".$sourceType."\" value=\"".$sourceComponent."\">\n" ;
-	//palios tropos emfanishs entolhs + onomatos arxeiou --       $dialogBox .= " ".$langMoveFrom." ".$sourceComponent." ".$langTo.":\n" ;
 	$dialogBox .="
 	    <table class='FormData' width=\"99%\">
         <tbody>
         <tr>
           <th class='left' width='200'>$langMove:</th>
           <td class='left'>$langMoveFrom <em>$moveFileNameAlias</em> $langTo:</td>
-          <td class='left'>
-	";
-	
+          <td class='left'>";
 		
-//	$dialogBox .= " ".$langMoveFrom." ".$langTo.":\n" ;
 	$dialogBox .= "<select name=\"".$command."\" class='auth_input'>\n" ;
 	$dialogBox .= "<option value=\"\" style=\"color:#999999\">".$langParentDir."\n";
 
