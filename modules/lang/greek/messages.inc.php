@@ -84,7 +84,6 @@ $langAfterPage="Eπόμενη";
 // index
 $langComments = "Σχόλια";
 $langAdmin = "Εργαλεία Διαχείρισης Πλατφόρμας";
-$langAdminBy = "Διαχείριση από ";
 $langState = "Διαχείριση Εξυπηρετητή";
 $langDevAdmin ="Διαχείριση Βάσης Δεδομένων";
 $langNomPageAdmin 		= "Διαχείριση";
@@ -893,7 +892,7 @@ $langSimpleExercise="Σε μία μόνο σελίδα";
 $langSequentialExercise="Σε μία ερώτηση ανά σελίδα (στη σειρά)";
 $langRandomQuestions="Τυχαίες Ερωτήσεις";
 $langGiveExerciseName="Δώστε το όνομα της άσκησης";
-$langGiveExerciseInts="Τα πεδία Χρονικός Περιορισμός & Επιτρεπόμενες Επαναλήψεις πρέπει να είναι ακέραιοι (0, 1, 2, ..,ν)";
+$langGiveExerciseInts="Τα πεδία Χρονικός Περιορισμός & Επιτρεπόμενες Επαναλήψεις πρέπει να είναι ακέραιοι αριθμοί";
 $langQuestCreate="Δημιουργία ερωτήσεων";
 $langExRecord="Η άσκηση σας αποθηκεύτηκε";
 $langBackModif="Επιστροφή στην διόρθωση της άσκησης";

@@ -38,7 +38,7 @@
 include '../../include/baseTheme.php';
 require_once 'auth.inc.php';
 
-$navigation[]= array ("url"=>"registration.php", "name"=> "$langRegistration");
+$navigation[]= array ("url"=>"registration.php", "name"=> "$langNewUser");
 $tool_content = "";
 
 // for security

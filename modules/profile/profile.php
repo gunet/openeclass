@@ -34,10 +34,7 @@ $require_valid_uid = TRUE;
 $tool_content = "";
 
 check_uid();
-
 $nameTools = $langModifProfile;
-
-
 check_guest();
 
 if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
@@ -71,14 +68,12 @@ if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
 		exit();
 	}
 
-
 	// everything is ok
 	else {
 		##[BEGIN personalisation modification]############
 		if (!isset($persoStatus) || $persoStatus == "") $persoStatus = "no";
 		else  $persoStatus = "yes";
 		$userLanguage = $_REQUEST['userLanguage'];
-
 
 		$username_form = escapeSimple($username_form);
 		if(mysql_query("UPDATE user
@@ -89,9 +84,7 @@ if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
 		header("location:". $_SERVER['PHP_SELF']."?msg=1");
 		exit();
 	        }
-
 	}
-
 }	// if submit
 
 ##[BEGIN personalisation modification - For LDAP users]############
@@ -122,7 +115,6 @@ if (isset($submit) && isset($ldap_submit) && ($ldap_submit == "ON")) {
 //Show message if exists
 if(isset($msg))
 {
-
 	switch ($msg){
 		case 1: { //profile information changed successfully (not the password data!)
 			$message = $langProfileReg;
@@ -158,9 +150,13 @@ if(isset($msg))
 			$type = "caution";
 			break;
 		}
-		
+		case 10: { // invalid characters
+			$message = $langInvalidCharsUsername;
+			$urlText = "";
+      $type = "caution";
+      break;
+		}
 		default:die("invalid message id");
-
 	}
 
 	$tool_content .=  "
@@ -237,21 +233,18 @@ if ($userLang == "el") {
 
 $sec = $urlSecure.'modules/profile/profile.php';
 $passurl = $urlSecure.'modules/profile/password.php';
+$authmethods = array("imap","pop3","ldap","db");
 
 if ((!isset($changePass)) || isset($_POST['submit'])) {
 
-	$tool_content .= "<div id=\"operations_container\">
-		<ul id=\"opslist\">";
-
-	$tool_content .= "
-			<li><a href=\"".$passurl."\">".$langChangePass."</a></li>";
-
+	$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
+	
+	if(!in_array($password_form,$authmethods)) {
+				$tool_content .= "<li><a href=\"".$passurl."\">".$langChangePass."</a></li>";
+	}
 
 	$tool_content .= " <li><a href='../unreguser/unreguser.php'>$langUnregUser</a></li>";
 	$tool_content .= "</ul></div>";
-
-
-
 	$tool_content .= "<form method=\"post\" action=\"$sec?submit=yes\"><br/>
     <table width=\"99%\">
     <tbody>
@@ -264,15 +257,11 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
        <td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"nom_form\" value=\"$nom_form\"></td>
     </tr>";
 
-	$authmethods = array("imap","pop3","ldap","db");
-	if(!in_array($password_form,$authmethods))
-	{
-		$tool_content .= "
-    <tr>
+	if(!in_array($password_form,$authmethods)) {
+		$tool_content .= "<tr>
        <th width=\"150\" class='left'>$langUsername</th>
        <td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"username_form\" value=\"$username_form\"></td>
-    </tr>
-    ";
+    </tr>";
 	}
 	else		// means that it is external auth method, so the user cannot change this password
 	{
@@ -289,8 +278,6 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
     <tr>
       <th width=\"150\" class='left'>".$langUsername. "</th>
       <td class=\"caution_small\">&nbsp;&nbsp;&nbsp;&nbsp;<b>".$username_form."</b> [".$auth_text."]
-        <input type=\"hidden\" name=\"password_form\" value=\"$password_form\">
-        <input type=\"hidden\" name=\"password_form1\" value=\"$password_form\">
         <input type=\"hidden\" name=\"username_form\" value=\"$username_form\">
       </td>
     </tr>";
@@ -327,12 +314,8 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
       <td><input type=\"Submit\" name=\"submit\" value=\"$langModify\"></td>
     </tr>
     </tbody></table>
-
     </form>
    ";
 }
-//}		// End of LDAP user added by adia
-
 draw($tool_content, 1);
-
 ?>
