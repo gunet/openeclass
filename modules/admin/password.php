@@ -39,6 +39,7 @@ $require_valid_uid = TRUE;
 include '../../include/baseTheme.php';
 
 $nameTools = $langChangePass;
+$navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[]= array ("url"=>"./edituser.php", "name"=> $langEditUser);
 
 check_uid();
@@ -62,14 +63,6 @@ if (isset($submit) && isset($changePass) && ($changePass == "do")) {
 		exit();
 	}
 
-	//check for not acceptable characters in password
-	if( (strstr($_REQUEST['password_form'], "'")) or (strstr($_REQUEST['password_form'], '"')) or (strstr($_REQUEST['password_form'], '\\'))
-	or (strstr($_REQUEST['password_form1'], "'")) or (strstr($_REQUEST['password_form1'], '"')) or (strstr($_REQUEST['password_form1'], '\\')))
-	{
-		header("location:". $passurl."?msg=6");
-		exit();
-	}
-
 	// check if passwd is too easy
 	$sql = "SELECT `nom`,`prenom` ,`username`,`email`,`am` FROM `user`WHERE `user_id`=".$_SESSION["uid"]." ";
 	$result = db_query($sql, $mysqlMainDb);
@@ -80,9 +73,6 @@ if (isset($submit) && isset($changePass) && ($changePass == "do")) {
 	|| (strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['username']))
 	|| (strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['email']))
 	|| (strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['am']))) {
-		//		echo strtoupper($_REQUEST['password_form1']);
-		//		echo strtoupper($myrow['am']);
-		//		die();
 		header("location:". $passurl."?msg=2");
 		exit();
 	}
@@ -108,7 +98,6 @@ if(isset($msg))
 {
 
 	switch ($msg){
-
 		case 1: {//passwords do not match
 			$message = $langPassTwo;
 			$urlText = "";
@@ -136,42 +125,25 @@ if(isset($msg))
 			$type = "success";
 			break;
 		}
-
-		case 6: {//not acceptable characters in password
-			$message = $langInvalidCharsPass;
-			$urlText = "";
-			$type = "caution";
-			break;
-		}
-
+		
 		default:die("invalid message id");
-
 	}
 
 	$tool_content .=  "
 			<table width=\"99%\">
 				<tbody>
 					<tr>
-						<td class=\"$type\">
-						$message<br>
-    <a href=\"$urlServer\">$urlText</a>
-					</td>
+						<td class=\"$type\">$message<br><a href=\"$urlServer\">$urlText</a></td>
 					</tr>
 				</tbody>
 			</table><br/>";
-
 }
 
 if (!isset($changePass)) {
 	$tool_content .= "<form method=\"post\" action=\"$passurl?submit=yes&changePass=do\">
     <table width=\"99%\">
     <thead>
-   
-   <tr>
-        <th width=\"150\">
-            $langNewPass1
-        </th>
-        <td>";
+    <tr><th width=\"150\">$langNewPass1</th><td>";
 
 	$tool_content .= "<input type=\"password\" size=\"40\" name=\"password_form\" value=\"\">
 					</td>
@@ -186,11 +158,10 @@ if (!isset($changePass)) {
     </tr>";
 	$tool_content .= "
     </thead></table>
-    <br><input type=\"Submit\" name=\"submit\" value=\"$langModify\">
+    <br><input type=\"submit\" name=\"submit\" value=\"$langModify\">
     </form>
    ";
 }
 
 draw($tool_content, 3);
-
 ?>
