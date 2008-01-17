@@ -68,28 +68,58 @@ $head_content .= $jscalendar->get_load_files_code();
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "listusers.php", "name" => $langListUsersActions);
 $nameTools = $langEditUser;
+$authmethods = array("imap","pop3","ldap","db");
 
 $u_submitted = isset($_POST['u_submitted'])?$_POST['u_submitted']:'';
 if((!empty($u)) && ctype_digit($u) )	// validate the user id
 {
 	$u = (int)$u;
-	if(empty($u_submitted) && !isset($_REQUEST['changePass'])) // if the form was not submitted
+	if(empty($u_submitted)) // if the form was not submitted
 	{
 		$sql = mysql_query("SELECT nom, prenom, username, password, email, phone, department, registered_at, expires_at 
 										FROM user	WHERE user_id = '$u'");
 		$info = mysql_fetch_array($sql);
-
 		$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
-		$tool_content .= "<li><a href=\"./password.php\">".$langChangePass."</a></li>";
+	
+		if(!in_array($info['password'], $authmethods)) {
+				$tool_content .= "<li><a href=\"./password.php\">".$langChangePass."</a></li>";
+		}
+
 		$tool_content .= " <li><a href='./listusers.php'>$langBack</a></li>";
 		$tool_content .= "</ul></div>";
 		$tool_content .= "<h4>$langEditUser $info[2]</h4>";
 		$tool_content .= "<form name=\"edituser\" method=\"post\" action=\"$_SERVER[PHP_SELF]\">
 	<table width=\"99%\" border=\"0\">
-	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langSurname: </th><td width=\"80%\"><input type=\"text\" name=\"lname\" size=\"40\" value=\"".$info[0]."\"</td></tr>
-	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langName: </th><td width=\"80%\"><input type=\"text\" name=\"fname\" size=\"40\" value=\"".$info[1]."\"</td></tr>
-	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'  width=\"20%\">$langUsername: </th><td width=\"80%\"><input type=\"text\" name=\"username\" size=\"30\" value=\"".$info[2]."\"</td></tr>
-	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">E-mail: </th><td width=\"80%\"><input type=\"text\" name=\"email\" size=\"50\" value=\"".$info[4]."\"</td></tr>
+	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langSurname: </th>
+	<td width=\"80%\"><input type=\"text\" name=\"lname\" size=\"40\" value=\"".$info[0]."\"</td></tr>
+	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langName: </th>
+	<td width=\"80%\"><input type=\"text\" name=\"fname\" size=\"40\" value=\"".$info[1]."\"</td></tr>";
+
+if(!in_array($info['password'], $authmethods)) {
+		$tool_content .= "<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'  width=\"20%\">$langUsername: </th>
+		<td width=\"80%\"><input type=\"text\" name=\"username\" size=\"30\" value=\"".$info[2]."\"</td></tr>";
+	}
+  else    // means that it is external auth method, so the user cannot change this password
+  {
+    switch($info['password'])
+    {
+      case "pop3": $auth=2;break;
+      case "imap": $auth=3;break;
+      case "ldap": $auth=4;break;
+      case "db": $auth=5;break;
+      default: $auth=1;break;
+    }
+    $auth_text = get_auth_info($auth);
+    $tool_content .= "
+    <tr>
+      <th width=\"150\" class='left'>".$langUsername. "</th>
+      <td class=\"caution_small\">&nbsp;&nbsp;&nbsp;&nbsp;<b>".$info[2]."</b> [".$auth_text."]
+        <input type=\"hidden\" name=\"username\" value=\"$info[2]\">
+      </td>
+    </tr>";
+  }
+
+	$tool_content .= "<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">E-mail: </th><td width=\"80%\"><input type=\"text\" name=\"email\" size=\"50\" value=\"".$info[4]."\"</td></tr>
 	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langTel: </th><td width=\"80%\"><input type=\"text\" name=\"phone\" size=\"30\" value=\"".$info[5]."\"</td></tr>";
 
 		$tool_content .= "<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langDepartment: </th><td width=\"80%\">";
@@ -194,143 +224,12 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
 				$tool_content .= $langCannotDeleteAdmin;
 			}
 		}
-	}
-	elseif (isset($changePass) && ($changePass == 1)) {
-		//Show message if exists
-		if(isset($msg))
-		{
-
-			switch ($msg){
-
-				case 2: {//passwords do not match
-					$message = $langPassTwo;
-					$urlText = "";
-					$type = "caution";
-					break;
-				}
-
-				case 3: { //pass too easy
-					$message = $langPassTooEasy .": <strong>".substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8)."</strong>";
-					$urlText = "";
-					$type = "caution";
-					break;
-				}
-
-				case 4: { // admin tools
-					$message = $langFields;
-					$urlText = "";
-					$type = "caution";
-					break;
-				}
-
-				case 7: {//password successfully changed
-					$message = $langPassChanged;
-					$urlText = $langBack;
-					$type = "success";
-					break;
-				}
-
-				case 9: {//not acceptable characters in password
-					$message = $langInvalidCharsPass;
-					$urlText = "";
-					$type = "caution";
-					break;
-				}
-
-			}
-
-			$tool_content .=  "
-			<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"$type\">
-						$message<br>
-    <a href=\"./listusers.php\">$urlText</a>
-					</td>
-					</tr>
-				</tbody>
-			</table><br/>";
-
-		}
-		$tool_content .= "<form method=\"post\" action=\"$_SERVER[PHP_SELF]?submit=yes&changePass=do\">
-    <table width=\"99%\">
-    <thead>
-    <tr>
-       <th width=\"150\">
-            $langNewPass1
-        </th>
-        <td>";
-
-		$tool_content .= "<input type=\"password\" size=\"40\" name=\"password_form\" value=\"\">
-					</td>
-		</tr>
-    <tr>
-        <th width=\"150\">
-            $langNewPass2
-        </th>
-        <td>       		
-            <input type=\"password\" size=\"40\" name=\"password_form1\" value=\"\">
-        </td>
-    </tr>";
-		$tool_content .= "
-    </thead></table>
-    <br><input type=\"Submit\" name=\"submit\" value=\"$langModify\">
-    </form>
-   ";
-	} elseif (isset($changePass) && ($changePass == "do")) {
-
-		if (empty($_REQUEST['password_form']) || empty($_REQUEST['password_form1'])) {
-			header("location:". $_SERVER['PHP_SELF']."?changePass=1&msg=4");
-			exit();
-		}
-
-		if ($_REQUEST['password_form1'] !== $_REQUEST['password_form']) {
-			header("location:". $_SERVER['PHP_SELF']."?changePass=1&msg=2");
-			exit();
-		}
-
-		//check for not acceptable characters in password
-		if ((strstr($_REQUEST['password_form'], "'")) 
-				or (strstr($_REQUEST['password_form'], '"')) 
-				or (strstr($_REQUEST['password_form'], '\\'))
-				or (strstr($_REQUEST['password_form1'], "'")) 
-				or (strstr($_REQUEST['password_form1'], '"')) 
-					or (strstr($_REQUEST['password_form1'], '\\')))
-		{
-			header("location:". $_SERVER['PHP_SELF']."?changePass=1&msg=9");
-			exit();
-		}
-
-		// check if passwd is too easy
-		$sql = "SELECT `nom`,`prenom` ,`username`,`email`,`am` FROM `user`WHERE `user_id`=".$_SESSION["uid"]." ";
-		$result = db_query($sql, $mysqlMainDb);
-		$myrow = mysql_fetch_array($result);
-
-		if ((strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['nom']))
-		|| (strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['prenom']))
-		|| (strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['username']))
-		|| (strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['email']))
-		|| (strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['am']))) {
-			header("location:". $_SERVER['PHP_SELF']."?changePass=1&msg=3");
-			exit();
-		}
-
-
-		//all checks ok. Change password!
-		$new_pass = md5($_REQUEST['password_form']);
-
-		$sql = "UPDATE `user` SET `password` = '$new_pass' WHERE `user_id` = ".$u."";
-		db_query($sql, $mysqlMainDb);
-		header("location:". $_SERVER['PHP_SELF']."?changePass=1&msg=7");
-		exit();
-
-	} else {// if the form was submitted: DO THE UPDATE OF USER
+	}  else {// if the form was submitted then update user
 	
-		// 1. get the variables from the form and initialize them
+		// get the variables from the form and initialize them
 		$fname = isset($_POST['fname'])?$_POST['fname']:'';
 		$lname = isset($_POST['lname'])?$_POST['lname']:'';
 		$username = isset($_POST['username'])?$_POST['username']:'';
-		$password = isset($_POST['password'])?$_POST['password']:'';
 		$email = isset($_POST['email'])?$_POST['email']:'';
 		$phone = isset($_POST['phone'])?$_POST['phone']:'';
 		$department = isset($_POST['department'])?$_POST['department']:'NULL';
@@ -345,67 +244,26 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
     $month=$date[1];
 		$expires_at = mktime($hour, $minute, 0, $month, $day, $year);
 	
-		$auth_methods = array('imap','pop3','ldap','db');
-		// 2. do the database update
-		// do not allow the user to have the characters: ',\" or \\ in password
-		$pw = array(); 	
-		$nr = 0;
-		while (isset($password{$nr})) // convert the string $password into an array $pw
-		{
-			$pw[$nr] = $password{$nr};
-			$nr++;
-		}
-		if($registered_at>$expires_at)
-		{
-			$tool_content .= "<br >$langExpireBeforeRegister <br><br>$langPlease <a href=\"edituser.php?u=".$u."\">$langAgain</a><br />";
-		}
-		elseif( (in_array("'",$pw)) || (in_array("\"",$pw)) || (in_array("\\",$pw)) )
-		{
-			$tool_content .= "<tr bgcolor=\"".$color2."\">
-			<td bgcolor=\"$color2\" colspan=\"3\" valign=\"top\">
-			<br>$langCharactersNotAllowed<br /><br />
-			<a href=\"./listusers.php\">".$langAgain."</a></td></tr></table>";
-		}
-		else
-		{
-
-			if(!in_array($password,$auth_methods) && strlen($password > 3))
-			{
-				// encryption of password
-				$password_encrypted = md5($password);
-			}
-			else
-			{
-				$password_encrypted = $password;
-			}
-
-			if($u=='1')
-			{
-				$department = 'NULL';
-			}
+		if($registered_at>$expires_at) {
+				$tool_content .= "<br >$langExpireBeforeRegister <br><br>$langPlease <a href=\"edituser.php?u=".$u."\">$langAgain</a><br />";
+		} else	{
+			if ($u=='1') $department = 'NULL';
 			$username = escapeSimple($username);
-			$sql = "UPDATE user
-								SET nom='".$lname."', prenom='".$fname."', username='".$username."', password='".$password_encrypted."', email='".$email."', phone='".$phone."',department=".$department.", expires_at=".$expires_at.
-				" WHERE user_id = '".$u."'";
+			$sql = "UPDATE user SET nom='".$lname."', prenom='".$fname."', 
+										username='".$username."', email='".$email."', phone='".$phone."',
+										department=".$department.", expires_at=".$expires_at." WHERE user_id = '".$u."'";
 				$qry = mysql_query($sql);
 				if (!$qry)
-				{
-					$tool_content .= "$langNoUpdate:".$u."!";
-				}
+						$tool_content .= "$langNoUpdate:".$u."!";
 				else
 				{
 					$num_update = mysql_affected_rows();
 					if($num_update==1)
-					{
-						$tool_content .= "<center><br><b>$langSuccessfulUpdate<br><br>";
-						$tool_content .= "<a href='listusers.php'>$langBack</a></center>";	
-					}
+							$tool_content .= "<center><br><b>$langSuccessfulUpdate<br><br>";
 					else
-					{
 						$tool_content .= "<center>$langUpdateNoChange<br><br>";
-						$tool_content .= "<a href='listusers.php'>$langBack</a></center>";	
-					}
-				}
+				$tool_content .= "<a href='listusers.php'>$langBack</a></center>";	
+			 }
 		}
 	}
 }
@@ -414,6 +272,5 @@ else
 	// Αλλιώς... τι γίνεται;
 	$tool_content .= "<h1>$langError</h1>\n<p><a href=\"listcours.php\">$back</p>\n";
 }
-
 draw($tool_content, 3, ' ', $head_content);
 ?>
