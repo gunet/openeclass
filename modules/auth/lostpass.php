@@ -34,12 +34,6 @@
  *
  */
 
-$sql = 'CREATE TABLE `passwd_reset` ('
-. ' `user_id` INT NOT NULL, '
-. ' `hash` VARCHAR(40) NOT NULL'
-. ' )'
-. ' TYPE = myisam';
-
 // Initialise $tool_content
 $tool_content = "";
 include '../../include/baseTheme.php';
@@ -105,21 +99,15 @@ if (isset($_REQUEST['do']) && $_REQUEST['do'] == "go") {
 			$res = db_query("SELECT `email` FROM user WHERE `user_id` = ".$myrow['user_id']."", $mysqlMainDb);
 			$myrow2 = mysql_fetch_array($res);
 
-			$text = $langPassEmail1 . $myrow['password'] . $langPassEmail2;
+			$text = "$langPassEmail1 <em>$myrow[password]</em><br>$langPassEmail2";
 
-			$emailheaders = "From: $siteName <$emailAdministrator>\n".
-			"MIME-Version: 1.0\n".
-			"Content-Type: text/plain; charset=$charset\n".
-			"Content-Transfer-Encoding: 8bit";
-			$emailsubject = "e-Class - $langAccountResetSuccess1";
-			send_mail($siteName, $emailAdministrator, '', $myrow2['email'],	$emailsubject, $text, $charset);
 			$tool_content .= "
 				<table width=\"99%\">
 				<tbody>
 					<tr>
 						<td class=\"success\">
-						<p><strong>$langAccountResetSuccess1</strong></p>
-						<p>$langAccountResetSuccess2 (".$myrow2['email']."), $langAccountResetSuccess3</p>
+						<p>$langAccountResetSuccess1</p>
+						<p>$text</p>
     					<p><a href=\"../../index.php\">$langHome</a></p>
 					</td>
 					</tr>
@@ -130,10 +118,19 @@ if (isset($_REQUEST['do']) && $_REQUEST['do'] == "go") {
 			db_query($sql, $mysqlMainDb);
 		}
 		//advice him to change his pass once logged in
+	} else {
+$tool_content = "<table width=\"99%\">
+                   <tbody>
+                   <tr>
+                   <td class=\"caution\">
+                   <p><strong>$langAccountResetInvalidLink</strong></p>
+                   <p><a href=\"../../index.php\">$langHome</a></p>
+                      </td>
+                     </tr>
+                     </tbody>
+                </table>";
 	}
-}
-
-if ((!isset($email) || !email_seems_valid($email)
+} elseif ((!isset($email) || !email_seems_valid($email)
      || !isset($userName) || empty($userName)) && !isset($_REQUEST['do'])) {
 
 		$lang_pass_invalid_mail= "$lang_pass_invalid_mail1 $lang_pass_invalid_mail2 $lang_pass_invalid_mail3";
@@ -220,13 +217,12 @@ if ((!isset($email) || !email_seems_valid($email)
 					<tr>
 						<td class=\"caution\">
 						<p><strong>$langPassCannotChange1</strong></p>
-						<p$langPassCannotChange2 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a> $langPassCannotChange3</p>
+						<p>$langPassCannotChange2 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a> $langPassCannotChange3</p>
 						<p><a href=\"../../index.php\">$langHome</a></p>
 					</td>
 					</tr>
 				</tbody>
 			</table>";
-
 		}
 	}
 	/***** Account details found, now send e-mail *****/
@@ -251,21 +247,14 @@ if ((!isset($email) || !email_seems_valid($email)
 		</table>";
 
 	} elseif (!isset($auth)) {
-                        $tool_content .= "
-                        <table width=\"99%\">
-                        <tbody>
-                                <tr>
-                                        <td class=\"success\">
-                                        $lang_pass_email_ok <strong>$email</strong><br/><br/>
-                                <a href=\"../../index.php\">$langHome</a>
-                                </td>
-                                </tr>
-                        </tbody>
-                </table><br/>";
-
+            $tool_content .= "<table width=\"99%\">
+                   <tbody><tr><td class=\"success\">
+                       $lang_pass_email_ok <strong>$email</strong><br/><br/>
+                        <a href=\"../../index.php\">$langHome</a>
+                        </td></tr></tbody></table><br/>";
                 }
 
-        } else {
+       } else {
                 $tool_content .= "<table width=\"99%\">
                 <tbody>
                   <tr>

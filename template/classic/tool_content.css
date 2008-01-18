@@ -225,6 +225,9 @@ caption {
     font-weight: bold;
 }
 
+.success em {
+	color: #E36154;
+}
 .inactive {
    background-color: #CAC3B5;
 }

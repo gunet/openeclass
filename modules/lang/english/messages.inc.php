@@ -24,9 +24,6 @@ $langAboutUsers = "Platform has";
 $langAboutCourses1 = "At this moment, platform hosts ";
 $langAboutUsers1 = "The number of registered users is ";
 $langLast30daysLogins1 = "and the total number of logins on the platform the last 30 days is ";
-$langProf = "Professors";
-$langStud = "Students";
-$langGuest = "Guest Students";
 $langAnd = "and";
 
 $langClosed = "closed";
@@ -83,9 +80,9 @@ $langListCours = "Courses List / Actions";
 $langListUsers = "Users List / Actions";
 $langSearchUser = "Search User";
 $langInfoMail = "Info email";
-$langProfReg = "Professor registration";
-$langProfOpen = "Professor open requests";
-$langUserOpen = "Students open requests";
+$langProfReg = "$langOfTeacher registration";
+$langProfOpen = "$langOfTeacher open requests";
+$langUserOpen = "$langOfStudents open requests";
 $langListFaculte = "Faculty list / Actions";
 $langPHPInfo = "PHP information";
 $langManuals = "Available Manuals";
@@ -1855,28 +1852,20 @@ $langHowToResetTitle = "
 ===============================================================================
 ";
 
-$langPassResetGoHere = "
-To reset your password go to the following address through your web browser. If you cannot click on the address, copy & paste it on your browser's address bar.
-This address is valid for one (1) hour. Beyond this time limit, you wiil need to repeat the password-reset process from the beginning.
-
-
-";
-
-$langPassEmail1 = "Your password has been reset. Your new password is
+$langPassResetGoHere = "To reset your password go to the following address through your web browser.
+If you cannot click on the address, copy & paste it on your browser's address bar.
+This address is valid for one (1) hour. Beyond this time limit, you will need
+to repeat the password reset request from the beginning.
 
 ";
+
+$langPassEmail1 = "Your password has been reset. Your new password is:";
 			
-$langPassEmail2 = "
-
-
-For security reasons, please change your password to something else, as soon as you login.
-";
+$langPassEmail2 = "For security reasons, please change your password to something else, as soon as you login.";
 
 
 $langAccountResetSuccess1="Your password has been reset";
-$langAccountResetSuccess2="In your email's inbox";
-$langAccountResetSuccess3="you will find an email with your new password.";
-
+$langAccountResetInvalidLink="The link you followed is no longer valid. Please repeat the password reset request.";
 $langAccountEmailError1 = 'An error occured while sending your data';
 $langAccountEmailError2 = "It was not feasible to send password reset instructions at";
 $langAccountEmailError3 = 'If necessarry, you may contact the platform administrator at';
@@ -1893,9 +1882,9 @@ $lang_send = 'Send';
 $lang_username="User name";
 
 
-$langPassCannotChange1="The password for this account cannot be changed";
-$langPassCannotChange2="This account belongs to an external authentication mechanism. Please contact the administrator at";
-$langPassCannotChange3="for more information";
+$langPassCannotChange1="The password for this account cannot be changed.";
+$langPassCannotChange2="This account uses an external authentication method. Please contact the administrator at";
+$langPassCannotChange3="for more information.";
 
 /************************************************************
 * manual.inc.php
@@ -2857,7 +2846,7 @@ $langNoLessonsAvailable = "No courses available.";
 
 // formuser.php
 $langUserRequest = "Request for new user account";
-$langNewUser = "New User Details";
+$langNewUser = "New User Registration";
 $langUserFillData = "User Details";
 $langInfoProfReq = "If you wish to have access in platform as a user - professor, please complete the form below. Your request will be sent to administrator who will create your account and send you an informational email.";
 $langInfoStudReg = " If you wish to have access in platform as a user - student, please complete the form below. Your account will be created automatically.";
