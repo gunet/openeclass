@@ -316,9 +316,8 @@ $langOther = "Other";
 $langTotal = "Total";
 $langProperty = "Property";
 $langStats = "Statistics per User";
-$langUser2 = "";
+$langUsage = "Usage Statistics";
 
-$langStat = "Statistics";
 $langNoUserList = "No listing results";
 $langContactAdmin = "Send a message to the Administrator";
 $langActivateAccount = "Please activate my account";
@@ -567,13 +566,8 @@ $langDelLk="Do you really want to delete this link?";
 $langRemove="Remove";
 
 
-
-
-
-
-
 $langCourseCreate = "Create a web Course";
-G = "Enter";
+$langEnter = "Enter";
 $langNameOfTheLink = "Name of the link";
 
 $langIcon = "Icon";
@@ -726,12 +720,12 @@ $langWorks="Students Papers";
 $langExercices="Exercices";
 $langAddPageHome="Upload Webpage";
 $langLinkSite="Add link on Homepage";
-$langModifyInfo="Lesson Admin";
-$langConference ="Tele cooperation";
+$langModifyInfo="Course Admin";
+$langConference ="Teleconference";
 $langDropBox = "DropBox";
 $langLearnPath = "Learning Path";
 $langWiki = "Wiki";
-$langToolManagement = "Tool management";
+$langToolManagement = "Tool Management";
 
 
 // Other SQL tables
@@ -3358,85 +3352,34 @@ $langdate="Date";
 
 $langAction = "Action";
 $langAddImage = "Include picture";
-
 $langAdministrator = "Administrator";
-
-
-
 $langChangePwdexp = "Enter new password twice to change, leave empty to keep it";
-
 $langChooseYourPassword = "Choose now a username and a password for the user account.";
 $langCloseWindow = "Close window";
 $langCodeUsed = "This official code is already used by another user.";
-
 $langContinue = "Continue";
-
-
-
 $langDear = "Dear";
 $langDelImage = "Remove picture";
-
-
-
-
 $langEmailWrong = "The email address is not valid";
-
-
 $langFirstname = "First name";
 $langFormula = "Yours sincerely";
-
 $langGroupTutor = "Group Tutor";
-
-
 $langLastname = "Last name";
-
 $langLegendRequiredFields = "<span class=\"required\">*</span> denotes required field";
-
-
-
 $langMemorizeYourPassord = "Memorize them, you will use them the next time you will enter to this site.";
-
-
 $langMyAgenda = "My calendar";
-
-
-
 $langOfficialCode = "Administrative code";
-
-
-
 $langPassTooEasy = "this password is too simple. Use a password like this ";
 $langPassTwice = "You typed two different passwords";
-
-	
 $langPeriodHourShort = "h.";
 $langPersonalCourseList = "Personal course list";
-
-
-
 $langPreview = "Preview";
 $langProblem = "In case of problems, contact us.";
-
-
-
-
 $langSaveChanges = "Save changes";
-
-
-
-User name:";
-
-
-
 $langTheSystemIsCaseSensitive = "The system is case sensitive.";
 $langUpdateImage = "Change picture";
 $langUserIsPlaformAdmin = "Is platform admin";
-
-
 $langUserid = "User Id";
-
-
-
 $langWikiAccessControl = "Access control management";
 $langWikiAccessControlText = "You can set access rights for users using the following grid : ";
 $langWikiAllPages = "All pages";
@@ -3578,10 +3521,7 @@ $langWikiTitleNew = "Wiki : Create new Wiki";
 $langWikiTitlePattern = "Wiki : %s";
 $langWikiVersionInfoPattern = "(version of %1\$s modified by %2\$s)";
 $langWikiVersionPattern = "%1\$s by %2\$s";
-
 $langYouAreReg = "You are registered on";
-
-
 $lang_footer_p_CourseManager = "Manager(s) for %s";
 $lang_p_platformManager = "Administrator for %s";
 
@@ -3590,11 +3530,7 @@ $lang_p_platformManager = "Administrator for %s";
 * work.inc.php
 **************************************************************/
 
-
-
 $langBackAssignment = "Back to work";
-
-
 
 $m['activate'] = "Activate";
 $m['deactivate'] = "Deactivate";
@@ -3694,32 +3630,21 @@ $langUploadError = "An error occured during uploading!";
 $langWorkGrade = "Assignment grade";
 $langGradeComments = "Grade comments were:";
 $langGradeOk = "Submit changes";
-
 $langNoSubmissions = "No submissions";
 $langNoAssign = "No assignments";
-
 $langGroupSubmit = "Group work submission";
 $langUserOnly = "To submit an assignment you must first log in.";
 $langGradeWork = "Grading comments";
-
 $langWorkWrongInput = 'The grade must be a number. Please go back an enter the grade again.';
 $langWarnForSubmissions = "If any assignments were submitted, they will be deleted";
 $langAssignmentActivated = "The assignment was activated";
 $langAssignmentDeactivated = "The assignment was deactivated";
 $langSaved = "The assignment details were saved";
 
-
-
 /***************************
 conactadmin.php
 ***************************/
 $langForm="Completion Form";
-
-
-
-
-
-
 
 /*************************************************************
 * addadmin.php
@@ -3753,16 +3678,12 @@ $langDatabaseProblem="Problem in the base of data!";
 **************************************************************/
 $langAlertAdmin="Please supplement at least administrator for the course!";
 
-
-
 /*************************************************************
 * work.php
 **************************************************************/
 
-
 $langExerciseNotPermit="The submission of the assignment is forbidden!";
 $langListUsersActions="List of Users of/Energies";
-
 
 /*************************************************************
 editpost.php
@@ -3784,7 +3705,6 @@ $langUserTopicInformation="<p>Couldn't get user and topic information from the d
 /*************************************************************
 newtopic.php
 **************************************************************/
-
 $langErrorDataForum="Can't get forum data.";
 $langErrorPost="The forum you are attempting to post to does not exist. Please try again.";
 $langErrorEnterTopic="Couldn't enter topic in database.";
@@ -3797,7 +3717,6 @@ $langErrorUpdatePostCount="Couldn't update forums post count.";
 /*************************************************************
 viewforum.php
 **************************************************************/
-
 $langErrorConnectForumDatabase="An Error Occured. Could not connect to the forums database.";
 $langErrorForumSelect= "Error - The forum you selected does not exist. Please go back and try again.";
 $langErrorTopicsQuery="An Error Occured. Could not query the topics database.<br>";

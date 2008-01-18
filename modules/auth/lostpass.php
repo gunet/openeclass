@@ -39,16 +39,13 @@ $sql = 'CREATE TABLE `passwd_reset` ('
 . ' `hash` VARCHAR(40) NOT NULL'
 . ' )'
 . ' TYPE = myisam';
-//LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-$langFiles = array('lostpass');
+
 // Initialise $tool_content
 $tool_content = "";
-
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
 include('../../include/sendMail.inc.php');
 $nameTools = $lang_remind_pass;
-
 
 function check_password_editable($password)
 {
@@ -67,29 +64,25 @@ function createPassword ($length = 8) {
 
 	// initialise password var
 	$password = "";
-
 	// define possible characters
 	$possible = "abcdefghjklmnopqrstvwxyz0123456789";
 
 	$i = 0;
-
 	// add random characters to $password until $length is reached
 	while ($i < $length) {
 
-		// pick a random character from the $possible pool
-		$char = substr($possible, mt_rand(0, strlen($possible)-1), 1);
+	// pick a random character from the $possible pool
+	$char = substr($possible, mt_rand(0, strlen($possible)-1), 1);
 
-		// do not allow dublicate characters in the password
+	// do not allow dublicate characters in the password
 		if (!strstr($password, $char)) {
 			$password .= $char;
 			$i++;
 		}
-
 	}
-
 	return $password;
-
 }
+
 //TODO place some sort of clear-out function to delete reset-pass entries older than 2 hours (link validity window)
 if (isset($_REQUEST['do']) && $_REQUEST['do'] == "go") {
 	$userUID = (int)$_REQUEST['u'];
@@ -107,8 +100,8 @@ if (isset($_REQUEST['do']) && $_REQUEST['do'] == "go") {
 		$sql = "UPDATE `user` SET `password` = '".$myrow['hash']."' WHERE `user_id` = ".$myrow['user_id']."";
 		
 		if(db_query($sql, $mysqlMainDb)) {
-			//send email to the user of his new pass (not hashed)
 
+			//send email to the user of his new pass (not hashed)
 			$res = db_query("SELECT `email` FROM user WHERE `user_id` = ".$myrow['user_id']."", $mysqlMainDb);
 			$myrow2 = mysql_fetch_array($res);
 
@@ -136,16 +129,16 @@ if (isset($_REQUEST['do']) && $_REQUEST['do'] == "go") {
 			$sql = "DELETE FROM `passwd_reset` WHERE `user_id` = ".$myrow['user_id']."";
 			db_query($sql, $mysqlMainDb);
 		}
-
 		//advice him to change his pass once logged in
 	}
 }
 
 if ((!isset($email) || !email_seems_valid($email)
-     || !isset($userName) || empty($userName))
-    && !isset($_REQUEST['do'])) {
-	/***** Email address entry form *****/
+     || !isset($userName) || empty($userName)) && !isset($_REQUEST['do'])) {
 
+		$lang_pass_invalid_mail= "$lang_pass_invalid_mail1 $lang_pass_invalid_mail2 $lang_pass_invalid_mail3";
+
+	/***** Email address entry form *****/
         if (isset($email) and !email_seems_valid($email)) {
                 $tool_content .= '<table width="99%"><tbody><tr><td class="caution">' .
                                 '<p><strong>' . $lang_pass_invalid_mail . '<br />&nbsp;<br />' .
@@ -156,26 +149,21 @@ if ((!isset($email) || !email_seems_valid($email)
 	$tool_content .= $lang_pass_intro;
 
 	$tool_content .= "<form method=\"post\" action=\"".$REQUEST_URI."\">
-	<table>
-	<thead>
-	<tr>
-	<th>
-	$lang_username: 
-	</th>
-	<td>
-	<input type=\"text\" name=\"userName\" size=\"40\" />
-	</td>
-	<tr>
-	<th>
-	$lang_email: 
-	</th>
-	<td>
-	<input type=\"text\" name=\"email\" size=\"40\" />
-	</td>
-	</thead>
-	</table>
-	<br/>
-	<input type=\"submit\" name=\"doit\" value=\"".$lang_pass_submit."\" />
+		<table>
+		<thead>
+		<tr><th>$lang_username: </th>
+		<td>
+		<input type=\"text\" name=\"userName\" size=\"40\" />
+		</td>
+		<tr>
+		<th>$lang_email: </th>
+		<td>
+		<input type=\"text\" name=\"email\" size=\"40\" />
+		</td>
+		</thead>
+		</table>
+		<br/>
+		<input type=\"submit\" name=\"doit\" value=\"".$lang_pass_submit."\" />
 	</form>";
 
 } elseif (!isset($_REQUEST['do'])) {
@@ -278,35 +266,31 @@ if ((!isset($email) || !email_seems_valid($email)
                 }
 
         } else {
-                $tool_content .= "
-                        <table width=\"99%\">
-                        <tbody>
-                                <tr>
-                                        <td class=\"caution\">
-                                        <p><strong>$langAccountNotFound1 ($email)</strong></p>
-                                        <p>$langAccountNotFound2 <a href='mailto: $emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p>
-                                <p><a href=\"../../index.php\">$langHome</a></p>
-                                </td>
-                                </tr>
-                        </tbody>
+                $tool_content .= "<table width=\"99%\">
+                <tbody>
+                  <tr>
+                  <td class=\"caution\">
+                  <p><strong>$langAccountNotFound1 ($email)</strong></p>
+                  <p>$langAccountNotFound2 <a href='mailto: $emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p>
+                  <p><a href=\"../../index.php\">$langHome</a></p>
+                   </td>
+                  </tr>
+                 </tbody>
                 </table>";
         }
 } else {
-                        $tool_content = "
-                        <table width=\"99%\">
-                        <tbody>
-                                <tr>
-                                        <td class=\"caution\">
-                                        <p><strong>$langAccountEmailError1</strong></p>
-                                        <p>$langAccountEmailError2 $email.</p>
-                                        <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p>
-                                        <p><a href=\"../../index.php\">$langHome</a></p>
-                                </td>
-                                </tr>
+               $tool_content = "<table width=\"99%\">
+                   <tbody>
+		               <tr>
+                   <td class=\"caution\">
+                   <p><strong>$langAccountEmailError1</strong></p>
+                   <p>$langAccountEmailError2 $email.</p>
+                   <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p>
+                   <p><a href=\"../../index.php\">$langHome</a></p>
+                      </td>
+                     </tr>
                         </tbody>
                 </table>";
 }
-
-
 draw($tool_content,0);
 ?>

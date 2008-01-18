@@ -229,7 +229,10 @@ if(!in_array($info['password'], $authmethods)) {
 		// get the variables from the form and initialize them
 		$fname = isset($_POST['fname'])?$_POST['fname']:'';
 		$lname = isset($_POST['lname'])?$_POST['lname']:'';
-		$username = isset($_POST['username'])?$_POST['username']:'';
+		
+		// trim white spaces in the end and in the beginning of the word
+		$username = preg_replace('/\s+/', ' ', trim(isset($_POST['username'])?$_POST['username']:''));
+
 		$email = isset($_POST['email'])?$_POST['email']:'';
 		$phone = isset($_POST['phone'])?$_POST['phone']:'';
 		$department = isset($_POST['department'])?$_POST['department']:'NULL';
@@ -243,7 +246,32 @@ if(!in_array($info['password'], $authmethods)) {
     $year=$date[2];
     $month=$date[1];
 		$expires_at = mktime($hour, $minute, 0, $month, $day, $year);
-	
+		$user_exist= FALSE;
+
+	// check if username is free
+  	$username_check=mysql_query("SELECT username FROM user WHERE username='".escapeSimple($username)."'");
+		$nums = mysql_num_rows($username_check);
+
+if (mysql_num_rows($username_check) > 1) {
+		    $user_exist = TRUE;
+	  }
+
+  // check if there are empty fields
+  if (empty($fname) OR empty($lname) OR empty($username)) {
+		$tool_content .= "<table width='99%'><tbody><tr>
+           <td class='caution' height='60'><p>$langEmptyFields</p>
+					<p><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p></td></tr></tbody></table><br /><br />";
+					draw($tool_content, 3, ' ', $head_content);
+			    exit();
+			}
+ 	 elseif(isset($user_exist) AND $user_exist == TRUE) {
+					$tool_content .= "<table width='99%'><tbody><tr>
+          	<td class='caution' height='60'><p>$langUserFree</p>
+						<p><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p></td></tr></tbody></table><br /><br />";
+						draw($tool_content, 3, ' ', $head_content);
+				    exit();
+  }
+
 		if($registered_at>$expires_at) {
 				$tool_content .= "<br >$langExpireBeforeRegister <br><br>$langPlease <a href=\"edituser.php?u=".$u."\">$langAgain</a><br />";
 		} else	{
