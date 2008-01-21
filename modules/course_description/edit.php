@@ -251,9 +251,9 @@ if (isset($delete) and $delete == "ask") {
 				$tool_content .=  "
          <p><div id='topic_title_id'>".$titreBloc[$numBloc]."&nbsp;&nbsp;&nbsp;
          <a href=\"".$_SERVER['PHP_SELF']."?numBloc=".$numBloc."\" >
-         <img src=\"../../images/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a>
+         <img src=\"../../images/edit.gif\" border=\"0\" title=\"".$langModify."\"></a>
          <a href=\"".$_SERVER['PHP_SELF']."?delete=ask&numBloc=".$numBloc."\">
-         <img src=\"../../images/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a>
+         <img src=\"../../images/delete.gif\" border=\"0\" title=\"".$langDelete."\"></a>
          </div></p>
          <p>".make_clickable(nl2br($contentBloc[$numBloc]))."</p>
          <br>";
