@@ -1,11 +1,11 @@
 <?php
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
-include('../../include/sendMail.inc.php');
+include '../../include/sendMail.inc.php';
 include '../auth/auth.inc.php';
 $nameTools= $langOpenProfessorRequests;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
-global $langRejectRequest,$langRegistration,$langReintroductionApplication;
+
 // Initialise $tool_content
 $tool_content = "";
 
@@ -230,13 +230,13 @@ else
 		<th scope=\"col\">$langActions</th>
 		</tr></thead><tbody>";
 
- 	$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,comment 
+ 	$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,comment,profpassword 
 									FROM prof_request WHERE (status='1' AND statut<>'5')");
 
 	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 		$req = mysql_fetch_array($sql);
 		$tool_content .= "<tr>";
-		for ($i = 1; $i < mysql_num_fields($sql); $i++) {
+		for ($i = 1; $i < mysql_num_fields($sql)-1; $i++) {
 			if ($i == 4 and $req[$i] != "") {
 				$tool_content .= "<td><a href=\"mailto:".
 				htmlspecialchars($req[$i])."\">".
@@ -247,14 +247,24 @@ else
 			}
 		}
 		$tool_content .= "<td align=center><font size='2'><a href='listreq.php?id=$req[rid]&close=1'>$langClose</a>
-			<br><a href='listreq.php?id=$req[rid]&close=2'>$langRejectRequest</a>
-			<br><a href='../auth/newprofadmin.php?id=".urlencode($req['rid']).
-											"&pn=".urlencode($req['profname']).
-											"&ps=".urlencode($req['profsurname']).
-											"&pu=".urlencode($req['profuname']).
-											"&pe=".urlencode($req['profemail']).
-											"&pt=".urlencode($req['proftmima']).
-											"'>$langRegistration</a></td></tr>";
+			<br><a href='listreq.php?id=$req[rid]&close=2'>$langRejectRequest</a>";
+
+		switch($req['profpassword']) {
+			case 'ldap': $tool_content .= "<br>$langRegistration<br>($langViaLdap)</td></tr>";
+        break;
+      case 'pop3': $tool_content .= "<br>$langRegistration<br>($langViaPop)</td></tr>";
+        break;
+      case 'imap': $tool_content .= "<br>$langRegistration<br>($langViaImap)</td></tr>";
+        break;
+      default:  $tool_content .= "<br><a href='../auth/newprofadmin.php?id=".urlencode($req['rid']).
+                      "&pn=".urlencode($req['profname']).
+                      "&ps=".urlencode($req['profsurname']).
+                      "&pu=".urlencode($req['profuname']).
+                      "&pe=".urlencode($req['profemail']).
+                      "&pt=".urlencode($req['proftmima']).
+                      "'>$langRegistration</a></td></tr>";
+        break;
+		}
 	}
 	$tool_content .= "</tbody></table>";
 	// Display other actions
