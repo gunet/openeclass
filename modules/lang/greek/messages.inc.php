@@ -2140,7 +2140,6 @@ $langSee = "Προεπισκόπηση";
 $langNoSee = "Απαιτείται εγγραφή";
 $langCourseName = "Τίτλος Μαθήματος";
 $langCoursesLabel = 'Τμήματα';
-$langFaculte = "Τμήμα";
 $langNoCoursesAvailable = "Δεν υπάρχουν διαθέσιμα μαθήματα για εγγραφή";
 $langRegistration="Εγγραφή";
 $langSurname="Επώνυμο";

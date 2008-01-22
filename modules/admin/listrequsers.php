@@ -111,7 +111,7 @@ $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
              <td class=stat2 style=\"border: 1px solid $table_border;\">$d[profemail]</td>
            </tr>
            <tr>
-             <td class=color1 style=\"border: 1px solid $table_border;\"><b>$langFaculte</b>:</td>
+             <td class=color1 style=\"border: 1px solid $table_border;\"><b>$langFaculty</b>:</td>
              <td class=stat2 style=\"border: 1px solid $table_border;\">$d[proftmima]</td>
            </tr>
            <tr>
