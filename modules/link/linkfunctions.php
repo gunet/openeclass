@@ -268,44 +268,47 @@ function showlinksofcategory($catid)
 	while ($myrow = mysql_fetch_array($result))
 	{
 		$myrow[3] = parse_tex($myrow[3]);
-		$tool_content .= 	"<tr>
-			<td width=\"20\" class=\"linkimg\">
-			
-			<a href=\"link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">
-			<img src=\"../../template/classic/img/links.gif\" border=\"0\" title=\"".$langLinks."\">
-			</td>
-			<td  width=\"99%\">
-      <a href=\"link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">".$myrow[2]."</a>\n
-			<br>".$myrow[3]."";
+		$tool_content .= "
+    <tr>
+      <td width='25' style='border-bottom : white; border-left: 1px solid #edecdf;'>&nbsp;</td>
+      <td width='500' class=\"linkimg\"><a href=\"link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\"><img src=\"../../template/classic/img/links.gif\" border=\"0\" title=\"".$langLinks."\"></a> <a href=\"link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">".$myrow[2]."</a>
+        <br>
+        <small>".$myrow[3]."</small>
+      </td>";
+	  
 		if ($is_adminOfCourse)
 		{
-			$tool_content .= 	"<br>";
+		$tool_content .=  "
+      <td width='45' align='right'>";
 			if (isset($category))
 			$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?action=editlink&category=$category&id=$myrow[0]&urlview=$urlview\">";
 			else
 			$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?action=editlink&id=$myrow[0]&urlview=$urlview\">";
-			$tool_content .=  "<img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langModify."\">
-				</a>
-				<a href=\"".$_SERVER['PHP_SELF']."?action=deletelink&id=".$myrow[0]."&urlview=".$urlview."\" onclick=\"javascript:if(!confirm('".$langLinkDelconfirm."')) return false;\">
-				<img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\">
-				</a>";
+			
+			$tool_content .=  "<img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langModify."\"></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?action=deletelink&id=".$myrow[0]."&urlview=".$urlview."\" onclick=\"javascript:if(!confirm('".$langLinkDelconfirm."')) return false;\"><img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\"></a>
+      </td>
+      <td width='45' align='right' style='border-right: 1px solid #edecdf;'>";
 			// DISPLAY MOVE UP COMMAND only if it is not the top link
 			if ($i!=1)
 			{
-				$tool_content .= 	"<a href=\"$_SERVER[PHP_SELF]?urlview=".$urlview."&up=".$myrow["id"]."\">
-					<img src=\"../../template/classic/img/up.gif\" border=0 title=\"".$langUp."\">
-					</a>\n";
+				$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?urlview=".$urlview."&up=".$myrow["id"]."\"><img src=\"../../template/classic/img/up.gif\" border=0 title=\"".$langUp."\"></a>";
 			}
+			
 			// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link
 			if($i < $numberoflinks)
 			{
-				$tool_content .= 	"<a href=\"$_SERVER[PHP_SELF]?urlview=".$urlview."&down=".$myrow["id"]."\">
-						<img src=\"../../template/classic/img/down.gif\" border=\"0\" title=\"".$langDown."\">
-						</a>\n";
+				$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?urlview=".$urlview."&down=".$myrow["id"]."\"><img src=\"../../template/classic/img/down.gif\" border=\"0\" title=\"".$langDown."\"></a>";
 			}
-		}
-		$tool_content .= 	"</td>
-			</tr>";
+		$tool_content .= "
+      </td>";		
+		} else {
+		$tool_content .=  "
+      <td width='45' align='right'>&nbsp;</td>
+      <td width='45' align='right' style='border-right: 1px solid #edecdf;'>&nbsp;</td>";
+	    }
+		
+		$tool_content .= "
+    </tr>";
 		$i++;
 	}
 
@@ -319,27 +322,26 @@ function showcategoryadmintools($categoryid)
 	global $langDelete, $langModify, $langUp, $langDown, $langCatDel;
 	global $tool_content;
 
-	$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?action=editcategory&id=$categoryid&urlview=$urlview\">
-		<img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langModify."\">
-		</a> \n";
-
-	$tool_content .=  " <a href=\"".$_SERVER['PHP_SELF']."?action=deletecategory&id=".$categoryid."&urlview=".$urlview."\" onclick=\"javascript:if(!confirm('".$langCatDel."')) return false;\">". "<img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\">
-</a>";
+	$tool_content .=  "
+      <td width='45' align='right'><a href=\"$_SERVER[PHP_SELF]?action=editcategory&id=$categoryid&urlview=$urlview\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langModify."\">&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?action=deletecategory&id=".$categoryid."&urlview=".$urlview."\" onclick=\"javascript:if(!confirm('".$langCatDel."')) return false;\">". "<img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\"></a>
+      </td>";
 
 
 	// DISPLAY MOVE UP COMMAND only if it is not the top link
-	if ($catcounter!=1) {
-		$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?catmove=true&up=".$categoryid."&urlview=$urlview\">
-			<img src=\"../../template/classic/img/up.gif\" border=0 title=\"".$langUp."\">
-			</a>\n";
+		$tool_content .=  "
+      <td width='45' align='right' style='border-right: 1px solid #edecdf;'>";
+	if ($catcounter!=1) 
+	{
+		$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?catmove=true&up=".$categoryid."&urlview=$urlview\"><img src=\"../../template/classic/img/up.gif\" border=0 title=\"".$langUp."\"></a>";
 	}
 	// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link
 	if($catcounter < $aantalcategories)
 	{
-		$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?catmove=true&down=".$categoryid."&urlview=$urlview\">
-			<img src=\"../../template/classic/img/down.gif\" border=\"0\" title=\"".$langDown."\">
-			</a>\n";
+		$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?catmove=true&down=".$categoryid."&urlview=$urlview\"><img src=\"../../template/classic/img/down.gif\" border=\"0\" title=\"".$langDown."\"></a>";
 	}
+		$tool_content .=  "
+      </td>
+    </tr>";
 	$catcounter++;
 }
 

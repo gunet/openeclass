@@ -1630,7 +1630,7 @@ $langDown = "Down";
 // Other
 $showall="Show all";
 $shownone="Show none";
-$langProfNoLinksExist = "No links exist. You may use the tool operations to add links.";
+$langProfNoLinksExist = "<br />No links exist! <br /><br />You may use the tool operations to add links.";
 $langNoLinksExist = "The professor has not added any links.";
 
 /*******************************************************

@@ -93,26 +93,34 @@ if($is_adminOfCourse) {
 	//displaying the error / status messages if there is one
 
 	$tool_content .="
-	<div id=\"operations_container\">
-	<ul id=\"opslist\">";
+    <div id=\"operations_container\">
+    <ul id=\"opslist\">";
 
 	if (isset($category))
-	$tool_content .=  "<li><a href=\"".$_SERVER['PHP_SELF']."?action=addlink&category=".$category."&urlview=@$urlview\">".$langLinkAdd."</a></li>";
+	$tool_content .=  "
+      <li><a href=\"".$_SERVER['PHP_SELF']."?action=addlink&category=".$category."&urlview=@$urlview\">".$langLinkAdd."</a></li>";
 	else
-	$tool_content .=  "<li><a href=\"".$_SERVER['PHP_SELF']."?action=addlink\">".$langLinkAdd."</a></li>";
+	$tool_content .=  "
+      <li><a href=\"".$_SERVER['PHP_SELF']."?action=addlink\">".$langLinkAdd."</a></li>";
 	//	$tool_content .= "<li> | </li>";
 	if (isset($urlview))
-	$tool_content .=  "<li><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory&urlview=".$urlview."\">".$langCategoryAdd."</a></li>";
+	$tool_content .=  "
+      <li><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory&urlview=".$urlview."\">".$langCategoryAdd."</a></li>";
 	else
-	$tool_content .=  "<li><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory\">".$langCategoryAdd."</a></li>";
+	$tool_content .=  "
+      <li><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory\">".$langCategoryAdd."</a></li>";
 
-	$tool_content .=  "</ul></div>
+	$tool_content .=  "
+    </ul>
+    </div>
 	";
 
 	if (!empty($catlinkstatus))	{
 
-		$tool_content .=  "<table width=\"99%\"><tbody><tr><td class=\"success\"><p><b>".$catlinkstatus."</b></td></tr></tbody></table>";
-		$tool_content .= "<br>";
+	$tool_content .=  "
+    <table width=\"99%\"><tbody><tr><td class=\"success\"><p><b>".$catlinkstatus."</b></td></tr></tbody></table>";
+	$tool_content .= "
+    <br>";
 		unset($catlinkstatus);
 	}
 
@@ -128,10 +136,10 @@ if($is_adminOfCourse) {
 		{$tool_content .=  "<input type=\"hidden\" name=\"id\" value=\"".$id."\">";}
 
 		$tool_content .=  "
-          <table width='99%' class='FormData'>
+          <table width='99%' class='FormData' height='250'>
           <tbody>
           <tr>
-            <th class='left'>&nbsp;</th>
+            <th class='left' width='150'>&nbsp;</th>
             <td><b>";
 		if ($action=="addlink")
 		{$tool_content .=  $langLinkAdd;}
@@ -190,10 +198,10 @@ if($is_adminOfCourse) {
 		$tool_content .=  "
           <form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?action=".$action."&urlview=".@$urlview."\">";
 		$tool_content .=  "
-          <table width='99%' class='FormData'>
+          <table width='99%' class='FormData' height='250'>
           <tbody>
           <tr>
-            <th class='left'>&nbsp;</th>
+            <th class='left' width='150'>&nbsp;</th>
             <td><b>";
 			
 		if ($action=="addcategory") {
@@ -214,7 +222,7 @@ if($is_adminOfCourse) {
           </tr>
           <tr>
             <th class='left'>".$langDescription." :</th>
-            <td><textarea wrap=\"physical\" rows=\"3\" cols=\"50\" name=\"description\" class='FormData_InputText'>
+            <td><textarea wrap=\"physical\" rows=\"8\" cols=\"50\" name=\"description\" class='FormData_InputText'>
 				".@htmlspecialchars($description)."</textarea></td>
           </tr>
           <tr>
@@ -240,7 +248,7 @@ $resultcategories=db_query($sqlcategories, $dbname);
 if (mysql_num_rows($resultcategories) > 0) {
 
 	//Starting the table which contains the categories
-	$tool_content .=  "<table width=\"99%\">";
+
 	// displaying the links which have no category (thus category = 0 or NULL), if none present this will not be displayed
 	$sqlLinks = "SELECT * FROM `".$tbl_link."` WHERE category=0 or category IS NULL";
 	$result = db_query($sqlLinks, $dbname);
@@ -251,32 +259,61 @@ if (mysql_num_rows($resultcategories) > 0) {
 	$sqlcategories="SELECT * FROM `".$tbl_categories."` ORDER BY `ordre` DESC";
 	$resultcategories=db_query($sqlcategories, $dbname);
 	$aantalcategories = @mysql_num_rows($resultcategories);
+	
 	if ($aantalcategories > 0) {
-		$more_less = "  <div id=\"operations_container\">
-	<ul id=\"opslist\">";
-
-		$more_less .=  "<li><b>$langCategorisedLinks</b></li><li><a href=\"".$_SERVER['PHP_SELF']."?urlview=";
+		$more_less = "
+    <table class=\"Deps\" width=\"99%\">
+    <tbody>
+    <tr>
+      <th>$langCategorisedLinks:</th>
+      <td><a href=\"".$_SERVER['PHP_SELF']."?urlview=";
 		for($j = 1; $j <= $aantalcategories; $j++)
 		{
 			$more_less .=  "0";
 		}
-		$more_less .=  "\">$shownone</a></li>";
-		$more_less .=  "<li><a href=\"".$_SERVER['PHP_SELF']."?urlview=";
+		$more_less .=  "\">$shownone</a> ";
+		$more_less .=  " | <a href=\"".$_SERVER['PHP_SELF']."?urlview=";
 		for($j = 1; $j <= $aantalcategories; $j++)
 		{
 			$more_less .=  "1";
 		}
-		$more_less .=  "\">$showall</a></li>";
-		$more_less .= "</ul></div>";
+		$more_less .=  "\">$showall</a></td>";
+		$more_less .= "
+    </tr>
+    </tbody>
+    </table>";
 	}
-
+	
+	
+    // Edw fiaxnei ton pinaka me tis henik;ew kathgories
 	if ($numberofzerocategory!==0)
 	{
-		$tool_content .=  "<tbody><tr><th class=\"left\" colspan=\"2\"><b>$langNoCategory</b></td></tr></tbody>";
-		showlinksofcategory(0);
+	$tool_content .=  "
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td width='25' style='background:#FBFBFB; border-left: 1px solid #edecdf; border-top: 1px solid #edecdf;'><img src=\"../../template/classic/img/opendir.gif\" border=\"0\" title=\"$langNoCategory\"></td>
+      <td class='left' width='500' colspan='3' style='background:#FBFBFB; border-right: 1px solid #edecdf; border-top: 1px solid #edecdf;'>$langNoCategory</td>
+    </tr>";
+	showlinksofcategory(0);
+	$tool_content .= "
+    <tr>
+      <td colspan='4' style='background:#FBFBFB; border-left: 1px solid #edecdf; border-right: 1px solid #edecdf; border-bottom: 1px solid #edecdf;'>&nbsp;</td>
+    </tr>";
+	$tool_content .= "
+    </tbody>
+    </table>";
 	}
 
-	$tool_content .= "</table><br/>$more_less<table width=\"99%\">";
+	// Edw fiaxnei to tool bar me tin emfanisi apokripsi
+	$tool_content .= "
+	
+    <br/>
+    $more_less
+	
+    <table width=\"99%\">
+    <tbody>
+    ";
 	$i=0;
 	$catcounter=1;
 	$view="0";
@@ -295,48 +332,83 @@ if (mysql_num_rows($resultcategories) > 0) {
 		// if the $urlview has a 1 for this categorie, this means it is expanded and should be desplayed as a
 		// - instead of a +, the category is no longer clickable and all the links of this category are displayed
 		$myrow["description"]=parse_tex($myrow["description"]);
-		if ((isset($urlview[$i]) and $urlview[$i]=="1")) {
+		if ((isset($urlview[$i]) and $urlview[$i]=="1")) 
+		{
 			$newurlview=$urlview;
 			$newurlview[$i]="0";
-			$tool_content .=  "<tr><th class=\"left\" colspan=\"2\" ><b>- <a href=\"".$_SERVER['PHP_SELF']."?urlview=".$newurlview."\">".$myrow["categoryname"]."</a></b><br>&nbsp;&nbsp;&nbsp;";
-			$tool_content .=  "<font size=\"2\">".$myrow["description"]."</font>";
-			if ($is_adminOfCourse)
-			showcategoryadmintools($myrow["id"]);
-			$tool_content .=  "</th></tr>";
-
-			showlinksofcategory($myrow["id"]);
-			$tool_content .=  "</td></tr>";
+			$tool_content .=  "
+    <tr>
+      <td class=\"left\" width='25' style='background:#FBFBFB; border-left: 1px solid #edecdf;'><img src=\"../../template/classic/img/opendir.gif\" border=\"0\" title=\"$shownone\"></td>
+      <td width='500' style='background:#FBFBFB;'><a href=\"".$_SERVER['PHP_SELF']."?urlview=".$newurlview."\">".$myrow["categoryname"]."</a>
+          <br>
+          <small>".$myrow["description"]."</small>
+      </td>";
+	    if ($is_adminOfCourse) {
+		showcategoryadmintools($myrow["id"]);
 		} else {
-			$tool_content .=  "<tr><th class=\"left\" colspan=\"2\" ><b>+ <a href=\"".$_SERVER['PHP_SELF']."?urlview=";
+		$tool_content .=  "
+      <td width='45' style='background:#FBFBFB;'>&nbsp;</td>
+      <td width='45' style='background:#FBFBFB; border-right: 1px solid #edecdf;'>&nbsp;</td>
+    </tr>";
+		}
+
+		showlinksofcategory($myrow["id"]);
+
+		} else {
+			$tool_content .=  "
+    <tr>
+      <td class=\"left\" width='25' style='background:#FBFBFB; border-left: 1px solid #edecdf;'><img src=\"../../template/classic/img/closeddir.gif\" border=\"0\" title=\"$showall\"></td>
+      <td width='500' style='background:#FBFBFB;'><a href=\"".$_SERVER['PHP_SELF']."?urlview=";
 			$tool_content .=  is_array($view)?implode('',$view):$view;
-			$tool_content .=  "\">".$myrow["categoryname"]."</a></b><br>&nbsp;&nbsp;&nbsp;";
-			$tool_content .=  "<font size=\"2\">".$myrow["description"]."</font>";
-			if ($is_adminOfCourse)
+			$tool_content .=  "\">".$myrow["categoryname"]."</a>
+          <br>
+          <small>".$myrow["description"]."</small>
+      </td>";
+			if ($is_adminOfCourse) {
 			showcategoryadmintools($myrow["id"]);
-			$tool_content .=  "</th></tr>";
+			} else {
+	        $tool_content .=  "
+      <td width='45' style='background:#FBFBFB;'>&nbsp;</td>
+      <td width='45' style='background:#FBFBFB; border-right: 1px solid #edecdf;'>&nbsp;</td>
+	</tr>";			
+			}
+			//$tool_content .=  "</td></tr>";
 		}
 		// displaying the link of the category
 		$i++;
 	}
-	$tool_content .=  "</table>";
+	$tool_content .= "
+    <tr>
+      <td colspan='4' style='background:#FBFBFB; border-left: 1px solid #edecdf; border-right: 1px solid #edecdf; border-bottom: 1px solid #edecdf;'>&nbsp;</td>
+    </tr>";
+	$tool_content .=  "
+    </tbody>   
+    </table>";
 
 } else {   // no category
-	if (getNumberOfLinks(0)>0){
-		$tool_content .=  "<table>";
-		$tool_content .=  "<tbody><tr><th class=\"left\" colspan=\"2\" ><b>$langLinks</b></th></tr>";
-
-		showlinksofcategory(0);
-		$tool_content .=  "</td></tr>";
-		$tool_content .=  "</tbody></table>";
+   if (getNumberOfLinks(0)>0){
+	$tool_content .=  "
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td width='1'><img src=\"../../template/classic/img/opendir.gif\" border=\"0\" title=\"$langNoCategory\"></td>
+      <td class=\"left\" colspan=\"3\" ><b>$langLinks</b></td>
+    </tr>";
+	showlinksofcategory(0);
+	$tool_content .=  "
+      </td>
+    </tr>
+    </tbody>
+    </table>";
 	} else {
 		if($is_adminOfCourse){
 			//if the user is the course administrator instruct him/her
 			//what he can do to add links
-			$tool_content .= "<p>$langProfNoLinksExist</p>";
+			$tool_content .= "<p class='alert1'>$langProfNoLinksExist</p>";
 		} else {
 			//if the user has no course administrator access
 			//inform him/her that no links exist
-			$tool_content .= "<p>$langNoLinksExist</p>";
+			$tool_content .= "<p class='alert1'>$langNoLinksExist</p>";
 		}
 	}
 }
