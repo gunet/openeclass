@@ -1,5 +1,29 @@
 <?
- /*
+/*
+      +----------------------------------------------------------------------+
+      | GUnet eClass 1.7                                                    |
+      | Asychronous Teleteaching Platform                                    |
+      +----------------------------------------------------------------------+
+      | Copyright (c) 2003-2007  GUnet                                       |
+      +----------------------------------------------------------------------+
+      |                                                                      |
+      | GUnet eClass 1.7 is an open platform distributed in the hope that   |
+      | it will be useful (without any warranty), under the terms of the     |
+      | GNU License (General Public License) as published by the Free        |
+      | Software Foundation. The full license can be read in "license.txt".  |
+      |                                                                      |
+      | Main Developers Group: Costas Tsibanis <k.tsibanis@noc.uoa.gr>       |
+      |                        Yannis Exidaridis <jexi@noc.uoa.gr>           |
+      |                        Alexandros Diamantidis <adia@noc.uoa.gr>      |
+      |                        Tilemachos Raptis <traptis@noc.uoa.gr>        |
+      |                                                                      |
+      | For a full list of contributors, see "credits.txt".                  |
+      |                                                                      |
+      +----------------------------------------------------------------------+
+      | Contact address: Asynchronous Teleteaching Group (eclass@gunet.gr),  |
+      |                  Network Operations Center, University of Athens,    |
+      |                  Panepistimiopolis Ilissia, 15784, Athens, Greece    |
+      +----------------------------------------------------------------------+
       +----------------------------------------------------------------------+
       | CLAROLINE version 1.4.* Lib transform text $Revision$          |
       +----------------------------------------------------------------------+
@@ -9,8 +33,7 @@
       |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
       |          Christophe Gesche <gesche@ipm.ucl.ac.be>                    |
       +----------------------------------------------------------------------+
- */
-
+*/
 
 /**
  * function make_clickable($text) 
@@ -22,6 +45,7 @@
  * @return text after conversion 
  * @author Rewritten by Nathan Codding - Feb 6, 2001.
  *         completed by Hugues Peeters - July 22, 2002
+ *         Regex fixes by Alexandros Diamantidis - Jan 22, 2008
  *
  * Actually this function is taken from the PHP BB 1.4 script
  * - Goes through the given string, and replaces xxxx://yyyy with an HTML <a> tag linking
@@ -30,34 +54,27 @@
  * 	to http://www.xxxx.yyyy[/zzzz] 
  * - Goes through the given string, and replaces xxxx@yyyy with an HTML mailto: tag linking
  *		to that email address
- * - Only matches these 2 patterns either after a space, or at the beginning of a line
- *
- * Notes: the email one might get annoying - it's easy to make it more restrictive, though.. maybe
- * have it require something like xxxx@yyyy.zzzz or such. We'll see.
  */
 
 function make_clickable($text)
 {
 
-	// If the user has decided to deeply use html and manage himself hyperlink
-	// cancel the make clickable() function and return the text untouched.
+        // If the user has decided to deeply use html and manage himself
+        // hyperlink cancel the make clickable() function and return the text
+        // untouched.
 
 	if (preg_match ( "<(a|img)[[:space:]]*(href|src)[[:space:]]*=(.*)>", $text) )
 	{
 		return $text;
 	}
 	
-	// pad it with a space so we can match things at the start of the 1st line.
-	$ret = " " . $text;
+	// matches an "xxxx://yyyy" URL
+	// xxxx can only be alphanumeric characters
+	// yyyy is anything up to the first space, newline, ()<>
 
-
-	// matches an "xxxx://yyyy" URL at the start of a line, or after a space.
-	// xxxx can only be alpha characters.
-	// yyyy is anything up to the first space, newline, or comma.
-
-	$ret = preg_replace("#([\n ])([a-z]+?)://([^, \n\r]+)#i", 
-						"\\1<a href=\"\\2://\\3\" >\\2://\\3</a>", 
-						$ret);
+	$text = preg_replace("#\b([a-z0-9]+?://[^, \n\r()<>]+)#i", 
+			"<a href='$1'>$1</a>", 
+			$text);
 
 	// matches a "www.xxxx.yyyy[/zzzz]" kinda lazy URL thing
 	// Must contain at least 2 dots. xxxx contains either alphanum, or "-"
@@ -66,23 +83,19 @@ function make_clickable($text)
 	// This is slightly restrictive - it's not going to match stuff like "forums.foo.com"
 	// This is to keep it from getting annoying and matching stuff that's not meant to be a link.
 
-	$ret = preg_replace("#([\n ])www\.([a-z0-9\-]+)\.([a-z0-9\-.\~]+)((?:/[^, \n\r]*)?)#i", 
-						"\\1<a href=\"http://www.\\2.\\3\\4\" >www.\\2.\\3\\4</a>", 
-						$ret);
+	$text = preg_replace("#\b((?<!://)www\.([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,}(/[^, \n\r()<>]*)?)#i", 
+			"<a href='http://$1'>$1</a>", 
+			$text);
 	
-	// matches an email@domain type address at the start of a line, or after a space.
-	// Note: before the @ sign, the only valid characters are the alphanums and "-", "_", or ".".
-	// After the @ sign, we accept anything up to the first space, linebreak, or comma.
+	// matches an email@domain type address
 
-	$ret = preg_replace("#([\n ])([a-z0-9\-_.]+?)@([^, \n\r]+)#i", 
-						"\\1<a href=\"mailto:\\2@\\3\">\\2@\\3</a>", 
-						$ret);
+	$text = preg_replace("#\b([0-9a-z_\.\+-]+@([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,})\b#i", 
+			"<a href='mailto:$1'>$1</a>", 
+			$text);
 	
-	// Remove our padding..
-	$ret = substr($ret, 1);
-	
-	return($ret);
+	return($text);
 }
+
 
 /**
  * formats the date according to the locale settings
@@ -116,5 +129,3 @@ function claro_format_locale_date($dateFormat, $timeStamp = -1)
 	return strftime($date, $timeStamp);
 
 } 
-
-?>
