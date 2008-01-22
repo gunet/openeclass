@@ -391,12 +391,15 @@ if (mysql_num_rows($resultcategories) > 0) {
     <table width=\"99%\">
     <tbody>
     <tr>
-      <td width='1'><img src=\"../../template/classic/img/opendir.gif\" border=\"0\" title=\"$langNoCategory\"></td>
-      <td class=\"left\" colspan=\"3\" ><b>$langLinks</b></td>
+      <td width='1' style='background:#FBFBFB; border-left: 1px solid #edecdf; border-top: 1px solid #edecdf;'><img src=\"../../template/classic/img/opendir.gif\" border=\"0\" title=\"$langNoCategory\"></td>
+      <td class=\"left\" colspan=\"3\" style='background:#FBFBFB; border-top: 1px solid #edecdf; border-right: 1px solid #edecdf;'><b>$langLinks</b></td>
     </tr>";
 	showlinksofcategory(0);
 	$tool_content .=  "
       </td>
+    </tr>
+    <tr>
+      <td colspan='4' style='background:#FBFBFB; border-left: 1px solid #edecdf; border-right: 1px solid #edecdf; border-bottom: 1px solid #edecdf;'>&nbsp;</td>
     </tr>
     </tbody>
     </table>";
