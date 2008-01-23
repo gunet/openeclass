@@ -1,5 +1,4 @@
-<?php
-$langFiles = array('admin', 'restore_course');
+<?
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include '../../include/lib/fileUploadLib.inc.php';
@@ -272,7 +271,7 @@ function user ($userid, $name, $surname, $login, $password, $email, $statut, $ph
 		return;
 	}
 	// add prefix only to usernames that dont use LDAP login
-	if ($course_prefix and $inst_id == 0) {
+	if ($course_prefix) {
 		if ($statut == 1) {
 			echo "<br>$langWithUsername $login $langUserisAdmin".
 				" - $langUsernameSame";
@@ -289,7 +288,7 @@ function user ($userid, $name, $surname, $login, $password, $email, $statut, $ph
 		echo "$langUserAlready <b>$login</b>. $langUName <i>$res[1] $res[2]</i>  !\n";
 	} else {
 		db_query("INSERT into `$mysqlMainDb`.user
-			(nom, prenom, username, password, email, statut, phone, department, inst_id)
+			(nom, prenom, username, password, email, statut, phone, department)
 			VALUES (".
 			join(", ", array(	
 				quote($name),
@@ -299,8 +298,7 @@ function user ($userid, $name, $surname, $login, $password, $email, $statut, $ph
 				quote($email),
 				quote($statut),
 				quote($phone),
-				quote($department),
-				quote($inst_id))).
+				quote($department))).
 				")");
 		$userid_map[$userid] = mysql_insert_id();
 	}

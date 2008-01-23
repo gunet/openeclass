@@ -698,7 +698,6 @@ elseif(isset($_REQUEST['install7']))
       statut tinyint(4) default NULL,
       phone varchar(20) default NULL,
       department int(10) default NULL,
-      inst_id int(11) default NULL,
       am varchar(20) default NULL,
       registered_at int(10) NOT NULL default '0',
       expires_at int(10) NOT NULL default '0',

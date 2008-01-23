@@ -655,8 +655,7 @@ function backup_users($f, $course) {
 			quote($q['email']).", ".
 			quote($q['cours_statut']).", ".
 			quote($q['phone']).", ".
-			quote($q['department']).", ".
-			quote($q['inst_id']).");\n");
+			quote($q['department']).");\n");
 	}
 }
 

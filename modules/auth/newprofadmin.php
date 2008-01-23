@@ -16,9 +16,8 @@ if($submit)
 	$password = isset($_POST['password'])?$_POST['password']:'';
 	$email_form = isset($_POST['email_form'])?$_POST['email_form']:'';
 	$department = isset($_POST['department'])?$_POST['department']:'';
-	$institut = isset($_POST['institut'])?$_POST['institut']:'NULL';
 	
-	// do not allow the user to have the characters: ',\" or \\ in password
+	// do not allow the user to have the characters: ',\" or \\ in username
 	
 	if ((strstr($uname, "'")) or (strstr($uname, '"')) or (strstr($uname, '\\')))
 	{
@@ -40,17 +39,17 @@ if($submit)
 		if (empty($nom_form) or empty($prenom_form) or empty($password) or empty($department) or empty($uname) or (empty($email_form))) 
 		{
 			$tool_content .= "<p>$langEmptyFields</p>
-			<br><br><center><p><a href=\"./newprofadmin.php\">$langAgain</a></p></center>";
+			<br><br><center><p><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p></center>";
 		}
 		elseif(isset($user_exist) and $uname==$user_exist) 
 		{
 			$tool_content .= "<p>$langUserFree</p>
-			<br><br><center><p><a href=\"./newprofadmin.php\">$langAgain</a></p></center>";
+			<br><br><center><p><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p></center>";
 	  }
 		elseif(!email_seems_valid($email_form)) // check if email syntax is valid
 		{
-	        $tool_content .= "<p>$langEmailWrong.</p>
-			<br><br><center><p><a href=\"./newprofadmin.php\">$langAgain</a></p></center>";
+      $tool_content .= "<p>$langEmailWrong.</p>
+			<br><br><center><p><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p></center>";
 		}
 		else
 		{
@@ -58,27 +57,11 @@ if($submit)
 			$dep = mysql_fetch_array($s);
 			$registered_at = time();
 	 		$expires_at = time() + $durationAccount;
-	 		switch($password)
-					{
-						case 'pop3': $auth = 2; break;
-						case 'imap': $auth = 3; break;
-						case 'ldap': $auth = 4; break;
-						case 'db': $auth = 5; break;
-						default: $auth=1; break;
-					}
-	 		
-	 		if($auth==1)
-	 		{		
-				$password_encrypted = md5($password);
-			}
-			else
-			{
-				$password_encrypted = $password;
-			}
+			$password_encrypted = md5($password);
 			$uname = escapeSimple($uname);
 			$inscr_user=mysql_query("INSERT INTO `$mysqlMainDb`.user
-				(user_id, nom, prenom, username, password, email, statut, department, inst_id, registered_at, expires_at)
-				VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email_form','$statut','$dep[id]', '$institut', '$registered_at', '$expires_at')");
+				(user_id, nom, prenom, username, password, email, statut, department, registered_at, expires_at)
+				VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email_form','$statut','$dep[id]', '$registered_at', '$expires_at')");
 			$last_id=mysql_insert_id();
 
 		// close request

@@ -58,21 +58,6 @@ if($submit) {
 	else {
 		$emailsubject = "$langYourReg $siteName $langAsUser";
 
-		if (isset($institut) and ($institut > 0)) {
-			$emailbody = "
-$langDestination $prenom_form $nom_form
-
-$langYouAreReg$siteName $langAsUser, $langSettings $uname
-$langPassSameLDAP
-$langAddress $siteName $langIs: $urlServer
-$langProblem
-
-$administratorName $administratorSurname
-$langManager $siteName
-$langTel $telephone
-$langEmail : $emailAdministrator
-";
-		} else {
 			$emailbody = "
 $langDestination $prenom_form $nom_form
 
@@ -86,15 +71,10 @@ $langManager $siteName
 $langTel $telephone
 $langEmail : $emailAdministrator
 ";
-			}
 
 send_mail($siteName, $emailAdministrator, '', $email_form, $emailsubject, $emailbody, $charset);
 
 // register user 
-
-		if (!isset($institut)) {
-			$institut = "NULL";
-		}
 		$registered_at = time();
     $expires_at = time() + $durationAccount;  
 
@@ -102,8 +82,8 @@ send_mail($siteName, $emailAdministrator, '', $email_form, $emailsubject, $email
 		$s = mysql_query("SELECT id FROM faculte WHERE name='$department'");
 		$dep = mysql_fetch_array($s);
 		$inscr_user=mysql_query("INSERT INTO `$mysqlMainDb`.user
-			(user_id, nom, prenom, username, password, email, statut, department, inst_id, registered_at, expires_at)
-			VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email_form', '5', '$dep[id]', '$institut', '$registered_at', '$expires_at')");
+			(user_id, nom, prenom, username, password, email, statut, department, registered_at, expires_at)
+			VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email_form', '5', '$dep[id]', '$registered_at', '$expires_at')");
 		
 		// close request
         $rid = intval($_POST['rid']);

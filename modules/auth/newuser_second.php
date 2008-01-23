@@ -122,7 +122,6 @@ if(!empty($submit))
 		send_mail($siteName, $emailAdministrator, '', $email,	$emailsubject, $emailbody, $charset);
 		$registered_at = time();
 		$expires_at = time() + $durationAccount;	//$expires_at = time() + 31536000;
-		$institut = 0;
 
 		// manage the store/encrypt process of password into database
 		$authmethods = array("2","3","4","5");
@@ -135,9 +134,9 @@ if(!empty($submit))
 		}
 			
 		$q1 = "INSERT INTO `$mysqlMainDb`.user
-			(user_id, nom, prenom, username, password, email, statut, department, inst_id, am, registered_at, expires_at)
+			(user_id, nom, prenom, username, password, email, statut, department, am, registered_at, expires_at)
 			VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email','$statut',
-				'$department','$institut','$am',".$registered_at.",".$expires_at.")";
+				'$department','$am',".$registered_at.",".$expires_at.")";
 
 		$inscr_user = mysql_query($q1);
 		$last_id = mysql_insert_id();

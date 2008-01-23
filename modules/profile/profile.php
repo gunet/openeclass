@@ -173,8 +173,7 @@ if(isset($msg))
 
 }
 
-// inst_id added by adia for LDAP users
-$sqlGetInfoUser ="SELECT nom, prenom, username, password, email, inst_id, am, perso, lang
+$sqlGetInfoUser ="SELECT nom, prenom, username, password, email, am, perso, lang
     FROM user WHERE user_id='".$uid."'";
 $result=mysql_query($sqlGetInfoUser);
 $myrow = mysql_fetch_array($result);

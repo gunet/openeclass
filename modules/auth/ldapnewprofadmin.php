@@ -83,8 +83,8 @@ if (isset($submit))  {
 		$registered_at = time();
     $expires_at = time() + $durationAccount; 
 
-		$sql=db_query("INSERT INTO user (user_id, nom, prenom, username, password, email, statut, department, inst_id, registered_at, expires_at)
-       VALUES ('NULL', '$pn', '$ps', '$pu', '$password', '$pe','1','$department', '0', '$registered_at', '$expires_at')", $mysqlMainDb);
+		$sql=db_query("INSERT INTO user (user_id, nom, prenom, username, password, email, statut, department, registered_at, expires_at)
+       VALUES ('NULL', '$pn', '$ps', '$pu', '$password', '$pe','1','$department', '$registered_at', '$expires_at')", $mysqlMainDb);
 			
 			// close request
       //  Update table prof_request ------------------------------
@@ -99,7 +99,7 @@ if (isset($submit))  {
                                 "$langManager $siteName \n$langTel $telephone \n" .
                                 "$langEmail: $emailAdministrator";
 		
-    if (!send_mail($gunet, $emailhelpdesk, '', $emailhelpdesk, $mailsubject, $emailbody, $charset))  {
+    if (!send_mail($gunet, $emailAdministrator, '', $emailhelpdesk, $mailsubject, $emailbody, $charset))  {
 		      $tool_content .= "<table width=\"99%\"><tbody><tr>
     	    	<td class=\"caution\" height='60'>
 	    	    <p>$langMailErrorMessage &nbsp; <a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></p>

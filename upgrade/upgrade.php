@@ -252,26 +252,32 @@ $tool_content .= add_field('prof_request', 'statut', 'tinyint(4) NOT NULL defaul
 // ***********************************************
 // new queries - upgrade queries to 2.0
 // ***********************************************
+
+//  not needed 
+db_query("DROP TABLE IF EXISTS institution");
+
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_objectives'))
-$tool_content .= add_field('cours', 'course_objectives', "TEXT");
+	$tool_content .= add_field('cours', 'course_objectives', "TEXT");
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_prerequisites'))
-$tool_content .= add_field('cours', 'course_prerequisites', "TEXT");
+	$tool_content .= add_field('cours', 'course_prerequisites', "TEXT");
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_references'))
-$tool_content .= add_field('cours', 'course_references', "TEXT");
+	$tool_content .= add_field('cours', 'course_references', "TEXT");
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_keywords'))
-$tool_content .= add_field('cours', 'course_keywords', "TEXT");
+	$tool_content .= add_field('cours', 'course_keywords', "TEXT");
 if (!mysql_field_exists("$mysqlMainDb",'cours','course_addon'))
-$tool_content .= add_field('cours', 'course_addon', "TEXT");
+	$tool_content .= add_field('cours', 'course_addon', "TEXT");
 if (!mysql_field_exists("$mysqlMainDb",'cours','first_create'))
-$tool_content .= add_field('cours', 'first_create', "datetime not null default '0000-00-00 00:00:00'");
+	$tool_content .= add_field('cours', 'first_create', "datetime not null default '0000-00-00 00:00:00'");
 
 // delete useless fields
 if (!mysql_field_exists("$mysqlMainDb",'cours','cahier_charges'))
-$tool_content .= delete_field('cours', 'cahier_charges');
+	$tool_content .= delete_field('cours', 'cahier_charges');
 if (!mysql_field_exists("$mysqlMainDb",'cours','versionDb'))
-$tool_content .= delete_field('cours', 'versionDb');
+	$tool_content .= delete_field('cours', 'versionDb');
 if (!mysql_field_exists("$mysqlMainDb",'cours','versionClaro'))
-$tool_content .= delete_field('cours', 'versionClaro');
+	$tool_content .= delete_field('cours', 'versionClaro');
+if (!mysql_field_exists("$mysqlMainDb",'user','inst_id'))
+	$tool_content .= delete_field('user', 'inst_id');
 
 // kstratos - UOM
 // Add 1 new field into table 'prof_request', after the field 'profuname'
