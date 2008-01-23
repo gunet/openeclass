@@ -360,30 +360,59 @@ function new_assignment()
 	$month	= date("m");
 	$year	= date("Y");
 
-	$tool_content .= "<form action=\"work.php\" method=\"post\">
-	<table width=\"99%\"><thead><tr><th>".
-	$m['title'].":</th><td><input type=\"text\" name=\"title\" size=\"55\"></td></tr>
-	</thead></table><br/>
-	<table width=\"99%\"><thead>
-	<tr><th>".
-	$m['description'].":</th></tr><tbody><tr><td>".
-	"<textarea id=\"xinha\" name=\"desc\" value=\"$desc\" style='width:100%' rows=\"20\" cols=\"80\">";
+	
+	$tool_content .= "
+    <div id=\"operations_container\">
+    <ul id=\"opslist\">
+      <li><a href='work.php'>$langBack</a></li>
+    </ul>
+    </div>
+    ";
+
+	$tool_content .= "
+    <form action=\"work.php\" method=\"post\">
+    <table width=\"99%\" class='FormData'
+    <tbody>
+    <tr>
+      <th width='150'>&nbsp;</th>
+      <td><b>".$m['WorkInfo ']."</b></td>
+    </tr>
+    <tr>
+      <th class=\"left\">".$m['title'].":</th>
+      <td><input type=\"text\" name=\"title\" size=\"55\" class='FormData_InputText'></td>
+    </tr>
+
+    <tr>
+      <th class=\"left\">".$m['description'].":</th>
+      <td>"."<textarea id=\"xinha\" name=\"desc\" value=\"$desc\" style='width:100%' rows=\"10\" cols=\"20\">";
 
 	if ($desc)
 		$tool_content .= $desc;
 
-	$tool_content .=	"</textarea></td></tr></tbody></table><br/>
-	<table width=\"99%\"><thead>
-	<tr><th>".$m['comments'].":</th><td>".
-	"<textarea name=\"comments\" rows=\"5\" cols=\"55\"></textarea></td></tr><tr><th>".
-	$m['deadline'].":</th><td>$end_cal_Work</td></tr><tr><th>".$m['group_or_user'].
-	":</th><td><input type=\"radio\" name=\"group_submissions\" value=\"0\" checked=\"1\">".
-	$m['user_work']."<br><input type=\"radio\" name=\"group_submissions\" value=\"1\">".
-	$m['group_work']."</td></tr></thead></table><br/>
-	<input type=\"submit\" name=\"new_assign\" value=\"$langAdd\"></form>
-	
-	<br/><p><a href='work.php'>$langBack</a>";
-
+	$tool_content .=	"</textarea></td>
+    </tr>
+    <tr>
+      <th class=\"left\">".$m['comments'].":</th>
+      <td>"."<textarea name=\"comments\" rows=\"3\" cols=\"55\"></textarea></td>
+    </tr>
+    <tr>
+      <th class=\"left\">".$m['deadline'].":</th>
+      <td>$end_cal_Work</td>
+    </tr>
+    <tr>
+      <th class=\"left\">".$m['group_or_user'].":</th>
+      <td><input type=\"radio\" name=\"group_submissions\" value=\"0\" checked=\"1\">".$m['user_work']."
+      <br><input type=\"radio\" name=\"group_submissions\" value=\"1\">".$m['group_work']."</td>
+    </tr>
+    <tr>
+      <th>&nbsp;</th>
+      <td><input type=\"submit\" name=\"new_assign\" value=\"$langAdd\"></td>
+    </tr>
+    </thead>
+    </table>
+    </form>
+    <br/>
+    ";
 }
 
 
@@ -554,17 +583,23 @@ function delete_assignment($id) {
 	move_dir("$workPath/$secret",
 	"$webDir/courses/garbage/$currentCourseID/work/${id}_$secret");
 
+	$tool_content .= "
+    <div id=\"operations_container\">
+    <ul id=\"opslist\">
+      <li><a href=\"work.php\">".$langBack."</a></li>
+    </ul>
+    </div>
+    ";
+		
+		
 	$tool_content .="
-	<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"success\">
-							<p><b>$langDeleted</b></p>
-							<p><a href=\"work.php\">".$langBack."</a></p>
-						</td>
-					</tr>
-				</tbody>
-			</table>";
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"success\"><p><b>$langDeleted</b></p></td>
+    </tr>
+    </tbody>
+    </table>";
 }
 
 
@@ -997,7 +1032,18 @@ function show_assignments($message = null)
 
 	$result = db_query("SELECT * FROM assignments ORDER BY id");
 
-	$tool_content .= "<p><a href='work.php?add=1'>$langNewAssign</a></p>";
+	
+	$tool_content .="
+    <div id=\"operations_container\">
+    <ul id=\"opslist\">
+      <li><a href='work.php?add=1'>$langNewAssign</a></li>
+    </ul>
+    </div>
+	";
+	
+	
+	
+	//$tool_content .= "<p><a href='work.php?add=1'>$langNewAssign</a></p>";
 	if (isset($message)) {
 		$tool_content .="
 	<table width=\"99%\">
@@ -1015,24 +1061,19 @@ function show_assignments($message = null)
 	if (mysql_num_rows($result)) {
 
 		$tool_content .= <<<cData
-			<table width="99%">
-				<thead><tr>
-					<th align="center">${m['title']}</th>
-			  <th align="center">
-				${m['deadline']}
-			  </th>
-			  <th align="center">
-			  	${m['edit']}
-			  </th>	
-			  <th align="center">
-			  	${m['delete']}
-			  </th>	
-			  <th align="center">
-				${m['activate']} / ${m['deactivate']}
-			  </th>
-			</tr></thead>
+    <table width="99%">
+    <thead>
+    <tr>
+      <th width='5'>a/a</th>
+      <th class='left'>${m['title']}</th>
+      <th width='70'>${m['deadline']}</th>
+      <th width='70'>${m['edit']}</th>
+      <th width='70'>${m['delete']}</th>
+      <th width='100'>${m['activate']} / ${m['deactivate']}</th>
+    </tr>
+    </thead>
 cData;
-
+       $index = 1;
 		while ($row = mysql_fetch_array($result)) {
 			// Check if assignement contains unevaluatde (incoming) submissions
 			$AssignementId = $row['id'];
@@ -1047,7 +1088,11 @@ cData;
 				$visibility_css = " ";
 			}
 
-			$tool_content .= "<tbody><tr ".$visibility_css."><td><a href=\"work.php?id=${row['id']}\" ";
+			$tool_content .= "
+    <tbody>
+    <tr ".$visibility_css.">
+      <td align='right'>$index.</td>
+      <td><a href=\"work.php?id=${row['id']}\" ";
 
 			//	if(!$row['active'])
 			//		$tool_content .= "class=\"invisible\" ";
@@ -1060,12 +1105,12 @@ cData;
 			//			$tool_content .= "</b>";
 
 			$tool_content .= <<<cData
-		</a></td>
-    <td $visibility_css align="center">${row['deadline']}</td>
-    <td $visibility_css align="center"><a href="work.php?id=${row['id']}&choice=edit"><img src="../../template/classic/img/edit.gif" border="0" alt="${m['edit']}"></a></td>
+      </a></td>
+      <td $visibility_css align="center">${row['deadline']}</td>
+      <td $visibility_css align="center"><a href="work.php?id=${row['id']}&choice=edit"><img src="../../template/classic/img/edit.gif" border="0" alt="${m['edit']}"></a></td>
 cData;
 			$tool_content .= "<td $visibility_css align=\"center\"><a href='work.php?id=${row['id']}&choice=do_delete' onClick=\"return confirmation('".addslashes($row_title)."');\"><img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"${m['delete']}\"></a></td>
-    <td $visibility_css width=\"10%\"align=\"center\">";
+      <td $visibility_css width=\"10%\"align=\"center\">";
 
 			if($row['active']) {
 				$deactivate_temp = htmlspecialchars($m['deactivate']);
@@ -1077,11 +1122,19 @@ cData;
 				$tool_content .= "<a href=\"work.php?choice=enable&id=${row['id']}\">".
 				"<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" title=\"${activate_temp}\"></a>";
 			}
-			$tool_content .= "</td></tr>";
+			$tool_content .= "
+      </td>
+    </tr>";
+	$index++;
 }
-$tool_content .= '</tbody></table>';
+$tool_content .= '
+    <tr>
+      <th colspan=\"6\">&nbsp;</th>
+    </tr>
+    </tbody>
+    </table>';
 } else {
-	$tool_content .= "<p>$langNoAssign</p>";
+	$tool_content .= "<p class=\"alert1\">$langNoAssign</p>";
 
 }
 }

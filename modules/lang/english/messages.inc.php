@@ -3162,6 +3162,7 @@ $m['noguest'] = 'To submit work to an assignment you must login as a normal
 $m['one_submission'] = 'One file has been submitted';
 $m['more_submissions'] = '%d files have been submitteD';
 $m['plainview'] = 'Concise list of submissions and grades';
+$m['WorkInfo ']= 'Work info';
 
 $langGroupWorkIntro = '
 	Below appear the assignments available in this course. Please select
