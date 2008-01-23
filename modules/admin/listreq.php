@@ -217,7 +217,6 @@ switch($close)
 }
 else
 {
-
 	$tool_content .= "<table width=\"99%\"><caption>$langOpenProfessorRequests</caption><thead><tr>
 		<th scope=\"col\">$langName</th>
 		<th scope=\"col\">$langSurname</th>
@@ -250,11 +249,29 @@ else
 			<br><a href='listreq.php?id=$req[rid]&close=2'>$langRejectRequest</a>";
 
 		switch($req['profpassword']) {
-			case 'ldap': $tool_content .= "<br>$langRegistration<br>($langViaLdap)</td></tr>";
+			case 'ldap': $tool_content .= "<br><a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid']).
+																			"&pn=".urlencode($req['profname']).
+								                      "&ps=".urlencode($req['profsurname']).
+																			"&pu=".urlencode($req['profuname']).
+																			"&pe=".urlencode($req['profemail']).
+																			"&pt=".urlencode($req['proftmima']).
+																			"&auth=4'>$langRegistration<br>($langViaLdap)</td></tr>";
         break;
-      case 'pop3': $tool_content .= "<br>$langRegistration<br>($langViaPop)</td></tr>";
+      case 'pop3': $tool_content .= "<br><a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid']).
+                                      "&pn=".urlencode($req['profname']).
+                                      "&ps=".urlencode($req['profsurname']).
+                                      "&pu=".urlencode($req['profuname']).
+                                      "&pe=".urlencode($req['profemail']).
+                                      "&pt=".urlencode($req['proftmima']).
+																			"&auth=2'>$langRegistration<br>($langViaPop)</td></tr>";
         break;
-      case 'imap': $tool_content .= "<br>$langRegistration<br>($langViaImap)</td></tr>";
+      case 'imap': $tool_content .= "<br><a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid']).
+                                      "&pn=".urlencode($req['profname']).
+                                      "&ps=".urlencode($req['profsurname']).
+                                      "&pu=".urlencode($req['profuname']).
+                                      "&pe=".urlencode($req['profemail']).
+                                      "&pt=".urlencode($req['proftmima']).
+																			"&auth=3'>$langRegistration<br>($langViaImap)</td></tr>";
         break;
       default:  $tool_content .= "<br><a href='../auth/newprofadmin.php?id=".urlencode($req['rid']).
                       "&pn=".urlencode($req['profname']).
