@@ -259,12 +259,6 @@ function loggedOutMenu(){
 	array_push($sideMenuLink, $urlServer."modules/auth/listfaculte.php");
 	array_push($sideMenuImg, "black-arrow1.gif");
 
-	/* Check for LDAP server entries */
-	$ldap_entries = mysql_fetch_array(db_query("SELECT ldapserver FROM institution", $mysqlMainDb));
-	if ($ldap_entries['ldapserver'] <> NULL) $newuser = "newuser_info.php";
-	else $newuser = "newuser.php";
-	// end of checking
-
 	$newuser = ($is_eclass_unique==1)?'newuser.php':'newuser_info.php';
 	$newprof = ($is_eclass_unique==1)?'newprof.php':'newprof_info.php';
 
