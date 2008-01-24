@@ -1,39 +1,11 @@
 <?
-/*
-      +----------------------------------------------------------------------+
-      | GUnet eClass 1.7                                                    |
-      | Asychronous Teleteaching Platform                                    |
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2003-2007  GUnet                                       |
-      +----------------------------------------------------------------------+
-      |                                                                      |
-      | GUnet eClass 1.7 is an open platform distributed in the hope that   |
-      | it will be useful (without any warranty), under the terms of the     |
-      | GNU License (General Public License) as published by the Free        |
-      | Software Foundation. The full license can be read in "license.txt".  |
-      |                                                                      |
-      | Main Developers Group: Costas Tsibanis <k.tsibanis@noc.uoa.gr>       |
-      |                        Yannis Exidaridis <jexi@noc.uoa.gr>           |
-      |                        Alexandros Diamantidis <adia@noc.uoa.gr>      |
-      |                        Tilemachos Raptis <traptis@noc.uoa.gr>        |
-      |                                                                      |
-      | For a full list of contributors, see "credits.txt".                  |
-      |                                                                      |
-      +----------------------------------------------------------------------+
-      | Contact address: Asynchronous Teleteaching Group (eclass@gunet.gr),  |
-      |                  Network Operations Center, University of Athens,    |
-      |                  Panepistimiopolis Ilissia, 15784, Athens, Greece    |
-      +----------------------------------------------------------------------+
-*/
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
-include('../../include/sendMail.inc.php');
-global $langRequestStudent,$langRequestReject,$langInformativeEmail;
+include '../../include/sendMail.inc.php';
 
 $nameTools= $langUserOpenRequests;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
-$local_style = " th {font-size:12px; font-family:Verdana, Arial, Helvetica;  } ";
-$sendmail =0;
+$sendmail = 0;
 
 $local_head = '
 <script type="text/javascript">
@@ -49,10 +21,6 @@ function confirmation() {
 // Initialise $tool_content
 $tool_content = "";
 
-$tool_content .= "<table width=99% border='0' cellspacing='0' align=center cellpadding='0'>\n";
-$tool_content .= "<tr>\n";
-$tool_content .= "<td valign=top>\n";
-
 if (isset($close) && $close == 1) {
 	$sql = db_query("UPDATE prof_request set status='2', date_closed=NOW() WHERE rid='$id'");
 	$tool_content .= "<br><br><center>$langRequestStudent</center>";
@@ -63,25 +31,25 @@ if (isset($close) && $close == 1) {
 					    comment = '".mysql_escape_string($comment)."'
 					    WHERE rid = '$id'")) {
 			if ($sendmail == 1) {
-        $emailsubject = "Απόρριψη αίτησης εγγραφής στην Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης";
-				$emailbody = "
-Η αίτησή σας για εγγραφή στην πλατφόρμα eClass απορρίφθηκε.
-Σχόλια:
+        $emailsubject = $langemailsubjectBlocked;
+				$emailbody = "$langemailbodyBlocked
+
+$langComments:
 
 > $comment
 
 $langManager $siteName
 $administratorName $administratorSurname
-Τηλ. $telephone
+$langphone $telephone
 $langEmail : $emailAdministrator
 
 ";
 				send_mail($siteName, $emailAdministrator, "$prof_name $prof_surname",
 					$prof_email, $emailsubject, $emailbody, $charset);
 			}
-                        $tool_content .= "<div class=alert1>$langRequestReject</div><br>";
-                        if ($sendmail == 1) $tool_content .= "<div class=kk align=center>$langInformativeEmail <b>$prof_email</b></div>.";
-                        $tool_content .= "<br><table width=80% align=center style=\"border: 1px solid $table_border;\"><tr><td class=color1><h4>Σχόλια:</h4><pre>$comment</pre></td></tr></table>\n";
+                  $tool_content .= "<div class=alert1>$langRequestReject</div><br>";
+                  if ($sendmail == 1) $tool_content .= "<div class=kk align=center>$langInformativeEmail <b>$prof_email</b></div>.";
+                  $tool_content .= "<br><table width=80% align=center style=\"border: 1px solid $table_border;\"><tr><td class=color1><h4>$langComments:</h4><pre>$comment</pre></td></tr></table>\n";
 		}
 	} else {
 		$r = db_query("SELECT comment, profname, profsurname, profemail, proftmima, date_open, profcomm
@@ -93,11 +61,8 @@ $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
         <tr>
        <td class=td_label2 style='border: 0px solid $table_border'>$langWarnReject <b>'$d[profname] $d[profsurname] &lt;$d[profemail]&gt;'</b> $langWithDetails:</td>
         </tr>
-        <tr><td>&nbsp;</td></tr>
-        <tr>
-        <td>";
-        
-        $tool_content .= "<table align=center width=50% border=\"0\" cellspacing=1 cellpading=1 style=\"border: 1px solid $table_border;\">
+        <tr><td>&nbsp;</td></tr><tr><td>";
+ $tool_content .= "<table align=center width=50% border=\"0\" cellspacing=1 cellpading=1 style=\"border: 1px solid $table_border;\">
            <tr>
              <td class=color1 style=\"border: 1px solid $table_border;\"><b>$langSurname</b>:</td>
              <td class=stat2 style=\"border: 1px solid $table_border;\">$d[profsurname]</td>
@@ -122,8 +87,7 @@ $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
              <td class=color1 style=\"border: 1px solid $table_border;\"><b>$langphone</b>:</td>
              <td class=stat2 style=\"border: 1px solid $table_border;\">$d[profcomm]</td>
            </tr>
-           </table>
-        ";
+           </table>";
         
          $tool_content .= "</td></tr>
         <tr>
@@ -137,36 +101,33 @@ $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
                <textarea name='comment' rows='5' cols='80' class=auth_input_admin>$d[comment]</textarea>
            </td>
         </tr>
+        <tr><td>&nbsp;</td></tr>
         <tr>
-           <td>&nbsp;</td>
-        </tr>
-        <tr>
-           <td class=color1 style='border : 0px solid $table_border'>
-                <input type='checkbox' name='sendmail' value='1' checked='yes'>
-                &nbsp;$langRequestSendMessage &nbsp;&nbsp;
-								<input type='text' name='prof_email' class=auth_input_admin value='$d[profemail] '>&nbsp;&nbsp;<small>($langRequestDisplayMessage)</small></td></tr>
-								<tr>
-								<td align='center'>
+        <td class=color1 style='border : 0px solid $table_border'>
+        <input type='checkbox' name='sendmail' value='1' checked='yes'>
+        &nbsp;$langRequestSendMessage &nbsp;&nbsp;
+				<input type='text' name='prof_email' class=auth_input_admin value='$d[profemail] '>&nbsp;&nbsp;<small>($langRequestDisplayMessage)</small></td></tr>
+ 				<tr><td align='center'>
                 <input type='submit' name='submit' value='$langRejectRequest'>
-            </td>
-        </tr>
-        </table>
-      </form>";
+       	</td></tr></table></form>";
 	}
 
 } else {
 
-      $tool_content .= "<table align=center width=98% bgcolor=white cellspacing=0 cellpadding=0 style='border: 1px solid #E6EDF5;'>
-      <tr>
-         <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=15%>$langName<br>$langSurname</th>
-         <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langUsername</th>
-         <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=20%>$langEmail</th>
-         <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=20%>$langDateRequest</th>
-         <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=20%>$langComments</th>
-         <th style='text-align: center; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=15%>$langActions</th>
-      </tr>";
 
-	$sql = db_query("SELECT rid,profname,profsurname,proftmima,profcomm,profuname,profemail,date_open,comment 
+		$tool_content .= "<table width=\"99%\"><thead><tr>
+	    <th scope=\"col\">$langName</th>
+  	  <th scope=\"col\">$langSurname</th>
+    	<th scope=\"col\">$langUsername</th>
+	    <th scope=\"col\">$langEmail</th>
+  	  <th scope=\"col\">$langDepartment</th>
+	    <th scope=\"col\">$langphone</th>
+  	  <th scope=\"col\">$langDateRequest</th>
+    	<th scope=\"col\">$langComments</th>
+   		<th scope=\"col\">$langActions</th>
+    	</tr></thead><tbody>";
+
+	$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,comment 
 								FROM prof_request WHERE status='1' and statut='5'");
 
 	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
@@ -174,16 +135,14 @@ $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
 $tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#F1F1F1'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
      $tool_content .= "<td class=kk title=".htmlspecialchars($req[3])."><small>".htmlspecialchars($req[1])."<br>";
      $tool_content .= htmlspecialchars($req[2])."</small></td>";
-		for ($i = 5; $i < mysql_num_fields($sql); $i++) {
-			if ($i == 6 and $req[$i] != "") {
+		for ($i = 2; $i < mysql_num_fields($sql); $i++) {
+			if ($i == 4 and $req[$i] != "") {
 				$tool_content .= "<td class=kk><small><a href=\"mailto:".htmlspecialchars($req[$i])."\" class=small_tools>".htmlspecialchars($req[$i])."</a></small></td>";
 			} else {
 				$tool_content .= "<td class=kk><small>".htmlspecialchars($req[$i])."</small></td>";
 			}
 		}
-
-			$tool_content .= "<td align=center class=kk><small><a href='$_SERVER[PHP_SELF]?id=$req[rid]&close=1' class=small_tools onclick='return confirmation();'>Κλείσιμο</a><br><a href='$_SERVER[PHP_SELF]?id=$req[rid]&close=2' class=small_tools>$langRejectRequest</a>";
-			
+			$tool_content .= "<td align=center class=kk><small><a href='$_SERVER[PHP_SELF]?id=$req[rid]&close=1' class=small_tools onclick='return confirmation();'>$langClose</a><br><a href='$_SERVER[PHP_SELF]?id=$req[rid]&close=2' class=small_tools>$langRejectRequest</a>";
 			$tool_content .= "<br><a href=\"../auth/newuserreq.php?".
 			"id=".urlencode($req['rid']).
 			"&pn=".urlencode($req['profname']).
@@ -192,22 +151,17 @@ $tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#F1F1F1'\" onMou
 			"&pe=".urlencode($req['profemail']).
 			"&pt=".urlencode($req['proftmima']).
 			"\" class=small_tools>$langRegistration</a>";	
-
-		// check for ldap server
-     /*if (check_ldap_entries())
-		   $tool_content .= "<br><a href='../auth/ldapnewuser.php?id=$req[rid]&m=$req[profemail]&tmima=".urlencode($req['proftmima'])."' class=small_tools>Εγγραφή LDAP</a>"; */
 			$tool_content .= "</small></td></tr>";
 	}
-  
-        if (mysql_num_rows($sql) == 0 ) {
+
+		  // no requests
+        if (mysql_num_rows($sql) == 0) {
              $tool_content .= "<tr><td colspan=9 class=kk align=center><br>$langUserNoRequests<br><br></td></tr>";
         }
-        $tool_content .= "</table>";
+        $tool_content .= "</thead></tbody></table>";
 }
 
-$tool_content .= "<tr><td align=right>
-   <a href=\"../admin/index.php\" class=mainpage>$langBackAdmin&nbsp;</a>
-	 </td></tr></table>";
+$tool_content .= "<br><center><p><a href=\"index.php\">$langBack</a></p></center>";
 
-draw($tool_content,3,'admin');
+draw($tool_content,3);
 ?>

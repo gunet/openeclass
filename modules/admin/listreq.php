@@ -216,8 +216,11 @@ switch($close)
     }
 }
 else
-{
-	$tool_content .= "<table width=\"99%\"><caption>$langOpenProfessorRequests</caption><thead><tr>
+{  
+// -----------------------------------
+// display all the requests
+// -----------------------------------
+	$tool_content .= "<table width=\"99%\"><thead><tr>
 		<th scope=\"col\">$langName</th>
 		<th scope=\"col\">$langSurname</th>
 		<th scope=\"col\">$langUsername</th>

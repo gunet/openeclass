@@ -288,13 +288,6 @@ function adminMenu(){
 	global $webDir, $urlAppend, $language, $phpSysInfoURL, $phpMyAdminURL;
 	global $siteName, $is_admin, $urlServer, $mysqlMainDb, $close_user_registration;
 
-	/* Check for LDAP server entries */
-	$ldap_entries = mysql_fetch_array(db_query("SELECT ldapserver FROM institution",$mysqlMainDb));
-	if ($ldap_entries['ldapserver'] <> NULL)
-	$newuser = "newprof_info.php";
-	else
-	$newuser = "newprof.php";
-
 	$sideMenuGroup = array();
 
 	$sideMenuSubGroup = array();
