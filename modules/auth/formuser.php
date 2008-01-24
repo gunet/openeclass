@@ -2,13 +2,27 @@
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 
-if (@$usercomment != "" AND $name != "" AND $surname != "" AND $username != "" 
-		AND $userphone != "" AND $usermail != "")  {
+$tool_content = "";
+$nameTools = $langUserRequest;
+$navigation[] = array("url"=>"registration.php", "name"=> $langAuthReg);
 
-	$nameTools = $langUserRequest;
-	$tool_content = "";
+if (isset($submit)) {
 
-// ------------------- Update table prof_request ------------------------------
+	if (empty($usercomment) or empty($name) 
+		or empty($surname) or empty($username) or empty($userphone) or empty($usermail)) {
+			$tool_content .= "<table width=\"99%\"><tbody><tr>
+		    <td class=\"caution\" height='60'>
+    			<p>$langFieldsMissing</p>
+					<p><a href='$_SERVER[PHP_SELF]?name=$_POST[name]&surname=$_POST[surname]&userphone=$_POST[userphone]&username=$_POST[username]&usermail=$_POST[usermail]&usercomment=$_POST[usercomment]'>$langAgain</a></p>
+		    </td>
+		  </tr></tbody>
+			  </table><br><br/>";
+    draw($tool_content, 0, 'auth');
+	  exit;
+
+   } else {  // register user request
+
+	// ------------------- Update table prof_request ------------------------------
 $upd=db_query("INSERT INTO prof_request(profname,profsurname,profuname,profemail,proftmima,profcomm,status,date_open,comment,statut) VALUES('$name','$surname','$username','$usermail','$department','$userphone','1',NOW(),'$usercomment','5')");
 
 //----------------------------- Email Message --------------------------
@@ -19,65 +33,35 @@ $upd=db_query("INSERT INTO prof_request(profname,profsurname,profuname,profemail
 			"$contactphone : $userphone\n\n\n$logo\n\n";
 
 	if (!send_mail($gunet, $emailhelpdesk, '', $emailhelpdesk, $mailsubject2, $MailMessage, $charset)) {
-		$tool_content .= "
-  <table width=\"99%\">
-  <tbody>
-  <tr>
-    <td class=\"caution\" height='60'>
-    <p>$langMailErrorMessage&nbsp; <a href=\"mailto:$emailhelpdesk\" class=mainpage>$emailhelpdesk</a>.</p>
-    </td>
-  </tr>
-  </tbody>
-  </table>
-  <br><br/>";
+		$tool_content .= "<table width=\"99%\"><tbody><tr>
+	    <td class=\"caution\" height='60'>
+  	  <p>$langMailErrorMessage&nbsp; <a href=\"mailto:$emailhelpdesk\" class=mainpage>$emailhelpdesk</a>.</p>
+    	</td>
+		  </tr></tbody></table><br><br/>";
 	}
 
     //  User Message
-	$tool_content .= "<table width=\"99%\">
-  <tbody>
-  <tr>
+	$tool_content .= "<table width=\"99%\"><tbody><tr>
     <td class=\"well-done\" height='60'>
     <p>$langDearUser!<br/><br/>$success</p>
     </td>
-  </tr>
-  </tbody></table>
-  <p><br/><br/>$infoprof<br/><br/>$click <a href=\"$urlServer\" class=mainpage>$langHere</a> $langBackPage</p>
-  <br><br/>
-	";
-     
-  $tool_content .= "</td></tr></table>";
+		 </tr></tbody></table>
+	  <p><br/><br/>$infoprof<br/><br/>$click <a href=\"$urlServer\" class=mainpage>$langHere</a> $langBackPage</p>
+  	<br><br/></td></tr></table>";
+
   draw($tool_content, 0);
   exit();
+	} 
 
-} else {
-
-$tool_content = "";
-$nameTools = $langUserRequest;
-
-	if (isset($Add) and (empty($usercomment) or empty($name) or empty($surname) or empty($username) or empty($userphone) or empty($usermail))) {
-	$tool_content .= "<table width=\"99%\"> <tbody>
-  <tr>
-    <td class=\"caution\" height='60'>
-    <p>$langFieldsMissing</p>
-    <p><a href=\"javascript:history.go(-1)\">".$langAgain."</a></p>
-    </td>
-  </tr></tbody>
-  </table><br><br/>
-  ";
-  
-  draw($tool_content, 0, 'auth');
-  exit;
-   }
+}  else { // display the form
 
 // security
 if (!isset($close_user_registration) or $close_user_registration == FALSE) {
-			$navigation[] = array("url"=>"registration.php", "name"=> $langAuthReg);
 			$tool_content .= "<div class='td_main'>$langForbidden</div></td></tr></table>";
 			draw($tool_content, 0, 'auth');
 			exit;
 			}
 
-$navigation[] = array("url"=>"registration.php", "name"=> $langAuthReg);
 $tool_content .= "<p>$langInfoStudReq</p>
     <table width=\"99%\" align='left' class='FormData'>
     <thead>
@@ -131,11 +115,11 @@ $tool_content .= "<p>$langInfoStudReq</p>
 	 $tool_content .= "</select></td></tr>				
        <tr>
          <th class='left'>&nbsp;</th>
-         <td><input type='submit' class='ButtonSubmit' name='Add' value='$langSubmitNew'></td>
+         <td><input type='submit' class='ButtonSubmit' name='submit' value='$langSubmitNew'></td>
          <td><small><p align='right'>$langRequiredFields</p></small></td>
        </tr></tbody></table>
        </form></td></tr></thead></table>"; 
-}   // end of else if
+}   // end of form
 
 draw($tool_content, 0);
 ?>
