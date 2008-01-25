@@ -40,30 +40,13 @@ function db_query2($sql, $db = FALSE)
 }
 
 /*
+ Debug MySQL queries
 -------------------------------------------------------------------------
 it is better to use the function below instead of the usual mysql_query()
 first argument: the query
 second argument (optional) : the name of the data base
 If error happens just display the error and the code
 -----------------------------------------------------------------------
-*/
-// Debug MySQL queries
-// commented, not working in all cases
-/*
-function db_query($sql, $db = FALSE) {
-if ($db) {
-mysql_select_db($db);
-$r = mysql_query($sql,$GLOBALS['db']);
-} else {
-$r = mysql_query($sql,$GLOBALS['db']);
-}
-if (mysql_errno()) {
-echo '<hr>' . mysql_errno() . ': ' . mysql_error() .
-"<br><pre>$sql</pre><hr>";
-}
-return $r;
-}
-
 */
 
 function db_query($sql, $db = FALSE) {
@@ -88,7 +71,6 @@ function email_seems_valid($email)
                 and !preg_match('#@.*--#', $email));
 }
 
-
 // Eclass SQL query wrapper returning only a single result value.
 // Useful in some cases because, it avoid nested arrays of results.
 function db_query_get_single_value($sqlQuery, $db = FALSE) {
@@ -103,7 +85,6 @@ function db_query_get_single_value($sqlQuery, $db = FALSE) {
 		return false;
 	}
 }
-
 
 // Claroline SQL query wrapper returning only the first row of the result
 // Useful in some cases because, it avoid nested arrays of results.
@@ -216,7 +197,6 @@ if (get_magic_quotes_gpc()) {
 // ------------------------------------------------------
 // Other useful functions. We use it in various scripts.
 // -----------------------------------------------------
-
 
 // Translate uid to username
 function uid_to_username($uid)
@@ -331,7 +311,7 @@ function selection($entries, $name, $default = '')
 // ----------------------------------------------------------------------------
 function check_admin() {
 
-	global $uid, $urlServer, $toolContent_ErrorExists;
+	global $uid;
 	// just make sure that the $uid variable isn't faked
 	if (isset($_SESSION['uid'])) $uid = $_SESSION['uid'];
 	else unset($uid);
@@ -350,7 +330,7 @@ function check_admin() {
 // ------------------------------------------
 
 function check_guest() {
-	global $mysqlMainDb, $uid, $urlServer;
+	global $mysqlMainDb, $uid;
 	if (isset($uid)) {
 		$res = db_query("SELECT statut FROM user WHERE user_id = '$uid'", $mysqlMainDb);
 		$g = mysql_fetch_row($res);
@@ -471,7 +451,6 @@ function imap_literal($s)
 // ------------------------------------------------------------------------------------
 
 function mysql_version() {
-
 	$ver = mysql_get_server_info();
 	if (version_compare("4.1", $ver) <= 0)
 	return true;
@@ -493,7 +472,6 @@ function parse_tex($textext)
 	$textext=str_replace("[/tex]","' width='100%'>",$textext);
 	return $textext;
 }
-
 
 
 // --------------------------------------
@@ -572,9 +550,9 @@ function check_new_announce() {
                 AND cours_user.user_id='$uid' AND annonces.temps >= '$lastlogin'
                 ORDER BY temps DESC";
   if (mysql_num_rows(mysql_query($sql)) > 0)
-  return TRUE;
+	  return TRUE;
   else
-  return FALSE;
+  	return FALSE;
 
 }
 

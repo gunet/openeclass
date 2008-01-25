@@ -121,7 +121,6 @@ function choose_image($fileName)
 		$type['acrobat'   ] = array("pdf");
 		$type['powerpoint'] = array("ppt");
 
-
 		$image['word'      ] = "doc.gif";
 		$image['web'       ] = "html.gif";
 		$image['image'     ] = "gif.gif";
@@ -151,7 +150,6 @@ function choose_image($fileName)
 	return "defaut.gif";
 }
 
-//------------------------------------------------------------------------------
 
 /**
  * Transform the file size in a human readable format
@@ -197,8 +195,6 @@ function format_date($fileDate)
 	return date("d.m.Y", $fileDate);
 }
 
-//------------------------------------------------------------------------------
-
 
 /**
  * Transform the file path in a url
@@ -218,6 +214,5 @@ function format_url($filePath)
 
 	return implode("/",$stringArray);
 }
-
 
 ?>

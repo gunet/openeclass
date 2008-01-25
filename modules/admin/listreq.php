@@ -6,6 +6,17 @@ include '../auth/auth.inc.php';
 $nameTools= $langOpenProfessorRequests;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
+$head_content = '
+<script type="text/javascript">
+function confirmation() {
+   if (confirm("'.$langCloseConf.'")) {
+                return true;
+   } else {
+          return false;
+  }
+}
+</script>';
+
 // Initialise $tool_content
 $tool_content = "";
 
@@ -248,7 +259,7 @@ else
 				htmlspecialchars($req[$i])."</td>";
 			}
 		}
-		$tool_content .= "<td align=center><font size='2'><a href='listreq.php?id=$req[rid]&close=1'>$langClose</a>
+		$tool_content .= "<td align=center><font size='2'><a href='listreq.php?id=$req[rid]&close=1' onclick='return confirmation();'>$langClose</a>
 			<br><a href='listreq.php?id=$req[rid]&close=2'>$langRejectRequest</a>";
 
 		switch($req['profpassword']) {
@@ -301,5 +312,5 @@ if (!empty($show)) {
 } else {
 	$tool_content .= "<br><center><p><a href=\"index.php\">$langBack</a></p></center>";
 }
-draw($tool_content,3);
+draw($tool_content, 3, ' ', $head_content);
 ?>

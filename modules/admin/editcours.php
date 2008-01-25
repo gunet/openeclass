@@ -57,6 +57,7 @@ session_start();
 $require_admin = TRUE;
 // Include baseTheme
 include '../../include/baseTheme.php';
+include '../../include/lib/fileDisplayLib.inc.php';
 
 if (isset($_GET['c'])) {
 	$c = $_GET['c'];
@@ -70,6 +71,7 @@ if(!isset($c))
 $nameTools = $langCourseEdit;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "listcours.php", "name" => $langListCours);
+
 // Initialise $tool_content
 $tool_content = "";
 
@@ -134,26 +136,23 @@ if (isset($c)) {
 	$tool_content .= "  <tr>
     <td colspan=\"2\"><i>$langTheCourse <b>$q[intitule]</b> $langMaxQuota</i><br></td>
   </tr>";			
-	$dq = $q['doc_quota'] / 1000000;
-	$vq = $q['video_quota'] / 1000000;
-	$gq = $q['group_quota'] / 1000000;
-	$drq = $q['dropbox_quota'] / 1000000;
+	$dq = format_file_size($q['doc_quota']);
+	$vq = format_file_size($q['video_quota']);
+	$gq = format_file_size($q['group_quota']);
+	$drq = format_file_size($q['dropbox_quota']);
+
 	$tool_content .= "  <tr>
     <td width=\"3%\" nowrap>$langLegend <b>$langDoc</b>:</td>
-    <td>".$dq." Mb.</td>
-</tr>";
+    <td>".$dq."</td></tr>";
 	$tool_content .= "  <tr>
     <td width=\"3%\" nowrap>$langLegend <b>$langVideo</b>:</td>
-    <td>".$vq." Mb.</td>
-</tr>";
-	$tool_content .= "  <tr>
+    <td>".$vq."</td></tr>";
+	$tool_content .= " <tr>
     <td width=\"3%\" nowrap>$langLegend <b>$langGroup</b>:</td>
-    <td>".$gq." Mb.</td>
-</tr>";
+    <td>".$gq."</td></tr>";
 	$tool_content .= "  <tr>
     <td width=\"3%\" nowrap>$langLegend <b>$langDropbox</b>:</td>
-    <td>".$drq." Mb.</td>
-</tr>";
+    <td>".$drq."</td></tr>";
 	$tool_content .= "</tbody></table><br>\n";
 	// Display course type and link to edit
 	$tool_content .= "<table width=\"99%\"><caption>".$langCourseStatus." (<a href=\"statuscours.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langModify."</a>)</caption><tbody>";

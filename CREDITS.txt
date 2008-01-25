@@ -80,3 +80,7 @@
 			Wiki module: Frederic Minne <zefredz@gmail.com>
 
       Exercise module: Copyright Olivier Brouckaert <oli.brouckaert@skynet.be>
+			
+			Function parse_tex(): Patrick Cool <patrick.cool@UGent.be>
+			
+			Function user_get_data(): Mathieu Laurent <laurent@cerdecam.be>

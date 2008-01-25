@@ -7,7 +7,7 @@ $nameTools= $langUserOpenRequests;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 $sendmail = 0;
 
-$local_head = '
+$head_content = '
 <script type="text/javascript">
 function confirmation() {
    if (confirm("'.$langCloseConf.'")) {
@@ -122,5 +122,5 @@ $tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#F1F1F1'\" onMou
         $tool_content .= "</thead></tbody></table>";
 }
 $tool_content .= "<br><center><p><a href=\"index.php\">$langBack</a></p></center>";
-draw($tool_content,3);
+draw($tool_content, 3 ,' ', $head_content);
 ?>
