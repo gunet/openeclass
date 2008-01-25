@@ -304,45 +304,45 @@ function submit_work($id) {
 		}
 		
 		$tool_content .="
-	<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"success\">
-							<p><b>$msg2</b></p><p>$msg1</p>
-							<p><a href='work.php'>$langBack</a></p>
-						</td>
-					</tr>
-				</tbody>
-			</table>";
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"success\">
+      <p><b>$msg2</b></p><p>$msg1</p>
+      <p><a href='work.php'>$langBack</a></p>
+      </td>
+    </tr>
+    </tbody>
+    </table>";
 		
 	} else {
 		$tool_content .="
-	<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"caution\">
-							<p><b>$langUploadError</b></p>
-							<p><a href='work.php'>$langBack</a></p>
-						</td>
-					</tr>
-				</tbody>
-			</table>";
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"caution\">
+      <p><b>$langUploadError</b></p>
+      <p><a href='work.php'>$langBack</a></p>
+      </td>
+    </tr>
+    </tbody>
+    </table>";
 		
 	}
 //	$tool_content .= "<p><center><a href='work.php'>$langBack</a></center></p>";
 
   } else { // not submit_ok
   	$tool_content .="
-	<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"caution\">
-							<p><b>$langExerciseNotPermit<br>$langExerciseNotPermit</b></p>
-							<p><a href='work.php'>$langBack</a></p>
-						</td>
-					</tr>
-				</tbody>
-			</table>";
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"caution\">
+      <p><b>$langExerciseNotPermit<br>$langExerciseNotPermit</b></p>
+      <p><a href='work.php'>$langBack</a></p>
+      </td>
+    </tr>
+    </tbody>
+    </table>";
   }
 }
 
@@ -371,7 +371,7 @@ function new_assignment()
 
 	$tool_content .= "
     <form action=\"work.php\" method=\"post\">
-    <table width=\"99%\" class='FormData'
+    <table width=\"99%\" class='FormData'>
     <tbody>
     <tr>
       <th width='150'>&nbsp;</th>
@@ -458,31 +458,48 @@ function show_edit_assignment($id) {
 
 	$deadline = $row['deadline'];
 
+	$tool_content .= "
+    <div id=\"operations_container\">
+    <ul id=\"opslist\">
+      <li><a href='work.php'>$langBack</a></li>
+    </ul>
+    </div>
+    ";
+	
 	$tool_content .= <<<cData
-	<form action="work.php" method="post">
-	<input type="hidden" name="id" value="$id">
-	<input type="hidden" name="choice" value="do_edit">
-	<table width="99%" ><thead>
-	<tr><th>${m['title']}:</th>
-	<td><input type="text" name="title" size="45" value="${row['title']}"></td></tr>
-	</thead></table><br/>
-	<table width="99%" >
-	<thead>
-<tr><th>${m['description']}:</th></tr></thead><tbody>
-	<tr><td>
-<textarea id='xinha' name='desc' value='${row['description']}' style='width:100%' rows='20' cols='60'>
-${row['description']}
-</textarea>
-	</td></tr>
-	</tbody></table><br/>
-	<table><thead>
-	<tr><th>${m['comments']}:</th>
-	<td><textarea name="comments" rows="5" cols="65">${row['comments']}</textarea></td></tr>
-<tr><th>${m['deadline']}:</th><td>
+    <form action="work.php" method="post">
+    <input type="hidden" name="id" value="$id">
+    <input type="hidden" name="choice" value="do_edit">
+
+    <table width="99%" class="FormData">
+    <tbody>
+    <tr>
+      <th width="150">&nbsp;</th>
+      <td><b>$m[WorkInfo]</b></td>
+    </tr>
+    <tr>
+      <th class="left">$m[title]:</th>
+      <td><input type="text" name="title" size="45" value="${row['title']}" class='FormData_InputText'></td>
+    </tr>
+    <tr>
+      <th class="left">${m['description']}:</th>
+      <td><textarea id='xinha' name='desc' value='${row['description']}' style='width:100%' rows='20' cols='60'>${row['description']}</textarea></td>
+    </tr>
+    <tr>
+      <th class="left">${m['comments']}:</th>
+      <td><textarea name="comments" rows="5" cols="65"  class='FormData_InputText'>${row['comments']}</textarea></td>
+    </tr>
+    <tr>
+      <th class="left">${m['deadline']}:</th>
+      <td>
 
 cData;
 
-	$tool_content .= getJsDeadline($deadline)."</td></tr><tr><th>".$m['group_or_user'].":</th><td>".
+	$tool_content .= getJsDeadline($deadline)."</td>
+    </tr>
+    <tr>
+      <th class=\"left\">".$m['group_or_user'].":</th>
+      <td>".
 	"<input type=\"radio\" name=\"group_submissions\" value=\"0\"";
 
 	if ($row['group_submissions'] == '0')
@@ -494,11 +511,17 @@ cData;
 	if ($row['group_submissions'] != '0')
 	$tool_content .= " checked=\"1\" >";
 	else $tool_content .= ">";
-	$tool_content .= $m['group_work']."</td></tr>
-	</thead></table><br/>
-	<input type=\"submit\" name=\"do_edit\" value=\"".$langEdit."\">";
+	$tool_content .= $m['group_work']."</td>
+    </tr>
+    <tr>
+      <th class=\"left\">&nbsp;</th>
+      <td><input type=\"submit\" name=\"do_edit\" value=\"".$langEdit."\"></td>
+    </tr>
+    </tbody>
+    </table>
+    </form>";
 	//////////////////////////////////////////////////////////////////////////////////////
-	$tool_content .= "<br/><br/><p><a href='work.php'>$langBack</a></p>";
+
 }
 
 // edit assignment
@@ -513,31 +536,38 @@ function edit_assignment($id)
 		description='".mysql_real_escape_string($_POST[desc])."', group_submissions='".mysql_real_escape_string($_POST[group_submissions])."',
 		comments='".mysql_real_escape_string($_POST[comments])."', deadline='".mysql_real_escape_string($_POST[WorkEnd])."' WHERE id='$id'")) {
 
+	$tool_content .= "
+    <div id=\"operations_container\">
+    <ul id=\"opslist\">
+      <li><a href='work.php?id=$id'>$langBackAssignment \"$_POST[title]\"</a></li>
+    </ul>
+    </div>
+    ";
+	
 	$tool_content .="
-	<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"success\">
-							<p><b>$langEditSuccess</b></p>
-							<p><a href='work.php?id=$id'>$langBackAssignment \"$_POST[title]\"</a></p>
-						</td>
-					</tr>
-				</tbody>
-			</table>";
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"success\">
+      <p><b>$langEditSuccess</b></p>
+      </td>
+    </tr>
+    </tbody>
+    </table>";
 
 
 		} else {
-			$tool_content .="
-	<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"success\">
-							<p><b>$langEditError</b></p>
-							<p><a href='work.php?id=$id'>$langBackAssignment \"$_POST[title]\"</a></p>
-						</td>
-					</tr>
-				</tbody>
-			</table>";
+	$tool_content .="
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"success\">
+      <p><b>$langEditError</b></p>
+      <p><a href='work.php?id=$id'>$langBackAssignment \"$_POST[title]\"</a></p>
+      </td>
+    </tr>
+    </tbody>
+    </table>";
 
 		}
 
@@ -627,7 +657,7 @@ function show_student_assignment($id)
 		$tool_content .= "<p>$langUserOnly</p>";
 		$submit_ok = FALSE;
 	} elseif ($GLOBALS['statut'] == 10) {
-		$tool_content .= "<p>$m[noguest]</p>";
+		$tool_content .= "<p class='alert1'>$m[noguest]</p>";
 		$submit_ok = FALSE;
 	} else {
 		if ($submission = was_graded($uid, $id)) {
@@ -635,7 +665,7 @@ function show_student_assignment($id)
 			$submit_ok = FALSE;
 		} elseif ($submission = find_submission($uid, $id)) {
 			show_submission_details($submission);
-			$tool_content .= "<p>$langNotice3</p>";
+			$tool_content .= "<p class='alert1'>$langNotice3</p>";
 		}
 	}
 	if ($submit_ok) {
@@ -696,7 +726,6 @@ function assignment_details($id, $row, $message = null)
 					<tr>
 						<td class=\"success\">
 							<p><b>$langSaved </b></p>
-							
 						</td>
 					</tr>
 				</tbody>
@@ -953,7 +982,7 @@ cData;
 		/* echo "<p><a href=\"work.php?choice=plain&id=$id\">$m[plainview]</a></p>"; */
 		//		$tool_content .= "<p><a href=\"work.php?download=$id\">$langZipDownload</a></p>";
 	} else {
-		$tool_content .= "<p>$langNoSubmissions</p>";
+		$tool_content .= "<p class='alert1'>$langNoSubmissions</p>";
 	}
 	$tool_content .= "<br/><p><a href='work.php'>$langBack</a></p>";
 }
@@ -1019,7 +1048,7 @@ cData;
 		}
 		$tool_content .= '</tbody></table>';
 	} else {
-		$tool_content .= "<p>$langNoAssign</p>";
+		$tool_content .= "<p class=\"alert1\">$langNoAssign</p>";
 
 	}
 }
@@ -1064,8 +1093,7 @@ function show_assignments($message = null)
     <table width="99%">
     <thead>
     <tr>
-      <th width='5'>a/a</th>
-      <th class='left'>${m['title']}</th>
+      <th class='left' colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${m['title']}</th>
       <th width='70'>${m['deadline']}</th>
       <th width='70'>${m['edit']}</th>
       <th width='70'>${m['delete']}</th>
@@ -1091,7 +1119,7 @@ cData;
 			$tool_content .= "
     <tbody>
     <tr ".$visibility_css.">
-      <td align='right'>$index.</td>
+      <td align='right' width='5'>$index.</td>
       <td><a href=\"work.php?id=${row['id']}\" ";
 
 			//	if(!$row['active'])
