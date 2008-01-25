@@ -49,71 +49,32 @@ $langEmail : $emailAdministrator
 			}
                   $tool_content .= "<div class=alert1>$langRequestReject</div><br>";
                   if ($sendmail == 1) $tool_content .= "<div class=kk align=center>$langInformativeEmail <b>$prof_email</b></div>.";
-                  $tool_content .= "<br><table width=80% align=center style=\"border: 1px solid $table_border;\"><tr><td class=color1><h4>$langComments:</h4><pre>$comment</pre></td></tr></table>\n";
+                  $tool_content .= "<br><center><h4>$langComments:</h4><pre>$comment</pre></center>\n";
 		}
 	} else {
+// -----------------
+ // reject request
+// ----------------
 		$r = db_query("SELECT comment, profname, profsurname, profemail, proftmima, date_open, profcomm
 					     FROM prof_request WHERE rid = '$id'");
 		$d = mysql_fetch_assoc($r);
 
-$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
-        <table border='0' width='100%' cellspacing='0'>
-        <tr>
-       <td class=td_label2 style='border: 0px solid $table_border'>$langWarnReject <b>'$d[profname] $d[profsurname] &lt;$d[profemail]&gt;'</b> $langWithDetails:</td>
-        </tr>
-        <tr><td>&nbsp;</td></tr><tr><td>";
- $tool_content .= "<table align=center width=50% border=\"0\" cellspacing=1 cellpading=1 style=\"border: 1px solid $table_border;\">
-           <tr>
-             <td class=color1 style=\"border: 1px solid $table_border;\"><b>$langSurname</b>:</td>
-             <td class=stat2 style=\"border: 1px solid $table_border;\">$d[profsurname]</td>
-           </tr>
-           <tr>
-             <td class=color1 style=\"border: 1px solid $table_border;\"><b>$langName</b>:</td>
-             <td class=stat2 style=\"border: 1px solid $table_border;\">$d[profname]</td>
-           </tr>
-           <tr>
-             <td class=color1 style=\"border: 1px solid $table_border;\"><b>$langEmail</b>:</td>
-             <td class=stat2 style=\"border: 1px solid $table_border;\">$d[profemail]</td>
-           </tr>
-           <tr>
-             <td class=color1 style=\"border: 1px solid $table_border;\"><b>$langFaculty</b>:</td>
-             <td class=stat2 style=\"border: 1px solid $table_border;\">$d[proftmima]</td>
-           </tr>
-           <tr>
-             <td class=color1 style=\"border: 1px solid $table_border;\"><b>$langDateRequest</b>:</td>
-             <td class=stat2 style=\"border: 1px solid $table_border;\">$d[date_open]</td>
-           </tr>
-           <tr>
-             <td class=color1 style=\"border: 1px solid $table_border;\"><b>$langphone</b>:</td>
-             <td class=stat2 style=\"border: 1px solid $table_border;\">$d[profcomm]</td>
-           </tr>
-           </table>";
-        
-         $tool_content .= "</td></tr>
-        <tr>
-         <td class=color1 style='border : 0px solid $table_border'>$langComments:</td>
-        </tr>
-        <tr>
-           <td><input type='hidden' name='id' value='$id'>
+$tool_content .= "<br><br>
+          <center><p>$langWarnReject:<br><br>".$d['profname']." ".$d['profsurname']." &lt;".$d['profemail']."&gt;
+          <br><br>$langComments:  <form action=\"$_SERVER[PHP_SELF]\" method=\"post\"
+							 <input type='hidden' name='id' value='$id'>
                <input type='hidden' name='close' value='2'>
                <input type='hidden' name='prof_name' value='$d[profname]'>
                <input type='hidden' name='prof_surname' value='$d[profsurname]'>
-               <textarea name='comment' rows='5' cols='80' class=auth_input_admin>$d[comment]</textarea>
-           </td>
-        </tr>
-        <tr><td>&nbsp;</td></tr>
-        <tr>
-        <td class=color1 style='border : 0px solid $table_border'>
-        <input type='checkbox' name='sendmail' value='1' checked='yes'>
-        &nbsp;$langRequestSendMessage &nbsp;&nbsp;
-				<input type='text' name='prof_email' class=auth_input_admin value='$d[profemail] '>&nbsp;&nbsp;<small>($langRequestDisplayMessage)</small></td></tr>
- 				<tr><td align='center'>
-                <input type='submit' name='submit' value='$langRejectRequest'>
-       	</td></tr></table></form>";
+					<textarea name=\"comment\" rows=\"5\" cols=\"40\">".$d['comment']."</textarea>
+          <br>
+					<input type=\"checkbox\" name=\"sendmail\" value=\"1\" checked=\"yes\">&nbsp;$langRequestSendMessage
+          <input type=\"text\" name=\"prof_email\" value=\"".$d['profemail']."\">
+          <br><br>($langRequestDisplayMessage)
+          <br><br><input type=\"submit\" name=\"submit\" value=\"$langRejectRequest\"></form></p></center>";
 	}
 
 } else {
-
 
 		$tool_content .= "<table width=\"99%\"><thead><tr>
 	    <th scope=\"col\">$langName</th>
@@ -160,8 +121,6 @@ $tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#F1F1F1'\" onMou
         }
         $tool_content .= "</thead></tbody></table>";
 }
-
 $tool_content .= "<br><center><p><a href=\"index.php\">$langBack</a></p></center>";
-
 draw($tool_content,3);
 ?>

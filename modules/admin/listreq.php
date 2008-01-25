@@ -198,7 +198,7 @@ switch($close)
 				$tool_content .= "
 					<br><br>
 					<center><p>$langGoingRejectRequest:<br><br>".$d['profname']." ".$d['profsurname']." &lt;".$d['profemail']."&gt;
-					<br><br>$langComments:	<form action=\"listreq.php\" method=\"post\">
+					<br><br>$langComments:	<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
 					<input type=\"hidden\" name=\"id\" value=\"".$id."\">
 					<input type=\"hidden\" name=\"close\" value=\"2\">
 					<input type=\"hidden\" name=\"prof_name\" value=\"".$d['profname']."\">
