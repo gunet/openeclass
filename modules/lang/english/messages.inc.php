@@ -3237,8 +3237,6 @@ $langNotFeasible="it is not feasible";
 /*************************************************************
 * listerq.php
 **************************************************************/
-
-
 $langReintroductionApplication="The reintroduction of application was completed with success";
 
 /*************************************************************
@@ -3248,11 +3246,6 @@ $langRequestStudent="The application of student closed!";
 $langRequestReject="The application was rejected";
 $langInformativeEmail="It was sent informative message in the address";
 
-/*************************************************************
-* myannouncements.php
-**************************************************************/
-
-$langDatabaseProblem="Problem in the base of data!";
 /*************************************************************
 * admin.php
 **************************************************************/
@@ -3279,8 +3272,6 @@ $langUnableDeleteTopic="Couldn't delete topic from database";
 $langTopicInformation="Couldn't get forum and topic information from the database.";
 $langErrorTopicSelect="Error - The forum/topic you selected does not exist. Please go back and try again.";
 $langUserTopicInformation="<p>Couldn't get user and topic information from the database.</p>";
-
-
 
 /*************************************************************
 newtopic.php

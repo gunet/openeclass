@@ -34,11 +34,10 @@
  *
  */
 $require_login = TRUE;
-$langFiles = 'announcements';
 $ignore_module_ini = true;
-global $langDatabaseProblem;
+
 include '../../include/baseTheme.php';
-include('../../include/lib/textLib.inc.php');
+include '../../include/lib/textLib.inc.php';
 $nameTools = $langMyAnnouncements;
 $tool_content = "";
 $result = db_query("SELECT annonces.id, annonces.title, annonces.contenu,
@@ -48,18 +47,16 @@ $result = db_query("SELECT annonces.id, annonces.title, annonces.contenu,
                         FROM annonces,cours_user
                         WHERE annonces.code_cours=cours_user.code_cours
                         AND cours_user.user_id='$uid'
-                        ORDER BY annonces.temps DESC", $mysqlMainDb)
-                                OR die("$langDatabaseProblem");
+                        ORDER BY annonces.temps DESC", $mysqlMainDb);
 
 $tool_content .= "<table width=\"99%\" cellpadding=\"0\" align=center cellspacing=\"0\" border=\"0\" class='FormData'>\n";
-
         if (mysql_num_rows($result) > 0)  {    // found announcements ?
         while ($myrow = mysql_fetch_array($result)) {
                 $content = $myrow['contenu'];
                 $content = make_clickable($content);
                 $content = nl2br($content);
                 $row = mysql_fetch_array(db_query("SELECT intitule,titulaires FROM cours 
-											WHERE code='$myrow[code_cours]'"));
+							WHERE code='$myrow[code_cours]'"));
                 $tool_content .= "<tr><td>";
                 $tool_content .= "<table width=100% align=center style=\"border: 1px solid silver;\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
                 $tool_content .= "<tr><td class='color1'><b>$row[intitule]</b></td>\n";
@@ -71,16 +68,13 @@ $tool_content .= "<table width=\"99%\" cellpadding=\"0\" align=center cellspacin
                 $tool_content .= "$content<br /><small><div align='right'><i>($langAnn: ".$myrow['temps'].")</i></div></small></td>";
                 $tool_content .= "</tr>";
                 $tool_content .= "</table>";
-
-								$tool_content .= "";
+		$tool_content .= "";
         }       // while loop
-
 } else {  // no announcements
         $tool_content .= "<tr><td>&nbsp;</td></tr>\n";
         $tool_content .= "<tr><td class=alert1><em>".$langNoAnnounce."</em></td></tr>\n";
 }
 
 $tool_content .= "</table>";
-
 draw($tool_content, 1, 'announcements');
 ?>
