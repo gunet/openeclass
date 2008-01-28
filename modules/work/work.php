@@ -720,43 +720,77 @@ function assignment_details($id, $row, $message = null)
 	}
 	//<a href='work.php?id=${row['id']}&choice=do_delete' onClick=\"return confirmation('".addslashes($row_title)."');\">
 	if (isset($message)) {
-		$tool_content .="
-	<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"success\">
-							<p><b>$langSaved </b></p>
-						</td>
-					</tr>
-				</tbody>
-			</table><br/>";
+	$tool_content .="
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"success\"><p><b>$langSaved </b></p></td>
+    </tr>
+    </tbody>
+    </table>
+    <br/>";
 	}
 
-	$tool_content .= "<table><thead>
-	<tr><th>$m[title]:</th><td>$row[title]</td></tr>";
-	$tool_content .= "<tr><th>$m[description]:</th><td>$row[description]</td></tr>
+	$tool_content .= "
+    <table>
+    <tbody>
+    <tr>
+      <th class='left'>&nbsp;</th>
+      <td><b>".$m['WorkInfo ']."</b></td>
+    </tr>
+    <tr>
+      <th class='left'>$m[title]:</th>
+      <td>$row[title]</td>
+    </tr>";
+	$tool_content .= "
+    <tr>
+      <th class='left'>$m[description]:</th>
+      <td>$row[description]</td>
+    </tr>
 	";
 	if (!empty($row['comments'])) {
-		$tool_content .= "<tr><th>$m[comments]:</th><td>$row[comments]</td></tr>";
+		$tool_content .= "
+    <tr>
+      <th class='left'>$m[comments]:</th>
+      <td>$row[comments]</td>
+    </tr>";
 	}
-	$tool_content .= "<tr><th>$m[start_date]:</th><td>$row[submission_date]</td></tr>
-		<tr><th>$m[deadline]:</th><td>$row[deadline] ";
+	$tool_content .= "
+    <tr>
+      <th class='left'>$m[start_date]:</th>
+      <td>$row[submission_date]</td>
+    </tr>
+    <tr>
+      <th class='left'>$m[deadline]:</th>
+      <td>$row[deadline] ";
 	if ($row['days'] > 1) {
-		$tool_content .= "$langDaysLeft $row[days] $langDays</td></tr>";
+		$tool_content .= "$langDaysLeft $row[days] $langDays</td>
+    </tr>";
 	} elseif ($row['days'] < 0) {
-		$tool_content .= "$langEndDeadline</td></tr>";
+		$tool_content .= "$langEndDeadline</td>
+    </tr>";
 	} elseif ($row['days'] == 1) {
-		$tool_content .= "$langWEndDeadline</td></tr>";
+		$tool_content .= "$langWEndDeadline</td>
+    </tr>";
 	} else {
-		$tool_content .= "$langNEndDeadline</td></tr>";
+		$tool_content .= "$langNEndDeadline</td>
+    </tr>";
 	}
-	$tool_content .= "<tr><th>$m[group_or_user]:</th><td>";
+	$tool_content .= "
+    <tr>
+      <th class='left'>$m[group_or_user]:</th>
+      <td>";
 	if ($row['group_submissions'] == '0') {
-		$tool_content .= "$m[user_work]</td></tr>";
+		$tool_content .= "$m[user_work]</td>
+    </tr>";
 	} else {
-		$tool_content .= "$m[group_work]</td></tr>";
+		$tool_content .= "$m[group_work]</td>
+    </tr>";
 	}
-	$tool_content .= "</thead></table><br/>";
+	$tool_content .= "
+    </tbody>
+    </table>
+    <br/>";
 }
 
 
