@@ -26,6 +26,8 @@ $langsStudent = "εκπαιδευόμενος";
 $langsOfStudent = "εκπαιδευόμενου";
 $langsStudents = "εκπαιδευόμενοι";
 $langsOfStudents = "εκπαιδευόμενων";
+$langsOfStudentss = "εκπαιδευόμενoυς";
+$langstudent = "εκπαιδευόμενο";
 
 $langGuest = "Χρήστης Επισκέπτης";
 $langGuests = "Χρήστες Επισκέπτες";
