@@ -59,9 +59,9 @@ $langUsers = "Χρήστες";
 $langUsersS = "χρήστες";
 $langUser = "Χρήστης";
 $langUserS = "χρήστης";
-
 $langSupportUser = "Υπεύθυνος Υποστήριξης:";
 $langAdminUsers = "Διαχείριση Χρηστών";
+
 /********************************************
 * addadmin.inc.php
 *********************************************/
@@ -494,10 +494,6 @@ $langWrongAuth = "Πληκτρολογήσατε λάθος όνομα χρήστη / συνθηματικό";
 
 /************************************************************
  * conference.inc.php
- * @author Dimitris Tsachalis <ditsa@ccf.auth.gr>
- * @version $Id$
- *
- * @abstract
  ******************************************************************/
 
  $langConference = "Τηλεσυνεργασία";
@@ -545,7 +541,7 @@ $langCourseProgram = "Περιγραφή Μαθήματος";
 $langThisCourseDescriptionIsEmpty = "Το μάθημα δεν διαθέτει περιγραφή";
 $langEditCourseProgram = "Δημιουργία και διόρθωση";
 $langQuestionPlan = "Ερώτηση στον διδάσκοντα";
-$langInfo2Say = "Πληροφορία για τους ".$langsOfStudentss." ;
+$langInfo2Say = "Πληροφορία για τους ".$langsOfStudentss;
 $langAddCat = "Κατηγορία";
 $langBackAndForget ="Ακύρωση και επιστροφή";
 $langBlockDeleted = "Η παρακάτω περιγραφή διαγράφηκε!";
@@ -664,7 +660,6 @@ $langForce="Εξώθηση του συνομιλητή σας, με μια σειρά ερωτήσεων και υποερωτήσεων,
 $langIndeed="Πράγματι, η Σωκρατική ειρωνεία είναι μια μέθοδος ερωτημάτων.";
 $langContradiction="Χρήση της αρχής της αποφυγής αντιφάσεων προκειμένου να οδηγήσετε τον συνομιλητή σας σε αδιέξοδο.";
 $langNotFalse="Η απάντηση δεν είναι εσφαλμένη. Είναι αλήθεια ότι η αποκάλυψη της άγνοιας του συνομιλητή σας επιδεικνύει τα αντιφατικά συμπεράσματα που προκύπτουν από τις αρχικές παραδοχές του.";
-
 $langDoc="Έγγραφα";
 $langVideoLinks="Βιντεοσκοπημένα Μαθήματα";
 $langWorks="Εργασίες";
@@ -1156,7 +1151,6 @@ $langProfLesson = "Διδάσκων του μαθήματος";
 /*****************************************************
 * guest.inc.php
 *****************************************************/
-
 $langAskGuest="Πληκτρολογήστε το συνθηματικό του λογαριασμού επισκέπτη";
 $langAddGuest="Προσθήκη χρήστη επισκέπτη";
 $langGuestName="Επισκέπτης";
@@ -1577,10 +1571,8 @@ $langPassResetGoHere = "
 ";
 
 $langPassEmail1 = "Το συνθηματικό σας έχει οριστεί ξανά επιτυχώς. Το νέο σας συνθηματικό είναι αυτό που ακολουθεί:";
-			
 $langPassEmail2 = "Για λόγους ασφάλειας, παρακαλούμε αλλάξτε το συνθηματικό το συντομότερο δυνατόν, σε κάτι
 που μόνο εσείς το γνωρίζετε, μόλις συνδεθείτε στην πλατφόρμα.";
-
 $langAccountResetSuccess1="Ο ορισμός νέου συνθηματικού σας έχει ολοκληρωθεί";
 $langAccountResetInvalidLink="Ο σύνδεσμος που ακολουθήσατε δεν ισχύει πλέον. Παρακαλούμε επαναλάβετε από την αρχή την διαδικασία.";
 $langAccountEmailError1 = "Παρουσιάστηκε σφάλμα κατά την αποστολή των στοιχείων σας";
@@ -1611,7 +1603,6 @@ $langNote = "Σημείωση";
 $langAcrobat = "Για να διαβάσετε τα αρχεία PDF μπορείτε να χρησιμοποιήσετε το πρόγραμμα Acrobat Reader";
 $langWhere ="που θα βρείτε";
 $langHere = "εδώ";
-
 
 /*********************************************************
 * opencours.inc.php
@@ -1665,12 +1656,6 @@ unset($titreBlocNotEditable);
 unset($questionPlan);
 unset($info2Say);
 */
-$titreBloc[] = "Description";
-$titreBlocNotEditable[] = TRUE;
-$questionPlan[] = "Σε τι αναφέρεται το μάθημα? Χρειάζονται τυχόν προαπαιτούμενα μαθήματα?";
-$info2Say[] = "Information about the course it will be given from the teacher";
-$titreBloc[] = "Goals";
-$titreBlocNotEditable[] = TRUE;
 $info2Say[] = "The goals of the course will be announced immediately";
 $questionPlan[] = "Who are the objectives of  the course?";
 $titreBloc[] = "Content of Course";
