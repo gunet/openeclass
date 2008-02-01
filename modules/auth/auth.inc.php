@@ -224,7 +224,7 @@ firstname (LDAP attribute: givenname)
 lastname (LDAP attribute: sn)
 email (LDAP attribute: mail)
 ****************************************************************/
-function auth_user_login ($auth,$test_username, $test_password) 
+function auth_user_login ($auth, $test_username, $test_password) 
 {
     global $mysqlMainDb;
     switch($auth)
@@ -301,67 +301,40 @@ function auth_user_login ($auth,$test_username, $test_password)
 	    break;
 	    
 	case '4':
-			$ldaphost = $GLOBALS['ldaphost'];
-			$basedn = $GLOBALS['ldapbind_dn'];
-			$ldap_uid = $test_username;
-			$ldap_passwd = $test_password;
-			// anonymous account:
-			$a_user = $GLOBALS['ldapbind_user'];
-			$a_pass = $GLOBALS['ldapbind_pw'];
-			$testauth = "false";
-			
-			  // suppose user has provided a pair: $user, $pass
-    $ldap_host = $ldaphost;
-    $ldap_base_dn = $basedn;
-    $ldap_user_attrib = 'uid';
-    $user = $ldap_uid;
-    $pass = $ldap_passwd;
-    $all_ldap_base_dn     = array();
-    $all_ldap_user_attrib = array();
+            $ldap_host = $GLOBALS['ldaphost'];
+            $all_ldap_base_dn = array('uid' => $GLOBALS['ldapbind_dn']);
+            // anonymous account:
+            $a_user = $GLOBALS['ldapbind_user'];
+            $a_pass = $GLOBALS['ldapbind_pw'];
+            $testauth = false;
 
-    $all_ldap_base_dn = array($ldap_base_dn);
+            $ldap = ldap_connect($ldap_host);
 
-    // Transfer the array of user attributes to a new value. Create an array of the user attributes to match
-    // the number of base dn's if a single user attribute has been passed.
-    $all_ldap_user_attrib[] = $ldap_user_attrib;
+            if ($ldap) {
+                    // LDAP connection established - now process all
+                    // base dn's until authentication is achieved or fail
+                    foreach ($all_ldap_base_dn as $attrib => $base_dn) {
+                            // construct dn for user
+                            $dn = "$attrib=$test_username,$base_dn";
 
-    $ldap = ldap_connect($ldap_host);
-
-    if($ldap)		// Check that connection was established
-    {
-        // now process all base dn's until authentication is achieved or fail
-        foreach( $all_ldap_base_dn as $idx => $base_dn)
-        {
-            // construct dn for user
-            $dn = $all_ldap_user_attrib[$idx] . "=" . $user . "," . $base_dn;
-
-            // try an authenticated bind. use this to confirm that the user/password pair
-            if(@ldap_bind($ldap, $dn, $pass))
-            {
-                    $testauth = true;
-                    $search = $all_ldap_user_attrib[$idx] . "=" . $user;
-                    $userinforequest = ldap_search($ldap, $base_dn, $search);
-                    $userinfo = ldap_get_entries($ldap, $userinforequest);
-                    if ($userinfo["count"] == 1) {
-                        $GLOBALS['auth_user_info'] = array(
-                                'firstname' => get_ldap_attribute($userinfo, 'givenname'),
-                                'lastname' => get_ldap_attribute($userinfo, 'sn'),
-                                'email' => get_ldap_attribute($userinfo, 'mail'));
+                            // try an authenticated bind to confirm
+                            // user/password pair
+                            if (@ldap_bind($ldap, $dn, $test_password)) {
+                                    $testauth = true;
+                                    $search = "$attrib=$test_username";
+                                    $userinforequest = ldap_search($ldap, $base_dn, $search);
+                                    $userinfo = ldap_get_entries($ldap, $userinforequest);
+                                    if ($userinfo["count"] == 1) {
+                                            $GLOBALS['auth_user_info'] = array(
+                                                'firstname' => get_ldap_attribute($userinfo, 'givenname'),
+                                                'lastname' => get_ldap_attribute($userinfo, 'sn'),
+                                                'email' => get_ldap_attribute($userinfo, 'mail'));
+                                    }
+                            }
                     }
-            } // end if
-            else
-            {
-                    $testauth = false;
+                    @ldap_unbind($ldap);
             }
-        } // foreach
-        @ldap_unbind($ldap);
-    } // if($ldap)
-    else
-    {
-    	$testauth = false;
-    }
-
-			break;    
+            break;    
 
 	case '5':
 	    $dbhost = $GLOBALS['dbhost'];

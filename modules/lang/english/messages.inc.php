@@ -291,6 +291,7 @@ $langOther = "Other";
 $langTotal = "Total";
 $langProperty = "Property";
 $langStats = "Statistics per User";
+$langStat = "Statistics";
 $langUsage = "Usage Statistics";
 
 $langNoUserList = "No listing results";
@@ -311,6 +312,7 @@ $langErrorDelete = "Error during the delete action";
 $langAfter = "After";
 $langBefore = "Before";
 $langUserType = "User type";
+$langUsername = "Username";
 
 // other
 $langAddAdminInApache = "Add a user in the Admin Group";
@@ -2093,6 +2095,8 @@ $l_smilepict	= "Picture";
 /*******************************************************
 * questionnaire.inc.php
 ********************************************************/
+$langCreateSurvey = 'Create Survey';
+$langCreatePoll = 'Create Poll';
 $langSurveysActive = "Active Surveys";
 $langSurveysInactive = "Inactive Surveys";
 $langSurvey = "Survey";
@@ -2242,7 +2246,7 @@ $langLanguage = "Language";
 $langCoursesLabel = 'Courses';
 $langRegistration="Registration";
 $langName="First Name";
-$langSurname="Surname";
+$langSurname="Last Name";
 $langConfirmation="Confirmation";
 $langUserNotice = "(max 20 characters)";
 $langEmailNotice = "e-mail address is not required but, keep in mind that without it, ".$langsTeacher." cannot send
@@ -3254,7 +3258,7 @@ $langAlertAdmin="Please supplement at least administrator for the course!";
 **************************************************************/
 
 $langExerciseNotPermit="The submission of the assignment is forbidden!";
-$langListUsersActions="List of Users of/Energies";
+$langListUsersActions="List of Users / Actions";
 
 /*************************************************************
 editpost.php

@@ -156,7 +156,7 @@ draw($tool_content, 2, ' ', $head_content);
  ****************************************************************************************************/
 	function printSurveys() {
  		global $tool_content, $currentCourse, $langSurveyNone,
- 			$langYes, $langCreate, $langName, $langSurveyCreator, 
+ 			$langYes, $langCreateSurvey, $langName, $langSurveyCreator, 
  			$langSurveyStart, $langSurveyEnd, $langType, 
  			$langSurveyOperations, $is_adminOfCourse, $langSurveysActive, $mysqlMainDb, $langActions, 
  			$langSurveyMC, $langEdit, $langDelete, $langActivate, $langDeactivate, $langSurveysInactive, $langParticipate, 
@@ -175,11 +175,11 @@ draw($tool_content, 2, ' ', $head_content);
 		if (!$survey_check) {
 			$tool_content .= "<p>".$langSurveyNone . "</p><br>";
 			if ($is_adminOfCourse) 
-				$tool_content .= '<a href="addsurvey.php?UseCase=0">'.$langCreate.'</a><br><br>  ';
+				$tool_content .= '<a href="addsurvey.php?UseCase=0">'.$langCreateSurvey.'</a><br><br>  ';
 			}
 		else {
 			if ($is_adminOfCourse) 
-				$tool_content .= '<b><a href="addsurvey.php?UseCase=0">'.$langCreate.'</a></b><br><br>  ';
+				$tool_content .= '<b><a href="addsurvey.php?UseCase=0">'.$langCreateSurvey.'</a></b><br><br>  ';
 			
 			// Print active surveys 
 			$tool_content .= <<<cData
@@ -273,7 +273,7 @@ cData;
  * printPolls()
  ****************************************************************************************************/
 	function printPolls() {
-		global $tool_content, $currentCourse, $langCreate, $langPollsActive, 
+		global $tool_content, $currentCourse, $langCreatePoll, $langPollsActive, 
 			$langYes, $langName, $langPollCreator, $langPollCreation, $langPollStart, 
 			$langPollEnd, $langPollOperations, $langPollNone, $is_adminOfCourse, $langSurveys,
 			$langNamesSurvey, $mysqlMainDb, $langEdit, $langDelete, $langActions,
@@ -293,12 +293,12 @@ cData;
 		if (!$poll_check) {
 			$tool_content .= "<p>".$langPollNone . "</p><br>";
 			if ($is_adminOfCourse) 
-				$tool_content .= '<a href="addpoll.php?UseCase=0">'.$langCreate.'</a><br><br>  ';
+				$tool_content .= '<a href="addpoll.php?UseCase=0">'.$langCreatePoll.'</a><br><br>  ';
 			}
 		else {
 		
 			if ($is_adminOfCourse) 
-				$tool_content .= '<b><a href="addpoll.php?UseCase=0">'.$langCreate.'</a></b><br><br>  ';
+				$tool_content .= '<b><a href="addpoll.php?UseCase=0">'.$langCreatePoll.'</a></b><br><br>  ';
 			
 			// Print active polls 
 			$tool_content .= <<<cData

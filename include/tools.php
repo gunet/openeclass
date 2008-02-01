@@ -89,13 +89,15 @@ function getToolsArray($cat) {
 			if (!check_guest()) {
 				if (isset($_SESSION['uid']) and $_SESSION['uid']) {
 					$result = db_query("
-                    select * from accueil
-                    where visible=1
+                    SELECT * FROM accueil
+                    WHERE visible=1
                     ORDER BY rubrique", $currentCourse);
 				} else {
 					$result = db_query("
-                    select * from accueil
-                    where visible=1 AND lien NOT LIKE '%/user.php'
+                    SELECT * FROM accueil
+                    WHERE visible=1 AND lien NOT LIKE '%/user.php'
+                    AND lien NOT LIKE '%/conference/conference.php'
+                    AND lien NOT LIKE '%/work/work.php'
                     ORDER BY rubrique", $currentCourse);
 				}
 			} else {
