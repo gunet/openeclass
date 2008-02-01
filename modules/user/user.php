@@ -32,10 +32,11 @@
  * @abstract This module is responsible for the user administration
  *
  */
+
+$require_login = true;
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'User';
-$require_login = true;
 $require_prof = true;
 
 include '../../include/baseTheme.php';

@@ -173,7 +173,7 @@ else
 	$is_admin = FALSE;
 
 if (isset($require_login) and $require_login and !$uid) {
-	$toolContent_ErrorExists = $langSessionIsLost;
+	$toolContent_ErrorExists = $langLoginRequired;
 	$errorMessagePath = "../../";
 }
 

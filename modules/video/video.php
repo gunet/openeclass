@@ -33,8 +33,6 @@
 /*******************************************************************
 *			   VIDEO UPLOADER AND DOWNLOADER
 ********************************************************************
-Allow professor to send quickly video immediately
-visible on his site.
 
 The script makes 5 things:
 1. Upload video
@@ -66,7 +64,6 @@ $action->record('MODULE_ID_VIDEO');
 /**************************************/
 
 $nameTools = $langVideo;
-$nick=$prenom." ".$nom;
 $tool_content="";
 $d = mysql_fetch_array(db_query("SELECT video_quota FROM cours WHERE code='$currentCourseID'",$mysqlMainDb));
 $diskQuotaVideo = $d['video_quota'];
@@ -83,6 +80,9 @@ function confirmation (name)
 }
 </script>
 ';
+
+	$nick=$prenom." ".$nom;
+	
 	$tool_content .= "<div id=\"operations_container\">
 		<ul id=\"opslist\">
 		<li><a href=\"$_SERVER[PHP_SELF]?form_input=file\">$langAddV</a></li>

@@ -434,13 +434,10 @@ else {
 
 	// If self-registration allowed by admin
 	if($selfRegProp==1) {
-		$tool_content .= "<th>$langGroupSelfRegistration</th>";
+		$tool_content .= "<th>$langRegistration</th>";
 	}
 
 	$tool_content .= "<th>$langRegistered</th><th>$langMax</th></tr></thead><tbody>";
-
-	//	mysql_select_db("$currentCourse");
-
 	$groupSelect=db_query("SELECT id, name, maxStudent, tutor FROM student_group", $currentCourse);
 	$totalRegistered=0;
 
@@ -474,7 +471,6 @@ else {
 		$tool_content .= "</td>";
 
 		// SELF REGISTRATION
-
 		// If self-registration allowed by admin
 		if($selfRegProp==1)
 		{
@@ -483,7 +479,7 @@ else {
 			{
 				$tool_content .= "&nbsp;-";
 			} else {
-			$tool_content .= "&nbsp;<a href=\"group_space.php?selfReg=1&userGroupId=".$group["id"]."\">$langGroupSelfRegInf</a>";
+			$tool_content .= "&nbsp;<a href=\"group_space.php?selfReg=1&userGroupId=".$group["id"]."\">$langRegistration</a>";
 			}
 			$tool_content .= "</td>";
 		}	// If self reg allowed by admin

@@ -55,6 +55,7 @@ existing (phpBB-based) to a new eclass forum :-(
 /*
 * GUNET eclass 2.0 standard stuff
 */
+$require_login = TRUE;
 $require_current_course = TRUE;
 $require_help = FALSE;
 include '../../include/baseTheme.php';

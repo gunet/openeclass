@@ -98,6 +98,8 @@ function getToolsArray($cat) {
                     WHERE visible=1 AND lien NOT LIKE '%/user.php'
                     AND lien NOT LIKE '%/conference/conference.php'
                     AND lien NOT LIKE '%/work/work.php'
+										AND lien NOT LIKE '%/dropbox/index.php'
+										AND lien NOT LIKE '%/questionnaire/questionnaire.php'
                     ORDER BY rubrique", $currentCourse);
 				}
 			} else {

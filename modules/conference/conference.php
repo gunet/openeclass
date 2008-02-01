@@ -30,9 +30,11 @@
  *
  */
 
+$require_login = TRUE;
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Conference';
+
 include '../../include/baseTheme.php';
 if(!isset($MCU))
 	$MCU="";
@@ -254,9 +256,6 @@ function netmeeting()
 			}
 	}
 
-
-
-
 /* load media player or netmeeting */
 function play_video()
 	{	
@@ -266,11 +265,6 @@ return false;
 
 
 	}
-
-
-
-
-
 
 	
 /* load presantation in right iframe*/
@@ -306,41 +300,22 @@ else{
 	$head_content.='pe = new PeriodicalExecuter(refresh_student, '.$refreshtime.');';
 }
 
-$head_content.='
-</script>
-';
-
+$head_content.='</script>';
 //END HEADERS
 
 //BODY
-
 if ($is_adminOfCourse) {
-$body_action='onload=init_teacher();';
+	$body_action='onload=init_teacher();';
+} else {
+	$body_action='onload=init_student();';
 }
-else
-{
-$body_action='onload=init_student();';
-}
-
 //END BODY
-
 
 //CONTENT
 $tool_content = "";//initialise $tool_content
 
-
-
-$tool_content.=
-'
-	<div id="conference">
-'.$langTeleconference_content.'	
-	</div>
-	<div id="video">
-'.$langVideo_content.'	
-	</div>
-
-
-';
+$tool_content.='<div id="conference">'.$langTeleconference_content.'</div>
+<div id="video">'.$langVideo_content.'</div>';
 
 if ($is_adminOfCourse) {
 @$tool_content.='<div  id="video_presantation_control">
@@ -372,15 +347,11 @@ $tool_content.='
 $tool_content.='
 	<div id="presantation_window">
 	'.$langPresantation_content.'
-
 	</div>
-
 	<div id="chat_div" align="center">
 		<div align="left" id="chat">
 		</div>
-
 		<form name = "chatForm" action = "conference.php#bottom" method = "get" target = "conference" onSubmit = "return prepare_message();">
-
 		<div align="center"  id="chat_control">
 			<input type="text" name="msg" size="80">
 			<input type="hidden" name="chatLine">
@@ -392,19 +363,9 @@ $tool_content.='
         		<a href="conference.php?save=true" onclick="return save_chat();">'.$langSaveChat.'</a>';
  		}
 
-$tool_content.='
-			</form>
-';
-		$tool_content.='
-
-		</div>
-	</div>
-
-	</div>
-	<div id="background">
-	</div>
-';
-
+$tool_content.='</form>';
+$tool_content.='</div></div></div>
+<div id="background"></div>';
 
 //END CONTENT
 //draw($tool_content, 2, 'conference', $head_content, $body_action,true);

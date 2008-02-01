@@ -53,7 +53,6 @@ existing (phpBB-based) to a new eclass forum :-(
 ==============================================================================
 */
 
-error_reporting(E_ALL);
 /*
 * GUNET eclass 2.0 standard stuff
 */

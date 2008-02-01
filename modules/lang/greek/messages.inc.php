@@ -1656,30 +1656,29 @@ unset($titreBlocNotEditable);
 unset($questionPlan);
 unset($info2Say);
 */
-$info2Say[] = "The goals of the course will be announced immediately";
-$questionPlan[] = "Who are the objectives of  the course?";
-$titreBloc[] = "Content of Course";
+$info2Say[] = "Οι στόχοι του μαθήματος θα ανακοινωθούν άμεσα";
+$questionPlan[] = "Ποιοι είναι οι στόχοι του μαθήματος";
+$titreBloc[] = "Περιεχόμενο Μαθήματος";
 $titreBlocNotEditable[] = TRUE;
 $questionPlan[] = "Ποια θα είναι η διδακτέα ύλη μαθήματος ?";
 $info2Say[] = "Η διδακτέα ύλη θα ανακοινωθεί σύντομα";
-$titreBloc[] = "Educational Activities";
+$titreBloc[] = "Εκπαιδευτικές Δραστηριότητες";
 $titreBlocNotEditable[] = TRUE;
-$questionPlan[] = "Will there be any educative activities gor a better comprehension of the
-cirriculum?";
+$questionPlan[] = "Θα υπάρχουν δραστηριότητες για την εμπέδωση της ύλης?";
 $info2Say[] = "Θα υπάρξουν αρκετές. Θα ανακοινωθούν πολύ σύντομα.";
 $titreBloc[] =" Βοηθήματα";
 $titreBlocNotEditable[] = TRUE;
-$questionPlan[] = "Υπάρχουν επιπλέον εκπαιδευτικά βοηθήματα για το μάθημα? Ειναι γενικά διαθέσιμα?";
+$questionPlan[] = "Υπάρχουν επιπλέον εκπαιδευτικά βοηθήματα για το μάθημα? Είναι διαθέσιμα?";
 $info2Say[] = "Υπάρχουν αρκετά εκπαιδευτικά βοηθήματα για το μάθημα. θα υπάρξει πλήρης κατάλογος και πληροφορίες πρόσβασης.";
-$titreBloc[] = "Human Potential";
+$titreBloc[] = "Ανθρώπινο Δυναμικό";
 $titreBlocNotEditable[] = TRUE;
 $questionPlan[] = "Υπάρχει διαθέσιμο ανθρώπινο δυναμικό για βοήθεια στη διδασκαλία του μαθήματος?";
 $info2Say[] = "Υπάρχει διαθέσιμο ανθρώπινο δυναμικό καθώς και υλικοτεχνική υποδομή.";
 $titreBloc[] = "Τρόποι αξιολόγησης / εξέτασης";
 $titreBlocNotEditable[] = TRUE;
 $questionPlan[] = "Με ποιο τρόπο θα γίνει η εξέταση του μαθήματος?";
-$info2Say[] = "The examination will become with oral and written examinations.";
-$titreBloc[] ="Additional elements";
+$info2Say[] = "Οι εξετάσεις θα είναι προφορικές και γραπτές.";
+$titreBloc[] ="Συμπληρωματικά Στοιχεία";
 $titreBlocNotEditable[] = FALSE;
 
 
@@ -2617,7 +2616,7 @@ $langNoAdminAccess = '
 ';
 
 $langLoginRequired = '
-		<p><b>Δεν είστε εγγεγραμμένος στο μάθημα που προσπαθείτε να μπείτε. </b>
+		<p><b>Δεν είστε εγγεγραμμένος στο μάθημα και επομένως δεν μπορείτε να χρησιμοποιήσετε το αντίστοιχο υποσύστημα.</b>
 		Η πλατφόρμα σας ανακατεύθυνε αυτόματα στην αρχική σελίδα
 		για να εγγραφείτε στο μάθημα, αν η εγγραφή είναι ελεύθερη. </p>
 ';

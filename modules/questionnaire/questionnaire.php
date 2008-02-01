@@ -52,8 +52,8 @@
 ==============================================================================
 */
 
+$require_login = TRUE;
 $require_current_course = TRUE;
-
 $require_help = TRUE;
 $helpTopic = 'Questionnaire';
 include '../../include/baseTheme.php';
@@ -157,7 +157,7 @@ draw($tool_content, 2, ' ', $head_content);
 	function printSurveys() {
  		global $tool_content, $currentCourse, $langSurveyNone,
  			$langYes, $langCreateSurvey, $langName, $langSurveyCreator, 
- 			$langSurveyStart, $langSurveyEnd, $langType, 
+ 			$langSurveyStart, $langSurveyEnd, $langType, $langCreate,
  			$langSurveyOperations, $is_adminOfCourse, $langSurveysActive, $mysqlMainDb, $langActions, 
  			$langSurveyMC, $langEdit, $langDelete, $langActivate, $langDeactivate, $langSurveysInactive, $langParticipate, 
  			$langHasParticipated, $uid;
@@ -371,7 +371,7 @@ cData;
 						$has_participated = mysql_fetch_array(
 							mysql_query("SELECT COUNT(*) FROM poll_answer where creator_id='$uid' AND pid='$thepid'"));
 					if ( $has_participated[0] == 0) {
-						$tool_content .= "<td><a href='pollparticipate.php?UseCase=1&pid=". $pid ."'>";
+						$tool_content .= "<td align='center'><a href='pollparticipate.php?UseCase=1&pid=". $pid ."'>";
 						$tool_content .= $langYes;
 						$tool_content .= "</a></td></tr>";
 					} else {
