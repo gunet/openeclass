@@ -23,35 +23,6 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/*===========================================================================
-	work.php
-	@last update: 17-4-2006 by Costas Tsibanis
-	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
-==============================================================================        
-        @Description: Main script for the work tool
-
- 	This is a tool plugin that allows course administrators - or others with the
- 	same rights
-
- 	The user can : - navigate through files and directories.
-                       - upload a file
-                       - delete, copy a file or a directory
-                       - edit properties & content (name, comments, 
-			 html content)
-
- 	@Comments: The script is organised in four sections.
-
- 	1) Execute the command called by the user
-           Note (March 2004) some editing functions (renaming, commenting)
-           are moved to a separate page, edit_document.php. This is also
-           where xml and other stuff should be added.
-   	2) Define the directory to display
-  	3) Read files and directories from the directory defined in part 2
-  	4) Display all of that on an HTML page
- 
-  	@TODO: eliminate code duplication between document/document.php, scormdocument.php
-==============================================================================
-*/
 
 function showQuestion($questionId, $onlyAnswers=false)
 {
@@ -93,12 +64,9 @@ function showQuestion($questionId, $onlyAnswers=false)
 		</tr>
 cData;
 
-		if(file_exists($picturePath.'/quiz-'.$questionId))
-		{
-
-	$tool_content .= "<tr><td align=\"center\" colspan=\"2\"><img src=\"".
-		${'picturePath'}."/quiz-".${'questionId'}."\" border=\"0\"></td></tr>";
-
+		if(file_exists($picturePath.'/quiz-'.$questionId)) {
+			$tool_content .= "<tr><td align=\"center\" colspan=\"2\"><img src=\"".
+				${'picturePath'}."/quiz-".${'questionId'}."\" border=\"0\"></td></tr>";
 		}
 	}  // end if(!$onlyAnswers)
 
@@ -108,8 +76,7 @@ cData;
 	$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 
 	// only used for the answer type "Matching"
-	if($answerType == MATCHING)
-	{
+	if($answerType == MATCHING) {
 		$cpt1='A';
 		$cpt2=1;
 		$Select=array();
@@ -121,11 +88,9 @@ cData;
 		$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 		// latex support
 		$answer=latex_content($answer);
-		if($answerType == FILL_IN_BLANKS)
-		{
+		if($answerType == FILL_IN_BLANKS) {
 			// splits text and weightings that are joined with the character '::'
 			list($answer)=explode('::',$answer);
-
 			// replaces [blank] by an input field
 			$answer=ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="10">',nl2br($answer));
 		}
@@ -159,17 +124,13 @@ cData;
 cData;
 		}
 		// fill in blanks
-		elseif($answerType == FILL_IN_BLANKS)
-		{
-
+		elseif($answerType == FILL_IN_BLANKS) {
 			$tool_content .= "<tr><td colspan=\"2\">${answer}</td></tr>";
-
 		}
 		// matching
 		else
 		{
-			if(!$answerCorrect)
-			{
+			if(!$answerCorrect) {
 				// options (A, B, C, ...) that will be put into the list-box
 				$Select[$answerId]['Lettre']=$cpt1++;
 				// answers that will be shown at the right side
@@ -177,7 +138,6 @@ cData;
 			}
 			else
 			{
-
 				$tool_content .= <<<cData
 					<tr>
 				  <td colspan="2">
@@ -189,12 +149,10 @@ cData;
 cData;
 
 	            // fills the list-box
-	            foreach($Select as $key=>$val)
+           foreach($Select as $key=>$val)
 	            {
-
-			$tool_content .= "<option value=\"${key}\">${val['Lettre']}</option>";
-
-				}  // end foreach()
+								$tool_content .= "<option value=\"${key}\">${val['Lettre']}</option>";
+							}  // end foreach()
 
 		  $tool_content .= "</select>&nbsp;&nbsp;</td><td width=\"40%\" valign=\"top\">";
 		  
@@ -204,21 +162,16 @@ cData;
 		  	$tool_content .= '&nbsp;';
 		  	
 		  $tool_content .=	"</td></tr></table></td></tr>";
-
-				$cpt2++;
+			$cpt2++;
 
 				// if the left side of the "matching" has been completely shown
-				if($answerId == $nbrAnswers)
-				{
+				if($answerId == $nbrAnswers) {
 					// if it remains answers to shown at the right side
-					while(isset($Select[$cpt2]))
-					{
-/////////////////////////////////////////////////////////////////////////////////
+					while(isset($Select[$cpt2])) 	{
 		$tool_content .= "<tr><td colspan=\"2\">".
 			"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"95%\">".
 			"<tr><td width=\"60%\" colspan=\"2\">&nbsp;</td><td width=\"40%\" align=\"right\" valign=\"top\">".
 			"<b>".$Select[$cpt2]['Lettre'].".</b> ".$Select[$cpt2]['Reponse']."</td></tr></table></td></tr>";
-/////////////////////////////////////////////////////////////////////////////////
 						$cpt2++;
 					}	// end while()
 				}  // end if()
@@ -228,7 +181,6 @@ cData;
 
 	// destruction of the Answer object
 	unset($objAnswerTmp);
-
 	// destruction of the Question object
 	unset($objQuestionTmp);
 

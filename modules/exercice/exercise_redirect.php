@@ -56,7 +56,6 @@
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
-
 include('exercise.lib.php');
  
 // answer types
@@ -66,20 +65,16 @@ define('FILL_IN_BLANKS',3);
 define('MATCHING',4);
 
 $require_current_course = TRUE;
-$langFiles='exercice';
 $require_help = TRUE;
 $helpTopic = 'Exercise';
 
 include '../../include/baseTheme.php';
 
 $tool_content = "";
-
 $nameTools = $langExercice;
-
 include('../../include/lib/textLib.inc.php');
 
 $picturePath='../../courses/'.$currentCourseID.'/image';
-
 $is_allowedToEdit=$is_adminOfCourse;
 $dbNameGlu=$currentCourseID;
 
@@ -96,7 +91,6 @@ if(!session_is_registered('objExercise')) {
 	$objExercise=new Exercise();
 
 	// if the specified exercise doesn't exist or is disabled
-	//if(!$objExercise->read($exerciseId) || (!$objExercise->selectStatus() && !$is_allowedToEdit))
 	if(!$objExercise->read($exerciseId) && (!$is_allowedToEdit))
 		{
 		die($langExerciseNotFound);
@@ -110,13 +104,11 @@ setcookie("marvelous_cookie", "", time() - 3600, "/");
 setcookie("marvelous_cookie_control", "", time() - 3600, "/");
 
 $exerciseTitle=$objExercise->selectTitle();
-//$exerciseDescription=$objExercise->selectDescription();
-//$randomQuestions=$objExercise->isRandom();
-//$exerciseType=$objExercise->selectType();
 
 $tool_content .= <<<cData
 	<h3>${exerciseTitle}</h3>
-	<p>${langExerciseExpired}<a href="exercice.php">${langExerciseLis}</a></p>
+	<p>${langExerciseExpired}</p>
+	<p><center><a href="exercice.php">${langBack}</a></center></p>
 cData;
 
 draw($tool_content, 2);

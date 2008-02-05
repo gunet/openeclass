@@ -23,52 +23,56 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/*===========================================================================
-	work.php
-	@last update: 17-4-2006 by Costas Tsibanis
-	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
-==============================================================================        
-        @Description: Main script for the work tool
-
- 	This is a tool plugin that allows course administrators - or others with the
- 	same rights
-
- 	The user can : - navigate through files and directories.
-                       - upload a file
-                       - delete, copy a file or a directory
-                       - edit properties & content (name, comments, 
-			 html content)
-
- 	@Comments: The script is organised in four sections.
-
- 	1) Execute the command called by the user
-           Note (March 2004) some editing functions (renaming, commenting)
-           are moved to a separate page, edit_document.php. This is also
-           where xml and other stuff should be added.
-   	2) Define the directory to display
-  	3) Read files and directories from the directory defined in part 2
-  	4) Display all of that on an HTML page
- 
-  	@TODO: eliminate code duplication between document/document.php, scormdocument.php
-==============================================================================
-*/
-
+// disable notices due to some problems
 error_reporting('E_ALL ^ E_NOTICE');
+
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
 include('exercise.lib.php');
+
 $require_current_course = TRUE;
-$langFiles='exercice';
-global $langAlertTitle,$langAlertAdmin;
-
 include '../../include/baseTheme.php';
+$dateNow = date("d-m-Y / H:i:s",time());
 
-// For using with th epop-up calendar
-include 'jscalendar.inc.php';
+$local_style = '
+    .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
+     padding-left: 15px; padding-right : 15px; }
+    .content {position: relative; left: 25px; }';
 
+include '../../include/jscalendar/calendar.php';
+
+if ($language == 'greek') {
+    $lang = 'el';
+} else if ($language == 'english') {
+    $lang = 'en';
+}
+
+$jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
+$local_head = $jscalendar->get_load_files_code();
+
+$u_date_start = strftime('%Y-%m-%d %H:%M:%S', strtotime('now -0 day'));
+$u_date_end = strftime('%Y-%m-%d %H:%M:%S', strtotime('now +1 year'));
+
+$start_cal_Excercise = $jscalendar->make_input_field(
+           array('showsTime'      => true,
+                 'showOthers'     => true,
+                 'ifFormat'       => '%Y-%m-%d %H:%M:%S',
+                 'timeFormat'     => '24'),
+           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+                 'name'        => 'exerciseStartDate',
+                 'value'       => $u_date_start));
+$end_cal_Excercise = $jscalendar->make_input_field(
+           array('showsTime'      => true,
+                 'showOthers'     => true,
+                 'ifFormat'       => '%Y-%m-%d %H:%M:%S',
+                 'timeFormat'     => '24'),
+           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+                 'name'        => 'exerciseEndDate',
+                 'value'       => $u_date_end));
+                 
+ 
 $local_head .= "
-
 <script language=\"JavaScript\">
 function validate() {
 	if (document.forms[0].intitule.value==\"\") {
@@ -82,7 +86,6 @@ function validate() {
  	return true;
 }
 </script>
-
 ";
 
 $tool_content = "";
@@ -95,9 +98,6 @@ define('UNIQUE_ANSWER',	1);
 define('MULTIPLE_ANSWER', 2);
 define('FILL_IN_BLANKS', 3);
 define('MATCHING', 4);
-
-// allows script inclusions
-define('ALLOWED_TO_INCLUDE',1);
 
 $is_allowedToEdit=$is_adminOfCourse;
 
@@ -120,14 +120,11 @@ if(!$is_allowedToEdit) {
 /****************************/
 /*  stripslashes POST data  */
 /****************************/
-
 if($REQUEST_METHOD == 'POST') {
 	foreach($_POST as $key=>$val) {
 		if(is_string($val)) {
 			$_POST[$key]=stripslashes($val);
-		}
-		elseif(is_array($val))
-		{
+		} elseif(is_array($val)) {
 			foreach($val as $key2=>$val2) {
 				$_POST[$key][$key2]=stripslashes($val2);
 			}
@@ -145,7 +142,6 @@ if(!is_object($objExercise)) {
 	if($exerciseId) {
 		$objExercise->read($exerciseId);
 	}
-
 	// saves the object into the session
 	session_register('objExercise');
 }
@@ -164,7 +160,6 @@ $nbrQuestions=$objExercise->selectNbrQuestions();
 if($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
 
 if($editQuestion || $newQuestion) {
-
 		// construction of the Question object
 		$objQuestion=new Question();
 
@@ -236,20 +231,11 @@ if($editQuestion || $modifyQuestion || $newQuestion || $modifyAnswers) {
 	$QUERY_STRING='';
 }
 
-
-// shows a link to go back to the question pool
-//if(((!$exerciseId)||(!isset($exerciseId))) && $nameTools != $langExerciseManagement) {
-//	//$navigation[]=@array("url" => "question_pool.php?fromExercise=$fromExercise","name" => $langQuestionPool);
-//	//$tool_content .= "<a href=\"question_pool.php?fromExercise=$fromExercise\">".$langQuestionPool."</a>";
-//}
-
 // if the question is duplicated, disable the link of tool name
 if($modifyIn == 'thisExercise') {
 	if ($buttonBack) {
 		$modifyIn='allExercises';
-	}
-	else
-	{
+	} else{
 		$noPHP_SELF=true;
 	}
 }
@@ -274,12 +260,10 @@ if(!$newQuestion && !$modifyQuestion && !$editQuestion && !$modifyAnswers) {
 	// exercise management
 	include('exercise_admin.inc.php');
 
-	if(!$modifyExercise)
-	{
+	if(!$modifyExercise) {
 		// question list management
 		include('question_list_admin.inc.php');
 	}
 }
-
 draw($tool_content, 2, '', $local_head, '');
 ?>

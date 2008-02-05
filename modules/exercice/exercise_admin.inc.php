@@ -23,42 +23,6 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/*===========================================================================
-	work.php
-	@last update: 17-4-2006 by Costas Tsibanis
-	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
-==============================================================================        
-        @Description: Main script for the work tool
-
- 	This is a tool plugin that allows course administrators - or others with the
- 	same rights
-
- 	The user can : - navigate through files and directories.
-                       - upload a file
-                       - delete, copy a file or a directory
-                       - edit properties & content (name, comments, 
-			 html content)
-
- 	@Comments: The script is organised in four sections.
-
- 	1) Execute the command called by the user
-           Note (March 2004) some editing functions (renaming, commenting)
-           are moved to a separate page, edit_document.php. This is also
-           where xml and other stuff should be added.
-   	2) Define the directory to display
-  	3) Read files and directories from the directory defined in part 2
-  	4) Display all of that on an HTML page
- 
-  	@TODO: eliminate code duplication between document/document.php, scormdocument.php
-==============================================================================
-*/
-
-// ALLOWED_TO_INCLUDE is defined in admin.php
-if(!defined('ALLOWED_TO_INCLUDE'))
-{
-	exit();
-}
-
 // the exercise form has been submitted
 if(isset($submitExercise))
 {
@@ -88,7 +52,6 @@ if(isset($submitExercise))
 	
 			// reads the exercise ID (only usefull for a new exercise)
 			$exerciseId=$objExercise->selectId();
-	
 			unset($modifyExercise);
 		}
 	}
@@ -114,9 +77,7 @@ $tool_content .= <<<cData
 	<table border="0" cellpadding="5">
 cData;
 
-	if(!empty($msgErr))
-	{
-
+	if(!empty($msgErr)){
 		$tool_content .= <<<cData
 			<tr>
 			  <td colspan="2">
@@ -148,7 +109,6 @@ if($exerciseType >= 2)
 	$tool_content .= 'checked="checked"';
 $tool_content .= "> ".$langSequentialExercise."</td></tr>";
 
-
 $tool_content .= "<td valign=\"top\">".$langExerciseStart." :</td>".
 	"<td>$start_cal_Excercise</td></tr>";
   
@@ -165,21 +125,17 @@ $tool_content .= "<tr><td valign=\"top\">".$langExerciseAttemptsAllowed." :</td>
   "value=\"".htmlspecialchars($exerciseAttemptsAllowed)."\">". 
   $langExerciseAttemptsAllowedUnit." (".$langExerciseAttemptsAllowedExplanation.")</td></tr>";
 
-	if($exerciseId && $nbrQuestions)
-	{
-
+/*
+	if($exerciseId && $nbrQuestions) {
 		$tool_content .= "<tr><td valign=\"top\">".$langRandomQuestions." :</td>".
   		"<td><input type=\"checkbox\" name=\"randomQuestions\" value=\"1\" "; 
-  	
   	if($randomQuestions) 
   		$tool_content .= "checked=\"checked\"";  
   	$tool_content .= ">".$langYes.", $langTake";
   	
     $tool_content .= "<select name=\"questionDrawn\">";
 
-		for($i=1;$i <= $nbrQuestions;$i++)
-		{
-
+		for($i=1;$i <= $nbrQuestions;$i++) {
 			$tool_content .= "<option value=\"".$i." ";
 			
 			if((isset($formSent) && $questionDrawn == $i) || (!isset($formSent) && ($randomQuestions == $i || ($randomQuestions <= 0 && $i == $nbrQuestions)))) 
@@ -187,10 +143,9 @@ $tool_content .= "<tr><td valign=\"top\">".$langExerciseAttemptsAllowed." :</td>
 			
 			$tool_content .=">".$i."</option>";
 		}
-
 		$tool_content .= "</select> ".strtolower($langQuestions)." ".$langAmong." ".$nbrQuestions." </td></tr>";
-
 	}
+*/
 
 	$tool_content .= <<<cData
 		<tr>
@@ -203,12 +158,8 @@ $tool_content .= "<tr><td valign=\"top\">".$langExerciseAttemptsAllowed." :</td>
 		</form>
 cData;
 
-}
-else
-{
-
+} else {
 $tool_content .= "<h3>".$exerciseTitle."</h3>";
-
 $tool_content .= <<<cData
 
 <blockquote>
@@ -232,7 +183,7 @@ $tool_content .= <<<cData
 			<td>${exerciseEndDate}</td>
 		</tr>
 		<tr>
-		  <td valign="top">${langExerciseConstrain} :</td>
+		  <td valign="top">${langExerciseConstrain} :<ctd>
 			<td>${exerciseTimeConstrain}</td>
 		</tr>
 		<tr>
@@ -244,7 +195,6 @@ $tool_content .= <<<cData
 cData;
 
 $tool_content .= "<a href=\"".$PHP_SELF."?modifyExercise=yes\"><img src=\"../../template/classic/img/edit.gif\" ".
-	"border=\"0\" align=\"absmiddle\" alt=\"".$langModify."\"></a>";
-
+	"border=\"0\" align=\"absmiddle\" title=\"".$langModify."\"></a>";
 }
 ?>

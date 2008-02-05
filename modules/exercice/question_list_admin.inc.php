@@ -15,29 +15,19 @@
 */
 
 		/*>>>>>>>>>>>>>>>>>>>> QUESTION LIST ADMINISTRATION <<<<<<<<<<<<<<<<<<<<*/
-
 /**
  * This script allows to manage the question list
- *
  * It is included from the script admin.php
  */
 
-// ALLOWED_TO_INCLUDE is defined in admin.php
-if(!defined('ALLOWED_TO_INCLUDE'))
-{
-	exit();
-}
-
 // moves a question up in the list
-if(isset($moveUp))
-{
+if(isset($moveUp)) {
 	$objExercise->moveUp($moveUp);
 	$objExercise->save();
 }
 
 // moves a question down in the list
-if(isset($moveDown))
-{
+if(isset($moveDown)) {
 	$objExercise->moveDown($moveDown);
 	$objExercise->save();
 }
@@ -64,9 +54,7 @@ if(isset($deleteQuestion))
 	unset($objQuestionTmp);
 }
 
-
 $tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
-
 $tool_content .= <<<cData
 		<li><a href="${PHP_SELF}?newQuestion=yes">${langNewQu}</a> | <a href="question_pool.php?fromExercise=${exerciseId}">
 		${langGetExistingQuestion}</a></li>
@@ -77,10 +65,8 @@ $tool_content .= <<<cData
 <table border="0" align="center" cellpadding="2" cellspacing="2" width="95%">
 cData;
 
-if($nbrQuestions)
-{
+if($nbrQuestions) {
 	$questionList=$objExercise->selectQuestionList();
-
 	$i=1;
 
 	foreach($questionList as $id) {
@@ -88,7 +74,7 @@ if($nbrQuestions)
 		$objQuestionTmp=new Question();
 		$objQuestionTmp->read($id);
 
-$tool_content .= "<tr><td>".$i." ".$objQuestionTmp->selectTitle()."<br><small>".
+	$tool_content .= "<tr><td>".$i." ".$objQuestionTmp->selectTitle()."<br><small>".
 	$aType[$objQuestionTmp->selectType()-1]."</small></td>";
 	
 $tool_content .= "</tr><tr><td><a href=\"".$_SERVER['PHP_SELF']."?editQuestion=".$id."\">".
@@ -98,16 +84,13 @@ $tool_content .= "</tr><tr><td><a href=\"".$_SERVER['PHP_SELF']."?editQuestion="
 	"<img src=\"../../template/classic/img/delete.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langDelete."\"></a>";
 
 		if($i != 1) {
-
-	$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?moveUp=".$id.
-		"\"><img src=\"../../template/classic/img/up.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langMoveUp."\"></a>";
-
+				$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?moveUp=".$id."\">
+   			<img src=\"../../template/classic/img/up.gif\" border=\"0\" align=\"absmiddle\" title=\"".$langMoveUp."\"></a>";
 		}
 
 		if($i != $nbrQuestions)		{
-
-		$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?moveDown=".$id.
-		"\"><img src=\"../../template/classic/img/down.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langMoveDown."\"></a>";
+			$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?moveDown=".$id."\">
+			<img src=\"../../template/classic/img/down.gif\" border=\"0\" align=\"absmiddle\" title=\"".$langMoveDown."\"></a>";
 		}
 
   $tool_content .= "</td></tr>";

@@ -1,6 +1,5 @@
 <?php 
- 
-/*=============================================================================
+ /*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -24,41 +23,10 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/*===========================================================================
-	exercise.php
-	@last update: 17-4-2006 by Costas Tsibanis
-	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
-==============================================================================        
-        @Description: Main script for the exercise tool
-
- 	This is a tool plugin that allows course administrators - or others with the
- 	same rights
-
- 	The user can : - navigate through files and directories.
-                       - upload a file
-                       - delete, copy a file or a directory
-                       - edit properties & content (name, comments, 
-			 html content)
-
- 	@Comments: The script is organised in four sections.
-
- 	1) Execute the command called by the user
-           Note (March 2004) some editing functions (renaming, commenting)
-           are moved to a separate page, edit_document.php. This is also
-           where xml and other stuff should be added.
-   	2) Define the directory to display
-  	3) Read files and directories from the directory defined in part 2
-  	4) Display all of that on an HTML page
- 
-  	@TODO: eliminate code duplication between document/document.php, scormdocument.php
-==============================================================================
-*/
-
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
 $require_current_course = TRUE;
-$langFiles='exercice';
 
 $require_help = TRUE;
 $helpTopic = 'Exercise';
@@ -72,13 +40,11 @@ $action = new action();
 $action->record('MODULE_ID_EXERCISE');
 
 $tool_content = "";
-
 $nameTools = $langExercices;
 
 /*******************************/
 /* Clears the exercise session */
 /*******************************/
-
 if(session_is_registered('objExercise'))	{ session_unregister('objExercise');	}
 if(session_is_registered('objQuestion'))	{ session_unregister('objQuestion');	}
 if(session_is_registered('objAnswer'))		{ session_unregister('objAnswer');		}
@@ -100,7 +66,6 @@ db_query($sql,$currentCourseID);
 
 // selects $limitExPage exercises at the same time
 @$from=$page*$limitExPage;
-
 
 // only for administrator
 if($is_allowedToEdit)
@@ -158,35 +123,27 @@ if($is_allowedToEdit) {
 cData;
 
 $tool_content .= "</ul></div>";
-}
-else 
-{ 
+} else  { 
 	$tool_content .= "<!--<td align=\"right\">-->";
 }
 
-if(isset($page))
-{
+if(isset($page)) {
 	$tool_content .= <<<cData
 		<small><a href="$_SERVER[PHP_SELF]?page=$page-1">
 	&lt;&lt; ${langPrevious}</a></small> |
 cData;
-
 }
-elseif($nbrExercises > $limitExPage)
-{
+elseif($nbrExercises > $limitExPage) {
 	$tool_content .= "<small>&lt;&lt; ${langPrevious} |</small>";
 }
 
-if($nbrExercises > $limitExPage)
-{
+if($nbrExercises > $limitExPage) {
 
 	$tool_content .= <<<cData
 	<small><a href="${PHP_SELF}?page=$page+1>">${langNext} &gt;&gt;</a></small>
 cData;
 
-}
-elseif(isset($page))
-{
+} elseif(isset($page)) {
 	$tool_content .= "<small>${langNext} &gt;&gt;</small>";
 }
 
@@ -233,9 +190,7 @@ cData;
 
 }
 
-if(!$nbrExercises)
-{
-
+if(!$nbrExercises) {
 	$tool_content .= "<tr><td";
 	if($is_allowedToEdit) 
 		$tool_content .= " colspan=\"4\"";
@@ -285,10 +240,9 @@ cData;
 	if (isset($page))	
 				$tool_content .= "<td width='20%' align='center'>".
 					"<a href=\"$_SERVER[PHP_SELF]?choice=disable&page=${page}&exerciseId=".$row['id']."\">".
-					"<img src=\"../../template/classic/img/visible.gif\" border=\"0\" alt=\"".htmlspecialchars($langDeactivate)."\"></a></td>";
+					"<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" alt=\"".htmlspecialchars($langDeactivate)."\"></a></td>";
 			else
-				$tool_content .= "<td width='20%' align='center'><a href='$_SERVER[PHP_SELF]?choice=disable&exerciseId=".$row['id']."'>".
-				"<img src='../../template/classic/img/visible.gif' border='0' alt='".htmlspecialchars($langDeactivate)."'></a></td>";
+				$tool_content .= "<td width='20%' align='center'><a href='$_SERVER[PHP_SELF]?choice=disable&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/invisible.gif' border='0' alt='".htmlspecialchars($langDeactivate)."'></a></td>";
 }
 // else if not active
 else
@@ -296,11 +250,11 @@ else
 	if (isset($page))
 		$tool_content .= "<td width='20%' align='center'>".
 			"<a href='$_SERVER[PHP_SELF]?choice=enable&page=${page}&exerciseId=".$row['id']."'>".
-			"<img src='../../template/classic/img/invisible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
+			"<img src='../../template/classic/img/visible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
 	else
 		$tool_content .= "<td width='20%' align='center'>".
 			"<a href='$_SERVER[PHP_SELF]?choice=enable&exerciseId=".$row['id']."'>".
-			"<img src='../../template/classic/img/invisible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
+			"<img src='../../template/classic/img/visible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
 }
 
 
@@ -347,46 +301,6 @@ if ($NumOfResults[0]) {
 	$i++;
 }	// end while()
 
-	$tool_content .= "</table>";
-
-/*****************************************/
-/* Exercise Results (uses tracking tool) */
-/*****************************************/
-
-// if tracking is enabled
-if(isset($is_trackingEnabled)):
-
-	$tool_content .= <<<cData
-		<br><br>
-		<table cellpadding="2" cellspacing="2" border="0" width="80%">
-		<tr bgcolor="#E6E6E6" align="center">
-		  <td width="50%">${langExercice}</td>
-		  <td width="30%">${langDate}</td>
-		  <td width="20%">${langResult}</td>
-		</tr>
-cData;
-
-$sql="SELECT `ce`.`titre`, `te`.`exe_result` , `te`.`exe_weighting`, UNIX_TIMESTAMP(`te`.`exe_date`)
-      FROM `$TBL_EXERCICES` AS ce , `$TBL_TRACK_EXERCICES` AS te
-      WHERE `te`.`exe_user_id` = '$_uid'
-      AND `te`.`exe_exo_id` = `ce`.`id`
-      ORDER BY `te`.`exe_cours_id` ASC, `ce`.`titre` ASC, `te`.`exe_date`ASC";
-
-$results=getManyResultsXCol($sql,4);
-
-if(is_array($results)) {
-	for($i = 0; $i < sizeof($results); $i++) {
-		$date_strftime = strftime($dateTimeFormatLong,$results[$i][3]);
-		$tool_content .= "<tr><td class=\"content\">".$results[$i][0]."></td>".
-  	"<td class=\"content\" align=\"center\"><small>".$date_strftime."</small></td>".
-  	"<td class=\"content\" align=\"center\">".$results[$i][1]." / ".$results[$i][2]."</td></tr>";
-	}
-}
-else
-	$tool_content .= "<tr><td colspan=\"3\">${langNoResult}</td></tr>";
-
 $tool_content .= "</table>";
-
-endif; // end if tracking is enabled
 draw($tool_content, 2);
 ?>

@@ -23,38 +23,6 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/*===========================================================================
-	exercise_result.php
-	@last update: 17-4-2006 by Costas Tsibanis
-	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
-==============================================================================        
-        @Description: Main script for the work tool
-
- 	This is a tool plugin that allows course administrators - or others with the
- 	same rights
-
- 	The user can : - navigate through files and directories.
-                       - upload a file
-                       - delete, copy a file or a directory
-                       - edit properties & content (name, comments, 
-			 html content)
-
- 	@Comments: The script is organised in four sections.
-
- 	1) Execute the command called by the user
-           Note (March 2004) some editing functions (renaming, commenting)
-           are moved to a separate page, edit_document.php. This is also
-           where xml and other stuff should be added.
-   	2) Define the directory to display
-  	3) Read files and directories from the directory defined in part 2
-  	4) Display all of that on an HTML page
- 
-  	@TODO: eliminate code duplication between document/document.php, scormdocument.php
-==============================================================================
-*/
-
-
-
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
@@ -66,21 +34,14 @@ define('FILL_IN_BLANKS', 3);
 define('MATCHING', 4);
 
 $require_current_course = TRUE;
-$langFiles='exercice';
 $guest_allowed = true;
-
-//include '../../include/init.php';
-
 include '../../include/baseTheme.php';
-
 $tool_content = "";
 
 $nameTools = $langExercices;
 $navigation[]= array ("url"=>"exercice.php", "name"=> $langExercices);
 
-
 // Destroy cookie
-
 if (!setcookie("marvelous_cookie", "", time() - 3600, "/")) {
 	header('Location: exercise_redirect.php');
 	exit();
@@ -92,8 +53,6 @@ if (!setcookie("marvelous_cookie_control", "", time() - 3600, "/")) {
 
 // latex support
 include_once "$webDir"."/modules/latexrender/latex.php";
-
-
 include('../../include/lib/textLib.inc.php');
 
 $TBL_EXERCICE_QUESTION='exercice_question';
@@ -122,7 +81,6 @@ $tool_content .= "<h3>".stripslashes($exerciseTitle)." : ".$langResult."</h3>".
 
 		// creates a temporary Question object
 		$objQuestionTmp=new Question();
-
 		$objQuestionTmp->read($questionId);
 
 		$questionName=$objQuestionTmp->selectTitle();
@@ -208,11 +166,9 @@ cData;
 		$objAnswerTmp=new Answer($questionId);
 
 		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
-
 		$questionScore=0;
 
-		for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
-		{
+		for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 			$answer=$objAnswerTmp->selectAnswer($answerId);
 			$answerComment=$objAnswerTmp->selectComment($answerId);
 			$answerCorrect=$objAnswerTmp->isCorrect($answerId);
@@ -250,11 +206,9 @@ cData;
 
 										// we save the answer because it will be modified
 										$temp=$answer;
-
 										$answer='';
 
 										$j=0;
-
 										// the loop will stop at the end of the text
 										while(1)
 										{
@@ -268,7 +222,6 @@ cData;
 
 											// adds the piece of text that is before the blank and ended by [
 											$answer.=substr($temp,0,$pos+1);
-
 											$temp=substr($temp,$pos+1);
 
 											// quits the loop if there are no more blanks
@@ -307,9 +260,7 @@ cData;
 
 											// adds the correct word, followed by ] to close the blank
 											$answer.=' / <font color="green"><b>'.substr($temp,0,$pos).'</b></font>]';
-
 											$j++;
-
 											$temp=substr($temp,$pos+1);
 										}
 
@@ -393,9 +344,7 @@ else
   $tool_content .= "</td></tr>";
 
 	} elseif($answerType == FILL_IN_BLANKS) {
-
-$tool_content .= "<tr><td>".nl2br($answer)."</td></tr>";
-
+			$tool_content .= "<tr><td>".nl2br($answer)."</td></tr>";
 	} else {
 
 $tool_content .= <<<cData
@@ -435,6 +384,7 @@ cData;
 /////////////////////////////////////////////////////////////////////////////
 // UPDATE results to DB
 /////////////////////////////////////////////////////////////////////////////
+
 $eid=$objExercise->selectId();
 mysql_select_db($currentCourseID);
 $sql="SELECT RecordStartDate FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
@@ -447,7 +397,6 @@ $exerciseTimeConstrain=$objExercise->selectTimeConstrain();
 $exerciseTimeConstrain = $exerciseTimeConstrain*60;
 $RecordEndDate = ($SubmitDate = date("Y-m-d H:i:s"));
 $SubmitDate = mktime(substr($SubmitDate, 11,2),substr($SubmitDate, 14,2),substr($SubmitDate, 17,2),substr($SubmitDate, 5,2),substr($SubmitDate, 8,2),substr($SubmitDate, 0,4));	
-//$OnTime = ($SubmitDate - ($RecordStartTime_temp + $exerciseTimeConstrain));
 if (!$exerciseTimeConstrain) {
 	$exerciseTimeConstrain = (7 * 24 * 60 * 60);
 }
@@ -473,8 +422,7 @@ if (($OnTime > 0 or $is_adminOfCourse)) { // exercise time limit hasn't expired
 			{
 			die($langExerciseNotFound);
 		}
-	
-		// saves the object into the session
+			// saves the object into the session
 		session_register('objExercise');
 }
 
@@ -510,17 +458,5 @@ $tool_content .= <<<cData
 cData;
 
 draw($tool_content, 2);
-
-/*******************************/
-/* Tracking of results         */
-/*******************************/
-
-// if tracking is enabled
-if(isset($is_trackingEnabled))
-{
-	include($includePath.'/libs/events.lib.inc.php');
-
-	event_exercice($objExercise->selectId(),$totalScore,$totalWeighting);
-}
 
 ?>

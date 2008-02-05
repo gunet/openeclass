@@ -23,42 +23,6 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/*===========================================================================
-	work.php
-	@last update: 17-4-2006 by Costas Tsibanis
-	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
-==============================================================================        
-        @Description: Main script for the work tool
-
- 	This is a tool plugin that allows course administrators - or others with the
- 	same rights
-
- 	The user can : - navigate through files and directories.
-                       - upload a file
-                       - delete, copy a file or a directory
-                       - edit properties & content (name, comments, 
-			 html content)
-
- 	@Comments: The script is organised in four sections.
-
- 	1) Execute the command called by the user
-           Note (March 2004) some editing functions (renaming, commenting)
-           are moved to a separate page, edit_document.php. This is also
-           where xml and other stuff should be added.
-   	2) Define the directory to display
-  	3) Read files and directories from the directory defined in part 2
-  	4) Display all of that on an HTML page
- 
-  	@TODO: eliminate code duplication between document/document.php, scormdocument.php
-==============================================================================
-*/
-
-// ALLOWED_TO_INCLUDE is defined in admin.php
-if(!defined('ALLOWED_TO_INCLUDE'))
-{
-	exit();
-}
-
 // if the question we are modifying is used in several exercises
 if(isset($usedInSeveralExercises))
 {
@@ -66,9 +30,7 @@ if(isset($usedInSeveralExercises))
 @$tool_content .= <<<cData
 	<h3>
 		${questionName}
-	</h3>
-
-		
+	</h3>	
 		<form method="post" action="${PHP_SELF}?modifyQuestion=${modifyQuestion}&modifyAnswers=${modifyAnswers}">
 		<table border="0" cellpadding="5">
 		<tr>
@@ -105,7 +67,6 @@ cData;
 	$tool_content .= "<input type=\"hidden\" name=\"blanks\" value=\"".htmlspecialchars(serialize($blanks))."\">";
 	$tool_content .= "<input type=\"hidden\" name=\"weighting\" value=\"".htmlspecialchars(serialize($weighting))."\">".
 		"<input type=\"hidden\" name=\"setWeighting\" value=\"1\">";
-
 		}
 	} // end submit answers
 
@@ -156,31 +117,22 @@ else
 	// is picture set ?
 	$okPicture=file_exists($picturePath.'/quiz-'.$questionId)?true:false;
 
-$tool_content .= "<h3>$questionName</h3>";
+	$tool_content .= "<h3>$questionName</h3>";
 
 	// show the picture of the question
-	if($okPicture)
-	{
-
-$tool_content .= "<center><img src='$picturePath/quiz-$questionId' border='0'></center>";
-
+	if($okPicture) {
+		$tool_content .= "<center><img src='$picturePath/quiz-$questionId' border='0'></center>";
 	}
 
-$tool_content .= "<blockquote>".nl2br($questionDescription)."</blockquote>";
+	$tool_content .= "<blockquote>".nl2br($questionDescription)."</blockquote>";
 
 	// doesn't show the edit link if we come from the question pool to pick a question for an exercise
-	if(!isset($fromExercise))
-	{
-
-$tool_content .= "<a href=\"".$PHP_SELF."?modifyQuestion=".$questionId.
-	"\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langModify."\"></a>";
-
+	if(!isset($fromExercise)) {
+			$tool_content .= "<a href=\"".$PHP_SELF."?modifyQuestion=".$questionId."\">
+			<img src=\"../../template/classic/img/edit.gif\" border=\"0\" align=\"absmiddle\" title=\"".$langModify."\"></a>";
 	}
 
-
-
 $tool_content .= "<br>$questionName</td></tr>";
-
 if($okPicture) {
         $tool_content .= "<tr><td valign=middle class=td_QuestionHeader align=center>
           <img src=$picturePath.'/quiz-'.$questionId;' border='0'>
@@ -190,7 +142,7 @@ if($okPicture) {
 
      // Question Description
   if($questionDescription) {
-  $tool_content .= "<tr> <td valign=middle class=td_QuestionHeader align=left><b><i>$langDesCom:</i></b><br/>".nl2br($questionDescription)."</td></tr>";
+					  $tool_content .= "<tr> <td valign=middle class=td_QuestionHeader align=left><b><i>$langDesCom:</i></b><br/>".nl2br($questionDescription)."</td></tr>";
         }
 
 $tool_content .= "</table>";
@@ -201,26 +153,19 @@ $tool_content .= "<br><table align='center' width='96%'  border='0' cellspacing=
    <b><u>$langQuestionAnswers</u>:</b>";
 
    // doesn't show the edit link if we come from the question pool to pick a question for an exercise
-        if(!isset($fromExercise)) {
- 
-        $tool_content .= "<a href='$PHP_SELF?modifyAnswers=$questionId'><img src='../../images/edit.gif' border='0' align='absmiddle' alt='$langModify'></a>";
+     if(!isset($fromExercise)) {
+        $tool_content .= "<a href='$PHP_SELF?modifyAnswers=$questionId'><img src='../../images/edit.gif' border='0' align='absmiddle' title='$langModify'></a>";
 }
 
 $tool_content .= "<br/>";
 
       // shows answers of the question. 'true' means that we don't show the question, only answers
-        if(!showQuestion($questionId,true))
-        {
-        $tool_content .= "<font color='red'>$langNoAnswer</font>";	 
+        if(!showQuestion($questionId,true)) {
+			        $tool_content .= "<font color='red'>$langNoAnswer</font>";	 
         }
-   
-
 $tool_content .= "</td></tr></table><br>";
 
-
-
 /*
-
 $tool_content .= "<hr size=\"1\" noshade=\"noshade\">";
 
 	// we are in an exercise

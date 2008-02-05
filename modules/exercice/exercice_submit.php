@@ -23,35 +23,6 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/*===========================================================================
-	exercice_submit.php
-	@last update: 17-4-2006 by Costas Tsibanis
-	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
-==============================================================================        
-        @Description: Main script for the work tool
-
- 	This is a tool plugin that allows course administrators - or others with the
- 	same rights
-
- 	The user can : - navigate through files and directories.
-                       - upload a file
-                       - delete, copy a file or a directory
-                       - edit properties & content (name, comments, 
-			 html content)
-
- 	@Comments: The script is organised in four sections.
-
- 	1) Execute the command called by the user
-           Note (March 2004) some editing functions (renaming, commenting)
-           are moved to a separate page, edit_document.php. This is also
-           where xml and other stuff should be added.
-   	2) Define the directory to display
-  	3) Read files and directories from the directory defined in part 2
-  	4) Display all of that on an HTML page
- 
-  	@TODO: eliminate code duplication between document/document.php, scormdocument.php
-==============================================================================
-*/
 
 include('exercise.class.php');
 include('question.class.php');
@@ -66,7 +37,6 @@ define('FILL_IN_BLANKS',3);
 define('MATCHING',4);
 
 $require_current_course = TRUE;
-$langFiles='exercice';
 $require_help = TRUE;
 $helpTopic = 'Exercise';
 $guest_allowed = true;
@@ -77,8 +47,6 @@ include '../../include/lib/textLib.inc.php';
 $tool_content = "";
 
 $nameTools = $langExercice;
-
-
 $picturePath='../../courses/'.$currentCourseID.'/image';
 
 $is_allowedToEdit=$is_adminOfCourse;
@@ -142,7 +110,6 @@ if(!session_is_registered('objExercise')) {
 	$objExercise=new Exercise();
 
 	// if the specified exercise doesn't exist or is disabled
-	//if(!$objExercise->read($exerciseId) || (!$objExercise->selectStatus() && !$is_allowedToEdit))
 	if(!$objExercise->read($exerciseId) && (!$is_allowedToEdit))
 		{
 		die($langExerciseNotFound);
@@ -191,8 +158,7 @@ $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user
 		if ((!$exerciseAllowedAttemtps)||($CurrentAttempt[0] <= $exerciseAllowedAttemtps)) { // if it is allowed begin again
 			
 			$CookieLife = $exerciseTimeConstrainSecs;
-			
-			
+						
 			if (!setcookie("marvelous_cookie", $eid_temp, $CookieLife, "/")) {
 					header('Location: exercise_redirect.php');
 				exit();

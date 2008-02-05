@@ -23,42 +23,11 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/*===========================================================================
-	work.php
-	@last update: 17-4-2006 by Costas Tsibanis
-	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
-==============================================================================        
-        @Description: Main script for the work tool
-
- 	This is a tool plugin that allows course administrators - or others with the
- 	same rights
-
- 	The user can : - navigate through files and directories.
-                       - upload a file
-                       - delete, copy a file or a directory
-                       - edit properties & content (name, comments, 
-			 html content)
-
- 	@Comments: The script is organised in four sections.
-
- 	1) Execute the command called by the user
-           Note (March 2004) some editing functions (renaming, commenting)
-           are moved to a separate page, edit_document.php. This is also
-           where xml and other stuff should be added.
-   	2) Define the directory to display
-  	3) Read files and directories from the directory defined in part 2
-  	4) Display all of that on an HTML page
- 
-  	@TODO: eliminate code duplication between document/document.php, scormdocument.php
-==============================================================================
-*/
-
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
 
 $require_current_course = TRUE;
-$langFiles='exercice';
 
 include '../../include/baseTheme.php';
 
@@ -66,7 +35,6 @@ $tool_content = "";
 
 $nameTools=$langQuestionPool;
 $navigation[]=array("url" => "exercice.php","name" => $langExercices);
-
 $is_allowedToEdit=$is_adminOfCourse;
 
 $TBL_EXERCICE_QUESTION='exercice_question';
@@ -158,7 +126,6 @@ if (isset($fromExercise)) {
 	$temp_fromExercise = $fromExercise;
 } else {
 	$temp_fromExercise = "";
-	//$fromExercise = 0;
 }
 
 $tool_content .= <<<cData
@@ -195,15 +162,12 @@ cData;
 	}
 	
 	// shows a list-box allowing to filter questions
-	while($row=mysql_fetch_array($result))
-	{
-
-	$tool_content .= "<option value=\"".$row['id']."\"";
+	while($row=mysql_fetch_array($result)) {
+		$tool_content .= "<option value=\"".$row['id']."\"";
 	
 	if(isset($exerciseId) && $exerciseId == $row['id']) 
 		$tool_content .= "selected=\"selected\"";
 	$tool_content .= ">".$row['titre']."</option>";
-
 	}
 	
 $tool_content .= <<<cData
@@ -213,8 +177,6 @@ $tool_content .= <<<cData
 cData;
 
 	@$from=$page*$limitQuestPage;
-	
-	//mysql_select_db($currentCourseID);
 	
 	// if we have selected an exercise in the list-box 'Filter'
 	if(isset($exerciseId) && $exerciseId > 0)
@@ -253,39 +215,27 @@ else
 
 $tool_content .= "\"><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"95%\"><tr><td>";
 
-	if(isset($fromExercise))
-	{
-
+	if(isset($fromExercise)) {
 		$tool_content .= "<a href=\"admin.php\">&lt;&lt; ".$langGoBackToEx."</a>";
-
-	}
-	else
-	{
-
+	} else {
 		$tool_content .= "<a href=\"admin.php?newQuestion=yes\">".$langNewQu."</a>";
-
 	}
 
 	  $tool_content .= "</td><td align=\"right\">";
 
-	if(isset($page))
-	{
+	if(isset($page)) {
 
 	$tool_content .= "<small><a href=\"".$PHP_SELF.
 		"?exerciseId=".$exerciseId.
 		"&fromExercise=".$fromExercise.
 		"&page=".($page-1)."\">&lt;&lt; ".$langPrevious."</a></small> |";
-
 	}
 	elseif($nbrQuestions > $limitQuestPage)
 	{
-
-	$tool_content .= "<small>&lt;&lt; $langPrevious |</small>";
-
+		$tool_content .= "<small>&lt;&lt; $langPrevious |</small>";
 	}
 
-	if($nbrQuestions > $limitQuestPage)
-	{
+	if($nbrQuestions > $limitQuestPage) {
 
 	$tool_content .= "<small><a href=\"".$PHP_SELF.
 	"?exerciseId=".$exerciseId.
@@ -294,11 +244,8 @@ $tool_content .= "\"><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" wid
 	" &gt;&gt;</a></small>";
 
 	}
-	elseif(isset($page))
-	{
-
-	$tool_content .= "<small>$langNext &gt;&gt;</small>";
-
+	elseif(isset($page)) {
+		$tool_content .= "<small>$langNext &gt;&gt;</small>";
 	}
 
 	 $tool_content .= <<<cData
@@ -330,8 +277,7 @@ cData;
 	}
 
 $tool_content .= "</tr>";
-
-	$i=1;
+$i=1;
 
 	while($row=mysql_fetch_array($result))
 	{
@@ -357,10 +303,9 @@ $tool_content .= "</tr>";
 
   $tool_content .= "</td>";
 
-			if(!isset($fromExercise))
-			{
+	if(!isset($fromExercise)) {
 
-  $tool_content .= "<td align=\"center\"><a href=\"".$PHP_SELF."?exerciseId=".$exerciseId."&delete=".$row['id']."\"". 
+	  $tool_content .= "<td align=\"center\"><a href=\"".$PHP_SELF."?exerciseId=".$exerciseId."&delete=".$row['id']."\"". 
 		" onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice)).
 		"')) return false;\"><img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a></td>";
 
@@ -369,28 +314,21 @@ $tool_content .= "</tr>";
 $tool_content .= "</tr>";
 
 			// skips the last question, that is only used to know if we have or not to create a link "Next page"
-			if($i == $limitQuestPage)
-			{
+			if($i == $limitQuestPage) {
 				break;
 			}
-
 			$i++;
 		}
 	}
 
-	if(!$nbrQuestions)
-	{
-
-$tool_content .= "<tr><td colspan=\"";
-
-if (isset($fromExercise)&&($fromExercise))
-	$tool_content .= "2";
-else
-	$tool_content .= "3";	
-	
+	if(!$nbrQuestions) {
+		$tool_content .= "<tr><td colspan=\"";
+		if (isset($fromExercise)&&($fromExercise))
+			$tool_content .= "2";
+		else
+			$tool_content .= "3";	
 	$tool_content .= "\">".$langNoQuestion."</td></tr>";
-
-	}
+}
 
 $tool_content .= <<<cData
 
@@ -400,8 +338,7 @@ cData;
 
 }
 // if not admin of course
-else
-{
+else {
 	$tool_content .= $langNotAllowed;
 }
 

@@ -1,7 +1,5 @@
 <?
-$langFiles = 'exercice';
 $require_current_course = TRUE;
-
 include '../../include/init.php';
 
 // IF PROF ONLY
@@ -22,7 +20,6 @@ if (ereg('[^(]*\((.*)\)[^)]*',$client,$regs)) {
 	if (eregi("Win",$os)) $crlf="\r\n";
 	}
 
-
 	echo "$langExerciseSurname\t$langExerciseName\t$langExerciseStart\t$langExerciseEnd\t$langYourTotalScore2\t$langQuestionWeighting";
 	echo "$crlf";
 	echo "$crlf";
@@ -31,7 +28,6 @@ mysql_select_db($currentCourseID);
 $sql="SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid='".mysql_real_escape_string($_GET['exerciseId'])."'";
 $result = mysql_query($sql);
 while($row=mysql_fetch_array($result)) {
-	//echo "$crlf";
 	$sid = $row['uid'];
 	$StudentName = db_query("select nom,prenom from user where user_id='$sid'", $mysqlMainDb);
 	$theStudent = mysql_fetch_array($StudentName);
@@ -62,9 +58,7 @@ while($row=mysql_fetch_array($result)) {
 		echo("$TotalScore\t");
 		echo("$TotalWeighting\t");
 	}
-/////////////////////////////////////////////////////////////////////////////////
 }
 echo "$crlf";
-
 }  // end of initial if
 ?>
