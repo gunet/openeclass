@@ -23,41 +23,8 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/*===========================================================================
-	exercise.class.php
-	@last update: 01-06-2006 by Dionysios G. Synodinos
-	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
-==============================================================================        
-        @Description: Main script for the work tool
-
- 	This is a tool plugin that allows course administrators - or others with the
- 	same rights
-
- 	The user can : - navigate through files and directories.
-                       - upload a file
-                       - delete, copy a file or a directory
-                       - edit properties & content (name, comments, 
-			 html content)
-
- 	@Comments: The script is organised in four sections.
-
- 	1) Execute the command called by the user
-           Note (March 2004) some editing functions (renaming, commenting)
-           are moved to a separate page, edit_document.php. This is also
-           where xml and other stuff should be added.
-   	2) Define the directory to display
-  	3) Read files and directories from the directory defined in part 2
-  	4) Display all of that on an HTML page
- 
-  	@TODO: eliminate code duplication between document/document.php, scormdocument.php
-==============================================================================
-*/
-//include '../../include/baseTheme.php';
-
 if(!class_exists('Exercise')):
-
-		/*>>>>>>>>>>>>>>>>>>>> CLASS EXERCISE <<<<<<<<<<<<<<<<<<<<*/
-
+/*>>>>>>>>>>>>>>>>>>>> CLASS EXERCISE <<<<<<<<<<<<<<<<<<<<*/
 /**
  * This class allows to instantiate an object of type Exercise
  *
@@ -132,20 +99,16 @@ class Exercise
 
 			// fills the array with the question ID for this exercise
 			// the key of the array is the question position
-			while($object=mysql_fetch_object($result))
-			{
+			while($object=mysql_fetch_object($result)) {
 				// makes sure that the question position is unique
 				while(isset($this->questionList[$object->q_position]))
 				{
 					$object->q_position++;
 				}
-
 				$this->questionList[$object->q_position]=$object->question_id;
 			}
-
 			return true;
 		}
-
 		// exercise not found
 		return false;
 	}
@@ -295,22 +258,18 @@ class Exercise
 			while(in_array($rand,$alreadyChosed));
 
 			$alreadyChosed[]=$rand;
-
 			$j=0;
 
-			foreach($this->questionList as $key=>$val)
-			{
+			foreach($this->questionList as $key=>$val) {
 				// if we have found the question chosed above
 				if($j == $rand)
 				{
 					$randQuestionList[$key]=$val;
 					break;
 				}
-
 				$j++;
 			}
 		}
-
 		return $randQuestionList;
 	}
 
@@ -620,6 +579,5 @@ class Exercise
 }
 
 endif;
-
 
 ?>

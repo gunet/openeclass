@@ -428,7 +428,8 @@ if (($OnTime > 0 or $is_adminOfCourse)) { // exercise time limit hasn't expired
 
 		$tool_content = <<<cData
 	<h3>${exerciseTitle}</h3>
-	<p>${langExerciseExpired}<a href="exercice.php">${langExerciseLis}</a></p>
+	<p>${langExerciseExpired}</p>
+	<center><a href="exercice.php">${langBack}</a></center>
 cData;
 
 draw($tool_content, 2);

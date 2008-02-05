@@ -1,6 +1,5 @@
 <?php 
 
-
 if(!class_exists('Answer')):
 
 		/*>>>>>>>>>>>>>>>>>>>> CLASS ANSWER <<<<<<<<<<<<<<<<<<<<*/
@@ -239,7 +238,6 @@ class Answer
 		$sql=substr($sql,0,-1);
 		mysql_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
 
-
 		// moves $new_* arrays
 		$this->answer=$this->new_answer;
 		$this->correct=$this->new_correct;
@@ -264,28 +262,23 @@ class Answer
 		global $TBL_REPONSES;
 
 		// if at least one answer
-		if($this->nbrAnswers)
-		{
+		if($this->nbrAnswers) {
 			// inserts new answers into data base
 			$sql="INSERT INTO `$TBL_REPONSES`(id,question_id,reponse,correct,comment,ponderation,r_position) VALUES";
 
-			for($i=1;$i <= $this->nbrAnswers;$i++)
-			{
+			for($i=1;$i <= $this->nbrAnswers;$i++) {
 				$answer=addslashes($this->answer[$i]);
 				$correct=$this->correct[$i];
 				$comment=addslashes($this->comment[$i]);
 				$weighting=$this->weighting[$i];
 				$position=$this->position[$i];
-
 				$sql.="('$i','$newQuestionId','$answer','$correct','$comment','$weighting','$position'),";
 			}
 
 			$sql=substr($sql,0,-1);
-			mysql_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
-			
+			mysql_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);			
 		}
 	}
 }
-
 endif;
 ?>

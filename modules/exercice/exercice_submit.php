@@ -64,8 +64,6 @@ if(isset($buttonCancel)) {
 	exit();
 }
 
-
-
 // if the user has submitted the form
 if(isset($formSent)) {
 	// initializing
@@ -137,7 +135,6 @@ if (!$exerciseTimeConstrain) {
 
 $RecordStartDate = date("Y-m-d H:i:s",time());
 
-
 if ((!$is_adminOfCourse)&&(isset($uid))) { //if registered student
 $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record WHERE eid='$eid_temp' AND uid='$uid'", $currentCourseID));
 ++$CurrentAttempt[0];
@@ -179,7 +176,6 @@ $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user
 if(!session_is_registered('questionList')) {
 	// selects the list of question ID
 	$questionList=$randomQuestions?$objExercise->selectRandomList():$objExercise->selectQuestionList();
-
 	// saves the question list into the session
 	session_register('questionList');
 }
@@ -197,7 +193,6 @@ if(!isset($questionNum) || $_POST['questionNum']) {
 }
 
 if(@$_POST['questionNum']) {
-	//$QUERY_STRING="questionNum='".mysql_real_escape_string($questionNum)."'";
 	$QUERY_STRING="questionNum=$questionNum";
 }
 
@@ -256,8 +251,8 @@ foreach($questionList as $questionId) {
 
 	// for sequential exercises
 	if($exerciseType == 2) {
-		// quits the loop
-		break;
+	// quits the loop
+	break;
 	}
 }	// end foreach()
 	$tool_content .= "</table></td></tr><tr><td align=\"center\"><br><input type=\"submit\" value=\"";
