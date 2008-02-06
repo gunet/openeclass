@@ -567,19 +567,5 @@ if($uid)
 	db_query($sql);
 }
 
-
-/*******************************/
-/* Tracking of results         */
-/*******************************/
-
-// if tracking is enabled
-if(isset($is_trackingEnabled))
-{
-	include($includePath.'/libs/events.lib.inc.php');
-
-	event_exercice($objExercise->selectId(),$totalScore,$totalWeighting);
-}
-
 echo "</div></body></html>"."\n";
-
 ?>
