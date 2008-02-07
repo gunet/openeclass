@@ -60,11 +60,6 @@ $tool_content = "";
 // upatras.gr patch begin, atkyritsis@upnet.gr, daskalou@upnet.gr
 // use the following array for the legend icons
 /*
-$icons = array(
-2 => "<img src=\"../../template/classic/img/OpenCourse.gif\" alt=\"\">",
-1 => "<img src=\"../../template/classic/img/Registration.gif\" alt=\"\">",
-0 => "<img src=\"../../template/classic/img/ClosedCourse.gif\" alt=\"\">"
-);
 */
 $icons = array(
  2 => "<img src=\"../../template/classic/img/OpenCourse.gif\"   alt=\"".$m['legopen']."\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\">",
@@ -108,7 +103,6 @@ if ($numoftypes > 1) {
      </table>";
 }
 
-//$tool_content .= "<div class='courses'>";
 
 // changed this foreach statement a bit
 // this way we sort by the course types
@@ -219,7 +213,6 @@ $tool_content .= "<a name='$type'>&nbsp;</a>$message</th>";
          }
 
 $tool_content .= "<br>";
-//$tool_content .= "</div>";
 
 draw($tool_content, 0);
 ?>

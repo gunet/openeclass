@@ -1,8 +1,8 @@
 <?php
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
-================================================================================
+  =============================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
         A full copyright notice can be read in "/info/copyright.txt".
         
@@ -56,11 +56,9 @@ function RecurseDir($directory, $baseFolder)
 				  $thisdir['struct'][] = RecurseDir($tempDir, $baseFolder);
 				} else {			
 				  $thisdir['struct'][] = $file;
-				  
 				  $tmp = $directory;
 				  $tmp = substr($tmp, strlen($baseFolder));
 				  $tmp = str_replace("\\", "/", $tmp);
-				  
 				  if (empty($tmp)) 
 				  {
 				  	upgrade_document("/", $file);
@@ -88,44 +86,38 @@ function RecurseDir($directory, $baseFolder)
 	}
 	
 	return $thisdir;
-}//telos anadromikou algorithmou scannarismatos arxeiwn kai fakelwn
-
+} //telos anadromikou algorithmou scannarismatos arxeiwn kai fakelwn
 
 //leitourgeia pou pairnei san orismata $uploadPath = sxetikos fakelos pou vrisketai to arxeio (p.x. "/" h' "/folder/") kai $file = pragmatiko_onoma_arxeiou
 //h leitourgia metonomazei to onoma tou arxeiou se kapoio me safe_filename xrhsimopoiwntas enan genhtora monadikou arithmou kai prosthetei ston pinaka document ths vashs tou kathe mathimatos (h vash exei proepilegei apo prohgoumena vhmata) ta anagkaia metadedomena
 function upgrade_document ($uploadPath, $file)
 {
 	
-	$fileName = trim ($file);     	
+	$fileName = trim($file);
         	
 	//elegxos ean to "path" tou arxeiou pros upload vrisketai hdh se eggrafh ston pinaka documents
     //(aftos einai ousiastika o elegxos if_exists dedomenou tou oti to onoma tou arxeiou sto filesystem
     //einai monadiko)
     
     $result = mysql_query ("SELECT filename FROM document WHERE path LIKE '%".$uploadPath.$fileName."%'");
-    
+
 	$row = mysql_fetch_array($result);
-	
+
 	if (empty($row['filename'])) //to arxeio den vrethike sth vash ara mporoume na proxwrhsoume me to upload
 	{
-
-
             /**** Check for no desired characters ***/
             $fileName = replace_dangerous_char($fileName);
 
             /*** Try to add an extension to files witout extension ***/
             $fileName = add_ext_on_mime($fileName);
-            
+
             /*** Handle PHP files ***/
             $fileName = php2phps($fileName);
-            
-            
-            
+
             //ypologismos onomatos arxeiou me date + time + 3 tyxaia alfarithmitika psifia.
             //to onoma afto tha xrhsimopoiei sto filesystem & tha apothikevetai ston pinaka documents
             $safe_fileName = date("YmdGis")."_".randomkeys('3').".".get_file_extention($fileName);
-            
-            
+
             //prosthiki eggrafhs kai metadedomenwn gia to eggrafo sth vash
             if ($uploadPath == ".")
             {
@@ -137,14 +129,12 @@ function upgrade_document ($uploadPath, $file)
             	$uploadPath2 = $uploadPath.$safe_fileName;
             	$existinguploadPath = $uploadPath.$fileName;
             }
-            
-            
             //san file format vres to extension tou arxeiou
             $file_format = get_file_extention($fileName);
-            
+
             //san date you arxeiou xrhsimopoihse thn shmerinh hm/nia
             $file_date = date("Y\-m\-d G\:i\:s");
-            
+
             //arxikopoihsh timwn twn metavlhtwn gia to upgrade twn eggrafwn
             $file_comment = "";
             $file_category = "";
@@ -156,33 +146,29 @@ function upgrade_document ($uploadPath, $file)
             $file_format = "";
             $file_language = "";
             $file_copyrighted = "";
-            
-            
+
             $query = "INSERT INTO document SET 
-            	path			=		'$uploadPath2',
-            	filename		=		'$fileName',
-            	visibility		=		'v',
-            	comment			=		'$file_comment',
-            	category		=		'$file_category',
-            	title			=		'$file_title',
-            	creator			=		'$file_creator',
-            	date			=		'$file_date',
-            	date_modified	=		'$file_date',
-            	subject			=		'$file_subject',
-            	description		=		'$file_description',            	
-            	author			=		'$file_author',
-            	format			=		'$file_format',
-            	language		=		'$file_language',
-            	copyrighted		=		'$file_copyrighted'";
-            rename (getcwd().$existinguploadPath, getcwd().$uploadPath2);
-            
+            	path = '$uploadPath2',
+            	filename = '$fileName',
+            	visibility = 'v',
+            	comment	= '$file_comment',
+            	category = '$file_category',
+            	title =	'$file_title',
+            	creator	= '$file_creator',
+            	date = '$file_date',
+            	date_modified =	'$file_date',
+            	subject	= '$file_subject',
+            	description = '$file_description',
+            	author = '$file_author',
+            	format	= '$file_format',
+            	language = '$file_language',
+            	copyrighted = '$file_copyrighted'";
+            rename(getcwd().$existinguploadPath, getcwd().$uploadPath2);
             mysql_query($query);
-                  
 	} //telos if(empty($row['filename']))
-	
 }
 
-//function pou epistrefei tyxaious xarakthres. to orisma $length kathorizei to megethos tou apistrefomenou xarakthra
+//function pou epistrefei tyxaious xarakthres. to orisma $length kathorizei to megethos tou epistrefomenou xarakthra
 function randomkeys($length)
  {
    $key = "";
@@ -192,6 +178,5 @@ function randomkeys($length)
      $key .= $pattern{rand(0,35)};
    }
    return $key;
-   
  }
 ?>
