@@ -1,9 +1,9 @@
-<div class="moz-text-flowed" style="font-family: -moz-fixed">***********************************
+***********************************
 Μαθηματικές φόρμουλες στο e-Class
 ***********************************
-Από την έκδοση GUnet e-Class 1.4 ενσωματώθηκε στην πλατφόρμα
+Από την έκδοση GUnet eClass 1.4 ενσωματώθηκε στην πλατφόρμα
 το σύστημα Latex. Xρησιμοποιώντας το latex, στα υποσυστήματα 
-"Ακακοινώσεις", "Περιοχή συζητήσεων" και "Ασκήσεις" καθίσταται 
+"Ανακοινώσεις", "Περιοχή συζητήσεων" και "Ασκήσεις" καθίσταται 
 δυνατόν να γράψουμε μαθηματικές φόρμουλες στα ηλεκτρονικά 
 μαθήματα που φιλοξενούνται στην πλατφόρμα.
 Το σύστημα αυτό εγκαταστάθηκε και δοκιμάστηκε με επιτυχία σε 
@@ -24,14 +24,14 @@
 Ρυθμίσεις 
 ************
 
-A) Ανοίχτε το αρχείο ρυθμίσεων του e-Class config.php.
-(π.χ. /var/www/html/eclass/claroline/include/config.php)
+A) Ανοίχτε το αρχείο ρυθμίσεων του eClass config.php.
+(π.χ. /var/www/html/eclass/config/config.php)
 
 Προσθέστε τις παρακάτω γραμμές
 
-define('latex_picture_path', "/path-to-eclass/claroline/latexrender/pictures");
-define('latex_picture_path_httpd',"/path-to-eclass/claroline/latexrender/pictures");
-define('latex_tmp_dir',"/path-to-eclass/claroline/latexrender/tmp"); 
+define('latex_picture_path', "/path-to-eclass/modules/latexrender/pictures");
+define('latex_picture_path_httpd',"/path-to-eclass/modules/latexrender/pictures");
+define('latex_tmp_dir',"/path-to-eclass/modules/latexrender/tmp"); 
 define('latex_path',"/usr/bin/latex");
 define('dvips_path',"/usr/bin/dvips");
 define('convert_path',"/usr/bin/convert");
@@ -40,15 +40,15 @@ define('identify_path',"usr/bin/identify");
 Προφανώς όπου path-to-eclass θα πρέπει να βάλετε το path της εγκατάστασης.
 Στο παράδειγμά μας θα πρέπει να είναι:
 
-define('latex_picture_path', "/var/www/html/eclass/claroline/latexrender/pictures");
-define('latex_picture_path_httpd',"/path-to-eclass/claroline/latexrender/pictures");
-define('latex_tmp_dir',"/path-to-eclass/claroline/latexrender/tmp"); // χωρίς τελικό slash
+define('latex_picture_path', "/var/www/html/eclass/modules/latexrender/pictures");
+define('latex_picture_path_httpd',"/path-to-eclass/modules/latexrender/pictures");
+define('latex_tmp_dir',"/path-to-eclass/modules/latexrender/tmp"); // χωρίς τελικό slash
 
 Επίσης ελέγξτε τα path των προγραμμάτων latex, dvips, 
 convert και identify και αλλάξτε τα κατάλληλα, αν απαιτείται.
 
-B) Μεταβείτε στον κατάλογο (κατάλογο εγκατάστασης του e-Class)/claroline/latexrender.
-(π.χ. /var/www/html/eclass/claroline/latexrender )
+B) Μεταβείτε στον κατάλογο (κατάλογο εγκατάστασης του eClass)/modules/latexrender.
+(π.χ. /var/www/html/eclass/modules/latexrender )
 
 Εκεί θα βρείτε δύο υποκαταλόγους με τα ονόματα pictures και tmp. 
 Αυτοί οι κατάλογοι πρέπει να έχουν πλήρη δικαιώματα (chmod 777) ώστε το πρόγραμμα να μπορεί να 
