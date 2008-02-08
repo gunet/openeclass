@@ -339,6 +339,7 @@ if (isset($create_course)) {
 
         $repertoire = new_code(find_faculty_by_name($faculte));
         $language=$languageCourse;
+        include("../lang/$language/common.inc.php");
         include("../lang/$language/messages.inc.php");
         if(empty($intitule) OR empty($repertoire)) {
                 $tool_content .= "
