@@ -1981,8 +1981,8 @@ $l_smilepict	= "Εικόνα";
 /*****************************************************************
 * questionnaire.inc.php
 ******************************************************************/
-$langCreateSurvey = 'Δημιουργία δημοσκόπησης';
-$langCreatePoll = 'Δημιουργία ερωτηματολογίου';
+$langCreateSurvey = 'Δημιουργία ερωτηματολογίου';
+$langCreatePoll = 'Δημιουργία δημοσκόπησης';
 $langQuestionnaire = "Ερωτηματολόγιo";
 $langSurvey = "Δημοσκόπηση";
 $langSurveys = "Δημοσκοπήσεις";
@@ -2114,6 +2114,7 @@ $langPollMoreQuestions = "+ ερωτήσεις";
 $langPollCreate = "Δημιουργία Δημοσκόπησης";
 $langPollCreated ="Η Δημοσκόπηση δημιουργήθηκε με επιτυχία.<br><br> <a href=\"questionnaire.php\">Επιστροφή</a>.";
 $langPollCreator = "Δημιουργός";
+$langPollCreation = "Ημ/νία Δημιουργίας";
 $langPollCreateDate = "Η δημοσκόπηση δημιουργήθηκε την";
 $langPollCreationError = "Σφάλμα κατά την δημιουργία της Δημοσκόπησης. Παρακαλώ προσπαθήστε ξανά.";
 $langPollDeleted ="Η Δημοσκόπηση διαγράφηκε με επιτυχία. <br><br><a href=\"questionnaire.php\">Επιστροφή</a>.";

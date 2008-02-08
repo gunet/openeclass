@@ -76,7 +76,7 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
 		where pid=".mysql_real_escape_string($_GET['pid'])." "
 		."ORDER BY pid", $currentCourse);
 	$thePoll = mysql_fetch_array($current_poll);
-	$tool_content .= "<b>" . $thePoll["name"] . "</b></b><br><br>";
+	$tool_content .= "<div id=\"topic_title_id\">" . $thePoll["name"] . "</div><br><p>";
 	$tool_content .= "$langPollCreateDate: <b>" . $thePoll["creation_date"] . "</b><br><br>";
 	$tool_content .= $langPollStarted . " <b>" . $thePoll["start_date"] . "</b> ";
 	$tool_content .= $langPollEnded. " <b>" . $thePoll["end_date"] . "</b><br><br>";
@@ -201,13 +201,13 @@ if ($_GET['type'] == 2) { //TF
 			$chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
 			$chart->render($webDir.$chart_path);
 			
-			$tool_content .= '<br><table width="100%"><tr><td><img src="'.$urlServer.$chart_path.'" /></td></tr></table><br>';
+			$tool_content .= '<table width="99%" align="center"><tr><td align="center"><img src="'.$urlServer.$chart_path.'" /></td></tr></table><br>';
 			
 		}
 	}
 
 // display individual results 
-	$tool_content .= "<br><br><b>" . $langIndividuals . "</b><br><br>";
+	$tool_content .= "<p><b>" . $langIndividuals . "</b><br>";
 	
 	$answers = db_query("
 		select * from poll_answer 
@@ -221,7 +221,7 @@ if ($_GET['type'] == 2) { //TF
 			select nom,prenom from user 
 			where user_id='$creator_id'", $mysqlMainDb);
 		$theCreator = mysql_fetch_array($answer_creator);
-		$tool_content .= "<table border=\"1\" width=\"100%\"><tr><td>";
+		$tool_content .= "<table width=\"99%\"><tr><td>";
 		$tool_content .= "<br><b>" . $theCreator["nom"]. " " . $theCreator["prenom"] . "</b><br>";
 		$qas = db_query("
 			select * from poll_answer_record 

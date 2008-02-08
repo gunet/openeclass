@@ -88,7 +88,7 @@ $start_cal_Poll = $jscalendar->make_input_field(
                  'showOthers'     => true,
                  'ifFormat'       => '%Y-%m-%d %H:%M:%S',
                  'timeFormat'     => '24'),
-           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align
+           array('style'       => 'width: 15em; color: #840; background-color: #fff; border: 1px dotted #000; text-align
 : center',
                  'name'        => 'PollStart',
                  'value'       => $u_date_start));
@@ -98,7 +98,7 @@ $end_cal_Poll = $jscalendar->make_input_field(
                  'showOthers'     => true,
                  'ifFormat'       => '%Y-%m-%d %H:%M:%S',
                  'timeFormat'     => '24'),
-           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+           array('style'       => 'width: 15em; color: #840; background-color: #fff; border: 1px dotted #000; text-align: center',
                  'name'        => 'PollEnd',
                  'value'       => $u_date_end));
 
@@ -175,25 +175,45 @@ else
 function printPollCreationForm() {
 	global $tool_content, $langName, $langPollStart, 
 		$langPollEnd, $langType, $langPollMC, $langPollFillText, $langPollContinue, $langCreate, 
-		$start_cal_Poll, $end_cal_Poll;
+		$start_cal_Poll, $end_cal_Poll, $langCreatePoll;
 	
 	$CurrentDate = date("Y-m-d H:i:s");
 	$tool_content .= <<<cData
-	<form action="addpoll.php" id="poll" method="post">
-	<table><thead></thead>
-		<tr><td>$langName</td><td colspan="2"><input type="text" size="50" name="PollName"></td></tr>
-		<tr><td>$langPollStart</td><td colspan="2">
-			<!--<input type="text" size="17" name="PollStart" value="$CurrentDate">-->
-			$start_cal_Poll
-		</td></tr>
-		<tr><td>$langPollEnd</td><td colspan="2"><!--<input type="text" size="17" name="PollEnd">-->$end_cal_Poll</td></tr>
-		<input name="UseCase" type="hidden" value="1" />
-		<tr><td colspan="3" align="right">
-		  <input name="$langPollContinue" type="submit" value="$langPollContinue -&gt;"></td>
-			<input type="hidden" value="1" name="questions">
-			<input type="hidden" value="2" name="answers">
-	</table>
-	</form>
+    <form action="addpoll.php" id="poll" method="post">
+    <table class='FormData'>
+    <tbody>
+    <tr>
+      <th class='left' width='150'>&nbsp;</th>
+      <td><b>$langCreatePoll</b></td>
+    </tr>
+    <tr>
+      <th class='left'>$langName</th>
+      <td><input type="text" size="50" name="PollName" class='FormData_InputText'></td>
+    </tr>
+    <tr>
+      <th class='left'>$langPollStart</th>
+      <td><!--<input type="text" size="17" name="PollStart" value="$CurrentDate">-->
+      $start_cal_Poll
+      </td>
+    </tr>
+    <tr>
+      <th class='left'>$langPollEnd</th>
+      <td><!--<input type="text" size="17" name="PollEnd">-->
+       $end_cal_Poll
+      </td>
+    </tr>
+    <tr>
+      <th>&nbsp;</th>
+      <td>
+      <input name="UseCase" type="hidden" value="1" />
+      <input name="$langPollContinue" type="submit" value="$langPollContinue -&gt;">
+      <input type="hidden" value="1" name="questions">
+      <input type="hidden" value="2" name="answers">
+      </td>
+    </tr>
+    </tbody>
+    </table>
+    </form>
 cData;
 }
 

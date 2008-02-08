@@ -3,7 +3,7 @@
 div.calendar { position: relative; }
 
 .calendar, .calendar table {
-  border: 1px solid #206A9B;
+  border: 1px solid #a33033;
   font-size: 11px;
   color: #000;
   cursor: default;
@@ -19,20 +19,20 @@ div.calendar { position: relative; }
 }
 
 .calendar .nav {
-  background: #007ED1 url(menuarrow2.gif) no-repeat 100% 100%;
+  background: #CAC3B5 url(menuarrow2.gif) no-repeat 100% 100%;
 }
 
 .calendar thead .title { /* This holds the current "month, year" */
   font-weight: bold;      /* Pressing it will take you to the current date */
   text-align: center;
-  background: #000;
+  background: #a33033
   color: #fff;
   padding: 2px;
 }
 
 .calendar thead tr { /* Row <TR> containing navigation buttons */
-  background: #007ED1;
-  color: #fff;
+  background: #CAC3B5;
+  color: #000;
 }
 
 .calendar thead .daynames { /* Row <TR> containing the day names */
@@ -51,7 +51,7 @@ div.calendar { position: relative; }
 }
 
 .calendar thead .hilite { /* How do the buttons in header appear when hover */
-  background-color: #34ABFA;
+  background-color: #edecdf;
   color: #000;
   border: 1px solid #016DC5;
   padding: 1px;
@@ -140,8 +140,8 @@ div.calendar { position: relative; }
 }
 
 .calendar tfoot .ttip { /* Tooltip (status bar) cell <TD> */
-  background: #000;
-  color: #fff;
+  background: #CAC3B5;
+  color: #000;
   border-top: 1px solid #206A9B;
   padding: 1px;
 }
@@ -231,6 +231,6 @@ div.calendar { position: relative; }
 
 .calendar td.time span.active {
   border-color: red;
-  background-color: #000;
+  background-color: gray;
   color: #A5FF00;
 }

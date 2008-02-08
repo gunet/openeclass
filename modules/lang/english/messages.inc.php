@@ -2141,6 +2141,7 @@ $langPollMoreAnswers ="More answers";
 $langPollMoreQuestions = "More questions";
 $langPollCreated = "The Survey was created successfully.<br><br><a href=\"questionnaire.php\">Back</a>.";
 $langPollCreator = "Creator";
+$langPollCreation = "Creation Date";
 $langPollCreateDate = "Survey created on";
 $langPollCreationError = "Survey creation error. Please try again.";
 $langPollDeleted = "The Survey was deleted successfully.<br><br><a href=\"questionnaire.php\">Back</a>.";

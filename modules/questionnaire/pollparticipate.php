@@ -59,6 +59,8 @@ $helpTopic = 'Questionnaire';
 
 include '../../include/baseTheme.php';
 
+$nameTools = $langParticipate;
+$navigation[] = array("url"=>"questionnaire.php", "name"=> $langQuestionnaire);
 $tool_content = "";
 
 if(!isset($_REQUEST['UseCase'])) $_REQUEST['UseCase'] = "";
@@ -104,25 +106,26 @@ $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11,2),substr($temp_CurrentD
 
 if (($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
 	$tool_content .= <<<cData
+	<p>
 	<form action="pollparticipate.php" id="poll" method="post">
 		<input type="hidden" value="2" name="UseCase">
 		<input type="hidden" value="$pid" name="pid">
 		
 cData;
-			$tool_content .= "<b>".$thePoll["name"]."</b>\n<br>";
+			$tool_content .= "<div id=\"topic_title_id\">".$thePoll["name"]."</div>\n";
 
 ///*****************************************************************************
 //		Get answers + questions
 //******************************************************************************/
 	if ($thePoll["type"] == 1) { //MC
-		$tool_content .= "\n<br><input type=\"hidden\" value=\"1\" name=\"PollType\"><br>\n";
+		$tool_content .= "\n<input type=\"hidden\" value=\"1\" name=\"PollType\">\n";
 		$questions = db_query("
 		select * from poll_question 
 		where pid='".mysql_real_escape_string($pid)."' "
 		."ORDER BY pqid", $currentCourse);
 		while ($theQuestion = mysql_fetch_array($questions)) {	
 			++$CurrentQuestion;
-			$tool_content .= "<br><br>".$theQuestion["question_text"]."<br><br>\n";
+			$tool_content .= "<p><b>".$theQuestion["question_text"]."</b><br>\n";
 			$tool_content .= "<input type=\"hidden\" value=\"". 
 				$theQuestion["question_text"] .
 				"\" name=\"question" . $CurrentQuestion . "\">";
@@ -163,6 +166,7 @@ cData;
 		$tool_content .= <<<cData
 			  <input name="$langPollContinue" type="submit" value="$langPollContinue -&gt;">
 		</form>
+		</p>
 cData;
 } else {
 		$tool_content .= $langPollInactive;
@@ -230,7 +234,7 @@ function submitPoll() {
 			}  
 		}
 	
-	$GLOBALS["tool_content"] .= "<center>".$GLOBALS["langPollSubmitted"]."</center>";
+	$GLOBALS["tool_content"] .= "<p class='alert1'>".$GLOBALS["langPollSubmitted"]."</p>";
 }
 
 ?>
