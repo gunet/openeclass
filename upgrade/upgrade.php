@@ -1067,6 +1067,7 @@ while ($code = mysql_fetch_row($res)) {
         update_field("accueil", "lien", "../../modules/agenda/agenda.php", "id", 1);
         db_query("UPDATE accueil SET visible = '0', admin = '1' WHERE id = 8 LIMIT 1", $code[0]);
 	update_field("accueil", "lien", "../../modules/video/video.php", "id", 4);
+	update_field("accueil", "lien", "../../modules/conference/conference.php", "id", 19);
 
        //set define string vars
         update_field("accueil", "define_var", "MODULE_ID_AGENDA", "id", 1);
@@ -1100,7 +1101,7 @@ while ($code = mysql_fetch_row($res)) {
         update_field("accueil", "image","calendar", "id", 1);
         update_field("accueil", "image","links", "id",	2);
         update_field("accueil", "image","docs", "id",	 3);
-        update_field("accueil", "image","video", "id",	4);
+        update_field("accueil", "image","videos", "id",	4);
         update_field("accueil", "image","assignments", "id",5);
         update_field("accueil", "image","announcements", "id",7);
         update_field("accueil", "image","users", "id", 8);
@@ -1109,7 +1110,7 @@ while ($code = mysql_fetch_row($res)) {
         update_field("accueil", "image","course_info", "id",	14);
         update_field("accueil", "image","groups", "id", 15);
         update_field("accueil", "image","dropbox", "id", 16);
-        update_field("accueil", "image","chat", "id", 19);
+        update_field("accueil", "image","conference", "id", 19);
         update_field("accueil", "image","description", "id",	20);
 
         // update menu entries with new messages
