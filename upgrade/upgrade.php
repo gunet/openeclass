@@ -23,31 +23,18 @@ $diskQuotaVideo = 20000000;
 $diskQuotaDropbox = 40000000;
 
 // new titles for table accueil
-$langDropBox['greek'] = "Ανταλλαγή Αρχείων";
-$langCourseAdmin['greek'] = "Διαχείριση Μαθήματος";
-$langUsers['greek'] = "Διαχείριση Χρηστών";
-$langForums['greek'] = "Περιοχή Συζητήσεων";
-$langWork['greek'] = "Εργασίες";
-$langWiki['greek'] = "Σύστημα Wiki";
-$langToolManagement['greek'] = "Ενεργοποίηση Εργαλείων";
-$langCourseStat['greek'] = "Στατιστικά Χρήσης";
-$langQuestionnaire['greek'] = "Ερωτηματολόγιο";
-$langConference['greek'] = "Τηλεσυνεργασία";
-$langLearnPath['greek'] = "Γραμμή Μάθησης";
-$langExercises['greek'] = "Ασκήσεις";
-
-$langDropBox['english'] = "DropBox";
-$langCourseAdmin['english'] = "Course Admin";
-$langUsers['english'] = "Users Admin";
-$langForums['english'] = "Forum";
-$langWork['english'] = "Student Papers";
-$langWiki['english'] = "Wiki";
-$langToolManagement['english'] = "Tools Management";
-$langCourseStat['english'] = "Usage Statistics";
-$langQuestionnaire['english'] = "Questionnaire";
-$langConference['english'] = "Teleconference";
-$langLearnPath['english'] = "Learning Path";
-$langExercises['english'] = "Exercises";
+$langDropBox = array('greek' => "Ανταλλαγή Αρχείων", 'english' => "DropBox");
+$langCourseAdmin = array('greek' => "Διαχείριση Μαθήματος", 'english' => "Course Admin");
+$langUsers = array('greek' => "Διαχείριση Χρηστών", 'english' => "Users Admin");
+$langForums = array('greek' => "Περιοχή Συζητήσεων", 'english' => "Forum");
+$langWork = array('greek' => "Εργασίες", 'english' => "Student Papers");
+$langWiki = array('greek' => "Σύστημα Wiki", 'english' => "Wiki");
+$langToolManagement = array('greek' => "Ενεργοποίηση Εργαλείων", 'english' => "Tools Management");
+$langCourseStat = array('greek' => "Στατιστικά Χρήσης", 'english' => "Usage Statistics");
+$langQuestionnaire = array('greek' => "Ερωτηματολόγιο", 'english' => "Questionnaire");
+$langConference = array('greek' => "Τηλεσυνεργασία", 'english' => "Teleconference");
+$langLearnPath = array('greek' => "Γραμμή Μάθησης", 'english' => "Learning Path");
+$langExercises = array('greek' => "Ασκήσεις", 'english' => "Exercises");
 
 // Initialise $tool_content
 $tool_content = "";
