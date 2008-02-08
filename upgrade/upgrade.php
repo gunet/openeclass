@@ -45,6 +45,7 @@ if (isset($_POST['submit_upgrade'])) {
 	$fromadmin = false;
 }
 
+
 if (!isset($submit2)) {
 	if((isset($encryptedPasswd)) || (!empty($encryptedPasswd))) {
            $newpass = md5($_REQUEST['password']);
@@ -52,7 +53,7 @@ if (!isset($submit2)) {
              $newpass = $_REQUEST['password'];
    }
 
-  if (!is_admin($_REQUEST['login'], $newpass, $mysqlMainDb)) {
+if (!is_admin($_REQUEST['login'], $newpass, $mysqlMainDb)) {
                 $tool_content .= "<p>Τα στοιχεία που δώσατε δεν αντιστοιχούν στο διαχειριστή του
                         συστήματος! Παρακαλούμε επιστρέψτε στην προηγούμενη σελίδα και ξαναδοκιμάστε.</p>
                         <center><a href=\"index.php\">Επιστροφή</a></center>";
@@ -164,7 +165,9 @@ if (!@chdir("../config/"))
        if (!strstr($conf, '$durationAccount')) {
 		$lines_to_add .= "\$durationAccount = \"126144000\";\n";
 	}
-
+       if (!strstr($conf, '$persoIsActive')) {
+		$lines_to_add .= "\$persoIsActive = true;\n";
+	}
        if (!strstr($conf, '$encryptedPasswd')) {
 		$lines_to_add = "\$encryptedPasswd = true;\n";
 	}
@@ -395,7 +398,7 @@ if (!mysql_field_exists("$mysqlMainDb",'user','lang'))
 @$tmp = mysql_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_objectives`,`course_prerequisites` ,`course_keywords` ,`course_references`)");
 
 // encrypt passwords in users table
-if (!$encryptedPasswd) {
+if (!isset($encryptedPasswd)) {
         if ($res = db_query("SELECT user_id, password FROM user")) {
                 while ($row = mysql_fetch_array($res)) {
                         $pass = $row["password"];
@@ -445,7 +448,7 @@ add_index('i_temps', 'temps', 'annonces');
 // **********************************************
 // upgrade courses databases
 // **********************************************
-
+$tool_content .= "<br><br>";
 $res = db_query("SELECT code, languageCourse FROM cours");
 while ($code = mysql_fetch_row($res)) {
         // get course language
@@ -1199,19 +1202,18 @@ mysql_select_db($mysqlMainDb);
 $tool_content .= upgrade_message();
 
 $tool_content .= "</td></tr></tbody></table>";
-if ($fromadmin)
-	$tool_content .= "<br><center><p><a href=\"../modules/admin/index.php\">Επιστροφή</a></p></center>";
-else
-	$tool_content .= "<br><center><p><a href=\"index.php\">Επιστροφή</a></p></center>";
+	if ($fromadmin)  {
+		$tool_content .= "<br><center><p><a href=\"../modules/admin/index.php\">Επιστροφή</a></p></center>";
+		draw($tool_content, 3, 'admin');
+	} else {
+		$_SESSION['uid'] = null;
+		session_destroy();
+		draw($tool_content,0);
+		$tool_content .= "<br><center><p><a href=\"../../index.php\">Επιστροφή</a></p></center>";
+	}
+
 } // end of if not submit
 
-if ($fromadmin)
-	draw($tool_content,3, 'admin');
-else {
-	$_SESSION['uid'] = null;
-	session_destroy();
-	draw($tool_content,0);
-}
 
 //-------------------------------------------------
 // end of main script
