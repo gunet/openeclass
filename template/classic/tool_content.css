@@ -1,5 +1,5 @@
 h1 {
-	font-size:18px;
+        font-size:18px;
 }
 
 h2 {
@@ -19,26 +19,26 @@ h5 {
 }
 
 p, ul {
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 11px;
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 11px;
 }
 
 a, a:link, a:active, a:visited {
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size:10px;
-    color: #727266;
-    text-decoration: none;
-    font-weight: bold;
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-size: 10px;
+        color: #727266;
+        text-decoration: none;
+        font-weight: bold;
 }
 
 a:hover {
 	text-decoration: underline;
-    font-size: 10px;
-    color: #a33033;
-    font-weight: bold;
+        font-size: 10px;
+        color: #a33033;
+        font-weight: bold;
 }
 
-.Login{
+.Login {
     vertical-align:middle;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 11px;
@@ -74,10 +74,10 @@ a:hover {
     border-top: 1px solid #a33033;
     border-bottom: 1px solid #a33033;
     margin-bottom: 0.8em;
-	overflow: hidden;
+    overflow: hidden;
 }
 
-#operations_container a{
+#operations_container a {
    color: #000000;
    font-size: 10px;
    font-weight: normal;
@@ -85,16 +85,15 @@ a:hover {
    text-decoration: none;
 }
 
-#operations_container a:hover{
-	text-decoration: underline;
-	color: #ffffff;
-    font-size: 10px;
-	vertical-align: middle;
+#operations_container a:hover {
+       text-decoration: underline;
+       color: #ffffff;
+       font-size: 10px;
+       vertical-align: middle;
 }
 
 
-#opslist
-{
+#opslist {
 list-style-type: none;
 margin: 0;
 padding: 0;
@@ -547,7 +546,7 @@ a.sortheader, a.sortheader:link, a.sortheader:active, a.sortheader:visited {
     font-size: 11px;
     font-weight: nolmal;
     text-decoration: none;
-        }
+}
 
 a.sortheader:hover {
     background-color: #edecdf;
@@ -555,7 +554,7 @@ a.sortheader:hover {
     font-size: 11px;
     font-weight: normal;
     text-decoration: underline;
-        }
+}
 
 
 table.sortable span.sortarrow {
@@ -563,3 +562,9 @@ table.sortable span.sortarrow {
     text-decoration: none;
 }
 
+.warntitle {
+        text-align: center;
+        font-weight: bold;
+        text-decoration: underline;
+        margin: 1em;
+}

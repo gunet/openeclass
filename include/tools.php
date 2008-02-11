@@ -402,7 +402,7 @@ function adminMenu(){
 		array_push($sideMenuImg, "db_admin.gif");
 	}
 	array_push($sideMenuText, $GLOBALS['langUpgradeBase']);
-	array_push($sideMenuLink, "../admin/upgrade.php");
+	array_push($sideMenuLink, $urlServer."upgrade/");
 	array_push($sideMenuImg, "db_upgrade.gif");
 
 	array_push($sideMenuSubGroup, $sideMenuText);
