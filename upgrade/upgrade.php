@@ -1,9 +1,8 @@
 <?php session_start();
 
 //Flag for fixing relative path
-//See init.php to undestand it's logic
+//See init.php to undestand its logic
 $path2add=2;
-//$require_admin = TRUE;
 
 include '../include/baseTheme.php';
 include 'document_upgrade.php';
@@ -45,21 +44,21 @@ if (isset($_POST['submit_upgrade'])) {
 	$fromadmin = false;
 }
 
-
 if (!isset($submit2)) {
-	if((isset($encryptedPasswd)) || (!empty($encryptedPasswd))) {
-           $newpass = md5($_REQUEST['password']);
-	 } else { //else use plain text password since the passwords are not hashed
-             $newpass = $_REQUEST['password'];
-   }
+        if((isset($encryptedPasswd)) || (!empty($encryptedPasswd))) {
+                $newpass = md5(@$_REQUEST['password']);
+        } else {
+                // plain text password since the passwords are not hashed
+                $newpass = @$_REQUEST['password'];
+        }
 
-if (!is_admin($_REQUEST['login'], $newpass, $mysqlMainDb)) {
+        if (!is_admin(@$_REQUEST['login'], $newpass, $mysqlMainDb)) {
                 $tool_content .= "<p>Τα στοιχεία που δώσατε δεν αντιστοιχούν στο διαχειριστή του
                         συστήματος! Παρακαλούμε επιστρέψτε στην προηγούμενη σελίδα και ξαναδοκιμάστε.</p>
                         <center><a href=\"index.php\">Επιστροφή</a></center>";
-		draw($tool_content,0);
-		exit;
-   }
+                draw($tool_content, 0);
+                exit;
+        }
 }
 
 // ********************************************
@@ -75,7 +74,7 @@ if (!@chdir("../config/"))
           $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>";
           $tool_content .= "<table width=99%>";
           $tool_content .= "<tr><td align='justify' style='border: 1px solid #FFFFFF;'>
-		Βρεθήκανε τα παρακάτω στοιχεία επικοινωνίας στο αρχείο ρυθμίσεων <tt>config.php</tt>. 
+		Στο αρχείο ρυθμίσεων <tt>config.php</tt> βρέθηκαν τα παρακάτω στοιχεία επικοινωνίας. 
 		<br>Μπορείτε να τα αλλάξετε / συμπληρώσετε.</td></tr>";
           $tool_content .= "<tr><td align='justify' style='border: 1px solid #FFFFFF;'>&nbsp;</td></tr>";
           $tool_content .= "<tr><td align='justify' style='border: 1px solid #FFFFFF;'>";
@@ -119,7 +118,7 @@ if (!@chdir("../config/"))
 		</td></tr><table>
         	</form>
         	</div>";
-} else {		
+} else {
 		// backup of config file 
    		if (!copy("config.php","config_backup.php"))
 		die ("Δεν ήταν δυνατή η λειτουργία αντιγράφου ασφαλείας του config.php! Ελέγξτε τα δικαιώματα πρόσβασης.");
@@ -417,19 +416,19 @@ if (!isset($encryptedPasswd)) {
         }
 }
 
- // update users with no registration date
-  $res = db_query("SELECT user_id,registered_at,expires_at FROM user
-                    WHERE registered_at='0'
-                    OR registered_at='NULL' OR registered_at=NULL
-                    OR registered_at='null' OR registered_at=null
-                    OR registered_at='\N' OR registered_at=\N
-                    OR registered_at=''");  
+// update users with no registration date
+$res = db_query("SELECT user_id,registered_at,expires_at FROM user
+                 WHERE registered_at='0'
+                 OR registered_at='NULL' OR registered_at=NULL
+                 OR registered_at='null' OR registered_at=null
+                 OR registered_at='\N' OR registered_at=\N
+                 OR registered_at=''");  
 
-  while ($row = mysql_fetch_array($res)) {
-          $registered_at = $row["registered_at"];
-          $regtime = 126144000+time();
-          db_query("UPDATE user SET registered_at=".time().",expires_at=".$regtime);
-    }
+while ($row = mysql_fetch_array($res)) {
+        $registered_at = $row["registered_at"];
+        $regtime = 126144000+time();
+        db_query("UPDATE user SET registered_at=".time().",expires_at=".$regtime);
+}
 
 
 //Empty table 'agenda' in the main database so that we do not have multiple entries
@@ -1200,20 +1199,20 @@ while ($code = mysql_fetch_row($res)) {
 // Fixed by vagpits
 mysql_select_db($mysqlMainDb);
 
-$tool_content .= upgrade_message();
-
-$tool_content .= "</td></tr></tbody></table>";
-	if ($fromadmin)  {
-		$tool_content .= "<br><center><p><a href=\"../modules/admin/index.php\">Επιστροφή</a></p></center>";
-		draw($tool_content, 3, 'admin');
-	} else {
-		$_SESSION['uid'] = null;
-		session_destroy();
-		draw($tool_content,0);
-		$tool_content .= "<br><center><p><a href=\"../../index.php\">Επιστροφή</a></p></center>";
-	}
+$tool_content .= upgrade_message() . "</td></tr></tbody></table>";
 
 } // end of if not submit
+
+if ($fromadmin)  {
+        $tool_content .= "<br><center><p><a href=\"../modules/admin/index.php\">Επιστροφή</a></p></center>";
+        draw($tool_content, 3, 'admin');
+} else {
+        $_SESSION['uid'] = null;
+        session_destroy();
+        draw($tool_content, 0);
+        $tool_content .= "<br><center><p><a href=\"../../index.php\">Επιστροφή</a></p></center>";
+}
+
 
 
 //-------------------------------------------------
