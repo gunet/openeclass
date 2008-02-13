@@ -2138,7 +2138,8 @@ $langPollFillText = "Fill in the text";
 $langPollContinue = "Continue";
 
 $langPollMoreAnswers ="More answers";
-$langPollMoreQuestions = "More questions";
+$langPollAddMultiple = "New multiple choice question";
+$langPollAddFill = "New text fill question";
 $langPollCreated = "The Survey was created successfully.<br><br><a href=\"questionnaire.php\">Back</a>.";
 $langPollCreator = "Creator";
 $langPollCreation = "Creation Date";

@@ -798,45 +798,40 @@ mysql_query("INSERT INTO group_properties
   TYPE=MyISAM $charset_spec");
 
 mysql_query("CREATE TABLE poll (
-      pid bigint(14) NOT NULL auto_increment,
+      pid int(11) NOT NULL auto_increment,
       creator_id mediumint(8) unsigned NOT NULL default '0',
       course_id varchar(20) NOT NULL default '0',
       name varchar(255) NOT NULL default '',
       creation_date datetime NOT NULL default '0000-00-00 00:00:00',
       start_date datetime NOT NULL default '0000-00-00 00:00:00',
       end_date datetime NOT NULL default '0000-00-00 00:00:00',
-      type int(11) NOT NULL default '0',
       active int(11) NOT NULL default '0',
       PRIMARY KEY  (pid))
     TYPE=MyISAM $charset_spec");
 
-    mysql_query("CREATE TABLE poll_answer (
-      aid bigint(12) NOT NULL default '0',
-      creator_id mediumint(8) unsigned NOT NULL default '0',
-      pid bigint(12) NOT NULL default '0',
-      date datetime NOT NULL default '0000-00-00 00:00:00',
-      PRIMARY KEY  (aid))
-    TYPE=MyISAM $charset_spec");
-
     mysql_query("CREATE TABLE poll_answer_record (
       arid int(11) NOT NULL auto_increment,
-      aid bigint(12) NOT NULL default '0',
-      question_text varchar(250) NOT NULL default '',
-      question_answer varchar(250) NOT NULL default '',
+	pid int(11) NOT NULL default '0',
+	qid int(11) NOT NULL default '0',
+      	aid int(11) NOT NULL default '0',
+	answer_text varchar(255) NOT NULL default '',
+	user_id int(11) NOT NULL default '0',
+      date datetime NOT NULL default '0000-00-00 00:00:00',
       PRIMARY KEY  (arid))
     TYPE=MyISAM $charset_spec");
 
     mysql_query("CREATE TABLE poll_question (
-      pqid bigint(12) NOT NULL default '0',
-      pid bigint(12) NOT NULL default '0',
+      pqid int(11) NOT NULL auto_increment,
+      pid int(11) NOT NULL default '0',
       question_text varchar(250) NOT NULL default '',
+      qtype ENUM('multiple', 'fill') NOT NULL,
       PRIMARY KEY  (pqid))
     TYPE=MyISAM $charset_spec");
 
     mysql_query("CREATE TABLE poll_question_answer (
       pqaid int(11) NOT NULL auto_increment,
-      pqid bigint(12) NOT NULL default '0',
-      answer_text varchar(250) default NULL,
+      pqid int(11) NOT NULL default '0',
+      answer_text text NOT NULL,
       PRIMARY KEY  (pqaid))
     TYPE=MyISAM $charset_spec");
 

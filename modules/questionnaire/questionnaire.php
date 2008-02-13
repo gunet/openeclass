@@ -111,21 +111,17 @@ if (isset($visibility)) {
 
 // delete polls
 if (isset($delete) and $delete='yes')  {
-				db_query("DELETE FROM poll WHERE pid=".mysql_real_escape_string($_GET['pid']));
-				$ad = mysql_fetch_array(db_query("SELECT aid FROM poll_answer 
-																				WHERE pid=".mysql_real_escape_string($_GET['pid'])));
-				db_query("DELETE FROM poll_answer_record WHERE aid='$ad[aid]'");
-				db_query("DELETE FROM poll_answer WHERE pid=".mysql_real_escape_string($_GET['pid']));
-				$pd = mysql_fetch_array(db_query("SELECT pqid FROM poll_question 
-																				WHERE pid=".mysql_real_escape_string($_GET['pid'])));	
-				db_query("DELETE FROM poll_question_answer WHERE pqid='$pd[pqid]'");
-				db_query("DELETE FROM poll_question WHERE pid=".mysql_real_escape_string($_GET['pid']));
-			
+				$pid = intval($_GET['pid']);
+				db_query("DELETE FROM poll_question_answer WHERE pqid IN
+					(SELECT pqid FROM poll_question WHERE pid=$pid)");
+				db_query("DELETE FROM poll WHERE pid=$pid");
+				db_query("DELETE FROM poll_question WHERE pid='$pid'");
+				db_query("DELETE FROM poll_answer_record WHERE pid='$pid'");	
         $GLOBALS["tool_content"] .= "<p>".$GLOBALS["langPollDeleted"]."</p>";
 				draw($tool_content, 2, ' ', $head_content);
 				exit();
 }
-
+/*
 // delete surveys
 if (isset($sdelete) and $sdelete='yes') {
 				db_query("DELETE FROM survey WHERE sid=".mysql_real_escape_string($_GET['sid']));
@@ -142,7 +138,7 @@ if (isset($sdelete) and $sdelete='yes') {
        draw($tool_content, 2, ' ', $head_content);
 			 exit();
 }
-
+*/
 //$tool_content .= "<p><b>$langNamesSurvey</b></p><br>";
 //printSurveys();
 
@@ -154,7 +150,7 @@ $tool_content .= "
       <td>";
 	  
       if ($is_adminOfCourse) {
-        $tool_content .= "<a href='addpoll.php?UseCase=0'>$langCreatePoll</a>";
+        $tool_content .= "<a href='addpoll.php'>$langCreatePoll</a>";
       } else {
         $tool_content .= "&nbsp";
       }
@@ -318,14 +314,9 @@ cData;
 		}
 		if (!$poll_check) {
 			$tool_content .= "<p class='alert1'>".$langPollNone . "</p><br>";
-			//if ($is_adminOfCourse) 
-				//$tool_content .= '<a href="addpoll.php?UseCase=0">'.$langCreatePoll.'</a><br><br>  ';
 			}
 		else {
 		
-			//if ($is_adminOfCourse) 
-				//$tool_content .= '<b><a href="addpoll.php?UseCase=0">'.$langCreatePoll.'</a></b><br><br>  ';
-			
 			// Print active polls 
 			$tool_content .= <<<cData
 
@@ -342,7 +333,7 @@ cData;
 cData;
 				
 				if ($is_adminOfCourse) {
-					$tool_content .= "
+ 					$tool_content .= "
         <th colspan='2' width='30'>$langActions</th>";
 				} else {
 					$tool_content .= "
@@ -376,16 +367,11 @@ cData;
 				
 				$pid = $thepoll["pid"];
 				$answers = db_query("
-				select * from poll_answer 
-				where pid='$pid'", $currentCourse);
+				select * from poll_answer_record where pid='$pid'", $currentCourse);
 				$countAnswers = mysql_num_rows($answers);
 				
 				if ($is_adminOfCourse) { 
-					$tool_content .= "
-      <tr>
-        <td colspan='2'><small>$index_aa.</small>&nbsp;<a href=\"pollresults.php?pid=". 
-					$pid ."&type=" . $thepoll["type"]."\">" . $thepoll["name"] .
-					"</a></td>";
+					$tool_content .= "<tr><td colspan='2'><small>$index_aa</small>&nbsp;<a href='pollresults.php?pid=$pid'>$thepoll[name]</a></td>";
 				} else {
 					$tool_content .= "
       <tr".$visibility_css.">
@@ -409,9 +395,9 @@ cData;
         </td>
       </tr>";
 				else {
-						$thepid = $thepoll["pid"];
-						$has_participated = mysql_fetch_array(
-							mysql_query("SELECT COUNT(*) FROM poll_answer where creator_id='$uid' AND pid='$thepid'"));
+					$thepid = $thepoll["pid"];
+					$has_participated = mysql_fetch_array(
+					mysql_query("SELECT COUNT(*) FROM poll_answer_record where user_id='$uid' AND pid='$thepid'"));
 					if ( $has_participated[0] == 0) {
 						$tool_content .= "
         <td align='center'><a href='pollparticipate.php?UseCase=1&pid=". $pid ."'>";
