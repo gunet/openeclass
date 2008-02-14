@@ -816,7 +816,7 @@ mysql_query("CREATE TABLE poll (
       	aid int(11) NOT NULL default '0',
 	answer_text varchar(255) NOT NULL default '',
 	user_id int(11) NOT NULL default '0',
-      date datetime NOT NULL default '0000-00-00 00:00:00',
+      submit_date datetime NOT NULL default '0000-00-00 00:00:00',
       PRIMARY KEY  (arid))
     TYPE=MyISAM $charset_spec");
 

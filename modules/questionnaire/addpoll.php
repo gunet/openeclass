@@ -201,9 +201,10 @@ function printQuestionForm($questions, $question_types) {
 ******************************************************************************/
 function add_multiple_choice_question($i, $text)
 {
-	global $tool_content, $langQuestion, $langPollMoreAnswers, $langAnswer;
-
-	$tool_content .= "<tr><td colspan='2'>$langQuestion #$i<br><input type='text' name='question[$i]' value='$text' size='50'><input type='hidden' name='question_type[$i]' value='1'></td></tr>";
+	global $tool_content, $langQuestion, $langPollMoreAnswers, $langAnswers;
+	
+	$k=$i+1;
+	$tool_content .= "<tr><td colspan='2'>$langQuestion #$k<br><input type='text' name='question[$i]' value='$text' size='50'><input type='hidden' name='question_type[$i]' value='1'></td></tr>";
 	if (isset($_POST['answer'.$i])) {
 		$answers = $_POST['answer'.$i];
 	} else {
@@ -212,7 +213,7 @@ function add_multiple_choice_question($i, $text)
 	if (isset($_POST['MoreAnswers'.$i])) {
 		$answers[] = '';
 	}
-	$tool_content .= "<tr><td colspan='2'>$langAnswer:";
+	$tool_content .= "<tr><td colspan='2'>$langAnswers:";
 	foreach ($answers as $j => $answertext) {
 	    $tool_content .= "<br><input type='text' name='answer${i}[]' value='$answertext' size='50'>";
 	}
@@ -226,10 +227,9 @@ function add_multiple_choice_question($i, $text)
 function add_fill_text_question($i, $text)
 {
 	global $tool_content, $langQuestion, $langAnswer;
-
+	
 	$tool_content .= "<tr><td colspan='2'>$langQuestion #$i<br><input type='text' name='question[$i]' value='$text' size='50'><input type='hidden' name='question_type[$i]' value='2'></td></tr>";
 }
-
 
 
 // ----------------------------------------
@@ -245,7 +245,6 @@ function createPoll($questions, $question_types) {
 	$pid = date("YmdHms");
 	$PollType = 1;
 	$PollActive = 1;
-
 	$PollName = $_POST['PollName'];
 	$StartDate = $_POST['PollStart'];
 	$EndDate = $_POST['PollEnd']; 
@@ -289,6 +288,4 @@ function createPoll($questions, $question_types) {
 	}
 	$GLOBALS["tool_content"] .= $GLOBALS["langPollCreated"];
 }
-
-
 ?>
