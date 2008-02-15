@@ -147,7 +147,7 @@ elseif ($a == 1)  {
 		$tool_content .= "<table width=\"99%\"><caption>$langFaculteIns</caption><tbody>";
 		$tool_content .= "<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap>".$langCodeFaculte1.":</th><td><input type=\"text\" name=\"codefaculte\" value=\"".@$codefaculte."\"></td><td><i>".$langCodeFaculte2."</i></td></tr>
 		<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap>".$langFaculte1.":</th><td><input type=\"text\" name=\"faculte\" value=\"".@$faculte."\"></td><td><i>".$langFaculte2."</i></td></tr>
-		<tr><td colspan=\"2\"><input type=\"submit\" name=\"add\" value=\"".$langAddYes."\"></td</tr>
+		<tr><td colspan=\"2\"><input type=\"submit\" name=\"add\" value=\"".$langAdd."\"></td</tr>
 		</tbody></table></form>";
 		}
 		$tool_content .= "<br><center><p><a href=\"$_SERVER[PHP_SELF]\">".$langBack."</a></p></center>";
