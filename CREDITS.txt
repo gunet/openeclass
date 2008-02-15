@@ -71,7 +71,9 @@
 
       DHTML Calendar: Copyright Mihai Bazon, 2002-2005
 	
-			POP3 class : Manuel Lemos (http://www.manuellemos.net)  <WebMaster@E-na.Net>
+      POP3 class : Manuel Lemos (http://www.manuellemos.net)  <WebMaster@E-na.Net>
+	
+      Libchart - PHP chart library: Copyright 2005-2006 Jean Marc Trémeaux <jm.tremeaux@gmail.com>
 
       LaTeX Rendering: Copyright (c) 2003/2004 Benjamin Zeiss <zeiss@math.uni-goettingen.de>
 
@@ -81,6 +83,6 @@
 
       Exercise module: Copyright Olivier Brouckaert <oli.brouckaert@skynet.be>
 			
-			Function parse_tex(): Patrick Cool <patrick.cool@UGent.be>
-			
-			Function user_get_data(): Mathieu Laurent <laurent@cerdecam.be>
+		Function parse_tex(): Patrick Cool <patrick.cool@UGent.be>
+		
+		Function user_get_data(): Mathieu Laurent <laurent@cerdecam.be>
