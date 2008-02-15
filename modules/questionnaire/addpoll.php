@@ -185,25 +185,26 @@ function printQuestionForm($questions, $question_types) {
 	$langCreate, $langPollMoreQuestions, 
 	$langPollCreated, $MoreQuestions;
 
-        $qnumber = 1;
 	foreach ($questions as $i => $text) {
 		if ($question_types[$i] == 1) {
-			add_multiple_choice_question($i, $text, $qnumber++);
+			add_multiple_choice_question($i, $text);
 		} else {
-			add_fill_text_question($i, $text, $qnumber++);
+			add_fill_text_question($i, $text);
 		}
 	}
 }
 
 
 /*****************************************************************************
-	Add multiple choice question $i to $tool_content, numbered $k
+	Add multiple choice question $i to $tool_content
 ******************************************************************************/
-function add_multiple_choice_question($i, $text, $k)
+function add_multiple_choice_question($i, $text)
 {
 	global $tool_content, $langQuestion, $langPollMoreAnswers, $langAnswers;
 	
-	$tool_content .= "<tr><td colspan='2'>$langQuestion #$k<br><input type='text' name='question[$i]' value='$text' size='50'><input type='hidden' name='question_type[$i]' value='1'></td></tr>";
+	$tool_content .= "<tr><td colspan='2'>$langQuestion #" . ($i+1) .
+                "<br><input type='text' name='question[$i]' value='$text' size='50'>" .
+                "<input type='hidden' name='question_type[$i]' value='1'></td></tr>";
 	if (isset($_POST['answer'.$i])) {
 		$answers = $_POST['answer'.$i];
 	} else {
@@ -221,13 +222,15 @@ function add_multiple_choice_question($i, $text, $k)
 
 
 /*****************************************************************************
-	Add fill text question $i to $tool_content, numbered $k
+	Add fill text question $i to $tool_content
 ******************************************************************************/
-function add_fill_text_question($i, $text, $k)
+function add_fill_text_question($i, $text)
 {
 	global $tool_content, $langQuestion, $langAnswer;
 	
-	$tool_content .= "<tr><td colspan='2'>$langQuestion #$k<br><input type='text' name='question[$i]' value='$text' size='50'><input type='hidden' name='question_type[$i]' value='2'></td></tr>";
+	$tool_content .= "<tr><td colspan='2'>$langQuestion #" . ($i+1) .
+                "<br><input type='text' name='question[$i]' value='$text' size='50'>" .
+                "<input type='hidden' name='question_type[$i]' value='2'></td></tr>";
 }
 
 
