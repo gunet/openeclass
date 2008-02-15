@@ -540,7 +540,6 @@ $langModifDone="The information has been modified";
 $langHome="Back to HomePage";
 $langCode="Course code";
 $langDelUsers="Unregister all users";
-$langTitle="Course title";
 $langFaculty="Faculty";
 $langDescription="Description";
 $langConfidentiality="Confidentiality";

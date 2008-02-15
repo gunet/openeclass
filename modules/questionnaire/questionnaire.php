@@ -173,7 +173,7 @@ draw($tool_content, 2, ' ', $head_content);
 /* Apenergopoihsame ta Surveys
 	function printSurveys() {
  		global $tool_content, $currentCourse, $langSurveyNone,
- 			$langYes, $langCreateSurvey, $langName, $langSurveyCreator, 
+ 			$langYes, $langCreateSurvey, $langTitle, $langSurveyCreator, 
  			$langSurveyStart, $langSurveyEnd, $langType, $langCreate,
  			$langSurveyOperations, $is_adminOfCourse, $langSurveysActive, $mysqlMainDb, $langActions, 
  			$langSurveyMC, $langEdit, $langDelete, $langActivate, $langDeactivate, $langSurveysInactive, $langParticipate, 
@@ -201,7 +201,7 @@ draw($tool_content, 2, ' ', $head_content);
 			// Print active surveys 
 			$tool_content .= <<<cData
 				<table border="0" width="99%"><thead><tr>
-				<th>$langName</th>
+				<th>$langTitle</th>
 				<th>$langSurveyCreator</th>
 				<th>$langCreate</th>
 				<th>$langSurveyStart</th>
@@ -296,7 +296,7 @@ cData;
  ****************************************************************************************************/
 	function printPolls() {
 		global $tool_content, $currentCourse, $langCreatePoll, $langPollsActive, 
-			$langYes, $langName, $langPollCreator, $langPollCreation, $langPollStart, 
+			$langYes, $langTitle, $langPollCreator, $langPollCreation, $langPollStart, 
 			$langPollEnd, $langPollOperations, $langPollNone, $is_adminOfCourse, $langSurveys,
 			$langNamesSurvey, $mysqlMainDb, $langEdit, $langDelete, $langActions,
 			$langDeactivate, $langPollsInactive, $langActivate, $langParticipate, 
@@ -325,7 +325,7 @@ cData;
       <tbody>
       <tr>
         <th width='1'>&nbsp</th>
-        <th class='left'>$langName</th>
+        <th class='left'>$langTitle</th>
         <th width='150' class='left'>$langPollCreator</th>
         <th width='30'>$langPollCreation</th>
         <th width='30'>$langPollStart</th>

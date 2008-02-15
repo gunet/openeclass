@@ -304,7 +304,7 @@ else
 		Prints the new survey creation form
 ******************************************************************************/
 function printSurveyCreationForm() {
-	global $tool_content, $langName, $langPollStart, 
+	global $tool_content, $langTitle, $langPollStart, 
 		$langPollEnd, $langType, $langSurveyMC, $langSurveyFillText, 
 		$langCreate, $langSurveyContinue,  $start_cal_Survey, $end_cal_Survey;
 	
@@ -314,7 +314,7 @@ function printSurveyCreationForm() {
 	<form action="addsurvey.php" id="survey" method="post">
 	<input type="hidden" value="0" name="MoreQuestions">
 	<table><thead></thead>
-		<tr><td>$langName</td><td colspan="2"><input type="text" size="50" name="SurveyName"></td></tr>
+		<tr><td>$langTitle</td><td colspan="2"><input type="text" size="50" name="SurveyName"></td></tr>
 		<tr><td>$langPollStart</td><td colspan="2">
 			$start_cal_Survey
 		</td></tr>
@@ -341,7 +341,7 @@ cData;
 ******************************************************************************/
 function printMCQuestionForm() {
 
-	global $tool_content, $langName, $langSurveyStart, $langSurveyEnd, 
+	global $tool_content, $langTitle, $langSurveyStart, $langSurveyEnd, 
 		$langType, $langSurveyMC, $langSurveyFillText, 
 		$langQuestion, $langCreate, $langSurveyMoreQuestions, 
 		$langSurveyCreated, $MoreQuestions, $langAnswer, 
@@ -363,7 +363,7 @@ function printMCQuestionForm() {
 	<form action="addsurvey.php" id="survey" method="post" name="SurveyForm" onSubmit="return checkrequired(this, 'question1')">
 	<input type="hidden" value="1" name="UseCase">
 	<table id="QuestionTable">
-	<tr><td>$langName</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
+	<tr><td>$langTitle</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
 	<tr><td>$langSurveyStart</td><td colspan="2"><input type="text" size="20" name="SurveyStart" value="$SurveyStart"></td></tr>
 	<tr><td>$langSurveyEnd</td><td colspan="2"><input type="text" size="20" name="SurveyEnd" value="$SurveyEnd"></td></tr>
 	<tr><td colspan=3>
@@ -396,7 +396,6 @@ function printMCQuestionForm() {
 		<input type="hidden" value="1" name="NumOfQuestions">
 		</form>
 cData;
-//	} elseif ($MoreQuestions == 1) {  // Print more answers
 	} elseif ($MoreQuestions == $langSurveyMoreAnswers) {  // Print more answers 
 		$NumOfQuestions = $_POST['NumOfQuestions'];
 		
@@ -404,7 +403,7 @@ cData;
 		<form action="addsurvey.php" id="survey" method="post">
 		<input type="hidden" value="1" name="UseCase">
 		<table>
-			<tr><td>$langName</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
+			<tr><td>$langTitle</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
 			<tr><td>$langSurveyStart</td><td colspan="2"><input type="text" size="10" name="SurveyStart" value="$SurveyStart"></td></tr>
 			<tr><td>$langSurveyEnd</td><td colspan="2"><input type="text" size="10" name="SurveyEnd" value="$SurveyEnd"></td></tr>
 			
@@ -436,7 +435,7 @@ cData;
 		<form action="addsurvey.php" id="survey" method="post" name="SurveyForm"  onSubmit="return checkrequired(this, 'questionx')">
 		<input type="hidden" value="1" name="UseCase">
 		<table>
-		<tr><td>$langName</td><td colspan="2">
+		<tr><td>$langTitle</td><td colspan="2">
 				<input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
 		<tr><td>$langSurveyStart</td><td colspan="2">
 					<input type="text" size="20" name="SurveyStart" value="$SurveyStart"></td></tr>
@@ -496,7 +495,7 @@ cData;
 		Prints new text fill question
 ******************************************************************************/
 function printTFQuestionForm() {
-	global $tool_content, $langName, $langSurveyStart, $langSurveyEnd, 
+	global $tool_content, $langTitle, $langSurveyStart, $langSurveyEnd, 
 		$langType, $langSurveyMC, $langSurveyFillText, 
 		$langQuestion, $langCreate, $langSurveyMoreQuestions, 
 		$langSurveyCreated, $MoreQuestions;
@@ -513,7 +512,7 @@ function printTFQuestionForm() {
 		<form action="addsurvey.php" id="survey" method="post">
 		<input type="hidden" value="2" name="UseCase">
 		<table>
-			<tr><td>$langName</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
+			<tr><td>$langTitle</td><td colspan="2"><input type="text" size="50" name="SurveyName" value="$SurveyName"></td></tr>
 			<tr><td>$langSurveyStart</td><td colspan="2"><input type="text" size="20" name="SurveyStart" value="$SurveyStart"></td></tr>
 			<tr><td>$langSurveyEnd</td><td colspan="2"><input type="text" size="20" name="SurveyEnd" value="$SurveyEnd"></td></tr>
 cData;

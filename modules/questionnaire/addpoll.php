@@ -63,7 +63,7 @@ if ($language == 'greek') {
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();
 
-$nameTools = $langCreate;
+$nameTools = $langCreatePoll;
 $navigation[] = array("url"=>"questionnaire.php", "name"=> $langQuestionnaire);
 
 $tool_content = "";
@@ -108,9 +108,8 @@ function jscal_html($name, $u_date = FALSE) {
 		Prints the new poll creation form
 ******************************************************************************/
 function printPollCreationForm() {
-	global $tool_content, $langName, $langPollStart, $langPollAddMultiple, $langPollAddFill,
-		$langPollEnd, $langPollMC, $langPollFillText, $langPollContinue, $langCreate,
-		$langCreatePoll;
+	global $tool_content, $langTitle, $langPollStart, $langPollAddMultiple, $langPollAddFill,
+		$langPollEnd, $langPollMC, $langPollFillText, $langPollContinue, $langCreatePoll;
 
 	if(isset($_POST['PollName'])) {
 		$PollName = htmlspecialchars($_POST['PollName']);
@@ -137,7 +136,7 @@ function printPollCreationForm() {
       <td><b>$langCreatePoll</b></td>
     </tr>
     <tr>
-      <th class='left'>$langName</th>
+      <th class='left'>$langTitle</th>
       <td><input type='text' size='50' name='PollName' class='FormData_InputText' value='$PollName'></td>
     </tr>
     <tr>
@@ -153,7 +152,7 @@ function printPollCreationForm() {
       <td>
       <input type='submit' name='MoreMultiple' value='$langPollAddMultiple'>
       <input type='submit' name='MoreFill' value='$langPollAddFill'>
-      <input type='submit' name='PollCreate' value='$langCreate'>
+      <input type='submit' name='PollCreate' value='$langCreatePoll'>
       </td>
     </tr>";
 
@@ -186,24 +185,24 @@ function printQuestionForm($questions, $question_types) {
 	$langCreate, $langPollMoreQuestions, 
 	$langPollCreated, $MoreQuestions;
 
+        $qnumber = 1;
 	foreach ($questions as $i => $text) {
 		if ($question_types[$i] == 1) {
-			add_multiple_choice_question($i, $text);
+			add_multiple_choice_question($i, $text, $qnumber++);
 		} else {
-			add_fill_text_question($i, $text);
+			add_fill_text_question($i, $text, $qnumber++);
 		}
 	}
 }
 
 
 /*****************************************************************************
-		Add multiple choice question $i to $tool_content
+	Add multiple choice question $i to $tool_content, numbered $k
 ******************************************************************************/
-function add_multiple_choice_question($i, $text)
+function add_multiple_choice_question($i, $text, $k)
 {
 	global $tool_content, $langQuestion, $langPollMoreAnswers, $langAnswers;
 	
-	$k=$i+1;
 	$tool_content .= "<tr><td colspan='2'>$langQuestion #$k<br><input type='text' name='question[$i]' value='$text' size='50'><input type='hidden' name='question_type[$i]' value='1'></td></tr>";
 	if (isset($_POST['answer'.$i])) {
 		$answers = $_POST['answer'.$i];
@@ -222,13 +221,13 @@ function add_multiple_choice_question($i, $text)
 
 
 /*****************************************************************************
-		Add fill text question $i to $tool_content
+	Add fill text question $i to $tool_content, numbered $k
 ******************************************************************************/
-function add_fill_text_question($i, $text)
+function add_fill_text_question($i, $text, $k)
 {
 	global $tool_content, $langQuestion, $langAnswer;
 	
-	$tool_content .= "<tr><td colspan='2'>$langQuestion #$i<br><input type='text' name='question[$i]' value='$text' size='50'><input type='hidden' name='question_type[$i]' value='2'></td></tr>";
+	$tool_content .= "<tr><td colspan='2'>$langQuestion #$k<br><input type='text' name='question[$i]' value='$text' size='50'><input type='hidden' name='question_type[$i]' value='2'></td></tr>";
 }
 
 

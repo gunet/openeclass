@@ -2111,7 +2111,6 @@ $langPollContinue = "Συνέχεια";
 $langPollMoreAnswers ="+ απαντήσεις";
 $langPollAddMultiple = "Νέα ερώτηση πολλαπλής επιλογής";
 $langPollAddFill = "Νέα ερώτηση συμπλήρωσης κενού";
-$langPollCreate = "Δημιουργία Δημοσκόπησης";
 $langPollCreated ="Η Δημοσκόπηση δημιουργήθηκε με επιτυχία.<br><br> <a href=\"questionnaire.php\">Επιστροφή</a>.";
 $langPollCreator = "Δημιουργός";
 $langPollCreation = "Ημ/νία Δημιουργίας";
@@ -2655,7 +2654,7 @@ $langUserBriefcase = "Χαρτοφυλάκιο χρήστη";
 $langPersonalisedBriefcase = "Προσωπικό χαρτοφυλάκιο";
 $langCopyrightFooter="Πληροφορίες πνευματικών δικαιωμάτων";
 $langAdvancedSearch="Σύνθετη αναζήτηση";
-$langTitle="Τίτλος";
+$langTitle = "Τίτλος";
 $langType = "Τύπος";
 /***************************************************************
 * unreguser.inc.php

@@ -139,7 +139,7 @@ hContent;
 draw($tool_content, 2, '', $head_content); 
 
 function printSurveyForm() {
-	global $currentCourse, $tool_content, $langName, $langSurveyStart, 
+	global $currentCourse, $tool_content, $langSurveyStart, 
 		$langSurveyEnd, $langSurveyContinue, $langSurveyInactive;
 		
 	$sid = htmlspecialchars($_REQUEST['sid']);

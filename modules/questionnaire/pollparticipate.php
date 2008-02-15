@@ -57,7 +57,7 @@ default:
 draw($tool_content, 2); 
 
 function printPollForm() {
-	global $currentCourse, $tool_content, $langName, $langPollStart, 
+	global $currentCourse, $tool_content, $langPollStart, 
 	$langPollEnd, $langSubmit, $langPollInactive, $langPollUnknown;
 	
 	$pid = intval($_REQUEST['pid']);

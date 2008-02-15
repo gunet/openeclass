@@ -153,7 +153,7 @@ cData;
 		$tool_content .= <<<cData
 			<b>$langSurveysInactive</b>
 			<table border="1"><tr>
-			<td>$langName</td>
+			<td>$langTitle</td>
 			<td>$langSurveyCreator</td>
 			<td>$langCreate</td>
 			<td>$langSurveyStart</td>
