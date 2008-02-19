@@ -37,7 +37,6 @@
 ==============================================================================*/
 
 $require_current_course = TRUE;  // flag ασφάλειας
-$langFiles = 'document';  // αρχείο μηνυμάτων
  
 $require_help = FALSE;
 //$helpTopic = 'User';
@@ -116,13 +115,12 @@ $tool_content .= "
        </th>
        <td>
           <select name=\"file_language\" class='auth_input'>
-            <option selected=\"selected\" value=\"en\">English
-            </option><option value=\"fr\">French
-            </option><option value=\"de\">German
-            </option><option value=\"el\">Greek
-            </option><option value=\"it\">Italian
-            </option><option value=\"es\">Spanish	
-            </option>
+            <option value=\"en\">$langEnglish</option>
+						<option value=\"fr\">$langFrench</option>
+						<option value=\"de\">$langGerman</option>
+						<option value=\"el\" selected>$langGreek</option>
+						<option value=\"it\">$langItalian</option>
+						<option value=\"es\">$langSpanish	</option>
           </select>
        </td>
        <td>&nbsp;</td>
@@ -130,7 +128,8 @@ $tool_content .= "
      <tr>
        <th class='left'>$langCopyrighted:</th>
        <td>
-         <input name=\"file_copyrighted\" type=\"radio\" value=\"2\" /> $langCopyrightedFree<br>
+         <input name=\"file_copyrighted\" type=\"radio\" value=\"0\" checked/> $langCopyrightedUnknown&nbsp;
+  			 <input name=\"file_copyrighted\" type=\"radio\" value=\"2\" /> $langCopyrightedFree&nbsp;
          <input name=\"file_copyrighted\" type=\"radio\" value=\"1\" /> $langCopyrightedNotFree
        </td>
        <td>&nbsp;</td>

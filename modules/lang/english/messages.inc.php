@@ -977,8 +977,8 @@ $langFillLists="Fill lists";
 $langGiveText="Enter text";
 $langDefineBlanks="Define one blank by tags [...]";
 $langGiveAnswers="Enter answers";
-$langChooseGoodAnswer="Choose a good answer";
-$langChooseGoodAnswers="Choose good answers";
+$langChooseGoodAnswer="Choose the correct answer";
+$langChooseGoodAnswers="Choose the correct answers";
 
 // question_list_admin.inc.php
 $langNewQu="New Question";

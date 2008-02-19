@@ -110,7 +110,6 @@ function confirmation (name)
 ';
 
 /*** clean information submited by the user from antislash ***/
-
 stripSubmitValue($_POST);
 stripSubmitValue($_GET);
 
@@ -261,29 +260,20 @@ if($is_adminOfCourse)
 		            	author			=		'".mysql_real_escape_string($file_author)."',
 		            	format			=		'".mysql_real_escape_string($file_format)."',
 		            	language		=		'".mysql_real_escape_string($file_language)."',
-		            	copyrighted		=		'".mysql_real_escape_string($file_copyrighted)."'";
+		            	copyrighted		=	'".mysql_real_escape_string($file_copyrighted)."'";
 
-				mysql_query($query);
+				db_query($query, $currentCourseID);
 
 				/*** Copy the file to the desired destination ***/
 				copy ($userFile, $baseWorkDir.$uploadPath."/".$safe_fileName);
 
-
-				@$dialogBox .= "
-		            <table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"success\">
+				@$dialogBox .= "<table width=\"99%\">tbody>
+					<tr><td class=\"success\">
 							<p><b> $langDownloadEnd</b></p>
-							
-						</td>
-					</tr>
-				</tbody>
-			</table>";
+							</td>
+					</tr></tbody></table>";
 			} // end else tou if(!empty($row['filename']))
-
 		} // end else
-
 	} // end if is_uploaded_file
 
 	/**************************************
@@ -300,9 +290,7 @@ if($is_adminOfCourse)
 		{
 			if (move($baseWorkDir."/".$source,$baseWorkDir.$moveTo)) {
 				update_db_info("update", $source, $moveTo."/".my_basename($source));
-				$dialogBox = "
-	            
-	<table width=\"99%\">
+				$dialogBox = "<table width=\"99%\">
 				<tbody>
 					<tr>
 						<td class=\"success\">
@@ -319,8 +307,7 @@ if($is_adminOfCourse)
 				<tbody>
 					<tr>
 						<td class=\"caution_small\">
-							<p><b>$langImpossible</b></p>
-							
+							<p><b>$langImpossible</b></p>							
 						</td>
 					</tr>
 				</tbody>
@@ -719,10 +706,10 @@ if($is_adminOfCourse)
     						</tr>";
 
 
-		$dialogBox .= "<tr>
-    							<th class='left'>$langCopyrighted : </th>
+		$dialogBox .= "<tr><th class='left'>$langCopyrighted : </th>
     							<td>
-    							<input name=\"file_copyrighted\" type=\"radio\" value=\"0\" "; if ($oldCopyrighted=="0" || empty($oldCopyrighted)) $dialogBox .= " checked=\"checked\" "; $dialogBox .= " /> $langCopyrightedUnknown <input name=\"file_copyrighted\" type=\"radio\" value=\"2\" "; if ($oldCopyrighted=="2") $dialogBox .= " checked=\"checked\" "; $dialogBox .= " /> $langCopyrightedFree <input name=\"file_copyrighted\" type=\"radio\" value=\"1\" "; 
+    							<input name=\"file_copyrighted\" type=\"radio\" value=\"0\" "; 
+		if ($oldCopyrighted=="0" || empty($oldCopyrighted)) $dialogBox .= " checked=\"checked\" "; $dialogBox .= " /> $langCopyrightedUnknown <input name=\"file_copyrighted\" type=\"radio\" value=\"2\" "; if ($oldCopyrighted=="2") $dialogBox .= " checked=\"checked\" "; $dialogBox .= " /> $langCopyrightedFree <input name=\"file_copyrighted\" type=\"radio\" value=\"1\" "; 
 
 		if ($oldCopyrighted=="1") $dialogBox .= " checked=\"checked\" "; $dialogBox .= "/> $langCopyrightedNotFree
     							</td>

@@ -958,8 +958,8 @@ $langFillLists="Συμπληρώστε τις δύο λίστες που ακολουθούν";
 $langGiveText="Πληκτρολογήστε το κείμενο";
 $langDefineBlanks="Ορίστε τουλάχιστον ένα κενό με αγκύλες [...]";
 $langGiveAnswers="Δώστε τις απαντήσεις στις ερωτήσεις";
-$langChooseGoodAnswer="Διαλέξτε μια καλή απάντηση";
-$langChooseGoodAnswers="Διαλέξτε μία ή περισσότερες καλές απαντήσεις";
+$langChooseGoodAnswer="Διαλέξτε την σωστή απάντηση";
+$langChooseGoodAnswers="Διαλέξτε μία ή περισσότερες σωστές απαντήσεις";
 
 // question_list_admin.inc.php
 $langQuestionList="Κατάλογος ερωτήσεων της άσκησης";
