@@ -53,9 +53,20 @@ define('MULTIPLE_ANSWER', 2);
 define('FILL_IN_BLANKS', 3);
 define('MATCHING', 4);
 
+$TBL_EXERCICE_QUESTION='exercice_question';
+$TBL_EXERCICES='exercices';
+$TBL_QUESTIONS='questions';
+$TBL_REPONSES='reponses';
+
+$TABLELEARNPATH         = "lp_learnPath";
+$TABLEMODULE            = "lp_module";
+$TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
+$TABLEASSET             = "lp_asset";
+$TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
+
 $require_current_course = TRUE;
 require_once("../../../config/config.php");
-require_once ('../../../include/init.php');
+require_once('../../../include/init.php');
 require_once('../../../include/lib/learnPathLib.inc.php');
 require_once('../../../include/lib/textLib.inc.php'); 
 
@@ -85,16 +96,6 @@ echo "<html>"."\n"
     .'<body style="margin: 2px;">'."\n"
     .'<div align="left">';
 
-$TBL_EXERCICE_QUESTION='exercice_question';
-$TBL_EXERCICES='exercices';
-$TBL_QUESTIONS='questions';
-$TBL_REPONSES='reponses';
-
-$TABLELEARNPATH         = "lp_learnPath";
-$TABLEMODULE            = "lp_module";
-$TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
-$TABLEASSET             = "lp_asset";
-$TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 // if the above variables are empty or incorrect, stops the script
 if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExercise))
@@ -105,6 +106,7 @@ if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExer
 $exerciseTitle=$objExercise->selectTitle();
 $exerciseId=$objExercise->selectId();
 
+// ------------ calculata exercise constrains ----------------------------
 $eid=$objExercise->selectId();
 mysql_select_db($currentCourseID);
 $sql="SELECT RecordStartDate FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
@@ -122,8 +124,8 @@ if (!$exerciseTimeConstrain) {
 }
 $OnTime = $RecordStartTime_temp + $exerciseTimeConstrain - $SubmitDate;
 
-//if ($OnTime > 0 or $is_adminOfCourse) { // exercise time limit hasn't expired
-if ($OnTime <= 0)  { // exercise time limit hasn't expired
+if ($OnTime <= 0)  { // exercise time limit has expired
+
  /* $sql="SELECT eurid FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
   $result = mysql_query($sql);
   $row=mysql_fetch_array($result);
@@ -132,8 +134,8 @@ if ($OnTime <= 0)  { // exercise time limit hasn't expired
   // record end/results of exercise
   $sql="UPDATE `exercise_user_record` SET RecordEndDate='$RecordEndDate',TotalScore='$totalScore', TotalWeighting='$totalWeighting', attempt='$attempt' WHERE eurid='$eurid'";
   db_query($sql,$currentCourseID);
-
 } else {  // not allowed begin again */
+/*
   // if the object is not in the session
   if(!session_is_registered('objExercise')) {
     // construction of Exercise
@@ -147,16 +149,15 @@ if ($OnTime <= 0)  { // exercise time limit hasn't expired
     // saves the object into the session
     session_register('objExercise');
 }
-
-    echo <<<cData
+*/
+echo <<<cData
   <h3>${exerciseTitle}</h3>
   <p>${langExerciseExpired}</p>
 cData;
 
-exit();
+exit;
 
 } else {
-
 
 echo "<h3>".stripslashes($exerciseTitle)." : ".$langResult."</h3>".
 	"<form method=\"GET\" action=\"backFromExercise.php\">".
@@ -200,7 +201,7 @@ echo <<<cData
 	<table width="95%" border="0" cellpadding="3" cellspacing="2">
 		<tr bgcolor="#E6E6E6">
 		  <td colspan="${colspan}">
-				$langQuestion $iplus
+		$langQuestion $iplus
 		  </td>
 		</tr>
 		<tr>
@@ -243,24 +244,16 @@ cData;
 		
 echo <<<cData
 	<tr>
-	  <td width="50%">
-		<small><i>${langElementList}</i></small>
-	  </td>
-	  <td width="50%">
-	<small><i>${langCorrespondsTo}</i></small>
-	  </td>
+	  <td width="50%"><small><i>${langElementList}</i></small></td>
+	  <td width="50%"><small><i>${langCorrespondsTo}</i></small></td>
 </tr>
 cData;
 
 		}
-
 		// construction of the Answer object
 		$objAnswerTmp=new Answer($questionId);
-
 		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
-
 		$questionScore=0;
-
 		for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
 		{
 			$answer=$objAnswerTmp->selectAnswer($answerId);
@@ -274,119 +267,102 @@ cData;
 				// for unique answer
 				case UNIQUE_ANSWER :	$studentChoice=($choice == $answerId)?1:0;
 
-										if($studentChoice)
-										{
-										  	$questionScore+=$answerWeighting;
-											$totalScore+=$answerWeighting;
-										}
-
-										break;
+								if($studentChoice)
+								{
+							  	$questionScore+=$answerWeighting;
+								$totalScore+=$answerWeighting;
+								}
+								break;
 				// for multiple answers
 				case MULTIPLE_ANSWER :	$studentChoice=@$choice[$answerId];
-
-										if($studentChoice)
-										{
-											$questionScore+=$answerWeighting;
-											$totalScore+=$answerWeighting;
-										}
-
-										break;
+							if($studentChoice)
+							{
+								$questionScore+=$answerWeighting;
+								$totalScore+=$answerWeighting;
+							}
+							break;
 				// for fill in the blanks
 				case FILL_IN_BLANKS :	// splits text and weightings that are joined with the character '::'
-										list($answer,$answerWeighting)=explode('::',$answer);
+					list($answer,$answerWeighting)=explode('::',$answer);
 
-										// splits weightings that are joined with a comma
-										$answerWeighting=explode(',',$answerWeighting);
+					// splits weightings that are joined with a comma
+					$answerWeighting=explode(',',$answerWeighting);
 
-										// we save the answer because it will be modified
-										$temp=$answer;
-
-										$answer='';
-
-										$j=0;
-
-										// the loop will stop at the end of the text
-										while(1)
-										{
-											// quits the loop if there are no more blanks
-											if(($pos = strpos($temp,'[')) === false)
-											{
-												// adds the end of the text
-												$answer.=$temp;
-												break;
-											}
-
-											// adds the piece of text that is before the blank and ended by [
-											$answer.=substr($temp,0,$pos+1);
-
-											$temp=substr($temp,$pos+1);
-
-											// quits the loop if there are no more blanks
-											if(($pos = strpos($temp,']')) === false)
-											{
-												// adds the end of the text
-												$answer.=$temp;
-												break;
-											}
-
-											$choice[$j]=trim(stripslashes($choice[$j]));
-
-											// if the word entered by the student IS the same as the one defined by the professor
-											if(strtolower(substr($temp,0,$pos)) == strtolower($choice[$j]))
-											{
-												// gives the related weighting to the student
-												$questionScore+=$answerWeighting[$j];
-
-												// increments total score
-												$totalScore+=$answerWeighting[$j];
-
-												// adds the word in green at the end of the string
-												$answer.=$choice[$j];
-											}
-											// else if the word entered by the student IS NOT the same as the one defined by the professor
-											elseif(!empty($choice[$j]))
-											{
-												// adds the word in red at the end of the string, and strikes it
-												$answer.='<font color="red"><s>'.$choice[$j].'</s></font>';
-											}
-											else
-											{
-												// adds a tabulation if no word has been typed by the student
-												$answer.='&nbsp;&nbsp;&nbsp;';
-											}
-
-											// adds the correct word, followed by ] to close the blank
-											$answer.=' / <font color="green"><b>'.substr($temp,0,$pos).'</b></font>]';
-
-											$j++;
-
-											$temp=substr($temp,$pos+1);
-										}
-
-										break;
+					// we save the answer because it will be modified
+					$temp=$answer;
+					$answer='';
+					$j=0;
+					// the loop will stop at the end of the text
+						while(1)
+						{
+						// quits the loop if there are no more blanks
+						if(($pos = strpos($temp,'[')) === false)
+							{
+							// adds the end of the text
+							$answer.=$temp;
+							break;
+							}
+					// adds the piece of text that is before the blank and ended by [
+							$answer.=substr($temp,0,$pos+1);
+							$temp=substr($temp,$pos+1);
+					// quits the loop if there are no more blanks
+						if(($pos = strpos($temp,']')) === false)
+							{
+							// adds the end of the text
+							$answer.=$temp;
+							break;
+							}
+							$choice[$j]=trim(stripslashes($choice[$j]));
+					// if the word entered by the student IS the same as the one defined by the professor
+						if(strtolower(substr($temp,0,$pos)) == strtolower($choice[$j]))
+						{
+						// gives the related weighting to the student
+						$questionScore+=$answerWeighting[$j];
+						// increments total score
+						$totalScore+=$answerWeighting[$j];
+						// adds the word in green at the end of the string
+						$answer.=$choice[$j];
+						}
+					// else if the word entered by the student IS NOT the same as the one defined by the professor
+						elseif(!empty($choice[$j]))
+						{
+						// adds the word in red at the end of the string, and strikes it
+						$answer.='<font color="red"><s>'.$choice[$j].'</s></font>';
+						}
+						else
+						{
+						// adds a tabulation if no word has been typed by the student
+						$answer.='&nbsp;&nbsp;&nbsp;';
+						}
+						// adds the correct word, followed by ] to close the blank
+						$answer.=' / <font color="green"><b>'.substr($temp,0,$pos).'</b></font>]';
+						$j++;
+						$temp=substr($temp,$pos+1);
+						}
+						break;
 				// for matching
-				case MATCHING :			if($answerCorrect)
-										{
-											if($answerCorrect == $choice[$answerId])
-											{
-												$questionScore+=$answerWeighting;
-												$totalScore+=$answerWeighting;
-												$choice[$answerId]=$matching[$choice[$answerId]];
-											}
-											elseif(!$choice[$answerId])
-											{
-												$choice[$answerId]='&nbsp;&nbsp;&nbsp;';
-											}
-											else
-											{
-												$choice[$answerId]='<font color="red"><s>'.$matching[$choice[$answerId]].'</s></font>';
-											}
-										}
-										else
-										{
-											$matching[$answerId]=$answer;
-										}
-										break;
+				case MATCHING :	if($answerCorrect)
+						{
+							if($answerCorrect == $choice[$answerId])
+								{
+								$questionScore+=$answerWeighting;
+									$totalScore+=$answerWeighting;
+									$choice[$answerId]=$matching[$choice[$answerId]];
+								}
+									elseif(!$choice[$answerId])
+									{
+									$choice[$answerId]='&nbsp;&nbsp;&nbsp;';
+									}
+									else
+									{
+									$choice[$answerId]='<font color="red"><s>'.$matching[$choice[$answerId]].'</s></font>';
+									}
+								}
+								else
+								{
+									$matching[$answerId]=$answer;
+								}
+							break;
 			}	// end switch()
 
 			if($answerType != MATCHING || $answerCorrect)
@@ -429,8 +405,7 @@ cData;
 	
   echo <<<cData
   </td>
-  <td width="45%">
-		${answer}
+  <td width="45%">${answer}
   </td>
   <td width="45%">
 cData;
@@ -450,11 +425,9 @@ echo "<tr><td>".nl2br($answer)."</td></tr>";
 
 echo <<<cData
 	<tr>
-	  <td width="50%">
-			${answer}
+	  <td width="50%">${answer}
 	  </td>
-	  <td width="50%">
-			${choice[$answerId]} / <font color="green"><b>${matching[$answerCorrect]}</b></font>
+	  <td width="50%">${choice[$answerId]} / <font color="green"><b>${matching[$answerCorrect]}</b></font>
 	  </td>
 	</tr>
 cData;
@@ -474,9 +447,7 @@ cData;
 
 		// destruction of Answer
 		unset($objAnswerTmp);
-
 		$i++;
-
 		$totalWeighting+=$questionWeighting;
 	}	// end foreach()
 
@@ -560,9 +531,7 @@ echo <<<cData
 	  </td>
 	</tr>
 	</table>
-	
 	</form>
-	
 	<br>
 cData;
 
@@ -586,11 +555,11 @@ if($uid)
 	$scoreMax = $totalWeighting;
 	// need learningPath_module_id and raw_to_pass value
 	$sql = "SELECT LPM.`raw_to_pass`, LPM.`learnPath_module_id`, UMP.`total_time`, UMP.`raw`
-				FROM `".$TABLELEARNPATHMODULE."` AS LPM, `".$TABLEUSERMODULEPROGRESS."` AS UMP
-				WHERE LPM.`learnPath_id` = '".(int)$_SESSION['path_id']."'
-				AND LPM.`module_id` = '".(int)$_SESSION['lp_module_id']."'
-				AND LPM.`learnPath_module_id` = UMP.`learnPath_module_id`
-				AND UMP.`user_id` = ".(int)$uid;
+			FROM `".$TABLELEARNPATHMODULE."` AS LPM, `".$TABLEUSERMODULEPROGRESS."` AS UMP
+			WHERE LPM.`learnPath_id` = '".(int)$_SESSION['path_id']."'
+			AND LPM.`module_id` = '".(int)$_SESSION['lp_module_id']."'
+			AND LPM.`learnPath_module_id` = UMP.`learnPath_module_id`
+			AND UMP.`user_id` = ".(int)$uid;
 	$query = db_query($sql);
 	$row = mysql_fetch_array($query);
 
@@ -605,29 +574,25 @@ if($uid)
 		// update raw
 		$sql .= "`raw` = $totalScore,";
 		// update credit and statut if needed ( score is better than raw_to_pass )
-		if ( $newRaw >= $row['raw_to_pass'])
+		if ($newRaw >= $row['raw_to_pass'])
 		{
-			$sql .= "	`credit` = 'CREDIT',
-						`lesson_status` = 'PASSED',";
+			$sql .= "`credit` = 'CREDIT',`lesson_status` = 'PASSED',";
 		}
 		else // minimum raw to pass needed to get credit 
 		{
-			$sql .= "	`credit` = 'NO-CREDIT',
-						`lesson_status` = 'FAILED',";
+			$sql .= "`credit` = 'NO-CREDIT',`lesson_status` = 'FAILED',";
 		}
 	}// else don't change raw, credit and lesson_status
 
 	// default query statements
-	$sql .= "	`scoreMin` 		= " . (int)$scoreMin . ",
-				`scoreMax` 		= " . (int)$scoreMax . ",
+	$sql .= "	`scoreMin` 	= " . (int)$scoreMin . ",
+				`scoreMax` 	= " . (int)$scoreMax . ",
 				`total_time`	= '".addScormTime($row['total_time'], $scormSessionTime)."',
 				`session_time`	= '".$scormSessionTime."'
 				WHERE `learnPath_module_id` = ". (int)$row['learnPath_module_id']."
 				AND `user_id` = " . (int)$uid . "";
 	db_query($sql);
-}
-
-
+	}
 }
 echo "</div></body></html>"."\n";
 ?>

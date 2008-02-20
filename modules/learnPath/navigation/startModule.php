@@ -214,19 +214,16 @@ switch ($module['contentType'])
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"
    "http://www.w3.org/TR/html4/frameset.dtd">
 <html>
+<head>
 
-  <head>
-  
-<?php
+<?
 
    // add the update frame if this is a SCORM module   
    if ( $module['contentType'] == CTSCORM_ )
    {
-      
       require_once("scormAPI.inc.php");
       echo "<frameset border='0' rows='0,75,*' frameborder='no'>
             <frame src='updateProgress.php' name='upFrame'>";
-      
    }
    else
    {
@@ -235,13 +232,12 @@ switch ($module['contentType'])
 ?>
     <frame src="../viewer_toc.php" name="tocFrame" scrolling="no" />
     <frame src="<?php echo $moduleStartAssetPage; ?>" name="scoFrame">
-
     </frameset>
   <noframes>
 <body>
-<?php
+<?
   echo $langBrowserCannotSeeFrames;
 ?>
-   </body>
+</body>
 </noframes>
 </html>

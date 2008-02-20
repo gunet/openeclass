@@ -25,7 +25,7 @@
 ==============================================================================*/
 
 /**===========================================================================
-	showExercise.php
+	.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 	               Dionysios G. Synodinos <synodinos@gmail.com>
@@ -42,26 +42,23 @@
 ==============================================================================
 */
 
+$require_current_course = TRUE;
 require_once('../../exercice/exercise.class.php');
 require_once('../../exercice/question.class.php');
 require_once('../../exercice/answer.class.php');
- 
+require_once("../../../config/config.php");
+require_once("../../../include/init.php");
+require_once('../../../include/lib/textLib.inc.php');
+
 // answer types
 define('UNIQUE_ANSWER',1);
 define('MULTIPLE_ANSWER',2);
 define('FILL_IN_BLANKS',3);
 define('MATCHING',4);
-
-$require_current_course = TRUE;
-
-require_once("../../../config/config.php");
-require_once ('../../../include/init.php');
-
-require_once('../../../include/lib/textLib.inc.php'); 
-
+$tool_content = "";
 $nameTools = $langExercice;
-
 $picturePath='../../'.$currentCourseID.'/image';
+
 
 $is_allowedToEdit=$is_adminOfCourse;
 $dbNameGlu=$currentCourseID;
@@ -142,7 +139,6 @@ $randomQuestions=$objExercise->isRandom();
 $exerciseType=$objExercise->selectType();
 $exerciseTimeConstrain=$objExercise->selectTimeConstrain();
 $exerciseAllowedAttemtps=$objExercise->selectAttemptsAllowed();
-
 $eid_temp = $objExercise->selectId();
 $exerciseTimeConstrainSecs = time() + ($exerciseTimeConstrain*60);
 $RecordStartDate = date("Y-m-d H:i:s",time());
@@ -155,7 +151,6 @@ if(!isset($_SESSION['exeStartTime']) )
    $_SESSION['exeStartTime'] = time();
 }
 
-
 if ((!$is_adminOfCourse)&&(isset($uid))) { //if registered student
 $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record WHERE eid='$eid_temp' AND uid='$uid'", $currentCourseID));
 ++$CurrentAttempt[0];
@@ -165,7 +160,12 @@ $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user
 				$exerciseTimeConstrainSecs = 9999999;
 				$CookieLife=time()+$exerciseTimeConstrainSecs;
 			if (!setcookie("marvelous_cookie", $eid_temp, $CookieLife, "/")) {
-				header('Location: ../../exercice/exercise_redirect.php');
+				echo <<<cData
+<h3>${exerciseTitle}</h3><p>${langExerciseExpired}</p>
+<p><center><a href='../learningPathList.php' target=top>${langBack}</a></center></p>
+cData;
+	
+	//			header('Location: ../../exercice/exercise_redirect.php');
 				exit();
 			}
 			// record start of exercise
@@ -175,7 +175,11 @@ $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user
 				"(0,'$eid_temp','$uid','$RecordStartDate','','','',1)";
 			$result=mysql_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);		
 		} else {  // not allowed begin again
-			header('Location: ../../exercice/exercise_redirect.php');
+				echo <<<cData
+<h3>${exerciseTitle}</h3><p>${langExerciseExpired}</p>
+<p><center><a href='../learningPathList.php' target=top>${langBack}</a></center></p>
+cData;
+			//header('Location: ../../exercice/exercise_redirect.php');
 			exit();
 		}
 	}
@@ -218,9 +222,7 @@ if(@$_POST['questionNum']) {
 	$exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 	echo <<<cData
 		<h3>${exerciseTitle}</h3>
-
 		<p>${exerciseDescription_temp}</p>
-		
 		<table width="100%" border="0" cellpadding="1" cellspacing="0">
 		<form method="post" action="${_SERVER['PHP_SELF']}" autocomplete="off">
 		<input type="hidden" name="formSent" value="1">
@@ -232,16 +234,12 @@ if(@$_POST['questionNum']) {
 		<table width="100%" cellpadding="4" cellspacing="2" border="0">
 cData;
 
-
 $i=0;
 foreach($questionList as $questionId) {
 	$i++;
-	//echo "<h1>".$i."</h1>";
-
 	// for sequential exercises
 	if($exerciseType == 2)
 	{
-		//echo "<h1>"."type=2"."</h1>";
 		// if it is not the right question, goes to the next loop iteration
 		if($questionNum != $i)
 		{
@@ -253,15 +251,11 @@ foreach($questionList as $questionId) {
 			if(isset($exerciseResult[$questionId])) {
 				// construction of the Question object
 				$objQuestionTmp=new Question();
-
 				// reads question informations
 				$objQuestionTmp->read($questionId);
-
 				$questionName=$objQuestionTmp->selectTitle();
-
 				// destruction of the Question object
 				unset($objQuestionTmp);
-
 				echo '<tr><td>'.$langAlreadyAnswered.' &quot;'.$questionName.'&quot;</td></tr>';
 				break;
 			}
@@ -293,7 +287,7 @@ foreach($questionList as $questionId) {
 	echo "</td></tr></form></table>";
 	echo "</div></body>"."\n";
 	echo "</html>"."\n";
-/////////////////////////////////////////////////////////////////////////////////
+
 
 function showQuestion($questionId, $onlyAnswers=false)
 {
@@ -446,7 +440,6 @@ cData;
 		  	echo '&nbsp;';
 		  	
 		  echo	"</td></tr></table></td></tr>";
-
 				$cpt2++;
 
 				// if the left side of the "matching" has been completely shown
@@ -455,7 +448,6 @@ cData;
 					// if it remains answers to shown at the right side
 					while(isset($Select[$cpt2]))
 					{
-/////////////////////////////////////////////////////////////////////////////////
 		echo "<tr><td colspan=\"2\">".
 			"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"95%\">".
 			"<tr><td width=\"60%\" colspan=\"2\">&nbsp;</td><td width=\"40%\" align=\"right\" valign=\"top\">".

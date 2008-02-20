@@ -152,11 +152,11 @@ else
 // check in DB if user has already browsed this module
 
 $sql = "SELECT `contentType`,
-				`total_time`,
-				`session_time`,
-				`scoreMax`,
-				`raw`,
-				`lesson_status`
+	`total_time`,
+	`session_time`,
+	`scoreMax`,
+	`raw`,
+	`lesson_status`
         FROM `".$TABLEUSERMODULEPROGRESS."` AS UMP, 
              `".$TABLELEARNPATHMODULE."` AS LPM, 
              `".$TABLEMODULE."` AS M
@@ -180,13 +180,11 @@ if( !$is_adminOfCourse
     exit();
 }
 
-//####################################################################################\\
 //################################## MODULE NAME BOX #################################\\
-//####################################################################################\\
 
 $cmd = ( isset($_REQUEST['cmd']) && is_string($_REQUEST['cmd']) )? (string)$_REQUEST['cmd'] : '';
 
-if ( $cmd == "updateName" )
+if ($cmd == "updateName")
 {
     $tool_content .= "<p>".claro_disp_message_box(nameBox(MODULE_, UPDATE_, $langModify))."</p>";
 }
@@ -197,9 +195,8 @@ else
 
 if($module['contentType'] != CTLABEL_ )
 {
-    //####################################################################################\\
+    
     //############################### MODULE COMMENT BOX #################################\\
-    //####################################################################################\\
     //#### COMMENT #### courseAdmin cannot modify this if this is a imported module ####\\
     // this the comment of the module in ALL learning paths
     if ( $cmd == "updatecomment" )
@@ -248,9 +245,8 @@ else
 }
 
 $tool_content .= '<small><a href="'.$pathBack.'"><< '.$langBackModule.'</a></small>'."\n\n";
-//####################################################################################\\
+
 //############################ PROGRESS  AND  START LINK #############################\\
-//####################################################################################\\
 
 /* Display PROGRESS */
 
@@ -406,10 +402,9 @@ if( $is_adminOfCourse ) // for teacher only
         case CTLABEL_ :
         case CTCOURSE_DESCRIPTION_ :
         case CTLINK_:
-        	break;
+       	break;
     }
 } // if ($is_adminOfCourse)
-
 draw($tool_content, 2, "learnPath", $head_content, $body_action);
 
 ?>

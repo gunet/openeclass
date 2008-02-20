@@ -70,7 +70,7 @@ if(!empty($intitule))
 }
 $titlePage .= $siteName;
 
-if ( isset($_GET['fullscreen']) && is_numeric($_GET['fullscreen']) )
+if (isset($_GET['fullscreen']) && is_numeric($_GET['fullscreen']))
 {
     $displayFull = (int) $_GET['fullscreen'];
 }
@@ -81,7 +81,7 @@ else
     $displayFull = FULL_SCREEN;
 }
 
-if ( $displayFull == 0	) 
+if ($displayFull == 0) 
 {
 	$tool_content .= "<iframe src=\"navigation/startModule.php\" name=\"mainFrame\" "
 		."width=\"99%\" height=\"550\" scrolling=\"no\" frameborder=\"0\">"
@@ -89,7 +89,6 @@ if ( $displayFull == 0	)
 		."<br />"
 		."<a href=\"module.php\">".$langBack."</a>"
 		."</iframe>";
-
 	draw($tool_content, 2, "learnPath", $head_content);
 }
 else
