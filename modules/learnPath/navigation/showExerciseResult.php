@@ -54,8 +54,6 @@ define('FILL_IN_BLANKS', 3);
 define('MATCHING', 4);
 
 $require_current_course = TRUE;
-$langFiles='exercice';
-
 require_once("../../../config/config.php");
 require_once ('../../../include/init.php');
 require_once('../../../include/lib/learnPathLib.inc.php');
@@ -68,9 +66,7 @@ if (isset($_SESSION['exeStartTime']))
    $timeToCompleteExe =  time() - $_SESSION['exeStartTime'];
 }
 
-/////////////////////////////////////////////////////////////////////////////
 // Destroy cookie
-/////////////////////////////////////////////////////////////////////////////
 if (!setcookie("marvelous_cookie", "", time()-3600, "/")) {
 	header('Location: ../../exercice/exercise_redirect.php');
 	exit();
@@ -108,6 +104,59 @@ if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExer
 
 $exerciseTitle=$objExercise->selectTitle();
 $exerciseId=$objExercise->selectId();
+
+$eid=$objExercise->selectId();
+mysql_select_db($currentCourseID);
+$sql="SELECT RecordStartDate FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
+$result=db_query($sql, $currentCourseID);
+$attempt = count($result);
+$row=mysql_fetch_array($result);
+$RecordStartDate = ($RecordStartTime_temp = $row[count($result)-1]);
+$RecordStartTime_temp = mktime(substr($RecordStartTime_temp, 11,2),substr($RecordStartTime_temp, 14,2),substr($RecordStartTime_temp, 17,2),substr($RecordStartTime_temp, 5,2),substr($RecordStartTime_temp, 8,2),substr($RecordStartTime_temp, 0,4));
+$exerciseTimeConstrain=$objExercise->selectTimeConstrain();
+$exerciseTimeConstrain = $exerciseTimeConstrain*60;
+$RecordEndDate = ($SubmitDate = date("Y-m-d H:i:s"));
+$SubmitDate = mktime(substr($SubmitDate, 11,2),substr($SubmitDate, 14,2),substr($SubmitDate, 17,2),substr($SubmitDate, 5,2),substr($SubmitDate, 8,2),substr($SubmitDate, 0,4));
+if (!$exerciseTimeConstrain) {
+  $exerciseTimeConstrain = (7 * 24 * 60 * 60);
+}
+$OnTime = $RecordStartTime_temp + $exerciseTimeConstrain - $SubmitDate;
+
+//if ($OnTime > 0 or $is_adminOfCourse) { // exercise time limit hasn't expired
+if ($OnTime <= 0)  { // exercise time limit hasn't expired
+ /* $sql="SELECT eurid FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
+  $result = mysql_query($sql);
+  $row=mysql_fetch_array($result);
+  $x = $row[count($result)-1];
+  $eurid = $row[count($result)-1];
+  // record end/results of exercise
+  $sql="UPDATE `exercise_user_record` SET RecordEndDate='$RecordEndDate',TotalScore='$totalScore', TotalWeighting='$totalWeighting', attempt='$attempt' WHERE eurid='$eurid'";
+  db_query($sql,$currentCourseID);
+
+} else {  // not allowed begin again */
+  // if the object is not in the session
+  if(!session_is_registered('objExercise')) {
+    // construction of Exercise
+    $objExercise=new Exercise();
+
+    // if the specified exercise doesn't exist or is disabled
+    if(!$objExercise->read($exerciseId) && (!$is_allowedToEdit))
+      {
+      die($langExerciseNotFound);
+    }
+    // saves the object into the session
+    session_register('objExercise');
+}
+
+    echo <<<cData
+  <h3>${exerciseTitle}</h3>
+  <p>${langExerciseExpired}</p>
+cData;
+
+exit();
+
+} else {
+
 
 echo "<h3>".stripslashes($exerciseTitle)." : ".$langResult."</h3>".
 	"<form method=\"GET\" action=\"backFromExercise.php\">".
@@ -436,10 +485,11 @@ cData;
 /////////////////////////////////////////////////////////////////////////////
 // UPDATE results to DB
 /////////////////////////////////////////////////////////////////////////////
+/*
 $eid=$objExercise->selectId();
 mysql_select_db($currentCourseID);
 $sql="SELECT RecordStartDate FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
-$result=mysql_query($sql);
+$result=db_query($sql, $currentCourseID);
 $attempt = count($result);
 $row=mysql_fetch_array($result);
 $RecordStartDate = ($RecordStartTime_temp = $row[count($result)-1]);
@@ -448,7 +498,11 @@ $exerciseTimeConstrain=$objExercise->selectTimeConstrain();
 $exerciseTimeConstrain = $exerciseTimeConstrain*60;
 $RecordEndDate = ($SubmitDate = date("Y-m-d H:i:s"));
 $SubmitDate = mktime(substr($SubmitDate, 11,2),substr($SubmitDate, 14,2),substr($SubmitDate, 17,2),substr($SubmitDate, 5,2),substr($SubmitDate, 8,2),substr($SubmitDate, 0,4));	
+if (!$exerciseTimeConstrain) {
+  $exerciseTimeConstrain = (7 * 24 * 60 * 60);
+}
 $OnTime = $RecordStartTime_temp + $exerciseTimeConstrain - $SubmitDate;
+
 if ($OnTime > 0 or $is_adminOfCourse) { // exercise time limit hasn't expired
 	$sql="SELECT eurid FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
 	$result = mysql_query($sql);
@@ -458,6 +512,7 @@ if ($OnTime > 0 or $is_adminOfCourse) { // exercise time limit hasn't expired
 	// record end/results of exercise
 	$sql="UPDATE `exercise_user_record` SET RecordEndDate='$RecordEndDate',TotalScore='$totalScore', TotalWeighting='$totalWeighting', attempt='$attempt' WHERE eurid='$eurid'";
 	db_query($sql,$currentCourseID);
+
 } else {  // not allowed begin again
 	// if the object is not in the session
 	if(!session_is_registered('objExercise')) {
@@ -465,26 +520,31 @@ if ($OnTime > 0 or $is_adminOfCourse) { // exercise time limit hasn't expired
 		$objExercise=new Exercise();
 	
 		// if the specified exercise doesn't exist or is disabled
-		//if(!$objExercise->read($exerciseId) || (!$objExercise->selectStatus() && !$is_allowedToEdit))
 		if(!$objExercise->read($exerciseId) && (!$is_allowedToEdit))
 			{
 			die($langExerciseNotFound);
-		}
-	
+		}	
 		// saves the object into the session
 		session_register('objExercise');
 }
 
 		echo <<<cData
 	<h3>${exerciseTitle}</h3>
-	<p>${langExerciseExpired}<a href="../../exercice/exercice.php">${langExerciseLis}</a></p>
+	<p>${langExerciseExpired}</p>
 cData;
 
-//draw($tool_content, 2);
 exit();
 
 }
-
+*/
+$sql="SELECT eurid FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
+  $result = mysql_query($sql);
+  $row=mysql_fetch_array($result);
+  $x = $row[count($result)-1];
+  $eurid = $row[count($result)-1];
+  // record end/results of exercise
+  $sql="UPDATE `exercise_user_record` SET RecordEndDate='$RecordEndDate',TotalScore='$totalScore', TotalWeighting='$totalWeighting', attempt='$attempt' WHERE eurid='$eurid'";
+  db_query($sql,$currentCourseID);
 
 echo <<<cData
 	<table width="95%" border="0" cellpadding="3" cellspacing="2">
@@ -567,5 +627,7 @@ if($uid)
 	db_query($sql);
 }
 
+
+}
 echo "</div></body></html>"."\n";
 ?>

@@ -47,7 +47,6 @@
 */
 
 $require_current_course = TRUE;
-$langFiles              = "learnPath";
 
 require_once("../../include/baseTheme.php");
 $head_content = "";

@@ -54,7 +54,6 @@
   ======================================*/
 
 $require_current_course = TRUE;
-$langFiles              = "learnPath";
 require_once("../../../config/config.php");
 require_once("../../../include/init.php");
 
@@ -101,17 +100,14 @@ if($uid) // if not anonymous
 	}
 }  // else anonymous : record nothing !
 
-
 // Get info about launched module
-
 $sql = "SELECT `contentType`,`startAsset_id`
           FROM `".$TABLEMODULE."`
          WHERE `module_id` = ". (int)$_SESSION['lp_module_id'];
 
 $module = db_query_get_single_row($sql);
 
-$sql = "SELECT `path`
-               FROM `".$TABLEASSET."`
+$sql = "SELECT `path` FROM `".$TABLEASSET."`
               WHERE `asset_id` = ". (int)$module['startAsset_id'];
 
 $assetPath = db_query_get_single_value($sql);
@@ -167,9 +163,6 @@ switch ($module['contentType'])
 		session_unregister('exerciseResult');
 		session_unregister('exeStartTime');
 
-		//$_SESSION['inPathMode'] = true;
-		//$startAssetpage = $urlServer.'/modules/'.'exercice/exercice_submit.php';
-		//$moduleStartAssetPage = $startAssetpage."?exerciseId=".$assetPath;
 		$moduleStartAssetPage = "showExercise.php?exerciseId=".$assetPath;
 		break;
 	case CTSCORM_ :

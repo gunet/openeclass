@@ -373,13 +373,9 @@ cData;
 
 		// destruction of Answer
 		unset($objAnswerTmp);
-
 		$i++;
-
 		$totalWeighting+=$questionWeighting;
 	}	// end foreach()
-
-
 
 /////////////////////////////////////////////////////////////////////////////
 // UPDATE results to DB
@@ -436,7 +432,6 @@ draw($tool_content, 2);
 exit();
 
 }
-
 
 $tool_content .= <<<cData
 	<table width="95%" border="0" cellpadding="3" cellspacing="2">

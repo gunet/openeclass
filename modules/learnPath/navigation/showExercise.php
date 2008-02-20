@@ -53,7 +53,6 @@ define('FILL_IN_BLANKS',3);
 define('MATCHING',4);
 
 $require_current_course = TRUE;
-$langFiles='exercice';
 
 require_once("../../../config/config.php");
 require_once ('../../../include/init.php');
@@ -284,7 +283,6 @@ foreach($questionList as $questionId) {
 		break;
 	}
 }	// end foreach()
-/////////////////////////////////////////////////////////////////////////////////
 	echo "</table></td></tr><tr><td align=\"center\"><br><input type=\"submit\" value=\"";
 	if ($exerciseType == 1 || $nbrQuestions == $questionNum)
 		echo $langOk." &gt;"."\">";
