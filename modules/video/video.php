@@ -157,132 +157,186 @@ function confirmation (name)
 			</table><br/>";
 		$id="";
 	} elseif (isset($form_input) && $form_input == "file") {
-		$tool_content .= "<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"insert_form\">
-		<table><thead>
-		<th>$langsendV
-		<input type=\"hidden\" name=\"id\" value=\"\">
-		</th>
-		<td><input type=\"file\" name=\"file\" size=\"45\"></td>
-		<tr>
-		<th>$langVideoTitle:</th>
-		<td><input type=\"text\" name=\"titre\" value=\"\" size=\"55\"></td>
-		</tr>
-		<tr>
-		<th>$langDescr&nbsp;:</th>
-		<td>
-		<textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"50\"></textarea>
-		</td>
-		</tr>
-		<tr>
-		<th>$langcreator&nbsp;:</th>
-		<td><input type=\"text\" name=\"creator\" value=\"$nick\" size=\"55\"></td>
-		</tr>
-		<tr>
-		<th>$langpublisher &nbsp;:</th>
-		<td><input type=\"text\" name=\"publisher\" value=\"$nick\" size=\"55\"></td>
-		</tr>
-		<tr>
-		<th>$langdate &nbsp;:</th>
-		<td><input type=\"text\" name=\"date\" value=\"".date("Y-m-d G:i:s")."\" size=\"55\"></td>
-		</tr></thead>
-		</table><br/>
-		<input type=\"submit\" name=\"submit\" value=\"$langAdd\"></form><br/>";
+		$tool_content .= "
+    <form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"insert_form\">
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <th class=\"left\" width=\"220\">&nbsp;</th>
+      <td><b>$langAddV</b></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langPathUploadFile :</th>
+      <td>
+      <input type=\"hidden\" name=\"id\" value=\"\">
+      <input type=\"file\" name=\"file\" size=\"38\">
+      </td>
+    <tr>
+      <th class=\"left\">$langVideoTitle:</th>
+      <td><input type=\"text\" name=\"titre\" value=\"\" size=\"55\" class=\"FormData_InputText\"></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langDescr&nbsp;:</th>
+      <td><textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"52\" class=\"FormData_InputText\"></textarea></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langcreator&nbsp;:</th>
+      <td><input type=\"text\" name=\"creator\" value=\"$nick\" size=\"55\" class=\"FormData_InputText\"></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langpublisher &nbsp;:</th>
+      <td><input type=\"text\" name=\"publisher\" value=\"$nick\" size=\"55\" class=\"FormData_InputText\"></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langdate &nbsp;:</th>
+      <td><input type=\"text\" name=\"date\" value=\"".date("Y-m-d G:i:s")."\" size=\"55\" class=\"FormData_InputText\"></td>
+    </tr>
+    <tr>
+      <th class=\"left\">&nbsp;</th>
+      <td><input type=\"submit\" name=\"submit\" value=\"$dropbox_lang[uploadFile]\"></td>
+    </tr>
+    </tbody>
+    </table>
+    <br/>
+    </form>
+    <br/>";
 	} elseif (isset($form_input) && $form_input == "url") {
-		$tool_content .= "<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"insert_form\">
-		<table><thead><tr><th>$langURL
-		<input type=\"hidden\" name=\"id\" value=\"\">
-		</th>
-		<td><input type=\"text\" name=\"URL\" size=\"45\"></td>
-		<tr>
-		<th>$langVideoTitle:</th>
-		<td><input type=\"text\" name=\"titre\" value=\"\" size=\"55\"></td>
-		</tr>
-		<tr>
-		<th>$langDescr :</th>
-		<td>
-		<textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"50\"></textarea>
-		</td>
-		</tr>
-		<tr>
-		<th>$langcreator :</th>
-		<td><input type=\"text\" name=\"creator\" value=\"$nick\" size=\"55\"></td>
-		</tr>
-		<tr>
-		<th>$langpublisher :</th>
-		<td><input type=\"text\" name=\"publisher\" value=\"$nick\" size=\"55\"></td>
-		</tr>
-		<tr>
-		<th>$langdate :</th>
-		<td><input type=\"text\" name=\"date\" value=\"".date("Y-m-d G:i")."\" size=\"55\"></td>
-		</tr></thead>
-		</table><br/>
-		<input type=\"submit\" name=\"submit\" value=\"$langAdd\"><br/><br/>
-		</form>";
+		$tool_content .= "
+    <form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"insert_form\">
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <th class=\"left\" width=\"220\">&nbsp;</th>
+      <td><b>$langAddVideoLink</b></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langURL
+      <input type=\"hidden\" name=\"id\" value=\"\">
+      </th>
+      <td><input type=\"text\" name=\"URL\" size=\"55\" class=\"FormData_InputText\"></td>
+    <tr>
+      <th class=\"left\">$langVideoTitle:</th>
+      <td><input type=\"text\" name=\"titre\" value=\"\" size=\"55\" class=\"FormData_InputText\"></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langDescr :</th>
+      <td><textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"52\" class=\"FormData_InputText\"></textarea></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langcreator :</th>
+      <td><input type=\"text\" name=\"creator\" value=\"$nick\" size=\"55\" class=\"FormData_InputText\"></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langpublisher :</th>
+      <td><input type=\"text\" name=\"publisher\" value=\"$nick\" size=\"55\" class=\"FormData_InputText\"></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langdate :</th>
+      <td><input type=\"text\" name=\"date\" value=\"".date("Y-m-d G:i")."\" size=\"55\" class=\"FormData_InputText\"></td>
+    </tr>
+    <tr>
+      <th class=\"left\">&nbsp;</th>
+      <td><input type=\"submit\" name=\"submit\" value=\"$langAdd\"></td>
+    </tr>
+    </tbody>
+    </table>
+	<br/>
+	<br/>
+    </form>";
 	}
 
 // ------------------- if no submit -----------------------
 if (isset($id)) {
-		if($id!="") {
-		$sql = "SELECT * FROM $table_edit WHERE id='".mysql_real_escape_string($id)."' ORDER BY titre";
+   if($id!="") {
+	  $sql = "SELECT * FROM $table_edit WHERE id='".mysql_real_escape_string($id)."' ORDER BY titre";
       $result = db_query($sql,$currentCourseID);
       $myrow = mysql_fetch_array($result);
       $id = $myrow[0];
-			$url= $myrow[1];
+	  $url= $myrow[1];
       $titre = $myrow[2];
       $description = $myrow[3];
       $creator = $myrow[4];
       $publisher = $myrow[5];
       $date = $myrow[6];
 
-			$tool_content .= "<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"edit_form\"><table><thead>";
-			if ($table_edit == 'videolinks') {
-					$tool_content .= "<tr><th>$langURL:</th>";
-	    		$tool_content .= "<input type='hidden' name='id' value=' '>";
-					$tool_content .= "<td><input type='text' name='url' value='$url' size='45'></td></tr>";		
-				} 
-				elseif ($table_edit == 'video') {
-		    		$tool_content .= "<input type='hidden' name='url' value='$url'>";
-			}
-			$tool_content .= "<tr><th>$langVideoTitle:</th>";
-			$tool_content .= "<td><input type=\"text\" name=\"titre\" value=\"".@$titre."\" size=\"55\"></td></tr>";
-			$tool_content .= "<tr>
-			<th>$langDescr&nbsp;:</th>
-			<td>
-			<textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"50\">".@$description."</textarea>
-			</td>
-			</tr>
-			<tr>
-			<th>$langcreator&nbsp;:</th>
-			<td><input type=\"text\" name=\"creator\" value=\"".@$creator."\" size=\"55\"></td>
-			</tr>
-			<tr><th>$langpublisher &nbsp;:</th>
-			<td><input type=\"text\" name=\"publisher\" value=\"".@$publisher."\" size=\"55\"></td>
-			</tr>
-			<tr><th>$langdate &nbsp;:</th>
-			<td><input type=\"text\" name=\"date\" value=\"".@$date."\" size=\"55\"></td>
-			</tr></thead></table><br/>
-			<input type=\"submit\" name=\"edit_submit\" value=\"$langModify\"><br/><br/>
-			<input type=\"hidden\" name=\"id\" value=\"".@$id."\">
-			<input type=\"hidden\" name=\"table\" value=\"".$table_edit."\"></form>
-			";		
+	$tool_content .= "
+    <form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"edit_form\">
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <th class=\"left\" width=\"220\">&nbsp;</th>
+      <td><b>$langModify</b></td>
+	</tr>";
+	if ($table_edit == 'videolinks') {
+	$tool_content .= "
+    <tr>
+      <th class=\"left\">$langURL:<input type='hidden' name='id' value=' '></th>
+      <td><input type='text' name='url' value='$url' size='55' class=\"FormData_InputText\"></td>
+    </tr>";		
+	} 
+	elseif ($table_edit == 'video') {
+	$tool_content .= "<input type='hidden' name='url' value='$url' class=\"FormData_InputText\">";
+	}
+	$tool_content .= "
+    <tr>
+      <th class=\"left\">$langVideoTitle:</th>
+      <td><input type=\"text\" name=\"titre\" value=\"".@$titre."\" size=\"55\" class=\"FormData_InputText\"></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langDescr&nbsp;:</th>
+      <td><textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"52\" class=\"FormData_InputText\">".@$description."</textarea></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langcreator&nbsp;:</th>
+      <td><input type=\"text\" name=\"creator\" value=\"".@$creator."\" size=\"55\" class=\"FormData_InputText\"></td>
+    </tr>
+	<tr>
+      <th class=\"left\">$langpublisher &nbsp;:</th>
+      <td><input type=\"text\" name=\"publisher\" value=\"".@$publisher."\" size=\"55\" class=\"FormData_InputText\"></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langdate &nbsp;:</th>
+      <td><input type=\"text\" name=\"date\" value=\"".@$date."\" size=\"55\" class=\"FormData_InputText\"></td>
+    </tr>
+    <tr>
+      <th class=\"left\">&nbsp;</th>
+      <td><input type=\"submit\" name=\"edit_submit\" value=\"$langModify\">
+          <input type=\"hidden\" name=\"id\" value=\"".@$id."\">
+          <input type=\"hidden\" name=\"table\" value=\"".$table_edit."\">
+      </td>
+    </tr>
+    </tbody>
+    </table>
+    </form>
+    <br/>
+    <br/>
+    ";		
 		}
 }	// if id
 	
 	$tool_content.="<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"insert_form\"></form>";
+	
+	$count_video = mysql_fetch_array(db_query("SELECT count(*) FROM video ORDER BY titre",$currentCourseID));
+	$count_video_links = mysql_fetch_array(db_query("SELECT count(*) FROM videolinks ORDER BY titre",$currentCourseID));
+
+	if ($count_video[0]<>0 || $count_video_links[0]<>0) {
 	// print the list if there is no editing
 	$results['video'] = db_query("SELECT *  FROM video ORDER BY titre",$currentCourseID);
 	$results['videolinks'] = db_query("SELECT * FROM videolinks ORDER BY titre",$currentCourseID);
 	$i=0;
-	$tool_content.="<table width=\"99%\"><thead>
-	<tr>
-		<th>$langVideoTitle</th>
-		<th>$langDescr</th>
-		<th>$langcreator</th>
-		<th>$langpublisher</th>
-		<th>$langdate</th>
-		<th>$langActions</th>
-		</tr></thead>
-		<tbody>";
+	$tool_content.="
+    <table width=\"99%\">
+    <thead>
+    <tr>
+      <th>$langVideoTitle</th>
+      <th>$langDescr</th>
+      <th>$langcreator</th>
+      <th>$langpublisher</th>
+      <th>$langdate</th>
+      <th>$langActions</th>
+    </tr>
+    </thead>
+    <tbody>";
 	foreach($results as $table => $result)
 	while ($myrow = mysql_fetch_array($result)) {
 		switch($table){
@@ -336,16 +390,37 @@ if (isset($id)) {
 		}// while
 		$i++;
 	}
-	$tool_content.="</tbody></table>";
+	$tool_content.="
+    </tbody>
+    </table>";
+	}
+	else
+	{
+		$tool_content .= "<p class='alert1'>$langNoVideo</p>";
+	}
 }   // if uid=prof_id
 
 // student view
 else {
 	$results['video'] = db_query("SELECT *  FROM video ORDER BY titre",$currentCourseID);
 	$results['videolinks'] = db_query("SELECT * FROM videolinks ORDER BY titre",$currentCourseID);
-	$tool_content .= "<table width=\"99%\"><thead>
-	<tr><th>$langVideoTitle</th><th>$langDescr</th></tr></thead><tbody>";
+	
+	$count_video = mysql_fetch_array(db_query("SELECT count(*) FROM video ORDER BY titre",$currentCourseID));
+	$count_video_links = mysql_fetch_array(db_query("SELECT count(*) FROM videolinks ORDER BY titre",$currentCourseID));
+
+	if ($count_video[0]<>0 || $count_video_links[0]<>0) {
+	$tool_content .= "
+    <table width=\"99%\">
+    <thead>
+      <th width=\"5%\">&nbsp;</th>	
+      <th class='left'>$langVideoTitle - $langDescr</th>
+	  <th width=\"5%\">&nbsp;</th>	
+    </tr>
+    </thead>
+    <tbody>";
+	
 	$i=0;
+	$count_video_presented=1;
 	foreach($results as $table => $result)
 	{
 		while ($myrow = mysql_fetch_array($result)) {
@@ -365,26 +440,33 @@ else {
 			$rowClass = ($i%2)==0 ? "class=\"odd\"" : "";
 			if($i%2==0) {				
 				$tool_content.=sprintf("				
-				<tr $rowClass>			
-				<td>
-				<a href=\"%s\" target=\"_blank\">%s</a></td>
-				<td>%s
-				</td>
-				</tr>
+    <tr $rowClass>
+      <td align='right'>$count_video_presented.</td>
+      <td><a href=\"%s\" target=\"_blank\">%s</a> <br>%s</td>
+      <td><img src='../../template/classic/img/play.gif'></td>
+    </tr>
 				", $videoURL, $myrow[2], $myrow[3]);
 			} elseif($i%2==1) {
 				$tool_content.=sprintf("				
-				<tr>			
-				<td>
-				<a href=\"%s\" target=\"_blank\">%s</a></td>
-				<td>%s
-				</td></tr>
+    <tr>
+       <td align='right'>$count_video_presented.</td>
+       <td><a href=\"%s\" target=\"_blank\">%s</a><br>%s</td>
+       <td><img src='../../template/classic/img/play.gif'></td>
+    </tr>
 				", $videoURL, $myrow[2], $myrow[3]);
 			}
 			$i++;
+			$count_video_presented++;
 		}
 	}
-	$tool_content .= "</tbody></table>";
+	$tool_content .= "
+    </tbody>
+    </table>";
+	}
+	else
+	{
+	$tool_content .= "<p class='alert1'>$langNoVideo</p>";
+	}
 }
 if (isset($head_content)) draw($tool_content, 2, 'user', $head_content);
 else draw($tool_content, 2, 'user');

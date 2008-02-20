@@ -2930,6 +2930,8 @@ $langcreator="Creator";
 $langpublisher="Publisher";
 $langdate="Date";
 
+$langNoVideo = "Not available video files or links";
+
 /*************************************************************
 * wiki.inc.php
 *************************************************************/
