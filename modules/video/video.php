@@ -324,16 +324,17 @@ if (isset($id)) {
 	$results['video'] = db_query("SELECT *  FROM video ORDER BY titre",$currentCourseID);
 	$results['videolinks'] = db_query("SELECT * FROM videolinks ORDER BY titre",$currentCourseID);
 	$i=0;
+	$count_video_presented_for_admin=1;
 	$tool_content.="
     <table width=\"99%\">
     <thead>
     <tr>
-      <th>$langVideoTitle</th>
-      <th>$langDescr</th>
-      <th>$langcreator</th>
-      <th>$langpublisher</th>
-      <th>$langdate</th>
-      <th>$langActions</th>
+      <th width=\"1%\">&nbsp;</th>
+      <th width=\"50%\" class=\"left\">$langVideoTitle - $langDescr</th>
+      <th width=\"15%\">$langcreator</th>
+      <th width=\"15%\">$langpublisher</th>
+      <th width=\"15%\">$langdate</th>
+      <th width=\"4%\">$langActions</th>
     </tr>
     </thead>
     <tbody>";
@@ -355,41 +356,53 @@ if (isset($id)) {
 		if($i%2)
 		{
 			$rowClass = ($i%2) ? "class=\"odd\"" : "";
-			$tool_content.=sprintf("
-				<tr $rowClass>
-				<td><a href=\"%s\" target=\"_blank\">%s</a></td>
-				<td>%s</td>
-				<td>%s</td>
-				<td>%s</td>
-				<td>%s</td>
-					", $videoURL, $myrow[2], $myrow[3],$myrow[4], $myrow[5],$myrow[6]);
-			$tool_content.=sprintf("<td align='center'>
-			 <a href=\"%s?id=%s&table_edit=%s&action=edit\">
-					<img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"$langModify\"></a> ", $_SERVER['PHP_SELF'], $myrow[0],$table);
-			$tool_content.=sprintf("<a href=\"%s?id=%s&delete=yes&table=%s\" onClick=\"return confirmation('".addslashes($myrow[2])."');\"><img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"$langDelete\"></a>
-					</td>
-				</tr>
-			", $_SERVER['PHP_SELF'], $myrow[0],$table);
+	$tool_content.=sprintf("
+    <tr $rowClass>
+      <td align=\"right\"><small>$count_video_presented_for_admin.</small></td>
+      <td><b>%s</b><br>%s</td>
+      <td>%s</td>
+      <td>%s</td>
+      <td align=\"center\">%s</td>
+	", $myrow[2], $myrow[3],$myrow[4], $myrow[5],$myrow[6]);
+	
+	$tool_content.=sprintf("
+      <td align='center'>
+        <a href=\"%s\" target=\"_blank\"><img src='../../template/classic/img/play.gif' alt=\"%s\" title=\"%s\"border='0'></a>
+        <a href=\"%s?id=%s&table_edit=%s&action=edit\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"$langModify\"></a>
+	", $videoURL, $myrow[2], $myrow[2], $_SERVER['PHP_SELF'], $myrow[0], $table);
+	
+	$tool_content.=sprintf("
+        <a href=\"%s?id=%s&delete=yes&table=%s\" onClick=\"return confirmation('".addslashes($myrow[2])."');\"><img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"$langDelete\"></a>
+      </td>
+    </tr>
+	", $_SERVER['PHP_SELF'], $myrow[0],$table);
+	
 		} else {
-			$tool_content.=sprintf("
-				<tr>
-				<td><a href=\"%s\" target=\"_blank\">%s</a></td>
-				<td>%s</td>
-				<td>%s</td>
-				<td>%s</td>
-				<td>%s</td>
-							", $videoURL, $myrow[2], $myrow[3],$myrow[4], $myrow[5],$myrow[6]);
-				$tool_content.=sprintf("<td align='center'>
-					<a href=\"%s?id=%s&table_edit=%s&action=edit\">
-					<img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"$langModify\"></a> ", $_SERVER['PHP_SELF'], $myrow[0],$table);
-				$tool_content.=sprintf("<a href=\"%s?id=%s&delete=yes&table=%s\" onClick=\"return confirmation('".addslashes($myrow[2])."');\">
-					<img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"$langDelete\"></a>						
-					</td>
-				</tr>
-			", $_SERVER['PHP_SELF'], $myrow[0],$table);
-		}// while
+		
+	$tool_content.=sprintf("
+    <tr>
+      <td align=\"right\"><small>$count_video_presented_for_admin.</small></td>
+      <td><b>%s</b><br>%s</td>
+      <td>%s</td>
+      <td>%s</td>
+      <td align=\"center\">%s</td>
+	", $myrow[2], $myrow[3],$myrow[4], $myrow[5],$myrow[6]);
+	
+	$tool_content.=sprintf("
+      <td align='center'><a href=\"%s\" target=\"_blank\"><img src='../../template/classic/img/play.gif' alt=\"%s\" title=\"%s\"border='0'></a>
+        <a href=\"%s?id=%s&table_edit=%s&action=edit\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"$langModify\"></a>
+	", $videoURL, $myrow[2], $myrow[2], $_SERVER['PHP_SELF'], $myrow[0],$table);
+	
+	$tool_content.=sprintf("
+        <a href=\"%s?id=%s&delete=yes&table=%s\" onClick=\"return confirmation('".addslashes($myrow[2])."');\"><img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"$langDelete\"></a>
+      </td>
+    </tr>
+	", $_SERVER['PHP_SELF'], $myrow[0],$table);
+	
+		} // if
 		$i++;
-	}
+		$count_video_presented_for_admin++;
+	} // while
 	$tool_content.="
     </tbody>
     </table>";
@@ -442,18 +455,18 @@ else {
 				$tool_content.=sprintf("				
     <tr $rowClass>
       <td align='right'>$count_video_presented.</td>
-      <td><a href=\"%s\" target=\"_blank\">%s</a> <br>%s</td>
-      <td><img src='../../template/classic/img/play.gif'></td>
+      <td><b>%s</b><br>%s</td>
+      <td><a href=\"%s\" target=\"_blank\" ><img src='../../template/classic/img/play.gif' title='%s' alt='%s' border='0'></a></td>
     </tr>
-				", $videoURL, $myrow[2], $myrow[3]);
+				", $myrow[2], $myrow[3], $videoURL, $myrow[2], $myrow[2]);
 			} elseif($i%2==1) {
 				$tool_content.=sprintf("				
     <tr>
        <td align='right'>$count_video_presented.</td>
-       <td><a href=\"%s\" target=\"_blank\">%s</a><br>%s</td>
-       <td><img src='../../template/classic/img/play.gif'></td>
+       <td><b>%s</b><br>%s</td>
+       <td><a href=\"%s\" target=\"_blank\"><img src='../../template/classic/img/play.gif' title='%s' alt='%s' border='0'></a></td>
     </tr>
-				", $videoURL, $myrow[2], $myrow[3]);
+				", $myrow[2], $myrow[3], $videoURL, $myrow[2], $myrow[2]);
 			}
 			$i++;
 			$count_video_presented++;
