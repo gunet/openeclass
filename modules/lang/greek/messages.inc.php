@@ -2128,6 +2128,7 @@ $langPollUnknown = "Δεν ξέρω / Δεν απαντώ";
 $langIndividuals = "Αποτελέσματα ανά χρήστη";
 $langDelConf = "Επιβεβαίωση διαγραφής";
 $langCollectiveCharts = "Συγκεντρωτικά αποτελέσματα";
+$langHasNotParticipated = "Δεν έχετε συμμετάσχει";
 
 /************************************************************
 * registration.inc.php

@@ -69,11 +69,9 @@ function printPollForm() {
 	$poll = db_query("SELECT * FROM poll WHERE pid='".mysql_real_escape_string($pid)."' "
 		."ORDER BY pid", $currentCourse);
 	$thePoll = mysql_fetch_array($poll);
-	
 	$temp_CurrentDate = date("Y-m-d H:i:s");
 	$temp_StartDate = $thePoll["start_date"];
 	$temp_EndDate = $thePoll["end_date"];
-	
 	$temp_StartDate = mktime(substr($temp_StartDate, 11,2),substr($temp_StartDate, 14,2),substr($temp_StartDate, 17,2),substr($temp_StartDate, 5,2),substr($temp_StartDate, 8,2),substr($temp_StartDate, 0,4));
 	$temp_EndDate = mktime(substr($temp_EndDate, 11,2),substr($temp_EndDate, 14,2),substr($temp_EndDate, 17,2),substr($temp_EndDate, 5,2),substr($temp_EndDate, 8,2),substr($temp_EndDate, 0,4));
 	$temp_CurrentDate = mktime(substr($temp_CurrentDate, 11,2),substr($temp_CurrentDate, 14,2),substr($temp_CurrentDate, 17,2),substr($temp_CurrentDate, 5,2),substr($temp_CurrentDate, 8,2),substr($temp_CurrentDate, 0,4));
@@ -81,14 +79,14 @@ function printPollForm() {
 	if (($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
 		$tool_content .= <<<cData
 	<p>
-	<form action="pollparticipate.php" id="poll" method="post">
+	<form action="$_SERVER[PHP_SELF]" id="poll" method="post">
 		<input type="hidden" value="2" name="UseCase">
 		<input type="hidden" value="$pid" name="pid">
 		
 cData;
 		$tool_content .= "<div id=\"topic_title_id\">".$thePoll["name"]."</div>\n";
 
-		///*****************************************************************************
+		//*****************************************************************************
 		//		Get answers + questions
 		//******************************************************************************/
 		$questions = db_query("SELECT * FROM poll_question 

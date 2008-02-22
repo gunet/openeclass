@@ -2156,6 +2156,7 @@ $langPollUnknown = "Don't know / No answer";
 $langIndividuals = "Results per user";
 $langQPref = "What type of questionnaire do you prefer?";
 $langHasParticipated = "Already participated";
+$langHasNotParticipated = "Have not participated";
 $langSurveyInfo ="You may choose from a the list of the following COLLES/ATTL questions or add your own questions in the blank fields.";
 $langQQuestionNotGiven ="You have not entered the text for the last question.";
 $langQFillInAllQs ="Please answer all questions.";

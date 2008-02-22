@@ -29,26 +29,6 @@
 	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
 ==============================================================================        
         @Description: Main script for the questionnaire tool
-
- 	This is a tool plugin that allows course administrators - or others with the
- 	same rights - to create surveys.
-
- 	The user can : - navigate through files and directories.
-                       - upload a file
-                       - delete, copy a file or a directory
-                       - edit properties & content (name, comments, 
-			 html content)
-
- 	@Comments: The script is organised in four sections.
-
- 	1) Execute the command called by the user
-           Note (March 2004) some editing functions (renaming, commenting)
-           are moved to a separate page, edit_document.php. This is also
-           where xml and other stuff should be added.
-   	2) Define the directory to display
-  	3) Read files and directories from the directory defined in part 2
-  	4) Display all of that on an HTML page
- 
 ==============================================================================
 */
 
@@ -79,11 +59,11 @@ function confirmation ()
 </script>
 ';
 
-
 if (isset($visibility)) {
 		switch ($visibility) {
 
 // activate / dectivate surveys
+/*
 		case 'sactivate':
 					$sql = "UPDATE survey SET active='1' WHERE sid='".mysql_real_escape_string($_GET['sid'])."'";
 					$result = db_query($sql,$currentCourseID);
@@ -94,7 +74,7 @@ if (isset($visibility)) {
 						$result = db_query($sql,$currentCourseID);
 						$GLOBALS["tool_content"] .= $GLOBALS["langSurveyDeactivated"];
 					break;
-
+*/
 // activate / dectivate polls
 		case 'activate':  
 						$sql = "UPDATE poll SET active='1' WHERE pid='".mysql_real_escape_string($_GET['pid'])."'";
@@ -142,28 +122,17 @@ if (isset($sdelete) and $sdelete='yes') {
 //$tool_content .= "<p><b>$langNamesSurvey</b></p><br>";
 //printSurveys();
 
-$tool_content .= "
-    <table class='Deps' width='99%'>
-    <tbody>
-    <tr>
-      <th><b>$langSurveys</b></th>
-      <td>";
-	  
+$tool_content .= "<table class='Deps' width='99%'><tbody><tr>
+      <th><b>$langSurveys</b></th><td>";
       if ($is_adminOfCourse) {
         $tool_content .= "<a href='addpoll.php'>$langCreatePoll</a>";
       } else {
         $tool_content .= "&nbsp";
       }
 
-$tool_content .= "</td>
-    </tr>
-    </tbody>
-    </table>
-    <br>";
+$tool_content .= "</td></tr></tbody></table><br>";
 printPolls();
-	
 draw($tool_content, 2, ' ', $head_content);
-
 
 	
  /***************************************************************************************************
@@ -288,39 +257,35 @@ cData;
 */
 
 
-
-
 	
  /***************************************************************************************************
  * printPolls()
  ****************************************************************************************************/
-	function printPolls() {
-		global $tool_content, $currentCourse, $langCreatePoll, $langPollsActive, 
-			$langYes, $langTitle, $langPollCreator, $langPollCreation, $langPollStart, 
-			$langPollEnd, $langPollOperations, $langPollNone, $is_adminOfCourse, $langSurveys,
-			$langNamesSurvey, $mysqlMainDb, $langEdit, $langDelete, $langActions,
-			$langDeactivate, $langPollsInactive, $langActivate, $langParticipate, 
-			$user_id, $langHasParticipated, $uid;
+function printPolls() {
+	global $tool_content, $currentCourse, $langCreatePoll, $langPollsActive, 
+		$langYes, $langTitle, $langPollCreator, $langPollCreation, $langPollStart, 
+		$langPollEnd, $langPollOperations, $langPollNone, $is_adminOfCourse, $langSurveys,
+		$langNamesSurvey, $mysqlMainDb, $langEdit, $langDelete, $langActions,
+		$langDeactivate, $langPollsInactive, $langActivate, $langParticipate, 
+		$user_id, $langHasParticipated, $langHasNotParticipated, $uid;
 		
-		$poll_check = 0;
-		$result = mysql_list_tables($currentCourse);
-		while ($row = mysql_fetch_row($result)) {
-			if ($row[0] == 'poll') {
-		 		$result = db_query("select * from poll", $currentCourse);
-				$num_rows = mysql_num_rows($result);
-				if ($num_rows > 0)
-		 			++$poll_check;
-			}
+	$poll_check = 0;
+	$result = mysql_list_tables($currentCourse);
+	while ($row = mysql_fetch_row($result)) {
+		if ($row[0] == 'poll') {
+	 		$result = db_query("select * from poll", $currentCourse);
+			$num_rows = mysql_num_rows($result);
+			if ($num_rows > 0)
+	 			++$poll_check;
 		}
-		if (!$poll_check) {
-			$tool_content .= "<p class='alert1'>".$langPollNone . "</p><br>";
-			}
-		else {
-		
-			// Print active polls 
-			$tool_content .= <<<cData
+	}
+	if (!$poll_check) {
+		$tool_content .= "<p class='alert1'>".$langPollNone . "</p><br>";
+		}
+	else {		
+		// Print active polls 
+		$tool_content .= <<<cData
 
-      <!--<b>$langPollsActive</b>-->
       <table border="0" width="99%">
       <tbody>
       <tr>
@@ -332,91 +297,69 @@ cData;
         <th width='30'>$langPollEnd</th>
 cData;
 				
-				if ($is_adminOfCourse) {
- 					$tool_content .= "
-        <th colspan='2' width='30'>$langActions</th>";
-				} else {
-					$tool_content .= "
-        <th width='30'>$langParticipate</th>";
-					}
-				
-			$tool_content .= "
-      </tr>
-      ";
-			$active_polls = db_query("SELECT * FROM poll", $currentCourse);
-			$index_aa = 1;
-			while ($thepoll = mysql_fetch_array($active_polls)) {	
-				$visibility = $thepoll["active"];
+		if ($is_adminOfCourse) {
+ 			$tool_content .= "<th colspan='2' width='30'>$langActions</th>";
+		} else {
+			$tool_content .= "<th width='30'>$langParticipate</th>";
+			}
+			
+		$tool_content .= "</tr>";
+		$active_polls = db_query("SELECT * FROM poll", $currentCourse);
+		$index_aa = 1;
+		while ($thepoll = mysql_fetch_array($active_polls)) {	
+			$visibility = $thepoll["active"];
 				
 		if (($visibility)||($is_adminOfCourse)) {
-				if ($visibility) {
-					$visibility_css = " ";
-					$visibility_gif = "invisible";
-					$visibility_func = "deactivate";
+			if ($visibility) {
+				$visibility_css = " ";
+				$visibility_gif = "invisible";
+				$visibility_func = "deactivate";
+			} else {
+				$visibility_css = " class=\"invisible\"";
+				$visibility_gif = "visible";
+				$visibility_func = "activate";
+			}
+				
+			$creator_id = $thepoll["creator_id"];
+			$poll_creator = db_query("SELECT nom,prenom FROM user 
+					WHERE user_id='$creator_id'", $mysqlMainDb);
+			$theCreator = mysql_fetch_array($poll_creator);			
+			$pid = $thepoll["pid"];
+			$answers = db_query("SELECT * FROM poll_answer_record WHERE pid='$pid'", $currentCourse);
+			$countAnswers = mysql_num_rows($answers);
+			$thepid = $thepoll["pid"];
+			$has_participated = mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM poll_answer_record 
+					WHERE user_id='$uid' AND pid='$thepid'")); 
+			if ($is_adminOfCourse) { 
+				$tool_content .= "<tr><td colspan='2'><small>$index_aa</small>&nbsp;<a href='pollresults.php?pid=$pid'>$thepoll[name]</a></td>";
+			} else {
+				if ($has_participated[0] == 0) {
+				$tool_content .= "<tr>".$visibility_css."<td colspan='2'><small>$index_aa.</small>&nbsp;
+				<a href='pollparticipate.php?UseCase=1&pid=$pid'>$thepoll[name]</a></td>";
 				} else {
-					$visibility_css = " class=\"invisible\"";
-					$visibility_gif = "visible";
-					$visibility_func = "activate";
+				$tool_content .= "<tr>".$visibility_css."<td colspan='2'><small>$index_aa.</small>&nbsp;$thepoll[name]</td>";
 				}
-				
-				$creator_id = $thepoll["creator_id"];
-				
-				$poll_creator = db_query("SELECT nom,prenom FROM user 
-									WHERE user_id='$creator_id'", $mysqlMainDb);
-				$theCreator = mysql_fetch_array($poll_creator);
-				
-				$pid = $thepoll["pid"];
-				$answers = db_query("
-				select * from poll_answer_record where pid='$pid'", $currentCourse);
-				$countAnswers = mysql_num_rows($answers);
-				
-				if ($is_adminOfCourse) { 
-					$tool_content .= "<tr><td colspan='2'><small>$index_aa</small>&nbsp;<a href='pollresults.php?pid=$pid'>$thepoll[name]</a></td>";
-				} else {
-					$tool_content .= "
-      <tr".$visibility_css.">
-        <td colspan='2'><small>$index_aa.</small>&nbsp;" . $thepoll["name"] . "</td>";
-				}	
+			}	
 					
-				$tool_content .= "
-        <td>" . $theCreator["nom"]. " " . $theCreator["prenom"] . "</td>";
-				$tool_content .= "
-        <td align='center'>" . $thepoll["creation_date"] . "</td>";
-				$tool_content .= "
-        <td align='center'>" . $thepoll["start_date"] . "</td>";
-				$tool_content .= "
-        <td align='center'>" . $thepoll["end_date"] . "</td>";
-				
-				if ($is_adminOfCourse) 
-					$tool_content .= "
-        <td align='center'>
-          <a href='$_SERVER[PHP_SELF]?delete=yes&pid={$pid}' onClick='return confirmation();'><img src='../../template/classic/img/delete.gif' title='$langDelete' border='0'></a>&nbsp;
-          <a href='$_SERVER[PHP_SELF]?visibility=$visibility_func&pid={$pid}'><img src='../../template/classic/img/".$visibility_gif.".gif' border='0'></a>
-        </td>
-      </tr>";
-				else {
-					$thepid = $thepoll["pid"];
-					$has_participated = mysql_fetch_array(
-					mysql_query("SELECT COUNT(*) FROM poll_answer_record where user_id='$uid' AND pid='$thepid'"));
-					if ( $has_participated[0] == 0) {
-						$tool_content .= "
-        <td align='center'><a href='pollparticipate.php?UseCase=1&pid=". $pid ."'>";
-						$tool_content .= $langYes;
-						$tool_content .= "</a></td>
-      </tr>";
-					} else {
-						$tool_content .= "
-        <td>".$langHasParticipated."</td>
-      </tr>";
-						}
+			$tool_content .= "<td>" . $theCreator["nom"]. " " . $theCreator["prenom"] . "</td>";
+			$tool_content .= "<td align='center'>" . $thepoll["creation_date"] . "</td>";
+			$tool_content .= "<td align='center'>" . $thepoll["start_date"] . "</td>";
+			$tool_content .= "<td align='center'>" . $thepoll["end_date"] . "</td>";		
+			if ($is_adminOfCourse)  {
+				$tool_content .= "<td align='center'>
+    				<a href='$_SERVER[PHP_SELF]?delete=yes&pid={$pid}' onClick='return confirmation();'><img src='../../template/classic/img/delete.gif' title='$langDelete' border='0'></a>&nbsp;
+          			<a href='$_SERVER[PHP_SELF]?visibility=$visibility_func&pid={$pid}'><img src='../../template/classic/img/".$visibility_gif.".gif' border='0'></a></td></tr>";
+			} else {
+				if ($has_participated[0] == 0) {
+					$tool_content .= "<td align='center'>$langHasNotParticipated</td></tr>";
+				} else {
+					$tool_content .= "<td>".$langHasParticipated."</td></tr>";
 					}
 				}
-			$index_aa ++;
 			}
-			$tool_content .= "
-      </tbody>
-      </table>
-      <br>";
+			$index_aa ++;
 		}
+		$tool_content .= "</tbody></table><br>";
 	}
+}
 ?>
