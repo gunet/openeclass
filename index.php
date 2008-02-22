@@ -97,7 +97,8 @@ if(!empty($submit))
 	$result=mysql_query($sqlLogin);
 	$check_passwords = array("pop3","imap","ldap","db");
 	$warning = "";
-	$auth_allow = 0;	$exists = 0;
+	$auth_allow = 0;	
+	$exists = 0;
 	while ($myrow = mysql_fetch_array($result))
 	{
 		$exists = 1;
@@ -193,8 +194,8 @@ if(!empty($submit))
 					$is_valid = auth_user_login($auth,$uname,$pass);
 					if($is_valid)
 					{
-						$is_active = check_activity($myrow["user_id"]);		// check if the account is active
-						if($myrow["user_id"]==$myrow["is_admin"])			// always the admin is active
+						$is_active = check_activity($myrow["user_id"]);	// check if the account is active
+						if($myrow["user_id"]==$myrow["is_admin"]) // always the admin is active
 						{
 							$is_active = 1;
 						}
@@ -210,7 +211,7 @@ if(!empty($submit))
 					}
 					else
 					{
-						$auth_allow = 2;		//$tool_content .= "<br />The connection does not seem to work!<br />";
+						$auth_allow = 2; //$tool_content .= "<br />The connection does not seem to work!<br />";
 					}
 					if($auth_allow==1)
 					{
@@ -246,9 +247,7 @@ if(!empty($submit))
 				{
 					$warning .= "<br>Invalid user auth method!Please contact the admin<br>";
 				}
-
 			}
-
 		}
 		else
 		{
@@ -269,11 +268,10 @@ if(!empty($submit))
 		{
 			case 1 : $warning .= ""; break;
 			case 2 : $warning .= "<br />".$langInvalidId ."<br />"; break;
-			case 3 : $warning .= $tool_content .= "<br />".$langAccountInactive1." <a href=\"modules/auth/contactadmin.php?userid=".$user."\">".$langAccountInactive2."</a><br /><br />"; break;
+			case 3 : $warning .= "<br />".$langAccountInactive1." <a href=\"modules/auth/contactadmin.php?userid=".$user."\">".$langAccountInactive2."</a><br /><br />"; break;
 			case 4 : $warning .= "<br />" . $langInvalidId . "<br />"; break;
 			default: break;
 		}
-		//$warning .= $auth_allow . "---". $langInvalidId;
 	}
 	else
 	{
@@ -286,7 +284,6 @@ if(!empty($submit))
 		session_register('statut');
 		session_register('is_admin');
 		$_SESSION['uid'] = $uid;
-		
 		mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action)
                 VALUES ('', '".$uid."', '".$REMOTE_ADDR."', NOW(), 'LOGIN')");
 
@@ -326,13 +323,8 @@ else unset($uid);
 //if the user logged in include the correct language files
 //in case he has a different language set in his/her profile
 if (isset($language)) {
-
 	include("./modules/lang/$language/common.inc.php");
 	include("./modules/lang/$language/messages.inc.php");
-/*
-	include("./modules/lang/$language/index.inc.php");
-	include("./modules/lang/$language/trad4all.inc.php");
-*/
 }
 $nameTools = $langWelcomeToEclass;
 

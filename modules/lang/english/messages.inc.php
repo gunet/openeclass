@@ -640,14 +640,10 @@ $langNotFalse="This answer is not false. It is true that the revelation of the i
 
 // Home Page MySQL Table "accueil"
 
-
 $langDoc="Documents";
-
 $langVideoLinks="Video Links";
 $langWorks=" ".$langStudents." Papers";
-
-
-$langExercices="Exercices";
+$langExercices="Exercises";
 $langAddPageHome="Upload Webpage";
 $langLinkSite="Add link on Homepage";
 $langModifyInfo="Course Admin";
@@ -754,14 +750,12 @@ $langFormat="Format";
 // $langFormat="";  //den xrhsimopoieitai. antistoixei se mime type
 $langSubject="Subject";
 $langAuthor="Author";
-
 $langCopyrighted="Copyright";
 $langCopyrightedFree="Free";
 $langCopyrightedNotFree="Protected";
 $langCopyrightedUnknown="Unknown";
 $langChangeMetadata="Modify document information";
 $langEditMeta="Modify<br>Information";
-
 $langCategoryExcercise="Excersise";
 $langCategoryEssay="Essay";
 $langCategoryDescription="Course description";
@@ -770,7 +764,6 @@ $langCategoryTheory="Theory";
 $langCategoryLecture="Lecture";
 $langCategoryNotes="Notes";
 $langCategoryOther="Other";
-
 $langNotRequired = "Filling-in the fields is not mandatory";
 $langCommands = "Actions";
 
@@ -921,7 +914,7 @@ $langRecEx="Save exercise";
 $langRecQu="Save question";
 $langRecAns="Save Answers";
 $langIntroduction="Introduction";
-$langTitleAssistant="Exercices creation assistant";
+$langTitleAssistant="Exercises creation assistant";
 $langQuesList="Questions list";
 $langSaveEx="Save exercise";
 $langClose="Close";

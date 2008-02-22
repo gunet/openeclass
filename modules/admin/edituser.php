@@ -76,15 +76,12 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
 	$u = (int)$u;
 	if(empty($u_submitted)) // if the form was not submitted
 	{
-		$sql = mysql_query("SELECT nom, prenom, username, password, email, phone, department, registered_at, expires_at 
-										FROM user	WHERE user_id = '$u'");
+		$sql = mysql_query("SELECT nom, prenom, username, password, email, phone, department, registered_at, expires_at FROM user WHERE user_id = '$u'");
 		$info = mysql_fetch_array($sql);
 		$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
-	
 		if(!in_array($info['password'], $authmethods)) {
 				$tool_content .= "<li><a href=\"./password.php\">".$langChangePass."</a></li>";
 		}
-
 		$tool_content .= " <li><a href='./listusers.php'>$langBack</a></li>";
 		$tool_content .= "</ul></div>";
 		$tool_content .= "<h4>$langEditUser $info[2]</h4>";
@@ -110,19 +107,15 @@ if(!in_array($info['password'], $authmethods)) {
       default: $auth=1;break;
     }
     $auth_text = get_auth_info($auth);
-    $tool_content .= "
-    <tr>
-      <th width=\"150\" class='left'>".$langUsername. "</th>
+    $tool_content .= "<tr><th width=\"150\" class='left'>".$langUsername. "</th>
       <td class=\"caution_small\">&nbsp;&nbsp;&nbsp;&nbsp;<b>".$info[2]."</b> [".$auth_text."]
         <input type=\"hidden\" name=\"username\" value=\"$info[2]\">
-      </td>
-    </tr>";
-  }
+      </td></tr>";
+ }
 
 	$tool_content .= "<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">E-mail: </th><td width=\"80%\"><input type=\"text\" name=\"email\" size=\"50\" value=\"".$info[4]."\"</td></tr>
 	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langTel: </th><td width=\"80%\"><input type=\"text\" name=\"phone\" size=\"30\" value=\"".$info[5]."\"</td></tr>";
-
-		$tool_content .= "<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langDepartment: </th><td width=\"80%\">";
+	$tool_content .= "<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langDepartment: </th><td width=\"80%\">";
 		if(!empty($info[6])) {
 			$department_select_box = list_departments($info[6]);
 		} else {
@@ -240,16 +233,14 @@ if(!in_array($info['password'], $authmethods)) {
 		$date = isset($_POST['date'])?$_POST['date']:'';
 		$hour = isset($_POST['hour'])?$_POST['hour']:'';
 		$minute = isset($_POST['minute'])?$_POST['minute']:'';
-		
 		$date = split("-",  $date);
-    $day=$date[0];
-    $year=$date[2];
-    $month=$date[1];
+    		$day=$date[0];
+    		$year=$date[2];
+    		$month=$date[1];
 		$expires_at = mktime($hour, $minute, 0, $month, $day, $year);
 		$user_exist= FALSE;
-
-	// check if username is free
-  	$username_check=mysql_query("SELECT username FROM user WHERE username='".escapeSimple($username)."'");
+		// check if username is free
+  		$username_check=mysql_query("SELECT username FROM user WHERE username='".escapeSimple($username)."'");
 		$nums = mysql_num_rows($username_check);
 
 if (mysql_num_rows($username_check) > 1) {
@@ -273,16 +264,16 @@ if (mysql_num_rows($username_check) > 1) {
   }
 
 		if($registered_at>$expires_at) {
-				$tool_content .= "<br >$langExpireBeforeRegister <br><br>$langPlease <a href=\"edituser.php?u=".$u."\">$langAgain</a><br />";
+				$tool_content .= "<center><br><b>$langExpireBeforeRegister<br><br><a href=\"edituser.php?u=".$u."\">$langAgain</a></b><br />";
 		} else	{
 			if ($u=='1') $department = 'NULL';
 			$username = escapeSimple($username);
 			$sql = "UPDATE user SET nom='".$lname."', prenom='".$fname."', 
-										username='".$username."', email='".$email."', phone='".$phone."',
-										department=".$department.", expires_at=".$expires_at." WHERE user_id = '".$u."'";
+				username='".$username."', email='".$email."', phone='".$phone."',
+				department=".$department.", expires_at=".$expires_at." WHERE user_id = '".$u."'";
 				$qry = mysql_query($sql);
 				if (!$qry)
-						$tool_content .= "$langNoUpdate:".$u."!";
+					$tool_content .= "$langNoUpdate:".$u."!";
 				else
 				{
 					$num_update = mysql_affected_rows();
