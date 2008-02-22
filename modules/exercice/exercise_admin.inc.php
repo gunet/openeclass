@@ -73,57 +73,81 @@ if(isset($modifyExercise))
 {
 
 $tool_content .= <<<cData
-	<form method="post" action="${PHP_SELF}?modifyExercise=${modifyExercise}">
-	<table border="0" cellpadding="5">
+    <form method="post" action="${PHP_SELF}?modifyExercise=${modifyExercise}">
+    <table width="99%"  class='FormData'>
+    <tbody>
 cData;
 
 	if(!empty($msgErr)){
 		$tool_content .= <<<cData
-			<tr>
-			  <td colspan="2">
-				<table border="0" cellpadding="3" align="center" width="400" bgcolor="#FFCC00">
-				<tr>
-				  <td>$msgErr</td>
-				</tr>
-				</table>
-			  </td>
-			</tr>
+    <tr>
+      <td colspan="2">
+      <table border="0" cellpadding="3" align="center" width="400" bgcolor="#FFCC00">
+        <tr><td>$msgErr</td></tr>
+      </table>
+      </td>
+    </tr>
 cData;
 	}
 
-$tool_content .= "<tr><td>".$langExerciseName." :</td><td><input type=\"text\" name=\"exerciseTitle\" ".
-	"size=\"50\" maxlength=\"200\" value=\"".htmlspecialchars($exerciseTitle)."\" style=\"width:400px;\"></td></tr>";
+$tool_content .= "
+    <tr>
+      <th class=\"left\" width=\"220\">&nbsp;</th>
+      <td><b>&nbsp;</b></td>
+    </tr>
+    <tr>
+      <th class=\"left\">".$langExerciseName." :</th>
+      <td><input type=\"text\" name=\"exerciseTitle\" "."size=\"50\" maxlength=\"200\" value=\"".htmlspecialchars($exerciseTitle)."\" style=\"width:400px;\" class=\"FormData_InputText\"></td>
+    </tr>";
 
-$tool_content .= "<tr><td valign=\"top\">".$langExerciseDescription." :</td><td><textarea wrap=\"virtual\" ".
-	"name=\"exerciseDescription\" cols=\"50\" rows=\"4\" style=\"width:400px;\">".
-	htmlspecialchars($exerciseDescription)."</textarea></td></tr>";
+$tool_content .= "
+    <tr>
+      <th class=\"left\">".$langExerciseDescription." :</th>
+      <td><textarea wrap=\"virtual\" ".
+	"name=\"exerciseDescription\" cols=\"50\" rows=\"4\" style=\"width:400px;\" class=\"FormData_InputText\">".htmlspecialchars($exerciseDescription)."</textarea></td>
+    </tr>";
 	
-$tool_content .= "<tr><td valign=\"top\">".$langExerciseType." :</td><td>".
-	"<input type=\"radio\" name=\"exerciseType\" value=\"1\" ";
+$tool_content .= "
+    <tr>
+      <th class=\"left\">".$langExerciseType." :</th>
+      <td>"."<input type=\"radio\" name=\"exerciseType\" value=\"1\" ";
 	
 if($exerciseType <= 1) 
 	$tool_content .= " checked=\"checked\"";
-$tool_content .= ">".$langSimpleExercise."<br><input type=\"radio\" name=\"exerciseType\" value=\"2\" ";
+$tool_content .= "> ".$langSimpleExercise."
+      <br>
+      <input type=\"radio\" name=\"exerciseType\" value=\"2\" ";
 
 if($exerciseType >= 2) 
 	$tool_content .= 'checked="checked"';
-$tool_content .= "> ".$langSequentialExercise."</td></tr>";
+$tool_content .= "> ".$langSequentialExercise."</td>
+    </tr>";
 
-$tool_content .= "<td valign=\"top\">".$langExerciseStart." :</td>".
-	"<td>$start_cal_Excercise</td></tr>";
+$tool_content .= "
+      <th class=\"left\">".$langExerciseStart." :</th>"."
+      <td>$start_cal_Excercise</td>
+    </tr>";
   
-$tool_content .= "<td valign=\"top\">".$langExerciseEnd." :</td>".
-	"<td>$end_cal_Excercise</td></tr>";
+$tool_content .= "
+      <th class=\"left\">".$langExerciseEnd." :</th>"."
+      <td>$end_cal_Excercise</td>
+    </tr>";
   
-$tool_content .= "<tr><td valign=\"top\">".$langExerciseConstrain." :</td>".
-	"<td><input type=\"text\" name=\"exerciseTimeConstrain\" size=\"3\" maxlength=\"3\" ". 
-  "value=\"".htmlspecialchars($exerciseTimeConstrain)."\">". 
-  $langExerciseConstrainUnit." (".$langExerciseConstrainExplanation.")</td></tr>";
+$tool_content .= "
+    <tr>
+      <th class=\"left\">".$langExerciseConstrain." :</th>"."
+      <td><input type=\"text\" name=\"exerciseTimeConstrain\" size=\"3\" maxlength=\"3\" ". 
+  "value=\"".htmlspecialchars($exerciseTimeConstrain)."\" class=\"FormData_InputText\">&nbsp;&nbsp;". 
+  $langExerciseConstrainUnit." &nbsp;&nbsp;&nbsp;&nbsp;(".$langExerciseConstrainExplanation.")</td>
+    </tr>";
   
-$tool_content .= "<tr><td valign=\"top\">".$langExerciseAttemptsAllowed." :</td>".
-	"<td><input type=\"text\" name=\"exerciseAttemptsAllowed\" size=\"2\" maxlength=\"2\"". 
-  "value=\"".htmlspecialchars($exerciseAttemptsAllowed)."\">". 
-  $langExerciseAttemptsAllowedUnit." (".$langExerciseAttemptsAllowedExplanation.")</td></tr>";
+$tool_content .= "
+    <tr>
+      <th class=\"left\">".$langExerciseAttemptsAllowed." :</th>"."
+      <td><input type=\"text\" name=\"exerciseAttemptsAllowed\" size=\"3\" maxlength=\"2\"". 
+  "value=\"".htmlspecialchars($exerciseAttemptsAllowed)."\" class=\"FormData_InputText\">&nbsp;&nbsp;". 
+  $langExerciseAttemptsAllowedUnit." &nbsp;&nbsp;&nbsp;(".$langExerciseAttemptsAllowedExplanation.")</td>
+    </tr>";
 
 /*
 	if($exerciseId && $nbrQuestions) {
@@ -148,53 +172,64 @@ $tool_content .= "<tr><td valign=\"top\">".$langExerciseAttemptsAllowed." :</td>
 */
 
 	$tool_content .= <<<cData
-		<tr>
-		  <td colspan="2" align="center">
-			<input type="submit" name="submitExercise" value="${langOk}">
-			&nbsp;&nbsp;<input type="submit" name="cancelExercise" value="${langCancel}">
-		  </td>
-		</tr>
-		</table>
-		</form>
+	
+    <tr>
+      <th class=\"left\">&nbsp;</th>
+      <td><input type="submit" name="submitExercise" value="${langOk}">&nbsp;&nbsp;<input type="submit" name="cancelExercise" value="${langCancel}"></td>
+    </tr>
+    </tbody>
+    </table>
+    </form>
 cData;
 
 } else {
-$tool_content .= "<h3>".$exerciseTitle."</h3>";
+$tool_content .= "
+    <div id=\"topic_title_id\">".$exerciseTitle."
+    <a href=\"".$PHP_SELF."?modifyExercise=yes\"><img src=\"../../template/classic/img/edit.gif\" ".
+	"border=\"0\" align=\"absmiddle\" title=\"".$langModify."\"></a></div>
+    <br>";
+
+	
 $tool_content .= <<<cData
 
-<blockquote>
-	<table border="0">
-		<tr>
-		  <td valign="top">$langExerciseDescription :</td>
-		  <td>
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td><b>$langExerciseDescription</b></td>
+      <td>:</td>  
+      <td>
 cData;
 
 $tool_content .= nl2br($exerciseDescription);
 
 $tool_content .= <<<cData
-		  </td>
-		</tr>
-		<tr>
-		  <td valign="top">${langExerciseStart} :</td>
-			<td>${exerciseStartDate}</td>
-		</tr>
-		<tr>
-		  <td valign="top">${langExerciseEnd} :</td>
-			<td>${exerciseEndDate}</td>
-		</tr>
-		<tr>
-		  <td valign="top">${langExerciseConstrain} :<ctd>
-			<td>${exerciseTimeConstrain}</td>
-		</tr>
-		<tr>
-		  <td valign="top">${langExerciseAttemptsAllowed} :</td>
-		  <td>${exerciseAttemptsAllowed}</td>
-		</tr>
-	</table>
-</blockquote>
+      </td>
+    </tr>
+    <tr>
+      <td width=\"200\"><b>${langExerciseStart}</b></td>
+      <td width=\"1\">:</td>  
+      <td>${exerciseStartDate}</td>
+    </tr>
+    <tr>
+      <td><b>${langExerciseEnd}</b></td>
+      <td>:</td>  
+      <td>${exerciseEndDate}</td>
+    </tr>
+    <tr>
+      <td><b>${langExerciseConstrain}</b></td>
+      <td>:</td>  
+      <td>${exerciseTimeConstrain} $langExerciseConstrainUnit</td>
+    </tr>
+    <tr>
+      <td><b>${langExerciseAttemptsAllowed}</b></td>
+      <td>:</td>
+      <td>${exerciseAttemptsAllowed} $langExerciseAttemptsAllowedUnit</td>
+    </tr>
+    </tbody>
+    </table>
+
 cData;
 
-$tool_content .= "<a href=\"".$PHP_SELF."?modifyExercise=yes\"><img src=\"../../template/classic/img/edit.gif\" ".
-	"border=\"0\" align=\"absmiddle\" title=\"".$langModify."\"></a>";
+$tool_content .= "<br><br>";
 }
 ?>

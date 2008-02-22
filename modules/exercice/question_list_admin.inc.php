@@ -37,16 +37,27 @@ if(isset($deleteQuestion))
 	unset($objQuestionTmp);
 }
 
-$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
+  $tool_content .= "
+    <table width=\"99%\" class='Deps'>
+    <tr>
+      <th><b>$langQuestionList</b></th>
+      <td>";
 $tool_content .= <<<cData
-		<li><a href="${PHP_SELF}?newQuestion=yes">${langNewQu}</a> | <a href="question_pool.php?fromExercise=${exerciseId}">
-		${langGetExistingQuestion}</a></li>
-</ul></div>
-	<br><br>
-	<b>${langQuestionList}</b>
-	
-<table border="0" align="center" cellpadding="2" cellspacing="2" width="95%">
+      <a href="${PHP_SELF}?newQuestion=yes">${langNewQu}</a> | <a href="question_pool.php?fromExercise=${exerciseId}">${langGetExistingQuestion}</a>
 cData;
+
+  $tool_content .= "
+      </td>
+    </tr>
+    </table>
+    <br>";
+	
+
+
+
+  $tool_content .= "
+    <table width=\"99%\">";
+
 
 if($nbrQuestions) {
 	$questionList=$objExercise->selectQuestionList();
@@ -57,26 +68,28 @@ if($nbrQuestions) {
 		$objQuestionTmp=new Question();
 		$objQuestionTmp->read($id);
 
-	$tool_content .= "<tr><td>".$i." ".$objQuestionTmp->selectTitle()."<br><small>".
-	$aType[$objQuestionTmp->selectType()-1]."</small></td>";
+	$tool_content .= "
+    <tr>
+      <td align=\"right\" width=\"1\">".$i.".</td>
+      <td> ".$objQuestionTmp->selectTitle()."<br><small>".$aType[$objQuestionTmp->selectType()-1]."</small></td>";
 	
-$tool_content .= "</tr><tr><td><a href=\"".$_SERVER['PHP_SELF']."?editQuestion=".$id."\">".
-	"<img src=\"../../template/classic/img/edit.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langModify."\"></a>".
-	" <a href=\"".$_SERVER['PHP_SELF']."?deleteQuestion=".$id."\" ".
-	"onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice))."')) return false;\">".
-	"<img src=\"../../template/classic/img/delete.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langDelete."\"></a>";
+$tool_content .= "
+      <td align=\"right\" width=\"50\"><a href=\"".$_SERVER['PHP_SELF']."?editQuestion=".$id."\">"."<img src=\"../../template/classic/img/edit.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langModify."\"></a>"." <a href=\"".$_SERVER['PHP_SELF']."?deleteQuestion=".$id."\" "."onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice))."')) return false;\">"."<img src=\"../../template/classic/img/delete.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langDelete."\"></a></td>
+      <td align=\"right\" width=\"50\">";
 
 		if($i != 1) {
-				$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?moveUp=".$id."\">
-   			<img src=\"../../template/classic/img/up.gif\" border=\"0\" align=\"absmiddle\" title=\"".$langMoveUp."\"></a>";
+			$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?moveUp=".$id."\">
+   			<img src=\"../../template/classic/img/up.gif\" border=\"0\" align=\"absmiddle\" title=\"".$langMoveUp."\"></a> ";
 		}
 
 		if($i != $nbrQuestions)		{
 			$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?moveDown=".$id."\">
-			<img src=\"../../template/classic/img/down.gif\" border=\"0\" align=\"absmiddle\" title=\"".$langMoveDown."\"></a>";
+			<img src=\"../../template/classic/img/down.gif\" border=\"0\" align=\"absmiddle\" title=\"".$langMoveDown."\"></a> ";
 		}
 
-  $tool_content .= "</td></tr>";
+  $tool_content .= "
+      </td>
+    </tr>";
 		$i++;
 		unset($objQuestionTmp);
 	}
@@ -84,10 +97,12 @@ $tool_content .= "</tr><tr><td><a href=\"".$_SERVER['PHP_SELF']."?editQuestion="
 
 if(!isset($i)) {
 $tool_content .= <<<cData
-	<tr><td>${langNoQuestion}</td>
-	</tr>
+    <tr>
+      <td>${langNoQuestion}</td>
+    </tr>
 cData;
 }
 
-$tool_content .= "</table>";
+$tool_content .= "
+    </table>";
 ?>
