@@ -2089,6 +2089,7 @@ $l_smilepict	= "Picture";
 ********************************************************/
 $langCreateSurvey = 'Create Survey';
 $langCreatePoll = 'Create Poll';
+$langEditPoll = 'Edit Poll';
 $langSurveysActive = "Active Surveys";
 $langSurveysInactive = "Inactive Surveys";
 $langSurvey = "Survey";
@@ -2128,11 +2129,11 @@ $langPollAddAnswer = "Add Answers";
 $langPollMC = "Multiple Choice";
 $langPollFillText = "Fill in the text";
 $langPollContinue = "Continue";
-
 $langPollMoreAnswers ="More answers";
 $langPollAddMultiple = "New multiple choice question";
 $langPollAddFill = "New text fill question";
 $langPollCreated = "The Survey was created successfully.<br><br><a href=\"questionnaire.php\">Back</a>.";
+$langPollEdited ="Poll edited succesfully.<br><br> <a href=\"questionnaire.php\">Back</a>.";
 $langPollCreator = "Creator";
 $langPollCreation = "Creation Date";
 $langPollCreateDate = "Survey created on";
@@ -2150,11 +2151,14 @@ $langIndividuals = "Results per user";
 $langQPref = "What type of questionnaire do you prefer?";
 $langHasParticipated = "Already participated";
 $langHasNotParticipated = "Have not participated";
+$langThereAreParticipants = "There are already participants. Editing is not allowed!";
+$langPollEmpty = "Please add more poll questions!";
 $langSurveyInfo ="You may choose from a the list of the following COLLES/ATTL questions or add your own questions in the blank fields.";
 $langQQuestionNotGiven ="You have not entered the text for the last question.";
 $langQFillInAllQs ="Please answer all questions.";
 $langDelConf = "Delete confirmation";
 $langCollectiveCharts = "Collective results";
+$langPollEmptyAnswers = "Error! There are no answers in question";
 
 $langQuestion1= array('In this unit, my effort was focused in subjects that interested me.'
                                         ,'Almost never.'

@@ -1982,6 +1982,7 @@ $l_smilepict	= "Εικόνα";
 ******************************************************************/
 $langCreateSurvey = 'Δημιουργία ερωτηματολογίου';
 $langCreatePoll = 'Δημιουργία δημοσκόπησης';
+$langEditPoll = 'Τροποποίηση δημοσκόπησης';
 $langQuestionnaire = "Ερωτηματολόγιo";
 $langSurvey = "Δημοσκόπηση";
 $langSurveys = "Δημοσκοπήσεις";
@@ -2112,6 +2113,7 @@ $langPollMoreAnswers ="+ απαντήσεις";
 $langPollAddMultiple = "Νέα ερώτηση πολλαπλής επιλογής";
 $langPollAddFill = "Νέα ερώτηση συμπλήρωσης κενού";
 $langPollCreated ="Η Δημοσκόπηση δημιουργήθηκε με επιτυχία.<br><br> <a href=\"questionnaire.php\">Επιστροφή</a>.";
+$langPollEdited ="Η Δημοσκόπηση τροποποιήθηκε με επιτυχία.<br><br> <a href=\"questionnaire.php\">Επιστροφή</a>.";
 $langPollCreator = "Δημιουργός";
 $langPollCreation = "Ημ/νία Δημιουργίας";
 $langPollCreateDate = "Η δημοσκόπηση δημιουργήθηκε την";
@@ -2129,6 +2131,9 @@ $langIndividuals = "Αποτελέσματα ανά χρήστη";
 $langDelConf = "Επιβεβαίωση διαγραφής";
 $langCollectiveCharts = "Συγκεντρωτικά αποτελέσματα";
 $langHasNotParticipated = "Δεν έχετε συμμετάσχει";
+$langThereAreParticipants = "Στην δημοσκόπηση έχουν ήδη συμμετάσχει χρήστες. Η διόρθωση των στοιχείων δεν είναι δυνατή!";
+$langPollEmpty = "Παρακαλώ προσθέστε ερωτήσεις στην δημοσκόπηση!";
+$langPollEmptyAnswers = "Σφάλμα! Δεν υπάρχουν απαντήσεις στην ερώτηση";
 
 /************************************************************
 * registration.inc.php

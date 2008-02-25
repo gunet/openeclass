@@ -52,7 +52,7 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
 	while ($theQuestion = mysql_fetch_array($questions)) {
 		$tool_content .= "<h3>$theQuestion[question_text]</h3>";
 		if ($theQuestion['qtype'] == 'multiple') {
-			$answers = db_query("SELECT COUNT(aid) AS count, poll_question_answer.answer_text AS answer 
+			$answers = db_query("SELECT COUNT(aid) AS count, aid, poll_question_answer.answer_text AS answer 
 					FROM poll_answer_record LEFT JOIN poll_question_answer 
 					ON poll_answer_record.aid = poll_question_answer.pqaid 
 					WHERE qid = $theQuestion[pqid] GROUP BY aid", $currentCourseID);
@@ -62,7 +62,11 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
 			while ($theAnswer = mysql_fetch_array($answers)) {
 				$answer_counts[] = $theAnswer['count'];
 				$answer_total += $theAnswer['count'];
-				$answer_text[] = $theAnswer['answer'];
+				if ($theAnswer['aid'] < 0) {
+					$answer_text[] = $langPollUnknown;
+				} else {
+					$answer_text[] = $theAnswer['answer'];
+				}
 			}
 			$chart = new PieChart(600, 300);
 			$chart->setMargin(5);
