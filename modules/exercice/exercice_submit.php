@@ -198,18 +198,18 @@ if(@$_POST['questionNum']) {
 
 	$exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 	$tool_content .= <<<cData
-		<h3>${exerciseTitle}</h3>
 
-		<p>${exerciseDescription_temp}</p>
+      <p>
+      <b>${exerciseTitle}</b><br>
+      ${exerciseDescription_temp}<br>
+      </p>
+  
+      <form method="post" action="$_SERVER[PHP_SELF]" autocomplete="off">
+      <input type="hidden" name="formSent" value="1">
+      <input type="hidden" name="exerciseType" value="$exerciseType">
+      <input type="hidden" name="questionNum" value="$questionNum">
+      <input type="hidden" name="nbrQuestions" value="$nbrQuestions">
 		
-		<table width="100%" border="0" cellpadding="1" cellspacing="0">
-		<form method="post" action="$_SERVER[PHP_SELF]" autocomplete="off">
-		<input type="hidden" name="formSent" value="1">
-		<input type="hidden" name="exerciseType" value="$exerciseType">
-		<input type="hidden" name="questionNum" value="$questionNum">
-		<input type="hidden" name="nbrQuestions" value="$nbrQuestions">
-		<tr><td>
-		<table width="100%" cellpadding="4" cellspacing="2" border="0">
 cData;
 
 $i=0;
@@ -235,19 +235,40 @@ foreach($questionList as $questionId) {
 				// destruction of the Question object
 				unset($objQuestionTmp);
 
-				$tool_content .= '<tr><td>'.$langAlreadyAnswered.' &quot;'.$questionName.'&quot;</td></tr>';
+				$tool_content .= '
+
+      <div class\"alert1\" '.$langAlreadyAnswered.' &quot;'.$questionName.'&quot;</div>
+      ';
 				break;
 			}
 		}
 	}
-	$tool_content .= "<tr bgcolor=\"#E6E6E6\"><td valign=\"top\" colspan=\"2\">".$langQuestion." ".$i; 
+	/*
+	$tool_content .= "
+      <br>
+      <p><b>".$langQuestion." ".$i; 
 	
 	if($exerciseType == 2) 
 		$tool_content .= " / ".$nbrQuestions;
-	$tool_content .= "</td></tr>";
-
+	$tool_content .= "
+      </b></p>";
+    */
 	// shows the question and its answers
+	$tool_content .= "
+	
+      <table width=\"99%\" align=\"center\" class=\"Exercise\">
+      <tr>
+        <th colspan='2'><b>".$langQuestion." ".$i."</b>"; 
+	
+	if($exerciseType == 2) 
+		$tool_content .= " / ".$nbrQuestions;
+	$tool_content .= "
+        <br>
+      ";
+	  
 	showQuestion($questionId);
+	$tool_content .= "
+      </table>";
 
 	// for sequential exercises
 	if($exerciseType == 2) {
@@ -255,13 +276,22 @@ foreach($questionList as $questionId) {
 	break;
 	}
 }	// end foreach()
-	$tool_content .= "</table></td></tr><tr><td align=\"center\"><br><input type=\"submit\" value=\"";
+	$tool_content .= "
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td align=\"center\"><br><input type=\"submit\" value=\"";
 	if ($exerciseType == 1 || $nbrQuestions == $questionNum)
 		$tool_content .= $langOk." &gt;"."\">";
 	else	
 		$tool_content .= $langNext." &gt;"."\">";
 
  	$tool_content .= " <input type=\"submit\" name=\"buttonCancel\" value=\"$langCancel\">";
-	$tool_content .= "</td></tr></form></table>";
+	$tool_content .= "</td>
+  </tr>
+  </table>
+  </form> 
+";
 draw($tool_content, 2);
 ?>

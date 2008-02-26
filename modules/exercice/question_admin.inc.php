@@ -32,7 +32,7 @@ if(isset($usedInSeveralExercises))
 		${questionName}
 	</h3>	
 		<form method="post" action="${PHP_SELF}?modifyQuestion=${modifyQuestion}&modifyAnswers=${modifyAnswers}">
-		<table border="0" cellpadding="5">
+		<table border="0">
 		<tr>
 		  <td>
 cData;
@@ -117,7 +117,7 @@ else
 	// is picture set ?
 	$okPicture=file_exists($picturePath.'/quiz-'.$questionId)?true:false;
 
-	$tool_content .= "<h3>$questionName</h3>";
+	//$tool_content .= "<p><b>$questionName</b></p>";
 
 	// show the picture of the question
 	if($okPicture) {

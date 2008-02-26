@@ -52,21 +52,19 @@ function showQuestion($questionId, $onlyAnswers=false)
 
 	$questionDescription_temp = nl2br(make_clickable($questionDescription));
 	$tool_content .= <<<cData
-		<tr>
-		  <td valign="top" colspan="2">
-				${questionName}
-		  </td>
-		</tr>
-		<tr>
-		  <td valign="top" colspan="2">
-			<i>${questionDescription_temp}</i>
-		  </td>
-		</tr>
+	
+        ${questionName}
+        <br><br>
+        <div align='right'><small><i>${questionDescription_temp}</i></small></div>
+        </th>
+      </tr>
 cData;
 
 		if(file_exists($picturePath.'/quiz-'.$questionId)) {
-			$tool_content .= "<tr><td align=\"center\" colspan=\"2\"><img src=\"".
-				${'picturePath'}."/quiz-".${'questionId'}."\" border=\"0\"></td></tr>";
+			$tool_content .= "
+      <tr>
+        <td align=\"center\" colspan=\"2\"><img src=\"".${'picturePath'}."/quiz-".${'questionId'}."\" border=\"0\"></td>
+      </tr>";
 		}
 	}  // end if(!$onlyAnswers)
 
@@ -99,33 +97,30 @@ cData;
 		if($answerType == UNIQUE_ANSWER)
 		{
 	$tool_content .= <<<cData
-		<tr>
-		  <td width="5%" align="center">
-			<input type="radio" name="choice[${questionId}]" value="${answerId}">
-		  </td>
-		  <td width="95%">
-			${answer}
-		  </td>
-		</tr>
+
+      <tr>
+        <td width="4%" align="center"><input type="radio" name="choice[${questionId}]" value="${answerId}"></td>
+        <td width="96%">${answer}</td>
+      </tr>
 cData;
 		}
 		// multiple answers
 		elseif($answerType == MULTIPLE_ANSWER)
 		{
 	$tool_content .= <<<cData
-		<tr>
-		  <td width="5%" align="center">
-			<input type="checkbox" name="choice[${questionId}][${answerId}]" value="1">
-		  </td>
-		  <td width="95%">
-			${answer}
-		  </td>
-		</tr>
+
+      <tr>
+        <td width="5%" align="center"><input type="checkbox" name="choice[${questionId}][${answerId}]" value="1"></td>
+        <td width="95%">${answer}</td>
+      </tr>
 cData;
 		}
 		// fill in blanks
 		elseif($answerType == FILL_IN_BLANKS) {
-			$tool_content .= "<tr><td colspan=\"2\">${answer}</td></tr>";
+			$tool_content .= "
+      <tr>
+        <td colspan=\"2\">${answer}</td>
+      </tr>";
 		}
 		// matching
 		else
@@ -139,39 +134,54 @@ cData;
 			else
 			{
 				$tool_content .= <<<cData
-					<tr>
-				  <td colspan="2">
-					<table border="0" cellpadding="0" cellspacing="0" width="95%">
-					<tr>
-					  <td width="40%" valign="top"><b>${cpt2}.</b> ${answer}</td>
-					  <td width="20%" align="center">&nbsp;&nbsp;<select name="choice[${questionId}][${answerId}]">
-						<option value="0">--</option>
+
+      <tr>
+        <td colspan="2">
+        <table border="0" cellpadding="0" cellspacing="0" width="95%">
+        <tr>
+          <td width="40%" valign="top"><b>${cpt2}.</b> ${answer}</td>
+          <td width="20%" align="center">&nbsp;&nbsp;
+            <select name="choice[${questionId}][${answerId}]">
+            <option value="0">--</option>
 cData;
 
 	            // fills the list-box
            foreach($Select as $key=>$val)
 	            {
-								$tool_content .= "<option value=\"${key}\">${val['Lettre']}</option>";
+								$tool_content .= "
+            <option value=\"${key}\">${val['Lettre']}</option>";
 							}  // end foreach()
 
-		  $tool_content .= "</select>&nbsp;&nbsp;</td><td width=\"40%\" valign=\"top\">";
+		  $tool_content .= "
+            </select>&nbsp;&nbsp;
+          </td>
+          <td width=\"40%\" valign=\"top\">";
 		  
 		  if(isset($Select[$cpt2])) 
 		  	$tool_content .= '<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse']; 
 		  else 
 		  	$tool_content .= '&nbsp;';
 		  	
-		  $tool_content .=	"</td></tr></table></td></tr>";
+		  $tool_content .=	"
+          </td>
+        </tr>
+        </table>
+        </td>
+      </tr>";
 			$cpt2++;
 
 				// if the left side of the "matching" has been completely shown
 				if($answerId == $nbrAnswers) {
 					// if it remains answers to shown at the right side
 					while(isset($Select[$cpt2])) 	{
-		$tool_content .= "<tr><td colspan=\"2\">".
+		$tool_content .= "
+      <tr>
+        <td colspan=\"2\">".
 			"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"95%\">".
 			"<tr><td width=\"60%\" colspan=\"2\">&nbsp;</td><td width=\"40%\" align=\"right\" valign=\"top\">".
-			"<b>".$Select[$cpt2]['Lettre'].".</b> ".$Select[$cpt2]['Reponse']."</td></tr></table></td></tr>";
+			"<b>".$Select[$cpt2]['Lettre'].".</b> ".$Select[$cpt2]['Reponse']."</td></tr></table>
+        </td>
+      </tr>";
 						$cpt2++;
 					}	// end while()
 				}  // end if()

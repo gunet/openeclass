@@ -3,19 +3,19 @@ h1 {
 }
 
 h2 {
-	font-size:16px;
+    font-size:16px;
 }
 
 h3 {
-	font-size:14px;
+    font-size:14px;
 }
 
 h4 {
-	font-size:12px;
+    font-size:12px;
 }
 
 h5 {
-	font-size:10px;
+    font-size:10px;
 }
 
 p, ul {
@@ -32,7 +32,7 @@ a, a:link, a:active, a:visited {
 }
 
 a:hover {
-	text-decoration: underline;
+    text-decoration: underline;
         font-size: 10px;
         color: #a33033;
         font-weight: bold;
@@ -40,29 +40,29 @@ a:hover {
 
 .Login {
     vertical-align:middle;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 11px;
     padding: 2px;
-	border: 1px solid #666666;
+    border: 1px solid #666666;
     background-color: #edecdf;
-	color: #666666;
+    color: #666666;
 }
 
 #tool_title {
-	width: 99%;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	height: 30px;
-	font-size: 14px;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-weight: bold;
+    width: 99%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 30px;
+    font-size: 14px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: bold;
     color: #727266;
-	text-align: left;
+    text-align: left;
 }
 
 #tool_content li {
-	list-style-type: square; 
-	font-size: 11px;
+    list-style-type: square; 
+    font-size: 11px;
 }
 
 #operations_container {
@@ -138,25 +138,25 @@ float: left;
 * html #opslist li:first-child { border-left: 0; }
 
 table, th, td {
-	border-collapse: collapse;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 11px;
+    border-collapse: collapse;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
 }
 
 table a:link {
-	text-decoration: none;
+    text-decoration: none;
 }
 
 table a:visited {
-	text-decoration: none;
+    text-decoration: none;
 }
 
 table a:hover {
-	text-decoration: underline !important;
+    text-decoration: underline !important;
 }
 
 td, th {
-	padding: 4px;
+    padding: 4px;
 }
 
 .LoginHead {
@@ -172,52 +172,52 @@ td, th {
 
 
 caption {
-	font-size: 1px;
-	font-weight: bold;
-	margin: 5px;
-	text-align: left;
+    font-size: 1px;
+    font-weight: bold;
+    margin: 5px;
+    text-align: left;
 }
 
 .caution {
-	background-image: url(../../images/important.gif);
-	background-repeat: no-repeat;
-	background-position: 7px 7px;
-	padding-left : 60px;
-   	background-color: #fff;
+    background-image: url(../../images/important.gif);
+    background-repeat: no-repeat;
+    background-position: 7px 7px;
+    padding-left : 60px;
+    background-color: #fff;
     border-color: #E0E0E0
 }
 
 .caution_NoBorder {
-	background-image: url(../../images/important.gif);
-	background-repeat: no-repeat;
-	background-position: 7px 7px;
-	padding-left : 60px;
-   	background-color: #fff;
+    background-image: url(../../images/important.gif);
+    background-repeat: no-repeat;
+    background-position: 7px 7px;
+    padding-left : 60px;
+    background-color: #fff;
 }
 
 .caution_small {
-	background-image: url(img/exclamation.gif);
-	background-repeat: no-repeat;
-	background-position: 4px 4px;
+    background-image: url(img/exclamation.gif);
+    background-repeat: no-repeat;
+    background-position: 4px 4px;
     padding-left : 20px;
     color: #E36154;
 }
 
 .well-done {
-	background-image: url(./img/tick.gif);
-	background-repeat: no-repeat;
-	background-position: 7px 7px;
-	padding-left : 60px;
-   	background-color: #fff;
+    background-image: url(./img/tick.gif);
+    background-repeat: no-repeat;
+    background-position: 7px 7px;
+    padding-left : 60px;
+    background-color: #fff;
     border-color: #E0E0E0;
 }
 
 .success {
-	background-image: url(img/well-done.gif);
+    background-image: url(img/well-done.gif);
     background-repeat: no-repeat;
-	background-position: 1px 1px;
-	padding-left : 27px;
-   	background-color: #FFF8DC;
+    background-position: 1px 1px;
+    padding-left : 27px;
+    background-color: #FFF8DC;
     color: #646664;
     font-size: 10px;
     font-style: normal;
@@ -225,47 +225,47 @@ caption {
 }
 
 .success em {
-	color: #E36154;
+    color: #E36154;
 }
 .inactive {
    background-color: #CAC3B5;
 }
 
 .left{
-	text-align: left;
+    text-align: left;
 }
 
 .right{
-	text-align: right;
+    text-align: right;
 }
 
 
 thead th {
-	text-align: center;
-	color: #727266;
+    text-align: center;
+    color: #727266;
     border: 1px solid #ffffff;
-	padding: 6px;
+    padding: 6px;
     font-weight: bold;
     font-size: 11px;
-	background: #edecdf;
-	font-size: 90% !important;
+    background: #edecdf;
+    font-size: 90% !important;
 }
 
 thead td {
-	text-align: left;
-	padding: 6px;
-	font-size: 90% !important;
+    text-align: left;
+    padding: 6px;
+    font-size: 90% !important;
 }
 
 tbody th {
     text-align: center;
-	color: #727266;
+    color: #727266;
     border: 1px solid #ffffff;
-	padding: 6px;
+    padding: 6px;
     font-weight: bold;
     font-size: 11px;
-	background: #edecdf;
-	font-size: 90% !important;
+    background: #edecdf;
+    font-size: 90% !important;
 }
 
 tbody tr {
@@ -305,7 +305,7 @@ tfoot td {
 }
 
 ul.listBullet {
-	list-style-image: url(img/square_bullet.gif);
+    list-style-image: url(img/square_bullet.gif);
 }
 
 table.htmlarea tr {
@@ -370,7 +370,7 @@ table.CourseListTitle a {
 }
 
 table.CourseListTitle a:hover {
-	text-decoration: underline;
+    text-decoration: underline;
     color: #a33033;
     font-size: 10px;
 }
@@ -408,13 +408,13 @@ table.DepTitle a {
     font-size: 10px;
     font-weight: bold;
     text-decoration: none;
-	vertical-align: middle;
+    vertical-align: middle;
 }
 
 table.DepTitle a:hover {
-	text-decoration: underline;
+    text-decoration: underline;
     color: #edecdf;
-	vertical-align: middle;
+    vertical-align: middle;
     font-size: 10px;
 }
 
@@ -457,7 +457,7 @@ table.Deps a {
 }
 
 table.Deps a:hover {
-	text-decoration: underline;
+    text-decoration: underline;
     color: #a33033;
     font-size: 10px;
 }
@@ -484,44 +484,44 @@ table.FormData td {
 }
 
 .FormData_InputText{
-	margin-top: 0px;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	padding: 3px 3px 3px 3px;
-	border: 1px dotted #727266;
+    margin-top: 0px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    padding: 3px 3px 3px 3px;
+    border: 1px dotted #727266;
     background-color: #fbfbfb;
-	color: #666666;
+    color: #666666;
 }
 
 .FormData_InactiveTools{
-	margin-top: 0px;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	padding: 3px 3px 3px 3px;
-	border: 1px dotted #727266;
+    margin-top: 0px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    padding: 3px 3px 3px 3px;
+    border: 1px dotted #727266;
     background-color: #fbfbfb;
-	color: #9F9F9F;
+    color: #9F9F9F;
 }
 
 .FormData_ActiveTools{
-	margin-top: 0px;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	padding: 3px 3px 3px 3px;
-	border: 1px dotted #727266;
+    margin-top: 0px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    padding: 3px 3px 3px 3px;
+    border: 1px dotted #727266;
     background-color: #fbfbfb;
-	color: #000000;
+    color: #000000;
   font-weight: bold
 }
 
 .auth_input{
-	margin-top: 0px;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	padding: 1px 1px 1px 1px;
-	border: 1px solid #C0C0C0;
+    margin-top: 0px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    padding: 1px 1px 1px 1px;
+    border: 1px solid #C0C0C0;
     background-color: #fbfbfb;
-	color: #666666;
+    color: #666666;
 }
 
 
@@ -567,4 +567,41 @@ table.sortable span.sortarrow {
         font-weight: bold;
         text-decoration: underline;
         margin: 1em;
+}
+
+
+
+
+
+
+table.Exercise {
+    background: none;
+    vertical-align: middle;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.Exercise th{
+    text-align: left;
+    padding: 8px;
+    font-weight: normal;
+    font-size:11px;
+    color: #727266;
+    vertical-align: middle;
+	border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+
+}
+
+table.Exercise td {
+    text-align: left;
+    padding: 8px;
+	background: #fbfbfb;
+    font-size:10px;
+    color: #727266;
+    vertical-align: middle;
 }

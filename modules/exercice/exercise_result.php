@@ -68,7 +68,8 @@ if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExer
 
 $exerciseTitle=$objExercise->selectTitle();
 
-$tool_content .= "<h3>".stripslashes($exerciseTitle)." : ".$langResult."</h3>".
+$tool_content .= "
+    <p><b>".stripslashes($exerciseTitle)." : ".$langResult."</b></p>".
 	"<form method=\"GET\" action=\"exercice.php\">";
 
 	$i=$totalScore=$totalWeighting=0;
@@ -105,34 +106,35 @@ $tool_content .= "<h3>".stripslashes($exerciseTitle)." : ".$langResult."</h3>".
 		}
 $iplus=$i+1;
 $tool_content .= <<<cData
-	<table width="95%" border="0" cellpadding="3" cellspacing="2">
-		<tr bgcolor="#E6E6E6">
-		  <td colspan="${colspan}">
-				$langQuestion $iplus
-		  </td>
-		</tr>
-		<tr>
-		  <td colspan="${colspan}">${questionName}</td>
-		</tr>
+
+      <br>
+      <table width="99%" align="center" class="Exercise">
+      <tr>
+        <th colspan="${colspan}"><b>$langQuestion $iplus</b>
+        <br>
+        ${questionName}<br><br>
+        </th>
+      </tr>
 cData;
 
 		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
 		{
 $tool_content .= <<<cData
-<tr>
-  <td width="5%" valign="top" align="center" nowrap="nowrap">
-	<small><i>${langChoice}</i></small>
-  </td>
-  <td width="5%" valign="top" nowrap="nowrap">
-	<small><i>${langExpectedChoice}</i></small>
-  </td>
-  <td width="45%" valign="top">
-	<small><i>${langAnswer}</i></small>
-  </td>
-  <td width="45%" valign="top">
-	<small><i>${langComment}</i></small>
-  </td>
-</tr>
+
+      <tr>
+        <td width="5%">
+        <small><b><i>${langChoice}</i></b></small>
+        </td>
+        <td width="5%">
+        <small><b><i>${langExpectedChoice}</i></b></small>
+        </td>
+        <td width="45%">
+        <small><b><i>${langAnswer}</i></b></small>
+        </td>
+        <td width="45%">
+        <small><b><i>${langComment}</i></b></small>
+        </td>
+      </tr>
 cData;
 
 	}
@@ -140,24 +142,18 @@ cData;
 	{
 
 $tool_content .= <<<cData
-	<tr>
-  	<td>
-		<small><i>${langAnswer}</i></small>
-  	</td>
-	</tr>
+      <tr>
+        <td><small><b><i>${langAnswer}</i></b></small></td>
+      </tr>
 cData;
 
 	} else {
 		
 $tool_content .= <<<cData
-	<tr>
-	  <td width="50%">
-		<small><i>${langElementList}</i></small>
-	  </td>
-	  <td width="50%">
-	<small><i>${langCorrespondsTo}</i></small>
-	  </td>
-</tr>
+      <tr>
+        <td width="50%"><small><i>${langElementList}</i></small></td>
+        <td width="50%"><small><i>${langCorrespondsTo}</i></small></td>
+      </tr>
 cData;
 
 		}
@@ -295,9 +291,9 @@ cData;
 				if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
 				{
 $tool_content .= <<<cData
-<tr>
-  <td width="5%" align="center">
-	<img src="../../template/classic/img/
+      <tr>
+        <td width="5%" align="center">
+        <img src="../../template/classic/img/
 cData;
 	
 	if ($answerType == UNIQUE_ANSWER)
@@ -312,8 +308,8 @@ cData;
 		
 	$tool_content .= <<<cData
 		.gif" border="0">
-  	</td>
-  	<td width="5%" align="center">
+        </td>
+        <td width="5%" align="center">
 cData;
 
 	
@@ -329,11 +325,9 @@ cData;
 	$tool_content .= ".gif\" border=\"0\">";
 	
   $tool_content .= <<<cData
-  </td>
-  <td width="45%">
-		${answer}
-  </td>
-  <td width="45%">
+        </td>
+        <td width="45%">${answer}</td>
+        <td width="45%">
 cData;
 
 if($studentChoice) 
@@ -341,21 +335,22 @@ if($studentChoice)
 else 
 	$tool_content .= '&nbsp;'; 
 
-  $tool_content .= "</td></tr>";
+  $tool_content .= "
+        </td>
+      </tr>";
 
 	} elseif($answerType == FILL_IN_BLANKS) {
-			$tool_content .= "<tr><td>".nl2br($answer)."</td></tr>";
+			$tool_content .= "
+      <tr>
+        <td>".nl2br($answer)."</td>
+      </tr>";
 	} else {
 
 $tool_content .= <<<cData
-	<tr>
-	  <td width="50%">
-			${answer}
-	  </td>
-	  <td width="50%">
-			${choice[$answerId]} / <font color="green"><b>${matching[$answerCorrect]}</b></font>
-	  </td>
-	</tr>
+      <tr>
+        <td width="50%">${answer}</td>
+        <td width="50%">${choice[$answerId]} / <font color="green"><b>${matching[$answerCorrect]}</b></font></td>
+      </tr>
 cData;
 
 		}
@@ -363,12 +358,13 @@ cData;
 }	// end for()
 
 $tool_content .= <<<cData
-	<tr>
-	  <td colspan="${colspan}" align="right">
-		<b>${langScore} : ${questionScore}/${questionWeighting}</b>
-	  </td>
-	</tr>
-	</table>
+      <tr>
+        <th colspan="${colspan}" align="right">
+        <b>${langScore} : ${questionScore}/${questionWeighting}</b>
+        </th>
+      </tr>
+      </table>
+      <br>
 cData;
 
 		// destruction of Answer
@@ -434,19 +430,21 @@ exit();
 }
 
 $tool_content .= <<<cData
-	<table width="95%" border="0" cellpadding="3" cellspacing="2">
-	<tr>
-	  <td align="center">
-		<b>${langYourTotalScore} ${totalScore}/${totalWeighting} !</b>
-	  </td>
-	</tr>
-	<tr>
-	  <td align="center">
-	    <br>
-		<input type="submit" value="${langFinish}">
-	  </td>
-	</tr>
-	</table>
+      <br>
+      <table width="99%">
+      <tr>
+        <td align="center">
+        <b>${langYourTotalScore} ${totalScore}/${totalWeighting} !</b>
+        </td>
+      </tr>
+      <tr>
+        <td align="center">
+        <br>
+        <input type="submit" value="${langFinish}">
+        </td>
+      </tr>
+      </table>
+      <br>
 	
 	</form>
 	
