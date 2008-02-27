@@ -2109,7 +2109,7 @@ $langPollType = "Τύπος";
 $langPollMC = "Πολλαπλής Επιλογής";
 $langPollFillText = "Συμπληρώστε το κενό";
 $langPollContinue = "Συνέχεια";
-$langPollMoreAnswers ="+ απαντήσεις";
+$langPollMoreAnswers ="+";
 $langPollAddMultiple = "Νέα ερώτηση πολλαπλής επιλογής";
 $langPollAddFill = "Νέα ερώτηση συμπλήρωσης κενού";
 $langPollCreated ="Η Δημοσκόπηση δημιουργήθηκε με επιτυχία.<br><br> <a href=\"questionnaire.php\">Επιστροφή</a>.";

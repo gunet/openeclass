@@ -145,7 +145,7 @@ function jscal_html($name, $u_date = FALSE) {
 function printPollCreationForm() {
 	global $tool_content, $langTitle, $langPollStart, $langPollAddMultiple, $langPollAddFill,
 		$langPollEnd, $langPollMC, $langPollFillText, $langPollContinue, $langCreatePoll,
-		$nameTools, $pid;
+		$nameTools, $pid, $langSurvey;
 
 	if(isset($_POST['PollName'])) {
 		$PollName = htmlspecialchars($_POST['PollName']);
@@ -167,24 +167,45 @@ function printPollCreationForm() {
 	} else {
 		$pidvar = '';
 	}
-	$tool_content .= "<form action='$_SERVER[PHP_SELF]' id='poll' method='post'>$pidvar
-    		<table class='FormData'>
-    		<tbody>
-    		<tr><th class='left'>$langTitle</th>
-      		<td><input type='text' size='50' name='PollName' class='FormData_InputText' value='$PollName'></td>
-    		</tr>
-    		<tr><th class='left'>$langPollStart</th>
-      		<td>$PollStart</td></tr>
-    		<tr>
-      		<th class='left'>$langPollEnd</th>
-      		<td>$PollEnd</td>
-    		</tr>
-    		<tr><th>&nbsp;</th>
-      		<td>
-      		<input type='submit' name='MoreMultiple' value='$langPollAddMultiple'>
-      		<input type='submit' name='MoreFill' value='$langPollAddFill'>
-      		<input type='submit' name='PollCreate' value='$nameTools'>
-      		</td></tr>";
+	$tool_content .= "
+    <form action='$_SERVER[PHP_SELF]' id='poll' method='post'>
+		<div id=\"operations_container\">
+		<ul id=\"opslist\">
+		<li><input type='submit' name='MoreMultiple' value='$langPollAddMultiple'></li>
+		<li><input type='submit' name='MoreFill' value='$langPollAddFill'></li>
+		</ul></div>
+      
+    <table width=\"99%\" class='FormData'>
+    <tbody>
+    <tr>
+      <th class=\"left\" width=\"220\">&nbsp;</th>
+      <td><b>$langSurvey</b></td>
+    </tr>
+    <tr>
+      <th class='left'>$langTitle</th>
+      <td><input type='text' size='50' name='PollName' class='FormData_InputText' value='$PollName'></td>
+    </tr>
+    <tr>
+      <th class='left'>$langPollStart</th>
+      <td>$PollStart</td></tr>
+    <tr>
+      <th class='left'>$langPollEnd</th>
+      <td>$PollEnd</td>
+    </tr>
+    <tr>
+      <th>&nbsp;</th>
+      <td>
+      <input type='submit' name='PollCreate' value='$nameTools'>
+      </td>
+    </tr>
+    </tbody>
+    </table>
+	
+    <br>
+	
+	<table width=\"99%\" class=\"Exercise\">
+    <tbody>
+	";
 
 	if (isset($_POST['question'])) {
 		$questions = $_POST['question'];
@@ -201,7 +222,10 @@ function printPollCreationForm() {
 		$question_types[] = 2;
 	}
 	printQuestionForm($questions, $question_types);
-    	$tool_content .= '</tbody></table></form>';
+    	$tool_content .= '
+    </tbody>
+    </table>
+    </form>';
 }
 
 /*****************************************************************************
@@ -289,7 +313,7 @@ function createPoll($questions, $question_types) {
 // Modify existing Poll
 // ----------------------------------------
 function editPoll($pid, $questions, $question_types) {
-	global $tool_content, $pid;
+	global $tool_content, $pid, $langPollNumAnswers;
 
 	$PollName = $_POST['PollName'];
 	$StartDate = $_POST['PollStart'];
@@ -311,11 +335,16 @@ function editPoll($pid, $questions, $question_types) {
 ******************************************************************************/
 function add_multiple_choice_question($i, $text)
 {
-	global $tool_content, $langQuestion, $langPollMoreAnswers, $langAnswers;
+	global $tool_content, $langQuestion, $langPollMoreAnswers, $langAnswers, $langPollUnknown, $langPollFillText, $langPollNumAnswers, $langPollAddAnswer, $langPollMC;
 	
-	$tool_content .= "<tr><td colspan='2'>$langQuestion #" . ($i+1) .
-                "<br><input type='text' name='question[$i]' value='$text' size='50'>" .
-                "<input type='hidden' name='question_type[$i]' value='1'></td></tr>";
+	$tool_content .= "
+    <tr>
+      <th class=\"left\" width=\"220\"><b>$langQuestion #" . ($i+1) ."</b><br><small>$langPollMC</small></th>
+      <td>
+      <input type='text' name='question[$i]' value='$text' size='52' class='FormData_InputText'>" ."
+      <input type='hidden' name='question_type[$i]' value='1'>
+      </td>
+    </tr>";
 	if (isset($_POST['answer'.$i])) {
 		$answers = $_POST['answer'.$i];
 	} else {
@@ -324,11 +353,22 @@ function add_multiple_choice_question($i, $text)
 	if (isset($_POST['MoreAnswers'.$i])) {
 		$answers[] = '';
 	}
-	$tool_content .= "<tr><td colspan='2'>$langAnswers:";
+	$tool_content .= "
+    <tr>
+      <td class=\"left\">$langAnswers:<br><br>
+      $langPollAddAnswer:
+      <input type='submit' name='MoreAnswers$i' value='$langPollMoreAnswers'>
+      </td>
+      <td>";
 	foreach ($answers as $j => $answertext) {
-	    $tool_content .= "<br><input type='text' name='answer${i}[]' value='$answertext' size='50'>";
+	    $tool_content .= "
+        <img src='../../images/arrow_blue.gif' alt='$langPollNumAnswers' title='$langPollNumAnswers'>&nbsp;&nbsp;<input type='text' name='answer${i}[]' value='$answertext' size='50' class='FormData_InputText'><br><br>";
 	}
-	$tool_content .= "</td></tr><tr><td colspan='2'><input type='submit' name='MoreAnswers$i' value='$langPollMoreAnswers'></td></tr>";
+	$tool_content .= "
+        <img src='../../images/arrow_blue.gif' alt='$langPollNumAnswers' title='$langPollNumAnswers'>&nbsp;&nbsp;$langPollUnknown
+      </td>
+    </tr>
+";
 }
 
 /*****************************************************************************
@@ -336,11 +376,16 @@ function add_multiple_choice_question($i, $text)
 ******************************************************************************/
 function add_fill_text_question($i, $text)
 {
-	global $tool_content, $langQuestion, $langAnswer;
+	global $tool_content, $langQuestion, $langAnswer, $langPollFillText;
 	
-	$tool_content .= "<tr><td colspan='2'>$langQuestion #" . ($i+1) .
-                "<br><input type='text' name='question[$i]' value='$text' size='50'>" .
-                "<input type='hidden' name='question_type[$i]' value='2'></td></tr>";
+	$tool_content .= "
+    <tr>
+      <th class=\"left\" width=\"220\"><b>$langQuestion #" . ($i+1) ."</b><br><small>$langPollFillText</small></th>
+      <td>
+      <input type='text' name='question[$i]' value='$text' size='52' class='FormData_InputText'>" . "
+      <input type='hidden' name='question_type[$i]' value='2'>
+      </td>
+    </tr>";
 }
 
 /********************************************************

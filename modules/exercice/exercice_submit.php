@@ -201,7 +201,7 @@ if(@$_POST['questionNum']) {
 
       <p>
       <b>${exerciseTitle}</b><br>
-      ${exerciseDescription_temp}<br>
+      ${exerciseDescription_temp}
       </p>
   
       <form method="post" action="$_SERVER[PHP_SELF]" autocomplete="off">
@@ -255,7 +255,7 @@ foreach($questionList as $questionId) {
     */
 	// shows the question and its answers
 	$tool_content .= "
-	
+	  <br>
       <table width=\"99%\" align=\"center\" class=\"Exercise\">
       <tr>
         <th colspan='2'><b>".$langQuestion." ".$i."</b>"; 
