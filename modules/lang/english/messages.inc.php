@@ -2124,6 +2124,7 @@ $langPollStart = "Start Date";
 $langPollStarted =" Poll started on";
 $langPollEnd = "End Date";
 $langPollEnded = "and ended on";
+$langPollHasEnded = "has ended";
 $langPollOperations = "Operations";
 $langPollAddAnswer = "Add Answers";
 $langPollMC = "Multiple Choice";
