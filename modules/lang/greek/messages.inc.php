@@ -2125,7 +2125,7 @@ $langPollSubmitted ="Ευχαριστούμε για την συμμετοχή σας!<br><br><a href=\"questi
 $langPollTotalAnswers = "Συνολικός αριθμός απαντήσεων";
 $langPollNone = "Δεν υπάρχουν αυτή την στιγμή διαθέσιμες δημοσκοπήσεις.";
 $langPollInactive = "Η Δημοσκόπηση έχει λήξει ή δεν έχει ενεργοποιηθεί ακόμα.";
-$langPollHasEnded = "έχει λήξει";
+$langPollHasEnded = "Έχει λήξει";
 $langPollCharts = "Αποτελέσματα δημοσκόπησης";
 $langPollUnknown = "Δεν ξέρω / Δεν απαντώ";
 $langIndividuals = "Αποτελέσματα ανά χρήστη";
