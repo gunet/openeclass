@@ -25,8 +25,6 @@
 
 $require_prof = TRUE;
 $require_current_course = TRUE;
-$langFiles = 'questionnaire';
-
 $require_help = TRUE;
 $helpTopic = 'Questionnaire';
 
@@ -124,16 +122,14 @@ function fill_questions($pid)
 function jscal_html($name, $u_date = FALSE) {
 	global $jscalendar;
 	if (!$u_date) {
-		$u_date = strftime('%Y-%m-%d %H:%M:%S', strtotime('now -0 day'));
+		$u_date = strftime('%Y-%m-%d', strtotime('now -0 day'));
 	}
 
 	$cal = $jscalendar->make_input_field(
-           array('showsTime' => true,
+           array('showsTime' => false,
                  'showOthers' => true,
-                 'ifFormat' => '%Y-%m-%d %H:%M:%S',
-                 'timeFormat'  => '24'),
-           array('style' => 'width: 15em; color: #840; background-color: #fff; border: 1px dotted #000; text-align
-: center',
+                 'ifFormat' => '%Y-%m-%d'),
+           array('style' => 'width: 15em; color: #840; background-color: #fff; border: 1px dotted #000; text-align: center',
                  'name'        => $name,
                  'value'       => $u_date));
 	return $cal;
@@ -160,7 +156,7 @@ function printPollCreationForm() {
 	if(isset($_POST['PollEnd'])) {
 		$PollEnd = jscal_html('PollEnd', $_POST['PollEnd']);
 	} else {
-		$PollEnd = jscal_html('PollEnd', strftime('%Y-%m-%d %H:%M:%S', strtotime('now +1 year')));
+		$PollEnd = jscal_html('PollEnd', strftime('%Y-%m-%d', strtotime('now +1 year')));
 	}
 	if (isset($pid)) {
 		$pidvar = "<input type='hidden' name='pid' value='$pid'>";
@@ -168,13 +164,13 @@ function printPollCreationForm() {
 		$pidvar = '';
 	}
 	$tool_content .= "
-    <form action='$_SERVER[PHP_SELF]' id='poll' method='post'>
+    <form action='$_SERVER[PHP_SELF]' id='poll' method='post'>$pidvar
 		<div id=\"operations_container\">
 		<ul id=\"opslist\">
 		<li><input type='submit' name='MoreMultiple' value='$langPollAddMultiple'></li>
 		<li><input type='submit' name='MoreFill' value='$langPollAddFill'></li>
 		</ul></div>
-      
+
     <table width=\"99%\" class='FormData'>
     <tbody>
     <tr>
@@ -200,12 +196,7 @@ function printPollCreationForm() {
     </tr>
     </tbody>
     </table>
-	
-    <br>
-	
-	<table width=\"99%\" class=\"Exercise\">
-    <tbody>
-	";
+    <br><table width=\"99%\" class=\"Exercise\"><tbody>";
 
 	if (isset($_POST['question'])) {
 		$questions = $_POST['question'];
@@ -286,7 +277,7 @@ function insertPollQuestions($pid, $questions, $question_types)
 function createPoll($questions, $question_types) {
 	global $tool_content;
 
-	$CreationDate = date("Y-m-d H:i:s");
+	$CreationDate = date("Y-m-d");
 	$PollName = $_POST['PollName'];
 	$StartDate = $_POST['PollStart'];
 	$EndDate = $_POST['PollEnd'];
@@ -313,19 +304,19 @@ function createPoll($questions, $question_types) {
 // Modify existing Poll
 // ----------------------------------------
 function editPoll($pid, $questions, $question_types) {
-	global $tool_content, $pid, $langPollNumAnswers;
+	global $pid;
 
 	$PollName = $_POST['PollName'];
 	$StartDate = $_POST['PollStart'];
 	$EndDate = $_POST['PollEnd']; 
 
-	mysql_select_db($GLOBALS['currentCourseID']);
-	$result = db_query("UPDATE poll
-		SET name = '$PollName', start_date = '$StartDate', end_date = '$EndDate' WHERE pid='$pid'");
+	mysql_select_db($GLOBALS['currentCourseID']);	
+	$result = db_query("UPDATE poll SET name = '$PollName', 
+		start_date = '$StartDate', end_date = '$EndDate' WHERE pid='$pid'");
 	db_query("DELETE FROM poll_question_answer WHERE pqid IN
-		(SELECT pqid FROM poll_question WHERE pid=$pid)");
+		(SELECT pqid FROM poll_question WHERE pid='$pid')");
 	db_query("DELETE FROM poll_question WHERE pid='$pid'");
-	insertPollQuestions($pid, $questions, $question_types);
+ 	insertPollQuestions($pid, $questions, $question_types); 
 	$GLOBALS["tool_content"] .= $GLOBALS["langPollEdited"];
 }
 
@@ -416,6 +407,5 @@ function questions_exist()
 	}
 	return false;
 }
-
 
 ?>
