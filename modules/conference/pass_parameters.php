@@ -34,11 +34,8 @@ $require_current_course = TRUE;
 include '../../include/baseTheme.php';
 
 $nameTools = "conference";
-
 $coursePath=$webDir."courses";
-
 $fileParameter   = $coursePath.'/'.$currentCourseID.'/.parameters.txt';
-
 
 if (is_file($fileParameter))
 {
@@ -78,13 +75,9 @@ if ($is_adminOfCourse) {
      		$fp = fopen($fileParameter, 'w+');
 		fwrite($fp,serialize($URL));
 		fclose($fp);
-
-
 }
-/*student get parameters for conference module*/
-//else
-//{
 
+/*student get parameters for conference module*/
                if($_POST["variable"]=="netmeeting_show")
                 {
 			if(isset($URL["netmeeting_show"]))
@@ -100,8 +93,4 @@ if ($is_adminOfCourse) {
 			if(isset($URL["presantation_URL"]))
                        		echo $URL["presantation_URL"];
                 }
-
-//}
-
-
 ?>

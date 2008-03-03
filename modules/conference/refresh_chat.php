@@ -31,12 +31,10 @@
  */
 	
 header("Content-type: text/html; charset=ISO-8859-7"); 
-//Μετατροπή του εργαλείου για να χρησιμοποιεί το baseTheme
 $require_current_course = TRUE;
-$langFiles = 'conference';
-$tool_content = "";
 $require_help = TRUE;
 $helpTopic = 'User';
+$tool_content = "";
 include '../../include/baseTheme.php';
 if(!isset($prenom))
         $prenom="";
@@ -45,7 +43,6 @@ if(!isset($nom))
 $nick=$prenom." ".$nom;
 
 $coursePath=$webDir."courses";
-
 
 /*==========================
           CHAT INIT
@@ -69,10 +66,6 @@ if (!file_exists($fileChatName)) {
 /*==========================
           COMMANDS
   ==========================*/
-
-//$tool_content .= "<table border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\" width=\" $mainInterfaceWidth\">";
-//$tool_content .= "<tr><td>";
-
 /*---------------------------
           RESET COMMAND
   ---------------------------*/
@@ -105,14 +98,12 @@ if (isset($_POST['store']) && $is_adminOfCourse) {
 /*-----------------------------
       'ADD NEW LINE' COMMAND
   -----------------------------*/
-
 if (isset($chatLine)) {
 	$chatLine=uft8html2utf8(utf8RawUrlDecode($chatLine));
         $fchat = fopen($fileChatName,'a');
         fwrite($fchat,$timeNow.' - '.$nick.' : '.stripslashes($chatLine)."\n");
         fclose($fchat);
 }
-
 
 /*==========================
     DISPLAY MESSAGE LIST
@@ -203,12 +194,8 @@ function uft8html2utf8( $s ) {
              $utf .= chr(128 + ($dec % 64));
            }
            return mb_convert_encoding($utf,"ISO-8859-7","UTF-8");
-             }
-       }                                
-       return preg_replace_callback('|&#([0-9]{1,});|', 'uft8html2utf8_callback', $s );                                
+           }
+       }
+       return preg_replace_callback('|&#([0-9]{1,});|', 'uft8html2utf8_callback', $s); 
 }
-
-
-
-
 ?>

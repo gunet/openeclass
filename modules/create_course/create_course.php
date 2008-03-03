@@ -1,9 +1,8 @@
 <?
-
-/**=============================================================================
+/* =============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
-================================================================================
+   ==============================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
         A full copyright notice can be read in "/info/copyright.txt".
         
@@ -22,14 +21,10 @@
         Network Operations Center, University of Athens, 
         Panepistimiopolis Ilissia, 15784, Athens, Greece
         eMail: eclassadmin@gunet.gr
-==============================================================================*/
 
-/*===========================================================================
 	create_course.php
 * @version $Id$
 	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
-==============================================================================        
-
  	The script requires some fields to be filled-in, thus it checks the
  	validity of the entries by javascripts.
 ==============================================================================*/
@@ -419,14 +414,15 @@ if (isset($create_course)) {
                                 fake_code = '$code',
                                 type = '$type',
                                 faculteid = '$facid',
-																first_create = NOW()");
+		
+		first_create = NOW()");
 
                 mysql_query("INSERT INTO cours_user SET
                                 code_cours = '$repertoire',
                                 user_id = '$uid',
                                 statut = '1',
-                                role = '$langProfessor',
-                                tutor='1'");
+                                tutor='1',
+				reg_date = CURDATE()");
 
                 mysql_query("INSERT INTO cours_faculte SET
                                 faculte = '$faculte',

@@ -1,5 +1,5 @@
 <?
-/**===========================================================================
+/* *===========================================================================
 *              GUnet e-Class 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 $require_current_course = TRUE;
@@ -36,21 +36,6 @@ $tool_content = "";
 
 // IF PROF ONLY
 if($is_adminOfCourse) {
-
-	if (isset($add)) {
-
-		mysql_select_db($mysqlMainDb);
-		$result = db_query("INSERT INTO cours_user (user_id, code_cours, statut) ".
-		"VALUES ('".mysql_escape_string($add)."', '$currentCourseID', ".
-		"'5')");
-		if ($result) {
-			$tool_content .= $langTheU.$langAdded;
-		} else {
-			$tool_content .= $langAddError;
-		}
-		$tool_content .= "<p><a href=\"adduser.php\">$langAddBack</a><p>";
-	} else {
-
 $tool_content .= <<<tCont
 	<p>$langAskManyUsers<p>
 	
@@ -67,9 +52,7 @@ tCont;
 	</thead>
 	</table>
 	<br><input type="submit" value="$langAdd">
-	</form>
-		
-	
+	</form>	
 tCont2;
 
 mysql_select_db($mysqlMainDb);
@@ -168,7 +151,7 @@ while ($myrow = mysql_fetch_array($result)) {
 $tool_content .= "</td></tr>
 	<tr><td>&nbsp;</td></tr>
 	<tr><td><a href=\"user.php\">$langBackUser</a>\n";
-	}
+
 }
 
 draw($tool_content, 2);
@@ -192,12 +175,12 @@ function adduser($user,$course) {
 	if (mysql_num_rows($result) > 0)
 	return -2;
 
-	$result = db_query("INSERT INTO cours_user (user_id, code_cours, statut) VALUES ('$userid', '$course', '5')");
+	$result = db_query("INSERT INTO cours_user (user_id, code_cours, statut, reg_date) 
+			VALUES ('$userid', '$course', '5', CURDATE())");
 	return $userid;
 }
 
 // function for checking file
-
 function check_uname_line($uname)
 {
 	if (preg_match("/[^a-zA-Z0-9.-_á-ùÁ-Ù]/", $uname)) {

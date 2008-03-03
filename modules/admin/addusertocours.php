@@ -1,5 +1,5 @@
 <?php
-/**=============================================================================
+/* *=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -23,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/* *===========================================================================
 	quotacours.php
 	@last update: 31-05-2006 by Pitsiougas Vagelis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
@@ -46,11 +46,7 @@
   
 ==============================================================================*/
 
-/*****************************************************************************
-		DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-******************************************************************************/
-// Set the langfiles needed
-$langFiles = 'admin';
+
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
@@ -82,12 +78,13 @@ if (isset($submit))  {
 	$numberProfs = @count($regprofs);
 	
 	// Wash out all course users
-	$sql = mysql_query("DELETE FROM cours_user WHERE code_cours = '".mysql_real_escape_string($_GET['c'])."' AND user_id != '".$uid."'");
+	$sql = mysql_query("DELETE FROM cours_user WHERE code_cours = '".mysql_real_escape_string($_GET['c'])."' 
+		AND user_id != '".$uid."'");
 	
 	for ($i=0; $i < $numberStuds; $i++) {
 		// Insert student
-		$sqlInsertStud = "INSERT INTO `cours_user` (`code_cours`, `user_id`, `statut`, `role`)
-			VALUES ('".mysql_real_escape_string($_GET['c'])."', '".$regstuds[$i]."', '5', ' ')"; 
+		$sqlInsertStud = "INSERT INTO `cours_user` (`code_cours`, `user_id`, `statut`, reg_date)
+			VALUES ('".mysql_real_escape_string($_GET['c'])."', '".$regstuds[$i]."', '5', CURDATE())"; 
 		mysql_query($sqlInsertStud) ;
 	}
 
@@ -178,10 +175,9 @@ function reverseAll(cbList) {
   
 	// Registered users not registered in the selected course
 	
-	$sqll= "SELECT DISTINCT u.user_id , u.nom, u.prenom 
-				FROM user u
-				LEFT JOIN cours_user cu ON u.user_id = cu.user_id AND cu.code_cours = '".mysql_real_escape_string($_GET['c'])."'
-				WHERE cu.user_id is null";
+	$sqll= "SELECT DISTINCT u.user_id , u.nom, u.prenom FROM user u
+		LEFT JOIN cours_user cu ON u.user_id = cu.user_id AND cu.code_cours = '".mysql_real_escape_string($_GET['c'])."'
+		WHERE cu.user_id is null";
 	
 	$resultAll=mysql_query($sqll);
 	while ($myuser = mysql_fetch_array($resultAll))
@@ -192,15 +188,14 @@ function reverseAll(cbList) {
 	
 	}	// while loop
 
-	$tool_content .= "</select>
-			</p>
-			<p>&nbsp; </p>
-			</td>
-			<td width=\"3%\" nowrap> 
-			<p>&nbsp;</p>
-			<p>&nbsp;</p>
-			<p><b>".$langStudents."</b></p>
-			<p>";
+	$tool_content .= "</select></p>
+		<p>&nbsp; </p>
+		</td>
+		<td width=\"3%\" nowrap> 
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p><b>".$langStudents."</b></p>
+		<p>";
 
 	// WATCH OUT ! form elements are called by numbers "form.element[3]"... 
 	// because select name contains "[]" causing a javascript element name problem
@@ -208,14 +203,14 @@ function reverseAll(cbList) {
 	$tool_content .= "<input type=\"button\" onClick=\"move(this.form.elements[0],this.form.elements[5])\" value=\"   >>   \">
 		<input type=\"button\" onClick=\"move(this.form.elements[5],this.form.elements[0])\" value=\"   <<   \">
 		</p>
-			<p>&nbsp;</p>
-			<p>&nbsp;</p>
-			<p>&nbsp;</p>
-			<p>&nbsp;</p>
-			<p>&nbsp;</p>
-			<p>&nbsp;</p>
-			<p><b>".$langProfessors."</b></p>
-			<p>";
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p><b>".$langProfessors."</b></p>
+		<p>";
 
 	// WATCH OUT ! form elements are called by numbers "form.element[3]"... 
 	// because select name contains "[]" causing a javascript element name problem

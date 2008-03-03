@@ -1,5 +1,5 @@
 <?php
-/**=============================================================================
+/* *=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -23,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/* ===========================================================================
 	speedSubscribe.php
 	@last update: 31-05-2006 by Pitsiougas Vagelis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
@@ -44,11 +44,7 @@
   
 ==============================================================================*/
 
-/*****************************************************************************
-		DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
-******************************************************************************/
-// Set the langfiles needed
-$langFiles = array('admin','gunet','speedSubscribe');
+
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
@@ -73,8 +69,8 @@ if (isset($submit) && $submit == "$langRegistration") {
 	// Register admin to courses selected
 	while (list($key,$contenu)= @each($course)) {
 		// Insert query
-		$sql = "INSERT INTO `cours_user` (`code_cours`, `user_id`, `statut`, `role`) 
-			VALUES ('$contenu', '$uid', '1', 'Διαχειριστής')";
+		$sql = "INSERT INTO `cours_user` (code_cours, user_id, statut, reg_date) 
+			VALUES ('$contenu', '$uid', '1', CURDATE())";
 		$res =mysql_query($sql);
 		// All OK
 		if ($res)

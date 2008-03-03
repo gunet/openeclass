@@ -1,5 +1,5 @@
 <?php  
-/**===========================================================================
+/*===========================================================================
 *              GUnet e-Class 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -23,7 +23,7 @@
 *						eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-/**
+/*
  * User Component
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -185,71 +185,57 @@ if ($countUser>=50) {
 
 }	// Show navigation buttons
 
-$tool_content .= "<table width=99%>
-							<thead><tr><th></th>
-							<th scope=\"col\">$langSurname<br>$langName</th>";
+$tool_content .= "<table width=99%><thead><tr><th></th>
+	<th scope=\"col\">$langSurname<br>$langName</th>";
 
 if(isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2))  {
-		$tool_content .="<th scope=\"col\">$langEmail</th>";
+	$tool_content .="<th scope=\"col\">$langEmail</th>";
 }
 
 $tool_content .= "<th scope=\"col\">$langAm</th>
-								<th scope=\"col\">$langGroup</th>";
+	<th scope=\"col\">$langGroup</th><th scope='col'>$langCourseRegistrationDate";
 
 // show admin tutor and unregister only to admins
 if(isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2)) {
-	$tool_content .= "	<th scope=\"col\">$langTutor</th>
+	$tool_content .= "<th scope=\"col\">$langTutor</th>
 		<th scope=\"col\">$langAdmR</th>
-		<th scope=\"col\">$langDelete</th>";
-			
+		<th scope=\"col\">$langDelete</th>";			
 }	// ADMIN ONLY
 
 $tool_content .= "</tr></thead><tbody>";
 
 //select name,sunrname, email, status and group of users
 $result = mysql_query("SELECT user.user_id, user.nom, user.prenom, user.email, user.am, cours_user.statut, 
-		cours_user.tutor, user_group.team
+		cours_user.tutor, cours_user.reg_date, user_group.team
 		FROM `$mysqlMainDb`.cours_user, `$mysqlMainDb`.user 
 		LEFT JOIN `$currentCourseID`.user_group 
 		ON user.user_id=user_group.user
 		WHERE `user`.`user_id`=`cours_user`.`user_id` AND `cours_user`.`code_cours`='$currentCourseID'
 		ORDER BY nom, prenom LIMIT $startList, $endList", $db);
 
-
 // ORDER BY cours_user.statut, tutor DESC, nom, prenom
 while ($myrow = mysql_fetch_array($result)) {
 	// bi colored table
 	if ($i%2==0) 
-			$tool_content .= "<tr >";
+		$tool_content .= "<tr >";
 	elseif ($i%2==1) 
 		$tool_content .= "<tr class=\"odd\">";
 	
 // show public list of users
 	$tool_content .= "<td valign=\"top\">
-		<font face=\"arial, helvetica\" size=\"2\">$i</font>
-		</td>
-		<td valign=\"top\">
-		<font face=\"arial, helvetica\" size=\"2\">
+		$i
+		</td><td valign=\"top\">
 		$myrow[nom]
-		<br>
-		$myrow[prenom]
-		</font>
+		<br>$myrow[prenom]		
 		</td>";
 
 if (isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2))  {
 	$tool_content .= "<td valign=\"top\">
-		<font face=\"arial, helvetica\" size=\"2\">
 		<a href=\"mailto:".$myrow["email"]."\">".$myrow["email"]."</a>
-		</font>
 		</td>";
 }
-	$tool_content .= "<td valign=\"top\">
-		<font face=\"arial, helvetica\" size=\"2\">
-		$myrow[am]
-		</font>
-		</td>
-		<td valign=top>
-		";
+	$tool_content .= "<td valign=\"top\">$myrow[am]</td>
+		<td valign=top>";
 
 	// NULL AND NOT '0' BECAUSE TEAM CAN BE INEXISTENT
 	if($myrow["team"]==NULL) {
@@ -258,21 +244,25 @@ if (isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]
 		$tool_content .= "$myrow[team]";
 	}
 	$tool_content .= "</td>";
+	$tool_content .= "<td align='center'>";
+	if ($myrow['reg_date'] == '0000-00-00')
+		$tool_content .= $langUnknownDate;
+	else
+		$tool_content .= "".greek_format($myrow['reg_date'])."";
+	$tool_content .= "</td>";
 
 ################## TUTOR, ADMIN AND UNSUBSCRIBE (ADMIN ONLY) ######################
 if(isset($status) && ($status["$currentCourseID"]=='1' OR $status["$currentCourseID"]=='2')) {
 // tutor right
-		if ($myrow["tutor"]=='0') {
-			$tool_content .= "<td valign=\"top\" align='center'>
-			
-			<a href=\"$_SERVER[PHP_SELF]?giveTutor=yes&user_id=$myrow[user_id]\">$langGiveTutor</a>
-			</td>";
+	if ($myrow["tutor"]=='0') {
+		$tool_content .= "<td valign=\"top\" align='center'>
+		<a href=\"$_SERVER[PHP_SELF]?giveTutor=yes&user_id=$myrow[user_id]\">$langGiveTutor</a>
+		</td>";
 		} else {
-			$tool_content .=  "<td class=\"highlight\" align='center'>
-			$langTutor
-			<br>
-			<a href=\"$_SERVER[PHP_SELF]?removeTutor=yes&user_id=$myrow[user_id]\">$langRemoveRight</a>
-			</td>";
+		$tool_content .= "<td class=\"highlight\" align='center'>
+		$langTutor<br>
+		<a href=\"$_SERVER[PHP_SELF]?removeTutor=yes&user_id=$myrow[user_id]\">$langRemoveRight</a>
+		</td>";
 		}
 		
 		// admin right
@@ -283,24 +273,18 @@ if(isset($status) && ($status["$currentCourseID"]=='1' OR $status["$currentCours
 					<br><a href=\"$_SERVER[PHP_SELF]?removeAdmin=yes&user_id=$myrow[user_id]\">$langRemoveRight</a>
 				</td>";
 			} else {
-				$tool_content .= "<td valign=\"top\" align='center'>
-					<font face=\"arial, helvetica\" size=\"2\">
+			$tool_content .= "<td valign=\"top\" align='center'>
 					<a href=\"$_SERVER[PHP_SELF]?giveAdmin=yes&user_id=$myrow[user_id]\">$langGiveAdmin</a>
 					</td>";
 				}		
 		} else {
 			if ($myrow["statut"]=='1') {
 				$tool_content .= "<td valign=\"top\" bgcolor=\"#CCFF99\" align='center'>
-					<font face=\"arial, helvetica\" size=\"2\">
-						$langAdmR
-					</font>
+				$langAdmR
 				</td>";
 			} else {
 				$tool_content .= "<td valign=\"top\" align='center'>
-					<font face=\"arial, helvetica\" size=\"2\">
-					<a href=\"$_SERVER[PHP_SELF]?giveAdmin=yes&user_id=$myrow[user_id]\">$langGiveAdmin</a>
-					</font>
-				</td>";
+					<a href=\"$_SERVER[PHP_SELF]?giveAdmin=yes&user_id=$myrow[user_id]\">$langGiveAdmin</a></td>";
 			}
 		}	
 		$tool_content .= "<td valign=\"top\" align='center'>";

@@ -47,11 +47,11 @@ $action->record('MODULE_ID_CHAT');
 
 $nameTools = $langConference;
 
-$browser = get_browser(null, true);   
+$browser = get_browser(null, true); 
 if($browser['browser']!="IE")   
-     $langTeleconference_content = $langTeleconference_content_noIE;
+	$langTeleconference_content = $langTeleconference_content_noIE;
 else
-		 $langTeleconference_content = $langTeleconference_content1;
+ 	$langTeleconference_content = $langTeleconference_content1;
 
 //HEADER
 $head_content='
@@ -72,9 +72,8 @@ function clear_chat()
 function save_chat()
 	{ 
 	var set_presantation = function(t) {
-		                alert(t.responseText);
-			}
-		
+	               alert(t.responseText);
+	}		
 	  	new Ajax.Request("refresh_chat.php", {method:"post", postBody:"store=true",onSuccess:set_presantation});
 		return false;
 	}
@@ -148,8 +147,6 @@ function init_teacher()
         var errFunc = function(t) {
                 alert("Error " + t.status + " -- " + t.statusText);
         }
-
-
 
 
 
@@ -295,8 +292,7 @@ $refreshtime="5";
 
 if ($is_adminOfCourse) {
 	$head_content.='pe = new PeriodicalExecuter(refresh_teacher, '.$refreshtime.');';
-}
-else{
+} else {
 	$head_content.='pe = new PeriodicalExecuter(refresh_student, '.$refreshtime.');';
 }
 
@@ -314,60 +310,43 @@ if ($is_adminOfCourse) {
 //CONTENT
 $tool_content = "";//initialise $tool_content
 
-$tool_content.='<div id="conference">'.$langTeleconference_content.'</div>
+$tool_content .= '<div id="conference">'.$langTeleconference_content.'</div>
 <div id="video">'.$langVideo_content.'</div>';
 
 if ($is_adminOfCourse) {
-@$tool_content.='<div  id="video_presantation_control">
-<form id="video_form" onSubmit="return play_video();">
-';
-if($MCU!="") {
-$tool_content.='
-      <p>'.$langconference.'
-      <input type="checkbox" name="conference_control" id="conference_control" onclick="javascript:netmeeting();" /></p>
-';
-}
-$tool_content.='
-    <br>
-    <p>'.$langsetvideo.'</p><input type="text" id="Video_URL" size="15"><br><input type="submit" value="'.$langButtonVideo.'">
-	<a href="javascript:clean_video();">'.$langWashVideo.'</a>
-</form>
+	@$tool_content.='<div  id="video_presantation_control"><form id="video_form" onSubmit="return play_video();">';
+	if($MCU!="") {
+		$tool_content.='<p>'.$langconference.'
+    		<input type="checkbox" name="conference_control" id="conference_control" onclick="javascript:netmeeting();" /></p>';
+	}
+	$tool_content.='<br><p>'.$langsetvideo.'</p><input type="text" id="Video_URL" size="15"><br><input type="submit" value="'.$langButtonVideo.'"><a href="javascript:clean_video();">'.$langWashVideo.'</a>
+	</form>
+	<form id="Presantation_form" onSubmit = "return show_presantation();">
+	<p>'.$langpresantation.'</p>
+	<input type="text" id="Presantation_URL" name="Presantation_URL" size="20"><br>
+	<input type="submit" value="'.$langButtonPresantation.'">
+	<a href="javascript:clean_presantation();">'.$langWashPresanation.'</a>
+	</form></div>';
+	}
 
-<form id="Presantation_form" onSubmit = "return show_presantation();">
-<p>'.$langpresantation.'</p>
-<input type="text" id="Presantation_URL" name="Presantation_URL" size="20"><br>
-<input type="submit" value="'.$langButtonPresantation.'">
-<a href="javascript:clean_presantation();">'.$langWashPresanation.'</a>
-</form>
-</div>
-';
-
-}
-
-$tool_content.='
-	<div id="presantation_window">
-	'.$langPresantation_content.'
-	</div>
+$tool_content .= '<div id="presantation_window">'.$langPresantation_content.'</div>
 	<div id="chat_div" align="center">
-		<div align="left" id="chat">
-		</div>
-		<form name = "chatForm" action = "conference.php#bottom" method = "get" target = "conference" onSubmit = "return prepare_message();">
-		<div align="center"  id="chat_control">
-			<input type="text" name="msg" size="80">
-			<input type="hidden" name="chatLine">
-			<input type="submit" value=" >> ">';
+	<div align="left" id="chat">
+	</div>
+	<form name = "chatForm" action = "conference.php#bottom" method = "get" target = "conference" onSubmit = "return prepare_message();">
+	<div align="center"  id="chat_control">
+	<input type="text" name="msg" size="80">
+	<input type="hidden" name="chatLine">
+	<input type="submit" value=" >> ">';
 
-		if ($is_adminOfCourse) {
-			$tool_content.=' 
-        		<br><a href="conference.php?reset=true" onclick="return clear_chat();">'.$langWash.'</a> |
+	if ($is_adminOfCourse) {
+		$tool_content .= '<br><a href="conference.php?reset=true" onclick="return clear_chat();">'.$langWash.'</a> |
         		<a href="conference.php?save=true" onclick="return save_chat();">'.$langSaveChat.'</a>';
  		}
 
 $tool_content.='</form>';
 $tool_content.='</div></div></div>
 <div id="background"></div>';
-
 //END CONTENT
-//draw($tool_content, 2, 'conference', $head_content, $body_action,true);
 draw($tool_content, 2, 'conference', $head_content, $body_action);
 ?>

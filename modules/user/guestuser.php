@@ -1,5 +1,5 @@
 <?
-/**===========================================================================
+/* *===========================================================================
 *              GUnet e-Class 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -26,68 +26,14 @@
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'User';
-
 include '../../include/baseTheme.php';
-
 
 $nameTools = $langAddGuest;
 $navigation[] = array ("url"=>"user.php", "name"=> $langUsers);
 
 $tool_content = "";
 // IF PROF ONLY
-if($is_adminOfCourse)
-{
-	// Create guest account
-	function createguest($c,$p) 
-	{
-		global $langGuestUserName,$langGuestSurname,$langGuestName, $mysqlMainDb;
-
-		// guest account user name
-		$guestusername=$langGuestUserName.$c;
-		// Guest account created...
-		mysql_select_db($mysqlMainDb);
-
-		$q=mysql_query("SELECT user_id FROM user WHERE username='$guestusername'");
-		
-		if (mysql_num_rows($q) > 0) {
-			$s = mysql_fetch_array($q);
-			
-			mysql_query("UPDATE user SET password='$p' WHERE user_id='$s[0]'")
-			or die ($langGuestFail);
-
-			mysql_query("INSERT INTO cours_user (code_cours,user_id,statut,role)
-			VALUES ('$c','$s[0]','10','Επισκέπτης')")
-			or die ($langGuestFail);
-
-		} 
-		else 
-		{
-			$regtime = time();
-			$exptime = 126144000 + $regtime;
-			mysql_query("INSERT INTO user (nom,prenom,username,password,statut,registered_at,expires_at)
-			VALUES ('$langGuestName','$langGuestSurname','$guestusername','$p','10',$regtime,$exptime)")
-			or die ($langGuestFail);
-			
-			mysql_query("INSERT INTO cours_user (code_cours,user_id,statut,role)
-			VALUES ('$c','".mysql_insert_id()."','10','Επισκέπτης')")
-			or die ($langGuestFail);
-		}
-	}
-
-
-	// Checking if Guest account exists....
-	function guestid($c) {
-		global $mysqlMainDb;
-
-		mysql_select_db($mysqlMainDb);
-		$q1=mysql_query("SELECT user_id  from cours_user WHERE statut='10' AND code_cours='$c'");
-		if (mysql_num_rows($q1) == 0) {
-			return FALSE;
-		} else {
-			$s=mysql_fetch_array($q1);
-			return $s[0];
-		}
-	}
+if($is_adminOfCourse) {
 
 	if (isset($createguest) and (!guestid($currentCourseID))) 
 	{
@@ -96,11 +42,9 @@ if($is_adminOfCourse)
 		$tool_content .= "<tr><td>$langGuestSuccess</td></tr>";
 	} elseif (isset($changepass)) 
 	{
-
 		$g=guestid($currentCourseID);
-		// *****************************************************
+		
 		// encrypt the password
-
 	 	$guestpassword_encrypted = md5($guestpassword);
 		$uguest=mysql_query("UPDATE user SET password='$guestpassword_encrypted' WHERE user_id='$g'")
 		or die($langGuestFail);
@@ -128,11 +72,8 @@ if($is_adminOfCourse)
 
 		} else {
 
-	$tool_content .="
-		<p>$langAskGuest</p>
-		
+	$tool_content .="<p>$langAskGuest</p>
 		<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">";
-		
 	$tool_content .= <<<tCont
 		<table>	
 		<thead>
@@ -155,6 +96,54 @@ $tool_content .= <<<tCont2
 
 tCont2;
 
-draw($tool_content, 2);	 }
+draw($tool_content, 2);	
 
+}
+
+// Create guest account
+function createguest($c,$p) 
+{
+	global $langGuestUserName, $langGuestSurname, $langGuestName, $mysqlMainDb;
+	
+	// guest account user name
+	$guestusername=$langGuestUserName.$c;
+	// Guest account created...
+	mysql_select_db($mysqlMainDb);
+
+	$q=mysql_query("SELECT user_id FROM user WHERE username='$guestusername'");
+	
+	if (mysql_num_rows($q) > 0) {
+		$s = mysql_fetch_array($q);
+		
+		mysql_query("UPDATE user SET password='$p' WHERE user_id='$s[0]'")
+		or die ($langGuestFail);
+
+		mysql_query("INSERT INTO cours_user (code_cours,user_id,statut,reg_date)
+			VALUES ('$c','$s[0]','10',CURDATE())")
+		or die ($langGuestFail);
+	}  else {
+	$regtime = time();
+	$exptime = 126144000 + $regtime;
+	mysql_query("INSERT INTO user (nom,prenom,username,password,statut,registered_at,expires_at)
+		VALUES ('$langGuestName','$langGuestSurname','$guestusername','$p','10',$regtime,$exptime)")
+	or die ($langGuestFail);
+		
+	mysql_query("INSERT INTO cours_user (code_cours,user_id,statut,reg_date)
+	VALUES ('$c','".mysql_insert_id()."','10',CURDATE())")
+	or die ($langGuestFail);
+	}
+}
+
+// Checking if Guest account exists....
+function guestid($c) {
+	global $mysqlMainDb;
+	mysql_select_db($mysqlMainDb);
+	$q1=mysql_query("SELECT user_id  from cours_user WHERE statut='10' AND code_cours='$c'");
+	if (mysql_num_rows($q1) == 0) {
+		return FALSE;
+	} else {
+		$s=mysql_fetch_array($q1);
+		return $s[0];
+	}
+}
 ?>

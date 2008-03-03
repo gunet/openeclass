@@ -239,7 +239,13 @@ if (!isset($submit2)) {
                 $tool_content .= delete_field('cours', 'versionClaro');
         if (!mysql_field_exists("$mysqlMainDb",'user','inst_id'))
                 $tool_content .= delete_field('user', 'inst_id');
-
+	if (!mysql_field_exists("$mysqlMainDb",'cours_user','role'))
+                $tool_content .= delete_field('cours_user', 'role');
+	
+	// add field to cours_user to keep track course user registration date
+	if (!mysql_field_exists($mysqlMainDb,'cours_user','reg_date'))
+                $tool_content .= add_field('cours_user','reg_date',"DATE NOT NULL");
+	
         // kstratos - UOM
         // Add 1 new field into table 'prof_request', after the field 'profuname'
         $reg = time();

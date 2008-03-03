@@ -50,21 +50,13 @@ if (file_exists("../config/config.php")) {
     <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-7\" />
     <link href=\"../template/classic/tool_content.css\" rel=\"stylesheet\" type=\"text/css\" />
     <link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
-      
   </head>
   <body>
-	<table width = \"99%\">
-				<tbody>
-					<tr>
-						<td class=\"extraMessage\">
-						Προσοχή !! Το αρχείο <b>config.php</b> υπάρχει ήδη στο σύστημά σας!! Το πρόγραμμα εγκατάστασης δεν πραγματοποιεί αναβάθμιση. Αν θέλετε να ξανατρέξετε την εγκατάσταση της πλατφόρμας,
-            παρακαλούμε διαγράψτε το αρχείο config.php!
-						
-					</td>
-					</tr>
-				</tbody>
-			</table>
-			</body></html>";
+	<table width = \"99%\"><tbody><tr><td class=\"extraMessage\">
+	Προσοχή !! Το αρχείο <b>config.php</b> υπάρχει ήδη στο σύστημά σας!! Το πρόγραμμα εγκατάστασης δεν πραγματοποιεί αναβάθμιση. Αν θέλετε να ξανατρέξετε την εγκατάσταση της πλατφόρμας,
+            παρακαλούμε διαγράψτε το αρχείο config.php!						
+	</td></tr></tbody></table>
+	</body></html>";
 	exit($tool_content);
 }
 
@@ -97,18 +89,15 @@ if(isset($welcomeScreen) )
 
 if (isset($alreadyVisited)) {
 
-
 	$tool_content .= "<form action=".$PHP_SELF."?alreadyVisited=1 method=\"post\">";
 	$tool_content .= "
             <input type=\"hidden\" name=\"urlAppendPath\" value=\"$urlAppendPath\">
             <input type=\"hidden\" name=\"pathForm\" value=\"".str_replace("\\","/",realpath($pathForm)."/")."\" >
-
             <input type=\"hidden\" name=\"dbHostForm\" value=\"$dbHostForm\">
             <input type=\"hidden\" name=\"dbUsernameForm\" value=\"$dbUsernameForm\">
             <input type=\"hidden\" name=\"dbNameForm\" value=\"$dbNameForm\">
             <input type=\"hidden\" name=\"dbMyAdmin\" value=\"$dbMyAdmin\">
             <input type=\"hidden\" name=\"dbPassForm\" value=\"".@$dbPassForm."\">
-
             <input type=\"hidden\" name=\"urlForm\" value=\"$urlForm\">
             <input type=\"hidden\" name=\"emailForm\" value=\"$emailForm\">
             <input type=\"hidden\" name=\"nameForm\" value=\"$nameForm\">
@@ -126,7 +115,7 @@ if (isset($alreadyVisited)) {
             <input type=\"hidden\" name=\"postaddressForm\" value=\"".@$postaddressForm."\">
             <input type=\"hidden\" name=\"ldapserver\" value=\"".@$ldapserver."\">
             <input type=\"hidden\" name=\"dnldapserver\" value=\"".@$dnldapserver."\">
-						<input type=\"hidden\" name=\"reguser\" value=\"".@$reguser."\">
+	<input type=\"hidden\" name=\"reguser\" value=\"".@$reguser."\">
             <input type=\"hidden\" name=\"vodServer\" value=\"".@$vodServerForm."\">
             <input type=\"hidden\" name=\"MCU\" value=\"".@$MCUForm."\">
             <input type=\"hidden\" name=\"persoIsActive\" value=\"".@$persoIsActive."\">";
@@ -144,7 +133,6 @@ if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
      <p>Tο eClass είναι ελεύθερη εφαρμογή και διανέμεται σύμφωνα με την άδεια GNU General Public Licence (GPL).
      Παρακαλούμε διαβάστε την άδεια και κάνετε κλίκ στην 'Αποδοχή'.
      <a href=\"../info/license/gpl_print.txt\">(".$langPrintVers.")</a></p>
-     
      <textarea wrap=\"virtual\" cols=\"65\" rows=\"15\">";
 	$tool_content .= file_get_contents('../info/license/gpl.txt');
 	$tool_content .= "</textarea><br/><br/>
@@ -160,42 +148,38 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	$langStepTitle = $langDBSetting;
 	$langStep = $langStep3;
 	$_SESSION['step']=3;
-	$tool_content .= "
-	
-		<p>".$langDBSettingIntro.".  ".$langAllFieldsRequired."</p>
-           
+	$tool_content .= "<p>".$langDBSettingIntro.".  ".$langAllFieldsRequired."</p>
 	<table width=\"99%\">
-		<thead>
-			<tr>
-				<th>".$langDBHost."</th>
-				<td>
-					<input type=\"text\" size=\"25\" name=\"dbHostForm\" value=\"".$dbHostForm."\">".$langEG." localhost
-				</td>
-			</tr>
-			<tr>
-				<th>".$langDBLogin."</th>
-				<td>
-					<input type=\"text\"  size=\"25\" name=\"dbUsernameForm\" value=\"".$dbUsernameForm."\">".$langEG." root
-				</td>
-			</tr>
-			<tr>
-				<th>".$langDBPassword."</th>
-				<td>
-					<input type=\"text\"  size=\"25\" name=\"dbPassForm\" value=\"$dbPassForm\">".$langEG." ".generePass(8)."
-				</td>
-			</tr>
-			<tr>
+	<thead>
+	<tr>
+	<th>".$langDBHost."</th>
+	<td><input type=\"text\" size=\"25\" name=\"dbHostForm\" value=\"".$dbHostForm."\">".$langEG." localhost
+	</td>
+	</tr>
+	<tr>
+	<th>".$langDBLogin."</th>
+	<td>
+	<input type=\"text\"  size=\"25\" name=\"dbUsernameForm\" value=\"".$dbUsernameForm."\">".$langEG." root
+	</td>
+	</tr>
+	<tr>
+	<th>".$langDBPassword."</th>
+	<td>
+	<input type=\"text\"  size=\"25\" name=\"dbPassForm\" value=\"$dbPassForm\">".$langEG." ".generePass(8)."
+	</td>
+	</tr>
+	<tr>
 		<th>".$langMainDB."</th>
 		<td>
 		<input type=\"text\"  size=\"25\" name=\"dbNameForm\" value=\"$dbNameForm\">(αν υπάρχει ήδη κάποια βάση δεδομένων με το όνομα eclass αλλάξτε το)
 				</td>
-			</tr>
-			<tr>
-				<th>URL του phpMyAdmin</th>
-				<td>
-					<input type=\"text\" size=\"25\" name=\"dbMyAdmin\" value=\"".$dbMyAdmin."\">Δεν χρειάζεται να το αλλάξετε
-				</td>
-			</tr>
+	</tr>
+	<tr>
+	<th>URL του phpMyAdmin</th>
+	<td>
+	<input type=\"text\" size=\"25\" name=\"dbMyAdmin\" value=\"".$dbMyAdmin."\">Δεν χρειάζεται να το αλλάξετε
+	</td>
+	</tr>
 	<tr>
 	<th>URL του System info</th>
 	<td>
@@ -229,35 +213,32 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
 	$langStep = $langStep4;
 	$_SESSION['step']=4;
 	$tool_content .=  "
-        
         <p>Τα παρακάτω θα γραφτούν στο αρχείο <b>config.php</b>.</p>
-        
-		<table width=\"99%\">
-			<thead>
-				<tr>
-					<th>URL του eClass<font color=\"red\">*</font></th>
-					<td>
-						<input type=\"text\" size=\"40\" name=\"urlForm\" value=\"$urlForm\">
-					</td>
-				</tr>
-				<tr>
-					<th>".$langLocalPath."<font color=red>*</font></th>
-					<td>
-						<input type=text size=40 name=\"pathForm\" value=\"".realpath($pathForm)."/\">
-					</td>
-				</tr>
-				<tr>
-					<th>".$langAdminName."</th>
-					<td>
-						<input type=\"text\" size=\"40\" name=\"nameForm\" value=\"$nameForm\">
-					</td>
-				</tr>
-				<tr>
-					<th>".$langAdminSurname."</th>
-					<td>
-						<input type=\"text\" size=\"40\" name=\"surnameForm\" value=\"$surnameForm\">
-					</td>
-				</tr>
+	<table width=\"99%\">
+	<thead><tr>
+	<th>URL του eClass<font color=\"red\">*</font></th>
+	<td>
+	<input type=\"text\" size=\"40\" name=\"urlForm\" value=\"$urlForm\">
+	</td>
+	</tr>
+	<tr>
+	<th>".$langLocalPath."<font color=red>*</font></th>
+	<td>
+	<input type=text size=40 name=\"pathForm\" value=\"".realpath($pathForm)."/\">
+	</td>
+	</tr>
+	<tr>
+	<th>".$langAdminName."</th>
+	<td>
+	<input type=\"text\" size=\"40\" name=\"nameForm\" value=\"$nameForm\">
+	</td>
+	</tr>
+	<tr>
+	<th>".$langAdminSurname."</th>
+	<td>
+	<input type=\"text\" size=\"40\" name=\"surnameForm\" value=\"$surnameForm\">
+	</td>
+	</tr>
          <tr>
            <th>".$langAdminEmail."</th>
             <td>
@@ -323,7 +304,7 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
                         <tr>
                             <th>".$langInstitutePostAddress."</th>
                             <td>
-												<textarea rows='3' cols='40' name=\"postaddressForm\" value=\"".@$postaddressForm."\"></textarea>
+			<textarea rows='3' cols='40' name=\"postaddressForm\" value=\"".@$postaddressForm."\"></textarea>
                             </td>
                         </tr>
                         <tr>
@@ -658,9 +639,9 @@ elseif(isset($_REQUEST['install7']))
       code_cours varchar(30) NOT NULL default '0',
       user_id int(11) unsigned NOT NULL default '0',
       statut tinyint(4) NOT NULL default '0',
-      role varchar(60) default NULL,
       team int(11) NOT NULL default '0',
       tutor int(11) NOT NULL default '0',
+      reg_date DATE NOT NULL,
       PRIMARY KEY  (code_cours,user_id))
       TYPE=MyISAM $charset_spec");
 
@@ -688,7 +669,7 @@ elseif(isset($_REQUEST['install7']))
 		# Table `user`
 		#
 
-		mysql_query("CREATE TABLE user (
+	mysql_query("CREATE TABLE user (
       user_id mediumint unsigned NOT NULL auto_increment,
       nom varchar(60) default NULL,
       prenom varchar(60) default NULL,
@@ -924,16 +905,16 @@ CREATE TABLE `auth` (
 =============================================================================
         Copyright(c) 2003-2007  Greek Universities Network - GUnet
 			
-				GUnet eClass 1.7 is an open platform distributed in the hope that   
+				GUnet eClass 2.0 is an open platform distributed in the hope that   
         it will be useful (without any warranty), under the terms of the     
         GNU License (General Public License) as published by the Free        
         Software Foundation. The full license can be read in "license.txt".
         A full copyright notice can be read in "/info/copyright.txt".
 
            Main Developers Group:  Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-												               Yannis Exidaridis <jexi@noc.uoa.gr>
-							                    Alexandros Diamantidis <adia@noc.uoa.gr>
-																		Tilemachos Raptis <traptis@noc.uoa.gr>
+			Yannis Exidaridis <jexi@noc.uoa.gr>
+			Alexandros Diamantidis <adia@noc.uoa.gr>
+			Tilemachos Raptis <traptis@noc.uoa.gr>
 
         For a full list of contributors, see "credits.txt".
 

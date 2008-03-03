@@ -1,42 +1,39 @@
 <?php
-/*
-      +----------------------------------------------------------------------+
-      | GUnet eClass 1.7                                                     |
-      | Asychronous Teleteaching Platform                                    |
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2003-2007  GUnet                                       |
-      +----------------------------------------------------------------------+
-      |                                                                      |
-      | GUnet eClass 1.7 is an open platform distributed in the hope that    |
-      | it will be useful (without any warranty), under the terms of the     |
-      | GNU License (General Public License) as published by the Free        |
-      | Software Foundation. The full license can be read in "license.txt".  |
-      |                                                                      |
-      | Main Developers Group: Costas Tsibanis <k.tsibanis@noc.uoa.gr>       |
-      |                        Yannis Exidaridis <jexi@noc.uoa.gr>           |
-      |                        Alexandros Diamantidis <adia@noc.uoa.gr>      |
-      |                        Tilemachos Raptis <traptis@noc.uoa.gr>        |
-      |                                                                      |
-      | For a full list of contributors, see "credits.txt".                  |
-      |                                                                      |
-      +----------------------------------------------------------------------+
-      | Contact address: Asynchronous Teleteaching Group (eclass@gunet.gr),  |
-      |                  Network Operations Center, University of Athens,    |
-      |                  Panepistimiopolis Ilissia, 15784, Athens, Greece    |
-      +----------------------------------------------------------------------+
+/* =============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+   =============================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        A full copyright notice can be read in "/info/copyright.txt".
+  
+   	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    	Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    	Alexandros Diamantidis <adia@noc.uoa.gr> 
+
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+
 */
 
 $require_login = TRUE;
-$langFiles = array('registration', 'opencours');
 include '../../include/baseTheme.php';
 $nameTools = $langChoiceLesson;
 $navigation[] = array ("url"=>"courses.php", "name"=> $langChoiceDepartment);
 $tool_content = "";
 
 $icons = array(
-2 => "<img src=\"../../template/classic/img/OpenCourse.gif\" alt=\"\">",
-1 => "<img src=\"../../template/classic/img/Registration.gif\" alt=\"\">",
-0 => "<img src=\"../../template/classic/img/ClosedCourse.gif\" alt=\"\">"
+2 => "<img src=\"../../template/classic/img/OpenCourse.gif\" title=\"\">",
+1 => "<img src=\"../../template/classic/img/Registration.gif\" title=\"\">",
+0 => "<img src=\"../../template/classic/img/ClosedCourse.gif\" title=\"\">"
 );
 
 if (isset($_REQUEST['fc'])) {
@@ -67,17 +64,15 @@ if (isset($_POST["submit"])) {
 		$errorExists = false;
         if (isset($selectCourse) and is_array($selectCourse)) {
                 while (list($key,$contenu) = each ($selectCourse)) { 
-												 $sqlcheckpassword = mysql_query("SELECT password FROM cours WHERE code='".$contenu."'");
+				 $sqlcheckpassword = mysql_query("SELECT password FROM cours WHERE code='".$contenu."'");
                         $myrow = mysql_fetch_array($sqlcheckpassword);
                         if ($myrow['password']!="" && $myrow['password']!=$$contenu) {
-                                $errorExists = true;
-													//			$tool_content .= "<p>".$langWrongPassCourse." ".$contenu."</p>";
+                                $errorExists = true;		
                         } else {
                         	if(!is_restricted($contenu)) { //do not allow registration to restricted course
                                 $sqlInsertCourse =
-                                "INSERT INTO `cours_user`
-                                                (`code_cours`, `user_id`, `statut`, `role`)
-                                                VALUES ('".$contenu."', '".$uid."', '5', ' ')";
+                                "INSERT INTO `cours_user` (`code_cours`, `user_id`, `statut`, `reg_date`)
+                                         VALUES ('".$contenu."', '".$uid."', '5', CURDATE())";
                                 mysql_query($sqlInsertCourse) ;
                                 if (mysql_errno() > 0) echo mysql_errno().": ".mysql_error()."<br>";
                         	} else { //DUKE
@@ -94,10 +89,7 @@ if (isset($_POST["submit"])) {
 		else 
 		  $tool_content .= "
     <div class=alert1>$langWrongPassCourse $contenu</div>
-    <br/><br/><br/><br/>";
-        //if($restrictedCourses!=null) { 
-        //        $tool_content .= "<div class=alert1>($langForbidden)</div><br><br><br><br>";
-        //} 
+    <br/><br/><br/><br/>"; 
         $tool_content .= "
     <div align=right><a href=\"../../index.php\">$langHome</a></div>";
 }
@@ -231,7 +223,6 @@ function expanded_faculte($fac, $uid) {
 	}
 	
 	$retString .= "
-    	
     <table class=\"DepTitle\" width=\"99%\">
     <thead>
     <tr>
@@ -275,14 +266,14 @@ function expanded_faculte($fac, $uid) {
     <br/><br/>";
 
         }
-		
-		  // changed this foreach statement a bit
-		  // this way we sort by the course types
-		  // then we just select visible
-		  // and finally we do the secondary sort by course title and but teacher's name
-				foreach (array("pre" => $m['pres'],
-				               "post" => $m['posts'],
-				               "other" => $m['others']) as $type => $message) {
+	
+	  // changed this foreach statement a bit
+	  // this way we sort by the course types
+	  // then we just select visible
+	  // and finally we do the secondary sort by course title and but teacher's name
+			foreach (array("pre" => $m['pres'],
+			               "post" => $m['posts'],
+			               "other" => $m['others']) as $type => $message) {
 					$result=db_query("SELECT
 						cours.code k,
 						cours.fake_code c,
@@ -299,7 +290,7 @@ function expanded_faculte($fac, $uid) {
 					
 					if (mysql_num_rows($result) == 0) {
 						continue;
-					}
+				}
 						
     if ($numoftypes > 1) {
 	$retString .= "\n
@@ -405,10 +396,8 @@ global $langRegistration,$langCourseCode,$langProfessor,$langType;
 	
    }
    // END of while
-   	$retString .= "
-    </table>
-    <br/>";
-			}
+   	$retString .= "</table><br/>";
+	}
 				
 return $retString;
 }
@@ -444,7 +433,6 @@ $result = mysql_query(
                 $r = mysql_fetch_array($n);
                 $retString .= " <span style='font-size: 10pt'>($r[0] "
                         . ($r[0] == 1? $langAvLesson: $langAvCourses) . ")</span><br>\n";
-		//$retString .= "</blockquote>";
 	}
 		$retString .= "<br>";
 
@@ -477,12 +465,8 @@ $result = db_query("SELECT DISTINCT faculte.id id, faculte.name f
 		$retString .= $codelink;
 		$counter++;
 	}
-               // o pinakas autos stoixizei tin kartela
-    $retString .= "</td>
-    </tr>
-    </table>
-    ";
-
+              // o pinakas autos stoixizei tin kartela
+    $retString .= "</td></tr></table>";
 
 return $retString;
 }

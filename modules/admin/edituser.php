@@ -1,5 +1,5 @@
 <? session_start();
-/**=============================================================================
+/* *=============================================================================
 GUnet e-Class 2.0
 E-learning and Course Management Program
 ================================================================================
@@ -23,7 +23,7 @@ Panepistimiopolis Ilissia, 15784, Athens, Greece
 eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/* *===========================================================================
 edituser.php
 @last update: 27-06-2006 by Karatzidis Stratos
 @authors list: Karatzidis Stratos <kstratos@uom.gr>
@@ -141,7 +141,7 @@ if(!in_array($info['password'], $authmethods)) {
        array('style' => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
                  'name' => 'date',
                  'value' => $dateregistration));
-		
+
 		$tool_content .= $start_cal."&nbsp;&nbsp;&nbsp;";
 		$tool_content .= "<select name='hour'>
         <option value='$hour'>$hour</option>
@@ -156,7 +156,7 @@ if(!in_array($info['password'], $authmethods)) {
           $tool_content .= "<option value='$m'>$m</option>";
     $tool_content .= "</select></td>";
 
-		$tool_content .= "</tr>
+	$tool_content .= "</tr>
 		<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langUserID: </th><td width=\"80%\">$u</td></tr>
 		</table>
 		<br /><input type=\"hidden\" name=\"u\" value=\"".$u."\">
@@ -166,7 +166,7 @@ if(!in_array($info['password'], $authmethods)) {
 		</form>";
 
 		$sql = mysql_query("SELECT nom, prenom, username FROM user WHERE user_id = '$u'");
-		$sql = mysql_query("SELECT a.code, a.intitule, b.statut, a.cours_id
+		$sql = mysql_query("SELECT a.code, a.intitule, b.reg_date, b.statut, a.cours_id
 			FROM cours AS a LEFT JOIN cours_user AS b ON a.code = b.code_cours
 			WHERE b.user_id = '$u' ORDER BY b.statut, a.faculte");
 
@@ -175,14 +175,19 @@ if(!in_array($info['password'], $authmethods)) {
 		{
 			$tool_content .= "<h4>$langStudentParticipation</h4>\n".
 			"<table border=\"1\">\n<tr><th>$langLessonCode</th><th>$langLessonName</th>".
-			"<th>$langProperty</th><th>$langActions</th></tr>";
+			"<th>$langCourseRegistrationDate</th><th>$langProperty</th><th>$langActions</th></tr>";
 
 			for ($j = 0; $j < mysql_num_rows($sql); $j++)
 			{
 				$logs = mysql_fetch_array($sql);
 				$tool_content .= "<tr><td>".htmlspecialchars($logs[0])."</td><td>".
-				htmlspecialchars($logs[1])."</td><td align=\"center\">";
-				switch ($logs[2])
+				htmlspecialchars($logs[1])."</td><td align='center'>";
+				if ($logs[2] == '0000-00-00')
+					 $tool_content .= $langUnknownDate;
+				else
+					$tool_content .= " ".greek_format($logs[2])." ";
+				$tool_content .= "</td><td align='center'>";
+				switch ($logs[3])
 				{
 					case 1:
 						$tool_content .= $langTeacher;
@@ -190,13 +195,12 @@ if(!in_array($info['password'], $authmethods)) {
 						break;
 					case 5:
 						$tool_content .= $langStudent;
-						$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=$u&c=$logs[0]\">".
-						"$langDelete</a></td></tr>\n";
+						$tool_content .= "</td><td align=\"center\"><a href='unreguser.php?u=$u&c=$logs[0]'><img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></img></a></td></tr>\n";
 						break;
 					default:
 						$tool_content .= $langVisitor;
-						$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=$u&c=$logs[0]\">".
-						"$langDelete</a></td></tr>\n";
+						$tool_content .= "</td><td align=\"center\"><a href=\"unreguser.php?u=$u&c=$logs[0]\"><img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></img></a>
+						</td></tr>\n";
 						break;
 				}
 			}
@@ -204,7 +208,7 @@ if(!in_array($info['password'], $authmethods)) {
 		}
 		else
 		{
-			$tool_content .= "<h2>$langNoStudentParticipation</h2>";
+			$tool_content .= "<h4>$langNoStudentParticipation</h4>";
 			if ($u > 1)
 			{
 				if (isset($logs))
@@ -217,7 +221,7 @@ if(!in_array($info['password'], $authmethods)) {
 				$tool_content .= $langCannotDeleteAdmin;
 			}
 		}
-	}  else {// if the form was submitted then update user
+	}  else { // if the form was submitted then update user
 	
 		// get the variables from the form and initialize them
 		$fname = isset($_POST['fname'])?$_POST['fname']:'';
@@ -249,20 +253,19 @@ if (mysql_num_rows($username_check) > 1) {
 
   // check if there are empty fields
   if (empty($fname) OR empty($lname) OR empty($username)) {
-		$tool_content .= "<table width='99%'><tbody><tr>
-           <td class='caution' height='60'><p>$langEmptyFields</p>
-					<p><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p></td></tr></tbody></table><br /><br />";
-					draw($tool_content, 3, ' ', $head_content);
-			    exit();
-			}
+	$tool_content .= "<table width='99%'><tbody><tr>
+        <td class='caution' height='60'><p>$langEmptyFields</p>
+	<p><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p></td></tr></tbody></table><br /><br />";
+	draw($tool_content, 3, ' ', $head_content);
+	    exit();
+	}
  	 elseif(isset($user_exist) AND $user_exist == TRUE) {
-					$tool_content .= "<table width='99%'><tbody><tr>
+		$tool_content .= "<table width='99%'><tbody><tr>
           	<td class='caution' height='60'><p>$langUserFree</p>
-						<p><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p></td></tr></tbody></table><br /><br />";
-						draw($tool_content, 3, ' ', $head_content);
-				    exit();
+		<p><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p></td></tr></tbody></table><br /><br />";
+		draw($tool_content, 3, ' ', $head_content);
+	    exit();
   }
-
 		if($registered_at>$expires_at) {
 				$tool_content .= "<center><br><b>$langExpireBeforeRegister<br><br><a href=\"edituser.php?u=".$u."\">$langAgain</a></b><br />";
 		} else	{
@@ -278,7 +281,7 @@ if (mysql_num_rows($username_check) > 1) {
 				{
 					$num_update = mysql_affected_rows();
 					if($num_update==1)
-							$tool_content .= "<center><br><b>$langSuccessfulUpdate<br><br>";
+						$tool_content .= "<center><br><b>$langSuccessfulUpdate<br><br>";
 					else
 						$tool_content .= "<center>$langUpdateNoChange<br><br>";
 				$tool_content .= "<a href='listusers.php'>$langBack</a></center>";	
