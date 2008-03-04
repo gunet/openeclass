@@ -1,5 +1,5 @@
 <?
-/**===========================================================================
+/*===========================================================================
 *              GUnet e-Class 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -22,7 +22,7 @@
 *						Panepistimiopolis Ilissia, 15784, Athens, Greece
 *						eMail: eclassadmin@gunet.gr
 ============================================================================*/
-/**
+/*
  * Edit, Course Description
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -83,16 +83,16 @@ if ($is_adminOfCourse) {
 			$_POST["edIdBloc"]= $idMax+1;
 		} else {
 			$sql ="INSERT IGNORE INTO `course_description`(`id`) 
-							VALUES ('".$_POST["edIdBloc"]."');";
+					VALUES ('".$_POST["edIdBloc"]."');";
 			}
 		db_query($sql, $db);
 		if ($edTitleBloc=="") {
 			$edTitleBloc = $titreBloc[$edIdBloc];
 		}
-		$sql ="UPDATE `course_description` SET `title`= '".trim($edTitleBloc)."',
-				`content` ='".trim($edContentBloc)."',
-				`upDate` = NOW() 
-					WHERE id = '".$_POST["edIdBloc"]."';";
+		$sql ="UPDATE course_description SET title= ".quote(trim($edTitleBloc)).",
+			content = ".quote(trim($edContentBloc)).",
+			`upDate` = NOW()
+			WHERE id = '".$_POST["edIdBloc"]."';";
 		db_query($sql, $db);
 	}
 	

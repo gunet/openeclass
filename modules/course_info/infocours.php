@@ -19,8 +19,8 @@ if (isset($localize)) {
 include '../../include/baseTheme.php';
 
 if(isset($newlang)) {
-			include ($webDir."modules/lang/$newlang/messages.inc.php");
-		}
+	include ($webDir."modules/lang/$newlang/messages.inc.php");
+}
 $nameTools = $langModifInfo;
 $tool_content = "";
 
@@ -42,9 +42,9 @@ if($is_adminOfCourse) {
 		$sql = "UPDATE $mysqlMainDb.cours
 			SET intitule='$int', 
 				faculte='$facname', 
-				description='$description',
-				course_addon='$course_addon',
-				course_keywords='$course_keywords', 
+				description=".quote($description).",
+				course_addon=".quote($course_addon).",
+				course_keywords=".quote($course_keywords).",
 				visible='$formvisible', 
 				titulaires='$titulary', 
 				languageCourse='$newlang',
@@ -87,21 +87,21 @@ if($is_adminOfCourse) {
   </table><br />";
 
 	} else {
-				$tool_content .= "<table width=\"99%\">
-			  <tbody>
-				<tr><td class=\"caution\" height='60'><p>$langNoCourseTitle</p>
+		$tool_content .= "<table width=\"99%\">
+		  <tbody>
+		<tr><td class=\"caution\" height='60'><p>$langNoCourseTitle</p>
     		<p><a href=\"$_SERVER[PHP_SELF]\">$langAgain</a></p>
 		    </td>
 		  </tr>
 		  </tbody>
 		  </table>";
 		}
-	} else {
+} else {
 
 		$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
 		$tool_content .= "<li><a href=\"archive_course.php\">$langBackupCourse</a></li>
-    <li><a href=\"delete_course.php\">$langDelCourse</a></li>
-    <li><a href=\"refresh_course.php\">$langRefreshCourse</a></li></ul></div>";
+  		  <li><a href=\"delete_course.php\">$langDelCourse</a></li>
+    		<li><a href=\"refresh_course.php\">$langRefreshCourse</a></li></ul></div>";
 
 		$sql = "SELECT cours_faculte.faculte,
 			cours.intitule, cours.description, course_keywords, course_addon,
@@ -129,8 +129,7 @@ if($is_adminOfCourse) {
 		@$tool_content .=" <table width=\"99%\" align='left' class='FormData'>
 								  <thead><tr><td>
    		<form method='post' action='$_SERVER[PHP_SELF]'>
-		  <table width=\"100%\">
-    	<tbody>
+		  <table width=\"100%\"><tbody>
 	    <tr>
       <th class='left' width='150'>&nbsp;</th>
       <td><b>$langCourseIden</b></td>
@@ -233,7 +232,6 @@ if($is_adminOfCourse) {
 			$curLang = 'el';
 		$tool_content .= selection(array('el' => $langNameOfLang['greek'],
 			'en' => $langNameOfLang['english']),'localize', $curLang);
-
 		$tool_content .= "
       </td>
       <td><small>$langTipLang</p></td>
@@ -250,13 +248,7 @@ if($is_adminOfCourse) {
     </tr>
     </tbody>
     </table>
-
-    </form>
-    </td>
-  </tr>
-  </thead>
-  </table>
-";
+</form></td></tr></thead></table>";
 	}     // else
 }   // if uid==prof_id
 
@@ -264,6 +256,5 @@ if($is_adminOfCourse) {
 else {
 	$tool_content .= "<p>$langForbidden</p>";
 }
-
 draw($tool_content,2,'course_info');
 ?>
