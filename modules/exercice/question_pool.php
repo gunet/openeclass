@@ -128,14 +128,32 @@ if (isset($fromExercise)) {
 	$temp_fromExercise = "";
 }
 
+	$tool_content .= "
+      <div id=\"operations_container\">
+        <ul id=\"opslist\">
+          <li>";
+		  
+	if(isset($fromExercise)) {
+		$tool_content .= "<a href=\"admin.php\">&lt;&lt; ".$langGoBackToEx."</a>";
+	} else {
+		$tool_content .= "<a href=\"admin.php?newQuestion=yes\">".$langNewQu."</a>";
+	}
+	
+	$tool_content .= "
+          </li>
+        </ul>
+      </div>";
+
 $tool_content .= <<<cData
-	<form method="get" action="${PHP_SELF}">
-	<!--<input type="hidden" name="fromExercise" value="$temp_fromExercise">-->
-	<table border="0" align="center" cellpadding="2" cellspacing="2" width="95%">
-	<tr>
+
+    <form method="get" action="${PHP_SELF}">
+    <!--<input type="hidden" name="fromExercise" value="$temp_fromExercise">-->
+    <table align="center" width="99%">
+    <tr>
 cData;
 	
-	$tool_content .= "<td colspan=\"";
+	$tool_content .= "
+      <td colspan=\"";
 	if (isset($fromExercise))
 		$tool_content .= "2";
 	else
@@ -171,9 +189,10 @@ cData;
 	}
 	
 $tool_content .= <<<cData
-    </select> <input type="submit" value="${langOk}">
-  </td>
-</tr>
+    </select>
+    <input type="submit" value="${langOk}">
+      </td>
+    </tr>
 cData;
 
 	@$from=$page*$limitQuestPage;
@@ -203,8 +222,8 @@ cData;
 	$nbrQuestions=mysql_num_rows($result);
 
 $tool_content .= <<<cData
-	<tr>
-	  <td colspan="
+    <tr>
+      <td colspan="
 cData;
 
 
@@ -213,15 +232,14 @@ if (isset($fromExercise))
 else
 	$tool_content .= "3";
 
-$tool_content .= "\"><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"95%\"><tr><td>";
+$tool_content .= "\">
 
-	if(isset($fromExercise)) {
-		$tool_content .= "<a href=\"admin.php\">&lt;&lt; ".$langGoBackToEx."</a>";
-	} else {
-		$tool_content .= "<a href=\"admin.php?newQuestion=yes\">".$langNewQu."</a>";
-	}
+    <table width=\"95%\">
+    <tbody>
+    <tr>";
 
-	  $tool_content .= "</td><td align=\"right\">";
+	  $tool_content .= "
+      <td align=\"right\">";
 
 	if(isset($page)) {
 
@@ -249,20 +267,20 @@ $tool_content .= "\"><table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" wid
 	}
 
 	 $tool_content .= <<<cData
-	 	</td>
-			</tr>
-			</table>
-		  </td>
+      </td>
+    </tr>
+    </table>
+    </td>
 		</tr>
-		<tr bgcolor="#E6E6E6">
+		<tr>
 cData;
 
 	if(isset($fromExercise))
 	{
 
 	$tool_content .= <<<cData
-	  <td width="80%" align="center">${langQuestion}</td>
-	  <td width="20%" align="center">${langReuse}</td>
+	  <th class='left' width="80%">${langQuestion}</th>
+	  <th width="20%" align="center">${langReuse}</th>
 cData;
 
 	}
@@ -270,9 +288,9 @@ cData;
 	{
 
   $tool_content .= <<<cData
-	<td width="60%" align="center">${langQuestion}</td>
-	<td width="20%" align="center">${langModify}</td>
-	<td width="20%" align="center">${langDelete}</td>
+	<th class='left' width="80%">${langQuestion}</th>
+	<th width="10%" align="center">${langModify}</th>
+	<th width="10%" align="center">${langDelete}</th>
 cData;
 	}
 
@@ -332,7 +350,8 @@ $tool_content .= "</tr>";
 
 $tool_content .= <<<cData
 
-</table>
+    </tbody>
+    </table>
 </form>
 cData;
 

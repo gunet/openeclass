@@ -418,7 +418,7 @@ if (mysql_num_rows($result) > 0) {
 	$tool_content .= "</tbody>";
 	$tool_content .=  "</table>";
 } else  {
-	$tool_content .= "<p>$langNoEvents</p>";
+	$tool_content .= "<p class='alert1'>$langNoEvents</p>";
 }
 if($is_adminOfCourse && isset($head_content)) {
 	draw($tool_content, 2, 'agenda', $head_content, @$body_action);

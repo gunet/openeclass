@@ -26,7 +26,7 @@
 
 function showQuestion($questionId, $onlyAnswers=false)
 {
-	global $tool_content, $picturePath, $webDir;
+	global $tool_content, $picturePath, $webDir, $langNoAnswer;
  	include_once "$webDir"."/modules/latexrender/latex.php";
 
 	// construction of the Question object
@@ -53,9 +53,9 @@ function showQuestion($questionId, $onlyAnswers=false)
 	$questionDescription_temp = nl2br(make_clickable($questionDescription));
 	$tool_content .= <<<cData
 	
-        ${questionName}
+        <b>${questionName}</b>
         <br><br>
-        <div align='right'><small><i>${questionDescription_temp}</i></small></div>
+        <small><i>${questionDescription_temp}</i></small>
         </th>
       </tr>
 cData;
@@ -63,7 +63,7 @@ cData;
 		if(file_exists($picturePath.'/quiz-'.$questionId)) {
 			$tool_content .= "
       <tr>
-        <td align=\"center\" colspan=\"2\"><img src=\"".${'picturePath'}."/quiz-".${'questionId'}."\" border=\"0\"></td>
+        <td align=\"center\" colspan=\"2\"><center><img src=\"".${'picturePath'}."/quiz-".${'questionId'}."\" border=\"0\"></center></td>
       </tr>";
 		}
 	}  // end if(!$onlyAnswers)
@@ -188,6 +188,13 @@ cData;
 			}
 		}
 	}	// end for()
+	
+	if(!$nbrAnswers) {
+		$tool_content .= "
+      <tr>
+        <td colspan=\"2\"><font color='red'>$langNoAnswer</font></td>
+      </tr>";
+	}
 
 	// destruction of the Answer object
 	unset($objAnswerTmp);

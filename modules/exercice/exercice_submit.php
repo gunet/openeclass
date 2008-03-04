@@ -258,7 +258,7 @@ foreach($questionList as $questionId) {
 	  <br>
       <table width=\"99%\" align=\"center\" class=\"Exercise\">
       <tr>
-        <th colspan='2'><b>".$langQuestion." ".$i."</b>"; 
+        <th colspan='2'><b><u>".$langQuestion."</u>: ".$i."</b>"; 
 	
 	if($exerciseType == 2) 
 		$tool_content .= " / ".$nbrQuestions;

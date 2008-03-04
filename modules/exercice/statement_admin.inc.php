@@ -142,46 +142,60 @@ if(($newQuestion || $modifyQuestion)) {
 	$okPicture=file_exists($picturePath.'/quiz-'.$questionId)?true:false;
 
 	$tool_content .= "<h3>$questionName</h3>";
-	@$tool_content .= "<form enctype='multipart/form-data' method='post' action='$_SERVER[PHP_SELF]?modifyQuestion=$modifyQuestion&newQuestion=$newQuestion'><table border='0' cellpadding='5'>";
+	@$tool_content .= "<form enctype='multipart/form-data' method='post' action='$_SERVER[PHP_SELF]?modifyQuestion=$modifyQuestion&newQuestion=$newQuestion'>
+    <table width=\"99%\" class=\"FormData\">
+    <tbody>";
 
 	if($okPicture) {
-		$tool_content .= "<tr><td colspan='2' align='center'>
-			<img src='$picturePath/quiz-$questionId' border='0'></td></tr>";
+		$tool_content .= "
+    <tr>
+      <td colspan='2' align='center'><img src='$picturePath/quiz-$questionId' border='0'></td>
+    </tr>";
 	}
 
 	// if there is an error message
 	if(!empty($msgErr))		{
 $tool_content .= <<<cData
-	<tr>
-	  <td colspan="2">
+    <tr>
+      <td colspan="2">
 		<table border="0" cellpadding="3" align="center" width="400" bgcolor="#FFCC00">
-		<tr>
-		  <td>${msgErr}</td>
-		</tr>
+		<tr><td>${msgErr}</td></tr>
 		</table>
-	  </td>
-	</tr>
+      </td>
+    </tr>
 cData;
 	}
 
-$tool_content .= "<tr><td>".$langQuestion." :</td><td><input type=\"text\" name=\"questionName\"" .
-	"size=\"50\" maxlength=\"200\" value=\"".htmlspecialchars($questionName)."\" style=\"width:400px;\"></td>";
+$tool_content .= "
+    <tr>
+      <th width=\"220\">&nbsp;</td>
+      <td><b>$langAddQ</b></td>
+    </tr>
+    <tr>
+      <th class=\"left\">".$langQuestion." :</td>
+      <td><input type=\"text\" name=\"questionName\"" .
+	"size=\"50\" maxlength=\"200\" value=\"".htmlspecialchars($questionName)."\" style=\"width:400px;\"  class=\"FormData_InputText\"></th>";
 
 $tool_content .= <<<cData
-	</tr>
-	<tr>
-	  <td valign="top">${langQuestionDescription} :</td>
+    </tr>
+    <tr>
+      <th class='left'>${langQuestionDescription} :</th>
 cData;
 
-  $tool_content .= "<td><textarea wrap=\"virtual\" name=\"questionDescription\" cols=\"50\" rows=\"4\" ".
-  	"style=\"width:400px;\">".htmlspecialchars($questionDescription)."</textarea></td></tr><tr><td>";
+  $tool_content .= "
+    <td><textarea wrap=\"virtual\" name=\"questionDescription\" cols=\"50\" rows=\"4\" ".
+  	"style=\"width:400px;\" class=\"FormData_InputText\">".htmlspecialchars($questionDescription)."</textarea></td>
+    </tr>
+    <tr>
+      <th class='left'>";
 
 if ($okPicture) 
 	$tool_content .= "$langReplacePicture";
 else 
 	$tool_content .= "$langAddPicture";	
 
-$tool_content .= " :</td> <td><input type=\"file\" name=\"imageUpload\" size=\"30\" style=\"width:390px;\">";
+$tool_content .= " :</th>
+      <td><input type=\"file\" name=\"imageUpload\" size=\"30\" style=\"width:390px;\">";
 	if ($okPicture)
 	{
 
@@ -194,13 +208,14 @@ $tool_content .= " :</td> <td><input type=\"file\" name=\"imageUpload\" size=\"3
 	}
 
   $tool_content .= <<<cData
-		  </td>
-		</tr>
-		<tr>
-		  <td valign="top">${langAnswerType} :</td>
+      </td>
+    </tr>
+    <tr>
+      <th class='left'>${langAnswerType} :</th>
 cData;
 
-$tool_content .= "<td><input type=\"radio\" name=\"answerType\" value=\"1\" ";
+$tool_content .= "
+      <td><input type=\"radio\" name=\"answerType\" value=\"1\" ";
         if ($answerType <= 1)
                 $tool_content .= 'checked="checked"';
         $tool_content .= "> ".$langUniqueSelect."<br>";
@@ -217,54 +232,18 @@ $tool_content .= "<td><input type=\"radio\" name=\"answerType\" value=\"1\" ";
                         $tool_content .= 'checked="checked"';
                 $tool_content .= "> ".$langFillBlanks;
 
-/*
-if ($modifyQuestion) {
-	$answerType = intval($answerType);
-	$tool_content .= "<td><input type='hidden' name='answerType' value='$answerType'>
-	<input type='hidden' name='modifyIn' value='thisExercise'>";
-	switch ($answerType) {
-		case 1:
-			$tool_content .= $langUniqueSelect;
-			break;
-		case 2:
-			$tool_content .= $langMultipleSelect;
-			break;
-		case 3:
-			$tool_content .= $langMatching;
-			break;
-		case 4:
-			$tool_content .= $langFillBlanks;
-			break;
-	}
-	$tool_content .= "</td>\n";
-} else {
-  $tool_content .= "<td><input type=\"radio\" name=\"answerType\" value=\"1\" "; 
-  	if ($answerType <= 1) 
-  		$tool_content .= 'checked="checked"'; 
-  	$tool_content .= "> ".$langUniqueSelect."<br>";
-	$tool_content .= "<input type=\"radio\" name=\"answerType\" value=\"2\" ";
-		if ($answerType == 2) 
-			$tool_content .= 'checked="checked"';
-		$tool_content .= "> ".$langMultipleSelect."<br>";
-	$tool_content .= "<input type=\"radio\" name=\"answerType\" value=\"4\" ";
-		if ($answerType >= 4) 
-			$tool_content .= 'checked="checked"';
-		$tool_content .= "> ".$langMatching."<br>";
-	$tool_content .= "<input type=\"radio\" name=\"answerType\" value=\"3\" ";
-		if ($answerType == 3) 
-			$tool_content .= 'checked="checked"';
-		$tool_content .= "> ".$langFillBlanks; 
-}
-*/
+
 $tool_content .= <<<cData
-	<tr>
-	  <td colspan="2" align="center">
-		<input type="submit" name="submitQuestion" value="{$langOk}">
-		&nbsp;&nbsp;<input type="submit" name="cancelQuestion" value="{$langCancel}">
-	  </td>
-	</tr>
-	</table>
-	</form>
+    <tr>
+      <th>&nbsp;</td>
+      <td>
+      <input type="submit" name="submitQuestion" value="{$langOk}">
+      &nbsp;&nbsp;<input type="submit" name="cancelQuestion" value="{$langCancel}">
+      </td>
+    </tr>
+    </tbody>
+    </table>
+    </form>
 cData;
 
 }

@@ -539,21 +539,32 @@ if(isset($modifyAnswers))
 		{
 
 $tool_content .= <<<cData
-<h3>
-  $questionName
-</h3>
+
+    <div id="operations_container">
+    <ul id="opslist">
+       <li>$langAnswers :
+          <input type="submit" name="lessAnswers" value="${langLessAnswers}">
+	      &nbsp;&nbsp;<input type="submit" name="moreAnswers" value="${langMoreAnswers}">
+       </li>
+    </ul>
+    </div>
+	
 
 <form method="post" action="${PHP_SELF}?modifyAnswers=${modifyAnswers}">
 <input type="hidden" name="formSent" value="1">
 <input type="hidden" name="nbrAnswers" value="${nbrAnswers}">
-<table width="650" border="0" cellpadding="5">
+
+  <table width="99%" class="FormData">
+  <tbody>
 cData;
 
 			if($okPicture)
 			{
 
-$tool_content .= "<tr><td colspan=\"5\" align=\"center\">".
-	"<img src=\"".$picturePath."/quiz-".$questionId."\" border=\"0\"></td></tr>";
+$tool_content .= "
+  <tr>
+    <td colspan=\"5\" align=\"center\">"."<img src=\"".$picturePath."/quiz-".$questionId."\" border=\"0\"></td>
+  </tr>";
 
 			}
 
@@ -561,78 +572,89 @@ $tool_content .= "<tr><td colspan=\"5\" align=\"center\">".
 			if(!empty($msgErr))
 			{
 $tool_content .= <<<cData
-<tr>
-  <td colspan="5">
-	<table border="0" cellpadding="3" align="center" width="400" bgcolor="#FFCC00">
-	<tr>
-	  <td>$msgErr</td>
-	</tr>
-	</table>
-  </td>
-</tr>
+  <tr>
+    <td colspan="5">
+      <table border="0" cellpadding="3" align="center" width="400" bgcolor="#FFCC00">
+        <tr><td>$msgErr</td></tr>
+      </table>
+    </td>
+  </tr>
 cData;
 
 			}
 $tool_content .= <<<cData
-<tr>
-  <td colspan="5">$langAnswers :</td>
-</tr>
-<tr bgcolor="#E6E6E6">
-  <td>N°</td>
-  <td>$langTrue</td>
-  <td>$langAnswer</td>
-  <td>$langComment</td>
-  <td>$langQuestionWeighting</td>
-</tr>
+
+  <tr>
+    <th colspan="6" class="left">$questionName</th>
+  </tr>
+  <tr>
+    <th class="right">N°</th>
+    <th colspam="2">$langTrue</th>
+    <th>$langAnswer</th>
+    <th>$langComment</th>
+    <th>$langQuestionWeighting</th>
+  </tr>
 cData;
 
 			for($i=1;$i <= $nbrAnswers;$i++)
 			{
 
-$tool_content .="<tr>  <td valign=\"top\">$i</td>";
+$tool_content .="
+  <tr>
+    <td align=\"right\" valign=\"top\">$i.</td>";
 
-				if($answerType == UNIQUE_ANSWER)
-				{
+if($answerType == UNIQUE_ANSWER)
+{
+  $tool_content .= "
+    <td align=\"center\" valign=\"top\">
+       <input type=\"radio\" value=\"".$i."\" name=\"correct\" ";
+  if(isset($correct) and $correct == $i) {
+     $tool_content .= "checked=\"checked\"></td>";
+  } else {
+     $tool_content .= "></td>";
+  }
+} else {
+ 
+  $tool_content .= "
+    <td align=\"center\" valign=\"top\">
+      <input type=\"checkbox\" value=\"1\" name=\"correct[".$i."]\" ";
+  if ((isset($correct[$i]))&&($correct[$i])) {
+	$tool_content .= "checked=\"checked\"></td>";
+  } else {
+	$tool_content .= "></td>";
+  }
 
-  $tool_content .= "<td valign=\"top\"><input type=\"radio\" value=\"".$i."\" name=\"correct\" ";
-  if(isset($correct) and $correct == $i) $tool_content .= "checked=\"checked\"></td>";
+}
 
-				}
-				else
-				{
-
-$tool_content .= "<td valign=\"top\"><input type=\"checkbox\" value=\"1\" name=\"correct[".$i."]\" ";
-if ((isset($correct[$i]))&&($correct[$i])) {
-		$tool_content .= "checked=\"checked\"></td>";
-	} else {
-		$tool_content .= "></td>";
-	}
-
-				}
-
-$tool_content .= "<td align=\"left\"><textarea wrap=\"virtual\" rows=\"7\" cols=\"25\" ".
-	"name=\"reponse[".$i."]\">".@htmlspecialchars($reponse[$i])."</textarea></td>".
-  "<td align=\"left\"><textarea wrap=\"virtual\" rows=\"7\" cols=\"25\" ".
-  "name=\"comment[".$i."]\">".@htmlspecialchars($comment[$i])."</textarea></td>".
-  "<td valign=\"top\"><input type=\"text\" name=\"weighting[".$i."]\" size=\"5\" value=\"";
+$tool_content .= "
+    <td align=\"center\">
+      <textarea wrap=\"virtual\" rows=\"7\" cols=\"25\" "."name=\"reponse[".$i."]\" class=\"FormData_InputText\">".@htmlspecialchars($reponse[$i])."</textarea>
+    </td>"."
+    <td align=\"center\">
+      <textarea wrap=\"virtual\" rows=\"7\" cols=\"25\" ". "name=\"comment[".$i."]\" class=\"FormData_InputText\">".@htmlspecialchars($comment[$i])."</textarea>
+    </td>"."
+    <td valign=\"top\" align=\"center\">
+      <input class=\"FormData_InputText\" type=\"text\" name=\"weighting[".$i."]\" size=\"5\" value=\"";
   if (isset($weighting[$i]))
   	$tool_content .= $weighting[$i];
   else	
   	$tool_content .= 0;
-  $tool_content .= "\"></td></tr>";
+  $tool_content .= "\">
+    </td>
+  </tr>";
 
   			}
 
 $tool_content .= <<<cData
-<tr>
-  <td colspan="5" align="center">
-  	<input type="submit" name="submitAnswers" value="${langOk}">
-	&nbsp;&nbsp;<input type="submit" name="lessAnswers" value="${langLessAnswers}">
-	&nbsp;&nbsp;<input type="submit" name="moreAnswers" value="${langMoreAnswers}">
-	&nbsp;&nbsp;<input type="submit" name="cancelAnswers" value="${langCancel}">
-  </td>
-</tr>
-</table>
+
+  <tr>
+    <th colspan="6" align="center">
+      <input type="submit" name="submitAnswers" value="${langOk}">&nbsp;&nbsp;
+      <input type="submit" name="cancelAnswers" value="${langCancel}">
+    </th>
+  </tr>
+  </tbody>
+  </table>
 </form>
 cData;
 
@@ -642,7 +664,7 @@ cData;
 
 $tool_content .= <<<cData
 <h3>
-  $questionName
+  $questionName 
 </h3>
 cData;
 
@@ -722,6 +744,7 @@ $tool_content .= <<<cData
 	&nbsp;&nbsp;<input type="submit" name="cancelAnswers" value="${langCancel}">
   </td>
 </tr>
+</tbody>
 </table>
 cData;
 

@@ -59,7 +59,7 @@ $start_cal_Excercise = $jscalendar->make_input_field(
                  'showOthers'     => true,
                  'ifFormat'       => '%Y-%m-%d %H:%M:%S',
                  'timeFormat'     => '24'),
-           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+           array('style'       => 'width: 15em; color: #840; background-color: #fff; border: 1px solid #000; text-align: center',
                  'name'        => 'exerciseStartDate',
                  'value'       => $u_date_start));
 $end_cal_Excercise = $jscalendar->make_input_field(
@@ -67,7 +67,7 @@ $end_cal_Excercise = $jscalendar->make_input_field(
                  'showOthers'     => true,
                  'ifFormat'       => '%Y-%m-%d %H:%M:%S',
                  'timeFormat'     => '24'),
-           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+           array('style'       => 'width: 15em; color: #840; background-color: #fff; border: 1px solid #000; text-align: center',
                  'name'        => 'exerciseEndDate',
                  'value'       => $u_date_end));
                  
@@ -223,10 +223,13 @@ if($cancelAnswers) {
 }
 
 // modifies the query string that is used in the link of tool name
-if($editQuestion || $modifyQuestion || $newQuestion || $modifyAnswers) {
+if($editQuestion || $modifyQuestion || $modifyAnswers) {
 	$nameTools=$langQuestionManagement;
 	$QUERY_STRING=$questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
-} else {
+} elseif($newQuestion) {
+	$nameTools=$langNewQu;
+	$QUERY_STRING=$questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
+}else {
 	$nameTools=$langExerciseManagement;
 	$QUERY_STRING='';
 }
