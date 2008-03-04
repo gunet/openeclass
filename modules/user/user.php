@@ -7,8 +7,8 @@
 *	A full copyright notice can be read in "/info/copyright.txt".
 *
 *  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-*				Yannis Exidaridis <jexi@noc.uoa.gr>
-*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*		Yannis Exidaridis <jexi@noc.uoa.gr>
+*		Alexandros Diamantidis <adia@noc.uoa.gr>
 *
 *	For a full list of contributors, see "credits.txt".
 *
@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 /*
@@ -53,24 +53,20 @@ function confirmation (name)
 </script>
 ';
 
-$sqlUserOfCourse = "SELECT user.user_id
-		FROM cours_user, user
-		WHERE code_cours='$currentCourseID'
-		AND cours_user.user_id = user.user_id";
+$sqlUserOfCourse = "SELECT user.user_id FROM cours_user, user
+	WHERE code_cours='$currentCourseID' AND cours_user.user_id = user.user_id";
 $result_numb = db_query($sqlUserOfCourse, $mysqlMainDb);
 $countUser = mysql_num_rows($result_numb);
 
 $nameTools = $langUsers." ($langUserNumber : $countUser)";
-$tool_content = "";//initialise $tool_content
+$tool_content = ""; //initialise $tool_content
 
 // IF PROF ONLY 
-//   show  help link and  link to Add new  user and  managment page  of groups
+//  show  help link and  link to Add new  user and  management page of groups
 if ($is_adminOfCourse) {
 $tool_content .= <<<cData
 	<p><a href="../group/group.php">$langGroupUserManagement</a>&nbsp;-&nbsp;$langDumpUser <a href="dumpuser.php">$langExcel</a> <a href="dumpuser2.php">$langCsv</a></p>
-	
 	<p>$langAdd&nbsp; <a href="adduser.php">$langOneUser</a>, <a href="muladduser.php">$langManyUsers</a>, <a href="guestuser.php">$langGUser</a></p>
-	
 	
 cData;
 }	// if prof
@@ -78,36 +74,35 @@ cData;
 // give admin status
 if(isset($giveAdmin) && $giveAdmin && $is_adminOfCourse) {
 	$result = db_query("UPDATE cours_user SET statut='1'
-			WHERE user_id='".mysql_real_escape_string($_GET['user_id'])."' AND code_cours='$currentCourseID'",$mysqlMainDb);
+		WHERE user_id='".mysql_real_escape_string($_GET['user_id'])."' AND code_cours='$currentCourseID'",$mysqlMainDb);
 }
 
 // give tutor status
 elseif(isset($giveTutor) && $giveTutor) {
 	$result = db_query("UPDATE cours_user SET tutor='1'
-			WHERE user_id='".mysql_real_escape_string($_GET['user_id'])."' AND code_cours='$currentCourseID'",$mysqlMainDb);
+		WHERE user_id='".mysql_real_escape_string($_GET['user_id'])."' AND code_cours='$currentCourseID'",$mysqlMainDb);
 	$result2=db_query("DELETE FROM user_group WHERE user='".mysql_real_escape_string($_GET['user_id'])."'", $currentCourseID);
 }
-
 
 // remove admin status
 elseif(isset($removeAdmin) && $removeAdmin) {
 	$result = db_query("UPDATE cours_user SET statut='5'
-			WHERE user_id!= $uid AND user_id='".mysql_real_escape_string($_GET['user_id'])."' "
-			."AND code_cours='$currentCourseID'",$mysqlMainDb);
+		WHERE user_id!= $uid AND user_id='".mysql_real_escape_string($_GET['user_id'])."' "
+		."AND code_cours='$currentCourseID'",$mysqlMainDb);
 }
 
 // remove tutor status
 elseif(isset($removeTutor) && $removeTutor) {
 	$result = db_query("UPDATE cours_user SET tutor='0'
-			WHERE user_id='".mysql_real_escape_string($_GET['user_id'])."' "
-			."AND code_cours='$currentCourseID'",$mysqlMainDb);
+		WHERE user_id='".mysql_real_escape_string($_GET['user_id'])."' "
+		."AND code_cours='$currentCourseID'",$mysqlMainDb);
 }
 
 // unregister user from courses
 elseif(isset($unregister) && $unregister) {
 		// SECURITY : CANNOT REMOVE MYSELF !
 	$result = db_query("DELETE FROM cours_user WHERE user_id!= $uid
-				AND user_id='".mysql_real_escape_string($_GET['user_id'])."' "
+			AND user_id='".mysql_real_escape_string($_GET['user_id'])."' "
 			."AND code_cours='$currentCourseID'", $mysqlMainDb);
 
 	$delGroupUser=db_query("DELETE FROM user_group WHERE user='".mysql_real_escape_string($_GET['user_id'])."'", $currentCourseID);

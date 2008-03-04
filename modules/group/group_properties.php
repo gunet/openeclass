@@ -1,5 +1,5 @@
 <?php
-/**===========================================================================
+/*===========================================================================
 *              GUnet e-Class 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -22,7 +22,7 @@
 *						Panepistimiopolis Ilissia, 15784, Athens, Greece
 *						eMail: eclassadmin@gunet.gr
 ============================================================================*/
-/**
+/*
  * Groups Component
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -31,9 +31,8 @@
  * @abstract This module is responsible for the user groups of each lesson
  *
  */
-$require_current_course = TRUE;
 
-$langFiles = 'group';
+$require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Group';
 $require_prof = true;
@@ -48,16 +47,9 @@ if ($is_adminOfCourse) {
 	$tool_content = "";
 	$tool_content .= <<<tCont
 
-<form method="post" action="group.php">
-<table>
-<thead>
-<tr> 
-<th>
-$langGroupProperties
-</th>
-</tr>
-</thead>
-<tbody>
+<form method="post" action="group.php"><table><thead>
+<tr> <th>$langGroupProperties</th></tr>
+</thead><tbody>
 <tr>
 <td>
 
@@ -77,16 +69,8 @@ tCont;
 		$tool_content .=  "$langGroupAllowStudentRegistration</td></tr>
 		</tbody></table><br/>";
 		
-		$tool_content .= "
-		<table>
-		<thead>
-		<tr>
-		<th>
-		$langTools
-		</th>
-		</tr>
-		<tr>
-		<td>";
+		$tool_content .= "<table><thead>
+		<tr><th>$langTools</th></tr><tr><td>";
 		if($myProperties['forum'])
 		{
 			$tool_content .=  "<input type=checkbox name=\"forum\" value=1 checked>";
@@ -119,7 +103,7 @@ tCont;
 		{
 			$tool_content .=  "<input type=checkbox name=\"document\" value=1>";
 		}
-		$tool_content .=  "$langDocument";
+		$tool_content .=  $langDoc;
 	}
 
 	$tool_content .= <<<tCont2
@@ -128,9 +112,7 @@ tCont;
 	</table>
 	<br>
 	<input type="submit" name="properties" value="$langModify">
-
 </form>
-
 
 tCont2;
 

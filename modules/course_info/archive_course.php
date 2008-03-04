@@ -36,8 +36,7 @@ if (isset($c) && ($c!="")) {
 
   $tool_content .= "
   </ul>
-  </div>";
-	
+  </div>";	
 	$dateBackuping  = date("Y-m-d-H-i-(B)-s");
 	$shortDateBackuping  = date("YzBs"); // YEAR - Day in Year - Swatch - second 
 	$archiveDir .= "/".$currentCourseID."/".$dateBackuping;
@@ -64,15 +63,13 @@ if (isset($c) && ($c!="")) {
 
 ";
 
-
 if (extension_loaded("zlib")) {
-	$zipCourse = new PclZip("../..".$archiveDir."/../archive.".$currentCourseID.".".$shortDateBackuping.".zip");
-	$zipCourse->create("../..".$archiveDir."/");
-    
 
+	$zipCourse = new PclZip("$urlServer/courses/archive/$currentCourseID/archive.$currentCourseID.$shortDateBackuping.zip");
+	$flag = $zipCourse->create("$urlServer.courses/archive/$currentCourseID");
+	print_r($flag);
 } else {
-		$tool_content .= $langBackupSuccesfull;
-
+	$tool_content .= $langBackupSuccesfull;
 	}
 	
 	$tool_content .= "<br />
@@ -82,15 +79,13 @@ if (extension_loaded("zlib")) {
       <td class=\"success\" width='1'></td>
       <td class=\"left\"><b>$langBackupSuccesfull</b></td>
       <td><div align='right'>
-          <a href=\"".$urlServer."/".$archiveDir."/../archive.".$currentCourseID.".".$shortDateBackuping.".zip\">".$langDownloadIt."</a></div>
+          <a href=\"".$urlServer.$archiveDir."/../archive.".$currentCourseID.".".$shortDateBackuping.".zip\">".$langDownloadIt."</a></div>
       </td>
       <td width='1'><img src=\"../../template/classic/img/download.gif\" alt=\"".$langDownloadIt."\" title=\"".$langDownloadIt."\" width=\"30\" height=\"29\"></td>
     </tr>
     </tbody>
     </table>
-
     <br />
-
     <table class='Deps' align='center'>
     <tbody>
     <tr>
@@ -119,10 +114,8 @@ if (extension_loaded("zlib")) {
 // ********************************************************************
 //  info  about cours
 // ********************************************************************
-
-	$tool_content .= "       <li>".$langBUCourseDataOfMainBase."  ".$currentCourseID."</li>\n";
-	$sqlInsertCourse = "
-INSERT INTO cours SET ";
+	$tool_content .= "<li>".$langBUCourseDataOfMainBase."  ".$currentCourseID."</li>\n";
+	$sqlInsertCourse = "INSERT INTO cours SET ";
 	$csvInsertCourse ="\n";
 	$sqlSelectInfoCourse ="Select * from `$mysqlMainDb`.cours where code = '".$currentCourseID."' ";
 	$resInfoCourse = mySqlQueryShowError($sqlSelectInfoCourse) ;
@@ -302,13 +295,11 @@ INSERT INTO cours SET ";
 	fclose($fdesc);
 	$tool_content .=  ")</li>\n     </ol>\n     </th>\n     <td>&nbsp;</td>\n     </tr>\n   </tbody>\n   </table>\n";
 	
-
 }	// end of isadminOfCourse
 else 
 {
 	$tool_content .= "<center><p>$langNotAllowed</p></center>";
 }
-
 
 
 draw($tool_content, 2, 'course_info');
@@ -336,7 +327,7 @@ function DirSize($path , $recursive=TRUE) {
 	return $result; 
 } 
 
-/** 
+/* 
  * Backup a db to a file 
  */ 
 function backupDatabase($link , $db_name , $structure , $donnees , $format="SQL" , $whereSave=".", $insertComplet="",$verbose=false)
@@ -461,7 +452,7 @@ function getextension($fichier) {
 	return array(array_pop($bouts), implode(".", $bouts)); 
 }
 
-/**
+/*
  * to create missing directory in a gived path
  *
  * @returns a resource identifier or FALSE if the query was not executed correctly. 
@@ -515,7 +506,7 @@ function mkpath($path, $verbose = false, $mode = "herit")  {
 }
 
 // 
-/**
+/*
  * to detect errors in Mysql Queries
  *
  * if  there is no error, the string is  write  in source html
