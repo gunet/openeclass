@@ -1,5 +1,5 @@
 <?php
-/**=============================================================================
+/*=============================================================================
 GUnet e-Class 2.0
 E-learning and Course Management Program
 ================================================================================
@@ -23,7 +23,7 @@ Panepistimiopolis Ilissia, 15784, Athens, Greece
 eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 phpbb/index.php
 @last update: 2006-07-23 by Artemios G. Voyiatzis
 @authors list: Artemios G. Voyiatzis <bogart@upnet.gr>
@@ -88,7 +88,6 @@ $tool_content .= <<< cData
 <TABLE WIDTH="99%" CELLPADDING="1" CELLSPACING="0" ALIGN="CENTER" VALIGN="TOP">
 <thead>
 <TR>
-	
 		<th> </th>
 		<th>$l_forum</th>
 		<th>$l_topics</th>
@@ -143,7 +142,6 @@ if ( $total_categories ) {
 			
 			</TABLE>
 cData;
-		//		$tool_content .= "$langErrorGetForumData <br>$sql";
 		$tool_content .= "Error getting forum data.";
 		draw($tool_content, 2);
 		exit();
@@ -160,7 +158,6 @@ cData;
 			}
 		}
 		$title = stripslashes($categories[$i]["cat_title"]);
-		/// Added by Thomas for Claroline : distinguish group forums from others
 		$catNum = $categories[$i]["cat_id"];
 		$tool_content .= "<TR><TD COLSPAN=5><p><b>$title</b></p></TD></TR>";
 		@reset($forum_row);
@@ -179,7 +176,6 @@ cData;
 					$last_post = "No Posts";
 				}
 				$tool_content .= "<TR>";
-				// XXX: find last_visit
 				if ( !isset($last_visit) ) {
 					$last_visit = 0;
 				}
@@ -195,10 +191,6 @@ cData;
 
 				$tool_content .= "<TD>";
 				$forum=$forum_row[$x]["forum_id"];
-				// Claroline function added by Thomas July 2002
-				// Visit only my group forum if not admin or tutor
-				// If tutor, see all groups but indicate my groups
-				// echo "<br>categories i $catNum<br>forum : $forum myGroupForum $myGroupForum<br>";// Debugging
 				if ( $is_adminOfCourse==1 ) { // TUTOR VIEW
 					$sqlTutor = db_query("SELECT id FROM student_group
 								WHERE forumId='$forum' AND tutor='$uid'", $currentCourseID );

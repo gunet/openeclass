@@ -1,5 +1,5 @@
 <?php
-/**=============================================================================
+/*=============================================================================
 GUnet e-Class 2.0
 E-learning and Course Management Program
 ================================================================================
@@ -23,7 +23,7 @@ Panepistimiopolis Ilissia, 15784, Athens, Greece
 eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 phpbb/viewforum.php
 * @version $Id$
 @last update: 2006-07-23 by Artemios G. Voyiatzis
@@ -58,7 +58,6 @@ existing (phpBB-based) to a new eclass forum :-(
 */
 $require_current_course = TRUE;
 $require_login = TRUE;
-$langFiles = 'phpbb';
 $require_help = FALSE;
 include '../../include/baseTheme.php';
 $navigation[]= array ("url"=>"index.php", "name"=> $l_forums);
@@ -146,7 +145,6 @@ if(!$result = db_query($sql, $currentCourseID)) {
 
 </TABLE>
 cData;
-	//	$tool_content .= "An Error Occured. Could not query the topics database.<br>$sql";
 	$tool_content .=$langErrorTopicsQueryDatabase;
 	draw($tool_content, 2);
 	exit();
@@ -165,7 +163,6 @@ if ($myrow = mysql_fetch_array($result)) {
 		list($year, $month, $day) = explode("-", $last_post_date);
 		list($hour, $min) = explode(":", $last_post_time);
 		$last_post_time = mktime($hour, $min, 0, $month, $day, $year);
-		// XXX: Find last_visit
 		if ( !isset($last_visit) ) {
 			$last_visit = 0;
 		}

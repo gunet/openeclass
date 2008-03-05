@@ -158,7 +158,7 @@ $langNoSuchUsers = "Thera are no users with such criteria";
 
 // addfaculte.php
 $langFaculteCatalog = "Faculty Catalogue";
-$langFaculteDepartment = "Faculty / Department";
+$langFaculteDepartment = "Faculty";
 $langFaculteDepartments = "Faculties / Departments";
 $langManyExist = "";
 $langReturnToAddFaculte = "Return to add faculty";
@@ -251,7 +251,7 @@ $langMethods = "Authentication Methods:";
 $langActivate = "Activate";
 $langDeactivate = "Deactivate";
 $langChooseAuthMethod = "Choose an authentication Method and define the method settings";
-$langNextStep = "Next step";
+$langNextStep = "Next Step";
 $langConnYes = "Successful Connection!";
 $langConnNo = "The connection does not work properly!";
 $langAuthNoValidUser = "No valid user in the auth method. Cannot register user";
@@ -398,11 +398,11 @@ $langContent="Content";
 $langEmptyAnn="Clear up list of announcements";
 $professorMessage=" ".$langTeacher." message";
 $langEmailSent=" and emailed to registered ".$langsStudents." ";
-$langEmailOption="Send this announcement by email to registered ".$langsStudents." ";
+$langEmailOption="Send announcement (via email) to registered ".$langsStudents." ";
 $langUp = "Up";
 $langDown = "Down";
 $langAnnTitle = "Announcement Title";
-$langAnnBody = "Main Body of Announcement";
+$langAnnBody = "Announcement Body";
 $langNoAnnounce = "No announcements exist";
 $langSureToDelAnnounce = "Are you sure you want to delete this announcement";
 $langSureToDelAnnounceAll = "Are you sure you want to delete all the announcements";
@@ -522,13 +522,13 @@ $langAdminOnly="Administrators only";
 $langInLnk="Deactivated links";
 $langDelLk="Do you really want to delete this link?";
 $langRemove="Remove";
-$langCourseCreate = "Create a web Course";
+$langCourseCreate = "Create Course";
 $langEnter = "Enter";
 $langNameOfTheLink = "Name of the link";
 $langIcon = "Icon";
 $langRegistered = "registered";
 $langOneRegistered = "registered";
-$langIdentity = "Identity";
+$langIdentity = "About";
 $langAdminUsers = "Users Administration";
 $langCourseS = "course";
 
@@ -544,8 +544,8 @@ $langCode="Course code";
 $langDelUsers="Unregister all users";
 $langFaculty="Faculty";
 $langDescription="Description";
-$langConfidentiality="Confidentiality";
-$langPublic="Public access from campus home page even without login";
+$langConfidentiality="Access Type";
+$langPublic="Public access, even without login";
 $langPrivOpen="Private access, registration open";
 $langForbidden="Not allowed";
 $langConfTip="Select users course access.";
@@ -601,7 +601,7 @@ $langDocsDeleted="Documents deleted";
 * create_course.inc.php
 ************************************************************/
 
-$langCreateSite="Create a course website";
+$langCreateSite="Create course";
 $langCreate = "Create course";
 $langFieldsRequ="All fields required";
 $langFieldsOptional = "Optional fields";
@@ -675,22 +675,22 @@ $langChat ="Tele cooperation";
 $langEnterMetadata="You can enter additional information about your course from the course management page";
 $langCreateCourse="Create new course wizard";
 $langCreateCourseStep="Step";
-$langCreateCourseStep2="from";
+$langCreateCourseStep2="of";
 $langCreateCourseStep1Title="Basic information about the course";
 $langCreateCourseStep2Title="Additional information about the course";
-$langCreateCourseStep3Title="System options about the course";
+$langCreateCourseStep3Title="Course Options";
 $langcourse_objectives="Course objectives";
 $langPreviousStep="Previous Step";
 $langFinalize="Create Course!";
 $langCourseCategory="The category the course belongs to";
 $langProfessorsInfo="Full names of the instructors of the course; seperated by commas (e.g.<i>John Doe, George Smith</i>)";
 $langCourseKeywords = "Course Keywords:";
-$langCourseAddon = "Add on Information:";
+$langCourseAddon = "Other Information:";
 $langAccessType="Please select an access type for the course.";
-$langSubsystems="Select the modules you want enabled";
+$langSubsystems="Select the desired enabled modules";
 $langLanguageTip="Select the language that will be used in the course's pages";
 $langPrivate="Private (Access is granted only to ".$langsStudents." added in the Users List)";
-$langAccess = "Choose your access type:";
+$langAccess = "Course Access Type:";
 $langAvailableTypes = "Available Access Types";
 $langModules = "Modules:";
 $langAlertTitle = "Please fill the course title!";
@@ -700,9 +700,9 @@ $langAlertProf = "Please fill the course ".$langsTeacher."!";
 * document.inc.php
 *******************************************************/
 
-$langDownloadFile= "Upload file to the server";
+$langDownloadFile= "Upload file";
 $langPathUploadFile= "File path";
-$langCreateDir="Create a directory";
+$langCreateDir="Create directory";
 $langNameDir="Name of the new directory";
 $langSize="Size";
 $langDate="Date";
@@ -713,10 +713,10 @@ $langOkComment = "Add / Modify Comment";
 $langVisible="Visible/invisible";
 $langCopy="Copy";
 $langTo="to";
-$langNoSpace="The upload has failed. You have exceeded the maximum available disk space.
+$langNoSpace="Upload failed. You have exceeded the maximum available disk space.
 	For more information, please contact the system administrator.";
 $langUnwantedFiletype='Unacceptable file type';
-$langDownloadEnd="The upload is finished";
+$langDownloadEnd="Upload finished";
 $langFileExists="Operation impossible.<br>A file with this name already exists.";
 $langDocCopied="Document copied";
 $langDocDeleted="Document deleted";
@@ -768,7 +768,6 @@ $langCategoryNotes="Notes";
 $langCategoryOther="Other";
 $langNotRequired = "Filling-in the fields is not mandatory";
 $langCommands = "Actions";
-
 $langQuotaBar = "View available disk space";
 $langQuotaUsed = "Used disk space";
 $langQuotaTotal = "Total available disk space";
@@ -784,11 +783,10 @@ $langDirectory = "Folder";
 /******************************************************
 * dropbox.inc.php
 ******************************************************/
-
 $dropbox_lang["dropbox"] = "Dropbox";
 $dropbox_lang["help"] = "Help";
 
-/**
+/*
  * error variables
  */
 $dropbox_lang["aliensNotAllowed"] = "Only area members can use the dropbox. You are not a member of this area.";
@@ -804,7 +802,7 @@ $dropbox_lang["installError"] = "Can't install the necessary tables for the drop
 $dropbox_lang['quotaError'] = "There is not enough disk space because of dropbox quota restrictions! File
 uploading failed!";
 
-/**
+/*
  * upload file variables
  */
 $dropbox_lang["uploadFile"] = "Upload document";
@@ -812,7 +810,7 @@ $dropbox_lang["authors"] = "Sender";
 $dropbox_lang["description"] = "Document Description";
 $dropbox_lang["sendTo"] = "Send to";
 
-/**
+/*
  * Sent/Received list variables
  */
 $dropbox_lang["receivedTitle"] = "Received Files";
@@ -844,14 +842,14 @@ $dropbox_lang['fileSize'] = "Size";
 $dropbox_lang['date'] = "Date";
 $dropbox_lang['col_recipient'] = "Recipient";
 
-/**
+/*
  * Feedback variables
  */
 $dropbox_lang["docAdd"] = "Paper has been added succesfully";
 $dropbox_lang["fileDeleted"] = "The selected file has been removed from your dropbox.";
 $dropbox_lang["backList"] = "Go back to your dropbox";
 
-/**
+/*
  * RH: Mailing variables
  */
 $dropbox_lang["mailingAsUsername"] = "Mailing ";
@@ -878,7 +876,7 @@ $dropbox_lang["mailingFileSentTo"] = "sent to ";
 $dropbox_lang["mailingFileNotRegistered"] = " (not registered for this course)";
 $dropbox_lang["mailingNothingFor"] = "Nothing for";
 
-/**
+/*
  * RH: Just Upload
  */
 $dropbox_lang["justUploadInSelect"] = "---JustUpload---";
@@ -1068,8 +1066,8 @@ $langGreekCode="Code contains non-latin characters! Try Again.";
 * forum_admin.inc.php
 ***********************************************************/
 
-$langOrganisation="Forums administration";
-$langForCat="Forums of the category";
+$langOrganisation="Forum administration";
+$langForCat="Forum of the category";
 $langBackCat="Back to categories";
 $langForName="Forum name";
 
@@ -1088,7 +1086,7 @@ $langAddForums="To add forums,click on \"Forums\" in the category of your choice
 $langCategories="Categories";
 $langNbFor="Number of forums";
 $langFunctions="Functions";
-$langAddCategory="Add a category";
+$langAddCategory="Add category";
 $langNotAllowed = "Not allowed";
 $langForumDataChanged = "Forum data changed";
 $langForumCategoryAdded = "A forum was added to the category";
@@ -1261,11 +1259,7 @@ $langExplanation_2="The name that will be presented in the left side menu.";
 $langExplanation_3="If you want to send non HTML documents (PDF, Word, Power Point, Video, etc.) use <a href='../document/document.php'>Documents tool</a>";
 $langExplanation_4="External link info";
 $langPgTitle="Page title";
-
-
-
 $langNoticeExpl = "Note: Maximum size allowed is 20MB";
-
 $langLinks = "HTML page";
 
 /**************************************************************
@@ -1284,7 +1278,7 @@ $langMyCoursesUser="My registered courses (".$langStudent.")";
 $langNoCourses="There are no courses";
 $langModifyProfile="Modify my profile";
 $langMyAgenda = "My Agenda";
-$langMyStats = "User statistics";   #ophelia 1-8-2006
+$langMyStats = "User Statistics";   #ophelia 1-8-2006
 $langMyAnnouncements = "My Announcements";
 $langWelcome="courses are freely available below. Other  courses require
 a username and a password, which you can obtain by clicking on 'registration'. ".$langTeachers." 
@@ -1475,7 +1469,7 @@ $langLastSessionTimeSpent = "Last session time";
 $langLearningPath = "Learning Path";
 $langLearningPathAdmin = "Learning Path Admin";
 $langLearningPathEmpty = "Learning Path is empty";
-$langLearningPathList = "Learning Paths List";
+$langLearningPathList = "Learning Path";
 $langLearningPathName = "New learning path name: ";
 $langLearningPathNotFound = "Learning Path not found";
 $langLessonStatus = "Module status";
@@ -1488,7 +1482,7 @@ $langMakeInvisible = "Make invisible";
 $langMaxFileSize = "Max file size: ";
 $langMinuteShort = "min.";
 $langModify = "Modify";
-$langModifyProfile = "My User Account";
+$langModifyProfile = "Modify my Profile";
 $langModule = "Module";
 $langModuleMoved = "Module moved";
 $langModuleOfMyCourse = "Use a module of this course";
@@ -1497,7 +1491,7 @@ $langModules = "Modules";
 $langModulesPoolToolName = "Pool of modules";
 $langMove = "Move";
 $langMoveDown = "Move down";
-$langMyAgenda = "My calendar";
+$langMyAgenda = "My Calendar";
 $langMyCourses = "My course list";
 
 $langNeverBrowsed = "Never browsed";
@@ -1587,7 +1581,7 @@ $langActiveTools="Active tools";
 $langAdministrationTools="Administration tools";
 $langInactiveTools="Inactive tools";
 $langAdministratorTools="Administrator tools";
-$langTools="Lesson tools";
+$langTools="Course tools";
 
 
 /*********************************************************
@@ -1610,7 +1604,7 @@ $langCategory="Category";
 $langCategoryName="Category name";
 
 
-$langCategoryAdd="Add a category";
+$langCategoryAdd="Add category";
 $langCategoryAdded="The category has been added";
 $langCategoryMod="Modify Category";
 $langCategoryModded="The category has been modified";
@@ -2406,7 +2400,7 @@ $langAddManyUsers  = "Add many users";
 
 $langChoiceLesson ="Course Selection";
 $langRegCourses = "Course Registration";
-$langChoiceDepartment ="Department Selection";
+$langChoiceDepartment ="Faculty Selection";
 $langCoursesRegistered="You were successfully registered to the selected courses!";
 $langNoCoursesRegistered="<p>You didn't registered to any course.</p><p> You can always register next time you enter in the platform</p>";
 $langDumpUser="User List:";
@@ -2956,7 +2950,7 @@ $langGroupTutor = "Group Tutor";
 $langLastname = "Last name";
 $langLegendRequiredFields = "<span class=\"required\">*</span> denotes required field";
 $langMemorizeYourPassord = "Memorize them, you will use them the next time you will enter to this site.";
-$langMyAgenda = "My calendar";
+$langMyAgenda = "My Calendar";
 $langOfficialCode = "Administrative code";
 $langPassTooEasy = "this password is too simple. Use a password like this ";
 $langPassTwice = "You typed two different passwords";

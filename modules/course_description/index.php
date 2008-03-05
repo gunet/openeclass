@@ -1,5 +1,5 @@
 <?php  
-/**===========================================================================
+/*===========================================================================
 *              GUnet e-Class 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -22,7 +22,7 @@
 *						Panepistimiopolis Ilissia, 15784, Athens, Greece
 *						eMail: eclassadmin@gunet.gr
 ============================================================================*/
-/**
+/*
  * Index, Course Description
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>

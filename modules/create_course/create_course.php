@@ -23,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 
 	create_course.php
-* @version $Id$
+*	 @version $Id$
 	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
  	The script requires some fields to be filled-in, thus it checks the
  	validity of the entries by javascripts.
@@ -106,12 +106,7 @@ if (isset($back1) or !isset($visit)) {
                         $tool_content .= "
           <option value='".$myfac['id']."--".$myfac['name']."'>$myfac[name]</option>";
         }
-        $tool_content .= "
-        </select>
-        </td>
-        <td>&nbsp;</td>
-      </tr>";
-
+        $tool_content .= "</select></td><td>&nbsp;</td></tr>";
         unset($repertoire);
         $tool_content .= "
       <tr>
@@ -132,17 +127,12 @@ if (isset($back1) or !isset($visit)) {
         <td>";
         @$tool_content .= " ".selection(array('greek' => $langNameOfLang['greek'], 
                                 'english' => $langNameOfLang['english']), 'languageCourse', $languageCourse)." ";
-        $tool_content .= "
-        </td>
-        <td>&nbsp;</td>
-      </tr>
-      <tr>
-        <th>&nbsp;</th>
+        $tool_content .= "</td><td>&nbsp;</td></tr>
+      	<tr><th>&nbsp;</th>
         <td><input type='submit' name='create2' value='$langNextStep >' /><input type='hidden' name='visit' value='true' /></td>
         <td><p align='right'><small>(*) &nbsp;$langFieldsRequ</small></p></td>
       </tbody>
       </table><br />";
-
 }
 
 // --------------------------------
@@ -150,7 +140,6 @@ if (isset($back1) or !isset($visit)) {
 // --------------------------------
 
  elseif (isset($create2) or isset($back2))  {
-
 	$nameTools = $langCreateCourse . " (" . $langCreateCourseStep." 2 " .$langCreateCourseStep2 . " 3 )";
 	$tool_content .= "
     <table width=\"99%\" align='left' class='FormData'>
@@ -180,14 +169,11 @@ if (isset($back1) or !isset($visit)) {
        <td><input type='submit' name='back1' value='< $langPreviousStep ' />&nbsp;<input type='submit' name='create3' value='$langNextStep >' /></td>
        <td><p align='right'><small>$langFieldsOptionalNote</p></td>
     </tbody>
-    </table><br />
-		";
+    </table><br />";
 
 }  elseif (isset($create3) or isset($back2)) {
-	
 	$nameTools = $langCreateCourse . " (" . $langCreateCourseStep." 3 " .$langCreateCourseStep2 . " 3 )" ;
     $tool_content .= "
-	
     <table width=\"99%\" align='left' class='FormData'>
     <tbody>
     <tr>
@@ -200,7 +186,6 @@ if (isset($back1) or !isset($visit)) {
     </tr>
     <tr>
       <td colspan='2'>
-
       <table>
       <tr>
          <td width='30'><img src=\"../../template/classic/img/OpenCourse.gif\" alt=\"".$m['legopen']."\" title=\"".$m['legopen']."\" width=\"16\" height=\"16\"></td>
@@ -221,7 +206,6 @@ if (isset($back1) or !isset($visit)) {
          <td width='325'><p align='right'><small>$langPrivate</small></p></td>
       </tr>
       </table>
-
       <br />
       </td>
     </tr>
@@ -230,7 +214,6 @@ if (isset($back1) or !isset($visit)) {
       <td colspan='2'><br />$langSubsystems</td>
     </tr>
       <td colspan='2'>
-	  
       <table>
       <tr>
         <td width='30' ><img src=\"../../template/classic/img/calendar_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
@@ -304,9 +287,7 @@ if (isset($back1) or !isset($visit)) {
         <td>&nbsp;</td>
         <td>&nbsp;</td>
       </tr>
-      </table>
-	  <br />
-
+      </table><br />
       </td>
     </tr>
     <tr>
@@ -315,9 +296,7 @@ if (isset($back1) or !isset($visit)) {
       <td><p align='right'><small>$langFieldsOptionalNote</small></p></td>
     </tr>
     </tbody>
-    </table><br />
-    
-	";
+    </table><br />";
 } // end of create3
 
 // create the course and the course database
@@ -392,7 +371,6 @@ if (isset($create_course)) {
                         draw($tool_content, '1', '', $local_head);
                         exit;
                 }
-
                 // ---------------------------------------------------------
                 //  all the course db queries are inside the following script
                 // ---------------------------------------------------------
@@ -414,9 +392,7 @@ if (isset($create_course)) {
                                 fake_code = '$code',
                                 type = '$type',
                                 faculteid = '$facid',
-		
 		first_create = NOW()");
-
                 mysql_query("INSERT INTO cours_user SET
                                 code_cours = '$repertoire',
                                 user_id = '$uid',
@@ -454,10 +430,8 @@ if (isset($create_course)) {
   </tr>
   </tbody>
   </table><br /><br />
-  
   <p align='center'><a href='../../courses/$repertoire/index.php' class=mainpage><img src=\"../../template/classic/img/go.gif\" alt=\"\" border=\"0\" height=\"46\" width=\"46\"></a><p>
   <p align='center'>&nbsp;<a href='../../courses/$repertoire/index.php' class=mainpage>$langEnter</a>&nbsp;</p>
-  
 ";
 
         } // else

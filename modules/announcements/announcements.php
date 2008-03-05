@@ -1,6 +1,6 @@
 <?php
-/**
- * *===========================================================================
+/*
+ **===========================================================================
  *               GUnet e-Class 2.0
  *        E-learning and Course Management Program
  * ===========================================================================
@@ -25,7 +25,7 @@
  * ============================================================================
  */
 
-/**
+/*
  * Announcements Component
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr> 
@@ -182,8 +182,8 @@ function confirmation (name)
 
         if ($myrow) {
             $AnnouncementToModify = $myrow['id'];
-            $contentToModify = $myrow['contenu'];
-            $titleToModify = $myrow['title'];
+            $contentToModify = q($myrow['contenu']);
+            $titleToModify = q($myrow['title']);
             $displayAnnouncementList = true;
         } 
     } 
@@ -192,19 +192,15 @@ function confirmation (name)
 	--------------------------------------*/
 
     if (isset($_POST['submitAnnouncement'])) {
-        /**
-         * ** MODIFY ANNOUNCEMENT **
-         */
+        // modify announcement
         if ($id) {
             db_query("UPDATE annonces SET contenu='" . mysql_real_escape_string($newContent) . "', 
-								title='" . mysql_real_escape_string($antitle) . "', temps=NOW()
-								WHERE id='" . mysql_real_escape_string($id) . "'", $mysqlMainDb);
+			title='" . mysql_real_escape_string($antitle) . "', temps=NOW()
+			WHERE id='" . mysql_real_escape_string($id) . "'", $mysqlMainDb);
             $message = "<p><b>$langAnnModify</b</b>";
         } 
 
-        /**
-         * ** ADD NEW ANNOUNCEMENT **
-         */
+        // add new announcement
         else {
             // DETERMINE THE ORDER OF THE NEW ANNOUNCEMENT
             $result = db_query("SELECT MAX(ordre) FROM annonces
@@ -222,9 +218,8 @@ function confirmation (name)
             $emailContent = stripslashes($newContent);
             $emailSubject = "$professorMessage ($currentCourseID - $intitule)"; 
             // Select students email list
-            $sqlUserOfCourse = "SELECT user.email
-					FROM cours_user, user WHERE code_cours='$currentCourseID'
-					AND cours_user.user_id = user.user_id";
+            $sqlUserOfCourse = "SELECT user.email FROM cours_user, user WHERE code_cours='$currentCourseID'
+				AND cours_user.user_id = user.user_id";
             $result = db_query($sqlUserOfCourse, $mysqlMainDb);
 
             $countEmail = mysql_num_rows($result);
@@ -245,27 +240,19 @@ function confirmation (name)
                 } 
             } 
             $messageUnvalid = " $langOn $countEmail $langRegUser, $unvalid $langUnvalid";
-            $message = "<p><b>$langAnnAdd $langEmailSent</b></p>
-				<p>
-					$messageUnvalid
-				</p>";
+            $message = "<p><b>$langAnnAdd $langEmailSent</b></p><p>$messageUnvalid</p>";
         } // if $emailOption==1
         else {
             $message = "<p><b>$langAnnAdd</b></p>";
         } 
     } // if $submit Announcement
-    /**
-     * TEACHER DISPLAY
-     */
-
+    // teacher display
     /*----------------------------------------
 	DISPLAY ACTION MESSAGE
 	--------------------------------------*/
-
     if (isset($message) && $message) {
-        $tool_content .= "
-			<table width=\"99%\"><tbody><tr><td class=\"success\">$message</td></tr></tbody>
-			</table><br/>";
+        $tool_content .= "<table width=\"99%\"><tbody><tr><td class=\"success\">$message</td></tr></tbody>
+		</table><br/>";
         $displayAnnouncementList = true; //do not show announcements
         $displayForm = false; //do not show form
     } 
@@ -336,19 +323,14 @@ function confirmation (name)
 	DISPLAY ANNOUNCEMENT LIST
 	--------------------------------------*/
     if ($displayAnnouncementList == true) {
-        $result = db_query("
-			SELECT * FROM annonces WHERE code_cours='$currentCourse' ORDER BY ordre DESC", $mysqlMainDb);
+        $result = db_query("SELECT * FROM annonces WHERE code_cours='$currentCourse' ORDER BY ordre DESC", $mysqlMainDb);
         $iterator = 1;
         $bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
 
-        $tool_content .= "
-                    <table width=\"99%\" align='center'>";
+        $tool_content .= "<table width=\"99%\" align='center'>";
         if ($announcementNumber > 0) {
-            $tool_content .= "
-                    <tbody>
-                    <tr>
-                      <th class='left'>$langAnnouncement</th>
-                      <th width='70' align='center'>$langTools</th>";
+            $tool_content .= "<tbody><tr><th class='left'>$langAnnouncement</th>
+                    <th width='70' align='center'>$langTools</th>";
 
             if ($announcementNumber > 1) {
                 $tool_content .= "
@@ -379,9 +361,6 @@ function confirmation (name)
                 $tool_content .= "
                       <th align='center' class='color1'>";
             } 
-            /**
-             * ** DISPLAY MOVE UP AND MOVE DOWN COMMANDS **
-             */
             // DISPLAY MOVE UP COMMAND
             // condition: only if it is not the top announcement
             if ($iterator != 1) {
@@ -448,7 +427,6 @@ else {
             $content = $myrow['contenu'];
             $content = make_clickable($content);
             $content = nl2br($content);
-
             $tool_content .= "
       <tr>
         <th class=\"color1\"><div align='left'><img class=\"displayed\" src=../../template/classic/img/announcements_on.gif border=0 title=\"" . $myrow["title"] . "\">&nbsp; " . $myrow["title"] . "($langPubl: " . greek_format($myrow["temps"]) . ")</div></th>

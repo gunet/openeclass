@@ -1,5 +1,5 @@
 <?php
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -23,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
         phpbb/viewtopic.php
         @last update: 2006-07-23 by Artemios G. Voyiatzis
         @authors list: Artemios G. Voyiatzis <bogart@upnet.gr>
@@ -111,7 +111,6 @@ if (!$result = db_query($sql, $currentCourseID)) {
 $myrow = mysql_fetch_array($result);
 $topic_subject = own_stripslashes($myrow["topic_title"]);
 $lock_state = $myrow["topic_status"];
-//$total = 368;
 if ( $total > $posts_per_page ) {
 	$times = 1;
 	$tool_content .= <<<cData
@@ -184,13 +183,10 @@ do {
 	$tool_content .= "<TD>$postTitle<p>$message</p><br/>
 	
 	<p><em>$l_posted: " . $myrow["post_time"] . "</em></p>";
-//	$tool_content .= "<HR>\n";
-	
-//	$tool_content .= "$message<BR><HR>";
 	if ($status[$dbname]==1 OR $status[$dbname]==2) { // course admin
 		$tool_content .= "<a href=\"editpost.php?post_id=" . 
-					$myrow["post_id"] . 
-					"&topic=$topic&forum=$forum\">$langEditDel</a>";
+				$myrow["post_id"] . 
+				"&topic=$topic&forum=$forum\">$langEditDel</a>";
 	}
 	$tool_content .= "</TD></TR>";
 	$count++;
@@ -200,7 +196,6 @@ $sql = "UPDATE topics SET topic_views = topic_views + 1 WHERE topic_id = '$topic
 db_query($sql, $currentCourseID);
 
 $tool_content .= "</tbody></TABLE>";
-//$tool_content .= "<TABLE ALIGN=\"CENTER\" BORDER=\"0\" WIDTH=\"99%\">";
 
 if ($total > $posts_per_page) {
 	$times = 1;
@@ -226,10 +221,7 @@ if ($total > $posts_per_page) {
 		$next_page = $start + $posts_per_page;
 		$tool_content .= "<a href=\"".$PHP_SELF."?topic=".$topic."&forum=".$forum."&start=".$next_page."\">".$l_nextpage."</a>";
 	}
-	$tool_content .= "
-			</FONT>
-		</TD>
-	</TR>";
+	$tool_content .= "</FONT></TD></TR>";
 }
 
 $tool_content .= "<p><a href=\"newtopic.php?forum=$forum\">";
@@ -239,7 +231,5 @@ if($lock_state != 1) {
 } else {
 	$tool_content .= "<IMG SRC=\"$reply_locked_image\" BORDER=\"0\"></TD></TR>";
 }
-//$tool_content .= "</TD><TD ALIGN=\"RIGHT\" colspan=2><hr noshade size=1></TR></TABLE><CENTER>";
-
 draw($tool_content,2);
 ?>
