@@ -527,8 +527,10 @@ $langEnter = "Enter";
 $langNameOfTheLink = "Name of the link";
 $langIcon = "Icon";
 $langRegistered = "registered";
+$langOneRegistered = "registered";
 $langIdentity = "Identity";
 $langAdminUsers = "Users Administration";
+$langCourseS = "course";
 
 /*******************************************************
 * course_info.inc.php
@@ -2322,7 +2324,7 @@ $langBegin="begin.";
 $langPreced50 = "Previous 50";
 $langFollow50 = "Next 50";
 $langEnd = "end";
-$langAdmR="Admin. rights";
+$langAdmR="Admin rights";
 $langAddHereSomeCourses = "<p>To register / unregister to / from a lesson,
 choose the faculty and then select / unselect the desired lesson.</p>
 <p>To save your preferences click on 'Submit changes'</p><br>";
@@ -2370,6 +2372,7 @@ $langLastUserVisits= "Last Visits of User ";
 
 // search_user.php
 $langphone= "Telephone";
+$langPhone = "<b>Phone:</b>";
 
 // adduser.php
 $langAskUser = "Enter the name, surname or username of the user you want to add.<br><br>

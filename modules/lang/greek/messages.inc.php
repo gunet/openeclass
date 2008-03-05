@@ -120,6 +120,7 @@ $langBackAdmin = "Επιστροφή στη σελίδα διαχείρισης";
 $langPlatformIdentity = "Ταυτότητα Πλατφόρμας";
 $langStoixeia = "Στοιχεία Πλατφόρμας";
 $langThereAre = "Υπάρχουν";
+$langThereIs = "Υπάρχει";
 $langOpenRequests = "Ανοικτές αιτήσεις ".$langsOfTeachers;
 $langNoOpenRequests = "Δεν βρέθηκαν ανοικτές αιτήσεις ".$langsOfTeachers;
 $langInfoAdmin  = "Ενημερωτικά Στοιχεία για τον Διαχειριστή";
@@ -166,7 +167,7 @@ $langNumEachCat = "Αριθμός μαθημάτων ανά τύπο μαθημάτων";
 $langAnnouncements = "Ανακοινώσεις";
 $langNumEachRec = "Αριθμός εγγραφών ανά μάθημα";
 $langFrom = "Από";
-$langNotExist = "Δεν υπάρχουν!";
+$langNotExist = "Δεν υπάρχουν";
 $langExist = "Υπάρχουν!";
 $langResult =" Αποτέλεσμα";
 $langMultiplePairs = "Πολλαπλά ζεύγη";
@@ -378,7 +379,6 @@ $langCleanup = 'Εκκαθάριση';
 /**********************************************************
 * agenda.inc.php
 **********************************************************/
-
 $langModify="Αλλαγή";
 $langAddModify="Προσθήκη / Αλλαγή";
 $langAddIntro="Προσθήκη Εισαγωγικού Κειμένου";
@@ -558,7 +558,9 @@ $langUpdate = "Αλλαγή Τίτλου";
 $langIcon = "Εικονίδιο";
 $langNameOfTheLink ="Όνομα Συνδέσμου";
 $langRegistered = "εγγεγραμμένοι";
+$langOneRegistered = "εγγεγραμμένος";
 $langIdentity = "Ταυτότητα Μαθήματος";
+$langCourseS = "μάθημα";
 
 /*********************************************
 * course_info.inc.php
@@ -2220,7 +2222,7 @@ $langAdmR="Δικαιώματα Διαχειριστή";
 $langAddHereSomeCourses = "<p>Για να εγγραφείτε / απεγγραφείτε σε / από ένα μάθημα,
 πρώτα επιλέξτε το τμήμα στο οποίο βρίσκεστε και στη συνέχεια επιλέξτε / αποεπιλέξτε το μάθημα.<br>
 <p>Για να καταχωρηθούν οι προτιμήσεις σας πατήστε 'Υποβολή αλλαγών'</p><br>";
-$langDeleteUser = "Είστε σίγουρος ότι θέλετε να διαγράψεται τον χρήστη";
+$langDeleteUser = "Είστε σίγουρος ότι θέλετε να διαγράψετε τον χρήστη";
 $langDeleteUser2 = "από αυτό το μάθημα";
 
 // adduser.php - added by adia 2003-02-21

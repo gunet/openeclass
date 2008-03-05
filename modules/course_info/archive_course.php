@@ -10,7 +10,6 @@ include '../../include/baseTheme.php';
 
 $nameTools = $langArchiveCourse;
 $tool_content = "";
-
 $verboseBackup = FALSE; 
 $archiveDir = "/courses/archive";  	// <- must moved to config
 $ext ="txt";				// <- must moved to config
@@ -21,10 +20,7 @@ if (extension_loaded("zlib")) {
 		
 // check if you are admin
 if($is_adminOfCourse) {
-  $tool_content .= "
-  <div id=\"operations_container\">
-  <ul id=\"opslist\">
-    <li>";
+  $tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\"><li>";
 if (isset($c) && ($c!="")) {
 	if (isset($search) && ($search=="yes")) $searchurl = "&search=yes";
 	else $searchurl = "";
@@ -32,11 +28,7 @@ if (isset($c) && ($c!="")) {
 } else {
 	$tool_content .= "<a href=\"infocours.php\">$langBack</a></li>";
 }
-	
-
-  $tool_content .= "
-  </ul>
-  </div>";	
+  $tool_content .= "</ul></div>";	
 	$dateBackuping  = date("Y-m-d-H-i-(B)-s");
 	$shortDateBackuping  = date("YzBs"); // YEAR - Day in Year - Swatch - second 
 	$archiveDir .= "/".$currentCourseID."/".$dateBackuping;
@@ -64,46 +56,38 @@ if (isset($c) && ($c!="")) {
 ";
 
 if (extension_loaded("zlib")) {
-
 	$zipCourse = new PclZip("$urlServer/courses/archive/$currentCourseID/archive.$currentCourseID.$shortDateBackuping.zip");
-	$flag = $zipCourse->create("$urlServer.courses/archive/$currentCourseID");
+	$flag = $zipCourse->create("$urlServer/courses/archive/$currentCourseID/archive.$currentCourseID.$shortDateBackuping.zip");
 	print_r($flag);
 } else {
 	$tool_content .= $langBackupSuccesfull;
-	}
+}
 	
-	$tool_content .= "<br />
-    <table width='99%'>
-    <tbody>
-    <tr>
-      <td class=\"success\" width='1'></td>
-      <td class=\"left\"><b>$langBackupSuccesfull</b></td>
-      <td><div align='right'>
-          <a href=\"".$urlServer.$archiveDir."/../archive.".$currentCourseID.".".$shortDateBackuping.".zip\">".$langDownloadIt."</a></div>
-      </td>
-      <td width='1'><img src=\"../../template/classic/img/download.gif\" alt=\"".$langDownloadIt."\" title=\"".$langDownloadIt."\" width=\"30\" height=\"29\"></td>
-    </tr>
-    </tbody>
-    </table>
-    <br />
+	$tool_content .= "<br /><table width='99%'>
+    	<tbody>
+    	<tr><td class=\"success\" width='1'></td>
+      	<td class=\"left\"><b>$langBackupSuccesfull</b></td>
+	<td><div align='right'>
+    	<a href=\"".$urlServer.$archiveDir."/../archive.".$currentCourseID.".".$shortDateBackuping.".zip\">".$langDownloadIt."</a>
+	</div></td>
+      <td width='1'><img src=\"../../template/classic/img/download.gif\" title=\"".$langDownloadIt."\" width=\"30\" height=\"29\"></td></tr>
+    	</tbody></table><br />
     <table class='Deps' align='center'>
     <tbody>
-    <tr>
-      <th align=\"left\">
-      <ol>\n";
+    <tr><th align=\"left\"><ol>\n";
 
 // if dir is missing, first we create it. mkpath is a recursive function
     $dirCourBase = realpath("../..").$archiveDir."/courseBase";
 	if (!is_dir($dirCourBase)) {
-		$tool_content .= "       <li>".$langCreateDirCourseBase."</li>\n";
+		$tool_content .= "<li>".$langCreateDirCourseBase."</li>\n";
 		mkpath($dirCourBase,$verboseBackup);
 	}
 
 	create_backup_file("$webDir/$archiveDir/backup.php");
-    
+
     $dirMainBase = realpath("../..").$archiveDir."/mainBase";
 	if (!is_dir($dirMainBase)) {
-		$tool_content .= "       <li>".$langCreateDirMainBase."</li>\n";
+		$tool_content .= "<li>".$langCreateDirMainBase."</li>\n";
 		mkpath($dirMainBase,$verboseBackup);
 	}
     $dirhtml = realpath("../..").$archiveDir."/html";
@@ -146,7 +130,7 @@ if (extension_loaded("zlib")) {
 // ********************************************************************
 //  info  about users
 // ********************************************************************
-	$tool_content .= "       <li>".$langBUUsersInMainBase." ".$currentCourseID."</li>\n";
+	$tool_content .= "<li>".$langBUUsersInMainBase." ".$currentCourseID."</li>\n";
 	
 	$sqlUserOfTheCourse ="SELECT user.* FROM `$mysqlMainDb`.user, `$mysqlMainDb`.cours_user
 		WHERE user.user_id=cours_user.user_id
@@ -210,7 +194,7 @@ if (extension_loaded("zlib")) {
 // ********************************************************************
 //  info  about announcment
 // ********************************************************************
-	$tool_content .= "       <li>".$langBUAnnounceInMainBase." ".$currentCourseID."</li>\n";
+	$tool_content .= "<li>".$langBUAnnounceInMainBase." ".$currentCourseID."</li>\n";
 	
 	$sqlAnnounceOfTheCourse ="SELECT a.* FROM  `$mysqlMainDb`.annonces a WHERE a.code_cours='$currentCourseID'";
 
@@ -278,7 +262,7 @@ if (extension_loaded("zlib")) {
 // Copy of  DB course
 // with mysqldump
 // ********************************************************************
-	$tool_content .= "       <li>".$langBackupOfDataBase." ".$currentCourseID."  (SQL)<br>(";
+	$tool_content .= "<li>".$langBackupOfDataBase." ".$currentCourseID."  (SQL)<br>(";
 	$tool_content .= backupDatabase($db , $currentCourseID , true, true , 'SQL' , realpath("../..".$archiveDir."/courseBase/"),true,$verboseBackup);
 	$tool_content .= ")</li>\n       <li>".$langBackupOfDataBase." ".$currentCourseID."  (PHP)<br>(";
 	$tool_content .= backupDatabase($db , $currentCourseID , true, true , 'PHP' , realpath("../..".$archiveDir."/courseBase/"),true,$verboseBackup);
@@ -293,7 +277,7 @@ if (extension_loaded("zlib")) {
 	$fdesc = fopen($systemFileNameOfArchive, "w");
 	fwrite($fdesc,$stringConfig);
 	fclose($fdesc);
-	$tool_content .=  ")</li>\n     </ol>\n     </th>\n     <td>&nbsp;</td>\n     </tr>\n   </tbody>\n   </table>\n";
+	$tool_content .=  ")</li>\n</ol>\n</th>\n<td>&nbsp;</td>\n</tr>\n</tbody>\n</table>\n";
 	
 }	// end of isadminOfCourse
 else 
@@ -301,12 +285,11 @@ else
 	$tool_content .= "<center><p>$langNotAllowed</p></center>";
 }
 
-
 draw($tool_content, 2, 'course_info');
 
-// -----------------
+// ---------------------------------------------
 // useful functions
-// -----------------
+// ---------------------------------------------
 
 function DirSize($path , $recursive=TRUE) { 
 	$result = 0; 
@@ -315,12 +298,11 @@ function DirSize($path , $recursive=TRUE) {
 	$fd = dir($path); 
 	while($file = $fd->read())
 	{ 
-	   	if(($file != ".") && ($file != ".."))
-   		{ 
+	   	if(($file != ".") && ($file != "..")) { 
     	if (@is_dir("$path$file/")) 
- 			$result += $recursive?DirSize("$path$file/"):0; 
+ 		$result += $recursive?DirSize("$path$file/"):0; 
     	else  
-			$result += filesize("$path$file"); 
+		$result += filesize("$path$file"); 
 		} 
 	}
 	$fd->close(); 

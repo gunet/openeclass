@@ -26,10 +26,7 @@
 /*
  * User Component
  * 
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
- * 
- * @abstract This module is responsible for the user administration
+ * @author Evelthon Prodromou <eprodromou@upnet.gr> is responsible for the user administration
  *
  */
 
@@ -53,18 +50,35 @@ function confirmation (name)
 </script>
 ';
 
-$sqlUserOfCourse = "SELECT user.user_id FROM cours_user, user
+$sql = "SELECT user.user_id, cours_user.statut FROM cours_user, user
 	WHERE code_cours='$currentCourseID' AND cours_user.user_id = user.user_id";
-$result_numb = db_query($sqlUserOfCourse, $mysqlMainDb);
+$result_numb = db_query($sql, $mysqlMainDb);
 $countUser = mysql_num_rows($result_numb);
 
-$nameTools = $langUsers." ($langUserNumber : $countUser)";
+$teachers = 0;
+$students = 0;
+$visitors = 0;
+while ($numrows=mysql_fetch_array($result_numb)) {
+	switch ($numrows['statut']) 
+	{
+		case 1:	 $teachers++; break;
+		case 5:	 $students++; break;
+		case 10: $visitors++; break;
+		default: break;
+	}
+}
+
+$nameTools = $langAdminUsers;
 $tool_content = ""; //initialise $tool_content
 
 // IF PROF ONLY 
 //  show  help link and  link to Add new  user and  management page of groups
 if ($is_adminOfCourse) {
-$tool_content .= <<<cData
+	
+	// display number of users
+	$tool_content .= "<p><i>$langThereAre: <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents και <b>$visitors</b> $langVisitors</i>.</p>";
+	$tool_content .= "<p><i>$langTotal: <b>$countUser</b> $langUsers</i>.</p><br>";
+	$tool_content .= <<<cData
 	<p><a href="../group/group.php">$langGroupUserManagement</a>&nbsp;-&nbsp;$langDumpUser <a href="dumpuser.php">$langExcel</a> <a href="dumpuser2.php">$langCsv</a></p>
 	<p>$langAdd&nbsp; <a href="adduser.php">$langOneUser</a>, <a href="muladduser.php">$langManyUsers</a>, <a href="guestuser.php">$langGUser</a></p>
 	
@@ -100,11 +114,10 @@ elseif(isset($removeTutor) && $removeTutor) {
 
 // unregister user from courses
 elseif(isset($unregister) && $unregister) {
-		// SECURITY : CANNOT REMOVE MYSELF !
+	// security : cannot remove myself
 	$result = db_query("DELETE FROM cours_user WHERE user_id!= $uid
-			AND user_id='".mysql_real_escape_string($_GET['user_id'])."' "
-			."AND code_cours='$currentCourseID'", $mysqlMainDb);
-
+		AND user_id='".mysql_real_escape_string($_GET['user_id'])."' "
+		."AND code_cours='$currentCourseID'", $mysqlMainDb);
 	$delGroupUser=db_query("DELETE FROM user_group WHERE user='".mysql_real_escape_string($_GET['user_id'])."'", $currentCourseID);
 }
 
@@ -159,7 +172,7 @@ if ($countUser>=50) {
 	}
 	$tool_content .= "</td><td valign=bottom align=middle width=20%>
 		<form method=post action=\"$_SERVER[PHP_SELF]?startList=$startList&numbList=all\">
-			<input type=submit value=\"$langAll\" name=numbering>
+		<input type=submit value=\"$langAll\" name=numbering>
 		</form>
 		</td>
 		<td valign=bottom align=middle width=20%>";
@@ -191,15 +204,13 @@ $tool_content .= "<th scope=\"col\">$langAm</th>
 	<th scope=\"col\">$langGroup</th><th scope='col'>$langCourseRegistrationDate";
 
 // show admin tutor and unregister only to admins
-if(isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2)) {
+if (isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2)) {
 	$tool_content .= "<th scope=\"col\">$langTutor</th>
 		<th scope=\"col\">$langAdmR</th>
-		<th scope=\"col\">$langDelete</th>";			
-}	// ADMIN ONLY
+		<th scope=\"col\">$langActions</th>";			
+} 
 
 $tool_content .= "</tr></thead><tbody>";
-
-//select name,sunrname, email, status and group of users
 $result = mysql_query("SELECT user.user_id, user.nom, user.prenom, user.email, user.am, cours_user.statut, 
 		cours_user.tutor, cours_user.reg_date, user_group.team
 		FROM `$mysqlMainDb`.cours_user, `$mysqlMainDb`.user 
@@ -208,7 +219,6 @@ $result = mysql_query("SELECT user.user_id, user.nom, user.prenom, user.email, u
 		WHERE `user`.`user_id`=`cours_user`.`user_id` AND `cours_user`.`code_cours`='$currentCourseID'
 		ORDER BY nom, prenom LIMIT $startList, $endList", $db);
 
-// ORDER BY cours_user.statut, tutor DESC, nom, prenom
 while ($myrow = mysql_fetch_array($result)) {
 	// bi colored table
 	if ($i%2==0) 
@@ -246,7 +256,7 @@ if (isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]
 		$tool_content .= "".greek_format($myrow['reg_date'])."";
 	$tool_content .= "</td>";
 
-################## TUTOR, ADMIN AND UNSUBSCRIBE (ADMIN ONLY) ######################
+// ************** tutor, admin and unsubscribe (admin only) ****************************** 
 if(isset($status) && ($status["$currentCourseID"]=='1' OR $status["$currentCourseID"]=='2')) {
 // tutor right
 	if ($myrow["tutor"]=='0') {
@@ -264,14 +274,14 @@ if(isset($status) && ($status["$currentCourseID"]=='1' OR $status["$currentCours
 		if ($myrow["user_id"]!=$_SESSION["uid"]) {
 			if ($myrow["statut"]=='1') {
 				$tool_content .= "<td class=\"highlight\" align='center'>
-					$langAdmR
-					<br><a href=\"$_SERVER[PHP_SELF]?removeAdmin=yes&user_id=$myrow[user_id]\">$langRemoveRight</a>
+				$langAdmR
+				<br><a href=\"$_SERVER[PHP_SELF]?removeAdmin=yes&user_id=$myrow[user_id]\">$langRemoveRight</a>
 				</td>";
 			} else {
 			$tool_content .= "<td valign=\"top\" align='center'>
-					<a href=\"$_SERVER[PHP_SELF]?giveAdmin=yes&user_id=$myrow[user_id]\">$langGiveAdmin</a>
-					</td>";
-				}		
+				<a href=\"$_SERVER[PHP_SELF]?giveAdmin=yes&user_id=$myrow[user_id]\">$langGiveAdmin</a>
+				</td>";
+			}		
 		} else {
 			if ($myrow["statut"]=='1') {
 				$tool_content .= "<td valign=\"top\" bgcolor=\"#CCFF99\" align='center'>
@@ -279,15 +289,13 @@ if(isset($status) && ($status["$currentCourseID"]=='1' OR $status["$currentCours
 				</td>";
 			} else {
 				$tool_content .= "<td valign=\"top\" align='center'>
-					<a href=\"$_SERVER[PHP_SELF]?giveAdmin=yes&user_id=$myrow[user_id]\">$langGiveAdmin</a></td>";
+				<a href=\"$_SERVER[PHP_SELF]?giveAdmin=yes&user_id=$myrow[user_id]\">$langGiveAdmin</a></td>";
 			}
 		}	
 		$tool_content .= "<td valign=\"top\" align='center'>";
 		$alert_uname = $myrow['prenom'] . " " . $myrow['nom'];
-		$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?unregister=yes&user_id=$myrow[user_id]\" onClick=\"return confirmation('".addslashes($alert_uname)."');\"><img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></a>";
-					
+		$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?unregister=yes&user_id=$myrow[user_id]\" onClick=\"return confirmation('".addslashes($alert_uname)."');\"><img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></a>";	
 	}	// admin only
-	
 	$tool_content .= "</td></tr>";
 	$i++;
 } 	// end of while
@@ -296,7 +304,6 @@ $tool_content .= "</tbody></table>";
 
 // navigation buttons
 // Do not show navigation buttons if less than 50 users
-
 if($countUser>=50) {
 	$tool_content .= "<table width=\"99%\">
 		<tr>
@@ -308,7 +315,7 @@ if($countUser>=50) {
 	
 	if ($startList!=0) {
 		$tool_content .= "<form method=post action=\"$_SERVER[PHP_SELF]?startList=$startList&numbList=less\">
-			<input type=\"submit\" value=\"$langPreced50<\" name=\"numbering\">
+		<input type=\"submit\" value=\"$langPreced50<\" name=\"numbering\">
 		</form>";	
 	}
 	$tool_content .= "</td><td valign=\"bottom\" align=\"middle\" width=\"20%\">
@@ -329,7 +336,6 @@ if($countUser>=50) {
 		</td>
 		</tr>
 		</table>";
-
 }	// navigation buttons
 draw($tool_content, 2, 'user', $head_content);
 ?>

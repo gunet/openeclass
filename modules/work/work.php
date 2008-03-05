@@ -791,7 +791,7 @@ function show_assignment($id, $message = FALSE)
 		require_once '../../include/libchart/libchart.php';
 
 		$chart = new PieChart(600, 300);
-		$chart->setTitle("ÊáôáíïìÞ âáèïëïãßáò åñãáóßáò");
+		$chart->setTitle("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 
 		$gradeOccurances = array(); // Named array to hold grade occurances/stats
 		$gradesExists = 0;
@@ -1131,7 +1131,7 @@ function download_assignments($id)
 	chdir($workPath);
 	create_zip_index("$secret/index.html", $id);
 	$zip = new PclZip($filename);
-	$zip->create($secret, "work_$id", $secret);
+	$flag = $zip->create($secret, "work_$id", $secret);
 	header("Content-Type: application/x-zip");
 	header("Content-Disposition: attachment; filename=$filename");
 	readfile($filename);
