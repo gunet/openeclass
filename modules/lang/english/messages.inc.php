@@ -1091,7 +1091,7 @@ $langNotAllowed = "Not allowed";
 $langForumDataChanged = "Forum data changed";
 $langForumCategoryAdded = "A forum was added to the category";
 $langForumDelete = "Forum was deleted";
-
+$langID = "ID";
 
 /*******************************************************************
 * group.inc.php

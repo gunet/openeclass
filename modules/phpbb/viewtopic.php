@@ -5,18 +5,18 @@
 ================================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
         A full copyright notice can be read in "/info/copyright.txt".
-        
+
        	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
         	    Yannis Exidaridis <jexi@noc.uoa.gr> 
       		    Alexandros Diamantidis <adia@noc.uoa.gr> 
 
         For a full list of contributors, see "credits.txt".  
-     
+
         This program is a free software under the terms of the GNU 
         (General Public License) as published by the Free Software 
         Foundation. See the GNU License for more details. 
         The full license can be read in "license.txt".
-     
+
        	Contact address: GUnet Asynchronous Teleteaching Group, 
         Network Operations Center, University of Athens, 
         Panepistimiopolis Ilissia, 15784, Athens, Greece
@@ -77,13 +77,11 @@ $sql = "SELECT f.forum_type, f.forum_name
 	FROM forums f, topics t 
 	WHERE (f.forum_id = '$forum') AND (t.topic_id = $topic) AND (t.forum_id = f.forum_id)";
 if (!$result = db_query($sql, $currentCourseID)) {
-	//XXX: Error message in specified language.
 	$tool_content .= $langErrorConnectForumDatabase;
 	draw($tool_content, 2);
 	exit();
 }
 if (!$myrow = mysql_fetch_array($result)) {
-	//XXX: Error message in specified language.
 	$tool_content .= $langErrorTopicSelect;
 	draw($tool_content, 2);
 	exit();
@@ -186,9 +184,9 @@ do {
 	if ($status[$dbname]==1 OR $status[$dbname]==2) { // course admin
 		$tool_content .= "<a href=\"editpost.php?post_id=" . 
 				$myrow["post_id"] . 
-				"&topic=$topic&forum=$forum\">$langEditDel</a>";
+				"&topic=$topic&forum=$forum\"><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>";
 	}
-	$tool_content .= "</TD></TR>";
+	$tool_content .= "</td></tr>";
 	$count++;
 } while($myrow = mysql_fetch_array($result));
 

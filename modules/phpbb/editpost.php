@@ -1,5 +1,5 @@
 <?php
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -23,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
         phpbb/editpost.php
         @last update: 2006-07-23 by Artemios G. Voyiatzis
         @authors list: Artemios G. Voyiatzis <bogart@upnet.gr>
@@ -124,7 +124,9 @@ if (isset($submit) && $submit) {
 			draw($tool_content, 2);
 			exit();
 		}
-		$subject = strip_tags($subject);
+		if (isset($subject)) {
+			$subject = strip_tags($subject);
+		}
 		if (isset($subject) && (trim($subject) != '')) {
 			if(!isset($notify)) {
 				$notify = 0;
@@ -139,20 +141,11 @@ if (isset($submit) && $submit) {
 				$tool_content .= $langUnableUpadateTopic;
 			}
 		}
-		$tool_content .= "
-		<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"success\">
-							<p><b>$l_stored</b></p>
-							
-							<p>$l_click <a href=\"viewtopic.php?topic=$topic_id&forum=$forum_id\">$l_here</a> $l_viewmsg</p>
-				<p>	$l_click <a href=\"viewforum.php?forum=$forum_id\">$l_here</a> $l_returntopic</p>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		";
+		$tool_content .= "<table width=\"99%\"><tbody><tr>
+		<td class=\"success\"><p><b>$l_stored</b></p>
+		<p>$l_click <a href=\"viewtopic.php?topic=$topic_id&forum=$forum_id\">$l_here</a> $l_viewmsg</p>
+		<p>$l_click <a href=\"viewforum.php?forum=$forum_id\">$l_here</a> $l_returntopic</p>
+		</td></tr></tbody></table>";
 	 } else {
 		$now_hour = date("H");
 		$now_min = date("i");
@@ -196,22 +189,11 @@ if (isset($submit) && $submit) {
 		if (@!$topic_removed) {
 			sync($currentCourseID, $topic_id, 'topic');
 		}
-		$tool_content .= "
-		
-		<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"success\">
-							<p><b>$l_deleted</b></p>
-							
-							<p>$l_click <a href=\"viewforum.php?forum=$forum_id\">$l_here</a> $l_returntopic</p>
-				<p>	$l_click <a href=\"index.php\">$l_here</a>$l_returnindex</p>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		
-		";
+		$tool_content .= "<table width=\"99%\"><tbody>
+		<tr><td class=\"success\"><p><b>$l_deleted</b></p>
+		<p>$l_click <a href=\"viewforum.php?forum=$forum_id\">$l_here</a> $l_returntopic</p>
+		<p>$l_click <a href=\"index.php\">$l_here</a>$l_returnindex</p>
+		</td></tr></tbody></table>";
 	}	
 } else {
 	// Gotta handle private forums right here. They're naturally covered on submit, but not in this part.
@@ -236,7 +218,6 @@ if (isset($submit) && $submit) {
 			<FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
 			<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"99%\">
 			<TR><TD>
-			
 				<TR><TD>$l_private</TD></TR>
 				<TR><TD>
 					<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\">
@@ -267,7 +248,8 @@ if (isset($submit) && $submit) {
 		}
 	}	
 	
-	$sql = "SELECT p.*, pt.post_text, u.username, u.user_id, u.user_sig, t.topic_title, t.topic_notify 
+	$sql = "SELECT p.*, pt.post_text, u.username, u.user_id, u.user_sig, t.topic_title, t.topic_notify, 
+		u.username, u.user_id, u.user_sig, t.topic_title, t.topic_notify 
 		FROM posts p, users u, topics t, posts_text pt 
 		WHERE (p.post_id = '$post_id') AND (pt.post_id = p.post_id) AND (p.topic_id = t.topic_id) AND (p.poster_id = u.user_id)";
 
@@ -277,8 +259,6 @@ if (isset($submit) && $submit) {
 		exit();
 	}
 	$myrow = mysql_fetch_array($result);
-	// Freekin' ugly but I couldn't get it to work right as 1 big if 
-	//          - James
 	if (isset($user_logged_in) && $user_logged_in) {
 		if($userdata["user_level"] <= 2) {
 			if($userdata["user_level"] == 2 && !is_moderator($forum, $userdata["user_id"], $currentCourseID)) {
@@ -291,7 +271,7 @@ if (isset($submit) && $submit) {
 		}
 	}
 	$message = $myrow["post_text"];
-	
+		
 	if (eregi("\[addsig]$", $message)) {
 		$addsig = 1;
 	} else {
@@ -313,48 +293,27 @@ if (isset($submit) && $submit) {
 		<TABLE WIDTH=\"99%\">
 		<thead>
 		";
-	 	
 	$first_post = is_first_post($topic, $post_id, $currentCourseID);
 	if($first_post) {
-		$tool_content .= "
-			<TR>
-			<th>$l_subject:</th>
-			<TD>
-				<INPUT TYPE=\"TEXT\" NAME=\"subject\" SIZE=\"50\" MAXLENGTH=\"100\" VALUE=\"" . stripslashes($myrow["topic_title"]) . "\"></TD>
-			</TR>";
+		$tool_content .= "<TR><th>$l_subject:</th><TD>
+		<INPUT TYPE=\"TEXT\" NAME=\"subject\" SIZE=\"50\" MAXLENGTH=\"100\" VALUE=\"" . stripslashes($myrow["topic_title"]) . "\"></TD></TR>";
 	}
-	$tool_content .= "
-			<TR>
-				<th>
-					$l_body:
-					
-				</th>
-				<TD>
-					<TEXTAREA NAME=\"message\" ROWS=10 COLS=45 WRAP=\"VIRTUAL\">$message</TEXTAREA>
-				</TD>
-			</TR>
-			</thead>
-			</table>
-			
-			<p>		<INPUT TYPE=\"CHECKBOX\" NAME=\"delete\">$l_delete</p>
-			
-					
-			
-					";
+	$tool_content .= "<TR><th>$l_body:</th><TD>
+		<TEXTAREA NAME=\"message\" ROWS=10 COLS=45 WRAP=\"VIRTUAL\">$message</TEXTAREA>
+		</TD></TR></thead></table>
+			<p><INPUT TYPE=\"CHECKBOX\" NAME=\"delete\">$l_delete</p>";
 
 	if (isset($user_logged_in) && $user_logged_in) {
 		$tool_content .= "<INPUT TYPE=\"HIDDEN\" NAME=\"username\" VALUE=\"" . $userdata["username"] . "\">";
 	}
-	$tool_content .= "
-					<INPUT TYPE=\"HIDDEN\" NAME=\"post_id\" VALUE=\"$post_id\">
-					<INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
-					<!--
-					<INPUT TYPE=\"HIDDEN\" NAME=\"topic_id\" VALUE=\"$topic\">
-					<INPUT TYPE=\"HIDDEN\" NAME=\"poster_id\" VALUE=\"" . $myrow["poster_id"] ."\">
-					-->
-					<INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">
-";
-	       
+	$tool_content .= "<INPUT TYPE=\"HIDDEN\" NAME=\"post_id\" VALUE=\"$post_id\">
+			<INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
+			<!--
+			<INPUT TYPE=\"HIDDEN\" NAME=\"topic_id\" VALUE=\"$topic\">
+			<INPUT TYPE=\"HIDDEN\" NAME=\"poster_id\" VALUE=\"" . $myrow["poster_id"] ."\">
+			-->
+	<INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">";
+
 }
 draw($tool_content,2);
 ?>

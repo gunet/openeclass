@@ -1,5 +1,5 @@
 <?php
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -23,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
         phpbb/newtopic.php
         @last update: 2006-07-23 by Artemios G. Voyiatzis
         @authors list: Artemios G. Voyiatzis <bogart@upnet.gr>
@@ -76,7 +76,6 @@ $sql = "SELECT forum_name, forum_access, forum_type
 	FROM forums
 	WHERE (forum_id = '$forum')";
 if (!$result = db_query($sql, $currentCourseID)) {
-	//XXX: Error message in specified language
 	$tool_content .= $langErrorDataForum;
 	draw($tool_content,2);
 	exit;
@@ -100,8 +99,9 @@ if (isset($submit) && $submit) {
 		exit;
 	}
 	if ( !isset($username) ) {
-		$username = "";
+		$username = $langAnonymous;
 	}
+	
 	$userdata = get_userdata($username, $db);
 	if($forum_access == 3 && $userdata["user_level"] < 2) {
 		$tool_content .= $l_nopost;
@@ -110,7 +110,6 @@ if (isset($submit) && $submit) {
 	}
 	// Either valid user/pass, or valid session. continue with post.. but first:
 	// Check that, if this is a private forum, the current user can post here.
-	      
 	if ($forum_type == 1) {
 		if (!check_priv_forum_auth($userdata['user_id'], $forum, TRUE, $currentCourseID)) {
 			$tool_content .= "$l_privateforum $l_nopost";
