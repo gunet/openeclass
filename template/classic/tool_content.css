@@ -568,37 +568,3 @@ table.sortable span.sortarrow {
         text-decoration: underline;
         margin: 1em;
 }
-
-
-table.Exercise {
-    background: none;
-	padding: 2px;
-    vertical-align: middle;
-    border-top: 1px solid #edecdf;
-    border-bottom: 1px solid #edecdf;
-    border-left: 1px solid #edecdf;
-    border-right: 1px solid #edecdf;
-}
-
-table.Exercise th{
-    text-align: left;
-    padding: 4px;
-    font-weight: normal;
-    font-size:11px;
-    color: #727266;
-    vertical-align: middle;
-	border-top: 1px solid #edecdf;
-    border-bottom: 1px solid #edecdf;
-    border-left: 1px solid #edecdf;
-    border-right: 1px solid #edecdf;
-
-}
-
-table.Exercise td {
-    text-align: left;
-    padding: 4px;
-	background: #fbfbfb;
-    font-size:11px;
-    color: #727266;
-    vertical-align: middle;
-}

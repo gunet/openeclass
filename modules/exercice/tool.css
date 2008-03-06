@@ -1,0 +1,58 @@
+table.Exercise {
+	padding: 2px;
+    vertical-align: middle;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+}
+
+table.Exercise th{
+    text-align: center;
+    padding: 4px;
+	padding-bottom: 6px;
+	padding-top: 6px;
+    font-weight: bold;
+	background: #fbfbfb;
+    font-size:10px !important; 
+    color: #727266;
+    vertical-align: middle;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+}
+
+table.Exercise td {
+	padding: 4px;
+	color: #727266;
+	vertical-align: middle;
+	background : #fbfbfb ;
+}
+
+table.Exercise_Title {
+	padding: 2px;
+	vertical-align: middle;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+}
+
+
+table.Exercise_Title td {
+	padding: 4px;
+	background: #Fbfbfb;
+	font-size:10px;
+	color: #727266;
+	vertical-align: middle;
+}
+
+#question_title_id {
+border-bottom: 1px dotted #edecdf;
+padding:2px;
+padding-top:5px;
+color: #a33033;
+font-size: 10px;
+font-weight:bold;
+}

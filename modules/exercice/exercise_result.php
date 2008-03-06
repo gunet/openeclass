@@ -108,12 +108,13 @@ $iplus=$i+1;
 $tool_content .= <<<cData
 
       <br>
-      <table width="99%" align="center" class="Exercise">
+      <table width="99%" class="Exercise">
+      <thead>
       <tr>
-        <th colspan="${colspan}"><b>$langQuestion $iplus</b>
-        <br>
-        ${questionName}<br><br>
-        </th>
+        <td colspan="${colspan}"><div id="question_title_id">$langQuestion $iplus</div></td>
+      </tr>
+      <tr>
+        <td colspan="${colspan}">${questionName}</td>
       </tr>
 cData;
 
@@ -122,18 +123,10 @@ cData;
 $tool_content .= <<<cData
 
       <tr>
-        <td width="5%">
-        <small><b><i>${langChoice}</i></b></small>
-        </td>
-        <td width="5%">
-        <small><b><i>${langExpectedChoice}</i></b></small>
-        </td>
-        <td width="45%">
-        <small><b><i>${langAnswer}</i></b></small>
-        </td>
-        <td width="45%">
-        <small><b><i>${langComment}</i></b></small>
-        </td>
+        <th width="5%">${langChoice}</th>
+        <th width="5%">${langExpectedChoice}</th>
+        <th width="45%">${langAnswer}</th>
+        <th width="45%">${langComment}</th>
       </tr>
 cData;
 
@@ -143,7 +136,7 @@ cData;
 
 $tool_content .= <<<cData
       <tr>
-        <td><small><b><i>${langAnswer}</i></b></small></td>
+        <th><small><b><i>${langAnswer}</i></b></small></th>
       </tr>
 cData;
 
@@ -151,8 +144,8 @@ cData;
 		
 $tool_content .= <<<cData
       <tr>
-        <td width="50%"><small><i>${langElementList}</i></small></td>
-        <td width="50%"><small><i>${langCorrespondsTo}</i></small></td>
+        <th width="50%">${langElementList}</th>
+        <th width="50%">${langCorrespondsTo}</th>
       </tr>
 cData;
 
@@ -292,7 +285,7 @@ cData;
 				{
 $tool_content .= <<<cData
       <tr>
-        <td width="5%" align="center">
+        <td width="5%"><div align="center">
         <img src="../../template/classic/img/
 cData;
 	
@@ -307,9 +300,9 @@ cData;
 		$tool_content .= '_off';
 		
 	$tool_content .= <<<cData
-		.gif" border="0">
+		.gif" border="0"></div>
         </td>
-        <td width="5%" align="center">
+        <td width="5%"><div align="center">
 cData;
 
 	
@@ -322,7 +315,7 @@ cData;
 	else	
 		$tool_content .= "_off";
 	
-	$tool_content .= ".gif\" border=\"0\">";
+	$tool_content .= ".gif\" border=\"0\"></div>";
 	
   $tool_content .= <<<cData
         </td>
@@ -363,6 +356,7 @@ $tool_content .= <<<cData
         <b>${langScore} : ${questionScore}/${questionWeighting}</b>
         </th>
       </tr>
+      </thead>
       </table>
       <br>
 cData;
@@ -431,9 +425,10 @@ exit();
 
 $tool_content .= <<<cData
       <br>
-      <table width="99%">
+      <table width="99%" class="Exercise_Title">
+      <thead>
       <tr>
-        <td align="center">
+        <td class="center">
         <b>${langYourTotalScore} ${totalScore}/${totalWeighting} !</b>
         </td>
       </tr>
@@ -443,6 +438,7 @@ $tool_content .= <<<cData
         <input type="submit" value="${langFinish}">
         </td>
       </tr>
+      </thead>
       </table>
       <br>
 	
@@ -451,6 +447,6 @@ $tool_content .= <<<cData
 	<br>
 cData;
 
-draw($tool_content, 2);
+draw($tool_content, 2, 'Exercice');
 
 ?>

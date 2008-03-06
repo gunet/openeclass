@@ -52,11 +52,12 @@ function showQuestion($questionId, $onlyAnswers=false)
 
 	$questionDescription_temp = nl2br(make_clickable($questionDescription));
 	$tool_content .= <<<cData
-	
+      <tr>
+        <td colspan="2">
         <b>${questionName}</b>
-        <br><br>
+        <br>
         <small><i>${questionDescription_temp}</i></small>
-        </th>
+        </td>
       </tr>
 cData;
 
@@ -99,8 +100,8 @@ cData;
 	$tool_content .= <<<cData
 
       <tr>
-        <td width="4%" align="center"><input type="radio" name="choice[${questionId}]" value="${answerId}"></td>
-        <td width="96%">${answer}</td>
+        <td width="1%" align="center"><input type="radio" name="choice[${questionId}]" value="${answerId}"></td>
+        <td width="99%">${answer}</td>
       </tr>
 cData;
 		}
@@ -110,8 +111,8 @@ cData;
 	$tool_content .= <<<cData
 
       <tr>
-        <td width="5%" align="center"><input type="checkbox" name="choice[${questionId}][${answerId}]" value="1"></td>
-        <td width="95%">${answer}</td>
+        <td width="1%" align="center"><input type="checkbox" name="choice[${questionId}][${answerId}]" value="1"></td>
+        <td width="99%">${answer}</td>
       </tr>
 cData;
 		}
@@ -137,10 +138,11 @@ cData;
 
       <tr>
         <td colspan="2">
-        <table border="0" cellpadding="0" cellspacing="0" width="95%">
+        <table>
+        <thead>
         <tr>
-          <td width="40%" valign="top"><b>${cpt2}.</b> ${answer}</td>
-          <td width="20%" align="center">&nbsp;&nbsp;
+          <td width="45%" valign="top"><b>${cpt2}.</b> ${answer}</td>
+          <td width="10%" align="center">&nbsp;&nbsp;
             <select name="choice[${questionId}][${answerId}]">
             <option value="0">--</option>
 cData;
@@ -155,7 +157,7 @@ cData;
 		  $tool_content .= "
             </select>&nbsp;&nbsp;
           </td>
-          <td width=\"40%\" valign=\"top\">";
+          <td width=\"45%\" valign=\"top\">";
 		  
 		  if(isset($Select[$cpt2])) 
 		  	$tool_content .= '<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse']; 
@@ -165,6 +167,7 @@ cData;
 		  $tool_content .=	"
           </td>
         </tr>
+        </thead>
         </table>
         </td>
       </tr>";
@@ -177,7 +180,7 @@ cData;
 		$tool_content .= "
       <tr>
         <td colspan=\"2\">".
-			"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"95%\">".
+			"<table>".
 			"<tr><td width=\"60%\" colspan=\"2\">&nbsp;</td><td width=\"40%\" align=\"right\" valign=\"top\">".
 			"<b>".$Select[$cpt2]['Lettre'].".</b> ".$Select[$cpt2]['Reponse']."</td></tr></table>
         </td>

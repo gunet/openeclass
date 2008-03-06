@@ -199,11 +199,14 @@ if(@$_POST['questionNum']) {
 	$exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 	$tool_content .= <<<cData
 
-      <p>
-      <b>${exerciseTitle}</b><br>
-      ${exerciseDescription_temp}
-      </p>
-  
+      <table width="99%" class="Exercise_Title">
+      <tr>
+        <td colspan=\"2\"><b>${exerciseTitle}</b>
+        <br/><br/>
+        ${exerciseDescription_temp}</td>
+      </tr>
+      </table>
+	  
       <form method="post" action="$_SERVER[PHP_SELF]" autocomplete="off">
       <input type="hidden" name="formSent" value="1">
       <input type="hidden" name="exerciseType" value="$exerciseType">
@@ -255,19 +258,20 @@ foreach($questionList as $questionId) {
     */
 	// shows the question and its answers
 	$tool_content .= "
-	  <br>
-      <table width=\"99%\" align=\"center\" class=\"Exercise\">
+      <br>
+      <table width=\"99%\" class=\"Exercise\">
+      <thead>
       <tr>
-        <th colspan='2'><b><u>".$langQuestion."</u>: ".$i."</b>"; 
+        <td colspan=\"2\"><div id=\"question_title_id\">".$langQuestion." : ".$i."</div></td>
+      </tr>
+      "; 
 	
 	if($exerciseType == 2) 
 		$tool_content .= " / ".$nbrQuestions;
-	$tool_content .= "
-        <br>
-      ";
 	  
 	showQuestion($questionId);
 	$tool_content .= "
+      </thead>
       </table>";
 
 	// for sequential exercises
@@ -278,20 +282,24 @@ foreach($questionList as $questionId) {
 }	// end foreach()
 	$tool_content .= "
     </table>
-    </td>
-  </tr>
-  <tr>
-    <td align=\"center\"><br><input type=\"submit\" value=\"";
+
+    <br/>
+	
+    <table width=\"99%\" class=\"Exercise_Title\">
+    <tr>
+      <td><div align=\"center\"><input type=\"submit\" value=\"";
 	if ($exerciseType == 1 || $nbrQuestions == $questionNum)
 		$tool_content .= $langOk." &gt;"."\">";
 	else	
 		$tool_content .= $langNext." &gt;"."\">";
 
- 	$tool_content .= " <input type=\"submit\" name=\"buttonCancel\" value=\"$langCancel\">";
-	$tool_content .= "</td>
-  </tr>
-  </table>
-  </form> 
+	$tool_content .= "
+      <input type=\"submit\" name=\"buttonCancel\" value=\"$langCancel\"></div>
+      </td>
+    </tr>
+    </table>
+	
+    </form> 
 ";
-draw($tool_content, 2);
+draw($tool_content, 2, 'exercice');
 ?>
