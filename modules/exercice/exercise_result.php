@@ -108,7 +108,7 @@ $iplus=$i+1;
 $tool_content .= <<<cData
 
       <br>
-      <table width="99%" class="Exercise">
+      <table width="99%" class="Exercise_Title">
       <thead>
       <tr>
         <td colspan="${colspan}"><div id="question_title_id">$langQuestion $iplus</div></td>
@@ -418,7 +418,7 @@ if (($OnTime > 0 or $is_adminOfCourse)) { // exercise time limit hasn't expired
 	<center><a href="exercice.php">${langBack}</a></center>
 cData;
 
-draw($tool_content, 2);
+draw($tool_content, 2, 'Exercice');
 exit();
 
 }
