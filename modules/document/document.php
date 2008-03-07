@@ -101,7 +101,7 @@ $local_head = '
 <script>
 function confirmation (name)
 {
-    if (confirm("'.$langAreYouSureToDelete.'"+ name + " ?"))
+    if (confirm("'.$langAreYouSureToDelete.'" + name))
         {return true;}
     else
         {return false;}
@@ -267,7 +267,7 @@ if($is_adminOfCourse)
 				/*** Copy the file to the desired destination ***/
 				copy ($userFile, $baseWorkDir.$uploadPath."/".$safe_fileName);
 
-				@$dialogBox .= "<table width=\"99%\">tbody>
+				@$dialogBox .= "<table width=\"99%\"><tbody>
 					<tr><td class=\"success\">
 							<p><b> $langDownloadEnd</b></p>
 							</td>

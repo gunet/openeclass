@@ -1,6 +1,5 @@
 <?php
-
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -24,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	learningPathAdmin.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -63,14 +62,12 @@ require_once("../../include/lib/learnPathLib.inc.php");
 require_once("../../include/lib/fileDisplayLib.inc.php");
 
 $require_current_course = TRUE;
-$langFiles              = "learnPath";
 
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";
 $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
-
 $imgRepositoryWeb       = "../../template/classic/img/";
 
 require_once("../../include/baseTheme.php");
@@ -128,13 +125,13 @@ switch($cmd)
                 AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
                 ORDER BY LPM.`rank` ASC";
         $result = db_query($sql);
-           
+
         $extendedList = array();
         while ($list = mysql_fetch_array($result, MYSQL_ASSOC))
         {
             $extendedList[] = $list;
         }
-           
+
         //-- delete module cmdid and his children if it is a label
         // get the modules tree ( cmdid module and all its children)
         //$temp[0] = get_module_tree( build_element_list($extendedList, 'parent', 'learnPath_module_id'), $_REQUEST['cmdid'] , 'learnPath_module_id');
@@ -155,7 +152,7 @@ switch($cmd)
                 AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'] ."
                 ORDER BY LPM.`rank` ASC";
         $result = db_query($sql);
-        
+
         $extendedList = array();
         while ($list = mysql_fetch_array($result, MYSQL_ASSOC))
         {
@@ -412,7 +409,7 @@ if (isset($displayCreateLabelForm) && $displayCreateLabelForm)
                   <p><strong><label for=\"newLabel\">".$langNewLabel."</label></strong>&nbsp;
                   <input type=\"text\" name=\"newLabel\" id=\"newLabel\" maxlength=\"255\" />
                   <input type=\"hidden\" name=\"cmd\" value=\"createLabel\" />
-                  <input type=\"submit\" value=\"".$langOk."\" />
+                   <input type=\"submit\" value=\"".$langCreate."\" />
                   </p></form>";
 }
 if (isset($displayChangePosForm) && $displayChangePosForm)
@@ -509,7 +506,6 @@ $tool_content .=
      ."</thead>"
      ."<tbody>";
 
-
 //####################################################################################\\
 //######################### LEARNING PATH LIST DISPLAY ###############################\\
 //####################################################################################\\
@@ -532,14 +528,11 @@ foreach ($flatElementList as $module)
     {
         $style="";
     }
-         
     $spacingString = "";
-     
     for($i = 0; $i < $module['children']; $i++)
            $spacingString .= "<td width='5'>&nbsp;</td>";
     
     $colspan = $maxDeep - $module['children']+1;
-         
     $tool_content .= "<tr align=\"center\"".$style.">\n".$spacingString."<td colspan=\"".$colspan."\" align=\"left\">";
                       
     if ($module['contentType'] == CTLABEL_) // chapter head
@@ -574,7 +567,6 @@ foreach ($flatElementList as $module)
          </td>";
 
     // DELETE ROW
-
    //in case of SCORM module, the pop-up window to confirm must be different as the action will be different on the server
     $tool_content .= "<td>
           <a href=\"".$_SERVER['PHP_SELF']."?cmd=delModule&cmdid=".$module['learnPath_module_id']."\" ".
@@ -681,7 +673,6 @@ foreach ($flatElementList as $module)
 
 $tool_content .= "</tbody>";
 
-
 if ($atleastOne == false)
 {
     $tool_content .= "<tfoot>";
@@ -690,6 +681,5 @@ if ($atleastOne == false)
 }
 
 $tool_content .= "</table>";
-
 draw($tool_content, 2, "learnPath", $head_content, $body_action);
 ?>

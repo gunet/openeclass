@@ -32,31 +32,31 @@
          Dimitra Kralli <d.kralli@di.uoa.gr> (University of Athens)
          Stevy Georgiadi <stevy@gunet.gr> (University of Athens)
          Victoria Daskalou <daskalou@upnet.gr> (University of Patras)
-				 Evelthon Prodromou <eprodromou@upnet.gr> (University of Patras)
-				 Thanos Kyritsis <atkyritsis@upnet.gr> (University of Patras)
-			
-      
+	 Evelthon Prodromou <eprodromou@upnet.gr> (University of Patras)
+	Thanos Kyritsis <atkyritsis@upnet.gr> (University of Patras)
+
+
       Also Credits to:	 
-				 Artemios Vogiatzis <bogart@upatras.gr (University of Patras)
-				 George Doukas <geodoukas@upatras.gr> (University of Patras)
-				 Stratos Karatzidis <kstratos@uom.gr> (University of Macedonia)
-				 Pitsiougas Vagelis <vagpits@uom.gr> (University of Macedonia)
-				 Ophelia Neofytou <ophelia@ucnet.uoc.gr> (Universify of Crete)
+	 Artemios Vogiatzis <bogart@upatras.gr (University of Patras)
+	 George Doukas <geodoukas@upatras.gr> (University of Patras)
+	 Stratos Karatzidis <kstratos@uom.gr> (University of Macedonia)
+	 Pitsiougas Vagelis <vagpits@uom.gr> (University of Macedonia)
+	 Ophelia Neofytou <ophelia@ucnet.uoc.gr> (Universify of Crete)
          Vangelis Chaniotakis <haniotak@ucnet.uoc.gr> (University of Crete)
-				 Sakis Agorastos <th_agorastos@hotmail.com> (University of Piraeus)
-				 Dimitris Daskopoulos <dimitris@ccf.auth.gr> (Aristotele University of Thessaloniki)
-				 Savvas Anastasiadis <sanastas@ccf.auth.gr> (Aristotele University of Thessaloniki)				
-				 Dimitris Tsachalis <ditsa@ccf.auth.gr> (Aristotele University of Thessaloniki)
-				 Ilias Mpertsimas <mhlias@noc.teilam.gr> (Technological Educational Institute of Lamia)
-				 Dionysios G. Synodinos <dsin@noc.ntua.gr> (National Technical University of Athens)
+	 Sakis Agorastos <th_agorastos@hotmail.com> (University of Piraeus)
+	 Dimitris Daskopoulos <dimitris@ccf.auth.gr> (Aristotele University of Thessaloniki)
+	 Savvas Anastasiadis <sanastas@ccf.auth.gr> (Aristotele University of Thessaloniki)				
+	 Dimitris Tsachalis <ditsa@ccf.auth.gr> (Aristotele University of Thessaloniki)
+	 Ilias Mpertsimas <mhlias@noc.teilam.gr> (Technological Educational Institute of Lamia)
+	 Dionysios G. Synodinos <dsin@noc.ntua.gr> (National Technical University of Athens)
          Michalis Psaltakis <mpsaltakis@aegean.gr> (University of the Aegean)
          Konstantinidis K. (Aristotele University of Thessaloniki)
 
-			Xinha: 
-					 Xinha was originally based on work by Mihai Bazon who produced htmlArea for Interactive Tools.
-					 Currently leading the Xinha project is James Sleeman.
-					 Raimund Meyer (ray) has contributed somewhat to the advancement of Xinha recently. 
-			     Copyright (c) 2003-2004 dynarch.com.
+	Xinha: 
+	 Xinha was originally based on work by Mihai Bazon who produced htmlArea for Interactive Tools.
+	 Currently leading the Xinha project is James Sleeman.
+	 Raimund Meyer (ray) has contributed somewhat to the advancement of Xinha recently. 
+	     Copyright (c) 2003-2004 dynarch.com.
     	     Copyright (c) 2002-2003 interactivetools.com, inc.
 
       PclZip: Vincent Blavet <vincent@phpconcept.net>
@@ -70,19 +70,22 @@
           Copyright (c), 1999-2001, Matthew Snelham (infinite@valinux.com)
 
       DHTML Calendar: Copyright Mihai Bazon, 2002-2005
-	
+
       POP3 class : Manuel Lemos (http://www.manuellemos.net)  <WebMaster@E-na.Net>
-	
+
       Libchart - PHP chart library: Copyright 2005-2006 Jean Marc Trémeaux <jm.tremeaux@gmail.com>
 
       LaTeX Rendering: Copyright (c) 2003/2004 Benjamin Zeiss <zeiss@math.uni-goettingen.de>
 
       Dropbox module: Copyright 2004 Jan Bols <jan@ivpv.UGent.be>
-     
-			Wiki module: Frederic Minne <zefredz@gmail.com>
+
+      Wiki module: Frederic Minne <zefredz@gmail.com>
+
+      Learnpath module: Piraux Sebastien <pir@cerdecam.be>
+	        Lederer Guillaume <led@cerdecam.be>
 
       Exercise module: Copyright Olivier Brouckaert <oli.brouckaert@skynet.be>
-			
-		Function parse_tex(): Patrick Cool <patrick.cool@UGent.be>
+
+       Function parse_tex(): Patrick Cool <patrick.cool@UGent.be>
 		
-		Function user_get_data(): Mathieu Laurent <laurent@cerdecam.be>
+       Function user_get_data(): Mathieu Laurent <laurent@cerdecam.be>

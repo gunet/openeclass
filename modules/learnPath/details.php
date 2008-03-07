@@ -47,7 +47,6 @@
 
 require_once("../../include/lib/learnPathLib.inc.php");
 $require_current_course = TRUE;
-$langFiles = "learnPath";
 
 $TABLECOURSUSER	        = "cours_user";
 $TABLEUSER              = "user";
@@ -60,7 +59,6 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 require_once("../../include/baseTheme.php");
 $head_content = "";
 $tool_content = "";
-
 
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
 if (! $is_adminOfCourse ) claro_die($langNotAllowed);
@@ -96,7 +94,7 @@ if( $learnPathName )
 	// display a list of user and their respective progress    
 	$sql = "SELECT U.`nom`, U.`prenom`, U.`user_id`
 			FROM `".$TABLEUSER."` AS U, 
-					`".$TABLECOURSUSER."` AS CU
+			`".$TABLECOURSUSER."` AS CU
 			WHERE U.`user_id`= CU.`user_id`
 			AND CU.`code_cours` = '". addslashes($currentCourseID) ."'
 			ORDER BY U.`nom` ASC";
@@ -121,7 +119,7 @@ if( $learnPathName )
 	{
 		$lpProgress = get_learnPath_progress($path_id,$user['user_id']);
 		$tool_content .= '<tr>'."\n"
-			.'<td><a href="detailsUserPath.php?uInfo='.$user['user_id'].'&amp;path_id='.$path_id.'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
+		.'<td><a href="detailsUserPath.php?uInfo='.$user['user_id'].'&amp;path_id='.$path_id.'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
 			.'<td align="right">'
 			.claro_disp_progress_bar($lpProgress, 1)
 			.'</td>'."\n"
@@ -131,7 +129,6 @@ if( $learnPathName )
 	// foot of table
 	$tool_content .= '</tbody>'."\n\n".'</table>'."\n\n";
 }
-
 
 draw($tool_content, 2, "learnPath", $head_content);
 

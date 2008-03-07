@@ -53,7 +53,6 @@ require_once("../../include/lib/fileUploadLib.inc.php");
 require_once("../../include/lib/fileDisplayLib.inc.php");
 
 $require_current_course = TRUE;
-$langFiles              = "learnPath";
 
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";
@@ -530,6 +529,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
             (`name`,`visibility`,`rank`,`comment`)
             VALUES ('". addslashes($lpName) ."','HIDE',".($rankMax+1).",'')";
     db_query($sql);
+
     
     $tempPathId = mysql_insert_id();
     $baseWorkDir .= "path_".$tempPathId;
@@ -665,7 +665,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
         $iterator = 0; // will be used to increment position of paths in manifestData['scosPaths"]
                        // and to have the names at the same pos if found
 
-        $xml_parser = xml_parser_create();
+        //$xml_parser = xml_parser_create();
+	$xml_parser = xml_parser_create('utf-8');
         xml_set_element_handler($xml_parser, "startElement", "endElement");
         xml_set_character_data_handler($xml_parser, "elementData");
 
@@ -689,9 +690,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
                 // fix for fread breaking thing 
                 // msg from "ml at csite dot com" 02-Jul-2003 02:29 on http://www.php.net/xml
                 // preg expression has been modified to match tag with inner attributes
-               
+
                 if (!isset($cache)) $cache = "";
-       
+
                 $data = $cache . $data;
                 if (!feof($fp)) 
                 {

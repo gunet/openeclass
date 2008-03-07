@@ -2784,7 +2784,7 @@ $langURL="Εξωτερικός σύνδεσμος προς τον εξυπηρετητή ήχου ή βίντεο";
 $langcreator="Δημιουργός";
 $langpublisher="Εκδότης";
 $langdate="Ημερομηνία";
-$langAreYouSureToDelete = "Επιβεβαίωση διαγραφής";
+$langAreYouSureToDelete = "Επιβεβαίωση διαγραφής ";
 $langNoVideo = "Δεν υπάρχουν διαθέσιμα Βίντεο για το μάθημα";
 
 /*************************************************************
@@ -2831,7 +2831,7 @@ $langWikiCreationSucceed = "Η δημιουργία του Wiki ήταν επιτυχημένη";
 $langWikiDefaultDescription = " Εισάγετε την περιγραφή του νέου σας wiki έδω";
 $langWikiDefaultTitle = "Καινούργιο Wiki";
 $langWikiDeleteWiki = "Διαγραφή Wiki";
-$langWikiDeleteWikiWarning = " ΠΡΟΕΙΔΟΠΟΙΗΣΗ : πρόκειται να διαγράψετε αυτό το wiki και όλες τις σελίδες του. Είστε βέβαιοι ότι θέλετε να συνεχίσετε;";
+$langWikiDeleteWikiWarning = " ΠΡΟΕΙΔΟΠΟΙΗΣΗ: πρόκειται να διαγράψετε αυτό το wiki και όλες τις σελίδες του. Είστε βέβαιοι ότι θέλετε να συνεχίσετε;";
 $langWikiDeletionSucceed = "Η διαγραφή του Wiki ήταν επιτυχημένη";
 $langWikiDescription = "Περιγραφή του Wiki";
 $langWikiDescriptionForm = "Περιγραφή Wiki";
