@@ -137,9 +137,10 @@ else
 
 	//$tool_content .= "<p><b>$questionName</b></p>";
 	$tool_content .= "
-    <table width='99%' class='Exercise'>
+    <table width='99%' class='Exercise_Title'>
+    <thead>
     <tr>
-      <th colspan='2'><b>".nl2br($questionName)."</b>&nbsp;&nbsp;";
+      <td class='left' colspan='2'><b>".nl2br($questionName)."</b>&nbsp;&nbsp;";
 
 	// doesn't show the edit link if we come from the question pool to pick a question for an exercise
 	if(!isset($fromExercise)) {
@@ -159,14 +160,14 @@ $tool_content .= "
 	}
 
 	$tool_content .= "
-      </th>
+      </td>
     </tr>";
 	
 
 
 $tool_content .= "
     <tr>
-      <td colspan='2'><b><u>$langQuestionAnswers</u>:</b>";
+      <td colspan='2'><br/><b><u>$langQuestionAnswers</u>:</b>";
 
     // doesn't show the edit link if we come from the question pool to pick a question for an exercise
      if(!isset($fromExercise)) {
@@ -174,7 +175,7 @@ $tool_content .= "
      }
 
         $tool_content .= "
-      <br/><br/>";
+      <br/>";
 
       // shows answers of the question. 'true' means that we don't show the question, only answers
       if(!showQuestion($questionId,true)) {
@@ -184,6 +185,7 @@ $tool_content .= "
 $tool_content .= "
       </td>
     </tr>
+    </thead>
     </table>
     <br>";
 

@@ -37,27 +37,21 @@ if(isset($deleteQuestion))
 	unset($objQuestionTmp);
 }
 
-  $tool_content .= "
-    <table width=\"99%\" class='Deps'>
-    <tr>
-      <th><b>$langQuestionList</b></th>
-      <td>";
-$tool_content .= <<<cData
-      <a href="${PHP_SELF}?newQuestion=yes">${langNewQu}</a> | <a href="question_pool.php?fromExercise=${exerciseId}">${langGetExistingQuestion}</a>
-cData;
 
-  $tool_content .= "
+
+
+  $tool_content .= <<<cData
+    <table width="99%" class="Exercise_Title">
+    <tbody>
+    <tr>
+      <td class="left" colspan="4">
+      <b>$langQuestionList :</b>
+      <div class="right">
+      <a href="${PHP_SELF}?newQuestion=yes">${langNewQu}</a> | <a href="question_pool.php?fromExercise=${exerciseId}">${langGetExistingQuestion}</a>
+      </div>
       </td>
     </tr>
-    </table>
-    <br>";
-	
-
-
-
-  $tool_content .= "
-    <table width=\"99%\">";
-
+cData;
 
 if($nbrQuestions) {
 	$questionList=$objExercise->selectQuestionList();
@@ -71,11 +65,9 @@ if($nbrQuestions) {
 	$tool_content .= "
     <tr>
       <td align=\"right\" width=\"1\">".$i.".</td>
-      <td> ".$objQuestionTmp->selectTitle()."<br><small>".$aType[$objQuestionTmp->selectType()-1]."</small></td>";
-	
-$tool_content .= "
-      <td align=\"right\" width=\"50\"><a href=\"".$_SERVER['PHP_SELF']."?editQuestion=".$id."\">"."<img src=\"../../template/classic/img/edit.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langModify."\"></a>"." <a href=\"".$_SERVER['PHP_SELF']."?deleteQuestion=".$id."\" "."onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice))."')) return false;\">"."<img src=\"../../template/classic/img/delete.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langDelete."\"></a></td>
-      <td align=\"right\" width=\"50\">";
+      <td> ".$objQuestionTmp->selectTitle()."<br><small>".$aType[$objQuestionTmp->selectType()-1]."</small></td>
+      <td class=\"right\" width=\"50\"><a href=\"".$_SERVER['PHP_SELF']."?editQuestion=".$id."\">"."<img src=\"../../template/classic/img/edit.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langModify."\"></a>"." <a href=\"".$_SERVER['PHP_SELF']."?deleteQuestion=".$id."\" "."onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice))."')) return false;\">"."<img src=\"../../template/classic/img/delete.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langDelete."\"></a></td>
+      <td class=\"right\" width=\"50\">";
 
 		if($i != 1) {
 			$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?moveUp=".$id."\">
@@ -98,11 +90,12 @@ $tool_content .= "
 if(!isset($i)) {
 $tool_content .= <<<cData
     <tr>
-      <td>${langNoQuestion}</td>
+      <td class="alert1"><font color="red">${langNoQuestion}</font></td>
     </tr>
 cData;
 }
 
 $tool_content .= "
+    </tbody>
     </table>";
 ?>

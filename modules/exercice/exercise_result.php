@@ -69,8 +69,17 @@ if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExer
 $exerciseTitle=$objExercise->selectTitle();
 
 $tool_content .= "
-    <p><b>".stripslashes($exerciseTitle)." : ".$langResult."</b></p>".
-	"<form method=\"GET\" action=\"exercice.php\">";
+      <table class=\"Exercise_Title\" width=\"99%\">
+      <thead>
+      <tr>
+        <td colspan=\"2\"><b>".stripslashes($exerciseTitle)." : ".$langResult."</b>
+        <br><br>
+        </td>
+      </tr>
+      </thead>
+      </table>
+	  
+	<form method=\"GET\" action=\"exercice.php\">";
 
 	$i=$totalScore=$totalWeighting=0;
 
@@ -428,14 +437,13 @@ $tool_content .= <<<cData
       <table width="99%" class="Exercise_Title">
       <thead>
       <tr>
-        <td class="center">
-        <b>${langYourTotalScore} ${totalScore}/${totalWeighting} !</b>
+        <td><div align="center">
+        <b>${langYourTotalScore} ${totalScore}/${totalWeighting} !</b></div>
         </td>
       </tr>
       <tr>
-        <td align="center">
-        <br>
-        <input type="submit" value="${langFinish}">
+        <td><div align="center">
+        <input type="submit" value="${langFinish}"></div>
         </td>
       </tr>
       </thead>

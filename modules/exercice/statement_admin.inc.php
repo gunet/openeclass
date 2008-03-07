@@ -141,7 +141,7 @@ if(($newQuestion || $modifyQuestion)) {
 	// is picture set ?
 	$okPicture=file_exists($picturePath.'/quiz-'.$questionId)?true:false;
 
-	$tool_content .= "<h3>$questionName</h3>";
+	//$tool_content .= "<h3>$questionName</h3>";
 	@$tool_content .= "<form enctype='multipart/form-data' method='post' action='$_SERVER[PHP_SELF]?modifyQuestion=$modifyQuestion&newQuestion=$newQuestion'>
     <table width=\"99%\" class=\"FormData\">
     <tbody>";
@@ -169,7 +169,7 @@ cData;
 $tool_content .= "
     <tr>
       <th width=\"220\">&nbsp;</td>
-      <td><b>$langAddQ</b></td>
+      <td><b>$langInfoQuestion</b></td>
     </tr>
     <tr>
       <th class=\"left\">".$langQuestion." :</td>

@@ -74,7 +74,7 @@ if(isset($modifyExercise))
 
 $tool_content .= <<<cData
     <form method="post" action="${PHP_SELF}?modifyExercise=${modifyExercise}">
-    <table width="99%"  class='FormData'>
+    <table width="99%" class='FormData'>
     <tbody>
 cData;
 
@@ -93,7 +93,7 @@ cData;
 $tool_content .= "
     <tr>
       <th class=\"left\" width=\"220\">&nbsp;</th>
-      <td><b>&nbsp;</b></td>
+      <td><b>$langInfoExercise</b></td>
     </tr>
     <tr>
       <th class=\"left\">".$langExerciseName." :</th>
@@ -183,20 +183,24 @@ $tool_content .= "
 cData;
 
 } else {
-$tool_content .= "
-    <div id=\"topic_title_id\">".$exerciseTitle."
-    <a href=\"".$PHP_SELF."?modifyExercise=yes\"><img src=\"../../template/classic/img/edit.gif\" ".
-	"border=\"0\" align=\"absmiddle\" title=\"".$langModify."\"></a></div>
-    <br>";
+
 
 	
 $tool_content .= <<<cData
 
-    <table width=\"99%\">
+    <table width="99%" class="FormData">
     <tbody>
     <tr>
-      <td><b>$langExerciseDescription</b></td>
-      <td>:</td>  
+      <th width="220" class="left">&nbsp;</th>
+      <td><b>$langInfoExercise</b>&nbsp;&nbsp;<a href="$PHP_SELF?modifyExercise=yes"><img src="../../template/classic/img/edit.gif"   border="0" align="absmiddle" title="$langModify"></a>
+      </td>
+    </tr>
+    <tr>
+      <th width="220" class="left">$langExerciseName :</th>
+      <td>$exerciseTitle</td>
+    </tr>
+    <tr>
+      <th class="left">$langExerciseDescription :</th>
       <td>
 cData;
 
@@ -206,23 +210,19 @@ $tool_content .= <<<cData
       </td>
     </tr>
     <tr>
-      <td width=\"200\"><b>${langExerciseStart}</b></td>
-      <td width=\"1\">:</td>  
+      <th class="left">${langExerciseStart} :</th>
       <td>${exerciseStartDate}</td>
     </tr>
     <tr>
-      <td><b>${langExerciseEnd}</b></td>
-      <td>:</td>  
+      <th class="left">${langExerciseEnd} :</th>
       <td>${exerciseEndDate}</td>
     </tr>
     <tr>
-      <td><b>${langExerciseConstrain}</b></td>
-      <td>:</td>  
+      <th class="left">${langExerciseConstrain} :</th>
       <td>${exerciseTimeConstrain} $langExerciseConstrainUnit</td>
     </tr>
     <tr>
-      <td><b>${langExerciseAttemptsAllowed}</b></td>
-      <td>:</td>
+      <th class="left">${langExerciseAttemptsAllowed} :</th>
       <td>${exerciseAttemptsAllowed} $langExerciseAttemptsAllowedUnit</td>
     </tr>
     </tbody>
@@ -230,6 +230,6 @@ $tool_content .= <<<cData
 
 cData;
 
-$tool_content .= "<br><br>";
+$tool_content .= "<br>";
 }
 ?>

@@ -152,7 +152,6 @@ cData;
 $tool_content .= <<<cData
 
       <br>
-
       <table align="left" width="99%">
       <thead>
       <tr>

@@ -906,6 +906,8 @@ $langDefScor="Define scoring settings";
 $langCreateModif="Creation/modification of questions";
 $langSub="Sub-title";
 $langNewQu="New question";
+$langInfoQuestion="Question Structure";
+$langInfoExercise="Exercise Structure";
 $langQuestion="Question";
 $langQuestions="Questions";
 $langAnswers="Answers";
@@ -924,6 +926,7 @@ $langQImage="Picture-question";
 $langAddQ="Add Question";
 $langAmong = "among";
 $langTake = "Take";
+
 
 // admin.php
 $langExerciseManagement="Exercise Management";

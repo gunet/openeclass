@@ -244,7 +244,6 @@ if($modifyIn == 'thisExercise') {
 }
 
 if($newQuestion || $modifyQuestion) {
-
 	// statement management
 	include('statement_admin.inc.php');
 }
@@ -268,5 +267,5 @@ if(!$newQuestion && !$modifyQuestion && !$editQuestion && !$modifyAnswers) {
 		include('question_list_admin.inc.php');
 	}
 }
-draw($tool_content, 2, '', $local_head, '');
+draw($tool_content, 2, 'Exercice', $local_head, '');
 ?>
