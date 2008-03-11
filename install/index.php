@@ -898,60 +898,37 @@ CREATE TABLE `auth` (
 		if (!$reguser) $user_registration = 'FALSE';
     else $user_registration = 'TRUE';
 		$stringConfig='<?php
-/*
-=============================================================================
-           GUnet eClass 2.0
-        E-learning and Course Management Program
-=============================================================================
-        Copyright(c) 2003-2007  Greek Universities Network - GUnet
-			
-				GUnet eClass 2.0 is an open platform distributed in the hope that   
-        it will be useful (without any warranty), under the terms of the     
-        GNU License (General Public License) as published by the Free        
-        Software Foundation. The full license can be read in "license.txt".
-        A full copyright notice can be read in "/info/copyright.txt".
+/* ========================================================
+ * GUnet eClass 2.0 configuration file
+ * Automatically created by install on '.date('Y-m-d H:i').'
+ * ======================================================== */
 
-           Main Developers Group:  Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-			Yannis Exidaridis <jexi@noc.uoa.gr>
-			Alexandros Diamantidis <adia@noc.uoa.gr>
-			Tilemachos Raptis <traptis@noc.uoa.gr>
+$urlServer = "'.$urlForm.'";
+$urlAppend = "'.$urlAppendPath.'";
+$webDir    = "'.str_replace("\\","/",realpath($pathForm)."/").'" ;
 
-        For a full list of contributors, see "credits.txt".
+$mysqlServer = "'.$dbHostForm.'";
+$mysqlUser = "'.$dbUsernameForm.'";
+$mysqlPassword = "'.$dbPassForm.'";
+$mysqlMainDb = "'.$mysqlMainDb.'";
+$phpMyAdminURL = "'.$dbMyAdmin.'";
+$phpSysInfoURL = "'.$phpSysInfoURL.'";
+$emailAdministrator = "'.$emailForm.'";
+$administratorName = "'.$nameForm.'";
+$administratorSurname = "'.$surnameForm.'";
+$siteName = "'.$campusForm.'";
 
-				Contact address: Asynchronous Teleteaching Group (eclass@gunet.gr),  
-		                       Network Operations Center, University of Athens,    
-    		                  Panepistimiopolis Ilissia, 15784, Athens, Greece
-
-=============================================================================
-*/
-
-
-$urlServer	=	"'.$urlForm.'";
-$urlAppend	=	"'.$urlAppendPath.'";
-$webDir		=	"'.str_replace("\\","/",realpath($pathForm)."/").'" ;
-
-$mysqlServer="'.$dbHostForm.'";
-$mysqlUser="'.$dbUsernameForm.'";
-$mysqlPassword="'.$dbPassForm.'";
-$mysqlMainDb="'.$mysqlMainDb.'";
-$phpMyAdminURL="'.$dbMyAdmin.'";
-$phpSysInfoURL="'.$phpSysInfoURL.'";
-$emailAdministrator="'.$emailForm.'";
-$administratorName="'.$nameForm.'";
-$administratorSurname="'.$surnameForm.'";
-$siteName="'.$campusForm.'";
-
-$telephone="'.$helpdeskForm.'";
-$fax="'.$faxForm.'";
-$emailhelpdesk="'.$helpdeskmail.'";
-$color1="#F5F5F5"; // light grey
-$color2="#E6E6E6"; // less light grey for bicolored tables
+$telephone = "'.$helpdeskForm.'";
+$fax = "'.$faxForm.'";
+$emailhelpdesk = "'.$helpdeskmail.'";
+$color1 = "#F5F5F5"; // light grey
+$color2 = "#E6E6E6"; // darker grey for bicolored tables
 
 $language = "greek";
 
-$Institution="'.$institutionForm.'";
-$InstitutionUrl="'.$institutionUrlForm.'";
-$postaddress="'.$postaddressForm.'";
+$Institution = "'.$institutionForm.'";
+$InstitutionUrl = "'.$institutionUrlForm.'";
+$postaddress = "'.$postaddressForm.'";
 
 $bannerPath = "images/gunet/banner.jpg";
 $colorLight = "#F5F5F5";
@@ -964,10 +941,10 @@ $close_user_registration = '.$user_registration.';
 $persoIsActive = '.$persoIsActive.';
 $durationAccount = "126144000";
 
-'.($vodServer==''?'//':'').'$vodServer="'.$vodServer.'";
-'.($MCU==''?'//':'').'$MCU="'.$MCU.'";
+'.($vodServer==''?'//':'').'$vodServer = "'.$vodServer.'";
+'.($MCU==''?'//':'').'$MCU = "'.$MCU.'";
 $encryptedPasswd = true;
-?>';
+';
 		// write to file
 		fwrite($fd, $stringConfig);
 		// message
