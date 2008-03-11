@@ -29,7 +29,7 @@ if(isset($usedInSeveralExercises))
 
 @$tool_content .= <<<cData
 
-    <h3>${questionName}</h3> lala!!!!!!!!!
+    <h3>${questionName}</h3>
     <form method="post" action="${PHP_SELF}?modifyQuestion=${modifyQuestion}&modifyAnswers=${modifyAnswers}">
     <table width="99%">
     <tr>
@@ -137,57 +137,68 @@ else
 
 	//$tool_content .= "<p><b>$questionName</b></p>";
 	$tool_content .= "
-    <table width='99%' class='Exercise_Title'>
-    <thead>
-    <tr>
-      <td class='left' colspan='2'><b>".nl2br($questionName)."</b>&nbsp;&nbsp;";
+      <table width='99%' class='Question'>
+      <thead>
+      <tr>
+        <th class='left' colspan='2'>
+          <b>".nl2br($questionName)."</b>&nbsp;&nbsp;";
 
 	// doesn't show the edit link if we come from the question pool to pick a question for an exercise
 	if(!isset($fromExercise)) {
 		$tool_content .= "
-      <a href=\"".$PHP_SELF."?modifyQuestion=".$questionId."\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" align=\"absmiddle\" title=\"".$langModify."\"></a>";
+          <a href=\"".$PHP_SELF."?modifyQuestion=".$questionId."\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" align=\"absmiddle\" title=\"".$langModify."\"></a>";
 	}
 
 $tool_content .= "
-      <br><i>$questionDescription</i>";
+          <br/>
+          <i>$questionDescription</i>";
 
 	// show the picture of the question
 	if($okPicture) {
 		$tool_content .= "
-      <br/>
-      <center><img src='$picturePath/quiz-$questionId' border='0'></center>
-      <br/>";
+          <br/>
+          <center><img src='$picturePath/quiz-$questionId' border='0'></center>
+          <br/>";
 	}
 
 	$tool_content .= "
-      </td>
-    </tr>";
+        </th>
+      </tr>";
 	
 
 
 $tool_content .= "
-    <tr>
-      <td colspan='2'><br/><b><u>$langQuestionAnswers</u>:</b>";
+      <tr>
+        <td colspan='2'>
+          <b><u>$langQuestionAnswers</u>:</b>";
 
-    // doesn't show the edit link if we come from the question pool to pick a question for an exercise
+     // doesn't show the edit link if we come from the question pool to pick a question for an exercise
      if(!isset($fromExercise)) {
         $tool_content .= "&nbsp;&nbsp;<a href='$PHP_SELF?modifyAnswers=$questionId'><img src='../../images/edit.gif' border='0' align='absmiddle' title='$langModify'></a>";
      }
 
         $tool_content .= "
-      <br/>";
+          <br/>
+        </td>
+      </tr>";
 
       // shows answers of the question. 'true' means that we don't show the question, only answers
       if(!showQuestion($questionId,true)) {
+	  /*
         $tool_content .= "
-      <font color='red'>$langNoAnswer</font>";	 
-      }
-$tool_content .= "
-      </td>
-    </tr>
-    </thead>
-    </table>
-    <br>";
+      <tr>
+        <td colspan='2'><font color='red'>$langNoAnswer</font></td>
+      </tr>";	 
+ 	  */
+       }
+ 	  
+
+    $tool_content .= "
+        </td>
+      </tr>
+      </thead>
+      </table>
+      <br/>";
 
 
 }

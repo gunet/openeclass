@@ -926,7 +926,7 @@ $langQuestionNotFound="Δεν βρέθηκε η ερώτηση";
 $langAlertAdmin="Παρακαλώ δηλώστε τουλάχιστον έναν διαχειριστή για το μάθημα!";
 
 // question_admin.inc.php
-$langNoAnswer="Δεν υπάρχει απάντηση αυτή την στιγμή";
+$langNoAnswer="Δεν υπάρχει απάντηση αυτή την στιγμή!";
 $langGoBackToQuestionPool="Επιστροφή στις διαθέσιμες ερωτήσεις";
 $langGoBackToQuestionList="Επιστροφή στη λίστα ερωτήσεων";
 $langQuestionAnswers="Απαντήσεις στην ερώτηση";

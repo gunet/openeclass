@@ -199,7 +199,7 @@ if(@$_POST['questionNum']) {
 	$exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 	$tool_content .= <<<cData
 
-      <table width="99%" class="Exercise_Title">
+      <table width="99%" class="Question">
       <tr>
         <td colspan=\"2\"><b>${exerciseTitle}</b>
         <br/><br/>
@@ -285,7 +285,7 @@ foreach($questionList as $questionId) {
 
     <br/>
 	
-    <table width=\"99%\" class=\"Exercise_Title\">
+    <table width=\"99%\" class=\"Question\">
     <tr>
       <td><div align=\"center\"><input type=\"submit\" value=\"";
 	if ($exerciseType == 1 || $nbrQuestions == $questionNum)

@@ -267,5 +267,5 @@ if(!$newQuestion && !$modifyQuestion && !$editQuestion && !$modifyAnswers) {
 		include('question_list_admin.inc.php');
 	}
 }
-draw($tool_content, 2, 'Exercice', $local_head, '');
+draw($tool_content, 2, 'exercice', $local_head, '');
 ?>

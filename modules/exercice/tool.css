@@ -30,7 +30,7 @@ table.Exercise td {
     background : #fbfbfb ;
 }
 
-table.Exercise_Title {
+table.Question {
     padding: 2px;
     vertical-align: middle;
     border-top: 1px solid #edecdf;
@@ -39,8 +39,22 @@ table.Exercise_Title {
     border-right: 1px solid #edecdf;
 }
 
+table.Question th {
+	padding: 4px;
+	background: #edecdf;
+	font-size:10px;
+	color: #727266;
+	vertical-align: middle;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+	font-style : normal;
+	font-variant : normal;
+	font-weight : normal;
+}
 
-table.Exercise_Title td {
+table.Question td {
     padding: 4px;
     background: #Fbfbfb;
     font-size:10px;

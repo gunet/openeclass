@@ -69,7 +69,7 @@ if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExer
 $exerciseTitle=$objExercise->selectTitle();
 
 $tool_content .= "
-      <table class=\"Exercise_Title\" width=\"99%\">
+      <table class=\"Question\" width=\"99%\">
       <thead>
       <tr>
         <td colspan=\"2\"><b>".stripslashes($exerciseTitle)." : ".$langResult."</b>
@@ -117,7 +117,7 @@ $iplus=$i+1;
 $tool_content .= <<<cData
 
       <br>
-      <table width="99%" class="Exercise_Title">
+      <table width="99%" class="Question">
       <thead>
       <tr>
         <td colspan="${colspan}"><div id="question_title_id">$langQuestion $iplus</div></td>
@@ -434,7 +434,7 @@ exit();
 
 $tool_content .= <<<cData
       <br>
-      <table width="99%" class="Exercise_Title">
+      <table width="99%" class="Question">
       <thead>
       <tr>
         <td><div align="center">
