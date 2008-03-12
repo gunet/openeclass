@@ -145,25 +145,32 @@ if (isset($fromExercise)) {
       </div>";
 
 $tool_content .= <<<cData
-
+\n
     <form method="get" action="${PHP_SELF}">
-    <!--<input type="hidden" name="fromExercise" value="$temp_fromExercise">-->
-    <table align="center" width="99%">
+cData;
+    //<!--<input type="hidden" name="fromExercise" value="$temp_fromExercise">-->
+
+$tool_content .= <<<cData
+
+
+    <table align="center" width="99%" class="Question">
+    <thead>
     <tr>
 cData;
 	
 	$tool_content .= "
-      <td colspan=\"";
+      <th colspan=\"";
 	if (isset($fromExercise))
 		$tool_content .= "2";
 	else
 		$tool_content .= "3";
 		
-	$tool_content .= "\" align=\"right\">";
+	$tool_content .= "\" align=\"right\" class=\"right\">";
   
-	$tool_content .= $langFilter." : <select name=\"exerciseId\">".
-		"<option value=\"0\">-- ".$langAllExercises." --</option>".
-		"<option value=\"-1\" ";
+	$tool_content .= "<b>".$langFilter."</b>: 
+      <select name=\"exerciseId\" class=\"FormData_InputText\">"."
+        <option value=\"0\">-- ".$langAllExercises." --</option>"."
+        <option value=\"-1\" ";
 		
 	if(isset($exerciseId) && $exerciseId == -1) 
 		$tool_content .= "selected=\"selected\""; 
@@ -181,7 +188,8 @@ cData;
 	
 	// shows a list-box allowing to filter questions
 	while($row=mysql_fetch_array($result)) {
-		$tool_content .= "<option value=\"".$row['id']."\"";
+		$tool_content .= "
+        <option value=\"".$row['id']."\"";
 	
 	if(isset($exerciseId) && $exerciseId == $row['id']) 
 		$tool_content .= "selected=\"selected\"";
@@ -189,9 +197,10 @@ cData;
 	}
 	
 $tool_content .= <<<cData
-    </select>
-    <input type="submit" value="${langOk}">
-      </td>
+
+      </select>
+      <input type="submit" value="${langOk}">
+      </th>
     </tr>
 cData;
 
@@ -222,8 +231,9 @@ cData;
 	$nbrQuestions=mysql_num_rows($result);
 
 $tool_content .= <<<cData
+
     <tr>
-      <td colspan="
+      <th colspan="
 cData;
 
 
@@ -234,12 +244,12 @@ else
 
 $tool_content .= "\">
 
-    <table width=\"95%\">
-    <tbody>
-    <tr>";
+      <table width=\"100%\">
+      <thead>
+      <tr>";
 
 	  $tool_content .= "
-      <td align=\"right\">";
+        <th align=\"right\">";
 
 	if(isset($page)) {
 
@@ -267,20 +277,23 @@ $tool_content .= "\">
 	}
 
 	 $tool_content .= <<<cData
-      </td>
+        </th>
+      </tr>
+      </thead>
+      </table>
+	  
+      </th>
     </tr>
-    </table>
-    </td>
-		</tr>
-		<tr>
+    <tr>
 cData;
 
 	if(isset($fromExercise))
 	{
 
 	$tool_content .= <<<cData
-	  <th class='left' width="80%">${langQuestion}</th>
-	  <th width="20%" align="center">${langReuse}</th>
+
+      <th class='left' width="90%"><b>${langQuestion}</b></th>
+      <th width="10%" align="center"><b>${langReuse}</b></th>
 cData;
 
 	}
@@ -288,13 +301,16 @@ cData;
 	{
 
   $tool_content .= <<<cData
-	<th class='left' width="80%">${langQuestion}</th>
-	<th width="10%" align="center">${langModify}</th>
-	<th width="10%" align="center">${langDelete}</th>
+      <th class='left' width="90%"><b>${langQuestion}</b></th>
+      <th width="5%" align="center"><b>${langModify}</b></th>
+      <th width="5%" align="center"><b>${langDelete}</b></th>
 cData;
 	}
 
-$tool_content .= "</tr>";
+$tool_content .= "
+    </thead>
+    <tbody>
+    </tr>";
 $i=1;
 
 	while($row=mysql_fetch_array($result))
@@ -306,30 +322,35 @@ $i=1;
 //$tool_content .= "<tr><td><a href=\"admin.php?editQuestion=".$row['id'].
 //	"&fromExercise=".$fromExercise."\">".$row['question']."</a></td><td align=\"center\">";
 
-			if(!isset($fromExercise)) {
-				//$tool_content .= "<a href=\"admin.php?editQuestion=".$row['id']."\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a>";
+	if(!isset($fromExercise)) {
+	$tool_content .= "
+    <tr>
+      <td><a href=\"admin.php?editQuestion=".$row['id']."&fromExercise=\"\">".$row['question']."</a></td>
+      <td><div align=\"center\"><a href=\"admin.php?editQuestion=".$row['id']."\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a></div>";
+	} else {
+	$tool_content .= "
+    <tr>
+      <td><a href=\"admin.php?editQuestion=".$row['id']."&fromExercise=".$fromExercise."\">".$row['question']."</a></td>
+      <td class=\"center\"><div align=\"center\">";
 				
-				$tool_content .= "<tr><td><a href=\"admin.php?editQuestion=".$row['id'].
-					"&fromExercise=\"\">".$row['question']."</a></td><td align=\"center\"><a href=\"admin.php?editQuestion=".$row['id']."\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a>";
-			} else {
-				$tool_content .= "<tr><td><a href=\"admin.php?editQuestion=".$row['id'].
-					"&fromExercise=".$fromExercise."\">".$row['question']."</a></td><td align=\"center\">";
-				
-				$tool_content .= "<a href=\"".$PHP_SELF."?recup=".$row['id'].
+	$tool_content .= "<a href=\"".$PHP_SELF."?recup=".$row['id'].
 					"&fromExercise=".$fromExercise."\"><img src=\"../../template/classic/img/enroll.gif\" border=\"0\" alt=\"".$langReuse."\"></a>";
-			}
+	}
 
-  $tool_content .= "</td>";
+  $tool_content .= "
+      </td>";
 
 	if(!isset($fromExercise)) {
 
-	  $tool_content .= "<td align=\"center\"><a href=\"".$PHP_SELF."?exerciseId=".$exerciseId."&delete=".$row['id']."\"". 
+	  $tool_content .= "
+      <td><div align=\"center\"><a href=\"".$PHP_SELF."?exerciseId=".$exerciseId."&delete=".$row['id']."\"". 
 		" onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice)).
-		"')) return false;\"><img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a></td>";
+		"')) return false;\"><img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a></div></td>";
 
 			}
 
-$tool_content .= "</tr>";
+$tool_content .= "
+    </tr>";
 
 			// skips the last question, that is only used to know if we have or not to create a link "Next page"
 			if($i == $limitQuestPage) {
@@ -340,12 +361,15 @@ $tool_content .= "</tr>";
 	}
 
 	if(!$nbrQuestions) {
-		$tool_content .= "<tr><td colspan=\"";
+		$tool_content .= "
+    <tr>
+      <td colspan=\"";
 		if (isset($fromExercise)&&($fromExercise))
 			$tool_content .= "2";
 		else
 			$tool_content .= "3";	
-	$tool_content .= "\">".$langNoQuestion."</td></tr>";
+	$tool_content .= "\">".$langNoQuestion."</td>
+    </tr>";
 }
 
 $tool_content .= <<<cData
@@ -361,5 +385,5 @@ else {
 	$tool_content .= $langNotAllowed;
 }
 
-draw($tool_content, 2);
+draw($tool_content, 2, 'exercice');
 ?>

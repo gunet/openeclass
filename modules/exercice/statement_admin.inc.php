@@ -142,74 +142,86 @@ if(($newQuestion || $modifyQuestion)) {
 	$okPicture=file_exists($picturePath.'/quiz-'.$questionId)?true:false;
 
 	//$tool_content .= "<h3>$questionName</h3>";
-	@$tool_content .= "<form enctype='multipart/form-data' method='post' action='$_SERVER[PHP_SELF]?modifyQuestion=$modifyQuestion&newQuestion=$newQuestion'>
+	@$tool_content .= "
+    <form enctype='multipart/form-data' method='post' action='$_SERVER[PHP_SELF]?modifyQuestion=$modifyQuestion&newQuestion=$newQuestion'>
+
     <table width=\"99%\" class=\"FormData\">
     <tbody>";
 
-	if($okPicture) {
-		$tool_content .= "
-    <tr>
-      <td colspan='2' align='center'><img src='$picturePath/quiz-$questionId' border='0'></td>
-    </tr>";
-	}
-
 	// if there is an error message
-	if(!empty($msgErr))		{
-$tool_content .= <<<cData
+	if(!empty($msgErr)) {
+	$tool_content .= <<<cData
     <tr>
       <td colspan="2">
-		<table border="0" cellpadding="3" align="center" width="400" bgcolor="#FFCC00">
-		<tr><td>${msgErr}</td></tr>
-		</table>
+        <table border="0" cellpadding="3" align="center" width="400" bgcolor="#FFCC00">
+        <tr>
+          <td>${msgErr}</td>
+        </tr>
+        </table>
       </td>
     </tr>
 cData;
 	}
 
-$tool_content .= "
+	$tool_content .= "
     <tr>
       <th width=\"220\">&nbsp;</td>
       <td><b>$langInfoQuestion</b></td>
     </tr>
     <tr>
-      <th class=\"left\">".$langQuestion." :</td>
-      <td><input type=\"text\" name=\"questionName\"" .
-	"size=\"50\" maxlength=\"200\" value=\"".htmlspecialchars($questionName)."\" style=\"width:400px;\"  class=\"FormData_InputText\"></th>";
+      <th class=\"left\">".$langQuestion." :</th>
+      <td><input type=\"text\" name=\"questionName\"" ."size=\"50\" maxlength=\"200\" value=\"".htmlspecialchars($questionName)."\" style=\"width:400px;\" class=\"FormData_InputText\"></td>";
 
-$tool_content .= <<<cData
+	$tool_content .= <<<cData
     </tr>
     <tr>
       <th class='left'>${langQuestionDescription} :</th>
 cData;
 
-  $tool_content .= "
-    <td><textarea wrap=\"virtual\" name=\"questionDescription\" cols=\"50\" rows=\"4\" ".
-  	"style=\"width:400px;\" class=\"FormData_InputText\">".htmlspecialchars($questionDescription)."</textarea></td>
+	$tool_content .= "
+      <td><textarea wrap=\"virtual\" name=\"questionDescription\" cols=\"50\" rows=\"4\" "."style=\"width:400px;\" class=\"FormData_InputText\">".htmlspecialchars($questionDescription)."</textarea></td>
     </tr>
     <tr>
       <th class='left'>";
 
-if ($okPicture) 
-	$tool_content .= "$langReplacePicture";
-else 
-	$tool_content .= "$langAddPicture";	
+	if ($okPicture) 
+		$tool_content .= "$langReplacePicture";
+	else 
+		$tool_content .= "$langAddPicture";	
 
-$tool_content .= " :</th>
-      <td><input type=\"file\" name=\"imageUpload\" size=\"30\" style=\"width:390px;\">";
+	$tool_content .= " :</th>
+      <td>";
+	  
+	if($okPicture) {
+		$tool_content .= "<img src='$picturePath/quiz-$questionId' border='0'>
+      <br/><br/>";
+	}
+	  
+	  
+	$tool_content .= "
+      <input type=\"file\" name=\"imageUpload\" size=\"30\" style=\"width:390px;\">
+      </td>
+    </tr>";
+	  
 	if ($okPicture)
 	{
-
-	$tool_content .= "<br><input type=\"checkbox\" name=\"deletePicture\" value=\"1\" ";
+	$tool_content .= "
+    <tr>
+      <th class='left'>$langDeletePicture :</th>
+      <td><input type=\"checkbox\" name=\"deletePicture\" value=\"1\" ";
 	
 	if(isset($deletePicture)) 
 		$tool_content .= 'checked="checked"'; 
-	$tool_content .= "> ".$langDeletePicture;
+	$tool_content .= "> ";
 
+	  $tool_content .= <<<cData
+      </td>
+    </tr>
+cData;
 	}
 
   $tool_content .= <<<cData
-      </td>
-    </tr>
+
     <tr>
       <th class='left'>${langAnswerType} :</th>
 cData;
@@ -218,15 +230,21 @@ $tool_content .= "
       <td><input type=\"radio\" name=\"answerType\" value=\"1\" ";
         if ($answerType <= 1)
                 $tool_content .= 'checked="checked"';
-        $tool_content .= "> ".$langUniqueSelect."<br>";
+        $tool_content .= "> ".$langUniqueSelect."
+          <br>
+          ";
         $tool_content .= "<input type=\"radio\" name=\"answerType\" value=\"2\" ";
                 if ($answerType == 2)
                         $tool_content .= 'checked="checked"';
-                $tool_content .= "> ".$langMultipleSelect."<br>";
+                $tool_content .= "> ".$langMultipleSelect."
+          <br>
+          ";
         $tool_content .= "<input type=\"radio\" name=\"answerType\" value=\"4\" ";
                 if ($answerType >= 4)
                         $tool_content .= 'checked="checked"';
-                $tool_content .= "> ".$langMatching."<br>";
+                $tool_content .= "> ".$langMatching."
+          <br>
+          ";
         $tool_content .= "<input type=\"radio\" name=\"answerType\" value=\"3\" ";
                 if ($answerType == 3)
                         $tool_content .= 'checked="checked"';
@@ -234,6 +252,8 @@ $tool_content .= "
 
 
 $tool_content .= <<<cData
+
+      </td>
     <tr>
       <th>&nbsp;</td>
       <td>

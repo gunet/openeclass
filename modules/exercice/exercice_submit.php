@@ -280,8 +280,20 @@ foreach($questionList as $questionId) {
 	break;
 	}
 }	// end foreach()
+
+if (!$questionList) 
+{
+   $tool_content .= "
+      <table width=\"99%\" class=\"Exercise\">
+      <thead>
+      <tr>
+        <td colspan='2'><font color='red'>$langNoAnswer</font></td>
+      </tr>
+      </thead>
+      </table>";	 
+   }
 	$tool_content .= "
-    </table>
+
 
     <br/>
 	
@@ -301,5 +313,6 @@ foreach($questionList as $questionId) {
 	
     </form> 
 ";
+
 draw($tool_content, 2, 'exercice');
 ?>
