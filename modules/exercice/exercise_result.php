@@ -455,6 +455,6 @@ $tool_content .= <<<cData
 	<br>
 cData;
 
-draw($tool_content, 2, 'Exercice');
+draw($tool_content, 2, 'exercice');
 
 ?>
