@@ -151,24 +151,24 @@ cData;
 
 $tool_content .= <<<cData
 
-      <br>
-      <table align="left" width="99%">
+      <table align="left" width="99%" class="ExerciseSum">
       <thead>
       <tr>
-
 cData;
 
 // shows the title bar only for the administrator
 if($is_allowedToEdit) {
 
 $tool_content .= <<<cData
-        <th>${langExerciseName}</th>
-        <th>${langModify}</th>
-        <th>${langDelete}</th>
-        <th>${langActivate} / ${langDeactivate}</th>
-        <th>${langResults}</th>
+
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;${langExerciseName}</td>
+        <td><div align="center">${langModify}</div></td>
+        <td><div align="center">${langDelete}</div></td>
+        <td><div align="center">${langActivate} / ${langDeactivate}</div></td>
+        <td><div align="center">${langResults}</div></td>
       </tr>
       </thead>
+
 cData;
 
 } else {
@@ -176,11 +176,11 @@ cData;
 // student view
 $tool_content .= <<<cData
 
-        <th>$langExerciseName</th>
-        <th width='150'>$langExerciseStart</th>
-        <th width='150'>$langExerciseEnd</th>
-        <th width='50'>$langExerciseConstrain</th>
-        <th width='50'>$langExerciseAttemptsAllowed</th>
+        <td>$langExerciseName</td>
+        <td width="150"><div align="center">$langExerciseStart</div></td>
+        <td width="150"><div align="center">$langExerciseEnd</div></td>
+        <td width="50"><div align="center">$langExerciseConstrain</div></td>
+        <td width="50"><div align="center">$langExerciseAttemptsAllowed</div></td>
       </tr>
       </thead>
 cData;
@@ -225,8 +225,7 @@ cData;
 	$tool_content .= <<<cData
 
         <td width="10%" align="center"><a href="admin.php?exerciseId=${row['id']}"><img src="../../template/classic/img/edit.gif" border="0" alt="${langModify_temp}"></a></td>
-        <td width="10%" align="center"><a href="$_SERVER[PHP_SELF]?choice=delete&exerciseId=${row['id']}" 
-        onclick="javascript:if(!confirm('${langConfirmYourChoice_temp}')) return false;"><img src="../../template/classic/img/delete.gif" border="0" alt="${langDelete_temp}"></a></td>
+        <td width="10%" align="center"><a href="$_SERVER[PHP_SELF]?choice=delete&exerciseId=${row['id']}"  onclick="javascript:if(!confirm('${langConfirmYourChoice_temp}')) return false;"><img src="../../template/classic/img/delete.gif" border="0" alt="${langDelete_temp}"></a></td>
 cData;
 
 		// if active
@@ -275,25 +274,25 @@ if ($NumOfResults[0]) {
 	$temp_EndDate = mktime(substr($row['EndDate'], 11,2),substr($row['EndDate'], 14,2),substr($row['EndDate'], 17,2),substr($row['EndDate'], 5,2),substr($row['EndDate'], 8,2),substr($row['EndDate'], 0,4));
 	if (($CurrentDate >= $temp_StartDate) && ($CurrentDate < $temp_EndDate)) {
 		$tool_content .= "
-      <tr>
         <td><a href=\"exercice_submit.php?exerciseId=".$row['id']."\">".$row['titre']."</a>";
 	} else {
 		$tool_content .= $row['titre'];
 	}
 	  $tool_content .= "</td>
-        <td align='center'>$row[StartDate]</td><td align='center'>$row[EndDate]</td>";
+        <td align='center'><small>$row[StartDate]</small></td>
+        <td align='center'><small>$row[EndDate]</small></td>";
 	  if ($row['TimeConstrain']>0)
 		  	$tool_content .= "
-        <td>$row[TimeConstrain] $langExerciseConstrainUnit</td>";
+        <td align='center'><small>$row[TimeConstrain] $langExerciseConstrainUnit</small></td>";
 		else 	
 				$tool_content .= "
-        <td align='center'> - </td>";
+        <td align='center'><small> - </small></td>";
 	  if ($row['AttemptsAllowed']>0)	
 		   $tool_content .= "
-        <td align='center'>$row[AttemptsAllowed]</td>"; 
+        <td align='center'><small>$row[AttemptsAllowed]</small></td>"; 
 		else
 			 $tool_content .= "
-        <td align='center'> - </td>";
+        <td align='center'><small> - </small></td>";
 	  
 	  $tool_content .= "
       </tr>";
@@ -309,5 +308,5 @@ if ($NumOfResults[0]) {
 
 $tool_content .= "
       </table>";
-draw($tool_content, 2);
+draw($tool_content, 2, 'exercice');
 ?>

@@ -964,6 +964,9 @@ $langDefineBlanks="Ορίστε τουλάχιστον ένα κενό με αγκύλες [...]";
 $langGiveAnswers="Δώστε τις απαντήσεις στις ερωτήσεις";
 $langChooseGoodAnswer="Διαλέξτε την σωστή απάντηση";
 $langChooseGoodAnswers="Διαλέξτε μία ή περισσότερες σωστές απαντήσεις";
+$langColumnA="Στήλη Α";
+$langColumnB="Στήλη B";
+$langMoreLessChoices="Προσθήκη/Αφαίρεση επιλογών";
 
 // question_list_admin.inc.php
 $langQuestionList="Κατάλογος ερωτήσεων της άσκησης";

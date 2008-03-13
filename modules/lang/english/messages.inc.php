@@ -975,6 +975,9 @@ $langDefineBlanks="Define one blank by tags [...]";
 $langGiveAnswers="Enter answers";
 $langChooseGoodAnswer="Choose the correct answer";
 $langChooseGoodAnswers="Choose the correct answers";
+$langColumnA="Column Á";
+$langColumnB="Column B";
+$langMoreLessChoices="More/Less choices";
 
 // question_list_admin.inc.php
 $langNewQu="New Question";

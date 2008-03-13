@@ -689,58 +689,29 @@ $tool_content .= "\">\n";
 
     $tool_content .= <<<cData
 	
-      <table class="Question" width="99%">
-      <thead>
+      <table class="FormData" width="99%">
+      <tbody>
       <tr>
-        <th class="left"><b>$questionName</b></th>
+        <th class="left" width="220">$langQuestion:</th>
+        <td><b>$questionName</b></td>
       </tr>
 cData;
 
 	if($okPicture)
 	{
      $tool_content .= "
-        <tr>
-          <th align=\"center\"><img src=\"".$picturePath."/quiz-".$questionId."\" border=\"0\"></th>
-        </tr>";
+      <tr>
+        <th colspan=\"2\"align=\"center\"><img src=\"".$picturePath."/quiz-".$questionId."\" border=\"0\"></th>
+      </tr>";
 	}
 	
     $tool_content .= <<<cData
       <tr>
-        <td>
-        <table width="100%">
-        <tbody>
-        <tr>
-          <th></th>
-          <td><b><u>$langQuestionAnswers</u>:</b></td>
-        </tr>
+        <th class="left">$langQuestionAnswers:</th>
+        <td>$langTypeTextBelow, $langAnd $langUseTagForBlank :<br/><br/>
+            <textarea wrap="virtual" name="reponse" cols="70" rows="6" class="FormData_InputText">
 cData;
 
-				// if there is an error message
-				if(!empty($msgErr))
-				{
-
-$tool_content .= "\n";
-$tool_content .= <<<cData
-
-        <tr>
-          <td colspan="2">
-          <table border="0" cellpadding="3" align="center" width="400" bgcolor="#FFCC00">
-          <tr>
-            <td>$msgErr</td>
-          </tr>
-          </table>
-          </td>
-        </tr>
-cData;
-
-				}
-
-$tool_content .= "
-        <tr>
-          <th class=\"left\" width=\"220\">".$langTypeTextBelow.", ".$langAnd." ".$langUseTagForBlank." :</th>
-          <td><textarea wrap=\"virtual\" name=\"reponse\" cols=\"65\" rows=\"6\" class=\"FormData_InputText\">";
-
-  
   if(!isset($submitAnswers) && empty($reponse)) 
   	$tool_content .= $langDefaultTextInBlanks; 
   else 
@@ -749,11 +720,37 @@ $tool_content .= "
 $tool_content .= <<<cData
 
             </textarea>
+        </td>
+      </tr>
+cData;
+
+		// if there is an error message
+		if(!empty($msgErr))
+		{
+
+		$tool_content .= "\n";
+		$tool_content .= <<<cData
+
+        <tr>
+          <th>&nbsp;</th>
+          <td>
+          <table border="0" cellpadding="3" align="center" width="400" bgcolor="#FFCC00">
+          <tr>
+            <td>$msgErr</td>
+          </tr>
+          </table>
           </td>
         </tr>
+cData;
+		}
+
+
+
+$tool_content .= <<<cData
+
         <tr>
-          <th></th>
-          <td colspan="5" align="center">
+          <th>&nbsp;</th>
+          <td>
           <input type="submit" name="submitAnswers" value="${langNext} &gt;">
           &nbsp;&nbsp;<input type="submit" name="cancelAnswers" value="${langCancel}">
           </td>
@@ -772,12 +769,11 @@ $tool_content .= "
       <input type=\"hidden\" name=\"reponse\" value=\"".htmlspecialchars($reponse)."\">";
 $tool_content .= <<<cData
 
-      <table border="0" cellpadding="5" width="100%">
 cData;
 
-				// if there is an error message
-				if(!empty($msgErr))
-				{
+		// if there is an error message
+		if(!empty($msgErr))
+		{
 
 $tool_content .= <<<cData
 
@@ -791,8 +787,7 @@ $tool_content .= <<<cData
         </td>
       </tr>
 cData;
-
-				}
+		}
 
 $tool_content .= <<<cData
 
@@ -814,7 +809,7 @@ cData;
 				//$tool_content .= $i;
 				$tool_content .= "
       <tr>
-        <th class=\"left\">".$blank." :</th>"."
+        <th class=\"right\">[".$blank."] :</th>"."
         <td><input type=\"text\" name=\"weighting[".$i."]\" "."size=\"5\" value=\"".intval($weighting[$i])."\" class=\"FormData_InputText\"></td>
       </tr>";
 	    		}
@@ -864,7 +859,7 @@ $tool_content .= <<<cData
     <tbody>
     <tr>
       <th width="220" class="left">$langQuestion :</th>
-      <td colspan="3" class="left">$questionName</td>
+      <td colspan="3" class="left"><b>$questionName</b></td>
     </tr>	
 cData;
 
@@ -903,9 +898,15 @@ cData;
 
 $tool_content .= <<<cData
     <tr>
-      <th class="left">$langMakeCorrespond :</th>
-      <td align="center"><b>$langQuestionWeighting</b></td>
-      <td align="center"><b>$langQuestionWeighting</b></td>
+      <th class="left">$langDefineOptions</th>
+      <td>&nbsp;</td>
+      <th align="right" colspan="2"><b>$langMakeCorrespond</b></th>
+    </tr>
+    <tr>
+      <th class="right">$langColumnA:</th>
+      <td align="left">$langMoreLessChoices: <input type="submit" name="moreMatches" value="+">&nbsp;<input type="submit" name="lessMatches" value="-">
+      </td>
+      <td align="center"><b>$langColumnB</b></td>
       <td align="center"><b>$langQuestionWeighting</b></td>
     </tr>
 cData;
@@ -922,8 +923,8 @@ if(!isset($formSent) && !isset($match[$i]))
 else 
 	$tool_content .= @htmlspecialchars($match[$i]);
 
-  $tool_content .= "\"></td>
-      <td align=\"center\"><select name=\"sel[".$i."]\">";
+  $tool_content .= "\" class=\"auth_input\"></td>
+      <td align=\"center\"><select name=\"sel[".$i."]\"  class=\"auth_input\">";
 
 				foreach($listeOptions as $key=>$val)
 				{
@@ -937,7 +938,7 @@ if((!isset($submitAnswers) && !isset($sel[$i]) && $j == 2 && $val == 'B') || @$s
 				} // end foreach()
 
 $tool_content .= "</select></td>
-      <td align=\"center\"><input type=\"text\" size=\"8\" ".
+      <td align=\"center\"><input type=\"text\" size=\"3\" ".
 	"name=\"weighting[".$i."]\" value=\"";
 	
 	
@@ -946,22 +947,20 @@ $tool_content .= "</select></td>
 	else 
 		$tool_content .= $weighting[$i];
 		
-	$tool_content .= "\"></td>
+	$tool_content .= "\"  class=\"auth_input\"></td>
     </tr>";
 
 		  	} // end for()
 
 $tool_content .= <<<cData
     <tr>
-      <th>
-      <input type="submit" name="moreMatches" value="$langMoreElements">
-      &nbsp;&nbsp;<input type="submit" name="lessMatches" value="$langLessElements">
-      </th>
+      <th class="right">&nbsp;</th>
       <td colspan="3">&nbsp;</td>
     </tr>
     <tr>
-      <th class="left">$langDefineOptions :</th>
-      <td colspan="3">&nbsp;</td>
+      <th class="right">$langColumnB:</th>
+      <td colspan="3">$langMoreLessChoices: <input type="submit" name="moreOptions" value="+">&nbsp;<input type="submit" name="lessOptions" value="-">
+      </td>
   </tr>
 cData;
 
@@ -971,8 +970,8 @@ cData;
 $tool_content .= "
     <tr>
       <th class=\"right\">".$val."</th>
-      <td colspan=\"3\"><input type=\"text\" ".
-	"name=\"option[".$key."]\" size=\"80\" value=\"";
+      <td><input type=\"text\" ".
+	"name=\"option[".$key."]\" size=\"58\" value=\"";
 	
 	
 	if(!isset($formSent) && !isset($option[$key])) 
@@ -980,18 +979,17 @@ $tool_content .= "
 	else 
 		$tool_content .= @htmlspecialchars($option[$key]);
 		
-		$tool_content .= "\"></td>
+		$tool_content .= "\" class=\"auth_input\"></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
     </tr>";
 
 			 } // end foreach()
 
 $tool_content .= <<<cData
     <tr>
-      <th>
-      <input type="submit" name="moreOptions" value="${langMoreElements}">
-      &nbsp;&nbsp;<input type="submit" name="lessOptions" value="${langLessElements}">
-      </th>
-      <td colspan="3" align="center">
+      <th>&nbsp;</th>
+      <td colspan="3" align="left">
       <input type="submit" name="submitAnswers" value="${langOk}">
       &nbsp;&nbsp;<input type="submit" name="cancelAnswers" value="${langCancel}">
       </td>

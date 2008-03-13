@@ -26,7 +26,7 @@
 
 function showQuestion($questionId, $onlyAnswers=false)
 {
-	global $tool_content, $picturePath, $webDir, $langNoAnswer;
+	global $tool_content, $picturePath, $webDir, $langNoAnswer, $langColumnA, $langColumnB, $langMakeCorrespond;
  	include_once "$webDir"."/modules/latexrender/latex.php";
 
 	// construction of the Question object
@@ -79,6 +79,21 @@ cData;
 		$cpt1='A';
 		$cpt2=1;
 		$Select=array();
+		$tool_content .= <<<cData
+      <tr>
+        <td colspan="2">
+        <table width="100%">
+        <thead>
+        <tr>
+          <td width="44%" class="left"><u><b>$langColumnA</b></u></td>
+          <td width="12%"><div align="center"><b>Αντιστοιχία</b></div></td>
+          <td width="44%" class="left"><u><b>$langColumnB</b></u></td>
+        </tr>
+        </thead>
+        </table>
+        </td>
+      </tr>
+cData;
 	}
 
 	for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
@@ -138,26 +153,26 @@ cData;
 
       <tr>
         <td colspan="2">
-        <table>
+        <table width="100%">
         <thead>
         <tr>
-          <td width="45%" valign="top"><b>${cpt2}.</b> ${answer}</td>
-          <td width="10%" align="center">&nbsp;&nbsp;
+          <td width="44%"><b>${cpt2}.</b> ${answer}</td>
+          <td width="12%"><div align="center">
             <select name="choice[${questionId}][${answerId}]">
             <option value="0">--</option>
 cData;
 
-	            // fills the list-box
+	       // fills the list-box
            foreach($Select as $key=>$val)
-	            {
-								$tool_content .= "
+	       {
+			$tool_content .= "
             <option value=\"${key}\">${val['Lettre']}</option>";
-							}  // end foreach()
+		   }// end foreach()
 
 		  $tool_content .= "
-            </select>&nbsp;&nbsp;
+            </select></div>
           </td>
-          <td width=\"45%\" valign=\"top\">";
+          <td width=\"44%\">";
 		  
 		  if(isset($Select[$cpt2])) 
 		  	$tool_content .= '<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse']; 

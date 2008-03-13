@@ -1,3 +1,50 @@
+table.ExerciseSum{
+    padding: 2px;
+    vertical-align: middle;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.ExerciseSum thead{
+	padding: 2px;
+	vertical-align: middle;
+	border-top: 1px solid #CAC3B5;
+	border-bottom: 1px solid #CAC3B5;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+}
+
+table.ExerciseSum tbody{
+    padding: 2px;
+    vertical-align: middle;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #CAC3B5;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.ExerciseSum th{
+    text-align: center;
+    padding: 4px;
+    padding-bottom: 6px;
+    padding-top: 6px;
+    font-weight: bold;
+    font-size:10px !important; 
+    vertical-align: middle;
+	background : #fbfbfb ;
+}
+
+table.ExerciseSum td {
+    padding: 4px;
+    color: #727266;
+    vertical-align: middle;
+    background : #fbfbfb ;
+}
+
+
+
 table.Exercise {
     padding: 2px;
     vertical-align: middle;
@@ -7,20 +54,17 @@ table.Exercise {
     border-right: 1px solid #edecdf;
 }
 
+
+
 table.Exercise th{
     text-align: center;
     padding: 4px;
     padding-bottom: 6px;
     padding-top: 6px;
     font-weight: bold;
-    background: #fbfbfb;
     font-size:10px !important; 
-    color: #727266;
     vertical-align: middle;
-    border-top: 1px solid #edecdf;
-    border-bottom: 1px solid #edecdf;
-    border-left: 1px solid #edecdf;
-    border-right: 1px solid #edecdf;
+	background : #fbfbfb ;
 }
 
 table.Exercise td {
