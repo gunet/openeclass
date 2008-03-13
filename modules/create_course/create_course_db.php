@@ -588,6 +588,7 @@ mysql_query ("CREATE TABLE document (id int(4) NOT NULL auto_increment,
 ############################# VIDEO ###########################################
     mysql_query("CREATE TABLE video (
                id int(11) NOT NULL auto_increment,
+	       path varchar(255),
                url varchar(200),
                titre varchar(200),
                description text,

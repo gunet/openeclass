@@ -34,7 +34,7 @@ $require_current_course = TRUE;
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';
-include 'forcedownload.php';
+include '../../include/lib/forcedownload.php';
 
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
@@ -120,7 +120,6 @@ if($is_adminOfCourse)
 
 	/*********************************************************************
 	UPLOAD FILE
-
 	//ousiastika dhmiourgei ena safe_fileName xrhsimopoiwntas ta DATETIME wste na mhn dhmiourgeitai
 	//provlhma sto filesystem apo to onoma tou arxeiou. Parola afta to palio filename pernaei apo
 	//'filtrarisma' wste na apofefxthoun 'epikyndynoi' xarakthres.
@@ -187,22 +186,16 @@ if($is_adminOfCourse)
 				// Added by Thomas
 				$dialogBox .= "<table width=\"99%\">
 				<tbody>
-					<tr>
-						<td class=\"success\">
-							<p><b>$langDownloadAndZipEnd</b></p>
-							
-						</td>
-					</tr>
-				</tbody>
-			</table>";
+				<tr>
+				<td class=\"success\">
+				<p><b>$langDownloadAndZipEnd</b></p>
+				</td></tr></tbody></table>";
 			}
-
 		}
 		else
 		{
 
 			$fileName = trim ($_FILES['userFile']['name']);
-
 
 			//elegxos ean to "path" tou arxeiou pros upload vrisketai hdh se eggrafh ston pinaka documents
 			//(aftos einai ousiastika o elegxos if_exists dedomenou tou oti to onoma tou arxeiou sto filesystem
@@ -218,8 +211,6 @@ if($is_adminOfCourse)
 				$dialogBox .= "<b>$langFileExists !</b>";
 			}else //to arxeio den vrethike sth vash ara mporoume na proxwrhsoume me to upload
 			{
-
-
 				/**** Check for no desired characters ***/
 				$fileName = replace_dangerous_char($fileName);
 
@@ -229,11 +220,9 @@ if($is_adminOfCourse)
 				/*** Handle PHP files ***/
 				$fileName = php2phps($fileName);
 
-
 				//ypologismos onomatos arxeiou me date + time.
 				//to onoma afto tha xrhsimopoiei sto filesystem & tha apothikevetai ston pinaka documents
 				$safe_fileName = date("YmdGis").randomkeys("8").".".get_file_extention($fileName);
-
 
 				//prosthiki eggrafhs kai metadedomenwn gia to eggrafo sth vash
 				if ($uploadPath == ".") $uploadPath2 = "/".$safe_fileName; else $uploadPath2 = $uploadPath."/".$safe_fileName;
@@ -243,7 +232,6 @@ if($is_adminOfCourse)
 
 				//san date you arxeiou xrhsimopoihse thn shmerinh hm/nia
 				$file_date = date("Y\-m\-d G\:i\:s");
-
 
 				$query = "INSERT INTO ".$dbTable." SET
 		            	path			=		'".mysql_real_escape_string($uploadPath2)."',
@@ -405,28 +393,18 @@ if($is_adminOfCourse)
 
 
 		if (is_dir("$baseWorkDir/$sourceFile")) {
-			//	echo "F=", $baseWorkDir.$sourceFile, "R=", $renameTo2;
 			my_rename($baseWorkDir.$sourceFile, $renameTo2);
 			update_db_info("update", $sourceFile,
 			dirname($sourceFile).'/'.$renameTo2);
 		}
 
 
-		$dialogBox = "
-	<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"success\">
-							<p><b>$langElRen</b></p>
-							
-						</td>
-					</tr>
-				</tbody>
-			</table>";
+		$dialogBox = "<table width=\"99%\"><tbody><tr><td class=\"success\">
+			<p><b>$langElRen</b></p></td>
+			</tr></tbody></table>";
 	}
 
-
-	//		rename
+	//	rename
 
 	if (isset($rename))
 	{
@@ -438,13 +416,11 @@ if($is_adminOfCourse)
 		//kai akolouthise thn palia methodo metonomasias arxeiwn
 		if(empty($res["filename"]))
 		{
-
 			$fileName = my_basename($rename);
 
 			@$dialogBox .= "<!-- rename -->\n";
 			$dialogBox .= "<form>\n";
 			$dialogBox .= "<input type=\"hidden\" name=\"sourceFile\" value=\"$rename\">\n
-
         <table class='FormData' width=\"99%\">
         <tbody>
         <tr>
@@ -489,13 +465,9 @@ if($is_adminOfCourse)
 		if (check_name_exist($baseWorkDir.$newDirPath."/".$newDirName) )
 		{
 			$dialogBox .= "<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"caution_small\">
-							<p><b>$langFileExists</b></p>
-						</td>
-					</tr>
-				</tbody>
+				<tbody><tr>
+				<td class=\"caution_small\"><p><b>$langFileExists</b></p>
+				</td></tr></tbody>
 			</table>";
 			$createDir = $newDirPath; 
 			unset($newDirPath);
@@ -503,7 +475,6 @@ if($is_adminOfCourse)
 		else
 		{
 			mkdir($baseWorkDir.$newDirPath."/".$newDirName, 0775);
-
 			$query =  "INSERT INTO ".$dbTable." SET
     			path=\"".$newDirPath."/".$newDirName."\",
     			filename=\"".$newDirName."\",
@@ -520,19 +491,13 @@ if($is_adminOfCourse)
 					format=\"\",
 					language=\"\",
 					copyrighted=\"\"";
-
 			mysql_query($query);
-
 		}
 
 		$dialogBox = "<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"success\">
-							<p><b>$langDirCr</b></p>
-							
-						</td>
-					</tr>
+				<tbody><tr><td class=\"success\">
+				<p><b>$langDirCr</b></p>
+				</td></tr>
 				</tbody>
 			</table>";
 	}
@@ -571,15 +536,15 @@ if($is_adminOfCourse)
 			if (empty($file_language)) $file_language = $file_oldLanguage;
 
 			$query =  "UPDATE ".$dbTable." SET
-    						comment=\"".mysql_real_escape_string($file_comment)."\",
-								category=\"".mysql_real_escape_string($file_category)."\",
-  	 						title=\"".mysql_real_escape_string($file_title)."\",							    				
-								date_modified=\"".date("Y\-m\-d G\:i\:s")."\",
+    					comment=\"".mysql_real_escape_string($file_comment)."\",
+					category=\"".mysql_real_escape_string($file_category)."\",
+  	 				title=\"".mysql_real_escape_string($file_title)."\",	
+						date_modified=\"".date("Y\-m\-d G\:i\:s")."\",
     						subject=\"".mysql_real_escape_string($file_subject)."\",
     						description=\"".mysql_real_escape_string($file_description)."\",
     						author=\"".mysql_real_escape_string($file_author)."\",
     						language=\"".mysql_real_escape_string($file_language)."\",
-    						copyrighted=\"".mysql_real_escape_string($file_copyrighted)."\"    						
+    						copyrighted=\"".mysql_real_escape_string($file_copyrighted)."\"   
     				  WHERE path=\"".$commentPath."\"";
 
 
@@ -950,7 +915,6 @@ if($is_adminOfCourse) {
 	$tool_content .=  "<li><a href=\"$_SERVER[PHP_SELF]?createDir=".$cmdCurDirPath."\">$langCreateDir</small></a>
     </li>";
 	$diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
-	//$tool_content .= "<a href=\"showquota.php?diskQuotaDocument=$diskQuotaDocument&diskUsed=$diskUsed\" target=\"blank\">$langQuotaBar</a>";
 	$tool_content .= "<li><a href=\"showquota.php?diskQuotaDocument=$diskQuotaDocument&diskUsed=$diskUsed\">$langQuotaBar</a></li>
     </ul></div><br />";
 
@@ -1356,35 +1320,5 @@ function make_clickable_path($path)
 	return $out;
 }
 
-//function pou epistrefei tyxaious xarakthres. to orisma $length kathorizei to megethos tou apistrefomenou xarakthra
-function randomkeys($length)
-{
-	$key = "";
-	$pattern = "1234567890abcdefghijklmnopqrstuvwxyz";
-	for($i=0;$i<$length;$i++)
-	{
-		$key .= $pattern{rand(0,35)};
-	}
-	return $key;
 
-}
-
-// A helper function, when passed a number representing KB,
-// and optionally the number of decimal places required,
-// it returns a formated number string, with unit identifier.
-function format_bytesize ($kbytes, $dec_places = 2)
-{
-	global $text;
-	if ($kbytes > 1048576) {
-		$result  = sprintf('%.' . $dec_places . 'f', $kbytes / 1048576);
-		$result .= '&nbsp;Gb';
-	} elseif ($kbytes > 1024) {
-		$result  = sprintf('%.' . $dec_places . 'f', $kbytes / 1024);
-		$result .= '&nbsp;Mb';
-	} else {
-		$result  = sprintf('%.' . $dec_places . 'f', $kbytes);
-		$result .= '&nbsp;Kb';
-	}
-	return $result;
-}
 ?>

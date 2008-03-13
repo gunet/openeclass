@@ -1,30 +1,30 @@
 <?php
 
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
         A full copyright notice can be read in "/info/copyright.txt".
-        
+
        	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
                      Yannis Exidaridis <jexi@noc.uoa.gr> 
                      Alexandros Diamantidis <adia@noc.uoa.gr> 
 
         For a full list of contributors, see "credits.txt".  
-     
+
         This program is a free software under the terms of the GNU 
         (General Public License) as published by the Free Software 
         Foundation. See the GNU License for more details. 
         The full license can be read in "license.txt".
-     
+
        	Contact address: GUnet Asynchronous Teleteaching Group, 
         Network Operations Center, University of Athens, 
         Panepistimiopolis Ilissia, 15784, Athens, Greece
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	learnPathLib.inc.php
 	@last update: 05-12-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -46,63 +46,63 @@
 ==============================================================================
 */
 
-/**
+/*
 * content type
 */
 define ( 'CTCLARODOC_', 'CLARODOC' );
-/**
+/*
 * content type
 */
 define ( 'CTDOCUMENT_', 'DOCUMENT' );
-/**
+/*
 * content type
 */
 define ( 'CTEXERCISE_', 'EXERCISE' );
-/**
+/*
 * content type
 */
 define ( 'CTSCORM_', 'SCORM' );
-/**
+/*
 * content type
 */
 define ( 'CTLABEL_', 'LABEL' );
-/**
+/*
 * content type
 */
 define ( 'CTCOURSE_DESCRIPTION_', 'COURSE_DESCRIPTION' );
-/**
+/*
 * content type
 */
 define ( 'CTLINK_', 'LINK' );
 
 
-/**
+/*
 * mode used by {@link commentBox($type, $mode)} and {@link nameBox($type, $mode)}
 */
 define ( 'DISPLAY_', 1 );
-/**
+/*
 * mode used by {@link commentBox($type, $mode)} and {@link nameBox($type, $mode)}
 */
 define ( 'UPDATE_', 2 );
 define ( 'UPDATENOTSHOWN_', 4 );
 
-/**
+/*
 * mode used by {@link commentBox($type, $mode)} and {@link nameBox($type, $mode)}
 */
 define ( 'DELETE_', 3 );
 
-/**
+/*
 * type used by {@link commentBox($type, $mode)} and {@link nameBox($type, $mode)}
 */
 define ( 'ASSET_', 1 );
-/**
+/*
 * type used by {@link commentBox($type, $mode)} and {@link nameBox($type, $mode)}
 */
 define ( 'MODULE_', 2 );
 define ( 'LEARNINGPATH_', 3 );
 define ( 'LEARNINGPATHMODULE_', 4 );
 
-/**
+/*
  * This function is used to display comments of module or learning path with admin links if needed.
  * Admin links are 'edit' and 'delete' links.
  *
@@ -265,7 +265,7 @@ function commentBox($type, $mode)
     return $output;
 }
 
-/**
+/*
   * This function is used to display name of module or learning path with admin links if needed
   *
   * @param string $type MODULE_ , LEARNINGPATH_
@@ -322,8 +322,8 @@ function nameBox($type, $mode, $formlabel = FALSE)
             {
 
                 $sql = "UPDATE `" . $tbl_name . "`
-                                      SET `" . $col_name . "` = '" . addslashes($_POST['newName']) ."'
-                                    WHERE " . $where_cond;
+                            SET `" . $col_name . "` = '" . addslashes($_POST['newName']) ."'
+                            WHERE " . $where_cond;
 
                 db_query($sql);
                 $dsp = TRUE;
@@ -360,8 +360,8 @@ function nameBox($type, $mode, $formlabel = FALSE)
     if ( $mode == DISPLAY_ || $dsp == true )
     {
         $sql = "SELECT `name`
-                      FROM `" . $tbl_name . "`
-                     WHERE " . $where_cond;
+                FROM `" . $tbl_name . "`
+                WHERE " . $where_cond;
 
         $result = db_query($sql);
         if($result)
@@ -388,7 +388,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
     return $output;
 }
 
-/**
+/*
   * This function is used to display the correct image in the modules lists
   * It looks for the correct type in the array, and return the corresponding image name if found
   * else it returns a default image
@@ -444,7 +444,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
       return "default.gif";
  }
 
-/**
+/*
  * This function receives an array like $table['idOfThingToOrder'] = $requiredOrder and will return a sorted array
  * like $table[$i] = $idOfThingToOrder
  * the id list is sorted according to the $requiredOrder values
@@ -495,7 +495,7 @@ function setOrderTab ( $formValuesTab )
 }
 
 
-/**
+/*
  * Check if an input string is a number
  *
  * @param string $var input to check
@@ -520,7 +520,7 @@ function is_num($var)
 }
 
 
-/**
+/*
  *  This function allows to display the modules content of a learning path.
  *  The function must be called from inside a learning path where the session variable path_id is known.
  */

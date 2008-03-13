@@ -37,7 +37,7 @@
 ==============================================================================*/
 
 include '../include/lib/fileUploadLib.inc.php';
-include '../modules/document/forcedownload.php';
+include '../include/lib/forcedownload.php';
 
 //anadromikos algorithmos scannarismatos arxeiwn kai fakelwmn - einai h kyria function gia to scannarisma olwn twn arxeiwn kai twn fakelwn 
 function RecurseDir($directory, $baseFolder)

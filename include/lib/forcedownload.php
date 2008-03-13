@@ -1,5 +1,5 @@
 <?php 
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -28,7 +28,7 @@
 	@last update: 18-07-2006 by Sakis Agorastos
 	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
 ==============================================================================        
-    @Description: Support functions used by document.php
+    @Description: Support functions used by document, document_upgrade, video.php
 
     This script contains the function that forces the web browser to donwload
     a file instead of just opening it. This happens for security reasons.
@@ -227,7 +227,16 @@ $f=array(
          "mxu" => "video/vnd.mpegurl",
          "avi" => "video/x-msvideo",
          "movie" => "video/x-sgi-movie",
-         "ice" => "x-conference-xcooltalk"
+         "ice" => "x-conference-xcooltalk",
+	 "asx" => "video/x-ms-asf",
+	 "wma" => "audio/x-ms-wma",
+	 "wax" => "audio/x-ms-wax",
+	 "wmv" => "video/x-ms-wmv",
+	 "wvx" => "video/x-ms-wvx",
+	 "wm" => "video/x-ms-wm",
+	"wmx" => "video/x-ms-wmx",
+	"wmz" => "application/x-ms-wmz",
+	"wmd" => "application/x-ms-wmd"
       );
       $ext=get_file_extention($filename);
       if(isset($f[$ext])) return $f[$ext];

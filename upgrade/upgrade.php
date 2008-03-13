@@ -939,6 +939,8 @@ if (!isset($submit2)) {
                 chdir($tmpfldr);
 
                 // Upgrading VIDEO table for new func of VIDEO module
+		if (!mysql_field_exists("$code[0]",'video','path'))
+                        $tool_content .= add_field_after_field('video', 'id', 'path', "VARCHAR(255)");
                 if (!mysql_field_exists("$code[0]",'video','creator'))
                         $tool_content .= add_field_after_field('video', 'creator', 'description', "VARCHAR(255)");
                 if (!mysql_field_exists("$code[0]",'video','publisher'))

@@ -609,7 +609,7 @@ function DefaultScoring($ChoiceCount,$Z,$weight) {
     return $score/10*$weight;
 } 
 
-/**
+/*
  * Get user data on the platform
  * @param $user_id integer
  * @return  array( `user_id`, `lastname`, `firstname`, `username`, `email`, `picture`, `officialCode`, `phone`, `status` ) with user data
@@ -640,6 +640,39 @@ function user_get_data($user_id)
     {
         return null;
     }
+}
+
+
+//function pou epistrefei tyxaious xarakthres. to orisma $length kathorizei to megethos tou apistrefomenou xarakthra
+function randomkeys($length)
+{
+	$key = "";
+	$pattern = "1234567890abcdefghijklmnopqrstuvwxyz";
+	for($i=0;$i<$length;$i++)
+	{
+		$key .= $pattern{rand(0,35)};
+	}
+	return $key;
+
+}
+
+// A helper function, when passed a number representing KB,
+// and optionally the number of decimal places required,
+// it returns a formated number string, with unit identifier.
+function format_bytesize ($kbytes, $dec_places = 2)
+{
+	global $text;
+	if ($kbytes > 1048576) {
+		$result  = sprintf('%.' . $dec_places . 'f', $kbytes / 1048576);
+		$result .= '&nbsp;Gb';
+	} elseif ($kbytes > 1024) {
+		$result  = sprintf('%.' . $dec_places . 'f', $kbytes / 1024);
+		$result .= '&nbsp;Mb';
+	} else {
+		$result  = sprintf('%.' . $dec_places . 'f', $kbytes);
+		$result .= '&nbsp;Kb';
+	}
+	return $result;
 }
 
 ?>
