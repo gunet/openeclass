@@ -382,9 +382,9 @@ $langChooseDate = "Choose Date";
 * announcements.inc.php
 ******************************************************************/
 
-$langOn="On";
+$langOn="Of";
 $langRegUser="registered users of the site";
-$langUnvalid="have unvalid or no email address";
+$langUnvalid="have invalid or no email address";
 $langModifAnn="Modify this announcement";
 $langAnnouncement = "Announcement";
 $langMove = "Move";
