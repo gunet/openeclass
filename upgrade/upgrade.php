@@ -937,27 +937,34 @@ if (!isset($submit2)) {
                 //*** proypothetei oti exei proepilegei h DB tou mathimatos kai pws to CWD einai o fakelos document tou mathimatos (p.x. .../eclass/courses/TMA100/document/) ***
                 RecurseDir(getcwd(), $baseFolder);
                 chdir($tmpfldr);
-
-                // Upgrading VIDEO table for new func of VIDEO module
-		if (!mysql_field_exists("$code[0]",'video','path'))
+	
+		// move video files to new directory
+		if (is_dir("$webDir/$code[0]/video")) {
+                        rename ("$webDir/courses/$code[0]/video", "$webDir/video/$code[0]") or
+                                die ("Δεν ήταν δυνατή η μετονομασία του καταλόγου $webDir/courses/$code[0]/video");
+                }
+                // upgrade video 
+		if (!mysql_field_exists("$code[0]",'video','path')) {
                         $tool_content .= add_field_after_field('video', 'id', 'path', "VARCHAR(255)");
+			$r = db_query("SELECT * FROM video, $code[0]");
+			while ($row = mysql_fetch_row($r)) {
+				upgrade_video($row['url']);
+			}
+		}
                 if (!mysql_field_exists("$code[0]",'video','creator'))
                         $tool_content .= add_field_after_field('video', 'creator', 'description', "VARCHAR(255)");
                 if (!mysql_field_exists("$code[0]",'video','publisher'))
                         $tool_content .= add_field_after_field('video', 'publisher', 'creator',"VARCHAR(255)");
                 if (!mysql_field_exists("$code[0]",'video','date'))
                         $tool_content .= add_field_after_field('video', 'date', 'publisher',"DATETIME");
-                if (!mysql_field_exists("$code[0]",'videolinks','creator'))
+
+		// upgrade videolinks
+		if (!mysql_field_exists("$code[0]",'videolinks','creator'))
                         $tool_content .= add_field_after_field('videolinks', 'creator', 'description', "VARCHAR(255)");
                 if (!mysql_field_exists("$code[0]",'videolinks','publisher'))
                         $tool_content .= add_field_after_field('videolinks', 'publisher', 'creator',"VARCHAR(255)");
                 if (!mysql_field_exists("$code[0]",'videolinks','date'))
                         $tool_content .= add_field_after_field('videolinks', 'date', 'publisher',"DATETIME");
-
-                if (is_dir("$webDir/$code[0]/video")) {
-                        rename ("$webDir/$code[0]/video", "$webDir/video/$code[0]") or
-                                die ("Δεν ήταν δυνατή η μετονομασία του καταλόγου");
-                }
 
                 // upgrading accueil table
 

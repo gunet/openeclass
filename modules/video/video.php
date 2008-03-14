@@ -45,11 +45,8 @@ On the long run, the idea is to allow sending realvideo . Which means only
 establish a correspondence between RealServer Content Path and the user's
 documents path.
 
-All documents are sent to the address /$webDir/$currentCourseID/document/
-where $currentCourseID is the web directory for the course and $webDir usually /var/www/html
 */
 
-//Μετατροπή του εργαλείου για να χρησιμοποιεί το baseTheme
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Video';

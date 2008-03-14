@@ -69,10 +69,8 @@ function RecurseDir($directory, $baseFolder)
 				  }
 				} 
 		  	$i++;
-			} 
-			
-		} 
-		
+			} 			
+		} 		
 		if ($i == 0)
 		{
 		  // empty directory
@@ -94,11 +92,10 @@ function upgrade_document ($uploadPath, $file)
 {
 	
 	$fileName = trim($file);
-        	
-	//elegxos ean to "path" tou arxeiou pros upload vrisketai hdh se eggrafh ston pinaka documents
-    //(aftos einai ousiastika o elegxos if_exists dedomenou tou oti to onoma tou arxeiou sto filesystem
-    //einai monadiko)
-    
+	/* elegxos ean to "path" tou arxeiou pros upload vrisketai hdh se eggrafh ston pinaka documents
+    	(aftos einai ousiastika o elegxos if_exists dedomenou tou oti to onoma tou arxeiou sto filesystem
+    	einai monadiko) */
+
     $result = mysql_query ("SELECT filename FROM document WHERE path LIKE '%".$uploadPath.$fileName."%'");
 
 	$row = mysql_fetch_array($result);
@@ -166,6 +163,26 @@ function upgrade_document ($uploadPath, $file)
             rename(getcwd().$existinguploadPath, getcwd().$uploadPath2);
             mysql_query($query);
 	} //telos if(empty($row['filename']))
+}
+
+// -------------------------------------
+// function for upgrading video files
+// -------------------------------------
+function upgrade_video ($file)
+{
+	global $webDir, $code[0];
+
+	$fileName = trim($file);
+        $fileName = replace_dangerous_char($fileName);
+        $fileName = add_ext_on_mime($fileName);
+	$fileName = php2phps($fileName);
+        $safe_filename = date("YmdGis")."_".randomkeys('3').".".get_file_extention($filename);
+	$path_to_video = $webDir.'video/'.$currentCourseID.'/';
+        if (rename($path_to_video.$file, $path_to_video.$safe_filename))
+        	db_query("UPDATE video SET path = '$safe_filename'
+	        	WHERE id = '$row[id]'", $code[0]);
+	else 
+		die("error");
 }
 
 //function pou epistrefei tyxaious xarakthres. to orisma $length kathorizei to megethos tou epistrefomenou xarakthra
