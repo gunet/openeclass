@@ -1,4 +1,6 @@
-<?php session_start();
+<?php
+
+session_start();
 
 //Flag for fixing relative path
 //See init.php to undestand its logic
@@ -945,10 +947,10 @@ if (!isset($submit2)) {
                 }
                 // upgrade video 
 		if (!mysql_field_exists("$code[0]",'video','path')) {
-                        $tool_content .= add_field_after_field('video', 'id', 'path', "VARCHAR(255)");
-			$r = db_query("SELECT * FROM video, $code[0]");
-			while ($row = mysql_fetch_row($r)) {
-				upgrade_video($row['url']);
+                        $tool_content .= add_field_after_field('video', 'path', 'id', "VARCHAR(255)");
+			$r = db_query("SELECT * FROM video", $code[0]);
+			while ($row = mysql_fetch_array($r)) {
+				upgrade_video($row['url'], $row['id'], $code[0]);
 			}
 		}
                 if (!mysql_field_exists("$code[0]",'video','creator'))
