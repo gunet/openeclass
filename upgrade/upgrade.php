@@ -794,9 +794,9 @@ if (!isset($submit2)) {
                                 `creator_id` mediumint(8) unsigned NOT NULL default '0',
                                 `course_id` varchar(20) NOT NULL default '0',
                                 `name` varchar(255) NOT NULL default '',
-                                `creation_date` datetime NOT NULL default '0000-00-00 00:00:00',
-                                `start_date` datetime NOT NULL default '0000-00-00 00:00:00',
-                                `end_date` datetime NOT NULL default '0000-00-00 00:00:00',
+                                `creation_date` date NOT NULL default '0000-00-00',
+                                `start_date` date NOT NULL default '0000-00-00',
+                                `end_date` date NOT NULL default '0000-00-00',
                                 `type` int(11) NOT NULL default '0',
                                 `active` int(11) NOT NULL default '0',
                                 PRIMARY KEY  (`pid`)
@@ -894,9 +894,9 @@ if (!isset($submit2)) {
 
                 // Upgrading EXERCICES table for new func of EXERCISE module
                 if (!mysql_field_exists("$code[0]",'exercices','StartDate'))
-                        $tool_content .= add_field_after_field('exercices', 'StartDate', 'type', "DATETIME");
+                        $tool_content .= add_field_after_field('exercices', 'StartDate', 'type', "DATE NOT NULL default '0000-00-00'");
                 if (!mysql_field_exists("$code[0]",'exercices','EndDate'))
-                        $tool_content .= add_field_after_field('exercices', 'EndDate', 'StartDate', "DATETIME");
+                        $tool_content .= add_field_after_field('exercices', 'EndDate', 'StartDate', "DATE NOT NULL default '0000-00-00'");
                 if (!mysql_field_exists("$code[0]",'exercices','TimeConstrain'))
                         $tool_content .= add_field_after_field('exercices', 'TimeConstrain', 'EndDate', "INT(11)");
                 if (!mysql_field_exists("$code[0]",'exercices','AttemptsAllowed'))
