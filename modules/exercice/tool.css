@@ -114,3 +114,7 @@ table.Question td {
     font-size: 10px;
     font-weight: bold;
 }
+
+.invisible {
+	text-decoration : line-through;
+}

@@ -1026,7 +1026,7 @@ $langExerciseLis="List of exercises";
 $langResults="Results";
 $langResultsFailed="Failure";
 $langYourTotalScore2="Total score";
-$langExerciseScores1="Webpage";
+$langExerciseScores1="HTML";
 $langExerciseScores2="Percentages";
 $langExerciseScores3="CSV";
 

@@ -162,10 +162,10 @@ if($is_allowedToEdit) {
 $tool_content .= <<<cData
 
         <td>&nbsp;&nbsp;&nbsp;&nbsp;${langExerciseName}</td>
+        <td><div align="center">${langResults}</div></td>
         <td><div align="center">${langModify}</div></td>
         <td><div align="center">${langDelete}</div></td>
         <td><div align="center">${langActivate} / ${langDeactivate}</div></td>
-        <td><div align="center">${langResults}</div></td>
       </tr>
       </thead>
 
@@ -199,6 +199,8 @@ if(!$nbrExercises) {
 
 $i=1;
 
+$tool_content .= "
+      <tbody>";
 // while list exercises
 while($row=mysql_fetch_array($result))
 {
@@ -210,15 +212,31 @@ $tool_content .= "
 	if($is_allowedToEdit)
 	{
 	$page_temp = ($i+(@$page*$limitExPage)).'.';
-  $tool_content .= <<<cData
-  
-        <td width="60%">${page_temp}&nbsp;<a href="exercice_submit.php?exerciseId=${row['id']}" 
-cData;
 
-	if(!$row['active']) 
-		$tool_content .= "class=\"invisible\""; 
-	$tool_content .= ">".$row['titre']."</a></td>";
+	if(!$row['active']) {
+		$tool_content .= "<td width=\"70%\"><a href=\"exercice_submit.php?exerciseId=${row['id']}\" class=\"invisible\"><img src=\"../../template/classic/img/exercise_off.gif\" border=\"0\" alt=\"${page_temp}\" title=\"${page_temp}\"></a>&nbsp;".$row['titre']."</td>"; 
+	} else {
+		$tool_content .= "<td width=\"70%\"><a href=\"exercice_submit.php?exerciseId=${row['id']}\"><img src=\"../../template/classic/img/exercise_on.gif\" border=\"0\" alt=\"${page_temp}\" title=\"${page_temp}\"></a>&nbsp;".$row['titre']."</td>";
+	}
+		
+
 	
+
+
+$eid = $row['id'];
+$NumOfResults = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record WHERE eid='$eid'", $currentCourseID));
+
+if ($NumOfResults[0]) {
+	$tool_content .= "
+        <td width=\"10%\" align=\"center\"><nobr><a href=\"results.php?&exerciseId=".$row['id']."\">".
+	$langExerciseScores1."</a> | <a href=\"csv.php?&exerciseId=".$row['id']."\">".$langExerciseScores3."</a></nobr></td>";
+} else {
+	$tool_content .= "
+        <td width=\"10%\" align=\"center\">	</td>";
+}
+
+
+
 	$langModify_temp = htmlspecialchars($langModify);
 	$langConfirmYourChoice_temp = addslashes(htmlspecialchars($langConfirmYourChoice));
 	$langDelete_temp = htmlspecialchars($langDelete);
@@ -251,19 +269,10 @@ else
 }
 
 
-$eid = $row['id'];
-$NumOfResults = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record WHERE eid='$eid'", $currentCourseID));
 
-if ($NumOfResults[0]) {
 	$tool_content .= "
-        <td width=\"20%\" align=\"center\"><nobr><a href=\"results.php?&exerciseId=".$row['id']."\">".
-	$langExerciseScores1."</a> | <a href=\"csv.php?&exerciseId=".$row['id']."\">".$langExerciseScores3."</a></nobr></td>
       </tr>";
-} else {
-	$tool_content .= "
-        <td width=\"20%\" align=\"center\">	</td>
-      </tr>";
-}
+
 	}
 	// student only
 	else {
@@ -307,6 +316,7 @@ if ($NumOfResults[0]) {
 }	// end while()
 
 $tool_content .= "
+      </tbody>
       </table>";
 draw($tool_content, 2, 'exercice');
 ?>
