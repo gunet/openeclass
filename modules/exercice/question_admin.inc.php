@@ -110,10 +110,10 @@ cData;
       	$tool_content .= "submitQuestion \" ";
       else	
       	$tool_content .= "submitAnswers \" ";
-     	
+
      	$tool_content .= "value=\"".$langOk."\"></td>&nbsp;&nbsp;<td align=\"center\">"."
         <input type=\"submit\" name=\"buttonBack\" value=\"".$langCancel."\">";
-     		
+	
      	$tool_content .= <<<cData
 
     </tr>
@@ -191,7 +191,6 @@ $tool_content .= "
       </tr>";	 
  	  */
        }
- 	  
 
     $tool_content .= "
         </td>
@@ -199,7 +198,5 @@ $tool_content .= "
       </thead>
       </table>
       <br/>";
-
-
 }
 ?>

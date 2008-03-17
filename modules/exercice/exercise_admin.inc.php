@@ -206,6 +206,8 @@ cData;
 
 $tool_content .= nl2br($exerciseDescription);
 
+$exerciseStartDate = greek_format($exerciseStartDate);
+$exerciseEndDate = greek_format($exerciseEndDate);
 $tool_content .= <<<cData
       </td>
     </tr>

@@ -33,7 +33,6 @@ include('exercise.lib.php');
 
 $require_current_course = TRUE;
 include '../../include/baseTheme.php';
-$dateNow = date("d-m-Y / H:i:s",time());
 
 $local_style = '
     .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
@@ -51,22 +50,20 @@ if ($language == 'greek') {
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();
 
-$u_date_start = strftime('%Y-%m-%d %H:%M:%S', strtotime('now -0 day'));
-$u_date_end = strftime('%Y-%m-%d %H:%M:%S', strtotime('now +1 year'));
+$u_date_start = strftime('%Y-%m-%d', strtotime('now -0 day'));
+$u_date_end = strftime('%Y-%m-%d', strtotime('now +1 year'));
 
 $start_cal_Excercise = $jscalendar->make_input_field(
-           array('showsTime'      => true,
+           array('showsTime'      => false,
                  'showOthers'     => true,
-                 'ifFormat'       => '%Y-%m-%d %H:%M:%S',
-                 'timeFormat'     => '24'),
+                 'ifFormat'       => '%Y-%m-%d'),
            array('style'       => 'width: 15em; color: #840; background-color: #fff; border: 1px solid #000; text-align: center',
                  'name'        => 'exerciseStartDate',
                  'value'       => $u_date_start));
 $end_cal_Excercise = $jscalendar->make_input_field(
-           array('showsTime'      => true,
+           array('showsTime'      => false,
                  'showOthers'     => true,
-                 'ifFormat'       => '%Y-%m-%d %H:%M:%S',
-                 'timeFormat'     => '24'),
+                 'ifFormat'       => '%Y-%m-%d'),
            array('style'       => 'width: 15em; color: #840; background-color: #fff; border: 1px solid #000; text-align: center',
                  'name'        => 'exerciseEndDate',
                  'value'       => $u_date_end));
