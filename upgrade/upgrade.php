@@ -233,15 +233,15 @@ if (!isset($submit2)) {
                 $tool_content .= add_field('cours', 'first_create', "datetime not null default '0000-00-00 00:00:00'");
 
         // delete useless fields
-        if (!mysql_field_exists("$mysqlMainDb",'cours','cahier_charges'))
+        if (mysql_field_exists("$mysqlMainDb",'cours','cahier_charges'))
                 $tool_content .= delete_field('cours', 'cahier_charges');
-        if (!mysql_field_exists("$mysqlMainDb",'cours','versionDb'))
+        if (mysql_field_exists("$mysqlMainDb",'cours','versionDb'))
                 $tool_content .= delete_field('cours', 'versionDb');
-        if (!mysql_field_exists("$mysqlMainDb",'cours','versionClaro'))
+        if (mysql_field_exists("$mysqlMainDb",'cours','versionClaro'))
                 $tool_content .= delete_field('cours', 'versionClaro');
-        if (!mysql_field_exists("$mysqlMainDb",'user','inst_id'))
+        if (mysql_field_exists("$mysqlMainDb",'user','inst_id'))
                 $tool_content .= delete_field('user', 'inst_id');
-	if (!mysql_field_exists("$mysqlMainDb",'cours_user','role'))
+	if (mysql_field_exists("$mysqlMainDb",'cours_user','role'))
                 $tool_content .= delete_field('cours_user', 'role');
 	
 	// add field to cours_user to keep track course user registration date
@@ -1300,9 +1300,9 @@ function delete_field($table, $field) {
 	$retString = "";
 	$retString .= "Διαγραφή πεδίου <b>$field</b> του πίνακα <b>$table</b>";
 	if (db_query("ALTER TABLE `$table` DROP `$field`")) {
-		$retString .= "$OK<br>";
+		$retString .= " $OK<br>";
 	} else {
-		$retString .= "$BAD<br>";
+		$retString .= " $BAD<br>";
 	}
 	return $retString;
 }
