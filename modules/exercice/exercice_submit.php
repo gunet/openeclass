@@ -136,9 +136,9 @@ if (!$exerciseTimeConstrain) {
 $RecordStartDate = date("Y-m-d H:i:s",time());
 
 if ((!$is_adminOfCourse)&&(isset($uid))) { //if registered student
-$CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record WHERE eid='$eid_temp' AND uid='$uid'", $currentCourseID));
-++$CurrentAttempt[0];
-	
+	$CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
+			WHERE eid='$eid_temp' AND uid='$uid'", $currentCourseID));
+	++$CurrentAttempt[0];
 		if (!isset($HTTP_COOKIE_VARS['marvelous_cookie_control'])) {
 			if (!setcookie("marvelous_cookie_control", $eid_temp, time()+(7 * 24 * 60 * 60), "/")) {
 					header('Location: exercise_redirect.php');

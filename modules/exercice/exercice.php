@@ -101,7 +101,7 @@ if($is_allowedToEdit)
 // only for students
 else
 {
-	$sql="SELECT id, titre, description, type, StartDate, EndDate,TimeConstrain,AttemptsAllowed ".
+	$sql="SELECT id, titre, description, type, StartDate, EndDate, TimeConstrain, AttemptsAllowed ".
 		"FROM `$TBL_EXERCICES` WHERE active='1' ORDER BY id LIMIT $from,".($limitExPage+1);
 	$result=db_query($sql);
 }
@@ -190,8 +190,7 @@ if(!$nbrExercises) {
 
 $i=1;
 
-$tool_content .= "
-      <tbody>";
+$tool_content .= "<tbody>";
 // while list exercises
 while($row=mysql_fetch_array($result))
 {
@@ -229,30 +228,31 @@ if ($NumOfResults[0]) {
         <td width="10%" align="center"><a href="$_SERVER[PHP_SELF]?choice=delete&exerciseId=${row['id']}"  onclick="javascript:if(!confirm('${langConfirmYourChoice_temp}')) return false;"><img src="../../template/classic/img/delete.gif" border="0" alt="${langDelete_temp}"></a></td>
 cData;
 
-		// if active
-		if($row['active'])
-		{
+	// if active
+	if($row['active'])
+	{
 
-	if (isset($page))	
-			$tool_content .= "
-        <td width='20%' align='center'>"."<a href=\"$_SERVER[PHP_SELF]?choice=disable&page=${page}&exerciseId=".$row['id']."\">"."<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" alt=\"".htmlspecialchars($langDeactivate)."\"></a></td>";
-		else
-			$tool_content .= "
-        <td width='20%' align='center'><a href='$_SERVER[PHP_SELF]?choice=disable&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/invisible.gif' border='0' alt='".htmlspecialchars($langDeactivate)."'></a></td>";
+	if (isset($page)) {	
+		$tool_content .= "
+        	<td width='20%' align='center'>"."<a href=\"$_SERVER[PHP_SELF]?choice=disable&page=${page}&exerciseId=".$row['id']."\">"."<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" alt=\"".htmlspecialchars($langDeactivate)."\"></a></td>";
+	} else {
+		$tool_content .= "<td width='20%' align='center'>
+		<a href='$_SERVER[PHP_SELF]?choice=disable&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/invisible.gif' border='0' alt='".htmlspecialchars($langDeactivate)."'></a></td>";
+	}
 }
 // else if not active
 else
 {
-	if (isset($page))
+	if (isset($page)) {
 		$tool_content .= "
-        <td width='20%' align='center'>"."<a href='$_SERVER[PHP_SELF]?choice=enable&page=${page}&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/visible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
-	else
+        	<td width='20%' align='center'>"."<a href='$_SERVER[PHP_SELF]?choice=enable&page=${page}&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/visible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
+	} else {
 		$tool_content .= "
-        <td width='20%' align='center'>"."<a href='$_SERVER[PHP_SELF]?choice=enable&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/visible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
+        	<td width='20%' align='center'>"."<a href='$_SERVER[PHP_SELF]?choice=enable&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/visible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
+	}
 }
 
 	$tool_content .= "</tr>";
-
 	}
 	// student only
 else {
@@ -269,13 +269,16 @@ else {
 	  $tool_content .= "<br>$row[description]</td>
         <td align='center'><small>".greek_format($row['StartDate'])."</small></td>
         <td align='center'><small>".greek_format($row['EndDate'])."</small></td>";
-	  if ($row['TimeConstrain']>0) {
+	// how many attempts we have.
+	$CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
+			WHERE eid='$row[id]' AND uid='$uid'", $currentCourseID));
+	 if ($row['TimeConstrain'] > 0) {
 		  	$tool_content .= "<td align='center'><small>$row[TimeConstrain] $langExerciseConstrainUnit</small></td>";
 		} else { 	
 			$tool_content .= "<td align='center'><small> - </small></td>"; 
 		}
 	  if ($row['AttemptsAllowed'] > 0) {	
-		   $tool_content .= "<td align='center'><small>$row[AttemptsAllowed]</small></td>"; 
+		   $tool_content .= "<td align='center'><small>$CurrentAttempt[0]/$row[AttemptsAllowed]</small></td>"; 
 		} else {
 			 $tool_content .= "<td align='center'><small> - </small></td>";
 		}
