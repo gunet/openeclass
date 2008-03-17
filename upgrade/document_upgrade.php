@@ -168,32 +168,19 @@ function upgrade_document ($uploadPath, $file)
 // -------------------------------------
 // function for upgrading video files
 // -------------------------------------
-function upgrade_video ($file)
+function upgrade_video($file, $id, $code)
 {
-	global $webDir, $code[0];
+	global $webDir;
 
 	$fileName = trim($file);
         $fileName = replace_dangerous_char($fileName);
         $fileName = add_ext_on_mime($fileName);
 	$fileName = php2phps($fileName);
-        $safe_filename = date("YmdGis")."_".randomkeys('3').".".get_file_extention($filename);
-	$path_to_video = $webDir.'video/'.$currentCourseID.'/';
+        $safe_filename = date("YmdGis")."_".randomkeys('3').".".get_file_extention($fileName);
+	$path_to_video = $webDir.'video/'.$code.'/';
         if (rename($path_to_video.$file, $path_to_video.$safe_filename))
         	db_query("UPDATE video SET path = '$safe_filename'
-	        	WHERE id = '$row[id]'", $code[0]);
+	        	WHERE id = '$id'", $code);
 	else 
 		die("error");
 }
-
-//function pou epistrefei tyxaious xarakthres. to orisma $length kathorizei to megethos tou epistrefomenou xarakthra
-function randomkeys($length)
- {
-   $key = "";
-   $pattern = "1234567890abcdefghijklmnopqrstuvwxyz";
-   for($i=0;$i<$length;$i++)
-   {
-     $key .= $pattern{rand(0,35)};
-   }
-   return $key;
- }
-?>
