@@ -41,7 +41,7 @@ $helpTopic = 'Exercise';
 
 include '../../include/baseTheme.php';
 $tool_content = "";
-$nameTools = $langExercice;
+$nameTools = $langResults;
 
 include('../../include/lib/textLib.inc.php');
 $picturePath='../../courses/'.$currentCourseID.'/image';
