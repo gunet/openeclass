@@ -58,7 +58,6 @@ if($nbrQuestions) {
 	$i=1;
 
 	foreach($questionList as $id) {
-
 		$objQuestionTmp=new Question();
 		$objQuestionTmp->read($id);
 
@@ -73,15 +72,12 @@ if($nbrQuestions) {
 			$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?moveUp=".$id."\">
    			<img src=\"../../template/classic/img/up.gif\" border=\"0\" align=\"absmiddle\" title=\"".$langMoveUp."\"></a> ";
 		}
-
 		if($i != $nbrQuestions)		{
 			$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?moveDown=".$id."\">
 			<img src=\"../../template/classic/img/down.gif\" border=\"0\" align=\"absmiddle\" title=\"".$langMoveDown."\"></a> ";
 		}
 
-  $tool_content .= "
-      </td>
-    </tr>";
+  $tool_content .= "</td></tr>";
 		$i++;
 		unset($objQuestionTmp);
 	}
@@ -95,7 +91,5 @@ $tool_content .= <<<cData
 cData;
 }
 
-$tool_content .= "
-    </tbody>
-    </table>";
+$tool_content .= "</tbody></table>";
 ?>

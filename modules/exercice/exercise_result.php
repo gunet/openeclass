@@ -63,7 +63,9 @@ $TBL_REPONSES='reponses';
 // if the above variables are empty or incorrect, stops the script
 if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExercise))
 {
-	die($langExerciseNotFound);
+	$tool_content .= $langExerciseNotFound;
+	draw($tool_content, 2, 'exercice');
+	exit();
 }
 
 $exerciseTitle=$objExercise->selectTitle();
@@ -178,116 +180,87 @@ cData;
 				// for unique answer
 				case UNIQUE_ANSWER :	$studentChoice=($choice == $answerId)?1:0;
 
-										if($studentChoice)
-										{
-										  	$questionScore+=$answerWeighting;
-											$totalScore+=$answerWeighting;
-										}
-
-										break;
+						if($studentChoice) {
+							$questionScore+=$answerWeighting;
+							$totalScore+=$answerWeighting;
+							}
+						break;
 				// for multiple answers
 				case MULTIPLE_ANSWER :	$studentChoice=@$choice[$answerId];
-
-										if($studentChoice)
-										{
-											$questionScore+=$answerWeighting;
-											$totalScore+=$answerWeighting;
-										}
-
-										break;
+						if($studentChoice) {
+							$questionScore+=$answerWeighting;
+							$totalScore+=$answerWeighting;
+							}
+						break;
 				// for fill in the blanks
 				case FILL_IN_BLANKS :	// splits text and weightings that are joined with the character '::'
-										list($answer,$answerWeighting)=explode('::',$answer);
-
-										// splits weightings that are joined with a comma
-										$answerWeighting=explode(',',$answerWeighting);
-
-										// we save the answer because it will be modified
-										$temp=$answer;
-										$answer='';
-
-										$j=0;
-										// the loop will stop at the end of the text
-										while(1)
-										{
-											// quits the loop if there are no more blanks
-											if(($pos = strpos($temp,'[')) === false)
-											{
-												// adds the end of the text
-												$answer.=$temp;
-												break;
-											}
-
-											// adds the piece of text that is before the blank and ended by [
-											$answer.=substr($temp,0,$pos+1);
-											$temp=substr($temp,$pos+1);
-
-											// quits the loop if there are no more blanks
-											if(($pos = strpos($temp,']')) === false)
-											{
-												// adds the end of the text
-												$answer.=$temp;
-												break;
-											}
-
-											$choice[$j]=trim(stripslashes($choice[$j]));
-
-											// if the word entered by the student IS the same as the one defined by the professor
-											if(strtolower(substr($temp,0,$pos)) == strtolower($choice[$j]))
-											{
-												// gives the related weighting to the student
-												$questionScore+=$answerWeighting[$j];
-
-												// increments total score
-												$totalScore+=$answerWeighting[$j];
-
-												// adds the word in green at the end of the string
-												$answer.=$choice[$j];
-											}
-											// else if the word entered by the student IS NOT the same as the one defined by the professor
-											elseif(!empty($choice[$j]))
-											{
-												// adds the word in red at the end of the string, and strikes it
-												$answer.='<font color="red"><s>'.$choice[$j].'</s></font>';
-											}
-											else
-											{
-												// adds a tabulation if no word has been typed by the student
-												$answer.='&nbsp;&nbsp;&nbsp;';
-											}
-
-											// adds the correct word, followed by ] to close the blank
-											$answer.=' / <font color="green"><b>'.substr($temp,0,$pos).'</b></font>]';
-											$j++;
-											$temp=substr($temp,$pos+1);
-										}
-
-										break;
+						list($answer,$answerWeighting)=explode('::',$answer);
+						// splits weightings that are joined with a comma
+						$answerWeighting=explode(',',$answerWeighting);
+						// we save the answer because it will be modified
+						$temp=$answer;
+						$answer='';
+						$j=0;
+						// the loop will stop at the end of the text
+						while(1)
+						{
+						// quits the loop if there are no more blanks
+						if(($pos = strpos($temp,'[')) === false) {
+							// adds the end of the text
+							$answer.=$temp;
+							break;
+						}
+					// adds the piece of text that is before the blank and ended by [
+						$answer.=substr($temp,0,$pos+1);
+						$temp=substr($temp,$pos+1);
+						// quits the loop if there are no more blanks
+						if(($pos = strpos($temp,']')) === false) {
+							// adds the end of the text
+							$answer.=$temp;
+							break;
+						}
+						$choice[$j]=trim(stripslashes($choice[$j]));
+					// if the word entered by the student IS the same as the one defined by the professor
+					if(strtolower(substr($temp,0,$pos)) == strtolower($choice[$j])) {
+						// gives the related weighting to the student
+						$questionScore+=$answerWeighting[$j];
+						// increments total score
+						$totalScore+=$answerWeighting[$j];
+						// adds the word in green at the end of the string
+						$answer.=$choice[$j];
+					}
+				// else if the word entered by the student IS NOT the same as the one defined by the professor
+						elseif(!empty($choice[$j])) {
+						// adds the word in red at the end of the string, and strikes it
+						$answer.='<font color="red"><s>'.$choice[$j].'</s></font>';
+						} else {
+						// adds a tabulation if no word has been typed by the student
+						$answer.='&nbsp;&nbsp;&nbsp;';
+						}
+						// adds the correct word, followed by ] to close the blank
+						$answer.=' / <font color="green"><b>'.substr($temp,0,$pos).'</b></font>]';
+						$j++;
+						$temp=substr($temp,$pos+1);
+						}
+					break;
 				// for matching
-				case MATCHING :			if($answerCorrect)
-										{
-											if($answerCorrect == $choice[$answerId])
-											{
-												$questionScore+=$answerWeighting;
-												$totalScore+=$answerWeighting;
-												$choice[$answerId]=$matching[$choice[$answerId]];
-											}
-											elseif(!$choice[$answerId])
-											{
-												$choice[$answerId]='&nbsp;&nbsp;&nbsp;';
-											}
-											else
-											{
-												$choice[$answerId]='<font color="red"><s>'.$matching[$choice[$answerId]].'</s></font>';
-											}
-										}
-										else
-										{
-											$matching[$answerId]=$answer;
-										}
-										break;
+				case MATCHING :	if($answerCorrect) {
+							if($answerCorrect == $choice[$answerId]) {
+							$questionScore+=$answerWeighting;
+							$totalScore+=$answerWeighting;
+							$choice[$answerId]=$matching[$choice[$answerId]];
+						}
+						elseif(!$choice[$answerId]) {
+							$choice[$answerId]='&nbsp;&nbsp;&nbsp;';
+						} else {
+							$choice[$answerId]='<font color="red"><s>'.$matching[$choice[$answerId]].'</s></font>';
+							}
+						}
+						else {
+							$matching[$answerId]=$answer;
+						}
+						break;
 			}	// end switch()
-
 			if($answerType != MATCHING || $answerCorrect)
 			{
 				if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
@@ -314,7 +287,6 @@ cData;
         <td width="5%"><div align="center">
 cData;
 
-	
 	if ($answerType == UNIQUE_ANSWER)
 		$tool_content .= "<img src=\"../../template/classic/img/radio";
 	else
@@ -322,11 +294,9 @@ cData;
 	if ($answerCorrect)
 		$tool_content .= "_on";
 	else	
-		$tool_content .= "_off";
-	
-	$tool_content .= ".gif\" border=\"0\"></div>";
-	
-  $tool_content .= <<<cData
+		$tool_content .= "_off";	
+	$tool_content .= ".gif\" border=\"0\"></div>";	
+  	$tool_content .= <<<cData
         </td>
         <td width="45%">${answer}</td>
         <td width="45%">
@@ -337,9 +307,7 @@ if($studentChoice)
 else 
 	$tool_content .= '&nbsp;'; 
 
-  $tool_content .= "
-        </td>
-      </tr>";
+  $tool_content .= "</td></tr>";
 
 	} elseif($answerType == FILL_IN_BLANKS) {
 			$tool_content .= "
@@ -370,7 +338,7 @@ $tool_content .= <<<cData
       <br>
 cData;
 
-		// destruction of Answer
+	// destruction of Answer
 		unset($objAnswerTmp);
 		$i++;
 		$totalWeighting+=$questionWeighting;
@@ -387,11 +355,11 @@ $result=mysql_query($sql);
 $attempt = count($result);
 $row=mysql_fetch_array($result);
 $RecordStartDate = ($RecordStartTime_temp = $row[count($result)-1]);
-$RecordStartTime_temp = mktime(substr($RecordStartTime_temp, 11,2),substr($RecordStartTime_temp, 14,2),substr($RecordStartTime_temp, 17,2),substr($RecordStartTime_temp, 5,2),substr($RecordStartTime_temp, 8,2),substr($RecordStartTime_temp, 0,4));	
+$RecordStartTime_temp = mktime(0, 0 , 0, substr($RecordStartTime_temp, 5,2), substr($RecordStartTime_temp, 8,2), substr($RecordStartTime_temp, 0,4));
 $exerciseTimeConstrain=$objExercise->selectTimeConstrain();
 $exerciseTimeConstrain = $exerciseTimeConstrain*60;
-$RecordEndDate = ($SubmitDate = date("Y-m-d H:i:s"));
-$SubmitDate = mktime(substr($SubmitDate, 11,2),substr($SubmitDate, 14,2),substr($SubmitDate, 17,2),substr($SubmitDate, 5,2),substr($SubmitDate, 8,2),substr($SubmitDate, 0,4));	
+$RecordEndDate = ($SubmitDate = date("Y-m-d"));
+$SubmitDate = mktime(0, 0, 0, substr($SubmitDate, 5,2), substr($SubmitDate, 8,2), substr($SubmitDate, 0,4));	
 if (!$exerciseTimeConstrain) {
 	$exerciseTimeConstrain = (7 * 24 * 60 * 60);
 }
@@ -410,18 +378,17 @@ if (($OnTime > 0 or $is_adminOfCourse)) { // exercise time limit hasn't expired
 	// if the object is not in the session
 	if(!session_is_registered('objExercise')) {
 		// construction of Exercise
-		$objExercise=new Exercise();
-	
+		$objExercise=new Exercise();	
 		// if the specified exercise doesn't exist or is disabled
-		if(!$objExercise->read($exerciseId) && (!$is_allowedToEdit))
-			{
-			die($langExerciseNotFound);
+		if(!$objExercise->read($exerciseId) && (!$is_allowedToEdit)) {
+			$tool_content .= $langExerciseNotFound;
+			draw($tool_content, 2, 'exercice');
+			exit();	
 		}
-			// saves the object into the session
+		// saves the object into the session
 		session_register('objExercise');
 }
-
-		$tool_content = <<<cData
+	$tool_content = <<<cData
 	<h3>${exerciseTitle}</h3>
 	<p>${langExerciseExpired}</p>
 	<center><a href="exercice.php">${langBack}</a></center>
@@ -429,7 +396,6 @@ cData;
 
 draw($tool_content, 2, 'Exercice');
 exit();
-
 }
 
 $tool_content .= <<<cData
@@ -448,13 +414,7 @@ $tool_content .= <<<cData
       </tr>
       </thead>
       </table>
-      <br>
-	
-	</form>
-	
-	<br>
+      <br></form><br>
 cData;
-
 draw($tool_content, 2, 'exercice');
-
 ?>

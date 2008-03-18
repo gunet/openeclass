@@ -110,9 +110,10 @@ if(!session_is_registered('objExercise')) {
 	// if the specified exercise doesn't exist or is disabled
 	if(!$objExercise->read($exerciseId) && (!$is_allowedToEdit))
 		{
-		die($langExerciseNotFound);
+		$tool_content .= $langExerciseNotFound;
+		draw($tool_content, 2, 'exercice');
+		exit();
 	}
-
 	// saves the object into the session
 	session_register('objExercise');
 }
@@ -133,7 +134,7 @@ if (!$exerciseTimeConstrain) {
 	$exerciseTimeConstrainSecs = time() + ($exerciseTimeConstrain*60);
 }
 
-$RecordStartDate = date("Y-m-d H:i:s",time());
+$RecordStartDate = date("Y-m-d");
 
 if ((!$is_adminOfCourse)&&(isset($uid))) { //if registered student
 	$CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
@@ -154,15 +155,13 @@ if ((!$is_adminOfCourse)&&(isset($uid))) { //if registered student
 	if (!isset($HTTP_COOKIE_VARS['marvelous_cookie'])) { // either expired or begin again
 		if ((!$exerciseAllowedAttemtps)||($CurrentAttempt[0] <= $exerciseAllowedAttemtps)) { // if it is allowed begin again
 			
-			$CookieLife = $exerciseTimeConstrainSecs;
-						
+			$CookieLife = $exerciseTimeConstrainSecs;						
 			if (!setcookie("marvelous_cookie", $eid_temp, $CookieLife, "/")) {
 					header('Location: exercise_redirect.php');
 				exit();
 			}
-
 			mysql_select_db($currentCourseID);
-			$sql="INSERT INTO `exercise_user_record` (eurid,eid,uid,RecordStartDate,RecordEndDate,".
+			$sql="INSERT INTO `exercise_user_record` (eurid,eid, uid,RecordStartDate,RecordEndDate,".
 				"TotalScore,TotalWeighting,attempt) VALUES".
 				"(0,'$eid_temp','$uid','$RecordStartDate','','','',1)";
 			$result=db_query($sql);		
@@ -195,10 +194,8 @@ if(!isset($questionNum) || $_POST['questionNum']) {
 if(@$_POST['questionNum']) {
 	$QUERY_STRING="questionNum=$questionNum";
 }
-
 	$exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 	$tool_content .= <<<cData
-
       <table width="99%" class="Question">
       <tr>
         <td colspan=\"2\"><b>${exerciseTitle}</b>
@@ -206,7 +203,6 @@ if(@$_POST['questionNum']) {
         ${exerciseDescription_temp}</td>
       </tr>
       </table>
-	  
       <form method="post" action="$_SERVER[PHP_SELF]" autocomplete="off">
       <input type="hidden" name="formSent" value="1">
       <input type="hidden" name="exerciseType" value="$exerciseType">
@@ -229,19 +225,12 @@ foreach($questionList as $questionId) {
 			if(isset($exerciseResult[$questionId])) {
 				// construction of the Question object
 				$objQuestionTmp=new Question();
-
 				// reads question informations
 				$objQuestionTmp->read($questionId);
-
 				$questionName=$objQuestionTmp->selectTitle();
-
 				// destruction of the Question object
 				unset($objQuestionTmp);
-
-				$tool_content .= '
-
-      <div class\"alert1\" '.$langAlreadyAnswered.' &quot;'.$questionName.'&quot;</div>
-      ';
+				$tool_content .= '<div class\"alert1\" '.$langAlreadyAnswered.' &quot;'.$questionName.'&quot;</div>';
 				break;
 			}
 		}
@@ -257,22 +246,16 @@ foreach($questionList as $questionId) {
       </b></p>";
     */
 	// shows the question and its answers
-	$tool_content .= "
-      <br>
-      <table width=\"99%\" class=\"Exercise\">
-      <thead>
+	$tool_content .= "<br><table width=\"99%\" class=\"Exercise\"><thead>
       <tr>
         <td colspan=\"2\"><div id=\"question_title_id\">".$langQuestion." : ".$i."</div></td>
-      </tr>
-      "; 
+      </tr>"; 
 	
 	if($exerciseType == 2) 
 		$tool_content .= " / ".$nbrQuestions;
-	  
+	
 	showQuestion($questionId);
-	$tool_content .= "
-      </thead>
-      </table>";
+	$tool_content .= "</thead></table>";
 
 	// for sequential exercises
 	if($exerciseType == 2) {
@@ -292,11 +275,7 @@ if (!$questionList)
       </thead>
       </table>";	 
    }
-	$tool_content .= "
-
-
-    <br/>
-	
+	$tool_content .= "<br/>	
     <table width=\"99%\" class=\"Question\">
     <tr>
       <td><div align=\"center\"><input type=\"submit\" value=\"";
@@ -304,15 +283,8 @@ if (!$questionList)
 		$tool_content .= $langOk." &gt;"."\">";
 	else	
 		$tool_content .= $langNext." &gt;"."\">";
-
-	$tool_content .= "
-      <input type=\"submit\" name=\"buttonCancel\" value=\"$langCancel\"></div>
-      </td>
-    </tr>
-    </table>
-	
-    </form> 
-";
-
+	$tool_content .= "<input type=\"submit\" name=\"buttonCancel\" value=\"$langCancel\"></div>
+      	</td>
+    	</tr></table></form>";
 draw($tool_content, 2, 'exercice');
 ?>

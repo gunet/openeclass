@@ -231,7 +231,6 @@ cData;
 	// if active
 	if($row['active'])
 	{
-
 	if (isset($page)) {	
 		$tool_content .= "
         	<td width='20%' align='center'>"."<a href=\"$_SERVER[PHP_SELF]?choice=disable&page=${page}&exerciseId=".$row['id']."\">"."<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" alt=\"".htmlspecialchars($langDeactivate)."\"></a></td>";

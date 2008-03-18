@@ -67,8 +67,7 @@ $end_cal_Excercise = $jscalendar->make_input_field(
            array('style'       => 'width: 15em; color: #840; background-color: #fff; border: 1px solid #000; text-align: center',
                  'name'        => 'exerciseEndDate',
                  'value'       => $u_date_end));
-                 
- 
+
 $local_head .= "
 <script language=\"JavaScript\">
 function validate() {
@@ -111,7 +110,9 @@ $TBL_QUESTIONS='questions';
 $TBL_REPONSES='reponses';
 
 if(!$is_allowedToEdit) {
-	die($langNotAllowed);
+	$tool_content .= $langNotAllowed;
+	draw($tool_content, 2, 'exercice', $local_head, '');
+	exit();
 }
 
 /****************************/
@@ -155,19 +156,18 @@ $nbrQuestions=$objExercise->selectNbrQuestions();
 
 // intializes the Question object
 if($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
-
-if($editQuestion || $newQuestion) {
+	if($editQuestion || $newQuestion) {
 		// construction of the Question object
 		$objQuestion=new Question();
-
 		// saves the object into the session
 		session_register('objQuestion');
-
 		// reads question data
 		if($editQuestion) {
 			// question not found
 			if(!$objQuestion->read($editQuestion)) {
-				die($langQuestionNotFound);
+				$tool_content .= $langQuestionNotFound;
+				draw($tool_content, 2, 'exercice', $local_head, '');
+				exit();
 			}
 		}
 	}
@@ -180,7 +180,9 @@ if($editQuestion || $newQuestion) {
 	// question not found
 	else
 	{
-		die($langQuestionNotFound);
+		$tool_content .= $langQuestionNotFound;
+		draw($tool_content, 2, 'exercice', $local_head, '');
+		exit();		
 	}
 }
 
@@ -222,11 +224,20 @@ if($cancelAnswers) {
 // modifies the query string that is used in the link of tool name
 if($editQuestion || $modifyQuestion || $modifyAnswers) {
 	$nameTools=$langQuestionManagement;
+	$navigation[]= array ("url" => "admin.php?exerciseId=$exerciseId", "name" => $langExerciseManagement);
 	$QUERY_STRING=$questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
 } elseif($newQuestion) {
 	$nameTools=$langNewQu;
+	$navigation[]= array ("url" => "admin.php?exerciseId=$exerciseId", "name" => $langExerciseManagement);
 	$QUERY_STRING=$questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
-}else {
+} elseif($modifyExercise) {
+	$nameTools=$langInfoExercise;
+	if (isset($exerciseId) and $exerciseId <> 0) {
+		$navigation[]= array ("url" => "admin.php?exerciseId=$exerciseId", 
+				"name" => $langExerciseManagement);
+	}
+}
+else {
 	$nameTools=$langExerciseManagement;
 	$QUERY_STRING='';
 }

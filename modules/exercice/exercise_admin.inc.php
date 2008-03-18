@@ -172,8 +172,7 @@ $tool_content .= "
 */
 
 	$tool_content .= <<<cData
-	
-    <tr>
+	   <tr>
       <th class=\"left\">&nbsp;</th>
       <td><input type="submit" name="submitExercise" value="${langOk}">&nbsp;&nbsp;<input type="submit" name="cancelExercise" value="${langCancel}"></td>
     </tr>
@@ -184,10 +183,7 @@ cData;
 
 } else {
 
-
-	
 $tool_content .= <<<cData
-
     <table width="99%" class="FormData">
     <tbody>
     <tr>

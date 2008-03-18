@@ -64,7 +64,9 @@ if(!session_is_registered('objExercise')) {
 	// if the specified exercise doesn't exist or is disabled
 	if(!$objExercise->read($exerciseId) && (!$is_allowedToEdit))
 		{
-		die($langExerciseNotFound);
+		$tool_content .= $langExerciseNotFound;
+		draw($tool_content, 2);
+		exit();
 	}
 
 	// saves the object into the session

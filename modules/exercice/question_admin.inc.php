@@ -103,7 +103,7 @@ cData;
     </tr>
     <tr>
 cData;
-    
+
       $tool_content .= "
         <input type=\"submit\" name=\"";
       if (isset($submitQuestion))
@@ -118,7 +118,6 @@ cData;
 
     </tr>
     </table>
-
       </td>
     </tr>
     </table>
@@ -149,38 +148,22 @@ else
           <a href=\"".$PHP_SELF."?modifyQuestion=".$questionId."\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" align=\"absmiddle\" title=\"".$langModify."\"></a>";
 	}
 
-$tool_content .= "
-          <br/>
-          <i>$questionDescription</i>";
+$tool_content .= "<br/><i>$questionDescription</i>";
 
 	// show the picture of the question
 	if($okPicture) {
-		$tool_content .= "
-          <br/>
-          <center><img src='$picturePath/quiz-$questionId' border='0'></center>
-          <br/>";
+		$tool_content .= "<br/><center><img src='$picturePath/quiz-$questionId' border='0'></center><br/>";
 	}
 
-	$tool_content .= "
-        </th>
-      </tr>";
-	
-
-
-$tool_content .= "
-      <tr>
-        <td colspan='2'>
-          <b><u>$langQuestionAnswers</u>:</b>";
+	$tool_content .= "</th></tr>";	
+$tool_content .= "<tr><td colspan='2'><b><u>$langQuestionAnswers</u>:</b>";
 
      // doesn't show the edit link if we come from the question pool to pick a question for an exercise
      if(!isset($fromExercise)) {
         $tool_content .= "&nbsp;&nbsp;<a href='$PHP_SELF?modifyAnswers=$questionId'><img src='../../images/edit.gif' border='0' align='absmiddle' title='$langModify'></a>";
      }
 
-        $tool_content .= "
-          <br/>
-        </td>
-      </tr>";
+        $tool_content .= "<br/></td></tr>";
 
       // shows answers of the question. 'true' means that we don't show the question, only answers
       if(!showQuestion($questionId,true)) {
@@ -192,11 +175,6 @@ $tool_content .= "
  	  */
        }
 
-    $tool_content .= "
-        </td>
-      </tr>
-      </thead>
-      </table>
-      <br/>";
+    $tool_content .= "</td></tr></thead></table><br/>";
 }
 ?>
