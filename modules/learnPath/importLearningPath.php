@@ -246,8 +246,15 @@ function elementData($parser,$data)
     global $errorMsgs,$okMsgs;
     global $pathToManifest;
     global $langErrorOpeningXMLFile;
-    
-    $data = trim(utf8_decode_if_is_utf8($data));
+    global $charset;
+
+// -----------------------------------
+// when eclass is full utf 8 restore this    
+// -----------------------------------------
+
+    //$data = trim(($data));
+    //$data = trim(iconv("utf-8", "iso-8859-7", $data));
+    $data = trim(iconv("utf-8", $charset, $data));
     
     if (!isset($data)) $data="";
     

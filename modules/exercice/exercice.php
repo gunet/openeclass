@@ -47,7 +47,7 @@ $nameTools = $langExercices;
 /*******************************/
 if(session_is_registered('objExercise'))	{ session_unregister('objExercise');	}
 if(session_is_registered('objQuestion'))	{ session_unregister('objQuestion');	}
-if(session_is_registered('objAnswer'))		{ session_unregister('objAnswer');		}
+if(session_is_registered('objAnswer'))		{ session_unregister('objAnswer');	}
 if(session_is_registered('questionList'))	{ session_unregister('questionList');	}
 if(session_is_registered('exerciseResult'))	{ session_unregister('exerciseResult');	}
 
@@ -133,7 +133,6 @@ elseif($nbrExercises > $limitExPage) {
 }
 
 if($nbrExercises > $limitExPage) {
-
 	$tool_content .= <<<cData
 	<small><a href="${PHP_SELF}?page=$page+1>">${langNext} &gt;&gt;</a></small>
 cData;
@@ -179,9 +178,7 @@ cData;
 }
 
 if(!$nbrExercises) {
-	$tool_content .= "
-      <tr>
-        <td";
+	$tool_content .= "<tr><td";
 	if($is_allowedToEdit) 
 		$tool_content .= " colspan=\"4\"";
 		$tool_content .= " class=\"empty\">${langNoEx}</td>
@@ -190,19 +187,15 @@ if(!$nbrExercises) {
 
 $i=1;
 
-$tool_content .= "
-      <tbody>";
+$tool_content .= "<tbody>";
 // while list exercises
 while($row=mysql_fetch_array($result))
 {
-
-$tool_content .= "
-      <tr>";
+$tool_content .= "<tr>";
 	// prof only
 	if($is_allowedToEdit)
 	{
 	$page_temp = ($i+(@$page*$limitExPage)).'.';
-
 	if(!$row['active']) {
 		$tool_content .= "
         <td width=\"2%\"><img src=\"../../template/classic/img/bullet_bw.gif\" border=\"0\" alt=\"bullet\" title=\"bullet\"></td>
@@ -256,11 +249,9 @@ else
         	<a href='$_SERVER[PHP_SELF]?choice=enable&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/visible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a>&nbsp;";
 	}
 }
-	$tool_content .= "
-        </td>";
-	$tool_content .= "
-      </tr>";
-	}
+	$tool_content .= "</td>";
+	$tool_content .= "</tr>";
+}
 	// student only
 else {
 	$page_offset_temp = @($i+($page*$limitExPage)).'.';
@@ -292,8 +283,8 @@ else {
 		}
 	  if ($row['AttemptsAllowed'] > 0) {	
 		   $tool_content .= "
-        <td align='center'><small>$CurrentAttempt[0]/$row[AttemptsAllowed]</small></td>"; 
-		} else {
+	        <td align='center'><small>$CurrentAttempt[0]/$row[AttemptsAllowed]</small></td>"; 
+	} else {
 			 $tool_content .= "
         <td align='center'><small> - </small></td>";
 		}

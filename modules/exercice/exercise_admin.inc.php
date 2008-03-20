@@ -23,6 +23,11 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
+/*****************************************************************************
+		Create the HTML for a jscalendar field 
+******************************************************************************/
+
+
 // the exercise form has been submitted
 if(isset($submitExercise))
 {
@@ -41,15 +46,12 @@ if(isset($submitExercise))
 			$objExercise->updateTitle($exerciseTitle);
 			$objExercise->updateDescription($exerciseDescription);
 			$objExercise->updateType($exerciseType);
-			
 			$objExercise->updateStartDate($exerciseStartDate);
 			$objExercise->updateEndDate($exerciseEndDate);
 			$objExercise->updateTimeConstrain($exerciseTimeConstrain);
-			$objExercise->updateAttemptsAllowed($exerciseAttemptsAllowed);
-			
+			$objExercise->updateAttemptsAllowed($exerciseAttemptsAllowed);			
 			$objExercise->setRandom($randomQuestions);
 			$objExercise->save();
-	
 			// reads the exercise ID (only usefull for a new exercise)
 			$exerciseId=$objExercise->selectId();
 			unset($modifyExercise);
@@ -90,6 +92,7 @@ cData;
 cData;
 	}
 
+
 $tool_content .= "
     <tr>
       <th class=\"left\" width=\"220\">&nbsp;</th>
@@ -123,16 +126,25 @@ if($exerciseType >= 2)
 $tool_content .= "> ".$langSequentialExercise."</td>
     </tr>";
 
+if (isset($exerciseStartDate))
+	$start_cal_Excercise = jscal_html('exerciseStartDate', $exerciseStartDate);
+else
+	$start_cal_Excercise = jscal_html('exerciseStartDate', strftime('%Y-%m-%d', strtotime('now -0 day')));
+
+if (isset($exerciseEndDate) and $exerciseEndDate != '')
+	$end_cal_Excercise = jscal_html('exerciseEndDate', $exerciseEndDate);
+else
+	$end_cal_Excercise = jscal_html('exerciseEndDate', strftime('%Y-%m-%d', strtotime('now +1 year')));
+
 $tool_content .= "
       <th class=\"left\">".$langExerciseStart." :</th>"."
-      <td>$start_cal_Excercise</td>
-    </tr>";
-  
+      <td>$start_cal_Excercise</td></tr>"; 
+
 $tool_content .= "
       <th class=\"left\">".$langExerciseEnd." :</th>"."
       <td>$end_cal_Excercise</td>
     </tr>";
-  
+
 $tool_content .= "
     <tr>
       <th class=\"left\">".$langExerciseConstrain." :</th>"."
@@ -230,4 +242,5 @@ cData;
 
 $tool_content .= "<br>";
 }
+
 ?>
