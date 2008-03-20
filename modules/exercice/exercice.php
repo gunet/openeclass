@@ -167,11 +167,11 @@ cData;
 // student view
 $tool_content .= <<<cData
 
-        <td colspan="2">&nbsp;$langExerciseName</td>
-        <td width="150"><div align="center">$langExerciseStart</div></td>
-        <td width="150"><div align="center">$langExerciseEnd</div></td>
-        <td width="50"><div align="center">$langExerciseConstrain</div></td>
-        <td width="50"><div align="center">$langExerciseAttemptsAllowed</div></td>
+        <td colspan="2">&nbsp;<b>$langExerciseName</b></td>
+        <td width="50"><small><div align="center"><b>$langExerciseStart</b></div></small></td>
+        <td width="50"><small><div align="center"><b>$langExerciseEnd</b></div></small></td>
+        <td width="50"><small><div align="center"><b>$langExerciseConstrain</b></div></small></td>
+        <td width="50"><small><div align="center"><b>$langExerciseAttemptsAllowed</b></div></small></td>
       </tr>
       </thead>
 cData;
@@ -277,23 +277,28 @@ else {
         <td width=\"2%\"><img src=\"../../template/classic/img/bullet_bw.gif\" border=\"0\" alt=\"bullet\" title=\"bullet\"></td>
         <td>".$row['titre'];
 	}
-	  $tool_content .= "<br>$row[description]</td>
+	  $tool_content .= "<br/><small>$row[description]</small></td>
         <td align='center'><small>".greek_format($row['StartDate'])."</small></td>
         <td align='center'><small>".greek_format($row['EndDate'])."</small></td>";
 	// how many attempts we have.
 	$CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
 			WHERE eid='$row[id]' AND uid='$uid'", $currentCourseID));
 	 if ($row['TimeConstrain'] > 0) {
-		  	$tool_content .= "<td align='center'><small>$row[TimeConstrain] $langExerciseConstrainUnit</small></td>";
+		  	$tool_content .= "
+        <td align='center'><small>$row[TimeConstrain] $langExerciseConstrainUnit</small></td>";
 		} else { 	
-			$tool_content .= "<td align='center'><small> - </small></td>"; 
+			$tool_content .= "
+        <td align='center'><small> - </small></td>"; 
 		}
 	  if ($row['AttemptsAllowed'] > 0) {	
-		   $tool_content .= "<td align='center'><small>$CurrentAttempt[0]/$row[AttemptsAllowed]</small></td>"; 
+		   $tool_content .= "
+        <td align='center'><small>$CurrentAttempt[0]/$row[AttemptsAllowed]</small></td>"; 
 		} else {
-			 $tool_content .= "<td align='center'><small> - </small></td>";
+			 $tool_content .= "
+        <td align='center'><small> - </small></td>";
 		}
-	  $tool_content .= "</tr>";
+	  $tool_content .= "
+      </tr>";
 	}
 	// skips the last exercise, that is only used to know if we have or not to create a link "Next page"
 	if ($i == $limitExPage) {
@@ -302,6 +307,8 @@ else {
 	$i++;
 }	// end while()
 
-$tool_content .= "</tbody></table>";
+$tool_content .= "
+      </tbody>
+      </table>";
 draw($tool_content, 2, 'exercice');
 ?>

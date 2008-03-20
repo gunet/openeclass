@@ -895,6 +895,7 @@ $langNoEx="There is no exercise for the moment";
 $langNewEx="New exercise";
 
 // exercice_admin.php
+$langExercicesView="Exercise View";
 $langExerciseType="Exercise Type";
 $langExerciseName="Exercise Name";
 $langExerciseDescription="Exercise Description";
@@ -2755,6 +2756,7 @@ $langBackList="Return to the list";
 $langType = "Type";
 $langHelp="Help";
 $langOk="Ok";
+$langCont = "Continue";
 $langUserBriefcase = "User portfolio";
 $langPersonalisedBriefcase = "Personalised portfolio";
 $langCopyrightFooter="Copyright notice";

@@ -71,7 +71,7 @@ if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExer
 $exerciseTitle=$objExercise->selectTitle();
 
 $tool_content .= "
-      <table class=\"Question\" width=\"99%\">
+      <table class=\"Exercise\" width=\"99%\">
       <thead>
       <tr>
         <td colspan=\"2\"><b>".stripslashes($exerciseTitle)." : ".$langResult."</b>
@@ -122,7 +122,8 @@ $tool_content .= <<<cData
       <table width="99%" class="Question">
       <thead>
       <tr>
-        <td colspan="${colspan}"><div id="question_title_id">$langQuestion $iplus</div></td>
+        <td colspan="${colspan}">
+        <div id="question_title_id">$langQuestion $iplus</div></td>
       </tr>
       <tr>
         <td colspan="${colspan}">${questionName}</td>
@@ -329,9 +330,9 @@ cData;
 
 $tool_content .= <<<cData
       <tr>
-        <th colspan="${colspan}" align="right">
-        <b>${langScore} : ${questionScore}/${questionWeighting}</b>
-        </th>
+        <td colspan="${colspan}"><div align="right">
+        <b>${langScore} : ${questionScore}/${questionWeighting}</b></div>
+        </td>
       </tr>
       </thead>
       </table>
@@ -400,10 +401,10 @@ exit();
 
 $tool_content .= <<<cData
       <br>
-      <table width="99%" class="Question">
+      <table width="99%" class="Exercise">
       <thead>
       <tr>
-        <td><div align="center">
+        <td><div align="right">
         <b>${langYourTotalScore} ${totalScore}/${totalWeighting} !</b></div>
         </td>
       </tr>

@@ -27,7 +27,6 @@
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
-
 include('exercise.lib.php');
  
 // answer types
@@ -46,7 +45,7 @@ include '../../include/lib/textLib.inc.php';
 
 $tool_content = "";
 
-$nameTools = $langExercice;
+$nameTools = $langExercicesView;
 $picturePath='../../courses/'.$currentCourseID.'/image';
 
 $is_allowedToEdit=$is_adminOfCourse;
@@ -196,13 +195,16 @@ if(@$_POST['questionNum']) {
 }
 	$exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 	$tool_content .= <<<cData
-      <table width="99%" class="Question">
+      <table width="99%" class="Exercise">
+      <thead>
       <tr>
         <td colspan=\"2\"><b>${exerciseTitle}</b>
         <br/><br/>
         ${exerciseDescription_temp}</td>
       </tr>
+      </thead>
       </table>
+	  
       <form method="post" action="$_SERVER[PHP_SELF]" autocomplete="off">
       <input type="hidden" name="formSent" value="1">
       <input type="hidden" name="exerciseType" value="$exerciseType">
@@ -246,7 +248,10 @@ foreach($questionList as $questionId) {
       </b></p>";
     */
 	// shows the question and its answers
-	$tool_content .= "<br><table width=\"99%\" class=\"Exercise\"><thead>
+	$tool_content .= "
+      <br/>
+      <table width=\"99%\" class=\"Question\">
+      <thead>
       <tr>
         <td colspan=\"2\"><div id=\"question_title_id\">".$langQuestion." : ".$i."</div></td>
       </tr>"; 
@@ -276,11 +281,11 @@ if (!$questionList)
       </table>";	 
    }
 	$tool_content .= "<br/>	
-    <table width=\"99%\" class=\"Question\">
+    <table width=\"99%\" class=\"Exercise\">
     <tr>
       <td><div align=\"center\"><input type=\"submit\" value=\"";
 	if ($exerciseType == 1 || $nbrQuestions == $questionNum)
-		$tool_content .= $langOk." &gt;"."\">";
+		$tool_content .= "$langCont\">&nbsp;";
 	else	
 		$tool_content .= $langNext." &gt;"."\">";
 	$tool_content .= "<input type=\"submit\" name=\"buttonCancel\" value=\"$langCancel\"></div>

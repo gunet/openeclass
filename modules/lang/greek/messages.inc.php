@@ -154,6 +154,7 @@ $langMultEnrol = "Πολλαπλές εγγραφές χρηστών";
 $langMultEmail= "Πολλαπλές εμφανίσεις διευθύνσεων e-mail";
 $langMultLoginPass = "Πολλαπλά ζεύγη LOGIN - PASS";
 $langOk = "Εντάξει";
+$langCont = "Συνέχεια";
 $langNumUsers = "Αριθμός συμμετεχόντων στην πλατφόρμα";
 $langNumGuest = "Αριθμός επισκεπτών";
 $langAddAdminInApache ="Προσθήκη Διαχειριστή";
@@ -869,6 +870,7 @@ $dropbox_lang['mailingJustUploadNoOther'] = "Το ανέβασμα αρχείου δεν μπορεί να σ
 /**********************************************************
 * exercice.inc.php
 **********************************************************/
+$langExercicesView="Προβολή Ασκησης";
 $langQuestion="Ερώτηση";
 $langQuestions="Ερωτήσεις";
 $langAnswer="Απάντηση";
