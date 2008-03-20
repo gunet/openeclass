@@ -110,7 +110,7 @@ $nbrExercises=mysql_num_rows($result);
 
 if($is_allowedToEdit) {
 	$tool_content .= "
-      <div id=\"operations_container\">
+      <div  align=\"left\" id=\"operations_container\">
         <ul id=\"opslist\">\n";
 
   $tool_content .= <<<cData
@@ -154,11 +154,9 @@ if($is_allowedToEdit) {
 
 $tool_content .= <<<cData
 
-        <td>&nbsp;&nbsp;&nbsp;&nbsp;${langExerciseName}</td>
-        <td><div align="center">${langResults}</div></td>
-        <td><div align="center">${langModify}</div></td>
-        <td><div align="center">${langDelete}</div></td>
-        <td><div align="center">${langActivate} / ${langDeactivate}</div></td>
+        <td width=\"80%\">&nbsp;&nbsp;&nbsp;&nbsp;${langExerciseName}</td>
+        <td width=\"10%\"><div align="center">${langResults}</div></td>
+        <td width=\"10%\"><div align="right">$langCommands&nbsp;</div></td>
       </tr>
       </thead>
 
@@ -181,30 +179,34 @@ cData;
 }
 
 if(!$nbrExercises) {
-	$tool_content .= "<tr><td>";
+	$tool_content .= "
+      <tr>
+        <td";
 	if($is_allowedToEdit) 
 		$tool_content .= " colspan=\"4\"";
-		$tool_content .= ">${langNoEx}</td>
+		$tool_content .= " class=\"empty\">${langNoEx}</td>
       </tr>";
 }
 
 $i=1;
 
-$tool_content .= "<tbody>";
+$tool_content .= "
+      <tbody>";
 // while list exercises
 while($row=mysql_fetch_array($result))
 {
 
-$tool_content .= "<tr>";
+$tool_content .= "
+      <tr>";
 	// prof only
 	if($is_allowedToEdit)
 	{
 	$page_temp = ($i+(@$page*$limitExPage)).'.';
 
 	if(!$row['active']) {
-		$tool_content .= "<td width=\"70%\"><a href=\"exercice_submit.php?exerciseId=${row['id']}\" class=\"invisible\"><img src=\"../../template/classic/img/exercise_off.gif\" border=\"0\" alt=\"${page_temp}\" title=\"${page_temp}\"></a>&nbsp;".$row['titre']."<br>".$row['description']."</td>"; 
+		$tool_content .= "<td width=\"80%\"><a href=\"exercice_submit.php?exerciseId=${row['id']}\" class=\"invisible\"><img src=\"../../template/classic/img/exercise_off.gif\" border=\"0\" alt=\"${page_temp}\" title=\"${page_temp}\"></a>&nbsp;".$row['titre']."<br>".$row['description']."</td>"; 
 	} else {
-		$tool_content .= "<td width=\"70%\"><a href=\"exercice_submit.php?exerciseId=${row['id']}\"><img src=\"../../template/classic/img/exercise_on.gif\" border=\"0\" alt=\"${page_temp}\" title=\"${page_temp}\"></a>&nbsp;".$row['titre']."<br>".$row['description']."</td>";
+		$tool_content .= "<td width=\"80%\"><a href=\"exercice_submit.php?exerciseId=${row['id']}\"><img src=\"../../template/classic/img/exercise_on.gif\" border=\"0\" alt=\"${page_temp}\" title=\"${page_temp}\"></a>&nbsp;".$row['titre']."<br>".$row['description']."</td>";
 	}
 
 $eid = $row['id'];
@@ -216,7 +218,7 @@ if ($NumOfResults[0]) {
 	$langExerciseScores1."</a> | <a href=\"csv.php?&exerciseId=".$row['id']."\">".$langExerciseScores3."</a></nobr></td>";
 } else {
 	$tool_content .= "
-        <td width=\"10%\" align=\"center\">	</td>";
+        <td width=\"10%\" align=\"center\">	- </td>";
 }
 
 	$langModify_temp = htmlspecialchars($langModify);
@@ -224,8 +226,8 @@ if ($NumOfResults[0]) {
 	$langDelete_temp = htmlspecialchars($langDelete);
 	$tool_content .= <<<cData
 
-        <td width="10%" align="center"><a href="admin.php?exerciseId=${row['id']}"><img src="../../template/classic/img/edit.gif" border="0" alt="${langModify_temp}"></a></td>
-        <td width="10%" align="center"><a href="$_SERVER[PHP_SELF]?choice=delete&exerciseId=${row['id']}"  onclick="javascript:if(!confirm('${langConfirmYourChoice_temp}')) return false;"><img src="../../template/classic/img/delete.gif" border="0" alt="${langDelete_temp}"></a></td>
+        <td width="10%" align="right"><a href="admin.php?exerciseId=${row['id']}"><img src="../../template/classic/img/edit.gif" border="0" alt="${langModify_temp}"></a>
+        <a href="$_SERVER[PHP_SELF]?choice=delete&exerciseId=${row['id']}"  onclick="javascript:if(!confirm('${langConfirmYourChoice_temp}')) return false;"><img src="../../template/classic/img/delete.gif" border="0" alt="${langDelete_temp}"></a>
 cData;
 
 	// if active
@@ -233,10 +235,10 @@ cData;
 	{
 	if (isset($page)) {	
 		$tool_content .= "
-        	<td width='20%' align='center'>"."<a href=\"$_SERVER[PHP_SELF]?choice=disable&page=${page}&exerciseId=".$row['id']."\">"."<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" alt=\"".htmlspecialchars($langDeactivate)."\"></a></td>";
+        	<a href=\"$_SERVER[PHP_SELF]?choice=disable&page=${page}&exerciseId=".$row['id']."\">"."<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" alt=\"".htmlspecialchars($langDeactivate)."\"></a>&nbsp;";
 	} else {
-		$tool_content .= "<td width='20%' align='center'>
-		<a href='$_SERVER[PHP_SELF]?choice=disable&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/invisible.gif' border='0' alt='".htmlspecialchars($langDeactivate)."'></a></td>";
+		$tool_content .= "
+		<a href='$_SERVER[PHP_SELF]?choice=disable&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/invisible.gif' border='0' alt='".htmlspecialchars($langDeactivate)."'></a>&nbsp;";
 	}
 }
 // else if not active
@@ -244,14 +246,16 @@ else
 {
 	if (isset($page)) {
 		$tool_content .= "
-        	<td width='20%' align='center'>"."<a href='$_SERVER[PHP_SELF]?choice=enable&page=${page}&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/visible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
+        	<a href='$_SERVER[PHP_SELF]?choice=enable&page=${page}&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/visible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a>&nbsp;";
 	} else {
 		$tool_content .= "
-        	<td width='20%' align='center'>"."<a href='$_SERVER[PHP_SELF]?choice=enable&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/visible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a></td>";
+        	<a href='$_SERVER[PHP_SELF]?choice=enable&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/visible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a>&nbsp;";
 	}
 }
-
-	$tool_content .= "</tr>";
+	$tool_content .= "
+        </td>";
+	$tool_content .= "
+      </tr>";
 	}
 	// student only
 else {

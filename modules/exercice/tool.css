@@ -118,3 +118,7 @@ table.Question td {
 .invisible {
 	text-decoration : line-through;
 }
+
+.empty {
+	color: red !important;
+}

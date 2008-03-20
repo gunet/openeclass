@@ -73,6 +73,8 @@ a:hover {
     color: #000000;
     border-top: 1px solid #a33033;
     border-bottom: 1px solid #a33033;
+	border-left: 1px solid #CAC3B5;
+	border-right: 1px solid #CAC3B5;
     margin-bottom: 0.8em;
     overflow: hidden;
 }

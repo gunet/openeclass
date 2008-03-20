@@ -879,7 +879,7 @@ $langEvalSet="Ρυθμίσεις βαθμολογίας";
 $langExercice="Ασκηση";
 $langActive="ενεργό";
 $langInactive="μη ενεργό";
-$langNoEx="Αυτή τη στιγμή δεν υπάρχει άσκηση";
+$langNoEx="Δεν υπάρχει διαθέσιμη άσκηση";
 $langNewEx="Καινούρια άσκηση";
 $langExerciseType="Τύπος Ασκήσεων";
 $langExerciseName="Όνομα Ασκησης";
@@ -977,7 +977,7 @@ $langGetExistingQuestion="Ερώτηση από άλλη άσκηση";
 // question_pool.php
 $langQuestionPool="Διαθέσιμες Ερωτήσεις";
 $langOrphanQuestions="Ερωτήσεις χωρίς απάντηση";
-$langNoQuestion="Δεν υπάρχει ερώτηση αυτή την στιγμή";
+$langNoQuestion="Δεν έχουν ορισθεί ερωτήσεις για τη συγκεκριμένη άσκηση";
 $langAllExercises="Όλες οι ασκήσεις";
 $langFilter="Φιλτράρισμα";
 $langGoBackToEx="Επιστροφή στην άσκηση";
