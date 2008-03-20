@@ -154,9 +154,9 @@ if($is_allowedToEdit) {
 
 $tool_content .= <<<cData
 
-        <td width=\"80%\">&nbsp;&nbsp;&nbsp;&nbsp;${langExerciseName}</td>
-        <td width=\"10%\"><div align="center">${langResults}</div></td>
-        <td width=\"10%\"><div align="right">$langCommands&nbsp;</div></td>
+        <td width="75%" colspan="2">&nbsp;<b>${langExerciseName}</b></td>
+        <td width="10%"><div align="center"><b>${langResults}</b></div></td>
+        <td width="15%"><div align="right"><b>$langCommands</b>&nbsp;</div></td>
       </tr>
       </thead>
 
@@ -167,7 +167,7 @@ cData;
 // student view
 $tool_content .= <<<cData
 
-        <td>$langExerciseName</td>
+        <td colspan="2">&nbsp;$langExerciseName</td>
         <td width="150"><div align="center">$langExerciseStart</div></td>
         <td width="150"><div align="center">$langExerciseEnd</div></td>
         <td width="50"><div align="center">$langExerciseConstrain</div></td>
@@ -204,9 +204,13 @@ $tool_content .= "
 	$page_temp = ($i+(@$page*$limitExPage)).'.';
 
 	if(!$row['active']) {
-		$tool_content .= "<td width=\"80%\"><a href=\"exercice_submit.php?exerciseId=${row['id']}\" class=\"invisible\"><img src=\"../../template/classic/img/exercise_off.gif\" border=\"0\" alt=\"${page_temp}\" title=\"${page_temp}\"></a>&nbsp;".$row['titre']."<br>".$row['description']."</td>"; 
+		$tool_content .= "
+        <td width=\"2%\"><img src=\"../../template/classic/img/bullet_bw.gif\" border=\"0\" alt=\"bullet\" title=\"bullet\"></td>
+        <td width=\"75%\"><div class=\"invisible\"><a href=\"exercice_submit.php?exerciseId=${row['id']}\">".$row['titre']."</a>&nbsp;<br/><small>".$row['description']."</small></div></td>"; 
 	} else {
-		$tool_content .= "<td width=\"80%\"><a href=\"exercice_submit.php?exerciseId=${row['id']}\"><img src=\"../../template/classic/img/exercise_on.gif\" border=\"0\" alt=\"${page_temp}\" title=\"${page_temp}\"></a>&nbsp;".$row['titre']."<br>".$row['description']."</td>";
+		$tool_content .= "
+        <td width=\"2%\"><img src=\"../../template/classic/img/bullet_bw.gif\" border=\"0\" alt=\"bullet\" title=\"bullet\"></td>
+        <td width=\"75%\"><a href=\"exercice_submit.php?exerciseId=${row['id']}\">".$row['titre']."</a>&nbsp;<br/><small>".$row['description']."</small></td>";
 	}
 
 $eid = $row['id'];
@@ -218,7 +222,7 @@ if ($NumOfResults[0]) {
 	$langExerciseScores1."</a> | <a href=\"csv.php?&exerciseId=".$row['id']."\">".$langExerciseScores3."</a></nobr></td>";
 } else {
 	$tool_content .= "
-        <td width=\"10%\" align=\"center\">	- </td>";
+        <td width=\"10%\" align=\"center\">	-&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;- </td>";
 }
 
 	$langModify_temp = htmlspecialchars($langModify);
@@ -226,7 +230,7 @@ if ($NumOfResults[0]) {
 	$langDelete_temp = htmlspecialchars($langDelete);
 	$tool_content .= <<<cData
 
-        <td width="10%" align="right"><a href="admin.php?exerciseId=${row['id']}"><img src="../../template/classic/img/edit.gif" border="0" alt="${langModify_temp}"></a>
+        <td width="13%" align="right"><a href="admin.php?exerciseId=${row['id']}"><img src="../../template/classic/img/edit.gif" border="0" alt="${langModify_temp}"></a>
         <a href="$_SERVER[PHP_SELF]?choice=delete&exerciseId=${row['id']}"  onclick="javascript:if(!confirm('${langConfirmYourChoice_temp}')) return false;"><img src="../../template/classic/img/delete.gif" border="0" alt="${langDelete_temp}"></a>
 cData;
 
@@ -265,9 +269,13 @@ else {
 	$temp_EndDate = mktime(0, 0, 0, substr($row['EndDate'], 5,2),substr($row['EndDate'], 8,2),substr($row['EndDate'], 0,4));
 	$CurrentDate = mktime(0, 0 , 0,substr($CurrentDate, 5,2), substr($CurrentDate, 8,2),substr($CurrentDate, 0,4));
 	if (($CurrentDate >= $temp_StartDate) && ($CurrentDate < $temp_EndDate)) {
-		$tool_content .= "<td><a href=\"exercice_submit.php?exerciseId=".$row['id']."\">".$row['titre']."</a>";
+		$tool_content .= "
+        <td width=\"2%\"><img src=\"../../template/classic/img/bullet_bw.gif\" border=\"0\" alt=\"bullet\" title=\"bullet\"></td>
+        <td><a href=\"exercice_submit.php?exerciseId=".$row['id']."\">".$row['titre']."</a>";
 	} else {
-		$tool_content .= "<td>".$row['titre'];
+		$tool_content .= "
+        <td width=\"2%\"><img src=\"../../template/classic/img/bullet_bw.gif\" border=\"0\" alt=\"bullet\" title=\"bullet\"></td>
+        <td>".$row['titre'];
 	}
 	  $tool_content .= "<br>$row[description]</td>
         <td align='center'><small>".greek_format($row['StartDate'])."</small></td>

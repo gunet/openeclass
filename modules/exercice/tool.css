@@ -37,10 +37,10 @@ table.ExerciseSum th{
 }
 
 table.ExerciseSum td {
-    padding: 4px;
-    color: #727266;
-    vertical-align: middle;
-    background : #fbfbfb ;
+	color: #727266;
+	vertical-align: top;
+	background : #fbfbfb ;
+	padding : 5px 4px 4px 4px;
 }
 
 
@@ -116,7 +116,11 @@ table.Question td {
 }
 
 .invisible {
-	text-decoration : line-through;
+	color : Silver;
+}
+
+.invisible a{
+	color : #ABABAB;
 }
 
 .empty {
