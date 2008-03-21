@@ -42,7 +42,7 @@ $helpTopic = 'Exercise';
 include '../../include/baseTheme.php';
 
 $tool_content = "";
-$nameTools = $langExercice;
+$nameTools = $langExercicesView;
 include('../../include/lib/textLib.inc.php');
 
 $picturePath='../../courses/'.$currentCourseID.'/image';
@@ -78,11 +78,41 @@ setcookie("marvelous_cookie_control", "", time() - 3600, "/");
 
 $exerciseTitle=$objExercise->selectTitle();
 
+$exerciseTitle=$objExercise->selectTitle();
+$exerciseDescription=$objExercise->selectDescription();
+$exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
+
+$tool_content .= "
+      <table class=\"Exercise\" width=\"99%\">
+      <thead>
+      <tr>
+        <td colspan=\"2\">
+        <b>".stripslashes($exerciseTitle)."</b>
+        <br/><br/>
+        ".stripslashes($exerciseDescription_temp)."
+        </td>
+      </tr>
+      </thead>
+      </table>
+	";
+
+
+
 $tool_content .= <<<cData
-	<h3>${exerciseTitle}</h3>
-	<p>${langExerciseExpired}</p>
-	<p><center><a href="exercice.php">${langBack}</a></center></p>
+      <br/>
+      <table width="99%" class="Question">
+      <thead>
+      <tr>
+        <td class="alert1">${langExerciseExpired}</td>
+      </tr>
+      <tr>
+        <td><br/><br/><br/><div align="center"><a href="exercice.php">${langBack}</a></div></td>
+      </tr>
+      </thead>
+      </table>
+
+
 cData;
 
-draw($tool_content, 2);
+draw($tool_content, 2, exercice);
 ?>

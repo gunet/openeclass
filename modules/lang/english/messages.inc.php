@@ -896,6 +896,7 @@ $langNewEx="New exercise";
 
 // exercice_admin.php
 $langExercicesView="Exercise View";
+$langExercicesResult="Exercise Results";
 $langExerciseType="Exercise Type";
 $langExerciseName="Exercise Name";
 $langExerciseDescription="Exercise Description";
@@ -1000,6 +1001,7 @@ $langReuse="Reuse";
 $langElementList="Element List";
 $langResult="Result";
 $langScore="Score";
+$langQuestionScore="Question Score";
 $langCorrespondsTo="Corresponds to";
 $langExpectedChoice="Expected Choice";
 $langYourTotalScore="Your total score is";
@@ -1022,7 +1024,8 @@ $langExerciseConstrainExplanation="0 for no constrain";
 $langExerciseAttemptsAllowedExplanation="0 for unlimited number of attempts";
 $langExerciseAttemptsAllowed="Attempts allowed";
 $langExerciseAttemptsAllowedUnit="times";
-$langExerciseExpired="The time limit for the exercise expired or you have reache dthe maximum number of allowed attempts.";
+$langExerciseExpired="You have reached the maximum number of allowed attempts.";
+$langExerciseExpiredTime="You have exceeded the time limit for this exercise.";
 $langExerciseLis="List of exercises";
 $langResults="Results";
 $langResultsFailed="Failure";

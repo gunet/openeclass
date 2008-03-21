@@ -45,12 +45,12 @@ table.ExerciseSum td {
 
 
 table.Exercise {
-    padding: 2px;
-    vertical-align: middle;
-    border-top: 1px solid #CAC3B5;
-    border-bottom: 1px solid #CAC3B5;
-    border-left: 1px solid #CAC3B5;
-    border-right: 1px solid #CAC3B5;
+	padding: 2px;
+	vertical-align: middle;
+	border-top: 1px solid #DBDCCD;
+	border-bottom: 1px solid #DBDCCD;
+	border-left: 1px solid #DBDCCD;
+	border-right: 1px solid #DBDCCD;
 }
 
 table.Exercise th{
@@ -104,7 +104,6 @@ table.Question td {
 }
 
 #question_title_id {
-    border-bottom: 1px dotted #edecdf;
     padding:2px;
     padding-top:5px;
     color: #a33033;
@@ -122,4 +121,14 @@ table.Question td {
 
 .empty {
 	color: red !important;
+}
+
+.score {
+	color: #a33033 !important;
+	text-align : right;
+}
+
+.question_local_header {
+	color: #a33033;
+	border: red  !important;
 }

@@ -55,8 +55,8 @@ function showQuestion($questionId, $onlyAnswers=false)
       <tr>
         <td colspan="2">
         <b>${questionName}</b>
-        <br>
-        <small><i>${questionDescription_temp}</i></small>
+        <br/>
+        <small>${questionDescription_temp}</small>
         </td>
       </tr>
 cData;

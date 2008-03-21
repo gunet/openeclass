@@ -253,7 +253,7 @@ foreach($questionList as $questionId) {
       <table width=\"99%\" class=\"Question\">
       <thead>
       <tr>
-        <td colspan=\"2\"><div id=\"question_title_id\">".$langQuestion." : ".$i."</div></td>
+        <td colspan=\"2\"><b><u>".$langQuestion."</u>: ".$i."</b></td>
       </tr>"; 
 	
 	if($exerciseType == 2) 

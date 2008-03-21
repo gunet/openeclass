@@ -38,7 +38,7 @@ $guest_allowed = true;
 include '../../include/baseTheme.php';
 $tool_content = "";
 
-$nameTools = $langExercices;
+$nameTools = $langExercicesResult;
 $navigation[]= array ("url"=>"exercice.php", "name"=> $langExercices);
 
 // Destroy cookie
@@ -69,13 +69,17 @@ if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExer
 }
 
 $exerciseTitle=$objExercise->selectTitle();
+$exerciseDescription=$objExercise->selectDescription();
+$exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 
 $tool_content .= "
       <table class=\"Exercise\" width=\"99%\">
       <thead>
       <tr>
-        <td colspan=\"2\"><b>".stripslashes($exerciseTitle)." : ".$langResult."</b>
-        <br><br>
+        <td colspan=\"2\">
+        <b>".stripslashes($exerciseTitle)."</b>
+        <br/><br/>
+        ".stripslashes($exerciseDescription_temp)."
         </td>
       </tr>
       </thead>
@@ -97,6 +101,11 @@ $tool_content .= "
 
 		$questionName=$objQuestionTmp->selectTitle();
 		$questionName=latex_content($questionName);
+		$questionDescription=$objQuestionTmp->selectDescription();
+		$questionDescription=latex_content($questionDescription);
+        $questionDescription_temp = nl2br(make_clickable($questionDescription));
+	
+	
 		$questionWeighting=$objQuestionTmp->selectWeighting();
 		$answerType=$objQuestionTmp->selectType();
 
@@ -118,16 +127,18 @@ $tool_content .= "
 $iplus=$i+1;
 $tool_content .= <<<cData
 
-      <br>
+      <br/>
       <table width="99%" class="Question">
       <thead>
       <tr>
-        <td colspan="${colspan}">
-        <div id="question_title_id">$langQuestion $iplus</div></td>
+        <td colspan="${colspan}"><b><u>$langQuestion</u>: $iplus</b></td>
       </tr>
       <tr>
-        <td colspan="${colspan}">${questionName}</td>
+        <td colspan="${colspan}"><b>${questionName}</b><br/>
+        <small>${questionDescription_temp}</small><br/><br/></td>
       </tr>
+      </thead>
+      <tbody>
 cData;
 
 		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
@@ -135,10 +146,10 @@ cData;
 $tool_content .= <<<cData
 
       <tr>
-        <th width="5%">${langChoice}</th>
-        <th width="5%">${langExpectedChoice}</th>
-        <th width="45%">${langAnswer}</th>
-        <th width="45%">${langComment}</th>
+        <td width="5%" align="center" style="background: #fff;"><b>${langChoice}</b></td>
+        <td width="5%" align="center" style="background: #fff;"><b>${langExpectedChoice}</b></td>
+        <td width="45%" align="center" style="background: #fff;"><b>${langAnswer}</b></td>
+        <td width="45%" align="center" style="background: #fff;"><b>${langComment}</b></td>
       </tr>
 cData;
 
@@ -148,7 +159,7 @@ cData;
 
 $tool_content .= <<<cData
       <tr>
-        <th><small><b><i>${langAnswer}</i></b></small></th>
+        <td style="background: #fff;"><b>${langAnswer}</b></td>
       </tr>
 cData;
 
@@ -156,8 +167,8 @@ cData;
 		
 $tool_content .= <<<cData
       <tr>
-        <th width="50%">${langElementList}</th>
-        <th width="50%">${langCorrespondsTo}</th>
+        <td width="50%" style="background: #fff;"><b>${langElementList}</b></td>
+        <td width="50%" style="background: #fff;"><b>${langCorrespondsTo}</b></td>
       </tr>
 cData;
 
@@ -268,7 +279,7 @@ cData;
 				{
 $tool_content .= <<<cData
       <tr>
-        <td width="5%"><div align="center">
+        <td width="5%" style="background: #fff;"><div align="center">
         <img src="../../template/classic/img/
 cData;
 	
@@ -285,7 +296,7 @@ cData;
 	$tool_content .= <<<cData
 		.gif" border="0"></div>
         </td>
-        <td width="5%"><div align="center">
+        <td width="5%" style="background: #fff;"><div align="center">
 cData;
 
 	if ($answerType == UNIQUE_ANSWER)
@@ -299,8 +310,8 @@ cData;
 	$tool_content .= ".gif\" border=\"0\"></div>";	
   	$tool_content .= <<<cData
         </td>
-        <td width="45%">${answer}</td>
-        <td width="45%">
+        <td width="45%" style="background: #fff;">${answer}</td>
+        <td width="45%" style="background: #fff;">
 cData;
 
 if($studentChoice) 
@@ -313,14 +324,14 @@ else
 	} elseif($answerType == FILL_IN_BLANKS) {
 			$tool_content .= "
       <tr>
-        <td>".nl2br($answer)."</td>
+        <td style=\"background: #fff;\">".nl2br($answer)."</td>
       </tr>";
 	} else {
 
 $tool_content .= <<<cData
       <tr>
-        <td width="50%">${answer}</td>
-        <td width="50%">${choice[$answerId]} / <font color="green"><b>${matching[$answerCorrect]}</b></font></td>
+        <td width="50%" style="background: #fff;">${answer}</td>
+        <td width="50%" style="background: #fff;">${choice[$answerId]} / <font color="green"><b>${matching[$answerCorrect]}</b></font></td>
       </tr>
 cData;
 
@@ -330,13 +341,13 @@ cData;
 
 $tool_content .= <<<cData
       <tr>
-        <td colspan="${colspan}"><div align="right">
-        <b>${langScore} : ${questionScore}/${questionWeighting}</b></div>
+        <td colspan="${colspan}" class="score">
+        ${langQuestionScore}: <b>${questionScore}/${questionWeighting}</b>
         </td>
       </tr>
-      </thead>
+      </tbody>
       </table>
-      <br>
+      
 cData;
 
 	// destruction of Answer
@@ -388,34 +399,59 @@ if (($OnTime > 0 or $is_adminOfCourse)) { // exercise time limit hasn't expired
 		}
 		// saves the object into the session
 		session_register('objExercise');
-}
-	$tool_content = <<<cData
-	<h3>${exerciseTitle}</h3>
-	<p>${langExerciseExpired}</p>
-	<center><a href="exercice.php">${langBack}</a></center>
-cData;
+    }
 
-draw($tool_content, 2, 'Exercice');
-exit();
-}
-
-$tool_content .= <<<cData
-      <br>
-      <table width="99%" class="Exercise">
+	$tool_content = "
+      <table class=\"Exercise\" width=\"99%\">
       <thead>
       <tr>
-        <td><div align="right">
-        <b>${langYourTotalScore} ${totalScore}/${totalWeighting} !</b></div>
-        </td>
-      </tr>
-      <tr>
-        <td><div align="center">
-        <input type="submit" value="${langFinish}"></div>
+        <td colspan=\"2\">
+        <b>".stripslashes($exerciseTitle)."</b>
+        <br/><br/>
+        ".stripslashes($exerciseDescription_temp)."
         </td>
       </tr>
       </thead>
       </table>
-      <br></form><br>
+      ";
+
+    $tool_content .= <<<cData
+      <br/>
+      <table width="99%" class="Question">
+      <thead>
+      <tr>
+        <td class="alert1">${langExerciseExpiredTime}</td>
+      </tr>
+      <tr>
+        <td><br/><br/><br/><div align="center"><a href="exercice.php">${langBack}</a></div></td>
+      </tr>
+      </thead>
+      </table>
+cData;
+
+draw($tool_content, 2, 'exercice');
+exit();
+}
+
+$tool_content .= <<<cData
+      <br/>
+      <table width="99%" class="Exercise">
+      <thead>
+      <tr>
+        <td class="score">
+        ${langYourTotalScore}: <b>${totalScore}/${totalWeighting}</b>
+        </td>
+      </tr>
+      </thead>
+      </table>
+
+      <br/>
+      <div align="center">
+        <input type="submit" value="${langFinish}">
+      </div>
+
+
+      <br/></form><br>
 cData;
 draw($tool_content, 2, 'exercice');
 ?>

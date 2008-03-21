@@ -871,6 +871,7 @@ $dropbox_lang['mailingJustUploadNoOther'] = "Το ανέβασμα αρχείου δεν μπορεί να σ
 * exercice.inc.php
 **********************************************************/
 $langExercicesView="Προβολή Ασκησης";
+$langExercicesResult="Αποτελέσματα Ασκησης";
 $langQuestion="Ερώτηση";
 $langQuestions="Ερωτήσεις";
 $langAnswer="Απάντηση";
@@ -988,9 +989,10 @@ $langReuse="Επαναχρησιμοποίηση";
 // exercise_result.php
 $langElementList="Το στοιχείο";
 $langScore="Βαθμολογία";
+$langQuestionScore="Βαθμολογία ερώτησης";
 $langCorrespondsTo="Αντιστοιχεί σε";
 $langExpectedChoice="Αναμενόμενη Απάντηση";
-$langYourTotalScore="Η συνολική σου βαθμολογία είναι";
+$langYourTotalScore="Συνολική βαθμολογία άσκησης";
 
 // exercice_submit.php
 $langDoAnEx="Κάντε μια άσκηση";
@@ -1008,7 +1010,8 @@ $langExerciseConstrainExplanation="0 για καθόλου περιορισμό";
 $langExerciseAttemptsAllowedExplanation="0 για απεριόριστο αριθμό επαναλήψεων";
 $langExerciseAttemptsAllowed="Επιτρεπόμενες επαναλήψεις";
 $langExerciseAttemptsAllowedUnit="φορές";
-$langExerciseExpired="Έχετε ξεπεράσει το επιτρεπτό χρονικό όριο ή έχετε φτάσει τον μέγιστο επιτρεπτό αριθμό επαναλήψεων της άσκησης.";
+$langExerciseExpired="Έχετε φτάσει τον μέγιστο επιτρεπτό αριθμό επαναλήψεων της άσκησης.";
+$langExerciseExpiredTime="Έχετε ξεπεράσει το επιτρεπτό χρονικό όριο εκτέλεσης της άσκησης.";
 $langExerciseLis="Λίστα ασκήσεων";
 $langResults="Αποτελέσματα";
 $langResultsFailed="Αποτυχία";
