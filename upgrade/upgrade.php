@@ -831,7 +831,7 @@ if (!isset($submit2)) {
 		if (!mysql_field_exists("$code[0]",'poll_answer_record', 'pid'))
                         $tool_content .= add_field_after_field('poll_answer_record', 'pid', 'arid', "INT(11) NOT NULL DEFAULT '0'");
 		if (!mysql_field_exists("$code[0]",'poll_answer_record', 'qid'))
-                        $tool_content .= add_field_after_field('poll_answer_record', 'pid', 'qid', "INT(11) NOT NULL DEFAULT '0'");
+                        $tool_content .= add_field_after_field('poll_answer_record', 'qid', 'pid', "INT(11) NOT NULL DEFAULT '0'");
 		if (mysql_field_exists("$code[0]",'poll_answer_record', 'question_text'))
                         $tool_content .= delete_field('poll_answer_record', 'question_text');
 		if (mysql_field_exists("$code[0]",'poll_answer_record', 'question_answer'))
