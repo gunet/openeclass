@@ -800,8 +800,13 @@ if (!isset($submit2)) {
                                 `type` int(11) NOT NULL default '0',
                                 `active` int(11) NOT NULL default '0',
                                 PRIMARY KEY  (`pid`)
-                                        ) ", $code[0]); //TYPE=MyISAM COMMENT='For the poll module';
-                }
+                                ) ", $code[0]); //TYPE=MyISAM COMMENT='For the poll module';
+                } else {
+			db_query("ALTER TABLE `poll` CHANGE `creation_date` `creation_date` DATE NOT NULL DEFAULT '0000-00-00'", $code[0]);
+			db_query("ALTER TABLE `poll` CHANGE `start_date` `start_date` DATE NOT NULL DEFAULT '0000-00-00'", $code[0]);
+			db_query("ALTER TABLE `poll` CHANGE `end_date` `end_date` DATE NOT NULL DEFAULT '0000-00-00'", $code[0]); 
+		}
+			
                 if (!mysql_table_exists($code[0], 'poll_answer'))  {
                         db_query("CREATE TABLE `poll_answer` (
                                 `aid` bigint(12) NOT NULL default '0',
@@ -819,16 +824,38 @@ if (!isset($submit2)) {
                                 `question_answer` varchar(250) NOT NULL default '',
                                 PRIMARY KEY  (`arid`)
                                         ) ", $code[0]); //TYPE=MyISAM COMMENT='For the poll module';
-                }
+                } 
+		
+		if (!mysql_field_exists("$code[0]",'poll_answer_record', 'qtype'))
+                        $tool_content .= add_field_after_field('poll_answer_record', 'pid', 'arid', "INT(11) NOT NULL");
+		if (!mysql_field_exists("$code[0]",'poll_answer_record', 'pid'))
+                        $tool_content .= add_field_after_field('poll_answer_record', 'pid', 'arid', "INT(11) NOT NULL DEFAULT '0'");
+		if (!mysql_field_exists("$code[0]",'poll_answer_record', 'qid'))
+                        $tool_content .= add_field_after_field('poll_answer_record', 'pid', 'qid', "INT(11) NOT NULL DEFAULT '0'");
+		if (mysql_field_exists("$code[0]",'poll_answer_record', 'question_text'))
+                        $tool_content .= delete_field('poll_answer_record', 'question_text');
+		if (mysql_field_exists("$code[0]",'poll_answer_record', 'question_answer'))
+                        $tool_content .= delete_field('poll_answer_record', 'question_answer');
+		if (!mysql_field_exists("$code[0]",'poll_answer_record','answer_text'))
+                        $tool_content .= add_field('poll_answer_record', 'answer_text', "VARCHAR(255) NOT NULL");
+		if (!mysql_field_exists("$code[0]",'poll_answer_record','user_id'))
+                        $tool_content .= add_field('poll_answer_record', 'user_id', "INT(11) NOT NULL DEFAULT '0'");
+		if (!mysql_field_exists("$code[0]",'poll_answer_record', 'submit_date'))
+                        $tool_content .= add_field('poll_answer_record', 'submit_date', "DATE NOT NULL DEFAULT '0000-00-00'");
+
                 if (!mysql_table_exists($code[0], 'poll_question'))  {
                         db_query("CREATE TABLE `poll_question` (
                                 `pqid` bigint(12) NOT NULL default '0',
                                 `pid` bigint(12) NOT NULL default '0',
                                 `question_text` varchar(250) NOT NULL default '',
                                 PRIMARY KEY  (`pqid`)
-                                        ) ", $code[0]); //TYPE=MyISAM COMMENT='For the poll module';
+                          ) ", $code[0]); //TYPE=MyISAM COMMENT='For the poll module';
                 }
-                if (!mysql_table_exists($code[0], 'poll_question_answer'))  {
+
+		if (!mysql_field_exists("$code[0]",'poll_question','qtype'))
+                        $tool_content .= add_field('poll_question', 'qtype', "ENUM('multiple', 'fill') NOT NULL");
+
+		 if (!mysql_table_exists($code[0], 'poll_question_answer'))  {
                         db_query("CREATE TABLE `poll_question_answer` (
                                 `pqaid` int(11) NOT NULL auto_increment,
                                 `pqid` bigint(12) NOT NULL default '0',
@@ -889,20 +916,24 @@ if (!isset($submit2)) {
                                 `TotalWeighting` int(11) default '0',
                                 `attempt` int(11) NOT NULL default '0',
                                 PRIMARY KEY  (`eurid`)
-                                        ) ", $code[0]); //TYPE=MyISAM COMMENT='For the exercise module';
+                                ) ", $code[0]); //TYPE=MyISAM COMMENT='For the exercise module';
                 }
 
                 // Upgrading EXERCICES table for new func of EXERCISE module
                 if (!mysql_field_exists("$code[0]",'exercices','StartDate'))
                         $tool_content .= add_field_after_field('exercices', 'StartDate', 'type', "DATE NOT NULL default '0000-00-00'");
-                if (!mysql_field_exists("$code[0]",'exercices','EndDate'))
+		else
+ 			db_query("ALTER TABLE `exercices` CHANGE `StartDate` `StartDate` DATE NULL DEFAULT NULL", $code[0]);
+		if (!mysql_field_exists("$code[0]",'exercices','EndDate'))
                         $tool_content .= add_field_after_field('exercices', 'EndDate', 'StartDate', "DATE NOT NULL default '0000-00-00'");
+		else 
+			db_query("ALTER TABLE `exercices` CHANGE `EndDate` `EndDate` DATE NULL DEFAULT NULL", $code[0]);
                 if (!mysql_field_exists("$code[0]",'exercices','TimeConstrain'))
                         $tool_content .= add_field_after_field('exercices', 'TimeConstrain', 'EndDate', "INT(11)");
                 if (!mysql_field_exists("$code[0]",'exercices','AttemptsAllowed'))
                         $tool_content .= add_field_after_field('exercices', 'AttemptsAllowed', 'TimeConstrain', "INT(11)");
 
-                // add new document fields
+		 // add new document fields
                 if (!mysql_field_exists("$code[0]",'document','filename'))
                         $tool_content .= add_field('document', 'filename', "TEXT");
                 if (!mysql_field_exists("$code[0]",'document','category'))
@@ -1193,6 +1224,7 @@ if (!isset($submit2)) {
                 Σε αυτή την περίπτωση επικοινωνήστε μαζί μας στο <a href='mailto:elearn@gunet.gr'>elearn@gunet.gr</a>
                 περιγράφοντας το πρόβλημα που παρουσιάστηκε και στέλνοντας (αν είναι δυνατόν) όλα τα μηνύματα που
                 εμφανίστηκαν στην οθόνη σας</p>
+		<center><p><a href='$urlServer?logout=yes'>Επιστροφή</a></p></center>
                 </td></tr></tbody></table>";
 
 } // end of if not submit
