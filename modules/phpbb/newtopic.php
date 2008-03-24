@@ -59,7 +59,6 @@ $require_current_course = TRUE;
 $require_login = TRUE;
 $require_help = FALSE;
 include '../../include/baseTheme.php';
-$nameTools = $l_forums;
 $tool_content = "";
 
 /*
@@ -72,8 +71,7 @@ include("functions.php"); // application logic for phpBB
  * Actual code starts here
  *****************************************************************************/
 
-$sql = "SELECT forum_name, forum_access, forum_type
-	FROM forums
+$sql = "SELECT forum_name, forum_access, forum_type FROM forums
 	WHERE (forum_id = '$forum')";
 if (!$result = db_query($sql, $currentCourseID)) {
 	$tool_content .= $langErrorDataForum;
@@ -85,6 +83,10 @@ $forum_name = $myrow["forum_name"];
 $forum_access = $myrow["forum_access"];
 $forum_type = $myrow["forum_type"];
 $forum_id = $forum;
+
+$nameTools = $langNewTopic;
+$navigation[]= array ("url"=>"index.php", "name"=> $l_forums);
+$navigation[]= array ("url"=>"viewforum.php?forum=$forum_id", "name"=> $forum_name);
 
 if (!does_exists($forum, $currentCourseID, "forum")) {
 	//XXX: Error message in specified language
@@ -142,7 +144,6 @@ if (isset($submit) && $submit) {
 	$prenom = addslashes($prenom);
 	// END ADDED BY THOMAS
 
-	//to prevent [addsig] from getting in the way, let's put the sig insert down here.
 	if (isset($sig) && $sig && $userdata['user_id'] != -1) {
 		$message .= "\n[addsig]";
 	}
@@ -196,62 +197,36 @@ if (isset($submit) && $submit) {
 	// Subtract 1 because we want the nr of replies, not the nr of posts.
 	$forward = 1;
 
-	$tool_content .= "
-	<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"success\">
-							<p><b>$l_stored</b></p>
-							<p>$l_click
-				<a href=\"viewtopic.php?topic=$topic_id&forum=$forum&$total_topic\">$l_here</a>$l_viewmsg
-				</p>
-				<p>$l_click <a href=\"viewforum.php?forum=$forum_id&total_forum\">$l_here</a> $l_returntopic</p>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			
-		"; 
+	$tool_content .= "<table width=\"99%\"><tbody>
+		<tr><td class=\"success\"><p><b>$l_stored</b></p><p>$l_click
+		<a href=\"viewtopic.php?topic=$topic_id&forum=$forum&$total_topic\">$l_here</a>$l_viewmsg
+		</p>
+		<p>$l_click <a href=\"viewforum.php?forum=$forum_id&total_forum\">$l_here</a> $l_returntopic</p>
+		</td></tr></tbody></table>			"; 
 } else {
 	// ADDED BY CLAROLINE: exclude non identified visitors
 	if (!$uid AND !$fakeUid) {
-		$tool_content .= "
-				<center>
-				<br>
-				<br>
-				$langLoginBeforePost1<br>$langLoginBeforePost2
-				<a href=../../index.php>$langLoginBeforePost3.</a>
-				</center>";
+		$tool_content .= "<center><br><br>
+		$langLoginBeforePost1<br>$langLoginBeforePost2
+		<a href=../../index.php>$langLoginBeforePost3.</a>
+		</center>";
 		draw($tool_content, 0);
 		exit();
 	}
 	// END ADDED BY CLAROLINE exclude visitors unidentified
-	$tool_content .= "
-		<FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
-		
-			<TABLE WIDTH=\"99%\">
-			<thead>
-			<TR><th>
-				$l_subject:
-			    </th>
-			    <TD>
-				<INPUT TYPE=\"TEXT\" NAME=\"subject\" SIZE=\"50\" MAXLENGTH=\"100\">
-			    </TD>
-			</TR>
-			<TR><th>
-				$l_body:
-				
-			    </th>
-			    <TD>
-				<TEXTAREA NAME=\"message\" ROWS=14 COLS=50 WRAP=\"VIRTUAL\"></TEXTAREA>
-			    </TD>
-			</TR>
-
-			</TABLE>
-			<br/>
-			<INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
-			<INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">&nbsp;
-				<INPUT TYPE=\"SUBMIT\" NAME=\"cancel\" VALUE=\"$l_cancelpost\">
+	$tool_content .= "<FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
+		<TABLE WIDTH=\"99%\">
+		<thead>
+		<TR><th>$l_subject:</th><TD>
+		<INPUT TYPE=\"TEXT\" NAME=\"subject\" SIZE=\"50\" MAXLENGTH=\"100\">
+		</TD></TR>
+		<TR><th>
+		$l_body:</th><TD>
+		<TEXTAREA NAME=\"message\" ROWS=14 COLS=50 WRAP=\"VIRTUAL\"></TEXTAREA>
+		</TD></TR></TABLE><br/>
+		<INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
+		<INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">&nbsp;
+		<INPUT TYPE=\"SUBMIT\" NAME=\"cancel\" VALUE=\"$l_cancelpost\">
 		</FORM>";
 }
 draw($tool_content, 2);

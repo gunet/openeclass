@@ -60,7 +60,6 @@ $require_current_course = TRUE;
 $require_login = TRUE;
 $require_help = FALSE;
 include '../../include/baseTheme.php';
-$nameTools = $l_forums;
 $tool_content = "";
 
 /*
@@ -109,6 +108,10 @@ if (!$result = db_query($sql, $currentCourseID)) {
 $myrow = mysql_fetch_array($result);
 $topic_subject = own_stripslashes($myrow["topic_title"]);
 $lock_state = $myrow["topic_status"];
+
+$navigation[]= array ("url"=>"index.php", "name"=> $l_forums);
+$navigation[]= array ("url"=>"viewforum.php?forum=$forum", "name"=> $forum_name);
+$nameTools = $topic_subject;
 if ( $total > $posts_per_page ) {
 	$times = 1;
 	$tool_content .= <<<cData
@@ -183,8 +186,8 @@ do {
 	<p><em>$l_posted: " . $myrow["post_time"] . "</em></p>";
 	if ($status[$dbname]==1 OR $status[$dbname]==2) { // course admin
 		$tool_content .= "<a href=\"editpost.php?post_id=" . 
-				$myrow["post_id"] . 
-				"&topic=$topic&forum=$forum\"><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>";
+			$myrow["post_id"] . 
+			"&topic=$topic&forum=$forum\"><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>";
 	}
 	$tool_content .= "</td></tr>";
 	$count++;

@@ -91,13 +91,11 @@ $sql = "SELECT f.forum_type, f.forum_name
 	FROM forums f
 	WHERE forum_id = '$forum'";
 if (!$result = db_query($sql, $currentCourseID)) {
-	//XXX: Error message in specified language.
 	$tool_content .= $langErrorConnectForumDatabase;
 	draw($tool_content, 2);
 	exit();
 }
 if (!$myrow = mysql_fetch_array($result)) {
-	//XXX: Error message in specified language.
 	$tool_content .= $langErrorForumSelect;
 	draw($tool_content, 2);
 	exit();
@@ -145,7 +143,7 @@ if(!$result = db_query($sql, $currentCourseID)) {
 
 </TABLE>
 cData;
-	$tool_content .=$langErrorTopicsQueryDatabase;
+	$tool_content .= $langErrorTopicsQueryDatabase;
 	draw($tool_content, 2);
 	exit();
 }
@@ -222,8 +220,8 @@ if ($myrow = mysql_fetch_array($result)) {
 		$tool_content .= "<TD>$last_post</TD></TR>\n";
 	} while($myrow = mysql_fetch_array($result));
 } else {
-	$tool_content .= "<TD COLSPAN=6>$l_notopics</TD></TR>\n";
+	$tool_content .= "<td colspan=6>$l_notopics</td></tr>\n";
 }
-$tool_content .= "</tbody></TABLE>";
+$tool_content .= "</tbody></table>";
 draw($tool_content, 2);
 ?>

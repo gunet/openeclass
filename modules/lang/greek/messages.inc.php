@@ -1725,10 +1725,10 @@ $langAdm="διαχείριση";
 $langQuote="quote";
 $langEditDel="αλλαγή/διαγραφή";
 $langSeen="Το έχουν δει";
-$langLastMsg="Τελευταίο μην.";
+$langLastMsg="Τελευταίο μήνυμα";
 $langLoginBeforePost1 = "Για να στείλετε μηνύματα, ";
 $langLoginBeforePost2 = "πρέπει προηγουμένως να ";
-$langLoginBeforePost3 = "κάνετε login στην Τάξη";
+$langLoginBeforePost3 = "κάνετε login στην πλατφόρμα";
 
 // page_header.php
 
@@ -1758,7 +1758,7 @@ $l_preferences	= "Προτιμήσεις";
 
 $l_anonymous	= "Ανώνυμος";  // Post
 $l_guest	= "Φιλοξενούμενος"; // Whosonline
-$l_noposts	= "Όχι $l_posts";
+$l_noposts	= "Δεν υπάρχουν αποστολές";
 $l_joined	= "Προσχώρηση";
 $l_gotopage	= "Πήγαινε σε σελίδα";
 $l_nextpage 	= "Επόμενη σελίδα";
@@ -1859,13 +1859,13 @@ $l_deletetopic	= "Διαγραφή αυτού του θέματος";
 
 $langErrorConnectForumDatabase="Παρουσιάστηκε πρόβλημα. Αδύνατη η σύνδεση με τη βάση δεδομένων του Forum.";
 $langErrorForumSelect= "Σφάλμα - Το forum που επιλέξατε δεν υπάρχε. Παρακαλώ προσπαθήστε πάλι.";
-$langErrorTopicsQuery="Παρούσιαστηκε σφάλμα. Αδύνατη η εκτέλεση της εντολής σας στη βάση δεδομένων τών θεμάτων.<br>";
-$langErrorTopicsQueryDatabase="Παρούσιαστηκε σφάλμα. Αδύνατη η εκτέλεση της εντολής σας στη βάση δεδομένων τών θεμάτων.";
+$langErrorTopicsQuery="Παρουσιάστηκε σφάλμα. Αδύνατη η εκτέλεση της εντολής σας στη βάση δεδομένων των θεμάτων.<br>";
+$langErrorTopicsQueryDatabase="Παρουσιάστηκε σφάλμα. Αδύνατη η εκτέλεση της εντολής σας στη βάση δεδομένων των θεμάτων.";
 $langUnableGetCategories="Αδύνατη η εμφάνιση κατηγοριών του Forum ";
 $langErrorGetForumData="Σφάλμα κατά την ανάκτηση δεδομένων του Forum "; 
 $langErrorConnectForumDatabase="Αδύνατη η σύνδεση με τη βάση δεδομένων του Forum.";
 $langErrorTopicSelect="Σφάλμα - Το forum/θέμα που επιλέξατε δεν υπάρχε. Παρακαλώ προσπαθήστε πάλι.";
-$langUnableEnterData="Σφάλμα -Αδύνατη η εισαγωγή δεδομένων στη βάση. Παρακαλώ προσπαθήστε πάλι.";
+$langUnableEnterData="Σφάλμα - Αδύνατη η εισαγωγή δεδομένων στη βάση. Παρακαλώ προσπαθήστε πάλι.";
 $langUnableEnterText="Αδύνατη η εισαγωγή κειμένου!<br>Αιτία";
 
 // Functions

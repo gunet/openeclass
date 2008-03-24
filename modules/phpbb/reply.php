@@ -1,5 +1,5 @@
 <?php
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -23,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
         phpbb/reply.php
 * @version $Id$
         @last update: 2006-07-23 by Artemios G. Voyiatzis
@@ -59,7 +59,7 @@
 $require_current_course = TRUE;
 $require_help = FALSE;
 include '../../include/baseTheme.php';
-$nameTools = $l_forums;
+
 $tool_content = "";
 
 /*
@@ -73,14 +73,14 @@ include("functions.php"); // application logic for phpBB
  *****************************************************************************/
 if ( isset($post_id) && $post_id) {
 	// We have a post id, so include that in the checks..
-	$sql  = "SELECT f.forum_type, f.forum_name, f.forum_access ";
+	$sql  = "SELECT f.forum_type, f.forum_name, f.forum_access, t.topic_title ";
 	$sql .= "FROM forums f, topics t, posts p ";
 	$sql .= "WHERE (f.forum_id = '$forum') AND (t.topic_id = $topic)";
 	$sql .= " AND (p.post_id = $post_id) AND (t.forum_id = f.forum_id)";
 	$sql .= " AND (p.forum_id = f.forum_id) AND (p.topic_id = t.topic_id)";
 } else {
 	// No post id, just check forum and topic.
-	$sql = "SELECT f.forum_type, f.forum_name, f.forum_access ";
+	$sql = "SELECT f.forum_type, f.forum_name, f.forum_access, t.topic_title ";
 	$sql .= "FROM forums f, topics t ";
 	$sql .= "WHERE (f.forum_id = '$forum') AND (t.topic_id = $topic) AND (t.forum_id = f.forum_id)";	
 }
@@ -99,7 +99,14 @@ if (!$myrow = mysql_fetch_array($result)) {
 $forum_name = $myrow["forum_name"];
 $forum_access = $myrow["forum_access"];
 $forum_type = $myrow["forum_type"];
+$topic_title = $myrow["topic_title"];
 $forum_id = $forum;
+
+$nameTools = $l_reply;
+$navigation[]= array ("url"=>"index.php", "name"=> $l_forums);
+$navigation[]= array ("url"=>"viewforum.php?forum=$forum", "name"=> $forum_name);
+$navigation[]= array ("url"=>"viewtopic.php?&topic=$topic&forum=$forum", "name"=> $topic_title);
+
 
 if (!does_exists($forum, $currentCourseID, "forum") || !does_exists($topic, $currentCourseID, "topic")) {
 	$tool_content .= $langErrorTopicSelect;
@@ -174,7 +181,6 @@ if (isset($submit) && $submit) {
 	$nom = addslashes($nom);
 	$prenom = addslashes($prenom);
 
-
 	//to prevent [addsig] from getting in the way, let's put the sig insert down here.
 	if (isset($sig) && $sig && $userdata["user_id"] != -1) {
 		$message .= "\n[addsig]";
@@ -232,20 +238,12 @@ if (isset($submit) && $submit) {
 	$total_topic = get_total_posts($topic, $currentCourseID, "topic")-1;  
 	// Subtract 1 because we want the nr of replies, not the nr of posts.
 	$forward = 1;
-	$tool_content .= "
-	<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"success\">
-							<p><b>$l_stored</b></p>
-							
-							<p>$l_click <a href=\"viewtopic.php?topic=$topic&forum=$forum&$total_topic\">$l_here</a> $l_viewmsg</p>
-				<p>$l_click <a href=\"viewforum.php?forum=$forum&$total_forum\">$l_here</a> $l_returntopic</p>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-	";
+	$tool_content .= "<table width=\"99%\">
+		<tbody><tr><td class=\"success\">
+		<p><b>$l_stored</b></p>
+		<p>$l_click <a href=\"viewtopic.php?topic=$topic&forum=$forum&$total_topic\">$l_here</a> $l_viewmsg</p>
+		<p>$l_click <a href=\"viewforum.php?forum=$forum&$total_forum\">$l_here</a> $l_returntopic</p>
+		</td></tr></tbody></table>";
 } else {
 	// Private forum logic here.
 	if (($forum_type == 1) && !$user_logged_in && !$logging_in) {
@@ -288,12 +286,8 @@ if (isset($submit) && $submit) {
 			// Ok, looks like we're good.
 		}
 	}	
-	$tool_content .= "
-		<FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
-		<TABLE>
-		<thead>
-			<TR><th>
-				$l_body:";
+	$tool_content .= "<FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\"><TABLE>
+		<thead><TR><th>$l_body:";
 	if (isset($quote) && $quote) {
 		$sql = "SELECT pt.post_text, p.post_time, u.username 
 			FROM posts p, users u, posts_text pt 
@@ -320,25 +314,14 @@ if (isset($submit) && $submit) {
 	if (!isset($quote)) {
 		$quote = "";
 	}
-	$tool_content .= "
-			</th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr>
-			<TD>
-				<TEXTAREA NAME=\"message\" ROWS=15 COLS=70 WRAP=\"VIRTUAL\">$reply</TEXTAREA>
-			</TD></TR>
-			</tbody>
-			</TABLE>
-			<br/>
-				<INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
-				<INPUT TYPE=\"HIDDEN\" NAME=\"topic\" VALUE=\"$topic\">
-				<INPUT TYPE=\"HIDDEN\" NAME=\"quote\" VALUE=\"$quote\">
-				<INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">&nbsp;
-				<INPUT TYPE=\"SUBMIT\" NAME=\"cancel\" VALUE=\"$l_cancelpost\">
-			
-		
+	$tool_content .= "</th></tr></thead><tbody>
+		<tr><TD><TEXTAREA NAME=\"message\" ROWS=15 COLS=70 WRAP=\"VIRTUAL\">$reply</TEXTAREA>
+		</TD></TR></tbody></TABLE><br/>
+		<INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
+		<INPUT TYPE=\"HIDDEN\" NAME=\"topic\" VALUE=\"$topic\">
+		<INPUT TYPE=\"HIDDEN\" NAME=\"quote\" VALUE=\"$quote\">
+		<INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">&nbsp;
+		<INPUT TYPE=\"SUBMIT\" NAME=\"cancel\" VALUE=\"$l_cancelpost\">
 		</FORM>";
 	// Topic review
 	$tool_content .= "<BR><CENTER>";

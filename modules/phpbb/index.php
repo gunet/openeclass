@@ -110,7 +110,7 @@ if ( !$result = db_query($sql, $currentCourseID) ) {
 			
 		</TABLE>
 cData;
-	$tool_content .= "$langUnableGetCategories  <br>$sql";
+	$tool_content .= "$langUnableGetCategories<br>$sql";
 	draw($tool_content, 2);
 	exit();
 }
@@ -173,13 +173,13 @@ cData;
 					$last_post_time = mktime($hour, $min, 0, $month, $day, $year);
 				}
 				if ( empty($last_post) ) {
-					$last_post = "No Posts";
+					$last_post = $l_noposts;
 				}
 				$tool_content .= "<TR>";
 				if ( !isset($last_visit) ) {
 					$last_visit = 0;
 				}
-				if(@$last_post_time > $last_visit && $last_post != "No posts") {
+				if(@$last_post_time > $last_visit && $last_post != $l_noposts) {
 					$tool_content .= "<TD WIDTH=5%><IMG SRC=\"$newposts_image\"></TD>";
 				} else {
 					$tool_content .= "<TD WIDTH=5%><IMG SRC=\"$folder_image\"></TD>";
@@ -193,7 +193,7 @@ cData;
 				$forum=$forum_row[$x]["forum_id"];
 				if ( $is_adminOfCourse==1 ) { // TUTOR VIEW
 					$sqlTutor = db_query("SELECT id FROM student_group
-								WHERE forumId='$forum' AND tutor='$uid'", $currentCourseID );
+						WHERE forumId='$forum' AND tutor='$uid'", $currentCourseID );
 					$countTutor = mysql_num_rows($sqlTutor);
 					if ( $countTutor == 0 ) {
 						$tool_content .= "<a href=\"viewforum.php?forum=" . $forum_row[$x]["forum_id"] . "&$total_posts\">$name</a>";
