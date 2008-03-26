@@ -73,7 +73,7 @@ table.Exercise td {
 
 table.Question {
     padding: 2px;
-    vertical-align: middle;
+	vertical-align: top;
     border-top: 1px solid #edecdf;
     border-bottom: 1px solid #edecdf;
     border-left: 1px solid #edecdf;
@@ -82,10 +82,10 @@ table.Question {
 
 table.Question th {
 	padding: 4px;
+	vertical-align: top;
 	background: #edecdf;
 	font-size:10px;
 	color: #727266;
-	vertical-align: middle;
 	border-top: 1px solid #edecdf;
 	border-bottom: 1px solid #edecdf;
 	border-left: 1px solid #edecdf;
@@ -96,11 +96,12 @@ table.Question th {
 }
 
 table.Question td {
-    padding: 4px;
-    background: #Fbfbfb;
-    font-size:10px;
-    color: #727266;
-    vertical-align: middle;
+	padding: 4px;
+	vertical-align: top !important;
+	background: #Fbfbfb;
+	font-size:10px;
+	color: #727266;
+	vertical-align: middle;
 }
 
 #question_title_id {
@@ -112,7 +113,7 @@ table.Question td {
 }
 
 .invisible {
-	color : Silver;
+	color : #CAC3B5;
 }
 
 .invisible a{

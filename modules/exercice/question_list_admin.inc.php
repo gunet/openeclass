@@ -38,19 +38,23 @@ if(isset($deleteQuestion))
 }
 
 
-
+  $tool_content .= <<<cData
+    <table width="99%" class="FormData">
+    <thead>
+    <tr>
+      <th class="left" width="220">$langQuestionList :</th>
+      <td><div class="right">
+      <a href="${PHP_SELF}?newQuestion=yes">${langNewQu}</a> | <a href="question_pool.php?fromExercise=${exerciseId}">${langGetExistingQuestion}</a>
+      </div></td>
+    </tr>
+    </thead>
+    </table>
+cData;
 
   $tool_content .= <<<cData
+  
     <table width="99%" class="Question">
     <tbody>
-    <tr>
-      <th class="left" colspan="4">
-      <b>$langQuestionList :</b>
-      <div class="right">
-      <a href="${PHP_SELF}?newQuestion=yes">${langNewQu}</a> | <a href="question_pool.php?fromExercise=${exerciseId}">${langGetExistingQuestion}</a>
-      </div>
-      </th>
-    </tr>
 cData;
 
 if($nbrQuestions) {
@@ -64,7 +68,7 @@ if($nbrQuestions) {
 	$tool_content .= "
     <tr>
       <td align=\"right\" width=\"1\">".$i.".</td>
-      <td> ".$objQuestionTmp->selectTitle()."<br><small>".$aType[$objQuestionTmp->selectType()-1]."</small></td>
+      <td> ".$objQuestionTmp->selectTitle()."<br/><small class=\"invisible\">".$aType[$objQuestionTmp->selectType()-1]."</small></td>
       <td class=\"right\" width=\"50\"><a href=\"".$_SERVER['PHP_SELF']."?editQuestion=".$id."\">"."<img src=\"../../template/classic/img/edit.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langModify."\"></a>"." <a href=\"".$_SERVER['PHP_SELF']."?deleteQuestion=".$id."\" "."onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice))."')) return false;\">"."<img src=\"../../template/classic/img/delete.gif\" border=\"0\" align=\"absmiddle\" alt=\"".$langDelete."\"></a></td>
       <td class=\"right\" width=\"50\">";
 
@@ -86,7 +90,7 @@ if($nbrQuestions) {
 if(!isset($i)) {
 $tool_content .= <<<cData
     <tr>
-      <td class="alert1"><font color="red">${langNoQuestion}</font></td>
+      <td class="alert1">${langNoQuestion}</td>
     </tr>
 cData;
 }

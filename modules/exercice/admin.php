@@ -117,7 +117,7 @@ if($REQUEST_METHOD == 'POST') {
 if(!is_object($objExercise)) {
 	// construction of the Exercise object
 	$objExercise=new Exercise();
-
+	
 	// creation of a new exercise if wrong or not specified exercise ID
 	if($exerciseId) {
 		$objExercise->read($exerciseId);
@@ -212,9 +212,13 @@ if($editQuestion || $modifyQuestion || $modifyAnswers) {
 	$nameTools=$langNewQu;
 	$navigation[]= array ("url" => "admin.php?exerciseId=$exerciseId", "name" => $langExerciseManagement);
 	$QUERY_STRING=$questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
+} elseif($NewExercise) {
+	$nameTools=$langNewEx;
+	$QUERY_STRING='';
 } elseif($modifyExercise) {
 	$nameTools=$langInfoExercise;
-
+	$navigation[]= array ("url" => "admin.php?exerciseId=$exerciseId", "name" => $langExerciseManagement);
+	$QUERY_STRING='';
 }
 else {
 	$nameTools=$langExerciseManagement;
@@ -270,7 +274,7 @@ function jscal_html($name, $u_date) {
  	   array('showsTime' => false,
                  'showOthers' => true,
                  'ifFormat' => '%Y-%m-%d'),
- array('style' => 'width: 15em; color: #840; background-color: #fff; border: 1px dotted #000; text-align: center',
+       array('style' => 'width: 15em; color: #840; background-color: #fff; border: 1px dotted #000; text-align: center',
                  'name'  => $name,
                  'value' => $u_date));
 	

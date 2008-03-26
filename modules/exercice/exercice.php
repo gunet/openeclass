@@ -114,7 +114,7 @@ if($is_allowedToEdit) {
         <ul id=\"opslist\">\n";
 
   $tool_content .= <<<cData
-          <li><a href="admin.php">${langNewEx}</a> |<a href="question_pool.php">${langQuestionPool}</a></li>
+          <li><a href="admin.php?NewExercise=Yes">${langNewEx}</a> |<a href="question_pool.php">${langQuestionPool}</a></li>
 cData;
 
 $tool_content .= "</ul></div>";
@@ -266,7 +266,7 @@ else {
 	} else {
 		$tool_content .= "
         <td width=\"2%\"><img src=\"../../template/classic/img/bullet_bw.gif\" border=\"0\" alt=\"bullet\" title=\"bullet\"></td>
-        <td>".$row['titre'];
+        <td>".$row['titre']."&nbsp;&nbsp;(<font color=\"red\">$m[expired]</font>)";
 	}
 	  $tool_content .= "<br/><small>$row[description]</small></td>
         <td align='center'><small>".greek_format($row['StartDate'])."</small></td>

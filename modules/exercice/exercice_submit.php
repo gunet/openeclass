@@ -237,6 +237,7 @@ foreach($questionList as $questionId) {
 			}
 		}
 	}
+
 	/*
 	$tool_content .= "
       <br>
@@ -247,6 +248,7 @@ foreach($questionList as $questionId) {
 	$tool_content .= "
       </b></p>";
     */
+
 	// shows the question and its answers
 	$tool_content .= "
       <br/>
@@ -272,14 +274,14 @@ foreach($questionList as $questionId) {
 if (!$questionList) 
 {
    $tool_content .= "
-      <table width=\"99%\" class=\"Exercise\">
+      <table width=\"99%\" class=\"Question\">
       <thead>
       <tr>
         <td colspan='2'><font color='red'>$langNoAnswer</font></td>
       </tr>
       </thead>
       </table>";	 
-   }
+} else {
 	$tool_content .= "<br/>	
     <table width=\"99%\" class=\"Exercise\">
     <tr>
@@ -289,7 +291,13 @@ if (!$questionList)
 	else	
 		$tool_content .= $langNext." &gt;"."\">";
 	$tool_content .= "<input type=\"submit\" name=\"buttonCancel\" value=\"$langCancel\"></div>
-      	</td>
-    	</tr></table></form>";
+      </td>
+    </tr>
+    </table>
+	";
+}	
+
+	$tool_content .= "
+    </form>";
 draw($tool_content, 2, 'exercice');
 ?>

@@ -932,7 +932,8 @@ $langTake = "Take";
 
 // admin.php
 $langExerciseManagement="Exercise Management";
-$langQuestionManagement="Questions / Answers Management";
+$langExerciseModify="Exercise Edit";
+$langQuestionManagement="Question Management";
 $langQuestionNotFound="Question not Found";
 
 // question_admin.inc.php
@@ -943,6 +944,7 @@ $langQuestionAnswers="Question answers";
 $langUsedInSeveralExercises="Be careful! This question and its answers are being used in several exercises. Do you want to change them?";
 $langModifyInAllExercises="in all exercises";
 $langModifyInThisExercise="in this exercise";
+$langQuestionView="View";
 
 // statement_admin.inc.php
 

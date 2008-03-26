@@ -883,7 +883,7 @@ $langExercice="Ασκηση";
 $langActive="ενεργό";
 $langInactive="μη ενεργό";
 $langNoEx="Δεν υπάρχει διαθέσιμη άσκηση";
-$langNewEx="Καινούρια άσκηση";
+$langNewEx="Νέα άσκηση";
 $langExerciseType="Τύπος Ασκήσεων";
 $langExerciseName="Όνομα Ασκησης";
 $langExerciseDescription="Περιγραφή Ασκησης";
@@ -923,8 +923,9 @@ $langAmong = "μεταξύ";
 $langTake = "διάλεξε";
 
 // admin.php
-$langExerciseManagement="Διαχείριση Ασκήσεων";
-$langQuestionManagement="Διαχείριση Ερωτήσεων / Απαντήσεων";
+$langExerciseManagement="Διαχείριση Ασκησης";
+$langExerciseModify="Τροποποίηση Ασκησης";
+$langQuestionManagement="Διαχείριση Ερώτησης";
 $langQuestionNotFound="Δεν βρέθηκε η ερώτηση";
 $langAlertAdmin="Παρακαλώ δηλώστε τουλάχιστον έναν διαχειριστή για το μάθημα!";
 
@@ -936,6 +937,7 @@ $langQuestionAnswers="Απαντήσεις στην ερώτηση";
 $langUsedInSeveralExercises="Προσοχή! H ερώτηση και οι απαντήσεις τις χρησιμοποιούνται σε αρκετές ασκήσεις. Θέλετε να τις αλλάξετε;";
 $langModifyInAllExercises="σε όλες τις ασκήσεις";
 $langModifyInThisExercise="μόνο στην τρέχουσα άσκηση";
+$langQuestionView="Προβολή";
 
 // statement_admin.inc.php
 $langAnswerType="Τύπος Απάντησης";

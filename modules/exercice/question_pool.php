@@ -46,7 +46,7 @@ $TBL_QUESTIONS='questions';
 $TBL_REPONSES='reponses';
 
 // maximum number of questions on a same page
-$limitQuestPage=50;
+$limitQuestPage=15;
 
 if($is_allowedToEdit)
 {
@@ -141,27 +141,26 @@ if (isset($fromExercise)) {
 		$tool_content .= "<a href=\"admin.php?newQuestion=yes\">".$langNewQu."</a>";
 	}
 	
-	$tool_content .= "</li></ul></div>";
+	$tool_content .= "
+          </li>
+        </ul>
+      </div>";
 
 $tool_content .= <<<cData
 \n
     <form method="get" action="${PHP_SELF}">
+	<input type="hidden" name="fromExercise" value="${fromExercise}">
 cData;
 
-$tool_content .= <<<cData
-    <table align="center" width="99%" class="Question">
+  $tool_content .= <<<cData
+    <table width="99%" class="FormData">
     <thead>
     <tr>
+      <th class="left" width="220">$langQuesList :</th>
 cData;
-	
+
 	$tool_content .= "
-      <th colspan=\"";
-	if (isset($fromExercise))
-		$tool_content .= "2";
-	else
-		$tool_content .= "3";
-		
-	$tool_content .= "\" align=\"right\" class=\"right\">";
+      <td align=\"right\" class=\"right\">";
 	$tool_content .= "<b>".$langFilter."</b>: 
       <select name=\"exerciseId\" class=\"FormData_InputText\">"."
         <option value=\"0\">-- ".$langAllExercises." --</option>"."
@@ -191,12 +190,16 @@ cData;
 	$tool_content .= ">".$row['titre']."</option>";
 	}
 	
-$tool_content .= <<<cData
+$tool_content .= "
       </select>
-      <input type="submit" value="${langOk}">
-      </th>
+      
+      <input type=\"submit\" value=\"${langOk}\">
+      </td>
     </tr>
-cData;
+    </thead>
+    </table>
+    ";
+
 
 	@$from=$page*$limitQuestPage;
 	
@@ -222,92 +225,59 @@ cData;
 	}
 	$nbrQuestions=mysql_num_rows($result);
 
-$tool_content .= <<<cData
-    <tr>
-      <th colspan="
-cData;
-
-
-if (isset($fromExercise))
-	$tool_content .= "2";
-else
-	$tool_content .= "3";
-
-$tool_content .= "\"><table width=\"100%\"><thead><tr>";
-
-	  $tool_content .= "
-        <th align=\"right\">";
-
-	if(isset($page)) {
-		$tool_content .= "<small><a href=\"".$PHP_SELF.
-		"?exerciseId=".$exerciseId.
-		"&fromExercise=".$fromExercise.
-		"&page=".($page-1)."\">&lt;&lt; ".$langPrevious."</a></small> |";
-	}
-	elseif($nbrQuestions > $limitQuestPage)
-	{
-		$tool_content .= "<small>&lt;&lt; $langPrevious |</small>";
-	}
-
-	if($nbrQuestions > $limitQuestPage) {
-
-	$tool_content .= "<small><a href=\"".$PHP_SELF.
-	"?exerciseId=".$exerciseId.
-	"&fromExercise=".$fromExercise.
-	"&page=".($page+1)."\">".$langNext.
-	" &gt;&gt;</a></small>";
-
-	}
-	elseif(isset($page)) {
-		$tool_content .= "<small>$langNext &gt;&gt;</small>";
-	}
-
-	 $tool_content .= <<<cData
-        </th>
-      </tr>
-      </thead>
-      </table>
-      </th>
-    </tr>
+	$tool_content .= <<<cData
+    <table width="99%" class="Question">
+    <tbody>
     <tr>
 cData;
 
 	if(isset($fromExercise)) {
 	$tool_content .= <<<cData
-      <th class='left' width="90%"><b>${langQuestion}</b></th>
-      <th width="10%" align="center"><b>${langReuse}</b></th>
+      <td class='left' width="90%" colspan="2">&nbsp;${langQuestionView}</td>
+      <td width="10%" align="center"><b>${langReuse}</b></td>
 cData;
-
-	}
-	else
-	{
+	} else {
 
   $tool_content .= <<<cData
-      <th class='left' width="90%"><b>${langQuestion}</b></th>
-      <th width="5%" align="center"><b>${langModify}</b></th>
-      <th width="5%" align="center"><b>${langDelete}</b></th>
+      <td class='left' width="90%" colspan="2">&nbsp;${langQuestionView}</td>
+      <td width="5%" align="center">${langModify}</td>
+      <td width="5%" align="center">${langDelete}</td>
 cData;
 	}
 
-$tool_content .= "</thead><tbody></tr>";
-$i=1;
+$tool_content .= "
+    </tr>";
+	
+    $i=1;
 	while($row=mysql_fetch_array($result))
 	{
 	// if we come from the exercise administration to get a question, doesn't show the question already used by that exercise
-		if(!isset($fromExercise) || !is_object(@$objExercise) || !$objExercise->isInList($row['id']))
+		if(isset($fromExercise) || !is_object(@$objExercise) || !$objExercise->isInList($row['id']))
 		{
-
+    
+	if ($row['type'] <= 1)
+		$answerType = $langUniqueSelect;
+	elseif ($row['type'] == 2)
+		$answerType = $langMultipleSelect;
+	elseif ($row['type'] >= 4)
+		$answerType = $langMatching;
+	elseif ($row['type'] == 3)
+		$answerType = $langFillBlanks;
+				
+				
+				
 	if(!isset($fromExercise)) {
 	$tool_content .= "
     <tr>
-      <td><a href=\"admin.php?editQuestion=".$row['id']."&fromExercise=\"\">".$row['question']."</a></td>
+      <td width=\"1%\"><div style=\"padding-top:4px;\"><img src=\"../../template/classic/img/arrow_grey.gif\" border=\"0\" alt=\"bullet\"></div></td>
+      <td><a href=\"admin.php?editQuestion=".$row['id']."&fromExercise=\"\">".$row['question']."</a><br/><small class=\"invisible\">".$answerType."</small></td>
       <td><div align=\"center\"><a href=\"admin.php?editQuestion=".$row['id']."\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"".$langModify."\"></a></div>";
 	} else {
 	$tool_content .= "
     <tr>
-      <td><a href=\"admin.php?editQuestion=".$row['id']."&fromExercise=".$fromExercise."\">".$row['question']."</a></td>
+      <td width=\"1%\"><div style=\"padding-top:4px;\"><img src=\"../../template/classic/img/arrow_grey.gif\" border=\"0\" alt=\"bullet\"></div></td>
+      <td><a href=\"admin.php?editQuestion=".$row['id']."&fromExercise=".$fromExercise."\">".$row['question']."</a><br/><small class=\"invisible\">".$answerType."</small></td>
       <td class=\"center\"><div align=\"center\">";
-				
 	$tool_content .= "<a href=\"".$PHP_SELF."?recup=".$row['id'].
 		"&fromExercise=".$fromExercise."\"><img src=\"../../template/classic/img/enroll.gif\" border=\"0\" alt=\"".$langReuse."\"></a>";
 	}
@@ -316,13 +286,14 @@ $i=1;
 
 	if(!isset($fromExercise)) {
 	  $tool_content .= "
-	      <td><div align=\"center\">
+      <td><div align=\"center\">
 		<a href=\"".$PHP_SELF."?exerciseId=".$exerciseId."&delete=".$row['id']."\"". 
 		" onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice)).
 		"')) return false;\"><img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"".$langDelete."\"></a></div></td>";
-			}
+	}
 
-$tool_content .= "</tr>";
+$tool_content .= "
+    </tr>";
 // skips the last question, that is only used to know if we have or not to create a link "Next page"
 			if($i == $limitQuestPage) {
 				break;
@@ -331,14 +302,70 @@ $tool_content .= "</tr>";
 		}
 	}
 	if(!$nbrQuestions) {
-		$tool_content .= "<tr><td colspan=\"";
+		$tool_content .= "
+    <tr>
+      <td colspan=\"";
 		if (isset($fromExercise)&&($fromExercise))
-			$tool_content .= "2";
+			$tool_content .= "3";
 		else
-			$tool_content .= "3";	
+			$tool_content .= "4";	
 	$tool_content .= "\">".$langNoQuestion."</td>
     </tr>";
 }
+
+	if($nbrQuestions > $limitQuestPage)
+	{
+	$tool_content .= "
+    <tr>
+      <th align=\"right\" colspan=\"
+    ";
+		if (isset($fromExercise))
+			$tool_content .= "3";
+		else
+			$tool_content .= "4";
+	
+	$tool_content .= "\"><div align=\"center\">";
+	$tool_content .= "<small>&lt;&lt; $langPrevious |</small>";
+	}
+	elseif(isset($page)) {
+	$tool_content .= "
+    <tr>
+      <th align=\"right\" colspan=\"
+    ";
+		if (isset($fromExercise))
+			$tool_content .= "3";
+		else
+			$tool_content .= "4";
+	
+	$tool_content .= "\"><div align=\"center\">";
+		$tool_content .= "<small>&lt;&lt; <a href=\"".$PHP_SELF.
+		"?exerciseId=".$exerciseId.
+		"&fromExercise=".$fromExercise.
+		"&page=".($page-1)."\">".$langPrevious."</a></small> | ";
+	}
+
+	if($nbrQuestions > $limitQuestPage) {
+		$tool_content .= "<small><a href=\"".$PHP_SELF.
+			"?exerciseId=".$exerciseId.
+			"&fromExercise=".$fromExercise.
+			"&page=".($page+1)."\">".$langNext.
+			"</a> &gt;&gt;</small></div>
+      </th>
+    </tr>";
+	}
+	elseif(isset($page)) {
+		$tool_content .= "<small>$langNext &gt;&gt;</small></div>
+      </th>
+    </tr>";
+	}
+
+	$tool_content .= <<<cData
+
+      </div>
+      </th>
+    </tr>
+cData;
+
 
 $tool_content .= <<<cData
     </tbody>
