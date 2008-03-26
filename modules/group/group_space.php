@@ -1,5 +1,5 @@
 <?php
-/**===========================================================================
+/*===========================================================================
 *              GUnet e-Class 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -18,11 +18,11 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
-/**
+/*
  * Groups Component
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -50,11 +50,9 @@ if (isset($userGroupId) && is_numeric($userGroupId)){
 	if(!session_is_registered('userGroupId')){
 		$_SESSION['userGroupId'] = (int)$_REQUEST['userGroupId'];
 	}
-} else{
+} else {
 	die("Wrong user group id / User group id not set");
 }
-
-
 
 if(isset($registration) and $statut != 10)
 {
@@ -71,38 +69,24 @@ if(isset($registration) and $statut != 10)
 		$regDone=1;
 	}
 }
-
 $currentCourse=$dbname;
 
-/*if ($is_adminOfCourse) {
-	if (isset($_REQUEST['userGroupId'])) {
-		$userGroupId = $_REQUEST['userGroupId'];
-	}
-}*/	// if prof
-
 ############### Secret Directory for Documents #################
-
 $sqlGroup=mysql_query("SELECT secretDirectory
 		FROM `$currentCourse`.student_group 
-			WHERE id='$userGroupId'");
+		WHERE id='$userGroupId'");
 
 while ($myGroup= mysql_fetch_array($sqlGroup))
 {
 	$secretDirectory=$myGroup['secretDirectory'];
 }
 
-
-################ NAME AND DESCRIPTION ######################
+// name and description
 mysql_select_db($dbname);
-$resultGroup=mysql_query("SELECT name, description, tutor, forumId
-				FROM student_group 
-					WHERE id='$userGroupId'");
-
+$resultGroup=mysql_query("SELECT name, description, tutor, forumId FROM student_group WHERE id='$userGroupId'");
 while ($myGroup = mysql_fetch_array($resultGroup))
 {
 	$forumId=$myGroup['forumId'];
-
-
 	if ($is_adminOfCourse)
 	{
 		$tool_content .=  "<p><a href=\"group_edit.php?userGroupId=$userGroupId\">$langEditGroup</a> | ";
@@ -116,29 +100,16 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 	{
 		$tool_content .=  "<p>$message";
 	}
-
 	$tool_content .= loadGroupTools()."</p>";
-
-	$tool_content .=  "
-		<table width=\"99%\">
-		<thead>
-		<tr>
-		<th width=\"200\">
-			$langGroupName
-		</th>
-		<td>
-			$myGroup[name]
-		</td>
-		</tr>
-		</thead>
-		</table>
-		<br>
-		";
+	$tool_content .=  "<table width=\"99%\"><thead>
+		<tr><th width=\"200\">$langGroupName</th>
+		<td>$myGroup[name]</td></tr>
+		</thead></table><br>";
 
 	$sqlTutor=mysql_query("SELECT tutor, user_id, nom, prenom, email, forumId
-					FROM `$mysqlMainDb`.user, student_group
-					WHERE user.user_id=student_group.tutor
-					AND student_group.id='$userGroupId'");
+		FROM `$mysqlMainDb`.user, student_group
+		WHERE user.user_id=student_group.tutor
+		AND student_group.id='$userGroupId'");
 	$countTutor = mysql_num_rows($sqlTutor);
 	$tool_content_tutor="";
 	if ($countTutor==0)
@@ -150,26 +121,15 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 		while ($myTutor = mysql_fetch_array($sqlTutor))
 		{
 			$tool_content_tutor .=  "$myTutor[nom] $myTutor[prenom]
-				<a href=mailto:$myTutor[email]>$myTutor[email]</a>";
+			<a href=mailto:$myTutor[email]>$myTutor[email]</a>";
 		}	// while tutor
 
 	}	// else
 
-	$tool_content .=  "
-		<table width=\"99%\">
-		<thead>
-		<tr>
-		<th width=\"200\">
-			$langGroupTutor
-		</th>
-		<td>
-			$tool_content_tutor
-		</td>
-		</tr>
-		</thead>
-		</table>
-		<br>
-		";
+	$tool_content .= "<table width=\"99%\"><thead>
+		<tr><th width=\"200\">$langGroupTutor</th>
+		<td>$tool_content_tutor</td>
+		</tr></thead></table><br>";
 
 	// Show 'none' if no description
 	$countDescription=strlen ($myGroup['description']);
@@ -183,59 +143,25 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 		$tool_content_description .=  "$myGroup[description]";
 	}	// else
 
-	$tool_content .=  "
-		<table width=\"99%\">
-		<thead>
-		<tr>
-		<th>
-			$langDescription
-		</th>
-		</tr>
-		</thead>
-		<tbody>
-		<tr>
-		<td>
-			$tool_content_description
-		</td>
-		</tr>
-		</tbody>
-		</table>
-		<br>
-		";
+	$tool_content .=  "<table width=\"99%\"><thead><tr>
+		<th>$langDescription</th></tr></thead>
+		<tbody><tr><td>$tool_content_description</td></tr></tbody>
+		</table><br>";
 }	// while loop
-
 
 ################ MEMBERS ################################
 
-$tool_content .=  "
-	
-		<table width=\"99%\">
-		<thead>
+$tool_content .=  "<table width=\"99%\"><thead>
+		<tr><th colspan=3>$langGroupMembers</th></tr>
 		<tr>
-		<th colspan=3>
-			$langGroupMembers
-		</th>
-		</tr>
-		<tr>
-		<th>
-			 $langNameSurname
-		</th>
-		<th>
-			$langAM
-		</th>
-		<th>
-			$langEmail
-		</th>
-		</tr>
-		
-			
-
-		";
+		<th>$langNameSurname</th>
+		<th>$langAM</th>
+		<th>$langEmail</th></tr>";
 
 $resultMember=mysql_query("SELECT nom, prenom, email, am
-			FROM `$mysqlMainDb`.user, user_group 
-			WHERE user_group.team='$userGroupId' 
-			AND user_group.user=$mysqlMainDb.user.user_id");
+		FROM `$mysqlMainDb`.user, user_group 
+		WHERE user_group.team='$userGroupId' 
+		AND user_group.user=$mysqlMainDb.user.user_id");
 $countMember = mysql_num_rows($resultMember);
 
 if(($countMember==0))
@@ -264,21 +190,16 @@ else
 	}	// while loop
 }	// else
 
-$tool_content .= "</tbody>
-		</table>";
-
+$tool_content .= "</tbody></table>";
 
 draw($tool_content, 2, 'group');
 
-
 function loadGroupTools(){
-	global $selfReg, $forumId, $langForums, $userGroupId, $langDocuments;
+	global $selfReg, $forumId, $langForums, $userGroupId, $langDoc;
 	global $is_adminOfCourse, $userGroupId, $langEmailGroup;
-	###################### TOOLS #############################
 
 	// Vars needed to determine group File Manager and group Forum
 	// They are unregistered when opening group.php once again.
-
 	session_register("secretDirectory");
 	session_register("userGroupId");
 	session_register("forumId");
@@ -291,30 +212,24 @@ function loadGroupTools(){
 	else
 	{
 		$resultProperties=mysql_query("SELECT id, self_registration, private, forum, document
-					FROM group_properties WHERE id=1");
+			FROM group_properties WHERE id=1");
 		while ($myProperties = mysql_fetch_array($resultProperties))
 		{
 			// Drive members into their own forum
-			if($myProperties['forum']==1){
-				$group_tools .=  "<a href=\"../phpbb/viewforum.php?forum=$forumId\">$langForums</a> | ";
+			if($myProperties['forum'] == 1){
+				$group_tools .= "<a href=\"../phpbb/viewforum.php?forum=$forumId\">$langForums</a>";
 			}
-
 			// Drive members into their own File Manager
-			if($myProperties['document']==1){
-				$group_tools .=  "<a href=\"document.php?userGroupId=$userGroupId\">$langDocuments</a>";
+			if($myProperties['document'] == 1) {
+				 $group_tools .=  " | <a href=\"document.php?userGroupId=$userGroupId\">$langDoc</a>";
 			}
-
-
 		}	// while loop
-
 		if ($is_adminOfCourse)
 		{
-
 			$group_tools .=  " | <a href=\"group_email.php?userGroupId=$userGroupId\">$langEmailGroup</a>";
 		}
 	}
 	$group_tools .= "</p>";
-
 	session_unregister("secretDirectory");
 	session_unregister("forumId");
 	return $group_tools;

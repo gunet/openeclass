@@ -101,21 +101,13 @@ if (!$myrow = mysql_fetch_array($result)) {
 	exit();
 }
 $forum_name = own_stripslashes($myrow["forum_name"]);
-$nameTools = $forum_name;//set name tools here cause we need $forum_name
+$nameTools = $forum_name;
 
 $tool_content .= <<<cData
-
 	<TABLE WIDTH="99%">
-	<thead>
-	<TR>
-		<th></th>
-		<th>&nbsp;$l_topic</th>
-		<th>$l_replies</th>
-		<th>$l_poster</th>
-		<th>$langSeen</th>
-		<th>$langLastMsg</th>
-	</TR>
-	</thead>
+	<thead><TR><th></th><th>&nbsp;$l_topic</th><th>$l_replies</th>
+	<th>$l_poster</th><th>$langSeen</th>
+	<th>$langLastMsg</th></TR></thead>
 	<tbody>
 cData;
 
@@ -127,7 +119,7 @@ if ( isset($start) ) {
 	$start = 0;
 }
 
-if ( !isset($topics_per_page) ) {
+if (!isset($topics_per_page)) {
 	$topics_per_page = 50;
 }
 
@@ -165,17 +157,17 @@ if ($myrow = mysql_fetch_array($result)) {
 			$last_visit = 0;
 		}
 		if($replys >= $hot_threshold) {
-			if ( $last_post_time < $last_visit )
-			$image = $hot_folder_image;
+			if ($last_post_time < $last_visit )
+				$image = $hot_folder_image;
 			else
-			$image = $hot_newposts_image;
+				$image = $hot_newposts_image;
 		} else {
 			if ( $last_post_time < $last_visit ) {
 				$image = $folder_image;
 			} else {
 				$image = $newposts_image;
 			}
-			if ( $myrow["topic_status"] == 1 ) {
+			if ($myrow["topic_status"] == 1) {
 				$image = $locked_image;
 			}
 		}
