@@ -100,18 +100,14 @@ function confirmation (name)
 </script>
 ';
 
-    $result = db_query("
-			SELECT * FROM annonces WHERE code_cours='$currentCourse' ", $mysqlMainDb);
+    $result = db_query("SELECT * FROM annonces WHERE code_cours='$currentCourse' ", $mysqlMainDb);
     $announcementNumber = mysql_num_rows($result);
     unset($result);
-    $tool_content .= "
-		<div id=\"operations_container\">
-		<ul id=\"opslist\">
-		<li><a href=\"" . $_SERVER['PHP_SELF'] . "?addAnnouce=1\">" . $langAddAnn . "</a></li>";
+    $tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">
+	<li><a href=\"" . $_SERVER['PHP_SELF'] . "?addAnnouce=1\">" . $langAddAnn . "</a></li>";
 
     if ($announcementNumber > 1 || isset($_POST['submitAnnouncement'])) {
-        $tool_content .= "<li>	
-			<a href=\"$_SERVER[PHP_SELF]?deleteAllAnnouncement=1\" onClick=\"return confirmation('all');\">$langEmptyAnn</a></li>";
+        $tool_content .= "<li><a href=\"$_SERVER[PHP_SELF]?deleteAllAnnouncement=1\" onClick=\"return confirmation('all');\">$langEmptyAnn</a></li>";
     } 
     $tool_content .= "</ul></div>";
     /*----------------------------------------
@@ -210,8 +206,8 @@ function confirmation (name)
             $order = $orderMax + 1; 
             // INSERT ANNOUNCEMENT
             db_query("INSERT INTO annonces SET contenu = '" . mysql_real_escape_string($newContent) . "', 
-					title='" . mysql_real_escape_string($antitle) . "', temps = NOW(),
-					code_cours = '$currentCourseID', ordre = '$order'");
+			title='" . mysql_real_escape_string($antitle) . "', temps = NOW(),
+			code_cours = '$currentCourseID', ordre = '$order'");
         } // else 
         // SEND EMAIL (OPTIONAL)
         if (isset($_POST['emailOption']) && is_numeric($_POST['emailOption']) && $_POST['emailOption'] == 1) {
@@ -448,6 +444,4 @@ if ($is_adminOfCourse) {
 } else {
     draw($tool_content, 2, 'announcements');
 } 
-
 ?>
-			

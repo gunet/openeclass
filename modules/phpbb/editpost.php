@@ -52,7 +52,6 @@
 ==============================================================================
 */
 
-
 /*
  * GUNET eclass 2.0 standard stuff
  */
@@ -60,7 +59,6 @@ $require_current_course = TRUE;
 $require_login = TRUE;
 $require_help = FALSE;
 include '../../include/baseTheme.php';
-$nameTools = $l_forums;
 $tool_content = "";
 
 /*
@@ -73,9 +71,7 @@ include("functions.php"); // application logic for phpBB
  * Actual code starts here
  *****************************************************************************/
 if (isset($submit) && $submit) {
-	$sql = "SELECT *
-		FROM posts
-		WHERE post_id = '$post_id'";
+	$sql = "SELECT * FROM posts WHERE post_id = '$post_id'";
 	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= $langErrorDataOne;
 		draw($tool_content, 2);
@@ -93,6 +89,16 @@ if (isset($submit) && $submit) {
 	$this_post_time = $myrow["post_time"];
 	list($day, $time) = split(" ", $myrow["post_time"]);
 	$date = date("Y-m-d H:i");
+
+	$row1 = mysql_fetch_row(db_query("SELECT forum_name FROM forums WHERE forum_id='$forum_id'"));
+	$forum_name = $row1[0];
+	$row2 = mysql_fetch_row(db_query("SELECT topic_title FROM topics WHERE topic_id='$topic_id'"));
+	$topic_title = $row2[0];
+
+	$nameTools = $l_reply;
+	$navigation[]= array ("url"=>"index.php", "name"=> $l_forums);
+	$navigation[]= array ("url"=>"viewforum.php?forum=$forum_id", "name"=> $forum_name);
+	$navigation[]= array ("url"=>"viewtopic.php?&topic=$topic_id&forum=$forum_id", "name"=> $topic_title);
 
 	// IF we made it this far we are allowed to edit this message, yay!
 	$is_html_disabled = false;
@@ -116,9 +122,7 @@ if (isset($submit) && $submit) {
 		$forward = 1;
 		$topic = $topic_id;
 		$forum = $forum_id;
-		$sql = "UPDATE posts_text
-			SET post_text = '$message'
-			WHERE (post_id = '$post_id')";
+		$sql = "UPDATE posts_text SET post_text = '$message' WHERE (post_id = '$post_id')";
 		if (!$result = db_query($sql, $currentCourseID)) {
 			$tool_content .= $langUnableUpadatePost;
 			draw($tool_content, 2);
@@ -195,11 +199,15 @@ if (isset($submit) && $submit) {
 		<p>$l_click <a href=\"index.php\">$l_here</a>$l_returnindex</p>
 		</td></tr></tbody></table>";
 	}	
+
 } else {
+
 	// Gotta handle private forums right here. They're naturally covered on submit, but not in this part.
 	$sql = "SELECT f.forum_type, f.forum_name, t.topic_title
 		FROM forums f, topics t
 		WHERE (f.forum_id = '$forum') AND (t.topic_id = $topic) AND (t.forum_id = f.forum_id)";
+	
+	
 	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= "$langTopicInformation";
 		draw($tool_content, 2);
@@ -212,27 +220,28 @@ if (isset($submit) && $submit) {
 		exit();
 	}
 	
+	$nameTools = $l_reply;
+	$navigation[]= array ("url"=>"index.php", "name"=> $l_forums);
+	$navigation[]= array ("url"=>"viewforum.php?forum=$forum", "name"=> $myrow['forum_name']);
+	$navigation[]= array ("url"=>"viewtopic.php?&topic=$topic&forum=$forum", "name"=> $myrow['topic_title']);
+
 	if (($myrow["forum_type"] == 1) && !$user_logged_in && !$logging_in) {
 		// Private forum, no valid session, and login form not submitted...
 		$tool_content .= "
 			<FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
 			<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"99%\">
+			<TR><TD>$l_private</TD></TR>
 			<TR><TD>
-				<TR><TD>$l_private</TD></TR>
-				<TR><TD>
-					<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\">
-					<TR><TD></TD></TR>
-					</TABLE>
-				</TD></TR>
-				<TR><TD>
-					<INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
-					<INPUT TYPE=\"HIDDEN\" NAME=\"topic\" VALUE=\"$topic\">
-					<INPUT TYPE=\"HIDDEN\" NAME=\"post_id\" VALUE=\"$post_id\">
-					<INPUT TYPE=\"SUBMIT\" NAME=\"logging_in\" VALUE=\"$l_enter\">
-				</TD></TR>
-				
+			<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\">
+			<TR><TD></TD></TR>
 			</TABLE>
-			</FORM>";
+			</TD></TR>
+			<TR><TD>
+			<INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
+			<INPUT TYPE=\"HIDDEN\" NAME=\"topic\" VALUE=\"$topic\">
+			<INPUT TYPE=\"HIDDEN\" NAME=\"post_id\" VALUE=\"$post_id\">
+			<INPUT TYPE=\"SUBMIT\" NAME=\"logging_in\" VALUE=\"$l_enter\">
+			</TD></TR></TABLE></FORM>";
 		draw($tool_content, 2);
 		exit();
 	} else {
@@ -287,12 +296,8 @@ if (isset($submit) && $submit) {
 	$message = preg_replace('#</textarea>#si', '&lt;/TEXTAREA&gt;', $message);
 	list($day, $time) = split(" ", $myrow["post_time"]);
 	
-	$tool_content .= "
-	<a href=\"viewtopic.php?topic=$topic&forum=$forum\" target=\"_blank\">$l_topicreview</a><br/><br/>
-		<FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
-		<TABLE WIDTH=\"99%\">
-		<thead>
-		";
+	$tool_content .= "<a href=\"viewtopic.php?topic=$topic&forum=$forum\" target=\"_blank\">$l_topicreview</a>
+		<br/><br/><FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\"><TABLE WIDTH=\"99%\"><thead>";
 	$first_post = is_first_post($topic, $post_id, $currentCourseID);
 	if($first_post) {
 		$tool_content .= "<TR><th>$l_subject:</th><TD>
@@ -301,7 +306,7 @@ if (isset($submit) && $submit) {
 	$tool_content .= "<TR><th>$l_body:</th><TD>
 		<TEXTAREA NAME=\"message\" ROWS=10 COLS=45 WRAP=\"VIRTUAL\">$message</TEXTAREA>
 		</TD></TR></thead></table>
-			<p><INPUT TYPE=\"CHECKBOX\" NAME=\"delete\">$l_delete</p>";
+		<p><INPUT TYPE=\"CHECKBOX\" NAME=\"delete\">$l_delete</p>";
 
 	if (isset($user_logged_in) && $user_logged_in) {
 		$tool_content .= "<INPUT TYPE=\"HIDDEN\" NAME=\"username\" VALUE=\"" . $userdata["username"] . "\">";
@@ -313,7 +318,6 @@ if (isset($submit) && $submit) {
 			<INPUT TYPE=\"HIDDEN\" NAME=\"poster_id\" VALUE=\"" . $myrow["poster_id"] ."\">
 			-->
 	<INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">";
-
 }
 draw($tool_content,2);
 ?>
