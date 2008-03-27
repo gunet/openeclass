@@ -216,9 +216,11 @@ if (!isset($submit2)) {
         // ***********************************************
         // new queries - upgrade queries to 2.0
         // ***********************************************
-
-        db_query("DROP TABLE IF EXISTS institution");
-
+	
+	// delete deprecated tables
+	if (mysql_table_exists($mysqlMainDb, 'institution'))
+                db_query("DROP TABLE `institution`");
+	
         if (!mysql_field_exists("$mysqlMainDb",'cours','course_objectives'))
                 $tool_content .= add_field('cours', 'course_objectives', "TEXT");
         if (!mysql_field_exists("$mysqlMainDb",'cours','course_prerequisites'))
@@ -354,13 +356,12 @@ if (!isset($submit2)) {
 
         // Table passwd_reset (used by the password reset module)
         if (!mysql_table_exists($mysqlMainDb, 'passwd_reset'))  {
-                db_query("
-                                CREATE TABLE `passwd_reset` (
-                                        `user_id` int(11) NOT NULL,
-                                        `hash` varchar(40) NOT NULL,
-                                        `password` varchar(8) NOT NULL,
-                                        `datetime` datetime NOT NULL
-                                        ) TYPE=MyISAM", $mysqlMainDb);
+                db_query("CREATE TABLE `passwd_reset` (
+                              `user_id` int(11) NOT NULL,
+                              `hash` varchar(40) NOT NULL,
+                              `password` varchar(8) NOT NULL,
+                              `datetime` datetime NOT NULL
+                              ) TYPE=MyISAM", $mysqlMainDb);
         }
 
         // add 5 new fields to table users
@@ -590,6 +591,10 @@ if (!isset($submit2)) {
                 // ********************************************
                 // new upgrade queries for e-Class 2.0
                 // ********************************************
+		if (mysql_table_exists($code[0], 'work'))
+                	db_query("DROP TABLE `work`");
+		if (mysql_table_exists($code[0], 'work_student'))
+                	db_query("DROP TABLE `work_student`");
 
                 $sql = 'SELECT id, titre, contenu, day, hour, lasting
                         FROM  agenda WHERE CONCAT(titre,contenu) != \'\'

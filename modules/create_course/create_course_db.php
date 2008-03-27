@@ -614,24 +614,6 @@ mysql_query ("CREATE TABLE document (id int(4) NOT NULL auto_increment,
 
 ############################# WORKS ###########################################
 
-mysql_query("
-CREATE TABLE work (
-    id int(11) NOT NULL auto_increment,
-    url varchar(200),
-    titre varchar(200),
-    description varchar(250),
-    auteurs varchar(200),
-    active tinyint(1),
-    accepted tinyint(1),
-    PRIMARY KEY (id))
-    TYPE=MyISAM $charset_spec");
-
-mysql_query("CREATE TABLE work_student (
-    work_id int(11) NOT NULL,
-    uname varchar(30),
-    PRIMARY KEY (work_id,uname))
-    TYPE=MyISAM $charset_spec");
-
 db_query("CREATE TABLE `assignments` (
     `id` int(11) NOT NULL auto_increment,
     `title` varchar(200) NOT NULL default '',

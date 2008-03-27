@@ -675,4 +675,24 @@ function format_bytesize ($kbytes, $dec_places = 2)
 	return $result;
 }
 
+
+// used in documents and group documents path navigation bar
+function make_clickable_path($path)
+{
+	global $langRoot;
+
+	$cur = '';
+	$out = '';
+	$base = $_SERVER['PHP_SELF'];
+	foreach (explode('/', $path) as $component) {
+		if (empty($component)) {
+			$out = "<a href='$base?openDir=/'>$langRoot</a>";
+		} else {
+			$cur .= rawurlencode("/$component");
+			$out .= " &raquo; <a href='$base?openDir=$cur'>$component</a>";
+		}
+	}
+	return $out;
+}
+
 ?>
