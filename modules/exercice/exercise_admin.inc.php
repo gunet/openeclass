@@ -161,28 +161,6 @@ $tool_content .= "
   $langExerciseAttemptsAllowedUnit." &nbsp;&nbsp;&nbsp;(".$langExerciseAttemptsAllowedExplanation.")</td>
     </tr>";
 
-/*
-	if($exerciseId && $nbrQuestions) {
-		$tool_content .= "<tr><td valign=\"top\">".$langRandomQuestions." :</td>".
-  		"<td><input type=\"checkbox\" name=\"randomQuestions\" value=\"1\" "; 
-  	if($randomQuestions) 
-  		$tool_content .= "checked=\"checked\"";  
-  	$tool_content .= ">".$langYes.", $langTake";
-  	
-    $tool_content .= "<select name=\"questionDrawn\">";
-
-		for($i=1;$i <= $nbrQuestions;$i++) {
-			$tool_content .= "<option value=\"".$i." ";
-			
-			if((isset($formSent) && $questionDrawn == $i) || (!isset($formSent) && ($randomQuestions == $i || ($randomQuestions <= 0 && $i == $nbrQuestions)))) 
-				$tool_content .= 'selected="selected"'; 
-			
-			$tool_content .=">".$i."</option>";
-		}
-		$tool_content .= "</select> ".strtolower($langQuestions)." ".$langAmong." ".$nbrQuestions." </td></tr>";
-	}
-*/
-
 	$tool_content .= <<<cData
 	   <tr>
       <th class=\"left\">&nbsp;</th>

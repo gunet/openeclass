@@ -139,7 +139,7 @@ else
       <table width='99%' class='Question'>
       <thead>
       <tr>
-        <th class='left' colspan='2'>
+        <th class='left' colspan='2' height=\"25\">
           <b>".nl2br($questionName)."</b>&nbsp;&nbsp;";
 
 	// doesn't show the edit link if we come from the question pool to pick a question for an exercise

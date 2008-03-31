@@ -543,8 +543,38 @@ $tool_content .= <<<cData
     <form method="post" action="${PHP_SELF}?modifyAnswers=${modifyAnswers}">
     <input type="hidden" name="formSent" value="1">
     <input type="hidden" name="nbrAnswers" value="${nbrAnswers}">
+cData;
 
-    <table width="99%" class="FormData">
+      $tool_content .= "
+      <table width=\"99%\" class=\"Question\">
+      <thead>
+      <tr>
+        <th class=\"left\" colspan=\"5\" height=\"25\">
+          <b>".nl2br($questionName)."</b>&nbsp;&nbsp;
+        </th>
+      </tr>
+      <tr>
+        <td colspan=\"5\" ><b><u>$langQuestionAnswers</u>:</b><br />";
+		
+		if($answerType == UNIQUE_ANSWER)
+		{
+      $tool_content .= "
+        <small>$langUniqueSelect</small>";
+		}
+		if($answerType == MULTIPLE_ANSWER)
+		{
+      $tool_content .= "
+        <small>$langMultipleSelect</small>";
+		}
+		
+      $tool_content .= "
+        </td>
+      </tr>
+      </thead>";
+
+$tool_content .= <<<cData
+	
+    
     <tbody>
 cData;
 
@@ -574,15 +604,11 @@ cData;
 	$tool_content .= <<<cData
 
   <tr>
-    <th width="220" class="left">$langQuestion :</th>
-    <td colspan="4" class="left">$questionName</td>
-  </tr>
-  <tr>
-    <th class="left"><u>$langAnswers</u> :<br/><small>$langUniqueSelect</small></th>
-    <td align="center"><b>$langTrue</b></td>
-    <td align="center"><b>$langAnswer</b></td>
-    <td align="center"><b>$langComment</b></td>
-    <td align="center"><b>$langQuestionWeighting</b></td>
+    <td align="right" width="3%"><b>$langID</b></td>
+    <td align="center" width="7%"><b>$langTrue</b></td>
+    <td align="center" width="45%"><b>$langAnswer</b></td>
+    <td align="center" width="45%"><b>$langComment</b></td>
+    <td align="center" width="10%"><b>$langQuestionWeighting</b></td>
   </tr>
 cData;
 
@@ -591,7 +617,7 @@ cData;
 
 $tool_content .="
   <tr>
-    <th class=\"right\">$i.</th>
+    <td class=\"right\">$i.</td>
     ";
 
 if($answerType == UNIQUE_ANSWER)
@@ -639,14 +665,19 @@ $tool_content .= "
 $tool_content .= <<<cData
 
     <tr>
-      <th class="left">$langAnswers :&nbsp;
+      <th class="left" colspan="2">&nbsp;</th>
+      <td class="left"><b>$langAnswers :</b>&nbsp;
         <input type="submit" name="lessAnswers" value="${langLessAnswers}">&nbsp;
         <input type="submit" name="moreAnswers" value="${langMoreAnswers}">
-      </th>
-      <td colspan="4" align="center">
+      </td>
+      <td align="center">
         <input type="submit" name="submitAnswers" value="${langOk}">&nbsp;&nbsp;
         <input type="submit" name="cancelAnswers" value="${langCancel}">
       </td>
+      <th class="left">&nbsp;</th>
+    </tr>
+    <tr>
+      <th class="left" colspan="5">&nbsp;</th>
     </tr>
     </tbody>
     </table>
