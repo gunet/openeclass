@@ -744,7 +744,7 @@ function show_assignment($id, $message = FALSE)
 {
 	global $tool_content, $m, $langBack, $langNoSubmissions, $langSubmissions, $mysqlMainDb, $langWorks;
 	global $langEndDeadline, $langWEndDeadline, $langNEndDeadline, $langDays, $langDaysLeft, $langGradeOk;
-	global $colorMedium, $currentCourseID, $webDir, $urlServer, $nameTools, $m;
+	global $colorMedium, $currentCourseID, $webDir, $urlServer, $nameTools, $langGraphResults, $m;
 
 	$res = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days FROM assignments WHERE id = '$id'");
 	$row = mysql_fetch_array($res);
@@ -791,7 +791,7 @@ function show_assignment($id, $message = FALSE)
 		require_once '../../include/libchart/libchart.php';
 
 		$chart = new PieChart(600, 300);
-		$chart->setTitle("�������� ���������� ��������");
+		$chart->setTitle("$langGraphResults");
 
 		$gradeOccurances = array(); // Named array to hold grade occurances/stats
 		$gradesExists = 0;

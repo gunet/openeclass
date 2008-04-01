@@ -76,25 +76,17 @@ include_once("./config.php");
 /******************************************************************************
 * Actual code starts here
 *****************************************************************************/
-
 /*
 * First, some decoration
 */
 
-if ( $is_adminOfCourse || $is_admin ) {
+if ($is_adminOfCourse || $is_admin) {
 	$tool_content .= "<a href=\"../forum_admin/forum_admin.php\">$l_adminpanel</a><P>&nbsp;";
 }
-$tool_content .= <<< cData
+$tool_content .= <<<cData
 <TABLE WIDTH="99%" CELLPADDING="1" CELLSPACING="0" ALIGN="CENTER" VALIGN="TOP">
 <thead>
-<TR>
-		<th> </th>
-		<th>$l_forum</th>
-		<th>$l_topics</th>
-		<th>$l_posts</th>
-		<th>$l_lastpost</th>
-	</TR>
-	</thead>
+<TR><th> </th><th>$l_forum</th><th>$l_topics</th><th>$l_posts</th><th>$l_lastpost</th></TR></thead>
 cData;
 
 /*
@@ -105,11 +97,8 @@ $sql = "SELECT c.* FROM catagories c, forums f
 	 GROUP BY c.cat_id, c.cat_title, c.cat_order
 	 ORDER BY c.cat_id DESC";
 
-if ( !$result = db_query($sql, $currentCourseID) ) {
-	$tool_content .= <<<cData
-			
-		</TABLE>
-cData;
+if ( !$result = db_query($sql, $currentCourseID)) {
+	$tool_content .= "</table>";
 	$tool_content .= "$langUnableGetCategories<br>$sql";
 	draw($tool_content, 2);
 	exit();
@@ -132,15 +121,12 @@ if ( $total_categories ) {
 		$limit_forums = "WHERE f.cat_id = $viewcat";
 	}
 	$sql = "SELECT f.*, u.username, u.user_id, p.post_time
-		FROM forums f
-		LEFT JOIN posts p ON p.post_id = f.forum_last_post_id
+		FROM forums f LEFT JOIN posts p ON p.post_id = f.forum_last_post_id
 		LEFT JOIN users u ON u.user_id = p.poster_id
-		$limit_forums
-		ORDER BY f.cat_id, f.forum_id";
+		$limit_forums ORDER BY f.cat_id, f.forum_id";
 	if ( !$f_res = db_query($sql, $currentCourseID) ) {
 		$tool_content .= <<<cData
-			
-			</TABLE>
+		</TABLE>
 cData;
 		$tool_content .= "Error getting forum data.";
 		draw($tool_content, 2);
@@ -188,7 +174,6 @@ cData;
 				$total_posts = $forum_row[$x]["forum_posts"];
 				$total_topics = $forum_row[$x]["forum_topics"];
 				$desc = stripslashes($forum_row[$x]["forum_desc"]);
-
 				$tool_content .= "<TD>";
 				$forum=$forum_row[$x]["forum_id"];
 				if ( $is_adminOfCourse==1 ) { // TUTOR VIEW

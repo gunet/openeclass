@@ -208,17 +208,17 @@ function confirmation ()
     		<tr><th>$langID</th><th width='600'>$langCategories</th>
     		<th>$langNbFor</th><th>$langActions</th></tr></thead><tbody>";
 		$result = db_query("select cat_id, cat_title from catagories order by cat_id", $currentCourseID);
-		$i=0;
+		$i=1;
 		while(list($cat_id, $cat_title) = mysql_fetch_row($result)) {
 			$gets = db_query("select count(*) as total from forums where cat_id=$cat_id", $currentCourseID);
 			$numbers= mysql_fetch_array($gets);
-			if($i%2==0){
+			if($i%2 == 0){
 				$tool_content .= "<tr bgcolor=$color1>";
 			}
-			elseif($i%2==1) {
+			elseif($i%2 == 1) {
 				$tool_content .= "<tr bgcolor=$color2>";
 			}
-			$tool_content .= "<td align='center'>$cat_id</td>
+			$tool_content .= "<td align='center'>$i</td>
 			<td>$cat_title &nbsp;</td><td align='center'>$numbers[total]</td>
 			<td align='center'>
 			<a href='forum_admin.php?forumgo=yes&cat_id=$cat_id&ctg=$cat_title'><img src='../../template/classic/img/forum_on.gif' border='0' title='$langForums'></img></a>&nbsp;

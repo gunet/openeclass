@@ -3191,8 +3191,6 @@ $langGroupWorkIntro = '
 	been graded.';
 
 $langModify="Modify";
-
-
 $langEditSuccess = "Successful editing!";
 $langEditError = "An error occured during the editing !";
 $langNewAssign = "New assignment";
@@ -3202,14 +3200,11 @@ $langDelWarn1 = "You are going to delete the assignment";
 $langDelSure = "Are you sure you want to delete the assignment?";
 $langWorkFile = "File";
 $langZipDownload = "Download assignments (in .zip format)";
-
 $langDelWarn2 = "There is a ".$langsStudent."  submission. This file will be deleted!";
 $langDelTitle = "Warning!";
 $langDelMany1 = "Have submitted";
 $langDelMany2 = " ".$langsStudents." assignments. These files will be deleted!";
-
 $langSubmissions = " ".$langStudent." Submissions";
-
 $langSubmitted = "A file has already been submitted for this assignment";
 $langNotice2 = "Submission date";
 $langNotice3 = "If you submit another file, the old file will be replaced by the new one.";
@@ -3221,7 +3216,6 @@ $langNEndDeadLine = "(Deadline is today)";
 $langDays = "days)";
 $langDaysLeft = "(left";
 $langGrades = "The grades were assigned successfully!";
-
 $langUpload = "Upload succesfull !";
 $langUploadError = "An error occured during uploading!";
 $langWorkGrade = "Assignment grade";
@@ -3237,7 +3231,7 @@ $langWarnForSubmissions = "If any assignments were submitted, they will be delet
 $langAssignmentActivated = "The assignment was activated";
 $langAssignmentDeactivated = "The assignment was deactivated";
 $langSaved = "The assignment details were saved";
-
+$langGraphResults="Assignment Results";
 /***************************
 conactadmin.php
 ***************************/

@@ -740,8 +740,8 @@ $langIn="στο";
 $langNewDir="Όνομα του καινούριου καταλόγου";
 $langImpossible="Δεν είναι δυνατή η λειτουργία";
 $langViMod="Η ορατότητα του εγγράφου άλλαξε";
-$langMoveOK="Μεταφορά επιτυχής!";
-$langMoveNotOK="Μεταφορά ανεπιτυχής";
+$langMoveOK="Η μεταφορά έγιμε με επιτυχία!";
+$langMoveNotOK="η μεταφορά δεν πραγματοποιήθηκε!";
 $langRoot = "Αρχικός κατάλογος";
 
 // Special for group documents
@@ -3075,7 +3075,7 @@ $langAssignmentActivated = "Η εργασία ενεργοποιήθηκε";
 $langAssignmentDeactivated = "Η εργασία απενεργοποιήθηκε";
 $langSaved = "Τα στοιχεία της εργασίας αποθηκεύτηκαν";
 $langExerciseNotPermit="Η υποβολή της εργασίας δεν επιτρέπεται!";
-
+$langGraphResults="Κατανομή βαθμολογιών εργασίας";
  
 /*************************************************************
 * listerqusers.php

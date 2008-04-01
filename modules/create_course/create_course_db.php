@@ -20,9 +20,6 @@
         PRIMARY KEY (cat_id))
         TYPE=MyISAM $charset_spec");
 
-  // Create a hidden category for group forums
-  mysql_query("INSERT INTO catagories VALUES (1,'$langCatagoryGroup',NULL)");
-
   // Create an example category
   mysql_query("INSERT INTO catagories VALUES (2,'$langCatagoryMain',NULL)");
 
