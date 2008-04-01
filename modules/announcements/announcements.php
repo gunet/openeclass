@@ -103,13 +103,18 @@ function confirmation (name)
     $result = db_query("SELECT * FROM annonces WHERE code_cours='$currentCourse' ", $mysqlMainDb);
     $announcementNumber = mysql_num_rows($result);
     unset($result);
-    $tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">
-	<li><a href=\"" . $_SERVER['PHP_SELF'] . "?addAnnouce=1\">" . $langAddAnn . "</a></li>";
+    $tool_content .= "
+      <div id=\"operations_container\">
+        <ul id=\"opslist\">
+          <li><a href=\"" . $_SERVER['PHP_SELF'] . "?addAnnouce=1\">" . $langAddAnn . "</a></li>";
 
     if ($announcementNumber > 1 || isset($_POST['submitAnnouncement'])) {
-        $tool_content .= "<li><a href=\"$_SERVER[PHP_SELF]?deleteAllAnnouncement=1\" onClick=\"return confirmation('all');\">$langEmptyAnn</a></li>";
+        $tool_content .= "
+          <li><a href=\"$_SERVER[PHP_SELF]?deleteAllAnnouncement=1\" onClick=\"return confirmation('all');\">$langEmptyAnn</a></li>";
     } 
-    $tool_content .= "</ul></div>";
+    $tool_content .= "
+        </ul>
+      </div>";
     /*----------------------------------------
 	DEFAULT DISPLAY SETTINGS
 	--------------------------------------*/
@@ -272,13 +277,13 @@ function confirmation (name)
             </tr>";
             $langAdd = $langModifAnn;
         } else {
-            $tool_content .= "
-            <table width='99%' class='FormData' align='center'>
-            <tbody>
-            <tr>
-              <th>&nbsp;</th>
-              <td><b>" . $langAddAnn . "</b></td>
-            </tr>";
+			$tool_content .= "
+      <table width='99%' class='FormData' align='center'>
+      <tbody>
+      <tr>
+        <th width='220'>&nbsp;</th>
+        <td><b>" . $langAddAnn . "</b></td>
+      </tr>";
         } 
 
         if (!isset($AnnouncementToModify)) $AnnouncementToModify = "";
@@ -286,33 +291,37 @@ function confirmation (name)
         if (!isset($titleToModify)) $titleToModify = "";
 
         $tool_content .= "
-            <tr>
-              <th width='150' class='left'>$langAnnTitle:</th>";
+      <tr>
+        <th width='150' class='left'>$langAnnTitle:</th>";
         $tool_content .= "
-              <td><input type='text' name='antitle' value='$titleToModify' size='50' class='FormData_InputText'></td>
-            </tr>";
+        <td><input type='text' name='antitle' value='$titleToModify' size='50' class='FormData_InputText'></td>
+      </tr>";
         $tool_content .= "
-            <tr>
-              <th class='left'>$langAnnBody:</th>";
+      <tr>
+        <th class='left'>$langAnnBody:</th>
+        <td>&nbsp;</td>
+      </tr>";
         $tool_content .= "
-              <td><textarea id='xinha' name='newContent' value='$contentToModify' rows='20' cols='90' class='FormData_InputText'>$contentToModify</textarea></td>
-            </tr>";
+      <tr>
+        <td colspan='2'><textarea id='xinha' name='newContent' value='$contentToModify' rows='20' cols='90'>$contentToModify</textarea></td>
+      </tr>";
         $tool_content .= "
             <input type=\"hidden\" name=\"id\" value=\"" . $AnnouncementToModify . "\">";
         $tool_content .= "
-            <tr>
-              <th>&nbsp;</th>
-              <td><input type=checkbox value=\"1\" name=\"emailOption\"> $langEmailOption </td>
-            </tr>";
+      <tr>
+        <th>&nbsp;</th>
+        <td><input type=checkbox value=\"1\" name=\"emailOption\"> $langEmailOption </td>
+      </tr>";
         $tool_content .= "
-            <tr>
-              <th>&nbsp;</th>
-              <td><input type=\"Submit\" name=\"submitAnnouncement\" value=\"$langAdd\"></td>
-            </tr>
-            </tbody>
-            </table>
-            </form>";
-        $tool_content .= "<br>";
+      <tr>
+        <th>&nbsp;</th>
+        <td><input type=\"Submit\" name=\"submitAnnouncement\" value=\"$langAdd\"></td>
+      </tr>
+      </tbody>
+      </table>
+      </form>";
+        $tool_content .= "
+      <br>";
     } 
 
     /*----------------------------------------
@@ -323,80 +332,82 @@ function confirmation (name)
         $iterator = 1;
         $bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
 
-        $tool_content .= "<table width=\"99%\" align='center'>";
-        if ($announcementNumber > 0) {
-            $tool_content .= "<tbody><tr><th class='left'>$langAnnouncement</th>
-                    <th width='70' align='center'>$langTools</th>";
 
-            if ($announcementNumber > 1) {
-                $tool_content .= "
-                      <th width='70' align='center'>$langMove</th>";
-            } 
-            $tool_content .= "
-                    </tr>";
-        } while ($myrow = mysql_fetch_array($result)) {
+		if ($announcementNumber > 0) 
+		{
+			$tool_content .= <<<cData
+\n
+      <table class="FormData" width="99%">
+      <thead>
+      <tr>
+        <th class="left" width="220">$langAnnouncement</th>
+cData;
+			$tool_content .= "
+          <td class='right'>&nbsp;</td>
+          <td width='70' class='right'>$langTools</td>";
+		if ($announcementNumber > 1) {
+			$tool_content .= "
+          <td width='70' class='right'>$langMove</td>";
+		} 
+		$tool_content .= "
+        </tr>
+      </thead>
+      </table>
+	  ";
+		} 
+		
+		$tool_content .= "
+      <table width=\"99%\" align='left' class=\"announcements\">
+      <tbody>";
+		while ($myrow = mysql_fetch_array($result)) 
+		{
             // FORMAT CONTENT
             $content = make_clickable($myrow['contenu']);
             $content = nl2br($content);
             $myrow['temps'] = greek_format($myrow['temps']);
-            $tool_content .= "
-                    <tr>
-                      <th class='color1'>
-                        <div align='left'><img class=\"displayed\" src=../../template/classic/img/announcements_on.gif border=0 title=\"" . $myrow["title"] . "\">&nbsp;" . $myrow["title"] . " <small>(" . $langPubl . ": " . $myrow['temps'] . ")</small></div>
-                      </th>";
 
-            $tool_content .= "
-                      <th class='color1'>
-                        <a href=\"$_SERVER[PHP_SELF]?modify=" . $myrow['id'] . "\">
-                        <img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"" . $langModify . "\"></a>
-                        <a href=\"$_SERVER[PHP_SELF]?delete=" . $myrow['id'] . "\" onClick=\"return confirmation('');\">
-                        <img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"" . $langDelete . "\"></a>
-                      </th>";
+			$tool_content .= "
+      <tr>
+        <td width='3'><img class=\"displayed\" src=../../template/classic/img/announcements_on.gif border=0 title=\"" . $myrow["title"] . "\"></td>
+        <td><b>" . $myrow["title"] . "</b>
+            <br /><small>(" . $langPubl . ": " . $myrow['temps'] . ")</small>
+            <br />$content        </td>
+        <td width='70' class='right'>
+        <a href=\"$_SERVER[PHP_SELF]?modify=" . $myrow['id'] . "\">
+        <img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"" . $langModify . "\"></a>
+        <a href=\"$_SERVER[PHP_SELF]?delete=" . $myrow['id'] . "\" onClick=\"return confirmation('');\">
+        <img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"" . $langDelete . "\"></a>
+        </td>";
 
-            if ($announcementNumber > 1) {
-                $tool_content .= "
-                      <th align='center' class='color1'>";
-            } 
+			if ($announcementNumber > 1) 
+			{
+			$tool_content .= "
+        <td align='center' width='70' class='right'>";
+			} 
             // DISPLAY MOVE UP COMMAND
             // condition: only if it is not the top announcement
-            if ($iterator != 1) {
-                $tool_content .= "
-                      <a href=\"$_SERVER[PHP_SELF]?up=" . $myrow["id"] . "\">
-                        <img class=\"displayed\" src=../../template/classic/img/up.gif border=0 title=\"" . $langUp . "\">
-                      </a>";
-            } 
+			if ($iterator != 1) 
+			{
+			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?up=" . $myrow["id"] . "\"><img class=\"displayed\" src=../../template/classic/img/up.gif border=0 title=\"" . $langUp . "\"></a>";
+			} 
             // DISPLAY MOVE DOWN COMMAND
-            if ($iterator < $bottomAnnouncement) {
-                $tool_content .= "
-                      <a href=\"$_SERVER[PHP_SELF]?down=" . $myrow["id"] . "\">
-                        <img class=\"displayed\" src=../../template/classic/img/down.gif border=0 title=\"" . $langDown . "\">
-                      </a>";
-            } 
+			if ($iterator < $bottomAnnouncement) {
+			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?down=" . $myrow["id"] . "\"><img class=\"displayed\" src=../../template/classic/img/down.gif border=0 title=\"" . $langDown . "\"></a>";
+			} 
 
-            if ($announcementNumber > 1) {
-                $tool_content .= "
-                      </th>";
-            } 
+			if ($announcementNumber > 1) 
+			{
+			$tool_content .= "
+        </td>";
+			} 
             // DISPLAY ANNOUNCEMENT CONTENT
-            $tool_content .= "
-                    </tr>
-                    <tr>";
-            if ($announcementNumber > 1) {
-                $tool_content .= "
-                      <td colspan='3'>";
-            } else {
-                $tool_content .= "
-                      <td colspan='2'>";
-            } 
-
-            $tool_content .= "<blockquote>" . $content . "</blockquote>
-                      </td>
-                    </tr>";
+			$tool_content .= "
+      </tr>";
             $iterator ++;
         } // end while ($myrow = mysql_fetch_array($result))
         $tool_content .= "
-                    </tbody>
-                    </table>";
+      </tbody>
+      </table>";
     } // end: if ($displayAnnoucementList == true)
     if ($announcementNumber < 1) {
         $no_content = true;
@@ -416,8 +427,21 @@ else {
     $result = db_query("SELECT * FROM annonces WHERE code_cours='$currentCourseID'
 				ORDER BY ordre DESC", $mysqlMainDb) OR die("DB problem");
     if (mysql_num_rows($result) > 0) {
+	$tool_content .= <<<cData
+      \n
+      <table class="FormData" width="99%">
+      <thead>
+      <tr>
+        <th class="left" width="220">$langAnnouncement</th>
+        <td>&nbsp;</td>
+      </tr>
+      </thead>
+      </table>
+	  
+cData;
+	
         $tool_content .= "
-      <table width=\"99%\" border='0'>
+      <table width=\"99%\" align='left' class=\"announcements\">
       <tbody>";
         while ($myrow = mysql_fetch_array($result)) {
             $content = $myrow['contenu'];
@@ -425,10 +449,9 @@ else {
             $content = nl2br($content);
             $tool_content .= "
       <tr>
-        <th class=\"color1\"><div align='left'><img class=\"displayed\" src=../../template/classic/img/announcements_on.gif border=0 title=\"" . $myrow["title"] . "\">&nbsp; " . $myrow["title"] . "($langPubl: " . greek_format($myrow["temps"]) . ")</div></th>
-      </tr>
-      <tr>
-        <td><blockquote>$content </blockquote></td>
+        <td width='3'><img class=\"displayed\" src=../../template/classic/img/announcements_on.gif border=0 title=\"" . $myrow["title"] . "\"></td>
+        <td><b>$myrow[title]</b><br/>$content        </td>
+        <td width='200'><div align='right'>($langPubl: " . greek_format($myrow["temps"]) . ")</div></td>
       </tr>";
         } // while loop
         $tool_content .= "

@@ -49,7 +49,20 @@ $result = db_query("SELECT annonces.id, annonces.title, annonces.contenu,
                         AND cours_user.user_id='$uid'
                         ORDER BY annonces.temps DESC", $mysqlMainDb);
 
-$tool_content .= "<table width=\"99%\" cellpadding=\"0\" align=center cellspacing=\"0\" border=\"0\" class='FormData'>\n";
+	$tool_content .= "
+      <table width=\"99%\" class='FormData'>
+      <thead>
+      <tr>
+        <th class=\"left\" width=\"220\">$langTitle</th>
+        <td>&nbsp;</td>
+      </tr>
+      </thead>
+      </table>
+    ";
+  
+	$tool_content .= "
+      <table width=\"99%\" align='left' class=\"announcements\">
+      <tbody>";
         if (mysql_num_rows($result) > 0)  {    // found announcements ?
         while ($myrow = mysql_fetch_array($result)) {
                 $content = $myrow['contenu'];
@@ -57,24 +70,21 @@ $tool_content .= "<table width=\"99%\" cellpadding=\"0\" align=center cellspacin
                 $content = nl2br($content);
                 $row = mysql_fetch_array(db_query("SELECT intitule,titulaires FROM cours 
 							WHERE code='$myrow[code_cours]'"));
-                $tool_content .= "<tr><td>";
-                $tool_content .= "<table width=100% align=center style=\"border: 1px solid silver;\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
-                $tool_content .= "<tr><td class='color1'><b>$row[intitule]</b></td>\n";
-                $tool_content .= "<td class='color1' align=right valign=middle>$row[titulaires]</td>";
-                $tool_content .= "<td class='color1' align=right width=1% valign=middle><img src='../../template/classic/img/teacher.gif' title=$langTutor></td>\n";
-                $tool_content .= "</tr>";
-                $tool_content .= "<tr>";
-                $tool_content .= "<td colspan=3 class=\"color2\">\n";
-                $tool_content .= "$content<br /><small><div align='right'><i>($langAnn: ".$myrow['temps'].")</i></div></small></td>";
-                $tool_content .= "</tr>";
-                $tool_content .= "</table>";
-		$tool_content .= "";
-        }       // while loop
+                $tool_content .= "
+      <tr>
+        <td width='3'><img class=\"displayed\" src=../../template/classic/img/announcements_on.gif border=0 title=\"" . $myrow["title"] . "\"></td>
+        <td>$m[name]: <b>$row[intitule]</b><br />$content</td>
+        <td align='right' width='300'><small><i>($langAnn: ".$myrow['temps'].")</i></small><br /><br />$langTutor: <b>$row[titulaires]</b></td>
+      </tr>";
+      }  // while loop
+	$tool_content .= "
+      <tbody>
+      </table>";
+
 } else {  // no announcements
-        $tool_content .= "<tr><td>&nbsp;</td></tr>\n";
-        $tool_content .= "<tr><td class=alert1><em>".$langNoAnnounce."</em></td></tr>\n";
+        $tool_content .= "<tr><td class=alert1>".$langNoAnnounce."</td></tr>\n";
 }
 
-$tool_content .= "</table>";
+$tool_content .= "</tbody></table>";
 draw($tool_content, 1, 'announcements');
 ?>

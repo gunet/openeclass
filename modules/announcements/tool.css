@@ -1,57 +1,36 @@
-.tidy {
-        vertical-align: middle;
-        padding : 2px;
-        font-size: 8pt;
-        word-wrap: break-word;
-        word-break: break-all;
-        }
-
-.color1 {
-        background : #F5F5F5;
-        padding : 5px;
-        font-size: 8pt;
-        word-wrap: break-word;
-        word-break: break-all;
-        }
-		
-LEGEND{
-  font-size: 10pt;
-  padding : 4px;
-}
-
-table {
-	border: 1px dotted #a2a2a3;
-	border-collapse: collapse;
-	font-family: Verdana, Arial, sans-serif !important;
-	font-size:12px;
-	color: #555;
-}
-
-
-th {
-	padding: 4px;
-	background-color: #ffffff;
-  border: 0px;
-  font-family: Verdana, Arial, sans-serif !important;
-}
-
-td {
-	padding: 4px;
-    border: 0px;
-    font-family: Verdana, Arial, sans-serif !important;
-}
-
-thead th {
-	text-align: left;
-	background: #E6EDF5;
-	color: #4F76A3;
-	font-size: 90% !important;
-}
-
-tbody th {
-	font-weight: bold;
-}
-
 tbody tr { background: #FCFDFE; font-size:12px;}
 
 tbody tr.odd { background: #F7F9FC; }
+
+table.announcements {
+    padding: 2px;
+	vertical-align: top;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.announcements th {
+	padding: 4px;
+	vertical-align: top;
+	background: #edecdf;
+	font-size:10px;
+	color: #727266;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+	font-style : normal;
+	font-variant : normal;
+	font-weight : normal;
+}
+
+table.announcements td {
+	padding: 4px;
+	vertical-align: top !important;
+	background: #Fbfbfb;
+	font-size:10px;
+	color: #727266;
+	vertical-align: middle;
+}
