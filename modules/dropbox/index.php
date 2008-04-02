@@ -46,11 +46,10 @@ $action->record('MODULE_ID_DROPBOX');
 
 $tool_content .="
 <div id=\"operations_container\">
-		<ul id=\"opslist\">
-		<li><a href=\"".$_SERVER['PHP_SELF']."?upload=1\">".$dropbox_lang['uploadFile']."</a></li>
-		</ul>
-		</div>
-		";
+  <ul id=\"opslist\">
+    <li><a href=\"".$_SERVER['PHP_SELF']."?upload=1\">".$dropbox_lang['uploadFile']."</a></li>
+  </ul>
+</div>";
 
 /*
 * get order status of sent list.
@@ -120,7 +119,7 @@ elseif(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1)
 {
 
 	$tool_content .= <<<tCont2
-	<form method="post" action="dropbox_submit.php" enctype="multipart/form-data" onsubmit="return checkForm(this)">
+    <form method="post" action="dropbox_submit.php" enctype="multipart/form-data" onsubmit="return checkForm(this)">
 tCont2;
 	if ($dropbox_cnf["allowOverwrite"]) {
 		$jsCheckFile = 'onChange="checkfile(this.value)"';
@@ -128,27 +127,27 @@ tCont2;
 		$jsCheckFile ="";
 	}
 	$tool_content .= "
-<table>
-<thead>
-	<tr>
-		<th>
-		".$dropbox_lang["uploadFile"]." :
-		</th>
-		<td>
-			<input type=\"file\" name=\"file\" size=\"\" $jsCheckFile>
-			<input type=\"hidden\" name=\"dropbox_unid\" value=\"$dropbox_unid\">";
-
-	$tool_content .= "</td></tr>";
+    <table width=\"99%\" class=\"FormData\">
+    <tbody>
+    <tr>
+      <th class=\"left\" width=\"220\">&nbsp;</th>
+      <td>".$dropbox_lang["uploadFile"]."</td>
+    </tr>
+    <tr>
+      <th class=\"left\">".$dropbox_lang['file']." :</th>
+      <td><input type=\"file\" name=\"file\" size=\"35\" $jsCheckFile>
+          <input type=\"hidden\" name=\"dropbox_unid\" value=\"$dropbox_unid\">
+      </td>
+    </tr>";
 
 	if ($dropbox_cnf["allowOverwrite"]) {
 		$tool_content .= "
-	<tr id=\"overwrite\" style=\"display: none\">
-		<td>
-		</td>
-		<td>
-		<input type=\"checkbox\" name=\"cb_overwrite\" id=\"cb_overwrite\" value=\"true\">".$dropbox_lang["overwriteFile"]."
-		</td>
-	</tr>";
+    <tr id=\"overwrite\" style=\"display: none\">
+      <td>&nbsp;</td>
+      <td>
+        <input type=\"checkbox\" name=\"cb_overwrite\" id=\"cb_overwrite\" value=\"true\">".$dropbox_lang["overwriteFile"]."
+      </td>
+    </tr>";
 
 	}
 
@@ -162,30 +161,18 @@ tCont2;
 	}
 
 	$tool_content .= "
-	<tr>
-	<th >
-		".$dropbox_lang["authors"]." :
-	</th>
-	<td>
-		<input type=\"text\" name=\"authors\" value=\"".getUserNameFromId($uid)."\" size=\"30\"> 
-	</td>
-	</tr>
-	<tr>
-	<th>
-		".$dropbox_lang["description"]." :
-	</th>
-	<td>
-		<textarea name=\"description\" cols=\"25\" rows=\"2\"></textarea>
-	</td>
-	</tr>
-	<tr>
-		<th>
-			".$dropbox_lang["sendTo"]." :
-		</th>
-		<td>
-			<select name=\"recipients[]\" size=\"$reciepientsSize\" multiple>";
-
-
+    <tr>
+      <th class=\"left\">".$dropbox_lang["authors"]." :</th>
+      <td><input type=\"text\" name=\"authors\" value=\"".getUserNameFromId($uid)."\" size=\"40\" class='FormData_InputText'></td>
+    </tr>
+    <tr>
+      <th class=\"left\">".$dropbox_lang["description"]." :</th>
+      <td><textarea name=\"description\" cols=\"37\" rows=\"2\" class='FormData_InputText'></textarea></td>
+    </tr>
+    <tr>
+      <th class=\"left\">".$dropbox_lang["sendTo"]." :</th>
+      <td>
+        <select name=\"recipients[]\" size=\"$reciepientsSize\" multiple  class=\"auth_input\">";
 
 	/*
 	*  if current user is a teacher then show all users of current course
@@ -216,29 +203,35 @@ tCont2;
 	$result = db_query($sql);
 	while ($res = mysql_fetch_array($result))
 	{
-		$tool_content .= "<option value=".$res['user_id'].">".$res['name']."</option>";
+		$tool_content .= "
+           <option value=".$res['user_id'].">".$res['name']."</option>";
 	}
 	if ($dropbox_person -> isCourseTutor || $dropbox_person -> isCourseAdmin)
 	{
 		if ( $dropbox_cnf["allowMailing"])  // RH: Mailing starting point
 		{
-			$tool_content .= '<option value="'.$dropbox_cnf["mailingIdBase"].'">'.$dropbox_lang["mailingInSelect"].'</option>';
+			$tool_content .= '
+           <option value="'.$dropbox_cnf["mailingIdBase"].'">'.$dropbox_lang["mailingInSelect"].'</option>';
 		}
 	}
 	if ($dropbox_cnf["allowJustUpload"])  // RH
 	{
-		$tool_content .= '<option value="0">'.$dropbox_lang["justUploadInSelect"].'</option>';
+		$tool_content .= '
+           <option value="0">'.$dropbox_lang["justUploadInSelect"].'</option>';
 	}
 
 	$tool_content .= "
-        	</select>
-		</td>
-	</tr>
-	</thead></table>
-	<br>
-		<input type=\"Submit\" name=\"submitWork\" value=\"".$dropbox_lang["ok"]."\">
-</form>
-<br>";
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <th>&nbsp;</th>
+      <td><input type=\"Submit\" name=\"submitWork\" value=\"".$dropbox_lang["ok"]."\"></td>
+    </tr>
+    </tbody>
+    </table>
+    </form>
+    <br>";
 	//==========================================================================
 	//END of send_file form
 	//==========================================================================
@@ -250,9 +243,6 @@ tCont2;
  * ========================================
  */
 
-$tool_content .= <<<tCont3
-
-tCont3;
 /**
  * --------------------------------------
  *       RECEIVED FILES LIST:  TABLE HEADER
@@ -262,113 +252,108 @@ if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
 {
 	$numberDisplayed = count($dropbox_person -> receivedWork);
 	$tool_content .= <<<tCont4
-	<table width="99%">
-	<thead>
-	<tr>
-	<th>
+
+    <table width="99%" class="FormData">
+    <thead>
+    <tr>
+      <th class="left" width=\"220\">
 tCont4;
 	$tool_content .= "
  	".strtoupper($dropbox_lang["receivedTitle"])."";
+
+	// check if there are received documents. If yes then display the icon deleteall
+	$dr_unid = urlencode( $dropbox_unid);
+	if ($numberDisplayed > 0) 
+	{
+		$dr_lang_all = addslashes( $dropbox_lang["all"]);
+		$tool_content .= "
+      </th>
+      <th width=\"3\">
+        <a href=\"dropbox_submit.php?deleteReceived=all&dropbox_unid=$dr_unid\" onClick=\"return confirmationall('".$dropbox_lang["all"]."');\"><img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
+	}
+			
 	$tool_content .= <<<tCont5
-	</th>
-	
-	
-	<td>
+
+      </th>
+      <td>
 	
 tCont5;
-	$tool_content .= "<div>
-		<form class=\"sort\" name=\"formReceived\" method=\"get\" action=\"index.php\">
-		".$dropbox_lang["orderBy"]."";
-
+	/*
 	$tool_content .= "
-		<select name=\"receivedOrder\" onchange=\"javascript: this.form.submit()\">";
-
+        <div align=\"right\">
+        <form class=\"sort\" name=\"formReceived\" method=\"get\" action=\"index.php\">
+		".$dropbox_lang["orderBy"]."";
+	$tool_content .= "
+        <select name=\"receivedOrder\" onchange=\"javascript: this.form.submit()\" class=\"auth_input\">";
 	if ($receivedOrder=="lastDate") {
-		$tool_content .= "<option value=\"lastDate\" selected>";
+		$tool_content .= "
+          <option value=\"lastDate\" selected>";
 	}	else {
-		$tool_content .= "<option value=\"lastDate\">";
+		$tool_content .= "
+          <option value=\"lastDate\">";
 	}
-
 	$tool_content .= "".$dropbox_lang['lastDate']."</option>";
-
 	if ($dropbox_cnf["allowOverwrite"]) {
 		if ($receivedOrder=="firstDate") {
-			$tool_content .= "<option value=\"firstDate\" selected>";
+			$tool_content .= "
+          <option value=\"firstDate\" selected>";
 		} else {
-			$tool_content .= "<option value=\"firstDate\">";
+			$tool_content .= "
+          <option value=\"firstDate\">";
 		}
 	}
 	$tool_content .= "".$dropbox_lang['firstDate']."</option>";
-
 	if ($receivedOrder=="title"){
-		$tool_content .="<option value=\"title\" selected>";
+		$tool_content .="
+          <option value=\"title\" selected>";
 	} else {
-		$tool_content .="<option value=\"title\">";
+		$tool_content .="
+          <option value=\"title\">";
 	}
 	$tool_content .= "".$dropbox_lang['title']."</option>";
-
 	if ($receivedOrder=="size"){
 		$tool_content .="option value=\"size\" selected>";
 	} else {
-		$tool_content .="<option value=\"size\">";
+		$tool_content .="
+          <option value=\"size\">";
 	}
 	$tool_content .= "".$dropbox_lang['size']."</option>";
-
 	if ($receivedOrder=="author"){
 		$tool_content .="option value=\"author\" selected>";
 	} else {
-		$tool_content .="<option value=\"author\">";
+		$tool_content .="
+          <option value=\"author\">";
 	}
-
 	$tool_content .= "".$dropbox_lang['author']."</option>";
-
 	if ($receivedOrder=="sender"){
 		$tool_content .="option value=\"sender\" selected>";
 	} else {
-		$tool_content .="<option value=\"ender\">";
+		$tool_content .="
+          <option value=\"ender\">";
 	}
 	$tool_content .= "".$dropbox_lang['sender']."</option>";
 
 	$tool_content .= "
-			</select>
-			</form>
-			</div>
-		</td>
-		<td ><div class=\"cellpos\">";
-
-	// check if there are received documents. If yes then display the icon deleteall
-	$dr_unid = urlencode( $dropbox_unid);
-	if ($numberDisplayed > 0) {
-
-		$dr_lang_all = addslashes( $dropbox_lang["all"]);
-		$tool_content .= "
-	<a href=\"dropbox_submit.php?deleteReceived=all&dropbox_unid=$dr_unid\" onClick=\"return confirmationall('".$dropbox_lang["all"]."');\">
-	<img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
-
-	}
-
+        </select>
+        </form>
+        </div>";
+	*/
 	$tool_content .= "
-		</div></td>
-		</tr>
-		</thead>
-		</table><br>
-		<table width=99%>
-		<thead>
-		<tr>
-			<th>".$dropbox_lang['file']."</th>
-			<th>".$dropbox_lang['fileSize']."</th>
-			<th>".$dropbox_lang["authors"]."</th>
-			<th>".$dropbox_lang['date']."</th>
-			<th>".$dropbox_lang["description"]."</th>
-			<th>$langDelete</th>
-		</tr>
-		</thead>
-		<tbody>
-		<!--</table>-->
+        </td>
+      </tr>
+      </thead>
+      </table>
 
-";
+      <table width=99% class=\"dropbox\">
+      <tbody>
+      <tr>
+        <td colspan=\"2\"><b>".$dropbox_lang['file']."</b></td>
+        <td width=\"130\"><b>".$dropbox_lang["authors"]."</b></td>
+        <td width=\"130\"><b>".$dropbox_lang['date']."</b></td>
+        <td width=\"20\"><b>$langDelete</b></td>
+      </tr>";
 
-	/**
+ /**
  * --------------------------------------
  *       RECEIVED FILES LIST
  * --------------------------------------
@@ -384,12 +369,9 @@ tCont5;
 		}
 
 		$tool_content .= "
-	<tr>";
-
-
-		$tool_content .= <<<tCont8
-		<td>
-tCont8;
+      <tr>
+        <td width=\"3\"><img src=\"../../template/classic/img/inbox.gif\" border=\"0\" title=\"$dropbox_lang[receivedTitle]\"></td>
+        <td>";
 
 		/* if (isset($origin))
 		$tool_content .= "<a href='dropbox_download.php?origin=$origin&id=".urlencode($w->id)."' target=_blank'>".$w->title."</a>";
@@ -398,59 +380,44 @@ tCont8;
 
 		$fSize = ceil(($w->filesize)/1024);
 		$tool_content .= <<<tCont9
-	</td>
-	<td>
-	$fSize kB
-	</td>
-	
+        <small>&nbsp;&nbsp;&nbsp;($fSize kB)</small>
+        <br />
+        <small>$w->description</small>
+        </td>
 tCont9;
 
-		$tool_content .= "<td >
-		$w->author
-		</td>
-		
-		<td>$w->uploadDate";
+		$tool_content .= "
+        <td>$w->author</td>
+        <td>$w->uploadDate";
 
 		if ($w->uploadDate != $w->lastUploadDate)
 		{
-
-			$tool_content .= "
-	
-	(".$dropbox_lang['lastUpdated']." $w->lastUploadDate)
-	";
-
-
+			$tool_content .= " (".$dropbox_lang['lastUpdated']." $w->lastUploadDate)";
 		}
 
-
-		$tool_content .= "	</td>
-		
-	<td >$w->description</td>
-	<td><div class=\"cellpos\">
-
-	";
+		$tool_content .= "
+        </td>	
+        <td><div class=\"cellpos\">";
 
 		$tool_content .= "
-	<a href=\"dropbox_submit.php?deleteReceived=".urlencode($w->id)."&dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation(\"$w->title\");'>
-	<img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
+        <a href=\"dropbox_submit.php?deleteReceived=".urlencode($w->id)."&dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation(\"$w->title\");'>
+        <img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
 
 		$tool_content .="
-	</div>
-	</td>
-	</tr>";
+        </div>
+        </td>
+      </tr>";
 		$i++;
 	} //end of foreach
 	if ($numberDisplayed == 0) {  // RH
-		$tool_content .= "
-<tr>
-<td colspan=\"6\">".$dropbox_lang['tableEmpty']."
-</td>
-</tr>";
-
+	$tool_content .= "
+      <tr>
+        <td colspan=\"6\">".$dropbox_lang['tableEmpty']."</td>
+      </tr>";
 	}
 	$tool_content .= "
-</tbody>
-</table>";
+      </tbody>
+      </table>";
 
 }  // RH: Mailing: end of 'Mailing detail: no received files'
 
@@ -462,99 +429,109 @@ tCont9;
 
 $numSent = count($dropbox_person -> sentWork);
 $tool_content .= <<<tCont10
-	<br><br><br>
-	<table width="99%">
-	<thead>
-	<tr>
-	<th>
+
+      <br>
+      <table width="99%" class="FormData">
+      <thead>
+      <tr>
+        <th class="left" width=\"220\">
 tCont10;
 $tool_content .= strtoupper($dropbox_lang["sentTitle"]);
 $tool_content .="
-	</th>
-	<td>";	
-$tool_content .= "
-	<form class=\"sort\" name=\"formSent\" method=\"get\" action=\"index.php\">";
+        </th>";
+	// if the user has sent files then display the icon deleteall
+	if ($numSent > 0) {
+	$tool_content .= "
+        <th width=\"3\">
+            <div class=\"cellpos\">
+            <a href=\"dropbox_submit.php?deleteSent=all&dropbox_unid=".urlencode( $dropbox_unid).$mailingInUrl."\"
+	onClick=\"return confirmationall('".addslashes($dropbox_lang["all"])."');\">
+            <img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>
+            </div>
+        </th>";
+	}
 
-$tool_content .= "
-	<span class=\"dropbox_listTitle\">".$dropbox_lang["orderBy"]."</span>
-	<select name=\"sentOrder\" onchange=\"javascript: this.form.submit()\">";
+	$tool_content .= "
+        <td>";	
+	/* exoume vgalei to sort
+	$tool_content .= "
+        <form class=\"sort\" name=\"formSent\" method=\"get\" action=\"index.php\">
+        <span class=\"dropbox_listTitle\">".$dropbox_lang["orderBy"]."</span>
+         <select name=\"sentOrder\" onchange=\"javascript: this.form.submit()\" class=\"auth_input\">";
 
 if ($sentOrder=="lastDate") {
-	$tool_content .= "<option value=\"lastDate\" selected>";
+	$tool_content .= "
+           <option value=\"lastDate\" selected>";
 } else {
-	$tool_content .= "<option value=\"lastDate\">";
+	$tool_content .= "
+           <option value=\"lastDate\">";
 }
 $tool_content .= "".$dropbox_lang['lastDate']."</option>";
 
 if ($dropbox_cnf["allowOverwrite"]) {
-	$tool_content .= "<option value=\"firstDate\" selected>";
+	$tool_content .= "
+           <option value=\"firstDate\" selected>";
 } else {
-	$tool_content .= "<option value=\"firstDate\">";
+	$tool_content .= "
+           <option value=\"firstDate\">";
 }
 $tool_content .= "".$dropbox_lang['firstDate']."</option>";
 
 if ($sentOrder=="title") {
-	$tool_content .= "<option value=\"title\" selected>";
+	$tool_content .= "
+           <option value=\"title\" selected>";
 } else {
-	$tool_content .= "<option value=\"title\">";
+	$tool_content .= "
+           <option value=\"title\">";
 }
 $tool_content .= "".$dropbox_lang['title']."</option>";
 
 if ($sentOrder=="size") {
-	$tool_content .= "<option value=\"size\" selected>";
+	$tool_content .= "
+           <option value=\"size\" selected>";
 } else {
-	$tool_content .= "<option value=\"size\">";
+	$tool_content .= "
+           <option value=\"size\">";
 }
 $tool_content .= "".$dropbox_lang['size']."</option>";
 
 if ($sentOrder=="author") {
-	$tool_content .= "<option value=\"author\" selected>";
+	$tool_content .= "
+           <option value=\"author\" selected>";
 } else {
-	$tool_content .= "<option value=\"author\">";
+	$tool_content .= "
+           <option value=\"author\">";
 }
 $tool_content .= "".$dropbox_lang['author']."</option>";
 
 if ($sentOrder=="recipient") {
-	$tool_content .= "<option value=\"recipient\" selected>";
+	$tool_content .= "
+           <option value=\"recipient\" selected>";
 } else {
-	$tool_content .= "<option value=\"recipient\">";
+	$tool_content .= "
+           <option value=\"recipient\">";
 }
 $tool_content .= "".$dropbox_lang['recipient']."</option>";
 
 $tool_content .= "
-	</select>
-	</form>
-	</td>
-	<td >
-
-<div class=\"cellpos\">";
-// if the user has sent files then display the icon deleteall
-if ($numSent > 0) {
-
-	$tool_content .= "
-	<a href=\"dropbox_submit.php?deleteSent=all&dropbox_unid=".urlencode( $dropbox_unid).$mailingInUrl."\"
-	onClick=\"return confirmationall('".addslashes($dropbox_lang["all"])."');\">
-	<img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
-
-}
+        </select>
+        </form>";
+*/
 $tool_content .= "
- 	</div></td>
-	</tr>
-	</thead>
-	</table>
-	<br>
-	<table width=99%>
-		<thead>
-		<tr>
-			<th>".$dropbox_lang['file']."</th>
-			<th>".$dropbox_lang['fileSize']."</th>
-			<th>".$dropbox_lang['col_recipient']."</th>
-			<th>".$dropbox_lang['date']."</th>
-			<th>".$dropbox_lang["description"]."</th>
-			<th>$langDelete</th>
-		</tr>
-		</thead>
-		<tbody>
+        </td>
+      </tr>
+      </thead>
+      </table>
+
+
+      <table width=99% class=\"dropbox\">
+      <tbody>
+      <tr>
+        <td colspan=\"2\"><b>".$dropbox_lang['file']."</b></td>
+        <td width=\"130\"><b>".$dropbox_lang['col_recipient']."</b></td>
+        <td width=\"130\"><b>".$dropbox_lang['date']."</b></td>
+        <td width=\"20\"><b>$langDelete</b></td>
+        </tr>
 	";
 
 
@@ -584,13 +561,15 @@ foreach ($dropbox_person -> sentWork as $w)
 	$fSize = ceil(($w->filesize)/1024);
 	$tool_content .= <<<tCont12
 		<tr>
+		<td width="3"><img src="../../template/classic/img/outbox.gif" border="0" title="$w->title"></td>
 		<td >
 		<a href="$ahref" target="_blank">
 		$w->title</a> 
+        <small>&nbsp;&nbsp;&nbsp;($fSize kB)</small>
+        <br />
+        <small>$w->description</small>
 		</td>
-		<td>
-		$fSize kB
-		</td>
+
 tCont12;
 	$tool_content .="
 		<td>";
@@ -607,9 +586,7 @@ tCont12;
 		
 		$w->uploadDate
 		</td>
-		<td>
-		$w->description
-		</td>
+
 		<td><div class=\"cellpos\">";
 	//<!--	Users cannot delete their own sent files -->
 
