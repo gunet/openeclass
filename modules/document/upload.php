@@ -36,8 +36,7 @@
     inputs for metadata. The actual uploading takes place at document.php
 ==============================================================================*/
 
-$require_current_course = TRUE;  // flag ασφάλειας
- 
+$require_current_course = TRUE;  // flag ασφάλειας 
 $require_help = FALSE;
 //$helpTopic = 'User';
 $require_login = true;
@@ -116,11 +115,11 @@ $tool_content .= "
        <td>
           <select name=\"file_language\" class='auth_input'>
             <option value=\"en\">$langEnglish</option>
-						<option value=\"fr\">$langFrench</option>
-						<option value=\"de\">$langGerman</option>
-						<option value=\"el\" selected>$langGreek</option>
-						<option value=\"it\">$langItalian</option>
-						<option value=\"es\">$langSpanish	</option>
+		<option value=\"fr\">$langFrench</option>
+		<option value=\"de\">$langGerman</option>
+		<option value=\"el\" selected>$langGreek</option>
+		<option value=\"it\">$langItalian</option>
+		<option value=\"es\">$langSpanish</option>
           </select>
        </td>
        <td>&nbsp;</td>
@@ -129,7 +128,7 @@ $tool_content .= "
        <th class='left'>$langCopyrighted:</th>
        <td>
          <input name=\"file_copyrighted\" type=\"radio\" value=\"0\" checked/> $langCopyrightedUnknown&nbsp;
-  			 <input name=\"file_copyrighted\" type=\"radio\" value=\"2\" /> $langCopyrightedFree&nbsp;
+  		<input name=\"file_copyrighted\" type=\"radio\" value=\"2\" /> $langCopyrightedFree&nbsp;
          <input name=\"file_copyrighted\" type=\"radio\" value=\"1\" /> $langCopyrightedNotFree
        </td>
        <td>&nbsp;</td>
@@ -148,9 +147,7 @@ $tool_content .= "
      </table>
      <br/>";
     $tool_content .=  "</form>";
- 
 
- 
 draw($tool_content, '2');
- 
+
 ?>

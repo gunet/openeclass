@@ -1,6 +1,5 @@
 <?php
-
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -24,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/* ==========================================================================
 	fileDisplayLib.inc.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -46,38 +45,6 @@
 ==============================================================================
 */
 
-/******************************************
- GENERIC FUNCTIONS : FOR OLDER PHP VERSIONS
-*******************************************/
-
-if ( ! function_exists('array_search') )
-{
-	/**
-	 * Searches haystack for needle and returns the key
-	 * if it is found in the array, FALSE otherwise
-	 *
-	 * Natively implemented in PHP since 4.0.5 version.
-	 * This function is intended for previous version.
-	 *
-	 * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
-	 * @param   - needle (mixed)
-	 * @param   - haystack (array)
-	 * @return  - array key or FALSE
-	 *
-	 * @see     - http://www.php.net/array_search
-	 */
-
-	function array_search($needle, $haystack)
-	{
-		while (list ($key, $val) = each ($haystack))
-			if ($val == $needle )
-				return $key;
-		return false;
-	}
-}
-
-
-
 /*****************************************
    GENERIC FUNCTION :STRIP SUBMIT VALUE
 *****************************************/
@@ -93,7 +60,7 @@ function stripSubmitValue(&$submitArray)
 }
 
 
-/**
+/*
  * Define the image to display for each file extension
  * This needs an existing image repository to works
  *
@@ -151,7 +118,7 @@ function choose_image($fileName)
 }
 
 
-/**
+/*
  * Transform the file size in a human readable format
  * 
  * @author - ???
@@ -180,10 +147,8 @@ function format_file_size($fileSize)
 	return $fileSize;
 }
 
-//------------------------------------------------------------------------------
 
-
-/**
+/*
  * Transform a UNIX time stamp in human readable format date
  *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
@@ -196,7 +161,7 @@ function format_date($fileDate)
 }
 
 
-/**
+/*
  * Transform the file path in a url
  * 
  * @param - filePaht (string) - relative local path of the file on the Hard disk

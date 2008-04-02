@@ -1,6 +1,6 @@
 <?php
 
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -24,7 +24,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	fileUploadLib.inc.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -49,7 +49,7 @@
 ==============================================================================
 */
 
-/**
+/*
  * replaces some dangerous character in a string for HTML use
  * currently: ?*<>\/"|:
  */
@@ -61,7 +61,7 @@ function replace_dangerous_char($string)
 
 //------------------------------------------------------------------------------
 
-/**
+/*
  * change the file name extension from .php to .phps
  * Useful to secure a site !!
  *
@@ -76,10 +76,8 @@ function php2phps ($fileName)
 	return $fileName;
 }
 
-//------------------------------------------------------------------------------
 
-
-/** 
+/* 
  * Compute the size already occupied by a directory and is subdirectories
  *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
@@ -124,9 +122,7 @@ function dir_total_space($dirPath)
 }
 
 
-//------------------------------------------------------------------------------
-
-/** 
+/* 
  * Try to add an extension to files witout extension
  * Some applications on Macintosh computers don't add an extension to the files.
  * This subroutine try to fix this on the basis of the MIME type send 
@@ -250,9 +246,7 @@ function add_ext_on_mime($fileName)
 	return $fileName;
 }
 
-/* --------------- backported functions from Claroline 1.7.x --------------- */
-
-/**
+/*
  * change the file named .htacess in htacess.txt
  * Useful to secure a site working on Apache.
  *
@@ -363,7 +357,7 @@ if (!function_exists('str_ireplace')) {
     }
 }
 
-/**
+/*
  * change the file named .htacess in htacess.txt
  * Useful to secure a site working on Apache.
  *
@@ -381,7 +375,7 @@ function get_secure_file_name($fileName)
     return $fileName;
 }
 
-/** 
+/* 
  * Check if there is enough place to add a file on a directory
  * on the base of a maximum directory size allowed
  *
@@ -407,11 +401,10 @@ function enough_size($fileSize, $dir, $maxDirSpace)
 			return false;
 		}
 	}
-
 	return true;
 }
 
-/**
+/*
  * Determine the maximum size allowed to upload. This size is based on
  * the tool $maxFilledSpace regarding the space already opccupied
  * by previous uploaded files, and the php.ini upload_max_filesize
@@ -439,7 +432,5 @@ function get_max_upload_size($maxFilledSpace, $baseWorkDir)
 
 	return $maxFileSize;
 }
-
-/* ----------- end of backported functions from Claroline 1.7.x ----------- */
 
 ?>

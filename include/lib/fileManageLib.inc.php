@@ -1,6 +1,6 @@
 <?php
 
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -24,7 +24,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	fileManageLib.inc.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -42,7 +42,7 @@
 ==============================================================================        
 */
 
-/**
+/*
  * Update the file or directory path in the document db document table
  *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
@@ -53,25 +53,21 @@
  *
  */
 
-function update_db_info($action, $oldPath, $newPath = "")
+function update_db_info($dbTable, $action, $oldPath, $newPath = "")
 {
-	$dbTable = "document";
-
 	if ($action == "delete") {
-		mysql_query("DELETE FROM ".$dbTable." 
-			WHERE path LIKE \"".$oldPath."%\"");
+	mysql_query("DELETE FROM ".$dbTable." 
+			WHERE path LIKE \"".$oldPath."%\""); 
 	} elseif ($action = "update") {
 		$newPath = preg_replace('|/+|', '/', $newPath);
-
-		mysql_query("UPDATE document
+		mysql_query("UPDATE ".$dbTable." 
 			SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
 			WHERE path LIKE '$oldPath%'");
 	}
 }
 
-//------------------------------------------------------------------------------
 
-/**
+/*
  * Cheks a file or a directory actually exist at this location
  *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
@@ -130,7 +126,7 @@ function my_delete($file)
 	
 }
 
-//------------------------------------------------------------------------------
+
 
 /**
  * Delete a directory and its whole content
@@ -180,8 +176,6 @@ function removeDir($dirPath)
 		rmdir( $dirPath ) ;
 	}
 }
-
-//------------------------------------------------------------------------------
 
 
 /**
@@ -281,9 +275,6 @@ function move($source, $target)
 	}
 	
 }
-
-
-//------------------------------------------------------------------------------
 
 
 
@@ -453,20 +444,20 @@ function index_and_sort_dir($path)
 }
 
 
-/**
+/*
  * build an html form listing all directories of a given directory
  *
  */
 
 function form_dir_list($sourceType, $sourceComponent, $command, $baseWorkDir)
 {
-	global $PHP_SELF, $langParentDir, $langTo, $langMoveFrom, $langMove;
+	global  $langParentDir, $langTo, $langMoveFrom, $langMove;
 
 	$dirList = index_and_sort_dir($baseWorkDir);
 
-	$dialogBox .= "<form action=\"".$PHP_SELF."\" method=\"post\">\n" ;
+	$dialogBox .= "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">\n" ;
 	$dialogBox .= "<input type=\"hidden\" name=\"".$sourceType."\" value=\"".$sourceComponent."\">\n" ;
-	//palios tropos emfanishs entolhs + onomatos arxeiou --       $dialogBox .= " ".$langMoveFrom." ".$sourceComponent." ".$langTo.":\n" ;
+	//palios tropos emfanishs entolhs + onomatos arxeiou -- $dialogBox .= " ".$langMoveFrom." ".$sourceComponent." ".$langTo.":\n" ;
 	$dialogBox .= "<table><thead>
 	<tr>
 	<th>".$langMoveFrom." $sourceComponent ".$langTo.":</th>" ;
@@ -476,20 +467,15 @@ function form_dir_list($sourceType, $sourceComponent, $command, $baseWorkDir)
 	$bwdLen = strlen($baseWorkDir) ;	// base directories lenght, used under
 
 	/* build html form inputs */
-
 	if ($dirList)
 	{
 		while (list( , $pathValue) = each($dirList) )
 		{
-
-			$pathValue = substr ( $pathValue , $bwdLen );		// truncate cunfidential informations confidentielles
-			$dirname = basename ($pathValue);					// extract $pathValue directory name du nom
-
-			/* compute de the display tab */
-
-			$tab = "";										// $tab reinitialisation
-			$depth = substr_count($pathValue, "/");			// The number of nombre '/' indicates the directory deepness
-
+			// truncate cunfidential informations confidentielles
+			$pathValue = substr ($pathValue , $bwdLen );	
+			$dirname = basename ($pathValue);	
+			$tab = "";	// $tab reinitialisation
+			$depth = substr_count($pathValue, "/");		
 			for ($h=0; $h<$depth; $h++)
 			{
 				$tab .= "&nbsp;&nbsp";
@@ -497,7 +483,6 @@ function form_dir_list($sourceType, $sourceComponent, $command, $baseWorkDir)
 			$dialogBox .= "<option value=\"$pathValue\">$tab>$dirname\n";
 		}
 	}
-
 	$dialogBox .= "</select></td></thead></table><br/>";
 	$dialogBox .= "<input type=\"submit\" value=\"$langMove\">";
 	$dialogBox .= "</form>\n";
@@ -534,15 +519,10 @@ function form_dir_list_exclude($sourceType, $sourceComponent, $command, $baseWor
 	{
 		while (list( , $pathValue) = each($dirList) )
 		{
-
-			$pathValue = substr ( $pathValue , $bwdLen );		// truncate cunfidential informations confidentielles
-			$dirname = basename ($pathValue);					// extract $pathValue directory name du nom
-
-			/* compute de the display tab */
-
-			$tab = "";										// $tab reinitialisation
-			$depth = substr_count($pathValue, "/");			// The number of nombre '/' indicates the directory deepness
-
+			$pathValue = substr ( $pathValue , $bwdLen );	
+			$dirname = basename ($pathValue);	
+			$tab = "";	
+			$depth = substr_count($pathValue, "/");		
 			for ($h=0; $h<$depth; $h++)
 			{
 				$tab .= "&nbsp;&nbsp";
@@ -552,14 +532,11 @@ function form_dir_list_exclude($sourceType, $sourceComponent, $command, $baseWor
 		}
 	}
 
-	$dialogBox .= "
-          </select></td>
-		  <td class='left'><input type=\"submit\" value=\"$langMove\"></td>
-        </tr>
+	$dialogBox .= "</select></td>
+		  <td class='left'><input type=\"submit\" value=\"$langMove\"></td></tr>
         </tbody>
         </table><br/>";
 	$dialogBox .= "</form>\n";
-
 	return $dialogBox;
 }
 
@@ -567,7 +544,7 @@ function form_dir_list_exclude($sourceType, $sourceComponent, $command, $baseWor
 
 /* --------------- backported functions from Claroline 1.7.x --------------- */
 
-/**
+/*
  * Delete a file or a directory (and its whole content)
  *
  * @param  - $filePath (String) - the path of file or directory to delete
@@ -605,13 +582,13 @@ function claro_delete_file($filePath)
                 if ( ! claro_delete_file($thisFile) ) return false;
             }
         }
-       
+
         return rmdir($filePath);
 
     } // end elseif is_dir()
 }
 
-/**
+/*
  * Rename a file or a directory
  *
  * @param  - $filePath (string) - complete path of the file or the directory
@@ -660,7 +637,7 @@ function claro_rename_file($oldFilePath, $newFilePath)
     }
 }
 
-/**
+/*
  * Copy a a file or a directory and its content to an other area
  *
  * @param  - $origDirPath (String) - the path of the directory to move
@@ -711,7 +688,7 @@ function claro_copy_file($sourcePath, $targetPath)
     } // end elseif is_dir()
 }
 
-/**
+/*
  * create directory
  *
  * @param string  $pathname
@@ -731,7 +708,7 @@ function claro_mkdir($pathName, $mode = 0777, $recursive = false)
             /* Remove rootSys path from pathName for system with safe_mode or open_basedir restrictions
                Functions (like file_exists, mkdir, ...) return false for files inaccessible with these restrictions
             */
-            
+
             $pathName = str_replace($webDir,'',$pathName);
             $dirTrail = $webDir ;
         }
@@ -741,9 +718,7 @@ function claro_mkdir($pathName, $mode = 0777, $recursive = false)
         }
 
         $dirList = explode( '/', str_replace('\\', '/', $pathName) );
-        
         $dirList[0] = empty($dirList[0]) ? '/' : $dirList[0];
-
         foreach($dirList as $thisDir)
         {
             $dirTrail .= empty($dirTrail) ? $thisDir : '/'.$thisDir;
