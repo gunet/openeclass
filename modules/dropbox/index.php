@@ -256,7 +256,7 @@ if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
     <table width="99%" class="FormData">
     <thead>
     <tr>
-      <th class="left" width=\"220\">
+      <th class="left" width="220">
 tCont4;
 	$tool_content .= "
  	".strtoupper($dropbox_lang["receivedTitle"])."";
@@ -344,7 +344,7 @@ tCont5;
       </thead>
       </table>
 
-      <table width=99% class=\"dropbox\">
+      <table width=\"99%\" class=\"dropbox\">
       <tbody>
       <tr>
         <td colspan=\"2\"><b>".$dropbox_lang['file']."</b></td>
@@ -401,7 +401,7 @@ tCont9;
 
 		$tool_content .= "
         <a href=\"dropbox_submit.php?deleteReceived=".urlencode($w->id)."&dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation(\"$w->title\");'>
-        <img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
+        <img src=\"../../template/classic/img/delete-small.png\" border=\"0\" title=\"$langDelete\"></a>";
 
 		$tool_content .="
         </div>
@@ -434,7 +434,7 @@ $tool_content .= <<<tCont10
       <table width="99%" class="FormData">
       <thead>
       <tr>
-        <th class="left" width=\"220\">
+        <th class="left" width="220">
 tCont10;
 $tool_content .= strtoupper($dropbox_lang["sentTitle"]);
 $tool_content .="
@@ -593,7 +593,7 @@ tCont12;
 	$tool_content .= "
 	<a href=\"dropbox_submit.php?deleteSent=".urlencode($w->id)."&dropbox_unid=".urlencode($dropbox_unid) . $mailingInUrl."\"
 		onClick='return confirmation(\"$w->title\");'>
-		<img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
+		<img src=\"../../template/classic/img/delete-small.png\" border=\"0\" title=\"$langDelete\"></a>";
 
 
 	$tool_content .= "</div>
