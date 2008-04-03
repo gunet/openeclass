@@ -286,22 +286,23 @@ function submit_work($id) {
     <tr>
       <td class=\"success\">
       <p><b>$msg2</b></p><p>$msg1</p>
-      <p><a href='work.php'>$langBack</a></p>
       </td>
     </tr>
     </tbody>
-    </table>";
-		
+    </table>
+    <p align=\"right\"><a href='work.php'>$langBack</a></p>";
 	} else {
-		$tool_content .="<table width=\"99%\">
-    		<tbody>
-    		<tr><td class=\"caution\">
-      		<p><b>$langUploadError</b></p>
-      		<p><a href='work.php'>$langBack</a></p>
-      		</td>
-    		</tr>
-    		</tbody>
-   		</table>";
+	$tool_content .="
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"caution\">
+        <p><b>$langUploadError</b></p>
+      </td>
+    </tr>
+    </tbody>
+    </table>
+    <p align=\"right\"><a href='work.php'>$langBack</a></p>";
 	}
 
   } else { // not submit_ok
@@ -333,17 +334,20 @@ function new_assignment()
 	$month	= date("m");
 	$year	= date("Y");
 
-	$tool_content .= "<div id=\"operations_container\">
-    		<ul id=\"opslist\">
-      		<li><a href='work.php'>$langBack</a></li></ul></div>";
-
 	$tool_content .= "
-    	<form action=\"work.php\" method=\"post\">
-    	<table width=\"99%\" class='FormData'>
-    	<tbody>
-    	<tr>
-      <th width='150'>&nbsp;</th>
-      <td><b>".$m['WorkInfo ']."</b></td>
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">
+        <li><a href='work.php'>$langBack</a></li>
+      </ul>
+    </div>";
+	  
+	$tool_content .= "
+    <form action=\"work.php\" method=\"post\">
+    <table width=\"99%\" class='FormData'>
+    <tbody>
+    <tr>
+      <th width='220'>&nbsp;</th>
+      <td><b>".$m['WorkInfo']."</b></td>
     </tr>
     <tr>
       <th class=\"left\">".$m['title'].":</th>
@@ -351,16 +355,19 @@ function new_assignment()
     </tr>
     <tr>
       <th class=\"left\">".$m['description'].":</th>
-      <td>"."<textarea id=\"xinha\" name=\"desc\" value=\"$desc\" style='width:100%' rows=\"10\" cols=\"20\">";
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan='2'>"."<textarea id=\"xinha\" name=\"desc\" value=\"$desc\" style='width:100%' rows=\"10\" cols=\"20\">";
 
 	if ($desc)
-		$tool_content .= $desc;
+		$tool_content .= "$desc";
 
 	$tool_content .= "</textarea></td>
     </tr>
     <tr>
       <th class=\"left\">".$m['comments'].":</th>
-      <td>"."<textarea name=\"comments\" rows=\"3\" cols=\"55\"></textarea></td>
+      <td>"."<textarea name=\"comments\" rows=\"3\" cols=\"53\" class='FormData_InputText'></textarea></td>
     </tr>
     <tr>
       <th class=\"left\">".$m['deadline'].":</th>
@@ -375,7 +382,7 @@ function new_assignment()
       <th>&nbsp;</th>
       <td><input type=\"submit\" name=\"new_assign\" value=\"$langAdd\"></td>
     </tr>
-    </thead>
+    </tbody>
     </table>
     </form>
     <br/>
@@ -411,8 +418,8 @@ function date_form($day, $month, $year)
 }
 
 //form for editing
-function show_edit_assignment($id) {
-
+function show_edit_assignment($id) 
+{
 	global $tool_content, $m, $langEdit, $langWorks, $langBack;
 	global $urlAppend;
 	global $end_cal_Work_db;
@@ -437,16 +444,22 @@ function show_edit_assignment($id) {
     <form action="work.php" method="post">
     <input type="hidden" name="id" value="$id">
     <input type="hidden" name="choice" value="do_edit">
-
     <table width="99%" class="FormData">
     <tbody>
     <tr>
-      <th class="left">$m[title]:</th>
+      <th width="220">&nbsp;</th>
+      <td><b>$m[WorkInfo]</b></td>
+    </tr>
+    <tr>
+      <th class="left" width='220'>$m[title]:</th>
       <td><input type="text" name="title" size="45" value="${row['title']}" class='FormData_InputText'></td>
     </tr>
     <tr>
       <th class="left">${m['description']}:</th>
-      <td><textarea id='xinha' name='desc' value='$description' style='width:100%' rows='20' cols='60'>${row['description']}</textarea></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan='2'><textarea id='xinha' name='desc' value='$description' style='width:100%' rows='20' cols='60'>${row['description']}</textarea></td>
     </tr>
     <tr>
       <th class="left">${m['comments']}:</th>
@@ -455,10 +468,10 @@ function show_edit_assignment($id) {
     <tr>
       <th class="left">${m['deadline']}:</th>
       <td>
-
 cData;
 
-	$tool_content .= getJsDeadline($deadline)."</td>
+	$tool_content .= getJsDeadline($deadline)."
+      </td>
     </tr>
     <tr>
       <th class=\"left\">".$m['group_or_user'].":</th>
@@ -595,19 +608,22 @@ function show_student_assignment($id)
 			$submit_ok = FALSE;
 		} elseif ($submission = find_submission($uid, $id)) {
 			show_submission_details($submission);
-			$tool_content .= "<p class='alert1'>$langNotice3</p>";
+			$tool_content .= "<br />";
+			//$tool_content .= "<p class='alert1'>$langNotice3</p>";
 		}
 	}
 	if ($submit_ok) {
 		show_submission_form($id);
 	}
-	$tool_content .= "<br/><p><a href='work.php'>$langBack</a></p>";
+	$tool_content .= "
+    <br/>
+    <p align=\"right\"><a href='work.php'>$langBack</a></p>";
 }
 
 
 function show_submission_form($id)
 {
-	global $tool_content, $m, $langWorkFile, $langSendFile, $langSubmit, $uid;
+	global $tool_content, $m, $langWorkFile, $langSendFile, $langSubmit, $uid, $langNotice3;
 
 	if (is_group_assignment($id) and ($gid = user_group($uid))) {
 		$tool_content .= "<p>$m[this_is_group_assignment] ".
@@ -615,49 +631,72 @@ function show_submission_form($id)
 		"$m[group_documents]</a> $m[select_publish]</p>";
 	} else {
 		$tool_content .= <<<cData
-		<form enctype="multipart/form-data" action="work.php" method="post">
-			<input type="hidden" name="id" value="${id}">
-			<table width="99%"><caption>${langSubmit}</caption><thead>	
-			<tr><th>${langWorkFile}:</th><td><input type="file" name="userfile"></td></tr>
-			<tr><th>${m['comments']}:</th><td><textarea name="stud_comments" rows="5"
-				cols="55"></textarea></td></tr></thead></table>
-			<br/><input type="submit" value="${langSubmit}" name="work_submit">
-		</form>
+
+    <form enctype="multipart/form-data" action="work.php" method="post">
+    <input type="hidden" name="id" value="${id}">
+    <table width="99%" align="left" class="FormData">
+    <thead>
+    <tr>
+      <th width="220">&nbsp;</th>
+      <td><b>${langSubmit}</b></td>
+    </tr>
+    <tr>
+      <th class="left">${langWorkFile}:</th>
+      <td><input type="file" name="userfile" class="FormData_InputText"></td>
+    </tr>
+    <tr>
+      <th class="left">${m['comments']}:</th>
+      <td><textarea name="stud_comments" rows="5" cols="55" class="FormData_InputText"></textarea></td>
+    </tr>
+    <tr>
+      <th>&nbsp;</th>
+      <td><input type="submit" value="${langSubmit}" name="work_submit"><br />$langNotice3</td>
+    </tr>
+    </thead>
+    </table>
+    <br/>
+    </form>
 cData;
 
-}
+	}
 }
 
 
 // Print a box with the details of an assignment
 function assignment_details($id, $row, $message = null)
 {
-	global $tool_content, $m, $langDaysLeft, $langDays, $langWEndDeadline, $langWEndDeadline, $langNEndDeadline, $langEndDeadline;
+	global $tool_content, $m, $langDaysLeft, $langDays, $langWEndDeadline, $langNEndDeadLine, $langNEndDeadline, $langEndDeadline;
 	global $color2, $langDelAssign, $is_adminOfCourse, $langZipDownload, $langSaved ;
 
 
 	if ($is_adminOfCourse) {
-		$tool_content .= "
-		<div id=\"operations_container\">
-		<ul id=\"opslist\">
-		<li><a href=\"work.php?id=$id&choice=do_delete\" onClick=\"return confirmation('".addslashes($row['title'])."');\">$langDelAssign</a></li>
-		<li><a href=\"work.php?download=$id\">$langZipDownload</a></li>
-		</ul>
-		</div>
-		";
+	$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">
+        <li><a href=\"work.php?id=$id&choice=do_delete\" onClick=\"return confirmation('".addslashes($row['title'])."');\">$langDelAssign</a></li>
+        <li><a href=\"work.php?download=$id\">$langZipDownload</a></li>
+      </ul>
+    </div>
+	";
 	}
 	
 	if (isset($message)) {
-		$tool_content .="<table width=\"99%\"><tbody>
-    			<tr><td class=\"success\"><p><b>$langSaved </b></p></td></tr>
-    			</tbody></table><br/>";
-	}
-	$tool_content .= "
-    <table>
+		$tool_content .="
+    <table width=\"99%\">
     <tbody>
     <tr>
-      <th class='left'>&nbsp;</th>
-      <td><b>".$m['WorkInfo ']."</b></td>
+      <td class=\"success\"><p><b>$langSaved </b></p></td>
+    </tr>
+    </tbody>
+    </table>
+    <br/>";
+	}
+	$tool_content .= "
+    <table width=\"99%\" class=\"FormData\">
+    <tbody>
+    <tr>
+      <th class='left' width='220'>&nbsp;</th>
+      <td><b>".$m['WorkInfo']."</b></td>
     </tr>
     <tr>
       <th class='left'>$m[title]:</th>
@@ -685,16 +724,16 @@ function assignment_details($id, $row, $message = null)
       <th class='left'>$m[deadline]:</th>
       <td>$row[deadline] ";
 	if ($row['days'] > 1) {
-		$tool_content .= "$langDaysLeft $row[days] $langDays</td>
+		$tool_content .= "<span class=\"not_expired\">$langDaysLeft $row[days] $langDays</span></td>
     </tr>";
 	} elseif ($row['days'] < 0) {
-		$tool_content .= "$langEndDeadline</td>
+		$tool_content .= "<span class=\"expired\">$langEndDeadline</span></td>
     </tr>";
 	} elseif ($row['days'] == 1) {
-		$tool_content .= "$langWEndDeadline</td>
+		$tool_content .= "<span class=\"expired_today\">$langWEndDeadline !</span></td>
     </tr>";
 	} else {
-		$tool_content .= "$langNEndDeadline</td>
+		$tool_content .= "<span class=\"expired_today\"><b>$langNEndDeadLine</b> !!!</span></td>
     </tr>";
 	}
 	$tool_content .= "
@@ -938,13 +977,13 @@ cData;
 cData;
 
 			if ($row['days'] > 1) {
-				$tool_content .= " ($m[in]&nbsp;$row[days]&nbsp;$langDays";
+				$tool_content .= " (<span class=\"not_expired\">$m[in]&nbsp;$row[days]&nbsp;$langDays</span>";
 			} elseif ($row['days'] < 0) {
-				$tool_content .= " ($m[expired])";
+				$tool_content .= " (<span class=\"expired\">$m[expired]</span>)";
 			} elseif ($row['days'] == 1) {
-				$tool_content .= " ($m[tomorrow])";
+				$tool_content .= " (<span class=\"expired_today\">$m[tomorrow]</span>)";
 			} else {
-				$tool_content .= " ($m[today])";
+				$tool_content .= " (<span class=\"expired_today\"><b>$m[today]</b></span>)";
 			}
 			$tool_content .= "</td><td width=\"10%\" align=\"center\">";
 

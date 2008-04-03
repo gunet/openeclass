@@ -40,8 +40,6 @@
 
 ==============================================================================*/
 
-
-
 $local_style = '
     .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
      padding-left: 15px; padding-right : 15px; }
@@ -66,7 +64,7 @@ $end_cal_Work = $jscalendar->make_input_field(
                  'showOthers'     => true,
                  'ifFormat'       => '%Y-%m-%d',
                  'timeFormat'     => '24'),
-           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+           array('style'       => 'width: 100px; color: #840; font-weight:bold; font-size:10px; background-color: #fff; border: 1px dotted #000; text-align: center',
                  'name'        => 'WorkEnd',
                  'value'       => $u_date_end));
 
@@ -78,7 +76,7 @@ function getJsDeadline($deadline) {
     	'showOthers'     => true,
       'ifFormat'       => '%Y-%m-%d',
       'timeFormat'     => '24'),
-    array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+    array('style'       => 'width: 100px; color: #840; font-weight:bold; font-size:10px; background-color: #fff; border: 1px dotted #000; text-align: center',
     	'name'        => 'WorkEnd',
       'value'       => $deadline));
 	

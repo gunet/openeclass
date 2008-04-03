@@ -61,8 +61,11 @@ function table_row($title, $content)
 {
 	global $tool_content;
 	if (trim($content) != '') {
-		$tool_content .= "<tr><th>$title:</b></th><td>".
-			htmlspecialchars($content)."</td></tr>";
+		$tool_content .= "
+    <tr>
+      <th class=\"left\">$title:</b></th>
+      <td>".htmlspecialchars($content)."</td>
+    </tr>";
 	}
 }
 
@@ -293,14 +296,27 @@ function show_submission_details($id)
 			"$m[your_group]</a> (".uid_to_name($sub['uid']).")";
 	} else $sub_notice = "";
 	
-	$tool_content .= "<p><b>$notice</b> </p><table><thead>";
+	$tool_content .= "
+    <table width=\"99%\" class=\"FormData\">
+    <tbody>";
+	$tool_content .= "
+    <tr>
+      <th width=\"220\">&nbsp;</th>
+      <td><b>$m[SubmissionWorkInfo]</b></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$m[SubmissionStatusWorkInfo]:</th>
+      <td>$notice</td>
+    </tr>";
 	table_row($m['grade'], $sub['grade']);
 	table_row($m['gradecomments'], $sub['grade_comments']);
 	table_row($m['sub_date'], $sub['submission_date']);
 	table_row($m['filename'], $sub['file_name']);
 	table_row($m['comments'], $sub['comments']);
-	
-	$tool_content .= "</thead></table><p>$sub_notice</p>";
+	$tool_content .= "
+    </tbody>
+    </table>
+    $sub_notice";
 	mysql_select_db($currentCourseID);
 }
 

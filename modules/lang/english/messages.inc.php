@@ -3180,7 +3180,8 @@ $m['one_submission'] = 'One file has been submitted';
 $m['more_submissions'] = '%d files have been submitteD';
 $m['plainview'] = 'Concise list of submissions and grades';
 $m['WorkInfo ']= 'Work info';
-
+$m['SubmissionWorkInfo']= 'Submission info';
+$m['SubmissionStatusWorkInfo']= 'Submission status';
 $langGroupWorkIntro = '
 	Below appear the assignments available in this course. Please select
 	an assignment to which to submit the file as group work, and
