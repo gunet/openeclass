@@ -67,7 +67,7 @@ function get_assignment_details($id)
 // $assign contains an array with the assignment's details
 function show_edit_form($id, $sid, $assign)
 {
-	global $m, $langGradeOk, $tool_content;
+	global $m, $langGradeOk, $tool_content, $langGradeWork;
 
 	if ($sub = mysql_fetch_array(db_query("SELECT * FROM assignment_submit WHERE id = '$sid'"))) {
 		
@@ -78,17 +78,28 @@ function show_edit_form($id, $sid, $assign)
 						"$m[ofgroup] $sub[group_id]</a>)";
 			} else $group_submission = "";
 		$tool_content .= <<<cData
-			<form method="post" action="work.php">
-			<input type="hidden" name="assignment" value="${id}">
-			<input type="hidden" name="submission" value="${sid}">
-			<table>
-			<thead>
-			<tr><th>${m['username']}:</th>
-			<td>${uid_2_name} $group_submission</td></tr>
-			<tr><th>${m['sub_date']}:</th>
-			<td>${sub['submission_date']}</td></tr>
-			<tr><th>${m['filename']}:</th>
-				<td><a href='work.php?get=${sub['id']}'>${sub['file_name']}</a></td></tr>
+
+    <form method="post" action="work.php">
+    <input type="hidden" name="assignment" value="${id}">
+    <input type="hidden" name="submission" value="${sid}">
+
+      <table width="99%" class="FormData">
+      <tbody>
+      <tr>
+        <th width="220">&nbsp;</th>
+        <td><b>$m[addgradecomments]</b></td>
+      </tr>
+
+    <tr>
+      <th class="left">${m['username']}:</th>
+      <td>${uid_2_name} $group_submission</td></tr>
+    <tr>
+      <th class="left">${m['sub_date']}:</th>
+      <td>${sub['submission_date']}</td></tr>
+    <tr>
+      <th class="left">${m['filename']}:</th>
+      <td><a href='work.php?get=${sub['id']}'>${sub['file_name']}</a></td>
+    </tr>
 cData;
 
 //			if (!empty($sub['group_id'])) {
@@ -98,19 +109,29 @@ cData;
 //			}
 			
 			$tool_content .= <<<cData
-				<tr><th>${m['grade']}:</th>
-			   <td> <input type="text" name="grade" maxlength="3" size="3" value="${sub['grade']}"></td>
-			</tr>
-		<tr><th>${m['gradecomments']}:</th>
-			<td><textarea cols="60" rows="3" name="comments">${sub['grade_comments']}
-				</textarea></td></tr>
-				</thead></table><br/>
-			<input type="submit" name="grade_comments" value="${langGradeOk}">
-			</form>
+
+    <tr>
+      <th class="left">${m['grade']}:</th>
+      <td><input type="text" name="grade" maxlength="3" size="3" value="${sub['grade']}" class="FormData_InputText"></td>
+    </tr>
+    <tr>
+      <th class="left">${m['gradecomments']}:</th>
+      <td><textarea cols="60" rows="3" name="comments" class="FormData_InputText">${sub['grade_comments']}</textarea></td>
+    </tr>
+    <tr>
+      <th class="left">&nbsp;</th>
+      <td><input type="submit" name="grade_comments" value="${langGradeOk}"></td>
+    </tr>
+    </tbody>
+    </table>
+
+    </form>
+    <br/>
 cData;
 
 	} else {
-		$tool_content .= "<p>error - no such submission with id $sid</p>\n";
+		$tool_content .= "
+    <p>error - no such submission with id $sid</p>\n";
 	}
 }
 

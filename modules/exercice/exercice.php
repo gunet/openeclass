@@ -117,7 +117,9 @@ if($is_allowedToEdit) {
           <li><a href="admin.php?NewExercise=Yes">${langNewEx}</a> |<a href="question_pool.php">${langQuestionPool}</a></li>
 cData;
 
-$tool_content .= "</ul></div>";
+$tool_content .= "
+        </ul>
+      </div>";
 } else  { 
 	$tool_content .= "<!--<td align=\"right\">-->";
 }
@@ -178,7 +180,8 @@ cData;
 }
 
 if(!$nbrExercises) {
-	$tool_content .= "<tr><td";
+	$tool_content .= "
+      <tr><td";
 	if($is_allowedToEdit) 
 		$tool_content .= " colspan=\"4\"";
 		$tool_content .= " class=\"empty\">${langNoEx}</td>
@@ -187,11 +190,13 @@ if(!$nbrExercises) {
 
 $i=1;
 
-$tool_content .= "<tbody>";
+$tool_content .= "
+      <tbody>";
 // while list exercises
 while($row=mysql_fetch_array($result))
 {
-$tool_content .= "<tr>";
+$tool_content .= "
+      <tr>";
 	// prof only
 	if($is_allowedToEdit)
 	{
@@ -223,8 +228,9 @@ if ($NumOfResults[0]) {
 	$langDelete_temp = htmlspecialchars($langDelete);
 	$tool_content .= <<<cData
 
-        <td width="13%" align="right"><a href="admin.php?exerciseId=${row['id']}"><img src="../../template/classic/img/edit.gif" border="0" alt="${langModify_temp}"></a>
-        <a href="$_SERVER[PHP_SELF]?choice=delete&exerciseId=${row['id']}"  onclick="javascript:if(!confirm('${langConfirmYourChoice_temp}')) return false;"><img src="../../template/classic/img/delete.gif" border="0" alt="${langDelete_temp}"></a>
+        <td width="13%" align="right">
+          <a href="admin.php?exerciseId=${row['id']}"><img src="../../template/classic/img/edit.gif" border="0" alt="${langModify_temp}"></a>
+          <a href="$_SERVER[PHP_SELF]?choice=delete&exerciseId=${row['id']}"  onclick="javascript:if(!confirm('${langConfirmYourChoice_temp}')) return false;"><img src="../../template/classic/img/delete.gif" border="0" alt="${langDelete_temp}"></a>
 cData;
 
 	// if active
@@ -232,10 +238,10 @@ cData;
 	{
 	if (isset($page)) {	
 		$tool_content .= "
-        	<a href=\"$_SERVER[PHP_SELF]?choice=disable&page=${page}&exerciseId=".$row['id']."\">"."<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" alt=\"".htmlspecialchars($langDeactivate)."\"></a>&nbsp;";
+          <a href=\"$_SERVER[PHP_SELF]?choice=disable&page=${page}&exerciseId=".$row['id']."\">"."<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" alt=\"".htmlspecialchars($langDeactivate)."\"></a>&nbsp;";
 	} else {
 		$tool_content .= "
-		<a href='$_SERVER[PHP_SELF]?choice=disable&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/invisible.gif' border='0' alt='".htmlspecialchars($langDeactivate)."'></a>&nbsp;";
+          <a href='$_SERVER[PHP_SELF]?choice=disable&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/invisible.gif' border='0' alt='".htmlspecialchars($langDeactivate)."'></a>&nbsp;";
 	}
 }
 // else if not active
@@ -243,14 +249,16 @@ else
 {
 	if (isset($page)) {
 		$tool_content .= "
-        	<a href='$_SERVER[PHP_SELF]?choice=enable&page=${page}&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/visible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a>&nbsp;";
+          <a href='$_SERVER[PHP_SELF]?choice=enable&page=${page}&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/visible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a>&nbsp;";
 	} else {
 		$tool_content .= "
-        	<a href='$_SERVER[PHP_SELF]?choice=enable&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/visible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a>&nbsp;";
+          <a href='$_SERVER[PHP_SELF]?choice=enable&exerciseId=".$row['id']."'>"."<img src='../../template/classic/img/visible.gif' border='0' alt='".htmlspecialchars($langActivate)."'></a>&nbsp;";
 	}
 }
-	$tool_content .= "</td>";
-	$tool_content .= "</tr>";
+	$tool_content .= "
+        </td>";
+	$tool_content .= "
+      </tr>";
 }
 	// student only
 else {

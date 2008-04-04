@@ -1,4 +1,4 @@
-table.ExerciseSum{
+table.WorkSum{
     padding: 2px;
     vertical-align: middle;
     border-top: 1px solid #edecdf;
@@ -7,7 +7,7 @@ table.ExerciseSum{
     border-right: 1px solid #edecdf;
 }
 
-table.ExerciseSum thead{
+table.WorkSum thead{
 	padding: 2px;
 	vertical-align: middle;
 	border-top: 1px solid #CAC3B5;
@@ -16,7 +16,7 @@ table.ExerciseSum thead{
 	border-right: 1px solid #edecdf;
 }
 
-table.ExerciseSum tbody{
+table.WorkSum tbody{
     padding: 2px;
     vertical-align: middle;
     border-top: 1px solid #edecdf;
@@ -25,7 +25,7 @@ table.ExerciseSum tbody{
     border-right: 1px solid #edecdf;
 }
 
-table.ExerciseSum th{
+table.WorkSum th{
 	text-align: center;
 	padding: 4px;
 	padding-bottom: 6px;
@@ -36,7 +36,7 @@ table.ExerciseSum th{
 	background : #fbfbfb;
 }
 
-table.ExerciseSum td {
+table.WorkSum td {
 	color: #727266;
 	vertical-align: top;
 	background : #fbfbfb;
@@ -44,7 +44,7 @@ table.ExerciseSum td {
 }
 
 
-table.Exercise {
+table.Work {
 	padding: 2px;
 	vertical-align: middle;
 	border-top: 1px solid #DBDCCD;
@@ -53,7 +53,7 @@ table.Exercise {
 	border-right: 1px solid #DBDCCD;
 }
 
-table.Exercise th{
+table.Work th{
 	text-align: center;
 	padding: 4px;
 	padding-bottom: 6px;
@@ -64,14 +64,14 @@ table.Exercise th{
 	background : #edecdf;
 }
 
-table.Exercise td {
+table.Work td {
     padding: 4px;
     color: #727266;
     vertical-align: middle;
     background : #edecdf;
 }
 
-table.Question {
+table.Assignment {
     padding: 2px;
 	vertical-align: top;
     border-top: 1px solid #edecdf;
@@ -80,7 +80,7 @@ table.Question {
     border-right: 1px solid #edecdf;
 }
 
-table.Question th {
+table.Assignment th {
 	padding: 4px;
 	vertical-align: top;
 	background: #edecdf;
@@ -95,7 +95,7 @@ table.Question th {
 	font-weight : normal;
 }
 
-table.Question td {
+table.Assignment td {
 	padding: 4px;
 	vertical-align: top !important;
 	background: #Fbfbfb;
@@ -113,7 +113,7 @@ table.Question td {
 }
 
 .invisible {
-	color : #CAC3B5;
+	color : #CAC3B5 !important;
 }
 
 .invisible a{
