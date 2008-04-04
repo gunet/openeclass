@@ -59,10 +59,12 @@ function update_db_info($dbTable, $action, $oldPath, $newPath = "")
 	mysql_query("DELETE FROM ".$dbTable." 
 			WHERE path LIKE \"".$oldPath."%\""); 
 	} elseif ($action = "update") {
-		$newPath = preg_replace('|/+|', '/', $newPath);
-		mysql_query("UPDATE ".$dbTable." 
+		//$newPath = preg_replace('|/+|', '/', $newPath);
+		/*mysql_query("UPDATE ".$dbTable." 
 			SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
-			WHERE path LIKE '$oldPath%'");
+			WHERE path LIKE '$oldPath%'"); */
+		mysql_query("UPDATE $dbTable SET path = '$newPath'
+				WHERE path ='$oldPath'"); 
 	}
 }
 
@@ -93,7 +95,7 @@ function check_name_exist($filePath)
 }
 
 
-/**
+/*
  * Delete a file or a directory 
  *
  * @author - Hugues Peeters
@@ -105,7 +107,7 @@ function check_name_exist($filePath)
 
 function my_delete($file)
 {
-	if ( check_name_exist($file) )
+	if (check_name_exist($file))
 	{
 		if ( is_file($file) ) // FILE CASE
 		{
@@ -113,7 +115,7 @@ function my_delete($file)
 			return true;
 		}
 
-		elseif ( is_dir($file) ) // DIRECTORY CASE
+		elseif (is_dir($file)) // DIRECTORY CASE
 		{
 			removeDir($file);
 			return true;
@@ -128,15 +130,13 @@ function my_delete($file)
 
 
 
-/**
+/*
  * Delete a directory and its whole content
  *
  * @author - Hugues Peeters
  * @param  - $dirPath (String) - the path of the directory to delete
  * @return - no return !
  */
-
-
 function removeDir($dirPath)
 {
 
@@ -178,7 +178,7 @@ function removeDir($dirPath)
 }
 
 
-/**
+/*
  * Rename a file or a directory
  * 
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
@@ -210,20 +210,15 @@ function my_rename($filePath, $newFileName)
 		
 		/*** Prevent file name with php extension ***/
 		$newFileName = php2phps($newFileName);
-
 		$newFileName = replace_dangerous_char($newFileName);
-
 		chdir($path);
 		rename($oldFileName, $newFileName);
-
 		return true;
 	}
 }
 
-//------------------------------------------------------------------------------
 
-
-/**
+/*
  * Move a file or a directory to an other area
  *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
@@ -234,20 +229,18 @@ function my_rename($filePath, $newFileName)
  * @see    - move() uses check_name_exist() and copyDirTo() functions
  */
 
-
 function move($source, $target)
 {
-	if ( check_name_exist($source) )
+	if(check_name_exist($source))
 	{
 		$fileName = my_basename($source);
-
-		if ( check_name_exist($target."/".$fileName) )
+		if (check_name_exist($target."/".$fileName))
 		{
 			return false; 
 		}
 		else
 		{	/*** File case ***/
-			if ( is_file($source) ) 
+			if (is_file($source)) 
 			{
 				copy($source , $target."/".$fileName);
 				unlink($source);
@@ -277,8 +270,7 @@ function move($source, $target)
 }
 
 
-
-/**
+/*
  * Move a directory and its content to an other area
  *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
@@ -316,8 +308,7 @@ function move_dir($src, $dest)
         closedir($handle) ;
 }
 
-//----------------------------------------------------------------------------------
-/**
+/*
  * Move a directory and its content to an other area
  *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
@@ -367,7 +358,6 @@ function copyDirTo($origDirPath, $destination)
 
 }
 
-//------------------------------------------------------------------------------
 
 
 /* NOTE: These functions batch is used to automatically build HTML forms
@@ -376,7 +366,7 @@ function copyDirTo($origDirPath, $destination)
  * From a thechnical point of view, form_dir_lists calls sort_dir wich calls index_dir
  */
 
-/**
+/*
  * Indexes all the directories and subdirectories
  * contented in a given directory
  * 
@@ -417,7 +407,7 @@ function index_dir($path)
 }
 
 
-/**
+/*
  * Indexes all the directories and subdirectories
  * contented in a given directory, and sort them alphabetically
  *
@@ -448,100 +438,54 @@ function index_and_sort_dir($path)
  * build an html form listing all directories of a given directory
  *
  */
-
-function form_dir_list($sourceType, $sourceComponent, $command, $baseWorkDir)
-{
-	global  $langParentDir, $langTo, $langMoveFrom, $langMove;
-
-	$dirList = index_and_sort_dir($baseWorkDir);
-
-	$dialogBox .= "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">\n" ;
-	$dialogBox .= "<input type=\"hidden\" name=\"".$sourceType."\" value=\"".$sourceComponent."\">\n" ;
-	//palios tropos emfanishs entolhs + onomatos arxeiou -- $dialogBox .= " ".$langMoveFrom." ".$sourceComponent." ".$langTo.":\n" ;
-	$dialogBox .= "<table><thead>
-	<tr>
-	<th>".$langMoveFrom." $sourceComponent ".$langTo.":</th>" ;
-	$dialogBox .= "<td><select name=\"".$command."\">\n" ;
-	$dialogBox .= "<option value=\"\" style=\"color:#999999\">".$langParentDir."\n";
-
-	$bwdLen = strlen($baseWorkDir) ;	// base directories lenght, used under
-
-	/* build html form inputs */
-	if ($dirList)
-	{
-		while (list( , $pathValue) = each($dirList) )
-		{
-			// truncate cunfidential informations confidentielles
-			$pathValue = substr ($pathValue , $bwdLen );	
-			$dirname = basename ($pathValue);	
-			$tab = "";	// $tab reinitialisation
-			$depth = substr_count($pathValue, "/");		
-			for ($h=0; $h<$depth; $h++)
-			{
-				$tab .= "&nbsp;&nbsp";
-			}
-			$dialogBox .= "<option value=\"$pathValue\">$tab>$dirname\n";
-		}
-	}
-	$dialogBox .= "</select></td></thead></table><br/>";
-	$dialogBox .= "<input type=\"submit\" value=\"$langMove\">";
-	$dialogBox .= "</form>\n";
-
-	return $dialogBox;
-}
-
-
-//afth h function (opws kai h prohgoumenh) dhmiourgei mia lista se combo box me tous fakelous enos path. sth sygkekrimenh exei prostethei to orisma $entryToExclude prokeimenou na mhn emfanizetai mia eggrafh
+//afth h function dhmiourgei mia lista se combo box me tous fakelous enos path. sth sygkekrimenh exei prostethei to orisma $entryToExclude prokeimenou na mhn emfanizetai mia eggrafh
 function form_dir_list_exclude($sourceType, $sourceComponent, $command, $baseWorkDir, $entryToExclude)
 {
 	global $langParentDir, $langTo, $langMoveFrom, $langMove, $moveFileNameAlias;
+	//global $tool_content;
 
 	$dirList = index_and_sort_dir($baseWorkDir);
-
 	$dialogBox .= "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">\n" ;
 	$dialogBox .= "<input type=\"hidden\" name=\"".$sourceType."\" value=\"".$sourceComponent."\">\n" ;
-	$dialogBox .="
-	    <table class='FormData' width=\"99%\">
-        <tbody>
-        <tr>
-          <th class='left' width='200'>$langMove:</th>
-          <td class='left'>$langMoveFrom <em>$moveFileNameAlias</em> $langTo:</td>
-          <td class='left'>";
-		
+	$dialogBox .="<table class='FormData' width=\"99%\">
+        	<tbody><tr><th class='left' width='200'>$langMove:</th>
+          	<td class='left'>$langMoveFrom <em>$moveFileNameAlias</em> $langTo:</td><td class='left'>";
 	$dialogBox .= "<select name=\"".$command."\" class='auth_input'>\n" ;
 	$dialogBox .= "<option value=\"\" style=\"color:#999999\">".$langParentDir."\n";
-
-	$bwdLen = strlen($baseWorkDir) ;	// base directories lenght, used under
-
+	$bwdLen = strlen($baseWorkDir) ;
+	
 	/* build html form inputs */
-
 	if ($dirList)
 	{
-		while (list( , $pathValue) = each($dirList) )
+		while (list( , $pathValue) = each($dirList))
 		{
-			$pathValue = substr ( $pathValue , $bwdLen );	
-			$dirname = basename ($pathValue);	
-			$tab = "";	
-			$depth = substr_count($pathValue, "/");		
-			for ($h=0; $h<$depth; $h++)
-			{
-				$tab .= "&nbsp;&nbsp";
+			$pathValue = substr($pathValue , $bwdLen);
+			$dirname = basename($pathValue);
+			$sql = db_query("SELECT path, filename FROM document 
+				WHERE path LIKE '%/$dirname%'"); 
+			while ($r = mysql_fetch_array($sql)) {
+				$filename = $r['filename'];
+				$path = $r['path']; 
+				$tab = "";	
+				$depth = substr_count($pathValue, "/");
+				for ($h=0; $h<$depth; $h++)
+				{
+					$tab .= "&nbsp;&nbsp";
+				}
+			//if ($pathValue != $entryToExclude) $dialogBox .= "<option value=\"$pathValue\">$tab>$filename\n";
+			if ($path != $entryToExclude or (!is_file($baseWorkDir.$path))) 
+					$dialogBox .= "<option value='$path'>$tab>$filename</option>";
 			}
-			
-			if ($pathValue != $entryToExclude) $dialogBox .= "<option value=\"$pathValue\">$tab>$dirname\n";
 		}
 	}
 
-	$dialogBox .= "</select></td>
-		  <td class='left'><input type=\"submit\" value=\"$langMove\"></td></tr>
-        </tbody>
-        </table><br/>";
-	$dialogBox .= "</form>\n";
+	$dialogBox .= "</select></td><td class='left'><input type=\"submit\" value=\"$langMove\"></td></tr>
+        	</tbody></table><br/>";
+	$dialogBox .= "</form>";
 	return $dialogBox;
 }
 
 //------------------------------------------------------------------------------
-
 /* --------------- backported functions from Claroline 1.7.x --------------- */
 
 /*
@@ -565,7 +509,6 @@ function claro_delete_file($filePath)
         if ( ! $dirHandle ) return false;
 
         $removableFileList = array();
-
         while ( $file = readdir($dirHandle) )
         {
             if ( $file == '.' || $file == '..') continue;
@@ -582,7 +525,6 @@ function claro_delete_file($filePath)
                 if ( ! claro_delete_file($thisFile) ) return false;
             }
         }
-
         return rmdir($filePath);
 
     } // end elseif is_dir()
