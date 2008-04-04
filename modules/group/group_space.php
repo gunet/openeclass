@@ -58,13 +58,13 @@ if(isset($registration) and $statut != 10)
 {
 	$userGroupId = $_SESSION['userGroupId'];
 	session_unregister('userGroupId');
-
 	$sqlExist=mysql_query("SELECT id FROM `$dbname`.user_group
-				WHERE user='$uid' AND team='$userGroupId'");
+		WHERE user='$uid' AND team='$userGroupId'");
 	$countExist = mysql_num_rows($sqlExist);
 	if($countExist==0 )
 	{
-		$sqlReg=mysql_query("INSERT INTO `$dbname`.user_group (user, team) VALUES ('$uid', '$userGroupId')");
+		$sqlReg=mysql_query("INSERT INTO `$dbname`.user_group (user, team) 
+			VALUES ('$uid', '$userGroupId')");
 		$message="<font color=red>$langGroupNowMember</font> | ";
 		$regDone=1;
 	}
@@ -73,8 +73,7 @@ $currentCourse=$dbname;
 
 ############### Secret Directory for Documents #################
 $sqlGroup=mysql_query("SELECT secretDirectory
-		FROM `$currentCourse`.student_group 
-		WHERE id='$userGroupId'");
+	FROM `$currentCourse`.student_group WHERE id='$userGroupId'");
 
 while ($myGroup= mysql_fetch_array($sqlGroup))
 {
@@ -89,7 +88,7 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 	$forumId=$myGroup['forumId'];
 	if ($is_adminOfCourse)
 	{
-		$tool_content .=  "<p><a href=\"group_edit.php?userGroupId=$userGroupId\">$langEditGroup</a> | ";
+		$tool_content .= "<p><a href=\"group_edit.php?userGroupId=$userGroupId\">$langEditGroup</a> | ";
 
 	}
 	elseif(isset($selfReg) AND ($uid))
@@ -120,7 +119,7 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 	{
 		while ($myTutor = mysql_fetch_array($sqlTutor))
 		{
-			$tool_content_tutor .=  "$myTutor[nom] $myTutor[prenom]
+			$tool_content_tutor .= "$myTutor[nom] $myTutor[prenom]
 			<a href=mailto:$myTutor[email]>$myTutor[email]</a>";
 		}	// while tutor
 
@@ -149,13 +148,11 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 		</table><br>";
 }	// while loop
 
-################ MEMBERS ################################
-
-$tool_content .=  "<table width=\"99%\"><thead>
+// members
+$tool_content .= "<table width=\"99%\"><thead>
 		<tr><th colspan=3>$langGroupMembers</th></tr>
-		<tr>
-		<th>$langNameSurname</th>
-		<th>$langAM</th>
+		<tr><th>$langNameSurname</th>
+		<th width='100'>$langAM</th>
 		<th>$langEmail</th></tr>";
 
 $resultMember=mysql_query("SELECT nom, prenom, email, am
@@ -176,14 +173,14 @@ else
 		$tool_content .= "<td>";
 		$tool_content .=  "$myMember[prenom] $myMember[nom]";
 		$tool_content .= "</td>";
-		$tool_content .= "<td>";
+		$tool_content .= "<td align='center'>";
 		if (!empty($myMember['am'])) {
 			$tool_content .=  "$myMember[am]";
 		} else {
 			$tool_content .= "-";
 		}
 		$tool_content .= "</td>";
-		$tool_content .= "<td>";
+		$tool_content .= "<td align='center'>";
 		$tool_content .= "<a href=mailto:$myMember[email]>$myMember[email]</a>";
 		$tool_content .= "</td>";
 		$tool_content .= "</tr>";
@@ -191,7 +188,6 @@ else
 }	// else
 
 $tool_content .= "</tbody></table>";
-
 draw($tool_content, 2, 'group');
 
 function loadGroupTools(){

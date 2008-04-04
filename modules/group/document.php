@@ -1,6 +1,6 @@
 <?php
 /*===========================================================================
- * @version $Id$
+* @version $Id$
 @last update: 21-12-2006 by Evelthon Prodromou
 @author  Dionysios G. Synodinos <synodinos@gmail.com>
 @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -15,23 +15,23 @@ The user can : - navigate through files and directories.
 - delete, copy a file or a directory
 - edit properties & content (name, comments,
 html content)
-
 */
 
 $require_current_course = TRUE;
 $require_help = TRUE;
 $require_login = true;
 $helpTopic = 'Doc';
+
 include '../../include/baseTheme.php';
+include '../../include/lib/forcedownload.php';
+include "../../include/lib/fileDisplayLib.inc.php";
+include "../../include/lib/fileManageLib.inc.php";
+include "../../include/lib/fileUploadLib.inc.php";
 
 $nameTools = $langDoc;
 $navigation[] = array ("url" => "group_space.php", "name" => $langGroupSpace);
 $baseServDir = $webDir;
 $tool_content = "";
-
-include ("../../include/lib/fileDisplayLib.inc.php");
-include ("../../include/lib/fileManageLib.inc.php");
-include ("../../include/lib/fileUploadLib.inc.php");
 
 $local_head = '
 <script>
@@ -55,7 +55,6 @@ $diskQuotaGroup = $d['group_quota'];
 /**************************************
 /FILEMANAGER BASIC VARIABLES DEFINITION
 **************************************/
-
 if ($is_adminOfCourse) {
 	$secretDirectory = group_secret($userGroupId);
 } else {
@@ -70,6 +69,25 @@ $baseServUrl = $urlAppend."/";
 $courseDir = "courses/".$dbname."/group/".$secretDirectory;
 $baseWorkDir = $baseServDir.$courseDir;
 
+// -------------------------
+// download
+// -------------------------
+if (isset($action2) and $action2 == "download")  {
+	$real_file = $webDir."/courses/".$currentCourseID."/group/".$secretDirectory."/".$id;
+	if (strpos($real_file, '/../') === FALSE) {
+		$result = db_query ("SELECT filename FROM group_documents WHERE path LIKE '%$id%'", $currentCourseID);
+		$row = mysql_fetch_array($result);
+		if (!empty($row['filename']))
+		{
+			$id = $row['filename'];
+		}
+		send_file_to_client($real_file, my_basename($id), true);
+		exit;
+	} else {
+		header("Refresh: ${urlServer}modules/group/document.php");
+	}
+}
+
 /*** clean information submited by the user from antislash ***/
 stripSubmitValue($_POST);
 stripSubmitValue($_GET);
@@ -77,7 +95,6 @@ stripSubmitValue($_GET);
 /**************************************
 UPLOAD FILE
 **************************************/
-
 if (is_uploaded_file(@$userFile) )
 {
 	/* Check the file size doesn't exceed
@@ -88,47 +105,60 @@ if (is_uploaded_file(@$userFile) )
 	{
 		$dialogBox .= $langNoSpace;
 	}
-	else
-	{
-		$fileName = trim ($_FILES['userFile']['name']);
+	elseif (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .
+		'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .
+		'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userFile']['name'])) {
+			$dialogBox .= "$langUnwantedFiletype: {$_FILES['userFile']['name']}";
+	} else {
+		$fileName = trim($_FILES['userFile']['name']);
 		/**** Check for no desired characters ***/
 		$fileName = replace_dangerous_char($fileName);
 		/*** Try to add an extension to files witout extension ***/
 		$fileName = add_ext_on_mime($fileName);
 		/*** Handle PHP files ***/
 		$fileName = php2phps($fileName);
+		$safe_fileName = date("YmdGis").randomkeys("8").".".get_file_extention($fileName);
+		$path = "/".$safe_fileName;
 		/*** Copy the file to the desired destination ***/
-		copy ($userFile, $baseWorkDir.$uploadPath."/".$fileName);
-		
+		copy ($userFile, $baseWorkDir.$uploadPath."/".$safe_fileName);
 		@$dialogBox .= "<table width=\"99%\"><tbody>
 			<tr><td class=\"success\"><p><b>$langDownloadEnd</b></p></td></tr>
 			</tbody></table>";
+		db_query("INSERT INTO group_documents SET
+			path='$path', filename='$fileName'", $currentCourseID);
+			
 	} // end else
 } // end if is_uploaded_file
 
 /**************************************
 MOVE FILE OR DIRECTORY
 **************************************/
-
 if (isset($moveTo))
 {
-	if (move($baseWorkDir.$source,$baseWorkDir.$moveTo) ) {
-		$dialogBox =  "<table width=\"99%\"><tbody><tr>
-			<td class=\"success\">
-			<p><b>$langMoveOK</b></p></td></tr>
+	//elegxos ean source kai destintation einai to idio
+	if($baseWorkDir."/".$source != $baseWorkDir.$moveTo || $baseWorkDir.$source != $baseWorkDir.$moveTo) {
+		if (move($baseWorkDir.$source,$baseWorkDir.$moveTo) ) {
+			update_db_info("group_documents", "update", $source, $moveTo."/".my_basename($source));
+			$dialogBox =  "<table width=\"99%\"><tbody><tr>
+			<td class=\"success\"><p><b>$langMoveOK</b></p></td></tr>
 			</tbody></table>";
-	} else {
-		$dialogBox = "<table width=\"99%\"><tbody><tr><td class=\"caution\">
+		} else {
+			$dialogBox = "<table width=\"99%\"><tbody><tr><td class=\"caution\">
 			<p><b>$langMoveNotOK</b></p></td></tr></tbody></table>";
-		/*** return to step 1 ***/
-		$move = $source;
-		unset ($moveTo);
+			/*** return to step 1 ***/
+			$move = $source;
+			unset ($moveTo);
+		}
 	}
 }
 
 if (isset($move)) {
-	@$dialogBox .= form_dir_list("source", $move, "moveTo", $baseWorkDir);
-}
+	//h $move periexei to onoma tou arxeiou. anazhthsh onomatos arxeiou sth vash
+	$result = mysql_query ("SELECT * FROM group_documents WHERE path=\"".$move."\"");
+	$res = mysql_fetch_array($result);
+	$moveFileNameAlias = $res['filename'];
+	@$dialogBox .= form_dir_list_exclude("group_documents", "source", $move, "moveTo", $baseWorkDir, $move);
+	}
 
 /**************************************
 DELETE FILE OR DIRECTORY
@@ -136,69 +166,60 @@ DELETE FILE OR DIRECTORY
 if (isset($delete))
 {
 	if (my_delete($baseWorkDir.$delete)) {
-		$dialogBox = "<table width=\"99%\">
-		<tbody><tr><td class=\"success\">
-		<p><b>$langDocDeleted</b></p></td>
-		</tr></tbody></table>";
+		update_db_info("group_documents", "delete", $delete);
+		$dialogBox = "<table width='99%'><tbody>
+			<tr><td class='success'><p><b>$langDocDeleted</b></p></td></tr></tbody></table>";
 	}
 }
 
 /*****************************************
-RENAME
+	RENAME
 ******************************************/
-if (isset($renameTo))
-{
-	if (my_rename($baseWorkDir.$sourceFile, $renameTo))
-	{
-		$dialogBox = " <table width=\"99%\">
-			<tbody><tr><td class=\"success\"><p><b>$langElRen</b></p></td></tr>
-			</tbody></table>";
-	} else {
-		$dialogBox = "<table width=\"99%\"><tbody><tr>
-			<td class=\"caution\"><p><b>$langFileExists</b></p></td>
-			</tr></tbody></table><br/>";
-		/*** return to step 1 ***/
-		$rename = $sourceFile;
-		unset($sourceFile);
-	}
+if (isset($renameTo)) {
+	$query =  "UPDATE group_documents SET filename=\"".$renameTo."\" WHERE path=\"".$sourceFile."\"";
+	db_query($query);
+	$dialogBox = "<table width=\"99%\"><tbody><tr><td class=\"success\">
+		<p><b>$langElRen</b></p></td></tr></tbody></table>";
 }
 
-/*-------------------------------------
-RENAME : STEP 1
---------------------------------------*/
-if (isset($rename))
-{
-	$fileName = basename($rename);
-	@$dialogBox .= "<!-- rename -->\n";
-	$dialogBox .= "<form>\n";
-	$dialogBox .= "<input type=\"hidden\" name=\"sourceFile\" value=\"$rename\">\n";
-	$dialogBox .= "<table><thead><tr><th>$langRename ".htmlspecialchars($fileName)." $langIn :</th>";
-	$dialogBox .= "<td><input type=\"text\" name=\"renameTo\" value=\"$fileName\"></td></thead></table>";
-	$dialogBox .= "<br/><input type=\"submit\" value=\"$langRename\">\n";
-	$dialogBox .= "</form>\n";
+// rename
+if (isset($rename)) {
+	$result = mysql_query ("SELECT * FROM group_documents WHERE path=\"".$rename."\"");
+	$res = mysql_fetch_array($result);
+	$fileName = $res["filename"];
+	@$dialogBox .= "<form>\n";
+	$dialogBox .= "<input type=\"hidden\" name=\"sourceFile\" value=\"$rename\">
+        <table class='FormData' width=\"99%\"><tbody><tr>
+        <th class='left' width='200'>$langRename:</th>
+        <td class='left'>$langRename ".htmlspecialchars($fileName)." $langIn: <input type=\"text\" name=\"renameTo\" value=\"$fileName\" class='FormData_InputText' size='50'></td>
+        <td class='left' width='1'><input type=\"submit\" value=\"$langRename\"></td>
+        </tr></tbody></table></form><br />";
 }
 
 /*****************************************
 CREATE DIRECTORY
 *****************************************/
-if (isset($newDirPath) && isset($newDirName))
-{
-	$newDirName = replace_dangerous_char($newDirName);
-	if (check_name_exist($baseWorkDir.$newDirPath."/".$newDirName))
-	{
-		@$dialogBox .= "<table width=\"99%\"><tbody><tr>
-			<td class=\"caution\"><p><b>$langFileExists</b></p></td>
-			</tr></tbody></table>";
-		$createDir = $newDirPath; 
-		unset($newDirPath);// return to step 1
-	}
-	else
-	{
-		mkdir($baseWorkDir.$newDirPath."/".$newDirName, 0755);
-	}
-
+if (isset($newDirPath) && isset($newDirName)) {
+	$newDirName = replace_dangerous_char(trim($newDirName));
+		if (check_name_exist($baseWorkDir.$newDirPath."/".$newDirName) )
+		{
+			$dialogBox .= "<table width=\"99%\">
+			<tbody><tr><td class=\"caution_small\"><p><b>$langFileExists</b></p>
+			</td></tr></tbody></table>";
+			$createDir = $newDirPath; 
+			unset($newDirPath);
+		}
+		else
+		{
+			$safe_dirName = date("YmdGis").randomkeys("8");
+			mkdir($baseWorkDir.$newDirPath."/".$safe_dirName, 0775);
+			$query =  "INSERT INTO group_documents SET
+    				path=\"".$newDirPath."/".$safe_dirName."\",
+    				filename=\"".$newDirName."\"";
+    			mysql_query($query);
+		}
 	$dialogBox = "<table width=\"99%\"><tbody><tr><td class=\"success\">
-		<p><b>$langDirCr</b></p></td></tr></tbody></table>";
+	<p><b>$langDirCr</b></p></td></tr></tbody></table>";	
 }
 
 /*-------------------------------------
@@ -206,7 +227,7 @@ STEP 1
 --------------------------------------*/
 if (isset($createDir))
 {
-	@$dialogBox .= "<!-- create dir -->\n";
+	$dialogBox ="";
 	$dialogBox .= "<form>\n";
 	$dialogBox .= "<input type=\"hidden\" name=\"newDirPath\" value=\"$createDir\">\n";
 	$dialogBox .= "<table><thead><tr><th>$langNewDir:</th>";
@@ -218,22 +239,13 @@ if (isset($createDir))
 /**************************************
 DEFINE CURRENT DIRECTORY
 **************************************/
-
 if (isset($openDir)  || isset($moveTo) || isset($createDir) || isset($newDirPath) || isset($uploadPath) ) // $newDirPath is from createDir command (step 2) and $uploadPath from upload command
 {
 	@$curDirPath = $openDir . $createDir . $moveTo . $newDirPath . $uploadPath;
-	/*
-	* NOTE: Actually, only one of these variables is set.
-	* By concatenating them, we eschew a long list of "if" statements
-	*/
 }
 elseif (isset($delete) || isset($move) || isset($rename) || isset($sourceFile) || isset($comment) || isset($commentPath) || isset($mkVisibl) || isset($mkInvisibl)) //$sourceFile is from rename command (step 2)
 {
 	@$curDirPath = dirname($delete . $move . $rename . $sourceFile . $comment . $commentPath . $mkVisibl . $mkInvisibl);
-	/*
-	* NOTE: Actually, only one of these variables is set.
-	* By concatenating them, we eschew a long list of "if" statements
-	*/
 }
 else
 {
@@ -265,20 +277,17 @@ while ($file = readdir($handle))
 	{
 		continue; // Skip current and parent directories
 	}
-
 	if(is_dir($file))
 	{
 		$dirNameList[] = $file;
 	}
-
 	if(is_file($file))
 	{
 		$fileNameList[] = $file;
 		$fileSizeList[] = filesize($file);
 		$fileDateList[] = filectime($file);
 	}
-} // end while ($file = readdir($handle))
-
+} 
 closedir($handle);
 
 /*** Sort alphabetically ***/
@@ -304,9 +313,8 @@ $resultGroup=db_query("SELECT forumId FROM student_group WHERE id='$userGroupId'
 while ($myGroup = mysql_fetch_array($resultGroup)) {
 	$forumId=$myGroup['forumId'];
 }
-
 $tool_content .= "<div id=\"operations_container\">
-	<ul id=\"opslist\"><li><a href='group_space.php'>${langGroupSpaceLink}</a></li>
+	<ul id=\"opslist\"><li><a href='group_space.php'>$langGroupSpaceLink</a></li>
 	<li><a href='../phpbb/viewforum.php?forum=$forumId'>$langGroupForumLink</a></li>
 	<li><a href='$_SERVER[PHP_SELF]?createDir=".$cmdCurDirPath."\'>$langCreateDir</a></li>
 	<li><a href='$_SERVER[PHP_SELF]?uploadFile=1'>$langDownloadFile</a></li></ul></div><div>";
@@ -317,42 +325,40 @@ DIALOG BOX SECTION
 if (isset($dialogBox))
 {
 	$tool_content .= <<<cData
-	 ${dialogBox} <br/> 
+	${dialogBox} <br/> 
 cData;
 
 }
 else
 {
-//	$tool_content .=  "<td>\n<!-- dialog box -->\n&nbsp;\n</td>\n";
+	$tool_content .=  "<td>&nbsp</td>";
 }
 
 /*----------------------------------------
 UPLOAD SECTION
 --------------------------------------*/
 if(isset($uploadFile) && $uploadFile == 1) {
-$tool_content .= <<<cData
-	<form action='${_SERVER['PHP_SELF']}' method='post' enctype='multipart/form-data'>
+	$tool_content .= <<<cData
+	<form action='$_SERVER[PHP_SELF]' method='post' enctype='multipart/form-data'>
 	<input type='hidden' name='uploadPath' value='$curDirPath'>
 	<table><caption>$langUpload</caption>
 	<thead><tr>
-	<th>${langDownloadFile} :</th><td>
+	<th>$langDownloadFile :</th><td>
 	<input type='file' name='userFile'></td></thead></table><br/>
 	<input type='submit' value='$langUpload'>
 	</form><br/>
 cData;
 }
 
-/*----------------------------------------
+/*------------------------------------
 CURRENT DIRECTORY LINE
 --------------------------------------*/
 $tool_content .= "<table width=\"99%\" align='left'><thead>";
-$tool_content .= "<tr><td class='left' height='18' colspan='3' style='border-top: 1px solid #edecdf; border-bottom: 1px solid #edecdf; border-left: 1px solid #edecdf; background: #fff;'>$langDirectory: ".make_clickable_path($curDirPath) . "</td>
-<td style='border-top: 1px solid #edecdf; background: #fff; border-bottom: 1px solid #edecdf; border-right: 1px solid #edecdf;'>
-<div align='right'>";
+$tool_content .= "<tr><td class='left' height='18' colspan='3' style='border-top: 1px solid #edecdf; border-bottom: 1px solid #edecdf; border-left: 1px solid #edecdf; background: #fff;'>$langDirectory: ".make_clickable_path("group_documents", $curDirPath). "</td>
+<td style='border-top: 1px solid #edecdf; background: #fff; border-bottom: 1px solid #edecdf; border-right: 1px solid #edecdf;'><div align='right'>";
   /*** go to parent directory ***/
 if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
 {
-	$tool_content .=  "<!-- parent dir -->\n";
 	$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdParentDir."\">$langUp</a>\n";
 	$tool_content .=  "<img src=\"img/parent.gif\" border=0 align=\"absmiddle\" height='12' width='12'>\n";
 }
@@ -370,17 +376,19 @@ if (isset($dirNameList))
 {
 	while (list($dirKey, $dirName) = each($dirNameList))
 	{
-		$dspDirName = htmlspecialchars($dirName);
+		$result = db_query ("SELECT filename FROM group_documents WHERE path LIKE '%$dirName'");
+		$row = mysql_fetch_array($result);
+		$dspDirName = $row['filename'];
 		$cmdDirName = rawurlencode($curDirPath."/".$dirName);
-		$tool_content .= "<tr align=\"center\">\n";
-		$tool_content .= "<td align=\"left\">\n";
+		$tool_content .= "<tr align='center'>";
+		$tool_content .= "<td align='left'>";
 		$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".@$style.">\n";
 		$tool_content .= "<img src=\"../../template/classic/img/folder.gif\" border=0 hspace=5>\n";
-		$tool_content .= $dspDirName."\n";
-		$tool_content .= "</a>\n";
+		$tool_content .= $dspDirName;
+		$tool_content .= "</a>";
 		/*** skip display date and time ***/
-		$tool_content .= "<td>-</td>\n";
-		$tool_content .= "<td>-</td>\n";
+		$tool_content .= "<td>-</td>";
+		$tool_content .= "<td>-</td>";
 		/*** delete command ***/
 		$tool_content .= "<td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdDirName."\" onClick=\"return confirmation();\"><img src=\"../../template/classic/img/delete.gif\" border=0></a></td>\n";
 		/*** copy command ***/
@@ -400,25 +408,31 @@ if (isset($fileNameList))
 {
 	while (list($fileKey, $fileName) = each ($fileNameList))
 	{
-		$image       = choose_image($fileName);
-		$size        = format_file_size($fileSizeList[$fileKey]);
-		$date        = format_date($fileDateList[$fileKey]);
+		$image = choose_image($fileName);
+		$size = format_file_size($fileSizeList[$fileKey]);
+		$date = format_date($fileDateList[$fileKey]);
 		$urlFileName = format_url("../../".$courseDir.$curDirPath."/".$fileName);
 		$urlShortFileName = format_url("$curDirPath/$fileName");
 		$cmdFileName = rawurlencode($curDirPath."/".$fileName);
 		$dspFileName = htmlspecialchars($fileName);
 		$tool_content .= "<tr align=\"center\"".@$style.">\n";
 		$tool_content .= "<td align=\"left\">\n";
-		$tool_content .= "<a href=\"".$urlFileName."\"".@$style.">\n";
-		$tool_content .= "<img src=\"../document/img/".$image."\" border=0 hspace=5>\n";
-		$tool_content .= $dspFileName."\n";
-		$tool_content .= "</a>\n";
+		$result = db_query("SELECT path, filename FROM group_documents 
+			WHERE path LIKE '%/$fileName%'", $currentCourseID);
+		$r = mysql_fetch_array($result);
+		$tool_content .= "<img src='../document/img/$image' border=0 hspace=5>";
+		if(empty($r["filename"])) { // compatibility
+			$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' title=\"$langSave\">".$dspFileName."</a>";
+		} else {
+			$tool_content .= "<a href='$_SERVER[PHP_SELF]?action2=download&id=$r[path]'>$r[filename]</a>";
+		}
 		/*** size ***/
 		$tool_content .= "<td>".$size."</td>\n";
 		/*** date ***/
 		$tool_content .= "<td>".$date."</td>\n";
 		/*** delete command ***/
-		@$tool_content .= "<td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdFileName."\" onClick=\"return confirmation();\"><img src=\"../../template/classic/img/delete.gif\" border=0></a></td>\n";
+		@$tool_content .= "<td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdFileName."\" onClick=\"return confirmation();\">
+		<img src=\"../../template/classic/img/delete.gif\" border=0></a></td>\n";
 		/*** copy command ***/
 		$tool_content .= "<td><a href=\"$_SERVER[PHP_SELF]?move=".$cmdFileName."\">
 		<img src=\"../../template/classic/img/move_doc.gif\" border=0></a></td>\n";
@@ -436,5 +450,4 @@ $tool_content .= "</div>\n";
 chdir($baseServDir."/modules/group/");
 
 draw($tool_content, 2, '', $local_head);
-
 ?>

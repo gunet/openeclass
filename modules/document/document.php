@@ -269,7 +269,7 @@ if($is_adminOfCourse)
 		$result = mysql_query ("SELECT * FROM $dbTable WHERE path=\"".$move."\"");
 		$res = mysql_fetch_array($result);
 		$moveFileNameAlias = $res['filename'];
-		@$dialogBox .= form_dir_list_exclude("source", $move, "moveTo", $baseWorkDir, $move);
+		@$dialogBox .= form_dir_list_exclude($dbTable, "source", $move, "moveTo", $baseWorkDir, $move);
 	}
 
 	/**************************************
@@ -654,7 +654,7 @@ if($is_adminOfCourse) {
 	$cols = 3;
 } 
 
-$tool_content .= "<tr><td class='left' height='18' colspan='$cols' style='border-top: 1px solid #edecdf; border-bottom: 1px solid #edecdf; border-left: 1px solid #edecdf; background: #fff;'>$langDirectory: ".make_clickable_path($curDirPath). "</td>
+$tool_content .= "<tr><td class='left' height='18' colspan='$cols' style='border-top: 1px solid #edecdf; border-bottom: 1px solid #edecdf; border-left: 1px solid #edecdf; background: #fff;'>$langDirectory: ".make_clickable_path($dbTable, $curDirPath). "</td>
 <td style='border-top: 1px solid #edecdf; background: #fff; border-bottom: 1px solid #edecdf; border-right: 1px solid #edecdf;'><div align='right'>";
 
 /*** go to parent directory ***/

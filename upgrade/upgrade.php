@@ -628,6 +628,15 @@ if (!isset($submit2)) {
                 }
                 // end of agenda
 
+		// Group table 
+		if (!mysql_table_exists($code[0], 'group_documents'))  {
+			db_query("CREATE TABLE `group_documents` (
+			`id` INT(4) NOT NULL AUTO_INCREMENT,
+			`path` VARCHAR(255) default NULL ,
+			`filename` VARCHAR(255) default NULL,
+ 			PRIMARY KEY(id))", $code[0]);
+		}
+
                 // Learning Path tables
                 if (!mysql_table_exists($code[0], 'lp_module'))  {
                         db_query("CREATE TABLE `lp_module` (
@@ -639,7 +648,7 @@ if (!isset($submit2)) {
                                 `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','LABEL','COURSE_DESCRIPTION','LINK') NOT NULL,
                                 `launch_data` text NOT NULL,
                                 PRIMARY KEY  (`module_id`)
-                                        ) ", $code[0]); //TYPE=MyISAM COMMENT='List of available modules used in learning paths';
+                                ) ", $code[0]); //TYPE=MyISAM COMMENT='List of available modules used in learning paths';
                 }
                 if (!mysql_table_exists($code[0], 'lp_learnPath'))  {
                         db_query("CREATE TABLE `lp_learnPath` (

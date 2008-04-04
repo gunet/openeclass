@@ -717,6 +717,13 @@ mysql_query("CREATE TABLE user_group (
     PRIMARY KEY  (id))
     TYPE=MyISAM $charset_spec");
 
+mysql_query("CREATE TABLE `group_documents` (
+	`id` INT(4) NOT NULL AUTO_INCREMENT,
+	`path` VARCHAR(255) default NULL ,
+	`filename` VARCHAR(255) default NULL,
+ 	PRIMARY KEY(id)) 
+	TYPE=MyISAM $charset_spec");
+ 
 mysql_query("CREATE TABLE group_properties (
     id tinyint(4) NOT NULL auto_increment,
     self_registration tinyint(4) default '1',

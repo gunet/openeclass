@@ -439,11 +439,10 @@ function index_and_sort_dir($path)
  *
  */
 //afth h function dhmiourgei mia lista se combo box me tous fakelous enos path. sth sygkekrimenh exei prostethei to orisma $entryToExclude prokeimenou na mhn emfanizetai mia eggrafh
-function form_dir_list_exclude($sourceType, $sourceComponent, $command, $baseWorkDir, $entryToExclude)
+function form_dir_list_exclude($dbTable, $sourceType, $sourceComponent, $command, $baseWorkDir, $entryToExclude)
 {
 	global $langParentDir, $langTo, $langMoveFrom, $langMove, $moveFileNameAlias;
-	//global $tool_content;
-
+	
 	$dirList = index_and_sort_dir($baseWorkDir);
 	$dialogBox .= "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">\n" ;
 	$dialogBox .= "<input type=\"hidden\" name=\"".$sourceType."\" value=\"".$sourceComponent."\">\n" ;
@@ -461,7 +460,7 @@ function form_dir_list_exclude($sourceType, $sourceComponent, $command, $baseWor
 		{
 			$pathValue = substr($pathValue , $bwdLen);
 			$dirname = basename($pathValue);
-			$sql = db_query("SELECT path, filename FROM document 
+			$sql = db_query("SELECT path, filename FROM $dbTable 
 				WHERE path LIKE '%/$dirname%'"); 
 			while ($r = mysql_fetch_array($sql)) {
 				$filename = $r['filename'];

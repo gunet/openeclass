@@ -702,7 +702,7 @@ function format_bytesize ($kbytes, $dec_places = 2)
 
 
 // used in documents and group documents path navigation bar
-function make_clickable_path($path)
+function make_clickable_path($dbTable, $path)
 {
 	global $langRoot;
 
@@ -714,10 +714,9 @@ function make_clickable_path($path)
 			$out = "<a href='$base?openDir=/'>$langRoot</a>";
 		} else {
 			$cur .= rawurlencode("/$component");
-			$row = mysql_fetch_array(db_query ("SELECT filename FROM document 
+			$row = mysql_fetch_array(db_query ("SELECT filename FROM $dbTable 
 					WHERE path LIKE '%$component'"));
 			$dirname = $row['filename'];
-			//$out .= " &raquo; <a href='$base?openDir=$cur'>$component</a>";
 			$out .= " &raquo; <a href='$base?openDir=$cur'>$dirname</a>";
 		}
 	}
