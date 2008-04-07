@@ -42,13 +42,13 @@ $tool_content = "";
 
 include('work_functions.php');
 
-$nameTools = $langGradeWork;
+$nameTools = $m['grades'];
 mysql_select_db($currentCourseID);
 
 if ($is_adminOfCourse and isset($_GET['assignment']) and isset($_GET['submission'])) {
 		$assign = get_assignment_details($_GET['assignment']);
 		$navigation[] = array("url"=>"work.php", "name"=>$langWorks);
-		$navigation[] = array("url"=>"work.php?id=$_GET[assignment]", "name"=>$assign['title']);
+		$navigation[] = array("url"=>"work.php?id=$_GET[assignment]", "name"=>$m['WorkView']);
 		show_edit_form($_GET['assignment'], $_GET['submission'], $assign);
 		draw($tool_content, 2);
 } else {
@@ -83,13 +83,12 @@ function show_edit_form($id, $sid, $assign)
     <input type="hidden" name="assignment" value="${id}">
     <input type="hidden" name="submission" value="${sid}">
 
-      <table width="99%" class="FormData">
-      <tbody>
-      <tr>
-        <th width="220">&nbsp;</th>
-        <td><b>$m[addgradecomments]</b></td>
-      </tr>
-
+    <table width="99%" class="FormData">
+    <tbody>
+    <tr>
+      <th width="220">&nbsp;</th>
+       <td><b>$m[addgradecomments]</b></td>
+    </tr>
     <tr>
       <th class="left">${m['username']}:</th>
       <td>${uid_2_name} $group_submission</td></tr>

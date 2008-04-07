@@ -95,6 +95,10 @@ table.Assignment th {
 	font-weight : normal;
 }
 
+table.Assignment thead {
+	text-align : center !Important;
+}
+
 table.Assignment td {
 	padding: 4px;
 	vertical-align: top !important;
@@ -103,6 +107,22 @@ table.Assignment td {
 	color: #727266;
 	vertical-align: middle;
 }
+
+table.Info {
+	background: #ffffff;
+}
+
+table.Info td {
+	font-size: 9	px;
+	background: #FBFBFB !important;
+	border-bottom: 1px solid #ffffff;
+	border-top: 1px solid #ffffff;
+	border-left: 1px solid #ffffff;
+	border-right: 1px solid #ffffff;
+}
+
+
+
 
 #question_title_id {
     padding:2px;

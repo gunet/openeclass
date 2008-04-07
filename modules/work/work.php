@@ -115,8 +115,7 @@ if ($is_adminOfCourse) {
 	} elseif (isset($sid)) {
 		show_submission($sid);
 	} elseif (isset($_POST['new_assign'])) {
-		add_assignment($title, $comments, $desc, "$WorkEnd",
-		$group_submissions);
+		add_assignment($title, $comments, $desc, "$WorkEnd", $group_submissions);
 		show_assignments();
 	} elseif (isset($grades)) {
 		submit_grades($grades_id, $grades);
@@ -134,6 +133,8 @@ if ($is_adminOfCourse) {
 				$navigation[] = array("url"=>"work.php", "name"=> $langWorks);
 				delete_assignment($id);
 			} elseif ($choice == 'edit') {
+				$nameTools = $m['WorkEdit'];
+				$navigation[] = array("url"=>"work.php", "name"=> $langWorks);
 				show_edit_assignment($id);
 			} elseif ($choice == 'do_edit') {
 				edit_assignment($id);
@@ -141,6 +142,8 @@ if ($is_adminOfCourse) {
 				show_plain_view($id);
 			}
 		} else {
+			$nameTools = $m['WorkView'];
+			$navigation[] = array("url"=>"work.php", "name"=> $langWorks);
 			show_assignment($id);
 		}
 	} else {
@@ -149,8 +152,13 @@ if ($is_adminOfCourse) {
 } else {
 	if (isset($id)) {
 		if (isset($work_submit)) {
+			$nameTools = $m['SubmissionStatusWorkInfo'];
+			$navigation[] = array("url"=>"work.php", "name"=> $langWorks);
+			$navigation[] = array("url"=>"work.php?id=$id", "name"=>$m['WorkView']);
 			submit_work($id);
 		} else {
+			$nameTools = $m['WorkView'];
+			$navigation[] = array("url"=>"work.php", "name"=> $langWorks);
 			show_student_assignment($id);
 		}
 	} else {
@@ -432,13 +440,7 @@ function show_edit_assignment($id)
 
 	$deadline = $row['deadline'];
 
-	$tool_content .= "
-    <div id=\"operations_container\">
-    <ul id=\"opslist\">
-      <li><a href='work.php'>$langBack</a></li>
-    </ul>
-    </div>
-    ";
+
 	$description = q($row['description']);
 	$tool_content .= <<<cData
     <form action="work.php" method="post">
@@ -496,6 +498,11 @@ cData;
     </tbody>
     </table>
     </form>";
+	
+	$tool_content .= "
+    <br />
+    <div align=\"right\"><a href='work.php'>$langBack</ul></div>
+    ";
 }
 
 // edit assignment
@@ -608,7 +615,7 @@ function show_student_assignment($id)
 			$submit_ok = FALSE;
 		} elseif ($submission = find_submission($uid, $id)) {
 			show_submission_details($submission);
-			$tool_content .= "<br />";
+			//$tool_content .= "<br />";
 			//$tool_content .= "<p class='alert1'>$langNotice3</p>";
 		}
 	}
@@ -634,8 +641,9 @@ function show_submission_form($id)
 
     <form enctype="multipart/form-data" action="work.php" method="post">
     <input type="hidden" name="id" value="${id}">
+    <br />
     <table width="99%" align="left" class="FormData">
-    <thead>
+    <tbody>
     <tr>
       <th width="220">&nbsp;</th>
       <td><b>${langSubmit}</b></td>
@@ -652,7 +660,7 @@ function show_submission_form($id)
       <th>&nbsp;</th>
       <td><input type="submit" value="${langSubmit}" name="work_submit"><br />$langNotice3</td>
     </tr>
-    </thead>
+    </tbody>
     </table>
     <br/>
     </form>
@@ -768,10 +776,10 @@ function sort_link($title, $opt, $attrib = '')
 			$r = 1;
 		}
 		$tool_content .= "
-      <td $attrib><a href='work.php?sort=$opt&rev=$r$i'>" ."$title</a></td>";
+      <td $attrib><div align='center'><a href='work.php?sort=$opt&rev=$r$i'>" ."$title</a></div></td>";
 	} else {
 		$tool_content .= "
-      <td $attrib><a href='work.php?sort=$opt$i'>$title</a></td>";
+      <td $attrib><div align='center'><a href='work.php?sort=$opt$i'>$title</a></div></td>";
 	}
 }
 
@@ -788,6 +796,7 @@ function show_assignment($id, $message = FALSE)
 	$row = mysql_fetch_array($res);
 
 	$nav[] = array("url"=>"work.php", "name"=> $langWorks);
+
 
 	if ($message) {
 		assignment_details($id, $row, $message);
@@ -821,10 +830,10 @@ function show_assignment($id, $message = FALSE)
 	$num_results = mysql_num_rows($result);
 	if ($num_results > 0) {
 		if ($num_results == 1) {
-			$tool_content .= "
-      <p>$m[one_submission]</p>\n";
+			$num_of_submissions = $m[one_submission];  
 		} else {
-			$nameTools .= sprintf(" ($m[more_submissions])", $num_results);
+			//$nameTools .= sprintf(" ($m[more_submissions])", $num_results);
+			$num_of_submissions = sprintf("$m[more_submissions]", $num_results);
 		}
 
 		require_once '../../include/libchart/libchart.php';
@@ -850,26 +859,7 @@ function show_assignment($id, $message = FALSE)
 				}
 			}
 		}
-		if ($gradesExists) {
-			foreach ( $gradeOccurances as $gradeValue=>$gradeOccurance ) {
-				$percentage = 100*($gradeOccurance/$num_results);
-				$chart->addPoint(new Point("$gradeValue ($percentage)", $percentage));
-			}
 
-			$chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
-			$chart->render($webDir.$chart_path);
-
-			$tool_content .= "
-
-    <table width=\"99%\" class=\"FormData\">
-    <tbody>
-    <tr>
-      <th class=\"left\" width=\"220\" valign=\"top\">$langGraphResults:</th>
-      <td><img src=\"".$urlServer.$chart_path."\" /></td>
-    </tr>
-    </tbody>
-    </table>";
-		}
 		$result = db_query("SELECT *
 					FROM `$GLOBALS[code_cours]`.assignment_submit AS assign,
 					`$mysqlMainDb`.user AS user
@@ -880,33 +870,32 @@ function show_assignment($id, $message = FALSE)
 
     <form action="work.php" method="post">
     <input type="hidden" name="grades_id" value="${id}">
-     <br />
+    <br />
     <table class="FormData" width="99%">
-    <thead>
+    <tbody>
     <tr>
-      <th class="left" width="220">$langSubmissions</th>
-      <td>&nbsp;</div></td>
+      <th class="left" width="220">$langSubmissions:</th>
+      <td>$num_of_submissions</td>
     </tr>
-    </thead>
+    </tbody>
     </table>
 cData;
 
 			$tool_content .= "
-      <table width=\"99%\" class=\"Assignment\" border=1>
+      <table width=\"99%\" class=\"Assignment\">
       <tbody>
       <tr>
         <td width=\"3\">&nbsp;</td>";
 
-			sort_link($m['username'], 'nom', 'align="left"');
+			sort_link($m['username'], 'nom');
 			sort_link($m['am'], 'am');
-
 			$tool_content .= "
-        <td><b>".$m['filename']."</b></td>";
-
+        <td align=\"center\"> <div class='center'><b>".$m['filename']."</b></div></td>";
 			sort_link($m['sub_date'], 'date');
 			sort_link($m['grade'], 'grade');
 			$tool_content .= "
-      </tr>";
+      </tr>
+";
 	  
 		$i = 1;
 		while ($row = mysql_fetch_array($result)) 
@@ -920,35 +909,51 @@ cData;
 
 			//professor comments
 			if (trim($row['grade_comments'] != '')) {
-				$prof_comment = "$m[gradecomments]: ".
-				htmlspecialchars($row['grade_comments']).
-				" <a href='grade_edit.php?assignment=$id&submission=$row[id]'>".
-				"($m[edit])</a>";
+				$prof_comment = "".htmlspecialchars($row['grade_comments']).
+				" (<a href='grade_edit.php?assignment=$id&submission=$row[id]'>".
+				"$m[edit]</a>)";
 			} else {
 				$prof_comment = "
 				<a href='grade_edit.php?assignment=$id&submission=$row[id]'>".
-				$m['addgradecomments']."</a>";
+				$m['comments']."</a> (+)";
 			}
 			$uid_2_name = uid_to_name($row['uid']);
 			$stud_am = mysql_fetch_array(db_query("SELECT am from $mysqlMainDb.user WHERE user_id = '$row[uid]'"));
 			$tool_content .= <<<cData
 
       <tr>
-        <td class="right">$i</td>
-        <td width="250">${uid_2_name} $subContentGroup</td>
-        <td width="50">${stud_am[0]}</td>
-        <td><a href="work.php?get=${row['id']}">${row['file_name']}</a>
+        <td class="right"><img src='../../template/classic/img/bullet_bw.gif' alt='' title=""></td>
+        <td>${uid_2_name} $subContentGroup</td>
+        <td width="75">${stud_am[0]}</td>
+        <td width="180"><a href="work.php?get=${row['id']}">${row['file_name']}</a>
 cData;
 			if (trim($row['comments'] != '')) {
-				$tool_content .= "		
-            <br /><br />
-            <b>$m[comments]:</b> $row[comments]";
+				$tool_content .= "
+            <br />
+            <table align=\"left\" width=\"100%\" class=\"Info\">
+            <tbody>
+            <tr>
+              <td width=\"1\" class=\"left\"><img src='../../template/classic/img/forum_off.gif' alt='$m[comments]' title=\"$m[comments]\"></td>
+              <td>$row[comments]</td>
+            <tr>
+            </tbody>
+            </table>";
 			}
 			$tool_content .= <<<cData
 
         </td>
-        <td align="center">${row['submission_date']}</td>
-        <td align="left"><div align="right"><input type="text" value="${row['grade']}" maxlength="3" size="3" name="grades[${row['id']}]"></div>$prof_comment</td>
+        <td width="75">${row['submission_date']}</td>
+        <td width="180" align="left">
+            <div align="center"><input type="text" value="${row['grade']}" maxlength="3" size="3" name="grades[${row['id']}]" class="auth_input"></div>
+            <table align="left" width="100%" class="Info">
+            <tbody>
+            <tr>
+              <td width="1" class="left"><img src='../../template/classic/img/forum_on.gif' alt='$m[comments]' title="$m[comments]"></td>
+              <td>$prof_comment</td>
+            <tr>
+            </tbody>
+            </table>
+        </td>
       </tr>
 cData;
 			$i++;
@@ -957,34 +962,56 @@ cData;
 			$tool_content .="
       </tbody>
       </table>
-      <br />
 	  ";
 	  
-	 
 		
 	  		$tool_content .= "
+    <br />
     <table class=\"FormData\" width=\"99%\">
-    <thead>
+    <tbody>
     <tr>
       <th class=\"left\" width=\"220\">&nbsp;</th>
       <td><input type=\"submit\" name=\"submit_grades\" value=\"${langGradeOk}\"></td>
     </tr>
-    </thead>
+    </tbody>
     </table>
-      
-    </form>	
+    </form>
 	";
 
-	} else {
-		$tool_content .= "
-      <br />
-      <table width=\"99%\" class=\"Assignment\">
-      <tbody>
-      <tr>
-        <td class=\"alert1\">$langNoSubmissions</td>
+	  
+		if ($gradesExists) {
+			foreach ( $gradeOccurances as $gradeValue=>$gradeOccurance ) {
+				$percentage = 100*($gradeOccurance/$num_results);
+				$chart->addPoint(new Point("$gradeValue ($percentage)", $percentage));
+			}
+
+			$chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
+			$chart->render($webDir.$chart_path);
+
+			$tool_content .= "
+    <table width=\"99%\" class=\"FormData\">
+    <tbody>
+    <tr>
+      <td align=\"right\"><img src=\"".$urlServer.$chart_path."\" /></td>
     </tr>
     </tbody>
     </table>";
+		}
+
+	} else {
+	
+		$tool_content .= <<<cData
+
+    <br />
+    <table class="FormData" width="99%">
+    <tbody>
+    <tr>
+      <th class="left" width="220">$langSubmissions:</th>
+      <td class="empty">$langNoSubmissions</td>
+    </tr>
+    </tbody>
+    </table>
+cData;
 	}
 	$tool_content .= "
       <br/>
@@ -1005,26 +1032,27 @@ function show_student_assignments()
 	if (mysql_num_rows($result)) {
 
 		$tool_content .= <<<cData
-			<table width="99%"><thead>
-			<tr>
-			<th>${m['title']}</th>
-			  <th>
-			${m['deadline']}
-			  </th>
-			  <th>
-			${m['submitted']}
-			  </th>
-			  <th>
-			${m['grade']}
-			  </th>
-			</tr></thead><tbody>
+
+      <table class="WorkSum" align="left" width="99%">
+      <thead>
+      <tr>
+        <th colspan="2"><div align="left">&nbsp;&nbsp;<b>${m['title']}</b></div></th>
+        <th><b>${m['deadline']}</b></th>
+        <th><b>${m['submitted']}</b></th>
+        <th><b>${m['grade']}</b></th>
+      </tr>
+      </thead>
+      <tbody>
 cData;
 
 		while ($row = mysql_fetch_array($result)) {
 			$title_temp = htmlspecialchars($row['title']);
 			$tool_content .= <<<cData
-			<tr><td><a href="work.php?id=${row['id']}">${title_temp}</a></td><td width="30%">
-			${row['deadline']}
+
+      <tr>
+        <td width="1"><img src='../../template/classic/img/bullet_bw.gif' alt=''></td>
+        <td><a href="work.php?id=${row['id']}">${title_temp}</a></td>
+        <td width="30%">${row['deadline']}
 cData;
 
 			if ($row['days'] > 1) {
@@ -1036,7 +1064,8 @@ cData;
 			} else {
 				$tool_content .= " (<span class=\"expired_today\"><b>$m[today]</b></span>)";
 			}
-			$tool_content .= "</td><td width=\"10%\" align=\"center\">";
+			$tool_content .= "</td>
+        <td width=\"10%\" align=\"center\">";
 
 			$grade = ' - ';
 			if ($submission = find_submission($uid, $row['id'])) {
@@ -1048,9 +1077,13 @@ cData;
 			} else {
 				$tool_content .= "<img src='../../template/classic/img/checkbox_off.gif' alt='$m[no]'>";
 			}
-			$tool_content .= "</td><td width=\"10%\" align=\"center\">${grade}</td></tr>";
+			$tool_content .= "</td>
+        <td width=\"10%\" align=\"center\">${grade}</td>
+      </tr>";
 		}
-		$tool_content .= '</tbody></table>';
+		$tool_content .= '
+      </tbody>
+      </table>';
 	} else {
 		$tool_content .= "<p class=\"alert1\">$langNoAssign</p>";
 

@@ -63,7 +63,7 @@ function table_row($title, $content)
 	if (trim($content) != '') {
 		$tool_content .= "
     <tr>
-      <th class=\"left\">$title:</b></th>
+      <th class=\"left\">$title:</th>
       <td>".htmlspecialchars($content)."</td>
     </tr>";
 	}
@@ -297,6 +297,7 @@ function show_submission_details($id)
 	} else $sub_notice = "";
 	
 	$tool_content .= "
+    <br />
     <table width=\"99%\" class=\"FormData\">
     <tbody>";
 	$tool_content .= "
