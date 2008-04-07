@@ -56,15 +56,11 @@
 function update_db_info($dbTable, $action, $oldPath, $newPath = "")
 {
 	if ($action == "delete") {
-	mysql_query("DELETE FROM ".$dbTable." 
+		mysql_query("DELETE FROM ".$dbTable." 
 			WHERE path LIKE \"".$oldPath."%\""); 
 	} elseif ($action = "update") {
-		//$newPath = preg_replace('|/+|', '/', $newPath);
-		/*mysql_query("UPDATE ".$dbTable." 
-			SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
-			WHERE path LIKE '$oldPath%'"); */
-		mysql_query("UPDATE $dbTable SET path = '$newPath'
-				WHERE path ='$oldPath'"); 
+		mysql_query("UPDATE $dbTable SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
+			WHERE path LIKE '$oldPath%'");
 	}
 }
 
@@ -109,7 +105,7 @@ function my_delete($file)
 {
 	if (check_name_exist($file))
 	{
-		if ( is_file($file) ) // FILE CASE
+		if (is_file($file)) // FILE CASE
 		{
 			unlink($file);
 			return true;
@@ -442,6 +438,7 @@ function index_and_sort_dir($path)
 function form_dir_list_exclude($dbTable, $sourceType, $sourceComponent, $command, $baseWorkDir, $entryToExclude)
 {
 	global $langParentDir, $langTo, $langMoveFrom, $langMove, $moveFileNameAlias;
+	global $tool_content;
 	
 	$dirList = index_and_sort_dir($baseWorkDir);
 	$dialogBox .= "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">\n" ;
@@ -471,9 +468,10 @@ function form_dir_list_exclude($dbTable, $sourceType, $sourceComponent, $command
 				{
 					$tab .= "&nbsp;&nbsp";
 				}
-			//if ($pathValue != $entryToExclude) $dialogBox .= "<option value=\"$pathValue\">$tab>$filename\n";
-			if ($path != $entryToExclude or (!is_file($baseWorkDir.$path))) 
-					$dialogBox .= "<option value='$path'>$tab>$filename</option>";
+			
+//			$tool_content .= $baseWorkDir.$path;
+			if ($pathValue != $entryToExclude and (!is_file($baseWorkDir.$path)))
+				$dialogBox .= "<option value='$path'>$tab>$filename</option>";
 			}
 		}
 	}
