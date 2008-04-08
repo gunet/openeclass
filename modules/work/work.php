@@ -107,6 +107,8 @@ hContent;
 
 if ($is_adminOfCourse) {
 	if (isset($grade_comments)) {
+		$nameTools = $m['WorkView'];
+		$navigation[] = array("url"=>"work.php", "name"=> $langWorks);
 		submit_grade_comments($assignment, $submission, $grade, $comments);
 	} elseif (isset($add)) {
 		$nameTools = $langNewAssign;
@@ -118,6 +120,8 @@ if ($is_adminOfCourse) {
 		add_assignment($title, $comments, $desc, "$WorkEnd", $group_submissions);
 		show_assignments();
 	} elseif (isset($grades)) {
+		$nameTools = $m['WorkView'];
+		$navigation[] = array("url"=>"work.php", "name"=> $langWorks);
 		submit_grades($grades_id, $grades);
 	} elseif (isset($id)) {
 		if (isset($choice)) {
@@ -130,6 +134,7 @@ if ($is_adminOfCourse) {
 			} elseif ($choice == 'delete') {
 				die("invalid option");
 			} elseif ($choice == "do_delete") {
+				$nameTools = $m['WorkDelete'];
 				$navigation[] = array("url"=>"work.php", "name"=> $langWorks);
 				delete_assignment($id);
 			} elseif ($choice == 'edit') {
@@ -137,6 +142,8 @@ if ($is_adminOfCourse) {
 				$navigation[] = array("url"=>"work.php", "name"=> $langWorks);
 				show_edit_assignment($id);
 			} elseif ($choice == 'do_edit') {
+				$nameTools = $m['WorkView'];
+				$navigation[] = array("url"=>"work.php", "name"=> $langWorks);
 				edit_assignment($id);
 			} elseif ($choice = 'plain') {
 				show_plain_view($id);
@@ -147,6 +154,8 @@ if ($is_adminOfCourse) {
 			show_assignment($id);
 		}
 	} else {
+		$nameTools = $m['WorkView'];
+		$navigation[] = array("url"=>"work.php", "name"=> $langWorks);
 		show_assignments();
 	}
 } else {
@@ -693,7 +702,7 @@ function assignment_details($id, $row, $message = null)
     <table width=\"99%\">
     <tbody>
     <tr>
-      <td class=\"success\"><p><b>$langSaved </b></p></td>
+      <td class=\"success\"><p><b>$langSaved</b></p></td>
     </tr>
     </tbody>
     </table>
@@ -776,10 +785,10 @@ function sort_link($title, $opt, $attrib = '')
 			$r = 1;
 		}
 		$tool_content .= "
-      <td $attrib><div align='center'><a href='work.php?sort=$opt&rev=$r$i'>" ."$title</a></div></td>";
+      <td $attrib><a href='work.php?sort=$opt&rev=$r$i'>" ."$title</a></td>";
 	} else {
 		$tool_content .= "
-      <td $attrib><div align='center'><a href='work.php?sort=$opt$i'>$title</a></div></td>";
+      <td $attrib><a href='work.php?sort=$opt$i'>$title</a></td>";
 	}
 }
 
@@ -882,17 +891,17 @@ function show_assignment($id, $message = FALSE)
 cData;
 
 			$tool_content .= "
-      <table width=\"99%\" class=\"Assignment\">
+      <table width=\"99%\" class=\"Work_List\">
       <tbody>
       <tr>
         <td width=\"3\">&nbsp;</td>";
 
-			sort_link($m['username'], 'nom');
-			sort_link($m['am'], 'am');
+			sort_link($m['username'], 'nom', 'align=left');
+			sort_link($m['am'], 'am', 'align=center');
 			$tool_content .= "
-        <td align=\"center\"> <div class='center'><b>".$m['filename']."</b></div></td>";
-			sort_link($m['sub_date'], 'date');
-			sort_link($m['grade'], 'grade');
+        <td align=\"center\"><div class='center'><b>".$m['filename']."</b></div></td>";
+			sort_link($m['sub_date'], 'date', 'align=center');
+			sort_link($m['grade'], 'grade', 'align=center class=grade');
 			$tool_content .= "
       </tr>
 ";
@@ -922,7 +931,7 @@ cData;
 			$tool_content .= <<<cData
 
       <tr>
-        <td class="right"><img src='../../template/classic/img/bullet_bw.gif' alt='' title=""></td>
+        <td align='right' width='4'>$i.</td>
         <td>${uid_2_name} $subContentGroup</td>
         <td width="75">${stud_am[0]}</td>
         <td width="180"><a href="work.php?get=${row['id']}">${row['file_name']}</a>
@@ -943,8 +952,8 @@ cData;
 
         </td>
         <td width="75">${row['submission_date']}</td>
-        <td width="180" align="left">
-            <div align="center"><input type="text" value="${row['grade']}" maxlength="3" size="3" name="grades[${row['id']}]" class="auth_input"></div>
+        <td width="180" align="left" class="grade">
+            <div align="center"><input type="text" value="${row['grade']}" maxlength="3" size="3" name="grades[${row['id']}]" class="grade_input"></div>
             <table align="left" width="100%" class="Info">
             <tbody>
             <tr>

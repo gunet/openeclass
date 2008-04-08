@@ -3181,6 +3181,7 @@ $m['more_submissions'] = '%d files have been submitteD';
 $m['plainview'] = 'Concise list of submissions and grades';
 $m['WorkInfo']= 'Work info';
 $m['WorkView']= 'Work view';
+$m['WorkDelete']= 'Work delete';
 $m['WorkEdit']= 'Work edit';
 $m['SubmissionWorkInfo']= 'Submission info';
 $m['SubmissionStatusWorkInfo']= 'Submission status';
