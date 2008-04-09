@@ -77,11 +77,20 @@ include("functions.php"); // application logic for phpBB
 /*
 * First, some decoration
 */
-if ( $is_adminOfCourse || $is_admin ) {
-	$tool_content .= "<a href=\"../forum_admin/forum_admin.php\">$l_adminpanel</a></P>&nbsp;";
-}
 
-$tool_content .= "<P><a href=\"newtopic.php?forum=$forum\">$langNewTopic</a></P>";
+	$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">";
+if ( $is_adminOfCourse || $is_admin ) {
+	$tool_content .= "
+        <li><a href=\"../forum_admin/forum_admin.php\"><a href=\"../forum_admin/forum_admin.php\">$l_adminpanel</a></li>";
+}
+	$tool_content .= "
+        <li><a href=\"newtopic.php?forum=$forum\">$langNewTopic</a></li>
+      </ul>
+    </div>
+    <br />
+	";
 
 /*
 * Retrieve and present data from course's forum
@@ -104,11 +113,18 @@ $forum_name = own_stripslashes($myrow["forum_name"]);
 $nameTools = $forum_name;
 
 $tool_content .= <<<cData
-	<TABLE WIDTH="99%">
-	<thead><TR><th></th><th>&nbsp;$l_topic</th><th>$l_replies</th>
-	<th>$l_poster</th><th>$langSeen</th>
-	<th>$langLastMsg</th></TR></thead>
-	<tbody>
+
+    <table width="99%" class="ForumSum">
+    <thead>
+    <TR>
+      <td class="lalahead" colspan="2">&nbsp;$l_topic</td>
+      <td class="lalahead" width="100">$l_replies</td>
+      <td class="lalahead" width="100">$l_poster</th>
+      <td class="lalahead" width="100">$langSeen</td>
+      <td class="lalahead" width="100">$langLastMsg</td>
+    </TR>
+    </thead>
+    <tbody>
 cData;
 
 if ( isset($start) ) {
@@ -133,7 +149,7 @@ $sql = "SELECT t.*, u.username, u2.username as last_poster, p.post_time FROM top
 if(!$result = db_query($sql, $currentCourseID)) {
 	$tool_content .= <<<cData
 
-</TABLE>
+    </TABLE>
 cData;
 	$tool_content .= $langErrorTopicsQueryDatabase;
 	draw($tool_content, 2);
@@ -171,7 +187,7 @@ if ($myrow = mysql_fetch_array($result)) {
 				$image = $locked_image;
 			}
 		}
-		$tool_content .= "<TD><IMG SRC=\"$image\"></TD>\n";
+		$tool_content .= "<TD width=\"1\"><IMG SRC=\"$image\"></TD>\n";
 		$topic_title = own_stripslashes($myrow["topic_title"]);
 		$pagination = '';
 		$start = '';
@@ -206,14 +222,14 @@ if ($myrow = mysql_fetch_array($result)) {
 		}
 		$topiclink .= "&$replys";
 		$tool_content .= "<TD><a href=\"$topiclink\">$topic_title</a>$pagination</TD>\n";
-		$tool_content .= "<TD>$replys</TD>\n";
-		$tool_content .= "<TD>" . $myrow["prenom"] . " " . $myrow["nom"] . "</TD>\n";
-		$tool_content .= "<TD>" . $myrow["topic_views"] . "</TD>\n";
-		$tool_content .= "<TD>$last_post</TD></TR>\n";
+		$tool_content .= "<TD class=\"lalaleftside\">$replys</TD>\n";
+		$tool_content .= "<TD class=\"lalaleftside1\">" . $myrow["prenom"] . " " . $myrow["nom"] . "</TD>\n";
+		$tool_content .= "<TD class=\"lalaleftside\">" . $myrow["topic_views"] . "</TD>\n";
+		$tool_content .= "<TD class=\"lalaleftside1\">$last_post</TD></TR>\n";
 	} while($myrow = mysql_fetch_array($result));
 } else {
 	$tool_content .= "<td colspan=6>$l_notopics</td></tr>\n";
 }
 $tool_content .= "</tbody></table>";
-draw($tool_content, 2);
+draw($tool_content, 2, 'phpbb');
 ?>

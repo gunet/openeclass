@@ -81,12 +81,26 @@ include_once("./config.php");
 */
 
 if ($is_adminOfCourse || $is_admin) {
-	$tool_content .= "<a href=\"../forum_admin/forum_admin.php\">$l_adminpanel</a><P>&nbsp;";
+	$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">
+        <li><a href=\"../forum_admin/forum_admin.php\">$l_adminpanel</a></li>
+      </ul>
+    </div>
+    <br />
+	";
 }
 $tool_content .= <<<cData
-<TABLE WIDTH="99%" CELLPADDING="1" CELLSPACING="0" ALIGN="CENTER" VALIGN="TOP">
-<thead>
-<TR><th> </th><th>$l_forum</th><th>$l_topics</th><th>$l_posts</th><th>$l_lastpost</th></TR></thead>
+
+    <table width="99%" class="ForumSum">
+    <thead>
+    <tr>
+      <td colspan="2" class="lalahead">$l_forum</td>
+      <td class="lalahead">$l_topics</td>
+      <td class="lalahead">$l_posts</td>
+      <td class="lalahead">$l_lastpost</td>
+    </tr>
+    </thead>
 cData;
 
 /*
@@ -98,7 +112,8 @@ $sql = "SELECT c.* FROM catagories c, forums f
 	 ORDER BY c.cat_id DESC";
 
 if ( !$result = db_query($sql, $currentCourseID)) {
-	$tool_content .= "</table>";
+	$tool_content .= "
+    </table>";
 	$tool_content .= "$langUnableGetCategories<br>$sql";
 	draw($tool_content, 2);
 	exit();
@@ -126,12 +141,16 @@ if ( $total_categories ) {
 		$limit_forums ORDER BY f.cat_id, f.forum_id";
 	if ( !$f_res = db_query($sql, $currentCourseID) ) {
 		$tool_content .= <<<cData
-		</TABLE>
+
+    </table>
 cData;
 		$tool_content .= "Error getting forum data.";
-		draw($tool_content, 2);
+		draw($tool_content, 2, 'phpbb');
 		exit();
 	}
+		$tool_content .= "
+    <tbody>";
+	 
 	while ( $forum_data = mysql_fetch_array($f_res) ) {
 		$forum_row[] = $forum_data;
 	}
@@ -139,13 +158,19 @@ cData;
 		if ( $viewcat != -1 ) {
 			if ( $categories[$i][cat_id] != $viewcat ) {
 				$title = stripslashes($categories[$i][cat_title]);
-				$tool_content .= "<TR><TD COLSPAN=5><p><b>$title</b></p></TD></TR>";
+				$tool_content .= "
+    <tr class=\"lala\">
+      <td colspan=\"5\" class=\"left\">&nbsp;$title</td>
+    </tr>";
 				continue;
 			}
 		}
 		$title = stripslashes($categories[$i]["cat_title"]);
 		$catNum = $categories[$i]["cat_id"];
-		$tool_content .= "<TR><TD COLSPAN=5><p><b>$title</b></p></TD></TR>";
+		$tool_content .= "
+    <tr>
+      <td colspan=\"5\" class=\"lala\">&nbsp;$title</td>
+    </tr>";
 		@reset($forum_row);
 		for ( $x=0; $x < count($forum_row); $x++) {
 			unset($last_post);
@@ -161,20 +186,24 @@ cData;
 				if ( empty($last_post) ) {
 					$last_post = $l_noposts;
 				}
-				$tool_content .= "<TR>";
+				$tool_content .= "
+    <tr>";
 				if ( !isset($last_visit) ) {
 					$last_visit = 0;
 				}
 				if(@$last_post_time > $last_visit && $last_post != $l_noposts) {
-					$tool_content .= "<TD WIDTH=5%><IMG SRC=\"$newposts_image\"></TD>";
+					$tool_content .= "
+      <td width=\"2\" class=\"left\"><IMG SRC=\"$newposts_image\"></td>";
 				} else {
-					$tool_content .= "<TD WIDTH=5%><IMG SRC=\"$folder_image\"></TD>";
+					$tool_content .= "
+      <td width=5%><IMG SRC=\"$folder_image\"></td>";
 				}
 				$name = stripslashes($forum_row[$x]["forum_name"]);
 				$total_posts = $forum_row[$x]["forum_posts"];
 				$total_topics = $forum_row[$x]["forum_topics"];
 				$desc = stripslashes($forum_row[$x]["forum_desc"]);
-				$tool_content .= "<TD>";
+				$tool_content .= "
+      <td>";
 				$forum=$forum_row[$x]["forum_id"];
 				if ( $is_adminOfCourse==1 ) { // TUTOR VIEW
 					$sqlTutor = db_query("SELECT id FROM student_group
@@ -201,11 +230,15 @@ cData;
 					$tool_content .= "<a href=\"viewforum.php?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a> ";
 				}
 				$tool_content .= "<br>$desc";
-				$tool_content .= "</TD>";
-				$tool_content .= "<TD WIDTH=5%>$total_topics</TD>";
-				$tool_content .= "<TD WIDTH=5%>$total_posts</TD>";
-				$tool_content .= "<TD WIDTH=15%>$last_post</TD>";
-				$tool_content .= "</TR>";
+				$tool_content .= "</td>";
+				$tool_content .= "
+      <td width=\"65\" class=\"lalaleftside\">$total_topics</td>";
+				$tool_content .= "
+      <td width=\"65\" class=\"lalaleftside\">$total_posts</td>";
+				$tool_content .= "
+      <td width=\"140\" class=\"lalaleftside\">$last_post</td>";
+				$tool_content .= "
+    </tr>";
 			}
 		}
 	}
@@ -215,8 +248,10 @@ cData;
 * Closing decoration and actual drawing
 */
 $tool_content .= <<<cData
-	</TABLE>
+
+    </tbody>
+    </table>
 
 cData;
-draw($tool_content, 2);
+draw($tool_content, 2, 'phpbb');
 ?>
