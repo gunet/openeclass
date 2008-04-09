@@ -1,5 +1,5 @@
 <?
-/**===========================================================================
+/*===========================================================================
 *              GUnet e-Class 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -22,7 +22,7 @@
 *						Panepistimiopolis Ilissia, 15784, Athens, Greece
 *						eMail: eclassadmin@gunet.gr
 ============================================================================*/
-/**
+/*
  * Init
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -86,19 +86,15 @@ if (isset($localize)) {
 	switch ($localize) {
 
 		case "en":
-			
 			$_SESSION['langswitch'] = "english";
 			$_SESSION['langLinkText'] = 'Ελληνικά';
 			$_SESSION['langLinkURL'] = "?localize=el";
 			break;
-
-		case "el":
-			
+		case "el":		
 			$_SESSION['langswitch'] = "greek";
 			$_SESSION['langLinkText'] = 'English';
 			$_SESSION['langLinkURL'] = "?localize=en";
 			break;
-
 		default:
 			die("Invalid language parameter passed");
 	}
@@ -198,8 +194,6 @@ if (!isset($guest_allowed) || $guest_allowed!= true){
 	}
 }
 
-
-
 // If $require_current_course is true, initialise course settings
 // Read properties of current course
 if (isset($require_current_course) and $require_current_course) {
@@ -209,39 +203,35 @@ if (isset($require_current_course) and $require_current_course) {
 		$HTTP_SESSION['dbname'] = $dbname;
 	}
 	if (!isset($_SESSION['dbname'])) {
-
 		$toolContent_ErrorExists = $langSessionIsLost;
 		$errorMessagePath = "../../";
 	} else {
-
 		$dbname = $_SESSION['dbname'];
 		$currentCourse = $dbname;
-
 		$result = db_query("
 		SELECT code, fake_code, intitule, faculte, 
 			titulaires, languageCourse, 
 			departmentUrlName, departmentUrl, visible
-		FROM cours
-		WHERE cours.code='$currentCourse'");
+		FROM cours WHERE cours.code='$currentCourse'");
 
 		while ($theCourse = mysql_fetch_array($result)) {
-			$fake_code 	= $theCourse["fake_code"];
+			$fake_code = $theCourse["fake_code"];
 			$code_cours = $theCourse["code"];
-			$intitule 	= $theCourse["intitule"];
-			$fac 		= $theCourse["faculte"];
-			$titulaires	= $theCourse["titulaires"];
+			$intitule = $theCourse["intitule"];
+			$fac = $theCourse["faculte"];
+			$titulaires = $theCourse["titulaires"];
 			$languageInterface = $theCourse["languageCourse"];
 			$departmentUrl= $theCourse["departmentUrl"];
 			$departmentUrlName= $theCourse["departmentUrlName"];
 			$visible = $theCourse['visible'];
 			// New variables
-			$currentCourseCode				= $fake_code ;
-			$currentCourseID				= $code_cours;
-			$currentCourseName				= $intitule;
-			$currentCourseDepartment		= $fac;
-			$currentCourseTitular 			= $titulaires;
-			$currentCourseLanguage			= $languageInterface;
-			$currentCourseDepartmentUrl		= $departmentUrl;
+			$currentCourseCode	= $fake_code ;
+			$currentCourseID	= $code_cours;
+			$currentCourseName	= $intitule;
+			$currentCourseDepartment	= $fac;
+			$currentCourseTitular 	= $titulaires;
+			$currentCourseLanguage		= $languageInterface;
+			$currentCourseDepartmentUrl	= $departmentUrl;
 			$currentCourseDepartmentUrlName	= $departmentUrlName;
 		}
 
@@ -265,14 +255,12 @@ if (isset($require_current_course) and $require_current_course) {
 
 		if ($visible != 2) {
 			if (!$uid) {
-
 				$toolContent_ErrorExists = $langNoAdminAccess;
 				$errorMessagePath = "../../";
-
 			} elseif ($statut == 0 and ($visible == 1 or $visible == 0)) {
-					$toolContent_ErrorExists = $langLoginRequired;
-					$errorMessagePath = "../../";
-				}
+				$toolContent_ErrorExists = $langLoginRequired;
+				$errorMessagePath = "../../";
+			}
 		}
 	}
 	# force a specific interface language
@@ -281,7 +269,6 @@ if (isset($require_current_course) and $require_current_course) {
 
 		// If course language is different from global language,
 		// include more messages
-
 
 		if ($language != $languageInterface) {
 				@ include("$webDir/modules/lang/greek/$languageInterface.inc.php");
@@ -333,18 +320,18 @@ if(file_exists($module_ini_dir = getcwd() . "/module.ini.php") && !$is_adminOfCo
 		}
 	} else {
 		$result = db_query("
-				SELECT `id` FROM `accueil` 
-				WHERE `visible` = 1
-				AND (
-				`id` = 1 or 
-				`id` = 2 or 
-				`id` = 3 or 
-				`id` = 4 or 
-				`id` = 7 or 
-				`id` = 10 or 
-				`id` = 20) 
-				ORDER BY rubrique
-				", $currentCourse);
+			SELECT `id` FROM `accueil` 
+			WHERE `visible` = 1
+			AND (
+			`id` = 1 or 
+			`id` = 2 or 
+			`id` = 3 or 
+			`id` = 4 or 
+			`id` = 7 or 
+			`id` = 10 or 
+			`id` = 20) 
+			ORDER BY rubrique
+			", $currentCourse);
 	}
 
 	$publicModules = array();

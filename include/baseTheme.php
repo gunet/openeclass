@@ -1,5 +1,5 @@
 <?PHP
-/**===========================================================================
+/*===========================================================================
 *              GUnet e-Class 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -23,7 +23,7 @@
 *						eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-/**
+/*
  * Base Theme Component, e-Class Core
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -128,7 +128,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 				$t->set_var('ACTIVE_TOOLS', '');
 				$t->set_var('NAV_CSS_CAT_CLASS', 'spacer');
 				$t->parse('leftNavCategoryTitle', 'leftNavCategoryTitleBlock',false);
-//				$t->clear_var('leftNavCategoryTitle'); //clear inner block
 			} elseif ($toolArr[$i][0]['type'] == 'split') {
 				$t->set_var('ACTIVE_TOOLS', '');
 				$t->set_var('NAV_CSS_CAT_CLASS', 'split');
@@ -151,10 +150,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 			}
 
-
-
 			$t->parse('leftNavCategory', 'leftNavCategoryBlock',true);
-
 			$t->clear_var('leftNavLink'); //clear inner block
 		}
 		$t->parse('leftNav', 'leftNavBlock',true);
@@ -200,7 +196,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		//if user is logged in display the logout option
 		if (session_is_registered('uid')) {
 			$t->set_var('LANG_LOGOUT', $langLogout);
-//			$t->set_var('LOGOUT_CLASS_ICON', 'logout_icon');
 		}
 
 		//set the text and icon on the third bar (header)
@@ -344,7 +339,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 		$t->set_block('mainBlock', 'breadCrumbEndBlock', 'breadCrumbEnd');
 
-
 		for($breadIterator2=0; $breadIterator2 < $breadIterator; $breadIterator2++){
 
 			$t->parse('breadCrumbEnd', 'breadCrumbEndBlock',true);
@@ -373,7 +367,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		//if $require_help is true (set by each tool) display the help link
 		if ($require_help == true){
 
-			$help_link_icon = " <a  href=\"".$relPath."modules/help/help.php?topic=$helpTopic&amp;language=$language\"
+		$help_link_icon = " <a  href=\"".$relPath."modules/help/help.php?topic=$helpTopic&amp;language=$language\"
         onClick=\"window.open('".$relPath."modules/help/help.php?topic=$helpTopic&amp;language=$language','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10'); 
         return false;\"> <img src=\"".$relPath."template/classic/img/help_icon.gif\" width=\"14\" height=\"14\" border=\"0\" alt=\"$langHelp\"/> </a>";
 
@@ -386,13 +380,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 		$t->set_var('LANG_COPYRIGHT_NOTICE', $langCopyrightFooter);
 
-		//		At this point all variables are set and we are ready to send the final output
-		//		back to the browser
-		//		-----------------------------------------------------------------------------
+		//	At this point all variables are set and we are ready to send the final output
+		//	back to the browser
 		$t->parse('main', 'mainBlock', false);
-
 		$t->pparse('Output', 'fh');
-
 	}
 	//	session_unregister('errMessage');
 }
