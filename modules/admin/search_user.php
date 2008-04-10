@@ -1,5 +1,5 @@
 <?php
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -23,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	serachuser.php
 	@last update: 16-10-2006 by Karatzidis Stratos
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
@@ -35,8 +35,8 @@
  	specifying certain criteria/filters
 	
  	The admin can : - specify the criteria
- 									- view the list
- 									- select the inactive users
+ 			- view the list
+ 			- select the inactive users
  									
 ==============================================================================
 */
@@ -60,12 +60,11 @@ if ($language == 'greek') {
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
 $head_content .= $jscalendar->get_load_files_code();
-
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $nameTools = $langSearchUser;		
 
 // Main body
-$new = isset($_GET['new'])?$_GET['new']:'yes';		//variable of declaring a new search
+$new = isset($_GET['new'])?$_GET['new']:'yes';	//variable of declaring a new search
 
 if((!empty($new)) && ($new=="yes")) {
 	// It is a new search, so unregister the search terms/filters in session variables
@@ -81,7 +80,7 @@ if((!empty($new)) && ($new=="yes")) {
 	unset($user_firstname);
 	unset($user_username);
 	unset($user_am);
-				unset($user_type);
+	unset($user_type);
 	unset($user_registered_at_flag);
 	unset($user_registered_at);
 	unset($user_email);
@@ -103,29 +102,24 @@ $tool_content .= "<a href=\"listusers.php?c=4\">".$langInactiveUsers."</a><br><b
 // display the search form
 $tool_content .= "<form action=\"listusers.php?search=".$new."\" method=\"post\" name=\"user_search\">";
 $tool_content .= "<table width=\"99%\"><tbody>";
-$tool_content .= "<tr>
-    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langSurname</b>:</th>
- <td><input type=\"text\" name=\"user_sirname\" size=\"40\" value=\"".$user_sirname."\"></td></tr>
-<tr>
- <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langName</b>:</th>
-<td><input type=\"text\" name=\"user_firstname\" size=\"40\" value=\"".$user_firstname."\"></td></tr>";
-$tool_content .= "  <tr>
-    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langAm:</b></th>
-   <td><input type=\"text\" name=\"user_am\" size=\"30\" value=\"".$user_am."\"></td></tr>";
-$tool_content .= "<tr>
-    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langUserType ($langStudent/$langTeacher):</b></th><td>";
+$tool_content .= "<tr><th width='150' class='left'><b>$langSurname</b>:</th>
+ <td><input type=\"text\" class='FormData_InputText' name=\"user_sirname\" size=\"40\" value=\"".$user_sirname."\"></td></tr>
+<tr><th class='left'><b>$langName</b>:</th>
+<td><input type=\"text\" class='FormData_InputText' name=\"user_firstname\" size=\"40\" value=\"".$user_firstname."\"></td></tr>";
+$tool_content .= "<tr><th class='left'><b>$langAm:</b></th><td><input type=\"text\" class='FormData_InputText' name=\"user_am\" size=\"30\" value=\"".$user_am."\"></td></tr>";
+$tool_content .= "<tr><th class='left'><b>$langUserType:</b></th><td>";
 $usertype_data = array();
-$usertype_data[5] = $langStudent;
+$usertype_data[0] = $langAllUsers;
 $usertype_data[1] = $langTeacher;
-$tool_content .= selection2($usertype_data,"user_type",$user_type);
+$usertype_data[5] = $langStudent;
+$usertype_data[10] = $langGuest;
+$tool_content .= selection($usertype_data,"user_type",$usertype_data[0]);
 $tool_content .= "</td></tr>";
-$tool_content .= " <tr>
-    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langRegistrationDate:</b></th>
-    <td>";
+$tool_content .= " <tr><th class='left'><b>$langRegistrationDate:</b></th><td>";
 $user_registered_at_flag_data = array();
 $user_registered_at_flag_data[1] = $langAfter;
 $user_registered_at_flag_data[2] = $langBefore;
-$tool_content .= selection2($user_registered_at_flag_data,"user_registered_at_flag",$user_registered_at_flag);
+$tool_content .= selection($user_registered_at_flag_data,"user_registered_at_flag",$user_registered_at_flag);
 
     $start_cal = $jscalendar->make_input_field(
        array('showOthers' => true,
@@ -147,9 +141,9 @@ $tool_content .= selection2($user_registered_at_flag_data,"user_registered_at_fl
     $tool_content .= "</tr>";
 
 $tool_content .= "<tr>
-<th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langEmail:</b></th><td><input type=\"text\" name=\"user_email\" size=\"40\" value=\"".$user_email."\"></td></tr>";
-$tool_content .= "<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langUsername:</b></th>
-<td><input type=\"text\" name=\"user_username\" size=\"40\" value=\"".$user_username."\"></td></tr>";
+<th class='left'><b>$langEmail:</b></th><td><input type=\"text\" class='FormData_InputText' name=\"user_email\" size=\"40\" value=\"".$user_email."\"></td></tr>";
+$tool_content .= "<tr><th class='left'><b>$langUsername:</b></th>
+<td><input type=\"text\" name=\"user_username\" class='FormData_InputText' size=\"40\" value=\"".$user_username."\"></td></tr>";
 $tool_content .= "<tr>
     <td colspan=\"2\"><br>
     <input type=\"hidden\" name=\"c\" value=\"searchlist\">

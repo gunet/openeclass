@@ -79,14 +79,14 @@ function dcToolBar(textarea,format,img_path)
 {
 	this.addButton		= function() {}
 	this.addSpace		= function() {}
-	this.draw			= function() {}
+	this.draw		= function() {}
 	this.btStrong		= function() {}
-	this.btEm			= function() {}
+	this.btEm		= function() {}
 	this.btIns		= function() {}
 	this.btDel		= function() {}
-	this.btQ			= function() {}
+	this.btQ		= function() {}
 	this.btCode		= function() {}
-	this.btBr			= function() {}
+	this.btBr		= function() {}
 	this.btBquote		= function() {}
 	this.btPre		= function() {}
 	this.btList		= function() {}
@@ -372,21 +372,21 @@ function dcToolBar(textarea,format,img_path)
 	}
 	
 	// methods
-	this.addButton		= addButton;
-	this.addSpace		= addSpace;
-	this.draw			= draw;
-	this.btStrong		= btStrong;
-	this.btEm			= btEm;
-	this.btIns		= btIns;
-	this.btDel		= btDel;
-	this.btQ			= btQ;
-	this.btCode		= btCode;
-	this.btBr			= btBr;
-	this.btBquote		= btBquote;
-	this.btPre		= btPre;
-	this.btList		= btList;
-	this.btLink		= btLink;
-	this.btImgLink		= btImgLink;
-	this.btImg		= btImg;
-	this.insImg		= insImg;
+	this.addButton	= addButton;
+	this.addSpace	= addSpace;
+	this.draw	= draw;
+	this.btStrong	= btStrong;
+	this.btEm	= btEm;
+	this.btIns	= btIns;
+	this.btDel	= btDel;
+	this.btQ	= btQ;
+	this.btCode	= btCode;
+	this.btBr	= btBr;
+	this.btBquote	= btBquote;
+	this.btPre	= btPre;
+	this.btList	= btList;
+	this.btLink	= btLink;
+	this.btImgLink	= btImgLink;
+	this.btImg	= btImg;
+	this.insImg	= insImg;
 }

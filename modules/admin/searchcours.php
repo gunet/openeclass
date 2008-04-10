@@ -1,5 +1,5 @@
 <?php
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -23,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	searchcours.php
 	@last update: 31-05-2006 by Pitsiougas Vagelis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
@@ -49,15 +49,12 @@
 /*****************************************************************************
 		DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
 ******************************************************************************/
-// Set the langfiles needed
-$langFiles = array('search','gunet','admin','registration');
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
 // Include baseTheme
 include '../../include/baseTheme.php';
 // Define $nameTools
-global $langCourseVis;
 $nameTools = $langSearchCourse;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 // Initialise $tool_content
@@ -85,13 +82,11 @@ if (isset($searchtitle) && isset($searchcode) && isset($searchtype) && isset($se
 	// Constract search form
 	$tool_content .= "<form action=\"listcours.php?search=yes\" method=\"post\">";
 	$tool_content .= "<table width=\"99%\"><caption>".$langSearchCriteria." ".@$newsearch."</caption><tbody>";
+	$tool_content .= "<tr><th class='left' width='150'><b>$langTitle:</b></th>
+    	<td><input type=\"text\" class='FormData_InputText' name=\"formsearchtitle\" size=\"40\" value=\"".@$searchtitle."\"></td></tr>";
 	$tool_content .= "  <tr>
-    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langTitle:</b></th>
-    <td><input type=\"text\" name=\"formsearchtitle\" size=\"40\" value=\"".@$searchtitle."\"></td>
-</tr>";
-	$tool_content .= "  <tr>
-    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langCourseCode:</b></th>
-    <td><input type=\"text\" name=\"formsearchcode\" size=\"40\" value=\"".@$searchcode."\"></td>
+    <th class='left'><b>$langCourseCode:</b></th>
+    <td><input class='FormData_InputText' type=\"text\" name=\"formsearchcode\" size=\"40\" value=\"".@$searchcode."\"></td>
 </tr>";
 	switch (@$searchcode) {
 		case "2":
@@ -108,7 +103,7 @@ if (isset($searchtitle) && isset($searchcode) && isset($searchtype) && isset($se
 			break;
 	}
 	$tool_content .= "  <tr>
-    <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>$langCourseVis:</b></td>
+    <th class='left'><b>$langCourseVis:</b></td>
     <td>
       <select name=\"formsearchtype\">
       	<option value=\"-1\" ".$typeSel[-1].">$langAllTypes</option>
@@ -118,8 +113,8 @@ if (isset($searchtitle) && isset($searchcode) && isset($searchtype) && isset($se
       </select>
     </td>
 </tr>";
-	$tool_content .= "  <tr>
-     <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>".$langDepartment.":</b></th>
+	$tool_content .= " <tr>
+     <th class='left'><b>".$langDepartment.":</b></th>
     <td><select name=\"formsearchfaculte\">
     	<option value=\"0\">$langAllFacultes</option>\n";
   
@@ -131,12 +126,9 @@ $resultFac=mysql_query("SELECT name FROM faculte ORDER BY number");
 		else 
 			$tool_content .= "<option>$myfac[name]</option>";
 	}
-	$tool_content .= "</select>
-    </td>
-  </tr>";  
-	$tool_content .= "  <tr>
-    <td colspan=\"2\"><br><input type='submit' name='search_submit' value='$langSearch'></td>
-  </tr>";
+	$tool_content .= "</select></td></tr>"; 
+	$tool_content .= "<tr><td colspan=\"2\"><br><input type='submit' name='search_submit' value='$langSearch'></td>
+  	</tr>";
 	$tool_content .= "</tbody></table></form>";
 
 	// Display link to go back to index.php

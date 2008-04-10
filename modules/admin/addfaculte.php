@@ -1,5 +1,5 @@
 <?php
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -23,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	addfaculte.php
 	@last update: 12-07-2006 by Pitsiougas Vagelis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
@@ -101,10 +101,10 @@ if (!isset($a)) {
 
 		// Give administrator a link to delete or edit a faculty
     $tool_content .= "<td width=\"3%\" nowrap><a href=\"$_SERVER[PHP_SELF]?a=2&c=".$logs['id']."\">
-				<img src='../../images/delete.gif' border='0' title='$langDelete'></img></a> 
-			  &nbsp;&nbsp;<a href=\"$_SERVER[PHP_SELF]?a=3&c=".$logs['id']."\">
-			  <img src='../../images/edit.gif' border='0' title='$langEdit'></img> 
-			  </a></td></tr>\n"; 
+		<img src='../../images/delete.gif' border='0' title='$langDelete'></img></a> 
+		  &nbsp;&nbsp;<a href=\"$_SERVER[PHP_SELF]?a=3&c=".$logs['id']."\">
+		  <img src='../../images/edit.gif' border='0' title='$langEdit'></img> 
+		  </a></td></tr>\n"; 
 	}
 	// Close table correctly
 	$tool_content .= "</tbody></table><br>";
@@ -119,7 +119,8 @@ elseif ($a == 1)  {
 		// Check for empty fields
 		if (empty($codefaculte) or empty($faculte)) {
 			$tool_content .= "<p>".$langEmptyFaculte."</p><br>";
-			$tool_content .= "<center><p><a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddFaculte."</a></p></center>";
+			$tool_content .= "<center><p>
+			<a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddFaculte."</a></p></center>";
 			}
 		// Check for greek letters
 		elseif (!preg_match("/^[A-Z0-9a-z_-]+$/", $codefaculte)) {
@@ -145,8 +146,8 @@ elseif ($a == 1)  {
 		// Display form for new faculte information
 		$tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?a=1\">";
 		$tool_content .= "<table width=\"99%\"><caption>$langFaculteIns</caption><tbody>";
-		$tool_content .= "<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap>".$langCodeFaculte1.":</th><td><input type=\"text\" name=\"codefaculte\" value=\"".@$codefaculte."\"></td><td><i>".$langCodeFaculte2."</i></td></tr>
-		<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap>".$langFaculte1.":</th><td><input type=\"text\" name=\"faculte\" value=\"".@$faculte."\"></td><td><i>".$langFaculte2."</i></td></tr>
+		$tool_content .= "<tr><th class='left'>".$langCodeFaculte1.":</th><td><input class='FormData_InputText' type=\"text\" name=\"codefaculte\" value=\"".@$codefaculte."\"></td><td><i>".$langCodeFaculte2."</i></td></tr>
+		<tr><th class='left'>".$langFaculte1.":</th><td><input class='FormData_InputText' type=\"text\" name=\"faculte\" value=\"".@$faculte."\"></td><td><i>".$langFaculte2."</i></td></tr>
 		<tr><td colspan=\"2\"><input type=\"submit\" name=\"add\" value=\"".$langAdd."\"></td</tr>
 		</tbody></table></form>";
 		}

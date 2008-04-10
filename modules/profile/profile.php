@@ -111,7 +111,6 @@ if (isset($submit) && isset($ldap_submit) && ($ldap_submit == "ON")) {
 }
 ##[END personalisation modification]############
 
-
 //Show message if exists
 if(isset($msg))
 {
@@ -159,17 +158,8 @@ if(isset($msg))
 		default:die("invalid message id");
 	}
 
-	$tool_content .=  "
-			<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"$type\">
-						$message<br>
-    <a href=\"../../index.php\">$urlText</a>
-					</td>
-					</tr>
-				</tbody>
-			</table><br/>";
+	$tool_content .=  "<table width=\"99%\"><tbody><tr><td class=\"$type\">$message<br>
+    	<a href=\"../../index.php\">$urlText</a></td></tr></tbody></table><br/>";
 
 }
 
@@ -292,16 +282,13 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
     </tr>";
 	##[BEGIN personalisation modification]############
 	if (session_is_registered("perso_is_active")) {
-
-		$tool_content .="
-    <tr>
+		$tool_content .="<tr>
       <th width=\"150\" class='left'>eClass Personalised</th>
       <td><input class='FormData_InputText' type=checkbox name='persoStatus' value=\"yes\" $checkedPerso></td>
     </tr>";
 	}
 	##[END personalisation modification]############
-	$tool_content .= "
-    <tr>
+	$tool_content .= "<tr>
       <th class='left'>$langLanguage</th>
       <td>
         <input type='radio' name='userLanguage' value='el' $checkedLangEl>$langGreek<br>

@@ -66,9 +66,9 @@ if($submit)
 
 		// close request
 	  $rid = intval($_POST['rid']);
-  	db_query("UPDATE prof_request set status = '2',date_closed = NOW() WHERE rid = '$rid'");
-       $tool_content .= "<p>$profsuccess</p><br><br><center><p>
-					<a href='../admin/listreq.php'>$langBackReq</a></p></center>";
+  	  db_query("UPDATE prof_request set status = '2',date_closed = NOW() WHERE rid = '$rid'");
+	       $tool_content .= "<p>$profsuccess</p><br><br><center><p>
+		<a href='../admin/listreq.php'>$langBackReq</a></p></center>";
 		}
 	}
 }
@@ -77,28 +77,28 @@ else
 $tool_content .= "<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
 	<table width=\"99%\"><caption>$langNewProf</caption><tbody>
 	<tr valign=\"top\" bgcolor=\"".$color2."\">
-	<th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>".$langSurname."</b></th>
-	<td><input type=\"text\" name=\"nom_form\" value=\"".@$ps."\" >&nbsp;(*)</td>
+	<th width=\"150\" class='left'><b>".$langSurname."</b></th>
+	<td><input class='FormData_InputText' type=\"text\" name=\"nom_form\" value=\"".@$ps."\" >&nbsp;(*)</td>
 	</tr>
 	<tr bgcolor=\"".$color2."\">
-	<th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>".$langName."</b></th>
+	<th class='left'><b>".$langName."</b></th>
 	<td>
-	<input type=\"text\" name=\"prenom_form\" value=\"".@$pn."\">&nbsp;(*)</td>
+	<input class='FormData_InputText' type=\"text\" name=\"prenom_form\" value=\"".@$pn."\">&nbsp;(*)</td>
 	</tr>
 	<tr bgcolor=\"".$color2."\">
-	<th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>".$langUsername."</b></th>
-	<td><input type=\"text\" name=\"uname\" value=\"".@$pu."\">&nbsp;(*)</td>
+	<th class='left'><b>".$langUsername."</b></th>
+	<td><input class='FormData_InputText' type=\"text\" name=\"uname\" value=\"".@$pu."\">&nbsp;(*)</td>
 	</tr>
 	<tr bgcolor=\"".$color2."\">
-	<th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>".$langPass."&nbsp;:</b></th>
-	<td><input type=\"text\" name=\"password\" value=\"".create_pass(5)."\"></td>
+	<th class='left'><b>".$langPass."&nbsp;:</b></th>
+	<td><input class='FormData_InputText' type=\"text\" name=\"password\" value=\"".create_pass(5)."\"></td>
 	</tr>
 	<tr bgcolor=\"".$color2."\">
-	<th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>".$langEmail."</b></th>
-	<td><input type=\"text\" name=\"email_form\" value=\"".@$pe."\">&nbsp;(*)</b></td>
+	<th class='left'><b>".$langEmail."</b></th>
+	<td><input class='FormData_InputText' type=\"text\" name=\"email_form\" value=\"".@$pe."\">&nbsp;(*)</b></td>
 	</tr>
 	<tr bgcolor=\"".$color2."\">
-        <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>".$langDepartment.":</th>
+        <th class='left'>".$langDepartment.":</th>
         <td><select name=\"department\">";
         $deps=mysql_query("SELECT name FROM faculte order by id");
         while ($dep = mysql_fetch_array($deps)) 

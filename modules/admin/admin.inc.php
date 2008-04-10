@@ -1,5 +1,5 @@
 <?php
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -23,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	admin.inc.php
 	@last update: 31-05-2006 by Stratos Karatzidis
 	              11-07-2006 by Vagelis Pitsiougas
@@ -58,38 +58,6 @@ function stripslashes_safe($string)
 }
 
 /*************************************************************
-Show a selection box. Taken from main.lib.php
-
-Difference: The function returns a value( a formatted select box)
-and not just echo the select box (version in main.lib.php)
-
-$entries: an array of (value => label)
-$name: the name of the selection element
-$default: if it matches one of the values, specifies the default entry
-return $select_box : string (a formatted select box)
-****************************************************************/
-function selection2($entries, $name, $default = '')
-{
-	$select_box = "<select name='$name'>\n";
-	foreach ($entries as $value => $label) 
-	{
-	    if ($value == $default) 
-	    {
-		$select_box .= "<option selected value='" . htmlspecialchars($value) . "'>" .
-				htmlspecialchars($label) . "</option>\n";
-	    } 
-	    else 
-	    {
-		$select_box .= "<option value='" . htmlspecialchars($value) . "'>" .
-				htmlspecialchars($label) . "</option>\n";
-	    }
-	}
-	$select_box .= "</select>\n";
-	
-	return $select_box;
-}
-
-/*************************************************************
 Show a selection box with departments. 
 
 The function returns a value( a formatted select box with departments)
@@ -101,24 +69,20 @@ return $departments_select : string (a formatted select box)
 function list_departments($department_value)
 {
 	$qry = "SELECT faculte.id,faculte.name FROM faculte ORDER BY faculte.name";
-  $dep = mysql_query($qry);
-  if($dep)
-  {
+  	$dep = mysql_query($qry);
+  	if($dep)
+  	{	
 		$departments_select = "";
 		$departments = array();
 		while($row=mysql_fetch_array($dep))
 		{
-	    $id = $row['id'];    
-	    $name = $row['name'];
-	    $departments[$id] = $name;
+		    	$id = $row['id'];
+	    		$name = $row['name'];
+	    		$departments[$id] = $name;
 		}
-		$departments_select = selection2($departments,"department",$department_value);
-	
+		$departments_select = selection($departments,"department",$department_value);
 		return $departments_select;
-	
-  }
-	else
-  {
+  	} else {
 		return 0;
 	}
 }
@@ -171,8 +135,7 @@ function convert_time($seconds)
 	}
     }
     if ($r_hours > 0) $r .= "$r_hours hours ";
-    if ($r_minutes > 0) $r .= "$r_minutes min";
-        								    
+    if ($r_minutes > 0) $r .= "$r_minutes min";							    
     return $r;
 }
 
@@ -183,13 +146,15 @@ Parameters: limit - the current limit
             fulllistsize - the size of the full list
             page - the page to send links from pages
 
-return String (the constracted table)
+return String (the constructed table)
 ***************************************************************/
 function show_paging($limit, $listsize, $fulllistsize, $page) {
+	
+	global $langNextPage;
+
 	$retString = "";
 	// Page numbers of navigation
-	$pn = 15;
-	
+	$pn = 15;	
 	$retString .= "<br><table width=\"99%\"><tbody><tr><td width=\"3%\" nowrap>$langPage</b></td><td align=\"center\">";
 	// Deal with previous page
 	if ($limit!=0) {
@@ -308,10 +273,10 @@ function show_paging($limit, $listsize, $fulllistsize, $page) {
 	}
 	// Deal with next page
 	if ($limit + $listsize >= $fulllistsize) {
-		$retString .= "|&nbsp;<b>Επόμενη</b>";
+		$retString .= "|&nbsp;<b>$langNextPage</b>";
 	} else {
 		$newlimit = $limit + $listsize;
-		$retString .= "|&nbsp;<a href=\"".$page."?limit=".$newlimit."\"><b>Επόμενη</b></a>";
+		$retString .= "|&nbsp;<a href=\"".$page."?limit=".$newlimit."\"><b>$langNextPage</b></a>";
 	}
 	$retString .= "</td></tr></tbody></table>";
 	

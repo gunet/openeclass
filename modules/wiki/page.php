@@ -1,6 +1,5 @@
 <?php 
-
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -24,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	page.php
 	@last update: 15-05-2007 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -44,10 +43,8 @@
 ==============================================================================
 */
     $tlabelReq = 'CLWIKI__';
-    
     require_once("../../include/lib/learnPathLib.inc.php");
     require_once("../../include/lib/textLib.inc.php");
-    
   $require_current_course = TRUE;
 	$require_help           = FALSE;
 	require_once("../../include/baseTheme.php");
@@ -65,12 +62,9 @@
 	else {
 		$is_courseMember = false;
 	}
-	
-	$nameTools = $langWiki;
-	
+	$nameTools = $langWiki;	
 	mysql_select_db($currentCourseID);
-    
-    
+
     // check and set user access level for the tool
     if ( ! isset( $_REQUEST['wikiId'] ) )
     {
@@ -98,9 +92,9 @@
         // course context
         $groupId = 0;
     }
-    
+
     // Wiki specific classes and libraries
-    
+
     require_once "lib/class.clarodbconnection.php";
     require_once "lib/class.wiki2xhtmlrenderer.php";
     require_once "lib/class.wikipage.php";
@@ -378,19 +372,16 @@
                 {
                     $wikiPage->loadPageVersion( $versionId );
                 }
-                
                 if ( $content == '' )
                 {
                     $content = $wikiPage->getContent();
                 }
-                
                 if  ( $content == "__CONTENT__EMPTY__" )
                 {
                     $content = '';
                 }
 
                 $title = $wikiPage->getTitle();
-                
                 $_SESSION['wikiLastVersion'] = $wikiPage->getLastVersionId();
             }
             else
@@ -440,7 +431,6 @@
                 if ( $wikiPage->pageExists( $title ) )
                 {
                     $wikiPage->loadPage( $title );
-                    
                     if ( $content == $wikiPage->getContent() )
                     {
                         unset( $_SESSION['wikiLastVersion'] );
@@ -460,9 +450,7 @@
                         else
                         {
                             $wikiPage->edit( $creatorId, $content, $time, true );
-                        
                             unset( $_SESSION['wikiLastVersion'] );
-                        
                             if ( $wikiPage->hasError() )
                             {
                                 $message = "Database error : " . $wikiPage->getError();
@@ -473,16 +461,13 @@
                                 $message = $langWikiPageSaved;
                                 $style = "success";
                             }
-                            
                             $action = 'show';
                         }
                     }
-                    
                 }
                 else
                 {
                     $wikiPage->create( $creatorId, $title, $content, $time, true );
-                    
                     if ( $wikiPage->hasError() )
                     {
                         $message = "Database error : " . $wikiPage->getError();
@@ -493,7 +478,6 @@
                         $message = $langWikiPageSaved;
                         $style = "success";
                     }
-                    
                     $action = 'show';
                     
                 }               
@@ -668,7 +652,6 @@
                 ? $langWikiMainPage
                 : $title
                 ;
-                
             break;
         }
     }
@@ -689,32 +672,27 @@
     if ( ! $is_allowedToRead )
     {
         $tool_content .= $langWikiNotAllowedToRead;
-        
-        require_once "../inc/claro_init_footer.inc.php";
-        
         die ( '' );
     }
     
     // Wiki navigation bar
     
     $tool_content .= '<p>';
-    
     $tool_content .= '<a class="claroCmd" href="'
         . $_SERVER['PHP_SELF']
         . '?wikiId=' . $wiki->getWikiId()
         . '&amp;action=show'
         . '&amp;title=__MainPage__'
         . '">'
-        . '<img src="'.$imgRepositoryWeb.'/wiki.gif" border="0" alt="edit" />&nbsp;'
+        . '<img src="'.$imgRepositoryWeb.'/wiki.gif" border="0" align="absmiddle" />&nbsp;'
         . $langWikiMainPage.'</a>'
         ;
-    
     $tool_content .= '&nbsp;|&nbsp;<a class="claroCmd" href="'
         . $_SERVER['PHP_SELF']
         . '?wikiId=' . $wiki->getWikiId()
         . '&amp;action=recent'
         . '">'
-        . '<img src="'.$imgRepositoryWeb.'/history.gif" border="0" alt="recent changes" />&nbsp;'
+        . '<img src="'.$imgRepositoryWeb.'/history.gif" border="0" align="absmiddle" />&nbsp;'
         . $langWikiRecentChanges.'</a>'
         ;
 
@@ -723,14 +701,14 @@
         . '?wikiId=' . $wiki->getWikiId()
         . '&amp;action=all'
         . '">'
-        . '<img src="'.$imgRepositoryWeb.'/book.gif" border="0" alt="all pages" />&nbsp;'
+        . '<img src="'.$imgRepositoryWeb.'/book.gif" border="0" align="absmiddle" />&nbsp;'
         . $langWikiAllPages.'</a>'
         ;
-        
+
     $tool_content .= '&nbsp;|&nbsp;<a class="claroCmd" href="'
         . 'wiki.php'
         . '">'
-        . '<img src="'.$imgRepositoryWeb.'/info.gif" border="0" alt="all pages" />&nbsp;'
+        . '<img src="'.$imgRepositoryWeb.'/info.gif" border="0" align="absmiddle" />&nbsp;'
         . $langWikiList .'</a>'
         ;
     
@@ -749,14 +727,14 @@
             . '&amp;action=show'
             . '&amp;title=' . rawurlencode($title)
             . '">'
-            . '<img src="'.$imgRepositoryWeb.'/back.gif" border="0" alt="back" />&nbsp;'
+            . '<img src="'.$imgRepositoryWeb.'/back.gif" border="0" align="absmiddle" />&nbsp;'
             . $langWikiBackToPage.'</a>'
             ;
     }
     else
     {
         $tool_content .= '<span class="claroCmdDisabled">'
-            . '<img src="'.$imgRepositoryWeb.'/back.gif" border="0" alt="back" />&nbsp;'
+            . '<img src="'.$imgRepositoryWeb.'/back.gif" border="0" align="absmiddle" />&nbsp;'
             . $langWikiBackToPage.'</span>'
             ;
     }
@@ -773,7 +751,7 @@
                 . '&amp;title=' . rawurlencode( $title )
                 . '&amp;versionId=' . $versionId
                 . '">'
-                . '<img src="'.$imgRepositoryWeb.'/edit.gif" border="0" alt="edit" />&nbsp;'
+                . '<img src="'.$imgRepositoryWeb.'/edit.gif" border="0" align="absmiddle" />&nbsp;'
                 . $langWikiEditPage.'</a>'
                 ;
         }
@@ -781,7 +759,7 @@
         else
         {
             $tool_content .= '&nbsp;|&nbsp;<span class="claroCmdDisabled">'
-                . '<img src="'.$imgRepositoryWeb.'/edit.gif" border="0" alt="edit" />&nbsp;'
+                . '<img src="'.$imgRepositoryWeb.'/edit.gif" border="0" align="absmiddle" />&nbsp;'
                 . $langWikiEditPage . '</span>'
                 ;
         }
@@ -789,7 +767,7 @@
     else
     {
         $tool_content .= '&nbsp;|&nbsp;<span class="claroCmdDisabled">'
-            . '<img src="'.$imgRepositoryWeb.'/edit.gif" border="0" alt="edit" />&nbsp;'
+            . '<img src="'.$imgRepositoryWeb.'/edit.gif" border="0"  />&nbsp;'
             . $langWikiEditPage . '</span>'
             ;
     }
@@ -803,7 +781,7 @@
                 . '&amp;action=history'
                 . '&amp;title=' . rawurlencode( $title )
                 . '">'
-                . '<img src="'.$imgRepositoryWeb.'/version.gif" border="0" alt="history" />&nbsp;'
+                . '<img src="'.$imgRepositoryWeb.'/version.gif" border="0" align="absmiddle" />&nbsp;'
                 . $langWikiPageHistory.'</a>'
                 ;
     }
@@ -811,7 +789,7 @@
     {
         // inactive
         $tool_content .= '&nbsp;|&nbsp;<span class="claroCmdDisabled">'
-            . '<img src="'.$imgRepositoryWeb.'/version.gif" border="0" alt="history" />&nbsp;'
+            . '<img src="'.$imgRepositoryWeb.'/version.gif" border="0" align="absmiddle" />&nbsp;'
             . $langWikiPageHistory . '</span>'
             ;
     }
@@ -851,11 +829,8 @@
                 . "\n"
                 ;
             $tool_content .= '</div>' . "\n";
-            
             $message = $langWikiConflictHowTo;
-                
             $tool_content .= claro_disp_message_box ( $message ) . '<br />' . "\n";
-            
             $tool_content .= '<form id="editConflict" action="'.$_SERVER['PHP_SELF'].'" method="POST">';
             $tool_content .= '<textarea name="conflictContent" id="wiki_content"'
                  . ' cols="80" rows="15" wrap="virtual">'
