@@ -86,7 +86,7 @@ function make_clickable($text)
 }
 
 
-/**
+/*
  * formats the date according to the locale settings
  *
  * @author  Christophe Gesche <gesche@ipm.ucl.ac.be>
