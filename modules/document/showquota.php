@@ -1,5 +1,5 @@
 <?php
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -44,10 +44,8 @@ $navigation[]= array ("url"=>"document.php", "name"=> $langDoc);
 $tool_content = "";
 $nameTools = $langQuotaBar;
 
-
 //diamorfwsh ths grafikhs mparas xrhsimopoioumenou kai eleftherou xwrou (me vash ta quotas) + ypologismos statistikwn stoixeiwn
    $oGauge = new myGauge(); //vrisketai sto arxeio 'gaugebar.php' & ginetai include parapanw
-    
     // apodosh timwn gia thn mpara
 	$fc = "#E6E6E6"; //foreground color
 	$bc = "#4F76A3"; //background color
@@ -57,62 +55,23 @@ $nameTools = $langQuotaBar;
 	$ma = $diskQuotaDocument; //maximum value
 	$cu = $diskUsed; //current value
 	$oGauge->setValues($fc, $bc, $wi, $hi, $mi, $ma, $cu);
-    
 	//pososto xrhsimopoioumenou xorou se %
 	$diskUsedPercentage = round(($diskUsed / $diskQuotaDocument) * 100)."%";
-	
-	
 	//morfopoihsh tou synolikou diathesimou megethous tou quota
 	$diskQuotaDocument = format_bytesize($diskQuotaDocument / 1024);
-	
 	//morfopoihsh tou synolikou megethous pou xrhsimopoieitai
 	$diskUsed = format_bytesize($diskUsed / 1024);
 	format_bytesize($diskUsed, '0');
 	//telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
-	
-	
 	//ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
-	$tool_content .= "
-    <table>
-    <tbody>
-    <tr>
-      <th class='left' width='170'>$langQuotaUsed</td>
-      <td width='110' align='center'>$diskUsed</td>
-    </tr>
-    <tr>
-      <th class='left'>$langQuotaPercentage</td>
-      <td align='center'>";
-    		$tool_content .= $oGauge->display();
-    		$tool_content .= "$diskUsedPercentage</td>
-    </tr>
-    <tr>
-      <th class='left'>$langQuotaTotal</td>
-      <td align='center'>$diskQuotaDocument</td>
-    </tr>
-    </tbody>
-    </table>
-";
-
+	$tool_content .= "<table><tbody><tr>
+      	<th class='left' width='170'>$langQuotaUsed</td>
+      	<td width='110' align='center'>$diskUsed</td>
+    	</tr><tr><th class='left'>$langQuotaPercentage</td><td align='center'>";
+	$tool_content .= $oGauge->display();
+    	$tool_content .= "$diskUsedPercentage</td></tr><tr>
+     	<th class='left'>$langQuotaTotal</td>
+      	<td align='center'>$diskQuotaDocument</td></tr></tbody></table>";
 $tmp_cwd = getcwd();
 draw($tool_content, 2, '', '');
-
-
-// A helper function, when passed a number representing KB,
-// and optionally the number of decimal places required,
-// it returns a formated number string, with unit identifier.
-function format_bytesize ($kbytes, $dec_places = 2)
-{
-    global $text;
-    if ($kbytes > 1048576) {
-        $result  = sprintf('%.' . $dec_places . 'f', $kbytes / 1048576);
-        $result .= '&nbsp;Gb';
-    } elseif ($kbytes > 1024) {
-        $result  = sprintf('%.' . $dec_places . 'f', $kbytes / 1024);
-        $result .= '&nbsp;Mb';
-    } else {
-        $result  = sprintf('%.' . $dec_places . 'f', $kbytes);
-        $result .= '&nbsp;Kb';
-    }
-    return $result;
-}
-?>    		
+?>
