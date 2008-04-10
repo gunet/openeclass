@@ -56,40 +56,95 @@ function confirmation ()
 ';
 	// forum go
 	if(isset($forumgo)) {
-		$tool_content .= "<p><b>$langForCat: $ctg</b> &nbsp;&nbsp;(<a href=\"$PHP_SELF?forumadmin=yes\">$langBackCat</a>)</p>
-    		<form action=\"forum_admin.php?forumgoadd=yes&ctg=$ctg&cat_id=$cat_id\" method=post>
-    		<table width=99%>
-    		<thead>
-    		<tr><th>$langForName</th><th>$langDescription</th><th>$langActions</th></tr></thead></tbody>";
+		$tool_content .= "
+	
+	<table class=\"Deps\" width=\"99%\">
+    <tbody>
+    <tr>
+     <th>$langForCat: <b>$ctg</b></th>
+     <td><a href=\"$PHP_SELF?forumadmin=yes\">$langBackCat</a></td>
+    </tr>
+    </tbody>
+    </table>
+    <br />";
 		$result = db_query("select forum_id, forum_name, forum_desc, forum_access, forum_moderator, forum_type from forums where cat_id='$cat_id'", $currentCourseID);
-		$i=0;
+	if ($result and mysql_num_rows($result) > 0) {
+		$tool_content .= "
+
+    <form action=\"forum_admin.php?forumgoadd=yes&ctg=$ctg&cat_id=$cat_id\" method=post>
+    <table width=99% class=\"ForumSum\">
+    <thead>
+    <tr>
+      <td width='10' class=\"lalahead\">$langID</td>
+      <td class=\"lalahead\">$langForName</td>
+      <td class=\"lalahead\">$langDescription</td>
+      <td width='75' class=\"lalahead\">$langActions</td>
+    </tr>
+    </thead>
+    <tbody>";
+		$i=1;
 		while(list($forum_id, $forum_name, $forum_desc, $forum_access,
 		$forum_moderator, $forum_type) = mysql_fetch_row($result)) {
 			if($i%2==0){
-				$tool_content .= "<tr bgcolor=$color1>";
+				$tool_content .= "
+    <tr bgcolor=$color1>";
 			}
 			elseif($i%2==1) {
-				$tool_content .= "<tr bgcolor=$color2>";
+				$tool_content .= "
+    <tr bgcolor=$color2>";
 			}
-			$tool_content .= "<td>$forum_name</td><td valign=top>$forum_desc&nbsp;</td>";
-			$tool_content .= "<td align='center'>
-			<a href=forum_admin.php?forumgoedit=yes&forum_id=$forum_id&ctg=$ctg&cat_id=$cat_id><img src='../../template/classic/img/edit.gif' title='$langModify' border='0'></img></a>
-			&nbsp;
-			<a href=forum_admin.php?forumgodel=yes&forum_id=$forum_id&cat_id=$cat_id&ctg=$ctg&ok=0>
-			<img src='../../template/classic/img/delete.gif' title='$langDelete' border='0'></img></a>
-			</td></tr>";
+			$tool_content .= "
+      <td align='right'>$i.</td>
+      <td align='left'>$forum_name</td>
+      <td align='left'>$forum_desc&nbsp;</td>";
+			$tool_content .= "
+      <td align='center'>
+        <a href=forum_admin.php?forumgoedit=yes&forum_id=$forum_id&ctg=$ctg&cat_id=$cat_id><img src='../../template/classic/img/edit.gif' title='$langModify' border='0'></img></a>
+        &nbsp;
+        <a href=forum_admin.php?forumgodel=yes&forum_id=$forum_id&cat_id=$cat_id&ctg=$ctg&ok=0><img src='../../template/classic/img/delete.gif' title='$langDelete' border='0'></img></a>
+      </td>
+    </tr>";
 			$i++;
 		}
-	$tool_content .= "</form></td></tr></tbody></table>
-    	<br><p><b>$langAddForCat: $ctg</b></p>
-    	<form action=\"forum_admin.php?forumgoadd=yes&ctg=$ctg&cat_id=$cat_id\" method=post>
-    	<table width=99%><thead>
-    	<tr><th>$langForName</th><td><input type=text name=forum_name size=40></td></tr>
-    	<tr><th>$langDescription</th><td><textarea name=forum_desc cols=40 rows=3></textarea></td></tr>";
-	$tool_content .= "</thead></table><input type=hidden name=cat_id value=\"$cat_id\">
-    	<input type=hidden name=forumgoadd value=yes><br/>
-    	<input type=submit value=$langAdd>
-    	</form>";
+	$tool_content .= "
+    </tbody>
+    </table>
+    </form>
+	
+    <br/>";
+	} else {
+		    $tool_content .= "
+    <p class=\"alert1\">$l_noforum</p>
+    </tr>";
+	}
+
+	$tool_content .= "
+    <form action=\"forum_admin.php?forumgoadd=yes&ctg=$ctg&cat_id=$cat_id\" method=post>
+    <table width=99% class=\"FormData\">
+    <tbody>
+    <tr>
+      <th width=\"220\">&nbsp;</th>
+      <td>$langAddForCat: <b>$ctg</b></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langForName</th>
+      <td><input type=text name=forum_name size=40 class=\"FormData_InputText\"></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langDescription</th>
+      <td><textarea name=forum_desc cols=40 rows=3 class=\"FormData_InputText\"></textarea></td>
+    </tr>
+    <tr>
+      <th>&nbsp;</th>
+      <td>
+        <input type=hidden name=cat_id value=\"$cat_id\">
+        <input type=hidden name=forumgoadd value=yes>
+        <input type=submit value=$langAdd>
+      </td>
+    </tr>
+    </tbody>
+    </table>
+    </form>";
 	}
 	// forum go edit	
 	elseif(isset($forumgoedit)) {
@@ -97,17 +152,27 @@ function confirmation ()
     		cat_id, forum_type from forums where forum_id='$forum_id'", $currentCourseID);
 		list($forum_id, $forum_name, $forum_desc, $forum_access, $forum_moderator, $cat_id_1,
 		$forum_type) = mysql_fetch_row($result);
-		$tool_content .= "<b>$langModify $forum_name</b>
-    		<form action=\"forum_admin.php?forumgosave=yes&ctg=$ctg&cat_id=".@$cat_id."\" method=post>
-    		<input type=hidden name=forum_id value=$forum_id>
-    		<table width=99%><thead>
-    		<tr><th>$langForName</th>
-    		<td><input type=text name=forum_name size=50 value=\"$forum_name\"></td></tr>
-    		<tr><th>$langDescription</th><td>
-    		<textarea name=forum_desc cols=50 rows=3>$forum_desc</textarea></td></tr>
-    		<tr><th>$langChangeCat</th>
-    		<td><SELECT NAME=cat_id>";
-		$result = db_query("select cat_id, cat_title from catagories", $currentCourseID);
+		$tool_content .= "
+    <form action=\"forum_admin.php?forumgosave=yes&ctg=$ctg&cat_id=".@$cat_id."\" method=post>
+    <input type=hidden name=forum_id value=$forum_id>
+    <table width=99% class=\"FormData\">
+    <tbody>
+    <tr>
+      <th width=\"220\">&nbsp;</th>
+      <td><b>$langModify $forum_name</b></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langForName</th>
+      <td><input type=text name=forum_name size=50 value=\"$forum_name\" class=\"FormData_InputText\"></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langDescription</th>
+      <td><textarea name=forum_desc cols=50 rows=3>$forum_desc</textarea></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langChangeCat</th>
+      <td><SELECT NAME=cat_id>";
+	  $result = db_query("select cat_id, cat_title from catagories", $currentCourseID);
 		while(list($cat_id, $cat_title) = mysql_fetch_row($result)) {
 			if ($cat_id == $cat_id_1) {
 				$tool_content .= "<OPTION VALUE=\"$cat_id\" selected>$cat_title</OPTION>";          }
@@ -115,30 +180,62 @@ function confirmation ()
 					$tool_content .= "<OPTION VALUE=\"$cat_id\">$cat_title</OPTION>";
 				}
 		}
-		$tool_content .= "</SELECT></td></tr></thead></table>
-    		<input type=hidden name=forumgosave value=yes><br/>
-    		<input type=submit value=\"$langSave\">
-    		</form>";
+	$tool_content .= " </SELECT> 
+	  </td>
+    </tr>
+    <tr>
+      <th>&nbsp;</th>
+      <td><input type=hidden name=forumgosave value=yes> <input type=submit value=\"$langSave\"></td>
+    </tr>
+    </thead>
+    </table>
+
+    </form>";
 	}
 
 	// edit forum category	
 	elseif(isset($forumcatedit)) {
 		$result = db_query("select cat_id, cat_title from catagories where cat_id='$cat_id'", $currentCourseID);
 		list($cat_id, $cat_title) = mysql_fetch_row($result);
-		$tool_content .= "<b>$langModCatName</b>
-    		<form action=\"forum_admin.php?forumcatsave=yes\" method=post>
-    		<input type=hidden name=cat_id value=$cat_id>
-    		<table width=99%><tr><td>$langCat</td><td><input type=text name=cat_title size=55 value=\"$cat_title\"></td></tr><tr><td>
-    		</td></tr></table>";
-		//   <input type=hidden name=forumcatsave value=yes>
-		$tool_content .= "<input type=submit value=\"$langSave\">
-		</form>";
+		$tool_content .= "
+    <form action=\"forum_admin.php?forumcatsave=yes\" method=post>
+    <input type=hidden name=cat_id value=$cat_id>		
+    <table width=99% class=\"FormData\">
+    <tbody>
+    <tr>
+      <th width=\"220\">&nbsp;</th>
+      <td><b>$langModCatName</b></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langCat</th>
+      <td><input type=text name=cat_title size=55 value=\"$cat_title\" class=\"FormData_InputText\"></td>
+    </tr>
+    <tr>
+      <th>&nbsp;</th>
+      <td><input type=submit value=\"$langSave\"></td>
+    </tr>
+    </thead>
+    </table>	
+    </form>";
 	}
 
 	// save forum category
 	elseif (isset($forumcatsave)) {
 		db_query("update catagories set cat_title='$cat_title' where cat_id='$cat_id'", $currentCourseID);
-		$tool_content .= "$langNameCatMod, &nbsp;<a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a>";
+
+	$tool_content .= "
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"success\">
+         <p><b>$langNameCatMod</b></p>
+      </td>
+    </tr>
+    </tbody>
+    </table>
+    <br />
+	<p align=\"right\"><a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a></p>";
+
 	}
 
 	// forum go save
@@ -158,11 +255,17 @@ function confirmation ()
 	// forum add category
 	elseif(isset($forumcatadd)) {
 		db_query("insert into catagories values (NULL, '$catagories', NULL)", $currentCourseID);
-		$tool_content .= "<table width=\"99%\"><tbody>
-			<tr>
-			<td class=\"success\"><p><b>$langCatAdded</b></p>
-			<p><a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a></p>
-			</td></tr></tbody></table>";
+		$tool_content .= "
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"success\">
+         <p><b>$langCatAdded</b></p>
+         <p><a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a></p>
+      </td>
+    </tr>
+    </tbody>
+    </table>";
 		}
 
 	// forum go add
@@ -176,10 +279,17 @@ function confirmation ()
 		while ($my_forum_id = mysql_fetch_array($idforum)) {
 			$forid=$my_forum_id[0];
 		}
-		$tool_content .= "<table width=\"99%\">
-			<tbody><tr><td class=\"success\"><p><b>$langForumCategoryAdded</b></p>
-			<p><a href=\"$PHP_SELF?forumgo=yes&cat_id=$cat_id&ctg=$ctg\">$langBack</a></p>
-			</td></tr></tbody></table>";
+		$tool_content .= "
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"success\">
+        <p><b>$langForumCategoryAdded</b></p>
+        <p><a href=\"$PHP_SELF?forumgo=yes&cat_id=$cat_id&ctg=$ctg\">$langBack</a></p>
+      </td>
+    </tr>
+    </tbody>
+    </table>";
 		}
 	
 	// forum delete category
@@ -197,50 +307,95 @@ function confirmation ()
 	elseif(isset($forumgodel)){
 		db_query("delete from topics where forum_id=$forum_id", $currentCourseID);
 		db_query("delete from forums where forum_id=$forum_id", $currentCourseID);
-		$tool_content .= "<table width=\"99%\"><tbody>
-			<tr><td class=\"success\"><p><b>$langForumDelete</b></p>
-			<p><a href=\"$PHP_SELF?forumgo=yes&ctg=$ctg&cat_id=$cat_id\">$langBack</a></p>
-			</td></tr></tbody></table>";
+		$tool_content .= "
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"success\">
+        <p><b>$langForumDelete</b></p>
+        <p><a href=\"$PHP_SELF?forumgo=yes&ctg=$ctg&cat_id=$cat_id\">$langBack</a></p>
+      </td>
+    </tr>
+    </tbody>
+    </table>";
 	} else {
-		$tool_content .= "<p><b>$langForCategories</b></p><p><em>$langAddForums.</em></p>
-    			<form action=\"forum_admin.php?forumadmin=yes\" method=post></td><tr><td>";
-		$tool_content .= "<table width=99%><thead>
-    		<tr><th>$langID</th><th width='600'>$langCategories</th>
-    		<th>$langNbFor</th><th>$langActions</th></tr></thead><tbody>";
+		$tool_content .= "
+
+    <form action=\"forum_admin.php?forumadmin=yes\" method=post></td><tr><td>";
+		$tool_content .= "
+    <table width=99% class=\"ForumSum\">
+    <thead>
+    <tr>
+      <td width='10' class=\"lalahead\">$langID</td>
+      <td class=\"lalahead\">$langForCategories</td>
+      <td width='70' class=\"lalahead\">$langNbFor</td>
+      <td width='75' class=\"lalahead\">$langActions</td>
+    </tr>
+    </thead>
+    <tbody>";
 		$result = db_query("select cat_id, cat_title from catagories order by cat_id", $currentCourseID);
 		$i=1;
+
 		while(list($cat_id, $cat_title) = mysql_fetch_row($result)) {
 			$gets = db_query("select count(*) as total from forums where cat_id=$cat_id", $currentCourseID);
 			$numbers= mysql_fetch_array($gets);
 			if($i%2 == 0){
-				$tool_content .= "<tr bgcolor=$color1>";
+				$tool_content .= "
+    <tr bgcolor=$color1>";
 			}
 			elseif($i%2 == 1) {
-				$tool_content .= "<tr bgcolor=$color2>";
+				$tool_content .= "
+    <tr bgcolor=$color2>";
 			}
-			$tool_content .= "<td align='center'>$i</td>
-			<td>$cat_title &nbsp;</td><td align='center'>$numbers[total]</td>
-			<td align='center'>
-			<a href='forum_admin.php?forumgo=yes&cat_id=$cat_id&ctg=$cat_title'><img src='../../template/classic/img/forum_on.gif' border='0' title='$langForums'></img></a>&nbsp;
-			<a href='forum_admin.php?forumcatedit=yes&cat_id=$cat_id'><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>&nbsp;
-			<a href='forum_admin.php?forumcatdel=yes&cat_id=$cat_id&ok=0' onClick='return confirmation();'><img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></img></a></td></tr>";
+			$tool_content .= "
+      <td align='right'>$i.</td>
+      <td align='left'>$cat_title &nbsp;</td>
+      <td align='center'>$numbers[total]</td>
+      <td align='center'>
+        <a href='forum_admin.php?forumgo=yes&cat_id=$cat_id&ctg=$cat_title'><img src='../../template/classic/img/forum_on.gif' border='0' title='$langForums'></img></a>&nbsp;
+        <a href='forum_admin.php?forumcatedit=yes&cat_id=$cat_id'><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>&nbsp;
+        <a href='forum_admin.php?forumcatdel=yes&cat_id=$cat_id&ok=0' onClick='return confirmation();'><img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></img></a>
+      </td>
+    </tr>";
 			$i++;
 		}
-		$tool_content .= "</tbody></table></form>
-    		<br/><p><b>$langAddCategory</b></p>
-    		<form action=\"forum_admin.php?forumcatadd=yes\" method=post>
-    		<table width=99%><thead><tr><th>$langCat</th>
-    		<td><input type=text name=catagories size=50></td></tr>
-    		</thead></table>
-		<input type=hidden name=forumcatadd value=yes><br/>
-    		<input type=submit value=\"$langAdd\"></form>";
+		$tool_content .= "
+    </tbody>
+    </table>
+    </form>
+	
+    <br/>
+    <form action=\"forum_admin.php?forumcatadd=yes\" method=post>
+
+    <table width=99% class=\"FormData\">
+    <tbody>
+    <tr>
+      <th width=\"220\">&nbsp;</th>
+      <td><b>$langAddCategory</b></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langCat</th>
+      <td><input type=text name=catagories size=50 class=\"FormData_InputText\"></td>
+    </tr>
+    <tr>
+      <th>&nbsp;</th>
+      <td><input type=hidden name=forumcatadd value=yes><input type=submit value=\"$langAdd\"></td>
+    </tr>
+    </thead>
+    </table>
+
+    </form>
+	<br/>
+	<p><b><u>$langNote</u>:</b> ($langForCategories)<br/>
+       <em>$langAddForums</em>
+    </p>";
 	}
 } else {
 	$tool_content .= "$langNotAllowed<br>";
 }
 if($is_adminOfCourse && isset($head_content)) {
-	draw($tool_content, 2, ' ', $head_content);	
+	draw($tool_content, 2, 'forum_admin', $head_content);	
 } else {
-	draw($tool_content, 2);
+	draw($tool_content, 2, 'forum_admin');
 }
 ?>

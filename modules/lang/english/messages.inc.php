@@ -1940,6 +1940,7 @@ $l_itemsreq	= "Items marked with a * are required";
 // Viewforum
 $l_viewforum	= "View Forum";
 $l_notopics	= "There are no topics for this forum. You can post one.";
+$l_noforum	= "There are no forums for this category.";
 $l_hotthres	= "Messages limit threshold has reached";
 $l_islocked	= "$l_topic is Locked (No new $l_posts may be made in it)";
 $l_moderatedby	= "Moderated by";

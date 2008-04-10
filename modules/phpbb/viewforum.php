@@ -152,7 +152,7 @@ if(!$result = db_query($sql, $currentCourseID)) {
     </TABLE>
 cData;
 	$tool_content .= $langErrorTopicsQueryDatabase;
-	draw($tool_content, 2);
+	draw($tool_content, 2, 'phpbb');
 	exit();
 }
 
@@ -160,7 +160,8 @@ $topics_start = $start;
 
 if ($myrow = mysql_fetch_array($result)) {
 	do {
-		$tool_content .= "<TR>\n";
+		$tool_content .= "
+    <TR>";
 		$replys = $myrow["topic_replies"];
 		$last_post = $myrow["post_time"];
 		$last_post_datetime = $myrow["post_time"];
@@ -187,7 +188,8 @@ if ($myrow = mysql_fetch_array($result)) {
 				$image = $locked_image;
 			}
 		}
-		$tool_content .= "<TD width=\"1\"><IMG SRC=\"$image\"></TD>\n";
+		$tool_content .= "
+      <TD width=\"1\"><IMG SRC=\"$image\"></TD>";
 		$topic_title = own_stripslashes($myrow["topic_title"]);
 		$pagination = '';
 		$start = '';
@@ -221,15 +223,17 @@ if ($myrow = mysql_fetch_array($result)) {
 			}
 		}
 		$topiclink .= "&$replys";
-		$tool_content .= "<TD><a href=\"$topiclink\">$topic_title</a>$pagination</TD>\n";
-		$tool_content .= "<TD class=\"lalaleftside\">$replys</TD>\n";
-		$tool_content .= "<TD class=\"lalaleftside1\">" . $myrow["prenom"] . " " . $myrow["nom"] . "</TD>\n";
-		$tool_content .= "<TD class=\"lalaleftside\">" . $myrow["topic_views"] . "</TD>\n";
-		$tool_content .= "<TD class=\"lalaleftside1\">$last_post</TD></TR>\n";
+		$tool_content .= "\n      <TD><a href=\"$topiclink\">$topic_title</a>$pagination</TD>\n";
+		$tool_content .= "      <TD class=\"lalaleftside\">$replys</TD>\n";
+		$tool_content .= "      <TD class=\"lalaleftside1\">" . $myrow["prenom"] . " " . $myrow["nom"] . "</TD>\n";
+		$tool_content .= "      <TD class=\"lalaleftside\">" . $myrow["topic_views"] . "</TD>\n";
+		$tool_content .= "      <TD class=\"lalaleftside1\">$last_post</TD></TR>\n";
 	} while($myrow = mysql_fetch_array($result));
 } else {
-	$tool_content .= "<td colspan=6>$l_notopics</td></tr>\n";
+	$tool_content .= "n\      <td colspan=6>$l_notopics</td></tr>\n";
 }
-$tool_content .= "</tbody></table>";
+$tool_content .= "
+    </tbody>
+    </table>";
 draw($tool_content, 2, 'phpbb');
 ?>

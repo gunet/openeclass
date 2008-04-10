@@ -51,11 +51,12 @@ table.ForumSum td {
 	padding-bottom: 6px;
 	padding-top: 6px;
 	font-weight: bold;
+	color: #000000 !important;
 }
 
 .lalahead {
 	background : #edecdf !important;
-	text-align: center;
+	text-align: center !important;;
 	padding: 4px;
 	padding-bottom: 6px;
 	padding-top: 6px;
@@ -63,14 +64,14 @@ table.ForumSum td {
 }
 
 .lalaleftside {
-	background : #F5F5F5 !important;
+	background : #F7F7F7 !important;
 	text-align: center;
 	vertical-align: middle !important;
 	font-size:10px !important;
 }
 
 .lalaleftside1 {
-	background : #F0F0F0 !important;
+	background : #F4F4F4 !important;
 	text-align: center;
 	vertical-align: middle !important;
 	font-size:10px !important;
