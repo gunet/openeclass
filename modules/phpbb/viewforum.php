@@ -230,7 +230,7 @@ if ($myrow = mysql_fetch_array($result)) {
 		$tool_content .= "      <TD class=\"lalaleftside1\">$last_post</TD></TR>\n";
 	} while($myrow = mysql_fetch_array($result));
 } else {
-	$tool_content .= "n\      <td colspan=6>$l_notopics</td></tr>\n";
+	$tool_content .= "\n      <td colspan=6>$l_notopics</td></tr>\n";
 }
 $tool_content .= "
     </tbody>

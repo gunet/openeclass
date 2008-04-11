@@ -144,10 +144,29 @@ cData;
 	$tool_content .= " ) </TD></TR></TABLE>\n";
 }
 
+	$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">
+        <li><a href=\"newtopic.php?forum=$forum\">$langNewTopic</a></li>
+        <li>";
+	if($lock_state != 1) {
+		$tool_content .= "<a href=\"reply.php?topic=$topic&forum=$forum\">$langAnswer</a>";
+	} else {
+		$tool_content .= "<IMG SRC=\"$reply_locked_image\" BORDER=\"0\">";
+	}				
+	$tool_content .= "</li>
+      </ul>
+    </div>
+    <br />
+	";
+
+
+
 $tool_content .= <<<cData
-	<TABLE WIDTH="99%\">
+
+	<TABLE WIDTH="99%" class="ForumSum">
 	<thead>
-		<TR><th>$l_author</th><th>$l_message</th></TR>
+		<TR><td class="lalahead" width=150"">$l_author</td><td class="lalahead">$l_message</td></TR>
 		</thead>
 		<tbody>
 cData;
@@ -173,15 +192,15 @@ $row_color = $color2;
 $count = 0;
 do {
 	if(!($count % 2))
-		$row_color = $color2;
+		$row_color = topic_row1;
 	else 
-		$row_color = $color1;
-	$tool_content .= "<TR BGCOLOR=\"$row_color\">\n";
-	$tool_content .= "<TD>" . $myrow["prenom"] . " " . $myrow["nom"] . "</TD>";
+		$row_color = topic_row2;
+	$tool_content .= "<TR>\n";
+	$tool_content .= "<TD class=\"$row_color\">" . $myrow["prenom"] . " " . $myrow["nom"] . "</TD>";
 	$message = own_stripslashes($myrow["post_text"]);
 	if ($count == 0) $postTitle = "<p><img src=\"$posticon\"><b>$topic_subject</b></p>";
 	else $postTitle = "";
-	$tool_content .= "<TD>$postTitle<p>$message</p><br/>
+	$tool_content .= "<TD class=\"$row_color\">$postTitle<p>$message</p><br/>
 	
 	<p><em>$l_posted: " . $myrow["post_time"] . "</em></p>";
 	if ($status[$dbname]==1 OR $status[$dbname]==2) { // course admin
@@ -225,6 +244,7 @@ if ($total > $posts_per_page) {
 	$tool_content .= "</FONT></TD></TR>";
 }
 
+/*
 $tool_content .= "<p><a href=\"newtopic.php?forum=$forum\">";
 $tool_content .= "$langNewTopic</a></p>";
 if($lock_state != 1) {
@@ -232,5 +252,6 @@ if($lock_state != 1) {
 } else {
 	$tool_content .= "<IMG SRC=\"$reply_locked_image\" BORDER=\"0\"></TD></TR>";
 }
-draw($tool_content,2);
+*/
+draw($tool_content,2,'phpbb');
 ?>
