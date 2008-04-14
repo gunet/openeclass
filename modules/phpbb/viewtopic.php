@@ -164,11 +164,14 @@ cData;
 
 $tool_content .= <<<cData
 
-	<TABLE WIDTH="99%" class="ForumSum">
-	<thead>
-		<TR><td class="lalahead" width=150"">$l_author</td><td class="lalahead">$l_message</td></TR>
-		</thead>
-		<tbody>
+    <table WIDTH="99%" class="ForumSum">
+    <thead>
+    <tr>
+      <td class="lalahead" width="150">$l_author</td>
+      <td class="lalahead" colspan="2">$l_message</td>
+    </tr>
+    </thead>
+    <tbody>
 cData;
 
 if (isset($start)) {
@@ -184,7 +187,7 @@ if (isset($start)) {
 }
 if (!$result = db_query($sql, $currentCourseID)) {
 	$tool_content .= "$langErrorConnectPostDatabase. $sql";
-	draw($tool_content, 2);
+	draw($tool_content, 2, 'phpbb');
 	exit();
 }
 $myrow = mysql_fetch_array($result);
@@ -195,31 +198,52 @@ do {
 		$row_color = topic_row1;
 	else 
 		$row_color = topic_row2;
-	$tool_content .= "<TR>\n";
-	$tool_content .= "<TD class=\"$row_color\">" . $myrow["prenom"] . " " . $myrow["nom"] . "</TD>";
+	$tool_content .= "
+    <tr>";
+	$tool_content .= "
+      <td class=\"$row_color\"><b>" . $myrow["prenom"] . " " . $myrow["nom"] . "</b></td>";
 	$message = own_stripslashes($myrow["post_text"]);
-	if ($count == 0) $postTitle = "<p><img src=\"$posticon\"><b>$topic_subject</b></p>";
-	else $postTitle = "";
-	$tool_content .= "<TD class=\"$row_color\">$postTitle<p>$message</p><br/>
-	
-	<p><em>$l_posted: " . $myrow["post_time"] . "</em></p>";
-	if ($status[$dbname]==1 OR $status[$dbname]==2) { // course admin
-		$tool_content .= "<a href=\"editpost.php?post_id=" . 
-			$myrow["post_id"] . 
-			"&topic=$topic&forum=$forum\"><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>";
+
+	if ($count == 0) {
+		$postTitle = "
+      $l_postTitle: <b>$topic_subject</b>";
+	} else {
+		$postTitle = "";
 	}
-	$tool_content .= "</td></tr>";
+
+	$tool_content .= "
+      <td class=\"$row_color\">
+        <div class='post_massage'>
+          <img src=\"$posticon\">
+          <em>$l_posted: " . $myrow["post_time"] . "</em>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$postTitle
+        </div>
+      <br />
+      $message
+      <br /><br />
+      </td>
+      <td class=\"$row_color\" width=\"3\">
+        <div align=\"right\">";
+	if ($status[$dbname]==1 OR $status[$dbname]==2) { // course admin
+		$tool_content .= "
+        <a href=\"editpost.php?post_id=".$myrow["post_id"]."&topic=$topic&forum=$forum\"><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>";
+	}
+	$tool_content .= "
+        </div>
+      </td>
+    </tr>";
 	$count++;
 } while($myrow = mysql_fetch_array($result));
 
 $sql = "UPDATE topics SET topic_views = topic_views + 1 WHERE topic_id = '$topic'";
 db_query($sql, $currentCourseID);
 
-$tool_content .= "</tbody></TABLE>";
+$tool_content .= "
+    </tbody>
+    </table>";
 
 if ($total > $posts_per_page) {
 	$times = 1;
-	$tool_content .= "<TR ALIGN=\"RIGHT\"><TD colspan=2>$l_gotopage ( ";
+	$tool_content .= "<tr ALIGN=\"RIGHT\"><TD colspan=2>$l_gotopage ( ";
 	$last_page = $start - $posts_per_page;
 	if($start > 0) {
 		$tool_content .= "<a href=\"$PHP_SELF?topic=$topic&forum=$forum&start=$last_page\">$l_prevpage</a> ";

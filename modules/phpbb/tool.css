@@ -80,14 +80,19 @@ table.ForumSum td {
 .topic_row1 {
 	background : #F7F7F7 !important;
 	text-align: left;
-	vertical-align: middle !important;
+	vertical-align: top !important;
 	font-size:10px !important;
 }
 
-.topic_row1 {
-	background : #F4F4F4 !important;
+.topic_row2 {
+	background : #FBFBFB !important;
 	text-align: left;
-	vertical-align: middle !important;
+	vertical-align: top !important;
 	font-size:10px !important;
 }
+
+.post_massage {
+	border-bottom: 1px dotted #D1D7DC;
+}
+
 

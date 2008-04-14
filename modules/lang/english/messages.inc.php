@@ -1852,6 +1852,7 @@ $l_password 	= "Password";
 $l_email 	= "Email";
 $l_emailaddress	= "Email Address";
 $l_preferences	= "Preferences";
+$l_postTitle	= "Post Subject";
 
 $l_anonymous	= "Anonymous";  // Post
 $l_guest	= "Guest"; // Whosonline

@@ -74,12 +74,12 @@ if (isset($submit) && $submit) {
 	$sql = "SELECT * FROM posts WHERE post_id = '$post_id'";
 	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= $langErrorDataOne;
-		draw($tool_content, 2);
+		draw($tool_content, 2, 'phpbb');
 		exit();
 	}
 	if (mysql_num_rows($result) <= 0) {
 		$tool_content .= $langErrorDataTwo;
-		draw($tool_content, 2);
+		draw($tool_content, 2, 'phpbb');
 		exit();
 	}
 	$myrow = mysql_fetch_array($result);
@@ -125,7 +125,7 @@ if (isset($submit) && $submit) {
 		$sql = "UPDATE posts_text SET post_text = '$message' WHERE (post_id = '$post_id')";
 		if (!$result = db_query($sql, $currentCourseID)) {
 			$tool_content .= $langUnableUpadatePost;
-			draw($tool_content, 2);
+			draw($tool_content, 2, 'phpbb');
 			exit();
 		}
 		if (isset($subject)) {
@@ -159,14 +159,14 @@ if (isset($submit) && $submit) {
 			WHERE post_id = '$post_id'";
 		if (!$r = db_query($sql, $currentCourseID)){
 			$tool_content .= $langUnableDeletePost;
-			draw($tool_content, 2);
+			draw($tool_content, 2, 'phpbb');
 			exit();
 		}
 		$sql = "DELETE FROM posts_text
 			WHERE post_id = '$post_id'";
 		if (!$r = db_query($sql, $currentCourseID)) {
 			$tool_content .= $langUnableDeletePost;
-			draw($tool_content, 2);
+			draw($tool_content, 2, 'phpbb');
 			exit();
 		} else if ($last_post_in_thread == $this_post_time) {
 			$topic_time_fixed = get_last_post($topic_id, $currentCourseID, "time_fix");
@@ -175,7 +175,7 @@ if (isset($submit) && $submit) {
 				WHERE topic_id = '$topic_id'";
 			if (!$r = db_query($sql, $currentCourseID)) {
 				$tool_content .= $langPostRemoved;
-				draw($tool_content, 2);
+				draw($tool_content, 2, 'phpbb');
 				exit();
 			}
 		}
@@ -184,7 +184,7 @@ if (isset($submit) && $submit) {
 				WHERE topic_id = '$topic_id'";
 			if (!$r = db_query($sql, $currentCourseID)) {
 				$tool_content .= $langUnableDeleteTopic;
-				draw($tool_content, 2);
+				draw($tool_content, 2, 'phpbb');
 				exit();
 			}
 	 		$topic_removed = TRUE;
@@ -210,13 +210,13 @@ if (isset($submit) && $submit) {
 	
 	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= "$langTopicInformation";
-		draw($tool_content, 2);
+		draw($tool_content, 2, 'phpbb');
 		exit();
 	}
 	
 	if (!$myrow = mysql_fetch_array($result)) {
 		$tool_content .= "$langErrorTopicSelect";
-		draw($tool_content, 2);
+		draw($tool_content, 2, 'phpbb');
 		exit();
 	}
 	
@@ -228,9 +228,9 @@ if (isset($submit) && $submit) {
 	if (($myrow["forum_type"] == 1) && !$user_logged_in && !$logging_in) {
 		// Private forum, no valid session, and login form not submitted...
 		$tool_content .= "
-			<FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
-			<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"99%\">
-			<TR><TD>$l_private</TD></TR>
+    <FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
+    <TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"99%\">
+    <TR><TD>$l_private</TD></TR>
 			<TR><TD>
 			<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\">
 			<TR><TD></TD></TR>
@@ -242,7 +242,7 @@ if (isset($submit) && $submit) {
 			<INPUT TYPE=\"HIDDEN\" NAME=\"post_id\" VALUE=\"$post_id\">
 			<INPUT TYPE=\"SUBMIT\" NAME=\"logging_in\" VALUE=\"$l_enter\">
 			</TD></TR></TABLE></FORM>";
-		draw($tool_content, 2);
+		draw($tool_content, 2, 'phpbb');
 		exit();
 	} else {
 		if ($myrow["forum_type"] == 1) {
@@ -250,7 +250,7 @@ if (isset($submit) && $submit) {
 			// this private forum.
 			if (!check_priv_forum_auth($userdata["user_id"], $forum, TRUE, $currentCourseID)) {
 				$tool_content .= "$l_privateforum $l_nopost";
-				draw($tool_content, 2);
+				draw($tool_content, 2, 'phpbb');
 				exit();
 			}
 			// Ok, looks like we're good.
@@ -264,7 +264,7 @@ if (isset($submit) && $submit) {
 
 	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= "<p>Couldn't get user and topic information from the database.</p>";
-		draw($tool_content, 2);
+		draw($tool_content, 2, 'phpbb');
 		exit();
 	}
 	$myrow = mysql_fetch_array($result);
@@ -273,7 +273,7 @@ if (isset($submit) && $submit) {
 			if($userdata["user_level"] == 2 && !is_moderator($forum, $userdata["user_id"], $currentCourseID)) {
 				if($userdata[user_level] < 2 && ($userdata["user_id"] != $myrow["user_id"])) {
 					$tool_content .= $l_notedit;
-					draw($tool_content, 2);
+					draw($tool_content, 2, 'phpbb');
 					exit();
 				}
 			}
@@ -296,28 +296,66 @@ if (isset($submit) && $submit) {
 	$message = preg_replace('#</textarea>#si', '&lt;/TEXTAREA&gt;', $message);
 	list($day, $time) = split(" ", $myrow["post_time"]);
 	
-	$tool_content .= "<a href=\"viewtopic.php?topic=$topic&forum=$forum\" target=\"_blank\">$l_topicreview</a>
-		<br/><br/><FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\"><TABLE WIDTH=\"99%\"><thead>";
+	
+		$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">
+        <li><a href=\"viewtopic.php?topic=$topic&forum=$forum\" target=\"_blank\">$l_topicreview</a></li>
+      </ul>
+    </div>
+    <br />";
+	
+	
+	
+	
+	$tool_content .= "
+    <FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
+    <table class=\"FormData\" width=\"99%\">
+    <tbody>";
 	$first_post = is_first_post($topic, $post_id, $currentCourseID);
 	if($first_post) {
-		$tool_content .= "<TR><th>$l_subject:</th><TD>
-		<INPUT TYPE=\"TEXT\" NAME=\"subject\" SIZE=\"50\" MAXLENGTH=\"100\" VALUE=\"" . stripslashes($myrow["topic_title"]) . "\"></TD></TR>";
+		$tool_content .= "
+    <TR>
+      <th width=\"220\">&nbsp;</th>
+      <TD><b>$l_reply</b></TD>
+    </TR>
+    <tr>
+      <th class=\"left\">$l_subject:</th>
+      <TD><INPUT TYPE=\"TEXT\" NAME=\"subject\" SIZE=\"53\" MAXLENGTH=\"100\" VALUE=\"" . stripslashes($myrow["topic_title"]) . "\"  class=\"FormData_InputText\"></TD>
+    </TR>";
 	}
-	$tool_content .= "<TR><th>$l_body:</th><TD>
-		<TEXTAREA NAME=\"message\" ROWS=10 COLS=45 WRAP=\"VIRTUAL\">$message</TEXTAREA>
-		</TD></TR></thead></table>
-		<p><INPUT TYPE=\"CHECKBOX\" NAME=\"delete\">$l_delete</p>";
-
+	$tool_content .= "
+    <TR>
+      <th class=\"left\">$l_body:</th>
+      <TD><TEXTAREA NAME=\"message\" ROWS=10 COLS=50 WRAP=\"VIRTUAL\"  class=\"FormData_InputText\">$message</TEXTAREA></TD>
+    </TR>
+    <TR>
+      <th class=\"left\">$l_delete:</th>
+      <TD><INPUT TYPE=\"CHECKBOX\" NAME=\"delete\"></TD>
+    </TR>
+    <TR>
+      <th>&nbsp;</th>
+      <TD>";
+	
 	if (isset($user_logged_in) && $user_logged_in) {
-		$tool_content .= "<INPUT TYPE=\"HIDDEN\" NAME=\"username\" VALUE=\"" . $userdata["username"] . "\">";
+		$tool_content .= "
+          <INPUT TYPE=\"HIDDEN\" NAME=\"username\" VALUE=\"" . $userdata["username"] . "\">";
 	}
-	$tool_content .= "<INPUT TYPE=\"HIDDEN\" NAME=\"post_id\" VALUE=\"$post_id\">
-			<INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
-			<!--
-			<INPUT TYPE=\"HIDDEN\" NAME=\"topic_id\" VALUE=\"$topic\">
-			<INPUT TYPE=\"HIDDEN\" NAME=\"poster_id\" VALUE=\"" . $myrow["poster_id"] ."\">
-			-->
-	<INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">";
+	$tool_content .= "
+          <INPUT TYPE=\"HIDDEN\" NAME=\"post_id\" VALUE=\"$post_id\">
+          <INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
+          <!--
+          <INPUT TYPE=\"HIDDEN\" NAME=\"topic_id\" VALUE=\"$topic\">
+          <INPUT TYPE=\"HIDDEN\" NAME=\"poster_id\" VALUE=\"" . $myrow["poster_id"] ."\">
+          -->
+          <INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">
+      </TD>
+    </TR>";
+	
+	
+		$tool_content .= "
+    </tbody>
+    </table>";
 }
-draw($tool_content,2);
+draw($tool_content,2, 'phpbb');
 ?>

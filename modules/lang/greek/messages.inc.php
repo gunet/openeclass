@@ -1757,6 +1757,7 @@ $l_password 	= "Συνθηματικό";
 $l_email 	= "Email";
 $l_emailaddress	= "Διεύθυνση Email";
 $l_preferences	= "Προτιμήσεις";
+$l_postTitle	= "Θέμα δημοσίευσης";
 
 $l_anonymous	= "Ανώνυμος";  // Post
 $l_guest	= "Φιλοξενούμενος"; // Whosonline

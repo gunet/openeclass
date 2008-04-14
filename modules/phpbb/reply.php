@@ -87,12 +87,12 @@ if ( isset($post_id) && $post_id) {
 
 if(!$result = db_query($sql, $currentCourseID)) {
 	$tool_content .= $langErrorConnectForumDatabase;
-	draw($tool_content, 2);
+	draw($tool_content, 2, 'phpbb');
 	exit();
 }
 if (!$myrow = mysql_fetch_array($result)) {
 	$tool_content .= $langErrorTopicSelect;
-	draw($tool_content, 2);
+	draw($tool_content, 2, 'phpbb');
 	exit();
 }
 
@@ -110,14 +110,14 @@ $navigation[]= array ("url"=>"viewtopic.php?&topic=$topic&forum=$forum", "name"=
 
 if (!does_exists($forum, $currentCourseID, "forum") || !does_exists($topic, $currentCourseID, "topic")) {
 	$tool_content .= $langErrorTopicSelect;
-	draw($tool_content, 2);
+	draw($tool_content, 2, 'phpbb');
 	exit();
 }
 
 if (isset($submit) && $submit) {
 	if (trim($message) == '') {
 		$tool_content .= $l_emptymsg;
-		draw($tool_content, 2);
+		draw($tool_content, 2, 'phpbb');
 		exit();
 	}
 	if ( $forum_access = 2 ) {
@@ -125,7 +125,7 @@ if (isset($submit) && $submit) {
 	}
 	if (isset($userdata["user_level"]) && $userdata["user_level"] == -1) {
 		$tool_content .= $luserremoved;
-		draw($tool_content, 2);
+		draw($tool_content, 2, 'phpbb');
 		exit();
 	}
 	if ($userdata["user_id"] != -1) {
@@ -134,14 +134,14 @@ if (isset($submit) && $submit) {
 	}
 	if ($forum_access == 3 && $userdata["user_level"] < 2) {
 		$tool_content .= $l_nopost;
-		draw($tool_content, 2);
+		draw($tool_content, 2, 'phpbb');
 		exit();
 	}
 	// XXX: Do we need this code ?
 	if ( $userdata["user_id"] == -1 ) {
 		if ($forum_access == 3 && $userdata["user_level"] < 2) {
 			$tool_content .= $l_nopost;
-			draw($tool_content, 2);
+			draw($tool_content, 2, 'phpbb');
 			exit();
 		}
 	}
@@ -150,7 +150,7 @@ if (isset($submit) && $submit) {
 	if ($forum_type == 1) {
 		if (!check_priv_forum_auth($userdata["user_id"], $forum, TRUE, $currentCourseID)) {
 			$tool_content .= "$l_privateforum $l_nopost";
-			draw($tool_content, 2);
+			draw($tool_content, 2, 'phpbb');
 			exit();
 		}
 	}
@@ -189,7 +189,7 @@ if (isset($submit) && $submit) {
 			VALUES ('$topic', '$forum', '" . $userdata["user_id"] . "','$time', '$poster_ip', '$nom', '$prenom')";
 	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= $langUnableEnterData;
-		draw($tool_content, 2);
+		draw($tool_content, 2, 'phpbb');
 		exit();
 	}
 	$this_post = mysql_insert_id();
@@ -197,7 +197,7 @@ if (isset($submit) && $submit) {
 		$sql = "INSERT INTO posts_text (post_id, post_text) VALUES ($this_post, '$message')";
 		if (!$result = db_query($sql, $currentCourseID)) {
 			$tool_content .= $langUnableEnterText;
-			draw($tool_content, 2);
+			draw($tool_content, 2, 'phpbb');
 			exit();
 		}
 	}
@@ -206,7 +206,7 @@ if (isset($submit) && $submit) {
 		WHERE topic_id = '$topic'";
 	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= $langUnableEnterData;
-		draw($tool_content, 2);
+		draw($tool_content, 2, 'phpbb');
 		exit();
 	}
 	$sql = "UPDATE forums 
@@ -215,7 +215,7 @@ if (isset($submit) && $submit) {
 	$result = db_query($sql, $currentCourseID);
 	if (!$result) {
 		$tool_content .= $langErrorUpadatePostCount;
-		draw($tool_content, 2);
+		draw($tool_content, 2, 'phpbb');
 		exit();
 	}    
 	$sql = "SELECT t.topic_notify, u.user_email, u.username, u.user_id
@@ -223,7 +223,7 @@ if (isset($submit) && $submit) {
 		WHERE t.topic_id = '$topic' AND t.topic_poster = u.user_id";
 	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= $langUserTopicInformation;
-		draw($tool_content, 2);
+		draw($tool_content, 2, 'phpbb');
 		exit();
 	}
 	$m = mysql_fetch_array($result);
@@ -265,14 +265,14 @@ if (isset($submit) && $submit) {
 			</TD></TR>
 			</TABLE>
 			</FORM>";
-		draw($tool_content, 2);
+		draw($tool_content, 2, 'phpbb');
 		exit();
 	} else {
 		// ADDED BY CLAROLINE: exclude non identified visitors
 		if (!$uid AND !$fakeUid) {
 			$tool_content .= "<center><br><br>$langLoginBeforePost1<br>";
 			$tool_content .= "$langLoginBeforePost2<a href=../../index.php>$langLoginBeforePost3</a></center>";
-			draw($tool_content, 2);
+			draw($tool_content, 2, 'phpbb');
 			exit();
 		}
 		if ($forum_type == 1) {
@@ -280,14 +280,33 @@ if (isset($submit) && $submit) {
 			// this private forum.
 			if (!check_priv_forum_auth($userdata["user_id"], $forum, TRUE, $currentCourseID)) {
 				$tool_content .= "$l_privateforum $l_nopost";
-				draw($tool_content, 2);
+				draw($tool_content, 2, 'phpbb');
 				exit();
 			}
 			// Ok, looks like we're good.
 		}
 	}	
-	$tool_content .= "<FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\"><TABLE>
-		<thead><TR><th>$l_body:";
+	// Topic review
+	$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">
+        <li><a href=\"viewtopic.php?topic=$topic&forum=$forum\" target=\"_blank\">$l_topicreview</a></li>
+      </ul>
+    </div>
+    <br />
+	";
+	
+	
+	$tool_content .= "
+    <FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
+    <table class=\"FormData\" width=\"99%\">
+    <tbody>
+    <tr>
+      <th width=\"220\">&nbsp;</th>
+      <TD>&nbsp;</TD>
+    </tr>
+    <tr>
+      <th class=\"left\">$l_body:";
 	if (isset($quote) && $quote) {
 		$sql = "SELECT pt.post_text, p.post_time, u.username 
 			FROM posts p, users u, posts_text pt 
@@ -304,7 +323,7 @@ if (isset($submit) && $submit) {
 			eval("\$reply = \"$syslang_quotemsg\";");
 		} else {
 			$tool_content .= $langErrorConnectForumDatabase;
-			draw($tool_content, 2);
+			draw($tool_content, 2, 'phpbb');
 			exit();
 		}
 	}				
@@ -314,19 +333,28 @@ if (isset($submit) && $submit) {
 	if (!isset($quote)) {
 		$quote = "";
 	}
-	$tool_content .= "</th></tr></thead><tbody>
-		<tr><TD><TEXTAREA NAME=\"message\" ROWS=15 COLS=70 WRAP=\"VIRTUAL\">$reply</TEXTAREA>
-		</TD></TR></tbody></TABLE><br/>
-		<INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
-		<INPUT TYPE=\"HIDDEN\" NAME=\"topic\" VALUE=\"$topic\">
-		<INPUT TYPE=\"HIDDEN\" NAME=\"quote\" VALUE=\"$quote\">
-		<INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">&nbsp;
-		<INPUT TYPE=\"SUBMIT\" NAME=\"cancel\" VALUE=\"$l_cancelpost\">
-		</FORM>";
-	// Topic review
-	$tool_content .= "<BR><CENTER>";
-	$tool_content .= "<a href=\"viewtopic.php?topic=$topic&forum=$forum\" target=\"_blank\"><b>$l_topicreview</b></a>";
-	$tool_content .= "</CENTER><BR>";
+	$tool_content .= "
+      </th>
+    </tr>
+    <tr>
+      <th width=\"220\">&nbsp;</th>
+      <td><TEXTAREA NAME=\"message\" ROWS=15 COLS=70 WRAP=\"VIRTUAL\">$reply</TEXTAREA></td>
+    </tr>
+    <tr>
+      <th>&nbsp;</th>
+      <td>
+          <INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
+          <INPUT TYPE=\"HIDDEN\" NAME=\"topic\" VALUE=\"$topic\">
+          <INPUT TYPE=\"HIDDEN\" NAME=\"quote\" VALUE=\"$quote\">
+          <INPUT TYPE=\"SUBMIT\" NAME=\"submit\" VALUE=\"$l_submit\">&nbsp;
+          <INPUT TYPE=\"SUBMIT\" NAME=\"cancel\" VALUE=\"$l_cancelpost\">
+      </td>
+    </tr>
+    </tbody>
+    </TABLE>
+    </FORM>
+    <br/>";
+
 }
-draw($tool_content,2);
+draw($tool_content, 2, 'phpbb');
 ?>
