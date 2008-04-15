@@ -974,16 +974,52 @@ if (!isset($submit2)) {
                         $tool_content .= add_field('document', 'copyrighted', "TEXT");
 
                 // upgrade course documents directory
-                $baseFolder = "$webDir/courses/".$code[0]."/document";
-                $tmpfldr = getcwd();
+                $baseFolder = $webDir."courses/".$code[0]."/document/";
+                /*$tmpfldr = getcwd();
                 if (!@chdir("$webDir/courses/".$code[0]."/document")) {
                         die("Δεν είναι δυνατή η πρόσβαση στον κατάλογο των εγγράφων (documents)!");
-                }
+                }*/
+		// ----------------------------------------
+		// upgrade file and directories
+		// ---------------------------------------
+		$tool_content .= "Κωδικοποίηση των περιεχομένων του υποσυστήματος 'Έγγραφα'";
+		$dirnames = array();
+		traverseDirTree($baseFolder, 'encode_file', NULL, 'array_dir');
 
-                //function gia anavathmisi twn arxeiwn se kathe course
-                //*** proypothetei oti exei proepilegei h DB tou mathimatos kai pws to CWD einai o fakelos document tou mathimatos (p.x. .../eclass/courses/TMA100/document/) ***
-                RecurseDir(getcwd(), $baseFolder);
-                chdir($tmpfldr);
+		//encode directories according to array entries
+		foreach ($dirnames as $olddir) {
+			$safe_fileName = date("mdGi")."_".randomkeys('5');
+			$newdirname = preg_replace('|/[^/]+$|', '/'.$safe_fileName, $olddir);
+			if (!(rename($olddir, $newdirname))) {	
+				$tool_content .= "Σφάλμα κατά την μετονομασία του $olddir σε $newdirname !";
+			} else { 
+			// fill table
+	    		$file_date = date("Y\-m\-d G\:i\:s");
+            		$file_comment = "";
+            		$file_category = "";
+            		$file_title = "";
+            		$file_creator = "";
+            		$file_subject = "";
+            		$file_description = "";
+            		$file_author = "";
+            		$file_format = "";
+            		$file_language = "";
+            		$file_copyrighted = "";
+	    		$file_format = "";
+            		$query = "INSERT INTO document 
+				SET path = '/".substr($newdirname, strlen($baseFolder))."',
+		            	filename = '".preg_replace('|^.*/|', '', $olddir)."', 
+				visibility = 'v', comment = '$file_comment', category = '$file_category',
+            			title =	'$file_title', creator = '$file_creator',
+            			date = '$file_date', date_modified = '$file_date',
+            			subject	= '$file_subject', description = '$file_description',
+            			author = '$file_author', format	= '$file_format',
+            			language = '$file_language', copyrighted = '$file_copyrighted'";
+             		mysql_query($query);
+			}
+		}
+		
+        	//chdir($tmpfldr);
 	
 		// move video files to new directory
 		if (is_dir("$webDir/$code[0]/video")) {
