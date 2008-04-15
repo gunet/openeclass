@@ -1082,11 +1082,12 @@ $langOrganisation="Forum administration";
 $langForCat="Forum of the category";
 $langBackCat="Back to categories";
 $langForName="Forum name";
-
+$langEditForum="Edit";
 $langFunctions="Functions";
-$langAddForCat="Add forum into category";
-
+$langAddForCat="Add forum";
+$langAddForum="Forum Add";
 $langChangeCat="Change of category";
+$langChangeForum="Edit forum";
 $langSave="Save";
 $langModCatName="Modify category name";
 $langCat="Category";
@@ -1103,6 +1104,7 @@ $langNotAllowed = "Not allowed";
 $langForumDataChanged = "Forum data changed";
 $langForumCategoryAdded = "A forum was added to the category";
 $langForumDelete = "Forum was deleted";
+$langCatForumDelete = "Forum category was deleted";
 $langID = "ID";
 
 /*******************************************************************

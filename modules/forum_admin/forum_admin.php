@@ -56,6 +56,8 @@ function confirmation ()
 ';
 	// forum go
 	if(isset($forumgo)) {
+	$nameTools = $langAddForum;
+	$navigation[]= array ("url"=>"../forum_admin/forum_admin.php", "name"=> $langOrganisation);
 		$tool_content .= "
 	
 	<table class=\"Deps\" width=\"99%\">
@@ -124,14 +126,18 @@ function confirmation ()
     <tbody>
     <tr>
       <th width=\"220\">&nbsp;</th>
-      <td>$langAddForCat: <b>$ctg</b></td>
+      <td><b>$langAddForCat</b></td>
     </tr>
     <tr>
-      <th class=\"left\">$langForName</th>
+      <th class=\"left\">$langCat:</th>
+      <td>$ctg</td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langForName:</th>
       <td><input type=text name=forum_name size=40 class=\"FormData_InputText\"></td>
     </tr>
     <tr>
-      <th class=\"left\">$langDescription</th>
+      <th class=\"left\">$langDescription:</th>
       <td><textarea name=forum_desc cols=40 rows=3 class=\"FormData_InputText\"></textarea></td>
     </tr>
     <tr>
@@ -148,6 +154,9 @@ function confirmation ()
 	}
 	// forum go edit	
 	elseif(isset($forumgoedit)) {
+	$nameTools = $langEditForum;
+	$navigation[]= array ("url"=>"../forum_admin/forum_admin.php", "name"=> $langOrganisation);
+	
 		$result = db_query("select forum_id, forum_name, forum_desc, forum_access, forum_moderator,
     		cat_id, forum_type from forums where forum_id='$forum_id'", $currentCourseID);
 		list($forum_id, $forum_name, $forum_desc, $forum_access, $forum_moderator, $cat_id_1,
@@ -159,7 +168,7 @@ function confirmation ()
     <tbody>
     <tr>
       <th width=\"220\">&nbsp;</th>
-      <td><b>$langModify $forum_name</b></td>
+      <td><b>$langChangeForum</b></td>
     </tr>
     <tr>
       <th class=\"left\">$langForName</th>
@@ -240,6 +249,9 @@ function confirmation ()
 
 	// forum go save
 	elseif(isset($forumgosave)) {
+	$nameTools = $langDelete;
+	$navigation[]= array ("url"=>"../forum_admin/forum_admin.php", "name"=> $langOrganisation);
+	
 		$result = @db_query("select user_id from users where username='$forum_moderator'", $currentCourseID);
 		list($forum_moderator) = mysql_fetch_row($result);
 		@db_query("update users set user_level='2' where user_id='$forum_moderator'", $currrentCourseID);
@@ -261,15 +273,19 @@ function confirmation ()
     <tr>
       <td class=\"success\">
          <p><b>$langCatAdded</b></p>
-         <p><a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a></p>
       </td>
     </tr>
     </tbody>
     </table>";
+		$tool_content .= "
+         <p align=\"right\"><a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a></p>";
 		}
 
 	// forum go add
 	elseif(isset($forumgoadd)) {
+	$nameTools = $langAddForum;
+	$navigation[]= array ("url"=>"../forum_admin/forum_admin.php", "name"=> $langOrganisation);
+	
 		$result = @db_query("select user_id from users where username='$forum_moderator'", $currentCourseID);
 		list($forum_moderator) = mysql_fetch_row($result);
 		db_query("update users set user_level='2' where user_id='$forum_moderator'", $currentCourseID);
@@ -285,11 +301,12 @@ function confirmation ()
     <tr>
       <td class=\"success\">
         <p><b>$langForumCategoryAdded</b></p>
-        <p><a href=\"$PHP_SELF?forumgo=yes&cat_id=$cat_id&ctg=$ctg\">$langBack</a></p>
       </td>
     </tr>
     </tbody>
     </table>";
+		$tool_content .= "
+        <p align=\"right\"><a href=\"$PHP_SELF?forumgo=yes&cat_id=$cat_id&ctg=$ctg\">$langBack</a></p>";	
 		}
 	
 	// forum delete category
@@ -300,11 +317,24 @@ function confirmation ()
 		}
 		db_query("delete from forums where cat_id=$cat_id", $currentCourseID);
 		db_query("delete from catagories where cat_id=$cat_id", $currentCourseID);
-		$tool_content .= "<a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a>";
+		$tool_content .= "
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"success\">
+        <p><b>$langCatForumDelete</b></p>
+      </td>
+    </tr>
+    </tbody>
+    </table>";
+		$tool_content .= "<p align=\"right\"><a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a></p>";
 	}
 
 	// forum delete
 	elseif(isset($forumgodel)){
+	$nameTools = $langDelete;
+	$navigation[]= array ("url"=>"../forum_admin/forum_admin.php", "name"=> $langOrganisation);
+	
 		db_query("delete from topics where forum_id=$forum_id", $currentCourseID);
 		db_query("delete from forums where forum_id=$forum_id", $currentCourseID);
 		$tool_content .= "
@@ -313,11 +343,12 @@ function confirmation ()
     <tr>
       <td class=\"success\">
         <p><b>$langForumDelete</b></p>
-        <p><a href=\"$PHP_SELF?forumgo=yes&ctg=$ctg&cat_id=$cat_id\">$langBack</a></p>
       </td>
     </tr>
     </tbody>
     </table>";
+		$tool_content .= "
+        <p align=\"right\"><a href=\"$PHP_SELF?forumgo=yes&ctg=$ctg&cat_id=$cat_id\">$langBack</a></p>";
 	} else {
 		$tool_content .= "
 
