@@ -50,7 +50,7 @@ table.ForumSum td {
 	padding: 4px;
 	padding-bottom: 6px;
 	padding-top: 6px;
-	font-weight: bold;
+	font-size:10px !important;
 	color: #000000 !important;
 }
 
@@ -68,6 +68,13 @@ table.ForumSum td {
 	text-align: center;
 	vertical-align: middle !important;
 	font-size:10px !important;
+}
+
+.lastpost {
+	background : #F7F7F7 !important;
+	text-align: left;
+	vertical-align: middle !important;
+	font-size:9px !important;
 }
 
 .lalaleftside1 {
