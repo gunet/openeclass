@@ -354,13 +354,13 @@ function confirmation ()
 
     <form action=\"forum_admin.php?forumadmin=yes\" method=post></td><tr><td>";
 		$tool_content .= "
-    <table width=99% class=\"ForumSum\">
+    <table width=99% class=\"ForumCategory\">
     <thead>
     <tr>
-      <td width='10' class=\"lalahead\">$langID</td>
-      <td class=\"lalahead\">$langForCategories</td>
-      <td width='70' class=\"lalahead\">$langNbFor</td>
-      <td width='75' class=\"lalahead\">$langActions</td>
+      <th width='10'>$langID</th>
+      <th>$langForCategories</th>
+      <th width='70'>$langNbFor</th>
+      <th width='75'>$langActions</th>
     </tr>
     </thead>
     <tbody>";

@@ -92,13 +92,13 @@ if ($is_adminOfCourse || $is_admin) {
 }
 $tool_content .= <<<cData
 
-    <table width="99%" class="ForumSum">
+    <table width="99%" class="ForumSum" border=1>
     <thead>
     <tr>
-      <td colspan="2" class="lalahead">$l_forum</td>
-      <td class="lalahead">$l_topics</td>
-      <td class="lalahead">$l_posts</td>
-      <td class="lalahead">$l_lastpost</td>
+      <td colspan="2" class="forum_category">$l_forums</td>
+      <td class="forum_category">$l_topics</td>
+      <td class="forum_category">$l_posts</td>
+      <td class="forum_category">$l_lastpost</td>
     </tr>
     </thead>
 cData;
@@ -135,7 +135,7 @@ if ( $total_categories ) {
 	if ( $viewcat != -1 ) {
 		$limit_forums = "WHERE f.cat_id = $viewcat";
 	}
-	$sql = "SELECT f.*, u.username, u.user_id, p.post_time, p.nom, p.prenom
+	$sql = "SELECT f.*, u.username, u.user_id, p.post_time, p.nom, p.prenom, p.topic_id
 		FROM forums f LEFT JOIN posts p ON p.post_id = f.forum_last_post_id
 		LEFT JOIN users u ON u.user_id = p.poster_id
 		$limit_forums ORDER BY f.cat_id, f.forum_id";
@@ -182,7 +182,7 @@ cData;
 					list($year, $month, $day) = explode("-", $last_post_date);
 					list($hour, $min) = explode(":", $last_post_time);
 					$last_post_time = mktime($hour, $min, 0, $month, $day, $year);
-					$human_last_post_time = date("d.m.Y H:i", $last_post_time);
+					$human_last_post_time = date("d/m/Y -  H:i", $last_post_time);
 				}
 				if (empty($last_post) ) {
 					$last_post = $l_noposts;
@@ -194,14 +194,15 @@ cData;
 				}
 				if(@$last_post_time > $last_visit && $last_post != $l_noposts) {
 					$tool_content .= "
-      <td width=\"2\" class=\"left\"><IMG SRC=\"$newposts_image\"></td>";
+      <td width=\"1\" class=\"left\"><IMG SRC=\"$newposts_image\"></td>";
 				} else {
 					$tool_content .= "
-      <td width=5%><IMG SRC=\"$folder_image\"></td>";
+      <td width=2% class=\"center\"><IMG SRC=\"$folder_image\"></td>";
 				}
 				$name = stripslashes($forum_row[$x]["forum_name"]);
 				$last_post_nom = $forum_row[$x]["nom"];
 				$last_post_prenom = $forum_row[$x]["prenom"];
+				$last_post_topic_id = $forum_row[$x]["topic_id"];
 				$total_posts = $forum_row[$x]["forum_posts"];
 				$total_topics = $forum_row[$x]["forum_topics"];
 				$desc = stripslashes($forum_row[$x]["forum_desc"]);
@@ -240,10 +241,12 @@ cData;
       <td width=\"65\" class=\"lalaleftside\">$total_posts</td>";
 				$tool_content .= "
       <td width=\"200\" class=\"lastpost\">";
-	  			if (isset($last_post_prenom) AND isset($last_post_nom)) {
-				$tool_content .= "$l_by: $last_post_prenom $last_post_nom <IMG SRC=\"$icon_topic_latest\"><br />$human_last_post_time</td>";	  			    
+	  			//if (isset($last_post_prenom) && isset($last_post_nom)) {
+				if ($total_topics>0 && $total_posts>0) {
+				$tool_content .= "$last_post_prenom $last_post_nom 
+             <a set=\"yes\" href=\"viewtopic.php?topic=$last_post_topic_id&forum=$forum\"><IMG border=\"0\" SRC=\"$icon_topic_latest\"></a><br />$human_last_post_time</td>";	  			    
 	  			} else {
-				$tool_content .= "$last_post</td>";				
+				$tool_content .= "$l_noposts</td>";				
 				}
 
 				$tool_content .= "

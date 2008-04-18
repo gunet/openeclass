@@ -72,7 +72,7 @@ table.ForumSum td {
 
 .lastpost {
 	background : #F7F7F7 !important;
-	text-align: left;
+	text-align: center;
 	vertical-align: middle !important;
 	font-size:9px !important;
 }
@@ -102,4 +102,15 @@ table.ForumSum td {
 	border-bottom: 1px dotted #D1D7DC;
 }
 
+.forum_category {
+	margin-top: 8px;
+	margin-left: 4px;
+	margin-bottom: 8px;
+	text-align: center;
+	padding: 4px;
+	color: #000000 !important;
+	background-color: #CAC3B5 !important;;
+	font-weight: normal;
+		font-size:10px !important;
+}
 

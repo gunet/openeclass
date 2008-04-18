@@ -102,7 +102,7 @@ if ($total > $posts_per_page) {
 
 if (!$result = db_query($sql, $currentCourseID)) {
 	$tool_content .= $langErrorConnectForumDatabase;
-	draw($tool_content, 2);
+	draw($tool_content, 2, 'phpbb');
 	exit();
 }
 $myrow = mysql_fetch_array($result);
@@ -115,8 +115,10 @@ $nameTools = $topic_subject;
 if ( $total > $posts_per_page ) {
 	$times = 1;
 	$tool_content .= <<<cData
-		<TABLE BORDER="0" WIDTH="99%" ALIGN="CENTER">
-		<TR><TD>$l_gotopage (
+
+    <TABLE BORDER="0" WIDTH="99%" ALIGN="CENTER">
+    <TR>
+      <TD>$l_gotopage (
 cData;
 	$last_page = $start - $posts_per_page;
 	if ( isset($start) && $start > 0 ) {
@@ -141,7 +143,9 @@ cData;
 		$next_page = $start + $posts_per_page;
 		$tool_content .= " <a href=\"$PHP_SELF?topic=$topic&forum=$forum&start=$next_page\">$l_nextpage</a>";
 	}
-	$tool_content .= " ) </TD></TR></TABLE>\n";
+	$tool_content .= " ) </TD>
+    </TR>
+    </TABLE>\n";
 }
 
 	$tool_content .= "

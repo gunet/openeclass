@@ -6,7 +6,8 @@ $hot_threshold = 10;
 $url_images = "images";
 $url_admin = "../forum_admin";
 
-$folder_image = "../../template/classic/img/folder.gif";
+//$folder_image = "../../template/classic/img/folder.gif";
+$folder_image = "../../template/classic/img/topic_read.gif";
 $icon_topic_latest = "../../template/classic/img/icon_topic_latest.gif";
 $hot_folder_image = $newposts_image = $folder_image;
 $hot_newposts_image = "$url_images/hot_red_folder.png";
