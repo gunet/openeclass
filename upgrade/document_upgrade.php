@@ -38,78 +38,25 @@
 
 include '../include/lib/fileUploadLib.inc.php';
 include '../include/lib/forcedownload.php';
-/*
-$dirnames = array();
-traverseDirTree($path, 'encode_file', NULL, 'array_dir');
 
-//print_r($dirnames);
-
-//encode directories according to array entries
-foreach ($dirnames as $olddir) {
-	$safe_fileName = "dir".date("YmdGis")."_".randomkeys('3');
-	$newdirname = preg_replace('|/[^/]+$|', '/'.$safe_fileName, $olddir);
-	if (!(rename($olddir, $newdirname))) {	
-		$tool_content .= "Error!";
-	} else { 
-		// fill table
-	    $file_date = date("Y\-m\-d G\:i\:s");
-            $file_comment = "";
-            $file_category = "";
-            $file_title = "";
-            $file_creator = "";
-            $file_subject = "";
-            $file_description = "";
-            $file_author = "";
-            $file_format = "";
-            $file_language = "";
-            $file_copyrighted = "";
-	    $file_format = "";
-            $query = "INSERT INTO document SET path = '$safe_fileName',
-            	filename = '$olddir', visibility = 'v',
-            	comment	= '$file_comment', category = '$file_category',
-            	title =	'$file_title', creator = '$file_creator',
-            	date = '$file_date', date_modified = '$file_date',
-            	subject	= '$file_subject', description = '$file_description',
-            	author = '$file_author', format	= '$file_format',
-            	language = '$file_language', copyrighted = '$file_copyrighted'";
-             mysql_query($query);
-	}
-}
-
-*/
 // encode files
 function encode_file($filename)  {
-	global $tool_content;
+	global $baseFolder, $tool_content;
 
         $ext = get_file_extention($filename);
-	$safe_fileName = date("mdGi")."_".randomkeys('5').".".$ext;
+	$safe_fileName = date("mdGi").randomkeys('5').".".$ext;
 	$newfilename = preg_replace('|/[^/]+$|', '/'.$safe_fileName, $filename);
+	$b = db_query("SELECT unique_filename FROM doc_tmp 
+		WHERE old_path ='/".substr($filename, strlen($baseFolder))."'");
+	$u = mysql_fetch_array($b);
+	// rename
 	if (!(rename($filename, $newfilename)))  {
-		$tool_content .= "Σφάλμα κατά την μετονομασία του $filename σε $newfilename !";
-	} else { 
-	    // fill table
-	    $file_date = date("Y\-m\-d G\:i\:s");
-            $file_comment = "";
-            $file_category = "";
-            $file_title = "";
-            $file_creator = "";
-            $file_subject = "";
-            $file_description = "";
-            $file_author = "";
-            $file_format = "";
-            $file_language = "";
-            $file_copyrighted = "";
-	    $file_format = $ext;
-            $query = "INSERT INTO document SET path = '/".$safe_fileName."',
-            	filename = '".preg_replace('|^.*/|', '', $filename)."', 
-		visibility = 'v',
-         	comment	= '$file_comment', category = '$file_category',
-            	title =	'$file_title', creator = '$file_creator',
-            	date = '$file_date', date_modified = '$file_date',
-            	subject	= '$file_subject', description = '$file_description',
-            	author = '$file_author', format	= '$file_format',
-            	language = '$file_language', copyrighted = '$file_copyrighted'";
-             mysql_query($query);
+	  	$tool_content .= "Σφάλμα κατά την μετονομασία του $filename σε $newfilename !";
+	} else {
+	// fill doc_tmp table	
+		$query = "UPDATE doc_tmp SET new_filename = '".preg_replace('|^.*/|', '', $newfilename)."'
+    			WHERE unique_filename = '$u[unique_filename]'";
+		db_query($query);
 	}
 }
 
@@ -118,7 +65,6 @@ function encode_file($filename)  {
 function array_dir($dirname)  {
 	global $dirnames;
 
-	$safe_fileName = date("YmdGis")."_".randomkeys('3');
 	$end = strlen($dirname)-2;
 	$dir = substr($dirname,$end);
 	$end2 = strlen($dirname)-1;
@@ -126,6 +72,50 @@ function array_dir($dirname)  {
 	if (($dir2 != '.') and ($dir != '..')) {
 		$dirnames[] = $dirname;
 	}
+}
+
+
+// fill an array with old directory names
+function array_old_dir($dirname)  {
+	global $oldfilenames;
+
+	$end = strlen($dirname)-2;
+	$dir = substr($dirname,$end);
+	$end2 = strlen($dirname)-1;
+	$dir2 = substr($dirname,$end2);
+	if (($dir2 != '.') and ($dir != '..')) {
+		$oldfilenames[] = $dirname;
+	}
+}
+
+
+// fill an array with new encoded directory names
+function array_enc_dir($dirname)  {
+	global $encdirnames;
+
+	$end = strlen($dirname)-2;
+	$dir = substr($dirname,$end);
+	$end2 = strlen($dirname)-1;
+	$dir2 = substr($dirname,$end2);
+	if (($dir2 != '.') and ($dir != '..')) {
+		$encdirnames[] = $dirname;
+	}
+}
+
+// fill an array with new encoded file names
+function array_enc_file($filename)  {
+	global $encfilenames;
+	
+	$encfilenames[] = $filename;
+}
+
+
+// fill an array with old file names
+function array_old_file($filename)  {
+	global $oldfilenames;
+
+	$oldfilenames[] = $filename;
+	
 }
 
 
@@ -146,9 +136,6 @@ function traverseDirTree($base, $fileFunc, $dirFunc=null, $afterDirFunc=null) {
   }
 	closedir($subdirectories);
 }
-
-
-
 
 
 
@@ -343,63 +330,6 @@ function upgrade_document ($uploadPath, $file)
             rename(getcwd().$existinguploadPath, getcwd().$uploadPath2);
             mysql_query($query);
 	} //telos if(empty($row['filename']))
-}
-
-
-function upgrade_dir ($uploadPath)
-{
-	
-	global $baseFolder;
-	
-	/* elegxos ean to "path" tou arxeiou pros upload vrisketai hdh se eggrafh ston pinaka documents
-    	(aftos einai ousiastika o elegxos if_exists dedomenou tou oti to onoma tou arxeiou sto filesystem
-    	einai monadiko) */
-
-	$result = mysql_query ("SELECT filename FROM document WHERE path LIKE '%".$uploadPath."%'");
-	$row = mysql_fetch_array($result);
-
-	if (empty($row['filename'])) //to arxeio den vrethike sth vash ara mporoume na proxwrhsoume me to upload
-	{
-            $safe_fileName = date("YmdGis")."_".randomkeys('3')."";
-      	    $newpath = $safe_fileName;
-            $existinguploadPath = $uploadPath;
-	    $newfilename = substr($existinguploadPath, strlen($baseFolder));
-
-            //san date you arxeiou xrhsimopoihse thn shmerinh hm/nia
-            $file_date = date("Y\-m\-d G\:i\:s");
-            //arxikopoihsh timwn twn metavlhtwn gia to upgrade twn eggrafwn
-            $file_comment = "";
-            $file_category = "";
-            $file_title = "";
-            $file_creator = "";
-            $file_subject = "";
-            $file_description = "";
-            $file_author = "";
-            $file_format = "";
-            $file_language = "";
-            $file_copyrighted = "";
-
-            $query = "INSERT INTO document SET 
-            	path = '$newpath',
-            	filename = '$newfilename',
-            	visibility = 'v',
-            	comment	= '$file_comment',
-            	category = '$file_category',
-            	title =	'$file_title',
-            	creator	= '$file_creator',
-            	date = '$file_date',
-            	date_modified =	'$file_date',
-            	subject	= '$file_subject',
-            	description = '$file_description',
-            	author = '$file_author',
-            	format	= '$file_format',
-            	language = '$file_language',
-            	copyrighted = '$file_copyrighted'";
-//            rename(getcwd().$existinguploadPath, getcwd().$newpath);
-            rename($existinguploadPath, $newpath);
-            db_query($query);
-	} //telos if(empty($row['filename']))
-return $existinguploadPath;
 }
 
 

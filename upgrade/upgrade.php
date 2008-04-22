@@ -973,58 +973,134 @@ if (!isset($submit2)) {
                 if (!mysql_field_exists("$code[0]",'document','copyrighted'))
                         $tool_content .= add_field('document', 'copyrighted', "TEXT");
 
-                // upgrade course documents directory
-                $baseFolder = $webDir."courses/".$code[0]."/document/";
-                /*$tmpfldr = getcwd();
-                if (!@chdir("$webDir/courses/".$code[0]."/document")) {
-                        die("Δεν είναι δυνατή η πρόσβαση στον κατάλογο των εγγράφων (documents)!");
-                }*/
-		// ----------------------------------------
-		// upgrade file and directories
-		// ---------------------------------------
-		$tool_content .= "Κωδικοποίηση των περιεχομένων του υποσυστήματος 'Έγγραφα'";
-		$dirnames = array();
-		traverseDirTree($baseFolder, 'encode_file', NULL, 'array_dir');
 
+	// -----------------------------------------------------------
+	// -------------- begin document upgrade ---------------------
+	// -----------------------------------------------------------
+		// add temporary column unique_filename in document table
+		if (!mysql_field_exists("$code[0]",'document','unique_filename'))
+                        $tool_content .= add_field('document', 'unique_filename', "TEXT");
+
+		// create temporary table
+		if (!mysql_table_exists($code[0], 'doc_tmp')) {
+                        db_query("CREATE TABLE doc_tmp (
+                                id int(11) NOT NULL auto_increment,
+                                   old_path text NOT NULL default '', 
+                                   old_filename text NOT NULL default '',
+                                   unique_filename text NOT NULL default '',
+				   new_path text NOT NULL default '',
+                                   new_filename text NOT NULL default '',
+                                   PRIMARY KEY (id))", $code[0]);
+                }
+
+		$baseFolder = $webDir."courses/".$code[0]."/document/";
+		$tool_content .= "Κωδικοποίηση των περιεχομένων του υποσυστήματος 'Έγγραφα'";
+
+		// initialization
+		$dirnames = array();
+		$oldfilenames = array();
+		$encdirnames = array();
+		$encfilenames = array();
+
+		// traverse directory tree and store old filenames+ directory names
+		traverseDirTree($baseFolder, 'array_old_file', 'array_old_dir', NULL);
+
+		foreach ($oldfilenames as $oldfile) {
+			$path = "/".substr($oldfile, strlen($baseFolder));
+		    	$file_date = date("Y\-m\-d G\:i\:s");
+			$r = mysql_query("SELECT * from document WHERE path='$path'");
+			if (mysql_num_rows($r) > 0) {
+				continue;	
+			} else {
+        	   		$query = "INSERT INTO document 
+				SET path = '/".substr($oldfile, strlen($baseFolder))."',
+		        	filename = '".preg_replace('|^.*/|', '', $oldfile)."', 
+				visibility = 'v', 
+				comment = '', category = '',
+            			title =	'', creator = '',
+            			date = '', date_modified = '$file_date',
+            			subject	= '', description = '',
+            			author = '', format = '',
+            			language = '', copyrighted = ''";
+				mysql_query($query);
+			}
+		}	
+
+		// check if there are duplicate filenames in records
+ 		$r = mysql_query("SELECT filename, COUNT(filename) AS c FROM document GROUP BY filename");
+		while ($dup = mysql_fetch_array($r)) {
+			if ($dup['c'] == 1)  {  // if there are no duplicates 
+				mysql_query("UPDATE document SET unique_filename='$dup[filename]' WHERE filename='$dup[filename]'");
+			} else {		// if there are duplicates
+				mysql_query("UPDATE document SET unique_filename=CONCAT(filename,SUBSTR(MD5(RAND()), 1, 5)) 
+					WHERE filename='$dup[filename]'");
+			} 
+		}
+	
+		// fill doc_tmp table
+		$r = mysql_query("SELECT path, filename, unique_filename FROM document");
+		while ($a = mysql_fetch_array($r)) {
+			mysql_query("INSERT INTO doc_tmp(old_path,old_filename, unique_filename) 
+				VALUES('$a[path]','$a[filename]','$a[unique_filename]')");
+		}
+
+		// encode files
+		traverseDirTree($baseFolder, 'encode_file', NULL, 'array_dir');
 		//encode directories according to array entries
 		foreach ($dirnames as $olddir) {
-			$safe_fileName = date("mdGi")."_".randomkeys('5');
+			$safe_fileName = date("mdGi").randomkeys('5');
 			$newdirname = preg_replace('|/[^/]+$|', '/'.$safe_fileName, $olddir);
+				$b = db_query("SELECT unique_filename FROM doc_tmp
+					WHERE old_path ='/".substr($olddir, strlen($baseFolder))."'"); 
+				$u = mysql_fetch_array($b);
 			if (!(rename($olddir, $newdirname))) {	
 				$tool_content .= "Σφάλμα κατά την μετονομασία του $olddir σε $newdirname !";
-			} else { 
-			// fill table
-	    		$file_date = date("Y\-m\-d G\:i\:s");
-            		$file_comment = "";
-            		$file_category = "";
-            		$file_title = "";
-            		$file_creator = "";
-            		$file_subject = "";
-            		$file_description = "";
-            		$file_author = "";
-            		$file_format = "";
-            		$file_language = "";
-            		$file_copyrighted = "";
-	    		$file_format = "";
-            		$query = "INSERT INTO document 
-				SET path = '/".substr($newdirname, strlen($baseFolder))."',
-		            	filename = '".preg_replace('|^.*/|', '', $olddir)."', 
-				visibility = 'v', comment = '$file_comment', category = '$file_category',
-            			title =	'$file_title', creator = '$file_creator',
-            			date = '$file_date', date_modified = '$file_date',
-            			subject	= '$file_subject', description = '$file_description',
-            			author = '$file_author', format	= '$file_format',
-            			language = '$file_language', copyrighted = '$file_copyrighted'";
-             		mysql_query($query);
+			} else {
+				// fill doc_tmp table
+	   			$query = "UPDATE doc_tmp SET new_filename = '".preg_replace('|^.*/|', '', $newdirname)."'
+    					WHERE unique_filename = '$u[unique_filename]'";
+				db_query($query);
 			}
 		}
 		
-        	//chdir($tmpfldr);
-	
-		// move video files to new directory
+		// fill arrays with new encoded dirnames and filenames
+		traverseDirTree($baseFolder, 'array_enc_file', NULL, 'array_enc_dir');
+		
+		// fill newpath in doc_tmp table with the correct encoded path
+		foreach ($encfilenames as $newfile) {
+		    	$query = "UPDATE doc_tmp 
+			SET new_path = '/".substr($newfile, strlen($baseFolder))."'
+		        WHERE new_filename = '".preg_replace('|^.*/|', '', $newfile)."'";
+	 		mysql_query($query);
+		}
+		foreach ($encdirnames as $newdir) {
+		    	$query = "UPDATE doc_tmp 
+			SET new_path = '/".substr($newdir, strlen($baseFolder))."'
+		        WHERE new_filename = '".preg_replace('|^.*/|', '', $newdir)."'";
+	 		mysql_query($query);
+		}		
+		
+		// update document table according to doc_tmp table using as key the unique filename 
+		$f = db_query("SELECT unique_filename,new_path FROM doc_tmp");
+		while ($u = mysql_fetch_array($f)) {
+			db_query("UPDATE document SET path='$u[new_path]'
+				WHERE unique_filename='$u[unique_filename]'");
+		}
+
+		// delete temporary table doc_tmp
+		db_query("DROP TABLE IF EXISTS doc_tmp");
+		// delete temporary column unique_filename from table document
+		if (mysql_field_exists("$code[0]",'document','unique_filename'))
+               		delete_field('document', 'unique_filename'); 
+
+// ------------------------------------------------------------------------------
+// ------------------- end of document upgrade ----------------------------------
+// ------------------------------------------------------------------------------
+
+             	// move video files to new directory
 		if (is_dir("$webDir/$code[0]/video")) {
                         rename ("$webDir/courses/$code[0]/video", "$webDir/video/$code[0]") or
-                                die ("Δεν ήταν δυνατή η μετονομασία του καταλόγου $webDir/courses/$code[0]/video");
+                              die ("Δεν ήταν δυνατή η μετονομασία του καταλόγου $webDir/courses/$code[0]/video");
                 }
                 // upgrade video 
 		if (!mysql_field_exists("$code[0]",'video','path')) {
