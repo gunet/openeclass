@@ -62,6 +62,7 @@ $langUserS = "χρήστης";
 $langSupportUser = "Υπεύθυνος Υποστήριξης:";
 $langAdminUsers = "Διαχείριση Χρηστών";
 
+
 /********************************************
 * addadmin.inc.php
 *********************************************/
@@ -1735,10 +1736,13 @@ $langLastMsg="Τελευταίο μήνυμα";
 $langLoginBeforePost1 = "Για να στείλετε μηνύματα, ";
 $langLoginBeforePost2 = "πρέπει προηγουμένως να ";
 $langLoginBeforePost3 = "κάνετε login στην πλατφόρμα";
+$langPages = "Σελίδες";
 
 // page_header.php
 
 $langNewTopic="Νέο θέμα";
+$langTopicData="Στοιχεία θέματος";
+$langTopicAnswer="Απάντηση στο θέμα συζήτησης";
 $langGroupDocumentsLink="Έγγραφα ομάδας ";
 $l_forum 	= "Περιοχή συζητήσεων";
 $l_forums	= "Περιοχές συζητήσεων";
@@ -1752,6 +1756,8 @@ $l_post 	= "Αποστολή";
 $l_posts 	= "Αποστολές";
 $l_message	= "Μήνυμα";
 $l_messages	= "Μηνύματα";
+$l_all      = "όλα";
+$l_pages    = "σελίδες";
 $l_subject	= "Θέμα";
 $l_body		= "Σώμα μηνύματος";
 $l_from		= "Από";   // Message from
@@ -1768,8 +1774,8 @@ $l_guest	= "Φιλοξενούμενος"; // Whosonline
 $l_noposts	= "Δεν υπάρχουν αποστολές";
 $l_joined	= "Προσχώρηση";
 $l_gotopage	= "Πήγαινε σε σελίδα";
-$l_nextpage 	= "Επόμενη σελίδα";
-$l_prevpage     = "Προηγούμενη σελίδα";
+$l_nextpage 	= "Επόμενη";
+$l_prevpage     = "Προηγούμενη";
 $l_go		= "Πήγαινε";
 $l_selectforum	= "Επιλογή $l_forum";
 $l_date		= "Ημερομηνία";
@@ -1793,7 +1799,7 @@ $l_click 	= "Πατήστε";
 $l_here 	= "εδώ";
 $l_toreturn	= " για επιστροφή";
 $l_returnindex	= "$l_toreturn στο ευρετήριο περιοχών συζητήσεων.";
-$l_returntopic	= "$l_toreturn στον κατάλογο θεμάτων της περιοχής συζητήσεων.";
+$l_returntopic	= "επιστροφή στην περιοχή συζητήσεων";
 $l_error	= "Σφάλμα";
 $l_tryagain	= "Παρακαλούμε επιστρέψτε στην προηγούμενη σελίδα και ξαναδοκιμάστε.";
 $l_mismatch 	= "Τα συνθηματικά δεν είναι ίδια.";
@@ -1827,7 +1833,7 @@ $l_aim 		= "AIM";
 $l_yim 		= "YIM";
 $l_yahoo 	= "Yahoo Messenger";
 $l_msn 		= "MSN";
-$l_messenger 	= "MSN Messenger";
+$l_messenger	= "MSN Messenger";
 $l_website 	= "Διεύθυνση ιστοσελίδας";
 $l_occupation 	= "Επάγγελμα";
 $l_interests 	= "Ενδιαφέροντα";
@@ -1864,6 +1870,8 @@ $l_locktopic	= "Κλείδωμα αυτού του θέματος";
 $l_unlocktopic	= "Ξεκλείδωμα αυτού του θέματος";
 $l_movetopic	= "Μεταφορά αυτού του θέματος";
 $l_deletetopic	= "Διαγραφή αυτού του θέματος";
+
+$l_ViewMessage	= "Εμφάνιση μηνύματος";
 
 $langErrorConnectForumDatabase="Παρουσιάστηκε πρόβλημα. Αδύνατη η σύνδεση με τη βάση δεδομένων του Forum.";
 $langErrorForumSelect= "Η περιοχή συζητήσεων που επιλέξατε δεν υπάρχει. Παρακαλώ προσπαθήστε ξανά.";

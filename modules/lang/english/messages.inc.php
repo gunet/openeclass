@@ -1821,9 +1821,14 @@ $langLoginBeforePost1 = "To post messages on the forum, ";
 $langLoginBeforePost2 = "beforehand, you must ";
 $langLoginBeforePost3 = "login on the Campus";
 
+$langPages = "Pages";
+
+
 // page_header.php
 
 $langNewTopic="New topic";
+$langTopicData="Topic elements";
+$langTopicAnswer="Topic Answer";
 $langAnswer="Answer";
 
 // Groups Management Claroline
@@ -1845,6 +1850,8 @@ $l_post 	= "Post";
 $l_posts 	= "Posts";
 $l_message	= "Message";
 $l_messages	= "Messages";
+$l_all      = "all";
+$l_pages    = "pages";
 $l_subject	= "Subject";
 $l_body		= "$l_message Body";
 $l_from		= "From";   // Message from
@@ -1861,8 +1868,8 @@ $l_guest	= "Guest"; // Whosonline
 $l_noposts	= "No $l_posts";
 $l_joined	= "Joined";
 $l_gotopage	= "Goto page";
-$l_nextpage 	= "Next Page";
-$l_prevpage     = "Previous Page";
+$l_nextpage 	= "Next";
+$l_prevpage     = "Previous";
 $l_go		= "Go";
 $l_selectforum	= "Select a $l_forum";
 
@@ -1875,7 +1882,7 @@ $l_confirm 	= "Confirm";
 $l_enter 	= "Enter";
 $l_by		= "by"; // Posted by
 $l_ondate	= "on"; // This message is edited by: $username on $date
-$l_new          = "New";
+$l_new      = "New";
 
 $l_html		= "HTML";
 $l_bbcode	= "BBcode";
@@ -1967,6 +1974,9 @@ $l_locktopic	= "Lock this $l_topic";
 $l_unlocktopic	= "Unlock this $l_topic";
 $l_movetopic	= "Move this $l_topic";
 $l_deletetopic	= "Delete this $l_topic";
+
+$l_ViewMessage	= "View Message";
+
 
 // Functions
 $l_loggedinas	= "Logged in as";

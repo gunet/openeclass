@@ -195,7 +195,7 @@ if ($myrow = mysql_fetch_array($result)) {
 		$start = '';
 		$topiclink = "viewtopic.php?topic=" . $myrow["topic_id"] . "&forum=$forum";
 		if($replys+1 > $posts_per_page) {
-			$pagination .= '&nbsp;&nbsp;&nbsp;(<img src=\"' . $posticon . '\">' . $l_gotopage;
+			$pagination .= "\n          <strong class=\"pagination\"><span>\n            <img src=".$posticon_more.">";
 			$pagenr = 1;
 			$skippages = 0;
 			for($x = 0; $x < $replys + 1; $x += $posts_per_page) {
@@ -209,18 +209,20 @@ if ($myrow = mysql_fetch_array($result)) {
 					$start .= "&" . ($x + $posts_per_page - 1);
 				}
 				if($pagenr > 3 && $skippages != 1) {
-					$pagination .= ", ... ";
+					$pagination .= " ... ";
 					$skippages = 1;
 				}
 				if ($skippages != 1 || $lastpage) {
-					if ($x != 0) {
-						$pagination .= ", ";
-						$pagination .= "<a href=\"$topiclink$start\">$pagenr</a>";
+					if ($x != -1) {
+						$pagination .= "\n            <a href=\"$topiclink$start\">$pagenr</a>";
+						//$pagination .= ", ";
+						$pagination .= "<span class=\"page-sep\">,</span>";
 					}
 					$pagenr++;
 				}
-				$pagination .= ")";
+				//$pagination .= ".";
 			}
+			$pagination .= "&nbsp;\n          </span></strong>\n      ";
 		}
 		$topiclink .= "&$replys";
 		$tool_content .= "\n      <TD><a href=\"$topiclink\">$topic_title</a>$pagination</TD>\n";

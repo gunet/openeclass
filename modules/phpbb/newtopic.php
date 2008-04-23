@@ -229,7 +229,7 @@ if (isset($submit) && $submit) {
     <tbody>
     <tr>
       <th width=\"220\">&nbsp;</th>
-      <TD>&nbsp;</TD>
+      <TD><b>$langTopicData</b></TD>
     </tr>
     <tr>
       <th class=\"left\">$l_subject:</th>

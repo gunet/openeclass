@@ -92,7 +92,7 @@ if ($is_adminOfCourse || $is_admin) {
 }
 $tool_content .= <<<cData
 
-    <table width="99%" class="ForumSum" border=1>
+    <table width="99%" class="ForumSum">
     <thead>
     <tr>
       <td colspan="2" class="forum_category">$l_forums</td>
@@ -246,7 +246,7 @@ cData;
 				$tool_content .= "$last_post_prenom $last_post_nom 
              <a set=\"yes\" href=\"viewtopic.php?topic=$last_post_topic_id&forum=$forum\"><IMG border=\"0\" SRC=\"$icon_topic_latest\"></a><br />$human_last_post_time</td>";	  			    
 	  			} else {
-				$tool_content .= "$l_noposts</td>";				
+				$tool_content .= "<font color=\"#CAC3B5\">$l_noposts</font></td>";				
 				}
 
 				$tool_content .= "

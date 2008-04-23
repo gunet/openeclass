@@ -71,6 +71,12 @@ include("functions.php"); // application logic for phpBB
 /******************************************************************************
  * Actual code starts here
  *****************************************************************************/
+ 
+if (isset($_GET['all'])) {
+    $paging = false;
+} else {
+	$paging = true;
+}
 
 $sql = "SELECT f.forum_type, f.forum_name
 	FROM forums f, topics t 
@@ -92,7 +98,7 @@ $sql = "SELECT topic_title, topic_status
 	WHERE topic_id = '$topic'";
 
 $total = get_total_posts($topic, $currentCourseID, "topic");
-if ($total > $posts_per_page) {
+if ($paging and $total > $posts_per_page) {
 	$times = 0;
 	for ($x = 0; $x < $total; $x += $posts_per_page) {
 	     $times++;
@@ -112,41 +118,6 @@ $lock_state = $myrow["topic_status"];
 $navigation[]= array ("url"=>"index.php", "name"=> $l_forums);
 $navigation[]= array ("url"=>"viewforum.php?forum=$forum", "name"=> $forum_name);
 $nameTools = $topic_subject;
-if ( $total > $posts_per_page ) {
-	$times = 1;
-	$tool_content .= <<<cData
-
-    <TABLE BORDER="0" WIDTH="99%" ALIGN="CENTER">
-    <TR>
-      <TD>$l_gotopage (
-cData;
-	$last_page = $start - $posts_per_page;
-	if ( isset($start) && $start > 0 ) {
-		$tool_content .= "<a href=\"$PHP_SELF?topic=$topic&forum=$forum&start=$last_page\">$l_prevpage</a> ";
-	} else {
-		$start = 0;
-	}
-	for($x = 0; $x < $total; $x += $posts_per_page) {
-		if($times != 1) {
-			$tool_content .= " | ";
-		}
-		if($start && ($start == $x)) {
-			$tool_content .= "" .  $times;
-		} else if($start == 0 && $x == 0) {
-			$tool_content .= "1";
-		} else {
-			$tool_content .= "<a href=\"$PHP_SELF?mode=viewtopic&topic=$topic&forum=$forum&start=$x\">$times</a>";
-		}
-		$times++;
-	}
-	if (($start + $posts_per_page) < $total) {
-		$next_page = $start + $posts_per_page;
-		$tool_content .= " <a href=\"$PHP_SELF?topic=$topic&forum=$forum&start=$next_page\">$l_nextpage</a>";
-	}
-	$tool_content .= " ) </TD>
-    </TR>
-    </TABLE>\n";
-}
 
 	$tool_content .= "
     <div id=\"operations_container\">
@@ -161,10 +132,80 @@ cData;
 	$tool_content .= "</li>
       </ul>
     </div>
-    <br />
 	";
+	
+	
+if ($paging and $total > $posts_per_page ) {
+	$times = 1;
+	$tool_content .= <<<cData
 
+    <table WIDTH="99%">
+    <thead>
+    <tr>
+    <td WIDTH="60%" align=\"left\">
+      <span class='row'><strong class='pagination'>
+       <span>
+cData;
+	$last_page = $start - $posts_per_page;
+	$tool_content .= "$langPages: ";
 
+	for($x = 0; $x < $total; $x += $posts_per_page) {
+		if($times != 1) {
+			$tool_content .= "\n       <span class=\"page-sep\">,</span>";
+		}
+		if($start && ($start == $x)) {
+			$tool_content .= "" .  $times;
+		} else if($start == 0 && $x == 0) {
+			$tool_content .= "1";
+		} else {
+			$tool_content .= "\n       <a href=\"$PHP_SELF?mode=viewtopic&topic=$topic&forum=$forum&start=$x\">$times</a>";
+		}
+		$times++;
+	}
+
+	$tool_content .= "
+       </span>
+       </strong>
+      </span>
+      </td>
+      <td align=\"right\">
+       <span class='pages'>$l_gotopage: &nbsp;&nbsp;";
+	if ( isset($start) && $start > 0 ) {
+		$tool_content .= "\n       <a href=\"$PHP_SELF?topic=$topic&forum=$forum&start=$last_page\">$l_prevpage</a>&nbsp;";
+	} else {
+		$start = 0;
+	}	
+	if (($start + $posts_per_page) < $total) {
+		$next_page = $start + $posts_per_page;
+		$tool_content .= "\n       <a href=\"$PHP_SELF?topic=$topic&forum=$forum&start=$next_page\">$l_nextpage</a>";
+	}
+	$tool_content .= "
+       &nbsp;|&nbsp;<a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;all=true\">$l_all</a>
+       </span>
+      </td>
+    </tr>
+    </thead>
+    </table>
+\n";
+} else {
+	$tool_content .= "
+    <table WIDTH=\"99%\">
+    <thead>
+    <tr>
+      <td WIDTH=\"60%\" align=\"left\">
+      <span class='row'><strong class='pagination'>&nbsp;</strong>
+      </span>
+    </td>
+    <td align=\"right\">
+      <span class='pages'>
+       &nbsp;|&nbsp;<a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;start=0\">$l_pages</a>
+      </span>
+      </td>
+    </tr>
+    </thead>
+    </table>
+    ";
+}
 
 $tool_content .= <<<cData
 
@@ -178,7 +219,14 @@ $tool_content .= <<<cData
     <tbody>
 cData;
 
-if (isset($start)) {
+$topic = intval($_GET['topic']);
+if (isset($_GET['all'])) {
+    $sql = "SELECT p.*, pt.post_text FROM posts p, posts_text pt 
+		WHERE topic_id = '$topic' 
+		AND p.post_id = pt.post_id
+		ORDER BY post_id";
+} elseif (isset($_GET['start'])) {
+	$start = intval($_GET['start']);
 	$sql = "SELECT p.*, pt.post_text FROM posts p, posts_text pt 
 		WHERE topic_id = '$topic' 
 		AND p.post_id = pt.post_id
@@ -229,7 +277,7 @@ do {
         <div align=\"right\">";
 	if ($status[$dbname]==1 OR $status[$dbname]==2) { // course admin
 		$tool_content .= "
-        <a href=\"editpost.php?post_id=".$myrow["post_id"]."&topic=$topic&forum=$forum\"><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>";
+        <a href=\"editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\"><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>";
 	}
 	$tool_content .= "
         </div>
@@ -245,41 +293,77 @@ $tool_content .= "
     </tbody>
     </table>";
 
-if ($total > $posts_per_page) {
+	
+if ($paging and $total > $posts_per_page) {
 	$times = 1;
-	$tool_content .= "<tr ALIGN=\"RIGHT\"><TD colspan=2>$l_gotopage ( ";
+	$tool_content .= <<<cData
+
+    <table WIDTH="99%">
+    <thead>
+    <tr>
+    <td WIDTH="60%" align=\"right\">
+      <span class='row'><strong class='pagination'>
+       <span>
+cData;
 	$last_page = $start - $posts_per_page;
-	if($start > 0) {
-		$tool_content .= "<a href=\"$PHP_SELF?topic=$topic&forum=$forum&start=$last_page\">$l_prevpage</a> ";
-	}
+	$tool_content .= "$langPages: ";
+
 	for($x = 0; $x < $total; $x += $posts_per_page) {
-		if ($times != 1) {
-			$tool_content .= " | ";
+		if($times != 1) {
+			$tool_content .= "\n       <span class=\"page-sep\">,</span>";
 		}
-		if ($start && ($start == $x)) {
-			$tool_content .= $times;
-		} else if ($start == 0 && $x == 0) {
+		if($start && ($start == $x)) {
+			$tool_content .= "" .  $times;
+		} else if($start == 0 && $x == 0) {
 			$tool_content .= "1";
 		} else {
-			$tool_content .= "<a href=\"$PHP_SELF?mode=viewtopic&topic=$topic&forum=$forum&start=$x\">$times</a>";
+			$tool_content .= "\n       <a href=\"$PHP_SELF?mode=viewtopic&amp;topic=$topic&amp;forum=$forum&amp;start=$x\">$times</a>";
 		}
 		$times++;
 	}
+	$tool_content .= "
+       </span>
+       </strong>
+      </span>
+      </td>
+      <td>
+       <span class='pages'>$l_gotopage: &nbsp;&nbsp;";
+	if ( isset($start) && $start > 0 ) {
+		$tool_content .= "\n       <a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;start=$last_page\">$l_prevpage</a>&nbsp;";
+	} else {
+		$start = 0;
+	}	
 	if (($start + $posts_per_page) < $total) {
 		$next_page = $start + $posts_per_page;
-		$tool_content .= "<a href=\"".$PHP_SELF."?topic=".$topic."&forum=".$forum."&start=".$next_page."\">".$l_nextpage."</a>";
+		$tool_content .= "\n       <a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;start=$next_page\">$l_nextpage</a>";
 	}
-	$tool_content .= "</FONT></TD></TR>";
+	$tool_content .= "
+       &nbsp;|&nbsp;<a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;all=true\">$l_all</a>
+       </span>
+      </td>
+    </tr>
+    </thead>
+    </table>
+	";
+} else {
+	$tool_content .= "
+    <table WIDTH=\"99%\">
+    <thead>
+    <tr>
+      <td WIDTH=\"60%\" align=\"left\">
+      <span class='row'><strong class='pagination'>&nbsp;</strong>
+      </span>
+    </td>
+    <td align=\"right\">
+      <span class='pages'>
+       &nbsp;|&nbsp;<a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;start=0\">$l_pages</a>
+      </span>
+      </td>
+    </tr>
+    </thead>
+    </table>
+    ";
 }
 
-/*
-$tool_content .= "<p><a href=\"newtopic.php?forum=$forum\">";
-$tool_content .= "$langNewTopic</a></p>";
-if($lock_state != 1) {
-	$tool_content .= "<p><a href=\"reply.php?topic=$topic&forum=$forum\">$langAnswer</a></p>";
-} else {
-	$tool_content .= "<IMG SRC=\"$reply_locked_image\" BORDER=\"0\"></TD></TR>";
-}
-*/
 draw($tool_content,2,'phpbb');
 ?>

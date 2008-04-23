@@ -1,28 +1,8 @@
 table.ForumCategory{
     padding: 2px;
     vertical-align: middle;
-    border-top: 1px solid #edecdf  !important;
-    border-bottom: 1px solid #edecdf !important;
-    border-left: 1px solid #edecdf !important;
-    border-right: 1px solid #edecdf !important;
 }
 
-table.ForumCategory thead{
-	border-top: 1px solid #CAC3B5;
-	border-bottom: 1px solid #CAC3B5;
-	border-left: 1px solid #edecdf;
-	border-right: 1px solid #edecdf;
-	background: #CAC3B5 !important;
-}
-
-table.ForumCategory tbody{
-    padding: 2px;
-    vertical-align: middle;
-    border-top: 1px solid #edecdf;
-    border-bottom: 1px solid #CAC3B5;
-    border-left: 1px solid #edecdf;
-    border-right: 1px solid #edecdf;
-}
 
 table.ForumCategory th{
 	text-align: center;
@@ -39,7 +19,8 @@ table.ForumCategory td {
 	color: #000;
 	vertical-align: top;
 	padding : 5px 4px 4px 4px;
-	    border-bottom: 1px dotted #fff;
+    border-bottom: 1px dotted #fff;
+	text-align: center;
 	background: #EDECDF !important;
 }
 

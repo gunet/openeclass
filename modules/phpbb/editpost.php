@@ -145,11 +145,18 @@ if (isset($submit) && $submit) {
 				$tool_content .= $langUnableUpadateTopic;
 			}
 		}
-		$tool_content .= "<table width=\"99%\"><tbody><tr>
-		<td class=\"success\"><p><b>$l_stored</b></p>
-		<p>$l_click <a href=\"viewtopic.php?topic=$topic_id&forum=$forum_id\">$l_here</a> $l_viewmsg</p>
-		<p>$l_click <a href=\"viewforum.php?forum=$forum_id\">$l_here</a> $l_returntopic</p>
-		</td></tr></tbody></table>";
+		$tool_content .= "
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"success\">
+        <p><b>$l_stored</b></p>
+        <p>$l_click <a href=\"viewtopic.php?topic=$topic_id&forum=$forum_id\">$l_here</a> $l_viewmsg</p>
+        <p>$l_click <a href=\"viewforum.php?forum=$forum_id\">$l_here</a> $l_returntopic</p>
+      </td>
+    </tr>
+    </tbody>
+    </table>";
 	 } else {
 		$now_hour = date("H");
 		$now_min = date("i");
@@ -193,15 +200,20 @@ if (isset($submit) && $submit) {
 		if (@!$topic_removed) {
 			sync($currentCourseID, $topic_id, 'topic');
 		}
-		$tool_content .= "<table width=\"99%\"><tbody>
-		<tr><td class=\"success\"><p><b>$l_deleted</b></p>
-		<p>$l_click <a href=\"viewforum.php?forum=$forum_id\">$l_here</a> $l_returntopic</p>
-		<p>$l_click <a href=\"index.php\">$l_here</a>$l_returnindex</p>
-		</td></tr></tbody></table>";
-	}	
-
-} else {
-
+		$tool_content .= "
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"success\">
+        <p><b>$l_deleted</b></p>
+        <p>$l_click <a href=\"viewforum.php?forum=$forum_id\">$l_here</a> $l_returntopic</p>
+        <p>$l_click <a href=\"index.php\">$l_here</a>$l_returnindex</p>
+      </td>
+    </tr>
+    </tbody>
+    </table>";
+	}
+	} else {
 	// Gotta handle private forums right here. They're naturally covered on submit, but not in this part.
 	$sql = "SELECT f.forum_type, f.forum_name, t.topic_title
 		FROM forums f, topics t
@@ -229,19 +241,31 @@ if (isset($submit) && $submit) {
 		// Private forum, no valid session, and login form not submitted...
 		$tool_content .= "
     <FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
-    <TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"99%\">
-    <TR><TD>$l_private</TD></TR>
-			<TR><TD>
-			<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\">
-			<TR><TD></TD></TR>
-			</TABLE>
-			</TD></TR>
-			<TR><TD>
-			<INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
-			<INPUT TYPE=\"HIDDEN\" NAME=\"topic\" VALUE=\"$topic\">
-			<INPUT TYPE=\"HIDDEN\" NAME=\"post_id\" VALUE=\"$post_id\">
-			<INPUT TYPE=\"SUBMIT\" NAME=\"logging_in\" VALUE=\"$l_enter\">
-			</TD></TR></TABLE></FORM>";
+
+    <TABLE WIDTH=\"99%\">
+    <TR>
+      <TD>$l_private</TD>
+    </TR>
+    <TR>
+      <TD>
+      <TABLE WIDTH=\"99%\">
+      <TR>
+        <TD>&nbsp;</TD>
+      </TR>
+      </TABLE>
+      </TD>
+    </TR>
+    <TR>
+      <TD>
+        <INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
+        <INPUT TYPE=\"HIDDEN\" NAME=\"topic\" VALUE=\"$topic\">
+        <INPUT TYPE=\"HIDDEN\" NAME=\"post_id\" VALUE=\"$post_id\">
+        <INPUT TYPE=\"SUBMIT\" NAME=\"logging_in\" VALUE=\"$l_enter\">
+      </TD>
+    </TR>
+    </TABLE>
+
+    </FORM>";
 		draw($tool_content, 2, 'phpbb');
 		exit();
 	} else {

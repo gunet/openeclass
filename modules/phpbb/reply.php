@@ -238,33 +238,60 @@ if (isset($submit) && $submit) {
 	$total_topic = get_total_posts($topic, $currentCourseID, "topic")-1;  
 	// Subtract 1 because we want the nr of replies, not the nr of posts.
 	$forward = 1;
-	$tool_content .= "<table width=\"99%\">
-		<tbody><tr><td class=\"success\">
-		<p><b>$l_stored</b></p>
-		<p>$l_click <a href=\"viewtopic.php?topic=$topic&forum=$forum&$total_topic\">$l_here</a> $l_viewmsg</p>
-		<p>$l_click <a href=\"viewforum.php?forum=$forum&$total_forum\">$l_here</a> $l_returntopic</p>
-		</td></tr></tbody></table>";
+	
+	$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">
+        <li><a href=\"viewtopic.php?topic=$topic&forum=$forum&$total_topic\">$l_ViewMessage</a></li>
+        <li><a href=\"viewforum.php?forum=$forum&$total_forum\">$l_returntopic</a></li>
+      </ul>
+    </div>
+    <br />
+	";
+	
+	$tool_content .= "
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"success\">
+        <p><b>$l_stored</b></p>
+      </td>
+    </tr>
+    </tbody>
+    </table>";
 } else {
 	// Private forum logic here.
 	if (($forum_type == 1) && !$user_logged_in && !$logging_in) {
 		$tool_content .= "
-			<FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
-			<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"99%\">
-			<TR><TD>
-				<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"1\" WIDTH=\"99%\">
-				<TR><TD>$l_private</TD></TR>
-				<TR><TD></TD></TR>
-				<TR><TD>
-					<INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
-					<INPUT TYPE=\"HIDDEN\" NAME=\"topic\" VALUE=\"$topic\">
-					<INPUT TYPE=\"HIDDEN\" NAME=\"post\" VALUE=\"$post\">
-					<INPUT TYPE=\"HIDDEN\" NAME=\"quote\" VALUE=\"$quote\">
-					<INPUT TYPE=\"SUBMIT\" NAME=\"logging_in\" VALUE=\"$l_enter\">
-				</TD></TR>
-				</TABLE>
-			</TD></TR>
-			</TABLE>
-			</FORM>";
+    <FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
+
+    <TABLE ALIGN=\"left\" WIDTH=\"99%\">
+    <TR>
+      <TD>
+
+      <TABLE WIDTH=\"100%\">
+      <TR>
+        <TD>$l_private</TD>
+      </TR>
+      <TR>
+        <TD>&nbsp;</TD>
+      </TR>
+      <TR>
+        <TD>
+          <INPUT TYPE=\"HIDDEN\" NAME=\"forum\" VALUE=\"$forum\">
+          <INPUT TYPE=\"HIDDEN\" NAME=\"topic\" VALUE=\"$topic\">
+          <INPUT TYPE=\"HIDDEN\" NAME=\"post\" VALUE=\"$post\">
+          <INPUT TYPE=\"HIDDEN\" NAME=\"quote\" VALUE=\"$quote\">
+          <INPUT TYPE=\"SUBMIT\" NAME=\"logging_in\" VALUE=\"$l_enter\">
+        </TD>
+      </TR>
+      </TABLE>
+
+      </TD>
+    </TR>
+    </TABLE>
+
+    </FORM>";
 		draw($tool_content, 2, 'phpbb');
 		exit();
 	} else {
@@ -303,7 +330,7 @@ if (isset($submit) && $submit) {
     <tbody>
     <tr>
       <th width=\"220\">&nbsp;</th>
-      <TD>&nbsp;</TD>
+      <TD><b>$langTopicAnswer</b>: $topic_title</TD>
     </tr>
     <tr>
       <th class=\"left\">$l_body:";
@@ -335,10 +362,7 @@ if (isset($submit) && $submit) {
 	}
 	$tool_content .= "
       </th>
-    </tr>
-    <tr>
-      <th width=\"220\">&nbsp;</th>
-      <td><TEXTAREA NAME=\"message\" ROWS=15 COLS=70 WRAP=\"VIRTUAL\">$reply</TEXTAREA></td>
+      <td valign=\"top\"><TEXTAREA NAME=\"message\" ROWS=15 COLS=70 WRAP=\"VIRTUAL\" class=\"auth_input\">$reply</TEXTAREA></td>
     </tr>
     <tr>
       <th>&nbsp;</th>
