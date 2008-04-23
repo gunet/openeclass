@@ -105,6 +105,15 @@ function confirmation (name)
 </script>
 ';
 
+function renameziparchivefile($p_event, &$p_header) {
+
+	global $safe_fileName;
+
+	$p_header['filename'] = $safe_fileName;
+	
+return 1;
+}
+
 /*** clean information submited by the user from antislash ***/
 stripSubmitValue($_POST);
 stripSubmitValue($_GET);
@@ -154,6 +163,44 @@ if($is_adminOfCourse)
 					break;
 				}
 				$realFileSize += $thisContent['size'];
+				$fileName = $thisContent['filename'];
+				/**** Check for no desired characters ***/
+				$fileName = replace_dangerous_char($fileName);
+				/*** Try to add an extension to files witout extension ***/
+				$fileName = add_ext_on_mime($fileName);
+				/*** Handle PHP files ***/
+				$fileName = php2phps($fileName);
+				//ypologismos onomatos arxeiou me date + time.
+				//to onoma afto tha xrhsimopoiei sto filesystem & tha apothikevetai ston pinaka documents
+				$safe_fileName = date("YmdGis").randomkeys("8").".".get_file_extention($fileName);
+				//prosthiki eggrafhs kai metadedomenwn gia to eggrafo sth vash
+				if ($uploadPath == ".") 
+					$uploadPath2 = "/".$safe_fileName; 
+				else 
+					$uploadPath2 = $uploadPath."/".$safe_fileName;
+				//san file format vres to extension tou arxeiou
+				$file_format = get_file_extention($fileName);
+				//san date you arxeiou xrhsimopoihse thn shmerinh hm/nia
+				$file_date = date("Y\-m\-d G\:i\:s");
+				$query = "INSERT INTO ".$dbTable." SET
+		            	path	=	'".mysql_real_escape_string($uploadPath2)."',
+		            	filename =	'$fileName',
+		            	visibility =	'v',
+		            	comment	=	'".mysql_real_escape_string($file_comment)."',
+		            	category =	'".mysql_real_escape_string($file_category)."',
+		            	title =	'".mysql_real_escape_string($file_title)."',
+		            	creator	=	'".mysql_real_escape_string($file_creator)."',
+		            	date	= '".mysql_real_escape_string($file_date)."',
+		            	date_modified	=	'".mysql_real_escape_string($file_date)."',
+		            	subject	=	'".mysql_real_escape_string($file_subject)."',
+		            	description =	'".mysql_real_escape_string($file_description)."', 
+		            	author	=	'".mysql_real_escape_string($file_author)."',
+		            	format	=	'".mysql_real_escape_string($file_format)."',
+		            	language =	'".mysql_real_escape_string($file_language)."',
+		            	copyrighted	=	'".mysql_real_escape_string($file_copyrighted)."'";
+				db_query($query, $currentCourseID);
+				$zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'renameziparchivefile');
+
 			}
 			if (isset($realFileSize) and ($realFileSize + $diskUsed > $diskQuotaDocument))
 			{
@@ -163,7 +210,8 @@ if($is_adminOfCourse)
 			{   /*** Uncompressing phase ***/
 				/*** PHP method - slower... ***/
 				chdir($baseWorkDir.$uploadPath);
-				$unzippingSate = $zipFile->extract();
+				//$unzippingSate = $zipFile->extract();
+				$zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'renameziparchivefile');
 			}
 			if (!isset($found_php)) {
 				// Added by Thomas
