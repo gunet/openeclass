@@ -1,5 +1,5 @@
 <?php session_start(); 
-/**===========================================================================
+/*===========================================================================
 *              GUnet eClass 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -18,11 +18,11 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
-/**
+/*
  * Index
  * 
  * @version $Id$
@@ -39,7 +39,6 @@
 $guest_allowed=true;
 $path2add=0;
 include("include/baseTheme.php");
-//@include("./include/lib/main.lib.php");
 include("./modules/auth/auth.inc.php");
 
 //$homePage is used by baseTheme.php to parse correctly the breadcrumb
@@ -70,17 +69,15 @@ unset($dbname);
 
 //if platform admin allows usage of eclass personalised
 //create a session so that each user can activate it for himself.
-if ($persoIsActive) session_register("perso_is_active");
+if (isset($persoIsActive)) session_register("perso_is_active");
 
 // ------------------------------------------------------------------------
-// if we try to login...
-// then authenticate user. First via LDAP then via MyQL
+// if we try to login... then authenticate user. 
 // -----------------------------------------------------------------------
 $warning = '';
 $uname = preg_replace('/\s+/', ' ', trim(isset($_POST['uname'])?$_POST['uname']:''));
 $pass = isset($_POST['pass'])?$_POST['pass']:'';
 $submit = isset($_POST['submit'])?$_POST['submit']:'';
-// $auth = get_auth_id();
 $auth = get_auth_active_methods();
 $is_eclass_unique = is_eclass_unique();
 
@@ -93,7 +90,6 @@ if(!empty($submit))
                 FROM user LEFT JOIN admin
                 ON user.user_id = admin.iduser
                 WHERE username='".$uname."'";
-	//$tool_content .= "<br>QUERY:".$sqlLogin."<br><br>";
 	$result=mysql_query($sqlLogin);
 	$check_passwords = array("pop3","imap","ldap","db");
 	$warning = "";
@@ -253,8 +249,6 @@ if(!empty($submit))
 		{
 			$tool_content .= "<br>No authentication method defined.Cannot proceed!<br>";
 		}
-
-
 	}		// while
 
 	if(empty($exists))
