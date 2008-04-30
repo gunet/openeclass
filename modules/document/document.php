@@ -728,7 +728,7 @@ if (isset($dirNameList))
 {
 	while (list($dirKey, $dirName) = each($dirNameList))
 	{
-		$result = db_query ("SELECT filename FROM document WHERE path LIKE '%$dirName'");
+		$result = db_query("SELECT filename FROM document WHERE path LIKE '%$dirName'");
 		$row = mysql_fetch_array($result);
 		$dspDirName = $row['filename'];
 		$cmdDirName = rawurlencode($curDirPath."/".$dirName);
@@ -741,6 +741,10 @@ if (isset($dirNameList))
 		{
 			$style="";
 			$style2="";
+		}
+		// do not display invisible directories to students
+		if ((@$dirVisibilityList[$dirKey] == "i")  and (!$is_adminOfCourse)) {
+			continue;
 		}
 		$tool_content .=  "<tr $style2>";
 		$tool_content .=  "<td width='1' style='border-left: 1px solid #edecdf;' align='center'><a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style."><img src=\"../../template/classic/img/folder.gif\" border=0 align='absmiddle'></a></td>\n";
@@ -800,11 +804,13 @@ if (isset($fileNameList)) {
 		$cmdFileName = rawurlencode($curDirPath."/".$fileName);
 		$dspFileName = htmlspecialchars($fileName);
 		if (@$fileVisibilityList[$fileKey] == "i") {
-			$style=" class=\"invisible\"";
 			$style2=" class=\"invisible_doc\"";
 		} else {
-			$style="";
 			$style2="";
+		}
+		// do not display invisible files to students
+		if ((@$fileVisibilityList[$fileKey] == "i")  and (!$is_adminOfCourse)) {
+			continue;
 		}
 		$tool_content .=  "<tr ".$style2.">\n";
 		$tool_content .=  "<td style='border-left: 1px solid #edecdf;' align='center'>
