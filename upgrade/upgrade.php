@@ -1010,7 +1010,10 @@ if (!isset($submit2)) {
 		    	$file_date = date("Y\-m\-d G\:i\:s");
 			$r = mysql_query("SELECT * from document WHERE path='$path'");
 			if (mysql_num_rows($r) > 0) {
-				continue;	
+				$query = "UPDATE document 
+				SET filename = '".preg_replace('|^.*/|', '', $oldfile)."'
+				WHERE path='$path'"; 
+				mysql_query($query);
 			} else {
         	   		$query = "INSERT INTO document 
 				SET path = '/".substr($oldfile, strlen($baseFolder))."',
