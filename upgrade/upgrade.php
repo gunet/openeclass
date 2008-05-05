@@ -1035,7 +1035,7 @@ if (!isset($submit2)) {
 			if ($dup['c'] == 1)  {  // if there are no duplicates 
 				mysql_query("UPDATE document SET unique_filename='$dup[filename]' WHERE filename='$dup[filename]'");
 			} else {		// if there are duplicates
-				mysql_query("UPDATE document SET unique_filename=CONCAT(filename,SUBSTR(MD5(RAND()), 1, 5)) 
+				mysql_query("UPDATE document SET unique_filename=CONCAT(filename,SUBSTRING(MD5(RAND()), 1, 5)) 
 					WHERE filename='$dup[filename]'");
 			} 
 		}
