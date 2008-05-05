@@ -74,13 +74,13 @@ function confirmation ()
 		$tool_content .= "
 
     <form action=\"forum_admin.php?forumgoadd=yes&ctg=$ctg&cat_id=$cat_id\" method=post>
-    <table width=99% class=\"ForumSum\">
+    <table width=99% class=\"ForumAdmSum\">
     <thead>
     <tr>
-      <td width='10' class=\"lalahead\">$langID</td>
-      <td class=\"lalahead\">$langForName</td>
-      <td class=\"lalahead\">$langDescription</td>
-      <td width='75' class=\"lalahead\">$langActions</td>
+      <th width='10'>$langID</th>
+      <th>&nbsp;$langForName</th>
+      <th>$langDescription</th>
+      <th width='75'><div align=\"center\">$langActions</div></th>
     </tr>
     </thead>
     <tbody>";
@@ -122,7 +122,7 @@ function confirmation ()
 
 	$tool_content .= "
     <form action=\"forum_admin.php?forumgoadd=yes&ctg=$ctg&cat_id=$cat_id\" method=post>
-    <table width=99% class=\"FormData\">
+    <table width=99% class=\"FormData\" align=\"left\">
     <tbody>
     <tr>
       <th width=\"220\">&nbsp;</th>
@@ -176,11 +176,12 @@ function confirmation ()
     </tr>
     <tr>
       <th class=\"left\">$langDescription</th>
-      <td><textarea name=forum_desc cols=50 rows=3>$forum_desc</textarea></td>
+      <td><textarea name=forum_desc cols=47 rows=3 class=\"FormData_InputText\">$forum_desc</textarea></td>
     </tr>
     <tr>
       <th class=\"left\">$langChangeCat</th>
-      <td><SELECT NAME=cat_id>";
+      <td>
+          <SELECT NAME=cat_id  class=\"auth_input\">";
 	  $result = db_query("select cat_id, cat_title from catagories", $currentCourseID);
 		while(list($cat_id, $cat_title) = mysql_fetch_row($result)) {
 			if ($cat_id == $cat_id_1) {
@@ -189,12 +190,15 @@ function confirmation ()
 					$tool_content .= "<OPTION VALUE=\"$cat_id\">$cat_title</OPTION>";
 				}
 		}
-	$tool_content .= " </SELECT> 
+	$tool_content .= "
+          </SELECT> 
 	  </td>
     </tr>
     <tr>
       <th>&nbsp;</th>
-      <td><input type=hidden name=forumgosave value=yes> <input type=submit value=\"$langSave\"></td>
+      <td><input type=hidden name=forumgosave value=yes>
+          <input type=submit value=\"$langSave\">
+      </td>
     </tr>
     </thead>
     </table>
@@ -236,14 +240,12 @@ function confirmation ()
     <table width=\"99%\">
     <tbody>
     <tr>
-      <td class=\"success\">
-         <p><b>$langNameCatMod</b></p>
-      </td>
+      <td class=\"success\">$langNameCatMod</td>
     </tr>
     </tbody>
     </table>
     <br />
-	<p align=\"right\"><a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a></p>";
+    <p align=\"right\"><a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a></p>";
 
 	}
 
@@ -258,10 +260,16 @@ function confirmation ()
 		@db_query("update forums set forum_name='$forum_name', forum_desc='$forum_desc',
             	forum_access='2', forum_moderator='1', cat_id='$cat_id',
             	forum_type='$forum_type' where forum_id='$forum_id'", $currentCourseID);
-		$tool_content .= "<table width=\"99%\"><tbody><tr>
-			<td class=\"success\"><p><b>$langForumDataChanged</b></p>
-			<p><a href=\"$PHP_SELF?forumgo=yes&cat_id=$cat_id&ctg=$ctg\">$langBack</a></p></td>
-			</tr></tbody></table>";
+		$tool_content .= "
+      <table width=\"99%\">
+      <tbody>
+      <tr>
+        <td class=\"success\">$langForumDataChanged</td>
+      </tr>
+      </tbody>
+      </table>
+      <br />
+      <p align=\"right\"><a href=\"$PHP_SELF?forumgo=yes&cat_id=$cat_id&ctg=$ctg\">$langBack</a></p>";
 	}
 
 	// forum add category
@@ -271,14 +279,12 @@ function confirmation ()
     <table width=\"99%\">
     <tbody>
     <tr>
-      <td class=\"success\">
-         <p><b>$langCatAdded</b></p>
-      </td>
+      <td class=\"success\">$langCatAdded</td>
     </tr>
     </tbody>
-    </table>";
-		$tool_content .= "
-         <p align=\"right\"><a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a></p>";
+    </table>
+    <br />
+    <p align=\"right\"><a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a></p>";
 		}
 
 	// forum go add
@@ -299,14 +305,12 @@ function confirmation ()
     <table width=\"99%\">
     <tbody>
     <tr>
-      <td class=\"success\">
-        <p><b>$langForumCategoryAdded</b></p>
-      </td>
+      <td class=\"success\">$langForumCategoryAdded</td>
     </tr>
     </tbody>
-    </table>";
-		$tool_content .= "
-        <p align=\"right\"><a href=\"$PHP_SELF?forumgo=yes&cat_id=$cat_id&ctg=$ctg\">$langBack</a></p>";	
+    </table>
+    <br />
+    <p align=\"right\"><a href=\"$PHP_SELF?forumgo=yes&cat_id=$cat_id&ctg=$ctg\">$langBack</a></p>";	
 		}
 	
 	// forum delete category
@@ -321,13 +325,12 @@ function confirmation ()
     <table width=\"99%\">
     <tbody>
     <tr>
-      <td class=\"success\">
-        <p><b>$langCatForumDelete</b></p>
-      </td>
+      <td class=\"success\">$langCatForumDelete</td>
     </tr>
     </tbody>
-    </table>";
-		$tool_content .= "<p align=\"right\"><a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a></p>";
+    </table>
+    <br />
+    <p align=\"right\"><a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a></p>";
 	}
 
 	// forum delete
@@ -341,14 +344,12 @@ function confirmation ()
     <table width=\"99%\">
     <tbody>
     <tr>
-      <td class=\"success\">
-        <p><b>$langForumDelete</b></p>
-      </td>
+      <td class=\"success\">$langForumDelete</td>
     </tr>
     </tbody>
-    </table>";
-		$tool_content .= "
-        <p align=\"right\"><a href=\"$PHP_SELF?forumgo=yes&ctg=$ctg&cat_id=$cat_id\">$langBack</a></p>";
+    </table>
+    <br />
+    <p align=\"right\"><a href=\"$PHP_SELF?forumgo=yes&ctg=$ctg&cat_id=$cat_id\">$langBack</a></p>";
 	} else {
 		$tool_content .= "
 
@@ -397,7 +398,7 @@ function confirmation ()
     <br/>
     <form action=\"forum_admin.php?forumcatadd=yes\" method=post>
 
-    <table width=99% class=\"FormData\">
+    <table width=99% class=\"FormData\" align=\"left\">
     <tbody>
     <tr>
       <th width=\"220\">&nbsp;</th>

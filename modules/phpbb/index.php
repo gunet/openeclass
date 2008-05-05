@@ -159,7 +159,7 @@ cData;
 			if ( $categories[$i][cat_id] != $viewcat ) {
 				$title = stripslashes($categories[$i][cat_title]);
 				$tool_content .= "
-    <tr class=\"lala\">
+    <tr class=\"Forum\">
       <td colspan=\"5\" class=\"left\">&nbsp;$title</td>
     </tr>";
 				continue;
@@ -169,7 +169,7 @@ cData;
 		$catNum = $categories[$i]["cat_id"];
 		$tool_content .= "
     <tr>
-      <td colspan=\"5\" class=\"lala\">&nbsp;$title</td>
+      <td colspan=\"5\" class=\"Forum\">&nbsp;$title</td>
     </tr>";
 		@reset($forum_row);
 		for ( $x=0; $x < count($forum_row); $x++) {
@@ -236,11 +236,11 @@ cData;
 				$tool_content .= "<br>$desc";
 				$tool_content .= "</td>";
 				$tool_content .= "
-      <td width=\"65\" class=\"lalaleftside\">$total_topics</td>";
+      <td width=\"65\" class=\"Forum_leftside\">$total_topics</td>";
 				$tool_content .= "
-      <td width=\"65\" class=\"lalaleftside\">$total_posts</td>";
+      <td width=\"65\" class=\"Forum_leftside\">$total_posts</td>";
 				$tool_content .= "
-      <td width=\"200\" class=\"lastpost\">";
+      <td width=\"200\" class=\"Forum_post\">";
 	  			//if (isset($last_post_prenom) && isset($last_post_nom)) {
 				if ($total_topics>0 && $total_posts>0) {
 				$tool_content .= "$last_post_prenom $last_post_nom 

@@ -1954,6 +1954,7 @@ $l_permdeny	= "Δεν δώσατε το σωστό $l_password ή δεν έχετε το δικαίωμα να αλλάξε
 $l_editedby	= "Το $l_message διορθώθηκε από:";
 $l_stored	= "Το $l_message αποθηκεύτηκε στη βάση.";
 $l_viewmsg	= " για να εμφανίσετε το $l_message.";
+$l_viewmsg1	= "εμφάνιση μηνύματος";
 $l_deleted	= "Το μήνυμα διαγράφηκε.";
 $l_nouser	= "Το $l_username δεν υπάρχει.";
 $l_passwdlost	= "Ξέχασα το συνθηματικό μου!";
@@ -1997,6 +1998,7 @@ $l_pmposted	= "Στάλθηκε απάντηση, πιέστε <a href=\"viewpmsg.php\">εδώ</a> για να
 // Viewpmsg
 $l_nopmsgs	= "Δεν έχετε προσωπικά μηνύματα.";
 $l_reply	= "Απάντηση";
+$l_replyEdit	= "Αλλαγή απάντησης";
 
 // Delpmsg
 $l_deletesucces	= "Διαγραφή επιτυχής.";

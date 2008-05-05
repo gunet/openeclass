@@ -27,14 +27,13 @@ table.ForumSum tbody{
 }
 
 table.ForumSum th{
-	text-align: center;
-	padding: 4px;
+	background : #edecdf !important;
+	text-align: center !important;
+	vertical-align: middle;	
+	font-weight: bold;		
+	font-size:10px !important;	
 	padding-bottom: 6px;
 	padding-top: 6px;
-	font-weight: bold;
-	font-size:10px !important;
-	vertical-align: middle;
-	background : #edecdf;
 }
 
 table.ForumSum td {
@@ -44,7 +43,7 @@ table.ForumSum td {
 	padding : 5px 4px 4px 4px;
 }
 
-.lala {
+.Forum {
 	background : #edecdf !important;
 	text-align: left;
 	padding: 4px;
@@ -54,7 +53,7 @@ table.ForumSum td {
 	color: #000000 !important;
 }
 
-.lalahead {
+.ForumHead {
 	background : #edecdf !important;
 	text-align: center !important;;
 	padding: 4px;
@@ -63,21 +62,21 @@ table.ForumSum td {
 	font-weight: bold;
 }
 
-.lalaleftside {
+.Forum_leftside {
 	background : #F7F7F7 !important;
 	text-align: center;
 	vertical-align: middle !important;
 	font-size:10px !important;
 }
 
-.lastpost {
+.Forum_post {
 	background : #F7F7F7 !important;
 	text-align: center;
 	vertical-align: middle !important;
 	font-size:9px !important;
 }
 
-.lalaleftside1 {
+.Forum_leftside1 {
 	background : #F4F4F4 !important;
 	text-align: center;
 	vertical-align: middle !important;
@@ -189,7 +188,7 @@ li.pagination {
 	float: right;
 	width: auto;
 	margin-top: 0;
-	padding: 1px 1 px 1px 1px;
+	padding: 1px 1px 1px 1px;
 	font-size: 0.9em;
 }
 

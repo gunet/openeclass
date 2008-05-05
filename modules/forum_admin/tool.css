@@ -1,3 +1,52 @@
+table.ForumAdmSum{
+    padding: 2px;
+    vertical-align: middle;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.ForumAdmSum thead{
+	padding: 2px;
+	vertical-align: middle;
+	border-top: 1px solid #CAC3B5;
+	border-bottom: 1px solid #CAC3B5;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+	background: #edecdf !important;
+}
+
+table.ForumAdmSum tbody{
+    padding: 2px;
+    vertical-align: middle;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #CAC3B5;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.ForumAdmSum th{
+    padding: 2px;
+	vertical-align: middle;
+	border-top: 1px solid #CAC3B5;
+	border-bottom: 1px solid #CAC3B5;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+	background: #edecdf !important;
+	text-align: left;
+	font-weight: bold;
+	font-size:9px !important;
+}
+
+table.ForumAdmSum td {
+	color: #727266;
+	vertical-align: top;
+	background : #fbfbfb;
+	padding : 5px 4px 4px 4px;
+}
+
+
 table.ForumCategory{
     padding: 2px;
     vertical-align: middle;
@@ -22,37 +71,4 @@ table.ForumCategory td {
     border-bottom: 1px dotted #fff;
 	text-align: center;
 	background: #EDECDF !important;
-}
-
-.lala {
-	background : #edecdf !important;
-	text-align: left;
-	padding: 4px;
-	padding-bottom: 6px;
-	padding-top: 6px;
-	font-weight: bold;
-	color: #000000 !important;
-}
-
-.lalahead {
-	background : #edecdf !important;
-	text-align: center;
-	padding: 4px;
-	padding-bottom: 6px;
-	padding-top: 6px;
-	font-weight: bold;
-}
-
-.lalaleftside {
-	background : #F7F7F7 !important;
-	text-align: center;
-	vertical-align: middle !important;
-	font-size:10px !important;
-}
-
-.lalaleftside1 {
-	background : #F4F4F4 !important;
-	text-align: center;
-	vertical-align: middle !important;
-	font-size:10px !important;
 }

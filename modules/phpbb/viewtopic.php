@@ -142,7 +142,7 @@ if ($paging and $total > $posts_per_page ) {
     <table WIDTH="99%">
     <thead>
     <tr>
-    <td WIDTH="60%" align=\"left\">
+    <td WIDTH="50%" align=\"left\">
       <span class='row'><strong class='pagination'>
        <span>
 cData;
@@ -171,16 +171,16 @@ cData;
       <td align=\"right\">
        <span class='pages'>$l_gotopage: &nbsp;&nbsp;";
 	if ( isset($start) && $start > 0 ) {
-		$tool_content .= "\n       <a href=\"$PHP_SELF?topic=$topic&forum=$forum&start=$last_page\">$l_prevpage</a>&nbsp;";
+		$tool_content .= "\n       <a href=\"$PHP_SELF?topic=$topic&forum=$forum&start=$last_page\">$l_prevpage</a>&nbsp;|";
 	} else {
 		$start = 0;
 	}	
 	if (($start + $posts_per_page) < $total) {
 		$next_page = $start + $posts_per_page;
-		$tool_content .= "\n       <a href=\"$PHP_SELF?topic=$topic&forum=$forum&start=$next_page\">$l_nextpage</a>";
+		$tool_content .= "\n       <a href=\"$PHP_SELF?topic=$topic&forum=$forum&start=$next_page\">$l_nextpage</a>&nbsp;|";
 	}
 	$tool_content .= "
-       &nbsp;|&nbsp;<a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;all=true\">$l_all</a>
+       &nbsp;<a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;all=true\">$l_all</a>
        </span>
       </td>
     </tr>
@@ -196,10 +196,14 @@ cData;
       <span class='row'><strong class='pagination'>&nbsp;</strong>
       </span>
     </td>
-    <td align=\"right\">
+    <td align=\"right\">";
+	if ($total > $posts_per_page) {	
+	$tool_content .= "
       <span class='pages'>
-       &nbsp;|&nbsp;<a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;start=0\">$l_pages</a>
-      </span>
+       &nbsp;<a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;start=0\">$l_pages</a>
+      </span>";
+	}	  
+	$tool_content .= "
       </td>
     </tr>
     </thead>
@@ -212,8 +216,8 @@ $tool_content .= <<<cData
     <table WIDTH="99%" class="ForumSum">
     <thead>
     <tr>
-      <td class="lalahead" width="150">$l_author</td>
-      <td class="lalahead" colspan="2">$l_message</td>
+      <td class="ForumHead" width="150">$l_author</td>
+      <td class="ForumHead" colspan="2">$l_message</td>
     </tr>
     </thead>
     <tbody>
@@ -301,7 +305,7 @@ if ($paging and $total > $posts_per_page) {
     <table WIDTH="99%">
     <thead>
     <tr>
-    <td WIDTH="60%" align=\"right\">
+    <td WIDTH="50%" align=\"right\">
       <span class='row'><strong class='pagination'>
        <span>
 cData;
@@ -329,16 +333,16 @@ cData;
       <td>
        <span class='pages'>$l_gotopage: &nbsp;&nbsp;";
 	if ( isset($start) && $start > 0 ) {
-		$tool_content .= "\n       <a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;start=$last_page\">$l_prevpage</a>&nbsp;";
+		$tool_content .= "\n       <a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;start=$last_page\">$l_prevpage</a>&nbsp;|";
 	} else {
 		$start = 0;
 	}	
 	if (($start + $posts_per_page) < $total) {
 		$next_page = $start + $posts_per_page;
-		$tool_content .= "\n       <a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;start=$next_page\">$l_nextpage</a>";
+		$tool_content .= "\n       <a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;start=$next_page\">$l_nextpage</a>&nbsp;|";
 	}
 	$tool_content .= "
-       &nbsp;|&nbsp;<a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;all=true\">$l_all</a>
+       &nbsp;<a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;all=true\">$l_all</a>
        </span>
       </td>
     </tr>
@@ -356,13 +360,20 @@ cData;
     </td>
     <td align=\"right\">
       <span class='pages'>
-       &nbsp;|&nbsp;<a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;start=0\">$l_pages</a>
+    ";
+	if ($total > $posts_per_page) {	
+	$tool_content .= "	  
+       &nbsp;<a href=\"$PHP_SELF?topic=$topic&amp;forum=$forum&amp;start=0\">$l_pages</a>
+    ";
+	}	
+	$tool_content .= "   
       </span>
       </td>
     </tr>
     </thead>
     </table>
     ";
+
 }
 
 draw($tool_content,2,'phpbb');

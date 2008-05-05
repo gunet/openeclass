@@ -253,9 +253,7 @@ if (isset($submit) && $submit) {
     <table width=\"99%\">
     <tbody>
     <tr>
-      <td class=\"success\">
-        <p><b>$l_stored</b></p>
-      </td>
+      <td class=\"success\">$l_stored</td>
     </tr>
     </tbody>
     </table>";

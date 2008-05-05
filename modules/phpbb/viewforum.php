@@ -116,13 +116,13 @@ $tool_content .= <<<cData
 
     <table width="99%" class="ForumSum">
     <thead>
-    <TR>
-      <td class="lalahead" colspan="2">&nbsp;$l_topic</td>
-      <td class="lalahead" width="100">$l_replies</td>
-      <td class="lalahead" width="100">$l_poster</th>
-      <td class="lalahead" width="100">$langSeen</td>
-      <td class="lalahead" width="100">$langLastMsg</td>
-    </TR>
+    <tr>
+      <td class="ForumHead" colspan="2">&nbsp;$l_topic</td>
+      <td class="ForumHead" width="100">$l_replies</td>
+      <td class="ForumHead" width="100">$l_poster</th>
+      <td class="ForumHead" width="100">$langSeen</td>
+      <td class="ForumHead" width="100">$langLastMsg</td>
+    </tr>
     </thead>
     <tbody>
 cData;
@@ -226,10 +226,10 @@ if ($myrow = mysql_fetch_array($result)) {
 		}
 		$topiclink .= "&$replys";
 		$tool_content .= "\n      <TD><a href=\"$topiclink\">$topic_title</a>$pagination</TD>\n";
-		$tool_content .= "      <TD class=\"lalaleftside\">$replys</TD>\n";
-		$tool_content .= "      <TD class=\"lalaleftside1\">" . $myrow["prenom"] . " " . $myrow["nom"] . "</TD>\n";
-		$tool_content .= "      <TD class=\"lalaleftside\">" . $myrow["topic_views"] . "</TD>\n";
-		$tool_content .= "      <TD class=\"lalaleftside1\">$last_post</TD></TR>\n";
+		$tool_content .= "      <TD class=\"Forum_leftside\">$replys</TD>\n";
+		$tool_content .= "      <TD class=\"Forum_leftside1\">" . $myrow["prenom"] . " " . $myrow["nom"] . "</TD>\n";
+		$tool_content .= "      <TD class=\"Forum_leftside\">" . $myrow["topic_views"] . "</TD>\n";
+		$tool_content .= "      <TD class=\"Forum_leftside1\">$last_post</TD></TR>\n";
 	} while($myrow = mysql_fetch_array($result));
 } else {
 	$tool_content .= "\n      <td colspan=6>$l_notopics</td></tr>\n";

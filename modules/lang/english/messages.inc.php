@@ -2055,6 +2055,7 @@ $l_permdeny	= "You did not supply the correct $l_password or do not have permiss
 $l_editedby	= "This $l_message was edited by:";
 $l_stored	= "Your $l_message has been stored in the database.";
 $l_viewmsg	= "to view your $l_message.";
+$l_viewmsg1	= "preview message";
 $l_deleted	= "Your message has been deleted.";
 $l_nouser	= "That $l_username doesn't exist.";
 $l_passwdlost	= "I forgot my password!";
@@ -2097,6 +2098,7 @@ $l_pmposted	= "Reply Posted, you can click <a href=\"viewpmsg.php\">here</a> to 
 // Viewpmsg
 $l_nopmsgs	= "You don't have any $l_privmsgs.";
 $l_reply	= "Reply";
+$l_replyEdit	= "Edit reply";
 
 // Delpmsg
 $l_deletesucces	= "Deletion successful.";

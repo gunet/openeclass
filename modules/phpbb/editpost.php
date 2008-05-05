@@ -145,15 +145,20 @@ if (isset($submit) && $submit) {
 				$tool_content .= $langUnableUpadateTopic;
 			}
 		}
+		
+		$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">
+        <li><a href=\"viewtopic.php?topic=$topic_id&forum=$forum_id\">$l_viewmsg1</a></li>
+        <li><a href=\"viewforum.php?forum=$forum_id\">$l_returntopic</a></li>
+      </ul>
+    </div>
+    <br />";
 		$tool_content .= "
     <table width=\"99%\">
     <tbody>
     <tr>
-      <td class=\"success\">
-        <p><b>$l_stored</b></p>
-        <p>$l_click <a href=\"viewtopic.php?topic=$topic_id&forum=$forum_id\">$l_here</a> $l_viewmsg</p>
-        <p>$l_click <a href=\"viewforum.php?forum=$forum_id\">$l_here</a> $l_returntopic</p>
-      </td>
+      <td class=\"success\">$l_stored</td>
     </tr>
     </tbody>
     </table>";
@@ -200,15 +205,22 @@ if (isset($submit) && $submit) {
 		if (@!$topic_removed) {
 			sync($currentCourseID, $topic_id, 'topic');
 		}
+		
+	$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">
+        <li><a href=\"viewforum.php?forum=$forum_id\">$l_returntopic</a></li>
+        <li><a href=\"index.php\">$l_returnindex</a></li>
+      </ul>
+    </div>
+    <br />";
+	
+	
 		$tool_content .= "
     <table width=\"99%\">
     <tbody>
     <tr>
-      <td class=\"success\">
-        <p><b>$l_deleted</b></p>
-        <p>$l_click <a href=\"viewforum.php?forum=$forum_id\">$l_here</a> $l_returntopic</p>
-        <p>$l_click <a href=\"index.php\">$l_here</a>$l_returnindex</p>
-      </td>
+      <td class=\"success\">$l_deleted</td>
     </tr>
     </tbody>
     </table>";
@@ -335,14 +347,14 @@ if (isset($submit) && $submit) {
 	$tool_content .= "
     <FORM ACTION=\"$PHP_SELF\" METHOD=\"POST\">
     <table class=\"FormData\" width=\"99%\">
-    <tbody>";
+    <tbody>
+    <TR>
+      <th width=\"220\">&nbsp;</th>
+      <TD><b>$l_replyEdit</b></TD>
+    </TR>";
 	$first_post = is_first_post($topic, $post_id, $currentCourseID);
 	if($first_post) {
 		$tool_content .= "
-    <TR>
-      <th width=\"220\">&nbsp;</th>
-      <TD><b>$l_reply</b></TD>
-    </TR>
     <tr>
       <th class=\"left\">$l_subject:</th>
       <TD><INPUT TYPE=\"TEXT\" NAME=\"subject\" SIZE=\"53\" MAXLENGTH=\"100\" VALUE=\"" . stripslashes($myrow["topic_title"]) . "\"  class=\"FormData_InputText\"></TD>
