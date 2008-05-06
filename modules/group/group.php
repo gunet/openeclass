@@ -227,6 +227,33 @@ while ($myTutor = mysql_fetch_array($sqlTutor)) {
 }
 
 if ($is_adminOfCourse) {
+
+	$tool_content .= "
+    <table width=\"99%\" align=\"left\" class=\"Group_Operations\">
+    <thead>
+    <tr>
+      <td width=\"50%\" align=\"center\"><a href=\"group_creation.php\">$langNewGroupCreate</a></td>
+      <td width=\"50%\"><a href=\"".$_SERVER['PHP_SELF']."?delete=yes\" onClick=\"return confirmation('delall');\">$langDeleteGroups</a></td>
+    </tr>
+    <tr>
+      <td><a href=\"".$_SERVER['PHP_SELF']."?fill=yes\">$langFillGroups</a></td>
+      <td><a href=\"".$_SERVER['PHP_SELF']."?empty=yes\" onClick=\"return confirmation('emptyall');\">$langEmtpyGroups</a></td>
+    </tr>
+    </thead>
+    </table>
+    <br /><br />";
+	/*
+	$tool_content .= "
+    <div id=\"operations_container\">
+	<ul id=\"opslist\">
+	<li><a href=\"group_creation.php\">$langNewGroupCreate</a></li>
+	<li><a href=\"".$_SERVER['PHP_SELF']."?delete=yes\" onClick=\"return confirmation('delall');\">$langDeleteGroups</a></li>
+	<li><a href=\"".$_SERVER['PHP_SELF']."?fill=yes\">$langFillGroups</a></li>
+	<li><a href=\"".$_SERVER['PHP_SELF']."?empty=yes\" onClick=\"return confirmation('emptyall');\">$langEmtpyGroups</a></li>
+	</ul></div>
+	<br />";
+	
+	
 	$tool_content .= "<div id=\"operations_container\">
 	<ul id=\"opslist\">
 	<li><a href=\"group_creation.php\">$langNewGroupCreate</a></li>
@@ -234,111 +261,161 @@ if ($is_adminOfCourse) {
 	<li><a href=\"".$_SERVER['PHP_SELF']."?fill=yes\">$langFillGroups</a></li>
 	<li><a href=\"".$_SERVER['PHP_SELF']."?empty=yes\" onClick=\"return confirmation('emptyall');\">$langEmtpyGroups</a></li>
 	</ul></div>";
+	*/
 	// Show DB messages
 	if(isset($message))
 	{
-		$tool_content .= "<table width=\"99%\">
-			<thead><tr><td class=\"success\">
-			<p><b>$message</b></p></td></tr></thead>
-		</table>
-		<br>";
+		$tool_content .= "
+    <table width=\"99%\">
+    <thead>
+    <tr>
+      <td class=\"success\">$message</td>
+    </tr>
+    </thead>
+    </table>
+    <br>";
 	}
 	unset($message);
 	#################### SHOW PROPERTIES ######################
 	$tool_content .= <<<tCont3
-	<table width="99%">
-	<thead><tr>
-	<th>$langGroupsProperties</th>
-	<th>$langGroupAccess</th>
-	</tr></thead>
+
+    <table width="70%" align="center">
+    <thead>
+    <tr>
+      <td colspan="2" class="right"><a href="group_properties.php">$langPropModify</a> <img src="../../template/classic/img/edit.gif" border="0" title="'.$langEdit.'"></td>
+    </tr>
+    <tr>
+      <th>$langGroupsProperties </th>
+      <th>$langGroupAccess</th>
+    </tr>
+    </thead>
+    </tbody>
 tCont3;
 
 	$resultProperties=db_query("SELECT id, self_registration, private, forum, document FROM group_properties WHERE id=1", $currentCourse);
 	while ($myProperties = mysql_fetch_array($resultProperties))
 	{
-		$tool_content .= "<tr><td>";
+		$tool_content .= "
+    <tr>
+      <td>";
 		if($myProperties['self_registration']==1)
 		{
-			$tool_content .= "$langGroupAllowStudentRegistration</td><td>$langYes";
+			$tool_content .= "$langGroupAllowStudentRegistration</td>
+      <td align=\"right\">$langYes";
 		}
 		else
 		{
-			$tool_content .= "$langGroupAllowStudentRegistration</td><td>$langNo";
+			$tool_content .= "$langGroupAllowStudentRegistration</td>
+      <td align=\"right\">$langNo";
 		}
-		$tool_content .= "</td></tr><tr><td colspan=2 class=\"category\">$langTools</td></tr>
-	<tr><td>";
+		$tool_content .= "</td>
+    </tr>
+    <tr>
+      <th colspan=2 class=\"left\">$langTools</th>
+    </tr>
+    <tr>
+      <td>";
 
 		if($myProperties['forum']==1) {
-			$tool_content .= "$langGroupForum</td><td>$langYes";
+			$tool_content .= "$langGroupForum</td>
+      <td align=\"right\">$langYes";
 			$fontColor="black";
 		} else {
-			$tool_content .= "$langGroupForum</td><td>$langNo";
+			$tool_content .= "$langGroupForum</td>
+      <td align=\"right\">$langNo";
 			$fontColor="silver";
 		}
-		$tool_content .= "</td></tr><tr><td>";
+		$tool_content .= "</td>
+    </tr>
+    <tr>
+      <td>";
 		if($myProperties['private']==1) {
-			$tool_content .= "$langForumType</td><td >$langPrivate";
+			$tool_content .= "$langForumType</td>
+      <td>$langPrivate";
 		}
 		else
 		{
-			$tool_content .= "$langForumType</td><td >$langPublicAccess";
+			$tool_content .= "$langForumType</td>
+      <td align=\"right\">$langPublicAccess";
 		}
-		$tool_content .= "</td></tr><tr ><td>";
+		$tool_content .= "</td>
+    </tr>
+    <tr>
+      <td>";
 
 		if($myProperties['document']==1)
 		{
-			$tool_content .= "$langDoc</td><td >$langYes";
+			$tool_content .= "$langDoc</td>
+      <td align=\"right\">$langYes";
 		}
 		else
 		{
-			$tool_content .= "$langDoc</td><td >$langNo";
+			$tool_content .= "$langDoc</td>
+      <td align=\"right\">$langNo";
 		}
-		$tool_content .= "</td></tr>";
+		$tool_content .= "</td>
+    </tr>";
 	}	// while loop
-	$tool_content .= "</table>";
-	$tool_content .= "<p><a href=\"group_properties.php\">".$langPropModify."</a></p>";
+	$tool_content .= "
+    </tbody>
+    </table>";
 
-	// groups list
-	$tool_content .= "<br><table width=\"99%\"><thead><tr> <th align=\"left\">$langExistingGroups</th>
-		<th>$langRegistered</th><th>$langMax</th>
-		<th>$langEdit</th>
-		<th>$langDelete</th></tr></thead><tbody>";
+
+
 	$groupSelect=db_query("SELECT id, name, maxStudent FROM student_group", $currentCourse);
 	$totalRegistered=0;
 	$myIterator=0;
+
+	// groups list
+	$tool_content .= "
+    <br />
+    <table width=\"99%\">
+    <thead>
+    <tr>
+      <th align=\"left\">$langExistingGroups</th>
+      <th>$langRegistered</th><th>$langMax</th>
+      <th>$langEdit</th>
+      <th>$langDelete</th>
+    </tr>
+    </thead>
+    <tbody>";	
+
 	while ($group = mysql_fetch_array($groupSelect))
 	{
 		// Count students registered in each group
 		$resultRegistered = db_query("SELECT id FROM user_group WHERE team='".$group["id"]."'", $currentCourse);
 		$countRegistered = mysql_num_rows($resultRegistered);
 		if ($myIterator%2==0) {
-			$tool_content .= "<tr>";
+			$tool_content .= "
+    <tr>";
 		}
 		elseif ($myIterator%2==1) {
-			$tool_content .= "<tr class=\"odd\">";
+			$tool_content .= "
+    <tr class=\"odd\">";
 		}
-		$tool_content .= "<td><div class=\"cellpos\">
-		<a href=\"group_space.php?userGroupId=".$group["id"]."\">".$group["name"]."</a></div>
-		</td><td><div class=\"cellpos\">".$countRegistered."</div></td>";
+		$tool_content .= "
+      <td><div class=\"cellpos\"><a href=\"group_space.php?userGroupId=".$group["id"]."\">".$group["name"]."</a></div></td>
+      <td><div class=\"cellpos\">".$countRegistered."</div></td>";
 		if ($group['maxStudent']==0) {
-			$tool_content .= "<td><div class=\"cellpos\">-</div></td>";
+			$tool_content .= "
+      <td><div class=\"cellpos\">-</div></td>";
 		} else {
-			$tool_content .= "<td><div class=\"cellpos\">".$group["maxStudent"]."</div></td>";
+			$tool_content .= "
+      <td><div class=\"cellpos\">".$group["maxStudent"]."</div></td>";
 		}
-		$tool_content .= "<td><div class=\"cellpos\">
-		<a href=\"group_edit.php?userGroupId=".$group["id"]."\">
-		<img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langEdit."\"></a></div></td>
-		<td><div class=\"cellpos\">
-		<a href=\"".$_SERVER['PHP_SELF']."?delete_one=yes&id=".$group["id"]."\" onClick=\"return confirmation('".addslashes($group["name"])."');\">
-		<img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\"></a></div></td></tr>";
+		$tool_content .= "
+      <td><div class=\"cellpos\"><a href=\"group_edit.php?userGroupId=".$group["id"]."\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langEdit."\"></a></div></td>
+      <td><div class=\"cellpos\"><a href=\"".$_SERVER['PHP_SELF']."?delete_one=yes&id=".$group["id"]."\" onClick=\"return confirmation('".addslashes($group["name"])."');\"><img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\"></a></div></td>
+    </tr>";
 
 		$totalRegistered=($totalRegistered+$countRegistered);
 		$myIterator++;
 	}	// while loop
 	$tool_content .= <<<tCont4
-	</tbody>
-	</table>
-	<br>
+
+    </tbody>
+    </table>
+    <br />
  
 tCont4;
 

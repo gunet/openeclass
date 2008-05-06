@@ -8,3 +8,20 @@ td.category {
 	vertical-align:top; 
 	text-align:center;
 }
+
+.Group_Operations {
+    text-align: center;
+    padding: 6px;
+    background: #CAC3B5;
+    font-size: 11px;
+    color: #000000;
+    border-top: 1px solid #a33033;
+    border-bottom: 1px solid #a33033;
+	border-left: 1px solid #CAC3B5;
+	border-right: 1px solid #CAC3B5;
+}
+
+.Group_Operations td{
+    text-align: center;
+    padding: 2px !important;
+}
