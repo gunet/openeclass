@@ -46,6 +46,7 @@ $langInfo = "Ταυτότητα Πλατφόρμας";
 $langAboutCourses = "Η πλατφόρμα υποστηρίζει συνολικά";
 $langAboutUsers = "H πλατφόρμα διαθέτει";
 
+
 #For the logged-out user:
 $langAboutCourses1 = "Αυτή τη στιγμή, η πλατφόρμα διαθέτει συνολικά";
 $langAboutUsers1 = "Οι εγγεγραμένοι χρήστες είναι ";
@@ -1267,7 +1268,7 @@ $langInvalidAuth = "Λάθος τρόπος πιστοποίησης";
 $langContact = 'Επικοινωνία';
 $langInfoPlat = 'Ταυτότητα Πλατφόρμας';
 $lang_forgot_pass = "Ξεχάσατε το συνθηματικό σας;";
-$langNewAnnounce = "Νέα !";
+$langNewAnnounce = "Νέα!";
 $langUnregUser = "Διαγραφή λογαριασμού";
 $langListFaculte = "Κατάλογος Τμημάτων";
 $langListCourses = "Kατάλογος Μαθημάτων";

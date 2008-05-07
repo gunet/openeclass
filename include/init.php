@@ -120,13 +120,16 @@ if (!isset($urlSecure)) {
 
 //load the correct language (Author: Evelthon Prodromou)
 if (session_is_registered('langswitch')) {
-	$language 		= $_SESSION['langswitch'];
+	$language 	= $_SESSION['langswitch'];
 	$langChangeLang = $_SESSION['langLinkText'];
 	$switchLangURL 	= $_SESSION['langLinkURL'];
 }
 
 // Connect to database
-$db = mysql_connect($mysqlServer, $mysqlUser, $mysqlPassword);
+@$db = mysql_connect($mysqlServer, $mysqlUser, $mysqlPassword);
+if (!$db) {
+	include 'not_installed.php';
+}
 if (mysql_version()) mysql_query("SET NAMES greek");
 mysql_select_db($mysqlMainDb, $db);
 

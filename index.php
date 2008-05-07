@@ -52,7 +52,7 @@ if (isset($mysqlServer) and isset($mysqlUser) and isset($mysqlPassword)) {
 	$db = mysql_connect($mysqlServer, $mysqlUser, $mysqlPassword);
 	if (mysql_version()) mysql_query("SET NAMES greek");
 }
-if (!isset($db)) {
+if (!$db) {
 	include ("not_installed.php");
 }
 
@@ -129,8 +129,6 @@ if(!empty($submit))
 						}
 						else
 						{
-							// $warning .= "<br />Your account is inactive. <br />Please <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">contact the Eclass Admin.</a><br /><br />";
-							// $warning .= "<br />".$langAccountInactive1." <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">".$langAccountInactive2."</a><br /><br />";
 							$auth_allow = 3;
 							$user = $myrow["user_id"];
 						}
@@ -241,13 +239,13 @@ if(!empty($submit))
 				}
 				else
 				{
-					$warning .= "<br>Invalid user auth method!Please contact the admin<br>";
+					$warning .= "<br>$langInvalidAuth<br>";
 				}
 			}
 		}
 		else
 		{
-			$tool_content .= "<br>No authentication method defined.Cannot proceed!<br>";
+			$tool_content .= "<br>$langInvalidAuth<br>";
 		}
 	}		// while
 
