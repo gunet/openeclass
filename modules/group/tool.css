@@ -25,3 +25,59 @@ td.category {
     text-align: center;
     padding: 2px !important;
 }
+
+table.GroupSum{
+    padding: 2px;
+    vertical-align: middle;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.GroupSum thead{
+	padding: 2px;
+	vertical-align: middle;
+	border-top: 1px solid #CAC3B5;
+	border-bottom: 1px solid #CAC3B5;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+}
+
+table.GroupSum tbody{
+    padding: 2px;
+    vertical-align: middle;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #CAC3B5;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.GroupSum th{
+	text-align: center;
+	padding: 4px;
+	padding-bottom: 6px;
+	padding-top: 6px;
+	font-weight: bold;
+	font-size:10px !important;
+	vertical-align: middle;
+	background : #fbfbfb;
+}
+
+table.GroupSum td {
+	color: #727266;
+	vertical-align: top;
+	background : #fbfbfb;
+	padding : 5px 4px 4px 4px;
+}
+
+
+div#content_login p{
+    line-height:1.4;
+}
+div#navigation{backgroundX:red;}
+div#extra{backgroundX:#FF8539}
+
+div#wrapper{float:left;width:99%;margin-right:-300px}
+div#content_login{margin-right:350px; padding-leftX:10px;}
+div#navigation{float:right;width:300px;}

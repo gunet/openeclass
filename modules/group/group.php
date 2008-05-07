@@ -276,20 +276,29 @@ if ($is_adminOfCourse) {
     <br>";
 	}
 	unset($message);
+	
+	$coursUsersSelect=db_query("
+	SELECT user_id FROM cours_user WHERE code_cours='$currentCourse' 
+		AND statut=5 AND tutor=0", $mysqlMainDb);
+	$countUsers = mysql_num_rows($coursUsersSelect);
+	$countNoGroup=($countUsers-$totalRegistered);
+
 	#################### SHOW PROPERTIES ######################
 	$tool_content .= <<<tCont3
 
-    <table width="70%" align="center">
+    <br />
+    <table width="50%" align="center" class="GroupSum">
     <thead>
     <tr>
       <td colspan="2" class="right"><a href="group_properties.php">$langPropModify</a> <img src="../../template/classic/img/edit.gif" border="0" title="'.$langEdit.'"></td>
     </tr>
-    <tr>
-      <th>$langGroupsProperties </th>
-      <th>$langGroupAccess</th>
-    </tr>
     </thead>
     </tbody>
+    <tr>
+      <td><b>$langGroupsProperties</b></td>
+      <td align="right"><b>$langGroupAccess</b></td>
+    </tr>
+
 tCont3;
 
 	$resultProperties=db_query("SELECT id, self_registration, private, forum, document FROM group_properties WHERE id=1", $currentCourse);
@@ -301,28 +310,28 @@ tCont3;
 		if($myProperties['self_registration']==1)
 		{
 			$tool_content .= "$langGroupAllowStudentRegistration</td>
-      <td align=\"right\">$langYes";
+      <td align=\"right\"><font color=\"green\">$langYes</font>";
 		}
 		else
 		{
 			$tool_content .= "$langGroupAllowStudentRegistration</td>
-      <td align=\"right\">$langNo";
+      <td align=\"right\"><font color=\"red\">$langNo</font>";
 		}
 		$tool_content .= "</td>
     </tr>
     <tr>
-      <th colspan=2 class=\"left\">$langTools</th>
+      <td colspan=2 class=\"left\"><b>$langTools</b></td>
     </tr>
     <tr>
       <td>";
 
 		if($myProperties['forum']==1) {
 			$tool_content .= "$langGroupForum</td>
-      <td align=\"right\">$langYes";
+      <td align=\"right\"><font color=\"green\">$langYes</font>";
 			$fontColor="black";
 		} else {
 			$tool_content .= "$langGroupForum</td>
-      <td align=\"right\">$langNo";
+      <td align=\"right\"><font color=\"red\">$langNo</font>";
 			$fontColor="silver";
 		}
 		$tool_content .= "</td>
@@ -346,12 +355,12 @@ tCont3;
 		if($myProperties['document']==1)
 		{
 			$tool_content .= "$langDoc</td>
-      <td align=\"right\">$langYes";
+      <td align=\"right\"><font color=\"green\">$langYes</font>";
 		}
 		else
 		{
 			$tool_content .= "$langDoc</td>
-      <td align=\"right\">$langNo";
+      <td align=\"right\"><font color=\"red\">$langNo</font>";
 		}
 		$tool_content .= "</td>
     </tr>";
@@ -360,13 +369,25 @@ tCont3;
     </tbody>
     </table>";
 
-
+	$tool_content .= "
+    <table>
+    <tbody>
+    <tr>
+      <td class=\"odd\">
+        <p><b>$totalRegistered</b> $langGroupStudentsInGroup<br></p>
+        <p><b>$countNoGroup</b> $langGroupNoGroup<br></p>
+        <p><b>$countUsers</b> $langGroupStudentsRegistered ($langGroupUsersList)</p>
+      </td>
+    </tr>
+    </tbody>
+    </table>";
 
 	$groupSelect=db_query("SELECT id, name, maxStudent FROM student_group", $currentCourse);
 	$totalRegistered=0;
 	$myIterator=0;
-
+	$num_of_groups = mysql_num_rows($groupSelect);
 	// groups list
+	if ($num_of_groups > 0) {
 	$tool_content .= "
     <br />
     <table width=\"99%\">
@@ -379,7 +400,7 @@ tCont3;
     </tr>
     </thead>
     <tbody>";	
-
+	}
 	while ($group = mysql_fetch_array($groupSelect))
 	{
 		// Count students registered in each group
@@ -419,16 +440,12 @@ tCont3;
  
 tCont4;
 
-	$coursUsersSelect=db_query("
-	SELECT user_id FROM cours_user WHERE code_cours='$currentCourse' 
-		AND statut=5 AND tutor=0", $mysqlMainDb);
-	$countUsers = mysql_num_rows($coursUsersSelect);
-	$countNoGroup=($countUsers-$totalRegistered);
-	$tool_content .= "<p><b>$totalRegistered</b> $langGroupStudentsInGroup<br></p>
-	<p><b>$countNoGroup</b> $langGroupNoGroup<br></p>
-	<p><b>$countUsers</b> $langGroupStudentsRegistered ($langGroupUsersList)</p>";
+
+	
+	
 	$tool_content .= <<<tCont5
-</form></td></tr><tr> <td width="100%" colspan="3">
+
+  </form></td></tr><tr> <td width="100%" colspan="3">
 
 tCont5;
 }	// end prof only
@@ -451,21 +468,34 @@ else {
 	while ($myTeamUser = mysql_fetch_array($findTeamUser)) {
 		$myTeam=$myTeamUser['team'];
 	}
-	$tool_content .= "<table width=\"99%\"><thead><tr> <th>$langExistingGroups</th>";
+	$tool_content .= "
+    <table width=\"99%\" class=\"GroupSum\">
+    <thead>
+    <tr>
+      <td colspan=\"2\"><b>$langExistingGroups</b></td>";
 
 	// If self-registration allowed by admin
 	if($selfRegProp==1) {
-		$tool_content .= "<th>$langRegistration</th>";
+		$tool_content .= "
+      <td><b>$langRegistration</b></td>";
 	}
 
-	$tool_content .= "<th>$langRegistered</th><th>$langMax</th></tr></thead><tbody>";
+	$tool_content .= "
+      <td align='center'><b>$langRegistered</b></td>
+      <td><div align='center'><b>$langMax</b></div></td>
+    </tr>
+    </thead>
+    <tbody>";
 	$groupSelect=db_query("SELECT id, name, maxStudent, tutor FROM student_group", $currentCourse);
 	$totalRegistered=0;
 	while ($group = mysql_fetch_array($groupSelect)) {
 		// Count students registered in each group
 		$resultRegistered = db_query("SELECT id FROM user_group WHERE team='".$group["id"]."'", $currentCourse);
 		$countRegistered = mysql_num_rows($resultRegistered);
-		$tool_content .= "<tr><td align='center'>";
+		$tool_content .= "
+    <tr>
+      <td width=\"2%\"><img src=\"../../template/classic/img/bullet_bw.gif\" alt=\"bullet\" title=\"bullet\" border=\"0\"></td>
+      <td>";
 
 		// Allow student to enter group only if member
 		if(@($tutorCheck==1)) {
@@ -479,18 +509,20 @@ else {
 		// STUDENT VIEW
 		else {
 			if(isset($myTeam) && $myTeam==$group['id'])	{
-				$tool_content .= "<a href=\"group_space.php?userGroupId=".$group["id"]."\">".$group["name"]."</a>($langMyGroup)";
+				$tool_content .= "<a href=\"group_space.php?userGroupId=".$group["id"]."\">".$group["name"]."</a>&nbsp;&nbsp;($langMyGroup)";
 			} else {
 				$tool_content .= $group['name'];
 			}
 		}	// else
-		$tool_content .= "</td>";
+		$tool_content .= "
+      </td>";
 
 		// SELF REGISTRATION
 		// If self-registration allowed by admin
 		if($selfRegProp==1)
 		{
-			$tool_content .= "<td align='center'>";
+			$tool_content .= "
+      <td align='center'>";
 			if((!$uid) OR (isset($myTeam)) OR (($countRegistered>=$group['maxStudent']) AND ($group['maxStudent']>>0)))
 			{
 				$tool_content .= "&nbsp;-";
@@ -499,17 +531,23 @@ else {
 			}
 			$tool_content .= "</td>";
 		}	// If self reg allowed by admin
-		$tool_content .= "<td align='center' width='50'>".$countRegistered."</td>";
+		$tool_content .= "
+      <td align='center' width='50'>".$countRegistered."</td>";
 		if ($group['maxStudent']==0) {
-			$tool_content .= "<td>-</td>";
+			$tool_content .= "
+      <td>-</td>";
 		} else {
-			$tool_content .= "<td align='center' width='50'>".$group["maxStudent"]."</td>";
+			$tool_content .= "
+      <td align='center' width='50'>".$group["maxStudent"]."</td>";
 		}
-		$tool_content .= "</tr>";
+		$tool_content .= "
+    </tr>";
 		$totalRegistered=($totalRegistered+$countRegistered);
 
 	}	// while loop
-	$tool_content .= "</tbody></table>";
+	$tool_content .= "
+    </tbody>
+    </table>";
 
 } 	// else student view
 if ($is_adminOfCourse) {

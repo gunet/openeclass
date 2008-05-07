@@ -88,22 +88,39 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 	$forumId=$myGroup['forumId'];
 	if ($is_adminOfCourse)
 	{
-		$tool_content .= "<p><a href=\"group_edit.php?userGroupId=$userGroupId\">$langEditGroup</a> | ";
+		$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">
+        <li><a href=\"group_edit.php?userGroupId=$userGroupId\">$langEditGroup</a></li>";
 
 	}
 	elseif(isset($selfReg) AND ($uid))
 	{
-		$tool_content .=  "<p><a href=\"$_SERVER[PHP_SELF]?registration=1\">$langRegIntoGroup</a>";
+		$tool_content .=  "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">
+        <li><a href=\"$_SERVER[PHP_SELF]?registration=1\">$langRegIntoGroup</a></li>";
 	}
 	elseif(isset($regDone))
 	{
-		$tool_content .=  "<p>$message";
+		$tool_content .=  "<p>$message</p>";
 	}
-	$tool_content .= loadGroupTools()."</p>";
-	$tool_content .=  "<table width=\"99%\"><thead>
-		<tr><th width=\"200\">$langGroupName</th>
-		<td>$myGroup[name]</td></tr>
-		</thead></table><br>";
+	$tool_content .=  "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">";
+	$tool_content .= loadGroupTools()."";
+	$tool_content .=  "
+
+    <table width=\"99%\" class=\"FormData\">
+    <thead>
+    <tr>
+      <th width=\"220\">&nbsp;</th>
+      <td><b>Στοιχεία ομάδας</b></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langGroupName :</th>
+      <td>$myGroup[name]</td>
+    </tr>";
 
 	$sqlTutor=mysql_query("SELECT tutor, user_id, nom, prenom, email, forumId
 		FROM `$mysqlMainDb`.user, student_group
@@ -120,15 +137,16 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 		while ($myTutor = mysql_fetch_array($sqlTutor))
 		{
 			$tool_content_tutor .= "$myTutor[nom] $myTutor[prenom]
-			<a href=mailto:$myTutor[email]>$myTutor[email]</a>";
+			(<a href=mailto:$myTutor[email]>$myTutor[email]</a>)";
 		}	// while tutor
 
 	}	// else
 
-	$tool_content .= "<table width=\"99%\"><thead>
-		<tr><th width=\"200\">$langGroupTutor</th>
-		<td>$tool_content_tutor</td>
-		</tr></thead></table><br>";
+	$tool_content .= "
+    <tr>
+      <th class=\"left\">$langGroupTutor :</th>
+      <td>$tool_content_tutor</td>
+    </tr>";
 
 	// Show 'none' if no description
 	$countDescription=strlen ($myGroup['description']);
@@ -142,18 +160,27 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 		$tool_content_description .=  "$myGroup[description]";
 	}	// else
 
-	$tool_content .=  "<table width=\"99%\"><thead><tr>
-		<th>$langDescription</th></tr></thead>
-		<tbody><tr><td>$tool_content_description</td></tr></tbody>
-		</table><br>";
+	$tool_content .=  "
+    <tr>
+      <th class=\"left\">$langDescription :</th>
+      <td>$tool_content_description</td>
+    </tr>";
 }	// while loop
 
 // members
-$tool_content .= "<table width=\"99%\"><thead>
-		<tr><th colspan=3>$langGroupMembers</th></tr>
-		<tr><th>$langNameSurname</th>
-		<th width='100'>$langAM</th>
-		<th>$langEmail</th></tr>";
+$tool_content .= "
+    <tr>
+      <th class=\"left\" valign=\"top\">$langGroupMembers :</th>
+      <td>
+          <table width=\"99%\" align=\"center\" class=\"GroupSum\">
+          <thead>
+		  <tr>
+            <td><b>$langNameSurname</b></td>
+            <td width='100'><div align=\"center\"><b>$langAM</b></div></td>
+            <td><div align=\"center\"><b>$langEmail</b></div></td>
+          </tr>
+          </thead>
+          <tbody>";
 
 $resultMember=mysql_query("SELECT nom, prenom, email, am
 		FROM `$mysqlMainDb`.user, user_group 
@@ -163,31 +190,39 @@ $countMember = mysql_num_rows($resultMember);
 
 if(($countMember==0))
 {
-	$tool_content .=  "<td colspan=3>$langGroupNoneMasc</td>";
+	$tool_content .=  "
+		  <tr>
+            <td colspan=3>$langGroupNoneMasc</td>
+          </tr>";
 }
 else
 {
 	while ($myMember = mysql_fetch_array($resultMember))
 	{
-		$tool_content .= "<tr>";
-		$tool_content .= "<td>";
-		$tool_content .=  "$myMember[prenom] $myMember[nom]";
-		$tool_content .= "</td>";
-		$tool_content .= "<td align='center'>";
+		$tool_content .= "
+          <tr>
+            <td>$myMember[prenom] $myMember[nom]</td>
+            <td><div align=\"center\">";
 		if (!empty($myMember['am'])) {
 			$tool_content .=  "$myMember[am]";
 		} else {
 			$tool_content .= "-";
 		}
-		$tool_content .= "</td>";
-		$tool_content .= "<td align='center'>";
-		$tool_content .= "<a href=mailto:$myMember[email]>$myMember[email]</a>";
-		$tool_content .= "</td>";
-		$tool_content .= "</tr>";
+		$tool_content .= "</div>
+            </td>
+            <td><div align=\"center\"><a href=mailto:$myMember[email]>$myMember[email]</a></div></td>
+          </tr>";
 	}	// while loop
 }	// else
-
-$tool_content .= "</tbody></table>";
+	$tool_content .=  "
+          </tbody>
+		  </table>";
+		  
+$tool_content .= "
+      </td>
+    </tr>
+    </thead>
+    </table>";
 draw($tool_content, 2, 'group');
 
 function loadGroupTools(){
@@ -203,29 +238,38 @@ function loadGroupTools(){
 	$group_tools = "";
 	if(isset($selfReg))
 	{
-		$group_tools .=  "&nbsp;</td>";
+		$group_tools .=  "&nbsp;";
 	}
 	else
 	{
 		$resultProperties=mysql_query("SELECT id, self_registration, private, forum, document
 			FROM group_properties WHERE id=1");
+
 		while ($myProperties = mysql_fetch_array($resultProperties))
 		{
 			// Drive members into their own forum
 			if($myProperties['forum'] == 1){
-				$group_tools .= "<a href=\"../phpbb/viewforum.php?forum=$forumId\">$langForums</a>";
+				$group_tools .= "
+      <li><a href=\"../phpbb/viewforum.php?forum=$forumId\">$langForums</a></li>";
 			}
 			// Drive members into their own File Manager
 			if($myProperties['document'] == 1) {
-				 $group_tools .=  " | <a href=\"document.php?userGroupId=$userGroupId\">$langDoc</a>";
+				 $group_tools .=  "
+      <li><a href=\"document.php?userGroupId=$userGroupId\">$langDoc</a></li>";
 			}
 		}	// while loop
 		if ($is_adminOfCourse)
 		{
-			$group_tools .=  " | <a href=\"group_email.php?userGroupId=$userGroupId\">$langEmailGroup</a>";
+			$group_tools .=  "
+      <li><a href=\"group_email.php?userGroupId=$userGroupId\">$langEmailGroup</a></li>";
 		}
 	}
-	$group_tools .= "</p>";
+	$group_tools .= "
+      </ul>
+    </div>
+    <br />
+	";
+	//$group_tools .= "</p>";
 	session_unregister("secretDirectory");
 	session_unregister("forumId");
 	return $group_tools;
