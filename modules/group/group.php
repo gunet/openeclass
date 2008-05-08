@@ -53,7 +53,7 @@ session_unregister("forumId");
 $currentCourse=$dbname;
 mysql_select_db("$currentCourse");
 $nameTools = $langGroupManagement;
-
+$totalRegistered=0;
 $tool_content = "";
 if ($is_adminOfCourse) {
 	$head_content = '
@@ -277,15 +277,10 @@ if ($is_adminOfCourse) {
 	}
 	unset($message);
 	
-	$coursUsersSelect=db_query("
-	SELECT user_id FROM cours_user WHERE code_cours='$currentCourse' 
-		AND statut=5 AND tutor=0", $mysqlMainDb);
-	$countUsers = mysql_num_rows($coursUsersSelect);
-	$countNoGroup=($countUsers-$totalRegistered);
+	
 
-	#################### SHOW PROPERTIES ######################
+	// ---------- display properties ------------------------
 	$tool_content .= <<<tCont3
-
     <br />
     <table width="50%" align="center" class="GroupSum">
     <thead>
@@ -365,84 +360,70 @@ tCont3;
 		$tool_content .= "</td>
     </tr>";
 	}	// while loop
-	$tool_content .= "
-    </tbody>
-    </table>";
+	$tool_content .= "</tbody></table>";
 
-	$tool_content .= "
-    <table>
-    <tbody>
-    <tr>
-      <td class=\"odd\">
-        <p><b>$totalRegistered</b> $langGroupStudentsInGroup<br></p>
-        <p><b>$countNoGroup</b> $langGroupNoGroup<br></p>
-        <p><b>$countUsers</b> $langGroupStudentsRegistered ($langGroupUsersList)</p>
-      </td>
-    </tr>
-    </tbody>
-    </table>";
+	
 
 	$groupSelect=db_query("SELECT id, name, maxStudent FROM student_group", $currentCourse);
-	$totalRegistered=0;
 	$myIterator=0;
 	$num_of_groups = mysql_num_rows($groupSelect);
 	// groups list
 	if ($num_of_groups > 0) {
-	$tool_content .= "
-    <br />
-    <table width=\"99%\">
-    <thead>
-    <tr>
-      <th align=\"left\">$langExistingGroups</th>
-      <th>$langRegistered</th><th>$langMax</th>
-      <th>$langEdit</th>
-      <th>$langDelete</th>
-    </tr>
-    </thead>
-    <tbody>";	
+		$tool_content .= "<br />
+    		<table width=\"99%\"><thead><tr>
+      		<th align=\"left\">$langExistingGroups</th>
+      		<th>$langRegistered</th><th>$langMax</th>
+      		<th>$langEdit</th>
+      		<th>$langDelete</th>
+    		</tr></thead><tbody>";	
 	}
+
 	while ($group = mysql_fetch_array($groupSelect))
 	{
 		// Count students registered in each group
 		$resultRegistered = db_query("SELECT id FROM user_group WHERE team='".$group["id"]."'", $currentCourse);
 		$countRegistered = mysql_num_rows($resultRegistered);
 		if ($myIterator%2==0) {
-			$tool_content .= "
-    <tr>";
+			$tool_content .= "<tr>";
 		}
 		elseif ($myIterator%2==1) {
-			$tool_content .= "
-    <tr class=\"odd\">";
+			$tool_content .= "<tr class=\"odd\">";
 		}
-		$tool_content .= "
-      <td><div class=\"cellpos\"><a href=\"group_space.php?userGroupId=".$group["id"]."\">".$group["name"]."</a></div></td>
-      <td><div class=\"cellpos\">".$countRegistered."</div></td>";
+		$tool_content .= "<td><div class=\"cellpos\">
+			<a href=\"group_space.php?userGroupId=".$group["id"]."\">".$group["name"]."</a></div></td>
+      		<td><div class=\"cellpos\">".$countRegistered."</div></td>";
 		if ($group['maxStudent']==0) {
-			$tool_content .= "
-      <td><div class=\"cellpos\">-</div></td>";
+			$tool_content .= "<td><div class=\"cellpos\">-</div></td>";
 		} else {
-			$tool_content .= "
-      <td><div class=\"cellpos\">".$group["maxStudent"]."</div></td>";
+			$tool_content .= "<td><div class=\"cellpos\">".$group["maxStudent"]."</div></td>";
 		}
-		$tool_content .= "
-      <td><div class=\"cellpos\"><a href=\"group_edit.php?userGroupId=".$group["id"]."\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langEdit."\"></a></div></td>
-      <td><div class=\"cellpos\"><a href=\"".$_SERVER['PHP_SELF']."?delete_one=yes&id=".$group["id"]."\" onClick=\"return confirmation('".addslashes($group["name"])."');\"><img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\"></a></div></td>
-    </tr>";
-
-		$totalRegistered=($totalRegistered+$countRegistered);
+		$tool_content .= "<td><div class=\"cellpos\">
+		<a href=\"group_edit.php?userGroupId=".$group["id"]."\">
+		<img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langEdit."\"></a></div></td>
+      		<td><div class=\"cellpos\"><a href=\"".$_SERVER['PHP_SELF']."?delete_one=yes&id=".$group["id"]."\" onClick=\"return confirmation('".addslashes($group["name"])."');\">
+		<img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\"></a></div></td>
+    		</tr>";
+		$totalRegistered = $totalRegistered+$countRegistered;
 		$myIterator++;
 	}	// while loop
-	$tool_content .= <<<tCont4
 
+	$coursUsersSelect=db_query("SELECT user_id FROM cours_user 
+		WHERE code_cours='$currentCourse' 
+		AND statut=5 AND tutor=0", $mysqlMainDb);
+	$countUsers = mysql_num_rows($coursUsersSelect);
+	$countNoGroup=($countUsers-$totalRegistered);
+	$tool_content .= <<<tCont4
     </tbody>
     </table>
     <br />
- 
 tCont4;
 
-
-	
-	
+$tool_content .= "<table><tbody><tr>
+      	<td class=\"odd\">
+        <p><b>$totalRegistered</b> $langGroupStudentsInGroup<br></p>
+        <p><b>$countNoGroup</b> $langGroupNoGroup<br></p>
+        <p><b>$countUsers</b> $langGroupStudentsRegistered ($langGroupUsersList)</p>
+      </td></tr></tbody></table>";
 	$tool_content .= <<<tCont5
 
   </form></td></tr><tr> <td width="100%" colspan="3">
@@ -487,7 +468,7 @@ else {
     </thead>
     <tbody>";
 	$groupSelect=db_query("SELECT id, name, maxStudent, tutor FROM student_group", $currentCourse);
-	$totalRegistered=0;
+	//$totalRegistered=0;
 	while ($group = mysql_fetch_array($groupSelect)) {
 		// Count students registered in each group
 		$resultRegistered = db_query("SELECT id FROM user_group WHERE team='".$group["id"]."'", $currentCourse);
