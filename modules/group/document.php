@@ -13,7 +13,7 @@ same rights
 The user can : - navigate through files and directories.
 - upload a file
 - delete, copy a file or a directory
-- edit properties & content (name, comments,
+- edit properties & content (name 
 html content)
 */
 
@@ -45,9 +45,6 @@ function confirmation ()
 </script>
 ';
 
-if (isset($uncompress) && $uncompress == 1)
-	include("../../include/pclzip/pclzip.lib.php");
-
 $sql_result = db_query("SELECT group_quota FROM cours WHERE code='$currentCourseID'", $mysqlMainDb);
 $d = mysql_fetch_array($sql_result);
 $diskQuotaGroup = $d['group_quota'];
@@ -61,7 +58,9 @@ if ($is_adminOfCourse) {
 	$secretDirectory = group_secret(user_group($uid));
 }
 if (empty($secretDirectory)) {
-	die("Error: can't find group document directory");
+	$tool_content .= $langInvalidGroupDir;
+	draw($tool_content, 2, '', $local_head);
+	exit;
 }
 
 $baseServDir = $webDir;
@@ -118,7 +117,7 @@ if (is_uploaded_file(@$userFile) )
 		/*** Handle PHP files ***/
 		$fileName = php2phps($fileName);
 		$safe_fileName = date("YmdGis").randomkeys("8").".".get_file_extention($fileName);
-		$path = "/".$safe_fileName;
+		$path = $uploadPath."/".$safe_fileName;
 		/*** Copy the file to the desired destination ***/
 		copy ($userFile, $baseWorkDir.$uploadPath."/".$safe_fileName);
 		@$dialogBox .= "<table width=\"99%\"><tbody>
@@ -239,13 +238,13 @@ if (isset($createDir))
 /**************************************
 DEFINE CURRENT DIRECTORY
 **************************************/
-if (isset($openDir)  || isset($moveTo) || isset($createDir) || isset($newDirPath) || isset($uploadPath) ) // $newDirPath is from createDir command (step 2) and $uploadPath from upload command
+if (isset($openDir)  || isset($moveTo) || isset($createDir) || isset($newDirPath) || isset($uploadPath)) // $newDirPath is from createDir command (step 2) and $uploadPath from upload command
 {
 	@$curDirPath = $openDir . $createDir . $moveTo . $newDirPath . $uploadPath;
 }
-elseif (isset($delete) || isset($move) || isset($rename) || isset($sourceFile) || isset($comment) || isset($commentPath) || isset($mkVisibl) || isset($mkInvisibl)) //$sourceFile is from rename command (step 2)
+elseif (isset($delete) || isset($move) || isset($rename) || isset($sourceFile)) //$sourceFile is from rename command (step 2)
 {
-	@$curDirPath = dirname($delete . $move . $rename . $sourceFile . $comment . $commentPath . $mkVisibl . $mkInvisibl);
+	@$curDirPath = dirname($delete . $move . $rename . $sourceFile);
 }
 else
 {
@@ -257,7 +256,7 @@ if ($curDirPath == "/" || $curDirPath == "\\")
 	$curDirPath =""; // manage the root directory problem
 }
 
-$curDirName = basename($curDirPath);
+$curDirName = my_basename($curDirPath);
 $parentDir = dirname($curDirPath);
 
 if ($parentDir == "/" || $parentDir == "\\")
@@ -317,7 +316,7 @@ $tool_content .= "<div id=\"operations_container\">
 	<ul id=\"opslist\"><li><a href='group_space.php'>$langGroupSpaceLink</a></li>
 	<li><a href='../phpbb/viewforum.php?forum=$forumId'>$langGroupForumLink</a></li>
 	<li><a href='$_SERVER[PHP_SELF]?createDir=".$cmdCurDirPath."\'>$langCreateDir</a></li>
-	<li><a href='$_SERVER[PHP_SELF]?uploadFile=1'>$langDownloadFile</a></li></ul></div><div>";
+	<li><a href='$_SERVER[PHP_SELF]?uploadPath=".$cmdCurDirPath."'>$langDownloadFile</a></li></ul></div>";
 
 /*----------------------------------------
 DIALOG BOX SECTION
@@ -337,7 +336,7 @@ else
 /*----------------------------------------
 UPLOAD SECTION
 --------------------------------------*/
-if(isset($uploadFile) && $uploadFile == 1) {
+if(isset($uploadPath)) {
 	$tool_content .= <<<cData
 	<form action='$_SERVER[PHP_SELF]' method='post' enctype='multipart/form-data'>
 	<input type='hidden' name='uploadPath' value='$curDirPath'>
@@ -354,13 +353,13 @@ cData;
 CURRENT DIRECTORY LINE
 --------------------------------------*/
 $tool_content .= "<table width=\"99%\" align='left'><thead>";
-$tool_content .= "<tr><td class='left' height='18' colspan='3' style='border-top: 1px solid #edecdf; border-bottom: 1px solid #edecdf; border-left: 1px solid #edecdf; background: #fff;'>$langDirectory: ".make_clickable_path("group_documents", $curDirPath). "</td>
+$tool_content .= "<tr><td class='left' height='18' colspan='6' style='border-top: 1px solid #edecdf; border-bottom: 1px solid #edecdf; border-left: 1px solid #edecdf; background: #fff;'>$langDirectory: ".make_clickable_path("group_documents", $curDirPath). "</td>
 <td style='border-top: 1px solid #edecdf; background: #fff; border-bottom: 1px solid #edecdf; border-right: 1px solid #edecdf;'><div align='right'>";
   /*** go to parent directory ***/
 if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
 {
 	$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdParentDir."\">$langUp</a>\n";
-	$tool_content .=  "<img src=\"img/parent.gif\" border=0 align=\"absmiddle\" height='12' width='12'>\n";
+	$tool_content .=  "<img src=\"../../template/classic/img/parent.gif\" border=0 align=\"absmiddle\" height='12' width='12'>\n";
 }
 
 $tool_content .= "</td></tr>";
@@ -392,11 +391,11 @@ if (isset($dirNameList))
 		/*** delete command ***/
 		$tool_content .= "<td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdDirName."\" onClick=\"return confirmation();\"><img src=\"../../template/classic/img/delete.gif\" border=0></a></td>\n";
 		/*** copy command ***/
-		$tool_content .= "<td><a href=\"$_SERVER[PHP_SELF]?move=".$cmdDirName."\"><img src=\"../../template/classic/img/move_doc.gif\" border=0></a></td>\n";
+		$tool_content .= "<td><a href=\"$_SERVER[PHP_SELF]?move=".$cmdDirName."\">
+		<img src=\"../../template/classic/img/move_doc.gif\" border=0></a></td>\n";
 		/*** rename command ***/
-		$tool_content .= "<td><a href=\"$_SERVER[PHP_SELF]?rename=".$cmdDirName."\"><img src=\"../../template/classic/img/edit.gif\" border=0></a></td>\n";
-		/*** comment command ***/
-		$tool_content .= "<td>-</td>\n";
+		$tool_content .= "<td><a href=\"$_SERVER[PHP_SELF]?rename=".$cmdDirName."\">
+		<img src=\"../../template/classic/img/edit.gif\" border=0></a></td>\n";
 		$tool_content .=  "</tr>\n";
 	}
 }
@@ -420,7 +419,7 @@ if (isset($fileNameList))
 		$result = db_query("SELECT path, filename FROM group_documents 
 			WHERE path LIKE '%/$fileName%'", $currentCourseID);
 		$r = mysql_fetch_array($result);
-		$tool_content .= "<img src='../document/img/$image' border=0 hspace=5>";
+		$tool_content .= "<img src='../document/img/$image' border=0 hspace=5 align=absmiddle>";
 		if(empty($r["filename"])) { // compatibility
 			$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' title=\"$langSave\">".$dspFileName."</a>";
 		} else {

@@ -1,6 +1,5 @@
 <?php
-
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -30,15 +29,13 @@
 	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
 ==============================================================================        
         @Description: Upload form that aids the user to select 
-					  a file to upload and add some metadata with it.
+		  a file to upload and add some metadata with it.
 
     The script shows a form with a "Browse file" tag and some simpl
     inputs for metadata. The actual uploading takes place at document.php
 ==============================================================================*/
 
-$require_current_course = TRUE;  // flag ασφάλειας 
-$require_help = FALSE;
-//$helpTopic = 'User';
+$require_current_course = TRUE;  
 $require_login = true;
 $require_prof = true;
 
@@ -57,7 +54,7 @@ $tool_content .= "
      <table width=\"99%\">
      <tbody>
      <tr>
-       <th class='left' width='220'>&nbsp;</th>
+       <th class='left' width='300'>&nbsp;</th>
        <td><b>$dropbox_lang[uploadFile]</b></td>
        <td>&nbsp;</td>
      </tr>
@@ -136,7 +133,7 @@ $tool_content .= "
      <tr>
        <th class='left'>$langUncompress</th>
        <td><input type=\"checkbox\" name=\"uncompress\" value=\"1\"> </td>
-       <td><small><div align='right'>$langNoticeGreek</div></small></td>
+       <td>&nbsp;</td>
      </tr>
      <tr>
        <th class='left'>&nbsp;</th>

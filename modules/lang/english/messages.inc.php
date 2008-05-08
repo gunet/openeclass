@@ -740,8 +740,8 @@ $langUncompress="uncompress zipped (.zip) file on the server";
 $langDownloadAndZipEnd=" Zip file uploaded and uncompressed";
 $langPublish = "Publish";
 $langParentDir = "parent directory";
-$langNoticeGreek = "Be aware that includes filenames in (.zip) cannot have greek characters!";
-$langInvalidDir = "Invalid Directory or Directory not exists";
+$langInvalidDir = "Error! Invalid Directory or Directory not exists!";
+$langInvalidGroupDir = "Error! Invalid Group Directory!";
 
 //prosthikes gia v2 - metadata
 $langCategory="Category";

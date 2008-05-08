@@ -742,7 +742,7 @@ $langIn="στο";
 $langNewDir="Όνομα του καινούριου καταλόγου";
 $langImpossible="Δεν είναι δυνατή η λειτουργία";
 $langViMod="Η ορατότητα του εγγράφου άλλαξε";
-$langMoveOK="Η μεταφορά έγιμε με επιτυχία!";
+$langMoveOK="Η μεταφορά έγινε με επιτυχία!";
 $langMoveNotOK="η μεταφορά δεν πραγματοποιήθηκε!";
 $langRoot = "Αρχικός κατάλογος";
 
@@ -751,12 +751,12 @@ $langGroupSpace="Περιοχή ομάδας χρηστών";
 $langGroupSpaceLink="Ομάδα χρηστών";
 $langGroupForumLink="Περιοχή συζητήσεων ομάδας χρηστών";
 $langZipNoPhp="Το αρχείο zip δεν πρέπει να περιέχει αρχεία .php";
-$langUncompress="αποσυμπίεση του αρχείου (.zip) στον εξυπηρέτη <small>(*)</small>";
+$langUncompress="αποσυμπίεση του αρχείου (.zip) στον εξυπηρέτη";
 $langDownloadAndZipEnd="Το αρχείο .zip ανέβηκε και αποσυμπιέστηκε";
 $langPublish = "Δημοσίευση";
 $langParentDir = "αρχικό κατάλογο";
-$langNoticeGreek = "<u>Προσοχή</u>! Τα ονόματα των αρχείων που θα συμπεριλάβετε στο αρχείο (.zip) δεν πρέπει να περιέχουν ελληνικούς χαρακτήρες";
 $langInvalidDir = "Ακυρο ή μη υπαρκτό όνομα καταλόγου";
+$langInvalidGroupDir = "Σφάλμα! Ο κατάλογος των ομάδων χρηστών δεν υπάρχει!";
 
 //prosthikes gia v2 - metadata
 $langCategory="Κατηγορία";
