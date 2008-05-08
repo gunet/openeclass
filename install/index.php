@@ -324,9 +324,9 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
                                 <input type=\"text\" size=\"40\" name=\"dnldapserver\" value=\"$dnldapserver\">
                             </td>
                         </tr>
-												<tr><th>Εγγραφή χρηστών μέσω αίτησης</th>
-										    <td><input type='checkbox' name='reguser'></td>
-										    </tr>
+			<tr><th>Εγγραφή χρηστών μέσω αίτησης</th>
+		    <td><input type='checkbox' name='reguser'></td>
+		    </tr>
                         <tr>
                             <th>
                                    Εξυπηρετητής video streaming 
@@ -349,15 +349,14 @@ function set_video_input()
 		<input type=\"checkbox\" id=\"video_check\" onclick=\"set_video_input();\"/><br>
      </td>
      </tr>
-			<tr>
-				<th>
-				 <div id=\"video_input_div_text\">
-				</div> 
-				</th>
-				<td>
-				 <div id=\"video_input_div_input\">
-				</td>
-			</tr>
+	<tr>
+	<th><div id=\"video_input_div_text\">
+	</div> 
+	</th>
+	<td>
+	<div id=\"video_input_div_input\">
+	</td>
+	</tr>
       <tr>
        <th>
          MCU (μονάδα ελέγχου για τηλεδιάσκεψη)
@@ -381,15 +380,15 @@ function set_MCU()
 		<input type=\"checkbox\" id=\"MCU_check\" onclick=\"set_MCU();\"/><br>
      </td>
      </tr>
-			<tr>
-				<th>
-				 <div id=\"MCU_div_text\">
-				 </div>
-				</th>
-				<td>
-				 <div id=\"MCU_div_input\">
-				</td>
-			</tr>
+	<tr>
+		<th>
+		 <div id=\"MCU_div_text\">
+		 </div>
+		</th>
+		<td>
+		 <div id=\"MCU_div_input\">
+		</td>
+		</tr>
            <tr><th>Personalization</th>
              <td>
             		<select name=\"persoIsActive\">
@@ -484,11 +483,11 @@ elseif(isset($_REQUEST['install7']))
 		$no = mysql_errno();     $msg = mysql_error();
 		$tool_content .= "
 		<table width = \"99%\">
-				<tbody>
-					<tr>
-						<td class=\"extraMessage\">
-						<u><b>[".$no."] - ".$msg."</b></u><br/>
-						<p>Η MySQL  δεν λειτουργεί ή το όνομα χρήστη/συνθηματικό δεν είναι σωστό.<br/>
+		<tbody>
+		<tr>
+		<td class=\"extraMessage\">
+		<u><b>[".$no."] - ".$msg."</b></u><br/>
+		<p>Η MySQL  δεν λειτουργεί ή το όνομα χρήστη/συνθηματικό δεν είναι σωστό.<br/>
         Παρακαλούμε ελέγξετε τα στοιχεία σας: </p>
         <ul id=\"installBullet\">
         <li>Όνομα Υπολογιστή : ".$dbHostForm."</li>
@@ -930,7 +929,6 @@ $Institution = "'.$institutionForm.'";
 $InstitutionUrl = "'.$institutionUrlForm.'";
 $postaddress = "'.$postaddressForm.'";
 
-$bannerPath = "images/gunet/banner.jpg";
 $colorLight = "#F5F5F5";
 $colorMedium = "#004571";
 $colorDark = "#000066";
@@ -1011,9 +1009,9 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	if (!ini_get('short_open_tag')) {
 		$errorContent[]= "
 		<table width = \"99%\">
-				<tbody>
-					<tr>
-						<td class=\"extraMessage\">
+			<tbody>
+			<tr>
+			<td class=\"extraMessage\">
 						
         <p><b>Προσοχή!</b> Φαίνεται πως η επιλογή short_open_tag
         στο αρχείο php.ini δεν είναι ενεργοποιημένη. Χωρίς αυτήν το
@@ -1024,10 +1022,10 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
         τις οδηγίες εγκατάστασης στο αρχείο
         <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
 						
-					</td>
-					</tr>
-				</tbody>
-			</table>
+				</td>
+				</tr>
+			</tbody>
+		</table>
 		";
 		$configErrorExists = true;
 	}

@@ -141,7 +141,7 @@ if(session_is_registered('uid') && !session_is_registered('langswitch')) {
                 FROM user 
                 WHERE user_id='".$_SESSION['uid']."'";
 	$result=mysql_query($sqlLang);
-	while ($myrow = mysql_fetch_array($result)) {
+	while (@($myrow = mysql_fetch_array($result))) {
 		if ($myrow[0]== "el") {
 			$language = "greek";
 			$_SESSION['langLinkText'] = "English";

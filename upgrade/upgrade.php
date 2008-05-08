@@ -106,9 +106,6 @@ if (!isset($submit2)) {
 
         // for upgrading 1.5 --> 1.7
         $lines_to_add = "";
-        if (!strstr($conf, '$bannerPath')) {
-                $lines_to_add .= "\$bannerPath = 'images/gunet/banner.jpg';\n";
-        }
         if (!strstr($conf, '$colorLight')) {
                 $lines_to_add .= "\$colorLight = '#F5F5F5';\n";
         }
@@ -145,42 +142,38 @@ if (!isset($submit2)) {
                 $lines_to_add .= "\$persoIsActive = true;\n";
         }
         if (!strstr($conf, '$encryptedPasswd')) {
-                $lines_to_add = "\$encryptedPasswd = true;\n";
+                $lines_to_add .= "\$encryptedPasswd = true;\n";
         }
 
         $new_copyright = file_get_contents('../info/license/header.txt');
 
         $new_conf = preg_replace(
                         array(
+				'#^.*(mainInterfaceWidth|bannerPath|userMailCanBeEmpty).*$#m',
                                 '#\$postaddress\b[^;]*;#sm',
                                 '#\$fax\b[^;]*;#',
                                 '#\$close_user_registration\b[^;]*;#',
                                 '#\?\>#',
-                                '#mainInterfaceWidth\s*=\s*"600";#',
                                 '#\$Institution\b[^;]*;#',
                                 '#\$telephone\b[^;]*;#',
-                                '#claroline/image/gunet/banner.jpg#',
                                 '#^/\*$.*^\*/$#sm',
                                 '#\/\/ .*^\/\/ HTTP_COOKIE[^\n]+$#sm'),
                         array(
+				'',
                                 "\$postaddress = '$_POST[postaddress]';",
                                 "\$fax = '$_POST[fax]';",
                                 "\$close_user_registration = $user_reg;",
                                 $lines_to_add."\n\n?>",
-                                'mainInterfaceWidth = 800;',
                                 "\$Institution = '$_POST[Institution]';",
                                 "\$telephone = '$_POST[telephone]';",
-                                'images/gunet/banner.jpg',
                                 $new_copyright,
                                 ''),
                         $conf);
-
         $fp = @fopen("config.php","w");
         if (!$fp)
                 die ("Δεν πραγματοποιήθηκε η εγγραφή των αλλαγών στο αρχείο ρυθμίσεων config.php! Ελέγξτε τα δικαιώματα πρόσβασης.");
         fwrite($fp, $new_conf);
         fclose($fp);
-
         // ****************************************************
         // 		upgrade eclass main database
         // ****************************************************
@@ -317,12 +310,12 @@ if (!isset($submit2)) {
                         `auth_instructions` text NOT NULL default '',
                         `auth_default` tinyint( 1 ) NOT NULL default '0',
                         PRIMARY KEY ( `auth_id` )) ",$mysqlMainDb); //TYPE = MYISAM  COMMENT='New table with auth methods in Eclass 2.0'
-                                // Insert the default values into the new table 'auth'
-                                db_query("INSERT INTO `auth` VALUES (1, 'eclass', '', '', 1)");
-                db_query("INSERT INTO `auth` VALUES (2, 'pop3', '', '', 0)");
-                db_query("INSERT INTO `auth` VALUES (3, 'imap', '', '', 0)");
-                db_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)");
-                db_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
+                  // Insert the default values into the new table 'auth'
+                   	db_query("INSERT INTO `auth` VALUES (1, 'eclass', '', '', 1)");
+                	db_query("INSERT INTO `auth` VALUES (2, 'pop3', '', '', 0)");
+                	db_query("INSERT INTO `auth` VALUES (3, 'imap', '', '', 0)");
+                	db_query("INSERT INTO `auth` VALUES (4, 'ldap', '', '', 0)");
+                	db_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
         }
 
         //Table agenda (stores events from all lessons)
@@ -362,7 +355,7 @@ if (!isset($submit2)) {
                               `password` varchar(8) NOT NULL,
                               `datetime` datetime NOT NULL
                               ) TYPE=MyISAM", $mysqlMainDb);
-        }
+        	}
 
         // add 5 new fields to table users
         if (!mysql_field_exists("$mysqlMainDb",'user','perso'))

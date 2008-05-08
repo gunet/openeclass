@@ -151,7 +151,6 @@ $color2="'.$_POST['formcolor2'].'"; // less light grey for bicolored tables
 // available: greek and english
 $language = "'.$_POST['formlanguage'].'";
 
-$bannerPath = "'.$_POST['formbannerPath'].'";
 $colorLight = "'.$_POST['formcolorLight'].'";
 $colorMedium = "'.$_POST['formcolorMedium'].'";
 $colorDark = "'.$_POST['formcolorDark'].'";
@@ -305,10 +304,6 @@ $tool_content .= " <tr>
 	$tool_content .= "  <tr>
     <td colspan=\"2\"><hr></td>
   </tr>";
-  	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>\$bannerPath:</b></td>
-    <td><input type=\"text\" name=\"formbannerPath\" size=\"40\" value=\"".$bannerPath."\"></td>
-</tr>";
 	$tool_content .= "  <tr>
     <td width=\"3%\" nowrap><b>\$colorLight:</b></td>
     <td><input type=\"text\" name=\"formcolorLight\" size=\"40\" value=\"".$colorLight."\"></td>
