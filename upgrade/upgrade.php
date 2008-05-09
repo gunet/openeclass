@@ -987,7 +987,7 @@ if (!isset($submit2)) {
                 }
 
 		$baseFolder = $webDir."courses/".$code[0]."/document/";
-		$tool_content .= "Κωδικοποίηση των περιεχομένων του υποσυστήματος 'Έγγραφα'";
+		$tool_content .= "<br>Κωδικοποίηση των περιεχομένων του υποσυστήματος 'Έγγραφα'<br>";
 
 		// initialization
 		$dirnames = array();
@@ -1092,6 +1092,127 @@ if (!isset($submit2)) {
 // ------------------------------------------------------------------------------
 // ------------------- end of document upgrade ----------------------------------
 // ------------------------------------------------------------------------------
+
+// -----------------------------------------------------------------
+// -------------- begin group document upgrade ---------------------
+// -----------------------------------------------------------------
+
+// add temporary column unique_filename in group document table
+		if (!mysql_field_exists("$code[0]",'group_documents','unique_filename'))
+                        $tool_content .= add_field('group_documents', 'unique_filename', "TEXT");
+
+		// create temporary table
+		if (!mysql_table_exists($code[0], 'group_doc_tmp')) {
+                        db_query("CREATE TABLE group_doc_tmp (
+                                id int(11) NOT NULL auto_increment,
+                                   old_path text NOT NULL default '', 
+                                   old_filename text NOT NULL default '',
+                                   unique_filename text NOT NULL default '',
+				   new_path text NOT NULL default '',
+                                   new_filename text NOT NULL default '',
+                                   PRIMARY KEY (id))", $code[0]);
+                }
+
+	// find group secret directory	
+	$s = db_query("SELECT secretDirectory FROM student_group");
+	while ($sd = mysql_fetch_array($s))   {
+
+		$baseFolder = $webDir."courses/".$code[0]."/group/".$sd[0]."/";
+		$tool_content .= "<br>Κωδικοποίηση των περιεχομένων του υποσυστήματος Ομάδες Χρηστών - 'Έγγραφα'<br>";
+
+		// initialization
+		$groupdirnames = array();
+		$groupoldfilenames = array();
+		$groupencdirnames = array();
+		$groupencfilenames = array();
+
+		// traverse directory tree and store old filenames + directory names
+		traverseDirTree($baseFolder, 'array_old_group_file', 'array_old_group_dir', NULL);
+
+		foreach ($groupoldfilenames as $oldfile) {
+			$path = "/".substr($oldfile, strlen($baseFolder));
+		    	$file_date = date("Y\-m\-d G\:i\:s");
+        	   		$query = "INSERT INTO group_documents 
+				SET path = '/".substr($oldfile, strlen($baseFolder))."',
+		        	filename = '".preg_replace('|^.*/|', '', $oldfile)."'";
+				mysql_query($query);
+		}	
+
+		// check if there are duplicate filenames in records
+ 		$r = mysql_query("SELECT filename, COUNT(filename) AS c FROM group_documents GROUP BY filename");
+		while ($dup = mysql_fetch_array($r)) {
+			if ($dup['c'] == 1)  {  // if there are no duplicates 
+				mysql_query("UPDATE group_documents SET unique_filename='$dup[filename]'
+						 WHERE filename='$dup[filename]'");
+			} else {	// if there are duplicates
+				mysql_query("UPDATE group_documents 
+					SET unique_filename=CONCAT(filename,SUBSTRING(MD5(RAND()), 1, 5)) 
+					WHERE filename='$dup[filename]'");
+			} 
+		}
+	
+		// fill group_doc_tmp table
+		$r = mysql_query("SELECT path, filename, unique_filename FROM group_documents");
+		while ($a = mysql_fetch_array($r)) {
+			mysql_query("INSERT INTO group_doc_tmp(old_path,old_filename, unique_filename) 
+				VALUES('$a[path]','$a[filename]','$a[unique_filename]')");
+		}
+
+		// encode group document files
+		traverseDirTree($baseFolder, 'encode_group_file', NULL, 'array_group_dir');
+		//encode group document directories according to array entries
+		foreach ($groupdirnames as $olddir) {
+			$safe_fileName = date("mdGi").randomkeys('5');
+			$newdirname = preg_replace('|/[^/]+$|', '/'.$safe_fileName, $olddir);
+				$b = db_query("SELECT unique_filename FROM group_doc_tmp
+					WHERE old_path ='/".substr($olddir, strlen($baseFolder))."'"); 
+				$u = mysql_fetch_array($b);
+			if (!(rename($olddir, $newdirname))) {	
+				$tool_content .= "Σφάλμα κατά την μετονομασία του $olddir σε $newdirname !";
+			} else {
+				// fill group_doc_tmp table
+	   			$query = "UPDATE group_doc_tmp 
+					SET new_filename = '".preg_replace('|^.*/|', '', $newdirname)."'
+    					WHERE unique_filename = '$u[unique_filename]'";
+				db_query($query);
+			}
+		}
+		
+		// fill arrays with new encoded dirnames and filenames
+		traverseDirTree($baseFolder, 'array_enc_group_file', NULL, 'array_enc_group_dir');
+		
+		// fill newpath in group_doc_tmp table with the correct encoded path
+		foreach ($groupencfilenames as $newfile) {
+		    	$query = "UPDATE group_doc_tmp 
+			SET new_path = '/".substr($newfile, strlen($baseFolder))."'
+		        WHERE new_filename = '".preg_replace('|^.*/|', '', $newfile)."'";
+	 		mysql_query($query);
+		}
+		foreach ($groupencdirnames as $newdir) {
+		    	$query = "UPDATE group_doc_tmp 
+			SET new_path = '/".substr($newdir, strlen($baseFolder))."'
+		        WHERE new_filename = '".preg_replace('|^.*/|', '', $newdir)."'";
+	 		mysql_query($query);
+		}		
+		
+		// update group document table according to doc_tmp table using as key the unique filename 
+		$f = db_query("SELECT unique_filename,new_path FROM group_doc_tmp");
+		while ($u = mysql_fetch_array($f)) {
+			db_query("UPDATE group_documents SET path='$u[new_path]'
+				WHERE unique_filename='$u[unique_filename]'");
+		}
+
+		// delete temporary table doc_tmp
+		//db_query("DROP TABLE IF EXISTS group_doc_tmp");
+		// delete temporary column unique_filename from table document
+		//if (mysql_field_exists("$code[0]",'group_documents','unique_filename'))
+               	//	delete_field('group_documents', 'unique_filename');
+
+	} // end of while 
+// ------------------------------------------------------------------------------
+// ------------------- end of group document upgrade ----------------------------
+// ------------------------------------------------------------------------------
+
 
              	// move video files to new directory
 		if (is_dir("$webDir/$code[0]/video")) {

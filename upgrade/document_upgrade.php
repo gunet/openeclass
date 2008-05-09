@@ -37,6 +37,11 @@
 include '../include/lib/fileUploadLib.inc.php';
 include '../include/lib/forcedownload.php';
 
+// -----------------------------------
+// functions for document ------------
+// -----------------------------------
+
+
 // encode files
 function encode_file($filename)  {
 	global $baseFolder, $tool_content;
@@ -134,6 +139,87 @@ function traverseDirTree($base, $fileFunc, $dirFunc=null, $afterDirFunc=null) {
     }
   }
 	closedir($subdirectories);
+}
+
+
+// -----------------------------------
+// functions for group document ------
+// -----------------------------------
+
+// fill an array with old group documents directory names
+function array_old_group_dir($dirname)  {
+	global $groupoldfilenames;
+
+	$end = strlen($dirname)-2;
+	$dir = substr($dirname,$end);
+	$end2 = strlen($dirname)-1;
+	$dir2 = substr($dirname,$end2);
+	if (($dir2 != '.') and ($dir != '..')) {
+		$groupoldfilenames[] = $dirname;
+	}
+}
+
+// fill an array with old group documents file names
+function array_old_group_file($filename)  {
+	global $groupoldfilenames;
+
+	$groupoldfilenames[] = $filename;
+	
+}
+
+// encode files
+function encode_group_file($filename)  {
+	global $baseFolder, $tool_content;
+
+        $ext = get_file_extention($filename);
+	$safe_fileName = date("mdGi").randomkeys('5').".".$ext;
+	$newfilename = preg_replace('|/[^/]+$|', '/'.$safe_fileName, $filename);
+	$b = db_query("SELECT unique_filename FROM group_doc_tmp 
+		WHERE old_path ='/".substr($filename, strlen($baseFolder))."'");
+	$u = mysql_fetch_array($b);
+	// rename
+	if (!(rename($filename, $newfilename)))  {
+	  	$tool_content .= "Σφάλμα κατά την μετονομασία του $filename σε $newfilename !";
+	} else {
+	// fill group_doc_tmp table	
+		$query = "UPDATE group_doc_tmp SET new_filename = '".preg_replace('|^.*/|', '', $newfilename)."'
+    			WHERE unique_filename = '$u[unique_filename]'";
+		db_query($query);
+	}
+}
+
+// fill an array with directory names
+function array_group_dir($dirname)  {
+	global $groupdirnames;
+
+	$end = strlen($dirname)-2;
+	$dir = substr($dirname,$end);
+	$end2 = strlen($dirname)-1;
+	$dir2 = substr($dirname,$end2);
+	if (($dir2 != '.') and ($dir != '..')) {
+		$groupdirnames[] = $dirname;
+	}
+}
+
+
+// fill an array with new encoded directory names
+function array_enc_group_dir($dirname)  {
+	global $groupencdirnames;
+
+	$end = strlen($dirname)-2;
+	$dir = substr($dirname,$end);
+	$end2 = strlen($dirname)-1;
+	$dir2 = substr($dirname,$end2);
+	if (($dir2 != '.') and ($dir != '..')) {
+		$groupencdirnames[] = $dirname;
+	}
+}
+
+// fill an array with new encoded file names
+function array_enc_group_file($filename)  {
+	global $groupencfilenames;
+	
+	$groupencfilenames[] = $filename;
 }
 
 
