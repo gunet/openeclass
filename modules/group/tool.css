@@ -1,16 +1,28 @@
-td.category {
-	background: #E6EDF5;
-	color: #4F76A3;
-	font-weight:bold;
-	text-align:left;
-}
 .cellpos{
 	vertical-align:top; 
 	text-align:center;
 }
 
+#box1 {
+	float: left;
+	top: 270px;
+    width: 41%;
+    position: absolute;}
+
+#box2 {
+	float: right;
+    top: 270px;
+    right: 35px;
+    width: 25%;
+    position: absolute;}
+    
+#box3 {
+	float: left;
+	top: 460px;
+	position: absolute;
+	}
+
 .Group_Operations {
-    text-align: center;
     padding: 6px;
     background: #CAC3B5;
     font-size: 11px;
@@ -22,8 +34,20 @@ td.category {
 }
 
 .Group_Operations td{
-    text-align: center;
     padding: 2px !important;
+}
+
+.Group_Operations a {
+   color: #000000;
+   font-size: 10px;
+   font-weight: normal;
+   text-decoration: none;
+}
+
+.Group_Operations a:hover {
+       text-decoration: underline;
+       color: #ffffff;
+       font-size: 10px;
 }
 
 table.GroupSum{
@@ -33,7 +57,7 @@ table.GroupSum{
     border-bottom: 1px solid #edecdf;
     border-left: 1px solid #edecdf;
     border-right: 1px solid #edecdf;
-}
+    }
 
 table.GroupSum thead{
 	padding: 2px;
@@ -70,14 +94,3 @@ table.GroupSum td {
 	background : #fbfbfb;
 	padding : 5px 4px 4px 4px;
 }
-
-
-div#content_login p{
-    line-height:1.4;
-}
-div#navigation{backgroundX:red;}
-div#extra{backgroundX:#FF8539}
-
-div#wrapper{float:left;width:99%;margin-right:-300px}
-div#content_login{margin-right:350px; padding-leftX:10px;}
-div#navigation{float:right;width:300px;}
