@@ -690,6 +690,9 @@ $langAccessType="Please select an access type for the course.";
 $langSubsystems="Select the desired enabled modules";
 $langLanguageTip="Select the language that will be used in the course's pages";
 $langPrivate="Private (Access is granted only to ".$langsStudents." added in the Users List)";
+$langPrivate_1="Course Access";
+$langPrivate_2="granted only to ".$langsStudents." added in the Users List";
+$langPrivate_3="granted to everybody";
 $langAccess = "Course Access Type:";
 $langAvailableTypes = "Available Access Types";
 $langModules = "Modules:";
@@ -1112,6 +1115,7 @@ $langID = "ID";
 ********************************************************************/
 
 $langNewGroupCreate="Create new group(s)";
+$langNewGroupCreateData="Group(s) Data";
 
 $langNewGroups="Number of new groups";
 $langMax="Max.";
@@ -1146,6 +1150,7 @@ $langDeleteGroupAllWarn = "Are you sure you want to delete all groups";
 $langGroupProperties="Groups settings";
 $langGroupAccess="Access";
 $langGroupAllowStudentRegistration=" ".$langStudents." are allowed to self-register in groups";
+$langGroupStudentRegistrationType="Registration Type";
 $langGroupPrivatise="Group forums private";
 $langGroupForum="Forum";
 $langGroupPropertiesModified="Groiup settings have been modified";

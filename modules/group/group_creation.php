@@ -49,35 +49,32 @@ $navigation[]= array ("url"=>"group.php", "name"=> $langGroupManagement);
 
 $tool_content = <<<tCont
 
-	<form method="post" action="group.php">
-	<table  >
-		<thead>
+    <form method="post" action="group.php">
+    <table width="99%" align="left" class="FormData">
+    <tbody>
+    <tr>
+      <th width="220">&nbsp;</th>
+      <td><b>$langNewGroupCreateData</b></td>
+    </tr>
+    <tr> 
+      <th class="left">$langNewGroups</th>
+      <td><input type="text" name="group_quantity" size="3" value="1" class="FormData_InputText"></td>
+    </tr>
+    <tr> 
+      <th class="left">$langMax $langPlaces</th>
+      <td><input type="text" name="group_max" size="3" value="8" class="FormData_InputText"></td>
+    </tr>
+    <tr>
+      <th>&nbsp;</th>
+      <td><input type="submit" value=$langCreate name="creation"></td>
+    </tr>
+    </tbody>
+    </table>
 		
-		<tr> 
-			<th>
-				$langNewGroups
-			</th>
-			<td>
-				<input type="text" name="group_quantity" size="3" value="1">
-			</td>
-		</tr>
-		
-		<tr> 
-			<th>
-				$langMax $langPlaces
-			</th>
-			<td>
-				<input type="text" name="group_max" size="3" value="8">
-			</td>
-		</tr>
-		
-		</thead>
-		</table>
-		
-		<br>
-		<input type="submit" value=$langCreate name="creation">
+    <br />
+    
 
-	</form>
+    </form>
 
 tCont;
 
