@@ -1118,6 +1118,7 @@ if (!isset($submit2)) {
 	while ($sd = mysql_fetch_array($s))   {
 
 		$baseFolder = $webDir."courses/".$code[0]."/group/".$sd[0]."/";
+
 		$tool_content .= "<br>Κωδικοποίηση των περιεχομένων του υποσυστήματος Ομάδες Χρηστών - 'Έγγραφα'<br>";
 
 		// initialization
@@ -1134,25 +1135,28 @@ if (!isset($submit2)) {
 		    	$file_date = date("Y\-m\-d G\:i\:s");
         	   		$query = "INSERT INTO group_documents 
 				SET path = '/".substr($oldfile, strlen($baseFolder))."',
-		        	filename = '".preg_replace('|^.*/|', '', $oldfile)."'";
+		        	filename = '".preg_replace('|^.*/|', '', $oldfile)."',
+				secretDirectory = '$sd[0]'";
 				mysql_query($query);
 		}	
 
 		// check if there are duplicate filenames in records
- 		$r = mysql_query("SELECT filename, COUNT(filename) AS c FROM group_documents GROUP BY filename");
+ 		$r = mysql_query("SELECT filename, COUNT(filename) AS c FROM group_documents 
+			WHERE secretDirectory='$sd[0]' GROUP BY filename");
 		while ($dup = mysql_fetch_array($r)) {
 			if ($dup['c'] == 1)  {  // if there are no duplicates 
 				mysql_query("UPDATE group_documents SET unique_filename='$dup[filename]'
-						 WHERE filename='$dup[filename]'");
+						 WHERE filename='$dup[filename]' AND secretDirectory='$sd[0]'");
 			} else {	// if there are duplicates
 				mysql_query("UPDATE group_documents 
 					SET unique_filename=CONCAT(filename,SUBSTRING(MD5(RAND()), 1, 5)) 
-					WHERE filename='$dup[filename]'");
+					WHERE filename='$dup[filename]' AND secretDirectory='$sd[0]'");
 			} 
 		}
 	
 		// fill group_doc_tmp table
-		$r = mysql_query("SELECT path, filename, unique_filename FROM group_documents");
+		$r = mysql_query("SELECT path, filename, unique_filename 
+			FROM group_documents WHERE secretDirectory='$sd[0]'");
 		while ($a = mysql_fetch_array($r)) {
 			mysql_query("INSERT INTO group_doc_tmp(old_path,old_filename, unique_filename) 
 				VALUES('$a[path]','$a[filename]','$a[unique_filename]')");
@@ -1199,20 +1203,21 @@ if (!isset($submit2)) {
 		$f = db_query("SELECT unique_filename,new_path FROM group_doc_tmp");
 		while ($u = mysql_fetch_array($f)) {
 			db_query("UPDATE group_documents SET path='$u[new_path]'
-				WHERE unique_filename='$u[unique_filename]'");
+				WHERE unique_filename='$u[unique_filename]' AND secretDirectory='$sd[0]'");
 		}
 
-		// delete temporary table doc_tmp
-		//db_query("DROP TABLE IF EXISTS group_doc_tmp");
-		// delete temporary column unique_filename from table document
-		//if (mysql_field_exists("$code[0]",'group_documents','unique_filename'))
-               	//	delete_field('group_documents', 'unique_filename');
+		// flush temporary table doc_tmp
+		db_query("TRUNCATE TABLE group_doc_tmp");
+		
+	} // end of while
 
-	} // end of while 
+// delete temporary column unique_filename from table document
+	if (mysql_field_exists("$code[0]",'group_documents','unique_filename'))
+		delete_field('group_documents', 'unique_filename');
+ 
 // ------------------------------------------------------------------------------
 // ------------------- end of group document upgrade ----------------------------
 // ------------------------------------------------------------------------------
-
 
              	// move video files to new directory
 		if (is_dir("$webDir/$code[0]/video")) {
