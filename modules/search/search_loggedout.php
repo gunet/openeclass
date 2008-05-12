@@ -1,5 +1,5 @@
 <?
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -33,60 +33,42 @@
 ==============================================================================*/
 
 $require_current_course = FALSE;
-$langFiles = array('course_info', 'create_course', 'opencours', 'search');
-//include '../../include/baseTheme.php';
 
 $nameTools = $langSearch;
 $tool_content = "";
 
-
 //elegxos ean *yparxoun* oroi anazhthshs
 if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_terms_instructor) && empty($search_terms_coursecode)) {
 /**********************************************************************************************
-				emfanish formas anahzthshs ean oi oroi anazhthshs einai kenoi 
+	emfanish formas anahzthshs ean oi oroi anazhthshs einai kenoi 
 ***********************************************************************************************/
-	
-		$tool_content .= "
-
-			<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
-			<table width=\"99%\">
-			<tbody>
-			<tr>
-				<th width=\"120\" class='left'>$langTitle</th>
-				<td width=\"250\"><input class='FormData_InputText' name=\"search_terms_title\" type=\"text\" size=\"50\" /></td>
-				<td><small>$langTitle_Descr</small></td>	
-			</tr>
-			<tr>
-				<th class='left'>$langKeywords</th>				
-				<td><input class='FormData_InputText' name=\"search_terms_keywords\" type=\"text\" size=\"50\" /></td>
-				<td><small>$langKeywords_Descr</small></td>	
-			</tr>
-			<tr>
-				<th class='left'>$langTeacher</td>					
-				<td><input class='FormData_InputText' name=\"search_terms_instructor\" type=\"text\" size=\"50\" /></td>
-				<td><small>$langInstructor_Descr</small></td>
-			</tr>
-			<tr>
-				<th class='left'>$langCourseCode</td>					
-				<td><input class='FormData_InputText' name=\"search_terms_coursecode\" type=\"text\" size=\"50\" /></td>
-				<td><small>$langCourseCode_Descr</small></td>
-			</tr>
-			<tr>
-				<th>&nbsp;</th>	
-				<td colspan=2><input type=\"Submit\" name=\"submit\" value=\"$langDoSearch\" />&nbsp;&nbsp;<input type=\"Reset\" name=\"reset\" value=\"$langNewSearch\" /></td>
-			</tr>								
-			<tbody>
-			</table>
-
-			</form>
-
-		";
+	$tool_content .= "<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
+		<table width=\"99%\"><tbody>
+		<tr><th width=\"120\" class='left'>$langTitle</th>
+		<td width=\"250\"><input class='FormData_InputText' name=\"search_terms_title\" type=\"text\" size=\"50\" /></td>
+		<td><small>$langTitle_Descr</small></td>	</tr>
+		<tr><th class='left'>$langKeywords</th>				
+		<td><input class='FormData_InputText' name=\"search_terms_keywords\" type=\"text\" size=\"50\" /></td>
+		<td><small>$langKeywords_Descr</small></td>	</tr>
+		<tr>
+		<th class='left'>$langTeacher</td>					
+		<td><input class='FormData_InputText' name=\"search_terms_instructor\" type=\"text\" size=\"50\" /></td>
+		<td><small>$langInstructor_Descr</small></td>
+		</tr>
+		<tr>
+		<th class='left'>$langCourseCode</td>					
+		<td><input class='FormData_InputText' name=\"search_terms_coursecode\" type=\"text\" size=\"50\" /></td>
+		<td><small>$langCourseCode_Descr</small></td>
+		</tr>
+		<tr><th>&nbsp;</th>	
+		<td colspan=2><input type=\"Submit\" name=\"submit\" value=\"$langDoSearch\" />&nbsp;&nbsp;<input type=\"Reset\" name=\"reset\" value=\"$langNewSearch\" /></td>
+		</tr><tbody></table></form>";
 	
 }else 
 {
 /**********************************************************************************************
-					ektelesh anazhthshs afou yparxoun oroi anazhthshs
-						 emfanish arikown mhnymatwn anazhthshs
+		ektelesh anazhthshs afou yparxoun oroi anazhthshs
+		 emfanish arikown mhnymatwn anazhthshs
 ***********************************************************************************************/
 	
 	//to pedio visible exei times 2 kai 1 gia Public kai Open mathimata
@@ -107,7 +89,6 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 		if (!empty($search_terms_instructor)) if($show_entry == FALSE) $show_entry = match_arrays($search_terms_instructor, $mycours['titulaires']);
 		if (!empty($search_terms_coursecode)) if($show_entry == FALSE) $show_entry = match_arrays($search_terms_coursecode, $mycours['code']);
 		
-		
 		//EMFANISH APOTELESMATOS:
 		//ean to flag $show_entry exei allaxtei se TRUE (ara kapoios apo tous orous anazhthshs entopistike sto
 		//$mycours, emfanise thn eggrafh
@@ -116,15 +97,12 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 			$tool_content .= "
 			<div id=\"marginForm\">
 			<fieldset>
-				<legend>
-					
-						".$langLesson.": ".$mycours['intitule']."
+				<legend>".$langLesson.": ".$mycours['intitule']."
 				</legend>
 				<label>
 				<ul class=\"listBullet\">
 				<li>
-					$langLessonCode : ".$mycours['code']."</li>
-					
+				$langLessonCode : ".$mycours['code']."</li>
 				<li>
 					$langTeacher : ".$mycours['titulaires']."
 				</li><li>
@@ -160,8 +138,6 @@ $search_terms_keywords = "";
 $search_terms_instructor = "";
 $search_terms_coursecode ="";
 
-
-
 //voithitiki function gia ton entopismo strings se array mesa se string
 function match_arrays($search_terms_array, $mycours_string)
 {
@@ -183,11 +159,11 @@ function match_arrays($search_terms_array, $mycours_string)
 
 function my_stripos($string, $word) 
 {
-			$source = array('Ü', 'Ý', 'Þ', 'ß', 'ý', 'ü', 'þ', 'ú', 'û', 'À', 'à');
+	$source = array('Ü', 'Ý', 'Þ', 'ß', 'ý', 'ü', 'þ', 'ú', 'û', 'À', 'à');
       $target = array('á', 'å', 'ç', 'é', 'õ', 'ï', 'ù', 'é', 'õ', 'é', 'õ');
 
       return strpos(
-				str_replace($source, $target, mb_strtolower($string, 'ISO-8859-7')),
-				str_replace($source, $target, mb_strtolower($word, 'ISO-8859-7')));
+	str_replace($source, $target, mb_strtolower($string, 'ISO-8859-7')),
+	str_replace($source, $target, mb_strtolower($word, 'ISO-8859-7')));
 }
 ?>

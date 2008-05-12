@@ -839,7 +839,7 @@ function show_assignment($id, $message = FALSE)
 	$num_results = mysql_num_rows($result);
 	if ($num_results > 0) {
 		if ($num_results == 1) {
-			$num_of_submissions = $m[one_submission];  
+			$num_of_submissions = $m['one_submission'];  
 		} else {
 			//$nameTools .= sprintf(" ($m[more_submissions])", $num_results);
 			$num_of_submissions = sprintf("$m[more_submissions]", $num_results);
