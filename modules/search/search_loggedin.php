@@ -109,7 +109,7 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 		{			
 			$tool_content .= "
 			<div id=\"marginForm\"><fieldset><legend>
-			".$langLesson.": ".$mycours['intitule']."
+			".$langCourse.": ".$mycours['intitule']."
 			</legend><label>
 			<ul class=\"listBullet\">
 			<li>$langLessonCode : ".$mycours['code']."</li>
