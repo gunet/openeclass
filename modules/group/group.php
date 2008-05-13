@@ -52,7 +52,7 @@ session_unregister("forumId");
 
 $currentCourse=$dbname;
 mysql_select_db("$currentCourse");
-$nameTools = $langGroupManagement;
+$nameTools = $langGroup;
 $totalRegistered=0;
 $tool_content = "";
 if ($is_adminOfCourse) {
@@ -240,7 +240,9 @@ if ($is_adminOfCourse) {
       <td><div align=\"right\"><a href=\"".$_SERVER['PHP_SELF']."?empty=yes\" onClick=\"return confirmation('emptyall');\">$langEmtpyGroups</a>&nbsp;</div></td>
     </tr>
     </thead>
-    </table>\n";
+    </table>
+	<br /><br />
+    ";
 	/*
 	$tool_content .= "
     <div id=\"operations_container\">
@@ -256,6 +258,7 @@ if ($is_adminOfCourse) {
 	if(isset($message))
 	{
 		$tool_content .= "
+
     <table width=\"99%\">
     <thead>
     <tr>
@@ -263,7 +266,7 @@ if ($is_adminOfCourse) {
     </tr>
     </thead>
     </table>
-    \n";
+    ";
 	}
 	unset($message);
 	
@@ -272,8 +275,7 @@ if ($is_adminOfCourse) {
 	// ---------- display properties ------------------------
 	$tool_content .= <<<tCont3
 	
-	
-    <div id="box1">
+    <br />
     <table class="GroupSum" width=\"99%\">
     <thead>
     <tr>
@@ -326,12 +328,12 @@ tCont3;
       <td>";
 		if($myProperties['private']==1) {
 			$tool_content .= "$langForumType</td>
-      <td>$langPrivate";
+      <td align=\"right\">$langForumClosed";
 		}
 		else
 		{
 			$tool_content .= "$langForumType</td>
-      <td align=\"right\">$langPublicAccess";
+      <td align=\"right\">$langForumOpen";
 		}
 		$tool_content .= "</td>
     </tr>
@@ -354,8 +356,7 @@ tCont3;
 	$tool_content .= "
     </tbody>
     </table>
-    </div>
-    <br />\n";
+    ";
 
 	
 
@@ -365,19 +366,23 @@ tCont3;
 	// groups list
 	if ($num_of_groups > 0) {
 		$tool_content .= "
+    
     <br />
-    <div id=\"box3\">
-    <table width=\"95%\">
+    <table width=\"99%\">
     <thead>
     <tr>
       <th colspan=\"2\"><div align=\"left\">$langExistingGroups</div></th>
-      <th>$langRegistered</th>
-      <th>$langMax</th>
-      <th>$langEdit</th>
-      <th>$langDelete</th>
+      <th width=\"80\">$langRegistered</th>
+      <th width=\"80\">$langMax</th>
+      <th width=\"50\">$langEdit</th>
+      <th width=\"50\">$langDelete</th>
     </tr>
     </thead>
     <tbody>";	
+	} else {
+	$tool_content .= "
+    <br />
+    <div class=\"alert1\">$langNoGroup</div>";
 	}
 
 	while ($group = mysql_fetch_array($groupSelect))
@@ -421,13 +426,13 @@ tCont3;
 	
     </tbody>
     </table>
-    </div>
-    
-	
+    <br />
+
+
 tCont4;
 
 $tool_content .= "
-    <div id=\"box2\">
+
     <table width=\"99%\">
     <tbody>
     <tr>
@@ -439,7 +444,7 @@ $tool_content .= "
     </tr>
     </tbody>
     </table>
-    </div>\n";
+    \n";
 
 }	// end prof only
 
@@ -461,6 +466,13 @@ else {
 	while ($myTeamUser = mysql_fetch_array($findTeamUser)) {
 		$myTeam=$myTeamUser['team'];
 	}
+	
+	$groupSelect=db_query("SELECT id, name, maxStudent, tutor FROM student_group", $currentCourse);
+	
+	$num_of_groups = mysql_num_rows($groupSelect);
+	// groups list
+	if ($num_of_groups > 0) {
+	
 	$tool_content .= "
     <table width=\"99%\" class=\"GroupSum\">
     <thead>
@@ -470,7 +482,7 @@ else {
 	// If self-registration allowed by admin
 	if($selfRegProp==1) {
 		$tool_content .= "
-      <td><b>$langRegistration</b></td>";
+      <td><div align='center'><b>$langRegistration</b></div></td>";
 	}
 
 	$tool_content .= "
@@ -479,7 +491,13 @@ else {
     </tr>
     </thead>
     <tbody>";
-	$groupSelect=db_query("SELECT id, name, maxStudent, tutor FROM student_group", $currentCourse);
+	} else {
+	$tool_content .= "
+    <br />
+    <div class=\"alert1\">$langNoGroup</div>";
+	}
+	
+	
 	//$totalRegistered=0;
 	while ($group = mysql_fetch_array($groupSelect)) {
 		// Count students registered in each group

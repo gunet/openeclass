@@ -670,6 +670,7 @@ $langCreateCourseGroups="Groups";
 $langCatagoryMain="Main";
 $langCatagoryGroup="Groups forums";
 $langChat ="Tele cooperation";
+$langNoGroup="There are no user groups defined";
 
 //neos odhgos dhmiourgias mathimaton
 $langEnterMetadata="You can enter additional information about your course from the course management page";
@@ -1109,6 +1110,8 @@ $langForumCategoryAdded = "A forum was added to the category";
 $langForumDelete = "Forum was deleted";
 $langCatForumDelete = "Forum category was deleted";
 $langID = "ID";
+$langForumOpen = "Open";
+$langForumClosed = "Private";
 
 /*******************************************************************
 * group.inc.php
@@ -1118,6 +1121,8 @@ $langNewGroupCreate="Create new group(s)";
 $langNewGroupCreateData="Group(s) Data";
 
 $langNewGroups="Number of new groups";
+$langNewGroupMembers="Number of participants ";
+
 $langMax="Max.";
 $langPlaces="seats by groups (optional)";
 $langGroupPlacesThis="seats (optional";

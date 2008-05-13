@@ -44,7 +44,7 @@ $helpTopic = 'Group';
 
 include '../../include/baseTheme.php';
 $nameTools = $langGroupSpace;
-$navigation[] = array ("url"=>"group.php", "name"=> $langGroupManagement);
+$navigation[] = array ("url"=>"group.php", "name"=> $langGroup);
 $tool_content = "";
 if (isset($userGroupId) && is_numeric($userGroupId)){
 	if(!session_is_registered('userGroupId')){
@@ -65,7 +65,7 @@ if(isset($registration) and $statut != 10)
 	{
 		$sqlReg=mysql_query("INSERT INTO `$dbname`.user_group (user, team) 
 			VALUES ('$uid', '$userGroupId')");
-		$message="<font color=red>$langGroupNowMember</font> | ";
+		$message="$langGroupNowMember";
 		$regDone=1;
 	}
 }
@@ -103,11 +103,18 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 	}
 	elseif(isset($regDone))
 	{
-		$tool_content .=  "<p>$message</p>";
-	}
-	$tool_content .=  "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">";
+
+		$tool_content .= "
+    <table width=\"99%\">
+    <thead>
+    <tr>
+      <td class=\"success\">$message</td>
+    </tr>
+    </thead>
+    </table>
+    ";
+		}
+
 	$tool_content .= loadGroupTools()."";
 	$tool_content .=  "
 
@@ -115,7 +122,7 @@ while ($myGroup = mysql_fetch_array($resultGroup))
     <thead>
     <tr>
       <th width=\"220\">&nbsp;</th>
-      <td><b>Στοιχεία ομάδας</b></td>
+      <td><b>aaaaaaaaaaaaaa</b></td>
     </tr>
     <tr>
       <th class=\"left\">$langGroupName :</th>
@@ -242,6 +249,9 @@ function loadGroupTools(){
 	}
 	else
 	{
+		$group_tools .=  "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">";
 		$resultProperties=mysql_query("SELECT id, self_registration, private, forum, document
 			FROM group_properties WHERE id=1");
 

@@ -690,6 +690,7 @@ $langJustCreated="Μόλις δημιουργήσατε με επιτυχία το μάθημα με τίτλο ";
 $langCreateCourseGroups="Ομάδες Χρηστών";
 $langCatagoryMain="Αρχή";
 $langCatagoryGroup="Συζήτησεις Ομάδων χρηστών";
+$langNoGroup="Δεν έχουν οριστεί ομάδες χρηστών";
 
 //neos odhgos dhmiourgias mathimaton
 $langEnterMetadata="(Σημ.) μπορείτε να αλλάξετε διάφορες ρυθμίσεις του μαθήματος μέσα από τη λειτουργία 'Διαχείριση Μαθήματος'";
@@ -1085,6 +1086,9 @@ $langForumCategoryAdded = "Προστέθηκε νέα περιοχή συζητήσεων στην κατηγορία που 
 $langForumDelete = "Η περιοχή συζητήσεων έχει διαγραφεί";
 $langCatForumDelete = "Η κατηγορία της περιοχής συζητήσεων έχει διαγραφεί";
 $langID = "Α/Α";
+$langForumOpen = "Ανοικτή";
+$langForumClosed = "Κλειστή";
+
 
 /***************************************************************
 * grades.inc.php
@@ -1098,6 +1102,7 @@ $langGroupManagement="Διαχείριση ομάδων χρηστών";
 $langNewGroupCreateData="Στοιχεία Ομάδας (αριθμητικά)";
 $langNewGroupCreate="Δημιουργία καινούριας ομάδας χρηστών";
 $langNewGroups="Αριθμός ομάδων χρηστών";
+$langNewGroupMembers="Αριθμός συμμετεχόντων";
 $langMax="Μέγ.";
 $langPlaces="συμμετέχοντες στην ομάδα χρηστών (προαιρετικό)";
 $langGroupPlacesThis="συμμετέχοντες (προαιρετικό)";

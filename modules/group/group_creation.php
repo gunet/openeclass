@@ -45,24 +45,25 @@ if (!$is_adminOfCourse) {
 }
 
 $nameTools = $langNewGroupCreate;
-$navigation[]= array ("url"=>"group.php", "name"=> $langGroupManagement);
+$navigation[]= array ("url"=>"group.php", "name"=> $langGroup);
+$tool_content = "";
 
 $tool_content = <<<tCont
 
     <form method="post" action="group.php">
-    <table width="99%" align="left" class="FormData">
+    <table width="100%" align="left" class="FormData">
     <tbody>
     <tr>
       <th width="220">&nbsp;</th>
       <td><b>$langNewGroupCreateData</b></td>
     </tr>
     <tr> 
-      <th class="left">$langNewGroups</th>
+      <th class="left">$langNewGroups :</th>
       <td><input type="text" name="group_quantity" size="3" value="1" class="FormData_InputText"></td>
     </tr>
     <tr> 
-      <th class="left">$langMax $langPlaces</th>
-      <td><input type="text" name="group_max" size="3" value="8" class="FormData_InputText"></td>
+      <th class="left">$langNewGroupMembers :</th>
+      <td><input type="text" name="group_max" size="3" value="8" class="FormData_InputText">&nbsp;<small>$langMax $langPlaces</small></td>
     </tr>
     <tr>
       <th>&nbsp;</th>
@@ -70,10 +71,8 @@ $tool_content = <<<tCont
     </tr>
     </tbody>
     </table>
-		
     <br />
     
-
     </form>
 
 tCont;

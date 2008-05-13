@@ -4,26 +4,19 @@
 }
 
 #box1 {
-	float: left;
-	top: 270px;
-    width: 41%;
-    position: absolute;}
+    float: left;
+    }
+    
 
 #box2 {
 	float: right;
-    top: 270px;
-    right: 35px;
-    width: 25%;
-    position: absolute;}
+    }
     
 #box3 {
-	float: left;
-	top: 460px;
-	position: absolute;
-	}
+    float: left;
+    }
 
 .Group_Operations {
-    padding: 6px;
     background: #CAC3B5;
     font-size: 11px;
     color: #000000;
