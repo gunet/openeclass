@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 /*
  * Init
@@ -74,17 +74,13 @@ if (!isset($colorMedium)) {
 if (!isset($colorDark)) {
 	$colorDark = "#000066";
 }
-if (!isset($bannerPath)) {
-	$bannerPath = 'images/gunet/banner.jpg';
-}
+
 if (!isset($table_border)) {
         $table_border = "#DCDCDC;";
 }
 // Set user desired language (Author: Evelthon Prodromou)
 if (isset($localize)) {
-
 	switch ($localize) {
-
 		case "en":
 			$_SESSION['langswitch'] = "english";
 			$_SESSION['langLinkText'] = 'Ελληνικά';
@@ -98,7 +94,6 @@ if (isset($localize)) {
 		default:
 			die("Invalid language parameter passed");
 	}
-
 }
 // Get configuration variables
 if (!isset($webDir)) {
@@ -155,9 +150,8 @@ if(session_is_registered('uid') && !session_is_registered('langswitch')) {
 }
 
 // Include messages
-
-@ include("$webDir/modules/lang/$language/common.inc.php");
-@ include("$webDir/modules/lang/$language/messages.inc.php");
+include("$webDir/modules/lang/$language/common.inc.php");
+include("$webDir/modules/lang/$language/messages.inc.php");
 
 // Make sure that the $uid variable isn't faked
 if (isset($_SESSION['uid'])) {
@@ -269,13 +263,13 @@ if (isset($require_current_course) and $require_current_course) {
 	# force a specific interface language
 	if (!empty($currentCourseLanguage)) {
 		$languageInterface = $currentCourseLanguage;
-
 		// If course language is different from global language,
 		// include more messages
-
 		if ($language != $languageInterface) {
-				@ include("$webDir/modules/lang/greek/$languageInterface.inc.php");
 			  $language = $languageInterface ;
+		// Include messages
+		include("$webDir/modules/lang/$language/common.inc.php");
+		include("$webDir/modules/lang/$language/messages.inc.php");
 		}
 	}
 }
