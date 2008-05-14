@@ -1,5 +1,5 @@
 <?php
-/**===========================================================================
+/*===========================================================================
 *              GUnet eClass 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -18,12 +18,12 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-/**
+/*
  * Perso Component
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -38,11 +38,9 @@
 
 include("redirector.php");
 //Check for lessons that the user is a professor
-$result2 = mysql_query("SELECT cours.code k, cours.fake_code c, cours.intitule i, cours.titulaires t, cours_user.statut s
-        	FROM cours, cours_user WHERE cours.code=cours_user.code_cours 
-		AND cours_user.user_id='".$uid."' AND cours_user.statut='1'");
+$result2 = mysql_query("SELECT cours.code k, cours.fake_code c, cours.intitule i, cours.titulaires t, cours_user.statut s FROM cours, cours_user WHERE cours.code=cours_user.code_cours 
+	AND cours_user.user_id='".$uid."' AND cours_user.statut='1'");
 if (mysql_num_rows($result2) > 0) {
-
 	$i=0;
 	while ($mycours = mysql_fetch_array($result2)) {
 		$dbname = $mycours["k"];
@@ -65,10 +63,10 @@ include("./modules/perso/forumPosts.php");
 //	BEGIN Get user's last login date]==============================================
 
 $last_login_query = 	"SELECT  `id_user` ,  `when` ,  `action`
-						FROM  $mysqlMainDb.loginout
-						WHERE  `action`  =  'LOGIN' AND  `id_user`  = $uid
-						ORDER BY  `when`  DESC 
-						LIMIT 1,1 ";
+			FROM  $mysqlMainDb.loginout
+			WHERE  `action`  =  'LOGIN' AND  `id_user`  = $uid
+			ORDER BY  `when`  DESC 
+			LIMIT 1,1 ";
 
 $login_date_result 	= db_query($last_login_query, $mysqlMainDb);
 
@@ -191,11 +189,11 @@ $tool_content = array(
 // == END create array with personalised content
 
 
-/**
+/*
  * Function autoCloseTags
  *
  * It is used by the announcements and agenda personalised components. These
- * tools iffer the ability to the professor to add content by using a WYSIWYG editor.
+ * tools offer the ability to the professor to add content by using a WYSIWYG editor.
  * Thus, the professor can add several HTML tags to the content. 
  * 
  * The personalised logic limits this content to an X number of characters. This can

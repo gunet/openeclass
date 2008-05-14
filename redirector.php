@@ -1,5 +1,5 @@
 <?php 
-/**===========================================================================
+/*===========================================================================
 *              GUnet eClass 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -18,12 +18,12 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-/**
+/*
  * Redirector Component
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -53,8 +53,8 @@ if (session_is_registered("uid") && isset($perso)) {
 		}
 
 //		case 3: {//documents
-//			
-//			//			echo "switch two";
+//		
+//		echo "switch two";
 //			break;
 //		}
 
@@ -81,7 +81,7 @@ if (session_is_registered("uid") && isset($perso)) {
 	}
 
 
-}elseif (!session_is_registered("uid")){
+} elseif (!session_is_registered("uid")){
 	die("UNAUTHORISED ACCESS. THIS IS AN INTERNAL SCRIPT AND CANNOT BE ACCESSED DIRECTLY. Please go back to <a href=\"$urlServer\">the login page</a>");
 }
 ?>

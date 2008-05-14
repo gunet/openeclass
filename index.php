@@ -199,13 +199,13 @@ if(!empty($submit))
 						}
 						else
 						{
-							$auth_allow = 3;		//$warning .= "<br />Your account is inactive. <br />Please contact the Eclass Admin<br />";
+							$auth_allow = 3;
 							$user = $myrow["user_id"];
 						}
 					}
 					else
 					{
-						$auth_allow = 2; //$tool_content .= "<br />The connection does not seem to work!<br />";
+						$auth_allow = 2;
 					}
 					if($auth_allow==1)
 					{
@@ -220,19 +220,14 @@ if(!empty($submit))
 					}
 					elseif($auth_allow==2)
 					{
-						// $tool_content .= "<br />The connection with the auth server does not seem to work!<br />";
-						//$tool_content .= "<br />".$langNoConnection."<br />";
 						continue;
 					}
 					elseif($auth_allow==3)
 					{
-						// $tool_content .= "<br />Your account is inactive. <br />Please <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">contact the Eclass Admin.</a><br /><br />";
-						// $tool_content .= "<br />".$langAccountInactive1." <a href=\"modules/auth/contactadmin.php?userid=".$myrow["user_id"]."\">".$langAccountInactive2."</a><br /><br />";
 						continue;
 					}
 					else
 					{
-						// $tool_content .= "CANNOT PROCEED<br />";
 						$tool_content .= $langLoginFatalError."<br />";
 						continue;
 					}
