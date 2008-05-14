@@ -90,16 +90,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	//show the error message above the normal tool content
 
 	if (strlen($extraMessage) > 0) {
-		$messageBox =  "
-					<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"extraMessage\">
-						$extraMessage
-					</td>
-					</tr>
-				</tbody>
-			</table><br/>";
+		$messageBox =  "<table width=\"99%\">
+		<tbody><tr><td class=\"extraMessage\">
+		$extraMessage</td></tr>
+		</tbody></table><br/>";
 	}
 
 	//get the left side menu from tools.php
