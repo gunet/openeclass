@@ -24,10 +24,10 @@
 ============================================================================*/
 /*
  * Groups Component
- * 
+ *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * 
+ *
  * @abstract This module is responsible for the user groups of each lesson
  *
  */
@@ -63,7 +63,7 @@ if(isset($registration) and $statut != 10)
 	$countExist = mysql_num_rows($sqlExist);
 	if($countExist==0 )
 	{
-		$sqlReg=mysql_query("INSERT INTO `$dbname`.user_group (user, team) 
+		$sqlReg=mysql_query("INSERT INTO `$dbname`.user_group (user, team)
 			VALUES ('$uid', '$userGroupId')");
 		$message="$langGroupNowMember";
 		$regDone=1;
@@ -92,6 +92,7 @@ while ($myGroup = mysql_fetch_array($resultGroup))
     <div id=\"operations_container\">
       <ul id=\"opslist\">
         <li><a href=\"group_edit.php?userGroupId=$userGroupId\">$langEditGroup</a></li>";
+		$tool_content .= loadGroupTools()."";
 
 	}
 	elseif(isset($selfReg) AND ($uid))
@@ -100,10 +101,19 @@ while ($myGroup = mysql_fetch_array($resultGroup))
     <div id=\"operations_container\">
       <ul id=\"opslist\">
         <li><a href=\"$_SERVER[PHP_SELF]?registration=1\">$langRegIntoGroup</a></li>";
+		$tool_content .= loadGroupTools()."";
 	}
 	elseif(isset($regDone))
 	{
-
+    	if(isset($selfReg))
+			{
+				$tool_content .=  "&nbsp;";
+			} else {
+				$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">";
+				$tool_content .= loadGroupTools()."";
+			}
 		$tool_content .= "
     <table width=\"99%\">
     <thead>
@@ -115,14 +125,14 @@ while ($myGroup = mysql_fetch_array($resultGroup))
     ";
 		}
 
-	$tool_content .= loadGroupTools()."";
+	//$tool_content .= loadGroupTools()."";
 	$tool_content .=  "
-
+    <br />
     <table width=\"99%\" class=\"FormData\">
     <thead>
     <tr>
       <th width=\"220\">&nbsp;</th>
-      <td><b>aaaaaaaaaaaaaa</b></td>
+      <td><b>$langGroupInfo</b></td>
     </tr>
     <tr>
       <th class=\"left\">$langGroupName :</th>
@@ -181,7 +191,7 @@ $tool_content .= "
       <td>
           <table width=\"99%\" align=\"center\" class=\"GroupSum\">
           <thead>
-		  <tr>
+          <tr>
             <td><b>$langNameSurname</b></td>
             <td width='100'><div align=\"center\"><b>$langAM</b></div></td>
             <td><div align=\"center\"><b>$langEmail</b></div></td>
@@ -190,8 +200,8 @@ $tool_content .= "
           <tbody>";
 
 $resultMember=mysql_query("SELECT nom, prenom, email, am
-		FROM `$mysqlMainDb`.user, user_group 
-		WHERE user_group.team='$userGroupId' 
+		FROM `$mysqlMainDb`.user, user_group
+		WHERE user_group.team='$userGroupId'
 		AND user_group.user=$mysqlMainDb.user.user_id");
 $countMember = mysql_num_rows($resultMember);
 
@@ -223,8 +233,8 @@ else
 }	// else
 	$tool_content .=  "
           </tbody>
-		  </table>";
-		  
+          </table>";
+
 $tool_content .= "
       </td>
     </tr>
@@ -249,9 +259,6 @@ function loadGroupTools(){
 	}
 	else
 	{
-		$group_tools .=  "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">";
 		$resultProperties=mysql_query("SELECT id, self_registration, private, forum, document
 			FROM group_properties WHERE id=1");
 
@@ -276,9 +283,7 @@ function loadGroupTools(){
 	}
 	$group_tools .= "
       </ul>
-    </div>
-    <br />
-	";
+    </div>";
 	//$group_tools .= "</p>";
 	session_unregister("secretDirectory");
 	session_unregister("forumId");
