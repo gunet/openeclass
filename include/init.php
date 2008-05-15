@@ -63,6 +63,8 @@ include $relPathLib . "lib/main.lib.php";
 //if session isn't started, start it. Needed by the language switch
 if (!session_id()) { session_start(); }
 
+header('Content-Type: text/html; charset=UTF-8');
+
 // Set some defaults
 //NOTE (evelthon) these defaults should be deleted ...
 if (!isset($colorLight)) {
