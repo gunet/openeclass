@@ -1,5 +1,5 @@
 <?
-/**===========================================================================
+/*===========================================================================
 *              GUnet e-Class 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -7,8 +7,8 @@
 *	A full copyright notice can be read in "/info/copyright.txt".
 *
 *  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-*				Yannis Exidaridis <jexi@noc.uoa.gr>
-*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*			Yannis Exidaridis <jexi@noc.uoa.gr>
+*			Alexandros Diamantidis <adia@noc.uoa.gr>
 *
 *	For a full list of contributors, see "credits.txt".
 *
@@ -23,7 +23,7 @@
 *						eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-/**
+/*
  * My-Agenda Component
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -35,11 +35,10 @@
  */
 
 $require_login = TRUE;
-$langFiles="myagenda";
 $ignore_module_ini = true;
 
 include '../../include/baseTheme.php';
-include('../../include/lib/textLib.inc.php');
+include '../../include/lib/textLib.inc.php';
 
 $nameTools = $langMyAgenda;
 $tool_content = "";
@@ -50,7 +49,7 @@ $TABLECOURSUSER = "`$mysqlMainDb`.cours_user";
 if (isset($uid))
 {
  	$query = db_query("SELECT cours.code k, cours.fake_code fc,
-				cours.intitule i, cours.titulaires t
+		cours.intitule i, cours.titulaires t
 	                        FROM cours, cours_user
 	                        WHERE cours.code = cours_user.code_cours
 	                        AND cours_user.user_id = '$uid'");
@@ -73,7 +72,7 @@ $langToday);
 // function list
 // -----------------------
 
-/**
+/*
  * Function get_agendaitems
  *
  * @param resource $query MySQL resource
@@ -116,7 +115,7 @@ function get_agendaitems($query, $month, $year) {
 	return $agendaitems;
 }
 
-/**
+/*
  * Function display_monthcalendar
  * 
  * Creates the html content of the agenda module
@@ -187,9 +186,7 @@ function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $mont
 		}
     	$tool_content .=  "</tr>\n";
     }
-  	$tool_content .=  "</table></center>\n";
-  	
+  	$tool_content .=  "</table></center>\n";	
 draw($tool_content, 1);
 }
-
 ?>
