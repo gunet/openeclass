@@ -252,9 +252,8 @@ function elementData($parser,$data)
 // when eclass is full utf 8 restore this    
 // -----------------------------------------
 
-    //$data = trim(($data));
-    //$data = trim(iconv("utf-8", "iso-8859-7", $data));
-    $data = trim(iconv("utf-8", $charset, $data));
+    $data = trim(($data));
+    //$data = trim(iconv("utf-8", $charset, $data));
     
     if (!isset($data)) $data="";
     
@@ -824,7 +823,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
                     break;
                 }
             }
-        } // if sizeof (...à
+        } // if sizeof (...Î°
         else
         {
             $errorFound = true;

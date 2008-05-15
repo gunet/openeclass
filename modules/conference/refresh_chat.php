@@ -30,7 +30,7 @@
  *
  */
 	
-header("Content-type: text/html; charset=ISO-8859-7"); 
+header("Content-type: text/html; charset=UTF-8"); 
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'User';
@@ -193,7 +193,8 @@ function uft8html2utf8( $s ) {
              $utf .= chr(128 + ((($dec % 4096) - ($dec % 64)) / 64));
              $utf .= chr(128 + ($dec % 64));
            }
-           return mb_convert_encoding($utf,"ISO-8859-7","UTF-8");
+           // return mb_convert_encoding($utf,"ISO-8859-7","UTF-8");
+           return $utf;
            }
        }
        return preg_replace_callback('|&#([0-9]{1,});|', 'uft8html2utf8_callback', $s); 

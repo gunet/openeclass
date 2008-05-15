@@ -1,7 +1,7 @@
 <?
     /** Libchart - PHP chart library
     *
-    * Copyright (C) 2005-2006 Jean-Marc Trémeaux (jm.tremeaux at gmail.com)
+    * Copyright (C) 2005-2006 Jean-Marc TrÎ¹meaux (jm.tremeaux at gmail.com)
     *
     * This library is free software; you can redistribute it and/or
     * modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,7 @@
     /**
     * Text drawing helper
     *
-    * @author   Jean-Marc Trémeaux (jm.tremeaux at gmail.com)
+    * @author   Jean-Marc TrÎ¹meaux (jm.tremeaux at gmail.com)
     */
 
     class Text
@@ -94,9 +94,10 @@
             if($align & $this->VERTICAL_TOP_ALIGN)
                 $py += $textHeight;
 
-            if (extension_loaded('mbstring')) {
-                $text = mb_convert_encoding($text, 'UTF-8', 'ISO-8859-7');
-            }
+// Not needed if encoding is already UTF-8
+//            if (extension_loaded('mbstring')) {
+//                $text = mb_convert_encoding($text, 'UTF-8', 'ISO-8859-7');
+//            }
 
             imagettftext($img, $fontSize, $angle, $px, $py, $color->getColor($img), $fontFileName, $text);
         }

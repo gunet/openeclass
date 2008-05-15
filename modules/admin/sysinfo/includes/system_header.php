@@ -20,7 +20,7 @@
 // $Id$
 
 header("Cache-Control: no-cache, must-revalidate");
-if (!isset($charset)) { $charset='iso-8859-1'; }
+if (!isset($charset)) { $charset='UTF-8'; }
 header('Content-Type: text/html; charset='.$charset);
 
 // timestamp

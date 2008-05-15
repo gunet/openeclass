@@ -29,7 +29,7 @@
  * @abstract 
  *
  */
-header("Content-type: text/html; charset=ISO-8859-7"); 
+header("Content-type: text/html; charset=UTF-8"); 
 $require_current_course = TRUE;
 include '../../include/baseTheme.php';
 

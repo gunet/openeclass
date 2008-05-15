@@ -159,11 +159,11 @@ function match_arrays($search_terms_array, $mycours_string)
 
 function my_stripos($string, $word) 
 {
-	$source = array('Ü', 'Ý', 'Þ', 'ß', 'ý', 'ü', 'þ', 'ú', 'û', 'À', 'à');
-      $target = array('á', 'å', 'ç', 'é', 'õ', 'ï', 'ù', 'é', 'õ', 'é', 'õ');
+	$source = array('Î¬', 'Î­', 'Î®', 'Î¯', 'Ï', 'ÏŒ', 'ÏŽ', 'ÏŠ', 'Ï‹', 'Î', 'Î°');
+      $target = array('Î±', 'Îµ', 'Î·', 'Î¹', 'Ï…', 'Î¿', 'Ï‰', 'Î¹', 'Ï…', 'Î¹', 'Ï…');
 
       return strpos(
-	str_replace($source, $target, mb_strtolower($string, 'ISO-8859-7')),
-	str_replace($source, $target, mb_strtolower($word, 'ISO-8859-7')));
+	str_replace($source, $target, mb_strtolower($string, 'UTF-8')),
+	str_replace($source, $target, mb_strtolower($word, 'UTF-8')));
 }
 ?>

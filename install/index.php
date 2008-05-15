@@ -46,15 +46,15 @@ if (file_exists("../config/config.php")) {
 	<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
 <html xmlns=\"http://www.w3.org/1999/xhtml\">
   <head>
-    <title>Καλωσορίσατε στον οδηγό εγκατάστασης του eClass</title>
-    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-7\" />
+    <title>ΞΞ±Ξ»ΟΟΞΏΟΞ―ΟΞ±ΟΞ΅ ΟΟΞΏΞ½ ΞΏΞ΄Ξ·Ξ³Ο Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ·Ο ΟΞΏΟ eClass</title>
+    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
     <link href=\"../template/classic/tool_content.css\" rel=\"stylesheet\" type=\"text/css\" />
     <link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
   </head>
   <body>
 	<table width = \"99%\"><tbody><tr><td class=\"extraMessage\">
-	Προσοχή !! Το αρχείο <b>config.php</b> υπάρχει ήδη στο σύστημά σας!! Το πρόγραμμα εγκατάστασης δεν πραγματοποιεί αναβάθμιση. Αν θέλετε να ξανατρέξετε την εγκατάσταση της πλατφόρμας,
-            παρακαλούμε διαγράψτε το αρχείο config.php!						
+	Ξ ΟΞΏΟΞΏΟΞ® !! Ξ€ΞΏ Ξ±ΟΟΞ΅Ξ―ΞΏ <b>config.php</b> ΟΟΞ¬ΟΟΞ΅ΞΉ Ξ®Ξ΄Ξ· ΟΟΞΏ ΟΟΟΟΞ·ΞΌΞ¬ ΟΞ±Ο!! Ξ€ΞΏ ΟΟΟΞ³ΟΞ±ΞΌΞΌΞ± Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ·Ο Ξ΄Ξ΅Ξ½ ΟΟΞ±Ξ³ΞΌΞ±ΟΞΏΟΞΏΞΉΞ΅Ξ― Ξ±Ξ½Ξ±Ξ²Ξ¬ΞΈΞΌΞΉΟΞ·. ΞΞ½ ΞΈΞ­Ξ»Ξ΅ΟΞ΅ Ξ½Ξ± ΞΎΞ±Ξ½Ξ±ΟΟΞ­ΞΎΞ΅ΟΞ΅ ΟΞ·Ξ½ Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ· ΟΞ·Ο ΟΞ»Ξ±ΟΟΟΟΞΌΞ±Ο,
+            ΟΞ±ΟΞ±ΞΊΞ±Ξ»ΞΏΟΞΌΞ΅ Ξ΄ΞΉΞ±Ξ³ΟΞ¬ΟΟΞ΅ ΟΞΏ Ξ±ΟΟΞ΅Ξ―ΞΏ config.php!						
 	</td></tr></tbody></table>
 	</body></html>";
 	exit($tool_content);
@@ -74,15 +74,15 @@ if(isset($welcomeScreen) )
 	$urlForm = "http://".$_SERVER['SERVER_NAME'].$urlAppendPath."/";
 	$pathForm = realpath("../")."/";
 	$emailForm = $_SERVER['SERVER_ADMIN'];
-	$nameForm = "Διαχειριστής";
-	$surnameForm = "Πλατφόρμας";
+	$nameForm = "ΞΞΉΞ±ΟΞ΅ΞΉΟΞΉΟΟΞ®Ο";
+	$surnameForm = "Ξ Ξ»Ξ±ΟΟΟΟΞΌΞ±Ο";
 	$loginForm = "admin";
 	$passForm = generePass(8);
 	$campusForm = "GUNet eClass";
 	$helpdeskForm = "+30 2xx xxxx xxx";
 	$faxForm = "";
 	$postaddressForm = "";
-	$institutionForm = "Ακαδημαϊκό Διαδίκτυο GUNet ";
+	$institutionForm = "ΞΞΊΞ±Ξ΄Ξ·ΞΌΞ±ΟΞΊΟ ΞΞΉΞ±Ξ΄Ξ―ΞΊΟΟΞΏ GUNet ";
 	$institutionUrlForm = "http://www.gunet.gr/";
 
 }
@@ -130,14 +130,14 @@ if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
 	$langStep = $langStep2;
 	$_SESSION['step']=2;
 	$tool_content .= "
-     <p>Tο eClass είναι ελεύθερη εφαρμογή και διανέμεται σύμφωνα με την άδεια GNU General Public Licence (GPL).
-     Παρακαλούμε διαβάστε την άδεια και κάνετε κλίκ στην 'Αποδοχή'.
+     <p>TΞΏ eClass Ξ΅Ξ―Ξ½Ξ±ΞΉ Ξ΅Ξ»Ξ΅ΟΞΈΞ΅ΟΞ· Ξ΅ΟΞ±ΟΞΌΞΏΞ³Ξ® ΞΊΞ±ΞΉ Ξ΄ΞΉΞ±Ξ½Ξ­ΞΌΞ΅ΟΞ±ΞΉ ΟΟΞΌΟΟΞ½Ξ± ΞΌΞ΅ ΟΞ·Ξ½ Ξ¬Ξ΄Ξ΅ΞΉΞ± GNU General Public Licence (GPL).
+     Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»ΞΏΟΞΌΞ΅ Ξ΄ΞΉΞ±Ξ²Ξ¬ΟΟΞ΅ ΟΞ·Ξ½ Ξ¬Ξ΄Ξ΅ΞΉΞ± ΞΊΞ±ΞΉ ΞΊΞ¬Ξ½Ξ΅ΟΞ΅ ΞΊΞ»Ξ―ΞΊ ΟΟΞ·Ξ½ 'ΞΟΞΏΞ΄ΞΏΟΞ®'.
      <a href=\"../info/license/gpl_print.txt\">(".$langPrintVers.")</a></p>
      <textarea wrap=\"virtual\" cols=\"65\" rows=\"15\">";
 	$tool_content .= file_get_contents('../info/license/gpl.txt');
 	$tool_content .= "</textarea><br/><br/>
-                    <input type=\"submit\" name=\"back1\" value=\"< Πίσω\">
-                    <input type=\"submit\" name=\"install3\" value=\"Αποδοχή>\" ></form>
+                    <input type=\"submit\" name=\"back1\" value=\"< Ξ Ξ―ΟΟ\">
+                    <input type=\"submit\" name=\"install3\" value=\"ΞΟΞΏΞ΄ΞΏΟΞ®>\" ></form>
                   ";
 	draw($tool_content);
 }
@@ -171,26 +171,26 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	<tr>
 		<th>".$langMainDB."</th>
 		<td>
-		<input type=\"text\"  size=\"25\" name=\"dbNameForm\" value=\"$dbNameForm\">(αν υπάρχει ήδη κάποια βάση δεδομένων με το όνομα eclass αλλάξτε το)
+		<input type=\"text\"  size=\"25\" name=\"dbNameForm\" value=\"$dbNameForm\">(Ξ±Ξ½ ΟΟΞ¬ΟΟΞ΅ΞΉ Ξ®Ξ΄Ξ· ΞΊΞ¬ΟΞΏΞΉΞ± Ξ²Ξ¬ΟΞ· Ξ΄Ξ΅Ξ΄ΞΏΞΌΞ­Ξ½ΟΞ½ ΞΌΞ΅ ΟΞΏ ΟΞ½ΞΏΞΌΞ± eclass Ξ±Ξ»Ξ»Ξ¬ΞΎΟΞ΅ ΟΞΏ)
 				</td>
 	</tr>
 	<tr>
-	<th>URL του phpMyAdmin</th>
+	<th>URL ΟΞΏΟ phpMyAdmin</th>
 	<td>
-	<input type=\"text\" size=\"25\" name=\"dbMyAdmin\" value=\"".$dbMyAdmin."\">Δεν χρειάζεται να το αλλάξετε
+	<input type=\"text\" size=\"25\" name=\"dbMyAdmin\" value=\"".$dbMyAdmin."\">ΞΞ΅Ξ½ ΟΟΞ΅ΞΉΞ¬ΞΆΞ΅ΟΞ±ΞΉ Ξ½Ξ± ΟΞΏ Ξ±Ξ»Ξ»Ξ¬ΞΎΞ΅ΟΞ΅
 	</td>
 	</tr>
 	<tr>
-	<th>URL του System info</th>
+	<th>URL ΟΞΏΟ System info</th>
 	<td>
-	<input type=\"text\" size=\"25\" name=\"phpSysInfoURL\" value=\"".$phpSysInfoURL."\">Δεν χρειάζεται να το αλλάξετε
+	<input type=\"text\" size=\"25\" name=\"phpSysInfoURL\" value=\"".$phpSysInfoURL."\">ΞΞ΅Ξ½ ΟΟΞ΅ΞΉΞ¬ΞΆΞ΅ΟΞ±ΞΉ Ξ½Ξ± ΟΞΏ Ξ±Ξ»Ξ»Ξ¬ΞΎΞ΅ΟΞ΅
 	</td>
 	</tr>
 	</thead>
 	</table>
   <br/><br/>              
-	<input type=\"submit\" name=\"back2\" value=\"< Πίσω\">
-	<input type=\"submit\" name=\"install5\" value=\"Επόμενο >\">
+	<input type=\"submit\" name=\"back2\" value=\"< Ξ Ξ―ΟΟ\">
+	<input type=\"submit\" name=\"install5\" value=\"ΞΟΟΞΌΞ΅Ξ½ΞΏ >\">
 </form>";
 
 	draw($tool_content);
@@ -213,10 +213,10 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
 	$langStep = $langStep4;
 	$_SESSION['step']=4;
 	$tool_content .=  "
-        <p>Τα παρακάτω θα γραφτούν στο αρχείο <b>config.php</b>.</p>
+        <p>Ξ€Ξ± ΟΞ±ΟΞ±ΞΊΞ¬ΟΟ ΞΈΞ± Ξ³ΟΞ±ΟΟΞΏΟΞ½ ΟΟΞΏ Ξ±ΟΟΞ΅Ξ―ΞΏ <b>config.php</b>.</p>
 	<table width=\"99%\">
 	<thead><tr>
-	<th>URL του eClass<font color=\"red\">*</font></th>
+	<th>URL ΟΞΏΟ eClass<font color=\"red\">*</font></th>
 	<td>
 	<input type=\"text\" size=\"40\" name=\"urlForm\" value=\"$urlForm\">
 	</td>
@@ -309,7 +309,7 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
                         </tr>
                         <tr>
                             <th>
-                                     LDAP εξυπηρέτης του Ιδρύματος
+                                     LDAP Ξ΅ΞΎΟΟΞ·ΟΞ­ΟΞ·Ο ΟΞΏΟ ΞΞ΄ΟΟΞΌΞ±ΟΞΏΟ
                             </th>
                             <td>
                                  <input type=\"text\" size=\"40\" name=\"ldapserver\" value=\"$ldapserver\">
@@ -317,19 +317,19 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
                         </tr>
                         <tr>
                             <th>
-                                Base dn του LDAP εξυπηρέτη
+                                Base dn ΟΞΏΟ LDAP Ξ΅ΞΎΟΟΞ·ΟΞ­ΟΞ·
                              </font>
                             </th>
                             <td>
                                 <input type=\"text\" size=\"40\" name=\"dnldapserver\" value=\"$dnldapserver\">
                             </td>
                         </tr>
-			<tr><th>Εγγραφή χρηστών μέσω αίτησης</th>
+			<tr><th>ΞΞ³Ξ³ΟΞ±ΟΞ® ΟΟΞ·ΟΟΟΞ½ ΞΌΞ­ΟΟ Ξ±Ξ―ΟΞ·ΟΞ·Ο</th>
 		    <td><input type='checkbox' name='reguser'></td>
 		    </tr>
                         <tr>
                             <th>
-                                   Εξυπηρετητής video streaming 
+                                   ΞΞΎΟΟΞ·ΟΞ΅ΟΞ·ΟΞ®Ο video streaming 
                             </th>
                             <td>
 <script>
@@ -337,8 +337,8 @@ function set_video_input()
 	{
 		if(document.getElementById(\"video_check\").checked==true)
 		{
-			document.getElementById(\"video_input_div_text\").innerHTML='Πρόθεμα του τελικού URL με το οποίο θα εξυπηρετούνται τα αποθηκευμένα στον εξυπηρέτη video streaming αρχεία<font color=\"red\">*';
-			document.getElementById(\"video_input_div_input\").innerHTML='<input type=\"text\" size=\"20\" name=\"vodServerForm\" value=\"$vodServer\"><br>Πχ. mms://windows_media.server.gr/, rtsp://real.server.gr';
+			document.getElementById(\"video_input_div_text\").innerHTML='Ξ ΟΟΞΈΞ΅ΞΌΞ± ΟΞΏΟ ΟΞ΅Ξ»ΞΉΞΊΞΏΟ URL ΞΌΞ΅ ΟΞΏ ΞΏΟΞΏΞ―ΞΏ ΞΈΞ± Ξ΅ΞΎΟΟΞ·ΟΞ΅ΟΞΏΟΞ½ΟΞ±ΞΉ ΟΞ± Ξ±ΟΞΏΞΈΞ·ΞΊΞ΅ΟΞΌΞ­Ξ½Ξ± ΟΟΞΏΞ½ Ξ΅ΞΎΟΟΞ·ΟΞ­ΟΞ· video streaming Ξ±ΟΟΞ΅Ξ―Ξ±<font color=\"red\">*';
+			document.getElementById(\"video_input_div_input\").innerHTML='<input type=\"text\" size=\"20\" name=\"vodServerForm\" value=\"$vodServer\"><br>Ξ Ο. mms://windows_media.server.gr/, rtsp://real.server.gr';
 		}
 		else{ document.getElementById(\"video_input_div_text\").innerHTML='';
 		      document.getElementById(\"video_input_div_input\").innerHTML='';
@@ -359,7 +359,7 @@ function set_video_input()
 	</tr>
       <tr>
        <th>
-         MCU (μονάδα ελέγχου για τηλεδιάσκεψη)
+         MCU (ΞΌΞΏΞ½Ξ¬Ξ΄Ξ± Ξ΅Ξ»Ξ­Ξ³ΟΞΏΟ Ξ³ΞΉΞ± ΟΞ·Ξ»Ξ΅Ξ΄ΞΉΞ¬ΟΞΊΞ΅ΟΞ·)
        </th>
        <td>
 <script>
@@ -367,8 +367,8 @@ function set_MCU()
 	{
 		if(document.getElementById(\"MCU_check\").checked==true)
 		{
-			document.getElementById(\"MCU_div_text\").innerHTML='<font size=\"2\" face=\"arial, helvetica\">Διεύθυνση MCU</font><font color=\"red\">*</font>';
-			document.getElementById(\"MCU_div_input\").innerHTML='<input type=\"text\" size=\"20\" name=\"MCUForm\" value=\"$MCU\"><br>Πχ. rts.grnet.gr';
+			document.getElementById(\"MCU_div_text\").innerHTML='<font size=\"2\" face=\"arial, helvetica\">ΞΞΉΞ΅ΟΞΈΟΞ½ΟΞ· MCU</font><font color=\"red\">*</font>';
+			document.getElementById(\"MCU_div_input\").innerHTML='<input type=\"text\" size=\"20\" name=\"MCUForm\" value=\"$MCU\"><br>Ξ Ο. rts.grnet.gr';
 		}
 		else{ document.getElementById(\"MCU_div_text\").innerHTML='';
 		      document.getElementById(\"MCU_div_input\").innerHTML='';
@@ -402,13 +402,13 @@ function set_MCU()
                         <p>
                                 <font color=\"red\">*
                                 </font>
-                                  = υποχρεωτικό</p>
+                                  = ΟΟΞΏΟΟΞ΅ΟΟΞΉΞΊΟ</p>
                         <p>
                             <font color=\"red\">**</font>
                                      ".$langWarnHelpDesk."
                         </p><br/>
-                    <input type=\"submit\" name=\"back3\" value=\"< Πίσω \">
-                                <input type=\"submit\" name=\"install6\" value='Επόμενο >'>";
+                    <input type=\"submit\" name=\"back3\" value=\"< Ξ Ξ―ΟΟ \">
+                                <input type=\"submit\" name=\"install6\" value='ΞΟΟΞΌΞ΅Ξ½ΞΏ >'>";
 	draw($tool_content);
 
 }
@@ -425,44 +425,44 @@ elseif(isset($_REQUEST['install6']))
 	if (!$reguser) {
       $mes_add ="";
   } else {
-      $mes_add = "<br>Η εγγραφή χρηστών θα γίνεται με αίτηση προς τον διαχειριστή της πλατφόρμας<br>";
+      $mes_add = "<br>Ξ Ξ΅Ξ³Ξ³ΟΞ±ΟΞ® ΟΟΞ·ΟΟΟΞ½ ΞΈΞ± Ξ³Ξ―Ξ½Ξ΅ΟΞ±ΞΉ ΞΌΞ΅ Ξ±Ξ―ΟΞ·ΟΞ· ΟΟΞΏΟ ΟΞΏΞ½ Ξ΄ΞΉΞ±ΟΞ΅ΞΉΟΞΉΟΟΞ® ΟΞ·Ο ΟΞ»Ξ±ΟΟΟΟΞΌΞ±Ο<br>";
   }
 
 	$tool_content .=  "
         <p>
-        Τα στοιχεία που δηλώσατε είναι τα παρακάτω:
-        (Εκτυπώστε τα αν θέλετε να θυμάστε το συνθηματικό του διαχειριστή και τις άλλες ρυθμίσεις)</p>
+        Ξ€Ξ± ΟΟΞΏΞΉΟΞ΅Ξ―Ξ± ΟΞΏΟ Ξ΄Ξ·Ξ»ΟΟΞ±ΟΞ΅ Ξ΅Ξ―Ξ½Ξ±ΞΉ ΟΞ± ΟΞ±ΟΞ±ΞΊΞ¬ΟΟ:
+        (ΞΞΊΟΟΟΟΟΟΞ΅ ΟΞ± Ξ±Ξ½ ΞΈΞ­Ξ»Ξ΅ΟΞ΅ Ξ½Ξ± ΞΈΟΞΌΞ¬ΟΟΞ΅ ΟΞΏ ΟΟΞ½ΞΈΞ·ΞΌΞ±ΟΞΉΞΊΟ ΟΞΏΟ Ξ΄ΞΉΞ±ΟΞ΅ΞΉΟΞΉΟΟΞ® ΞΊΞ±ΞΉ ΟΞΉΟ Ξ¬Ξ»Ξ»Ξ΅Ο ΟΟΞΈΞΌΞ―ΟΞ΅ΞΉΟ)</p>
         <ul id=\"installBullet\">
-        <li>Όνομα υπολογιστή : $dbHostForm</li>
-        <li>Όνομα Χρήστη για τη Βάση Δεδομένων : $dbUsernameForm</li>
-        <li>Συνθηματικό για τη Βάση Δεδομένων: $dbPassForm</li>
-        <li>Κύρια Βάση Δεδομένων : $dbNameForm</li>
-        <li>URL του phpMyAdmin : $dbMyAdmin</li>
+        <li>ΞΞ½ΞΏΞΌΞ± ΟΟΞΏΞ»ΞΏΞ³ΞΉΟΟΞ® : $dbHostForm</li>
+        <li>ΞΞ½ΞΏΞΌΞ± Ξ§ΟΞ®ΟΟΞ· Ξ³ΞΉΞ± ΟΞ· ΞΞ¬ΟΞ· ΞΞ΅Ξ΄ΞΏΞΌΞ­Ξ½ΟΞ½ : $dbUsernameForm</li>
+        <li>Ξ£ΟΞ½ΞΈΞ·ΞΌΞ±ΟΞΉΞΊΟ Ξ³ΞΉΞ± ΟΞ· ΞΞ¬ΟΞ· ΞΞ΅Ξ΄ΞΏΞΌΞ­Ξ½ΟΞ½: $dbPassForm</li>
+        <li>ΞΟΟΞΉΞ± ΞΞ¬ΟΞ· ΞΞ΅Ξ΄ΞΏΞΌΞ­Ξ½ΟΞ½ : $dbNameForm</li>
+        <li>URL ΟΞΏΟ phpMyAdmin : $dbMyAdmin</li>
 
-        <li>URL του eClass : $urlForm</li>
-        <li>Toπικό path : $pathForm</li>
-        <li>Email Διαχειριστή : $emailForm</li>
-        <li>Όνομα Διαχειριστή : $nameForm</li>
+        <li>URL ΟΞΏΟ eClass : $urlForm</li>
+        <li>ToΟΞΉΞΊΟ path : $pathForm</li>
+        <li>Email ΞΞΉΞ±ΟΞ΅ΞΉΟΞΉΟΟΞ® : $emailForm</li>
+        <li>ΞΞ½ΞΏΞΌΞ± ΞΞΉΞ±ΟΞ΅ΞΉΟΞΉΟΟΞ® : $nameForm</li>
 
-        <li>Επώνυμο Διαχειριστή : $surnameForm</li>
-        <li><b>Όνομα Χρήστη του Διαχειριστή : </b>$loginForm</li>
-        <li><b>Συνθηματικό του Διαχειριστή : </b>$passForm</li>
-        <li>Όνομα Πανεπιστημιακού Ιδρύματος : $campusForm</li>
+        <li>ΞΟΟΞ½ΟΞΌΞΏ ΞΞΉΞ±ΟΞ΅ΞΉΟΞΉΟΟΞ® : $surnameForm</li>
+        <li><b>ΞΞ½ΞΏΞΌΞ± Ξ§ΟΞ®ΟΟΞ· ΟΞΏΟ ΞΞΉΞ±ΟΞ΅ΞΉΟΞΉΟΟΞ® : </b>$loginForm</li>
+        <li><b>Ξ£ΟΞ½ΞΈΞ·ΞΌΞ±ΟΞΉΞΊΟ ΟΞΏΟ ΞΞΉΞ±ΟΞ΅ΞΉΟΞΉΟΟΞ® : </b>$passForm</li>
+        <li>ΞΞ½ΞΏΞΌΞ± Ξ Ξ±Ξ½Ξ΅ΟΞΉΟΟΞ·ΞΌΞΉΞ±ΞΊΞΏΟ ΞΞ΄ΟΟΞΌΞ±ΟΞΏΟ : $campusForm</li>
 
-        <li>Τηλέφωνο Helpdesk : $helpdeskForm</li>
+        <li>Ξ€Ξ·Ξ»Ξ­ΟΟΞ½ΞΏ Helpdesk : $helpdeskForm</li>
         <li>Fax Helpdesk : $faxForm</li>
         <li>E-mail Helpdesk : $helpdeskmail</li>
-        <li>Όνομα του Ιδρύματος : $institutionForm</li>
-        <li>URL Ιδρύματος : $institutionUrlForm</li>
-        <li>Στοιχεία Επικοινωνίας του Ιδρύματος : $postaddressForm</li>
-        <li>LDAP εξυπηρέτης του Ιδρύματος : $ldapserver</li>
-        <li>Base DN του LDAP Εξυπηρέτη : $dnldapserver </li>
+        <li>ΞΞ½ΞΏΞΌΞ± ΟΞΏΟ ΞΞ΄ΟΟΞΌΞ±ΟΞΏΟ : $institutionForm</li>
+        <li>URL ΞΞ΄ΟΟΞΌΞ±ΟΞΏΟ : $institutionUrlForm</li>
+        <li>Ξ£ΟΞΏΞΉΟΞ΅Ξ―Ξ± ΞΟΞΉΞΊΞΏΞΉΞ½ΟΞ½Ξ―Ξ±Ο ΟΞΏΟ ΞΞ΄ΟΟΞΌΞ±ΟΞΏΟ : $postaddressForm</li>
+        <li>LDAP Ξ΅ΞΎΟΟΞ·ΟΞ­ΟΞ·Ο ΟΞΏΟ ΞΞ΄ΟΟΞΌΞ±ΟΞΏΟ : $ldapserver</li>
+        <li>Base DN ΟΞΏΟ LDAP ΞΞΎΟΟΞ·ΟΞ­ΟΞ· : $dnldapserver </li>
 				<li>".$mes_add."</li>
 				<li>MCU: ".@$MCUForm." </li>
 				<li>Vod Server: ".@$vodServerForm." </li>
         </ul>     
-        <input type=\"submit\" name=\"back4\" value=\"< Πίσω\">               
-        <input type=\"submit\" name=\"install7\" value=\"Eγκατάσταση του eClass >\">               
+        <input type=\"submit\" name=\"back4\" value=\"< Ξ Ξ―ΟΟ\">               
+        <input type=\"submit\" name=\"install7\" value=\"EΞ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ· ΟΞΏΟ eClass >\">               
         </form>";
 
 draw($tool_content);
@@ -487,19 +487,19 @@ elseif(isset($_REQUEST['install7']))
 		<tr>
 		<td class=\"extraMessage\">
 		<u><b>[".$no."] - ".$msg."</b></u><br/>
-		<p>Η MySQL  δεν λειτουργεί ή το όνομα χρήστη/συνθηματικό δεν είναι σωστό.<br/>
-        Παρακαλούμε ελέγξετε τα στοιχεία σας: </p>
+		<p>Ξ MySQL  Ξ΄Ξ΅Ξ½ Ξ»Ξ΅ΞΉΟΞΏΟΟΞ³Ξ΅Ξ― Ξ® ΟΞΏ ΟΞ½ΞΏΞΌΞ± ΟΟΞ®ΟΟΞ·/ΟΟΞ½ΞΈΞ·ΞΌΞ±ΟΞΉΞΊΟ Ξ΄Ξ΅Ξ½ Ξ΅Ξ―Ξ½Ξ±ΞΉ ΟΟΟΟΟ.<br/>
+        Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»ΞΏΟΞΌΞ΅ Ξ΅Ξ»Ξ­Ξ³ΞΎΞ΅ΟΞ΅ ΟΞ± ΟΟΞΏΞΉΟΞ΅Ξ―Ξ± ΟΞ±Ο: </p>
         <ul id=\"installBullet\">
-        <li>Όνομα Υπολογιστή : ".$dbHostForm."</li>
-        <li>Όνομα Χρήστη : ".$dbUsernameForm."</li>
-        <li>Συνθηματικό  : ".$dbPassForm."</li>
+        <li>ΞΞ½ΞΏΞΌΞ± Ξ₯ΟΞΏΞ»ΞΏΞ³ΞΉΟΟΞ® : ".$dbHostForm."</li>
+        <li>ΞΞ½ΞΏΞΌΞ± Ξ§ΟΞ®ΟΟΞ· : ".$dbUsernameForm."</li>
+        <li>Ξ£ΟΞ½ΞΈΞ·ΞΌΞ±ΟΞΉΞΊΟ  : ".$dbPassForm."</li>
         </ul>
-        <p>Eπιστρέψτε στο βήμα 3 για να τα διορθώσετε.</p>
+        <p>EΟΞΉΟΟΟΞ­ΟΟΞ΅ ΟΟΞΏ Ξ²Ξ®ΞΌΞ± 3 Ξ³ΞΉΞ± Ξ½Ξ± ΟΞ± Ξ΄ΞΉΞΏΟΞΈΟΟΞ΅ΟΞ΅.</p>
 						</td>
 					</tr>
 				</tbody>
 			</table><br/>
-			<input type=\"submit\" name=\"install3\" value=\"< Επιστροφή στο βήμα 3\">
+			<input type=\"submit\" name=\"install3\" value=\"< ΞΟΞΉΟΟΟΞΏΟΞ® ΟΟΞΏ Ξ²Ξ®ΞΌΞ± 3\">
 			</form>
        ";
 		draw($tool_content);exit();
@@ -658,11 +658,11 @@ elseif(isset($_REQUEST['install7']))
       TYPE=MyISAM $charset_spec");
 
 
-		mysql_query("INSERT INTO faculte VALUES (1, 'TMA', 'Τμήμα 1', 10, 100)");
-		mysql_query("INSERT INTO faculte VALUES (2, 'TMB', 'Τμήμα 2', 20, 100)");
-		mysql_query("INSERT INTO faculte VALUES (3, 'TMC', 'Τμήμα 3', 30, 100)");
-		mysql_query("INSERT INTO faculte VALUES (4, 'TMD', 'Τμήμα 4', 40, 100)");
-		mysql_query("INSERT INTO faculte VALUES (5, 'TME', 'Τμήμα 5', 50, 100)");
+		mysql_query("INSERT INTO faculte VALUES (1, 'TMA', 'Ξ€ΞΌΞ®ΞΌΞ± 1', 10, 100)");
+		mysql_query("INSERT INTO faculte VALUES (2, 'TMB', 'Ξ€ΞΌΞ®ΞΌΞ± 2', 20, 100)");
+		mysql_query("INSERT INTO faculte VALUES (3, 'TMC', 'Ξ€ΞΌΞ®ΞΌΞ± 3', 30, 100)");
+		mysql_query("INSERT INTO faculte VALUES (4, 'TMD', 'Ξ€ΞΌΞ®ΞΌΞ± 4', 40, 100)");
+		mysql_query("INSERT INTO faculte VALUES (5, 'TME', 'Ξ€ΞΌΞ®ΞΌΞ± 5', 50, 100)");
 
 		#
 		# Table `user`
@@ -888,11 +888,11 @@ CREATE TABLE `auth` (
 	if (!$fd) {
 		$tool_content .= "
                 <br>
-                <b>Παρουσιάστηκε σφάλμα!</b>
+                <b>Ξ Ξ±ΟΞΏΟΟΞΉΞ¬ΟΟΞ·ΞΊΞ΅ ΟΟΞ¬Ξ»ΞΌΞ±!</b>
                 <br><br>
-        Δεν είναι δυνατή η δημιουργία του αρχείου config.php.<br><br>
-        Παρακαλούμε ελέγξτε τα δικαιώματα πρόσβασης στους υποκαταλόγους του eclass
-        και δοκιμάστε ξανά την εγκατάσταση.\n";
+        ΞΞ΅Ξ½ Ξ΅Ξ―Ξ½Ξ±ΞΉ Ξ΄ΟΞ½Ξ±ΟΞ® Ξ· Ξ΄Ξ·ΞΌΞΉΞΏΟΟΞ³Ξ―Ξ± ΟΞΏΟ Ξ±ΟΟΞ΅Ξ―ΞΏΟ config.php.<br><br>
+        Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»ΞΏΟΞΌΞ΅ Ξ΅Ξ»Ξ­Ξ³ΞΎΟΞ΅ ΟΞ± Ξ΄ΞΉΞΊΞ±ΞΉΟΞΌΞ±ΟΞ± ΟΟΟΟΞ²Ξ±ΟΞ·Ο ΟΟΞΏΟΟ ΟΟΞΏΞΊΞ±ΟΞ±Ξ»ΟΞ³ΞΏΟΟ ΟΞΏΟ eclass
+        ΞΊΞ±ΞΉ Ξ΄ΞΏΞΊΞΉΞΌΞ¬ΟΟΞ΅ ΞΎΞ±Ξ½Ξ¬ ΟΞ·Ξ½ Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ·.\n";
 	} else {
 		if (!$reguser) $user_registration = 'FALSE';
     else $user_registration = 'TRUE';
@@ -952,13 +952,13 @@ $encryptedPasswd = true;
 				<tbody>
 					<tr>
 						<td class=\"extraMessageOK\">
-						 <p>Η εγκατάσταση ολοκληρώθηκε με επιτυχία!
-                Κάντε κλίκ παρακάτω για να μπείτε στο e-class.</p>
+						 <p>Ξ Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ· ΞΏΞ»ΞΏΞΊΞ»Ξ·ΟΟΞΈΞ·ΞΊΞ΅ ΞΌΞ΅ Ξ΅ΟΞΉΟΟΟΞ―Ξ±!
+                ΞΞ¬Ξ½ΟΞ΅ ΞΊΞ»Ξ―ΞΊ ΟΞ±ΟΞ±ΞΊΞ¬ΟΟ Ξ³ΞΉΞ± Ξ½Ξ± ΞΌΟΞ΅Ξ―ΟΞ΅ ΟΟΞΏ e-class.</p>
                 <br>
                 <p><b>
-                Συμβουλή: Για να προστατέψετε το e-class, αλλάξτε τα δικαιώματα πρόσβασης των αρχείων
-                <tt>/config/config.php</tt> και <tt>/install/index.php</tt> και
-                επιτρέψτε μόνο ανάγνωση (CHMOD 444).</b></p>
+                Ξ£ΟΞΌΞ²ΞΏΟΞ»Ξ®: ΞΞΉΞ± Ξ½Ξ± ΟΟΞΏΟΟΞ±ΟΞ­ΟΞ΅ΟΞ΅ ΟΞΏ e-class, Ξ±Ξ»Ξ»Ξ¬ΞΎΟΞ΅ ΟΞ± Ξ΄ΞΉΞΊΞ±ΞΉΟΞΌΞ±ΟΞ± ΟΟΟΟΞ²Ξ±ΟΞ·Ο ΟΟΞ½ Ξ±ΟΟΞ΅Ξ―ΟΞ½
+                <tt>/config/config.php</tt> ΞΊΞ±ΞΉ <tt>/install/index.php</tt> ΞΊΞ±ΞΉ
+                Ξ΅ΟΞΉΟΟΞ­ΟΟΞ΅ ΞΌΟΞ½ΞΏ Ξ±Ξ½Ξ¬Ξ³Ξ½ΟΟΞ· (CHMOD 444).</b></p>
 						</td>
 					</tr>
 				</tbody>
@@ -966,10 +966,10 @@ $encryptedPasswd = true;
         <br>
        </form>
     <form action=\"../\">
-    <input type=\"submit\" value=\"Είσοδος στο eClass\">
+    <input type=\"submit\" value=\"ΞΞ―ΟΞΏΞ΄ΞΏΟ ΟΟΞΏ eClass\">
 	</form>";
 		draw($tool_content);
-	}       // τέλος ελέγχου για δικαιώματα
+	}       // ΟΞ­Ξ»ΞΏΟ Ξ΅Ξ»Ξ­Ξ³ΟΞΏΟ Ξ³ΞΉΞ± Ξ΄ΞΉΞΊΞ±ΞΉΟΞΌΞ±ΟΞ±
 }	// end of step 6
 
 // step 1 requirements
@@ -989,14 +989,14 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 					<tr>
 						<td class=\"extraMessage\">
 						
-        <p><b>Προσοχή!</b> Φαίνεται πως η επιλογή register_globals
-        στο αρχείο php.ini δεν είναι ενεργοποιημένη. Χωρίς αυτήν το
-        e-class δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το
-        αρχείο php.ini ώστε να περιέχει τη γραμμή:</p>
+        <p><b>Ξ ΟΞΏΟΞΏΟΞ®!</b> Ξ¦Ξ±Ξ―Ξ½Ξ΅ΟΞ±ΞΉ ΟΟΟ Ξ· Ξ΅ΟΞΉΞ»ΞΏΞ³Ξ® register_globals
+        ΟΟΞΏ Ξ±ΟΟΞ΅Ξ―ΞΏ php.ini Ξ΄Ξ΅Ξ½ Ξ΅Ξ―Ξ½Ξ±ΞΉ Ξ΅Ξ½Ξ΅ΟΞ³ΞΏΟΞΏΞΉΞ·ΞΌΞ­Ξ½Ξ·. Ξ§ΟΟΞ―Ο Ξ±ΟΟΞ®Ξ½ ΟΞΏ
+        e-class Ξ΄Ξ΅Ξ½ ΞΌΟΞΏΟΞ΅Ξ― Ξ½Ξ± Ξ»Ξ΅ΞΉΟΞΏΟΟΞ³Ξ®ΟΞ΅ΞΉ. Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»ΞΏΟΞΌΞ΅ Ξ΄ΞΉΞΏΟΞΈΟΟΟΞ΅ ΟΞΏ
+        Ξ±ΟΟΞ΅Ξ―ΞΏ php.ini ΟΟΟΞ΅ Ξ½Ξ± ΟΞ΅ΟΞΉΞ­ΟΞ΅ΞΉ ΟΞ· Ξ³ΟΞ±ΞΌΞΌΞ®:</p>
         <p><b>register_globals = On</b></p>
-       <p>Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
-        τις οδηγίες εγκατάστασης στο αρχείο
-        <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
+       <p>Ξ ΞΉΞΈΞ±Ξ½ΟΞ½ Ξ΅ΟΞ―ΟΞ·Ο Ξ½Ξ± ΟΟΞ΅ΞΉΞ¬ΞΆΞΏΞ½ΟΞ±ΞΉ ΞΊΞ±ΞΉ ΞΊΞ¬ΟΞΏΞΉΞ΅Ο Ξ¬Ξ»Ξ»Ξ΅Ο Ξ±Ξ»Ξ»Ξ±Ξ³Ξ­Ο. ΞΞΉΞ±Ξ²Ξ¬ΟΟΞ΅
+        ΟΞΉΟ ΞΏΞ΄Ξ·Ξ³Ξ―Ξ΅Ο Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ·Ο ΟΟΞΏ Ξ±ΟΟΞ΅Ξ―ΞΏ
+        <a href='install.html'>install.html</a> ΞΊΞ±ΞΉ Ξ΅ΟΞ±Ξ½Ξ΅ΞΊΞΊΞΉΞ½Ξ΅Ξ―ΟΟΞ΅ ΟΞΏΞ½ ΞΏΞ΄Ξ·Ξ³Ο Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ·Ο.</p>
 						
 					</td>
 					</tr>
@@ -1013,14 +1013,14 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 			<tr>
 			<td class=\"extraMessage\">
 						
-        <p><b>Προσοχή!</b> Φαίνεται πως η επιλογή short_open_tag
-        στο αρχείο php.ini δεν είναι ενεργοποιημένη. Χωρίς αυτήν το
-        e-class δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το
-        αρχείο php.ini ώστε να περιέχει τη γραμμή:</p>
+        <p><b>Ξ ΟΞΏΟΞΏΟΞ®!</b> Ξ¦Ξ±Ξ―Ξ½Ξ΅ΟΞ±ΞΉ ΟΟΟ Ξ· Ξ΅ΟΞΉΞ»ΞΏΞ³Ξ® short_open_tag
+        ΟΟΞΏ Ξ±ΟΟΞ΅Ξ―ΞΏ php.ini Ξ΄Ξ΅Ξ½ Ξ΅Ξ―Ξ½Ξ±ΞΉ Ξ΅Ξ½Ξ΅ΟΞ³ΞΏΟΞΏΞΉΞ·ΞΌΞ­Ξ½Ξ·. Ξ§ΟΟΞ―Ο Ξ±ΟΟΞ®Ξ½ ΟΞΏ
+        e-class Ξ΄Ξ΅Ξ½ ΞΌΟΞΏΟΞ΅Ξ― Ξ½Ξ± Ξ»Ξ΅ΞΉΟΞΏΟΟΞ³Ξ®ΟΞ΅ΞΉ. Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»ΞΏΟΞΌΞ΅ Ξ΄ΞΉΞΏΟΞΈΟΟΟΞ΅ ΟΞΏ
+        Ξ±ΟΟΞ΅Ξ―ΞΏ php.ini ΟΟΟΞ΅ Ξ½Ξ± ΟΞ΅ΟΞΉΞ­ΟΞ΅ΞΉ ΟΞ· Ξ³ΟΞ±ΞΌΞΌΞ®:</p>
         <p><b>short_open_tag = On</b></p>
-        <p>Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
-        τις οδηγίες εγκατάστασης στο αρχείο
-        <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
+        <p>Ξ ΞΉΞΈΞ±Ξ½ΟΞ½ Ξ΅ΟΞ―ΟΞ·Ο Ξ½Ξ± ΟΟΞ΅ΞΉΞ¬ΞΆΞΏΞ½ΟΞ±ΞΉ ΞΊΞ±ΞΉ ΞΊΞ¬ΟΞΏΞΉΞ΅Ο Ξ¬Ξ»Ξ»Ξ΅Ο Ξ±Ξ»Ξ»Ξ±Ξ³Ξ­Ο. ΞΞΉΞ±Ξ²Ξ¬ΟΟΞ΅
+        ΟΞΉΟ ΞΏΞ΄Ξ·Ξ³Ξ―Ξ΅Ο Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ·Ο ΟΟΞΏ Ξ±ΟΟΞ΅Ξ―ΞΏ
+        <a href='install.html'>install.html</a> ΞΊΞ±ΞΉ Ξ΅ΟΞ±Ξ½Ξ΅ΞΊΞΊΞΉΞ½Ξ΅Ξ―ΟΟΞ΅ ΟΞΏΞ½ ΞΏΞ΄Ξ·Ξ³Ο Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ·Ο.</p>
 						
 				</td>
 				</tr>
@@ -1041,14 +1041,14 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 				<tbody>
 					<tr>
 						<td class=\"extraMessage\">
-			  <p><b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει 
-        δικαιώματα δημιουργίας του κατάλογου <b>/config</b>.<br/>
-        Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει. 
-        Παρακαλούμε διορθώστε τα δικαιώματα.
+			  <p><b>Ξ ΟΞΏΟΞΏΟΞ®!</b> Ξ¦Ξ±Ξ―Ξ½Ξ΅ΟΞ±ΞΉ ΟΟΟ ΞΏ ΞΏΞ΄Ξ·Ξ³ΟΟ Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ·Ο Ξ΄Ξ΅Ξ½ Ξ­ΟΞ΅ΞΉ 
+        Ξ΄ΞΉΞΊΞ±ΞΉΟΞΌΞ±ΟΞ± Ξ΄Ξ·ΞΌΞΉΞΏΟΟΞ³Ξ―Ξ±Ο ΟΞΏΟ ΞΊΞ±ΟΞ¬Ξ»ΞΏΞ³ΞΏΟ <b>/config</b>.<br/>
+        Ξ§ΟΟΞ―Ο Ξ΄ΞΉΞΊΞ±ΞΉΟΞΌΞ±ΟΞ± Ξ΄Ξ·ΞΌΞΉΞΏΟΟΞ³Ξ―Ξ±Ο, ΞΏ ΞΏΞ΄Ξ·Ξ³ΟΟ Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ·Ο Ξ΄Ξ΅Ξ½ ΞΌΟΞΏΟΞ΅Ξ― Ξ½Ξ± ΟΟΞ½Ξ΅ΟΞ―ΟΞ΅ΞΉ. 
+        Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»ΞΏΟΞΌΞ΅ Ξ΄ΞΉΞΏΟΞΈΟΟΟΞ΅ ΟΞ± Ξ΄ΞΉΞΊΞ±ΞΉΟΞΌΞ±ΟΞ±.
         <br/>
-        Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
-        τις οδηγίες εγκατάστασης στο αρχείο
-        <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
+        Ξ ΞΉΞΈΞ±Ξ½ΟΞ½ Ξ΅ΟΞ―ΟΞ·Ο Ξ½Ξ± ΟΟΞ΅ΞΉΞ¬ΞΆΞΏΞ½ΟΞ±ΞΉ ΞΊΞ±ΞΉ ΞΊΞ¬ΟΞΏΞΉΞ΅Ο Ξ¬Ξ»Ξ»Ξ΅Ο Ξ±Ξ»Ξ»Ξ±Ξ³Ξ­Ο. ΞΞΉΞ±Ξ²Ξ¬ΟΟΞ΅
+        ΟΞΉΟ ΞΏΞ΄Ξ·Ξ³Ξ―Ξ΅Ο Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ·Ο ΟΟΞΏ Ξ±ΟΟΞ΅Ξ―ΞΏ
+        <a href='install.html'>install.html</a> ΞΊΞ±ΞΉ Ξ΅ΟΞ±Ξ½Ξ΅ΞΊΞΊΞΉΞ½Ξ΅Ξ―ΟΟΞ΅ ΟΞΏΞ½ ΞΏΞ΄Ξ·Ξ³Ο Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ·Ο.</p>
 					</td>
 					</tr>
 				</tbody>
@@ -1068,14 +1068,14 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 					<tr>
 						<td class=\"extraMessage\">
 						
-        <p><b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει 
-        δικαιώματα δημιουργίας του κατάλογου <b>/courses</b>.<br/>
-        Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει. 
-        Παρακαλούμε διορθώστε τα δικαιώματα.
+        <p><b>Ξ ΟΞΏΟΞΏΟΞ®!</b> Ξ¦Ξ±Ξ―Ξ½Ξ΅ΟΞ±ΞΉ ΟΟΟ ΞΏ ΞΏΞ΄Ξ·Ξ³ΟΟ Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ·Ο Ξ΄Ξ΅Ξ½ Ξ­ΟΞ΅ΞΉ 
+        Ξ΄ΞΉΞΊΞ±ΞΉΟΞΌΞ±ΟΞ± Ξ΄Ξ·ΞΌΞΉΞΏΟΟΞ³Ξ―Ξ±Ο ΟΞΏΟ ΞΊΞ±ΟΞ¬Ξ»ΞΏΞ³ΞΏΟ <b>/courses</b>.<br/>
+        Ξ§ΟΟΞ―Ο Ξ΄ΞΉΞΊΞ±ΞΉΟΞΌΞ±ΟΞ± Ξ΄Ξ·ΞΌΞΉΞΏΟΟΞ³Ξ―Ξ±Ο, ΞΏ ΞΏΞ΄Ξ·Ξ³ΟΟ Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ·Ο Ξ΄Ξ΅Ξ½ ΞΌΟΞΏΟΞ΅Ξ― Ξ½Ξ± ΟΟΞ½Ξ΅ΟΞ―ΟΞ΅ΞΉ. 
+        Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»ΞΏΟΞΌΞ΅ Ξ΄ΞΉΞΏΟΞΈΟΟΟΞ΅ ΟΞ± Ξ΄ΞΉΞΊΞ±ΞΉΟΞΌΞ±ΟΞ±.
         <br/>
-        Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
-        τις οδηγίες εγκατάστασης στο αρχείο
-        <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
+        Ξ ΞΉΞΈΞ±Ξ½ΟΞ½ Ξ΅ΟΞ―ΟΞ·Ο Ξ½Ξ± ΟΟΞ΅ΞΉΞ¬ΞΆΞΏΞ½ΟΞ±ΞΉ ΞΊΞ±ΞΉ ΞΊΞ¬ΟΞΏΞΉΞ΅Ο Ξ¬Ξ»Ξ»Ξ΅Ο Ξ±Ξ»Ξ»Ξ±Ξ³Ξ­Ο. ΞΞΉΞ±Ξ²Ξ¬ΟΟΞ΅
+        ΟΞΉΟ ΞΏΞ΄Ξ·Ξ³Ξ―Ξ΅Ο Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ·Ο ΟΟΞΏ Ξ±ΟΟΞ΅Ξ―ΞΏ
+        <a href='install.html'>install.html</a> ΞΊΞ±ΞΉ Ξ΅ΟΞ±Ξ½Ξ΅ΞΊΞΊΞΉΞ½Ξ΅Ξ―ΟΟΞ΅ ΟΞΏΞ½ ΞΏΞ΄Ξ·Ξ³Ο Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ·Ο.</p>
 					</td>
 					</tr>
 				</tbody>
@@ -1093,14 +1093,14 @@ if(!$mkd){
         <tbody>
           <tr>
             <td class=\"extraMessage\">
-        <p><b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει
-        δικαιώματα δημιουργίας του κατάλογου <b>/video</b>.<br/>
-        Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει.
-        Παρακαλούμε διορθώστε τα δικαιώματα.
+        <p><b>Ξ ΟΞΏΟΞΏΟΞ®!</b> Ξ¦Ξ±Ξ―Ξ½Ξ΅ΟΞ±ΞΉ ΟΟΟ ΞΏ ΞΏΞ΄Ξ·Ξ³ΟΟ Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ·Ο Ξ΄Ξ΅Ξ½ Ξ­ΟΞ΅ΞΉ
+        Ξ΄ΞΉΞΊΞ±ΞΉΟΞΌΞ±ΟΞ± Ξ΄Ξ·ΞΌΞΉΞΏΟΟΞ³Ξ―Ξ±Ο ΟΞΏΟ ΞΊΞ±ΟΞ¬Ξ»ΞΏΞ³ΞΏΟ <b>/video</b>.<br/>
+        Ξ§ΟΟΞ―Ο Ξ΄ΞΉΞΊΞ±ΞΉΟΞΌΞ±ΟΞ± Ξ΄Ξ·ΞΌΞΉΞΏΟΟΞ³Ξ―Ξ±Ο, ΞΏ ΞΏΞ΄Ξ·Ξ³ΟΟ Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ·Ο Ξ΄Ξ΅Ξ½ ΞΌΟΞΏΟΞ΅Ξ― Ξ½Ξ± ΟΟΞ½Ξ΅ΟΞ―ΟΞ΅ΞΉ.
+        Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»ΞΏΟΞΌΞ΅ Ξ΄ΞΉΞΏΟΞΈΟΟΟΞ΅ ΟΞ± Ξ΄ΞΉΞΊΞ±ΞΉΟΞΌΞ±ΟΞ±.
         <br/>
-        Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
-        τις οδηγίες εγκατάστασης στο αρχείο
-        <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
+        Ξ ΞΉΞΈΞ±Ξ½ΟΞ½ Ξ΅ΟΞ―ΟΞ·Ο Ξ½Ξ± ΟΟΞ΅ΞΉΞ¬ΞΆΞΏΞ½ΟΞ±ΞΉ ΞΊΞ±ΞΉ ΞΊΞ¬ΟΞΏΞΉΞ΅Ο Ξ¬Ξ»Ξ»Ξ΅Ο Ξ±Ξ»Ξ»Ξ±Ξ³Ξ­Ο. ΞΞΉΞ±Ξ²Ξ¬ΟΟΞ΅
+        ΟΞΉΟ ΞΏΞ΄Ξ·Ξ³Ξ―Ξ΅Ο Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ·Ο ΟΟΞΏ Ξ±ΟΟΞ΅Ξ―ΞΏ
+        <a href='install.html'>install.html</a> ΞΊΞ±ΞΉ Ξ΅ΟΞ±Ξ½Ξ΅ΞΊΞΊΞΉΞ½Ξ΅Ξ―ΟΟΞ΅ ΟΞΏΞ½ ΞΏΞ΄Ξ·Ξ³Ο Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ·Ο.</p>
           </td>
           </tr>
         </tbody>
@@ -1118,13 +1118,13 @@ if(!$mkd){
 
 	$tool_content .= "
      
-    <u>Έλεγχος προαπαιτούμενων προγραμμάτων για τη λειτουργία του eClass</u>
+    <u>ΞΞ»Ξ΅Ξ³ΟΞΏΟ ΟΟΞΏΞ±ΟΞ±ΞΉΟΞΏΟΞΌΞ΅Ξ½ΟΞ½ ΟΟΞΏΞ³ΟΞ±ΞΌΞΌΞ¬ΟΟΞ½ Ξ³ΞΉΞ± ΟΞ· Ξ»Ξ΅ΞΉΟΞΏΟΟΞ³Ξ―Ξ± ΟΞΏΟ eClass</u>
     <p>
-        Webserver (<em>βρέθηκε <b>".$_SERVER['SERVER_SOFTWARE']."</b></em>) 
-        με υποστήριξη PHP (<em>βρέθηκε <b>PHP ".phpversion()."</b></em>).</p>
+        Webserver (<em>Ξ²ΟΞ­ΞΈΞ·ΞΊΞ΅ <b>".$_SERVER['SERVER_SOFTWARE']."</b></em>) 
+        ΞΌΞ΅ ΟΟΞΏΟΟΞ®ΟΞΉΞΎΞ· PHP (<em>Ξ²ΟΞ­ΞΈΞ·ΞΊΞ΅ <b>PHP ".phpversion()."</b></em>).</p>
     ";
 
-	$tool_content .= "<u>Απαιτούμενα PHP modules</u>";
+	$tool_content .= "<u>ΞΟΞ±ΞΉΟΞΏΟΞΌΞ΅Ξ½Ξ± PHP modules</u>";
 	$tool_content .= "<ul id=\"installBullet\">";
 	warnIfExtNotLoaded("standard");
 	warnIfExtNotLoaded("session");
@@ -1133,44 +1133,44 @@ if(!$mkd){
 	warnIfExtNotLoaded("mbstring");
 	warnIfExtNotLoaded("zlib");
 	warnIfExtNotLoaded("pcre");
-	$tool_content .= "</ul><u>Προαιρετικά PHP modules</u>";
+	$tool_content .= "</ul><u>Ξ ΟΞΏΞ±ΞΉΟΞ΅ΟΞΉΞΊΞ¬ PHP modules</u>";
 	$tool_content .= "<ul id=\"installBullet\">";
 	warnIfExtNotLoaded("ldap");
 	$tool_content .= "</ul>";
 	$tool_content .= "
     
-    <u>Άλλες απαιτήσεις συστήματος</u>
+    <u>ΞΞ»Ξ»Ξ΅Ο Ξ±ΟΞ±ΞΉΟΞ®ΟΞ΅ΞΉΟ ΟΟΟΟΞ®ΞΌΞ±ΟΞΏΟ</u>
     <ul id=\"installBullet\">
     <li>
-    Μια βάση δεδομένων MySQL, στην οποία έχετε λογαριασμό με δικαιώματα να δημιουργείτε και να διαγράφετε βάσεις δεδομένων.
+    ΞΞΉΞ± Ξ²Ξ¬ΟΞ· Ξ΄Ξ΅Ξ΄ΞΏΞΌΞ­Ξ½ΟΞ½ MySQL, ΟΟΞ·Ξ½ ΞΏΟΞΏΞ―Ξ± Ξ­ΟΞ΅ΟΞ΅ Ξ»ΞΏΞ³Ξ±ΟΞΉΞ±ΟΞΌΟ ΞΌΞ΅ Ξ΄ΞΉΞΊΞ±ΞΉΟΞΌΞ±ΟΞ± Ξ½Ξ± Ξ΄Ξ·ΞΌΞΉΞΏΟΟΞ³Ξ΅Ξ―ΟΞ΅ ΞΊΞ±ΞΉ Ξ½Ξ± Ξ΄ΞΉΞ±Ξ³ΟΞ¬ΟΞ΅ΟΞ΅ Ξ²Ξ¬ΟΞ΅ΞΉΟ Ξ΄Ξ΅Ξ΄ΞΏΞΌΞ­Ξ½ΟΞ½.
     </li>
     <li>
-        Δικαιώματα εγγραφής στον κατάλογο <tt>include/</tt>.
+        ΞΞΉΞΊΞ±ΞΉΟΞΌΞ±ΟΞ± Ξ΅Ξ³Ξ³ΟΞ±ΟΞ®Ο ΟΟΞΏΞ½ ΞΊΞ±ΟΞ¬Ξ»ΞΏΞ³ΞΏ <tt>include/</tt>.
     </li>
     <li>
-        Δικαιώματα εγγραφής στον κατάλογο όπου το e-class έχει αποσυμπιεστεί.
+        ΞΞΉΞΊΞ±ΞΉΟΞΌΞ±ΟΞ± Ξ΅Ξ³Ξ³ΟΞ±ΟΞ®Ο ΟΟΞΏΞ½ ΞΊΞ±ΟΞ¬Ξ»ΞΏΞ³ΞΏ ΟΟΞΏΟ ΟΞΏ e-class Ξ­ΟΞ΅ΞΉ Ξ±ΟΞΏΟΟΞΌΟΞΉΞ΅ΟΟΞ΅Ξ―.
     </li>
     </ul>
     
-    <u>Επιπρόσθετη λειτουργικότητα:</u>
+    <u>ΞΟΞΉΟΟΟΟΞΈΞ΅ΟΞ· Ξ»Ξ΅ΞΉΟΞΏΟΟΞ³ΞΉΞΊΟΟΞ·ΟΞ±:</u>
      <ul id=\"installBullet\">
-     <li>Εάν επιθυμείτε να υποστηρίζετε streaming για τα αρχεία video που θα αποτελούν μέρος του υλικού των αποθηκευμένων μαθημάτων θα πρέπει να υπάρχει εγκατεστημένος streaming server σύμφωνα με τις οδηγίες που θα βρείτε στο εγχειρίδιο τάδε. 
+     <li>ΞΞ¬Ξ½ Ξ΅ΟΞΉΞΈΟΞΌΞ΅Ξ―ΟΞ΅ Ξ½Ξ± ΟΟΞΏΟΟΞ·ΟΞ―ΞΆΞ΅ΟΞ΅ streaming Ξ³ΞΉΞ± ΟΞ± Ξ±ΟΟΞ΅Ξ―Ξ± video ΟΞΏΟ ΞΈΞ± Ξ±ΟΞΏΟΞ΅Ξ»ΞΏΟΞ½ ΞΌΞ­ΟΞΏΟ ΟΞΏΟ ΟΞ»ΞΉΞΊΞΏΟ ΟΟΞ½ Ξ±ΟΞΏΞΈΞ·ΞΊΞ΅ΟΞΌΞ­Ξ½ΟΞ½ ΞΌΞ±ΞΈΞ·ΞΌΞ¬ΟΟΞ½ ΞΈΞ± ΟΟΞ­ΟΞ΅ΞΉ Ξ½Ξ± ΟΟΞ¬ΟΟΞ΅ΞΉ Ξ΅Ξ³ΞΊΞ±ΟΞ΅ΟΟΞ·ΞΌΞ­Ξ½ΞΏΟ streaming server ΟΟΞΌΟΟΞ½Ξ± ΞΌΞ΅ ΟΞΉΟ ΞΏΞ΄Ξ·Ξ³Ξ―Ξ΅Ο ΟΞΏΟ ΞΈΞ± Ξ²ΟΞ΅Ξ―ΟΞ΅ ΟΟΞΏ Ξ΅Ξ³ΟΞ΅ΞΉΟΞ―Ξ΄ΞΉΞΏ ΟΞ¬Ξ΄Ξ΅. 
     </li>
     <li>
-Το eClass θα εγκαταστήσει το δικό του διαχειριστικό εργαλείο μέσω web των βάσεων δεδομένων MySQL (<a
-href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
-μπορείτε να χρησιμοποιήσετε και το δικό σας.
+Ξ€ΞΏ eClass ΞΈΞ± Ξ΅Ξ³ΞΊΞ±ΟΞ±ΟΟΞ®ΟΞ΅ΞΉ ΟΞΏ Ξ΄ΞΉΞΊΟ ΟΞΏΟ Ξ΄ΞΉΞ±ΟΞ΅ΞΉΟΞΉΟΟΞΉΞΊΟ Ξ΅ΟΞ³Ξ±Ξ»Ξ΅Ξ―ΞΏ ΞΌΞ­ΟΟ web ΟΟΞ½ Ξ²Ξ¬ΟΞ΅ΟΞ½ Ξ΄Ξ΅Ξ΄ΞΏΞΌΞ­Ξ½ΟΞ½ MySQL (<a
+href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) Ξ±Ξ»Ξ»Ξ¬
+ΞΌΟΞΏΟΞ΅Ξ―ΟΞ΅ Ξ½Ξ± ΟΟΞ·ΟΞΉΞΌΞΏΟΞΏΞΉΞ®ΟΞ΅ΟΞ΅ ΞΊΞ±ΞΉ ΟΞΏ Ξ΄ΞΉΞΊΟ ΟΞ±Ο.
 </li></ul>
 <p>
-Πριν προχωρήσετε στην εγκατάσταση τυπώστε και διαβάστε προσεκτικά τις
-<a href=\"install.html\" target=_blank>Οδηγίες Εγκατάστασης</a>.
+Ξ ΟΞΉΞ½ ΟΟΞΏΟΟΟΞ®ΟΞ΅ΟΞ΅ ΟΟΞ·Ξ½ Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ· ΟΟΟΟΟΟΞ΅ ΞΊΞ±ΞΉ Ξ΄ΞΉΞ±Ξ²Ξ¬ΟΟΞ΅ ΟΟΞΏΟΞ΅ΞΊΟΞΉΞΊΞ¬ ΟΞΉΟ
+<a href=\"install.html\" target=_blank>ΞΞ΄Ξ·Ξ³Ξ―Ξ΅Ο ΞΞ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ·Ο</a>.
 </p>
 <p>
-Επίσης, γενικές οδηγίες για την πλατφόρμα μπορείτε να διαβάσετε <a href=\"../README.txt\" target=_blank>εδώ</a>.
+ΞΟΞ―ΟΞ·Ο, Ξ³Ξ΅Ξ½ΞΉΞΊΞ­Ο ΞΏΞ΄Ξ·Ξ³Ξ―Ξ΅Ο Ξ³ΞΉΞ± ΟΞ·Ξ½ ΟΞ»Ξ±ΟΟΟΟΞΌΞ± ΞΌΟΞΏΟΞ΅Ξ―ΟΞ΅ Ξ½Ξ± Ξ΄ΞΉΞ±Ξ²Ξ¬ΟΞ΅ΟΞ΅ <a href=\"../README.txt\" target=_blank>Ξ΅Ξ΄Ο</a>.
 </p>
 <br>
 
-<input type=\"submit\" name=\"install2\" value=\"Επόμενο >\">
+<input type=\"submit\" name=\"install2\" value=\"ΞΟΟΞΌΞ΅Ξ½ΞΏ >\">
 </form>
 ";
 	draw($tool_content);
@@ -1181,7 +1181,7 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
 	<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
 <html>
   <head>
-    <title>Καλωσορίσατε στον οδηγό εγκατάστασης του eClass</title>
+    <title>ΞΞ±Ξ»ΟΟΞΏΟΞ―ΟΞ±ΟΞ΅ ΟΟΞΏΞ½ ΞΏΞ΄Ξ·Ξ³Ο Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ·Ο ΟΞΏΟ eClass</title>
     <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-7\" />
     <link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
 
@@ -1195,14 +1195,14 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
 	 <input type=\"hidden\" name=\"welcomeScreen\" value=\"welcomeScreen\">
     <div class=\"welcomeImg\"></div>
    
-   Καλωσορίσατε στον οδηγό εγκατάστασης του eClass. Ο οδηγός αυτός :
+   ΞΞ±Ξ»ΟΟΞΏΟΞ―ΟΞ±ΟΞ΅ ΟΟΞΏΞ½ ΞΏΞ΄Ξ·Ξ³Ο Ξ΅Ξ³ΞΊΞ±ΟΞ¬ΟΟΞ±ΟΞ·Ο ΟΞΏΟ eClass. Ξ ΞΏΞ΄Ξ·Ξ³ΟΟ Ξ±ΟΟΟΟ :
     <ul id=\"installBullet\">
-    	<li>Θα σας βοηθήσει να όρίσετε τις ρυθμίσεις για τη βάση δεδομένων</li>
-    	<li>Θα σας βοηθήσει να όρίσετε τις ρυθμίσεις της πλατφόρμας</li>
-    	<li>Θα δημιουργήσει το αρχείο config.php</li>
+    	<li>ΞΞ± ΟΞ±Ο Ξ²ΞΏΞ·ΞΈΞ®ΟΞ΅ΞΉ Ξ½Ξ± ΟΟΞ―ΟΞ΅ΟΞ΅ ΟΞΉΟ ΟΟΞΈΞΌΞ―ΟΞ΅ΞΉΟ Ξ³ΞΉΞ± ΟΞ· Ξ²Ξ¬ΟΞ· Ξ΄Ξ΅Ξ΄ΞΏΞΌΞ­Ξ½ΟΞ½</li>
+    	<li>ΞΞ± ΟΞ±Ο Ξ²ΞΏΞ·ΞΈΞ®ΟΞ΅ΞΉ Ξ½Ξ± ΟΟΞ―ΟΞ΅ΟΞ΅ ΟΞΉΟ ΟΟΞΈΞΌΞ―ΟΞ΅ΞΉΟ ΟΞ·Ο ΟΞ»Ξ±ΟΟΟΟΞΌΞ±Ο</li>
+    	<li>ΞΞ± Ξ΄Ξ·ΞΌΞΉΞΏΟΟΞ³Ξ®ΟΞ΅ΞΉ ΟΞΏ Ξ±ΟΟΞ΅Ξ―ΞΏ config.php</li>
     </ul>
  
-  <input type=\"submit\" name=\"install1\" value=\"Επόμενο >\">
+  <input type=\"submit\" name=\"install1\" value=\"ΞΟΟΞΌΞ΅Ξ½ΞΏ >\">
  </div>
   </form>
   
@@ -1230,9 +1230,9 @@ function warnIfExtNotLoaded($extentionName) {
 	} else {
 		$tool_content .= "
                 <li>$extentionName
-                <font color=\"#FF0000\"> - <b>Δεν είναι εγκατεστημένο!</b></font>
-                (Διαβάστε περισσότερα
-                <a href=\"http://www.php.net/$extentionName\" target=_blank>εδώ)</a>
+                <font color=\"#FF0000\"> - <b>ΞΞ΅Ξ½ Ξ΅Ξ―Ξ½Ξ±ΞΉ Ξ΅Ξ³ΞΊΞ±ΟΞ΅ΟΟΞ·ΞΌΞ­Ξ½ΞΏ!</b></font>
+                (ΞΞΉΞ±Ξ²Ξ¬ΟΟΞ΅ ΟΞ΅ΟΞΉΟΟΟΟΞ΅ΟΞ±
+                <a href=\"http://www.php.net/$extentionName\" target=_blank>Ξ΅Ξ΄Ο)</a>
                 </li>";
 	}
 }

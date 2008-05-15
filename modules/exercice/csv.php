@@ -6,7 +6,7 @@ include '../../include/init.php';
 if($is_adminOfCourse) {
 
 header("Content-disposition: filename=".$currentCourse."_".$_GET['exerciseId']."_".date("Y-m-d").".xls");
-header("Content-type: application/msexcel; charset=iso-8859-7");
+header("Content-type: application/msexcel; charset=UTF-8");
 header("Pragma: no-cache");
 header("Expires: 0");
 

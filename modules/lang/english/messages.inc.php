@@ -422,7 +422,7 @@ $langCreateDirMainBase ="Creation of directory for restoring main database";
 $langCreateDirCourseBase ="Creation of directory for restoring courses databases";
 $langCopyDirectoryCourse = "Copy of course's files";
 $langDisk_free_space = "free space";
-$langBuildTheCompressedFile ="2∞ - Creation of backup file";
+$langBuildTheCompressedFile ="2¬∞ - Creation of backup file";
 $langFileCopied = "file copied";
 $langArchiveLocation="Archive location";
 $langSizeOf ="Size of";
@@ -488,7 +488,7 @@ $langWrongAuth = "You did not provide a valid pair of username/password";
 
 $langCopyright = "Copyright Notice";
 $langCopyrightNotice = '
-eClass © 2003 - 2007 <a href="http://www.gunet.gr/" target=_blank>Greek Universities Network GUnet</a>.<br>&nbsp;<br>
+eClass ¬© 2003 - 2007 <a href="http://www.gunet.gr/" target=_blank>Greek Universities Network GUnet</a>.<br>&nbsp;<br>
 The <a href="http://portal.eclass.gunet.gr" target=_blank>eClass platform</a>
 is a complete Electronic Course Management System and constitutes GUnet\'s
 proposition for an Asynchronous Teleteaching Service infrastructure.
@@ -983,7 +983,7 @@ $langDefineBlanks="Define one blank by tags [...]";
 $langGiveAnswers="Enter answers";
 $langChooseGoodAnswer="Choose the correct answer";
 $langChooseGoodAnswers="Choose the correct answers";
-$langColumnA="Column ¡";
+$langColumnA="Column Œë";
 $langColumnB="Column B";
 $langMoreLessChoices="More/Less choices";
 
@@ -1247,9 +1247,9 @@ $sendinfomail="Send information e-mail to ".$langsTeachers." ";
 $infoabouteclass="Update information about eClass";
 
 $langCopyrightNotice = '
-e-Class © 2002 - 2003 <a href="http://www.gunet.gr/">GUnet<a><br>&nbsp;<br>
+e-Class ¬© 2002 - 2003 <a href="http://www.gunet.gr/">GUnet<a><br>&nbsp;<br>
 GUNet e-Class is based on <a href="http://www.claroline.net">claroline</a>,
-© 2001, 2002 Universit&eacute; catholique de Louvain (UCL)<br>&nbsp;<br>
+¬© 2001, 2002 Universit&eacute; catholique de Louvain (UCL)<br>&nbsp;<br>
 The content of the courses hosted here is the property of their creators
 and GUnet doesn\'t claim any rights upon it. For any further use or
 republication of the content please contact the maintainers of each
@@ -1996,7 +1996,7 @@ $l_logout	= "Logout";
 $l_login	= "Login";
 
 // Page_header
-$l_separator	= "ª ª";  // Included here because some languages have
+$l_separator	= "¬ª ¬ª";  // Included here because some languages have
 		          // problems with high ASCII (Big-5 and the like).
 $l_editprofile	= "Edit Profile";
 $l_editprefs	= "Edit $l_preferences";
@@ -2461,9 +2461,9 @@ $langProfAccount = " ".$langTeacher." Account";
 $langUserAccountInfo1 = '(Application form)&nbsp;';
 $langUserAccountInfo2 = '(Creation)&nbsp;';
 $langUserAccountInfo3 = 'Alternative Selection';
-$langNewAccountActivation = 'Account ¡ctivation';
-$langNewUserAccountActivation = '".$langStudent." Account ¡ctivation';
-$langNewProfAccountActivation = ' ".$langTeacher." Account ¡ctivation';
+$langNewAccountActivation = 'Account Œëctivation';
+$langNewUserAccountActivation = '".$langStudent." Account Œëctivation';
+$langNewProfAccountActivation = ' ".$langTeacher." Account Œëctivation';
 $langNewAccountActivation1 = '(existing account)';
 $profsuccess=" ".$langTeacher." new account has been created succesfully!";
 $langDearProf="Dear ".$langTeacher." !";
@@ -2473,7 +2473,7 @@ $emailprompt="Type your e-mail address:";
 $ldapprompt="Type your LDAP password:";
 $univprompt="Choose University:";
 $ldapnamesur="Full Name:";
-$langInstitution='∫‰ÒıÏ·:';
+$langInstitution='ŒäŒ¥œÅœÖŒºŒ±:';
 $ldapuserexists='A user with the details you entered already exists in the system.';
 $ldapempty="One or more fields are epmty!";
 $ldapfound="found in LDAP server and the given info are correct";
@@ -2765,10 +2765,10 @@ $langSubmitChanges = "Submit changes";
 * trad4all.inc.php
 *******************************************************************/
 
-$langNameOfLang['english']="english";
-$langNameOfLang['french']="french";
-$langNameOfLang['greek']="greek";
-$charset = 'iso-8859-7';
+$langNameOfLang['english']="English";
+$langNameOfLang['french']="French";
+$langNameOfLang['greek']="Greek";
+$charset = 'UTF-8';
 $langDay_of_weekNames = array();
 $langDay_of_weekNames['init'] = array('S', 'M', 'T', 'W', 'T', 'F', 'S');
 $langDay_of_weekNames['short'] = array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
@@ -3081,7 +3081,7 @@ $langWikiHelpSyntaxContent = "<h1>Wiki Syntax</h1>
 <dt>Hyperlinks</dt>
 <dd><code>[url]</code>, <code>[name|url]</code>, <code>[name|url|language]</code> or <code>[name|url|language|title]</code>.&nbsp;;</dd>
 <dt>Image inclusion</dt>
-<dd><code>((url|alternate text))</code>, <code>((url|alternate text|position))</code> ou <code>((url|alternate text|position|long description))</code>. <br />The position argument can take the following values : L (left), R (right) or C (centerÈ).&nbsp;;</dd>
+<dd><code>((url|alternate text))</code>, <code>((url|alternate text|position))</code> ou <code>((url|alternate text|position|long description))</code>. <br />The position argument can take the following values : L (left), R (right) or C (centerŒπ).&nbsp;;</dd>
 <dd>You can use the syntax as Hyperlinks. For example <code>[title|image.gif]</code>. This syntax is deprecated, consider to use the preceding one&nbsp;;</dd>
 <dt>Link to an image</dt>
 <dd>same as Hyperlinks but put a 0 in fourth argument to avoid image recognition and get an hyperlink to an image. For example <code>[image|image.gif||0]</code> will display a link to image.gif instead of display the imge itself</dd>

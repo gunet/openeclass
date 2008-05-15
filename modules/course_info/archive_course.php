@@ -55,10 +55,13 @@ if (isset($c) && ($c!="")) {
 
 ";
 
+$zipfile = $webDir."courses/archive/$currentCourseID/archive.$currentCourseID.$shortDateBackuping.zip";
+
 if (extension_loaded("zlib")) {
-	$zipCourse = new PclZip("$urlServer/courses/archive/$currentCourseID/archive.$currentCourseID.$shortDateBackuping.zip");
-	$flag = $zipCourse->create("$urlServer/courses/archive/$currentCourseID/archive.$currentCourseID.$shortDateBackuping.zip");
-	print_r($flag);
+	$zipCourse = new PclZip($zipfile);
+	if ($zipCourse->create($webDir.$archiveDir) == 0) {
+                die('Error: '.$zipCourse->errorInfo(true));
+        }
 } else {
 	$tool_content .= $langBackupSuccesfull;
 }
