@@ -19,48 +19,46 @@
 //
 // $Id$
 
-$charset                = 'iso-8859-2';
-
 $text['title']          = 'Informacja o systemie';
 
 $text['vitals']         = 'Stan systemu';
 $text['hostname']       = 'Nazwa kanoniczna hosta';
-$text['ip']             = 'IP nas�uchuj�cy';
-$text['kversion']       = 'Wersja j�dra';
+$text['ip']             = 'IP nasÂłuchujÂący';
+$text['kversion']       = 'Wersja jÂądra';
 $text['uptime']         = 'Uptime';
-$text['users']          = 'Obecnych u�ytkownk�w';
-$text['loadavg']        = 'Obci��enia �rednie';
+$text['users']          = 'Obecnych uÂżytkownkĂłw';
+$text['loadavg']        = 'ObciÂąÂżenia Âśrednie';
 
-$text['hardware']       = 'Informacja o sprz�cie';
+$text['hardware']       = 'Informacja o sprzĂŞcie';
 $text['numcpu']         = 'Procesory';
 $text['cpumodel']       = 'Model';
 $text['mhz']            = 'Chip MHz';
 $text['cache']          = 'Cache Size';
 $text['bogomips']       = 'System Bogomips';
-$text['pci']            = 'Urz�dzenia PCI';
-$text['ide']            = 'Urz�dzenia IDE';
-$text['scsi']           = 'Urz�dzenia SCSI';
+$text['pci']            = 'UrzÂądzenia PCI';
+$text['ide']            = 'UrzÂądzenia IDE';
+$text['scsi']           = 'UrzÂądzenia SCSI';
 
-$text['netusage']       = 'Sie�';
-$text['device']         = 'Urz�dzenie';
+$text['netusage']       = 'SieĂŚ';
+$text['device']         = 'UrzÂądzenie';
 $text['received']       = 'Odebrano';
-$text['sent']           = 'Wys�ano';
-$text['errors']         = 'B��dow/Porzuconych';
+$text['sent']           = 'WysÂłano';
+$text['errors']         = 'BÂłĂŞdow/Porzuconych';
 
-$text['memusage']       = 'Obci��enie pami�ci';
-$text['phymem']         = 'Pami�� fizyczna';
-$text['swap']           = 'Pami�� Swap';
+$text['memusage']       = 'ObciÂąÂżenie pamiĂŞci';
+$text['phymem']         = 'PamiĂŞĂŚ fizyczna';
+$text['swap']           = 'PamiĂŞĂŚ Swap';
 
-$text['fs']             = 'Zamontowane systemy plik�w';
+$text['fs']             = 'Zamontowane systemy plikĂłw';
 $text['mount']          = 'Punkt montowania';
 $text['partition']      = 'Partycja';
 
-$text['percent']        = 'Procentowo zaj�te';
+$text['percent']        = 'Procentowo zajĂŞte';
 $text['type']           = 'Typ';
 $text['free']           = 'Wolne';
-$text['used']           = 'Zaj�te';
+$text['used']           = 'ZajĂŞte';
 $text['size']           = 'Rozmiar';
-$text['totals']         = 'Ca�kowite';
+$text['totals']         = 'CaÂłkowite';
 
 $text['kb']             = 'KB';
 $text['mb']             = 'MB';
@@ -71,8 +69,8 @@ $text['none']           = 'brak';
 $text['capacity']       = 'Rozmiar'; 
 
 $text['template']       = 'Szablon';
-$text['language']       = 'J�zyk';
-$text['submit']         = 'Wy�lij';
+$text['language']       = 'JĂŞzyk';
+$text['submit']         = 'WyÂślij';
 $text['created']        = 'Utworzone przez';
 
 $text['days']           = 'dni';

@@ -19,63 +19,61 @@
 //
 // $Id$
 
-$charset                = 'iso-8859-2';
+$text['title']          = 'InformÃ¡cie o systÃ©me';
 
-$text['title']          = 'Informácie o systéme';
-
-$text['vitals']         = 'Základné informácie';
-$text['hostname']       = 'Meno poèítaèa';
+$text['vitals']         = 'ZÃ¡kladnÃ© informÃ¡cie';
+$text['hostname']       = 'Meno poÄÃ­taÄa';
 $text['ip']             = 'IP adresa';
 $text['kversion']       = 'Verzia jadra';
 $text['uptime']         = 'Uptime';
-$text['users']          = 'Prihlásených u¾ívateåov';
+$text['users']          = 'PrihlÃ¡senÃ½ch uÅ¾Ã­vateÄºov';
 $text['loadavg']        = 'Priemer loadu';
 
-$text['hardware']       = 'Hardwarové informácie';
+$text['hardware']       = 'HardwarovÃ© informÃ¡cie';
 $text['numcpu']         = 'Procesory';
 $text['cpumodel']       = 'Model';
 $text['mhz']            = 'Frekvencia';
-$text['cache']          = 'Veåkos» cache';
+$text['cache']          = 'VeÄºkosÅ¥ cache';
 $text['bogomips']       = 'Bogomipsov';
 $text['pci']            = 'PCI zariadenia';
 $text['ide']            = 'IDE zariadenia';
 $text['scsi']           = 'SCSI zariadenia';
 
-$text['netusage']       = 'Pou¾ívanie siete';
+$text['netusage']       = 'PouÅ¾Ã­vanie siete';
 $text['device']         = 'Zariadenia';
-$text['received']       = 'Prijatých';
-$text['sent']           = 'Odoslaných';
-$text['errors']         = 'Chyby/Vypustených';
+$text['received']       = 'PrijatÃ½ch';
+$text['sent']           = 'OdoslanÃ½ch';
+$text['errors']         = 'Chyby/VypustenÃ½ch';
 
-$text['memusage']       = 'Obsadenie pamäti';
-$text['phymem']         = 'Fyzická pamä»';
+$text['memusage']       = 'Obsadenie pamÃ¤ti';
+$text['phymem']         = 'FyzickÃ¡ pamÃ¤Å¥';
 $text['swap']           = 'Swap';
 
-$text['fs']             = 'Namountované súborové systémy';
-$text['mount']          = 'Adresár';
-$text['partition']      = 'Partícia';
+$text['fs']             = 'NamountovanÃ© sÃºborovÃ© systÃ©my';
+$text['mount']          = 'AdresÃ¡r';
+$text['partition']      = 'PartÃ­cia';
 
-$text['percent']        = 'Obsadených';
+$text['percent']        = 'ObsadenÃ½ch';
 $text['type']           = 'Typ';
-$text['free']           = 'Voåných';
-$text['used']           = 'Pou¾itých';
-$text['size']           = 'Veåkos»';
+$text['free']           = 'VoÄºnÃ½ch';
+$text['used']           = 'PouÅ¾itÃ½ch';
+$text['size']           = 'VeÄºkosÅ¥';
 $text['totals']         = 'Celkom';
 
 $text['kb']             = 'KB';
 $text['mb']             = 'MB';
 $text['gb']             = 'GB';
 
-$text['none']           = '¾iadne';
+$text['none']           = 'Å¾iadne';
 
 $text['capacity']       = 'Kapacita';
 
-$text['template']       = '©ablóna';
+$text['template']       = 'Å ablÃ³na';
 $text['language']       = 'Jazyk';
-$text['submit']         = 'Odosla»';
-$text['created']        = 'Vytvorené pomocou';
+$text['submit']         = 'OdoslaÅ¥';
+$text['created']        = 'VytvorenÃ© pomocou';
 
-$text['days']           = 'dní';
-$text['hours']          = 'hodín';
-$text['minutes']        = 'minút';
+$text['days']           = 'dnÃ­';
+$text['hours']          = 'hodÃ­n';
+$text['minutes']        = 'minÃºt';
 ?>

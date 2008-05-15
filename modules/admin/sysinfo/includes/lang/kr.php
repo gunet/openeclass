@@ -20,63 +20,61 @@
 // $Id$
 // Translated by Sungkook KIM - ace@aceteam.org
 
-$charset                = 'iso-2022-kr';
+$text['title']          = 'ì‹œìŠ¤í…œ ì •ë³´';
 
-$text['title']          = '½Ã½ºÅÛ Á¤º¸';
+$text['vitals']         = 'í˜„ìž¬ ì‹œìŠ¤í…œ ìƒí™©';
+$text['hostname']       = 'ì‹œìŠ¤í…œì˜ í˜¸ìŠ¤íŠ¸ë„¤ìž„';
+$text['ip']             = 'ì‹œìŠ¤í…œì˜ IP ì£¼ì†Œ';
+$text['kversion']       = 'ì»¤ë„ ë²„ì ¼';
+$text['uptime']         = 'ì‹¤í–‰ ì‹œê°„';
+$text['users']          = 'í˜„ìž¬ ì ‘ì†ìž ìˆ˜';
+$text['loadavg']        = 'í‰ê·  ë¡œë“œ';
 
-$text['vitals']         = 'ÇöÀç ½Ã½ºÅÛ »óÈ²';
-$text['hostname']       = '½Ã½ºÅÛÀÇ È£½ºÆ®³×ÀÓ';
-$text['ip']             = '½Ã½ºÅÛÀÇ IP ÁÖ¼Ò';
-$text['kversion']       = 'Ä¿³Î ¹öÁ¯';
-$text['uptime']         = '½ÇÇà ½Ã°£';
-$text['users']          = 'ÇöÀç Á¢¼ÓÀÚ ¼ö';
-$text['loadavg']        = 'Æò±Õ ·Îµå';
+$text['hardware']       = 'í•˜ë“œì›¨ì–´ ì •ë³´';
+$text['numcpu']         = 'í”„ë¡œì„¸ì„œ ê°¯ìˆ˜';
+$text['cpumodel']       = 'í”„ë¡œì„¸ì„œ ëª¨ë¸';
+$text['mhz']            = 'ì¹©ì…‹ í´ëŸ­';
+$text['cache']          = 'ì¼€ì‰¬ ì‚¬ì´ì¦ˆ';
+$text['bogomips']       = 'ìžì²´í…ŒìŠ¤íŠ¸ í´ëŸ­';
+$text['pci']            = 'PCI ìž¥ì¹˜';
+$text['ide']            = 'IDE ìž¥ì¹˜';
+$text['scsi']           = 'SCSI ìž¥ì¹˜';
 
-$text['hardware']       = 'ÇÏµå¿þ¾î Á¤º¸';
-$text['numcpu']         = 'ÇÁ·Î¼¼¼­ °¹¼ö';
-$text['cpumodel']       = 'ÇÁ·Î¼¼¼­ ¸ðµ¨';
-$text['mhz']            = 'Ä¨¼Â Å¬·°';
-$text['cache']          = 'ÄÉ½¬ »çÀÌÁî';
-$text['bogomips']       = 'ÀÚÃ¼Å×½ºÆ® Å¬·°';
-$text['pci']            = 'PCI ÀåÄ¡';
-$text['ide']            = 'IDE ÀåÄ¡';
-$text['scsi']           = 'SCSI ÀåÄ¡';
+$text['netusage']       = ' ë„¤íŠ¸ì›Œí¬ ì‚¬ìš©ì •ë³´';
+$text['device']         = 'ìž¥ì¹˜';
+$text['received']       = 'ë°›ì€ ëŸ‰';
+$text['sent']           = 'ë³´ë‚¸ ëŸ‰';
+$text['errors']         = 'ì—ëŸ¬ / ì‹¤íŒ¨';
 
-$text['netusage']       = ' ³×Æ®¿öÅ© »ç¿ëÁ¤º¸';
-$text['device']         = 'ÀåÄ¡';
-$text['received']       = '¹ÞÀº ·®';
-$text['sent']           = 'º¸³½ ·®';
-$text['errors']         = '¿¡·¯ / ½ÇÆÐ';
+$text['memusage']       = 'ë©”ëª¨ë¦¬ ì‚¬ìš©ëŸ‰';
+$text['phymem']         = 'ë¬¼ë¦¬ì  ë©”ëª¨ë¦¬';
+$text['swap']           = 'ìŠ¤ì™‘ ë””ìŠ¤í¬';
 
-$text['memusage']       = '¸Þ¸ð¸® »ç¿ë·®';
-$text['phymem']         = '¹°¸®Àû ¸Þ¸ð¸®';
-$text['swap']           = '½º¿Ò µð½ºÅ©';
+$text['fs']             = 'ë§ˆìš´íŠ¸ í˜„í™©';
+$text['mount']          = 'ë§ˆìš´íŠ¸';
+$text['partition']      = 'íŒŒí‹°ì…˜';
 
-$text['fs']             = '¸¶¿îÆ® ÇöÈ²';
-$text['mount']          = '¸¶¿îÆ®';
-$text['partition']      = 'ÆÄÆ¼¼Ç';
+$text['percent']        = ' í¼ì„¼íŠ¸';
+$text['type']           = 'íƒ€ìž…';
+$text['free']           = 'ë‚¨ì€ëŸ‰';
+$text['used']           = 'ì‚¬ìš©ëŸ‰';
+$text['size']           = 'ì´ ìš©ëŸ‰';
+$text['totals']         = 'í•©ê³„';
 
-$text['percent']        = ' ÆÛ¼¾Æ®';
-$text['type']           = 'Å¸ÀÔ';
-$text['free']           = '³²Àº·®';
-$text['used']           = '»ç¿ë·®';
-$text['size']           = 'ÃÑ ¿ë·®';
-$text['totals']         = 'ÇÕ°è';
+$text['kb']             = 'í‚¬ë¡œë°”ì´íŠ¸(KB)';
+$text['mb']             = 'ë©”ê°€ë°”ì´íŠ¸(MB)';
+$text['gb']             = 'ê¸°ê°€ë°”ì´íŠ¸(GB)';
 
-$text['kb']             = 'Å³·Î¹ÙÀÌÆ®(KB)';
-$text['mb']             = '¸Þ°¡¹ÙÀÌÆ®(MB)';
-$text['gb']             = '±â°¡¹ÙÀÌÆ®(GB)';
+$text['none']           = 'ì—†ìŒ';
 
-$text['none']           = '¾øÀ½';
+$text['capacity']       = 'ìš©ëŸ‰'; 
 
-$text['capacity']       = '¿ë·®'; 
+$text['template']       = 'í…œí”Œë¦¿';
+$text['language']       = 'ì–¸ì–´';
+$text['submit']         = 'ì ìš©';
+$text['created']        = 'ë§Œë“ ì´';
 
-$text['template']       = 'ÅÛÇÃ¸´';
-$text['language']       = '¾ð¾î';
-$text['submit']         = 'Àû¿ë';
-$text['created']        = '¸¸µçÀÌ';
-
-$text['days']           = 'ÀÏ';
-$text['hours']          = '½Ã';
-$text['minutes']        = 'ºÐ';
+$text['days']           = 'ì¼';
+$text['hours']          = 'ì‹œ';
+$text['minutes']        = 'ë¶„';
 ?>

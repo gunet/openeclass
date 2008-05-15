@@ -19,46 +19,44 @@
 //
 // $Id$
 
-$charset                = 'iso-8859-2';
+$text['title']          = 'Informace o systÃ©mu';
 
-$text['title']          = 'Informace o systému';
-
-$text['vitals']         = 'Zásadní informace';
-$text['hostname']       = 'Jméno poèítaèe';
+$text['vitals']         = 'ZÃ¡sadnÃ­ informace';
+$text['hostname']       = 'JmÃ©no poÄÃ­taÄe';
 $text['ip']             = 'IP adresa';
-$text['kversion']       = 'Verze jádra';
+$text['kversion']       = 'Verze jÃ¡dra';
 $text['uptime']         = 'Uptime';
-$text['users']          = 'Pøihlá¹ených u¾ivatelù';
-$text['loadavg']        = 'Prùmìru loadu';
+$text['users']          = 'PÅ™ihlÃ¡Å¡enÃ½ch uÅ¾ivatelÅ¯';
+$text['loadavg']        = 'PrÅ¯mÄ›ru loadu';
 
-$text['hardware']       = 'Hardwarové informace';
+$text['hardware']       = 'HardwarovÃ© informace';
 $text['numcpu']         = 'Procesory';
 $text['cpumodel']       = 'Model';
 $text['mhz']            = 'Frekvence';
 $text['cache']          = 'Velikost cache';
 $text['bogomips']       = 'Bogomipsy';
-$text['pci']            = 'PCI zaøízení';
-$text['ide']            = 'IDE zaøízení';
-$text['scsi']           = 'SCSI zaøízení';
+$text['pci']            = 'PCI zaÅ™Ã­zenÃ­';
+$text['ide']            = 'IDE zaÅ™Ã­zenÃ­';
+$text['scsi']           = 'SCSI zaÅ™Ã­zenÃ­';
 
-$text['netusage']       = 'Pou¾ívání sítì';
-$text['device']         = 'Zaøízení';
-$text['received']       = 'Pøijato';
-$text['sent']           = 'Odesláno';
-$text['errors']         = 'Chyby/Vypu¹tìno';
+$text['netusage']       = 'PouÅ¾Ã­vÃ¡nÃ­ sÃ­tÄ›';
+$text['device']         = 'ZaÅ™Ã­zenÃ­';
+$text['received']       = 'PÅ™ijato';
+$text['sent']           = 'OdeslÃ¡no';
+$text['errors']         = 'Chyby/VypuÅ¡tÄ›no';
 
-$text['memusage']       = 'Obsazení pamìti';
-$text['phymem']         = 'Fyzická pamì»';
+$text['memusage']       = 'ObsazenÃ­ pamÄ›ti';
+$text['phymem']         = 'FyzickÃ¡ pamÄ›Å¥';
 $text['swap']           = 'Swap';
 
-$text['fs']             = 'Namountované souborové systémy';
-$text['mount']          = 'Adresáø';
+$text['fs']             = 'NamountovanÃ© souborovÃ© systÃ©my';
+$text['mount']          = 'AdresÃ¡Å™';
 $text['partition']      = 'Partition';
 
 $text['percent']        = 'Obsazeno';
 $text['type']           = 'Typ';
 $text['free']           = 'Volno';
-$text['used']           = 'Pou¾ito';
+$text['used']           = 'PouÅ¾ito';
 $text['size']           = 'Velikost';
 $text['totals']         = 'Celkem';
 
@@ -66,16 +64,16 @@ $text['kb']             = 'KB';
 $text['mb']             = 'MB';
 $text['gb']             = 'GB';
 
-$text['none']           = '¾ádná';
+$text['none']           = 'Å¾Ã¡dnÃ¡';
 
 $text['capacity']       = 'Kapacita';
 
-$text['template']       = '©ablona';
+$text['template']       = 'Å ablona';
 $text['language']       = 'Jazyk';
 $text['submit']         = 'Odeslat';
-$text['created']        = 'Vytvoøeno pomocí';
+$text['created']        = 'VytvoÅ™eno pomocÃ­';
 
-$text['days']           = 'dnù';
+$text['days']           = 'dnÅ¯';
 $text['hours']          = 'hodin';
 $text['minutes']        = 'minut';
 ?>
