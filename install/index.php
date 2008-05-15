@@ -939,6 +939,8 @@ $close_user_registration = '.$user_registration.';
 $persoIsActive = '.$persoIsActive.';
 $durationAccount = "126144000";
 
+define("UTF8", true);
+
 '.($vodServer==''?'//':'').'$vodServer = "'.$vodServer.'";
 '.($MCU==''?'//':'').'$MCU = "'.$MCU.'";
 $encryptedPasswd = true;

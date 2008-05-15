@@ -46,6 +46,11 @@ if (isset($_POST['submit_upgrade'])) {
 	$fromadmin = false;
 }
 
+if (!defined('UTF8')) {
+        $Institution = iconv('ISO-8859-7', 'UTF-8', $Institution);
+        $postaddress = iconv('ISO-8859-7', 'UTF-8', $postaddress);
+}
+
 if (!isset($submit2)) {
         if((isset($encryptedPasswd)) || (!empty($encryptedPasswd))) {
                 $newpass = md5(@$_REQUEST['password']);
@@ -104,8 +109,15 @@ if (!isset($submit2)) {
         if (!$conf)
                 die ("Το αρχείο ρυθμίσεων config.php δεν μπόρεσε να διαβαστεί! Ελέγξτε τα δικαιώματα πρόσβασης.");
 
-        // for upgrading 1.5 --> 1.7
         $lines_to_add = "";
+        
+        // Convert to UTF-8 if needed
+        if (!defined('UTF8')) {
+                $lines_to_add .= "define('UTF8', true);\n";
+                $conf = iconv('ISO-8859-7', 'UTF-8', $conf);
+        }
+
+        // for upgrading 1.5 --> 1.7
         if (!strstr($conf, '$colorLight')) {
                 $lines_to_add .= "\$colorLight = '#F5F5F5';\n";
         }
