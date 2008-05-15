@@ -1182,7 +1182,7 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
 <html>
   <head>
     <title>Καλωσορίσατε στον οδηγό εγκατάστασης του eClass</title>
-    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-7\" />
+    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
     <link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
 
       

@@ -141,9 +141,10 @@
 
             $angle = -45;
 
-            if (extension_loaded('mbstring')) {
-                $text = mb_convert_encoding($text, 'UTF-8', 'ISO-8859-7');
-            }
+// Not needed if encoding is already UTF-8
+//            if (extension_loaded('mbstring')) {
+//                $text = mb_convert_encoding($text, 'UTF-8', 'ISO-8859-7');
+//            }
             imagettftext($img, $fontSize, $angle, $px, $py, $color->getColor($img), $fontFileName, $text);
         }
     }

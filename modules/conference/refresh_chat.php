@@ -193,6 +193,7 @@ function uft8html2utf8( $s ) {
              $utf .= chr(128 + ((($dec % 4096) - ($dec % 64)) / 64));
              $utf .= chr(128 + ($dec % 64));
            }
+           // Not needed since encoding is UTF-8
            // return mb_convert_encoding($utf,"ISO-8859-7","UTF-8");
            return $utf;
            }
