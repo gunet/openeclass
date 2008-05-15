@@ -65,7 +65,7 @@ if(isset($registration) and $statut != 10)
 	{
 		$sqlReg=mysql_query("INSERT INTO `$dbname`.user_group (user, team)
 			VALUES ('$uid', '$userGroupId')");
-		$message="$langGroupNowMember";
+		$message="<font color=red>$langGroupNowMember</font>: ";
 		$regDone=1;
 	}
 }
@@ -92,8 +92,6 @@ while ($myGroup = mysql_fetch_array($resultGroup))
     <div id=\"operations_container\">
       <ul id=\"opslist\">
         <li><a href=\"group_edit.php?userGroupId=$userGroupId\">$langEditGroup</a></li>";
-		$tool_content .= loadGroupTools()."";
-
 	}
 	elseif(isset($selfReg) AND ($uid))
 	{
@@ -101,31 +99,20 @@ while ($myGroup = mysql_fetch_array($resultGroup))
     <div id=\"operations_container\">
       <ul id=\"opslist\">
         <li><a href=\"$_SERVER[PHP_SELF]?registration=1\">$langRegIntoGroup</a></li>";
-		$tool_content .= loadGroupTools()."";
 	}
 	elseif(isset($regDone))
 	{
-    	if(isset($selfReg))
-			{
-				$tool_content .=  "&nbsp;";
-			} else {
-				$tool_content .= "
+			$tool_content .= "
     <div id=\"operations_container\">
       <ul id=\"opslist\">";
-				$tool_content .= loadGroupTools()."";
-			}
-		$tool_content .= "
-    <table width=\"99%\">
-    <thead>
-    <tr>
-      <td class=\"success\">$message</td>
-    </tr>
-    </thead>
-    </table>
-    ";
-		}
 
-	//$tool_content .= loadGroupTools()."";
+			$tool_content .= "$message";
+	} else {
+			$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">";
+	}
+	$tool_content .= loadGroupTools();
 	$tool_content .=  "
     <br />
     <table width=\"99%\" class=\"FormData\">
@@ -231,10 +218,10 @@ else
           </tr>";
 	}	// while loop
 }	// else
+
 	$tool_content .=  "
           </tbody>
           </table>";
-
 $tool_content .= "
       </td>
     </tr>
@@ -261,7 +248,6 @@ function loadGroupTools(){
 	{
 		$resultProperties=mysql_query("SELECT id, self_registration, private, forum, document
 			FROM group_properties WHERE id=1");
-
 		while ($myProperties = mysql_fetch_array($resultProperties))
 		{
 			// Drive members into their own forum
@@ -284,7 +270,6 @@ function loadGroupTools(){
 	$group_tools .= "
       </ul>
     </div>";
-	//$group_tools .= "</p>";
 	session_unregister("secretDirectory");
 	session_unregister("forumId");
 	return $group_tools;

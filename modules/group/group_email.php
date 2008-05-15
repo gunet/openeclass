@@ -1,4 +1,4 @@
-<?php  
+<?php
 /**===========================================================================
 *              GUnet e-Class 2.0
 *       E-learning and Course Management Program
@@ -24,10 +24,10 @@
 ============================================================================*/
 /**
  * Groups Component
- * 
+ *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * 
+ *
  * @abstract This module is responsible for the user groups of each lesson
  *
  */
@@ -66,39 +66,45 @@ if ($is_adminOfCourse)  {
 				$tool_content .= "<h4>$langMailError</h4>";
 			}
 		}
-		$tool_content .= "<h4>$langEmailSuccess</h4>";
-		$tool_content .= "&nbsp;";
-		$tool_content .= "<p><a href=\"group.php\">$langBack</a></p>";
+		$tool_content .= "
+    <table width=\"99%\">
+    <thead>
+    <tr>
+      <td class=\"success\">$langEmailSuccess</td>
+    </tr>
+    </thead>
+    </table>
+    <br />
+    ";
+		$tool_content .= "<p align=\"right\"><a href=\"group.php\">$langBack</a></p>";
 	} else {
 
 		$tool_content .= <<<tCont
-<h4>$langTypeMessage</h4>
 
-<form action="group_email.php" method="post">
- <input type="hidden" name="userGroupId" value="$userGroupId">
-<table>
-	<thead>
-		<tr>
-			<th>$langMailSubject</th>
-			<td><input type="text" name="subject" size="58"></input></td>
-		</tr>
-	</thead>
-</table>
-<br>
-<table>
-	<thead>
-		<tr>
-			<th>$langMailBody</th>
-		</tr>
-		<tr>
-			<td><textarea name="body_mail" rows="10" cols="73"></textarea></td>
-		</tr>
-	</thead>
-</table>
-
-<br>
-<input type="submit" name="submit" value="$langSend"></input>
-</form>
+  <form action="group_email.php" method="post">
+  <input type="hidden" name="userGroupId" value="$userGroupId">
+    <table width="99%" class="FormData">
+    <thead>
+    <tr>
+      <th width="220">&nbsp;</th>
+      <td><b>$langTypeMessage</b></td>
+    </tr>
+    <tr>
+      <th class="left">$langMailSubject:</th>
+      <td><input type="text" name="subject" size="58" class="FormData_InputText"></input></td>
+    </tr>
+    <tr>
+      <th class="left" valign="top">$langMailBody:</th>
+      <td><textarea name="body_mail" rows="10" cols="73" class="FormData_InputText"></textarea></td>
+    </tr>
+    <tr>
+      <th>&nbsp;</th>
+      <td><input type="submit" name="submit" value="$langSend"></input></td>
+    </tr>
+    </thead>
+    </table>
+   <br />
+   </form>
 
 
 tCont;

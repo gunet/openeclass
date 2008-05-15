@@ -25,10 +25,10 @@
 
 /**
  * Groups Component
- * 
+ *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * 
+ *
  * @abstract This module is responsible for the user groups of each lesson
  *
  */
@@ -41,12 +41,12 @@ $require_prof = true;
 
 include '../../include/baseTheme.php';
 $nameTools = $langEditGroup;
-$navigation[]= array ("url"=>"group.php", "name"=> $langGroupManagement);
+$navigation[]= array ("url"=>"group.php", "name"=> $langGroup);
 
 //check for valid $userGroupId
 if (isset($userGroupId) && is_numeric($userGroupId)){
 	$userGroupId = (int)$userGroupId;
-	
+
 } else{
 	die("Wrong user group id / User group id not set");
 }
@@ -56,7 +56,7 @@ $tool_content ="";
 $head_content = <<<hCont
 <script type="text/javascript" language="JavaScript">
 
-<!-- Begin javascript menu swapper 
+<!-- Begin javascript menu swapper
 function move(fbox, tbox) {
 var arrFbox = new Array();
 var arrTbox = new Array();
@@ -103,13 +103,13 @@ tbox[c] = no;
 <script type="text/javascript" language="JavaScript">
 
 function selectAll(cbList,bSelect) {
-  for (var i=0; i<cbList.length; i++) 
+  for (var i=0; i<cbList.length; i++)
     cbList[i].selected = cbList[i].checked = bSelect
 }
 
 function reverseAll(cbList) {
   for (var i=0; i<cbList.length; i++) {
-    cbList[i].checked = !(cbList[i].checked) 
+    cbList[i].checked = !(cbList[i].checked)
     cbList[i].selected = !(cbList[i].selected)
   }
 }
@@ -128,11 +128,11 @@ tCont;
 if(isset($modify))
 {
 	// Update main group settings
-	$updateStudentGroup=db_query("UPDATE student_group 
+	$updateStudentGroup=db_query("UPDATE student_group
 		SET name='$name', description='$description', maxStudent='$maxStudent', tutor='$tutor'
 		WHERE id='$userGroupId'", $currentCourseID);
 
-	if (isset($forumId)) 
+	if (isset($forumId))
 		db_query("UPDATE forums SET forum_name='$name' WHERE forum_id='$forumId'", $currentCourseID);
 
 	// Count number of members
@@ -147,32 +147,21 @@ if(isset($modify))
 		// Too much members compared to max members allowed
 		$langGroupEdited=$langGroupTooMuchMembers;
 	}
-	else 
+	else
 	{
 		// Delete all members of this group
 		$delGroupUsers=db_query("DELETE FROM user_group WHERE team='$userGroupId'", $currentCourseID);
 		$numberMembers--;
 
-	for ($i = 0; $i <= $numberMembers; $i++) 
+	for ($i = 0; $i <= $numberMembers; $i++)
 	{
-		$registerUserGroup=db_query("INSERT INTO user_group (user, team) 
+		$registerUserGroup=db_query("INSERT INTO user_group (user, team)
 			VALUES ('$ingroup[$i]', '$userGroupId')", $currentCourseID);
 	}
 
 		$langGroupEdited=$langGroupSettingsModified;
 	}	// else
-
-	$tool_content .= "<table>
-		<thead>
-		<tr>
-		<th>
-			$langGroupEdited
-		</th>
-		</tr>
-		</thead>
-		</table>
-		<br>";
-
+		$message = $langGroupEdited;
 }	// if $modify
 
 //=======================================================================
@@ -182,7 +171,7 @@ if(isset($modify))
 $groupSelect=db_query("SELECT name, tutor, description, maxStudent
 			FROM student_group WHERE id='$userGroupId'", $currentCourseID);
 
-while ($myStudentGroup = mysql_fetch_array($groupSelect)) 
+while ($myStudentGroup = mysql_fetch_array($groupSelect))
 {
 		$tool_content_group_name = $myStudentGroup['name'];
 
@@ -206,23 +195,23 @@ while ($myStudentGroup = mysql_fetch_array($groupSelect))
 					$myTutor[nom] $myTutor[prenom]
 				</option>";
 		}
-		else 
+		else
 		{
-			
+
 			$tool_content_tutor .= "
 				<option value=$myTutor[user_id]>
 					$myTutor[nom] $myTutor[prenom]
 				</option>";
 		}
 	}
-	
-	
-	
+
+
+
 	if($tutorExists==0)
 	{
 		$tool_content_tutor .=  "<option SELECTED value=0>$langGroupNoTutor</option>";
 	}
-	else 
+	else
 	{
 		$tool_content_tutor .=  "<option value=0>$langGroupNoTutor</option>";
 	}
@@ -236,7 +225,7 @@ while ($myStudentGroup = mysql_fetch_array($groupSelect))
 	{
 		$tool_content_max_student =  $myStudentGroup['maxStudent'];
 	}
-	
+
 	$tool_content_group_description = $myStudentGroup['description'];
 
 
@@ -247,7 +236,7 @@ while ($myStudentGroup = mysql_fetch_array($groupSelect))
 
 // Student registered to the course but inserted in no group
 
-$sqll= "SELECT DISTINCT u.user_id , u.nom, u.prenom 
+$sqll= "SELECT DISTINCT u.user_id , u.nom, u.prenom
 			FROM (`$mysqlMainDb`.user u, `$mysqlMainDb`.cours_user cu)
 			LEFT JOIN user_group ug
 			ON u.user_id=ug.user
@@ -267,8 +256,8 @@ while ($myNotMember = mysql_fetch_array($resultNotMember))
 
 }	// while loop
 
-$resultMember=mysql_query("SELECT user_group.id, user.user_id, user.nom, user.prenom, user.email 
-	FROM `$mysqlMainDb`.user, user_group 
+$resultMember=mysql_query("SELECT user_group.id, user.user_id, user.nom, user.prenom, user.email
+	FROM `$mysqlMainDb`.user, user_group
 	WHERE user_group.team='$userGroupId' AND user_group.user=$mysqlMainDb.user.user_id");
 
 $a=0;
@@ -282,78 +271,93 @@ while ($myMember = mysql_fetch_array($resultMember))
 
 
 //========================================================================
+		$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">
+        <li><a href=\"group_space.php?userGroupId=$userGroupId\">$langGroupThisSpace</a></li>
+        <li><a href=\"../user/user.php\">$langAddTutors</a></li>
+      </ul>
+    </div>";
+
+	if (isset($message)) {
+		$tool_content .= "
+    <table width=\"99%\">
+    <thead>
+    <tr>
+      <td class=\"success\">$message</td>
+    </tr>
+    </thead>
+    </table>
+    ";
+	}
 $tool_content .="
-
-<p><a href=\"group_space.php?userGroupId=$userGroupId\">$langGroupThisSpace</a></p>
-<p><a href=\"../user/user.php\">$langAddTutors</a></p>
-
-<form name= \"groupedit\" method=\"POST\" action=\"".$_SERVER['PHP_SELF']."?edit=yes&userGroupId=$userGroupId\">
-
-<table>
-	<thead>
-		<tr>
-			<th>$langGroupName $myStudentGroup[name]</th>
-			<td><input type=text name=\"name\" size=40 value=\"$tool_content_group_name\"></td>
-		</tr>
-		<tr>
-			<th>$langGroupTutor</th>
-			<td>
-				<select name=\"tutor\">
-				$tool_content_tutor
-				</select>	
-			</td>
-		</tr>
-		<tr>
-			<th>$langMax $langGroupPlacesThis</th>
-			<td><input type=text name=\"maxStudent\" size=2 value=\"$tool_content_max_student\"></td>
-		</tr>
-	</thead>
-</table>
-<br>
-<table>
-	<thead>
-		<tr>
-			<th>$langDescription $langUncompulsory</th>
-		</tr>
-		<tr>
-			<td><textarea name=\"description\" rows=6 cols=60 wrap=virtual>$tool_content_group_description</textarea></td>
-		</tr>
-	</thead>
-</table>
-<br>
-<table>
-	<thead>
-		<tr>
-			<th>$langNoGroupStudents</th>
-			<th>$langMove</th>
-			<th> $langGroupMembers</th>
-		</tr>
-		<tr>
-			<td>
-				<select name=\"nogroup[]\" size=20 multiple>
-					$tool_content_not_Member
-				</select>
-			</td>
-			<td>
-				<input type=\"button\" onClick=\"move(this.form.elements[4],this.form.elements[7])\" value=\"   >>   \">
-				<br>
-				<input type=\"button\" onClick=\"move(this.form.elements[7],this.form.elements[4])\" value=\"   <<   \"></td>
-			<td>
-			
-			<select name=\"ingroup[]\" size=\"20\" multiple>
-				$tool_content_group_members
-			</select>
-			
-			</td>
-		</tr>
-	</thead>
-</table>
-<br>
-
-<input type=submit value=\"$langModify\"  name=\"modify\" onClick=\"selectAll(this.form.elements[7],true)\">
-<br>
+  <form name= \"groupedit\" method=\"POST\" action=\"".$_SERVER['PHP_SELF']."?edit=yes&userGroupId=$userGroupId\">
 
 
+    <br />
+    <table width=\"99%\" class=\"FormData\">
+    <thead>
+    <tr>
+      <th width=\"220\">&nbsp;</th>
+      <td><b>$langGroupInfo</b></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langGroupName $myStudentGroup[name]:</th>
+      <td><input type=text name=\"name\" size=40 value=\"$tool_content_group_name\" class=\"FormData_InputText\"></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langGroupTutor:</th>
+      <td>
+         <select name=\"tutor\"  class=\"FormData_InputText\">$tool_content_tutor</select>
+      </td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langMax $langGroupPlacesThis:</th>
+      <td><input type=text name=\"maxStudent\" size=2 value=\"$tool_content_max_student\"  class=\"auth_input\"></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langDescription $langUncompulsory:</th>
+      <td><textarea name=\"description\" rows=6 cols=60 wrap=virtual  class=\"FormData_InputText\">$tool_content_group_description</textarea></td>
+    </tr>
+    <tr>
+      <th class=\"left\" valign=\"top\">$langGroupMembers :</th>
+      <td>
+          <table width=\"99%\" align=\"center\" class=\"GroupSum\">
+          <thead>
+          <tr>
+            <td><b>$langNoGroupStudents</b></td>
+            <td width='100'><div align=\"center\"><b>$langMove</b></div></td>
+            <td><div align=\"center\"><b>$langGroupMembers</b></div></td>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td><div align=\"left\">
+              <select name=\"nogroup[]\" size=20 multiple>
+                $tool_content_not_Member
+              </select></div>
+            </td>
+            <td>
+              <div align=\"center\">
+              <input type=\"button\" onClick=\"move(this.form.elements[4],this.form.elements[7])\" value=\"   >>   \"><br /><input type=\"button\" onClick=\"move(this.form.elements[7],this.form.elements[4])\" value=\"   <<   \">
+              </div>
+            </td>
+            <td><div align=\"right\">
+              <select name=\"ingroup[]\" size=\"20\" multiple>
+                $tool_content_group_members
+              </select></div>
+            </td>
+          </tr>
+          </tbody>
+          </table>
+      </td>
+    </tr>
+    <tr>
+      <th class=\"left\">&nbsp;</th>
+      <td><input type=submit value=\"$langModify\"  name=\"modify\" onClick=\"selectAll(this.form.elements[7],true)\"></td>
+    </tr>
+    </thead>
+    </table>
 ";
 
 draw($tool_content, 2, 'group', $head_content);

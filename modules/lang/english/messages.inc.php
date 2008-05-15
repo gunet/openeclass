@@ -1194,6 +1194,7 @@ $langGroupNowMember="You are now member of this group";
 $langForumType="Forum type";
 $langPropModify="Modify settings";
 $langGroupFilledGroups="Groups have been filled (or completed) by ".$langsStudents." present in the 'Users' list.";
+$langGroupInfo = "Group Info";
 
 // group - email
 $langEmailGroup = "Email to group";
@@ -1305,7 +1306,7 @@ $langMyAgenda = "My Agenda";
 $langMyStats = "User Statistics";   #ophelia 1-8-2006
 $langMyAnnouncements = "My Announcements";
 $langWelcome="courses are freely available below. Other  courses require
-a username and a password, which you can obtain by clicking on 'registration'. ".$langTeachers." 
+a username and a password, which you can obtain by clicking on 'registration'. ".$langTeachers."
 can create course websites clicking on registration too, but selecting then 'Create course site'.";
 $langAdminTool = "Admin Tool";
 $langUserName="Username";
@@ -1659,8 +1660,8 @@ and email.
 $lang_pass_submit = 'Send';
 
 $lang_pass_invalid_mail1 = 'The email address,';
-$lang_pass_invalid_mail2 = 'in invalid. If this was due to a mistake on your behalf, try again. 
-	If this was not a mistake, and yet you are certain you already have an account on the platform, 
+$lang_pass_invalid_mail2 = 'in invalid. If this was due to a mistake on your behalf, try again.
+	If this was not a mistake, and yet you are certain you already have an account on the platform,
 	please contact the platform administrator at this email';
 $lang_pass_invalid_mail3 = 'giving any clues that can help in finding your account like name, surname, department etc.';
 
@@ -1684,7 +1685,7 @@ to repeat the password reset request from the beginning.
 ";
 
 $langPassEmail1 = "Your password has been reset. Your new password is:";
-			
+
 $langPassEmail2 = "For security reasons, please change your password to something else, as soon as you login.";
 
 
@@ -1695,7 +1696,7 @@ $langAccountEmailError2 = "It was not feasible to send password reset instructio
 $langAccountEmailError3 = 'If necessarry, you may contact the platform administrator at';
 $lang_pass_email_ok = 'Your account information were found and send to the folowing email address';
 
-$langAccountNotFound1 = 'No account was found with the email address you entered'; 
+$langAccountNotFound1 = 'No account was found with the email address you entered';
 $langAccountNotFound2 = 'However, if you are certain you already have an account, please contact the site administrator at ';
 $langAccountNotFound3 = 'giving clues that can help in finding your account like name, surname, department etc.';
 $langHome = "Return to home page";
@@ -2300,7 +2301,7 @@ $langYouAreReg="\nYou are registered on";
 $langIs="is";
 $langPersonalSettings="Your personnal settings have been registered and an email has been sent to help you remember your username and password.</p>";
 $langPersonalSettingsMore="	Click <a href='../../index.php'>here</a> to navigate your User Portfolio.<br>
-							You can also: 
+							You can also:
 							<ul>
 								<li>navigate the platform and your personal selections,</li>
 								<li>select \"Courses List\" to review the available courses.</li>
@@ -3302,12 +3303,12 @@ $langListUsersActions="List of Users / Actions";
 /*************************************************************
 editpost.php
 **************************************************************/
-	
-$langErrorDataOne="Error retrieving data from database (1)"; 
+
+$langErrorDataOne="Error retrieving data from database (1)";
 $langErrorDataTwo="Error retrieving data from database (2)";
 $langUnableUpadatePost="Unable to update the posting in the database";
 $langUnableUpadateTopic="Unable to update the topic subject in the database";
-$langUnableDeletePost="Couldn't delete post from database";	
+$langUnableDeletePost="Couldn't delete post from database";
 $langPostRemoved="Couldn't update to previous post time - last post has been removed";
 $langUnableDeleteTopic="Couldn't delete topic from database";
 $langTopicInformation="Couldn't get forum and topic information from the database.";
@@ -3358,7 +3359,7 @@ $langNoChanges="Error! Inactive accounts were not updated";
 
 $langErrorAddaAdmin="Error: the user was not added in the administrators. Likely he is already administrator.";
 $langMultEnrol="Multiple users registrations";
-$langMultEmail="Multiple appearances of e-mail addresses"; 
+$langMultEmail="Multiple appearances of e-mail addresses";
 $langMultLoginPass="Multiple pairs of LOGIN - PASS";
 $langDataBase="Database";
 $langTryDeleteAdmin="You tried to delete user with user id = 1 (Admin)!";
@@ -3371,10 +3372,10 @@ $langMoveOK="File moved with success!";
 $langMoveNotOK="File not moved";
 $langSimpleExercise="In one page";
 $langSequentialExercise="In a question per page";
-$langRandomQuestions="Random questions";	
+$langRandomQuestions="Random questions";
 $langGiveExerciseName="Input the exercise name";
-$langGiveExerciseInts="Input fields Time Restriction and Allowed Repeats ould be integer numbers";	 
-$langMoreAnswers="+answer"; 
+$langGiveExerciseInts="Input fields Time Restriction and Allowed Repeats ould be integer numbers";
+$langMoreAnswers="+answer";
 $langLessAnswers="-answer";
 $langMoreElements="More";
 $langLessElements="Less";
@@ -3384,7 +3385,7 @@ $langListFaculteActions="List of Faculties/Departments - Actions";
 $m['grades']= "Grades";
 $langPublicAccess="open";
 $langAsynchronous="Asynchronous Teleteaching Team";
-$langHelpDeskEmail="Email Helpdesk"; 
+$langHelpDeskEmail="Email Helpdesk";
 $langFileScormError="The updated file is not valid.";
 $langCourseTools="Course Tools";
 $langLinkDeleted="The link was deleted";
