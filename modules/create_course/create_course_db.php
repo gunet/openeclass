@@ -1,7 +1,7 @@
 <?
 // if mysql > 4.1 then create tables with charset
         if (mysql_version()) {
-                $charset_spec = 'DEFAULT CHARACTER SET=greek';
+                $charset_spec = 'DEFAULT CHARACTER SET=utf8';
         } else {
                 $charset_spec = '';
         }

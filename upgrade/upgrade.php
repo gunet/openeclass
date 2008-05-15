@@ -9,10 +9,10 @@ $path2add=2;
 include '../include/baseTheme.php';
 include 'document_upgrade.php';
 
-$nameTools = "Αναβάθμιση των βάσεων δεδομένων του eClass";
+$nameTools = "Ξ‘Ξ½Ξ±Ξ²Ξ¬ΞΈΞΌΞΉΟƒΞ· Ο„Ο‰Ξ½ Ξ²Ξ¬ΟƒΞµΟ‰Ξ½ Ξ΄ΞµΞ΄ΞΏΞΌΞ­Ξ½Ο‰Ξ½ Ο„ΞΏΟ… eClass";
 $auth_methods = array("imap","pop3","ldap","db");
-$OK = "[<font color='green'> Επιτυχία </font>]";
-$BAD = "[<font color='red'> Σφάλμα ή δεν χρειάζεται τροποποίηση</font>]";
+$OK = "[<font color='green'> Ξ•Ο€ΞΉΟ„Ο…Ο‡Ξ―Ξ± </font>]";
+$BAD = "[<font color='red'> Ξ£Ο†Ξ¬Ξ»ΞΌΞ± Ξ® Ξ΄ΞµΞ½ Ο‡ΟΞµΞΉΞ¬Ξ¶ΞµΟ„Ξ±ΞΉ Ο„ΟΞΏΟ€ΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ·</font>]";
 
 $tool_content = "";
 $tool_content .= "<table width=\"99%\"><tbody>";
@@ -24,18 +24,18 @@ $diskQuotaVideo = 20000000;
 $diskQuotaDropbox = 40000000;
 
 // new titles for table accueil
-$langDropBox = array('greek' => "Ανταλλαγή Αρχείων", 'english' => "DropBox");
-$langCourseAdmin = array('greek' => "Διαχείριση Μαθήματος", 'english' => "Course Admin");
-$langUsers = array('greek' => "Διαχείριση Χρηστών", 'english' => "Users Admin");
-$langForums = array('greek' => "Περιοχή Συζητήσεων", 'english' => "Forum");
-$langWork = array('greek' => "Εργασίες", 'english' => "Student Papers");
-$langWiki = array('greek' => "Σύστημα Wiki", 'english' => "Wiki");
-$langToolManagement = array('greek' => "Ενεργοποίηση Εργαλείων", 'english' => "Tools Management");
-$langCourseStat = array('greek' => "Στατιστικά Χρήσης", 'english' => "Usage Statistics");
-$langQuestionnaire = array('greek' => "Ερωτηματολόγιο", 'english' => "Questionnaire");
-$langConference = array('greek' => "Τηλεσυνεργασία", 'english' => "Teleconference");
-$langLearnPath = array('greek' => "Γραμμή Μάθησης", 'english' => "Learning Path");
-$langExercises = array('greek' => "Ασκήσεις", 'english' => "Exercises");
+$langDropBox = array('greek' => "Ξ‘Ξ½Ο„Ξ±Ξ»Ξ»Ξ±Ξ³Ξ® Ξ‘ΟΟ‡ΞµΞ―Ο‰Ξ½", 'english' => "DropBox");
+$langCourseAdmin = array('greek' => "Ξ”ΞΉΞ±Ο‡ΞµΞ―ΟΞΉΟƒΞ· ΞΞ±ΞΈΞ®ΞΌΞ±Ο„ΞΏΟ‚", 'english' => "Course Admin");
+$langUsers = array('greek' => "Ξ”ΞΉΞ±Ο‡ΞµΞ―ΟΞΉΟƒΞ· Ξ§ΟΞ·ΟƒΟ„ΟΞ½", 'english' => "Users Admin");
+$langForums = array('greek' => "Ξ ΞµΟΞΉΞΏΟ‡Ξ® Ξ£Ο…Ξ¶Ξ·Ο„Ξ®ΟƒΞµΟ‰Ξ½", 'english' => "Forum");
+$langWork = array('greek' => "Ξ•ΟΞ³Ξ±ΟƒΞ―ΞµΟ‚", 'english' => "Student Papers");
+$langWiki = array('greek' => "Ξ£ΟΟƒΟ„Ξ·ΞΌΞ± Wiki", 'english' => "Wiki");
+$langToolManagement = array('greek' => "Ξ•Ξ½ΞµΟΞ³ΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ· Ξ•ΟΞ³Ξ±Ξ»ΞµΞ―Ο‰Ξ½", 'english' => "Tools Management");
+$langCourseStat = array('greek' => "Ξ£Ο„Ξ±Ο„ΞΉΟƒΟ„ΞΉΞΊΞ¬ Ξ§ΟΞ®ΟƒΞ·Ο‚", 'english' => "Usage Statistics");
+$langQuestionnaire = array('greek' => "Ξ•ΟΟ‰Ο„Ξ·ΞΌΞ±Ο„ΞΏΞ»ΟΞ³ΞΉΞΏ", 'english' => "Questionnaire");
+$langConference = array('greek' => "Ξ¤Ξ·Ξ»ΞµΟƒΟ…Ξ½ΞµΟΞ³Ξ±ΟƒΞ―Ξ±", 'english' => "Teleconference");
+$langLearnPath = array('greek' => "Ξ“ΟΞ±ΞΌΞΌΞ® ΞΞ¬ΞΈΞ·ΟƒΞ·Ο‚", 'english' => "Learning Path");
+$langExercises = array('greek' => "Ξ‘ΟƒΞΊΞ®ΟƒΞµΞΉΟ‚", 'english' => "Exercises");
 
 // Initialise $tool_content
 $tool_content = "";
@@ -55,9 +55,9 @@ if (!isset($submit2)) {
         }
 
         if (!is_admin(@$_REQUEST['login'], $newpass, $mysqlMainDb)) {
-                $tool_content .= "<p>Τα στοιχεία που δώσατε δεν αντιστοιχούν στο διαχειριστή του
-                        συστήματος! Παρακαλούμε επιστρέψτε στην προηγούμενη σελίδα και ξαναδοκιμάστε.</p>
-                        <center><a href=\"index.php\">Επιστροφή</a></center>";
+                $tool_content .= "<p>Ξ¤Ξ± ΟƒΟ„ΞΏΞΉΟ‡ΞµΞ―Ξ± Ο€ΞΏΟ… Ξ΄ΟΟƒΞ±Ο„Ξµ Ξ΄ΞµΞ½ Ξ±Ξ½Ο„ΞΉΟƒΟ„ΞΏΞΉΟ‡ΞΏΟΞ½ ΟƒΟ„ΞΏ Ξ΄ΞΉΞ±Ο‡ΞµΞΉΟΞΉΟƒΟ„Ξ® Ο„ΞΏΟ…
+                        ΟƒΟ…ΟƒΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚! Ξ Ξ±ΟΞ±ΞΊΞ±Ξ»ΞΏΟΞΌΞµ ΞµΟ€ΞΉΟƒΟ„ΟΞ­ΟΟ„Ξµ ΟƒΟ„Ξ·Ξ½ Ο€ΟΞΏΞ·Ξ³ΞΏΟΞΌΞµΞ½Ξ· ΟƒΞµΞ»Ξ―Ξ΄Ξ± ΞΊΞ±ΞΉ ΞΎΞ±Ξ½Ξ±Ξ΄ΞΏΞΊΞΉΞΌΞ¬ΟƒΟ„Ξµ.</p>
+                        <center><a href=\"index.php\">Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®</a></center>";
                 draw($tool_content, 0);
                 exit;
         }
@@ -67,7 +67,7 @@ if (!isset($submit2)) {
 // upgrade config.php
 // *******************************************
 if (!@chdir("../config/")) {
-     die ("Δεν ήταν δυνατή η πρόσβαση στον κατάλογο του αρχείο ρυθμίσεων config.php! Ελέγξτε τα δικαιώματα πρόσβασης.");
+     die ("Ξ”ΞµΞ½ Ξ®Ο„Ξ±Ξ½ Ξ΄Ο…Ξ½Ξ±Ο„Ξ® Ξ· Ο€ΟΟΟƒΞ²Ξ±ΟƒΞ· ΟƒΟ„ΞΏΞ½ ΞΊΞ±Ο„Ξ¬Ξ»ΞΏΞ³ΞΏ Ο„ΞΏΟ… Ξ±ΟΟ‡ΞµΞ―ΞΏ ΟΟ…ΞΈΞΌΞ―ΟƒΞµΟ‰Ξ½ config.php! Ξ•Ξ»Ξ­Ξ³ΞΎΟ„Ξµ Ο„Ξ± Ξ΄ΞΉΞΊΞ±ΞΉΟΞΌΞ±Ο„Ξ± Ο€ΟΟΟƒΞ²Ξ±ΟƒΞ·Ο‚.");
 }
 
 if (!isset($submit2)) {
@@ -75,34 +75,34 @@ if (!isset($submit2)) {
         // get old contact values
         $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>" .
                 "<div class='kk'>" .
-                "<p>Στο αρχείο ρυθμίσεων <tt>config.php</tt> βρέθηκαν τα παρακάτω στοιχεία επικοινωνίας." .
-                "<br>Μπορείτε να τα αλλάξετε / συμπληρώσετε.</p>" .
-                "<fieldset><legend>Στοιχεία Επικοινωνίας</legend>" .
-                "<table><tr><td style='border: 1px solid #FFFFFF;'>Όνομα Ιδρύματος:</td>" .
+                "<p>Ξ£Ο„ΞΏ Ξ±ΟΟ‡ΞµΞ―ΞΏ ΟΟ…ΞΈΞΌΞ―ΟƒΞµΟ‰Ξ½ <tt>config.php</tt> Ξ²ΟΞ­ΞΈΞ·ΞΊΞ±Ξ½ Ο„Ξ± Ο€Ξ±ΟΞ±ΞΊΞ¬Ο„Ο‰ ΟƒΟ„ΞΏΞΉΟ‡ΞµΞ―Ξ± ΞµΟ€ΞΉΞΊΞΏΞΉΞ½Ο‰Ξ½Ξ―Ξ±Ο‚." .
+                "<br>ΞΟ€ΞΏΟΞµΞ―Ο„Ξµ Ξ½Ξ± Ο„Ξ± Ξ±Ξ»Ξ»Ξ¬ΞΎΞµΟ„Ξµ / ΟƒΟ…ΞΌΟ€Ξ»Ξ·ΟΟΟƒΞµΟ„Ξµ.</p>" .
+                "<fieldset><legend>Ξ£Ο„ΞΏΞΉΟ‡ΞµΞ―Ξ± Ξ•Ο€ΞΉΞΊΞΏΞΉΞ½Ο‰Ξ½Ξ―Ξ±Ο‚</legend>" .
+                "<table><tr><td style='border: 1px solid #FFFFFF;'>ΞΞ½ΞΏΞΌΞ± Ξ™Ξ΄ΟΟΞΌΞ±Ο„ΞΏΟ‚:</td>" .
                 "<td style='border: 1px solid #FFFFFF;'>&nbsp;<input class=auth_input_admin type='text' size='40' name='Institution' value='".@$Institution."'></td></tr>" .
-                "<tr><td style='border: 1px solid #FFFFFF;'>Διεύθυνση Ιδρύματος:</td>" .
+                "<tr><td style='border: 1px solid #FFFFFF;'>Ξ”ΞΉΞµΟΞΈΟ…Ξ½ΟƒΞ· Ξ™Ξ΄ΟΟΞΌΞ±Ο„ΞΏΟ‚:</td>" .
                 "<td style='border: 1px solid #FFFFFF;'>&nbsp;<textarea rows='3' cols='40' class=auth_input_admin name='postaddress'>".@$postaddress."</textarea></td></tr>" .
-                "<tr><td style='border: 1px solid #FFFFFF;'>Τηλ. Επικοινωνίας:</td>" .
+                "<tr><td style='border: 1px solid #FFFFFF;'>Ξ¤Ξ·Ξ». Ξ•Ο€ΞΉΞΊΞΏΞΉΞ½Ο‰Ξ½Ξ―Ξ±Ο‚:</td>" .
                 "<td style='border: 1px solid #FFFFFF;'>&nbsp;<input class=auth_input_admin type='text' name='telephone' value='".@$telephone."'></td></tr>" .
                 "<tr><td style='border: 1px solid #FFFFFF;'>Fax:</td>" .
                 "<td style='border: 1px solid #FFFFFF;'>&nbsp;<input class=auth_input_admin type='text' name='fax' value='".@$fax."'></td></tr></table></fieldset>
-                <fieldset><legend>Εγγραφή Χρηστών</legend>
+                <fieldset><legend>Ξ•Ξ³Ξ³ΟΞ±Ο†Ξ® Ξ§ΟΞ·ΟƒΟ„ΟΞ½</legend>
                 <table cellpadding='1' cellspacing='2' border='0' width='99%'>
                 <tr><td style='border: 1px solid #FFFFFF;''>
-                <span class='explanationtext'>Εγγραφή χρηστών μέσω αίτησης</span></td>
+                <span class='explanationtext'>Ξ•Ξ³Ξ³ΟΞ±Ο†Ξ® Ο‡ΟΞ·ΟƒΟ„ΟΞ½ ΞΌΞ­ΟƒΟ‰ Ξ±Ξ―Ο„Ξ·ΟƒΞ·Ο‚</span></td>
                 <td style='border: 1px solid #FFFFFF;'><input type='checkbox' name='reguser' $closeregdefault></td>
                 </tr>
                 </table></fieldset>
-                <p><input name='submit2' value='Συνέχεια' type='submit'></p>
+                <p><input name='submit2' value='Ξ£Ο…Ξ½Ξ­Ο‡ΞµΞΉΞ±' type='submit'></p>
                 </div></form>";
 } else {
         // backup of config file 
         if (!copy("config.php","config_backup.php"))
-                die ("Δεν ήταν δυνατή η λειτουργία αντιγράφου ασφαλείας του config.php! Ελέγξτε τα δικαιώματα πρόσβασης.");
+                die ("Ξ”ΞµΞ½ Ξ®Ο„Ξ±Ξ½ Ξ΄Ο…Ξ½Ξ±Ο„Ξ® Ξ· Ξ»ΞµΞΉΟ„ΞΏΟ…ΟΞ³Ξ―Ξ± Ξ±Ξ½Ο„ΞΉΞ³ΟΞ¬Ο†ΞΏΟ… Ξ±ΟƒΟ†Ξ±Ξ»ΞµΞ―Ξ±Ο‚ Ο„ΞΏΟ… config.php! Ξ•Ξ»Ξ­Ξ³ΞΎΟ„Ξµ Ο„Ξ± Ξ΄ΞΉΞΊΞ±ΞΉΟΞΌΞ±Ο„Ξ± Ο€ΟΟΟƒΞ²Ξ±ΟƒΞ·Ο‚.");
 
         $conf = file_get_contents("config.php");
         if (!$conf)
-                die ("Το αρχείο ρυθμίσεων config.php δεν μπόρεσε να διαβαστεί! Ελέγξτε τα δικαιώματα πρόσβασης.");
+                die ("Ξ¤ΞΏ Ξ±ΟΟ‡ΞµΞ―ΞΏ ΟΟ…ΞΈΞΌΞ―ΟƒΞµΟ‰Ξ½ config.php Ξ΄ΞµΞ½ ΞΌΟ€ΟΟΞµΟƒΞµ Ξ½Ξ± Ξ΄ΞΉΞ±Ξ²Ξ±ΟƒΟ„ΞµΞ―! Ξ•Ξ»Ξ­Ξ³ΞΎΟ„Ξµ Ο„Ξ± Ξ΄ΞΉΞΊΞ±ΞΉΟΞΌΞ±Ο„Ξ± Ο€ΟΟΟƒΞ²Ξ±ΟƒΞ·Ο‚.");
 
         // for upgrading 1.5 --> 1.7
         $lines_to_add = "";
@@ -171,7 +171,7 @@ if (!isset($submit2)) {
                         $conf);
         $fp = @fopen("config.php","w");
         if (!$fp)
-                die ("Δεν πραγματοποιήθηκε η εγγραφή των αλλαγών στο αρχείο ρυθμίσεων config.php! Ελέγξτε τα δικαιώματα πρόσβασης.");
+                die ("Ξ”ΞµΞ½ Ο€ΟΞ±Ξ³ΞΌΞ±Ο„ΞΏΟ€ΞΏΞΉΞ®ΞΈΞ·ΞΊΞµ Ξ· ΞµΞ³Ξ³ΟΞ±Ο†Ξ® Ο„Ο‰Ξ½ Ξ±Ξ»Ξ»Ξ±Ξ³ΟΞ½ ΟƒΟ„ΞΏ Ξ±ΟΟ‡ΞµΞ―ΞΏ ΟΟ…ΞΈΞΌΞ―ΟƒΞµΟ‰Ξ½ config.php! Ξ•Ξ»Ξ­Ξ³ΞΎΟ„Ξµ Ο„Ξ± Ξ΄ΞΉΞΊΞ±ΞΉΟΞΌΞ±Ο„Ξ± Ο€ΟΟΟƒΞ²Ξ±ΟƒΞ·Ο‚.");
         fwrite($fp, $new_conf);
         fclose($fp);
         // ****************************************************
@@ -285,7 +285,7 @@ if (!isset($submit2)) {
                            start_date datetime NOT NULL default '0000-00-00 00:00:00',
                            end_date datetime NOT NULL default '0000-00-00 00:00:00',
                            PRIMARY KEY  (id))
-                                TYPE=MyISAM DEFAULT CHARACTER SET=greek");
+                                TYPE=MyISAM DEFAULT CHARACTER SET=utf8");
         }
         // new table for monthly summary
         if (!mysql_table_exists($mysqlMainDb, 'monthly_summary'))  {
@@ -299,7 +299,7 @@ if (!isset($submit2)) {
                            logins int(11) NOT NULL default '0',
                            details text NOT NULL default '',
                            PRIMARY KEY  (id))
-                                TYPE=MyISAM DEFAULT CHARACTER SET=greek");
+                                TYPE=MyISAM DEFAULT CHARACTER SET=utf8");
         }
         // new table 'auth' with auth methods
         if(!mysql_table_exists($mysqlMainDb, 'auth')) {
@@ -386,10 +386,10 @@ if (!isset($submit2)) {
                                 }
                         }
                 } else {
-                        die("ΠΡΟΣΟΧΗ! Η διαδικασία αναβάθμισης δέν μπόρεσε να " .
-                                        "κρυπτογραφήσει τα password και η πλατφόρμα δεν μπορεί " .
-                                        "να λειτουργήσει. Αφαιρέστε τη γραμμή " .
-                                        "«\$encryptedPasswd = true;»");
+                        die("Ξ Ξ΅ΞΞ£ΞΞ§Ξ—! Ξ— Ξ΄ΞΉΞ±Ξ΄ΞΉΞΊΞ±ΟƒΞ―Ξ± Ξ±Ξ½Ξ±Ξ²Ξ¬ΞΈΞΌΞΉΟƒΞ·Ο‚ Ξ΄Ξ­Ξ½ ΞΌΟ€ΟΟΞµΟƒΞµ Ξ½Ξ± " .
+                                        "ΞΊΟΟ…Ο€Ο„ΞΏΞ³ΟΞ±Ο†Ξ®ΟƒΞµΞΉ Ο„Ξ± password ΞΊΞ±ΞΉ Ξ· Ο€Ξ»Ξ±Ο„Ο†ΟΟΞΌΞ± Ξ΄ΞµΞ½ ΞΌΟ€ΞΏΟΞµΞ― " .
+                                        "Ξ½Ξ± Ξ»ΞµΞΉΟ„ΞΏΟ…ΟΞ³Ξ®ΟƒΞµΞΉ. Ξ‘Ο†Ξ±ΞΉΟΞ­ΟƒΟ„Ξµ Ο„Ξ· Ξ³ΟΞ±ΞΌΞΌΞ® " .
+                                        "Β«\$encryptedPasswd = true;Β»");
                 }
         }
 
@@ -430,9 +430,9 @@ if (!isset($submit2)) {
                 $lang = $code[1];
 
                 // modify course_code/index.php
-                $tool_content .= "Τροποποίηση αρχείου index.php του μαθήματος <b>$code[0]</b><br />";
+                $tool_content .= "Ξ¤ΟΞΏΟ€ΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ· Ξ±ΟΟ‡ΞµΞ―ΞΏΟ… index.php Ο„ΞΏΟ… ΞΌΞ±ΞΈΞ®ΞΌΞ±Ο„ΞΏΟ‚ <b>$code[0]</b><br />";
                 if (!@chdir("$webDir/courses/$code[0]")) {
-                        die ("Δεν πραγματοποιήθηκε η αλλαγή στον κατάλογο των μαθημάτων! Ελέγξτε τα δικαιώματα πρόσβασης.");
+                        die ("Ξ”ΞµΞ½ Ο€ΟΞ±Ξ³ΞΌΞ±Ο„ΞΏΟ€ΞΏΞΉΞ®ΞΈΞ·ΞΊΞµ Ξ· Ξ±Ξ»Ξ»Ξ±Ξ³Ξ® ΟƒΟ„ΞΏΞ½ ΞΊΞ±Ο„Ξ¬Ξ»ΞΏΞ³ΞΏ Ο„Ο‰Ξ½ ΞΌΞ±ΞΈΞ·ΞΌΞ¬Ο„Ο‰Ξ½! Ξ•Ξ»Ξ­Ξ³ΞΎΟ„Ξµ Ο„Ξ± Ξ΄ΞΉΞΊΞ±ΞΉΟΞΌΞ±Ο„Ξ± Ο€ΟΟΟƒΞ²Ξ±ΟƒΞ·Ο‚.");
                 }
 
                 if (!file_exists("temp")) {
@@ -441,20 +441,20 @@ if (!isset($submit2)) {
 
                 $filecontents = file_get_contents("index.php");
                 if (!$filecontents)
-                        die ("To αρχείο δεν μπόρεσε να διαβαστεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
+                        die ("To Ξ±ΟΟ‡ΞµΞ―ΞΏ Ξ΄ΞµΞ½ ΞΌΟ€ΟΟΞµΟƒΞµ Ξ½Ξ± Ξ΄ΞΉΞ±Ξ²Ξ±ΟƒΟ„ΞµΞ―. Ξ•Ξ»Ξ­Ξ³ΞΎΟ„Ξµ Ο„Ξ± Ξ΄ΞΉΞΊΞ±ΞΉΟΞΌΞ±Ο„Ξ± Ο€ΟΟΟƒΞ²Ξ±ΟƒΞ·Ο‚.");
                 $newfilecontents = preg_replace('#../claroline/#','../../modules/',$filecontents);
                 $fp = @fopen("index.php","w");
                 if (!$fp)
-                        die ("To αρχείο δεν μπόρεσε να διαβαστεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
+                        die ("To Ξ±ΟΟ‡ΞµΞ―ΞΏ Ξ΄ΞµΞ½ ΞΌΟ€ΟΟΞµΟƒΞµ Ξ½Ξ± Ξ΄ΞΉΞ±Ξ²Ξ±ΟƒΟ„ΞµΞ―. Ξ•Ξ»Ξ­Ξ³ΞΎΟ„Ξµ Ο„Ξ± Ξ΄ΞΉΞΊΞ±ΞΉΟΞΌΞ±Ο„Ξ± Ο€ΟΟΟƒΞ²Ξ±ΟƒΞ·Ο‚.");
                 if (!@fwrite($fp, $newfilecontents))
-                        die ("Το αρχείο δεν μπόρεσε να τροποποιηθεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
+                        die ("Ξ¤ΞΏ Ξ±ΟΟ‡ΞµΞ―ΞΏ Ξ΄ΞµΞ½ ΞΌΟ€ΟΟΞµΟƒΞµ Ξ½Ξ± Ο„ΟΞΏΟ€ΞΏΟ€ΞΏΞΉΞ·ΞΈΞµΞ―. Ξ•Ξ»Ξ­Ξ³ΞΎΟ„Ξµ Ο„Ξ± Ξ΄ΞΉΞΊΞ±ΞΉΟΞΌΞ±Ο„Ξ± Ο€ΟΟΟƒΞ²Ξ±ΟƒΞ·Ο‚.");
                 fclose($fp);
                 // Fixed By vagpits
                 if (!@chdir("$webDir/upgrade")) {
-                        die("Δεν πραγματοποιήθηκε η αλλαγή στον κατάλογο αναβάθμισης! Ελέγξτε τα δικαιώματα πρόσβασης.");
+                        die("Ξ”ΞµΞ½ Ο€ΟΞ±Ξ³ΞΌΞ±Ο„ΞΏΟ€ΞΏΞΉΞ®ΞΈΞ·ΞΊΞµ Ξ· Ξ±Ξ»Ξ»Ξ±Ξ³Ξ® ΟƒΟ„ΞΏΞ½ ΞΊΞ±Ο„Ξ¬Ξ»ΞΏΞ³ΞΏ Ξ±Ξ½Ξ±Ξ²Ξ¬ΞΈΞΌΞΉΟƒΞ·Ο‚! Ξ•Ξ»Ξ­Ξ³ΞΎΟ„Ξµ Ο„Ξ± Ξ΄ΞΉΞΊΞ±ΞΉΟΞΌΞ±Ο„Ξ± Ο€ΟΟΟƒΞ²Ξ±ΟƒΞ·Ο‚.");
                 }
 
-                $tool_content .= "Αναβάθμιση μαθήματος <b>$code[0]</b><br>";
+                $tool_content .= "Ξ‘Ξ½Ξ±Ξ²Ξ¬ΞΈΞΌΞΉΟƒΞ· ΞΌΞ±ΞΈΞ®ΞΌΞ±Ο„ΞΏΟ‚ <b>$code[0]</b><br>";
                 mysql_select_db($code[0]);
 
                 // *********************************
@@ -472,9 +472,9 @@ if (!isset($submit2)) {
                 while ($f = mysql_fetch_row($s)) {
                         if (empty($f[0]))  {
                                 if (db_query("UPDATE `questions` SET type=1",$code[0])) {
-                                        $tool_content .= "Πίνακας questions: $OK<br>";
+                                        $tool_content .= "Ξ Ξ―Ξ½Ξ±ΞΊΞ±Ο‚ questions: $OK<br>";
                                 } else {
-                                        $tool_content .= "Πίνακας questions: $BAD<br>";
+                                        $tool_content .= "Ξ Ξ―Ξ½Ξ±ΞΊΞ±Ο‚ questions: $BAD<br>";
                                 }
                         }
                 } // while
@@ -987,7 +987,7 @@ if (!isset($submit2)) {
                 }
 
 		$baseFolder = $webDir."courses/".$code[0]."/document/";
-		$tool_content .= "<br>Κωδικοποίηση των περιεχομένων του υποσυστήματος 'Έγγραφα'<br>";
+		$tool_content .= "<br>ΞΟ‰Ξ΄ΞΉΞΊΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ· Ο„Ο‰Ξ½ Ο€ΞµΟΞΉΞµΟ‡ΞΏΞΌΞ­Ξ½Ο‰Ξ½ Ο„ΞΏΟ… Ο…Ο€ΞΏΟƒΟ…ΟƒΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚ 'ΞΞ³Ξ³ΟΞ±Ο†Ξ±'<br>";
 
 		// initialization
 		$dirnames = array();
@@ -1050,7 +1050,7 @@ if (!isset($submit2)) {
 					WHERE old_path ='/".substr($olddir, strlen($baseFolder))."'"); 
 				$u = mysql_fetch_array($b);
 			if (!(rename($olddir, $newdirname))) {	
-				$tool_content .= "Σφάλμα κατά την μετονομασία του $olddir σε $newdirname !";
+				$tool_content .= "Ξ£Ο†Ξ¬Ξ»ΞΌΞ± ΞΊΞ±Ο„Ξ¬ Ο„Ξ·Ξ½ ΞΌΞµΟ„ΞΏΞ½ΞΏΞΌΞ±ΟƒΞ―Ξ± Ο„ΞΏΟ… $olddir ΟƒΞµ $newdirname !";
 			} else {
 				// fill doc_tmp table
 	   			$query = "UPDATE doc_tmp SET new_filename = '".preg_replace('|^.*/|', '', $newdirname)."'
@@ -1119,7 +1119,7 @@ if (!isset($submit2)) {
 
 		$baseFolder = $webDir."courses/".$code[0]."/group/".$sd[0]."/";
 
-		$tool_content .= "<br>Κωδικοποίηση των περιεχομένων του υποσυστήματος Ομάδες Χρηστών - 'Έγγραφα'<br>";
+		$tool_content .= "<br>ΞΟ‰Ξ΄ΞΉΞΊΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ· Ο„Ο‰Ξ½ Ο€ΞµΟΞΉΞµΟ‡ΞΏΞΌΞ­Ξ½Ο‰Ξ½ Ο„ΞΏΟ… Ο…Ο€ΞΏΟƒΟ…ΟƒΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚ ΞΞΌΞ¬Ξ΄ΞµΟ‚ Ξ§ΟΞ·ΟƒΟ„ΟΞ½ - 'ΞΞ³Ξ³ΟΞ±Ο†Ξ±'<br>";
 
 		// initialization
 		$groupdirnames = array();
@@ -1172,7 +1172,7 @@ if (!isset($submit2)) {
 					WHERE old_path ='/".substr($olddir, strlen($baseFolder))."'"); 
 				$u = mysql_fetch_array($b);
 			if (!(rename($olddir, $newdirname))) {	
-				$tool_content .= "Σφάλμα κατά την μετονομασία του $olddir σε $newdirname !";
+				$tool_content .= "Ξ£Ο†Ξ¬Ξ»ΞΌΞ± ΞΊΞ±Ο„Ξ¬ Ο„Ξ·Ξ½ ΞΌΞµΟ„ΞΏΞ½ΞΏΞΌΞ±ΟƒΞ―Ξ± Ο„ΞΏΟ… $olddir ΟƒΞµ $newdirname !";
 			} else {
 				// fill group_doc_tmp table
 	   			$query = "UPDATE group_doc_tmp 
@@ -1222,7 +1222,7 @@ if (!isset($submit2)) {
              	// move video files to new directory
 		if (is_dir("$webDir/$code[0]/video")) {
                         rename ("$webDir/courses/$code[0]/video", "$webDir/video/$code[0]") or
-                              die ("Δεν ήταν δυνατή η μετονομασία του καταλόγου $webDir/courses/$code[0]/video");
+                              die ("Ξ”ΞµΞ½ Ξ®Ο„Ξ±Ξ½ Ξ΄Ο…Ξ½Ξ±Ο„Ξ® Ξ· ΞΌΞµΟ„ΞΏΞ½ΞΏΞΌΞ±ΟƒΞ―Ξ± Ο„ΞΏΟ… ΞΊΞ±Ο„Ξ±Ξ»ΟΞ³ΞΏΟ… $webDir/courses/$code[0]/video");
                 }
                 // upgrade video 
 		if (!mysql_field_exists("$code[0]",'video','path')) {
@@ -1260,7 +1260,7 @@ if (!isset($submit2)) {
                                 AND `define_var` <> 'MODULE_ID_USAGE' AND `define_var` <> 'MODULE_ID_TOOLADMIN'
                                 AND `define_var` <> 'MODULE_ID_WIKI'", $code[0]);
 
-                // id νέων υποσυστημάτων
+                // id Ξ½Ξ­Ο‰Ξ½ Ο…Ο€ΞΏΟƒΟ…ΟƒΟ„Ξ·ΞΌΞ¬Ο„Ο‰Ξ½
                 if (accueil_tool_missing('MODULE_ID_QUESTIONNAIRE')) {
                         db_query("INSERT IGNORE INTO accueil VALUES (
                                 '21',
@@ -1326,7 +1326,7 @@ if (!isset($submit2)) {
                 }
 
                 // table accueil
-                $tool_content .= "Διόρθωση εγγραφών του πίνακα accueil.<br>";
+                $tool_content .= "Ξ”ΞΉΟΟΞΈΟ‰ΟƒΞ· ΞµΞ³Ξ³ΟΞ±Ο†ΟΞ½ Ο„ΞΏΟ… Ο€Ξ―Ξ½Ξ±ΞΊΞ± accueil.<br>";
 
                 /* compatibility update
                    a) remove entries modules import, external, videolinks, old statistics
@@ -1397,10 +1397,10 @@ if (!isset($submit2)) {
                         $sql = db_query("SELECT texte_intro FROM introduction", $code[0]);
                         while ($text = mysql_fetch_array($sql)) {
                                 if (db_query("UPDATE cours SET description='$text[0]' WHERE code='$code[0]'", $mysqlMainDb)) {
-                                        $tool_content .= "Μεταφορά του εισαγωγικού κειμένου <b>$text[0]</b> στον πίνακα <b>cours</b>: $OK<br>";
+                                        $tool_content .= "ΞΞµΟ„Ξ±Ο†ΞΏΟΞ¬ Ο„ΞΏΟ… ΞµΞΉΟƒΞ±Ξ³Ο‰Ξ³ΞΉΞΊΞΏΟ ΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ… <b>$text[0]</b> ΟƒΟ„ΞΏΞ½ Ο€Ξ―Ξ½Ξ±ΞΊΞ± <b>cours</b>: $OK<br>";
                                         db_query("DROP TABLE IF EXISTS introduction", $code[0]);
                                 } else {
-                                        $tool_content .= "Μεταφορά του εισαγωγικού κειμένου <b>$text[0]</b> στον πίνακα <b>cours</b>: $BAD<br>";
+                                        $tool_content .= "ΞΞµΟ„Ξ±Ο†ΞΏΟΞ¬ Ο„ΞΏΟ… ΞµΞΉΟƒΞ±Ξ³Ο‰Ξ³ΞΉΞΊΞΏΟ ΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ… <b>$text[0]</b> ΟƒΟ„ΞΏΞ½ Ο€Ξ―Ξ½Ξ±ΞΊΞ± <b>cours</b>: $BAD<br>";
                                 }
                         }
                 } // end of table introduction
@@ -1466,13 +1466,13 @@ if (!isset($submit2)) {
 
         } // End of 'while' courses
 
-        $tool_content .= "<p>Η αναβάθμιση των βάσεων δεδομένων του eClass πραγματοποιήθηκε!</p>
-                <p>Είστε πλέον έτοιμοι να χρησιμοποιήσετε την καινούρια έκδοση του eClass!</p>
-                <p>Αν παρουσιάστηκε κάποιο σφάλμα, πιθανόν κάποιο μάθημα να μην δουλεύει εντελώς σωστά.
-                Σε αυτή την περίπτωση επικοινωνήστε μαζί μας στο <a href='mailto:elearn@gunet.gr'>elearn@gunet.gr</a>
-                περιγράφοντας το πρόβλημα που παρουσιάστηκε και στέλνοντας (αν είναι δυνατόν) όλα τα μηνύματα που
-                εμφανίστηκαν στην οθόνη σας</p>
-		<center><p><a href='$urlServer?logout=yes'>Επιστροφή</a></p></center>
+        $tool_content .= "<p>Ξ— Ξ±Ξ½Ξ±Ξ²Ξ¬ΞΈΞΌΞΉΟƒΞ· Ο„Ο‰Ξ½ Ξ²Ξ¬ΟƒΞµΟ‰Ξ½ Ξ΄ΞµΞ΄ΞΏΞΌΞ­Ξ½Ο‰Ξ½ Ο„ΞΏΟ… eClass Ο€ΟΞ±Ξ³ΞΌΞ±Ο„ΞΏΟ€ΞΏΞΉΞ®ΞΈΞ·ΞΊΞµ!</p>
+                <p>Ξ•Ξ―ΟƒΟ„Ξµ Ο€Ξ»Ξ­ΞΏΞ½ Ξ­Ο„ΞΏΞΉΞΌΞΏΞΉ Ξ½Ξ± Ο‡ΟΞ·ΟƒΞΉΞΌΞΏΟ€ΞΏΞΉΞ®ΟƒΞµΟ„Ξµ Ο„Ξ·Ξ½ ΞΊΞ±ΞΉΞ½ΞΏΟΟΞΉΞ± Ξ­ΞΊΞ΄ΞΏΟƒΞ· Ο„ΞΏΟ… eClass!</p>
+                <p>Ξ‘Ξ½ Ο€Ξ±ΟΞΏΟ…ΟƒΞΉΞ¬ΟƒΟ„Ξ·ΞΊΞµ ΞΊΞ¬Ο€ΞΏΞΉΞΏ ΟƒΟ†Ξ¬Ξ»ΞΌΞ±, Ο€ΞΉΞΈΞ±Ξ½ΟΞ½ ΞΊΞ¬Ο€ΞΏΞΉΞΏ ΞΌΞ¬ΞΈΞ·ΞΌΞ± Ξ½Ξ± ΞΌΞ·Ξ½ Ξ΄ΞΏΟ…Ξ»ΞµΟΞµΞΉ ΞµΞ½Ο„ΞµΞ»ΟΟ‚ ΟƒΟ‰ΟƒΟ„Ξ¬.
+                Ξ£Ξµ Ξ±Ο…Ο„Ξ® Ο„Ξ·Ξ½ Ο€ΞµΟΞ―Ο€Ο„Ο‰ΟƒΞ· ΞµΟ€ΞΉΞΊΞΏΞΉΞ½Ο‰Ξ½Ξ®ΟƒΟ„Ξµ ΞΌΞ±Ξ¶Ξ― ΞΌΞ±Ο‚ ΟƒΟ„ΞΏ <a href='mailto:elearn@gunet.gr'>elearn@gunet.gr</a>
+                Ο€ΞµΟΞΉΞ³ΟΞ¬Ο†ΞΏΞ½Ο„Ξ±Ο‚ Ο„ΞΏ Ο€ΟΟΞ²Ξ»Ξ·ΞΌΞ± Ο€ΞΏΟ… Ο€Ξ±ΟΞΏΟ…ΟƒΞΉΞ¬ΟƒΟ„Ξ·ΞΊΞµ ΞΊΞ±ΞΉ ΟƒΟ„Ξ­Ξ»Ξ½ΞΏΞ½Ο„Ξ±Ο‚ (Ξ±Ξ½ ΞµΞ―Ξ½Ξ±ΞΉ Ξ΄Ο…Ξ½Ξ±Ο„ΟΞ½) ΟΞ»Ξ± Ο„Ξ± ΞΌΞ·Ξ½ΟΞΌΞ±Ο„Ξ± Ο€ΞΏΟ…
+                ΞµΞΌΟ†Ξ±Ξ½Ξ―ΟƒΟ„Ξ·ΞΊΞ±Ξ½ ΟƒΟ„Ξ·Ξ½ ΞΏΞΈΟΞ½Ξ· ΟƒΞ±Ο‚</p>
+		<center><p><a href='$urlServer?logout=yes'>Ξ•Ο€ΞΉΟƒΟ„ΟΞΏΟ†Ξ®</a></p></center>
                 </td></tr></tbody></table>";
 
 } // end of if not submit
@@ -1509,7 +1509,7 @@ function update_assignment_submit()
 		}
 	}
 	if ($updated) {
-		echo "Πίνακας assignment_submit: $GLOBALS[OK]<br>\n";
+		echo "Ξ Ξ―Ξ½Ξ±ΞΊΞ±Ο‚ assignment_submit: $GLOBALS[OK]<br>\n";
 	}
 }
 
@@ -1520,7 +1520,7 @@ function add_field($table, $field, $type)
 	global $OK, $BAD;
 
 	$retString = "";
-	$retString .= "Προσθήκη πεδίου <b>$field</b> στον πίνακα <b>$table</b>: ";
+	$retString .= "Ξ ΟΞΏΟƒΞΈΞ®ΞΊΞ· Ο€ΞµΞ΄Ξ―ΞΏΟ… <b>$field</b> ΟƒΟ„ΞΏΞ½ Ο€Ξ―Ξ½Ξ±ΞΊΞ± <b>$table</b>: ";
 	$fields = db_query("SHOW COLUMNS FROM $table LIKE '$field'");
 	if (mysql_num_rows($fields) == 0) {
 		if (db_query("ALTER TABLE `$table` ADD `$field` $type")) {
@@ -1529,7 +1529,7 @@ function add_field($table, $field, $type)
 			$retString .= " $BAD<br>";
 		}
 	} else {
-		$retString .= "Υπάρχει ήδη. $OK<br>";
+		$retString .= "Ξ¥Ο€Ξ¬ΟΟ‡ΞµΞΉ Ξ®Ξ΄Ξ·. $OK<br>";
 	}
 
 	return $retString;
@@ -1540,7 +1540,7 @@ function add_field_after_field($table, $field, $after_field, $type)
 	global $OK, $BAD;
 
 	$retString = "";
-	$retString .= "Προσθήκη πεδίου <b>$field</b> μετά το πεδίο <b>$after_field</b> στον πίνακα <b>$table</b>: ";
+	$retString .= "Ξ ΟΞΏΟƒΞΈΞ®ΞΊΞ· Ο€ΞµΞ΄Ξ―ΞΏΟ… <b>$field</b> ΞΌΞµΟ„Ξ¬ Ο„ΞΏ Ο€ΞµΞ΄Ξ―ΞΏ <b>$after_field</b> ΟƒΟ„ΞΏΞ½ Ο€Ξ―Ξ½Ξ±ΞΊΞ± <b>$table</b>: ";
 	$fields = db_query("SHOW COLUMNS FROM $table LIKE '$field'");
 	if (mysql_num_rows($fields) == 0) {
 		if (db_query("ALTER TABLE `$table` ADD COLUMN `$field` $type AFTER `$after_field`")) {
@@ -1549,7 +1549,7 @@ function add_field_after_field($table, $field, $after_field, $type)
 			$retString .= " $BAD<br>";
 		}
 	} else {
-		$retString .= "Υπάρχει ήδη. $OK<br>";
+		$retString .= "Ξ¥Ο€Ξ¬ΟΟ‡ΞµΞΉ Ξ®Ξ΄Ξ·. $OK<br>";
 	}
 
 	return $retString;
@@ -1558,7 +1558,7 @@ function rename_field($table, $field, $new_field, $type)
 {
 	global $OK, $BAD;
 	$retString = "";
-	$retString .= "Μετονομασία πεδίου <b>$field</b> σε <b>$new_field</b> στον πίνακα <b>$table</b>: ";
+	$retString .= "ΞΞµΟ„ΞΏΞ½ΞΏΞΌΞ±ΟƒΞ―Ξ± Ο€ΞµΞ΄Ξ―ΞΏΟ… <b>$field</b> ΟƒΞµ <b>$new_field</b> ΟƒΟ„ΞΏΞ½ Ο€Ξ―Ξ½Ξ±ΞΊΞ± <b>$table</b>: ";
 	$fields = db_query("SHOW COLUMNS FROM $table LIKE '$new_field'");
 	if (mysql_num_rows($fields) == 0) {
 		if (db_query("ALTER TABLE `$table` CHANGE  `$field` `$new_field` $type")) {
@@ -1567,7 +1567,7 @@ function rename_field($table, $field, $new_field, $type)
 			$retString .= " $BAD<br>";
 		}
 	} else {
-		$retString .= "Υπάρχει ήδη. $OK<br>";
+		$retString .= "Ξ¥Ο€Ξ¬ΟΟ‡ΞµΞΉ Ξ®Ξ΄Ξ·. $OK<br>";
 	}
 	return $retString;
 
@@ -1578,7 +1578,7 @@ function delete_field($table, $field) {
 	global $OK, $BAD;
 	
 	$retString = "";
-	$retString .= "Διαγραφή πεδίου <b>$field</b> του πίνακα <b>$table</b>";
+	$retString .= "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® Ο€ΞµΞ΄Ξ―ΞΏΟ… <b>$field</b> Ο„ΞΏΟ… Ο€Ξ―Ξ½Ξ±ΞΊΞ± <b>$table</b>";
 	if (db_query("ALTER TABLE `$table` DROP `$field`")) {
 		$retString .= " $OK<br>";
 	} else {
@@ -1591,7 +1591,7 @@ function delete_table($table)
 {
 	global $OK, $BAD;
 	$retString = "";
-	$retString .= "Διαγραφή πίνακα <b>$table</b>: ";
+	$retString .= "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® Ο€Ξ―Ξ½Ξ±ΞΊΞ± <b>$table</b>: ";
 	if (db_query("DROP TABLE $table")) {
 		$retString .= " $OK<br>";
 	} else {
@@ -1604,7 +1604,7 @@ function merge_tables($table_destination,$table_source,$fields_destination,$fiel
 {
 	global $OK, $BAD;
 	$retString = "";
-	$retString .= " Ενοποίηση των πινάκων <b>$table_destination</b>,<b>$table_source</b>";
+	$retString .= " Ξ•Ξ½ΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ· Ο„Ο‰Ξ½ Ο€ΞΉΞ½Ξ¬ΞΊΟ‰Ξ½ <b>$table_destination</b>,<b>$table_source</b>";
 	$query = "INSERT INTO $table_destination (";
 	foreach($fields_destination as $val)
 	{
@@ -1676,12 +1676,12 @@ function add_index($index, $column, $table)  {
         $ind_sql = db_query("SHOW INDEX FROM $table");
         while ($i = mysql_fetch_array($ind_sql))  {
                 if ($i['Key_name'] == $index) {
-                        $retString = "<p>Υπάρχει ήδη κάποιο index στον πίνακα $table</p>";
+                        $retString = "<p>Ξ¥Ο€Ξ¬ΟΟ‡ΞµΞΉ Ξ®Ξ΄Ξ· ΞΊΞ¬Ο€ΞΏΞΉΞΏ index ΟƒΟ„ΞΏΞ½ Ο€Ξ―Ξ½Ξ±ΞΊΞ± $table</p>";
 			return $retString;
                 }
         }
         db_query("ALTER TABLE $table ADD INDEX $index($column)");
-        $retString = "<p>Προστέθηκε index στο πεδίο $column του πίνακα $table</p>";
+        $retString = "<p>Ξ ΟΞΏΟƒΟ„Ξ­ΞΈΞ·ΞΊΞµ index ΟƒΟ„ΞΏ Ο€ΞµΞ΄Ξ―ΞΏ $column Ο„ΞΏΟ… Ο€Ξ―Ξ½Ξ±ΞΊΞ± $table</p>";
         return $retString;
 }
 

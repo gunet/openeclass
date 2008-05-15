@@ -50,7 +50,7 @@ $tool_content = "";
 // check if we can connect to database. If not then eclass is most likely not installed
 if (isset($mysqlServer) and isset($mysqlUser) and isset($mysqlPassword)) {
 	$db = mysql_connect($mysqlServer, $mysqlUser, $mysqlPassword);
-	if (mysql_version()) mysql_query("SET NAMES greek");
+	if (mysql_version()) mysql_query("SET NAMES utf8");
 }
 if (!$db) {
 	include ("not_installed.php");
@@ -287,7 +287,7 @@ if(!empty($submit))
 	//check user language preferences
 	if (isset($userLanguage) && $userLanguage == "en") {
 		$_SESSION['langswitch'] = "english";
-		$langChangeLang = $_SESSION['langLinkText'] = "Ελληνικά";
+		$langChangeLang = $_SESSION['langLinkText'] = "Ξ•Ξ»Ξ»Ξ·Ξ½ΞΉΞΊΞ¬";
 		$switchLangURL = $_SESSION['langLinkURL'] = "?localize=el";
 		
 	} elseif(isset($userLanguage) && $userLanguage == "el") {

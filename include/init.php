@@ -83,7 +83,7 @@ if (isset($localize)) {
 	switch ($localize) {
 		case "en":
 			$_SESSION['langswitch'] = "english";
-			$_SESSION['langLinkText'] = 'Ελληνικά';
+			$_SESSION['langLinkText'] = 'Ξ•Ξ»Ξ»Ξ·Ξ½ΞΉΞΊΞ¬';
 			$_SESSION['langLinkURL'] = "?localize=el";
 			break;
 		case "el":		
@@ -125,7 +125,7 @@ if (session_is_registered('langswitch')) {
 if (!$db) {
 	include 'not_installed.php';
 }
-if (mysql_version()) mysql_query("SET NAMES greek");
+if (mysql_version()) mysql_query("SET NAMES utf8");
 mysql_select_db($mysqlMainDb, $db);
 
 //if the user is logged in, get this preferred language set in his
@@ -143,7 +143,7 @@ if(session_is_registered('uid') && !session_is_registered('langswitch')) {
 			$_SESSION['langLinkURL'] = "?localize=en";
 		} else {
 			$language = "english";
-			$_SESSION['langLinkText'] = "Ελληνικά";
+			$_SESSION['langLinkText'] = "Ξ•Ξ»Ξ»Ξ·Ξ½ΞΉΞΊΞ¬";
 			$_SESSION['langLinkURL'] = "?localize=el";
 		}
 	}

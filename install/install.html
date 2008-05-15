@@ -220,20 +220,7 @@ short_open_tag = on</pre>
       δημιουργηθεί ένας λογαριασμός χρήστη (user account), με
       δικαιώματα δημιουργίας βάσης δεδομένων.
     </p>
-    <p>
-      Θα πρέπει επίσης ο MySQL server να έχει σαν
-      default-character-set τα ελληνικά. Για να γίνει αυτό θα
-      πρέπει να ξεκινήσετε τον mysqld (ή safe_mysqld) με την
-      παράμετρο
-    </p>
-
-    <pre>--default-character-set=greek</pre>
-    <p>
-      Π.χ. <code>/usr/local/mysql/bin/safe_mysqld
-      --default-character-set=greek</code> (+ τυχόν άλλες
-      παράμετροι).
-    </p>
-		<p>Προσέξτε επίσης η MySQL να μην τρέχει σε strict mode.
+		<p>Προσέξτε η MySQL να μην τρέχει σε strict mode.
 		Για να το διαπιστώσετε ελέγξτε αν έχει κάποια τιμή η παράμετρος 
 		<pre>--sql-mode</pre> η οποία βρίσκεται στο αρχείο ρυθμίσεων <em>my.cnf</em> ή <em>my.ini</em> 
 		για τους χρήστες UNIX και Windows αντίστοιχα. Αν έχει (π.χ. <code>--sql-mode=STRICT_TRANS_TABLES</code>

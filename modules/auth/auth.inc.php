@@ -362,7 +362,7 @@ function auth_user_login ($auth, $test_username, $test_password)
 			    		mysql_close($link);
 							// Connect to database
 							$GLOBALS['db'] = mysql_connect($GLOBALS['mysqlServer'], $GLOBALS['mysqlUser'], $GLOBALS['mysqlPassword']);
-							if (mysql_version()) mysql_query("SET NAMES greek");
+							if (mysql_version()) mysql_query("SET NAMES utf8");
 							mysql_select_db($mysqlMainDb, $GLOBALS['db']);
 
 

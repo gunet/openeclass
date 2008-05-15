@@ -506,9 +506,9 @@ elseif(isset($_REQUEST['install7']))
 	}
 	$mysqlMainDb = $dbNameForm;
 	mysql_query("DROP DATABASE IF EXISTS ".$mysqlMainDb);
-	if (mysql_version()) mysql_query("SET NAMES greek");
+	if (mysql_version()) mysql_query("SET NAMES utf8");
 	if (mysql_version())
-	$cdb=mysql_query("CREATE DATABASE $mysqlMainDb CHARACTER SET greek");
+	$cdb=mysql_query("CREATE DATABASE $mysqlMainDb CHARACTER SET utf8");
 	else
 	$cdb=mysql_query("CREATE DATABASE $mysqlMainDb");
 	mysql_select_db ($mysqlMainDb);
@@ -533,7 +533,7 @@ elseif(isset($_REQUEST['install7']))
 
 // if mysql > 4.1 then create tables with charset
         if (mysql_version()) {
-                $charset_spec = 'DEFAULT CHARACTER SET=greek';
+                $charset_spec = 'DEFAULT CHARACTER SET=utf8';
         } else {
                 $charset_spec = '';
         }
