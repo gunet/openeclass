@@ -1,5 +1,4 @@
 <?php
-
 /*
 ===========================================================================
     admin/platformStats.php
@@ -12,10 +11,6 @@
 ==============================================================================
 */
 
-
-
-// Set the langfiles needed
-$langFiles = array('usage', 'admin');
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
@@ -28,16 +23,12 @@ $page_title = $langPlatformStats.": ".$langVisitsStats;
 
 // Initialise $tool_content
 $tool_content = "";
-
 $tool_content .=  "<a href='stateclass.php'>".$langPlatformGenStats."</a> <br> ".
                 "<a href='platformStats.php?first='>".$langVisitsStats."</a> <br> ".
              "<a href='visitsCourseStats.php?first='>".$langVisitsCourseStats."</a> <br> ".
               "<a href='oldStats.php'>".$langOldStats."</a> <br> ".
                "<a href='monthlyReport.php'>".$langMonthlyReport."</a>".
           "<p>&nbsp</p>";
-
-
-
 
 // jscalendar is used in order to select the time period for the statistics
 include('../../include/jscalendar/calendar.php');
@@ -54,17 +45,11 @@ $local_head = $jscalendar->get_load_files_code();
         $tool_content .= "<p>$langGDRequired</p>";
     } else {
         $made_chart = true;
-        
         //show chart with statistics
         require_once "statsResults.php";
-        
         //show form for determining time period and user
         require_once "statsForm.php";
-
     }
 
-
 draw($tool_content, 3, 'admin', $local_head, '');
-
-
 ?>

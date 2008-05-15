@@ -1,6 +1,5 @@
 <?php
 $require_current_course = TRUE;
-$langFiles = 'course_info';
 $require_prof = true;
 include '../../include/baseTheme.php';
 
@@ -9,9 +8,7 @@ $nameTools = $langDelCourse;
 $tool_content = "";
 
 if($is_adminOfCourse) {
-	if(isset($delete)) {
-		
-		
+	if(isset($delete)) {		
 		mysql_select_db("$mysqlMainDb",$db); 
 		mysql_query("DROP DATABASE `$currentCourseID`");
 		mysql_query("DELETE FROM `$mysqlMainDb`.cours WHERE code='$currentCourseID'");
@@ -24,33 +21,22 @@ if($is_adminOfCourse) {
 		@mkdir("../../courses/garbage");
 		rename("../../courses/$currentCourseID", "../../courses/garbage/$currentCourseID");
 		
-		$tool_content .= "<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"success\">
-							<p><b>$langTheCourse $currentCourseID $intitule $langHasDel</b></p>
-							
-							<p><a href=\"../../index.php\">".$langBackHome." ".$siteName."</a></p>
-						</td>
-					</tr>
-				</tbody>
-			</table>";
+		$tool_content .= "<table width=\"99%\"><tbody><tr>
+		<td class=\"success\"><p><b>$langTheCourse $currentCourseID $intitule $langHasDel</b></p>
+		<p><a href=\"../../index.php\">".$langBackHome." ".$siteName."</a></p>
+		</td></tr></tbody></table>";
 		
 		draw($tool_content, 1);
-
 		exit();
 	} else {
 
-  $tool_content .= "
-  <div id=\"operations_container\">
+  $tool_content .= "<div id=\"operations_container\">
   <ul id=\"opslist\">
     <li><a href=\"infocours.php\">$langBack</a></li>
   </ul>
   </div>";
 
-  $tool_content .= "
-  <br />
-";
+  $tool_content .= "<br />";
 
   $tool_content .= "
     <table width=\"99%\">
@@ -79,5 +65,4 @@ if($is_adminOfCourse) {
 }
 
 draw($tool_content, 2, 'course_info');
-
 ?>

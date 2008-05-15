@@ -1,5 +1,5 @@
 <?php
-/**===========================================================================
+/*===========================================================================
 *              GUnet e-Class 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -18,11 +18,11 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
-/**
+/*
  * Groups Component
  *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -31,9 +31,8 @@
  * @abstract This module is responsible for the user groups of each lesson
  *
  */
-$require_current_course = TRUE;
 
-$langFiles = 'group';
+$require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Group';
 $require_prof = true;
@@ -44,15 +43,11 @@ $navigation[]= array ("url"=>"group.php", "name"=> $langGroupSpace,
 "url"=>"group_space.php?userGroupId=$userGroupId", "name"=>$langGroupSpace);
 
 include('../../include/sendMail.inc.php');
-
 $tool_content = "";
-
 $currentCourse=$dbname;
 
 if ($is_adminOfCourse)  {
-
 	if (isset($submit)) {
-
 		$sql=mysql_query("SELECT user FROM `$dbname`.user_group WHERE team = '$userGroupId'");
 		while ($userid = mysql_fetch_array($sql)) {
 			mysql_select_db($mysqlMainDb);
@@ -66,22 +61,15 @@ if ($is_adminOfCourse)  {
 				$tool_content .= "<h4>$langMailError</h4>";
 			}
 		}
-		$tool_content .= "
-    <table width=\"99%\">
-    <thead>
-    <tr>
-      <td class=\"success\">$langEmailSuccess</td>
-    </tr>
-    </thead>
-    </table>
-    <br />
-    ";
+		$tool_content .= "<table width=\"99%\"><thead>
+    		<tr><td class=\"success\">$langEmailSuccess</td></tr>
+    		</thead></table><br />";
 		$tool_content .= "<p align=\"right\"><a href=\"group.php\">$langBack</a></p>";
 	} else {
 
 		$tool_content .= <<<tCont
 
-  <form action="group_email.php" method="post">
+  <form action="$_SERVER[PHP_SELF]" method="post">
   <input type="hidden" name="userGroupId" value="$userGroupId">
     <table width="99%" class="FormData">
     <thead>

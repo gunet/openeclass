@@ -1,5 +1,5 @@
 <?php
-/**=============================================================================
+/*=============================================================================
            GUnet e-Class 2.0
         E-learning and Course Management Program
 ================================================================================
@@ -23,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
     stateclass.php
     @last update: 05-07-2006 by Pitsiougas Vagelis
     @authors list: Karatzidis Stratos <kstratos@uom.gr>
@@ -36,8 +36,7 @@
 /*****************************************************************************
         DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
 ******************************************************************************/
-// Set the langfiles needed
-$langFiles = array('admin', 'usage');
+
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
@@ -154,8 +153,7 @@ $tool_content .= "<table width='75%' border=1 align=center cellspacing='0' cellp
   <td class='stat2'>$langNbAnnoucement :<b>".list_1Result("select count(*) from annonces;")."</b></td>
         </tr>
         </table>
-        <br>
-				</td>
+        <br></td>
         <td valign=top width=49%>
 
  <table border='0' align=center width='75%' cellspacing='0' cellpadding='1' style='border: 1px solid  $table_border'>
@@ -163,8 +161,7 @@ $tool_content .= "<table width='75%' border=1 align=center cellspacing='0' cellp
           <td style='background: #E6EDF5; color: #4F76A3; font-size: 90%' colspan='2'>$langNumEachRec :</td>
         </tr>
         <tr>
- <td class='stat2'>".tablize(list_ManyResult("select CONCAT(code_cours,\" Statut :\",statut), count(user_id) 
-				from cours_user GROUP BY code_cours, statut order by code_cours"), $language)."</td>
+ <td class='stat2'>".tablize(list_ManyResult("select CONCAT(code_cours,\" Statut :\",statut), count(user_id) from cours_user GROUP BY code_cours, statut order by code_cours"), $language)."</td>
         </tr></table>
 </td></tr></table>";
 
@@ -248,7 +245,7 @@ $tool_content .= "</td></tr>
 $tool_content .= "</td></tr></table></td></tr></table>";
 
 
-/**
+/*
  * output an <Table> with an array
  *
  * @return void
@@ -259,7 +256,7 @@ $tool_content .= "</td></tr></table></td></tr></table>";
 function tablize($tableau, $lang) {
 
 	global $langClosed, $langTypesRegistration, $langOpen, $langStudents, $langGuest, 
-	   		 $langPre, $langPost, $langOther, $langEnglish, $langGreek, $langProf; 
+   		 $langPre, $langPost, $langOther, $langEnglish, $langGreek, $langProf; 
 
     $ret = "";
 	if (is_array($tableau)) { 

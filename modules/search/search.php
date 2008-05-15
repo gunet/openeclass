@@ -1,5 +1,5 @@
 <?
-/**=============================================================================
+/*=============================================================================
 GUnet e-Class 2.0
 E-learning and Course Management Program
 ================================================================================
@@ -37,7 +37,6 @@ search.php
 //  x. sthn kentrikh selida mathimatos (exei ginei log-in kai o xrhsths eigaxthhke se mathima)
 //*/
 
-$langFiles = array('course_info', 'create_course', 'opencours', 'search');
 include '../../include/baseTheme.php';
 if(isset($_POST['search_terms'])) {
 	$search_terms_title = $search_terms_keywords = $search_terms_instructor = $search_terms_coursecode = $_POST['search_terms'];
@@ -46,29 +45,8 @@ if(isset($_POST['search_terms'])) {
 if (@empty($uid))
 {
 	include 'search_loggedout.php';
-
 }else
 {
 	include 'search_loggedin.php';
-
-	//exei ginei comment out giati den xreiazetai edw. th stigmh pou to mikro <input> gia anazhthsh (sto theme.php) emfanizetai mono entos enos mathimatos, to search_incourse.php kaleitai apeftheias mesw aftou (apo th forma).
-
-	/*
-	//elegxos ean o xrhsths einai sthn kentrikh selida (xartofylakio)
-	if (@empty($currentCourseID))
-	{
-	include 'search_loggedin.php';
-
-	}
-	else
-	{
-	//elegxos ean o xrhsths exei kanei login kai einai entos mathimatos
-	include 'search_incourse.php';
-
-	}*/
-
 }
-
-
-
 ?>

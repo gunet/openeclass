@@ -1,6 +1,5 @@
 <?php
-
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -24,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	insertMyDescription.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -41,7 +40,6 @@
 require_once("../../include/lib/learnPathLib.inc.php");
 
 $require_current_course = TRUE;
-$langFiles              = "learnPath";
 
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";
@@ -59,13 +57,11 @@ if ( ! $is_adminOfCourse ) claro_die($langNotAllowed);
 $navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langLearningPathAdmin);
 $nameTools = $langInsertMyDescToolName;
 
-
 // $_SESSION
 if ( !isset($_SESSION['path_id']) )
 {
       claro_die ("<center> Not allowed ! (path_id not set :@ )</center>");
 }
-
 
 mysql_select_db($currentCourseID);
 
@@ -129,14 +125,13 @@ if ($num == 0)
 else 
 {
 	// check if this is this LP that used this course description as a module
-	$sql = "SELECT *
-			FROM `".$TABLELEARNPATHMODULE."` AS LPM,
-					`".$TABLEMODULE."` AS M,
-					`".$TABLEASSET."` AS A
+	$sql = "SELECT * FROM `".$TABLELEARNPATHMODULE."` AS LPM,
+			`".$TABLEMODULE."` AS M,
+			`".$TABLEASSET."` AS A
 			WHERE M.`module_id` =  LPM.`module_id`
-				AND M.`startAsset_id` = A.`asset_id`
-				AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'] ."
-				AND M.`contentType` = \"".CTCOURSE_DESCRIPTION_."\"";
+			AND M.`startAsset_id` = A.`asset_id`
+			AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'] ."
+			AND M.`contentType` = \"".CTCOURSE_DESCRIPTION_."\"";
 	$query2 = db_query($sql);
 	$num = mysql_numrows($query2);
 	
@@ -158,13 +153,10 @@ else
 		$query = db_query($sql);
 
     }
-	//$tool_content .= "done2";
 	header("Location: ./learningPathAdmin.php");
 	exit();
 }
  
-//draw($tool_content, 2, "learnPath");
 header("Location: ./learningPathAdmin.php");
 exit();
-
 ?>

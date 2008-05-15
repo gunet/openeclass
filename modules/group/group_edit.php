@@ -1,5 +1,5 @@
 <?php
-/**===========================================================================
+/*===========================================================================
 *              GUnet e-Class 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -18,12 +18,12 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-/**
+/*
  * Groups Component
  *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -34,7 +34,6 @@
  */
 $require_login = TRUE;
 $require_current_course = TRUE;
-$langFiles = 'group';
 $require_help = TRUE;
 $helpTopic = 'Group';
 $require_prof = true;
@@ -47,7 +46,7 @@ $navigation[]= array ("url"=>"group.php", "name"=> $langGroup);
 if (isset($userGroupId) && is_numeric($userGroupId)){
 	$userGroupId = (int)$userGroupId;
 
-} else{
+} else {
 	die("Wrong user group id / User group id not set");
 }
 
@@ -190,14 +189,12 @@ while ($myStudentGroup = mysql_fetch_array($groupSelect))
 		if($myStudentGroup['tutor']==$myTutor['user_id'])
 		{
 			$tutorExists=1;
-			$tool_content_tutor .= "
-				<option SELECTED value=\"$myTutor[user_id]\">
-					$myTutor[nom] $myTutor[prenom]
+			$tool_content_tutor .= "<option SELECTED value=\"$myTutor[user_id]\">
+				$myTutor[nom] $myTutor[prenom]
 				</option>";
 		}
 		else
 		{
-
 			$tool_content_tutor .= "
 				<option value=$myTutor[user_id]>
 					$myTutor[nom] $myTutor[prenom]
@@ -269,7 +266,6 @@ while ($myMember = mysql_fetch_array($resultMember))
 	$a++;
 }
 
-
 //========================================================================
 		$tool_content .= "
     <div id=\"operations_container\">
@@ -292,8 +288,6 @@ while ($myMember = mysql_fetch_array($resultMember))
 	}
 $tool_content .="
   <form name= \"groupedit\" method=\"POST\" action=\"".$_SERVER['PHP_SELF']."?edit=yes&userGroupId=$userGroupId\">
-
-
     <br />
     <table width=\"99%\" class=\"FormData\">
     <thead>
@@ -361,7 +355,6 @@ $tool_content .="
 ";
 
 draw($tool_content, 2, 'group', $head_content);
-
 ?>
 
 

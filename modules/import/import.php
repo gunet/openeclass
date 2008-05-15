@@ -1,42 +1,35 @@
 <?php 
+/* =============================================================================
+       	GUnet e-Class 2.0 
+        E-learning and Course Management Program  
+   ==============================================================================
+       	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+        A full copyright notice can be read in "/info/copyright.txt".
+        
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+        	    	Yannis Exidaridis <jexi@noc.uoa.gr> 
+      		    	Alexandros Diamantidis <adia@noc.uoa.gr> 
 
-/*
-      +----------------------------------------------------------------------+
-      | CLAROLINE version 1.3.0 $Revision$                             |
-      +----------------------------------------------------------------------+
-      | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
-      +----------------------------------------------------------------------+
-      |   $Id$            |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-      |   of the License, or (at your option) any later version.             |
-      |                                                                      |
-      |   This program is distributed in the hope that it will be useful,    |
-      |   but WITHOUT ANY WARRANTY; without even the implied warranty of     |
-      |   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      |
-      |   GNU General Public License for more details.                       |
-      |                                                                      |
-      |   You should have received a copy of the GNU General Public License  |
-      |   along with this program; if not, write to the Free Software        |
-      |   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA          |
-      |   02111-1307, USA. The GNU GPL license is also available through     |
-      |   the world-wide-web at http://www.gnu.org/copyleft/gpl.html         |
-      +----------------------------------------------------------------------+
-      | Authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>                |
-      |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
-      |          Christophe Gesche <gesche@ipm.ucl.ac.be>                    |
-      +----------------------------------------------------------------------+
- */
+        For a full list of contributors, see "credits.txt".  
+     
+        This program is a free software under the terms of the GNU 
+        (General Public License) as published by the Free Software 
+        Foundation. See the GNU License for more details. 
+        The full license can be read in "license.txt".
+     
+       	Contact address: GUnet Asynchronous Teleteaching Group, 
+        Network Operations Center, University of Athens, 
+        Panepistimiopolis Ilissia, 15784, Athens, Greece
+        eMail: eclassadmin@gunet.gr
+
+==============================================================================*/
 
 
 $require_current_course = TRUE;
-$langFiles = 'import';
+
 include '../../include/baseTheme.php';
 
 $nameTools = $langAddPage;
-
 $tool_content = "";
 
 // Check if user=prof or assistant
@@ -59,18 +52,12 @@ if($is_adminOfCourse)
 		$file_name = str_replace("à", "a", $file_name);
 
 		@copy("$file", "$updir/$file_name")
-		or die("
-		
-			<p>
-				$langCouldNot
-			</p>
-	</tr>");
-$sql = 'SELECT MAX(`id`) FROM `accueil` ';
+		or die("<p>$langCouldNot</p></tr>");
+		$sql = 'SELECT MAX(`id`) FROM `accueil` ';
 		$res = db_query($sql,$dbname);
 		while ($maxID = mysql_fetch_row($res)) {
 			$mID = $maxID[0];
 		}
-		
 		if($mID<101) $mID = 101;
 		else $mID = $mID+1;
 
@@ -85,32 +72,16 @@ $sql = 'SELECT MAX(`id`) FROM `accueil` ';
 					'HTML_PAGE'
 					)", $currentCourse);
 		
-			$tool_content .=  "
-					<table>
-				<tbody>
-					<tr>
-						<td class=\"success\">
-						$langOkSent.
-					</td>
-					</tr>
-				</tbody>
-			</table>";
+		$tool_content .=  "<table><tbody><tr>
+		<td class=\"success\">$langOkSent.</td></tr>
+		</tbody>
+		</table>";
 		}
 		else 
 		{
-			$tool_content .= "
-			<table>
-				<tbody>
-					<tr>
-						<td class=\"caution\">
-					
-						$langTooBig
-					
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			";
+			$tool_content .= "<table><tbody><tr>
+			<td class=\"caution\">$langTooBig</td>
+			</tr></tbody></table>";
 			draw($tool_content, 2);
 		}	// else
 	}	// if submit
@@ -119,63 +90,25 @@ $sql = 'SELECT MAX(`id`) FROM `accueil` ';
 
 else
 	{
-		$tool_content .=  "
-		<p>$langExplanation</p>
-			
-			
-		<form method=\"POST\" action=\"$PHP_SELF?submit=yes\" enctype=\"multipart/form-data\">
-			<table>
-			<thead>
-				<tr>
-					<th>
-						
-							$langSendPage :
-						
-					</th>
-					<td>
-						<input type=\"file\" name=\"file\" size=\"35\" accept=\"text/html\">
-					</td>
-				</tr>
-				<tr>
-					<th>
-						
-							$langPgTitle :
-						
-					</th>
-					<td>
-						<input type=\"Text\" name=\"link_name\" size=\"50\">
-					</td>
-				</tr>
-				</thead>
-				</table>
-				<br>
-						<input type=\"Submit\" name=\"submit\" value=\"$langAdd\">
-				
-</form>";
+		$tool_content .=  "<p>$langExplanation</p>
+		<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\">
+		<table><thead><tr><th>$langSendPage :</th>
+		<td><input type=\"file\" name=\"file\" size=\"35\" accept=\"text/html\"></td>
+		</tr><tr><th>$langPgTitle :</th>
+		<td><input type=\"Text\" name=\"link_name\" size=\"50\"></td>
+		</tr></thead></table>
+		<br>
+		<input type=\"Submit\" name=\"submit\" value=\"$langAdd\"></form>";
 	}	// else
 }	// if uid=prof_id
 
 else {
 	// Print You are not identified as responsible for this course
-	$tool_content .=  "
-				<table>
-				<tbody>
-					<tr>
-						<td class=\"caution\">
-					
-						$langNotAllowed
-					
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		
-	";
+	$tool_content .=  "<table><tbody><tr><td class=\"caution\">$langNotAllowed
+	</td></tr></tbody></table>";
 }	// else
 
 $tool_content .=  "";
-
 draw($tool_content, 2);
-
 ?>
 

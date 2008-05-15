@@ -1,6 +1,5 @@
 <?php
-
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -24,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	learningPathList.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -61,7 +60,6 @@ require_once("../../include/lib/learnPathLib.inc.php");
 require_once("../../include/lib/fileManageLib.inc.php");
 
 $require_current_course = TRUE;
-$langFiles              = "learnPath";
 $require_help           = TRUE;
 $helpTopic              = "Path";
 
@@ -151,9 +149,9 @@ if ($is_adminOfCourse) {
 				if (is_dir($webDir."courses/".$currentCourseID."/scormPackages/path_".$_GET['del_path_id']))
 				{
 					$findsql = "SELECT M.`module_id`
-								FROM  `".$TABLELEARNPATHMODULE."` AS LPM,
-										`".$TABLEMODULE."` AS M
-								WHERE LPM.`learnPath_id` = ". (int)$_GET['del_path_id']."
+							FROM  `".$TABLELEARNPATHMODULE."` AS LPM,
+							`".$TABLEMODULE."` AS M
+							WHERE LPM.`learnPath_id` = ". (int)$_GET['del_path_id']."
 								AND 
 										( M.`contentType` = '".CTSCORM_."'
 										OR

@@ -1,6 +1,5 @@
 <?php  
-
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -24,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	showCourseDescription.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -39,7 +38,6 @@
 */
 
 $require_current_course = TRUE;
-$langFiles = "course_description";;
 require_once("../../../config/config.php");
 require_once ('../../../include/init.php');
 
@@ -61,8 +59,6 @@ $nameTools = $langCourseProgram;
 <td colspan="2">
 
 <?php 
-
-
 	mysql_select_db("$currentCourseID",$db);
 	$sql = "SELECT `id`,`title`,`content` FROM `course_description` order by id";
 	$res = db_query($sql);
@@ -88,15 +84,8 @@ $nameTools = $langCourseProgram;
 
 
 ?>
-		</td>
-	</tr>
-	<tr name="bottomLine" >
-		<td colspan="2">
-			<br>
-			<hr noshade size="1">
-		</td>
-	</tr>
-</table>
-</body>
-</html>
+	</td></tr><tr name="bottomLine" >
+	<td colspan="2"><br>
+	<hr noshade size="1">
+	</td></tr></table></body></html>
 

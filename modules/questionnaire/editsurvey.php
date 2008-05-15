@@ -54,7 +54,6 @@
 */
 
 $require_current_course = TRUE;
-$langFiles = 'questionnaire';
 
 $require_help = TRUE;
 $helpTopic = 'Questionnaire';

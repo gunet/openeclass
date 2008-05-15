@@ -1,5 +1,5 @@
 <?php
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -23,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	phpInfo.php
 	@last update: 31-05-2006 by Pitsiougas Vagelis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
@@ -44,10 +44,9 @@
 ==============================================================================*/
 
 /*****************************************************************************
-		DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
+		DEAL WITH BASETHEME, OTHER INCLUDES AND NAMETOOLS
 ******************************************************************************/
-// Set the langfiles needed
-$langFiles = 'admin';
+
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;

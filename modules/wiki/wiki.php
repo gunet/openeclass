@@ -1,6 +1,6 @@
 <?php
 
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -24,7 +24,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	wiki.php
 	@last update: 15-05-2007 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -49,7 +49,6 @@
     require_once("../../include/lib/learnPathLib.inc.php");
     
     $require_current_course = TRUE;
-	$langFiles              = "wiki";
 	$require_help           = TRUE;
 	$helpTopic              = "Wiki";
 	

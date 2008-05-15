@@ -41,9 +41,8 @@
 */
 
 $require_current_course = TRUE;
-$langFiles 				= 'usage';
-$require_help 			= true;
-$helpTopic 				= 'Usage';
+$require_help	= true;
+$helpTopic = 'Usage';
 $require_login = true;
 $require_prof = true;
 
@@ -104,8 +103,6 @@ $local_head = $jscalendar->get_load_files_code();
     $date_where = " (date_time BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
     $date_what  = "DATE_FORMAT(MIN(date_time), '$date_fmt') AS date_start, DATE_FORMAT(MAX(date_time), '$date_fmt') AS date_end ";
 
-
-
     if ($u_user_id != -1) {
         $user_where = " (user_id = '$u_user_id') ";
     } else {
@@ -158,16 +155,12 @@ $local_head = $jscalendar->get_load_files_code();
 
     $chart->render($webDir.$chart_path);
 
-
-
     if ($chart_content) {
         $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
     }
     else   {
       $tool_content .='<br><p>'.$langNoStatistics.'</p>';
     }
-   
-
 
     //make form
     $start_cal = $jscalendar->make_input_field(
@@ -263,12 +256,8 @@ $local_head = $jscalendar->get_load_files_code();
         </thead>
         </table>
         <br/>
-        
-       
             <input type="submit" name="btnUsage" value="'.$langSubmit.'">
-       
     </form>';
-
     }
 
 

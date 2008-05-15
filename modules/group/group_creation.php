@@ -1,5 +1,5 @@
 <?php
-/**===========================================================================
+/*===========================================================================
 *              GUnet e-Class 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -18,11 +18,11 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
-/**
+/*
  * Groups Component
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -32,8 +32,6 @@
  *
  */
 $require_current_course = TRUE;
-
-$langFiles = 'group';
 $require_help = TRUE;
 $helpTopic = 'Group';
 $require_prof = true;
@@ -41,7 +39,7 @@ $require_prof = true;
 include '../../include/baseTheme.php';
 
 if (!$is_adminOfCourse) {
-	die("You are not a professor for this lesson");
+	die("You are not professor for this lesson");
 }
 
 $nameTools = $langNewGroupCreate;
@@ -72,11 +70,9 @@ $tool_content = <<<tCont
     </tbody>
     </table>
     <br />
-    
     </form>
 
 tCont;
-
 
 draw($tool_content, 2, 'group');
 

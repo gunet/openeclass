@@ -26,7 +26,6 @@ eMail: eclassadmin@gunet.gr
 */
 
 $require_login = TRUE;
-$langFiles = 'unreguser';
 include '../../include/baseTheme.php';
 
 $nameTools = $langUnregCours;
@@ -68,7 +67,7 @@ if (isset($uid) and $uid==$_SESSION['uid']) {
                 }
          }
        $tool_content .= "<div align=right><a href='../../index.php' class=mainpage>$langBack</a></div><br><br>";
-			 $tool_content .= "</td></tr></table>";
+		$tool_content .= "</td></tr></table>";
 }
 
 $tool_content .= "</td></tr></table>";

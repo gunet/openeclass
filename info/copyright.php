@@ -25,18 +25,15 @@
 ==============================================================================
 */
 
-
-$langFiles = 'copyright';
 $path2add=2;
-
 include '../include/baseTheme.php';
-
 $nameTools = $langCopyright;
 $tool_content = "";
-
 $tool_content .= "<p align=justify>$langCopyrightNotice</p>";
 
-if(session_is_registered('uid')) draw($tool_content,1);
-else draw($tool_content, 0);
+if(session_is_registered('uid')) 
+	draw($tool_content,1);
+else 
+	draw($tool_content, 0);
 
 ?>

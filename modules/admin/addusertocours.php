@@ -23,30 +23,6 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/* *===========================================================================
-	quotacours.php
-	@last update: 31-05-2006 by Pitsiougas Vagelis
-	@authors list: Karatzidis Stratos <kstratos@uom.gr>
-		       Pitsiougas Vagelis <vagpits@uom.gr>
-==============================================================================        
-        @Description: Edit quota of a course
-
- 	This script allows the administrator to edit the quota of a selected
- 	course
-
- 	The user can : - Edit the quota of a course
-                 - Return to edit course list
-
- 	@Comments: The script is organised in four sections.
-
-  1) Get course quota information
-  2) Edit that information
-  3) Update course quota
-  4) Display all on an HTML page
-  
-==============================================================================*/
-
-
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;

@@ -1,5 +1,5 @@
 <?PHP
-/**===========================================================================
+/*===========================================================================
 *              GUnet eClass 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -18,12 +18,12 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-/**
+/*
  * Logged In Component
  *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -34,6 +34,8 @@
  *
  */
 
+include("./modules/perso/lessons.php");
+include("./modules/perso/documents.php");
 
 $tool_content .= " ";
 $result2 = mysql_query("SELECT cours.code k, cours.fake_code c,
@@ -81,7 +83,7 @@ while ($mycours = mysql_fetch_array($result2)) {
      </table>
      <br/>";
 
- }  else  {
+}  else  {
            if ($_SESSION['statut'] == '5')  // if we are login for first time
            $tool_content .= "
     <p>$langWelcomeStud</p>\n";
@@ -89,7 +91,7 @@ while ($mycours = mysql_fetch_array($result2)) {
 
 // second case check in which courses are registered as a professeror
      $result2 = mysql_query("SELECT cours.code k, cours.fake_code c, cours.intitule i, cours.titulaires t, cours_user.statut s FROM cours, cours_user WHERE cours.code=cours_user.code_cours
-				AND cours_user.user_id='".$uid."' AND cours_user.statut='1'");
+		AND cours_user.user_id='".$uid."' AND cours_user.statut='1'");
         if (mysql_num_rows($result2) > 0) {
      $tool_content .= "
      <table width=99% align='center' class='CourseListTitle'>
@@ -130,6 +132,28 @@ while ($mycours = mysql_fetch_array($result2)) {
       <p>$langWelcomeProf</p>\n";
 } // if
 
+
+// docs perso info
+
+$tool_content .= "<table width='100%'><thead>
+      		<tr><th>$langMyPersoDocs </th></tr></thead>
+      		<tbody>";
+
+$csql = db_query("SELECT cours.code k, cours.fake_code c,
+	cours.intitule i, cours_user.statut s
+	FROM cours, cours_user WHERE cours.code=cours_user.code_cours AND cours_user.user_id='".$uid."'
+	AND cours_user.statut='5'");
+
+while ($c = mysql_fetch_array($csql)) {
+	$d = mysql_fetch_array(db_query("SELECT path, filename, title, date_modified
+		FROM document, accueil WHERE visibility = 'v'
+		AND accueil.visible =1 AND accueil.id =3
+		ORDER BY date_modified DESC", $c['k']));
+
+	$docs_content = "<li class='category'>$d[title]<a class='square_bullet2' href='$d[path]'>$d[filename]</a></li>"; 
+	$tool_content .= "<tr class='odd'><td>$docs_content</td></tr>";
+}
+$tool_content .= "</tbody></table>";
 
 session_register('status');
 ?>

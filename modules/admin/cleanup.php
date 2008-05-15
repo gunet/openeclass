@@ -1,10 +1,7 @@
 <?
-$langFiles = 'admin';
-
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
-
 include '../../include/baseTheme.php';
 
 $nameTools = $langCleanUp;
@@ -12,7 +9,6 @@ $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 
 // Initialise $tool_content
 $tool_content = "";
-
 $tool_content .= "<table width=99% border='0' height=316 cellspacing='0' align=center cellpadding='0'>\n";
 $tool_content .= "<tr>\n";
 $tool_content .= "<td valign=top>\n";

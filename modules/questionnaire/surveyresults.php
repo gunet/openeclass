@@ -55,8 +55,6 @@
 */
 
 $require_current_course = TRUE;
-$langFiles = 'questionnaire';
-
 $require_help = TRUE;
 $helpTopic = 'Questionnaire';
 
@@ -105,7 +103,7 @@ if ($_GET['type'] == 2) { //TF
 			where aid=$aid 
 			ORDER BY aid", $currentCourse);
 			while ($theQAs = mysql_fetch_array($qas)) {	
-				$tool_content .= "<br>" . $theQAs["question_text"]. ": <br>" . $theQAs["question_answer"] . "<br>";
+			$tool_content .= "<br>" . $theQAs["question_text"]. ": <br>" . $theQAs["question_answer"] . "<br>";
 			}
 			$tool_content .= "<br>";
 			$tool_content .= "</td></tr></table><br><br>";
@@ -113,7 +111,7 @@ if ($_GET['type'] == 2) { //TF
 	}
 } else { //MC
 	$tool_content .= "\n<!-- BEGIN MC -->\n";
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	
 	$total_answers = 0;
 	

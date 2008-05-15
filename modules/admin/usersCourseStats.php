@@ -11,11 +11,9 @@
 ==============================================================================
 */
 
-
-$langFiles 				= array('usage', 'admin');
 $require_admin = TRUE;
-$require_help 			= true;
-$helpTopic 				= 'Usage';
+$require_help = true;
+$helpTopic = 'Usage';
 
 include '../../include/baseTheme.php';
 
@@ -34,8 +32,6 @@ $tool_content .=  "<a href='stateclass.php'>".$langPlatformGenStats."</a> <br> "
 
 $tool_content .= "<p> </p>";
 
-
-
 include('../../include/jscalendar/calendar.php');
 if ($language == 'greek') {
     $lang = 'el';
@@ -50,22 +46,17 @@ if ($language == 'greek') {
 
         //make chart
         require_once '../../include/libchart/libchart.php';
-        
         $query = "SELECT cours.intitule AS name, count(user_id) AS cnt FROM cours_user LEFT JOIN cours ON ".
             " cours.code = cours_user.code_cours GROUP BY code_cours";
-   
+
         $result = db_query($query, $mysqlMainDb);
-   
         $chart = new VerticalChart(200, 300);
-   
         while ($row = mysql_fetch_assoc($result)) {
               $chart->addPoint(new Point($row['name'], $row['cnt']));
               $chart->width += 25;
         }
-       
        $chart->setTitle("$langUsersCourse");
 
-        
        mysql_free_result($result);
        $chart_path = 'temp/chart_'.md5(serialize($chart)).'.png';
 

@@ -1,6 +1,5 @@
-<?php
-session_start();
-/**===========================================================================
+<?php session_start();
+/*===========================================================================
 *              GUnet e-Class 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -19,12 +18,12 @@ session_start();
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*					Network Operations Center, University of Athens,
+*					Panepistimiopolis Ilissia, 15784, Athens, Greece
+*					eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-/**
+/*
  * Open courses component
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -34,7 +33,6 @@ session_start();
  *
  */
 
-$langFiles = 'opencours';
 include '../../include/baseTheme.php';
 $nameTools = $langListCourses;
 $navigation[] = array ("url"=>"listfaculte.php", "name"=> $listfac);
@@ -110,18 +108,18 @@ if ($numoftypes > 1) {
 // and finally we do the secondary sort by course title and but teacher's name
 
 foreach (array("pre" => $m['pres'],
-				"post" => $m['posts'],
-				"other" => $m['others']) as $type => $message) {
+		"post" => $m['posts'],
+		"other" => $m['others']) as $type => $message) {
 
-			$result=mysql_query("SELECT
-						cours.code k,
-						cours.fake_code c,
-						cours.intitule i,
-						cours.visible visible,
-						cours.titulaires t
+		$result=mysql_query("SELECT
+				cours.code k,
+				cours.fake_code c,
+				cours.intitule i,
+				cours.visible visible,
+				cours.titulaires t
 			        FROM cours_faculte, cours
 			        WHERE cours.code = cours_faculte.code
-							      AND cours.type = '$type'
+			      AND cours.type = '$type'
    	             		AND cours_faculte.facid='$fc'
 		                ORDER BY cours.intitule, cours.titulaires");
 
@@ -129,9 +127,7 @@ foreach (array("pre" => $m['pres'],
 		continue;
 	}
 
-$tool_content .= "
-     <br>
-	 
+$tool_content .= "<br>
      <table width=99% class='CourseListTitle'>
      <tr>
        <th>";

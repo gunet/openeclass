@@ -1,5 +1,5 @@
 <?php
-/**===========================================================================
+/*===========================================================================
 *              GUnet e-Class 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -18,12 +18,12 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-/**
+/*
  * Links Component
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -41,7 +41,6 @@
  */
 
 $require_current_course = TRUE;
-$langFiles = 'link';
 $require_help = TRUE;
 $helpTopic = 'Link';
 $guest_allowed = true;
@@ -70,7 +69,6 @@ if (isset($action) && ($is_adminOfCourse)) { //allow link management actions onl
 			if(!addlinkcategory("link"))	// here we add a link
 			unset($submitLink);
 		}
-
 		break;
 		case "addcategory": if(isset($submitCategory)) {
 			if(!addlinkcategory("category"))	// here we add a category
@@ -95,7 +93,6 @@ if($is_adminOfCourse) {
 	$tool_content .="
     <div id=\"operations_container\">
     <ul id=\"opslist\">";
-
 	if (isset($category))
 	$tool_content .=  "
       <li><a href=\"".$_SERVER['PHP_SELF']."?action=addlink&category=".$category."&urlview=@$urlview\">".$langLinkAdd."</a></li>";
@@ -110,10 +107,7 @@ if($is_adminOfCourse) {
 	$tool_content .=  "
       <li><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory\">".$langCategoryAdd."</a></li>";
 
-	$tool_content .=  "
-    </ul>
-    </div>
-	";
+	$tool_content .=  "</ul></div>";
 
 	if (!empty($catlinkstatus))	{
 
@@ -133,10 +127,9 @@ if($is_adminOfCourse) {
 		{$category=0;}
 		$tool_content .=  "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?action=".$action."&urlview=".@$urlview."\">";
 		if ($action=="editlink")
-		{$tool_content .=  "<input type=\"hidden\" name=\"id\" value=\"".$id."\">";}
+		{$tool_content .= "<input type=\"hidden\" name=\"id\" value=\"".$id."\">";}
 
-		$tool_content .=  "
-          <table width='99%' class='FormData' height='250'>
+		$tool_content .= "<table width='99%' class='FormData' height='250'>
           <tbody>
           <tr>
             <th class='left' width='150'>&nbsp;</th>
@@ -178,10 +171,7 @@ if($is_adminOfCourse) {
 			$tool_content .=  " selected";
 			$tool_content .= 	">".$myrow["categoryname"]."</option>\n";
 		}
-		$tool_content .=  "
-                </select>
-             </td>
-          </tr>";
+		$tool_content .=  "</select></td></tr>";
 		$tool_content .=  "
           <tr>
             <th class='left'>&nbsp;</th>
@@ -238,9 +228,9 @@ if($is_adminOfCourse) {
 }
 
 if (isset($down))
-movecatlink($down);
+	movecatlink($down);
 if (isset($up))
-movecatlink($up);
+	movecatlink($up);
 
 $sqlcategories="SELECT * FROM `".$tbl_categories."` order by ordre DESC";
 $resultcategories=db_query($sqlcategories, $dbname);

@@ -1,5 +1,5 @@
 <?PHP
-/**===========================================================================
+/*===========================================================================
 *              GUnet e-Class 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -23,7 +23,7 @@
 *						eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-/**
+/*
  * Personalised Lessons Component, e-Class Personalised
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -35,7 +35,7 @@
  *
  */
 
-/**
+/*
  * Function getUserLessonInfo
  *
  * Creates content for the user's lesson block on the personalised interface
@@ -52,8 +52,7 @@ function  getUserLessonInfo($uid, $type) {
 
 	//	TODO: add the new fields for memory in the db
 
-	$user_courses = "SELECT
-								cours.code , cours.fake_code , 
+	$user_courses = "SELECT cours.code , cours.fake_code , 
 	                                           cours.intitule , cours.titulaires ,
 	                                           cours.languageCourse ,
 	                                           cours_user.statut,
@@ -61,9 +60,7 @@ function  getUserLessonInfo($uid, $type) {
 	                                           user.announce_flag,
 	                                           user.doc_flag,
 	                                           user.forum_flag
-
 	                                   FROM    cours, cours_user, user
-	                                  
 	                                  WHERE cours.code = cours_user.code_cours
 	                                  AND   cours_user.user_id = '".$uid."' 
 	                                  AND   user.user_id = '".$uid."'
@@ -89,11 +86,8 @@ function  getUserLessonInfo($uid, $type) {
 		$repeat_val++;
 	}
 
-	$memory = "SELECT
-				user.announce_flag, user.doc_flag, user.forum_flag
-				FROM user
-				WHERE user.user_id = '".$uid."'
-				";
+	$memory = "SELECT user.announce_flag, user.doc_flag, user.forum_flag
+		FROM user WHERE user.user_id = '".$uid."'";
 	$memory_result = db_query($memory, $mysqlMainDb);
 
 	while ($my_memory_result = mysql_fetch_row($memory_result)) {

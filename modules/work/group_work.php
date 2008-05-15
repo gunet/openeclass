@@ -55,12 +55,11 @@
 ==============================================================================
 */
 
-$langFiles="work";
+
 $require_current_course = TRUE;
 $require_login = true;
 
 include('work_functions.php');
-
 include '../../include/baseTheme.php';
 
 $tool_content = "";
@@ -78,7 +77,6 @@ $groupPath = $coursePath."/group/".group_secret($gid);
 $nameTools = $langGroupSubmit;
 
 if (isset($_GET['submit'])) {
-	//printf("<p>$langGroupWorkIntro</p>", basename($_GET['submit']));
 	$tool_content .= "<p>$langGroupWorkIntro</p>"; 
 	show_assignments();	
 	draw($tool_content, 2);
@@ -188,8 +186,6 @@ function submit_work($uid, $id, $file) {
 
 	$group = user_group($uid);
 
-	// $file = cleanup_filename($file);
-	// $local_name = greek_to_latin(basename_noext($file).'_group '.$group.'.'.extension($file));
 	$local_name = greek_to_latin('Group '.$group.'.'.extension($file));
 
 	$source = $groupPath.$file;
@@ -201,33 +197,16 @@ function submit_work($uid, $id, $file) {
 			submission_ip, file_path, file_name, comments, group_id) 
 			VALUES ('$uid','$id', NOW(), '$REMOTE_ADDR', '$destination',
 				'".basename($file)."', '$_POST[comments]', '$group')", $currentCourseID);
-//		$tool_content .=  "<p>$m[the_file] \"".basename($file)."\" $m[was_submitted]</p>";
 		
-		$tool_content .="
-	<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"success\">
-							<p><b>$langUploadSuccess</b></p>
-							<p>$m[the_file] \"".basename($file)."\" $m[was_submitted]</p>
-							<p><a href='work.php'>$langBack</a></p>
-						</td>
-					</tr>
-				</tbody>
-			</table>";
+		$tool_content .="<table width=\"99%\"><tbody>
+			<tr><td class=\"success\"><p><b>$langUploadSuccess</b></p>
+			<p>$m[the_file] \"".basename($file)."\" $m[was_submitted]</p>
+			<p><a href='work.php'>$langBack</a></p>
+			</td></tr></tbody></table>";
 	} else {
-		$tool_content .="
-	<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"caution\">
-							<p><b>$langUploadError</b></p>
-							
-							<p><a href='work.php'>$langBack</a></p>
-						</td>
-					</tr>
-				</tbody>
-			</table>";
+		$tool_content .="<table width=\"99%\"><tbody><tr><td class=\"caution\">
+		<p><b>$langUploadError</b></p><p><a href='work.php'>$langBack</a></p></td>
+		</tr></tbody></table>";
 	}
 }
 

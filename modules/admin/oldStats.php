@@ -12,8 +12,6 @@
 
 ==============================================================================
 */
-// Set the langfiles needed
-$langFiles = array('usage', 'admin');
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
@@ -60,7 +58,6 @@ while ($row = mysql_fetch_assoc($result)) {
 $min_w = date("d-m-Y", $min_when);
 
 
-
 if (!extension_loaded('gd')) {
     $tool_content .= "<p>$langGDRequired</p>";
 } else {
@@ -89,8 +86,6 @@ if (!extension_loaded('gd')) {
 
     $date_fmt = '%Y-%m-%d';
     $date_where = " (start_date BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
-
-   
     $query = "SELECT MONTH(start_date) AS month, YEAR(start_date) AS year, SUM(login_sum) AS visits FROM loginout_summary ".
             " WHERE $date_where GROUP BY MONTH(start_date)";
 

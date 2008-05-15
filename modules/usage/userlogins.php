@@ -40,16 +40,13 @@
 */
 
 $require_current_course = TRUE;
-$langFiles 				= 'usage';
-$require_help 			= true;
-$helpTopic 				= 'Usage';
+$require_help = true;
+$helpTopic = 'Usage';
 $require_login = true;
 $require_prof = true;
 
 include '../../include/baseTheme.php';
 include('../../include/action.php');
-
-
 $tool_content = '';
 $tool_content .= "<div id=\"operations_container\">
 	<ul id=\"opslist\">";
@@ -57,18 +54,13 @@ $tool_content .= "<li><a href='usage.php'>".$langUsage."</a></li>";
 $tool_content .= "<li><a href='favourite.php?first='>".$langFavourite."</a></li>";
 $tool_content .= "<li><a href='userlogins.php?first='>".$langUserLogins."</a></li>";
 $tool_content .= "<li><a href='oldStats.php'>".$langOldStats."</a></li></ul></div>";
-
-
-
 $tool_content .= "<p> $langUserLogins </p>";
-
 
 $nameTools = $langUsage;
 $local_style = '
     .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
      padding-left: 15px; padding-right : 15px; }
     .content {position: relative; left: 25px; }';
-
 
 include('../../include/jscalendar/calendar.php');
 if ($language == 'greek') {
@@ -99,8 +91,6 @@ foreach ($usage_defaults as $key => $val) {
 
 
 $date_fmt = '%Y-%m-%d';
-
-
 $date_where = " (date_time BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
 $date_what  = "DATE_FORMAT(MIN(date_time), '$date_fmt') AS date_start, DATE_FORMAT(MAX(date_time), '$date_fmt') AS date_end ";
 
@@ -166,7 +156,6 @@ if ($table_cont) {
     $tool_content .=  '<table><thead>
         <tr> <th>'.$langUser.'</th> <th>'.$langAddress.' </th> <th>'.$langLoginDate.'</th>'.
         $table_cont.'</thead></table>';
-        
 }
 if ($table2_cont) {
     $tool_content .=  '<br><p>'.$langStatAccueil.'</p><table><thead>
@@ -231,7 +220,6 @@ if (!($table_cont || $table2_cont)) {
         $user_opts .= '<option '.$selected.' value="'.$row["user_id"].'">'.$row['prenom'].' '.$row['nom']."</option>\n";
     }
 
-   
     $tool_content .= '
     <form method="post">
     &nbsp;&nbsp;
@@ -258,5 +246,4 @@ if (!($table_cont || $table2_cont)) {
 
 
 draw($tool_content, 2, '', $local_head, '');
-
 ?>

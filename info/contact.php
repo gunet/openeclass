@@ -25,7 +25,6 @@
 ==============================================================================
 */
 
-$langFiles = array('registration','gunet');
 $path2add=2;
 include '../include/baseTheme.php';
 
@@ -55,11 +54,7 @@ $tool_content .= "
     <th class='left' width='180'>$langEmail:</th>
     <td width='300'>".mailto($emailAdministrator, str_replace('@', ' &lt;at> ', $emailAdministrator))."
     </td>
-  </tr>
-  </tbody>
-  </table>
-
-  ";
+  </tr></tbody></table>";
 
 draw($tool_content, 0);
 ?>

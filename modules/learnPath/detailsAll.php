@@ -1,6 +1,5 @@
 <?php
-
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -24,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	detailsAll.php
 	@last update: 05-12-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -49,7 +48,6 @@
 
 require_once("../../include/lib/learnPathLib.inc.php");
 $require_current_course = TRUE;
-$langFiles = "learnPath";
 
 $TABLECOURSUSER	        = "cours_user";
 $TABLEUSER              = "user";
@@ -68,7 +66,6 @@ if (! $is_adminOfCourse ) claro_die($langNotAllowed);
 $nameTools = $langTrackAllPath;
 
 // display title
-//$titleTab['mainTitle'] = $nameTools;
 $titleTab['subTitle'] = $langTrackAllPathExplanation;
 $tool_content .= claro_disp_tool_title($titleTab);
 
@@ -141,7 +138,6 @@ foreach ( $usersList as $user )
 	
 // foot of table
 $tool_content .= '</tbody>'."\n\n".'</table>'."\n\n";
-
 draw($tool_content, 2, "learnPath", $head_content);
 
 ?>

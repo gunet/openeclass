@@ -1,5 +1,5 @@
 <?php
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -23,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	auth.php
 	@last update: 27-06-2006 by Stratos Karatzidis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
@@ -39,7 +39,6 @@
 ==============================================================================
 */
 
-$langFiles = array('admin','about','authmethods');
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include_once '../auth/auth.inc.php';
@@ -109,11 +108,8 @@ else
 }
 
 $tool_content .= "</td></tr></table><br /><br />";
-
 $tool_content .= "<table width=\"99%\"><tr><td>";
-
 $tool_content .= $langChooseAuthMethod.":<br /><br />";
-
 $tool_content .= "POP3&nbsp;&nbsp;";
 $tool_content .= in_array("2",$auth_methods)? "<a href=\"auth.php?auth=2&active=no\">".$langDeactivate."</a>":"<a href=\"auth.php?auth=2&active=yes\">".$langActivate."</a>";
 $tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=2\">$langAuthSettings</a>";

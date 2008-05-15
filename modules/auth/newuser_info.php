@@ -1,5 +1,5 @@
 <?php 
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -23,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	newuser_info.php
 * @version $Id$
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
@@ -37,7 +37,7 @@
 ==============================================================================
 */
 
-$langFiles = array('registration','index','authmethods');
+
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
 
@@ -55,11 +55,7 @@ if (isset($close_user_registration) and $close_user_registration == TRUE)
   else
     $newuser = "newuser.php";
 
-$tool_content .= "
-$langSelection
-<br>
-<a href=\"$newuser\">$langAuthReg".get_auth_info($e)."</a>
-";
+$tool_content .= "$langSelection<br><a href=\"$newuser\">$langAuthReg".get_auth_info($e)."</a>";
 
 if(!empty($auth))
 {
@@ -68,8 +64,7 @@ if(!empty($auth))
 		if($v!=1)
 		{
 			$tool_content .= "
-			<a href=\"ldapnewuser.php?auth=".$v."\">$langAuthReg".get_auth_info($v)."</a>
-";
+			<a href=\"ldapnewuser.php?auth=".$v."\">$langAuthReg".get_auth_info($v)."</a>";
 		}
 		else
 		{
@@ -77,8 +72,6 @@ if(!empty($auth))
 		}
 	}
 }
-
 $tool_content .= "";
-
 draw($tool_content,0,'auth');
 ?>

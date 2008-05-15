@@ -25,7 +25,7 @@ eMail: eclassadmin@gunet.gr
 ==============================================================================
 */
 
-$langFiles = array('registration','usage');
+
 $require_help = TRUE;
 $helpTopic = 'Personal Statistics';
 include '../../include/baseTheme.php';
@@ -38,7 +38,6 @@ check_uid();
 $nameTools = $langPersonalStats;
 
 check_guest();
-
 
 // Chart display added - haniotak
 if (!extension_loaded('gd')) {
@@ -85,7 +84,6 @@ if (!extension_loaded('gd')) {
 // End of chart display; chart unlinked at end of script.
 
 
-
 $sql = "SELECT * FROM loginout
     WHERE id_user = '".$_SESSION["uid"]."' ORDER by idLog DESC LIMIT 10";
 
@@ -110,8 +108,6 @@ $tool_content .= " <br>
         <tbody>
             ";
 $i = 0;
-//$color[]=$color1;
-//$color[]=$color2;
 
 $nomAction["LOGIN"] = "<font color=\"#008000\">$langLogIn</font>";
 $nomAction["LOGOUT"] = "<font color=\"#FF0000\">$langLogOut</font>";

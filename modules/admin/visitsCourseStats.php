@@ -11,9 +11,6 @@
 ==============================================================================
 */
 
-
-// Set the langfiles needed
-$langFiles = array('usage', 'admin');
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
@@ -24,15 +21,12 @@ $nameTools = $langVisitsCourseStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 // Initialise $tool_content
 $tool_content = "";
-
 $tool_content .=  "<a href='stateclass.php'>".$langPlatformGenStats."</a> <br> ".
                 "<a href='platformStats.php?first='>".$langVisitsStats."</a> <br> ".
              "<a href='visitsCourseStats.php?first='>".$langVisitsCourseStats."</a> <br> ".
               "<a href='oldStats.php'>".$langOldStats."</a> <br> ".
                "<a href='monthlyReport.php'>".$langMonthlyReport."</a>".
           "<p>&nbsp</p>";
-
-
 
 
 include('../../include/jscalendar/calendar.php');

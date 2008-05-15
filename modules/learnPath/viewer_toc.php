@@ -1,6 +1,5 @@
 <?php
-
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -24,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	viewer_toc.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -47,7 +46,7 @@
 */
 
 $require_current_course = TRUE;
-$langFiles              = "learnPath";
+
 require_once("../../config/config.php");
 require_once("../../include/init.php");
 
@@ -69,8 +68,6 @@ require_once("../../include/lib/learnPathLib.inc.php");
 require_once("../../include/lib/fileDisplayLib.inc.php");
 
 mysql_select_db($currentCourseID);
-
-
 echo '<html>'."\n"
     .'<head>'."\n"
     .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
@@ -361,8 +358,7 @@ if($uid) {
 		.'</small>'."\n";
 }
 echo '</th>'
-    .'</tr>'
-    /*.'</thead>'*/;
+    .'</tr>';
 if(isset($endOfSteps)) {
 	echo '<tbody>'
 	    .'<tr>'

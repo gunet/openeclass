@@ -1,5 +1,5 @@
 <? 
-/**===========================================================================
+/*===========================================================================
 *              GUnet e-Class 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -18,12 +18,12 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*					Network Operations Center, University of Athens,
+*					Panepistimiopolis Ilissia, 15784, Athens, Greece
+*					eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-/**
+/*
  * e-Class manuals Component
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -32,8 +32,6 @@
  * @abstract This component offers  the platform's manuals.
  *
  */
-
-$langFiles = 'manual';
 
 $path2add=2;
 include '../include/baseTheme.php';

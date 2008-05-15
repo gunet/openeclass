@@ -1,6 +1,5 @@
 <?php
-
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -24,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	insertMyDoc.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -52,7 +51,6 @@ require_once("../../include/lib/fileManageLib.inc.php");
 require_once("../../include/lib/textLib.inc.php");
 
 $require_current_course = TRUE;
-$langFiles              = "learnPath";
 
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";
@@ -86,11 +84,6 @@ if ( !isset($_SESSION['path_id']) )
 }
 
 mysql_select_db($currentCourseID);
-
-
-/*======================================
-       CLAROLINE MAIN
- ======================================*/
 
 // FUNCTION NEEDED TO BUILD THE QUERY TO SELECT THE MODULES THAT MUST BE AVAILABLE
 
@@ -468,9 +461,7 @@ unset($attribute);
 
 $tool_content .= display_my_documents($dialogBox, $style) ;
 
-//####################################################################################\\
 //################################## MODULES LIST ####################################\\
-//####################################################################################\\
 
 $tool_content .= "<br />";
 $tool_content .= claro_disp_tool_title($langPathContentTitle);

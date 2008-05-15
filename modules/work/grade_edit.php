@@ -32,14 +32,10 @@
 ==============================================================================        
 */
 
-
-$langFiles="work";
 $require_current_course = TRUE;
 
 include '../../include/baseTheme.php';
-
 $tool_content = "";
-
 include('work_functions.php');
 
 $nameTools = $m['grades'];
@@ -101,13 +97,7 @@ function show_edit_form($id, $sid, $assign)
     </tr>
 cData;
 
-//			if (!empty($sub['group_id'])) {
-//					$tool_content .= "<tr><td colspan='2'><b>$m[groupsubmit] ".
-//						"<a href='../group/group_space.php?userGroupId=$sub[group_id]'>".
-//						"$m[ofgroup] $sub[group_id]</a></b></td></tr>\n";
-//			}
-			
-			$tool_content .= <<<cData
+	$tool_content .= <<<cData
 
     <tr>
       <th class="left">${m['grade']}:</th>
@@ -129,8 +119,7 @@ cData;
 cData;
 
 	} else {
-		$tool_content .= "
-    <p>error - no such submission with id $sid</p>\n";
+		$tool_content .= "<p>error - no such submission with id $sid</p>\n";
 	}
 }
 

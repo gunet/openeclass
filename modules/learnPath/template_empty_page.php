@@ -1,6 +1,5 @@
 <?php
-
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -24,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	template_empty_page.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -42,7 +41,6 @@ Initializations
 ****************/
 
 $require_current_course = TRUE;
-$langFiles = "learnPath";
 
 require_once("../../include/baseTheme.php");
 $head_content = "";
@@ -58,8 +56,6 @@ if($is_adminOfCourse) {       // Teacher View
 else { // Student View
 
 } // Student View
-
-
 
 /*>>>>>>>>>>>> COMMON FOR THEACHERS AND STUDENTS  <<<<<<<<<<<<*/
 
