@@ -1,6 +1,7 @@
 <?php
+header('Content-Type: text/html; charset=UTF-8');
 /**===========================================================================
-*              GUnet e-Class 2.0
+*              GUnet eClass 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
 *	Copyright(c) 2003-2006  Greek Universities Network - GUnet
@@ -24,11 +25,11 @@
 ============================================================================*/
 /**
  * Installation wizard
- * 
+ *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * 
- * @abstract This is the installation wizard of eclass. 
+ *
+ * @abstract This is the installation wizard of eclass.
  *
  */
 session_start();
@@ -36,7 +37,7 @@ session_start();
 $tool_content = "";
 if (!isset($siteName)) $siteName = "";
 if (!isset($InstitutionUrl)) $InstitutionUrl = "";
-if (!isset($Institution)) $Institution = ""; 
+if (!isset($Institution)) $Institution = "";
 include "../modules/lang/greek/common.inc.php";
 include "../modules/lang/greek/messages.inc.php";
 include('install_functions.php');
@@ -46,15 +47,15 @@ if (file_exists("../config/config.php")) {
 	<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
 <html xmlns=\"http://www.w3.org/1999/xhtml\">
   <head>
+<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
     <title>Καλωσορίσατε στον οδηγό εγκατάστασης του eClass</title>
-    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
     <link href=\"../template/classic/tool_content.css\" rel=\"stylesheet\" type=\"text/css\" />
     <link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
   </head>
   <body>
 	<table width = \"99%\"><tbody><tr><td class=\"extraMessage\">
 	Προσοχή !! Το αρχείο <b>config.php</b> υπάρχει ήδη στο σύστημά σας!! Το πρόγραμμα εγκατάστασης δεν πραγματοποιεί αναβάθμιση. Αν θέλετε να ξανατρέξετε την εγκατάσταση της πλατφόρμας,
-            παρακαλούμε διαγράψτε το αρχείο config.php!						
+            παρακαλούμε διαγράψτε το αρχείο config.php!
 	</td></tr></tbody></table>
 	</body></html>";
 	exit($tool_content);
@@ -188,7 +189,7 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	</tr>
 	</thead>
 	</table>
-  <br/><br/>              
+  <br/><br/>
 	<input type=\"submit\" name=\"back2\" value=\"< Πίσω\">
 	<input type=\"submit\" name=\"install5\" value=\"Επόμενο >\">
 </form>";
@@ -294,7 +295,7 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
                             </td>
                         </tr>
                         <tr>
-                            <th>                           
+                            <th>
                                     ".$langInstituteName."
                             </th>
                             <td>
@@ -329,7 +330,7 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
 		    </tr>
                         <tr>
                             <th>
-                                   Εξυπηρετητής video streaming 
+                                   Εξυπηρετητής video streaming
                             </th>
                             <td>
 <script>
@@ -343,7 +344,7 @@ function set_video_input()
 		else{ document.getElementById(\"video_input_div_text\").innerHTML='';
 		      document.getElementById(\"video_input_div_input\").innerHTML='';
 		}
-		
+
 	}
 </script>
 		<input type=\"checkbox\" id=\"video_check\" onclick=\"set_video_input();\"/><br>
@@ -351,7 +352,7 @@ function set_video_input()
      </tr>
 	<tr>
 	<th><div id=\"video_input_div_text\">
-	</div> 
+	</div>
 	</th>
 	<td>
 	<div id=\"video_input_div_input\">
@@ -373,7 +374,7 @@ function set_MCU()
 		else{ document.getElementById(\"MCU_div_text\").innerHTML='';
 		      document.getElementById(\"MCU_div_input\").innerHTML='';
 		}
-		
+
 
 	}
 </script>
@@ -460,9 +461,9 @@ elseif(isset($_REQUEST['install6']))
 				<li>".$mes_add."</li>
 				<li>MCU: ".@$MCUForm." </li>
 				<li>Vod Server: ".@$vodServerForm." </li>
-        </ul>     
-        <input type=\"submit\" name=\"back4\" value=\"< Πίσω\">               
-        <input type=\"submit\" name=\"install7\" value=\"Eγκατάσταση του eClass >\">               
+        </ul>
+        <input type=\"submit\" name=\"back4\" value=\"< Πίσω\">
+        <input type=\"submit\" name=\"install7\" value=\"Eγκατάσταση του eClass >\">
         </form>";
 
 draw($tool_content);
@@ -682,7 +683,7 @@ elseif(isset($_REQUEST['install7']))
       registered_at int(10) NOT NULL default '0',
       expires_at int(10) NOT NULL default '0',
      `perso` enum('yes','no') NOT NULL default 'no',
-		 `lang` enum('el','en') DEFAULT 'el' NOT NULL,	
+		 `lang` enum('el','en') DEFAULT 'el' NOT NULL,
   	 `announce_flag` date NOT NULL default '0000-00-00',
  		 `doc_flag` date NOT NULL default '0000-00-00',
     `forum_flag` date NOT NULL default '0000-00-00',
@@ -874,7 +875,7 @@ CREATE TABLE `auth` (
   			`datetime` datetime NOT NULL
 			) TYPE=MyISAM $charset_spec");
 
-		
+
 //dhmiourgia full text indexes
 		mysql_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu` ,`code_cours`)");
 		mysql_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_objectives` ,`course_prerequisites` ,`course_keywords` ,`course_references`)");
@@ -955,10 +956,10 @@ $encryptedPasswd = true;
 					<tr>
 						<td class=\"extraMessageOK\">
 						 <p>Η εγκατάσταση ολοκληρώθηκε με επιτυχία!
-                Κάντε κλίκ παρακάτω για να μπείτε στο e-class.</p>
+                Κάντε κλίκ παρακάτω για να μπείτε στο eClass.</p>
                 <br>
                 <p><b>
-                Συμβουλή: Για να προστατέψετε το e-class, αλλάξτε τα δικαιώματα πρόσβασης των αρχείων
+                Συμβουλή: Για να προστατέψετε το eClass, αλλάξτε τα δικαιώματα πρόσβασης των αρχείων
                 <tt>/config/config.php</tt> και <tt>/install/index.php</tt> και
                 επιτρέψτε μόνο ανάγνωση (CHMOD 444).</b></p>
 						</td>
@@ -990,16 +991,16 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 				<tbody>
 					<tr>
 						<td class=\"extraMessage\">
-						
+
         <p><b>Προσοχή!</b> Φαίνεται πως η επιλογή register_globals
         στο αρχείο php.ini δεν είναι ενεργοποιημένη. Χωρίς αυτήν το
-        e-class δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το
+        eClass δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το
         αρχείο php.ini ώστε να περιέχει τη γραμμή:</p>
         <p><b>register_globals = On</b></p>
        <p>Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
         τις οδηγίες εγκατάστασης στο αρχείο
         <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
-						
+
 					</td>
 					</tr>
 				</tbody>
@@ -1014,16 +1015,16 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 			<tbody>
 			<tr>
 			<td class=\"extraMessage\">
-						
+
         <p><b>Προσοχή!</b> Φαίνεται πως η επιλογή short_open_tag
         στο αρχείο php.ini δεν είναι ενεργοποιημένη. Χωρίς αυτήν το
-        e-class δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το
+        eClass δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το
         αρχείο php.ini ώστε να περιέχει τη γραμμή:</p>
         <p><b>short_open_tag = On</b></p>
         <p>Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
         τις οδηγίες εγκατάστασης στο αρχείο
         <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
-						
+
 				</td>
 				</tr>
 			</tbody>
@@ -1043,9 +1044,9 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 				<tbody>
 					<tr>
 						<td class=\"extraMessage\">
-			  <p><b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει 
+			  <p><b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει
         δικαιώματα δημιουργίας του κατάλογου <b>/config</b>.<br/>
-        Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει. 
+        Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει.
         Παρακαλούμε διορθώστε τα δικαιώματα.
         <br/>
         Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
@@ -1057,10 +1058,10 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 			</table>
 		";
 		$configErrorExists = true;
-		} 
+		}
 	}
 	// courses directory
-	
+
 	if (!is_dir("../courses")) {
 		$mkd = @mkdir("../courses", 0777);
 	if(!$mkd){
@@ -1069,10 +1070,10 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 				<tbody>
 					<tr>
 						<td class=\"extraMessage\">
-						
-        <p><b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει 
+
+        <p><b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει
         δικαιώματα δημιουργίας του κατάλογου <b>/courses</b>.<br/>
-        Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει. 
+        Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει.
         Παρακαλούμε διορθώστε τα δικαιώματα.
         <br/>
         Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
@@ -1083,7 +1084,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 				</tbody>
 			</table>";
 		$configErrorExists = true;
-			} 
+			}
 	}
 
 
@@ -1119,10 +1120,10 @@ if(!$mkd){
 	}
 
 	$tool_content .= "
-     
+
     <u>Έλεγχος προαπαιτούμενων προγραμμάτων για τη λειτουργία του eClass</u>
     <p>
-        Webserver (<em>βρέθηκε <b>".$_SERVER['SERVER_SOFTWARE']."</b></em>) 
+        Webserver (<em>βρέθηκε <b>".$_SERVER['SERVER_SOFTWARE']."</b></em>)
         με υποστήριξη PHP (<em>βρέθηκε <b>PHP ".phpversion()."</b></em>).</p>
     ";
 
@@ -1140,7 +1141,7 @@ if(!$mkd){
 	warnIfExtNotLoaded("ldap");
 	$tool_content .= "</ul>";
 	$tool_content .= "
-    
+
     <u>Άλλες απαιτήσεις συστήματος</u>
     <ul id=\"installBullet\">
     <li>
@@ -1150,13 +1151,13 @@ if(!$mkd){
         Δικαιώματα εγγραφής στον κατάλογο <tt>include/</tt>.
     </li>
     <li>
-        Δικαιώματα εγγραφής στον κατάλογο όπου το e-class έχει αποσυμπιεστεί.
+        Δικαιώματα εγγραφής στον κατάλογο όπου το eClass έχει αποσυμπιεστεί.
     </li>
     </ul>
-    
+
     <u>Επιπρόσθετη λειτουργικότητα:</u>
      <ul id=\"installBullet\">
-     <li>Εάν επιθυμείτε να υποστηρίζετε streaming για τα αρχεία video που θα αποτελούν μέρος του υλικού των αποθηκευμένων μαθημάτων θα πρέπει να υπάρχει εγκατεστημένος streaming server σύμφωνα με τις οδηγίες που θα βρείτε στο εγχειρίδιο τάδε. 
+     <li>Εάν επιθυμείτε να υποστηρίζετε streaming για τα αρχεία video που θα αποτελούν μέρος του υλικού των αποθηκευμένων μαθημάτων θα πρέπει να υπάρχει εγκατεστημένος streaming server σύμφωνα με τις οδηγίες που θα βρείτε στο εγχειρίδιο τάδε.
     </li>
     <li>
 Το eClass θα εγκαταστήσει το δικό του διαχειριστικό εργαλείο μέσω web των βάσεων δεδομένων MySQL (<a
@@ -1187,27 +1188,27 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
     <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
     <link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
 
-      
+
   </head>
   <body>
-	
-	
+
+
 	<div class=\"outer\">
      <form action=".$PHP_SELF."?alreadyVisited=1 method=\"post\">
 	 <input type=\"hidden\" name=\"welcomeScreen\" value=\"welcomeScreen\">
     <div class=\"welcomeImg\"></div>
-   
+
    Καλωσορίσατε στον οδηγό εγκατάστασης του eClass. Ο οδηγός αυτός :
     <ul id=\"installBullet\">
     	<li>Θα σας βοηθήσει να όρίσετε τις ρυθμίσεις για τη βάση δεδομένων</li>
     	<li>Θα σας βοηθήσει να όρίσετε τις ρυθμίσεις της πλατφόρμας</li>
     	<li>Θα δημιουργήσει το αρχείο config.php</li>
     </ul>
- 
+
   <input type=\"submit\" name=\"install1\" value=\"Επόμενο >\">
  </div>
   </form>
-  
+
   </body>
 </html>";
 

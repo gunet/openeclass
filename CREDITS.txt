@@ -20,7 +20,7 @@
       | Contact address: Asynchronous Teleteaching Group (eclass@gunet.gr),  |
       |                  Network Operations Center, University of Athens,    |
       |                  Panepistimiopolis Ilissia, 15784, Athens, Greece    |
-      +----------------------------------------------------------------------+  
+      +----------------------------------------------------------------------+
 
       GUnet eClass was initially based on Claroline 1.3.0, by:
           Thomas De Praetere <depraetere@ipm.ucl.ac.be>
@@ -36,7 +36,7 @@
 	Thanos Kyritsis <atkyritsis@upnet.gr> (University of Patras)
 
 
-      Also Credits to:	 
+      Also Credits to:
 	 Artemios Vogiatzis <bogart@upatras.gr (University of Patras)
 	 George Doukas <geodoukas@upatras.gr> (University of Patras)
 	 Stratos Karatzidis <kstratos@uom.gr> (University of Macedonia)
@@ -45,19 +45,21 @@
          Vangelis Chaniotakis <haniotak@ucnet.uoc.gr> (University of Crete)
 	 Sakis Agorastos <th_agorastos@hotmail.com> (University of Piraeus)
 	 Dimitris Daskopoulos <dimitris@ccf.auth.gr> (Aristotele University of Thessaloniki)
-	 Savvas Anastasiadis <sanastas@ccf.auth.gr> (Aristotele University of Thessaloniki)				
+	 Savvas Anastasiadis <sanastas@ccf.auth.gr> (Aristotele University of Thessaloniki)
 	 Dimitris Tsachalis <ditsa@ccf.auth.gr> (Aristotele University of Thessaloniki)
 	 Ilias Mpertsimas <mhlias@noc.teilam.gr> (Technological Educational Institute of Lamia)
 	 Dionysios G. Synodinos <dsin@noc.ntua.gr> (National Technical University of Athens)
          Michalis Psaltakis <mpsaltakis@aegean.gr> (University of the Aegean)
          Konstantinidis K. (Aristotele University of Thessaloniki)
 
-	Xinha: 
+	Xinha:
 	 Xinha was originally based on work by Mihai Bazon who produced htmlArea for Interactive Tools.
 	 Currently leading the Xinha project is James Sleeman.
-	 Raimund Meyer (ray) has contributed somewhat to the advancement of Xinha recently. 
+	 Raimund Meyer (ray) has contributed somewhat to the advancement of Xinha recently.
 	     Copyright (c) 2003-2004 dynarch.com.
     	     Copyright (c) 2002-2003 interactivetools.com, inc.
+
+	  Template Engine: Copyright 1999-2000 NetUSE GmbH Kristian Koehntopp
 
       PclZip: Vincent Blavet <vincent@phpconcept.net>
 
@@ -87,5 +89,5 @@
       Exercise module: Copyright Olivier Brouckaert <oli.brouckaert@skynet.be>
 
        Function parse_tex(): Patrick Cool <patrick.cool@UGent.be>
-		
+
        Function user_get_data(): Mathieu Laurent <laurent@cerdecam.be>
