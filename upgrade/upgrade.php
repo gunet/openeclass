@@ -1109,9 +1109,11 @@ if (!isset($submit2)) {
 // -------------- begin group document upgrade ---------------------
 // -----------------------------------------------------------------
 
-// add temporary column unique_filename in group document table
+	// add temporary columns:unique_filename, secretDirectory in group document table
 		if (!mysql_field_exists("$code[0]",'group_documents','unique_filename'))
                         $tool_content .= add_field('group_documents', 'unique_filename', "TEXT");
+		if (!mysql_field_exists("$code[0]",'group_documents','secretDirectory'))
+                        $tool_content .= add_field('group_documents', 'secretDirectory', "TEXT");
 
 		// create temporary table
 		if (!mysql_table_exists($code[0], 'group_doc_tmp')) {
@@ -1218,14 +1220,19 @@ if (!isset($submit2)) {
 				WHERE unique_filename='$u[unique_filename]' AND secretDirectory='$sd[0]'");
 		}
 
-		// flush temporary table doc_tmp
+		// flush temporary table group_doc_tmp
 		db_query("TRUNCATE TABLE group_doc_tmp");
 		
 	} // end of while
 
-// delete temporary column unique_filename from table document
+	// delete temporary column unique_filename and secret directorry from table document
 	if (mysql_field_exists("$code[0]",'group_documents','unique_filename'))
 		delete_field('group_documents', 'unique_filename');
+	if (mysql_field_exists("$code[0]",'group_documents','secretDirectory'))
+		delete_field('group_documents', 'secretDirectory');
+
+	// delete temporary table group_doc_tmp
+	db_query("DROP TABLE IF EXISTS group_doc_tmp");
  
 // ------------------------------------------------------------------------------
 // ------------------- end of group document upgrade ----------------------------
