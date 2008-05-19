@@ -311,7 +311,7 @@ $tool_content .="
     </tr>
     <tr>
       <th class=\"left\">$langDescription $langUncompulsory:</th>
-      <td><textarea name=\"description\" rows=6 cols=60 wrap=virtual  class=\"FormData_InputText\">$tool_content_group_description</textarea></td>
+      <td><textarea name=\"description\" rows=2 cols=60 wrap=virtual  class=\"FormData_InputText\">$tool_content_group_description</textarea></td>
     </tr>
     <tr>
       <th class=\"left\" valign=\"top\">$langGroupMembers :</th>
@@ -321,13 +321,13 @@ $tool_content .="
           <tr>
             <td><b>$langNoGroupStudents</b></td>
             <td width='100'><div align=\"center\"><b>$langMove</b></div></td>
-            <td><div align=\"center\"><b>$langGroupMembers</b></div></td>
+            <td><div align=\"right\"><b>$langGroupMembers</b></div></td>
           </tr>
           </thead>
           <tbody>
           <tr>
             <td><div align=\"left\">
-              <select name=\"nogroup[]\" size=20 multiple>
+              <select name=\"nogroup[]\" size=15 multiple>
                 $tool_content_not_Member
               </select></div>
             </td>
@@ -337,7 +337,7 @@ $tool_content .="
               </div>
             </td>
             <td><div align=\"right\">
-              <select name=\"ingroup[]\" size=\"20\" multiple>
+              <select name=\"ingroup[]\" size=\"15\" multiple>
                 $tool_content_group_members
               </select></div>
             </td>

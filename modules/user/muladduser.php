@@ -36,23 +36,43 @@ $tool_content = "";
 
 // IF PROF ONLY
 if($is_adminOfCourse) {
-$tool_content .= <<<tCont
-	<p>$langAskManyUsers<p>
-	
-	<p>$langAskManyUsers2<p>
-	
-tCont;
-    $tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\" enctype=\"multipart/form-data\">";
+	$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">
+        <li><a href=\"user.php\">$langBackUser</a></li>
+      </ul>
+    </div>";
+
+    $tool_content .= "
+    <form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\" enctype=\"multipart/form-data\">";
 	$tool_content .= <<<tCont2
-	<table>	
-	<thead>
-	<tr>
-		<th>$langAskUserFile</th>
-		<td><input type="file" name="users_file"></td></tr> 
-	</thead>
+
+    <table width="99%" class="FormData">
+    <tbody>
+    <tr>
+      <th width="220">&nbsp;</th>
+      <td><b></b></td>
+      <td align="right">&nbsp;</td>
+    </tr>
+    <tr>
+      <th class="left">$langAskUserFile</th>
+      <td><input type="file" name="users_file" class="FormData_InputText"></td>
+      <td align="right"><small>$langAskManyUsers</small></td>
+    </tr>
+    <tr>
+      <th class="left">&nbsp;</th>
+      <td><input type="submit" value="$langAdd"></td>
+      <td align="right"><small>$langAskManyUsers1</small></td>
+    </tr>
+    <tr>
+      <td colspan="3"><small>$langAskManyUsers2</small></td>
+    </tr>
+	</tbody>
 	</table>
-	<br><input type="submit" value="$langAdd">
-	</form>	
+	<br />
+
+    </form>
+
 tCont2;
 
 mysql_select_db($mysqlMainDb);
@@ -148,13 +168,11 @@ while ($myrow = mysql_fetch_array($result)) {
 	}
 	db_query("DROP TABLE lala");
 }
-$tool_content .= "</td></tr>
-	<tr><td>&nbsp;</td></tr>
-	<tr><td><a href=\"user.php\">$langBackUser</a>\n";
+
 
 }
 
-draw($tool_content, 2);
+draw($tool_content, 2, 'user');
 
 // function for adding users
 
@@ -175,7 +193,7 @@ function adduser($user,$course) {
 	if (mysql_num_rows($result) > 0)
 	return -2;
 
-	$result = db_query("INSERT INTO cours_user (user_id, code_cours, statut, reg_date) 
+	$result = db_query("INSERT INTO cours_user (user_id, code_cours, statut, reg_date)
 			VALUES ('$userid', '$course', '5', CURDATE())");
 	return $userid;
 }

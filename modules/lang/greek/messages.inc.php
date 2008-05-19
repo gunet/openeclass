@@ -186,8 +186,8 @@ $langCleanUp = "Διαγραφή παλιών αρχείων";
 // listusers
 $langBegin="αρχή";
 $langEnd = "τέλος";
-$langPreced50 = "Προηγούμενοι 50";
-$langFollow50 = "Επόμενοι 50";
+$langPreced50 = "Προηγούμενοι";
+$langFollow50 = "Επόμενοι";
 $langAll="όλοι";
 $langNoSuchUsers = "Δεν υπάρχουν χρήστες σύμφωνα με τα κριτήρια που ορίσατε";
 $langAsInactive = "ως μη ενεργοί";

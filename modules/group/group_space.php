@@ -106,7 +106,7 @@ while ($myGroup = mysql_fetch_array($resultGroup))
     <div id=\"operations_container\">
       <ul id=\"opslist\">";
 
-			$tool_content .= "$message";
+			$tool_content .= "$message&nbsp;";
 	} else {
 			$tool_content .= "
     <div id=\"operations_container\">
@@ -242,7 +242,7 @@ function loadGroupTools(){
 	$group_tools = "";
 	if(isset($selfReg))
 	{
-		$group_tools .=  "&nbsp;";
+		$group_tools .=  "";
 	}
 	else
 	{

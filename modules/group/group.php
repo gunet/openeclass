@@ -24,10 +24,10 @@
 ============================================================================*/
 /*
  * Groups Component
- * 
+ *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * 
+ *
  * @abstract This module is responsible for the user groups of each lesson
  *
  */
@@ -68,7 +68,7 @@ function confirmation (name)
 	} else if (name == "emptyall") {
 		if (confirm("'.$langDeleteGroupAllWarn.' ?"))
 		{return true;}
-		else 
+		else
 		{return false;}
 	} else {
 		if (confirm("'.$langDeleteGroupWarn.' ("+ name + ") ?"))
@@ -96,7 +96,7 @@ if(isset($_REQUEST['creation']) && $is_adminOfCourse) {
 		db_query("INSERT INTO student_group (maxStudent, secretDirectory)
 			VALUES ('".mysql_real_escape_string($group_max)."', '$secretDirectory')");
 		$lastId=mysql_insert_id();
-		
+
 		db_query("INSERT INTO forums
 			(forum_id, forum_name, forum_desc,
 			forum_access, forum_moderator, forum_topics,
@@ -116,9 +116,9 @@ if(isset($_REQUEST['creation']) && $is_adminOfCourse) {
 
 if(isset($_REQUEST['properties']) && $is_adminOfCourse)
 {
-	@db_query("UPDATE group_properties 
+	@db_query("UPDATE group_properties
 		SET self_registration='".mysql_real_escape_string($self_registration)."', private='".mysql_real_escape_string($private)."',
-		forum='".mysql_real_escape_string($forum)."', document='".mysql_real_escape_string($document)."' WHERE id=1", $currentCourse); 
+		forum='".mysql_real_escape_string($forum)."', document='".mysql_real_escape_string($document)."' WHERE id=1", $currentCourse);
 	$message = $langGroupPropertiesModified;
 }	// if $submit
 
@@ -187,7 +187,7 @@ elseif (isset($_REQUEST['fill']) && $is_adminOfCourse) {
 	$sqlUserSansGroupe= "SELECT cu.user_id FROM `$mysqlMainDb`.cours_user cu
 			LEFT JOIN `$currentCourse`.user_group ug on ug.user = cu.user_id
 			WHERE cu.code_cours='$currentCourse'
-			AND cu.statut=5 AND ug.user is null AND cu.tutor=0";		
+			AND cu.statut=5 AND ug.user is null AND cu.tutor=0";
 	$resUserSansGroupe= db_query($sqlUserSansGroupe);
 	while (isset($placeAvailableInGroups) and is_array($placeAvailableInGroups) and (!empty($placeAvailableInGroups)) and list($idUser) = mysql_fetch_array($resUserSansGroupe))
 	{
@@ -269,12 +269,12 @@ if ($is_adminOfCourse) {
     ";
 	}
 	unset($message);
-	
-	
+
+
 
 	// ---------- display properties ------------------------
 	$tool_content .= <<<tCont3
-	
+
     <br />
     <table class="GroupSum" width=\"99%\">
     <thead>
@@ -358,7 +358,7 @@ tCont3;
     </table>
     ";
 
-	
+
 
 	$groupSelect=db_query("SELECT id, name, maxStudent FROM student_group", $currentCourse);
 	$myIterator=0;
@@ -366,7 +366,7 @@ tCont3;
 	// groups list
 	if ($num_of_groups > 0) {
 		$tool_content .= "
-    
+
     <br />
     <table width=\"99%\">
     <thead>
@@ -378,7 +378,7 @@ tCont3;
       <th width=\"50\">$langDelete</th>
     </tr>
     </thead>
-    <tbody>";	
+    <tbody>";
 	} else {
 	$tool_content .= "
     <br />
@@ -417,13 +417,13 @@ tCont3;
 		$myIterator++;
 	}	// while loop
 
-	$coursUsersSelect=db_query("SELECT user_id FROM cours_user 
-		WHERE code_cours='$currentCourse' 
+	$coursUsersSelect=db_query("SELECT user_id FROM cours_user
+		WHERE code_cours='$currentCourse'
 		AND statut=5 AND tutor=0", $mysqlMainDb);
 	$countUsers = mysql_num_rows($coursUsersSelect);
 	$countNoGroup=($countUsers-$totalRegistered);
 	$tool_content .= <<<tCont4
-	
+
     </tbody>
     </table>
     <br />
@@ -466,13 +466,13 @@ else {
 	while ($myTeamUser = mysql_fetch_array($findTeamUser)) {
 		$myTeam=$myTeamUser['team'];
 	}
-	
+
 	$groupSelect=db_query("SELECT id, name, maxStudent, tutor FROM student_group", $currentCourse);
-	
+
 	$num_of_groups = mysql_num_rows($groupSelect);
 	// groups list
 	if ($num_of_groups > 0) {
-	
+
 	$tool_content .= "
     <table width=\"99%\" class=\"GroupSum\">
     <thead>
@@ -482,12 +482,12 @@ else {
 	// If self-registration allowed by admin
 	if($selfRegProp==1) {
 		$tool_content .= "
-      <td><div align='center'><b>$langRegistration</b></div></td>";
+      <td width=\"50\"><div align='center'><b>$langRegistration</b></div></td>";
 	}
 
 	$tool_content .= "
-      <td align='center'><b>$langRegistered</b></td>
-      <td><div align='center'><b>$langMax</b></div></td>
+      <td width=\"50\"><div align='center'><b>$langRegistered</b></div></td>
+      <td width=\"50\"><div align='center'><b>$langMax</b></div></td>
     </tr>
     </thead>
     <tbody>";
@@ -496,8 +496,8 @@ else {
     <br />
     <div class=\"alert1\">$langNoGroup</div>";
 	}
-	
-	
+
+
 	//$totalRegistered=0;
 	while ($group = mysql_fetch_array($groupSelect)) {
 		// Count students registered in each group
@@ -525,31 +525,30 @@ else {
 				$tool_content .= $group['name'];
 			}
 		}	// else
-		$tool_content .= "
-      </td>";
+		$tool_content .= "</td>";
 
 		// SELF REGISTRATION
 		// If self-registration allowed by admin
 		if($selfRegProp==1)
 		{
 			$tool_content .= "
-      <td align='center'>";
+      <td><div align='center'>";
 			if((!$uid) OR (isset($myTeam)) OR (($countRegistered>=$group['maxStudent']) AND ($group['maxStudent']>>0)))
 			{
-				$tool_content .= "&nbsp;-";
+				$tool_content .= "-";
 			} else {
-			$tool_content .= "&nbsp;<a href=\"group_space.php?selfReg=1&userGroupId=".$group["id"]."\">$langRegistration</a>";
+			$tool_content .= "<a href=\"group_space.php?selfReg=1&userGroupId=".$group["id"]."\">$langRegistration</a>";
 			}
-			$tool_content .= "</td>";
+			$tool_content .= "</div></td>";
 		}	// If self reg allowed by admin
 		$tool_content .= "
-      <td align='center' width='50'>".$countRegistered."</td>";
+      <td><div align='center'>".$countRegistered."</div></td>";
 		if ($group['maxStudent']==0) {
 			$tool_content .= "
-      <td>-</td>";
+      <td><div align='center'>-</div></td>";
 		} else {
 			$tool_content .= "
-      <td align='center' width='50'>".$group["maxStudent"]."</td>";
+      <td><div align='center'>".$group["maxStudent"]."</div></td>";
 		}
 		$tool_content .= "
     </tr>";

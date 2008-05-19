@@ -2354,8 +2354,8 @@ $langAndP="and his password";
 $langDereg="has been unregistered from this course";
 $langAddAU="Add a user";
 $langBegin="begin.";
-$langPreced50 = "Previous 50";
-$langFollow50 = "Next 50";
+$langPreced50 = "Previous";
+$langFollow50 = "Next";
 $langEnd = "end";
 $langAdmR="Admin rights";
 $langAddHereSomeCourses = "<p>To register / unregister to / from a lesson,
@@ -2408,10 +2408,10 @@ $langphone= "Telephone";
 $langPhone = "<b>Phone:</b>";
 
 // adduser.php
-$langAskUser = "Enter the name, surname or username of the user you want to add.<br><br>
-        User must have an account in platform";
-$langAskManyUsers = "Type the filename or click in \"Browse\" to browse for it.<br><br>
-        Users must have an account in platform.";
+$langAskUser1 = "Enter the name, surname or username of the user you want to add.";
+$langAskUser2 = "User must have an account in platform";
+$langAskManyUsers = "Type the filename or click in \"Browse\" to browse for it.";
+$langAskManyUsers1 = "Users must have an account in platform.";
 $langAskManyUsers2 = "<strong>Note</strong>: Users file must be a simple text file with one username per line: E.g.
            <br><br>
             helen<br>

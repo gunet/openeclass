@@ -45,31 +45,64 @@ if (isset($add)) {
 		"VALUES ('".mysql_escape_string($add)."', '$currentCourseID', ".
 		"'5', CURDATE())");
 	if ($result) {
-		$tool_content .=  "<p>$langTheU $langAdded</p>";
+		$tool_content .=  "
+    <p>$langTheU $langAdded</p>";
 	} else {
-		$tool_content .=  "<p>$langAddError</p>";
+		$tool_content .=  "
+    <p>$langAddError</p>";
 	}
-	$tool_content .=  "</td></tr><tr><td><br><br><a href=\"adduser.php\">$langAddBack</a></td></tr>\n";
+	$tool_content .= "
+    <br><br>
+    <p align=\"right\"><a href=\"adduser.php\">$langAddBack</a></p>\n";
 } else {
+	$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">
+        <li><a href=\"user.php\">$langBackUser</a></li>
+      </ul>
+    </div>";
+$tool_content .= "
 
-$tool_content .= "<p>$langAskUser</p><form method='post' action='$_SERVER[PHP_SELF]'";
+    <form method='post' action='$_SERVER[PHP_SELF]'";
 
 if(!isset($search_nom)) $search_nom = "";
 if(!isset($search_prenom)) $search_prenom = "";
 if(!isset($search_uname)) $search_uname = "";
 $tool_content .= <<<tCont
-	<table>	
-	<thead>
-	<tr><th>$langSurname</th><td><input type="text" name="search_nom" value="$search_nom"></td></tr>
-	<tr><th>$langName</th><td><input type="text" name="search_prenom" value="$search_prenom"></td></tr>
-	<tr><th>$langUsername</th><td><input type="text" name="search_uname" value="$search_uname"></td></tr>
-	</thead>
+
+    <table width="99%" class="FormData">
+    <tbody>
+    <tr>
+      <th width="220">&nbsp;</th>
+      <td><b>$langUserData</b></td>
+      <td align="right"><small>$langAskUser1</small></td>
+    </tr>
+    <tr>
+      <th class="left">$langSurname</th>
+      <td><input type="text" name="search_nom" value="$search_nom" class="FormData_InputText"></td>
+      <td>&nbsp;</td>
+    </tr>
+	<tr>
+      <th class="left">$langName</th>
+      <td><input type="text" name="search_prenom" value="$search_prenom" class="FormData_InputText"></td>
+      <td>&nbsp;</td>
+    </tr>
+	<tr>
+      <th class="left">$langUsername</th>
+      <td><input type="text" name="search_uname" value="$search_uname" class="FormData_InputText"></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th class="left">&nbsp;</th>
+      <td><input type="submit" value="$langSearch"></td>
+      <td align="right"><small>$langAskUser2</small></td>
+    </tr>
+	</tbody>
 	</table>
-	<br>
-	<input type="submit" value="$langSearch">
-	</form>
-	
-	<tr><td>
+	<br />
+
+    </form>
+
 tCont;
 
 	mysql_select_db($mysqlMainDb);
@@ -94,47 +127,54 @@ tCont;
 			c.user_id IS NULL AND $query
 			");
 		if (mysql_num_rows($result) == 0) {
-			$tool_content .= "<p>$langNoUsersFound </p></td></tr>\n";
+			$tool_content .= "
+    <p class=\"alert1\">$langNoUsersFound</p>\n";
 		} else {
 			$tool_content .= <<<tCont3
-	<table width=99% >
-	<thead>
-		<tr>
-			<th></th>
-			<th>$langName</th>
-			<th>$langSurname</th>
-			<th>$langUsername</th>
-			<th></th>
-		</tr>
-	<thead>
-	<tbody>
+
+    <table width=99%>
+    <tbody>
+    <tr>
+      <th class="right" width="2%">$langID</th>
+      <th class="left">$langName</th>
+      <th class="left">$langSurname</th>
+      <th class="left">$langUsername</th>
+      <th>$langActions</th>
+    </tr>
 tCont3;
 			$i = 1;
 			while ($myrow = mysql_fetch_array($result)) {
 				if ($i % 2 == 0) {
-					$tool_content .= "<tr>";
+					$tool_content .= "
+    <tr>";
 		        	} else {
-					$tool_content .= "<tr class=\"odd\">";
+					$tool_content .= "
+    <tr class=\"odd\">";
 				}
-				$tool_content .= "<td>$i</td>".
-				     "<td>$myrow[prenom]</td>".
-				     "<td>$myrow[nom]</td>".
-				     "<td>$myrow[username]</td>".
-				     "<td><a href=\"$_SERVER[PHP_SELF]?add=$myrow[user_id]\">".
-				     "$langRegister</a></td></tr>\n";
+				$tool_content .= "
+      <td align=\"right\">$i.</td>
+      <td>$myrow[prenom]</td>
+      <td>$myrow[nom]</td>
+      <td>$myrow[username]</td>
+      <td align=\"center\"><a href=\"$_SERVER[PHP_SELF]?add=$myrow[user_id]\">$langRegister</a></td>
+    </tr>\n";
 				$i++;
 			}
 
-	$tool_content .= "</tbody>";
-	$tool_content .= "</table>";
+	$tool_content .= "
+    </tbody>";
+	$tool_content .= "
+    </table>";
         	}
 		db_query("DROP TABLE lala");
-	}
-	$tool_content .= "
-	<p><a href=\"user.php\">$langBackUser</a></p>";
+	} else {
+    $tool_content .= "
+    <p class=\"alert1\">$langNoUsersFound</p>";
+    }
+
 	}
 }
 
-draw($tool_content, 2);
+draw($tool_content, 2, 'user');
 
 ?>
