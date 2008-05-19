@@ -40,12 +40,19 @@ if($is_adminOfCourse) {
         <li><a href=\"user.php\">$langBackUser</a></li>
       </ul>
     </div>";
+
 	if (isset($createguest) and (!guestid($currentCourseID)))
 	{
 		// encrypt the password
 		createguest($currentCourseID,md5($guestpassword));
 		$tool_content .= "
-    <p class=\"success\">$langGuestSuccess</p>";
+    <table width=\"99%\">
+    <thead>
+    <tr>
+      <td class=\"success\">$langGuestSuccess</td>
+    </tr>
+    </thead>
+    </table>";
 	} elseif (isset($changepass))
 	{
 		$g=guestid($currentCourseID);
@@ -55,12 +62,24 @@ if($is_adminOfCourse) {
 		$uguest=mysql_query("UPDATE user SET password='$guestpassword_encrypted' WHERE user_id='$g'")
 		or die($langGuestFail);
 		$tool_content .= "
-    <p class=\"success\">$langGuestChange</p>";
+    <table width=\"99%\">
+    <thead>
+    <tr>
+      <td class=\"success\">$langGuestChange</td>
+    </tr>
+    </thead>
+    </table>";
 	} else {
 		$id = guestid($currentCourseID);
 		if ($id) {
-			$tool_content .=  "
-    <p class=\"success\">$langGuestExist</p>";
+		$tool_content .= "
+    <table width=\"99%\">
+    <thead>
+    <tr>
+      <td class=\"success\">$langGuestExist</td>
+    </tr>
+    </thead>
+    </table>";
 
 			$q1=mysql_query("SELECT nom,prenom,username FROM user where user_id='$id'");
 			$s=mysql_fetch_array($q1);

@@ -2367,6 +2367,7 @@ $langDeleteUser2 = "from this lesson";
 $langGroup="group";
 $langUserNoneMasc="-";
 $langTutor="Tutor";
+
 $langTutorDefinition="Tutor (right to supervise groups)";
 $langAdminDefinition="Admin (right to modify course website content)";
 $langDeleteUserDefinition="Unregister (delete from users list of  <b>this</b> course)";
@@ -2515,6 +2516,7 @@ $langAuthenticateVia2 = "Available authentication methods of the institution";
 $langCannotUseAuthMethods = "You cannot use the platform at the moment. Please inform the platform admin";
 $langAuthReg = "User registration ";
 $langUserData = "User Personal Data";
+$langUsersData = "Users Data";
 $langUserExistingAccount = 'Login';
 
 // LIST REQUESTS
@@ -2563,6 +2565,7 @@ $langPlease = "Please";
 $langUserNoRequests = "There are no ".$langsStudents." open requests !";
 $langOtherDepartments = "Enroll to courses from other faculties";
 $langNoLessonsAvailable = "No courses available.";
+$langUserPermitions = "Rights";
 
 // formuser.php
 $langUserRequest = "Request for new user account";
