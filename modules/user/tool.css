@@ -1,6 +1,71 @@
 td.highlight {
-	background:#CCFF99;
+	background: #eaffd5 !important;
+    text-align: center;
+    font-size: 9px;}
+
+td.highlight a {
+	color: #ff0000;
 }
+
+td.highlight a:hover {
+	color: #ff3f00;
+    text-decoration: underline;
+}
+
+.add_user a {
+	color: #029516 !important;
+}
+
+.add_user a:hover {
+	color: #02c81c !important;
+    text-decoration: underline;
+}
+
+table.NavUsers{
+    padding: 2px;
+    vertical-align: middle;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+    }
+
+table.NavUser thead{
+	padding: 2px;
+	vertical-align: middle;
+	border-top: 1px solid #CAC3B5;
+	border-bottom: 1px solid #CAC3B5;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+}
+
+table.NavUser tbody{
+    padding: 2px;
+    vertical-align: middle;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #CAC3B5;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.NavUser th{
+	text-align: center;
+	padding: 4px;
+	padding-bottom: 6px;
+	padding-top: 6px;
+	font-weight: bold;
+	font-size:10px !important;
+	vertical-align: middle;
+	background : #fbfbfb;
+}
+
+table.NavUser td {
+	color: #727266;
+	vertical-align: top;
+	background : #fbfbfb;
+	padding : 5px 4px 4px 4px;
+}
+
 
 .Group_Operations {
     background: #CAC3B5;

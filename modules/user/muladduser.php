@@ -51,7 +51,7 @@ if($is_adminOfCourse) {
     <tbody>
     <tr>
       <th width="220">&nbsp;</th>
-      <td><b></b></td>
+      <td><b>$langUsersData</b></td>
       <td align="right">&nbsp;</td>
     </tr>
     <tr>
@@ -62,16 +62,14 @@ if($is_adminOfCourse) {
     <tr>
       <th class="left">&nbsp;</th>
       <td><input type="submit" value="$langAdd"></td>
-      <td align="right"><small>$langAskManyUsers1</small></td>
-    </tr>
-    <tr>
-      <td colspan="3"><small>$langAskManyUsers2</small></td>
+      <td align="right">&nbsp;</td>
     </tr>
 	</tbody>
 	</table>
 	<br />
 
     </form>
+    <p>$langAskManyUsers1<br />$langAskManyUsers2</small></p>
 
 tCont2;
 

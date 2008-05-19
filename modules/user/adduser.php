@@ -44,13 +44,23 @@ if (isset($add)) {
 	$result = db_query("INSERT INTO cours_user (user_id, code_cours, statut, reg_date) ".
 		"VALUES ('".mysql_escape_string($add)."', '$currentCourseID', ".
 		"'5', CURDATE())");
+
+		$tool_content .= "
+
+    <table width=\"99%\">
+    <thead>
+    <tr>
+      <td class=\"success\">";
 	if ($result) {
-		$tool_content .=  "
-    <p>$langTheU $langAdded</p>";
+		$tool_content .=  "$langTheU $langAdded";
 	} else {
-		$tool_content .=  "
-    <p>$langAddError</p>";
+		$tool_content .=  "$langAddError";
 	}
+		$tool_content .= "</td>
+    </tr>
+    </thead>
+    </table>";
+
 	$tool_content .= "
     <br><br>
     <p align=\"right\"><a href=\"adduser.php\">$langAddBack</a></p>\n";

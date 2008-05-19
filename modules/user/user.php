@@ -98,12 +98,13 @@ $tool_content .= "
     <tbody>
     <tr>
       <td class=\"odd\">
-        <p>$langThereAre: <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents και <b>$visitors</b> $langVisitors</p>
+        <p>$langThereAre: <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents, <b>$visitors</b> $langVisitors</p>
         <p align=\"right\">$langTotal: <b>$countUser</b> $langUsers</p>
       </td>
     </tr>
     </tbody>
-    </table>";
+    </table>
+    <br />";
 
 }	// if prof
 
@@ -146,7 +147,7 @@ elseif(isset($unregister) && $unregister) {
 // display list of users
 
 // navigation buttons
-$endList=2;
+$endList=20;
 
 if(isset ($numbering) && $numbering) {
 	if($numbList=="more") {
@@ -178,13 +179,14 @@ $i=$startList+1;
 // Do not show navigation buttons if less than 50 users
 if ($countUser>=$endList) {
 	$tool_content .= "
-   <table width=99%>
+   <table width=99% class=\"NavUser\">
+   <thead>
    <tr>
      <td valign=bottom align=left width=20%>
        <form method=post action=\"$_SERVER[PHP_SELF]?numbList=begin\">
          <input type=submit value=\"<< $langBegin\" name=\"numbering\" class=\"auth_input\">
        </form>
-    </td>
+     </td>
      <td valign=bottom align=middle width=20%>";
 
 	// if beginning of list or complete listing, do not show "previous" button
@@ -212,43 +214,55 @@ if ($countUser>=$endList) {
 	}
 	$tool_content .= "
      </td>
-     <td valign=bottom align=right width=20%>
+     <td valign=bottom width=20%>
+       <div align='right'>
        <form method=post action=\"$_SERVER[PHP_SELF]?numbList=final\">
          <input type=submit value=\"$langEnd >>\" name=numbering class=\"auth_input\">
        </form>
+       </div>
      </td>
      </tr>
+   </thead>
    </table>";
 
 }	// Show navigation buttons
 
 $tool_content .= "
-   <table width=99%>
+   <table width=99% class=\"NavUser\">
    <thead>
    <tr>
-     <th width=\"2%\">$langID</th>
-     <th scope=\"col\" width=\"120\">$langSurname<br>$langName</th>";
+     <td width=\"2%\" rowspan=\"2\" align=\"right\"><div align=\"right\"><b>$langID</b></div></td>
+     <td scope=\"col\" width=\"120\" rowspan=\"2\"><div align=\"left\"><b>$langSurname<br>$langName</b></div></td>";
 
 if(isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2))  {
 	$tool_content .="
-     <th scope=\"col\" width=\"100\">$langEmail</th>";
+     <td scope=\"col\" width=\"100\" rowspan=\"2\"><div align=\"center\"><b>$langEmail</b></div></td>";
 }
 
 $tool_content .= "
-     <th scope=\"col\" width=\"50\">$langAm</th>
-     <th scope=\"col\" width=\"80\">$langGroup</th>
-     <th scope='col' width=\"100\">$langCourseRegistrationDate";
+     <td scope=\"col\" width=\"60\" rowspan=\"2\"><div align=\"center\"><b>$langAm</b></div></td>
+     <td scope=\"col\" width=\"60\" rowspan=\"2\"><div align=\"center\"><b>$langGroup</b></div></td>
+     <td scope=\"col\" width=\"60\" rowspan=\"2\"><div align=\"center\"><b>$langCourseRegistrationDate</b></div></td>";
 
 // show admin tutor and unregister only to admins
 if (isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2)) {
 	$tool_content .= "
-     <th scope=\"col\" width=\"60\">$langTutor</th>
-     <th scope=\"col\" width=\"60\">$langAdmR</th>
-     <th scope=\"col\" width=\"50\">$langActions</th>";
+     <td scope=\"col\" width=\"60\" colspan=\"2\"><div align=\"center\"><b>$langUserPermitions</b></div></td>
+     <td scope=\"col\" width=\"50\" rowspan=\"2\"><div align=\"center\"><b>$langActions</b></div></td>";
 }
 
 $tool_content .= "
-   </tr>
+   </tr>";
+
+if (isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2)) {
+	$tool_content .= "
+  <tr>
+     <td scope=\"col\" width=\"60\"><div align=\"center\"><b>$langTutor</b></div></td>
+     <td scope=\"col\" width=\"60\"><div align=\"center\"><b>$langAdministrator</b></div></td>
+  </tr>";
+}
+
+$tool_content .= "
    </thead>
    <tbody>";
 $result = mysql_query("SELECT user.user_id, user.nom, user.prenom, user.email, user.am, cours_user.statut,
@@ -275,7 +289,7 @@ while ($myrow = mysql_fetch_array($result)) {
 
 if (isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2))  {
 	$tool_content .= "
-     <td valign=\"top\"><a href=\"mailto:".$myrow["email"]."\">".$myrow["email"]."</a></td>";
+     <td valign=\"top\" align=\"center\"><a href=\"mailto:".$myrow["email"]."\">".$myrow["email"]."</a></td>";
 }
 	$tool_content .= "
      <td valign=\"top\" align=\"center\">$myrow[am]</td>
@@ -294,6 +308,7 @@ if (isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]
 		$tool_content .= $langUnknownDate;
 	else
 		$tool_content .= "".greek_format($myrow['reg_date'])."";
+
 	$tool_content .= "</td>";
 
 // ************** tutor, admin and unsubscribe (admin only) ******************************
@@ -301,25 +316,25 @@ if(isset($status) && ($status["$currentCourseID"]=='1' OR $status["$currentCours
 // tutor right
 	if ($myrow["tutor"]=='0') {
 		$tool_content .= "
-     <td valign=\"top\" align='center'><a href=\"$_SERVER[PHP_SELF]?giveTutor=yes&user_id=$myrow[user_id]\">$langGiveTutor</a></td>";
+     <td valign=\"top\" align='center' class=\"add_user\"><a href=\"$_SERVER[PHP_SELF]?giveTutor=yes&user_id=$myrow[user_id]\" title=\"$langGiveTutor\">$langAdd</a></td>";
 		} else {
 		$tool_content .= "
-     <td class=\"highlight\" align='center'>$langTutor<br><a href=\"$_SERVER[PHP_SELF]?removeTutor=yes&user_id=$myrow[user_id]\">$langRemoveRight</a></td>";
+     <td class=\"highlight\" align='center'>$langTutor<br><a href=\"$_SERVER[PHP_SELF]?removeTutor=yes&user_id=$myrow[user_id]\" title=\"$langRemoveRight\">$langRemove</a></td>";
 		}
 
 		// admin right
 		if ($myrow["user_id"]!=$_SESSION["uid"]) {
 			if ($myrow["statut"]=='1') {
 				$tool_content .= "
-     <td class=\"highlight\" align='center'>$langAdmR<br><a href=\"$_SERVER[PHP_SELF]?removeAdmin=yes&user_id=$myrow[user_id]\">$langRemoveRight</a></td>";
+     <td class=\"highlight\" align='center'>$langAdministrator<br><a href=\"$_SERVER[PHP_SELF]?removeAdmin=yes&user_id=$myrow[user_id]\" title=\"$langRemoveRight\">$langRemove</a></td>";
 			} else {
 			$tool_content .= "
-     <td valign=\"top\" align='center'><a href=\"$_SERVER[PHP_SELF]?giveAdmin=yes&user_id=$myrow[user_id]\">$langGiveAdmin</a></td>";
+     <td valign=\"top\" align='center' class=\"add_user\"><a href=\"$_SERVER[PHP_SELF]?giveAdmin=yes&user_id=$myrow[user_id]\" title=\"$langGiveAdmin\">$langAdd</a></td>";
 			}
 		} else {
 			if ($myrow["statut"]=='1') {
 				$tool_content .= "
-     <td valign=\"top\" bgcolor=\"#CCFF99\" align='center'>$langAdmR</td>";
+     <td valign=\"top\" class=\"highlight\" align='center' title=\"$langAdmR\"><b>$langAdministrator</b></td>";
 			} else {
 				$tool_content .= "
      <td valign=\"top\" align='center'><a href=\"$_SERVER[PHP_SELF]?giveAdmin=yes&user_id=$myrow[user_id]\">$langGiveAdmin</a></td>";
