@@ -19,9 +19,9 @@
  * 	The full license can be read in "license.txt".
  * 
  * 	Contact address: 	GUnet Asynchronous Teleteaching Group,
- * 						Network Operations Center, University of Athens,
- * 						Panepistimiopolis Ilissia, 15784, Athens, Greece
- * 						eMail: eclassadmin@gunet.gr
+ * 					Network Operations Center, University of Athens,
+ * 					Panepistimiopolis Ilissia, 15784, Athens, Greece
+ * 					eMail: eclassadmin@gunet.gr
  * ============================================================================
  */
 
@@ -46,14 +46,15 @@ $guest_allowed = true;
 include '../../include/baseTheme.php';
 include('../../include/lib/textLib.inc.php');
 include('../../include/sendMail.inc.php');
+include('../../include/phpmathpublisher/mathpublisher.php') ;
 
-/**
+/*
  * *** The following is added for statistics purposes **
  */
 include('../../include/action.php');
 $action = new action();
 $action->record('MODULE_ID_ANNOUNCE');
-/**
+/*
  */
 
 $nameTools = $langAnnouncements;
@@ -76,12 +77,11 @@ if ($is_adminOfCourse && (@$addAnnouce == 1 || isset($modify))) {
 hContent;
 } 
 
-/**
+/*
  * TEACHER ONLY
  */
 if ($is_adminOfCourse) { // check teacher status
         $head_content .= '
-	
 <script>
 function confirmation (name)
 {
@@ -183,7 +183,8 @@ function confirmation (name)
 
         if ($myrow) {
             $AnnouncementToModify = $myrow['id'];
-            $contentToModify = q($myrow['contenu']);
+//            $contentToModify = q($myrow['contenu']);
+	    $contentToModify = mathfilter($contentToModify, 12, "../../include/phpmathpublisher/img/");
             $titleToModify = q($myrow['title']);
             $displayAnnouncementList = true;
         } 
@@ -277,7 +278,7 @@ function confirmation (name)
             </tr>";
             $langAdd = $langModifAnn;
         } else {
-			$tool_content .= "
+		$tool_content .= "
       <table width='99%' class='FormData' align='center'>
       <tbody>
       <tr>
@@ -332,17 +333,15 @@ function confirmation (name)
         $iterator = 1;
         $bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
 
-
-		if ($announcementNumber > 0) 
-		{
-			$tool_content .= <<<cData
+	if ($announcementNumber > 0) {
+		$tool_content .= <<<cData
 \n
       <table class="FormData" width="99%">
       <thead>
       <tr>
         <th class="left" width="220">$langAnnouncement</th>
 cData;
-			$tool_content .= "
+	$tool_content .= "
           <td class='right'>&nbsp;</td>
           <td width='70' class='right'>$langTools</td>";
 		if ($announcementNumber > 1) {
@@ -350,24 +349,21 @@ cData;
           <td width='70' class='right'>$langMove</td>";
 		} 
 		$tool_content .= "
-        </tr>
-      </thead>
-      </table>
-	  ";
-		} 
+        </tr></thead></table>";
+	} 
 		
-		$tool_content .= "
+	$tool_content .= "
       <table width=\"99%\" align='left' class=\"announcements\">
       <tbody>";
-		while ($myrow = mysql_fetch_array($result)) 
+	while ($myrow = mysql_fetch_array($result)) 
 		{
             // FORMAT CONTENT
             $content = make_clickable($myrow['contenu']);
             $content = nl2br($content);
+	// display math symbols (if there are)
+	    $content = mathfilter($content, 12, "../../include/phpmathpublisher/img/");
             $myrow['temps'] = greek_format($myrow['temps']);
-
-			$tool_content .= "
-      <tr>
+	$tool_content .= "<tr>
         <td width='3'><img class=\"displayed\" src=../../template/classic/img/announcements_on.gif border=0 title=\"" . $myrow["title"] . "\"></td>
         <td><b>" . $myrow["title"] . "</b>
             <br /><small>(" . $langPubl . ": " . $myrow['temps'] . ")</small>
@@ -379,30 +375,23 @@ cData;
         <img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"" . $langDelete . "\"></a>
         </td>";
 
-			if ($announcementNumber > 1) 
-			{
-			$tool_content .= "
-        <td align='center' width='70' class='right'>";
-			} 
-            // DISPLAY MOVE UP COMMAND
+	if ($announcementNumber > 1)  {
+		$tool_content .= "<td align='center' width='70' class='right'>";
+	} 
+           // DISPLAY MOVE UP COMMAND
             // condition: only if it is not the top announcement
-			if ($iterator != 1) 
-			{
-			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?up=" . $myrow["id"] . "\"><img class=\"displayed\" src=../../template/classic/img/up.gif border=0 title=\"" . $langUp . "\"></a>";
-			} 
-            // DISPLAY MOVE DOWN COMMAND
-			if ($iterator < $bottomAnnouncement) {
-			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?down=" . $myrow["id"] . "\"><img class=\"displayed\" src=../../template/classic/img/down.gif border=0 title=\"" . $langDown . "\"></a>";
-			} 
-
-			if ($announcementNumber > 1) 
-			{
-			$tool_content .= "
-        </td>";
-			} 
-            // DISPLAY ANNOUNCEMENT CONTENT
-			$tool_content .= "
-      </tr>";
+	if ($iterator != 1)  {
+		$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?up=" . $myrow["id"] . "\"><img class=\"displayed\" src=../../template/classic/img/up.gif border=0 title=\"" . $langUp . "\"></a>";
+	} 
+        // DISPLAY MOVE DOWN COMMAND
+	if ($iterator < $bottomAnnouncement) {
+		$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?down=" . $myrow["id"] . "\"><img class=\"displayed\" src=../../template/classic/img/down.gif border=0 title=\"" . $langDown . "\"></a>";
+	} 
+	if ($announcementNumber > 1) {
+		$tool_content .= "</td>";
+	} 
+// DISPLAY ANNOUNCEMENT CONTENT
+	$tool_content .= "</tr>";
             $iterator ++;
         } // end while ($myrow = mysql_fetch_array($result))
         $tool_content .= "
@@ -425,7 +414,7 @@ cData;
 // student view
 else {
     $result = db_query("SELECT * FROM annonces WHERE code_cours='$currentCourseID'
-				ORDER BY ordre DESC", $mysqlMainDb) OR die("DB problem");
+	ORDER BY ordre DESC", $mysqlMainDb) OR die("DB problem");
     if (mysql_num_rows($result) > 0) {
 	$tool_content .= <<<cData
       \n

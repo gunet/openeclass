@@ -1,5 +1,5 @@
 <?php 
-/**===========================================================================
+/*===========================================================================
 *              GUnet e-Class 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -18,12 +18,12 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*					Network Operations Center, University of Athens,
+*					Panepistimiopolis Ilissia, 15784, Athens, Greece
+*					eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-/**
+/*
  * My Announcements Component
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -38,6 +38,7 @@ $ignore_module_ini = true;
 
 include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
+include('../../include/phpmathpublisher/mathpublisher.php') ;
 $nameTools = $langMyAnnouncements;
 $tool_content = "";
 $result = db_query("SELECT annonces.id, annonces.title, annonces.contenu,
@@ -59,7 +60,6 @@ $result = db_query("SELECT annonces.id, annonces.title, annonces.contenu,
       </thead>
       </table>
     ";
-  
 	$tool_content .= "
       <table width=\"99%\" align='left' class=\"announcements\">
       <tbody>";
@@ -68,8 +68,9 @@ $result = db_query("SELECT annonces.id, annonces.title, annonces.contenu,
                 $content = $myrow['contenu'];
                 $content = make_clickable($content);
                 $content = nl2br($content);
+		$content = mathfilter($content, 12, "../../include/phpmathpublisher/img/");
                 $row = mysql_fetch_array(db_query("SELECT intitule,titulaires FROM cours 
-							WHERE code='$myrow[code_cours]'"));
+			WHERE code='$myrow[code_cours]'"));
                 $tool_content .= "
       <tr>
         <td width='3'><img class=\"displayed\" src=../../template/classic/img/announcements_on.gif border=0 title=\"" . $myrow["title"] . "\"></td>
