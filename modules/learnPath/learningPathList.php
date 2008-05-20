@@ -1,24 +1,24 @@
 <?php
 /*=============================================================================
-       	GUnet e-Class 2.0 
-        E-learning and Course Management Program  
+       	GUnet e-Class 2.0
+        E-learning and Course Management Program
 ================================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
         A full copyright notice can be read in "/info/copyright.txt".
-        
-       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-                     Yannis Exidaridis <jexi@noc.uoa.gr> 
-                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
-        For a full list of contributors, see "credits.txt".  
-     
-        This program is a free software under the terms of the GNU 
-        (General Public License) as published by the Free Software 
-        Foundation. See the GNU License for more details. 
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+                     Yannis Exidaridis <jexi@noc.uoa.gr>
+                     Alexandros Diamantidis <adia@noc.uoa.gr>
+
+        For a full list of contributors, see "credits.txt".
+
+        This program is a free software under the terms of the GNU
+        (General Public License) as published by the Free Software
+        Foundation. See the GNU License for more details.
         The full license can be read in "license.txt".
-     
-       	Contact address: GUnet Asynchronous Teleteaching Group, 
-        Network Operations Center, University of Athens, 
+
+       	Contact address: GUnet Asynchronous Teleteaching Group,
+        Network Operations Center, University of Athens,
         Panepistimiopolis Ilissia, 15784, Athens, Greece
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
@@ -27,15 +27,15 @@
 	learningPathList.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.7 licensed under GPL
 	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: learningPathList Revision: 1.56
-	      
+
 	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
                       Lederer Guillaume <led@cerdecam.be>
-==============================================================================        
+==============================================================================
     @Description: This file displays the list of all learning paths available
                   for the course.
 
@@ -51,8 +51,8 @@
                   - modify, delete, statistics, visibility and order, options
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
 
@@ -85,7 +85,7 @@ $style= "";
 
 $nameTools = $langLearningPathList;
 
-if ( isset($_GET['cmd']) && $_GET['cmd'] == 'export' 
+if ( isset($_GET['cmd']) && $_GET['cmd'] == 'export'
 	&& isset($_GET['path_id']) && is_numeric($_GET['path_id']) && $is_adminOfCourse )
 {
       mysql_select_db($currentCourseID);
@@ -102,7 +102,7 @@ if ( isset($_GET['cmd']) && $_GET['cmd'] == 'export'
       }
 } // endif $cmd == export
 
-if ( isset($_GET['cmd']) && $_GET['cmd'] == 'export12' 
+if ( isset($_GET['cmd']) && $_GET['cmd'] == 'export12'
 	&& isset($_GET['path_id']) && is_numeric($_GET['path_id']) && $is_adminOfCourse )
 {
       mysql_select_db($currentCourseID);
@@ -140,7 +140,7 @@ if ($is_adminOfCourse) {
                   {return false;}
           }
           </script>";
-	
+
 	if (isset($_REQUEST['cmd'])) {
 		// execution of commands
 		switch ( $_REQUEST['cmd'] ) {
@@ -152,7 +152,7 @@ if ($is_adminOfCourse) {
 							FROM  `".$TABLELEARNPATHMODULE."` AS LPM,
 							`".$TABLEMODULE."` AS M
 							WHERE LPM.`learnPath_id` = ". (int)$_GET['del_path_id']."
-								AND 
+								AND
 										( M.`contentType` = '".CTSCORM_."'
 										OR
 										M.`contentType` = '".CTLABEL_."'
@@ -160,46 +160,46 @@ if ($is_adminOfCourse) {
 								AND LPM.`module_id` = M.`module_id`
 									";
 					$findResult = db_query($findsql);
-	
+
 					// Delete the startAssets
-	
+
 					$delAssetSql = "DELETE
 									FROM `".$TABLEASSET."`
 									WHERE 1=0
 								";
-	
+
 					while ($delList = mysql_fetch_array($findResult))
 					{
 						$delAssetSql .= " OR `module_id`=". (int)$delList['module_id'];
 					}
-	
+
 					db_query($delAssetSql);
-	
+
 					// DELETE the SCORM modules
-	
+
 					$delModuleSql = "DELETE
 									FROM `".$TABLEMODULE."`
 									WHERE (`contentType` = '".CTSCORM_."' OR `contentType` = '".CTLABEL_."')
 									AND (1=0
 									";
-	
+
 					if (mysql_num_rows($findResult)>0)
 					{
 						mysql_data_seek($findResult,0);
 					}
-	
+
 					while ($delList = mysql_fetch_array($findResult))
 					{
 						$delModuleSql .= " OR `module_id`=". (int)$delList['module_id'];
 					}
 					$delModuleSql .= ")";
-	
+
 					db_query($delModuleSql);
-	
+
 					// DELETE the directory containing the package and all its content
 					$real = realpath($webDir."courses/".$currentCourseID."/scormPackages/path_".$_GET['del_path_id']);
 					claro_delete_file($real);
-	
+
 				}   // end of dealing with the case of a scorm learning path.
 				else
 				{
@@ -216,35 +216,35 @@ if ($is_adminOfCourse) {
 										FROM `".$TABLEMODULE."`
 										WHERE 1=0
 									";
-					
+
 					while ($delList = mysql_fetch_array($findResult))
 					{
 						$delLabelModuleSql .= " OR `module_id`=". (int)$delList['module_id'];
 					}
 					$query = db_query($delLabelModuleSql);
 				}
-				
+
 				// delete everything for this path (common to normal and scorm paths) concerning modules, progression and path
-	
+
 				// delete all user progression
 				$sql1 = "DELETE
 						FROM `".$TABLEUSERMODULEPROGRESS."`
 						WHERE `learnPath_id` = ". (int)$_GET['del_path_id'];
 				$query = db_query($sql1);
-	
+
 				// delete all relation between modules and the deleted learning path
 				$sql2 = "DELETE
 						FROM `".$TABLELEARNPATHMODULE."`
 						WHERE `learnPath_id` = ". (int)$_GET['del_path_id'];
 				$query = db_query($sql2);
-	
+
 				// delete the learning path
 				$sql3 = "DELETE
 							FROM `".$TABLELEARNPATH."`
 							WHERE `learnPath_id` = ". (int)$_GET['del_path_id'] ;
-	
+
 				$query = db_query($sql3);
-	
+
 				break;
 		// ACCESSIBILITY COMMAND
 			case "mkBlock" :
@@ -258,7 +258,7 @@ if ($is_adminOfCourse) {
 				break;
 			// VISIBILITY COMMAND
 			case "mkVisibl" :
-			case "mkInvisibl" :      
+			case "mkInvisibl" :
 				$_REQUEST['cmd'] == "mkVisibl" ? $visibility = 'SHOW' : $visibility = 'HIDE';
 				$sql = "UPDATE `".$TABLELEARNPATH."`
 						SET `visibility` = '$visibility'
@@ -289,10 +289,10 @@ if ($is_adminOfCourse) {
 						// determine the default order of this Learning path
 						$result = db_query("SELECT MAX(`rank`)
 												FROM `".$TABLELEARNPATH."`");
-	
+
 						list($orderMax) = mysql_fetch_row($result);
 						$order = $orderMax + 1;
-						
+
 						// create new learning path
 						$sql = "INSERT
 								INTO `".$TABLELEARNPATH."`
@@ -307,7 +307,7 @@ if ($is_adminOfCourse) {
 					}
 				}
 				else { // create form requested
-					$dialogBox = 
+					$dialogBox =
 						"<form action=\"".$_SERVER['PHP_SELF']."\" method=\"POST\">"
 						."<p><strong>".$langCreateNewLearningPath."</strong><br /><br />"
 						."<label for=\"newPathName\">".$langLearningPathName."</label><br />"
@@ -379,30 +379,50 @@ if (isset($sortDirection) && $sortDirection)
 
 // Display links to create and import a learning path
 if($is_adminOfCourse) {
-	
+
 	if (isset($dialogBox)) {
 		$tool_content .= claro_disp_message_box($dialogBox, $style) ."<br />";
 	}
 
-  
+	$tool_content .= "
+    <table width=\"99%\" align=\"left\" class=\"Group_Operations\">
+    <thead>
+    <tr>
+      <td width=\"50%\">&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?cmd=create\">".$langCreateNewLearningPath."</a></td>
+      <td width=\"50%\"><div align=\"right\"><a href=\"modules_pool.php\">".$langModulesPoolToolName."</a>&nbsp;</div></td>
+    </tr>
+    <tr>
+      <td>&nbsp;<a href=\"importLearningPath.php\">".$langimportLearningPath."</a></td>
+      <td><div align=\"right\"><a href=\"detailsAll.php\">".$langTrackAllPath."</a>&nbsp;</div></td>
+    </tr>
+    </thead>
+    </table>
+	<br /><br /><br />
+    ";
+    /*
 	  $tool_content .= "
 		<div id=\"operations_container\">
 		<ul id=\"opslist\">
-		  <li><a href=\"".$_SERVER['PHP_SELF']."?cmd=create\">".$langCreateNewLearningPath."</a></li>
-		  <li><a href=\"importLearningPath.php\">".$langimportLearningPath."</a></li>
-		  <li><a href=\"modules_pool.php\">".$langModulesPoolToolName."</a></li>
-		  <li><a href=\"detailsAll.php\">".$langTrackAllPath."</a></li>
+		  <li></li>
+		  <li></li>
+		  <li></li>
+		  <li></li>
         </ul></div>";
-	
+    */
 }
 
-$tool_content .= "<table width=\"99%\">
- <thead>
- <tr align=\"center\" valign=\"top\">
-  <th>".$langLearningPath."</th>";
+$tool_content .= "
+    <table width=\"99%\">
+    <thead>
+    <tr align=\"center\" valign=\"top\">
+      <th width=\"400\" colspan=\"2\"><div align=\"left\">&nbsp;&nbsp;".$langLearningPath."</div></th>";
 
 if($is_adminOfCourse) {
      // Titles for teachers
+     $tool_content .= "<th colspan=\"3\" width=\"200\">".$langAdm."</th>";
+     //$tool_content .= "<th width=\"1\">&nbsp;</th>";
+     $tool_content .= "<th colspan=\"5\"  width=\"120\">".$langTools."</th>";
+     /*
      $tool_content .= "<th>".$langModify."</th>"
             ."<th>".$langDelete."</th>"
             ."<th>".$langBlock."</th>"
@@ -410,6 +430,7 @@ if($is_adminOfCourse) {
             ."<th colspan=\"2\">".$langOrder."</th>"
             ."<th>".$langExport."</th>"
             ."<th>".$langTracking."</th>";
+    */
 }
 elseif($uid) {
    // display progression only if user is not teacher && not anonymous
@@ -472,9 +493,9 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
     //Display current learning path name
 
     if ( !$is_blocked ) {
-        $tool_content .= "<td align=\"left\"><a href=\"learningPath.php?path_id="
-            .$list['learnPath_id']."\"".$style."><img src=\"../../template/classic/img/lp_on.gif\" alt=\"\"
-            border=\"0\" />  ".htmlspecialchars($list['name'])."</a></td>";
+        $tool_content .= "<td align=\"left\" width=\"1\"><img src=\"../../template/classic/img/lp_on.gif\" alt=\"\"
+            border=\"0\" /></td><td align=\"left\"><a href=\"learningPath.php?path_id="
+            .$list['learnPath_id']."\"".$style.">".htmlspecialchars($list['name'])."</a></td>";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
@@ -507,7 +528,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
         else {
             $moduleNumber = 0;
         }
-        
+
         //2.1 no progression found in DB
 
         if (($moduleNumber == 0)  && ($list['lock'] == 'CLOSE')) {
@@ -552,6 +573,61 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
     if($is_adminOfCourse) {
         // 5 administration columns
 
+        // LOCK link
+
+        $tool_content .= "<td style=\"border-left: 1px solid #edecdf;\">";
+
+        if ( $list['lock'] == 'OPEN') {
+            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkBlock&cmdid=".$list['learnPath_id']."\">\n"
+                  ."<img src=\"../../template/classic/img/unblock.gif\" alt=\"$langBlock\" title=\"$langBlock\" border=\"0\">\n"
+                  ."</a>\n";
+        }
+        else {
+            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkUnblock&cmdid=".$list['learnPath_id']."\">\n"
+                  ."<img src=\"../../template/classic/img/block.gif\" alt=\"$langAltMakeNotBlocking\" title=\"$langAltMakeNotBlocking\" border=\"0\">\n"
+                  ."</a>\n";
+        }
+        $tool_content .= "</td>\n";
+
+
+        // EXPORT links
+        $tool_content .= '<td><a href="' . $_SERVER['PHP_SELF'] . '?cmd=export&amp;path_id=' . $list['learnPath_id'] . '" >'
+            .'<img src="../../template/classic/img/export.gif" alt="'.$langExport2004. '" title="'.$langExport2004. '" border="0" title="'.$langExport2004.'"></a>' ."\n"
+            .'<a href="' . $_SERVER['PHP_SELF'] . '?cmd=export12&amp;path_id=' . $list['learnPath_id'] . '" >'
+            .'<img src="../../template/classic/img/export.gif" alt="'.$langExport12.'" title="'.$langExport12.'" border="0" title="'.$langExport12.'"></a>' ."\n"
+            .'</td>' . "\n";
+
+        // statistics links
+        $tool_content .= "<td style=\"border-right: 1px solid #edecdf;\">\n
+          <a href=\"details.php?path_id=".$list['learnPath_id']."\">
+          <img src=\"../../template/classic/img/statistics.gif\" border=\"0\" alt=\"$langTracking\" title=\"$langTracking\" />
+          </a>
+          </td>\n";
+
+     //$tool_content .= "<th width=\"1\">&nbsp;</th>";
+
+        // VISIBILITY link
+
+        $tool_content .= "<td>\n";
+
+        if ( $list['visibility'] == 'HIDE') {
+            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkVisibl&visibility_path_id=".$list['learnPath_id']."\">\n"
+                  ."<img src=\"../../template/classic/img/invisible.gif\" alt=\"$langAltMakeVisible\" title=\"$langAltMakeVisible\" border=\"0\" />\n"
+                  ."</a>";
+        } else {
+            if ($list['lock']=='CLOSE') {
+                $onclick = "onClick=\"return confirm('" . clean_str_for_javascript($langAlertBlockingPathMadeInvisible) . "');\"";
+            }
+            else {
+                $onclick = "";
+            }
+
+            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkInvisibl&visibility_path_id=".$list['learnPath_id']."\" ".$onclick. " >\n"
+                 ."<img src=\"../../template/classic/img/visible.gif\" alt=\"$langMakeInvisible\" title=\"$langMakeInvisible\" border=\"0\" />\n"
+                 ."</a>\n";
+        }
+        $tool_content .= "</td>\n";
+
         // Modify command / go to other page
         $tool_content .= "<td>\n"
              ."<a href=\"learningPathAdmin.php?path_id=".$list['learnPath_id']."\">\n"
@@ -572,8 +648,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
                   ."</a>\n"
                   ."</td>\n";
 
-        }
-        else {
+        } else {
             $tool_content .=  "<td>\n"
                   ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=delete&del_path_id=".$list['learnPath_id']."\" "
                   ."onClick=\"return confirmation('".clean_str_for_javascript($list['name'])."');\">\n"
@@ -581,51 +656,11 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
                   ."</a>\n"
                   ."</td>\n";
         }
-
-        // LOCK link
-
-        $tool_content .= "<td>";
-
-        if ( $list['lock'] == 'OPEN') {
-            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkBlock&cmdid=".$list['learnPath_id']."\">\n"
-                  ."<img src=\"../../template/classic/img/unblock.gif\" alt=\"$langBlock\" title=\"$langBlock\" border=\"0\">\n"
-                  ."</a>\n";
-        }
-        else {
-            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkUnblock&cmdid=".$list['learnPath_id']."\">\n"
-                  ."<img src=\"../../template/classic/img/block.gif\" alt=\"$langAltMakeNotBlocking\" title=\"$langAltMakeNotBlocking\" border=\"0\">\n"
-                  ."</a>\n";
-        }
-        $tool_content .= "</td>\n";
-
-        // VISIBILITY link
-
-        $tool_content .= "<td>\n";
-
-        if ( $list['visibility'] == 'HIDE') {
-            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkVisibl&visibility_path_id=".$list['learnPath_id']."\">\n"
-                  ."<img src=\"../../template/classic/img/invisible.gif\" alt=\"$langAltMakeVisible\" title=\"$langAltMakeVisible\" border=\"0\" />\n"
-                  ."</a>";
-        }
-        else {
-            if ($list['lock']=='CLOSE') {
-                $onclick = "onClick=\"return confirm('" . clean_str_for_javascript($langAlertBlockingPathMadeInvisible) . "');\"";
-            }
-            else {
-                $onclick = "";
-            }
-
-            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkInvisibl&visibility_path_id=".$list['learnPath_id']."\" ".$onclick. " >\n"
-                 ."<img src=\"../../template/classic/img/visible.gif\" alt=\"$langMakeInvisible\" title=\"$langMakeInvisible\" border=\"0\" />\n"
-                 ."</a>\n";
-        }
-        $tool_content .= "</td>\n";
-
         // ORDER links
 
         // DISPLAY MOVE UP COMMAND only if it is not the top learning path
         if ($iterator != 1) {
-            $tool_content .= "<td>\n"
+            $tool_content .= "<td class=\"right\">\n"
                   ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=moveUp&move_path_id=".$list['learnPath_id']."\">\n"
                   ."<img src=\"../../template/classic/img/up.gif\" alt=\"$langAltMoveUp\" title=\"$langAltMoveUp\" border=\"0\" />\n"
                   ."</a>\n"
@@ -637,7 +672,7 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
 
         // DISPLAY MOVE DOWN COMMAND only if it is not the bottom learning path
         if($iterator < $LPNumber) {
-            $tool_content .= "<td>\n"
+            $tool_content .= "<td class=\"left\">\n"
                   ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=moveDown&move_path_id=".$list['learnPath_id']."\">\n"
                   ."<img src=\"../../template/classic/img/down.gif\" alt=\"$langMoveDown\" title=\"$langMoveDown\" border=\"0\" />\n"
                   ."</a>\n"
@@ -646,20 +681,6 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
         else {
             $tool_content .= "<td>&nbsp;</td>\n";
         }
-        
-        // EXPORT links
-        $tool_content .= '<td><a href="' . $_SERVER['PHP_SELF'] . '?cmd=export&amp;path_id=' . $list['learnPath_id'] . '" >'
-            .'<img src="../../template/classic/img/export.gif" alt="'.$langExport2004. '" title="'.$langExport2004. '" border="0" title="'.$langExport2004.'"></a>' ."\n"
-            .'<a href="' . $_SERVER['PHP_SELF'] . '?cmd=export12&amp;path_id=' . $list['learnPath_id'] . '" >'
-            .'<img src="../../template/classic/img/export.gif" alt="'.$langExport12.'" title="'.$langExport12.'" border="0" title="'.$langExport12.'"></a>' ."\n"
-            .'</td>' . "\n";
-        
-        // statistics links
-        $tool_content .= "<td>\n
-          <a href=\"details.php?path_id=".$list['learnPath_id']."\">
-          <img src=\"../../template/classic/img/statistics.gif\" border=\"0\" alt=\"$langTracking\" title=\"$langTracking\" />
-          </a>
-          </td>\n";
     }
     elseif($uid) {
         // % progress
@@ -703,6 +724,6 @@ elseif (!$is_adminOfCourse && $iterator != 1 && $uid) {
 $tool_content .= "</tfoot>\n";
 $tool_content .= "</table>\n";
 
-draw($tool_content, 2, "learnPath", $head_content);
+draw($tool_content, 2, 'learnPath', $head_content);
 
 ?>

@@ -53,3 +53,29 @@ a:visited.invisible
     font-size: smaller;
     margin-left: 30px;
 }
+.Group_Operations {
+    background: #CAC3B5;
+    font-size: 11px;
+    color: #000000;
+    border-top: 1px solid #a33033;
+    border-bottom: 1px solid #a33033;
+	border-left: 1px solid #CAC3B5;
+	border-right: 1px solid #CAC3B5;
+}
+
+.Group_Operations td{
+    padding: 2px !important;
+}
+
+.Group_Operations a {
+   color: #000000;
+   font-size: 10px;
+   font-weight: normal;
+   text-decoration: none;
+}
+
+.Group_Operations a:hover {
+       text-decoration: underline;
+       color: #ffffff;
+       font-size: 10px;
+}
