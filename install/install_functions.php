@@ -62,7 +62,7 @@ function draw($toolContent){
 
 		$t->set_var('BREAD_TEXT',  $langStep);
 
-		$pageTitle = "Οδηγός Εγκατάστασης e-Class - " . $langStepTitle . " (" . $langStep . ")";
+		$pageTitle = "ΞΞ΄Ξ·Ξ³ΟΟ‚ Ξ•Ξ³ΞΊΞ±Ο„Ξ¬ΟƒΟ„Ξ±ΟƒΞ·Ο‚ e-Class - " . $langStepTitle . " (" . $langStep . ")";
 		$t->set_var('PAGE_TITLE',  $pageTitle);
 
 
@@ -98,7 +98,7 @@ function installerMenu(){
 	$sideMenuLink 	= array();
 	$sideMenuImg	= array();
 
-//	array_push($sideMenuSubGroup, "Πορεία Εγκατάστασης");
+//	array_push($sideMenuSubGroup, "Ξ ΞΏΟΞµΞ―Ξ± Ξ•Ξ³ΞΊΞ±Ο„Ξ¬ΟƒΟ„Ξ±ΟƒΞ·Ο‚");
 
 	for($i=0; $i<6; $i++) {
 		if($i < $_SESSION['step']-1) {
