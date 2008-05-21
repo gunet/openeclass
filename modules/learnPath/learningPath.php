@@ -1,24 +1,24 @@
 <?php
 /*=============================================================================
-       	GUnet e-Class 2.0 
-        E-learning and Course Management Program  
+       	GUnet e-Class 2.0
+        E-learning and Course Management Program
 ================================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
         A full copyright notice can be read in "/info/copyright.txt".
-        
-       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-                     Yannis Exidaridis <jexi@noc.uoa.gr> 
-                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
-        For a full list of contributors, see "credits.txt".  
-     
-        This program is a free software under the terms of the GNU 
-        (General Public License) as published by the Free Software 
-        Foundation. See the GNU License for more details. 
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+                     Yannis Exidaridis <jexi@noc.uoa.gr>
+                     Alexandros Diamantidis <adia@noc.uoa.gr>
+
+        For a full list of contributors, see "credits.txt".
+
+        This program is a free software under the terms of the GNU
+        (General Public License) as published by the Free Software
+        Foundation. See the GNU License for more details.
         The full license can be read in "license.txt".
-     
-       	Contact address: GUnet Asynchronous Teleteaching Group, 
-        Network Operations Center, University of Athens, 
+
+       	Contact address: GUnet Asynchronous Teleteaching Group,
+        Network Operations Center, University of Athens,
         Panepistimiopolis Ilissia, 15784, Athens, Greece
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
@@ -27,22 +27,22 @@
 	learningPath.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.7 licensed under GPL
 	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: learningPath.php Revision: 1.30
-	      
+
 	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
                       Lederer Guillaume <led@cerdecam.be>
-==============================================================================        
-    @Description: This script displays the contents of a learning path to 
-                  a user and his progress. If the user is anonymous the 
+==============================================================================
+    @Description: This script displays the contents of a learning path to
+                  a user and his progress. If the user is anonymous the
                   progress is not displayed at all.
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
 
@@ -71,7 +71,7 @@ if ( isset($_GET['path_id']) && $_GET['path_id'] > 0)
     $_SESSION['path_id'] = (int) $_GET['path_id'];
 }
 elseif( (!isset($_SESSION['path_id']) || $_SESSION['path_id'] == "") )
-{ 
+{
     // if path id not set, redirect user to the home page of learning path
     header("Location: ./learningPathList.php");
     exit();
@@ -124,15 +124,15 @@ $sql = "SELECT LPM.`learnPath_module_id`,
 
 $extendedList = db_query_fetch_all($sql);
 
-// build the array of modules     
+// build the array of modules
 // build_element_list return a multi-level array, where children is an array with all nested modules
 // build_display_element_list return an 1-level array where children is the deep of the module
 $flatElementList = build_display_element_list(build_element_list($extendedList, 'parent', 'learnPath_module_id'));
- 
+
 $is_blocked = false;
 $atleastOne = false;
 $moduleNb = 0;
- 
+
 // look for maxDeep
 $maxDeep = 1; // used to compute colspan of <td> cells
 for( $i = 0 ; $i < sizeof($flatElementList) ; $i++ )
@@ -142,8 +142,8 @@ for( $i = 0 ; $i < sizeof($flatElementList) ; $i++ )
 
 /*================================================================
                       OUTPUT STARTS HERE
- ================================================================*/  
-  
+ ================================================================*/
+
 
 //####################################################################################\\
 //##################################### TITLE ########################################\\
@@ -172,7 +172,7 @@ if ( $uid )
 $tool_content .= '</tr></thead>'."\n\n"
 	.'<tbody>'."\n\n";
 
-   
+
   //####################################################################################\\
   //############################## MODULE TABLE LIST DISPLAY ###########################\\
   //####################################################################################\\
@@ -189,7 +189,7 @@ foreach ($flatElementList as $module)
     {
         $progress = 0;
     }
-      
+
     if ( $module['contentType'] == CTEXERCISE_ )
     {
         $passExercise = ($module['credit'] == "CREDIT");
@@ -198,7 +198,7 @@ foreach ($flatElementList as $module)
     {
         $passExercise = false;
     }
-      
+
     if ( $module['contentType'] == CTSCORM_ && $module['scoreMax'] <= 0)
     {
         if ( $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED')
@@ -214,28 +214,28 @@ foreach ($flatElementList as $module)
     }
 
     // display the current module name (and link if allowed)
-      
+
     $spacingString = "";
     for($i = 0; $i < $module['children']; $i++)
     {
         $spacingString .= '<td width="5">&nbsp;</td>'."\n";
     }
-    
+
     $colspan = $maxDeep - $module['children']+1;
-      
+
     $tool_content .= '<tr align="center">'."\n"
 		.$spacingString
 		.'<td colspan="'.$colspan.'" align="left">'."\n";
-    
+
     //-- if chapter head
     if ( $module['contentType'] == CTLABEL_ )
     {
         $tool_content .= '<b>'.htmlspecialchars($module['name']).'</b>'."\n";
-    }        
+    }
     //-- if user can access module
     elseif ( !$is_blocked )
     {
-        if($module['contentType'] == CTEXERCISE_ ) 
+        if($module['contentType'] == CTEXERCISE_ )
             $moduleImg = 'exercise_on.gif';
         else if($module['contentType'] == CTLINK_ )
         	$moduleImg = "links.gif";
@@ -243,7 +243,7 @@ foreach ($flatElementList as $module)
         	$moduleImg = "description_on.gif";
         else
             $moduleImg = choose_image(basename($module['path']));
-            
+
         $contentType_alt = selectAlt($module['contentType']);
         $tool_content .= '<a href="module.php?module_id='.$module['module_id'].'">'
         	.'<img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" />'
@@ -253,9 +253,9 @@ foreach ($flatElementList as $module)
         // exercise module : credit == CREDIT || lesson_status == 'passed'
         // scorm module : credit == CREDIT || lesson_status == 'passed'|'completed'
 
-        if( $module['lock'] == 'CLOSE' && $module['credit'] != 'CREDIT' 
-            && $module['lesson_status'] != 'COMPLETED' && $module['lesson_status'] != 'PASSED' 
-            && !$passExercise 
+        if( $module['lock'] == 'CLOSE' && $module['credit'] != 'CREDIT'
+            && $module['lesson_status'] != 'COMPLETED' && $module['lesson_status'] != 'PASSED'
+            && !$passExercise
           )
         {
             if($uid)
@@ -272,7 +272,7 @@ foreach ($flatElementList as $module)
     //-- user is blocked by previous module, don't display link
     else
     {
-        if($module['contentType'] == CTEXERCISE_ ) 
+        if($module['contentType'] == CTEXERCISE_ )
             $moduleImg = 'exercise_on.gif';
         else if($module['contentType'] == CTLINK_ )
         	$moduleImg = "links.gif";
@@ -298,19 +298,19 @@ foreach ($flatElementList as $module)
     {
         $tool_content .= '<td colspan="2">&nbsp;</td>'."\n";
     }
-  
+
     if ($progress > 0)
     {
         $globalProg =  $globalProg+$progress;
     }
-      
-    if($module['contentType'] != CTLABEL_) 
+
+    if($module['contentType'] != CTLABEL_)
         $moduleNb++; // increment number of modules used to compute global progression except if the module is a title
-       
+
     $tool_content .= '</tr>'."\n\n";
     $atleastOne = true;
 }
-  
+
 $tool_content .= '</tbody>'."\n\n";
 
 if ($atleastOne == false)

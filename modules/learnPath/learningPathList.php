@@ -83,7 +83,7 @@ $head_content = "";
 $tool_content = "";
 $style= "";
 
-$nameTools = $langLearningPathList;
+$nameTools = $langLearningPath;
 
 if (isset($_GET['cmd']) && $_GET['cmd'] == 'export'
 	&& isset($_GET['path_id']) && is_numeric($_GET['path_id']) && $is_adminOfCourse)
@@ -276,7 +276,7 @@ if ($is_adminOfCourse) {
 				}
 				else { // create form requested
 					$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
-					$nameTools = $langCreateNewLearningPath;	
+					$nameTools = $langCreateNewLearningPath;
 					$dialogBox ="<form action=\"".$_SERVER['PHP_SELF']."\" method=\"POST\">"
 						."<p><label for=\"newPathName\">".$langLearningPathName."</label><br />"
 						."<input type=\"text\" name=\"newPathName\" id=\"newPathName\" "
@@ -350,7 +350,7 @@ if($is_adminOfCourse) {
 		$tool_content .= claro_disp_message_box($dialogBox, $style) ."<br />";
 		draw($tool_content, 2, 'learnPath', $head_content);
 		exit;
-	} else { 	
+	} else {
 		$tool_content .= "<table width=\"99%\" align=\"left\" class=\"Group_Operations\"><thead><tr>
     	  	<td width=\"50%\">&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?cmd=create\">".$langCreateNewLearningPath."</a></td>
       		<td width=\"50%\"><div align=\"right\"><a href=\"modules_pool.php\">".$langModulesPoolToolName."</a>&nbsp;</div></td>
@@ -361,16 +361,21 @@ if($is_adminOfCourse) {
 	}
 }
 
-// check if there are learning paths available	
+// check if there are learning paths available
 $l = db_query("SELECT * FROM `".$TABLELEARNPATH."`");
-if ((mysql_num_rows($l) == 0)) {  
+if ((mysql_num_rows($l) == 0)) {
 	$tool_content .= "<p class='alert1'>$langNoLearningPath</p>";
 	draw($tool_content, 2, 'learnPath', $head_content);
 	exit;
 }
 
-$tool_content .= "<table width=\"99%\"><thead><tr align=\"center\" valign=\"top\">
-      <th width=\"400\" colspan=\"2\"><div align=\"left\">&nbsp;&nbsp;".$langLearningPath."</div></th>";
+
+$tool_content .= "
+    <table width=\"99%\">
+    <thead>
+    <tr align=\"center\" valign=\"top\">
+      <th width=\"400\" colspan=\"2\"><div align=\"left\">&nbsp;&nbsp;".$langLearningPathList."</div></th>";
+
 
 if($is_adminOfCourse) {
      // Titles for teachers
