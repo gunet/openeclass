@@ -419,7 +419,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
 
  }
  /**
-  * This function is used to display the correct alt texte for image in the modules lists.
+  * This function is used to display the correct alt text for image in the modules lists.
   * Mainly used at the same time than selectImage() to add an alternate text on the image.
   *
   * @param  string $contentType type of content in learning path
@@ -429,11 +429,11 @@ function nameBox($type, $mode, $formlabel = FALSE)
   */
  function selectAlt($contentType)
  {
-      global $langAltDocument, $langAltClarodoc, $langAltExercise, $langAltScorm;
+      global $langDoc, $langAltClarodoc, $langExercise, $langAltScorm;
 
-      $altList[CTDOCUMENT_] = $langAltDocument;
+      $altList[CTDOCUMENT_] = $langDoc;
       $altList[CTCLARODOC_] = $langAltClarodoc;
-      $altList[CTEXERCISE_] = $langAltExercise;
+      $altList[CTEXERCISE_] = $langExercise;
       $altList[CTSCORM_] = $langAltScorm;
 
       if (array_key_exists( $contentType , $altList ))

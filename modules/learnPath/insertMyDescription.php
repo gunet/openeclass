@@ -47,8 +47,6 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-//$TABLEDOCUMENT          = "document";
-
 require_once("../../include/baseTheme.php");
 $tool_content = "";
 
@@ -72,10 +70,8 @@ mysql_select_db($currentCourseID);
 
 // SQL Checks
 // check if a module of this course already used the same document
-$sql = "SELECT *
-	FROM `".$TABLEMODULE."` AS M, `".$TABLEASSET."` AS A
-	WHERE A.`module_id` = M.`module_id`
-	AND M.`contentType` = \"".CTCOURSE_DESCRIPTION_."\"";
+$sql = "SELECT * FROM `".$TABLEMODULE."` AS M, `".$TABLEASSET."` AS A
+	WHERE A.`module_id` = M.`module_id` AND M.`contentType` = \"".CTCOURSE_DESCRIPTION_."\"";
 $query = db_query($sql);
 $num = mysql_numrows($query);
 
@@ -126,12 +122,12 @@ else
 {
 	// check if this is this LP that used this course description as a module
 	$sql = "SELECT * FROM `".$TABLELEARNPATHMODULE."` AS LPM,
-			`".$TABLEMODULE."` AS M,
-			`".$TABLEASSET."` AS A
-			WHERE M.`module_id` =  LPM.`module_id`
-			AND M.`startAsset_id` = A.`asset_id`
-			AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'] ."
-			AND M.`contentType` = \"".CTCOURSE_DESCRIPTION_."\"";
+		`".$TABLEMODULE."` AS M,
+		`".$TABLEASSET."` AS A
+		WHERE M.`module_id` =  LPM.`module_id`
+		AND M.`startAsset_id` = A.`asset_id`
+		AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'] ."
+		AND M.`contentType` = \"".CTCOURSE_DESCRIPTION_."\"";
 	$query2 = db_query($sql);
 	$num = mysql_numrows($query2);
 	

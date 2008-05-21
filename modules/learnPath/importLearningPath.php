@@ -1,6 +1,5 @@
 <?php
-
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -24,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	importLearningPath.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -66,7 +65,7 @@ require_once("../../include/baseTheme.php");
 $tool_content = "";
 $pwd = getcwd();
 
-$navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPathList);
+$navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPath);
 if (! $is_adminOfCourse ) claro_die($langNotAllowed);
 $nameTools = $langimportLearningPath;
 

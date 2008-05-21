@@ -66,9 +66,7 @@ if ( !isset($_SESSION['path_id']) )
       claro_die ("<center> Not allowed ! (path_id not set :@ )</center>");
 }
 
-
 mysql_select_db($currentCourseID);
-
 $iterator = 1;
 
 if (!isset($_POST['maxLinkForm'])) $_POST['maxLinkForm'] = 0; 
@@ -82,8 +80,7 @@ while ($iterator <= $_POST['maxLinkForm']) {
 		$row = db_query_get_single_row($sql);
 		
 		// check if this link is already a module
-		$sql = "SELECT *
-        		FROM `".$TABLEMODULE."` AS M, `".$TABLEASSET."` AS A
+		$sql = "SELECT * FROM `".$TABLEMODULE."` AS M, `".$TABLEASSET."` AS A
         		WHERE A.`module_id` = M.`module_id`
         		AND M.`name` LIKE \"" .addslashes($row['titre']) ."\"
         		AND M.`comment` LIKE \"" .addslashes($row['description']) ."\"
@@ -91,7 +88,7 @@ while ($iterator <= $_POST['maxLinkForm']) {
         		AND M.`contentType` = \"".CTLINK_."\"";
 		$query0 = db_query($sql);
         $num = mysql_numrows($query0);
-        
+
         if ($num == 0) { 
 			// create new module
 			$sql = "INSERT INTO `".$TABLEMODULE."`
@@ -112,13 +109,12 @@ while ($iterator <= $_POST['maxLinkForm']) {
 			$insertedAsset_id = mysql_insert_id();
 
 			$sql = "UPDATE `".$TABLEMODULE."`
-					SET `startAsset_id` = " . (int)$insertedAsset_id . "
-					WHERE `module_id` = " . (int)$insertedModule_id . "";
+				SET `startAsset_id` = " . (int)$insertedAsset_id . "
+				WHERE `module_id` = " . (int)$insertedModule_id . "";
 			$query = db_query($sql);
 			
 			// determine the default order of this Learning path
-			$sql = "SELECT MAX(`rank`)
-					FROM `".$TABLELEARNPATHMODULE."`";
+			$sql = "SELECT MAX(`rank`) FROM `".$TABLELEARNPATHMODULE."`";
 			$result = db_query($sql);
 
 			list($orderMax) = mysql_fetch_row($result);
@@ -126,9 +122,9 @@ while ($iterator <= $_POST['maxLinkForm']) {
 
 			// finally : insert in learning path
 			$sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
-					(`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`)
-					VALUES ('". (int)$_SESSION['path_id']."', '".(int)$insertedModule_id."','" 
-					."', ".(int)$order.", 'OPEN')";
+				(`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`)
+				VALUES ('". (int)$_SESSION['path_id']."', '".(int)$insertedModule_id."','" 
+				."', ".(int)$order.", 'OPEN')";
 			$query = db_query($sql);
 			
 			$dialogBox .= $row['titre']." : ".$langLinkInsertedAsModule."<br />";
@@ -136,14 +132,13 @@ while ($iterator <= $_POST['maxLinkForm']) {
         } 
         else { 
         	// check if this is this LP that used this document as a module
-        	$sql = "SELECT *
-					FROM `".$TABLELEARNPATHMODULE."` AS LPM,
-						`".$TABLEMODULE."` AS M,
-						`".$TABLEASSET."` AS A
-					WHERE M.`module_id` =  LPM.`module_id`
-					AND M.`startAsset_id` = A.`asset_id`
-					AND A.`path` = '". addslashes($row['url'])."'
-					AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'];
+        	$sql = "SELECT * FROM `".$TABLELEARNPATHMODULE."` AS LPM,
+				`".$TABLEMODULE."` AS M,
+				`".$TABLEASSET."` AS A
+				WHERE M.`module_id` =  LPM.`module_id`
+				AND M.`startAsset_id` = A.`asset_id`
+				AND A.`path` = '". addslashes($row['url'])."'
+				AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'];
 			$query2 = db_query($sql);
 			$num = mysql_numrows($query2);
 			
@@ -152,7 +147,7 @@ while ($iterator <= $_POST['maxLinkForm']) {
 				$thisLinkModule = mysql_fetch_array($query0);
 				// determine the default order of this Learning path
 				$sql = "SELECT MAX(`rank`)
-						FROM `".$TABLELEARNPATHMODULE."`";
+					FROM `".$TABLELEARNPATHMODULE."`";
 				$result = db_query($sql);
 
 				list($orderMax) = mysql_fetch_row($result);
@@ -160,10 +155,10 @@ while ($iterator <= $_POST['maxLinkForm']) {
 				
 				// finally : insert in learning path
 				$sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
-						(`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`)
-						VALUES ('". (int)$_SESSION['path_id']."', '"
-						.(int)$thisLinkModule['module_id']."','"
-						."', ".(int)$order.",'OPEN')";
+					(`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`)
+					VALUES ('". (int)$_SESSION['path_id']."', '"
+					.(int)$thisLinkModule['module_id']."','"
+					."', ".(int)$order.",'OPEN')";
 				$query = db_query($sql);
 				
 				$dialogBox .= $row['titre']." : ".$langLinkInsertedAsModule."<br />";
@@ -173,10 +168,8 @@ while ($iterator <= $_POST['maxLinkForm']) {
 				$dialogBox .= $row['titre']." : ".$langLinkAlreadyUsed."<br />";
 				$style = "caution";
 			}
-        } 
-
+        	} 
 	} 
-	
 	$iterator++;
 } 
 
@@ -187,13 +180,11 @@ if (isset($dialogBox) && $dialogBox != "") {
 }
 
 $tool_content .= showlinks($tbl_link);
-
 $tool_content .= "<br />";
 $tool_content .= claro_disp_tool_title($langPathContentTitle);
 $tool_content .= '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
 // display list of modules used by this learning path
 $tool_content .= display_path_content();
-
 
 draw($tool_content, 2, "learnPath");
 
@@ -226,17 +217,13 @@ function showlinks($tbl_link)
 		<input type=\"checkbox\" name=\"insertLink_".$i."\" id=\"insertLink_".$i."\" 
 		value=\"$myrow[0]\" />
 		</td>
-
-		<td>
-        <a href=\"../link/link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">
+		<td><a href=\"../link/link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">
         <img src=\"../../template/classic/img/links.gif\" border=\"0\">&nbsp;
         ".$myrow[2]."</a>\n
 		</td><td>".$myrow[3]."";
-	
 		$output .= 	"</td></tr>";
 		$i++;
 	}
-
 	$output .=  "</td></tr>";
 	$output .= '<tr>'
 			."<td colspan=\"3\" align=\"left\">"
@@ -246,7 +233,6 @@ function showlinks($tbl_link)
 			."</td>"
 			."</tr>";
 	$output .=  "</tbody></table></form>";	
-
 	return $output;
 }
 

@@ -64,7 +64,7 @@ $head_content = "";
 $tool_content = "";
 $body_action = "";
 
-$navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPathList);
+$navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPath);
 if ( ! $is_adminOfCourse ) claro_die($langNotAllowed);
 $nameTools = $langModulesPoolToolName;
 
@@ -102,32 +102,27 @@ switch( $cmd )
 			$moduleWorkDir = $webDir.$moduleDir;
 	
 			// delete all assets of this module
-			$sql = "DELETE
-					FROM `".$TABLEASSET."`
-					WHERE `module_id` = ". (int)$_GET['cmdid'];
+			$sql = "DELETE FROM `".$TABLEASSET."`
+				WHERE `module_id` = ". (int)$_GET['cmdid'];
 			db_query($sql);
 	
 			// delete from all learning path of this course but keep there id before
-			$sql = "SELECT *
-					FROM `".$TABLELEARNPATHMODULE."`
-					WHERE `module_id` = ". (int)$_GET['cmdid'];
+			$sql = "SELECT * FROM `".$TABLELEARNPATHMODULE."`
+				WHERE `module_id` = ". (int)$_GET['cmdid'];
 			$result = db_query($sql);
 	
-			$sql = "DELETE
-					FROM `".$TABLELEARNPATHMODULE."`
-					WHERE `module_id` = ". (int)$_GET['cmdid'];
+			$sql = "DELETE FROM `".$TABLELEARNPATHMODULE."`
+				WHERE `module_id` = ". (int)$_GET['cmdid'];
 			db_query($sql);
 	
 			// delete the module in modules table
-			$sql = "DELETE
-					FROM `".$TABLEMODULE."`
-					WHERE `module_id` = ". (int)$_GET['cmdid'];
+			$sql = "DELETE FROM `".$TABLEMODULE."`
+				WHERE `module_id` = ". (int)$_GET['cmdid'];
 			db_query($sql);
 	
 			//delete all user progression concerning this module
-			$sql = "DELETE
-					FROM `".$TABLEUSERMODULEPROGRESS."`
-					WHERE 1=0 ";
+			$sql = "DELETE FROM `".$TABLEUSERMODULEPROGRESS."`
+				WHERE 1=0 ";
 	
 			while ($list = mysql_fetch_array($result))
 			{
@@ -145,9 +140,8 @@ switch( $cmd )
     case "rqRename" :
     	if (isset($_GET['module_id']) && is_numeric($_GET['module_id']) ) {
 			//get current name from DB
-			$query= "SELECT `name`
-					FROM `".$TABLEMODULE."`
-					WHERE `module_id` = '". (int)$_GET['module_id']."'";
+			$query= "SELECT `name` FROM `".$TABLEMODULE."`
+				WHERE `module_id` = '". (int)$_GET['module_id']."'";
 			$result = db_query($query);
 			$list = mysql_fetch_array($result);
 			
@@ -238,9 +232,8 @@ switch( $cmd )
                     ."<input type=\"submit\" value=\"".$langOk."\">\n"
                     ."<br /><br />\n"
                     ."</form>\n";
-                 
-                 $head_content .= claro_disp_html_area_head("comment");
-					
+
+                 $head_content .= claro_disp_html_area_head("comment");	
                  $body_action = "onload=\"initEditor()\"";
             }
         } // else no module_id

@@ -52,6 +52,9 @@ $tool_content .= <<<tCont
 <img src='../images/pdf.gif' border='0
 ' title='$langFormatPDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/manT/ManT.pdf" target=_blank class=mainpage>$langManT</a></img>
 <br/><br/>
+<img src='../images/html.gif' border='0
+' title='$langFormatHTML' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/manT/mant.php" class=mainpage>$langManT</a></img>
+<br/><br/>
 <img src='../images/pdf.gif' border='0' title=
 '$langFormatPDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/manS/ManS.pdf" target=_blank class=mainpage>$langManS</a></img>
 <br/>

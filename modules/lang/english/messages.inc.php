@@ -78,6 +78,7 @@ $langListFaculte = "Faculty list / Actions";
 $langPHPInfo = "PHP information";
 $langManuals = "Available Manuals";
 $langFormatPDF = "PDF format";
+$langFormatHTML = "HTML format";
 $langAdminManual = "Admin Manual";
 $langConfigFile = "Configuration File";
 $langDBaseAdmin = "phpMyAdmin";
@@ -991,8 +992,6 @@ $langMoreLessChoices="More/Less choices";
 // question_list_admin.inc.php
 $langNewQu="New Question";
 $langQuestionList="Question List";
-$langMoveUp="Move Up";
-$langMoveDown="Move Down";
 $langGetExistingQuestion="Get Existing Question";
 
 // question_pool.php
@@ -1340,38 +1339,32 @@ $langWelcomeProf = "Select \"Create course site\" to create your on-line courses
 * install.inc.php
 **************************************************/
 
-$langEG 			= "e. g.";
-$langDBHost			= "Database Host";
-$langDBLogin		= "Database Username";
-$langDBPassword 	= "Database Password";
-$langMainDB			= "Main claroline DB";
+$langEG = "e. g.";
+$langDBHost	= "Database Host";
+$langDBLogin	= "Database Username";
+$langDBPassword = "Database Password";
+$langMainDB	= "Main DB";
 $langAllFieldsRequired	= "all fields required";
-$langPrintVers			= "Printable version";
-$langLocalPath			= "Corresponding local path";
-$langAdminEmail			= "Administrator email";
-$langAdminName			= "Administrator name";
-$langAdminSurname		= "Administrator surname";
-$langAdminLogin			= "Administrator login";
-$langAdminPass			= "Administrator password";
-$langHelpDeskPhone		= "Helpdesk telephone";
-$langHelpDeskFax                = "Helpdeski fax number";
-$langCampusName			= "Your campus' name";
-$langInstituteShortName         = "Institution short name";
-$langInstituteName		= "URL of this institution";
-$langInstitutePostAddress       = "Institution postal address";
+$langPrintVers	= "Printable version";
+$langLocalPath	= "Corresponding local path";
+$langAdminEmail	= "Administrator email";
+$langAdminName	= "Administrator name";
+$langAdminSurname = "Administrator surname";
+$langAdminLogin	= "Administrator login";
+$langAdminPass	= "Administrator password";
+$langHelpDeskPhone = "Helpdesk telephone";
+$langHelpDeskFax = "Helpdesk fax number";
+$langCampusName	= "University name";
+$langInstituteShortName = "Institution short name";
+$langInstituteName = "URL of this institution";
+$langInstitutePostAddress = "Institution postal address";
 
-$langDBSettingIntro		= "
-				Install script will create claroline main DB. Please note that Claroline
-				will need to create many DBs. If you are allowed only one
-				DB for your website by your Hosting Services, Claroline will not work.";
-
-
-$langStep1 			= "Step 1 of 6";
-$langStep2 			= "Step 2 of 6";
-$langStep3 			= "Step 3 of 6";
-$langStep4 			= "Step 4 of 6";
-$langStep5 			= "Step 5 of 6";
-$langStep6 			= "Step 6 of 6";
+$langStep1 	= "Step 1 of 6";
+$langStep2 	= "Step 2 of 6";
+$langStep3 	= "Step 3 of 6";
+$langStep4 	= "Step 4 of 6";
+$langStep5 	= "Step 5 of 6";
+$langStep6 	= "Step 6 of 6";
 $langCfgSetting		= "Config settings";
 $langDBSetting 		= "MySQL database settings";
 $langMainLang 		= "Main language";
@@ -1386,27 +1379,21 @@ $langInstallEnd   	= "Installation Finished";
 
 $langAddComment = "Add a comment";
 $langAddIntro = "Add introduction text";
-
 $langAddModulesButton = "Add selection";
 $langAddOneModuleButton = "Add module";
 $langAgenda = "Agenda";
 $langAlertBlockingMakedInvisible = "This module is blocked. Making it invisible will allow ".$langsStudents." to access the next module without having to complete this one. Confirm ?";
-$langAlertBlockingPathMadeInvisible = "This path is blocking. Making it invisible will allow ".$langsStudents." to access the next path without having to complete this one. Confirm ?";
+$langAlertBlockingPathMadeInvisible = "This path is blocking. Making it invisible will allow ".$langsStudents." to access the next path without having to complete this one. Confirm?";
 $langAlreadyBrowsed = "Already browsed";
-$langAltDocument = "Document";
-$langAltExercise = "Exercise";
 $langAltMakeNotBlocking = "Unblock";
-$langAltMakeVisible = "Make visible";
-$langAltMove = "Move";
-$langAltMoveUp = "Move up";
 $langAltScorm = "Scorm";
 $langAnnouncement = "Announcements";
-$langAreYouSureDeleteModule = "Are you sure to totally delete this module ? It will be completely deleted from the server and from any learning path it is in. You won't be able to use it in any learning path. Confirm delete of : ";
-$langAreYouSureToDelete = "Delete confirmation ";
+$langAreYouSureDeleteModule = "Are you sure to totally delete this module";
+$langAreYouSureToDelete = "Delete confirmation";
 $langAreYouSureToDeleteScorm = "This learning path is part of a SCORM importation package. If you delete this path, all its SCORM conformant modules and related files will be deleted from the platform. Are you sure you want to delete the learning path named ";
 $langAreYouSureToRemove = "Are you sure you want to remove the following module from the learning path: ";
 $langAreYouSureToRemoveLabel = "By deleting a label you will delete all modules or label it contains.";
-$langAreYouSureToRemoveSCORM = "SCORM conformant modules are definitively removed from server when deleted in their learning path.";
+$langAreYouSureToRemoveSCORM = "SCORM conformant modules are definitively removed when deleted in their learning path.";
 $langAreYouSureToRemoveStd = "The module will still be available in the pool of modules.";
 $langBackModule = "Back to list";
 $langBackToLPAdmin = "Back to learning path administration";
@@ -1425,15 +1412,15 @@ $langCreateLabel = "Create label";
 $langCreateNewLearningPath = "Create a new learning path";
 $langDOCUMENTTypeDesc = "Document";
 $langDate = "Date";
-$langDefaultLearningPathComment = "This is the introduction text of this learning path. To replace it by your own text, click below on <b>modify</b>.";
-$langDefaultModuleAddedComment = "This an additional introduction text about the presence of this module specially into this learning path. To replace it by your own text, click below on <b>modify</b>.";
-$langDefaultModuleComment = "This is the introduction text of this module, it will appears in each learning path that contains this module. To replace it by your own text, click below on <b>modify</b>.";
+$langDefaultLearningPathComment = "This is the introduction text of this learning path.";
+$langDefaultModuleAddedComment = "This an additional introduction text about the presence of this module specially into this learning path.";
+$langDefaultModuleComment = "This is the introduction text of this module, it will appears in each learning path that contains this module.";
 $langDescriptionCours = "Course description";
 $langDocInsertedAsModule = "has been added as module";
 $langDocumentAlreadyUsed = "This document is already used as a module in this learning path";
-$langDocumentAsModule = "Use a document";
+$langDocumentAsModule = "Use document";
 $langDocumentInModule = "Document in module";
-$langEXERCISETypeDesc = "Eclass exercise";
+$langEXERCISETypeDesc = "Exercise";
 $langEndOfSteps = "Click exit after completing this last step.";
 $langErrorAssetNotFound = "Asset not found: ";
 $langErrorCopyAttachedFile = "Unable to copy file: ";
@@ -1451,7 +1438,7 @@ $langErrorLoadingExercise = "Unable to load the exercise";
 $langErrorLoadingQuestion = "Unable to load exercise's question";
 $langErrorNameAlreadyExists = "Error: Name already exists in the learning path or in the module pool";
 $langErrorNoModuleInPackage = "No module in package";
-$langErrorNoZlibExtension = "Zlib php extension is required to use this tool.  Please contact your platform administrator.";
+$langErrorNoZlibExtension = "Zlib php extension is required to use this tool. Please contact your platform administrator.";
 $langErrorOpeningManifest = "Cannot find <i>manifest</i> file in the package.<br /> File not found : imsmanifest.xml";
 $langErrorOpeningXMLFile = "Cannot find secondary initialisation file in the package.<br /> File not found : ";
 $langErrorReadingManifest = "Error reading <i>manifest</i> file";
@@ -1502,9 +1489,7 @@ $langLessonStatus = "Module status";
 $langLinkAlreadyUsed = "This link is already used as a module in this learning path";
 $langLinkAsModule = "Use a Link";
 $langLinkInsertedAsModule = "has been added as a module of the course and of this learning path";
-
 $langLogout = "Logout";
-$langMakeInvisible = "Make invisible";
 $langMaxFileSize = "Max file size: ";
 $langMinuteShort = "min.";
 $langModify = "Modify";
@@ -1516,10 +1501,6 @@ $langModuleStillInPool = "Modules of this path will still be available in the po
 $langModules = "Modules";
 $langModulesPoolToolName = "Pool of modules";
 $langMove = "Move";
-$langMoveDown = "Move down";
-$langMyAgenda = "My Calendar";
-$langMyCourses = "My course list";
-
 $langNeverBrowsed = "Never browsed";
 $langNewLabel = "Create a new label / title in this learning path";
 $langNext = "Next";
@@ -1529,13 +1510,11 @@ $langNoEx = "There is no exercise for the moment";
 $langNoLearningPath = "No learning path";
 $langNoModule = "No module";
 $langNoMoreModuleToAdd = "All modules of this course are already used in this learning path.";
-
 $langNoStartAsset = "There is no start asset defined for this module.";
 $langNotAllowed = "Not allowed";
 $langNotAttempted = "Not attempted";
 $langNotInstalled = "An error occured.  Learning Path import failed.";
 $langNotice = "Notice";
-
 $langOkChapterHeadAdded = "Title added: ";
 $langOkDefaultCommentUsed = "Warning: Installation cannot find the description of the learning path and has set a default comment.  You should change it";
 $langOkDefaultTitleUsed = "Warning: Installation cannot find the name of the learning path and has set a default name.  You should change it.";
@@ -1544,7 +1523,6 @@ $langOkManifestFound = "Manifest found in zip file: ";
 $langOkManifestRead = "Manifest read.";
 $langOkModuleAdded = "Module added: ";
 $langOrder = "Order";
-
 $langPassed = "Passed";
 $langPathContentTitle = "Learning path content";
 $langPathsInCourseProg = "Course progression ";
@@ -1563,7 +1541,6 @@ $langRemove = "Remove";
 $langRename = "Rename";
 $langRoot = "Root";
 $langSCORMTypeDesc = "SCORM conformable content";
-
 $langScormIntroTextForDummies = "Imported packages must consist of a zip file and be SCORM 2004 or SCORM 1.2 conformable.";
 $langSecondShort = "sec.";
 $langSize = "Size";
@@ -1586,7 +1563,6 @@ $langUnamedPath = "Unamed path";
 $langUp = "Up";
 $langUseOfPool = "This page allows you to view all the modules available in this course. <br /> Any exercise or document that has been added in a learning path will also appear in this list.";
 $langUsedInLearningPaths = "Number of learning paths using this module : ";
-
 $langView = "View";
 $langViewMode = "View mode";
 $langVisibility = "Visibility";
@@ -1602,18 +1578,15 @@ $langScormErrorExport = "Error exporting SCORM package";
 /*********************************************************
 * lessonTools.inc.php
 *********************************************************/
-
 $langActiveTools="Active tools";
 $langAdministrationTools="Administration tools";
 $langInactiveTools="Inactive tools";
 $langAdministratorTools="Administrator tools";
 $langTools="Course tools";
 
-
 /*********************************************************
 * link.inc.php
 *********************************************************/
-
 $langLinks="Links";
 $langListDeleted="The list has been deleted";
 $langLinkMod="Link modified";
@@ -1686,17 +1659,13 @@ to repeat the password reset request from the beginning.
 ";
 
 $langPassEmail1 = "Your password has been reset. Your new password is:";
-
 $langPassEmail2 = "For security reasons, please change your password to something else, as soon as you login.";
-
-
 $langAccountResetSuccess1="Your password has been reset";
 $langAccountResetInvalidLink="The link you followed is no longer valid. Please repeat the password reset request.";
 $langAccountEmailError1 = 'An error occured while sending your data';
 $langAccountEmailError2 = "It was not feasible to send password reset instructions at";
 $langAccountEmailError3 = 'If necessarry, you may contact the platform administrator at';
 $lang_pass_email_ok = 'Your account information were found and send to the folowing email address';
-
 $langAccountNotFound1 = 'No account was found with the email address you entered';
 $langAccountNotFound2 = 'However, if you are certain you already have an account, please contact the site administrator at ';
 $langAccountNotFound3 = 'giving clues that can help in finding your account like name, surname, department etc.';
@@ -1727,16 +1696,12 @@ $langNote = "Note";
 /****************************************************************
 * myagenda.inc.php
 ****************************************************************/
-
 $langMyAgenda = "My Agenda";
 $langToday = "Today";
-
 
 /************************************************************
 * opencours.inc.php
 *************************************************************/
-
-
 $listfac="Select faculty";
 $listtomeis = "Division";
 $langDepartmentsList = "A list of this institution's departments apprears below. Please click on
@@ -1760,7 +1725,6 @@ $m['type'] = 'Course type';
 $m['pre']  = 'Undergraduate';
 $m['post']  = 'Post-graduate';
 $m['other']  = 'Other';
-
 $m['pres']  = 'Under-graduate';
 $m['posts']  = 'Post-graduate';
 $m['others']  = 'Other';
@@ -1769,26 +1733,14 @@ $m['legopen'] = 'Open Course';
 $m['legrestricted'] = 'Registration required';
 $m['legclosed'] = 'Closed Course';
 $m['nolessons'] = 'There are no available courses!';
-
 $m['type']="Type";
 $m['name']="Course";
 $m['code']="Course code";
 $m['prof']="Instructor(s)";
-
 $m['mailprof'] = "To enroll to this lesson you need to send an email to the ".$langsTeacher." by clicking ";
 $m['here'] = "here.";
 $m['unsub'] = "Course is closed. Unregistration is not allowed";
 
-
-/*************************************************************
-* pedasuggest.inc.php
-*************************************************************/
-/*
-unset($titreBloc);
-unset($titreBlocNotEditable);
-unset($questionPlan);
-unset($info2Say);
-*/
 
 /*********************************************************
 * perso.inc.php
@@ -1799,20 +1751,16 @@ $langMyPersoAnnouncements = "MY ANNOUNCEMENTS";
 $langMyPersoDocs = "MY LATEST DOCUMENTS";
 $langMyPersoAgenda = "MY AGENDA";
 $langMyPersoForum = "THE LATEST SUBMISSION TO MY FORUMS";
-
 $langAssignment = "Assignment";
 $langDeadline = "Deadline";
-
 $langNoEventsExist="No events exist";
 $langNoAssignmentsExist="No assignments exist";
 $langNoAnnouncementsExist="No announcements exist";
 $langNoDocsExist="No documents exist";
 $langNoPosts="There are no submissions to your forums";
-
 $langNotEnrolledToLessons="You are not enrolled to any lessons";
 $langCreateLesson="You can create a course by following the link \"$langCourseCreate\"";
 $langEnroll="You can enroll to a course by following the link \"$langOtherCourses\"";
-
 $langMore="...[More]";
 $langSender="Sender";
 $langUnknown="Not defined";
@@ -1844,11 +1792,7 @@ $langTopicAnswer="Topic Answer";
 $langAnswer="Answer";
 
 // Groups Management Claroline
-
-
 $langGroupDocumentsLink="Documents of the group ";
-
-
 
 $l_forum 	= "Forum";
 $l_forums	= "Forums";

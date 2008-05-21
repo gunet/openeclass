@@ -632,7 +632,7 @@ foreach ($flatElementList as $module)
             $onclick = "";
         }
         $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkInvisibl&cmdid=".$module['module_id']."\" ".$onclick. " >".
-             "<img src=\"".$imgRepositoryWeb."visible.gif\" alt=\"$langMakeInvisible\" title=\"$langMakeInvisible\" border=0>".
+             "<img src=\"".$imgRepositoryWeb."visible.gif\" alt=\"$langVisible\" title=\"$langVisible\" border=0>".
              "</a>";
     }
 
@@ -642,7 +642,7 @@ foreach ($flatElementList as $module)
     // DISPLAY CATEGORY MOVE COMMAND
     $tool_content .= "<td>".
          "<a href=\"".$_SERVER['PHP_SELF']."?cmd=changePos&cmdid=".$module['learnPath_module_id']."\">".
-         "<img src=\"".$imgRepositoryWeb."move.gif\" alt=\"$langAltMove\" title=\"$langAltMove\" border=0>".
+         "<img src=\"".$imgRepositoryWeb."move.gif\" alt=\"$langMove\" title=\"$langMove\" border=0>".
          "</a>".
          "</td>";
 
@@ -651,7 +651,7 @@ foreach ($flatElementList as $module)
     {
         $tool_content .= "<td>".
              "<a href=\"".$_SERVER['PHP_SELF']."?cmd=moveUp&cmdid=".$module['learnPath_module_id']."\">".
-             "<img src=\"".$imgRepositoryWeb."up.gif\" alt=\"$langAltMoveUp\" title=\"$langAltMoveUp\" border=0>".
+             "<img src=\"".$imgRepositoryWeb."up.gif\" alt=\"$langUp\" title=\"$langUp\" border=0>".
              "</a>".
              "</td>";
     }
@@ -665,7 +665,7 @@ foreach ($flatElementList as $module)
     {
         $tool_content .= "<td>".
              "<a href=\"".$_SERVER['PHP_SELF']."?cmd=moveDown&cmdid=".$module['learnPath_module_id']."\">".
-             "<img src=\"".$imgRepositoryWeb."down.gif\" alt=\"$langMoveDown\" title=\"$langMoveDown\" border=0>".
+             "<img src=\"".$imgRepositoryWeb."down.gif\" alt=\"$langDown\" title=\"$langDown\" border=0>".
              "</a>".
              "</td>";
     }
