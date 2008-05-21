@@ -85,15 +85,15 @@ $style= "";
 
 $nameTools = $langLearningPathList;
 
-if ( isset($_GET['cmd']) && $_GET['cmd'] == 'export'
-	&& isset($_GET['path_id']) && is_numeric($_GET['path_id']) && $is_adminOfCourse )
+if (isset($_GET['cmd']) && $_GET['cmd'] == 'export'
+	&& isset($_GET['path_id']) && is_numeric($_GET['path_id']) && $is_adminOfCourse)
 {
       mysql_select_db($currentCourseID);
       require_once("include/scormExport.inc.php");
       $scorm = new ScormExport((int)$_GET['path_id']);
-      if ( !$scorm->export() )
+      if (!$scorm->export())
       {
-          $dialogBox = '<b>Error exporting SCORM package</b><br />'."\n".'<ul>'."\n";
+          $dialogBox = '<b>'.$langScormErrorExport.'</b><br />'."\n".'<ul>'."\n";
           foreach( $scorm->getError() as $error)
           {
               $dialogBox .= '<li>' . $error . '</li>'."\n";
@@ -108,9 +108,9 @@ if ( isset($_GET['cmd']) && $_GET['cmd'] == 'export12'
       mysql_select_db($currentCourseID);
       require_once("include/scormExport12.inc.php");
       $scorm = new ScormExport((int)$_GET['path_id']);
-      if ( !$scorm->export() )
+      if (!$scorm->export())
       {
-          $dialogBox = '<b>Error exporting SCORM package</b><br />'."\n".'<ul>'."\n";
+          $dialogBox = '<b>'.$langScormErrorExport.'</b><br />'."\n".'<ul>'."\n";
           foreach( $scorm->getError() as $error)
           {
               $dialogBox .= '<li>' . $error . '</li>'."\n";
@@ -149,51 +149,34 @@ if ($is_adminOfCourse) {
 				if (is_dir($webDir."courses/".$currentCourseID."/scormPackages/path_".$_GET['del_path_id']))
 				{
 					$findsql = "SELECT M.`module_id`
-							FROM  `".$TABLELEARNPATHMODULE."` AS LPM,
-							`".$TABLEMODULE."` AS M
-							WHERE LPM.`learnPath_id` = ". (int)$_GET['del_path_id']."
-								AND
-										( M.`contentType` = '".CTSCORM_."'
-										OR
-										M.`contentType` = '".CTLABEL_."'
-										)
-								AND LPM.`module_id` = M.`module_id`
-									";
+						FROM  `".$TABLELEARNPATHMODULE."` AS LPM, `".$TABLEMODULE."` AS M
+						WHERE LPM.`learnPath_id` = ". (int)$_GET['del_path_id']."
+						AND ( M.`contentType` = '".CTSCORM_."' OR M.`contentType` = '".CTLABEL_."')
+						AND LPM.`module_id` = M.`module_id`";
 					$findResult = db_query($findsql);
 
 					// Delete the startAssets
-
-					$delAssetSql = "DELETE
-									FROM `".$TABLEASSET."`
-									WHERE 1=0
-								";
+					$delAssetSql = "DELETE FROM `".$TABLEASSET."` WHERE 1=0";
 
 					while ($delList = mysql_fetch_array($findResult))
 					{
 						$delAssetSql .= " OR `module_id`=". (int)$delList['module_id'];
 					}
-
 					db_query($delAssetSql);
 
 					// DELETE the SCORM modules
-
-					$delModuleSql = "DELETE
-									FROM `".$TABLEMODULE."`
-									WHERE (`contentType` = '".CTSCORM_."' OR `contentType` = '".CTLABEL_."')
-									AND (1=0
-									";
+					$delModuleSql = "DELETE FROM `".$TABLEMODULE."`
+					WHERE (`contentType` = '".CTSCORM_."' OR `contentType` = '".CTLABEL_."') AND (1=0";
 
 					if (mysql_num_rows($findResult)>0)
 					{
 						mysql_data_seek($findResult,0);
 					}
-
 					while ($delList = mysql_fetch_array($findResult))
 					{
 						$delModuleSql .= " OR `module_id`=". (int)$delList['module_id'];
 					}
 					$delModuleSql .= ")";
-
 					db_query($delModuleSql);
 
 					// DELETE the directory containing the package and all its content
@@ -204,18 +187,14 @@ if ($is_adminOfCourse) {
 				else
 				{
 					$findsql = "SELECT M.`module_id`
-									FROM  `".$TABLELEARNPATHMODULE."` AS LPM,
-										`".$TABLEMODULE."` AS M
-									WHERE LPM.`learnPath_id` = ". (int)$_GET['del_path_id']."
-									AND M.`contentType` = '".CTLABEL_."'
-									AND LPM.`module_id` = M.`module_id`
-									";
+						FROM  `".$TABLELEARNPATHMODULE."` AS LPM,
+						`".$TABLEMODULE."` AS M
+						WHERE LPM.`learnPath_id` = ". (int)$_GET['del_path_id']."
+						AND M.`contentType` = '".CTLABEL_."'
+						AND LPM.`module_id` = M.`module_id`";
 					$findResult = db_query($findsql);
 					// delete labels of non scorm learning path
-					$delLabelModuleSql = "DELETE
-										FROM `".$TABLEMODULE."`
-										WHERE 1=0
-									";
+					$delLabelModuleSql = "DELETE FROM `".$TABLEMODULE."` WHERE 1=0";
 
 					while ($delList = mysql_fetch_array($findResult))
 					{
@@ -227,21 +206,17 @@ if ($is_adminOfCourse) {
 				// delete everything for this path (common to normal and scorm paths) concerning modules, progression and path
 
 				// delete all user progression
-				$sql1 = "DELETE
-						FROM `".$TABLEUSERMODULEPROGRESS."`
-						WHERE `learnPath_id` = ". (int)$_GET['del_path_id'];
+				$sql1 = "DELETE FROM `".$TABLEUSERMODULEPROGRESS."`
+					WHERE `learnPath_id` = ". (int)$_GET['del_path_id'];
 				$query = db_query($sql1);
 
 				// delete all relation between modules and the deleted learning path
-				$sql2 = "DELETE
-						FROM `".$TABLELEARNPATHMODULE."`
+				$sql2 = "DELETE FROM `".$TABLELEARNPATHMODULE."`
 						WHERE `learnPath_id` = ". (int)$_GET['del_path_id'];
 				$query = db_query($sql2);
 
 				// delete the learning path
-				$sql3 = "DELETE
-							FROM `".$TABLELEARNPATH."`
-							WHERE `learnPath_id` = ". (int)$_GET['del_path_id'] ;
+				$sql3 = "DELETE FROM `".$TABLELEARNPATH."` WHERE `learnPath_id` = ". (int)$_GET['del_path_id'] ;
 
 				$query = db_query($sql3);
 
@@ -280,37 +255,30 @@ if ($is_adminOfCourse) {
 				// create form sent
 				if( isset($_POST["newPathName"]) && $_POST["newPathName"] != "") {
 					// check if name already exists
-					$sql = "SELECT `name`
-							FROM `".$TABLELEARNPATH."`
-							WHERE `name` = '". mysql_real_escape_string($_POST['newPathName']) ."'";
+					$sql = "SELECT `name` FROM `".$TABLELEARNPATH."`
+						WHERE `name` = '". mysql_real_escape_string($_POST['newPathName']) ."'";
 					$query = db_query($sql);
 					$num = mysql_numrows($query);
-					if($num == 0 ) { // "name" doesn't already exist
+					if($num == 0) { // "name" doesn't already exist
 						// determine the default order of this Learning path
-						$result = db_query("SELECT MAX(`rank`)
-												FROM `".$TABLELEARNPATH."`");
-
+						$result = db_query("SELECT MAX(`rank`) FROM `".$TABLELEARNPATH."`");
 						list($orderMax) = mysql_fetch_row($result);
 						$order = $orderMax + 1;
-
 						// create new learning path
-						$sql = "INSERT
-								INTO `".$TABLELEARNPATH."`
-										(`name`, `comment`, `rank`)
-								VALUES ('". mysql_real_escape_string($_POST['newPathName']) ."','" . mysql_real_escape_string(trim($_POST['newComment']))."',".(int)$order.")";
+						$sql = "INSERT INTO `".$TABLELEARNPATH."` (`name`, `comment`, `rank`)
+							VALUES ('". mysql_real_escape_string($_POST['newPathName']) ."','" . mysql_real_escape_string(trim($_POST['newComment']))."',".(int)$order.")";
 						$lp_id = db_query($sql);
-					}
-					else {
+					} else {
 						// display error message
 						$dialogBox = $langErrorNameAlreadyExists;
 						$style = "caution";
 					}
 				}
 				else { // create form requested
-					$dialogBox =
-						"<form action=\"".$_SERVER['PHP_SELF']."\" method=\"POST\">"
-						."<p><strong>".$langCreateNewLearningPath."</strong><br /><br />"
-						."<label for=\"newPathName\">".$langLearningPathName."</label><br />"
+					$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
+					$nameTools = $langCreateNewLearningPath;	
+					$dialogBox ="<form action=\"".$_SERVER['PHP_SELF']."\" method=\"POST\">"
+						."<p><label for=\"newPathName\">".$langLearningPathName."</label><br />"
 						."<input type=\"text\" name=\"newPathName\" id=\"newPathName\" "
 						."maxlength=\"255\"></input><br /><br />"
 						."<label for=\"newComment\">".$langComment."</label><br />"
@@ -319,7 +287,7 @@ if ($is_adminOfCourse) {
 						."<input type=\"hidden\" name=\"cmd\" value=\"create\">"
 						."<input type=\"submit\" value=\"".$langOk."\"></input>"
 						."<br /><br /></p></form>";
-				}
+					}
 				break;
 			default:
 				break;
@@ -364,7 +332,6 @@ if (isset($sortDirection) && $sortDirection)
                              SET `rank` = \"" . (int)$nextLPOrder . "\"
                            WHERE `learnPath_id` =  \"" . (int)$thisLearningPathId . "\"";
              db_query($sql);
-
              break;
          }
 
@@ -379,42 +346,30 @@ if (isset($sortDirection) && $sortDirection)
 
 // Display links to create and import a learning path
 if($is_adminOfCourse) {
-
 	if (isset($dialogBox)) {
 		$tool_content .= claro_disp_message_box($dialogBox, $style) ."<br />";
+		draw($tool_content, 2, 'learnPath', $head_content);
+		exit;
+	} else { 	
+		$tool_content .= "<table width=\"99%\" align=\"left\" class=\"Group_Operations\"><thead><tr>
+    	  	<td width=\"50%\">&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?cmd=create\">".$langCreateNewLearningPath."</a></td>
+      		<td width=\"50%\"><div align=\"right\"><a href=\"modules_pool.php\">".$langModulesPoolToolName."</a>&nbsp;</div></td>
+    		</tr><tr>
+      		<td>&nbsp;<a href=\"importLearningPath.php\">".$langimportLearningPath."</a></td>
+      		<td><div align=\"right\"><a href=\"detailsAll.php\">".$langTrackAllPathExplanation."</a>&nbsp;</div></td>
+    		</tr></thead></table><br /><br /><br />";
 	}
-
-	$tool_content .= "
-    <table width=\"99%\" align=\"left\" class=\"Group_Operations\">
-    <thead>
-    <tr>
-      <td width=\"50%\">&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?cmd=create\">".$langCreateNewLearningPath."</a></td>
-      <td width=\"50%\"><div align=\"right\"><a href=\"modules_pool.php\">".$langModulesPoolToolName."</a>&nbsp;</div></td>
-    </tr>
-    <tr>
-      <td>&nbsp;<a href=\"importLearningPath.php\">".$langimportLearningPath."</a></td>
-      <td><div align=\"right\"><a href=\"detailsAll.php\">".$langTrackAllPath."</a>&nbsp;</div></td>
-    </tr>
-    </thead>
-    </table>
-	<br /><br /><br />
-    ";
-    /*
-	  $tool_content .= "
-		<div id=\"operations_container\">
-		<ul id=\"opslist\">
-		  <li></li>
-		  <li></li>
-		  <li></li>
-		  <li></li>
-        </ul></div>";
-    */
 }
 
-$tool_content .= "
-    <table width=\"99%\">
-    <thead>
-    <tr align=\"center\" valign=\"top\">
+// check if there are learning paths available	
+$l = db_query("SELECT * FROM `".$TABLELEARNPATH."`");
+if ((mysql_num_rows($l) == 0)) {  
+	$tool_content .= "<p class='alert1'>$langNoLearningPath</p>";
+	draw($tool_content, 2, 'learnPath', $head_content);
+	exit;
+}
+
+$tool_content .= "<table width=\"99%\"><thead><tr align=\"center\" valign=\"top\">
       <th width=\"400\" colspan=\"2\"><div align=\"left\">&nbsp;&nbsp;".$langLearningPath."</div></th>";
 
 if($is_adminOfCourse) {
@@ -471,12 +426,13 @@ $result = db_query($sql);
 
 // used to know if the down array (for order) has to be displayed
 $LPNumber = mysql_num_rows($result);
+
 $iterator = 1;
 
 $is_blocked = false;
-while ( $list = mysql_fetch_array($result) ) // while ... learning path list
+while ($list = mysql_fetch_array($result)) // while ... learning path list
 {
-    if ( $list['visibility'] == 'HIDE' ) {
+    if ($list['visibility'] == 'HIDE') {
         if ($is_adminOfCourse) {
             $style=" class=\"invisible\"";
         }
@@ -491,15 +447,13 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
     $tool_content .= "<tr align=\"center\"".$style.">";
 
     //Display current learning path name
-
-    if ( !$is_blocked ) {
+    if (!$is_blocked) {
         $tool_content .= "<td align=\"left\" width=\"1\"><img src=\"../../template/classic/img/lp_on.gif\" alt=\"\"
             border=\"0\" /></td><td align=\"left\"><a href=\"learningPath.php?path_id="
             .$list['learnPath_id']."\"".$style.">".htmlspecialchars($list['name'])."</a></td>";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
-
         // step 1. find last visible module of the current learning path in DB
 
         $blocksql = "SELECT `learnPath_module_id`
@@ -512,7 +466,6 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
         $resultblock = db_query($blocksql);
 
         // step 2. see if there is a user progression in db concerning this module of the current learning path
-
         $number = mysql_num_rows($resultblock);
         if ($number != 0) {
             $listblock = mysql_fetch_array($resultblock);
@@ -521,7 +474,6 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
                           WHERE `learnPath_module_id`=". (int)$listblock['learnPath_module_id']."
                           AND `user_id`='". (int)$uid."'
                          ";
-
             $resultblock2 = db_query($blocksql2);
             $moduleNumber = mysql_num_rows($resultblock2);
         }
@@ -530,7 +482,6 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
         }
 
         //2.1 no progression found in DB
-
         if (($moduleNumber == 0)  && ($list['lock'] == 'CLOSE')) {
             //must block next path because last module of this path never tried!
 
@@ -549,11 +500,10 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
 
         if ($moduleNumber!=0) {
             $listblock2 = mysql_fetch_array($resultblock2);
-
             if (($listblock2['credit']=="NO-CREDIT") && ($list['lock'] == 'CLOSE')) {
                 //must block next path because last module of this path not credited yet!
                 if($uid) {
-                    if ( !$is_adminOfCourse ) {
+                    if (!$is_adminOfCourse) {
                         $is_blocked = true;
                     } // never blocked if allowed to edit
                 }
@@ -577,18 +527,16 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
 
         $tool_content .= "<td style=\"border-left: 1px solid #edecdf;\">";
 
-        if ( $list['lock'] == 'OPEN') {
+        if ($list['lock'] == 'OPEN') {
             $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkBlock&cmdid=".$list['learnPath_id']."\">\n"
                   ."<img src=\"../../template/classic/img/unblock.gif\" alt=\"$langBlock\" title=\"$langBlock\" border=\"0\">\n"
                   ."</a>\n";
-        }
-        else {
+        } else {
             $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkUnblock&cmdid=".$list['learnPath_id']."\">\n"
-                  ."<img src=\"../../template/classic/img/block.gif\" alt=\"$langAltMakeNotBlocking\" title=\"$langAltMakeNotBlocking\" border=\"0\">\n"
-                  ."</a>\n";
+            ."<img src=\"../../template/classic/img/block.gif\" alt=\"$langAltMakeNotBlocking\" title=\"$langAltMakeNotBlocking\" border=\"0\">\n"
+            ."</a>\n";
         }
         $tool_content .= "</td>\n";
-
 
         // EXPORT links
         $tool_content .= '<td><a href="' . $_SERVER['PHP_SELF'] . '?cmd=export&amp;path_id=' . $list['learnPath_id'] . '" >'
@@ -609,7 +557,6 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
         // VISIBILITY link
 
         $tool_content .= "<td>\n";
-
         if ( $list['visibility'] == 'HIDE') {
             $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkVisibl&visibility_path_id=".$list['learnPath_id']."\">\n"
                   ."<img src=\"../../template/classic/img/invisible.gif\" alt=\"$langAltMakeVisible\" title=\"$langAltMakeVisible\" border=\"0\" />\n"
@@ -697,29 +644,18 @@ while ( $list = mysql_fetch_array($result) ) // while ... learning path list
     $tool_content .= "</tr>";
     $iterator++;
 
-} // end while
+	} // end while
 
 $tool_content .= "</tbody>\n<tfoot>";
 
-if( $iterator == 1 ) {
-      $tool_content .= "<tr><td align=\"center\" colspan=\"9\">".$langNoLearningPath."</td></tr>";
-}
-elseif (!$is_adminOfCourse && $iterator != 1 && $uid) {
+if (!$is_adminOfCourse && $iterator != 1 && $uid) {
     // add a blank line between module progression and global progression
     $tool_content .= "<tr><td colspan=\"3\">&nbsp;</td></tr>";
     $total = round($globalprog/($iterator-1));
-    $tool_content .= "<tr>
-          <td align =\"right\">
-          ".$langPathsInCourseProg." :
-          </td>
-          <td align=\"right\" >".
-          claro_disp_progress_bar($total, 1).
-          "</td>
-          <td align=\"left\">
-          <small> ".$total."% </small>
-          </td>
-          </tr>
-          ";
+    $tool_content .= "<tr><td align =\"right\">".$langPathsInCourseProg." :</td>
+          <td align=\"right\" >".claro_disp_progress_bar($total, 1)."</td>
+          <td align=\"left\"><small> ".$total."% </small>
+          </td></tr>";
 }
 $tool_content .= "</tfoot>\n";
 $tool_content .= "</table>\n";

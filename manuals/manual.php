@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*					Network Operations Center, University of Athens,
-*					Panepistimiopolis Ilissia, 15784, Athens, Greece
-*					eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 /*
@@ -44,16 +44,16 @@ $tool_content .= <<<tCont
 <p>$langIntroMan</p>
 <ul class="listBullet">
 
-<img src='../images/pdf.gif' border='0' title='Μορφή PDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/eClass.pdf" target=_blank class=mainpage>$langFinalDesc</a></img>
+<img src='../images/pdf.gif' border='0' title='$langFormatPDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/eClass.pdf" target=_blank class=mainpage>$langFinalDesc</a></img>
 <br/><br/>
 <img src='../images/pdf.gif' border='0' title=
-'Μορφή PDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/eClass_short.pdf" target=_blank class=mainpage>$langShortDesc</a></img>
+'$langFormatPDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/eClass_short.pdf" target=_blank class=mainpage>$langShortDesc</a></img>
 <br/><br/>
 <img src='../images/pdf.gif' border='0
-' title='Μορφή PDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/manT/ManT.pdf" target=_blank class=mainpage>$langManT</a></img>
+' title='$langFormatPDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/manT/ManT.pdf" target=_blank class=mainpage>$langManT</a></img>
 <br/><br/>
 <img src='../images/pdf.gif' border='0' title=
-'Μορφή PDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/manS/ManS.pdf" target=_blank class=mainpage>$langManS</a></img>
+'$langFormatPDF' align='absmiddle'>&nbsp;&nbsp;<a href="$urlServerTemp/manuals/manS/ManS.pdf" target=_blank class=mainpage>$langManS</a></img>
 <br/>
 
 </ul>

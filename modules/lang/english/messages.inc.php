@@ -77,6 +77,7 @@ $langUserOpen = " ".$langOfStudents." open requests";
 $langListFaculte = "Faculty list / Actions";
 $langPHPInfo = "PHP information";
 $langManuals = "Available Manuals";
+$langFormatPDF = "PDF format";
 $langAdminManual = "Admin Manual";
 $langConfigFile = "Configuration File";
 $langDBaseAdmin = "phpMyAdmin";
@@ -1495,7 +1496,7 @@ $langLearningPath = "Learning Path";
 $langLearningPathAdmin = "Learning Path Admin";
 $langLearningPathEmpty = "Learning Path is empty";
 $langLearningPathList = "Learning Path";
-$langLearningPathName = "New learning path name: ";
+$langLearningPathName = "New learning path name:";
 $langLearningPathNotFound = "Learning Path not found";
 $langLessonStatus = "Module status";
 $langLinkAlreadyUsed = "This link is already used as a module in this learning path";
@@ -1576,7 +1577,7 @@ $langTimeInLearnPath = "Time in learning path";
 $langTo = "to";
 $langTotalTimeSpent = "Total time";
 $langTrackAllPath = "Learning paths tracking";
-$langTrackAllPathExplanation = "Progression of users on all learning paths";
+$langTrackAllPathExplanation = "Progression of users in learning paths";
 $langTrackUser = "User Tracking";
 $langTracking = "Tracking";
 $langTypeOfModule = "Module type";
@@ -1596,7 +1597,7 @@ $langYourBestScore = "Your best performance";
 $langZipNoPhp = "The zip file can not contain .PHP files";
 $lang_enroll = "Enrol";
 $langimportLearningPath = "Import a learning path";
-
+$langScormErrorExport = "Error exporting SCORM package";
 
 /*********************************************************
 * lessonTools.inc.php
