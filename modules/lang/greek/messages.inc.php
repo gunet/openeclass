@@ -1443,7 +1443,8 @@ $langLearningPath = "Γραμμή μάθησης";
 $langLearningPathAdmin = "Διαχείριση γραμμής μάθησης";
 $langLearningPathEmpty = "Η γραμμή μάθησης είναι κενή ";
 $langLearningPathList = "Λίστα γραμμών μάθησης";
-$langLearningPathName = "Νέο όνομα γραμμής μάθησης:";
+$langLearningPathName = "Όνομα νέας γραμμής μάθησης";
+$langLearningPathData = "Στοιχεία γραμμής μάθησης";
 $langLearningPathNotFound = "Η γραμμή μάθησης δεν βρέθηκε ";
 $langLessonStatus = "Κατάσταση ενότητας";
 $langLinkAlreadyUsed = "Αυτός ο σύνδεσμος ήδη χρησιμοποιείται σαν ενότητα σε αυτήν τη γραμμή μάθησης";
@@ -1491,8 +1492,13 @@ $langProgress = "Πρόοδος";
 $langQuitViewer = "Επιστροφή στη λίστα";
 $langRawHasBeenChanged = "Ο ελάχιστος βαθμός για προαγωγή έχει αλλαχθεί";
 $langRoot = "Αρχικός κατάλογος";
-$langSCORMTypeDesc = "Περιεχόμενο προσαρμοσμένο σε SCORM";
-$langScormIntroTextForDummies = "Τα εισαγόμενα πακέτα πρέπει να αποτελούνται από ένα .zip αρχείο και να είναι συμβατά με το SCORM 2004 ή με το SCORM 1.2.";
+$langSCORMTypeDesc = "SCORM προσαρμοσμένο περιεχόμενο";
+$langScormIntroTextForDummies = "Τα εισαγόμενα πακέτα πρεπει να αποτελούνται απο ένα  αρχείο zip και να είναι συμβατά με:
+   <ul>
+     <li> το SCORM 2004 ή</li>
+     <li> το SCORM 1.2.</li>
+   </ul>";
+
 $langSecondShort = "δευτ.";
 $langStartModule = "Έναρξη ενότητας";
 $langStatsOfLearnPath = "Παρακολούθηση γραμμής μάθησης";
@@ -1519,7 +1525,7 @@ $langWrongOperation = "Λανθασμένη λειτουργία";
 $langYourBestScore = "Η καλύτερη σου βαθμολογία";
 $lang_enroll = "Eγγραφή";
 $langimportLearningPath = "Εισαγωγή γραμμής μάθησης";
-$langScormErrorExport = "Σφάλμα κατά την εξαγωγή του πακέτου SCORM"; 
+$langScormErrorExport = "Σφάλμα κατά την εξαγωγή του πακέτου SCORM";
 
 /*************************************************
 * lessontools.inc.php

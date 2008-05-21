@@ -277,6 +277,32 @@ if ($is_adminOfCourse) {
 				else { // create form requested
 					$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
 					$nameTools = $langCreateNewLearningPath;
+					$dialogBox = "
+    <form action=\"".$_SERVER['PHP_SELF']."\" method=\"POST\">
+    <table width=\"99%\" align=\"left\" class=\"FormData\">
+    <tbody>
+    <tr>
+      <th width=\"220\">&nbsp;</th>
+      <td><b>$langLearningPathData</b></td>
+    </tr>
+    <tr>
+      <th class=\"left\"><label for=\"newPathName\">".$langLearningPathName."</label> :</th>
+      <td><input type=\"text\" name=\"newPathName\" id=\"newPathName\" size=\"33\" maxlength=\"255\" class=\"FormData_InputText\"></input></td>
+    </tr>
+    <tr>
+      <th class=\"left\"><label for=\"newComment\">".$langComment."</label> :</th>
+      <td><textarea id=\"newComment\" name=\"newComment\" rows=\"2\" cols=\"30\" class=\"FormData_InputTextt\"></textarea></td>
+    </tr>
+    <tr>
+      <th class=\"left\">&nbsp;</th>
+      <td><input type=\"hidden\" name=\"cmd\" value=\"create\"><input type=\"submit\" value=\"".$langCreate."\"></input></td>
+    </tr>
+    </tbody>
+    </table>
+    </form>";
+
+
+    /*
 					$dialogBox ="<form action=\"".$_SERVER['PHP_SELF']."\" method=\"POST\">"
 						."<p><label for=\"newPathName\">".$langLearningPathName."</label><br />"
 						."<input type=\"text\" name=\"newPathName\" id=\"newPathName\" "
@@ -287,6 +313,7 @@ if ($is_adminOfCourse) {
 						."<input type=\"hidden\" name=\"cmd\" value=\"create\">"
 						."<input type=\"submit\" value=\"".$langOk."\"></input>"
 						."<br /><br /></p></form>";
+	*/
 					}
 				break;
 			default:
@@ -351,13 +378,36 @@ if($is_adminOfCourse) {
 		draw($tool_content, 2, 'learnPath', $head_content);
 		exit;
 	} else {
-		$tool_content .= "<table width=\"99%\" align=\"left\" class=\"Group_Operations\"><thead><tr>
-    	  	<td width=\"50%\">&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?cmd=create\">".$langCreateNewLearningPath."</a></td>
-      		<td width=\"50%\"><div align=\"right\"><a href=\"modules_pool.php\">".$langModulesPoolToolName."</a>&nbsp;</div></td>
-    		</tr><tr>
-      		<td>&nbsp;<a href=\"importLearningPath.php\">".$langimportLearningPath."</a></td>
-      		<td><div align=\"right\"><a href=\"detailsAll.php\">".$langTrackAllPathExplanation."</a>&nbsp;</div></td>
-    		</tr></thead></table><br /><br /><br />";
+
+		$tool_content .= "
+	    <div id=\"operations_container\">
+      <ul id=\"opslist\">
+        <li><a href=\"".$_SERVER['PHP_SELF']."?cmd=create\" title=\"$langCreateNewLearningPath\">".$langCreate."</a></li>
+        <li><a href=\"importLearningPath.php\" title=\"$langimportLearningPath\">".$langImport."</a></li>
+        <li><a href=\"detailsAll.php\" title=\"$langTrackAllPathExplanation\">".$langProgress."</a></li>
+        <li><a href=\"modules_pool.php\">".$langModulesPoolToolName."</a></li>
+      </ul>
+
+    </div>
+    ";
+	/*
+		$tool_content .= "
+    <table width=\"99%\" align=\"left\" class=\"Group_Operations\">
+      <thead>
+      <tr>
+        <td width=\"50%\">&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?cmd=create\" title=\"$langCreateNewLearningPath\">".$langCreate."</a></td>
+        <td width=\"50%\"><div align=\"right\"><a href=\"modules_pool.php\">".$langModulesPoolToolName."</a>&nbsp;</div></td>
+      </tr>
+      <tr>
+        <td>&nbsp;<a href=\"importLearningPath.php\" title=\"$langimportLearningPath\">".$langImport."</a></td>
+        <td><div align=\"right\"><a href=\"detailsAll.php\" title=\"$langTrackAllPathExplanation\">".$langProgress."</a>&nbsp;</div></td>
+      </tr>
+      </thead>
+      </table>
+      <br />
+      <br />
+      <br />";
+      */
 	}
 }
 

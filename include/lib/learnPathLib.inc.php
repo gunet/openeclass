@@ -1,25 +1,25 @@
 <?php
 
 /*=============================================================================
-       	GUnet e-Class 2.0 
-        E-learning and Course Management Program  
+       	GUnet e-Class 2.0
+        E-learning and Course Management Program
 ================================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
         A full copyright notice can be read in "/info/copyright.txt".
 
        	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-                     Yannis Exidaridis <jexi@noc.uoa.gr> 
-                     Alexandros Diamantidis <adia@noc.uoa.gr> 
+                     Yannis Exidaridis <jexi@noc.uoa.gr>
+                     Alexandros Diamantidis <adia@noc.uoa.gr>
 
-        For a full list of contributors, see "credits.txt".  
+        For a full list of contributors, see "credits.txt".
 
-        This program is a free software under the terms of the GNU 
-        (General Public License) as published by the Free Software 
-        Foundation. See the GNU License for more details. 
+        This program is a free software under the terms of the GNU
+        (General Public License) as published by the Free Software
+        Foundation. See the GNU License for more details.
         The full license can be read in "license.txt".
 
-       	Contact address: GUnet Asynchronous Teleteaching Group, 
-        Network Operations Center, University of Athens, 
+       	Contact address: GUnet Asynchronous Teleteaching Group,
+        Network Operations Center, University of Athens,
         Panepistimiopolis Ilissia, 15784, Athens, Greece
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
@@ -28,21 +28,21 @@
 	learnPathLib.inc.php
 	@last update: 05-12-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.7 licensed under GPL
 	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: learnPath.lib.inc.php Revision: 1.41.2.2
-	      
+
 	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
                       Lederer Guillaume <led@cerdecam.be>
-==============================================================================        
-    @Description: This functions library is used by most of the pages of the 
+==============================================================================
+    @Description: This functions library is used by most of the pages of the
                   learning path tool.
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
 
@@ -171,7 +171,7 @@ function commentBox($type, $mode)
                            SET `" . $col_name . "` = \"". addslashes($_POST['insertCommentBox'])."\"
                          WHERE " . $where_cond;
             db_query($sql);
-            
+
             if($mode == UPDATE_)
             	$dsp = true;
             elseif($mode == UPDATENOTSHOWN_)
@@ -261,7 +261,7 @@ function commentBox($type, $mode)
             }
         }
     }
-	
+
     return $output;
 }
 
@@ -343,10 +343,10 @@ function nameBox($type, $mode, $formlabel = FALSE)
             $oldName = db_query_get_single_value($sql);
 
             $output .= '<form method="POST" action="' . $_SERVER['PHP_SELF'].'">' . "\n";
-            
+
             if($formlabel != FALSE)
             	$output .= '<p><strong><label for="newLabel">'.$formlabel.'</label></strong>&nbsp;&nbsp;';
-            
+
             $output .=  '<input type="text" name="newName" size="50" maxlength="255" value="'.htmlspecialchars($oldName).'" />'
             .    '<input type="hidden" name="cmd" value="updateName" />' ."\n"
             .    '<input type="submit" value="' . $langOk . '" />' . "\n"
@@ -375,7 +375,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
            $currentName = false;
         }
 
-        $output .= '<strong>' 
+        $output .= '<strong>'
         .    $currentName;
 
         if ( $is_adminOfCourse )
@@ -384,7 +384,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
             .    '</a>' . "\n";
         $output .= '</strong>'."\n\n";
     }
-	
+
     return $output;
 }
 
@@ -538,11 +538,11 @@ function display_path_content()
     $style = "";
     $output = "";
 
-    $sql = "SELECT M.`name`, M.`contentType`, 
-                   LPM.`learnPath_module_id`, LPM.`parent`, 
+    $sql = "SELECT M.`name`, M.`contentType`,
+                   LPM.`learnPath_module_id`, LPM.`parent`,
                    A.`path`
             FROM `" . $tbl_lp_learnPath . "` AS LP,
-                 `" . $tbl_lp_rel_learnPath_module . "` AS LPM, 
+                 `" . $tbl_lp_rel_learnPath_module . "` AS LPM,
                  `" . $tbl_lp_module . "` AS M
             LEFT JOIN `" . $tbl_lp_asset . "` AS A
               ON M.`startAsset_id` = A.`asset_id`
@@ -586,7 +586,7 @@ function display_path_content()
         $colspan = $maxDeep - $module['children']+1;
 
         $output .= '<tr align="center" '.$style.'>' . "\n"
-        .    $spacingString 
+        .    $spacingString
         .    '<td colspan="' . $colspan . '" align="left">'
         ;
 
@@ -604,7 +604,7 @@ function display_path_content()
         		$moduleImg = "description_on.gif";
             else
             	$moduleImg = choose_image(basename($module['path']));
-            	
+
             $contentType_alt = selectAlt($module['contentType']);
 
             $output .= '<img src="' . $imgRepositoryWeb . $moduleImg . '" alt="' .$contentType_alt.'" title="' .$contentType_alt.'" border="0" />'
@@ -616,13 +616,13 @@ function display_path_content()
     }
     $output .= '</tbody>'."\n\n"
 	.	 '</table>'."\n\n";
-	
+
 	return $output;
 }
 
 /**
  * Compute the progression into the $lpid learning path in pourcent
- * 
+ *
  * @param $lpid id of the learning path
  * @param $lpUid user id
  *
@@ -630,7 +630,7 @@ function display_path_content()
  */
 function get_learnPath_progress($lpid, $lpUid)
 {
-    
+
     $tbl_lp_learnPath            = "lp_learnPath";
     $tbl_lp_rel_learnPath_module = "lp_rel_learnPath_module";
     $tbl_lp_user_module_progress = "lp_user_module_progress";
@@ -659,7 +659,7 @@ function get_learnPath_progress($lpid, $lpUid)
         $modules [] = $row;
     }
     mysql_free_result($result);
-    
+
     $progress = 0;
     if( !is_array($modules) || empty($modules) )
     {
@@ -684,7 +684,7 @@ function get_learnPath_progress($lpid, $lpUid)
             {
                 $modProgress = 100;
             }
-            
+
             if ($modProgress >= 0)
             {
                 $progress += $modProgress;
@@ -708,7 +708,7 @@ function get_learnPath_progress($lpid, $lpUid)
         else {
             $nbrOfVisibleModules = false;
         }
-        
+
 
 		if( is_numeric($nbrOfVisibleModules) )
           	$progression = @round($progress/$nbrOfVisibleModules);
@@ -770,11 +770,11 @@ function display_my_exercises($dialogBox, $style)
             FROM `" . $tbl_quiz_test . "`
             ORDER BY  `titre`, `id`";
     $exercises = db_query_fetch_all($sql);
-    
+
     if( is_array($exercises) && !empty($exercises) )
     {
 		$output .= '<tbody>' . "\n\n";
-		
+
 	    foreach ( $exercises as $exercise )
 	    {
 	        $output .= '<tr>'."\n"
@@ -806,9 +806,9 @@ function display_my_exercises($dialogBox, $style)
 	    }//end while another module to display
 	    $output .= '</tbody>'."\n\n";
 	}
-    
+
     $output .= '<tfoot>'."\n\n";
-    
+
     if( !$atleastOne )
     {
         $output .= '<tr>'."\n"
@@ -841,7 +841,7 @@ function display_my_exercises($dialogBox, $style)
     .    '</table>'."\n\n"
     .    '<!-- end of display_my_exercises output -->' . "\n"
     ;
-    
+
     return $output;
 }
 
@@ -877,7 +877,7 @@ function display_my_documents($dialogBox, $style)
 
     global $fileList;
     global $imgRepositoryWeb;
-    
+
     global $secureDocumentDownload;
 
 	$output = "";
@@ -976,7 +976,7 @@ function display_my_documents($dialogBox, $style)
                 $image       = choose_image($fileName);
                 $size        = format_file_size($fileList['size'][$fileKey]);
                 $date        = format_date($fileList['date'][$fileKey]);
-                
+
                 $doc_url = $cmdFileName;
                 $urlFileName = "../../".$courseDir.$doc_url;
             }
@@ -1056,7 +1056,7 @@ function display_my_documents($dialogBox, $style)
 	$output .= '</tfoot></table>'."\n"
     	.'</form>'."\n"
     	.'<!-- end of display_my_documents output -->'."\n";
-	
+
 	return $output;
 }
 
@@ -1078,7 +1078,7 @@ function find_deep($id, $searchIn)
 }
 
 /**
- * Build an tree of $list from $id using the 'parent' 
+ * Build an tree of $list from $id using the 'parent'
  * table. (recursive function)
  * Rows with a father id not existing in the array will be ignored
  *
@@ -1086,9 +1086,9 @@ function find_deep($id, $searchIn)
  * @param $paramField name of the field containing the parent id
  * @param $idField name of the field containing the current id
  * @param $id learnPath_module_id of the node to build
- * @return tree of the learning path 
+ * @return tree of the learning path
  *
- * @author Piraux Sebastien <pir@cerdecam.be>     
+ * @author Piraux Sebastien <pir@cerdecam.be>
  */
 function build_element_list($list, $parentField, $idField, $id = 0)
 {
@@ -1128,12 +1128,12 @@ function build_element_list($list, $parentField, $idField, $id = 0)
 
 /**
  * return a flattened tree of the modules of a learnPath after having add
- * 'up' and 'down' fields to let know if the up and down arrows have to be 
+ * 'up' and 'down' fields to let know if the up and down arrows have to be
  * displayed. (recursive function)
- * 
+ *
  * @param $elementList a tree array as one returned by build_element_list
  * @param $deepness
- * @return array containing infos of the learningpath, each module is an element 
+ * @return array containing infos of the learningpath, each module is an element
     of this array and each one has 'up' and 'down' boolean and deepness added in
  *
  * @author Piraux Sebastien <pir@cerdecam.be>
@@ -1244,7 +1244,7 @@ function delete_module_tree($module_tree)
                                         WHERE `learnPath_module_id` = " . (int)$module['learnPath_module_id']);
                 db_query("DELETE FROM `" . $tbl_lp_user_module_progress . "`
                                         WHERE `learnPath_module_id` = " . (int)$module['learnPath_module_id']);
-    
+
                 break;
         }
     }
@@ -1252,7 +1252,7 @@ function delete_module_tree($module_tree)
 }
 /**
  * This function return the node with $module_id (recursive)
- * 
+ *
  *
  * @param $lpModules array the tree of all modules in a learning path
  * @param $iid node we are looking for
@@ -1283,7 +1283,7 @@ function get_module_tree( $lpModules , $id, $field = 'module_id')
 }
 
 /**
- * Convert the time recorded in seconds to a scorm type 
+ * Convert the time recorded in seconds to a scorm type
  *
  * @author Piraux Sebastien <pir@cerdecam.be>
  * @param $time time in seconds to convert to a scorm type time
@@ -1308,7 +1308,7 @@ function seconds_to_scorm_time($time)
     }
 
     return     $hours . ':' . $min . ':' . $sec;
-} 
+}
 
 /**
   * This function allows to see if a time string is the SCORM 2004 requested format:
@@ -1365,7 +1365,7 @@ function addScorm2004Time($time1, $time2)
 
           $mask = "/^([0-9]{2,4}):([0-9]{2}):([0-9]{2}).?([0-9]?[0-9]?)$/";
           $mask2004 = "/^PT([0-9]{1,2})H([0-9]{1,2})M([0-9]{2}).?([0-9]?[0-9]?)S$/";
-        
+
           preg_match($mask,$time1, $matches);
           $hours1 = $matches[1];
           $minutes1 = $matches[2];
@@ -1431,7 +1431,7 @@ function addScorm2004Time($time1, $time2)
           if ($total_hours < 10) {$total_hours = "0" . $total_hours;}
           if ($total_minutes < 10) {$total_minutes = "0" . $total_minutes;}
           if ($total_secondes < 10) {$total_secondes = "0" . $total_secondes;}
-          
+
         $total_time = $total_hours . ":" . $total_minutes . ":" . $total_secondes;
         // add primes only if != 0
         if ($total_primes != 0) {$total_time .= "." . $total_primes;}
@@ -1459,7 +1459,7 @@ function addScormTime($time1, $time2)
           //extract hours, minutes, secondes, ... from time1 and time2
 
           $mask = "/^([0-9]{2,4}):([0-9]{2}):([0-9]{2}).?([0-9]?[0-9]?)$/";
-        
+
           preg_match($mask,$time1, $matches);
           $hours1 = $matches[1];
           $minutes1 = $matches[2];
@@ -1525,7 +1525,7 @@ function addScormTime($time1, $time2)
           if ($total_hours < 10) {$total_hours = "0" . $total_hours;}
           if ($total_minutes < 10) {$total_minutes = "0" . $total_minutes;}
           if ($total_secondes < 10) {$total_secondes = "0" . $total_secondes;}
-          
+
         $total_time = $total_hours . ":" . $total_minutes . ":" . $total_secondes;
         // add primes only if != 0
         if ($total_primes != 0) {$total_time .= "." . $total_primes;}
@@ -1709,7 +1709,7 @@ function claro_disp_message_box($message, $style = FALSE)
 	else {
 		$cell = "<td>";
 	}
-	
+	/*
     return "\n".'<table>'
     .      '<tbody>'
     .      '<tr>'
@@ -1720,6 +1720,8 @@ function claro_disp_message_box($message, $style = FALSE)
     .      '</tbody>'
     .      '</table>' . "\n\n"
     ;
+    */
+    return "$cell $message" ;
 }
 
 /**
@@ -1921,7 +1923,7 @@ echo '<textarea '
 }
 
 /**
- * In order for HTMLArea to work correctly, the area needs a 
+ * In order for HTMLArea to work correctly, the area needs a
  * specific Javascript code previously loaded in the html header.
  * This function returns that Javascript code.
  *
@@ -1937,18 +1939,18 @@ echo '<textarea '
  * @author Thanos Kyritsis <atkyritsis@upnet.gr>
  * @author Hugues Peeters <hugues.peeters@claroline.net>
  */
-function claro_disp_html_area_head($name) 
+function claro_disp_html_area_head($name)
 {
 	global $urlAppend, $iso639_2_code;
-	
+
 	$incPath = $urlAppend.'/include/htmlarea';
-    
+
     // ugly fix for using gr for greek instead of el
     // FIXME: use this function everywhere in eclass and then fix it
     if (strcmp($iso639_2_code, "el") == 0) {
     	$iso639_2_code = "gr";
     }
-	
+
 	return '
 		<script type="text/javascript">
 		  _editor_url = "'.$incPath.'";
@@ -1956,7 +1958,7 @@ function claro_disp_html_area_head($name)
 		<script type="text/javascript" src="'.$incPath.'/htmlarea.js"></script>
 		<script type="text/javascript" src="'.$incPath.'/lang/'.$iso639_2_code.'.js"></script>
 		<script type="text/javascript" src="'.$incPath.'/dialog.js"></script>
-		
+
 		<script type="text/javascript">
 		var    editor = null;
 		function initEditor() {
@@ -1964,7 +1966,7 @@ function claro_disp_html_area_head($name)
 			config.height = "180px";
 			config.hideSomeButtons(" showhelp undo redo popupeditor ");
 			editor = new HTMLArea("'.$name.'", config);
-		
+
 			// comment the following two lines to    see    how    customization works
 			editor.generate();
 			return false;
@@ -2090,11 +2092,11 @@ function claro_is_javascript_enabled()
 
 function get_limited_page_links($sql, $limiter, $stringPreviousPage, $stringNextPage)
 {
-	
+
 	$totalnum = mysql_num_rows(db_query($sql));
 	$firstpage = 1;
 	$lastpage = ceil($totalnum / $limiter);
-	
+
 	if (isset( $_GET['page'] ) && is_numeric( $_GET['page'] )) {
 		$currentpage = (int) $_GET['page'];
 		if ($currentpage < $firstpage || $currentpage > $lastpage) {
@@ -2104,19 +2106,19 @@ function get_limited_page_links($sql, $limiter, $stringPreviousPage, $stringNext
 	else {
 		$currentpage = $firstpage;
 	}
-	
+
 	$prevpage = $currentpage - 1;
 	$nextpage = $currentpage + 1;
-	
+
 	$url = basename($_SERVER['PHP_SELF']);
-	
+
 	switch($_SERVER['argc']) {
 		case 0:
 			$url .= "?page=";
 			break;
 		case 1:
 			$arguments = ereg_replace('[&|?]page=.*$', "", "?".$_SERVER['argv'][0]);
-			
+
 			if (!strcmp($arguments, NULL)) {
 				$url .= "?page=";
 			}
@@ -2128,32 +2130,32 @@ function get_limited_page_links($sql, $limiter, $stringPreviousPage, $stringNext
 			$url .= "?page=";
 			break;
 	}
-	
+
 	$prevstring = "<a href=\"".$url.$prevpage."\">".$stringPreviousPage."</a> | ";
 	$nextstring = "<a href=\"".$url.$nextpage."\">".$stringNextPage."</a>";
-	
+
 	if ($currentpage == $firstpage) {
 		$prevstring = $stringPreviousPage." | ";
 	}
-	
+
 	if ($currentpage == $lastpage) {
 		$nextstring = $stringNextPage;
 	}
-	
+
 	$wholestring = "<p>".$prevstring.$nextstring."</p>";
-	
+
 	if ( $lastpage == $firstpage) {
 		$wholestring = "";
 	}
-	
+
 	return $wholestring;
 }
 
 
 /**
  * This function accepts a sql query and a limiter number as arguments. Then it
- * limits the query's results into multiple pages and returns the proper list 
- * of results for the proper page we are currently browsing. Should be used 
+ * limits the query's results into multiple pages and returns the proper list
+ * of results for the proper page we are currently browsing. Should be used
  * together with get_limited_page_links().
  *
  * @param string $sql contains the sql query we want to limit
@@ -2161,14 +2163,14 @@ function get_limited_page_links($sql, $limiter, $stringPreviousPage, $stringNext
  * @return string contains the links' html code for browsing the pages
  * @author Thanos Kyritsis <atkyritsis@upnet.gr>
  */
- 
+
 function get_limited_list($sql, $limiter)
 {
-	
+
 	$totalnum = mysql_num_rows(db_query($sql));
 	$firstpage = 1;
 	$lastpage = ceil($totalnum / $limiter);
-	
+
 	if (isset( $_GET['page'] ) && is_numeric( $_GET['page'] )) {
 		$currentpage = (int) $_GET['page'];
 		if ($currentpage < $firstpage || $currentpage > $lastpage) {
@@ -2178,11 +2180,11 @@ function get_limited_list($sql, $limiter)
 	else {
 		$currentpage = $firstpage;
 	}
-	
+
 	$limit = ($currentpage - 1) * $limiter;
-	
+
 	$sql .= " LIMIT ".$limit.",".$limiter;
-	
+
 	return db_query_fetch_all($sql);
 }
 
