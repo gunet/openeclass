@@ -2092,7 +2092,6 @@ function claro_is_javascript_enabled()
 
 function get_limited_page_links($sql, $limiter, $stringPreviousPage, $stringNextPage)
 {
-
 	$totalnum = mysql_num_rows(db_query($sql));
 	$firstpage = 1;
 	$lastpage = ceil($totalnum / $limiter);
