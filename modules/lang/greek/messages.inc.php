@@ -88,13 +88,13 @@ $langComments = "Σχόλια";
 $langAdmin = "Εργαλεία Διαχείρισης Πλατφόρμας";
 $langState = "Διαχείριση Εξυπηρετητή";
 $langDevAdmin ="Διαχείριση Βάσης Δεδομένων";
-$langNomPageAdmin 		= "Διαχείριση";
-$langSysInfo  			= "Πληροφορίες Συστήματος";
+$langNomPageAdmin 	= "Διαχείριση";
+$langSysInfo  	= "Πληροφορίες Συστήματος";
 $langCheckDatabase  	= "Ελεγχος κύριας βάσης δεδομένων";
-$langStatOf 			= "Στατιστικά του ";
-$langSpeeSubscribe 		= "Εγγραφή σαν Διαχειριστής Μαθήματος";
+$langStatOf 	= "Στατιστικά του ";
+$langSpeeSubscribe 	= "Εγγραφή σαν Διαχειριστής Μαθήματος";
 $langLogIdentLogout 	= "Καταγραφή των εισόδων και εξόδων από το σύστημα";
-$langPlatformStats 		= "Στατιστικά Πλατφόρμας";
+$langPlatformStats 	= "Στατιστικά Πλατφόρμας";
 $langPlatformGenStats   = "Γενικά στατιστικά";
 $langVisitsStats        = "Στατιστικά επισκέψεων";
 $langMonthlyReport      = "Μηνιαίες αναφορές";
@@ -1345,7 +1345,7 @@ $langInstallEnd 	= "Ολοκλήρωση Εγκατάστασης";
 /********************************************************
 * learnpath.inc.php
 *********************************************************/
-$langAddComment = "Προσθήκη / αλλαγή σχολίου στο";
+$langAddComment = "Προσθήκη / αλλαγή σχολίου";
 $langAddModule = "Προσθήκη";
 $langAddModulesButton = "Προσθήκη επιλεγμένων";
 $langAddOneModuleButton = "Προσθήκη ενότητας";

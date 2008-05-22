@@ -62,8 +62,8 @@ require_once("../../include/baseTheme.php");
 $tool_content = "";
 
 $navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPathList);
-if ( ! $is_adminOfCourse ) claro_die($langNotAllowed);
-$navigation[]= array ("url"=>"learningPathAdmin.php", "name"=> $langLearningPathAdmin);
+if (! $is_adminOfCourse) claro_die($langNotAllowed);
+$navigation[]= array ("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
 $nameTools = $langInsertMyModuleToolName;
 
 // $_SESSION
@@ -73,10 +73,6 @@ if ( !isset($_SESSION['path_id']) )
 }
 
 mysql_select_db($currentCourseID);
-
-/*======================================
-       CLAROLINE MAIN
- ======================================*/
 
 // FUNCTION NEEDED TO BUILD THE QUERY TO SELECT THE MODULES THAT MUST BE AVAILABLE
 
@@ -109,9 +105,8 @@ function buildRequestModules()
     $sql .=" AND M.`module_id` != ". (int)$list['module_id'];
  }
  
- //$sql .= " AND M.`contentType` != \"".CTSCORM_."\"";
 
- /** To find which module must displayed we can also proceed  with only one query.
+ /* To find which module must displayed we can also proceed  with only one query.
   * But this implies to use some features of MySQL not available in the version 3.23, so we use
   * two differents queries to get the right list.
   * Here is how to proceed with only one

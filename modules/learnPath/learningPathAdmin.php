@@ -101,7 +101,6 @@ if ( !$is_adminOfCourse )
     exit();
 }
 
-
 mysql_select_db($currentCourseID);
 
 $head_content .= "<script>
@@ -472,6 +471,12 @@ $sql = "SELECT M.*, LPM.*, A.`path`
 
 $result = db_query($sql);
 
+if (mysql_num_rows($result) == 0) {
+	$tool_content .= "<p class='alert1'>$langNoModule</p>";
+	draw($tool_content, 2, "learnPath", $head_content, $body_action);
+	exit;
+}
+
 $extendedList = array();
 while ($list = mysql_fetch_array($result, MYSQL_ASSOC))
 {
@@ -485,7 +490,6 @@ while ($list = mysql_fetch_array($result, MYSQL_ASSOC))
 $flatElementList = build_display_element_list(build_element_list($extendedList, 'parent', 'learnPath_module_id'));
 
 $iterator = 1;
-$atleastOne = false;
 $i = 0;
 
 // look for maxDeep
@@ -511,12 +515,11 @@ $tool_content .=
            ."<th>".$langMove."</th>"
            ."<th colspan=\"2\">".$langOrder."</th>"
           ."</tr>"
-     ."</thead>"
-     ."<tbody>";
+     ."</thead>".
+     "<tbody>";
 
-//####################################################################################\\
-//######################### LEARNING PATH LIST DISPLAY ###############################\\
-//####################################################################################\\
+
+// ----------------------- LEARNING PATH LIST DISPLAY --------------------------------- 
 
 foreach ($flatElementList as $module)
 {
@@ -592,7 +595,7 @@ foreach ($flatElementList as $module)
        </td>";
 
     // LOCK
-    $tool_content .=    "<td>";
+    $tool_content .= "<td>";
 
     if ( $module['contentType'] == CTLABEL_)
     {
@@ -615,10 +618,9 @@ foreach ($flatElementList as $module)
     // VISIBILITY
     $tool_content .= "<td>";
 
-    if ( $module['visibility'] == 'HIDE')
-    {
+    if ($module['visibility'] == 'HIDE') {
         $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkVisibl&cmdid=".$module['module_id']."\">".
-             "<img src=\"".$imgRepositoryWeb."invisible.gif\" alt=\"$langAltMakeVisible\" title=\"$langAltMakeVisible\" border=\"0\">".
+       "<img src=\"".$imgRepositoryWeb."invisible.gif\" alt=\"$langAltMakeVisible\" title=\"$langAltMakeVisible\" border=\"0\">".
              "</a>";
     }
     else
@@ -673,20 +675,13 @@ foreach ($flatElementList as $module)
     {
         $tool_content .= "<td>&nbsp;</td>";
     }
-
     $tool_content .= "\n</tr>\n";
     $iterator++;
-    $atleastOne = true;
-}
+} // end of foreach
 
 $tool_content .= "</tbody>";
 
-if ($atleastOne == false)
-{
-    $tool_content .= "<tfoot>";
-    $tool_content .= "<tr><td align=\"center\" colspan=\"9\">".$langNoModule."</td></tr>";
-    $tool_content .= "</tfoot>";
-}
+
 
 $tool_content .= "</table>";
 draw($tool_content, 2, "learnPath", $head_content, $body_action);
