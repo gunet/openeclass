@@ -185,14 +185,12 @@ function commentBox($type, $mode)
                       WHERE " . $where_cond;
             $oldComment = db_query_get_single_value($sql);
 
-            $output .= '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">' . "\n"
-                .'<table><tr><td valign="top">' . "\n"
-                .claro_disp_html_area('insertCommentBox', $oldComment, 20, 70) . "\n"
-                .'</td></tr></table>' ."\n"
+            $output .= '
+      <form method="POST" action="'.$_SERVER['PHP_SELF'].'">' . "\n"
+                .claro_disp_html_area('insertCommentBox', $oldComment, 4, 50) . "\n"
                 .'<input type="hidden" name="cmd" value="update' . $col_name . '" />'
                 .'<input type="submit" value="' . $langOk . '" />' . "\n"
-                .'<br />' . "\n"
-                .'</form>' . "\n"
+                .'      </form>' . "\n"
             ;
         }
 
@@ -250,8 +248,7 @@ function commentBox($type, $mode)
             if ( $is_adminOfCourse )
             {
 
-                $output .= '<br />' . "\n"
-                .    '<a href="' . $_SERVER['PHP_SELF'] . '?cmd=update' . $col_name . '">' . "\n"
+                $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?cmd=update' . $col_name . '">' . "\n"
                 .    '<img src="../../template/classic/img/edit.gif" alt="' . $langModify . '" title="'.$langModify.'" border="0" />'
                 .    '</a>' . "\n"
                 .    '<a href="' . $_SERVER['PHP_SELF'].'?cmd=del' . $col_name . '" '
@@ -283,7 +280,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
 
     // globals
     global $is_adminOfCourse;
-    global $urlAppend;
+    global $urlAppend, $langLearningPath1;
     global $langModify, $langOk, $langErrorNameAlreadyExists;
 
     // $dsp will be set 'true' if the comment has to be displayed
@@ -342,16 +339,16 @@ function nameBox($type, $mode, $formlabel = FALSE)
 
             $oldName = db_query_get_single_value($sql);
 
-            $output .= '<form method="POST" action="' . $_SERVER['PHP_SELF'].'">' . "\n";
+            $output .= '
+      <form method="POST" action="' . $_SERVER['PHP_SELF'].'">' . "\n";
 
-            if($formlabel != FALSE)
-            	$output .= '<p><strong><label for="newLabel">'.$formlabel.'</label></strong>&nbsp;&nbsp;';
+             if($formlabel != FALSE)
+             	//$output .= '<label for="newLabel">'.$formlabel.'</label>&nbsp;&nbsp;';
 
-            $output .=  '<input type="text" name="newName" size="50" maxlength="255" value="'.htmlspecialchars($oldName).'" />'
-            .    '<input type="hidden" name="cmd" value="updateName" />' ."\n"
-            .    '<input type="submit" value="' . $langOk . '" />' . "\n"
-            .    '</form>' . "\n"
-            ;
+             $output .=  '        <input type="text" name="newName" size="50" maxlength="255" value="'.htmlspecialchars($oldName).'" / class="FormData_InputText">' ."\n"
+             .    '        <input type="hidden" name="cmd" value="updateName" />' ."\n"
+             .    '        <input type="submit" value="' . $langOk . '" />' . "\n"
+             .    '      </form>';
         }
 
     }
@@ -375,14 +372,14 @@ function nameBox($type, $mode, $formlabel = FALSE)
            $currentName = false;
         }
 
-        $output .= '<strong>'
-        .    $currentName;
+        //$output .= '<strong>'
+        $output .=  $currentName;
 
         if ( $is_adminOfCourse )
-            $output .= '<br /><a href="' . $_SERVER['PHP_SELF'] . '?cmd=updateName">'
+            $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?cmd=updateName">'
             .    '<img src="../../template/classic/img/edit.gif" alt="' . $langModify . '" title="' . $langModify . '" border="0" />'
             .    '</a>' . "\n";
-        $output .= '</strong>'."\n\n";
+        //$output .= '</strong>'."\n\n";
     }
 
     return $output;
@@ -1707,7 +1704,7 @@ function claro_disp_message_box($message, $style = FALSE)
 		$cell = "<td class=\"$style\">";
 	}
 	else {
-		$cell = "<td>";
+		$cell = "<td class=\"left\">";
 	}
 	/*
     return "\n".'<table>'
@@ -1849,7 +1846,7 @@ function claro_disp_progress_bar ($progress, $factor)
 //                              </style>';
 
 function claro_disp_html_area($name, $content = '',
-                              $rows=20,    $cols=70, $optAttrib='')
+                              $rows=5,    $cols=50, $optAttrib='')
 {
     global $langTextEditorDisable, $langTextEditorEnable,$langSwitchEditorToTextConfirm;
     global $urlAppend;

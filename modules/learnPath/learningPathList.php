@@ -290,7 +290,7 @@ if ($is_adminOfCourse) {
     </tr>
     <tr>
       <th class=\"left\"><label for=\"newComment\">".$langComment."</label> :</th>
-      <td><textarea id=\"newComment\" name=\"newComment\" rows=\"2\" cols=\"30\" class=\"FormData_InputTextt\"></textarea></td>
+      <td><textarea id=\"newComment\" name=\"newComment\" rows=\"2\" cols=\"30\" class=\"FormData_InputText\"></textarea></td>
     </tr>
     <tr>
       <th class=\"left\">&nbsp;</th>

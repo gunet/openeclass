@@ -77,7 +77,6 @@ $body_action = "";
 $dialogBox = "";
 
 //$nameTools = $langLearningPathAdmin;
-
 $nameTools = $langNomPageAdmin;
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
 
@@ -369,37 +368,64 @@ $sql = "SELECT *
 $query = db_query($sql);
 $LPDetails = mysql_fetch_array($query);
 
+$tool_content .="
+    <table width=\"99%\" class=\"FormData\">
+    <tbody>
+    <tr>
+      <th width=\"220\" class=\"left\" height=\"32\"></th>
+      <td class=\"left\"><b>$langLearningPathData</b></td>
+    </tr>
+";
+
 //####################################################################################\\
 //############################ LEARNING PATH NAME BOX ################################\\
 //####################################################################################\\
-$tool_content .= "<p>";
+
+$tool_content .="
+    <tr>
+      <th width=\"220\" class=\"left\" height=\"32\">$langTitle :</th>
+      ";
+
 if ( $cmd == "updateName" )
 {
     $tool_content .= claro_disp_message_box(nameBox(LEARNINGPATH_, UPDATE_, $langModify));
 }
 else
 {
-    $tool_content .= nameBox(LEARNINGPATH_, DISPLAY_);
+    $tool_content .= "<td class=\"left\">".nameBox(LEARNINGPATH_, DISPLAY_);
 }
-$tool_content .= "<br />";
+
+$tool_content .="
+      </td>
+    </tr>
+";
+//$tool_content .= "<br />";
 //####################################################################################\\
 //############################ LEARNING PATH COMMENT BOX #############################\\
 //####################################################################################\\
+
+$tool_content .="
+    <tr>
+      <th width=\"220\" class=\"left\" height=\"32\">$langComments :</th>
+      <td class=\"left\">
+      ";
+
 if ( $cmd == "updatecomment" )
 {
     $tool_content .= commentBox(LEARNINGPATH_, UPDATE_);
     $head_content .= claro_disp_html_area_head("insertCommentBox");
     $body_action = "onload=\"initEditor()\"";
-}
-elseif ($cmd == "delcomment" )
-{
+} elseif ($cmd == "delcomment" ) {
     $tool_content .= commentBox(LEARNINGPATH_, DELETE_);
-}
-else
-{
+} else {
     $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 }
-$tool_content .= "<br /><br /></p>";
+
+$tool_content .="
+      </td>
+    </tr>";
+
+
 //####################################################################################\\
 //############################ create label && change pos forms  #####################\\
 //####################################################################################\\
@@ -432,6 +458,7 @@ if (isset($displayChangePosForm) && $displayChangePosForm)
     </form>";
 }
 
+
 //####################################################################################\\
 //############################### DIALOG BOX SECTION #################################\\
 //####################################################################################\\
@@ -446,15 +473,35 @@ if (isset($dialogBox) && $dialogBox!="")
 //######################### LEARNING PATH COURSEADMIN LINKS ##########################\\
 //####################################################################################\\
 
+$tool_content .="
+    <tr>
+      <th width=\"220\" class=\"left\" height=\"32\">$langImport :</th>
+      <td class=\"left\">
+      ";
 $tool_content .=
- "<p>"
-."<a href=\"insertMyDoc.php\">".$langDocumentAsModule."</a> | "
-."<a href=\"insertMyExercise.php\">".$langExerciseAsModule."</a> | "
-."<a href=\"insertMyLink.php\">".$langLinkAsModule."</a> | "
-."<a href=\"insertMyDescription.php\">".$langCourseDescriptionAsModule."</a> | "
-."<a href=\"".$_SERVER['PHP_SELF']."?cmd=createLabel\">".$langCreateLabel."</a> | "
-."<a href=\"insertMyModule.php\">".$langModuleOfMyCourse."</a></p>";
+"<a href=\"".$_SERVER['PHP_SELF']."?cmd=createLabel\">".$langCreateLabel."</a>";
+$tool_content .="
+      </td>
+    </tr>
+    <tr>
+      <th width=\"220\" class=\"left\" height=\"32\">$langImport :</th>
+      <td class=\"left\">";
 
+$tool_content .=
+ ""
+."<a href=\"insertMyDoc.php\">".$langDocumentAsModule."</a><br />"
+."<a href=\"insertMyExercise.php\">".$langExerciseAsModule."</a><br />"
+."<a href=\"insertMyLink.php\">".$langLinkAsModule."</a><br />"
+."<a href=\"insertMyDescription.php\">".$langCourseDescriptionAsModule."</a><br />"
+."<a href=\"insertMyModule.php\">".$langModuleOfMyCourse."</a>";
+
+
+$tool_content .="
+      </td>
+    </tr>
+    <tr>
+      <th width=\"220\" class=\"left\" height=\"32\">$langImport :</th>
+      <td class=\"left\">";
 //####################################################################################\\
 //######################### LEARNING PATH LIST CONTENT ###############################\\
 //####################################################################################\\
@@ -519,7 +566,7 @@ $tool_content .=
      "<tbody>";
 
 
-// ----------------------- LEARNING PATH LIST DISPLAY --------------------------------- 
+// ----------------------- LEARNING PATH LIST DISPLAY ---------------------------------
 
 foreach ($flatElementList as $module)
 {
@@ -684,5 +731,10 @@ $tool_content .= "</tbody>";
 
 
 $tool_content .= "</table>";
+$tool_content .="
+      </td>
+    </tr>
+    </tbody>
+    </table>";
 draw($tool_content, 2, "learnPath", $head_content, $body_action);
 ?>

@@ -1480,6 +1480,7 @@ $langLINKTypeDesc = "Link";
 $langLastName = "Last Name";
 $langLastSessionTimeSpent = "Last session time";
 $langLearningPath = "Learning Path";
+$langLearningPath1 = "Learning Path";
 $langLearningPathAdmin = "Learning Path Admin";
 $langLearningPathEmpty = "Learning Path is empty";
 $langLearningPathList = "Available learning paths";
