@@ -1442,7 +1442,7 @@ $langLastSessionTimeSpent = "Τελευταία χρονική συνεδρία�
 $langLearningPath = "Γραμμή μάθησης";
 $langLearningPathAdmin = "Διαχείριση γραμμής μάθησης";
 $langLearningPathEmpty = "Η γραμμή μάθησης είναι κενή ";
-$langLearningPathList = "Λίστα γραμμών μάθησης";
+$langLearningPathList = "Γραμμές μάθησης";
 $langLearningPathName = "Όνομα νέας γραμμής μάθησης";
 $langLearningPathData = "Στοιχεία γραμμής μάθησης";
 $langLearningPathNotFound = "Η γραμμή μάθησης δεν βρέθηκε ";
@@ -1741,7 +1741,7 @@ $langDuration="Διάρκεια";
 /***********************************************************
 * phpbb.inc.php
 ************************************************************/
-$langAdm="διαχείριση";
+$langAdm="Διαχείριση";
 $langQuote="quote";
 $langEditDel="αλλαγή/διαγραφή";
 $langSeen="Το έχουν δει";

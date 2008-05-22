@@ -225,10 +225,9 @@ if ($is_adminOfCourse) {
 			case "mkBlock" :
 			case "mkUnblock" :
 				$_REQUEST['cmd'] == "mkBlock" ? $blocking = 'CLOSE' : $blocking = 'OPEN';
-				$sql = "UPDATE `".$TABLELEARNPATH."`
-						SET `lock` = '$blocking'
-						WHERE `learnPath_id` = ". (int)$_GET['cmdid']."
-						AND `lock` != '$blocking'";
+				$sql = "UPDATE `".$TABLELEARNPATH."` SET `lock` = '$blocking'
+					WHERE `learnPath_id` = ". (int)$_GET['cmdid']."
+					AND `lock` != '$blocking'";
 				$query = db_query ($sql);
 				break;
 			// VISIBILITY COMMAND
@@ -236,9 +235,9 @@ if ($is_adminOfCourse) {
 			case "mkInvisibl" :
 				$_REQUEST['cmd'] == "mkVisibl" ? $visibility = 'SHOW' : $visibility = 'HIDE';
 				$sql = "UPDATE `".$TABLELEARNPATH."`
-						SET `visibility` = '$visibility'
-						WHERE `learnPath_id` = ". (int)$_GET['visibility_path_id']."
-						AND `visibility` != '$visibility'";
+					SET `visibility` = '$visibility'
+					WHERE `learnPath_id` = ". (int)$_GET['visibility_path_id']."
+					AND `visibility` != '$visibility'";
 				$query = db_query ($sql);
 				break;
 			// ORDER COMMAND
@@ -258,7 +257,7 @@ if ($is_adminOfCourse) {
 					$sql = "SELECT `name` FROM `".$TABLELEARNPATH."`
 						WHERE `name` = '". mysql_real_escape_string($_POST['newPathName']) ."'";
 					$query = db_query($sql);
-					$num = mysql_numrows($query);
+					$num = mysql_num_rows($query);
 					if($num == 0) { // "name" doesn't already exist
 						// determine the default order of this Learning path
 						$result = db_query("SELECT MAX(`rank`) FROM `".$TABLELEARNPATH."`");
@@ -424,23 +423,13 @@ $tool_content .= "
     <table width=\"99%\">
     <thead>
     <tr align=\"center\" valign=\"top\">
-      <th width=\"400\" colspan=\"2\"><div align=\"left\">&nbsp;&nbsp;".$langLearningPathList."</div></th>";
+    <th width=\"550\" colspan=\"2\"><div align=\"left\">&nbsp;&nbsp;".$langLearningPathList."</div></th>";
 
 
 if($is_adminOfCourse) {
      // Titles for teachers
-     $tool_content .= "<th colspan=\"3\" width=\"200\">".$langAdm."</th>";
-     //$tool_content .= "<th width=\"1\">&nbsp;</th>";
-     $tool_content .= "<th colspan=\"5\"  width=\"120\">".$langTools."</th>";
-     /*
-     $tool_content .= "<th>".$langModify."</th>"
-            ."<th>".$langDelete."</th>"
-            ."<th>".$langBlock."</th>"
-            ."<th>".$langVisibility."</th>"
-            ."<th colspan=\"2\">".$langOrder."</th>"
-            ."<th>".$langExport."</th>"
-            ."<th>".$langTracking."</th>";
-    */
+     $tool_content .= "<th colspan=\"3\" width=\"150\">".$langAdm."</th>";
+     $tool_content .= "<th colspan=\"5\"  width=\"150\">".$langActions."</th>";
 }
 elseif($uid) {
    // display progression only if user is not teacher && not anonymous
@@ -539,7 +528,6 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         //2.1 no progression found in DB
         if (($moduleNumber == 0)  && ($list['lock'] == 'CLOSE')) {
             //must block next path because last module of this path never tried!
-
             if($uid) {
                 if ( !$is_adminOfCourse ) {
                     $is_blocked = true;
@@ -552,7 +540,6 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         }
 
         //2.2. deal with progression found in DB if at leats one module in this path
-
         if ($moduleNumber!=0) {
             $listblock2 = mysql_fetch_array($resultblock2);
             if (($listblock2['credit']=="NO-CREDIT") && ($list['lock'] == 'CLOSE')) {
@@ -594,7 +581,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         $tool_content .= "</td>\n";
 
         // EXPORT links
-        $tool_content .= '<td><a href="' . $_SERVER['PHP_SELF'] . '?cmd=export&amp;path_id=' . $list['learnPath_id'] . '" >'
+        $tool_content .= '<td><a href="'.$_SERVER['PHP_SELF'].'?cmd=export&amp;path_id=' . $list['learnPath_id'] . '" >'
             .'<img src="../../template/classic/img/export.gif" alt="'.$langExport2004. '" title="'.$langExport2004. '" border="0" title="'.$langExport2004.'"></a>' ."\n"
             .'<a href="' . $_SERVER['PHP_SELF'] . '?cmd=export12&amp;path_id=' . $list['learnPath_id'] . '" >'
             .'<img src="../../template/classic/img/export.gif" alt="'.$langExport12.'" title="'.$langExport12.'" border="0" title="'.$langExport12.'"></a>' ."\n"
@@ -607,10 +594,8 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
           </a>
           </td>\n";
 
-     //$tool_content .= "<th width=\"1\">&nbsp;</th>";
 
         // VISIBILITY link
-
         $tool_content .= "<td>\n";
         if ( $list['visibility'] == 'HIDE') {
             $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkVisibl&visibility_path_id=".$list['learnPath_id']."\">\n"
@@ -641,7 +626,6 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         $real = realpath($webDir."courses/".$currentCourseID."/scormPackages/path_".$list['learnPath_id']);
 
         // check if the learning path is of a Scorm import package and add right popup:
-
         if (is_dir($real)) {
             $tool_content .=  "<td>\n"
                   ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=delete&del_path_id=".$list['learnPath_id']."\" "
@@ -698,23 +682,18 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
     }
     $tool_content .= "</tr>";
     $iterator++;
+} // end while
 
-	} // end while
-
-$tool_content .= "</tbody>\n<tfoot>";
+$tool_content .= "</tbody>\n<thead>";
 
 if (!$is_adminOfCourse && $iterator != 1 && $uid) {
     // add a blank line between module progression and global progression
-    $tool_content .= "<tr><td colspan=\"3\">&nbsp;</td></tr>";
-    $total = round($globalprog/($iterator-1));
-    $tool_content .= "<tr><td align =\"right\">".$langPathsInCourseProg." :</td>
-          <td align=\"right\" >".claro_disp_progress_bar($total, 1)."</td>
-          <td align=\"left\"><small> ".$total."% </small>
-          </td></tr>";
+    $total = round($globalprog / ($iterator-1));
+    $tool_content .= "<th colspan = '4'><div align='center'>".$langPathsInCourseProg."&nbsp;".claro_disp_progress_bar($total, 1)." ".$total."% </div></th>"; 
+
 }
-$tool_content .= "</tfoot>\n";
+$tool_content .= "</thead>\n";
 $tool_content .= "</table>\n";
 
 draw($tool_content, 2, 'learnPath', $head_content);
-
 ?>

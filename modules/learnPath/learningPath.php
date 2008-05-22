@@ -62,20 +62,23 @@ $imgRepositoryWeb       = "../../template/classic/img/";
 require_once("../../include/baseTheme.php");
 $tool_content = "";
 
-$nameTools = $langLearningPath;
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
-
 // $_SESSION
-if ( isset($_GET['path_id']) && $_GET['path_id'] > 0)
+if (isset($_GET['path_id']) && $_GET['path_id'] > 0)
 {
     $_SESSION['path_id'] = (int) $_GET['path_id'];
 }
-elseif( (!isset($_SESSION['path_id']) || $_SESSION['path_id'] == "") )
+elseif((!isset($_SESSION['path_id']) || $_SESSION['path_id'] == ""))
 {
     // if path id not set, redirect user to the home page of learning path
     header("Location: ./learningPathList.php");
     exit();
 }
+
+$l = db_query("SELECT name FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."'");
+$lpname = mysql_fetch_array($l);
+$nameTools = $lpname['name'];
+$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
+
 
 // permissions (only for the viewmode, there is nothing to edit here )
 if ( $is_adminOfCourse )
@@ -88,10 +91,7 @@ if ( $is_adminOfCourse )
 mysql_select_db($currentCourseID);
 
 // main page
-//############################## MODULE TABLE LIST PREPARATION ###############################
-
-if($uid)
-{
+if ($uid) {
     $uidCheckString = "AND UMP.`user_id` = ".$uid;
 }
 else // anonymous
@@ -99,17 +99,13 @@ else // anonymous
     $uidCheckString = "AND UMP.`user_id` IS NULL ";
 }
 
-$sql = "SELECT LPM.`learnPath_module_id`,
-				LPM.`parent`,
-				LPM.`lock`,
-				M.`module_id`,
-				M.`contentType`,
-				M.`name`,
-				UMP.`lesson_status`, UMP.`raw`,
-				UMP.`scoreMax`, UMP.`credit`,
-				A.`path`
-           FROM (`".$TABLEMODULE."` AS M,
-		   		`".$TABLELEARNPATHMODULE."` AS LPM)
+$sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
+	LPM.`lock`, M.`module_id`,
+	M.`contentType`, M.`name`,
+	UMP.`lesson_status`, UMP.`raw`,
+	UMP.`scoreMax`, UMP.`credit`, A.`path`
+        FROM (`".$TABLEMODULE."` AS M,
+	`".$TABLELEARNPATHMODULE."` AS LPM)
      LEFT JOIN `".$TABLEUSERMODULEPROGRESS."` AS UMP
              ON UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
              ".$uidCheckString."
@@ -122,6 +118,13 @@ $sql = "SELECT LPM.`learnPath_module_id`,
        GROUP BY LPM.`module_id`
        ORDER BY LPM.`rank`";
 
+if (mysql_num_rows(db_query($sql)) == 0)  {
+	$tool_content .= "<p class='alert1'>$langNoModule</p>";
+	draw($tool_content, 2, "learnPath");
+	exit;
+}
+
+
 $extendedList = db_query_fetch_all($sql);
 
 // build the array of modules
@@ -130,7 +133,6 @@ $extendedList = db_query_fetch_all($sql);
 $flatElementList = build_display_element_list(build_element_list($extendedList, 'parent', 'learnPath_module_id'));
 
 $is_blocked = false;
-$atleastOne = false;
 $moduleNb = 0;
 
 // look for maxDeep
@@ -144,18 +146,10 @@ for( $i = 0 ; $i < sizeof($flatElementList) ; $i++ )
                       OUTPUT STARTS HERE
  ================================================================*/
 
-
-//####################################################################################\\
-//##################################### TITLE ########################################\\
-//####################################################################################\\
-$tool_content .= nameBox(LEARNINGPATH_, DISPLAY_);
-// and comment !
+// comment 
 $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 
-//####################################################################################\\
-//############################## MODULE TABLE HEADER #################################\\
-//####################################################################################\\
-
+// --------------------------- module table header --------------------------
 $tool_content .= "\n".'<br />'."\n"
   	.'<table width="99%">'."\n"
   	.'<thead>'."\n"
@@ -163,19 +157,15 @@ $tool_content .= "\n".'<br />'."\n"
 	.'<th colspan="'.($maxDeep+1).'">'.$langModule.'</th>'."\n";
 
 
-if ( $uid )
-{
-	// show only progress column for authenticated users
+// show only progress column for authenticated users
+if ($uid) {	
     $tool_content .= '<th colspan="2">'.$langProgress.'</th>'."\n";
 }
 
 $tool_content .= '</tr></thead>'."\n\n"
 	.'<tbody>'."\n\n";
 
-
-  //####################################################################################\\
-  //############################## MODULE TABLE LIST DISPLAY ###########################\\
-  //####################################################################################\\
+  // ------------------ module table list display -----------------------------------
 
 if (!isset($globalProg)) $globalProg = 0;
 
@@ -214,7 +204,6 @@ foreach ($flatElementList as $module)
     }
 
     // display the current module name (and link if allowed)
-
     $spacingString = "";
     for($i = 0; $i < $module['children']; $i++)
     {
@@ -264,7 +253,6 @@ foreach ($flatElementList as $module)
             }
             else // anonymous : don't display the modules that are unreachable
             {
-                $atleastOne = true; // trick to avoid having the "no modules" msg to be displayed
                 break ;
             }
         }
@@ -308,21 +296,12 @@ foreach ($flatElementList as $module)
         $moduleNb++; // increment number of modules used to compute global progression except if the module is a title
 
     $tool_content .= '</tr>'."\n\n";
-    $atleastOne = true;
 }
 
 $tool_content .= '</tbody>'."\n\n";
 
-if ($atleastOne == false)
-{
-    $tool_content .= '<tfoot>'."\n\n"
-		.'<tr>'."\n"
-		.'<td align="center" colspan="3">'.$langNoModule.'</td>'."\n"
-		.'</tr>'."\n\n"
-		.'</tfoot>'."\n\n";
-}
-elseif($uid && $moduleNb > 0)
-{
+
+if($uid && $moduleNb > 0) {
     // add a blank line between module progression and global progression
     $tool_content .= '<tfoot>'."\n\n"
 		.'<tr>'."\n"
@@ -341,7 +320,5 @@ elseif($uid && $moduleNb > 0)
 		.'</tfoot>'."\n\n";
 }
 $tool_content .= '</table>'."\n\n";
-
 draw($tool_content, 2, "learnPath");
-
 ?>
