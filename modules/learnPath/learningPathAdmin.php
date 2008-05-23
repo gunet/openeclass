@@ -373,13 +373,14 @@ $tool_content .="
     <tr>
       <th width=\"100\"class=\"left\" height=\"32\"></th>
       <td class=\"left\"><b>$langLearningPathData</b></td>
-    </tr>
-";
+    </tr>";
 
 
 //############################ LEARNING PATH NAME BOX ################################\\
 
-$tool_content .="<tr><th class=\"left\" height=\"32\">$langTitle :</th>";
+$tool_content .="
+    <tr>
+      <th class=\"left\" height=\"32\">$langTitle :</th>";
 
 if ($cmd == "updateName")
 {
@@ -387,14 +388,19 @@ if ($cmd == "updateName")
 }
 else
 {
-    $tool_content .= "<td class=\"left\">".nameBox(LEARNINGPATH_, DISPLAY_);
+    $tool_content .= "
+      <td class=\"left\">".nameBox(LEARNINGPATH_, DISPLAY_);
 }
 
-$tool_content .="</td></tr>";
+$tool_content .="</td>
+    </tr>";
 
 //############################ LEARNING PATH COMMENT BOX #############################\\
 
-$tool_content .="<tr><th class=\"left\" height=\"32\">$langComments :</th><td class=\"left\">";
+$tool_content .="
+    <tr>
+      <th class=\"left\" height=\"32\">$langComments :</th>
+      <td class=\"left\">";
 
 if ($cmd == "updatecomment")
 {
@@ -407,8 +413,14 @@ if ($cmd == "updatecomment")
     $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 }
 
-$tool_content .="</td></tr>";
+$tool_content .="</td>
+    </tr>";
 
+
+$tool_content .="
+    <tr>
+      <td colspan=\"2\">&nbsp;</td>
+    </tr>";
 
 
 // -------------------- create label -------------------
@@ -456,19 +468,22 @@ if (isset($dialogBox) && $dialogBox!="")
 // --------------- learning path course admin links ------------------------------
 
 
-$tool_content .="<tr><th class=\"left\" height=\"32\">$langImport :</th><td class=\"left\">";
-$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=createLabel\">".$langCreateLabel."</a>";
-$tool_content .="</td></tr><tr><th class=\"left\" height=\"32\">$langLearningModule :</th><td class=\"left\">";
+$tool_content .="
+    <tr>
+      <th class=\"left\" height=\"32\">$langLearningModule :</th>
+      <td class=\"left\"><a href=\"".$_SERVER['PHP_SELF']."?cmd=createLabel\">".$langCreateLabel."</a></td>
+    </tr>
+    <tr>
+      <th class=\"left\" height=\"32\">$langLearningObjects :</th>
+      <td class=\"left\">$langAddModule :";
 
-$tool_content .=
- ""
-."<a href=\"insertMyDoc.php\">".$langDocumentAsModule."</a><br />"
-."<a href=\"insertMyExercise.php\">".$langExerciseAsModule."</a><br />"
-."<a href=\"insertMyLink.php\">".$langLinkAsModule."</a><br />"
-."<a href=\"insertMyDescription.php\">".$langCourseDescriptionAsModule."</a><br />"
-."<a href=\"insertMyModule.php\">".$langModuleOfMyCourse."</a>";
+$tool_content .= " <a href=\"insertMyDoc.php\" title=\"$langDocumentAsModule\">".$langDocumentAsModuleLabel."</a> | <a href=\"insertMyExercise.php\" title=\"$langExerciseAsModule\">".$langExerciseAsModuleLabel."</a> | <a href=\"insertMyLink.php\" title=\"$langLinkAsModule\">".$langLinkAsModuleLabel."</a> | <a href=\"insertMyDescription.php\" title=\"$langCourseDescriptionAsModule\">".$langCourseDescriptionAsModuleLabel."</a> | <a href=\"insertMyModule.php\" title=\"$langModuleOfMyCourse\">".$langModuleOfMyCourseLabel."</a>";
 
-$tool_content .="</td></tr><tr><th class=\"left\" height=\"32\">$langImport :</th><td class=\"left\">";
+$tool_content .="</td>
+    </tr>
+    <tr>
+      <th class=\"left\" height=\"32\" valign=\"top\">$langLearningPathStructure :</th>
+      <td class=\"left\">";
 
 //  -------------------------- learning path list content ----------------------------
 
@@ -515,7 +530,7 @@ $tool_content .="
     <table width=\"99%\">
     <thead>
     <tr align=\"center\" valign=\"top\">
-      <th colspan=\"".($maxDeep+1)."\">".$langModule."</th>
+      <th colspan=\"".($maxDeep+1)."\" class=\"left\">".$langContents."</th>
       <th width=\"50\">".$langBlock."</th>
       <th colspan=\"3\" width=\"90\">".$langMove."</th>
       <th colspan=\"3\" width=\"90\">".$langActions."</th>
