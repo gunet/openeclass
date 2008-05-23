@@ -1484,7 +1484,11 @@ if (!isset($submit2)) {
                 // remove tables liste_domains. Used for old statistics module
                 db_query("DROP TABLE IF EXISTS liste_domaines");
 
+                // convert to UTF-8
+                convert_db_utf8($code[0]);
         } // End of 'while' courses
+
+        convert_db_utf8($mysqlMainDb);
 
         $tool_content .= "<p>Η αναβάθμιση των βάσεων δεδομένων του eClass πραγματοποιήθηκε!</p>
                 <p>Είστε πλέον έτοιμοι να χρησιμοποιήσετε την καινούρια έκδοση του eClass!</p>
@@ -1703,6 +1707,21 @@ function add_index($index, $column, $table)  {
         db_query("ALTER TABLE $table ADD INDEX $index($column)");
         $retString = "<p>Προστέθηκε index στο πεδίο $column του πίνακα $table</p>";
         return $retString;
+}
+
+// convert database and all tables to UTF-8
+function convert_db_utf8($database)
+{
+        db_query("ALTER DATABASE `$database` DEFAULT CHARACTER SET=utf8");
+        $result = mysql_list_tables($database);
+        if (!$result) {
+                echo "DB Error, could not list tables for database $database. ",
+                     'MySQL Error: ', mysql_error();
+        }
+        while ($row = mysql_fetch_row($result)) {
+                db_query("ALTER TABLE `$database`.`$row[0]` DEFAULT CHARACTER SET=utf8");
+        }
+        mysql_free_result($result);
 }
 
 ?>
