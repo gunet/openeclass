@@ -1381,6 +1381,7 @@ $langAddComment = "Add a comment";
 $langAddIntro = "Add introduction text";
 $langAddModulesButton = "Add selection";
 $langAddOneModuleButton = "Add module";
+$langLearningModule = "Section";
 $langAgenda = "Agenda";
 $langAlertBlockingMakedInvisible = "This module is blocked. Making it invisible will allow ".$langsStudents." to access the next module without having to complete this one. Confirm ?";
 $langAlertBlockingPathMadeInvisible = "This path is blocking. Making it invisible will allow ".$langsStudents." to access the next path without having to complete this one. Confirm?";

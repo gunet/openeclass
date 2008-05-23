@@ -377,36 +377,16 @@ if($is_adminOfCourse) {
 		draw($tool_content, 2, 'learnPath', $head_content);
 		exit;
 	} else {
-
 		$tool_content .= "
-	    <div id=\"operations_container\">
+    <div id=\"operations_container\">
       <ul id=\"opslist\">
         <li><a href=\"".$_SERVER['PHP_SELF']."?cmd=create\" title=\"$langCreateNewLearningPath\">".$langCreate."</a></li>
         <li><a href=\"importLearningPath.php\" title=\"$langimportLearningPath\">".$langImport."</a></li>
         <li><a href=\"detailsAll.php\" title=\"$langTrackAllPathExplanation\">".$langProgress."</a></li>
         <li><a href=\"modules_pool.php\">".$langModulesPoolToolName."</a></li>
       </ul>
-
     </div>
     ";
-	/*
-		$tool_content .= "
-    <table width=\"99%\" align=\"left\" class=\"Group_Operations\">
-      <thead>
-      <tr>
-        <td width=\"50%\">&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?cmd=create\" title=\"$langCreateNewLearningPath\">".$langCreate."</a></td>
-        <td width=\"50%\"><div align=\"right\"><a href=\"modules_pool.php\">".$langModulesPoolToolName."</a>&nbsp;</div></td>
-      </tr>
-      <tr>
-        <td>&nbsp;<a href=\"importLearningPath.php\" title=\"$langimportLearningPath\">".$langImport."</a></td>
-        <td><div align=\"right\"><a href=\"detailsAll.php\" title=\"$langTrackAllPathExplanation\">".$langProgress."</a>&nbsp;</div></td>
-      </tr>
-      </thead>
-      </table>
-      <br />
-      <br />
-      <br />";
-      */
 	}
 }
 
@@ -689,7 +669,7 @@ $tool_content .= "</tbody>\n<thead>";
 if (!$is_adminOfCourse && $iterator != 1 && $uid) {
     // add a blank line between module progression and global progression
     $total = round($globalprog / ($iterator-1));
-    $tool_content .= "<th colspan = '4'><div align='center'>".$langPathsInCourseProg."&nbsp;".claro_disp_progress_bar($total, 1)." ".$total."% </div></th>"; 
+    $tool_content .= "<th colspan = '4'><div align='center'>".$langPathsInCourseProg."&nbsp;".claro_disp_progress_bar($total, 1)." ".$total."% </div></th>";
 
 }
 $tool_content .= "</thead>\n";

@@ -74,8 +74,8 @@ elseif((!isset($_SESSION['path_id']) || $_SESSION['path_id'] == ""))
     exit();
 }
 
-$l = db_query("SELECT name FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."'");
-$lpname = mysql_fetch_array($l);
+//$l = db_query("SELECT name FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."'");
+//$lpname = mysql_fetch_array($l);
 $nameTools = $lpname['name'];
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
 
@@ -146,7 +146,7 @@ for( $i = 0 ; $i < sizeof($flatElementList) ; $i++ )
                       OUTPUT STARTS HERE
  ================================================================*/
 
-// comment 
+// comment
 $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 
 // --------------------------- module table header --------------------------
@@ -158,7 +158,7 @@ $tool_content .= "\n".'<br />'."\n"
 
 
 // show only progress column for authenticated users
-if ($uid) {	
+if ($uid) {
     $tool_content .= '<th colspan="2">'.$langProgress.'</th>'."\n";
 }
 
