@@ -1,5 +1,5 @@
-<?PHP
-/**===========================================================================
+<?php
+/*===========================================================================
 *              GUnet e-Class 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -23,7 +23,7 @@
 *					eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-/**
+/*
  * Tool Component
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -34,7 +34,7 @@
  * 
  */
 
-/**
+/*
  * Function getSideMenu
  *
  * Offers an upper-layer logic. Decides what function should be called to
@@ -70,7 +70,7 @@ function getSideMenu($menuTypeID){
 }
 
 
-/**
+/*
  * Function getToolsArray
  *
  * Queries the database for tool information in accordance
@@ -101,6 +101,7 @@ function getToolsArray($cat) {
 			AND lien NOT LIKE '%/dropbox/index.php'
 			AND lien NOT LIKE '%/questionnaire/questionnaire.php'
 			AND lien NOT LIKE '%/phpbb/index.php'
+			AND lien NOT LIKE '%/learnPath/learningPathList.php'
                     ORDER BY rubrique", $currentCourse);
 				}
 			} else {
