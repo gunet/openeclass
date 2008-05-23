@@ -74,8 +74,8 @@ elseif((!isset($_SESSION['path_id']) || $_SESSION['path_id'] == ""))
     exit();
 }
 
-//$l = db_query("SELECT name FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."'");
-//$lpname = mysql_fetch_array($l);
+$l = db_query("SELECT name FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."'");
+$lpname = mysql_fetch_array($l);
 $nameTools = $lpname['name'];
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
 

@@ -76,7 +76,6 @@ $tool_content = "";
 $body_action = "";
 $dialogBox = "";
 
-//$nameTools = $langLearningPathAdmin;
 $nameTools = $langNomPageAdmin;
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
 
@@ -377,16 +376,12 @@ $tool_content .="
     </tr>
 ";
 
-//####################################################################################\\
+
 //############################ LEARNING PATH NAME BOX ################################\\
-//####################################################################################\\
 
-$tool_content .="
-    <tr>
-      <th class=\"left\" height=\"32\">$langTitle :</th>
-      ";
+$tool_content .="<tr><th class=\"left\" height=\"32\">$langTitle :</th>";
 
-if ( $cmd == "updateName" )
+if ($cmd == "updateName")
 {
     $tool_content .= claro_disp_message_box(nameBox(LEARNINGPATH_, UPDATE_, $langModify));
 }
@@ -395,22 +390,13 @@ else
     $tool_content .= "<td class=\"left\">".nameBox(LEARNINGPATH_, DISPLAY_);
 }
 
-$tool_content .="
-      </td>
-    </tr>
-";
-//$tool_content .= "<br />";
-//####################################################################################\\
+$tool_content .="</td></tr>";
+
 //############################ LEARNING PATH COMMENT BOX #############################\\
-//####################################################################################\\
 
-$tool_content .="
-    <tr>
-      <th class=\"left\" height=\"32\">$langComments :</th>
-      <td class=\"left\">
-      ";
+$tool_content .="<tr><th class=\"left\" height=\"32\">$langComments :</th><td class=\"left\">";
 
-if ( $cmd == "updatecomment" )
+if ($cmd == "updatecomment")
 {
     $tool_content .= commentBox(LEARNINGPATH_, UPDATE_);
     $head_content .= claro_disp_html_area_head("insertCommentBox");
@@ -421,14 +407,11 @@ if ( $cmd == "updatecomment" )
     $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 }
 
-$tool_content .="
-      </td>
-    </tr>";
+$tool_content .="</td></tr>";
 
 
-//####################################################################################\\
-//############################ create label && change pos forms  #####################\\
-//####################################################################################\\
+
+// -------------------- create label -------------------
 
 if (isset($displayCreateLabelForm) && $displayCreateLabelForm)
 {
@@ -469,23 +452,13 @@ if (isset($dialogBox) && $dialogBox!="")
     $tool_content .= "<br />";
 }
 
-//####################################################################################\\
-//######################### LEARNING PATH COURSEADMIN LINKS ##########################\\
-//####################################################################################\\
 
-$tool_content .="
-    <tr>
-      <th class=\"left\" height=\"32\">$langImport :</th>
-      <td class=\"left\">
-      ";
-$tool_content .=
-"<a href=\"".$_SERVER['PHP_SELF']."?cmd=createLabel\">".$langCreateLabel."</a>";
-$tool_content .="
-      </td>
-    </tr>
-    <tr>
-      <th class=\"left\" height=\"32\">$langLearningModule :</th>
-      <td class=\"left\">";
+// --------------- learning path course admin links ------------------------------
+
+
+$tool_content .="<tr><th class=\"left\" height=\"32\">$langImport :</th><td class=\"left\">";
+$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=createLabel\">".$langCreateLabel."</a>";
+$tool_content .="</td></tr><tr><th class=\"left\" height=\"32\">$langLearningModule :</th><td class=\"left\">";
 
 $tool_content .=
  ""
@@ -495,18 +468,9 @@ $tool_content .=
 ."<a href=\"insertMyDescription.php\">".$langCourseDescriptionAsModule."</a><br />"
 ."<a href=\"insertMyModule.php\">".$langModuleOfMyCourse."</a>";
 
+$tool_content .="</td></tr><tr><th class=\"left\" height=\"32\">$langImport :</th><td class=\"left\">";
 
-$tool_content .="
-      </td>
-    </tr>
-    <tr>
-      <th class=\"left\" height=\"32\">$langImport :</th>
-      <td class=\"left\">";
-//####################################################################################\\
-//######################### LEARNING PATH LIST CONTENT ###############################\\
-//####################################################################################\\
-
-//--- BUILD ARBORESCENCE OF MODULES IN LEARNING PATH
+//  -------------------------- learning path list content ----------------------------
 
 $sql = "SELECT M.*, LPM.*, A.`path`
         FROM (`".$TABLEMODULE."` AS M,
@@ -520,6 +484,7 @@ $result = db_query($sql);
 
 if (mysql_num_rows($result) == 0) {
 	$tool_content .= "<p class='alert1'>$langNoModule</p>";
+	$tool_content .= "</td></tr></table>";
 	draw($tool_content, 2, "learnPath", $head_content, $body_action);
 	exit;
 }
@@ -535,8 +500,6 @@ while ($list = mysql_fetch_array($result, MYSQL_ASSOC))
 // build_display_element_list return an 1-level array where children is the deep of the module
 
 $flatElementList = build_display_element_list(build_element_list($extendedList, 'parent', 'learnPath_module_id'));
-
-$iterator = 1;
 $i = 0;
 
 // look for maxDeep
@@ -546,9 +509,7 @@ for ($i=0 ; $i < sizeof($flatElementList) ; $i++)
     if ($flatElementList[$i]['children'] > $maxDeep) $maxDeep = $flatElementList[$i]['children'] ;
 }
 
-//####################################################################################\\
-//######################### LEARNING PATH LIST HEADER ################################\\
-//####################################################################################\\
+// -------------------------- learning path list header ----------------------------
 
 $tool_content .="
     <table width=\"99%\">
@@ -608,7 +569,6 @@ foreach ($flatElementList as $module)
         else
             $moduleImg = choose_image(basename($module['path']));
 
-
         $contentType_alt = selectAlt($module['contentType']);
         $tool_content .= "<img src=\"".$imgRepositoryWeb."".$moduleImg."\" alt=\"".$contentType_alt."\" title=\"".$contentType_alt."\" border=\"0\">&nbsp;<a href=\"module.php?module_id=".$module['module_id']."\"".$style.">". htmlspecialchars($module['name']). "</a>";
     }
@@ -624,41 +584,44 @@ foreach ($flatElementList as $module)
     }
     elseif ( $module['lock'] == 'OPEN')
     {
-        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkBlock&cmdid=".$module['learnPath_module_id']."\"><img src=\"".$imgRepositoryWeb."unblock.gif\" alt=\"$langBlock\" title=\"$langBlock\" border=0></a>";
+        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkBlock&cmdid=".$module['learnPath_module_id']."\">
+	<img src=\"".$imgRepositoryWeb."unblock.gif\" alt=\"$langBlock\" title=\"$langBlock\" border=0></a>";
     }
     elseif( $module['lock'] == 'CLOSE')
     {
-        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkUnblock&cmdid=".$module['learnPath_module_id']."\"><img src=\"".$imgRepositoryWeb."block.gif\" alt=\"$langAltMakeNotBlocking\" title=\"$langAltMakeNotBlocking\" border=0></a>";
+        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkUnblock&cmdid=".$module['learnPath_module_id']."\">
+	<img src=\"".$imgRepositoryWeb."block.gif\" alt=\"$langAltMakeNotBlocking\" title=\"$langAltMakeNotBlocking\" border=0></a>";
     }
     $tool_content .= "</td>";
 
     // ORDER COMMANDS
     // DISPLAY CATEGORY MOVE COMMAND
-    $tool_content .= "
-      <td style=\"border-left: 1px solid #edecdf;\"><a href=\"".$_SERVER['PHP_SELF']."?cmd=changePos&cmdid=".$module['learnPath_module_id']."\"><img src=\"".$imgRepositoryWeb."move.gif\" alt=\"$langMove\" title=\"$langMove\" border=0></a></td>";
+    	$tool_content .= "<td style=\"border-left: 1px solid #edecdf;\">
+	<a href=\"".$_SERVER['PHP_SELF']."?cmd=changePos&cmdid=".$module['learnPath_module_id']."\">
+	<img src=\"".$imgRepositoryWeb."move.gif\" alt=\"$langMove\" title=\"$langMove\" border=0></a></td>";
 
     // DISPLAY MOVE UP COMMAND only if it is not the top learning path
     if ($module['up'])
     {
-        $tool_content .= "
-      <td align=\"right\"><a href=\"".$_SERVER['PHP_SELF']."?cmd=moveUp&cmdid=".$module['learnPath_module_id']."\"><img src=\"".$imgRepositoryWeb."up.gif\" alt=\"$langUp\" title=\"$langUp\" border=0></a></td>";
+        $tool_content .= "<td align=\"right\">
+	<a href=\"".$_SERVER['PHP_SELF']."?cmd=moveUp&cmdid=".$module['learnPath_module_id']."\">
+	<img src=\"".$imgRepositoryWeb."up.gif\" alt=\"$langUp\" title=\"$langUp\" border=0></a></td>";
     }
     else
     {
-        $tool_content .= "
-      <td>&nbsp;</td>";
+        $tool_content .= "<td>&nbsp;</td>";
     }
 
     // DISPLAY MOVE DOWN COMMAND only if it is not the bottom learning path
     if ($module['down'])
     {
-        $tool_content .= "
-      <td align=\"left\"><a href=\"".$_SERVER['PHP_SELF']."?cmd=moveDown&cmdid=".$module['learnPath_module_id']."\"><img src=\"".$imgRepositoryWeb."down.gif\" alt=\"$langDown\" title=\"$langDown\" border=0></a></td>";
+        $tool_content .= "<td align=\"left\">
+	<a href=\"".$_SERVER['PHP_SELF']."?cmd=moveDown&cmdid=".$module['learnPath_module_id']."\">
+	<img src=\"".$imgRepositoryWeb."down.gif\" alt=\"$langDown\" title=\"$langDown\" border=0></a></td>";
     }
     else
     {
-        $tool_content .= "
-      <td>&nbsp;</td>";
+        $tool_content .= "<td>&nbsp;</td>";
     }
 
     // Modify command / go to other page
@@ -681,11 +644,10 @@ foreach ($flatElementList as $module)
     $tool_content .=   "');\"><img src=\"".$imgRepositoryWeb."delete.gif\" border=0 alt=\"".$langRemove."\" title=\"".$langRemove."\"></a></td>";
 
     // VISIBILITY
-    $tool_content .= "
-      <td>";
+    $tool_content .= "<td>";
 
     if ($module['visibility'] == 'HIDE') {
-        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkVisibl&cmdid=".$module['module_id']."\"><img src=\"".$imgRepositoryWeb."invisible.gif\" alt=\"$langAltMakeVisible\" title=\"$langAltMakeVisible\" border=\"0\"></a>";
+        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkVisibl&cmdid=".$module['module_id']."\"><img src=\"".$imgRepositoryWeb."invisible.gif\" alt=\"$langVisible\" title=\"$langVisible\" border=\"0\"></a>";
     }
     else
     {
@@ -701,19 +663,10 @@ foreach ($flatElementList as $module)
     }
 
     $tool_content .= "</td>";
-
-    $tool_content .= "
-    </tr>";
-    $iterator++;
+    $tool_content .= "</tr>";
 } // end of foreach
 
-$tool_content .= "
-    </tbody>
-    </table>";
-$tool_content .="
-      </td>
-    </tr>
-    </tbody>
-    </table>";
+$tool_content .= "</tbody></table>";
+$tool_content .="</td></tr></tbody></table>";
 draw($tool_content, 2, "learnPath", $head_content, $body_action);
 ?>

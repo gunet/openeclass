@@ -61,7 +61,7 @@ $imgRepositoryWeb       = "../../template/classic/img/";
 require_once("../../include/baseTheme.php");
 $tool_content = "";
 
-$navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPathList);
+$navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPath);
 if (! $is_adminOfCourse) claro_die($langNotAllowed);
 $navigation[]= array ("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
 $nameTools = $langInsertMyModuleToolName;

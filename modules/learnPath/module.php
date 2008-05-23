@@ -80,8 +80,7 @@ else
     $navigation[]= array ("url"=>"learningPath.php", "name"=> $langLearningPath);
 }
 
-// $_SESSION
-// path_id
+
 if ( isset($_GET['path_id']) && $_GET['path_id'] != '' )
 {
     $_SESSION['path_id'] = $_GET['path_id'];
@@ -242,7 +241,7 @@ else
 	$pathBack = "./learningPath.php";
 }
 
-$tool_content .= '<small><a href="'.$pathBack.'"><< '.$langBackModule.'</a></small>'."\n\n";
+$tool_content .= '<small><a href="'.$pathBack.'"><< '.$langBackToLPAdmin.'</a></small>'."\n\n";
 
 //############################ PROGRESS  AND  START LINK #############################\\
 

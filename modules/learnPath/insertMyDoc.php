@@ -68,13 +68,11 @@ $tool_content = "";
 $pwd = getcwd();
 
 $courseDir   = "courses/".$currentCourseID."/document";
-//$moduleDir   = $_course['path']."/modules";
 $baseWorkDir = $webDir.$courseDir;
-//$moduleWorkDir = $coursesRepositorySys.$moduleDir;
 
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
-if ( ! $is_adminOfCourse ) claro_die($langNotAllowed);
-$navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langLearningPathAdmin);
+$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
+if (!$is_adminOfCourse) claro_die($langNotAllowed);
+$navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
 $nameTools = $langInsertMyDocToolName;
 
 // $_SESSION
@@ -90,20 +88,16 @@ mysql_select_db($currentCourseID);
 // 1)  We select first the modules that must not be displayed because
 // as they are already in this learning path
 
-function buildRequestModules()
-{
+function buildRequestModules() {
 
  global $TABLELEARNPATHMODULE;
  global $TABLEMODULE;
 
- $firstSql = "SELECT `module_id`
-              FROM `".$TABLELEARNPATHMODULE."` AS LPM
+ $firstSql = "SELECT `module_id` FROM `".$TABLELEARNPATHMODULE."` AS LPM
               WHERE LPM.`learnPath_id` = ". (int)$_SESSION['path_id'];
 
  $firstResult = db_query($firstSql);
-
  // 2) We build the request to get the modules we need
-
  $sql = "SELECT M.*
          FROM `".$TABLEMODULE."` AS M
          WHERE 1 = 1";
@@ -111,33 +105,11 @@ function buildRequestModules()
  while ($list=mysql_fetch_array($firstResult))
  {
     $sql .=" AND M.`module_id` != ". (int)$list['module_id'];
- }
-
- /** To find which module must displayed we can also proceed  with only one query.
-  * But this implies to use some features of MySQL not available in the version 3.23, so we use
-  * two differents queries to get the right list.
-  * Here is how to proceed with only one
-
-  $query = "SELECT *
-             FROM `".$TABLEMODULE."` AS M
-             WHERE NOT EXISTS(SELECT * FROM `".$TABLELEARNPATHMODULE."` AS TLPM
-             WHERE TLPM.`module_id` = M.`module_id`)"; 
-  */
-
+ } 
   return $sql;
+} 
 
-}//end function
-
-//####################################################################################\\
-//################################ DOCUMENTS LIST ####################################\\
-//####################################################################################\\
-
-// FORM SENT
-/*
- *
- * SET THE DOCUMENT AS A MODULE OF THIS LEARNING PATH
- *
- */
+// -------------------------- documents list ----------------
 
 // evaluate how many form could be sent
 if (!isset($dialogBox)) $dialogBox = "";
@@ -150,12 +122,10 @@ if (!isset($_REQUEST['maxDocForm'])) $_REQUEST['maxDocForm'] = 0;
 while ($iterator <= $_REQUEST['maxDocForm'])
 {
     $iterator++;
-
     if (isset($_REQUEST['submitInsertedDocument']) && isset($_POST['insertDocument_'.$iterator]) )
     {
         $insertDocument = str_replace('..', '',$_POST['insertDocument_'.$iterator]);
         $filenameDocument = $_POST['filenameDocument_'.$iterator];
-        
         $sourceDoc = $baseWorkDir.$insertDocument;
 
         if ( check_name_exist($sourceDoc) ) // source file exists ?
@@ -177,7 +147,6 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                         (`name` , `comment`, `contentType`, `launch_data`)
                         VALUES ('". addslashes($filenameDocument) ."' , '". addslashes($langDefaultModuleComment) . "', '".CTDOCUMENT_."','')";
                 $query = db_query($sql);
-
                 $insertedModule_id = mysql_insert_id();
 
                 // create new asset
@@ -185,7 +154,6 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                         (`path` , `module_id` , `comment`)
                         VALUES ('". addslashes($insertDocument)."', " . (int)$insertedModule_id . ", '')";
                 $query = db_query($sql);
-
                 $insertedAsset_id = mysql_insert_id();
 
                 $sql = "UPDATE `".$TABLEMODULE."`
@@ -197,7 +165,6 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                 $sql = "SELECT MAX(`rank`)
                         FROM `".$TABLELEARNPATHMODULE."`";
                 $result = db_query($sql);
-
                 list($orderMax) = mysql_fetch_row($result);
                 $order = $orderMax + 1;
 
@@ -206,17 +173,14 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                         (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`)
                         VALUES ('". (int)$_SESSION['path_id']."', '".(int)$insertedModule_id."','".addslashes($langDefaultModuleAddedComment)."', ".(int)$order.", 'OPEN')";
                 $query = db_query($sql);
-                
                 $addedDoc = $filenameDocument;
-
                 $dialogBox .= $addedDoc ." ".$langDocInsertedAsModule."<br>";
                 $style = "success";
             }
             else
             {
                 // check if this is this LP that used this document as a module
-                $sql = "SELECT *
-                        FROM `".$TABLELEARNPATHMODULE."` AS LPM,
+                $sql = "SELECT * FROM `".$TABLELEARNPATHMODULE."` AS LPM,
                              `".$TABLEMODULE."` AS M,
                              `".$TABLEASSET."` AS A
                         WHERE M.`module_id` =  LPM.`module_id`
@@ -240,9 +204,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                             (`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`)
                             VALUES ('". (int)$_SESSION['path_id']."', '". (int)$thisDocumentModule['module_id']."','".addslashes($langDefaultModuleAddedComment)."', ".(int)$order.",'OPEN')";
                     $query = db_query($sql);
-                     
                     $addedDoc =  $filenameDocument;
-
                     $dialogBox .= $addedDoc ." ".$langDocInsertedAsModule."<br>";
                     $style = "success";
                 }
@@ -263,10 +225,6 @@ while ($iterator <= $_REQUEST['maxDocForm'])
 if (isset($_REQUEST['openDir']) ) // $newDirPath is from createDir command (step 2) and $uploadPath from upload command
 {
     $curDirPath = $_REQUEST['openDir'];
-    /*
-     * NOTE: Actually, only one of these variables is set.
-     * By concatenating them, we eschew a long list of "if" statements
-     */
 }
 else
 {
@@ -276,10 +234,6 @@ else
 if ($curDirPath == "/" || $curDirPath == "\\" || strstr($curDirPath, ".."))
 {
     $curDirPath =""; // manage the root directory problem
-
-    /*
-     * The strstr($curDirPath, "..") prevent malicious users to go to the root directory
-     */
 }
 
 $curDirName = basename($curDirPath);
@@ -319,10 +273,7 @@ while($row = mysql_fetch_array($result, MYSQL_ASSOC))
 /*--------------------------------------
   LOAD FILES AND DIRECTORIES INTO ARRAYS
   --------------------------------------*/
-@chdir (realpath($baseWorkDir.$curDirPath))
-or claro_die("<center>
-        <b>Wrong directory !</b>
-        <br /> Please contact your platform administrator.</center>");
+chdir(realpath($baseWorkDir.$curDirPath));
 $handle = opendir(".");
 
 define('A_DIRECTORY', 1);
@@ -399,61 +350,6 @@ if ($fileList)
                     $fileList['filename']);
 }
 
-/*----------------------------------------
-        CHECK BASE INTEGRITY
---------------------------------------*/
-
-if (isset($attribute))
-{
-    /*
-     * check if the number of DB records is greater
-     * than the numbers of files attributes previously given
-     */
-
-    if ( isset($attribute['path']) && isset($fileList['comment']) 
-         && ( sizeof($attribute['path']) > (sizeof($fileList['comment']) + sizeof($fileList['visibility'])) ) )
-    {
-        /* SEARCH DB RECORDS WICH HAVE NOT CORRESPONDANCE ON THE DIRECTORY */
-        foreach( $attribute['path'] as $chekinFile)
-        {
-            if (isset($dirNameList) && in_array(basename($chekinFile), $dirNameList))
-                continue;
-            elseif (isset($fileNameList) && $fileNameList && in_array(basename($chekinFile), $fileNameList))
-                continue;
-            else
-                $recToDel[]= $chekinFile; // add chekinFile to the list of records to delete
-        }
-
-        /* BUILD THE QUERY TO DELETE DEPRECATED DB RECORDS */
-        $nbrRecToDel = sizeof ($recToDel);
-        $queryClause = "";
-        
-        for ($i=0; $i < $nbrRecToDel ;$i++)
-        {
-            $queryClause .= "path LIKE \"". addslashes($recToDel[$i]) ."%\"";
-            if ($i < $nbrRecToDel-1) 
-            {
-                $queryClause .=" OR ";
-            }
-        }
-
-        $sql = "DELETE
-                FROM `".$dbTable."`
-                WHERE ".$queryClause;
-        db_query($sql);
-
-        $sql = "DELETE
-                FROM `".$dbTable."`
-                WHERE `comment` LIKE ''
-                  AND `visibility` LIKE 'v'";
-        db_query($sql);
-
-        /* The second query clean the DB 'in case of' empty records (no comment an visibility=v)
-           These kind of records should'nt be there, but we never know... */
-
-    }
-} // end if (isset($attribute))
-
 closedir($handle);
 unset($attribute);
 
@@ -466,10 +362,9 @@ $tool_content .= display_my_documents($dialogBox, $style) ;
 $tool_content .= "<br />";
 $tool_content .= claro_disp_tool_title($langPathContentTitle);
 $tool_content .= '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
+
 // display list of modules used by this learning path
 $tool_content .= display_path_content();
-
 chdir($pwd);
 draw($tool_content, 2, "learnPath");
-
 ?>

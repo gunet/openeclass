@@ -55,9 +55,9 @@ require_once("../../include/baseTheme.php");
 $tool_content = "";
 $dialogBox = "";
 
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
-if ( ! $is_adminOfCourse ) claro_die($langNotAllowed);
-$navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langLearningPathAdmin);
+$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
+if (!$is_adminOfCourse) claro_die($langNotAllowed);
+$navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
 $nameTools = $langInsertMyLinkToolName;
 
 // $_SESSION

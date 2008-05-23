@@ -50,9 +50,9 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 require_once("../../include/baseTheme.php");
 $tool_content = "";
 
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
-if ( ! $is_adminOfCourse ) claro_die($langNotAllowed);
-$navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langLearningPathAdmin);
+$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
+if (!$is_adminOfCourse ) claro_die($langNotAllowed);
+$navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
 $nameTools = $langInsertMyDescToolName;
 
 // $_SESSION
@@ -113,10 +113,6 @@ if ($num == 0)
 		VALUES ('". (int)$_SESSION['path_id']."', '". (int)$insertedModule_id."',
 		" . (int)$order . ", 'OPEN')";
 	$query = db_query($sql);
-
-	//$tool_content .= "done";
-	header("Location: ./learningPathAdmin.php");
-    exit();
 }
 else 
 {
@@ -149,10 +145,9 @@ else
 		$query = db_query($sql);
 
     }
-	header("Location: ./learningPathAdmin.php");
-	exit();
 }
- 
-header("Location: ./learningPathAdmin.php");
-exit();
+
+$tool_content .= claro_disp_tool_title($langLinkInsertedAsModule);
+$tool_content .= '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
+draw($tool_content, 2, "learnPath");
 ?>
