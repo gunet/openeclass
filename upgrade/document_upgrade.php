@@ -50,7 +50,7 @@ function encode_file($filename)  {
 	$safe_fileName = date("mdGi").randomkeys('5').".".$ext;
 	$newfilename = preg_replace('|/[^/]+$|', '/'.$safe_fileName, $filename);
 	$b = db_query("SELECT unique_filename FROM doc_tmp 
-		WHERE old_path ='/".substr($filename, strlen($baseFolder))."'");
+		WHERE old_path=".quote('/'.substr($filename, strlen($baseFolder))));
 	$u = mysql_fetch_array($b);
 	// rename
 	if (!(rename($filename, $newfilename)))  {
@@ -175,7 +175,7 @@ function encode_group_file($filename)  {
 	$safe_fileName = date("mdGi").randomkeys('5').".".$ext;
 	$newfilename = preg_replace('|/[^/]+$|', '/'.$safe_fileName, $filename);
 	$b = db_query("SELECT unique_filename FROM group_doc_tmp 
-		WHERE old_path ='/".substr($filename, strlen($baseFolder))."'");
+		WHERE old_path=".quote('/'.substr($filename, strlen($baseFolder))));
 	$u = mysql_fetch_array($b);
 	// rename
 	if (!(rename($filename, $newfilename)))  {
@@ -228,7 +228,7 @@ function array_enc_group_file($filename)  {
 // -------------------------------------
 function upgrade_video($file, $id, $code)
 {
-	global $webDir;
+	global $webDir, $tool_content;
 
 	$fileName = trim($file);
         $fileName = replace_dangerous_char($fileName);
@@ -236,9 +236,11 @@ function upgrade_video($file, $id, $code)
 	$fileName = php2phps($fileName);
         $safe_filename = date("YmdGis")."_".randomkeys('3').".".get_file_extention($fileName);
 	$path_to_video = $webDir.'video/'.$code.'/';
-        if (rename($path_to_video.$file, $path_to_video.$safe_filename))
+        if (rename($path_to_video.$file, $path_to_video.$safe_filename)) {
         	db_query("UPDATE video SET path = '$safe_filename'
 	        	WHERE id = '$id'", $code);
-	else 
-		die("error");
+	} else {
+		$tool_content .= "Προσοχή: το αρχείο video $path_to_video.$file δεν υπάρχει!<br>";
+                db_query("DELETE FROM video WHERE id = '$id'", $code);
+        }
 }

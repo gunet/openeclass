@@ -8,6 +8,7 @@ $path2add=2;
 
 include '../include/baseTheme.php';
 include 'document_upgrade.php';
+include 'messages_accueil.php';
 
 $nameTools = "Αναβάθμιση των βάσεων δεδομένων του eClass";
 $auth_methods = array("imap","pop3","ldap","db");
@@ -23,26 +24,11 @@ $diskQuotaGroup = 40000000;
 $diskQuotaVideo = 20000000;
 $diskQuotaDropbox = 40000000;
 
-// new titles for table accueil
-$langDropBox = array('greek' => "Ανταλλαγή Αρχείων", 'english' => "DropBox");
-$langCourseAdmin = array('greek' => "Διαχείριση Μαθήματος", 'english' => "Course Admin");
-$langUsers = array('greek' => "Διαχείριση Χρηστών", 'english' => "Users Admin");
-$langForums = array('greek' => "Περιοχή Συζητήσεων", 'english' => "Forum");
-$langWork = array('greek' => "Εργασίες", 'english' => "Student Papers");
-$langWiki = array('greek' => "Σύστημα Wiki", 'english' => "Wiki");
-$langToolManagement = array('greek' => "Ενεργοποίηση Εργαλείων", 'english' => "Tools Management");
-$langCourseStat = array('greek' => "Στατιστικά Χρήσης", 'english' => "Usage Statistics");
-$langQuestionnaire = array('greek' => "Ερωτηματολόγιο", 'english' => "Questionnaire");
-$langConference = array('greek' => "Τηλεσυνεργασία", 'english' => "Teleconference");
-$langLearnPath = array('greek' => "Γραμμή Μάθησης", 'english' => "Learning Path");
-$langExercises = array('greek' => "Ασκήσεις", 'english' => "Exercises");
-
 // Initialise $tool_content
 $tool_content = "";
 $fromadmin = true;
 
 if (isset($_POST['submit_upgrade'])) {
-	include('../config/config.php');
 	$fromadmin = false;
 }
 
@@ -66,6 +52,17 @@ if (!isset($submit2)) {
                 draw($tool_content, 0);
                 exit;
         }
+}
+
+// Make sure 'video' subdirectory exists and is writable
+if (!file_exists('../video')) {
+        if (!mkdir('../video')) {
+                die('Ο υποκατάλογος "video" δεν υπάρχει και δεν μπόρεσε να δημιουργηθεί. Ελέγξτε τα δικαιώματα πρόσβασης.');
+        }
+} elseif (!is_dir('../video')) {
+        die('Υπάρχει ένα αρχείο με όνομα "video" που εμποδίζει! Θα πρέπει να το διαγράψετε.');
+} elseif (!is_writable('../video')) {
+        die('Δεν υπάρχει δικαίωμα εγγραφής στον υποκατάλογο "video"!');
 }
 
 // ********************************************
@@ -189,6 +186,8 @@ if (!isset($submit2)) {
         // ****************************************************
         // 		upgrade eclass main database
         // ****************************************************
+
+	db_query('SET NAMES greek');
 
         // **************************************
         // old queries
@@ -444,7 +443,7 @@ if (!isset($submit2)) {
                 // modify course_code/index.php
                 $tool_content .= "Τροποποίηση αρχείου index.php του μαθήματος <b>$code[0]</b><br />";
                 if (!@chdir("$webDir/courses/$code[0]")) {
-                        die ("Δεν πραγματοποιήθηκε η αλλαγή στον κατάλογο των μαθημάτων! Ελέγξτε τα δικαιώματα πρόσβασης.");
+                        die ("Δεν πραγματοποιήθηκε η αλλαγή στον κατάλογο του μαθήματος \"$code[0]\"! Ελέγξτε τα δικαιώματα πρόσβασης.");
                 }
 
                 if (!file_exists("temp")) {
@@ -1239,9 +1238,10 @@ if (!isset($submit2)) {
 // ------------------------------------------------------------------------------
 
              	// move video files to new directory
-		if (is_dir("$webDir/$code[0]/video")) {
-                        rename ("$webDir/courses/$code[0]/video", "$webDir/video/$code[0]") or
-                              die ("Δεν ήταν δυνατή η μετονομασία του καταλόγου $webDir/courses/$code[0]/video");
+                $course_video = "${webDir}courses/$code[0]/video";
+		if (is_dir($course_video)) {
+                        rename ($course_video, "${webDir}video/$code[0]") or
+                              $tool_content .= "Προσοχή: Δεν ήταν δυνατή η μεταφορά του υποκαταλόγου $course_video στο φάκελο video<br>";
                 }
                 // upgrade video 
 		if (!mysql_field_exists("$code[0]",'video','path')) {
@@ -1415,11 +1415,12 @@ if (!isset($submit2)) {
                 if (mysql_table_exists($code[0], 'introduction')) {
                         $sql = db_query("SELECT texte_intro FROM introduction", $code[0]);
                         while ($text = mysql_fetch_array($sql)) {
-                                if (db_query("UPDATE cours SET description='$text[0]' WHERE code='$code[0]'", $mysqlMainDb)) {
-                                        $tool_content .= "Μεταφορά του εισαγωγικού κειμένου <b>$text[0]</b> στον πίνακα <b>cours</b>: $OK<br>";
+                                $description = quote($text[0]);
+                                if (db_query("UPDATE cours SET description=$description WHERE code='$code[0]'", $mysqlMainDb)) {
+                                        $tool_content .= "Μεταφορά του εισαγωγικού κειμένου στον πίνακα <b>cours</b>: $OK<br>";
                                         db_query("DROP TABLE IF EXISTS introduction", $code[0]);
                                 } else {
-                                        $tool_content .= "Μεταφορά του εισαγωγικού κειμένου <b>$text[0]</b> στον πίνακα <b>cours</b>: $BAD<br>";
+                                        $tool_content .= "Μεταφορά του εισαγωγικού κειμένου στον πίνακα <b>cours</b>: $BAD<br>";
                                 }
                         }
                 } // end of table introduction
@@ -1488,7 +1489,7 @@ if (!isset($submit2)) {
         $tool_content .= "<p>Η αναβάθμιση των βάσεων δεδομένων του eClass πραγματοποιήθηκε!</p>
                 <p>Είστε πλέον έτοιμοι να χρησιμοποιήσετε την καινούρια έκδοση του eClass!</p>
                 <p>Αν παρουσιάστηκε κάποιο σφάλμα, πιθανόν κάποιο μάθημα να μην δουλεύει εντελώς σωστά.
-                Σε αυτή την περίπτωση επικοινωνήστε μαζί μας στο <a href='mailto:elearn@gunet.gr'>elearn@gunet.gr</a>
+                Σε αυτή την περίπτωση επικοινωνήστε μαζί μας στο <a href='mailto:eclass@gunet.gr'>eclass@gunet.gr</a>
                 περιγράφοντας το πρόβλημα που παρουσιάστηκε και στέλνοντας (αν είναι δυνατόν) όλα τα μηνύματα που
                 εμφανίστηκαν στην οθόνη σας</p>
 		<center><p><a href='$urlServer?logout=yes'>Επιστροφή</a></p></center>
@@ -1648,7 +1649,7 @@ function merge_tables($table_destination,$table_source,$fields_destination,$fiel
 // checks if a mysql table exists
 function mysql_table_exists($db, $table)
 {
-	$exists = mysql_query('SHOW TABLES FROM `'.$db.'` LIKE \''.$table.'\'');
+	$exists = db_query('SHOW TABLES FROM `'.$db.'` LIKE \''.$table.'\'');
 	return mysql_num_rows($exists) == 1;
 }
 
