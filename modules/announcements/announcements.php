@@ -183,8 +183,7 @@ function confirmation (name)
 
         if ($myrow) {
             $AnnouncementToModify = $myrow['id'];
-//            $contentToModify = q($myrow['contenu']);
-	    $contentToModify = mathfilter($contentToModify, 12, "../../include/phpmathpublisher/img/");
+            $contentToModify = q($myrow['contenu']);
             $titleToModify = q($myrow['title']);
             $displayAnnouncementList = true;
         } 
