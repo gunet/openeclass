@@ -842,7 +842,7 @@ function display_my_exercises($dialogBox, $style)
     return $output;
 }
 
-/**
+/*
   * This function is used to display the list of document available in the course
   * It also displays the form used to add selected document in the learning path
   *
@@ -857,32 +857,28 @@ function display_my_exercises($dialogBox, $style)
 function display_my_documents($dialogBox, $style)
 {
     global $is_adminOfCourse;
-
-	global $courseDir;
-	global $baseWorkDir;
+    global $courseDir;
+    global $baseWorkDir;
     global $curDirName;
     global $curDirPath;
     global $parentDir;
-
-	global $langAddModule;
+    global $langAddModule;
     global $langUp;
     global $langName;
     global $langSize;
     global $langDate;
     global $langOk;
     global $langAddModulesButton;
-
     global $fileList;
     global $imgRepositoryWeb;
-
     global $secureDocumentDownload;
 
-	$output = "";
-    /**
+    $output = "";
+    /*
      * DISPLAY
      */
-    $output .= '<!-- display_my_documents output -->' . "\n";
 
+    $output .= '<!-- display_my_documents output -->' . "\n";
     $dspCurDirName = htmlspecialchars($curDirName);
     $cmdCurDirPath = rawurlencode($curDirPath);
     $cmdParentDir  = rawurlencode($parentDir);
@@ -913,10 +909,8 @@ function display_my_documents($dialogBox, $style)
     }
     /* CURRENT DIRECTORY */
     $output .= '<table width="99%">';
-    if ( $curDirName ) /* if the $curDirName is empty, we're in the root point
-    and there is'nt a dir name to display */
-    {
-        $output .= '<!-- current dir name -->' . "\n"
+    if ($curDirName) {
+        $output .= "\n"
         .    '<thead>' . "\n"
         .    '<tr>' . "\n"
         .    '<th colspan="' . $colspan . '" align="left" style="text-align: left; background-color: #0066cc; color: #ffffff">'. "\n"
@@ -942,14 +936,12 @@ function display_my_documents($dialogBox, $style)
     --------------------------------------*/
 
     if ( $fileList )
-    { /*print_r($fileList); die();*/
+    { 
         $iterator = 0;
-
         while ( list( $fileKey, $fileName ) = each ( $fileList['name'] ) )
         {
-
-			$dspFileName = htmlspecialchars($fileList['filename'][$fileKey]);
-            $cmdFileName = str_replace("%2F","/",rawurlencode($curDirPath."/".$fileName));
+		$dspFileName = htmlspecialchars($fileList['filename'][$fileKey]); 
+            	$cmdFileName = str_replace("%2F","/",rawurlencode($curDirPath."/".$fileName));
 
             if ($fileList['visibility'][$fileKey] == "i")
             {
@@ -973,7 +965,6 @@ function display_my_documents($dialogBox, $style)
                 $image       = choose_image($fileName);
                 $size        = format_file_size($fileList['size'][$fileKey]);
                 $date        = format_date($fileList['date'][$fileKey]);
-
                 $doc_url = $cmdFileName;
                 $urlFileName = "../../".$courseDir.$doc_url;
             }
@@ -983,11 +974,9 @@ function display_my_documents($dialogBox, $style)
                 $size        = '&nbsp;';
                 $date        = '&nbsp;';
                 $urlFileName = $_SERVER['PHP_SELF'] . '?openDir=' . $cmdFileName;
-                $dspFileName = htmlspecialchars($fileName);
             }
 
             $output .= '<tr align="center" ' . $style . '>'."\n";
-
             if ($fileList['type'][$fileKey] == A_FILE)
             {
                 $iterator++;
@@ -1003,16 +992,11 @@ function display_my_documents($dialogBox, $style)
             }
             $output .= '<td align="left">'
             .    '<a href="' . $urlFileName . '" ' . $style . '>'
-            .    '<img src="' . $imgRepositoryWeb . $image . '" border="0" hspace="5" alt="" />' . $dspFileName . '</a>'
+            .    '<img src="' . $imgRepositoryWeb . $image . '" border="0" hspace="5">' . $dspFileName . '</a>'
             .    '</td>'."\n"
             .    '<td><small>' . $size . '</small></td>' . "\n"
             .    '<td><small>' . $date . '</small></td>' . "\n"
             ;
-
-            /* NB : Before tracking implementation the url above was simply
-            * "<a href=\"",$urlFileName,"\"",$style,">"
-            */
-
 
             $output .= '</tr>' . "\n";
 

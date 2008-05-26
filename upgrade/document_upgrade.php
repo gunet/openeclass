@@ -54,7 +54,7 @@ function encode_file($filename)  {
 	$u = mysql_fetch_array($b);
 	// rename
 	if (!(rename($filename, $newfilename)))  {
-	  	$tool_content .= "Σφάλμα κατά την μετονομασία του $filename σε $newfilename !";
+	  	$tool_content .= "Σφάλμα κατά την μετονομασία του $filename σε $newfilename !<br>";
 	} else {
 	// fill doc_tmp table	
 		$query = "UPDATE doc_tmp SET new_filename = '".preg_replace('|^.*/|', '', $newfilename)."'
@@ -179,7 +179,7 @@ function encode_group_file($filename)  {
 	$u = mysql_fetch_array($b);
 	// rename
 	if (!(rename($filename, $newfilename)))  {
-	  	$tool_content .= "Σφάλμα κατά την μετονομασία του $filename σε $newfilename !";
+	  	$tool_content .= "Σφάλμα κατά την μετονομασία του $filename σε $newfilename !<br>";
 	} else {
 	// fill group_doc_tmp table	
 		$query = "UPDATE group_doc_tmp SET new_filename = '".preg_replace('|^.*/|', '', $newfilename)."'

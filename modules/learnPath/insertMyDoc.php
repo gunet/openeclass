@@ -236,7 +236,8 @@ if ($curDirPath == "/" || $curDirPath == "\\" || strstr($curDirPath, ".."))
     $curDirPath =""; // manage the root directory problem
 }
 
-$curDirName = basename($curDirPath);
+$d = mysql_fetch_array(db_query("SELECT filename FROM $TABLEDOCUMENT WHERE path='$curDirPath'")); 
+$curDirName = $d['filename'];
 $parentDir  = dirname($curDirPath);
 
 if ($parentDir == "/" || $parentDir == "\\")
@@ -254,14 +255,13 @@ if ($parentDir == "/" || $parentDir == "\\")
   --------------------------------------*/
 
 /* Search infos in the DB about the current directory the user is in */
-
 $sql = "SELECT *
         FROM `".$TABLEDOCUMENT."`
         WHERE `path` LIKE \"". addslashes($curDirPath) ."/%\"
         AND `path` NOT LIKE \"". addslashes($curDirPath) ."/%/%\"";
 $result = db_query($sql);
 $attribute = array();
-           
+
 while($row = mysql_fetch_array($result, MYSQL_ASSOC))
 {
     $attribute['path'      ][] = $row['path'      ];
