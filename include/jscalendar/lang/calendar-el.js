@@ -11,14 +11,14 @@
 
 // full day names
 Calendar._DN = new Array
-("Κυριακή",
- "Δευτέρα",
- "Τρίτη",
- "Τετάρτη",
- "Πέμπτη",
- "Παρασκευή",
- "Σάββατο",
- "Κυριακή");
+("ΞΟ…ΟΞΉΞ±ΞΊΞ®",
+ "Ξ”ΞµΟ…Ο„Ξ­ΟΞ±",
+ "Ξ¤ΟΞ―Ο„Ξ·",
+ "Ξ¤ΞµΟ„Ξ¬ΟΟ„Ξ·",
+ "Ξ Ξ­ΞΌΟ€Ο„Ξ·",
+ "Ξ Ξ±ΟΞ±ΟƒΞΊΞµΟ…Ξ®",
+ "Ξ£Ξ¬Ξ²Ξ²Ξ±Ο„ΞΏ",
+ "ΞΟ…ΟΞΉΞ±ΞΊΞ®");
 
 // Please note that the following array of short day names (and the same goes
 // for short month names, _SMN) isn't absolutely necessary.  We give it here
@@ -34,14 +34,14 @@ Calendar._DN = new Array
 
 // short day names
 Calendar._SDN = new Array
-("Κυρ",
- "Δευ",
- "Τρ",
- "Τετ",
- "Πεμ",
- "Παρ",
- "Σαβ",
- "Κυρ");
+("ΞΟ…Ο",
+ "Ξ”ΞµΟ…",
+ "Ξ¤Ο",
+ "Ξ¤ΞµΟ„",
+ "Ξ ΞµΞΌ",
+ "Ξ Ξ±Ο",
+ "Ξ£Ξ±Ξ²",
+ "ΞΟ…Ο");
 
 // First day of the week. "0" means display Sunday first, "1" means display
 // Monday first, etc.
@@ -49,37 +49,37 @@ Calendar._FD = 1;
 
 // full month names
 Calendar._MN = new Array
-("Ιανουάριος",
- "Φεβρουάριος",
- "Μάρτιος",
- "Απρίλιος",
- "Μάιος",
- "Ιούνιος",
- "Ιούλιος",
- "Αύγουστος",
- "Σεπτέμβριος",
- "Οκτώβριος",
- "Νοέμβριος",
- "Δεκέμβριος");
+("Ξ™Ξ±Ξ½ΞΏΟ…Ξ¬ΟΞΉΞΏΟ‚",
+ "Ξ¦ΞµΞ²ΟΞΏΟ…Ξ¬ΟΞΉΞΏΟ‚",
+ "ΞΞ¬ΟΟ„ΞΉΞΏΟ‚",
+ "Ξ‘Ο€ΟΞ―Ξ»ΞΉΞΏΟ‚",
+ "ΞΞ¬ΞΉΞΏΟ‚",
+ "Ξ™ΞΏΟΞ½ΞΉΞΏΟ‚",
+ "Ξ™ΞΏΟΞ»ΞΉΞΏΟ‚",
+ "Ξ‘ΟΞ³ΞΏΟ…ΟƒΟ„ΞΏΟ‚",
+ "Ξ£ΞµΟ€Ο„Ξ­ΞΌΞ²ΟΞΉΞΏΟ‚",
+ "ΞΞΊΟ„ΟΞ²ΟΞΉΞΏΟ‚",
+ "ΞΞΏΞ­ΞΌΞ²ΟΞΉΞΏΟ‚",
+ "Ξ”ΞµΞΊΞ­ΞΌΞ²ΟΞΉΞΏΟ‚");
 
 // short month names
 Calendar._SMN = new Array
-("Ιαν",
- "Φεβ",
- "Μαρ",
- "Απρ",
- "Μάι",
- "Ιούν",
- "Ιούλ",
- "Αύγ",
- "Σεπ",
- "Οκτ",
- "Νοέ",
- "Δεκ");
+("Ξ™Ξ±Ξ½",
+ "Ξ¦ΞµΞ²",
+ "ΞΞ±Ο",
+ "Ξ‘Ο€Ο",
+ "ΞΞ¬ΞΉ",
+ "Ξ™ΞΏΟΞ½",
+ "Ξ™ΞΏΟΞ»",
+ "Ξ‘ΟΞ³",
+ "Ξ£ΞµΟ€",
+ "ΞΞΊΟ„",
+ "ΞΞΏΞ­",
+ "Ξ”ΞµΞΊ");
 
 // tooltips
 Calendar._TT = {};
-Calendar._TT["INFO"] = "Πληροφορίες για το Ημερολόγιο";
+Calendar._TT["INFO"] = "Ξ Ξ»Ξ·ΟΞΏΟ†ΞΏΟΞ―ΞµΟ‚ Ξ³ΞΉΞ± Ο„ΞΏ Ξ—ΞΌΞµΟΞΏΞ»ΟΞ³ΞΉΞΏ";
 
 Calendar._TT["ABOUT"] =
 "DHTML Date/Time Selector\n" +
@@ -97,31 +97,31 @@ Calendar._TT["ABOUT_TIME"] = "\n\n" +
 "- or Shift-click to decrease it\n" +
 "- or click and drag for faster selection.";
 
-Calendar._TT["PREV_YEAR"] = "Προηγ. έτος";
-Calendar._TT["PREV_MONTH"] = "Προηγ. μήνας";
-Calendar._TT["GO_TODAY"] = "Σήμερα";
-Calendar._TT["NEXT_MONTH"] = "Επόμ. μήνας";
-Calendar._TT["NEXT_YEAR"] = "Επόμ. έτος";
-Calendar._TT["SEL_DATE"] = "Επιλέξτε ημερομηνία";
-Calendar._TT["DRAG_TO_MOVE"] = "Σύρετε με το ποντίκι για μετακίνηση";
-Calendar._TT["PART_TODAY"] = " (σήμερα)";
+Calendar._TT["PREV_YEAR"] = "Ξ ΟΞΏΞ·Ξ³. Ξ­Ο„ΞΏΟ‚";
+Calendar._TT["PREV_MONTH"] = "Ξ ΟΞΏΞ·Ξ³. ΞΌΞ®Ξ½Ξ±Ο‚";
+Calendar._TT["GO_TODAY"] = "Ξ£Ξ®ΞΌΞµΟΞ±";
+Calendar._TT["NEXT_MONTH"] = "Ξ•Ο€ΟΞΌ. ΞΌΞ®Ξ½Ξ±Ο‚";
+Calendar._TT["NEXT_YEAR"] = "Ξ•Ο€ΟΞΌ. Ξ­Ο„ΞΏΟ‚";
+Calendar._TT["SEL_DATE"] = "Ξ•Ο€ΞΉΞ»Ξ­ΞΎΟ„Ξµ Ξ·ΞΌΞµΟΞΏΞΌΞ·Ξ½Ξ―Ξ±";
+Calendar._TT["DRAG_TO_MOVE"] = "Ξ£ΟΟΞµΟ„Ξµ ΞΌΞµ Ο„ΞΏ Ο€ΞΏΞ½Ο„Ξ―ΞΊΞΉ Ξ³ΞΉΞ± ΞΌΞµΟ„Ξ±ΞΊΞ―Ξ½Ξ·ΟƒΞ·";
+Calendar._TT["PART_TODAY"] = " (ΟƒΞ®ΞΌΞµΟΞ±)";
 
 // the following is to inform that "%s" is to be the first day of week
 // %s will be replaced with the day name.
-Calendar._TT["DAY_FIRST"] = "Εμφάνισε πρώτα την %s ";
+Calendar._TT["DAY_FIRST"] = "Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞµ Ο€ΟΟΟ„Ξ± Ο„Ξ·Ξ½ %s ";
 
 // This may be locale-dependent.  It specifies the week-end days, as an array
 // of comma-separated numbers.  The numbers are from 0 to 6: 0 means Sunday, 1
 // means Monday, etc.
 Calendar._TT["WEEKEND"] = "0,6";
 
-Calendar._TT["CLOSE"] = "Κλείσιμο";
-Calendar._TT["TODAY"] = "Σήμερα";
-Calendar._TT["TIME_PART"] = "(Shift-) Κλικ για να αλλάξετε τιμή";
+Calendar._TT["CLOSE"] = "ΞΞ»ΞµΞ―ΟƒΞΉΞΌΞΏ";
+Calendar._TT["TODAY"] = "Ξ£Ξ®ΞΌΞµΟΞ±";
+Calendar._TT["TIME_PART"] = "(Shift-) ΞΞ»ΞΉΞΊ Ξ³ΞΉΞ± Ξ½Ξ± Ξ±Ξ»Ξ»Ξ¬ΞΎΞµΟ„Ξµ Ο„ΞΉΞΌΞ®";
 
 // date formats
 Calendar._TT["DEF_DATE_FORMAT"] = "%Y-%m-%d";
 Calendar._TT["TT_DATE_FORMAT"] = "%a, %b %e";
 
-Calendar._TT["WK"] = "εβδ.";
-Calendar._TT["TIME"] = "Ώρα:";
+Calendar._TT["WK"] = "ΞµΞ²Ξ΄.";
+Calendar._TT["TIME"] = "ΞΟΞ±:";
