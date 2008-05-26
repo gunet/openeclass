@@ -135,9 +135,7 @@ while ($mycours = mysql_fetch_array($result2)) {
 
 // docs perso info
 
-$tool_content .= "<table width='100%'><thead>
-      		<tr><th>$langMyPersoDocs </th></tr></thead>
-      		<tbody>";
+$tool_content .= "<table width='100%'><thead><tr><th>$langMyPersoDocs </th></tr></thead><tbody>";
 
 $csql = db_query("SELECT cours.code k, cours.fake_code c,
 	cours.intitule i, cours_user.statut s
@@ -150,7 +148,8 @@ while ($c = mysql_fetch_array($csql)) {
 		AND accueil.visible =1 AND accueil.id =3
 		ORDER BY date_modified DESC", $c['k']));
 
-	$docs_content = "<li class='category'>$d[title]<a class='square_bullet2' href='$d[path]'>$d[filename]</a></li>"; 
+	$docs_content = "<li class='category'>$d[title]
+		<a class='square_bullet2' href='$urlServer/courses/$c[k]/document$d[path]'>$d[filename]</a></li>"; 
 	$tool_content .= "<tr class='odd'><td>$docs_content</td></tr>";
 }
 $tool_content .= "</tbody></table>";
