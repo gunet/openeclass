@@ -1382,6 +1382,7 @@ $langAddIntro = "Add introduction text";
 $langAddModulesButton = "Add selection";
 $langAddOneModuleButton = "Add module";
 $langLearningPathStructure = "Learning Path Structure";
+$langLearningPathConfigure = "Learning Path Configuration";
 $langContents = "Contents";
 $langLearningObjects = "Learning Objects";
 $langLearningModule = "Section";

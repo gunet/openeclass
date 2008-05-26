@@ -871,7 +871,7 @@ function display_my_documents($dialogBox, $style)
     global $langAddModulesButton;
     global $fileList;
     global $imgRepositoryWeb;
-    global $secureDocumentDownload;
+    global $secureDocumentDownload, $langSelection, $langDirectory;
 
     $output = "";
     /*
@@ -883,12 +883,13 @@ function display_my_documents($dialogBox, $style)
     $cmdCurDirPath = rawurlencode($curDirPath);
     $cmdParentDir  = rawurlencode($parentDir);
 
-    $output .= '<form action="' . $_SERVER['PHP_SELF'] . '" method="POST">';
+    $output .= '
+    <form action="' . $_SERVER['PHP_SELF'] . '" method="POST">';
 
     /*--------------------------------------
     DIALOG BOX SECTION
     --------------------------------------*/
-    $colspan = 4;
+    $colspan = 5;
     if( !empty($dialogBox) )
     {
         $output .= claro_disp_message_box($dialogBox, $style)."<br />";
@@ -907,28 +908,32 @@ function display_my_documents($dialogBox, $style)
         .    '</a></p>' . "\n"
         ;
     }
+    $colspan2 = $colspan -1 ;
     /* CURRENT DIRECTORY */
-    $output .= '<table width="99%">';
+    $output .= '
+    <table width="99%">';
     if ($curDirName) {
-        $output .= "\n"
-        .    '<thead>' . "\n"
-        .    '<tr>' . "\n"
-        .    '<th colspan="' . $colspan . '" align="left" style="text-align: left; background-color: #0066cc; color: #ffffff">'. "\n"
-        .    '<img src="' . $imgRepositoryWeb . 'opendir.gif" align="absbottom" vspace=2 hspace=5 alt="" />' . "\n"
-        .    $dspCurDirName . "\n"
-        .    '</th>' . "\n"
-        .    '</tr>' . "\n"
-        .    '</thead>' . "\n"
-        ;
+        $output .= '
+    <thead>
+    <tr>
+      <td class="left" height="18" style="border-top: 1px solid #edecdf; border-bottom: 1px solid #edecdf; border-left: 1px solid #edecdf; background: #fff;"><img src="' . $imgRepositoryWeb . 'opendir.gif" align="absbottom" vspace=2 hspace=5 alt="" /></td>
+      <td colspan="$colspan2" style="border-top: 1px solid #edecdf; background: #fff; border-bottom: 1px solid #edecdf; border-right: 1px solid #edecdf;">'.$langDirectory.': '.$dspCurDirName.'</td>
+    </tr>
+    </thead>';
     }
 
-    $output .= '<thead><tr align="center" valign="top">'
-    .    '<th>' . $langAddModule . '</th>' . "\n"
-    .    '<th>' . $langName . '</th>' . "\n"
-    .    '<th>' . $langSize . '</th>' . "\n"
-    .    '<th>' . $langDate . '</th>' . "\n"
-    .    '</tr></thead><tbody>' . "\n"
-    ;
+
+
+    $output .= "
+    <thead>
+    <tr valign=\"top\">
+      <th colspan=\"2\" class=\"left\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$langName</th>
+      <th>$langSize</th>
+      <th>$langDate</th>
+      <th>$langSelection</th>
+      </tr>
+    </thead>
+    <tbody>";
 
 
     /*--------------------------------------
@@ -936,11 +941,11 @@ function display_my_documents($dialogBox, $style)
     --------------------------------------*/
 
     if ( $fileList )
-    { 
+    {
         $iterator = 0;
         while ( list( $fileKey, $fileName ) = each ( $fileList['name'] ) )
         {
-		$dspFileName = htmlspecialchars($fileList['filename'][$fileKey]); 
+		$dspFileName = htmlspecialchars($fileList['filename'][$fileKey]);
             	$cmdFileName = str_replace("%2F","/",rawurlencode($curDirPath."/".$fileName));
 
             if ($fileList['visibility'][$fileKey] == "i")
@@ -976,29 +981,26 @@ function display_my_documents($dialogBox, $style)
                 $urlFileName = $_SERVER['PHP_SELF'] . '?openDir=' . $cmdFileName;
             }
 
-            $output .= '<tr align="center" ' . $style . '>'."\n";
+            $output .= '
+    <tr align="center" ' . $style . '>
+      <td align="left" width="1"><img src="' . $imgRepositoryWeb . $image . '" border="0" hspace="5"></td>
+      <td align="left"><a href="' . $urlFileName . '" ' . $style . '>'.$dspFileName.'</a></td>
+      <td width="100"><small>' . $size . '</small></td>
+      <td width="100"><small>' . $date . '</small></td>';
+
             if ($fileList['type'][$fileKey] == A_FILE)
             {
                 $iterator++;
-                $output .= '<td>'
-                .    '<input type="checkbox" name="insertDocument_' . $iterator . '" id="insertDocument_' . $iterator . '" value="' . $curDirPath . "/" . $fileName . '" />'
-                .'<input type="hidden" name="filenameDocument_' . $iterator . '" id="filenameDocument_' . $iterator . '" value="' .$dspFileName .'" />'
-                .    '</td>' . "\n"
-                ;
+                $output .= '
+      <td><input type="checkbox" name="insertDocument_' . $iterator . '" id="insertDocument_' . $iterator . '" value="' . $curDirPath . "/" . $fileName . '" /><input type="hidden" name="filenameDocument_' . $iterator . '" id="filenameDocument_' . $iterator . '" value="' .$dspFileName .'" /></td>';
             }
             else
             {
-                $output .= '<td>&nbsp;</td>';
+                $output .= '
+      <td>&nbsp;</td>';
             }
-            $output .= '<td align="left">'
-            .    '<a href="' . $urlFileName . '" ' . $style . '>'
-            .    '<img src="' . $imgRepositoryWeb . $image . '" border="0" hspace="5">' . $dspFileName . '</a>'
-            .    '</td>'."\n"
-            .    '<td><small>' . $size . '</small></td>' . "\n"
-            .    '<td><small>' . $date . '</small></td>' . "\n"
-            ;
-
-            $output .= '</tr>' . "\n";
+            $output .= '
+    </tr>';
 
             /* COMMENTS */
 
@@ -1007,36 +1009,41 @@ function display_my_documents($dialogBox, $style)
                 $fileList['comment'][$fileKey] = htmlspecialchars($fileList['comment'][$fileKey]);
                 $fileList['comment'][$fileKey] = claro_parse_user_text($fileList['comment'][$fileKey]);
 
-                $output .= '<tr align="left">'."\n"
-                	.'<td>&nbsp;</td>'."\n"
-                	.'<td colspan="'.$colspan.'">'."\n"
-                	.'<div class="comment">'
-                	.$fileList['comment'][$fileKey]
-	                .'</div>'."\n"
-	                .'</td>'."\n"
-	                .'</tr>'."\n";
+                $output .= '
+    <tr align="left">
+      <td>&nbsp;</td>
+      <td colspan="'.$colspan.'"><div class="comment">'.$fileList['comment'][$fileKey].'</div></td>
+    </tr>';
             }
         }  // end each ($fileList)
         // form button
-        $output .= '</tbody><tfoot>'
-        	.'<tr><td colspan="4"><hr noshade size="1"></td></tr>'."\n";
 
-        $output .= '<tr>'."\n"
-			.'<td colspan="'.$colspan.'" align="left">'."\n"
-			.'<input type="hidden" name="openDir" value="'.$curDirPath.'" />'."\n"
-			.'<input type="hidden" name="maxDocForm" value ="'.$iterator.'" />'."\n"
-			.'<input type="submit" name="submitInsertedDocument" value="'.$langAddModulesButton.'" />'."\n"
-			.'</td>'."\n"
-			.'</tr>'."\n";
+
+    $colspan1 = $colspan -1 ;
+        $output .= '
+    <tr>
+      <th colspan="'.$colspan1.'" align="left">&nbsp;</th>
+      <td align="right" width="100">
+        <input type="hidden" name="openDir" value="'.$curDirPath.'" />
+        <input type="hidden" name="maxDocForm" value ="'.$iterator.'" />
+        <input type="submit" name="submitInsertedDocument" value="'.$langAddModulesButton.'" />
+      </td>
+    </tr>';
     } // end if ( $fileList)
 	else
 	{
-		$output .= '<tr><td colspan="4"><hr noshade size="1"></td></tr>'."\n";
+		$output .= '
+    <tr>
+      <td colspan="4">&nbsp;</td>
+    </tr>';
     }
 
-	$output .= '</tfoot></table>'."\n"
-    	.'</form>'."\n"
-    	.'<!-- end of display_my_documents output -->'."\n";
+	$output .= '
+    </tbody>
+    </table>
+
+    </form>
+    <!-- end of display_my_documents output -->'."\n";
 
 	return $output;
 }

@@ -392,7 +392,7 @@ else
       <td class=\"left\">".nameBox(LEARNINGPATH_, DISPLAY_);
 }
 
-$tool_content .="</td>
+$tool_content .="      </td>
     </tr>";
 
 //############################ LEARNING PATH COMMENT BOX #############################\\
@@ -422,20 +422,28 @@ $tool_content .="
       <td colspan=\"2\">&nbsp;</td>
     </tr>";
 
+$tool_content .="
+    <tr>
+      <th class=\"left\">&nbsp;</th>
+      <td><b>$langLearningPathConfigure</b></td>
+    </tr>\n";
+
 
 // -------------------- create label -------------------
-
 if (isset($displayCreateLabelForm) && $displayCreateLabelForm)
 {
-    $dialogBox = "
-    <form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">
-    <p>
-      <strong><label for=\"newLabel\">".$langNewLabel."</label></strong>&nbsp;
-      <input type=\"text\" name=\"newLabel\" id=\"newLabel\" maxlength=\"255\" />
-      <input type=\"hidden\" name=\"cmd\" value=\"createLabel\" />
-      <input type=\"submit\" value=\"".$langCreate."\" />
-    </p>
-    </form>";
+    $tool_content .= "
+    <tr>
+      <th class=\"left\" height=\"32\">$langLearningModule :</th>
+      <td>
+        <form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">
+          <label for=\"newLabel\">".$langNewLabel."</label>&nbsp;
+          <input type=\"text\" name=\"newLabel\" id=\"newLabel\" maxlength=\"255\" / class=\"FormData_InputText\" size=\"30\" >
+          <input type=\"hidden\" name=\"cmd\" value=\"createLabel\" />
+          <input type=\"submit\" value=\"".$langCreate."\" />
+        </form>
+      </td>
+    </tr>";
 }
 if (isset($displayChangePosForm) && $displayChangePosForm)
 {
@@ -467,12 +475,15 @@ if (isset($dialogBox) && $dialogBox!="")
 
 // --------------- learning path course admin links ------------------------------
 
-
+if (!isset($displayCreateLabelForm))
+{
 $tool_content .="
     <tr>
       <th class=\"left\" height=\"32\">$langLearningModule :</th>
-      <td class=\"left\"><a href=\"".$_SERVER['PHP_SELF']."?cmd=createLabel\">".$langCreateLabel."</a></td>
-    </tr>
+      <td><a href=\"".$_SERVER['PHP_SELF']."?cmd=createLabel\">".$langCreate."</a></td>
+    </tr>";
+}
+$tool_content .="
     <tr>
       <th class=\"left\" height=\"32\">$langLearningObjects :</th>
       <td class=\"left\">$langAddModule :";

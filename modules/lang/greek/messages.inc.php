@@ -1350,6 +1350,7 @@ $langAddModule = "Προσθήκη";
 $langLearningModule = "Ενότητα";
 $langLearningObjects = "Εκπαιδευτικά Αντικείμενα";
 $langLearningPathStructure = "Δομή Γραμμής Μάθησης";
+$langLearningPathConfigure = "Διαμόρφωση γραμμής μάθησης";
 $langContents = "Περιεχόμενα";
 $langAddModulesButton = "Προσθήκη επιλεγμένων";
 $langAddOneModuleButton = "Προσθήκη ενότητας";
