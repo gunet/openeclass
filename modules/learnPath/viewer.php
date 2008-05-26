@@ -56,7 +56,13 @@ $tool_content = "";
 // 1 : display only table of content and content
 define ('FULL_SCREEN' , 0);
 
-$nameTools = $langLearningPath;
+$l = db_query("SELECT name FROM lp_learnPath WHERE learnPath_id = '".(int)$_SESSION['path_id']."'", $currentCourseID);
+$lpname = mysql_fetch_array($l);
+$nameTools = $lpname['name'];
+$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
+$navigation[] = array("url"=>"learningPath.php", "name"=> $langLearningPath);
+
+
 if (!isset($titlePage)) $titlePage = '';
 if(!empty($nameTools))
 {

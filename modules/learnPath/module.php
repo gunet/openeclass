@@ -71,7 +71,7 @@ $body_action = "";
 
 $nameTools = $langModule;
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
-if ( $is_adminOfCourse )
+if ($is_adminOfCourse)
 {
     $navigation[]= array ("url"=>"learningPathAdmin.php", "name"=> $langLearningPath);
 }
