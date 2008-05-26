@@ -85,9 +85,11 @@
 
       Learnpath module: Piraux Sebastien <pir@cerdecam.be>
 	        Lederer Guillaume <led@cerdecam.be>
+	
+      PHP MathPublisher : Copyright (c) 2005 by Pascal Brachet <pbrachet@xm1math.net> 
 
       Exercise module: Copyright Olivier Brouckaert <oli.brouckaert@skynet.be>
 
-       Function parse_tex(): Patrick Cool <patrick.cool@UGent.be>
+      Function parse_tex(): Patrick Cool <patrick.cool@UGent.be>
 
-       Function user_get_data(): Mathieu Laurent <laurent@cerdecam.be>
+      Function user_get_data(): Mathieu Laurent <laurent@cerdecam.be>

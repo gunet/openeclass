@@ -378,9 +378,7 @@ $tool_content .="
 
 //############################ LEARNING PATH NAME BOX ################################\\
 
-$tool_content .="
-    <tr>
-      <th class=\"left\" height=\"32\">$langTitle :</th>";
+$tool_content .="<tr><th class=\"left\" height=\"32\">$langTitle :</th>";
 
 if ($cmd == "updateName")
 {
@@ -388,19 +386,13 @@ if ($cmd == "updateName")
 }
 else
 {
-    $tool_content .= "
-      <td class=\"left\">".nameBox(LEARNINGPATH_, DISPLAY_);
+    $tool_content .= "<td class=\"left\">".nameBox(LEARNINGPATH_, DISPLAY_);
 }
 
-$tool_content .="      </td>
-    </tr>";
+$tool_content .= "</td></tr>";
 
 //############################ LEARNING PATH COMMENT BOX #############################\\
-
-$tool_content .="
-    <tr>
-      <th class=\"left\" height=\"32\">$langComments :</th>
-      <td class=\"left\">";
+$tool_content .="<tr><th class=\"left\" height=\"32\">$langComments :</th><td class=\"left\">";
 
 if ($cmd == "updatecomment")
 {
@@ -413,10 +405,7 @@ if ($cmd == "updatecomment")
     $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 }
 
-$tool_content .="</td>
-    </tr>";
-
-
+$tool_content .="</td></tr>";
 $tool_content .="
     <tr>
       <td colspan=\"2\">&nbsp;</td>
@@ -461,7 +450,6 @@ if (isset($displayChangePosForm) && $displayChangePosForm)
     </form>";
 }
 
-
 //####################################################################################\\
 //############################### DIALOG BOX SECTION #################################\\
 //####################################################################################\\
@@ -477,6 +465,7 @@ if (isset($dialogBox) && $dialogBox!="")
 
 if (!isset($displayCreateLabelForm))
 {
+
 $tool_content .="
     <tr>
       <th class=\"left\" height=\"32\">$langLearningModule :</th>
@@ -490,14 +479,11 @@ $tool_content .="
 
 $tool_content .= " <a href=\"insertMyDoc.php\" title=\"$langDocumentAsModule\">".$langDocumentAsModuleLabel."</a> | <a href=\"insertMyExercise.php\" title=\"$langExerciseAsModule\">".$langExerciseAsModuleLabel."</a> | <a href=\"insertMyLink.php\" title=\"$langLinkAsModule\">".$langLinkAsModuleLabel."</a> | <a href=\"insertMyDescription.php\" title=\"$langCourseDescriptionAsModule\">".$langCourseDescriptionAsModuleLabel."</a> | <a href=\"insertMyModule.php\" title=\"$langModuleOfMyCourse\">".$langModuleOfMyCourseLabel."</a>";
 
-$tool_content .="</td>
-    </tr>
-    <tr>
-      <th class=\"left\" height=\"32\" valign=\"top\">$langLearningPathStructure :</th>
-      <td class=\"left\">";
+$tool_content .="</td></tr><tr>
+     <th class=\"left\" height=\"32\" valign=\"top\">$langLearningPathStructure :</th>
+     <td class=\"left\">";
 
 //  -------------------------- learning path list content ----------------------------
-
 $sql = "SELECT M.*, LPM.*, A.`path`
         FROM (`".$TABLEMODULE."` AS M,
              `".$TABLELEARNPATHMODULE."` AS LPM)
@@ -536,7 +522,6 @@ for ($i=0 ; $i < sizeof($flatElementList) ; $i++)
 }
 
 // -------------------------- learning path list header ----------------------------
-
 $tool_content .="
     <table width=\"99%\">
     <thead>
@@ -549,9 +534,7 @@ $tool_content .="
     </thead>
     <tbody>";
 
-
 // ----------------------- LEARNING PATH LIST DISPLAY ---------------------------------
-
 foreach ($flatElementList as $module)
 {
     //-------------visibility-----------------------------
@@ -601,10 +584,9 @@ foreach ($flatElementList as $module)
     $tool_content .= "</td>"; // end of td of module name
 
     // LOCK
-    $tool_content .= "
-      <td style=\"border-left: 1px solid #edecdf;\">";
+    $tool_content .= "<td style=\"border-left: 1px solid #edecdf;\">";
 
-    if ( $module['contentType'] == CTLABEL_)
+    if ($module['contentType'] == CTLABEL_)
     {
         $tool_content .= "&nbsp;";
     }
