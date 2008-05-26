@@ -1,24 +1,24 @@
 <?php
 /*=============================================================================
-       	GUnet e-Class 2.0 
-        E-learning and Course Management Program  
+       	GUnet e-Class 2.0
+        E-learning and Course Management Program
 ================================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
         A full copyright notice can be read in "/info/copyright.txt".
-        
-       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-                     Yannis Exidaridis <jexi@noc.uoa.gr> 
-                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
-        For a full list of contributors, see "credits.txt".  
-     
-        This program is a free software under the terms of the GNU 
-        (General Public License) as published by the Free Software 
-        Foundation. See the GNU License for more details. 
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+                     Yannis Exidaridis <jexi@noc.uoa.gr>
+                     Alexandros Diamantidis <adia@noc.uoa.gr>
+
+        For a full list of contributors, see "credits.txt".
+
+        This program is a free software under the terms of the GNU
+        (General Public License) as published by the Free Software
+        Foundation. See the GNU License for more details.
         The full license can be read in "license.txt".
-     
-       	Contact address: GUnet Asynchronous Teleteaching Group, 
-        Network Operations Center, University of Athens, 
+
+       	Contact address: GUnet Asynchronous Teleteaching Group,
+        Network Operations Center, University of Athens,
         Panepistimiopolis Ilissia, 15784, Athens, Greece
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
@@ -27,21 +27,21 @@
 	insertMyExercise.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.7 licensed under GPL
 	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: insertMyExercise.php Revision: 1.14.2.1
-	      
+
 	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
                       Lederer Guillaume <led@cerdecam.be>
-==============================================================================        
+==============================================================================
     @Description: This script lists all available exercises and the course
                   admin can add them to a learning path
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
 
@@ -75,6 +75,14 @@ $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath)
 if (!$is_adminOfCourse) claro_die($langNotAllowed);
 $navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
 $nameTools = $langInsertMyExerciseToolName;
+
+	$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">
+        <li><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</a></li>
+      </ul>
+    </div>
+    ";
 
 // $_SESSION
 if ( !isset($_SESSION['path_id']) )
@@ -125,7 +133,7 @@ while ($listex = mysql_fetch_array($resultex) )
 
             $result = db_query($sql);
             $exercise = mysql_fetch_array($result);
-            
+
             if( !empty($exercise['description']) ) {
             	$comment = $exercise['description'];
             }
@@ -166,8 +174,12 @@ while ($listex = mysql_fetch_array($resultex) )
                     VALUES ('". (int)$_SESSION['path_id']."', '".(int)$insertedExercice_id."','".addslashes($langDefaultModuleAddedComment)."', ".$order.",'OPEN')";
             $query = db_query($sql);
 
-            $dialogBox .= $exercise['titre'] ." :  ".$langExInsertedAsModule."<br>";
+            $MessBox .= $exercise['titre'] ." :  ".$langExInsertedAsModule."<br>";
             $style = "success";
+            $tool_content .= "<table width=\"99%\"><tr>";
+            $tool_content .= claro_disp_message_box($MessBox, $style);
+            $tool_content .= "</td></tr></table>";
+            $tool_content .= "<br />";
         }
         else    // exercise is already used as a module in another learning path , so reuse its reference
         {
@@ -208,13 +220,21 @@ while ($listex = mysql_fetch_array($resultex) )
 
                 $result = db_query($sql);
                 $exercise = mysql_fetch_array($result);
-                $dialogBox .= $exercise['titre']." : ".$langExInsertedAsModule."<br>";
+                $MessBox .= $exercise['titre']." : ".$langExInsertedAsModule."<br>";
                 $style = "success";
+                $tool_content .= "<table width=\"99%\"><tr>";
+                $tool_content .= claro_disp_message_box($MessBox, $style);
+                $tool_content .= "</td></tr></table>";
+                $tool_content .= "<br />";
             }
             else
             {
-                $dialogBox .= $listex['titre']." : ".$langExAlreadyUsed."<br>";
+                $MessBox .= $listex['titre']." : ".$langExAlreadyUsed."<br>";
                 $style = "caution";
+                $tool_content .= "<table width=\"99%\"><tr>";
+                $tool_content .= claro_disp_message_box($MessBox, $style);
+                $tool_content .= "</td></tr></table>";
+                $tool_content .= "<br />";
             }
         }
     }
@@ -224,11 +244,11 @@ while ($listex = mysql_fetch_array($resultex) )
 $tool_content .= display_my_exercises($dialogBox, $style);
 
 //STEP TWO : display learning path content
-$tool_content .= claro_disp_tool_title($langPathContentTitle);
-$tool_content .= '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
+//$tool_content .= claro_disp_tool_title($langPathContentTitle);
+//$tool_content .= '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
 
 // display list of modules used by this learning path
-$tool_content .= display_path_content();
+//$tool_content .= display_path_content();
 
 draw($tool_content, 2, "learnPath");
 

@@ -88,6 +88,14 @@ mysql_select_db($currentCourseID);
 // 1)  We select first the modules that must not be displayed because
 // as they are already in this learning path
 
+
+	$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">
+        <li><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</a></li>
+      </ul>
+    </div>
+    ";
 function buildRequestModules() {
 
  global $TABLELEARNPATHMODULE;
@@ -174,8 +182,12 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                         VALUES ('". (int)$_SESSION['path_id']."', '".(int)$insertedModule_id."','".addslashes($langDefaultModuleAddedComment)."', ".(int)$order.", 'OPEN')";
                 $query = db_query($sql);
                 $addedDoc = $filenameDocument;
-                $dialogBox .= $addedDoc ." ".$langDocInsertedAsModule."<br>";
+                $InfoBox .= $addedDoc ." ".$langDocInsertedAsModule."<br>";
                 $style = "success";
+                $tool_content .= "<table width=\"99%\"><tr>";
+                $tool_content .= claro_disp_message_box($InfoBox, $style);
+                $tool_content .= "</td></tr></table>";
+                $tool_content .= "<br />";
             }
             else
             {
@@ -205,13 +217,21 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                             VALUES ('". (int)$_SESSION['path_id']."', '". (int)$thisDocumentModule['module_id']."','".addslashes($langDefaultModuleAddedComment)."', ".(int)$order.",'OPEN')";
                     $query = db_query($sql);
                     $addedDoc =  $filenameDocument;
-                    $dialogBox .= $addedDoc ." ".$langDocInsertedAsModule."<br>";
+                    $InfoBox .= $addedDoc ." ".$langDocInsertedAsModule."<br>";
                     $style = "success";
+                    $tool_content .= "<table width=\"99%\"><tr>";
+                    $tool_content .= claro_disp_message_box($InfoBox, $style);
+                    $tool_content .= "</td></tr></table>";
+                    $tool_content .= "<br />";
                 }
                 else
                 {
-                    $dialogBox .= $filenameDocument.": ".$langDocumentAlreadyUsed."<br>";
+                    $InfoBox .= "<b>$filenameDocument</b>: ".$langDocumentAlreadyUsed."<br>";
                     $style = "caution";
+                    $tool_content .= "<table width=\"99%\"><tr>";
+                    $tool_content .= claro_disp_message_box($InfoBox, $style);
+                    $tool_content .= "</td></tr></table>";
+                    $tool_content .= "<br />";
                 }
             }
         }
@@ -236,7 +256,7 @@ if ($curDirPath == "/" || $curDirPath == "\\" || strstr($curDirPath, ".."))
     $curDirPath =""; // manage the root directory problem
 }
 
-$d = mysql_fetch_array(db_query("SELECT filename FROM $TABLEDOCUMENT WHERE path='$curDirPath'")); 
+$d = mysql_fetch_array(db_query("SELECT filename FROM $TABLEDOCUMENT WHERE path='$curDirPath'"));
 $curDirName = $d['filename'];
 $parentDir  = dirname($curDirPath);
 
@@ -354,13 +374,6 @@ closedir($handle);
 unset($attribute);
 
 
-	$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">
-        <li><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</a></li>
-      </ul>
-    </div>
-    ";
 // display list of available documents
 $tool_content .= display_my_documents($dialogBox, $style) ;
 

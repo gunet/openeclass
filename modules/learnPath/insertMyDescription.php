@@ -1,24 +1,24 @@
 <?php
 /*=============================================================================
-       	GUnet e-Class 2.0 
-        E-learning and Course Management Program  
+       	GUnet e-Class 2.0
+        E-learning and Course Management Program
 ================================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
         A full copyright notice can be read in "/info/copyright.txt".
-        
-       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-                     Yannis Exidaridis <jexi@noc.uoa.gr> 
-                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
-        For a full list of contributors, see "credits.txt".  
-     
-        This program is a free software under the terms of the GNU 
-        (General Public License) as published by the Free Software 
-        Foundation. See the GNU License for more details. 
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+                     Yannis Exidaridis <jexi@noc.uoa.gr>
+                     Alexandros Diamantidis <adia@noc.uoa.gr>
+
+        For a full list of contributors, see "credits.txt".
+
+        This program is a free software under the terms of the GNU
+        (General Public License) as published by the Free Software
+        Foundation. See the GNU License for more details.
         The full license can be read in "license.txt".
-     
-       	Contact address: GUnet Asynchronous Teleteaching Group, 
-        Network Operations Center, University of Athens, 
+
+       	Contact address: GUnet Asynchronous Teleteaching Group,
+        Network Operations Center, University of Athens,
         Panepistimiopolis Ilissia, 15784, Athens, Greece
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
@@ -27,13 +27,13 @@
 	insertMyDescription.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-==============================================================================        
+==============================================================================
     @Description: This script lets the course
                   admin to add the course description to a learning path
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
 
@@ -55,6 +55,13 @@ if (!$is_adminOfCourse ) claro_die($langNotAllowed);
 $navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
 $nameTools = $langInsertMyDescToolName;
 
+	$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">
+        <li><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</a></li>
+      </ul>
+    </div>
+    ";
 // $_SESSION
 if ( !isset($_SESSION['path_id']) )
 {
@@ -114,7 +121,7 @@ if ($num == 0)
 		" . (int)$order . ", 'OPEN')";
 	$query = db_query($sql);
 }
-else 
+else
 {
 	// check if this is this LP that used this course description as a module
 	$sql = "SELECT * FROM `".$TABLELEARNPATHMODULE."` AS LPM,
@@ -126,17 +133,17 @@ else
 		AND M.`contentType` = \"".CTCOURSE_DESCRIPTION_."\"";
 	$query2 = db_query($sql);
 	$num = mysql_numrows($query2);
-	
+
 	if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
 		$thisDocumentModule = mysql_fetch_array($query);
 		// determine the default order of this Learning path
 		$sql = "SELECT MAX(`rank`)
 			FROM `".$TABLELEARNPATHMODULE."`";
 		$result = db_query($sql);
-	
+
 		list($orderMax) = mysql_fetch_row($result);
 		$order = $orderMax + 1;
-	
+
 		// finally : insert in learning path
 		$sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
 			(`learnPath_id`, `module_id`, `rank`, `lock`)
@@ -148,6 +155,6 @@ else
 }
 
 $tool_content .= claro_disp_tool_title($langLinkInsertedAsModule);
-$tool_content .= '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
+//$tool_content .= '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
 draw($tool_content, 2, "learnPath");
 ?>

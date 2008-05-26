@@ -424,7 +424,7 @@ if (isset($displayCreateLabelForm) && $displayCreateLabelForm)
     $tool_content .= "
     <tr>
       <th class=\"left\" height=\"32\">$langLearningModule :</th>
-      <td>
+      <td class=\"right\">
         <form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">
           <label for=\"newLabel\">".$langNewLabel."</label>&nbsp;
           <input type=\"text\" name=\"newLabel\" id=\"newLabel\" maxlength=\"255\" / class=\"FormData_InputText\" size=\"30\" >
@@ -469,13 +469,13 @@ if (!isset($displayCreateLabelForm))
 $tool_content .="
     <tr>
       <th class=\"left\" height=\"32\">$langLearningModule :</th>
-      <td><a href=\"".$_SERVER['PHP_SELF']."?cmd=createLabel\">".$langCreate."</a></td>
+      <td class=\"right\"><a href=\"".$_SERVER['PHP_SELF']."?cmd=createLabel\">".$langCreate."</a></td>
     </tr>";
 }
 $tool_content .="
     <tr>
       <th class=\"left\" height=\"32\">$langLearningObjects :</th>
-      <td class=\"left\">$langAddModule :";
+      <td class=\"right\">$langAddModule :";
 
 $tool_content .= " <a href=\"insertMyDoc.php\" title=\"$langDocumentAsModule\">".$langDocumentAsModuleLabel."</a> | <a href=\"insertMyExercise.php\" title=\"$langExerciseAsModule\">".$langExerciseAsModuleLabel."</a> | <a href=\"insertMyLink.php\" title=\"$langLinkAsModule\">".$langLinkAsModuleLabel."</a> | <a href=\"insertMyDescription.php\" title=\"$langCourseDescriptionAsModule\">".$langCourseDescriptionAsModuleLabel."</a> | <a href=\"insertMyModule.php\" title=\"$langModuleOfMyCourse\">".$langModuleOfMyCourseLabel."</a>";
 

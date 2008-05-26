@@ -215,9 +215,8 @@ function showlinks($tbl_link)
     <table width=\"99%\">
     <thead>
       <tr>
-        <th colspan=\"2\" class=\"left\" width=\"250\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$langName</th>
-        <th width=\"250\">$langComment</th>
-        <th width=\"100\">$langSelection</th>
+        <th colspan=\"2\" class=\"left\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$langName</th>
+        <th width=\"10\">$langSelection</th>
       </tr>
     </thead>
     <tbody>";
@@ -227,17 +226,18 @@ function showlinks($tbl_link)
 		$myrow[3] = parse_tex($myrow[3]);
 		$output .= 	"
     <tr>
-      <td width=\"1\"><img src=\"../../template/classic/img/links.gif\" border=\"0\"></td>
-      <td align=\"left\"><a href=\"../link/link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">".$myrow[2]."</a></td>
-      <td>".$myrow[3]."";
-		$output .= 	"</td>
+      <td width=\"1\" valign=\"top\"><img src=\"../../template/classic/img/links.gif\" border=\"0\"></td>
+      <td align=\"left\" valign=\"top\"><a href=\"../link/link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">".$myrow[2]."</a>
+      <br />
+      <small class=\"comments\">".$myrow[3]."</small>";
+		$output .= 	"
       <td align=\"center\"><input type=\"checkbox\" name=\"insertLink_".$i."\" id=\"insertLink_".$i."\" value=\"$myrow[0]\" /></td>
     </tr>";
 		$i++;
 	}
 	$output .= "
     <tr>
-      <th colspan=\"3\">&nbsp;</th>
+      <th colspan=\"2\">&nbsp;</th>
       <td align=\"right\">
         <input type=\"hidden\" name=\"maxLinkForm\" value =\"" .($i-1) ."\" />
         <input type=\"submit\" name=\"submitInsertedLink\" value=\"$langAddModulesButton\" />

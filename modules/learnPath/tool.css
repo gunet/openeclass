@@ -11,6 +11,7 @@ a:visited.invisible
    color: #999999;
 }
 
+.comments{ color: #a19b99; }
 .correct{ color: #009900; }
 .error{  color: #990000; }
 

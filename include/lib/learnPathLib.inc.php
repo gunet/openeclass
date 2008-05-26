@@ -735,33 +735,33 @@ function display_my_exercises($dialogBox, $style)
     global $langExercise;
     global $langNoEx;
     global $langAddOneModuleButton;
-    global $imgRepositoryWeb;
+    global $imgRepositoryWeb, $langComment, $langSelection;
     $output = "";
 
-    $output .= '<!-- display_my_exercises output -->' . "\n";
+    $output .= '<!-- display_my_exercises output -->' . "\n\n";
     /*--------------------------------------
     DIALOG BOX SECTION
     --------------------------------------*/
-    $colspan = 4;
+    $colspan = 3;
     if( !empty($dialogBox) )
     {
         $output .= claro_disp_message_box($dialogBox, $style).'<br />'."\n";
     }
-    $output .= '<table width="99%">'."\n\n"
-    .    '<thead>'."\n"
-    .    '<tr align="center" valign="top">'."\n"
-    .    '<th width="10%">'
-    .    $langAddModule
-    .    '</th>'."\n"
-    .    '<th>'
+    $output .= '    <form method="POST" name="addmodule" action="' . $_SERVER['PHP_SELF'] . '?cmdglobal=add">'."\n";
+    $output .= '    <table width="99%">'."\n"
+    .    '    <thead>'."\n"
+    .    '    <tr align="center" valign="top">'."\n"
+    .    '      <th>'
     .    $langExercise
     .    '</th>'."\n"
-    .    '</tr>'."\n"
-    .    '</thead>'."\n\n"
+    .    '      <th width="100">'
+    .    $langSelection
+    .    '</th>'."\n"
+    .    '    </tr>'."\n"
+    .    '    </thead>'."\n"
     ;
 
     // Display available modules
-    $output .= '<form method="POST" name="addmodule" action="' . $_SERVER['PHP_SELF'] . '?cmdglobal=add">'."\n";
     $atleastOne = FALSE;
     $sql = "SELECT `id`, `titre` AS `title`, `description`
             FROM `" . $tbl_quiz_test . "`
@@ -770,73 +770,65 @@ function display_my_exercises($dialogBox, $style)
 
     if( is_array($exercises) && !empty($exercises) )
     {
-		$output .= '<tbody>' . "\n\n";
+		$output .= '    <tbody>' . "\n";
 
 	    foreach ( $exercises as $exercise )
 	    {
-	        $output .= '<tr>'."\n"
-	        .    '<td align="center">'
-	        .    '<input type="checkbox" name="check_' . $exercise['id'] . '" id="check_' . $exercise['id'] . '" value="' . $exercise['id'] . '" />'
-	        .    '</td>'."\n"
-	        .    '<td align="left">'
+	        $output .= '    <tr>'."\n"
+	        .    '      <td align="left">'
 	        .    '<label for="check_'.$exercise['id'].'" >'
-	        .    '<img src="' . $imgRepositoryWeb . 'exercise_on.gif" alt="' . $langExercise . '" title="' . $langExercise . '" />'
+	        .    '<img src="' . $imgRepositoryWeb . 'exercise_on.gif" alt="' . $langExercise . '" title="' . $langExercise . '" />&nbsp;'
 	        .    $exercise['title']
 	        .    '</label>'
-	        .    '</td>'."\n"
-	        .    '</tr>'."\n\n"
-	        ;
-
+	        .    '<br />'."\n";
 	        // COMMENT
-
 	        if( !empty($exercise['description']) )
 	        {
-	            $output .= '<tr>'."\n"
-	            .    '<td>&nbsp;</td>'."\n"
-	            .    '<td>'
-	            .    '<small>' . $exercise['description'] . '</small>'
+	            $output .= '      <small class="comments">' . $exercise['description'] . '</small>'
 	            .    '</td>'."\n"
-	            .    '</tr>'."\n\n"
 	            ;
-	        }
+	        } else {
+	            $output .= '</td>'."\n"
+	            ;
+            }
+	        $output .= '      <td align="center">'
+	        .    '<input type="checkbox" name="check_' . $exercise['id'] . '" id="check_' . $exercise['id'] . '" value="' . $exercise['id'] . '" />'
+	        .    '</td>'."\n"
+	        .    '    </tr>'."\n"
+	        ;
+
+
 	        $atleastOne = true;
 	    }//end while another module to display
-	    $output .= '</tbody>'."\n\n";
+	    $output .= '    </tbody>'."\n";
 	}
-
-    $output .= '<tfoot>'."\n\n";
 
     if( !$atleastOne )
     {
-        $output .= '<tr>'."\n"
-		.	 '<td colspan="2" align="center">'
+        $output .= '    <tr>'."\n"
+		.	 '      <td colspan="2" align="center">'
         .    $langNoEx
         .    '</td>'."\n"
-		.	 '</tr>'."\n\n"
+		.	 '    </tr>'."\n"
         ;
     }
 
     // Display button to add selected modules
 
-    $output .= '<tr>'."\n"
-    .    '<td colspan="2">'
-    .    '<hr noshade size="1">'
-    .    '</td>'."\n"
-	.	 '</tr>'."\n\n"
-    ;
     if( $atleastOne )
     {
-        $output .= '<tr>'."\n"
-		.	 '<td colspan="2">'
+        $output .= '    <tr>'."\n"
+		.	 '      <th>&nbsp;</th>'
+		.	 '      <td>'
         .    '<input type="submit" name="insertExercise" value="'.$langAddModulesButton.'" />'
         .    '</td>'."\n"
-		.	 '</tr>'."\n\n"
+		.	 '    </tr>'."\n"
         ;
     }
-    $output .= '</form>'."\n\n"
-    .    '</tfoot>'."\n\n"
-    .    '</table>'."\n\n"
-    .    '<!-- end of display_my_exercises output -->' . "\n"
+    $output .= '    </tbody>'."\n"
+    .    '    </table>'."\n\n"
+    .    '    </form>'."\n\n"
+    .    '    <!-- end of display_my_exercises output -->' . "\n"
     ;
 
     return $output;
@@ -898,32 +890,33 @@ function display_my_documents($dialogBox, $style)
     CURRENT DIRECTORY LINE
     --------------------------------------*/
 
+
+
+    /* CURRENT DIRECTORY */
+    if ($curDirName) {
+        $output .= '
+    <table width="99%" class="FormData">
+    <thead>
+    <tr>
+      <td width="1" class="right"><img src="' . $imgRepositoryWeb . 'opendir.gif" align="absbottom" vspace=2 hspace=5 alt="" /></td>
+      <td>'.$langDirectory.': <b>'.$dspCurDirName.'</b></td>';
     /* GO TO PARENT DIRECTORY */
     if ($curDirName) /* if the $curDirName is empty, we're in the root point
     and we can't go to a parent dir */
     {
-        $output .= '<p><a href="' . $_SERVER['PHP_SELF'] . '?openDir=' . $cmdParentDir . '">' . "\n"
-        .    '<img src="' . $imgRepositoryWeb . 'parent.gif" border="0" align="absbottom" hspace="5" alt="" />'."\n"
-        .    '<small>' . $langUp . '</small>' . "\n"
-        .    '</a></p>' . "\n"
-        ;
+        $output .= '
+      <td width="1" ><img src="' . $imgRepositoryWeb . 'parent.gif" border="0" align="absbottom" hspace="5" alt="" /></td>
+      <td width="10" class="right"><a href="' . $_SERVER['PHP_SELF'] . '?openDir=' . $cmdParentDir . '"><small>' . $langUp . '</small></a></td>';
     }
-    $colspan2 = $colspan -1 ;
-    /* CURRENT DIRECTORY */
+        $output .= '
+    </tr>
+    </thead>
+    </table>';
+    }
+
+
     $output .= '
     <table width="99%">';
-    if ($curDirName) {
-        $output .= '
-    <thead>
-    <tr>
-      <td class="left" height="18" style="border-top: 1px solid #edecdf; border-bottom: 1px solid #edecdf; border-left: 1px solid #edecdf; background: #fff;"><img src="' . $imgRepositoryWeb . 'opendir.gif" align="absbottom" vspace=2 hspace=5 alt="" /></td>
-      <td colspan="$colspan2" style="border-top: 1px solid #edecdf; background: #fff; border-bottom: 1px solid #edecdf; border-right: 1px solid #edecdf;">'.$langDirectory.': '.$dspCurDirName.'</td>
-    </tr>
-    </thead>';
-    }
-
-
-
     $output .= "
     <thead>
     <tr valign=\"top\">
@@ -1637,7 +1630,7 @@ function claro_disp_tool_title($titlePart, $helpUrl = false)
     }
 
 
-    $string = "\n" . '<h3>' . "\n";
+    $string = "\n" . '    <h3>' . "\n";
 
     if ($helpUrl)
     {

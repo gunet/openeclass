@@ -1,24 +1,24 @@
-<?php 
+<?php
 /*=============================================================================
-       	GUnet e-Class 2.0 
-        E-learning and Course Management Program  
+       	GUnet e-Class 2.0
+        E-learning and Course Management Program
 ================================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
         A full copyright notice can be read in "/info/copyright.txt".
-        
-       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-                     Yannis Exidaridis <jexi@noc.uoa.gr> 
-                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
-        For a full list of contributors, see "credits.txt".  
-     
-        This program is a free software under the terms of the GNU 
-        (General Public License) as published by the Free Software 
-        Foundation. See the GNU License for more details. 
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+                     Yannis Exidaridis <jexi@noc.uoa.gr>
+                     Alexandros Diamantidis <adia@noc.uoa.gr>
+
+        For a full list of contributors, see "credits.txt".
+
+        This program is a free software under the terms of the GNU
+        (General Public License) as published by the Free Software
+        Foundation. See the GNU License for more details.
         The full license can be read in "license.txt".
-     
-       	Contact address: GUnet Asynchronous Teleteaching Group, 
-        Network Operations Center, University of Athens, 
+
+       	Contact address: GUnet Asynchronous Teleteaching Group,
+        Network Operations Center, University of Athens,
         Panepistimiopolis Ilissia, 15784, Athens, Greece
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
@@ -27,24 +27,24 @@
 	insertMyModule.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.7 licensed under GPL
 	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: insertMyModule.php Revision: 1.22
-	      
+
 	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
                       Lederer Guillaume <led@cerdecam.be>
-==============================================================================        
+==============================================================================
     @Description: This script lists all available modules and the course
                   admin can add them to a learning path
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
- 
+
 require_once("../../include/lib/learnPathLib.inc.php");
 require_once("../../include/lib/fileDisplayLib.inc.php");
 
@@ -66,6 +66,14 @@ if (! $is_adminOfCourse) claro_die($langNotAllowed);
 $navigation[]= array ("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
 $nameTools = $langInsertMyModuleToolName;
 
+	$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">
+        <li><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</a></li>
+      </ul>
+    </div>
+    ";
+
 // $_SESSION
 if ( !isset($_SESSION['path_id']) )
 {
@@ -84,7 +92,7 @@ function buildRequestModules()
 
  global $TABLELEARNPATHMODULE;
  global $TABLEMODULE;
- global $TABLEASSET;
+ global $TABLEASSET, $langLearningModule, $langSelection;
 
  $firstSql = "SELECT LPM.`module_id`
               FROM `".$TABLELEARNPATHMODULE."` AS LPM
@@ -104,7 +112,7 @@ function buildRequestModules()
  {
     $sql .=" AND M.`module_id` != ". (int)$list['module_id'];
  }
- 
+
 
  /* To find which module must displayed we can also proceed  with only one query.
   * But this implies to use some features of MySQL not available in the version 3.23, so we use
@@ -114,7 +122,7 @@ function buildRequestModules()
   $query = "SELECT *
              FROM `".$TABLEMODULE."` AS M
              WHERE NOT EXISTS(SELECT * FROM `".$TABLELEARNPATHMODULE."` AS TLPM
-             WHERE TLPM.`module_id` = M.`module_id`)"; 
+             WHERE TLPM.`module_id` = M.`module_id`)";
  */
 
   return $sql;
@@ -123,7 +131,7 @@ function buildRequestModules()
 
 //COMMAND ADD SELECTED MODULE(S):
 
-if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add')) 
+if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add'))
 {
 
     // select all 'addable' modules of this course for this learning path
@@ -134,7 +142,7 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add'))
     while ($list = mysql_fetch_array($result))
     {
         // see if check box was checked
-        if (isset($_REQUEST['check_'.$list['module_id']]) && $_REQUEST['check_'.$list['module_id']]) 
+        if (isset($_REQUEST['check_'.$list['module_id']]) && $_REQUEST['check_'.$list['module_id']])
         {
             // find the order place where the module has to be put in the learning path
             $sql = "SELECT MAX(`rank`)
@@ -156,12 +164,12 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add'))
             $nb++;
         }
     }
-     
+
      /*if ( !$atleastOne )
      {
          $tool_content .= claro_disp_message_box("No module selected !!");
      }*/
-     
+
 } //end if ADD command
 
 //STEP ONE : display form to add module of the course that are not in this path yet
@@ -170,28 +178,29 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add'))
 
 $result = db_query(buildRequestModules());
 
-$tool_content .= '<table width="99%">'."\n"
-       .'<thead>'."\n"
-       .'<tr>'."\n"
-       .'<th width="10%">'
-       .$langAddModule
+$tool_content .= '    <form name="addmodule" action="'.$_SERVER['PHP_SELF'].'?cmdglobal=add">'."\n\n";
+$tool_content .= '    <table width="99%">'."\n"
+       .'    <thead>'."\n"
+       .'    <tr>'."\n"
+       .'      <th class="left">'
+       .$langLearningModule
        .'</th>'."\n"
-       .'<th>'
-       .$langModule
+       .'      <th width="100">'
+       .$langSelection
        .'</th>'."\n"
-       .'</tr>'."\n"
-       .'</thead>'."\n\n"
-       .'<tbody>'."\n\n";
+       .'    </tr>'."\n"
+       .'    </thead>'."\n"
+       .'    <tbody>'."\n";
 
 // Display available modules
-$tool_content .= '<form name="addmodule" action="'.$_SERVER['PHP_SELF'].'?cmdglobal=add">'."\n";
+
 
 $atleastOne = FALSE;
 
 while ($list=mysql_fetch_array($result))
 {
     //CHECKBOX, NAME, RENAME, COMMENT
-    if($list['contentType'] == CTEXERCISE_ ) 
+    if($list['contentType'] == CTEXERCISE_ )
         $moduleImg = "exercise_on.gif";
     else if($list['contentType'] == CTLINK_ )
         $moduleImg = "links.gif";
@@ -199,72 +208,65 @@ while ($list=mysql_fetch_array($result))
        	$moduleImg = "description_on.gif";
     else
         $moduleImg = choose_image(basename($list['path']));
-        
+
     $contentType_alt = selectAlt($list['contentType']);
-    
-    $tool_content .= '<tr>'."\n"
-        .'<td align="center">'."\n"
-        .'<input type="checkbox" name="check_'.$list['module_id'].'" id="check_'.$list['module_id'].'">'."\n"
-        .'</td>'."\n"
-        .'<td align="left">'."\n"
-        .'<label for="check_'.$list['module_id'].'" ><img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" />'.$list['name'].'</label>'."\n"
-        .'</td>'."\n"
-        .'</tr>'."\n\n";
+
+    $tool_content .= '    <tr>'."\n"
+        .'      <td align="left">'."\n"
+        .'        <label for="check_'.$list['module_id'].'" ><img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" />&nbsp;'.$list['name'].'</label>'."\n";
 
     // COMMENT
-
     if ($list['comment'] != null)
     {
-        $tool_content .= '<tr>'."\n"
-            .'<td>&nbsp;</td>'."\n"
-            .'<td>'."\n"
-            .'<small>'.$list['comment'].'</small>'."\n"
-            .'</td>'."\n"
-            .'</tr>'."\n\n";
+        $tool_content .= '      <br />'."\n"
+            .'        <small class="comments">'.$list['comment'].'</small>'."\n";
     }
+    $tool_content .= '      </td>'."\n"
+        .'      <td align="center">'."\n"
+        .'        <input type="checkbox" name="check_'.$list['module_id'].'" id="check_'.$list['module_id'].'">'."\n"
+        .'      </td>'."\n"
+        .'    </tr>'."\n";
+
     $atleastOne = TRUE;
 
 }//end while another module to display
 
-$tool_content .= "\n".'</tbody>'."\n\n".'<tfoot>'."\n\n";
+//$tool_content .= '    </tbody>'."\n".'    <tfoot>'."\n";
 
 if ( !$atleastOne )
 {
-    $tool_content .= '<tr>'."\n"
-        .'<td colspan="2" align="center">'
+    $tool_content .= '    <tr>'."\n"
+        .'      <td colspan="2" align="center">'
         .$langNoMoreModuleToAdd
         .'</td>'."\n"
-        .'</tr>'."\n";
+        .'    </tr>'."\n";
 }
-$tool_content .= '<tr>'
-	.'<td colspan="6"><hr noshade size="1"></td>'
-	.'</tr>'."\n"
-	;
+
 // Display button to add selected modules
 
 if ( $atleastOne )
 {
-    $tool_content .= '<tr>'."\n"
-        .'<td colspan="2">'."\n"
-        .'<input type="submit" value="'.$langAddModulesButton.'" />'."\n"
-        .'<input type="hidden" name="cmdglobal" value="add">'."\n"
-        .'</td>'."\n"
-        .'</tr>'."\n";
+    $tool_content .= '    <tr>'."\n"
+        .'      <th>&nbsp;</th>'."\n"
+        .'      <td>'."\n"
+        .'        <input type="submit" value="'.$langAddModulesButton.'" />'."\n"
+        .'        <input type="hidden" name="cmdglobal" value="add">'."\n"
+        .'      </td>'."\n"
+        .'    </tr>'."\n";
 }
 
-$tool_content .= "\n".'</tfoot>'."\n\n".'</form>'."\n".'</table>';
+$tool_content .= "\n".'    </tbody>'."\n".'    </table>'."\n".'    </form>';
 
 //####################################################################################\\
 //################################## MODULES LIST ####################################\\
 //####################################################################################\\
 
-$tool_content .= "<br />";
+//$tool_content .= "<br />";
 // display subtitle
-$tool_content .= claro_disp_tool_title($langPathContentTitle);
+//$tool_content .= claro_disp_tool_title($langPathContentTitle);
 // display back link to return to the LP administration
-$tool_content .= '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
 // display list of modules used by this learning path
-$tool_content .= display_path_content();
+//$tool_content .= display_path_content();
 
 draw($tool_content, 2, "learnPath");
 ?>
