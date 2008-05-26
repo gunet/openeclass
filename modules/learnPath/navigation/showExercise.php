@@ -1,5 +1,4 @@
 <?php 
-
 /**=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
@@ -165,8 +164,7 @@ $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user
 <p><center><a href='../learningPathList.php' target=top>${langBack}</a></center></p>
 cData;
 	
-	//			header('Location: ../../exercice/exercise_redirect.php');
-				exit();
+			exit();
 			}
 			// record start of exercise
 			mysql_select_db($currentCourseID);
@@ -311,7 +309,6 @@ function showQuestion($questionId, $onlyAnswers=false)
 		$questionName=$objQuestionTmp->selectTitle();
 		$questionDescription=$objQuestionTmp->selectDescription();
 	// latex support
-
 		$questionName=latex_content($questionName);
 		$questionDescription=latex_content($questionDescription);
 
@@ -397,9 +394,7 @@ cData;
 		// fill in blanks
 		elseif($answerType == FILL_IN_BLANKS)
 		{
-
 			echo "<tr><td colspan=\"2\">${answer}</td></tr>";
-
 		}
 		// matching
 		else
@@ -425,34 +420,27 @@ cData;
 cData;
 
 	            // fills the list-box
-	            foreach($Select as $key=>$val)
-	            {
-
-			echo "<option value=\"${key}\">${val['Lettre']}</option>";
-
-				}  // end foreach()
-
+	            foreach($Select as $key=>$val) {
+			echo "<option value=\"${key}\">${val['Lettre']}</option>";	
+		     }  // end foreach()
 		  echo "</select>&nbsp;&nbsp;</td><td width=\"40%\" valign=\"top\">";
 		  
 		  if(isset($Select[$cpt2])) 
 		  	echo '<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse']; 
 		  else 
 		  	echo '&nbsp;';
-		  	
+	
 		  echo	"</td></tr></table></td></tr>";
 				$cpt2++;
-
 				// if the left side of the "matching" has been completely shown
 				if($answerId == $nbrAnswers)
 				{
 					// if it remains answers to shown at the right side
-					while(isset($Select[$cpt2]))
-					{
-		echo "<tr><td colspan=\"2\">".
-			"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"95%\">".
-			"<tr><td width=\"60%\" colspan=\"2\">&nbsp;</td><td width=\"40%\" align=\"right\" valign=\"top\">".
-			"<b>".$Select[$cpt2]['Lettre'].".</b> ".$Select[$cpt2]['Reponse']."</td></tr></table></td></tr>";
-/////////////////////////////////////////////////////////////////////////////////
+					while(isset($Select[$cpt2])) { 
+						echo "<tr><td colspan=\"2\">".
+						"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"95%\">".
+						"<tr><td width=\"60%\" colspan=\"2\">&nbsp;</td><td width=\"40%\" align=\"right\" valign=\"top\">".
+						"<b>".$Select[$cpt2]['Lettre'].".</b> ".$Select[$cpt2]['Reponse']."</td></tr></table></td></tr>";
 						$cpt2++;
 					}	// end while()
 				}  // end if()
@@ -462,10 +450,8 @@ cData;
 
 	// destruction of the Answer object
 	unset($objAnswerTmp);
-
 	// destruction of the Question object
 	unset($objQuestionTmp);
-
 	return $nbrAnswers;
 }
 ?>

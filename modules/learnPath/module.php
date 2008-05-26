@@ -291,19 +291,19 @@ if($module['contentType'] != CTLABEL_) //
         //display user best score
         if ($resultBrowsed['scoreMax'] > 0)
         {
-			$raw = round($resultBrowsed['raw']/$resultBrowsed['scoreMax']*100);
+		$raw = round($resultBrowsed['raw']/$resultBrowsed['scoreMax']*100);
         }
         else
         {
-			$raw = 0;
+		$raw = 0;
         }
 
         $raw = max($raw, 0);
-        
+
         if (($resultBrowsed['contentType'] == CTSCORM_ ) && ($resultBrowsed['scoreMax'] <= 0)
-            &&  (  ( ($resultBrowsed['lesson_status'] == "COMPLETED") || ($resultBrowsed['lesson_status'] == "PASSED") ) || ($resultBrowsed['raw'] != -1) ) )
+            &&  ((($resultBrowsed['lesson_status'] == "COMPLETED") || ($resultBrowsed['lesson_status'] == "PASSED") ) || ($resultBrowsed['raw'] != -1) ) )
         {
-			$raw = 100;
+		$raw = 100;
         }
 
         // no sens to display a score in case of a document module
@@ -312,10 +312,10 @@ if($module['contentType'] != CTLABEL_) //
              ($resultBrowsed['contentType'] != CTCOURSE_DESCRIPTION_)
            )
         {
-			$tool_content .= '<tr>'."\n"
-				.'<td>'.$langYourBestScore.'</td>'."\n"
-				.'<td>'.claro_disp_progress_bar($raw, 1).' '.$raw.'%</td>'."\n"
-				.'</tr>'."\n\n";
+		$tool_content .= '<tr>'."\n"
+			.'<td>'.$langYourBestScore.'</td>'."\n"
+			.'<td>'.claro_disp_progress_bar($raw, 1).' '.$raw.'%</td>'."\n"
+			.'</tr>'."\n\n";
         }
 
         //display lesson status
@@ -364,12 +364,11 @@ if($module['contentType'] != CTLABEL_) //
 
     if( $module['startAsset_id'] != "" && $asset['asset_id'] == $module['startAsset_id'] )
     {
-
-		$tool_content .= '<center>'."\n"
-			.'<form action="./viewer.php" method="post">'."\n"
-			.'<input type="submit" value="'.$langStartModule.'" />'."\n"
-			.'</form>'."\n"
-			.'</center>'."\n\n";
+	$tool_content .= '<center>'."\n"
+		.'<form action="./viewer.php" method="post">'."\n"
+		.'<input type="submit" value="'.$langStartModule.'" />'."\n"
+		.'</form>'."\n"
+		.'</center>'."\n\n";
     }
     else
     {
@@ -403,5 +402,4 @@ if( $is_adminOfCourse ) // for teacher only
     }
 } // if ($is_adminOfCourse)
 draw($tool_content, 2, "learnPath", $head_content, $body_action);
-
 ?>

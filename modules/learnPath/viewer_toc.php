@@ -88,8 +88,8 @@ else // anonymous
 
 // get the list of available modules
 $sql = "SELECT LPM.`learnPath_module_id` ,
-			LPM.`parent`,
-			LPM.`lock`,
+	LPM.`parent`,
+	LPM.`lock`,
             M.`module_id`,
             M.`contentType`,
             M.`name`,
@@ -195,8 +195,7 @@ foreach ($flatElementList as $module)
 	for($i = 0; $i < $module['children']; $i++) $spacingString .= '<td>&nbsp;</td>';
 	
 	$colspan = $maxDeep - $module['children']+1;
-        
-      
+ 
 	// spacing col
 	if ( !$is_blocked )
 	{

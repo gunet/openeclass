@@ -57,9 +57,6 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 $TABLEUSERS             = "user";
 
-/*======================================
-       CLAROLINE MAIN
-  ======================================*/
 
 if($uid)
 {
