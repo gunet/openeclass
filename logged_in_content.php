@@ -132,27 +132,56 @@ while ($mycours = mysql_fetch_array($result2)) {
       <p>$langWelcomeProf</p>\n";
 } // if
 
+// get last login date
+$last_login_query = "SELECT `when`
+	FROM  $mysqlMainDb.loginout
+	WHERE action = 'LOGIN' AND id_user = '$uid'
+	ORDER BY `when` DESC LIMIT 1,1";
+
+$row = mysql_fetch_row(db_query($last_login_query));
+// cut the hour, minutes and seconds
+$logindate = eregi_replace(" ", "-",substr($row[0],0,10));
 
 // docs perso info
-
-$tool_content .= "<table width='100%'><thead><tr><th>$langMyPersoDocs </th></tr></thead><tbody>";
-
-$csql = db_query("SELECT cours.code k, cours.fake_code c,
+$tool_content .= "<table width='100%'><thead><tr><th>$langMyPersoDocs</th></tr></thead><tbody>";
+$sql = "SELECT cours.code k, cours.fake_code c, cours.intitule t,
 	cours.intitule i, cours_user.statut s
 	FROM cours, cours_user WHERE cours.code=cours_user.code_cours AND cours_user.user_id='".$uid."'
-	AND cours_user.statut='5'");
+	AND cours_user.statut='5'";
 
+$csql = db_query($sql);
 while ($c = mysql_fetch_array($csql)) {
-	$d = mysql_fetch_array(db_query("SELECT path, filename, title, date_modified
+	$s = db_query("SELECT path, filename, title, date_modified
 		FROM document, accueil WHERE visibility = 'v'
+		AND DATE_FORMAT(date_modified,'%Y-%m-%d') >='" .$logindate."'
 		AND accueil.visible =1 AND accueil.id =3
-		ORDER BY date_modified DESC", $c['k']));
-
-	$docs_content = "<li class='category'>$d[title]
-		<a class='square_bullet2' href='$urlServer/courses/$c[k]/document$d[path]'>$d[filename]</a></li>"; 
-	$tool_content .= "<tr class='odd'><td>$docs_content</td></tr>";
+		ORDER BY date_modified DESC", $c['k']);
+	while ($d = mysql_fetch_array($s)) {
+		$tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
+		$tool_content .= "<td>&nbsp;<img src='images/arrow_blue.gif'>&nbsp;$c[t]:&nbsp;$d[title]
+		<a class='CourseLink' href='$urlServer/courses/$c[k]/document$d[path]'>$d[filename]</a></td></tr>";
+	} 
 }
-$tool_content .= "</tbody></table>";
 
+// assignments info
+$tool_content .= "<tr><th>$langMyPersoDeadlines</th></tr>";
+$asql = db_query($sql, $mysqlMainDb);
+while ($c = mysql_fetch_array($asql)) {
+	$s = db_query("SELECT DISTINCT assignments.id, assignments.title, 
+		assignments.description, assignments.deadline, 
+		cours.intitule,(TO_DAYS(assignments.deadline) - TO_DAYS(NOW())) AS days_left
+		FROM  ".$c['k'].".assignments, ".$mysqlMainDb.".cours, ".$c['k'].".accueil
+		WHERE (TO_DAYS(deadline) - TO_DAYS(NOW())) >= '0'
+		AND assignments.active = 1 AND cours.code = '".$c['k']."'
+		AND ".$c['k'].".accueil.visible =1
+		AND ".$c['k'].".accueil.id =5 ORDER BY deadline", $c['k']); 
+	
+	while ($d = mysql_fetch_array($s)) {
+		$tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
+		$tool_content .= "<td>&nbsp;<img src='images/arrow_blue.gif'>&nbsp;$c[t]:&nbsp;<b>$d[title]</b>&nbsp;- $langExerciseEnd: ".greek_format($d['deadline'])."</td></tr>";
+	} 
+}
+
+$tool_content .= "</tbody></table>";
 session_register('status');
 ?>

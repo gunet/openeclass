@@ -1,5 +1,5 @@
 <?PHP
-/**===========================================================================
+/*===========================================================================
 *              GUnet e-Class 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -18,12 +18,12 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*					Network Operations Center, University of Athens,
+*					Panepistimiopolis Ilissia, 15784, Athens, Greece
+*					eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-/**
+/*
  * Personalised Documents Component, e-Class Personalised
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -35,7 +35,7 @@
  *
  */
 
-/**
+/*
  * Function getUserDocuments
  * 
  * Populates an array with data regarding the user's personalised documents
@@ -48,13 +48,12 @@ function getUserDocuments($param = null, $type) {
 
 	global $mysqlMainDb, $uid, $dbname, $currentCourseID;
 
-	$uid				= $param['uid'];
+	$uid	= $param['uid'];
 	$lesson_code		= $param['lesson_code'];
 	$max_repeat_val		= $param['max_repeat_val'];
 	$lesson_title		= $param['lesson_titles'];
 	$lesson_code		= $param['lesson_code'];
 	$lesson_professor	= $param['lesson_professor'];
-
 	$usr_lst_login	= $param['usr_lst_login'];
 
 	$usr_memory = $param['usr_memory'];
@@ -64,13 +63,13 @@ function getUserDocuments($param = null, $type) {
 	$queryParamNew = array(
 	'lesson_code'		=> $lesson_code,
 	'max_repeat_val'	=> $max_repeat_val,
-	'date'				=> $usr_lst_login
+	'date'		=> $usr_lst_login
 	);
 
 	$queryParamMemo = array(
 	'lesson_code'		=> $lesson_code,
 	'max_repeat_val'	=> $max_repeat_val,
-	'date'				=> $usr_memory
+	'date'		=> $usr_memory
 	);
 
 	$docs_query_new 	= createDocsQueries($queryParamNew);
@@ -139,12 +138,10 @@ function getUserDocuments($param = null, $type) {
 					$myDocuments[0] = strrev(substr(strstr(strrev($myDocuments[0]),"/"), 1));
 					array_push($docsData,$myDocuments);
 				}
-
 				array_push($docsLessonData, $docsData);
 				array_push($docsSubGroup, $docsLessonData);
 			}
 		}
-
 	}
 
 	if($type == "html") {
@@ -170,8 +167,7 @@ function docsHtmlInterface($data) {
 	$docsExist = false;
 	$content= <<<aCont
 	<div id="datacontainer">
-
-				<ul id="datalist">
+<ul id="datalist">
 aCont;
 	$max_repeat_val = count($data);
 	for ($i=0; $i <$max_repeat_val; $i++) {
@@ -179,33 +175,20 @@ aCont;
 		if ($iterator > 0) {
 			$docsExist = true;
 			$content .= "
-		<li class=\"category\">".$data[$i][0]."</li>
-		";
-
+		<li class=\"category\">".$data[$i][0]."</li>";
 			for ($j=0; $j < $iterator; $j++){
 				$url = $_SERVER['PHP_SELF'] . "?perso=6&c=" .$data[$i][1]."&p=".$data[$i][2][$j][0];
-				$content .= "
-		<li><a class=\"square_bullet2\" href=\"$url\"><p class=\"content_pos\">".$data[$i][2][$j][2]." (".$data[$i][2][$j][3].")</p></a>
-			
-		</li>
-		";
+				$content .= "<li><a class=\"square_bullet2\" href=\"$url\"><p class=\"content_pos\">".$data[$i][2][$j][2]." (".$data[$i][2][$j][3].")</p></a>
+				</li>";
 			}
-
 			if ($i+1 <$max_repeat_val) $content .= "<br>";
 		}
 	}
-
-	$content .= "
-	</ul>
-			</div> 
-";
-
+	$content .= "</ul></div> ";
 	if (!$docsExist) {
 		$content = "<p>$langNoDocsExist</p>";
 	}
-
 	return $content;
-
 }
 
 /**
@@ -233,19 +216,13 @@ function createDocsQueries($queryParam){
 		}
 
 		$docs_query[$i] = "SELECT path, filename, title, date_modified
-								FROM document, accueil
-								WHERE visibility = 'v'
-								AND DATE_FORMAT(date_modified,'%Y %m %d') >='" .$dateVar."'
-								AND accueil.visible =1
-								AND accueil.id =3
-								ORDER BY date_modified DESC
-									";
-
+			FROM document, accueil WHERE visibility = 'v'
+			AND DATE_FORMAT(date_modified,'%Y %m %d') >='" .$dateVar."'
+			AND accueil.visible =1
+			AND accueil.id =3
+			ORDER BY date_modified DESC";
 	}
-
 	return $docs_query;
 }
-
-
 
 ?>

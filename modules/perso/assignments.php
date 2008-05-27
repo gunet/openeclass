@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*					Network Operations Center, University of Athens,
+*					Panepistimiopolis Ilissia, 15784, Athens, Greece
+*					eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 /**
@@ -46,41 +46,33 @@
  */
 function getUserAssignments($param, $type) {
 	global $mysqlMainDb;
-	$uid				= $param['uid'];
-	$lesson_code		= $param['lesson_code'];
-	$max_repeat_val		= $param['max_repeat_val'];
-	$lesson_titles		= $param['lesson_titles'];
-	$lesson_code		= $param['lesson_code'];
+	$uid	= $param['uid'];
+	$lesson_code	= $param['lesson_code'];
+	$max_repeat_val	= $param['max_repeat_val'];
+	$lesson_titles	= $param['lesson_titles'];
+	$lesson_code	= $param['lesson_code'];
 	$lesson_professor	= $param['lesson_professor'];
 
-
 	for ($i=0;$i<$max_repeat_val;$i++) {
-
-		$assignments_query[$i] = "SELECT DISTINCT assignments.id, assignments.title, assignments.description, assignments.deadline, 
-									cours.intitule,(TO_DAYS(assignments.deadline) - TO_DAYS(NOW())) AS days_left
-										FROM  ".$lesson_code[$i].".assignments, ".$mysqlMainDb.".cours, ".$lesson_code[$i].".accueil
-										WHERE (TO_DAYS(deadline) - TO_DAYS(NOW())) >= '0'
-										AND assignments.active = 1
-										AND cours.code = '".$lesson_code[$i]."'
-										AND ".$lesson_code[$i].".accueil.visible =1
-										AND ".$lesson_code[$i].".accueil.id =5
-										ORDER BY deadline";
-
+		$assignments_query[$i] = "SELECT DISTINCT assignments.id, assignments.title, 
+		assignments.description, assignments.deadline, 
+		cours.intitule,(TO_DAYS(assignments.deadline) - TO_DAYS(NOW())) AS days_left
+		FROM  ".$lesson_code[$i].".assignments, ".$mysqlMainDb.".cours, ".$lesson_code[$i].".accueil
+		WHERE (TO_DAYS(deadline) - TO_DAYS(NOW())) >= '0'
+		AND assignments.active = 1 AND cours.code = '".$lesson_code[$i]."'
+		AND ".$lesson_code[$i].".accueil.visible =1
+		AND ".$lesson_code[$i].".accueil.id =5 ORDER BY deadline";
 	}
 
 	//initialise array to store all assignments from all lessons
 	$assignGroup = array();
 
 	for ($i=0;$i<$max_repeat_val;$i++) {//each iteration refers to one lesson
-
 		$mysql_query_result = db_query($assignments_query[$i], $lesson_code[$i]);
 		$assignments_repeat_val=0;
 		while($myAssignments = mysql_fetch_row($mysql_query_result)){
-
 			if ($myAssignments){
-
 				array_push($myAssignments, $lesson_code[$i]);
-
 				if ($submission = findSubmission($uid, $myAssignments[0], $lesson_code[$i])) {
 					$lesson_assign[$i][$assignments_repeat_val]['delivered'] = 1; //delivered
 					array_push($myAssignments, 1);
@@ -88,17 +80,12 @@ function getUserAssignments($param, $type) {
 					$lesson_assign[$i][$assignments_repeat_val]['delivered'] = 0;//not delivered
 					array_push($myAssignments, 0);
 				}
-
 				array_push($assignGroup, $myAssignments);
 			}
-
 		}
-
 	}
 
-
 	$assignGroup = columnSort($assignGroup, 3);
-
 	if($type == "html") {
 		return assignHtmlInterface($assignGroup);
 	} elseif ($type == "data") {
@@ -126,13 +113,10 @@ function assignHtmlInterface($data) {
 	
 	<table  width="100%" class="assign">
 		<thead>
-			<tr>
-				<th class="assign">$langCourse</th>
-				<th class="assign">$langAssignment</th>
-				<th class="assign">$langDeadline</th>
-			</tr>
-		</thead>
-		<tbody>
+		<tr><th class="assign">$langCourse</th>
+		<th class="assign">$langAssignment</th>
+		<th class="assign">$langDeadline</th>
+		</tr></thead><tbody>
 aCont;
 
 		for ($i=0; $i < $iterator; $i++){
@@ -145,37 +129,22 @@ aCont;
 				$class = "";
 			}
 			$url = $_SERVER['PHP_SELF'] . "?perso=1&c=" .$data[$i][6]."&i=".$data[$i][0];
-			$assign_content .= "
-		<tr>
-			<td class=\"assign\"><p>".$data[$i][4]."</p></td>
-			
+			$assign_content .= "<tr>
+			<td class=\"assign\"><p>".$data[$i][4]."</p></td>			
 			<td class=\"assign\">
-			
-				<div id=\"assigncontainer\">
-					<ul id=\"assignlist\">
-						<li>
-							<a $class href=\"$url\">
-								<div class=\"assign_pos\">".$data[$i][1]."</div>
-							</a>
-						</li>
-					</ul>
-				</div> 
-			
+			<div id=\"assigncontainer\">
+			<ul id=\"assignlist\">
+			<li><a $class href=\"$url\"><div class=\"assign_pos\">".$data[$i][1]."</div>
+			</a></li></ul>
+			</div> 
 			</td>
-			
-			<td class=\"assign\"><p>".$data[$i][3]."</p></td>
-		</tr>
-		";
+			<td class=\"assign\"><p>".$data[$i][3]."</p></td></tr>";
 		}
-
-		$assign_content .= "
-			</tbody></table>
-			";
+		$assign_content .= "</tbody></table>";
 	} else {
 		$assign_content .= "<p>$langNoAssignmentsExist</p>";
 	}
 	return $assign_content;
-	//	$assign_content .=
 }
 
 /**
@@ -216,13 +185,12 @@ function findSubmission($uid, $id, $lesson_db) {
 	if (isGroupAssignment($id, $lesson_db))	{
 		$gid = getUserGroup($uid, $lesson_db);
 		$res = db_query("SELECT id FROM $lesson_db.assignment_submit
-								WHERE assignment_id = '$id'
-								AND (uid = '$uid' OR group_id = '$gid')", $lesson_db);
+			WHERE assignment_id = '$id'
+			AND (uid = '$uid' OR group_id = '$gid')", $lesson_db);
 	} else {
 		$res =db_query("SELECT id FROM $lesson_db.assignment_submit
-				WHERE assignment_id = '$id' AND uid = '$uid'", $lesson_db);
+			WHERE assignment_id = '$id' AND uid = '$uid'", $lesson_db);
 	}
-
 	if ($res) {
 		$row = mysql_fetch_row($res);
 		return $row[0];
@@ -243,7 +211,6 @@ function findSubmission($uid, $id, $lesson_db) {
  * @return boolean
  */
 function isGroupAssignment($id, $lesson_db) {
-	//	$lv = new DBI();
 	$res = db_query("SELECT group_submissions FROM $lesson_db.assignments WHERE id = '$id'", $lesson_db);
 	if ($res) {
 		$row = mysql_fetch_row($res);
@@ -278,6 +245,5 @@ function getUserGroup($uid, $lesson_db) {
 		}
 	}
 }
-
 
 ?>
