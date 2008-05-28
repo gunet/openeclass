@@ -87,14 +87,14 @@ include('../../include/lib/fileUploadLib.inc.php');
 include('../../include/lib/fileManageLib.inc.php');
 
 if ($language == 'greek')
-$lang_editor='gr';
+	$lang_editor='el';
 else
-$lang_editor='en';
+	$lang_editor='en';
 
 $head_content .= <<<hContent
 <script type="text/javascript">
         _editor_url  = "$urlAppend/include/xinha/";
-        _editor_lang = "en";
+        _editor_lang = "$lang_editor";
         _editor_skin = "silva";
 </script>
 <script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
@@ -357,7 +357,6 @@ function new_assignment()
         <li><a href='work.php'>$langBack</a></li>
       </ul>
     </div>";
-	  
 	$tool_content .= "
     <form action=\"work.php\" method=\"post\">
     <table width=\"99%\" class='FormData'>

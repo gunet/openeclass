@@ -64,13 +64,13 @@ function getUserAnnouncements($param = null, $type) {
 	$queryParamNew = array(
 	'lesson_code'		=> $lesson_code,
 	'max_repeat_val'	=> $max_repeat_val,
-	'date'				=> $usr_lst_login
+	'date'		=> $usr_lst_login
 	);
 
 	$queryParamMemo = array(
 	'lesson_code'		=> $lesson_code,
 	'max_repeat_val'	=> $max_repeat_val,
-	'date'				=> $usr_memory
+	'date'		=> $usr_memory
 	);
 
 	$announce_query_new 	= createQueries($queryParamNew);
@@ -89,22 +89,17 @@ function getUserAnnouncements($param = null, $type) {
 
 		if ($num_rows = mysql_num_rows($mysql_query_result) > 0) {
 			$getNewAnnounce = true;
-
 			$announceLessonData = array();
 			$announceData = array();
 
 			array_push($announceLessonData, $lesson_title[$i]);
 			array_push($announceLessonData, $lesson_code[$i]);
-
 		}
 
 		while ($myAnnouncements = mysql_fetch_row($mysql_query_result)) {
-
 			if ($myAnnouncements){
-
 				$myAnnouncements[0] = strip_tags($myAnnouncements[0], '<b><i><u><ol><ul><li><br>');
 				array_push($announceData,$myAnnouncements);
-
 			}
 		}
 
@@ -112,9 +107,7 @@ function getUserAnnouncements($param = null, $type) {
 			array_push($announceLessonData, $announceData);
 			array_push($announceSubGroup, $announceLessonData);
 		}
-
 	}
-
 
 
 	if ($getNewAnnounce) {
@@ -141,12 +134,10 @@ function getUserAnnouncements($param = null, $type) {
 					$myAnnouncements[0] = strip_tags($myAnnouncements[0], '<b><i><u><ol><ul><li><br>');
 					array_push($announceData,$myAnnouncements);
 				}
-
 				array_push($announceLessonData, $announceData);
 				array_push($announceSubGroup, $announceLessonData);
 			}
 		}
-
 	}
 
 	if($type == "html") {
@@ -172,8 +163,7 @@ function announceHtmlInterface($data) {
 
 	$assign_content= <<<aCont
 	<div id="datacontainer">
-
-				<ul id="datalist">
+	<ul id="datalist">
 aCont;
 	$max_repeat_val = count($data);
 	for ($i=0; $i <$max_repeat_val; $i++) {
@@ -181,8 +171,7 @@ aCont;
 		if ($iterator > 0) {
 			$announceExist = true;
 			$assign_content .= "
-		<li class=\"category\">".$data[$i][0]."</li>
-		";
+		<li class=\"category\">".$data[$i][0]."</li>";
 			$url = $_SERVER['PHP_SELF'] . "?perso=2&c=" .$data[$i][1];
 			for ($j=0; $j < $iterator; $j++){
 				if(strlen($data[$i][2][$j][0]) > 150) {
@@ -190,22 +179,16 @@ aCont;
 					$data[$i][2][$j][0] .= " <strong class=\"announce_date\">$langMore</strong>
 					";
 				}
-				$assign_content .= "
+			$assign_content .= "
 		<li><a class=\"square_bullet2\" href=\"$url\">
 		<p class=\"content_pos\"><strong><span class=\"announce_date\">".$data[$i][2][$j][1]." : </span></strong>".$data[$i][2][$j][0].autoCloseTags($data[$i][2][$j][0])."</p></a>
-			
-		</li>
-		";
+		</li>";
 			}
-
 			if ($i+1 <$max_repeat_val) $assign_content .= "<br>";
 		}
 	}
 
-	$assign_content .= "
-	</ul>
-			</div> 
-";
+	$assign_content .= "</ul></div> ";
 
 	if (!$announceExist) {
 		$assign_content = "<p>$langNoAnnouncementsExist</p>";
@@ -239,18 +222,14 @@ function createQueries($queryParam){
 		}
 
 		$announce_query[$i] = "SELECT contenu, temps 
-								FROM " .$mysqlMainDb." . annonces, ".$lesson_code[$i].".accueil
-								WHERE code_cours='" . $lesson_code[$i] . "'
-								AND DATE_FORMAT(temps,'%Y %m %d') >='" .$dateVar."'
-								AND ".$lesson_code[$i].".accueil.visible =1
-								AND ".$lesson_code[$i].".accueil.id =7
-								ORDER BY temps DESC
-								";
+		FROM " .$mysqlMainDb." . annonces, ".$lesson_code[$i].".accueil
+		WHERE code_cours='" . $lesson_code[$i] . "'
+		AND DATE_FORMAT(temps,'%Y %m %d') >='" .$dateVar."'
+		AND ".$lesson_code[$i].".accueil.visible =1
+		AND ".$lesson_code[$i].".accueil.id =7
+		ORDER BY temps DESC";
 	}
-
 	return $announce_query;
 }
-
-
 
 ?>

@@ -51,7 +51,7 @@ $navigation[]= array ("url"=>"index.php", "name"=> $langCourseProgram);
 
 $db = $_SESSION['dbname'];
 if ($language == 'greek')
-        $lang_editor='gr';
+        $lang_editor='el';
 else
         $lang_editor='en';
         
@@ -60,7 +60,7 @@ $head_content = <<<hCont
 
 <script type="text/javascript">
         _editor_url  = "$urlAppend/include/xinha/";
-        _editor_lang = "en";
+        _editor_lang = "$lang_editor";
         _editor_skin = "silva";
 </script>
 <script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>

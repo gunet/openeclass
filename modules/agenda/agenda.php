@@ -53,7 +53,7 @@ mysql_select_db($dbname);
 if ((@$addEvent == 1 || (isset($id) && $id)) && $is_adminOfCourse) {
 
 if ($language == 'greek') {
-		$lang_editor='gr';
+		$lang_editor='el';
 		$lang_jscalendar = 'el';
 }
 	else {
@@ -67,7 +67,7 @@ if ($language == 'greek') {
 	$head_content = <<<hContent
 <script type="text/javascript">
         _editor_url  = "$urlAppend/include/xinha/";
-        _editor_lang = "en";
+        _editor_lang = "$lang_editor";
         _editor_skin = "silva";
 </script>
 <script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
@@ -79,10 +79,10 @@ $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang_jscalen
 $head_content .= $jscalendar->get_load_files_code();
 
 $start_cal = $jscalendar->make_input_field(
-					array('showOthers' => true,
-								'align' => 'Tl',
+		array('showOthers' => true,
+		'align' => 'Tl',
                  'ifFormat' => '%Y-%m-%d'),
-					array('style' => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+		array('style' => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
                  'name' => 'date',
                  'value' => ' '));
 }
@@ -269,15 +269,7 @@ tContentForm;
 			$hourAncient = split(":", $hourAncient);
 			$hours=$hourAncient[0];
 			$minutes=$hourAncient[1];
-		}
-/*
-		if (isset($dayAncient) && $dayAncient) {
-			$dayAncient= split("-",  $dayAncient);
-			$year=$dayAncient[0];
-			$month=$dayAncient[1];
-			$day=$dayAncient[2];
-		}  */
-		
+		}		
 		$tool_content .= "<tbody><tr><td align='center'>";
 		
 		// display jscalendar
