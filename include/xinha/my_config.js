@@ -70,13 +70,13 @@ xinha_init = xinha_init ? xinha_init : function()
 
    xinha_config.formatblock =
   {
-    "&mdash; Μορφοποίηση &mdash;": "",
-    "Τίτλος"            : "h3",
-    "Υπότιτλος"         : "h4",
-    "Έντονος Υπότιτλος" : "h5",
-    "Σημαντικό Κείμενο" : "h6",
-    "Απλή Παράγραφος"   : "p",
-    "Formatted"         : "pre"
+    "&mdash;": "",
+    "H3"  : "h3",
+    "H4"  : "h4",
+    "H5" : "h5",
+    "H6" : "h6",
+    "p"  : "p",
+    "Formatted" : "pre"
   };
 	 	
 
