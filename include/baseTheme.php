@@ -232,18 +232,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		$t->set_var('LOGOUT_LINK',  $relPath);
 
 		if ($menuTypeID != 2) {
-			if (session_is_registered('langswitch')) {
-				$t->set_var('LANG_LOCALIZE',  $langChangeLang);
-				$t->set_var('LOCALIZE_LINK',  $switchLangURL);
-
-			} else {
-				$t->set_var('LANG_LOCALIZE',  'English');
-				$t->set_var('LOCALIZE_LINK',  '?localize=en');
-				
-			}
+			$t->set_var('LANG_SELECT', lang_selections());
 		} else {
-			$t->set_var('LANG_LOCALIZE',  '');
-			$t->set_var('LOCALIZE_LINK',  '');
+			$t->set_var('LANG_SELECT', '');
 		}
 
 		//START breadcrumb AND page title
@@ -508,25 +499,47 @@ function dumpArray($arr){
 function print_a($TheArray) {
 	echo "<table border=1>n";
 
-	$Keys = array_keys( $TheArray );
-	foreach( $Keys as $OneKey )
+	$Keys = array_keys($TheArray);
+	foreach($Keys as $OneKey)
 	{
 		echo "<tr>n";
-
 		echo "<td bgcolor='yellow'>";
-		echo "<B>" . $OneKey . "</B>";
+		echo "<b>" . $OneKey . "</b>";
 		echo "</td>n";
-
 		echo "<td bgcolor='#C4C2A6'>";
-		if ( is_array($TheArray[$OneKey]) )
-		print_a($TheArray[$OneKey]);
+		if (is_array($TheArray[$OneKey]))
+			print_a($TheArray[$OneKey]);
 		else
-		echo $TheArray[$OneKey];
+			echo $TheArray[$OneKey];
 		echo "</td>n";
 
 		echo "</tr>n";
 	}
 	echo "</table>n";
+}
+
+/**
+ * Function lang_selections
+ *
+ * Returns the HTML code for a language selection tool
+ * 
+ */
+function lang_selections() {
+
+	global $language;
+
+	$langArrayOfNames = array(
+		'greek' => 'Ελληνικά (el)', 
+		'english' => 'English (en)', 
+		'spanish' => 'Español (es)',
+		'czech' => 'Česky (cz)');
+
+	$html = '<form name="langform" action="'.$_SERVER['PHP_SELF'].'" method="GET" onChange="document.langform.submit();">';
+	
+	$html .= selection($langArrayOfNames, 'localize', $language);
+ 
+	$html .= '</form>';
+ 	return $html;
 }
 
 ?>

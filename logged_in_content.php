@@ -36,6 +36,8 @@
 
 include("./modules/perso/lessons.php");
 include("./modules/perso/documents.php");
+include("./include/lib/textLib.inc.php");
+include("./include/phpmathpublisher/mathpublisher.php");
 
 $tool_content .= " ";
 $result2 = mysql_query("SELECT cours.code k, cours.fake_code c,
@@ -133,23 +135,51 @@ while ($mycours = mysql_fetch_array($result2)) {
 } // if
 
 // get last login date
-$last_login_query = "SELECT `when`
-	FROM  $mysqlMainDb.loginout
-	WHERE action = 'LOGIN' AND id_user = '$uid'
-	ORDER BY `when` DESC LIMIT 1,1";
+$last_login_query = "SELECT `when` FROM  $mysqlMainDb.loginout
+	WHERE action = 'LOGIN' AND id_user = '$uid' ORDER BY `when` DESC LIMIT 1,1";
 
 $row = mysql_fetch_row(db_query($last_login_query));
 // cut the hour, minutes and seconds
 $logindate = eregi_replace(" ", "-",substr($row[0],0,10));
 
-// docs perso info
-$tool_content .= "<table width='100%'><thead><tr><th>$langMyPersoDocs</th></tr></thead><tbody>";
+$tool_content .= "<table width='100%'>";
+
+// get registered courses
 $sql = "SELECT cours.code k, cours.fake_code c, cours.intitule t,
 	cours.intitule i, cours_user.statut s
 	FROM cours, cours_user WHERE cours.code=cours_user.code_cours AND cours_user.user_id='".$uid."'
 	AND cours_user.statut='5'";
 
-$csql = db_query($sql);
+// my announcements
+$tool_content .= "<tr><th>$langMyPersoAnnouncements</th></tr>";
+$ansql = db_query($sql, $mysqlMainDb);
+while ($c = mysql_fetch_array($ansql)) {
+
+$result = db_query("SELECT contenu, temps, title 
+		FROM " .$mysqlMainDb." . annonces, ".$c['k'].".accueil
+		WHERE code_cours='" .$c['k']. "'
+		AND DATE_FORMAT(temps, '%Y-%m-%d') >= '".$logindate."'
+		AND ".$c['k'].".accueil.visible =1
+		AND ".$c['k'].".accueil.id =7
+		ORDER BY temps DESC", $mysqlMainDb);
+	
+	while ($ann = mysql_fetch_array($result)) {
+		$content = $ann['contenu'];
+                $content = make_clickable($content);
+                $content = nl2br($content);
+		$content = mathfilter($content, 12, "../../include/phpmathpublisher/img/");
+		$row = mysql_fetch_array(db_query("SELECT intitule,titulaires 
+			FROM cours WHERE code='$c[k]'"));
+		$tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
+                $tool_content .= "<td>&nbsp;<img src='images/arrow_blue.gif'>&nbsp;$c[t]:&nbsp;($langTutor: <b>$row[titulaires]</b>)<br>$ann[title]<br>$content<br>
+		<small><i>($langAnn: ".greek_format($ann['temps']).")</i></small></td></tr>";
+	}
+}
+
+$tool_content .= "<tr><th>$langMyPersoDocs</th></tr>";
+$csql = db_query($sql, $mysqlMainDb);
+// docs perso info
+//die($logindate);
 while ($c = mysql_fetch_array($csql)) {
 	$s = db_query("SELECT path, filename, title, date_modified
 		FROM document, accueil WHERE visibility = 'v'
@@ -182,6 +212,6 @@ while ($c = mysql_fetch_array($asql)) {
 	} 
 }
 
-$tool_content .= "</tbody></table>";
+$tool_content .= "</table>";
 session_register('status');
 ?>

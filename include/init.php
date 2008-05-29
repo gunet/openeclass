@@ -65,48 +65,19 @@ if (!session_id()) { session_start(); }
 
 header('Content-Type: text/html; charset=UTF-8');
 
-// Set some defaults
-//NOTE (evelthon) these defaults should be deleted ...
-if (!isset($colorLight)) {
-	$colorLight	= "#F5F5F5";
-}
-if (!isset($colorMedium)) {
-	$colorMedium = "#004571";
-}
-if (!isset($colorDark)) {
-	$colorDark = "#000066";
-}
-
-if (!isset($table_border)) {
-        $table_border = "#DCDCDC;";
-}
 // Set user desired language (Author: Evelthon Prodromou)
-if (isset($localize)) {
-	switch ($localize) {
-		case "en":
-			$_SESSION['langswitch'] = "english";
-			$_SESSION['langLinkText'] = 'Ελληνικά';
-			$_SESSION['langLinkURL'] = "?localize=el";
-			break;
-		case "el":		
-			$_SESSION['langswitch'] = "greek";
-			$_SESSION['langLinkText'] = 'English';
-			$_SESSION['langLinkURL'] = "?localize=en";
-			break;
-		default:
-			die("Invalid language parameter passed");
-	}
+if (isset($_GET['localize'])) {
+	$_SESSION['langswitch'] = $localize = $language = preg_replace('/[^a-z]/', '', $_GET['localize']);
+}
+if (!isset($localize)) {
+	$localize = $language = $_SESSION['langswitch'];
 }
 // Get configuration variables
 if (!isset($webDir)) {
-	//path for logged out + logge in
-	//    @include($pathOverride . "config/config.php");
-
 	//path for course_home
 	@include($relPath . "config/config.php");
-
 	if (!isset($webDir)) {
-		@include 'not_installed.php';
+		include 'not_installed.php';
                 die("Unable to find configuration file, please contact the system administrator");
 	}
 }
@@ -116,10 +87,9 @@ if (!isset($urlSecure)) {
 }
 
 //load the correct language (Author: Evelthon Prodromou)
+
 if (session_is_registered('langswitch')) {
-	$language 	= $_SESSION['langswitch'];
-	$langChangeLang = $_SESSION['langLinkText'];
-	$switchLangURL 	= $_SESSION['langLinkURL'];
+	$language = $_SESSION['langswitch'];
 }
 
 // Connect to database
@@ -133,20 +103,13 @@ mysql_select_db($mysqlMainDb, $db);
 //if the user is logged in, get this preferred language set in his
 //profile (Author: Evelthon Prodromou)
 if(session_is_registered('uid') && !session_is_registered('langswitch')) {
-	
-	$sqlLang= "SELECT lang
-                FROM user 
-                WHERE user_id='".$_SESSION['uid']."'";
+	$sqlLang= "SELECT lang FROM user WHERE user_id='".$_SESSION['uid']."'";
 	$result=mysql_query($sqlLang);
 	while (@($myrow = mysql_fetch_array($result))) {
 		if ($myrow[0]== "el") {
 			$language = "greek";
-			$_SESSION['langLinkText'] = "English";
-			$_SESSION['langLinkURL'] = "?localize=en";
 		} else {
 			$language = "english";
-			$_SESSION['langLinkText'] = "Ελληνικά";
-			$_SESSION['langLinkURL'] = "?localize=el";
 		}
 	}
 }
