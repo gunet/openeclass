@@ -25,15 +25,15 @@
 
 /*
  * Base Theme Component, e-Class Core
- * 
+ *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * 
- * @abstract This component is the core of eclass. Each and every file that 
+ *
+ * @abstract This component is the core of eclass. Each and every file that
  * requires output to the user's browser must include this file and use
  * the draw method to output the UI to the user's browser.
- * 
- * An exception of this scenario is when the user uses the personalised 
+ *
+ * An exception of this scenario is when the user uses the personalised
  * interface. In that case function drawPerso needs to be called.
  *
  */
@@ -68,9 +68,9 @@ include('tools.php');
  *
  * This method processes all data to render the display. It is executed by
  * each tool. Is in charge of generating the interface and parse it to the user's browser.
- * 
+ *
  * @param mixed $toolContent html code
- * @param int $menuTypeID 
+ * @param int $menuTypeID
  * @param string $tool_css (optional) catalog name where a "tool.css" file exists
  * @param string $head_content (optional) code to be added to the HEAD of the UI
  * @param string $body_action (optional) code to be added to the BODY tag
@@ -126,7 +126,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 				$t->set_var('ACTIVE_TOOLS', '');
 				$t->set_var('NAV_CSS_CAT_CLASS', 'split');
 				$t->parse('leftNavCategoryTitle', 'leftNavCategoryTitleBlock',false);
-				
+
 			} elseif ($toolArr[$i][0]['type'] == 'text') {
 				$t->set_var('ACTIVE_TOOLS', $toolArr[$i][0]['text']);
 				$t->set_var('NAV_CSS_CAT_CLASS', 'category');
@@ -353,8 +353,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		if ($require_help == true){
 
 		$help_link_icon = " <a  href=\"".$relPath."modules/help/help.php?topic=$helpTopic&amp;language=$language\"
-        onClick=\"window.open('".$relPath."modules/help/help.php?topic=$helpTopic&amp;language=$language','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10'); 
-        return false;\"> <img src=\"".$relPath."template/classic/img/help_icon.gif\" width=\"14\" height=\"14\" border=\"0\" alt=\"$langHelp\"/> </a>";
+        onClick=\"window.open('".$relPath."modules/help/help.php?topic=$helpTopic&amp;language=$language','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10');
+        return false;\"> <img src=\"".$relPath."template/classic/img/help_icon.gif\" width=\"12\" height=\"12\" border=\"0\" alt=\"$langHelp\"/> </a>";
 
 			$t->set_var('HELP_LINK_ICON', $help_link_icon);
 			$t->set_var('LANG_HELP', $langHelp);
@@ -375,12 +375,12 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 /**
  * Function drawPerso
- * 
+ *
  * This method processes all data to render the display. It is executed by
  * eclass personalised. Is in charge of generating the interface and parse it to the user's browser.
  *
  * @param mixed $toolContent html code
- * 
+ *
  */
 function drawPerso($toolContent){
 
@@ -479,7 +479,7 @@ function drawPerso($toolContent){
  *
  * Used for debugging purposes. Dumps array to browser
  * window.
- * 
+ *
  * @param array $arr
  */
 function dumpArray($arr){
@@ -493,7 +493,7 @@ function dumpArray($arr){
  *
  * Used for debugging purposes. Dumps array to browser
  * window. Better organisation of arrays than dumpArray
- * 
+ *
  * @param array $arr
  */
 function print_a($TheArray) {
@@ -522,22 +522,22 @@ function print_a($TheArray) {
  * Function lang_selections
  *
  * Returns the HTML code for a language selection tool
- * 
+ *
  */
 function lang_selections() {
 
 	global $language;
 
 	$langArrayOfNames = array(
-		'greek' => 'Ελληνικά (el)', 
-		'english' => 'English (en)', 
+		'greek' => 'Ελληνικά (el)',
+		'english' => 'English (en)',
 		'spanish' => 'Español (es)',
 		'czech' => 'Česky (cz)');
 
 	$html = '<form name="langform" action="'.$_SERVER['PHP_SELF'].'" method="GET" onChange="document.langform.submit();">';
-	
+
 	$html .= selection($langArrayOfNames, 'localize', $language);
- 
+
 	$html .= '</form>';
  	return $html;
 }

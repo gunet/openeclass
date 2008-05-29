@@ -279,20 +279,20 @@ function group_secret($gid)
 
 /*
  * Return the $uids of the users participating in a given ($code_cours) course
- * 
+ *
  * @param $code_cours code of the course as appears in 'cours_user' table in the main database, e.g. "TMA100"
  *
- * @return array containing the $uids of the users registered as students in the given course. 
- * 
+ * @return array containing the $uids of the users registered as students in the given course.
+ *
  * @author Sakis Agorastos <thagorastos@gmail.com>
  */
 function get_all_uids_of_students_in_course($code_cours)
 {
 	global $mysqlMainDb;
-	
+
 	$sql= "SELECT `user_id` FROM `cours_user` WHERE `code_cours` LIKE '%".$code_cours."%' AND statut='5'";
 	$result = db_query($sql, $mysqlMainDb);
-	
+
 	$uids = array();
     	while($row = mysql_fetch_array($result))
     	{
@@ -314,7 +314,7 @@ function get_all_uids_of_students_in_course($code_cours)
 function selection($entries, $name, $default = '')
 {
 	$retString = "";
-	$retString .= "<select name='$name'>\n";
+	$retString .= "<select name='$name' class='auth_input'>\n";
 	foreach ($entries as $value => $label) {
 		if ($value == $default) {
 			$retString .= "<option selected value='" . htmlspecialchars($value) . "'>" .
@@ -416,11 +416,11 @@ function check_uid() {
 function user_exists($login) {
   global $mysqlMainDb;
 
-  $username_check = mysql_query("SELECT username FROM `$mysqlMainDb`.user 
+  $username_check = mysql_query("SELECT username FROM `$mysqlMainDb`.user
 								WHERE username='".mysql_real_escape_string($login)."'");
   if (mysql_num_rows($username_check) > 0)
     return TRUE;
-  else 
+  else
     return FALSE;
 }
 
@@ -567,7 +567,7 @@ function check_new_announce() {
 
   global $uid;
 
-  $row = mysql_fetch_array(mysql_query("SELECT * FROM loginout 
+  $row = mysql_fetch_array(mysql_query("SELECT * FROM loginout
 					WHERE id_user='$uid' AND action = 'LOGIN' ORDER BY idLog DESC"));
   $lastlogin = $row['when'];
   $sql = "SELECT * FROM annonces,cours_user
@@ -632,7 +632,7 @@ function DefaultScoring($ChoiceCount,$Z,$weight) {
     }
 
     return $score/10*$weight;
-} 
+}
 
 /*
  * Get user data on the platform
@@ -645,7 +645,7 @@ function user_get_data($user_id)
 {
 		global $mysqlMainDb;
 		mysql_select_db($mysqlMainDb);
-	
+
     $sql = 'SELECT  `user_id`,
                     `nom` AS `lastname` ,
                     `prenom`  AS `firstname`,
@@ -714,7 +714,7 @@ function make_clickable_path($dbTable, $path)
 			$out = "<a href='$base?openDir=/'>$langRoot</a>";
 		} else {
 			$cur .= rawurlencode("/$component");
-			$row = mysql_fetch_array(db_query ("SELECT filename FROM $dbTable 
+			$row = mysql_fetch_array(db_query ("SELECT filename FROM $dbTable
 					WHERE path LIKE '%$component'"));
 			$dirname = $row['filename'];
 			$out .= " &raquo; <a href='$base?openDir=$cur'>$dirname</a>";

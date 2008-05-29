@@ -50,9 +50,9 @@ body {
 
 #logo {
 	float: left;
-	width: 231px;
-	height: 45px;
-	margin-top:5px;
+	width: 228px;
+	height: 60px;
+	margin-top:1px;
 	margin-left:5px;
 	background-image: url(img/logo_bg_50.gif);
 	background-repeat: no-repeat;
