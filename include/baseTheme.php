@@ -534,10 +534,8 @@ function lang_selections() {
 		'spanish' => 'Español (es)',
 		'czech' => 'Česky (cz)');
 
-	$html = '<form name="langform" action="'.$_SERVER['PHP_SELF'].'" method="GET" onChange="document.langform.submit();">';
-
-	$html .= selection($langArrayOfNames, 'localize', $language);
-
+	$html = '<form name="langform" action="'.$_SERVER['PHP_SELF'].'" method="GET" >';
+	$html .= selection($langArrayOfNames, 'localize', $language, 'onChange="document.langform.submit();"');
 	$html .= '</form>';
  	return $html;
 }

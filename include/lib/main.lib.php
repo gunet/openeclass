@@ -311,10 +311,10 @@ function get_all_uids_of_students_in_course($code_cours)
 // $name: the name of the selection element
 // $default: if it matches one of the values, specifies the default entry
 // Changed by vagpits
-function selection($entries, $name, $default = '')
+function selection($entries, $name, $default = '', $extra = '')
 {
 	$retString = "";
-	$retString .= "<select name='$name' class='auth_input'>\n";
+	$retString .= "<select name='$name' class='auth_input' $extra>\n";
 	foreach ($entries as $value => $label) {
 		if ($value == $default) {
 			$retString .= "<option selected value='" . htmlspecialchars($value) . "'>" .
