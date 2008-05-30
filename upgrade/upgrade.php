@@ -107,7 +107,7 @@ if (!isset($submit2)) {
                 die ("Το αρχείο ρυθμίσεων config.php δεν μπόρεσε να διαβαστεί! Ελέγξτε τα δικαιώματα πρόσβασης.");
 
         $lines_to_add = "";
-        
+
         // Convert to UTF-8 if needed
         if (!defined('UTF8')) {
                 $lines_to_add .= "define('UTF8', true);\n";
@@ -115,15 +115,6 @@ if (!isset($submit2)) {
         }
 
         // for upgrading 1.5 --> 1.7
-        if (!strstr($conf, '$colorLight')) {
-                $lines_to_add .= "\$colorLight = '#F5F5F5';\n";
-        }
-        if (!strstr($conf, '$colorMedium')) {
-                $lines_to_add .= "\$colorMedium = '#004571';\n";
-        }
-        if (!strstr($conf, '$colorDark')) {
-                $lines_to_add .= "\$colorDark = '#000066';\n";
-        }
         if (!strstr($conf, '$table_border')) {
                 $lines_to_add .= "\$table_border = '#DCDCDC';\n";
         }

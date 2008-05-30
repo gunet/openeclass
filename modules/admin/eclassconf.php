@@ -1,5 +1,5 @@
 <?php
-/**=============================================================================
+/*=============================================================================
        	GUnet e-Class 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -23,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	eclassconf.php
 	@last update: 31-05-2006 by Pitsiougas Vagelis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
@@ -150,10 +150,6 @@ $color2="'.$_POST['formcolor2'].'"; // less light grey for bicolored tables
 
 // available: greek and english
 $language = "'.$_POST['formlanguage'].'";
-
-$colorLight = "'.$_POST['formcolorLight'].'";
-$colorMedium = "'.$_POST['formcolorMedium'].'";
-$colorDark = "'.$_POST['formcolorDark'].'";
 
 $postaddress = "'.$_POST['formpostaddress'].'";
 $fax = "'.$_POST['formfax'].'";
@@ -304,18 +300,6 @@ $tool_content .= " <tr>
 	$tool_content .= "  <tr>
     <td colspan=\"2\"><hr></td>
   </tr>";
-	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>\$colorLight:</b></td>
-    <td><input type=\"text\" name=\"formcolorLight\" size=\"40\" value=\"".$colorLight."\"></td>
-</tr>";
-	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>\$colorMedium:</b></td>
-    <td><input type=\"text\" name=\"formcolorMedium\" size=\"40\" value=\"".$colorMedium."\"></td>
-</tr>";
-	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>\$colorDark:</b></td>
-    <td><input type=\"text\" name=\"formcolorDark\" size=\"40\" value=\"".$colorDark."\"></td>
-</tr>";
 $tool_content .= "  <tr>
     <td width=\"3%\" nowrap><b>\$table_border:</b></td>
     <td><input type=\"text\" name=\"formtableborder\" size=\"40\" value=\"".$table_border."\"></td>

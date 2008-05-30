@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: text/html; charset=UTF-8');
-/**===========================================================================
+/*===========================================================================
 *              GUnet eClass 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -23,7 +23,7 @@ header('Content-Type: text/html; charset=UTF-8');
 *				Panepistimiopolis Ilissia, 15784, Athens, Greece
 *				eMail: eclassadmin@gunet.gr
 ============================================================================*/
-/**
+/*
  * Installation wizard
  *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -90,7 +90,7 @@ if(isset($welcomeScreen) )
 
 if (isset($alreadyVisited)) {
 
-	$tool_content .= "<form action=".$PHP_SELF."?alreadyVisited=1 method=\"post\">";
+	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?alreadyVisited=1 method=\"post\">";
 	$tool_content .= "
             <input type=\"hidden\" name=\"urlAppendPath\" value=\"$urlAppendPath\">
             <input type=\"hidden\" name=\"pathForm\" value=\"".str_replace("\\","/",realpath($pathForm)."/")."\" >
@@ -103,7 +103,6 @@ if (isset($alreadyVisited)) {
             <input type=\"hidden\" name=\"emailForm\" value=\"$emailForm\">
             <input type=\"hidden\" name=\"nameForm\" value=\"$nameForm\">
             <input type=\"hidden\" name=\"surnameForm\" value=\"$surnameForm\">
-
             <input type=\"hidden\" name=\"loginForm\" value=\"$loginForm\">
             <input type=\"hidden\" name=\"passForm\" value=\"$passForm\">
             <input type=\"hidden\" name=\"phpSysInfoURL\" value=\"$phpSysInfoURL\">
@@ -381,28 +380,21 @@ function set_MCU()
 		<input type=\"checkbox\" id=\"MCU_check\" onclick=\"set_MCU();\"/><br>
      </td>
      </tr>
-	<tr>
-		<th>
-		 <div id=\"MCU_div_text\">
-		 </div>
-		</th>
-		<td>
-		 <div id=\"MCU_div_input\">
-		</td>
-		</tr>
+	<tr><th><div id=\"MCU_div_text\"></div></th>
+	<td>
+	<div id=\"MCU_div_input\">
+	</td></tr>
            <tr><th>Personalization</th>
-             <td>
-            		<select name=\"persoIsActive\">
-                  			<option value=\"true\" ".$persoIsActiveSelTrue.">true</option>
-                   			<option value=\"false\" ".$persoIsActiveSelFalse.">false</option>
-                		</select>
-                            </td>
-                        </tr>
-                </thead>
-                    </table>
-                        <p>
-                                <font color=\"red\">*
-                                </font>
+            <td>
+            <select name=\"persoIsActive\">
+            	<option value=\"true\" ".$persoIsActiveSelTrue.">true</option>
+            	<option value=\"false\" ".$persoIsActiveSelFalse.">false</option>
+            	</select>
+             </td>
+             </tr>
+             </thead>
+             </table>
+             <p><font color=\"red\">*</font>
                                   = υποχρεωτικό</p>
                         <p>
                             <font color=\"red\">**</font>
@@ -458,9 +450,9 @@ elseif(isset($_REQUEST['install6']))
         <li>Στοιχεία Επικοινωνίας του Ιδρύματος : $postaddressForm</li>
         <li>LDAP εξυπηρέτης του Ιδρύματος : $ldapserver</li>
         <li>Base DN του LDAP Εξυπηρέτη : $dnldapserver </li>
-				<li>".$mes_add."</li>
-				<li>MCU: ".@$MCUForm." </li>
-				<li>Vod Server: ".@$vodServerForm." </li>
+	<li>".$mes_add."</li>
+	<li>MCU: ".@$MCUForm." </li>
+	<li>Vod Server: ".@$vodServerForm." </li>
         </ul>
         <input type=\"submit\" name=\"back4\" value=\"< Πίσω\">
         <input type=\"submit\" name=\"install7\" value=\"Eγκατάσταση του eClass >\">
@@ -881,7 +873,6 @@ CREATE TABLE `auth` (
 		mysql_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_objectives` ,`course_prerequisites` ,`course_keywords` ,`course_references`)");
 
 
-
 	// creation of config.php
 	$fd=@fopen("../config/config.php", "w");
 	$langStepTitle = $langInstallEnd;
@@ -930,10 +921,6 @@ $Institution = "'.$institutionForm.'";
 $InstitutionUrl = "'.$institutionUrlForm.'";
 $postaddress = "'.$postaddressForm.'";
 
-$colorLight = "#F5F5F5";
-$colorMedium = "#004571";
-$colorDark = "#000066";
-
 $have_latex = FALSE;
 $close_user_registration = '.$user_registration.';
 
@@ -951,21 +938,15 @@ $encryptedPasswd = true;
 		// message
 
 		$tool_content .= "
- 	      <table width = \"99%\">
-				<tbody>
-					<tr>
-						<td class=\"extraMessageOK\">
-						 <p>Η εγκατάσταση ολοκληρώθηκε με επιτυχία!
+ 	      <table width = \"99%\"><tbody><tr><td class=\"extraMessageOK\">
+		<p>Η εγκατάσταση ολοκληρώθηκε με επιτυχία!
                 Κάντε κλίκ παρακάτω για να μπείτε στο eClass.</p>
                 <br>
                 <p><b>
                 Συμβουλή: Για να προστατέψετε το eClass, αλλάξτε τα δικαιώματα πρόσβασης των αρχείων
                 <tt>/config/config.php</tt> και <tt>/install/index.php</tt> και
                 επιτρέψτε μόνο ανάγνωση (CHMOD 444).</b></p>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+		</td></tr></tbody></table>
         <br>
        </form>
     <form action=\"../\">
@@ -987,11 +968,8 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	if (empty($SERVER_SOFTWARE)) {
 
 		$errorContent[]= "
-		<table width = \"99%\">
-				<tbody>
-					<tr>
-						<td class=\"extraMessage\">
-
+		<table width = \"99%\"><tbody><tr>
+		<td class=\"extraMessage\">
         <p><b>Προσοχή!</b> Φαίνεται πως η επιλογή register_globals
         στο αρχείο php.ini δεν είναι ενεργοποιημένη. Χωρίς αυτήν το
         eClass δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το
@@ -1000,22 +978,14 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
        <p>Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
         τις οδηγίες εγκατάστασης στο αρχείο
         <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
-
-					</td>
-					</tr>
-				</tbody>
-			</table>
-        ";
+	</td></tr></tbody></table>";
 		$configErrorExists = true;
 	}
 
 	if (!ini_get('short_open_tag')) {
 		$errorContent[]= "
-		<table width = \"99%\">
-			<tbody>
-			<tr>
-			<td class=\"extraMessage\">
-
+		<table width = \"99%\"><tbody>
+		<tr><td class=\"extraMessage\">
         <p><b>Προσοχή!</b> Φαίνεται πως η επιλογή short_open_tag
         στο αρχείο php.ini δεν είναι ενεργοποιημένη. Χωρίς αυτήν το
         eClass δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το
@@ -1024,12 +994,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
         <p>Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
         τις οδηγίες εγκατάστασης στο αρχείο
         <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
-
-				</td>
-				</tr>
-			</tbody>
-		</table>
-		";
+	</td></tr></tbody></table>";
 		$configErrorExists = true;
 	}
 
@@ -1039,25 +1004,18 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	if (!is_dir("../config")) {
 			$mkd=@mkdir("../config", 0777);
 		if(!$mkd){
-			$errorContent[]= "
-			<table width = \"99%\">
-				<tbody>
-					<tr>
-						<td class=\"extraMessage\">
-			  <p><b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει
-        δικαιώματα δημιουργίας του κατάλογου <b>/config</b>.<br/>
-        Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει.
-        Παρακαλούμε διορθώστε τα δικαιώματα.
-        <br/>
-        Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
-        τις οδηγίες εγκατάστασης στο αρχείο
-        <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
-					</td>
-					</tr>
-				</tbody>
-			</table>
-		";
-		$configErrorExists = true;
+			$errorContent[]= "<table width = \"99%\">
+			<tbody><tr><td class=\"extraMessage\">
+		  	<p><b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει
+        		δικαιώματα δημιουργίας του κατάλογου <b>/config</b>.<br/>
+        		Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει.
+        		Παρακαλούμε διορθώστε τα δικαιώματα.
+        		<br/>
+        		Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
+        		τις οδηγίες εγκατάστασης στο αρχείο
+        		<a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
+			</td></tr></tbody></table>";
+			$configErrorExists = true;
 		}
 	}
 	// courses directory
@@ -1066,25 +1024,18 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 		$mkd = @mkdir("../courses", 0777);
 	if(!$mkd){
 		$errorContent[]= "
-		<table width = \"99%\">
-				<tbody>
-					<tr>
-						<td class=\"extraMessage\">
-
-        <p><b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει
-        δικαιώματα δημιουργίας του κατάλογου <b>/courses</b>.<br/>
-        Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει.
-        Παρακαλούμε διορθώστε τα δικαιώματα.
-        <br/>
-        Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
-        τις οδηγίες εγκατάστασης στο αρχείο
-        <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
-					</td>
-					</tr>
-				</tbody>
-			</table>";
+		<table width = \"99%\"><tbody><tr><td class=\"extraMessage\">
+        	<p><b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει
+        	δικαιώματα δημιουργίας του κατάλογου <b>/courses</b>.<br/>
+        	Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει.
+        	Παρακαλούμε διορθώστε τα δικαιώματα.
+        	<br/>
+        	Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
+        	τις οδηγίες εγκατάστασης στο αρχείο
+        	<a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
+		</td></tr></tbody></table>";
 		$configErrorExists = true;
-			}
+		}
 	}
 
 
@@ -1179,7 +1130,6 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
 	draw($tool_content);
 
 } else {
-
 	$tool_content .= "
 	<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
 <html>
@@ -1187,28 +1137,21 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
     <title>Καλωσορίσατε στον οδηγό εγκατάστασης του eClass</title>
     <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
     <link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
-
-
   </head>
   <body>
-
-
 	<div class=\"outer\">
-     <form action=".$PHP_SELF."?alreadyVisited=1 method=\"post\">
+     <form action='$_SERVER[PHP_SELF]'?alreadyVisited=1 method=\"post\">
 	 <input type=\"hidden\" name=\"welcomeScreen\" value=\"welcomeScreen\">
     <div class=\"welcomeImg\"></div>
-
    Καλωσορίσατε στον οδηγό εγκατάστασης του eClass. Ο οδηγός αυτός :
     <ul id=\"installBullet\">
-    	<li>Θα σας βοηθήσει να όρίσετε τις ρυθμίσεις για τη βάση δεδομένων</li>
-    	<li>Θα σας βοηθήσει να όρίσετε τις ρυθμίσεις της πλατφόρμας</li>
+    	<li>Θα σας βοηθήσει να ορίσετε τις ρυθμίσεις για τη βάση δεδομένων</li>
+    	<li>Θα σας βοηθήσει να ορίσετε τις ρυθμίσεις της πλατφόρμας</li>
     	<li>Θα δημιουργήσει το αρχείο config.php</li>
     </ul>
 
   <input type=\"submit\" name=\"install1\" value=\"Επόμενο >\">
- </div>
-  </form>
-
+ </div></form>
   </body>
 </html>";
 
@@ -1218,7 +1161,7 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
 
 // useful functions
 
-/**
+/*
  * check extension and  write  if exist  in a  <LI></LI>
  * @params string	$extentionName 		name  of  php extention to be checked
  * @params boolean	$echoWhenOk			true => show ok when  extention exist
@@ -1254,7 +1197,7 @@ function mysql_version() {
 	return false;
 }
 
-/**
+/*
  * return a string without logic
  *
  * @author Christophe Gesche <gesche@ipm.ucl.ac.be>

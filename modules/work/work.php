@@ -682,7 +682,7 @@ cData;
 function assignment_details($id, $row, $message = null)
 {
 	global $tool_content, $m, $langDaysLeft, $langDays, $langWEndDeadline, $langNEndDeadLine, $langNEndDeadline, $langEndDeadline;
-	global $color2, $langDelAssign, $is_adminOfCourse, $langZipDownload, $langSaved ;
+	global $langDelAssign, $is_adminOfCourse, $langZipDownload, $langSaved ;
 
 
 	if ($is_adminOfCourse) {
@@ -798,7 +798,7 @@ function show_assignment($id, $message = FALSE)
 {
 	global $tool_content, $m, $langBack, $langNoSubmissions, $langSubmissions, $mysqlMainDb, $langWorks;
 	global $langEndDeadline, $langWEndDeadline, $langNEndDeadline, $langDays, $langDaysLeft, $langGradeOk;
-	global $colorMedium, $currentCourseID, $webDir, $urlServer, $nameTools, $langGraphResults, $m;
+	global $currentCourseID, $webDir, $urlServer, $nameTools, $langGraphResults, $m;
 
 	$res = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days FROM assignments WHERE id = '$id'");
 	$row = mysql_fetch_array($res);
@@ -967,13 +967,10 @@ cData;
 			$i++;
 		} //END of While
 		
-			$tool_content .="
-      </tbody>
-      </table>
-	  ";
-	  
-		
-	  		$tool_content .= "
+	$tool_content .="</tbody></table>";
+
+	
+	$tool_content .= "
     <br />
     <table class=\"FormData\" width=\"99%\">
     <tbody>
