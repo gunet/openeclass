@@ -368,7 +368,7 @@ if (isset($create_course)) {
                        mkdir("../../courses/$repertoire/scormPackages", 0777) and
                        mkdir("../../video/$repertoire", 0777))) {
                         $tool_content .= "<div class='caution'>$langErrorDir</div>";
-                        draw($tool_content, '1', '', $local_head);
+                        draw($tool_content, '1', null, $local_head);
                         exit;
                 }
                 // ---------------------------------------------------------
@@ -439,5 +439,5 @@ if (isset($create_course)) {
 
 $tool_content .= "</form>";
 
-draw($tool_content, '1', '', $local_head);
+draw($tool_content, '1', null, $local_head);
 ?>
