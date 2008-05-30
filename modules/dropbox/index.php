@@ -1,6 +1,6 @@
 <?php
 /**===========================================================================
-*              GUnet e-Class 2.0
+*              GUnet eClass 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
 *	Copyright(c) 2003-2006  Greek Universities Network - GUnet
@@ -245,7 +245,7 @@ tCont2;
 
 /**
  * --------------------------------------
- *       RECEIVED FILES LIST:  TABLE HEADER
+ * Â Â Â Â Â Â RECEIVED FILES LIST:  TABLE HEADER
  * --------------------------------------
  */
 if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
@@ -355,7 +355,7 @@ tCont5;
 
  /**
  * --------------------------------------
- *       RECEIVED FILES LIST
+ * Â Â Â Â Â Â RECEIVED FILES LIST
  * --------------------------------------
  */
 
@@ -423,7 +423,7 @@ tCont9;
 
 /**
  * --------------------------------------
- *       SENT FILES LIST:  TABLE HEADER
+ * Â Â Â Â Â Â SENT FILES LIST:  TABLE HEADER
  * --------------------------------------
  */
 
@@ -538,7 +538,7 @@ $tool_content .= "
 
 /**
  * --------------------------------------
- *       SENT FILES LIST
+ * Â Â Â Â Â Â SENT FILES LIST
  * --------------------------------------
  */
 $i = 0;

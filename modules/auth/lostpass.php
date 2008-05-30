@@ -1,6 +1,6 @@
 <?php
 /**===========================================================================
-*              GUnet e-Class 2.0
+*              GUnet eClass 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
 *	Copyright(c) 2003-2006  Greek Universities Network - GUnet
@@ -230,7 +230,7 @@ $tool_content = "<table width=\"99%\">
         	"MIME-Version: 1.0\n".
         	"Content-Type: text/plain; charset=$charset\n".
         	"Content-Transfer-Encoding: 8bit";
-	$emailsubject = "e-Class account information";
+	$emailsubject = "eClass account information";
 	if (!send_mail($siteName, $emailAdministrator, '', $email, $emailsubject, $text, $charset)) {
 		$tool_content = "
 			<table width=\"99%\">

@@ -1,6 +1,6 @@
 <?
 /**=============================================================================
-       	GUnet e-Class 2.0 
+       	GUnet eClass 2.0 
         E-learning and Course Management Program  
 ================================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
@@ -69,7 +69,7 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 			FROM cours AS a LEFT JOIN cours_user AS b ON a.code = b.code_cours
 			WHERE b.user_id = '$u' ORDER BY b.statut, a.faculte");
 
-		// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα 
+		// Ξ±Ξ½ ΞΏ Ο‡ΟΞ®ΟƒΟ„Ξ·Ο‚ ΟƒΟ…ΞΌΞΌΞµΟ„Ξ­Ο‡ΞµΞΉ ΟƒΞµ ΞΌΞ±ΞΈΞ®ΞΌΞ±Ο„Ξ± Ο„ΟΟ„Ξµ Ο€Ξ±ΟΞΏΟ…ΟƒΞ―Ξ±ΟƒΞµ Ο„Ξ· Ξ»Ξ―ΟƒΟ„Ξ± 
 		if (mysql_num_rows($sql) > 0) 
 		{
 			$tool_content .= "<h4>$langStudentParticipation</h4>\n".
@@ -184,7 +184,7 @@ $tool_content .= "</tbody></table>";
 } 
 else 
 {
-    // Αλλιώς... τι γίνεται;
+    // Ξ‘Ξ»Ξ»ΞΉΟΟ‚... Ο„ΞΉ Ξ³Ξ―Ξ½ΞµΟ„Ξ±ΞΉ;
     $tool_content .= "<h1>$langError</h1>\n<p><a href=\"listcours.php\">$langBack</p>\n";
 }
 

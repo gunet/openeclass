@@ -1,6 +1,6 @@
 <?php
 /**=============================================================================
-       	GUnet e-Class 2.0 
+       	GUnet eClass 2.0 
         E-learning and Course Management Program  
 ================================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
@@ -68,12 +68,12 @@ if(!empty($userid))
 		$tool_content .= "<table width=\"99%\"><tbody><tr><td>";
 		//$to = $email;
 		$to = $GLOBALS['emailAdministrator'];
-		$emailsubject = "Ενεργοποίηση λογαριασμού χρήστη";
-		$emailbody = "Ο φοιτητής με τα παρακάτω στοιχεία επιθυμεί την 
-		επανενεργοποίηση του λογαριασμού του:
+		$emailsubject = "Ξ•Ξ½ΞµΟΞ³ΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ· Ξ»ΞΏΞ³Ξ±ΟΞΉΞ±ΟƒΞΌΞΏΟ Ο‡ΟΞ®ΟƒΟ„Ξ·";
+		$emailbody = "Ξ Ο†ΞΏΞΉΟ„Ξ·Ο„Ξ®Ο‚ ΞΌΞµ Ο„Ξ± Ο€Ξ±ΟΞ±ΞΊΞ¬Ο„Ο‰ ΟƒΟ„ΞΏΞΉΟ‡ΞµΞ―Ξ± ΞµΟ€ΞΉΞΈΟ…ΞΌΞµΞ― Ο„Ξ·Ξ½ 
+		ΞµΟ€Ξ±Ξ½ΞµΞ½ΞµΟΞ³ΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ· Ο„ΞΏΟ… Ξ»ΞΏΞ³Ξ±ΟΞΉΞ±ΟƒΞΌΞΏΟ Ο„ΞΏΟ…:
 		$sirname $firstname
 		Email: $email
-		Σχόλια: $body";
+		Ξ£Ο‡ΟΞ»ΞΉΞ±: $body";
 		if (!send_mail($siteName, $emailAdministrator, '', $to,	$emailsubject, $emailbody, $charset)) 
 		{
 				$tool_content .= "<h4>'$langEmailNotSend' '$to'!</h4>";

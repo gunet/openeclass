@@ -1,6 +1,6 @@
 <?php // $Id$
 /*=============================================================================
-       	GUnet e-Class 2.0 
+       	GUnet eClass 2.0 
         E-learning and Course Management Program  
 ================================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
@@ -86,7 +86,7 @@ cData;
         <thead>
         <tr>
           <td width="44%" class="left"><u><b>$langColumnA</b></u></td>
-          <td width="12%"><div align="center"><b>Αντιστοιχία</b></div></td>
+          <td width="12%"><div align="center"><b>Ξ‘Ξ½Ο„ΞΉΟƒΟ„ΞΏΞΉΟ‡Ξ―Ξ±</b></div></td>
           <td width="44%" class="left"><u><b>$langColumnB</b></u></td>
         </tr>
         </thead>

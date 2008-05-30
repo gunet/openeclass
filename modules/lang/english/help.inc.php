@@ -523,18 +523,18 @@ $langHImport = "Upload page";
 $langImportContent = "<p>You can add your personal pages in lesson home page.
 The page must be in HTML format and can be created with a word processor or
 an editor for creating Web sites and pages. If you want to add a page upload the file .html
-by pressing the button �browse� , type the title of the page and press button 'Add'.
+by pressing the button οΏ½browseοΏ½ , type the title of the page and press button 'Add'.
 Your page will be linked from Homepage. If you want to send non HTML documents
 (PDF, Word, Power Point, Video, etc.) use 'Documents tool'
 These links can be deactivated and deleted.</p>";
 
-$langHModule = "�dd link in home page";
+$langHModule = "οΏ½dd link in home page";
 $langModuleContent = "<p>If you want to add links in lesson home page, just type the title and the address of the
 link and press button 'Add'. These links can be deactivated and deleted.</p>";
 
 //Help import page
 $langHImport = "Upload html file";
-$langImportContent = "<p>If needed, you can upload a file relative to your lesson. This file will be stored on the e-Class server. A link towards this file will be added on the left side menu, with the rest lesson tools.
+$langImportContent = "<p>If needed, you can upload a file relative to your lesson. This file will be stored on the eClass server. A link towards this file will be added on the left side menu, with the rest lesson tools.
 The link will open in a new browser window.</p>
 <p>To upload your html page click on 'Browse', choose the file you wish to upload, type a title in the 'Page Title' field and click on 'Add'.</p>
 <p>The link of this file can be deactivated and deleted from the 'Tools administration' module.</p>";
@@ -557,7 +557,7 @@ By the time you have completed the modifications press button 'Change'.
 user authentication procedure.</p>
 <p><b>Registration based accessed courses :</b> are accessible to users that
 must be registered.</p>
-<p><b>Closed courses :</b> are accessible to users already registered at e-class platform and
+<p><b>Closed courses :</b> are accessible to users already registered at eClass platform and
 have permission from the professor to attend the specific course.</p>
 <p><u>More actions:</u></p>
 <p><b>Archive this course:</b> You can create a backup file for the course and then
@@ -612,14 +612,14 @@ Regarding the video conferencing functionality, the student will be given the ab
 
 $langHVideo = "Video";
 $langVideoContent ="
-<p>Courses might contain audio and video files as contend. Audio and video files can be distributed either via downloading or streaming. When distributed via downloading there is a significant amount of time for waiting until downloading finishes in order to playback the file. When distributed via streaming there is no wait time and playback starts immediately. Video module adds streaming capabilities to e-class.</p>
+<p>Courses might contain audio and video files as contend. Audio and video files can be distributed either via downloading or streaming. When distributed via downloading there is a significant amount of time for waiting until downloading finishes in order to playback the file. When distributed via streaming there is no wait time and playback starts immediately. Video module adds streaming capabilities to eClass.</p>
 <p><b><u>Instructor Options</u></b></p>
 <p>
 You can upload video file in several formats like mpeg, avi etc. Choose \"Add video\" and type the path to the video file you want or click on \"Browse\" to locate it visually. Optionally you can fill in the \"Document title\" & \"Description\" fields. Click on \"Add\" in order to upload the file to the platform. Additionally you can add video links to your courses. Choose \"Add video link\" and then type the link to the file on the streaming server you want to add in the \"URL\" field. Optionally you can fill in the \"Document title\" & \"Description\" fields. When finished click on \"Add\". Once added you can modify any of the fields by choosing \"Modify\" or you can delete a file or link by choosing \"Delete\". By choosing \"Delete whole list\" you can remove all the files and links added to a course. If there is a streaming server integrated with the platform the process of video files addition is transparent. There is no extra care or action to be done in order the files to be streamed from the streaming server. Keep in mind that video files and links will be available all the time if someone uses the direct url to them.
 </p>
 <p><b><u>Student Options</u></b></p>
 <p>
-Choose the video file you want to playback. If there is a streaming server integrated with e-class, the student should be informed what client should use for playback.
+Choose the video file you want to playback. If there is a streaming server integrated with eClass, the student should be informed what client should use for playback.
 </p>
 ";
 
@@ -630,7 +630,7 @@ After entering the information you want press the button 'Add'. </p><p>If, for s
 the information press 'Return and Cancel'. Whenever you want, you can modify the information you have entered by
 clicking 'Modify' or deleting it by clicking on 'Delete'.</p>";
 
-$langHModule = "�dd link in home page";
+$langHModule = "οΏ½dd link in home page";
 $langModuleContent = "<p>If you want to add links in lesson home page, just type the title and the address of the
 link and press button 'Add'. These links can be deactivated and deleted.</p>";
 
@@ -811,7 +811,7 @@ $langWikiSyntaxContent = "<h1>Wiki Syntax</h1>
 <dt>Hyperlinks</dt>
 <dd><code>[url]</code>, <code>[name|url]</code>, <code>[name|url|language]</code> or <code>[name|url|language|title]</code>.&nbsp;;</dd>
 <dt>Image inclusion</dt>
-<dd><code>((url|alternate text))</code>, <code>((url|alternate text|position))</code> ou <code>((url|alternate text|position|long description))</code>. <br />The position argument can take the following values : L (left), R (right) or C (center�).&nbsp;;</dd>
+<dd><code>((url|alternate text))</code>, <code>((url|alternate text|position))</code> ou <code>((url|alternate text|position|long description))</code>. <br />The position argument can take the following values : L (left), R (right) or C (centerοΏ½).&nbsp;;</dd>
 <dd>You can use the syntax as Hyperlinks. For example <code>[title|image.gif]</code>. This syntax is deprecated, consider to use the preceding one&nbsp;;</dd>
 <dt>Link to an image</dt>
 <dd>same as Hyperlinks but put a 0 in fourth argument to avoid image recognition and get an hyperlink to an image. For example <code>[image|image.gif||0]</code> will display a link to image.gif instead of display the imge itself</dd>

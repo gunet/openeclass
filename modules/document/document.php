@@ -1,6 +1,6 @@
 <?php
 /*===========================================================================
-				GUNet e-Class 2.0
+				GUNet eClass 2.0
         E-learning and Course Management Program
 ================================================================================
         Copyright(c) 2003-2006  Greek Universities Network - GUnet

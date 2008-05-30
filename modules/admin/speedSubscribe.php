@@ -1,6 +1,6 @@
 <?php
 /* *=============================================================================
-       	GUnet e-Class 2.0 
+       	GUnet eClass 2.0 
         E-learning and Course Management Program  
 ================================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
@@ -64,8 +64,8 @@ if (isset($submit) && $submit == "$langRegistration") {
 	// Constract a display table
 	$tool_content .= "<table width=\"99%\"><caption>".$lang_subscribe_processing."</caption></tbody>";
 
-	$lesStatutDeCours["1"] = "Καθηγητής";
-	$lesStatutDeCours["5"] = "Φοιτητής";
+	$lesStatutDeCours["1"] = "ΞΞ±ΞΈΞ·Ξ³Ξ·Ο„Ξ®Ο‚";
+	$lesStatutDeCours["5"] = "Ξ¦ΞΏΞΉΟ„Ξ·Ο„Ξ®Ο‚";
 	// Register admin to courses selected
 	while (list($key,$contenu)= @each($course)) {
 		// Insert query

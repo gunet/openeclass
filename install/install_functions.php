@@ -62,7 +62,7 @@ function draw($toolContent){
 
 		$t->set_var('BREAD_TEXT',  $langStep);
 
-		$pageTitle = "Οδηγός Εγκατάστασης e-Class - " . $langStepTitle . " (" . $langStep . ")";
+		$pageTitle = "Οδηγός Εγκατάστασης eClass - " . $langStepTitle . " (" . $langStep . ")";
 		$t->set_var('PAGE_TITLE',  $pageTitle);
 
 

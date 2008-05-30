@@ -2,7 +2,7 @@
 
 /*
  +----------------------------------------------------------------------+
- | e-class version 1.3                                                  |
+ | eClass version 1.3                                                   |
  | based on CLAROLINE version 1.3.0                                     |
  +----------------------------------------------------------------------+
  | Copyright (c) 2001, 2002 Universite catholique de Louvain (UCL)      |
@@ -12,7 +12,7 @@
  |          Hugues Peeters    <peeters@ipm.ucl.ac.be>                   |
  |          Christophe Gesche <gesche@ipm.ucl.ac.be>                    |
  |                                                                      |
- | e-class changes by: Costas Tsibanis <costas@noc.uoa.gr>              |
+ | eClass changes by: Costas Tsibanis <costas@noc.uoa.gr>               |
  |                     Yannis Exidaridis <jexi@noc.uoa.gr>              |
  |                     Alexandros Diamantidis <adia@noc.uoa.gr>         |
  +----------------------------------------------------------------------+

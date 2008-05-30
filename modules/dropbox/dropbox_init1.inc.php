@@ -1,6 +1,6 @@
 <?php
 /**===========================================================================
-*              GUnet e-Class 2.0
+*              GUnet eClass 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
 *	Copyright(c) 2003-2006  Greek Universities Network - GUnet
@@ -76,7 +76,7 @@ $head_content ='<script>
 
 /**
  * --------------------------------------
- *       DATABASE TABLE VARIABLES
+ * Â Â Â Â  Â DATABASE TABLE VARIABLES
  * --------------------------------------
  */
 $dropbox_cnf["postTbl"] = "dropbox_post";
@@ -88,7 +88,7 @@ $dropbox_cnf["courseUserTbl"] = "cours_user";
 
 /**
  * --------------------------------------
- *       INITIALISE OTHER VARIABLES & CONSTANTS
+ * Â Â Â Â  Â INITIALISE OTHER VARIABLES & CONSTANTS
  * --------------------------------------
  */
 $dropbox_cnf["courseId"] = $currentCourseID;
@@ -102,7 +102,7 @@ $dropbox_cnf["allowStudentToStudent"] = false;
 
 /**
  * --------------------------------------
- * RH:   INITIALISE MAILING VARIABLES
+ * RH:Â  Â INITIALISE MAILING VARIABLES
  * --------------------------------------
  */
 $dropbox_cnf["allowMailing"] = false;  // false = no mailing functionality
@@ -116,7 +116,7 @@ $dropbox_cnf["mailingFileRegexp"] = '/^(.+)\.\w{1,4}$/';
 
 /**
  * ========================================
- *       Often used functions
+ * Â Â Â Â  Â Often used functions
  * ========================================
  */
 /*

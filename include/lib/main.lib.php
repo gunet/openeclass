@@ -1,7 +1,7 @@
 <?
 /*
 =============================================================================
-GUnet e-Class 2.0
+GUnet eClass 2.0
 E-learning and Course Management Program
 ================================================================================
 Copyright(c) 2003-2006  Greek Universities Network - GUnet
@@ -26,8 +26,8 @@ eMail: eclassadmin@gunet.gr
 
 /*
 ----------------------------------------------------------------------
-General useful functions for e-Class
-Standard header included by all e-class files
+General useful functions for eClass
+Standard header included by all eClass files
 Defines standard functions and validates variables
 ---------------------------------------------------------------------
 */
@@ -301,8 +301,8 @@ function get_all_uids_of_students_in_course($code_cours)
     return $uids;
 }
 
-// -------------------------------------------------------------------
-// Often useful function (with so many selection boxes in e-Class !!)
+// ------------------------------------------------------------------
+// Often useful function (with so many selection boxes in eClass !!)
 // ------------------------------------------------------------------
 
 

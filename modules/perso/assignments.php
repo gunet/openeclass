@@ -1,6 +1,6 @@
 <?PHP
 /**===========================================================================
-*              GUnet e-Class 2.0
+*              GUnet eClass 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
 *	Copyright(c) 2003-2006  Greek Universities Network - GUnet
@@ -24,11 +24,11 @@
 ============================================================================*/
 
 /**
- * Personalised Assignments Component, e-Class Personalised
+ * Personalised Assignments Component, eClass Personalised
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * @package e-Class Personalised
+ * @package eClass Personalised
  * 
  * @abstract This component populates the assignments block on the user's personalised 
  * interface. It is based on the diploma thesis of Evelthon Prodromou.
@@ -97,7 +97,7 @@ function getUserAssignments($param, $type) {
 /**
  * Function assignHtmlInterface
  * 
- * Generates html content for the assignments block of e-class personalised.
+ * Generates html content for the assignments block of eClass personalised.
  *
  * @param array $data
  * @return string HTML content for the assignments block

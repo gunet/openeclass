@@ -525,7 +525,7 @@ if (!isset($submit2)) {
                                    PRIMARY KEY (id))", $code[0]);
                 }
 
-                // upgrade queries for e-Class 1.6
+                // upgrade queries for eClass 1.6
                 $tool_content .= add_field('liens','category',"INT(4) DEFAULT '0' NOT NULL");
                 $tool_content .= add_field('liens','ordre',"MEDIUMINT(8) DEFAULT '0' NOT NULL");
                 if (!mysql_table_exists($code[0], 'link_categories'))  {
@@ -584,7 +584,7 @@ if (!isset($submit2)) {
                 }
 
                 // ********************************************
-                // new upgrade queries for e-Class 2.0
+                // new upgrade queries for eClass 2.0
                 // ********************************************
 		if (mysql_table_exists($code[0], 'work'))
                 	db_query("DROP TABLE `work`");

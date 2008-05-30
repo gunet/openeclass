@@ -1,6 +1,6 @@
 <?
 /*=============================================================================
-       	GUnet e-Class 2.0 
+       	GUnet eClass 2.0 
         E-learning and Course Management Program  
 ================================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
@@ -340,7 +340,7 @@ if($sql)
 	if($countUser>0)
 	{
 		$caption = "";
-		$caption .= "<p><i>$langThereAre: <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents και <b>$visitors</b> $langVisitors</i></p>";
+		$caption .= "<p><i>$langThereAre: <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents ΞΊΞ±ΞΉ <b>$visitors</b> $langVisitors</i></p>";
 		$caption .= "<p><i>$langTotal: <b>$countUser</b> $langUsers</i>";
 
 		if($countUser>0)

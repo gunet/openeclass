@@ -1,7 +1,7 @@
 <?php
 /*
 =============================================================================
-GUnet e-Class 2.0
+GUnet eClass 2.0
 E-learning and Course Management Program
 ================================================================================
 Copyright(c) 2003-2006  Greek Universities Network - GUnet
@@ -102,7 +102,7 @@ if (isset($submit) && isset($ldap_submit) && ($ldap_submit == "ON")) {
 		$_SESSION['langLinkURL'] = "?localize=en";
 	} else {
 		$_SESSION['langswitch'] = "english";
-		$_SESSION['langLinkText'] = "ÅëëçíéêÜ";
+		$_SESSION['langLinkText'] = "Î•Î»Î»Î·Î½Î¹ÎºÎ¬";
 		$_SESSION['langLinkURL'] = "?localize=el";
 	}
 
@@ -215,7 +215,7 @@ if ($userLang == "el") {
 	$_SESSION['langLinkURL'] = "?localize=en";
 } else {
 	$_SESSION['langswitch'] = "english";
-	$_SESSION['langLinkText'] = "ÅëëçíéêÜ";
+	$_SESSION['langLinkText'] = "Î•Î»Î»Î·Î½Î¹ÎºÎ¬";
 	$_SESSION['langLinkURL'] = "?localize=el";
 }
 ##[END personalisation modification]############

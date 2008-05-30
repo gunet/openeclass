@@ -1,6 +1,6 @@
 <?php
 /**=============================================================================
-       	GUnet e-Class 2.0 
+       	GUnet eClass 2.0 
         E-learning and Course Management Program  
 ================================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
@@ -35,7 +35,7 @@
  		@Comments: For this to work you need to add:
 
 		1.) draw($tool_content, 2, '', $local_head, '');
-		2.) $tool_content .=  "<form method=\"post\"><tr><td>глеяолгмиа</td><td>".$start_cal."</td></tr></form>";
+		2.) $tool_content .=  "<form method=\"post\"><tr><td>н≈н°н∙н║н÷н°н≈н²н≥н▒</td><td>".$start_cal."</td></tr></form>";
  
 
 ==============================================================================*/

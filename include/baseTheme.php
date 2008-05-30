@@ -1,6 +1,6 @@
 <?PHP
 /*===========================================================================
-*              GUnet e-Class 2.0
+*              GUnet eClass 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
 *	Copyright(c) 2003-2006  Greek Universities Network - GUnet
@@ -24,7 +24,7 @@
 ============================================================================*/
 
 /*
- * Base Theme Component, e-Class Core
+ * Base Theme Component, eClass Core
  *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$

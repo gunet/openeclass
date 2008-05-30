@@ -1,6 +1,6 @@
 <?PHP
 /**===========================================================================
-*              GUnet e-Class 2.0
+*              GUnet eClass 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
 *	Copyright(c) 2003-2006  Greek Universities Network - GUnet
@@ -24,11 +24,11 @@
 ============================================================================*/
 
 /**
- * Personalised ForumPosts Component, e-Class Personalised
+ * Personalised ForumPosts Component, eClass Personalised
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * @package e-Class Personalised
+ * @package eClass Personalised
  * 
  * @abstract This component populates the Forum Posts block on the user's personalised 
  * interface. It is based on the diploma thesis of Evelthon Prodromou.
@@ -143,7 +143,7 @@ function getUserForumPosts($param, $type) {
 /**
  * Function forumHtmlInterface
  * 
- * Generates html content for the Forum Posts block of e-class personalised.
+ * Generates html content for the Forum Posts block of eClass personalised.
  *
  * @param array $data
  * @return string HTML content for the documents block

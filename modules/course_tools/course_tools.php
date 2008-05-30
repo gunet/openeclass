@@ -1,6 +1,6 @@
 <?PHP
 /**===========================================================================
-*              GUnet e-Class 2.0
+*              GUnet eClass 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
 *	Copyright(c) 2003-2006  Greek Universities Network - GUnet
@@ -306,10 +306,10 @@ if ($is_adminOfCourse){
 		if (isset($file_name) and ($file_name != "") && ($file_size <= "$size")) {
 
 			$file_name = str_replace(" ", "", $file_name);
-			$file_name = str_replace("é", "e", $file_name);
-			$file_name = str_replace("è", "e", $file_name);
-			$file_name = str_replace("ê", "e", $file_name);
-			$file_name = str_replace("à", "a", $file_name);
+			$file_name = str_replace("Î¹", "e", $file_name);
+			$file_name = str_replace("Î¸", "e", $file_name);
+			$file_name = str_replace("Îº", "e", $file_name);
+			$file_name = str_replace("Î°", "a", $file_name);
 
 			@copy("$file", "$updir/$file_name")
 			or die("<p>$langCouldNot</p></tr>");

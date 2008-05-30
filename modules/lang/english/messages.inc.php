@@ -1227,8 +1227,8 @@ $langGuestChange="Guest account password successfully changed!";
 
 $infoprof="An e-mail with your account details will be sent to you as soon as possible by the Administrators of Asynchronous Teleteaching Platform.";
 
-$profinfo="Platform GUnet e-Class proviedes two ways or registration to ".$langsTeachers." ";
-$userinfo="Platform GUnet e-Class provides two ways of registration";
+$profinfo="The GUnet eClass platform provides two ways of registration to ".$langsTeachers." ";
+$userinfo="The GUnet eClass platform provides two ways of registration";
 $regprofldap="Registration for ".$langsTeachers." with account in the LDAP Directory Service of their institution";
 $regldap="Registration for users with account in the LDAP Directory Service of their institution";
 $regprofnoldap="Registration for ".$langsTeachers." without an account in the LDAP Directory Service of their institution";
@@ -1241,14 +1241,14 @@ $mailbody5="of GUnet ";
 $mailbody6="as a ".$langsTeacher.".";
 $mailbody7="Faculty / Department:";
 $mailbody8="as a ".$langsStudent." .";
-$logo= "GUnet e-Class Asynchronous Teleteaching Platform";
+$logo= "GUnet eClass Asynchronous Teleteaching Platform";
 $gunet="GUnet Asynchronous Teleteaching Group";
 $sendinfomail="Send information e-mail to ".$langsTeachers." ";
 $infoabouteclass="Update information about eClass";
 
 $langCopyrightNotice = '
-e-Class © 2002 - 2003 <a href="http://www.gunet.gr/">GUnet<a><br>&nbsp;<br>
-GUNet e-Class is based on <a href="http://www.claroline.net">claroline</a>,
+eClass © 2002 - 2003 <a href="http://www.gunet.gr/">GUnet<a><br>&nbsp;<br>
+GUNet eClass is based on <a href="http://www.claroline.net">claroline</a>,
 © 2001, 2002 Universit&eacute; catholique de Louvain (UCL)<br>&nbsp;<br>
 The content of the courses hosted here is the property of their creators
 and GUnet doesn\'t claim any rights upon it. For any further use or
@@ -1257,7 +1257,7 @@ course.
 ';
 
 // contact.php
-$introcontact = "You can contact with the GUNet e-Class Asynchronous Teleteaching Team of <b>".$siteName."</b> using the
+$introcontact = "You can contact with the GUNet eClass Asynchronous Teleteaching Team of <b>".$siteName."</b> using the
  following ways:";
 $langPostMail="<b>Post Office Address:</b>";
 
@@ -2492,7 +2492,7 @@ $langRequestDisplayMessage = "the message will also include the above comment";
 $langNoSuchRequest = "No such prof request with this ID. Cannot Proceed";
 $langTeacherRequestHasRejected = "".$langTeacher."  Request is now rejected";
 $langRequestMessageHasSent = " and a message was sent in the address ";
-$langRequestHasRejected = "Your request for registration in the e-Class platform has rejected.";
+$langRequestHasRejected = "Your request for registration to the eClass platform has rejected.";
 $langRegistrationDate = "Registration Date";
 $langExpirationDate = "Expiration Date";
 $langCourseRegistrationDate = "Course Registration Date";

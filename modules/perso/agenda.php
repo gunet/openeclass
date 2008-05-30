@@ -1,6 +1,6 @@
 <?PHP
 /**===========================================================================
- *              GUnet e-Class 2.0 
+ *              GUnet eClass 2.0 
  *       E-learning and Course Management Program  
  * ===========================================================================
  *	Copyright(c) 2003-2006  Greek Universities Network - GUnet
@@ -24,11 +24,11 @@
   ============================================================================*/
 
 /**
- * Personalised Documents Component, e-Class Personalised
+ * Personalised Documents Component, eClass Personalised
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * @package e-Class Personalised
+ * @package eClass Personalised
  * 
  * @abstract This component populates the agenda block on the user's personalised 
  * interface. It is based on the diploma thesis of Evelthon Prodromou.

@@ -1,6 +1,6 @@
 <?php
 /**=============================================================================
-           GUnet e-Class 2.0
+           GUnet eClass 2.0
         E-learning and Course Management Program
 ================================================================================
            Copyright(c) 2003-2006  Greek Universities Network - GUnet
@@ -31,7 +31,7 @@
 ==============================================================================
         @Description: About page for the administrator
 
-     This script displays information about GUnet e-Class version and about the
+     This script displays information about GUnet eClass version and about the
      server running (PHP version, Apache version, MySQL version).
 
      The user can : - See the information
