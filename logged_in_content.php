@@ -150,15 +150,15 @@ $sql = "SELECT cours.code k, cours.fake_code c, cours.intitule t,
 	FROM cours, cours_user WHERE cours.code=cours_user.code_cours AND cours_user.user_id='".$uid."'
 	AND cours_user.statut='5'";
 
-// my announcements
+// display last week announcements
 $tool_content .= "<tr><th>$langMyPersoAnnouncements</th></tr>";
 $ansql = db_query($sql, $mysqlMainDb);
 while ($c = mysql_fetch_array($ansql)) {
-
 $result = db_query("SELECT contenu, temps, title 
 		FROM " .$mysqlMainDb." . annonces, ".$c['k'].".accueil
 		WHERE code_cours='" .$c['k']. "'
-		AND DATE_FORMAT(temps, '%Y-%m-%d') >= '".$logindate."'
+		AND DATE_SUB(DATE_FORMAT('".$logindate."','%Y-%m-%d'), INTERVAL 1 WEEK) 
+		<= DATE_FORMAT(temps,'%Y-%m-%d')
 		AND ".$c['k'].".accueil.visible =1
 		AND ".$c['k'].".accueil.id =7
 		ORDER BY temps DESC", $mysqlMainDb);
@@ -178,12 +178,13 @@ $result = db_query("SELECT contenu, temps, title
 
 $tool_content .= "<tr><th>$langMyPersoDocs</th></tr>";
 $csql = db_query($sql, $mysqlMainDb);
-// docs perso info
-//die($logindate);
+
+// display last week doc info
 while ($c = mysql_fetch_array($csql)) {
 	$s = db_query("SELECT path, filename, title, date_modified
 		FROM document, accueil WHERE visibility = 'v'
-		AND DATE_FORMAT(date_modified,'%Y-%m-%d') >='" .$logindate."'
+		AND DATE_SUB(DATE_FORMAT('".$logindate."','%Y-%m-%d'), INTERVAL 1 WEEK) 
+		<= DATE_FORMAT(date_modified,'%Y-%m-%d')
 		AND accueil.visible =1 AND accueil.id =3
 		ORDER BY date_modified DESC", $c['k']);
 	while ($d = mysql_fetch_array($s)) {
