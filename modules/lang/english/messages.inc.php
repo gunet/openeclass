@@ -2751,7 +2751,7 @@ $langOk="Ok";
 $langCont = "Continue";
 $langUserBriefcase = "User portfolio";
 $langPersonalisedBriefcase = "Personalised portfolio";
-$langCopyrightFooter="Copyright notice";
+$langCopyrightFooter="Copyright &copy; 2003-2008 GUnet";
 $langAdvancedSearch="Advanced search";
 $langHomePage = "Home page";
 

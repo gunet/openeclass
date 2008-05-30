@@ -2715,7 +2715,7 @@ $langCheckPublicTools = "
 ";
 $langUserBriefcase = "Χαρτοφυλάκιο χρήστη";
 $langPersonalisedBriefcase = "Προσωπικό χαρτοφυλάκιο";
-$langCopyrightFooter="Πληροφορίες πνευματικών δικαιωμάτων";
+$langCopyrightFooter="Copyright &copy; 2003-2008 GUnet";
 $langAdvancedSearch="Σύνθετη αναζήτηση";
 $langTitle = "Τίτλος";
 $langType = "Τύπος";
