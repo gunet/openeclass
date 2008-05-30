@@ -70,7 +70,7 @@ if (isset($_GET['localize'])) {
 	$_SESSION['langswitch'] = $localize = $language = preg_replace('/[^a-z]/', '', $_GET['localize']);
 }
 if (!isset($localize)) {
-	$localize = $language = $_SESSION['langswitch'];
+	@$localize = $language = $_SESSION['langswitch'];
 }
 // Get configuration variables
 if (!isset($webDir)) {
@@ -87,7 +87,6 @@ if (!isset($urlSecure)) {
 }
 
 //load the correct language (Author: Evelthon Prodromou)
-
 if (session_is_registered('langswitch')) {
 	$language = $_SESSION['langswitch'];
 }
