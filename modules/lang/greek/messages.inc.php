@@ -1285,6 +1285,7 @@ $langListCourses = "Kατάλογος Μαθημάτων";
 $langAsynchronous = "Ομάδα Ασύγχρονης Τηλεκπαίδευσης";
 $langUserLogin = "Σύνδεση χρήστη";
 $langWelcomeToEclass = "Καλωσορίσατε στο ".$siteName."!";
+$langWelcomeToPortfolio = "Καλωσορίσατε στο προσωπικό σας χαρτοφυλάκιο";
 $langUnregCourse = "Απεγγραφή από μάθημα";
 $langUnCourse = "Απεγγραφή";
 $langCourseCode = "Μάθημα (Κωδικός)";

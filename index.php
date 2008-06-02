@@ -321,7 +321,7 @@ $nameTools = $langWelcomeToEclass;
 // --------------------------------------------------------------
 
 if (isset($uid) AND !isset($logout)) {
-	
+	$nameTools = $langWelcomeToPortfolio;
 	$require_help = true;
 	$helpTopic="Portfolio";
 

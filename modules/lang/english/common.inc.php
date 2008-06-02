@@ -4,7 +4,7 @@
 * General Messages - Feel free to suit them in your needs
 *******************************************************/
 
-$langEclass = "eClass Asynchronous Teleteaching Platform";
+$langEclass = "Open eClass - Course Management System";
 $langYes = "Yes";
 $langNo = "No";
 

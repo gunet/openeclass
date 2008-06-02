@@ -1317,6 +1317,7 @@ $langListCourses = "Courses List";
 $langInfoPlat = "Platform Information";
 $langUserLogin = "User login";
 $langWelcomeToEclass = "Welcome to $siteName!";
+$langWelcomeToPortfolio = "Welcome to your personalized portfolio";
 $langUnregCourse = "Course Unregister";
 $langUnCourse = "Unregister";
 $langManagement="Administration";
