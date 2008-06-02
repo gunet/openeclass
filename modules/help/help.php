@@ -8,9 +8,8 @@ if (!isset($language)) {
 
 if (file_exists("../lang/$language/help.inc.php")) {
 	include("../lang/$language/help.inc.php");
-}
-else {
-	die();
+} else {
+	die('No such help topic');
 }
 
 // Default topic
@@ -18,7 +17,10 @@ if (!isset($_GET['topic']) ||  empty($GLOBALS["lang$_GET[topic]Content"])) {
 	$_GET['topic'] = 'Default';
 }
 
+header('Content-Type: text/html; charset=UTF-8');
+
 ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>
 		<title><?= $GLOBALS["langH$_GET[topic]"] ?></title>

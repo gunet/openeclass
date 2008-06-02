@@ -847,5 +847,3 @@ $langWikiSyntaxContent = "<h1>Wiki Syntax</h1>
 <dt>Named anchor</dt>
 <dd><code>~anchor~</code>&nbsp;;</dd>
 </dl>";
-
-?>

@@ -942,6 +942,3 @@ $langWikiSyntaxContent = "<h1>Σύνταξη Wiki </h1>
 <dd><code>~στήριγμα~</code>&nbsp;</dd>
 </dl>";
 
-
-?>
-
