@@ -58,7 +58,7 @@ if (mysql_num_rows($result2) > 0) {
      <thead>
      <tr>
        <th width='65%' class='left'>$langCourseCode</th>
-       <th width='30%' class='left'>$langProfessor</th>
+       <th width='30%' class='left'>$langTeacher</th>
        <th width='5%'>$langUnCourse</th>
      </tr>
      </thead>";
@@ -107,7 +107,7 @@ while ($mycours = mysql_fetch_array($result2)) {
      <thead>
      <tr>
        <th width='65%' class='left'>$langCourseCode</th>
-       <th width='30%' class='left'>$langProfessor</th>
+       <th width='30%' class='left'>$langTeacher</th>
        <th width='5%'>$langManagement</th>
      </tr>
      </thead>";

@@ -16,7 +16,7 @@ $langUptime = "Platform is operational since";
 $langTotalHits = "Total hits";
 $langLast30daysLogins = "Total logins on the platform the last 30 days";
 $langTotalCourses = "Number of courses";
-$langInfo = "Platform Info";
+$langInfo = "Platform Information";
 $langAboutCourses = "There are ";
 $langAboutUsers = "Platform has";
 $langAboutCourses1 = "At this moment, platform hosts ";
@@ -53,13 +53,13 @@ $langAdmin = "Administration Tools";
 $langTools = "Tools";
 $langState = "State";
 $langDevAdmin ="Development Administration";
-$langNomPageAdmin 		= "Administration";
-$langSysInfo  			= "System Info";
-$langCheckDatabase  	= "Check main database";
-$langStatOf 			= "Statistics of "; // Stats of...
-$langSpeeSubscribe 		= "Quick subscribe as Course Checker";
-$langLogIdentLogout 	= "Log of login and logout";
-$langPlatformStats 		= "Platform statistics";
+$langNomPageAdmin = "Administration";
+$langSysInfo  = "System Info";
+$langCheckDatabase = "Check main database";
+$langStatOf = "Statistics of "; // Stats of...
+$langSpeeSubscribe = "Quick subscribe as Course Checker";
+$langLogIdentLogout = "Log of login and logout";
+$langPlatformStats = "Platform statistics";
 $langPlatformGenStats   = "General statistics";
 $langVisitsStats        = "Visits statistics";
 $langMonthlyReport      = "Monthly reports";
@@ -111,7 +111,6 @@ $langNbCourses = "Number of courses";
 $langToday   ="Today";
 $langLast7Days ="Last 7 days";
 $langLast30Days ="Last 30 days";
-
 $langNbUsers = "Number of users";
 $langCoursVisible = "Visibility";
 $langOthers = "Other sets";
@@ -615,7 +614,6 @@ $langDivision = "Division";
 $langTargetFac="This is the faculty, department or school where the course is delivered";
 $langMax="max. 12 characters, e.g. <i>ROM2121</i>";
 $langDoubt="If you doubt on your course's code, consult, ";
-$langProfessors=" ".$langTeacher."(s)";
 $langExFac = "If you wish to create course, in another faculty, then contact Asynchronous Teleteaching Team";
 $langEmpty="You left some fields empty.<br>Use the <b>Back</b> button on your browser and try again.<br>";
 $langEmptyFields="You left some fields empty.";
@@ -664,7 +662,6 @@ $langIntroductionText="This is the introduction text of your course. To replace 
 $langIntroductionTwo="This page allows any ".$langsStudent." or group to upload a document on the course\'s website. Send HTML file only if it contains no image.";
 $langQuestionnaire = "Questionnaire";
 $langCourseDescription="Write here the description that will appear in the course list.";
-$langProfessor="Instructor";
 $langJustCreated="You just created the course titled ";
 
  // Groups
@@ -1224,45 +1221,40 @@ $langGuestChange="Guest account password successfully changed!";
 /************************************************************
 * gunet.inc.php
 ************************************************************/
-
 $infoprof="An e-mail with your account details will be sent to you as soon as possible by the Administrators of Asynchronous Teleteaching Platform.";
-
-$profinfo="The GUnet eClass platform provides two ways of registration to ".$langsTeachers." ";
-$userinfo="The GUnet eClass platform provides two ways of registration";
+$profinfo="Platform $siteName provides two ways of registration to ".$langsTeachers." ";
+$userinfo="Platform $siteName provides two ways of registration";
 $regprofldap="Registration for ".$langsTeachers." with account in the LDAP Directory Service of their institution";
 $regldap="Registration for users with account in the LDAP Directory Service of their institution";
 $regprofnoldap="Registration for ".$langsTeachers." without an account in the LDAP Directory Service of their institution";
 $regnoldap="Registration for ".$langsTeachers." without an account in the LDAP Directory Service of their institution";
-$mailbody1="\nGUnet Academic Network\n\n";
+$mailbody1="\n$Institution\n\n";
 $mailbody2="User\n\n";
 $mailbody3="desires access ";
 $mailbody4="to Asynchronous Teleteaching Service ";
-$mailbody5="of GUnet ";
+$mailbody5="of $siteName";
 $mailbody6="as a ".$langsTeacher.".";
 $mailbody7="Faculty / Department:";
 $mailbody8="as a ".$langsStudent." .";
-$logo= "GUnet eClass Asynchronous Teleteaching Platform";
-$gunet="GUnet Asynchronous Teleteaching Group";
+$logo= "Asynchronous Teleteaching Platform $siteName";
+$gunet="$siteName Asynchronous Teleteaching Group";
 $sendinfomail="Send information e-mail to ".$langsTeachers." ";
-$infoabouteclass="Update information about eClass";
-
+$infoabouteclass="Update information about $siteName";
 $langCopyrightNotice = '
-eClass © 2002 - 2003 <a href="http://www.gunet.gr/">GUnet<a><br>&nbsp;<br>
-GUNet eClass is based on <a href="http://www.claroline.net">claroline</a>,
-© 2001, 2002 Universit&eacute; catholique de Louvain (UCL)<br>&nbsp;<br>
+Copyright © 2003 - 2008 <a href="http://www.gunet.gr/" target=_blank>GUnet</a>.<br>&nbsp;<br>
+<a href="http://portal.eclass.gunet.gr" target=_blank>Platform Open eClass</a>
+is a complete course management system. It was developed and currently supported by GUnet Asynchronous Teleteaching Team and is <a href="http://download.eclass.gunet.gr" target="_blank">freely available</a>
+as Open Source Software according to GNU General Public License (GNU GPL).<br><br>
 The content of the courses hosted here is the property of their creators
 and GUnet doesn\'t claim any rights upon it. For any further use or
 republication of the content please contact the maintainers of each
-course.
-';
+course.';
 
 // contact.php
-$introcontact = "You can contact with the GUNet eClass Asynchronous Teleteaching Team of <b>".$siteName."</b> using the
+$introcontact = "You can contact with the Asynchronous Teleteaching Team of <b>".$siteName."</b> using the
  following ways:";
 $langPostMail="<b>Post Office Address:</b>";
-
 $langFax = "<b>Fax:</b>";
-
 
 /********************************************************************
 * import.inc.php
@@ -1318,18 +1310,17 @@ $langMenu ="Menu";
 $langLogout="Logout";
 $langOtherCourses="Courses list";
 $langSupportForum="Support forum";
-$langNewUser = 'New user registration';
 $langContact = 'Contact';
 $lang_forgot_pass = 'Forgot your password?';
 $langNewAnnounce = "New !";
 $langListCourses = "Courses List";
-$langInfoPlat = "Platform infornation";
+$langInfoPlat = "Platform Information";
 $langUserLogin = "User login";
-$langWelcomeToEclass = "Welcome to eClass!";
+$langWelcomeToEclass = "Welcome to $siteName!";
 $langUnregCourse = "Course Unregister";
 $langUnCourse = "Unregister";
 $langManagement="Administration";
-$langInfoAbout = "Platform <b>GUNet eClass</b> is a complete Courses Management System. It is GUnet's proposal for supporting Asynchronous Teleteaching. It is mainly designed to aid the classical way of  teaching and is adapted to th Greek Academic Educational System. It is an open platform technically supported by GUnet.
+$langInfoAbout = "Platform <b>".$siteName."</b> is a complete Courses Management System. It is GUNet's proposal for supporting Asynchronous Teleteaching. It is mainly designed to aid the classical way of  teaching and is adapted to th Greek Academic Educational System. It is an open platform technically supported by GUNet.
 More information about platform can be found in the available manuals.";
 $langWelcomeStud = "Select \"Courses list\" to review the available courses.";
 $langWelcomeProf = "Select \"Create course site\" to create your on-line courses.";
@@ -1692,8 +1683,6 @@ $langPassCannotChange3="for more information.";
 /************************************************************
 * manual.inc.php
 ************************************************************/
-
-
 $langIntroMan = "Here you can find useful manuals about platform eClass.";
 $langFinalDesc = "Description of eClass";
 $langShortDesc = "Short Description of eClass";
@@ -1714,14 +1703,13 @@ $langToday = "Today";
 /************************************************************
 * opencours.inc.php
 *************************************************************/
-$listfac="Select faculty";
+$langListFac = "Courses List / Select faculty";
 $listtomeis = "Division";
 $langDepartmentsList = "A list of this institution's departments apprears below. Please click on
 	any of them to view a list of its available courses.";
 $langWrongPassCourse = "Wrong Course Password";
 $langAvCourses = "courses available";
 $langAvCours = "course available";
-
 $m['begin'] = 'begin';
 $m['department'] = 'Faculty / Department';
 $m['lessoncode'] = 'Course Name (code)';
@@ -2413,7 +2401,7 @@ $langProfEmail="User E-mail";
 $reguserldap="LDAP User Registration";
 $langByLdap="LDAP authentication";
 $langNewProf="New progessor account details";
-$langUserAccount = 'User Account';
+$langUserAccount = " ".$langStudent." Account";
 $langNewAccount = 'New Account';
 $langProfAccount = " ".$langTeacher." Account";
 $langUserAccountInfo1 = '(Application form)&nbsp;';
@@ -2471,7 +2459,6 @@ $langAuthPassword = "Please type your password:";
 $langAuthenticateVia = "Authenticate via";
 $langAuthenticateVia2 = "Available authentication methods of the institution";
 $langCannotUseAuthMethods = "You cannot use the platform at the moment. Please inform the platform admin";
-$langAuthReg = "User registration ";
 $langUserData = "User Personal Data";
 $langUsersData = "Users Data";
 $langUserExistingAccount = 'Login';
@@ -2526,7 +2513,7 @@ $langUserPermitions = "Rights";
 
 // formuser.php
 $langUserRequest = "Request for new user account";
-$langNewUser = "New User Registration";
+$langNewUser = "User Registration";
 $langUserFillData = "User Details";
 $langInfoProfReq = "If you wish to have access in platform as a user - ".$langsTeacher.", please complete the form below. Your request will be sent to administrator who will create your account and send you an informational email.";
 $langInfoStudReg = " If you wish to have access in platform as a user - ".$langsStudent." , please complete the form below. Your account will be created automatically.";

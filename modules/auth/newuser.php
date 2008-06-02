@@ -41,19 +41,18 @@ include '../../include/sendMail.inc.php';
 include 'auth.inc.php';
 $nameTools = $langUserDetails;
 // Main body
-$navigation[] = array("url"=>"registration.php", "name"=> $langAuthReg);
+$navigation[] = array("url"=>"registration.php", "name"=> $langNewUser);
 
-$tool_content = "";		// Initialise $tool_content
+$tool_content = "";	// Initialise $tool_content
 
 if (isset($close_user_registration) and $close_user_registration == TRUE) {
-			 $tool_content .= "<div class='td_main'>$langForbidden</div>";
-       draw($tool_content,0);
-	     exit;
+	$tool_content .= "<div class='td_main'>$langForbidden</div>";
+        draw($tool_content,0);
+	exit;
  }
 
 // display form
 if (!isset($submit)) {
-
 	// Main body
 	@$tool_content .= "
 	<table width=\"99%\" align='left' class='FormData'>

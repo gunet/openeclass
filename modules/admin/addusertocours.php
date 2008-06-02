@@ -67,7 +67,7 @@ if (isset($submit))  {
 	for ($i=0; $i < $numberProfs; $i++) {
 		// Insert professor
 		$sqlInsertProf = "INSERT INTO `cours_user` (`code_cours`, `user_id`, `statut`, `role`)
-			VALUES ('".mysql_real_escape_string($_GET['c'])."', '".$regprofs[$i]."', '1', 'ÊáèçãçôÞò')"; 
+			VALUES ('".mysql_real_escape_string($_GET['c'])."', '".$regprofs[$i]."', '1', 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½')"; 
 		mysql_query($sqlInsertProf) ;
 	}
 
@@ -185,7 +185,7 @@ function reverseAll(cbList) {
 		<p>&nbsp;</p>
 		<p>&nbsp;</p>
 		<p>&nbsp;</p>
-		<p><b>".$langProfessors."</b></p>
+		<p><b>".$langTeachers."</b></p>
 		<p>";
 
 	// WATCH OUT ! form elements are called by numbers "form.element[3]"... 

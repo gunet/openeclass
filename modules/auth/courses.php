@@ -204,7 +204,8 @@ function getdepnumcourses($fac) {
 }
 
 function expanded_faculte($fac, $uid) {
-	global $m, $icons, $langTutor, $langBegin,$langRegistration, $mysqlMainDb, $table_border;
+	global $m, $icons, $langTutor, $langBegin, $langRegistration, $mysqlMainDb, $table_border;
+	global $langRegistration,$langCourseCode,$langTeacher,$langType;
 
 	$retString = "";
 
@@ -317,10 +318,8 @@ function expanded_faculte($fac, $uid) {
     ";
 	}
 	
-
 	// legend
 
-global $langRegistration,$langCourseCode,$langProfessor,$langType;
   $retString .= "
     <script type=\"text/javascript\" src=\"sorttable.js\"></script>
     <table class=\"sortable\" id=\"t1\" width=\"99%\">
@@ -331,7 +330,7 @@ global $langRegistration,$langCourseCode,$langProfessor,$langType;
     $retString .= "
       <th class='left' width='60%'>$langCourseCode</th>";
     $retString .= "
-      <th class='left' width='23%'>$langProfessor</th>";
+      <th class='left' width='23%'>$langTeacher</th>";
     $retString .= "
       <th width='7%'><b>$langType</b></th>";
     $retString .= "

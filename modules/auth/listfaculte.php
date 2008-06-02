@@ -25,39 +25,30 @@
 */
 
 include '../../include/baseTheme.php';
-$nameTools = $listfac;
+$nameTools = $langListFac;
 $result=mysql_query("SELECT id, name, code FROM faculte ORDER BY name");
 $numrows = mysql_num_rows($result);
 
 $tool_content = "";
-
 if (isset($result))  {
-
-$tool_content .= "
+	$tool_content .= "
     <script type='text/javascript' src='sorttable.js'></script>
     <table width='99%' class='sortable' id='t1'>
     <thead><tr><th class='left'>$m[department]</th></tr></thead>\n";
 
    while ($fac = mysql_fetch_array($result)) {
-	$tool_content .= "
-    <tbody>
-    <tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">\n";
+	$tool_content .= "<tbody>
+    	<tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">\n";
   	$tool_content .= "
-    <td>&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<a href='opencourses.php?fc=$fac[id]'>$fac[name]</a>&nbsp;
-    <small>($fac[code])</small>&nbsp;";
+    	<td>&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<a href='opencourses.php?fc=$fac[id]'>$fac[name]</a>&nbsp;
+    	<small>($fac[code])</small>&nbsp;";
 
-     $n=mysql_query("SELECT COUNT(*) FROM cours_faculte WHERE faculte='$fac[name]'");
-     $r=mysql_fetch_array($n);
+     	$n=mysql_query("SELECT COUNT(*) FROM cours_faculte WHERE faculte='$fac[name]'");
+     	$r=mysql_fetch_array($n);
 
-    $tool_content .= "
-    <small><font color=\"#aaaaaa\">($r[0]  ".  ($r[0] == 1? $langAvCours: $langAvCourses) . ")</font><small></td>
-    </tr>\n";
-        }
-      $tool_content .= "
-     </tbody>\n
-    </table>";
+    	$tool_content .= "<small><font color=\"#aaaaaa\">($r[0]  ".  ($r[0] == 1? $langAvCours: $langAvCourses) . ")</font><small></td></tr>\n";
+	}
+   $tool_content .= "</tbody>\n</table>";
   }
-
-
 draw($tool_content, 0);
 ?>

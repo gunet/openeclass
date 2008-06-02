@@ -98,7 +98,7 @@ case 'other': { //other
 }
 
 $bar_content .= "<p><b>".$langLessonCode."</b>: ".$fake_code."</p>";
-$bar_content .= "<p><b>".$langProfessors."</b>: ".$professor."</p>";
+$bar_content .= "<p><b>".$langTeachers."</b>: ".$professor."</p>";
 $bar_content .= "<p><b>".$langFaculty."</b>: ".$faculte."</p>";
 $bar_content .= "<p><b>".$m['type']."</b>: ".$lessonType."</p>";
 
@@ -140,16 +140,10 @@ if ($is_adminOfCourse) {
 
 $tool_content .= <<<lCont
 <div id="container_login">
-
 <div id="wrapper">
-<div id="content_login">
-<p>$main_content</p>
-
-
-</div>
+<div id="content_login"><p>$main_content</p></div>
 </div>
 <div id="navigation">
-
   <table width="99%">
   <tbody>
   <tr>
@@ -159,11 +153,7 @@ $tool_content .= <<<lCont
   </tr>
   </tbody>
   </table>
-
-
 </div>
-
-
 </div>
 
 lCont;

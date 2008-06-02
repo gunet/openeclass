@@ -1,5 +1,5 @@
 <?php
-/**=============================================================================
+/*=============================================================================
   GUnet eClass 2.0
   E-learning and Course Management Program
   ================================================================================
@@ -23,7 +23,7 @@
   eMail: eclassadmin@gunet.gr
   ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
   newuser_info.php
  * @version $Id$
 
@@ -40,7 +40,7 @@
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
 
-$nameTools = $langAuthReg;
+$nameTools = $langNewUser;
 
 $tool_content = "";
 $tool_content .= "<table width=75%><thead><tr><td><fieldset><legend>$langUserAccount ";
@@ -57,8 +57,7 @@ if (isset($close_user_registration) and $close_user_registration == TRUE) {
         $tool_content .= "$langUserAccountInfo2";
 }
 
-$tool_content .= "</legend><br><p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
-								<a href=\"$newuser\">$langNewAccount</a></p>";
+$tool_content .= "</legend><br><p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;<a href=\"$newuser\">$langNewAccount</a></p>";
 
 if(!empty($auth)) {
         if (count($auth) > 1) {
@@ -78,13 +77,8 @@ if(!empty($auth)) {
         }
 }
 
-$tool_content .= "<br></FIELDSET>
-		</td></tr></thead></table>
-		<br><br>
-		<table width=75%>
-		<thead>
-		<tr><td><FIELDSET><LEGEND>".$langProfAccount." ".$langUserAccountInfo1."</LEGEND>
-		<br>";
+$tool_content .= "<br></FIELDSET></td></tr></thead></table><br><br><table width=75%>
+	<thead><tr><td><FIELDSET><LEGEND>".$langProfAccount." ".$langUserAccountInfo1."</LEGEND><br>";
 
 if(!empty($auth)) {
         $tool_content .= "<p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;

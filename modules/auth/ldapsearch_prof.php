@@ -35,13 +35,11 @@ include '../../include/sendMail.inc.php';
 require_once 'auth.inc.php';
 
 $msg = "$langReqRegProf (".(get_auth_info($auth)).")";
-
 $nameTools = $msg;
-$navigation[]= array ("url"=>"registration.php", "name"=> "$langAuthReg");
+$navigation[]= array ("url"=>"registration.php", "name"=> "$langNewUser");
 $navigation[]= array ("url"=>"ldapnewprof.php", "name"=> "$langConfirmUser");
 
 $tool_content = "";
-
 $auth = get_auth_id();
 
 // for security

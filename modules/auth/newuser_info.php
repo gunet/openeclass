@@ -45,7 +45,6 @@ $nameTools = $reguser;
 $tool_content = "";		// Initialise $tool_content
 
 // Main body
-
 $auth = get_auth_active_methods();
 $e = 1;
 
@@ -55,7 +54,7 @@ if (isset($close_user_registration) and $close_user_registration == TRUE)
   else
     $newuser = "newuser.php";
 
-$tool_content .= "$langSelection<br><a href=\"$newuser\">$langAuthReg".get_auth_info($e)."</a>";
+$tool_content .= "$langSelection<br><a href=\"$newuser\">$langNewUser".get_auth_info($e)."</a>";
 
 if(!empty($auth))
 {
@@ -63,8 +62,7 @@ if(!empty($auth))
 	{
 		if($v!=1)
 		{
-			$tool_content .= "
-			<a href=\"ldapnewuser.php?auth=".$v."\">$langAuthReg".get_auth_info($v)."</a>";
+			$tool_content .= "<a href=\"ldapnewuser.php?auth=".$v."\">$langNewUser".get_auth_info($v)."</a>";
 		}
 		else
 		{

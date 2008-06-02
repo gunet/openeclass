@@ -518,7 +518,7 @@ function print_a($TheArray) {
 	echo "</table>n";
 }
 
-/**
+/*
  * Function lang_selections
  *
  * Returns the HTML code for a language selection tool

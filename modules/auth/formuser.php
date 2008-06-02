@@ -4,19 +4,18 @@ include '../../include/sendMail.inc.php';
 
 $tool_content = "";
 $nameTools = $langUserRequest;
-$navigation[] = array("url"=>"registration.php", "name"=> $langAuthReg);
+$navigation[] = array("url"=>"registration.php", "name"=> $langNewUser);
 
 if (isset($submit)) {
-
 	if (empty($usercomment) or empty($name) 
 		or empty($surname) or empty($username) or empty($userphone) or empty($usermail)) {
 			$tool_content .= "<table width=\"99%\"><tbody><tr>
 		    <td class=\"caution\" height='60'>
     			<p>$langFieldsMissing</p>
-					<p><a href='$_SERVER[PHP_SELF]?name=$_POST[name]&surname=$_POST[surname]&userphone=$_POST[userphone]&username=$_POST[username]&usermail=$_POST[usermail]&usercomment=$_POST[usercomment]'>$langAgain</a></p>
+			<p><a href='$_SERVER[PHP_SELF]?name=$_POST[name]&surname=$_POST[surname]&userphone=$_POST[userphone]&username=$_POST[username]&usermail=$_POST[usermail]&usercomment=$_POST[usercomment]'>$langAgain</a></p>
 		    </td>
 		  </tr></tbody>
-			  </table><br><br/>";
+		</table><br><br/>";
     draw($tool_content, 0, 'auth');
 	  exit;
 

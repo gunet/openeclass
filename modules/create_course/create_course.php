@@ -110,7 +110,7 @@ if (isset($back1) or !isset($visit)) {
         unset($repertoire);
         $tool_content .= "
       <tr>
-        <th class='left'>$langProfessors&nbsp;:</th>
+        <th class='left'>$langTeachers&nbsp;:</th>
         <td><input class='FormData_InputText' type='text' name='titulaires' size='60' value='".$titulaire_probable."' /></td>
         <td>&nbsp;</td>
       </tr>

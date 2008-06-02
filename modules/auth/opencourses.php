@@ -35,7 +35,7 @@
 
 include '../../include/baseTheme.php';
 $nameTools = $langListCourses;
-$navigation[] = array ("url"=>"listfaculte.php", "name"=> $listfac);
+$navigation[] = array ("url"=>"listfaculte.php", "name"=> $langListFac);
 
 //parse the faculte id in a session
 //This is needed in case the user decides to switch language.

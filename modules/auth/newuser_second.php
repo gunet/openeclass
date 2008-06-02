@@ -42,13 +42,12 @@ include('../../include/sendMail.inc.php');
 include 'auth.inc.php';
 $nameTools = $langRegistration;
 
-$tool_content = "";		// Initialise $tool_content
+$tool_content = "";	// Initialise $tool_content
 
 // Main body
-$navigation[] = array("url"=>"newuser.php", "name"=> $langAuthReg);
+$navigation[] = array("url"=>"newuser.php", "name"=> $langNewUser);
 
-$statut=5;		// student registration
-
+$statut=5;	// student registration
 // Get the incoming variables and initialize them
 $submit = isset($_POST['submit'])?$_POST['submit']:'';
 $auth = isset($_POST['auth'])?$_POST['auth']:'';

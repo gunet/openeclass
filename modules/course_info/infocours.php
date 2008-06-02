@@ -147,7 +147,7 @@ if($is_adminOfCourse) {
     </tr>
     <tr>
     <tr>
-      <th class='left'>$langProfessors&nbsp;:</th>
+      <th class='left'>$langTeachers&nbsp;:</th>
       <td><input type=\"text\" name=\"titulary\" value=\"$titulary\" size=\"60\" class='FormData_InputText'></td>
       <td>&nbsp;</td>
     </tr>

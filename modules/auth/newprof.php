@@ -3,7 +3,7 @@ include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 require_once 'auth.inc.php';
 $nameTools = $langReqRegProf;
-$navigation[] = array("url"=>"registration.php", "name"=> $langAuthReg);
+$navigation[] = array("url"=>"registration.php", "name"=> $langNewUser);
 
 // Initialise $tool_content
 $tool_content = "";
@@ -118,7 +118,7 @@ if (count($registration_errors) == 0) {    // registration is ok
       $surname = $nom_form;
       $name = $prenom_form;
 
-		mysql_select_db($mysqlMainDb,$db);
+	mysql_select_db($mysqlMainDb,$db);
       $sql = "INSERT INTO prof_request(profname,profsurname,profuname,profpassword,
       profemail,proftmima,profcomm,status,date_open,comment) VALUES(
       '$name','$surname','$username','$password','$usermail','$department','$userphone','1',NOW(),'$usercomment')";
@@ -147,7 +147,7 @@ if (count($registration_errors) == 0) {    // registration is ok
       <td class=\"well-done\" height='60'>
       <p>$langDearProf</p><p>$success</p><p>$infoprof</p>
       <p><a href=\"$urlServer\">$langBack</a></p>
-  	 	</td>
+  	 </td>
 	    </tr></tbody></table>";
     }	
 	
