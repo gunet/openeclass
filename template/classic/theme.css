@@ -312,6 +312,14 @@ body {
 	text-align: right;
 }
 
+#fbar_info .langSwitch select{
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+	text-decoration: none;
+    font-size: 10px;
+    color: #727266;
+    font-weight: bold;
+}
+
 #fbar_info .langSwitch a{
 	text-decoration: none;
     font-size: 10px;

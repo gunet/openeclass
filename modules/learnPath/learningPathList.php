@@ -400,23 +400,26 @@ if ((mysql_num_rows($l) == 0)) {
 
 
 $tool_content .= "
-    <table width=\"99%\">
+    <table width=\"99%\" class=\"LearnPathSum\">
     <thead>
-    <tr align=\"center\" valign=\"top\">
-    <th width=\"550\" colspan=\"2\"><div align=\"left\">&nbsp;&nbsp;".$langLearningPathList."</div></th>";
+    <tr>
+      <td width=\"1%\">&nbsp;</td>
+      <td><div align=\"center\"><b>".$langContents."</b></div></td>\n";
 
 
 if($is_adminOfCourse) {
      // Titles for teachers
-     $tool_content .= "<th colspan=\"3\" width=\"150\">".$langAdm."</th>";
-     $tool_content .= "<th colspan=\"5\"  width=\"150\">".$langActions."</th>";
+     $tool_content .= "      <td colspan=\"3\" width=\"150\"><div align=\"center\"><b>".$langAdm."</b></div></td>\n";
+     $tool_content .= "      <td colspan=\"5\" width=\"150\"><div align=\"center\"><b>".$langActions."</b></div></td>\n";
 }
 elseif($uid) {
    // display progression only if user is not teacher && not anonymous
-   $tool_content .= "<th colspan=\"2\">".$langProgress."</th>";
+   $tool_content .= "      <td colspan=\"2\" width=\"20%\"><div align=\"center\"><b>".$langProgress."</b></div></td>\n";
 }
 // close title line
-$tool_content .= "</tr>\n</thead>\n<tbody>";
+$tool_content .= "    </tr>
+    </thead>
+    <tbody>";
 
 // display invisible learning paths only if user is courseAdmin
 if ($is_adminOfCourse) {
@@ -458,7 +461,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
 {
     if ($list['visibility'] == 'HIDE') {
         if ($is_adminOfCourse) {
-            $style=" class=\"invisible\"";
+            $style="class=\"invisible\"";
         }
         else {
             continue; // skip the display of this file
@@ -468,13 +471,14 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         $style="";
     }
 
-    $tool_content .= "<tr align=\"center\"".$style.">";
+    $tool_content .= "
+    <tr ".$style.">";
 
     //Display current learning path name
     if (!$is_blocked) {
-        $tool_content .= "<td align=\"left\" width=\"1\"><img src=\"../../template/classic/img/lp_on.gif\" alt=\"\"
-            border=\"0\" /></td><td align=\"left\"><a href=\"learningPath.php?path_id="
-            .$list['learnPath_id']."\"".$style.">".htmlspecialchars($list['name'])."</a></td>";
+        $tool_content .= "
+      <td><img src=\"../../template/classic/img/lp_on.gif\" alt=\"\" border=\"0\" /></td>
+      <td><a href=\"learningPath.php?path_id=".$list['learnPath_id']."\"".$style.">".htmlspecialchars($list['name'])."</a></td>\n";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
@@ -536,8 +540,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         }
     }
     else {  //else of !$is_blocked condition , we have already been blocked before, so we continue beeing blocked : we don't display any links to next paths any longer
-        $tool_content .= "<td align=\"left\"> <img src=\"../../template/classic/img/lp_on.gif\" alt=\"\"
-                    border=\"0\" /> ".$list['name'].$list['minRaw']."</td>\n";
+        $tool_content .= "      <td align=\"left\"><img src=\"../../template/classic/img/lp_on.gif\" alt=\"\" border=\"0\" /> ".$list['name'].$list['minRaw']."</td>\n";
     }
 
     // DISPLAY ADMIN LINK-----------------------------------------------------------
@@ -547,39 +550,35 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
 
         // LOCK link
 
-        $tool_content .= "<td style=\"border-left: 1px solid #edecdf;\">";
+        $tool_content .= "      <td style=\"border-left: 1px solid #edecdf;\">";
 
         if ($list['lock'] == 'OPEN') {
-            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkBlock&cmdid=".$list['learnPath_id']."\">\n"
-                  ."<img src=\"../../template/classic/img/unblock.gif\" alt=\"$langBlock\" title=\"$langBlock\" border=\"0\">\n"
-                  ."</a>\n";
+            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkBlock&cmdid=".$list['learnPath_id']."\">"
+                  ."<img src=\"../../template/classic/img/unblock.gif\" alt=\"$langBlock\" title=\"$langBlock\" border=\"0\">"
+                  ."</a>";
         } else {
-            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkUnblock&cmdid=".$list['learnPath_id']."\">\n"
-            ."<img src=\"../../template/classic/img/block.gif\" alt=\"$langAltMakeNotBlocking\" title=\"$langAltMakeNotBlocking\" border=\"0\">\n"
-            ."</a>\n";
+            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkUnblock&cmdid=".$list['learnPath_id']."\">"
+            ."<img src=\"../../template/classic/img/block.gif\" alt=\"$langAltMakeNotBlocking\" title=\"$langAltMakeNotBlocking\" border=\"0\">"
+            ."</a>";
         }
         $tool_content .= "</td>\n";
 
         // EXPORT links
-        $tool_content .= '<td><a href="'.$_SERVER['PHP_SELF'].'?cmd=export&amp;path_id=' . $list['learnPath_id'] . '" >'
-            .'<img src="../../template/classic/img/export.gif" alt="'.$langExport2004. '" title="'.$langExport2004. '" border="0" title="'.$langExport2004.'"></a>' ."\n"
+        $tool_content .= '      <td><a href="'.$_SERVER['PHP_SELF'].'?cmd=export&amp;path_id=' . $list['learnPath_id'] . '" >'
+            .'<img src="../../template/classic/img/export.gif" alt="'.$langExport2004. '" title="'.$langExport2004. '" border="0" title="'.$langExport2004.'"></a>' .""
             .'<a href="' . $_SERVER['PHP_SELF'] . '?cmd=export12&amp;path_id=' . $list['learnPath_id'] . '" >'
-            .'<img src="../../template/classic/img/export.gif" alt="'.$langExport12.'" title="'.$langExport12.'" border="0" title="'.$langExport12.'"></a>' ."\n"
+            .'<img src="../../template/classic/img/export.gif" alt="'.$langExport12.'" title="'.$langExport12.'" border="0" title="'.$langExport12.'"></a>' .""
             .'</td>' . "\n";
 
         // statistics links
-        $tool_content .= "<td style=\"border-right: 1px solid #edecdf;\">\n
-          <a href=\"details.php?path_id=".$list['learnPath_id']."\">
-          <img src=\"../../template/classic/img/statistics.gif\" border=\"0\" alt=\"$langTracking\" title=\"$langTracking\" />
-          </a>
-          </td>\n";
+        $tool_content .= "      <td style=\"border-right: 1px solid #edecdf;\"><a href=\"details.php?path_id=".$list['learnPath_id']."\"><img src=\"../../template/classic/img/statistics.gif\" border=\"0\" alt=\"$langTracking\" title=\"$langTracking\" /></a></td>\n";
 
 
         // VISIBILITY link
-        $tool_content .= "<td>\n";
+        $tool_content .= "      <td>";
         if ( $list['visibility'] == 'HIDE') {
-            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkVisibl&visibility_path_id=".$list['learnPath_id']."\">\n"
-                  ."<img src=\"../../template/classic/img/invisible.gif\" alt=\"$langVisible\" title=\"$langVisible\" border=\"0\" />\n"
+            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkVisibl&visibility_path_id=".$list['learnPath_id']."\">"
+                  ."<img src=\"../../template/classic/img/invisible.gif\" alt=\"$langVisible\" title=\"$langVisible\" border=\"0\" />"
                   ."</a>";
         } else {
             if ($list['lock']=='CLOSE') {
@@ -589,17 +588,17 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
                 $onclick = "";
             }
 
-            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkInvisibl&visibility_path_id=".$list['learnPath_id']."\" ".$onclick. " >\n"
-                 ."<img src=\"../../template/classic/img/visible.gif\" alt=\"$langVisible\" title=\"$langVisible\" border=\"0\" />\n"
-                 ."</a>\n";
+            $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?cmd=mkInvisibl&visibility_path_id=".$list['learnPath_id']."\" ".$onclick. " >"
+                 ."<img src=\"../../template/classic/img/visible.gif\" alt=\"$langVisible\" title=\"$langVisible\" border=\"0\" />"
+                 ."</a>";
         }
         $tool_content .= "</td>\n";
 
         // Modify command / go to other page
-        $tool_content .= "<td>\n"
-             ."<a href=\"learningPathAdmin.php?path_id=".$list['learnPath_id']."\">\n"
-             ."<img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"$langModify\" title=\"$langModify\" />\n"
-             ."</a>\n"
+        $tool_content .= "      <td>"
+             ."<a href=\"learningPathAdmin.php?path_id=".$list['learnPath_id']."\">"
+             ."<img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"$langModify\" title=\"$langModify\" />"
+             ."</a>"
              ."</td>\n";
 
         // DELETE link
@@ -607,45 +606,45 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
 
         // check if the learning path is of a Scorm import package and add right popup:
         if (is_dir($real)) {
-            $tool_content .=  "<td>\n"
+            $tool_content .=  "      <td>"
                   ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=delete&del_path_id=".$list['learnPath_id']."\" "
-                  ."onClick=\"return scormConfirmation('".clean_str_for_javascript($list['name'])."');\">\n"
-                  ."<img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"$langDelete\" title=\"$langDelete\" />\n"
-                  ."</a>\n"
+                  ."onClick=\"return scormConfirmation('".clean_str_for_javascript($list['name'])."');\">"
+                  ."<img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"$langDelete\" title=\"$langDelete\" />"
+                  ."</a>"
                   ."</td>\n";
 
         } else {
-            $tool_content .=  "<td>\n"
+            $tool_content .=  "      <td>"
                   ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=delete&del_path_id=".$list['learnPath_id']."\" "
-                  ."onClick=\"return confirmation('".clean_str_for_javascript($list['name'])."');\">\n"
-                  ."<img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"$langDelete\" title=\"$langDelete\" />\n"
-                  ."</a>\n"
+                  ."onClick=\"return confirmation('".clean_str_for_javascript($list['name'])."');\">"
+                  ."<img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"$langDelete\" title=\"$langDelete\" />"
+                  ."</a>"
                   ."</td>\n";
         }
         // ORDER links
 
         // DISPLAY MOVE UP COMMAND only if it is not the top learning path
         if ($iterator != 1) {
-            $tool_content .= "<td class=\"right\">\n"
-                  ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=moveUp&move_path_id=".$list['learnPath_id']."\">\n"
-                  ."<img src=\"../../template/classic/img/up.gif\" alt=\"$langUp\" title=\"$langUp\" border=\"0\" />\n"
-                  ."</a>\n"
+            $tool_content .= "      <td class=\"right\">"
+                  ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=moveUp&move_path_id=".$list['learnPath_id']."\">"
+                  ."<img src=\"../../template/classic/img/up.gif\" alt=\"$langUp\" title=\"$langUp\" border=\"0\" />"
+                  ."</a>"
                   ."</td>\n";
         }
         else {
-            $tool_content .= "<td>&nbsp;</td>\n";
+            $tool_content .= "      <td>&nbsp;</td>\n";
         }
 
         // DISPLAY MOVE DOWN COMMAND only if it is not the bottom learning path
         if($iterator < $LPNumber) {
-            $tool_content .= "<td class=\"left\">\n"
-                  ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=moveDown&move_path_id=".$list['learnPath_id']."\">\n"
-                  ."<img src=\"../../template/classic/img/down.gif\" alt=\"$langDown\" title=\"$langDown\" border=\"0\" />\n"
-                  ."</a>\n"
-                  ."</td>\n";
+            $tool_content .= "      <td class=\"left\">"
+                  ."<a href=\"".$_SERVER['PHP_SELF']."?cmd=moveDown&move_path_id=".$list['learnPath_id']."\">"
+                  ."<img src=\"../../template/classic/img/down.gif\" alt=\"$langDown\" title=\"$langDown\" border=\"0\" />"
+                  ."</a>"
+                  ."</td>";
         }
         else {
-            $tool_content .= "<td>&nbsp;</td>\n";
+            $tool_content .= "      <td>&nbsp;</td>";
         }
     }
     elseif($uid) {
@@ -655,25 +654,28 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         if ($prog >= 0) {
             $globalprog += $prog;
         }
-        $tool_content .= "<td align=\"right\">".claro_disp_progress_bar($prog, 1)."</td>";
-        $tool_content .= "<td align=\"left\">
-              <small> ".$prog."% </small>
-              </td>";
+        $tool_content .= "      <td align=\"right\" width=\"130\">".claro_disp_progress_bar($prog, 1)."</td>\n";
+        $tool_content .= "      <td align=\"left\" width=\"30\"><small> ".$prog."% </small></td>";
     }
-    $tool_content .= "</tr>";
+    $tool_content .= "
+    </tr>";
     $iterator++;
 } // end while
 
-$tool_content .= "</tbody>\n<thead>";
+$tool_content .= "
+    <tr>";
 
 if (!$is_adminOfCourse && $iterator != 1 && $uid) {
     // add a blank line between module progression and global progression
     $total = round($globalprog / ($iterator-1));
-    $tool_content .= "<th colspan = '4'><div align='center'>".$langPathsInCourseProg."&nbsp;".claro_disp_progress_bar($total, 1)." ".$total."% </div></th>";
-
+    $tool_content .= "
+      <td colspan = '2'><div align='right'><b>".$langPathsInCourseProg."</b>:</div></td>
+      <td><div align='right'>".claro_disp_progress_bar($total, 1)."</div></td>
+      <td><div align='left'>".$total."%</div></td>\n";
 }
-$tool_content .= "</thead>\n";
-$tool_content .= "</table>\n";
+$tool_content .= "    </tr>
+    </tbody>\n";
+$tool_content .= "    </table>\n";
 
 draw($tool_content, 2, 'learnPath', $head_content);
 ?>
