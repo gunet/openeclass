@@ -1,24 +1,24 @@
 <?php
 /*=============================================================================
-       	GUnet eClass 2.0 
-        E-learning and Course Management Program  
+       	GUnet eClass 2.0
+        E-learning and Course Management Program
 ================================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
         A full copyright notice can be read in "/info/copyright.txt".
-        
-       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-                     Yannis Exidaridis <jexi@noc.uoa.gr> 
-                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
-        For a full list of contributors, see "credits.txt".  
-     
-        This program is a free software under the terms of the GNU 
-        (General Public License) as published by the Free Software 
-        Foundation. See the GNU License for more details. 
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+                     Yannis Exidaridis <jexi@noc.uoa.gr>
+                     Alexandros Diamantidis <adia@noc.uoa.gr>
+
+        For a full list of contributors, see "credits.txt".
+
+        This program is a free software under the terms of the GNU
+        (General Public License) as published by the Free Software
+        Foundation. See the GNU License for more details.
         The full license can be read in "license.txt".
-     
-       	Contact address: GUnet Asynchronous Teleteaching Group, 
-        Network Operations Center, University of Athens, 
+
+       	Contact address: GUnet Asynchronous Teleteaching Group,
+        Network Operations Center, University of Athens,
         Panepistimiopolis Ilissia, 15784, Athens, Greece
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
@@ -27,22 +27,22 @@
 	module.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.7 licensed under GPL
 	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: module.php Revision: 1.26
-	      
+
 	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
                       Lederer Guillaume <led@cerdecam.be>
-==============================================================================        
-    @Description: This script provides information on the progress of a 
+==============================================================================
+    @Description: This script provides information on the progress of a
                   learning path module and then launches navigation for it.
                   It also displays some extra option for the teacher.
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
 
@@ -79,6 +79,24 @@ else
 {
     $navigation[]= array ("url"=>"learningPath.php", "name"=> $langLearningPath);
 }
+
+//back button
+if ($is_adminOfCourse)
+{
+	$pathBack = "./learningPathAdmin.php";
+}
+else
+{
+	$pathBack = "./learningPath.php";
+}
+		$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">
+        <li><a href=\"".$pathBack."\">".$langBackToLPAdmin."</a></li>
+      </ul>
+    </div>
+    ";
+
 
 
 if ( isset($_GET['path_id']) && $_GET['path_id'] != '' )
@@ -154,8 +172,8 @@ $sql = "SELECT `contentType`,
 	`scoreMax`,
 	`raw`,
 	`lesson_status`
-        FROM `".$TABLEUSERMODULEPROGRESS."` AS UMP, 
-             `".$TABLELEARNPATHMODULE."` AS LPM, 
+        FROM `".$TABLEUSERMODULEPROGRESS."` AS UMP,
+             `".$TABLELEARNPATHMODULE."` AS LPM,
              `".$TABLEMODULE."` AS M
         WHERE UMP.`user_id` = '$uid'
           AND UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
@@ -192,7 +210,7 @@ else
 
 if($module['contentType'] != CTLABEL_ )
 {
-    
+
     //############################### MODULE COMMENT BOX #################################\\
     //#### COMMENT #### courseAdmin cannot modify this if this is a imported module ####\\
     // this the comment of the module in ALL learning paths
@@ -231,17 +249,6 @@ $tool_content .= "<br />";
 } //  if($module['contentType'] != CTLABEL_ )
 
 
-//back button
-if ($is_adminOfCourse)
-{
-	$pathBack = "./learningPathAdmin.php";
-}
-else
-{
-	$pathBack = "./learningPath.php";
-}
-
-$tool_content .= '<small><a href="'.$pathBack.'"><< '.$langBackToLPAdmin.'</a></small>'."\n\n";
 
 //############################ PROGRESS  AND  START LINK #############################\\
 
@@ -287,7 +294,7 @@ if($module['contentType'] != CTLABEL_) //
 			.'<td>'.$langLastSessionTimeSpent.'</td>'."\n"
 			.'<td>'.$resultBrowsed['session_time'].'</td>'."\n"
 			.'</tr>'."\n\n";
-			
+
         //display user best score
         if ($resultBrowsed['scoreMax'] > 0)
         {
@@ -374,9 +381,9 @@ if($module['contentType'] != CTLABEL_) //
     {
         $tool_content .= '<p><center>'.$langNoStartAsset.'</center></p>'."\n";
     }
-}// end if($module['contentType'] != CTLABEL_) 
+}// end if($module['contentType'] != CTLABEL_)
 // if module is a label, only allow to change its name.
-  
+
 //####################################################################################\\
 //################################# ADMIN DISPLAY ####################################\\
 //####################################################################################\\

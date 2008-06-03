@@ -1209,24 +1209,25 @@ else // if method == 'post'
     <table width=\"99%\" align=\"left\" class=\"FormData\">
     <tbody>
     <tr>
-      <th width=\"220\">&nbsp;</th>
-      <td colspan=\"2\"><b>$langAskUserFile</b></td>
+      <th width=\"30%\">&nbsp;</th>
+      <td><b>$langAskUserFile</b></td>
     </tr>
     <tr>
       <th class=\"left\">$langPathUploadFile :</th>
       <td>
           <input type=\"hidden\" name=\"claroFormId\" value=\"".uniqid('')."\" >
           <input type=\"file\" name=\"uploadedPackage\">
-          <input type=\"submit\" value=\"".$langImport."\">
       </td>
-      <td align=\"right\" width=\"170\">
-          <small>$langMaxFileSize ".format_file_size(get_max_upload_size($maxFilledSpace,$baseWorkDir))."</small>
-      </td>
+    </tr>
+    <tr>
+      <th class=\"left\">&nbsp;</th>
+      <td><input type=\"submit\" value=\"".$langImport."\"></td>
     </tr>
     </tbody>
     </table>
+    <p align=\"right\"><small>$langMaxFileSize ".format_file_size(get_max_upload_size($maxFilledSpace,$baseWorkDir))."</small></p>
     <br />
-    </form><br /><br /><br />
+    </form><br />
     <p><u>$langNote</u> :</p>
     <p>$langScormIntroTextForDummies</p>
     ";

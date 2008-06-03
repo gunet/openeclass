@@ -155,12 +155,12 @@ $tool_content .= "
     <table width=\"99%\" class=\"LearnPathSum\">
     <thead>
     <tr>
-      <td colspan=\"".($maxDeep+1)."\"><div align=\"center\"><b>".$langModule."</b></div></td>\n";
+      <td colspan=\"".($maxDeep+1)."\"><div align=\"left\">&nbsp;&nbsp;<b>".$langLearningModule."</b></u></div></td>\n";
 
 
 // show only progress column for authenticated users
 if ($uid) {
-    $tool_content .= '      <td colspan="2" width="20%"><div align="center"><b>'.$langProgress.'</b></div></td>'."\n";
+    $tool_content .= '      <td colspan="2" width="20%"><div align="center"><u><b>'.$langProgress.'</b></u></div></td>'."\n";
 }
 
 $tool_content .= "    </tr>
