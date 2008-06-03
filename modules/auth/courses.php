@@ -118,7 +118,7 @@ else
       <th class='left'><b>$langFaculty</b></th>
     </tr>
     </thead>";
-                         
+
       while ($fac = mysql_fetch_array($result)) {
       $tool_content .= "
     <tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">
@@ -188,7 +188,7 @@ function getfacfromfc( $dep_id) {
 
 function getfacfromuid($uid) {
 	$res = mysql_fetch_row(db_query("SELECT name FROM faculte,user
-					WHERE user.user_id = '$uid' AND faculte.id = user.department"));
+		WHERE user.user_id = '$uid' AND faculte.id = user.department"));
 	if (isset($res[0]))
 		return $res[0];
 	else
@@ -354,7 +354,7 @@ function expanded_faculte($fac, $uid) {
         if ($myCourses[$mycours["k"]]["statut"]!=1) {
 		// password needed
           if ($mycours['p']!="" && $mycours['visible'] == 1) {
-			$requirepassword = $m['code'].": <input type=\"password\" name=\"".$mycours['k']."\" value=\"".$mycours['p']."\">";
+		$requirepassword = $m['code'].": <input type=\"password\" name=\"".$mycours['k']."\" value=\"".$mycours['p']."\">";
           } else {
             $requirepassword = "";
           }
@@ -364,14 +364,13 @@ function expanded_faculte($fac, $uid) {
           $retString .= "<img src=../../template/classic/img/teacher.gif title=$langTutor>";
 								}
       } else {
-			if ($mycours['p']!="" && $mycours['visible'] == 1) {
+		if ($mycours['p']!="" && $mycours['visible'] == 1) {
 			  $requirepassword = "<br>".$m['code'].": <input type=\"password\" name=\"".$mycours['k']."\">";
-			} else {
+		} else {
 			  $requirepassword = "";
-			}
-			
-   			if ($mycours["visible"]>0  || isset ($myCourses[$mycours["k"]]["subscribed"])) {
-	      	  $retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]'></td>";
+		}
+		if ($mycours["visible"]>0  || isset ($myCourses[$mycours["k"]]["subscribed"])) {
+	      		  $retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]'></td>";
        		}
       }
 
@@ -389,9 +388,7 @@ function expanded_faculte($fac, $uid) {
                 $retString .= $image;
               }
             }
-    $retString .= "</td>";
-	$retString .= "
-    </tr>";
+    $retString .= "</td>";$retString .= "</tr>";
 	
    }
    // END of while
@@ -440,13 +437,13 @@ $result = mysql_query(
 
 function collapsed_facultes_horiz($fac) {
 
-global $listfac;
+global $langListFac;
 $retString = "";
 
 	$retString .= "\n
     <table class=\"Deps\" width=\"99%\">
     <tr>
-      <th>$listfac:</th>
+      <th>$langListFac:</th>
       <td>";
 
 $result = db_query("SELECT DISTINCT faculte.id id, faculte.name f
