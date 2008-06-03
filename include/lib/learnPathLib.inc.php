@@ -1630,7 +1630,7 @@ function claro_disp_tool_title($titlePart, $helpUrl = false)
     }
 
 
-    $string = "\n" . '    <h3>' . "\n";
+    //$string = "\n" . '    <p>' . "\n";
 
     if ($helpUrl)
     {
@@ -1660,10 +1660,10 @@ function claro_disp_tool_title($titlePart, $helpUrl = false)
 
     if ( isset($titleElement['subTitle']) )
     {
-        $string .= '<br /><small>' . $titleElement['subTitle'] . '</small>' . "\n";
+        $string .= '      ' . $titleElement['subTitle'] . '' . "\n";
     }
 
-    $string .= '</h3>'."\n\n";
+    //$string .= '    </p>'."\n\n";
 
     return $string;
 }

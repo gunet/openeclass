@@ -78,8 +78,8 @@ $usersList = get_limited_list($sql, 30);
 // display tab header
 $tool_content .= '<table width="99%">'."\n"
 	.'  <thead>'."\n"
-	.'  <tr align="center" valign="top">'."\n"
-	.'    <th colspan="2">'.$langStudent.'</th>'."\n"
+	.'  <tr>'."\n"
+	.'    <th colspan="2" class="left">'.$langStudent.'</th>'."\n"
 	.'    <th colspan="2" width="20%">'.$langProgress.'</th>'."\n"
 	.'  </tr>'."\n"
 	.'  </thead>'."\n\n"

@@ -83,7 +83,7 @@ $head_content = "";
 $tool_content = "";
 $style= "";
 
-$nameTools = $langLearningPath;
+$nameTools = $langLearningPaths;
 
 if (isset($_GET['cmd']) && $_GET['cmd'] == 'export'
 	&& isset($_GET['path_id']) && is_numeric($_GET['path_id']) && $is_adminOfCourse)
@@ -274,7 +274,7 @@ if ($is_adminOfCourse) {
 					}
 				}
 				else { // create form requested
-					$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
+					$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
 					$nameTools = $langCreateNewLearningPath;
 					$dialogBox = "
     <form action=\"".$_SERVER['PHP_SELF']."\" method=\"POST\">
@@ -404,7 +404,7 @@ $tool_content .= "
     <thead>
     <tr>
       <td width=\"1%\">&nbsp;</td>
-      <td><div align=\"center\"><b>".$langContents."</b></div></td>\n";
+      <td><div align=\"center\"><b>".$langLearningPaths."</b></div></td>\n";
 
 
 if($is_adminOfCourse) {
@@ -461,7 +461,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
 {
     if ($list['visibility'] == 'HIDE') {
         if ($is_adminOfCourse) {
-            $style="class=\"invisible\"";
+            $style = " class=\"invisible\"";
         }
         else {
             continue; // skip the display of this file

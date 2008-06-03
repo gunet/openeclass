@@ -77,7 +77,7 @@ $body_action = "";
 $dialogBox = "";
 
 $nameTools = $langNomPageAdmin;
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
+$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
 
 // $_SESSION
 if ( isset($_GET['path_id']) && $_GET['path_id'] > 0 )

@@ -1,6 +1,8 @@
 
-.invisible { color: #999999;
-background-color: #f9f8ea;}
+.invisible { 
+    color: #999999 !important;
+    background-color: #f9f8ea !important;
+}
 .invisible a,
 .invisible a:link,
 .invisible a:visited,
@@ -84,13 +86,12 @@ table.LearnPathSum th{
 	background : #fbfbfb;
 }
 
-table.LearnPathSum td {
+table.LearnPathSum td{
 	color: #727266;
 	vertical-align: top;
 	background : #fbfbfb;
 	padding : 5px 4px 4px 4px;
 }
-
 
 
 

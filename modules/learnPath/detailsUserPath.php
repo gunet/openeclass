@@ -1,24 +1,24 @@
 <?php
 /*=============================================================================
-       	GUnet eClass 2.0 
-        E-learning and Course Management Program  
+       	GUnet eClass 2.0
+        E-learning and Course Management Program
 ================================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
         A full copyright notice can be read in "/info/copyright.txt".
-        
-       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-                     Yannis Exidaridis <jexi@noc.uoa.gr> 
-                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
-        For a full list of contributors, see "credits.txt".  
-     
-        This program is a free software under the terms of the GNU 
-        (General Public License) as published by the Free Software 
-        Foundation. See the GNU License for more details. 
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+                     Yannis Exidaridis <jexi@noc.uoa.gr>
+                     Alexandros Diamantidis <adia@noc.uoa.gr>
+
+        For a full list of contributors, see "credits.txt".
+
+        This program is a free software under the terms of the GNU
+        (General Public License) as published by the Free Software
+        Foundation. See the GNU License for more details.
         The full license can be read in "license.txt".
-     
-       	Contact address: GUnet Asynchronous Teleteaching Group, 
-        Network Operations Center, University of Athens, 
+
+       	Contact address: GUnet Asynchronous Teleteaching Group,
+        Network Operations Center, University of Athens,
         Panepistimiopolis Ilissia, 15784, Athens, Greece
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
@@ -27,18 +27,18 @@
 	detailsUserPath.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.7 licensed under GPL
 	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: tracking/lp_modules_details.php Revision: 1.20
-==============================================================================        
+==============================================================================
     @Description: This script presents the student's progress for a learning
                   path to the teacher.
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
 
@@ -60,7 +60,7 @@ require_once("../../include/baseTheme.php");
 $head_content = "";
 $tool_content = "";
 
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
+$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
 if (!$is_adminOfCourse) claro_die($langNotAllowed);
 $navigation[] = array("url"=>"details.php?path_id=".$_REQUEST['path_id'], "name"=> $langStatsOfLearnPath);
 $nameTools = $langTrackUser;
@@ -70,7 +70,7 @@ if( empty($_REQUEST['uInfo']) || empty($_REQUEST['path_id']) )
 	header("Location: ./learningPathList.php");
 	exit();
 }
-	
+
 
 // get infos about the user
 $sql = "SELECT `nom` AS `lastname`, `prenom` as `firstname`, `email`
@@ -81,7 +81,7 @@ $uDetails = db_query_get_single_row($sql);
 mysql_select_db($currentCourseID);
 
 // get infos about the learningPath
-$sql = "SELECT `name` 
+$sql = "SELECT `name`
         FROM `".$TABLELEARNPATH."`
        WHERE `learnPath_id` = ". (int)$_REQUEST['path_id'];
 $lpDetails = db_query_get_single_row($sql);
@@ -132,26 +132,22 @@ for ( $i = 0 ; $i < sizeof($flatElementList) ; $i++ )
 }
 
 // ------------------- some user details --------------------------
-$tool_content .= ucfirst(strtolower($langUser)).': <br />'."\n"
-	.'<ul>'."\n"
-	.'<li>'.$langLastName.': '.$uDetails['lastname'].'</li>'."\n"
-	.'<li>'.$langName.': '.$uDetails['firstname'].'</li>'."\n"
-	.'<li>'.$langEmail.': '.$uDetails['email'].'</li>'."\n"
-	.'</ul>'."\n\n";
 
 // -------------------- table header ----------------------------
-$tool_content .= '<br />'."\n"
-	.'<table width="99%" border="0" cellspacing="2">'."\n"
-	.'<thead>'."\n"
-	.'<tr align="center" valign="top">'."\n"
-	.'<th colspan="'.($maxDeep+1).'">'.$langModule.'</th>'."\n"
-	.'<th>'.$langLastSessionTimeSpent.'</th>'."\n"
-	.'<th>'.$langTotalTimeSpent.'</th>'."\n"
-	.'<th>'.$langLessonStatus.'</th>'."\n"
-	.'<th colspan="2">'.$langProgress.'</th>'."\n"
-	.'</tr>'."\n"
-	.'</thead>'."\n"
-	.'<tbody>'."\n\n";
+$tool_content .= '    <table width="99%">'."\n"
+	.'    <thead>'."\n"
+	.'    <tr>'."\n"
+	.'      <td colspan="'.($maxDeep+6).'" class="left"><b>'.$langUser.'</b>: '.$uDetails['lastname'].' '.$uDetails['firstname'].' ('.$uDetails['email'].')</td>'."\n"
+	.'    </tr>'."\n"
+	.'    <tr>'."\n"
+	.'      <th width="30%" colspan="'.($maxDeep+1).'">'.$langLearningObjects.'</th>'."\n"
+	.'      <th width="15%">'.$langLastSessionTimeSpent.'</th>'."\n"
+	.'      <th width="15%">'.$langTotalTimeSpent.'</th>'."\n"
+	.'      <th width="15%">'.$langLessonStatus.'</th>'."\n"
+	.'      <th width="25%" colspan="2">'.$langProgress.'</th>'."\n"
+	.'   </tr>'."\n"
+	.'   </thead>'."\n"
+	.'   <tbody>'."\n\n";
 
 // ---------------- display list of elements ------------------------
 foreach ($flatElementList as $module)
@@ -176,18 +172,18 @@ foreach ($flatElementList as $module)
 			$progress = 0;
 		}
 	}
-		
+
 	// display the current module name
 	$spacingString = '';
 	for($i = 0; $i < $module['children']; $i++)
 	$spacingString .= '<td width="5">&nbsp;</td>';
 	$colspan = $maxDeep - $module['children']+1;
 
-	$tool_content .= '<tr align="center">'."\n".$spacingString.'<td colspan="'.$colspan.'" align="left">';
+	$tool_content .= '   <tr align="center">'."\n".$spacingString.'      <td colspan="'.$colspan.'" align="left">';
 	//-- if chapter head
 	if ( $module['contentType'] == CTLABEL_ )
 	{
-		$tool_content .= '<b>'.$module['name'].'</b>';
+		$tool_content .= '      <b>'.$module['name'].'</b>';
 	}
 	//-- if user can access module
 	else
@@ -201,11 +197,11 @@ foreach ($flatElementList as $module)
 		else
 		$moduleImg = choose_image(basename($module['path']));
 		$contentType_alt = selectAlt($module['contentType']);
-		$tool_content .= '<img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" />'.$module['name'];
+		$tool_content .= '<img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" /> <small>'.$module['name'].'</small>';
 	}
 
 		$tool_content .= '</td>'."\n";
-		
+
 		if ($module['contentType'] == CTSCORM_)
 		{
 			$session_time = preg_replace("/\.[0-9]{0,2}/", "", $module['session_time']);
@@ -220,8 +216,8 @@ foreach ($flatElementList as $module)
 		else
 		{
 			// if no progression has been recorded for this module
-			// leave 
-			if($module['lesson_status'] == "") 
+			// leave
+			if($module['lesson_status'] == "")
 			{
 			$session_time = "&nbsp;";
 			$total_time = "&nbsp;";
@@ -233,11 +229,11 @@ foreach ($flatElementList as $module)
 			}
 		}
 		//-- session_time
-		$tool_content .= '<td>'.$session_time.'</td>'."\n";
+		$tool_content .= '      <td><small>'.$session_time.'<small></td>'."\n";
 		//-- total_time
-		$tool_content .= '<td>'.$total_time.'</td>'."\n";
+		$tool_content .= '      <td><small>'.$total_time.'</small></td>'."\n";
 		//-- status
-		$tool_content .= '<td>';
+		$tool_content .= '      <td><small>';
 		if($module['contentType'] == CTEXERCISE_ && $module['lesson_status'] != "" ) {
 			if ($module['lesson_status']=="NOT ATTEMPTED") {
 				$tool_content .= $langNotAttempted;
@@ -284,49 +280,49 @@ foreach ($flatElementList as $module)
 				$tool_content .= strtolower($module['lesson_status']);
 			}
 		}
-		$tool_content .= '</td>'."\n";
+		$tool_content .= '</small></td>'."\n";
 		//-- progression
 		if($module['contentType'] != CTLABEL_ )
 		{
 			// display the progress value for current module
-			$tool_content .= '<td align="right">'.claro_disp_progress_bar($progress, 1).'</td>'."\n";
-			$tool_content .= '<td align="left"><small>&nbsp;'.$progress.'%</small></td>'."\n";
+			$tool_content .= '      <td align="right">'.claro_disp_progress_bar($progress, 1).'</td>'."\n";
+			$tool_content .= '      <td align="left"><small>&nbsp;'.$progress.'%</small></td>'."\n";
 		}
 		else // label
 		{
-		$tool_content .= '<td colspan="2">&nbsp;</td>'."\n";
+		$tool_content .= '      <td colspan="2">&nbsp;</td>'."\n";
 		}
-		
+
 		if ($progress > 0)
 		{
 		$globalProg += $progress;
 		}
-		if($module['contentType'] != CTLABEL_) 
+		if($module['contentType'] != CTLABEL_)
 			$moduleNb++; // increment number of modules used to compute global progression except if the module is a title
-		
-		$tool_content .= '</tr>'."\n\n";
+
+		$tool_content .= '    </tr>'."\n\n";
 }
-$tool_content .= '</tbody>'."\n".'<tfoot>'."\n";
+$tool_content .= '    </tbody>'."\n".'    <tfoot>'."\n";
 
 if ($moduleNb == 0)
 {
-	$tool_content .= '<tr><td align="center" colspan="6">'.$langNoModule.'</td></tr>';
+	$tool_content .= '    <tr>'."\n".'      <td align="center" colspan="6">'.$langNoModule.'</td>'."\n".'    </tr>'."\n";
 }
 elseif($moduleNb > 0)
 {
 	// display global stats
-	$tool_content .= '<tr>'."\n"
-		.'<td colspan="'.($maxDeep+1).'">&nbsp;</td>'."\n"
-		.'<td align="right">'.(($global_time != "0000:00:00")? $langTimeInLearnPath : '&nbsp;').'</td>'."\n"
-		.'<td align="center">'.(($global_time != "0000:00:00")? preg_replace("/\.[0-9]{0,2}/", "", $global_time) : '&nbsp;').'</td>'."\n"
-		.'<td align="right">'.$langGlobalProgress.'</td>'."\n"
-		.'<td align="right">'
+	$tool_content .= '    <tr>'."\n"
+		.'      <td colspan="'.($maxDeep+1).'">&nbsp;</td>'."\n"
+		.'      <td align="right">'.(($global_time != "0000:00:00")? $langTimeInLearnPath : '&nbsp;').'</td>'."\n"
+		.'      <td align="center">'.(($global_time != "0000:00:00")? preg_replace("/\.[0-9]{0,2}/", "", $global_time) : '&nbsp;').'</td>'."\n"
+		.'      <td align="right">'.$langGlobalProgress.'</td>'."\n"
+		.'      <td align="right">'
 		.claro_disp_progress_bar(round($globalProg / ($moduleNb) ), 1)
 		.'</td>'."\n"
-		.'<td align="left">&nbsp;'.round($globalProg / ($moduleNb) ) .'%</td>'."\n"
-		.'</tr>';
+		.'      <td align="left">&nbsp;'.round($globalProg / ($moduleNb) ) .'%</td>'."\n"
+		.'    </tr>';
 }
-$tool_content .= "\n".'</tfoot>'."\n".'</table>'."\n";
+$tool_content .= "\n".'    </tfoot>'."\n".'    </table>'."\n";
 
 draw($tool_content, 2, "learnPath", $head_content);
 ?>

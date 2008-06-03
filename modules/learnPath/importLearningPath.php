@@ -67,7 +67,7 @@ require_once("../../include/baseTheme.php");
 $tool_content = "";
 $pwd = getcwd();
 
-$navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPath);
+$navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPaths);
 if (! $is_adminOfCourse ) claro_die($langNotAllowed);
 $nameTools = $langimportLearningPath;
 
@@ -1213,7 +1213,7 @@ else // if method == 'post'
       <td><b>$langAskUserFile</b></td>
     </tr>
     <tr>
-      <th class=\"left\">$langPathUploadFile :</th>
+      <th class=\"left\">$langLearningPathUploadFile :</th>
       <td>
           <input type=\"hidden\" name=\"claroFormId\" value=\"".uniqid('')."\" >
           <input type=\"file\" name=\"uploadedPackage\">
