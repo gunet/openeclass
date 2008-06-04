@@ -1321,8 +1321,8 @@ $langWelcomeToPortfolio = "Welcome to your personalized portfolio";
 $langUnregCourse = "Course Unregister";
 $langUnCourse = "Unregister";
 $langManagement="Administration";
-$langInfoAbout = "Platform <b>".$siteName."</b> is a complete Courses Management System. It is GUNet's proposal for supporting Asynchronous Teleteaching. It is mainly designed to aid the classical way of  teaching and is adapted to th Greek Academic Educational System. It is an open platform technically supported by GUNet.
-More information about platform can be found in the available manuals.";
+$langInfoAbout = "The <strong>$siteName</strong> plaform is a complete Course Management System that supports Asynchronous eLearning Services via a simple web browser. Its goal is the incorporation and constructive use of the Internet and web technologies in the teaching and learning process. It supports the electronic management, storage and presentation of teaching materials, independently of the spatial and time limiting factors of conventional teaching and creating the necessary conditions for a dynamic teaching environment.<br><br>
+The introduction of eLearning into the traditional teaching process provides new capabilities and allows new means of interaction between $langsStudents and $langsTeachers, through a contemporary technological peak environment.";
 $langWelcomeStud = "Select \"Courses list\" to review the available courses.";
 $langWelcomeProf = "Select \"Create course site\" to create your on-line courses.";
 
