@@ -1,17 +1,15 @@
 <?
-
 /********************************************************
 * about.inc.php
 *********************************************************/
-
 $langIntro = "The <b>$siteName</b> is a complete Asynchronous Teleteaching Platform in <a href=\"$InstitutionUrl\" target=\"_blank\" class=mainpage>$Institution</a>.";
-$langVersion="eClass version";
+$langVersion="$siteName version";
 $langAboutText="Platform version is";
 $langEclassVersion="2.0";
 $langHostName="Host Name is";
 $langWebVersion="uses";
 $langMySqlVersion="MySql ";
-$langNoMysql="MySql not working !";
+$langNoMysql="MySql not working!";
 $langUptime = "Platform is operational since";
 $langTotalHits = "Total hits";
 $langLast30daysLogins = "Total logins on the platform the last 30 days";
@@ -233,12 +231,10 @@ $langRegCourse = "Registration Required";
 
 // mailtoprof.php
 $langSendMessageTo = "Send mail";
-
 $langProfOnly = "just the ".$langsTeachers." ";
 $langToAllUsers="to all users";
 
 // searchcours.php
-
 $langNewSearch = "New Search";
 $langSearchCriteria = "Search Criteria";
 $langSearch = "Search";
@@ -288,18 +284,17 @@ $langLdapNotWork = "Warning: The PHP LDAP module does not seem to be present. Pl
 $langVisitors = "Visitors";
 $langVisitor = "Visitor";
 $langOther = "Other";
-
 $langTotal = "Total";
 $langProperty = "Property";
 $langStats = "Statistics per User";
 $langStat = "Statistics";
 $langUsage = "Usage Statistics";
-
 $langNoUserList = "No listing results";
 $langContactAdmin = "Send a message to the Administrator";
 $langActivateAccount = "Please activate my account";
 $langLessonCode = "Course code";
 $langAsInactive = "as inactive";
+
 // unregister
 $langConfirmDelete = "Delete Confirmation ";
 $langConfirmDeleteQuestion1 = "Are you sure that you want to delete the user";
@@ -932,7 +927,6 @@ $langAddQ="Add Question";
 $langAmong = "among";
 $langTake = "Take";
 
-
 // admin.php
 $langExerciseManagement="Exercise Management";
 $langExerciseModify="Exercise Edit";
@@ -1036,9 +1030,7 @@ $langYourTotalScore2="Total score";
 $langExerciseScores1="HTML";
 $langExerciseScores2="Percentages";
 $langExerciseScores3="CSV";
-
 $langExerciseSurname="Surname";
-
 
 /******************************************************
 * external_module.inc.php
@@ -1058,7 +1050,6 @@ $langInvalidLink = "Link is empty!";
 /*********************************************************
 * faculte.inc.php
 *********************************************************/
-
 $langListFaculte= "Faculties / Departments - Actions";
 $langCodeFaculte1= "Faculty / Department Code";
 $langCodeFaculte2= "(only with latin characters, e.g. PHYS)";
@@ -1078,7 +1069,6 @@ $langGreekCode="Code contains non-latin characters! Try Again.";
 /***********************************************************
 * forum_admin.inc.php
 ***********************************************************/
-
 $langOrganisation="Forum administration";
 $langForCat="Forum of the category";
 $langBackCat="Back to categories";
@@ -1116,21 +1106,17 @@ $langForumClosed = "Private";
 
 $langNewGroupCreate="Create new group(s)";
 $langNewGroupCreateData="Group(s) Data";
-
 $langNewGroups="Number of new groups";
 $langNewGroupMembers="Number of participants ";
-
 $langMax="Max.";
 $langPlaces="seats by groups (optional)";
 $langGroupPlacesThis="seats (optional";
-
 $langDeleteGroups="Delete all groups";
 $langGroupsAdded="groups have been added";
 $langGroupAdded = "group has been added";
 $langGroupsDeleted="All groups have been deleted";
 $langGroupDel="Group deleted";
 $langMove="Move";
-
 $langGroupsEmptied="All groups are now empty";
 $langEmtpyGroups="Empty all groups";
 $langGroupsFilled="All groups have been filled";
@@ -1144,7 +1130,6 @@ $langModify="Edit";
 $langGroup="Group";
 $langExistingGroups="Groups";
 $langRegistered="Registered";
-
 $langDeleteGroupWarn = "Are you sure you want to delete this group";
 $langDeleteGroupAllWarn = "Are you sure you want to delete all groups";
 
@@ -1177,7 +1162,7 @@ $langGroupStudentsRegistered=" ".$langsStudents." registered to this course";
 $langGroupNoGroup="unassigned ".$langsStudents." ";
 $langGroupUsersList="See <a href=../user/user.php>Users</a>";
 $langGroupTooMuchMembers="Number proposed exceeds max. that you allowed (you can modify it below).
-				Group composition has not been modified";
+ Group composition has not been modified";
 $langGroupNoTutor="none";
 $langGroupNone="none";
 $langGroupNoneMasc="none";
@@ -1350,7 +1335,6 @@ $langCampusName	= "University name";
 $langInstituteShortName = "Institution short name";
 $langInstituteName = "URL of this institution";
 $langInstitutePostAddress = "Institution postal address";
-
 $langStep1 	= "Step 1 of 6";
 $langStep2 	= "Step 2 of 6";
 $langStep3 	= "Step 3 of 6";
@@ -1597,17 +1581,13 @@ $langListDeleted="The list has been deleted";
 $langLinkMod="Link modified";
 $langLinkModify = "Modify link";
 $langLinkName="Link name";
-
 $langDelList="Delete whole list";
-
 $langLinkAdd="Add link";
 $langLinkAdded="The link has been added";
 
 // Category language variables
 $langCategory="Category";
 $langCategoryName="Category name";
-
-
 $langCategoryAdd="Add category";
 $langCategoryAdded="The category has been added";
 $langCategoryMod="Modify Category";
@@ -1685,9 +1665,9 @@ $langPassCannotChange3="for more information.";
 /************************************************************
 * manual.inc.php
 ************************************************************/
-$langIntroMan = "Here you can find useful manuals about platform eClass.";
-$langFinalDesc = "Description of eClass";
-$langShortDesc = "Short Description of eClass";
+$langIntroMan = "Here you can find useful manuals about platform $siteName.";
+$langFinalDesc = "$siteName description";
+$langShortDesc = "$siteName short description";
 $langManS = " ".$langStudent." Manual";
 $langManT = " ".$langTeacher." Manual";
 $langOr = "or";
