@@ -332,7 +332,7 @@ $langActivateAccount = "Παρακαλώ να ενεργοποιήσετε το 
 $langLessonCode = "Κωδικός μαθήματος";
 
 // unregister
-$langConfirmDelete = "Επιβεβαίωση διαγραφής";
+$langConfirmDelete = "Επιβεβαίωση διαγραφής ";
 $langConfirmDeleteQuestion1 = "Θέλετε σίγουρα να διαγράψετε τον χρήστη";
 $langConfirmDeleteQuestion2 = "από το μάθημα με κωδικό";
 $langTryDeleteAdmin = "Προσπαθήσατε να διαγράψετε τον χρήστη με user id = 1(Admin)!";
@@ -2184,7 +2184,6 @@ $langPollHasEnded = "Έχει λήξει";
 $langPollCharts = "Αποτελέσματα δημοσκόπησης";
 $langPollUnknown = "Δεν ξέρω / Δεν απαντώ";
 $langIndividuals = "Αποτελέσματα ανά χρήστη";
-$langDelConf = "Επιβεβαίωση διαγραφής";
 $langCollectiveCharts = "Συγκεντρωτικά αποτελέσματα";
 $langHasNotParticipated = "Δεν έχετε συμμετάσχει";
 $langThereAreParticipants = "Στην δημοσκόπηση έχουν ήδη συμμετάσχει χρήστες. Η διόρθωση των στοιχείων δεν είναι δυνατή!";
@@ -2828,7 +2827,6 @@ $langURL="Εξωτερικός σύνδεσμος προς τον εξυπηρε
 $langcreator="Δημιουργός";
 $langpublisher="Εκδότης";
 $langdate="Ημερομηνία";
-$langAreYouSureToDelete = "Επιβεβαίωση διαγραφής ";
 $langNoVideo = "Δεν υπάρχουν διαθέσιμα Βίντεο για το μάθημα";
 
 /*************************************************************

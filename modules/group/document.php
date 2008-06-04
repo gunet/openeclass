@@ -37,7 +37,7 @@ $local_head = '
 <script>
 function confirmation ()
 {
-    if (confirm("'.$langAreYouSureToDelete.'"))
+    if (confirm("'.$langConfirmDelete.'"))
         {return true;}
     else
         {return false;}

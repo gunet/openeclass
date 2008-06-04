@@ -301,7 +301,7 @@ $langActivateAccount = "Please activate my account";
 $langLessonCode = "Course code";
 $langAsInactive = "as inactive";
 // unregister
-$langConfirmDelete = "Delete Confirmation";
+$langConfirmDelete = "Delete Confirmation ";
 $langConfirmDeleteQuestion1 = "Are you sure that you want to delete the user";
 $langConfirmDeleteQuestion2 = "from the course with id";
 $langCannotDeleteAdmin = "Cannot delete the admin account!";
@@ -1387,7 +1387,6 @@ $langAltMakeNotBlocking = "Unblock";
 $langAltScorm = "Scorm";
 $langAnnouncement = "Announcements";
 $langAreYouSureDeleteModule = "Are you sure to totally delete this module";
-$langAreYouSureToDelete = "Delete confirmation";
 $langAreYouSureToDeleteScorm = "This learning path is part of a SCORM importation package. If you delete this path, all its SCORM conformant modules and related files will be deleted from the platform. Are you sure you want to delete the learning path named ";
 $langAreYouSureToRemove = "Are you sure you want to remove the following module from the learning path: ";
 $langAreYouSureToRemoveLabel = "By deleting a label you will delete all modules or label it contains.";
@@ -2140,7 +2139,6 @@ $langPollEmpty = "Please add more poll questions!";
 $langSurveyInfo ="You may choose from a the list of the following COLLES/ATTL questions or add your own questions in the blank fields.";
 $langQQuestionNotGiven ="You have not entered the text for the last question.";
 $langQFillInAllQs ="Please answer all questions.";
-$langDelConf = "Delete confirmation";
 $langCollectiveCharts = "Collective results";
 $langPollEmptyAnswers = "Error! There are no answers in question";
 

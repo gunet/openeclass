@@ -89,7 +89,7 @@ if($is_adminOfCourse) {
 <script>
 function confirmation (name)
 {
-    if (confirm("'.$langAreYouSureToDelete.'"+ name + " ?"))
+    if (confirm("'.$langConfirmDelete.'"+ name + " ?"))
         {return true;}
     else
         {return false;}

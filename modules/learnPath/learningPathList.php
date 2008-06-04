@@ -125,7 +125,7 @@ if ($is_adminOfCourse) {
 	$head_content .= "<script>
           function confirmation (name)
           {
-              if (confirm('". clean_str_for_javascript($langAreYouSureToDelete) . " ' + name + '? " . $langModuleStillInPool . "'))
+              if (confirm('". clean_str_for_javascript($langConfirmDelete) . " ' + name + '? " . $langModuleStillInPool . "'))
                   {return true;}
               else
                   {return false;}

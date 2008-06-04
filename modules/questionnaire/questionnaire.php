@@ -51,7 +51,7 @@ $head_content = '
 <script>
 function confirmation ()
 {
-    if (confirm("'.$langDelConf.'"))
+    if (confirm("'.$langDeleteConfirmation.'"))
         {return true;}
     else
         {return false;}
