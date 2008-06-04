@@ -84,10 +84,10 @@ mysql_select_db($currentCourseID);
 $sql = "SELECT `name`
         FROM `".$TABLELEARNPATH."`
        WHERE `learnPath_id` = ". (int)$_REQUEST['path_id'];
-$lpDetails = db_query_get_single_row($sql);
+$LPresult = mysql_fetch_row(db_query($sql));
+$LPname = $LPresult[0];
 
 //### PREPARE LIST OF ELEMENTS TO DISPLAY #################################
-
 $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
 	LPM.`lock`, M.`module_id`,
 	M.`contentType`, M.`name`,
@@ -131,13 +131,15 @@ for ( $i = 0 ; $i < sizeof($flatElementList) ; $i++ )
 	if ($flatElementList[$i]['children'] > $maxDeep) $maxDeep = $flatElementList[$i]['children'] ;
 }
 
-// ------------------- some user details --------------------------
 
 // -------------------- table header ----------------------------
-$tool_content .= '    <table width="99%">'."\n"
+$tool_content .= '
+    <table width="99%">'."\n"
 	.'    <thead>'."\n"
+          // ------------------- some user details --------------------------
 	.'    <tr>'."\n"
-	.'      <td colspan="'.($maxDeep+6).'" class="left"><b>'.$langUser.'</b>: '.$uDetails['lastname'].' '.$uDetails['firstname'].' ('.$uDetails['email'].')</td>'."\n"
+	.'      <td colspan="'.($maxDeep+2).'" class="left"><img src="../../template/classic/img/lp_on.gif" alt="'.$langLearningPath.'" title="'.$langLearningPath.'" border="0" />&nbsp;<b>'.$LPname.'</b></td>'."\n"
+	.'      <td colspan="'.($maxDeep+4).'" class="right"><b>'.$langStudent.'</b>: '.$uDetails['lastname'].' '.$uDetails['firstname'].' ('.$uDetails['email'].')</td>'."\n"
 	.'    </tr>'."\n"
 	.'    <tr>'."\n"
 	.'      <th width="30%" colspan="'.($maxDeep+1).'">'.$langLearningObjects.'</th>'."\n"
@@ -145,9 +147,9 @@ $tool_content .= '    <table width="99%">'."\n"
 	.'      <th width="15%">'.$langTotalTimeSpent.'</th>'."\n"
 	.'      <th width="15%">'.$langLessonStatus.'</th>'."\n"
 	.'      <th width="25%" colspan="2">'.$langProgress.'</th>'."\n"
-	.'   </tr>'."\n"
-	.'   </thead>'."\n"
-	.'   <tbody>'."\n\n";
+	.'    </tr>'."\n"
+	.'    </thead>'."\n"
+	.'    <tbody>'."\n\n";
 
 // ---------------- display list of elements ------------------------
 foreach ($flatElementList as $module)
@@ -176,10 +178,10 @@ foreach ($flatElementList as $module)
 	// display the current module name
 	$spacingString = '';
 	for($i = 0; $i < $module['children']; $i++)
-	$spacingString .= '<td width="5">&nbsp;</td>';
+	$spacingString .= '      <td width="5">&nbsp;</td>\n';
 	$colspan = $maxDeep - $module['children']+1;
 
-	$tool_content .= '   <tr align="center">'."\n".$spacingString.'      <td colspan="'.$colspan.'" align="left">';
+	$tool_content .= '    <tr align="center">'."\n".$spacingString.'      <td colspan="'.$colspan.'" align="left">';
 	//-- if chapter head
 	if ( $module['contentType'] == CTLABEL_ )
 	{
@@ -300,7 +302,7 @@ foreach ($flatElementList as $module)
 		if($module['contentType'] != CTLABEL_)
 			$moduleNb++; // increment number of modules used to compute global progression except if the module is a title
 
-		$tool_content .= '    </tr>'."\n\n";
+		$tool_content .= '    </tr>'."\n";
 }
 $tool_content .= '    </tbody>'."\n".'    <tfoot>'."\n";
 

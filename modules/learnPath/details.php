@@ -59,7 +59,7 @@ require_once("../../include/baseTheme.php");
 $head_content = "";
 $tool_content = "";
 
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
+$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
 if (!$is_adminOfCourse) claro_die($langNotAllowed);
 $nameTools = $langStatsOfLearnPath;
 
@@ -81,9 +81,6 @@ if( $learnPathName )
 {
 	// display title
 	$titleTab['subTitle'] = htmlspecialchars($learnPathName);
-	$tool_content .= "    <p><b>$langLearningPath</b>: ";
-	$tool_content .= claro_disp_tool_title($titleTab);
-	$tool_content .= "</p>";
 	mysql_select_db($mysqlMainDb);
 
 	// display a list of user and their respective progress
@@ -102,6 +99,11 @@ if( $learnPathName )
 	// display tab header
 	$tool_content .= '    <table width="99%">'."\n\n"
 		.'    <thead>'."\n"
+		.'    <tr>'."\n"
+		.'      <td colspan="4" class="left"><img src="../../template/classic/img/lp_on.gif" alt="'.$langLearningPath.'" title="'.$langLearningPath.'" border="0" /><b>';
+	$tool_content .= claro_disp_tool_title($titleTab);
+	$tool_content .= '</b></td>'."\n"
+		.'    </tr>'."\n"
 		.'    <tr>'."\n"
 		.'      <th colspan="2" class="left">'.$langStudent.'</th>'."\n"
 		.'      <th colspan="2" width="25%">'.$langProgress.'</th>'."\n"

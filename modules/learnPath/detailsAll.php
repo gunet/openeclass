@@ -61,7 +61,7 @@ require_once("../../include/baseTheme.php");
 $head_content = "";
 $tool_content = "";
 
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
+$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
 if (! $is_adminOfCourse ) claro_die($langNotAllowed);
 $nameTools = $langTrackAllPathExplanation;
 
