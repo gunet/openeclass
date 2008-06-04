@@ -644,7 +644,7 @@ $langNotFalse="This answer is not false. It is true that the revelation of the i
 
 $langDoc="Documents";
 $langVideoLinks="Video Links";
-$langWorks=" ".$langStudents." Papers";
+$langWorks="Assignments";
 $langExercices="Exercises";
 $langAddPageHome="Upload Webpage";
 $langLinkSite="Add link on Homepage";
@@ -848,7 +848,7 @@ $dropbox_lang['col_recipient'] = "Recipient";
 /*
  * Feedback variables
  */
-$dropbox_lang["docAdd"] = "Paper has been added succesfully";
+$dropbox_lang["docAdd"] = "File has been added succesfully";
 $dropbox_lang["fileDeleted"] = "The selected file has been removed from your dropbox.";
 $dropbox_lang["backList"] = "Go back to your dropbox";
 
