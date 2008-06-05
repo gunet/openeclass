@@ -1,4 +1,3 @@
-
 .invisible { 
     color: #999999 !important;
     background-color: #f9f8ea !important;
@@ -83,13 +82,11 @@ table.LearnPathSum th{
 	font-weight: bold;
 	font-size:10px !important;
 	vertical-align: middle;
-	background : #fbfbfb;
 }
 
 table.LearnPathSum td{
 	color: #727266;
 	vertical-align: top;
-	background : #fbfbfb;
 	padding : 5px 4px 4px 4px;
 }
 

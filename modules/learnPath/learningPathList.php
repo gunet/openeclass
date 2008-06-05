@@ -462,6 +462,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
     if ($list['visibility'] == 'HIDE') {
         if ($is_adminOfCourse) {
             $style = " class=\"invisible\"";
+            $image_bullet = "lp_off.gif";
         }
         else {
             continue; // skip the display of this file
@@ -469,6 +470,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
     }
     else {
         $style="";
+        $image_bullet = "lp_on.gif";
     }
 
     $tool_content .= "
@@ -477,7 +479,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
     //Display current learning path name
     if (!$is_blocked) {
         $tool_content .= "
-      <td><img src=\"../../template/classic/img/lp_on.gif\" alt=\"\" border=\"0\" /></td>
+      <td><img src=\"../../template/classic/img/".$image_bullet."\" alt=\"\" border=\"0\" /></td>
       <td style=\"border-right: 1px solid #edecdf;\"><a href=\"learningPath.php?path_id=".$list['learnPath_id']."\"".$style.">".htmlspecialchars($list['name'])."</a></td>\n";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
