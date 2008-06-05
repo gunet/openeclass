@@ -97,7 +97,7 @@ $local_head = '
 <script>
 function confirmation (name)
 {
-    if (confirm("'.$langAreYouSureToDelete.'" + name))
+    if (confirm("'.$langConfirmDelete.'" + name))
         {return true;}
     else
         {return false;}
@@ -105,12 +105,53 @@ function confirmation (name)
 </script>
 ';
 
+
+// actions to do before extracting file from zip archive
 function renameziparchivefile($p_event, &$p_header) {
-
-	global $safe_fileName;
-
-	$p_header['filename'] = $safe_fileName;
 	
+	global $dbTable, $file_comment, $file_category, $file_creator, $file_date, $file_subject, 
+		$file_title, $file_description, $file_author, $file_format, $file_language, $file_copyrighted,
+		$currentCourseID, $uploadPath, $realFileSize; 
+	
+	$realFileSize += $p_header['size'];
+	$fileName = $p_header['stored_filename'];
+	/**** Check for no desired characters ***/
+	$fileName = replace_dangerous_char($fileName);
+	/*** Try to add an extension to files witout extension ***/
+	$fileName = add_ext_on_mime($fileName);
+	/*** Handle PHP files ***/
+	$fileName = php2phps($fileName);
+	//ypologismos onomatos arxeiou me date + time.
+	//to onoma afto tha xrhsimopoiei sto filesystem & tha apothikevetai ston pinaka documents
+	$safe_fileName = date("YmdGis").randomkeys("8").".".get_file_extention($fileName);
+	//prosthiki eggrafhs kai metadedomenwn gia to eggrafo sth vash
+	if ($uploadPath == ".") 
+		$uploadPath2 = "/".$safe_fileName; 
+	else 
+		$uploadPath2 = $uploadPath."/".$safe_fileName;
+	//san file format vres to extension tou arxeiou
+	$file_format = get_file_extention($fileName);
+	//san date you arxeiou xrhsimopoihse thn shmerinh hm/nia
+	$file_date = date("Y\-m\-d G\:i\:s");
+	$query = "INSERT INTO ".$dbTable." SET
+		path = '".mysql_real_escape_string($uploadPath2)."',
+		filename = '$fileName',
+		visibility = 'v',
+		comment = '".mysql_real_escape_string($file_comment)."',
+		category = '".mysql_real_escape_string($file_category)."',
+		title =	'".mysql_real_escape_string($file_title)."',
+		creator	= '".mysql_real_escape_string($file_creator)."',
+		date = '".mysql_real_escape_string($file_date)."',
+		date_modified = '".mysql_real_escape_string($file_date)."',
+		subject = '".mysql_real_escape_string($file_subject)."',
+		description = '".mysql_real_escape_string($file_description)."', 
+		author = '".mysql_real_escape_string($file_author)."',
+		format = '".mysql_real_escape_string($file_format)."',
+		language = '".mysql_real_escape_string($file_language)."',
+		copyrighted = '".mysql_real_escape_string($file_copyrighted)."'";
+		db_query($query, $currentCourseID);
+	// file will be extracted with new encoded filename
+		$p_header['filename'] = $safe_fileName;
 return 1;
 }
 
@@ -134,87 +175,27 @@ if($is_adminOfCourse)
 	$dialogBox = '';
 	if (is_uploaded_file(@$userFile))
 	{
-		/* Check the file size doesn't exceed
-		* the maximum file size authorized in the directory
-		*/
+		// check for disk quotas
 		$diskUsed = dir_total_space($baseWorkDir);
 		if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaDocument) {
 			$dialogBox .= $langNoSpace;
 		}
+		// check for dangerous extensions and file types
 		if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .
 		'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .
 		'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userFile']['name'])) {
 			$dialogBox .= "$langUnwantedFiletype: {$_FILES['userFile']['name']}";
 		}
-
 		/*** Unzipping stage ***/
-		elseif (@$uncompress == 1 && preg_match("/.zip$/", $_FILES['userFile']['name']) )
+		elseif (isset($uncompress) and $uncompress == 1 
+			and preg_match("/.zip$/", $_FILES['userFile']['name']) )
 		{
 			$zipFile = new pclZip($userFile);
-			/*** Check the zip content (real size and file extension) ***/
-			$zipContentArray = $zipFile->listContent();
-			$realFileSize = 0;
-			foreach($zipContentArray as $thisContent)
-			{
-				if (preg_match("/.php$/", $thisContent['filename']))
-				{
-					$dialogBox .= $langZipNoPhp;
-					$found_php = true;
-					break;
-				}
-				$realFileSize += $thisContent['size'];
-				$fileName = $thisContent['filename'];
-				/**** Check for no desired characters ***/
-				$fileName = replace_dangerous_char($fileName);
-				/*** Try to add an extension to files witout extension ***/
-				$fileName = add_ext_on_mime($fileName);
-				/*** Handle PHP files ***/
-				$fileName = php2phps($fileName);
-				//ypologismos onomatos arxeiou me date + time.
-				//to onoma afto tha xrhsimopoiei sto filesystem & tha apothikevetai ston pinaka documents
-				$safe_fileName = date("YmdGis").randomkeys("8").".".get_file_extention($fileName);
-				//prosthiki eggrafhs kai metadedomenwn gia to eggrafo sth vash
-				if ($uploadPath == ".") 
-					$uploadPath2 = "/".$safe_fileName; 
-				else 
-					$uploadPath2 = $uploadPath."/".$safe_fileName;
-				//san file format vres to extension tou arxeiou
-				$file_format = get_file_extention($fileName);
-				//san date you arxeiou xrhsimopoihse thn shmerinh hm/nia
-				$file_date = date("Y\-m\-d G\:i\:s");
-				$query = "INSERT INTO ".$dbTable." SET
-		            	path	=	'".mysql_real_escape_string($uploadPath2)."',
-		            	filename =	'$fileName',
-		            	visibility =	'v',
-		            	comment	=	'".mysql_real_escape_string($file_comment)."',
-		            	category =	'".mysql_real_escape_string($file_category)."',
-		            	title =	'".mysql_real_escape_string($file_title)."',
-		            	creator	=	'".mysql_real_escape_string($file_creator)."',
-		            	date	= '".mysql_real_escape_string($file_date)."',
-		            	date_modified	=	'".mysql_real_escape_string($file_date)."',
-		            	subject	=	'".mysql_real_escape_string($file_subject)."',
-		            	description =	'".mysql_real_escape_string($file_description)."', 
-		            	author	=	'".mysql_real_escape_string($file_author)."',
-		            	format	=	'".mysql_real_escape_string($file_format)."',
-		            	language =	'".mysql_real_escape_string($file_language)."',
-		            	copyrighted	=	'".mysql_real_escape_string($file_copyrighted)."'";
-				db_query($query, $currentCourseID);
-				$zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'renameziparchivefile');
-
-			}
-			if (isset($realFileSize) and ($realFileSize + $diskUsed > $diskQuotaDocument))
-			{
+			$realFileSize = 0;		
+			$zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'renameziparchivefile');
+			if ($diskUsed + $realFileSize > $diskQuotaDocument) {
 				$dialogBox .= $langNoSpace;
-			}
-			elseif(!isset($found_php))
-			{   /*** Uncompressing phase ***/
-				/*** PHP method - slower... ***/
-				chdir($baseWorkDir.$uploadPath);
-				//$unzippingSate = $zipFile->extract();
-				$zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'renameziparchivefile');
-			}
-			if (!isset($found_php)) {
-				// Added by Thomas
+			} else {
 				$dialogBox .= "<table width=\"99%\"><tbody><tr>
 				<td class=\"success\"><p><b>$langDownloadAndZipEnd</b></p>
 				</td></tr></tbody></table>";
