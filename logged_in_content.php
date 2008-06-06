@@ -45,18 +45,12 @@ $result2 = mysql_query("SELECT cours.code k, cours.fake_code c,
 	FROM cours, cours_user WHERE cours.code=cours_user.code_cours AND cours_user.user_id='".$uid."'
 	AND (cours_user.statut='5' OR cours_user.statut='10')");
 if (mysql_num_rows($result2) > 0) {
-	$tool_content .= "
-	 <table width=99% align='center' class='CourseListTitle'>
-     <tr>
-       <th><b>$langMyCoursesUser</b></th>
-     </tr>
-     </table>
-
+	$tool_content .= "<table width=99% align='center' class='CourseListTitle'>
+     	<tr><th><b>$langMyCoursesUser</b></th></tr>
+     	</table>
      <script type='text/javascript' src='modules/auth/sorttable.js'></script>
      <table width='99%' align='center' class='sortable' id='t1'>";
-	$tool_content .= "
-     <thead>
-     <tr>
+	$tool_content .= "<thead><tr>
        <th width='65%' class='left'>$langCourseCode</th>
        <th width='30%' class='left'>$langTeacher</th>
        <th width='5%'>$langUnCourse</th>
@@ -81,9 +75,7 @@ while ($mycours = mysql_fetch_array($result2)) {
        </td>
      </tr>";
          }
-	$tool_content .= "
-     </table>
-     <br/>";
+	$tool_content .= "</table><br/>";
 
 }  else  {
            if ($_SESSION['statut'] == '5')  // if we are login for first time
@@ -150,11 +142,29 @@ $sql = "SELECT cours.code k, cours.fake_code c, cours.intitule t,
 	FROM cours, cours_user WHERE cours.code=cours_user.code_cours AND cours_user.user_id='".$uid."'
 	AND cours_user.statut='5'";
 
+if (mysql_num_rows(db_query($sql, $mysqlMainDb)) > 0) {
+// assignments info
+	$tool_content .= "<tr><th>$langMyPersoDeadlines</th></tr>";
+	$asql = db_query($sql, $mysqlMainDb);
+	while ($c = mysql_fetch_array($asql)) {
+		$s = db_query("SELECT DISTINCT assignments.id, assignments.title, 
+			assignments.description, assignments.deadline, 
+			cours.intitule,(TO_DAYS(assignments.deadline) - TO_DAYS(NOW())) AS days_left
+			FROM  ".$c['k'].".assignments, ".$mysqlMainDb.".cours, ".$c['k'].".accueil
+			WHERE (TO_DAYS(deadline) - TO_DAYS(NOW())) >= '0'
+			AND assignments.active = 1 AND cours.code = '".$c['k']."'
+			AND ".$c['k'].".accueil.visible =1
+			AND ".$c['k'].".accueil.id =5 ORDER BY deadline", $c['k']); 
+		while ($d = mysql_fetch_array($s)) {
+			$tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
+			$tool_content .= "<td>&nbsp;<img src='images/arrow_blue.gif'>&nbsp;$c[t]:&nbsp;<b>$d[title]</b>&nbsp;- $langExerciseEnd: ".greek_format($d['deadline'])."</td></tr>";
+		} 
+	}
 // display last week announcements
-$tool_content .= "<tr><th>$langMyPersoAnnouncements</th></tr>";
-$ansql = db_query($sql, $mysqlMainDb);
-while ($c = mysql_fetch_array($ansql)) {
-$result = db_query("SELECT contenu, temps, title 
+	$tool_content .= "<tr><th>$langMyPersoAnnouncements</th></tr>";
+	$ansql = db_query($sql, $mysqlMainDb);
+	while ($c = mysql_fetch_array($ansql)) {
+	$result = db_query("SELECT contenu, temps, title 
 		FROM " .$mysqlMainDb." . annonces, ".$c['k'].".accueil
 		WHERE code_cours='" .$c['k']. "'
 		AND DATE_SUB(DATE_FORMAT('".$logindate."','%Y-%m-%d'), INTERVAL 1 WEEK) 
@@ -163,54 +173,36 @@ $result = db_query("SELECT contenu, temps, title
 		AND ".$c['k'].".accueil.id =7
 		ORDER BY temps DESC", $mysqlMainDb);
 	
-	while ($ann = mysql_fetch_array($result)) {
-		$content = $ann['contenu'];
-                $content = make_clickable($content);
-                $content = nl2br($content);
-		$content = mathfilter($content, 12, "../../include/phpmathpublisher/img/");
-		$row = mysql_fetch_array(db_query("SELECT intitule,titulaires 
-			FROM cours WHERE code='$c[k]'"));
-		$tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
-                $tool_content .= "<td>&nbsp;<img src='images/arrow_blue.gif'>&nbsp;$c[t]:&nbsp;($langTutor: <b>$row[titulaires]</b>)<br>$ann[title]<br>$content<br>
+		while ($ann = mysql_fetch_array($result)) {
+			$content = $ann['contenu'];
+                	$content = make_clickable($content);
+                	$content = nl2br($content);
+			$content = mathfilter($content, 12, "../../include/phpmathpublisher/img/");
+			$row = mysql_fetch_array(db_query("SELECT intitule,titulaires 
+				FROM cours WHERE code='$c[k]'"));
+			$tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
+                	$tool_content .= "<td>&nbsp;<img src='images/arrow_blue.gif'>&nbsp;$c[t]:&nbsp;($langTutor: <b>$row[titulaires]</b>)<br>$ann[title]<br>$content<br>
 		<small><i>($langAnn: ".greek_format($ann['temps']).")</i></small></td></tr>";
+		}
 	}
-}
 
-$tool_content .= "<tr><th>$langMyPersoDocs</th></tr>";
-$csql = db_query($sql, $mysqlMainDb);
+	$tool_content .= "<tr><th>$langMyPersoDocs</th></tr>";
+	$csql = db_query($sql, $mysqlMainDb);
 
 // display last week doc info
-while ($c = mysql_fetch_array($csql)) {
-	$s = db_query("SELECT path, filename, title, date_modified
-		FROM document, accueil WHERE visibility = 'v'
-		AND DATE_SUB(DATE_FORMAT('".$logindate."','%Y-%m-%d'), INTERVAL 1 WEEK) 
-		<= DATE_FORMAT(date_modified,'%Y-%m-%d')
-		AND accueil.visible =1 AND accueil.id =3
-		ORDER BY date_modified DESC", $c['k']);
-	while ($d = mysql_fetch_array($s)) {
-		$tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
-		$tool_content .= "<td>&nbsp;<img src='images/arrow_blue.gif'>&nbsp;$c[t]:&nbsp;$d[title]
+	while ($c = mysql_fetch_array($csql)) {
+		$s = db_query("SELECT path, filename, title, date_modified
+			FROM document, accueil WHERE visibility = 'v'
+			AND DATE_SUB(DATE_FORMAT('".$logindate."','%Y-%m-%d'), INTERVAL 1 WEEK) 
+			<= DATE_FORMAT(date_modified,'%Y-%m-%d')
+			AND accueil.visible =1 AND accueil.id =3
+			ORDER BY date_modified DESC", $c['k']);
+		while ($d = mysql_fetch_array($s)) {
+			$tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
+			$tool_content .= "<td>&nbsp;<img src='images/arrow_blue.gif'>&nbsp;$c[t]:&nbsp;$d[title]
 		<a class='CourseLink' href='$urlServer/courses/$c[k]/document$d[path]'>$d[filename]</a></td></tr>";
-	} 
-}
-
-// assignments info
-$tool_content .= "<tr><th>$langMyPersoDeadlines</th></tr>";
-$asql = db_query($sql, $mysqlMainDb);
-while ($c = mysql_fetch_array($asql)) {
-	$s = db_query("SELECT DISTINCT assignments.id, assignments.title, 
-		assignments.description, assignments.deadline, 
-		cours.intitule,(TO_DAYS(assignments.deadline) - TO_DAYS(NOW())) AS days_left
-		FROM  ".$c['k'].".assignments, ".$mysqlMainDb.".cours, ".$c['k'].".accueil
-		WHERE (TO_DAYS(deadline) - TO_DAYS(NOW())) >= '0'
-		AND assignments.active = 1 AND cours.code = '".$c['k']."'
-		AND ".$c['k'].".accueil.visible =1
-		AND ".$c['k'].".accueil.id =5 ORDER BY deadline", $c['k']); 
-	
-	while ($d = mysql_fetch_array($s)) {
-		$tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
-		$tool_content .= "<td>&nbsp;<img src='images/arrow_blue.gif'>&nbsp;$c[t]:&nbsp;<b>$d[title]</b>&nbsp;- $langExerciseEnd: ".greek_format($d['deadline'])."</td></tr>";
-	} 
+		} 
+	}
 }
 
 $tool_content .= "</table>";

@@ -74,7 +74,6 @@ if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
 		if (!isset($persoStatus) || $persoStatus == "") $persoStatus = "no";
 		else  $persoStatus = "yes";
 		$userLanguage = $_REQUEST['userLanguage'];
-
 		$username_form = escapeSimple($username_form);
 		if(mysql_query("UPDATE user
 	        SET nom='$nom_form', prenom='$prenom_form',
@@ -91,19 +90,17 @@ if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
 if (isset($submit) && isset($ldap_submit) && ($ldap_submit == "ON")) {
 
 	$userLanguage = $_REQUEST['userLanguage'];
-
-	if (!isset($persoStatus) || $persoStatus == "") $persoStatus = "no";
-	else  $persoStatus = "yes";
-	mysql_query(" UPDATE user SET perso = '$persoStatus', lang = '$userLanguage' WHERE user_id='".$_SESSION["uid"]."' ");
+	if (!isset($persoStatus) || $persoStatus == "")
+		$persoStatus = "no";
+	else  
+		$persoStatus = "yes";
+	mysql_query(" UPDATE user SET perso = '$persoStatus', 
+			lang = '$userLanguage' WHERE user_id='".$_SESSION["uid"]."' ");
 	if (session_is_registered("user_perso_active") && $persoStatus=="no") session_unregister("user_perso_active");
 	if ($userLang == "el") {
 		$_SESSION['langswitch'] = "greek";
-		$_SESSION['langLinkText'] = "English";
-		$_SESSION['langLinkURL'] = "?localize=en";
 	} else {
 		$_SESSION['langswitch'] = "english";
-		$_SESSION['langLinkText'] = "Ελληνικά";
-		$_SESSION['langLinkURL'] = "?localize=el";
 	}
 
 	header("location:". $_SERVER['PHP_SELF']."?msg=1");
@@ -121,28 +118,24 @@ if(isset($msg))
 			$type = "success";
 			break;
 		}
-
 		case 3: { //pass too easy
-			$message = $langPassTooEasy .": <strong>".substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8)."</strong>";
+			$message = $langPassTooEasy.": <strong>".substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8)."</strong>";
 			$urlText = "";
 			$type = "caution";
 			break;
 		}
-
 		case 4: { // empty fields check
 			$message = $langFields;
 			$urlText = "";
 			$type = "caution";
 			break;
 		}
-
 		case 5: {//username already exists
 			$message = $langUserTaken;
 			$urlText = "";
 			$type = "caution";
 			break;
 		}
-
 		case 6: {//email not valid
 			$message = $langEmailWrong;
 			$urlText = "";
@@ -225,13 +218,10 @@ $passurl = $urlSecure.'modules/profile/password.php';
 $authmethods = array("imap","pop3","ldap","db");
 
 if ((!isset($changePass)) || isset($_POST['submit'])) {
-
 	$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
-	
 	if(!in_array($password_form,$authmethods)) {
-				$tool_content .= "<li><a href=\"".$passurl."\">".$langChangePass."</a></li>";
+		$tool_content .= "<li><a href=\"".$passurl."\">".$langChangePass."</a></li>";
 	}
-
 	$tool_content .= " <li><a href='../unreguser/unreguser.php'>$langUnregUser</a></li>";
 	$tool_content .= "</ul></div>";
 	$tool_content .= "<form method=\"post\" action=\"$sec?submit=yes\"><br/>
@@ -283,7 +273,7 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
 	##[BEGIN personalisation modification]############
 	if (session_is_registered("perso_is_active")) {
 		$tool_content .="<tr>
-      <th width=\"150\" class='left'>eClass Personalised</th>
+      <th width=\"150\" class='left'>$langPerso</th>
       <td><input class='FormData_InputText' type=checkbox name='persoStatus' value=\"yes\" $checkedPerso></td>
     </tr>";
 	}

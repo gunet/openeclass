@@ -1727,7 +1727,7 @@ $m['unsub'] = "Course is closed. Unregistration is not allowed";
 /*********************************************************
 * perso.inc.php
 *********************************************************/
-
+$langPerso = "Modify portfolio view";
 $langMyPersoDeadlines = "MY DEADLINES";
 $langMyPersoAnnouncements = "MY ANNOUNCEMENTS";
 $langMyPersoDocs = "MY LATEST DOCUMENTS";
