@@ -75,57 +75,14 @@ function send_mail_multipart($from, $from_address, $to, $to_address,
 }
 
 
-// Encode a mail header line with q-encoding according to MIME / RFC 2047
+// Encode a mail header line with according to MIME / RFC 2047
 function qencode($header, $charset)
 {
 	// If header contains no chars > 128, return it without encoding
 	if (!preg_match('/[\200-\377]/', $header)) {
 		return $header;
-	}
-
-	// Maximum length of encoded lines allowed, minus the charset
-	// declaration and delimiters overhead
-	$maxlen = 75 - strlen($charset) - 9;
-
-	// Charset declaration
-	$decl = "=?$charset?q?";
-
-	// Start with an empty line, set current length > maxlen so that
-	// a charset declaration is put at the beginning
-	$quoted = '';
-	$current = $maxlen + 1;
-	$beginning = TRUE;
-
-	for ($i = 0; $i < strlen($header); $i++) {
-		if ($current >= $maxlen) {
-			if ($beginning) {
-				$quoted .= "$decl";
-				$beginning = FALSE;
-			} else {
-				$quoted .= "?=\n   $decl";
-			}
-			$current = strlen($decl);
-		}
-		$c = $header{$i};
-		if (ord($c) < 32) {
-			// Ignore control characters
-		} elseif ($c == ' ') {
-			// Space turns to '_'
-			$quoted .= '_';
-			$current++;
-		} elseif (preg_match('/^[a-zA-Z0-9\,\*\+\-\!\/]$/', $c)) {
-			// These don't need quoting
-			$quoted .= $c;
-			$current++;
-		} else {
-			// All others get quoted
-			$quoted .= sprintf("=%02x", ord($c));
-			$current += 3;
-		}
-	}
-	$quoted .= "?=";
-
-	return $quoted;
+	} else {
+                mb_internal_encoding('UTF-8');
+	        return mb_encode_mimeheader($header, $charset);
+        }
 }
-
-?>
