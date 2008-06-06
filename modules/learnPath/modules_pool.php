@@ -1,24 +1,24 @@
 <?php
 /*=============================================================================
-       	GUnet eClass 2.0 
-        E-learning and Course Management Program  
+       	GUnet eClass 2.0
+        E-learning and Course Management Program
 ================================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
         A full copyright notice can be read in "/info/copyright.txt".
-        
-       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-                     Yannis Exidaridis <jexi@noc.uoa.gr> 
-                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
-        For a full list of contributors, see "credits.txt".  
-     
-        This program is a free software under the terms of the GNU 
-        (General Public License) as published by the Free Software 
-        Foundation. See the GNU License for more details. 
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+                     Yannis Exidaridis <jexi@noc.uoa.gr>
+                     Alexandros Diamantidis <adia@noc.uoa.gr>
+
+        For a full list of contributors, see "credits.txt".
+
+        This program is a free software under the terms of the GNU
+        (General Public License) as published by the Free Software
+        Foundation. See the GNU License for more details.
         The full license can be read in "license.txt".
-     
-       	Contact address: GUnet Asynchronous Teleteaching Group, 
-        Network Operations Center, University of Athens, 
+
+       	Contact address: GUnet Asynchronous Teleteaching Group,
+        Network Operations Center, University of Athens,
         Panepistimiopolis Ilissia, 15784, Athens, Greece
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
@@ -27,23 +27,23 @@
 	modules_pool.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.7 licensed under GPL
 	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: modules_pool.php Revision: 1.32
-	      
+
 	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
                       Lederer Guillaume <led@cerdecam.be>
-==============================================================================        
+==============================================================================
     @Description: This is the page where the list of modules of the course
                   present on the platform can be browsed
-                  user allowed to edit the course can 
+                  user allowed to edit the course can
                   delete the modules form this page
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
 
@@ -64,9 +64,9 @@ $head_content = "";
 $tool_content = "";
 $body_action = "";
 
-$navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPath);
+$navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPaths);
 if ( ! $is_adminOfCourse ) claro_die($langNotAllowed);
-$nameTools = $langModulesPoolToolName;
+$nameTools = $langLearningObjectsInUse;
 
 mysql_select_db($currentCourseID);
 
@@ -97,39 +97,39 @@ switch( $cmd )
         if (isset($_GET['cmdid']) && is_numeric($_GET['cmdid']) ) {
 			// used to physically delete the module  from server
 			require_once("../../include/lib/fileManageLib.inc.php");
-	
+
 			$moduleDir   = "courses/".$currentCourseID."/modules";
 			$moduleWorkDir = $webDir.$moduleDir;
-	
+
 			// delete all assets of this module
 			$sql = "DELETE FROM `".$TABLEASSET."`
 				WHERE `module_id` = ". (int)$_GET['cmdid'];
 			db_query($sql);
-	
+
 			// delete from all learning path of this course but keep there id before
 			$sql = "SELECT * FROM `".$TABLELEARNPATHMODULE."`
 				WHERE `module_id` = ". (int)$_GET['cmdid'];
 			$result = db_query($sql);
-	
+
 			$sql = "DELETE FROM `".$TABLELEARNPATHMODULE."`
 				WHERE `module_id` = ". (int)$_GET['cmdid'];
 			db_query($sql);
-	
+
 			// delete the module in modules table
 			$sql = "DELETE FROM `".$TABLEMODULE."`
 				WHERE `module_id` = ". (int)$_GET['cmdid'];
 			db_query($sql);
-	
+
 			//delete all user progression concerning this module
 			$sql = "DELETE FROM `".$TABLEUSERMODULEPROGRESS."`
 				WHERE 1=0 ";
-	
+
 			while ($list = mysql_fetch_array($result))
 			{
 				$sql.=" OR `learnPath_module_id`=". (int)$list['learnPath_module_id'];
 			}
 			db_query($sql);
-	
+
 			// delete directory and it content
 			claro_delete_file($moduleWorkDir."/module_".(int)$_GET['cmdid']);
         }
@@ -144,23 +144,25 @@ switch( $cmd )
 				WHERE `module_id` = '". (int)$_GET['module_id']."'";
 			$result = db_query($query);
 			$list = mysql_fetch_array($result);
-			
+
 			$tool_content .= claro_disp_message_box("
 				<form method=\"post\" name=\"rename\" action=\"".$_SERVER['PHP_SELF']."\">
-				<p><label for=\"newName\">".$langInsertNewModuleName."</label> :
-				<input type=\"text\" name=\"newName\" id=\"newName\" value=\"".htmlspecialchars($list['name'])."\"></input>
-				<input type=\"submit\" value=\"".$langOk."\" name=\"submit\">
-				<input type=\"hidden\" name=\"cmd\" value=\"exRename\">
-				<input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">
-				</p></form>")."<br />";
+                <table width=\"99%\" class=\"LearnPathSum\"><thead><tr class=\"LP_header\"><td>
+                    <label for=\"newName\">".$langInsertNewModuleName."</label> :
+				    <input type=\"text\" class=\"auth_input\"name=\"newName\" id=\"newName\" value=\"".htmlspecialchars($list['name'])."\"></input>
+				    <input type=\"submit\" value=\"".$langOk."\" name=\"submit\">
+                    <input type=\"hidden\" name=\"cmd\" value=\"exRename\">
+				    <input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">
+                </td></tr></thead></table>
+				</form>")."";
         }
         break;
 
      //try to change name for selected module
     case "exRename" :
         //check if newname is empty
-        if( isset($_POST["newName"]) && is_string($_POST["newName"]) 
-        	&& $_POST["newName"] != "" && isset($_POST['module_id']) 
+        if( isset($_POST["newName"]) && is_string($_POST["newName"])
+        	&& $_POST["newName"] != "" && isset($_POST['module_id'])
         	&& is_numeric($_POST['module_id']) )
         {
             //check if newname is not already used in another module of the same course
@@ -203,29 +205,29 @@ switch( $cmd )
                     WHERE `module_id` = '". (int)$_GET['module_id']."'";
             $result = db_query($query);
             $comment = mysql_fetch_array($result);
-            
+
             if( isset($comment['comment']) )
             {
-                
-                $tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">\n"
-                    .'<table><tr><td valign="top">'."\n"
-                    .claro_disp_html_area('comment', $comment['comment'], 20, 70)
-                    ."</td></tr></table>\n"
+
+                $tool_content .= "    <form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">\n"
+                    .'    <table width="99%" class="LearnPathSum"><thead><tr class="LP_header"><td><b>'.$langComments.'</b>:<br /> '."\n"
+                    .claro_disp_html_area('comment', $comment['comment'], 1, 60)
+                    ."<br />\n"
                     ."<input type=\"hidden\" name=\"cmd\" value=\"exComment\">\n"
                     ."<input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">\n"
-                    ."<input type=\"submit\" value=\"".$langOk."\">\n"
-                    ."<br /><br />\n"
+                    ."<input type=\"submit\" value=\"".$langGradeOk."\">\n"
+                    ."</td></tr></thead></table>\n"
                     ."</form>\n";
-                 
+
                  $head_content .= claro_disp_html_area_head("comment");
-					
+
                  $body_action = "onload=\"initEditor()\"";
             }
-            else 
+            else
             {
             	$tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">\n"
                     .'<table><tr><td valign="top">'."\n"
-                    .claro_disp_html_area('comment', '', 20, 70)
+                    .claro_disp_html_area('comment', '', 2, 60)
                     ."</td></tr></table>\n"
                     ."<input type=\"hidden\" name=\"cmd\" value=\"exComment\">\n"
                     ."<input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">\n"
@@ -233,7 +235,7 @@ switch( $cmd )
                     ."<br /><br />\n"
                     ."</form>\n";
 
-                 $head_content .= claro_disp_html_area_head("comment");	
+                 $head_content .= claro_disp_html_area_head("comment");
                  $body_action = "onload=\"initEditor()\"";
             }
         } // else no module_id
@@ -241,7 +243,7 @@ switch( $cmd )
 
     //make update to change the comment in the database for this module
     case "exComment":
-        if( isset($_POST['comment']) && is_string($_POST['comment']) 
+        if( isset($_POST['comment']) && is_string($_POST['comment'])
         	&& isset($_POST['module_id']) && is_numeric($_POST['module_id']) )
         {
             $sql = "UPDATE `".$TABLEMODULE."`
@@ -253,24 +255,16 @@ switch( $cmd )
 }
 
 
-$tool_content .= "<table width=\"99%\">
+$tool_content .= "
+    <br />
+    <table width=\"99%\" class=\"LearnPathSum\">
     <thead>
-        <tr align=\"center\" valign=\"top\">
-          <th>
-            ".$langModule."
-          </th>
-          <th>
-            ".$langDelete."
-          </th>
-          <th>
-            ".$langRename."
-          </th>
-          <th>
-            ".$langComment."
-          </th>";
-$tool_content .=      "</tr>\n".
-      "</thead>\n".
-          "<tbody>\n";
+    <tr class=\"LP_header\">
+      <td colspan=\"2\"><div align=\"center\"><b>".$langLearningObjects."</b></div></td>
+      <td width=\"10%\"><div align=\"right\"><b>".$langTools."</b>&nbsp;&nbsp;&nbsp;</div></td>\n";
+$tool_content .="    </tr>\n".
+      "    </thead>\n".
+      "    <tbody>";
 
 $sql = "SELECT M.*, count(M.`module_id`) AS timesUsed
         FROM `".$TABLEMODULE."` AS M
@@ -292,43 +286,36 @@ while ($list = mysql_fetch_array($result))
     $contentType_img = selectImage($list['contentType']);
     $contentType_alt = selectAlt($list['contentType']);
     $tool_content .= "
-         <tr>
-            <td align=\"left\">
-            <img src=\"".$imgRepositoryWeb.$contentType_img."\" alt=\"".$contentType_alt."\" title=\"".$contentType_alt."\" />".$list['name']."
-            </td>
-            <td align='center'>
-             <a href=\"".$_SERVER['PHP_SELF']."?cmd=eraseModule&amp;cmdid=".$list['module_id']."\"
-                onClick=\"return confirmation('".clean_str_for_javascript($list['name'] . $langUsedInLearningPaths . $list['timesUsed'])."');\">
-                <img src=\"".$imgRepositoryWeb."delete.gif\" border=\"0\" alt=\"".$langDelete."\" title=\"".$langDelete."\" />
-                </a>
-            </td>
-            <td align=\"center\">
-               <a href=\"".$_SERVER['PHP_SELF']."?cmd=rqRename&amp;module_id=".$list['module_id']."\"><img src=\"".$imgRepositoryWeb."edit.gif\" border=0 alt=\"$langRename\" title=\"$langRename\" /></a>
-            </td>
-            <td align=\"center\">
-               <a href=\"".$_SERVER['PHP_SELF']."?cmd=rqComment&amp;module_id=".$list['module_id']."\"><img src=\"".$imgRepositoryWeb."comment.gif\" border=0 alt=\"$langComment\" title=\"$langComment\" /></a>
-            </td>";
-    $tool_content .= "</tr>";
+    <tr>
+      <td align=\"left\" width=\"1%\" valign=\"top\"><img src=\"".$imgRepositoryWeb.$contentType_img."\" alt=\"".$contentType_alt."\" title=\"".$contentType_alt."\" /></td>
+      <td align=\"left\"><b>".$list['name']."</b>";
 
-    if ( isset($list['comment']) )
+    if ( $list['comment'] )
     {
-        $tool_content .= "
-              <tr>
-                 <td colspan=\"5\">
-                        <small>".$list['comment']."</small>
-                 </td>
-              </tr>";
+        $tool_content .= "<br /><small style=\"color: #a19b99;\"><b>$langComments</b>: ".$list['comment']."</small>";
     }
+
+    $tool_content .= "</td>
+      <td align='right'><a href=\"".$_SERVER['PHP_SELF']."?cmd=eraseModule&amp;cmdid=".$list['module_id']."\" onClick=\"return confirmation('".clean_str_for_javascript($list['name'] . $langUsedInLearningPaths . $list['timesUsed'])."');\"><img src=\"".$imgRepositoryWeb."delete.gif\" border=\"0\" alt=\"".$langDelete."\" title=\"".$langDelete."\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?cmd=rqRename&amp;module_id=".$list['module_id']."\"><img src=\"".$imgRepositoryWeb."edit.gif\" border=0 alt=\"$langRename\" title=\"$langRename\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?cmd=rqComment&amp;module_id=".$list['module_id']."\"><img src=\"".$imgRepositoryWeb."comment.gif\" border=0 alt=\"$langComment\" title=\"$langComment\" /></a></td>\n";
+    $tool_content .= "    </tr>";
+
+
 
     $atleastOne = true;
 
 } //end while another module to display
 
-if ($atleastOne == false) {$tool_content .= "<tr><td align=\"center\" colspan=\"5\">".$langNoModule."</td></tr>";}
+if ($atleastOne == false) {
+    $tool_content .= "
+    <tr>
+      <td align=\"center\" colspan=\"5\">".$langNoModule."</td>
+    </tr>";
+}
 
 // Display button to add selected modules
 
-$tool_content .= "</tbody>\n</table>";
+$tool_content .= "
+    </tbody>\n    </table>";
 
 draw($tool_content, 2, "learnPath", $head_content, $body_action);
 

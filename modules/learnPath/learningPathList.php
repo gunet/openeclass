@@ -383,7 +383,7 @@ if($is_adminOfCourse) {
         <li><a href=\"".$_SERVER['PHP_SELF']."?cmd=create\" title=\"$langCreateNewLearningPath\">".$langCreate."</a></li>
         <li><a href=\"importLearningPath.php\" title=\"$langimportLearningPath\">".$langImport."</a></li>
         <li><a href=\"detailsAll.php\" title=\"$langTrackAllPathExplanation\">".$langProgress."</a></li>
-        <li><a href=\"modules_pool.php\">".$langModulesPoolToolName."</a></li>
+        <li><a href=\"modules_pool.php\">".$langLearningObjectsInUse_sort."</a></li>
       </ul>
     </div>
     ";
@@ -402,7 +402,7 @@ if ((mysql_num_rows($l) == 0)) {
 $tool_content .= "
     <table width=\"99%\" class=\"LearnPathSum\">
     <thead>
-    <tr>
+    <tr class=\"LP_header\">
       <td width=\"1%\">&nbsp;</td>
       <td><div align=\"center\"><b>".$langLearningPaths."</b></div></td>\n";
 
@@ -413,8 +413,8 @@ if($is_adminOfCourse) {
      $tool_content .= "      <td colspan=\"5\" width=\"20%\"><div align=\"center\"><b>".$langActions."</b></div></td>\n";
 }
 elseif($uid) {
-   // display progression only if user is not teacher && not anonymous
-   $tool_content .= "      <td colspan=\"2\" width=\"20%\"><div align=\"center\"><b>".$langProgress."</b></div></td>\n";
+     // display progression only if user is not teacher && not anonymous
+     $tool_content .= "      <td colspan=\"2\" width=\"20%\"><div align=\"center\"><b>".$langProgress."</b></div></td>\n";
 }
 // close title line
 $tool_content .= "    </tr>

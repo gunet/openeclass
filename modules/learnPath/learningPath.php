@@ -154,7 +154,7 @@ $tool_content .= "<p style=\"color: gray;\">".commentBox(LEARNINGPATH_, DISPLAY_
 $tool_content .= "
     <table width=\"99%\" class=\"LearnPathSum\">
     <thead>
-    <tr>
+    <tr class=\"LP_header\">
       <td colspan=\"".($maxDeep+1)."\"><div align=\"center\">&nbsp;&nbsp;<b>".$langLearningObjects."</b></u></div></td>\n";
 
 
