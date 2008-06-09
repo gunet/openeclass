@@ -50,7 +50,7 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 require_once("../../include/baseTheme.php");
 $tool_content = "";
 
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
+$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
 if (!$is_adminOfCourse ) claro_die($langNotAllowed);
 $navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
 $nameTools = $langInsertMyDescToolName;

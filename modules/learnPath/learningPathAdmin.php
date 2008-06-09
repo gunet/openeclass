@@ -378,7 +378,9 @@ $tool_content .="
 
 //############################ LEARNING PATH NAME BOX ################################\\
 
-$tool_content .="<tr><th class=\"left\" height=\"32\">$langTitle :</th>";
+$tool_content .="
+    <tr>
+      <th class=\"left\" height=\"32\">$langTitle :</th>";
 
 if ($cmd == "updateName")
 {
@@ -386,10 +388,13 @@ if ($cmd == "updateName")
 }
 else
 {
-    $tool_content .= "<td class=\"left\">".nameBox(LEARNINGPATH_, DISPLAY_);
+    $tool_content .= "
+      <td class=\"left\">".nameBox(LEARNINGPATH_, DISPLAY_);
 }
 
-$tool_content .= "</td></tr>";
+$tool_content .= "
+      </td>
+    </tr>";
 
 //############################ LEARNING PATH COMMENT BOX #############################\\
 $tool_content .="<tr><th class=\"left\" height=\"32\">$langComments :</th><td class=\"left\">";
@@ -523,13 +528,13 @@ for ($i=0 ; $i < sizeof($flatElementList) ; $i++)
 
 // -------------------------- learning path list header ----------------------------
 $tool_content .="
-    <table width=\"99%\">
+    <table width=\"99%\" class=\"LearnPathSum\">
     <thead>
-    <tr align=\"center\" valign=\"top\">
-      <th colspan=\"".($maxDeep+1)."\" class=\"left\">".$langContents."</th>
-      <th width=\"50\">".$langBlock."</th>
-      <th colspan=\"3\" width=\"90\">".$langMove."</th>
-      <th colspan=\"3\" width=\"90\">".$langActions."</th>
+    <tr class=\"LP_header\">
+      <td colspan=\"".($maxDeep+1)."\"><div align=\"center\">".$langContents."</div></td>
+      <td width=\"50\"><div align=\"center\">".$langBlock."</div></td>
+      <td colspan=\"3\" width=\"90\"><div align='center'>".$langMove."</div></td>
+      <td colspan=\"3\" width=\"90\"><div align=\"center\">".$langActions."</div></td>
     </tr>
     </thead>
     <tbody>";
@@ -543,6 +548,7 @@ foreach ($flatElementList as $module)
         if ($is_adminOfCourse)
         {
             $style=" class=\"invisible\"";
+            $image_bullet = "off";
         }
         else
         {
@@ -552,6 +558,7 @@ foreach ($flatElementList as $module)
     else
     {
         $style="";
+        $image_bullet = "on";
     }
     $spacingString = "";
     for($i = 0; $i < $module['children']; $i++)
@@ -570,11 +577,13 @@ foreach ($flatElementList as $module)
     else // module
     {
         if($module['contentType'] == CTEXERCISE_ )
-            $moduleImg = "exercise_on.gif";
+            $moduleImg = "exercise_$image_bullet.gif";
         else if($module['contentType'] == CTLINK_ )
-        	$moduleImg = "links.gif";
+        	$moduleImg = "links_$image_bullet.gif";
         else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
-        	$moduleImg = "description_on.gif";
+        	$moduleImg = "description_$image_bullet.gif";
+        else if($module['contentType'] == CTDOCUMENT_ )
+        	$moduleImg = "docs_$image_bullet.gif";
         else
             $moduleImg = choose_image(basename($module['path']));
 

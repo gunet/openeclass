@@ -404,17 +404,17 @@ $tool_content .= "
     <thead>
     <tr class=\"LP_header\">
       <td width=\"1%\">&nbsp;</td>
-      <td><div align=\"center\"><b>".$langLearningPaths."</b></div></td>\n";
+      <td><div align=\"center\">".$langLearningPaths."</div></td>\n";
 
 
 if($is_adminOfCourse) {
      // Titles for teachers
-     $tool_content .= "      <td colspan=\"3\" width=\"20%\"><div align=\"center\"><b>".$langAdm."</b></div></td>\n";
-     $tool_content .= "      <td colspan=\"5\" width=\"20%\"><div align=\"center\"><b>".$langActions."</b></div></td>\n";
+     $tool_content .= "      <td colspan=\"3\" width=\"20%\"><div align=\"center\">".$langAdm."</div></td>\n";
+     $tool_content .= "      <td colspan=\"5\" width=\"20%\"><div align=\"center\">".$langActions."</div></td>\n";
 }
 elseif($uid) {
      // display progression only if user is not teacher && not anonymous
-     $tool_content .= "      <td colspan=\"2\" width=\"20%\"><div align=\"center\"><b>".$langProgress."</b></div></td>\n";
+     $tool_content .= "      <td colspan=\"2\" width=\"20%\"><div align=\"center\">".$langProgress."</div></td>\n";
 }
 // close title line
 $tool_content .= "    </tr>

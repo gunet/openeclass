@@ -24,7 +24,10 @@ a:visited.invisible
 
 .LP_header { 
     color: #000 !important;
-    background-color: #f9f8ea !important;}
+    background-color: #f9f8ea !important;
+	text-align: center !important;
+	font-weight: bold !important;
+}
 
 .Group_Operations {
     background: #CAC3B5;

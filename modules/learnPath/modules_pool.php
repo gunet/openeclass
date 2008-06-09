@@ -85,7 +85,7 @@ $head_content .= "<script>
   ======================================*/
 
 // display use explication text
-$tool_content .= "<p>".$langUseOfPool."</p>";
+$tool_content .= "<p>".$langUseOfPool."</p><br />";
 
 // HANDLE COMMANDS:
 $cmd = ( isset($_REQUEST['cmd']) && is_string($_REQUEST['cmd']) )? (string)$_REQUEST['cmd'] : '';
@@ -149,8 +149,8 @@ switch( $cmd )
 				<form method=\"post\" name=\"rename\" action=\"".$_SERVER['PHP_SELF']."\">
                 <table width=\"99%\" class=\"LearnPathSum\"><thead><tr class=\"LP_header\"><td>
                     <label for=\"newName\">".$langInsertNewModuleName."</label> :
-				    <input type=\"text\" class=\"auth_input\"name=\"newName\" id=\"newName\" value=\"".htmlspecialchars($list['name'])."\"></input>
-				    <input type=\"submit\" value=\"".$langOk."\" name=\"submit\">
+				    <input type=\"text\" size=\"40\" class=\"auth_input\"name=\"newName\" id=\"newName\" value=\"".htmlspecialchars($list['name'])."\"></input></td><td class=\"right\">
+				    <input type=\"submit\" value=\"".$langGradeOk."\" name=\"submit\">
                     <input type=\"hidden\" name=\"cmd\" value=\"exRename\">
 				    <input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">
                 </td></tr></thead></table>
@@ -255,16 +255,7 @@ switch( $cmd )
 }
 
 
-$tool_content .= "
-    <br />
-    <table width=\"99%\" class=\"LearnPathSum\">
-    <thead>
-    <tr class=\"LP_header\">
-      <td colspan=\"2\"><div align=\"center\"><b>".$langLearningObjects."</b></div></td>
-      <td width=\"10%\"><div align=\"right\"><b>".$langTools."</b>&nbsp;&nbsp;&nbsp;</div></td>\n";
-$tool_content .="    </tr>\n".
-      "    </thead>\n".
-      "    <tbody>";
+
 
 $sql = "SELECT M.*, count(M.`module_id`) AS timesUsed
         FROM `".$TABLEMODULE."` AS M
@@ -277,6 +268,22 @@ $sql = "SELECT M.*, count(M.`module_id`) AS timesUsed
 $result = db_query($sql);
 $atleastOne = false;
 
+$query_num_results = db_query($sql);
+$num_results = mysql_numrows($query_num_results);
+
+
+if (!$num_results == 0) {
+
+$tool_content .= "
+    <table width=\"99%\" class=\"LearnPathSum\">
+    <thead>
+    <tr class=\"LP_header\">
+      <td colspan=\"2\"><div align=\"center\"><b>".$langLearningObjects."</b></div></td>
+      <td width=\"10%\"><div align=\"right\"><b>".$langTools."</b>&nbsp;&nbsp;&nbsp;</div></td>\n";
+$tool_content .="    </tr>\n".
+      "    </thead>\n".
+      "    <tbody>";
+}
 // Display modules of the pool of this course
 
 while ($list = mysql_fetch_array($result))
@@ -299,23 +306,17 @@ while ($list = mysql_fetch_array($result))
       <td align='right'><a href=\"".$_SERVER['PHP_SELF']."?cmd=eraseModule&amp;cmdid=".$list['module_id']."\" onClick=\"return confirmation('".clean_str_for_javascript($list['name'] . $langUsedInLearningPaths . $list['timesUsed'])."');\"><img src=\"".$imgRepositoryWeb."delete.gif\" border=\"0\" alt=\"".$langDelete."\" title=\"".$langDelete."\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?cmd=rqRename&amp;module_id=".$list['module_id']."\"><img src=\"".$imgRepositoryWeb."edit.gif\" border=0 alt=\"$langRename\" title=\"$langRename\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?cmd=rqComment&amp;module_id=".$list['module_id']."\"><img src=\"".$imgRepositoryWeb."comment.gif\" border=0 alt=\"$langComment\" title=\"$langComment\" /></a></td>\n";
     $tool_content .= "    </tr>";
 
-
-
     $atleastOne = true;
-
 } //end while another module to display
-
-if ($atleastOne == false) {
-    $tool_content .= "
-    <tr>
-      <td align=\"center\" colspan=\"5\">".$langNoModule."</td>
-    </tr>";
-}
-
-// Display button to add selected modules
 
 $tool_content .= "
     </tbody>\n    </table>";
+
+if ($atleastOne == false) {
+    $tool_content .= "
+      <p class=\"alert1\">".$langNoModule."</p>";
+}
+
 
 draw($tool_content, 2, "learnPath", $head_content, $body_action);
 
