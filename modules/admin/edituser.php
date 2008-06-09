@@ -80,20 +80,20 @@ if((!empty($u)) && ctype_digit($u) )	// validate the user id
 		$info = mysql_fetch_array($sql);
 		$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
 		if(!in_array($info['password'], $authmethods)) {
-				$tool_content .= "<li><a href=\"./password.php\">".$langChangePass."</a></li>";
+			$tool_content .= "<li><a href='password.php?userid=$u'>".$langChangePass."</a></li>";
 		}
 		$tool_content .= " <li><a href='./listusers.php'>$langBack</a></li>";
 		$tool_content .= "</ul></div>";
 		$tool_content .= "<h4>$langEditUser $info[2]</h4>";
 		$tool_content .= "<form name=\"edituser\" method=\"post\" action=\"$_SERVER[PHP_SELF]\">
-	<table width=\"99%\" border=\"0\">
-	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langSurname: </th>
-	<td width=\"80%\"><input type=\"text\" name=\"lname\" size=\"40\" value=\"".$info[0]."\"</td></tr>
-	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langName: </th>
-	<td width=\"80%\"><input type=\"text\" name=\"fname\" size=\"40\" value=\"".$info[1]."\"</td></tr>";
+		<table width=\"99%\" border=\"0\"><thead>
+		<tr><th>$langSurname: </th>
+		<td width=\"80%\"><input type=\"text\" name=\"lname\" size=\"40\" value=\"".$info[0]."\"</td></tr>
+		<tr><th>$langName: </th>
+		<td width=\"80%\"><input type=\"text\" name=\"fname\" size=\"40\" value=\"".$info[1]."\"</td></tr>";
 
 if(!in_array($info['password'], $authmethods)) {
-		$tool_content .= "<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'  width=\"20%\">$langUsername: </th>
+		$tool_content .= "<tr><th>$langUsername: </th>
 		<td width=\"80%\"><input type=\"text\" name=\"username\" size=\"30\" value=\"".$info[2]."\"</td></tr>";
 	}
   else    // means that it is external auth method, so the user cannot change this password
@@ -107,15 +107,15 @@ if(!in_array($info['password'], $authmethods)) {
       default: $auth=1;break;
     }
     $auth_text = get_auth_info($auth);
-    $tool_content .= "<tr><th width=\"150\" class='left'>".$langUsername. "</th>
+    $tool_content .= "<tr><th>".$langUsername. "</th>
       <td class=\"caution_small\">&nbsp;&nbsp;&nbsp;&nbsp;<b>".$info[2]."</b> [".$auth_text."]
         <input type=\"hidden\" name=\"username\" value=\"$info[2]\">
       </td></tr>";
  }
 
-	$tool_content .= "<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">E-mail: </th><td width=\"80%\"><input type=\"text\" name=\"email\" size=\"50\" value=\"".$info[4]."\"</td></tr>
-	<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langTel: </th><td width=\"80%\"><input type=\"text\" name=\"phone\" size=\"30\" value=\"".$info[5]."\"</td></tr>";
-	$tool_content .= "<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langDepartment: </th><td width=\"80%\">";
+	$tool_content .= "<tr><th>e-mail: </th><td width=\"80%\"><input type=\"text\" name=\"email\" size=\"50\" value=\"".$info[4]."\"</td></tr>
+	<tr><th>$langTel: </th><td width=\"80%\"><input type=\"text\" name=\"phone\" size=\"30\" value=\"".$info[5]."\"</td></tr>";
+	$tool_content .= "<tr><th>$langDepartment: </th><td width=\"80%\">";
 		if(!empty($info[6])) {
 			$department_select_box = list_departments($info[6]);
 		} else {
@@ -123,12 +123,10 @@ if(!in_array($info['password'], $authmethods)) {
 		}
 
 		$tool_content .= $department_select_box."</td></tr>";
-		$tool_content .= "<tr>
-			<th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langRegistrationDate: </th>
+		$tool_content .= "<tr><th>$langRegistrationDate: </th>
 			<td width=\"80%\"><span style=\"color:green;font-weight:bold;\">".date("j/n/Y H:i",$info[7])."</span></td></tr>
-			<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langExpirationDate: </th>
+			<tr><th>$langExpirationDate: </th>
 			<td width=\"80%\">";
-
 		$dateregistration = date("j-n-Y", $info[8]);
 		$hour = date("H", $info[8]);
 		$minute = date("i", $info[8]);
@@ -142,12 +140,12 @@ if(!in_array($info['password'], $authmethods)) {
                  'name' => 'date',
                  'value' => $dateregistration));
 
-		$tool_content .= $start_cal."&nbsp;&nbsp;&nbsp;";
-		$tool_content .= "<select name='hour'>
-        <option value='$hour'>$hour</option>
-        <option value='--'>--</option>";
+	$tool_content .= $start_cal."&nbsp;&nbsp;&nbsp;";
+	$tool_content .= "<select name='hour'>
+	        <option value='$hour'>$hour</option>
+        	<option value='--'>--</option>";
     for ($h=0; $h<=24; $h++)
-			 $tool_content .= "<option value='$h'>$h</option>";
+	$tool_content .= "<option value='$h'>$h</option>";
     $tool_content .= "</select>&nbsp;&nbsp;&nbsp;";
 	  $tool_content .= "<select name=\"minute\">
 	    <option value=\"$minute\">$minute</option>
@@ -157,7 +155,7 @@ if(!in_array($info['password'], $authmethods)) {
     $tool_content .= "</select></td>";
 
 	$tool_content .= "</tr>
-		<tr><th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"20%\">$langUserID: </th><td width=\"80%\">$u</td></tr>
+		<tr><th>$langUserID: </th><td width=\"80%\">$u</td></tr>
 		</table>
 		<br /><input type=\"hidden\" name=\"u\" value=\"".$u."\">
 		<input type=\"hidden\" name=\"u_submitted\" value=\"1\">
@@ -267,7 +265,7 @@ if (mysql_num_rows($username_check) > 1) {
 	    exit();
   }
 		if($registered_at>$expires_at) {
-				$tool_content .= "<center><br><b>$langExpireBeforeRegister<br><br><a href=\"edituser.php?u=".$u."\">$langAgain</a></b><br />";
+			$tool_content .= "<center><br><b>$langExpireBeforeRegister<br><br><a href=\"edituser.php?u=".$u."\">$langAgain</a></b><br />";
 		} else	{
 			if ($u=='1') $department = 'NULL';
 			$username = escapeSimple($username);

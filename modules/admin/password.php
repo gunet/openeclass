@@ -1,5 +1,5 @@
 <?PHP
-/**===========================================================================
+/*===========================================================================
 *              GUnet eClass 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -18,11 +18,11 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
-/**
+/*
  * Index
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -51,117 +51,57 @@ if (!isset($urlSecure)) {
 	$passurl = $urlSecure.'modules/admin/password.php';
 }
 
-if (isset($submit) && isset($changePass) && ($changePass == "do")) {
-
-	if (empty($_REQUEST['password_form']) || empty($_REQUEST['password_form1'])) {
-		header("location:". $passurl."?msg=3");
-		exit();
-	}
-
-	if ($_REQUEST['password_form1'] !== $_REQUEST['password_form']) {
-		header("location:". $passurl."?msg=1");
-		exit();
-	}
-
-	// check if passwd is too easy
-	$sql = "SELECT `nom`,`prenom` ,`username`,`email`,`am` FROM `user`WHERE `user_id`=".$_SESSION["uid"]." ";
-	$result = db_query($sql, $mysqlMainDb);
-	$myrow = mysql_fetch_array($result);
-
-	if ((strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['nom']))
-	|| (strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['prenom']))
-	|| (strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['username']))
-	|| (strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['email']))
-	|| (strtoupper($_REQUEST['password_form1']) == strtoupper($myrow['am']))) {
-		header("location:". $passurl."?msg=2");
-		exit();
-	}
-
-
-	//all checks ok. Change password!
-	$sql = "SELECT `password` FROM `user` WHERE `user_id`=".$_SESSION["uid"]." ";
-	$result = db_query($sql, $mysqlMainDb);
-	$myrow = mysql_fetch_array($result);
-	
-	$old_pass_db = $myrow['password'];
-	$new_pass = md5($_REQUEST['password_form']);
-
-	$sql = "UPDATE `user` SET `password` = '$new_pass' WHERE `user_id` = ".$_SESSION["uid"]."";
-	db_query($sql, $mysqlMainDb);
-	header("location:". $passurl."?msg=4");
-	exit();
-
-}
-
-//Show message if exists
-if(isset($msg))
-{
-
-	switch ($msg){
-		case 1: {//passwords do not match
-			$message = $langPassTwo;
-			$urlText = "";
-			$type = "caution";
-			break;
-		}
-
-		case 2: { //pass too easy
-			$message = $langPassTooEasy .": <strong>".substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8)."</strong>";
-			$urlText = "";
-			$type = "caution";
-			break;
-		}
-
-		case 3: { // admin tools
-			$message = $langFields;
-			$urlText = "";
-			$type = "caution";
-			break;
-		}
-
-		case 4: {//password successfully changed
-			$message = $langPassChanged;
-			$urlText = $langHome;
-			$type = "success";
-			break;
-		}
-		
-		default:die("invalid message id");
-	}
-
-	$tool_content .=  "
-			<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"$type\">$message<br><a href=\"$urlServer\">$urlText</a></td>
-					</tr>
-				</tbody>
-			</table><br/>";
-}
-
 if (!isset($changePass)) {
-	$tool_content .= "<form method=\"post\" action=\"$passurl?submit=yes&changePass=do\">
-    <table width=\"99%\">
-    <thead>
-    <tr><th width=\"150\">$langNewPass1</th><td>";
-
-	$tool_content .= "<input type=\"password\" size=\"40\" name=\"password_form\" value=\"\">
-					</td>
-		</tr>
-    <tr>
-        <th width=\"150\">
-            $langNewPass2
-        </th>
-        <td>       		
-            <input type=\"password\" size=\"40\" name=\"password_form1\" value=\"\">
+	$tool_content .= "<form method=\"post\" action=\"$passurl?submit=yes&changePass=do&userid=$userid\">
+    	<table width=\"99%\">
+    	<thead>
+    	<tr><th width=\"150\">$langNewPass1</th><td>";
+	$tool_content .= "<input type=\"password\" size=\"40\" name=\"password_form\" value=\"\"></td></tr>
+    	<tr>
+        <th width=\"150\">$langNewPass2</th>
+        <td><input type=\"password\" size=\"40\" name=\"password_form1\" value=\"\">
         </td>
     </tr>";
-	$tool_content .= "
-    </thead></table>
+	$tool_content .= "</thead></table>
     <br><input type=\"submit\" name=\"submit\" value=\"$langModify\">
-    </form>
-   ";
+    </form>";
+}
+
+elseif (isset($submit) && isset($changePass) && ($changePass == "do")) {
+	$userid = $_REQUEST['userid'];
+	if (empty($_REQUEST['password_form']) || empty($_REQUEST['password_form1'])) {
+		$tool_content .= mes($langFields, "", 'caution');
+		draw($tool_content, 3);
+		exit();
+	}
+	if ($_REQUEST['password_form1'] !== $_REQUEST['password_form']) {
+		$tool_content .= mes($langPassTwo, "", 'caution');
+		draw($tool_content, 3);
+		exit();
+	}	
+	//all checks ok. Change password!
+	$sql = "SELECT `password` FROM `user` WHERE `user_id`='$userid'";
+	$result = db_query($sql, $mysqlMainDb);
+	$myrow = mysql_fetch_array($result);
+	$old_pass_db = $myrow['password'];
+	$new_pass = md5($_REQUEST['password_form']);
+	$sql = "UPDATE `user` SET `password` = '$new_pass' WHERE `user_id` = '$userid'";
+	db_query($sql, $mysqlMainDb);
+	$tool_content .= mes($langPassChanged, $langHome, 'success');
+	draw($tool_content, 3);
+	exit();
 }
 
 draw($tool_content, 3);
+// display message
+function mes($message, $urlText, $type) {
+	global $urlServer, $langBack, $userid;
+
+ 	$str = "<table width='99%'><tbody>
+		<tr><td class='$type'>$message<br><a href='$urlServer'>$urlText</a></td></tr>
+		<tr><td align='center'><a href='$_SERVER[PHP_SELF]?userid=$userid'>$langBack</a></td></tr>
+		</tbody></table><br/>";
+	return $str;
+}
+
 ?>
