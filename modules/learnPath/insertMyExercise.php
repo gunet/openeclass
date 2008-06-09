@@ -70,6 +70,7 @@ $head_content = "";
 $tool_content = "";
 $dialogBox = "";
 $style = "";
+$MessBox = "";
 
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
 if (!$is_adminOfCourse) claro_die($langNotAllowed);
@@ -114,22 +115,18 @@ while ($listex = mysql_fetch_array($resultex) )
         $insertedExercise = $listex['id'];
 
         // check if a module of this course already used the same exercise
-        $sql = "SELECT *
-                FROM `".$TABLEMODULE."` AS M, `".$TABLEASSET."` AS A
+        $sql = "SELECT * FROM `".$TABLEMODULE."` AS M, `".$TABLEASSET."` AS A
                 WHERE A.`module_id` = M.`module_id`
                   AND A.`path` LIKE \"". (int)$insertedExercise."\"
                   AND M.`contentType` = \"".CTEXERCISE_."\"";
 
         $query = db_query($sql);
-
         $num = mysql_numrows($query);
 
         if($num == 0)
         {
             // select infos about added exercise
-            $sql = "SELECT *
-                    FROM `".$TABLEEXERCISES."`
-                    WHERE `id` = ". (int)$insertedExercise;
+            $sql = "SELECT * FROM `".$TABLEEXERCISES."` WHERE `id` = ". (int)$insertedExercise;
 
             $result = db_query($sql);
             $exercise = mysql_fetch_array($result);
@@ -146,7 +143,6 @@ while ($listex = mysql_fetch_array($resultex) )
                     (`name` , `comment`, `contentType`, `launch_data`)
                     VALUES ('".addslashes($exercise['titre'])."' , '".addslashes($comment)."', '".CTEXERCISE_."','')";
             $query = db_query($sql);
-
             $insertedExercice_id = mysql_insert_id();
 
             // create new asset
@@ -154,18 +150,14 @@ while ($listex = mysql_fetch_array($resultex) )
                     (`path` , `module_id` , `comment`)
                     VALUES ('". (int)$insertedExercise."', ". (int)$insertedExercice_id ." , '')";
             $query = db_query($sql);
-
             $insertedAsset_id = mysql_insert_id();
-
             $sql = "UPDATE `".$TABLEMODULE."`
                        SET `startAsset_id` = ". (int)$insertedAsset_id."
                      WHERE `module_id` = ". (int)$insertedExercice_id;
             $query = db_query($sql);
 
             // determine the default order of this Learning path
-            $result = db_query("SELECT MAX(`rank`)
-                                     FROM `".$TABLELEARNPATHMODULE."`");
-
+            $result = db_query("SELECT MAX(`rank`) FROM `".$TABLELEARNPATHMODULE."`");
             list($orderMax) = mysql_fetch_row($result);
             $order = $orderMax + 1;
             // finally : insert in learning path
@@ -200,13 +192,11 @@ while ($listex = mysql_fetch_array($resultex) )
             {
                 $thisExerciseModule = mysql_fetch_array($query);
                 // determine the default order of this Learning path
-                $sql = "SELECT MAX(`rank`)
-                        FROM `".$TABLELEARNPATHMODULE."`";
+                $sql = "SELECT MAX(`rank`) FROM `".$TABLELEARNPATHMODULE."`";
                 $result = db_query($sql);
 
                 list($orderMax) = mysql_fetch_row($result);
                 $order = $orderMax + 1;
-
                 // finally : insert in learning path
                 $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
                         (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`)
@@ -214,9 +204,7 @@ while ($listex = mysql_fetch_array($resultex) )
                 $query = db_query($sql);
 
                 // select infos about added exercise
-                $sql = "SELECT *
-                        FROM `".$TABLEEXERCISES."`
-                        WHERE `id` = ". (int)$insertedExercise;
+                $sql = "SELECT * FROM `".$TABLEEXERCISES."` WHERE `id` = ". (int)$insertedExercise;
 
                 $result = db_query($sql);
                 $exercise = mysql_fetch_array($result);

@@ -597,8 +597,7 @@ $langDocsDeleted="Documents deleted";
 * create_course.inc.php
 ************************************************************/
 
-$langCreateSite="Create course";
-$langCreate = "Create course";
+$langCreate = "Create";
 $langFieldsRequ="All fields required";
 $langFieldsOptional = "Optional fields";
 $langFieldsOptionalNote = "note: you can change anything you wish later";
@@ -3177,7 +3176,7 @@ $langNEndDeadLine = "(Deadline is today)";
 $langDays = "days)";
 $langDaysLeft = "(left";
 $langGrades = "The grades were assigned successfully!";
-$langUpload = "Upload succesfull !";
+$langUpload = "Upload";
 $langUploadError = "An error occured during uploading!";
 $langWorkGrade = "Assignment grade";
 $langGradeComments = "Grade comments were:";

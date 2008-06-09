@@ -623,7 +623,6 @@ $langDocsDeleted="Τα έγγραφα απενεργοποιήθηκαν";
 * create_course.inc.php
 *****************************************************/
 $langDescrInfo="Σύντομη περιγραφή του μαθήματος";
-$langCreateSite="Δημιουργία ενός μαθήματος";
 $langFieldsRequ="Όλα τα πεδία είναι υποχρεωτικά!";
 $langFieldsOptional = "Προαιρετικά πεδία";
 $langFieldsOptionalNote = "Σημ. μπορείτε να αλλάξετε οποιεσδήποτε από τις πληροφορίες αργότερα";
@@ -1346,7 +1345,6 @@ $langInstallEnd 	= "Ολοκλήρωση Εγκατάστασης";
 * learnpath.inc.php
 *********************************************************/
 $langAddComment = "Προσθήκη / αλλαγή σχολίου";
-$langAddModule = "Προσθήκη";
 $langLearningModule = "Ενότητα";
 $langLearningObjects = "Εκπαιδευτικά Αντικείμενα";
 $langLearningObjectsInUse = "Εκπαιδευτικά Αντικείμενα σε χρήση";

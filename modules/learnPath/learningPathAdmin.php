@@ -480,7 +480,7 @@ $tool_content .="
 $tool_content .="
     <tr>
       <th class=\"left\" height=\"32\">$langLearningObjects :</th>
-      <td class=\"right\">$langAddModule :";
+      <td class=\"right\">$langAdd :";
 
 $tool_content .= " <a href=\"insertMyDoc.php\" title=\"$langDocumentAsModule\">".$langDocumentAsModuleLabel."</a> | <a href=\"insertMyExercise.php\" title=\"$langExerciseAsModule\">".$langExerciseAsModuleLabel."</a> | <a href=\"insertMyLink.php\" title=\"$langLinkAsModule\">".$langLinkAsModuleLabel."</a> | <a href=\"insertMyDescription.php\" title=\"$langCourseDescriptionAsModule\">".$langCourseDescriptionAsModuleLabel."</a> | <a href=\"insertMyModule.php\" title=\"$langModuleOfMyCourse\">".$langModuleOfMyCourseLabel."</a>";
 

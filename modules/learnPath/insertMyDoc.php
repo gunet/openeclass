@@ -57,9 +57,7 @@ $TABLEMODULE            = "lp_module";
 $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
-
 $imgRepositoryWeb       = "../../template/classic/img/";
-
 $dbTable                = "document";
 $TABLEDOCUMENT          = "document";
 
@@ -69,7 +67,7 @@ $pwd = getcwd();
 
 $courseDir   = "courses/".$currentCourseID."/document";
 $baseWorkDir = $webDir.$courseDir;
-
+$InfoBox = "";
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
 if (!$is_adminOfCourse) claro_die($langNotAllowed);
 $navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
