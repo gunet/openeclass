@@ -33,7 +33,7 @@ a:visited.invisible
     border-top: 1px solid #a33033;
     border-bottom: 1px solid #a33033;
 	border-left: 1px solid #CAC3B5;
-	border-right: 1px solid #CAC3B5;
+	border-right: 1px #000000 solid;
 }
 
 .Group_Operations td{
