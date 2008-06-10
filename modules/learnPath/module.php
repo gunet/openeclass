@@ -69,15 +69,15 @@ $tool_content = "";
 $head_content = "";
 $body_action = "";
 
-$nameTools = $langModule;
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
+$nameTools = $langLearningObject;
+$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
 if ($is_adminOfCourse)
 {
-    $navigation[]= array ("url"=>"learningPathAdmin.php", "name"=> $langLearningPath);
+    $navigation[]= array ("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
 }
 else
 {
-    $navigation[]= array ("url"=>"learningPath.php", "name"=> $langLearningPath);
+    $navigation[]= array ("url"=>"learningPath.php", "name"=> $langNomPageAdmin);
 }
 
 //back button
@@ -183,6 +183,15 @@ $sql = "SELECT `contentType`,
              ";
 $resultBrowsed = db_query_get_single_row($sql);
 
+        if ($module['contentType']== CTSCORM_ ) { $nameTools = $langSCORMTypeDesc; }
+        if ($module['contentType']== CTEXERCISE_ ) { $nameTools = $langExerciseAsModuleLabel; }
+        if ($module['contentType']== CTDOCUMENT_ ) { $nameTools = $langDocumentAsModuleLabel; }
+        if ($module['contentType']== CTLINK_ ) { $nameTools = $langLinkAsModuleLabel; }
+        if ($module['contentType']== CTCOURSE_DESCRIPTION_ ) { $nameTools = $langCourseDescriptionAsModuleLabel; }
+        if ($module['contentType']== CTLABEL_ ) { $nameTools = $langModuleOfMyCourseLabel; }
+
+
+
 // redirect user to the path browser if needed
 if( !$is_adminOfCourse
 	&& ( !is_array($resultBrowsed) || !$resultBrowsed || count($resultBrowsed) <= 0 )
@@ -256,6 +265,7 @@ $tool_content .= "<br />";
 
 if($module['contentType'] != CTLABEL_) //
 {
+
     if( $resultBrowsed && count($resultBrowsed) > 0 && $module['contentType'] != CTLABEL_)
     {
         $contentType_img = selectImage($resultBrowsed['contentType']);
@@ -266,6 +276,7 @@ if($module['contentType'] != CTLABEL_) //
         if ($resultBrowsed['contentType']== CTDOCUMENT_ ) { $contentDescType = $langDOCUMENTTypeDesc; }
         if ($resultBrowsed['contentType']== CTLINK_ ) { $contentDescType = $langLINKTypeDesc; }
         if ($resultBrowsed['contentType']== CTCOURSE_DESCRIPTION_ ) { $contentDescType = $langDescriptionCours; }
+
 
 		$tool_content .= '<br /><center><strong>'.$langProgInModuleTitle.'</strong></center><br />'."\n\n"
 			.'<table align="center">'."\n"
@@ -350,6 +361,7 @@ if($module['contentType'] != CTLABEL_) //
         else {
             $statusToDisplay = $resultBrowsed['lesson_status'];
         }
+
 		$tool_content .= '<tr>'."\n"
 			.'<td>'.$langLessonStatus.'</td>'."\n"
 			.'<td>'.$statusToDisplay.'</td>'."\n"

@@ -371,13 +371,12 @@ $tool_content .="
     <table width=\"99%\" class=\"FormData\">
     <tbody>
     <tr>
-      <th width=\"100\"class=\"left\" height=\"32\"></th>
+      <th width=\"100\" class=\"left\" height=\"32\"></th>
       <td class=\"left\"><b>$langLearningPathData</b></td>
     </tr>";
 
 
 //############################ LEARNING PATH NAME BOX ################################\\
-
 $tool_content .="
     <tr>
       <th class=\"left\" height=\"32\">$langTitle :</th>";
@@ -397,8 +396,10 @@ $tool_content .= "
     </tr>";
 
 //############################ LEARNING PATH COMMENT BOX #############################\\
-$tool_content .="<tr><th class=\"left\" height=\"32\">$langComments :</th><td class=\"left\">";
-
+$tool_content .="
+    <tr>
+      <th class=\"left\" height=\"32\">$langComments :</th>
+      <td class=\"left\">";
 if ($cmd == "updatecomment")
 {
     $tool_content .= commentBox(LEARNINGPATH_, UPDATE_);
@@ -410,7 +411,9 @@ if ($cmd == "updatecomment")
     $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 }
 
-$tool_content .="</td></tr>";
+$tool_content .="
+      </td>
+    </tr>";
 $tool_content .="
     <tr>
       <td colspan=\"2\">&nbsp;</td>
@@ -442,17 +445,19 @@ if (isset($displayCreateLabelForm) && $displayCreateLabelForm)
 if (isset($displayChangePosForm) && $displayChangePosForm)
 {
     $dialogBox = "
-    <form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">
-    <p>
-       <strong>".$langMove." ' ".$moduleInfos['name']." ' ".$langTo."</strong>&nbsp;";
+    <tr>
+      <th class=\"left\" height=\"32\">".$langMove." :</th>
+      <td class=\"right\">
+        <form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">\"<b>".$moduleInfos['name']."</b>\" &nbsp;".$langTo.":&nbsp;&nbsp;";
     // build select input - $elementList has been declared in the previous big cmd case
     $dialogBox .= claro_build_nested_select_menu("newPos",$elementList);
     $dialogBox .= "
-       <input type=\"hidden\" name=\"cmd\" value=\"changePos\" />
-       <input type=\"hidden\" name=\"cmdid\" value=\"".$_REQUEST['cmdid']."\" />
-       <input type=\"submit\" value=\"".$langOk."\" />
-    </p>
-    </form>";
+         <input type=\"hidden\" name=\"cmd\" value=\"changePos\" />
+         <input type=\"hidden\" name=\"cmdid\" value=\"".$_REQUEST['cmdid']."\" />
+         <input type=\"submit\" value=\"".$langOk."\" />
+        </form>
+      </td>
+    </tr>";
 }
 
 //####################################################################################\\
@@ -461,8 +466,8 @@ if (isset($displayChangePosForm) && $displayChangePosForm)
 
 if (isset($dialogBox) && $dialogBox!="")
 {
-    $tool_content .= claro_disp_message_box($dialogBox);
-    $tool_content .= "<br />";
+    $tool_content .= $dialogBox;
+    //$tool_content .= "<br />";
 }
 
 
@@ -484,7 +489,10 @@ $tool_content .="
 
 $tool_content .= " <a href=\"insertMyDoc.php\" title=\"$langDocumentAsModule\">".$langDocumentAsModuleLabel."</a> | <a href=\"insertMyExercise.php\" title=\"$langExerciseAsModule\">".$langExerciseAsModuleLabel."</a> | <a href=\"insertMyLink.php\" title=\"$langLinkAsModule\">".$langLinkAsModuleLabel."</a> | <a href=\"insertMyDescription.php\" title=\"$langCourseDescriptionAsModule\">".$langCourseDescriptionAsModuleLabel."</a> | <a href=\"insertMyModule.php\" title=\"$langModuleOfMyCourse\">".$langModuleOfMyCourseLabel."</a>";
 
-$tool_content .="</td></tr><tr>
+$tool_content .="
+       </td>
+    </tr>
+    <tr>
      <th class=\"left\" height=\"32\" valign=\"top\">$langLearningPathStructure :</th>
      <td class=\"left\">";
 

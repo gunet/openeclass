@@ -187,9 +187,9 @@ function commentBox($type, $mode)
 
             $output .= '
       <form method="POST" action="'.$_SERVER['PHP_SELF'].'">' . "\n"
-                .claro_disp_html_area('insertCommentBox', $oldComment, 4, 50) . "\n"
-                .'<input type="hidden" name="cmd" value="update' . $col_name . '" />'
-                .'<input type="submit" value="' . $langOk . '" />' . "\n"
+                .claro_disp_html_area('insertCommentBox', $oldComment, 1, 50) . "\n"
+                .'        <input type="hidden" name="cmd" value="update' . $col_name . '" />' . "\n"
+                .'        <input type="submit" value="' . $langOk . '" />' . "\n"
                 .'      </form>' . "\n"
             ;
         }
@@ -985,7 +985,10 @@ function display_my_documents($dialogBox, $style)
             {
                 $iterator++;
                 $output .= '
-      <td><input type="checkbox" name="insertDocument_' . $iterator . '" id="insertDocument_' . $iterator . '" value="' . $curDirPath . "/" . $fileName . '" /><input type="hidden" name="filenameDocument_' . $iterator . '" id="filenameDocument_' . $iterator . '" value="' .$dspFileName .'" /></td>';
+      <td>
+        <input type="checkbox" name="insertDocument_' . $iterator . '" id="insertDocument_' . $iterator . '" value="' . $curDirPath . "/" . $fileName . '" />
+        <input type="hidden" name="filenameDocument_' . $iterator . '" id="filenameDocument_' . $iterator . '" value="' .$dspFileName .'" />
+      </td>';
             }
             else
             {
@@ -1830,7 +1833,7 @@ function claro_disp_progress_bar ($progress, $factor)
 //                              </style>';
 
 function claro_disp_html_area($name, $content = '',
-                              $rows=5,    $cols=50, $optAttrib='')
+                              $rows=5, $cols=50, $optAttrib='')
 {
     global $langTextEditorDisable, $langTextEditorEnable,$langSwitchEditorToTextConfirm;
     global $urlAppend;

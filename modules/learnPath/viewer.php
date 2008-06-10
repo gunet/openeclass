@@ -1,24 +1,24 @@
 <?php
 /*=============================================================================
-       	GUnet eClass 2.0 
-        E-learning and Course Management Program  
+       	GUnet eClass 2.0
+        E-learning and Course Management Program
 ================================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
         A full copyright notice can be read in "/info/copyright.txt".
-        
-       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-                     Yannis Exidaridis <jexi@noc.uoa.gr> 
-                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
-        For a full list of contributors, see "credits.txt".  
-     
-        This program is a free software under the terms of the GNU 
-        (General Public License) as published by the Free Software 
-        Foundation. See the GNU License for more details. 
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+                     Yannis Exidaridis <jexi@noc.uoa.gr>
+                     Alexandros Diamantidis <adia@noc.uoa.gr>
+
+        For a full list of contributors, see "credits.txt".
+
+        This program is a free software under the terms of the GNU
+        (General Public License) as published by the Free Software
+        Foundation. See the GNU License for more details.
         The full license can be read in "license.txt".
-     
-       	Contact address: GUnet Asynchronous Teleteaching Group, 
-        Network Operations Center, University of Athens, 
+
+       	Contact address: GUnet Asynchronous Teleteaching Group,
+        Network Operations Center, University of Athens,
         Panepistimiopolis Ilissia, 15784, Athens, Greece
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
@@ -27,21 +27,21 @@
 	viewer.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.7 licensed under GPL
 	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: navigation/viewer.php Revision: 1.15
-	      
+
 	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
                       Lederer Guillaume <led@cerdecam.be>
-==============================================================================        
-    @Description: This is the main navigation script for browsing a 
+==============================================================================
+    @Description: This is the main navigation script for browsing a
                   learning path. It handles the frames.
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
 
@@ -59,8 +59,8 @@ define ('FULL_SCREEN' , 0);
 $l = db_query("SELECT name FROM lp_learnPath WHERE learnPath_id = '".(int)$_SESSION['path_id']."'", $currentCourseID);
 $lpname = mysql_fetch_array($l);
 $nameTools = $lpname['name'];
-$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPathList);
-$navigation[] = array("url"=>"learningPath.php", "name"=> $langLearningPath);
+$navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
+$navigation[] = array("url"=>"learningPath.php", "name"=> $langNomPageAdmin);
 
 
 if (!isset($titlePage)) $titlePage = '';
@@ -86,7 +86,7 @@ else
     $displayFull = FULL_SCREEN;
 }
 
-if ($displayFull == 0) 
+if ($displayFull == 0)
 {
 	$tool_content .= "<iframe src=\"navigation/startModule.php\" name=\"mainFrame\" "
 		."width=\"99%\" height=\"550\" scrolling=\"no\" frameborder=\"0\">"
