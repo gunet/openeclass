@@ -51,7 +51,7 @@ $head_content = '
 <script>
 function confirmation ()
 {
-    if (confirm("'.$langDeleteConfirmation.'"))
+    if (confirm("'.$langConfirmDelete.'"))
         {return true;}
     else
         {return false;}
@@ -65,15 +65,15 @@ if (isset($visibility)) {
 // activate / dectivate surveys
 /*
 		case 'sactivate':
-					$sql = "UPDATE survey SET active='1' WHERE sid='".mysql_real_escape_string($_GET['sid'])."'";
-					$result = db_query($sql,$currentCourseID);
-					$GLOBALS["tool_content"] .= $GLOBALS["langSurveyActivated"];
-					break;
+		$sql = "UPDATE survey SET active='1' WHERE sid='".mysql_real_escape_string($_GET['sid'])."'";
+		$result = db_query($sql,$currentCourseID);
+		$GLOBALS["tool_content"] .= $GLOBALS["langSurveyActivated"];
+			break;
 		case 'sdeactivate':
-						$sql = "UPDATE survey SET active='0' WHERE sid='".mysql_real_escape_string($_GET['sid'])."'";
-						$result = db_query($sql,$currentCourseID);
-						$GLOBALS["tool_content"] .= $GLOBALS["langSurveyDeactivated"];
-					break;
+			$sql = "UPDATE survey SET active='0' WHERE sid='".mysql_real_escape_string($_GET['sid'])."'";
+				$result = db_query($sql,$currentCourseID);
+				$GLOBALS["tool_content"] .= $GLOBALS["langSurveyDeactivated"];
+			break;
 */
 // activate / dectivate polls
 		case 'activate':  
