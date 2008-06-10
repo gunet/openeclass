@@ -42,11 +42,9 @@
 $require_admin = TRUE;
 // Include baseTheme
 include '../../include/baseTheme.php';
-
 // Define $nameTools
 $nameTools = $langStat4eClass;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
-
 // Initialise $tool_content
 $tool_content = "";
 
@@ -108,14 +106,14 @@ $tool_content .= "<table border='0' width=90% align=center cellspacing='0' cellp
         <table width=100% align=center border=0 cellspacing='0' cellpadding='0'>
         <tr><td valign=top width=49% align=center>
      <table border='0' width='75%' border=1 align=center cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
-      <tr><td  style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langCourses :</td></tr>
+      <tr><td style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langCourses :</td></tr>
      <tr>
       <td class='stat2'>$langNumCourses : <b>".list_1Result("select count(*) from cours;")."</b></td>
     </tr></table>
 
       <br>
     <table border='0' width='75%' border=1 align=center cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
-     <tr><td  style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langNumEachCourse :</td></tr>
+     <tr><td style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langNumEachCourse :</td></tr>
     <tr>
    <td class='stat2'>".tablize(list_ManyResult("select DISTINCT faculte, count(*) from cours Group by faculte"), $language)."</td>
        </tr>
@@ -135,9 +133,7 @@ $tool_content .= "<br><table border='0' align=center width='75%' cellspacing='0'
   <td class='stat2'>".tablize(list_ManyResult("select DISTINCT visible, count(*) from cours GROUP BY visible "), $language)."</td>
         </tr>
         </table>
-
         <br>
-
   <table border='0' align=center width='75%' cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
         <tr>
           <td style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langNumEachCat :</td>
@@ -164,7 +160,6 @@ $tool_content .= "<table width='75%' border=1 align=center cellspacing='0' cellp
  <td class='stat2'>".tablize(list_ManyResult("select CONCAT(code_cours,\" Statut :\",statut), count(user_id) from cours_user GROUP BY code_cours, statut order by code_cours"), $language)."</td>
         </tr></table>
 </td></tr></table>";
-
 
 $tool_content .= " </td></tr>
 <tr><td class='stat2'>&nbsp;</td></tr></table>";
@@ -217,8 +212,7 @@ else
 $tool_content .= "</td></tr></table>";
 $tool_content .=  "</td></tr>";
 
-$sqlLoginDouble = "select DISTINCT CONCAT(username, \" -- \", password) as paire, count(*) as nb from user group by paire 
-					HAVING nb > 1 order by nb desc";
+$sqlLoginDouble = "select DISTINCT CONCAT(username, \" -- \", password) as paire, count(*) as nb from user group by paire HAVING nb > 1 order by nb desc";
 $loginDouble = list_ManyResult($sqlLoginDouble);
 
 $tool_content .= "<tr><td>

@@ -145,8 +145,6 @@ $telephone="'.$_POST['formtelephone'].'";
 $emailhelpdesk="'.$_POST['formemailhelpdesk'].'";
 $Institution="'.$_POST['formInstitution'].'";
 $InstitutionUrl="'.$_POST['formInstitutionUrl'].'";
-$color1="'.$_POST['formcolor1'].'"; // light grey
-$color2="'.$_POST['formcolor2'].'"; // less light grey for bicolored tables
 
 // available: greek and english
 $language = "'.$_POST['formlanguage'].'";
@@ -155,7 +153,6 @@ $postaddress = "'.$_POST['formpostaddress'].'";
 $fax = "'.$_POST['formfax'].'";
 $have_latex = '.$latex.';
 
-$table_border = "'.$_POST['formtableborder'].'";
 $close_user_registration = '.$user_reg.';
 $encryptedPasswd = "true";
 $persoIsActive = "'.$_POST['formpersoIsActive'].'";
@@ -272,15 +269,7 @@ $tool_content .= " <tr>
     <td width=\"3%\" nowrap><b>\$InstitutionUrl:</b></td>
     <td><input type=\"text\" name=\"formInstitutionUrl\" size=\"40\" value=\"".$InstitutionUrl."\"></td>
 </tr>";
-	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>\$color1:</b></td>
-    <td><input type=\"text\" name=\"formcolor1\" size=\"40\" value=\"".$color1."\"></td>
-</tr>";
-	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>\$color2:</b></td>
-    <td><input type=\"text\" name=\"formcolor2\" size=\"40\" value=\"".$color2."\"></td>
-</tr>";
-	$tool_content .= "  <tr>
+	$tool_content .= "<tr>
     <td colspan=\"2\"><hr></td>
   </tr>";
 	if ($language=="greek") {
@@ -296,13 +285,6 @@ $tool_content .= " <tr>
       <option value=\"greek\" ".$grSel.">greek</option>
       <option value=\"english\" ".$enSel.">english</option>
     </select></td>
-</tr>";
-	$tool_content .= "  <tr>
-    <td colspan=\"2\"><hr></td>
-  </tr>";
-$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>\$table_border:</b></td>
-    <td><input type=\"text\" name=\"formtableborder\" size=\"40\" value=\"".$table_border."\"></td>
 </tr>";
 	$tool_content .= "  <tr>
     <td colspan=\"2\"><hr></td>

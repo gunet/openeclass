@@ -115,9 +115,6 @@ if (!isset($submit2)) {
         }
 
         // for upgrading 1.5 --> 1.7
-        if (!strstr($conf, '$table_border')) {
-                $lines_to_add .= "\$table_border = '#DCDCDC';\n";
-        }
         if (!strstr($conf, '$postaddress')) {
                 $lines_to_add .= "\$postaddress = '$_POST[postaddress]';\n";
         }
