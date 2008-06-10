@@ -2459,7 +2459,8 @@ $langTryAgain = "Try Again!";
 /************************************************
 * restore_course.inc.php
 *************************************************/
-
+$langFirstMethod = "First WayMethod";
+$langSecondMethod = "Second Way";
 $langAdmin = "Administration Tools";
 $langRequest1 = "Click on \"Browse\" to search for the backup file of the course
 	you want to restore. Then click on \"Submit\".";

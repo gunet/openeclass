@@ -5,32 +5,28 @@ include '../../include/lib/fileUploadLib.inc.php';
 include '../../include/lib/fileManageLib.inc.php';
 include '../../include/pclzip/pclzip.lib.php';
 $nameTools = $langRestoreCourse;
-$navigation[] = array("url" => "../admin/index.php", "name" => "Εργαλεία Διαχείρισης Πλατφόρμας");
+$navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 
 // Initialise $tool_content
 $tool_content = "";
 // Main body
 
 if (isset($send_archive) and $_FILES['archiveZipped']['size'] > 0) {
-
 	$tool_content .= "<table width=\"99%\"><caption>".$langFileSent."</caption><tbody>
-<tr><td width=\"3%\"nowrap>$langFileSentName</td><td>".$_FILES['archiveZipped']['name']."</td></tr>
-<tr><td width=\"3%\"nowrap>$langFileSentSize</td><td>".$_FILES['archiveZipped']['size']."</td></tr>
-<tr><td width=\"3%\"nowrap>$langFileSentType</td><td>".$_FILES['archiveZipped']['type']."</td></tr>
-<tr><td width=\"3%\"nowrap>$langFileSentTName</td><td>".$_FILES['archiveZipped']['tmp_name']."</td></tr>	
-	";
+	<tr><td width=\"3%\"nowrap>$langFileSentName</td><td>".$_FILES['archiveZipped']['name']."</td></tr>
+	<tr><td width=\"3%\"nowrap>$langFileSentSize</td><td>".$_FILES['archiveZipped']['size']."</td></tr>
+	<tr><td width=\"3%\"nowrap>$langFileSentType</td><td>".$_FILES['archiveZipped']['type']."</td></tr><tr>
+	<td width=\"3%\"nowrap>$langFileSentTName</td><td>".$_FILES['archiveZipped']['tmp_name']."</td></tr>";
 	$tool_content .= "<tbody></table><br>";
-
-		$tool_content .= "<table width=\"99%\"><caption>".$langFileUnzipping."</caption><tbody>";
-		$tool_content .= "<tr><td>".unpack_zip_show_files($archiveZipped)."</td></tr>";
-		$tool_content .= "<tbody></table><br>";
+	$tool_content .= "<table width=\"99%\"><caption>".$langFileUnzipping."</caption><tbody>";
+	$tool_content .= "<tr><td>".unpack_zip_show_files($archiveZipped)."</td></tr>";
+	$tool_content .= "<tbody></table><br>";
 }
 elseif (isset($create_dir_for_course)) {
 	/* 3° Try to create course with data uploaded
               If course already exists -> merge or rename
 	 */
 	$r = $restoreThis."/html";
-
 	$course_code = create_course($course_code, $course_lang, $course_title,
 		$course_desc, $course_fac, $course_vis, $course_prof, $course_type);
 	move_dir($r, "$webDir/courses/$course_code");
@@ -44,8 +40,10 @@ elseif (isset($create_dir_for_course)) {
 	$tool_content .= ob_get_contents();
 	ob_end_clean();
 	$tool_content .= "</p>";
-	@mkdir("../../courses/garbage");
-	@mkdir("../../courses/garbage/tmpUnzipping");
+	if (!file_exists("../../courses/garbage"))
+		mkdir("../../courses/garbage");
+	if (!file_exists("../../courses/garbage/tmpUnzipping"))
+		mkdir("../../courses/garbage/tmpUnzipping");
 	rename("../../courses/tmpUnzipping", "../../courses/garbage/tmpUnzipping/".time()."");
 	$tool_content .= "<br><center><p><a href=\"../admin/index.php\">Επιστροφή</p></center>";
 }
@@ -70,13 +68,13 @@ elseif (isset($pathOf4path)) {
 	ob_end_clean();
 
 } else {
-	$tool_content .= "<table width=\"99%\"><caption>1ος Τρόπος</caption><tbody>
+	$tool_content .= "<table width=\"99%\"><caption>$langFirstMethod</caption><tbody>
 	<tr><td>$langRequest1<br><br><form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" name=\"sendZip\"  enctype=\"multipart/form-data\">
 	<input type=\"file\" name=\"archiveZipped\" >
 	<input type=\"submit\" name=\"send_archive\" value=\"".$langSend."\">
 </form></td></tr>
 	</tbody></table><br>";
-	$tool_content .= "<table width=\"99%\"><caption>2ος Τρόπος</caption><tbody>
+	$tool_content .= "<table width=\"99%\"><caption>$langSecondMethod</caption><tbody>
 	<tr><td>$langRequest2<br><br><form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" name=\"sendPath\"  enctype=\"multipart/form-data\">
 	<input type=\"text\" name=\"pathToArchive\">
 	<input type=\"submit\" name=\"send_path\" value=\"".$langSend."\">
@@ -101,7 +99,7 @@ draw($tool_content,3, 'admin');
 //				if no -> add user
 //		6.4.2 add link in course_user
 
-/**
+/*
  * to create missing directory in a gived path
  *
  * @returns a resource identifier or FALSE if the query was not executed correctly. 
@@ -111,80 +109,26 @@ draw($tool_content,3, 'admin');
  * @param sting		$path 		wanted path 
  * @param boolean	$verbose	fix if comments must be printed
  */
-function mkpath($path, $verbose = FALSE)  {
-	Global $langCreatedIn;
+function mkpath($path)  {
+	
+	global $langCreatedIn;
+
 	$path = str_replace("/","\\",$path);
 	$dirs = explode("\\",$path);
 	$path = $dirs[0];
-	if ($verbose)
-		echo "<ul>";
 	for($i = 1;$i < count($dirs);$i++) 
 	{
 		$path .= "/".$dirs[$i];
 		if(!is_dir($path))
 		{
-			if (mkdir($path, 0770))
-			{
-				if ($verbose)
-					echo "
-				<li>
-					<strong>
-						".basename($path)."
-					</strong>
-					<br>
-				 	".$langCreatedIn." 
-					<br>
-				 	<strong>
-						".realpath($path."/..")."
-					</strong>";
-			}
-			else
-			{
-				if ($verbose)
-					echo "
-				</ul>
-				error : ".$path." not created";
-			}
+			mkdir($path, 0770);
 		}
 	}
-	if ($verbose)
-		echo "</ul>";
 }
-
-
-function listDir($dirname,$recursive=false) {
-	if  (!isset($dirname))
-		exit (1);
-	$dirname = realpath($dirname);
-	if($dirname[strlen($dirname)-1]!='/')
-		$dirname.='/';
-	$handle = opendir($dirname);
-	echo "<ul>";
-	while ($entries = readdir($handle)) {
-		if ($entries=='.'||$entries=='..'||$entries=='CVS')
-			continue;
-		if (is_dir($dirname.$entries) )
-		{
-			echo "<li><strong>".$entries."</strong>";
-			if ($recursive)
-				listDir($dirname.$entries,$recursive);
-			echo "</li>";
-		}
-		else
-		{
-			echo "<li>".$entries."</li>";
-		}
-	}	
-	echo "</ul>";
-	closedir($handle);
-	
-}
-
 
 
 // Functions  restoring
 // Displaying Form
-
 
 function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 	global $action, $restoreThis, $langNameOfLang;
@@ -241,7 +185,6 @@ function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) 
 }
 
 // inserting announcements into the main database
-
 function announcement ($text, $date, $order) {
 	global $action, $course_code, $mysqlMainDb;
 	if (!$action) return;
@@ -415,8 +358,6 @@ function assignment_submit($userid, $assignment_id, $submission_date,
 		 join(", ", $values). ")");
 }
 
-
-
 // creating course and inserting entries into the main database
 
 function create_course($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
@@ -561,10 +502,8 @@ function unpack_zip_show_files($zipfile)
 		</li>";
 	}
 	closedir($handle);
-	$retString .= "</ol>\n";
-	
+	$retString .= "</ol>\n";	
 	chdir($webDir."modules/course_info");
 	return $retString;
 }
-
 ?>

@@ -86,7 +86,7 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != "") && ($_POST['submit'] 
 
 $langManager $siteName
 $administratorName $administratorSurname
-Ôçë. $telephone
+$langTel $telephone
 $langEmail : $emailAdministrator
 ";
 		if (!send_mail($siteName, $emailAdministrator, '', $to,
@@ -105,8 +105,9 @@ else {
 <textarea name=\"body_mail\" rows=\"10\" cols=\"60\"></textarea>
 <br><br>
 $langSendMessageTo <select name=\"sendTo\">
+<option value=\"1\">".$langProfOnly."</option>
 <option value=\"0\">".$langToAllUsers."</option>
-<option value=\"1\">".$langProfOnly."</option></select><br><br>
+</select><br><br>
 <input type=\"submit\" name=\"submit\" value=\"$langSend\"></input>
 </form></td></tr></tbody></table>";
 

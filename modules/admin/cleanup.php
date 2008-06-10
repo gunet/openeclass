@@ -12,8 +12,7 @@ $tool_content = "";
 $tool_content .= "<table width=99% border='0' height=316 cellspacing='0' align=center cellpadding='0'>\n";
 $tool_content .= "<tr>\n";
 $tool_content .= "<td valign=top>\n";
-$tool_content .= "<table width='96%' align='center' class='admin'>
-							   <tr><td valign=top><br>";
+$tool_content .= "<table width='96%' align='center' class='admin'><tr><td valign=top><br>";
 
 if (isset($_POST['submit'])) {
 	foreach (array('temp' => 2, 'garbage' => 5, 'archive' => 1, 'tmpUnzipping' => 1) as $dir => $days) {
@@ -23,14 +22,13 @@ if (isset($_POST['submit'])) {
 	}
 } else {
 	$tool_content .= "<p class=kk>$langCleanupInfo,</p><br><div align=center>";
-	$tool_content .= "<form method='post' action='cleanup.php'>
-			<input type='submit' name='submit' value='$langCleanup'></div></form>";
+	$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]'>
+	<input type='submit' name='submit' value='$langCleanup'></div></form>";
 }
 
 $tool_content .= "</td></tr><tr><td align=right>";
 $tool_content .= "<a href=\"index.php\" class=mainpage>$langBackAdmin&nbsp;</a>";
 $tool_content .= "</td></tr></table></td></tr></table>";
-
 
 /*****************************************************************************
                 DISPLAY HTML
