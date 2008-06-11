@@ -65,7 +65,7 @@ $tool_content .= "<td valign=top>
      <td valign=top>
      <table width=90% align=center border=0 cellspacing='0' cellpadding='0'>
      <tr><td valign=top width=49%>
- <table border='0' width=100% align=center cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
+ <table border='0' width=100% align=center cellspacing='0' cellpadding='1'>
     <tr><td class='stat1' colspan='3'>$langNbLogin</td></tr>
    <tr>
   <td class='stat2'>$langFrom ".list_1Result("select loginout.when from loginout order by loginout.when limit 1").": </td>
@@ -81,7 +81,7 @@ list_1Result("select count(*) from loginout where loginout.action ='LOGIN'")."</
 </table>
 </td><td width=2%>&nbsp;</td>";
 
-$tool_content .= "<td valign=top width=49%><table border='0' width=100% align=center cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
+$tool_content .= "<td valign=top width=49%><table border='0' width=100% align=center cellspacing='0' cellpadding='1'> 
  <tr><td class='stat1' colspan='3'>$langNumUsers</td></tr>
  <tr>
  <td class='stat2'>$langNbProf :</td><td class='stat2' align=right width='25%'>
@@ -95,9 +95,8 @@ $tool_content .= "<td valign=top width=49%><table border='0' width=100% align=ce
   <tr><td class='stat2' colspan=3>&nbsp;</td></tr></table>
   </td></tr></table>";
 
-          
 // Constract some tables with statistical information
-$tool_content .= "<table border='0' width=90% align=center cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
+$tool_content .= "<table border='0' width=90% align=center cellspacing='0' cellpadding='1'>
  <tr><td class='stat1' colspan='2'>$langStatCour</td>
  </tr>
    <tr><td class='stat2'>&nbsp;</td></tr>
@@ -105,27 +104,27 @@ $tool_content .= "<table border='0' width=90% align=center cellspacing='0' cellp
       <td class='stat2' valign=top>
         <table width=100% align=center border=0 cellspacing='0' cellpadding='0'>
         <tr><td valign=top width=49% align=center>
-     <table border='0' width='75%' border=1 align=center cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
+     <table border='0' width='75%' border=1 align=center cellspacing='0' cellpadding='1'>
       <tr><td style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langCourses :</td></tr>
      <tr>
       <td class='stat2'>$langNumCourses : <b>".list_1Result("select count(*) from cours;")."</b></td>
     </tr></table>
 
       <br>
-    <table border='0' width='75%' border=1 align=center cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
+    <table border='0' width='75%' border=1 align=center cellspacing='0' cellpadding='1'>
      <tr><td style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langNumEachCourse :</td></tr>
     <tr>
    <td class='stat2'>".tablize(list_ManyResult("select DISTINCT faculte, count(*) from cours Group by faculte"), $language)."</td>
        </tr>
        </table>";
 
-$tool_content .= "<br><table border='0' align=center width='75%' cellspacing='0' cellpadding='1' style='border: 1px solid  $table_border'>
+$tool_content .= "<br><table border='0' align=center width='75%' cellspacing='0' cellpadding='1'>
     <tr><td style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langNumEachLang :</td></tr>
   <tr>
   <td class='stat2'>".tablize(list_ManyResult("select DISTINCT languageCourse, count(*) from cours Group by languageCourse "), $language)."</td></tr></table>
  <br>
 
-  <table border='0' align=center width='75%' cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
+  <table border='0' align=center width='75%' cellspacing='0' cellpadding='1'>
    <tr>
    <td  style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langNunEachAccess :</td>
     </tr>
@@ -134,7 +133,7 @@ $tool_content .= "<br><table border='0' align=center width='75%' cellspacing='0'
         </tr>
         </table>
         <br>
-  <table border='0' align=center width='75%' cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
+  <table border='0' align=center width='75%' cellspacing='0' cellpadding='1'>
         <tr>
           <td style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langNumEachCat :</td>
         </tr>
@@ -143,7 +142,7 @@ $tool_content .= "<br><table border='0' align=center width='75%' cellspacing='0'
         </table>";
 
 
-$tool_content .= "<table width='75%' border=1 align=center cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
+$tool_content .= "<table width='75%' border=1 align=center cellspacing='0' cellpadding='1'>
    <tr><td style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langAnnouncements :</td></tr>
    <tr>
   <td class='stat2'>$langNbAnnoucement :<b>".list_1Result("select count(*) from annonces;")."</b></td>
@@ -152,7 +151,7 @@ $tool_content .= "<table width='75%' border=1 align=center cellspacing='0' cellp
         <br></td>
         <td valign=top width=49%>
 
- <table border='0' align=center width='75%' cellspacing='0' cellpadding='1' style='border: 1px solid  $table_border'>
+ <table border='0' align=center width='75%' cellspacing='0' cellpadding='1'>
         <tr>
           <td style='background: #E6EDF5; color: #4F76A3; font-size: 90%' colspan='2'>$langNumEachRec :</td>
         </tr>
@@ -164,10 +163,10 @@ $tool_content .= "<table width='75%' border=1 align=center cellspacing='0' cellp
 $tool_content .= " </td></tr>
 <tr><td class='stat2'>&nbsp;</td></tr></table>";
 
-$tool_content .= "<table width=90% align=center cellspacing='0' cellpadding='1' style='border: 1px solid $table_border' > 
+$tool_content .= "<table width=90% align=center cellspacing='0' cellpadding='1'> 
 	<tr><td class=stat1 width=80%><b>$langAlert !</b></td></tr>
     <tr><td>
- <table border='0' width=100% align=center cellspacing='0' cellpadding='1'  style='border: 1px solid $table_border'>";
+ <table border='0' width=100% align=center cellspacing='0' cellpadding='1'>";
 
 $sqlLoginDouble = "select DISTINCT username, count(*) as nb from user group by username HAVING nb > 1 order by nb desc";
 $loginDouble = list_ManyResult($sqlLoginDouble);
@@ -190,7 +189,7 @@ $tool_content .= "</td></tr></table></td></tr>";
 $sqlLoginDouble = "select DISTINCT email, count(*) as nb from user group by email HAVING nb > 1  order by nb desc";
 $loginDouble = list_ManyResult($sqlLoginDouble);
 
-$tool_content .= "<tr><td><table border='0' width=100% align=center cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
+$tool_content .= "<tr><td><table border='0' width=100% align=center cellspacing='0' cellpadding='1'>
      <tr>
        <td class='stat2' width=80%><strong>$langMultipleAddr e-mail:</strong>
        <br><span class='explanationtext'>(".$sqlLoginDouble.")</span></td>
@@ -216,7 +215,7 @@ $sqlLoginDouble = "select DISTINCT CONCAT(username, \" -- \", password) as paire
 $loginDouble = list_ManyResult($sqlLoginDouble);
 
 $tool_content .= "<tr><td>
- <table border='0' width=100% align=center cellspacing='0' cellpadding='1' style='border: 1px solid $table_border'>
+ <table border='0' width=100% align=center cellspacing='0' cellpadding='1'>
    <tr>
     <td class='stat2' width=80%><strong>$langMultiplePairs LOGIN - PASS</strong>
      <br><span class='explanationtext'>(".$sqlLoginDouble.")</td>

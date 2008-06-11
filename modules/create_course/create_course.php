@@ -310,7 +310,7 @@ if (isset($create_course)) {
         // to $faculte ksanapairnei thn timh mono tou onomatos
         // tou tmhmatos gia logous compatibility
         $faculte = $facname;
-
+	// find new code
         $repertoire = new_code(find_faculty_by_name($faculte));
         $language=$languageCourse;
         include("../lang/$language/common.inc.php");
@@ -336,25 +336,6 @@ if (isset($create_course)) {
                 //remove space in code_cours
                 $repertoire = str_replace (" ", "", $repertoire);
                 $repertoire_lower=strtolower($repertoire);
-
-                $dbList = mysql_list_dbs();
-                $cnt = 0;
-                $dbNumber = mysql_num_rows($dbList);
-                while ($cnt < $dbNumber) {
-                        $dbCode = mysql_db_name($dbList, $cnt);
-                        if ($dbCode == $repertoire) {
-                                $tool_content .= "<tr bgcolor=\"$color2\" height=\"400\">
-                                        <td colspan=\"2\" valign=\"top\">
-                                        <font face=\"arial, helvetica\" size=\"2\">
-                                        $langCodeTaken.
-                                        <br>
-                                        <p>&nbsp;</p>
-                                        </td></tr></table>";
-                                exit();
-                        }		// end if ($dbCode == $repertoire)
-                        $cnt++;
-                }			// end while ($cnt < $dbNumbert)
-
                 // create directories
                 umask(0);
                 if (! (mkdir("../../courses/$repertoire", 0777) and

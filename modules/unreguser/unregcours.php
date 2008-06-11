@@ -46,10 +46,10 @@ if (!isset($doit) or $doit != "yes") {
 	      <tr><td class=kk colspan=2 align=center>$langConfirmUnregCours : <em>$cid</em></td></tr>
         <tr><td>&nbsp;</td></tr>
         <tr>
-        <td class='DocData' style=\"border: 1px solid $table_border;\" width='50%' align=center onMouseOver=\"this.style.backgroundColor='#C0BD85'\"; onMouseOut=\"this.style.backgroundColor='transparent'\">
+        <td class='tborder' width='50%' align=center onMouseOver=\"this.style.backgroundColor='#C0BD85'\"; onMouseOut=\"this.style.backgroundColor='transparent'\">
            $langYes:&nbsp;<a href='$_SERVER[PHP_SELF]?u=$uid&cid=$cid&doit=yes' class=mainpage>$langDelete</a>
            </td>
-           <td class='DocData' style=\"border: 1px solid $table_border;\" align=center onMouseOver=\"this.style.backgroundColor='orange'\"; onMouseOut=\"this.style.backgroundColor='transparent'\">
+           <td class='tborder' align=center onMouseOver=\"this.style.backgroundColor='orange'\"; onMouseOut=\"this.style.backgroundColor='transparent'\">
            $langNo:&nbsp;<a href='../../index.php' class=mainpage>$langBack</a>
            </td></tr></table>";
 

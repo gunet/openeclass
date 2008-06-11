@@ -3208,7 +3208,6 @@ $langTryDeleteAdmin="You tried to delete user with user id = 1 (Admin)!";
 $langDownloadIt="Download it";
 $langBackupEnd="Backup completed as";
 $langSubmitActions="Submit Actions";
-$langCodeTaken="Code course is already used. We request you select some other.";
 $langcourse_prerequisites="Prerequisites knowledge";
 $langMoveOK="File moved with success!";
 $langMoveNotOK="File not moved";

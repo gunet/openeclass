@@ -54,13 +54,6 @@ if (isset($path2add) && $path2add == 0){
 }
 
 
-// ------------------------
-// define some colors 
-// ------------------------
-$color1="#F5F5F5"; // light grey
-$color2="#E6E6E6"; // less light grey for bicolored tables
-$table_border = "#DCDCDC";
-
 //------------------------------------
 // include the following necessary files
 // ---------------------------------

@@ -1,5 +1,5 @@
 <? 
-/**=============================================================================
+/*=============================================================================
        	GUnet eClass 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -19,7 +19,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	ldapsearch.php
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
@@ -80,18 +80,18 @@ if (isset($submit))  {
             break;
         }
 	
-		$registered_at = time();
+	$registered_at = time();
     $expires_at = time() + $durationAccount; 
 
 		$sql=db_query("INSERT INTO user (user_id, nom, prenom, username, password, email, statut, department, registered_at, expires_at)
        VALUES ('NULL', '$pn', '$ps', '$pu', '$password', '$pe','1','$department', '$registered_at', '$expires_at')", $mysqlMainDb);
 			
-			// close request
+	// close request
       //  Update table prof_request ------------------------------
       $rid = intval($_POST['rid']);
       db_query("UPDATE prof_request set status = '2',date_closed = NOW() WHERE rid = '$rid'");
       
-			$emailbody = "$langDestination $pu $ps\n" .
+		$emailbody = "$langDestination $pu $ps\n" .
                                 "$langYouAreReg $siteName $langSettings $pu\n" .
                                 "$langPass: $password\n$langAddress $siteName: " .
                                 "$urlServer\n$langProblem\n$langFormula" .
@@ -113,38 +113,38 @@ if (isset($submit))  {
     $tool_content .= "<table width=\"99%\"><tbody>
       <tr>
       <td class=\"well-done\" height='60'>
-			<p>$profsuccess</p><br><br>
-			<center><p><a href='../admin/listreq.php'>$langBackReq</a></p></center>
+		<p>$profsuccess</p><br><br>
+		<center><p><a href='../admin/listreq.php'>$langBackReq</a></p></center>
       </td>
       </tr></tbody></table>";
 
 } else {  // display the form
-		$tool_content .= "<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
-			<table width=\"99%\"><caption>$langNewProf</caption><tbody>
-      <tr valign=\"top\" bgcolor=\"".$color2."\">
-      <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>".$langSurname."</b></th>
+	$tool_content .= "<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
+		<table width=\"99%\"><caption>$langNewProf</caption><tbody>
+      <tr>
+      <th width=\"150\" class='left'><b>".$langSurname."</b></th>
     	<td>$ps</td></tr>
       <input type=\"hidden\" name=\"ps\" value=\"$ps\">
-      <tr bgcolor=\"".$color2."\">
-      <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>".$langName."</b></th>
+      <tr>
+      <th class='left'><b>".$langName."</b></th>
       <td>$pn</td></tr>
       <input type=\"hidden\" name=\"pn\" value=\"$pn\">
-      <tr bgcolor=\"".$color2."\">
-      <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>".$langUsername."</b></th>
+      <tr>
+      <th class='left'><b>".$langUsername."</b></th>
       <td>$pu</td>
       <input type=\"hidden\" name=\"pu\" value=\"$pu\">
       </tr>
-      <tr bgcolor=\"".$color2."\">
-       <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%' width=\"3%\" nowrap><b>".$langEmail."</b></th>
+      <tr>
+       <th class='left'><b>".$langEmail."</b></th>
        <td>$pe</b></td>
       <input type=\"hidden\" name=\"pe\" value=\"$pe\" >
        </tr>
-      <tr bgcolor=\"".$color2."\">
-        <th style='text-align: left; background: #E6EDF5; color: #4F76A3; font-size: 90%'>".$langDepartment.":</th>
+      <tr>
+        <th class='left'>".$langDepartment.":</th>
         <td><select name=\"department\">";
-				$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id");
-				while ($dep = mysql_fetch_array($deps))
-					  $tool_content .= "\n<option value=\"".$dep[1]."\">".$dep[0]."</option>";
+		$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id");
+		while ($dep = mysql_fetch_array($deps))
+			  $tool_content .= "\n<option value=\"".$dep[1]."\">".$dep[0]."</option>";
         $tool_content .= "</select>
         </td>
         </tr>

@@ -570,3 +570,7 @@ table.sortable span.sortarrow {
         text-decoration: underline;
         margin: 1em;
 }
+
+.tborder {
+	border: 1px solid #dcdcdc;	
+	}

@@ -204,8 +204,8 @@ function getdepnumcourses($fac) {
 }
 
 function expanded_faculte($fac, $uid) {
-	global $m, $icons, $langTutor, $langBegin, $langRegistration, $mysqlMainDb, $table_border;
-	global $langRegistration,$langCourseCode,$langTeacher,$langType;
+	global $m, $icons, $langTutor, $langBegin, $langRegistration, $mysqlMainDb;
+	global $langRegistration, $langCourseCode, $langTeacher, $langType;
 
 	$retString = "";
 

@@ -129,7 +129,7 @@ if (isset($delete) and $delete == "ask") {
         $res = db_query($sql,$db);
         $blocs = mysql_fetch_array($res);
         if (is_array($blocs)) {
-         	$tool_content .= "<table align=center width=96% style=\"border: 1px solid $table_border;\" border=\"0\" >";
+         	$tool_content .= "<table align=center width=96% border=\"0\" >";
 		$tool_content .= "<tr><td class=color2>";
     		$tool_content .= "<b>".$blocs["title"].":</b></td></tr><tr><td class=color1>".mathfilter($blocs["content"], 12, "../../courses/mathimg/")."";
 		$tool_content .= "</td></tr></table>";

@@ -247,13 +247,12 @@ if (!$result = db_query($sql, $currentCourseID)) {
 	exit();
 }
 $myrow = mysql_fetch_array($result);
-$row_color = $color2;
 $count = 0;
 do {
 	if(!($count % 2))
-		$row_color = topic_row1;
+		$row_color = 'topic_row1';
 	else 
-		$row_color = topic_row2;
+		$row_color = 'topic_row2';
 	$tool_content .= "
     <tr>";
 	$tool_content .= "

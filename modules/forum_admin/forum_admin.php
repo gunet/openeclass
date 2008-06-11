@@ -86,20 +86,12 @@ function confirmation ()
     <tbody>";
 		$i=1;
 		while(list($forum_id, $forum_name, $forum_desc, $forum_access,
-		$forum_moderator, $forum_type) = mysql_fetch_row($result)) {
-			if($i%2==0){
-				$tool_content .= "
-    <tr bgcolor=$color1>";
-			}
-			elseif($i%2==1) {
-				$tool_content .= "
-    <tr bgcolor=$color2>";
-			}
+			$forum_moderator, $forum_type) = mysql_fetch_row($result)) {
 			$tool_content .= "
       <td align='right'>$i.</td>
       <td align='left'>$forum_name</td>
       <td align='left'>$forum_desc&nbsp;</td>";
-			$tool_content .= "
+	$tool_content .= "
       <td align='center'>
         <a href=forum_admin.php?forumgoedit=yes&forum_id=$forum_id&ctg=$ctg&cat_id=$cat_id><img src='../../template/classic/img/edit.gif' title='$langModify' border='0'></img></a>
         &nbsp;
@@ -370,14 +362,6 @@ function confirmation ()
 		while(list($cat_id, $cat_title) = mysql_fetch_row($result)) {
 			$gets = db_query("select count(*) as total from forums where cat_id=$cat_id", $currentCourseID);
 			$numbers= mysql_fetch_array($gets);
-			if($i%2 == 0){
-				$tool_content .= "
-    <tr bgcolor=$color1>";
-			}
-			elseif($i%2 == 1) {
-				$tool_content .= "
-    <tr bgcolor=$color2>";
-			}
 			$tool_content .= "
       <td><div align='right'>$i.</div></td>
       <td><div align='left'>$cat_title &nbsp;</div></td>

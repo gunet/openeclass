@@ -21,8 +21,7 @@ if($submit)
 	
 	if ((strstr($uname, "'")) or (strstr($uname, '"')) or (strstr($uname, '\\')))
 	{
-		$tool_content .= "<tr bgcolor=\"".$color2."\">
-		<td bgcolor=\"$color2\" colspan=\"3\" valign=\"top\">
+		$tool_content .= "<tr><td colspan=\"3\" valign=\"top\">
 		<br>$langCharactersNotAllowed<br /><br />
 		<a href='$_SERVER[PHP_SELF]'>".$langAgain."</a></td></tr></table>";
 	}
@@ -76,28 +75,28 @@ else
 {
 $tool_content .= "<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
 	<table width=\"99%\"><caption>$langNewProf</caption><tbody>
-	<tr valign=\"top\" bgcolor=\"".$color2."\">
+	<tr>
 	<th width=\"150\" class='left'><b>".$langSurname."</b></th>
 	<td><input class='FormData_InputText' type=\"text\" name=\"nom_form\" value=\"".@$ps."\" >&nbsp;(*)</td>
 	</tr>
-	<tr bgcolor=\"".$color2."\">
+	<tr>
 	<th class='left'><b>".$langName."</b></th>
 	<td>
 	<input class='FormData_InputText' type=\"text\" name=\"prenom_form\" value=\"".@$pn."\">&nbsp;(*)</td>
 	</tr>
-	<tr bgcolor=\"".$color2."\">
+	<tr>
 	<th class='left'><b>".$langUsername."</b></th>
 	<td><input class='FormData_InputText' type=\"text\" name=\"uname\" value=\"".@$pu."\">&nbsp;(*)</td>
 	</tr>
-	<tr bgcolor=\"".$color2."\">
+	<tr>
 	<th class='left'><b>".$langPass."&nbsp;:</b></th>
 	<td><input class='FormData_InputText' type=\"text\" name=\"password\" value=\"".create_pass(5)."\"></td>
 	</tr>
-	<tr bgcolor=\"".$color2."\">
+	<tr>
 	<th class='left'><b>".$langEmail."</b></th>
 	<td><input class='FormData_InputText' type=\"text\" name=\"email_form\" value=\"".@$pe."\">&nbsp;(*)</b></td>
 	</tr>
-	<tr bgcolor=\"".$color2."\">
+	<tr>
         <th class='left'>".$langDepartment.":</th>
         <td><select name=\"department\">";
         $deps=mysql_query("SELECT name FROM faculte order by id");

@@ -828,7 +828,7 @@ function check_priv_forum_auth($userid, $forumid, $is_posting, $db)
  * Displays an error message and exits the script. Used in the posting files.
  */
 function error_die($msg){
-	global $tablewidth, $table_bgcolor, $color1;
+	global $tablewidth, $table_bgcolor;
 	global $db, $userdata, $user_logged_in;
 	global $FontFace, $FontSize3, $textcolor, $phpbbversion;
 	global $starttime;
@@ -839,10 +839,10 @@ function error_die($msg){
 		<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" ALIGN=\"CENTER\" VALIGN=\"TOP\" WIDTH=\"$tablewidth\">
 		<TR><TD BGCOLOR=\"$table_bgcolor\">
 			<TABLE BORDER=\"0\" CALLPADDING=\"1\" CELLSPACEING=\"1\" WIDTH=\"100%\">
-			<TR BGCOLOR=\"$color1\" ALIGN=\"LEFT\">
-				<TD>
-					<p><font face=\"Verdana\" size=\"2\"><ul>$msg</ul></font></P>
-				</TD>
+			<TR ALIGN=\"LEFT\">
+			<TD>
+			<p><font face=\"Verdana\" size=\"2\"><ul>$msg</ul></font></P>
+			</TD>
 			</TR>
 			</TABLE>
 		</TD></TR>

@@ -108,40 +108,40 @@ $tool_content .= "<table width=\"99%\"><tbody>
    <tr>
     <td>
     <form action='$_SERVER[PHP_SELF]' method='post'>
-    <table  border=0 cellpadding='1' cellspacing='2' border='0' width='100%' align=center>
+    <table border=0 cellpadding='1' cellspacing='2' border='0' width='100%' align=center>
 	<thead>
-    <tr valign='top'>
-    <th class=color1 style='border : 1px solid $table_border;' width=25%>$langSurname</th>
-	  <td><input type='text' class=auth_input_admin name='nom_form' value='".@$ps."' >
+    <tr>
+    <th class='left' width=20%>$langSurname</th>
+	 <td><input type='text' class=auth_input_admin name='nom_form' value='".@$ps."' >
 	<small>&nbsp;(*)</small></td>
 	  </tr>
 	  <tr>
-	  <th class=color1 style='border : 1px solid $table_border;'>$langName</th>
+	  <th class='left'>$langName</th>
 	  <td><input type='text' class=auth_input_admin name='prenom_form' value='".@$pn."' >
 	<small>&nbsp;(*)</small></td>
 	  </tr>
 	  <tr>
-	  <th class=color1 style='border : 1px solid $table_border;'>$langUsername</th>
+	  <th class='left'>$langUsername</th>
 	  <td><input type='text' class=auth_input_admin name='uname' value='".@$pu."'>
 		<small>&nbsp;(*)</small></td>
 	  </tr>
 	  <tr>
-	  <th class=color1 style='border : 1px solid $table_border;'>$langPass&nbsp;:</th>
+	  <th class='left'>$langPass&nbsp;:</th>
 	  <td><input type='text' class=auth_input_admin name='password' value=".create_pass(5)."></td>
 	  </tr>
 	  <tr>
-    	<th class=color1 style='border : 1px solid $table_border;'>$langEmail</th>
+    	<th class='left'>$langEmail</th>
 	  <td><input type='text' class=auth_input_admin name='email_form' value='".@$pe."'>
 		<small>&nbsp;(*)</small></td>
 	  </tr>
 	  <tr>
-	  <th class=color1 style='border : 1px solid $table_border;'>$langDepartment &nbsp;
+	  <th class='left'>$langDepartment &nbsp;
 		</span></th><td>";
 
-		$dep = array();
+	$dep = array();
         $deps=db_query("SELECT name FROM faculte order by id");
 			while ($n = mysql_fetch_array($deps))
-					$dep[$n[0]] = $n['name'];  
+				$dep[$n[0]] = $n['name'];  
 
 		if (isset($pt))
 			$tool_content .= selection ($dep, 'department', $pt);

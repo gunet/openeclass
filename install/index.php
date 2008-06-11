@@ -115,7 +115,7 @@ if (isset($alreadyVisited)) {
             <input type=\"hidden\" name=\"postaddressForm\" value=\"".@$postaddressForm."\">
             <input type=\"hidden\" name=\"ldapserver\" value=\"".@$ldapserver."\">
             <input type=\"hidden\" name=\"dnldapserver\" value=\"".@$dnldapserver."\">
-	<input type=\"hidden\" name=\"reguser\" value=\"".@$reguser."\">
+	    <input type=\"hidden\" name=\"reguser\" value=\"".@$reguser."\">
             <input type=\"hidden\" name=\"vodServer\" value=\"".@$vodServerForm."\">
             <input type=\"hidden\" name=\"MCU\" value=\"".@$MCUForm."\">
             <input type=\"hidden\" name=\"persoIsActive\" value=\"".@$persoIsActive."\">";
@@ -169,10 +169,10 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	</td>
 	</tr>
 	<tr>
-		<th>".$langMainDB."</th>
-		<td>
-		<input type=\"text\"  size=\"25\" name=\"dbNameForm\" value=\"$dbNameForm\">(αν υπάρχει ήδη κάποια βάση δεδομένων με το όνομα eclass αλλάξτε το)
-				</td>
+	<th>".$langMainDB."</th>
+	<td>
+	<input type=\"text\"  size=\"25\" name=\"dbNameForm\" value=\"$dbNameForm\">(αν υπάρχει ήδη κάποια βάση δεδομένων με το όνομα eclass αλλάξτε το)
+	</td>
 	</tr>
 	<tr>
 	<th>URL του phpMyAdmin</th>
@@ -912,8 +912,6 @@ $siteName = "'.$campusForm.'";
 $telephone = "'.$helpdeskForm.'";
 $fax = "'.$faxForm.'";
 $emailhelpdesk = "'.$helpdeskmail.'";
-$color1 = "#F5F5F5"; // light grey
-$color2 = "#E6E6E6"; // darker grey for bicolored tables
 
 $language = "greek";
 
