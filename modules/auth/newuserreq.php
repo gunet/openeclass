@@ -109,33 +109,33 @@ $tool_content .= "<table width=\"99%\"><tbody>
     <td>
     <form action='$_SERVER[PHP_SELF]' method='post'>
     <table  border=0 cellpadding='1' cellspacing='2' border='0' width='100%' align=center>
-		<thead>
+	<thead>
     <tr valign='top'>
-    <th class=color1 style='border : 1px solid $table_border;' width=50%>$langSurname</th>
+    <th class=color1 style='border : 1px solid $table_border;' width=25%>$langSurname</th>
 	  <td><input type='text' class=auth_input_admin name='nom_form' value='".@$ps."' >
-		<small>&nbsp;(*)</small></td>
+	<small>&nbsp;(*)</small></td>
 	  </tr>
 	  <tr>
-	  <th class=color1 style='border : 1px solid $table_border;' width=50%>$langName</th>
+	  <th class=color1 style='border : 1px solid $table_border;'>$langName</th>
 	  <td><input type='text' class=auth_input_admin name='prenom_form' value='".@$pn."' >
-		<small>&nbsp;(*)</small></td>
+	<small>&nbsp;(*)</small></td>
 	  </tr>
 	  <tr>
-	  <th class=color1 style='border : 1px solid $table_border;' width=50%>$langUsername</th>
+	  <th class=color1 style='border : 1px solid $table_border;'>$langUsername</th>
 	  <td><input type='text' class=auth_input_admin name='uname' value='".@$pu."'>
 		<small>&nbsp;(*)</small></td>
 	  </tr>
 	  <tr>
-	  <th class=color1 style='border : 1px solid $table_border;' width=50%>$langPass&nbsp;:</th>
+	  <th class=color1 style='border : 1px solid $table_border;'>$langPass&nbsp;:</th>
 	  <td><input type='text' class=auth_input_admin name='password' value=".create_pass(5)."></td>
 	  </tr>
 	  <tr>
-    <th class=color1 style='border : 1px solid $table_border;' width=50%>$langEmail</th>
+    	<th class=color1 style='border : 1px solid $table_border;'>$langEmail</th>
 	  <td><input type='text' class=auth_input_admin name='email_form' value='".@$pe."'>
 		<small>&nbsp;(*)</small></td>
 	  </tr>
 	  <tr>
-	  <th class=color1 style='border : 1px solid $table_border;' width=50%>$langDepartment &nbsp;
+	  <th class=color1 style='border : 1px solid $table_border;'>$langDepartment &nbsp;
 		</span></th><td>";
 
 		$dep = array();
@@ -149,12 +149,11 @@ $tool_content .= "<table width=\"99%\"><tbody>
 			$tool_content .= selection ($dep, 'department');
  
 	   	$tool_content .= "</td></tr><tr><td colspan=\"2\">".$langRequiredFields."</td></tr>
-				<tr><td>&nbsp;</td>
-				<td><input type=\"submit\" name=\"submit\" value=\"".$langOk."\" >
-			  </td>
-		    </tr></thead></table>
-				<input type='hidden' name='rid' value='".@$id."'>
-				</tbody></table></form>";
+			<tr><td>&nbsp;</td>
+		<td><input type=\"submit\" name=\"submit\" value=\"".$langOk."\" ></td>
+		</tr></thead></table>
+		<input type='hidden' name='rid' value='".@$id."'>
+		</tbody></table></form>";
     $tool_content .= "<center><p><a href=\"../admin/index.php\">$langBack</p></center>";
 
 } // end of if 

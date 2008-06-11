@@ -449,7 +449,7 @@ $langWrongAuth = "You did not provide a valid pair of username/password";
 * conference.inc.php
 ****************************************************/
 
-/**
+/*
  * conference
  *
  * @author Dimitris Tsachalis <ditsa@ccf.auth.gr>
@@ -457,7 +457,6 @@ $langWrongAuth = "You did not provide a valid pair of username/password";
 
  $langWash = "Clean";
  $langWashFrom = "Chat cleared by";
-
  $langClearedBy = "cleared by";
  $langChatError = "It is not possible to start the live conference";
  $langButtonVideo="Transmit";
@@ -502,17 +501,35 @@ content, please contact the persons in charge of the respective course.';
 ********************************************************************/
 $langCourseProgram = "Course Description";
 $langThisCourseDescriptionIsEmpty = "This course is presently not described";
-$langEditCourseProgram = "Create and edit with forms";
+$langEditCourseProgram = "Create and edit";
 $langQuestionPlan = "Question to ".$langsTeacher." ";
 $langInfo2Say = "Information to give to ".$langsStudents." ";
-$langAddCat = "add category";
+$langAddCat = "Category";
 $langBackAndForget ="Cancel changes and return";
 $langBlockDeleted = "Description deleted!";
+
+/***************************************************************
+* pedasugggest.inc.php
+****************************************************************/
+unset($titreBloc);
+unset($titreBlocNotEditable);
+
+$titreBloc[] = "Course Content";
+$titreBlocNotEditable[] = TRUE;
+$titreBloc[] = "Educational Activities";
+$titreBlocNotEditable[] = TRUE;
+$titreBloc[] = "Books";
+$titreBlocNotEditable[] = TRUE;
+$titreBloc[] = "Human Resources";
+$titreBlocNotEditable[] = TRUE;
+$titreBloc[] = "Evaluation Methods / Exams";
+$titreBlocNotEditable[] = TRUE;
+$titreBloc[] = "Supplementary Information";
+$titreBlocNotEditable[] = FALSE;
 
 /*******************************************************************
 * course_home.inc.php
 *******************************************************************/
-
 $langAdminOnly="Administrators only";
 $langInLnk="Deactivated links";
 $langDelLk="Do you really want to delete this link?";

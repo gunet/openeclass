@@ -42,7 +42,9 @@ $helpTopic = 'Coursedescription';
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';
-include('../../include/lib/textLib.inc.php');
+include '../../include/lib/textLib.inc.php';
+// support for math symbols
+include '../../include/phpmathpublisher/mathpublisher.php';
 
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
@@ -54,26 +56,19 @@ $nameTools = $langCourseProgram;
 $tool_content = "";
 
 if ($is_adminOfCourse) {
-	$tool_content .= "
-		<div id=\"operations_container\">
-		<ul id=\"opslist\">
-			<li><a href=\"edit.php\">".$langEditCourseProgram."</a></li>
-		</ul>
-		</div>
-		<br>";
+	$tool_content .= "<div id=\"operations_container\">
+	<ul id=\"opslist\">
+	<li><a href=\"edit.php\">".$langEditCourseProgram."</a></li>
+	</ul></div><br>";
 }
 
 $sql = "SELECT `id`,`title`,`content` FROM `course_description` order by id";
 $res = db_query($sql, $currentCourseID);
 if (mysql_num_rows($res) > 0) {
-
-	while ($bloc = mysql_fetch_array($res))
-	{
-		$tool_content .= 
-         "<p><div id='topic_title_id'>".$bloc["title"]."</div></p>
-         <p>".make_clickable(nl2br($bloc["content"]))."</p><br>";
+	while ($bloc = mysql_fetch_array($res)) {
+		$tool_content .= "<p><div id='topic_title_id'>".$bloc["title"]."</div></p>
+   		<p>".mathfilter(make_clickable(nl2br($bloc["content"])), 12, "../../courses/mathimg/")."</p><br>";
 	}
-				
 } else {
 	$tool_content .= "<br><p class=\"alert1\">$langThisCourseDescriptionIsEmpty</p>";
 }

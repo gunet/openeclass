@@ -46,7 +46,8 @@ $guest_allowed = true;
 include '../../include/baseTheme.php';
 include('../../include/lib/textLib.inc.php');
 include('../../include/sendMail.inc.php');
-include('../../include/phpmathpublisher/mathpublisher.php') ;
+// support for math symbols
+include('../../include/phpmathpublisher/mathpublisher.php');
 
 /*
  * *** The following is added for statistics purposes **
@@ -220,7 +221,7 @@ function confirmation (name)
             $emailSubject = "$professorMessage ($currentCourseID - $intitule)"; 
             // Select students email list
             $sqlUserOfCourse = "SELECT user.email FROM cours_user, user WHERE code_cours='$currentCourseID'
-				AND cours_user.user_id = user.user_id";
+			AND cours_user.user_id = user.user_id";
             $result = db_query($sqlUserOfCourse, $mysqlMainDb);
 
             $countEmail = mysql_num_rows($result);
@@ -252,8 +253,7 @@ function confirmation (name)
 	DISPLAY ACTION MESSAGE
 	--------------------------------------*/
     if (isset($message) && $message) {
-        $tool_content .= "<table width=\"99%\"><tbody><tr><td class=\"success\">$message</td></tr></tbody>
-		</table><br/>";
+        $tool_content .= "<table width=\"99%\"><tbody><tr><td class=\"success\">$message</td></tr></tbody></table><br/>";
         $displayAnnouncementList = true; //do not show announcements
         $displayForm = false; //do not show form
     } 
@@ -277,13 +277,8 @@ function confirmation (name)
             </tr>";
             $langAdd = $langModifAnn;
         } else {
-		$tool_content .= "
-      <table width='99%' class='FormData' align='center'>
-      <tbody>
-      <tr>
-        <th width='220'>&nbsp;</th>
-        <td><b>" . $langAddAnn . "</b></td>
-      </tr>";
+		$tool_content .= "<table width='99%' class='FormData' align='center'>
+      		<tbody><tr><th width='220'>&nbsp;</th><td><b>" . $langAddAnn . "</b></td></tr>";
         } 
 
         if (!isset($AnnouncementToModify)) $AnnouncementToModify = "";
@@ -360,7 +355,7 @@ cData;
             $content = make_clickable($myrow['contenu']);
             $content = nl2br($content);
 	// display math symbols (if there are)
-	    $content = mathfilter($content, 12, "../../include/phpmathpublisher/img/");
+	    $content = mathfilter($content, 12, "../../courses/mathimg/");
             $myrow['temps'] = greek_format($myrow['temps']);
 	$tool_content .= "<tr>
         <td width='3'><img class=\"displayed\" src=../../template/classic/img/announcements_on.gif border=0 title=\"" . $myrow["title"] . "\"></td>
