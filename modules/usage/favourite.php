@@ -115,7 +115,8 @@ $local_head = $jscalendar->get_load_files_code();
     switch ($u_stats_value) {
         case "visits":
             $query = "SELECT module_id, COUNT(*) AS cnt, accueil.rubrique AS name FROM actions ".
-            " LEFT JOIN accueil ON actions.module_id = accueil.id  WHERE $date_where AND $user_where GROUP BY module_id";
+            " LEFT JOIN accueil ON actions.module_id = accueil.id  
+		WHERE $date_where AND $user_where GROUP BY module_id";
 
             $result = db_query($query, $currentCourseID);
 
@@ -133,7 +134,8 @@ $local_head = $jscalendar->get_load_files_code();
 
         case "duration":
             $query = "SELECT module_id, SUM(duration) AS tot_dur, accueil.rubrique AS name FROM actions ".
-            " LEFT JOIN accueil ON actions.module_id = accueil.id  WHERE $date_where AND $user_where GROUP BY module_id";
+            " LEFT JOIN accueil ON actions.module_id = accueil.id  
+		WHERE $date_where AND $user_where GROUP BY module_id";
 
             $result = db_query($query, $currentCourseID);
 
@@ -182,7 +184,6 @@ $local_head = $jscalendar->get_load_files_code();
                  'value'       => $u_date_end));
 
 
-
     $qry = "SELECT LEFT(a.nom, 1) AS first_letter
         FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
         WHERE b.code_cours='".$currentCourseID."'
@@ -214,17 +215,6 @@ $local_head = $jscalendar->get_load_files_code();
         $user_opts .= '<option '.$selected.' value="'.$row["user_id"].'">'.$row['prenom'].' '.$row['nom']."</option>\n";
     }
 
-
-/*    $qry = "SELECT id, rubrique AS name FROM accueil WHERE define_var != '' AND visible = 1 ORDER BY name ";
-
-    $mod_opts = '<option value="-1">'.$langAllModules."</option>\n";
-    $result = db_query($qry, $currentCourseID);
-    while ($row = mysql_fetch_assoc($result)) {
-        if ($u_module_id == $row['id']) { $selected = 'selected'; } else { $selected = ''; }
-        $mod_opts .= '<option '.$selected.' value="'.$row["id"].'">'.$row['name']."</option>\n";
-    }
-*/
-
     $statsValueOptions =
         '<option value="visits" '.	 (($u_stats_value=='visits')?('selected'):(''))	  .'>'.$langVisits."</option>\n".
         '<option value="duration" '.(($u_stats_value=='duration')?('selected'):('')) .'>'.$langDuration."</option>\n";
@@ -239,7 +229,6 @@ $local_head = $jscalendar->get_load_files_code();
             <th>'.$langValueType.'</th>
             <td><select name="u_stats_value">'.$statsValueOptions.'</select></td>
         </tr>
-
         <tr>
             <th>'.$langStartDate.'</th>
             <td>'."$start_cal".'</td>

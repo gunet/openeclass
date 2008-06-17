@@ -1,5 +1,4 @@
 <?php
-
 /*
 ===========================================================================
     admin/summarizeMonthlyData.php
@@ -16,7 +15,6 @@
     //check if data for last month have already been inserted in 'monthly_summary'...
     $lmon = mktime(0, 0, 0, date("m")-1, date("d"),  date("Y"));
     $last_month = date('m Y', $lmon);
-    
     $sql = "SELECT id FROM monthly_summary WHERE `month` = '$last_month'";
     $result = db_query($sql, $mysqlMainDb);
 
@@ -27,7 +25,6 @@
         }
     }
     mysql_free_result($result);
-    
     //... and if not inserted yet
     if (!$isReported) {
         $current_month = date('Y-m-01 00:00:00');
@@ -43,9 +40,8 @@
         $result = db_query($sql, $mysqlMainDb);
         while ($row = mysql_fetch_assoc($result)) {
             $login_sum = $row['sum_id'];
-           
         }
-        
+
         mysql_free_result($result);
         if (!isset($cours_sum)) {$cours_sum = 0;}
 
@@ -64,8 +60,7 @@
         }
         mysql_free_result($result);
         if (!isset($prof_sum)) {$prof_sum = 0;}
-        
-        
+
         $sql = "SELECT count(user_id) as stud_sum FROM user WHERE statut=5";
         $result = db_query($sql, $mysqlMainDb);
         while ($row = mysql_fetch_assoc($result)) {
@@ -73,7 +68,7 @@
         }
         mysql_free_result($result);
         if (!isset($stud_sum)) {$stud_sum = 0;}
-        
+
         $sql = "SELECT count(user_id) as vis_sum FROM user WHERE statut=10";
         $result = db_query($sql, $mysqlMainDb);
         while ($row = mysql_fetch_assoc($result)) {
@@ -81,8 +76,7 @@
         }
         mysql_free_result($result);
         if (!isset($vis_sum)) {$vis_sum = 0;}
-        
-        
+
         $mtext = "<table>";
         $mtext .= "<tr><th>".$langCourse."</th><th>".$langCoursVisible."</th><th>".$langType."</th><th>".$langDepartment."</th><th>".$langTeacher. "</th><th>".$langNbUsers."</th></tr>";
 
@@ -100,16 +94,17 @@
             }
             //declare visibility
             if ($row['visible'] == 0) {
-              $cvisible = $langClosed;
+              $cvisible = $langTypeClosed;
             }
             else if ($row['visible']==1) {
-              $cvisible = $langTypesRegistration;
+              $cvisible = $langTypeRegistration;
             }
             else {
-                $cvisible = $langOpen;
+                $cvisible = $langTypeOpen;
             }
-            
-            $mtext .= "<tr><td>".$row['name']."</td><td> ".$cvisible."</td><td> ".$ctype."</td><td> ".$row['dept']."</td><td>".$row['proff']."</td><td>".$row['cnt']."</td></tr>";
+            $mtext .= "<tr><td>".$row['name']."</td><td> ".$cvisible."</td><td> ".$ctype."</td>
+		<td align='center'> ".$row['dept']."</td>
+		<td>".$row['proff']."</td><td align='center'>".$row['cnt']."</td></tr>";
         }
         mysql_free_result($result);
         $mtext .= '</table>';
@@ -118,8 +113,6 @@
             " visitorsNum = $vis_sum, coursNum = $cours_sum, logins = $login_sum, details = '$mtext'";
         $result= db_query($sql, $mysqlMainDb);
         @mysql_free_result($result);
-
     }
 
-  
 ?>

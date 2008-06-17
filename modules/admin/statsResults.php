@@ -66,7 +66,7 @@ switch ($u_stats_type) {
     switch ($u_interval) {
         case "summary":
             while ($row = mysql_fetch_assoc($result)) {
-                $chart->addPoint(new Point("Summary", $row['cnt']));
+                $chart->addPoint(new Point($langSummary, $row['cnt']));
                 $chart->width += 25;
                 $chart_content=1;
             }
@@ -115,7 +115,6 @@ if (!file_exists("../../courses/temp")) {
 }
 
 $chart_path = 'courses/temp/chart_'.md5(serialize($chart)).'.png';
-//$tool_content .= $query."<br />";
 $chart->render($webDir.$chart_path);
 
 //check if there are statistics to show
@@ -127,6 +126,4 @@ else   {
 }
 
 $tool_content .= '<br>';
-
-
 ?>

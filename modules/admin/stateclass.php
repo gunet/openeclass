@@ -34,7 +34,7 @@
 ==============================================================================*/
 
 /*****************************************************************************
-        DEAL WITH LANGFILES, BASETHEME, OTHER INCLUDES AND NAMETOOLS
+        DEAL WITH BASETHEME, OTHER INCLUDES AND NAMETOOLS
 ******************************************************************************/
 
 // Check if user is administrator and if yes continue

@@ -2741,9 +2741,9 @@ $langConfirmUnregCours = "Are you sure you want to unregister from course with c
  $langMonthly = "Montlhy";
  $langYearly = "Yearly";
  $langSummary = "Summary";
+ $langDurationExpl = "Duration of visits on each module is computed appoximately in minutes.";
 
- $langDurationExpl = "Duration of visits on each module is computed appoximately.";
- $langMonths[1] = "Jan";
+$langMonths[1] = "Jan";
  $langMonths[2] = "Feb";
  $langMonths[3] = "Mar";
  $langMonths[4] = "Apr";
@@ -2754,7 +2754,7 @@ $langConfirmUnregCours = "Are you sure you want to unregister from course with c
  $langMonths[9] = "Sep";
  $langMonths[10] = "Oct";
  $langMonths[11] = "Nov";
- $langMonths[12] = "Dec";
+ $langMonths[12] = "Dec"; 
 
  #for monthly report
  $langMonths['01'] = "January";

@@ -39,7 +39,6 @@ $total_answers = 0;
 $questions = array();
 
 if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
-	
 	$pid = intval($_GET['pid']);
 	$current_poll = db_query("SELECT * FROM poll WHERE pid='$pid' ORDER BY pid", $currentCourse);
 	$thePoll = mysql_fetch_array($current_poll);
@@ -53,9 +52,9 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
 		$tool_content .= "<h3>$theQuestion[question_text]</h3>";
 		if ($theQuestion['qtype'] == 'multiple') {
 			$answers = db_query("SELECT COUNT(aid) AS count, aid, poll_question_answer.answer_text AS answer 
-					FROM poll_answer_record LEFT JOIN poll_question_answer 
-					ON poll_answer_record.aid = poll_question_answer.pqaid 
-					WHERE qid = $theQuestion[pqid] GROUP BY aid", $currentCourseID);
+				FROM poll_answer_record LEFT JOIN poll_question_answer 
+				ON poll_answer_record.aid = poll_question_answer.pqaid 
+				WHERE qid = $theQuestion[pqid] GROUP BY aid", $currentCourseID);
 			$answer_counts = array();
 			$answer_text = array();
 			$answer_total = 0;

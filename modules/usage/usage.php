@@ -40,8 +40,8 @@
 */
 
 $require_current_course = TRUE;
-$require_help 			= true;
-$helpTopic 				= 'Usage';
+$require_help = true;
+$helpTopic = 'Usage';
 $require_login = true;
 $require_prof = true;
 include '../../include/baseTheme.php';

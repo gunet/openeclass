@@ -188,7 +188,7 @@ if (!extension_loaded('gd')) {
         switch ($u_interval) {
             case "summary":
                 while ($row = mysql_fetch_assoc($result)) {
-                        $chart->addPoint(new Point("Summary", $row['cnt']));
+                        $chart->addPoint(new Point($langSummary, $row['cnt']));
                         $chart->width += 25;
                         $chart_content=1;
                 }
