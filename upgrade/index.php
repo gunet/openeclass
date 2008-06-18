@@ -37,10 +37,10 @@ $tool_content .= "<p>Για να δείτε τις αλλαγές-βελτιώσ
 <fieldset><legend><b>Στοιχεία Εισόδου</b></legend>
 <table cellpadding='1' cellspacing='2' width='99%'>
 <tr><th style='text-align: left; background: #edecdf; color: #727266; font-size: 90%'>$langUsername :</th>
-    <td style=\"border: 1px solid #FFFFFF;\">&nbsp;<input class='auth_input_admin' style='width:150px; heigth:20px;' type='text' name='login' size='20'></td>
+    <td style=\"border: 1px solid #FFFFFF;\">&nbsp;<input class='auth_input_admin' style='width:200px; heigth:20px;' type='text' name='login' size='20'></td>
 </tr>
 <tr><th style='text-align: left; background: #edecdf; color: #727266; font-size: 90%'>$langPass :</th>
-    <td style=\"border: 1px solid #FFFFFF;\">&nbsp;<input class='auth_input_admin' type='password' style='width:150px; heigth:20px;' name='password' size='20'></td>
+    <td style=\"border: 1px solid #FFFFFF;\">&nbsp;<input class='auth_input_admin' type='password' style='width:200px; heigth:20px;' name='password' size='20'></td>
 </tr>
 <tr><td colspan='2' style=\"border: 1px solid #FFFFFF;\" align='center'>
     <input type='submit' name='submit_upgrade' value='Αναβάθμιση Βάσης Δεδομένων'></td>
