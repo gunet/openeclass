@@ -57,131 +57,114 @@ $tool_content .=  "<a href='stateclass.php'>".$langPlatformGenStats."</a> <br> "
               "<a href='oldStats.php'>".$langOldStats."</a> <br> ".
                "<a href='monthlyReport.php'>".$langMonthlyReport."</a>";
 
-$tool_content .= "<table width=99% border='0' height=316 cellspacing='0' align=center cellpadding='0'>\n";
-$tool_content .= "<tr>\n";
-$tool_content .= "<td valign=top>
- <table width='96%' align='center' class='admin'>
-   <tr>
+ $tool_content .= "<table width='96%' align='center'><tr>
      <td valign=top>
      <table width=90% align=center border=0 cellspacing='0' cellpadding='0'>
      <tr><td valign=top width=49%>
  <table border='0' width=100% align=center cellspacing='0' cellpadding='1'>
-    <tr><td class='stat1' colspan='3'>$langNbLogin</td></tr>
+    <tr><th class='left' colspan='3'>$langNbLogin</th></tr>
    <tr>
-  <td class='stat2'>$langFrom ".list_1Result("select loginout.when from loginout order by loginout.when limit 1").": </td>
-	<td class='stat2' align=right width='25%'><b>".
+  <td >$langFrom ".list_1Result("select loginout.when from loginout order by loginout.when limit 1").": </td>
+	<td  align=right width='25%'><b>".
 list_1Result("select count(*) from loginout where loginout.action ='LOGIN'")."</b></td></tr>
- <tr><td class='stat2'>$langLast30Days :</td><td class='stat2' align=right><b>
+ <tr><td >$langLast30Days :</td><td  align=right><b>
 ".list_1Result("select count(*) from loginout where action ='LOGIN' and (loginout.when > DATE_SUB(CURDATE(),INTERVAL 30 DAY))")."</b></td></tr>
-<tr><td class='stat2'>$langLast7Days :</td><td class='stat2' align=right><b>
+<tr><td >$langLast7Days :</td><td  align=right><b>
 ".list_1Result("select count(*) from loginout where action ='LOGIN' and (loginout.when > DATE_SUB(CURDATE(),INTERVAL 7 DAY))")."</b></td>
  </tr>
-<tr><td class='stat2'>$langToday :</td><td class='stat2' align=right><b>
+<tr><td >$langToday :</td><td  align=right><b>
 ".list_1Result("select count(*) from loginout where action ='LOGIN' and (loginout.when > curdate())")."</b></td> </tr>
 </table>
 </td><td width=2%>&nbsp;</td>";
 
 $tool_content .= "<td valign=top width=49%><table border='0' width=100% align=center cellspacing='0' cellpadding='1'> 
- <tr><td class='stat1' colspan='3'>$langNumUsers</td></tr>
+ <tr><th class='left' colspan='3'>$langNumUsers</td></tr>
  <tr>
- <td class='stat2'>$langNbProf :</td><td class='stat2' align=right width='25%'>
+ <td >$langNbProf :</td><td  align=right width='25%'>
 <b>".list_1Result("select count(*) from user where statut = 1;")."</b></td>
    </tr>
   <tr>
-  <td class='stat2'>$langNbStudents :</td><td class='stat2' align=right><b>
+  <td >$langNbStudents :</td><td  align=right><b>
 ".list_1Result("select count(*) from user where statut = 5;")."</b></td></tr>
- <tr><td class='stat2'>$langNumGuest :</td><td class='stat2' align=right>
+ <tr><td >$langNumGuest :</td><td  align=right>
 <b>".list_1Result("select count(*) from user where statut = 10;")."</b></td></tr>
-  <tr><td class='stat2' colspan=3>&nbsp;</td></tr></table>
+  <tr><td  colspan=3>&nbsp;</td></tr></table>
   </td></tr></table>";
 
 // Constract some tables with statistical information
 $tool_content .= "<table border='0' width=90% align=center cellspacing='0' cellpadding='1'>
- <tr><td class='stat1' colspan='2'>$langStatCour</td>
+ <tr><th class='left' colspan='2'>$langStatCour</td>
  </tr>
-   <tr><td class='stat2'>&nbsp;</td></tr>
+   <tr><td'>&nbsp;</td></tr>
      <tr>
-      <td class='stat2' valign=top>
+      <td valign=top>
         <table width=100% align=center border=0 cellspacing='0' cellpadding='0'>
         <tr><td valign=top width=49% align=center>
      <table border='0' width='75%' border=1 align=center cellspacing='0' cellpadding='1'>
-      <tr><td style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langCourses :</td></tr>
+      <tr><td class='stat'>$langCourses :</td></tr>
      <tr>
-      <td class='stat2'>$langNumCourses : <b>".list_1Result("select count(*) from cours;")."</b></td>
+      <td>$langNumCourses : <b>".list_1Result("select count(*) from cours;")."</b></td>
     </tr></table>
 
       <br>
     <table border='0' width='75%' border=1 align=center cellspacing='0' cellpadding='1'>
-     <tr><td style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langNumEachCourse :</td></tr>
+     <tr><td class='stat'>$langNumEachCourse :</td></tr>
     <tr>
-   <td class='stat2'>".tablize(list_ManyResult("select DISTINCT faculte, count(*) from cours Group by faculte"), $language)."</td>
+   <td >".tablize(list_ManyResult("select DISTINCT faculte, count(*) from cours Group by faculte"), $language)."</td>
        </tr>
        </table>";
 
 $tool_content .= "<br><table border='0' align=center width='75%' cellspacing='0' cellpadding='1'>
-    <tr><td style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langNumEachLang :</td></tr>
+    <tr><td class='stat'>$langNumEachLang :</td></tr>
   <tr>
-  <td class='stat2'>".tablize(list_ManyResult("select DISTINCT languageCourse, count(*) from cours Group by languageCourse "), $language)."</td></tr></table>
+  <td >".tablize(list_ManyResult("select DISTINCT languageCourse, count(*) from cours Group by languageCourse "), $language)."</td></tr></table>
  <br>
 
   <table border='0' align=center width='75%' cellspacing='0' cellpadding='1'>
-   <tr>
-   <td  style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langNunEachAccess :</td>
-    </tr>
-      <tr>
-  <td class='stat2'>".tablize(list_ManyResult("select DISTINCT visible, count(*) from cours GROUP BY visible "), $language)."</td>
+   <tr><td class='stat'>$langNunEachAccess :</td></tr>
+      <tr><td >".tablize(list_ManyResult("select DISTINCT visible, count(*) from cours GROUP BY visible "), $language)."</td>
         </tr>
         </table>
         <br>
-  <table border='0' align=center width='75%' cellspacing='0' cellpadding='1'>
+  	<table border='0' align=center width='75%' cellspacing='0' cellpadding='1'>
+        <tr><td class='stat'>$langNumEachCat :</td></tr>
         <tr>
-          <td style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langNumEachCat :</td>
-        </tr>
-        <tr>
- <td class='stat2'>".tablize(list_ManyResult("select DISTINCT type, count(*) from cours GROUP BY type"),$language)."</td></tr>
+ <td>".tablize(list_ManyResult("select DISTINCT type, count(*) from cours GROUP BY type"),$language)."</td></tr>
         </table>";
 
-
 $tool_content .= "<table width='75%' border=1 align=center cellspacing='0' cellpadding='1'>
-   <tr><td style='background: #E6EDF5; color: #4F76A3; font-size: 90%'>$langAnnouncements :</td></tr>
-   <tr>
-  <td class='stat2'>$langNbAnnoucement :<b>".list_1Result("select count(*) from annonces;")."</b></td>
-        </tr>
-        </table>
-        <br></td>
-        <td valign=top width=49%>
-
+   <tr><td class='stat'2>$langAnnouncements :</td></tr>
+   <tr><td >$langNbAnnoucement :<b>".list_1Result("select count(*) from annonces;")."</b></td></tr>
+   </table>
+   <br></td>
+  <td valign=top width=49%>
  <table border='0' align=center width='75%' cellspacing='0' cellpadding='1'>
+        <tr><td class='stat'>$langNumEachRec :</td></tr>
         <tr>
-          <td style='background: #E6EDF5; color: #4F76A3; font-size: 90%' colspan='2'>$langNumEachRec :</td>
-        </tr>
-        <tr>
- <td class='stat2'>".tablize(list_ManyResult("select CONCAT(code_cours,\" Statut :\",statut), count(user_id) from cours_user GROUP BY code_cours, statut order by code_cours"), $language)."</td>
+ <td >".tablize(list_ManyResult("select CONCAT(code_cours,\" Statut :\",statut), count(user_id) from cours_user GROUP BY code_cours, statut order by code_cours"), $language)."</td>
         </tr></table>
 </td></tr></table>";
 
-$tool_content .= " </td></tr>
-<tr><td class='stat2'>&nbsp;</td></tr></table>";
+$tool_content .= " </td></tr></table>";
 
 $tool_content .= "<table width=90% align=center cellspacing='0' cellpadding='1'> 
-	<tr><td class=stat1 width=80%><b>$langAlert !</b></td></tr>
-    <tr><td>
- <table border='0' width=100% align=center cellspacing='0' cellpadding='1'>";
+	<tr><th class='left' width=80%><b>$langAlert !</b></td></tr>
+    <tr><td><table border='0' width=100% align=center cellspacing='0' cellpadding='1'>";
 
 $sqlLoginDouble = "select DISTINCT username, count(*) as nb from user group by username HAVING nb > 1 order by nb desc";
 $loginDouble = list_ManyResult($sqlLoginDouble);
 
-$tool_content .= "<tr><td class=stat2 width=80%><strong>$langMultipleUsers :</strong><br>
+$tool_content .= "<tr><td width=80%><strong>$langMultipleUsers :</strong><br>
 <span class='explanationtext'>(".$sqlLoginDouble.")</span></td>
 <td class=color2 align=center><strong>$langResult</strong></td>
     </tr>
-    <tr><td class=stat2>";
+    <tr><td>";
 
 if (count($loginDouble) > 0) {
         $tool_content .= tablize($loginDouble, $language);
-      $tool_content .=  "</td><td class=color2 align=center>".error_message()." ";
+      $tool_content .=  "</td><td class='color2' align=center>".error_message()." ";
 } else {
-        $tool_content .= "</td><td class=color2 align=center>".ok_message()." ";
+        $tool_content .= "</td><td class='color2' align=center>".ok_message()." ";
 }
 $tool_content .= "</td></tr></table></td></tr>";
 
@@ -189,14 +172,11 @@ $tool_content .= "</td></tr></table></td></tr>";
 $sqlLoginDouble = "select DISTINCT email, count(*) as nb from user group by email HAVING nb > 1  order by nb desc";
 $loginDouble = list_ManyResult($sqlLoginDouble);
 
-$tool_content .= "<tr><td><table border='0' width=100% align=center cellspacing='0' cellpadding='1'>
-     <tr>
-       <td class='stat2' width=80%><strong>$langMultipleAddr e-mail:</strong>
+$tool_content .= "<tr><td><table border='0' width=100% align=center cellspacing='0' cellpadding='1'><tr>
+       <td  width=80%><strong>$langMultipleAddr e-mail:</strong>
        <br><span class='explanationtext'>(".$sqlLoginDouble.")</span></td>
        <td class=color2 align=center><strong>$langResult</strong></td>
-     </tr>
-     <tr>
-       <td class=stat2>";
+     </tr><tr><td>";
 
 if (count($loginDouble) > 0) {
  $tool_content .= tablize($loginDouble, $language);
@@ -217,25 +197,24 @@ $loginDouble = list_ManyResult($sqlLoginDouble);
 $tool_content .= "<tr><td>
  <table border='0' width=100% align=center cellspacing='0' cellpadding='1'>
    <tr>
-    <td class='stat2' width=80%><strong>$langMultiplePairs LOGIN - PASS</strong>
+    <td  width=80%><strong>$langMultiplePairs LOGIN - PASS</strong>
      <br><span class='explanationtext'>(".$sqlLoginDouble.")</td>
       <td class='color2' align=center><strong>$langResult</strong></td>
     </tr>
-    <tr><td class=stat2>";
-
+    <tr><td>";
 
 if (count($loginDouble) > 0) {
-$tool_content .=  tablize($loginDouble, $language);
-$tool_content .= "</td><td class=color2 align=center>";
-$tool_content .= error_message();
+	$tool_content .=  tablize($loginDouble, $language);
+	$tool_content .= "</td><td class=color2 align=center>";
+	$tool_content .= error_message();
 } else {
-$tool_content .= "</td><td class=color2 align=center>";
-$tool_content .= ok_message();
+	$tool_content .= "</td><td class=color2 align=center>";
+	$tool_content .= ok_message();
 }
 $tool_content .= "</tr></table></td></tr></table>";
-$tool_content .= "</td></tr>
-   <tr><td colspan=2><p align=right><a href='index.php' class=mainpage>$langBackAdmin&nbsp;</a></p>";
-$tool_content .= "</td></tr></table></td></tr></table>";
+$tool_content .= "</td></tr><tr><td colspan=2 align='right'>
+	<a href='index.php' class=mainpage>$langBackAdmin</a>";
+$tool_content .= "</td></tr></table>";
 
 
 /*
