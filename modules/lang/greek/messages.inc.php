@@ -1381,7 +1381,11 @@ $langCreateNewLearningPath = "Δημιουργία νέας γραμμής μά�
 $langDOCUMENTTypeDesc = "Έγγραφο";
 $langDefaultLearningPathComment = "Εισαγωγικό κείμενο της γραμμής μάθησης.";
 $langDefaultModuleAddedComment = "Πρόσθετο εισαγωγικό κείμενο σχετικά με την παρουσία της ενότητας στη γραμμή μάθησης.";
-$langDefaultModuleComment = "Εισαγωγικό κείμενο της ενότητας. Θα εμφανίζεται σε κάθε γραμμή μάθησης που θα περιέχει αυτή την ενότητα.";
+$langDefaultModuleComment = "Εισαγωγικό κείμενο της ενότητας. Θα εμφανίζεται σε κάθε γραμμή μάθησης που θα περιέχει αυτή την ενότητα";
+
+$langModuleComment_inCurrentLP = "Ορατό <u>μόνο</u> στη συγκεκριμένη γραμμή μάθησης";
+$langModuleComment_inCourse = "Εμφανίζεται με την <u>επαναχρησιμοποίηση</u> του αντικείμενου σε άλλη γραμμή μάθησης";
+
 $langDescriptionCours = "Περιγραφή μαθήματος";
 $langDocInsertedAsModule = "έχει προστεθεί σαν ενότητα";
 $langDocumentAlreadyUsed = "Αυτό το έγγραφο έχει ήδη χρησιμοποιηθεί σαν ενότητα σε αυτή τη γραμμή μάθησης";
@@ -1440,7 +1444,7 @@ $langInsertMyDocToolName = "Εισαγωγή εγγράφου";
 $langInsertMyExerciseToolName = "Εισαγωγή άσκησης";
 $langInsertMyLinkToolName = "Εισαγωγή συνδέσμου";
 $langInsertMyModuleToolName = "Εισαγωγή ενότητας";
-$langInsertMyModulesTitle = "Εισαγωγή ενότητας μαθήματος";
+$langInsertMyModulesTitle = "Επαναχρησιμοποίηση ενότητας του μαθήματος";
 $langInsertNewModuleName = "Εισαγωγή νέου ονόματος";
 $langInstalled = "Η γραμμή μάθησης έχει εισαχθεί με επιτυχία.";
 $langIntroLearningPath = "Χρησιμοποήστε αυτό το εργαλείο για να παρέχετε στους ".$langsOfStudentss." μια γραμμή μάθησης μεταξύ εγγράφων, ασκήσεων, σελίδες HTML, συνδέσεις κ.λπ.<br /><br />Εάν επιθυμείτε να παρουσιάσετε στους ".$langsOfStudentss." τη γραμμή μάθησης σας, κάντε κλικ παρακάτω.<br />";
@@ -1454,6 +1458,7 @@ $langLearningPathEmpty = "Η γραμμή μάθησης είναι κενή";
 $langLearningPathList = "Διαθέσιμες γραμμές μάθησης";
 $langLearningPathName = "Όνομα νέας γραμμής μάθησης";
 $langLearningPathData = "Στοιχεία γραμμής μάθησης";
+$langLearningObjectData = "Στοιχεία Εκπαιδευτικού Αντικείμενου";
 $langLearningPathNotFound = "Η γραμμή μάθησης δεν βρέθηκε ";
 $langLessonStatus = "Κατάσταση ενότητας";
 $langLinkAlreadyUsed = "Αυτός ο σύνδεσμος ήδη χρησιμοποιείται σαν ενότητα σε αυτήν τη γραμμή μάθησης";
@@ -1466,11 +1471,12 @@ $langMinuteShort = "ελαχ.";
 $langModuleMoved = "Μετακίνηση ενότητας";
 $langModuleOfMyCourse = "Χρήση ενότητας του μαθήματος";
 $langModuleOfMyCourseLabel = "Eνότητας του μαθήματος";
+$langModuleOfMyCourseLabel_onom = "Eνότητα του μαθήματος";
 $langModuleStillInPool = "Ενότητες αυτής της γραμμής θα είναι ακόμα διαθέσιμες στο σύνολο των ενοτήτων";
 $langModulesPoolToolName = "Σύνολο ενοτήτων";
 $langMyCourses = "Τα μαθήματά μου";
 $langNeverBrowsed = "Δεν έχει ολοκληρωθεί";
-$langNewLabel = "Δημιουργία νέας ετικέτας";
+$langNewLabel = "Δημιουργία νέας ενότητας";
 $langLabel = "Eτικέτα";
 $langNext = "Επόμενο";
 $langNextPage = "Επόμενη Σελίδα";
@@ -2018,12 +2024,12 @@ $l_smilepict	= "Εικόνα";
 /*****************************************************************
 * questionnaire.inc.php
 ******************************************************************/
-$langCreateSurvey = 'Δημιουργία ερωτηματολογίου';
-$langCreatePoll = 'Δημιουργία δημοσκόπησης';
-$langEditPoll = 'Τροποποίηση δημοσκόπησης';
-$langQuestionnaire = "Ερωτηματολόγιo";
-$langSurvey = "Δημοσκόπηση";
-$langSurveys = "Δημοσκοπήσεις";
+$langCreateSurvey = 'Δημιουργία Έρευνας Μαθησιακού Προφίλ';
+$langCreatePoll = 'Δημιουργία Ερωτηματολογίου';
+$langEditPoll = 'Τροποποίηση Ερωτηματολογίου';
+$langQuestionnaire = "Ερωτηματολόγια";
+$langSurvey = "Ερωτηματολόγιο";
+$langSurveys = "Ερωτηματολόγια";
 $langParticipate = "Συμμετοχή";
 $langSurveysActive = "Ενεργές Έρευνες Μαθησιακού Προφίλ";
 $langSurveysInactive = "Ανενεργές Έρευνες Μαθησιακού Προφίλ";
@@ -2041,7 +2047,7 @@ $langSurveyMoreAnswers ="+ απαντήσεις";
 $langSurveyMoreQuestions = "+ ερωτήσεις";
 $langSurveyCreated ="Η Έρευνα Μαθησιακού Προφίλ δημιουργήθηκε με επιτυχία.<br><br><a href=\"questionnaire.php\">Επιστροφή</a>";
 $langSurveyCreator = "Δημιουργός";
-$langSurveyCreationError = "Σφάλμα κατά την δημιουργία της Δημοσκόπησης. Παρακαλώ προσπαθήστε ξανά.";
+$langSurveyCreationError = "Σφάλμα κατά την δημιουργία του Ερωτηματολογίου. Παρακαλώ προσπαθήστε ξανά.";
 $langSurveyDeleted ="Η Έρευνα Μαθησιακού Προφίλ διαγράφηκε με επιτυχία.<br><br><a href=\"questionnaire.php\">Επιστροφή</a>.";
 $langSurveyDeactivated ="Η Έρευνα Μαθησιακού Προφίλ απενεργοποιήθηκε με επιτυχία.";
 $langSurveyActivated ="Η Έρευνα Μαθησιακού Προφίλ ενεργοποιήθηκε με επιτυχία.";
@@ -2050,7 +2056,7 @@ $langSurveyTotalAnswers = "Συνολικός αριθμός απαντήσεω�
 $langSurveyNone = "Δεν έχουν δημιουργηθεί έρευνες μαθησιακού προφίλ για το μάθημα";
 $langSurveyInactive = "Η Έρευνα Μαθησιακού Προφίλ έχει λήξει ή δεν έχει ενεργοποιηθεί ακόμα.";
 $langSurveyCharts = "Αποτελέσματα έρευνας";
-$langQPref = "Τι τύπο ερωτηματολογίου επιθυμείτε;";
+$langQPref = "Τι τύπο έρευνα μαθησιακού προφίλ επιθυμείτε;";
 $langQPrefSurvey = "Έρευνα μαθησιακού προφίλ";
 $langNamesSurvey = "Έρευνες Μαθησιακού Προφίλ";
 $langHasParticipated = "Έχετε ήδη συμμετάσχει";
@@ -2134,8 +2140,8 @@ $langQuestion10= array('Μου αρέσει να παίρνω τον ρόλο τ
 					);
 
 // polls
-$langPollsActive = "Ενεργές Δημοσκοπήσεις";
-$langPollsInactive = "Ανενεργές Δημοσκοπήσεις";
+$langPollsActive = "Ενεργά Ερωτηματολόγια";
+$langPollsInactive = "Ανενεργά Ερωτηματολόγια";
 $langPollStart = "Έναρξη";
 $langPollStarted = "Ξεκίνησε την";
 $langPollEnd = "Λήξη";
@@ -2150,27 +2156,27 @@ $langPollContinue = "Συνέχεια";
 $langPollMoreAnswers ="+";
 $langPollAddMultiple = "Νέα ερώτηση πολλαπλής επιλογής";
 $langPollAddFill = "Νέα ερώτηση συμπλήρωσης κενού";
-$langPollCreated ="Η Δημοσκόπηση δημιουργήθηκε με επιτυχία.<br><br> <a href=\"questionnaire.php\">Επιστροφή</a>.";
-$langPollEdited ="Η Δημοσκόπηση τροποποιήθηκε με επιτυχία.<br><br> <a href=\"questionnaire.php\">Επιστροφή</a>.";
+$langPollCreated ="Το Ερωτηματολόγιο δημιουργήθηκε με επιτυχία.<br><br> <a href=\"questionnaire.php\">Επιστροφή</a>.";
+$langPollEdited ="Το Ερωτηματολόγιο τροποποιήθηκε με επιτυχία.<br><br> <a href=\"questionnaire.php\">Επιστροφή</a>.";
 $langPollCreator = "Δημιουργός";
 $langPollCreation = "Ημ/νία Δημιουργίας";
-$langPollCreateDate = "Η δημοσκόπηση δημιουργήθηκε την";
-$langPollCreationError = "Σφάλμα κατά την δημιουργία της Δημοσκόπησης. Παρακαλώ προσπαθήστε ξανά.";
-$langPollDeleted ="Η Δημοσκόπηση διαγράφηκε με επιτυχία. <br><br><a href=\"questionnaire.php\">Επιστροφή</a>.";
-$langPollDeactivated ="Η Δημοσκόπηση απενεργοποιήθηκε με επιτυχία!";
-$langPollActivated ="Η Δημοσκόπηση ενεργοποιήθηκε με επιτυχία!";
+$langPollCreateDate = "Το Ερωτηματολόγιο δημιουργήθηκε την";
+$langPollCreationError = "Σφάλμα κατά την δημιουργία του Ερωτηματολογίου. Παρακαλώ προσπαθήστε ξανά.";
+$langPollDeleted ="Το Ερωτηματολόγιο διαγράφηκε με επιτυχία. <br><br><a href=\"questionnaire.php\">Επιστροφή</a>.";
+$langPollDeactivated ="Το Ερωτηματολόγιο απενεργοποιήθηκε με επιτυχία!";
+$langPollActivated ="Το Ερωτηματολόγιο ενεργοποιήθηκε με επιτυχία!";
 $langPollSubmitted ="Ευχαριστούμε για την συμμετοχή σας!<br><br><a href=\"questionnaire.php\">Επιστροφή</a>";
 $langPollTotalAnswers = "Συνολικός αριθμός απαντήσεων";
-$langPollNone = "Δεν υπάρχουν αυτή την στιγμή διαθέσιμες δημοσκοπήσεις.";
-$langPollInactive = "Η Δημοσκόπηση έχει λήξει ή δεν έχει ενεργοποιηθεί ακόμα.";
+$langPollNone = "Δεν υπάρχουν αυτή την στιγμή διαθέσιμα Ερωτηματολόγια.";
+$langPollInactive = "Το Ερωτηματολόγιο έχει λήξει ή δεν έχει ενεργοποιηθεί ακόμα.";
 $langPollHasEnded = "Έχει λήξει";
-$langPollCharts = "Αποτελέσματα δημοσκόπησης";
+$langPollCharts = "Αποτελέσματα Ερωτηματολογίου";
 $langPollUnknown = "Δεν ξέρω / Δεν απαντώ";
 $langIndividuals = "Αποτελέσματα ανά χρήστη";
 $langCollectiveCharts = "Συγκεντρωτικά αποτελέσματα";
 $langHasNotParticipated = "Δεν έχετε συμμετάσχει";
-$langThereAreParticipants = "Στην δημοσκόπηση έχουν ήδη συμμετάσχει χρήστες. Η διόρθωση των στοιχείων δεν είναι δυνατή!";
-$langPollEmpty = "Παρακαλώ προσθέστε ερωτήσεις στην δημοσκόπηση!";
+$langThereAreParticipants = "Στο Ερωτηματολόγιο έχουν ήδη συμμετάσχει χρήστες. Η διόρθωση των στοιχείων δεν είναι δυνατή!";
+$langPollEmpty = "Παρακαλώ προσθέστε ερωτήσεις στο Ερωτηματολόγιο!";
 $langPollEmptyAnswers = "Σφάλμα! Δεν υπάρχουν απαντήσεις στην ερώτηση";
 
 /************************************************************
@@ -2761,7 +2767,7 @@ $langConfirmUnregCours = "Θέλετε σίγουρα να απεγγραφεί�
  $langMonths[9] = "Σεπ";
  $langMonths[10] = "Οκτ";
  $langMonths[11] = "Νοε";
- $langMonths[12] = "Δεκ"; 
+ $langMonths[12] = "Δεκ";
  #for monthly report
  $langMonths['01'] = "Ιανουάριος";
  $langMonths['02'] = "Φεβρουάριος";

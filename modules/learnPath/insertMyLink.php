@@ -173,13 +173,7 @@ while ($iterator <= $_POST['maxLinkForm']) {
 	$iterator++;
 }
 
-	$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">
-        <li><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</a></li>
-      </ul>
-    </div>
-    ";
+
 
 if (isset($dialogBox) && $dialogBox != "") {
     $tool_content .= "<table width=\"99%\"><tr>";
@@ -195,6 +189,9 @@ $tool_content .= showlinks($tbl_link);
 // display list of modules used by this learning path
 //$tool_content .= display_path_content();
 
+	$tool_content .= "
+    <br />
+    <p align=\"right\"><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</a>";
 draw($tool_content, 2, "learnPath");
 
 
@@ -212,11 +209,11 @@ function showlinks($tbl_link)
 	$output = "";
 	$output .= '<form action="' . $_SERVER['PHP_SELF'] . '" method="POST">';
 	$output .= "
-    <table width=\"99%\">
+    <table width=\"99%\" class=\"LearnPathSum\">
     <thead>
-      <tr>
-        <th colspan=\"2\" class=\"left\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$langName</th>
-        <th width=\"10\">$langSelection</th>
+      <tr align=\"center\" class=\"LP_header\">
+        <td colspan=\"2\"><div align=\"center\">$langName</div></td>
+        <td width=\"10\"><div align=\"center\">$langSelection</div></td>
       </tr>
     </thead>
     <tbody>";
@@ -226,7 +223,7 @@ function showlinks($tbl_link)
 		$myrow[3] = parse_tex($myrow[3]);
 		$output .= 	"
     <tr>
-      <td width=\"1\" valign=\"top\"><img src=\"../../template/classic/img/links.gif\" border=\"0\"></td>
+      <td width=\"1\" valign=\"top\"><img src=\"../../template/classic/img/links_on.gif\" border=\"0\"></td>
       <td align=\"left\" valign=\"top\"><a href=\"../link/link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">".$myrow[2]."</a>
       <br />
       <small class=\"comments\">".$myrow[3]."</small>";
@@ -237,10 +234,10 @@ function showlinks($tbl_link)
 	}
 	$output .= "
     <tr>
-      <th colspan=\"2\">&nbsp;</th>
+      <td colspan=\"2\">&nbsp;</td>
       <td align=\"right\">
         <input type=\"hidden\" name=\"maxLinkForm\" value =\"" .($i-1) ."\" />
-        <input type=\"submit\" name=\"submitInsertedLink\" value=\"$langAddModulesButton\" />
+        <input type=\"submit\" name=\"submitInsertedLink\" value=\"$langAddModulesButton\" class=\"LP_button\"/>
       </td>
     </tr>
     </tbody>

@@ -87,13 +87,7 @@ mysql_select_db($currentCourseID);
 // as they are already in this learning path
 
 
-	$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">
-        <li><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</a></li>
-      </ul>
-    </div>
-    ";
+
 function buildRequestModules() {
 
  global $TABLELEARNPATHMODULE;
@@ -374,6 +368,10 @@ unset($attribute);
 
 // display list of available documents
 $tool_content .= display_my_documents($dialogBox, $style) ;
+
+	$tool_content .= "
+    <br />
+    <p align=\"right\"><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</p>";
 
 //################################## MODULES LIST ####################################\\
 

@@ -77,14 +77,6 @@ if (!$is_adminOfCourse) claro_die($langNotAllowed);
 $navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
 $nameTools = $langInsertMyExerciseToolName;
 
-	$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">
-        <li><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</a></li>
-      </ul>
-    </div>
-    ";
-
 // $_SESSION
 if ( !isset($_SESSION['path_id']) )
 {
@@ -237,6 +229,10 @@ $tool_content .= display_my_exercises($dialogBox, $style);
 
 // display list of modules used by this learning path
 //$tool_content .= display_path_content();
+
+	$tool_content .= "
+    <br />
+    <p align=\"right\"><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</p>";
 
 draw($tool_content, 2, "learnPath");
 

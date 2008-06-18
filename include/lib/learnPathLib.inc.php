@@ -120,7 +120,7 @@ function commentBox($type, $mode)
     $tbl_lp_module               = "lp_module";
     // globals
     global $is_adminOfCourse;
-    global $langModify, $langOk, $langErrorNameAlreadyExists, $langAddComment, $langConfirmYourChoice;
+    global $langModify, $langOk, $langErrorNameAlreadyExists, $langAdd, $langConfirmYourChoice;
     global $langDefaultLearningPathComment, $langDefaultModuleComment;
     global $langDefaultModuleAddedComment, $langDelete;
     // will be set 'true' if the comment has to be displayed
@@ -233,10 +233,9 @@ function commentBox($type, $mode)
             // if no comment and user is admin : display link to add a comment
             if ( $is_adminOfCourse )
             {
-                $output .= '<!--<p>-->' . "\n"
+                $output .= '' . "\n"
                 .    '<a href="' . $_SERVER['PHP_SELF'] . '?cmd=update' . $col_name . '">' . "\n"
-                .    $langAddComment . '</a>' . "\n"
-                .    '<!--</p>-->' . "\n"
+                .    $langAdd . '</a>' . "\n"
                 ;
             }
         }
@@ -748,15 +747,15 @@ function display_my_exercises($dialogBox, $style)
         $output .= claro_disp_message_box($dialogBox, $style).'<br />'."\n";
     }
     $output .= '    <form method="POST" name="addmodule" action="' . $_SERVER['PHP_SELF'] . '?cmdglobal=add">'."\n";
-    $output .= '    <table width="99%">'."\n"
+    $output .= '    <table width="99%" class="LearnPathSum">'."\n"
     .    '    <thead>'."\n"
-    .    '    <tr align="center" valign="top">'."\n"
-    .    '      <th>'
+    .    '    <tr align="center" class="LP_header">'."\n"
+    .    '      <td><div align="center">'
     .    $langExercise
-    .    '</th>'."\n"
-    .    '      <th width="100">'
+    .    '</div></td>'."\n"
+    .    '      <td width="100"><div align="center">'
     .    $langSelection
-    .    '</th>'."\n"
+    .    '</div></td>'."\n"
     .    '    </tr>'."\n"
     .    '    </thead>'."\n"
     ;
@@ -800,7 +799,7 @@ function display_my_exercises($dialogBox, $style)
 
 	        $atleastOne = true;
 	    }//end while another module to display
-	    $output .= '    </tbody>'."\n";
+	    //$output .= '    </tbody>'."\n";
 	}
 
     if( !$atleastOne )
@@ -818,9 +817,9 @@ function display_my_exercises($dialogBox, $style)
     if( $atleastOne )
     {
         $output .= '    <tr>'."\n"
-		.	 '      <th>&nbsp;</th>'
+		.	 '      <td>&nbsp;</td>'."\n"
 		.	 '      <td>'
-        .    '<input type="submit" name="insertExercise" value="'.$langAddModulesButton.'" />'
+        .    '<input type="submit" name="insertExercise" value="'.$langAddModulesButton.'" class="LP_button"/>'
         .    '</td>'."\n"
 		.	 '    </tr>'."\n"
         ;
@@ -916,14 +915,14 @@ function display_my_documents($dialogBox, $style)
 
 
     $output .= '
-    <table width="99%">';
+    <table width="99%" class="LearnPathSum">';
     $output .= "
     <thead>
-    <tr valign=\"top\">
-      <th colspan=\"2\" class=\"left\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$langName</th>
-      <th>$langSize</th>
-      <th>$langDate</th>
-      <th>$langSelection</th>
+    <tr class=\"LP_header\">
+      <td colspan=\"2\"><div align=\"center\">$langName</div></td>
+      <td><div align=\"center\">$langSize</div></tdh>
+      <td><div align=\"center\">$langDate</div></td>
+      <td><div align=\"center\">$langSelection</div></td>
       </tr>
     </thead>
     <tbody>";
@@ -1018,11 +1017,11 @@ function display_my_documents($dialogBox, $style)
     $colspan1 = $colspan -1 ;
         $output .= '
     <tr>
-      <th colspan="'.$colspan1.'" align="left">&nbsp;</th>
+      <td colspan="'.$colspan1.'" align="left">&nbsp;</td>
       <td align="right" width="100">
         <input type="hidden" name="openDir" value="'.$curDirPath.'" />
         <input type="hidden" name="maxDocForm" value ="'.$iterator.'" />
-        <input type="submit" name="submitInsertedDocument" value="'.$langAddModulesButton.'" />
+        <input type="submit" name="submitInsertedDocument" value="'.$langAddModulesButton.'" class="LP_button"/>
       </td>
     </tr>';
     } // end if ( $fileList)
@@ -1705,6 +1704,17 @@ function claro_disp_message_box($message, $style = FALSE)
     .      '</table>' . "\n\n"
     ;
     */
+    return "$cell $message" ;
+}
+
+function claro_disp_message_box1($message, $style = FALSE)
+{
+	if ($style) {
+		$cell = "";
+	}
+	else {
+		$cell = "";
+	}
     return "$cell $message" ;
 }
 

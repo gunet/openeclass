@@ -55,13 +55,7 @@ if (!$is_adminOfCourse ) claro_die($langNotAllowed);
 $navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
 $nameTools = $langInsertMyDescToolName;
 
-	$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">
-        <li><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</a></li>
-      </ul>
-    </div>
-    ";
+
 // $_SESSION
 if ( !isset($_SESSION['path_id']) )
 {
@@ -153,8 +147,13 @@ else
 
     }
 }
+$tool_content = "<table width=\"99%\"><tbody><tr><td class=\"success\">";
 
 $tool_content .= claro_disp_tool_title($langLinkInsertedAsModule);
+$tool_content .= "</td></tr></tbody></table>";
+	$tool_content .= "
+    <br />
+    <p align=\"right\"><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</a></p>";
 //$tool_content .= '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
 draw($tool_content, 2, "learnPath");
 ?>

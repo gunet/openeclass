@@ -29,6 +29,16 @@ a:visited.invisible
 	font-weight: bold !important;
 }
 
+.LP_button { 
+    vertical-align:middle;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    padding: 2px;
+    border: 1px solid #CAC3B5;
+    background-color: #f9f8ea;
+    color: #666666;
+}
+
 .Group_Operations {
     background: #CAC3B5;
     font-size: 11px;
@@ -58,7 +68,6 @@ a:visited.invisible
 
 table.LearnPathSum{
     padding: 2px;
-    vertical-align: middle;
     border-top: 1px solid #edecdf;
     border-bottom: 1px solid #edecdf;
     border-left: 1px solid #edecdf;
@@ -67,7 +76,6 @@ table.LearnPathSum{
 
 table.LearnPathSum thead{
 	padding: 2px;
-	vertical-align: middle;
 	border-top: 1px solid #CAC3B5;
 	border-bottom: 1px solid #CAC3B5;
 	border-left: 1px solid #edecdf;
@@ -76,7 +84,6 @@ table.LearnPathSum thead{
 
 table.LearnPathSum tbody{
     padding: 2px;
-    vertical-align: middle;
     border-top: 1px solid #edecdf;
     border-bottom: 1px solid #CAC3B5;
     border-left: 1px solid #edecdf;
@@ -90,7 +97,6 @@ table.LearnPathSum th{
 	padding-top: 6px;
 	font-weight: bold;
 	font-size:10px !important;
-	vertical-align: middle;
 }
 
 table.LearnPathSum td{
@@ -237,3 +243,4 @@ table.Question td {
 	color: #a33033;
 	border: red  !important;
 }
+

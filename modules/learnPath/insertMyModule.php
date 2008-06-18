@@ -64,15 +64,9 @@ $tool_content = "";
 $navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPath);
 if (! $is_adminOfCourse) claro_die($langNotAllowed);
 $navigation[]= array ("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
-$nameTools = $langInsertMyModuleToolName;
+$nameTools = $langInsertMyModulesTitle;
 
-	$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">
-        <li><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</a></li>
-      </ul>
-    </div>
-    ";
+
 
 // $_SESSION
 if ( !isset($_SESSION['path_id']) )
@@ -179,15 +173,15 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add'))
 $result = db_query(buildRequestModules());
 
 $tool_content .= '    <form name="addmodule" action="'.$_SERVER['PHP_SELF'].'?cmdglobal=add">'."\n\n";
-$tool_content .= '    <table width="99%">'."\n"
+$tool_content .= '    <table width="99%" class="LearnPathSum">'."\n"
        .'    <thead>'."\n"
-       .'    <tr>'."\n"
-       .'      <th class="left">'
+       .'    <tr class="LP_header">'."\n"
+       .'      <td class="left"><div align="center">'
        .$langLearningModule
-       .'</th>'."\n"
-       .'      <th width="100">'
+       .'</div></td>'."\n"
+       .'      <td width="100"><div align="center">'
        .$langSelection
-       .'</th>'."\n"
+       .'</div></td>'."\n"
        .'    </tr>'."\n"
        .'    </thead>'."\n"
        .'    <tbody>'."\n";
@@ -203,7 +197,7 @@ while ($list=mysql_fetch_array($result))
     if($list['contentType'] == CTEXERCISE_ )
         $moduleImg = "exercise_on.gif";
     else if($list['contentType'] == CTLINK_ )
-        $moduleImg = "links.gif";
+        $moduleImg = "links_on.gif";
     else if($list['contentType'] == CTCOURSE_DESCRIPTION_ )
        	$moduleImg = "description_on.gif";
     else
@@ -247,9 +241,9 @@ if ( !$atleastOne )
 if ( $atleastOne )
 {
     $tool_content .= '    <tr>'."\n"
-        .'      <th>&nbsp;</th>'."\n"
+        .'      <td>&nbsp;</td>'."\n"
         .'      <td>'."\n"
-        .'        <input type="submit" value="'.$langAddModulesButton.'" />'."\n"
+        .'        <input type="submit" value="'.$langReuse.'" />'."\n"
         .'        <input type="hidden" name="cmdglobal" value="add">'."\n"
         .'      </td>'."\n"
         .'    </tr>'."\n";
@@ -257,6 +251,11 @@ if ( $atleastOne )
 
 $tool_content .= "\n".'    </tbody>'."\n".'    </table>'."\n".'    </form>';
 
+
+	$tool_content .= "
+        <br />
+        <p align=\"right\"><a href=\"learningPathAdmin.php\">$langBackToLPAdmin</p>
+    ";
 //####################################################################################\\
 //################################## MODULES LIST ####################################\\
 //####################################################################################\\

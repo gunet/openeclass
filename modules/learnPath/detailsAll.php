@@ -79,8 +79,8 @@ $usersList = get_limited_list($sql, 30);
 $tool_content .= '<table width="99%">'."\n"
 	.'  <thead>'."\n"
 	.'  <tr>'."\n"
-	.'    <th colspan="2" class="left">'.$langStudent.'</th>'."\n"
-	.'    <th colspan="2" width="20%">'.$langProgress.'</th>'."\n"
+	.'    <th colspan="2" class="left"><div align="center">'.$langStudent.'</div></th>'."\n"
+	.'    <th colspan="2" width="20%"><div align="center">'.$langProgress.'</div></th>'."\n"
 	.'  </tr>'."\n"
 	.'  </thead>'."\n\n"
 	.'  <tbody>'."\n";
@@ -117,6 +117,7 @@ foreach ( $usersList as $user )
 	else
 	{
 		$total = round($globalprog/($iterator-1));
+
 		$tool_content .= '    <tr>'."\n"
 			.'      <td width="1"><img src="../../template/classic/img/bullet_bw.gif" alt="bullet" title="bullet" border="0"></td>'."\n"
 			.'      <td><a href="detailsUser.php?uInfo='.$user['user_id'].'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
