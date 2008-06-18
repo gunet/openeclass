@@ -1272,7 +1272,7 @@ $langLinks = "HTML page";
 * index.inc.php
 **************************************************************/
 
-$langInvalidId = "<font color='red'> Login failed.<br>If you are not registered, create a new account using the <a href='modules/auth/registration.php'>registration form</a>. </font><br>&nbsp;<br>";
+$langInvalidId = "Login failed.<br>If you are not registered, create a new account using the <a href='modules/auth/registration.php'>registration form</a>.";
 $langAccountInactive1 = "Inactive Account.";
 $langAccountInactive2 = "Please cont the admin to activate your account.";
 $langMyCourses="My courses";

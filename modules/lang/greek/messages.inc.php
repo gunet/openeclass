@@ -1246,10 +1246,8 @@ $langPgTitle="Τίτλος σελίδας";
 * index.inc.php
 ***************************************************************/
 $langHomePage = "Αρχική Σελίδα";
-$langInvalidId = "<font color='red'>
-        Λάθος στοιχεία.<br>Αν δεν είστε γραμμένος, συμπληρώστε τη
-        <a href='modules/auth/registration.php'>φόρμα εγγραφής</a>.
-        </font><br>&nbsp;<br>";
+$langInvalidId = "Λάθος στοιχεία.<br>Αν δεν είστε γραμμένος, συμπληρώστε τη
+        <a href='modules/auth/registration.php'>φόρμα εγγραφής</a>.";
 $langAccountInactive1 = "Μη ενεργός λογαριασμός.";
 $langAccountInactive2 = "Παρακαλώ επικοινωνήστε με τον διαχειριστή για την ενεργοποίηση του λογαριασμού σας";
 $langMyCoursesProf="Τα μαθήματα που υποστηρίζω (".$langTeacher.")";
