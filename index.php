@@ -36,7 +36,7 @@
 *               HOME PAGE OF ECLASS		               *
 ****************************************************************
 */
-$guest_allowed=true;
+$guest_allowed = true;
 $path2add=0;
 include("include/baseTheme.php");
 include("./modules/auth/auth.inc.php");
@@ -326,7 +326,6 @@ if (isset($uid) AND !isset($logout)) {
 	$helpTopic="Portfolio";
 
 	if (!session_is_registered("user_perso_active")) {
-
 		if (!check_guest()){
 			//if the user is not a guest, load classic view
 			include("logged_in_content.php");
@@ -334,10 +333,16 @@ if (isset($uid) AND !isset($logout)) {
 		} else {
 			//if the user is a guest send him straight to the corresponding lesson
 			$guestSQL = db_query("SELECT `code_cours` FROM `cours_user` WHERE `user_id` = $uid", $mysqlMainDb);
-			$sql_row = mysql_fetch_row($guestSQL);
-			$dbname=$sql_row[0];
-			session_register("dbname");
-			header("location:".$urlServer."courses/$dbname/index.php");
+			if (mysql_num_rows($guestSQL) > 0) { 
+				$sql_row = mysql_fetch_row($guestSQL);
+				$dbname=$sql_row[0];
+				session_register("dbname");
+				header("location:".$urlServer."courses/$dbname/index.php");
+			} else { // if course has deleted stop guest account
+				$warning = "<br><font color='red'>".$langInvalidGuestAccount."</font><br>";
+				include("logged_out_content.php");
+				draw($tool_content, 0,'index');
+			}
 		}
 	} else {
 		//load personalised view

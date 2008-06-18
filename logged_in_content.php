@@ -63,7 +63,7 @@ while ($mycours = mysql_fetch_array($result2)) {
          $status[$dbname] = $mycours["s"];
          $tool_content .= "
      <tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
-    $tool_content .= "
+	$tool_content .= "
        <td>
        &nbsp;<img src='images/arrow_blue.gif'>&nbsp;
        <a href='${urlServer}courses/$mycours[k]' class=CourseLink>$mycours[i]</a>
@@ -140,7 +140,7 @@ $tool_content .= "<table width='100%'>";
 $sql = "SELECT cours.code k, cours.fake_code c, cours.intitule t,
 	cours.intitule i, cours_user.statut s
 	FROM cours, cours_user WHERE cours.code=cours_user.code_cours AND cours_user.user_id='".$uid."'
-	AND cours_user.statut='5'";
+	 AND (cours_user.statut='5' OR cours_user.statut='1')";
 
 if (mysql_num_rows(db_query($sql, $mysqlMainDb)) > 0) {
 

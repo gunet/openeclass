@@ -1248,6 +1248,7 @@ $langPgTitle="Τίτλος σελίδας";
 $langHomePage = "Αρχική Σελίδα";
 $langInvalidId = "Λάθος στοιχεία.<br>Αν δεν είστε γραμμένος, συμπληρώστε τη
         <a href='modules/auth/registration.php'>φόρμα εγγραφής</a>.";
+$langInvalidGuestAccount = "Το μάθημα για το οποίο έχει δημιουργηθεί ο λογαριασμός 'χρήστη επισκέπτη' δεν υπάρχει πλέον."; 
 $langAccountInactive1 = "Μη ενεργός λογαριασμός.";
 $langAccountInactive2 = "Παρακαλώ επικοινωνήστε με τον διαχειριστή για την ενεργοποίηση του λογαριασμού σας";
 $langMyCoursesProf="Τα μαθήματα που υποστηρίζω (".$langTeacher.")";

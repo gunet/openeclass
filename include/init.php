@@ -156,6 +156,7 @@ if (!isset($guest_allowed) || $guest_allowed!= true){
 	}
 }
 
+
 // If $require_current_course is true, initialise course settings
 // Read properties of current course
 if (isset($require_current_course) and $require_current_course) {

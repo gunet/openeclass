@@ -1273,8 +1273,9 @@ $langLinks = "HTML page";
 **************************************************************/
 
 $langInvalidId = "Login failed.<br>If you are not registered, create a new account using the <a href='modules/auth/registration.php'>registration form</a>.";
+$langInvalidGuestAccount = "Course with guest account not exists anymore.";
 $langAccountInactive1 = "Inactive Account.";
-$langAccountInactive2 = "Please cont the admin to activate your account.";
+$langAccountInactive2 = "Please contact the administrator to activate your account.";
 $langMyCourses="My courses";
 $langMyCoursesProf="My courses (".$langsTeachers.")";
 $langMyCoursesUser="My registered courses (".$langStudent.")";
