@@ -49,7 +49,7 @@ require_once("../../include/lib/learnPathLib.inc.php");
 require_once("../../include/lib/fileDisplayLib.inc.php");
 
 $require_current_course = TRUE;
-
+$require_prof = TRUE;
 /*
  * DB tables definition
  */
@@ -73,28 +73,15 @@ $style = "";
 $MessBox = "";
 
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
-if (!$is_adminOfCourse) claro_die($langNotAllowed);
 $navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
 $nameTools = $langInsertMyExerciseToolName;
 
-// $_SESSION
-if ( !isset($_SESSION['path_id']) )
-{
-      claro_die ("<center> Not allowed ! (path_id not set :@ )</center>");
-}
 
 mysql_select_db($currentCourseID);
 
-/* ---------------------------------------------------------- */
-
-/*======================================
-       CLAROLINE MAIN
-  ======================================*/
-
 // see checked exercises to add
 
-$sql = "SELECT *
-        FROM `".$TABLEEXERCISES;
+$sql = "SELECT * FROM `".$TABLEEXERCISES;
 $resultex = db_query($sql);
 
 // for each exercise checked, try to add it to the learning path.
@@ -161,7 +148,7 @@ while ($listex = mysql_fetch_array($resultex) )
             $MessBox .= $exercise['titre'] ." :  ".$langExInsertedAsModule."<br>";
             $style = "success";
             $tool_content .= "<table width=\"99%\"><tr>";
-            $tool_content .= claro_disp_message_box($MessBox, $style);
+            $tool_content .= disp_message_box($MessBox, $style);
             $tool_content .= "</td></tr></table>";
             $tool_content .= "<br />";
         }
@@ -203,7 +190,7 @@ while ($listex = mysql_fetch_array($resultex) )
                 $MessBox .= $exercise['titre']." : ".$langExInsertedAsModule."<br>";
                 $style = "success";
                 $tool_content .= "<table width=\"99%\"><tr>";
-                $tool_content .= claro_disp_message_box($MessBox, $style);
+                $tool_content .= disp_message_box($MessBox, $style);
                 $tool_content .= "</td></tr></table>";
                 $tool_content .= "<br />";
             }
@@ -212,7 +199,7 @@ while ($listex = mysql_fetch_array($resultex) )
                 $MessBox .= $listex['titre']." : ".$langExAlreadyUsed."<br>";
                 $style = "caution";
                 $tool_content .= "<table width=\"99%\"><tr>";
-                $tool_content .= claro_disp_message_box($MessBox, $style);
+                $tool_content .= disp_message_box($MessBox, $style);
                 $tool_content .= "</td></tr></table>";
                 $tool_content .= "<br />";
             }
@@ -224,7 +211,7 @@ while ($listex = mysql_fetch_array($resultex) )
 $tool_content .= display_my_exercises($dialogBox, $style);
 
 //STEP TWO : display learning path content
-//$tool_content .= claro_disp_tool_title($langPathContentTitle);
+//$tool_content .= disp_tool_title($langPathContentTitle);
 //$tool_content .= '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
 
 // display list of modules used by this learning path

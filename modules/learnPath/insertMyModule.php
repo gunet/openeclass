@@ -49,6 +49,7 @@ require_once("../../include/lib/learnPathLib.inc.php");
 require_once("../../include/lib/fileDisplayLib.inc.php");
 
 $require_current_course = TRUE;
+$require_prof = TRUE;
 
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";
@@ -62,17 +63,8 @@ require_once("../../include/baseTheme.php");
 $tool_content = "";
 
 $navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPath);
-if (! $is_adminOfCourse) claro_die($langNotAllowed);
 $navigation[]= array ("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
 $nameTools = $langInsertMyModulesTitle;
-
-
-
-// $_SESSION
-if ( !isset($_SESSION['path_id']) )
-{
-    claro_die ("<center> Not allowed ! (path_id not set :@ )</center>");
-}
 
 mysql_select_db($currentCourseID);
 
@@ -158,11 +150,6 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add'))
             $nb++;
         }
     }
-
-     /*if ( !$atleastOne )
-     {
-         $tool_content .= claro_disp_message_box("No module selected !!");
-     }*/
 
 } //end if ADD command
 
@@ -262,7 +249,7 @@ $tool_content .= "\n".'    </tbody>'."\n".'    </table>'."\n".'    </form>';
 
 //$tool_content .= "<br />";
 // display subtitle
-//$tool_content .= claro_disp_tool_title($langPathContentTitle);
+//$tool_content .= disp_tool_title($langPathContentTitle);
 // display back link to return to the LP administration
 // display list of modules used by this learning path
 //$tool_content .= display_path_content();

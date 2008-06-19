@@ -52,6 +52,7 @@
 
 require_once("../../include/lib/learnPathLib.inc.php");
 $require_current_course = TRUE;
+$require_prof = TRUE;
 
 $TABLECOURSUSER	        = "cours_user";
 $TABLEUSER              = "user";
@@ -66,7 +67,6 @@ $head_content = "";
 $tool_content = "";
 
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
-if (! $is_adminOfCourse ) claro_die($langNotAllowed);
 $navigation[] = array("url"=>"detailsAll.php", "name"=> $langTrackAllPathExplanation);
 $nameTools = $langTrackUser;
 
@@ -82,8 +82,8 @@ if( empty($_REQUEST['uInfo']) )
 $sql = "SELECT `u`.`nom` AS `lastname`,`u`.`prenom` AS `firstname`, `u`.`email`
 			FROM `".$TABLECOURSUSER."` as `cu` , `".$TABLEUSER."` as `u`
 			WHERE `cu`.`user_id` = `u`.`user_id`
-				AND `cu`.`code_cours` = '". addslashes($currentCourseID) ."'
-				AND `u`.`user_id` = '". (int)$_REQUEST['uInfo']."'";
+			AND `cu`.`code_cours` = '". addslashes($currentCourseID) ."'
+			AND `u`.`user_id` = '". (int)$_REQUEST['uInfo']."'";
 
 $results = db_query_fetch_all($sql);
 
@@ -103,7 +103,7 @@ $tool_content .= ucfirst(strtolower($langUser)).': <br />'."\n"
 	.'<li>'.$langName.': '.$trackedUser['firstname'].'</li>'."\n"
 	.'<li>'.$langEmail.': ';
 if( empty($trackedUser['email']) )	$tool_content .= $langNoEmail;
-else 								$tool_content .= $trackedUser['email'];
+else 			$tool_content .= $trackedUser['email'];
 
 $tool_content .= '</li>'."\n"
 	.'</ul>'."\n"
@@ -144,7 +144,7 @@ else
 			.'        <td width="1%"><img src="../../template/classic/img/lp_on.gif" alt="" border="0" /></td>'."\n"
 			.'        <td><a href="detailsUserPath.php?uInfo='.$_GET['uInfo'].'&path_id='.$lpDetails['learnPath_id'].'">'.htmlspecialchars($lpDetails['name']).'</a></td>'."\n"
 			.'        <td align="right">'.""
-			.claro_disp_progress_bar($lpProgress, 1)
+			.disp_progress_bar($lpProgress, 1)
 			.'</td>'."\n"
 			.'        <td align="left"><small>'.$lpProgress.'%</small></td>'."\n"
 			.'      </tr>'."\n";

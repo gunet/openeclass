@@ -1,6 +1,5 @@
 <?php
-
-/**=============================================================================
+/*=============================================================================
        	GUnet eClass 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -24,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	lib.wikidisplay.php
 	@last update: 15-05-2007 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -123,7 +122,7 @@
         $location = add_request_variable_to_url( $script, "wikiId", $wikiId );
         $location = add_request_variable_to_url( $location, "action", "show" );
 
-        $out .= claro_disp_button ( $location, $langCancel );
+        $out .= disp_button ($location, $langCancel);
         
         $out .= '</div>' . "\n";
 
@@ -157,7 +156,7 @@
         
         $out .= '</div>' . "\n";
         
-        $out .= claro_disp_message_box( '<small>'.$langWikiPreviewWarning.'</small>', "caution" )
+        $out .= disp_message_box( '<small>'.$langWikiPreviewWarning.'</small>', "caution" )
             ."<br />". "\n";
 
         $out .= '<div class="wiki2xhtml">' . "\n";
@@ -220,7 +219,7 @@
         $location = add_request_variable_to_url( $location, "title", $title );
         $location = add_request_variable_to_url( $location, "action", "show" );
         
-        $out .= claro_disp_button ( $location, $langCancel );
+        $out .= disp_button ($location, $langCancel);
         
         $out .= "</form></div>\n";
         
@@ -353,7 +352,7 @@
         }
         
         $form .= '<input type="submit" name="action[exEdit]" value="' . $langSave . '" />' . "\n"
-            . claro_disp_button ( $_SERVER['PHP_SELF'] . '?action=list', $langCancel ) . "\n"
+            . disp_button ($_SERVER['PHP_SELF'] . '?action=list', $langCancel) . "\n"
             ;
             
         $form .= '</div>' . "\n"

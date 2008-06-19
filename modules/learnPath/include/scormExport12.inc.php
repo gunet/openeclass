@@ -338,7 +338,7 @@ class ScormExport
     <tr><th valign="top" colspan="2">' . $langQuestion . ' ' . $questionCount . '</th></tr>
     <tfoot>
         <tr><td valign="top" colspan="2">' . $qtitle . '</td></tr>
-        <tr><td valign="top" colspan="2"><i>' . claro_parse_user_text($qdescription) . '</i></td></tr>' . "\n";
+        <tr><td valign="top" colspan="2"><i>' . parse_user_text($qdescription) . '</i></td></tr>' . "\n";
             
             // Attached file, if it exists.
             //$attachedFile = $question->selectAttachedFile();

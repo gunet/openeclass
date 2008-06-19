@@ -45,6 +45,7 @@
 require_once("../../include/lib/learnPathLib.inc.php");
 require_once("../../include/lib/fileDisplayLib.inc.php");
 $require_current_course = TRUE;
+$require_prof = TRUE;
 
 $TABLECOURSUSER	        = "cours_user";
 $TABLEUSER              = "user";
@@ -61,7 +62,6 @@ $head_content = "";
 $tool_content = "";
 
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
-if (!$is_adminOfCourse) claro_die($langNotAllowed);
 $navigation[] = array("url"=>"details.php?path_id=".$_REQUEST['path_id'], "name"=> $langStatsOfLearnPath);
 $nameTools = $langTrackUser;
 
@@ -287,8 +287,8 @@ foreach ($flatElementList as $module)
 		if($module['contentType'] != CTLABEL_ )
 		{
 			// display the progress value for current module
-			$tool_content .= '      <td align="right">'.claro_disp_progress_bar($progress, 1).'</td>'."\n";
-			$tool_content .= '      <td align="left"><small>&nbsp;'.$progress.'%</small></td>'."\n";
+			$tool_content .= '<td align="right">'.disp_progress_bar($progress, 1).'</td>'."\n";
+			$tool_content .= '<td align="left"><small>&nbsp;'.$progress.'%</small></td>'."\n";
 		}
 		else // label
 		{
@@ -302,13 +302,13 @@ foreach ($flatElementList as $module)
 		if($module['contentType'] != CTLABEL_)
 			$moduleNb++; // increment number of modules used to compute global progression except if the module is a title
 
-		$tool_content .= '    </tr>'."\n";
+		$tool_content .= '</tr>'."\n";
 }
-$tool_content .= '    </tbody>'."\n".'    <tfoot>'."\n";
+$tool_content .= '</tbody>'."\n".'<tfoot>'."\n";
 
 if ($moduleNb == 0)
 {
-	$tool_content .= '    <tr>'."\n".'      <td align="center" colspan="6">'.$langNoModule.'</td>'."\n".'    </tr>'."\n";
+	$tool_content .= '<tr>'."\n".'<td align="center" colspan="6">'.$langNoModule.'</td>'."\n".'    </tr>'."\n";
 }
 elseif($moduleNb > 0)
 {
@@ -317,9 +317,9 @@ elseif($moduleNb > 0)
 		.'      <td colspan="'.($maxDeep+1).'">&nbsp;</td>'."\n"
 		.'      <td align="right">'.(($global_time != "0000:00:00")? $langTimeInLearnPath : '&nbsp;').'</td>'."\n"
 		.'      <td align="center">'.(($global_time != "0000:00:00")? preg_replace("/\.[0-9]{0,2}/", "", $global_time) : '&nbsp;').'</td>'."\n"
-		.'      <td align="right">'.$langGlobalProgress.'</td>'."\n"
-		.'      <td align="right">'
-		.claro_disp_progress_bar(round($globalProg / ($moduleNb) ), 1)
+		.'<td align="right">'.$langGlobalProgress.'</td>'."\n"
+		.'<td align="right">'
+		.disp_progress_bar(round($globalProg / ($moduleNb) ), 1)
 		.'</td>'."\n"
 		.'      <td align="left">&nbsp;'.round($globalProg / ($moduleNb) ) .'%</td>'."\n"
 		.'    </tr>';

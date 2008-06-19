@@ -40,6 +40,7 @@
 require_once("../../include/lib/learnPathLib.inc.php");
 
 $require_current_course = TRUE;
+$require_prof = TRUE;
 
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";
@@ -51,16 +52,9 @@ require_once("../../include/baseTheme.php");
 $tool_content = "";
 
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
-if (!$is_adminOfCourse ) claro_die($langNotAllowed);
 $navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
 $nameTools = $langInsertMyDescToolName;
 
-
-// $_SESSION
-if ( !isset($_SESSION['path_id']) )
-{
-      claro_die ("<center> Not allowed ! (path_id not set :@ )</center>");
-}
 
 mysql_select_db($currentCourseID);
 
@@ -149,7 +143,7 @@ else
 }
 $tool_content = "<table width=\"99%\"><tbody><tr><td class=\"success\">";
 
-$tool_content .= claro_disp_tool_title($langLinkInsertedAsModule);
+$tool_content .= disp_tool_title($langLinkInsertedAsModule);
 $tool_content .= "</td></tr></tbody></table>";
 	$tool_content .= "
     <br />

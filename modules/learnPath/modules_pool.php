@@ -50,6 +50,7 @@
 require_once("../../include/lib/learnPathLib.inc.php");
 
 $require_current_course = TRUE;
+$require_prof = TRUE;
 
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";
@@ -65,11 +66,9 @@ $tool_content = "";
 $body_action = "";
 
 $navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPaths);
-if ( ! $is_adminOfCourse ) claro_die($langNotAllowed);
+
 $nameTools = $langLearningObjectsInUse;
-
 mysql_select_db($currentCourseID);
-
 $head_content .= "<script>
         function confirmation (name)
         {
@@ -145,7 +144,7 @@ switch( $cmd )
 			$result = db_query($query);
 			$list = mysql_fetch_array($result);
 
-			$tool_content .= claro_disp_message_box("
+			$tool_content .= disp_message_box("
 				<form method=\"post\" name=\"rename\" action=\"".$_SERVER['PHP_SELF']."\">
                 <table width=\"99%\" class=\"LearnPathSum\"><thead><tr class=\"LP_header\"><td>
                     <label for=\"newName\">".$langInsertNewModuleName."</label> :
@@ -184,13 +183,13 @@ switch( $cmd )
             }
             else
             {
-                $tool_content .= claro_disp_message_box($langErrorNameAlreadyExists, "caution");
+                $tool_content .= disp_message_box($langErrorNameAlreadyExists, "caution");
                 $tool_content .= "<br />";
             }
         }
         else
         {
-            $tool_content .= claro_disp_message_box($langErrorEmptyName, "caution");
+            $tool_content .= disp_message_box($langErrorEmptyName, "caution");
             $tool_content .= "<br />";
         }
         break;
@@ -209,9 +208,9 @@ switch( $cmd )
             if( isset($comment['comment']) )
             {
 
-                $tool_content .= "    <form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">\n"
+                $tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">\n"
                     .'    <table width="99%" class="LearnPathSum"><thead><tr class="LP_header"><td><b>'.$langComments.'</b>:<br /> '."\n"
-                    .claro_disp_html_area('comment', $comment['comment'], 1, 60)
+                    .disp_html_area('comment', $comment['comment'], 1, 60)
                     ."<br />\n"
                     ."<input type=\"hidden\" name=\"cmd\" value=\"exComment\">\n"
                     ."<input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">\n"
@@ -219,7 +218,7 @@ switch( $cmd )
                     ."</td></tr></thead></table>\n"
                     ."</form>\n";
 
-                 $head_content .= claro_disp_html_area_head("comment");
+                 $head_content .= disp_html_area_head("comment");
 
                  $body_action = "onload=\"initEditor()\"";
             }
@@ -227,7 +226,7 @@ switch( $cmd )
             {
             	$tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">\n"
                     .'<table><tr><td valign="top">'."\n"
-                    .claro_disp_html_area('comment', '', 2, 60)
+                    .disp_html_area('comment', '', 2, 60)
                     ."</td></tr></table>\n"
                     ."<input type=\"hidden\" name=\"cmd\" value=\"exComment\">\n"
                     ."<input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">\n"
@@ -235,7 +234,7 @@ switch( $cmd )
                     ."<br /><br />\n"
                     ."</form>\n";
 
-                 $head_content .= claro_disp_html_area_head("comment");
+                 $head_content .= disp_html_area_head("comment");
                  $body_action = "onload=\"initEditor()\"";
             }
         } // else no module_id

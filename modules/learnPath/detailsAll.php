@@ -48,6 +48,7 @@
 
 require_once("../../include/lib/learnPathLib.inc.php");
 $require_current_course = TRUE;
+$require_prof = TRUE;
 
 $TABLECOURSUSER	        = "cours_user";
 $TABLEUSER              = "user";
@@ -62,7 +63,6 @@ $head_content = "";
 $tool_content = "";
 
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
-if (! $is_adminOfCourse ) claro_die($langNotAllowed);
 $nameTools = $langTrackAllPathExplanation;
 
 // display a list of user and their respective progress
@@ -119,10 +119,10 @@ foreach ( $usersList as $user )
 		$total = round($globalprog/($iterator-1));
 
 		$tool_content .= '    <tr>'."\n"
-			.'      <td width="1"><img src="../../template/classic/img/bullet_bw.gif" alt="bullet" title="bullet" border="0"></td>'."\n"
-			.'      <td><a href="detailsUser.php?uInfo='.$user['user_id'].'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
-			.'      <td align="right">'
-			.claro_disp_progress_bar($total, 1)
+		.'<td width="1"><img src="../../template/classic/img/bullet_bw.gif" alt="bullet" title="bullet" border="0"></td>'."\n"
+		.'      <td><a href="detailsUser.php?uInfo='.$user['user_id'].'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
+			.'<td align="right">'
+			.disp_progress_bar($total, 1)
 			.'</td>'."\n"
 			.'      <td align="left"><small>'.$total.'%</small></td>'."\n"
 			.'    </tr>'."\n";

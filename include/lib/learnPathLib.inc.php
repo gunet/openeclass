@@ -39,10 +39,6 @@
 ==============================================================================
     @Description: This functions library is used by most of the pages of the
                   learning path tool.
-
-    @Comments:
-
-    @todo:
 ==============================================================================
 */
 
@@ -50,54 +46,21 @@
 * content type
 */
 define ( 'CTCLARODOC_', 'CLARODOC' );
-/*
-* content type
-*/
 define ( 'CTDOCUMENT_', 'DOCUMENT' );
-/*
-* content type
-*/
 define ( 'CTEXERCISE_', 'EXERCISE' );
-/*
-* content type
-*/
 define ( 'CTSCORM_', 'SCORM' );
-/*
-* content type
-*/
 define ( 'CTLABEL_', 'LABEL' );
-/*
-* content type
-*/
 define ( 'CTCOURSE_DESCRIPTION_', 'COURSE_DESCRIPTION' );
-/*
-* content type
-*/
 define ( 'CTLINK_', 'LINK' );
-
 
 /*
 * mode used by {@link commentBox($type, $mode)} and {@link nameBox($type, $mode)}
 */
 define ( 'DISPLAY_', 1 );
-/*
-* mode used by {@link commentBox($type, $mode)} and {@link nameBox($type, $mode)}
-*/
 define ( 'UPDATE_', 2 );
 define ( 'UPDATENOTSHOWN_', 4 );
-
-/*
-* mode used by {@link commentBox($type, $mode)} and {@link nameBox($type, $mode)}
-*/
 define ( 'DELETE_', 3 );
-
-/*
-* type used by {@link commentBox($type, $mode)} and {@link nameBox($type, $mode)}
-*/
 define ( 'ASSET_', 1 );
-/*
-* type used by {@link commentBox($type, $mode)} and {@link nameBox($type, $mode)}
-*/
 define ( 'MODULE_', 2 );
 define ( 'LEARNINGPATH_', 3 );
 define ( 'LEARNINGPATHMODULE_', 4 );
@@ -155,7 +118,7 @@ function commentBox($type, $mode)
             $col_name = 'specificComment';
             $tbl_name = $tbl_lp_rel_learnPath_module;
             $where_cond = "`learnPath_id` = " . (int) $_SESSION['path_id'] . "
-                                        AND `module_id` = " . (int) $_SESSION['lp_module_id'];  // use backticks ( ` ) for col names and simple quote ( ' ) for string
+              	AND `module_id` = " . (int) $_SESSION['lp_module_id'];
             break;
     }
 
@@ -187,7 +150,7 @@ function commentBox($type, $mode)
 
             $output .= '
       <form method="POST" action="'.$_SERVER['PHP_SELF'].'">' . "\n"
-                .claro_disp_html_area('insertCommentBox', $oldComment, 1, 50) . "\n"
+                .disp_html_area('insertCommentBox', $oldComment, 1, 50) . "\n"
                 .'        <input type="hidden" name="cmd" value="update' . $col_name . '" />' . "\n"
                 .'        <input type="submit" value="' . $langOk . '" />' . "\n"
                 .'      </form>' . "\n"
@@ -246,7 +209,6 @@ function commentBox($type, $mode)
             // display edit and delete links if user as the right to see it
             if ( $is_adminOfCourse )
             {
-
                 $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?cmd=update' . $col_name . '">' . "\n"
                 .    '<img src="../../template/classic/img/edit.gif" alt="' . $langModify . '" title="'.$langModify.'" border="0" />'
                 .    '</a>' . "\n"
@@ -344,7 +306,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
              if($formlabel != FALSE)
              	//$output .= '<label for="newLabel">'.$formlabel.'</label>&nbsp;&nbsp;';
 
-             $output .=  '        <input type="text" name="newName" size="50" maxlength="255" value="'.htmlspecialchars($oldName).'" / class="FormData_InputText">' ."\n"
+             $output .=  '<input type="text" name="newName" size="50" maxlength="255" value="'.htmlspecialchars($oldName).'" / class="FormData_InputText">' ."\n"
              .    '        <input type="hidden" name="cmd" value="updateName" />' ."\n"
              .    '        <input type="submit" value="' . $langOk . '" />' . "\n"
              .    '      </form>';
@@ -414,7 +376,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
       return "docs_on.gif";
 
  }
- /**
+ /*
   * This function is used to display the correct alt text for image in the modules lists.
   * Mainly used at the same time than selectImage() to add an alternate text on the image.
   *
@@ -425,10 +387,10 @@ function nameBox($type, $mode, $formlabel = FALSE)
   */
  function selectAlt($contentType)
  {
-      global $langDoc, $langAltClarodoc, $langExercise, $langAltScorm;
+      global $langDoc, $langExercise, $langAltScorm;
 
       $altList[CTDOCUMENT_] = $langDoc;
-      $altList[CTCLARODOC_] = $langAltClarodoc;
+      $altList[CTCLARODOC_] = $langDoc;
       $altList[CTEXERCISE_] = $langExercise;
       $altList[CTSCORM_] = $langAltScorm;
 
@@ -440,55 +402,6 @@ function nameBox($type, $mode, $formlabel = FALSE)
       return "default.gif";
  }
 
-/*
- * This function receives an array like $table['idOfThingToOrder'] = $requiredOrder and will return a sorted array
- * like $table[$i] = $idOfThingToOrder
- * the id list is sorted according to the $requiredOrder values
- *
- * @param  $formValuesTab array an array like these sent by the form on learingPathAdmin.php for an exemple
- *
- * @return array an array of the sorted list of ids
- *
- * @author Piraux Sebastien <pir@cerdecam.be>
- * @author Lederer Guillaume <led@cerdecam.be>
- */
-function setOrderTab ( $formValuesTab )
-{
-    global $langErrorInvalidParms, $langErrorValuesInDouble;
-    global $dialogBox;
-
-    $tabOrder = array(); // declaration to avoid bug in "elseif (in_array ... "
-    $i = 0;
-    foreach ( $formValuesTab as $key => $requiredOrder)
-    {
-        // error if input is not a number
-        if( !is_num($requiredOrder) )
-        {
-            $dialogBox .= $langErrorInvalidParms;
-            return 0;
-        }
-        elseif( in_array($requiredOrder, $tabOrder) )
-        {
-            $dialogBox .= $langErrorValuesInDouble;
-            return 0;
-        }
-        // $tabInvert = required order => id module
-        $tabInvert[$requiredOrder] = $key;
-        // $tabOrder = required order : unsorted
-        $tabOrder[$i] = $requiredOrder;
-        $i++;
-    }
-    // $tabOrder = required order : sorted
-    sort($tabOrder);
-    $i = 0;
-    foreach ($tabOrder as $key => $order)
-    {
-        // $tabSorted = new Order => id learning path
-        $tabSorted[$i] = $tabInvert[$order];
-        $i++;
-    }
-    return $tabSorted;
-}
 
 
 /*
@@ -744,7 +657,7 @@ function display_my_exercises($dialogBox, $style)
     $colspan = 3;
     if( !empty($dialogBox) )
     {
-        $output .= claro_disp_message_box($dialogBox, $style).'<br />'."\n";
+        $output .= disp_message_box($dialogBox, $style).'<br />'."\n";
     }
     $output .= '    <form method="POST" name="addmodule" action="' . $_SERVER['PHP_SELF'] . '?cmdglobal=add">'."\n";
     $output .= '    <table width="99%" class="LearnPathSum">'."\n"
@@ -883,7 +796,7 @@ function display_my_documents($dialogBox, $style)
     $colspan = 5;
     if( !empty($dialogBox) )
     {
-        $output .= claro_disp_message_box($dialogBox, $style)."<br />";
+        $output .= disp_message_box($dialogBox, $style)."<br />";
     }
     /*--------------------------------------
     CURRENT DIRECTORY LINE
@@ -1002,7 +915,7 @@ function display_my_documents($dialogBox, $style)
             if ($fileList['comment'][$fileKey] != "" )
             {
                 $fileList['comment'][$fileKey] = htmlspecialchars($fileList['comment'][$fileKey]);
-                $fileList['comment'][$fileKey] = claro_parse_user_text($fileList['comment'][$fileKey]);
+                $fileList['comment'][$fileKey] = parse_user_text($fileList['comment'][$fileKey]);
 
                 $output .= '
     <tr align="left">
@@ -1043,22 +956,6 @@ function display_my_documents($dialogBox, $style)
 	return $output;
 }
 
-/**
- * Recursive Function used to find the deep of a module in a learning path
- * DEPRECATED : no more since the display has been reorganised
- *
- * @param integer $id id_of_module that we are looking for deep
- * @param array $searchInarray of parents of modules in a learning path $searchIn[id_of_module] = parent_of_this_module
- *
- * @author Piraux Sebastien <pir@cerdecam.be>
- */
-function find_deep($id, $searchIn)
-{
-    if ( $searchIn[$id] == 0 || !isset($searchIn[$id]) && $id == $searchIn[$id])
-    return 0;
-    else
-    return find_deep($searchIn[$id],$searchIn) + 1;
-}
 
 /**
  * Build an tree of $list from $id using the 'parent'
@@ -1084,8 +981,8 @@ function build_element_list($list, $parentField, $idField, $id = 0)
             if( $element[$idField] == $id )
             {
                 $tree = $element; // keep all $list informations in the returned array
-                // explicitly add 'name' and 'value' for the claro_build_nested_select_menu function
-                //$tree['name'] = $element['name']; // useless since 'name' is the same word in db and in the  claro_build_nested_select_menu function
+                // explicitly add 'name' and 'value' for the build_nested_select_menu function
+                //$tree['name'] = $element['name']; // useless since 'name' is the same word in db and in the  build_nested_select_menu function
                 $tree['value'] = $element[$idField];
                 break;
             }
@@ -1173,8 +1070,7 @@ function build_display_element_list($elementList, $deepness = 0)
  */
 function set_module_tree_visibility($module_tree, $visibility)
 {
-    //$tbl_cdb_names = claro_sql_get_course_tbl();
-    //$tbl_lp_rel_learnPath_module = $tbl_cdb_names['lp_rel_learnPath_module'];
+
     $tbl_lp_rel_learnPath_module = "lp_rel_learnPath_module";
 
     foreach($module_tree as $module)
@@ -1520,10 +1416,7 @@ function addScormTime($time1, $time2)
     }
 }
 
-
-/*********************** Functions from claroline 1.7.x ***********************/
-
-/**
+/*
  * function that cleans php string for javascript
  *
  * This function is needed to clean strings used in javascript output
@@ -1552,7 +1445,7 @@ function clean_str_for_javascript( $str )
     return $output;
 }
 
-/**
+/*
  * Parse the user text (e.g. stored in database)
  * before displaying it to the screen
  * For example it change new line charater to <br> tag etc.
@@ -1562,44 +1455,21 @@ function clean_str_for_javascript( $str )
  * @author Hugues Peeters <hugues.peeters@claroline.net>
  */
 
-function claro_parse_user_text($userText)
+function parse_user_text($userText)
 {
-   global $claro_texRendererUrl; // see 'inc/conf/claro_main.conf.php'
-
-   if ( !empty($claro_texRendererUrl) )
-   {
-       $userText = str_replace('[tex]',
-                          '<img src="'.$claro_texRendererUrl.'?',
-                          $userText);
-
-       $userText = str_replace('[/tex]',
-                           '" border="0" align="absmiddle">',
-                           $userText);
-   }
-   else
-   {
-       $userText = str_replace('[tex]',
-                              '<embed TYPE="application/x-techexplorer" texdata="',
-                              $userText);
-
-       $userText = str_replace('[/tex]',
-                               '" width="99%" pluginspace="http://www.integretechpub.com/">',
-                               $userText);
-   }
 
    $userText = make_clickable($userText);
 
-   if ( strpos($userText, '<!-- content: html -->') === false )
+   if (strpos($userText, '<!-- content: html -->') === false)
    {
         // only if the content isn't HTML change new line to <br>
         // Note the '<!-- content: html -->' is introduced by HTML Area
         $userText = nl2br($userText);
    }
-
     return $userText;
 }
 
-/**
+/*
  * Displays the title of a tool. Optionally, there can be a subtitle below
  * the normal title, and / or a supra title above the normal title.
  *
@@ -1618,11 +1488,11 @@ function claro_parse_user_text($userText)
  * @return void
  */
 
-function claro_disp_tool_title($titlePart, $helpUrl = false)
+function disp_tool_title($titlePart)
 {
     // if titleElement is simply a string transform it into an array
 
-    if ( is_array($titlePart) )
+    if (is_array($titlePart))
     {
         $titleElement = $titlePart;
     }
@@ -1631,26 +1501,7 @@ function claro_disp_tool_title($titlePart, $helpUrl = false)
         $titleElement['mainTitle'] = $titlePart;
     }
 
-
-    //$string = "\n" . '    <p>' . "\n";
-
-    if ($helpUrl)
-    {
-        global $clarolineRepositoryWeb, $imgRepositoryWeb,$langHelp;
-
-    $string .= "<a href='#' onClick=\"MyWindow=window.open('". $clarolineRepositoryWeb . "help/" .$helpUrl
-            ."','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10'); return false;\">"
-
-            .'<img src="'.$imgRepositoryWeb.'/help.gif" '
-            .' alt ="'.$langHelp.'"'
-            .' align="right"'
-            .' hspace="30">'
-            .'</a>' . "\n"
-            ;
-    }
-
-
-    if ( isset($titleElement['supraTitle']) )
+    if (isset($titleElement['supraTitle']))
     {
         $string .= '<small>' . $titleElement['supraTitle'] . '</small><br />' . "\n";
     }
@@ -1665,13 +1516,11 @@ function claro_disp_tool_title($titlePart, $helpUrl = false)
         $string .= '      ' . $titleElement['subTitle'] . '' . "\n";
     }
 
-    //$string .= '    </p>'."\n\n";
-
     return $string;
 }
 
 
-/**
+/*
  * Prepare display of the message box appearing on the top of the window,
  * just    below the tool title. It is recommended to use this function
  * to display any confirmation or error messages, or to ask to the user
@@ -1684,7 +1533,7 @@ function claro_disp_tool_title($titlePart, $helpUrl = false)
  * @return $string - the
  */
 
-function claro_disp_message_box($message, $style = FALSE)
+function disp_message_box($message, $style = FALSE)
 {
 	if ($style) {
 		$cell = "<td class=\"$style\">";
@@ -1692,22 +1541,11 @@ function claro_disp_message_box($message, $style = FALSE)
 	else {
 		$cell = "<td class=\"left\">";
 	}
-	/*
-    return "\n".'<table>'
-    .      '<tbody>'
-    .      '<tr>'
-    .      $cell
-    .      $message
-    .      '</td>'
-    .      '</tr>'
-    .      '</tbody>'
-    .      '</table>' . "\n\n"
-    ;
-    */
+	
     return "$cell $message" ;
 }
 
-function claro_disp_message_box1($message, $style = FALSE)
+function disp_message_box1($message, $style = FALSE)
 {
 	if ($style) {
 		$cell = "";
@@ -1718,32 +1556,9 @@ function claro_disp_message_box1($message, $style = FALSE)
     return "$cell $message" ;
 }
 
-/**
- * Terminate the script and display message
- *
- * @param string message
- */
 
-function claro_die($message)
-{
-
-    $tool_content = '<p><br /></br></p><table align="center">'
-    .    '<tr><td>'
-    .    claro_disp_message_box($message, "caution")
-    .    '</td></tr>'
-    .    '</table>'
-    ;
-	draw($tool_content, 2, "learnPath");
-    die(); // necessary to prevent any continuation of the application
-}
-
-
-/**
- * Prepare the display of a clikcable button
- *
- * This function is needed because claroline buttons rely on javascript.
- * The function return an optionnal behavior fo browser where javascript
- * isn't  available.
+/*
+ * Prepare the display of a clickable button
  *
  * @author Hugues Peeters <hugues.peeters@claroline.net>
  *
@@ -1754,11 +1569,10 @@ function claro_die($message)
  * @return string the button
  */
 
-function claro_disp_button($url, $text, $confirmMessage = '')
+function disp_button($url, $text, $confirmMessage = '')
 {
 
-    if (   claro_is_javascript_enabled()
-        && ! preg_match('~^Mozilla/4\.[1234567]~', $_SERVER['HTTP_USER_AGENT']))
+    if (is_javascript_enabled() && ! preg_match('~^Mozilla/4\.[1234567]~', $_SERVER['HTTP_USER_AGENT']))
     {
         if ($confirmMessage != '')
         {
@@ -1780,7 +1594,7 @@ function claro_disp_button($url, $text, $confirmMessage = '')
     }
 }
 
-/**
+/*
  * Function used to draw a progression bar
  *
  * @author Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -1791,7 +1605,7 @@ function claro_disp_button($url, $text, $confirmMessage = '')
  * (i.e. 1 will give a 100 pixel wide bar)
  */
 
-function claro_disp_progress_bar ($progress, $factor)
+function disp_progress_bar ($progress, $factor)
 {
     $maxSize  = $factor * 100; //pixels
     $barwidth = $factor * $progress ;
@@ -1816,14 +1630,11 @@ function claro_disp_progress_bar ($progress, $factor)
 }
 
 
-/**
- * Insert a    sort of    HTML Wysiwyg textarea inside a FORM
+/*
+ * Insert a sort of  HTML Wysiwyg textarea inside a FORM
  * the html area currently implemented is HTMLArea 3.0. To work correctly,
- * the area    needs a    specific stylesheet
+ * the area needs a specific stylesheet
  * previously loaded in the html header.
- * For that, use the claroline $htmlHeadXtra[] array at
- * the top of the script
- * just before including claro_init_header.inc.php
  *
  * @param string $name content for name attribute in textarea tag
  * @param string $content optional content previously inserted into    the    area
@@ -1838,14 +1649,10 @@ function claro_disp_progress_bar ($progress, $factor)
  * @author Thanos Kyritsis <atkyritsis@upnet.gr>
  * @author Hugues Peeters <hugues.peeters@claroline.net>
  */
-// Example : $htmlHeadXtra[] = '<style type="text/css">
-//                               @import url('.$urlAppend.'/claroline/inc/htmlarea'.'/htmlarea.css);
-//                              </style>';
 
-function claro_disp_html_area($name, $content = '',
-                              $rows=5, $cols=50, $optAttrib='')
+function disp_html_area($name, $content = '', $rows=5, $cols=50, $optAttrib='')
 {
-    global $langTextEditorDisable, $langTextEditorEnable,$langSwitchEditorToTextConfirm;
+    global $langTextEditorDisable, $langTextEditorEnable, $langSwitchEditorToTextConfirm;
     global $urlAppend;
     $incPath = $urlAppend.'/include/htmlarea';
 
@@ -1859,7 +1666,7 @@ function claro_disp_html_area($name, $content = '',
 
     if (isset($_REQUEST['areaContent'])) $content = stripslashes($_REQUEST['areaContent']);
 
-    if (claro_is_javascript_enabled())
+    if (is_javascript_enabled())
     {
         if ( isset($_SESSION['htmlArea']) && $_SESSION['htmlArea'] != 'disabled' )
         {
@@ -1899,7 +1706,7 @@ function claro_disp_html_area($name, $content = '',
         .    '</div>'."\n"
         ;
 
-    } // end if claro_is_javascript_enabled()
+    } // end if is_javascript_enabled()
 
 
 echo '<textarea '
@@ -1916,12 +1723,12 @@ echo '<textarea '
     return $returnString;
 }
 
-/**
+/*
  * In order for HTMLArea to work correctly, the area needs a
  * specific Javascript code previously loaded in the html header.
  * This function returns that Javascript code.
  *
- * Previously this code was part of the claro_disp_html_area()
+ * Previously this code was part of the disp_html_area()
  * function code, but it's a more clean implementation to split it
  * into a new function.
  *
@@ -1933,7 +1740,7 @@ echo '<textarea '
  * @author Thanos Kyritsis <atkyritsis@upnet.gr>
  * @author Hugues Peeters <hugues.peeters@claroline.net>
  */
-function claro_disp_html_area_head($name)
+function disp_html_area_head($name)
 {
 	global $urlAppend, $iso639_2_code;
 
@@ -1968,8 +1775,8 @@ function claro_disp_html_area_head($name)
 		</script>';
 }
 
-/**
- * function claro_build_nested_select_menu($name, $elementList)
+/*
+ * function build_nested_select_menu($name, $elementList)
  * Build in a relevant way 'select' menu for an HTML form containing nested data
  *
  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
@@ -1997,7 +1804,7 @@ function claro_disp_html_area_head($name)
  *
  */
 
-function claro_build_nested_select_menu($name, $elementList)
+function build_nested_select_menu($name, $elementList)
 {
     return '<select name="' . $name . '">' . "\n"
     .      implode("\n", prepare_option_tags($elementList) )
@@ -2005,9 +1812,9 @@ function claro_build_nested_select_menu($name, $elementList)
     ;
 }
 
-/**
- * prepare the 'option' html tag for the claro_disp_nested_select_menu()
- * fucntion
+/*
+ * prepare the 'option' html tag for the disp_nested_select_menu()
+ * function
  *
  * @author Hugues Peeters <hugues.peeters@claroline.net>
  * @param array $elementList
@@ -2037,25 +1844,22 @@ function prepare_option_tags($elementList, $deepness = 0)
 
     return  $optionTagList;
 }
-//////////////////////////////////////////////////////////////////////////////
-//                              INPUT HANDLING
-//
-//////////////////////////////////////////////////////////////////////////////
 
-/**
+
+/*
  * checks if the javascript is enabled on the client browser
  * Actually a cookies is set on the header by a javascript code.
  * If this cookie isn't set, it means javascript isn't enabled.
  *
- * @return boolean enabling state of javascript
- * @author Hugues Peeters <hugues.peeters@claroline.net>
+ * return boolean enabling state of javascript
+ * author Hugues Peeters <hugues.peeters@claroline.net>
  */
 
-function claro_is_javascript_enabled()
+function is_javascript_enabled()
 {
     global $_COOKIE;
 
-    if ( isset( $_COOKIE['javascriptEnabled'] ) && $_COOKIE['javascriptEnabled'] == true)
+    if (isset($_COOKIE['javascriptEnabled']) && $_COOKIE['javascriptEnabled'] == true)
     {
         return true;
     }
@@ -2065,12 +1869,8 @@ function claro_is_javascript_enabled()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//                              OTHER FUNCTIONS
-//
-//////////////////////////////////////////////////////////////////////////////
 
-/**
+/*
  * This function accepts a sql query and a limiter number as arguments. Then it
  * limits the query's results into multiple pages and returns html code for
  * presenting links in order to browse through these pages. Should be used
@@ -2145,7 +1945,7 @@ function get_limited_page_links($sql, $limiter, $stringPreviousPage, $stringNext
 }
 
 
-/**
+/*
  * This function accepts a sql query and a limiter number as arguments. Then it
  * limits the query's results into multiple pages and returns the proper list
  * of results for the proper page we are currently browsing. Should be used

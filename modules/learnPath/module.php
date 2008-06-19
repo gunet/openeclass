@@ -204,7 +204,7 @@ $tool_content .="
 
 if ($cmd == "updateName")
 {
-    $tool_content .= "".claro_disp_message_box1(nameBox(MODULE_, UPDATE_, $langModify))."";
+    $tool_content .= "".disp_message_box1(nameBox(MODULE_, UPDATE_, $langModify))."";
 }
 else
 {
@@ -227,7 +227,7 @@ if($module['contentType'] != CTLABEL_ )
     if ( $cmd == "updatecomment" )
     {
         $tool_content .= "".commentBox(MODULE_, UPDATE_)."";
-        $head_content .= claro_disp_html_area_head("insertCommentBox");
+        $head_content .= disp_html_area_head("insertCommentBox");
 		$body_action = "onload=\"initEditor()\"";
     }
     elseif ($cmd == "delcomment" )
@@ -251,7 +251,7 @@ $tool_content .="
     if ( $cmd == "updatespecificComment" )
     {
         $tool_content .= "".commentBox(LEARNINGPATHMODULE_, UPDATE_)."";
-        $head_content .= claro_disp_html_area_head("insertCommentBox");
+        $head_content .= disp_html_area_head("insertCommentBox");
 		$body_action = "onload=\"initEditor()\"";
     }
     elseif ($cmd == "delspecificComment" )
@@ -348,10 +348,10 @@ if($module['contentType'] != CTLABEL_) //
              ($resultBrowsed['contentType'] != CTCOURSE_DESCRIPTION_)
            )
         {
-		$tool_content .= '        <tr>'."\n"
+		$tool_content .= '<tr>'."\n"
 			.'          <td>'.$langYourBestScore.'</td>'."\n"
             .'          <td>:</td>'."\n"
-			.'          <td>'.claro_disp_progress_bar($raw, 1).' '.$raw.'%</td>'."\n"
+			.'          <td>'.disp_progress_bar($raw, 1).' '.$raw.'%</td>'."\n"
 			.'        </tr>'."\n\n";
         }
 

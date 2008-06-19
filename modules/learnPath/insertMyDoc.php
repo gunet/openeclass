@@ -51,7 +51,7 @@ require_once("../../include/lib/fileManageLib.inc.php");
 require_once("../../include/lib/textLib.inc.php");
 
 $require_current_course = TRUE;
-
+$require_prof = TRUE;
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";
 $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
@@ -69,15 +69,8 @@ $courseDir   = "courses/".$currentCourseID."/document";
 $baseWorkDir = $webDir.$courseDir;
 $InfoBox = "";
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
-if (!$is_adminOfCourse) claro_die($langNotAllowed);
 $navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
 $nameTools = $langInsertMyDocToolName;
-
-// $_SESSION
-if ( !isset($_SESSION['path_id']) )
-{
-      claro_die ("<center> Not allowed ! (path_id not set :@ )</center>");
-}
 
 mysql_select_db($currentCourseID);
 
@@ -177,7 +170,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                 $InfoBox .= $addedDoc ." ".$langDocInsertedAsModule."<br>";
                 $style = "success";
                 $tool_content .= "<table width=\"99%\"><tr>";
-                $tool_content .= claro_disp_message_box($InfoBox, $style);
+                $tool_content .= disp_message_box($InfoBox, $style);
                 $tool_content .= "</td></tr></table>";
                 $tool_content .= "<br />";
             }
@@ -212,7 +205,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                     $InfoBox .= $addedDoc ." ".$langDocInsertedAsModule."<br>";
                     $style = "success";
                     $tool_content .= "<table width=\"99%\"><tr>";
-                    $tool_content .= claro_disp_message_box($InfoBox, $style);
+                    $tool_content .= disp_message_box($InfoBox, $style);
                     $tool_content .= "</td></tr></table>";
                     $tool_content .= "<br />";
                 }
@@ -221,7 +214,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                     $InfoBox .= "<b>$filenameDocument</b>: ".$langDocumentAlreadyUsed."<br>";
                     $style = "caution";
                     $tool_content .= "<table width=\"99%\"><tr>";
-                    $tool_content .= claro_disp_message_box($InfoBox, $style);
+                    $tool_content .= disp_message_box($InfoBox, $style);
                     $tool_content .= "</td></tr></table>";
                     $tool_content .= "<br />";
                 }
@@ -376,7 +369,7 @@ $tool_content .= display_my_documents($dialogBox, $style) ;
 //################################## MODULES LIST ####################################\\
 
 //$tool_content .= "<br />";
-//$tool_content .= claro_disp_tool_title($langPathContentTitle);
+//$tool_content .= disp_tool_title($langPathContentTitle);
 //$tool_content .= '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
 
 // display list of modules used by this learning path

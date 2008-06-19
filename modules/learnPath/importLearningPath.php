@@ -54,6 +54,7 @@ require_once("../../include/lib/fileUploadLib.inc.php");
 require_once("../../include/lib/fileDisplayLib.inc.php");
 
 $require_current_course = TRUE;
+$require_prof = TRUE;
 
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";
@@ -68,7 +69,6 @@ $tool_content = "";
 $pwd = getcwd();
 
 $navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPaths);
-if (! $is_adminOfCourse ) claro_die($langNotAllowed);
 $nameTools = $langimportLearningPath;
 
 mysql_select_db($currentCourseID);
@@ -80,7 +80,7 @@ $errorFound = false;
       Functions
    --------------------------------------------------------*/
 
-/**
+/*
  * Function used by the SAX xml parser when the parser meets a opening tag
  * exemple :
  *          <manifest identifier="samplescorm" version"1.1">

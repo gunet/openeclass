@@ -352,7 +352,7 @@ if($uid) {
 	$lpProgress = get_learnPath_progress((int)$_SESSION['path_id'],$uid);
 	echo '<small>'
 		.$langGlobalProgress
-		.claro_disp_progress_bar($lpProgress, 1)
+		.disp_progress_bar($lpProgress, 1)
 		."&nbsp;".$lpProgress."%"
 		.'</small>'."\n";
 }

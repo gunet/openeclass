@@ -277,7 +277,7 @@ foreach ($flatElementList as $module)
     if( $uid && ($module['contentType'] != CTLABEL_) )
     {
         // display the progress value for current module
-        $tool_content .= '      <td align="right">'.claro_disp_progress_bar ($progress, 1).'</td>'."\n"
+        $tool_content .= '<td align="right">'.disp_progress_bar ($progress, 1).'</td>'."\n"
         	.'      <td align="left">'
 			.'<small>&nbsp;'.$progress.'%</small>'
 			.'</td>'."\n";
@@ -295,7 +295,7 @@ foreach ($flatElementList as $module)
     if($module['contentType'] != CTLABEL_)
         $moduleNb++; // increment number of modules used to compute global progression except if the module is a title
 
-    $tool_content .= '    </tr>'."\n";
+    $tool_content .= '</tr>'."\n";
 }
 
 
@@ -306,7 +306,7 @@ if($uid && $moduleNb > 0) {
     $tool_content .= '    <tr>'."\n"
 		.'      <td align="right" colspan="'.($maxDeep+1).'"><b>'.$langGlobalProgress.'</b></td>'."\n"
 		.'      <td align="right">'
-        .claro_disp_progress_bar(round($globalProg / ($moduleNb) ), 1 )
+        .disp_progress_bar(round($globalProg / ($moduleNb) ), 1 )
 		.'</td>'."\n"
 		.'      <td align="left">'
 		.'<small>&nbsp;'.round($globalProg / ($moduleNb) ) .'%</small>'

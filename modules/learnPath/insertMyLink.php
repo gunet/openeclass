@@ -41,6 +41,7 @@ require_once("../../include/lib/learnPathLib.inc.php");
 require_once("../../include/lib/fileDisplayLib.inc.php");
 
 $require_current_course = TRUE;
+$require_prof = TRUE;
 
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";
@@ -56,15 +57,8 @@ $tool_content = "";
 $dialogBox = "";
 
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPath);
-if (!$is_adminOfCourse) claro_die($langNotAllowed);
 $navigation[] = array("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
 $nameTools = $langInsertMyLinkToolName;
-
-// $_SESSION
-if ( !isset($_SESSION['path_id']) )
-{
-      claro_die ("<center> Not allowed ! (path_id not set :@ )</center>");
-}
 
 mysql_select_db($currentCourseID);
 $iterator = 1;
@@ -177,14 +171,14 @@ while ($iterator <= $_POST['maxLinkForm']) {
 
 if (isset($dialogBox) && $dialogBox != "") {
     $tool_content .= "<table width=\"99%\"><tr>";
-    $tool_content .= claro_disp_message_box($dialogBox, $style);
+    $tool_content .= disp_message_box($dialogBox, $style);
     $tool_content .= "</td></tr></table>";
     $tool_content .= "<br />";
 }
 
 $tool_content .= showlinks($tbl_link);
 //$tool_content .= "<br />";
-//$tool_content .= claro_disp_tool_title($langPathContentTitle);
+//$tool_content .= disp_tool_title($langPathContentTitle);
 //$tool_content .= '<a href="learningPathAdmin.php">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
 // display list of modules used by this learning path
 //$tool_content .= display_path_content();

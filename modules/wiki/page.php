@@ -131,11 +131,11 @@
 
         if ( isset( $_gid ) && $_gid != $wikiGroupId )
         {
-            claro_die($langNotAllowed);
+            die($langNotAllowed);
         }
         elseif( !isset( $_gid ) && $result['group_id'] != 0 )
         {
-            claro_die($langNotAllowed);
+            die($langNotAllowed);
         }
     }
     
@@ -656,20 +656,18 @@
         }
     }
     
-    $tool_content .= claro_disp_tool_title( $toolTitle, false );
+    $tool_content .= disp_tool_title($toolTitle);
     
-    if ( !empty($message) )
+    if (!empty($message))
     {
-        $tool_content .= claro_disp_message_box($message, $style) ."<br />" ."\n";
+        $tool_content .= disp_message_box($message, $style) ."<br />" ."\n";
     }
     
-    // Check javascript
-    
-    $javascriptEnabled = claro_is_javascript_enabled();
-    
+    // Check for javascript
+    $javascriptEnabled = is_javascript_enabled();
     // user is not allowed to read this page
     
-    if ( ! $is_allowedToRead )
+    if (!$is_allowedToRead)
     {
         $tool_content .= $langWikiNotAllowedToRead;
         die ( '' );
@@ -830,7 +828,7 @@
                 ;
             $tool_content .= '</div>' . "\n";
             $message = $langWikiConflictHowTo;
-            $tool_content .= claro_disp_message_box ( $message ) . '<br />' . "\n";
+            $tool_content .= disp_message_box ( $message ) . '<br />' . "\n";
             $tool_content .= '<form id="editConflict" action="'.$_SERVER['PHP_SELF'].'" method="POST">';
             $tool_content .= '<textarea name="conflictContent" id="wiki_content"'
                  . ' cols="80" rows="15" wrap="virtual">'
@@ -846,7 +844,7 @@
                 . '&amp;title=' . $title
                 . '&amp;action=show'
                 ;
-            $tool_content .= claro_disp_button( $url, $langCancel ) . "\n";
+            $tool_content .= disp_button($url, $langCancel) . "\n";
             $tool_content .= '</div>' . "\n";
             $tool_content .= '</form>';
             break;

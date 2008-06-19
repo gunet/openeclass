@@ -373,7 +373,7 @@ if (isset($sortDirection) && $sortDirection)
 // Display links to create and import a learning path
 if($is_adminOfCourse) {
 	if (isset($dialogBox)) {
-		$tool_content .= claro_disp_message_box($dialogBox, $style) ."<br />";
+		$tool_content .= disp_message_box($dialogBox, $style) ."<br />";
 		draw($tool_content, 2, 'learnPath', $head_content);
 		exit;
 	} else {
@@ -656,8 +656,8 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         if ($prog >= 0) {
             $globalprog += $prog;
         }
-        $tool_content .= "      <td align=\"right\" width=\"130\">".claro_disp_progress_bar($prog, 1)."</td>\n";
-        $tool_content .= "      <td align=\"left\" width=\"30\"><small> ".$prog."% </small></td>";
+        $tool_content .= "<td align=\"right\" width=\"130\">".disp_progress_bar($prog, 1)."</td>\n";
+        $tool_content .= "<td align=\"left\" width=\"30\"><small> ".$prog."% </small></td>";
     }
     $tool_content .= "
     </tr>";
@@ -672,7 +672,7 @@ if (!$is_adminOfCourse && $iterator != 1 && $uid) {
     $total = round($globalprog / ($iterator-1));
     $tool_content .= "
       <td colspan = '2'><div align='right'><b>".$langPathsInCourseProg."</b>:</div></td>
-      <td><div align='right'>".claro_disp_progress_bar($total, 1)."</div></td>
+      <td><div align='right'>".disp_progress_bar($total, 1)."</div></td>
       <td><div align='left'>".$total."%</div></td>\n";
 }
 $tool_content .= "    </tr>

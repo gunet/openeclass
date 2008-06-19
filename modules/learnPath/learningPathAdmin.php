@@ -238,7 +238,7 @@ switch($cmd)
                 if ( $list['learnPath_module_id'] != $_REQUEST['cmdid'] ) $extendedList[] = $list;
             }
 
-            // build the array that will be used by the claro_build_nested_select_menu function
+            // build the array that will be used by thebuild_nested_select_menu function
             $elementList = array();
             $elementList = build_element_list($extendedList, 'parent', 'learnPath_module_id');
 
@@ -383,7 +383,7 @@ $tool_content .="
 
 if ($cmd == "updateName")
 {
-    $tool_content .= claro_disp_message_box(nameBox(LEARNINGPATH_, UPDATE_, $langModify));
+    $tool_content .= disp_message_box(nameBox(LEARNINGPATH_, UPDATE_, $langModify));
 }
 else
 {
@@ -403,7 +403,7 @@ $tool_content .="
 if ($cmd == "updatecomment")
 {
     $tool_content .= commentBox(LEARNINGPATH_, UPDATE_);
-    $head_content .= claro_disp_html_area_head("insertCommentBox");
+    $head_content .= disp_html_area_head("insertCommentBox");
     $body_action = "onload=\"initEditor()\"";
 } elseif ($cmd == "delcomment" ) {
     $tool_content .= commentBox(LEARNINGPATH_, DELETE_);
@@ -411,20 +411,10 @@ if ($cmd == "updatecomment")
     $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 }
 
-$tool_content .="
-      </td>
-    </tr>";
-$tool_content .="
-    <tr>
-      <td colspan=\"2\">&nbsp;</td>
-    </tr>";
+$tool_content .= "</td></tr>";
+$tool_content .= "<tr><td colspan=\"2\">&nbsp;</td></tr>";
 
-$tool_content .="
-    <tr>
-      <th class=\"left\">&nbsp;</th>
-      <td><b>$langLearningPathConfigure</b></td>
-    </tr>\n";
-
+$tool_content .= "<tr><th class=\"left\">&nbsp;</th><td><b>$langLearningPathConfigure</b></td></tr>";
 
 // -------------------- create label -------------------
 if (isset($displayCreateLabelForm) && $displayCreateLabelForm)
@@ -480,7 +470,7 @@ if (isset($displayChangePosForm) && $displayChangePosForm)
       <td class=\"right\">
         <form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">\"<b>".$moduleInfos['name']."</b>\" &nbsp;".$langTo.":&nbsp;&nbsp;";
     // build select input - $elementList has been declared in the previous big cmd case
-    $dialogBox .= claro_build_nested_select_menu("newPos",$elementList);
+    $dialogBox .= build_nested_select_menu("newPos",$elementList);
     $dialogBox .= "
          <input type=\"hidden\" name=\"cmd\" value=\"changePos\" />
          <input type=\"hidden\" name=\"cmdid\" value=\"".$_REQUEST['cmdid']."\" />
@@ -497,7 +487,6 @@ if (isset($displayChangePosForm) && $displayChangePosForm)
 if (isset($dialogBox) && $dialogBox!="")
 {
     $tool_content .= $dialogBox;
-    //$tool_content .= "<br />";
 }
 
 

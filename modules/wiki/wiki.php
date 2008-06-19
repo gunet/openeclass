@@ -65,19 +65,6 @@
 	$nameTools = $langWiki;
 	
 	mysql_select_db($currentCourseID);
-    
-    /*if ( ! $is_toolAllowed )
-    {
-        if ( is_null( $_cid ) )
-        {
-            claro_disp_auth_form( true );
-        }
-        else
-        {
-            claro_die($langNotAllowed);
-        }
-    }*/
-    
     // display mode
     
     // check and set user access level for the tool
@@ -94,9 +81,9 @@
         $navigation[]  = array ('url' => '../group/group.php', 'name' => $langGroups);
         $navigation[] = array ('url' => '../group/group_space.php', 'name' => $_group['name']);
     }
-    elseif ( $_gid && ! $is_groupAllowed )
+    elseif ($_gid && ! $is_groupAllowed)
     {
-        claro_die($langNotAllowed);
+        die($langNotAllowed);
     }
     else
     {
@@ -439,11 +426,11 @@
         }
     }
 
-    $tool_content .= claro_disp_tool_title( $toolTitle) . "\n";
+    $tool_content .= disp_tool_title($toolTitle) . "\n";
 
     if ( ! empty( $message ) )
     {
-        $tool_content .= claro_disp_message_box( $message, $style ) ."<br />" . "\n";
+        $tool_content .= disp_message_box( $message, $style ) ."<br />" . "\n";
     }
 
     switch( $action )
@@ -473,7 +460,7 @@
             $tool_content .= '<div style="padding: 5px">'
                 . '<input type="hidden" name="wikiId" value="' . $wikiId . '" />' . "\n"
                 . '<input type="submit" name="action[exDelete]" value="' . $langContinue . '" />' . "\n"
-                . claro_disp_button ($_SERVER['PHP_SELF'], $langCancel )
+                . disp_button ($_SERVER['PHP_SELF'], $langCancel )
                 . '</div>'
                 ;
 

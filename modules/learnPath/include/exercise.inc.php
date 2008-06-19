@@ -68,7 +68,7 @@ $tool_content .= '<hr noshade="noshade" size="1" />';
 //####################################################################################\\
 if( !empty($dialogBox) )
 {
-	$tool_content .= claro_disp_message_box($dialogBox);
+	$tool_content .= disp_message_box($dialogBox);
 }
 
 // form to change raw needed to pass the exercise

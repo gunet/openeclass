@@ -46,6 +46,7 @@
 
 require_once("../../include/lib/learnPathLib.inc.php");
 $require_current_course = TRUE;
+$require_prof = TRUE;
 
 $TABLECOURSUSER	        = "cours_user";
 $TABLEUSER              = "user";
@@ -60,7 +61,6 @@ $head_content = "";
 $tool_content = "";
 
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
-if (!$is_adminOfCourse) claro_die($langNotAllowed);
 $nameTools = $langStatsOfLearnPath;
 
 // path id can not be empty, return to the list of learning paths
@@ -101,7 +101,7 @@ if( $learnPathName )
 		.'    <thead>'."\n"
 		.'    <tr>'."\n"
 		.'      <td colspan="4" class="left"><img src="../../template/classic/img/lp_on.gif" alt="'.$langLearningPath.'" title="'.$langLearningPath.'" border="0" /><b>';
-	$tool_content .= claro_disp_tool_title($titleTab);
+	$tool_content .= disp_tool_title($titleTab);
 	$tool_content .= '</b></td>'."\n"
 		.'    </tr>'."\n"
 		.'    <tr>'."\n"
@@ -119,7 +119,7 @@ if( $learnPathName )
 		.'      <td width="1"><img src="../../template/classic/img/bullet_bw.gif" alt="bullet" title="bullet" border="0"></td>'."\n"
 		.'      <td><a href="detailsUserPath.php?uInfo='.$user['user_id'].'&amp;path_id='.$path_id.'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
 		.'      <td align="right">'
-		.claro_disp_progress_bar($lpProgress, 1)
+		.disp_progress_bar($lpProgress, 1)
 		.'</td>'."\n"
 		.'      <td align="left"><small>'.$lpProgress.'%</small></td>'."\n"
 		.'    </tr>'."\n";
