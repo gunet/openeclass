@@ -58,7 +58,8 @@ define ('FULL_SCREEN' , 0);
 
 $l = db_query("SELECT name FROM lp_learnPath WHERE learnPath_id = '".(int)$_SESSION['path_id']."'", $currentCourseID);
 $lpname = mysql_fetch_array($l);
-$nameTools = $lpname['name'];
+//$nameTools = $lpname['name'];
+$nameTools = $langPreview;
 $navigation[] = array("url"=>"learningPathList.php", "name"=> $langLearningPaths);
 $navigation[] = array("url"=>"learningPath.php", "name"=> $langNomPageAdmin);
 
@@ -91,9 +92,9 @@ if ($displayFull == 0)
 	$tool_content .= "<iframe src=\"navigation/startModule.php\" name=\"mainFrame\" "
 		."width=\"99%\" height=\"550\" scrolling=\"no\" frameborder=\"0\">"
 		.$langBrowserCannotSeeFrames
-		."<br />"
-		."<a href=\"module.php\">".$langBack."</a>"
-		."</iframe>";
+		."<br />"."\n"
+		."      <a href=\"module.php\">".$langBack."</a>"."\n"
+		."      </iframe>"."\n";
 	draw($tool_content, 2, "learnPath", $head_content);
 }
 else

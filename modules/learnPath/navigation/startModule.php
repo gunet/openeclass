@@ -1,24 +1,24 @@
 <?php
 /*=============================================================================
-       	GUnet eClass 2.0 
-        E-learning and Course Management Program  
+       	GUnet eClass 2.0
+        E-learning and Course Management Program
 ================================================================================
        	Copyright(c) 2003-2006  Greek Universities Network - GUnet
         A full copyright notice can be read in "/info/copyright.txt".
-        
-       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-                     Yannis Exidaridis <jexi@noc.uoa.gr> 
-                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
-        For a full list of contributors, see "credits.txt".  
-     
-        This program is a free software under the terms of the GNU 
-        (General Public License) as published by the Free Software 
-        Foundation. See the GNU License for more details. 
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+                     Yannis Exidaridis <jexi@noc.uoa.gr>
+                     Alexandros Diamantidis <adia@noc.uoa.gr>
+
+        For a full list of contributors, see "credits.txt".
+
+        This program is a free software under the terms of the GNU
+        (General Public License) as published by the Free Software
+        Foundation. See the GNU License for more details.
         The full license can be read in "license.txt".
-     
-       	Contact address: GUnet Asynchronous Teleteaching Group, 
-        Network Operations Center, University of Athens, 
+
+       	Contact address: GUnet Asynchronous Teleteaching Group,
+        Network Operations Center, University of Athens,
         Panepistimiopolis Ilissia, 15784, Athens, Greece
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
@@ -27,24 +27,24 @@
 	startModule.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.7 licensed under GPL
 	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: startModule.php Revision: 1.21.2.1
-	      
+
 	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
                       Lederer Guillaume <led@cerdecam.be>
-==============================================================================        
-    @Description: This script is the main page loaded when user start viewing 
-                  a module in the browser. We define here the frameset 
-                  containing the launcher module (SCO if it is a SCORM 
+==============================================================================
+    @Description: This script is the main page loaded when user start viewing
+                  a module in the browser. We define here the frameset
+                  containing the launcher module (SCO if it is a SCORM
                   conformant one) and a frame to update the user's progress.
-                  
+
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
 
@@ -114,7 +114,7 @@ switch ($module['contentType'])
 {
 	case CTDOCUMENT_ :
 		if($uid)
-		{ 
+		{
 		    // if credit was already set this query changes nothing else it update the query made at the beginning of this script
 		    $sql = "UPDATE `".$TABLEUSERMODULEPROGRESS."`
 		               SET `credit` = 1,
@@ -129,10 +129,10 @@ switch ($module['contentType'])
 		} // else anonymous : record nothing
 
 		$startAssetPage = urlencode($assetPath);
-        if ( strstr($_SERVER['SERVER_SOFTWARE'], 'Apache') 
+        if ( strstr($_SERVER['SERVER_SOFTWARE'], 'Apache')
               && (isset($secureDocumentDownload) && $secureDocumentDownload == true)
             )
-        { 
+        {
             // slash argument method - only compatible with Apache
             // str_replace("%2F","/",urlencode($startAssetPage)) is used to avoid problems with accents in filename.
             $moduleStartAssetPage = $clarolineRepositoryWeb.'/document'.str_replace('%2F','/',$startAssetPage);
@@ -171,7 +171,7 @@ switch ($module['contentType'])
 		break;
 	case CTCOURSE_DESCRIPTION_ :
 		if($uid)
-		{ 
+		{
 		    // if credit was already set this query changes nothing else it update the query made at the beginning of this script
 		    $sql = "UPDATE `".$TABLEUSERMODULEPROGRESS."`
 		               SET `credit` = 1,
@@ -184,7 +184,7 @@ switch ($module['contentType'])
 
 		    db_query($sql);
 		} // else anonymous : record nothing
-		
+
 		$moduleStartAssetPage = "showCourseDescription.php";
 		break;
 	case CTLINK_ :
@@ -201,7 +201,7 @@ switch ($module['contentType'])
 
 		    db_query($sql);
 		}
-		
+
 		$moduleStartAssetPage = $assetPath;
 		break;
 } // end switch
@@ -214,7 +214,7 @@ switch ($module['contentType'])
 
 <?
 
-   // add the update frame if this is a SCORM module   
+   // add the update frame if this is a SCORM module
    if ( $module['contentType'] == CTSCORM_ )
    {
       require_once("scormAPI.inc.php");
@@ -223,7 +223,7 @@ switch ($module['contentType'])
    }
    else
    {
-      echo "<frameset border='0' rows='75,*' frameborder='yes'>";
+      echo "<frameset border='0' rows='95,*' frameborder='no'>";
    }
 ?>
     <frame src="../viewer_toc.php" name="tocFrame" scrolling="no" />

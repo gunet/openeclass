@@ -1402,6 +1402,7 @@ $langDate = "Date";
 $langDefaultLearningPathComment = "This is the introduction text of this learning path.";
 $langDefaultModuleAddedComment = "This an additional introduction text about the presence of this module specially into this learning path.";
 
+$langInstructions = "Instructions";
 $langModuleComment_inCurrentLP = "Visible <u>only</u> in current Learning Path";
 $langModuleComment_inCourse = "Visible when <u>reuse</u> this object in other Learning Paths";
 

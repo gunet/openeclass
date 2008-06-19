@@ -79,9 +79,7 @@ $head_content .= "<script>
         }
         </script>";
 
-/*======================================
-       CLAROLINE MAIN
-  ======================================*/
+
 
 // display use explication text
 $tool_content .= "<p>".$langUseOfPool."</p><br />";

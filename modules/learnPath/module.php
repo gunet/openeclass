@@ -216,7 +216,7 @@ $tool_content .= "
     </tr>";
 $tool_content .="
     <tr>
-      <th class=\"left\" height=\"32\" rowspan=\"2\">$langComments :</th>
+      <th class=\"left\" height=\"32\">$langComments :</th>
       <td class=\"left\">";
 if($module['contentType'] != CTLABEL_ )
 {
@@ -239,12 +239,11 @@ if($module['contentType'] != CTLABEL_ )
         $tool_content .= "".commentBox(MODULE_, DISPLAY_)."";
     }
 $tool_content .="
-      <br /><br />
-      <div align=\"right\"><small>($langModuleComment_inCurrentLP)</small></div>
       </td>
     </tr>";
 $tool_content .="
     <tr>
+      <th class=\"left\" height=\"32\">$langComments - $langInstructions:<br /><small>($langModuleComment_inCurrentLP)</small></th>
       <td class=\"left\">";
     //#### ADDED COMMENT #### courseAdmin can always modify this ####\\
     // this is a comment for THIS module in THIS learning path
@@ -265,8 +264,6 @@ $tool_content .="
 } //  if($module['contentType'] != CTLABEL_ )
 
 $tool_content .= "
-      <br /><br />
-      <div align=\"right\"><small>($langModuleComment_inCourse)</small></div>
       </td>
     </tr>";
     $tool_content .="
@@ -307,21 +304,21 @@ if($module['contentType'] != CTLABEL_) //
 		$tool_content .= '        <tr>'."\n"
             .'          <td>'.$langTypeOfModule.'</td>'."\n"
             .'          <td>:</td>'."\n"
-			.'          <td><img src="'.$imgRepositoryWeb.$contentType_img.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" />&nbsp;&nbsp;'.$contentDescType.'</td>'."\n"
+			.'          <td align="right"><img src="'.$imgRepositoryWeb.$contentType_img.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" />&nbsp;&nbsp;'.$contentDescType.'</td>'."\n"
 			.'        </tr>'."\n\n";
 
         //display total time already spent in the module
 		$tool_content .= '        <tr>'."\n"
 			.'          <td>'.$langTotalTimeSpent.'</td>'."\n"
             .'          <td>:</td>'."\n"
-			.'          <td>'.$resultBrowsed['total_time'].'</td>'."\n"
+			.'          <td align="right">'.$resultBrowsed['total_time'].'</td>'."\n"
 			.'        </tr>'."\n\n";
 
         //display time passed in last session
 		$tool_content .= '        <tr>'."\n"
 			.'          <td>'.$langLastSessionTimeSpent.'</td>'."\n"
             .'          <td>:</td>'."\n"
-			.'          <td>'.$resultBrowsed['session_time'].'</td>'."\n"
+			.'          <td align="right">'.$resultBrowsed['session_time'].'</td>'."\n"
 			.'        </tr>'."\n\n";
 
         //display user best score
@@ -384,7 +381,7 @@ if($module['contentType'] != CTLABEL_) //
 		$tool_content .= '        <tr>'."\n"
 			.'          <td>'.$langLessonStatus.'</td>'."\n"
             .'          <td>:</td>'."\n"
-			.'          <td>'.$statusToDisplay.'</td>'."\n"
+			.'          <td align="right">'.$statusToDisplay.'</td>'."\n"
 			.'        </tr>'."\n\n"
 			.'        </tbody>'."\n\n"
 			.'        </table>'."\n\n";
@@ -410,11 +407,9 @@ $tool_content .= "
     if( $module['startAsset_id'] != "" && $asset['asset_id'] == $module['startAsset_id'] )
     {
 	$tool_content .= ''."\n"
-		.'        <center>'."\n"
 		.'        <form action="./viewer.php" method="post">'."\n"
 		.'        <input type="submit" value="'.$langStartModule.'" />'."\n"
-		.'        </form>'."\n"
-		.'        </center>'."";
+		.'        </form>'."\n";
     }
     else
     {

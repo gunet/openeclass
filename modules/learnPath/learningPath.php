@@ -228,7 +228,7 @@ foreach ($flatElementList as $module)
         if($module['contentType'] == CTEXERCISE_ )
             $moduleImg = 'exercise_on.gif';
         else if($module['contentType'] == CTLINK_ )
-        	$moduleImg = "links.gif";
+        	$moduleImg = "links_on.gif";
         else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
         	$moduleImg = "description_on.gif";
         else
@@ -263,13 +263,13 @@ foreach ($flatElementList as $module)
         if($module['contentType'] == CTEXERCISE_ )
             $moduleImg = 'exercise_on.gif';
         else if($module['contentType'] == CTLINK_ )
-        	$moduleImg = "links.gif";
+        	$moduleImg = "links_on.gif";
         else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
         	$moduleImg = "description_on.gif";
        else
             $moduleImg = choose_image(basename($module['path']));
 
-        $tool_content .= '<img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" />'.""
+        $tool_content .= '<img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" />'." "
              .htmlspecialchars($module['name']);
     }
     $tool_content .= '</td>'."\n";

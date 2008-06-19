@@ -1248,7 +1248,7 @@ $langPgTitle="Τίτλος σελίδας";
 $langHomePage = "Αρχική Σελίδα";
 $langInvalidId = "Λάθος στοιχεία.<br>Αν δεν είστε γραμμένος, συμπληρώστε τη
         <a href='modules/auth/registration.php'>φόρμα εγγραφής</a>.";
-$langInvalidGuestAccount = "Το μάθημα για το οποίο έχει δημιουργηθεί ο λογαριασμός 'χρήστη επισκέπτη' δεν υπάρχει πλέον."; 
+$langInvalidGuestAccount = "Το μάθημα για το οποίο έχει δημιουργηθεί ο λογαριασμός 'χρήστη επισκέπτη' δεν υπάρχει πλέον.";
 $langAccountInactive1 = "Μη ενεργός λογαριασμός.";
 $langAccountInactive2 = "Παρακαλώ επικοινωνήστε με τον διαχειριστή για την ενεργοποίηση του λογαριασμού σας";
 $langMyCoursesProf="Τα μαθήματα που υποστηρίζω (".$langTeacher.")";
@@ -1383,7 +1383,8 @@ $langDefaultLearningPathComment = "Εισαγωγικό κείμενο της γ
 $langDefaultModuleAddedComment = "Πρόσθετο εισαγωγικό κείμενο σχετικά με την παρουσία της ενότητας στη γραμμή μάθησης.";
 $langDefaultModuleComment = "Εισαγωγικό κείμενο της ενότητας. Θα εμφανίζεται σε κάθε γραμμή μάθησης που θα περιέχει αυτή την ενότητα";
 
-$langModuleComment_inCurrentLP = "Ορατό <u>μόνο</u> στη συγκεκριμένη γραμμή μάθησης";
+$langInstructions = "Οδηγίες";
+$langModuleComment_inCurrentLP = "<u>Μόνο</u> για τη συγκεκριμένη γρ. μάθησης";
 $langModuleComment_inCourse = "Εμφανίζεται με την <u>επαναχρησιμοποίηση</u> του αντικείμενου σε άλλη γραμμή μάθησης";
 
 $langDescriptionCours = "Περιγραφή μαθήματος";
@@ -2841,7 +2842,7 @@ $langModifyProfile = "Αλλαγή του προφίλ μου";
 $langOfficialCode = "Κωδικός διαχείρισης";
 $langOneResp = "Ενας από τους διαχειριστές του μαθήματος";
 $langPersonalCourseList = "Προσωπική λίστα μαθήματος";
-$langPreview = "Παρουσίαση/προβολή";
+$langPreview = "Παρουσίαση/Προβολή";
 $langSaveChanges = "Αποθήκευση αλλαγών";
 $langTheSystemIsCaseSensitive = "(γίνεται διάκριση μεταξύ κεφαλαίων και πεζών γραμμάτων.)";
 $langUpdateImage = "Αλλαγή εικόνας";

@@ -193,7 +193,7 @@ foreach ($flatElementList as $module)
 		if($module['contentType'] == CTEXERCISE_ )
 			$moduleImg = "exercise_on.gif";
 		else if($module['contentType'] == CTLINK_ )
-        		$moduleImg = "links.gif";
+        		$moduleImg = "links_on.gif";
         else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
         	$moduleImg = "description_on.gif";
 		else

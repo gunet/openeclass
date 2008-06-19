@@ -66,6 +66,7 @@ $navigation[]= array ("url"=>"learningPathList.php", "name"=> $langLearningPath)
 $navigation[]= array ("url"=>"learningPathAdmin.php", "name"=> $langNomPageAdmin);
 $nameTools = $langInsertMyModulesTitle;
 
+
 mysql_select_db($currentCourseID);
 
 // FUNCTION NEEDED TO BUILD THE QUERY TO SELECT THE MODULES THAT MUST BE AVAILABLE
@@ -78,7 +79,7 @@ function buildRequestModules()
 
  global $TABLELEARNPATHMODULE;
  global $TABLEMODULE;
- global $TABLEASSET, $langLearningModule, $langSelection;
+ global $TABLEASSET, $langLearningModule, $langSelection, $langComments;
 
  $firstSql = "SELECT LPM.`module_id`
               FROM `".$TABLELEARNPATHMODULE."` AS LPM
@@ -200,7 +201,7 @@ while ($list=mysql_fetch_array($result))
     if ($list['comment'] != null)
     {
         $tool_content .= '      <br />'."\n"
-            .'        <small class="comments">'.$list['comment'].'</small>'."\n";
+            .'        <small style=\"color: #a19b99;\"><b>'.$langComments.'</b>: <small class="comments">'.$list['comment'].'</small>'."\n";
     }
     $tool_content .= '      </td>'."\n"
         .'      <td align="center">'."\n"
@@ -230,7 +231,7 @@ if ( $atleastOne )
     $tool_content .= '    <tr>'."\n"
         .'      <td>&nbsp;</td>'."\n"
         .'      <td>'."\n"
-        .'        <input type="submit" value="'.$langReuse.'" />'."\n"
+        .'        <input type="submit" value="'.$langReuse.'" class="LP_button" />'."\n"
         .'        <input type="hidden" name="cmdglobal" value="add">'."\n"
         .'      </td>'."\n"
         .'    </tr>'."\n";

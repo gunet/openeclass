@@ -39,7 +39,7 @@ a:visited.invisible
     color: #666666;
 }
 
-.Group_Operations {
+.LP_Operations {
     background: #CAC3B5;
     font-size: 11px;
     color: #000000;
@@ -49,7 +49,7 @@ a:visited.invisible
 	border-right: 1px #000000 solid;
 }
 
-.Group_Operations td{
+.LP_Operations td{
     padding: 2px !important;
 }
 
@@ -60,7 +60,7 @@ a:visited.invisible
    text-decoration: none;
 }
 
-.Group_Operations a:hover {
+.LP_Operations a:hover {
        text-decoration: underline;
        color: #ffffff;
        font-size: 10px;
