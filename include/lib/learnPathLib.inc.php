@@ -1491,7 +1491,7 @@ function parse_user_text($userText)
 function disp_tool_title($titlePart)
 {
     // if titleElement is simply a string transform it into an array
-
+    $string = "";
     if (is_array($titlePart))
     {
         $titleElement = $titlePart;
