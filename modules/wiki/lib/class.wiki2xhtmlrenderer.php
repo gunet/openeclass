@@ -51,7 +51,7 @@
     require_once dirname(__FILE__) . '/class.wikistore.php';
     require_once dirname(__FILE__) . '/class.wikipage.php';
      
-    define ("WIKI_WORD_PATTERN", '((?<![A-Za-z0-9µÀ-ÖØ-öø-ÿ])([A-ZÀ-ÖØ-Þ][a-zµß-öø-ÿ]+){2,}(?![A-Za-z0-9µÀ-ÖØ-öø-ÿ]))' );
+    define ("WIKI_WORD_PATTERN", '((?<![A-Za-z0-9])([A-Z][a-z]+){2,}(?![A-Za-z0-9]))' );
      
     /**
     * Wiki2xhtml rendering engine
@@ -208,16 +208,16 @@
                 }
                  
                 if ((!ereg('[a-zA-Z]+://', $url)
-                    && !preg_match('~^#~', $url )
+                    && !preg_match('~^#~', $url)
                     && !preg_match('~^\.*/~', $url)
-                    && !preg_match( '~^mailto:~', $url ) )
-                    && $this->getOpt('active_wiki_urls' ))
+                    && !preg_match('~^mailto:~', $url))
+                    && $this->getOpt('active_wiki_urls'))
                 {
-                    $attr = $this->_getWikiPageLink($url );
+                    $attr = $this->_getWikiPageLink($url);
                 }
                 else
                 {
-                    $attr = ' href="'.$this->protectAttr($this->protectUrls($url ) ).'"' . ' rel="nofollow"' ;
+                    $attr = ' href="'.$this->protectAttr($this->protectUrls($url)).'"' . ' rel="nofollow"' ;
                 }
                 
                 $attr .= ($lang)
@@ -253,7 +253,7 @@
             // allow links to use wikiwords for wiki page locations
             if ($this->getOpt('active_wikiwords') && $this->getOpt('words_pattern'))
             {
-                $pageName = preg_replace('/¶¶¶'.$this->getOpt('words_pattern').'¶¶¶/msU', '$1', $pageName);
+                $pageName = preg_replace('/'.$this->getOpt('words_pattern').'/msU', '$1', $pageName);
             }
              
             if ($this->wiki->pageExists( $pageName ) )

@@ -1847,30 +1847,6 @@ function prepare_option_tags($elementList, $deepness = 0)
 
 
 /*
- * checks if the javascript is enabled on the client browser
- * Actually a cookies is set on the header by a javascript code.
- * If this cookie isn't set, it means javascript isn't enabled.
- *
- * return boolean enabling state of javascript
- * author Hugues Peeters <hugues.peeters@claroline.net>
- */
-
-function is_javascript_enabled()
-{
-    global $_COOKIE;
-
-    if (isset($_COOKIE['javascriptEnabled']) && $_COOKIE['javascriptEnabled'] == true)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-
-/*
  * This function accepts a sql query and a limiter number as arguments. Then it
  * limits the query's results into multiple pages and returns html code for
  * presenting links in order to browse through these pages. Should be used

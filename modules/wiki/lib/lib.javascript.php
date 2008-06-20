@@ -59,18 +59,3 @@
     {
         return realpath( str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] ) . dirname( $_SERVER['SCRIPT_NAME'] ) );
     }
-    
-    // remove from claroline version
-    
-    function add_check_if_javascript_enabled_js()
-    {
-        return '<script type="text/javascript">document.cookie="javascriptEnabled=true";</script>';
-    }
-    
-    function is_javascript_enabled()
-    {
-        return isset( $_COOKIE['javascriptEnabled'] )
-            && ( $_COOKIE['javascriptEnabled'] == true )
-            ;
-    }
-?>

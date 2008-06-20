@@ -100,7 +100,7 @@ class wiki2xhtml
 
 		$this->setOpt('parse_pre',1);			# Parser l'intérieur de blocs <pre> ?
 
-		$this->setOpt('active_fix_word_entities',1); # Fixe les caractères MS
+		$this->setOpt('active_fix_word_entities',0); # Fixe les caractères MS
 		$this->setOpt('active_fr_syntax',1);	# Corrections syntaxe FR
 
 		$this->setOpt('first_title_level',3);	# Premier niveau de titre <h..>

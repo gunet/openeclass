@@ -723,4 +723,25 @@ function make_clickable_path($dbTable, $path)
 	return $out;
 }
 
-?>
+
+
+/*
+ * Checks if Javascript is enabled on the client browser
+ * A cookie is set on the header by javascript code.
+ * If this cookie isn't set, it means javascript isn't enabled.
+ *
+ * return boolean enabling state of javascript
+ * author Hugues Peeters <hugues.peeters@claroline.net>
+ */
+
+function is_javascript_enabled()
+{
+        return isset($_COOKIE['javascriptEnabled'])
+                and $_COOKIE['javascriptEnabled'];
+}
+
+function add_check_if_javascript_enabled_js()
+{
+        return '<script type="text/javascript">document.cookie="javascriptEnabled=true";</script>';
+}
+
