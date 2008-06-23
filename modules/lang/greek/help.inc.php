@@ -28,7 +28,7 @@
 
 // help_forums.php
 
-$langClose="Κλείσιμο παραθύρου";
+$langWindowClose="Κλείσιμο παραθύρου";
 
 $langHDefault='Βοήθεια μη διαθέσιμη';
 $langDefaultContent='<p>Δεν υπάρχει κείμενο βοήθειας για την περιοχή

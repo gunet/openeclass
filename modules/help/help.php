@@ -86,7 +86,7 @@ header('Content-Type: text/html; charset=UTF-8');
 		<h3><?= $GLOBALS["langH$_GET[topic]"] ?></h3>
 		<?= $GLOBALS["lang$_GET[topic]Content"] ?>	
 		<center><p>
-			<a href='javascript:window.close();'><?= $langClose ?></a>
+			<a href='javascript:window.close();'><?= $langWindowClose ?></a>
 		</p></center>
 	</body>
 </html>

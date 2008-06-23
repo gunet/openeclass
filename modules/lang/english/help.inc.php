@@ -29,7 +29,7 @@
 
 // help_forums.php
 
-$langClose="Close window";
+$langWindowClose="Close window";
 
 $langHDefault='Help non available';
 $langDefaultContent='<p>There is no help text available for the page you
