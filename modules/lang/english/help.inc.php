@@ -745,9 +745,7 @@ and all uploaded <i>Scorm format Learning Paths</i>, as well.</p>
 ";
 
 $langHUsage = "Usage Statistics";
-$langUsageContent =
-"
-<p>The usage statistics modules allows the professor to see statistics about his lesson. They are presented in the form of charts or lists.</p>
+$langUsageContent = "<p>The usage statistics modules allows the professor to see statistics about his lesson. They are presented in the form of charts or lists.</p>
 <p><strong>Statistics categories</strong></p>
 <ul>
 <li>Usage statistics</li>
