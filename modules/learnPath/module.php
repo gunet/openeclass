@@ -187,7 +187,6 @@ if( !$is_adminOfCourse
     exit();
 }
 
-
 $tool_content .="
     <table width=\"99%\" class=\"FormData\">
     <tbody>
