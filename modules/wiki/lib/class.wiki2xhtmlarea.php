@@ -108,8 +108,9 @@
          */
         function getToolbar()
         {
+
+	    global $wiki_toolbar;
             $toolbar = '';
-            
 
             $toolbar .= '<script type="text/javascript" src="'
                 .document_web_path().'/lib/javascript/toolbar.js"></script>'
@@ -119,22 +120,22 @@
 		var tb = new dcToolBar(document.getElementById('".$this->attributeList['id']."'),
 		'wiki','".document_web_path()."/toolbar/');
 
-        tb.btStrong('Strong emphasis');
-		tb.btEm('Emphasis');
-		tb.btIns('Inserted');
-		tb.btDel('Deleted');
-		tb.btQ('Inline quote');
-		tb.btCode('Code');
+        	tb.btStrong('".$wiki_toolbar['Strongemphasis']."');
+		tb.btEm('".$wiki_toolbar['Emphasis']."');
+		tb.btIns('".$wiki_toolbar['Inserted']."');
+		tb.btDel('".$wiki_toolbar['Deleted']."');
+		tb.btQ('".$wiki_toolbar['Inlinequote']."');
+		tb.btCode('".$wiki_toolbar['Code']."');
 		tb.addSpace(10);
-		tb.btBr('Line break');
+		tb.btBr('".$wiki_toolbar['Linebreak']."');
 		tb.addSpace(10);
-		tb.btBquote('Blockquote');
-		tb.btPre('Preformated text');
-		tb.btList('Unordered list','ul');
-		tb.btList('Ordered list','ol');
+		tb.btBquote('".$wiki_toolbar['Blockquote']."');
+		tb.btPre('".$wiki_toolbar['Preformatedtext']."');
+		tb.btList('".$wiki_toolbar['Unorderedlist']."','ul');
+		tb.btList('".$wiki_toolbar['Orderedlist']."','ol');
 		tb.addSpace(10);
-        tb.btLink('Link','URL?','Language?','fr');
-        tb.btImgLink('External image','URL?');
+        	tb.btLink('".$wiki_toolbar['Link']."','URL?','Language?','fr');
+        	tb.btImgLink('".$wiki_toolbar['Externalimage']."','URL?');
 		tb.draw('');
 	}
 	</script>\n";

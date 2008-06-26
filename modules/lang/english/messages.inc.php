@@ -3004,11 +3004,23 @@ $langYouAreReg = "You are registered on";
 $lang_footer_p_CourseManager = "Manager(s) for %s";
 $lang_p_platformManager = "Administrator for %s";
 
+$wiki_toolbar['Strongemphasis'] = "Strong Emphasis"; 
+$wiki_toolbar['Emphasis'] = "Emphasis";
+$wiki_toolbar['Inserted'] = "Inserted";
+$wiki_toolbar['Deleted'] = "Deleted";
+$wiki_toolbar['Inlinequote'] = "Inline Quote";
+$wiki_toolbar['Code'] = "Code";
+$wiki_toolbar['Linebreak'] = "Line break";
+$wiki_toolbar['Blockquote'] = "Blockquote";
+$wiki_toolbar['Preformatedtext'] = "Preformated Text";
+$wiki_toolbar['Unorderedlist'] = "Unordered List";
+$wiki_toolbar['Orderedlist'] = "Ordered List";
+$wiki_toolbar['Externalimage'] = "External Image";
+$wiki_toolbar['Link'] = "Link";
 
 /**************************************************************
 * work.inc.php
 **************************************************************/
-
 $langBackAssignment = "Back to work";
 $m['activate'] = "Activate";
 $m['deactivate'] = "Deactivate";

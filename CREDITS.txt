@@ -33,7 +33,7 @@
          Stevy Georgiadi <stevy@gunet.gr> (University of Athens)
          Victoria Daskalou <daskalou@upnet.gr> (University of Patras)
 	 Evelthon Prodromou <eprodromou@upnet.gr> (University of Patras)
-	Thanos Kyritsis <atkyritsis@upnet.gr> (University of Patras)
+	 Thanos Kyritsis <atkyritsis@upnet.gr> (University of Patras)
 
 
       Also Credits to:
@@ -82,6 +82,9 @@
       Dropbox module: Copyright 2004 Jan Bols <jan@ivpv.UGent.be>
 
       Wiki module: Frederic Minne <zefredz@gmail.com>
+	class wiki2xhtml based on DotClear version 3.1d licensed under GPL
+	      Copyright (c) 2004 Olivier Meunier and contributors.
+	 DotClear contributors: Stephanie Booth, Mathieu Pillard, Christophe Bonijol, Jean-Charles Bagneris, Nicolas Chachereau, Jereme Lipowicz	
 
       Learnpath module: Piraux Sebastien <pir@cerdecam.be>
 	        Lederer Guillaume <led@cerdecam.be>
