@@ -109,7 +109,7 @@
         function getToolbar()
         {
 
-	    global $wiki_toolbar;
+	    global $wiki_toolbar, $langWikiUrl;
             $toolbar = '';
 
             $toolbar .= '<script type="text/javascript" src="'
@@ -134,8 +134,8 @@
 		tb.btList('".$wiki_toolbar['Unorderedlist']."','ul');
 		tb.btList('".$wiki_toolbar['Orderedlist']."','ol');
 		tb.addSpace(10);
-        	tb.btLink('".$wiki_toolbar['Link']."','URL?','Language?','fr');
-        	tb.btImgLink('".$wiki_toolbar['Externalimage']."','URL?');
+        	tb.btLink('".$wiki_toolbar['Link']."','".$langWikiUrl."','Language?','fr');
+        	tb.btImgLink('".$wiki_toolbar['Externalimage']."','".$langWikiUrl."');
 		tb.draw('');
 	}
 	</script>\n";

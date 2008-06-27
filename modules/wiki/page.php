@@ -45,7 +45,7 @@
     $tlabelReq = 'CLWIKI__';
     require_once("../../include/lib/learnPathLib.inc.php");
     require_once("../../include/lib/textLib.inc.php");
-  $require_current_course = TRUE;
+  	$require_current_course = TRUE;
 	$require_help           = FALSE;
 	require_once("../../include/baseTheme.php");
 	
@@ -94,7 +94,6 @@
     }
 
     // Wiki specific classes and libraries
-
     require_once "lib/class.clarodbconnection.php";
     require_once "lib/class.wiki2xhtmlrenderer.php";
     require_once "lib/class.wikipage.php";
@@ -437,7 +436,6 @@
 
                         $message = $langWikiIdenticalContent;
                         $style = "caution";
-                        
                         $action = 'show';
                     }
                     else
@@ -479,10 +477,8 @@
                         $style = "success";
                     }
                     $action = 'show';
-                    
-                }               
+                }
             }
-            
             break;
         }
         // page history

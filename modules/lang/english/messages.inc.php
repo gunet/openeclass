@@ -3003,7 +3003,7 @@ $langWikiVersionPattern = "%1\$s by %2\$s";
 $langYouAreReg = "You are registered on";
 $lang_footer_p_CourseManager = "Manager(s) for %s";
 $lang_p_platformManager = "Administrator for %s";
-
+$langWikiUrl = "Type your URL";
 $wiki_toolbar['Strongemphasis'] = "Strong Emphasis"; 
 $wiki_toolbar['Emphasis'] = "Emphasis";
 $wiki_toolbar['Inserted'] = "Inserted";
