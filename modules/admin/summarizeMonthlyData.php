@@ -78,9 +78,13 @@
         if (!isset($vis_sum)) {$vis_sum = 0;}
 
         $mtext = "<table>";
-        $mtext .= "<tr><th>".$langCourse."</th><th>".$langCoursVisible."</th><th>".$langType."</th><th>".$langDepartment."</th><th>".$langTeacher. "</th><th>".$langNbUsers."</th></tr>";
+        $mtext .= "<tr><th>".$langCourse."</th>
+		<th>".$langCoursVisible."</th>
+		<th>".$langType."</th>
+		<th>".$langDepartment."</th>
+		<th>".$langTeacher."</th>
+		<th>".$langNbUsers."</th></tr>";
 
-        
         $sql = "SELECT cours.intitule AS name, cours.visible as visible, cours.type as type, cours.faculte as dept, cours.titulaires as proff, count(user_id) AS cnt FROM cours_user LEFT JOIN cours ON ".
             " cours.code = cours_user.code_cours GROUP BY code_cours ";
         $result = db_query($sql, $mysqlMainDb);
@@ -103,14 +107,14 @@
                 $cvisible = $langTypeOpen;
             }
             $mtext .= "<tr><td>".$row['name']."</td><td> ".$cvisible."</td><td> ".$ctype."</td>
-		<td align='center'> ".$row['dept']."</td>
-		<td>".$row['proff']."</td><td align='center'>".$row['cnt']."</td></tr>";
+		<td align=center>".$row['dept']."</td>
+		<td>".$row['proff']."</td><td align=center>".$row['cnt']."</td></tr>";
         }
         mysql_free_result($result);
         $mtext .= '</table>';
 
-        $sql = "INSERT INTO monthly_summary SET month='$last_month', profesNum = $prof_sum, studNum = $stud_sum, ".
-            " visitorsNum = $vis_sum, coursNum = $cours_sum, logins = $login_sum, details = '$mtext'";
+        $sql = "INSERT INTO monthly_summary SET month='$last_month', profesNum = '$prof_sum', studNum = '$stud_sum',
+            visitorsNum = '$vis_sum', coursNum = '$cours_sum', logins = '$login_sum', details = '$mtext'";
         $result= db_query($sql, $mysqlMainDb);
         @mysql_free_result($result);
     }
