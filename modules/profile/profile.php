@@ -46,7 +46,12 @@ if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
 	}
 
 	// check if there are empty fields
-	if (empty($nom_form) OR empty($prenom_form) OR empty($username_form) OR empty($email_form)) {
+	if (empty($nom_form) OR empty($prenom_form) OR empty($username_form)) {
+		header("location:". $_SERVER['PHP_SELF']."?msg=4");
+		exit();
+	}
+	
+	elseif (empty($email_form) and check_prof()) {
 		header("location:". $_SERVER['PHP_SELF']."?msg=4");
 		exit();
 	}
@@ -62,8 +67,8 @@ if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
 		exit();
 	}
 
-	// check if user email is valid
-	elseif (!email_seems_valid($email_form)) {
+	// check if email is valid
+	elseif (!email_seems_valid($email_form) and check_prof()) {
 		header("location:". $_SERVER['PHP_SELF']."?msg=6");
 		exit();
 	}

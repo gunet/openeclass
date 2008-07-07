@@ -1,5 +1,5 @@
 <?php
-/**=============================================================================
+/*=============================================================================
        	GUnet eClass 2.0 
         E-learning and Course Management Program  
 ================================================================================
@@ -23,7 +23,7 @@
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	listcours.php
 	@last update: 11-07-2006 by Pitsiougas Vagelis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
@@ -150,7 +150,7 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	$logs = mysql_fetch_array($sql);
 	$tool_content .= "  <tr>\n";
 	 for ($i = 0; $i < 2; $i++) {
-	 	$tool_content .= "<td width=\"500\">".htmlspecialchars($logs[$i])."</td>\n";
+	 	$tool_content .= "<td width=\"250\">".htmlspecialchars($logs[$i])."</td>\n";
 	}
 	$tool_content .= "<td width='500'>".htmlspecialchars($logs[2])." (".$logs[3].")</td>\n";
 	// Define course type

@@ -1,5 +1,5 @@
 <?
-/**===========================================================================
+/*===========================================================================
 *              GUnet eClass 2.0
 *       E-learning and Course Management Program
 * ===========================================================================
@@ -18,12 +18,12 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*					Network Operations Center, University of Athens,
+*					Panepistimiopolis Ilissia, 15784, Athens, Greece
+*					eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-/**
+/*
  * Course Home Component
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -47,9 +47,8 @@ $tool_content = "";
 $main_content = "";
 $bar_content = "";
 
-
 //For statistics: record login
- global $uid, $currentCourse, $REMOTE_ADDR;
+global $uid, $currentCourse, $REMOTE_ADDR;
 $sql_log = "INSERT INTO logins SET user_id='$uid', ip='$REMOTE_ADDR', date_time=NOW()";
 db_query($sql_log, $currentCourse);
 
@@ -98,7 +97,7 @@ case 'other': { //other
 }
 
 $bar_content .= "<p><b>".$langLessonCode."</b>: ".$fake_code."</p>";
-$bar_content .= "<p><b>".$langTeachers."</b>: ".$professor."</p>";
+$bar_content .= "<p><b>".$langTeachers."</b>: ".$professor." <a href='../../modules/contact/index.php'>(".$langEmail.")</a></p>";
 $bar_content .= "<p><b>".$langFaculty."</b>: ".$faculte."</p>";
 $bar_content .= "<p><b>".$m['type']."</b>: ".$lessonType."</p>";
 

@@ -605,6 +605,35 @@ $langAgendaDeleted="Agenda data deleted from course";
 $langWorksDeleted="Assignments deleted";
 $langDocsDeleted="Documents deleted";
 
+/***************************************************
+* contact.inc.php
+*****************************************************/
+
+$langContactProf = "Contact $langTeachers";
+$langEmailEmpty = "Your e-mail address is empty. To contact the course $langsTeachers,
+you must have a valid address, so that they can reply to your message. You can
+enter your e-mail address from the <a href='%s'>Modify my Profile</a>
+option at your portfolio page.";
+
+$langEmptyMessage = "Message text was empty. Your message was not sent.";
+$langSendMessage = "Send message";
+$langContactMessage = "Contact course $langsTeachers. Enter your message here:";
+$langSendingMessage = "Your message is now sent to:";
+$langErrorSendingMessage = "Error! The message was not sent.";
+
+$langContactIntro = "An $siteName user named <%s> with e-mail address
+%s has sent you the following message. If you reply to
+this message, the answer will be addressed to this user.
+
+%s
+";
+
+$langNonUserContact = "To contact this course\'s $langsTeachers, you
+must have a valid account and be logged-in to the system. Please
+visit the <a href='%s'>login page</a>.";
+$langIntroMessage = "Compose your message";
+$langHeaderMessage = "Message from $langsstudent";
+
 
 /************************************************************
 * create_course.inc.php
