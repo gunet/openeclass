@@ -150,11 +150,11 @@ if (mysql_num_rows(db_query($sql, $mysqlMainDb)) > 0) {
 	while ($c = mysql_fetch_array($asql)) {	
 		$s = db_query("SELECT DISTINCT assignments.id, assignments.deadline, 
 			cours.intitule,(TO_DAYS(assignments.deadline) - TO_DAYS(NOW())) AS days_left
-			FROM  ".$c['k'].".assignments, ".$mysqlMainDb.".cours, ".$c['k'].".accueil
+			FROM `$c[k]`.assignments, `$mysqlMainDb`.cours, `$c[k]`.accueil
 			WHERE (TO_DAYS(deadline) - TO_DAYS(NOW())) >= '0'
-			AND assignments.active = 1 AND cours.code = '".$c['k']."'
-			AND ".$c['k'].".accueil.visible =1
-			AND ".$c['k'].".accueil.id =5 ORDER BY deadline", $c['k']);
+			AND assignments.active = 1 AND cours.code = '$c[k]'
+			AND `$c[k]`.accueil.visible =1
+			AND `$c[k]`.accueil.id =5 ORDER BY deadline", $c['k']);
 		if (mysql_num_rows($s) > 0) $found++;	  
 		}
 // if assignments found then display them
@@ -165,11 +165,11 @@ if (mysql_num_rows(db_query($sql, $mysqlMainDb)) > 0) {
 			$s = db_query("SELECT DISTINCT assignments.id, assignments.title, 
 				assignments.description, assignments.deadline, 
 				cours.intitule,(TO_DAYS(assignments.deadline) - TO_DAYS(NOW())) AS days_left
-				FROM  ".$c['k'].".assignments, ".$mysqlMainDb.".cours, ".$c['k'].".accueil
+				FROM `$c[k]`.assignments, `$mysqlMainDb`.cours, `$c[k]`.accueil
 				WHERE (TO_DAYS(deadline) - TO_DAYS(NOW())) >= '0'
-				AND assignments.active = 1 AND cours.code = '".$c['k']."'
-				AND ".$c['k'].".accueil.visible =1
-				AND ".$c['k'].".accueil.id =5 ORDER BY deadline", $c['k']); 
+				AND assignments.active = 1 AND cours.code = '$c[k]'
+				AND `$c[k]`.accueil.visible =1
+				AND `$c[k]`.accueil.id =5 ORDER BY deadline", $c['k']); 
 			while ($d = mysql_fetch_array($s)) {
 				$tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
 				$tool_content .= "<td>&nbsp;<img src='images/arrow_blue.gif'>&nbsp;$c[t]:&nbsp;<b>$d[title]</b>&nbsp;- $langExerciseEnd: ".greek_format($d['deadline'])."</td></tr>";
@@ -181,12 +181,12 @@ if (mysql_num_rows(db_query($sql, $mysqlMainDb)) > 0) {
 	$found = 0;
 	$ansql = db_query($sql, $mysqlMainDb);
 	while ($c = mysql_fetch_array($ansql)) {
-		$result = db_query("SELECT temps FROM " .$mysqlMainDb." . annonces, ".$c['k'].".accueil
-			WHERE code_cours='" .$c['k']. "'
+		$result = db_query("SELECT temps FROM `$mysqlMainDb`.annonces, `$c[k]`.accueil
+			WHERE code_cours='`$c[k]`'
 			AND DATE_SUB(DATE_FORMAT('".$logindate."','%Y-%m-%d'), INTERVAL 1 WEEK) 
 			<= DATE_FORMAT(temps,'%Y-%m-%d')
-			AND ".$c['k'].".accueil.visible =1
-			AND ".$c['k'].".accueil.id =7", $mysqlMainDb);
+			AND `$c[k]`.accueil.visible =1
+			AND `$c[k]`.accueil.id =7", $mysqlMainDb);
 		if (mysql_num_rows($result) > 0) $found++;	  
 	}
 // if announcements found then display them
@@ -195,12 +195,12 @@ if (mysql_num_rows(db_query($sql, $mysqlMainDb)) > 0) {
 		$ansql = db_query($sql, $mysqlMainDb);
 		while ($c = mysql_fetch_array($ansql)) {
 		$result = db_query("SELECT contenu, temps, title 
-			FROM " .$mysqlMainDb." . annonces, ".$c['k'].".accueil
-			WHERE code_cours='" .$c['k']. "'
+			FROM `$mysqlMainDb`.annonces, `$c[k]`.accueil
+			WHERE code_cours=`$c[k]`
 			AND DATE_SUB(DATE_FORMAT('".$logindate."','%Y-%m-%d'), INTERVAL 1 WEEK) 
 			<= DATE_FORMAT(temps,'%Y-%m-%d')
-			AND ".$c['k'].".accueil.visible =1
-			AND ".$c['k'].".accueil.id =7
+			AND `$c[k]`.accueil.visible =1
+			AND `$c[k]`.accueil.id =7
 			ORDER BY temps DESC", $mysqlMainDb);
 	
 			while ($ann = mysql_fetch_array($result)) {
