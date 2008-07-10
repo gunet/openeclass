@@ -96,6 +96,7 @@ $langLastStud = "Last user registration:";
 $langAfterLastLogin = "After your last login, there have been registered:";
 $langOtherActions = "Other Actions";
 $langFound = "Found";
+$langFoundIt = "found";
 $langCleanUp = "Cleanup Old Files";
 $langUpgradeBase = "Upgrade Database";
 
@@ -1346,8 +1347,21 @@ $langWelcomeProf = "Select \"Create course site\" to create your on-line courses
 /*************************************************
 * install.inc.php
 **************************************************/
-
-$langEG = "e. g.";
+$langWelcomeWizard = "Welcome to installation wizard of Open eClass!";
+$langThisWizard = "This  Wizard:"
+$langWizardHelp1 = "will help you to define database settings";
+$langWizardHelp2 = "will help you to define platform settings";
+$langWizardHelp3 = "will create <tt>config.php</tt>";
+$langRequiredPHP = "Required PHP modules";
+$langOptionalPHP = "Optional PHP modules";
+$langOtherReq = "Other system requirements";
+$langInstallBullet1 = "Μια βάση δεδομένων MySQL, στην οποία έχετε λογαριασμό με δικαιώματα να δημιουργείτε και να διαγράφετε βάσεις δεδομένων.";
+$langInstallBullet2 = "Δικαιώματα εγγραφής στον κατάλογο <tt>include/</tt>.";
+$langInstallBullet3 = "Δικαιώματα εγγραφής στον κατάλογο όπου το eClass έχει αποσυμπιεστεί.";
+$langCheckReq = "Έλεγχος προαπαιτούμενων προγραμμάτων για τη λειτουργία του Open eClass";
+$langInfoLicence = "Tο Open eClass είναι ελεύθερη εφαρμογή και διανέμεται σύμφωνα με την άδεια GNU General Public Licence (GPL). <br>Παρακαλούμε διαβάστε την άδεια και κάνετε κλίκ στο 'Αποδοχή'";
+$langAccept = "Accept";
+$langEG = "e.g.";
 $langDBHost	= "Database Host";
 $langDBLogin	= "Database Username";
 $langDBPassword = "Database Password";
@@ -1366,19 +1380,20 @@ $langCampusName	= "University name";
 $langInstituteShortName = "Institution short name";
 $langInstituteName = "URL of this institution";
 $langInstitutePostAddress = "Institution postal address";
-$langStep1 	= "Step 1 of 6";
-$langStep2 	= "Step 2 of 6";
-$langStep3 	= "Step 3 of 6";
-$langStep4 	= "Step 4 of 6";
-$langStep5 	= "Step 5 of 6";
-$langStep6 	= "Step 6 of 6";
-$langCfgSetting		= "Config settings";
-$langDBSetting 		= "MySQL database settings";
-$langMainLang 		= "Main language";
-$langLicence		= "License";
-$langLastCheck		= "Last check before install";
-$langRequirements	= "System Requirements";
-$langInstallEnd   	= "Installation Finished";
+$langStep1 = "Step 1 of 6";
+$langStep2 = "Step 2 of 6";
+$langStep3 = "Step 3 of 6";
+$langStep4 = "Step 4 of 6";
+$langStep5 = "Step 5 of 6";
+$langStep6 = "Step 6 of 6";
+$langCfgSetting	= "Config settings";
+$langDBSetting = "MySQL database settings";
+$langMainLang = "Main language";
+$langLicence = "License";
+$langLastCheck	= "Last check before install";
+$langRequirements = "System Requirements";
+$langInstallEnd = "Installation Finished";
+
 
 /*********************************************************
 * learnpath_inc.php

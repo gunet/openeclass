@@ -48,7 +48,7 @@ if (file_exists("../config/config.php")) {
 <html xmlns=\"http://www.w3.org/1999/xhtml\">
   <head>
 <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
-    <title>Καλωσορίσατε στον οδηγό εγκατάστασης του eClass</title>
+    <title>$langWelcomeWizard</title>
     <link href=\"../template/classic/tool_content.css\" rel=\"stylesheet\" type=\"text/css\" />
     <link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
   </head>
@@ -85,11 +85,9 @@ if(isset($welcomeScreen) )
 	$postaddressForm = "";
 	$institutionForm = "Ακαδημαϊκό Διαδίκτυο GUNet ";
 	$institutionUrlForm = "http://www.gunet.gr/";
-
 }
 
 if (isset($alreadyVisited)) {
-
 	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?alreadyVisited=1 method=\"post\">";
 	$tool_content .= "
             <input type=\"hidden\" name=\"urlAppendPath\" value=\"$urlAppendPath\">
@@ -129,16 +127,12 @@ if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
 	$langStepTitle = $langLicence;
 	$langStep = $langStep2;
 	$_SESSION['step']=2;
-	$tool_content .= "
-     <p>Tο eClass είναι ελεύθερη εφαρμογή και διανέμεται σύμφωνα με την άδεια GNU General Public Licence (GPL).
-     Παρακαλούμε διαβάστε την άδεια και κάνετε κλίκ στην 'Αποδοχή'.
-     <a href=\"../info/license/gpl_print.txt\">(".$langPrintVers.")</a></p>
-     <textarea wrap=\"virtual\" cols=\"65\" rows=\"15\">";
+	$tool_content .= "<p>$langInfoLicence<a href=\"../info/license/gpl_print.txt\">(".$langPrintVers.")</a></p>
+        <textarea wrap=\"virtual\" cols=\"65\" rows=\"15\">";
 	$tool_content .= file_get_contents('../info/license/gpl.txt');
 	$tool_content .= "</textarea><br/><br/>
-                    <input type=\"submit\" name=\"back1\" value=\"< Πίσω\">
-                    <input type=\"submit\" name=\"install3\" value=\"Αποδοχή>\" ></form>
-                  ";
+        <input type=\"submit\" name=\"back1\" value=\"< $langPreviousStep\">
+        <input type=\"submit\" name=\"install3\" value=\"$langAccept >\" ></form>";
 	draw($tool_content);
 }
 
@@ -189,8 +183,8 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	</thead>
 	</table>
   <br/><br/>
-	<input type=\"submit\" name=\"back2\" value=\"< Πίσω\">
-	<input type=\"submit\" name=\"install5\" value=\"Επόμενο >\">
+	<input type=\"submit\" name=\"back2\" value=\"< $langPreviousStep\">
+	<input type=\"submit\" name=\"install5\" value=\"$langNextStep >\">
 </form>";
 
 	draw($tool_content);
@@ -400,8 +394,8 @@ function set_MCU()
                             <font color=\"red\">**</font>
                                      ".$langWarnHelpDesk."
                         </p><br/>
-                    <input type=\"submit\" name=\"back3\" value=\"< Πίσω \">
-                                <input type=\"submit\" name=\"install6\" value='Επόμενο >'>";
+                    <input type=\"submit\" name=\"back3\" value=\"< $langPreviousStep \">
+                                <input type=\"submit\" name=\"install6\" value='$langNextStep >'>";
 	draw($tool_content);
 
 }
@@ -416,45 +410,41 @@ elseif(isset($_REQUEST['install6']))
 	$_SESSION['step']=5;
 
 	if (!$reguser) {
-      $mes_add ="";
-  } else {
-      $mes_add = "<br>Η εγγραφή χρηστών θα γίνεται με αίτηση προς τον διαχειριστή της πλατφόρμας<br>";
-  }
+      		$mes_add ="";
+  	} else {
+      		$mes_add = "<br>Η εγγραφή χρηστών θα γίνεται με αίτηση προς τον διαχειριστή της πλατφόρμας<br>";
+  	}
 
-	$tool_content .=  "
-        <p>
+	$tool_content .= "<p>
         Τα στοιχεία που δηλώσατε είναι τα παρακάτω:
         (Εκτυπώστε τα αν θέλετε να θυμάστε το συνθηματικό του διαχειριστή και τις άλλες ρυθμίσεις)</p>
         <ul id=\"installBullet\">
-        <li>Όνομα υπολογιστή : $dbHostForm</li>
-        <li>Όνομα Χρήστη για τη Βάση Δεδομένων : $dbUsernameForm</li>
-        <li>Συνθηματικό για τη Βάση Δεδομένων: $dbPassForm</li>
-        <li>Κύρια Βάση Δεδομένων : $dbNameForm</li>
-        <li>URL του phpMyAdmin : $dbMyAdmin</li>
-
-        <li>URL του eClass : $urlForm</li>
-        <li>Toπικό path : $pathForm</li>
-        <li>Email Διαχειριστή : $emailForm</li>
-        <li>Όνομα Διαχειριστή : $nameForm</li>
-
-        <li>Επώνυμο Διαχειριστή : $surnameForm</li>
-        <li><b>Όνομα Χρήστη του Διαχειριστή : </b>$loginForm</li>
-        <li><b>Συνθηματικό του Διαχειριστή : </b>$passForm</li>
+        <li>$langDBHost: $dbHostForm</li>
+        <li>$langDBLogin: $dbUsernameForm</li>
+        <li>$langDBPassword: $dbPassForm</li>
+        <li>$langMainDB: $dbNameForm</li>
+        <li>PHPMyAdmin URL: $dbMyAdmin</li>
+        <li>URL του eClass: $urlForm</li>
+        <li>Toπικό path: $pathForm</li>
+        <li>$langAdminEmail: $emailForm</li>
+        <li>$langAdminName: $nameForm</li>
+        <li>$langAdminSurname: $surnameForm</li>
+        <li><b>$langAdminLogin: </b>$loginForm</li>
+        <li><b>$langAdminPass: </b>$passForm</li>
         <li>Όνομα Πανεπιστημιακού Ιδρύματος : $campusForm</li>
-
-        <li>Τηλέφωνο Helpdesk : $helpdeskForm</li>
-        <li>Fax Helpdesk : $faxForm</li>
-        <li>E-mail Helpdesk : $helpdeskmail</li>
-        <li>Όνομα του Ιδρύματος : $institutionForm</li>
-        <li>URL Ιδρύματος : $institutionUrlForm</li>
-        <li>Στοιχεία Επικοινωνίας του Ιδρύματος : $postaddressForm</li>
+        <li>$langHelpDeskPhone: $helpdeskForm</li>
+        <li>$langHelpDeskFax: $faxForm</li>
+        <li>$langHelpDeskEmail: $helpdeskmail</li>
+        <li>$langInstituteShortName: $institutionForm</li>
+        <li>$langInstituteName: $institutionUrlForm</li>
+        <li>$langInstitutePostAddress: $postaddressForm</li>
         <li>LDAP εξυπηρέτης του Ιδρύματος : $ldapserver</li>
         <li>Base DN του LDAP Εξυπηρέτη : $dnldapserver </li>
 	<li>".$mes_add."</li>
 	<li>MCU: ".@$MCUForm." </li>
 	<li>Vod Server: ".@$vodServerForm." </li>
         </ul>
-        <input type=\"submit\" name=\"back4\" value=\"< Πίσω\">
+        <input type=\"submit\" name=\"back4\" value=\"< $langPreviousStep\">
         <input type=\"submit\" name=\"install7\" value=\"Eγκατάσταση του eClass >\">
         </form>";
 
@@ -465,37 +455,29 @@ draw($tool_content);
 
 elseif(isset($_REQUEST['install7']))
 {
-
 	// database creation
 	$langStepTitle = $langInstallEnd;
 	$langStep = $langStep6;
 	$_SESSION['step']=6;
 	$db = @mysql_connect("$dbHostForm", "$dbUsernameForm", "$dbPassForm");
-	if (mysql_errno()>0) // problem with server
+	if (mysql_errno() >0 ) // problem with server
 	{
-		$no = mysql_errno();     $msg = mysql_error();
-		$tool_content .= "
-		<table width = \"99%\">
-		<tbody>
-		<tr>
-		<td class=\"extraMessage\">
+		$no = mysql_errno(); 
+		$msg = mysql_error();
+		$tool_content .= "<table width = \"99%\"><tbody><tr><td class=\"extraMessage\">
 		<u><b>[".$no."] - ".$msg."</b></u><br/>
 		<p>Η MySQL  δεν λειτουργεί ή το όνομα χρήστη/συνθηματικό δεν είναι σωστό.<br/>
-        Παρακαλούμε ελέγξετε τα στοιχεία σας: </p>
-        <ul id=\"installBullet\">
-        <li>Όνομα Υπολογιστή : ".$dbHostForm."</li>
-        <li>Όνομα Χρήστη : ".$dbUsernameForm."</li>
-        <li>Συνθηματικό  : ".$dbPassForm."</li>
-        </ul>
-        <p>Eπιστρέψτε στο βήμα 3 για να τα διορθώσετε.</p>
-						</td>
-					</tr>
-				</tbody>
-			</table><br/>
-			<input type=\"submit\" name=\"install3\" value=\"< Επιστροφή στο βήμα 3\">
-			</form>
-       ";
-		draw($tool_content);exit();
+        	Παρακαλούμε ελέγξετε τα στοιχεία σας: </p>
+        	<ul id=\"installBullet\">
+        	<li>Όνομα Υπολογιστή : ".$dbHostForm."</li>
+        	<li>Όνομα Χρήστη : ".$dbUsernameForm."</li>
+        	<li>Συνθηματικό  : ".$dbPassForm."</li>
+        	</ul>
+        	<p>Eπιστρέψτε στο βήμα 3 για να τα διορθώσετε.</p></td>
+		</tr></tbody></table><br/>
+		<input type=\"submit\" name=\"install3\" value=\"< Επιστροφή στο βήμα 3\"></form>";
+		draw($tool_content);
+		exit();
 	}
 	$mysqlMainDb = $dbNameForm;
 	mysql_query("DROP DATABASE IF EXISTS ".$mysqlMainDb);
@@ -1068,15 +1050,11 @@ if(!$mkd){
 		exit();
 	}
 
-	$tool_content .= "
-
-    <u>Έλεγχος προαπαιτούμενων προγραμμάτων για τη λειτουργία του eClass</u>
-    <p>
+	$tool_content .= "<u>$langCheckReq</u><p>
         Webserver (<em>βρέθηκε <b>".$_SERVER['SERVER_SOFTWARE']."</b></em>)
-        με υποστήριξη PHP (<em>βρέθηκε <b>PHP ".phpversion()."</b></em>).</p>
-    ";
+        με υποστήριξη PHP (<em>βρέθηκε <b>PHP ".phpversion()."</b></em>).</p>";
 
-	$tool_content .= "<u>Απαιτούμενα PHP modules</u>";
+	$tool_content .= "<u>$langRequiredPHP</u>";
 	$tool_content .= "<ul id=\"installBullet\">";
 	warnIfExtNotLoaded("standard");
 	warnIfExtNotLoaded("session");
@@ -1085,23 +1063,17 @@ if(!$mkd){
 	warnIfExtNotLoaded("mbstring");
 	warnIfExtNotLoaded("zlib");
 	warnIfExtNotLoaded("pcre");
-	$tool_content .= "</ul><u>Προαιρετικά PHP modules</u>";
+	$tool_content .= "</ul><u>$langOptionalPHP</u>";
 	$tool_content .= "<ul id=\"installBullet\">";
 	warnIfExtNotLoaded("ldap");
 	$tool_content .= "</ul>";
 	$tool_content .= "
 
-    <u>Άλλες απαιτήσεις συστήματος</u>
+    <u>$langOtherReq</u>
     <ul id=\"installBullet\">
-    <li>
-    Μια βάση δεδομένων MySQL, στην οποία έχετε λογαριασμό με δικαιώματα να δημιουργείτε και να διαγράφετε βάσεις δεδομένων.
-    </li>
-    <li>
-        Δικαιώματα εγγραφής στον κατάλογο <tt>include/</tt>.
-    </li>
-    <li>
-        Δικαιώματα εγγραφής στον κατάλογο όπου το eClass έχει αποσυμπιεστεί.
-    </li>
+    <li>$langInstallBullet1</li>
+    <li>$langInstallBullet2</li>
+    <li>$langInstallBullet3</li>
     </ul>
 
     <u>Επιπρόσθετη λειτουργικότητα:</u>
@@ -1122,7 +1094,7 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
 </p>
 <br>
 
-<input type=\"submit\" name=\"install2\" value=\"Επόμενο >\">
+<input type=\"submit\" name=\"install2\" value=\"$langNextStep >\">
 </form>
 ";
 	draw($tool_content);
@@ -1130,29 +1102,22 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
 } else {
 	$tool_content .= "
 	<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
-<html>
-  <head>
-    <title>Καλωσορίσατε στον οδηγό εγκατάστασης του eClass</title>
-    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
-    <link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
-  </head>
-  <body>
-	<div class=\"outer\">
-     <form action='$_SERVER[PHP_SELF]'?alreadyVisited=1 method=\"post\">
-	 <input type=\"hidden\" name=\"welcomeScreen\" value=\"welcomeScreen\">
-    <div class=\"welcomeImg\"></div>
-   Καλωσορίσατε στον οδηγό εγκατάστασης του eClass. Ο οδηγός αυτός :
-    <ul id=\"installBullet\">
-    	<li>Θα σας βοηθήσει να ορίσετε τις ρυθμίσεις για τη βάση δεδομένων</li>
-    	<li>Θα σας βοηθήσει να ορίσετε τις ρυθμίσεις της πλατφόρμας</li>
-    	<li>Θα δημιουργήσει το αρχείο config.php</li>
-    </ul>
-
-  <input type=\"submit\" name=\"install1\" value=\"Επόμενο >\">
- </div></form>
-  </body>
-</html>";
-
+	<html><head><title>$langWelcomeWizard</title>
+    	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
+    	<link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
+  	</head>
+  	<body><div class=\"outer\">
+     	<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method=\"post\">
+	<input type=\"hidden\" name=\"welcomeScreen\" value=\"welcomeScreen\">
+    	<div class=\"welcomeImg\"></div>$langWelcomeWizard $langThisWizard
+    	<ul id=\"installBullet\">
+    	<li>$langWizardHelp1</li>
+    	<li>$langWizardHelp2</li>
+    	<li>$langWizardHelp3</li>
+    	</ul>
+  	<input type=\"submit\" name=\"install1\" value=\"$langNextStep >\">
+ 	</div></form>
+	</body></html>";
 	echo $tool_content;
 }
 
@@ -1161,8 +1126,8 @@ href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
 
 /*
  * check extension and  write  if exist  in a  <LI></LI>
- * @params string	$extentionName 		name  of  php extention to be checked
- * @params boolean	$echoWhenOk			true => show ok when  extention exist
+ * @params string	$extentionName 	name  of  php extention to be checked
+ * @params boolean	$echoWhenOk	true => show ok when  extention exist
  * @author Christophe Gesche
  * @desc check extention and  write  if exist  in a  <LI></LI>
  */
@@ -1190,9 +1155,9 @@ function mysql_version() {
 
 	$ver = mysql_get_server_info();
 	if (version_compare("4.1", $ver) <= 0)
-	return true;
+		return true;
 	else
-	return false;
+		return false;
 }
 
 /*

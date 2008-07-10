@@ -102,6 +102,7 @@ $langReport             = "Αναφορά για το μήνα";
 $langNoReport           = "Δεν υπάρχουν διαθέσιμα στοιχεία για το μήνα";
 $langEmailNotSend = "Σφάλμα κατά την αποστολή e-mail στη διεύθυνση";
 $langFound = "Βρέθηκαν";
+$langFoundIt = "βρέθηκε";
 $langListCours = "Λίστα Μαθημάτων / Ενέργειες";
 $langListUsersActions = "Λίστα Χρηστών / Ενέργειες";
 $langSearchUser = "Αναζήτηση Χρήστη";
@@ -1332,30 +1333,42 @@ $langWelcomeProf = "Επιλέξτε \"Δημιουργία Μαθήματος\"
 /***********************************************************
 * install.inc.php
 ***********************************************************/
-$langEG	= "π. χ.";
-$langDBHost	= "Όνομα υπολογιστή της Βάσης Δεδομένων";
+$langWelcomeWizard = "Καλωσορίσατε στον οδηγό εγκατάστασης του Open eClass!";
+$langThisWizard = "Ο οδηγός αυτός:";
+$langWizardHelp1 = "Θα σας βοηθήσει να ορίσετε τις ρυθμίσεις για τη βάση δεδομένων";
+$langWizardHelp2 = "Θα σας βοηθήσει να ορίσετε τις ρυθμίσεις της πλατφόρμας";
+$langWizardHelp3 = "Θα δημιουργήσει το αρχείο <tt>config.php</tt>";
+$langRequiredPHP = "Απαιτούμενα PHP modules";
+$langOptionalPHP = "Προαιρετικά PHP modules";
+$langOtherReq = "Άλλες απαιτήσεις συστήματος";
+$langInstallBullet1 = "Μια βάση δεδομένων MySQL, στην οποία έχετε λογαριασμό με δικαιώματα να δημιουργείτε και να διαγράφετε βάσεις δεδομένων.";
+$langInstallBullet2 = "Δικαιώματα εγγραφής στον κατάλογο <tt>include/</tt>.";
+$langInstallBullet3 = "Δικαιώματα εγγραφής στον κατάλογο όπου το Open eClass έχει αποσυμπιεστεί.";
+$langCheckReq = "Έλεγχος προαπαιτούμενων προγραμμάτων για τη λειτουργία του Open eClass";
+$langInfoLicence = "Tο Open eClass είναι ελεύθερη εφαρμογή και διανέμεται σύμφωνα με την άδεια GNU General Public Licence (GPL). <br>Παρακαλούμε διαβάστε την άδεια και κάνετε κλίκ στο 'Αποδοχή'";
+$langAccept = "Αποδοχή";
+$langEG	= "π.χ.";
+$langDBHost = "Όνομα υπολογιστή της Βάσης Δεδομένων";
 $langDBLogin = "Όνομα Χρήστη για τη Βάση Δεδομένων";
 $langDBPassword	= "Συνθηματικό για τη Βάση Δεδομένων";
-$langMainDB	= "Κύρια Βάση Δεδομένων του eClass";
+$langMainDB = "Κύρια Βάση Δεδομένων του Open eClass";
 $langAllFieldsRequired	= "όλα τα πεδία είναι υποχρεωτικά";
 $langPrintVers = "Εκτυπώσιμη μορφή";
-$langLocalPath	= "Path των αρχείων του eClass στον εξυπηρετητή";
+$langLocalPath	= "Path των αρχείων του Open eClass στον εξυπηρετητή";
 $langAdminEmail	= "Email Διαχειριστή";
 $langAdminName = "Όνομα Διαχειριστή";
-$langAdminSurname	= "Επώνυμο Διαχειριστή";
+$langAdminSurname = "Επώνυμο Διαχειριστή";
 $langAdminLogin	= "Όνομα Χρήστη του Διαχειριστή";
 $langAdminPass	= "Συνθηματικό του Διαχειριστή";
 $langHelpDeskPhone = "Τηλέφωνο Helpdesk";
 $langHelpDeskFax = "Αριθμός Fax Helpdesk";
-$langHelpDeskEmail	= "Email Helpdesk";
+$langHelpDeskEmail = "Email Helpdesk";
 $langCampusName	= "Όνομα Πλατφόρμας";
 $langInstituteShortName  = "Όνομα Ιδρύματος - Οργανισμού";
 $langInstituteName = "Website Ιδρύματος - Οργανισμού";
 $langInstitutePostAddress = "Ταχ. Διεύθυνση Ιδρύματος - Οργανισμού";
-$langWarnHelpDesk	= "Προσοχή: στο \"Email helpdesk\" στέλνονται οι αιτήσεις καθηγητών για λογαριασμό στην πλατφόρμα";
-$langDBSettingIntro		= "Το πρόγραμμα εγκατάστασης θα δημιουργήσει την κύρια βάση δεδομένων του eClass.
-				Έχετε υπ'όψιν σας ότι κατά τη λειτουργία της πλατφόρμας θα χρειαστεί να
-				δημιουργηθούν νέες βάσεις δεδομένων (μία για κάθε μάθημα) ";
+$langWarnHelpDesk = "Προσοχή: στο \"Email helpdesk\" στέλνονται οι αιτήσεις καθηγητών για λογαριασμό στην πλατφόρμα";
+$langDBSettingIntro = "Το πρόγραμμα εγκατάστασης θα δημιουργήσει την κύρια βάση δεδομένων του Open eClass. Έχετε υπ'όψιν σας ότι κατά τη λειτουργία της πλατφόρμας θα χρειαστεί να δημιουργηθούν νέες βάσεις δεδομένων (μία για κάθε μάθημα) ";
 
 $langStep1 = "Βήμα 1 από 6";
 $langStep2 = "Βήμα 2 από 6";
@@ -1368,8 +1381,8 @@ $langDBSetting = "Ρυθμίσεις της MySQL";
 $langMainLang	= "Κύρια Γλώσσα Εγκατάστασης";
 $langLicence = "Άδεια Χρήσης";
 $langLastCheck = "Τελευταίος έλεγχος πριν την εγκατάσταση";
-$langRequirements	= "Απαιτήσεις Συστήματος";
-$langInstallEnd 	= "Ολοκλήρωση Εγκατάστασης";
+$langRequirements = "Απαιτήσεις Συστήματος";
+$langInstallEnd	= "Ολοκλήρωση Εγκατάστασης";
 
 /********************************************************
 * learnpath.inc.php
