@@ -45,17 +45,13 @@ include('install_functions.php');
 if (file_exists("../config/config.php")) {
 	$tool_content .= "
 	<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
-<html xmlns=\"http://www.w3.org/1999/xhtml\">
-  <head>
-<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
-    <title>$langWelcomeWizard</title>
-    <link href=\"../template/classic/tool_content.css\" rel=\"stylesheet\" type=\"text/css\" />
-    <link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
-  </head>
-  <body>
-	<table width = \"99%\"><tbody><tr><td class=\"extraMessage\">
-	Προσοχή !! Το αρχείο <b>config.php</b> υπάρχει ήδη στο σύστημά σας!! Το πρόγραμμα εγκατάστασης δεν πραγματοποιεί αναβάθμιση. Αν θέλετε να ξανατρέξετε την εγκατάσταση της πλατφόρμας,
-            παρακαλούμε διαγράψτε το αρχείο config.php!
+	<html xmlns=\"http://www.w3.org/1999/xhtml\"><head>
+	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
+    	<title>$langWelcomeWizard</title>
+    	<link href=\"../template/classic/tool_content.css\" rel=\"stylesheet\" type=\"text/css\" />
+    	<link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
+  	</head>
+  	<body><table width = \"99%\"><tbody><tr><td class=\"extraMessage\">$langWarnConfig
 	</td></tr></tbody></table>
 	</body></html>";
 	exit($tool_content);
@@ -136,19 +132,16 @@ if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
 }
 
 elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
-
 	// step 3 mysql database settings
 	$langStepTitle = $langDBSetting;
 	$langStep = $langStep3;
 	$_SESSION['step']=3;
 	$tool_content .= "<p>".$langDBSettingIntro.".  ".$langAllFieldsRequired."</p>
 	<table width=\"99%\">
-	<thead>
-	<tr>
+	<thead><tr>
 	<th>".$langDBHost."</th>
 	<td><input type=\"text\" size=\"25\" name=\"dbHostForm\" value=\"".$dbHostForm."\">".$langEG." localhost
-	</td>
-	</tr>
+	</td></tr>
 	<tr>
 	<th>".$langDBLogin."</th>
 	<td>
@@ -164,28 +157,23 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	<tr>
 	<th>".$langMainDB."</th>
 	<td>
-	<input type=\"text\"  size=\"25\" name=\"dbNameForm\" value=\"$dbNameForm\">(αν υπάρχει ήδη κάποια βάση δεδομένων με το όνομα eclass αλλάξτε το)
+	<input type=\"text\"  size=\"25\" name=\"dbNameForm\" value=\"$dbNameForm\">($langNeedChangeDB)
 	</td>
 	</tr>
-	<tr>
-	<th>URL του phpMyAdmin</th>
+	<tr><th>URL του phpMyAdmin</th>
 	<td>
-	<input type=\"text\" size=\"25\" name=\"dbMyAdmin\" value=\"".$dbMyAdmin."\">Δεν χρειάζεται να το αλλάξετε
+	<input type=\"text\" size=\"25\" name=\"dbMyAdmin\" value=\"".$dbMyAdmin."\">$langNotNeedChange
 	</td>
-	</tr>
-	<tr>
+	</tr><tr>
 	<th>URL του System info</th>
 	<td>
-	<input type=\"text\" size=\"25\" name=\"phpSysInfoURL\" value=\"".$phpSysInfoURL."\">Δεν χρειάζεται να το αλλάξετε
+	<input type=\"text\" size=\"25\" name=\"phpSysInfoURL\" value=\"".$phpSysInfoURL."\">$langNotNeedChange
 	</td>
-	</tr>
-	</thead>
-	</table>
-  <br/><br/>
+	</tr></thead>
+	</table><br/><br/>
 	<input type=\"submit\" name=\"back2\" value=\"< $langPreviousStep\">
 	<input type=\"submit\" name=\"install5\" value=\"$langNextStep >\">
-</form>";
-
+	</form>";
 	draw($tool_content);
 }	 // install3
 
@@ -205,10 +193,8 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
 	$langStepTitle = $langCfgSetting;
 	$langStep = $langStep4;
 	$_SESSION['step']=4;
-	$tool_content .=  "
-        <p>Τα παρακάτω θα γραφτούν στο αρχείο <b>config.php</b>.</p>
-	<table width=\"99%\">
-	<thead><tr>
+	$tool_content .= "<p>$langWillWrite</b>. $langRequiredFields.</p></p>
+	<table width=\"99%\"><thead><tr>
 	<th>URL του eClass<font color=\"red\">*</font></th>
 	<td>
 	<input type=\"text\" size=\"40\" name=\"urlForm\" value=\"$urlForm\">
@@ -278,9 +264,9 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
           <tr>
           <th>".$langInstitutePostAddress."</th>
           <td>
-	<textarea rows='3' cols='40' name=\"postaddressForm\" value=\"".@$postaddressForm."\"></textarea>
+	  <textarea rows='3' cols='40' name=\"postaddressForm\" value=\"".@$postaddressForm."\"></textarea>
           </td></tr>
-          <tr><th>LDAP εξυπηρέτης του Ιδρύματος</th>
+          <tr><th>$langldap_host_url</th>
           <td><input type=\"text\" size=\"40\" name=\"ldapserver\" value=\"$ldapserver\"></td>
          </tr>
          <tr><th>Base dn του LDAP εξυπηρέτη</th>
@@ -288,10 +274,10 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
          <input type=\"text\" size=\"40\" name=\"dnldapserver\" value=\"$dnldapserver\">
          </td>
          </tr>
-	<tr><th>Εγγραφή χρηστών μέσω αίτησης</th>
+	<tr><th>$langViaReq</th>
 	<td><input type='checkbox' name='reguser'></td>
 	</tr>
-         <tr><th>Εξυπηρετητής video streaming</th>
+         <tr><th>$langVod</th>
          <td>
 <script>
 function set_video_input()
@@ -307,21 +293,14 @@ function set_video_input()
 
 	}
 </script>
-		<input type=\"checkbox\" id=\"video_check\" onclick=\"set_video_input();\"/><br>
+	<input type=\"checkbox\" id=\"video_check\" onclick=\"set_video_input();\"/><br>
      </td>
-     </tr>
-	<tr>
-	<th><div id=\"video_input_div_text\">
-	</div>
-	</th>
-	<td>
-	<div id=\"video_input_div_input\">
-	</td>
+     </tr><tr>
+	<th><div id=\"video_input_div_text\"></div></th>
+	<td><div id=\"video_input_div_input\"></td>
 	</tr>
       <tr>
-       <th>
-         MCU (μονάδα ελέγχου για τηλεδιάσκεψη)
-       </th>
+       <th>$langMCU</th>
        <td>
 <script>
 function set_MCU()
@@ -338,14 +317,14 @@ function set_MCU()
 
 	}
 </script>
-		<input type=\"checkbox\" id=\"MCU_check\" onclick=\"set_MCU();\"/><br>
+	<input type=\"checkbox\" id=\"MCU_check\" onclick=\"set_MCU();\"/><br>
      </td>
      </tr>
 	<tr><th><div id=\"MCU_div_text\"></div></th>
 	<td>
 	<div id=\"MCU_div_input\">
 	</td></tr>
-           <tr><th>Personalization</th>
+           <tr><th>$langPerso</th>
             <td>
             <select name=\"persoIsActive\">
             	<option value=\"true\" ".$persoIsActiveSelTrue.">true</option>
@@ -355,8 +334,6 @@ function set_MCU()
              </tr>
              </thead>
              </table>
-             <p><font color=\"red\">*</font>
-                                  = υποχρεωτικό</p>
           <p><font color=\"red\">**</font>".$langWarnHelpDesk."</p><br/>
          <input type=\"submit\" name=\"back3\" value=\"< $langPreviousStep \">
          <input type=\"submit\" name=\"install6\" value='$langNextStep >'>";
@@ -376,44 +353,41 @@ elseif(isset($_REQUEST['install6']))
 	if (!$reguser) {
       		$mes_add ="";
   	} else {
-      		$mes_add = "<br>Η εγγραφή χρηστών θα γίνεται με αίτηση προς τον διαχειριστή της πλατφόρμας<br>";
+      		$mes_add = "<br>$langToReq<br>";
   	}
 
-	$tool_content .= "<p>
-        Τα στοιχεία που δηλώσατε είναι τα παρακάτω:
-        (Εκτυπώστε τα αν θέλετε να θυμάστε το συνθηματικό του διαχειριστή και τις άλλες ρυθμίσεις)</p>
+	$tool_content .= "<p>$langReviewSettings</p>
         <ul id=\"installBullet\">
         <li>$langDBHost: $dbHostForm</li>
         <li>$langDBLogin: $dbUsernameForm</li>
         <li>$langDBPassword: $dbPassForm</li>
         <li>$langMainDB: $dbNameForm</li>
         <li>PHPMyAdmin URL: $dbMyAdmin</li>
-        <li>URL του eClass: $urlForm</li>
-        <li>Toπικό path: $pathForm</li>
+        <li>$langSiteUrl: $urlForm</li>
+        <li>$langLocalPath: $pathForm</li>
         <li>$langAdminEmail: $emailForm</li>
         <li>$langAdminName: $nameForm</li>
         <li>$langAdminSurname: $surnameForm</li>
         <li><b>$langAdminLogin: </b>$loginForm</li>
         <li><b>$langAdminPass: </b>$passForm</li>
-        <li>Όνομα Πανεπιστημιακού Ιδρύματος : $campusForm</li>
+        <li>$langCampusName: $campusForm</li>
         <li>$langHelpDeskPhone: $helpdeskForm</li>
         <li>$langHelpDeskFax: $faxForm</li>
         <li>$langHelpDeskEmail: $helpdeskmail</li>
         <li>$langInstituteShortName: $institutionForm</li>
         <li>$langInstituteName: $institutionUrlForm</li>
         <li>$langInstitutePostAddress: $postaddressForm</li>
-        <li>LDAP εξυπηρέτης του Ιδρύματος : $ldapserver</li>
+        <li>$langldap_host_url: $ldapserver</li>
         <li>Base DN του LDAP Εξυπηρέτη : $dnldapserver </li>
 	<li>".$mes_add."</li>
 	<li>MCU: ".@$MCUForm." </li>
-	<li>Vod Server: ".@$vodServerForm." </li>
+	<li>$langVod: ".@$vodServerForm." </li>
         </ul>
         <input type=\"submit\" name=\"back4\" value=\"< $langPreviousStep\">
-        <input type=\"submit\" name=\"install7\" value=\"Eγκατάσταση του eClass >\">
+        <input type=\"submit\" name=\"install7\" value=\"$langInstall >\">
         </form>";
 
 draw($tool_content);
-
 }
 // step 6 installation successful
 
@@ -424,22 +398,21 @@ elseif(isset($_REQUEST['install7']))
 	$langStep = $langStep6;
 	$_SESSION['step']=6;
 	$db = @mysql_connect("$dbHostForm", "$dbUsernameForm", "$dbPassForm");
-	if (mysql_errno() >0 ) // problem with server
+	if (mysql_errno() > 0) // problem with server
 	{
 		$no = mysql_errno(); 
 		$msg = mysql_error();
 		$tool_content .= "<table width = \"99%\"><tbody><tr><td class=\"extraMessage\">
 		<u><b>[".$no."] - ".$msg."</b></u><br/>
-		<p>Η MySQL  δεν λειτουργεί ή το όνομα χρήστη/συνθηματικό δεν είναι σωστό.<br/>
-        	Παρακαλούμε ελέγξετε τα στοιχεία σας: </p>
+		<p>$langErrorMysql</p>
         	<ul id=\"installBullet\">
-        	<li>Όνομα Υπολογιστή : ".$dbHostForm."</li>
-        	<li>Όνομα Χρήστη : ".$dbUsernameForm."</li>
-        	<li>Συνθηματικό  : ".$dbPassForm."</li>
+        	<li>$langDBHost: ".$dbHostForm."</li>
+        	<li>$langDBLogin: ".$dbUsernameForm."</li>
+        	<li>$langDBPassword: ".$dbPassForm."</li>
         	</ul>
-        	<p>Eπιστρέψτε στο βήμα 3 για να τα διορθώσετε.</p></td>
+        	<p>$langBackStep3_2</p></td>
 		</tr></tbody></table><br/>
-		<input type=\"submit\" name=\"install3\" value=\"< Επιστροφή στο βήμα 3\"></form>";
+		<input type=\"submit\" name=\"install3\" value=\"< $langBackStep3\"></form>";
 		draw($tool_content);
 		exit();
 	}
@@ -454,13 +427,7 @@ elseif(isset($_REQUEST['install7']))
 	$langStepTitle = $langInstallEnd;
 	$langStep = $langStep6;
 	if (!$fd) {
-		$tool_content .= "
-                <br>
-                <b>Παρουσιάστηκε σφάλμα!</b>
-                <br><br>
-        	Δεν είναι δυνατή η δημιουργία του αρχείου config.php.<br><br>
-        	Παρακαλούμε ελέγξτε τα δικαιώματα πρόσβασης στους υποκαταλόγους του eclass
-        	και δοκιμάστε ξανά την εγκατάσταση.\n";
+		$tool_content .= $langErrorConfig;
 	} else {
 		if (!$reguser) $user_registration = 'FALSE';
     		else $user_registration = 'TRUE';
@@ -507,26 +474,17 @@ define("UTF8", true);
 '.($MCU==''?'//':'').'$MCU = "'.$MCU.'";
 $encryptedPasswd = true;
 ';
-		// write to file
-		fwrite($fd, $stringConfig);
-		// message
+	// write to file
+	fwrite($fd, $stringConfig);
+	// message
 
-		$tool_content .= "
- 	      <table width = \"99%\"><tbody><tr><td class=\"extraMessageOK\">
-		<p>Η εγκατάσταση ολοκληρώθηκε με επιτυχία!
-                Κάντε κλίκ παρακάτω για να μπείτε στο eClass.</p>
-                <br>
-                <p><b>
-                Συμβουλή: Για να προστατέψετε το eClass, αλλάξτε τα δικαιώματα πρόσβασης των αρχείων
-                <tt>/config/config.php</tt> και <tt>/install/index.php</tt> και
-                επιτρέψτε μόνο ανάγνωση (CHMOD 444).</b></p>
-		</td></tr></tbody></table>
-        <br>
-       </form>
-    <form action=\"../\">
-    <input type=\"submit\" value=\"Είσοδος στο eClass\">
-	</form>";
-		draw($tool_content);
+	$tool_content .= "<table width = \"99%\"><tbody><tr><td class=\"extraMessageOK\">
+	<p>$langInstallSuccess</p>
+        <br><p><b>$langProtect</b></p>
+	</td></tr></tbody></table><br>
+        </form>
+    	<form action=\"../\"><input type=\"submit\" value=\"$langEnterFirstTime\"></form>";
+	draw($tool_content);
 	}       // τέλος ελέγχου για δικαιώματα
 }	// end of step 6
 
@@ -540,19 +498,11 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	$configErrorExists = false;
 
 	if (empty($SERVER_SOFTWARE)) {
-
 		$errorContent[]= "
 		<table width = \"99%\"><tbody><tr>
 		<td class=\"extraMessage\">
-        <p><b>Προσοχή!</b> Φαίνεται πως η επιλογή register_globals
-        στο αρχείο php.ini δεν είναι ενεργοποιημένη. Χωρίς αυτήν το
-        eClass δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το
-        αρχείο php.ini ώστε να περιέχει τη γραμμή:</p>
-        <p><b>register_globals = On</b></p>
-       <p>Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
-        τις οδηγίες εγκατάστασης στο αρχείο
-        <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
-	</td></tr></tbody></table>";
+        	<p>$langWarningInstall1</p>
+		</td></tr></tbody></table>";
 		$configErrorExists = true;
 	}
 
@@ -560,34 +510,19 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 		$errorContent[]= "
 		<table width = \"99%\"><tbody>
 		<tr><td class=\"extraMessage\">
-        <p><b>Προσοχή!</b> Φαίνεται πως η επιλογή short_open_tag
-        στο αρχείο php.ini δεν είναι ενεργοποιημένη. Χωρίς αυτήν το
-        eClass δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το
-        αρχείο php.ini ώστε να περιέχει τη γραμμή:</p>
-        <p><b>short_open_tag = On</b></p>
-        <p>Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
-        τις οδηγίες εγκατάστασης στο αρχείο
-        <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
-	</td></tr></tbody></table>";
+        	<p>$langWarningInstall2</p>
+		</td></tr></tbody></table>";
 		$configErrorExists = true;
 	}
-
 
 	// create config, courses and video catalogs
 	//config directory
 	if (!is_dir("../config")) {
-			$mkd=@mkdir("../config", 0777);
-		if(!$mkd){
+		$mkd=@mkdir("../config", 0777);
+		if(!$mkd) {
 			$errorContent[]= "<table width = \"99%\">
 			<tbody><tr><td class=\"extraMessage\">
-		  	<p><b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει
-        		δικαιώματα δημιουργίας του κατάλογου <b>/config</b>.<br/>
-        		Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει.
-        		Παρακαλούμε διορθώστε τα δικαιώματα.
-        		<br/>
-        		Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
-        		τις οδηγίες εγκατάστασης στο αρχείο
-        		<a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
+		  	<p>$langWarningInstall3</p>
 			</td></tr></tbody></table>";
 			$configErrorExists = true;
 		}
@@ -599,43 +534,22 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	if(!$mkd){
 		$errorContent[]= "
 		<table width = \"99%\"><tbody><tr><td class=\"extraMessage\">
-        	<p><b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει
-        	δικαιώματα δημιουργίας του κατάλογου <b>/courses</b>.<br/>
-        	Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει.
-        	Παρακαλούμε διορθώστε τα δικαιώματα.
-        	<br/>
-        	Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
-        	τις οδηγίες εγκατάστασης στο αρχείο
-        	<a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
+        	<p>$langWarningInstall4</p>
 		</td></tr></tbody></table>";
 		$configErrorExists = true;
 		}
 	}
 
-
-if (!is_dir("../video")) {
+	if (!is_dir("../video")) {
 		$mkd=@mkdir("../video", 0777);
-if(!$mkd){
-    $errorContent[]= "
-    <table width = \"99%\">
-        <tbody>
-          <tr>
-            <td class=\"extraMessage\">
-        <p><b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει
-        δικαιώματα δημιουργίας του κατάλογου <b>/video</b>.<br/>
-        Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει.
-        Παρακαλούμε διορθώστε τα δικαιώματα.
-        <br/>
-        Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε
-        τις οδηγίες εγκατάστασης στο αρχείο
-        <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.</p>
-          </td>
-          </tr>
-        </tbody>
-      </table>";
-    $configErrorExists = true;
-  }
-}
+		if(!$mkd) {
+    			$errorContent[]= "<table width = \"99%\">
+        		<tbody><tr><td class=\"extraMessage\">
+        		<p>$langWarningInstall5</p></td>
+          		</tr></tbody></table>";
+    			$configErrorExists = true;
+  		}
+	}
 
 	if($configErrorExists) {
 		$tool_content .= implode("<br/>", $errorContent);
@@ -647,7 +561,6 @@ if(!$mkd){
 	$tool_content .= "<u>$langCheckReq</u><p>
         Webserver (<em>βρέθηκε <b>".$_SERVER['SERVER_SOFTWARE']."</b></em>)
         με υποστήριξη PHP (<em>βρέθηκε <b>PHP ".phpversion()."</b></em>).</p>";
-
 	$tool_content .= "<u>$langRequiredPHP</u>";
 	$tool_content .= "<ul id=\"installBullet\">";
 	warnIfExtNotLoaded("standard");
@@ -661,59 +574,43 @@ if(!$mkd){
 	$tool_content .= "<ul id=\"installBullet\">";
 	warnIfExtNotLoaded("ldap");
 	$tool_content .= "</ul>";
-	$tool_content .= "
-
-    <u>$langOtherReq</u>
-    <ul id=\"installBullet\">
-    <li>$langInstallBullet1</li>
-    <li>$langInstallBullet2</li>
-    <li>$langInstallBullet3</li>
-    </ul>
-
-    <u>Επιπρόσθετη λειτουργικότητα:</u>
-     <ul id=\"installBullet\">
-     <li>Εάν επιθυμείτε να υποστηρίζετε streaming για τα αρχεία video που θα αποτελούν μέρος του υλικού των αποθηκευμένων μαθημάτων θα πρέπει να υπάρχει εγκατεστημένος streaming server σύμφωνα με τις οδηγίες που θα βρείτε στο εγχειρίδιο τάδε.
-    </li>
-    <li>
-Το eClass θα εγκαταστήσει το δικό του διαχειριστικό εργαλείο μέσω web των βάσεων δεδομένων MySQL (<a
-href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
-μπορείτε να χρησιμοποιήσετε και το δικό σας.
-</li></ul>
-<p>
-Πριν προχωρήσετε στην εγκατάσταση τυπώστε και διαβάστε προσεκτικά τις
-<a href=\"install.html\" target=_blank>Οδηγίες Εγκατάστασης</a>.
-</p>
-<p>
-Επίσης, γενικές οδηγίες για την πλατφόρμα μπορείτε να διαβάσετε <a href=\"../README.txt\" target=_blank>εδώ</a>.
-</p>
-<br>
-
-<input type=\"submit\" name=\"install2\" value=\"$langNextStep >\">
-</form>
-";
-	draw($tool_content);
-
-} else {
-	$tool_content .= "
-	<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
-	<html><head><title>$langWelcomeWizard</title>
-    	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
-    	<link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
-  	</head>
-  	<body><div class=\"outer\">
-     	<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method=\"post\">
-	<input type=\"hidden\" name=\"welcomeScreen\" value=\"welcomeScreen\">
-    	<div class=\"welcomeImg\"></div>$langWelcomeWizard $langThisWizard
-    	<ul id=\"installBullet\">
-    	<li>$langWizardHelp1</li>
-    	<li>$langWizardHelp2</li>
-    	<li>$langWizardHelp3</li>
-    	</ul>
-  	<input type=\"submit\" name=\"install1\" value=\"$langNextStep >\">
- 	</div></form>
-	</body></html>";
-	echo $tool_content;
-}
-
-
+	$tool_content .= "<u>$langOtherReq</u><ul id=\"installBullet\">
+    		<li>$langInstallBullet1</li>
+    		<li>$langInstallBullet2</li>
+    		<li>$langInstallBullet3</li>
+    		</ul>
+    		<u>$langAddOnStreaming:</u>
+		<ul id=\"installBullet\">
+     		<li>$langAddOnExpl</li>
+    		<li>
+		Το Open eClass θα εγκαταστήσει το δικό του διαχειριστικό εργαλείο μέσω web των βάσεων δεδομένων MySQL (<a href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
+		μπορείτε να χρησιμοποιήσετε και το δικό σας.</li></ul>
+		<p>Πριν προχωρήσετε στην εγκατάσταση τυπώστε και διαβάστε προσεκτικά τις
+		<a href=\"install.html\" target=_blank>Οδηγίες Εγκατάστασης</a>.
+		</p><p>
+		Επίσης, γενικές οδηγίες για την πλατφόρμα μπορείτε να διαβάσετε <a href=\"../README.txt\" target=_blank>εδώ</a>.
+		</p><br>
+		<input type=\"submit\" name=\"install2\" value=\"$langNextStep >\">
+		</form>";
+		draw($tool_content);
+	} else {
+		$tool_content .= "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
+		<html><head><title>$langWelcomeWizard</title>
+    		<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
+    		<link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
+  		</head>
+  		<body><div class=\"outer\">
+     		<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method=\"post\">
+		<input type=\"hidden\" name=\"welcomeScreen\" value=\"welcomeScreen\">
+    		<div class=\"welcomeImg\"></div>$langWelcomeWizard $langThisWizard
+    		<ul id=\"installBullet\">
+    		<li>$langWizardHelp1</li>
+    		<li>$langWizardHelp2</li>
+    		<li>$langWizardHelp3</li>
+    		</ul>
+  		<input type=\"submit\" name=\"install1\" value=\"$langNextStep >\">
+ 		</div></form>
+		</body></html>";
+		echo $tool_content;
+	}
 ?>

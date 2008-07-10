@@ -174,7 +174,6 @@ $langEditFacSucces = "Editing of faculty completed successfully!";
 $langQuickAddDelUserToCoursSuccess = "User management finished with success!";
 $langFormUserManage = "User Management Form";
 $langListNotRegisteredUsers = "Unregistered Users List";
-
 $langListRegisteredStudents = "Registered ".$langStudents." List";
 $langListRegisteredProfessors = "Registered ".$langTeachers." List";
 $langErrChoose = "An error occured!";
@@ -212,7 +211,6 @@ $langStatsCourse = "Course Statistics";
 // infocours.php
 $langCourseEditSuccess = "Course information modified with success!";
 $langCourseInfoEdit = "Modify Course Information";
-
 $langEdit = "Edit";
 
 // listreq.php
@@ -1393,7 +1391,32 @@ $langLicence = "License";
 $langLastCheck	= "Last check before install";
 $langRequirements = "System Requirements";
 $langInstallEnd = "Installation Finished";
-
+$langWarnConfig = "Προσοχή !! Το αρχείο <b>config.php</b> υπάρχει ήδη στο σύστημά σας!! Το πρόγραμμα εγκατάστασης δεν πραγματοποιεί αναβάθμιση. Αν θέλετε να ξανατρέξετε την εγκατάσταση της πλατφόρμας, παρακαλούμε διαγράψτε το αρχείο config.php!";
+$langErrorConfig = "<br><b>Παρουσιάστηκε σφάλμα!</b><br><br>Δεν είναι δυνατή η δημιουργία του αρχείου config.php.<br><br>Παρακαλούμε ελέγξτε τα δικαιώματα πρόσβασης στους υποκαταλόγους του Open eClass και δοκιμάστε ξανά την εγκατάσταση.";
+$langErrorMysql = "Η MySQL  δεν λειτουργεί ή το όνομα χρήστη/συνθηματικό δεν είναι σωστό.<br/>Παρακαλούμε ελέγξετε τα στοιχεία σας:";
+$langBackStep3 = "Επιστροφή στο βήμα 3";
+$langBackStep3_2 = "Eπιστρέψτε στο βήμα 3 για να τα διορθώσετε."; 
+$langNotNeedChange = "Δεν χρειάζεται να το αλλάξετε";
+$langNeedChangeDB = "αν υπάρχει ήδη κάποια βάση δεδομένων με το όνομα eclass αλλάξτε το";
+$langWillWrite = "Τα παρακάτω θα γραφτούν στο αρχείο <b>config.php";
+$langProtect = "Συμβουλή: Για να προστατέψετε το Open eClass, αλλάξτε τα δικαιώματα πρόσβασης των αρχείων
+           <tt>/config/config.php</tt> και <tt>/install/index.php</tt> και
+           επιτρέψτε μόνο ανάγνωση (CHMOD 444).";
+$langInstallSuccess = "Η εγκατάσταση ολοκληρώθηκε με επιτυχία! Κάντε κλίκ παρακάτω για να μπείτε στο Open eClass";
+$langEnterFirstTime = "Είσοδος στο Open eClass";
+$langMCU = "MCU (μονάδα ελέγχου για τηλεδιάσκεψη)";
+$langVOD = "Vod Server";
+$langSiteUrl = "URL του Open eClass";
+$langInstall = "Eγκατάσταση του Open eClass";
+$langAddOnStreaming = "Επιπρόσθετη λειτουργικότητα";
+$langAddOnExpl = "Εάν επιθυμείτε να υποστηρίζετε streaming για τα αρχεία video που θα αποτελούν μέρος του υλικού των αποθηκευμένων μαθημάτων θα πρέπει να υπάρχει εγκατεστημένος streaming server.";
+$langWarningInstall1 = "<b>Προσοχή!</b> Φαίνεται πως η επιλογή register_globals στο αρχείο php.ini δεν είναι ενεργοποιημένη. Χωρίς αυτήν το Open eClass δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το αρχείο php.ini ώστε να περιέχει τη γραμμή:</p> <p><b>register_globals = On</b></p><p>Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε τις οδηγίες εγκατάστασης στο αρχείο <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.";
+$langWarningInstall2 = "<b>Προσοχή!</b> Φαίνεται πως η επιλογή short_open_tag στο αρχείο php.ini δεν είναι ενεργοποιημένη. Χωρίς αυτήν το Open eClass δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το αρχείο php.ini ώστε να περιέχει τη γραμμή:</p><p><b>short_open_tag = On</b></p><p>Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε τις οδηγίες εγκατάστασης στο αρχείο <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.";
+$langWarningInstall3 = "<b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει δικαιώματα δημιουργίας του κατάλογου <b>/config</b>.<br/>Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει. Παρακαλούμε διορθώστε τα δικαιώματα.<br/>Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε τις οδηγίες εγκατάστασης στο αρχείο <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.";
+$langWarningInstall4 = "<b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει δικαιώματα δημιουργίας του κατάλογου <b>/courses</b>.<br/>Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει. Παρακαλούμε διορθώστε τα δικαιώματα.<br/>Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε τις οδηγίες εγκατάστασης στο αρχείο <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.";
+$langWarningInstall5 = "<b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει δικαιώματα δημιουργίας του κατάλογου <b>/video</b>.<br/>Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει. Παρακαλούμε διορθώστε τα δικαιώματα.<br/>Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε τις οδηγίες εγκατάστασης στο αρχείο <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.";
+$langReviewSettings = "Τα στοιχεία που δηλώσατε είναι τα παρακάτω: (Εκτυπώστε τα αν θέλετε να θυμάστε το συνθηματικό του διαχειριστή και τις άλλες ρυθμίσεις)";
+$langToReq = "Η εγγραφή χρηστών θα γίνεται με αίτηση προς τον διαχειριστή της πλατφόρμας";
 
 /*********************************************************
 * learnpath_inc.php
@@ -2527,7 +2550,7 @@ $usersuccess="New user account created with success!";
 $langAsUser = "(User Account)";
 $langChooseReg = "Choose registration method";
 $langTryAgain = "Try Again!";
-
+$langViaReq = "User registration via request";
 
 /************************************************
 * restore_course.inc.php
