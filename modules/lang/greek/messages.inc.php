@@ -1578,7 +1578,6 @@ $langProgInModuleTitle = "Η πρόοδος σου σε αυτή την ενότ
 $langProgress = "Πρόοδος";
 $langQuitViewer = "Επιστροφή στη λίστα";
 $langRawHasBeenChanged = "Ο ελάχιστος βαθμός για προαγωγή έχει αλλαχθεί";
-$langRoot = "Αρχικός κατάλογος";
 $langSCORMTypeDesc = "SCORM προσαρμοσμένο περιεχόμενο";
 $langScormIntroTextForDummies = "Τα εισαγόμενα πακέτα πρέπει να αποτελούνται από ένα αρχείο zip και να είναι συμβατά με:
    <ul>
