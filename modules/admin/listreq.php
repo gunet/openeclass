@@ -46,7 +46,7 @@ if (!empty($show) && ($show=="closed")) {
 		// Epanafora aitisis
 		$sql = db_query("UPDATE prof_request set status='1', date_closed=NULL WHERE rid='$id'");
 		$tool_content = "<table><tbody><tr><td class=\"success\">$langReintroductionApplication  </td></tr></tbody></table>";
-		
+
 	} else {
 		// Show only closed forms
 		$tool_content .= "<table width=\"99%\"><caption>$langOpenProfessorRequests</caption><thead><tr>
@@ -62,7 +62,7 @@ if (!empty($show) && ($show=="closed")) {
 		<th scope=\"col\">$langActions</th>
 		</tr></thead><tbody>";
 
- 		$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,date_closed,comment 
+ 		$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,date_closed,comment
 											FROM prof_request WHERE (status='2' AND statut<>'5')");
 
 		for ($j = 0; $j < mysql_num_rows($sql); $j++) {
@@ -90,7 +90,7 @@ if (!empty($show) && ($show=="closed")) {
 		// Epanafora aitisis
 		$sql = db_query("UPDATE prof_request set status='1', date_closed=NULL WHERE rid='$id'");
 		$tool_content = "<table><tbody><tr><td class=\"success\">$langReintroductionApplication</td></tr></tbody></table>";
-		
+
 	} else {
 		// Show only closed forms
 		$tool_content .= "<table width=\"99%\">
@@ -108,7 +108,7 @@ if (!empty($show) && ($show=="closed")) {
 		<th scope=\"col\">$langActions</th>
 		</tr></thead><tbody>";
 
- 		$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,date_closed,comment 
+ 		$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,date_closed,comment
 		FROM prof_request WHERE (status='3' AND statut<>'5')");
 
 		for ($j = 0; $j < mysql_num_rows($sql); $j++) {
@@ -144,7 +144,7 @@ if (!empty($show) && ($show=="closed")) {
 		<th scope=\"col\">$langComments</th>
 		</tr></thead><tbody>";
 
- 	$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,date_closed,comment 
+ 	$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,date_closed,comment
 		FROM prof_request WHERE (status='0' AND statut<>'5')");
 
 	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
@@ -174,16 +174,16 @@ switch($close)
 	    $submit = isset($_POST['submit'])?$_POST['submit']:'';
 	    if(!empty($submit))
 	    {
-				// post the comment and do the delete action	    
-				if (!empty($comment)) 
+				// post the comment and do the delete action
+				if (!empty($comment))
 				{
 		    	$sql = "UPDATE prof_request set status = '3',
 					    date_closed = NOW(),
 					    comment = '".mysql_escape_string($comment)."'
 					    WHERE rid = '$id'";
-		    	if (db_query($sql)) 
+		    	if (db_query($sql))
 		    	{
-						if (isset($sendmail) and ($sendmail == 1)) 
+						if (isset($sendmail) and ($sendmail == 1))
 						{
     			    $emailsubject = $langemailsubjectBlocked;
 			    		$emailbody = "$langemailbodyBlocked
@@ -220,14 +220,14 @@ switch($close)
 					<input type=\"text\" name=\"prof_email\" value=\"".$d['profemail']."\">
 					<br><br>($langRequestDisplayMessage)
 					<br><br><input type=\"submit\" name=\"submit\" value=\"$langRejectRequest\"></form></p></center>";
-	    }	
+	    }
 	    break;
     default:
 	    break;
     }
 }
 else
-{  
+{
 // -----------------------------------
 // display all the requests
 // -----------------------------------
@@ -243,7 +243,7 @@ else
 		<th scope=\"col\">$langActions</th>
 		</tr></thead><tbody>";
 
- 	$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,comment,profpassword 
+ 	$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,comment,profpassword
 									FROM prof_request WHERE (status='1' AND statut<>'5')");
 
 	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
@@ -299,18 +299,25 @@ else
 	}
 	$tool_content .= "</tbody></table>";
 	// Display other actions
-	$tool_content .= "<br><table width=\"99%\"><caption>$langOtherActions</caption><tbody>
-		<tr><td><a href=\"listreq.php?show=closed\">$langReqHaveClosed</a><br>
-		<a href=\"listreq.php?show=rejected\">$langReqHaveBlocked</a><br>
-		<a href=\"listreq.php?show=accepted\">$langReqHaveFinished</a></td></tr>
-	</tbody></table>";
+	$tool_content .= "<br>
+    <table width=\"99%\" align=\"left\" class=\"FormData\">
+    <thead>
+    <tr>
+      <th class=\"left\" width=\"220\">$langOtherActions</th>
+      <td class=\"left\"><a href=\"listreq.php?show=closed\">$langReqHaveClosed</a><br>
+		  <a href=\"listreq.php?show=rejected\">$langReqHaveBlocked</a><br>
+		  <a href=\"listreq.php?show=accepted\">$langReqHaveFinished</a>
+      </td>
+    </tr>
+	</thead>
+    </table>";
 }
 
 // If show is set then we return to listereq, else return to admin index.php
 if (!empty($show)) {
-	$tool_content .= "<br><center><p><a href=\"listreq.php\">$langBack</a></p></center>";
+	$tool_content .= "<br><p align=\"right\"><a href=\"listreq.php\">$langBack</a></p>";
 } else {
-	$tool_content .= "<br><center><p><a href=\"index.php\">$langBack</a></p></center>";
+	$tool_content .= "<br><p align=\"right\"><a href=\"index.php\">$langBack</a></p>";
 }
 draw($tool_content, 3, ' ', $head_content);
 ?>
