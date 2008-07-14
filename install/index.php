@@ -195,7 +195,7 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
 	$_SESSION['step']=4;
 	$tool_content .= "<p>$langWillWrite</b>. $langRequiredFields.</p></p>
 	<table width=\"99%\"><thead><tr>
-	<th>URL του eClass<font color=\"red\">*</font></th>
+	<th>$langSiteUrl<font color=\"red\">*</font></th>
 	<td>
 	<input type=\"text\" size=\"40\" name=\"urlForm\" value=\"$urlForm\">
 	</td>
@@ -208,77 +208,58 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
 	</tr>
 	<tr>
 	<th>".$langAdminName."</th>
-	<td>
-	<input type=\"text\" size=\"40\" name=\"nameForm\" value=\"$nameForm\">
-	</td>
+	<td><input type=\"text\" size=\"40\" name=\"nameForm\" value=\"$nameForm\"></td>
 	</tr>
 	<tr>
 	<th>".$langAdminSurname."</th>
-	<td>
-	<input type=\"text\" size=\"40\" name=\"surnameForm\" value=\"$surnameForm\">
-	</td>
+	<td><input type=\"text\" size=\"40\" name=\"surnameForm\" value=\"$surnameForm\"></td>
 	</tr>
-         <tr><th>".$langAdminEmail."</th>
-         <td>
-         <input type=text size=40 name=\"emailForm\" value=\"$emailForm\">
-         </td></tr>
-          <tr><th>".$langAdminLogin."</th>
-          <td><input type=\"text\" size=\"40\" name=\"loginForm\" value=\"$loginForm\">
-          </td>
-          </tr>
-          <tr><th>".$langAdminPass."</th>
-          <td>
-          <input type=\"text\" size=\"40\" name=\"passForm\" value=\"$passForm\">
-          </td>
-          </tr>
-          <tr><th>".$langCampusName."</th>
-          <td><input type=\"text\" size=\"40\" name=\"campusForm\" value=\"$campusForm\">
-          <td>
-          </tr>
-          <tr><th>".$langHelpDeskPhone."</th>
-          <td>
-          <input type=\"text\" size=\"40\" name=\"helpdeskForm\" value=\"$helpdeskForm\">
-          </td>
-          </tr>
-          <tr><th>".$langHelpDeskFax."</th>
-          <td>
-          <input type=\"text\" size=\"40\" name=\"faxForm\" value=\"$faxForm\">
-          </td>
-          </tr>
-          <tr>
-          <th>".$langHelpDeskEmail."
-          <font color=\"red\">**</font color>
-          </th>
-          <td>
-          <input type=text size=40 name=\"helpdeskmail\" value=\"$helpdeskmail\">
-          </td>
-          </tr>
-          <tr><th>".$langInstituteShortName."</th>
-          <td><input type=text size=40 name=\"institutionForm\" value=\"$institutionForm\"></td>
-          </tr>
-          <tr><th>".$langInstituteName."</th>
-          <td>
-          <input type=\"text\" size=\"40\" name=\"institutionUrlForm\" value=\"$institutionUrlForm\">
-          </td>
-          </tr>
-          <tr>
-          <th>".$langInstitutePostAddress."</th>
-          <td>
-	  <textarea rows='3' cols='40' name=\"postaddressForm\" value=\"".@$postaddressForm."\"></textarea>
-          </td></tr>
-          <tr><th>$langldap_host_url</th>
-          <td><input type=\"text\" size=\"40\" name=\"ldapserver\" value=\"$ldapserver\"></td>
-         </tr>
-         <tr><th>Base dn του LDAP εξυπηρέτη</th>
-         <td>
-         <input type=\"text\" size=\"40\" name=\"dnldapserver\" value=\"$dnldapserver\">
-         </td>
-         </tr>
+        <tr><th>".$langAdminEmail."</th>
+        <td><input type=text size=40 name=\"emailForm\" value=\"$emailForm\"></td>
+	</tr>
+        <tr><th>".$langAdminLogin."</th>
+        <td><input type=\"text\" size=\"40\" name=\"loginForm\" value=\"$loginForm\">
+        </td>
+        </tr>
+        <tr><th>".$langAdminPass."</th>
+        <td><input type=\"text\" size=\"40\" name=\"passForm\" value=\"$passForm\"></td>
+        </tr>
+        <tr><th>".$langCampusName."</th>
+        <td><input type=\"text\" size=\"40\" name=\"campusForm\" value=\"$campusForm\">
+        <td>
+        </tr>
+        <tr><th>".$langHelpDeskPhone."</th>
+        <td><input type=\"text\" size=\"40\" name=\"helpdeskForm\" value=\"$helpdeskForm\"></td>
+        </tr>
+        <tr><th>".$langHelpDeskFax."</th>
+        <td><input type=\"text\" size=\"40\" name=\"faxForm\" value=\"$faxForm\"></td>
+        </tr>
+        <tr>
+        <th>".$langHelpDeskEmail."
+        <font color=\"red\">**</font color>
+        </th>
+        <td><input type=text size=40 name=\"helpdeskmail\" value=\"$helpdeskmail\"></td>
+        </tr>
+        <tr><th>".$langInstituteShortName."</th>
+        <td><input type=text size=40 name=\"institutionForm\" value=\"$institutionForm\"></td>
+        </tr>
+        <tr><th>".$langInstituteName."</th>
+        <td><input type=\"text\" size=\"40\" name=\"institutionUrlForm\" value=\"$institutionUrlForm\"></td>
+        </tr>
+        <tr><th>".$langInstitutePostAddress."</th>
+        <td><textarea rows='3' cols='40' name=\"postaddressForm\" value=\"".@$postaddressForm."\"></textarea></td>
+	</tr>
+        <tr><th>$langldap_host_url</th>
+        <td><input type=\"text\" size=\"40\" name=\"ldapserver\" value=\"$ldapserver\"></td>
+        </tr>
+        <tr><th>$langLDAPBaseDn</th>
+        <td><input type=\"text\" size=\"40\" name=\"dnldapserver\" value=\"$dnldapserver\"></td>
+        </tr>
 	<tr><th>$langViaReq</th>
 	<td><input type='checkbox' name='reguser'></td>
 	</tr>
-         <tr><th>$langVod</th>
-         <td>
+        <tr><th>$langVod</th>
+        <td>
 <script>
 function set_video_input()
 	{
@@ -290,7 +271,6 @@ function set_video_input()
 		else{ document.getElementById(\"video_input_div_text\").innerHTML='';
 		      document.getElementById(\"video_input_div_input\").innerHTML='';
 		}
-
 	}
 </script>
 	<input type=\"checkbox\" id=\"video_check\" onclick=\"set_video_input();\"/><br>
@@ -299,9 +279,7 @@ function set_video_input()
 	<th><div id=\"video_input_div_text\"></div></th>
 	<td><div id=\"video_input_div_input\"></td>
 	</tr>
-      <tr>
-       <th>$langMCU</th>
-       <td>
+      <tr><th>$langMCU</th><td>
 <script>
 function set_MCU()
 	{
@@ -313,8 +291,6 @@ function set_MCU()
 		else{ document.getElementById(\"MCU_div_text\").innerHTML='';
 		      document.getElementById(\"MCU_div_input\").innerHTML='';
 		}
-
-
 	}
 </script>
 	<input type=\"checkbox\" id=\"MCU_check\" onclick=\"set_MCU();\"/><br>
@@ -338,7 +314,6 @@ function set_MCU()
          <input type=\"submit\" name=\"back3\" value=\"< $langPreviousStep \">
          <input type=\"submit\" name=\"install6\" value='$langNextStep >'>";
 	draw($tool_content);
-
 }
 
 // step 5 last check before install
@@ -378,7 +353,7 @@ elseif(isset($_REQUEST['install6']))
         <li>$langInstituteName: $institutionUrlForm</li>
         <li>$langInstitutePostAddress: $postaddressForm</li>
         <li>$langldap_host_url: $ldapserver</li>
-        <li>Base DN του LDAP Εξυπηρέτη : $dnldapserver </li>
+        <li>$langLDAPBaseDn: $dnldapserver </li>
 	<li>".$mes_add."</li>
 	<li>MCU: ".@$MCUForm." </li>
 	<li>$langVod: ".@$vodServerForm." </li>

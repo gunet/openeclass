@@ -21,15 +21,12 @@ DIV.outer
       margin-left: -207px; /* half of width */
       margin-top: -222px;  /* half of height */
 }
-      
-      
-    
-      
+
 DIV.welcomeImg {
 	float: left;
 	width: 413px;
 	height: 360px;
-	background-image: url(welcome.jpg);
+	background-image: url(welcome.png);
 	background-repeat: no-repeat;
 	background-position:center;
 	overflow:visible;
