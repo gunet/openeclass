@@ -631,7 +631,7 @@ $langNonUserContact = "To contact this course\'s $langsTeachers, you
 must have a valid account and be logged-in to the system. Please
 visit the <a href='%s'>login page</a>.";
 $langIntroMessage = "Compose your message";
-$langHeaderMessage = "Message from $langsstudent";
+$langHeaderMessage = "Message from $langsStudent";
 
 
 /************************************************************
@@ -1345,7 +1345,7 @@ $langWelcomeProf = "Select \"Create course site\" to create your on-line courses
 * install.inc.php
 **************************************************/
 $langWelcomeWizard = "Welcome to installation wizard of Open eClass!";
-$langThisWizard = "This  Wizard:"
+$langThisWizard = "This  Wizard:";
 $langWizardHelp1 = "will help you to define database settings";
 $langWizardHelp2 = "will help you to define platform settings";
 $langWizardHelp3 = "will create <tt>config.php</tt>";
@@ -1416,6 +1416,8 @@ $langWarningInstall4 = "<b>Προσοχή!</b> Φαίνεται πως ο οδη
 $langWarningInstall5 = "<b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει δικαιώματα δημιουργίας του κατάλογου <b>/video</b>.<br/>Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει. Παρακαλούμε διορθώστε τα δικαιώματα.<br/>Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε τις οδηγίες εγκατάστασης στο αρχείο <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.";
 $langReviewSettings = "Τα στοιχεία που δηλώσατε είναι τα παρακάτω: (Εκτυπώστε τα αν θέλετε να θυμάστε το συνθηματικό του διαχειριστή και τις άλλες ρυθμίσεις)";
 $langToReq = "Η εγγραφή χρηστών θα γίνεται με αίτηση προς τον διαχειριστή της πλατφόρμας";
+$langLDAPBaseDn = "Base DN του LDAP Εξυπηρέτη";
+$langChooseLang = "Επιλογή Γλώσσας";
 
 /*********************************************************
 * learnpath_inc.php
