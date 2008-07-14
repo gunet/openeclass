@@ -144,64 +144,7 @@ function installerMenu(){
 }
 
 
-// Other useful functions
 
-/*
- * check extension and  write  if exist  in a  <LI></LI>
- * @params string	$extentionName 	name  of  php extention to be checked
- * @params boolean	$echoWhenOk	true => show ok when  extention exist
- * @author Christophe Gesche
- * @desc check extention and  write  if exist  in a  <LI></LI>
- */
-function warnIfExtNotLoaded($extentionName) {
-
-	global $tool_content;
-	if (extension_loaded ($extentionName)) {
-		$tool_content .= "<li> $extentionName - <b>ok!</b> </li> ";
-	} else {
-		$tool_content .= "
-                <li>$extentionName
-                <font color=\"#FF0000\"> - <b>Δεν είναι εγκατεστημένο!</b></font>
-                (Διαβάστε περισσότερα
-                <a href=\"http://www.php.net/$extentionName\" target=_blank>εδώ)</a>
-                </li>";
-	}
-}
-
-// -----------------------------------------------------------------------------------
-// checking the mysql version
-// note version_compare() is used for checking the php version but works for mysql too
-// ------------------------------------------------------------------------------------
-
-function mysql_version() {
-
-	$ver = mysql_get_server_info();
-	if (version_compare("4.1", $ver) <= 0)
-		return true;
-	else
-		return false;
-}
-
-/*
- * return a string without logic
- *
- * @author Christophe Gesche <gesche@ipm.ucl.ac.be>
- * @param  integer	$nbcar 			default 5   	define here  length of password
- * @param  boolean	$lettresseules	default false	fix  if pass can content digit
- * @return string password
- * @desc return a string to be use as password
- */
-
-function generePass($nbcar=5,$lettresseules = false) {
-	$chaine = "abBDEFcdefghijkmnPQRSTUVWXYpqrst23456789"; //possible characters
-	if ($lettresseules)
-	$chaine = "abcdefghijklmnopqrstuvwxyzAZERTYUIOPMLKJHGFDSQWXCVBN"; //possible characters
-	for($i=0; $i<$nbcar; $i++)
-	{
-		@$pass .= $chaine[rand()%strlen($chaine)];
-	}
-	return $pass;
-}
 
 
 

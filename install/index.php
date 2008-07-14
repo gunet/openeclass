@@ -1,4 +1,4 @@
-<?php
+<?php session_start();
 header('Content-Type: text/html; charset=UTF-8');
 /*===========================================================================
 *              GUnet eClass 2.0
@@ -32,15 +32,25 @@ header('Content-Type: text/html; charset=UTF-8');
  * @abstract This is the installation wizard of eclass.
  *
  */
-session_start();
 
 $tool_content = "";
 if (!isset($siteName)) $siteName = "";
 if (!isset($InstitutionUrl)) $InstitutionUrl = "";
 if (!isset($Institution)) $Institution = "";
-include "../modules/lang/greek/common.inc.php";
-include "../modules/lang/greek/messages.inc.php";
-include('install_functions.php');
+
+// greek is the default language 
+if (!isset($lang)) {
+	$_SESSION['lang'] = 'greek';
+}
+// get installation language
+if (isset($_POST['lang'])) {
+	$_SESSION['lang'] = $_POST['lang'];
+} 
+
+include "../include/lib/main.lib.php";
+include "install_functions.php";
+include "../modules/lang/$lang/common.inc.php";
+include "../modules/lang/$lang/messages.inc.php";
 
 if (file_exists("../config/config.php")) {
 	$tool_content .= "
@@ -534,8 +544,8 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	}
 
 	$tool_content .= "<u>$langCheckReq</u><p>
-        Webserver (<em>βρέθηκε <b>".$_SERVER['SERVER_SOFTWARE']."</b></em>)
-        με υποστήριξη PHP (<em>βρέθηκε <b>PHP ".phpversion()."</b></em>).</p>";
+        Webserver (<em>$langFoundIt <b>".$_SERVER['SERVER_SOFTWARE']."</b></em>)
+        $langWithPHP (<em>$langFoundIt <b>PHP ".phpversion()."</b></em>).</p>";
 	$tool_content .= "<u>$langRequiredPHP</u>";
 	$tool_content .= "<ul id=\"installBullet\">";
 	warnIfExtNotLoaded("standard");
@@ -557,33 +567,40 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
     		<u>$langAddOnStreaming:</u>
 		<ul id=\"installBullet\">
      		<li>$langAddOnExpl</li>
-    		<li>
-		Το Open eClass θα εγκαταστήσει το δικό του διαχειριστικό εργαλείο μέσω web των βάσεων δεδομένων MySQL (<a href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά
-		μπορείτε να χρησιμοποιήσετε και το δικό σας.</li></ul>
-		<p>Πριν προχωρήσετε στην εγκατάσταση τυπώστε και διαβάστε προσεκτικά τις
-		<a href=\"install.html\" target=_blank>Οδηγίες Εγκατάστασης</a>.
-		</p><p>
-		Επίσης, γενικές οδηγίες για την πλατφόρμα μπορείτε να διαβάσετε <a href=\"../README.txt\" target=_blank>εδώ</a>.
-		</p><br>
-		<input type=\"submit\" name=\"install2\" value=\"$langNextStep >\">
+    		<li>$langExpPhpMyAdmin</li></ul>
+		<p>$langBeforeInstall1<a href=\"install.html\" target=_blank>$langInstallInstr</a>.</p>
+		<p>$langBeforeInstall2<a href=\"../README.txt\" target=_blank>$langHere</a>.</p>
+		<br><input type=\"submit\" name=\"install2\" value=\"$langNextStep >\">
 		</form>";
 		draw($tool_content);
-	} else {
+} else {
+		$langLanguages = array(
+			'greek' => 'Ελληνικά (el)',
+			'english' => 'English (en)');
+
 		$tool_content .= "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
 		<html><head><title>$langWelcomeWizard</title>
     		<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
     		<link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
   		</head>
   		<body><div class=\"outer\">
-     		<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method=\"post\">
-		<input type=\"hidden\" name=\"welcomeScreen\" value=\"welcomeScreen\">
-    		<div class=\"welcomeImg\"></div>$langWelcomeWizard $langThisWizard
+    		<div class=\"welcomeImg\"></div>
+		<form name='langform' action='$_SERVER[PHP_SELF]' method=\"post\">
+		<p>$langChooseLang:&nbsp;&nbsp;
+		".selection($langLanguages, 'lang', $lang, 'onChange="document.langform.submit();"')."
+		</p>
+		</form>
+		$langWelcomeWizard $langThisWizard
     		<ul id=\"installBullet\">
     		<li>$langWizardHelp1</li>
     		<li>$langWizardHelp2</li>
     		<li>$langWizardHelp3</li>
     		</ul>
+		<p>
+		<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method=\"post\">
+		<input type=\"hidden\" name=\"welcomeScreen\" value=\"welcomeScreen\">
   		<input type=\"submit\" name=\"install1\" value=\"$langNextStep >\">
+		</p>
  		</div></form>
 		</body></html>";
 		echo $tool_content;

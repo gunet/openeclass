@@ -1410,6 +1410,11 @@ $langReviewSettings = "Τα στοιχεία που δηλώσατε είναι 
 $langToReq = "Η εγγραφή χρηστών θα γίνεται με αίτηση προς τον διαχειριστή της πλατφόρμας";
 $langLDAPBaseDn = "Base DN του LDAP Εξυπηρέτη";
 $langChooseLang = "Επιλογή Γλώσσας";
+$langExpPhpMyAdmin = "Το Open eClass θα εγκαταστήσει το δικό του διαχειριστικό εργαλείο μέσω web των βάσεων δεδομένων MySQL (<a href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά μπορείτε να χρησιμοποιήσετε και το δικό σας.";
+$langBeforeInstall1 = "Πριν προχωρήσετε στην εγκατάσταση τυπώστε και διαβάστε προσεκτικά τις ";
+$langBeforeInstall2 = "Επίσης, γενικές οδηγίες για την πλατφόρμα μπορείτε να διαβάσετε ";
+$langInstallInstr = "Οδηγίες Εγκατάστασης";
+$langWithPHP = "με υποστήριξη PHP";
 
 /********************************************************
 * learnpath.inc.php
