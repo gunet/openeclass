@@ -1,4 +1,4 @@
-<?
+<?php
 
 /**********************************************************
 * General Messages - Feel free to suit them in your needs

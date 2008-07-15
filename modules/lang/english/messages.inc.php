@@ -1,4 +1,4 @@
-<?
+<?php
 /********************************************************
 * about.inc.php
 *********************************************************/
@@ -1344,7 +1344,9 @@ $langWelcomeProf = "Select \"Create course site\" to create your on-line courses
 /*************************************************
 * install.inc.php
 **************************************************/
+$langTitleInstall = "Open eClass Install Wizard"; 
 $langWelcomeWizard = "Welcome to installation wizard of Open eClass!";
+$langInstallProgress = "Install Progress";
 $langThisWizard = "This  Wizard:";
 $langWizardHelp1 = "will help you to define database settings";
 $langWizardHelp2 = "will help you to define platform settings";
@@ -1363,7 +1365,7 @@ $langDBHost	= "Database Host";
 $langDBLogin	= "Database Username";
 $langDBPassword = "Database Password";
 $langMainDB	= "Main DB";
-$langAllFieldsRequired	= "all fields required";
+$langAllFieldsRequired	= "All fields required.";
 $langPrintVers	= "Printable version";
 $langLocalPath	= "Corresponding local path";
 $langAdminEmail	= "Administrator email";
@@ -1377,6 +1379,8 @@ $langCampusName	= "University name";
 $langInstituteShortName = "Institution short name";
 $langInstituteName = "URL of this institution";
 $langInstitutePostAddress = "Institution postal address";
+$langDBSettingIntro = "Installation program will create main database of Open eClass. Keep in mind that during platform operation several databases will be created (one per course)";
+$langWarnHelpDesk = "Warning: In email address of \"Email Helpdesk\" field, professors requests are submitted";
 $langStep1 = "Step 1 of 6";
 $langStep2 = "Step 2 of 6";
 $langStep3 = "Step 3 of 6";
@@ -1402,17 +1406,17 @@ $langProtect = "Notice: To protect Open eClass, change access rights of
            <tt>/config/config.php</tt> and <tt>/install/index.php</tt> and make it read only (CHMOD 444).";
 $langInstallSuccess = "Installation completed with success! Click to enter Open eClass";
 $langEnterFirstTime = "Enter Open eClass";
-$langMCU = "MCU (μονάδα ελέγχου για τηλεδιάσκεψη)";
-$langVOD = "Vod Server";
+$langMCU = "MCU (Multipoint Conferencing Unit)";
+$langVod = "Vod Server";
 $langSiteUrl = "Open eClass URL του ";
 $langInstall = "Installation of Open eClass";
 $langAddOnStreaming = "Addon Functionality";
-$langAddOnExpl = "Εάν επιθυμείτε να υποστηρίζετε streaming για τα αρχεία video που θα αποτελούν μέρος του υλικού των αποθηκευμένων μαθημάτων θα πρέπει να υπάρχει εγκατεστημένος streaming server.";
-$langWarningInstall1 = "<b>Warning!</b> It seems that register_globals στο αρχείο php.ini δεν είναι ενεργοποιημένη. Χωρίς αυτήν το Open eClass δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το αρχείο php.ini ώστε να περιέχει τη γραμμή:</p> <p><b>register_globals = On</b></p><p>Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε τις οδηγίες εγκατάστασης στο αρχείο <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.";
-$langWarningInstall2 = "<b>Warning!</b> Φαίνεται πως η επιλογή short_open_tag στο αρχείο php.ini δεν είναι ενεργοποιημένη. Χωρίς αυτήν το Open eClass δεν μπορεί να λειτουργήσει. Παρακαλούμε διορθώστε το αρχείο php.ini ώστε να περιέχει τη γραμμή:</p><p><b>short_open_tag = On</b></p><p>Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε τις οδηγίες εγκατάστασης στο αρχείο <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.";
-$langWarningInstall3 = "<b>Warning!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει δικαιώματα δημιουργίας του κατάλογου <b>/config</b>.<br/>Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει. Παρακαλούμε διορθώστε τα δικαιώματα.<br/>Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε τις οδηγίες εγκατάστασης στο αρχείο <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.";
-$langWarningInstall4 = "<b>Warning!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει δικαιώματα δημιουργίας του κατάλογου <b>/courses</b>.<br/>Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει. Παρακαλούμε διορθώστε τα δικαιώματα.<br/>Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε τις οδηγίες εγκατάστασης στο αρχείο <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.";
-$langWarningInstall5 = "<b>Warning!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει δικαιώματα δημιουργίας του κατάλογου <b>/video</b>.<br/>Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει. Παρακαλούμε διορθώστε τα δικαιώματα.<br/>Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε τις οδηγίες εγκατάστασης στο αρχείο <a href='install.html'>install.html</a> και επανεκκινείστε τον οδηγό εγκατάστασης.";
+$langAddOnExpl = "If you want to support video streaming, keep in mind that a streaming servet must be installed.";
+$langWarningInstall1 = "<b>Warning!</b> It seems that the option register_globals of php.ini is not set. Without it Open eClass cannot run. Please modify php.ini </p> <p>(e.g.: <b>register_globals = On</b>).</p><p>Probably some other changes are required. Read the installation instructions in <a href='install.html'>install.html</a> and restart installation wizard again.";
+$langWarningInstall2 = "<b>Warning!</b> It seems that the option short_open_tag of php.ini is not set. Without it Open eClass cannot run. Please modify php.ini </p> <p>(e.g.: <b>short_open_tag = On</b>).</p><p>Probably some other changes are required. Read the installation instructions in <a href='install.html'>install.html</a> and restart installation wizard again.";
+$langWarningInstall3 = "<b>Warning!</b> It seems that installation wizard has not creation rights of directory <b>/config</b>.<br/>Without creation rights, installation wizard cannot continue. Please change creation rights.<p>Probably some other changes are required. Read the installation instructions in <a href='install.html'>install.html</a> and restart installation wizard again.";
+$langWarningInstall4 = "<b>Warning!</b> It seems that installation wizard has not creation rights of directory <b>/courses</b>.<br/>Without creation rights, installation wizard cannot continue. Please change creation rights.<p>Probably some other changes are required. Read the installation instructions in <a href='install.html'>install.html</a> and restart installation wizard again.";
+$langWarningInstall5 = "<b>Warning!</b> It seems that installation wizard has not creation rights of directory <b>/video</b>.<br/>Without creation rights, installation wizard cannot continue. Please change creation rights.<p>Probably some other changes are required. Read the installation instructions in <a href='install.html'>install.html</a> and restart installation wizard again.";
 $langReviewSettings = "Your settings are: (You can print them if you want to remember admin password and/or other settings)";
 $langToReq = "User registration via request to platform administrator";
 $langLDAPBaseDn = "LDAP Server Base DN";

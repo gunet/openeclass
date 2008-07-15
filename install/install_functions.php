@@ -6,16 +6,14 @@ function draw($toolContent){
 	global $language, $helpTopic, $require_help, $langEclass, $langCopyrightFooter;
 	global $relPath, $urlServer;
 	global $langChangeLang, $switchLangURL;
-	global $langStep, $langStepTitle;
+	global $langStep, $langStepTitle, $langTitleInstall, $langInstallProgress;
 
 	//display the left column (installation steps)
 	$toolArr = installerMenu();
 	$numOfToolGroups = count($toolArr);
 
 	$t = new Template();
-
 	$t->set_file('fh', "theme.html");
-
 	$t->set_block('fh', 'mainBlock', 'main');
 
 	//	BEGIN constructing the installation wizard steps
@@ -24,11 +22,8 @@ function draw($toolContent){
 	$t->set_block('leftNavCategoryBlock', 'leftNavLinkBlock', 'leftNavLink');
 
 	if (is_array($toolArr)) {
-
 		for($i=0; $i< $numOfToolGroups; $i++){
-
 			$numOfTools = count($toolArr[$i][1]);
-
 			for($j=0; $j< $numOfTools; $j++){
 				if ($toolArr[$i][1][$j] == true) $currentStep = "currentStep";
 				else $currentStep = "";
@@ -45,28 +40,19 @@ function draw($toolContent){
 				}
 			}
 
-//			$t->set_var('ACTIVE_TOOLS', $toolArr[$i][0]);
-//			$t->set_var('NAV_CSS_CAT_CLASS', 'category');
 			$t->parse('leftNavCategory', 'leftNavCategoryBlock',true);
-
 			$t->clear_var('leftNavLink'); //clear inner block
 		}
 
 		$t->set_var('CURRENT_STEP_TITLE', $toolArr[$i_var][0][$j_var]);
-		
 		$t->set_var('URL_PATH',  $urlServer);
-
 		$t->set_var('TOOL_CONTENT', $toolContent);
-
-		$t->set_var('THIRD_BAR_TEXT',$langStepTitle);
-
+		$t->set_var('THIRD_BAR_TEXT', $langInstallProgress);
 		$t->set_var('BREAD_TEXT',  $langStep);
+		$t->set_var('FOUR_BAR_TEXT', $langTitleInstall);
 
-		$pageTitle = "Οδηγός Εγκατάστασης eClass - " . $langStepTitle . " (" . $langStep . ")";
+		$pageTitle = "$langTitleInstall - " . $langStepTitle . " (" . $langStep . ")";
 		$t->set_var('PAGE_TITLE',  $pageTitle);
-
-
-		//		$t->set_var('TOOL_PATH',  $relPath);
 
 		if (isset($head_content)){
 			$t->set_var('HEAD_EXTRAS', $head_content);
@@ -80,7 +66,6 @@ function draw($toolContent){
 		//		back to the browser
 		//		-----------------------------------------------------------------------------
 		$t->parse('main', 'mainBlock', false);
-
 		$t->pparse('Output', 'fh');
 
 	}
@@ -97,8 +82,6 @@ function installerMenu(){
 	$sideMenuText 	= array();
 	$sideMenuLink 	= array();
 	$sideMenuImg	= array();
-
-//	array_push($sideMenuSubGroup, "Πορεία Εγκατάστασης");
 
 	for($i=0; $i<6; $i++) {
 		if($i < $_SESSION['step']-1) {
@@ -142,10 +125,4 @@ function installerMenu(){
 
 	return $sideMenuGroup;
 }
-
-
-
-
-
-
 ?>

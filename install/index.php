@@ -47,6 +47,8 @@ if (isset($_POST['lang'])) {
 	$_SESSION['lang'] = $_POST['lang'];
 } 
 
+$lang = $_SESSION['lang'];
+
 include "../include/lib/main.lib.php";
 include "install_functions.php";
 include "../modules/lang/$lang/common.inc.php";
