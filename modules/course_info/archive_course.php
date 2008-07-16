@@ -9,10 +9,9 @@ $require_prof;
 include '../../include/baseTheme.php';
 
 $nameTools = $langArchiveCourse;
-$tool_content = "";
-$verboseBackup = FALSE; 
-$archiveDir = "/courses/archive";  	// <- must moved to config
-$ext ="txt";				// <- must moved to config
+$navigation[] = array("url" => "infocours.php", "name" => $langModifInfo);
+$tool_content = ""; 
+$archiveDir = "/courses/archive"; 
  
 if (extension_loaded("zlib")) {
 	include("../../include/pclzip/pclzip.lib.php");
@@ -20,19 +19,21 @@ if (extension_loaded("zlib")) {
 		
 // check if you are admin
 if($is_adminOfCourse) {
-  $tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\"><li>";
-if (isset($c) && ($c!="")) {
-	if (isset($search) && ($search=="yes")) $searchurl = "&search=yes";
-	else $searchurl = "";
-	$tool_content .= "<a href=\"../admin/editcours.php?c=".$c."".$searchurl."\">$langBack</a></li>";
-} else {
-	$tool_content .= "<a href=\"infocours.php\">$langBack</a></li>";
-}
-  $tool_content .= "</ul></div>";	
+	$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\"><li>";
+	if (isset($c) && ($c!="")) {
+		if (isset($search) && ($search=="yes")) $searchurl = "&search=yes";
+		else $searchurl = "";
+		$tool_content .= "<a href=\"../admin/editcours.php?c=".$c."".$searchurl."\">$langBack</a></li>";
+	} else {
+		$tool_content .= "<a href=\"infocours.php\">$langBack</a></li>";
+	}
+	
+	$tool_content .= "</ul></div>";	
 	$dateBackuping  = date("Y-m-d-H-i-(B)-s");
 	$shortDateBackuping  = date("YzBs"); // YEAR - Day in Year - Swatch - second 
 	$archiveDir .= "/".$currentCourseID."/".$dateBackuping;
-	$systemFileNameOfArchive = realpath("../..").$archiveDir."/claroBak-".$currentCourseID."-".$dateBackuping.".".$ext;
+	$systemFileNameOfArchive = realpath("../..").$archiveDir."/claroBak-".$currentCourseID."-".$dateBackuping.".txt";
+	$zipfile = $webDir."courses/archive/$currentCourseID/archive.$currentCourseID.$shortDateBackuping.zip";
 	
 // ********************************************************************
 // build config file
@@ -54,46 +55,24 @@ if (isset($c) && ($c!="")) {
 // find in ".$archiveDir."/".$currentCourseID." to content of directory of course
 
 ";
-
-$zipfile = $webDir."courses/archive/$currentCourseID/archive.$currentCourseID.$shortDateBackuping.zip";
-
-if (extension_loaded("zlib")) {
-	$zipCourse = new PclZip($zipfile);
-	if ($zipCourse->create($webDir.$archiveDir) == 0) {
-                die('Error: '.$zipCourse->errorInfo(true));
-        }
-} else {
-	$tool_content .= $langBackupSuccesfull;
-}
 	
-	$tool_content .= "<br /><table width='99%'>
-    	<tbody>
-    	<tr><td class=\"success\" width='1'></td>
-      	<td class=\"left\"><b>$langBackupSuccesfull</b></td>
-	<td><div align='right'>
-    	<a href=\"".$urlServer.$archiveDir."/../archive.".$currentCourseID.".".$shortDateBackuping.".zip\">".$langDownloadIt."</a>
-	</div></td>
-      <td width='1'><img src=\"../../template/classic/img/download.gif\" title=\"".$langDownloadIt."\" width=\"30\" height=\"29\"></td></tr>
-    	</tbody></table><br />
-    <table class='Deps' align='center'>
-    <tbody>
-    <tr><th align=\"left\"><ol>\n";
+	$tool_content .= "<table class='Deps' align='center'><tbody><tr><th align=\"left\"><ol>\n";
 
-// if dir is missing, first we create it. mkpath is a recursive function
-    $dirCourBase = realpath("../..").$archiveDir."/courseBase";
+	// if dir is missing, first we create it. mkpath is a recursive function
+       $dirCourBase = realpath("../..").$archiveDir."/courseBase";
 	if (!is_dir($dirCourBase)) {
 		$tool_content .= "<li>".$langCreateDirCourseBase."</li>\n";
-		mkpath($dirCourBase,$verboseBackup);
+		mkpath($dirCourBase);
 	}
-
+	
 	create_backup_file("$webDir/$archiveDir/backup.php");
 
-    $dirMainBase = realpath("../..").$archiveDir."/mainBase";
+    	$dirMainBase = realpath("../..").$archiveDir."/mainBase";
 	if (!is_dir($dirMainBase)) {
 		$tool_content .= "<li>".$langCreateDirMainBase."</li>\n";
-		mkpath($dirMainBase,$verboseBackup);
+		mkpath($dirMainBase);
 	}
-    $dirhtml = realpath("../..").$archiveDir."/html";
+    	$dirhtml = realpath("../..").$archiveDir."/html";
 
 // ********************************************************************
 // Copy of  from DB main
@@ -104,8 +83,8 @@ if (extension_loaded("zlib")) {
 	$tool_content .= "<li>".$langBUCourseDataOfMainBase."  ".$currentCourseID."</li>\n";
 	$sqlInsertCourse = "INSERT INTO cours SET ";
 	$csvInsertCourse ="\n";
-	$sqlSelectInfoCourse ="Select * from `$mysqlMainDb`.cours where code = '".$currentCourseID."' ";
-	$resInfoCourse = mySqlQueryShowError($sqlSelectInfoCourse) ;
+	$sqlSelectInfoCourse ="SELECT * FROM `$mysqlMainDb`.cours WHERE code = '".$currentCourseID."' ";
+	$resInfoCourse = mysql_query($sqlSelectInfoCourse) ;
 	$infoCourse = mysql_fetch_array($resInfoCourse);
 	for($noField=0; $noField<mysql_num_fields($resInfoCourse); $noField++) {
 		if ($noField>0)
@@ -139,7 +118,7 @@ if (extension_loaded("zlib")) {
 		WHERE user.user_id=cours_user.user_id
 		AND cours_user.code_cours='$currentCourseID'";
 
-		$resUsers = mySqlQueryShowError($sqlUserOfTheCourse,$db);
+		$resUsers = mysql_query($sqlUserOfTheCourse,$db);
 		$nbFields = mysql_num_fields($resUsers);
 		$sqlInsertUsers = "";
 		$csvInsertUsers = "";
@@ -198,10 +177,8 @@ if (extension_loaded("zlib")) {
 //  info  about announcment
 // ********************************************************************
 	$tool_content .= "<li>".$langBUAnnounceInMainBase." ".$currentCourseID."</li>\n";
-	
 	$sqlAnnounceOfTheCourse ="SELECT a.* FROM  `$mysqlMainDb`.annonces a WHERE a.code_cours='$currentCourseID'";
-
-		$resAnn = mySqlQueryShowError($sqlAnnounceOfTheCourse,$db);
+		$resAnn = mysql_query($sqlAnnounceOfTheCourse,$db);
 		$nbFields = mysql_num_fields($resAnn);
 		$sqlInsertAnn = "";
 		$csvInsertAnn = "";
@@ -256,8 +233,8 @@ if (extension_loaded("zlib")) {
 /*  End  of  backup Annonces */
 
 	// we can copy file of course
-	$tool_content .= "       <li>".$langCopyDirectoryCourse."<br>(";
-	$nbFiles = copydir(realpath("../../courses/".$currentCourseID."/"), $dirhtml,$verboseBackup);
+	$tool_content .= "<li>".$langCopyDirectoryCourse."<br>(";
+	$nbFiles = copydir(realpath("../../courses/".$currentCourseID."/"), $dirhtml);
 	$tool_content .= "<strong>".$nbFiles."</strong> ".$langFileCopied.")</li>\n";
 	$stringConfig .= "// ".$nbFiles." was in ".realpath("../../courses/".$currentCourseID."/");
 
@@ -266,11 +243,11 @@ if (extension_loaded("zlib")) {
 // with mysqldump
 // ********************************************************************
 	$tool_content .= "<li>".$langBackupOfDataBase." ".$currentCourseID."  (SQL)<br>(";
-	$tool_content .= backupDatabase($db , $currentCourseID , true, true , 'SQL' , realpath("../..".$archiveDir."/courseBase/"),true,$verboseBackup);
+	$tool_content .= backupDatabase($db , $currentCourseID , true, true , 'SQL' , realpath("../..".$archiveDir."/courseBase/"),true);
 	$tool_content .= ")</li>\n       <li>".$langBackupOfDataBase." ".$currentCourseID."  (PHP)<br>(";
-	$tool_content .= backupDatabase($db , $currentCourseID , true, true , 'PHP' , realpath("../..".$archiveDir."/courseBase/"),true,$verboseBackup);
+	$tool_content .= backupDatabase($db , $currentCourseID , true, true , 'PHP' , realpath("../..".$archiveDir."/courseBase/"),true);
 	$tool_content .= ")</li>\n       <li>".$langBackupOfDataBase." ".$currentCourseID."  (CSV)<br>(";
-	$tool_content .= backupDatabase($db , $currentCourseID , true, true , 'CSV' , realpath("../..".$archiveDir."/courseBase/"),true,$verboseBackup);
+	$tool_content .= backupDatabase($db , $currentCourseID , true, true , 'CSV' , realpath("../..".$archiveDir."/courseBase/"),true);
 
 // ********************************************************************
 // Copy of DB course
@@ -280,15 +257,34 @@ if (extension_loaded("zlib")) {
 	$fdesc = fopen($systemFileNameOfArchive, "w");
 	fwrite($fdesc,$stringConfig);
 	fclose($fdesc);
-	$tool_content .=  ")</li>\n</ol>\n</th>\n<td>&nbsp;</td>\n</tr>\n</tbody>\n</table>\n";
-	
+	$tool_content .= ")</li></ol></th><td>&nbsp;</td></tr></tbody></table>";
+
+//-----------------------------------------
+// create zip file
+// ----------------------------------------
+
+	$zipCourse = new PclZip($zipfile);
+	if ($zipCourse->create($webDir.$archiveDir) == 0) {
+		$tool_content .= "Error: ".$zipCourse->errorInfo(true);
+		draw($tool_content, 2, 'course_info');
+		exit;
+	} else { 		
+		$tool_content .= "<br /><table width='99%'><tbody>
+   		<tr><td class='success' width='1'></td>
+     		<td class='left'><b>$langBackupSuccesfull</b></td><td><div align='right'>
+    		<a href='$urlServer/courses/archive/$currentCourseID/archive.$currentCourseID.$shortDateBackuping.zip'>$langDownloadIt</a>
+		</div></td>
+        	<td width='1'><img src='../../template/classic/img/download.gif' title='$langDownloadIt' width='30' height='29'></td></tr>
+    		</tbody></table><br>";
+	}
+	draw($tool_content, 2, 'course_info');	
 }	// end of isadminOfCourse
 else 
 {
 	$tool_content .= "<center><p>$langNotAllowed</p></center>";
+	draw($tool_content, 2, 'course_info');
+	exit;
 }
-
-draw($tool_content, 2, 'course_info');
 
 // ---------------------------------------------
 // useful functions
@@ -315,7 +311,7 @@ function DirSize($path , $recursive=TRUE) {
 /* 
  * Backup a db to a file 
  */ 
-function backupDatabase($link , $db_name , $structure , $donnees , $format="SQL" , $whereSave=".", $insertComplet="",$verbose=false)
+function backupDatabase($link , $db_name , $structure , $donnees , $format="SQL" , $whereSave=".", $insertComplet="")
 { 
 	global $langBackupEnd;
 	if (!is_resource($link)) 
@@ -334,8 +330,6 @@ function backupDatabase($link , $db_name , $structure , $donnees , $format="SQL"
 		if ($format=="PHP")
 			fwrite($fp, "mysql_query(\"");
 		$tablename = mysql_tablename($res, $i); 
-		if ($verbose)
-			echo "[".$tablename."] ";
 		if ($structure === true) 
 		{ 
 			fwrite($fp, "DROP TABLE IF EXISTS `$tablename`;\n"); 
@@ -390,19 +384,14 @@ function backupDatabase($link , $db_name , $structure , $donnees , $format="SQL"
 	fclose($fp); 
 }
 
-function copydir($origine,$destination,$verbose=false) {
+function copydir($origine, $destination) {
+	
 	$dossier=opendir($origine);
 	if (file_exists($destination))
 	{ 
 		return 0;
 	}
-	mkdir($destination, 0770);
-	if ($verbose)
-		echo "
-		<strong>
-			[".basename($destination)."]
-		</strong>
-		<ol>";
+	mkdir($destination, 0755);
 	$total = 0;
 
 	while ($fichier = readdir($dossier)) 
@@ -412,30 +401,18 @@ function copydir($origine,$destination,$verbose=false) {
 		{
 			if (is_dir($origine."/".$fichier))
 			{
-				if ($verbose)
-					echo "
-			<li>";
-				$total += copydir("$origine/$fichier", "$destination/$fichier",$verbose);
+				$total += copydir("$origine/$fichier", "$destination/$fichier");
 			} 
 			else 
 			{
 				copy("$origine/$fichier", "$destination/$fichier");
-				if ($verbose)
-					echo "<li>$fichier";
 				$total++;
 			}
-			if ($verbose)
-				echo "</li>";
 		}
 	}
-	if ($verbose)
-		echo "</ol>";
 	return $total;
 }
-function getextension($fichier) { 
-	$bouts = explode(".", $fichier); 
-	return array(array_pop($bouts), implode(".", $bouts)); 
-}
+
 
 /*
  * to create missing directory in a gived path
@@ -445,80 +422,23 @@ function getextension($fichier) {
  * @author Christophe Gesche gesche@ipm.ucl.ac.be Claroline Team 
  * @since  28-Aug-2001 09:12 
  * @param sting		$path 		wanted path 
- * @param boolean	$verbose	fix if comments must be printed
- * @param string	$mode		fix if chmod is same of parent or default
  */
-function mkpath($path, $verbose = false, $mode = "herit")  {
-	Global $langCreatedIn;
+function mkpath($path)  {
+	
+	global $langCreatedIn;
+	
 	$path = str_replace("/","\\",$path);
 	$dirs = explode("\\",$path);
 	$path = $dirs[0];
-	if ($verbose)
-		echo "<ul>";
 	for($i = 1;$i < count($dirs);$i++) 
 	{
 		$path .= "/".$dirs[$i];
 		if(!is_dir($path))
 		{
-			$ret=mkdir($path, 0770);
-			if ($ret)
-			{
-				if ($verbose)
-					echo "
-				<li>
-					<strong>
-						".basename($path)."
-					</strong>
-					<br>
-				 	".$langCreatedIn." 
-					<br>
-				 	<strong>
-						".realpath($path."/..")."
-					</strong>";
-			}
-			else
-			{
-				if ($verbose)
-					echo "
-				</ul>
-				error : ".$path." not created";
-			}
+			$ret=mkdir($path, 0755);
 		}
 	}
-	if ($verbose)
-		echo "</ul>";
 	return $ret;
-}
-
-// 
-/*
- * to detect errors in Mysql Queries
- *
- * if  there is no error, the string is  write  in source html
- * if not,  error is printed with sql request
- *
- * @returns a resource identifier or FALSE if the query was not executed correctly. 
- * @author Christophe Gesche gesche@ipm.ucl.ac.be Claroline Team 
- */
-function mySqlQueryShowError($sql,$db="###")
-{
-    if ($db=="###")
-	{
-		$val =  @mysql_query($sql);
-	}
-	else
-	{
-		$val =  @mysql_query($sql,$db);
-	}
-	if (mysql_errno())
-	{
-		echo "<HR>".mysql_errno().": ".mysql_error()."<br><PRE>$sql</PRE><HR>";
-	}
-    else
-	{
-		echo "<!-- \n$sql\n-->";
-	}
-	return $val;
 }
 
 
@@ -542,7 +462,7 @@ function create_backup_file($file) {
 function backup_annonces($f, $course) {
 	global $mysqlMainDb;
 	
-	$res = mySqlQueryShowError("SELECT * FROM `$mysqlMainDb`.annonces
+	$res = mysql_query("SELECT * FROM `$mysqlMainDb`.annonces
 				    WHERE code_cours = '$course'");
 	while($q = mysql_fetch_array($res)) {
 		fputs($f, "announcement(".
@@ -553,7 +473,7 @@ function backup_annonces($f, $course) {
 }
 
 function backup_groups($f) {
-	$res = mySqlQueryShowError("SELECT * FROM user_group");
+	$res = mysql_query("SELECT * FROM user_group");
 		while($row = mysql_fetch_assoc($res)) {
 		fputs($f, "group(".
 			$row['user'].", ".
@@ -564,7 +484,7 @@ function backup_groups($f) {
 }
 
 function backup_assignment_submit($f) {
-	$res = mySqlQueryShowError("SELECT * FROM assignment_submit");
+	$res = mysql_query("SELECT * FROM assignment_submit");
 		while($row = mysql_fetch_assoc($res)) {
 		$values = array();
 		foreach (array('assignment_id', 'submission_date',
@@ -581,7 +501,7 @@ function backup_assignment_submit($f) {
 
 
 function backup_dropbox_file($f) {
-	$res = mySqlQueryShowError("SELECT * FROM dropbox_file");
+	$res = mysql_query("SELECT * FROM dropbox_file");
 	while ($row = mysql_fetch_array($res)) {
 		fputs ($f, "dropbox_file(".
 			quote($row['uploaderId']).", ".
@@ -596,7 +516,7 @@ function backup_dropbox_file($f) {
 }
 
 function backup_dropbox_person($f) {
-	$res = mySqlQueryShowError("SELECT * FROM dropbox_person");
+	$res = mysql_query("SELECT * FROM dropbox_person");
 	while ($row = mysql_fetch_array($res)) {
 		fputs ($f, "dropbox_person(".
 			quote($row['fileId']).", ".
@@ -605,7 +525,7 @@ function backup_dropbox_person($f) {
 }
 
 function backup_dropbox_post($f) {
-	$res = mySqlQueryShowError("SELECT * FROM dropbox_post");
+	$res = mysql_query("SELECT * FROM dropbox_post");
 	while ($row = mysql_fetch_array($res)) {
 		fputs ($f, "dropbox_post(".
 			quote($row['fileId']).", ".
@@ -617,7 +537,7 @@ function backup_dropbox_post($f) {
 function backup_users($f, $course) {
 	global $mysqlMainDb;
 	
-	$res = mySqlQueryShowError("SELECT user.*, cours_user.statut as cours_statut
+	$res = mysql_query("SELECT user.*, cours_user.statut as cours_statut
 		FROM `$mysqlMainDb`.user, `$mysqlMainDb`.cours_user
 		WHERE user.user_id=cours_user.user_id
 		AND cours_user.code_cours='$course'");
@@ -696,7 +616,7 @@ function backup_course_db($f, $course) {
 function backup_course_details($f, $course) {
 	global $mysqlMainDb;
 	
-	$res = mySqlQueryShowError("SELECT * FROM `$mysqlMainDb`.cours
+	$res = mysql_query("SELECT * FROM `$mysqlMainDb`.cours
 				    WHERE code = '$course'");
 	$q = mysql_fetch_array($res);
 	fputs($f, "course_details('$course',\t// Course code\n\t".
