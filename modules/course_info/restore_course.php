@@ -23,7 +23,7 @@ if (isset($send_archive) and $_FILES['archiveZipped']['size'] > 0) {
 	$tool_content .= "<tbody></table><br>";
 }
 elseif (isset($create_dir_for_course)) {
-	/* 3° Try to create course with data uploaded
+	/* 3 Try to create course with data uploaded
               If course already exists -> merge or rename
 	 */
 	$r = $restoreThis."/html";
@@ -45,7 +45,7 @@ elseif (isset($create_dir_for_course)) {
 	if (!file_exists("../../courses/garbage/tmpUnzipping"))
 		mkdir("../../courses/garbage/tmpUnzipping");
 	rename("../../courses/tmpUnzipping", "../../courses/garbage/tmpUnzipping/".time()."");
-	$tool_content .= "<br><center><p><a href=\"../admin/index.php\">Επιστροφή</p></center>";
+	$tool_content .= "<br><center><p><a href=\"../admin/index.php\">$langBack</p></center>";
 }
 elseif (isset($send_path) and !empty($pathToArchive)) {
 	if (file_exists($pathToArchive))
@@ -56,7 +56,7 @@ elseif (isset($send_path) and !empty($pathToArchive)) {
 }
 elseif (isset($pathOf4path)) {
 	// we know  where is the 4 paths to restore  the  course.
-	//2° Show content
+	// 2 Show content
 	// $restoreThis: contains the path of the archived course
 
 	// If $action == 0, the course isn't restored - the user just
@@ -66,27 +66,26 @@ elseif (isset($pathOf4path)) {
 	include("$restoreThis/backup.php");
 	$tool_content .= ob_get_contents();
 	ob_end_clean();
-
 } else {
 	$tool_content .= "<table width=\"99%\"><caption>$langFirstMethod</caption><tbody>
 	<tr><td>$langRequest1<br><br><form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" name=\"sendZip\"  enctype=\"multipart/form-data\">
 	<input type=\"file\" name=\"archiveZipped\" >
 	<input type=\"submit\" name=\"send_archive\" value=\"".$langSend."\">
-</form></td></tr>
+	</form></td></tr>
 	</tbody></table><br>";
 	$tool_content .= "<table width=\"99%\"><caption>$langSecondMethod</caption><tbody>
 	<tr><td>$langRequest2<br><br><form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" name=\"sendPath\"  enctype=\"multipart/form-data\">
 	<input type=\"text\" name=\"pathToArchive\">
 	<input type=\"submit\" name=\"send_path\" value=\"".$langSend."\">
-</form></td></tr>
+	</form></td></tr>
 	</tbody></table><br>";
 }
 
 draw($tool_content,3, 'admin');
 
-// 4° move rep of archive/html in the  new rep for the course
-// 5° create course database,  tables and fill tables
-// 6° the critical reconnection -> reinsert data of course in main database.
+// 4 move rep of archive/html in the  new rep for the course
+// 5 create course database,  tables and fill tables
+// 6 the critical reconnection -> reinsert data of course in main database.
 //	6.1 is the faculty of the course always existing ?
 //	6.2 insert data of course in course table
 //	6.3 insert data of announcment
@@ -99,41 +98,16 @@ draw($tool_content,3, 'admin');
 //				if no -> add user
 //		6.4.2 add link in course_user
 
-/*
- * to create missing directory in a gived path
- *
- * @returns a resource identifier or FALSE if the query was not executed correctly. 
- * @author KilerCris@Mail.com original function from  php manual 
- * @author Christophe Gesche gesche@ipm.ucl.ac.be Claroline Team 
- * @since  28-Aug-2001 09:12 
- * @param sting		$path 		wanted path 
- * @param boolean	$verbose	fix if comments must be printed
- */
-function mkpath($path)  {
-	
-	global $langCreatedIn;
-
-	$path = str_replace("/","\\",$path);
-	$dirs = explode("\\",$path);
-	$path = $dirs[0];
-	for($i = 1;$i < count($dirs);$i++) 
-	{
-		$path .= "/".$dirs[$i];
-		if(!is_dir($path))
-		{
-			mkdir($path, 0770);
-		}
-	}
-}
-
 
 // Functions  restoring
 // Displaying Form
 
 function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
+	
 	global $action, $restoreThis, $langNameOfLang;
-
-	include("../lang/greek/restore_course.inc.php");
+	
+	@include("../lang/greek/common.inc.php");
+	@include("../lang/greek/messages.inc.php");
 
 	//check for lesson language
 	$languages = array();
@@ -155,33 +129,28 @@ function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) 
 
 //display the form
 	if (!$action) {
-?>
-<form action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
-  <table border="0">
-	<tr><td align="justify" colspan="2"><?= $langInfo1 ?></td></tr>
-	<tr><td align="justify" colspan="2"><?= $langInfo2 ?></td></tr>
-	<tr><td>&nbsp;</td></tr>
-	<tr><td><?= $langCourseCode?>:</td><td><input type="text" name="course_code" value="<?= $code ?>"></td></tr>
-	<tr><td><?= $langLang?>:</td><td><? selection($languages, 'course_lang', $lang) ?></td></tr>
-	<tr><td><?= $langTitle?>:</td><td><input type="text" name="course_title" value="<?= $title ?>" size="50"></td></tr>
-	<tr><td><?= $langCourseDescription?>:</td><td><input type="text" name="course_desc" value="<?= $desc ?>" size="50"></td></tr>
-	<tr><td><?= $langCourseFac?>:</td><td><? echo faculty_select($fac) ?></td></tr>
-	<tr><td><?= $langCourseOldFac?>:</td><td><? echo $fac ?></td></tr>
-	<tr><td><?= $langCourseVis?>:</td><td><? echo visibility_select($vis) ?></td></tr>
-	<tr><td><?= $langTeacher?>:</td><td><input type="text" name="course_prof" value="<?= $prof ?>" size="50"></td></tr>
-	<tr><td><?= $langCourseType?>:</td><td><?= type_select($type) ?></td></tr>
-	<tr><td>&nbsp;</td></tr>
-	<tr><td colspan="2"><input type="checkbox" name="course_addusers" checked><?= $langUsersWillAdd ?></td></tr>
-	<tr><td colspan="2"><input type="checkbox" name="course_prefix" checked><?= $langUserPrefix?></td></tr>
-	<tr><td>&nbsp;</td></tr>
-	<tr><td>
-		<input type="submit" name="create_dir_for_course" value="<?= $langOk?>">
-		<input type="hidden" name="restoreThis" value="<?= $restoreThis ?>">
-	</td></tr>
-</table></form>
-<?
+		echo "<form action='$_SERVER[PHP_SELF]' method='post'>";
+  		echo "<table border='0'>";
+		echo "<tr><td align='justify' colspan='2'>$langInfo1</td></tr>";
+		echo "<tr><td align='justify' colspan='2'>$langInfo2</td></tr>";
+		echo "<tr><td>&nbsp;</td></tr>";
+		echo "<tr><td>$langCourseCode:</td><td><input type='text' name='course_code' value='$code'></td></tr>";
+		echo "<tr><td>$langLanguage:</td><td>".selection($languages, 'course_lang', $lang)."</td></tr>";
+		echo "<tr><td>$langTitle:</td><td><input type='text' name='course_title' value='$title' size='50'></td></tr>";
+		echo "<tr><td>$langCourseDescription:</td><td><input type='text' name='course_desc' value='$desc' size='50'></td></tr>";
+		echo "<tr><td>$langCourseFac:</td><td>".faculty_select($fac)."</td></tr>";
+		echo "<tr><td>$langCourseOldFac:</td><td>$fac</td></tr>";
+		echo "<tr><td>$langCourseVis:</td><td>".visibility_select($vis)."</td></tr>";
+		echo "<tr><td>$langTeacher:</td><td><input type='text' name='course_prof' value='$prof' size='50'></td></tr>";
+		echo "<tr><td>$langCourseType:</td><td>".type_select($type)."</td></tr>";
+		echo "<tr><td>&nbsp;</td></tr>";
+		echo "<tr><td colspan='2'><input type='checkbox' name='course_addusers' checked>$langUsersWillAdd </td></tr>";
+		echo "<tr><td colspan='2'><input type='checkbox' name='course_prefix' checked>$langUserPrefix</td></tr>";
+		echo "<tr><td>&nbsp;</td></tr><tr><td>";
+		echo "<input type='submit' name='create_dir_for_course' value='$langOk'>";
+		echo "<input type='hidden' name='restoreThis' value='$restoreThis'>";
+		echo "</td></tr></table></form>";
 	}
-
 }
 
 // inserting announcements into the main database
@@ -197,7 +166,6 @@ function announcement ($text, $date, $order) {
 			quote($date),
 			quote($order))).
 			")");
-				
 }
 
 
@@ -413,47 +381,57 @@ include(\"../../modules/course_home/course_home.php\");
 // form select about visibility
 function visibility_select($current)
 {
-	echo "<select name=\"course_vis\">\n";
-	foreach (array('Ανοιχτό' => '2', 'Ανοιχτό με εγγραφή' => '1', 'Κλειστό' => '0') as $text => $type) {
+	global $langTypeOpen, $langTypeRegistration, $langTypeClosed;
+	$ret = "";
+ 
+	$ret .= "<select name=\"course_vis\">\n";
+	foreach (array($langTypeOpen => '2', $langTypeRegistration => '1', $langTypeClosed => '0') 
+			as $text => $type) {
 		if($type == $current) {
-			echo "<option value=\"$type\" selected>$text</option>\n";
+			$ret .= "<option value=\"$type\" selected>$text</option>\n";
 		} else {
-			echo "<option value=\"$type\">$text</option>\n";
+			$ret .= "<option value=\"$type\">$text</option>\n";
 		}
 	}
-	echo "</select>\n";
+	$ret .= "</select>\n";
+return $ret;
 }
 
 // form select about type
 function type_select($current)
 {
-	echo "<select name=\"course_type\">\n";
-	foreach (array('Προπτυχιακό' => 'pre', 'Μεταπτυχιακό' => 'post', 'Άλλο' => 'other') as $text => $type) {
+	global $langPre, $langPost, $langOther;
+	
+	$ret = "";
+	$ret .= "<select name=\"course_type\">\n";
+	foreach (array($langPre => 'pre', $langPost => 'post', $langOther => 'other') as $text => $type) {
 		if($type == $current) {
-			echo "<option value=\"$type\" selected>$text</option>\n";
+			$ret .= "<option value=\"$type\" selected>$text</option>\n";
 		} else {
-			echo "<option value=\"$type\">$text</option>\n";
+			$ret .= "<option value=\"$type\">$text</option>\n";
 		}
 	}
-	echo "</select>\n";
+	$ret .= "</select>\n";
+return $ret;
 }
 
 // form select about faculty
 function faculty_select($current)
 {
 	global $mysqlMainDb;
+	$ret = "";
 	
-	echo "<select name=\"course_fac\">\n";
+	$ret .= "<select name=\"course_fac\">\n";
 	$res = mysql_query("SELECT name FROM `$mysqlMainDb`.faculte ORDER BY number");
 	while ($fac = mysql_fetch_array($res)) {
 		if($fac['name'] == $current) {
-			echo "<option selected>$fac[name]</option>\n";
+			$ret .= "<option selected>$fac[name]</option>\n";
 		} else {
-			echo "<option>$fac[name]</option>\n";
+			$ret .= "<option>$fac[name]</option>\n";
 		}
 	}
-	echo "</select>\n";
-
+	$ret .= "</select>\n";
+return $ret;
 }
 
 function unpack_zip_show_files($zipfile)
@@ -468,11 +446,12 @@ function unpack_zip_show_files($zipfile)
 	chdir($destdir);
 	$state = $zip->extract();
 
-	$retString .= "<br>$langEndFileUnzip<br><br>$langLesFound<ol>" ;
-	$dirnameCourse = realpath("$destdir/courses/archive/");
-	if($dirnameCourse[strlen($dirnameCourse)-1]!='/')
-		$dirnameCourse.='/';
+	$retString .= "<br>$langEndFileUnzip<br><br>$langLesFound<ol>";
+	$dirnameCourse = realpath("$destdir/archive/");
+	if($dirnameCourse[strlen($dirnameCourse)-1] != '/')
+		$dirnameCourse .= '/';
 	$handle = opendir($dirnameCourse);
+
 	while ($entries = readdir($handle)) {
 		if ($entries == '.' or $entries == '..' or $entries == 'CVS')
 			continue;
@@ -480,7 +459,7 @@ function unpack_zip_show_files($zipfile)
 			$retString .= "<li>".$entries."<br>".$langLesFiles."
 			<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" name=\"restoreThis\">
 			<ol>";
-			$dirnameArchive = realpath("$destdir/courses/archive/$entries/");
+			$dirnameArchive = realpath("$destdir/archive/$entries/");
 			if($dirnameArchive[strlen($dirnameArchive)-1]!='/')
 				$dirnameArchive.='/';
 			$handle2=opendir($dirnameArchive);
@@ -488,18 +467,14 @@ function unpack_zip_show_files($zipfile)
 				if ($entries=='.'||$entries=='..'||$entries=='CVS')
 					continue;
 				if (is_dir($dirnameArchive.$entries))
-					$retString.= "
-				<li>
+					$retString.= "<li>
 					<input type=\"radio\" checked name=\"restoreThis\" value=\"".realpath($dirnameArchive.$entries)."\"> ".$entries."
 				</li>";
 			}
 			closedir($handle2);
-			$retString .= "
-			</ol>
-			<br>
+			$retString .= "</ol><br>
 			<input type=\"submit\" value=\"$langRestore\" name=\"pathOf4path\">
-			</form>
-		</li>";
+			</form></li>";
 	}
 	closedir($handle);
 	$retString .= "</ol>\n";	

@@ -414,32 +414,6 @@ function copydir($origine, $destination) {
 }
 
 
-/*
- * to create missing directory in a gived path
- *
- * @returns a resource identifier or FALSE if the query was not executed correctly. 
- * @author KilerCris@Mail.com original function from  php manual 
- * @author Christophe Gesche gesche@ipm.ucl.ac.be Claroline Team 
- * @since  28-Aug-2001 09:12 
- * @param sting		$path 		wanted path 
- */
-function mkpath($path)  {
-	
-	global $langCreatedIn;
-	
-	$path = str_replace("/","\\",$path);
-	$dirs = explode("\\",$path);
-	$path = $dirs[0];
-	for($i = 1;$i < count($dirs);$i++) 
-	{
-		$path .= "/".$dirs[$i];
-		if(!is_dir($path))
-		{
-			$ret=mkdir($path, 0755);
-		}
-	}
-	return $ret;
-}
 
 
 // adia function

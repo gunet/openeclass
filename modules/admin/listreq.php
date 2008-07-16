@@ -50,25 +50,25 @@ if (!empty($show) && ($show=="closed")) {
 	} else {
 		// Show only closed forms
 		$tool_content .= "<table width=\"99%\"><caption>$langOpenProfessorRequests</caption><thead><tr>
-		<th scope=\"col\">$langName</th>
-		<th scope=\"col\">$langSurname</th>
-		<th scope=\"col\">$langUsername</th>
+		<th scope=\"col\">$langName $langSurname</th>
+		<th scope=\"col\" width='20'>$langUsername</th>
 		<th scope=\"col\">$langEmail</th>
 		<th scope=\"col\">$langDepartment</th>
-		<th scope=\"col\">$langphone</th>
-		<th scope=\"col\">$langDateRequest</th>
+		<th scope=\"col\" width='12'>$langTel</th>
+		<th scope=\"col\" width='15'>$langDateRequest</th>
 		<th scope=\"col\">$langDateClosed</th>
 		<th scope=\"col\">$langComments</th>
 		<th scope=\"col\">$langActions</th>
 		</tr></thead><tbody>";
 
  		$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,date_closed,comment
-											FROM prof_request WHERE (status='2' AND statut<>'5')");
+			FROM prof_request WHERE (status='2' AND statut<>'5')");
 
 		for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 			$req = mysql_fetch_array($sql);
 			$tool_content .= "<tr>";
-			for ($i = 1; $i < mysql_num_fields($sql); $i++) {
+			$tool_content .= "<tr><td>".htmlspecialchars($req[1])."&nbsp;".htmlspecialchars($req[2])."";
+			for ($i = 3; $i < mysql_num_fields($sql); $i++) {
 				if ($i == 4 and $req[$i] != "") {
 					$tool_content .= "<td><a href=\"mailto:".
 					htmlspecialchars($req[$i])."\">".
@@ -96,13 +96,12 @@ if (!empty($show) && ($show=="closed")) {
 		$tool_content .= "<table width=\"99%\">
 		<caption>$langOpenProfessorRequests</caption>
 		<thead><tr>
-		<th scope=\"col\">$langName</th>
-		<th scope=\"col\">$langSurname</th>
-		<th scope=\"col\">$langUsername</th>
+		<th scope=\"col\">$langName $langSurname</th>
+		<th scope=\"col\" width='20'>$langUsername</th>
 		<th scope=\"col\">$langEmail</th>
 		<th scope=\"col\">$langDepartment</th>
-		<th scope=\"col\">$langphone</th>
-		<th scope=\"col\">$langDateRequest</th>
+		<th scope=\"col\" width='12'>$langTel</th>
+		<th scope=\"col\" width='15'>$langDateRequest</th>
 		<th scope=\"col\">$langDateReject</th>
 		<th scope=\"col\">$langComments</th>
 		<th scope=\"col\">$langActions</th>
@@ -112,9 +111,10 @@ if (!empty($show) && ($show=="closed")) {
 		FROM prof_request WHERE (status='3' AND statut<>'5')");
 
 		for ($j = 0; $j < mysql_num_rows($sql); $j++) {
+			$tool_content .= "<tr><td>".htmlspecialchars($req[1])."&nbsp;".htmlspecialchars($req[2])."";
 			$req = mysql_fetch_array($sql);
 			$tool_content .= "<tr>";
-			for ($i = 1; $i < mysql_num_fields($sql); $i++) {
+			for ($i = 3; $i < mysql_num_fields($sql); $i++) {
 				if ($i == 4 and $req[$i] != "") {
 					$tool_content .= "<td><a href=\"mailto:".
 					htmlspecialchars($req[$i])."\">".
@@ -133,13 +133,12 @@ if (!empty($show) && ($show=="closed")) {
 } elseif (!empty($show) && ($show=="accepted")) {
 	// Show only accepted forms
 	$tool_content .= "<table width=\"99%\"><caption>$langOpenProfessorRequests</caption><thead><tr>
-		<th scope=\"col\">$langName</th>
-		<th scope=\"col\">$langSurname</th>
-		<th scope=\"col\">$langUsername</th>
+		<th scope=\"col\">$langName $langSurname</th>
+		<th scope=\"col\" width='20'>$langUsername</th>
 		<th scope=\"col\">$langEmail</th>
 		<th scope=\"col\">$langDepartment</th>
-		<th scope=\"col\">$langphone</th>
-		<th scope=\"col\">$langDateRequest</th>
+		<th scope=\"col\" width='12'>$langTel</th>
+		<th scope=\"col\" width='15'>$langDateRequest</th>
 		<th scope=\"col\">$langDateCompleted</th>
 		<th scope=\"col\">$langComments</th>
 		</tr></thead><tbody>";
@@ -150,7 +149,8 @@ if (!empty($show) && ($show=="closed")) {
 	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 		$req = mysql_fetch_array($sql);
 		$tool_content .= "<tr>";
-		for ($i = 1; $i < mysql_num_fields($sql); $i++) {
+		$tool_content .= "<tr><td>".htmlspecialchars($req[1])."&nbsp;".htmlspecialchars($req[2])."";
+		for ($i = 3; $i < mysql_num_fields($sql); $i++) {
 			if ($i == 4 and $req[$i] != "") {
 				$tool_content .= "<td><a href=\"mailto:".
 				htmlspecialchars($req[$i])."\">".
@@ -174,18 +174,16 @@ switch($close)
 	    $submit = isset($_POST['submit'])?$_POST['submit']:'';
 	    if(!empty($submit))
 	    {
-				// post the comment and do the delete action
-				if (!empty($comment))
-				{
+		// post the comment and do the delete action
+		if (!empty($comment)) {
 		    	$sql = "UPDATE prof_request set status = '3',
 					    date_closed = NOW(),
 					    comment = '".mysql_escape_string($comment)."'
 					    WHERE rid = '$id'";
 		    	if (db_query($sql))
 		    	{
-						if (isset($sendmail) and ($sendmail == 1))
-						{
-    			    $emailsubject = $langemailsubjectBlocked;
+				if (isset($sendmail) and ($sendmail == 1)) {
+    			    		$emailsubject = $langemailsubjectBlocked;
 			    		$emailbody = "$langemailbodyBlocked
 			    		$langComments:> $comment
 			    		$langManager $siteName
@@ -193,33 +191,30 @@ switch($close)
 			    		$langphone : $telephone
 			    		$langEmail : $emailAdministrator";
 			    		send_mail($siteName, $emailAdministrator, "$prof_name $prof_surname",	$prof_email, $emailsubject, $emailbody, $charset);
-						}
-						$tool_content .= "<p>$langTeacherRequestHasRejected";
-						$tool_content .= " $langRequestMessageHasSent $prof_email";
-						$tool_content .= ". <br><br>$langComments:<br><pre>$comment</pre></p>\n";
-		    	}
 				}
-	    }
-	    else
-	    {
-				// display the form
-				$r = db_query("SELECT comment, profname, profsurname, profemail
-					     FROM prof_request WHERE rid = '$id'");
-				$d = mysql_fetch_assoc($r);
-				$tool_content .= "
-					<br><br>
-					<center><p>$langGoingRejectRequest:<br><br>".$d['profname']." ".$d['profsurname']." &lt;".$d['profemail']."&gt;
-					<br><br>$langComments:	<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
-					<input type=\"hidden\" name=\"id\" value=\"".$id."\">
-					<input type=\"hidden\" name=\"close\" value=\"2\">
-					<input type=\"hidden\" name=\"prof_name\" value=\"".$d['profname']."\">
-					<input type=\"hidden\" name=\"prof_surname\" value=\"".$d['profsurname']."\">
-					<textarea name=\"comment\" rows=\"5\" cols=\"40\">".$d['comment']."</textarea>
-					<br><input type=\"checkbox\" name=\"sendmail\" value=\"1\"
-					checked=\"yes\">&nbsp;$langRequestSendMessage:
-					<input type=\"text\" name=\"prof_email\" value=\"".$d['profemail']."\">
-					<br><br>($langRequestDisplayMessage)
-					<br><br><input type=\"submit\" name=\"submit\" value=\"$langRejectRequest\"></form></p></center>";
+				$tool_content .= "<p>$langTeacherRequestHasRejected";
+				$tool_content .= " $langRequestMessageHasSent $prof_email";
+				$tool_content .= ". <br><br>$langComments:<br><pre>$comment</pre></p>\n";
+		    	}
+		}
+	    } else {
+			// display the form
+			$r = db_query("SELECT comment, profname, profsurname, profemail
+				     FROM prof_request WHERE rid = '$id'");
+			$d = mysql_fetch_assoc($r);
+			$tool_content .= "<br><br>
+			<center><p>$langGoingRejectRequest:<br><br>".$d['profname']." ".$d['profsurname']." &lt;".$d['profemail']."&gt;
+			<br><br>$langComments:	<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
+			<input type=\"hidden\" name=\"id\" value=\"".$id."\">
+			<input type=\"hidden\" name=\"close\" value=\"2\">
+			<input type=\"hidden\" name=\"prof_name\" value=\"".$d['profname']."\">
+			<input type=\"hidden\" name=\"prof_surname\" value=\"".$d['profsurname']."\">
+			<textarea name=\"comment\" rows=\"5\" cols=\"40\">".$d['comment']."</textarea>
+			<br><input type=\"checkbox\" name=\"sendmail\" value=\"1\"
+			checked=\"yes\">&nbsp;$langRequestSendMessage:
+			<input type=\"text\" name=\"prof_email\" value=\"".$d['profemail']."\">
+			<br><br>($langRequestDisplayMessage)
+			<br><br><input type=\"submit\" name=\"submit\" value=\"$langRejectRequest\"></form></p></center>";
 	    }
 	    break;
     default:
@@ -232,24 +227,23 @@ else
 // display all the requests
 // -----------------------------------
 	$tool_content .= "<table width=\"99%\"><thead><tr>
-		<th scope=\"col\">$langName</th>
-		<th scope=\"col\">$langSurname</th>
-		<th scope=\"col\">$langUsername</th>
+		<th scope=\"col\">$langName $langSurname</th>
+		<th scope=\"col\" width='20'>$langUsername</th>
 		<th scope=\"col\">$langEmail</th>
 		<th scope=\"col\">$langDepartment</th>
-		<th scope=\"col\">$langphone</th>
-		<th scope=\"col\">$langDateRequest</th>
+		<th scope=\"col\" width='12'>$langTel</th>
+		<th scope=\"col\" width='15'>$langDateRequest</th>
 		<th scope=\"col\">$langComments</th>
-		<th scope=\"col\">$langActions</th>
+		<th scope=\"col\" width='15'>$langActions</th>
 		</tr></thead><tbody>";
 
  	$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,comment,profpassword
-									FROM prof_request WHERE (status='1' AND statut<>'5')");
+		FROM prof_request WHERE (status='1' AND statut<>'5')");
 
 	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 		$req = mysql_fetch_array($sql);
-		$tool_content .= "<tr>";
-		for ($i = 1; $i < mysql_num_fields($sql)-1; $i++) {
+		$tool_content .= "<tr><td>".htmlspecialchars($req[1])."&nbsp;".htmlspecialchars($req[2])."";	
+		for ($i = 3; $i < mysql_num_fields($sql)-1; $i++) {
 			if ($i == 4 and $req[$i] != "") {
 				$tool_content .= "<td><a href=\"mailto:".
 				htmlspecialchars($req[$i])."\">".
@@ -264,12 +258,12 @@ else
 
 		switch($req['profpassword']) {
 			case 'ldap': $tool_content .= "<br><a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid']).
-																			"&pn=".urlencode($req['profname']).
-								                      "&ps=".urlencode($req['profsurname']).
-																			"&pu=".urlencode($req['profuname']).
-																			"&pe=".urlencode($req['profemail']).
-																			"&pt=".urlencode($req['proftmima']).
-																			"&auth=4'>$langRegistration<br>($langViaLdap)</td></tr>";
+				"&pn=".urlencode($req['profname']).
+		        	   "&ps=".urlencode($req['profsurname']).
+				"&pu=".urlencode($req['profuname']).
+				"&pe=".urlencode($req['profemail']).
+				"&pt=".urlencode($req['proftmima']).
+				"&auth=4'>$langRegistration<br>($langViaLdap)</td></tr>";
         break;
       case 'pop3': $tool_content .= "<br><a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid']).
                                       "&pn=".urlencode($req['profname']).
@@ -285,7 +279,7 @@ else
                                       "&pu=".urlencode($req['profuname']).
                                       "&pe=".urlencode($req['profemail']).
                                       "&pt=".urlencode($req['proftmima']).
-																			"&auth=3'>$langRegistration<br>($langViaImap)</td></tr>";
+				"&auth=3'>$langRegistration<br>($langViaImap)</td></tr>";
         break;
       default:  $tool_content .= "<br><a href='../auth/newprofadmin.php?id=".urlencode($req['rid']).
                       "&pn=".urlencode($req['profname']).
@@ -308,7 +302,7 @@ else
 		  <a href=\"listreq.php?show=rejected\">$langReqHaveBlocked</a><br>
 		  <a href=\"listreq.php?show=accepted\">$langReqHaveFinished</a>
       </td>
-    </tr>
+    	</tr>
 	</thead>
     </table>";
 }
