@@ -264,7 +264,7 @@ if($is_adminOfCourse) {
 // ----------------------------------------
 
 	$zipCourse = new PclZip($zipfile);
-	if ($zipCourse->create($webDir.$archiveDir) == 0) {
+	if ($zipCourse->create($webDir.$archiveDir, PCLZIP_OPT_REMOVE_PATH, "$webDir") == 0) {
 		$tool_content .= "Error: ".$zipCourse->errorInfo(true);
 		draw($tool_content, 2, 'course_info');
 		exit;

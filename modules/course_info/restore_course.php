@@ -17,15 +17,13 @@ if (isset($send_archive) and $_FILES['archiveZipped']['size'] > 0) {
 	<tr><td width=\"3%\"nowrap>$langFileSentSize</td><td>".$_FILES['archiveZipped']['size']."</td></tr>
 	<tr><td width=\"3%\"nowrap>$langFileSentType</td><td>".$_FILES['archiveZipped']['type']."</td></tr><tr>
 	<td width=\"3%\"nowrap>$langFileSentTName</td><td>".$_FILES['archiveZipped']['tmp_name']."</td></tr>";
-	$tool_content .= "<tbody></table><br>";
+	$tool_content .= "</tbody></table><br>";
 	$tool_content .= "<table width=\"99%\"><caption>".$langFileUnzipping."</caption><tbody>";
 	$tool_content .= "<tr><td>".unpack_zip_show_files($archiveZipped)."</td></tr>";
 	$tool_content .= "<tbody></table><br>";
 }
 elseif (isset($create_dir_for_course)) {
-	/* 3 Try to create course with data uploaded
-              If course already exists -> merge or rename
-	 */
+	//Try to create course with data uploaded
 	$r = $restoreThis."/html";
 	$course_code = create_course($course_code, $course_lang, $course_title,
 		$course_desc, $course_fac, $course_vis, $course_prof, $course_type);
@@ -444,7 +442,7 @@ function unpack_zip_show_files($zipfile)
 	mkpath("$destdir");
 	$zip = new pclZip($zipfile);
 	chdir($destdir);
-	$state = $zip->extract();
+	$state = $zip->extract(PCLZIP_OPT_REMOVE_PATH, "courses/");
 
 	$retString .= "<br>$langEndFileUnzip<br><br>$langLesFound<ol>";
 	$dirnameCourse = realpath("$destdir/archive/");
