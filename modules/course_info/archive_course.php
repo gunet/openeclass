@@ -32,34 +32,11 @@ if($is_adminOfCourse) {
 	$dateBackuping  = date("Y-m-d-H-i-(B)-s");
 	$shortDateBackuping  = date("YzBs"); // YEAR - Day in Year - Swatch - second 
 	$archiveDir .= "/".$currentCourseID."/".$dateBackuping;
-	$systemFileNameOfArchive = realpath("../..").$archiveDir."/claroBak-".$currentCourseID."-".$dateBackuping.".txt";
 	$zipfile = $webDir."courses/archive/$currentCourseID/archive.$currentCourseID.$shortDateBackuping.zip";
-	
-// ********************************************************************
-// build config file
-// ********************************************************************
-	$stringConfig="<?php
-/*
-      +----------------------------------------------------------------------+
-      +----------------------------------------------------------------------+
-      This file was generate by script $PHP_SELF
-      ".date("r")."                  |
-      +----------------------------------------------------------------------+
-      |   This program is free software; you can redistribute it and/or      |
-      |   modify it under the terms of the GNU General Public License        |
-      |   as published by the Free Software Foundation; either version 2     |
-*/
-
-// Source was  in ".realpath("../../".$currentCourseID."/")."
-// find in ".$archiveDir."/courseBase/courseBase.sql sql to rebuild the cours base
-// find in ".$archiveDir."/".$currentCourseID." to content of directory of course
-
-";
-	
 	$tool_content .= "<table class='Deps' align='center'><tbody><tr><th align=\"left\"><ol>\n";
 
 	// if dir is missing, first we create it. mkpath is a recursive function
-       $dirCourBase = realpath("../..").$archiveDir."/courseBase";
+        $dirCourBase = realpath("../..").$archiveDir."/courseBase";
 	if (!is_dir($dirCourBase)) {
 		$tool_content .= "<li>".$langCreateDirCourseBase."</li>\n";
 		mkpath($dirCourBase);
@@ -82,7 +59,6 @@ if($is_adminOfCourse) {
 // ********************************************************************
 	$tool_content .= "<li>".$langBUCourseDataOfMainBase."  ".$currentCourseID."</li>\n";
 	$sqlInsertCourse = "INSERT INTO cours SET ";
-	$csvInsertCourse ="\n";
 	$sqlSelectInfoCourse ="SELECT * FROM `$mysqlMainDb`.cours WHERE code = '".$currentCourseID."' ";
 	$resInfoCourse = mysql_query($sqlSelectInfoCourse) ;
 	$infoCourse = mysql_fetch_array($resInfoCourse);
@@ -91,23 +67,12 @@ if($is_adminOfCourse) {
 			$sqlInsertCourse .= ", ";
 		$nameField = mysql_field_name($resInfoCourse,$noField);
 		$sqlInsertCourse .= "$nameField = '".$infoCourse["$nameField"]."'";
-		$csvInsertCourse .= "'".addslashes($infoCourse["$nameField"])."';";
 	}
 	$sqlInsertCourse .= ";";
-	$stringConfig .= "
-# Insert Course
-#------------------------------------------
-#	".$sqlInsertCourse."
-#------------------------------------------
-	";
 
 	$fcoursql = fopen(realpath("../..").$archiveDir."/mainBase/cours.sql", "w");
 	fwrite($fcoursql, $sqlInsertCourse); 
 	fclose($fcoursql);
-	
-	$fcourcsv = fopen(realpath("../..").$archiveDir."/mainBase/cours.csv", "w");
-	fwrite($fcourcsv, $csvInsertCourse); 
-	fclose($fcourcsv);
 	
 // ********************************************************************
 //  info  about users
@@ -121,55 +86,24 @@ if($is_adminOfCourse) {
 		$resUsers = mysql_query($sqlUserOfTheCourse,$db);
 		$nbFields = mysql_num_fields($resUsers);
 		$sqlInsertUsers = "";
-		$csvInsertUsers = "";
-		$htmlInsertUsers = "<table>\t<TR>\n";
-// creation of headers 
-		for($noField=0; $noField < $nbFields; $noField++)
-		{
-			$nameField = mysql_field_name($resUsers,$noField);
-			$csvInsertUsers .= "'".addslashes($nameField)."';";
-			$htmlInsertUsers .= "\t\t<TH>".$nameField."</TH>\n";
-		}
-			$htmlInsertUsers .= "\t</TR>\n";
 
 // creation of body
 		while($users = mysql_fetch_array($resUsers))
 		{
-			$htmlInsertUsers .= "\t<TR>\n";
 			$sqlInsertUsers .= "INSERT IGNORE INTO user SET ";
-			$csvInsertUsers .= "\n";
 			for($noField=0; $noField < $nbFields; $noField++)
 			{
 				if ($noField>0)
 					$sqlInsertUsers .= ", ";
 				$nameField = mysql_field_name($resUsers,$noField);
 				$sqlInsertUsers .= "$nameField = '".$users["$nameField"]."' ";
-				$csvInsertUsers .= "'".addslashes($users["$nameField"])."';";
-				$htmlInsertUsers .= "\t\t<td>".$users["$nameField"]."</td>\n";				
 			}
 			$sqlInsertUsers .= ";";
-			$htmlInsertUsers .= "\t</tr>\n";
 		}
-	$htmlInsertUsers .= "</table>\n";
-
-	$stringConfig .= "
-# INSERT Users
-#------------------------------------------
-#	".$sqlInsertUsers."
-#------------------------------------------
-	";
-
 	$fuserssql = fopen(realpath("../..").$archiveDir."/mainBase/users.sql", "w");
 	fwrite($fuserssql, $sqlInsertUsers); 
 	fclose($fuserssql);
 	
-	$fuserscsv = fopen(realpath("../..").$archiveDir."/mainBase/users.csv", "w");
-	fwrite($fuserscsv, $csvInsertUsers); 
-	fclose($fuserscsv);
-
-	$fusershtml = fopen(realpath("../..").$archiveDir."/mainBase/users.html", "w");
-	fwrite($fusershtml, $htmlInsertUsers); 
-	fclose($fusershtml);
 
 /*  End  of  backup user */
 
@@ -181,54 +115,23 @@ if($is_adminOfCourse) {
 		$resAnn = mysql_query($sqlAnnounceOfTheCourse,$db);
 		$nbFields = mysql_num_fields($resAnn);
 		$sqlInsertAnn = "";
-		$csvInsertAnn = "";
-		$htmlInsertAnn = "<table>\t<TR>\n";
-
-// creation of headers 
-		for($noField=0; $noField < $nbFields; $noField++) {
-			$nameField = mysql_field_name($resUsers,$noField);
-			$csvInsertAnn .= "'".addslashes($nameField)."';";
-			$htmlInsertAnn .= "\t\t<TH>".$nameField."</TH>\n";
-		}
-			$htmlInsertAnn .= "\t</TR>\n";
 
 // creation of body
 		while($announce = mysql_fetch_array($resAnn)) {
-			$htmlInsertAnn .= "\t<TR>\n";
 			$sqlInsertAnn .= "INSERT INTO users SET ";
-			$csvInsertAnn .= "\n";
 			for($noField=0; $noField < $nbFields; $noField++) {
 				if ($noField>0)
 					$sqlInsertAnn .= ", ";
 				$nameField = mysql_field_name($resAnn,$noField);
-				$sqlInsertAnn .= "$nameField = '".addslashes($announce["$nameField"])."' ";
-				$csvInsertAnn .= "'".addslashes($announce["$nameField"])."';";
-				$htmlInsertAnn .= "\t\t<td>".$announce["$nameField"]."</td>\n";				
+				$sqlInsertAnn .= "$nameField = '".addslashes($announce["$nameField"])."' ";	
 			}
 			$sqlInsertAnn .= ";";
-			$htmlInsertAnn .= "\t</tr>\n";
 		}
-	$htmlInsertAnn .= "</table>\n";
-
-	
-	$stringConfig .= "
-#INSERT ANNOUNCE
-#------------------------------------------
-#	".$sqlInsertAnn."
-#------------------------------------------
-	";
 
 	$fannsql = fopen(realpath("../..").$archiveDir."/mainBase/annonces.sql", "w");
 	fwrite($fannsql, $sqlInsertAnn); 
 	fclose($fannsql);
 	
-	$fanncsv = fopen(realpath("../..").$archiveDir."/mainBase/annnonces.csv", "w");
-	fwrite($fanncsv, $csvInsertAnn); 
-	fclose($fanncsv);
-
-	$fannhtml = fopen(realpath("../..").$archiveDir."/mainBase/annonces.html", "w");
-	fwrite($fannhtml, $htmlInsertAnn); 
-	fclose($fannhtml);
 
 /*  End  of  backup Annonces */
 
@@ -236,7 +139,6 @@ if($is_adminOfCourse) {
 	$tool_content .= "<li>".$langCopyDirectoryCourse."<br>(";
 	$nbFiles = copydir(realpath("../../courses/".$currentCourseID."/"), $dirhtml);
 	$tool_content .= "<strong>".$nbFiles."</strong> ".$langFileCopied.")</li>\n";
-	$stringConfig .= "// ".$nbFiles." was in ".realpath("../../courses/".$currentCourseID."/");
 
 // ********************************************************************
 // Copy of  DB course
@@ -244,19 +146,12 @@ if($is_adminOfCourse) {
 // ********************************************************************
 	$tool_content .= "<li>".$langBackupOfDataBase." ".$currentCourseID."  (SQL)<br>(";
 	$tool_content .= backupDatabase($db , $currentCourseID , true, true , 'SQL' , realpath("../..".$archiveDir."/courseBase/"),true);
-	$tool_content .= ")</li>\n       <li>".$langBackupOfDataBase." ".$currentCourseID."  (PHP)<br>(";
-	$tool_content .= backupDatabase($db , $currentCourseID , true, true , 'PHP' , realpath("../..".$archiveDir."/courseBase/"),true);
-	$tool_content .= ")</li>\n       <li>".$langBackupOfDataBase." ".$currentCourseID."  (CSV)<br>(";
-	$tool_content .= backupDatabase($db , $currentCourseID , true, true , 'CSV' , realpath("../..".$archiveDir."/courseBase/"),true);
 
 // ********************************************************************
 // Copy of DB course
 // with mysqldump
 // ********************************************************************
 
-	$fdesc = fopen($systemFileNameOfArchive, "w");
-	fwrite($fdesc,$stringConfig);
-	fclose($fdesc);
 	$tool_content .= ")</li></ol></th><td>&nbsp;</td></tr></tbody></table>";
 
 //-----------------------------------------
@@ -327,23 +222,15 @@ function backupDatabase($link , $db_name , $structure , $donnees , $format="SQL"
 	$num_rows = mysql_num_rows($res); 
 	$i = 0; 
 	while ($i < $num_rows) { 
-		if ($format=="PHP")
-			fwrite($fp, "mysql_query(\"");
 		$tablename = mysql_tablename($res, $i); 
 		if ($structure === true) 
 		{ 
 			fwrite($fp, "DROP TABLE IF EXISTS `$tablename`;\n"); 
-			if ($format=="PHP")
-				fwrite($fp, "\");");
-			if ($format=="PHP")
-				fwrite($fp, "mysql_query(\"");
 			$query = "SHOW CREATE TABLE $tablename"; 
 			$resCreate = mysql_query($query); 
 			$row = mysql_fetch_array($resCreate); 
 			$schema = $row[1].";"; 
 			fwrite($fp, "$schema\n\n"); 
-			if ($format=="PHP")
-				fwrite($fp, "\");");
 		} 
 		if ($donnees === true) 
 		{ 
@@ -370,11 +257,7 @@ function backupDatabase($link , $db_name , $structure , $donnees , $format="SQL"
 					{ 
 						$lesDonnees = $sInsert." ( ".$lesDonnees." );"; 
 					} 
-					if ($format=="PHP")
-						fwrite($fp, "mysql_query(\"");
 					fwrite($fp, "$lesDonnees\n"); 
-					if ($format=="PHP")
-						fwrite($fp, "\");");
 				} 
 			} 
 		} 
@@ -412,7 +295,6 @@ function copydir($origine, $destination) {
 	}
 	return $total;
 }
-
 
 
 
