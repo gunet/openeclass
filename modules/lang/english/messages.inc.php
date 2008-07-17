@@ -423,8 +423,6 @@ $langArchiveLocation="Archive location";
 $langSizeOf ="Size of";
 $langBackupSuccesfull = "Successfull backup";
 $langBUCourseDataOfMainBase = "Backup of course data in main database for";
-$langBUUsersInMainBase = "Backup of users data in main database for";
-$langBUAnnounceInMainBase="Backup of announce data in main database for";
 $langBackupOfDataBase="Backup of database";
 
 

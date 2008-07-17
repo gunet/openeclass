@@ -42,6 +42,7 @@ if($is_adminOfCourse) {
 		mkpath($dirCourBase);
 	}
 	
+	// creation of the sql queries will all the data dumped 
 	create_backup_file("$webDir/$archiveDir/backup.php");
 
     	$dirMainBase = realpath("../..").$archiveDir."/mainBase";
@@ -51,108 +52,14 @@ if($is_adminOfCourse) {
 	}
     	$dirhtml = realpath("../..").$archiveDir."/html";
 
-// ********************************************************************
-// Copy of  from DB main
-// fields about this course
-// ********************************************************************
-//  info  about cours
-// ********************************************************************
 	$tool_content .= "<li>".$langBUCourseDataOfMainBase."  ".$currentCourseID."</li>\n";
-	$sqlInsertCourse = "INSERT INTO cours SET ";
-	$sqlSelectInfoCourse ="SELECT * FROM `$mysqlMainDb`.cours WHERE code = '".$currentCourseID."' ";
-	$resInfoCourse = mysql_query($sqlSelectInfoCourse) ;
-	$infoCourse = mysql_fetch_array($resInfoCourse);
-	for($noField=0; $noField<mysql_num_fields($resInfoCourse); $noField++) {
-		if ($noField>0)
-			$sqlInsertCourse .= ", ";
-		$nameField = mysql_field_name($resInfoCourse,$noField);
-		$sqlInsertCourse .= "$nameField = '".$infoCourse["$nameField"]."'";
-	}
-	$sqlInsertCourse .= ";";
-
-	$fcoursql = fopen(realpath("../..").$archiveDir."/mainBase/cours.sql", "w");
-	fwrite($fcoursql, $sqlInsertCourse); 
-	fclose($fcoursql);
 	
-// ********************************************************************
-//  info  about users
-// ********************************************************************
-	$tool_content .= "<li>".$langBUUsersInMainBase." ".$currentCourseID."</li>\n";
-	
-	$sqlUserOfTheCourse ="SELECT user.* FROM `$mysqlMainDb`.user, `$mysqlMainDb`.cours_user
-		WHERE user.user_id=cours_user.user_id
-		AND cours_user.code_cours='$currentCourseID'";
-
-		$resUsers = mysql_query($sqlUserOfTheCourse,$db);
-		$nbFields = mysql_num_fields($resUsers);
-		$sqlInsertUsers = "";
-
-// creation of body
-		while($users = mysql_fetch_array($resUsers))
-		{
-			$sqlInsertUsers .= "INSERT IGNORE INTO user SET ";
-			for($noField=0; $noField < $nbFields; $noField++)
-			{
-				if ($noField>0)
-					$sqlInsertUsers .= ", ";
-				$nameField = mysql_field_name($resUsers,$noField);
-				$sqlInsertUsers .= "$nameField = '".$users["$nameField"]."' ";
-			}
-			$sqlInsertUsers .= ";";
-		}
-	$fuserssql = fopen(realpath("../..").$archiveDir."/mainBase/users.sql", "w");
-	fwrite($fuserssql, $sqlInsertUsers); 
-	fclose($fuserssql);
-	
-
-/*  End  of  backup user */
-
-// ********************************************************************
-//  info  about announcment
-// ********************************************************************
-	$tool_content .= "<li>".$langBUAnnounceInMainBase." ".$currentCourseID."</li>\n";
-	$sqlAnnounceOfTheCourse ="SELECT a.* FROM  `$mysqlMainDb`.annonces a WHERE a.code_cours='$currentCourseID'";
-		$resAnn = mysql_query($sqlAnnounceOfTheCourse,$db);
-		$nbFields = mysql_num_fields($resAnn);
-		$sqlInsertAnn = "";
-
-// creation of body
-		while($announce = mysql_fetch_array($resAnn)) {
-			$sqlInsertAnn .= "INSERT INTO users SET ";
-			for($noField=0; $noField < $nbFields; $noField++) {
-				if ($noField>0)
-					$sqlInsertAnn .= ", ";
-				$nameField = mysql_field_name($resAnn,$noField);
-				$sqlInsertAnn .= "$nameField = '".addslashes($announce["$nameField"])."' ";	
-			}
-			$sqlInsertAnn .= ";";
-		}
-
-	$fannsql = fopen(realpath("../..").$archiveDir."/mainBase/annonces.sql", "w");
-	fwrite($fannsql, $sqlInsertAnn); 
-	fclose($fannsql);
-	
-
-/*  End  of  backup Annonces */
-
 	// we can copy file of course
 	$tool_content .= "<li>".$langCopyDirectoryCourse."<br>(";
 	$nbFiles = copydir(realpath("../../courses/".$currentCourseID."/"), $dirhtml);
 	$tool_content .= "<strong>".$nbFiles."</strong> ".$langFileCopied.")</li>\n";
-
-// ********************************************************************
-// Copy of  DB course
-// with mysqldump
-// ********************************************************************
-	$tool_content .= "<li>".$langBackupOfDataBase." ".$currentCourseID."  (SQL)<br>(";
-	$tool_content .= backupDatabase($db , $currentCourseID , true, true , 'SQL' , realpath("../..".$archiveDir."/courseBase/"),true);
-
-// ********************************************************************
-// Copy of DB course
-// with mysqldump
-// ********************************************************************
-
-	$tool_content .= ")</li></ol></th><td>&nbsp;</td></tr></tbody></table>";
+	$tool_content .= "<li>".$langBackupOfDataBase." ".$currentCourseID;
+	$tool_content .= "</li></ol></th><td>&nbsp;</td></tr></tbody></table>";
 
 //-----------------------------------------
 // create zip file
@@ -163,14 +70,14 @@ if($is_adminOfCourse) {
 		$tool_content .= "Error: ".$zipCourse->errorInfo(true);
 		draw($tool_content, 2, 'course_info');
 		exit;
-	} else { 		
+	} else { 
 		$tool_content .= "<br /><table width='99%'><tbody>
    		<tr><td class='success' width='1'></td>
      		<td class='left'><b>$langBackupSuccesfull</b></td><td><div align='right'>
     		<a href='$urlServer/courses/archive/$currentCourseID/archive.$currentCourseID.$shortDateBackuping.zip'>$langDownloadIt</a>
-		</div></td>
-        	<td width='1'><img src='../../template/classic/img/download.gif' title='$langDownloadIt' width='30' height='29'></td></tr>
-    		</tbody></table><br>";
+		</div></td><td width='1'>
+		<img src='../../template/classic/img/download.gif' title='$langDownloadIt' width='30' height='29'></td></tr>
+    		</tbody></table>";
 	}
 	draw($tool_content, 2, 'course_info');	
 }	// end of isadminOfCourse
@@ -184,88 +91,6 @@ else
 // ---------------------------------------------
 // useful functions
 // ---------------------------------------------
-
-function DirSize($path , $recursive=TRUE) { 
-	$result = 0; 
-	if(!is_dir($path) || !is_readable($path)) 
-   		return 0; 
-	$fd = dir($path); 
-	while($file = $fd->read())
-	{ 
-	   	if(($file != ".") && ($file != "..")) { 
-    	if (@is_dir("$path$file/")) 
- 		$result += $recursive?DirSize("$path$file/"):0; 
-    	else  
-		$result += filesize("$path$file"); 
-		} 
-	}
-	$fd->close(); 
-	return $result; 
-} 
-
-/* 
- * Backup a db to a file 
- */ 
-function backupDatabase($link , $db_name , $structure , $donnees , $format="SQL" , $whereSave=".", $insertComplet="")
-{ 
-	global $langBackupEnd;
-	if (!is_resource($link)) 
-		return false; 
-	mysql_select_db($db_name); 
-	$format = strtolower($format); 
-	$filename = $whereSave."/courseDbContent.".$format; 
-	$format = strtoupper($format); 
-	$fp = fopen($filename, "w"); 
-	if (!is_resource($fp)) 
-		return false; 
-	$res = mysql_list_tables($db_name, $link); 
-	$num_rows = mysql_num_rows($res); 
-	$i = 0; 
-	while ($i < $num_rows) { 
-		$tablename = mysql_tablename($res, $i); 
-		if ($structure === true) 
-		{ 
-			fwrite($fp, "DROP TABLE IF EXISTS `$tablename`;\n"); 
-			$query = "SHOW CREATE TABLE $tablename"; 
-			$resCreate = mysql_query($query); 
-			$row = mysql_fetch_array($resCreate); 
-			$schema = $row[1].";"; 
-			fwrite($fp, "$schema\n\n"); 
-		} 
-		if ($donnees === true) 
-		{ 
-			$query = "SELECT * FROM $tablename"; 
-			$resData = mysql_query($query); 
-			if (mysql_num_rows($resData) > 0) 
-			{ 
-				$sFieldnames = ""; 
-				if ($insertComplet === true) 
-				{ 
-					$num_fields = mysql_num_fields($resData); 
-					for($j=0; $j < $num_fields; $j++) 
-					{ 
-						$sFieldnames .= "`".mysql_field_name($resData, $j)."`, "; 
-					} 
-					$sFieldnames = "(".substr($sFieldnames, 0, -2).")"; 
-				} 
-				$sInsert = "INSERT INTO `$tablename` $sFieldnames values "; 
-				while($rowdata = mysql_fetch_assoc($resData)) 
-				{ 
-					$lesDonnees = "<guillemet>".implode("<guillemet>,<guillemet>", $rowdata)."<guillemet>"; 
-					$lesDonnees = str_replace("<guillemet>", "'",addslashes($lesDonnees)); 
-					if ($format == "SQL") 
-					{ 
-						$lesDonnees = $sInsert." ( ".$lesDonnees." );"; 
-					} 
-					fwrite($fp, "$lesDonnees\n"); 
-				} 
-			} 
-		} 
-		$i++; 
-	} 
-	return "$langBackupEnd $format";
-	fclose($fp); 
-}
 
 function copydir($origine, $destination) {
 	

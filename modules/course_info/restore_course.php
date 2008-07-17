@@ -65,6 +65,10 @@ elseif (isset($pathOf4path)) {
 	$tool_content .= ob_get_contents();
 	ob_end_clean();
 } else {
+
+// -------------------------------------
+// Displaying Form
+// -------------------------------------
 	$tool_content .= "<table width=\"99%\"><caption>$langFirstMethod</caption><tbody>
 	<tr><td>$langRequest1<br><br><form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" name=\"sendZip\"  enctype=\"multipart/form-data\">
 	<input type=\"file\" name=\"archiveZipped\" >
@@ -81,25 +85,8 @@ elseif (isset($pathOf4path)) {
 
 draw($tool_content,3, 'admin');
 
-// 4 move rep of archive/html in the  new rep for the course
-// 5 create course database,  tables and fill tables
-// 6 the critical reconnection -> reinsert data of course in main database.
-//	6.1 is the faculty of the course always existing ?
-//	6.2 insert data of course in course table
-//	6.3 insert data of announcment
-//	6.4 insert  user ?
-//		for each user
-//		6.4.1 compare user if always existing in database ?
-//				if yes  -> same  id ?
-//					if yes it's all right.
-//					if no, read the new id
-//				if no -> add user
-//		6.4.2 add link in course_user
-
 
 // Functions  restoring
-// Displaying Form
-
 function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 	
 	global $action, $restoreThis, $langNameOfLang;
@@ -125,7 +112,7 @@ function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) 
 	}
 	closedir($handle);
 
-//display the form
+//display the restoring form
 	if (!$action) {
 		echo "<form action='$_SERVER[PHP_SELF]' method='post'>";
   		echo "<table border='0'>";
@@ -168,7 +155,6 @@ function announcement ($text, $date, $order) {
 
 
 // inserting users into the main database
-
 function user ($userid, $name, $surname, $login, $password, $email, $statut, $phone, $department, $inst_id) {
 	global $action, $course_code, $userid_map, $mysqlMainDb, $course_prefix, $course_addusers;
 	global $langUserWith, $langAlready, $langWithUsername, $langUserisAdmin, $langUsernameSame, $langUserAlready, $langUName, $langPrevId, $langNewId, $langUserName;
@@ -231,7 +217,6 @@ function query($sql) {
 }
 
 // function for inserting info about user group
-
 function group( $userid, $team, $status, $role) {
 	global $action, $userid_map, $course_code, $course_addusers;
 	if (!$action) return;
@@ -250,7 +235,6 @@ function group( $userid, $team, $status, $role) {
 }
 
 // functions for inserting info about dropbox
-
 function dropbox_file($userid, $filename, $filesize, $title, $description, $author, $uploadDate, $lastUploadDate) {
 	global $action,$userid_map, $course_code, $course_addusers;
 	if (!$action) return;
@@ -298,7 +282,6 @@ function dropbox_post($fileId, $recipientId) {
 
 
 // insert an assignment submission, translating user id's
-
 function assignment_submit($userid, $assignment_id, $submission_date,
 	$submission_ip, $file_path, $file_name, $comments,
 	$grade, $grade_comments, $grade_submission_date,
@@ -325,7 +308,6 @@ function assignment_submit($userid, $assignment_id, $submission_date,
 }
 
 // creating course and inserting entries into the main database
-
 function create_course($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 	global $mysqlMainDb;
 
@@ -361,8 +343,6 @@ function create_course($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 }
 
 // crating course index.php file
-
-
 function course_index($dir, $code) {
 	$f = fopen("$dir/index.php", "w");
 	fputs($f, "<?php
@@ -432,6 +412,7 @@ function faculty_select($current)
 return $ret;
 }
 
+// Unzip backup file
 function unpack_zip_show_files($zipfile)
 {
 	global $webDir, $uid, $langEndFileUnzip, $langLesFound, $langRestore, $langLesFiles;
