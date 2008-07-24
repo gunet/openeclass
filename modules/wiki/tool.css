@@ -22,12 +22,6 @@ a:visited.invisible
     margin-left: 30px;
 }
 
-.LP_header { 
-    color: #000 !important;
-    background-color: #f9f8ea !important;
-	text-align: center !important;
-	font-weight: bold !important;
-}
 
 .LP_button { 
     vertical-align:middle;
@@ -66,7 +60,11 @@ a:visited.invisible
        font-size: 10px;
 }
 
-table.LearnPathSum{
+
+
+
+
+table.WikiSum{
     padding: 2px;
     border-top: 1px solid #edecdf;
     border-bottom: 1px solid #edecdf;
@@ -74,7 +72,7 @@ table.LearnPathSum{
     border-right: 1px solid #edecdf;
 }
 
-table.LearnPathSum thead{
+table.WikiSum thead{
 	padding: 2px;
 	border-top: 1px solid #CAC3B5;
 	border-bottom: 1px solid #CAC3B5;
@@ -82,7 +80,7 @@ table.LearnPathSum thead{
 	border-right: 1px solid #edecdf;
 }
 
-table.LearnPathSum tbody{
+table.WikiSum tbody{
     padding: 2px;
     border-top: 1px solid #edecdf;
     border-bottom: 1px solid #CAC3B5;
@@ -90,7 +88,7 @@ table.LearnPathSum tbody{
     border-right: 1px solid #edecdf;
 }
 
-table.LearnPathSum th{
+table.WikiSum th{
 	text-align: center;
 	padding: 4px;
 	padding-bottom: 6px;
@@ -99,13 +97,36 @@ table.LearnPathSum th{
 	font-size:10px !important;
 }
 
-table.LearnPathSum td{
+table.WikiSum td{
 	color: #727266;
 	vertical-align: top;
 	padding : 5px 4px 4px 4px;
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.Wiki_header { 
+    color: #000 !important;
+    background-color: #f9f8ea !important;
+	text-align: center !important;
+	font-weight: bold !important;
+}
 
 
 table.ExerciseSum{

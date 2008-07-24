@@ -1,24 +1,24 @@
 <?php
 /*=============================================================================
-       	GUnet eClass 2.0 
-        E-learning and Course Management Program  
+       	GUnet eClass 2.0
+        E-learning and Course Management Program
 ================================================================================
        	Copyright(c) 2003-2007  Greek Universities Network - GUnet
         A full copyright notice can be read in "/info/copyright.txt".
-        
-       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-                     Yannis Exidaridis <jexi@noc.uoa.gr> 
-                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
-        For a full list of contributors, see "credits.txt".  
-     
-        This program is a free software under the terms of the GNU 
-        (General Public License) as published by the Free Software 
-        Foundation. See the GNU License for more details. 
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+                     Yannis Exidaridis <jexi@noc.uoa.gr>
+                     Alexandros Diamantidis <adia@noc.uoa.gr>
+
+        For a full list of contributors, see "credits.txt".
+
+        This program is a free software under the terms of the GNU
+        (General Public License) as published by the Free Software
+        Foundation. See the GNU License for more details.
         The full license can be read in "license.txt".
-     
-       	Contact address: GUnet Asynchronous Teleteaching Group, 
-        Network Operations Center, University of Athens, 
+
+       	Contact address: GUnet Asynchronous Teleteaching Group,
+        Network Operations Center, University of Athens,
         Panepistimiopolis Ilissia, 15784, Athens, Greece
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
@@ -27,19 +27,19 @@
 	lib.wikidisplay.php
 	@last update: 15-05-2007 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.7.9 licensed under GPL
 	      copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: lib.wikidisplay Revision: 1.21.2.2
-	      
+
 	Claroline authors: Frederic Minne <zefredz@gmail.com>
-==============================================================================        
-    @Description: 
+==============================================================================
+    @Description:
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
 
@@ -63,14 +63,14 @@
         , $forcePreview = true )
     {
         global $langPreview, $langCancel, $langSave, $langWikiMainPage;
-        
+
         // create script
         $script = ( is_null( $script ) ) ? $_SERVER['PHP_SELF'] : $script;
         $script = add_request_variable_to_url( $script, "title", rawurlencode($title) );
-        
+
         // set display title
         $localtitle = ( $title === '__MainPage__' ) ? $langWikiMainPage : $title;
-        
+
         // display title
         $out = '<div class="wikiTitle">' . "\n";
         $out .= '<h1>'.$localtitle.'</h1>' . "\n";
@@ -80,7 +80,7 @@
         $out .= '<form method="POST" action="'.$script.'"'
             . ' name="editform" id="editform">' . "\n"
             ;
-        
+
         if ( $showWikiToolBar === true )
         {
             $wikiarea = new Wiki2xhtmlArea( $content, 'wiki_content', 80, 15, null );
@@ -95,23 +95,23 @@
             $out .= $content;
             $out .= '</textarea>' . "\n";
         }
-        
+
         $out .= '<div style="padding:10px;">' . "\n";
-            
+
         $out .= '<input type="hidden" name="wikiId" value="'
             . $wikiId
             . '" />' . "\n"
             ;
-            
+
         $out .= '<input type="hidden" name="versionId" value="'
             . $versionId
             . '" />' . "\n"
             ;
-        
+
         $out .= '<input type="submit" name="action[preview]" value="'
             .$langPreview.'" />' . "\n"
             ;
-        
+
         if( ! $forcePreview )
         {
             $out .= '<input type="submit" name="action[save]" value="'
@@ -123,11 +123,11 @@
         $location = add_request_variable_to_url( $location, "action", "show" );
 
         $out .= disp_button ($location, $langCancel);
-        
+
         $out .= '</div>' . "\n";
 
         $out .= "</form>\n";
-        
+
         return $out;
     }
 
@@ -144,23 +144,23 @@
             ,$langWikiPreviewWarning,$langWikiMainPage;
 
         $out = "<div id=\"preview\" class=\"wikiTitle\">\n";
-        
+
         if( $title === '__MainPage__' )
         {
             $title = $langWikiMainPage;
         }
-        
+
         $title = "<h1 class=\"wikiTitle\">$langWikiPreviewTitle$title</h1>\n";
-        
+
         $out .= $title;
-        
+
         $out .= '</div>' . "\n";
-        
+
         $out .= disp_message_box( '<small>'.$langWikiPreviewWarning.'</small>', "caution" )
             ."<br />". "\n";
 
         $out .= '<div class="wiki2xhtml">' . "\n";
-        
+
         if ( $content != '' )
         {
             $out .= $wikiRenderer->render( $content );
@@ -169,11 +169,11 @@
         {
             $out .= $langWikiContentEmpty;
         }
-        
+
         $out .= "</div>\n";
 
         // $out .= "</div>\n";
-        
+
         return $out;
     }
 
@@ -197,17 +197,17 @@
         $out .= '<input type="hidden" name="wiki_content" value="'
             . htmlspecialchars($content) . '" />' . "\n"
             ;
-            
+
         $out .= '<input type="hidden" name="title" value="'
             . htmlspecialchars($title)
             . '" />' . "\n"
             ;
-            
+
         $out .= '<input type="hidden" name="wikiId" value="'
             . $wikiId
             . '" />' . "\n"
             ;
-        
+
         $out .= '<input type="submit" name="action[save]" value="'
             . $langSave.'" />' . "\n"
             ;
@@ -218,14 +218,14 @@
         $location = add_request_variable_to_url( $script, "wikiId", $wikiId );
         $location = add_request_variable_to_url( $location, "title", $title );
         $location = add_request_variable_to_url( $location, "action", "show" );
-        
+
         $out .= disp_button ($location, $langCancel);
-        
+
         $out .= "</form></div>\n";
-        
+
         return $out;
     }
-    
+
     /**
      * Generate html code of Wiki properties edit form
      * @param int wikiId ID of the wiki
@@ -248,11 +248,11 @@
             , $langWikiCreatePrivilege, $langCancel, $langSave, $langWikiDefaultTitle
             , $langWikiDefaultDescription
             ;
-        
+
         $title = ( $title != '' ) ? $title : $langWikiDefaultTitle;
-        
+
         $desc = ( $desc != '' ) ? $desc : $langWikiDefaultDescription;
-        
+
         if ( is_null ( $acl ) && $groupId == 0 )
         {
             $acl = WikiAccessControl::defaultCourseWikiACL();
@@ -261,7 +261,7 @@
         {
             $acl = WikiAccessControl::defaultGroupWikiACL();
         }
-        
+
         // process ACL
         $group_read_checked = ( $acl['group_read'] == true ) ? ' checked="checked"' : '';
         $group_edit_checked = ( $acl['group_edit'] == true ) ? ' checked="checked"' : '';
@@ -272,28 +272,52 @@
         $other_read_checked = ( $acl['other_read'] == true ) ? ' checked="checked"' : '';
         $other_edit_checked = ( $acl['other_edit'] == true ) ? ' checked="checked"' : '';
         $other_create_checked = ( $acl['other_create'] == true ) ? ' checked="checked"' : '';
-        
+
         $script = ( is_null( $script ) ) ? $_SERVER['PHP_SELF'] : $script;
-        
+
         $form = '<form method="POST" id="wikiProperties" action="'.$script.'">' . "\n"
-            . '<fieldset style="padding: 10px; margin: 10px;">' . "\n"
-            . '<legend>'.$langWikiDescriptionForm.'</legend>' . "\n"
-            . '<!-- wikiId = 0 if creation, != 0 if edition  -->' . "\n"
-            . '<p style="font-style: italic;">' . $langWikiDescriptionFormText . '</p>' . "\n"
-            . '<input type="hidden" name="wikiId" value="'.$wikiId.'" />' . "\n"
-            . '<!-- groupId = 0 if course wiki, != 0 if group_wiki  -->' . "\n"
-            . '<input type="hidden" name="groupId" value="'.$groupId.'" />' . "\n"
-            . '<div style="padding: 5px">' . "\n"
-            . '<label for="wikiTitle">' . $langWikiTitle . ' :</label><br />' . "\n"
-            . '<input type="text" name="title" id="wikiTitle" size="80" maxlength="254" value="'.htmlspecialchars($title).'" />' . "\n"
-            . '</div>' . "\n"
-            . '<div style="padding: 5px">' . "\n"
-            . '<label for="wikiDesc">'.$langWikiDescription.' :</label><br />' . "\n"
-            . '<textarea id="wikiDesc" name="desc" cols="80" rows="10">'.$desc.'</textarea>' . "\n"
-            . '</div>' . "\n"
-            . '</fieldset>' . "\n"
+              . '      <table width="99%" class="FormData">' . "\n"
+              . '      <tbody>' . "\n"
+              . '      <tr>' . "\n"
+              . '        <th class="left" width="220">&nbsp;</th>' . "\n"
+              . '        <td><b>'.$langWikiDescriptionForm.'</b></td>' . "\n"
+              . '      </tr>' . "\n"
+              . '      <tr>' . "\n"
+              . '        <th class="left">'.$langWikiTitle.' :</th>' . "\n"
+              . '        <td>' . "\n"
+              . '        <input type="hidden" name="wikiId" value="'.$wikiId.'" />' . "\n"
+              . '        <!-- groupId = 0 if course wiki, != 0 if group_wiki  -->' . "\n"
+              . '        <input type="hidden" name="groupId" value="'.$groupId.'" />' . "\n"
+              . '        <input class="FormData_InputText" type="text" name="title" id="wikiTitle" size="53" maxlength="254" value="'.htmlspecialchars($title).'" />' . "\n"
+              . '        </td>' . "\n"
+              . '      </tr>' . "\n"
+              . '      <tr>' . "\n"
+              . '        <th class="left">'.$langWikiDescription.' :</th>' . "\n"
+              . '        <td>' . "\n"
+              . '        <textarea class="FormData_InputText" id="wikiDesc" name="desc" cols="50" rows="5">'.$desc.'</textarea>' . "\n";
+
+
+              /*
+              . '<fieldset style="padding: 10px; margin: 10px;">' . "\n"
+              . '<legend>'.$langWikiDescriptionForm.'</legend>' . "\n"
+              . '<!-- wikiId = 0 if creation, != 0 if edition  -->' . "\n"
+              . '<p style="font-style: italic;">' . $langWikiDescriptionFormText . '</p>' . "\n"
+              . '<input type="hidden" name="wikiId" value="'.$wikiId.'" />' . "\n"
+              . '<!-- groupId = 0 if course wiki, != 0 if group_wiki  -->' . "\n"
+              . '<input type="hidden" name="groupId" value="'.$groupId.'" />' . "\n"
+              . '<div style="padding: 5px">' . "\n"
+
+              . '<label for="wikiTitle">' . $langWikiTitle . ' :</label><br />' . "\n"
+              . '<input type="text" name="title" id="wikiTitle" size="80" maxlength="254" value="'.htmlspecialchars($title).'" />' . "\n"
+              . '</div>' . "\n"
+              . '<div style="padding: 5px">' . "\n"
+              . '<label for="wikiDesc">'.$langWikiDescription.' :</label><br />' . "\n"
+              . '<textarea id="wikiDesc" name="desc" cols="80" rows="10">'.$desc.'</textarea>' . "\n"
+              . '</div>' . "\n"
+              . '</fieldset>' . "\n"
+              */
 ;// atkyritsis, for the moment we skip wiki ACL
-// commenting below and hardwiring the default ACL properties            
+// commenting below and hardwiring the default ACL properties
 /*            . '<fieldset id="acl" style="padding: 10px;margin: 10px;">' . "\n"
             . '<legend>' . $langWikiAccessControl . '</legend>' . "\n"
             . '<p style="font-style: italic;">'.$langWikiAccessControlText.'</p>' . "\n"
@@ -311,7 +335,7 @@
             . '<td><input type="checkbox" onclick="updateBoxes(\'course\',\'create\');" id="course_create" name="acl[course_create]"'.$course_create_checked.' /></td>' . "\n"
             . '</tr>' . "\n"
             ;
-            
+
         if ( $groupId != 0 )
         {
             $form .= '<!-- group acl row hidden if groupId == 0, set all to false -->' . "\n"
@@ -323,7 +347,7 @@
                 . '</tr>' . "\n"
                 ;
         }
-        
+
         $form .= '<tr>' . "\n"
             . '<td class="matrixOrd">'.$langWikiOtherUsers.'</td>' . "\n"
             . '<td><input type="checkbox" onclick="updateBoxes(\'other\',\'read\');" id="other_read" name="acl[other_read]"'.$other_read_checked.' /></td>' . "\n"
@@ -336,29 +360,40 @@
             ;*/
 // atkyritsis
 // hardwiring
-		$form .= '<input type="hidden" name="acl[course_read]" value="on" />' ."\n";
-		$form .= '<input type="hidden" name="acl[course_edit]" value="on" />' ."\n";
-		$form .= '<input type="hidden" name="acl[course_create]" value="on" />' ."\n";
-		$form .= '<input type="hidden" name="acl[other_read]" value="on" />' ."\n";
-		$form .= '<input type="hidden" name="acl[other_edit]" value="off" />' ."\n";
-		$form .= '<input type="hidden" name="acl[other_create]" value="off" />' ."\n";
+		$form .= '        <input type="hidden" name="acl[course_read]" value="on" />' ."\n";
+		$form .= '        <input type="hidden" name="acl[course_edit]" value="on" />' ."\n";
+		$form .= '        <input type="hidden" name="acl[course_create]" value="on" />' ."\n";
+		$form .= '        <input type="hidden" name="acl[other_read]" value="on" />' ."\n";
+		$form .= '        <input type="hidden" name="acl[other_edit]" value="off" />' ."\n";
+		$form .= '        <input type="hidden" name="acl[other_create]" value="off" />' ."\n";
+
 // hardwiring over
-        
-        $form .= '<div style="padding: 10px">' . "\n" ;
-        
+
+        //$form .= '<div style="padding: 10px">' . "\n" ;
+
         if ( $groupId != 0 )
         {
-            $form .= '<input type="hidden" name="gidReq" value="' . $groupId  . '" />' . "\n";
+            $form .= '        <input type="hidden" name="gidReq" value="' . $groupId  . '" />' . "\n";
         }
-        
-        $form .= '<input type="submit" name="action[exEdit]" value="' . $langSave . '" />' . "\n"
+
+		$form .= '        </td>' . "\n"
+               . '      </tr>' . "\n"
+               . '      <tr>' . "\n"
+               . '        <th class="left">&nbsp;</th>' . "\n"
+               . '        <td>' . "\n";
+
+
+        $form .= '        <input type="submit" name="action[exEdit]" value="' . $langSave . '" />' . "\n"
             . disp_button ($_SERVER['PHP_SELF'] . '?action=list', $langCancel) . "\n"
             ;
-            
-        $form .= '</div>' . "\n"
-            . '</form>' . "\n"
+
+        $form .= '        </td>' . "\n"
+               . '      </tr>' . "\n"
+               . '      </tbody>' . "\n"
+               . '      </table>' . "\n"
+            . '      </form>' . "\n"
             ;
-            
+
         return $form;
     }
 ?>

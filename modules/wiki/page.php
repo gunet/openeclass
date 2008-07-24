@@ -1,24 +1,24 @@
-<?php 
+<?php
 /*=============================================================================
-       	GUnet eClass 2.0 
-        E-learning and Course Management Program  
+       	GUnet eClass 2.0
+        E-learning and Course Management Program
 ================================================================================
        	Copyright(c) 2003-2007  Greek Universities Network - GUnet
         A full copyright notice can be read in "/info/copyright.txt".
-        
-       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-                     Yannis Exidaridis <jexi@noc.uoa.gr> 
-                     Alexandros Diamantidis <adia@noc.uoa.gr> 
 
-        For a full list of contributors, see "credits.txt".  
-     
-        This program is a free software under the terms of the GNU 
-        (General Public License) as published by the Free Software 
-        Foundation. See the GNU License for more details. 
+       	Authors:    Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+                     Yannis Exidaridis <jexi@noc.uoa.gr>
+                     Alexandros Diamantidis <adia@noc.uoa.gr>
+
+        For a full list of contributors, see "credits.txt".
+
+        This program is a free software under the terms of the GNU
+        (General Public License) as published by the Free Software
+        Foundation. See the GNU License for more details.
         The full license can be read in "license.txt".
-     
-       	Contact address: GUnet Asynchronous Teleteaching Group, 
-        Network Operations Center, University of Athens, 
+
+       	Contact address: GUnet Asynchronous Teleteaching Group,
+        Network Operations Center, University of Athens,
         Panepistimiopolis Ilissia, 15784, Athens, Greece
         eMail: eclassadmin@gunet.gr
 ==============================================================================*/
@@ -27,19 +27,19 @@
 	page.php
 	@last update: 15-05-2007 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.7.9 licensed under GPL
 	      copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: page Revision: 1.61.2.4
-	      
+
 	Claroline authors: Frederic Minne <zefredz@gmail.com>
-==============================================================================        
-    @Description: 
+==============================================================================
+    @Description:
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
     $tlabelReq = 'CLWIKI__';
@@ -48,21 +48,21 @@
   	$require_current_course = TRUE;
 	$require_help           = FALSE;
 	require_once("../../include/baseTheme.php");
-	
+
 	$head_content = "";
 	$tool_content = "";
 	$style= "";
-	
+
 	$imgRepositoryWeb = "../../template/classic/img";
 	$_gid = null;
-	
+
 	if (isset($_SESSION['statut']) && $_SESSION['statut'] != 0 ) {
 		$is_courseMember = true;
 	}
 	else {
 		$is_courseMember = false;
 	}
-	$nameTools = $langWiki;	
+	$nameTools = $langWiki;
 	mysql_select_db($currentCourseID);
 
     // check and set user access level for the tool
@@ -71,9 +71,9 @@
         header( "Location: wiki.php" );
         exit();
     }
-    
+
     // set admin mode and groupId
-    
+
     $is_allowedToAdmin = $is_adminOfCourse;
 
     if ( $_gid && $is_groupAllowed )
@@ -125,7 +125,7 @@
             ;
 
         $result = $con->getRowFromQuery( $sql );
-        
+
         $wikiGroupId = (int) $result['group_id'];
 
         if ( isset( $_gid ) && $_gid != $wikiGroupId )
@@ -137,10 +137,10 @@
             die($langNotAllowed);
         }
     }
-    
+
     // set request variables
     $wikiId = ( isset( $_REQUEST['wikiId'] ) ) ? (int) $_REQUEST['wikiId'] : 0;
-    
+
     // Database nitialisation
     $config = array();
     $config["tbl_wiki_properties"] = $tblList[ "wiki_properties" ];
@@ -149,35 +149,35 @@
     $config["tbl_wiki_acls"] = $tblList[ "wiki_acls" ];
 
     $con = new ClarolineDatabaseConnection();
-    
+
     // auto create wiki in devel mode
     if( defined("DEVEL_MODE") && ( DEVEL_MODE == true ) )
     {
         init_wiki_tables( $con, false );
     }
-    
+
     // Objects instantiation
     $wikiStore = new WikiStore( $con, $config );
-    
+
     if ( ! $wikiStore->wikiIdExists( $wikiId ) )
     {
         die ( $langWikiInvalidWikiId );
     }
-    
+
     $wiki = $wikiStore->loadWiki( $wikiId );
     $wikiPage = new WikiPage( $con, $config, $wikiId );
     $wikiRenderer = new Wiki2xhtmlRenderer( $wiki );
-    
+
     $accessControlList = $wiki->getACL();
-    
+
     // --------------- Start of access rights management --------------
-    
+
     // Wiki access levels
-    
+
     $is_allowedToEdit = false;
     $is_allowedToRead = false;
     $is_allowedToCreate = false;
-    
+
     // set user access rights using user status and wiki access control list
 
     if ( $_gid && $is_groupAllowed )
@@ -226,9 +226,9 @@
             }
         }
     }
-    
+
     // --------------- End of  access rights management ----------------
-    
+
     // filter action
 
     if ( $is_allowedToEdit || $is_allowedToCreate )
@@ -245,25 +245,25 @@
     }
 
     $_CLEAN = filter_by_key( 'action', $valid_actions, "R", true );
-    
+
     $action = ( isset( $_CLEAN['action'] ) ) ? $_CLEAN['action'] : 'show';
-    
+
     // get request variables
-    
+
     $creatorId = $uid;
-    
+
     $versionId = ( isset( $_REQUEST['versionId'] ) ) ? (int) $_REQUEST['versionId'] : 0;
 
     $title = ( isset( $_REQUEST['title'] ) ) ? strip_tags( $_REQUEST['title'] ) : '';
-    
+
     if ( $action == "diff" )
     {
         $old = ( isset( $_REQUEST['old'] ) ) ? (int) $_REQUEST['old'] : 0;
         $new = ( isset( $_REQUEST['new'] ) ) ? (int) $_REQUEST['new'] : 0;
     }
-    
+
     // get content
-    
+
     if ( $action == "edit" )
     {
         if ( isset( $_REQUEST['wiki_content'] ) )
@@ -289,14 +289,14 @@
         	$content = ( isset( $_REQUEST['wiki_content'] ) ) ? stripslashes($_REQUEST['wiki_content']) : '';
         }
     }
-    
+
     // use __MainPage__ if empty title
 
     if ( $title === '' )
     {
         // create wiki main page in a localisation compatible way
         $title = '__MainPage__';
-        
+
         if( $wikiStore->pageExists( $wikiId, $title ) )
         {
             // do nothing
@@ -313,19 +313,19 @@
             die ( "Wrong page title" );
         }
     }
-    
+
     // --------- Start of wiki command processing ----------
-    
+
     // init message
     $message = '';
-    
+
     switch( $action )
     {
         // show differences
         case "diff":
         {
             require_once "lib/lib.diff.php";
-            
+
             if ( $wikiStore->pageExists( $wikiId, $title ) )
             {
                 // older version
@@ -333,17 +333,17 @@
                 $old = $wikiPage->getContent();
                 $oldTime = $wikiPage->getCurrentVersionMtime();
                 $oldEditor = $wikiPage->getEditorId();
-                
+
                 // newer version
                 $wikiPage->loadPageVersion( $new );
                 $new = $wikiPage->getContent();
                 $newTime = $wikiPage->getCurrentVersionMtime();
                 $newEditor = $wikiPage->getEditorId();
-                
+
                 // get differences
                 $diff = '<table style="border: 0;">'.diff( $old, $new, true, 'format_table_line' ).'</table>';
             }
-            
+
             break;
         }
         // recent changes
@@ -397,7 +397,7 @@
         case "show":
         {
             unset( $_SESSION['wikiLastVersion'] );
-            
+
             if ( $wikiStore->pageExists( $wikiId, $title ) )
             {
                 if ( $versionId == 0 )
@@ -490,28 +490,28 @@
             break;
         }
     }
-    
+
     // change to use empty page content
-    
+
     if ( ! isset( $content ) )
     {
         $content = '';
     }
-    
+
     // --------- End of wiki command processing -----------
-    
+
     // --------- Start of wiki display --------------------
-    
+
     // set xtra head
-    
+
     $jspath = document_web_path() . '/lib/javascript';
-	
+
     // set image repository
     $head_content .= "<script type=\"text/javascript\">"
         . "\nvar sImgPath = '".$imgRepositoryWeb . "'"
         . "\n</script>\n"
         ;
-    
+
     // set style
     $head_content .=
         "<style type=\"text/css\">
@@ -544,7 +544,7 @@
             font-size: 11px;
             font-weight:bold;
         }
-        
+
         .wiki2xhtml a.wikiEdit{
             color: red;
         }
@@ -567,13 +567,13 @@
         }
         </style>"
         ;
-        
+
     // Breadcrumps
-    
+
     $navigation[]= array ( 'url' => 'wiki.php', 'name' => $langWiki);
     $navigation[]= array ( 'url' => NULL
         , 'name' => $wiki->getTitle() );
-        
+
     switch( $action )
     {
         case "edit":
@@ -614,12 +614,12 @@
             $noPHP_SELF = true;
         }
     }
-    
+
     // tool title
-    
+
     $toolTitle = array();
     $toolTitle['mainTitle'] = sprintf( $langWikiTitlePattern, $wiki->getTitle() );
-    
+
     if ( $_gid )
     {
 		$toolTitle['supraTitle'] = $_group['name'];
@@ -651,77 +651,90 @@
             break;
         }
     }
-    
-    $tool_content .= disp_tool_title($toolTitle);
-    
+
+    //$tool_content .= disp_tool_title($toolTitle);
+
     if (!empty($message))
     {
-        $tool_content .= disp_message_box($message, $style) ."<br />" ."\n";
+        //$tool_content .= disp_message_box($message, $style) ."<br />" ."\n";
+        $tool_content .= "
+        <table width=\"99%\">
+        <tbody>
+        <tr>
+          <td class=\"success\">
+            <p><b>$message</b></p>
+          </td>
+        </tr>
+        </tbody>
+        </table>
+        ";
     }
-    
+
     // Check for javascript
     $javascriptEnabled = is_javascript_enabled();
     // user is not allowed to read this page
-    
+
     if (!$is_allowedToRead)
     {
         $tool_content .= $langWikiNotAllowedToRead;
         die ( '' );
     }
-    
+
     // Wiki navigation bar
-    
-    $tool_content .= '<p>';
-    $tool_content .= '<a class="claroCmd" href="'
+    $tool_content .= '
+      <div id="operations_container">
+        <ul id="opslist">' . "\n";
+    $tool_content .= '          <li>'
+        . '<img src="'.$imgRepositoryWeb.'/wiki.gif" border="0" align="absmiddle" />&nbsp;<a class="claroCmd" href="'
         . $_SERVER['PHP_SELF']
         . '?wikiId=' . $wiki->getWikiId()
         . '&amp;action=show'
         . '&amp;title=__MainPage__'
         . '">'
-        . '<img src="'.$imgRepositoryWeb.'/wiki.gif" border="0" align="absmiddle" />&nbsp;'
-        . $langWikiMainPage.'</a>'
+        . $langWikiMainPage.'</a></li>' . "\n"
         ;
-    $tool_content .= '&nbsp;|&nbsp;<a class="claroCmd" href="'
+    $tool_content .= '          <li>'
+        . '<img src="'.$imgRepositoryWeb.'/history.gif" border="0" align="absmiddle" />&nbsp;<a class="claroCmd" href="'
         . $_SERVER['PHP_SELF']
         . '?wikiId=' . $wiki->getWikiId()
         . '&amp;action=recent'
         . '">'
-        . '<img src="'.$imgRepositoryWeb.'/history.gif" border="0" align="absmiddle" />&nbsp;'
-        . $langWikiRecentChanges.'</a>'
+        . $langWikiRecentChanges.'</a></li>' . "\n"
         ;
 
-    $tool_content .= '&nbsp;|&nbsp;<a class="claroCmd" href="'
+    $tool_content .= '          <li>'
+        . '<img src="'.$imgRepositoryWeb.'/book.gif" border="0" align="absmiddle" />&nbsp;<a class="claroCmd" href="'
         . $_SERVER['PHP_SELF']
         . '?wikiId=' . $wiki->getWikiId()
-        . '&amp;action=all'
-        . '">'
-        . '<img src="'.$imgRepositoryWeb.'/book.gif" border="0" align="absmiddle" />&nbsp;'
-        . $langWikiAllPages.'</a>'
+        . '&amp;action=all">'
+        . $langWikiAllPages.'</a></li>' . "\n"
         ;
 
-    $tool_content .= '&nbsp;|&nbsp;<a class="claroCmd" href="'
+    $tool_content .= '          <li>'
+        . '<img src="'.$imgRepositoryWeb.'/info.gif" border="0" align="absmiddle" />&nbsp;<a class="claroCmd" href="'
         . 'wiki.php'
         . '">'
-        . '<img src="'.$imgRepositoryWeb.'/info.gif" border="0" align="absmiddle" />&nbsp;'
-        . $langWikiList .'</a>'
+        . $langWikiList .'</a></li>' . "\n"
         ;
-    
-    $tool_content .= '</p>';
-    
+
+    $tool_content .= '        </ul>
+        </div>';
+
     if ( $action != 'recent' && $action != 'all' )
     {
-    
+
     $tool_content .= '<p>';
-    
+
     if ( $action == "edit" || $action == "diff" || $action == "history" )
     {
-        $tool_content .= '<a class="claroCmd" href="'
+        $tool_content .= ''
+            . '<img src="'.$imgRepositoryWeb.'/back.gif" border="0" align="absmiddle" />&nbsp;'
+            . '<a class="claroCmd" href="'
             . $_SERVER['PHP_SELF']
             . '?wikiId=' . $wiki->getWikiId()
             . '&amp;action=show'
             . '&amp;title=' . rawurlencode($title)
             . '">'
-            . '<img src="'.$imgRepositoryWeb.'/back.gif" border="0" align="absmiddle" />&nbsp;'
             . $langWikiBackToPage.'</a>'
             ;
     }
@@ -732,20 +745,21 @@
             . $langWikiBackToPage.'</span>'
             ;
     }
-        
+
     if ( $is_allowedToEdit || $is_allowedToCreate )
     {
         // Show context
         if ( $action == "show" || $action == "history" || $action == "diff" )
         {
-            $tool_content .= '&nbsp;|&nbsp;<a class="claroCmd" href="'
+            $tool_content .= '&nbsp;|&nbsp;'
+                . '<img src="'.$imgRepositoryWeb.'/edit.gif" border="0" align="absmiddle" />&nbsp;'
+                . '<a class="claroCmd" href="'
                 . $_SERVER['PHP_SELF']
                 . '?wikiId=' . $wiki->getWikiId()
                 . '&amp;action=edit'
                 . '&amp;title=' . rawurlencode( $title )
                 . '&amp;versionId=' . $versionId
                 . '">'
-                . '<img src="'.$imgRepositoryWeb.'/edit.gif" border="0" align="absmiddle" />&nbsp;'
                 . $langWikiEditPage.'</a>'
                 ;
         }
@@ -765,17 +779,18 @@
             . $langWikiEditPage . '</span>'
             ;
     }
-    
+
     if ( $action == "show" || $action == "edit" || $action == "history" || $action == "diff" )
     {
         // active
-        $tool_content .= '&nbsp;|&nbsp;<a class="claroCmd" href="'
+        $tool_content .= '&nbsp;|&nbsp;'
+                . '<img src="'.$imgRepositoryWeb.'/version.gif" border="0" align="absmiddle" />&nbsp;'
+                . '<a class="claroCmd" href="'
                 . $_SERVER['PHP_SELF']
                 . '?wikiId=' . $wiki->getWikiId()
                 . '&amp;action=history'
                 . '&amp;title=' . rawurlencode( $title )
                 . '">'
-                . '<img src="'.$imgRepositoryWeb.'/version.gif" border="0" align="absmiddle" />&nbsp;'
                 . $langWikiPageHistory.'</a>'
                 ;
     }
@@ -787,22 +802,23 @@
             . $langWikiPageHistory . '</span>'
             ;
     }
-        
+
     if ( $action == "edit" || $action == "diff" )
     {
-        $tool_content .= '&nbsp;|&nbsp;<a class="claroCmd" href="#" onClick="MyWindow=window.open(\''
+        $tool_content .= '&nbsp;|&nbsp;'
+            . '<img src="'.$imgRepositoryWeb.'/help_little.gif" border="0" alt="history" />&nbsp;'
+            . '<a class="claroCmd" href="#" onClick="MyWindow=window.open(\''
             . '../help/help.php?topic=WikiSyntax&amp;language=' . $language
             . '\',\'MyWindow\',\'toolbar=no,location=no,directories=no,status=yes,menubar=no'
             . ',scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10\'); return false;">'
-            . '<img src="'.$imgRepositoryWeb.'/help_little.gif" border="0" alt="history" />&nbsp;'
             . $langWikiHelpSyntax . '</a>'
             ;
     }
 
     $tool_content .= '</p>' . "\n";
-    
+
     }
-    
+
     switch( $action )
     {
         case "conflict":
@@ -815,7 +831,7 @@
             {
                 $displaytitle = $title;
             }
-            
+
             $tool_content .= '<div class="wikiTitle">' . "\n";
             $tool_content .= '<h1>'.$displaytitle
                 . ' : ' . $langWikiEditConflict
@@ -855,11 +871,11 @@
             {
                 $displaytitle = $title;
             }
-            
+
             $oldTime = claro_format_locale_date($dateTimeFormatLong
                         , strtotime($oldTime) )
                         ;
-                        
+
             $userInfo = user_get_data( $oldEditor );
             mysql_select_db($currentCourseID);
             $oldEditorStr = $userInfo['firstname'] . "&nbsp;" . $userInfo['lastname'];
@@ -867,7 +883,7 @@
             $newTime = claro_format_locale_date( $dateTimeFormatLong
                         , strtotime($newTime) )
                         ;
-                        
+
             $userInfo = user_get_data( $newEditor );
             mysql_select_db($currentCourseID);
             $newEditorStr = $userInfo['firstname'] . "&nbsp;" . $userInfo['lastname'];
@@ -876,7 +892,7 @@
                 . sprintf( $langWikiDifferencePattern, $oldTime, $oldEditorStr, $newTime, $newEditorStr )
                 . ')'
                 ;
-                
+
             $versionInfo = '&nbsp;<span style="font-size: 10px; font-weight: normal; color: red;">'
                         . $versionInfo . '</span>'
                         ;
@@ -888,7 +904,7 @@
                 . "\n"
                 ;
             $tool_content .= '</div>' . "\n";
-            
+
             $tool_content .= '<strong>'.$langWikiDifferenceKeys.'</strong>';
 
             $tool_content .= '<div class="diff">' . "\n";
@@ -901,7 +917,7 @@
             $tool_content .= '<div class="diff">' . "\n";
             $tool_content .= $diff;
             $tool_content .= '</div>' . "\n";
-            
+
             break;
         }
         case "recent":
@@ -909,27 +925,27 @@
             if ( is_array( $recentChanges ) )
             {
                 $tool_content .= '<ul>' . "\n";
-                
+
                 foreach ( $recentChanges as $recentChange )
                 {
                     $pgtitle = ( $recentChange['title'] == "__MainPage__" )
                         ? $langWikiMainPage
                         : $recentChange['title']
                         ;
-                        
+
                     $entry = '<strong><a href="'.$_SERVER['PHP_SELF'].'?wikiId='
                         . $wikiId . '&amp;title=' . rawurlencode( $recentChange['title'] )
                         . '&amp;action=show"'
                         . '>'.$pgtitle.'</a></strong>'
                         ;
-                        
+
                     $time = claro_format_locale_date( $dateTimeFormatLong
                         , strtotime($recentChange['last_mtime']) )
                         ;
-                        
+
                     $userInfo = user_get_data( $recentChange['editor_id'] );
                     mysql_select_db($currentCourseID);
-                    
+
                     $userStr = $userInfo['firstname'] . "&nbsp;" . $userInfo['lastname'];
                     $userUrl = $userStr;
                     $tool_content .= '<li>'
@@ -946,7 +962,7 @@
         case "all":
         {
             // handle main page
-            
+
             $tool_content .= '<ul><li><a href="'.$_SERVER['PHP_SELF']
                 . '?wikiId=' . $wikiId
                 . '&amp;title=' . rawurlencode("__MainPage__")
@@ -954,13 +970,13 @@
                 . $langWikiMainPage
                 . '</a></li></ul>' . "\n"
                 ;
-            
+
             // other pages
-            
+
             if ( is_array( $allPages ) )
             {
                 $tool_content .= '<ul>' . "\n";
-                
+
                 foreach ( $allPages as $page )
                 {
                     if ( $page['title'] == "__MainPage__" )
@@ -975,7 +991,7 @@
                         . $wikiId . '&amp;title=' . $pgtitle . '&amp;action=show"'
                         . '>' . $page['title'] . '</a>'
                         ;
-                        
+
                     $tool_content .= '<li>' . $link. '</li>' . "\n";
                 }
                 $tool_content .= '</ul>' . "\n";
@@ -1034,7 +1050,7 @@
                 {
                     $displaytitle = $title;
                 }
-                
+
                 if ( $versionId != 0 )
                 {
                     $editorInfo = user_get_data( $wikiPage->getEditorId() );
@@ -1043,13 +1059,13 @@
                     $editorStr = $editorInfo['firstname'] . "&nbsp;" . $editorInfo['lastname'];
 
                     $editorUrl = '&nbsp;-&nbsp;' . $editorStr;
-                    
+
                     $mtime = claro_format_locale_date( $dateTimeFormatLong
                         , strtotime($wikiPage->getCurrentVersionMtime()) )
                         ;
-                        
+
                     $versionInfo = sprintf( $langWikiVersionInfoPattern, $mtime, $editorUrl );
-                        
+
                     $versionInfo = '&nbsp;<span style="font-size: 10px; font-weight: normal; color: red;">'
                         . $versionInfo . '</span>'
                         ;
@@ -1058,7 +1074,7 @@
                 {
                     $versionInfo = '';
                 }
-                
+
                 $tool_content .= '<div class="wikiTitle">' . "\n";
                 $tool_content .= '<h1>'.$displaytitle
                     . $versionInfo
@@ -1066,11 +1082,11 @@
                     . "\n"
                     ;
                 $tool_content .= '</div>' . "\n";
-                
+
                 $tool_content .= '<div class="wiki2xhtml">' . "\n";
                 $tool_content .= $wikiRenderer->render( $content );
                 $tool_content .= '</div>' . "\n";
-                
+
                 $tool_content .= '<div style="clear:both;"><!-- spacer --></div>' . "\n";
             }
 
@@ -1090,30 +1106,30 @@
             $tool_content .= '<div class="wikiTitle">' . "\n";
             $tool_content .= '<h1>'.$displaytitle.'</h1>' . "\n";
             $tool_content .= '</div>' . "\n";
-            
+
             $tool_content .= '<form id="differences" method="GET" action="'
                 . $_SERVER['PHP_SELF']
                 . '">'
                 . "\n"
                 ;
-                
+
             $tool_content .= '<div>' . "\n"
                 . '<input type="hidden" name="wikiId" value="'.$wikiId.'" />' . "\n"
                 . '<input type="hidden" name="title" value="'.$title.'" />' . "\n"
                 . '<input type="submit" name="action[diff]" value="'.$langWikiShowDifferences.'" />' . "\n"
                 . '</div>' . "\n"
                 ;
-            
+
             $tool_content .= '<table style="border: 0px;">' . "\n";
-            
+
             if ( is_array( $history ) )
             {
                 $firstPass = true;
-                
+
                 foreach ( $history as $version )
                 {
                     $tool_content .= '<tr>' . "\n";
-                    
+
                     if ( $firstPass == true )
                     {
                         $checked = ' checked="checked"';
@@ -1123,13 +1139,13 @@
                     {
                         $checked = '';
                     }
-                    
+
                     $tool_content .= '<td>'
                         . '<input type="radio" name="old" value="'.$version['id'].'"'.$checked.' />' . "\n"
                         . '</td>'
                         . "\n"
                         ;
-                        
+
                     $tool_content .= '<td>'
                         . '<input type="radio" name="new" value="'.$version['id'].'"'.$checked.' />' . "\n"
                         . '</td>'
@@ -1140,9 +1156,9 @@
                     mysql_select_db($currentCourseID);
 
                     $userStr = $userInfo['firstname'] . "&nbsp;" . $userInfo['lastname'];
-                    
+
                     $userUrl = $userStr;
-                    
+
                     $versionUrl = '<a href="' . $_SERVER['PHP_SELF'] . '?wikiId='
                         . $wikiId . '&amp;title=' . rawurlencode( $title )
                         . '&amp;action=show&amp;versionId=' . $version['id']
@@ -1151,17 +1167,17 @@
                             , strtotime($version['mtime']) )
                         . '</a>'
                         ;
-                    
+
                     $tool_content .= '<td>'
                         . sprintf( $langWikiVersionPattern, $versionUrl, $userUrl )
                         . '</td>'
                         . "\n"
                         ;
-                        
+
                     $tool_content .= '</tr>' . "\n";
                 }
             }
-            
+
             $tool_content .= '</table>' . "\n";
             $tool_content .= '</form>';
             break;
