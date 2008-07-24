@@ -112,9 +112,9 @@
         }
         mysql_free_result($result);
         $mtext .= '</table>';
-
+        $mtext = quote($mtext);
         $sql = "INSERT INTO monthly_summary SET month='$last_month', profesNum = '$prof_sum', studNum = '$stud_sum',
-            visitorsNum = '$vis_sum', coursNum = '$cours_sum', logins = '$login_sum', details = '$mtext'";
+            visitorsNum = '$vis_sum', coursNum = '$cours_sum', logins = '$login_sum', details = $mtext";
         $result= db_query($sql, $mysqlMainDb);
         @mysql_free_result($result);
     }
