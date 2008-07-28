@@ -1,12 +1,12 @@
-<?php session_start(); 
+<?php session_start();
 /*===========================================================================
-*              GUnet eClass 2.0
-*       E-learning and Course Management Program
+*   Open eClass 2.1
+*   E-learning and Course Management System
 * ===========================================================================
-*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Copyright(c) 2003-2008  Greek Universities Network - GUnet
 *	A full copyright notice can be read in "/info/copyright.txt".
 *
-*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*  	Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
 *				Yannis Exidaridis <jexi@noc.uoa.gr>
 *				Alexandros Diamantidis <adia@noc.uoa.gr>
 *
@@ -18,15 +18,15 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*				Network Operations Center, University of Athens,
-*				Panepistimiopolis Ilissia, 15784, Athens, Greece
-*				eMail: eclassadmin@gunet.gr
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
 ============================================================================*/
 /*
  * Index
- * 
+ *
  * @version $Id$
- * 
+ *
  * @abstract This file serves as the home page of eclass when the user
  * is not logged in.
  *
@@ -72,7 +72,7 @@ unset($dbname);
 if (isset($persoIsActive)) session_register("perso_is_active");
 
 // ------------------------------------------------------------------------
-// if we try to login... then authenticate user. 
+// if we try to login... then authenticate user.
 // -----------------------------------------------------------------------
 $warning = '';
 $uname = preg_replace('/\s+/', ' ', trim(isset($_POST['uname'])?$_POST['uname']:''));
@@ -93,7 +93,7 @@ if(!empty($submit))
 	$result=mysql_query($sqlLogin);
 	$check_passwords = array("pop3","imap","ldap","db");
 	$warning = "";
-	$auth_allow = 0;	
+	$auth_allow = 0;
 	$exists = 0;
 	while ($myrow = mysql_fetch_array($result))
 	{
@@ -289,7 +289,7 @@ if(!empty($submit))
 		$_SESSION['langswitch'] = "english";
 		$langChangeLang = $_SESSION['langLinkText'] = "Ελληνικά";
 		$switchLangURL = $_SESSION['langLinkURL'] = "?localize=el";
-		
+
 	} elseif(isset($userLanguage) && $userLanguage == "el") {
 		$_SESSION['langswitch'] = "greek";
 		$langChangeLang = $_SESSION['langLinkText'] = "English";
@@ -333,7 +333,7 @@ if (isset($uid) AND !isset($logout)) {
 		} else {
 			//if the user is a guest send him straight to the corresponding lesson
 			$guestSQL = db_query("SELECT `code_cours` FROM `cours_user` WHERE `user_id` = $uid", $mysqlMainDb);
-			if (mysql_num_rows($guestSQL) > 0) { 
+			if (mysql_num_rows($guestSQL) > 0) {
 				$sql_row = mysql_fetch_row($guestSQL);
 				$dbname=$sql_row[0];
 				session_register("dbname");
