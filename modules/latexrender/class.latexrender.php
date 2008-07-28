@@ -1,27 +1,27 @@
 <?php
-/**
- * LaTeX Rendering Class
- * Copyright (C) 2003  Benjamin Zeiss <zeiss@math.uni-goettingen.de>
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- * --------------------------------------------------------------------
- * @author Benjamin Zeiss <zeiss@math.uni-goettingen.de>
- * @version v0.6
- * @package latexrender
- *
- */
+/*===========================================================================
+*   Open eClass 2.1
+*   E-learning and Course Management System
+* ===========================================================================
+*	Copyright(c) 2003-2008  Greek Universities Network - GUnet
+*	A full copyright notice can be read in "/info/copyright.txt".
+*
+*  	Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*
+*	For a full list of contributors, see "credits.txt".
+*
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
+*
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
 
 class LatexRender {
 

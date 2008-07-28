@@ -1,12 +1,12 @@
 <?
 /*===========================================================================
-*              GUnet eClass 2.0
-*       E-learning and Course Management Program
+*   Open eClass 2.1
+*   E-learning and Course Management System
 * ===========================================================================
-*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
+*	Copyright(c) 2003-2008  Greek Universities Network - GUnet
 *	A full copyright notice can be read in "/info/copyright.txt".
 *
-*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*  	Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
 *				Yannis Exidaridis <jexi@noc.uoa.gr>
 *				Alexandros Diamantidis <adia@noc.uoa.gr>
 *
@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*					Network Operations Center, University of Athens,
-*					Panepistimiopolis Ilissia, 15784, Athens, Greece
-*					eMail: eclassadmin@gunet.gr
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 /*
