@@ -830,51 +830,51 @@ $langDirectory = "Folder";
 /******************************************************
 * dropbox.inc.php
 ******************************************************/
-$dropbox_lang["dropbox"] = "Dropbox";
-$dropbox_lang["help"] = "Help";
+$dropbox_lang['dropbox'] = "Dropbox";
+$dropbox_lang['help'] = "Help";
 
 /*
  * error variables
  */
-$dropbox_lang["aliensNotAllowed"] = "Only area members can use the dropbox. You are not a member of this area.";
-$dropbox_lang["queryError"] = "Error in database query. Please contact your system administrator.";
-$dropbox_lang["generalError"] = "An error has occured. Please contact your system administrator.";
-$dropbox_lang["badFormData"] = "Submit failed: bad form data. Please contact your system administrator.";
-$dropbox_lang["noUserSelected"] = "Please select a user to send the file to.";
-$dropbox_lang["noFileSpecified"] = "You didn't specify a file to upload.";
-$dropbox_lang["tooBig"] = "You didn't choose a file or the file is too big.";
-$dropbox_lang["uploadError"] = "Error uploading file. Please contact your system administrator.";
-$dropbox_lang["errorCreatingDir"] = "Can't create the dropbox directory. Please contact your system administrator.";
-$dropbox_lang["installError"] = "Can't install the necessary tables for the dropbox module. Please contact your system administrator.";
+$dropbox_lang['aliensNotAllowed'] = "Only area members can use the dropbox. You are not a member of this area.";
+$dropbox_lang['queryError'] = "Error in database query. Please contact your system administrator.";
+$dropbox_lang['generalError'] = "An error has occured. Please contact your system administrator.";
+$dropbox_lang['badFormData'] = "Submit failed: bad form data. Please contact your system administrator.";
+$dropbox_lang['noUserSelected'] = "Please select a user to send the file to.";
+$dropbox_lang['noFileSpecified'] = "You didn't specify a file to upload.";
+$dropbox_lang['tooBig'] = "You didn't choose a file or the file is too big.";
+$dropbox_lang['uploadError'] = "Error uploading file. Please contact your system administrator.";
+$dropbox_lang['errorCreatingDir'] = "Can't create the dropbox directory. Please contact your system administrator.";
+$dropbox_lang['installError'] = "Can't install the necessary tables for the dropbox module. Please contact your system administrator.";
 $dropbox_lang['quotaError'] = "There is not enough disk space because of dropbox quota restrictions! File
 uploading failed!";
 
 /*
  * upload file variables
  */
-$dropbox_lang["uploadFile"] = "Upload document";
-$dropbox_lang["authors"] = "Sender";
-$dropbox_lang["description"] = "Document Description";
-$dropbox_lang["sendTo"] = "Send to";
+$dropbox_lang['uploadFile'] = "Upload document";
+$dropbox_lang['authors'] = "Sender";
+$dropbox_lang['description'] = "Document Description";
+$dropbox_lang['sendTo'] = "Send to";
 
 /*
  * Sent/Received list variables
  */
-$dropbox_lang["receivedTitle"] = "Received Files";
-$dropbox_lang["sentTitle"] = "Sent Files";
+$dropbox_lang['receivedTitle'] = "Received Files";
+$dropbox_lang['sentTitle'] = "Sent Files";
 $dropbox_lang['all'] = "Notice: Files will be removed from your list only";
-$dropbox_lang["confirmDelete1"] = "Notice: File ";
-$dropbox_lang["confirmDelete2"] = " will be removed from your list only";
-$dropbox_lang["workDelete"] = "Remove entry from list";
-$dropbox_lang["sentBy"] = "Sent by";
-$dropbox_lang["sentTo"] = "Sent to";
-$dropbox_lang["sentOn"] = "on";
-$dropbox_lang["anonymous"] = "unknown";
-$dropbox_lang["ok"] = "OK";
-$dropbox_lang["lastUpdated"] = "Last updated on";
-$dropbox_lang["lastResent"] = "Last resent on";
+$dropbox_lang['confirmDelete1'] = "Notice: File ";
+$dropbox_lang['confirmDelete2'] = " will be removed from your list only";
+$dropbox_lang['workDelete'] = "Remove entry from list";
+$dropbox_lang['sentBy'] = "Sent by";
+$dropbox_lang['sentTo'] = "Sent to";
+$dropbox_lang['sentOn'] = "on";
+$dropbox_lang['anonymous'] = "unknown";
+$dropbox_lang['ok'] = "OK";
+$dropbox_lang['lastUpdated'] = "Last updated on";
+$dropbox_lang['lastResent'] = "Last resent on";
 $dropbox_lang['tableEmpty'] = "The list is empty.";
-$dropbox_lang["overwriteFile"] = "Overwrite previously sent file?";
+$dropbox_lang['overwriteFile'] = "Overwrite previously sent file?";
 $dropbox_lang['orderBy'] = "Order by ";
 $dropbox_lang['lastDate'] = "date last sent";
 $dropbox_lang['firstDate'] = "date first sent";
@@ -891,43 +891,42 @@ $dropbox_lang['col_recipient'] = "Recipient";
 /*
  * Feedback variables
  */
-$dropbox_lang["docAdd"] = "File has been added succesfully";
-$dropbox_lang["fileDeleted"] = "The selected file has been removed from your dropbox.";
-$dropbox_lang["backList"] = "Go back to your dropbox";
+$dropbox_lang['docAdd'] = "File has been added succesfully";
+$dropbox_lang['fileDeleted'] = "The selected file has been removed from your dropbox.";
+$dropbox_lang['backList'] = "Go back to your dropbox";
 
 /*
  * RH: Mailing variables
  */
-$dropbox_lang["mailingAsUsername"] = "Mailing ";
-$dropbox_lang["mailingInSelect"] = "---Mailing---";
-$dropbox_lang["mailingSelectNoOther"] = "Mailing cannot be combined with other recipients";
-$dropbox_lang["mailingNonMailingError"] = "Mailing cannot be overwritten by non-mailing and vice-versa";
-$dropbox_lang["mailingExamine"] = "Examine mailing zip-file";
-$dropbox_lang["mailingNotYetSent"] = "Mailing content files have not yet been sent out...";
-$dropbox_lang["mailingSend"] = "Send content files";
-$dropbox_lang["mailingConfirmSend"] = "Send content files to individual destinations ?";
-$dropbox_lang["mailingBackToDropbox"] = "(back to Dropbox main window)";
-$dropbox_lang["mailingWrongZipfile"] = "Mailing must be zipfile with STUDENTID or LOGINNAME";
-$dropbox_lang["mailingZipEmptyOrCorrupt"] = "Mailing zipfile is empty or not a valid zipfile";
-$dropbox_lang["mailingZipPhp"] = "Mailing zipfile must not contain php files - it will not be sent";
-$dropbox_lang["mailingZipDups"] = "Mailing zipfile must not contain duplicate files - it will not be sent";
-$dropbox_lang["mailingFileFunny"] = "no name, or extension not 1-4 letters or digits";
-$dropbox_lang["mailingFileNoPrefix"] = "name does not start with ";
-$dropbox_lang["mailingFileNoPostfix"] = "name does not end with ";
-$dropbox_lang["mailingFileNoRecip"] = "name does not contain any recipient-id";
-$dropbox_lang["mailingFileRecipNotFound"] = "no such ".$langsStudent." with ";
-$dropbox_lang["mailingFileRecipDup"] = "multiple users have ";
-$dropbox_lang["mailingFileIsFor"] = "is for ";
-$dropbox_lang["mailingFileSentTo"] = "sent to ";
-$dropbox_lang["mailingFileNotRegistered"] = " (not registered for this course)";
-$dropbox_lang["mailingNothingFor"] = "Nothing for";
+$dropbox_lang['mailingAsUsername'] = "Mailing ";
+$dropbox_lang['mailingInSelect'] = "---Mailing---";
+$dropbox_lang['mailingSelectNoOther'] = "Mailing cannot be combined with other recipients";
+$dropbox_lang['mailingNonMailingError'] = "Mailing cannot be overwritten by non-mailing and vice-versa";
+$dropbox_lang['mailingExamine'] = "Examine mailing zip-file";
+$dropbox_lang['mailingNotYetSent'] = "Mailing content files have not yet been sent out...";
+$dropbox_lang['mailingSend'] = "Send content files";
+$dropbox_lang['mailingConfirmSend'] = "Send content files to individual destinations ?";
+$dropbox_lang['mailingBackToDropbox'] = "(back to Dropbox main window)";
+$dropbox_lang['mailingWrongZipfile'] = "Mailing must be zipfile with STUDENTID or LOGINNAME";
+$dropbox_lang['mailingZipEmptyOrCorrupt'] = "Mailing zipfile is empty or not a valid zipfile";
+$dropbox_lang['mailingZipPhp'] = "Mailing zipfile must not contain php files - it will not be sent";
+$dropbox_lang['mailingZipDups'] = "Mailing zipfile must not contain duplicate files - it will not be sent";
+$dropbox_lang['mailingFileFunny'] = "no name, or extension not 1-4 letters or digits";
+$dropbox_lang['mailingFileNoPrefix'] = "name does not start with ";
+$dropbox_lang['mailingFileNoPostfix'] = "name does not end with ";
+$dropbox_lang['mailingFileNoRecip'] = "name does not contain any recipient-id";
+$dropbox_lang['mailingFileRecipNotFound'] = "no such ".$langsStudent." with ";
+$dropbox_lang['mailingFileRecipDup'] = "multiple users have ";
+$dropbox_lang['mailingFileIsFor'] = "is for ";
+$dropbox_lang['mailingFileSentTo'] = "sent to ";
+$dropbox_lang['mailingFileNotRegistered'] = " (not registered for this course)";
+$dropbox_lang['mailingNothingFor'] = "Nothing for";
 
 /*
  * RH: Just Upload
  */
-$dropbox_lang["justUploadInSelect"] = "---JustUpload---";
-$dropbox_lang["justUploadInList"] = "Upload by";
-$dropbox_lang["mailingJustUploadNoOther"] = "Just Upload cannot be combined with other recipients";
+$dropbox_lang['justUploadInSelect'] = "---JustUpload---";
+$dropbox_lang['justUploadInList'] = "Upload by";
 
 /**************************************************************
 * exercice.inc.php
@@ -3404,4 +3403,4 @@ $dropbox_lang['fileDeleted']='Selected file has been deleted from the Dropbox.';
 $dropbox_lang['backList']='Back in the Dropbox';
 $dropbox_lang['justUploadInSelect']='--- Upload a file ---';
 $dropbox_lang['justUploadInList'] ='Uploaded file from';
-$dropbox_lang['mailingJustUploadNoOther']='Can not upload a file while sending in other recipients ';
+$dropbox_lang['mailingJustUploadNoOther']='Can not upload a file while sending to other recipients ';
