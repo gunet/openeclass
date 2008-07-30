@@ -21,7 +21,7 @@
 *						Network Operations Center, University of Athens,
 *						Panepistimiopolis Ilissia, 15784, Athens, Greece
 *						eMail: eclassadmin@gunet.gr
-============================================================================*/
+============================================================================
  * Logged Out Component
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
