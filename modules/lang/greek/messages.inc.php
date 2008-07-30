@@ -1767,21 +1767,10 @@ $m['unsub'] = "Το μάθημα είναι κλειστό και δεν μπο�
 * pedasugggest.inc.php
 ****************************************************************/
 
-unset($titreBloc);
-unset($titreBlocNotEditable);
-
-$titreBloc[] = "Περιεχόμενο Μαθήματος";
-$titreBlocNotEditable[] = TRUE;
-$titreBloc[] = "Εκπαιδευτικές Δραστηριότητες";
-$titreBlocNotEditable[] = TRUE;
-$titreBloc[] =" Βοηθήματα";
-$titreBlocNotEditable[] = TRUE;
-$titreBloc[] = "Ανθρώπινο Δυναμικό";
-$titreBlocNotEditable[] = TRUE;
-$titreBloc[] = "Τρόποι αξιολόγησης / εξέτασης";
-$titreBlocNotEditable[] = TRUE;
-$titreBloc[] ="Συμπληρωματικά Στοιχεία";
-$titreBlocNotEditable[] = FALSE;
+$titreBloc = array("Περιεχόμενο Μαθήματος", "Εκπαιδευτικές Δραστηριότητες",
+"Βοηθήματα", "Ανθρώπινο Δυναμικό", "Τρόποι αξιολόγησης / εξέτασης",
+"Συμπληρωματικά Στοιχεία");
+$titreBlocNotEditable = array(TRUE TRUE, TRUE, TRUE, TRUE, FALSE);
 
 
 /********************************************************************

@@ -534,21 +534,11 @@ $langBlockDeleted = "Description deleted!";
 /***************************************************************
 * pedasugggest.inc.php
 ****************************************************************/
-unset($titreBloc);
-unset($titreBlocNotEditable);
 
-$titreBloc[] = "Course Content";
-$titreBlocNotEditable[] = TRUE;
-$titreBloc[] = "Educational Activities";
-$titreBlocNotEditable[] = TRUE;
-$titreBloc[] = "Books";
-$titreBlocNotEditable[] = TRUE;
-$titreBloc[] = "Human Resources";
-$titreBlocNotEditable[] = TRUE;
-$titreBloc[] = "Evaluation Methods / Exams";
-$titreBlocNotEditable[] = TRUE;
-$titreBloc[] = "Supplementary Information";
-$titreBlocNotEditable[] = FALSE;
+$titreBloc = array("Course Content", "Educational Activities", "Books",
+"Human Resources", "Evaluation Methods / Exams", "Supplementary Information");
+$titreBlocNotEditable = array(TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
+
 
 /*******************************************************************
 * course_home.inc.php
