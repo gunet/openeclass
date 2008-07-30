@@ -358,9 +358,6 @@ $langAdminAnnMes = "announced in";
 $langAdminAnnTitleEn = "Title";
 $langAdminAnnBodyEn = "Announcement";
 $langAdminAnnCommEn = "Comment";
-$langAdminAnnTitleGr = "Title (in greek) ";
-$langAdminAnnBodyGr = "Announcement (in greek)";
-$langAdminAnnCommGr = "Comment (in greek)";
 
 // cleanup.php
 $langCleanupOldFiles = 'Old files clean-up';
@@ -1565,7 +1562,6 @@ $langLastSessionTimeSpent = "Last session time";
 $langLearningPath = "Learning Path";
 $langLearningPaths = "Learning Paths";
 $langLearningPath1 = "Learning Path";
-$langLearningPathAdmin = "Learning Path Admin";
 $langLearningPathEmpty = "Learning Path is empty";
 $langLearningPathList = "Available learning paths";
 $langLearningPathName = "New learning path name";
@@ -2406,8 +2402,6 @@ $langphone= "Telephone";
 $langPhone = "<b>Phone:</b>";
 
 // adduser.php
-$langAskUser1 = "Enter the name, surname or username of the user you want to add.";
-$langAskUser2 = "User must have an account in platform";
 $langAskManyUsers = "Type the filename or click in \"Browse\" to browse for it.";
 $langAskManyUsers1 = "Users must have an account in platform.";
 $langAskManyUsers2 = "<strong>Note</strong>: Users file must be a simple text file with one username per line: E.g.
