@@ -22,7 +22,6 @@
 *						Panepistimiopolis Ilissia, 15784, Athens, Greece
 *						eMail: eclassadmin@gunet.gr
 ============================================================================*/
- */
 
 /*
  * Announcements Component

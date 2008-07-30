@@ -22,6 +22,8 @@
 *						Panepistimiopolis Ilissia, 15784, Athens, Greece
 *						eMail: eclassadmin@gunet.gr
 ============================================================================*/
+
+/*
  * Not Installed Component
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>

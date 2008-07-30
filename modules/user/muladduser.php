@@ -21,7 +21,8 @@
 *						Network Operations Center, University of Athens,
 *						Panepistimiopolis Ilissia, 15784, Athens, Greece
 *						eMail: eclassadmin@gunet.gr
-============================================================================*/s
+============================================================================*/
+
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'User';

@@ -23,6 +23,7 @@
 *						eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
+/*==============================================================================
 	@authors list: Originally written by Agorastos Sakis <th_agorastos@hotmail.com>
 	and later rewritten 
 		    by Costas Tsibanis <k.tsibanis@noc.uoa.gr>
