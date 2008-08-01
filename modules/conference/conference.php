@@ -114,7 +114,7 @@ function init_teacher()
 		if(t.responseText==""){
 			document.getElementById("presantation_window").innerHTML="'.$langPresantation_content.'";
 		} else{
-			var presantation=\'<iframe id="iframe" src="\'+t.responseText+\'"></iframe>\';
+			var presantation=\'<iframe height="100%" width="100%" id="iframe" src="\'+t.responseText+\'"></iframe>\';
                         document.getElementById("presantation_window").innerHTML=presantation;
                 }
         }
@@ -173,7 +173,7 @@ function refresh_student()
 			document.getElementById("presantation_window").innerHTML="'.$langPresantation_content.'";
 		} else if( t.responseText!=presantation_URL){
 			presantation_URL=t.responseText;
-			var presantation=\'<iframe id="iframe" src="\'+t.responseText+\'"></iframe>\';
+			var presantation=\'<iframe height="100%" width="100%" id="iframe" src="\'+t.responseText+\'"></iframe>\';
                         document.getElementById("presantation_window").innerHTML=presantation;
                 }
         }
@@ -269,7 +269,7 @@ return false;
 /* load presantation in right iframe*/
 function show_presantation()
 	{
-var presantation_url=\'<iframe src="\'+document.getElementById("Presantation_URL").value+\'"></iframe>\';
+var presantation_url=\'<iframe height="100%" width="100%" src="\'+document.getElementById("Presantation_URL").value+\'"></iframe>\';
 document.getElementById("presantation_window").innerHTML=presantation_url;
 new Ajax.Request("pass_parameters.php", {method:"post", postBody:"presantation_URL="+escape(document.getElementById("Presantation_URL").value)});
 return false;
