@@ -79,7 +79,7 @@
         $groupId = (int) $_gid;
 
         $navigation[]  = array ('url' => '../group/group.php', 'name' => $langGroups);
-        $navigation[] = array ('url' => '../group/group_space.php', 'name' => $_group['name']);
+        $navigation[]  = array ('url' => '../group/group_space.php', 'name' => $_group['name']);
     }
     elseif ($_gid && ! $is_groupAllowed)
     {
@@ -510,6 +510,7 @@
         </tr>
         </tbody>
         </table>
+        <br />
         ";
     }
 
@@ -536,7 +537,8 @@
             {
                 $tool_content .= '        <thead>' . "\n"
                     . '        <tr class="Wiki_header">' . "\n"
-                    . '          <td><div align="center">'.$langTitle.'</div></td>' . "\n"
+                    . '          <td colspan="2"><div align="center">'.$langTitle.'</div></td>' . "\n"
+                    . '          <td><div align="center">'.$langDescription.'</div></td>' . "\n"
                     . '          <td><div align="center">'.$langWikiNumberOfPages.'</div></td>' . "\n"
                     . '          <td><div align="center">'.$langWikiRecentChanges.'</div></td>' . "\n"
                     . '        </tr>' . "\n"

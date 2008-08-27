@@ -516,15 +516,20 @@
     $head_content .=
         "<style type=\"text/css\">
         .wikiTitle h1{
-            color: Black;
+            color: grey;
             background: none;
-            font-size: 16px;
+            font-size: 11px;
             font-weight: bold;
             /*font-weight: normal;*/
-            border-bottom: 1px solid #000000;
         }
         .wiki2xhtml{
-            margin-left: 5px;
+            vertical-align:middle;
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+            font-size: 10px;
+            padding: 1px;
+            border: 1px solid #CAC3B5;
+            background-color: #f9f8ea;
+            color: #666666;
         }
         .wiki2xhtml h2,h3,h4{
             color: Black;
@@ -532,12 +537,12 @@
         }
         .wiki2xhtml h2{
             border-bottom: 1px solid #aaaaaa;
-            font-size: 16px;
+            font-size: 11px;
             font-weight:bold;
         }
         .wiki2xhtml h3{
             border-bottom: 1px groove #aaaaaa;
-            font-size: 13px;
+            font-size: 11px;
             font-weight:bold;
         }
         .wiki2xhtml h4{
@@ -667,6 +672,7 @@
         </tr>
         </tbody>
         </table>
+        <br />
         ";
     }
 
@@ -723,7 +729,7 @@
     if ( $action != 'recent' && $action != 'all' )
     {
 
-    $tool_content .= '<p>';
+    $tool_content .= '<p align="right">';
 
     if ( $action == "edit" || $action == "diff" || $action == "history" )
     {
@@ -734,24 +740,23 @@
             . '?wikiId=' . $wiki->getWikiId()
             . '&amp;action=show'
             . '&amp;title=' . rawurlencode($title)
-            . '">'
-            . $langWikiBackToPage.'</a>'
+            . '">'.$langWikiBackToPage.'</a>'
             ;
     }
-    else
-    {
-        $tool_content .= '<span class="claroCmdDisabled">'
-            . '<img src="'.$imgRepositoryWeb.'/back.gif" border="0" align="absmiddle" />&nbsp;'
-            . $langWikiBackToPage.'</span>'
-            ;
-    }
+    //else
+    //{
+    //    $tool_content .= '<span class="claroCmdDisabled">'
+    //        . '<img src="'.$imgRepositoryWeb.'/back.gif" border="0" align="absmiddle" />&nbsp;'
+    //        . $langWikiBackToPage.'</span>'
+    //        ;
+    //}
 
     if ( $is_allowedToEdit || $is_allowedToCreate )
     {
         // Show context
         if ( $action == "show" || $action == "history" || $action == "diff" )
         {
-            $tool_content .= '&nbsp;|&nbsp;'
+            $tool_content .= '&nbsp;&nbsp;&nbsp;'
                 . '<img src="'.$imgRepositoryWeb.'/edit.gif" border="0" align="absmiddle" />&nbsp;'
                 . '<a class="claroCmd" href="'
                 . $_SERVER['PHP_SELF']
@@ -764,26 +769,26 @@
                 ;
         }
         // Other contexts
-        else
-        {
-            $tool_content .= '&nbsp;|&nbsp;<span class="claroCmdDisabled">'
-                . '<img src="'.$imgRepositoryWeb.'/edit.gif" border="0" align="absmiddle" />&nbsp;'
-                . $langWikiEditPage . '</span>'
-                ;
-        }
+        //else
+        //{
+        //    $tool_content .= '&nbsp;&nbsp;&nbsp;<span class="claroCmdDisabled">'
+        //        . '<img src="'.$imgRepositoryWeb.'/edit.gif" border="0" align="absmiddle" />&nbsp;'
+        //        . $langWikiEditPage . '</span>'
+        //        ;
+        //}
     }
-    else
-    {
-        $tool_content .= '&nbsp;|&nbsp;<span class="claroCmdDisabled">'
-            . '<img src="'.$imgRepositoryWeb.'/edit.gif" border="0"  />&nbsp;'
-            . $langWikiEditPage . '</span>'
-            ;
-    }
+    //else
+    //{
+    //    $tool_content .= '&nbsp;|&nbsp;<span class="claroCmdDisabled">'
+    //        . '<img src="'.$imgRepositoryWeb.'/edit.gif" border="0"  />&nbsp;'
+    //        . $langWikiEditPage . '</span>'
+    //        ;
+    //}
 
     if ( $action == "show" || $action == "edit" || $action == "history" || $action == "diff" )
     {
         // active
-        $tool_content .= '&nbsp;|&nbsp;'
+        $tool_content .= '&nbsp;&nbsp;&nbsp;'
                 . '<img src="'.$imgRepositoryWeb.'/version.gif" border="0" align="absmiddle" />&nbsp;'
                 . '<a class="claroCmd" href="'
                 . $_SERVER['PHP_SELF']
@@ -794,18 +799,18 @@
                 . $langWikiPageHistory.'</a>'
                 ;
     }
-    else
-    {
-        // inactive
-        $tool_content .= '&nbsp;|&nbsp;<span class="claroCmdDisabled">'
-            . '<img src="'.$imgRepositoryWeb.'/version.gif" border="0" align="absmiddle" />&nbsp;'
-            . $langWikiPageHistory . '</span>'
-            ;
-    }
+    //else
+    //{
+    //    // inactive
+    //    $tool_content .= '&nbsp;|&nbsp;<span class="claroCmdDisabled">'
+    //        . '<img src="'.$imgRepositoryWeb.'/version.gif" border="0" align="absmiddle" />&nbsp;'
+    //        . $langWikiPageHistory . '</span>'
+    //        ;
+    //}
 
     if ( $action == "edit" || $action == "diff" )
     {
-        $tool_content .= '&nbsp;|&nbsp;'
+        $tool_content .= '&nbsp;&nbsp;&nbsp;'
             . '<img src="'.$imgRepositoryWeb.'/help_little.gif" border="0" alt="history" />&nbsp;'
             . '<a class="claroCmd" href="#" onClick="MyWindow=window.open(\''
             . '../help/help.php?topic=WikiSyntax&amp;language=' . $language
@@ -825,11 +830,13 @@
         {
             if( $title === '__MainPage__' )
             {
-                $displaytitle = $langWikiMainPage;
+                //$displaytitle = $langWikiMainPage;
+                $displaytitle = '';
             }
             else
             {
-                $displaytitle = $title;
+                //$displaytitle = $title;
+                $displaytitle = '';
             }
 
             $tool_content .= '<div class="wikiTitle">' . "\n";
@@ -865,11 +872,13 @@
         {
             if( $title === '__MainPage__' )
             {
-                $displaytitle = $langWikiMainPage;
+                //$displaytitle = $langWikiMainPage;
+                $displaytitle = '';
             }
             else
             {
-                $displaytitle = $title;
+                //$displaytitle = $title;
+                $displaytitle = '';
             }
 
             $oldTime = claro_format_locale_date($dateTimeFormatLong
@@ -893,7 +902,7 @@
                 . ')'
                 ;
 
-            $versionInfo = '&nbsp;<span style="font-size: 10px; font-weight: normal; color: red;">'
+            $versionInfo = '<span style="font-size: 10px; font-weight: normal; color: red;">'
                         . $versionInfo . '</span>'
                         ;
 
@@ -1041,15 +1050,19 @@
             }
             else
             {
+
                 // get localized value for wiki main page title
                 if( $title === '__MainPage__' )
                 {
-                    $displaytitle = $langWikiMainPage;
+                    //$displaytitle = $langWikiMainPage;
+                    $displaytitle = '';
                 }
                 else
                 {
-                    $displaytitle = $title;
+                    //$displaytitle = $title;
+                    $displaytitle = '';
                 }
+
 
                 if ( $versionId != 0 )
                 {
@@ -1096,11 +1109,13 @@
         {
             if( $title === '__MainPage__' )
             {
-                $displaytitle = $langWikiMainPage;
+                //$displaytitle = $langWikiMainPage;
+                $displaytitle = '';
             }
             else
             {
-                $displaytitle = $title;
+                //$displaytitle = $title;
+                $displaytitle = '';
             }
 
             $tool_content .= '<div class="wikiTitle">' . "\n";

@@ -61,6 +61,15 @@ a:visited.invisible
 }
 
 
+a.claroCmd {
+   font-size: 10px;
+   font-weight: normal;
+   text-decoration: none;
+}
+
+a.claroCmd:hover {
+   text-decoration: underline;
+}
 
 
 
