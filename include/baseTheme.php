@@ -521,23 +521,46 @@ function print_a($TheArray) {
 /*
  * Function lang_selections
  *
- * Returns the HTML code for a language selection tool
+ * Returns the HTML code for a language selection tool form
  *
  */
 function lang_selections() {
+	$html = '<form name="langform" action="'.$_SERVER['PHP_SELF'].'" method="GET" >';
+	$html .= lang_select_options('onChange="document.langform.submit();"');
+	$html .= '</form>';
+ 	return $html;
+}
 
+/*
+ * Function lang_select_option
+ *
+ * Returns the HTML code for the <select> element of the language selection tool
+ *
+ */
+function lang_select_options($onchange_js = '') {
 	global $language;
 
 	$langArrayOfNames = array(
 		'greek' => 'Ελληνικά (el)',
 		'english' => 'English (en)',
-		'spanish' => 'Español (es)',
-		'czech' => 'Česky (cz)');
+#		'spanish' => 'Español (es)',
+#		'czech' => 'Česky (cz)',
+#		'albanian' => 'Shqip (sq)',
+#		'bulgarian' => 'Български (bg)',
+#		'catalan' => 'Català (ca)',
+#		'danish' => 'Dansk (da)',
+#		'dutch' => 'Nederlands (nl)',
+#		'finnish' => 'Suomi (fi)',
+#		'french' => 'Français (fr)',
+#		'german' => 'Deutsch (de)',
+#		'icelandic' => 'Íslenska (is)',
+#		'italian' => 'Italiano (it)',
+#		'japanese' => '日本語 (jp)',
+#		'polish' => 'Polski (pl)',
+#		'russian' => 'Русский (ru)',
+#		'turkish' => 'Türkçe (tr)',
+        );
 
-	$html = '<form name="langform" action="'.$_SERVER['PHP_SELF'].'" method="GET" >';
-	$html .= selection($langArrayOfNames, 'localize', $language, 'onChange="document.langform.submit();"');
-	$html .= '</form>';
- 	return $html;
+	return selection($langArrayOfNames, 'localize', $language, $onchange_js);
 }
 
-?>

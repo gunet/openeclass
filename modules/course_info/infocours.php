@@ -254,8 +254,7 @@ if($is_adminOfCourse) {
 			$curLang = 'en';
 		else
 			$curLang = 'el';
-		$tool_content .= selection(array('el' => $langNameOfLang['greek'],
-			'en' => $langNameOfLang['english']),'localize', $curLang);
+		$tool_content .= lang_select_options();
 		$tool_content .= "
       </td>
       <td><small>$langTipLang</p></td>

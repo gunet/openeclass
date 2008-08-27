@@ -119,8 +119,7 @@ if (isset($back1) or !isset($visit)) {
       <tr>
         <th class='left'>$langLanguage&nbsp;:</th>
         <td>";
-        @$tool_content .= " ".selection(array('greek' => $langNameOfLang['greek'], 
-                                'english' => $langNameOfLang['english']), 'languageCourse', $languageCourse)." ";
+        @$tool_content .= lang_select_options();
         $tool_content .= "</td><td>&nbsp;</td></tr>
       	<tr><th>&nbsp;</th>
         <td><input type='submit' name='create2' value='$langNextStep >' /><input type='hidden' name='visit' value='true' /></td>
