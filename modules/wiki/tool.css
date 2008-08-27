@@ -1,3 +1,61 @@
+.wikiTitle h1{
+            color: grey;
+            background: none;
+            font-size: 11px;
+            font-weight: bold;
+            /*font-weight: normal;*/
+        }
+.wiki2xhtml{
+            vertical-align:middle;
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+            font-size: 10px;
+            padding: 1px;
+            border: 1px solid #CAC3B5;
+            background-color: #f9f8ea;
+            color: #666666;
+        }
+.wiki2xhtml h2,h3,h4{
+            color: Black;
+            background: none;
+        }
+.wiki2xhtml h2{
+            border-bottom: 1px solid #aaaaaa;
+            font-size: 11px;
+            font-weight:bold;
+        }
+.wiki2xhtml h3{
+            border-bottom: 1px groove #aaaaaa;
+            font-size: 11px;
+            font-weight:bold;
+        }
+.wiki2xhtml h4{
+            font-size: 11px;
+            font-weight:bold;
+        }
+
+.wiki2xhtml a.wikiEdit{
+            color: red;
+        }
+.diff{
+            font-family: monospace;
+            padding: 5px;
+            margin: 5px;
+        }
+.diffEqual{
+            background-color: white;
+        }
+.diffMoved{
+            background-color: #00CCFF;
+        }
+.diffAdded{
+            background-color: lime;
+        }
+.diffDeleted{
+            background-color: #FF00AA;
+        }
+
+
+
 .invisible { 
     color: #999999 !important;
     background-color: #f9f8ea !important;
