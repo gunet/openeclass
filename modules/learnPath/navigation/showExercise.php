@@ -150,7 +150,8 @@ if(!isset($_SESSION['exeStartTime']) )
    $_SESSION['exeStartTime'] = time();
 }
 
-if ((!$is_adminOfCourse)&&(isset($uid))) { //if registered student
+//if ((!$is_adminOfCourse)&&(isset($uid))) { //if registered student
+if ((isset($uid))) { //if registered student
 $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record WHERE eid='$eid_temp' AND uid='$uid'", $currentCourseID));
 ++$CurrentAttempt[0];
 	if (!isset($_COOKIE['marvelous_cookie'])) { // either expired or begin again
