@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*===========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
@@ -28,16 +28,16 @@
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 	               Dionysios G. Synodinos <synodinos@gmail.com>
-==============================================================================        
-    @Description: This script is a replicate from 
-                  exercice/exercice.php, but it is modified for the 
-                  displaying needs of the learning path tool. The core 
+==============================================================================
+    @Description: This script is a replicate from
+                  exercice/exercice.php, but it is modified for the
+                  displaying needs of the learning path tool. The core
                   application logic remains the same.
                   It also contains a replicate from exercice/exercise.lib.php
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
 
@@ -164,7 +164,7 @@ $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user
 <h3>${exerciseTitle}</h3><p>${langExerciseExpired}</p>
 <p><center><a href='../learningPathList.php' target=top>${langBack}</a></center></p>
 cData;
-	
+
 			exit();
 			}
 			// record start of exercise
@@ -172,7 +172,7 @@ cData;
 			$sql="INSERT INTO `exercise_user_record` (eurid,eid,uid,RecordStartDate,RecordEndDate,".
 				"TotalScore,TotalWeighting,attempt) VALUES".
 				"(0,'$eid_temp','$uid','$RecordStartDate','','','',1)";
-			$result=mysql_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);		
+			$result=mysql_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);
 		} else {  // not allowed begin again
 				echo <<<cData
 <h3>${exerciseTitle}</h3><p>${langExerciseExpired}</p>
@@ -220,17 +220,22 @@ if(@$_POST['questionNum']) {
 
 	$exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 	echo <<<cData
-		<h3>${exerciseTitle}</h3>
-		<p>${exerciseDescription_temp}</p>
-		<table width="100%" border="0" cellpadding="1" cellspacing="0">
+
+      <table width="99%" class="Exercise">
+      <thead>
+      <tr>
+        <td colspan=\"2\"><b>${exerciseTitle}</b>
+        <br/>
+        ${exerciseDescription_temp}</td>
+      </tr>
+      </thead>
+      </table>
+
 		<form method="post" action="${_SERVER['PHP_SELF']}" autocomplete="off">
 		<input type="hidden" name="formSent" value="1">
 		<input type="hidden" name="exerciseType" value="${exerciseType}">
 		<input type="hidden" name="questionNum" value="${questionNum}">
 		<input type="hidden" name="nbrQuestions" value="${nbrQuestions}">
-		<tr>
-		<td>
-		<table width="100%" cellpadding="4" cellspacing="2" border="0">
 cData;
 
 $i=0;
@@ -260,11 +265,19 @@ foreach($questionList as $questionId) {
 			}
 		}
 	}
-	echo "<tr bgcolor=\"#E6E6E6\"><td valign=\"top\" colspan=\"2\">".$langQuestion." ".$i; 
-	
-	if($exerciseType == 2) 
+
+		// shows the question and its answers
+
+	echo "<br/>
+      <table width=\"99%\" class=\"Question\">
+      <thead>
+      <tr>
+        <td colspan=\"2\"><b><u>".$langQuestion."</u>: ".$i."</b></td>
+      </tr>";
+
+	if($exerciseType == 2)
 		echo " / ".$nbrQuestions;
-	echo "</td></tr>";
+	//echo "</thead></table>";
 
 	// shows the question and its answers
 	showQuestion($questionId);
@@ -276,21 +289,50 @@ foreach($questionList as $questionId) {
 		break;
 	}
 }	// end foreach()
+
+if (!$questionList)
+{
+   $tool_content .= "
+      <table width=\"99%\" class=\"Question\">
+      <thead>
+      <tr>
+        <td colspan='2'><font color='red'>$langNoAnswer</font></td>
+      </tr>
+      </thead>
+      </table>";
+} else {
+	echo "<br/>
+    <table width=\"99%\" class=\"Exercise\">
+    <tr>
+      <td><div align=\"center\"><input type=\"submit\" value=\"";
+	if ($exerciseType == 1 || $nbrQuestions == $questionNum)
+		echo "$langCont\">&nbsp;";
+	else
+		$tool_content .= $langNext." &gt;"."\">";
+	echo "<input type=\"submit\" name=\"buttonCancel\" value=\"$langCancel\"></div>
+      </td>
+    </tr>
+    </table>
+	";
+}
+
+    /*
 	echo "</table></td></tr><tr><td align=\"center\"><br><input type=\"submit\" value=\"";
 	if ($exerciseType == 1 || $nbrQuestions == $questionNum)
 		echo $langOk." &gt;"."\">";
-	else	
+	else
 		echo $langNext." &gt;"."\">";
 
  	echo " <input type=\"submit\" name=\"buttonCancel\" value=\"${langCancel}\">";
 	echo "</td></tr></form></table>";
+	*/
 	echo "</div></body>"."\n";
 	echo "</html>"."\n";
 
 
 function showQuestion($questionId, $onlyAnswers=false)
 {
-	global $picturePath, $webDir;
+	global $picturePath, $webDir, $langColumnA, $langColumnB, $langMakeCorrespond;
  	require_once "$webDir"."/modules/latexrender/latex.php";
 
 	// construction of the Question object
@@ -347,6 +389,21 @@ cData;
 		$cpt1='A';
 		$cpt2=1;
 		$Select=array();
+	echo <<<cData
+      <tr>
+        <td colspan="2">
+        <table width="100%">
+        <thead>
+        <tr>
+          <td width="44%" class="left"><u><b>$langColumnA</b></u></td>
+          <td width="12%"><div align="center"><b>$langMakeCorrespond</b></div></td>
+          <td width="44%" class="left"><u><b>$langColumnB</b></u></td>
+        </tr>
+        </thead>
+        </table>
+        </td>
+      </tr>
+cData;
 	}
 
 	for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
@@ -368,34 +425,31 @@ cData;
 		if($answerType == UNIQUE_ANSWER)
 		{
 	echo <<<cData
-		<tr>
-		  <td width="5%" align="center">
-			<input type="radio" name="choice[${questionId}]" value="${answerId}">
-		  </td>
-		  <td width="95%">
-			${answer}
-		  </td>
-		</tr>
+
+      <tr>
+        <td width="1%" align="center"><input type="radio" name="choice[${questionId}]" value="${answerId}"></td>
+        <td width="99%">${answer}</td>
+      </tr>
 cData;
 		}
 		// multiple answers
 		elseif($answerType == MULTIPLE_ANSWER)
 		{
 	echo <<<cData
-		<tr>
-		  <td width="5%" align="center">
-			<input type="checkbox" name="choice[${questionId}][${answerId}]" value="1">
-		  </td>
-		  <td width="95%">
-			${answer}
-		  </td>
-		</tr>
+
+      <tr>
+        <td width="1%" align="center"><input type="checkbox" name="choice[${questionId}][${answerId}]" value="1"></td>
+        <td width="99%">${answer}</td>
+      </tr>
 cData;
 		}
 		// fill in blanks
 		elseif($answerType == FILL_IN_BLANKS)
 		{
-			echo "<tr><td colspan=\"2\">${answer}</td></tr>";
+			echo "
+      <tr>
+        <td colspan=\"2\">${answer}</td>
+      </tr>";
 		}
 		// matching
 		else
@@ -409,40 +463,55 @@ cData;
 			}
 			else
 			{
-
 				echo <<<cData
-					<tr>
-				  <td colspan="2">
-					<table border="0" cellpadding="0" cellspacing="0" width="95%">
-					<tr>
-					  <td width="40%" valign="top"><b>${cpt2}.</b> ${answer}</td>
-					  <td width="20%" align="center">&nbsp;&nbsp;<select name="choice[${questionId}][${answerId}]">
-						<option value="0">--</option>
+
+      <tr>
+        <td colspan="2">
+        <table width="100%">
+        <thead>
+        <tr>
+          <td width="44%"><b>${cpt2}.</b> ${answer}</td>
+          <td width="12%"><div align="center">
+            <select name="choice[${questionId}][${answerId}]">
+            <option value="0">--</option>
 cData;
 
 	            // fills the list-box
 	            foreach($Select as $key=>$val) {
-			echo "<option value=\"${key}\">${val['Lettre']}</option>";	
+			echo "<option value=\"${key}\">${val['Lettre']}</option>";
 		     }  // end foreach()
-		  echo "</select>&nbsp;&nbsp;</td><td width=\"40%\" valign=\"top\">";
-		  
-		  if(isset($Select[$cpt2])) 
-		  	echo '<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse']; 
-		  else 
+		  echo "
+            </select></div>
+          </td>
+          <td width=\"44%\">";
+
+		  if(isset($Select[$cpt2]))
+		  	echo '<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
+		  else
 		  	echo '&nbsp;';
-	
-		  echo	"</td></tr></table></td></tr>";
+
+		  echo	"
+          </td>
+        </tr>
+        </thead>
+        </table>
+        </td>
+      </tr>";
 				$cpt2++;
 				// if the left side of the "matching" has been completely shown
 				if($answerId == $nbrAnswers)
 				{
 					// if it remains answers to shown at the right side
-					while(isset($Select[$cpt2])) { 
-						echo "<tr><td colspan=\"2\">".
-						"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"95%\">".
-						"<tr><td width=\"60%\" colspan=\"2\">&nbsp;</td><td width=\"40%\" align=\"right\" valign=\"top\">".
-						"<b>".$Select[$cpt2]['Lettre'].".</b> ".$Select[$cpt2]['Reponse']."</td></tr></table></td></tr>";
-						$cpt2++;
+					while(isset($Select[$cpt2])) {
+	  echo "
+      <tr>
+        <td colspan=\"2\">".
+			"<table>".
+			"<tr><td width=\"60%\" colspan=\"2\">&nbsp;</td><td width=\"40%\" align=\"right\" valign=\"top\">".
+			"<b>".$Select[$cpt2]['Lettre'].".</b> ".$Select[$cpt2]['Reponse']."</td></tr></table>
+        </td>
+      </tr>";
+	  $cpt2++;
 					}	// end while()
 				}  // end if()
 			}

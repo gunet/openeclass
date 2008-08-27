@@ -85,7 +85,7 @@ cData;
         <thead>
         <tr>
           <td width="44%" class="left"><u><b>$langColumnA</b></u></td>
-          <td width="12%"><div align="center"><b>Αντιστοιχία</b></div></td>
+          <td width="12%"><div align="center"><b>$langMakeCorrespond</b></div></td>
           <td width="44%" class="left"><u><b>$langColumnB</b></u></td>
         </tr>
         </thead>
@@ -172,12 +172,12 @@ cData;
             </select></div>
           </td>
           <td width=\"44%\">";
-		  
-		  if(isset($Select[$cpt2])) 
-		  	$tool_content .= '<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse']; 
-		  else 
+
+		  if(isset($Select[$cpt2]))
+		  	$tool_content .= '<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
+		  else
 		  	$tool_content .= '&nbsp;';
-		  	
+
 		  $tool_content .=	"
           </td>
         </tr>
@@ -205,7 +205,7 @@ cData;
 			}
 		}
 	}	// end for()
-	
+
 	if(!$nbrAnswers) {
 		$tool_content .= "
       <tr>

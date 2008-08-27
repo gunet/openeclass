@@ -127,7 +127,7 @@ for ($i=0 ; $i < sizeof($flatElementList) ; $i++)
 	if ($flatElementList[$i]['children'] > $maxDeep) $maxDeep = $flatElementList[$i]['children'] ;
 }
 
-$moduleNameLength = 25; // size of 'name' to display in the list, the string will be partially displayed if it is more than $moduleNameLength letters long
+$moduleNameLength = 255; // size of 'name' to display in the list, the string will be partially displayed if it is more than $moduleNameLength letters long
 
 // get the name of the learning path
 $sql = "SELECT `name`
@@ -368,6 +368,7 @@ if(isset($imagePassed))
 echo '</td>'
     .'</tr>'
     .'</thead>';
+/*
 if(isset($endOfSteps)) {
 	echo '<tbody>'
 	    .'<tr>'
@@ -377,6 +378,7 @@ if(isset($endOfSteps)) {
 	    .'</tr>'
 	    .'</tbody>';
 }
+*/
 echo '</table>'
     .'</body></html>'."\n"
      ;

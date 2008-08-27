@@ -29,15 +29,15 @@
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 	               Dionysios G. Synodinos <synodinos@gmail.com>
-==============================================================================        
-    @Description: This script is a replicate from 
-                  exercice/exercise_result.php, but it is modified for the 
-                  displaying needs of the learning path tool. The core 
+==============================================================================
+    @Description: This script is a replicate from
+                  exercice/exercise_result.php, but it is modified for the
+                  displaying needs of the learning path tool. The core
                   application logic remains the same.
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
 
@@ -68,7 +68,7 @@ $require_current_course = TRUE;
 require_once("../../../config/config.php");
 require_once('../../../include/init.php');
 require_once('../../../include/lib/learnPathLib.inc.php');
-require_once('../../../include/lib/textLib.inc.php'); 
+require_once('../../../include/lib/textLib.inc.php');
 
 $nameTools = $langExercices;
 // calculate time needed to complete the exercise
@@ -127,6 +127,14 @@ $OnTime = $RecordStartTime_temp + $exerciseTimeConstrain - $SubmitDate;
 if ($OnTime <= 0)  { // exercise time limit has expired
 
 echo <<<cData
+      <br/>
+      <table width="99%" class="Question">
+      <thead>
+      <tr>
+        <td class="alert1">${langExerciseExpiredTime}</td>
+      </tr>
+      </thead>
+      </table>
   <h3>${exerciseTitle}</h3>
   <p>${langExerciseExpired}</p>
 cData;
@@ -135,8 +143,22 @@ exit;
 
 } else {
 
-echo "<h3>".stripslashes($exerciseTitle)." : ".$langResult."</h3>".
-	"<form method=\"GET\" action=\"backFromExercise.php\">".
+    echo "
+      <table class=\"Exercise\" width=\"99%\">
+      <thead>
+      <tr>
+        <td colspan=\"2\">
+        <b>".stripslashes($exerciseTitle)."</b>
+        <br/><br/>
+        ".stripslashes($exerciseDescription_temp)."
+        </td>
+      </tr>
+      </thead>
+      </table>";
+
+
+echo "
+	<form method=\"GET\" action=\"backFromExercise.php\">".
 	"<input type=\"hidden\" name=\"op\" value=\"finish\">";
 
 	$i=$totalScore=$totalWeighting=0;
@@ -174,34 +196,29 @@ echo "<h3>".stripslashes($exerciseTitle)." : ".$langResult."</h3>".
 		}
 $iplus = $i+1;
 echo <<<cData
-	<table width="95%" border="0" cellpadding="3" cellspacing="2">
-		<tr bgcolor="#E6E6E6">
-		  <td colspan="${colspan}">
-		$langQuestion $iplus
-		  </td>
-		</tr>
-		<tr>
-		  <td colspan="${colspan}">${questionName}</td>
-		</tr>
+      <br/>
+      <table width="99%" class="Question">
+      <thead>
+      <tr>
+        <td colspan="${colspan}"><b><u>$langQuestion</u>: $iplus</b></td>
+      </tr>
+      <tr>
+        <td colspan="${colspan}"><b>${questionName}</b><br/>
+        <small>${questionDescription_temp}</small><br/><br/></td>
+      </tr>
+      </thead>
+      <tbody>
 cData;
 
 		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
 		{
 echo <<<cData
-<tr>
-  <td width="5%" valign="top" align="center" nowrap="nowrap">
-	<small><i>${langChoice}</i></small>
-  </td>
-  <td width="5%" valign="top" nowrap="nowrap">
-	<small><i>${langExpectedChoice}</i></small>
-  </td>
-  <td width="45%" valign="top">
-	<small><i>${langAnswer}</i></small>
-  </td>
-  <td width="45%" valign="top">
-	<small><i>${langComment}</i></small>
-  </td>
-</tr>
+      <tr>
+        <td width="5%" align="center" style="background: #fff;"><b>${langChoice}</b></td>
+        <td width="5%" align="center" style="background: #fff;"><b>${langExpectedChoice}</b></td>
+        <td width="45%" align="center" style="background: #fff;"><b>${langAnswer}</b></td>
+        <td width="45%" align="center" style="background: #fff;"><b>${langComment}</b></td>
+      </tr>
 cData;
 
 	}
@@ -209,20 +226,18 @@ cData;
 	{
 
 echo <<<cData
-	<tr>
-  	<td>
-		<small><i>${langAnswer}</i></small>
-  	</td>
-	</tr>
+      <tr>
+        <td style="background: #fff;"><b>${langAnswer}</b></td>
+      </tr>
 cData;
 
 	} else {
-		
+
 echo <<<cData
-	<tr>
-	  <td width="50%"><small><i>${langElementList}</i></small></td>
-	  <td width="50%"><small><i>${langCorrespondsTo}</i></small></td>
-</tr>
+      <tr>
+        <td width="50%" style="background: #fff;"><b>${langElementList}</b></td>
+        <td width="50%" style="background: #fff;"><b>${langCorrespondsTo}</b></td>
+      </tr>
 cData;
 
 		}
@@ -346,66 +361,66 @@ cData;
 				if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
 				{
 echo <<<cData
-<tr>
-  <td width="5%" align="center">
-	<img src="../../../template/classic/img/
+      <tr>
+        <td width="5%" style="background: #fff;"><div align="center">
+        <img src="../../../template/classic/img/
 cData;
-	
+
 	if ($answerType == UNIQUE_ANSWER)
 		echo "radio";
 	else
 		echo "checkbox";
-	
+
 	if ($studentChoice)
 		echo "_on";
 	else
 		echo '_off';
-		
+
 	echo <<<cData
-		.gif" border="0">
-  	</td>
-  	<td width="5%" align="center">
+		.gif" border="0"></div>
+        </td>
+        <td width="5%" style="background: #fff;"><div align="center">
 cData;
 
-	
+
 	if ($answerType == UNIQUE_ANSWER)
 		echo "<img src=\"../../../template/classic/img/radio";
 	else
 		echo "<img src=\"../../../template/classic/img/checkbox";
 	if ($answerCorrect)
 		echo "_on";
-	else	
+	else
 		echo "_off";
-	
+
 	echo ".gif\" border=\"0\">";
-	
+
   echo <<<cData
-  </td>
-  <td width="45%">${answer}
-  </td>
-  <td width="45%">
+        </td>
+        <td width="45%" style="background: #fff;">${answer}</td>
+        <td width="45%" style="background: #fff;">
 cData;
 
-if($studentChoice) 
-	echo nl2br(make_clickable($answerComment)); 
-else 
-	echo '&nbsp;'; 
+if($studentChoice)
+	echo nl2br(make_clickable($answerComment));
+else
+	echo '&nbsp;';
 
   echo "</td></tr>";
 
 	} elseif($answerType == FILL_IN_BLANKS) {
 
-echo "<tr><td>".nl2br($answer)."</td></tr>";
+echo "
+      <tr>
+        <td style=\"background: #fff;\">".nl2br($answer)."</td>
+      </tr>";
 
 	} else {
 
 echo <<<cData
-	<tr>
-	  <td width="50%">${answer}
-	  </td>
-	  <td width="50%">${choice[$answerId]} / <font color="green"><b>${matching[$answerCorrect]}</b></font>
-	  </td>
-	</tr>
+      <tr>
+        <td width="50%" style="background: #fff;">${answer}</td>
+        <td width="50%" style="background: #fff;">${choice[$answerId]} / <font color="green"><b>${matching[$answerCorrect]}</b></font></td>
+      </tr>
 cData;
 
 		}
@@ -413,12 +428,13 @@ cData;
 }	// end for()
 
 echo <<<cData
-	<tr>
-	  <td colspan="${colspan}" align="right">
-		<b>${langScore} : ${questionScore}/${questionWeighting}</b>
-	  </td>
-	</tr>
-	</table>
+      <tr>
+        <td colspan="${colspan}" class="score">
+        ${langQuestionScore}: <b>${questionScore}/${questionWeighting}</b>
+        </td>
+      </tr>
+      </tbody>
+      </table>
 cData;
 
 		// destruction of Answer
@@ -443,24 +459,27 @@ $sql="SELECT eurid FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
   db_query($sql,$currentCourseID);
 
 echo <<<cData
-	<table width="95%" border="0" cellpadding="3" cellspacing="2">
-	<tr>
-	  <td align="center">
-		<b>${langYourTotalScore} ${totalScore}/${totalWeighting} !</b>
-	  </td>
-	</tr>
-	<tr>
-	  <td align="center">
-	    <br>
-		<input type="submit" value="${langFinish}">
-	  </td>
-	</tr>
-	</table>
-	</form>
-	<br>
+      <br/>
+      <table width="99%" class="Exercise">
+      <thead>
+      <tr>
+        <td class="score">
+        ${langYourTotalScore}: <b>${totalScore}/${totalWeighting}</b>
+        </td>
+      </tr>
+      </thead>
+      </table>
+
+      <br/>
+      <div align="center">
+        <input type="submit" value="${langFinish}">
+      </div>
+
+
+      <br/></form><br>
 cData;
 
-// record progression 
+// record progression
 // update raw in DB to keep the best one, so update only if new raw is better  AND if user NOT anonymous
 if($uid)
 {
@@ -489,13 +508,13 @@ if($uid)
 	$row = mysql_fetch_array($query);
 
 	$scormSessionTime = seconds_to_scorm_time($timeToCompleteExe);
-	
+
 	// build sql query
 	$sql = "UPDATE `".$TABLEUSERMODULEPROGRESS."` SET ";
 	// if recorded score is less then the new score => update raw, credit and status
 
 	if ($row['raw'] < $totalScore)
-	{ 
+	{
 		// update raw
 		$sql .= "`raw` = $totalScore,";
 		// update credit and statut if needed ( score is better than raw_to_pass )
@@ -503,7 +522,7 @@ if($uid)
 		{
 			$sql .= "`credit` = 'CREDIT',`lesson_status` = 'PASSED',";
 		}
-		else // minimum raw to pass needed to get credit 
+		else // minimum raw to pass needed to get credit
 		{
 			$sql .= "`credit` = 'NO-CREDIT',`lesson_status` = 'FAILED',";
 		}

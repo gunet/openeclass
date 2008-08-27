@@ -54,9 +54,6 @@ $nameTools = $langCourseProgram;
   <title><?php echo $langCourseProgram ?></title>
 </head>
 <body style="margin: 2px;">
-<table width="99%" border="0">
-<tr>
-<td colspan="2">
 
 <?php
 	mysql_select_db("$currentCourseID",$db);
@@ -64,27 +61,20 @@ $nameTools = $langCourseProgram;
 	$res = db_query($sql);
 	if (mysql_num_rows($res) >0 )
 	{
-		echo "
-			<hr noshade size=\"1\">";
+		//echo "
+		//	<hr noshade size=\"1\">";
 		while ($bloc = mysql_fetch_array($res))
 		{
-			echo "
-			<H4>
-				".$bloc["title"]."
-			</H4>
-			<font size=2 face='arial, helvetica'>
-				".make_clickable(nl2br($bloc["content"]))."
-			</font>";
+			echo "<p><div id='course_topic_title_id'>".$bloc["title"]."</div></p>
+			<p>".make_clickable(nl2br($bloc["content"]))."</p>";
 		}
 	}
 	else
 	{
-		echo "<br><h4>$langThisCourseDescriptionIsEmpty</h4>";
+		echo "<p>$langThisCourseDescriptionIsEmpty</p>";
 	}
 
 
 ?>
-	</td></tr><tr name="bottomLine" >
-	<td colspan="2"><br>
-	</td></tr></table></body></html>
+    </body></html>
 
