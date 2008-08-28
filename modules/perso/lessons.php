@@ -71,7 +71,7 @@
  * @return mixed content
 
  */
-
+//echo "lessons";
 function  getUserLessonInfo($uid, $type) {
 
 	//	?$userID=$uid;
