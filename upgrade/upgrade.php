@@ -340,6 +340,14 @@ if (!isset($submit2)) {
                 	db_query("INSERT INTO `auth` VALUES (5, 'db', '', '', 0)");
         }
 
+        // Table agenda might be missing some fields in case database
+        // was upgraded from 1.7 to an old version of 2.0. In this case,
+        // just drop the table and it will be recreated
+        if (!mysql_field_exists($$mysqlMainDb, 'agenda', 'lesson_code') or
+            !mysql_field_exists($$mysqlMainDb, 'agenda', 'lesson_event_id')) {
+                db_query("DROP TABLE `agenda`");
+        }
+
         //Table agenda (stores events from all lessons)
         if (!mysql_table_exists($mysqlMainDb, 'agenda'))  {
                 db_query("CREATE TABLE `agenda` (
