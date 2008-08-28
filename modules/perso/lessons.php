@@ -71,7 +71,7 @@
  * @return mixed content
 
  */
-//echo "lessons";
+
 function  getUserLessonInfo($uid, $type) {
 
 	//	?$userID=$uid;
@@ -111,15 +111,9 @@ function  getUserLessonInfo($uid, $type) {
 	                                  ";
 
 
-
-
 	$mysql_query_result = db_query($user_courses, $mysqlMainDb);
 
-
-
 	$repeat_val = 0;
-
-
 
 	$lesson_titles = array();
 
@@ -131,19 +125,15 @@ function  getUserLessonInfo($uid, $type) {
 
 	while ($mycourses = mysql_fetch_row($mysql_query_result)) {
 
-
-
 		$lesson_titles[$repeat_val] 	= $mycourses[2]; //lesson titles
 
-		$lesson_code[$repeat_val]		= $mycourses[0]; //lesson code used in tables
+		$lesson_code[$repeat_val]	= $mycourses[0]; //lesson code used in tables
 
 		$lesson_professor[$repeat_val]	= $mycourses[3]; //lesson professor
 
-		$lesson_statut[$repeat_val]		= $mycourses[5];//statut (user|prof)
+		$lesson_statut[$repeat_val]	= $mycourses[5];//statut (user|prof)
 
 		$lesson_fakeCode[$repeat_val]	= $mycourses[1];//lesson fake code
-
-
 
 		$repeat_val++;
 
@@ -158,10 +148,7 @@ function  getUserLessonInfo($uid, $type) {
 	$memory_result = db_query($memory, $mysqlMainDb);
 
 
-
 	while ($my_memory_result = mysql_fetch_row($memory_result)) {
-
-
 
 		$lesson_announce_f = eregi_replace("-", " ", $my_memory_result[0]);
 
@@ -171,21 +158,13 @@ function  getUserLessonInfo($uid, $type) {
 
 	}
 
-
-
-
-
-
-
 	$max_repeat_val = $repeat_val;
-
-
 
 	$ret_val[0] = $max_repeat_val;
 
 	$ret_val[1] = $lesson_titles;
 
-	@$ret_val[2]	= $lesson_code;
+	@$ret_val[2] = $lesson_code;
 
 	@$ret_val[3] = $lesson_professor;
 
@@ -214,10 +193,7 @@ function  getUserLessonInfo($uid, $type) {
 	}
 
 
-
 }
-
-
 
 
 
@@ -241,78 +217,57 @@ function htmlInterface($data, $lesson_fCode) {
 
 	global $langNotEnrolledToLessons, $langCreateLesson, $langEnroll;
 
-	$lesson_content = "";
+	global $langUnregCourse, $langManagement, $uid;
 
+	$lesson_content = "";
 	if ($data[0] > 0) {
 
 		$lesson_content .= <<<lCont
 
-
-
       		<div id="datacontainer">
-
-
 
 				<ul id="datalist">
 
 lCont;
 
-
-
 		for ($i=0; $i<$data[0]; $i++){
 
+		$lesson_content .= "
 
-
-			$lesson_content .= "
-
-	<li>
-
-	<a class=\"square_bullet\" href=\"courses/".$data[2][$i]."\">
-
-	
+	<li>";
+	if ($data[4][$i] == '5') {
+		$lesson_content .= "<a href=\"modules/unreguser/unregcours.php?cid=".$data[2][$i]."&uid=".$uid."\">
+		<img style='float:right; padding-top:1em; padding-right:1em;' src='${urlServer}/template/classic/img/cunregister.gif' border='0' title='$langUnregCourse'></img></a>"; 
+	} elseif ($data[4][$i] == '1'){
+		$lesson_content .= "<a href=\"modules/course_info/infocours.php?from_home=TRUE&cid=".$data[2][$i]."\">
+		<img style='float:right;padding-top:1em; padding-right:1em;' src='${urlServer}/template/classic/img/referencement.gif' border='0' title='$langManagement'></img></a>	";
+	}
+	$lesson_content .= "<a class=\"square_bullet\" href=\"courses/".$data[2][$i]."\">
 
 	<strong class=\"title_pos\">".$lesson_fCode[$i]." - ".$data[1][$i]."</strong>
 
 	<cite class=\"content_pos\">".$data[3][$i]."</cite>
-
+	
 	</a>
-
-	</li>
-
-	";
+	</li>";
+	/*if ($data[4][$i] == '5') {
+		$lesson_content .= "<a href=\"modules/unreguser/unregcours.php?cid=".$data[2][$i]."&uid=".$uid."\">
+		<img style='float:right;' src='${urlServer}/template/classic/img/cunregister.gif' border='0' title='$langUnregCourse'></img></a>"; 
+	} elseif ($data[4][$i] == '1'){
+		$lesson_content .= "<a href=\"modules/course_info/infocours.php?from_home=TRUE&cid=".$data[2][$i]."\">
+		<img style='float:right;' src='${urlServer}/template/classic/img/referencement.gif' border='0' title='$langManagement'></img></a>	
+	";  
+	} */
 
 		}
 
-
-
-
-
-
-
-		$lesson_content .= "
-
-	</ul>
-
-			</div> 
-
-		<br>";
+		$lesson_content .= "</ul></div><br>";
 
 	} else {
-
-		$lesson_content .= "
-
-		<p>$langNotEnrolledToLessons</p>
-
-		";
+		$lesson_content .= "<p>$langNotEnrolledToLessons</p>";
 
 		if ($statut == 1) {
-
-			$lesson_content .= "
-
-		<p>$langCreateLesson</p>
-
-		";
-
+			$lesson_content .= "<p>$langCreateLesson</p>";
 		}
 
 		$lesson_content .= "
@@ -341,13 +296,9 @@ lCont;
 
 	}
 
-
-
 	return $lesson_content;
 
 }
-
-
 
 ?>
 
