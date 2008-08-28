@@ -113,7 +113,6 @@ function  getUserLessonInfo($uid, $type) {
 
 
 
-
 	$mysql_query_result = db_query($user_courses, $mysqlMainDb);
 
 

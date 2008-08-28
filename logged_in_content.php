@@ -34,7 +34,7 @@
  *
  */
 
-include("./modules/perso/lessons.php");
+/*include("./modules/perso/lessons.php");
 include("./modules/perso/documents.php");
 include("./include/lib/textLib.inc.php");
 include("./include/phpmathpublisher/mathpublisher.php");
@@ -248,6 +248,128 @@ if (mysql_num_rows(db_query($sql, $mysqlMainDb)) > 0) {
 	}
 }
 
-$tool_content .= "</table>";
-session_register('status');
+$tool_content .= "</table>";*/
+
+//cleare $tool_content
+$tool_content = "";
+
+include ("perso.php");
+//echo "perso included";
+$tool_content = "
+<div id=\"leftnav_perso\">
+<table width=\"100%\">
+   				<thead>
+   					<tr>
+      					<th> {LANG_MY_PERSO_LESSONS}</th>
+      				</tr>
+      			</thead>
+      			<tbody>
+      				<tr class=\"odd\">
+      					<td>
+      						{LESSON_CONTENT}
+      					</td>
+     				</tr>
+      			</tbody>
+      		</table>
+
+      		<br />
+
+      		<table width=\"100%\">
+      			<thead>
+      				<tr>
+      					<th>
+      						{LANG_MY_PERSO_ANNOUNCEMENTS}
+      					</th>
+      				</tr>
+      			</thead>
+      			<tbody>
+      				<tr class=\"odd\">
+      					<td>
+      						{ANNOUNCE_CONTENT}
+     					</td>
+     				</tr>
+      			</tbody>
+      		</table>
+
+      		<br />
+
+<table width=\"100%\">
+      			<thead>
+      				<tr>
+      					<th>
+      						{LANG_MY_PERSO_AGENDA}
+      					</th>
+      				</tr>
+      			</thead>
+      			<tbody>
+      				<tr class=\"odd\">
+      					<td>
+	      					{AGENDA_CONTENT}
+     					</td>
+     				</tr>
+      			</tbody>
+      		</table>
+
+	  	</div>
+
+	  	<div id=\"content_main_perso\">
+
+	  		<table width=\"100%\">
+      			<thead>
+      				<tr>
+      					<th>
+      						{LANG_MY_PERSO_DEADLINES}
+      					</th>
+      				</tr>
+      			</thead>
+      			<tbody>
+      				<tr class=\"odd\">
+      					<td>
+      						{ASSIGN_CONTENT}
+     					</td>
+     				</tr>
+      			</tbody>
+      		</table>
+
+      		<br />
+      		<table width=\"100%\">
+      			<thead>
+      				<tr>
+      					<th>
+      						{LANG_MY_PERSO_DOCS}
+      					</th>
+      				</tr>
+      			</thead>
+      			<tbody>
+      				<tr class=\"odd\">
+      					<td>
+      						{DOCS_CONTENT}
+     					</td>
+     				</tr>
+     			</tbody>
+     		</table>
+
+     		<br />
+
+     		<table width=\"100%\">
+     			<thead>
+     				<tr>
+     					<th>
+     						{LANG_PERSO_FORUM}
+     					</th>
+     				</tr>
+     			</thead>
+     			<tbody>
+     				<tr class=\"odd\">
+     					<td>
+     						{FORUM_CONTENT}
+     					</td>
+     				</tr>
+      			</tbody>
+      		</table>
+      		
+      		</div>";
+
+//the following is not needed as it is registered in perso.php
+//session_register('status');
 ?>
