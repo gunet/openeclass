@@ -32,12 +32,8 @@ if (isset($from_home) and ($from_home == TRUE) and isset($_GET['cid'])) {
 
 $require_current_course = TRUE;
 $require_prof = true;
-if (isset($localize)) {
-	if ($localize == 'el')
-		$newlang = 'greek';
-	else
-		$newlang = 'english';
-	$language = $newlang;
+if (isset($_POST['localize'])) {
+	$newlang = $language = preg_replace('/[^a-z]/', '', $_POST['localize']);
 }
 
 include '../../include/baseTheme.php';
@@ -49,7 +45,7 @@ $nameTools = $langModifInfo;
 $tool_content = "";
 
 // submit
-if($is_adminOfCourse) {
+if ($is_adminOfCourse) {
 	if (isset($submit)) {
 		if (!empty($int)) {
 			if(isset($newlang)) {
@@ -250,11 +246,8 @@ if($is_adminOfCourse) {
     <tr>
       <th class='left'>$langOptions&nbsp;:</th>
       <td width='1'>";
-		if ($leCours['languageCourse'] == 'english')
-			$curLang = 'en';
-		else
-			$curLang = 'el';
-		$tool_content .= lang_select_options();
+		$language = $leCours['languageCourse'];
+		$tool_content .= lang_select_options('localize');
 		$tool_content .= "
       </td>
       <td><small>$langTipLang</p></td>

@@ -563,7 +563,7 @@ function print_a($TheArray) {
  */
 function lang_selections() {
 	$html = '<form name="langform" action="' . $_SERVER ['PHP_SELF'] . '" method="GET" >';
-	$html .= lang_select_options ( 'onChange="document.langform.submit();"' );
+	$html .= lang_select_options('localize', 'onChange="document.langform.submit();"');
 	$html .= '</form>';
 	return $html;
 }
@@ -574,27 +574,30 @@ function lang_selections() {
  * Returns the HTML code for the <select> element of the language selection tool
  *
  */
-function lang_select_options($onchange_js = '') {
+function lang_select_options($name, $onchange_js = '') {
 	global $language;
 	
-	$langArrayOfNames = array ('greek' => 'Ελληνικά (el)', 'english' => 'English (en)' );#		'spanish' => 'Español (es)',
+	$langArrayOfNames = array (
+                'greek' => 'Ελληνικά (el)',
+                'english' => 'English (en)' );
+
+#		'spanish' => 'Español (es)',
 #		'czech' => 'Česky (cz)',
-	#		'albanian' => 'Shqip (sq)',
-	#		'bulgarian' => 'Български (bg)',
-	#		'catalan' => 'Català (ca)',
-	#		'danish' => 'Dansk (da)',
-	#		'dutch' => 'Nederlands (nl)',
-	#		'finnish' => 'Suomi (fi)',
-	#		'french' => 'Français (fr)',
-	#		'german' => 'Deutsch (de)',
-	#		'icelandic' => 'Íslenska (is)',
-	#		'italian' => 'Italiano (it)',
-	#		'japanese' => '日本語 (jp)',
-	#		'polish' => 'Polski (pl)',
-	#		'russian' => 'Русский (ru)',
-	#		'turkish' => 'Türkçe (tr)',
-	
-	
-	return selection ( $langArrayOfNames, 'localize', $language, $onchange_js );
+#		'albanian' => 'Shqip (sq)',
+#		'bulgarian' => 'Български (bg)',
+#		'catalan' => 'Català (ca)',
+#		'danish' => 'Dansk (da)',
+#		'dutch' => 'Nederlands (nl)',
+#		'finnish' => 'Suomi (fi)',
+#		'french' => 'Français (fr)',
+#		'german' => 'Deutsch (de)',
+#		'icelandic' => 'Íslenska (is)',
+#		'italian' => 'Italiano (it)',
+#		'japanese' => '日本語 (jp)',
+#		'polish' => 'Polski (pl)',
+#		'russian' => 'Русский (ru)',
+#		'turkish' => 'Türkçe (tr)',
+
+	return selection ($langArrayOfNames, $name, $language, $onchange_js);
 }
 

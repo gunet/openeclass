@@ -119,7 +119,7 @@ if (isset($back1) or !isset($visit)) {
       <tr>
         <th class='left'>$langLanguage&nbsp;:</th>
         <td>";
-        @$tool_content .= lang_select_options();
+        $tool_content .= lang_select_options('languageCourse');
         $tool_content .= "</td><td>&nbsp;</td></tr>
       	<tr><th>&nbsp;</th>
         <td><input type='submit' name='create2' value='$langNextStep >' /><input type='hidden' name='visit' value='true' /></td>
@@ -305,7 +305,7 @@ if (isset($create_course)) {
         $faculte = $facname;
 	// find new code
         $repertoire = new_code(find_faculty_by_name($faculte));
-        $language=$languageCourse;
+        $language = preg_replace('/[^a-z]/', '', $_POST['languageCourse']);
         include("../lang/$language/common.inc.php");
         include("../lang/$language/messages.inc.php");
         if(empty($intitule) OR empty($repertoire)) {
@@ -355,7 +355,7 @@ if (isset($create_course)) {
 
                 mysql_query("INSERT INTO cours SET
                                 code = '$code',
-                                languageCourse = '$languageCourse',
+                                languageCourse = '$language',
                                 intitule = '$intitule',
                                 description = '$description',
                                 course_addon = '$course_addon',
