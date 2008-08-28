@@ -52,12 +52,13 @@ session_register('status');
 // end of check
 
 //include personalised component files (announcemets.php etc.) from /modules/perso
-include("./modules/perso/lessons.php");
-include("./modules/perso/assignments.php");
-include("./modules/perso/announcements.php");
-include("./modules/perso/documents.php");
-include("./modules/perso/agenda.php");
-include("./modules/perso/forumPosts.php");
+
+include(getcwd() . "/modules/perso/lessons.php");
+include(getcwd() . "/modules/perso/assignments.php");
+include(getcwd() . "/modules/perso/announcements.php");
+include(getcwd() . "/modules/perso/documents.php");
+include(getcwd() . "/modules/perso/agenda.php");
+include(getcwd() . "/modules/perso/forumPosts.php");
 
 //	BEGIN Get user's last login date]==============================================
 
@@ -92,8 +93,10 @@ if ($row = mysql_fetch_row($user_status_query)) {
 
 
 //	BEGIN Get user's lesson info]=====================================================
+
 $user_lesson_info = getUserLessonInfo($uid, "html");
 //	END Get user's lesson info]=====================================================
+
 
 //if user is registered to at least one lesson
 if ($user_lesson_info[0][0] > 0) {
@@ -177,7 +180,7 @@ if ($user_lesson_info[0][0] > 0) {
 }
 
 // ==  BEGIN create array with personalised content
-$tool_content = array(
+$perso_tool_content = array(
 'lessons_content' 	=> $user_lesson_info[1],
 'assigns_content' 	=> $user_assignments,
 'announce_content' 	=> $user_announcements,
@@ -185,6 +188,7 @@ $tool_content = array(
 'agenda_content' 	=> $user_agenda,
 'forum_content' 	=> $user_forumPosts
 );
+
 // == END create array with personalised content
 
 

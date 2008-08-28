@@ -329,7 +329,7 @@ if (isset($uid) AND !isset($logout)) {
 		if (!check_guest()){
 			//if the user is not a guest, load classic view
 			include("logged_in_content.php");
-			draw($tool_content,1);
+			draw($tool_content,1,null,null,null,null,$perso_tool_content);
 		} else {
 			//if the user is a guest send him straight to the corresponding lesson
 			$guestSQL = db_query("SELECT `code_cours` FROM `cours_user` WHERE `user_id` = $uid", $mysqlMainDb);
