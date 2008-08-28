@@ -147,33 +147,33 @@ if (mysql_num_rows(db_query($sql, $mysqlMainDb)) > 0) {
 // assignments info
 	$asql = db_query($sql, $mysqlMainDb);
 	$found = 0;
-	while ($c = mysql_fetch_array($asql)) {	
-		$s = db_query("SELECT DISTINCT assignments.id, assignments.deadline, 
+	while ($c = mysql_fetch_array($asql)) {
+		$s = db_query("SELECT DISTINCT assignments.id, assignments.deadline,
 			cours.intitule,(TO_DAYS(assignments.deadline) - TO_DAYS(NOW())) AS days_left
 			FROM `$c[k]`.assignments, `$mysqlMainDb`.cours, `$c[k]`.accueil
 			WHERE (TO_DAYS(deadline) - TO_DAYS(NOW())) >= '0'
 			AND assignments.active = 1 AND cours.code = '$c[k]'
 			AND `$c[k]`.accueil.visible =1
 			AND `$c[k]`.accueil.id =5 ORDER BY deadline", $c['k']);
-		if (mysql_num_rows($s) > 0) $found++;	  
+		if (mysql_num_rows($s) > 0) $found++;
 		}
 // if assignments found then display them
 	if ($found > 0)  {
 		$tool_content .= "<tr><th>$langMyPersoDeadlines</th></tr>";
 		$asql = db_query($sql, $mysqlMainDb);
 		while ($c = mysql_fetch_array($asql)) {
-			$s = db_query("SELECT DISTINCT assignments.id, assignments.title, 
-				assignments.description, assignments.deadline, 
+			$s = db_query("SELECT DISTINCT assignments.id, assignments.title,
+				assignments.description, assignments.deadline,
 				cours.intitule,(TO_DAYS(assignments.deadline) - TO_DAYS(NOW())) AS days_left
 				FROM `$c[k]`.assignments, `$mysqlMainDb`.cours, `$c[k]`.accueil
 				WHERE (TO_DAYS(deadline) - TO_DAYS(NOW())) >= '0'
 				AND assignments.active = 1 AND cours.code = '$c[k]'
 				AND `$c[k]`.accueil.visible =1
-				AND `$c[k]`.accueil.id =5 ORDER BY deadline", $c['k']); 
+				AND `$c[k]`.accueil.id =5 ORDER BY deadline", $c['k']);
 			while ($d = mysql_fetch_array($s)) {
 				$tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
 				$tool_content .= "<td>&nbsp;<img src='images/arrow_blue.gif'>&nbsp;$c[t]:&nbsp;<b>$d[title]</b>&nbsp;- $langExerciseEnd: ".greek_format($d['deadline'])."</td></tr>";
-			} 
+			}
 		}
 	}
 
@@ -183,32 +183,32 @@ if (mysql_num_rows(db_query($sql, $mysqlMainDb)) > 0) {
 	while ($c = mysql_fetch_array($ansql)) {
 		$result = db_query("SELECT temps FROM `$mysqlMainDb`.annonces, `$c[k]`.accueil
 			WHERE code_cours='`$c[k]`'
-			AND DATE_SUB(DATE_FORMAT('".$logindate."','%Y-%m-%d'), INTERVAL 1 WEEK) 
+			AND DATE_SUB(DATE_FORMAT('".$logindate."','%Y-%m-%d'), INTERVAL 1 WEEK)
 			<= DATE_FORMAT(temps,'%Y-%m-%d')
 			AND `$c[k]`.accueil.visible =1
 			AND `$c[k]`.accueil.id =7", $mysqlMainDb);
-		if (mysql_num_rows($result) > 0) $found++;	  
+		if (mysql_num_rows($result) > 0) $found++;
 	}
 // if announcements found then display them
 	if ($found > 0)  {
 		$tool_content .= "<tr><th>$langMyPersoAnnouncements</th></tr>";
 		$ansql = db_query($sql, $mysqlMainDb);
 		while ($c = mysql_fetch_array($ansql)) {
-		$result = db_query("SELECT contenu, temps, title 
+		$result = db_query("SELECT contenu, temps, title
 			FROM `$mysqlMainDb`.annonces, `$c[k]`.accueil
 			WHERE code_cours=`$c[k]`
-			AND DATE_SUB(DATE_FORMAT('".$logindate."','%Y-%m-%d'), INTERVAL 1 WEEK) 
+			AND DATE_SUB(DATE_FORMAT('".$logindate."','%Y-%m-%d'), INTERVAL 1 WEEK)
 			<= DATE_FORMAT(temps,'%Y-%m-%d')
 			AND `$c[k]`.accueil.visible =1
 			AND `$c[k]`.accueil.id =7
 			ORDER BY temps DESC", $mysqlMainDb);
-	
+
 			while ($ann = mysql_fetch_array($result)) {
 				$content = $ann['contenu'];
                 		$content = make_clickable($content);
                 		$content = nl2br($content);
 				$content = mathfilter($content, 12, "../../include/phpmathpublisher/img/");
-				$row = mysql_fetch_array(db_query("SELECT intitule,titulaires 
+				$row = mysql_fetch_array(db_query("SELECT intitule,titulaires
 					FROM cours WHERE code='$c[k]'"));
 				$tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
                 		$tool_content .= "<td>&nbsp;<img src='images/arrow_blue.gif'>&nbsp;$c[t]:&nbsp;($langTutor: <b>$row[titulaires]</b>)<br>$ann[title]<br>$content<br>
@@ -221,7 +221,7 @@ if (mysql_num_rows(db_query($sql, $mysqlMainDb)) > 0) {
 	$csql = db_query($sql, $mysqlMainDb);
 	while ($c = mysql_fetch_array($csql)) {
 		$s = db_query("SELECT path FROM document, accueil WHERE visibility = 'v'
-			AND DATE_SUB(DATE_FORMAT('".$logindate."','%Y-%m-%d'), INTERVAL 1 WEEK) 
+			AND DATE_SUB(DATE_FORMAT('".$logindate."','%Y-%m-%d'), INTERVAL 1 WEEK)
 			<= DATE_FORMAT(date_modified,'%Y-%m-%d')
 			AND accueil.visible =1 AND accueil.id = 3", $c['k']);
 		if (mysql_num_rows($s) > 0) $found++;
@@ -235,7 +235,7 @@ if (mysql_num_rows(db_query($sql, $mysqlMainDb)) > 0) {
 		while ($c = mysql_fetch_array($csql)) {
 			$s = db_query("SELECT path, filename, title, date_modified
 				FROM document, accueil WHERE visibility = 'v'
-				AND DATE_SUB(DATE_FORMAT('".$logindate."','%Y-%m-%d'), INTERVAL 1 WEEK) 
+				AND DATE_SUB(DATE_FORMAT('".$logindate."','%Y-%m-%d'), INTERVAL 1 WEEK)
 				<= DATE_FORMAT(date_modified,'%Y-%m-%d')
 				AND accueil.visible =1 AND accueil.id =3
 				ORDER BY date_modified DESC", $c['k']);
@@ -243,7 +243,7 @@ if (mysql_num_rows(db_query($sql, $mysqlMainDb)) > 0) {
 				$tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
 				$tool_content .= "<td>&nbsp;<img src='images/arrow_blue.gif'>&nbsp;$c[t]:&nbsp;$d[title]
 				<a class='CourseLink' href='$urlServer/courses/$c[k]/document$d[path]'>$d[filename]</a></td></tr>";
-			} 
+			}
 		}
 	}
 }
@@ -257,10 +257,10 @@ include ("perso.php");
 //echo "perso included";
 $tool_content = "
 <div id=\"leftnav_perso\">
-<table width=\"100%\">
+            <table width=\"100%\">
    				<thead>
    					<tr>
-      					<th> {LANG_MY_PERSO_LESSONS}</th>
+      					<th class=\"persoBoxTitle\">{LANG_MY_PERSO_LESSONS}</th>
       				</tr>
       			</thead>
       			<tbody>
@@ -277,7 +277,7 @@ $tool_content = "
       		<table width=\"100%\">
       			<thead>
       				<tr>
-      					<th>
+      					<th class=\"persoBoxTitle\">
       						{LANG_MY_PERSO_ANNOUNCEMENTS}
       					</th>
       				</tr>
@@ -296,7 +296,7 @@ $tool_content = "
 <table width=\"100%\">
       			<thead>
       				<tr>
-      					<th>
+      					<th class=\"persoBoxTitle\">
       						{LANG_MY_PERSO_AGENDA}
       					</th>
       				</tr>
@@ -317,7 +317,7 @@ $tool_content = "
 	  		<table width=\"100%\">
       			<thead>
       				<tr>
-      					<th>
+      					<th class=\"persoBoxTitle\">
       						{LANG_MY_PERSO_DEADLINES}
       					</th>
       				</tr>
@@ -335,7 +335,7 @@ $tool_content = "
       		<table width=\"100%\">
       			<thead>
       				<tr>
-      					<th>
+      					<th class=\"persoBoxTitle\">
       						{LANG_MY_PERSO_DOCS}
       					</th>
       				</tr>
@@ -354,7 +354,7 @@ $tool_content = "
      		<table width=\"100%\">
      			<thead>
      				<tr>
-     					<th>
+     					<th class=\"persoBoxTitle\">
      						{LANG_PERSO_FORUM}
      					</th>
      				</tr>
@@ -367,7 +367,7 @@ $tool_content = "
      				</tr>
       			</tbody>
       		</table>
-      		
+
       		</div>";
 
 //the following is not needed as it is registered in perso.php

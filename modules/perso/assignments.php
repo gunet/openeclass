@@ -29,7 +29,7 @@
 
  * Personalised Assignments Component, eClass Personalised
 
- * 
+ *
 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
 
@@ -37,9 +37,9 @@
 
  * @package eClass Personalised
 
- * 
+ *
 
- * @abstract This component populates the assignments block on the user's personalised 
+ * @abstract This component populates the assignments block on the user's personalised
 
  * interface. It is based on the diploma thesis of Evelthon Prodromou.
 
@@ -53,7 +53,7 @@
 
  * Function getUserAssignments
 
- * 
+ *
 
  * Populates an array with data regarding the user's personalised assignments
 
@@ -87,9 +87,9 @@ function getUserAssignments($param, $type) {
 
 	for ($i=0;$i<$max_repeat_val;$i++) {
 
-		$assignments_query[$i] = "SELECT DISTINCT assignments.id, assignments.title, 
+		$assignments_query[$i] = "SELECT DISTINCT assignments.id, assignments.title,
 
-		assignments.description, assignments.deadline, 
+		assignments.description, assignments.deadline,
 
 		cours.intitule,(TO_DAYS(assignments.deadline) - TO_DAYS(NOW())) AS days_left
 
@@ -171,7 +171,7 @@ function getUserAssignments($param, $type) {
 
  * Function assignHtmlInterface
 
- * 
+ *
 
  * Generates html content for the assignments block of eClass personalised.
 
@@ -199,9 +199,9 @@ function assignHtmlInterface($data) {
 
 		$assign_content .= <<<aCont
 
-	
 
-	<table  width="100%" class="assign">
+
+	<table width="100%" class="assign">
 
 		<thead>
 
@@ -239,7 +239,7 @@ aCont;
 
 			$assign_content .= "<tr>
 
-			<td class=\"assign\"><p>".$data[$i][4]."</p></td>			
+			<td class=\"assign\"><p>".$data[$i][4]."</p></td>
 
 			<td class=\"assign\">
 
@@ -251,7 +251,7 @@ aCont;
 
 			</a></li></ul>
 
-			</div> 
+			</div>
 
 			</td>
 
@@ -281,7 +281,7 @@ aCont;
 
  * Sorts an array by one of it's columns specified by $column
 
- * 
+ *
 
  * @param array $unsorted
 
@@ -327,7 +327,7 @@ function columnSort($unsorted, $column) {
 
  *  Gets the id of an assignments
 
- * 
+ *
 
  * @param int $uid
 
@@ -389,7 +389,7 @@ function findSubmission($uid, $id, $lesson_db) {
 
  * Returns true if it is.
 
- * 
+ *
 
  * @param int $id
 
@@ -435,13 +435,13 @@ function isGroupAssignment($id, $lesson_db) {
 
  * Returns the user's group he is enrolled at, false otherwise
 
- * 
+ *
 
  * @param int $uid
 
  * @param string $lesson_db
 
- * @return mixed 
+ * @return mixed
 
  */
 
