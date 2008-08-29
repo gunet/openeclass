@@ -180,7 +180,7 @@ function announcement ($text, $date, $order) {
 
 
 // inserting users into the main database
-function user ($userid, $name, $surname, $login, $password, $email, $statut, $phone, $department, $inst_id) {
+function user ($userid, $name, $surname, $login, $password, $email, $statut, $phone, $department, $inst_id = NULL) {
 	global $action, $course_code, $userid_map, $mysqlMainDb, $course_prefix, $course_addusers;
 	global $langUserWith, $langAlready, $langWithUsername, $langUserisAdmin, $langUsernameSame, $langUserAlready, $langUName, $langPrevId, $langNewId, $langUserName;
 	

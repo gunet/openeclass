@@ -172,6 +172,7 @@ function backup_annonces($f, $course) {
 				    WHERE code_cours = '$course'");
 	while($q = mysql_fetch_array($res)) {
 		fputs($f, "announcement(".
+			quote($q['title']).",\n".
 			quote($q['contenu']).",\n".
 			quote($q['temps']).", ".
 			quote($q['ordre']).");\n");
@@ -257,7 +258,9 @@ function backup_users($f, $course) {
 			quote($q['email']).", ".
 			quote($q['cours_statut']).", ".
 			quote($q['phone']).", ".
-			quote($q['department']).");\n");
+			quote($q['department']).", ".
+			quote($q['registered_at']).", ".
+			quote($q['expires_at']).");\n");
 	}
 }
 
