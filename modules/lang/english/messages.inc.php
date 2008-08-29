@@ -667,8 +667,8 @@ $langErrorDir = "Unable to create course subdirectory. The course was not create
 
 // tables MySQL
 $langForumLanguage="english";	// other possibilities are english, spanish (this uses phpbb language functions)
-$langTestForum="Test forum";
-$langDelAdmin="Remove this through the forum admin tool";
+$langTestForum="General forum";
+$langDelAdmin="Discussion on all topics concerning this course";
 $langMessage="When you remove the test forum, it will remove all messages in that forum too.";
 $langExMessage="Example message";
 $langAnonymous="Anonymous";

@@ -61,7 +61,7 @@
      KEY forum_last_post_id (forum_last_post_id))
     TYPE=MyISAM $charset_spec");
 
-  mysql_query("INSERT INTO forums VALUES (1,'$langTestForum','$langDelAdmin',2,1,1,1,1,2,0)");
+  mysql_query("INSERT INTO forums VALUES (1,'$langTestForum','$langDelAdmin',2,1,0,0,0,2,0)");
 
 	mysql_query("CREATE TABLE posts (
       post_id int(10) NOT NULL auto_increment,
@@ -79,15 +79,11 @@
       KEY poster_id (poster_id))
       TYPE=MyISAM $charset_spec");
 
-  mysql_query("INSERT INTO posts VALUES (1,1,1,1,NOW(),'130.104.1.1','$nom','$prenom')");
-
       mysql_query("CREATE TABLE posts_text (
                 post_id int(10) DEFAULT '0' NOT NULL,
                 post_text text,
                 PRIMARY KEY (post_id))
     TYPE=MyISAM $charset_spec");
-
-  mysql_query("INSERT INTO posts_text VALUES ('1','$langMessage')");
 
   mysql_query("CREATE TABLE topics (
                topic_id int(10) NOT NULL auto_increment,
@@ -108,7 +104,11 @@
                KEY topic_last_post_id (topic_last_post_id))
     TYPE=MyISAM $charset_spec");
 
-mysql_query("INSERT INTO topics VALUES (1,'$langExMessage',-1,'2001-09-18 20:25',1,'',1,1,'0','1', '$nom', '$prenom')");
+/* example message */
+/*  mysql_query("INSERT INTO posts_text VALUES ('1','$langMessage')");
+  mysql_query("INSERT INTO posts VALUES (1,1,1,1,NOW(),'130.104.1.1','$nom','$prenom')");
+  mysql_query("INSERT INTO topics VALUES (1,'$langExMessage',-1,'2001-09-18 20:25',1,'',1,1,'0','1', '$nom', '$prenom')"); */
+
   mysql_query("CREATE TABLE users (
                user_id int(10) NOT NULL auto_increment,
                username varchar(40) NOT NULL,
