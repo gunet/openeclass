@@ -164,24 +164,25 @@ function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) 
 }
 
 // inserting announcements into the main database
-function announcement ($text, $date, $order) {
+function announcement ($title = NULL, $text, $date, $order) {
 	global $action, $course_code, $mysqlMainDb;
 	if (!$action) return;
 	db_query("INSERT into `$mysqlMainDb`.annonces
-		(contenu,code_cours,temps,ordre)
+		(title, contenu, temps, code_cours, ordre)
 		VALUES (".
 		join(", ", array(	
+			quote($title),
 			quote($text),
-			quote($course_code),
 			quote($date),
+			quote($course_code),
 			quote($order))).
 			")");
 }
 
 
 // inserting users into the main database
-function user ($userid, $name, $surname, $login, $password, $email, $statut, $phone, $department, $inst_id = NULL) {
-	global $action, $course_code, $userid_map, $mysqlMainDb, $course_prefix, $course_addusers;
+function user ($userid, $name, $surname, $login, $password, $email, $statut, $phone, $department, $registered_at = NULL, $expires_at = NULL, $inst_id = NULL) {
+	global $action, $course_code, $userid_map, $mysqlMainDb, $course_prefix, $course_addusers, $durationAccount;
 	global $langUserWith, $langAlready, $langWithUsername, $langUserisAdmin, $langUsernameSame, $langUserAlready, $langUName, $langPrevId, $langNewId, $langUserName;
 	
 	if (!$action) return;
@@ -190,6 +191,13 @@ function user ($userid, $name, $surname, $login, $password, $email, $statut, $ph
 		echo "<br>$langUserWith $userid_map[$userid] $langAlready\n";
 		return;
 	}
+	if (!$registered_at)  {
+		$registered_at = time(); 
+	}
+	if (!$expires_at) { 
+		$expires_at = time() + $durationAccount;	
+	}
+
 	// add prefix only to usernames that dont use LDAP login
 	if ($course_prefix) {
 		if ($statut == 1) {
@@ -208,7 +216,7 @@ function user ($userid, $name, $surname, $login, $password, $email, $statut, $ph
 		echo "$langUserAlready <b>$login</b>. $langUName <i>$res[1] $res[2]</i>  !\n";
 	} else {
 		db_query("INSERT into `$mysqlMainDb`.user
-			(nom, prenom, username, password, email, statut, phone, department)
+			(nom, prenom, username, password, email, statut, phone, department, registered_at, expires_at)
 			VALUES (".
 			join(", ", array(	
 				quote($name),
@@ -218,7 +226,10 @@ function user ($userid, $name, $surname, $login, $password, $email, $statut, $ph
 				quote($email),
 				quote($statut),
 				quote($phone),
-				quote($department))).
+				quote($department),
+				quote($registered_at),
+				quote($expires_at)
+				)).
 				")");
 		$userid_map[$userid] = mysql_insert_id();
 	}
@@ -244,8 +255,9 @@ function query($sql) {
 // function for inserting info about user group
 function group( $userid, $team, $status, $role) {
 	global $action, $userid_map, $course_code, $course_addusers;
-	if (!$action) return;
-	if (!$course_addusers) return;
+	if (!$action or !$course_addusers or !isset($userid_map[$userid])) {
+		return;
+	}
 	mysql_select_db($course_code);
 	db_query("INSERT into user_group
 		(user,team,status,role)
