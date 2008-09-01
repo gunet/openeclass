@@ -322,7 +322,7 @@ aCont;
 	for ($i=0; $i <$max_repeat_val; $i++) {
 
 		$iterator =  count($data[$i][2]);
-
+		
 		if ($iterator > 0) {
 
 			$docsExist = true;

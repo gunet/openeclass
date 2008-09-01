@@ -76,7 +76,7 @@ function getUserAssignments($param, $type) {
 	$lesson_code	= $param['lesson_code'];
 
 	$max_repeat_val	= $param['max_repeat_val'];
-
+	
 	$lesson_titles	= $param['lesson_titles'];
 
 	$lesson_code	= $param['lesson_code'];
@@ -88,79 +88,77 @@ function getUserAssignments($param, $type) {
 	for ($i=0;$i<$max_repeat_val;$i++) {
 
 		$assignments_query[$i] = "SELECT DISTINCT assignments.id, assignments.title,
-
 		assignments.description, assignments.deadline,
-
 		cours.intitule,(TO_DAYS(assignments.deadline) - TO_DAYS(NOW())) AS days_left
-
 		FROM  ".$lesson_code[$i].".assignments, ".$mysqlMainDb.".cours, ".$lesson_code[$i].".accueil
-
 		WHERE (TO_DAYS(deadline) - TO_DAYS(NOW())) >= '0'
-
 		AND assignments.active = 1 AND cours.code = '".$lesson_code[$i]."'
-
 		AND ".$lesson_code[$i].".accueil.visible =1
-
 		AND ".$lesson_code[$i].".accueil.id =5 ORDER BY deadline";
-
 	}
 
 
 
 	//initialise array to store all assignments from all lessons
 
-	$assignGroup = array();
-
-
+	$assignSubGroup = array();
 
 	for ($i=0;$i<$max_repeat_val;$i++) {//each iteration refers to one lesson
-
+				
 		$mysql_query_result = db_query($assignments_query[$i], $lesson_code[$i]);
+
+		if ($num_rows = mysql_num_rows($mysql_query_result) > 0) {
+
+			$assignmentLessonData = array();
+			$assignmentData = array();
+
+			array_push($assignmentLessonData, $lesson_titles[$i]);
+
+			array_push($assignmentLessonData, $lesson_code[$i]);
+
+		}
+
 
 		$assignments_repeat_val=0;
 
 		while($myAssignments = mysql_fetch_row($mysql_query_result)){
-
-			if ($myAssignments){
-
-				array_push($myAssignments, $lesson_code[$i]);
+		
+			if ($myAssignments) {
 
 				if ($submission = findSubmission($uid, $myAssignments[0], $lesson_code[$i])) {
-
 					$lesson_assign[$i][$assignments_repeat_val]['delivered'] = 1; //delivered
-
 					array_push($myAssignments, 1);
 
 				} else {
-
 					$lesson_assign[$i][$assignments_repeat_val]['delivered'] = 0;//not delivered
-
 					array_push($myAssignments, 0);
 
 				}
-
-				array_push($assignGroup, $myAssignments);
-
+				array_push($assignmentData,$myAssignments);
 			}
+		}
+		
+		if ($num_rows > 0) {
+			array_push($assignmentLessonData, $assignmentData);
 
+			array_push($assignSubGroup, $assignmentLessonData);
+				
 		}
 
 	}
-
-
-
-	$assignGroup = columnSort($assignGroup, 3);
-
+	
+	// order assignments according to lesson code
+	//$assignGroup = columnSort($assignmentLessonData, 1);
+	
 	if($type == "html") {
 
-		return assignHtmlInterface($assignGroup);
+		return assignHtmlInterface($assignSubGroup);
 
 	} elseif ($type == "data") {
 
-		return $assignGroup;
+		return $assignSubGroup;
 
 	}
-
 
 
 }
@@ -190,87 +188,51 @@ function assignHtmlInterface($data) {
 	global  $langCourse, $langAssignment, $langDeadline, $langNoAssignmentsExist;
 
 	$assign_content = "";
+	
+	$assign_content= <<<aCont
 
-	$iterator =  count($data);
+	<div id="datacontainer">
 
-
-
-	if ($iterator > 0) {
-
-		$assign_content .= <<<aCont
-
-
-
-	<table width="100%" class="assign">
-
-		<thead>
-
-		<tr><th class="assign">$langCourse</th>
-
-		<th class="assign">$langAssignment</th>
-
-		<th class="assign">$langDeadline</th>
-
-		</tr></thead><tbody>
+	<ul id="datalist">
 
 aCont;
 
+	$max_repeat_val = count($data);
+ 	for ($i=0; $i <$max_repeat_val; $i++) {
 
+		$iterator = count($data[$i][2]);
+	
+		$assign_content .= "<li class='category'>".$data[$i][0]."</li>";
 
-		for ($i=0; $i < $iterator; $i++){
+		if ($iterator > 0) {
+			$assignmentsExist = true;
 
+			for ($j=0; $j < $iterator; $j++) {
+				
+				$url = $_SERVER['PHP_SELF'] . "?perso=1&c=" .$data[$i][1]."&i=".$data[$i][2][$j][6];
 
-
-			if($data[$i][7] == 1) {
-
-				$class = "class=\"tick\"";
-
-			} elseif ($data[$i][5] < 3) {
-
-				$class = "class=\"exclamation\"";
-
-			} else {
-
-				$class = "";
-
+				if($data[$i][2][$j][6] == 1) {
+					$class = "class =\"tick\"";
+				} elseif ($data[$i][2][$j][6] == 0) {
+					$class = "class =\"exclamation\"";
+				} else {
+					$class = "";
+				}
+				$assign_content .= "";
+				$assign_content .= "<li><a class=\"square_bullet2\" href=\"$url\">
+				<p $class>".greek_format($data[$i][2][$j][3])." : ".$data[$i][2][$j][1]."</p></a></li>";
 			}
-
-			$url = $_SERVER['PHP_SELF'] . "?perso=1&c=" .$data[$i][6]."&i=".$data[$i][0];
-
-			$assign_content .= "<tr>
-
-			<td class=\"assign\"><p>".$data[$i][4]."</p></td>
-
-			<td class=\"assign\">
-
-			<div id=\"assigncontainer\">
-
-			<ul id=\"assignlist\">
-
-			<li><a $class href=\"$url\"><div class=\"assign_pos\">".$data[$i][1]."</div>
-
-			</a></li></ul>
-
-			</div>
-
-			</td>
-
-			<td class=\"assign\"><p>".$data[$i][3]."</p></td></tr>";
-
+			if ($i+1 <$max_repeat_val) $assign_content .= "<br>";
 		}
-
-		$assign_content .= "</tbody></table>";
-
-	} else {
-
-		$assign_content .= "<p>$langNoAssignmentsExist</p>";
-
 	}
+	$assign_content .= "</ul></div>";
 
+	if (!$assignmentsExist) {
+		$assign_content .= "<p>$langNoAssignmentsExist</p>";
+	}
+		
 	return $assign_content;
-
 }
-
 
 
 /**
