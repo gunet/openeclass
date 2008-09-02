@@ -194,7 +194,6 @@ function loggedInMenu(){
 	}
 
 	if ($statut != 10) {
-
 		array_push($sideMenuText, $GLOBALS['langRegCourses']);
 		array_push($sideMenuLink, $urlServer . "modules/auth/courses.php");
 		array_push($sideMenuImg, "enroll.gif");
@@ -203,19 +202,17 @@ function loggedInMenu(){
 		array_push($sideMenuLink, $urlServer . "modules/agenda/myagenda.php");
 		array_push($sideMenuImg, "calendar.gif");
 
-
-		array_push($sideMenuText, $GLOBALS['langMyAnnouncements']);
-		array_push($sideMenuLink, $urlServer . "modules/announcements/myannouncements.php");
-		array_push($sideMenuImg, "announcements.gif");
-
 		array_push($sideMenuText, $GLOBALS['langModifyProfile']);
 		array_push($sideMenuLink, $urlServer . "modules/profile/profile.php");
 		array_push($sideMenuImg, "profile.gif");
 
+		array_push($sideMenuText, $GLOBALS['langManuals']);
+		array_push($sideMenuLink, $urlServer."manuals/manual.php");
+		array_push($sideMenuImg, "manual.gif");
+		
 		array_push($sideMenuText, $GLOBALS['langMyStats']);
 		array_push($sideMenuLink, $urlServer . "modules/profile/personal_stats.php");
 		array_push($sideMenuImg, "platform_stats.gif");
-
 	}
 
 	if ($statut == 10) {
