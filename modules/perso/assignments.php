@@ -196,7 +196,7 @@ function assignHtmlInterface($data) {
 	<ul id="datalist">
 
 aCont;
-
+	$assignmentsExist = false;
 	$max_repeat_val = count($data);
  	for ($i=0; $i <$max_repeat_val; $i++) {
 
