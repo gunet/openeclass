@@ -90,9 +90,7 @@ function getUserDocuments($param = null, $type) {
 	$usr_lst_login	= $param['usr_lst_login'];
 
 
-
 	$usr_memory = $param['usr_memory'];
-
 
 
 	//		Generate SQL code for all queries
@@ -152,11 +150,9 @@ function getUserDocuments($param = null, $type) {
 		$mysql_query_result = db_query($docs_query_new[$i], $lesson_code[$i]);
 
 
-
 		if ($num_rows = mysql_num_rows($mysql_query_result) > 0) {
 
 			$getNewDocs = true;
-
 
 
 			$docsLessonData = array();
@@ -164,11 +160,9 @@ function getUserDocuments($param = null, $type) {
 			$docsData = array();
 
 
-
 			array_push($docsLessonData, $lesson_title[$i]);
 
 			array_push($docsLessonData, $lesson_code[$i]);
-
 
 
 		}
@@ -177,11 +171,7 @@ function getUserDocuments($param = null, $type) {
 
 		while ($myDocuments = mysql_fetch_row($mysql_query_result)) {
 
-
-
 			if ($myDocuments){
-
-
 
 				$myDocuments[0] = strrev(substr(strstr(strrev($myDocuments[0]),"/"), 1));
 
@@ -200,7 +190,6 @@ function getUserDocuments($param = null, $type) {
 			array_push($docsSubGroup, $docsLessonData);
 
 		}
-
 
 
 	}
@@ -306,7 +295,6 @@ function docsHtmlInterface($data) {
 	global $urlServer, $langNoDocsExist ;
 
 
-
 	$docsExist = false;
 
 	$content= <<<aCont
@@ -318,7 +306,6 @@ function docsHtmlInterface($data) {
 aCont;
 
 	$max_repeat_val = count($data);
-
 	for ($i=0; $i <$max_repeat_val; $i++) {
 
 		$iterator =  count($data[$i][2]);
@@ -331,14 +318,15 @@ aCont;
 
 		<li class=\"category\">".$data[$i][0]."</li>";
 
-			for ($j=0; $j < $iterator; $j++){
+			for ($j=0; $j < $iterator; $j++) {
 
 				$url = $_SERVER['PHP_SELF'] . "?perso=6&c=" .$data[$i][1]."&p=".$data[$i][2][$j][0];
 
-				$content .= "<li><a class=\"square_bullet2\" href=\"$url\"><p class=\"content_pos\">".$data[$i][2][$j][2]." (".$data[$i][2][$j][3].")</p></a>
-
+				$content .= "<li><a class=\"square_bullet2\" href=\"$url\">
+					<p class=\"content_pos\">"
+					.greek_format(date("Y-m-d", strtotime($data[$i][2][$j][3]))).
+					" : ".$data[$i][2][$j][1]."</p></a>
 				</li>";
-
 			}
 
 			if ($i+1 <$max_repeat_val) $content .= "<br>";
@@ -358,7 +346,6 @@ aCont;
 	return $content;
 
 }
-
 
 
 /**
@@ -394,7 +381,6 @@ function createDocsQueries($queryParam){
 
 
 	for ($i=0;$i<$max_repeat_val;$i++) {
-
 
 
 		if(is_array($date)){
