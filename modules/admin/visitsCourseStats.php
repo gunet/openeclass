@@ -47,12 +47,15 @@ $nameTools = $langVisitsCourseStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 // Initialise $tool_content
 $tool_content = "";
-$tool_content .=  "<a href='stateclass.php'>".$langPlatformGenStats."</a> <br> ".
-                "<a href='platformStats.php?first='>".$langVisitsStats."</a> <br> ".
-             "<a href='visitsCourseStats.php?first='>".$langVisitsCourseStats."</a> <br> ".
-              "<a href='oldStats.php'>".$langOldStats."</a> <br> ".
-               "<a href='monthlyReport.php'>".$langMonthlyReport."</a>".
-          "<p>&nbsp</p>";
+$tool_content .= "
+  <div id=\"operations_container\">
+    <ul id=\"opslist\">
+      <li><a href='stateclass.php'>".$langPlatformGenStats."</a></li>
+      <li><a href='platformStats.php?first='>".$langVisitsStats."</a></li>
+      <li><a href='oldStats.php'>".$langOldStats."</a></li>
+      <li><a href='monthlyReport.php'>".$langMonthlyReport."</a></li>
+    </ul>
+  </div>";
 
 
 include('../../include/jscalendar/calendar.php');
@@ -260,19 +263,36 @@ if (!extension_loaded('gd')) {
     if (!file_exists("../../courses/temp")) {
         mkdir("../../courses/temp", 0777);
     }
-    
+
     $chart_path = 'courses/temp/chart_'.md5(serialize($chart)).'.png';
 
     $chart->render($webDir.$chart_path);
 
     //check if there are statistics to show
     if ($chart_content) {
-        $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
+  $tool_content .= '
+  <table class="FormData" width="99%" align="left">
+  <tbody>
+  <tr>
+    <th width="220"  class="left">'.$langVisits.' :</th>
+    <td valign="top"><img src="'.$urlServer.$chart_path.'" /></td>
+  </tr>
+  </tbody>
+  </table>';
+        $tool_content .= '';
     }
     else   {
-      $tool_content .='<p>'.$langNoStatistics.'</p>';
+  $tool_content .= '
+  <table class="FormData" width="99%" align="left">
+  <tbody>
+  <tr>
+    <th width="220" class="left">'.$langVisits.' :</th>
+    <td valign="top">'.$langNoStatistics.'</td>
+  </tr>
+  </tbody>
+  </table>';
     }
-    $tool_content .= '<br>';
+    $tool_content .= '<br />';
 
 
 /*************************************************************************
@@ -337,33 +357,36 @@ if (!extension_loaded('gd')) {
 
     //form
      $tool_content .= '
-        <form method="post">
-            <table>
-
-                <tr>
-                    <td>'.$langStartDate.'</td>
-                    <td>'."$start_cal".'</td>
-                </tr>
-                <tr>
-                    <td>'.$langEndDate.'</td>
-                    <td>'."$end_cal".'</td>
-                </tr>
-                <tr>
-                    <td>'.$langCourse.'</td>
-                    <td>'.$langFirstLetterCourse.':<br />'.$letterlinks.'<br /><select name="u_course_id">'.$cours_opts.'</select></td>
-                </tr>
-                <tr>
-                    <td>'.$langInterval.'</td>
-                    <td><select name="u_interval">'.$statsIntervalOptions.'</select></td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
-                </tr>
-
-            </table>
-        </form>';
-
+  <form method="post">
+  <table class="FormData" width="99%" align="left">
+  <tbody>
+  <tr>
+    <th width="220" class="left">'.$langStartDate.'</th>
+    <td>'."$start_cal".'</td>
+  </tr>
+  <tr>
+    <th class="left">'.$langEndDate.'</th>
+    <td>'."$end_cal".'</td>
+  </tr>
+  <tr>
+    <th class="left">'.$langFirstLetterCourse.'</th>
+    <td>'.$letterlinks.'</td>
+  </tr>
+  <tr>
+    <th class="left">'.$langCourse.'</th>
+    <td><select name="u_course_id">'.$cours_opts.'</select></td>
+  </tr>
+  <tr>
+    <th class="left">'.$langInterval.'</th>
+    <td><select name="u_interval">'.$statsIntervalOptions.'</select></td>
+  </tr>
+  <tr>
+    <th class="left">&nbsp;</th>
+    <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
+  </tr>
+  </tbody>
+  </table>
+  </form>';
     }
 
 

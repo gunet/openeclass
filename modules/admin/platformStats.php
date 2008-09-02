@@ -50,12 +50,15 @@ $page_title = $langPlatformStats.": ".$langVisitsStats;
 
 // Initialise $tool_content
 $tool_content = "";
-$tool_content .=  "<a href='stateclass.php'>".$langPlatformGenStats."</a> <br> ".
-                "<a href='platformStats.php?first='>".$langVisitsStats."</a> <br> ".
-             "<a href='visitsCourseStats.php?first='>".$langVisitsCourseStats."</a> <br> ".
-              "<a href='oldStats.php'>".$langOldStats."</a> <br> ".
-               "<a href='monthlyReport.php'>".$langMonthlyReport."</a>".
-          "<p>&nbsp</p>";
+$tool_content .= "
+  <div id=\"operations_container\">
+    <ul id=\"opslist\">
+      <li><a href='stateclass.php'>".$langPlatformGenStats."</a></li>
+      <li><a href='visitsCourseStats.php?first='>".$langVisitsCourseStats."</a></li>
+      <li><a href='oldStats.php'>".$langOldStats."</a></li>
+      <li><a href='monthlyReport.php'>".$langMonthlyReport."</a></li>
+    </ul>
+  </div>";
 
 // jscalendar is used in order to select the time period for the statistics
 include('../../include/jscalendar/calendar.php');

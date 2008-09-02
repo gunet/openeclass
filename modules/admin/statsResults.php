@@ -144,11 +144,27 @@ $chart->render($webDir.$chart_path);
 
 //check if there are statistics to show
 if ($chart_content) {
-    $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
+$tool_content .= '
+  <table class="FormData" width="99%" align="left">
+  <tbody>
+  <tr>
+    <th width="220"  class="left">'.$langVisits.' :</th>
+    <td valign="top"><img src="'.$urlServer.$chart_path.'" /></td>
+  </tr>
+  </tbody>
+  </table>';
 }
 else   {
-    $tool_content .='<p>'.$langNoStatistics.'</p>';
+$tool_content .= '
+  <table class="FormData" width="99%" align="left">
+  <tbody>
+  <tr>
+    <th width="220"  class="left">'.$langVisits.' :</th>
+    <td>'.$langNoStatistics.'</td>
+  </tr>
+  </tbody>
+  </table>';
 }
 
-$tool_content .= '<br>';
+$tool_content .= '<br />';
 ?>

@@ -1,3 +1,22 @@
+a.add {
+	color: #ff0000 !important;
+}
+
+a.add:hover {
+	color: #ff3f00 !important;
+    text-decoration: underline;
+}
+
+a.revoke {
+	color: #029516 !important;
+}
+
+a.revoke:hover {
+	color: #02c81c !important;
+    text-decoration: underline;
+}
+
+
 p {
 	font-size:12px;
 }
@@ -70,3 +89,36 @@ thead th {
         word-wrap: break-word;
         word-break: break-all;
         }
+
+table.stateclass {
+    padding: 2px;
+	vertical-align: top;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.stateclass th {
+	padding: 4px;
+	vertical-align: top;
+	background: #edecdf;
+	font-size:10px;
+	color: #727266;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+	font-style : normal;
+	font-variant : normal;
+	font-weight : normal;
+}
+
+table.stateclass td {
+	padding: 4px;
+	vertical-align: top !important;
+	background: #Fbfbfb;
+	font-size:10px;
+	color: #727266;
+	vertical-align: middle;
+}

@@ -82,33 +82,32 @@ $statsIntervalOptions =
 //die($out);
 $tool_content .= '
 <form method="post">
-    <table>
-
-        <tr>
-            <td>'.$langStartDate.'</td>
-            <td>'.$start_cal.'</td>
-        </tr>
-        <tr>
-            <td>'.$langEndDate.'</td>
-            <td>'.$end_cal.'</td>
-        </tr>
-        <tr>
-            <td>'.$langUser.'</td>
-            <td>'.$langFirstLetterUser.':<br/>'.$letterlinks.'<br/><select name="u_user_id">'.$user_opts.'</select></td>
-        </tr>
-
-        <tr>
-            <td>'.$langInterval.'</td>
-            <td><select name="u_interval">'.$statsIntervalOptions.'</select></td>
-        </tr>
-
-        <tr>
-            <td>&nbsp;</td>
-            <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
-        </tr>
-
-
-
+  <table class="FormData" width="99%" align="left">
+  <tbody>
+  <tr>
+    <th width="220"  class="left">'.$langStartDate.':</th>
+    <td>'.$start_cal.'</td>
+  </tr>
+  <tr>
+    <th class="left">'.$langEndDate.':</th>
+    <td>'.$end_cal.'</td>
+  </tr>
+  <tr>
+    <th class="left">'.$langFirstLetterUser.':</th>
+    <td>'.$letterlinks.'</td>
+  </tr>
+  <tr>
+    <th class="left">'.$langUser.':</th>
+    <td><select name="u_user_id">'.$user_opts.'</select></td>
+  </tr>
+  <tr>
+    <th class="left">'.$langInterval.':</th>
+    <td><select name="u_interval">'.$statsIntervalOptions.'</select></td>
+  </tr>
+  <tr>
+    <th>&nbsp;</th>
+    <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
+  </tr>
 </table>
 </form>';
 

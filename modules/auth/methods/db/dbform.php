@@ -66,62 +66,41 @@ else
 }
 
 
-$tool_content .= "<table border=\"0\">
-<tr valign=\"top\">
-    <td align=\"right\">$langdbhost:</td>
-    <td>
-        <input name=\"dbhost\" type=\"text\" size=\"30\" value=\"$dbhost\" />
-    </td>
-</tr>";
+$tool_content .= "
+    <tr>
+      <th class=\"left\">$langdbhost:</th>
+      <td><input class=\"FormData_InputText\" name=\"dbhost\" type=\"text\" size=\"30\" value=\"$dbhost\" /></td>
+    </tr>";
 
-$tool_content .= "<tr valign=\"top\">
-    <td align=\"right\">$langdbname:</td>
-    <td>
-    <input name=\"dbname\" type=\"text\" size=\"30\" value=\"$dbname\" />
-    </td>
-</tr>
-
-<tr valign=\"top\">
-    <td align=\"right\">$langdbuser:</td>
-    <td>
-    <input name=\"dbuser\" type=\"text\" size=\"30\" value=\"$dbuser\" />
-    </td>
-</tr>
-
-<tr valign=\"top\">
-    <td align=\"right\">$langdbpass:</td>
-    <td>
-    <input name=\"dbpass\" type=\"password\" size=\"30\" value=\"$dbpass\" />
-    </td>
-</tr>
-
-<tr valign=\"top\">
-    <td align=\"right\">$langdbtable:</td>
-    <td>
-    <input name=\"dbtable\" type=\"text\" size=\"30\" value=\"$dbtable\" />
-    </td>
-</tr>
-
-<tr valign=\"top\">
-    <td align=\"right\">$langdbfielduser:</td>
-    <td>
-    <input name=\"dbfielduser\" type=\"text\" size=\"30\" value=\"$dbfielduser\" />
-    </td>
-</tr>
-
-<tr valign=\"top\">
-    <td align=\"right\">$langdbfieldpass:</td>
-    <td>
-    <input name=\"dbfieldpass\" type=\"text\" size=\"30\" value=\"$dbfieldpass\" />
-    </td>
-</tr>
-
-<tr valign=\"top\">
-    <td align=\"right\">$langInstructions:</td>
-    <td>
-	<textarea name=\"dbinstructions\" cols=\"30\" rows=\"10\" wrap=\"virtual\">".$dbinstructions."</textarea> 
-    </td>
-</tr>
-</table>";
+$tool_content .= "
+    <tr>
+      <th class=\"left\">$langdbname:</th>
+      <td><input class=\"FormData_InputText\" name=\"dbname\" type=\"text\" size=\"30\" value=\"$dbname\" /></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langdbuser:</th>
+    <td><input class=\"FormData_InputText\" name=\"dbuser\" type=\"text\" size=\"30\" value=\"$dbuser\" /></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langdbpass:</th>
+      <td><input class=\"FormData_InputText\" name=\"dbpass\" type=\"password\" size=\"30\" value=\"$dbpass\" /></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langdbtable:</th>
+      <td><input class=\"FormData_InputText\" name=\"dbtable\" type=\"text\" size=\"30\" value=\"$dbtable\" /></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langdbfielduser:</th>
+      <td><input class=\"FormData_InputText\" name=\"dbfielduser\" type=\"text\" size=\"30\" value=\"$dbfielduser\" /></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langdbfieldpass:</th>
+    <td><input class=\"FormData_InputText\" name=\"dbfieldpass\" type=\"text\" size=\"30\" value=\"$dbfieldpass\" /></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langInstructions:</th>
+      <td><textarea class=\"FormData_InputText\" name=\"dbinstructions\" cols=\"30\" rows=\"10\" wrap=\"virtual\">".$dbinstructions."</textarea></td>
+    </tr>
+";
 
 ?>

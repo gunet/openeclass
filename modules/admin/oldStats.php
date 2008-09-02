@@ -49,12 +49,15 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 // Initialise $tool_content
 $tool_content = "";
 
-$tool_content .=  "<a href='stateclass.php'>".$langPlatformGenStats."</a> <br> ".
-                "<a href='platformStats.php?first='>".$langVisitsStats."</a> <br> ".
-             "<a href='visitsCourseStats.php?first='>".$langVisitsCourseStats."</a> <br> ".
-              "<a href='oldStats.php'>".$langOldStats."</a> <br> ".
-               "<a href='monthlyReport.php'>".$langMonthlyReport."</a>".
-          "<p>&nbsp</p>";
+$tool_content .= "
+  <div id=\"operations_container\">
+    <ul id=\"opslist\">
+      <li><a href='stateclass.php'>".$langPlatformGenStats."</a></li>
+      <li><a href='platformStats.php?first='>".$langVisitsStats."</a></li>
+      <li><a href='visitsCourseStats.php?first='>".$langVisitsCourseStats."</a></li>
+      <li><a href='monthlyReport.php'>".$langMonthlyReport."</a></li>
+    </ul>
+  </div>";
 
 
 //move data from table 'loginout' to 'loginout_summary' if older than eight months
@@ -88,8 +91,15 @@ if (!extension_loaded('gd')) {
     $tool_content .= "<p>$langGDRequired</p>";
 } else {
     $made_chart = true;
-
-    $tool_content .= "<p> $langOldStatsLoginsExpl </p>";
+  $tool_content .= '
+  <table class="FormData" width="99%" align="left">
+  <tbody>
+  <tr>
+    <th width="220"  class="left">&nbsp;</th>
+    <td valign="top">'.$langOldStatsLoginsExpl.'</td>
+  </tr>
+  </tbody>
+  </table>';
 
     /*****************************************
       start making chart
@@ -135,18 +145,35 @@ if (!extension_loaded('gd')) {
         mkdir("../../courses/temp", 0777);
     }
     $chart_path = 'courses/temp/chart_'.md5(serialize($chart)).'.png';
-   
+
     $chart->render($webDir.$chart_path);
 
 
 //check if there are statistics to show
     if ($chart_content) {
-        $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
+  $tool_content .= '
+  <table class="FormData" width="99%" align="left">
+  <tbody>
+  <tr>
+    <th width="220"  class="left">'.$langVisits.' :</th>
+    <td valign="top"><img src="'.$urlServer.$chart_path.'" /></td>
+  </tr>
+  </tbody>
+  </table>';
     }
     else   {
-      $tool_content .='<br><p>'.$langNoStatistics.'</p>';
+  $tool_content .= '
+  <table class="FormData" width="99%" align="left">
+  <tbody>
+  <tr>
+    <th width="220"  class="left">'.$langVisits.' :</th>
+    <td valign="top">'.$langNoStatistics.'</td>
+  </tr>
+  </tbody>
+  </table>';
     }
-    $tool_content .= '<br>';
+    $tool_content .= '
+    <br />';
 
 
     /********************************************************
@@ -172,25 +199,23 @@ if (!extension_loaded('gd')) {
 
 
     $tool_content .= '
-    <form method="post">
-    &nbsp;&nbsp;
-        <table>
-
-        <tr>
-            <td>'.$langStartDate.'</td>
-            <td>'."$start_cal".'</td>
-        </tr>
-        <tr>
-            <td>'.$langEndDate.'</td>
-            <td>'."$end_cal".'</td>
-        </tr>
-        
-        <tr>
-            <td>&nbsp;</td>
-            <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
-        </tr>
-        </table>
-    </form>';
+  <form method="post">
+  <table class="FormData" width="99%" align="left">
+  <tbody>
+  <tr>
+    <th width="220" class="left">'.$langStartDate.'</th>
+    <td>'."$start_cal".'</td>
+  </tr>
+  <tr>
+    <th class="left">'.$langEndDate.'</th>
+    <td>'."$end_cal".'</td>
+  </tr>
+  <tr>
+    <th>&nbsp;</th>
+    <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
+  </tr>
+  </table>
+  </form>';
 
 }
 

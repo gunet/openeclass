@@ -28,18 +28,18 @@
 	@last update: 27-06-2006 by Stratos Karatzidis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
-==============================================================================        
+==============================================================================
         @Description: Platform Authentication Methods and their settings
 
- 	This script tries to get the values of an authentication method, establish 
+ 	This script tries to get the values of an authentication method, establish
  	a connectiond and with a test account successfully connect to the server.
  	Possible scenarios:
- 	- The settings of the method are fine and the mechanism authenticates the 
+ 	- The settings of the method are fine and the mechanism authenticates the
  	test account
- 	- The settings of the method are fine, but the method does not work 
+ 	- The settings of the method are fine, but the method does not work
  	with the test account
  	- The settings are wrong.
- 	
+
  	The admin can: - choose a method and define its settings
 
 ==============================================================================
@@ -73,27 +73,27 @@ if((!empty($auth_submit)) && ($auth_submit==1))
 
   if((array_key_exists('submit', $_POST)) && (!empty($submit))) // if form is submitted
 	{
-		$tool_content .= "<br />$langConnTest";
+		$tool_content .= "<br /><p>$langConnTest</p>";
 		if((!empty($test_username)) && (!empty($test_password)))
 		{
 	    $is_valid = auth_user_login($auth,$test_username,$test_password);
 	    if($is_valid)
 	    {
-			$auth_allow = 1;	
-			$tool_content .= "<table><tbody><tr><td class=\"success\">$langConnYes</td></tr></tbody></table><br /><br />";
+			$auth_allow = 1;
+			$tool_content .= "<table width=\"99%\"><tbody><tr><td class=\"success\">$langConnYes</td></tr></tbody></table><br /><br />";
 	    }
 	    else
 	    {
-			$tool_content .= "<table><tbody><tr><td class=\"caution\">$langConnNo</td></tr></tbody></table><br /><br />";
+			$tool_content .= "<table width=\"99%\"><tbody><tr><td class=\"caution\">$langConnNo</td></tr></tbody></table><br /><br />";
 				$auth_allow = 0;
-	    }	
+	    }
 		}
 		else
 		{
-	    $tool_content .= "<br />$langWrongAuth<br />";
+			$tool_content .= "<table width=\"99%\"><tbody><tr><td class=\"caution\">$langWrongAuth</td></tr></tbody></table><br /><br />";
 	    $auth_allow = 0;
 		}
-	
+
 		///// store the values - do the updates /////
 		if((!empty($auth_allow))&&($auth_allow==1))
 		{
@@ -136,25 +136,25 @@ if((!empty($auth_submit)) && ($auth_submit==1))
 						default:
 						break;
 			}
-				 
+
 			$qry = "UPDATE auth SET auth_settings='".$auth_settings."',auth_instructions='".$auth_instructions."',auth_default=1 WHERE auth_id=".$auth;
 			$sql2 = mysql_query($qry,$db);		// do the update as the default method
 			if($sql2)
 			{
 				if(mysql_affected_rows($db)==1)
 				{
-					$tool_content .= "<br />$langHasActivate<br />";
+					$tool_content .= "<p class=\"alert1\">$langHasActivate</p>";
 				}
 				else
 				{
-					$tool_content .= "<br />$langAlreadyActiv<br />";
+					$tool_content .= "<p class=\"alert1\">$langAlreadyActiv</p>";
 				}
 			}
 			else
 			{
-				$tool_content .= "<br>$langErrActiv<br />";
+				$tool_content .= "<p class=\"alert1\">$langErrActiv</p>";
 			}
-		
+
 		}
 
 	}
@@ -166,37 +166,49 @@ else
 	{
 		$auth_data = get_auth_settings($auth);
 	}
-	
-	$tool_content .= "<table width=\"99%\">
-	<tr><td colspan='2'>";
-	$tool_content .= "<form name=\"authmenu\" method=\"post\" action=\"auth_process.php\">
-	<input type=\"hidden\" name=\"auth_submit\" value=\"1\" />
-	<input type=\"hidden\" name=\"auth\" value=\"".htmlspecialchars($auth)."\" />
-	<input type=\"hidden\" name=\"step\" value=\"1\" />
-	<strong>".get_auth_info($auth)."</strong><br /><br /><br />";
+
+
+	$tool_content .= "
+    <table width='99%' class='FormData' align='left'>
+    <tbody>
+    <tr>
+      <th width='220'>
+        <form name=\"authmenu\" method=\"post\" action=\"auth_process.php\">
+	    <input type=\"hidden\" name=\"auth_submit\" value=\"1\" />
+	    <input type=\"hidden\" name=\"auth\" value=\"".htmlspecialchars($auth)."\" />
+	    <input type=\"hidden\" name=\"step\" value=\"1\" />
+      </th>
+      <td><b>".get_auth_info($auth)."</b></td>
+    </tr>";
 	switch($auth)
 	{
 		case 2: include_once '../auth/methods/pop3form.php';
 			break;
 		case 3: include_once '../auth/methods/imapform.php';
-			break;			
+			break;
 		case 4: include_once '../auth/methods/ldapform.php';
 			break;
 		case 5: include_once '../auth/methods/db/dbform.php';
 			break;
 		default:
-			break;		
-	}	
-	
-	$tool_content .= "</td></tr>";
-	$tool_content .= "<tr><td colspan='2'>$langTestAccount</td></tr>
-	<tr><td>$langUsername: </td><td><input type=\"text\" name=\"test_username\" value=\"".$test_username."\"></td></tr>
-	<tr><td>$langPass: </td><td><input type=\"password\" name=\"test_password\" value=\"".$test_password."\"></td></tr>
-	<tr><td colspan='2'><input type=\"submit\" name=\"submit\" value=\"$langModify\"></form></td></tr>";
-	
+			break;
+	}
+
+	$tool_content .= "
+    <tr>
+      <td colspan=\"2\">&nbsp;</td>
+    </tr>
+    <tr>
+      <th>&nbsp;</th>
+      <td>$langTestAccount</td>
+    </tr>
+	<tr><th class=\"left\">$langUsername: </th><td><input size=\"30\" class=\"FormData_InputText\" type=\"text\" name=\"test_username\" value=\"".$test_username."\"></td></tr>
+	<tr><th class=\"left\">$langPass: </th><td><input size=\"30\" class=\"FormData_InputText\" type=\"password\" name=\"test_password\" value=\"".$test_password."\"></td></tr>
+	<tr><th>&nbsp;</th><td><input type=\"submit\" name=\"submit\" value=\"$langModify\"></form></td></tr>";
+
 	$tool_content .="<br /></table>";
 }
 
-draw($tool_content,3);
+draw($tool_content,3,'admin');
 
 ?>

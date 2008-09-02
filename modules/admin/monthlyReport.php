@@ -47,12 +47,15 @@ $nameTools = $langMonthlyReport;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 // Initialise $tool_content
 $tool_content = "";
-$tool_content .=  "<a href='stateclass.php'>".$langPlatformGenStats."</a> <br> ".
-                "<a href='platformStats.php?first='>".$langVisitsStats."</a> <br> ".
-             "<a href='visitsCourseStats.php?first='>".$langVisitsCourseStats."</a> <br> ".
-              "<a href='oldStats.php'>".$langOldStats."</a> <br> ".
-               "<a href='monthlyReport.php'>".$langMonthlyReport."</a>".
-          "<p>&nbsp</p>";
+$tool_content .= "
+  <div id=\"operations_container\">
+    <ul id=\"opslist\">
+      <li><a href='stateclass.php'>".$langPlatformGenStats."</a></li>
+      <li><a href='platformStats.php?first='>".$langVisitsStats."</a></li>
+      <li><a href='visitsCourseStats.php?first='>".$langVisitsCourseStats."</a></li>
+      <li><a href='oldStats.php'>".$langOldStats."</a></li>
+    </ul>
+  </div>";
 
 $months = "";
 for ($i=0; $i<12; $i++)
@@ -62,13 +65,21 @@ for ($i=0; $i<12; $i++)
   $months .= "<option value='$mval'>".$langMonths[date("m", $mon)] . date(" Y", $mon);
 }
 
-$tool_content .= '<form method="post">&nbsp;&nbsp;<table><tr>
-            <select name="selectedMonth">
-            '.$months.'
-           </select>
-        </tr>
-        <tr><input type="submit" name="btnUsage" value="'.$langSubmit.'"></tr>
-        </table></form>';
+$tool_content .= '
+<form method="post">
+  <table class="FormData" width="99%" align="left">
+  <tbody>
+  <tr>
+    <th width="220"  class="left">&nbsp;</th>
+    <td><select name="selectedMonth">'.$months.'</select></td>
+  </tr>
+  <tr>
+    <th class="left">&nbsp;</th>
+    <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
+  </tr>
+  </tbody>
+  </table>
+</form>';
 
 if (isset($_POST["selectedMonth"])) {
 
@@ -95,18 +106,57 @@ if (isset($_POST["selectedMonth"])) {
 	} else {
 		$msg_of_month = $langMonths[$m];
 	}
-	
+
 	if ($coursNum) {
-        	$tool_content .= '<br><table > <tr>
-          	<th> '.$langReport.': '.$msg_of_month.' '.$y.' </th></tr>
-            	<tr><td>'.$langNbProf.': <b>'.$profesNum.'</b>
-		<br> '.$langNbStudents.': <b>'.$studNum.'</b>
-             	<br> '.$langNbVisitors.': <b>'.$visitorsNum.'</b>
-             	<br> '.$langNbCourses.':  <b>'.$coursNum.'</b>
-             	<br> '.$langNbLogin.': <b>'.$logins.'</b>
-          	<p>&nbsp;</p>'.$details. '</td></tr></table>';  //$details includes an html table with all details
+    $tool_content .= '
+    <br />
+    <table class="FormData" width="99%" align="left">
+    <tbody>
+    <tr>
+      <td class="left">&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th width="220"  class="left">&nbsp;</th>
+      <td>'.$langReport.': '.$msg_of_month.' '.$y.'</td>
+    </tr>
+    <tr>
+      <th class="left">'.$langNbProf.': </th>
+      <td>'.$profesNum.'</td>
+    </tr>
+    <tr>
+      <th class="left">'.$langNbStudents.': </th>
+      <td>'.$studNum.'</td>
+    </tr>
+    <tr>
+      <th class="left">'.$langNbVisitors.': </th>
+      <td>'.$visitorsNum.'</td>
+    </tr>
+    <tr>
+      <th class="left">'.$langNbCourses.':  </th>
+      <td>'.$coursNum.'</td>
+    </tr>
+    <tr>
+      <th class="left">'.$langNbLogin.': </th>
+      <td>'.$logins.'</td>
+    </tr>
+    <tr>
+      <td colspan="2">
+         '.$details. '
+      </td>
+    </tr>
+    </tbody>
+    </table>';           //$details includes an html table with all details
     } else {
-        $tool_content .= '<br><p>'.$langNoReport.': '.$msg_of_month.' '.$y.'</p>';
+        $tool_content .= '
+    <table class="FormData" width="99%" align="left">
+    <tbody>
+    <tr>
+      <th width="220"  class="left">&nbsp;</th>
+      <td>'.$langNoReport.': '.$msg_of_month.' '.$y.'</td>
+    </tr>
+    </tbody>
+    </table>';
     }
 }
 

@@ -22,9 +22,9 @@
 *						Panepistimiopolis Ilissia, 15784, Athens, Greece
 *						eMail: eclassadmin@gunet.gr
 ============================================================================*/
-    
+
 if (!function_exists('ldap_connect'))		// Is php4-ldap really there?
-{ 
+{
     $tool_content .= "<p align='center'><font color='red'><strong>$langLdapNotWork.</strong></font></p>";
 }
 
@@ -51,7 +51,7 @@ if(!empty($ldapdata))
     {
     	$ldaphost = ""; $ldapbind_dn = ""; $ldapbind_user = ""; $ldapbind_pw = "";
     }
-    
+
 }
 else
 {
@@ -60,40 +60,26 @@ else
     $ldaphost = $ldapsettings;
 }
 
-$tool_content .= "<tr valign=\"top\">
-    <td align=\"right\">$langldap_host_url:</td>
-    <td>
-        <input name=\"ldaphost\" type=\"text\" size=\"30\" value=\"".$ldaphost."\">
-    </td>
-    <td>&nbsp;</td>
+$tool_content .= "
+    <tr>
+      <th class=\"left\">$langldap_host_url:</th>
+      <td><input class=\"FormData_InputText\" name=\"ldaphost\" type=\"text\" size=\"30\" value=\"".$ldaphost."\"></td>
     </tr>
-
-<tr valign=\"top\">
-    <td align=\"right\">$langldap_bind_dn:</td>
-    <td>
-    <input name=\"ldapbind_dn\" type=\"text\" size=\"30\" value=\"".$ldapbind_dn."\">
-    </td>
-</tr>
-
-<tr valign=\"top\">
-    <td align=\"right\">$langldap_bind_user:</td>
-    <td>
-    <input name=\"ldapbind_user\" type=\"text\" size=\"30\" value=\"".$ldapbind_user."\">
-    </td>
-</tr>
-
-<tr valign=\"top\">
-    <td align=\"right\">$langldap_bind_pw:</td>
-    <td>
-    <input name=\"ldapbind_pw\" type=\"password\" size=\"30\" value=\"".$ldapbind_pw."\">
-		</td>
-</tr>
-
-<tr valign=\"top\">
-    <td align=\"right\">$langInstructions:</td>
-    <td>
-	<textarea name=\"ldapinstructions\" cols=\"30\" rows=\"10\" wrap=\"virtual\">".$ldapinstructions."</textarea> 
-    </td>
-</tr>
-</table>";
+    <tr>
+      <th class=\"left\">$langldap_bind_dn:</th>
+      <td><input class=\"FormData_InputText\" name=\"ldapbind_dn\" type=\"text\" size=\"30\" value=\"".$ldapbind_dn."\"></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langldap_bind_user:</th>
+      <td><input class=\"FormData_InputText\" name=\"ldapbind_user\" type=\"text\" size=\"30\" value=\"".$ldapbind_user."\"></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langldap_bind_pw:</th>
+      <td><input class=\"FormData_InputText\" name=\"ldapbind_pw\" type=\"password\" size=\"30\" value=\"".$ldapbind_pw."\"></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langInstructions:</td>
+      <td><textarea class=\"FormData_InputText\" name=\"ldapinstructions\" cols=\"30\" rows=\"10\" wrap=\"virtual\">".$ldapinstructions."</textarea>   </td>
+    </tr>
+";
 ?>

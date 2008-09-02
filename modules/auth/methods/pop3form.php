@@ -41,17 +41,17 @@ else
 $pop3host = isset($_POST['pop3host'])?$_POST['pop3host']:$pop3host;
 $pop3instructions = isset($_POST['pop3instructions'])?$_POST['pop3instructions']:$pop3instructions;
 
-$tool_content .= "<table border=\"0\">
-<tr valign=\"top\">
-<td align=\"right\">$langpop3host:</td>
-    <td>
-        <input name=\"pop3host\" type=\"text\" size=\"30\" value=\"".$pop3host."\" />
-    </td>
-</tr>
-<tr valign=\"top\"><td align=\"right\">$langpop3port:</td><td>110</td></tr>
-<tr valign=\"top\"><td align=\"right\">$langInstructions:</td><td>
-	<textarea name=\"pop3instructions\" cols=\"30\" rows=\"10\" wrap=\"virtual\">".$pop3instructions."</textarea> 
- </td>
-</tr>
-</table>";
+$tool_content .= "
+    <tr>
+      <th class=\"left\">$langpop3host:</th>
+      <td><input class=\"FormData_InputText\" name=\"pop3host\" type=\"text\" size=\"30\" value=\"".$pop3host."\" /></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langpop3port:</th>
+      <td>110</td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langInstructions:</th>
+      <td><textarea class=\"FormData_InputText\" name=\"pop3instructions\" cols=\"30\" rows=\"10\" wrap=\"virtual\">".$pop3instructions."</textarea></td>
+    </tr>";
 ?>
