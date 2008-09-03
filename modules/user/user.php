@@ -307,7 +307,7 @@ if (isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]
 	if ($myrow['reg_date'] == '0000-00-00')
 		$tool_content .= $langUnknownDate;
 	else
-		$tool_content .= "".greek_format($myrow['reg_date'])."";
+		$tool_content .= "".nice_format($myrow['reg_date'])."";
 
 	$tool_content .= "</td>";
 

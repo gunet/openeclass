@@ -125,10 +125,10 @@ while($row=mysql_fetch_array($result)) {
 		$RecordEndDate = $row2['RecordEndDate'];
 		$tool_content .= "
     <tr>
-      <td align=\"center\">".greek_format($row2['RecordStartDate'])."</td>";
+      <td align=\"center\">".nice_format($row2['RecordStartDate'])."</td>";
 		if ($RecordEndDate != "0000-00-00") { 
 			$tool_content .= "
-      <td align=\"center\">".greek_format($RecordEndDate)."</td>";
+      <td align=\"center\">".nice_format($RecordEndDate)."</td>";
 		} else { // user termination or excercise time limit exceeded
 			$tool_content .= "
       <td align=\"center\">".$langResultsFailed."</td>";

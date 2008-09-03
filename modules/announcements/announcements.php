@@ -354,7 +354,7 @@ cData;
             $content = nl2br($content);
 	// display math symbols (if there are)
 	    $content = mathfilter($content, 12, "../../courses/mathimg/");
-            $myrow['temps'] = greek_format($myrow['temps']);
+            $myrow['temps'] = nice_format($myrow['temps']);
 	$tool_content .= "<tr>
         <td width='3'><img class=\"displayed\" src=../../template/classic/img/announcements_on.gif border=0 title=\"" . $myrow["title"] . "\"></td>
         <td><b>" . $myrow["title"] . "</b>
@@ -432,7 +432,7 @@ cData;
       <tr>
         <td width='3'><img class=\"displayed\" src=../../template/classic/img/announcements_on.gif border=0 title=\"" . $myrow["title"] . "\"></td>
         <td><b>$myrow[title]</b><br/>$content        </td>
-        <td width='200'><div align='right'>($langPubl: " . greek_format($myrow["temps"]) . ")</div></td>
+        <td width='200'><div align='right'>($langPubl: " . nice_format($myrow["temps"]) . ")</div></td>
       </tr>";
         } // while loop
         $tool_content .= "

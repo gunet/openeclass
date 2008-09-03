@@ -220,7 +220,7 @@ aCont;
 				}
 				$assign_content .= "";
 				$assign_content .= "<li><a class=\"square_bullet2\" href=\"$url\">
-				<p $class>".greek_format($data[$i][2][$j][3])." : ".$data[$i][2][$j][1]."</p></a></li>";
+				<p $class>".nice_format($data[$i][2][$j][3])." : ".$data[$i][2][$j][1]."</p></a></li>";
 			}
 			if ($i+1 <$max_repeat_val) $assign_content .= "<br>";
 		}

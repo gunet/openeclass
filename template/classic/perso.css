@@ -205,13 +205,13 @@ cite.content_pos {
 }
 
 .square_bullet {
-	background-image: url(img/square_bullet.gif);
+	background-image: url(img/arrow_grey.gif);
 	background-repeat: no-repeat;
 	background-position: 4px 8px;
 }
 
 .square_bullet2 {
-	background-image: url(img/square_bullet.gif);
+	background-image: url(img/arrow_grey.gif);
 	background-repeat: no-repeat;
 	background-position: 4px 9px;
 }
@@ -286,18 +286,17 @@ cite.content_pos {
 	display:block;
 	padding-top: 3px;
 	padding-bottom: 3px;
-	background-color: #fbfbfb;
+	background-color: #fff;
 	text-decoration: none;
 	
 }
 
 #assigncontainer li.category {
-	margin-top: 1px;
+	margin-top: 1px; 
 	margin-left: 1px;
 	display: block;
 	padding: 3px;
 	color:#4f76a3;
-	background-color: #e6edf5;
-	border: 1px solid #ff9933;
+	background-color: #fbfbfb;
 	font-weight: bold;
 }

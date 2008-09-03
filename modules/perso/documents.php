@@ -324,7 +324,7 @@ aCont;
 
 				$content .= "<li><a class=\"square_bullet2\" href=\"$url\">
 					<p class=\"content_pos\">"
-					.greek_format(date("Y-m-d", strtotime($data[$i][2][$j][3]))).
+					.nice_format(date("Y-m-d", strtotime($data[$i][2][$j][3]))).
 					" : ".$data[$i][2][$j][1]."</p></a>
 				</li>";
 			}

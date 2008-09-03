@@ -183,7 +183,7 @@ if(!in_array($info['password'], $authmethods)) {
 				if ($logs[2] == '0000-00-00')
 					 $tool_content .= $langUnknownDate;
 				else
-					$tool_content .= " ".greek_format($logs[2])." ";
+					$tool_content .= " ".nice_format($logs[2])." ";
 				$tool_content .= "</td><td align='center'>";
 				switch ($logs[3])
 				{

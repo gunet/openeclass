@@ -276,8 +276,8 @@ else {
         <td>".$row['titre']."&nbsp;&nbsp;(<font color=\"red\">$m[expired]</font>)";
 	}
 	  $tool_content .= "<br/><small>$row[description]</small></td>
-        <td align='center'><small>".greek_format($row['StartDate'])."</small></td>
-        <td align='center'><small>".greek_format($row['EndDate'])."</small></td>";
+        <td align='center'><small>".nice_format($row['StartDate'])."</small></td>
+        <td align='center'><small>".nice_format($row['EndDate'])."</small></td>";
 	// how many attempts we have.
 	$CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
 			WHERE eid='$row[id]' AND uid='$uid'", $currentCourseID));
