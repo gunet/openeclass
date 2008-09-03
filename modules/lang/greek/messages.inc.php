@@ -204,7 +204,6 @@ $langMaxQuota = "έχει μέγιστο επιτρεπτό αποθηκευτι
 $langLegend = "Για το υποσύστημα";
 $langDropbox = "Χώρος Ανταλλαγής Αρχείων";
 $langVideo = "Βίντεο";
-$langGroup = "Ομάδες Χρηστών";
 
 // Added by vagpits
 // General
@@ -2892,6 +2891,7 @@ $langContinue = " Συνέχεια ";
 $langCourseManager = "Διαχειριστής μαθήματος";
 $langDelImage = "Διαγραφή εικόνας";
 $langGroups = "Ομάδες Χρηστών";
+$langGroup = "Ομάδα Χρηστών";
 $langIs = "είναι";
 $langLastname = "Επώνυμο";
 $langLegendRequiredFields = "<span class=\"required\">*</span> δείχνει απαραίτητο πεδίο ";

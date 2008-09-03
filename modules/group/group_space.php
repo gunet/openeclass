@@ -44,7 +44,7 @@ $helpTopic = 'Group';
 
 include '../../include/baseTheme.php';
 $nameTools = $langGroupSpace;
-$navigation[] = array ("url"=>"group.php", "name"=> $langGroup);
+$navigation[] = array ("url"=>"group.php", "name"=> $langGroups);
 $tool_content = "";
 if (isset($userGroupId) && is_numeric($userGroupId)){
 	if(!session_is_registered('userGroupId')){

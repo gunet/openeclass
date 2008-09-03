@@ -120,7 +120,7 @@ else {
     <td><input type='text' name='vq' value='$vq' size='4' maxlength='4'> Mb.</td>
   </tr>
   <tr>
-    <td width=\"3%\" nowrap>$langLegend <b>$langGroup</b>:</td>
+    <td width=\"3%\" nowrap>$langLegend <b>$langGroups</b>:</td>
     <td><input type='text' name='gq' value='$gq' size='4' maxlength='4'> Mb.</td>
   </tr>
   <tr>

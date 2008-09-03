@@ -135,7 +135,7 @@ function renameziparchivefile($p_event, &$p_header) {
 	$file_date = date("Y\-m\-d G\:i\:s");
 	$query = "INSERT INTO ".$dbTable." SET
 		path = '".mysql_real_escape_string($uploadPath2)."',
-		filename = '$fileName',
+		filename = '".mysql_real_escape_string($fileName)."',
 		visibility = 'v',
 		comment = '".mysql_real_escape_string($file_comment)."',
 		category = '".mysql_real_escape_string($file_category)."',
@@ -234,7 +234,7 @@ if($is_adminOfCourse)
 				$file_date = date("Y\-m\-d G\:i\:s");
 				$query = "INSERT INTO ".$dbTable." SET
 		            	path	=	'".mysql_real_escape_string($uploadPath2)."',
-		            	filename =	'$fileName',
+		            	filename =	'".mysql_real_escape_string($fileName)."',
 		            	visibility =	'v',
 		            	comment	=	'".mysql_real_escape_string($file_comment)."',
 		            	category =	'".mysql_real_escape_string($file_category)."',

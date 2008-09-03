@@ -149,7 +149,7 @@ if (isset($c)) {
     <td width=\"3%\" nowrap>$langLegend <b>$langVideo</b>:</td>
     <td>".$vq."</td></tr>";
 	$tool_content .= " <tr>
-    <td width=\"3%\" nowrap>$langLegend <b>$langGroup</b>:</td>
+    <td width=\"3%\" nowrap>$langLegend <b>$langGroups</b>:</td>
     <td>".$gq."</td></tr>";
 	$tool_content .= "  <tr>
     <td width=\"3%\" nowrap>$langLegend <b>$langDropbox</b>:</td>

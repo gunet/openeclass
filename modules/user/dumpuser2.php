@@ -46,7 +46,7 @@ if (ereg('[^(]*\((.*)\)[^)]*',$client,$regs)) {
 	}
 
 
-	echo "$langSurname\t$langName\t$langEmail\t$langAm\t$langUsername\t$langGroup";
+	echo "$langSurname\t$langName\t$langEmail\t$langAm\t$langUsername\t$langGroups";
 	echo "$crlf";
 	echo "$crlf";
 	$sql = db_query("SELECT  user.nom, user.prenom, user.email, user.am, user.username, user_group.team

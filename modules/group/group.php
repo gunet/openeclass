@@ -53,7 +53,7 @@ session_unregister("forumId");
 
 $currentCourse=$dbname;
 mysql_select_db("$currentCourse");
-$nameTools = $langGroup;
+$nameTools = $langGroups;
 $totalRegistered=0;
 $tool_content = "";
 if ($is_adminOfCourse) {

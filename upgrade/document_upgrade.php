@@ -42,186 +42,141 @@ include '../include/lib/forcedownload.php';
 // functions for document ------------
 // -----------------------------------
 
-
-// encode files
-function encode_file($filename)  {
-	global $baseFolder, $tool_content;
-
+// Returns a random filename with the same extension as $filename
+function random_filename($filename)  {
         $ext = get_file_extention($filename);
-	$safe_fileName = date("mdGi").randomkeys('5').".".$ext;
-	$newfilename = preg_replace('|/[^/]+$|', '/'.$safe_fileName, $filename);
-	$b = db_query("SELECT unique_filename FROM doc_tmp 
-		WHERE old_path=".quote('/'.substr($filename, strlen($baseFolder))));
-	$u = mysql_fetch_array($b);
-	// rename
-	if (!(rename($filename, $newfilename)))  {
-	  	$tool_content .= "Σφάλμα κατά την μετονομασία του $filename σε $newfilename !<br>";
-	} else {
-	// fill doc_tmp table	
-		$query = "UPDATE doc_tmp SET new_filename = '".preg_replace('|^.*/|', '', $newfilename)."'
-    			WHERE unique_filename = '$u[unique_filename]'";
-		db_query($query);
-	}
+        if (!empty($ext)) {
+                $ext = '.' . $ext;
+        }
+        return date("mdGi") . randomkeys('5') . $ext;
+}
+
+// Rename a file and insert its information in the database, if needed
+// Returns the new file path or false if file wasn't renamed
+function document_upgrade_file($path, $data)
+{
+        if ($data == 'document') {
+                $table = 'document';
+        } else {
+                $table = 'group_documents';
+        }
+
+        // Filenames in older versions of eClass were in ISO-8859-7
+        // No need to conver them, we're assuming "SET NAMES greek"
+        $db_path = trim_path($path);
+        $old_filename = preg_replace('|^.*/|', '', $db_path);
+        $new_filename = random_filename($old_filename);
+        $new_path = preg_replace('|/[^/]*$|', "/$new_filename", $db_path);
+        $r = db_query("SELECT * FROM $table WHERE path = ".quote($db_path));
+        if (mysql_num_rows($r) > 0) {
+                $current_filename = mysql_fetch_array($r);
+                if (empty($current_filename['filename'])) {
+                        // File exists in database, hasn't been upgraded
+                        db_query("UPDATE $table
+                                        SET filename = " . quote($old_filename) . ",
+                                        path = " . quote($new_path) . "
+                                        WHERE path= " . quote($db_path));
+                        rename($path, $data.$new_path);
+                } else {
+                        // File wasn't renamed
+                        $new_path = false;
+                }
+        } else {
+                // File doesn't exist in database
+                $file_date = quote(date('c', filemtime($path)));
+                if ($table == 'document') {
+                        db_query("INSERT INTO document
+                                  SET path = " . quote($new_path) . ",
+                                      filename = " . quote($old_filename) . ",
+                                      visibility = 'v', 
+                                      comment = '', category = '',
+                                      title = '', creator = '',
+                                      date = $file_date, date_modified = $file_date,
+                                      subject = '', description = '',
+                                      author = '', format = '',
+                                      language = '', copyrighted = ''");
+                } else {
+                        db_query("INSERT INTO group_documents
+                                  SET path = " . quote($new_path) . ",
+                                  filename = " . quote($old_filename));
+                }
+echo("<div style='background-color: green'>rename($path, $data$new_path);</div>");
+                rename($path, $data.$new_path);
+        }
+        return $new_path;
+}
+
+// Upgrade a directory, and if it was renamed, fix its contents'
+// database records to point to the new path
+function document_upgrade_dir($path, $data)
+{
+        if ($data == 'document') {
+                $table = 'document';
+        } else {
+                $table = 'group_documents';
+        }
+
+        $db_path = trim_path($path);
+        $new_path = document_upgrade_file($path, $data);
+        if ($new_path) {
+                // Directory was renamed - need to update contents' entries
+                db_query("UPDATE $table
+                          SET path = CONCAT(".quote($new_path).',
+                                SUBSTRING(path FROM '. (1+strlen($db_path)) .'))
+                          WHERE path LIKE '.quote("$db_path%"));
+        }
 }
 
 
-// fill an array with directory names
-function array_dir($dirname)  {
-	global $dirnames;
-
-	$end = strlen($dirname)-2;
-	$dir = substr($dirname,$end);
-	$end2 = strlen($dirname)-1;
-	$dir2 = substr($dirname,$end2);
-	if (($dir2 != '.') and ($dir != '..')) {
-		$dirnames[] = $dirname;
-	}
+// Remove the first component from beginning of $path, return the rest starting with '/'
+function trim_path($path)
+{
+        return preg_replace('|^[^/]*/|', '/', $path);
 }
 
 
-// fill an array with old directory names
-function array_old_dir($dirname)  {
-	global $oldfilenames;
-
-	$end = strlen($dirname)-2;
-	$dir = substr($dirname,$end);
-	$end2 = strlen($dirname)-1;
-	$dir2 = substr($dirname,$end2);
-	if (($dir2 != '.') and ($dir != '..')) {
-		$oldfilenames[] = $dirname;
-	}
+// Upgrades 'group_documents' table and encodes all filenames to be pure ASCII
+// Database selected should be the current course database
+function encode_group_documents($course_code, $group_id, $secret_directory)
+{
+        chdir($GLOBALS['webDir'].'courses/'.$course_code.'/group');
+        traverseDirTree($secret_directory, 'document_upgrade_file', 'document_upgrade_dir', $secret_directory);
 }
 
 
-// fill an array with new encoded directory names
-function array_enc_dir($dirname)  {
-	global $encdirnames;
-
-	$end = strlen($dirname)-2;
-	$dir = substr($dirname,$end);
-	$end2 = strlen($dirname)-1;
-	$dir2 = substr($dirname,$end2);
-	if (($dir2 != '.') and ($dir != '..')) {
-		$encdirnames[] = $dirname;
-	}
-}
-
-// fill an array with new encoded file names
-function array_enc_file($filename)  {
-	global $encfilenames;
-	
-	$encfilenames[] = $filename;
+// Upgrades 'document' table and encodes all filenames to be pure ASCII
+// Database selected should be the current course database
+function encode_documents($course_code)
+{
+        chdir($GLOBALS['webDir'].'courses/'.$course_code);
+        traverseDirTree('document', 'document_upgrade_file', 'document_upgrade_dir', 'document');
 }
 
 
-// fill an array with old file names
-function array_old_file($filename)  {
-	global $oldfilenames;
-
-	$oldfilenames[] = $filename;
-	
+// -----------------------------------------------------------
+// generic function to traverse the directory tree depth first
+// -----------------------------------------------------------
+function traverseDirTree($base, $fileFunc, $dirFunc, $data) {
+        $subdirectories = opendir($base);
+        // First process all directories
+        while (($subdirectory = readdir($subdirectories)) !== false){
+                $path = $base.'/'.$subdirectory;
+                if ($subdirectory != '.' and $subdirectory != '..' and is_dir($path)) {
+                        traverseDirTree($path, $fileFunc, $dirFunc, $data);
+                        $dirFunc($path, $data);
+                }
+        }
+        // Then process all files
+        rewinddir($subdirectories);
+        while (($filename = readdir($subdirectories)) !== false){
+                $path = $base.'/'.$filename;
+                if (is_file($path)) {
+                        $fileFunc($path, $data);
+                }
+        }
+        closedir($subdirectories);
 }
 
-// -------------------------------------------------
-// generic function to traverse the directory tree
-// -------------------------------------------------
-function traverseDirTree($base, $fileFunc, $dirFunc=null, $afterDirFunc=null) {
-  $subdirectories=opendir($base);
-  while (($subdirectory=readdir($subdirectories))!==false){
-    $path=$base.$subdirectory;
-    if (is_file($path)){
-      if ($fileFunc!==null) $fileFunc($path);
-    }else{
-      if ($dirFunc!==null) $dirFunc($path);
-      if (($subdirectory!='.') && ($subdirectory!='..')){
-        traverseDirTree($path.'/',$fileFunc,$dirFunc,$afterDirFunc);
-      }
-      if ($afterDirFunc!==null) $afterDirFunc($path);
-    }
-  }
-	closedir($subdirectories);
-}
-
-
-// -----------------------------------
-// functions for group document ------
-// -----------------------------------
-
-// fill an array with old group documents directory names
-function array_old_group_dir($dirname)  {
-	global $groupoldfilenames;
-
-	$end = strlen($dirname)-2;
-	$dir = substr($dirname,$end);
-	$end2 = strlen($dirname)-1;
-	$dir2 = substr($dirname,$end2);
-	if (($dir2 != '.') and ($dir != '..')) {
-		$groupoldfilenames[] = $dirname;
-	}
-}
-
-// fill an array with old group documents file names
-function array_old_group_file($filename)  {
-	global $groupoldfilenames;
-
-	$groupoldfilenames[] = $filename;
-	
-}
-
-// encode files
-function encode_group_file($filename)  {
-	global $baseFolder, $tool_content;
-
-        $ext = get_file_extention($filename);
-	$safe_fileName = date("mdGi").randomkeys('5').".".$ext;
-	$newfilename = preg_replace('|/[^/]+$|', '/'.$safe_fileName, $filename);
-	$b = db_query("SELECT unique_filename FROM group_doc_tmp 
-		WHERE old_path=".quote('/'.substr($filename, strlen($baseFolder))));
-	$u = mysql_fetch_array($b);
-	// rename
-	if (!(rename($filename, $newfilename)))  {
-	  	$tool_content .= "Σφάλμα κατά την μετονομασία του $filename σε $newfilename !<br>";
-	} else {
-	// fill group_doc_tmp table	
-		$query = "UPDATE group_doc_tmp SET new_filename = '".preg_replace('|^.*/|', '', $newfilename)."'
-    			WHERE unique_filename = '$u[unique_filename]'";
-		db_query($query);
-	}
-}
-
-// fill an array with directory names
-function array_group_dir($dirname)  {
-	global $groupdirnames;
-
-	$end = strlen($dirname)-2;
-	$dir = substr($dirname,$end);
-	$end2 = strlen($dirname)-1;
-	$dir2 = substr($dirname,$end2);
-	if (($dir2 != '.') and ($dir != '..')) {
-		$groupdirnames[] = $dirname;
-	}
-}
-
-
-// fill an array with new encoded directory names
-function array_enc_group_dir($dirname)  {
-	global $groupencdirnames;
-
-	$end = strlen($dirname)-2;
-	$dir = substr($dirname,$end);
-	$end2 = strlen($dirname)-1;
-	$dir2 = substr($dirname,$end2);
-	if (($dir2 != '.') and ($dir != '..')) {
-		$groupencdirnames[] = $dirname;
-	}
-}
-
-// fill an array with new encoded file names
-function array_enc_group_file($filename)  {
-	global $groupencfilenames;
-	
-	$groupencfilenames[] = $filename;
-}
 
 
 // -------------------------------------
@@ -229,7 +184,7 @@ function array_enc_group_file($filename)  {
 // -------------------------------------
 function upgrade_video($file, $id, $code)
 {
-	global $webDir, $tool_content;
+	global $webDir;
 
 	$fileName = trim($file);
         $fileName = replace_dangerous_char($fileName);
@@ -241,7 +196,7 @@ function upgrade_video($file, $id, $code)
         	db_query("UPDATE video SET path = '$safe_filename'
 	        	WHERE id = '$id'", $code);
 	} else {
-		$tool_content .= "Προσοχή: το αρχείο video $path_to_video.$file δεν υπάρχει!<br>";
+		echo "Ξ ΟΞΏΟƒΞΏΟ‡Ξ®: Ο„ΞΏ Ξ±ΟΟ‡ΞµΞ―ΞΏ video $path_to_video.$file Ξ΄ΞµΞ½ Ο…Ο€Ξ¬ΟΟ‡ΞµΞΉ!<br>";
                 db_query("DELETE FROM video WHERE id = '$id'", $code);
         }
 }

@@ -43,7 +43,7 @@ if (!$is_adminOfCourse) {
 }
 
 $nameTools = $langNewGroupCreate;
-$navigation[]= array ("url"=>"group.php", "name"=> $langGroup);
+$navigation[]= array ("url"=>"group.php", "name"=> $langGroups);
 $tool_content = "";
 
 $tool_content = <<<tCont

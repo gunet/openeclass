@@ -98,7 +98,7 @@ $baseWorkDir = $baseServDir.$courseDir;
 if (isset($action2) and $action2 == "download")  {
 	$real_file = $webDir."/courses/".$currentCourseID."/group/".$secretDirectory."/".$id;
 	if (strpos($real_file, '/../') === FALSE) {
-		$result = db_query ("SELECT filename FROM group_documents WHERE path LIKE '%$id%'", $currentCourseID);
+		$result = db_query ("SELECT filename FROM group_documents WHERE path =" . quote($id), $currentCourseID);
 		$row = mysql_fetch_array($result);
 		if (!empty($row['filename']))
 		{
@@ -147,8 +147,9 @@ if (is_uploaded_file(@$userFile) )
 		@$dialogBox .= "<table width=\"99%\"><tbody>
 			<tr><td class=\"success\"><p><b>$langDownloadEnd</b></p></td></tr>
 			</tbody></table>";
-		db_query("INSERT INTO group_documents SET
-			path='$path', filename='$fileName'", $currentCourseID);
+		db_query('INSERT INTO group_documents SET
+			        path='.quote($path).',
+                                filename='.quote($fileName));
 			
 	} // end else
 } // end if is_uploaded_file
@@ -223,26 +224,29 @@ if (isset($rename)) {
 CREATE DIRECTORY
 *****************************************/
 if (isset($newDirPath) && isset($newDirName)) {
-	$newDirName = replace_dangerous_char(trim($newDirName));
-		if (check_name_exist($baseWorkDir.$newDirPath."/".$newDirName) )
-		{
-			$dialogBox .= "<table width=\"99%\">
-			<tbody><tr><td class=\"caution_small\"><p><b>$langFileExists</b></p>
-			</td></tr></tbody></table>";
-			$createDir = $newDirPath; 
-			unset($newDirPath);
-		}
-		else
-		{
-			$safe_dirName = date("YmdGis").randomkeys("8");
-			mkdir($baseWorkDir.$newDirPath."/".$safe_dirName, 0775);
-			$query =  "INSERT INTO group_documents SET
-    				path=\"".$newDirPath."/".$safe_dirName."\",
-    				filename=\"".$newDirName."\"";
-    			mysql_query($query);
-		}
-	$dialogBox = "<table width=\"99%\"><tbody><tr><td class=\"success\">
-	<p><b>$langDirCr</b></p></td></tr></tbody></table>";	
+        $newDirName = trim($newDirName);
+        $r = db_query('SELECT * FROM group_documents WHERE filename = ' . quote($newDirName));
+        $exists = false;
+        $parent = preg_replace('|/[^/]*$|', '', $newDirPath);
+        while ($rs = mysql_fetch_array($r)) {
+                if (preg_replace('|/[^/]*$|', '', $rs['path']) == $parent) {
+                        $exists = true;
+                }
+        }
+        if ($exists) {
+                $dialogBox .= "<table width=\"99%\">
+                        <tbody><tr><td class=\"caution_small\"><p><b>$langFileExists</b></p>
+                        </td></tr></tbody></table>";
+        } else {
+                $safe_dirName = date("YmdGis").randomkeys("8");
+                mkdir("$baseWorkDir$newDirPath/$safe_dirName", 0775);
+                db_query('INSERT INTO group_documents SET
+                                path='.quote($newDirPath.'/'.$safe_dirName).',
+                                filename='.quote($newDirName));
+                mysql_query($query);
+                $dialogBox = "<table width=\"99%\"><tbody><tr><td class=\"success\">
+                        <p><b>$langDirCr</b></p></td></tr></tbody></table>";	
+        }
 }
 
 /*-------------------------------------
@@ -329,8 +333,6 @@ if (isset($fileNameList))
 DISPLAY
 **************************************/
 $dspCurDirName = htmlspecialchars($curDirName);
-$cmdCurDirPath = rawurlencode($curDirPath);
-$cmdParentDir  = rawurlencode($parentDir);
 $resultGroup=db_query("SELECT forumId FROM student_group WHERE id='$userGroupId'", $dbname);
 
 while ($myGroup = mysql_fetch_array($resultGroup)) {
@@ -339,8 +341,8 @@ while ($myGroup = mysql_fetch_array($resultGroup)) {
 $tool_content .= "<div id=\"operations_container\">
 	<ul id=\"opslist\"><li><a href='group_space.php'>$langGroupSpaceLink</a></li>
 	<li><a href='../phpbb/viewforum.php?forum=$forumId'>$langGroupForumLink</a></li>
-	<li><a href='$_SERVER[PHP_SELF]?createDir=".$cmdCurDirPath."\'>$langCreateDir</a></li>
-	<li><a href='$_SERVER[PHP_SELF]?uploadPath=".$cmdCurDirPath."'>$langDownloadFile</a></li></ul></div>";
+	<li><a href='$_SERVER[PHP_SELF]?createDir=".$curDirPath."'>$langCreateDir</a></li>
+	<li><a href='$_SERVER[PHP_SELF]?uploadPath=".$curDirPath."'>$langDownloadFile</a></li></ul></div>";
 
 /*----------------------------------------
 DIALOG BOX SECTION
@@ -382,7 +384,7 @@ $tool_content .= "<tr><td class='left' height='18' colspan='6' style='border-top
   /*** go to parent directory ***/
 if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
 {
-	$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdParentDir."\">$langUp</a>\n";
+	$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$ParentDir."\">$langUp</a>\n";
 	$tool_content .=  "<img src=\"../../template/classic/img/parent.gif\" border=0 align=\"absmiddle\" height='12' width='12'>\n";
 }
 
@@ -402,10 +404,10 @@ if (isset($dirNameList))
 		$result = db_query ("SELECT filename FROM group_documents WHERE path LIKE '%$dirName'");
 		$row = mysql_fetch_array($result);
 		$dspDirName = $row['filename'];
-		$cmdDirName = rawurlencode($curDirPath."/".$dirName);
+		$cmdDirName = $curDirPath."/".$dirName;
 		$tool_content .= "<tr align='center'>";
 		$tool_content .= "<td align='left'>";
-		$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".@$style.">\n";
+		$tool_content .= "<a href='$_SERVER[PHP_SELF]?openDir=$cmdDirName'".@$style.">\n";
 		$tool_content .= "<img src=\"../../template/classic/img/folder.gif\" border=0 hspace=5>\n";
 		$tool_content .= $dspDirName;
 		$tool_content .= "</a>";

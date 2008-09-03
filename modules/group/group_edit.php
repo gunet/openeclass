@@ -39,7 +39,7 @@ $require_prof = true;
 
 include '../../include/baseTheme.php';
 $nameTools = $langEditGroup;
-$navigation[]= array ("url"=>"group.php", "name"=> $langGroup);
+$navigation[]= array ("url"=>"group.php", "name"=> $langGroups);
 
 //check for valid $userGroupId
 if (isset($userGroupId) && is_numeric($userGroupId)){
