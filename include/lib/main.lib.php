@@ -546,7 +546,18 @@ function my_basename($path) {
 
 // transform the date format from "date year-month-day" to "day-month-year"
 function greek_format($date) {
+
 	return implode("-",array_reverse(split("-",$date)));
+}
+
+// format the date according to language
+function nice_format($date) {
+	 
+	if ($GLOBALS['language'] == 'greek')
+		return greek_format($date);
+	else 
+		return $date;
+	 
 }
 
 // creating passwords automatically
