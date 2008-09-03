@@ -156,7 +156,7 @@ function create_backup_file($file) {
 	if (!$f) {
 		die("Error! Unable to open output file: '$f'\n");
 	}
-	fputs($f, "<?\n");
+	fputs($f, "<?\n$version = 2;\n$encoding = 'UTF-8';\n");
 	backup_course_details($f, $currentCourseID);
 	backup_annonces($f, $currentCourseID);
 	backup_users($f, $currentCourseID);
@@ -172,10 +172,10 @@ function backup_annonces($f, $course) {
 				    WHERE code_cours = '$course'");
 	while($q = mysql_fetch_array($res)) {
 		fputs($f, "announcement(".
-			quote($q['title']).",\n".
 			quote($q['contenu']).",\n".
 			quote($q['temps']).", ".
-			quote($q['ordre']).");\n");
+			quote($q['ordre']).", ".
+			quote($q['title']).");\n");
 	}
 }
 

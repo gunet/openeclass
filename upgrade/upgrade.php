@@ -30,6 +30,8 @@ session_start();
 $path2add=2;
 
 include '../include/baseTheme.php';
+include '../include/lib/fileUploadLib.inc.php';
+include '../include/lib/forcedownload.php';
 include 'upgrade_functions.php';
 
 $nameTools = "Αναβάθμιση των βάσεων δεδομένων του eClass";

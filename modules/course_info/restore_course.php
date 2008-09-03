@@ -26,15 +26,22 @@
 
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
+include '../../upgrade/upgrade_functions.php';
 include '../../include/lib/fileUploadLib.inc.php';
 include '../../include/lib/fileManageLib.inc.php';
+include '../../include/lib/forcedownload.php';
 include '../../include/pclzip/pclzip.lib.php';
+
 $nameTools = $langRestoreCourse;
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 
 // Initialise $tool_content
 $tool_content = "";
 // Main body
+
+// Default backup version
+$version = 1;
+$encoding = 'ISO-8859-7';
 
 if (isset($send_archive) and $_FILES['archiveZipped']['size'] > 0) {
 	$tool_content .= "<table width=\"99%\"><caption>".$langFileSent."</caption><tbody>
@@ -57,11 +64,16 @@ elseif (isset($create_dir_for_course)) {
 	$tool_content .= "<p>$langCopyFiles $webDir/courses/$course_code</p><br><p>";
 	$action = 1;
 	$userid_map = array();
+	if ($encoding != 'UTF-8') {
+		db_query('SET NAMES greek');
+	}
 	// now we include the file for restoring
 	ob_start();
 	include("$restoreThis/backup.php");
+	upgrade_course($course_code, $course_lang);
 	$tool_content .= ob_get_contents();
 	ob_end_clean();
+	
 	$tool_content .= "</p>";
 	if (!file_exists("../../courses/garbage"))
 		mkdir("../../courses/garbage");
@@ -114,11 +126,19 @@ draw($tool_content,3, 'admin');
 // Functions  restoring
 function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 	
-	global $action, $restoreThis, $langNameOfLang;
+	global $action, $restoreThis, $langNameOfLang, $encoding, $version;
 	
 	@include("../lang/greek/common.inc.php");
 	@include("../lang/greek/messages.inc.php");
 
+	if ($encoding != 'UTF-8') {
+		$code = iconv($encoding, 'UTF-8', $code);
+		$title = iconv($encoding, 'UTF-8', $title);
+		$desc = iconv($encoding, 'UTF-8', $desc);
+		$prof = iconv($encoding, 'UTF-8', $prof);
+		$fac = iconv($encoding, 'UTF-8', $fac);
+	}
+ 
 	//check for lesson language
 	$languages = array();
 	$langdirname = "../lang/";
@@ -155,7 +175,7 @@ function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) 
 		echo "<tr><td>$langCourseType:</td><td>".type_select($type)."</td></tr>";
 		echo "<tr><td>&nbsp;</td></tr>";
 		echo "<tr><td colspan='2'><input type='checkbox' name='course_addusers' checked>$langUsersWillAdd </td></tr>";
-		echo "<tr><td colspan='2'><input type='checkbox' name='course_prefix' checked>$langUserPrefix</td></tr>";
+		echo "<tr><td colspan='2'><input type='checkbox' name='course_prefix'>$langUserPrefix</td></tr>";
 		echo "<tr><td>&nbsp;</td></tr><tr><td>";
 		echo "<input type='submit' name='create_dir_for_course' value='$langOk'>";
 		echo "<input type='hidden' name='restoreThis' value='$restoreThis'>";
@@ -164,7 +184,7 @@ function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) 
 }
 
 // inserting announcements into the main database
-function announcement ($title = NULL, $text, $date, $order) {
+function announcement ($text, $date, $order, $title = '') {
 	global $action, $course_code, $mysqlMainDb;
 	if (!$action) return;
 	db_query("INSERT into `$mysqlMainDb`.annonces
@@ -182,9 +202,15 @@ function announcement ($title = NULL, $text, $date, $order) {
 
 // inserting users into the main database
 function user ($userid, $name, $surname, $login, $password, $email, $statut, $phone, $department, $registered_at = NULL, $expires_at = NULL, $inst_id = NULL) {
-	global $action, $course_code, $userid_map, $mysqlMainDb, $course_prefix, $course_addusers, $durationAccount;
+	global $action, $course_code, $userid_map, $mysqlMainDb, $course_prefix, $course_addusers, $durationAccount, $version, $encoding;
 	global $langUserWith, $langAlready, $langWithUsername, $langUserisAdmin, $langUsernameSame, $langUserAlready, $langUName, $langPrevId, $langNewId, $langUserName;
 	
+	if ($encoding != 'UTF-8') {
+		$name = iconv($encoding, 'UTF-8', $name);
+		$surname = iconv($encoding, 'UTF-8', $surname);
+		$login = iconv($encoding, 'UTF-8', $login);
+	}
+
 	if (!$action) return;
 	if (!$course_addusers and $statut != 1)  return;
 	if (isset($userid_map[$userid])) {
@@ -215,6 +241,9 @@ function user ($userid, $name, $surname, $login, $password, $email, $statut, $ph
 		echo "<br>"; 
 		echo "$langUserAlready <b>$login</b>. $langUName <i>$res[1] $res[2]</i>  !\n";
 	} else {
+		if ($version == 1) { // if we come from a archive < 2.x encrypt user password
+			$password = md5($password);
+		}
 		db_query("INSERT into `$mysqlMainDb`.user
 			(nom, prenom, username, password, email, statut, phone, department, registered_at, expires_at)
 			VALUES (".
@@ -246,9 +275,12 @@ function user ($userid, $name, $surname, $login, $password, $email, $statut, $ph
 }
 
 function query($sql) {
-	global $action, $course_code;
+	global $action, $course_code, $encoding;
 	if (!$action) return;
 	mysql_select_db($course_code);
+	if ($encoding != 'UTF-8') {
+		iconv($encoding, 'UTF-8', $sql);
+	}
 	db_query($sql);
 }
 
@@ -497,4 +529,3 @@ function unpack_zip_show_files($zipfile)
 	chdir($webDir."modules/course_info");
 	return $retString;
 }
-?>
