@@ -30,7 +30,7 @@
 
  * Personalised Lessons Component, eClass Personalised
 
- * 
+ *
 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
 
@@ -38,9 +38,9 @@
 
  * @package eClass Personalised
 
- * 
+ *
 
- * @abstract This component populates the lessons block on the user's personalised 
+ * @abstract This component populates the lessons block on the user's personalised
 
  * interface. It is based on the diploma thesis of Evelthon Prodromou.
 
@@ -62,7 +62,7 @@
 
  * If type is 'data' it returns an array with all lesson data
 
- * 
+ *
 
  * @param int $uid user id
 
@@ -84,7 +84,7 @@ function  getUserLessonInfo($uid, $type) {
 
 
 
-	$user_courses = "SELECT cours.code , cours.fake_code , 
+	$user_courses = "SELECT cours.code , cours.fake_code ,
 
 	                                           cours.intitule , cours.titulaires ,
 
@@ -92,7 +92,7 @@ function  getUserLessonInfo($uid, $type) {
 
 	                                           cours_user.statut,
 
-	                                           user.perso, 
+	                                           user.perso,
 
 	                                           user.announce_flag,
 
@@ -104,7 +104,7 @@ function  getUserLessonInfo($uid, $type) {
 
 	                                  WHERE cours.code = cours_user.code_cours
 
-	                                  AND   cours_user.user_id = '".$uid."' 
+	                                  AND   cours_user.user_id = '".$uid."'
 
 	                                  AND   user.user_id = '".$uid."'
 
@@ -223,35 +223,35 @@ function htmlInterface($data, $lesson_fCode) {
 	if ($data[0] > 0) {
 
 	$lesson_content .= <<<lCont
-	<div id="assigncontainer">
-	
-	<table width="100%" class="assign">
-	<thead>
-	<tr><th class="assign" width="90%">$langCourse</th>
-	<th class="assign">$langActions</th>
-	</tr></thead><tbody>
-	<ul id="datalist">
+<div id="assigncontainer">
 
+
+        <table width="100%">
+        <tbody>
+        <tr>
+          <td width="90%"><b>$langCourse</b></td>
+          <td><b>$langActions</b></td>
+        </tr>
 lCont;
 
 		for ($i=0; $i<$data[0]; $i++) {
- 			$lesson_content .= "<tr><td class=\"assign\"><li class=\"category\">";
-			$lesson_content .= "<a class=\"square_bullet2\" href=\"courses/".$data[2][$i]."\">
-			<strong class=\"title_pos\">".$lesson_fCode[$i]." - ".$data[1][$i]."</strong>
-			<cite class=\"content_pos\">".$data[3][$i]."</cite>
-			</a></li></td>";
+ 			$lesson_content .= "
+        <tr>
+          <td><a href=\"courses/".$data[2][$i]."\">".$lesson_fCode[$i]." - ".$data[1][$i]."</a><cite class=\"content_pos\">".$data[3][$i]."</cite></td>";
 			if ($data[4][$i] == '5') {
-				$lesson_content .= "<td align='center'>
-				<a href=\"modules/unreguser/unregcours.php?cid=".$data[2][$i]."&uid=".$uid."\">
-				<img style='padding-top:1em; padding-right:1em; border:1px;' src='${urlServer}/template/classic/img/cunregister.gif' title='$langUnregCourse'></img></a></td></tr>"; 
+				$lesson_content .= "
+          <td align='center'><a href=\"modules/unreguser/unregcours.php?cid=".$data[2][$i]."&uid=".$uid."\"><img style='border:0px;' src='${urlServer}/template/classic/img/cunregister.gif' title='$langUnregCourse'></img></a></td>
+        </tr>";
 			} elseif ($data[4][$i] == '1') {
-				$lesson_content .= "<td align='center'> 
-				<a href=\"modules/course_info/infocours.php?from_home=TRUE&cid=".$data[2][$i]."\">
-				<img style='padding-top:1em; padding-right:1em; border:1px;' src='${urlServer}/template/classic/img/referencement.gif' title='$langManagement'></img></a></td></tr>";
+				$lesson_content .= "
+          <td align='center'><a href=\"modules/course_info/infocours.php?from_home=TRUE&cid=".$data[2][$i]."\"><img style='border:0px;' src='${urlServer}/template/classic/img/referencement.gif' title='$langManagement'></img></a></td>
+        </tr>";
 			}
 		}
-
-		$lesson_content .= "</tbody></table></ul></div><br>";
+		$lesson_content .= "
+		</tbody>
+        </table>
+        </div>";
 
 	} else {
 		$lesson_content .= "<p>$langNotEnrolledToLessons</p>";
@@ -264,10 +264,10 @@ lCont;
 
 	}
 
-	$lesson_content .= "<a class=\"enroll_icon\" href=".$urlServer."modules/auth/courses.php>$langOtherCourses</a>";
+	//$lesson_content .= "<a class=\"enroll_icon\" href=".$urlServer."modules/auth/courses.php>$langOtherCourses</a>";
 
 
-
+    /*
 	if ($statut == 1) {
 
 		$lesson_content .= "
@@ -275,8 +275,8 @@ lCont;
 	 | <a class=\"create_lesson\" href=".$urlServer."modules/create_course/create_course.php>$langCourseCreate</a>
 
 	";
-
 	}
+    */
 
 	return $lesson_content;
 }

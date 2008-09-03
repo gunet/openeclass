@@ -53,17 +53,17 @@ $table_title = 'en_title';
 	$_lang_commenten_ = $langAdminAnnCommEn;
 }
 
-// display settings 
+// display settings
 	$displayAnnouncementList = true;
 	$displayForm = true;
 
-	// delete announcement command 
+	// delete announcement command
 	if (isset($delete) && $delete) {
 		$result =  db_query("DELETE FROM admin_announcements WHERE id='$delete'", $mysqlMainDb);
 		$message = $langAdminAnnDel;
 	}
 
-	// moddify announcement command 
+	// moddify announcement command
 	if (isset($modify) && $modify) {
 		$result = db_query("SELECT * FROM admin_announcements WHERE id='$modify'",$mysqlMainDb);
 		$myrow = mysql_fetch_array($result);
@@ -81,35 +81,35 @@ $table_title = 'en_title';
 		}
 	}
 
-	// submit announcement command 
+	// submit announcement command
 	if (isset($submitAnnouncement) && $submitAnnouncement) {
-		// modify announcement 
+		// modify announcement
 		if($id) {
 			if (isset($visible)) {
-				db_query("UPDATE admin_announcements 
-					SET gr_title='$title', gr_body='$newContent', gr_comment='$comment', 
+				db_query("UPDATE admin_announcements
+					SET gr_title='$title', gr_body='$newContent', gr_comment='$comment',
 					en_title='$title_en', en_body='$newContent_en', en_comment='$comment_en',
 					visible='V', date=NOW() WHERE id=$id",$mysqlMainDb);
-					
+
 			} else {
-				db_query("UPDATE admin_announcements 
-					SET gr_title='$title', gr_body='$newContent', gr_comment='$comment', 
+				db_query("UPDATE admin_announcements
+					SET gr_title='$title', gr_body='$newContent', gr_comment='$comment',
 					en_title='$title_en', en_body='$newContent_en', en_comment='$comment_en',
 					visible='I', date=NOW() WHERE id=$id",$mysqlMainDb);
 				}
 			$message = $langAdminAnnModify;
 		}
-		// add new announcement 
+		// add new announcement
 		else {
-			// insert announcement 
+			// insert announcement
 			if (isset($visible)) {
-			db_query("INSERT INTO admin_announcements 
-					SET gr_title = '$title', gr_body = '$newContent', gr_comment = '$comment', 
+			db_query("INSERT INTO admin_announcements
+					SET gr_title = '$title', gr_body = '$newContent', gr_comment = '$comment',
 					en_title='$title_en', en_body='$newContent_en', en_comment='$comment_en',
 					date = NOW()");
 				} else {
-			db_query("INSERT INTO admin_announcements 
-					SET gr_title = '$title', gr_body = '$newContent', gr_comment = '$comment', 
+			db_query("INSERT INTO admin_announcements
+					SET gr_title = '$title', gr_body = '$newContent', gr_comment = '$comment',
 					en_title='$title_en', en_body='$newContent_en', en_comment='$comment_en',
 					visible='I', date = NOW()");
 				}
@@ -118,7 +118,7 @@ $table_title = 'en_title';
 	}	// if $submit announcement
 
 	// 	action message
-	
+
 	if (isset($message) && $message) {
 		$tool_content .=  "<table><tbody><tr><td class=\"success\">$message</td></tr></tbody></table><br/>";
 		$displayAnnouncementList = true;//do not show announcements
@@ -130,12 +130,19 @@ $table_title = 'en_title';
 
 		// display add announcement command
 		$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?localize=$localize'>";
+		$tool_content .= "
+  <div id=\"operations_container\">
+    <ul id=\"opslist\">
+      <li>";
 			if (isset($modify)) {
 				$tool_content .= "$langAdminModifAnn";
 			} else {
-				$tool_content .=  "<p><b>".$langAdminAddAnn."</b></p><br>";
+				$tool_content .=  "$langAdminAddAnn";
 			}
-		
+		$tool_content .= "</li>
+    </ul>
+  </div>";
+
 		if (!isset($AnnouncementToModify)) $AnnouncementToModify ="";
 		if (!isset($contentToModify))	$contentToModify ="";
 		if (!isset($titleToModify))	$titleToModify ="";
@@ -148,32 +155,39 @@ $table_title = 'en_title';
 		$tool_content .= "<table>";
 		$tool_content .= "<tr><td>$_lang_title_</td></tr>";
 		@$tool_content .= "<tr><td><input type=\"text\" name='title' value='$titleToModify' size='50'>";
-		if (isset($visibleToModify) and $visibleToModify == 'V') 
+		if (isset($visibleToModify) and $visibleToModify == 'V')
 				$tool_content .= "$langAdminAnVis : <input type=checkbox value=\"1\" name=\"visible\" checked></td></tr>";
-		else		
+		else
 				$tool_content .= "$langAdminAnVis : <input type=checkbox value=\"1\" name=\"visible\"></td></tr>";
 		$tool_content .= "<tr><td>$_lang_body_</td></tr>";
 		@$tool_content .= "<tr><td><textarea name='newContent' value='$contentToModify' rows='15' cols='96'>$contentToModify</textarea></td></tr>";
 		$tool_content .= "<tr><td><input type=\"hidden\" name=\"id\" value=\"".$AnnouncementToModify."\"></td></tr>";
 		$tool_content .= "<tr><td>$_lang_comment_</td></tr>";
-		@$tool_content .= "<tr><td><textarea name='comment' value='$comment' rows='2' cols='80'>$commentToModify</textarea></td></tr>";	
+		@$tool_content .= "<tr><td><textarea name='comment' value='$comment' rows='2' cols='80'>$commentToModify</textarea></td></tr>";
 		// english
 		$tool_content .= "<tr><td>$_lang_titleen_</td></tr>";
 		@$tool_content .= "<tr><td><input type=\"text\" name='title_en' value='$titleToModifyEn' size='50'></td</tr>";
 		$tool_content .= "<tr><td>$_lang_bodyen_</td></tr>";
 		@$tool_content .= "<tr><td><textarea name='newContent_en' value='$contentToModifyEn' rows='15' cols='96'>$contentToModifyEn</textarea></td></tr>";
 		$tool_content .= "<tr><td>$_lang_commenten_</td></tr>";
-		@$tool_content .= "<tr><td><textarea name='comment_en' value='$commentToModifyEn' rows='2' cols='80'>$commentToModifyEn</textarea></td></tr>";	
+		@$tool_content .= "<tr><td><textarea name='comment_en' value='$commentToModifyEn' rows='2' cols='80'>$commentToModifyEn</textarea></td></tr>";
 		$tool_content .= "<tr><td><input type=\"Submit\" name=\"submitAnnouncement\" value=\"$langOk\"></td></tr></table></form>";
 		$tool_content .= "<br><br>";
 	}
 
-	// display admin announcements 
+	// display admin announcements
 		if ($displayAnnouncementList == true) {
 			$result = db_query("SELECT * FROM admin_announcements ORDER BY id DESC", $mysqlMainDb);
 			$announcementNumber = mysql_num_rows($result);
 			if (@$addAnnouce != 1) {
+			     $tool_content .= "
+  <div id=\"operations_container\">
+    <ul id=\"opslist\">
+      <li>";
 					$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?addAnnouce=1&localize=$localize\">".$langAdminAddAnn."</a>";
+					$tool_content .= "</li>
+    </ul>
+  </div>";
 			}
 			$tool_content .=  "<table width=\"99%\">";
 			if ($announcementNumber>0) {
@@ -205,7 +219,7 @@ $table_title = 'en_title';
 			$tool_content .= "<tr><td><span class='headers'>".$_lang_comment_.":</span> ".$myrow['gr_comment']."</td>";
 			// english comments
 			$tool_content .= "<td>".$myrow['en_comment']."</td></tr>";
-			
+
 			// blank line
 			$tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
 		}	// end while ($myrow = mysql_fetch_array($result))
@@ -213,6 +227,6 @@ $table_title = 'en_title';
 	}	// end: if ($displayAnnoucementList == true)
 
 
-// display everything 
+// display everything
 draw($tool_content, 3);
-?>			
+?>

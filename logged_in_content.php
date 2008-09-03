@@ -40,39 +40,37 @@ include ("perso.php");
 
 $tool_content = "
 <div id=\"leftnav_perso\">
-            <table width=\"100%\">
-   				<thead>
-   					<tr>
-      					<th class=\"persoBoxTitle\">{LANG_MY_PERSO_LESSONS}</th>
-      				</tr>
-      			</thead>
-      			<tbody>
-      				<tr class=\"odd\">
-      					<td>
-      						{LESSON_CONTENT}
-      					</td>
-     				</tr>
-      			</tbody>
-      		</table>
+  <table width=\"100%\">
+  <thead>
+  <tr>
+    <th class=\"persoBoxTitle\">{LANG_MY_PERSO_LESSONS}</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class=\"odd\">
+    <td>
+      {LESSON_CONTENT}
+    </td>
+  </tr>
+  </tbody>
+  </table>
 
-      		<br />
+  <br />
 
-      		<table width=\"100%\">
-      			<thead>
-      				<tr>
-      					<th class=\"persoBoxTitle\">
-      						{LANG_MY_PERSO_ANNOUNCEMENTS}
-      					</th>
-      				</tr>
-      			</thead>
-      			<tbody>
-      				<tr class=\"odd\">
-      					<td>
-      						{ANNOUNCE_CONTENT}
-     					</td>
-     				</tr>
-      			</tbody>
-      		</table>
+  <table width=\"100%\">
+  <thead>
+  <tr>
+    <th class=\"persoBoxTitle\">{LANG_MY_PERSO_ANNOUNCEMENTS}</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class=\"odd\">
+    <td>
+      {ANNOUNCE_CONTENT}
+    </td>
+  </tr>
+  </tbody>
+  </table>
 
       		<br />
 

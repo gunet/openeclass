@@ -29,7 +29,7 @@
 
  * Personalised Documents Component, eClass Personalised
 
- * 
+ *
 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
 
@@ -37,9 +37,9 @@
 
  * @package eClass Personalised
 
- * 
+ *
 
- * @abstract This component populates the documents block on the user's personalised 
+ * @abstract This component populates the documents block on the user's personalised
 
  * interface. It is based on the diploma thesis of Evelthon Prodromou.
 
@@ -53,7 +53,7 @@
 
  * Function getUserDocuments
 
- * 
+ *
 
  * Populates an array with data regarding the user's personalised documents
 
@@ -276,7 +276,7 @@ function getUserDocuments($param = null, $type) {
 
  * Function docsHtmlInterface
 
- * 
+ *
 
  * Generates html content for the documents block of eClass personalised.
 
@@ -299,9 +299,8 @@ function docsHtmlInterface($data) {
 
 	$content= <<<aCont
 
-	<div id="datacontainer">
-
-<ul id="datalist">
+    <div id="datacontainer">
+        <ul id="datalist">
 
 aCont;
 
@@ -309,24 +308,21 @@ aCont;
 	for ($i=0; $i <$max_repeat_val; $i++) {
 
 		$iterator =  count($data[$i][2]);
-		
+
 		if ($iterator > 0) {
 
 			$docsExist = true;
 
 			$content .= "
 
-		<li class=\"category\">".$data[$i][0]."</li>";
+            <li class=\"category\">".$data[$i][0]."</li>";
 
 			for ($j=0; $j < $iterator; $j++) {
 
 				$url = $_SERVER['PHP_SELF'] . "?perso=6&c=" .$data[$i][1]."&p=".$data[$i][2][$j][0];
 
-				$content .= "<li><a class=\"square_bullet2\" href=\"$url\">
-					<p class=\"content_pos\">"
-					.nice_format(date("Y-m-d", strtotime($data[$i][2][$j][3]))).
-					" : ".$data[$i][2][$j][1]."</p></a>
-				</li>";
+				$content .= "
+            <li><a class=\"square_bullet2\" href=\"$url\"><p class=\"content_pos\">".nice_format(date("Y-m-d", strtotime($data[$i][2][$j][3])))." : ".$data[$i][2][$j][1]."</p></a></li>";
 			}
 
 			if ($i+1 <$max_repeat_val) $content .= "<br>";
@@ -335,7 +331,9 @@ aCont;
 
 	}
 
-	$content .= "</ul></div> ";
+	$content .= "
+        </ul>
+    </div> ";
 
 	if (!$docsExist) {
 
@@ -352,13 +350,13 @@ aCont;
 
  * Function createDocsQueries
 
- * 
+ *
 
  * Creates needed queries used by getUserDocuments
 
  *
 
- * @param array $queryParam 
+ * @param array $queryParam
 
  * @return array sql query
 

@@ -136,8 +136,8 @@ table.assign {
 	margin-left: 1px;
 	display: block;
 	padding: 3px;
-	color:#000;
-	border-bottom: 1px solid #CAC3B5;
+	color: #727266;
+	border-bottom: 1px solid #F3D8D9;
 	font-weight: bold;
 }
 
@@ -159,7 +159,7 @@ p.content_pos {
 }
 
 cite.content_pos {
-	padding-left: 15px;
+	padding-left: 0px;
 	font-style : normal;
 	color: #CAC3B5;
 }
@@ -258,7 +258,11 @@ cite.content_pos {
 
 //---------------
 
-#assigncontainer { width: 100%; padding:0;}
+#assigncontainer {
+	width: 100%;
+	padding:0;
+}
+
 
 #assigncontainer ul {
 	margin: 0;
@@ -269,8 +273,8 @@ cite.content_pos {
 
 #assigncontainer a {
 	display: block;
-	padding-top: 3px;
-	padding-bottom: 3px;
+	padding-top: 1px;
+	padding-bottom: 1px;
 	margin-left:1px;
 	<!--[if lte IE 6]>
 	//width: 99.9%;
@@ -284,19 +288,23 @@ cite.content_pos {
 
 #assigncontainer a:hover {
 	display:block;
-	padding-top: 3px;
-	padding-bottom: 3px;
+	padding-top: 1px;
+	padding-bottom: 1px;
 	background-color: #fff;
 	text-decoration: none;
 	
 }
 
 #assigncontainer li.category {
-	margin-top: 1px; 
-	margin-left: 1px;
+	margin-top: 0px;
+	margin-left: 0px;
 	display: block;
-	padding: 3px;
-	color:#4f76a3;
-	background-color: #fbfbfb;
+	padding: 0px;
+	color: #727266;
 	font-weight: bold;
+}
+
+table.lessonslist {
+	border : 0px !important;
+		padding: 0px !important;
 }
