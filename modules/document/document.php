@@ -344,17 +344,20 @@ if($is_adminOfCourse)
 	//step 2
 	if (isset($newDirPath) and !empty($newDirName)) 
 	{
-		$newDirName = replace_dangerous_char(trim($newDirName));
-		if (check_name_exist($baseWorkDir.$newDirPath."/".$newDirName) )
-		{
-			$dialogBox .= "<table width=\"99%\">
-			<tbody><tr><td class=\"caution_small\"><p><b>$langFileExists</b></p>
-			</td></tr></tbody></table>";
-			$createDir = $newDirPath; 
-			unset($newDirPath);
-		}
-		else
-		{
+		$newDirName = trim($newDirName);
+        	$r = db_query('SELECT * FROM document WHERE filename = ' . quote($newDirName));
+        	$exists = false;
+        	$parent = preg_replace('|/[^/]*$|', '', $newDirPath);
+        	while ($rs = mysql_fetch_array($r)) {
+                	if (preg_replace('|/[^/]*$|', '', $rs['path']) == $parent) {
+                        	$exists = true;
+                	}
+        	}
+        	if ($exists) {
+                	$dialogBox .= "<table width=\"99%\">
+                        <tbody><tr><td class=\"caution_small\"><p><b>$langFileExists</b></p>
+                        </td></tr></tbody></table>";
+        	} else {
 			$safe_dirName = date("YmdGis").randomkeys("8");
 			mkdir($baseWorkDir.$newDirPath."/".$safe_dirName, 0775);
 			$query =  "INSERT INTO ".$dbTable." SET
@@ -374,9 +377,9 @@ if($is_adminOfCourse)
 				language=\"\",
 				copyrighted=\"\"";
 			mysql_query($query);
+			$dialogBox = "<table width=\"99%\"><tbody><tr><td class=\"success\">
+				<p><b>$langDirCr</b></p></td></tr></tbody></table>";
 		}
-		$dialogBox = "<table width=\"99%\"><tbody><tr><td class=\"success\">
-			<p><b>$langDirCr</b></p></td></tr></tbody></table>";
 	}
 
 	// step 1
