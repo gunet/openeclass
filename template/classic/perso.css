@@ -136,8 +136,8 @@ table.assign {
 	margin-left: 1px;
 	display: block;
 	padding: 3px;
-	color: #727266;
-	border-bottom: 1px solid #F3D8D9;
+	color: #CAC3B5;
+	border-bottom: 1px solid #EDECDF;
 	font-weight: bold;
 }
 
@@ -304,7 +304,10 @@ cite.content_pos {
 	font-weight: bold;
 }
 
-table.lessonslist {
+.lessonslist_header {
 	border : 0px !important;
-		padding: 0px !important;
+	padding: 0px !important;
+	background-color: transparent !important;
+	border-bottom: 1px solid #EDECDF !important;
+	color: #CAC3B5;
 }

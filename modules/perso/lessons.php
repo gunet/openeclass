@@ -226,18 +226,19 @@ function htmlInterface($data, $lesson_fCode) {
 <div id="assigncontainer">
 
 
-        <table width="100%">
+        <table width="100%" class="FormData">
         <tbody>
-        <tr>
-          <td width="90%"><b>$langCourse</b></td>
+        <tr class="lessonslist_header">
+          <td width="90%" colspan="2"><b>$langCourse</b></td>
           <td><b>$langActions</b></td>
         </tr>
 lCont;
 
 		for ($i=0; $i<$data[0]; $i++) {
  			$lesson_content .= "
-        <tr>
-          <td><a href=\"courses/".$data[2][$i]."\">".$lesson_fCode[$i]." - ".$data[1][$i]."</a><cite class=\"content_pos\">".$data[3][$i]."</cite></td>";
+        <tr style=\"background-color: transparent;\" onmouseover=\"this.style.backgroundColor='#fbfbfb'\" onmouseout=\"this.style.backgroundColor='transparent'\">
+          <td align='left' width=\"1\" style=\"padding-left: 4px; padding-right: 0px;\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+          <td align='left' style=\"padding-left: 0px; padding-top: 2px; padding-bottom: 2px; padding-right: 0px;\"><a href=\"courses/".$data[2][$i]."\">".$lesson_fCode[$i]." - ".$data[1][$i]."</a><cite class=\"content_pos\">".$data[3][$i]."</cite></td>";
 			if ($data[4][$i] == '5') {
 				$lesson_content .= "
           <td align='center'><a href=\"modules/unreguser/unregcours.php?cid=".$data[2][$i]."&uid=".$uid."\"><img style='border:0px;' src='${urlServer}/template/classic/img/cunregister.gif' title='$langUnregCourse'></img></a></td>
