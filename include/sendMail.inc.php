@@ -22,7 +22,7 @@
 
 // Send a mail message, with the proper MIME headers and charset tag
 function send_mail($from, $from_address, $to, $to_address,
-                   $subject, $body, $charset)
+                   $subject, $body, $charset, $extra_headers = '')
 {
 	if (empty($to)) {
 		$to_header = $to_address;
@@ -34,6 +34,9 @@ function send_mail($from, $from_address, $to, $to_address,
 		"MIME-Version: 1.0\n" .
 		"Content-Type: text/plain; charset=$charset\n" .
 		"Content-Transfer-Encoding: 8bit";
+	if ($extra_headers) {
+		$headers .= "\n" . preg_replace('/\n+/', "\n", $extra_headers);
+	}
 
 	return @mail($to_header, qencode($subject, $charset),
                $body, $headers);
