@@ -1064,6 +1064,9 @@ function document_upgrade_file($path, $data)
                 $current_filename = mysql_fetch_array($r);
                 if (empty($current_filename['filename']) or
                     preg_match('/[^\040-\177]/', $current_filename['path'])) {
+                        if (!empty($current_filename['filename'])) {
+                                $old_filename = $current_filename['filename'];
+                        }
                         // File exists in database, hasn't been upgraded
                         db_query("UPDATE $table
                                         SET filename = " . quote($old_filename) . ",
