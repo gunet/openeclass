@@ -574,3 +574,40 @@ table.sortable span.sortarrow {
 .tborder {
 	border: 1px solid #dcdcdc;	
 	}
+	
+	
+table.AnnouncementsList{
+    background: none;
+    font-size:12px;
+    border-top: 0px solid #fff !important;
+    border-bottom: 0px solid #fff !important;
+    border-left: 0px solid #fff  !important;
+    border-right: 0px solid #fff  !important;
+}
+
+table.AnnouncementsList thead{
+    background: none;
+    text-align: left;
+    color: #a33033;
+}
+
+table.AnnouncementsList th{
+    text-align: left;
+	background: none;
+    color: #a33033;
+    font-weight: bold;
+	border-bottom: 1px solid #edecdf !important;
+}
+
+table.AnnouncementsList tbody{
+    background: none;
+}
+
+
+table.AnnouncementsList td {
+    background: none;
+	text-align: left;
+	color: #727266;
+	font-weight: normal;
+	font-size:10px;
+}

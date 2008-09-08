@@ -1,3 +1,8 @@
+.invisible { 
+	background: #F7F9FC !important;
+	color: silver !important;
+	}
+
 a.add {
 	color: #ff0000 !important;
 }

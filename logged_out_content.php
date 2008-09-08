@@ -23,15 +23,15 @@
 *						eMail: eclassadmin@gunet.gr
 ============================================================================
  * Logged Out Component
- * 
+ *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * 
- * @abstract This component creates the content of the index page when the 
+ *
+ * @abstract This component creates the content of the index page when the
  * user is not logged in
- * It includes: 
- * 1. The login form, 
- * 2. an optional content below the login form, 
+ * It includes:
+ * 1. The login form,
+ * 2. an optional content below the login form,
  * 3. The introductory message
  * 4. Platform announcements (If there are any)
  *
@@ -52,9 +52,9 @@ if(session_is_registered('langswitch')) {
 	$language = $_SESSION['langswitch'];
 }
 
-if ($language == "greek") 
+if ($language == "greek")
 		$sql = $sql_el;
-else 
+else
 		$sql = $sql_en;
 
 $tool_content .= <<<lCont
@@ -79,29 +79,33 @@ if (mysql_num_rows($result) > 0) {
 	$tool_content .= "
 <br/>
 
-<table width=\"99%\">
-	<thead><tr><th>$langAnnouncements </th></tr></thead>
-	<tbody>";
+  <table width=\"99%\" class=\"AnnouncementsList\">
+  <thead>
+  <tr>
+    <th>$langAnnouncements</th>
+  </tr>
+  </thead>
+  <tbody>";
 
 	$numOfAnnouncements = count($announceArr);
 
 	for($i=0; $i < $numOfAnnouncements; $i++) {
-		if ($i%2 == 0) 
+		if ($i%2 == 0)
 				$rowClass = "class=\"odd\"";
-		else 
+		else
 				$rowClass = "";
 
 		$tool_content .= "
-		<tr $rowClass>
-			<td>
-				<p><b>".greek_format($announceArr[$i][0]).":</b> <u>".$announceArr[$i][1]."</u></p>
-				<p>".$announceArr[$i][2]."</p>
-				<p><i>".$announceArr[$i][3]."</i></p>
-			</td>
-		</tr>
-		";
+  <tr $rowClass>
+    <td><b>".greek_format($announceArr[$i][0]).":</b> <u>".$announceArr[$i][1]."</u><br />
+        ".$announceArr[$i][2]."<br />
+        <i>".$announceArr[$i][3]."</i>
+    </td>
+  </tr>";
 	}
-	$tool_content .= "</tbody></table>";
+	$tool_content .= "
+  </tbody>
+  </table>";
 }
 
 $tool_content .= <<<lCont2
