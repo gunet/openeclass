@@ -31,7 +31,7 @@
 $langIntro = "The <b>$siteName</b> is a complete Asynchronous Teleteaching Platform in <a href=\"$InstitutionUrl\" target=\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion="$siteName version";
 $langAboutText="Platform version is";
-$langEclassVersion="2.0";
+$langEclassVersion="2.1";
 $langHostName="Host Name is";
 $langWebVersion="uses";
 $langMySqlVersion="MySql ";
@@ -2402,6 +2402,7 @@ $langphone= "Telephone";
 $langPhone = "<b>Phone:</b>";
 
 // adduser.php
+$langAskUser = "First you must search for the user. User must already have an account in the platform.";
 $langAskManyUsers = "Type the filename or click in \"Browse\" to browse for it.";
 $langAskManyUsers1 = "Users must have an account in platform.";
 $langAskManyUsers2 = "<strong>Note</strong>: Users file must be a simple text file with one username per line: E.g.
@@ -2411,7 +2412,6 @@ $langAskManyUsers2 = "<strong>Note</strong>: Users file must be a simple text fi
             john<br>
             ";
 
-$langAskSearch = "Enter the name, surname or username of the user you want to search for.";
 $langAddUser = "Add User";
 $langOneUser = "one user";
 $langManyUsers = "many users";

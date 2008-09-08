@@ -57,7 +57,7 @@ if($is_adminOfCourse) {
     <tr>
       <th class="left">$langAskUserFile</th>
       <td><input type="file" name="users_file" class="FormData_InputText"></td>
-      <td align="right"><small>$langAskManyUsers</small></td>
+      <td align="justify"><small>$langAskManyUsers</small></td>
     </tr>
     <tr>
       <th class="left">&nbsp;</th>
@@ -199,7 +199,7 @@ function adduser($user,$course) {
 // function for checking file
 function check_uname_line($uname)
 {
-	if (preg_match("/[^a-zA-Z0-9.-_á-ùÁ-Ù]/", $uname)) {
+	if (preg_match("/[^a-zA-Z0-9.-_ï¿½-ï¿½ï¿½-ï¿½]/", $uname)) {
 		return FALSE;
 	} else {
 		return 	TRUE;

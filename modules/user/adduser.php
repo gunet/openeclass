@@ -85,7 +85,7 @@ $tool_content .= <<<tCont
     <tr>
       <th width="220">&nbsp;</th>
       <td><b>$langUserData</b></td>
-      <td align="right"><small>$langAskUser1</small></td>
+      <td align="justify"><small>$langAskUser</small></td>
     </tr>
     <tr>
       <th class="left">$langSurname</th>
@@ -105,7 +105,7 @@ $tool_content .= <<<tCont
     <tr>
       <th class="left">&nbsp;</th>
       <td><input type="submit" value="$langSearch"></td>
-      <td align="right"><small>$langAskUser2</small></td>
+      <td>&nbsp;</td>
     </tr>
 	</tbody>
 	</table>

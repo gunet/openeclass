@@ -46,7 +46,8 @@
     require_once("../../include/lib/learnPathLib.inc.php");
     require_once("../../include/lib/textLib.inc.php");
   	$require_current_course = TRUE;
-	$require_help           = FALSE;
+	$require_help           = TRUE;
+	$helpTopic              = "Wiki";
 	require_once("../../include/baseTheme.php");
 
 	$head_content = "";

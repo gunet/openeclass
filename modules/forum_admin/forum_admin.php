@@ -69,34 +69,31 @@ function confirmation ()
 		$result = db_query("select forum_id, forum_name, forum_desc, forum_access, forum_moderator, forum_type from forums where cat_id='$cat_id'", $currentCourseID);
 	if ($result and mysql_num_rows($result) > 0) {
 		$tool_content .= "
-
-    <form action=\"forum_admin.php?forumgoadd=yes&ctg=$ctg&cat_id=$cat_id\" method=post>
-    <table width=99% class=\"ForumAdmSum\">
-    <thead>
-    <tr>
-      <th width='10'>$langID</th>
-      <th>&nbsp;$langForName</th>
-      <th>$langDescription</th>
-      <th width='75'><div align=\"center\">$langActions</div></th>
-    </tr>
-    </thead>
-    <tbody>";
+		<form action=\"forum_admin.php?forumgoadd=yes&ctg=$ctg&cat_id=$cat_id\" method=post>
+    		<table width=99% class=\"ForumAdmSum\">
+    		<thead>
+    		<tr>
+      		<th width='10'>$langID</th>
+      		<th>&nbsp;$langForName</th>
+      		<th>$langDescription</th>
+      		<th width='75'><div align=\"center\">$langActions</div></th>
+    		</tr>
+    		</thead>
+    		<tbody>";
 		$i=1;
 		while(list($forum_id, $forum_name, $forum_desc, $forum_access,
 			$forum_moderator, $forum_type) = mysql_fetch_row($result)) {
 			$tool_content .= "
-      <td align='right'>$i.</td>
-      <td align='left'>$forum_name</td>
-      <td align='left'>$forum_desc&nbsp;</td>";
-	$tool_content .= "
-      <td align='center'>
-        <a href=forum_admin.php?forumgoedit=yes&forum_id=$forum_id&ctg=$ctg&cat_id=$cat_id><img src='../../template/classic/img/edit.gif' title='$langModify' border='0'></img></a>
-        &nbsp;
-        <a href=forum_admin.php?forumgodel=yes&forum_id=$forum_id&cat_id=$cat_id&ctg=$ctg&ok=0><img src='../../template/classic/img/delete.gif' title='$langDelete' border='0'></img></a>
-      </td>
-    </tr>";
-			$i++;
-		}
+      			<tr><td align='right'>$i.</td>
+      			<td align='left'>$forum_name</td>
+      			<td align='left'>$forum_desc&nbsp;</td>";
+			$tool_content .= "<td align='center'>
+        		<a href=forum_admin.php?forumgoedit=yes&forum_id=$forum_id&ctg=$ctg&cat_id=$cat_id><img src='../../template/classic/img/edit.gif' title='$langModify' border='0'></img></a>
+        		&nbsp;
+        		<a href=forum_admin.php?forumgodel=yes&forum_id=$forum_id&cat_id=$cat_id&ctg=$ctg&ok=0><img src='../../template/classic/img/delete.gif' title='$langDelete' border='0'></img></a>
+      			</td></tr>";
+		$i++;
+	}
 	$tool_content .= "
     </tbody>
     </table>
@@ -104,9 +101,8 @@ function confirmation ()
 	
     <br/>";
 	} else {
-		    $tool_content .= "
-    <p class=\"alert1\">$l_noforum</p>
-    </tr>";
+		    $tool_content .= "<p class=\"alert1\">$l_noforum</p>
+    			</tr>";
 	}
 
 	$tool_content .= "
@@ -341,7 +337,6 @@ function confirmation ()
     <p align=\"right\"><a href=\"$PHP_SELF?forumgo=yes&ctg=$ctg&cat_id=$cat_id\">$langBack</a></p>";
 	} else {
 		$tool_content .= "
-
     <form action=\"forum_admin.php?forumadmin=yes\" method=post></td><tr><td>";
 		$tool_content .= "
     <table width=99% class=\"ForumCategory\">
@@ -353,25 +348,23 @@ function confirmation ()
       <th width='75'>$langActions</th>
     </tr>
 ";
-		$result = db_query("select cat_id, cat_title from catagories order by cat_id", $currentCourseID);
-		$i=1;
+	$result = db_query("select cat_id, cat_title from catagories order by cat_id", $currentCourseID);
+	$i=1;
 
-		while(list($cat_id, $cat_title) = mysql_fetch_row($result)) {
-			$gets = db_query("select count(*) as total from forums where cat_id=$cat_id", $currentCourseID);
-			$numbers= mysql_fetch_array($gets);
-			$tool_content .= "
-      <td><div align='right'>$i.</div></td>
-      <td><div align='left'>$cat_title &nbsp;</div></td>
-      <td>$numbers[total]</td>
-      <td>
-        <a href='forum_admin.php?forumgo=yes&cat_id=$cat_id&ctg=$cat_title'><img src='../../template/classic/img/forum_on.gif' border='0' title='$langForums'></img></a>&nbsp;
-        <a href='forum_admin.php?forumcatedit=yes&cat_id=$cat_id'><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>&nbsp;
-        <a href='forum_admin.php?forumcatdel=yes&cat_id=$cat_id&ok=0' onClick='return confirmation();'><img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></img></a>
-      </td>
-    </tr>";
+	while(list($cat_id, $cat_title) = mysql_fetch_row($result)) {
+		$gets = db_query("select count(*) as total from forums where cat_id=$cat_id", $currentCourseID);
+		$numbers= mysql_fetch_array($gets);
+		$tool_content .= "<tr><td><div align='right'>$i.</div></td>
+      		<td><div align='left'>$cat_title &nbsp;</div></td>
+      		<td>$numbers[total]</td><td>
+        	<a href='forum_admin.php?forumgo=yes&cat_id=$cat_id&ctg=$cat_title'><img src='../../template/classic/img/forum_on.gif' border='0' title='$langForums'></img></a>&nbsp;
+        	<a href='forum_admin.php?forumcatedit=yes&cat_id=$cat_id'><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>&nbsp;
+        	<a href='forum_admin.php?forumcatdel=yes&cat_id=$cat_id&ok=0' onClick='return confirmation();'><img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></img></a>
+      		</td>
+    		</tr>";
 			$i++;
 		}
-		$tool_content .= "
+	$tool_content .= "
     </thead>
     </table>
     </form>

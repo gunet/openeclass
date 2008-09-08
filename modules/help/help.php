@@ -43,6 +43,8 @@ if (!isset($_GET['topic']) ||  empty($GLOBALS["lang$_GET[topic]Content"])) {
 
 header('Content-Type: text/html; charset=UTF-8');
 
+$title = $GLOBALS["langH" . str_replace('_student', '', $_GET['topic'])];
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -107,7 +109,7 @@ header('Content-Type: text/html; charset=UTF-8');
 		</style>
 	</head>
 	<body>
-		<h3><?= $GLOBALS["langH$_GET[topic]"] ?></h3>
+		<h3><?= $title ?></h3>
 		<?= $GLOBALS["lang$_GET[topic]Content"] ?>	
 		<center><p>
 			<a href='javascript:window.close();'><?= $langWindowClose ?></a>

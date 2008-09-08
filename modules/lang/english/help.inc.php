@@ -56,7 +56,7 @@ $langForContent="<p>The forum is a written asynchronous discussion tool.
 // help_home.php
 
 $langHHome="Home Page Help";
-$langHomeContent="<p>For more convenience, eClass tools contain default
+$langHomeContent="<p>For more convenience, Open eClass tools contain default
 entries.  There is a small example in every tool to help you grasp quickly how
 it works. It is up to you to modify the example or to delete it.</p>
 
@@ -87,16 +87,15 @@ what level of confidentiality you want.  By default, your course is hidden
 
 
 $langHInit="Start Page Help";
-$langInitContent="<p>You are currently in the eClass platfotm's Start Page.
+$langInitContent="<p>You are currently in the Open eClass platform's start page.
 Type your username and password to login to the platform. In case you
 have forgotten your login information, click on 'Forgot your password?' and
 in the form that appears enter your e-mail address, in order to recover
 your username and password.</p>
-
 <p><b>New user registration</b></p>
-<p>If you are a student you have to register, by clicking in 'New user
-registration', and then you have to choose your desired courses. </p>
-<b>Professor acount request</b>
+<p>If you are a student you have to register, by clicking in 'User
+Registration', and then you have to choose your desired courses.</p> 
+<p><b>Professor acount request</b></p>
 <p>If you are a professor, you also have to register by clicking in 'Professor account request'.
  After that you must fill a form with some personal informations: Name, surname, username, phone, e-mail and
  the department in which you belong. After filling the form, your request will be sent in the administrators
@@ -105,6 +104,7 @@ registration', and then you have to choose your desired courses. </p>
  click in 'Create course site'. After completing some details about your course, your course will be created
  and you will be directed in your newly created course home page.</p>";
 
+$langInit_studentContent = $langInitContent;
 
 $langHPortfolio="User portfolio";
 $langClar2Content="<p>Here you can find all courses you are registered to
@@ -152,26 +152,22 @@ $langDocContent="<p>The Documents tool is similar to the FileManager of
 <p>You can :</p>
 <h4>Upload a document</h4>
 <ul>
-  <li>Select the file on your computer using the Browse button <input
- type=submit value=Browse name=submit2>
-    on the right of your screen.</li>
-        <li>
-            Launch the upload with the Upload Button <input type=submit value=Upload name=submit2>.
-        </li>
-    </ul>
-    <h4>
-        Rename a document (a directory)
-    </h4>
+  <li>Select the file on your computer by clicking in 'Upload file'.</li>
+<li>In the following form use 'Browse' button to search for the file in your computer.</li>
+  <li>Launch the upload with the 'Upload' button 
+  </li>
+  </ul>
+  <h4>Rename a document (a directory)</h4>
     <ul>
         <li>
-            click on the <img src=../../template/classic/img/renommer.gif width=20 height=20 align=baseline>
-            button in the Rename column
+            Click on the icon 'Rename' (<img src='../../template/classic/img/edit.gif' width=10 height=10
+ align=baseline>).
         </li>
         <li>
             Type the new name in the field (top left)
         </li>
         <li>
-            Validate by clicking <input type=submit value=Ok name=submit24>.
+            Validate by clicking 'Rename' button.
         </li>
     </ul>
         <h4>
@@ -179,25 +175,20 @@ $langDocContent="<p>The Documents tool is similar to the FileManager of
         </h4>
         <ul>
             <li>
-                Click on <img src=../../template/classic/img/supprimer.gif width=20 height=20>
-                in column 'Delete'.
-            </li>
+           Click on the icon 'Delete' (<img src='../../template/classic/img/delete.gif' width=10 height=10 align=baseline>)</li>
         </ul>
         <h4>
             Make a document (or directory) invisible to students
         </h4>
         <ul>
             <li>
-                Click on <img src=../../template/classic/img/visible.gif width=20 height=20>
-                in column 'Visible/invisible'.
+                Click on the icon 'Visible/invisible' (<img src='../../template/classic/img/visible.gif' width=10 height=10 align=baseline>)  
             </li>
             <li>
-                The document (or directory) still exists but it is not visible by students anymore.
+                After that the document (or directory) still exists but it is not visible by students anymore.
             </li>
             <li>
-                To make it invisible back again, click on
-                <img src=../../template/classic/img/invisible.gif width=24 height=20>
-                in column 'Visible/invisible'
+           To make it invisible back again, click on the icon 'Visible/invisible' (<img src='../../template/classic/img/invisible.gif' width=14 height=10 align=baseline> 
             </li>
         </ul>
         <h4>
@@ -205,19 +196,12 @@ $langDocContent="<p>The Documents tool is similar to the FileManager of
         </h4>
         <ul>
             <li>
-                Click on <img src=../../template/classic/img/comment.gif width=20 height=20> in column 'Comment'
-            </li>
+                Click on the icon 'Comment' *(<img src='../../template/classic/img/information.gif' width=10
+ height=10 align=baseline>)</li>
             <li>
                 Type new comment in the corresponding field (top right).
             </li>
-            <li>
-                Validate by clicking <input type=submit value=OK name=submit2>
-            .</li>
         </ul>
-        <p>
-        To delete a comment, click on <img src=../../template/classic/img/comment.gif width=20 height=20>,
-        delete the old comment in the field and click
-        <input type=submit value=OK name=submit22>.
         <hr>
         <p>
             You can organise your content through filing. For this:
@@ -229,15 +213,13 @@ $langDocContent="<p>The Documents tool is similar to the FileManager of
         </h4>
         <ul>
             <li>
-                Click on
-                <img src=../../template/classic/img/dossier.gif width=20 height=20>
-                'Create a directory' (top left)
+                Click on the link 'Create a directory'.
             </li>
             <li>
                 Type the name of your new directory in the corresponding field (top left)
             </li>
             <li>
-                Validate by clicking <input type=submit value=OK name=submit23>.
+                Validate by clicking 'Create directory' button.
             </li>
         </ul>
         <h4>
@@ -245,18 +227,16 @@ $langDocContent="<p>The Documents tool is similar to the FileManager of
         </h4>
         <ul>
             <li>
-                Click on button <img src=../../template/classic/img/deplacer.gif width=34 height=16>
-                in column 'Move'
+                Click on the icon 'Move' (<img src='../../template/classic/img/move_doc.gif' width=10 height=10 align=basename>)
             </li>
             <li>
                 Choose the directory into which you want to move the document (or directory) in the corresponding scrolling menu (top left) (note: the word 'root' means you cannot go upper than that level in the document tree of the server).
             </li>
             <li>
-                Validate by clicking on <input type=submit value=OK name=submit232>.
+                Validate by clicking on 'Move' 
             </li>
         </ul>
-<center>
-<p>";
+</p>";
 
 
 
@@ -265,10 +245,8 @@ $langDocContent="<p>The Documents tool is similar to the FileManager of
 
 $langHUser="Help Users";
 $langUserContent="<b>Roles</b><p>Roles have no computer related function.
- They do not give rights on operating the system. They just indicate to
- Humans, who is who. You can modify them by clicking on 'modify' under
- 'role', then typing whatever you want: professor, assistant, student,
- visitor, expert...</P><hr>
+ They do not give rights on operating the system.</p>
+<hr>
 <b>Admin rights</b>
 <p>Admin rights, on the other hand, correspond to the technical
  authorisation to modify the content and organisation of the course
@@ -276,77 +254,26 @@ $langUserContent="<b>Roles</b><p>Roles have no computer related function.
  rights and giving none of them.</P>
 <p>To allow an assistant, for instance, to co-admin the site, you need to
  register him in the course or be sure he is already registerd, then click
- on 'modify' under 'admin rights', then click 'all', then 'Ok'.</P><hr>
-<b>Co-chairmen</b>
-<p>To mention in the header of the course website the name of a
- co-chairmen, use the tool 'Modify course information' (orange tools). This
- modification does not register your co-chairmen as a user of the course.
- The field 'Professors' is completely independant of the Users
- list.</p><hr>
-<b>Add a user</b>
-<p>To add a user for your course, fill the fields and validate. The person
-will receive an email telling him/her you have registered him/her and telling
-him/her or reminding him/her his/her login and  password.</p>";
+ on 'Add' under 'Administrator'.</p><hr>
+<b>Add One user</b>
+<p>To add a user for your course, fill the fields and click in 'Search' button. After finding user click in 'Register user to course' to register him/her in your course</p>";
 
-// Help Group
 
-$langHGroup="Help groups";
-$langGroupContent="<p><b>Introduction</b></p>
-<p>This tool allows to create and manage work groups.
-At creation (Create groups), groups are emtpy. There are
-many ways to fill them:
-<ul><li>automatically ('Fill groups'),</li>
-<li>manually ('Edit'),</li>
-<li>self-registration by students (Groups settings: 'Self registration allowed...').</li>
-</ul>
-<p>These three ways can be combined. You can, for instance, ask students to self-register first.
-Then discover that some of them didn't and decide then to fill groups automatically in
-order to complete them. You can also edit each group to compose membership one student
-at a time after or before self-registration and/or automatical filling.</p>
-<p>Groups filling, whether automatical or manual, works only if there are already students
-registered in the course (don't mix registration to the course with registration into groups).
-Students list is visible in <b>Users</b> tool. </p><hr noshade size=1>
-<p><b>Create groups</b></p>
-<p>To create new groups, click on 'Create new group(s)' and determine number of groups to
-create. Maximum number of members is optional but we suggest to chose one. If you leave max. field
-unchanged, groups size maximum will be infinite.</p><hr noshade size=1>
-<p><b>Group settings</b></p>
-<p>You can determine Group settings globally (for all groups).
-<b>Students are allowed to self-register in groups</b>:
-<p>You create empty groups, students self-register.
-If you have defined a maximum number, full groups do not accept new members.
-This method is good for teachers who do not know students list when
-creating groups.</p>
-<b>Outils</b>:</p>
-<p>Every group possesses either a forum (private or public) or a Documents area
-(a shared file manager) or (most frequent) both.</p>
-<hr noshade size=1>
-<p><b>Manual edit</b></p>
-<p>Once groups created (Create groups), you see at bottom of page, a list of groups
-with a series of informations and functions
-<ul><li><b>Edit</b> to modify manually Group name, description, tutor,
-members list.</li>
-<li><b>Delete</b> deletes a group.</li></ul>
-<hr noshade size=1>";
+// Help guest user
+$langHGuest = "Add Guest Account";
+$langGuestContent = "<p>By clicking in 'Add guest account' you can create an account for a guest user in a course. A guest user, can have access in the initial course page and of course the various active course tools but can't upload or modify anything.</p>";
 
-// Help survey
-$langHSurvey="Help";
-$langSurveyContent="<p>This tool allows the teacher to create and
-manage Surveys.</p>";
 
-// Help poll.php
-$langHPoll="Help";
-$langPollContent="<p>This tool allows the teacher to create and
-manage Polls.</p>";
 
 // Help questionnaire.php
-$langHQuestionnaire="Help";
-$langQuestionnaireContent="<p>This tool allows the teacher to create and
-manage Questionnaires.</p>";;
+$langHQuestionnaire="Questionnaire Help";
+$langQuestionnaireContent="<p>With this tool can create and manage questionnaires.</p>
+<p>To create a questionnaire click on 'Create Questionnaire'. In the next form fill the title and the start / end date of the questionnaire. You can choose the question type by clicking in the corresponing buttons ('New mulitple choise question' and 'New text fill question'. After completing the questions and their answers click on 'Create Questionnaire' 
+</p>
+<p>Questionnaire results can accessed by the questionnaire admin page.</p>";
+
 
 // Help exercise.php
-
-
 $langHExercise="Help exercises";
 $langExerciseContent="<p>The exercise tool allows you to create exercises that will contains as many questions as
 you l
@@ -446,7 +373,7 @@ Orphan questions are questions that don't belong to any exercise.</p>";
 
 // help work
 
-$langHWork = "Help";
+$langHWork = "Work";
 $langWorkContent = "
 <p>Work tool is a complete tool for creating / submittion of assignments.</p>
 <p>As a professor, you can create an assignment by clicking on <b>\"New Assignment\"</b>.
@@ -472,72 +399,96 @@ one.
 </p>
 ";
 
+
+// Help Group
+$langHGroup="Help groups";
+$langGroupContent="<p><b>Introduction</b></p>
+<p>This tool allows to create and manage work groups.
+At creation (Create groups), groups are emtpy. There are
+many ways to fill them:
+<ul><li>automatically ('Fill groups'),</li>
+<li>manually ('Edit'),</li>
+<li>self-registration by students (Groups settings: 'Self registration allowed...').</li>
+</ul>
+<p>These three ways can be combined. You can, for instance, ask students to self-register first.
+Then discover that some of them didn't and decide then to fill groups automatically in
+order to complete them. You can also edit each group to compose membership one student
+at a time after or before self-registration and/or automatical filling.</p>
+<p>Groups filling, whether automatical or manual, works only if there are already students
+registered in the course (don't mix registration to the course with registration into groups).
+Students list is visible in <b>Users</b> tool. </p><hr noshade size=1>
+<p><b>Create groups</b></p>
+<p>To create new groups, click on 'Create new group(s)' and determine number of groups to
+create. Maximum number of members is optional but we suggest to chose one. If you leave max. field
+unchanged, groups size maximum will be infinite.</p><hr noshade size=1>
+<p><b>Group settings</b></p>
+<p>You can determine Group settings globally (for all groups).
+<b>Students are allowed to self-register in groups</b>:
+<p>You create empty groups, students self-register.
+If you have defined a maximum number, full groups do not accept new members.
+This method is good for teachers who do not know students list when
+creating groups.</p>
+<b>Outils</b>:</p>
+<p>Every group possesses either a forum (private or public) or a Documents area
+(a shared file manager) or (most frequent) both.</p>
+<hr noshade size=1>
+<p><b>Manual edit</b></p>
+<p>Once groups created (Create groups), you see at bottom of page, a list of groups
+with a series of informations and functions
+<ul><li><b>Edit</b> to modify manually Group name, description, tutor,
+members list.</li>
+<li><b>Delete</b> deletes a group.</li></ul>
+<hr noshade size=1>";
+
 // Help Agenda
-$langHAgenda = "Calendar";
-$langAgendaContent = "You can add an event in agenda, by choosing a date, typing a title, describe the details and
-pressing 'Ok'. If you wish, you can change some event properties by clickin 'Modify' or deleting an event by clicking
-'Delete'.";
+$langHAgenda = "Agenda";
+$langAgendaContent = "<p>You can add an event in agenda, by clicking on the link 'Add an event'. In the following form, choose a date, type a title and describe the details. After that press button 'Add / / Modify' An event will be created.</p>
+<p>If you wish, you can change some event properties by clicking the icon 'Modify' or deleting an event by clicking
+the icon 'Delete'.</p>";
 
 // Help link
-
 $langHLink = "Link";
-$langLinkContent="<p>
-The Links tool allows you to create a library of resources for your students. Especially resources that you have
-not created yourself.</p>
-<p>When the list grows, it might prove relevant to organise it into categories to help your students find the
-right information at the right place.
-You can edit every link to re-assign it into a new category (you need to create this category first).</p>
-<p>The Description field can be used to give pre-information on the target web pages but also to describe what
-you expect the student to do with the link. If, for instance, you point to a website on Aristotle,
-the description field may ask the student to study the difference between synthesis and analysis. ";
+$langLinkContent="<p>With the Links tool you can create links to various web pages.</p>
+<p>To add a link click on the link 'Add link'. Type the url, the link name and (optionally) a small description. If you want you can choose the category which the link will belongs. Click on the 'Add' button to add the link.</p>
+<p>You can organize your links by grouping them in categories. You can add a category by clicking in 'Add category' Type the category name and category description. After that click on the button 'Add'.</p> 
+<p>Notice that you can edit every link to re-assign it into a new category (of course you need to create this category first).</p>";
 
 // Help announcements
-
 $langHAnnounce = "Announcements";
-$langAnnounceContent = "<p>You can add announcements in a course typing a description of announcements and pressing 'Ok'.</p><p>
-Also, you can change the announcement clicking on 'Modify' or delete an announcement clicking on 'Delete'. If you want
-to mail your announcement to the registered students in your lesson, just check 'Send this announcement by email to
-registered students'</p>";
+$langAnnounceContent = "<p>You can add announcements in a course by clicking in the link 'Add announcement'. In the following form type the title and the body of the announcement. After that click on the 'Add' button.</p><p>
+Also, you can change the announcement clicking on the icon 'Modify' or delete an announcement clicking on the icon 'Delete'. If you want to mail your announcement to the registered students in your lesson, just check 'Send announcement (via email) to registered students'</p>";
 
 // Help profile
-
 $langHProfile = "My profile";
 $langProfileContent = "<p>You can modify your personal info in the platform</p>
-<li>You can modify your name, surname and your e-mail address.</li>
+<li>You can modify your name, surname, and your e-mail address.</li>
 <li>Also if you desire, you can modify your username and your password.</li>
 <li>After making any changes, just click on the button 'Modify'.</li>";
 
-//help video links
-
-$langHVideoLinks = "Video";
-$langVideoLinksContent = "You can add video links in yous course. Just type the address of a video on
-demand (VOD) server in field 'URL'. You can also type the title and the description and finally press button 'Add'.
-When you change 'Delete whole list' you can delete all the video links of your course";
 
 //Help import
-
 $langHImport = "Upload page";
-$langImportContent = "<p>You can add your personal pages in lesson home page.
+$langImportContent = "<p>You can add your personal pages in course home page.
 The page must be in HTML format and can be created with a word processor or
 an editor for creating Web sites and pages. If you want to add a page upload the file .html
-by pressing the button οΏ½browseοΏ½ , type the title of the page and press button 'Add'.
+by pressing the button 'Browse', type the title of the page and press button 'Add'.
 Your page will be linked from Homepage. If you want to send non HTML documents
 (PDF, Word, Power Point, Video, etc.) use 'Documents tool'
 These links can be deactivated and deleted.</p>";
 
-$langHModule = "οΏ½dd link in home page";
+$langHModule = "Add link in home page";
 $langModuleContent = "<p>If you want to add links in lesson home page, just type the title and the address of the
 link and press button 'Add'. These links can be deactivated and deleted.</p>";
 
 //Help import page
 $langHImport = "Upload html file";
-$langImportContent = "<p>If needed, you can upload a file relative to your lesson. This file will be stored on the eClass server. A link towards this file will be added on the left side menu, with the rest lesson tools.
+$langImportContent = "<p>If needed, you can upload a file relative to your course. This file will be stored on the server. A link towards this file will be added on the left side menu, with the rest lesson tools.
 The link will open in a new browser window.</p>
 <p>To upload your html page click on 'Browse', choose the file you wish to upload, type a title in the 'Page Title' field and click on 'Add'.</p>
 <p>The link of this file can be deactivated and deleted from the 'Tools administration' module.</p>";
 
 //Help Course tools
-$langHcourseTools = "Tools Administraion";
+$langHcourseTools = "Tools Management";
 $langcourseToolsContent = "<p>This module is used to activate or deactivate lesson tools. Each tool's status is presented on one of the two columns and can be active or not.</p>
 
 <p>In order to change the status of a tool click on the tools name to it and then click on '>>' to change it's status. You can move multiple tools by using CTRL+click. Finally, click  on 'Save changes' at the end of the table to save your changes.</p>
@@ -627,16 +578,13 @@ After entering the information you want press the button 'Add'. </p><p>If, for s
 the information press 'Return and Cancel'. Whenever you want, you can modify the information you have entered by
 clicking 'Modify' or deleting it by clicking on 'Delete'.</p>";
 
-$langHModule = "οΏ½dd link in home page";
-$langModuleContent = "<p>If you want to add links in lesson home page, just type the title and the address of the
+$langHModule = "Add link in home page";
+$langModuleContent = "<p>If you want to add links in course home page, just type the title and the address of the
 link and press button 'Add'. These links can be deactivated and deleted.</p>";
 
 
 // Help  Scorm - Learning Path
-
-
 $langHPath="Help - Learning Path";
-
 $langPathContent="
 The Learning Path tool has four functions:
 <ul>
@@ -760,85 +708,16 @@ $langUsageContent = "<p>The usage statistics modules allows the professor to see
 $langHCreateCourse = "Create Course Wizard";
 $langCreateCourseContent = "<p>The Create Course Wizard is one of the most important tools of the platform. By using this, the user-instructor is able to create new courses in the platform and configure them.</p><p>The wizards consists of 3 steps. Filling in every field with an asterisk, is mandatory. Under some fields, lie exemplary information to help the user with the filling-in.</p><p>In case the user enters invalid data in a field, the system informs the user and prompts him to correct the error so as to be able to continue to the next step.</p>";
 
+
 // Wiki Help
-
 $langHWiki = "Help - Wiki";
-$langWikiContent = "<h3>Wiki administration help</h3>
-<dl class=\"wikiHelp\">
-<dt>How to create a new Wiki ?</dt>
-<dd>Click on the link 'Create a new Wiki'. Then enter the properties of the Wiki :
+$langWikiContent = "<p>To create a new Wiki</p>
 <ul>
-<li><b>Title of the Wiki</b> : choose a title for the Wiki</li>
-<li><b>Description of the Wiki</b> : choose a description for the Wiki</li>
-<li><b>Access control management</b> : set the access ontrol of the Wiki by checking/uncheking the box (see below)</li>
+<li><b>Title of the Wiki</b>: choose a title for the Wiki</li>
+<li><b>Description of the Wiki</b>: choose a description for the Wiki</li>
+<li><b>Access control management</b>: set the access ontrol of the Wiki by checking/uncheking the box (see below)</li>
 </ul>
-</dd>
-<dt>How to enter a Wiki ?</dt>
-<dd>Click on the title of the Wiki in the list.</dd>
-<dt>How to change the properties of a Wiki ?</dt>
-<dd>Click on the icon in the 'Properties' column in the Wiki list to go to the Wiki properties form.</dd>
-<dt>How to use the Access control management options ?</dt>
-<dd>You can set the access rights for users by checking/unchecking the box in the 'Access control management' section of Wiki properties.
- You can grant/ungrant access to three types of users :<ul>
-<li><b>Course members</b> : users enroll to the course (except the course managers)</li>
-<li><b>Group members</b> (only available whithin a group) : users which are members of the group (expect the group's tutors)</li>
-<li><b>Other users</b> : anonymous users or users which are not course members</li></ul>
-For each user type, you can grant three type of privileges to the Wiki(*) :<ul>
-<li><b>Read pages</b> : the user of the given type can read the pages of the Wiki</li>
-<li><b>Edit pages</b> : the user of the given type can modify the content of th pages of the Wiki</li>
-<li><b>Create pages</b> : the user of the given type can create new pages in the Wiki</li>
-</ul><small><em>(*) Note that if a user cannot read the pages of a Wiki, he cannot edit or modify them. Note that if a user cannot edit the pages of a Wiki, he cannot create new pages.</em></small></dd>
-<dt>How to delete a Wiki ?</dt>
-<dd>Click on the icon in the 'Delete' column to delete a Wiki and all its pages.</dd>
-<dt>How to get the list of the pages in a Wiki ?</dt>
-<dd>Click on the number of pages of this Wiki in the Wiki list.</dd>
-<dt>How to get the list of the last modified pages in a Wiki ?</dt>
-<dd>Click on the icon in the 'Recent changes' column in the Wiki list.</dd>
-</dl>";
-
-$langHWikiSyntax = "Help - Wiki Syntax";
-$langWikiSyntaxContent = "<h1>Wiki Syntax</h1>
-<h2>1. Basic syntax</h2>
-<dl class=\"wikiHelp\">
-<dt>Creating wiki pages and links between them</dt>
-<dd><strong>Wiki words</strong> : Wiki words are words written like <em>WikiWord</em>. Wiki2xhtml automaticaly recognise them as Wiki page links. To create a wiki page or to create a link to a wiki page, edit an existing one and add the title of the page in WikiWord syntax, for example <em>MyPage</em>, then save the page. Wiki2xhtml will automaticaly replace the Wiki Word <em>MyPage</em> with a link to the Wiki page <em>MyPage</em>&nbsp;;</dd>
-<dd><strong>Wiki links</strong> : Wiki links are like Hyperlinks (see below) expect that they do not contain any protocol scheme (like <em>http://</em> or <em>ftp://</em>) and thatthey are automaticaly recognise as links to Wiki pages. To create a new page or create a link to an existing one using Wiki links, edit a page and add <code>[page title]</code> or <code>[name of link|title of page]</code> to its content. You can also use this syntax to change the text of a WikiWord link : <code>[name of link|WikiWord]</code>.</dd>
-<dt>Hyperlinks</dt>
-<dd><code>[url]</code>, <code>[name|url]</code>, <code>[name|url|language]</code> or <code>[name|url|language|title]</code>.&nbsp;;</dd>
-<dt>Image inclusion</dt>
-<dd><code>((url|alternate text))</code>, <code>((url|alternate text|position))</code> ou <code>((url|alternate text|position|long description))</code>. <br />The position argument can take the following values : L (left), R (right) or C (centerοΏ½).&nbsp;;</dd>
-<dd>You can use the syntax as Hyperlinks. For example <code>[title|image.gif]</code>. This syntax is deprecated, consider to use the preceding one&nbsp;;</dd>
-<dt>Link to an image</dt>
-<dd>same as Hyperlinks but put a 0 in fourth argument to avoid image recognition and get an hyperlink to an image. For example <code>[image|image.gif||0]</code> will display a link to image.gif instead of display the imge itself</dd>
-<dt>Layout</dt>
-<dd><strong>Italic</strong> : surround your text with two single quotes <code>''text''</code>&nbsp;;</dd>
-<dd><strong>Bold</strong> : surround your text with three single quotes underscores <code>'''text'''</code>&nbsp;;</dd>
-<dd><strong>Underline</strong> : surround your text with two underscores <code>__text__</code>&nbsp;;</dd>
-<dd><strong>Stroke</strong> : surround your text with two minus symbols <code>--text--</code>&nbsp;;</dd>
-<dd><strong>Title</strong> : <code>!!!</code>, <code>!!</code>, <code>!</code> respectively for titles, sub-titles and sub-sub-titles&nbsp;;</dd>
-<dt>List</dt>
-<dd>line starting with <code>*</code> (unordered list) or <code>#</code> (ordered list). You can mix lists (<code>*#*</code>) to create multi-level lists.&nbsp;;</dd>
-<dt>Paragraph</dt>
-<dd>Separate paragraphs with one or more new lines&nbsp;;</dd>
-</dl>
-<h2>2. Advanced syntax</h2>
-<dl class=\"wikiHelp\">
-<dt>Footnote</dt>
-<dd><code>\$\$footnote text\$\$</code>&nbsp;;</dd>
-<dt>Preformated text</dt>
-<dd>begin each line of preformated text with a blank space&nbsp;;</dd>
-<dt>Cite block</dt>
-<dd><code>&gt;</code> or <code>;:</code> before each line&nbsp;;</dd>
-<dt>Horizontal line</dt>
-<dd><code>----</code>&nbsp;;</dd>
-<dt>Forced line break</dt>
-<dd><code>%%%</code>&nbsp;;</dd>
-<dt>Acronym</dt>
-<dd><code>??acronym??</code> or <code>??acronym|definition??</code>&nbsp;;</dd>
-<dt>Inline cite</dt>
-<dd><code>{{cite}}</code>, <code>{{cite|language}}</code> or <code>{{cite|language|url}}</code>&nbsp;;</dd>
-<dt>Code</dt>
-<dd><code>@@your code here@@</code>&nbsp;;</dd>
-<dt>Named anchor</dt>
-<dd><code>~anchor~</code>&nbsp;;</dd>
-</dl>";
+<p>To enter a Wiki click on the title of the Wiki in the list.</p>
+<p>To change the properties of a Wiki click on the icon <img src='../../template/classic/img/edit.gif' align='absmiddle' border='0'>.</p> 
+<p>To delete a Wiki click on the icon <img src='../../template/classic/img/delete.gif' align='absmiddle' border='0'></p> 
+<p>To get the list of the last modified pages click on the link 'Recent changes'.</p>";
