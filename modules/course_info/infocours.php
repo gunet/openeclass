@@ -62,21 +62,24 @@ if ($is_adminOfCourse) {
 		$sql = "UPDATE $mysqlMainDb.cours
 			SET intitule='$int', 
 				faculte='$facname', 
-				description=".quote($description).",
-				course_addon=".quote($course_addon).",
-				course_keywords=".quote($course_keywords).",
-				visible='$formvisible', 
-				titulaires='$titulary', 
-				languageCourse='$newlang',
-				type='$type',
-				password='$password',
-				faculteid='$facid'
-			WHERE code='$currentCourseID'";
+				description=".autoquote($description).",
+				course_addon=".autoquote($course_addon).",
+				course_keywords=".autoquote($course_keywords).",
+				visible=".autoquote($formvisible).", 
+				titulaires=".autoquote($titulary).", 
+				languageCourse=".autoquote($newlang).",
+				type=".autoquote($type).",
+				password=".autoquote($password).",
+				faculteid=".autoquote($facid)."
+			WHERE code=".autoquote($currentCourseID);
 		mysql_query($sql);
-		mysql_query("UPDATE `$mysqlMainDb`.cours_faculte SET faculte='$facname', facid='$facid' WHERE code='$currentCourseID'");
+		mysql_query("UPDATE `$mysqlMainDb`.cours_faculte
+                             SET faculte=".autoquote($facname).",
+                                 facid=".autoquote($facid)."
+                             WHERE code='$currentCourseID'");
 
 		// update Home Page Menu Titles for new language
-		mysql_select_db("$currentCourseID",$db);
+		mysql_select_db($currentCourseID, $db);
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langAgenda' WHERE id='1'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langLinks' WHERE id='2'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langDoc' WHERE id='3'");
@@ -191,16 +194,16 @@ if ($is_adminOfCourse) {
       $tool_content .= "</td><td>&nbsp;</td></tr>
 	    <tr>
       <th class='left'>$langDescription&nbsp;:</th>
-      <td><textarea name=\"description\" value=\"$leCours[description]\" cols=\"57\" rows=\"4\" class='FormData_InputText'>$leCours[description]</textarea></td>
+      <td><textarea name='description' value='".q($leCours['description'])."' cols='57' rows='4' class='FormData_InputText'>".q($leCours['description'])."</textarea></td>
       <td>&nbsp;</td>
     </tr>";
 		$tool_content .= "<tr><th class='left'>$langCourseKeywords&nbsp;</th> 
-		<td><input type='text' name='course_keywords' value='$leCours[course_keywords]' size='60' class='FormData_InputText'></td>
+		<td><input type='text' name='course_keywords' value='".q($leCours['course_keywords'])."' size='60' class='FormData_InputText'></td>
 			<td>&nbsp;</td>
     </tr>
 		<tr>
      <th class='left'>$langCourseAddon&nbsp;</th>
-     <td><textarea name=\"course_addon\" value='$leCours[course_addon]' cols='57' rows='2' class='FormData_InputText'>$leCours[course_addon]</textarea></td><td>&nbsp;</td>
+     <td><textarea name='course_addon' value='".q($leCours['course_addon'])."' cols='57' rows='2' class='FormData_InputText'>".q($leCours['course_addon'])."</textarea></td><td>&nbsp;</td>
     </tr>
     </tbody>
     </table><br />";
@@ -226,12 +229,12 @@ if ($is_adminOfCourse) {
       <td>&nbsp;</td>
       <td bgcolor='#F8F8F8'><input type=\"checkbox\" name=\"checkpassword\" ".$checkpasssel.">&nbsp;
             $langOptPassword&nbsp;
-            <input type=\"text\" name=\"password\" value=\"".$password."\" class='FormData_InputText'>
+            <input type='text' name='password' value='".q($password)."' class='FormData_InputText'>
       </td> 
     </tr>
     <tr>
-      <th class='left'><img src=\"../../template/classic/img/ClosedCourse.gif\" alt=\"".$m['legclosed']."\" title=\"".$m['legclosed']."\" width=\"16\" height=\"16\">&nbsp;".$m['legclosed']."&nbsp;:</th>
-      <td><input type=\"radio\" name=\"formvisible\" value=\"0\"".@$visibleChecked[0]."></td>
+      <th class='left'><img src='../../template/classic/img/ClosedCourse.gif' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16'>&nbsp;$m[legclosed]&nbsp;:</th>
+      <td><input type='radio' name='formvisible' value='0'".@$visibleChecked[0]."></td>
       <td>$langPrivate&nbsp;</td>
     </tr>
     </tbody>
@@ -259,7 +262,7 @@ if ($is_adminOfCourse) {
     <tbody>
     <tr>
       <th class='left' width='150'>&nbsp;</th>
-      <td><input type=\"Submit\" name=\"submit\" value=\"$langSubmit\"></td>
+      <td><input type='Submit' name='submit' value='$langSubmit'></td>
       <td>&nbsp;</td>
     </tr>
     </tbody>
@@ -272,5 +275,5 @@ if ($is_adminOfCourse) {
 else {
 	$tool_content .= "<p>$langForbidden</p>";
 }
+
 draw($tool_content,2,'course_info');
-?>

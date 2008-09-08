@@ -133,15 +133,25 @@ function db_query_fetch_all($sqlQuery, $db = FALSE) {
 
 
 // Quote string for SQL query
-
 function quote($s) {
 	return "'".addslashes($s)."'";
 }
 
+
+// Quote string for SQL query if needed (if magic quotes are on)
+function autoquote($s) {
+        if (get_magic_quotes_gpc()) {
+        	return "'$s'";
+        } else {
+        	return "'".addslashes($s)."'";
+        }
+}
+
+
 // Shortcut for htmlspecialchars()
 function q($s)
 {
-	return htmlspecialchars($s);
+	return htmlspecialchars($s, ENT_QUOTES);
 }
 
 /*
