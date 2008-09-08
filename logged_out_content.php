@@ -120,7 +120,7 @@ $tool_content .= <<<lCont2
 
  <table width="99%">
  <tr>
-   <th class="LoginHead"> <b>$langUserLogin </b></th>
+   <th class="LoginHead"><b>$langUserLogin </b></th>
  </tr>
  <tr>
    <td class="LoginData">

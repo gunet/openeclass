@@ -28,7 +28,7 @@
 	@last update: 11-07-2006 by Pitsiougas Vagelis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Pitsiougas Vagelis <vagpits@uom.gr>
-==============================================================================        
+==============================================================================
         @Description: List courses
 
  	This script allows the administrator list all available courses, or some
@@ -119,68 +119,82 @@ if (isset($search) && $search=="yes") {
 		$caption .= "$langFound ".mysql_num_rows($sql)." $langCourses ";
 	} else {
 		$sql=mysql_query("SELECT faculte, code, intitule,titulaires,visible FROM cours ORDER BY faculte");
-		$caption .= "$langFound ".mysql_num_rows($sql)." $langCourses ";			
+		$caption .= "$langFound ".mysql_num_rows($sql)." $langCourses ";
 	}
 }
 // Normal list, no search, select all courses
 else {
-	$a=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours"));		
+	$a=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours"));
 	$caption .= "".$langManyExist." ".$a[0]." $langCourses";
 	$sql = mysql_query("SELECT faculte, code, intitule,titulaires,visible FROM cours ORDER BY faculte,code LIMIT ".$limit.",".$listsize."");
-	
+
 	if ($fulllistsize > $listsize ) {
 		// Display navigation in pages
 		$tool_content .= show_paging($limit, $listsize, $fulllistsize, "listcours.php");
 	}
 }
 // Construct cours list table
-$tool_content .= "<table width=\"99%\"><caption>".$caption."</caption>
-<thead>
+$tool_content .= "
+  <table class=\"FormData\" width=\"99%\" align=\"left\">
+  <tbody>
   <tr>
+    <td colspan=\"7\" class=\"right\">".$caption."</td>
+  </tr>
+  <tr>
+    <th scope=\"col\" width=\"1\">".$langCourseVis."</th>
+    <th scope=\"col\">".$langCourseCode."<br />".$langTeacher."</th>
     <th scope=\"col\">".$langDepartment."</th>
-    <th scope=\"col\">".$langCourseCode."</th>
-    <th scope=\"col\">".$langTitle." (".$langTeacher.")</th>
-    <th scope=\"col\">".$langCourseVis."</th>
     <th scope=\"col\">".$langUsers."</th>
     <th scope=\"col\" colspan='2'>".$langActions."</th>
-  </tr>
-</thead><tbody>\n";
+  </tr>\n";
 
 for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	$logs = mysql_fetch_array($sql);
-	$tool_content .= "  <tr>\n";
-	 for ($i = 0; $i < 2; $i++) {
-	 	$tool_content .= "<td width=\"250\">".htmlspecialchars($logs[$i])."</td>\n";
-	}
-	$tool_content .= "<td width='500'>".htmlspecialchars($logs[2])." (".$logs[3].")</td>\n";
+	$tool_content .= "
+  <tr>
+    <td align=\"center\">";
 	// Define course type
 	switch ($logs[4]) {
 	case 2:
-		$tool_content .= "<td align='center'><img src='../../images/OpenCourse.gif' title='$langOpenCourse'></img></td>\n";
+		$tool_content .= "<img src='../../images/OpenCourse.gif' title='$langOpenCourse'></img>\n";
 		break;
 	case 1:
-		$tool_content .= "<td align='center'><img src='../../images/Registration.gif' title='$langRegCourse'></img></td>\n";
+		$tool_content .= "<img src='../../images/Registration.gif' title='$langRegCourse'></img>\n";
 		break;
 	case 0:
-		$tool_content .= "<td align='center'><img src='../../images/ClosedCourse.gif' title='$langClosedCourse'></img></td>\n";
+		$tool_content .= "<img src='../../images/ClosedCourse.gif' title='$langClosedCourse'></img>\n";
 		break;
 	}
+$tool_content .= "</td>
+    <td><b>".htmlspecialchars($logs[2])."</b> (".htmlspecialchars($logs[1]).")
+    <br />
+    <i>".$logs[3]."</i></td>
+    <td>".htmlspecialchars($logs[0])."</td>";
+
 	// Add links to course users, delete course and course edit
-	$tool_content .= "<td align='center'><a href=\"listusers.php?c=".$logs[1]."\"><img src='../../template/classic/img/user_list.gif' title='$langUsers' border='0'></img></a></td>
-    <td><a href=\"delcours.php?c=".$logs[1]."\"><img src='../../images/delete.gif' title='$langDelete' border='0'></img></a></td>
-    <td><a href=\"editcours.php?c=".$logs[1]."".$searchurl."\"><img src='../../images/edit.gif' title='$langEdit' border='0'></img></a></td>\n";
+	$tool_content .= "
+    <td align='center'><a href=\"listusers.php?c=".$logs[1]."\"><img src='../../template/classic/img/user_list.gif' title='$langUsers' border='0'></img></a></td>
+    <td align=\"center\" width='10'><a href=\"delcours.php?c=".$logs[1]."\"><img src='../../images/delete.gif' title='$langDelete' border='0'></img></a></td>
+    <td align=\"center\" width='20'><a href=\"editcours.php?c=".$logs[1]."".$searchurl."\"><img src='../../images/edit.gif' title='$langEdit' border='0'></img></a></td>\n";
 }
 // Close table correctly
-$tool_content .= "</tbody></table>\n";
+$tool_content .= "
+  </tr>
+  </tbody>
+  </table>\n";
 // If a search is started display link to search page
 if (isset($search) && $search=="yes") {
-	$tool_content .= "<br><center><p><a href=\"searchcours.php\">".$langReturnSearch."</a></p></center>";
+	$tool_content .= "
+<br>
+<p align=\"right\"><a href=\"searchcours.php\">".$langReturnSearch."</a></p>";
 } elseif ($fulllistsize > $listsize) {
 	// Display navigation in pages
 	$tool_content .= show_paging($limit, $listsize, $fulllistsize, "listcours.php");
 }
-// Display link to index.php	
-$tool_content .= "<br><center><p><a href=\"index.php\">".$langBack."</a></p></center>";
+// Display link to index.php
+$tool_content .= "
+<br>
+<p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
 
 /*****************************************************************************
 		DISPLAY HTML
