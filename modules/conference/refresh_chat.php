@@ -137,7 +137,6 @@ if ($FileNbLine > MAX_LINE_IN_FILE) {
         buffer(implode("",$tmp), $tmpArchiveFile);
 
         // clean the original file
-
         $fp = fopen($fileChatName, "w");
         fwrite($fp, implode("", $fileContent));
 }

@@ -513,8 +513,8 @@ $langWrongAuth = "Πληκτρολογήσατε λάθος όνομα χρήσ�
  $langPresantation_content="<p align='center'>Εδώ θα παρουσιαστεί μία ιστοσελίδα που θα επιλέξει ο $langsTeacher.</p>";
  $langWashPresanation="Παύση μετάδοσης";
  $langSaveChat="Αποθήκευση κουβέντας";
- $langSaveMessage="Η κουβέντα αποθηκεύτηκε στα Έγγραφα";
- $langSaveErrorMessage="Η κουβέντα δεν μπόρεσε να αποθηκευτή";
+ $langSaveMessage="Η κουβέντα αποθηκεύθηκε στα Έγγραφα";
+ $langSaveErrorMessage="Η κουβέντα δεν μπόρεσε να αποθηκευθεί";
 
 /*****************************************************************
 * copyright.inc.php
