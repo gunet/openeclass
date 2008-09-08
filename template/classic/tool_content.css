@@ -578,36 +578,33 @@ table.sortable span.sortarrow {
 	
 table.AnnouncementsList{
     background: none;
-    font-size:12px;
-    border-top: 0px solid #fff !important;
-    border-bottom: 0px solid #fff !important;
-    border-left: 0px solid #fff  !important;
-    border-right: 0px solid #fff  !important;
+    font-size:11px;
 }
 
 table.AnnouncementsList thead{
-    background: none;
-    text-align: left;
-    color: #a33033;
+	text-align: left;
+	color: #a33033 !important;
+	border-bottom : 1px solid #727266 !important;
 }
 
 table.AnnouncementsList th{
-    text-align: left;
-	background: none;
-    color: #a33033;
-    font-weight: bold;
-	border-bottom: 1px solid #edecdf !important;
+	text-align: left;
+	color: #a33033 !important;
+	background: none !important;
+	border-bottom : 1px solid #EDECDF;
 }
 
 table.AnnouncementsList tbody{
-    background: none;
+	background: none;
 }
 
 
 table.AnnouncementsList td {
-    background: none;
+	background: none;
 	text-align: left;
 	color: #727266;
 	font-weight: normal;
-	font-size:10px;
+	font-size:11px;
+	border-bottom : 1px solid #EDECDF;
 }
+

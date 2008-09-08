@@ -82,7 +82,8 @@ if (mysql_num_rows($result) > 0) {
   <table width=\"99%\" class=\"AnnouncementsList\">
   <thead>
   <tr>
-    <th>$langAnnouncements</th>
+    <th width=\"180\">$langAnnouncements</th>
+    <td>&nbsp;</td>
   </tr>
   </thead>
   <tbody>";
@@ -90,16 +91,17 @@ if (mysql_num_rows($result) > 0) {
 	$numOfAnnouncements = count($announceArr);
 
 	for($i=0; $i < $numOfAnnouncements; $i++) {
-		if ($i%2 == 0)
-				$rowClass = "class=\"odd\"";
-		else
-				$rowClass = "";
+	//	if ($i%2 == 0)
+	//			$rowClass = "class=\"odd\"";
+	//	else
+	//			$rowClass = "";
 
 		$tool_content .= "
-  <tr $rowClass>
-    <td><b>".greek_format($announceArr[$i][0]).":</b> <u>".$announceArr[$i][1]."</u><br />
+  <tr>
+    <td colspan=\"2\"><b>".greek_format($announceArr[$i][0]).":</b> <u>".$announceArr[$i][1]."</u>
+    <p>
         ".$announceArr[$i][2]."<br />
-        <i>".$announceArr[$i][3]."</i>
+        <i>".$announceArr[$i][3]."</i></p>
     </td>
   </tr>";
 	}
