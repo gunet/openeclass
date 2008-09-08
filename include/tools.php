@@ -206,13 +206,21 @@ function loggedInMenu(){
 		array_push($sideMenuLink, $urlServer . "modules/profile/profile.php");
 		array_push($sideMenuImg, "profile.gif");
 
-		array_push($sideMenuText, $GLOBALS['langManuals']);
-		array_push($sideMenuLink, $urlServer."manuals/manual.php");
-		array_push($sideMenuImg, "manual.gif");
-		
 		array_push($sideMenuText, $GLOBALS['langMyStats']);
 		array_push($sideMenuLink, $urlServer . "modules/profile/personal_stats.php");
 		array_push($sideMenuImg, "platform_stats.gif");
+
+		array_push($sideMenuText, $GLOBALS['langManuals']);
+		array_push($sideMenuLink, $urlServer."manuals/manual.php");
+		array_push($sideMenuImg, "manual.gif");
+
+		array_push($sideMenuText, $GLOBALS['langInfoPlat']);
+		array_push($sideMenuLink, $urlServer."info/about.php");
+		array_push($sideMenuImg, "eclass_version.gif");
+
+		array_push($sideMenuText, $GLOBALS['langContact']);
+		array_push($sideMenuLink, $urlServer."info/contact.php");
+		array_push($sideMenuImg, "contact.gif");
 	}
 
 	if ($statut == 10) {
