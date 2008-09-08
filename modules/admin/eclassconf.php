@@ -84,48 +84,34 @@ if (isset($submit))  {
 		$tool_content .= $langFileError;
 	} else {
 
-if ($_POST['formcloseuserregistration'] == 'false') {
-                     $user_reg = 'FALSE';
-             } else {
-                     $user_reg = 'TRUE';
-    }
+                if ($_POST['formcloseuserregistration'] == 'false') {
+                        $user_reg = 'FALSE';
+                } else {
+                        $user_reg = 'TRUE';
+                }
 
+                if ($_POST['formhavelatex'] == 'false') {
+                        $latex = 'FALSE';
+                } else {
+                        $latex = 'TRUE';
+                }
 
-if ($_POST['formhavelatex'] == 'false') {
-                     $latex = 'FALSE';
-             } else {
-                     $latex = 'TRUE';
-		    }
-
+                if (defined('UTF8')) {
+                        $utf8define = "define('UTF8', true);";
+                }
 
 		// Prepare config.php content
 		$stringConfig='<?php
+/*===========================================================================
+ *   Open eClass 2.1
+ *   E-learning and Course Management System
+ *===========================================================================
 
-/*
-	=============================================================================
-	GUnet eClass 2.0
-	E-learning and Course Management Program
-	================================================================================
-	Copyright(c) 2003-2007  - GUnet
-
-	GUnet eClass 2.0 is an open platform distributed in the hope that
-  it will be useful (without any warranty), under the terms of the
-  GNU License (General Public License) as published by the Free
-  Software Foundation. The full license can be read in "license.txt".
-
-       Main Developers Group: Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-                                  Yannis Exidaridis <jexi@noc.uoa.gr>
-                             Alexandros Diamantidis <adia@noc.uoa.gr>
-                               Tilemachos Raptis <traptis@noc.uoa.gr>
-
-       For a full list of contributors, see "CREDITS.txt".
-
-	Contact address: Asynchronous Teleteaching Group (eclass@gunet.gr),
-                     Network Operations Center, University of Athens,
-                    Panepistimiopolis Ilissia, 15784, Athens, Greece
+ config.php automatically generated on '.date('c').'
 
 */
 
+'.$utf8define.'
 $urlServer	=	"'.$_POST['formurlServer'].'";
 $urlAppend	=	"'.$_POST['formurlAppend'].'";
 $webDir		=	"'.str_replace("\\","/",realpath($_POST['formwebDir'])."/").'" ;
@@ -158,8 +144,7 @@ $encryptedPasswd = "true";
 $persoIsActive = "'.$_POST['formpersoIsActive'].'";
 
 $durationAccount = "'.$_POST['formdurationAccount'].'";
-
-?>';
+';
 	// Save new config.php
 	fwrite($fd, $stringConfig);
 	// Update user with perso = no if persoisactive==false
@@ -220,7 +205,7 @@ else {
   </tr>
   <tr>
     <th class=\"left\"><b>\$mysqlPassword:</b></th>
-    <td><input class=\"FormData_InputText\" type=\"text\" name=\"formmysqlPassword\" size=\"40\" value=\"".$mysqlPassword."\"></td>
+    <td><input class=\"FormData_InputText\" type=\"password\" name=\"formmysqlPassword\" size=\"40\" value=\"".$mysqlPassword."\"></td>
   </tr>
   <tr>
     <th class=\"left\"><b>\$mysqlMainDb:</b></th>
