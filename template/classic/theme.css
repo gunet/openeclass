@@ -287,15 +287,15 @@ body {
 }
 
 #fbar_info .user a{
-    text-decoration: none;
-    color: #727266;
-    font-weight: bold;
-    font-size: 9px;
+	text-decoration: none;
+	color: red;
+	font-weight: bold;
+	font-size: 9px;
 }
 
 #fbar_info .user a:hover{
     text-decoration: underline;
-    color: red;
+    color: #a33033;
     font-weight: bold;
     font-size: 9px;
 }

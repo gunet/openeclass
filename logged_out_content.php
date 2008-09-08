@@ -83,7 +83,7 @@ if (mysql_num_rows($result) > 0) {
   <thead>
   <tr>
     <th width=\"180\">$langAnnouncements</th>
-    <td>&nbsp;</td>
+    <th>&nbsp;</th>
   </tr>
   </thead>
   <tbody>";
@@ -98,7 +98,10 @@ if (mysql_num_rows($result) > 0) {
 
 		$tool_content .= "
   <tr>
-    <td colspan=\"2\"><b>".greek_format($announceArr[$i][0]).":</b> <u>".$announceArr[$i][1]."</u>
+    <td colspan=\"2\">
+      <img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'>
+      <b>".$announceArr[$i][1]."</b>
+      (".greek_format($announceArr[$i][0]).")
     <p>
         ".$announceArr[$i][2]."<br />
         <i>".$announceArr[$i][3]."</i></p>

@@ -578,20 +578,22 @@ table.sortable span.sortarrow {
 	
 table.AnnouncementsList{
     background: none;
-    font-size:11px;
+    font-size:12px;
 }
 
 table.AnnouncementsList thead{
 	text-align: left;
 	color: #a33033 !important;
-	border-bottom : 1px solid #727266 !important;
 }
 
 table.AnnouncementsList th{
 	text-align: left;
 	color: #a33033 !important;
 	background: none !important;
-	border-bottom : 1px solid #EDECDF;
+	border-top : 1px dotted #727266;
+	padding-left: 2px;
+	padding-top: 9px;
+	padding-bottom: 6px;
 }
 
 table.AnnouncementsList tbody{
@@ -605,6 +607,6 @@ table.AnnouncementsList td {
 	color: #727266;
 	font-weight: normal;
 	font-size:11px;
-	border-bottom : 1px solid #EDECDF;
+	border : 0px dotted #fff !important;
 }
 
