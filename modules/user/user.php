@@ -79,7 +79,7 @@ if ($is_adminOfCourse) {
     <table width=\"99%\" align=\"left\" class=\"Group_Operations\">
     <thead>
     <tr>
-      <td width=\"50%\">&nbsp;<b>$langDumpUser</b> <a href=\"dumpuser.php\">$langExcel</a> <a href=\"dumpuser2.php\">$langCsv</a></td>
+      <td width=\"50%\">&nbsp;<b>$langDumpUser</b><a href=\"dumpuser2.php\">$langCsv</a></td>
       <td width=\"50%\"><div align=\"right\"><a href=\"../group/group.php\">$langGroupUserManagement</a>&nbsp;</div></td>
     </tr>
     <tr>
