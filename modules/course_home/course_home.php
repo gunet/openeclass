@@ -25,10 +25,10 @@
 
 /*
  * Course Home Component
- * 
+ *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * 
+ *
  * @abstract This component creates the content for the course's home page
  *
  */
@@ -36,7 +36,7 @@
 $require_current_course = TRUE;
 $guest_allowed = true;
 
-//$courseHome is used by the breadcrumb logic 
+//$courseHome is used by the breadcrumb logic
 //See function draw() in baseTheme.php for details
 //$courseHome = true;
 //$path2add is used in init.php to fix relative paths
@@ -97,7 +97,7 @@ case 'other': { //other
 }
 
 $bar_content .= "<p><b>".$langLessonCode."</b>: ".$fake_code."</p>";
-$bar_content .= "<p><b>".$langTeachers."</b>: ".$professor." <a href='../../modules/contact/index.php'>(".$langEmail.")</a></p>";
+$bar_content .= "<p><b>".$langTeachers."</b>: ".$professor."</p>";
 $bar_content .= "<p><b>".$langFaculty."</b>: ".$faculte."</p>";
 $bar_content .= "<p><b>".$m['type']."</b>: ".$lessonType."</p>";
 
@@ -152,6 +152,21 @@ $tool_content .= <<<lCont
   </tr>
   </tbody>
   </table>
+
+  <br />
+
+  <table width="99%">
+  <tbody>
+  <tr>
+    <td class="odd" width="1%" align="right"></td>
+    <td align="left">
+      $langContactProf: (<a href="../../modules/contact/index.php">$langEmail</a>)
+    </td>
+  </tr>
+  </tbody>
+  </table>
+
+
 </div>
 </div>
 
