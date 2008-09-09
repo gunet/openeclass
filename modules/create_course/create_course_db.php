@@ -18,19 +18,15 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
-// if mysql > 4.1 then create tables with charset
-        if (mysql_version()) {
-                $charset_spec = 'DEFAULT CHARACTER SET=utf8';
-        } else {
-                $charset_spec = '';
-        }
 
-        $cdb=mysql_query("CREATE DATABASE `$repertoire` $charset_spec");
-        $code=$repertoire;
+$charset_spec = 'DEFAULT CHARACTER SET=utf8';
+
+$cdb=mysql_query("CREATE DATABASE `$repertoire` $charset_spec");
+$code=$repertoire;
 
 // select course database
     mysql_select_db($repertoire);

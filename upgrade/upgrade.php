@@ -380,14 +380,14 @@ if (!isset($submit2)) {
                 db_query("CREATE TABLE `admin_announcements` (
                         `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
                         `gr_title` VARCHAR( 255 ) NULL ,
-                        `gr_body` VARCHAR( 255 ) NULL ,
+                        `gr_body` TEXT NULL ,
                         `gr_comment` VARCHAR( 255 ) NULL ,
                         `en_title` VARCHAR( 255 ) NULL ,
-                        `en_body` VARCHAR( 255 ) NULL ,
+                        `en_body` TEXT NULL ,
                         `en_comment` VARCHAR( 255 ) NULL ,
                         `date` DATE NOT NULL ,
                         `visible` ENUM( 'V', 'I' ) NOT NULL
-                                ) TYPE = MYISAM ", $mysqlMainDb);
+                        ) TYPE = MYISAM ", $mysqlMainDb);
         }
 
         // Table passwd_reset (used by the password reset module)

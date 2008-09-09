@@ -27,13 +27,7 @@ mysql_query("DROP TABLE IF EXISTS monthly_summary");
 mysql_query("DROP TABLE IF EXISTS prof_request");
 mysql_query("DROP TABLE IF EXISTS user");
 
-
-// if mysql > 4.1 then create tables with charset
-        if (mysql_version()) {
-                $charset_spec = 'DEFAULT CHARACTER SET=utf8';
-        } else {
-                $charset_spec = '';
-        }
+$charset_spec = 'DEFAULT CHARACTER SET=utf8';
 
 // create tables
 
@@ -59,10 +53,10 @@ mysql_query("CREATE TABLE annonces (
 mysql_query("CREATE TABLE admin_announcements (
 	id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 	gr_title VARCHAR(255) NULL,
-	 gr_body VARCHAR(255) NULL,
+	 gr_body TEXT NULL,
 	 gr_comment VARCHAR(255) NULL,
 	 en_title VARCHAR(255) NULL,
-	  en_body VARCHAR(255) NULL,
+	 en_body TEXT NULL,
 	en_comment VARCHAR(255) NULL,
 	date DATE NOT NULL,
 	visible ENUM('V', 'I') NOT NULL
