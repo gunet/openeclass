@@ -40,7 +40,7 @@ $userdata = mysql_fetch_array(db_query("SELECT nom, prenom, email FROM user WHER
 if (empty($userdata['email'])) {
 	if ($uid) {
 		$tool_content .= sprintf('<p>'.$langEmailEmpty.'</p>', $urlServer.'modules/profile/profile.php');
-		
+
 	} else {
 		$tool_content .= sprintf('<p>'.$langNonUserContact.'</p>', $urlServer);
 	}
@@ -62,25 +62,29 @@ draw($tool_content, 2, 'admin');
 
 
 // display form
-function form() 
+function form()
 {
-  $ret = "<p>$GLOBALS[langContactMessage]</p>
-  <table width=99% align=center><tr><td>
+  $ret = "
   <form method='post' action='$_SERVER[PHP_SELF]'>
-  <FIELDSET style='PADDING-RIGHT: 7px; PADDING-LEFT: 7px; PADDING-BOTTOM: 7px; PADDING-TOP: 7px'>
-  <LEGEND>$GLOBALS[langIntroMessage]</LEGEND>
-     <table border='0' align=center width='90%' cellspacing='2' cellpadding=1 >
-     <tr>
-        <td align=center>
-        <textarea class=auth_input name='content' rows='20' cols='80'></textarea></td>
-     </tr>
-     <tr>
-        <td align=center><input type='submit' name='submit' value='$GLOBALS[langSendMessage]'></td>
-     </tr>
-     </table>
-  </FIELDSET>
-  </form>
-  </td></tr></table>";
+
+  <table class=\"FormData\" width=\"99%\" align=\"left\">
+  <tbody>
+  <tr>
+    <th>&nbsp;</th>
+    <td>$GLOBALS[langContactMessage]</td>
+  </tr>
+  <tr>
+    <th class=\"left\">$GLOBALS[langIntroMessage]</th>
+    <td><textarea class=auth_input name='content' rows='10' cols='80'></textarea></td>
+  </tr>
+  <tr>
+    <th>&nbsp;</th>
+    <td><input type='submit' name='submit' value='$GLOBALS[langSendMessage]'></td>
+  </tr>
+  </tbody>
+  </table>
+
+  </form>";
 
 return $ret;
 }
