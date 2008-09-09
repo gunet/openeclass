@@ -56,7 +56,7 @@ $tool_content .= "
     </td>
   </tr></tbody></table>";
 
-if (isset($uid)) {
+if (isset($uid) and $uid) {
         draw($tool_content, 1);
 } else {
         draw($tool_content, 0);

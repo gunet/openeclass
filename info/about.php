@@ -79,7 +79,7 @@ $tool_content .= "<p>$langUptime<b> ".$uptime."</b> $langLast30daysLogins1 <b>".
 
 $tool_content .= "<p align='justify'>$langSupportUser <i> $administratorName $administratorSurname </i></p>";
 
-if (isset($uid)) {
+if (isset($uid) and $uid) {
         draw($tool_content, 1);
 } else {
         draw($tool_content, 0);
