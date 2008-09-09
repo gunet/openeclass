@@ -1,12 +1,12 @@
       +----------------------------------------------------------------------+
-      | GUnet eClass 2.0                                                     |
+      | Open eClass 2.1                                                     |
       | Asychronous Teleteaching Platform                                    |
       +----------------------------------------------------------------------+
       | Copyright 2001-2002 Universite catholique de Louvain (UCL)           |
-      | Copyright 2003-2007 GUnet                                            |
+      | Copyright 2003-2008 GUnet                                            |
       +----------------------------------------------------------------------+
       |                                                                      |
-      | GUnet eClass 2.0 is an open platform distributed in the hope that    |
+      | Open eClass 2.1 is an open platform distributed in the hope that    |
       | it will be useful (without any warranty), under the terms of the     |
       | GNU License (General Public License) as published by the Free        |
       | Software Foundation. The full license can be read in "license.txt".  |
@@ -75,7 +75,7 @@
 
       POP3 class : Manuel Lemos (http://www.manuellemos.net)  <WebMaster@E-na.Net>
 
-      Libchart - PHP chart library: Copyright 2005-2006 Jean Marc Trémeaux <jm.tremeaux@gmail.com>
+      Libchart - PHP chart library: Copyright 2005-2006 Jean Marc Trï¿½meaux <jm.tremeaux@gmail.com>
 
       LaTeX Rendering: Copyright (c) 2003/2004 Benjamin Zeiss <zeiss@math.uni-goettingen.de>
 
@@ -83,7 +83,7 @@
 
       Wiki module: Frederic Minne <zefredz@gmail.com>
 	class wiki2xhtml based on DotClear version 3.1d licensed under GPL
-	      Copyright (c) 2004 Olivier Meunier and contributors.
+	Copyright (c) 2004 Olivier Meunier and contributors.
 	 DotClear contributors: Stephanie Booth, Mathieu Pillard, Christophe Bonijol, Jean-Charles Bagneris, Nicolas Chachereau, Jereme Lipowicz	
 
       Learnpath module: Piraux Sebastien <pir@cerdecam.be>
