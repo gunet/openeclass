@@ -391,8 +391,8 @@ function adminMenu(){
 	$arrMenuType['text'] = $GLOBALS['langState'];
 	array_push($sideMenuSubGroup, $arrMenuType);
 	array_push($sideMenuText, $GLOBALS['langCleanUp']);
-  array_push($sideMenuLink, "../admin/cleanup.php");
-  array_push($sideMenuImg, "black-arrow1.gif");
+  	array_push($sideMenuLink, "../admin/cleanup.php");
+  	array_push($sideMenuImg, "black-arrow1.gif");
 
 	if (isset($phpSysInfoURL) && PHP_OS!="WIN32" && PHP_OS!="WINNT") {
 		array_push($sideMenuText, $GLOBALS['langSysInfo']);
@@ -442,7 +442,11 @@ function adminMenu(){
 	array_push($sideMenuLink, "../admin/stateclass.php");
 	array_push($sideMenuImg, "black-arrow1.gif");
 	array_push($sideMenuText, $GLOBALS['langAdminManual']);
-	array_push($sideMenuLink, $urlServer . "manuals/manA/ManA.pdf");
+	if ($language == 'greek') { 
+		array_push($sideMenuLink, $urlServer . "manuals/manA/ManA.pdf");
+	} else { 
+		array_push($sideMenuLink, $urlServer . "manuals/manA/ManA_en.pdf");
+	}
 	array_push($sideMenuImg, "black-arrow1.gif");
 
 	array_push($sideMenuSubGroup, $sideMenuText);
