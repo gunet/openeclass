@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 /*===========================================================================
@@ -103,7 +103,7 @@ if (!isset($a)) {
     $tool_content .= "<td width=\"3%\" nowrap><a href=\"$_SERVER[PHP_SELF]?a=2&c=".$logs['id']."\">
 		<img src='../../images/delete.gif' border='0' title='$langDelete'></img></a> 
 		  &nbsp;&nbsp;<a href=\"$_SERVER[PHP_SELF]?a=3&c=".$logs['id']."\">
-		  <img src='../../images/edit.gif' border='0' title='$langEdit'></img> 
+		  <img src='../../template/classic/img/edit.gif' border='0' title='$langEdit'></img> 
 		  </a></td></tr>\n"; 
 	}
 	// Close table correctly

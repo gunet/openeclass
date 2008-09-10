@@ -535,7 +535,7 @@ if($sql)
 					case 10:	$tool_content .= "<img src='../../template/classic/img/guest.gif' title='$langVisitor'></img>";break;
 	   			default:	$tool_content .= "$langOther ($logs[6])";break;
 				}
-				$tool_content .= "</td><td><a href=\"edituser.php?u=".$logs['user_id']."\"><img src='../../images/edit.gif' title='$langEdit' border='0'></a></td>
+				$tool_content .= "</td><td><a href=\"edituser.php?u=".$logs['user_id']."\"><img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></a></td>
 					<td><a href=\"unreguser.php?u=".$logs['user_id']."\"><img src='../../images/delete.gif' title='$langDelete' border='0'></img></a></td>
 					<td align='center'><a href=\"userstats.php?u=".$logs['user_id']."\"><img src='../../template/classic/img/platform_stats.gif' border='0' title='$langStat'></img></a></td>\n";
 				$tool_content .= "</tr>";

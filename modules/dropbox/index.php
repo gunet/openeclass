@@ -18,12 +18,12 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-/**
+/*
  * File exchange Component
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -556,7 +556,7 @@ foreach ($dropbox_person -> sentWork as $w)
 	else
 	{
 		$ahref = "dropbox_download.php?id=" . urlencode($w->id) . $mailingInUrl;
-		$imgsrc = '../../images/travaux.gif';
+		$imgsrc = '../../template/classic/img/outbox.gif';
 	}
 	$fSize = ceil(($w->filesize)/1024);
 	$tool_content .= <<<tCont12

@@ -327,7 +327,7 @@ mysql_query("CREATE TABLE accueil (
                 'calendar',
                 '".$sbsystems[1]."',
                 '0',
-                '../../../images/pastillegris.png',
+                '',
                 'MODULE_ID_AGENDA')");
 
     mysql_query("INSERT INTO accueil VALUES (
@@ -337,7 +337,7 @@ mysql_query("CREATE TABLE accueil (
                'links',
                '".$sbsystems[2]."',
                '0',
-               '../../../images/pastillegris.png',
+               '',
                'MODULE_ID_LINKS'
                )");
 
@@ -348,7 +348,7 @@ mysql_query("CREATE TABLE accueil (
                'docs',
                '".$sbsystems[3]."',
                '0',
-               '../../../images/pastillegris.png',
+               '',
                'MODULE_ID_DOCS'
                )");
     //den yparxei akomh MODULE_ID_ gia to module VIDEO opote prepei na symplhrwthei
@@ -359,7 +359,7 @@ mysql_query("CREATE TABLE accueil (
                'videos',
                '".$sbsystems[4]."',
                '0',
-               '../../../images/pastillegris.png',
+               '',
                'MODULE_ID_VIDEO'
                )");
 
@@ -370,7 +370,7 @@ mysql_query("INSERT INTO accueil VALUES (
                'assignments',
                '".$sbsystems[5]."',
                '0',
-               '../../../images/pastillegris.png',
+               '',
                'MODULE_ID_ASSIGN'
                )");
 
@@ -381,7 +381,7 @@ mysql_query("INSERT INTO accueil VALUES (
                'announcements',
                '".$sbsystems[7]."',
                '0',
-               '../../../images/pastillegris.png',
+               '',
                'MODULE_ID_ANNOUNCE'
                )");
 
@@ -392,7 +392,7 @@ mysql_query("INSERT INTO accueil VALUES (
                'forum',
                '".$sbsystems[9]."',
                '0',
-               '../../../images/pastillegris.png',
+               '',
                'MODULE_ID_FORUM'
                )");
 
@@ -403,7 +403,7 @@ mysql_query("INSERT INTO accueil VALUES (
                'exercise',
                '".$sbsystems[10]."',
                '0',
-               '../../../images/pastillegris.png',
+               '',
                'MODULE_ID_EXERCISE'
                )");
 
@@ -414,7 +414,7 @@ mysql_query("INSERT INTO accueil VALUES (
         'groups',
         '".$sbsystems[15]."',
         '0',
-        '../../../images/pastillegris.png',
+        '',
         'MODULE_ID_GROUPS'
         )");
 
@@ -425,7 +425,7 @@ mysql_query("INSERT INTO accueil VALUES (
         'dropbox',
         '".$sbsystems[16]."',
         '0',
-        '../../../images/pastillegris.png',
+        '',
         'MODULE_ID_DROPBOX'
         )");
 
@@ -436,7 +436,7 @@ mysql_query("INSERT INTO accueil VALUES (
                 'conference',
                 '".$sbsystems[19]."',
                 '0',
-                '../../../images/pastillegris.png',
+                '',
                 'MODULE_ID_CHAT'
                 )");
 
@@ -447,7 +447,7 @@ mysql_query("INSERT INTO accueil VALUES (
                'description',
                '".$sbsystems[20]."',
                '0',
-               '../../../images/pastillegris.png',
+               '',
                'MODULE_ID_DESCRIPTION'
                )");
 
@@ -458,7 +458,7 @@ mysql_query("INSERT INTO accueil VALUES (
                 'questionnaire',
                 '".$sbsystems[21]."',
                 '0',
-                '../../../images/pastillegris.png',
+                '',
                 'MODULE_ID_QUESTIONNAIRE'
                 )");
 
@@ -469,7 +469,7 @@ mysql_query("INSERT INTO accueil VALUES (
                'lp',
                '".$sbsystems[23]."',
                '0',
-               '../../../images/pastillegris.png',
+               '',
                'MODULE_ID_LP'
                )");
 
@@ -480,7 +480,7 @@ mysql_query("INSERT INTO accueil VALUES (
                'tooladmin',
                '0',
                '1',
-               '../../../images/pastillegris.png',
+               '',
                'MODULE_ID_TOOLADMIN'
                )");
 
@@ -491,7 +491,7 @@ mysql_query("INSERT INTO accueil VALUES (
                'wiki',
                '".$sbsystems[26]."',
                '0',
-               '../../../images/pastillegris.png',
+               '',
                'MODULE_ID_WIKI'
                )");
 
@@ -524,7 +524,7 @@ mysql_query("INSERT INTO accueil VALUES (
                 'usage',
                 '".$sbsystems[24]."',
                 '1',
-                '../../../images/pastillegris.png',
+                '',
                 'MODULE_ID_USAGE')");
 
 

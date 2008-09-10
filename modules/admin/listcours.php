@@ -175,7 +175,7 @@ $tool_content .= "</td>
 	$tool_content .= "
     <td align='center'><a href=\"listusers.php?c=".$logs[1]."\"><img src='../../template/classic/img/user_list.gif' title='$langUsers' border='0'></img></a></td>
     <td align=\"center\" width='10'><a href=\"delcours.php?c=".$logs[1]."\"><img src='../../images/delete.gif' title='$langDelete' border='0'></img></a></td>
-    <td align=\"center\" width='20'><a href=\"editcours.php?c=".$logs[1]."".$searchurl."\"><img src='../../images/edit.gif' title='$langEdit' border='0'></img></a></td>\n";
+    <td align=\"center\" width='20'><a href=\"editcours.php?c=".$logs[1]."".$searchurl."\"><img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></img></a></td>\n";
 }
 // Close table correctly
 $tool_content .= "

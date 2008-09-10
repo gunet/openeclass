@@ -114,7 +114,7 @@ function choose_image($fileName)
 		}
 	}
 
-	return "defaut.gif";
+	return "default.gif";
 }
 
 

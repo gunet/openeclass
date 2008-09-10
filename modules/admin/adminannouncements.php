@@ -233,7 +233,7 @@ $table_title = 'en_title';
     			<td colspan=\"3\" class=\"right\">(".$langAdminAnnMes." <b>".nice_format($myrow['date'])."</b>)
 			&nbsp;&nbsp;
 			<a href='$_SERVER[PHP_SELF]?modify=$myrow[id]&localize=$localize'>
-			<img src='../../images/edit.gif' border='0' title='$langModify' style='vertical-align:middle;'>
+			<img src='../../template/classic/img/edit.gif' border='0' title='$langModify' style='vertical-align:middle;'>
 			</a>&nbsp;
 			<a href='$_SERVER[PHP_SELF]?delete=$myrow[id]&localize=$localize' onClick='return confirmation();'>
 			<img src='../../images/delete.gif' border='0' title='$langDelete' style='vertical-align:middle;'></a>

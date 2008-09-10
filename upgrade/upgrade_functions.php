@@ -347,7 +347,7 @@ function upgrade_course($code, $lang)
                                 'dropbox',
                                 '0',
                                 '0',
-                                '../../../images/pastillegris.png',
+                                '',
                                 )", $code);
 
                         db_query("CREATE TABLE dropbox_file (
@@ -829,7 +829,7 @@ function upgrade_course($code, $lang)
                                 'questionnaire',
                                 '0',
                                 '0',
-                                '../../../images/pastillegris.png',
+                                '',
                                 'MODULE_ID_QUESTIONNAIRE'
                                         )", $code);
                 }
@@ -842,7 +842,7 @@ function upgrade_course($code, $lang)
                                 'lp',
                                 '0',
                                 '0',
-                                '../../../images/pastillegris.png',
+                                '',
                                 'MODULE_ID_LP'
                                         )", $code);
                 }
@@ -855,7 +855,7 @@ function upgrade_course($code, $lang)
                                 'usage',
                                 '0',
                                 '1',
-                                '../../../images/pastillegris.png',
+                                '',
                                 'MODULE_ID_USAGE')", $code);
                 }
 
@@ -867,7 +867,7 @@ function upgrade_course($code, $lang)
                                 'tooladmin',
                                 '0',
                                 '1',
-                                '../../../images/pastillegris.png',
+                                '',
                                 'MODULE_ID_TOOLADMIN'
                                         )", $code);
                 }
@@ -880,7 +880,7 @@ function upgrade_course($code, $lang)
                                 'wiki',
                                 '0',
                                 '0',
-                                '../../../images/pastillegris.png',
+                                '',
                                 'MODULE_ID_WIKI'
                                         )", $code);
                 }

@@ -160,7 +160,7 @@ $tool_content .= "<tr><td colspan='2'><b><u>$langQuestionAnswers</u>:</b>";
 
      // doesn't show the edit link if we come from the question pool to pick a question for an exercise
      if(!isset($fromExercise)) {
-        $tool_content .= "&nbsp;&nbsp;<a href='$PHP_SELF?modifyAnswers=$questionId'><img src='../../images/edit.gif' border='0' align='absmiddle' title='$langModify'></a>";
+        $tool_content .= "&nbsp;&nbsp;<a href='$PHP_SELF?modifyAnswers=$questionId'><img src='../../template/classic/img/edit.gif' border='0' align='absmiddle' title='$langModify'></a>";
      }
 
         $tool_content .= "<br/></td></tr>";

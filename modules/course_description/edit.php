@@ -188,7 +188,7 @@ if (isset($delete) and $delete == "ask") {
 			if (isset($blocState[$numBloc]) && $blocState[$numBloc]=="used") {
 				$tool_content .= "<p><div id='topic_title_id'>".$titreBloc[$numBloc]."&nbsp;&nbsp;&nbsp;
          			<a href='".$_SERVER['PHP_SELF']."?numBloc=".$numBloc."' >
-         			<img src='../../images/edit.gif' border='0' title='".$langModify."'></a>
+         			<img src='../../template/classic/img/edit.gif' border='0' title='".$langModify."'></a>
          			<a href='".$_SERVER['PHP_SELF']."?delete=ask&numBloc=".$numBloc."'>
          			<img src='../../images/delete.gif' border='0' title='".$langDelete."'></a>
          			</div></p><p>".mathfilter(make_clickable(nl2br($contentBloc[$numBloc])), 12, "../../courses/mathimg/")."</p><br>";
