@@ -30,7 +30,7 @@ if (isset($c) && ($c!="")) {
 	session_register("dbname");
 }
 $require_current_course = TRUE;
-$require_prof;
+$require_prof = TRUE;
 include '../../include/baseTheme.php';
 
 $nameTools = $langArchiveCourse;
@@ -60,21 +60,12 @@ if($is_adminOfCourse) {
 	$zipfile = $webDir."courses/archive/$currentCourseID/archive.$currentCourseID.$shortDateBackuping.zip";
 	$tool_content .= "<table class='Deps' align='center'><tbody><tr><th align=\"left\"><ol>\n";
 
-	// if dir is missing, first we create it. mkpath is a recursive function
-        $dirCourBase = realpath("../..").$archiveDir."/courseBase";
-	if (!is_dir($dirCourBase)) {
-		$tool_content .= "<li>".$langCreateDirCourseBase."</li>\n";
-		mkpath($dirCourBase);
-	}
+	$dirArchive = realpath("../..").$archiveDir;
+	mkpath($dirArchive);
 	
 	// creation of the sql queries will all the data dumped 
 	create_backup_file("$webDir/$archiveDir/backup.php");
 
-    	$dirMainBase = realpath("../..").$archiveDir."/mainBase";
-	if (!is_dir($dirMainBase)) {
-		$tool_content .= "<li>".$langCreateDirMainBase."</li>\n";
-		mkpath($dirMainBase);
-	}
     	$dirhtml = realpath("../..").$archiveDir."/html";
 
 	$tool_content .= "<li>".$langBUCourseDataOfMainBase."  ".$currentCourseID."</li>\n";
@@ -89,7 +80,7 @@ if($is_adminOfCourse) {
 //-----------------------------------------
 // create zip file
 // ----------------------------------------
-
+	
 	$zipCourse = new PclZip($zipfile);
 	if ($zipCourse->create($webDir.$archiveDir, PCLZIP_OPT_REMOVE_PATH, "$webDir") == 0) {
 		$tool_content .= "Error: ".$zipCourse->errorInfo(true);
@@ -152,13 +143,11 @@ function copydir($origine, $destination) {
 function create_backup_file($file) {
 	global $currentCourseID;
 
-	$version = '';
-	$encoding = '';
 	$f = fopen($file,"w");
 	if (!$f) {
 		die("Error! Unable to open output file: '$f'\n");
 	}
-	fputs($f, "<?\n$version = 2;\n$encoding = 'UTF-8';\n");
+	fputs($f, "<?\n\$version = 2;\n\$encoding = 'UTF-8';\n");
 	backup_course_details($f, $currentCourseID);
 	backup_annonces($f, $currentCourseID);
 	backup_users($f, $currentCourseID);
