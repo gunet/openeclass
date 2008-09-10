@@ -91,23 +91,25 @@ if ($is_adminOfCourse) {
 }
 
 $tool_content .= "
-  <form name='chatForm' action='messageList.php' method='get' target='messageList' onSubmit='return prepare_message();'>
+
   <table width='99%' class='FormData'>
   <thead>
   <tr>
     <th>&nbsp;</th>
-    <td><b>$langTypeMessage</b><br />
-    <input type='text' name='msg' size='80'>
-    <input type='hidden' name='chatLine'>
-    <input type='submit' value=' >> '>
+    <td>
+      <form name='chatForm' action='messageList.php' method='get' target='messageList' onSubmit='return prepare_message();'>
+      <b>$langTypeMessage</b><br />
+      <input type='text' name='msg' size='80'>
+      <input type='hidden' name='chatLine'>
+      <input type='submit' value=' >> '>
+      </form>
     </td>
   </tr>
+  <tr>
+    <th>&nbsp;</th>
+    <th><iframe frameborder='0' src='messageList.php' width='100%' height='300' name='messageList' style='border: 0px solid #edecdf;'><a href='messageList.php'>Message list</a></iframe></th>
+  </tr>
   </thead>
-  </table>
-  </form>
-
-  <div id=\"chat_window\">
-  <iframe frameborder='0' src='messageList.php' width='99%' height='300' name='messageList' style='border: 0px solid #edecdf;'><a href='messageList.php'>Message list</a></iframe>
-  </div>";
+  </table>";
 
 draw($tool_content, 2, 'conference', $head_content);
