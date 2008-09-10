@@ -73,7 +73,7 @@ elseif (isset($create_dir_for_course)) {
 	upgrade_course($course_code, $course_lang);
 	$tool_content .= ob_get_contents();
 	ob_end_clean();
-	
+
 	$tool_content .= "</p>";
 	if (!file_exists("../../courses/garbage"))
 		mkdir("../../courses/garbage");
@@ -87,7 +87,7 @@ elseif (isset($send_path) and !empty($pathToArchive)) {
 		unpack_zip_show_files($pathToArchive);
 	else
 		$tool_content .= $langFileNotFound;
-	
+
 }
 elseif (isset($pathOf4path)) {
 	// we know  where is the 4 paths to restore  the  course.
@@ -95,7 +95,7 @@ elseif (isset($pathOf4path)) {
 	// $restoreThis: contains the path of the archived course
 
 	// If $action == 0, the course isn't restored - the user just
-	// gets a form with the archived course details.	
+	// gets a form with the archived course details.
 	$action = 0;
 	ob_start();
 	include("$restoreThis/backup.php");
@@ -106,18 +106,46 @@ elseif (isset($pathOf4path)) {
 // -------------------------------------
 // Displaying Form
 // -------------------------------------
-	$tool_content .= "<table width=\"99%\"><caption>$langFirstMethod</caption><tbody>
-	<tr><td>$langRequest1<br><br><form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" name=\"sendZip\"  enctype=\"multipart/form-data\">
-	<input type=\"file\" name=\"archiveZipped\" >
-	<input type=\"submit\" name=\"send_archive\" value=\"".$langSend."\">
-	</form></td></tr>
-	</tbody></table><br>";
-	$tool_content .= "<table width=\"99%\"><caption>$langSecondMethod</caption><tbody>
-	<tr><td>$langRequest2<br><br><form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" name=\"sendPath\"  enctype=\"multipart/form-data\">
-	<input type=\"text\" name=\"pathToArchive\">
-	<input type=\"submit\" name=\"send_path\" value=\"".$langSend."\">
-	</form></td></tr>
-	</tbody></table><br>";
+	$tool_content .= "
+  <table width='99%' class='FormData'>
+  <tbody>
+  <tr>
+    <th>&nbsp;</th>
+    <td><b>$langFirstMethod</b></td>
+  </tr>
+  <tr>
+    <th>&nbsp;</th>
+	<td>$langRequest1
+      <br /><br />
+      <form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" name=\"sendZip\"  enctype=\"multipart/form-data\">
+	  <input type=\"file\" name=\"archiveZipped\" >
+	  <input type=\"submit\" name=\"send_archive\" value=\"".$langSend."\">
+	  </form>
+    </td>
+  </tr>
+  </tbody>
+  </table>
+  <br>
+
+  <table width='99%' class='FormData'>
+  <tbody>
+  <tr>
+    <th>&nbsp;</th>
+    <td><b>$langSecondMethod</b></td>
+  </tr>
+  <tr>
+    <th>&nbsp;</th>
+    <td>$langRequest2
+      <br><br>
+      <form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\" name=\"sendPath\"  enctype=\"multipart/form-data\">
+	  <input type=\"text\" name=\"pathToArchive\">
+	  <input type=\"submit\" name=\"send_path\" value=\"".$langSend."\">
+	  </form>
+    </td>
+  </tr>
+  </tbody>
+  </table>
+  <br />";
 }
 
 draw($tool_content,3, 'admin');
@@ -125,9 +153,9 @@ draw($tool_content,3, 'admin');
 
 // Functions  restoring
 function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
-	
+
 	global $action, $restoreThis, $langNameOfLang, $encoding, $version;
-	
+
 	@include("../lang/greek/common.inc.php");
 	@include("../lang/greek/messages.inc.php");
 
@@ -138,7 +166,7 @@ function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) 
 		$prof = iconv($encoding, 'UTF-8', $prof);
 		$fac = iconv($encoding, 'UTF-8', $fac);
 	}
- 
+
 	//check for lesson language
 	$languages = array();
 	$langdirname = "../lang/";
@@ -160,7 +188,7 @@ function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) 
 //display the restoring form
 	if (!$action) {
 		echo "<form action='$_SERVER[PHP_SELF]' method='post'>";
-  		echo "<table border='0'>";
+  		echo "<table width='99%' class='FormData'><tbody>";
 		echo "<tr><td align='justify' colspan='2'>$langInfo1</td></tr>";
 		echo "<tr><td align='justify' colspan='2'>$langInfo2</td></tr>";
 		echo "<tr><td>&nbsp;</td></tr>";
@@ -179,7 +207,7 @@ function course_details ($code, $lang, $title, $desc, $fac, $vis, $prof, $type) 
 		echo "<tr><td>&nbsp;</td></tr><tr><td>";
 		echo "<input type='submit' name='create_dir_for_course' value='$langOk'>";
 		echo "<input type='hidden' name='restoreThis' value='$restoreThis'>";
-		echo "</td></tr></table></form>";
+		echo "</td></tr></tbody></table></form>";
 	}
 }
 
@@ -190,7 +218,7 @@ function announcement ($text, $date, $order, $title = '') {
 	db_query("INSERT into `$mysqlMainDb`.annonces
 		(title, contenu, temps, code_cours, ordre)
 		VALUES (".
-		join(", ", array(	
+		join(", ", array(
 			quote($title),
 			quote($text),
 			quote($date),
@@ -204,7 +232,7 @@ function announcement ($text, $date, $order, $title = '') {
 function user ($userid, $name, $surname, $login, $password, $email, $statut, $phone, $department, $registered_at = NULL, $expires_at = NULL, $inst_id = NULL) {
 	global $action, $course_code, $userid_map, $mysqlMainDb, $course_prefix, $course_addusers, $durationAccount, $version, $encoding;
 	global $langUserWith, $langAlready, $langWithUsername, $langUserisAdmin, $langUsernameSame, $langUserAlready, $langUName, $langPrevId, $langNewId, $langUserName;
-	
+
 	if ($encoding != 'UTF-8') {
 		$name = iconv($encoding, 'UTF-8', $name);
 		$surname = iconv($encoding, 'UTF-8', $surname);
@@ -218,10 +246,10 @@ function user ($userid, $name, $surname, $login, $password, $email, $statut, $ph
 		return;
 	}
 	if (!$registered_at)  {
-		$registered_at = time(); 
+		$registered_at = time();
 	}
-	if (!$expires_at) { 
-		$expires_at = time() + $durationAccount;	
+	if (!$expires_at) {
+		$expires_at = time() + $durationAccount;
 	}
 
 	// add prefix only to usernames that dont use LDAP login
@@ -233,12 +261,12 @@ function user ($userid, $name, $surname, $login, $password, $email, $statut, $ph
 			$login = $course_code.'_'.$login;
 		}
 	}
-	
+
 	$u = mysql_query("SELECT * FROM `$mysqlMainDb`.user WHERE BINARY username=".quote($login));
 	if (mysql_num_rows($u) > 0) 	{
 		$res = mysql_fetch_array($u);
 		$userid_map[$userid] = $res['user_id'];
-		echo "<br>"; 
+		echo "<br>";
 		echo "$langUserAlready <b>$login</b>. $langUName <i>$res[1] $res[2]</i>  !\n";
 	} else {
 		if ($version == 1) { // if we come from a archive < 2.x encrypt user password
@@ -247,7 +275,7 @@ function user ($userid, $name, $surname, $login, $password, $email, $statut, $ph
 		db_query("INSERT into `$mysqlMainDb`.user
 			(nom, prenom, username, password, email, statut, phone, department, registered_at, expires_at)
 			VALUES (".
-			join(", ", array(	
+			join(", ", array(
 				quote($name),
 				quote($surname),
 				quote($login),
@@ -262,11 +290,11 @@ function user ($userid, $name, $surname, $login, $password, $email, $statut, $ph
 				")");
 		$userid_map[$userid] = mysql_insert_id();
 	}
-	
+
 	db_query("INSERT into `$mysqlMainDb`.cours_user
 		(code_cours,user_id,statut)
 		VALUES (".
-		join(", ", array(	
+		join(", ", array(
 			quote($course_code),
 			quote($userid_map[$userid]),
 			quote($statut))).
@@ -294,13 +322,13 @@ function group( $userid, $team, $status, $role) {
 	db_query("INSERT into user_group
 		(user,team,status,role)
 		VALUES (".
-		join(", ", array(	
+		join(", ", array(
 			quote($userid_map[$userid]),
 			quote($team),
 			quote($status),
 			quote($role))).
 			")");
-	
+
 }
 
 // functions for inserting info about dropbox
@@ -381,15 +409,15 @@ function create_course($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 	global $mysqlMainDb;
 
 	$repertoire = new_code(find_faculty_by_name($fac));
-	
+
 	if (mysql_select_db($repertoire)) {
 		echo $langCourseExists;
 		exit;
 	}
 	db_query("INSERT into `$mysqlMainDb`.cours
-		(code, languageCourse, intitule, description, faculte, visible, titulaires, fake_code, type) 
+		(code, languageCourse, intitule, description, faculte, visible, titulaires, fake_code, type)
 		VALUES (".
-		join(", ", array(	
+		join(", ", array(
 			quote($repertoire),
 			quote($lang),
 			quote($title),
@@ -403,7 +431,7 @@ function create_course($code, $lang, $title, $desc, $fac, $vis, $prof, $type) {
 	db_query("INSERT into `$mysqlMainDb`.cours_faculte
 		(faculte,code)
 		VALUES(".quote($fac).",".quote($repertoire).")");
-						
+
 	if (!db_query("CREATE DATABASE `$repertoire`")) {
 		echo "Database $repertoire creation failure ";
 		exit;
@@ -430,9 +458,9 @@ function visibility_select($current)
 {
 	global $langTypeOpen, $langTypeRegistration, $langTypeClosed;
 	$ret = "";
- 
+
 	$ret .= "<select name=\"course_vis\">\n";
-	foreach (array($langTypeOpen => '2', $langTypeRegistration => '1', $langTypeClosed => '0') 
+	foreach (array($langTypeOpen => '2', $langTypeRegistration => '1', $langTypeClosed => '0')
 			as $text => $type) {
 		if($type == $current) {
 			$ret .= "<option value=\"$type\" selected>$text</option>\n";
@@ -448,7 +476,7 @@ return $ret;
 function type_select($current)
 {
 	global $langPre, $langPost, $langOther;
-	
+
 	$ret = "";
 	$ret .= "<select name=\"course_type\">\n";
 	foreach (array($langPre => 'pre', $langPost => 'post', $langOther => 'other') as $text => $type) {
@@ -467,7 +495,7 @@ function faculty_select($current)
 {
 	global $mysqlMainDb;
 	$ret = "";
-	
+
 	$ret .= "<select name=\"course_fac\">\n";
 	$res = mysql_query("SELECT name FROM `$mysqlMainDb`.faculte ORDER BY number");
 	while ($fac = mysql_fetch_array($res)) {
@@ -525,7 +553,7 @@ function unpack_zip_show_files($zipfile)
 			</form></li>";
 	}
 	closedir($handle);
-	$retString .= "</ol>\n";	
+	$retString .= "</ol>\n";
 	chdir($webDir."modules/course_info");
 	return $retString;
 }

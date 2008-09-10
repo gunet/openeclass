@@ -28,7 +28,7 @@
 
  * Personalised Announcements Component, eClass Personalised
 
- * 
+ *
 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
 
@@ -36,9 +36,9 @@
 
  * @package eClass Personalised
 
- * 
+ *
 
- * @abstract This component populates the announcements block on the user's personalised 
+ * @abstract This component populates the announcements block on the user's personalised
 
  * interface. It is based on the diploma thesis of Evelthon Prodromou.
 
@@ -52,7 +52,7 @@
 
  * Function getUserAnnouncements
 
- * 
+ *
 
  * Populates an array with data regarding the user's personalised announcements
 
@@ -278,7 +278,7 @@ function getUserAnnouncements($param = null, $type) {
 
  * Function announceHtmlInterface
 
- * 
+ *
 
  * Generates html content for the announcements block of eClass personalised.
 
@@ -298,62 +298,37 @@ function announceHtmlInterface($data) {
 
 	$announceExist = false;
 
-
-
 	$assign_content= <<<aCont
-
 	<div id="datacontainer">
-
 	<ul id="datalist">
-
 aCont;
 
 	$max_repeat_val = count($data);
 	for ($i=0; $i <$max_repeat_val; $i++) {
 
 		$iterator =  count($data[$i][2]);
-		
 		if ($iterator > 0) {
-
 			$announceExist = true;
-
 			$assign_content .= "
-
-		<li class=\"category\">".$data[$i][0]."</li>";
-
+	  <li class=\"category\">".$data[$i][0]."</li>";
 			$url = $_SERVER['PHP_SELF'] . "?perso=2&c=" .$data[$i][1];
-
 			for ($j=0; $j < $iterator; $j++){
-
 				if(strlen($data[$i][2][$j][0]) > 150) {
-
 					$data[$i][2][$j][0] = substr($data[$i][2][$j][0], 0, 150);
-
-					$data[$i][2][$j][0] .= " <strong class=\"announce_date\">$langMore</strong>
-
-					";
-
-				} 
-
+					$data[$i][2][$j][0] .= " <strong class=\"announce_date\">$langMore</strong>";
+				}
 			$assign_content .= "
-
-		<li><a class=\"square_bullet2\" href=\"$url\">
-
-		<p class=\"content_pos\"><strong><span class=\"announce_date\">".nice_format($data[$i][2][$j][1])." : </span></strong>".$data[$i][2][$j][0].autoCloseTags($data[$i][2][$j][0])."</p></a>
-
-		</li>";
-
+	  <li><a class=\"square_bullet2\" href=\"$url\">
+          <p class=\"content_pos\">".$data[$i][2][$j][0].autoCloseTags($data[$i][2][$j][0]).": (<strong><span class=\"announce_date\">".nice_format($data[$i][2][$j][1])."</span></strong>)</p></a>
+      </li>";
 			}
-
 			if ($i+1 <$max_repeat_val) $assign_content .= "<br>";
-
 		}
-
 	}
 
-
-
-	$assign_content .= "</ul></div> ";
+	$assign_content .= "
+	</ul>
+    </div> ";
 
 
 
@@ -375,7 +350,7 @@ aCont;
 
  * Function createQueries
 
- * 
+ *
 
  * Creates needed queries used by getUserAnnouncements
 
@@ -419,7 +394,7 @@ function createQueries($queryParam){
 
 
 
-		$announce_query[$i] = "SELECT contenu, temps 
+		$announce_query[$i] = "SELECT contenu, temps
 
 		FROM " .$mysqlMainDb." . annonces, ".$lesson_code[$i].".accueil
 

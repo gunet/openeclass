@@ -76,7 +76,7 @@ function getUserAssignments($param, $type) {
 	$lesson_code	= $param['lesson_code'];
 
 	$max_repeat_val	= $param['max_repeat_val'];
-	
+
 	$lesson_titles	= $param['lesson_titles'];
 
 	$lesson_code	= $param['lesson_code'];
@@ -104,7 +104,7 @@ function getUserAssignments($param, $type) {
 	$assignSubGroup = array();
 
 	for ($i=0;$i<$max_repeat_val;$i++) {//each iteration refers to one lesson
-				
+
 		$mysql_query_result = db_query($assignments_query[$i], $lesson_code[$i]);
 
 		if ($num_rows = mysql_num_rows($mysql_query_result) > 0) {
@@ -122,7 +122,7 @@ function getUserAssignments($param, $type) {
 		$assignments_repeat_val=0;
 
 		while($myAssignments = mysql_fetch_row($mysql_query_result)){
-		
+
 			if ($myAssignments) {
 
 				if ($submission = findSubmission($uid, $myAssignments[0], $lesson_code[$i])) {
@@ -137,19 +137,19 @@ function getUserAssignments($param, $type) {
 				array_push($assignmentData,$myAssignments);
 			}
 		}
-		
+
 		if ($num_rows > 0) {
 			array_push($assignmentLessonData, $assignmentData);
 
 			array_push($assignSubGroup, $assignmentLessonData);
-				
+
 		}
 
 	}
-	
+
 	// order assignments according to lesson code
 	//$assignGroup = columnSort($assignmentLessonData, 1);
-	
+
 	if($type == "html") {
 
 		return assignHtmlInterface($assignSubGroup);
@@ -188,29 +188,22 @@ function assignHtmlInterface($data) {
 	global  $langCourse, $langAssignment, $langDeadline, $langNoAssignmentsExist;
 
 	$assign_content = "";
-	
+
 	$assign_content= <<<aCont
-
-	<div id="datacontainer">
-
-	<ul id="datalist">
+    <div id="datacontainer">
+      <ul id="datalist">
 
 aCont;
 	$assignmentsExist = false;
 	$max_repeat_val = count($data);
  	for ($i=0; $i <$max_repeat_val; $i++) {
-
 		$iterator = count($data[$i][2]);
-	
-		$assign_content .= "<li class='category'>".$data[$i][0]."</li>";
-
+		$assign_content .= "
+        <li class='category'>".$data[$i][0]."</li>";
 		if ($iterator > 0) {
 			$assignmentsExist = true;
-
 			for ($j=0; $j < $iterator; $j++) {
-				
 				$url = $_SERVER['PHP_SELF'] . "?perso=1&c=" .$data[$i][1]."&i=".$data[$i][2][$j][6];
-
 				if($data[$i][2][$j][6] == 1) {
 					$class = "class =\"tick\"";
 				} elseif ($data[$i][2][$j][6] == 0) {
@@ -219,18 +212,21 @@ aCont;
 					$class = "";
 				}
 				$assign_content .= "";
-				$assign_content .= "<li><a class=\"square_bullet2\" href=\"$url\">
-				<p $class>".nice_format($data[$i][2][$j][3])." : ".$data[$i][2][$j][1]."</p></a></li>";
+				$assign_content .= "
+        <li><a class=\"square_bullet2\" href=\"$url\"><p $class>".$data[$i][2][$j][1]." : ".nice_format($data[$i][2][$j][3])."</p></a>
+        </li>";
 			}
 			if ($i+1 <$max_repeat_val) $assign_content .= "<br>";
 		}
 	}
-	$assign_content .= "</ul></div>";
+	$assign_content .= "
+      </ul>
+    </div>";
 
 	if (!$assignmentsExist) {
 		$assign_content .= "<p>$langNoAssignmentsExist</p>";
 	}
-		
+
 	return $assign_content;
 }
 

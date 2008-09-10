@@ -29,7 +29,7 @@
 
  * Personalised ForumPosts Component, eClass Personalised
 
- * 
+ *
 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
 
@@ -37,9 +37,9 @@
 
  * @package eClass Personalised
 
- * 
+ *
 
- * @abstract This component populates the Forum Posts block on the user's personalised 
+ * @abstract This component populates the Forum Posts block on the user's personalised
 
  * interface. It is based on the diploma thesis of Evelthon Prodromou.
 
@@ -53,7 +53,7 @@
 
  * Function getUserForumPosts
 
- * 
+ *
 
  * Populates an array with data regarding the user's personalised forum posts
 
@@ -263,7 +263,7 @@ function getUserForumPosts($param, $type) {
 
  * Function forumHtmlInterface
 
- * 
+ *
 
  * Generates html content for the Forum Posts block of eClass personalised.
 
@@ -284,82 +284,35 @@ function forumHtmlInterface($data) {
 	$content = "";
 
 	if($numOfLessons = count($data) > 0) {
-
-		
-
 		$content .= <<<fCont
-
-
-
-	 <div id="datacontainer">
-
-
-
-				<ul id="datalist">
-
+    <div id="datacontainer">
+      <ul id="datalist">
 fCont;
-
 		$numOfLessons = count($data);
-
 		for ($i=0; $i <$numOfLessons; $i++) {
-
 			$content .= "
-
-		<li class=\"category\">".$data[$i][0]."
-
-		</li>";
-
+        <li class=\"category\">".$data[$i][0]."</li>";
 			$iterator =  count($data[$i][2][0]);
-
 			for ($j=0; $j < $iterator; $j++){
-
-				
-
 				$url = $_SERVER['PHP_SELF']."?perso=5&c=".$data[$i][1]."&t=".$data[$i][2][0][$j][2]."&f=".$data[$i][2][0][$j][0]."&s=".$data[$i][2][0][$j][4];
-
-				
-
 				if(strlen($data[$i][2][0][$j][8]) > 150) {
-
 					$data[$i][2][0][$j][8] = substr($data[$i][2][0][$j][8], 0, 150);
-
-					$data[$i][2][0][$j][8] .= " <strong><span class=\"announce_date\">$langMore</span></strong>
-
-					";
-
+					$data[$i][2][0][$j][8] .= " <strong><span class=\"announce_date\">$langMore</span></strong>";
 				}
-
-				
-
 				$content .= "
+        <li>
+        <a class=\"square_bullet\" href=\"$url\">
+          <strong class=\"title_pos\">".$data[$i][2][0][$j][3]." (".nice_format(date("Y-m-d", strtotime($data[$i][2][0][$j][5]))).")</strong></a>
+          <p class=\"content_pos\">".$data[$i][2][0][$j][8]."</p>
+          <p align=\"right\"><cite class=\"content_pos\">".$data[$i][2][0][$j][6]." ".$data[$i][2][0][$j][7]."</cite></p>
 
-		<li><a class=\"square_bullet\" href=\"$url\">
-
-		<strong class=\"title_pos\">".$data[$i][2][0][$j][3]." (".$data[$i][2][0][$j][5].")</strong>
-
-		<p class=\"content_pos\">".$data[$i][2][0][$j][8]."</p>
-
-		<cite class=\"content_pos\">$langSender: ".$data[$i][2][0][$j][6]." ".$data[$i][2][0][$j][7]."</cite>
-
-		</a></li>
-
-		";
-
+        </li>";
 			}
-
-
-
 			if ($i+1 <$numOfLessons) $content .= "<br>";
-
 		}
-
-
-
-		$content .= "</ul>
-
-			</div> 
-
-		";
+		$content .= "
+      </ul>
+    </div>";
 
 	} else {
 
@@ -381,7 +334,7 @@ fCont;
 
  * Function createForumQueries
 
- * 
+ *
 
  * Creates needed queries used by getUserForumPosts()
 
@@ -401,7 +354,7 @@ function createForumQueries($dateVar){
 
 									forums.forum_name,
 
-			
+
 
 									topics.topic_id,
 
@@ -433,33 +386,33 @@ function createForumQueries($dateVar){
 
 									accueil
 
-			
 
-						WHERE 	
+
+						WHERE
 
 						CONCAT(topics.topic_title, posts_text.post_text) != \'\'
 
-						
+
 
 						AND		forums.forum_id = topics.forum_id
 
 						AND		posts.forum_id 	= forums.forum_id
 
-						AND		posts.post_id	= posts_text.post_id	
+						AND		posts.post_id	= posts_text.post_id
 
-						AND 	posts.topic_id	= topics.topic_id	
+						AND 	posts.topic_id	= topics.topic_id
 
 
 
 						AND	DATE_FORMAT(posts.post_time, \'%Y %m %d\') >= "'.$dateVar.'"
 
-						
+
 
 						AND accueil.visible =1
 
 						AND accueil.id =9
 
-			
+
 
 						ORDER BY posts.post_time ';
 
