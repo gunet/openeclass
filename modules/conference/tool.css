@@ -33,16 +33,14 @@
 	background: #edecdf;
 }
 
-#presantation_window{
-	position:absolute;
-	height: 500px;
-	width: 700px;
+#chat_window{
+	position:relative;
+	height: 300px;
+	width: 755px;
 	/*border:groove;*/
-	top:210px;
-	left:430px;
-
 	border:1px solid #a2a2a3;
 	background: #edecdf;
+	overflow: auto;
 }
 
 #iframe{

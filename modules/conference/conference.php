@@ -1,4 +1,4 @@
-<? 
+<?
 /*===========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
@@ -41,26 +41,35 @@ $action->record('MODULE_ID_CHAT');
 
 $nameTools = $langConference;
 
+
+
+
+
 // guest user not allowed
 if (check_guest()) {
-	$tool_content .= "<table width=100% border='0' height=316 cellspacing='0' cellpadding='0'>\n";
-        $tool_content .= "<tr><td valign=top><br><br>";
-        $tool_content .= "<div class=td_main>$langNoGuest</div>";
-        $tool_content .= "</td></tr>";
-        $tool_content .= "</table>";
+	$tool_content .= "
+       <table width=\"99%\">
+       <tbody>
+       <tr>
+         <td class=\"extraMessage\"><p>$langNoGuest</p></td>
+       </tr>
+       </tbody>
+       </table>";
 	draw($tool_content, 2, 'conference');
 }
 
 if (!($uid) or !($_SESSION['uid'])) {
-	$tool_content .= "<table width=100% border='0' height=316 cellspacing='0' cellpadding='0'>\n";
-        $tool_content .= "<tr><td valign=top><br><br>";
-  	$tool_content .= "<div class=td_main>$langNoAliens</div>";
-        $tool_content .= "</td></tr>";
-        $tool_content .= "</table>";
+	$tool_content .= "
+       <table width=\"99%\">
+       <tbody>
+       <tr>
+         <td class=\"extraMessage\"><p>$langNoAliens</p></td>
+       </tr>
+       </tbody>
+       </table>";
 	draw($tool_content, 2, 'conference');
 }
 
-$tool_content .= "<table height=316 width=100%>";
 ?>
 <script>
 function prepare_message()
@@ -73,18 +82,34 @@ function prepare_message()
 </script>
 <?
 if ($is_adminOfCourse) {
-        $tool_content .= "<tr><td align=left class=tool_bar width=50%>
-	<img src='../../template/classic/img/clean.gif'>&nbsp;<a href='messageList.php?reset=true' target='messageList' class=small_tools>$langWash</a></td><td width=49% align=right class=tool_bar><a href='messageList.php?store=true' target='messageList' class=small_tools>$langSave</a>&nbsp;<img src='../../template/classic/img/save.gif'></td></tr>";
+    $tool_content .= "
+      <div id=\"operations_container\">
+        <ul id=\"opslist\">
+          <li><img src='../../template/classic/img/clean.gif'>&nbsp;<a href='messageList.php?reset=true' target='messageList' class=small_tools>$langWash</a></li>
+          <li><img src='../../template/classic/img/save.gif'>&nbsp;<a href='messageList.php?store=true' target='messageList' class=small_tools>$langSave</a></li>
+        </ul>
+      </div>";
 }
 
-$tool_content .= "<tr><td colspan ='2' valign=top>
-<form name='chatForm' action='messageList.php' method='get' target='messageList' onSubmit='return prepare_message();'>
-<span class='explanationtext'>$langTypeMessage</span><br>
-<input type='text' name='msg' size='80'>
-<input type='hidden' name='chatLine'>
-<input type='submit' value=' >> '><br>";
+$tool_content .= "
+  <form name='chatForm' action='messageList.php' method='get' target='messageList' onSubmit='return prepare_message();'>
+  <table width='99%' class='FormData'>
+  <thead>
+  <tr>
+    <th>&nbsp;</th>
+    <td><b>$langTypeMessage</b><br />
+    <input type='text' name='msg' size='80'>
+    <input type='hidden' name='chatLine'>
+    <input type='submit' value=' >> '>
+    </td>
+  </tr>
+  </thead>
+  </table>
+  </form>
 
-$tool_content .= "&nbsp;<br><iframe frameborder='0' src='messageList.php' width='96%' height='300' name='messageList' style='border: 1px solid silver'><a href='messageList.php'>Message list</a></iframe></td></tr></table>";
+  <div id=\"chat_window\">
+  <iframe frameborder='0' src='messageList.php' width='99%' height='300' name='messageList' style='border: 0px solid #edecdf;'><a href='messageList.php'>Message list</a></iframe>
+  </div>";
 
 draw($tool_content, 2, 'conference');
 ?>

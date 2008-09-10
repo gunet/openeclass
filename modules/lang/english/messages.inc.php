@@ -495,7 +495,8 @@ $langWrongAuth = "You did not provide a valid pair of username/password";
  $langSaveChat="Save chat";
  $langSaveMessage="Chat has been saved in Documents.";
  $langSaveErrorMessage="Error. Chat has not been saved.";
-
+ $langNoAliens = "Only platform registered users can access 'Chat' !";
+ $langNoGuest = "Guest Users cannot access 'Chat'";
 
 /*************************************************
 * copyright.inc.php
@@ -1353,7 +1354,7 @@ $langWelcomeProf = "Select \"Create course site\" to create your on-line courses
 /*************************************************
 * install.inc.php
 **************************************************/
-$langTitleInstall = "Open eClass Install Wizard"; 
+$langTitleInstall = "Open eClass Install Wizard";
 $langWelcomeWizard = "Welcome to installation wizard of Open eClass!";
 $langInstallProgress = "Install Progress";
 $langThisWizard = "This  Wizard:";
@@ -1407,7 +1408,7 @@ $langWarnConfig = "Warning !! File <b>config.php</b> exists !! Installation cann
 $langErrorConfig = "<br><b>Error occuredα!</b><br><br>It is not possible creation of file config.php.<br><br>Please check access rights in subdirectories of Open eClass and rerun installation.";
 $langErrorMysql = "MySQL is not working or username / password is wrong.<br/>Please check your settings:";
 $langBackStep3 = "Back to Step 3";
-$langBackStep3_2 = "Back to step 3."; 
+$langBackStep3_2 = "Back to step 3.";
 $langNotNeedChange = "No need to change";
 $langNeedChangeDB = "if there is any database with the same name (eclass) you must change it";
 $langWillWrite = "Information below will be written in <b>config.php";
@@ -3085,7 +3086,7 @@ $langYouAreReg = "You are registered on";
 $lang_footer_p_CourseManager = "Manager(s) for %s";
 $lang_p_platformManager = "Administrator for %s";
 $langWikiUrl = "Type your URL";
-$wiki_toolbar['Strongemphasis'] = "Strong Emphasis"; 
+$wiki_toolbar['Strongemphasis'] = "Strong Emphasis";
 $wiki_toolbar['Emphasis'] = "Emphasis";
 $wiki_toolbar['Inserted'] = "Inserted";
 $wiki_toolbar['Deleted'] = "Deleted";

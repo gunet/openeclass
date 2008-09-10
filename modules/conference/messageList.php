@@ -60,9 +60,9 @@ if (!file_exists($fileChatName)) {
 	fclose($fp);
 }
 
-// chat commands 
+// chat commands
 
-// reset command 
+// reset command
 if (isset($_GET['reset']) && $is_adminOfCourse) {
 	$fchat = fopen($fileChatName,'w');
 	fwrite($fchat, $timeNow." ---- ".$langWashFrom." ---- ".$nick." --------\n");
@@ -77,12 +77,12 @@ if (isset($_GET['store']) && $is_adminOfCourse) {
 
 	buffer(implode('', file($fileChatName)), $tmpArchiveFile);
 	if (copy($tmpArchiveFile, $pathToSaveChat.$chat_filename)) {
-                $alert_div=$langSaveMessage; 
+                $alert_div=$langSaveMessage;
         } else {
                 $alert_div= $langSaveErrorMessage;
         }
 	echo $alert_div;
-	db_query("INSERT INTO document SET path='/$chat_filename', filename='$saveIn', 
+	db_query("INSERT INTO document SET path='/$chat_filename', filename='$saveIn',
 		date=NOW(), date_modified=NOW()", $currentCourseID);
 	exit;
 }
@@ -103,12 +103,12 @@ $tmp = array_splice($fileContent, 0 , $lineToRemove);
 
 $fileReverse = array_reverse($fileContent);
 foreach ($fileReverse as $thisLine) {
-    echo '<span>', preg_replace('/ : /', '</span> : ', $thisLine), '<br>';
+    echo '<small><span style="color:#727266;">', preg_replace('/ : /', '</span> : ', $thisLine), '</small><br>';
 }
 
 
-/* 
- * For performance reason, buffer the content 
+/*
+ * For performance reason, buffer the content
  * in a temporary archive file
  * once the chat file is too large
  */
