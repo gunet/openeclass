@@ -70,8 +70,7 @@ if (!($uid) or !($_SESSION['uid'])) {
 	draw($tool_content, 2, 'conference');
 }
 
-?>
-<script>
+$head_content = '<script type="text/javascript">
 function prepare_message()
 {
 	document.chatForm.chatLine.value=document.chatForm.msg.value;
@@ -79,8 +78,8 @@ function prepare_message()
 	document.chatForm.msg.focus();
 	return true;
 }
-</script>
-<?
+</script>';
+
 if ($is_adminOfCourse) {
     $tool_content .= "
       <div id=\"operations_container\">
@@ -111,5 +110,4 @@ $tool_content .= "
   <iframe frameborder='0' src='messageList.php' width='99%' height='300' name='messageList' style='border: 0px solid #edecdf;'><a href='messageList.php'>Message list</a></iframe>
   </div>";
 
-draw($tool_content, 2, 'conference');
-?>
+draw($tool_content, 2, 'conference', $head_content);

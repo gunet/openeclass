@@ -24,12 +24,12 @@
 ============================================================================*/
 
 $require_current_course = TRUE;
-$tool_content = "";
 include '../../include/baseTheme.php';
-?>
+
+?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <head>
-<meta http-equiv="refresh" content="30; url=<?= $_SERVER['PHP_SELF'] ?>">
-<link rel="stylesheet" href="<?= $urlServer ?>/template/chat.css" type="text/css">
+<meta http-equiv="refresh" content="30; url=<?= $_SERVER['PHP_SELF'] ?>" />
+<link rel="stylesheet" href="<?= $urlServer ?>/template/chat.css" type="text/css" />
 <title>Chat messages</title>
 </head>
 <body>
@@ -103,8 +103,10 @@ $tmp = array_splice($fileContent, 0 , $lineToRemove);
 
 $fileReverse = array_reverse($fileContent);
 foreach ($fileReverse as $thisLine) {
-    echo '<small><span style="color:#727266;">', preg_replace('/ : /', '</span> : ', $thisLine), '</small><br>';
+    echo '<small><span style="color:#727266;">', preg_replace('/ : /', '</span> : ', $thisLine), "</small><br />\n";
 }
+
+echo "</body></html>\n";
 
 
 /*
@@ -124,5 +126,3 @@ function buffer($content, $tmpFile) {
 	$fp = fopen($tmpFile, "a");
 	fwrite($fp, $content);
 }
-echo "<p>".$tool_content."</p>";
-?>
