@@ -52,22 +52,22 @@ if (isset($submit))  {
 	// Count students and professors
 	$numberStuds = @count($regstuds);
 	$numberProfs = @count($regprofs);
-	
+
 	// Wash out all course users
-	$sql = mysql_query("DELETE FROM cours_user WHERE code_cours = '".mysql_real_escape_string($_GET['c'])."' 
+	$sql = mysql_query("DELETE FROM cours_user WHERE code_cours = '".mysql_real_escape_string($_GET['c'])."'
 		AND user_id != '".$uid."'");
-	
+
 	for ($i=0; $i < $numberStuds; $i++) {
 		// Insert student
 		$sqlInsertStud = "INSERT INTO `cours_user` (`code_cours`, `user_id`, `statut`, reg_date)
-			VALUES ('".mysql_real_escape_string($_GET['c'])."', '".$regstuds[$i]."', '5', CURDATE())"; 
+			VALUES ('".mysql_real_escape_string($_GET['c'])."', '".$regstuds[$i]."', '5', CURDATE())";
 		mysql_query($sqlInsertStud) ;
 	}
 
 	for ($i=0; $i < $numberProfs; $i++) {
 		// Insert professor
 		$sqlInsertProf = "INSERT INTO `cours_user` (`code_cours`, `user_id`, `statut`, `role`)
-			VALUES ('".mysql_real_escape_string($_GET['c'])."', '".$regprofs[$i]."', '1', '���������')"; 
+			VALUES ('".mysql_real_escape_string($_GET['c'])."', '".$regprofs[$i]."', '1', '���������')";
 		mysql_query($sqlInsertProf) ;
 	}
 
@@ -79,7 +79,7 @@ else {
 	// Some javascript is needed
 	$tool_content .= '<script type="text/javascript" language="JavaScript">
 
-<!-- Begin javascript menu swapper 
+<!-- Begin javascript menu swapper
 function move(fbox, tbox) {
 var arrFbox = new Array();
 var arrTbox = new Array();
@@ -126,57 +126,58 @@ tbox[c] = no;
 <script type="text/javascript" language="JavaScript">
 
 function selectAll(cbList1,cbList2,bSelect) {
-  for (var i=0; i<cbList1.length; i++) 
+  for (var i=0; i<cbList1.length; i++)
     cbList1[i].selected = cbList1[i].checked = bSelect
-  for (var i=0; i<cbList2.length; i++) 
+  for (var i=0; i<cbList2.length; i++)
     cbList2[i].selected = cbList2[i].checked = bSelect
 }
 
 function reverseAll(cbList) {
   for (var i=0; i<cbList.length; i++) {
-    cbList[i].checked = !(cbList[i].checked) 
+    cbList[i].checked = !(cbList[i].checked)
     cbList[i].selected = !(cbList[i].selected)
   }
 }
 
 </script>';
-	
-	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."".$searchurl." method=\"post\">";
-	$tool_content .= "<table width=\"99%\"><caption>".$langFormUserManage."</caption><tbody>";
 
-	$tool_content .= "<tr valign=top align=center> 
-			<td align=left><font size=\"2\" face=\"arial, helvetica\">
-				<b>".$langListNotRegisteredUsers."</b> <p>
-	<select name=\"unregusers[]\" size=20 multiple>";  
-  
+	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."".$searchurl." method=\"post\">";
+	$tool_content .= "
+  <table class=\"FormData\" width=\"99%\" align=\"left\">
+  <tbody>
+  <tr>
+    <th colspan=\"3\">".$langFormUserManage."</th>
+  </tr>
+  <tr>
+    <th align=left>".$langListNotRegisteredUsers."<br />
+	  <select name=\"unregusers[]\" size=20 multiple class=\"auth_input\">";
+
 	// Registered users not registered in the selected course
-	
+
 	$sqll= "SELECT DISTINCT u.user_id , u.nom, u.prenom FROM user u
 		LEFT JOIN cours_user cu ON u.user_id = cu.user_id AND cu.code_cours = '".mysql_real_escape_string($_GET['c'])."'
 		WHERE cu.user_id is null";
-	
+
 	$resultAll=mysql_query($sqll);
 	while ($myuser = mysql_fetch_array($resultAll))
 	{
-		$tool_content .= "<option value=\"$myuser[user_id]\">
-			$myuser[prenom] $myuser[nom]
-		</option>";
-	
+		$tool_content .= "
+	    <option value=\"$myuser[user_id]\">$myuser[prenom] $myuser[nom]</option>";
 	}	// while loop
 
-	$tool_content .= "</select></p>
-		<p>&nbsp; </p>
-		</td>
-		<td width=\"3%\" nowrap> 
+	$tool_content .= "
+	  </select>
+    </th>
+    <td width=\"3%\" class=\"center\" nowrap>
 		<p>&nbsp;</p>
 		<p>&nbsp;</p>
-		<p><b>".$langStudents."</b></p>
+		<p align=\"center\"><b>".$langStudents."</b></p>
 		<p>";
 
-	// WATCH OUT ! form elements are called by numbers "form.element[3]"... 
+	// WATCH OUT ! form elements are called by numbers "form.element[3]"...
 	// because select name contains "[]" causing a javascript element name problem
-	
-	$tool_content .= "<input type=\"button\" onClick=\"move(this.form.elements[0],this.form.elements[5])\" value=\"   >>   \">
+
+	$tool_content .= "<p align=\"center\"><input type=\"button\" onClick=\"move(this.form.elements[0],this.form.elements[5])\" value=\"   >>   \">
 		<input type=\"button\" onClick=\"move(this.form.elements[5],this.form.elements[0])\" value=\"   <<   \">
 		</p>
 		<p>&nbsp;</p>
@@ -185,72 +186,75 @@ function reverseAll(cbList) {
 		<p>&nbsp;</p>
 		<p>&nbsp;</p>
 		<p>&nbsp;</p>
-		<p><b>".$langTeachers."</b></p>
-		<p>";
+		<p align=\"center\"><b>".$langTeachers."</b></p>
+		";
 
-	// WATCH OUT ! form elements are called by numbers "form.element[3]"... 
+	// WATCH OUT ! form elements are called by numbers "form.element[3]"...
 	// because select name contains "[]" causing a javascript element name problem
-	
-	$tool_content .= "<input type=\"button\" onClick=\"move(this.form.elements[0],this.form.elements[6])\" value=\"   >>   \">
-		<input type=\"button\" onClick=\"move(this.form.elements[6],this.form.elements[0])\" value=\"   <<   \">
-		</p>
-		</td>
-		<td><font size=\"2\" face=\"arial, helvetica\">
-		<p><b>".$langListRegisteredStudents."</b></p>
-		<p> 
-		<select name=\"regstuds[]\" size=\"8\" multiple>";
-	
+
+	$tool_content .= "<p align=\"center\"><input type=\"button\" onClick=\"move(this.form.elements[0],this.form.elements[6])\" value=\"   >>   \">
+		<input type=\"button\" onClick=\"move(this.form.elements[6],this.form.elements[0])\" value=\"   <<   \"></p>
+    </td>
+    <th>".$langListRegisteredStudents."<br />
+		<select name=\"regstuds[]\" size=\"8\" multiple class=\"auth_input\">";
+
 	// Students registered in the selected course
-	$resultStud=mysql_query("SELECT DISTINCT u.user_id , u.nom, u.prenom 
+	$resultStud=mysql_query("SELECT DISTINCT u.user_id , u.nom, u.prenom
 				FROM user u, cours_user cu
 				WHERE cu.code_cours='".mysql_real_escape_string($_GET['c'])."'
 				AND cu.user_id=u.user_id
 				AND cu.statut=5");
-	
+
 	$a=0;
 	while ($myStud = mysql_fetch_array($resultStud))
 		{
-	 	$tool_content .= "<option value=\"".$myStud['user_id']."\">$myStud[prenom] $myStud[nom]</option>";
+	 	$tool_content .= "
+		  <option value=\"".$myStud['user_id']."\">$myStud[prenom] $myStud[nom]</option>";
 		$a++;
 	}
 
-	$tool_content .= "</select></p>
+	$tool_content .= "
+		</select>
 		<p>&nbsp;</p>
-		<p><b>".$langListRegisteredProfessors."</b></p>
-		<p> 
-		<select name=\"regprofs[]\" size=\"8\" multiple>";
-	
+		".$langListRegisteredProfessors."<br />
+		<select name=\"regprofs[]\" size=\"8\" multiple class=\"auth_input\">";
 	// Professors registered in the selected course
 	// Administrator is excluded
-	$resultProf=mysql_query("SELECT DISTINCT u.user_id , u.nom, u.prenom 
+	$resultProf=mysql_query("SELECT DISTINCT u.user_id , u.nom, u.prenom
 				FROM user u, cours_user cu
 				WHERE cu.code_cours='".mysql_real_escape_string($_GET['c'])."'
 				AND cu.user_id=u.user_id
 				AND cu.statut=1
 				AND u.user_id!='".$uid."'");
-	
 	$a=0;
 	while ($myProf = mysql_fetch_array($resultProf))
 		{
-	 	$tool_content .= "<option value=\"".$myProf['user_id']."\">$myProf[prenom] $myProf[nom]</option>";
+	 	$tool_content .= "
+		  <option value=\"".$myProf['user_id']."\">$myProf[prenom] $myProf[nom]</option>";
 		$a++;
 	}
+	$tool_content .= "
+		</select>
+    </th>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td><input type=submit value=\"".$langAcceptChanges."\" name=\"submit\" onClick=\"selectAll(this.form.elements[5],this.form.elements[6],true)\"></td>
+    <td>&nbsp;</td>
+  </tr>
+  </tbody>
+  </table>";
 
-	$tool_content .= "</select></p></td></tr><tr><td colspan=\"3\">
-	<table width=\"100%\"><tbody>
-	<tr><td align=\"center\"><input type=submit value=\"".$langAcceptChanges."\" style=\"font-weight: bold\" name=\"submit\" onClick=\"selectAll(this.form.elements[5],this.form.elements[6],true)\"></td></tr></tbody></table>
-	</td></tr></tbody></table>";
-	
 	$tool_content .= "</form>";
-	
+
 }
 // If course selected go back to editcours.php
 if (isset($_GET['c'])) {
-	$tool_content .= "<center><p><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\">".$langBack."</a></p></center>";
+	$tool_content .= "<p align=\"right\"><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\">".$langBack."</a></p>";
 }
 // Else go back to index.php directly
 else {
-	$tool_content .= "<center><p><a href=\"index.php\">".$langBackAdmin."</a></p></center>";
+	$tool_content .= "<p align=\"right\"><a href=\"index.php\">".$langBackAdmin."</a></p>";
 }
 
 /*****************************************************************************

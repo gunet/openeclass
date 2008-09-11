@@ -26,10 +26,10 @@
 
 /*
  * Index
- * 
+ *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * 
+ *
  * @abstract Password change component (for platform administrator)
  *
  */
@@ -54,19 +54,29 @@ if (!isset($urlSecure)) {
 }
 
 if (!isset($changePass)) {
-	$tool_content .= "<form method=\"post\" action=\"$passurl?submit=yes&changePass=do&userid=$userid\">
-    	<table width=\"99%\">
-    	<thead>
-    	<tr><th width=\"150\">$langNewPass1</th><td>";
-	$tool_content .= "<input type=\"password\" size=\"40\" name=\"password_form\" value=\"\"></td></tr>
-    	<tr>
-        <th width=\"150\">$langNewPass2</th>
-        <td><input type=\"password\" size=\"40\" name=\"password_form1\" value=\"\">
-        </td>
-    </tr>";
-	$tool_content .= "</thead></table>
-    <br><input type=\"submit\" name=\"submit\" value=\"$langModify\">
-    </form>";
+	$tool_content .= "
+<form method=\"post\" action=\"$passurl?submit=yes&changePass=do&userid=$userid\">
+  <table class=\"FormData\" width=\"99%\" align=\"left\">
+  <tbody>
+  <tr>
+    <th width=\"220\">&nbsp;</th>
+    <td><b>$lang_remind_pass</b></td>
+  </tr>
+  <tr>
+    <th class=\"left\">$langNewPass1</th>
+    <td><input type=\"password\" size=\"40\" name=\"password_form\" value=\"\"></td>
+  </tr>
+  <tr>
+    <th class=\"left\">$langNewPass2</th>
+    <td><input type=\"password\" size=\"40\" name=\"password_form1\" value=\"\"></td>
+  </tr>
+  <tr>
+    <th class=\"left\">&nbsp;</th>
+    <td><input type=\"submit\" name=\"submit\" value=\"$langModify\"></td>
+  </tr>
+  </tbody>
+  </table>
+</form>";
 }
 
 elseif (isset($submit) && isset($changePass) && ($changePass == "do")) {
@@ -80,7 +90,7 @@ elseif (isset($submit) && isset($changePass) && ($changePass == "do")) {
 		$tool_content .= mes($langPassTwo, "", 'caution');
 		draw($tool_content, 3);
 		exit();
-	}	
+	}
 	//all checks ok. Change password!
 	$sql = "SELECT `password` FROM `user` WHERE `user_id`='$userid'";
 	$result = db_query($sql, $mysqlMainDb);

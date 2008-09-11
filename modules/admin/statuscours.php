@@ -30,7 +30,7 @@
 	@last update: 31-05-2006 by Pitsiougas Vagelis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Pitsiougas Vagelis <vagpits@uom.gr>
-==============================================================================        
+==============================================================================
         @Description: Edit status of a course
 
  	This script allows the administrator to edit the status of a selected
@@ -45,7 +45,7 @@
   2) Edit that information
   3) Update course status
   4) Display all on an HTML page
-  
+
 ==============================================================================*/
 
 /*****************************************************************************
@@ -96,35 +96,43 @@ else {
 	$visible = $row['visible'];
 	$visibleChecked[$visible]="checked";
 	// Constract edit form
-	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."".$searchurl." method=\"post\">";
-	$tool_content .= "<table width=\"99%\"><caption>".$langCourseStatusChange."</caption><tbody>";
-	$tool_content .= "  <tr>
-    <td colspan=\"2\"><i>$langConfTip</i></td>
+	$tool_content .= "
+<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."".$searchurl." method=\"post\">
+  <table class=\"FormData\" width=\"99%\" align=\"left\">
+  <tbody>
+  <tr>
+    <th width=\"220\">&nbsp;</th>
+    <td colspan=\"2\"><b>".$langCourseStatusChange."<b></td>
   </tr>";
-	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><input type=\"radio\" name=\"formvisible\" value=\"2\"".@$visibleChecked[2]."></td>
+	$tool_content .= "
+  <tr>
+    <th class=\"left\" rowspan=\"3\">$langConfTip</th>
+    <td width=\"1\"><input type=\"radio\" name=\"formvisible\" value=\"2\"".@$visibleChecked[2]."></td>
     <td>".$langPublic."</td>
-  </tr>";
-	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><input type=\"radio\" name=\"formvisible\" value=\"1\"".@$visibleChecked[1]."></td>
+  </tr>
+  <tr>
+    <td><input type=\"radio\" name=\"formvisible\" value=\"1\"".@$visibleChecked[1]."></td>
     <td>".$langPrivOpen."</td>
-  </tr>";
-	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><input type=\"radio\" name=\"formvisible\" value=\"0\"".@$visibleChecked[0]."></td>
+  </tr>
+  <tr>
+    <td><input type=\"radio\" name=\"formvisible\" value=\"0\"".@$visibleChecked[0]."></td>
     <td>".$langPrivate."</td>
-  </tr>";
-	$tool_content .= "  <tr>
-    <td colspan=\"2\"><br><input type='submit' name='submit' value='$langModify'></td>
-  </tr>";
-	$tool_content .= "</tbody></table></form>\n";
+  </tr>
+  <tr>
+    <th>&nbsp;</th>
+    <td colspan=\"2\"><input type='submit' name='submit' value='$langModify'></td>
+  </tr>
+  </tbody>
+  </table>
+</form>\n";
 }
 // If course selected go back to editcours.php
 if (isset($_GET['c'])) {
-	$tool_content .= "<center><p><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\">".$langBack."</a></p></center>";
+	$tool_content .= "<p align=\"right\"><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\">".$langBack."</a></p>";
 }
 // Else go back to index.php directly
 else {
-	$tool_content .= "<center><p><a href=\"index.php\">".$langBackAdmin."</a></p></center>";
+	$tool_content .= "<p align=\"right\"><a href=\"index.php\">".$langBackAdmin."</a></p>";
 }
 
 /*****************************************************************************

@@ -30,7 +30,7 @@
 	@last update: 31-05-2006 by Pitsiougas Vagelis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Pitsiougas Vagelis <vagpits@uom.gr>
-==============================================================================        
+==============================================================================
         @Description: Edit quota of a course
 
  	This script allows the administrator to edit the quota of a selected
@@ -45,7 +45,7 @@
   2) Edit that information
   3) Update course quota
   4) Display all on an HTML page
-  
+
 ==============================================================================*/
 
 /*****************************************************************************
@@ -98,7 +98,7 @@ if (isset($submit))  {
 // Display edit form for course quota
 else {
 	// Get course information
-	$q = mysql_fetch_array(mysql_query("SELECT code,intitule,doc_quota,video_quota,group_quota,dropbox_quota 
+	$q = mysql_fetch_array(mysql_query("SELECT code,intitule,doc_quota,video_quota,group_quota,dropbox_quota
 			FROM cours WHERE code='".mysql_real_escape_string($_GET['c'])."'"));
 	$quota_info .= "<i>".$langTheCourse." <b>".$q['intitule']."</b> ".$langMaxQuota;
 	$dq = $q['doc_quota'] / 1000000;
@@ -106,41 +106,50 @@ else {
 	$gq = $q['group_quota'] / 1000000;
 	$drq = $q['dropbox_quota'] / 1000000;
 	// Constract the edit form
-	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."".$searchurl." method=\"post\">
-<table width=\"99%\"><caption>".$langQuotaAdmin."</caption><tbody>
+	$tool_content .= "
+<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."".$searchurl." method=\"post\">
+  <table class=\"FormData\" width=\"99%\" align=\"left\">
+  <tbody>
   <tr>
-    <td colspan=\"2\">".$quota_info."</td>
+    <th width=\"220\">&nbsp;</th>
+    <td><b>".$langQuotaAdmin."</b></td>
   </tr>
   <tr>
-    <td width=\"3%\" nowrap>$langLegend <b>$langDoc</b>:</td>
+    <th>&nbsp;</th>
+    <td>".$quota_info."</td>
+  </tr>
+  <tr>
+    <th class=\"left\">$langLegend <b>$langDoc</b>:</th>
     <td><input type='text' name='dq' value='$dq' size='4' maxlength='4'> Mb.</td>
   </tr>
   <tr>
-    <td width=\"3%\" nowrap>$langLegend <b>$langVideo</b>:</td>
+    <th class=\"left\">$langLegend <b>$langVideo</b>:</th>
     <td><input type='text' name='vq' value='$vq' size='4' maxlength='4'> Mb.</td>
   </tr>
   <tr>
-    <td width=\"3%\" nowrap>$langLegend <b>$langGroups</b>:</td>
+    <th class=\"left\">$langLegend <b>$langGroups</b>:</th>
     <td><input type='text' name='gq' value='$gq' size='4' maxlength='4'> Mb.</td>
   </tr>
   <tr>
-    <td width=\"3%\" nowrap>$langLegend <b>$langDropbox</b>:</td>
+    <th class=\"left\">$langLegend <b>$langDropbox</b>:</th>
     <td><input type='text' name='drq' value='$drq' size='4' maxlength='4'> Mb.</td>
   </tr>
   <input type='hidden' name='c' value='".htmlspecialchars($_GET['c'])."'>
   <tr>
-    <td colspan=\"2\"><input type='submit' name='submit' value='$langModify'></td>
+    <th>&nbsp;</th>
+    <td><input type='submit' name='submit' value='$langModify'></td>
   </tr>
-</tbody></table>
+  </tbody>
+  </table>
 </form>\n";
 }
 // If course selected go back to editcours.php
 if (isset($_GET['c'])) {
-	$tool_content .= "<center><p><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\">".$langBack."</a></p></center>";
+	$tool_content .= "<p align=\"right\"><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\">".$langBack."</a></p>";
 }
 // Else go back to index.php directly
 else {
-	$tool_content .= "<center><p><a href=\"index.php\">".$langBackAdmin."</a></p></center>";
+	$tool_content .= "<p align=\"right\"><a href=\"index.php\">".$langBackAdmin."</a></p>";
 }
 
 /*****************************************************************************

@@ -125,7 +125,7 @@ if (isset($search) && $search=="yes") {
 // Normal list, no search, select all courses
 else {
 	$a=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours"));
-	$caption .= "".$langManyExist." ".$a[0]." $langCourses";
+	$caption .= "".$langManyExist.": <b>".$a[0]." $langCourses</b>";
 	$sql = mysql_query("SELECT faculte, code, intitule,titulaires,visible FROM cours ORDER BY faculte,code LIMIT ".$limit.",".$listsize."");
 
 	if ($fulllistsize > $listsize ) {
@@ -133,49 +133,61 @@ else {
 		$tool_content .= show_paging($limit, $listsize, $fulllistsize, "listcours.php");
 	}
 }
+
 // Construct cours list table
 $tool_content .= "
   <table class=\"FormData\" width=\"99%\" align=\"left\">
   <tbody>
   <tr>
-    <td colspan=\"7\" class=\"right\">".$caption."</td>
+    <td class=\"odd\" colspan='7'><div align=\"right\">".$caption."</div></td>
   </tr>
   <tr>
+    <th scope=\"col\" colspan='2'>".$langCourseCode."<br />".$langTeacher."</th>
     <th scope=\"col\" width=\"1\">".$langCourseVis."</th>
-    <th scope=\"col\">".$langCourseCode."<br />".$langTeacher."</th>
     <th scope=\"col\">".$langDepartment."</th>
     <th scope=\"col\">".$langUsers."</th>
     <th scope=\"col\" colspan='2'>".$langActions."</th>
-  </tr>\n";
+  </tr>";
 
+$k = 0;
 for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	$logs = mysql_fetch_array($sql);
+
+	if ($k%2==0) {
 	$tool_content .= "
-  <tr>
+  <tr>";
+	} else {
+	$tool_content .= "
+  <tr class=\"odd\">";
+	}
+
+$tool_content .= "
+    <td width=\"1\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+    <td><b>".htmlspecialchars($logs[2])."</b> (".htmlspecialchars($logs[1]).")<br />
+        <i>".$logs[3]."</i>
+    </td>
     <td align=\"center\">";
 	// Define course type
 	switch ($logs[4]) {
 	case 2:
-		$tool_content .= "<img src='../../images/OpenCourse.gif' title='$langOpenCourse'></img>\n";
+		$tool_content .= "<img src='../../images/OpenCourse.gif' title='$langOpenCourse'></img>";
 		break;
 	case 1:
-		$tool_content .= "<img src='../../images/Registration.gif' title='$langRegCourse'></img>\n";
+		$tool_content .= "<img src='../../images/Registration.gif' title='$langRegCourse'></img>";
 		break;
 	case 0:
-		$tool_content .= "<img src='../../images/ClosedCourse.gif' title='$langClosedCourse'></img>\n";
+		$tool_content .= "<img src='../../images/ClosedCourse.gif' title='$langClosedCourse'></img>";
 		break;
 	}
 $tool_content .= "</td>
-    <td><b>".htmlspecialchars($logs[2])."</b> (".htmlspecialchars($logs[1]).")
-    <br />
-    <i>".$logs[3]."</i></td>
     <td>".htmlspecialchars($logs[0])."</td>";
 
 	// Add links to course users, delete course and course edit
 	$tool_content .= "
     <td align='center'><a href=\"listusers.php?c=".$logs[1]."\"><img src='../../template/classic/img/user_list.gif' title='$langUsers' border='0'></img></a></td>
     <td align=\"center\" width='10'><a href=\"delcours.php?c=".$logs[1]."\"><img src='../../images/delete.gif' title='$langDelete' border='0'></img></a></td>
-    <td align=\"center\" width='20'><a href=\"editcours.php?c=".$logs[1]."".$searchurl."\"><img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></img></a></td>\n";
+    <td align=\"center\" width='20'><a href=\"editcours.php?c=".$logs[1]."".$searchurl."\"><img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></img></a></td>";
+    $k++;
 }
 // Close table correctly
 $tool_content .= "

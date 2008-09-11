@@ -28,7 +28,7 @@
 	@last update: 31-05-2006 by Pitsiougas Vagelis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Pitsiougas Vagelis <vagpits@uom.gr>
-==============================================================================        
+==============================================================================
         @Description: Edit basic information of a course
 
  	This script allows the administrator to edit the basic information of a
@@ -43,7 +43,7 @@
   2) Edit that information
   3) Update course
   4) Display all on an HTML page
-  
+
 ==============================================================================*/
 
 /*****************************************************************************
@@ -83,11 +83,11 @@ if (isset($submit))  {
 	// Some changes happened
 	if (mysql_affected_rows() > 0) {
 		$sql = mysql_query("UPDATE cours_faculte SET faculte='$facname', facid='$facid' WHERE code='".mysql_real_escape_string($_GET['c'])."'");
-		$tool_content .= "<p>".$langCourseEditSuccess."</p>";
+		$tool_content .= "<p class=\"alert1\">".$langCourseEditSuccess."</p>";
 	}
 	// Nothing updated
 	else {
-		$tool_content .= "<p>".$langNoChangeHappened."</p>";
+		$tool_content .= "<p class=\"alert1\">".$langNoChangeHappened."</p>";
 	}
 
 }
@@ -96,47 +96,57 @@ else {
 	// Get course information
 	$row = mysql_fetch_array(mysql_query("SELECT * FROM cours WHERE code='".mysql_real_escape_string($_GET['c'])."'"));
 	// Constract the edit form
-	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."".$searchurl." method=\"post\">";	
-	$tool_content .= "<table width=\"99%\"><caption>".$langCourseInfoEdit."</caption><tbody>";
-	$tool_content .= "<tr>
-    <td width=\"3%\" nowrap><b>".$langDepartment.":</b></td>
+	$tool_content .= "
+  <form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])."".$searchurl." method=\"post\">
+  <table class=\"FormData\" width=\"99%\" align=\"left\">
+  <tbody>
+  <tr>
+    <th width=\"220\">&nbsp;</th>
+    <td><b>".$langCourseInfoEdit."</b></td>
+  </tr>";
+	$tool_content .= "
+  <tr>
+    <th class=\"left\">".$langDepartment.":</th>
     <td><select name=\"faculte\">\n";
   // Construct select object for facultes
 	$resultFac=mysql_query("SELECT id,name FROM faculte ORDER BY number");
 
-	while ($myfac = mysql_fetch_array($resultFac)) {	
-		if($myfac['id'] == $row['faculteid']) 
+	while ($myfac = mysql_fetch_array($resultFac)) {
+		if($myfac['id'] == $row['faculteid'])
 			$tool_content .= "<option value=\"".$myfac['id']."--".$myfac['name']."\" selected>$myfac[name]</option>";
-		else 
+		else
 			$tool_content .= "<option value=\"".$myfac['id']."--".$myfac['name']."\">$myfac[name]</option>";
 	}
 	$tool_content .= "</select>
     </td>
-  </tr>";  
-	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>".$langCourseCode.":</b></td>
+  </tr>
+  <tr>
+    <th class=\"left\">".$langCourseCode.":</th>
     <td><i>".$row['code']."</i></td>
-  </tr>";
-	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>".$langTitle.":</b></td>
+  </tr>
+  <tr>
+    <th class=\"left\">".$langTitle.":</b></th>
     <td><input type=\"text\" name=\"intitule\" value=\"".$row['intitule']."\" size=\"60\"></td>
-  </tr>";
-	$tool_content .= "  <tr>
-    <td width=\"3%\" nowrap><b>".$langTeacher.":</b></td>
+  </tr>
+  <tr>
+    <th class=\"left\">".$langTeacher.":</th>
     <td><input type=\"text\" name=\"titulaires\" value=\"".$row['titulaires']."\" size=\"60\"></td>
-  </tr>";
-	$tool_content .= "  <tr>
-    <td colspan=\"2\"><br><input type='submit' name='submit' value='$langModify'></td>
-  </tr>";
-	$tool_content .= "</tbody></table></form>\n";
+  </tr>
+  <tr>
+    <th>&nbsp;</th>
+    <td><input type='submit' name='submit' value='$langModify'></td>
+  </tr>
+  </tbody>
+  </table>
+  </form>\n";
 }
 // If course selected go back to editcours.php
 if (isset($_GET['c'])) {
-	$tool_content .= "<center><p><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\">".$langBack."</a></p></center>";
+	$tool_content .= "<p align=\"right\"><a href=\"editcours.php?c=".htmlspecialchars($_GET['c'])."".$searchurl."\">".$langBack."</a></p>";
 }
 // Else go back to index.php directly
 else {
-	$tool_content .= "<center><p><a href=\"index.php\">".$langBackAdmin."</a></p></center>";
+	$tool_content .= "<p align=\"right\"><a href=\"index.php\">".$langBackAdmin."</a></p>";
 }
 
 /*****************************************************************************
