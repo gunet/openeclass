@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 
 /*===========================================================================
 work.php
@@ -224,18 +224,19 @@ function add_assignment($title, $comments, $desc, $deadline, $group_submissions)
 function submit_work($id) {
 
 	global $tool_content, $workPath, $uid, $stud_comments, $group_sub, $REMOTE_ADDR,
-	$langUploadSuccess, $langBack, $langWorks, $langUploadError, $currentCourseID;
+	$langUploadSuccess, $langBack, $langWorks, $langUploadError, $currentCourseID, $langExerciseNotPermit;
 
 	//DUKE Work submission bug fix.
 	//Do not allow work submission if:
 	//	> after work deadline
 	//	> user not registered to lesson
 	//	> user is guest 
-	if(isset($_SESSION["status"])) {
-		$status=$_SESSION["status"];
+	if(isset($_SESSION["statut"])) {
+		$status=$_SESSION["statut"];
 	} else {
 		unset($status);
 	}
+	
 	$submit_ok = FALSE; //Default do not allow submission
 	if(isset($uid) && $uid) { //check if loged-in
 		if ($GLOBALS['statut'] == 10) { //user is guest
@@ -326,7 +327,7 @@ function submit_work($id) {
     <tbody>
     <tr>
       <td class=\"caution\">
-      <p><b>$langExerciseNotPermit<br>$langExerciseNotPermit</b></p>
+      <p><b>$langExerciseNotPermit</b></p>
       <p align=\"right\"><a href='work.php'>$langBack</a></p>
       </td>
     </tr>
