@@ -209,7 +209,7 @@ cData;
 				$tool_content .= "
       <td>";
 				$forum=$forum_row[$x]["forum_id"];
-				if ( $is_adminOfCourse==1 ) { // TUTOR VIEW
+				if ( $is_adminOfCourse==1 ) { // admin
 					$sqlTutor = db_query("SELECT id FROM student_group
 						WHERE forumId='$forum' AND tutor='$uid'", $currentCourseID );
 					$countTutor = mysql_num_rows($sqlTutor);
@@ -218,7 +218,8 @@ cData;
 					} else {
 						$tool_content .= "<a href=\"viewforum.php?forum=" . $forum_row[$x]["forum_id"] . "&$total_posts\">$name</a>&nbsp;($langOneMyGroups)";
 					}
-				} elseif ( $status[$dbname] == 1 OR $status[$dbname] == 2 ) { // ADMIN VIEW
+				} 
+				if ( $is_adminOfCourse==1 ) { // admin
 					$tool_content .= "<a href=\"viewforum.php?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>";
 				} elseif ( $catNum == 1 ) { // STUDENT VIEW
 					if ( @$forum == @$myGroupForum ) {
@@ -242,15 +243,13 @@ cData;
 				$tool_content .= "
       <td width=\"200\" class=\"Forum_post\">";
 	  			//if (isset($last_post_prenom) && isset($last_post_nom)) {
-				if ($total_topics>0 && $total_posts>0) {
+			if ($total_topics>0 && $total_posts>0) {
 				$tool_content .= "$last_post_prenom $last_post_nom 
              <a set=\"yes\" href=\"viewtopic.php?topic=$last_post_topic_id&forum=$forum\"><IMG border=\"0\" SRC=\"$icon_topic_latest\"></a><br />$human_last_post_time</td>";	  			    
-	  			} else {
+	  		} else {
 				$tool_content .= "<font color=\"#CAC3B5\">$l_noposts</font></td>";				
-				}
-
-				$tool_content .= "
-    </tr>";
+			}
+				$tool_content .= "</tr>";
 			}
 		}
 	}

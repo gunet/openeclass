@@ -278,7 +278,7 @@ do {
       </td>
       <td class=\"$row_color\" width=\"3\">
         <div align=\"right\">";
-	if ($status[$dbname]==1 OR $status[$dbname]==2) { // course admin
+	if ($is_adminOfCourse) { // course admin
 		$tool_content .= "
         <a href=\"editpost.php?post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\"><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>";
 	}
