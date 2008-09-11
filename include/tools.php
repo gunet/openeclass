@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*					Network Operations Center, University of Athens,
-*					Panepistimiopolis Ilissia, 15784, Athens, Greece
-*					eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 /*
@@ -585,37 +585,6 @@ function lessonToolsMenu(){
 	}
 	//	------------------------------------------------------------------
 	//	END of Get professor's tools
-	//	------------------------------------------------------------------
-
-	//	------------------------------------------------------------------
-	//	Get platform administrator tools
-	//	------------------------------------------------------------------
-	/*if (isset($is_admin) and $is_admin) {
-
-	$result= getToolsArray('claroAdmin');
-
-	$sideMenuSubGroup = array();
-	$sideMenuText = array();
-	$sideMenuLink = array();
-	$sideMenuID = array();
-
-	array_push($sideMenuSubGroup, $langAdministratorTools);
-	while ($toolsRow = mysql_fetch_array($result)) {
-
-	define($toolsRow["define_var"], $toolsRow["id"]);
-
-	array_push($sideMenuText, $toolsRow["rubrique"]);
-	array_push($sideMenuLink, $toolsRow["lien"]);
-	array_push($sideMenuID, $toolsRow["id"]);
-	}
-
-	array_push($sideMenuSubGroup, $sideMenuText);
-	array_push($sideMenuSubGroup, $sideMenuLink);
-	array_push($sideMenuSubGroup, $sideMenuID);
-	array_push($sideMenuGroup, $sideMenuSubGroup);
-	}*/
-	//	------------------------------------------------------------------
-	//	End of Get professor's tools
 	//	------------------------------------------------------------------
 
 	return $sideMenuGroup;

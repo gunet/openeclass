@@ -1794,7 +1794,7 @@ $m['restricted'] = 'Open Courses with Registration (Account Required)';
 $m['closed'] = 'Closed Courses';
 $m['title'] = 'Title';
 $m['description'] = 'Description';
-$m['professor'] = 'Instructor';
+$m['professor'] = $langTeacher;
 $m['type'] = 'Course type';
 $m['pre']  = 'Undergraduate';
 $m['post']  = 'Post-graduate';
@@ -1810,7 +1810,7 @@ $m['nolessons'] = 'There are no available courses!';
 $m['type']="Type";
 $m['name']="Course";
 $m['code']="Course code";
-$m['prof']="Instructor(s)";
+$m['prof']="$langTeacher";
 $m['mailprof'] = "To enroll to this lesson you need to send an email to the ".$langsTeacher." by clicking ";
 $m['here'] = "here.";
 $m['unsub'] = "Course is closed. Unregistration is not allowed";
@@ -2292,7 +2292,7 @@ $langEmailNotice = "e-mail address is not required but, keep in mind that withou
 announcements to your mail box, neither you can use the feature 'forgot your password'";
 $langMailErrorMessage = "There was an error during sending message - your request could not be sent.";
 $langAm = " ".$langStudent." ID";
-$langUserDetails = "New user information";
+$langUserDetails = "$langOfStudent Registration";
 $langSubmitNew = "Submit";
 $langInvalidAuth = "Invalid auth method";
 

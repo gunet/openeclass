@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 include '../../include/baseTheme.php';
@@ -45,7 +45,7 @@ if (isset($result))  {
      	$n=mysql_query("SELECT COUNT(*) FROM cours_faculte WHERE faculte='$fac[name]'");
      	$r=mysql_fetch_array($n);
 
-    	$tool_content .= "<small><font color=\"#aaaaaa\">($r[0]  ".  ($r[0] == 1? $langAvCours: $langAvCourses) . ")</font><small></td></tr>\n";
+    	$tool_content .= "<small><font color=\"#aaaaaa\"> - $r[0]  ".  ($r[0] == 1? $langAvCours: $langAvCourses) . "</font><small></td></tr>\n";
 	}
    $tool_content .= "</tbody>\n</table>";
   }

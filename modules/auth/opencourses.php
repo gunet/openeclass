@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 /*
@@ -117,20 +117,17 @@ foreach (array("pre" => $m['pres'],
 				cours.intitule i,
 				cours.visible visible,
 				cours.titulaires t
-			        FROM cours_faculte, cours
-			        WHERE cours.code = cours_faculte.code
-			      AND cours.type = '$type'
-   	             		AND cours_faculte.facid='$fc'
+				FROM cours_faculte, cours
+				WHERE cours.code = cours_faculte.code
+				AND cours.type = '$type'
+				AND cours_faculte.facid='$fc'
 		                ORDER BY cours.intitule, cours.titulaires");
 
 	if (mysql_num_rows($result) == 0) {
 		continue;
 	}
 
-$tool_content .= "<br>
-     <table width=99% class='CourseListTitle'>
-     <tr>
-       <th>";
+$tool_content .= "<br><table width=99% class='CourseListTitle'><tr><th>";
 	 // We changed the style a bit here and we output types as the title
 $tool_content .= "<a name='$type'>&nbsp;</a>$message</th>";
 

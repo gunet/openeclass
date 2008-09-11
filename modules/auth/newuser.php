@@ -18,12 +18,12 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	newuser.php
 * @version $Id$
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
@@ -58,16 +58,13 @@ if (!isset($submit)) {
 	<table width=\"99%\" align='left' class='FormData'>
 	<thead><tr><td>
 	<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
-
 	<table width=\"100%\">
-	<tbody>
-	<tr>
+	<tbody><tr>
 	<th class='left' width='20%'>$langName</th>
 	<td width='10%'><input type=\"text\" name=\"prenom_form\" value=\"$prenom_form\" class='FormData_InputText'></td>
 	<td><small>(*)</small></td>
 	</tr>
-	<tr>
-	<th class='left'>$langSurname</th>
+	<tr><th class='left'>$langSurname</th>
 	<td><input type=\"text\" name=\"nom_form\" value=\"$nom_form\" class='FormData_InputText'></td>
 	<td><small>(*)</small></td>
 	</tr>
@@ -108,7 +105,7 @@ $tool_content .= "</select>
 
 <tr><th class='left'>&nbsp;</th>
     <td>
-		<input type=\"hidden\" name=\"auth\" value=\"1\">
+	<input type=\"hidden\" name=\"auth\" value=\"1\">
     <input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\">
     </td>
 	<td><p align='right'>$langRequiredFields <br/></p></td>
