@@ -87,6 +87,7 @@ function choose_image($fileName)
 		$type['code'      ] = array("js", "cpp", "c", "java");
 		$type['acrobat'   ] = array("pdf");
 		$type['powerpoint'] = array("ppt");
+		$type['text'      ] = array("txt");
 
 		$image['word'      ] = "doc.gif";
 		$image['web'       ] = "html.gif";
@@ -98,6 +99,7 @@ function choose_image($fileName)
 		$image['code'      ] = "js.gif";
 		$image['acrobat'   ] = "pdf.gif";
 		$image['powerpoint'] = "ppt.gif";
+		$image['text'      ] = "txt.gif";
 
 	}
 

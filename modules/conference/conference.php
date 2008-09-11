@@ -42,9 +42,6 @@ $action->record('MODULE_ID_CHAT');
 $nameTools = $langConference;
 
 
-
-
-
 // guest user not allowed
 if (check_guest()) {
 	$tool_content .= "
@@ -91,7 +88,6 @@ if ($is_adminOfCourse) {
 }
 
 $tool_content .= "
-
   <table width='99%' class='FormData'>
   <thead>
   <tr>
