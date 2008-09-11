@@ -56,7 +56,7 @@ if ($language == 'greek') {
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();
 
-$u_date_end = strftime('%Y-%m-%d', strtotime('now +1 year'));
+$u_date_end = strftime('%Y-%m-%d', strtotime('now +2 month'));
 
 
 $end_cal_Work = $jscalendar->make_input_field(

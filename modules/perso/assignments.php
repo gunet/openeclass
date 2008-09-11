@@ -203,7 +203,13 @@ aCont;
 		if ($iterator > 0) {
 			$assignmentsExist = true;
 			for ($j=0; $j < $iterator; $j++) {
+<<<<<<< assignments.php
+				
+				$url = $_SERVER['PHP_SELF'] . "?perso=1&c=" .$data[$i][1]."&i=".$data[$i][2][$j][0];
+
+=======
 				$url = $_SERVER['PHP_SELF'] . "?perso=1&c=" .$data[$i][1]."&i=".$data[$i][2][$j][6];
+>>>>>>> 1.16
 				if($data[$i][2][$j][6] == 1) {
 					$class = "class =\"tick\"";
 				} elseif ($data[$i][2][$j][6] == 0) {
