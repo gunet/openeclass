@@ -693,7 +693,7 @@ $tool_content .= "<tr><td class='left' height='18' colspan='$cols' style='border
 if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
 {
    $tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdParentDir."\">$langUp</a>\n";
-   $tool_content .=  "<img src=\"img/parent.gif\" border=0 align=\"absmiddle\" height='12' width='12'>\n";
+   $tool_content .=  "<img src=\"../../template/classic/img/parent.gif\" border=0 align=\"absmiddle\" height='12' width='12'>\n";
 }
 $tool_content .= "</div></td></tr>";
 $tool_content .= "<tr><th width='1' style='border-left: 1px solid #edecdf;'>".$m['type']."</th>

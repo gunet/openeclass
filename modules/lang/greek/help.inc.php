@@ -127,6 +127,7 @@ $langPortfolioContent="<p>Σε αυτή τη σελίδα εμφανίζοντα
 να δείτε συγκεντρωτικά τις ανακοινώσεις και το ημερολόγιο των μαθημάτων
 σας.</p>
 ";
+$langPortfolio_studentContent = $langPortfolioContent;
 
 $langHcourse_home_stud='Κεντρική σελίδα μαθήματος';
 $langcourse_home_studContent='<p>Βρίσκεστε στην κεντρική σελίδα του
