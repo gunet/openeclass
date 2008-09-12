@@ -71,7 +71,7 @@ Registration', and then you have to choose your desired courses.</p>
 $langInit_studentContent = $langInitContent;
 
 $langHPortfolio="User Portfolio";
-$langClar2Content="<p>Here you can find all courses you are registered to
+$langPortfolioContent="<p>Here you can find all courses you are registered to
 (as a student), as well as all the courses you have created (as a professor).
 You can enter any one of them by clicking on its title.</p>
 
@@ -80,6 +80,7 @@ courses or unregister from your currently selected courses, change
 your profile information (such as name, password and preferred language),
 or find an aggregation page with the announcements and agenda of your
 courses.</p>";
+$langPortfolio_studentContent = $langPortfolioContent;
 
 $langHcourse_home_stud='Main course page';
 $langcourse_home_studContent='<p>You are currently in the on-line course\'s
