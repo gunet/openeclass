@@ -19,12 +19,12 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-/**
+/*
 
  * Personalised Announcements Component, eClass Personalised
 
@@ -48,7 +48,7 @@
 
 
 
-/**
+/*
 
  * Function getUserAnnouncements
 
@@ -74,7 +74,7 @@ function getUserAnnouncements($param = null, $type) {
 
 
 
-	$uid				= $param['uid'];
+	$uid			= $param['uid'];
 
 	$lesson_code		= $param['lesson_code'];
 
@@ -294,7 +294,7 @@ function getUserAnnouncements($param = null, $type) {
 
 function announceHtmlInterface($data) {
 
-	global $urlServer,$langNoAnnouncementsExist, $langMore;
+	global $urlServer, $langNoAnnouncementsExist, $langMore;
 
 	$announceExist = false;
 
@@ -305,42 +305,32 @@ aCont;
 
 	$max_repeat_val = count($data);
 	for ($i=0; $i <$max_repeat_val; $i++) {
-
 		$iterator =  count($data[$i][2]);
 		if ($iterator > 0) {
 			$announceExist = true;
-			$assign_content .= "
-	  <li class=\"category\">".$data[$i][0]."</li>";
+			$assign_content .= "<li class=\"category\">".$data[$i][0]."</li>";
 			$url = $_SERVER['PHP_SELF'] . "?perso=2&c=" .$data[$i][1];
 			for ($j=0; $j < $iterator; $j++){
 				if(strlen($data[$i][2][$j][0]) > 150) {
 					$data[$i][2][$j][0] = substr($data[$i][2][$j][0], 0, 150);
 					$data[$i][2][$j][0] .= " <strong class=\"announce_date\">$langMore</strong>";
 				}
-			$assign_content .= "
-	  <li><a class=\"square_bullet2\" href=\"$url\">
-          <p class=\"content_pos\">".$data[$i][2][$j][0].autoCloseTags($data[$i][2][$j][0]).": (<strong><span class=\"announce_date\">".nice_format($data[$i][2][$j][1])."</span></strong>)</p></a>
-      </li>";
+			$assign_content .= "<li><a class=\"square_bullet2\" href=\"$url\">
+          		<strong class=\"title_pos\">".$data[$i][2][$j][0].autoCloseTags($data[$i][2][$j][0]).
+			"<span class=\"announce_date\"> (".nice_format($data[$i][2][$j][2]).")</span></strong></a>
+			<p class=\"content_pos\">".$data[$i][2][$j][1].autoCloseTags($data[$i][2][$j][1]).	
+			"</p></li>";
 			}
 			if ($i+1 <$max_repeat_val) $assign_content .= "<br>";
 		}
 	}
 
-	$assign_content .= "
-	</ul>
-    </div> ";
-
-
+	$assign_content .= "</ul></div> ";
 
 	if (!$announceExist) {
-
 		$assign_content = "<p>$langNoAnnouncementsExist</p>";
-
 	}
-
 	return $assign_content;
-
-
 
 }
 
@@ -368,19 +358,12 @@ function createQueries($queryParam){
 
 	global $mysqlMainDb, $maxValue;
 
-
-
 	$lesson_code = $queryParam['lesson_code'];
-
 	$max_repeat_val = $queryParam['max_repeat_val'];
-
 	$date = $queryParam['date'];
 
-	//	echo $max_repeat_val;
 
 	for ($i=0;$i<$max_repeat_val;$i++) {
-
-
 
 		if(is_array($date)){
 
@@ -394,7 +377,7 @@ function createQueries($queryParam){
 
 
 
-		$announce_query[$i] = "SELECT contenu, temps
+		$announce_query[$i] = "SELECT title, contenu, temps
 
 		FROM " .$mysqlMainDb." . annonces, ".$lesson_code[$i].".accueil
 
@@ -407,7 +390,6 @@ function createQueries($queryParam){
 		AND ".$lesson_code[$i].".accueil.id =7
 
 		ORDER BY temps DESC";
-
 	}
 
 	return $announce_query;

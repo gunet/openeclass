@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 
@@ -74,13 +74,10 @@ function getUserAgenda($param, $type) {
 
 	$uniqueDates = 5;
 
-
-
 	global $mysqlMainDb, $uid, $dbname, $currentCourseID;
 
 
-
-	$uid				= $param['uid'];
+	$uid			= $param['uid'];
 
 	$lesson_code		= $param['lesson_code'];
 
@@ -133,12 +130,13 @@ function getUserAgenda($param, $type) {
 			ORDER by day, hour
 
 			";
-
 	
 
 	//mysql version 5.x query
 
-	$sql_5= "SELECT agenda.titre, agenda.contenu, agenda.day, agenda.hour, agenda.lasting, agenda.lesson_code,cours.intitule
+	$sql_5= "SELECT agenda.titre, agenda.contenu, agenda.day, 
+			DATE_FORMAT(agenda.hour, '%H:%i'), 
+			agenda.lasting, agenda.lesson_code,cours.intitule
 
 			FROM 
 
@@ -191,7 +189,6 @@ function getUserAgenda($param, $type) {
 	$agendaDateData = array();
 
 
-
 	$previousDate = "0000-00-00";
 
 	$firstRun = true;
@@ -209,11 +206,7 @@ function getUserAgenda($param, $type) {
 		if ($myAgenda[2] != $previousDate ) {
 
 			if (!$firstRun) {
-
 				@array_push($agendaDateData, $agendaData);
-
-
-
 			}
 
 		}
@@ -268,7 +261,7 @@ function getUserAgenda($param, $type) {
 
 
 
-/**
+/*
 
  * Function agendaHtmlInterface
 
@@ -284,7 +277,7 @@ function getUserAgenda($param, $type) {
 
 function agendaHtmlInterface($data) {
 
-	global $langNoEventsExist, $langUnknown, $langDuration, $langMore;
+	global $langNoEventsExist, $langUnknown, $langDuration, $langMore, $l_ondate;
 
 	$numOfDays = count($data);
 
@@ -296,73 +289,45 @@ function agendaHtmlInterface($data) {
 
 
 
-				<ul id="datalist">
+	<ul id="datalist">
 
 agCont;
-
-
-
 		for ($i=0; $i <$numOfDays; $i++) {
 
-			$agenda_content .= "
-
-		<li class=\"category\">".$data[$i][0][2]."</li>
-
-		";
+			$agenda_content .= "<li class=\"category\">".nice_format($data[$i][0][2])."</li>";
 
 			$iterator =  count($data[$i]);
-
-
 
 			for ($j=0; $j < $iterator; $j++){
 
 				$url = $_SERVER['PHP_SELF'] . "?perso=4&c=" . $data[$i][$j][5];
 
 				if (strlen($data[$i][$j][4]) < 2) {
-
 					$data[$i][$j][4] = "$langUnknown";
-
 				}
-
+				else {
+					$data[$i][$j][4] = $data[$i][$j][4]."'";
+				}
 
 
 				if(strlen($data[$i][$j][1]) > 150) {
-
 					$data[$i][$j][1] = substr($data[$i][$j][1], 0, 150);
-
 					$data[$i][$j][1] .= " <strong class=\"announce_date\">$langMore</strong>";
-
 				}
 
-				$agenda_content .= "
-
-		<li><a class=\"square_bullet\" href=\"$url\"><strong class=\"title_pos\">".$data[$i][$j][6]." - ".$data[$i][$j][3]." ($langDuration: ".$data[$i][$j][4].")</strong>
-
-			<cite class=\"content_pos\"><span class=\"announce_date\">".$data[$i][$j][0]."</span></cite>
-
-			<p class=\"content_pos\">".$data[$i][$j][1].autoCloseTags($data[$i][$j][1])."</p>
-
-		</a></li>
-
-		";
-
+				$agenda_content .= "<li><a class=\"square_bullet\" href=\"$url\">
+				<p class=\"title_pos\">
+				<span class=\"announce_date\">".$data[$i][$j][0]."</span></p>
+				<strong class=\"title_pos\">"
+				.$data[$i][$j][6]."&nbsp;".$l_ondate."&nbsp;".$data[$i][$j][3]." ($langDuration: ".$data[$i][$j][4].")</strong>
+				</a>
+				<p class=\"content_pos\">".$data[$i][$j][1].autoCloseTags($data[$i][$j][1])."</p>
+				</li>";
 			}
 
-
-
 			if ($i+1 <$numOfDays) $agenda_content .= "<br>";
-
 		}
-
-
-
-		$agenda_content .= "
-
-	</ul>
-
-			</div> 
-
-";
+		$agenda_content .= "</ul></div> ";
 
 	} else {
 
@@ -371,14 +336,9 @@ agCont;
 	}
 
 
-
 	return $agenda_content;
 
 }
-
-
-
-
 
 ?>
 

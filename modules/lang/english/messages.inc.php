@@ -1837,7 +1837,7 @@ $langCreateLesson="You can create a course by following the link \"$langCourseCr
 $langEnroll="You can enroll to a course by following the link \"$langOtherCourses\"";
 $langMore="...[More]";
 $langSender="Sender";
-$langUnknown="Not defined";
+$langUnknown="not defined";
 $langDuration="Duration";
 
 /***************************************************************************
