@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 /*
@@ -96,8 +96,35 @@ function confirmation (name)
         	{return false;}
 	}
 }
+
 </script>
 ';
+
+$head_content .= <<<hContent
+<script type="text/javascript">
+function checkrequired(which, entry) {
+	var pass=true;
+	if (document.images) {
+		for (i=0;i<which.length;i++) {
+			var tempobj=which.elements[i];
+			if (tempobj.name == entry) {
+				if (tempobj.type=="text"&&tempobj.value=='') {
+					pass=false;
+					break;
+		  		}
+	  		}
+		}
+	}
+	if (!pass) {
+		alert("$langEmptyAnTitle");
+		return false;
+	} else {
+		return true;
+	}
+}
+
+</script>
+hContent;
 
     $result = db_query("SELECT * FROM annonces WHERE code_cours='$currentCourse' ", $mysqlMainDb);
     $announcementNumber = mysql_num_rows($result);
@@ -263,7 +290,7 @@ function confirmation (name)
 
     if ($displayForm == true && (@$addAnnouce == 1 || isset($modify))) {
         // DISPLAY ADD ANNOUNCEMENT COMMAND
-        $tool_content .= "<form method=\"post\" action=\"" . $_SERVER['PHP_SELF'] . "\">\n"; 
+        $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'antitle');\">"; 
         // should not send email if updating old message
         if (isset ($modify) && $modify) {
             $tool_content .= "

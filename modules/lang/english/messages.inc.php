@@ -424,7 +424,7 @@ $langAnnBody = "Announcement Body";
 $langNoAnnounce = "No announcements exist";
 $langSureToDelAnnounce = "Are you sure you want to delete this announcement";
 $langSureToDelAnnounceAll = "Are you sure you want to delete all the announcements";
-
+$langEmptyAnTitle = "Please fill in the announcement title";
 // my announcements
 $langMyAnnouncements = "My announcements";
 $langAnn = "Announced at";

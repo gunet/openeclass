@@ -19,9 +19,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 
@@ -198,8 +198,7 @@ aCont;
 	$max_repeat_val = count($data);
  	for ($i=0; $i <$max_repeat_val; $i++) {
 		$iterator = count($data[$i][2]);
-		$assign_content .= "
-        <li class='category'>".$data[$i][0]."</li>";
+		$assign_content .= "<li class='category'>".$data[$i][0]."</li>";
 		if ($iterator > 0) {
 			$assignmentsExist = true;
 			for ($j=0; $j < $iterator; $j++) {
@@ -213,9 +212,9 @@ aCont;
 					$class = "";
 				}
 				$assign_content .= "";
-				$assign_content .= "
-        <li><a class=\"square_bullet2\" href=\"$url\"><p $class>".$data[$i][2][$j][1]." : ".nice_format($data[$i][2][$j][3])."</p></a>
-        </li>";
+				$assign_content .= "<li><a class=\"square_bullet2\" href=\"$url\">
+				<p $class>".$data[$i][2][$j][1]." : (".nice_format($data[$i][2][$j][3]).")</p></a>
+        			</li>";
 			}
 			if ($i+1 <$max_repeat_val) $assign_content .= "<br>";
 		}
