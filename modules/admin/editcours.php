@@ -19,13 +19,13 @@ session_start();
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 
-/**===========================================================================
+/*===========================================================================
 	editcours.php
 	@last update: 31-05-2006 by Pitsiougas Vagelis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
@@ -146,7 +146,7 @@ if (isset($c)) {
     <td colspan=\"2\">&nbsp;</td>
   </tr>
   <tr>
-    <th width=\"220\" class=\"left\"><b>$langTheCourse <b>$q[intitule]</b> $langMaxQuota</b></th>
+    <th width=\"220\" class=\"left\"><b>$langTheCourse <b>$row[intitule]</b> $langMaxQuota</b></th>
     <td>".$langQuota." (<a href=\"quotacours.php?c=".htmlspecialchars($c).$searchurl."\">".$langModify."</a>)</td>
   </tr>";
 	// Get information about course quota

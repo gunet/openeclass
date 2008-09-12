@@ -1,5 +1,4 @@
 <?php
-
 /*===========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
@@ -8,8 +7,8 @@
 *	A full copyright notice can be read in "/info/copyright.txt".
 *
 *  	Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-*				Yannis Exidaridis <jexi@noc.uoa.gr>
-*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*			Yannis Exidaridis <jexi@noc.uoa.gr>
+*			Alexandros Diamantidis <adia@noc.uoa.gr>
 *
 *	For a full list of contributors, see "credits.txt".
 *
