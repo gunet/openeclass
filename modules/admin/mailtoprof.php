@@ -29,7 +29,7 @@
 	@last update: 31-05-2006 by Pitsiougas Vagelis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Pitsiougas Vagelis <vagpits@uom.gr>
-==============================================================================        
+==============================================================================
         @Description: Send mail to the users of the platform
 
  	This script allows the administrator to send a message by email to all
@@ -66,8 +66,7 @@ $tool_content = "";
 /*****************************************************************************
 		MAIN BODY
 ******************************************************************************/
-// Constract a table for display
-$tool_content .= "<table width=\"99%\"><tbody><tr><td>";
+
 // Send email after form post
 if (isset($_POST['submit']) && ($_POST['body_mail'] != "") && ($_POST['submit'] == $langSend)) {
 	// Where to send the email
@@ -78,12 +77,12 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != "") && ($_POST['submit'] 
 		// Only professors
 		$sql = mysql_query("SELECT DISTINCT email FROM user where statut='1'");
 	} else { die(); } // invalid sendTo var
-	
+
 	// Send email to all addresses
 	while ($m = mysql_fetch_array($sql)) {
 		$to = $m[0];
 		$emailsubject = $infoabouteclass;
-		$emailbody = "".$_POST['body_mail']." 
+		$emailbody = "".$_POST['body_mail']."
 
 $langManager $siteName
 $administratorName $administratorSurname
@@ -92,29 +91,46 @@ $langEmail : $emailAdministrator
 ";
 		if (!send_mail($siteName, $emailAdministrator, '', $to,
 			$emailsubject, $emailbody, $charset)) {
-				$tool_content .= "<h4>".$langEmailNotSend." ".$to."!</h4>";
+				$tool_content .= "<p class=\"caution_small\">".$langEmailNotSend." ".$to."!</p>";
 		}
 	}
 	// Display result and close table correctly
-	$tool_content .= "<h4>$emailsuccess</h4></td></tr><tbody></table>";
+	$tool_content .= "<p class=\"success_small\">$emailsuccess</p>";
 }
 // Display form to administrator
 else {
 	// Constract form
-	$tool_content .= "<h5>".$typeyourmessage."</h5>";
-	$tool_content .= "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">
-<textarea name=\"body_mail\" rows=\"10\" cols=\"60\"></textarea>
-<br><br>
-$langSendMessageTo <select name=\"sendTo\">
-<option value=\"1\">".$langProfOnly."</option>
-<option value=\"0\">".$langToAllUsers."</option>
-</select><br><br>
-<input type=\"submit\" name=\"submit\" value=\"$langSend\"></input>
-</form></td></tr></tbody></table>";
+$tool_content .= "
+<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">
+  <table width=\"99%\" class=\"FormData\">
+  <tbody>
+  <tr>
+    <th width=\"220\">&nbsp;</th>
+    <td><b>$l_message</b></td>
+  </tr>
+  <tr>
+    <th class='left'>".$typeyourmessage."$l_message</th>
+	<td><textarea class=\"auth_input\" name=\"body_mail\" rows=\"10\" cols=\"60\"></textarea></td>
+  </tr>
+  <tr>
+    <th class='left'>$langSendMessageTo</th>
+    <td><select name=\"sendTo\">
+          <option value=\"1\">".$langProfOnly."</option>
+          <option value=\"0\">".$langToAllUsers."</option>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <th>&nbsp;</th>
+    <td><input type=\"submit\" name=\"submit\" value=\"$langSend\"></input></td>
+  </tr>
+  </tbody>
+  </table>
+</form>";
 
 }
 // Display link back to index.php
-$tool_content .= "<br><center><p><a href=\"index.php\">".$langBack."</a></p></center>";	
+$tool_content .= "<p>&nbsp;</p><p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
 
 /*****************************************************************************
 		DISPLAY HTML

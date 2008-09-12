@@ -101,34 +101,45 @@ $tool_content .= "<br><br>
 
 } else {
 
-		$tool_content .= "<table width=\"99%\"><thead><tr>
-	    <th scope=\"col\">$langName</th>
-  	  <th scope=\"col\">$langSurname</th>
-    	<th scope=\"col\">$langUsername</th>
-	    <th scope=\"col\">$langEmail</th>
-  	  <th scope=\"col\">$langDepartment</th>
-	    <th scope=\"col\">$langphone</th>
-  	  <th scope=\"col\">$langDateRequest</th>
-    	<th scope=\"col\">$langComments</th>
-   		<th scope=\"col\">$langActions</th>
-    	</tr></thead><tbody>";
+		$tool_content .= "
+  <table class=\"FormData\" width=\"99%\" align=\"left\">
+  <thead>
+  <tr>
+    <th colspan=\"2\" class=\"left\">$langSurname<br />$langName</th>
+    <th class=\"left\">$langUsername</th>
+    <th class=\"left\">$langEmail</th>
+    <th class=\"left\">$langDepartment</th>
+    <th class=\"left\">$langphone</th>
+    <th>$langDate<br />$langDateRequest_small</th>
+    <th>$langComments</th>
+    <th>$langActions</th>
+  </tr>
+  </thead>
+  <tbody>";
 
-	$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,comment 
+	$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,comment
 								FROM prof_request WHERE status='1' and statut='5'");
 
+    $k = 0;
 	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 		$req = mysql_fetch_array($sql);
-$tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#F1F1F1'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
-     $tool_content .= "<td class=kk title=".htmlspecialchars($req[3])."><small>".htmlspecialchars($req[1])."<br>";
-     $tool_content .= htmlspecialchars($req[2])."</small></td>";
-		for ($i = 2; $i < mysql_num_fields($sql); $i++) {
+				if ($k%2==0) {
+	              $tool_content .= "\n  <tr>";
+	            } else {
+	              $tool_content .= "\n  <tr class=\"odd\">";
+	            }
+	    $tool_content .= "\n    <td width=\"1\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+     $tool_content .= "\n    <td title=".htmlspecialchars($req[3])."><small>".htmlspecialchars($req[2])."&nbsp;".htmlspecialchars($req[1])."</small></td>";
+		for ($i = 3; $i < mysql_num_fields($sql) - 2; $i++) {
 			if ($i == 4 and $req[$i] != "") {
-				$tool_content .= "<td class=kk><small><a href=\"mailto:".htmlspecialchars($req[$i])."\" class=small_tools>".htmlspecialchars($req[$i])."</a></small></td>";
+				$tool_content .= "\n    <td><small><a href=\"mailto:".htmlspecialchars($req[$i])."\" class=small_tools>".htmlspecialchars($req[$i])."</a></small></td>";
 			} else {
-				$tool_content .= "<td class=kk><small>".htmlspecialchars($req[$i])."</small></td>";
+				$tool_content .= "\n    <td><small>".htmlspecialchars($req[$i])."</small></td>";
 			}
 		}
-			$tool_content .= "<td align=center class=kk><small><a href='$_SERVER[PHP_SELF]?id=$req[rid]&close=1' class=small_tools onclick='return confirmation();'>$langClose</a><br><a href='$_SERVER[PHP_SELF]?id=$req[rid]&close=2' class=small_tools>$langRejectRequest</a>";
+            $tool_content .= "\n    <td align=\"center\"><small>".nice_format(date("Y-m-d", strtotime($req[7])))."</small></td>";
+            $tool_content .= "\n    <td>".$req[8]."</td>";
+			$tool_content .= "\n    <td align=center><small><a href='$_SERVER[PHP_SELF]?id=$req[rid]&close=1' class=small_tools onclick='return confirmation();'>$langClose</a><br><a href='$_SERVER[PHP_SELF]?id=$req[rid]&close=2' class=small_tools>$langRejectRequest</a>";
 			$tool_content .= "<br><a href=\"../auth/newuserreq.php?".
 			"id=".urlencode($req['rid']).
 			"&pn=".urlencode($req['profname']).
@@ -136,15 +147,16 @@ $tool_content .= "<tr onMouseOver=\"this.style.backgroundColor='#F1F1F1'\" onMou
 			"&pu=".urlencode($req['profuname']).
 			"&pe=".urlencode($req['profemail']).
 			"&pt=".urlencode($req['proftmima']).
-			"\" class=small_tools>$langRegistration</a>";	
-			$tool_content .= "</small></td></tr>";
+			"\" class=small_tools>$langRegistration</a>";
+			$tool_content .= "</small></td>\n  </tr>";
+			$k++;
 	}
 
 		  // no requests
         if (mysql_num_rows($sql) == 0) {
-             $tool_content .= "<tr><td colspan=9 class=kk align=center><br>$langUserNoRequests<br><br></td></tr>";
+             $tool_content .= "\n  <tr><td colspan=9 class=kk align=center><br>$langUserNoRequests<br><br></td></tr>";
         }
-        $tool_content .= "</thead></tbody></table>";
+        $tool_content .= "\n  </tbody>\n  </table>\n";
 }
-$tool_content .= "<br><center><p><a href=\"index.php\">$langBack</a></p></center>";
+$tool_content .= "<p>&nbsp;</p><center><p align=\"right\"><a href=\"index.php\">$langBack</a></p></center>";
 draw($tool_content, 3 ,' ', $head_content);

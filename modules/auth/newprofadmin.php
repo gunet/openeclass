@@ -45,9 +45,8 @@ if($submit)
 
 	if ((strstr($uname, "'")) or (strstr($uname, '"')) or (strstr($uname, '\\')))
 	{
-		$tool_content .= "<tr><td colspan=\"3\" valign=\"top\">
-		<br>$langCharactersNotAllowed<br /><br />
-		<a href='$_SERVER[PHP_SELF]'>".$langAgain."</a></td></tr></table>";
+		$tool_content .= "<p class=\"caution_small\">$langCharactersNotAllowed</p><br /><br />
+		<p align=\"right\"><a href='$_SERVER[PHP_SELF]'>".$langAgain."</a></p>";
 	}
 	else	// do the other checks
 	{
@@ -61,18 +60,18 @@ if($submit)
 		// check if there are empty fields
 		if (empty($nom_form) or empty($prenom_form) or empty($password) or empty($department) or empty($uname) or (empty($email_form)))
 		{
-			$tool_content .= "<p>$langEmptyFields</p>
-			<br><br><center><p><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p></center>";
+			$tool_content .= "<p class=\"caution_small\">$langEmptyFields</p>
+			<br><br><p align=\"right\"><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
 		}
 		elseif(isset($user_exist) and $uname==$user_exist)
 		{
-			$tool_content .= "<p>$langUserFree</p>
-			<br><br><center><p><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p></center>";
+			$tool_content .= "<p class=\"caution_small\">$langUserFree</p>
+			<br><br><p align=\"right\"><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
 	  }
 		elseif(!email_seems_valid($email_form)) // check if email syntax is valid
 		{
-      $tool_content .= "<p>$langEmailWrong.</p>
-			<br><br><center><p><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p></center>";
+      $tool_content .= "<p class=\"caution_small\">$langEmailWrong.</p>
+			<br><br><p align=\"right\"><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
 		}
 		else
 		{
@@ -90,8 +89,7 @@ if($submit)
 		// close request
 	  $rid = intval($_POST['rid']);
   	  db_query("UPDATE prof_request set status = '2',date_closed = NOW() WHERE rid = '$rid'");
-	       $tool_content .= "<p>$profsuccess</p><br><br><center><p>
-		<a href='../admin/listreq.php'>$langBackReq</a></p></center>";
+	       $tool_content .= "<p class=\"success_small\">$profsuccess</p><br><br><p align=\"right\"><a href='../admin/listreq.php'>$langBackReq</a></p>";
 		}
 	}
 }

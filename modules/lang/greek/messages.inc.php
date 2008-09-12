@@ -2471,6 +2471,12 @@ $langDateRequest = "Ημ/νία αίτησης";
 $langDateReject = "Ημ/νία απόρριψης";
 $langDateClosed = "Ημ/νία κλεισίματος";
 $langDateCompleted = "Ημ/νία ολοκλήρωσης";
+
+$langDateRequest_small = "Aίτησης";
+$langDateReject_small = "Aπόρριψης";
+$langDateClosed_small = "Kλεισίματος";
+$langDateCompleted_small = "Oλοκλήρωσης";
+
 $langRejectRequest = "Απόρριψη";
 $langListRequest = "Λίστα Αιτήσεων";
 $langTeacherRequestHasDeleted = "Η αίτηση του $langsOfTeacher διαγράφηκε!";

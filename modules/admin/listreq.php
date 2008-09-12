@@ -364,7 +364,7 @@ else
  	$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,comment,profpassword
 		FROM prof_request WHERE (status='1' AND statut<>'5')");
 
-    $ê = 0;
+    $k = 0;
 	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 		$req = mysql_fetch_array($sql);
 				if ($k%2==0) {

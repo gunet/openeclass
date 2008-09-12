@@ -1,4 +1,4 @@
-<? 
+<?
 /*===========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
@@ -27,10 +27,10 @@
 	ldapsearch.php
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
-==============================================================================        
+==============================================================================
   @Description: This script/file tries to authenticate the user, using
   his user/pass pair and the authentication method defined by the admin
-  
+
 ==============================================================================
 */
 
@@ -57,7 +57,7 @@ if (isset($submit))  {
       $pu = $_POST['pu'];
       $pe = $_POST['pe'];
 			$department = $_POST['department'];
-		
+
 		// check if user name exists
     	$username_check=mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='".escapeSimple($pu)."'");
 	    while ($myusername = mysql_fetch_array($username_check))
@@ -65,8 +65,8 @@ if (isset($submit))  {
     	  $user_exist=$myusername[0];
 	    }
 	  	if(isset($user_exist) and $pu == $user_exist) {
-	  	   $tool_content .= "<p>$langUserFree</p><br><br><center><p><a href='../admin/listreq.php'>$langBackReq</a></p></center>";
-				 draw($tool_content,0);
+	  	   $tool_content .= "<p class=\"caution_small\">$langUserFree</p><br><br><p align=\"right\"><a href='../admin/listreq.php'>$langBackReq</a></p>";
+				 draw($tool_content,0,'auth');
 		     exit();
 	    }
 
@@ -83,18 +83,18 @@ if (isset($submit))  {
           default:  $password = "";
             break;
         }
-	
+
 	$registered_at = time();
-    $expires_at = time() + $durationAccount; 
+    $expires_at = time() + $durationAccount;
 
 		$sql=db_query("INSERT INTO user (user_id, nom, prenom, username, password, email, statut, department, registered_at, expires_at)
        VALUES ('NULL', '$pn', '$ps', '$pu', '$password', '$pe','1','$department', '$registered_at', '$expires_at')", $mysqlMainDb);
-			
+
 	// close request
       //  Update table prof_request ------------------------------
       $rid = intval($_POST['rid']);
       db_query("UPDATE prof_request set status = '2',date_closed = NOW() WHERE rid = '$rid'");
-      
+
 		$emailbody = "$langDestination $pu $ps\n" .
                                 "$langYouAreReg $siteName $langSettings $pu\n" .
                                 "$langPass: $password\n$langAddress $siteName: " .
@@ -102,7 +102,7 @@ if (isset($submit))  {
                                 "$administratorName $administratorSurname" .
                                 "$langManager $siteName \n$langTel $telephone \n" .
                                 "$langEmail: $emailAdministrator";
-		
+
     if (!send_mail($gunet, $emailAdministrator, '', $emailhelpdesk, $mailsubject, $emailbody, $charset))  {
 		      $tool_content .= "<table width=\"99%\"><tbody><tr>
     	    	<td class=\"caution\" height='60'>
@@ -123,42 +123,53 @@ if (isset($submit))  {
       </tr></tbody></table>";
 
 } else {  // display the form
-	$tool_content .= "<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
-		<table width=\"99%\"><caption>$langNewProf</caption><tbody>
-      <tr>
-      <th width=\"150\" class='left'><b>".$langSurname."</b></th>
-    	<td>$ps</td></tr>
-      <input type=\"hidden\" name=\"ps\" value=\"$ps\">
-      <tr>
-      <th class='left'><b>".$langName."</b></th>
-      <td>$pn</td></tr>
-      <input type=\"hidden\" name=\"pn\" value=\"$pn\">
-      <tr>
-      <th class='left'><b>".$langUsername."</b></th>
-      <td>$pu</td>
-      <input type=\"hidden\" name=\"pu\" value=\"$pu\">
-      </tr>
-      <tr>
-       <th class='left'><b>".$langEmail."</b></th>
-       <td>$pe</b></td>
-      <input type=\"hidden\" name=\"pe\" value=\"$pe\" >
-       </tr>
-      <tr>
-        <th class='left'>".$langDepartment.":</th>
-        <td><select name=\"department\">";
+	$tool_content .= "
+<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
+  <table width=\"99%\" class=\"FormData\">
+  <tbody>
+  <tr>
+    <th width=\"220\">&nbsp;</th>
+    <td><b>$langNewProf</b></td>
+  </tr>
+  <tr>
+    <th class='left'><b>".$langSurname."</b></th>
+    <td>$ps</td>
+  </tr>
+  <input type=\"hidden\" name=\"ps\" value=\"$ps\">
+  <tr>
+    <th class='left'><b>".$langName."</b></th>
+    <td>$pn</td>
+  </tr>
+  <input type=\"hidden\" name=\"pn\" value=\"$pn\">
+  <tr>
+    <th class='left'><b>".$langUsername."</b></th>
+    <td>$pu</td>
+  <input type=\"hidden\" name=\"pu\" value=\"$pu\">
+  </tr>
+  <tr>
+    <th class='left'><b>".$langEmail."</b></th>
+    <td>$pe</b></td>
+    <input type=\"hidden\" name=\"pe\" value=\"$pe\" >
+  </tr>
+  <tr>
+    <th class='left'>".$langDepartment.":</th>
+    <td><select name=\"department\">";
 		$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id");
 		while ($dep = mysql_fetch_array($deps))
-			  $tool_content .= "\n<option value=\"".$dep[1]."\">".$dep[0]."</option>";
+			  $tool_content .= "\n      <option value=\"".$dep[1]."\">".$dep[0]."</option>";
         $tool_content .= "</select>
-        </td>
-        </tr>
-        <tr><td>&nbsp;</td>
-        <td><input type=\"submit\" name=\"submit\" value=\"".$langOk."\" >
+    </td>
+  </tr>
+  <tr>
+    <th>&nbsp;</th>
+    <td><input type=\"submit\" name=\"submit\" value=\"".$langOk."\" >
         <input type=\"hidden\" name=\"auth\" value=\"$auth\" >
-        </td>
-        </tr>
-        <input type='hidden' name='rid' value='".@$id."'>
-        </tbody></table></form>";
+    </td>
+  </tr>
+  <input type='hidden' name='rid' value='".@$id."'>
+  </tbody>
+  </table>
+</form>";
  }
-draw($tool_content,0);
+draw($tool_content,0,'auth');
 ?>

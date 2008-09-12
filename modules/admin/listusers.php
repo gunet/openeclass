@@ -594,7 +594,7 @@ if($sql)
 	}
 	else
 	{
-		$tool_content .= $langNoSuchUsers;
+		$tool_content .= "<p class=\"caution_small\">$langNoSuchUsers</p>";
 	}
 }
 else

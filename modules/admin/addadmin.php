@@ -28,7 +28,7 @@
 	@last update: 31-05-2006 by Pitsiougas Vagelis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Pitsiougas Vagelis <vagpits@uom.gr>
-==============================================================================        
+==============================================================================
         @Description: Add a user to administrators
 
  	This script allows the administrator of the platform to search for a user
@@ -73,20 +73,20 @@ if(!empty($encodeLogin)) 	// Check if a username has been posted
 	{
 		// If username exists insert userid to admin table and make the user administrator
 		$row = mysql_fetch_row($res);
-		if (mysql_query("INSERT INTO admin VALUES('$row[0]')")) 
-			$tool_content .= "<p>$langTheUser ".htmlspecialchars($encodeLogin)." $langWith  id='$row[0]' $langDone</p>";
+		if (mysql_query("INSERT INTO admin VALUES('$row[0]')"))
+			$tool_content .= "<p class=\"success_small\">$langTheUser ".htmlspecialchars($encodeLogin)." $langWith  id='$row[0]' $langDone</p>";
 		else // If mysql_query failed print message
-			$tool_content .= "<p>$langErrorAddAdmin</p>";
-	} 
-	else 
+			$tool_content .= "<p class=\"success_small\">$langErrorAddAdmin</p>";
+	}
+	else
 	{
 		// If username does not exist in database, inform user about the result
-		$tool_content .= "<p>$langTheUser ".htmlspecialchars($encodeLogin)." $langNotFound.</p>";
+		$tool_content .= "<p class=\"caution_small\">$langTheUser ".htmlspecialchars($encodeLogin)." $langNotFound.</p>";
 		$tool_content .= printform($langUserName);		// Display form again
 	}
-} 
+}
 else 	// No form post has been done
-{ 
+{
 	// Display form
 	$tool_content .= printform($langUserName);
 }
@@ -103,28 +103,36 @@ if((!empty($delete)) && ($delete=='1') && (!empty($aid)) && ($aid!='1'))
 // Display the list of admins
 if($r1=db_query("SELECT user_id,prenom,nom,username FROM user,admin WHERE user.user_id=admin.idUser ORDER BY user_id"))
 {
-	$tool_content .= "<br /><center><table width=\"80%\"><thead><tr>
-	<th scope=\"col\">ID</th>
-	<th scope=\"col\">".$langSurname." - ".$langName."</th>
-	<th scope=\"col\">".$langUsername."</th>";
-	$tool_content .= "<th scope=\"col\">".$langActions."</th>";
-	$tool_content .= "</tr></thead><tbody>";
+	$tool_content .= "
+<p>
+  <table width=\"99%\">
+  <thead>
+  <tr>
+    <th class=\"left\">ID</th>
+    <th class=\"left\">".$langSurname." - ".$langName."</th>
+	<th class=\"left\">".$langUsername."</th>
+    <th>".$langActions."</th>
+  </tr>
+  </thead>
+  <tbody>";
 	while($row = mysql_fetch_array($r1))
 	{
-		$tool_content .= "<tr>";
-		$tool_content .= "<td>".htmlspecialchars($row['user_id'])."</td>".
-		"<td>".htmlspecialchars($row['prenom'])." " .htmlspecialchars($row['nom'])."</td>".
-		"<td>".htmlspecialchars($row['username'])."</td>";
+		$tool_content .= "\n  <tr>";
+		$tool_content .= "\n    <td>".htmlspecialchars($row['user_id'])."</td>".
+		"\n    <td>".htmlspecialchars($row['prenom'])." " .htmlspecialchars($row['nom'])."</td>".
+		"\n    <td>".htmlspecialchars($row['username'])."</td>";
 		if($row['user_id']!=1)
 		{
-			$tool_content .= "<td><a href=\"addadmin.php?delete=1&aid=".$row['user_id']."\">$langDelete</a></td>";
-		}
-		$tool_content .= "</tr>";
+			$tool_content .= "\n    <td align=\"center\"><a href=\"addadmin.php?delete=1&aid=".$row['user_id']."\">$langDelete</a></td>";
+		} else {
+			$tool_content .= "\n    <td align=\"center\">---</td>";
+        }
+		$tool_content .= "\n  </tr>";
 	}
-	$tool_content .= "</tbody></table></center><br />";
+	$tool_content .= "\n  </tbody>\n  </table>\n</p>\n<br />";
 }
 // Display link back to index.php
-$tool_content .= "<center><p><a href='index.php'>$langBack</a></p></center>";
+$tool_content .= "<p class=\"right\"><a href='index.php'>$langBack</a></p>";
 
 /*****************************************************************************
 		DISPLAY HTML
@@ -141,24 +149,41 @@ draw($tool_content,3);
 
 /*****************************************************************************
 	 			function draw
-****************************************************************************** 
+******************************************************************************
   This method constracts a simple form where the administrator searches for
   a user by username to give user administrator permissions
-  printform($message) 
+  printform($message)
   $tool_content: (String) The string to display for username
 
   @returns
   $ret: (String) The constracted form
 ******************************************************************************/
-function printform ($message) { 
+function printform ($message) {
 	global $langAdd, $langInsertUserInfo,$langDeleteAdmin,$langNotFeasible;
 	// Initialize $ret
 	$ret = "";
 	// Constract the display form
-	$ret .= "<form method='post' name='makeadmin' action='$_SERVER[PHP_SELF]'>";
-	$ret .= "<table width=\"99%\"><caption>".$langInsertUserInfo."</caption><tbody>
-	<tr><td width=\"3%\" nowrap>".$message."</td><td><input type='text' name='encodeLogin' size='20' maxlength='30'></td></tr>
-	<tr><td colspan=\"2\"><input type='submit' name='crypt' value='$langAdd'></td></tr></tbody></table></form>";
+	$ret .= "
+  <form method='post' name='makeadmin' action='$_SERVER[PHP_SELF]'>";
+	$ret .= "
+  <table class=\"FormData\" width=\"99%\" align=\"left\">
+  <tbody>
+  <tr>
+    <th width=\"220\">&nbsp;</th>
+    <td><b>".$langInsertUserInfo."</b></td>
+  </tr>
+  <tr>
+    <th class=\"left\">".$message."</th>
+    <td><input type='text' name='encodeLogin' size='20' maxlength='30'></td>
+  </tr>
+  <tr>
+    <th class=\"left\">&nbsp;</th>
+    <td><input type='submit' name='crypt' value='$langAdd'></td>
+  </tr>
+  </tbody>
+  </tbody>
+  </table>
+</form>";
 	// Return $ret
 	return $ret;
 }

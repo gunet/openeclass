@@ -2512,6 +2512,12 @@ $langDateRequest = "Date of Request";
 $langDateReject = "Date of reject request";
 $langDateClosed = "Date of close request";
 $langDateCompleted = "Date of completed request";
+
+$langDateRequest_small = "Request";
+$langDateReject_small = "Reject";
+$langDateClosed_small = "Close";
+$langDateCompleted_small = "Completed";
+
 $langRejectRequest = "Reject";
 $langListRequest = "List Requests";
 $langComments = "Comments";

@@ -198,11 +198,22 @@ caption {
 }
 
 .caution_small {
-    background-image: url(img/exclamation.gif);
-    background-repeat: no-repeat;
-    background-position: 4px 4px;
-    padding-left : 20px;
-    color: #E36154;
+	background-image: url(img/exclamation.gif);
+	background-repeat: no-repeat;
+	background-position: 0px 0px;
+	padding-left : 20px;
+	padding-bottom : 4px;
+	color: #D46452;
+}
+
+.success_small {
+	background-image: url(img/well-done.gif);
+	background-repeat: no-repeat;
+	background-position: 0px 0px;
+	padding-left : 25px;
+	padding-top : 2px;
+	padding-bottom : 6px;
+	color: #727266;
 }
 
 .well-done {
