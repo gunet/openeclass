@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 
@@ -37,7 +37,7 @@ if (file_exists("../lang/$language/help.inc.php")) {
 }
 
 // Default topic
-if (!isset($_GET['topic']) ||  empty($GLOBALS["lang$_GET[topic]Content"])) {
+if (!isset($_GET['topic']) || empty($GLOBALS["lang$_GET[topic]Content"])) {
 	$_GET['topic'] = 'Default';
 }
 
@@ -53,7 +53,7 @@ $title = $GLOBALS["langH" . str_replace('_student', '', $_GET['topic'])];
 		<link href="../../template/classic/tool_content.css" rel="stylesheet" type="text/css" />
 
 		<style type='text/css'>
-					html {
+			html {
                                 background-color: #575656;
                                 padding: 5px 5px 5px 5px;
                            }	
@@ -76,7 +76,7 @@ $title = $GLOBALS["langH" . str_replace('_student', '', $_GET['topic'])];
                                 font-variant : normal;
                                 font-weight : bold;
                            }
-                        
+
                         p {
                            padding: 10px;
                             text-align:justify;

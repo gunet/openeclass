@@ -369,7 +369,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		
 		//if $require_help is true (set by each tool) display the help link
 		if ($require_help == true) {
-			if (!$GLOBALS['is_adminOfCourse']) {
+			if (!check_prof()) {
 				$helpTopic .= '_student';
 			}
 			$help_link_icon = " <a  href=\"" . $relPath . "modules/help/help.php?topic=$helpTopic&amp;language=$language\"

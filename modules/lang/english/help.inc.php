@@ -18,13 +18,11 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-
-// help_forums.php
 
 $langWindowClose="Close window";
 
@@ -32,8 +30,8 @@ $langHDefault='Help non available';
 $langDefaultContent='<p>There is no help text available for the page you
 are currently viewing.</p>';
 
-
-$langHFor="Forums help";
+// help_forums.php
+$langHFor="Forums";
 $langForContent="<p>The forum is a written asynchronous discussion tool.
  Where email allows one-to-one dialogue, forums allow public or semi-public
  dialogue.</p><p>Technically speaking, the students need only their
@@ -52,41 +50,7 @@ $langForContent="<p>The forum is a written asynchronous discussion tool.
  list of its members, the definition of a goal, a task, a theme...</p>";
 
 
-
-// help_home.php
-
-$langHHome="Home Page Help";
-$langHomeContent="<p>For more convenience, Open eClass tools contain default
-entries.  There is a small example in every tool to help you grasp quickly how
-it works. It is up to you to modify the example or to delete it.</p>
-
-<p>For instance, here on the Home Page of your course website,there is a small
-introduction text saying 'This is the introduction text of your course. To
-replace it by your own text, click below on modify.' Click on modify, edit it
-and Ok. It's that simple. Every tool has the same logic: add, delete, modify,
-which is the logic of dynamic websites.</p>
-
-<p>When you first create your website, most of the tools are active. Here
-again, it is up to you to deactivate the ones you don't need. You just have to
-click on 'deactivate'.  Then it goes down to the grey section of your homepage
-an becomes invisible to your students.  However, you can reactivate it whenever
-you want, making it visible to the students once more.</p> <p>You can add your
-own pages to your Home Page. These pages must be HTML pages (which can be
-created by any Word Processor or Web Composer). Use 'Upload page and link to
-Homepage' to send your page to the server. The standard header of your website
-will be automatically merged with your new document, so that you just need to
-concentrate on the content. If you want to link from your Home towards
-existaing websites or pages existing anywhere on the web (even inside your own
-site), use 'Add link on Homepage' The pages you have added to the Home page can
-deactivated then deleted, where the standard tools can be deactivated, but not
-deleted.</p>
-
-<p>Once your course website is ready, go to 'Modify course info' and decide
-what level of confidentiality you want.  By default, your course is hidden
-(because you work on it).</p>";
-
-
-$langHInit="Start Page Help";
+$langHInit="Start Page";
 $langInitContent="<p>You are currently in the Open eClass platform's start page.
 Type your username and password to login to the platform. In case you
 have forgotten your login information, click on 'Forgot your password?' and
@@ -106,7 +70,7 @@ Registration', and then you have to choose your desired courses.</p>
 
 $langInit_studentContent = $langInitContent;
 
-$langHPortfolio="User portfolio";
+$langHPortfolio="User Portfolio";
 $langClar2Content="<p>Here you can find all courses you are registered to
 (as a student), as well as all the courses you have created (as a professor).
 You can enter any one of them by clicking on its title.</p>
@@ -137,8 +101,7 @@ and view usage statistics.</p>';
 
 
 // help_document.php
-
-$langHDoc="Help Documents";
+$langHDoc="Documents";
 $langDocContent="<p>The Documents tool is similar to the FileManager of
  your desktop computer.</p><p>You can upload files of any type (HTML, Word,
  Powerpoint, Excel, Acrobat, Flash, Quicktime, etc.). Your only concern
@@ -238,12 +201,8 @@ $langDocContent="<p>The Documents tool is similar to the FileManager of
         </ul>
 </p>";
 
-
-
-
 // Help_user.php
-
-$langHUser="Help Users";
+$langHUser="Users Admin";
 $langUserContent="<b>Roles</b><p>Roles have no computer related function.
  They do not give rights on operating the system.</p>
 <hr>
@@ -260,21 +219,20 @@ $langUserContent="<b>Roles</b><p>Roles have no computer related function.
 
 
 // Help guest user
-$langHGuest = "Add Guest Account";
+$langHGuest = "Guest Account";
 $langGuestContent = "<p>By clicking in 'Add guest account' you can create an account for a guest user in a course. A guest user, can have access in the initial course page and of course the various active course tools but can't upload or modify anything.</p>";
 
 
-
-// Help questionnaire.php
-$langHQuestionnaire="Questionnaire Help";
+// Help questionnaire
+$langHQuestionnaire="Questionnaire";
 $langQuestionnaireContent="<p>With this tool can create and manage questionnaires.</p>
 <p>To create a questionnaire click on 'Create Questionnaire'. In the next form fill the title and the start / end date of the questionnaire. You can choose the question type by clicking in the corresponing buttons ('New mulitple choise question' and 'New text fill question'. After completing the questions and their answers click on 'Create Questionnaire' 
 </p>
 <p>Questionnaire results can accessed by the questionnaire admin page.</p>";
 
 
-// Help exercise.php
-$langHExercise="Help exercises";
+// Help exercise
+$langHExercise="Exercises";
 $langExerciseContent="<p>The exercise tool allows you to create exercises that will contains as many questions as
 you l
 ike.<br><br>
@@ -372,10 +330,8 @@ Orphan questions are questions that don't belong to any exercise.</p>";
 
 
 // help work
-
-$langHWork = "Work";
-$langWorkContent = "
-<p>Work tool is a complete tool for creating / submittion of assignments.</p>
+$langHWork = "Assignments";
+$langWorkContent = "<p>Assignment tool is a complete tool for creating / submittion of assignments.</p>
 <p>As a professor, you can create an assignment by clicking on <b>\"New Assignment\"</b>.
 Fill in the title of the assignment, define a deadline and optionally add a comment.</p>
 <p>When the assignment has completed, do not forget to activate it by clicking on the icon
@@ -401,9 +357,8 @@ one.
 
 
 // Help Group
-$langHGroup="Help groups";
-$langGroupContent="<p><b>Introduction</b></p>
-<p>This tool allows to create and manage work groups.
+$langHGroup="Groups";
+$langGroupContent = "<p>This tool allows to create and manage work groups.
 At creation (Create groups), groups are emtpy. There are
 many ways to fill them:
 <ul><li>automatically ('Fill groups'),</li>
@@ -459,7 +414,7 @@ $langAnnounceContent = "<p>You can add announcements in a course by clicking in 
 Also, you can change the announcement clicking on the icon 'Modify' or delete an announcement clicking on the icon 'Delete'. If you want to mail your announcement to the registered students in your lesson, just check 'Send announcement (via email) to registered students'</p>";
 
 // Help profile
-$langHProfile = "My profile";
+$langHProfile = "Modify my profile";
 $langProfileContent = "<p>You can modify your personal info in the platform</p>
 <li>You can modify your name, surname, and your e-mail address.</li>
 <li>Also if you desire, you can modify your username and your password.</li>
@@ -467,7 +422,7 @@ $langProfileContent = "<p>You can modify your personal info in the platform</p>
 
 
 //Help import
-$langHImport = "Upload page";
+$langHImport = "Upload html page";
 $langImportContent = "<p>You can add your personal pages in course home page.
 The page must be in HTML format and can be created with a word processor or
 an editor for creating Web sites and pages. If you want to add a page upload the file .html
@@ -476,48 +431,46 @@ Your page will be linked from Homepage. If you want to send non HTML documents
 (PDF, Word, Power Point, Video, etc.) use 'Documents tool'
 These links can be deactivated and deleted.</p>";
 
-$langHModule = "Add link in home page";
-$langModuleContent = "<p>If you want to add links in lesson home page, just type the title and the address of the
+$langHModule = "Add external link";
+$langModuleContent = "<p>If you want to add links in course home page, just type the title and the address of the
 link and press button 'Add'. These links can be deactivated and deleted.</p>";
 
-//Help import page
-$langHImport = "Upload html file";
-$langImportContent = "<p>If needed, you can upload a file relative to your course. This file will be stored on the server. A link towards this file will be added on the left side menu, with the rest lesson tools.
-The link will open in a new browser window.</p>
-<p>To upload your html page click on 'Browse', choose the file you wish to upload, type a title in the 'Page Title' field and click on 'Add'.</p>
-<p>The link of this file can be deactivated and deleted from the 'Tools administration' module.</p>";
 
-//Help Course tools
+//tools management
 $langHcourseTools = "Tools Management";
-$langcourseToolsContent = "<p>This module is used to activate or deactivate lesson tools. Each tool's status is presented on one of the two columns and can be active or not.</p>
-
-<p>In order to change the status of a tool click on the tools name to it and then click on '>>' to change it's status. You can move multiple tools by using CTRL+click. Finally, click  on 'Save changes' at the end of the table to save your changes.</p>
+$langcourseToolsContent = "<p>This module is used to activate or deactivate course tools. Each tool's status is presented in one of the two columns and can be active or not.</p>
+<p>In order to change the status of a tool click on the tools name to it and then click on '>>' to change it's status. You can move multiple tools by using CTRL+click. Finally, click  on 'Submit changes' to save your changes.</p>
 ";
 
-$langHInfocours = "Modify course info";
+// course info
+$langHInfocours = "Course Admin";
 $langInfocoursContent = "<p>When the page of your course is ready, you can modify
 course information. You can modify professor name, configure the users access rights
 and modify the language that will be valid for every visitor of your course's website.
-By the time you have completed the modifications press button 'Change'.
+By the time you have completed the modifications, press button 'Submit'.
 </p>
 <p><u>Course categories:</u></p>
-<p><b>Open courses :</b> are accessible from the public without any login/password
+<p><b>Open Course :</b> is accessible from the public without any login/password
 user authentication procedure.</p>
-<p><b>Registration based accessed courses :</b> are accessible to users that
-must be registered.</p>
-<p><b>Closed courses :</b> are accessible to users already registered at eClass platform and
+<p><b>Registration required Course :</b> is accessible to users that must be registered in the platform.</p>
+<p><b>Closed Course :</b> is accessible to users already registered in the platform and
 have permission from the professor to attend the specific course.</p>
-<p><u>More actions:</u></p>
+<p><u>Other actions:</u></p>
 <p><b>Archive this course:</b> You can create a backup file for the course and then
 download and save it to your computer. In case of unmeant deletion or destruction of the course
 you can use the backup file but you have to contact with the administrator of the platform.</p>
 <p><b>Delete the whole course website :</b> Deleting the course website will permanently delete all
 the documents it contains and unregister all its students (not remove them from other courses).</p>
-<p><b>Delete users from course :</b> You can delete all the users registered at your course
-without removing them from other courses .</p>";
+<p><b>Refresh Course :</b> You can delete the old data courses in order to create course for the next academic year.</p>";
 
 $langHConference = "Conference";
-$langConferenceContent = "
+$langConferenceContent = "<p>The instructor has the ability to exchange messages with the students by typing the message on text field at the bottom of the page and then pressing \">>\". The instructor has the option to clear all past messages from appearing on the page by selecting \"Clear\". Also clicking on 'Save' you can save all the conference messages in the 'Documents' </p>
+";
+
+$langHConference_stud = $langHConference;
+$langConference_studentContent = "<p>The instructor has the ability to exchange messages with the students that are using the Conference Module by typing the message on text field at the bottom of the page and then pressing \">>\". The instructor also has the option to clear all past messages from appearing on the page by selecting \"Clear\".</p>";
+
+/*
 <b><u>Description</u></b>
 <p>This module gives the instructor the ability to conduct live meetings with the students. It offers 4 functionalities: <br></p>
 <p>It offers 4 functionalities:</p>
@@ -538,6 +491,7 @@ The equipment requirements for conferencing are just a set of speakers and a mic
 Regarding the video conferencing functionality, the student will be given the ability to connect to the conference throught the web pages of this subsystem, once the instructor has activated this option. Each course on the eClass platform automatically utilizes a separate \"virtual conferencing room\" for all its participants. A good practice is for participants to keep all microphones muted, until the need to speak arises, so that inadvertent noise will not be transmitted to other participants. The use of headphones with integrated microphones is the best option for avoiding echo problems during the conferences.
 </p>
 
+
 <b><u>Video</u></b>
 <p><b><u>Instructor Options</u></b></p>
 <p>When the instructor selects the \"video\" option, a field is activated allowing the placement of a URL for the streaming video. After completion of the URL and the selection of \"Play\", video is loaded in the window above the controls with the embedded use of the appropriate media player, as set in the OS to handle the correct file extensions. The instructor must have informed the students ahead of time that they will need to have installed the media player that the material he presents will require.</p>
@@ -557,30 +511,26 @@ Regarding the video conferencing functionality, the student will be given the ab
 <p><b><u>Student Options</u></b></p>
 <p>The instructor has the ability to exchange messages with the students that are using the Conference Module by typing the message on text field at the bottom of the page and then pressing \">>\". The instructor also has the option to clear all past messages from appearing on the page by selecting \"Clear\".</p>
 ";
-
+*/
 $langHVideo = "Video";
 $langVideoContent ="
 <p>Courses might contain audio and video files as contend. Audio and video files can be distributed either via downloading or streaming. When distributed via downloading there is a significant amount of time for waiting until downloading finishes in order to playback the file. When distributed via streaming there is no wait time and playback starts immediately. Video module adds streaming capabilities to eClass.</p>
 <p><b><u>Instructor Options</u></b></p>
 <p>
 You can upload video file in several formats like mpeg, avi etc. Choose \"Add video\" and type the path to the video file you want or click on \"Browse\" to locate it visually. Optionally you can fill in the \"Document title\" & \"Description\" fields. Click on \"Add\" in order to upload the file to the platform. Additionally you can add video links to your courses. Choose \"Add video link\" and then type the link to the file on the streaming server you want to add in the \"URL\" field. Optionally you can fill in the \"Document title\" & \"Description\" fields. When finished click on \"Add\". Once added you can modify any of the fields by choosing \"Modify\" or you can delete a file or link by choosing \"Delete\". By choosing \"Delete whole list\" you can remove all the files and links added to a course. If there is a streaming server integrated with the platform the process of video files addition is transparent. There is no extra care or action to be done in order the files to be streamed from the streaming server. Keep in mind that video files and links will be available all the time if someone uses the direct url to them.
-</p>
-<p><b><u>Student Options</u></b></p>
-<p>
-Choose the video file you want to playback. If there is a streaming server integrated with eClass, the student should be informed what client should use for playback.
-</p>
-";
+</p>";
 
+$langHVideo_stud = $langHVideo;
+$langVideo_studentContent = "<p>Choose the video file you want to playback. If there is a streaming server integrated with platform, the student should be informed what client should use for playback.
+</p>";
+
+// Help course description
 $langHCoursedescription = "Course Description";
 $langCoursedescriptionContent = "<p>You can add some additional info about the course, when you click in 'Create
 and Edit'. You can add a category, selecting it from the drop down box and click in the button 'Add'.
 After entering the information you want press the button 'Add'. </p><p>If, for some reason, you decide that don't want to enter
 the information press 'Return and Cancel'. Whenever you want, you can modify the information you have entered by
 clicking 'Modify' or deleting it by clicking on 'Delete'.</p>";
-
-$langHModule = "Add link in home page";
-$langModuleContent = "<p>If you want to add links in course home page, just type the title and the address of the
-link and press button 'Add'. These links can be deactivated and deleted.</p>";
 
 
 // Help  Scorm - Learning Path
@@ -689,6 +639,16 @@ href=\"http://www.trivantis.com/\">http://www.trivantis.com</a></li>
 and all uploaded <i>Scorm format Learning Paths</i>, as well.</p>
 ";
 
+//Help Dropbox
+$langHDropbox="DropBox";
+$langDropboxContent="<p>Dropbox is a tool exchange file between professors and students. You can exchange various file types (e.g. Word files, Excel, PDF etc.)</p>
+<p>There are two folders. In folder <b>Received Files</b>
+there are all files you have recieved from other users of the platform with some additional info such as username, file size and file recieved date. In folder <b>Sent files</b> there are files you have sent in other users of platform with similar info.</p>
+<p>Note that if you delete a file, file doesn't delete from the platform database but only from this folder.</p>
+<p>If you wish to send a file to another user, first select the file from your computer by clicking on 'File Upload'. Optionally you can type a short description. Then select the recipient from the users list and click on 'Send'  You can select more recipients with your mouse and pressing <b>CTRL (Control)</b>.
+</p>";
+
+
 $langHUsage = "Usage Statistics";
 $langUsageContent = "<p>The usage statistics modules allows the professor to see statistics about his lesson. They are presented in the form of charts or lists.</p>
 <p><strong>Statistics categories</strong></p>
@@ -705,12 +665,12 @@ $langUsageContent = "<p>The usage statistics modules allows the professor to see
 ";
 
 //Help Create Course Wizard
-$langHCreateCourse = "Create Course Wizard";
+$langHCreateCourse = "Create Course";
 $langCreateCourseContent = "<p>The Create Course Wizard is one of the most important tools of the platform. By using this, the user-instructor is able to create new courses in the platform and configure them.</p><p>The wizards consists of 3 steps. Filling in every field with an asterisk, is mandatory. Under some fields, lie exemplary information to help the user with the filling-in.</p><p>In case the user enters invalid data in a field, the system informs the user and prompts him to correct the error so as to be able to continue to the next step.</p>";
 
 
 // Wiki Help
-$langHWiki = "Help - Wiki";
+$langHWiki = "Wiki";
 $langWikiContent = "<p>To create a new Wiki</p>
 <ul>
 <li><b>Title of the Wiki</b>: choose a title for the Wiki</li>
