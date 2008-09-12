@@ -50,7 +50,7 @@ $langsOfStudent = "εκπαιδευόμενου";
 $langsStudents = "εκπαιδευόμενοι";
 $langsOfStudents = "εκπαιδευόμενων";
 $langsOfStudentss = "εκπαιδευόμενoυς";
-$langsstudent = "εκπαιδευόμενο";
+$langsstudent_acc = "εκπαιδευόμενο";
 
 $langGuest = "Χρήστης Επισκέπτης";
 $langGuests = "Χρήστες Επισκέπτες";

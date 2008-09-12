@@ -47,6 +47,7 @@ $langOfStudent = "Student";
 $langOfStudents = "Students";
 
 $langsStudent = "student";
+$langsstudent_acc = $langsStudent;
 $langsStudents = "students";
 $langsOfStudent = "student";
 $langsOfStudents = "students";
