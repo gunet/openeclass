@@ -1411,7 +1411,7 @@ $langBackStep3 = "Back to Step 3";
 $langBackStep3_2 = "Back to step 3.";
 $langNotNeedChange = "No need to change";
 $langNeedChangeDB = "if there is any database with the same name (eclass) you must change it";
-$langWillWrite = "Information below will be written in <b>config.php";
+$langWillWrite = "Information below will be written in <b>config.php</b>";
 $langProtect = "Notice: To protect Open eClass, change access rights of
            <tt>/config/config.php</tt> and <tt>/install/index.php</tt> and make it read only (CHMOD 444).";
 $langInstallSuccess = "Installation completed with success! Click to enter Open eClass";

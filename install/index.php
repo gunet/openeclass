@@ -205,7 +205,7 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
 	$langStepTitle = $langCfgSetting;
 	$langStep = $langStep4;
 	$_SESSION['step']=4;
-	$tool_content .= "<p>$langWillWrite</b>. $langRequiredFields.</p></p>
+	$tool_content .= "<p>$langWillWrite. $langRequiredFields.</p>
 	<table width=\"99%\"><thead><tr>
 	<th>$langSiteUrl<font color=\"red\">*</font></th>
 	<td>
