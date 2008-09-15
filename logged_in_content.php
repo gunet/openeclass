@@ -48,9 +48,7 @@ $tool_content = "
   </thead>
   <tbody>
   <tr class=\"odd\">
-    <td>
-      {LESSON_CONTENT}
-    </td>
+    <td>{LESSON_CONTENT}</td>
   </tr>
   </tbody>
   </table>
@@ -65,89 +63,76 @@ $tool_content = "
   </thead>
   <tbody>
   <tr class=\"odd\">
-    <td>
-      {ANNOUNCE_CONTENT}
+    <td>{ANNOUNCE_CONTENT}</td>
+  </tr>
+  </tbody>
+  </table>
+
+  <br />
+
+  <table width=\"100%\">
+  <thead>
+  <tr>
+    <th class=\"persoBoxTitle\">{LANG_MY_PERSO_AGENDA}</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class=\"odd\">
+    <td>{AGENDA_CONTENT}
     </td>
   </tr>
   </tbody>
   </table>
 
-      		<br />
+</div>
 
-<table width=\"100%\">
-      			<thead>
-      				<tr>
-      					<th class=\"persoBoxTitle\">
-      						{LANG_MY_PERSO_AGENDA}
-      					</th>
-      				</tr>
-      			</thead>
-      			<tbody>
-      				<tr class=\"odd\">
-      					<td>
-	      					{AGENDA_CONTENT}
-     					</td>
-     				</tr>
-      			</tbody>
-      		</table>
 
-	  	</div>
+<div id=\"content_main_perso\">
+  <table width=\"100%\">
+  <thead>
+  <tr>
+    <th class=\"persoBoxTitle\">{LANG_MY_PERSO_DEADLINES}</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class=\"odd\">
+    <td>{ASSIGN_CONTENT}
+    </td>
+  </tr>
+  </tbody>
+  </table>
 
-	  	<div id=\"content_main_perso\">
+  <br />
 
-	  		<table width=\"100%\">
-      			<thead>
-      				<tr>
-      					<th class=\"persoBoxTitle\">
-      						{LANG_MY_PERSO_DEADLINES}
-      					</th>
-      				</tr>
-      			</thead>
-      			<tbody>
-      				<tr class=\"odd\">
-      					<td>
-      						{ASSIGN_CONTENT}
-     					</td>
-     				</tr>
-      			</tbody>
-      		</table>
+  <table width=\"100%\">
+  <thead>
+  <tr>
+    <th class=\"persoBoxTitle\">{LANG_MY_PERSO_DOCS}</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class=\"odd\">
+    <td>{DOCS_CONTENT}
+    </td>
+  </tr>
+  </tbody>
+  </table>
 
-      		<br />
-      		<table width=\"100%\">
-      			<thead>
-      				<tr>
-      					<th class=\"persoBoxTitle\">
-      						{LANG_MY_PERSO_DOCS}
-      					</th>
-      				</tr>
-      			</thead>
-      			<tbody>
-      				<tr class=\"odd\">
-      					<td>
-      						{DOCS_CONTENT}
-     					</td>
-     				</tr>
-     			</tbody>
-     		</table>
+  <br />
 
-     		<br />
+  <table width=\"100%\">
+  <thead>
+  <tr>
+    <th class=\"persoBoxTitle\">{LANG_PERSO_FORUM}</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class=\"odd\">
+    <td>{FORUM_CONTENT}
+    </td>
+  </tr>
+  </tbody>
+  </table>
 
-     		<table width=\"100%\">
-     			<thead>
-     				<tr>
-     					<th class=\"persoBoxTitle\">
-     						{LANG_PERSO_FORUM}
-     					</th>
-     				</tr>
-     			</thead>
-     			<tbody>
-     				<tr class=\"odd\">
-     					<td>
-     						{FORUM_CONTENT}
-     					</td>
-     				</tr>
-      			</tbody>
-      		</table>
-
-      		</div>";
+</div>";
 ?>

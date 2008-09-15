@@ -185,43 +185,42 @@ function getUserAssignments($param, $type) {
 
 function assignHtmlInterface($data) {
 
-	global  $langCourse, $langAssignment, $langDeadline, $langNoAssignmentsExist;
+	global  $langCourse, $langAssignment, $langDeadline, $langNoAssignmentsExist, $langGroupWorkSubmitted1, $langGroupWorkSubmitted, $langExerciseEnd;
 
 	$assign_content = "";
 
 	$assign_content= <<<aCont
-    <div id="datacontainer">
-      <ul id="datalist">
+
+      <div id="datacontainer">
+        <ul id="datalist">
 
 aCont;
 	$assignmentsExist = false;
 	$max_repeat_val = count($data);
  	for ($i=0; $i <$max_repeat_val; $i++) {
 		$iterator = count($data[$i][2]);
-		$assign_content .= "<li class='category'>".$data[$i][0]."</li>";
+		$assign_content .= "\n          <li class='category'>".$data[$i][0]."</li>";
 		if ($iterator > 0) {
 			$assignmentsExist = true;
 			for ($j=0; $j < $iterator; $j++) {
 				$url = $_SERVER['PHP_SELF'] . "?perso=1&c=" .$data[$i][1]."&i=".$data[$i][2][$j][0];
 
 				if($data[$i][2][$j][6] == 1) {
-					$class = "class =\"tick\"";
+					$submit_status = "&nbsp;(".$langGroupWorkSubmitted.")";
 				} elseif ($data[$i][2][$j][6] == 0) {
-					$class = "class =\"exclamation\"";
+					$submit_status = "&nbsp;($langGroupWorkSubmitted1)";
 				} else {
-					$class = "";
+					$submit_status = "";
 				}
 				$assign_content .= "";
-				$assign_content .= "<li><a class=\"square_bullet2\" href=\"$url\">
-				<p $class>".$data[$i][2][$j][1]." : (".nice_format($data[$i][2][$j][3]).")</p></a>
-        			</li>";
+				$assign_content .= "\n          <li><a class=\"square_bullet2\" href=\"$url\"><strong class=\"title_pos\">".$data[$i][2][$j][1]."</strong></a>  <p class=\"content_pos\">$langExerciseEnd: <b>".nice_format($data[$i][2][$j][3])."</b>".$submit_status."</p></li>";
 			}
-			if ($i+1 <$max_repeat_val) $assign_content .= "<br>";
+			//if ($i+1 <$max_repeat_val) $assign_content .= "<br>";
 		}
 	}
 	$assign_content .= "
-      </ul>
-    </div>";
+        </ul>
+      </div>";
 
 	if (!$assignmentsExist) {
 		$assign_content .= "<p>$langNoAssignmentsExist</p>";

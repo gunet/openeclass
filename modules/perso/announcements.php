@@ -299,8 +299,9 @@ function announceHtmlInterface($data) {
 	$announceExist = false;
 
 	$assign_content= <<<aCont
-	<div id="datacontainer">
-	<ul id="datalist">
+
+      <div id="datacontainer">
+        <ul id="datalist">
 aCont;
 
 	$max_repeat_val = count($data);
@@ -308,24 +309,27 @@ aCont;
 		$iterator =  count($data[$i][2]);
 		if ($iterator > 0) {
 			$announceExist = true;
-			$assign_content .= "<li class=\"category\">".$data[$i][0]."</li>";
+			$assign_content .= "\n          <li class=\"category\">".$data[$i][0]."</li>";
 			$url = $_SERVER['PHP_SELF'] . "?perso=2&c=" .$data[$i][1];
 			for ($j=0; $j < $iterator; $j++){
-				if(strlen($data[$i][2][$j][0]) > 150) {
-					$data[$i][2][$j][0] = substr($data[$i][2][$j][0], 0, 150);
-					$data[$i][2][$j][0] .= " <strong class=\"announce_date\">$langMore</strong>";
+				if(strlen($data[$i][2][$j][1]) > 150) {
+					$data[$i][2][$j][1] = substr($data[$i][2][$j][1], 0, 150);
+					$data[$i][2][$j][1] .= "... <a href=\"$url\">[$langMore]</a>";
 				}
-			$assign_content .= "<li><a class=\"square_bullet2\" href=\"$url\">
-          		<strong class=\"title_pos\">".$data[$i][2][$j][0].autoCloseTags($data[$i][2][$j][0]).
-			"<span class=\"announce_date\"> (".nice_format($data[$i][2][$j][2]).")</span></strong></a>
-			<p class=\"content_pos\">".$data[$i][2][$j][1].autoCloseTags($data[$i][2][$j][1]).	
-			"</p></li>";
+				if(strlen($data[$i][2][$j][0]) > 50) {
+					$data[$i][2][$j][0] = substr($data[$i][2][$j][0], 0, 50);
+					$data[$i][2][$j][0] .= "...";
+				}
+
+			$assign_content .= "\n          <li><a class=\"square_bullet2\" href=\"$url\"><strong class=\"title_pos\">".$data[$i][2][$j][0].autoCloseTags($data[$i][2][$j][0])." <span class=\"announce_date\"> (".nice_format($data[$i][2][$j][2]).")</span></strong></a><p class=\"content_pos\">".$data[$i][2][$j][1].autoCloseTags($data[$i][2][$j][1])."</p></li>";
 			}
-			if ($i+1 <$max_repeat_val) $assign_content .= "<br>";
+			//if ($i+1 <$max_repeat_val) $assign_content .= "<br>";
 		}
 	}
 
-	$assign_content .= "</ul></div> ";
+	$assign_content .= "
+        </ul>
+      </div> ";
 
 	if (!$announceExist) {
 		$assign_content = "<p>$langNoAnnouncementsExist</p>";

@@ -311,18 +311,16 @@ aCont;
 
 			$docsExist = true;
 
-			$content .= "
-        <li class=\"category\">".$data[$i][0]."</li>";
+			$content .= "\n          <li class=\"category\">".$data[$i][0]."</li>";
 
 			for ($j=0; $j < $iterator; $j++) {
 
 				$url = $_SERVER['PHP_SELF'] . "?perso=6&c=" .$data[$i][1]."&p=".$data[$i][2][$j][0];
 
-				$content .= "
-      <li><a class=\"square_bullet2\" href=\"$url\"><p class=\"content_pos\">".$data[$i][2][$j][1]." : (".nice_format(date("Y-m-d", strtotime($data[$i][2][$j][3]))).")</p></a></li>";
+				$content .= "\n          <li><a class=\"square_bullet2\" href=\"$url\"><strong class=\"title_pos\">".$data[$i][2][$j][1]." - (".nice_format(date("Y-m-d", strtotime($data[$i][2][$j][3]))).")</strong></a></li>";
 			}
 
-			if ($i+1 <$max_repeat_val) $content .= "<br>";
+			//if ($i+1 <$max_repeat_val) $content .= "<br>";
 
 		}
 

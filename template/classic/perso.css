@@ -141,21 +141,86 @@ table.assign {
 	font-weight: bold;
 }
 
-.title_pos {
+//---------------
+#assigncontainer {
+	width: 100%;
+	padding:0;
+}
+
+
+#assigncontainer ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+#assigncontainer a {
 	display: block;
-	padding-left: 16px;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	margin-left:1px;
+	<!--[if lte IE 6]>
+	//width: 99.9%;
+	<![endif]-->
+
+}
+
+#assigncontainer a:link, #assignlist a:visited {
+	text-decoration: none;
+}
+
+#assigncontainer a:hover {
+	display:block;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	background-color: #fff;
+	text-decoration: none;
+
+}
+
+#assigncontainer li.category {
+	margin-top: 0px;
+	margin-left: 0px;
+	display: block;
+	padding: 0px;
 	color: #727266;
 	font-weight: bold;
 }
 
-.content_pos {
+.lessonslist_header {
+	border : 0px !important;
+	padding: 0px !important;
+	background-color: transparent !important;
+	border-bottom: 1px solid #EDECDF !important;
+	color: #CAC3B5;
+}
+
+
+.title_pos {
 	display: block;
 	padding-left: 14px;
+	color: #727266;
+	font-weight: bold;
+}
+
+.more_pos {
+	color: #727266;
+    padding-left: 10px;
+}
+
+.content_pos {
+  	display: block;
+	padding-left: 14px;
+    color: #727266;
+    padding-top: 0px;
 }
 
 p.content_pos {
-	display: block;
-	padding-left: 11px;
+  	display: block;
+	padding-left: 10px;
+    font-size: 10px;
+    color: #727266;
 }
 
 cite.content_pos {
@@ -200,20 +265,20 @@ cite.content_pos {
 	background-image: url(img/admin-tools.gif);
 	background-repeat: no-repeat;
 	background-position: 0 50%;
-	padding: 4px 0 4px 20px;
+	padding: 4px 0 4px 20px;       
 	margin: .5em 0;
 }
 
 .square_bullet {
 	background-image: url(img/arrow_grey.gif);
 	background-repeat: no-repeat;
-	background-position: 4px 8px;
+	background-position: 4px 6px;
 }
 
 .square_bullet2 {
 	background-image: url(img/arrow_grey.gif);
 	background-repeat: no-repeat;
-	background-position: 4px 9px;
+	background-position: 4px 6px;
 }
 
 .enroll_icon {
@@ -254,60 +319,4 @@ cite.content_pos {
 
 .announce_date{
 	color: #727266;
-}
-
-//---------------
-
-#assigncontainer {
-	width: 100%;
-	padding:0;
-}
-
-
-#assigncontainer ul {
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
-	font-family: Arial, Helvetica, sans-serif;
-}
-
-#assigncontainer a {
-	display: block;
-	padding-top: 1px;
-	padding-bottom: 1px;
-	margin-left:1px;
-	<!--[if lte IE 6]>
-	//width: 99.9%;
-	<![endif]-->
-	
-}
-
-#assigncontainer a:link, #assignlist a:visited {
-	text-decoration: none;
-}
-
-#assigncontainer a:hover {
-	display:block;
-	padding-top: 1px;
-	padding-bottom: 1px;
-	background-color: #fff;
-	text-decoration: none;
-	
-}
-
-#assigncontainer li.category {
-	margin-top: 0px;
-	margin-left: 0px;
-	display: block;
-	padding: 0px;
-	color: #727266;
-	font-weight: bold;
-}
-
-.lessonslist_header {
-	border : 0px !important;
-	padding: 0px !important;
-	background-color: transparent !important;
-	border-bottom: 1px solid #EDECDF !important;
-	color: #CAC3B5;
 }

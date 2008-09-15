@@ -1834,7 +1834,7 @@ $langNoPosts="There are no submissions to your forums";
 $langNotEnrolledToLessons="You are not enrolled to any lessons";
 $langCreateLesson="You can create a course by following the link \"$langCourseCreate\"";
 $langEnroll="You can enroll to a course by following the link \"$langOtherCourses\"";
-$langMore="...[More]";
+$langMore="More";
 $langSender="Sender";
 $langUnknown="not defined";
 $langDuration="Duration";
@@ -3175,6 +3175,8 @@ $langGroupWorkIntro = '
 	Furthermore, no new submissions are allowed when the assignment has
 	been graded.';
 
+$langGroupWorkSubmitted = "submitted";
+$langGroupWorkÕœ‘Submitted = "NOT submitted";
 $langModify="Modify";
 $langEditSuccess = "Successful editing!";
 $langEditError = "An error occured during the editing !";

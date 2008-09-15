@@ -28,7 +28,7 @@
 
  * Personalised Documents Component, eClass Personalised
 
- * 
+ *
 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
 
@@ -36,9 +36,9 @@
 
  * @package eClass Personalised
 
- * 
+ *
 
- * @abstract This component populates the agenda block on the user's personalised 
+ * @abstract This component populates the agenda block on the user's personalised
 
  * interface. It is based on the diploma thesis of Evelthon Prodromou.
 
@@ -52,7 +52,7 @@
 
  * Function getUserAgenda
 
- * 
+ *
 
  * Populates an array with data regarding the user's personalised agenda.
 
@@ -105,11 +105,11 @@ function getUserAgenda($param, $type) {
 
 	$sql_4 = "SELECT agenda.titre, agenda.contenu, agenda.day, agenda.hour, agenda.lasting, agenda.lesson_code,cours.intitule
 
-			FROM 
+			FROM
 
 			(	SELECT day
 
-				FROM agenda 
+				FROM agenda
 
 				WHERE ($tbl_lesson_codes)
 
@@ -130,19 +130,19 @@ function getUserAgenda($param, $type) {
 			ORDER by day, hour
 
 			";
-	
+
 
 	//mysql version 5.x query
 
-	$sql_5= "SELECT agenda.titre, agenda.contenu, agenda.day, 
-			DATE_FORMAT(agenda.hour, '%H:%i'), 
+	$sql_5= "SELECT agenda.titre, agenda.contenu, agenda.day,
+			DATE_FORMAT(agenda.hour, '%H:%i'),
 			agenda.lasting, agenda.lesson_code,cours.intitule
 
-			FROM 
+			FROM
 
 			((	SELECT day
 
-				FROM agenda 
+				FROM agenda
 
 				WHERE ($tbl_lesson_codes)
 
@@ -168,7 +168,7 @@ function getUserAgenda($param, $type) {
 
 	$ver = mysql_get_server_info();
 
-	
+
 
 	if (version_compare("5.0", $ver) <= 0)
 
@@ -178,7 +178,7 @@ function getUserAgenda($param, $type) {
 
 	$sql = $sql_4;//mysql 5 compatible query
 
-	
+
 
 	$mysql_query_result = db_query($sql, $mysqlMainDb);
 
@@ -195,7 +195,7 @@ function getUserAgenda($param, $type) {
 
 	while ($myAgenda = mysql_fetch_row($mysql_query_result)) {
 
-		
+
 
 		//allow certain html tags that do not cause errors in the
 
@@ -277,7 +277,8 @@ function getUserAgenda($param, $type) {
 
 function agendaHtmlInterface($data) {
 
-	global $langNoEventsExist, $langUnknown, $langDuration, $langMore, $l_ondate, $langHours, $langHour;
+	global $langNoEventsExist, $langUnknown, $langDuration, $langMore, $l_ondate, $langHours, $langHour, $langExerciseStart;
+
 
 	$numOfDays = count($data);
 
@@ -285,16 +286,13 @@ function agendaHtmlInterface($data) {
 
 		$agenda_content= <<<agCont
 
-	<div id="datacontainer">
-
-
-
-	<ul id="datalist">
+      <div id="datacontainer">
+        <ul id="datalist">
 
 agCont;
 		for ($i=0; $i <$numOfDays; $i++) {
 
-			$agenda_content .= "<li class=\"category\">".nice_format($data[$i][0][2])."</li>";
+			$agenda_content .= "\n          <li class=\"category\">".nice_format($data[$i][0][2])."</li>";
 
 			$iterator =  count($data[$i]);
 
@@ -312,25 +310,25 @@ agCont;
 					$data[$i][$j][4] = $data[$i][$j][4]." $langHours";
 				}
 
+				if(strlen($data[$i][$j][0]) > 80) {
+					$data[$i][$j][0] = substr($data[$i][$j][0], 0, 80);
+					$data[$i][$j][0] .= "...";
+				}
 
 				if(strlen($data[$i][$j][1]) > 150) {
 					$data[$i][$j][1] = substr($data[$i][$j][1], 0, 150);
-					$data[$i][$j][1] .= " <strong class=\"announce_date\">$langMore</strong>";
+					$data[$i][$j][1] .= "... <a href=\"$url\">[$langMore]</a>";
+
 				}
 
-				$agenda_content .= "<li><a class=\"square_bullet\" href=\"$url\">
-				<p class=\"title_pos\">
-				<span class=\"announce_date\">".$data[$i][$j][0]."</span></p>
-				<strong class=\"title_pos\">"
-				.$data[$i][$j][6]."&nbsp;".$l_ondate."&nbsp;".$data[$i][$j][3]." ($langDuration: ".$data[$i][$j][4].")</strong>
-				</a>
-				<p class=\"content_pos\">".$data[$i][$j][1].autoCloseTags($data[$i][$j][1])."</p>
-				</li>";
+				$agenda_content .= "\n          <li><a class=\"square_bullet2\" href=\"$url\"><strong class=\"title_pos\">".$data[$i][$j][0]."</strong></a> <p class=\"content_pos\"><b class=\"announce_date\">".$data[$i][$j][6]."</b>&nbsp;-&nbsp;(".$langExerciseStart.":<b>".$data[$i][$j][3]."</b>, $langDuration:<b>".$data[$i][$j][4]."</b>)<br /><span class=\"announce_date\"> ".$data[$i][$j][1].autoCloseTags($data[$i][$j][1])."</span></p></li>";
 			}
 
-			if ($i+1 <$numOfDays) $agenda_content .= "<br>";
+			//if ($i+1 <$numOfDays) $agenda_content .= "<br>";
 		}
-		$agenda_content .= "</ul></div> ";
+		$agenda_content .= "
+        </ul>
+      </div> ";
 
 	} else {
 

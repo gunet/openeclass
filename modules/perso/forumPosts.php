@@ -290,8 +290,7 @@ function forumHtmlInterface($data) {
 fCont;
 		$numOfLessons = count($data);
 		for ($i=0; $i <$numOfLessons; $i++) {
-			$content .= "
-        <li class=\"category\">".$data[$i][0]."</li>";
+			$content .= "\n          <li class=\"category\">".$data[$i][0]."</li>";
 			$iterator =  count($data[$i][2][0]);
 			for ($j=0; $j < $iterator; $j++){
 				$url = $_SERVER['PHP_SELF']."?perso=5&c=".$data[$i][1]."&t=".$data[$i][2][0][$j][2]."&f=".$data[$i][2][0][$j][0]."&s=".$data[$i][2][0][$j][4];
@@ -299,16 +298,9 @@ fCont;
 					$data[$i][2][0][$j][8] = substr($data[$i][2][0][$j][8], 0, 150);
 					$data[$i][2][0][$j][8] .= " <strong><span class=\"announce_date\">$langMore</span></strong>";
 				}
-				$content .= "
-        <li>
-        <a class=\"square_bullet\" href=\"$url\">
-          <strong class=\"title_pos\">".$data[$i][2][0][$j][3]." (".nice_format(date("Y-m-d", strtotime($data[$i][2][0][$j][5]))).")</strong></a>
-          <p class=\"content_pos\">".$data[$i][2][0][$j][8]."</p>
-          <p align=\"right\"><cite class=\"content_pos\">".$data[$i][2][0][$j][6]." ".$data[$i][2][0][$j][7]."</cite></p>
-
-        </li>";
+				$content .= "\n          <li><a class=\"square_bullet\" href=\"$url\"><strong class=\"title_pos\">".$data[$i][2][0][$j][3]." (".nice_format(date("Y-m-d", strtotime($data[$i][2][0][$j][5]))).")</strong></a><p class=\"content_pos\">".$data[$i][2][0][$j][8]."<br /><cite class=\"content_pos\">".$data[$i][2][0][$j][6]." ".$data[$i][2][0][$j][7]."</cite></p></li>";
 			}
-			if ($i+1 <$numOfLessons) $content .= "<br>";
+			//if ($i+1 <$numOfLessons) $content .= "<br>";
 		}
 		$content .= "
       </ul>
