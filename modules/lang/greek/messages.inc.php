@@ -403,6 +403,8 @@ $langDeleteOK="Το γεγονός διαγράφηκε";
 $langNoEvents = "Δεν υπάρχουν γεγονότα";
 $langSureToDel = "Είστε σίγουρος ότι θέλετε να διαγράψετε το γεγονός με τίτλο";
 $langDelete = "Διαγραφή";
+$langInHour = "(σε ώρες)";
+
 
 // week days
 $langDay_of_weekNames = array();
@@ -1463,7 +1465,7 @@ $langDocumentAlreadyUsed = "Αυτό το έγγραφο έχει ήδη χρη�
 $langDocumentAsModule = "Χρήση Εγγράφου";
 $langDocumentAsModuleLabel = "Εγγράφου";
 $langDocumentInModule = "Έγγραφο σε ενότητα";
-$langEXERCISETypeDesc = "Άσκηση eClass";
+$langEXERCISETypeDesc = "Άσκηση πλατφόρμας";
 $langEndOfSteps = "Κάντε κλίκ στη λήξη αφού ολοκληρώσετε αυτό το τελευταίο βήμα.";
 $langErrorAssetNotFound = "Το στοιχείο δεν βρέθηκε: ";
 $langErrorCopyAttachedFile = "Δεν είναι δυνατή η αντιγραφή αρχείου: ";

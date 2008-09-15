@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 /*
@@ -244,7 +244,7 @@ if ($is_adminOfCourse) {
     <tr><th>$langChooseDate</th>
         <th>$langHour</th>
         <th>$langMinute</th>
-        <th>$langLasting</th>
+        <th>$langLasting $langInHour</th>
     </tr>
     </thead>
 tContentForm;
@@ -262,7 +262,7 @@ tContentForm;
 		
 		// display jscalendar
 		$tool_content .= " ".$start_cal."</td>";
-		$tool_content .= "<td align='center'><select name='fhour'>
+		$tool_content .= "<td align='center' width='100'><select name='fhour'>
 		    <option value='$hours'>$hours</option>
     		<option value='--'>--</option>";
 
@@ -270,7 +270,7 @@ tContentForm;
           $tool_content .= "<option value='$h'>$h</option>";
 
     $tool_content .= "</select></td>";
-	$tool_content .= "<td align='center'><select name=\"fminute\">
+	$tool_content .= "<td align='center' width='100'><select name=\"fminute\">
     <option value=\"$minutes\">[$minutes]</option>
     <option value=\"--\">--</option>";
 

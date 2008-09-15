@@ -277,7 +277,7 @@ function getUserAgenda($param, $type) {
 
 function agendaHtmlInterface($data) {
 
-	global $langNoEventsExist, $langUnknown, $langDuration, $langMore, $l_ondate;
+	global $langNoEventsExist, $langUnknown, $langDuration, $langMore, $l_ondate, $langHours, $langHour;
 
 	$numOfDays = count($data);
 
@@ -305,8 +305,11 @@ agCont;
 				if (strlen($data[$i][$j][4]) == 0) {
 					$data[$i][$j][4] = "$langUnknown";
 				}
+				elseif ($data[$i][$j][4] == 1) {
+					$data[$i][$j][4] = $data[$i][$j][4]." $langHour";
+				}
 				else {
-					$data[$i][$j][4] = $data[$i][$j][4]."'";
+					$data[$i][$j][4] = $data[$i][$j][4]." $langHours";
 				}
 
 

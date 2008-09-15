@@ -366,13 +366,11 @@ $langDaySing = 'day';
 $langDayPlur = 'days';
 $langCleanupInfo = 'This will clean up old files from the "temp", "archive", "garbage", and "tmpUnzipping" directories. Are you sure?';
 $langCleanup = 'Proceed with clean-up';
-
 $langBackAdmin = "Back to admin page";
 
 /************************************************************
 * agenda.inc.php
 ************************************************************/
-
 $langEvents="Events";
 $langAddModify="Add / Modify";
 $langAgenda="Agenda";
@@ -381,7 +379,8 @@ $langMonth="Month";
 $langYear="Year";
 $langHour="Hour";
 $langHours = "Hours";
-$langMinute ="Minutes";
+$langMinutes ="Minutes";
+$langMinute ="Minute";
 $langLasting="Lasting";
 $langDateNow = "Today:";
 $langModify="Modify";
@@ -395,6 +394,7 @@ $langDeleteOK="The event was deleted";
 $langNoEvents = "No events exist";
 $langSureToDel = "Are you sure you want to delete the event titled";
 $langChooseDate = "Choose Date";
+$langInHour = "(in hour)";
 
 /*****************************************************************
 * announcements.inc.php
@@ -433,7 +433,6 @@ $langAnn = "Announced at";
 /*********************************************************
 * archive_course.inc.php
 *********************************************************/
-
 $langArchiveCourse = "Course backuping ";
 $langCreatedIn = "created in";
 $langCreateDirMainBase ="Creation of directory for restoring main database";
