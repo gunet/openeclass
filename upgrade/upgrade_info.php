@@ -1,5 +1,5 @@
-<!-- saved from url=(0022)http://internet.e-mail -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<?PHP header('Content-Type: text/html; charset=UTF-8');
+?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
 <META http-equiv=Content-Type content="text/html; charset=UTF-8">
@@ -60,22 +60,22 @@ pre {
 <p>Με τις παρακάτω οδηγίες περιγράφεται αναλυτικά η διαδικασία αναβάθμισης της
   πλατφόρμας Open eClass από τις προηγούμενες εκδόσεις στην τρέχουσα 2.1. Επίσης, βεβαιωθείτε ότι την ώρα της αναβάθμισης δεν γίνονται μαθήματα ούτε υπάρχει πρόσβαση στις βάσεις δεδομένων του eClass. </p>
 <ul><b>Βήμα 1</b>
- <li> <a href="upgrade.html#unix">Για υπολογιστές με λειτουργικό σύστημα Unix
+ <li> <a href="#unix">Για υπολογιστές με λειτουργικό σύστημα Unix
     / Linux (Solaris, Redhat, Debian, Suse, Mandrake κ.λπ.)</a></li>
-  <li><a href="upgrade.html#win">Για υπολογιστές με λειτουργικό σύστημα Ms Windows
+  <li><a href="#win">Για υπολογιστές με λειτουργικό σύστημα Ms Windows
     (Windows2000, WindowsXP, Windows2003 κ.λπ.)</a></li>
 	</ul>
 	<ul><b>Βήμα 2</b>
-  <li><a href="upgrade.html#dbase">Αναβάθμιση της Βάσης Δεδομένων</a></li>
+  <li><a href="#dbase">Αναβάθμιση της Βάσης Δεδομένων</a></li>
 	</ul>
 	<ul><b>Βήμα 3</b>
-  <li><a href="upgrade.html#after">Έλεγχος επιτυχούς αναβάθμισης</a></li>
+  <li><a href="#after">Έλεγχος επιτυχούς αναβάθμισης</a></li>
 	</ul>
 	<ul>
-	<li><a href="upgrade.html#oldest">Αναβάθμιση από παλιότερες εκδόσεις ( <= 1.6)</a></li>
+	<li><a href="#oldest">Αναβάθμιση από παλιότερες εκδόσεις ( <= 1.6)</a></li>
 	</ul>
 	<ul><b>Προαιρετικές επιπλέον ρυθμίσεις</b>
-  <li><a href="upgrade.html#other">Προαιρετικές επιπλέον ρυθμίσεις</a></li>
+  <li><a href="#other">Προαιρετικές επιπλέον ρυθμίσεις</a></li>
 </ul>
 <br>
 <hr width='80%'><br>
@@ -136,7 +136,7 @@ find ./ -type d -exec chmod 775 {} \;
   </li>
 </ul>
 <p>Μόλις ολοκληρωθούν τα παραπάνω, θα έχετε εγκαταστήσει με επιτυχία τα αρχεία
-  της νέας έκδοσης του eClass (Open eClass 2.1). Στη συνέχεια διαβάστε τις <a href="upgrade.html#dbase">οδηγίες</a>
+  της νέας έκδοσης του eClass (Open eClass 2.1). Στη συνέχεια διαβάστε τις <a href="#dbase">οδηγίες</a>
   για να αναβαθμίσετε τις βάσεις δεδομένων του.</p>
 
 <h3><a name="win">Βήμα 1: Για υπολογιστές με λειτουργικό σύστημα Ms Windows</a></h3>
@@ -174,7 +174,7 @@ find ./ -type d -exec chmod 775 {} \;
     τη νέα διανομή.</li>
 	</ul>
 	<p>Μόλις ολοκληρωθούν τα παραπάνω θα έχετε εγκαταστήσει με επιτυχία τα αρχεία
-    της νέας έκδοσης του Open eClass. Στη συνέχεια διαβάστε τις <a href="upgrade.html#dbase">οδηγίες</a>
+    της νέας έκδοσης του Open eClass. Στη συνέχεια διαβάστε τις <a href="#dbase">οδηγίες</a>
     για να αναβαθμίσετε τις βάσεις δεδομένων του.</p>
 
 <a name="dbase">
@@ -240,6 +240,17 @@ find ./ -type d -exec chmod 775 {} \;
       στο αρχείο κειμένου <a href="../install/README_latex.txt">README_latex.txt</a>. Αν δεν επιθυμείτε υποστήριξη latex
       αφήστε την όπως είναι (δηλαδή στην τιμή <em>FALSE</em>).
 </li>
+<li>
+<p>
+ Μπορείτε να προσθέσετε κείμενο (π.χ. ενημερωτικού περιεχομένου) στα αριστερά και δεξιά της αρχικής σελίδας της πλατφόρμας. Για το σκοπό αυτό, απλά πληκτρολογήστε το κείμενο της αρεσκείας σας (σε μορφή HTML) στα scripts <em>eclass_home_extras_left.html</em> και <em>eclass_home_extras_right.html</em> αντίστοιχα, που βρίσκονται στον αρχικό κατάλογο του eClass.
+</p>
+</li>
+<li>
+<p>
+ Μπορείτε να αλλάξετε τα ονόματα των βασικών ρόλων των χρηστών της πλατφόρμας αλλάζοντας το αρχείο μηνυμάτων (path του eClass)/modules/lang/greek/common.inc.php
+</p>
+</li>
+
 <li>Αν θέλετε να χρησιμοποιήσετε την πλατφόρμα με Web server που έχει ενεργοποιημένη την υποστήριξη SSL
       (π.χ. https://eclass.gunet.gr) μπορείτε να το κάνετε δηλώνοντας στο <em>config.php</em> την μεταβλητή
       <em>urlSecure</em>. π.χ. <code>$urlSecure = "https://eclass.gunet.gr"</code>. Περισσότερες και αναλυτικότερες

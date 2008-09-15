@@ -1,4 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<?PHP header('Content-Type: text/html; charset=UTF-8');
+?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
 <META http-equiv=Content-Type content="text/html; charset=UTF-8">
@@ -429,9 +430,15 @@ short_open_tag = on</pre>
 οδηγίες για τις ενέργειες αυτές, μπορείτε να βρείτε στο εγχειρίδιο του Διαχειριστή (βρίσκεται μέσα στο διαχειριστικό εργαλείο).
 </p>
 </li>
+
 <li>
 <p>
- Μπορείτε να προσθέσετε κείμενο (π.χ. ενημερωτικού περιεχομένου) στα αριστερά και δεξιά της αρχικής σελίδας της πλατφόρμας. Για το σκοπό αυτό, απλά πληκτρολογήστε το κείμενο της αρεσκείας σας (ακόμα και σε μορφή HTML) στα scripts <em>eclass_home_extras_left.html</em> και <em>eclass_home_extras_right.html</em> αντίστοιχα, που βρίσκονται στον αρχικό κατάλογο του eClass.
+ Μπορείτε να προσθέσετε κείμενο (π.χ. ενημερωτικού περιεχομένου) στα αριστερά και δεξιά της αρχικής σελίδας της πλατφόρμας. Για το σκοπό αυτό, απλά πληκτρολογήστε το κείμενο της αρεσκείας σας (σε μορφή HTML) στα scripts <em>eclass_home_extras_left.html</em> και <em>eclass_home_extras_right.html</em> αντίστοιχα, που βρίσκονται στον αρχικό κατάλογο του eClass.
+</p>
+</li>
+<li>
+<p>
+ Μπορείτε να αλλάξετε τα ονόματα των βασικών ρόλων των χρηστών της πλατφόρμας αλλάζοντας το αρχείο μηνυμάτων (path του eClass)/modules/lang/greek/common.inc.php
 </p>
 </li>
   <li>Τέλος, στους χρήστες της πλατφόρμας, θα πρέπει να επισημανθεί να έχουν την 

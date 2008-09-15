@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 
@@ -53,7 +53,7 @@ if (intval($max_execution_time) < 300) {
 }
 $tool_content .= "<p>Για να δείτε τις αλλαγές-βελτιώσεις της καινούριας έκδοσης του eClass κάντε
    κλικ <a href='CHANGES.txt'>εδώ</a>. Αν δεν το έχετε κάνει ήδη, παρακαλούμε
-   διαβάσετε και ακολουθήστε τις <a href='upgrade.html'>οδηγίες αναβάθμισης</a>
+   διαβάσετε και ακολουθήστε τις <a href='upgrade_info.php'>οδηγίες αναβάθμισης</a>
    πριν προχωρήσετε στο παρακάτω βήμα.</p>
 <p>Για να προχωρήσετε στην αναβάθμιση της βάσης δεδομένων, δώστε το όνομα
    χρήστη και το συνθηματικό του διαχειριστή της πλατφόρμας:</p>

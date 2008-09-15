@@ -19,9 +19,9 @@ header('Content-Type: text/html; charset=UTF-8');
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 /*
  * Installation wizard
@@ -570,7 +570,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 		<ul id=\"installBullet\">
      		<li>$langAddOnExpl</li>
     		<li>$langExpPhpMyAdmin</li></ul>
-		<p>$langBeforeInstall1<a href=\"install.html\" target=_blank>$langInstallInstr</a>.</p>
+		<p>$langBeforeInstall1<a href=\"install_info.php\" target=_blank>$langInstallInstr</a>.</p>
 		<p>$langBeforeInstall2<a href=\"../README.txt\" target=_blank>$langHere</a>.</p>
 		<br><input type=\"submit\" name=\"install2\" value=\"$langNextStep >\">
 		</form>";
