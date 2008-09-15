@@ -78,7 +78,7 @@ $tool_content .= "
       <td><input class=\"FormData_InputText\" name=\"ldapbind_pw\" type=\"password\" size=\"30\" value=\"".$ldapbind_pw."\"></td>
     </tr>
     <tr>
-      <th class=\"left\">$langInstructions:</td>
+      <th class=\"left\">$langInstructionsAuth:</td>
       <td><textarea class=\"FormData_InputText\" name=\"ldapinstructions\" cols=\"30\" rows=\"10\" wrap=\"virtual\">".$ldapinstructions."</textarea>   </td>
     </tr>
 ";

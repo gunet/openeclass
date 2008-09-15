@@ -98,7 +98,7 @@ $tool_content .= "
     <td><input class=\"FormData_InputText\" name=\"dbfieldpass\" type=\"text\" size=\"30\" value=\"$dbfieldpass\" /></td>
     </tr>
     <tr>
-      <th class=\"left\">$langInstructions:</th>
+      <th class=\"left\">$langInstructionsAuth:</th>
       <td><textarea class=\"FormData_InputText\" name=\"dbinstructions\" cols=\"30\" rows=\"10\" wrap=\"virtual\">".$dbinstructions."</textarea></td>
     </tr>
 ";
