@@ -302,7 +302,7 @@ agCont;
 
 				$url = $_SERVER['PHP_SELF'] . "?perso=4&c=" . $data[$i][$j][5];
 
-				if (strlen($data[$i][$j][4]) = 0) {
+				if (strlen($data[$i][$j][4]) == 0) {
 					$data[$i][$j][4] = "$langUnknown";
 				}
 				else {
