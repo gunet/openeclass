@@ -1831,12 +1831,12 @@ $langNoAnnouncementsExist="No announcements exist";
 $langNoDocsExist="No documents exist";
 $langNoPosts="There are no submissions to your forums";
 $langNotEnrolledToLessons="You are not enrolled to any lessons";
-$langCreateLesson="You can create a course by following the link \"$langCourseCreate\"";
-$langEnroll="You can enroll to a course by following the link \"$langOtherCourses\"";
 $langMore="More";
 $langSender="Sender";
 $langUnknown="not defined";
 $langDuration="Duration";
+$langClassic = "Simple";
+$langModern = "Advanced";
 
 /***************************************************************************
 * phpbb.inc.php

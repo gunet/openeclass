@@ -54,15 +54,10 @@ if (session_is_registered("uid") && isset($perso)) {
 	switch ($perso){
 
 		case 1: { //assignments
-
 			//$c is the lesson code.
-
 			$_SESSION["dbname"] = $c;
-
 			$url = $urlServer."modules/work/work.php?id=".$i;
-
 			header("location:".$url);
-
 			break;
 
 		}
@@ -70,28 +65,11 @@ if (session_is_registered("uid") && isset($perso)) {
 
 
 		case 2: {//announcements
-
 			//$c is the lesson code.
-
 			$_SESSION["dbname"] = $c;
-
 			header("location:".$urlServer."modules/announcements/announcements.php");
-
 			break;
-
 		}
-
-
-
-//		case 3: {//documents
-
-//		
-
-//		echo "switch two";
-
-//			break;
-
-//		}
 
 
 
@@ -104,7 +82,6 @@ if (session_is_registered("uid") && isset($perso)) {
 			header("location:".$urlServer."modules/agenda/agenda.php");
 
 			break;
-
 		}
 
 
@@ -124,21 +101,12 @@ if (session_is_registered("uid") && isset($perso)) {
 
 
 		case 6: {//documents
-
 			$_SESSION["dbname"] = $c;
-
 			$url = $urlServer."modules/document/document.php?openDir=" . $p;
-
 			header("location:".$url);
-
 			break;
-
 		}
-
 	}
-
-
-
 
 
 } elseif (!session_is_registered("uid")){

@@ -215,7 +215,7 @@ function htmlInterface($data, $lesson_fCode) {
 
 	global $statut, $is_admin, $urlServer, $langCourseCreate, $langOtherCourses;
 
-	global $langNotEnrolledToLessons, $langCreateLesson, $langEnroll;
+	global $langNotEnrolledToLessons, $langWelcomeProf, $langWelcomeStud;
 
 	global $langCourse, $langActions, $langUnregCourse, $langManagement, $uid;
 
@@ -258,10 +258,10 @@ lCont;
 		$lesson_content .= "<p>$langNotEnrolledToLessons</p>";
 
 		if ($statut == 1) {
-			$lesson_content .= "<p>$langCreateLesson</p>";
+			$lesson_content .= "<p>$langWelcomeProf</p>";
 		}
 
-		$lesson_content .= "<p>$langEnroll</p>";
+		$lesson_content .= "<p>$langWelcomeStud</p>";
 
 	}
 

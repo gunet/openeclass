@@ -74,8 +74,6 @@ if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
 	// everything is ok
 	else {
 		##[BEGIN personalisation modification]############
-		if (!isset($persoStatus) || $persoStatus == "") $persoStatus = "no";
-		else  $persoStatus = "yes";
 		$userLanguage = $_REQUEST['userLanguage'];
 		$username_form = escapeSimple($username_form);
 		if(mysql_query("UPDATE user
@@ -93,12 +91,8 @@ if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
 if (isset($submit) && isset($ldap_submit) && ($ldap_submit == "ON")) {
 
 	$userLanguage = $_REQUEST['userLanguage'];
-	if (!isset($persoStatus) || $persoStatus == "")
-		$persoStatus = "no";
-	else  
-		$persoStatus = "yes";
 	mysql_query(" UPDATE user SET perso = '$persoStatus', 
-			lang = '$userLanguage' WHERE user_id='".$_SESSION["uid"]."' ");
+		lang = '$userLanguage' WHERE user_id='".$_SESSION["uid"]."' ");
 	if (session_is_registered("user_perso_active") && $persoStatus=="no") session_unregister("user_perso_active");
 	if ($userLang == "el") {
 		$_SESSION['langswitch'] = "greek";
@@ -173,9 +167,13 @@ $am_form = $myrow['am'];
 ##[BEGIN personalisation modification, added 'personalisation on SELECT]############
 $persoStatus=	$myrow['perso'];
 $userLang = $myrow['lang'];
-
-if ($persoStatus == "yes") $checkedPerso = "checked";
-else $checkedPerso = "";
+if ($persoStatus == "yes")  {
+	$checkedClassic = "checked";
+	$checkedPerso = "";
+} else {
+	$checkedClassic  = "";
+	$checkedPerso = "checked";
+}
 
 if ($userLang == "el") {
 	$checkedLangEl = "checked";
@@ -275,17 +273,19 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
     </tr>";
 	##[BEGIN personalisation modification]############
 	if (session_is_registered("perso_is_active")) {
-		$tool_content .="<tr>
-      <th width=\"150\" class='left'>$langPerso</th>
-      <td><input class='FormData_InputText' type=checkbox name='persoStatus' value=\"yes\" $checkedPerso></td>
-    </tr>";
+		$tool_content .= "<tr><th width=\"150\" class='left'>$langPerso</th>
+        	<td>
+		<input class='FormData_InputText' type=radio name='persoStatus' value='no' $checkedPerso>$langModern&nbsp;
+		<input class='FormData_InputText' type=radio name='persoStatus' value='yes' $checkedClassic>$langClassic
+		</td>
+        	</tr>"; 
 	}
 	##[END personalisation modification]############
 	$tool_content .= "<tr>
       <th class='left'>$langLanguage</th>
       <td>
         <input type='radio' name='userLanguage' value='el' $checkedLangEl>$langGreek<br>
-        <input type='radio' name='userLanguage' value='en'  $checkedLangEn>$langEnglish
+        <input type='radio' name='userLanguage' value='en' $checkedLangEn>$langEnglish
       </td>
     </tr>
 	<tr>
