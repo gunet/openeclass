@@ -52,6 +52,34 @@ function confirmation (name)
 }
 </script>
 ";
+
+$head_content .= <<<hContent
+<script type="text/javascript">
+function checkrequired(which, entry) {
+	var pass=true;
+	if (document.images) {
+		for (i=0;i<which.length;i++) {
+			var tempobj=which.elements[i];
+			if (tempobj.name == entry) {
+				if (tempobj.type=="text"&&tempobj.value=='') {
+					pass=false;
+					break;
+		  		}
+	  		}
+		}
+	}
+	if (!pass) {
+		alert("$langEmptyAsTitle");
+		return false;
+	} else {
+		return true;
+	}
+}
+
+</script>
+hContent;
+
+
 // For using with the pop-up calendar
 include 'jscalendar.inc.php';
 
@@ -357,7 +385,7 @@ function new_assignment()
       </ul>
     </div>";
 	$tool_content .= "
-    <form action=\"work.php\" method=\"post\">
+    <form action=\"work.php\" method=\"post\" onsubmit=\"return checkrequired(this, 'title');\">
     <table width=\"99%\" class='FormData'>
     <tbody>
     <tr>
@@ -450,7 +478,7 @@ function show_edit_assignment($id)
 
 	$description = q($row['description']);
 	$tool_content .= <<<cData
-    <form action="work.php" method="post">
+    <form action="$_SERVER[PHP_SELF]" method="post" onsubmit="return checkrequired(this, 'title');">
     <input type="hidden" name="id" value="$id">
     <input type="hidden" name="choice" value="do_edit">
     <table width="99%" class="FormData">

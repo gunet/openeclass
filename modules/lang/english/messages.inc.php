@@ -661,8 +661,7 @@ $langTargetFac="This is the faculty, department or school where the course is de
 $langMax="max. 12 characters, e.g. <i>ROM2121</i>";
 $langDoubt="If you doubt on your course's code, consult, ";
 $langExFac = "If you wish to create course, in another faculty, then contact Asynchronous Teleteaching Team";
-$langEmpty="You left some fields empty.<br>Use the <b>Back</b> button on your browser and try again.<br>";
-$langEmptyFields="You left some fields empty.";
+$langEmptyFields="You left some fields empty!";
 $langErrorDir = "Unable to create course subdirectory. The course was not created! <br><br>Please check <em>courses</em> directory access permissions.";
 
 // tables MySQL
@@ -3178,7 +3177,7 @@ $langGroupWorkIntro = '
 $langGroupWorkSubmitted = "Submitted";
 $langGroupWorkSubmitted1 = "NOT submitted";
 $langGroupWorkDeadline_of_Submission = "Deadline of Submission";
-
+$langEmptyAsTitle = "You didn't fill assignment title";
 $langModify="Modify";
 $langEditSuccess = "Successful editing!";
 $langEditError = "An error occured during the editing !";

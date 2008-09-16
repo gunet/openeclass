@@ -26,37 +26,44 @@
 
 $require_login = TRUE;
 $require_prof = TRUE;
-
 $require_help = TRUE;
 $helpTopic = 'CreateCourse';
 
 include '../../include/baseTheme.php';
 $nameTools = $langCreateCourse . " (" . $langCreateCourseStep ." 1 " .$langCreateCourseStep2 . " 3 )" ;
+$tool_content = $head_content = "";
 
-$local_head = '
+$head_content .= <<<hContent
 <script type="text/javascript">
-function validate()
-{
-  if (document.forms[0].intitule.value=="")
-  {
-      alert("'.$langAlertTitle.'");
-      return false;
-  }
-  if (document.forms[0].titulaires.value=="")
-  {
-      alert("'.$langAlertProf.'");
-      return false;
-  }
-    return true;
+function checkrequired(which, entry, entry2) {
+	var pass=true;
+	if (document.images) {
+		for (i=0;i<which.length;i++) {
+			var tempobj=which.elements[i];
+			if ((tempobj.name == entry) || (tempobj.name == entry2)) {
+				if (tempobj.type=="text"&&tempobj.value=='') {
+					pass=false;	
+					break;
+		  		}
+	  		}
+		}
+	}
+	if (!pass) {
+		alert("$langEmptyFields");
+		return false;
+	} else {
+		return true;
+	}
 }
-</script>
-';
 
-$tool_content = "";
+</script>
+hContent;
+
 $titulaire_probable="$prenom $nom";
 $local_style = "input { font-size: 12px; }";
 
-$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]' onsubmit='return validate();'>";
+$tool_content .= "<form method='post' name='createform' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'intitule', 'titulaires');\">";
+//$tool_content .= "<form method='post' name='createform' action='$_SERVER[PHP_SELF]'>";
 @$tool_content .= "<input type='hidden' name='intitule' value='".htmlspecialchars($_POST['intitule'])."' />
       <input type='hidden' name='faculte' value='".htmlspecialchars($_POST['faculte'])."' />
       <input type='hidden' name='titulaires' value='".htmlspecialchars($_POST['titulaires'])."' />
@@ -308,23 +315,9 @@ if (isset($create_course)) {
         $language = preg_replace('/[^a-z]/', '', $_POST['languageCourse']);
         include("../lang/$language/common.inc.php");
         include("../lang/$language/messages.inc.php");
-        if(empty($intitule) OR empty($repertoire)) {
-                $tool_content .= "
-    <table width=\"99%\">
-    <tbody>
-    <tr>
-      <td class=\"caution\" height='60'>
-      <p>$langEmptyFields</p>
-      <p><a href=\"javascript:history.go(-1)\">$langAgain</a></p>
-      </td>
-    </tr>
-    </tbody>
-    </table>\n";
-
-        } else {	// if all form fields fulfilled
-                // replace lower case letters by upper case in code_cours
-                $repertoire=strtoupper($repertoire);
-                $faculte_lower=strtolower($faculte);
+        // replace lower case letters by upper case in code_cours
+        $repertoire=strtoupper($repertoire);
+        $faculte_lower=strtolower($faculte);
 
                 //remove space in code_cours
                 $repertoire = str_replace (" ", "", $repertoire);
@@ -342,7 +335,7 @@ if (isset($create_course)) {
                        mkdir("../../courses/$repertoire/scormPackages", 0777) and
                        mkdir("../../video/$repertoire", 0777))) {
                         $tool_content .= "<div class='caution'>$langErrorDir</div>";
-                        draw($tool_content, '1', null, $local_head);
+                        draw($tool_content, '1', null, $head_content);
                         exit;
                 }
                 // ---------------------------------------------------------
@@ -407,11 +400,9 @@ if (isset($create_course)) {
   <p align='center'><a href='../../courses/$repertoire/index.php' class=mainpage><img src=\"../../template/classic/img/go.gif\" alt=\"\" border=\"0\" height=\"46\" width=\"46\"></a><p>
   <p align='center'>&nbsp;<a href='../../courses/$repertoire/index.php' class=mainpage>$langEnter</a>&nbsp;</p>
 ";
-
-        } // else
 } // end of submit
 
 $tool_content .= "</form>";
 
-draw($tool_content, '1', null, $local_head);
+draw($tool_content, '1', null, $head_content);
 ?>
