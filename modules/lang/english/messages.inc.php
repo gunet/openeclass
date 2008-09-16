@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 
@@ -205,7 +205,7 @@ $langListRegisteredProfessors = "Registered ".$langTeachers." List";
 $langErrChoose = "An error occured!";
 
 // eclassconf
-$langEclassConf = "Configuration File of eClass";
+$langEclassConf = "Configuration File";
 $langFileUpdatedSuccess = "Config file edited with success!";
 $langFileEdit = "File Edit";
 $langFileError = "Unable to write config.php! Please check persmissions!";
@@ -452,7 +452,7 @@ $langBackupOfDataBase="Backup of database";
 * authmethods.inc.php
 *******************************************************/
 
-$langViaeClass = "using eClass";
+$langViaeClass = "using Open eClass";
 $langViaPop = "using a POP3 mail account";
 $langViaImap = "using an IMAP mail account";
 $langViaLdap = "using an LDAP account";
@@ -503,15 +503,14 @@ $langWrongAuth = "You did not provide a valid pair of username/password";
 
 $langCopyright = "Copyright Notice";
 $langCopyrightNotice = '
-eClass © 2003 - 2007 <a href="http://www.gunet.gr/" target=_blank>Greek Universities Network GUnet</a>.<br>&nbsp;<br>
-The <a href="http://portal.eclass.gunet.gr" target=_blank>eClass platform</a>
-is a complete Electronic Course Management System and constitutes GUnet\'s
+Open eClass © 2003 - 2008 <a href="http://www.gunet.gr/" target=_blank>Greek Universities Network GUnet</a>.<br>&nbsp;<br>
+The <a href="http://www.openeclass.org" target=_blank>Open eClass platform</a>
+is a complete Electronic Course Management System and is GUnet\'s
 proposition for an Asynchronous Teleteaching Service infrastructure.
 It was developed and is actively supported by the GUnet Asynchronous
-Teleteaching Team, and is <a
-href="http://download.eclass.gunet.gr" target="_blank">distributed freely</a>
+Teleteaching Team, and is <a href="http://download.eclass.gunet.gr" target="_blank">distributed freely</a>
 as Open Source Software under the GNU General Public License (GNU GPL).<br><br>
-The content of Electronic Courses hosted on the eClass platform, as well as
+The content of Electronic Courses hosted on the Open eClass platform, as well as
 all copyrights of this content, belongs to the authors of the courses and
 GUnet claims no rights on it. For every use or republication of course
 content, please contact the persons in charge of the respective course.';
@@ -1264,15 +1263,6 @@ $logo= "Asynchronous Teleteaching Platform $siteName";
 $gunet="$siteName Asynchronous Teleteaching Group";
 $sendinfomail="Send information e-mail to ".$langsTeachers." ";
 $infoabouteclass="Update information about $siteName";
-$langCopyrightNotice = '
-Copyright © 2003 - 2008 <a href="http://www.gunet.gr/" target=_blank>GUnet</a>.<br>&nbsp;<br>
-<a href="http://portal.eclass.gunet.gr" target=_blank>Platform Open eClass</a>
-is a complete course management system. It was developed and currently supported by GUnet Asynchronous Teleteaching Team and is <a href="http://download.eclass.gunet.gr" target="_blank">freely available</a>
-as Open Source Software according to GNU General Public License (GNU GPL).<br><br>
-The content of the courses hosted here is the property of their creators
-and GUnet doesn\'t claim any rights upon it. For any further use or
-republication of the content please contact the maintainers of each
-course.';
 
 // contact.php
 $introcontact = "You can contact with the Asynchronous Teleteaching Team of <b>".$siteName."</b> using the
@@ -2527,7 +2517,7 @@ $langRequestDisplayMessage = "the message will also include the above comment";
 $langNoSuchRequest = "No such prof request with this ID. Cannot Proceed";
 $langTeacherRequestHasRejected = "".$langTeacher."  Request is now rejected";
 $langRequestMessageHasSent = " and a message was sent in the address ";
-$langRequestHasRejected = "Your request for registration to the eClass platform has rejected.";
+$langRequestHasRejected = "Your request for registration to platform has rejected.";
 $langRegistrationDate = "Registration Date";
 $langExpirationDate = "Expiration Date";
 $langCourseRegistrationDate = "Course Registration Date";
