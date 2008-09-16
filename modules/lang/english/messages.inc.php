@@ -3176,7 +3176,7 @@ $langGroupWorkIntro = '
 	been graded.';
 
 $langGroupWorkSubmitted = "Submitted";
-$langGroupWorkÕœ‘Submitted = "NOT submitted yet";
+$langGroupWorkSubmitted1 = "NOT submitted";
 $langGroupWorkDeadline_of_Submission = "Deadline of Submission";
 
 $langModify="Modify";
