@@ -3141,8 +3141,10 @@ $langGroupWorkIntro = '
 	δεν μπορείτε να στείλετε αρχείο σε εργασία που έχει ήδη βαθμολογηθεί
 	από τον διδάσκοντα.';
 
-$langGroupWorkSubmitted = "υποβλήθηκε";
-$langGroupWorkSubmitted1 = "ΔΕΝ υποβλήθηκε";
+$langGroupWorkSubmitted = "Έχει&nbsp;αποσταλεί";
+$langGroupWorkSubmitted1 = "ΔΕΝ έχει&nbsp;αποσταλεί";
+$langGroupWorkDeadline_of_Submission = "Προθεσμία υποβολής";
+
 $langEditSuccess = "Η διόρθωση των στοιχείων της εργασίας έγινε με επιτυχία!";
 $langEditError = "Παρουσιάστηκε πρόβλημα κατά την διόρθωση των στοιχείων !";
 $langNewAssign = "Δημιουργία Εργασίας";

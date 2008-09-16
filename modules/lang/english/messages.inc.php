@@ -3175,8 +3175,10 @@ $langGroupWorkIntro = '
 	Furthermore, no new submissions are allowed when the assignment has
 	been graded.';
 
-$langGroupWorkSubmitted = "submitted";
-$langGroupWorkÕœ‘Submitted = "NOT submitted";
+$langGroupWorkSubmitted = "Submitted";
+$langGroupWorkÕœ‘Submitted = "NOT submitted yet";
+$langGroupWorkDeadline_of_Submission = "Deadline of Submission";
+
 $langModify="Modify";
 $langEditSuccess = "Successful editing!";
 $langEditError = "An error occured during the editing !";
