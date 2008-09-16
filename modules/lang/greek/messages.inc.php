@@ -776,6 +776,7 @@ $langViMod="Η ορατότητα του εγγράφου άλλαξε";
 $langMoveOK="Η μεταφορά έγινε με επιτυχία!";
 $langMoveNotOK="η μεταφορά δεν πραγματοποιήθηκε!";
 $langRoot = "Αρχικός κατάλογος";
+$langNoDocuments = "Δεν υπάρχουν έγγραφα";
 
 // Special for group documents
 $langGroupSpace="Περιοχή ομάδας χρηστών";

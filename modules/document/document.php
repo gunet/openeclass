@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 /*===========================================================================
@@ -82,11 +82,10 @@ if (@$action2=="download")
 
 if($is_adminOfCourse)  {
 	if (@$uncompress == 1)
-	include("../../include/pclzip/pclzip.lib.php");
+		include("../../include/pclzip/pclzip.lib.php");
 }
 
 // file manager basic variables definition
-
 $baseServDir = $webDir;
 $baseServUrl = $urlAppend."/";
 $courseDir = "courses/$currentCourseID/document";
@@ -676,182 +675,188 @@ if($is_adminOfCourse) {
 		$tool_content .=  $dialogBox . " ";
 	}
 } 
-	// Current Directory Line
-$tool_content .= "<div class=\"fileman\">";
-$tool_content .= "<table width=\"99%\" align='left'><thead>";
 
-if($is_adminOfCourse) { 
-	$cols = 4;
+// check if there are documents
+if($is_adminOfCourse) {
+	$sql = db_query("SELECT * FROM document");
 } else { 
-	$cols = 3;
-} 
-
-$tool_content .= "<tr><td class='left' height='18' colspan='$cols' style='border-top: 1px solid #edecdf; border-bottom: 1px solid #edecdf; border-left: 1px solid #edecdf; background: #fff;'>$langDirectory: ".make_clickable_path($dbTable, $curDirPath). "</td>
-<td style='border-top: 1px solid #edecdf; background: #fff; border-bottom: 1px solid #edecdf; border-right: 1px solid #edecdf;'><div align='right'>";
-
-/*** go to parent directory ***/
-if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
-{
-   $tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdParentDir."\">$langUp</a>\n";
-   $tool_content .=  "<img src=\"../../template/classic/img/parent.gif\" border=0 align=\"absmiddle\" height='12' width='12'>\n";
+	$sql = db_query("SELECT * FROM document WHERE visibility = 'v'");
 }
-$tool_content .= "</div></td></tr>";
-$tool_content .= "<tr><th width='1' style='border-left: 1px solid #edecdf;'>".$m['type']."</th>
+if (mysql_num_rows($sql) == 0) {
+	$tool_content .= "<p class='alert1'>$langNoDocuments</p>";
+} else {
+
+	// Current Directory Line
+	$tool_content .= "<div class=\"fileman\">";
+	$tool_content .= "<table width=\"99%\" align='left'><thead>";
+
+	if($is_adminOfCourse) { 
+		$cols = 4;
+	} else { 
+		$cols = 3;
+	} 	
+
+	$tool_content .= "<tr><td class='left' height='18' colspan='$cols' style='border-top: 1px solid #edecdf; border-bottom: 1px solid #edecdf; border-left: 1px solid #edecdf; background: #fff;'>$langDirectory: ".make_clickable_path($dbTable, $curDirPath). "</td>
+	<td style='border-top: 1px solid #edecdf; background: #fff; border-bottom: 1px solid #edecdf; border-right: 1px solid #edecdf;'><div align='right'>";
+
+	/*** go to parent directory ***/
+	if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
+	{
+   	$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdParentDir."\">$langUp</a>\n";
+   	$tool_content .=  "<img src=\"../../template/classic/img/parent.gif\" border=0 align=\"absmiddle\" height='12' width='12'>\n";
+	}
+	$tool_content .= "</div></td></tr>";
+	$tool_content .= "<tr><th width='1' style='border-left: 1px solid #edecdf;'>".$m['type']."</th>
 	<th class='left'>&nbsp;$langName</th>
 	<th width='100'>$langSize</th>
 	<th width='100'>$langDate</th>";
-if($is_adminOfCourse) {
-	$tool_content .= "<th width='100' style='border-right: 1px solid #edecdf;'>$langCommands</th>";
-} 
-$tool_content .= "</tr></thead>";
+	if($is_adminOfCourse) {
+		$tool_content .= "<th width='100' style='border-right: 1px solid #edecdf;'>$langCommands</th>";
+	} 
+	$tool_content .= "</tr></thead>";
 
 // ---------------------------------
 // Display Directories
 // ---------------------------------
-if (isset($dirNameList))
-{
-	while (list($dirKey, $dirName) = each($dirNameList))
+	if (isset($dirNameList))
 	{
-		$result = db_query("SELECT filename FROM document WHERE path LIKE '%$dirName'");
-		$row = mysql_fetch_array($result);
-		$dspDirName = $row['filename'];
-		$cmdDirName = rawurlencode($curDirPath."/".$dirName);
-		if (@$dirVisibilityList[$dirKey] == "i")
-		{
-			$style=" class=\"invisible\"";
-			$style2 = " class=\"invisible_doc\"";
-		}
-		else
-		{
-			$style="";
-			$style2="";
-		}
-		// do not display invisible directories to students
-		if ((@$dirVisibilityList[$dirKey] == "i")  and (!$is_adminOfCourse)) {
-			continue;
-		}
-		$tool_content .=  "<tr $style2>";
-		$tool_content .=  "<td width='1' style='border-left: 1px solid #edecdf;' align='center'><a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style."><img src=\"../../template/classic/img/folder.gif\" border=0 align='absmiddle'></a></td>\n";
-		$tool_content .=  "<td class='left'>\n";
-		$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style.">\n";
-		$tool_content .=  $dspDirName."\n";
-		$tool_content .=  "</a>";
-		/*** comments ***/
-		if (@$dirCommentList[$dirKey] != "")
-		{
-			$dirCommentList[$dirKey] = htmlspecialchars($dirCommentList[$dirKey]);
-			$dirCommentList[$dirKey] = nl2br($dirCommentList[$dirKey]);
-			$tool_content .=  "<span class=\"comment\">";
-			$tool_content .=  " (".$dirCommentList[$dirKey].")";
-			$tool_content .=  "</span>\n";
-		}
-		/*** skip display date and time ***/
-		$tool_content .=  "</td><td>&nbsp;</td><td style='border-right: 1px solid #edecdf;'>&nbsp;</td>";
-		if($is_adminOfCourse) {
-			/*** delete command ***/
-			@$tool_content .=  "<td align='center' style='border-right: 1px solid #edecdf;'><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdDirName."\" onClick=\"return confirmation('".addslashes($dspDirName)."');\">
-			<img src=\"../../template/classic/img/delete.gif\" border=0 title=\"$langDelete\"></a>";
-			/*** copy command ***/
-			$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?move=".$cmdDirName."\">
-			<img src=\"../../template/classic/img/move_doc.gif\" border=0 title=\"$langMove\"></a>";
-			/*** rename command ***/
-			$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?rename=".$cmdDirName."\">
-			<img src=\"../../template/classic/img/edit.gif\" border=0 title=\"$langRename\"></a>";
-			/*** comment command ***/
-			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?comment=".$cmdDirName."\">
-			<img src=\"../../template/classic/img/information.gif\" border=0 title=\"$langComment\"></a>";
-			/*** visibility command ***/
-			if (@$dirVisibilityList[$dirKey] == "i")
-			{
-				$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?mkVisibl=".$cmdDirName."\">
-				<img src=\"../../template/classic/img/invisible.gif\" border=0 title=\"$langVisible\"></a>";
-			}
-			else
-			{
-				$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?mkInvisibl=".$cmdDirName."\">
-				<img src=\"../../template/classic/img/visible.gif\" border=0 title=\"$langVisible\"></a>";
-			}
-			$tool_content .=  "</td></tr>";
-		}
-	}
-}
-
-// ------------------------------
-//       Display Files
-// ------------------------------
-if (isset($fileNameList)) {
-	while (list($fileKey, $fileName) = each ($fileNameList)) {
-		$image = choose_image($fileName);
-		$size = format_file_size($fileSizeList[$fileKey]);
-		$date = format_date($fileDateList[$fileKey]);
-		$urlFileName = format_url($baseServUrl.$courseDir.$curDirPath."/".$fileName);
-		$cmdFileName = rawurlencode($curDirPath."/".$fileName);
-		$dspFileName = htmlspecialchars($fileName);
-		if (@$fileVisibilityList[$fileKey] == "i") {
-			$style2=" class=\"invisible_doc\"";
-		} else {
-			$style2="";
-		}
-		// do not display invisible files to students
-		if ((@$fileVisibilityList[$fileKey] == "i")  and (!$is_adminOfCourse)) {
-			continue;
-		}
-		$tool_content .=  "<tr ".$style2.">\n";
-		$tool_content .=  "<td style='border-left: 1px solid #edecdf;' align='center'>
-		<img src=\"./img/".$image."\" align='absmiddle' border=0>\n";
-		//h $dspFileName periexei to onoma tou arxeiou sto filesystem
-		$query = "SELECT filename, copyrighted FROM document WHERE path LIKE '%".$curDirPath."/".$fileName."%'";
-		$result = mysql_query ($query);
-		$row = mysql_fetch_array($result);
-		$tool_content .=  "</td><td class='left'>";
-		$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' title=\"$langSave\">".$row["filename"];
-		if ($row["copyrighted"] == "1") 
-			$tool_content .= " <img src=\"./img/copyrighted.jpg\" align='absmiddle' border=\"0\">";
-		$tool_content .= "</a>";
-		/*** comments ***/
-		if (@$fileCommentList[$fileKey] != "")
-		{
-			$fileCommentList[$fileKey] = htmlspecialchars($fileCommentList[$fileKey]);
-			$fileCommentList[$fileKey] = nl2br($fileCommentList[$fileKey]);
-			$tool_content .=  "&nbsp;<span class=\"comment\">";
-			$tool_content .=  " (".$fileCommentList[$fileKey].")";
-			$tool_content .=  "</span>\n";
-		}
-		$tool_content .=  "</td>";
-		/*** size ***/
-		$tool_content .=  "<td align='center'>".$size."</td>\n";
-		/*** date ***/
-		$tool_content .=  "<td align='center'>".$date."</td>\n";
-		if($is_adminOfCourse) {
-			/*** delete command ***/
-			$tool_content .=  "<td align='center' style='border-right: 1px solid #edecdf;'><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdFileName."\" onClick=\"return confirmation('".addslashes($row["filename"])."');\">
-			<img src=\"../../template/classic/img/delete.gif\" border=0  title=\"$langDelete\"></a>";
-			/*** copy command ***/
-			$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?move=".$cmdFileName."\">
-			<img src=\"../../template/classic/img/move_doc.gif\" border=0  title=\"$langMove\"></a>";
-			/*** rename command ***/
-			$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?rename=".$cmdFileName."\">
-			<img src=\"../../template/classic/img/edit.gif\" border=0  title=\"$langRename\"></a>";
-			/*** comment command ***/
-			$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?comment=".$cmdFileName."\">
-			<img src=\"../../template/classic/img/information.gif\" border=0  title=\"$langComment\"></a>";
-			/*** visibility command ***/
-			if (@$fileVisibilityList[$fileKey] == "i")
-			{
-				$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?mkVisibl=".$cmdFileName."\">
-				<img src=\"../../template/classic/img/invisible.gif\" border=0  title=\"$langVisible\"></a>";
+		while (list($dirKey, $dirName) = each($dirNameList)) {
+			$result = db_query("SELECT filename FROM document WHERE path LIKE '%$dirName'");
+			$row = mysql_fetch_array($result);
+			$dspDirName = $row['filename'];
+			$cmdDirName = rawurlencode($curDirPath."/".$dirName);
+			if (@$dirVisibilityList[$dirKey] == "i") {
+				$style=" class=\"invisible\"";
+				$style2 = " class=\"invisible_doc\"";
 			} else {
-				$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?mkInvisibl=".$cmdFileName."\">
-				<img src=\"../../template/classic/img/visible.gif\" border=0  title=\"$langVisible\"></a>";
+				$style="";
+				$style2="";
 			}
-			$tool_content .=  "</td></td></tr>\n";
+		// do not display invisible directories to students
+			if ((@$dirVisibilityList[$dirKey] == "i")  and (!$is_adminOfCourse)) {
+				continue;
+			}	
+			$tool_content .=  "<tr $style2>";
+			$tool_content .=  "<td width='1' style='border-left: 1px solid #edecdf;' align='center'><a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style."><img src=\"../../template/classic/img/folder.gif\" border=0 align='absmiddle'></a></td>\n";
+			$tool_content .=  "<td class='left'>\n";
+			$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style.">\n";
+			$tool_content .=  $dspDirName."\n";
+			$tool_content .=  "</a>";
+			/*** comments ***/
+			if (@$dirCommentList[$dirKey] != "")
+			{
+				$dirCommentList[$dirKey] = htmlspecialchars($dirCommentList[$dirKey]);
+				$dirCommentList[$dirKey] = nl2br($dirCommentList[$dirKey]);
+				$tool_content .=  "<span class=\"comment\">";
+				$tool_content .=  " (".$dirCommentList[$dirKey].")";
+				$tool_content .=  "</span>\n";
+			}
+			/*** skip display date and time ***/
+			$tool_content .=  "</td><td>&nbsp;</td><td style='border-right: 1px solid #edecdf;'>&nbsp;</td>";
+			if($is_adminOfCourse) {
+				/*** delete command ***/
+				@$tool_content .=  "<td align='center' style='border-right: 1px solid #edecdf;'><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdDirName."\" onClick=\"return confirmation('".addslashes($dspDirName)."');\">
+				<img src=\"../../template/classic/img/delete.gif\" border=0 title=\"$langDelete\"></a>";
+				/*** copy command ***/
+				$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?move=".$cmdDirName."\">
+				<img src=\"../../template/classic/img/move_doc.gif\" border=0 title=\"$langMove\"></a>";
+				/*** rename command ***/
+				$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?rename=".$cmdDirName."\">
+				<img src=\"../../template/classic/img/edit.gif\" border=0 title=\"$langRename\"></a>";
+				/*** comment command ***/
+				$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?comment=".$cmdDirName."\">
+				<img src=\"../../template/classic/img/information.gif\" border=0 title=\"$langComment\"></a>";
+				/*** visibility command ***/
+				if (@$dirVisibilityList[$dirKey] == "i") {
+					$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?mkVisibl=".$cmdDirName."\">
+					<img src=\"../../template/classic/img/invisible.gif\" border=0 title=\"$langVisible\"></a>";
+				}
+				else {
+					$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?mkInvisibl=".$cmdDirName."\">
+					<img src=\"../../template/classic/img/visible.gif\" border=0 title=\"$langVisible\"></a>";
+				}
+				$tool_content .=  "</td></tr>";
+			}
 		}
 	}
-}
-$tool_content .= "<tr><td colspan='$cols' style='border-left: 1px solid #edecdf;'>&nbsp;</td></tr>
+
+	// ------------------------------
+	//       Display Files
+	// ------------------------------
+	if (isset($fileNameList)) {
+		while (list($fileKey, $fileName) = each ($fileNameList)) {
+			$image = choose_image($fileName);
+			$size = format_file_size($fileSizeList[$fileKey]);
+			$date = format_date($fileDateList[$fileKey]);
+			$urlFileName = format_url($baseServUrl.$courseDir.$curDirPath."/".$fileName);
+			$cmdFileName = rawurlencode($curDirPath."/".$fileName);
+			$dspFileName = htmlspecialchars($fileName);
+			if (@$fileVisibilityList[$fileKey] == "i") {
+				$style2=" class=\"invisible_doc\"";
+			} else {
+				$style2="";
+			}
+			// do not display invisible files to students
+			if ((@$fileVisibilityList[$fileKey] == "i")  and (!$is_adminOfCourse)) {
+				continue;
+			}
+			$tool_content .=  "<tr ".$style2.">\n";
+			$tool_content .=  "<td style='border-left: 1px solid #edecdf;' align='center'>
+			<img src=\"./img/".$image."\" align='absmiddle' border=0>\n";
+			//h $dspFileName periexei to onoma tou arxeiou sto filesystem
+			$query = "SELECT filename, copyrighted FROM document WHERE path LIKE '%".$curDirPath."/".$fileName."%'";
+			$result = mysql_query ($query);
+			$row = mysql_fetch_array($result);
+			$tool_content .=  "</td><td class='left'>";
+			$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' 	title=\"$langSave\">".$row["filename"];
+			if ($row["copyrighted"] == "1") 
+				$tool_content .= " <img src=\"./img/copyrighted.jpg\" align='absmiddle' border=\"0\">";
+			$tool_content .= "</a>";
+			/*** comments ***/
+			if (@$fileCommentList[$fileKey] != "")
+			{
+				$fileCommentList[$fileKey] = htmlspecialchars($fileCommentList[$fileKey]);
+				$fileCommentList[$fileKey] = nl2br($fileCommentList[$fileKey]);
+				$tool_content .=  "&nbsp;<span class=\"comment\">";
+				$tool_content .=  " (".$fileCommentList[$fileKey].")";
+				$tool_content .=  "</span>\n";
+			}
+			$tool_content .=  "</td>";
+			/*** size ***/
+			$tool_content .=  "<td align='center'>".$size."</td>\n";
+			/*** date ***/
+			$tool_content .=  "<td align='center'>".$date."</td>\n";
+			if($is_adminOfCourse) {
+				/*** delete command ***/
+				$tool_content .=  "<td align='center' style='border-right: 1px solid #edecdf;'><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdFileName."\" onClick=\"return confirmation('".addslashes($row["filename"])."');\">
+				<img src=\"../../template/classic/img/delete.gif\" border=0  title=\"$langDelete\"></a>";
+				/*** copy command ***/
+				$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?move=".$cmdFileName."\">
+				<img src=\"../../template/classic/img/move_doc.gif\" border=0  title=\"$langMove\"></a>";
+				/*** rename command ***/
+				$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?rename=".$cmdFileName."\">
+				<img src=\"../../template/classic/img/edit.gif\" border=0  title=\"$langRename\"></a>";
+				/*** comment command ***/
+				$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?comment=".$cmdFileName."\">
+				<img src=\"../../template/classic/img/information.gif\" border=0  title=\"$langComment\"></a>";
+				/*** visibility command ***/
+				if (@$fileVisibilityList[$fileKey] == "i")
+				{
+					$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?mkVisibl=".$cmdFileName."\">
+					<img src=\"../../template/classic/img/invisible.gif\" border=0  title=\"$langVisible\"></a>";
+				} else {
+					$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?mkInvisibl=".$cmdFileName."\">
+					<img src=\"../../template/classic/img/visible.gif\" border=0  title=\"$langVisible\"></a>";
+				}
+				$tool_content .=  "</td></td></tr>\n";
+			}
+		}
+	}
+	$tool_content .= "<tr><td colspan='$cols' style='border-left: 1px solid #edecdf;'>&nbsp;</td></tr>
 	<tr><th colspan='$cols' style='border-left: 1px solid #edecdf;' class='left'>&nbsp;</th>
 	<th style='border-right: 1px solid #edecdf;'>&nbsp;</th></tr>";
-$tool_content .=  "</table></div>";	
+	$tool_content .=  "</table></div>";
+}	
 $tmp_cwd = getcwd();
 chdir($baseServDir."/modules/document/");
 draw($tool_content, 2, "document", $local_head);

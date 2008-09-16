@@ -747,7 +747,6 @@ $langAlertProf = "Please fill the course ".$langsTeacher."!";
 /******************************************************
 * document.inc.php
 *******************************************************/
-
 $langDownloadFile= "Upload file";
 $langPathUploadFile= "File path";
 $langCreateDir="Create directory";
@@ -776,6 +775,7 @@ $langNewDir="Name of new directory";
 $langImpossible="Operation impossible";
 $langViMod="Visibility modified";
 $langRoot = "Root directory";
+$langNoDocuments = "There are no documents";
 
 // Special for group documents
 $langGroupManagement="Group management";
