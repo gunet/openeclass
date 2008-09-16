@@ -7,7 +7,7 @@ $tool_content ="";
 $tool_content .= "
 <p align='justify'>$langIntro
 <br><br>
-$langAboutText:&nbsp;<b>$siteName $langEclassVersion</b>&nbsp;&nbsp;<a href='http://portal.eclass.gunet.gr/' title='Portal eClass' target='_blank' border=0><img src='../images/about.gif' width=16 height=16 align=absbottom border=0></a><br><br>";
+$langAboutText:&nbsp;<b>$siteName $langEclassVersion</b>&nbsp;&nbsp;(<a href='http://portal.eclass.gunet.gr/' title='Portal eClass' target='_blank' border=0>>></a>)<br><br>";
 
 /*
   * Make table with general platform information
@@ -44,7 +44,7 @@ $uptime = date("G:i d-n-Y", $first_date_time);
 //find number of logins
 mysql_select_db($mysqlMainDb);
 $lastMonth = date("Y-m-d H:i:s", time()-24*3600*30);
-$total_logins = mysql_fetch_array(db_query("SELECT COUNT(idLog) FROM loginout 
+$total_logins = mysql_fetch_array(db_query("SELECT COUNT(idLog) FROM loginout
 													WHERE action='LOGIN' AND `when`> '$lastMonth'"));
 
 $a=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours"));

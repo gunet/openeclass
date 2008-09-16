@@ -25,10 +25,10 @@
 
 /*
  * Open courses component
- * 
+ *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * 
+ *
  * @abstract This component shows a list of courses
  *
  */
@@ -51,7 +51,7 @@ $fc = intval($fc);
 $fac = mysql_fetch_row(mysql_query("SELECT name FROM faculte WHERE id = ".$fc));
 if (!($fac = $fac[0])) {
 	die("ERROR: no faculty with id $fc");
-} 
+}
 
 $tool_content = "";
 
@@ -127,71 +127,73 @@ foreach (array("pre" => $m['pres'],
 		continue;
 	}
 
-$tool_content .= "<br><table width=99% class='CourseListTitle'><tr><th>";
+$tool_content .= "
+<br />
+<table width=99%>
+<tr>
+  <td>";
 	 // We changed the style a bit here and we output types as the title
-$tool_content .= "<a name='$type'>&nbsp;</a>$message</th>";
+	 $tool_content .= "<a name='$type'>&nbsp;</a><b><font color=\"#a33033\">$message</font></b></td>";
 
           // output a top href link if necessary
           if ( $numoftypes > 1)
-       $tool_content .= "
-       <td><a href=\"#top\" class='mainpage'>$m[begin]</a>&nbsp;</td>";
+       $tool_content .= "\n    <td align=\"right\"><a href=\"#top\" class='mainpage'>$m[begin]</a>&nbsp;</td>";
           // or a space for beautifying reasons
           else
-       $tool_content .= "
-       <td>&nbsp;</td>";
-	 $tool_content .= "
-     </tr>";
-	 $tool_content .= "
-     </table>
-	 ";
+       $tool_content .= "\n    <td>&nbsp;</td>";
+	   $tool_content .= "\n  </tr>";
+	   $tool_content .= "\n  </table>";
 
      $tool_content .= "
      <script type='text/javascript' src='sorttable.js'></script>
-     <table width=99% class=\"sortable\" id=\"t1\">";
-     $tool_content .= "
-     <thead>
-     <tr>";
-	 $tool_content .= "
-       <th class='left'>$m[lessoncode]</th>";
-     $tool_content .= "
-       <th class='left'>$m[professor]</th>";
-     $tool_content .= "
-       <th>$langFileSentType</th>";
-     $tool_content .="
-     </tr>
-     </thead>";
+     <table width=\"99%\" style=\"border: 1px solid #edecdf;\">
+     <tr>
+       <td>
 
+       <table width=100% class=\"sortable\" id=\"t1\">
+       <thead>
+       <tr>
+         <th class='left' style=\"border: 1px solid #E1E0CC;\" colspan=\"2\">$m[lessoncode]</th>
+         <th class='left' style=\"border: 1px solid #E1E0CC;\">$m[professor]</th>
+         <th style=\"border: 1px solid #E1E0CC;\"  width='30'>$langFileSentType</th>
+       </tr>
+       </thead>
+       <tbody>";
+        $k = 0;
 		while ($mycours = mysql_fetch_array($result)) {
             if ($mycours['visible'] == 2) {
-              $codelink = "&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<a href='../../courses/$mycours[k]/'>$mycours[i]</a>&nbsp;<font color='#a9a9a9'>(".$mycours['c'].")</font>";
+              $codelink = "<a href='../../courses/$mycours[k]/'>$mycours[i]</a>&nbsp;<small><font style=\"color: #a33033;\">(".$mycours['c'].")</font></small>";
             } else {
-              $codelink = "&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<font color='#a9a9a9'>$mycours[i]&nbsp;(".$mycours['c'].")</font>";
+              $codelink = "<small><font color='#a33033'>$mycours[i]&nbsp;(".$mycours['c'].")</font></small>";
             }
 
             // output each course as a table for beautifying reasons
-            $tool_content .= "
-     <tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">";
+   if ($k%2==0) {
+	              $tool_content .= "\n  <tr>";
+	            } else {
+	              $tool_content .= "\n  <tr class=\"odd\">";
+	            }
             // changed the variable because of the previous change in the select argument
 
-       $tool_content .= "
-       <td width='65%'>".$codelink."</td>";
-       $tool_content .= "
-       <td>$mycours[t]</td>";
-       $tool_content .= "
-       <td width='5%' align='center'>";
+            $tool_content .= "\n         <td width=\"1\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+            $tool_content .= "\n         <td>".$codelink."</td>";
+            $tool_content .= "\n         <td><small>$mycours[t]</small></td>";
+            $tool_content .= "\n         <td align='center'>";
             // show the necessary access icon
                       foreach ($icons as $visible => $image) {
                           if ($visible == $mycours['visible']) {
                               $tool_content .= $image;
                           }
                         }
-       $tool_content .= "</td>";
-     $tool_content .= "
-     </tr>";
+            $tool_content .= "\n         </td>";
+            $tool_content .= "\n       </tr>";
+            $k++;
           }
-	 $tool_content .= "
-     </table>
-	 
+	 $tool_content .= "\n       </tbody>\n       </table>
+
+  </td>
+</tr>
+</table>
      <br/>";
         $tool_content .= "";
           // that's it!

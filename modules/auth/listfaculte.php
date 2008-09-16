@@ -31,23 +31,44 @@ $numrows = mysql_num_rows($result);
 $tool_content = "";
 if (isset($result))  {
 	$tool_content .= "
-    <script type='text/javascript' src='sorttable.js'></script>
-    <table width='99%' class='sortable' id='t1'>
-    <thead><tr><th class='left'>$m[department]</th></tr></thead>\n";
+<script type='text/javascript' src='sorttable.js'></script>
+<table width=\"99%\" style=\"border: 1px solid #edecdf;\">
+<tr>
+  <td>
 
+  <table class='sortable' id='t1' align=\"left\" width=\"100%\">
+  <thead>
+  <tr>
+    <th class='left' colspan='2' style=\"border: 1px solid #E1E0CC;\">$m[department]</th>
+  </tr>
+  </thead>
+  <tbody>";
+
+   $k = 0;
    while ($fac = mysql_fetch_array($result)) {
-	$tool_content .= "<tbody>
-    	<tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">\n";
-  	$tool_content .= "
-    	<td>&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<a href='opencourses.php?fc=$fac[id]'>$fac[name]</a>&nbsp;
-    	<small>($fac[code])</small>&nbsp;";
+   if ($k%2==0) {
+	              $tool_content .= "\n  <tr>";
+	            } else {
+	              $tool_content .= "\n  <tr class=\"odd\">";
+	            }
+	$tool_content .= "
+    <td width='1'><img src='../../images/arrow_blue.gif'></td>
+    <td><a href='opencourses.php?fc=$fac[id]'>$fac[name]</a>&nbsp;&nbsp;<small><font style=\"color: #a33033;\">($fac[code])</font>";
 
      	$n=mysql_query("SELECT COUNT(*) FROM cours_faculte WHERE faculte='$fac[name]'");
      	$r=mysql_fetch_array($n);
 
-    	$tool_content .= "<small><font color=\"#aaaaaa\"> - $r[0]  ".  ($r[0] == 1? $langAvCours: $langAvCourses) . "</font><small></td></tr>\n";
+    $tool_content .= "<font style=\"color: #CAC3B5;\">&nbsp;&nbsp;-&nbsp;&nbsp;$langThereAre $r[0]&nbsp;".  ($r[0] == 1? $langAvCours: $langAvCourses) . "</small></td>
+  </tr>";
+  $k++;
 	}
-   $tool_content .= "</tbody>\n</table>";
+   $tool_content .= "
+  </tbody>
+  </table>
+
+  </td>
+</tr>
+</table>";
   }
-draw($tool_content, 0);
+draw($tool_content, 0, 'auth');
 ?>

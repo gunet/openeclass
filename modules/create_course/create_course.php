@@ -30,7 +30,8 @@ $require_help = TRUE;
 $helpTopic = 'CreateCourse';
 
 include '../../include/baseTheme.php';
-$nameTools = $langCreateCourse . " (" . $langCreateCourseStep ." 1 " .$langCreateCourseStep2 . " 3 )" ;
+
+$nameTools = $langCreateCourse . " (" . $langCreateCourseStep ." 1 " .$langCreateCourseStep2 . " 3)" ;
 $tool_content = $head_content = "";
 
 $head_content .= <<<hContent
@@ -42,7 +43,7 @@ function checkrequired(which, entry, entry2) {
 			var tempobj=which.elements[i];
 			if ((tempobj.name == entry) || (tempobj.name == entry2)) {
 				if (tempobj.type=="text"&&tempobj.value=='') {
-					pass=false;	
+					pass=false;
 					break;
 		  		}
 	  		}
@@ -60,7 +61,6 @@ function checkrequired(which, entry, entry2) {
 hContent;
 
 $titulaire_probable="$prenom $nom";
-$local_style = "input { font-size: 12px; }";
 
 $tool_content .= "<form method='post' name='createform' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'intitule', 'titulaires');\">";
 //$tool_content .= "<form method='post' name='createform' action='$_SERVER[PHP_SELF]'>";
@@ -82,7 +82,7 @@ if (isset($back1) or !isset($visit)) {
     <table width=\"99%\" align='left' class='FormData'>
     <tbody>
     <tr>
-      <th>&nbsp;</th>
+      <th width=\"220\">&nbsp;</th>
       <td><b>$langCreateCourseStep1Title</b></td>
       <td>&nbsp;</td>
      </tr>
@@ -100,7 +100,7 @@ if (isset($back1) or !isset($visit)) {
         $tool_content .= "
         <select name='faculte' class=auth_input>";
         while ($myfac = mysql_fetch_array($resultFac)) {
-                if(isset($faculte) and implode('--',array($myfac['id'],$myfac['name'])) == $faculte)	
+                if(isset($faculte) and implode('--',array($myfac['id'],$myfac['name'])) == $faculte)
                    $tool_content .= "
           <option selected value='".$myfac['id']."--".$myfac['name']."'>$myfac[name]</option>";
                 else
@@ -145,7 +145,7 @@ if (isset($back1) or !isset($visit)) {
     <table width=\"99%\" align='left' class='FormData'>
     <tbody>
     <tr>
-      <th>&nbsp;</th>
+      <th width=\"220\">&nbsp;</th>
       <td><b>$langCreateCourseStep2Title</b></td>
       <td>&nbsp;</td>
     </tr>
@@ -177,7 +177,7 @@ if (isset($back1) or !isset($visit)) {
     <table width=\"99%\" align='left' class='FormData'>
     <tbody>
     <tr>
-      <th>&nbsp;</th>
+      <th width=\"220\">&nbsp;</th>
       <td colspan='2'><b>$langCreateCourseStep3Title</b></td>
     </tr>
     <tr>

@@ -37,73 +37,72 @@ $auth = get_auth_id();
 // display form
 if (!isset($submit)) {
 
-@$tool_content .= "	
-<table width=\"99%\" class='FormData' align='left'>
+@$tool_content .= "
+<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
+<table width=\"99%\" style=\"border: 1px solid #edecdf;\">
 <thead>
 <tr>
-<td>
-<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
+  <td>
 
-  <table width=\"100%\" align='left'>
-  <tbody>
+  <table width=\"99%\" class='FormData' align='left'>
+  <thead>
   <tr>
-   <th class='left' width='20%'>$langSurname</th>
-   <td width='10%'><input size='35' type=\"text\" name=\"nom_form\" value=\"$nom_form\" class='FormData_InputText'></td>
-	<td>(*)</td>
+   <th class='left' width='220'>$langSurname</th>
+   <td><input size='35' type=\"text\" name=\"nom_form\" value=\"$nom_form\" class='FormData_InputText'>&nbsp;&nbsp;<small>(*)</small></td>
   </tr>
   <tr>
     <th class='left'>$langName</th>
-    <td><input size='35' type=\"text\" name=\"prenom_form\" value=\"$prenom_form\" class='FormData_InputText'></td>
-	<td>(*)</td>
+    <td><input size='35' type=\"text\" name=\"prenom_form\" value=\"$prenom_form\" class='FormData_InputText'>&nbsp;&nbsp;<small>(*)</small></td>
   </tr>
 	<tr>
     <th class='left'>$langPhone</th>
-    <td><input size='35' type=\"text\" name=\"userphone\" value=\"$userphone\" class='FormData_InputText'></td>
-  <td>(*)</td>
+    <td><input size='35' type=\"text\" name=\"userphone\" value=\"$userphone\" class='FormData_InputText'>&nbsp;&nbsp;<small>(*)</small></td>
   </tr>
   <tr>
     <th class='left'>$langUsername</th>
-    <td><input size='35' type=\"text\" name=\"uname\" value=\"$uname\" class='FormData_InputText'></td>
-	<td>(*)</td>
+    <td><input size='35' type=\"text\" name=\"uname\" value=\"$uname\" class='FormData_InputText'>&nbsp;&nbsp;<small>(*)</small></td>
   </tr>
   <tr>
     <th class='left'>$langPass</th>
-    <td><input size='35' type=\"text\" name=\"password\" value=\"".create_pass(5)."\" class='FormData_InputText'></td>
-	<td></td>
+    <td><input size='35' type=\"text\" name=\"password\" value=\"".create_pass(5)."\" class='FormData_InputText'>&nbsp;&nbsp;<small>(*)</small></td>
   </tr>
   <tr>
     <th class='left'>$langEmail</th>
-    <td><input size='35' type=\"text\" name=\"email_form\" value=\"$email_form\" class='FormData_InputText'></td>
-	<td>(*)</td>
+    <td><input size='35' type=\"text\" name=\"email_form\" value=\"$email_form\" class='FormData_InputText'>&nbsp;&nbsp;<small>(*)</small></td>
   </tr>
   <tr>
     <th class='left'>$langComments</td>
-    <td><textarea name=\"usercomment\" COLS=\"32\" ROWS=\"4\" WRAP=\"SOFT\" class='FormData_InputText'>".$usercomment."</textarea></td>
-	<td>(*) $profreason</td>
+    <td><textarea name=\"usercomment\" COLS=\"32\" ROWS=\"4\" WRAP=\"SOFT\" class='FormData_InputText'>".$usercomment."</textarea>&nbsp;&nbsp;<small>(*) $profreason</small></td>
   </tr>
   <tr>
     <th class='left'>".$langDepartment."</th>
-    <td colspan='2'><select name=\"department\">";
+    <td><select name=\"department\">";
         $deps=mysql_query("SELECT name FROM faculte order by id");
-        while ($dep = mysql_fetch_array($deps)) 
+        while ($dep = mysql_fetch_array($deps))
         {
         	$tool_content .= "<option value=\"$dep[0]\">$dep[0]</option>\n";
         }
         $tool_content .= "</select>
     </td>
-  </tr>	
+  </tr>
   <tr>
     <th>&nbsp;</th>
     <td>
-    <input type=\"submit\" name=\"submit\" value=\"".$langSubmitNew."\" >
-    <input type=\"hidden\" name=\"auth\" value=\"1\" ></td>
-		<td>
-    <p align='right'>$langRequiredFields<br></p>
+      <input type=\"submit\" name=\"submit\" value=\"".$langSubmitNew."\" >
+      <input type=\"hidden\" name=\"auth\" value=\"1\" >
     </td>
   </tr>
-  </tbody></table></form>
-  </td></tr></table>
-	<br>";
+  </thead>
+  </table>
+    <div align=\"right\"><small>$langRequiredFields</small></div>
+  </td>
+</tr>
+</thead>
+</table>
+
+  </form>
+
+  <br>";
 
 } else {
 
@@ -111,10 +110,10 @@ if (!isset($submit)) {
 $registration_errors = array();
 
     // check if there are empty fields
-    if (empty($nom_form) or empty($prenom_form) or empty($userphone) or empty($password) 
+    if (empty($nom_form) or empty($prenom_form) or empty($userphone) or empty($password)
 				or empty($usercomment) or empty($uname) or (empty($email_form))) {
       $registration_errors[]=$langEmptyFields;
-	   } 
+	   }
 
 if (count($registration_errors) == 0) {    // registration is ok
      $uname = escapeSimple($uname);  // escape the characters: simple and double quote
@@ -173,8 +172,8 @@ if (count($registration_errors) == 0) {    // registration is ok
       <p><a href=\"$urlServer\">$langBack</a></p>
   	 </td>
 	    </tr></tbody></table>";
-    }	
-	
+    }
+
 	else	{  // errors exist - registration failed
             $tool_content .= "<table width='99%'><tbody><tr>" .
                               "<td class='caution' height='60'>";

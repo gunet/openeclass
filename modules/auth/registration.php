@@ -43,12 +43,22 @@ include 'auth.inc.php';
 $nameTools = $langNewUser;
 
 $tool_content = "";
-$tool_content .= "<table width=75%><thead><tr><td><fieldset><legend>$langUserAccount ";
+$tool_content .= "
+<table width=\"99%\" style=\"border: 1px solid #edecdf;\">
+<thead>
+<tr>
+  <td>
+
+  <table class=\"FormData\" width=\"99%\" align=\"left\">
+  <thead>
+  <tr>
+    <th width=\"120\" rowspan=\"5\">&nbsp;</th>
+    <td><strong><font style=\"color: #a33033;\">$langUserAccount ";
 
 $auth = get_auth_active_methods();
 $e = 1;
 
-// check for close user registration 
+// check for close user registration
 if (isset($close_user_registration) and $close_user_registration == TRUE) {
         $newuser = "formuser.php";
         $tool_content .= "$langUserAccountInfo1";
@@ -57,32 +67,38 @@ if (isset($close_user_registration) and $close_user_registration == TRUE) {
         $tool_content .= "$langUserAccountInfo2";
 }
 
-$tool_content .= "</legend><br><p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;<a href=\"$newuser\">$langNewAccount</a></p>";
+$tool_content .= "</font></strong></td>
+  </tr>
+    <td><p><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'>&nbsp;&nbsp;<a href=\"$newuser\">$langNewAccount</a></p>";
 
 if(!empty($auth)) {
         if (count($auth) > 1) {
-                $tool_content .= "<br><p><span style='border-bottom: 1px dotted silver;'>$langUserAccountInfo3&nbsp;</span>: </p>";
+                $tool_content .= "\n      <br>\n      <p><span style='border-bottom: 1px dotted silver;'>$langUserAccountInfo3&nbsp;</span>: </p>";
         }
 
         foreach($auth as $k => $v) {
                 if($v!=1) {
-                        $tool_content .= "
-                                <p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
-                       $langNewAccount&nbsp;
-                        (<a href=\"ldapnewuser.php?auth=".$v."\">".get_auth_info($v)."</a>)
-                                </p>";
+                        $tool_content .= "\n      <p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;$langNewAccount&nbsp;(<a href=\"ldapnewuser.php?auth=".$v."\">".get_auth_info($v)."</a>)</p>";
                 } else {
                         continue;
                 }
         }
 }
 
-$tool_content .= "<br></FIELDSET></td></tr></thead></table><br><br><table width=75%>
-	<thead><tr><td><FIELDSET><LEGEND>".$langProfAccount." ".$langUserAccountInfo1."</LEGEND><br>";
+$tool_content .= "\n      <br>
+    </td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><strong><font style=\"color: #a33033;\">".$langProfAccount." ".$langUserAccountInfo1."</font></strong></td>
+  </tr>
+  <tr>
+    <td>";
 
 if(!empty($auth)) {
-        $tool_content .= "<p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
-				        <a href=\"newprof.php\">$langNewAccount</a></p>";
+        $tool_content .= "<p><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'>&nbsp;&nbsp;<a href=\"newprof.php\">$langNewAccount</a></p>";
         if (count($auth) > 1) {
                 $tool_content .= "<br><p><span style=\"border-bottom: 1px dotted silver;\">$langUserAccountInfo3</span>&nbsp;:</p>";
         }
@@ -92,7 +108,7 @@ if(!empty($auth)) {
                 } else {
                         $auth_method_settings = get_auth_settings($v);
                         $tool_content .= "<p><img src='../../images/arrow_blue.gif'>&nbsp;&nbsp;
-                        $langNewAccount 
+                        $langNewAccount
                                 &nbsp;(<a href=\"ldapnewprof.php?auth=".$v."\">".get_auth_info($v)."</a>)</p>";
                 }
         }
@@ -100,6 +116,15 @@ if(!empty($auth)) {
         $tool_content .= "<p>$langCannotUseAuthMethods </p>";
 }
 
-$tool_content .= "<br></FIELDSET></td></tr></thead></table>";
+$tool_content .= "\n      <br>
+    </td>
+  </tr>
+  </thead>
+  </table>
+
+  </td>
+</tr>
+</thead>
+</table>";
 draw($tool_content, 0, 'auth');
 ?>

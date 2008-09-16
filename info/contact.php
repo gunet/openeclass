@@ -32,29 +32,42 @@ $nameTools = $contactpoint;
 $tool_content = "";
 
 $tool_content .= "
-  <p>$introcontact</p>
- <br/>
-  <table width='500'>
-  <tbody>
+<p>$introcontact</p>
+
+<table width=\"80%\" style=\"border: 1px solid #edecdf;\">
+<thead>
+<tr>
+  <td>
+
+  <table width=\"500\" class=\"FormData\">
+  <thead>
   <tr>
-    <td class='left' width='20'><img src='../images/env.gif' align='absbottom'></img></td>
-    <th class='left' width='180'>$langPostMail</th>
+    <th class='left' width='220'>$langPostMail</th>
     <td width='300'>
         $Institution<br>
         $postaddress
     </td>
   </tr>
   <tr>
-    <td class='left' width='20'><img src='../images/phone.gif' align='absbottom'></img></td>
-	<th class='left' width='180'>$langPhone<br/>$langFax</th>
-    <td width='300'>$telephone<br/>$fax</td>
+	<th class='left'>$langPhone</th>
+    <td width='300'>$telephone</td>
   </tr>
   <tr>
-    <td class='left' width='20'><img src='../images/email.gif' align='absbottom'></img></td>
-    <th class='left' width='180'>$langEmail:</th>
+	<th class='left'>$langFax</th>
+    <td width='300'>$fax</td>
+  </tr>
+  <tr>
+    <th class='left'>$langEmail:</th>
     <td width='300'>".mailto($emailAdministrator, str_replace('@', ' &lt;at> ', $emailAdministrator))."
     </td>
-  </tr></tbody></table>";
+  </tr>
+  </thead>
+  </table>
+
+  </td>
+</tr>
+</thead>
+</table>";
 
 if (isset($uid) and $uid) {
         draw($tool_content, 1);

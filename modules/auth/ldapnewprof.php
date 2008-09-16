@@ -28,8 +28,8 @@
 	@last update: 31-05-2006 by Karatzidis Stratos
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
-==============================================================================        
-  @Description: Introductory file that displays a form, requesting 
+==============================================================================
+  @Description: Introductory file that displays a form, requesting
   from the user/prof to enter the account settings and authenticate
   him/her against the predefined method of the platform
 ==============================================================================
@@ -58,13 +58,14 @@ $settings = get_auth_settings($auth);
 if(!empty($msg)) $nameTools = "$langConfirmUser ($msg)";
 
 @$tool_content .= "
-<table width=\"99%\" class='FormData' align='left'>
+<form method=\"POST\" action=\"ldapsearch_prof.php\">
+<table width=\"99%\" style=\"border: 1px solid #edecdf;\">
 <thead>
 <tr>
-<td>			
-<form method=\"POST\" action=\"ldapsearch_prof.php\">
-	 <table width=\"100%\" align='left'>
-  <tbody>
+  <td>
+
+  <table width=\"99%\" class='FormData' align='left'>
+  <thead>
   <tr>
     <th class='left' width='25%'>$langAuthUserName</th>
     <td><input type='text' name='ldap_email' value='$ldap_email' class='FormData_InputText'></td>
@@ -78,13 +79,16 @@ if(!empty($msg)) $nameTools = "$langConfirmUser ($msg)";
     <td>
     <input type=\"hidden\" name=\"auth\" value=\"".$auth."\">
     <input type=\"submit\" name=\"is_submit\" value=\"".$langSubmit."\">
-	<br/><br/>
-    ".$settings['auth_instructions']."
 	</td>
-  </tr>	
-  </tbody>
+  </tr>
+  </thead>
   </table>
-</form></td></tr></thead></table>";
-		
+     <div align=\"right\"><small>".$settings['auth_instructions']."</small></div>
+  </td>
+</tr>
+</thead>
+</table>
+</form>";
+
 draw($tool_content,0,'auth');
 ?>
