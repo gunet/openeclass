@@ -28,7 +28,7 @@
 * @version $Id$
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
-==============================================================================        
+==============================================================================
 
  	Purpose: The file displays the form that that the candidate user must fill
  	in with all the basic information.
@@ -55,63 +55,68 @@ if (isset($close_user_registration) and $close_user_registration == TRUE) {
 if (!isset($submit)) {
 	// Main body
 	@$tool_content .= "
-	<table width=\"99%\" align='left' class='FormData'>
-	<thead><tr><td>
-	<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
-	<table width=\"100%\">
-	<tbody><tr>
-	<th class='left' width='20%'>$langName</th>
-	<td width='10%'><input type=\"text\" name=\"prenom_form\" value=\"$prenom_form\" class='FormData_InputText'></td>
-	<td><small>(*)</small></td>
-	</tr>
-	<tr><th class='left'>$langSurname</th>
-	<td><input type=\"text\" name=\"nom_form\" value=\"$nom_form\" class='FormData_InputText'></td>
-	<td><small>(*)</small></td>
-	</tr>
-	<tr>
-	<th class='left'>$langUsername</th>
-	<td><input type=\"text\" name=\"uname\" value=\"$uname\" size=\"20\" maxlength=\"20\" class='FormData_InputText'></td>
-	<td><small>(*) $langUserNotice</small></td>
-	</tr>
-	<tr>
-	<th class='left'>$langPass</th>
-	<td><input type=\"password\" name=\"password1\" size=\"20\" maxlength=\"20\" class='FormData_InputText'></td>
-	<td><small>(*)</small></td>
-	</tr>
-	<tr>
-	<th class='left'>$langConfirmation</th>
-	<td valign=\"top\"><input type=\"password\" name=\"password\" size=\"20\" maxlength=\"20\" class='FormData_InputText'></td>
-	<td><small>(*) $langUserNotice</small></td>
-	</tr>
-	<tr>
-	<th class='left'>$langEmail</th>
-	<td><input type=\"text\" name=\"email\" value=\"$email\" class='FormData_InputText'></td>
-	<td align=left>$langEmailNotice</td>
-	</tr>
-	<tr>
-	<th class='left'>$langAm</th>
-	<td><input type=\"text\" name=\"am\" value=\"$am\" class='FormData_InputText'></td>
-	<td>&nbsp;</td>
-	</tr>
-	<tr>
-	<th class='left'>$langDepartment</th>
-	<td colspan='2'><select name=\"department\">";
-$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id");
-while ($dep = mysql_fetch_array($deps)) 
-	$tool_content .= "\n<option value=\"".$dep[1]."\">".$dep[0]."</option>";
-$tool_content .= "</select>
-	</td>
-</tr>
+<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
+<table width=\"99%\" style=\"border: 1px solid #edecdf;\">
+<thead>
+<tr>
+  <td>
 
-<tr><th class='left'>&nbsp;</th>
-    <td>
-	<input type=\"hidden\" name=\"auth\" value=\"1\">
-    <input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\">
+  <table width=\"100%\" align='left' class='FormData'>
+  <thead>
+  <tr>
+    <th class='left' width='220'>$langName</th>
+    <td colspan=\"2\"><input type=\"text\" name=\"prenom_form\" value=\"$prenom_form\" class='FormData_InputText'>&nbsp;&nbsp;<small>(*)</small></td>
+  </tr>
+  <tr>
+    <th class='left'>$langSurname</th>
+    <td colspan=\"2\"><input type=\"text\" name=\"nom_form\" value=\"$nom_form\" class='FormData_InputText'>&nbsp;&nbsp;<small>(*)</small></td>
+  </tr>
+  <tr>
+    <th class='left'>$langUsername</th>
+    <td colspan=\"2\"><input type=\"text\" name=\"uname\" value=\"$uname\" size=\"20\" maxlength=\"20\" class='FormData_InputText'>&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
+  </tr>
+  <tr>
+    <th class='left'>$langPass</th>
+    <td colspan=\"2\"><input type=\"password\" name=\"password1\" size=\"20\" maxlength=\"20\" class='FormData_InputText'>&nbsp;&nbsp;<small>(*)</small></td>
+  </tr>
+  <tr>
+    <th class='left'>$langConfirmation</th>
+    <td colspan=\"2\"><input type=\"password\" name=\"password\" size=\"20\" maxlength=\"20\" class='FormData_InputText'>&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
+  </tr>
+  <tr>
+    <th class='left'>$langEmail</th>
+    <td valign=\"top\"><input type=\"text\" name=\"email\" value=\"$email\" class='FormData_InputText'></td>
+    <td><small>$langEmailNotice</small></td>
+  </tr>
+  <tr>
+    <th class='left'>$langAm</th>
+    <td colspan=\"2\"><input type=\"text\" name=\"am\" value=\"$am\" class='FormData_InputText'></td>
+  </tr>
+  <tr>
+    <th class='left'>$langDepartment</th>
+	<td colspan=\"2\"><select name=\"department\">";
+$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id");
+while ($dep = mysql_fetch_array($deps))
+	$tool_content .= "\n	      <option value=\"".$dep[1]."\">".$dep[0]."</option>";
+$tool_content .= "\n	    </select>
     </td>
-	<td><p align='right'>$langRequiredFields <br/></p></td>
-</tr></tbody></table>
-</form>
-</td></tr></thead></table>";
+  </tr>
+  <tr>
+    <th class='left'>&nbsp;</th>
+    <td colspan=\"2\">
+	  <input type=\"hidden\" name=\"auth\" value=\"1\">
+      <input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\">
+    </td>
+  </tr>
+  </thead>
+  </table>
+
+      <div align=\"right\"><small>$langRequiredFields</small></div>
+  </td>
+</tr>
+</thead>
+</table>
+</form>";
 
 } else {
 

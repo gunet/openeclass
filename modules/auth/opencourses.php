@@ -164,7 +164,7 @@ $tool_content .= "
             if ($mycours['visible'] == 2) {
               $codelink = "<a href='../../courses/$mycours[k]/'>$mycours[i]</a>&nbsp;<small><font style=\"color: #a33033;\">(".$mycours['c'].")</font></small>";
             } else {
-              $codelink = "<small><font color='#a33033'>$mycours[i]&nbsp;(".$mycours['c'].")</font></small>";
+              $codelink = "<font color='#CAC3B5'>$mycours[i]&nbsp;<small>(".$mycours['c'].")</small></font>";
             }
 
             // output each course as a table for beautifying reasons

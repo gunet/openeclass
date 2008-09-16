@@ -100,9 +100,9 @@ if (!isset($submit)) {
 </thead>
 </table>
 
-  </form>
+</form>
 
-  <br>";
+<br>";
 
 } else {
 
