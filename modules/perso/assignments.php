@@ -185,7 +185,7 @@ function getUserAssignments($param, $type) {
 
 function assignHtmlInterface($data) {
 
-	global  $langCourse, $langAssignment, $langDeadline, $langNoAssignmentsExist, $langGroupWorkSubmitted1, $langGroupWorkSubmitted, $langExerciseEnd;
+	global  $langCourse, $langAssignment, $langDeadline, $langNoAssignmentsExist, $langGroupWorkSubmitted1, $langGroupWorkDeadline_of_Submission, $langGroupWorkSubmitted, $langExerciseEnd;
 
 	$assign_content = "";
 
@@ -213,7 +213,7 @@ aCont;
 					$submit_status = "";
 				}
 				$assign_content .= "";
-				$assign_content .= "\n          <li><a class=\"square_bullet2\" href=\"$url\"><strong class=\"title_pos\">".$data[$i][2][$j][1]."</strong></a>  <p class=\"content_pos\">$langExerciseEnd: <b>".nice_format($data[$i][2][$j][3])."</b>".$submit_status."</p></li>";
+				$assign_content .= "\n          <li><a class=\"square_bullet2\" href=\"$url\"><strong class=\"title_pos\">".$data[$i][2][$j][1]."</strong></a>  <p class=\"content_pos\">$langGroupWorkDeadline_of_Submission: <b>".nice_format($data[$i][2][$j][3])."</b>&nbsp;<span style=\"color: #CAC3B5;\">".$submit_status."</span></p></li>";
 			}
 			//if ($i+1 <$max_repeat_val) $assign_content .= "<br>";
 		}
