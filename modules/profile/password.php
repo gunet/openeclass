@@ -24,10 +24,10 @@
 ============================================================================*/
 /**
  * Index
- * 
+ *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * 
+ *
  * @abstract Password change component
  *
  */
@@ -138,7 +138,7 @@ if(isset($msg)) {
 			$type = "caution";
 			break;
 		}
-		
+
 		default:die("invalid message id");
 
 	}
@@ -151,37 +151,32 @@ if(isset($msg)) {
 }
 
 if (!isset($changePass)) {
-	$tool_content .= "<form method=\"post\" action=\"$passurl?submit=yes&changePass=do\">
-    <table width=\"99%\">
-    <tbody>
-    <tr>
-        <th width=\"150\" class='left'>$langOldPass</th>
-        <td>
-            <input class='FormData_InputText' type=\"password\" size=\"40\" name=\"old_pass\" value=\"\">
-        </td>
+	$tool_content .= "
+<form method=\"post\" action=\"$passurl?submit=yes&changePass=do\">
+  <table width=\"99%\">
+  <tbody>
+  <tr>
+    <th width=\"220\" class='left'>$langOldPass</th>
+    <td><input class='FormData_InputText' type=\"password\" size=\"40\" name=\"old_pass\" value=\"\"></td>
     </tr>
    <tr>
-        <th width=\"150\" class='left'>
-            $langNewPass1
-        </th>
-        <td>";
+     <th class='left'>$langNewPass1</th>
+     <td>";
 
-	$tool_content .= "<input class='FormData_InputText' type=\"password\" size=\"40\" name=\"password_form\" value=\"\">
-					</td>
-					</tr>
-			    <tr>
-        <th width=\"150\" class='left'>$langNewPass2</th>
-        <td>       		
-            <input class='FormData_InputText' type=\"password\" size=\"40\" name=\"password_form1\" value=\"\">
-        </td>
+	$tool_content .= "<input class='FormData_InputText' type=\"password\" size=\"40\" name=\"password_form\" value=\"\"></td>
+   </tr>
+   <tr>
+     <th width=\"150\" class='left'>$langNewPass2</th>
+     <td><input class='FormData_InputText' type=\"password\" size=\"40\" name=\"password_form1\" value=\"\"></td>
     </tr>
 	<tr>
-        <th>&nbsp;</th>
-        <td><input type=\"Submit\" name=\"submit\" value=\"$langModify\"></td>
+      <th>&nbsp;</th>
+      <td><input type=\"Submit\" name=\"submit\" value=\"$langModify\"></td>
     </tr>
-	</tbody></table>
-    <br>
-    </form>
+	</tbody>
+    </table>
+
+</form>
    ";
 }
 

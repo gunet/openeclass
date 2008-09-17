@@ -48,7 +48,7 @@ if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
 		header("location:". $_SERVER['PHP_SELF']."?msg=4");
 		exit();
 	}
-	
+
 	elseif (empty($email_form) and check_prof()) {
 		header("location:". $_SERVER['PHP_SELF']."?msg=4");
 		exit();
@@ -91,7 +91,7 @@ if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
 if (isset($submit) && isset($ldap_submit) && ($ldap_submit == "ON")) {
 
 	$userLanguage = $_REQUEST['userLanguage'];
-	mysql_query(" UPDATE user SET perso = '$persoStatus', 
+	mysql_query(" UPDATE user SET perso = '$persoStatus',
 		lang = '$userLanguage' WHERE user_id='".$_SESSION["uid"]."' ");
 	if (session_is_registered("user_perso_active") && $persoStatus=="no") session_unregister("user_perso_active");
 	if ($userLang == "el") {
@@ -225,21 +225,22 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
 	}
 	$tool_content .= " <li><a href='../unreguser/unreguser.php'>$langUnregUser</a></li>";
 	$tool_content .= "</ul></div>";
-	$tool_content .= "<form method=\"post\" action=\"$sec?submit=yes\"><br/>
+	$tool_content .= "
+<form method=\"post\" action=\"$sec?submit=yes\"><br/>
     <table width=\"99%\">
     <tbody>
     <tr>
-       <th width=\"150\" class='left'>$langName</th>
+       <th width=\"220\" class='left'>$langName</th>
        <td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"prenom_form\" value=\"$prenom_form\"></td>
     </tr>
     <tr>
-       <th width=\"150\" class='left'>$langSurname</th>
+       <th class='left'>$langSurname</th>
        <td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"nom_form\" value=\"$nom_form\"></td>
     </tr>";
 
 	if(!in_array($password_form,$authmethods)) {
 		$tool_content .= "<tr>
-       <th width=\"150\" class='left'>$langUsername</th>
+       <th class='left'>$langUsername</th>
        <td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"username_form\" value=\"$username_form\"></td>
     </tr>";
 	}
@@ -256,7 +257,7 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
 		$auth_text = get_auth_info($auth);
 		$tool_content .= "
     <tr>
-      <th width=\"150\" class='left'>".$langUsername. "</th>
+      <th class='left'>".$langUsername. "</th>
       <td class=\"caution_small\">&nbsp;&nbsp;&nbsp;&nbsp;<b>".$username_form."</b> [".$auth_text."]
         <input type=\"hidden\" name=\"username_form\" value=\"$username_form\">
       </td>
@@ -265,23 +266,26 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
 
 	$tool_content .= "
     <tr>
-        <th width=\"150\" class='left'>$langEmail</th>
+        <th class='left'>$langEmail</th>
         <td><input class='FormData_InputText' type=\"text\" size=\"40\" name=\"email_form\" value=\"$email_form\"></td>
     <tr>
-        <th width=\"150\" class='left'>$langAm</th>
+        <th class='left'>$langAm</th>
         <td><input class='FormData_InputText' type=\"text\" size=\"20\" name=\"am_form\" value=\"$am_form\"></td>
     </tr>";
 	##[BEGIN personalisation modification]############
 	if (session_is_registered("perso_is_active")) {
-		$tool_content .= "<tr><th width=\"150\" class='left'>$langPerso</th>
-        	<td>
+		$tool_content .= "
+    <tr>
+      <th class='left'>$langPerso</th>
+      <td>
 		<input class='FormData_InputText' type=radio name='persoStatus' value='no' $checkedPerso>$langModern&nbsp;
 		<input class='FormData_InputText' type=radio name='persoStatus' value='yes' $checkedClassic>$langClassic
 		</td>
-        	</tr>"; 
+    </tr>";
 	}
 	##[END personalisation modification]############
-	$tool_content .= "<tr>
+	$tool_content .= "
+    <tr>
       <th class='left'>$langLanguage</th>
       <td>
         <input type='radio' name='userLanguage' value='el' $checkedLangEl>$langGreek<br>
@@ -292,8 +296,10 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
       <th>&nbsp;</th>
       <td><input type=\"Submit\" name=\"submit\" value=\"$langModify\"></td>
     </tr>
-    </tbody></table>
-    </form>
+    </tbody>
+    </table>
+
+</form>
    ";
 }
 draw($tool_content, 1);
