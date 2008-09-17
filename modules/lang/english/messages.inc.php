@@ -2735,7 +2735,7 @@ $langMonthNames['long'] = array('January', 'February', 'March', 'April', 'May', 
 $langMonthNames['fine'] = $langMonthNames['long'];
 
 $dateFormatShort =  "%b %d, %y";
-$dateFormatLong  = '%A %B %e, %Y';
+$dateFormatLong  = '%A %B %d, %Y';
 $dateTimeFormatLong  = '%B %d, %Y at %I:%M %p';
 $timeNoSecFormat = '%I:%M %p';
 $langBackList="Return to the list";

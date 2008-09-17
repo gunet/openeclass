@@ -334,8 +334,8 @@ if (mysql_num_rows($result) > 0) {
 		}
 		if ($barreMois!=date("m",strtotime($myrow["day"]))) {
 			$barreMois=date("m",strtotime($myrow["day"]));
-			$tool_content .=  "\n    <tr>";
-			$tool_content .=  "\n      <td colspan=\"2\">".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",strtotime($myrow["day"])))."</b></td>";
+			$tool_content .=  "\n<tr>";
+			$tool_content .=  "\n<td colspan=\"2\">".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",strtotime($myrow["day"])))."</b></td>";
 			$tool_content .=  "\n    </tr>";
 		}
 
@@ -348,10 +348,8 @@ if (mysql_num_rows($result) > 0) {
 		else
 			$tool_content .=  "\n      <td valign=\"top\" colspan=\"2\">";
 
-		$tool_content .=  "<p>".ucfirst(claro_format_locale_date($dateFormatLong,strtotime($myrow["day"])))."
-        / $langHour:
-        ".ucfirst(date("H:i",strtotime($myrow["hour"])))." ";
-
+		$tool_content .=  "<p>".ucfirst(claro_format_locale_date($dateFormatLong,strtotime($myrow["day"])))." / $langHour: ".ucfirst(date("H:i",strtotime($myrow["hour"])))." ";
+	$message = "$langUnknown";
 	if ($myrow["lasting"] !="") {
 		if ($myrow["lasting"] == 1)
 			$message = $langHour;
