@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*===========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
@@ -119,7 +119,7 @@ cData;
 $tool_content .= "
         </ul>
       </div>";
-} else  { 
+} else  {
 	$tool_content .= "<!--<td align=\"right\">-->";
 }
 
@@ -152,36 +152,31 @@ cData;
 // shows the title bar only for the administrator
 if($is_allowedToEdit) {
 
-$tool_content .= <<<cData
-
-        <td width="75%" colspan="2">&nbsp;<b>${langExerciseName}</b></td>
-        <td width="10%"><div align="center"><b>${langResults}</b></div></td>
-        <td width="15%"><div align="right"><b>$langCommands</b>&nbsp;</div></td>
+$tool_content .= "
+        <th style=\"border: 1px solid #edecdf;\" colspan=\"2\"><div align=\"left\">${langExerciseName}</div></th>
+        <th width=\"65\" style=\"border: 1px solid #edecdf;\">${langResults}</th>
+        <th width=\"65\" style=\"border: 1px solid #edecdf;\" class=\"right\">$langCommands&nbsp;</th>
       </tr>
-      </thead>
-
-cData;
+      </thead>";
 
 } else {
 
 // student view
-$tool_content .= <<<cData
-
-        <td colspan="2">&nbsp;<b>$langExerciseName</b></td>
-        <td width="50"><small><div align="center"><b>$langExerciseStart</b></div></small></td>
-        <td width="50"><small><div align="center"><b>$langExerciseEnd</b></div></small></td>
-        <td width="50"><small><div align="center"><b>$langExerciseConstrain</b></div></small></td>
-        <td width="50"><small><div align="center"><b>$langExerciseAttemptsAllowed</b></div></small></td>
+$tool_content .= "
+        <th style=\"border: 1px solid #edecdf;\" class=\"left\" class=\"left\" colspan=\"2\"><div align=\"left\">$langExerciseName</div></th>
+        <th style=\"border: 1px solid #edecdf;\">$langExerciseStart</th>
+        <th style=\"border: 1px solid #edecdf;\">$langExerciseEnd</th>
+        <th style=\"border: 1px solid #edecdf;\">$langExerciseConstrain</th>
+        <th style=\"border: 1px solid #edecdf;\">$langExerciseAttemptsAllowed</th>
       </tr>
-      </thead>
-cData;
+      </thead>";
 
 }
 
 if(!$nbrExercises) {
 	$tool_content .= "
       <tr><td";
-	if($is_allowedToEdit) 
+	if($is_allowedToEdit)
 		$tool_content .= " colspan=\"4\"";
 		$tool_content .= " class=\"empty\">${langNoEx}</td>
       </tr>";
@@ -192,22 +187,27 @@ $i=1;
 $tool_content .= "
       <tbody>";
 // while list exercises
+$k = 0;
 while($row=mysql_fetch_array($result))
 {
-$tool_content .= "
-      <tr>";
+    if ($k%2==0) {
+	   $tool_content .= "\n      <tr>";
+	} else {
+	   $tool_content .= "\n      <tr class=\"odd\">";
+    }
+
 	// prof only
 	if($is_allowedToEdit)
 	{
 	$page_temp = ($i+(@$page*$limitExPage)).'.';
 	if(!$row['active']) {
 		$tool_content .= "
-        <td width=\"2%\"><img src=\"../../template/classic/img/bullet_bw.gif\" border=\"0\" alt=\"bullet\" title=\"bullet\"></td>
-        <td width=\"75%\"><div class=\"invisible\"><a href=\"exercice_submit.php?exerciseId=${row['id']}\">".$row['titre']."</a>&nbsp;<br/><small>".$row['description']."</small></div></td>"; 
+        <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+        <td><div class=\"invisible\"><a href=\"exercice_submit.php?exerciseId=${row['id']}\">".$row['titre']."</a>&nbsp;<br/><small>".$row['description']."</small></div></td>";
 	} else {
 		$tool_content .= "
-        <td width=\"2%\"><img src=\"../../template/classic/img/bullet_bw.gif\" border=\"0\" alt=\"bullet\" title=\"bullet\"></td>
-        <td width=\"75%\"><a href=\"exercice_submit.php?exerciseId=${row['id']}\">".$row['titre']."</a>&nbsp;<br/><small>".$row['description']."</small></td>";
+        <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+        <td><a href=\"exercice_submit.php?exerciseId=${row['id']}\">".$row['titre']."</a>&nbsp;<br/><small>".$row['description']."</small></td>";
 	}
 
 $eid = $row['id'];
@@ -215,11 +215,11 @@ $NumOfResults = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_r
 
 if ($NumOfResults[0]) {
 	$tool_content .= "
-        <td width=\"10%\" align=\"center\"><nobr><a href=\"results.php?&exerciseId=".$row['id']."\">".
+        <td align=\"center\"><nobr><a href=\"results.php?&exerciseId=".$row['id']."\">".
 	$langExerciseScores1."</a> | <a href=\"csv.php?&exerciseId=".$row['id']."\">".$langExerciseScores3."</a></nobr></td>";
 } else {
 	$tool_content .= "
-        <td width=\"10%\" align=\"center\">	-&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;- </td>";
+        <td align=\"center\">	-&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;- </td>";
 }
 
 	$langModify_temp = htmlspecialchars($langModify);
@@ -227,7 +227,7 @@ if ($NumOfResults[0]) {
 	$langDelete_temp = htmlspecialchars($langDelete);
 	$tool_content .= <<<cData
 
-        <td width="13%" align="right">
+        <td align="right">
           <a href="admin.php?exerciseId=${row['id']}"><img src="../../template/classic/img/edit.gif" border="0" alt="${langModify_temp}"></a>
           <a href="$_SERVER[PHP_SELF]?choice=delete&exerciseId=${row['id']}"  onclick="javascript:if(!confirm('${langConfirmYourChoice_temp}')) return false;"><img src="../../template/classic/img/delete.gif" border="0" alt="${langDelete_temp}"></a>
 cData;
@@ -235,7 +235,7 @@ cData;
 	// if active
 	if($row['active'])
 	{
-	if (isset($page)) {	
+	if (isset($page)) {
 		$tool_content .= "
           <a href=\"$_SERVER[PHP_SELF]?choice=disable&page=${page}&exerciseId=".$row['id']."\">"."<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" alt=\"".htmlspecialchars($langDeactivate)."\"></a>&nbsp;";
 	} else {
@@ -268,29 +268,29 @@ else {
 	$CurrentDate = mktime(0, 0 , 0,substr($CurrentDate, 5,2), substr($CurrentDate, 8,2),substr($CurrentDate, 0,4));
 	if (($CurrentDate >= $temp_StartDate) && ($CurrentDate < $temp_EndDate)) {
 		$tool_content .= "
-        <td width=\"2%\"><img src=\"../../template/classic/img/bullet_bw.gif\" border=\"0\" alt=\"bullet\" title=\"bullet\"></td>
+        <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
         <td><a href=\"exercice_submit.php?exerciseId=".$row['id']."\">".$row['titre']."</a>";
 	} else {
 		$tool_content .= "
-        <td width=\"2%\"><img src=\"../../template/classic/img/bullet_bw.gif\" border=\"0\" alt=\"bullet\" title=\"bullet\"></td>
+        <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
         <td>".$row['titre']."&nbsp;&nbsp;(<font color=\"red\">$m[expired]</font>)";
 	}
 	  $tool_content .= "<br/><small>$row[description]</small></td>
         <td align='center'><small>".nice_format($row['StartDate'])."</small></td>
         <td align='center'><small>".nice_format($row['EndDate'])."</small></td>";
 	// how many attempts we have.
-	$CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
+	$CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record
 			WHERE eid='$row[id]' AND uid='$uid'", $currentCourseID));
 	 if ($row['TimeConstrain'] > 0) {
 		  	$tool_content .= "
         <td align='center'><small>$row[TimeConstrain] $langExerciseConstrainUnit</small></td>";
-		} else { 	
+		} else {
 			$tool_content .= "
-        <td align='center'><small> - </small></td>"; 
+        <td align='center'><small> - </small></td>";
 		}
-	  if ($row['AttemptsAllowed'] > 0) {	
+	  if ($row['AttemptsAllowed'] > 0) {
 		   $tool_content .= "
-	        <td align='center'><small>$CurrentAttempt[0]/$row[AttemptsAllowed]</small></td>"; 
+	        <td align='center'><small>$CurrentAttempt[0]/$row[AttemptsAllowed]</small></td>";
 	} else {
 			 $tool_content .= "
         <td align='center'><small> - </small></td>";
@@ -303,6 +303,7 @@ else {
 		break;
 	}
 	$i++;
+	$k++;
 }	// end while()
 
 $tool_content .= "
