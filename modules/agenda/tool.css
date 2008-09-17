@@ -2,3 +2,25 @@
 .today {
     background-color:#FBEC5D;
 }
+
+table.Agenda{
+    padding: 2px;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.Agenda th {
+    text-align: center!important;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.Agenda td {
+	color: #727266;
+	vertical-align: top;
+	padding : 5px 4px 4px 4px;
+}
