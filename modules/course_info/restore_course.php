@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 
@@ -53,8 +53,16 @@ if (isset($send_archive) and $_FILES['archiveZipped']['size'] > 0) {
 	$tool_content .= "<table width=\"99%\"><caption>".$langFileUnzipping."</caption><tbody>";
 	$tool_content .= "<tr><td>".unpack_zip_show_files($archiveZipped)."</td></tr>";
 	$tool_content .= "<tbody></table><br>";
-}
-elseif (isset($create_dir_for_course)) {
+} elseif (isset($send_path) and !empty($pathToArchive)) {
+	if (file_exists($pathToArchive)) {
+		$tool_content .= "<table width=\"99%\"><caption>".$langFileUnzipping."</caption><tbody>";
+		$tool_content .= "<tr><td>".unpack_zip_show_files($pathToArchive)."</td></tr>";
+		$tool_content .= "<tbody></table><br>";
+	}
+	else
+		$tool_content .= $langFileNotFound;
+
+} elseif (isset($create_dir_for_course)) {
 	//Try to create course with data uploaded
 	$r = $restoreThis."/html";
 	$course_code = create_course($course_code, $course_lang, $course_title,
@@ -75,20 +83,14 @@ elseif (isset($create_dir_for_course)) {
 	ob_end_clean();
 
 	$tool_content .= "</p>";
-	if (!file_exists("../../courses/garbage"))
-		mkdir("../../courses/garbage");
-	if (!file_exists("../../courses/garbage/tmpUnzipping"))
-		mkdir("../../courses/garbage/tmpUnzipping");
-	rename("../../courses/tmpUnzipping", "../../courses/garbage/tmpUnzipping/".time()."");
+	if (!file_exists($webDir."courses/garbage"))
+		mkdir($webDir."courses/garbage");
+	if (!file_exists($webDir."courses/garbage/tmpUnzipping"))
+		mkdir($webDir."courses/garbage/tmpUnzipping");
+	rename($webDir."courses/tmpUnzipping", $webDir."courses/garbage/tmpUnzipping/".time()."");
 	$tool_content .= "<br><center><p><a href=\"../admin/index.php\">$langBack</p></center>";
 }
-elseif (isset($send_path) and !empty($pathToArchive)) {
-	if (file_exists($pathToArchive))
-		unpack_zip_show_files($pathToArchive);
-	else
-		$tool_content .= $langFileNotFound;
 
-}
 elseif (isset($pathOf4path)) {
 	// we know  where is the 4 paths to restore  the  course.
 	// 2 Show content
@@ -307,7 +309,9 @@ function query($sql) {
 	if (!$action) return;
 	mysql_select_db($course_code);
 	if ($encoding != 'UTF-8') {
-		iconv($encoding, 'UTF-8', $sql);
+		if (!iconv($encoding, 'UTF-8', $sql)) {
+			die($sql);
+		};
 	}
 	db_query($sql);
 }
@@ -519,9 +523,8 @@ function unpack_zip_show_files($zipfile)
 	$destdir = $webDir."courses/tmpUnzipping/".$uid;
 	mkpath("$destdir");
 	$zip = new pclZip($zipfile);
-	chdir($destdir);
+	chdir($destdir);	
 	$state = $zip->extract(PCLZIP_OPT_REMOVE_PATH, "courses/");
-
 	$retString .= "<br>$langEndFileUnzip<br><br>$langLesFound<ol>";
 	$dirnameCourse = realpath("$destdir/archive/");
 	if($dirnameCourse[strlen($dirnameCourse)-1] != '/')

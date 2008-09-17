@@ -2575,14 +2575,7 @@ $langRequest2 = "If the backup file you wish to restore is too large and can't
 	be uploaded, you can enter the path of a directory on the server where
 	it can be found.";
 $langRestoreStep1 = "1. Restore a course from a file or directory.";
-$langDescribe = "The backup of a course is found in a compressed file or
-	a directory and consists of four parts";
-$langDescribe1 = "A descriptive file";
-$langDescribe2 = "The documents subdirectory";
-$langDescribe3 = "An SQL file to reconstruct the course database";
-$langDescribe4 = "An SQL file containing main database data.";
 $langFileNotFound = "File not found.";
-
 $langFileSent = "File uploaded";
 $langFileSentName = "File name:";
 $langFileSentSize = "File size:";
