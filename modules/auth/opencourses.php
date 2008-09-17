@@ -166,15 +166,11 @@ $tool_content .= "
             } else {
               $codelink = "<font color='#CAC3B5'>$mycours[i]&nbsp;<small>(".$mycours['c'].")</small></font>";
             }
-
-            // output each course as a table for beautifying reasons
-   if ($k%2==0) {
+                if ($k%2==0) {
 	              $tool_content .= "\n  <tr>";
 	            } else {
 	              $tool_content .= "\n  <tr class=\"odd\">";
 	            }
-            // changed the variable because of the previous change in the select argument
-
             $tool_content .= "\n         <td width=\"1\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
             $tool_content .= "\n         <td>".$codelink."</td>";
             $tool_content .= "\n         <td><small>$mycours[t]</small></td>";
