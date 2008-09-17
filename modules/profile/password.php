@@ -100,54 +100,49 @@ if(isset($msg)) {
 		case 1: {//passwords do not match
 			$message = $langPassTwo;
 			$urlText = "";
-			$type = "caution";
+			$type = "caution_small";
 			break;
 		}
 
 		case 2: { //pass too easy
 			$message = $langPassTooEasy .": <strong>".substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8)."</strong>";
 			$urlText = "";
-			$type = "caution";
+			$type = "caution_small";
 			break;
 		}
 
 		case 3: { // admin tools
 			$message = $langFields;
 			$urlText = "";
-			$type = "caution";
+			$type = "caution_small";
 			break;
 		}
 
 		case 4: {//password successfully changed
 			$message = $langPassChanged;
 			$urlText = $langHome;
-			$type = "success";
+			$type = "success_small";
 			break;
 		}
 
 		case 5: {//wrong old password entered
 			$message = $langPassOldWrong;
 			$urlText = "";
-			$type = "caution";
+			$type = "caution_small";
 			break;
 		}
 
 		case 6: {//not acceptable characters in password
 			$message = $langInvalidCharsPass;
 			$urlText = "";
-			$type = "caution";
+			$type = "caution_small";
 			break;
 		}
 
 		default:die("invalid message id");
 
 	}
-
-	$tool_content .= "<table width=\"99%\">
-			<tbody><tr><td class=\"$type\">$message<br>
-		    <a href=\"$urlServer\">$urlText</a>
-					</td></tr></tbody>
-			</table><br/>";
+	$tool_content .=  "<p class=\"$type\">$message<br><a href=\"$urlServer\">$urlText</a></p><br/>";
 }
 
 if (!isset($changePass)) {

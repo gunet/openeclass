@@ -112,44 +112,43 @@ if(isset($msg))
 		case 1: { //profile information changed successfully (not the password data!)
 			$message = $langProfileReg;
 			$urlText = $langHome;
-			$type = "success";
+			$type = "success_small";
 			break;
 		}
 		case 3: { //pass too easy
 			$message = $langPassTooEasy.": <strong>".substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8)."</strong>";
 			$urlText = "";
-			$type = "caution";
+			$type = "caution_small";
 			break;
 		}
 		case 4: { // empty fields check
 			$message = $langFields;
 			$urlText = "";
-			$type = "caution";
+			$type = "caution_small";
 			break;
 		}
 		case 5: {//username already exists
 			$message = $langUserTaken;
 			$urlText = "";
-			$type = "caution";
+			$type = "caution_small";
 			break;
 		}
 		case 6: {//email not valid
 			$message = $langEmailWrong;
 			$urlText = "";
-			$type = "caution";
+			$type = "caution_small";
 			break;
 		}
 		case 10: { // invalid characters
 			$message = $langInvalidCharsUsername;
 			$urlText = "";
-      $type = "caution";
+      $type = "caution_small";
       break;
 		}
 		default:die("invalid message id");
 	}
 
-	$tool_content .=  "<table width=\"99%\"><tbody><tr><td class=\"$type\">$message<br>
-    	<a href=\"../../index.php\">$urlText</a></td></tr></tbody></table><br/>";
+	$tool_content .=  "<p class=\"$type\">$message<br><a href=\"../../index.php\">$urlText</a></p><br/>";
 
 }
 

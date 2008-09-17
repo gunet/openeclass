@@ -200,21 +200,38 @@ caption {
 .caution_small {
 	background-image: url(img/exclamation.gif);
 	background-repeat: no-repeat;
-	background-position: 0px 0px;
-	padding-left : 20px;
+	background-position: 4px 1px;
+	padding-left : 25px;
 	padding-bottom : 4px;
+    padding-top : 1px;
 	color: #D46452;
 }
+
+p.caution_small{
+  border-bottom: 1px solid #F0C9C1;
+  border-top: 1px solid #F0C9C1;
+  border-left: 1px solid #F0C9C1;
+  border-right: 1px solid #F0C9C1;
+}
+
 
 .success_small {
 	background-image: url(img/well-done.gif);
 	background-repeat: no-repeat;
-	background-position: 0px 0px;
-	padding-left : 25px;
-	padding-top : 2px;
+	background-position: 3px 3px;
+	padding-left : 30px;
+	padding-top : 5px;
 	padding-bottom : 6px;
 	color: #727266;
 }
+
+p.success_small{
+  border-bottom: 1px solid #BAEFBF;
+  border-top: 1px solid #BAEFBF;
+  border-left: 1px solid #BAEFBF;
+  border-right: 1px solid #BAEFBF;
+}
+
 
 .well-done {
     background-image: url(./img/tick.gif);
