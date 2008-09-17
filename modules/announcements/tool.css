@@ -1,7 +1,3 @@
-tbody tr { background: #FCFDFE; font-size:12px;}
-
-tbody tr.odd { background: #F7F9FC; }
-
 table.announcements {
     padding: 2px;
 	vertical-align: top;
@@ -14,22 +10,17 @@ table.announcements {
 table.announcements th {
 	padding: 4px;
 	vertical-align: top;
-	background: #edecdf;
 	font-size:10px;
 	color: #727266;
 	border-top: 1px solid #edecdf;
 	border-bottom: 1px solid #edecdf;
 	border-left: 1px solid #edecdf;
 	border-right: 1px solid #edecdf;
-	font-style : normal;
-	font-variant : normal;
-	font-weight : normal;
 }
 
 table.announcements td {
 	padding: 4px;
 	vertical-align: top !important;
-	background: #Fbfbfb;
 	font-size:10px;
 	color: #727266;
 	vertical-align: middle;

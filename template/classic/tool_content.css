@@ -218,9 +218,9 @@ p.caution_small{
 .success_small {
 	background-image: url(img/well-done.gif);
 	background-repeat: no-repeat;
-	background-position: 3px 3px;
+	background-position: 3px 1px;
 	padding-left : 30px;
-	padding-top : 5px;
+	padding-top : 4px;
 	padding-bottom : 6px;
 	color: #727266;
 }
