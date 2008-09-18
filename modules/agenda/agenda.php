@@ -229,6 +229,8 @@ function confirmation (name)
 	}
 
 	if (@$addEvent == 1 || (isset($id) && $id)) {
+		$nameTools = $langAddEvent;
+		$navigation[] = array ("url"=>"agenda.php", "name"=> $langAgenda);
 		$tool_content .= <<<tContentForm
 
 <form method="post" action="".$_SERVER[PHP_SELF]."">
@@ -285,7 +287,7 @@ tContentForm;
     </tr>
     <tr>
       <th class=\"left\">&nbsp;</th>
-      <td><input type=\"Submit\" name=\"submit\" value=\"$langAddModify\"></td>
+      <td><input type=\"submit\" name=\"submit\" value=\"$langAddModify\"></td>
     </tr>
     </tbody>
     </table>

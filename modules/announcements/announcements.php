@@ -295,7 +295,6 @@ hContent;
 	DISPLAY FORM TO FILL AN ANNOUNCEMENT
 	(USED FOR ADD AND MODIFY)
 	--------------------------------------*/
-
     if ($displayForm == true && (@$addAnnouce == 1 || isset($modify))) {
         // DISPLAY ADD ANNOUNCEMENT COMMAND
         $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'antitle');\">";
@@ -308,12 +307,13 @@ hContent;
               <th>&nbsp;</th>
               <td><b>$langModifAnn</b></td>
             </tr>";
-            $langAdd = $langModifAnn;
+            $langAdd = $nameTools = $langModifAnn;
         } else {
 		$tool_content .= "<table width='99%' class='FormData' align='center'>
       		<tbody><tr><th width='220'>&nbsp;</th><td><b>" . $langAddAnn . "</b></td></tr>";
+		$nameTools = $langAddAnn;
         }
-
+	$navigation[] = array("url" => "announcements.php", "name" => $langAnnouncements);
         if (!isset($AnnouncementToModify)) $AnnouncementToModify = "";
         if (!isset($contentToModify)) $contentToModify = "";
         if (!isset($titleToModify)) $titleToModify = "";
