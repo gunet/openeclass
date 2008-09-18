@@ -339,10 +339,10 @@ if (isset($id)) {
      <thead>
      <tr>
        <th colspan=\"2\"><div align=\"left\">$langDirectory $langVideo</div></th>
-       <th><div align=\"left\">$langcreator</div></th>
-       <th><div align=\"left\">$langpublisher</div></th>
-       <th>$langdate</th>
-       <th>$langActions</th>
+       <th width=\"150\"><div align=\"left\">$langcreator</div></th>
+       <th width=\"150\"><div align=\"left\">$langpublisher</div></th>
+       <th width=\"70\">$langdate</th>
+       <th width=\"70\">$langActions</th>
     </tr>
     </thead>
     <tbody>";
