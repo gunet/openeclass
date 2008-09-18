@@ -2893,7 +2893,9 @@ $langURL="Video Server URL";
 $langcreator="Creator";
 $langpublisher="Publisher";
 $langdate="Date";
-$langNoVideo = "Not available video files or links";
+$langNoVideo = "There are no available video files";
+$langEmptyVideoTitle = "Please type a video title";
+
 
 /*************************************************************
 * wiki.inc.php

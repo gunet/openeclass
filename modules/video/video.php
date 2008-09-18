@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 /*
  * video
@@ -65,7 +65,7 @@ $action->record('MODULE_ID_VIDEO');
 include '../../include/lib/forcedownload.php';
 
 $nameTools = $langVideo;
-$tool_content="";
+$tool_content = "";
 $d = mysql_fetch_array(db_query("SELECT video_quota FROM cours WHERE code='$currentCourseID'",$mysqlMainDb));
 $diskQuotaVideo = $d['video_quota'];
 
@@ -99,19 +99,37 @@ function confirmation (name)
 </script>
 ';
 
+$head_content .= <<<hContent
+<script type="text/javascript">
+function checkrequired(which, entry) {
+	var pass=true;
+	if (document.images) {
+		for (i=0;i<which.length;i++) {
+			var tempobj=which.elements[i];
+			if (tempobj.name == entry) {
+				if (tempobj.type=="text"&&tempobj.value=='') {
+					pass=false;
+					break;
+		  		}
+	  		}
+		}
+	}
+	if (!pass) {
+		alert("$langEmptyVideoTitle");
+		return false;
+	} else {
+		return true;
+	}
+}
+
+</script>
+hContent;
+
 // ----------------------
 // download video
 // ----------------------
 
 $nick=$prenom." ".$nom;
-$tool_content .= "
-  <div id=\"operations_container\">
-    <ul id=\"opslist\">
-	  <li><a href=\"$_SERVER[PHP_SELF]?form_input=file\">$langAddV</a></li>
-	  <li><a href=\"$_SERVER[PHP_SELF]?form_input=url\">$langAddVideoLink</a></li>
-	</ul>
-  </div>";
-
 	if (isset($_POST['submit']) or isset($_POST['edit_submit'])) {
 		if($id) {
 			$sql = "UPDATE $table SET url='".mysql_real_escape_string($url)."', titre='".mysql_real_escape_string($titre)."', description='".mysql_real_escape_string($description)."',creator='".mysql_real_escape_string($creator)."',publisher='".mysql_real_escape_string($publisher)."'
@@ -121,29 +139,31 @@ $tool_content .= "
 			if(isset($URL))
 			{
 				if ($titre == "") $titre = $URL;
-				$url=$URL;
+				$url = $URL;
 				$sql = "INSERT INTO videolinks (url,titre,description,creator,publisher,date) VALUES ('$url','".mysql_real_escape_string($titre)."','".mysql_real_escape_string($description)."','".mysql_real_escape_string($creator)."','".mysql_real_escape_string($publisher)."','".mysql_real_escape_string($date)."')";
 			} else {
 				$updir = "$webDir/video/$currentCourseID"; //path to upload directory
 				if (($file_name != "") && ($file_size <= $diskQuotaVideo )) {
-				// convert php file in phps to protect the platform against malicious codes
-				$file_name = ereg_replace(".php$", ".phps", $file_name);
-				$file_name = str_replace(" ", "%20", $file_name);
-				$file_name = str_replace("%20", "", $file_name);
-				$file_name = str_replace("\'", "", $file_name);
-				$safe_filename = date("YmdGis").randomkeys("8").".".get_file_extention($file_name);
-				if ($titre == "") $titre = $file_name;
-				$iscopy=@copy("$file", "$updir/$safe_filename");
-				if(!$iscopy) {
-					$tool_content="<p class=\"success_small\">$langFileNot<br /><a href=\"$_SERVER[PHP_SELF]\">$langBack</a></p><br />";
+					// convert php file in phps to protect the platform against malicious codes
+					$file_name = ereg_replace(".php$", ".phps", $file_name);
+					$file_name = str_replace(" ", "%20", $file_name);
+					$file_name = str_replace("%20", "", $file_name);
+					$file_name = str_replace("\'", "", $file_name);
+					$safe_filename = date("YmdGis").randomkeys("8").".".get_file_extention($file_name);
+					if ($titre == "") $titre = $file_name;
+					$iscopy=@copy("$file", "$updir/$safe_filename");
+						if(!$iscopy) {
+							$tool_content .= "<p class=\"success_small\">$langFileNot<br />
+							<a href=\"$_SERVER[PHP_SELF]\">$langBack</a></p><br />";
+							draw($tool_content, 2, 'video', $head_content);
+							exit;
+						}
+				} else {
+					$tool_content="<p class=\"caution_small\">$langTooBig<br />
+					<a href=\"$_SERVER[PHP_SELF]\">$langBack</a></p><br />";
 					draw($tool_content, 2, 'user', $head_content);
 					exit;
 				}
-		} else {
-				$tool_content="<p class=\"caution_small\">$langTooBig<br /><a href=\"$_SERVER[PHP_SELF]\">$langBack</a></p><br />";
-				draw($tool_content, 2, 'user', $head_content);
-				exit;
-			}
 				$path = "/".$safe_filename;
 				$url="$file_name";
 				$sql = "INSERT INTO video (path, url, titre, description, creator, publisher, date) VALUES ('$path', '$url','".mysql_real_escape_string($titre)."','".mysql_real_escape_string($description)."','".mysql_real_escape_string($creator)."','".mysql_real_escape_string($publisher)."','".mysql_real_escape_string($date)."')";
@@ -151,11 +171,11 @@ $tool_content .= "
 		}	// else
 		$result = db_query($sql,$currentCourseID);
 			if($id) {
-				$tool_content.="<p class=\"success_small\">$langTitleMod</p><br />";
+				$tool_content .= "<p class=\"success_small\">$langTitleMod</p><br />";
 				$id="";
-		} else {
-			$tool_content.="<p class=\"success_small\">$langFAdd</p><br />";
-		}	 // else
+			} else {
+				$tool_content .= "<p class=\"success_small\">$langFAdd</p><br />";
+			}	 // else
 	}	// if submit
 
 	elseif (isset($delete)) {
@@ -170,8 +190,10 @@ $tool_content .= "
 		$tool_content .= "<p class=\"success_small\">$langDelF</p><br />";
 		$id="";
 	} elseif (isset($form_input) && $form_input == "file") {
+		$nameTools = $langAddV;
+		$navigation[] = array ("url"=>"video.php", "name"=> $langVideo);
 		$tool_content .= "
-<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"insert_form\">
+<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"insert_form\" onsubmit=\"return checkrequired(this, 'titre');\">
     <table width=\"99%\" class=\"FormData\">
     <tbody>
     <tr>
@@ -213,8 +235,10 @@ $tool_content .= "
 </form>
 <br/>";
 	} elseif (isset($form_input) && $form_input == "url") {
+		$nameTools = $langAddVideoLink;
+		$navigation[] = array ("url"=>"video.php", "name"=> $langVideo);
 		$tool_content .= "
-<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"insert_form\">
+<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"insert_form\" onsubmit=\"return checkrequired(this, 'titre');\">
     <table width=\"99%\" class=\"FormData\">
     <tbody>
     <tr>
@@ -276,8 +300,11 @@ if (isset($id)) {
       	  	$creator = $myrow[5];
       	  	$publisher = $myrow[6];
 	}
+	$nameTools = $langModify;
+	$navigation[] = array ("url"=>"video.php", "name"=> $langVideo);
+
 	$tool_content .= "
-    <form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"edit_form\">
+    <form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"edit_form\" onsubmit=\"return checkrequired(this, 'titre');\">
         <table width=\"99%\" class=\"FormData\">
         <tbody>
     	<tr>
@@ -293,6 +320,7 @@ if (isset($id)) {
 	elseif ($table_edit == 'video') {
 		$tool_content .= "<input type='hidden' name='url' value='$url' class=\"FormData_InputText\">";
 	}
+
 	$tool_content .= "
         <tr>
       	  <th class=\"left\">$langVideoTitle:</th>
@@ -323,29 +351,33 @@ if (isset($id)) {
     <br/>";
 	}
 }	// if id
-
 	$tool_content.="\n\n     <form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"insert_form\"></form>";
 	$count_video = mysql_fetch_array(db_query("SELECT count(*) FROM video ORDER BY titre",$currentCourseID));
 	$count_video_links = mysql_fetch_array(db_query("SELECT count(*) FROM videolinks ORDER BY titre",$currentCourseID));
-
+	if (!isset($form_input)) {
+		$tool_content .= "<div id=\"operations_container\">
+    			<ul id=\"opslist\">
+		  	<li><a href=\"$_SERVER[PHP_SELF]?form_input=file\">$langAddV</a></li>
+		  	<li><a href=\"$_SERVER[PHP_SELF]?form_input=url\">$langAddVideoLink</a></li>
+			</ul>
+  		</div>";
+	}
 	if ($count_video[0]<>0 || $count_video_links[0]<>0) {
 	// print the list if there is no editing
 		$results['video'] = db_query("SELECT *  FROM video ORDER BY titre",$currentCourseID);
 		$results['videolinks'] = db_query("SELECT * FROM videolinks ORDER BY titre",$currentCourseID);
 		$i=0;
 		$count_video_presented_for_admin=1;
-		$tool_content.="
-     <table width=\"99%\" class=\"Video\">
-     <thead>
-     <tr>
-       <th colspan=\"2\"><div align=\"left\">$langDirectory $langVideo</div></th>
-       <th width=\"150\"><div align=\"left\">$langcreator</div></th>
-       <th width=\"150\"><div align=\"left\">$langpublisher</div></th>
-       <th width=\"70\">$langdate</th>
-       <th width=\"70\">$langActions</th>
-    </tr>
-    </thead>
-    <tbody>";
+		$tool_content.= "<table width=\"99%\" class=\"Video\">
+     		<thead><tr>
+       			<th colspan=\"2\"><div align=\"left\">$langDirectory $langVideo</div></th>
+       			<th width=\"150\"><div align=\"left\">$langcreator</div></th>
+       			<th width=\"150\"><div align=\"left\">$langpublisher</div></th>
+       			<th width=\"70\">$langdate</th>
+       			<th width=\"70\">$langActions</th>
+    		</tr>
+    		</thead>
+    		<tbody>";
 	foreach($results as $table => $result)
 	while ($myrow = mysql_fetch_array($result)) {
 		switch($table){
@@ -370,9 +402,11 @@ if (isset($id)) {
 			$rowClass = " ";
 		}
 			$tool_content .= "\n     <tr $rowClass>";
-			$tool_content .= "\n       <td width=\"1%\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
-      		$tool_content .= $link_to_add;
-			$tool_content .= "\n       <td align='center'><a href='$_SERVER[PHP_SELF]?id=$myrow[0]&table_edit=$table&action=edit'><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>&nbsp;&nbsp;";
+			$tool_content .= "\n       <td width=\"1%\">
+			<img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+      			$tool_content .= $link_to_add;
+			$tool_content .= "\n       <td align='center'>
+			<a href='$_SERVER[PHP_SELF]?id=$myrow[0]&table_edit=$table&action2=edit'><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>&nbsp;&nbsp;";
 			$tool_content .= "<a href='$_SERVER[PHP_SELF]?id=$myrow[0]&delete=yes&table=$table' onClick='return confirmation(\"".addslashes($myrow[2])."\");'><img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></img></a></td>\n     </tr>";
 		$i++;
 		$count_video_presented_for_admin++;
@@ -443,7 +477,7 @@ else {
 	}
 }
 if (isset($head_content))
-	draw($tool_content, 2, video, $head_content);
+	draw($tool_content, 2, 'video', $head_content);
 else
-	draw($tool_content, 2, video);
+	draw($tool_content, 2, 'video');
 ?>
