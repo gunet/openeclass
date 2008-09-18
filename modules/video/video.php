@@ -135,14 +135,12 @@ $tool_content .= "
 				if ($titre == "") $titre = $file_name;
 				$iscopy=@copy("$file", "$updir/$safe_filename");
 				if(!$iscopy) {
-					$tool_content="<table width=\"99%\"><tbody><tr>
-					<td class=\"caution\"><p><b>$langFileNot</b></p>
-					<p><a href=\"$_SERVER[PHP_SELF]\">$langBack</a></p></td></tr></tbody></table>";
+					$tool_content="<p class=\"success_small\">$langFileNot<br /><a href=\"$_SERVER[PHP_SELF]\">$langBack</a></p><br />";
 					draw($tool_content, 2, 'user', $head_content);
 					exit;
 				}
 		} else {
-				$tool_content="<table width=\"99%\"><tbody><tr><td class=\"caution\"><p><b>$langTooBig</b></p><p><a href=\"$_SERVER[PHP_SELF]\">$langBack</a></p></td></tr></tbody></table>";
+				$tool_content="<p class=\"caution_small\">$langTooBig<br /><a href=\"$_SERVER[PHP_SELF]\">$langBack</a></p><br />";
 				draw($tool_content, 2, 'user', $head_content);
 				exit;
 			}
@@ -153,14 +151,10 @@ $tool_content .= "
 		}	// else
 		$result = db_query($sql,$currentCourseID);
 			if($id) {
-				$tool_content.="<table width=\"99%\">
-				<tbody><tr><td class=\"success\"><p><b>$langTitleMod</b></p></td></tr></tbody>
-				</table><br>";
+				$tool_content.="<p class=\"success_small\">$langTitleMod</p><br />";
 				$id="";
 		} else {
-			$tool_content.="<table width=\"99%\">
-				<tbody><tr><td class=\"success\"><p><b>$langFAdd</b></p></td></tr></tbody>
-				</table><br>";
+			$tool_content.="<p class=\"success_small\">$langFAdd</p><br />";
 		}	 // else
 	}	// if submit
 
@@ -173,14 +167,12 @@ $tool_content .= "
 		}
 		$sql = "DELETE FROM $table WHERE id='".mysql_real_escape_string($id)."'";
 		$result = db_query($sql,$currentCourseID);
-		$tool_content .= "<table width=\"99%\">
-			<tbody><tr><td class=\"success\"><p><b>$langDelF</b></p></td></tr></tbody>
-			</table><br/>";
+		$tool_content .= "<p class=\"success_small\">$langDelF</p><br />";
 		$id="";
 	} elseif (isset($form_input) && $form_input == "file") {
 		$tool_content .= "
 <form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"insert_form\">
-    <table width=\"99%\" class=\"Video\">
+    <table width=\"99%\" class=\"FormData\">
     <tbody>
     <tr>
       <th class=\"left\" width=\"220\">&nbsp;</th>
@@ -218,13 +210,12 @@ $tool_content .= "
     </tr>
     </tbody>
     </table>
-    <br/>
-    </form>
-    <br/>";
+</form>
+<br/>";
 	} elseif (isset($form_input) && $form_input == "url") {
 		$tool_content .= "
-    <form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"insert_form\">
-    <table width=\"99%\" class=\"Video\">
+<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"insert_form\">
+    <table width=\"99%\" class=\"FormData\">
     <tbody>
     <tr>
       <th class=\"left\" width=\"220\">&nbsp;</th>
@@ -260,7 +251,9 @@ $tool_content .= "
       <td><input type=\"submit\" name=\"submit\" value=\"$langAdd\"></td>
     </tr>
     </tbody>
-    </table><br/><br/></form>";
+    </table>
+</form>
+<br/>";
 }
 
 // ------------------- if no submit -----------------------
@@ -284,40 +277,50 @@ if (isset($id)) {
       	  	$publisher = $myrow[6];
 	}
 	$tool_content .= "
-<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"edit_form\">
-        <table width=\"99%\" class=\"Video\">
+    <form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"edit_form\">
+        <table width=\"99%\" class=\"FormData\">
         <tbody>
-    	<tr><th class=\"left\" width=\"220\">&nbsp;</th>
-      	<td><b>$langModify</b></td></tr>";
+    	<tr>
+          <th class=\"left\" width=\"220\">&nbsp;</th>
+      	  <td><b>$langModify</b></td></tr>";
 	if ($table_edit == 'videolinks') {
-		$tool_content .= "<tr>
-      		<th class=\"left\">$langURL:<input type='hidden' name='id' value=' '></th>
-      		<td><input type='text' name='url' value='$url' size='55' class=\"FormData_InputText\"></td></tr>";
+		$tool_content .= "
+        <tr>
+          <th class=\"left\">$langURL:<input type='hidden' name='id' value=' '></th>
+          <td><input type='text' name='url' value='$url' size='55' class=\"FormData_InputText\"></td>
+        </tr>";
 	}
 	elseif ($table_edit == 'video') {
 		$tool_content .= "<input type='hidden' name='url' value='$url' class=\"FormData_InputText\">";
 	}
-	$tool_content .= "<tr>
-      	<th class=\"left\">$langVideoTitle:</th>
-      	<td><input type=\"text\" name=\"titre\" value=\"".@$titre."\" size=\"55\" class=\"FormData_InputText\"></td>
-    	</tr><tr>
-      <th class=\"left\">$langDescr&nbsp;:</th>
-      <td><textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"52\" class=\"FormData_InputText\">".@$description."</textarea></td>
-    </tr>
-    <tr>
-      <th class=\"left\">$langcreator&nbsp;:</th>
-      <td><input type=\"text\" name=\"creator\" value=\"".@$creator."\" size=\"55\" class=\"FormData_InputText\"></td>
-    </tr>
-	<tr>
-      <th class=\"left\">$langpublisher &nbsp;:</th>
-      <td><input type=\"text\" name=\"publisher\" value=\"".@$publisher."\" size=\"55\" class=\"FormData_InputText\"></td>
-    </tr>
-    <tr>
-      <th class=\"left\">&nbsp;</th>
-      <td><input type=\"submit\" name=\"edit_submit\" value=\"$langModify\">
-          <input type=\"hidden\" name=\"id\" value=\"".@$id."\">
-          <input type=\"hidden\" name=\"table\" value=\"".$table_edit."\">
-      </td></tr></tbody></table></form><br/><br/>";
+	$tool_content .= "
+        <tr>
+      	  <th class=\"left\">$langVideoTitle:</th>
+      	  <td><input type=\"text\" name=\"titre\" value=\"".@$titre."\" size=\"55\" class=\"FormData_InputText\"></td>
+    	</tr>
+        <tr>
+          <th class=\"left\">$langDescr&nbsp;:</th>
+          <td><textarea wrap=\"physical\" rows=\"3\" name=\"description\" cols=\"52\" class=\"FormData_InputText\">".@$description."</textarea></td>
+        </tr>
+        <tr>
+          <th class=\"left\">$langcreator&nbsp;:</th>
+          <td><input type=\"text\" name=\"creator\" value=\"".@$creator."\" size=\"55\" class=\"FormData_InputText\"></td>
+        </tr>
+	    <tr>
+          <th class=\"left\">$langpublisher &nbsp;:</th>
+          <td><input type=\"text\" name=\"publisher\" value=\"".@$publisher."\" size=\"55\" class=\"FormData_InputText\"></td>
+        </tr>
+        <tr>
+          <th class=\"left\">&nbsp;</th>
+          <td><input type=\"submit\" name=\"edit_submit\" value=\"$langModify\">
+            <input type=\"hidden\" name=\"id\" value=\"".@$id."\">
+            <input type=\"hidden\" name=\"table\" value=\"".$table_edit."\">
+          </td>
+        </tr>
+        </tbody>
+        </table>
+    </form>
+    <br/>";
 	}
 }	// if id
 
@@ -335,9 +338,9 @@ if (isset($id)) {
      <table width=\"99%\" class=\"Video\">
      <thead>
      <tr>
-       <th class=\"left\" colspan=\"2\">$langVideoTitle - $langDescr</th>
-       <th>$langcreator</th>
-       <th>$langpublisher</th>
+       <th colspan=\"2\"><div align=\"left\">$langDirectory $langVideo</div></th>
+       <th><div align=\"left\">$langcreator</div></th>
+       <th><div align=\"left\">$langpublisher</div></th>
        <th>$langdate</th>
        <th>$langActions</th>
     </tr>
@@ -352,11 +355,11 @@ if (isset($id)) {
 				} else {
 					$videoURL = "'$_SERVER[PHP_SELF]?action2=download&id=$myrow[1]'";
 				}
-				$link_to_add = "\n       <td><b>$myrow[3]</b><br>$myrow[4]</td>\n       <td>$myrow[5]</td>\n       <td align='center'>$myrow[6]</td><td align='center'>".nice_format(date("Y-m-d", strtotime($myrow[7])))."</td>";
+				$link_to_add = "\n       <td><a href= $videoURL>$myrow[3]</a><br>\n          $myrow[4]</td>\n       <td>$myrow[5]</td>\n       <td>".nice_format(date("Y-m-d", strtotime($myrow[6])))."]</td>\n       <td align='center'>".nice_format(date("Y-m-d", strtotime($myrow[7])))."</td>";
 				break;
 			case "videolinks":
 				$videoURL= "'$myrow[1]' target=_blank";
-				$link_to_add = "\n       <td><b>$myrow[2]</b><br>$myrow[3]</td><td>$myrow[4]</td>\n       <td align='center'>$myrow[5]</td><td align='center'>$myrow[6]</td>";
+				$link_to_add = "\n       <td><a href= $videoURL>$myrow[2]</a><br>$myrow[3]</td><td>$myrow[4]</td>\n       <td>$myrow[5]</td><td align='center'>".nice_format(date("Y-m-d", strtotime($myrow[6])))."</td>";
 				break;
 			default:
 				exit;
@@ -366,14 +369,11 @@ if (isset($id)) {
 		} else {
 			$rowClass = " ";
 		}
-			$tool_content .= "\n     <tr $rowClass>
-      			<td align='right'><small>$count_video_presented_for_admin.</small></td>";
-      			$tool_content .= $link_to_add;
-			$tool_content .= "<td align='center'><a href= $videoURL>
-			<img src='../../template/classic/img/play.gif' alt='$langDownloadIt' title='$langDownloadIt' border='0'></a>
-        		<a href='$_SERVER[PHP_SELF]?id=$myrow[0]&table_edit=$table&action=edit'><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>";
-			$tool_content .= "<a href='$_SERVER[PHP_SELF]?id=$myrow[0]&delete=yes&table=$table' onClick='return confirmation(\"".addslashes($myrow[2])."\");'>
-			<img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></img></a></td></tr>";
+			$tool_content .= "\n     <tr $rowClass>";
+			$tool_content .= "\n       <td width=\"1%\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+      		$tool_content .= $link_to_add;
+			$tool_content .= "\n       <td align='center'><a href='$_SERVER[PHP_SELF]?id=$myrow[0]&table_edit=$table&action=edit'><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>&nbsp;&nbsp;";
+			$tool_content .= "<a href='$_SERVER[PHP_SELF]?id=$myrow[0]&delete=yes&table=$table' onClick='return confirmation(\"".addslashes($myrow[2])."\");'><img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></img></a></td>\n     </tr>";
 		$i++;
 		$count_video_presented_for_admin++;
 	} // while
@@ -393,11 +393,14 @@ else {
 	$count_video_links = mysql_fetch_array(db_query("SELECT count(*) FROM videolinks
 						ORDER BY titre",$currentCourseID));
 	if ($count_video[0]<>0 || $count_video_links[0]<>0) {
-		$tool_content .= "<table width=\"99%\"><thead>
-      		<th width=\"5%\">$langID</th>
-      		<th class='left'>$langVideoTitle - $langDescr</th>
-	  	<th width=\"10%\">$langActions</th></tr>
-    		</thead><tbody>";
+		$tool_content .= "
+        <table width=\"99%\" align='left' class=\"Video\">
+        <thead>
+        <tr>
+          <th colspan=\"2\"><div align=\"left\">$langDirectory $langVideo</div></th>
+        </tr>
+        </thead>
+        <tbody>";
 		$i=0;
 		$count_video_presented=1;
 		foreach($results as $table => $result)
@@ -410,11 +413,11 @@ else {
 				} else {
 					$videoURL = "'$_SERVER[PHP_SELF]?action2=download&id=$myrow[1]'";
 				}
-				$link_to_add = "<td><b>$myrow[3]</b><br>$myrow[4]</td>";
+				$link_to_add = "\n          <td><a href=$videoURL>$myrow[3]</a><br /><small>$myrow[4]</small></td>";
 				break;
 			case "videolinks":
 				$videoURL= "'$myrow[1]' target=_blank";
-				$link_to_add = "<td><b>$myrow[2]</b><br>$myrow[3]</td>";
+				$link_to_add = "\n          <td><a href=$videoURL>$myrow[2]</a><br />$myrow[3]</td>";
 				break;
 			default:
 				exit;
@@ -424,15 +427,15 @@ else {
 			} else {
 				$rowClass = " ";
 			}
-			$tool_content .= "<tr $rowClass>
-      			<td align='center'><small>$count_video_presented.</small></td>";
-      			$tool_content .= $link_to_add;
-			$tool_content .= "<td align='center'><a href=$videoURL><img src='../../template/classic/img/play.gif' alt='$langDownloadIt' title='$langDownloadIt' border='0'></img></a></td></tr>";
+			$tool_content .= "\n        <tr $rowClass>";
+            $tool_content .= "\n          <td width=\"1%\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+      		$tool_content .= $link_to_add;
+			$tool_content .= "\n        </tr>";
 			$i++;
 			$count_video_presented++;
 		}
 	}
-	$tool_content .= "</tbody></table>";
+	$tool_content .= "\n        </tbody>\n        </table>\n";
 	}
 	else
 	{
