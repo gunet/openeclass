@@ -15,3 +15,25 @@
 	background-color: #FFF8DC;
 	color: silver;
 }
+
+table.Documents{
+    padding: 2px;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.Documents th {
+    text-align: center!important;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.Documents td {
+	vertical-align: top;
+    font-size : 10px;
+	padding : 5px 4px 4px 4px;
+}
