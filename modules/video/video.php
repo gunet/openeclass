@@ -355,7 +355,7 @@ if (isset($id)) {
 				} else {
 					$videoURL = "'$_SERVER[PHP_SELF]?action2=download&id=$myrow[1]'";
 				}
-				$link_to_add = "\n       <td><a href= $videoURL>$myrow[3]</a><br>\n          $myrow[4]</td>\n       <td>$myrow[5]</td>\n       <td>".nice_format(date("Y-m-d", strtotime($myrow[6])))."]</td>\n       <td align='center'>".nice_format(date("Y-m-d", strtotime($myrow[7])))."</td>";
+				$link_to_add = "\n       <td><a href= $videoURL>$myrow[3]</a><br>\n          $myrow[4]</td>\n       <td>$myrow[5]</td>\n       <td>$myrow[6]</td>\n       <td align='center'>".nice_format(date("Y-m-d", strtotime($myrow[7])))."</td>";
 				break;
 			case "videolinks":
 				$videoURL= "'$myrow[1]' target=_blank";
