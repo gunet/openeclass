@@ -84,7 +84,7 @@ $start_cal = $jscalendar->make_input_field(
 	array('showOthers' => true,
 	    	 'align' => 'Tl',
                  'ifFormat' => '%Y-%m-%d'),
-	array('style' => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+	array('style' => 'width: 14em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center',
                  'name' => 'date',
                  'value' => ' '));
 }
@@ -187,23 +187,22 @@ function confirmation (name)
 </script>
 ';
 
-	$tool_content .= "<div id=\"operations_container\">
-		<ul id=\"opslist\">";
+	$tool_content .= "\n  <div id=\"operations_container\">\n    <ul id=\"opslist\">";
 	if ((!isset($addEvent) && @$addEvent != 1) || isset($_POST['submit'])) {
-		$tool_content .= "<li><a href=\"".$_SERVER['PHP_SELF']."?addEvent=1\">".$langAddEvent."</a></li>";
+		$tool_content .= "\n        <li><a href=\"".$_SERVER['PHP_SELF']."?addEvent=1\">".$langAddEvent."</a></li>";
 	}
 
 	$sens =" ASC";
 	$result = db_query("SELECT id FROM agenda", $currentCourseID);
 	if (mysql_num_rows($result) > 1) {
 		if (isset($_GET["sens"]) && $_GET["sens"]=="d") {
-			$tool_content .=  "<li><a href=\"".$_SERVER['PHP_SELF']."?sens=\" >$langOldToNew</a></li>";
+			$tool_content .=  "\n        <li><a href=\"".$_SERVER['PHP_SELF']."?sens=\" >$langOldToNew</a></li>";
 			$sens=" DESC ";
 		} else {
-			$tool_content .=  "<li><a href=\"".$_SERVER['PHP_SELF']."?sens=d\" >$langOldToNew</a></li>";
+			$tool_content .=  "\n        <li><a href=\"".$_SERVER['PHP_SELF']."?sens=d\" >$langOldToNew</a></li>";
 		}
 	}
-	$tool_content .= "</ul></div>";
+	$tool_content .= "\n    </ul>\n  </div>\n";
 }
 	if (isset($id) && $id) {
 		$sql = "SELECT id, titre, contenu, day, hour, lasting FROM agenda WHERE id=$id";
@@ -220,7 +219,7 @@ function confirmation (name)
           array('showOthers' => true,
                 'align' => 'Tl',
                  'ifFormat' => '%Y-%m-%d'),
-          array('style' => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+          array('style' => 'width: 14em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center',
                  'name' => 'date',
                  'value' => $dayAncient));
 	}
@@ -232,19 +231,16 @@ function confirmation (name)
 	if (@$addEvent == 1 || (isset($id) && $id)) {
 		$tool_content .= <<<tContentForm
 
-    <p>$langAddEvent</p>
 <form method="post" action="".$_SERVER[PHP_SELF]."">
     <input type="hidden" name="id" value="$id">
-    <table width="99%">
-    <thead>
-    <tr><th>$langChooseDate</th>
-        <th>$langHour</th>
-        <th>$langMinute</th>
-        <th>$langLasting $langInHour</th>
-    </tr>
-    </thead>
-tContentForm;
 
+    <table width=\"99%\" class=\"FormData\">
+    <tbody>
+    <tr>
+      <th class=\"left\" width=\"150\">&nbsp;</th>
+      <td><b>$langAddEvent</b><td>
+    </tr>
+tContentForm;
 		$day	= date("d");
 		$hours	= date("H");
 		$minutes= date("i");
@@ -254,40 +250,48 @@ tContentForm;
 			$hours=$hourAncient[0];
 			$minutes=$hourAncient[1];
 		}
-		$tool_content .= "<tbody><tr><td align='center'>";
-
-		// display jscalendar
-		$tool_content .= " ".$start_cal."</td>";
-		$tool_content .= "<td align='center' width='100'><select name='fhour'>
+		$tool_content .= "
+    <tr>
+      <th class=\"left\" rowspan=\"2\">$l_options:</th>
+      <td>$langDate: ".$start_cal."</td>
+    </tr>
+    <tr>
+      <td>$langHour: <select name='fhour' class='auth_input'>
 		    <option value='$hours'>$hours</option>
     		<option value='--'>--</option>";
-
-    for ($h=0; $h<=24; $h++)
-          $tool_content .= "<option value='$h'>$h</option>";
-
-    $tool_content .= "</select></td>";
-	$tool_content .= "<td align='center' width='100'><select name=\"fminute\">
-    <option value=\"$minutes\">[$minutes]</option>
-    <option value=\"--\">--</option>";
-
+            for ($h=0; $h<=24; $h++)
+            $tool_content .= "\n		    <option value='$h'>$h</option>";
+            $tool_content .= "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
+        $tool_content .= "$langMinute:<select name=\"fminute\" class='auth_input'>
+            <option value=\"$minutes\">[$minutes]</option>
+            <option value=\"--\">--</option>";
 	for ($m=0; $m<=55; $m=$m+5)
 		$tool_content .=  "<option value='$m'>$m</option>";
-	$tool_content .= "</select></td><td align='center'>
-	<input type=\"text\" name=\"lasting\" value=\"".@$myrow['lasting']."\" size=\"2\" maxlength=\"2\"></td>
-    	</tr></tbody></table><br>";
 
-	$tool_content .="<table width = \"99%\"><thead><tr><th>$langTitle :</th>
-    	<td colspan=\"5\"><input type=\"text\" size=\"60\" name=\"titre\" value=\"".@$titre."\"></td>
-    	</tr></thead></table><br>";
-		if (!isset($contenu)) {
+		$tool_content .= "
+           </select>&nbsp;&nbsp;&nbsp;&nbsp;$langLasting $langInHour: <input class='FormData_InputText' type=\"text\" name=\"lasting\" value=\"".@$myrow['lasting']."\" size=\"2\" maxlength=\"2\"></td>
+    </tr>
+    <tr>
+      <th class=\"left\">$langTitle:</th>
+      <td><input type=\"text\" size=\"70\" name=\"titre\" value=\"".@$titre."\"  class='FormData_InputText'></td>
+    </tr>";
+    if (!isset($contenu)) {
 			$contenu="";
 		}
+		$tool_content .= "
+    <tr>
+      <th class=\"left\">$langDetail:</th>
+      <td><textarea id='xinha' name='contenu' value='$contenu' rows='12' cols='70'>".$contenu."</textarea></td>
+    </tr>
+    <tr>
+      <th class=\"left\">&nbsp;</th>
+      <td><input type=\"Submit\" name=\"submit\" value=\"$langAddModify\"></td>
+    </tr>
+    </tbody>
+    </table>
+</form>
+<br />";
 
-	$tool_content .= "<table width = \"99%\"><thead><tr><th colspan=6>$langDetail</th></tr></thead>
-    	<tbody><tr><td colspan=\"6\">
-	<textarea id='xinha' name='contenu' value='$contenu' rows='20' cols='78'>".$contenu."</textarea></td></tr>
-    	</tbody></table><br>
-    	<input type=\"Submit\" name=\"submit\" value=\"$langAddModify\"></form><br><br>";
 	}
 }
 
@@ -298,18 +302,21 @@ if (!isset($sens)) $sens =" ASC";
 
 $result = db_query("SELECT id, titre, contenu, day, hour, lasting FROM agenda ORDER BY day ".$sens.", hour ".$sens,$currentCourseID);
 if (mysql_num_rows($result) > 0) {
-	$tool_content .=  "\n    <table width=\"99%\" align=\"center\" class=\"Agenda\">";
+	$tool_content .=  "\n    <table width=\"99%\" align=\"left\" class=\"FormData\">";
 	$tool_content .=  "\n    <thead>";
 	$tool_content .=  "\n    <tr>";
-	$tool_content .=  "\n      <th><div align=\"left\">$langEvents</div></th>";
+	$tool_content .=  "\n      <td><div align=\"left\"><b>$langEvents</b></div></td>";
 	if ($is_adminOfCourse) {
-		$tool_content .=  "\n      <th width=60>$langActions</th>";
+		$tool_content .=  "\n      <td width=60><b>$langActions</b></td>";
 	}
 	$tool_content .= "\n    </tr>\n    </thead>";
-	$tool_content .= "\n    <tbody>";
+	$tool_content .= "\n    </table>\n\n";
 	$numLine=0;
 	$barreMois ="";
 	$nowBarShowed = FALSE;
+
+	$tool_content .= "\n    <table width=\"99%\" align=\"left\" class=\"Agenda\">";
+	$tool_content .= "\n    <tbody>";
 	while ($myrow = mysql_fetch_array($result)) {
 		$contenu = $myrow["contenu"];
 		$contenu = nl2br($contenu);
@@ -323,10 +330,12 @@ if (mysql_num_rows($result) > 0) {
 				if ($barreMois!=date("m",time())) {
 					$barreMois=date("m",time());
 					$tool_content .= "\n    <tr>";
-					$tool_content .= "\n      <td class=\"month\" colspan=\"2\" valign=\"top\">".$langCalendar."&nbsp;".ucfirst(claro_format_locale_date("%B %Y",time()))."</td>";
+					// current month
+					$tool_content .= "\n      <td colspan=\"2\" class=\"monthLabel\">".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",time()))."</b></td>";
 					$tool_content .= "\n    </tr>";
 				}
 				$nowBarShowed = TRUE;
+
 				$tool_content .=  "\n    <tr>";
 				$tool_content .=  "\n      <td colspan=2 class=\"today\"><b>$langDateNow : $dateNow</b></td>";
 				$tool_content .=  "\n    </tr>";
@@ -334,21 +343,24 @@ if (mysql_num_rows($result) > 0) {
 		}
 		if ($barreMois!=date("m",strtotime($myrow["day"]))) {
 			$barreMois=date("m",strtotime($myrow["day"]));
-			$tool_content .=  "\n<tr>";
-			$tool_content .=  "\n<td colspan=\"2\">".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",strtotime($myrow["day"])))."</b></td>";
-			$tool_content .=  "\n    </tr>";
+
+            // month LABEL
+			$tool_content .= "\n    <tr>";
+			$tool_content .=  "\n      <td colspan=\"2\" class=\"monthLabel\"><div align=\"center\">".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",strtotime($myrow["day"])))."</b></div></td>";
+			$tool_content .= "\n    </tr>";
 		}
 
-		if($numLine%2 == 0)
-			$tool_content .=  "\n    <tr>";
-		elseif($numLine%2 == 1)
-			$tool_content .=  "\n    <tr class=\"odd\">";
+		if($numLine%2 == 0) {
+			$tool_content .= "\n    <tr>";
+		} elseif($numLine%2 == 1) {
+			$tool_content .= "\n    <tr class=\"odd\">";
+        }
 		if ($is_adminOfCourse)
-			$tool_content .=  "\n      <td valign=\"top\">";
+			$tool_content .= "\n      <td valign=\"top\">";
 		else
-			$tool_content .=  "\n      <td valign=\"top\" colspan=\"2\">";
+			$tool_content .= "\n      <td valign=\"top\" colspan=\"2\">";
 
-		$tool_content .=  "<p>".ucfirst(claro_format_locale_date($dateFormatLong,strtotime($myrow["day"])))." / $langHour: ".ucfirst(date("H:i",strtotime($myrow["hour"])))." ";
+		$tool_content .= "".ucfirst(claro_format_locale_date($dateFormatLong,strtotime($myrow["day"])))." / $langHour: ".ucfirst(date("H:i",strtotime($myrow["hour"])))." ";
 	$message = "$langUnknown";
 	if ($myrow["lasting"] !="") {
 		if ($myrow["lasting"] == 1)
@@ -356,22 +368,24 @@ if (mysql_num_rows($result) > 0) {
 		else
 			$message = $langHours;
 	}
-		$tool_content .=  "<br><b>".$myrow["titre"]."</b> (".$langLasting.": ".$myrow["lasting"]." ".$message.")<br>$contenu</p></td>";
+		$tool_content .=  "<br><b>".$myrow["titre"]."</b> (".$langLasting.": ".$myrow["lasting"]." ".$message.")<p class=\"agendaBody\">$contenu</p></td>";
 
 	//agenda event functions
 	//added icons next to each function
 	//(evelthon, 12/05/2006)
 	if ($is_adminOfCourse) {
-		$tool_content .=  "\n      <td align='right'><a href=\"$_SERVER[PHP_SELF]?id=".$myrow["id"]."\">
+		$tool_content .=  "\n      <td class='right'><a href=\"$_SERVER[PHP_SELF]?id=".$myrow["id"]."\">
             	<img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langModify."\"></a>&nbsp;
         	<a href=\"$_SERVER[PHP_SELF]?id=".$myrow[0]."&delete=yes\" onClick=\"return confirmation('".addslashes($myrow["titre"])."');\">
             	<img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\"></a></td>";
 	}
 		$tool_content .=  "\n    </tr>";
 		$numLine++;
+
 	} 	// while
 	$tool_content .= "\n    </tbody>";
-	$tool_content .=  "\n    </table>";
+	$tool_content .=  "\n    </table>\n";
+
 } else  {
 	$tool_content .= "<p class='alert1'>$langNoEvents</p>";
 }
