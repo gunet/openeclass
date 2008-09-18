@@ -27,15 +27,15 @@
 	upload.php
 	@last update: 18-07-2006 by Sakis Agorastos
 	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
-==============================================================================        
-        @Description: Upload form that aids the user to select 
+==============================================================================
+        @Description: Upload form that aids the user to select
 		  a file to upload and add some metadata with it.
 
     The script shows a form with a "Browse file" tag and some simpl
     inputs for metadata. The actual uploading takes place at document.php
 ==============================================================================*/
 
-$require_current_course = TRUE;  
+$require_current_course = TRUE;
 $require_login = true;
 $require_prof = true;
 
@@ -45,7 +45,7 @@ $tool_content = "";
 if(!isset($_REQUEST['uploadPath'])) {
 	$_REQUEST['uploadPath'] = "";
 }
- 
+
 $nameTools = $langDownloadFile;
 $navigation[]= array ("url"=>"document.php", "name"=> $langDoc);
 $tool_content .= "
@@ -137,8 +137,7 @@ $tool_content .= "
      </tr>
      <tr>
        <th class='left'>&nbsp;</th>
-       <td><input type=\"submit\" value=\"$langUpload\"></td>
-       <td><p align='right'><small>$langNotRequired</small></p></td>
+       <td colspan=\"2\"><input type=\"submit\" value=\"$langUpload\"><p align='right'><small>$langNotRequired</small></p></td>
      </tr>
      </tbody>
      </table>

@@ -1,27 +1,30 @@
 .invisible_doc {
 	font-style: italic;
-	background-color: #FFF8DC;
 	color: silver;
 }
 
 .invisible_doc td{
 	font-style: italic;
-	background-color: #FFF8DC;
 	color: silver;
 }
 
 .invisible_doc a {
 	font-style: italic;
-	background-color: #FFF8DC;
 	color: silver;
 }
+
+.comment {
+  text-align: left;
+}
+
 
 table.Documents{
     padding: 2px;
     border-top: 1px solid #edecdf;
     border-bottom: 1px solid #edecdf;
     border-left: 1px solid #edecdf;
-    border-right: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;;
+    background-color: #fbfbfb;
 }
 
 table.Documents th {
@@ -33,7 +36,8 @@ table.Documents th {
 }
 
 table.Documents td {
-	vertical-align: top;
     font-size : 10px;
 	padding : 5px 4px 4px 4px;
+    text-align: center;
+    background-color: #fbfbfb;
 }

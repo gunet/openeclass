@@ -195,9 +195,7 @@ if($is_adminOfCourse)
 			if ($diskUsed + $realFileSize > $diskQuotaDocument) {
 				$dialogBox .= $langNoSpace;
 			} else {
-				$dialogBox .= "<table width=\"99%\"><tbody><tr>
-				<td class=\"success\"><p><b>$langDownloadAndZipEnd</b></p>
-				</td></tr></tbody></table>";
+				$dialogBox .= "<p class=\"success_small\">$langDownloadAndZipEnd</p><br />";
 			}
 		}
 		else
@@ -380,7 +378,7 @@ if($is_adminOfCourse)
         	<tbody><tr><th class='left' width='200'>$langNameDir:</th>
           	<td class='left' width='1'><input type=\"text\" name=\"newDirName\" class='FormData_InputText'></td>
           	<td class='left'><input type=\"submit\" value=\"$langCreateDir\"></td>
-  		</tr></tbody></table></form>";
+  		</tr></tbody></table></form><br />";
 	}
 
 	//	add/update/remove comment
@@ -528,9 +526,7 @@ if($is_adminOfCourse)
 			$newVisibilityStatus = "i";
 		// enallagh ths timhs sto pedio visibility tou pinaka document
 		mysql_query ("UPDATE $dbTable SET visibility='".$newVisibilityStatus."' WHERE path LIKE '%".$visibilityPath."%'");
-		$dialogBox = "<table width=\"99%\"><tbody><tr>
-             	<td class=\"success\" style='border-left: 1px solid #edecdf; border-right: 1px solid #edecdf; border-top: 1px solid #edecdf;'><p><b>$langViMod</b></p></td>
-           	</tr></tbody></table>";
+		$dialogBox = "<p class=\"success_small\">$langViMod</p><br />";
 	}
 } // teacher only
 
@@ -685,7 +681,7 @@ if (mysql_num_rows($sql) == 0) {
 	   }
 
 	$tool_content .= "\n  <tr>";
-    $tool_content .= "\n    <td height='18' colspan='$cols'>$langDirectory: ".make_clickable_path($dbTable, $curDirPath). "</td>";
+    $tool_content .= "\n    <td height='18' colspan='$cols'><div align=\"left\">$langDirectory: ".make_clickable_path($dbTable, $curDirPath). "</div></td>";
 	$tool_content .= "\n    <td><div align='right'>";
 
 	/*** go to parent directory ***/
@@ -698,7 +694,7 @@ if (mysql_num_rows($sql) == 0) {
     $tool_content .= "\n  </tr>";
 	$tool_content .= "\n  <tr>";
     $tool_content .= "\n    <th width='1'>".$m['type']."</th>";
-	$tool_content .= "\n    <th>&nbsp;$langName</th>";
+	$tool_content .= "\n    <th><div align=\"left\">$langName</div></th>";
 	$tool_content .= "\n    <th width='100'>$langSize</th>";
 	$tool_content .= "\n    <th width='100'>$langDate</th>";
 	if($is_adminOfCourse) {
@@ -730,8 +726,8 @@ if (mysql_num_rows($sql) == 0) {
 				continue;
 			}
 			$tool_content .=  "\n  <tr $style2>";
-			$tool_content .=  "\n    <td width='1'><a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style."><img src=\"../../template/classic/img/folder.gif\" border=0 align='absmiddle'></a></td>";
-			$tool_content .=  "\n    <td>";
+			$tool_content .=  "\n    <td width='1' valign=\"top\" style=\"padding-top: 7px;\"><a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style."><img src=\"../../template/classic/img/folder.gif\" border=0 align='absmiddle'></a></td>";
+			$tool_content .=  "\n    <td><div align=\"left\">";
 			$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style.">";
 			$tool_content .=  $dspDirName."";
 			$tool_content .=  "</a>";
@@ -740,12 +736,12 @@ if (mysql_num_rows($sql) == 0) {
 			{
 				$dirCommentList[$dirKey] = htmlspecialchars($dirCommentList[$dirKey]);
 				$dirCommentList[$dirKey] = nl2br($dirCommentList[$dirKey]);
-				$tool_content .=  "<span class=\"comment\">";
+				$tool_content .=  "<br /><span class=\"comment\">";
 				$tool_content .=  " (".$dirCommentList[$dirKey].")";
 				$tool_content .=  "</span>\n";
 			}
 			/*** skip display date and time ***/
-			$tool_content .=  "</td>";
+			$tool_content .=  "</div></td>";
 			$tool_content .=  "\n    <td>&nbsp;</td>";
 			$tool_content .=  "\n    <td>&nbsp;</td>";
 			if($is_adminOfCourse) {
@@ -797,7 +793,7 @@ if (mysql_num_rows($sql) == 0) {
 				continue;
 			}
 			$tool_content .=  "\n  <tr ".$style2.">";
-			$tool_content .=  "\n    <td>";
+			$tool_content .=  "\n    <td valign=\"top\" style=\"padding-top: 7px;\">";
             $tool_content .=  "<img src=\"./img/".$image."\" align='absmiddle' border=0>";
 			//h $dspFileName periexei to onoma tou arxeiou sto filesystem
 			$query = "SELECT filename, copyrighted FROM document WHERE path LIKE '%".$curDirPath."/".$fileName."%'";
@@ -805,7 +801,7 @@ if (mysql_num_rows($sql) == 0) {
 			$row = mysql_fetch_array($result);
 			$tool_content .=  "</td>";
             $tool_content .=  "\n    <td>";
-			$tool_content .=  "<a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' 	title=\"$langSave\">".$row["filename"];
+			$tool_content .=  "<div align=\"left\"><a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' 	title=\"$langSave\">".$row["filename"];
 			if ($row["copyrighted"] == "1")
 				$tool_content .= " <img src=\"./img/copyrighted.jpg\" align='absmiddle' border=\"0\">";
 			$tool_content .= "</a>";
@@ -814,11 +810,11 @@ if (mysql_num_rows($sql) == 0) {
 			{
 				$fileCommentList[$fileKey] = htmlspecialchars($fileCommentList[$fileKey]);
 				$fileCommentList[$fileKey] = nl2br($fileCommentList[$fileKey]);
-				$tool_content .=  "&nbsp;<span class=\"comment\">";
+				$tool_content .=  "&nbsp;<br /><span class=\"comment\">";
 				$tool_content .=  " (".$fileCommentList[$fileKey].")";
 				$tool_content .=  "</span>";
 			}
-			$tool_content .=  "</td>";
+			$tool_content .=  "</div></td>";
 			/*** size ***/
 			$tool_content .=  "\n    <td>".$size."</td>";
 			/*** date ***/
