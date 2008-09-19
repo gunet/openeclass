@@ -40,7 +40,7 @@ include ("perso.php");
 
 $tool_content = "
 <div id=\"leftnav_perso\">
-  <table width=\"100%\">
+  <table width=\"99%\">
   <thead>
   <tr>
     <th class=\"persoBoxTitle\">{LANG_MY_PERSO_LESSONS}</th>
@@ -55,7 +55,7 @@ $tool_content = "
 
   <br />
 
-  <table width=\"100%\">
+  <table width=\"99%\">
   <thead>
   <tr>
     <th class=\"persoBoxTitle\">{LANG_MY_PERSO_ANNOUNCEMENTS}</th>
@@ -70,7 +70,7 @@ $tool_content = "
 
   <br />
 
-  <table width=\"100%\">
+  <table width=\"99%\">
   <thead>
   <tr>
     <th class=\"persoBoxTitle\">{LANG_MY_PERSO_AGENDA}</th>
@@ -88,7 +88,7 @@ $tool_content = "
 
 
 <div id=\"content_main_perso\">
-  <table width=\"100%\">
+  <table width=\"99%\">
   <thead>
   <tr>
     <th class=\"persoBoxTitle\">{LANG_MY_PERSO_DEADLINES}</th>
@@ -104,7 +104,7 @@ $tool_content = "
 
   <br />
 
-  <table width=\"100%\">
+  <table width=\"99%\">
   <thead>
   <tr>
     <th class=\"persoBoxTitle\">{LANG_MY_PERSO_DOCS}</th>
@@ -120,7 +120,7 @@ $tool_content = "
 
   <br />
 
-  <table width=\"100%\">
+  <table width=\"99%\">
   <thead>
   <tr>
     <th class=\"persoBoxTitle\">{LANG_PERSO_FORUM}</th>
