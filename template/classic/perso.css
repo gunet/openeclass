@@ -8,9 +8,10 @@
 }
 
 #content_main_perso {
+	float:right;
+	clear:right;
 	width:48.5%;
 	margin:0;
-	margin-left:50.5%;
 	padding-top: 1em;
 }
 
