@@ -1,47 +1,32 @@
-table.WorkSum{
+table.WorkSum {
     padding: 2px;
-    vertical-align: middle;
+	vertical-align: top;
     border-top: 1px solid #edecdf;
     border-bottom: 1px solid #edecdf;
     border-left: 1px solid #edecdf;
     border-right: 1px solid #edecdf;
 }
 
-table.WorkSum thead{
-	padding: 2px;
-	vertical-align: middle;
-	border-top: 1px solid #CAC3B5;
-	border-bottom: 1px solid #CAC3B5;
+table.WorkSum th {
+	padding: 4px;
+	vertical-align: top;
+	font-size:10px;
+	color: #727266;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
 	border-left: 1px solid #edecdf;
 	border-right: 1px solid #edecdf;
 }
 
-table.WorkSum tbody{
-    padding: 2px;
-    vertical-align: middle;
-    border-top: 1px solid #edecdf;
-    border-bottom: 1px solid #CAC3B5;
-    border-left: 1px solid #edecdf;
-    border-right: 1px solid #edecdf;
-}
-
-table.WorkSum th{
-	text-align: center;
-	padding: 4px;
-	padding-bottom: 6px;
-	padding-top: 6px;
-	font-weight: bold;
-	font-size:10px !important;
-	vertical-align: middle;
-	background : #fbfbfb;
-}
-
 table.WorkSum td {
+	padding: 4px;
+	vertical-align: top; !important
+	font-size:10px;
 	color: #727266;
-	vertical-align: top;
-	background : #fbfbfb;
-	padding : 5px 4px 4px 4px;
+	vertical-align: middle;
 }
+
+
 
 
 table.Work {

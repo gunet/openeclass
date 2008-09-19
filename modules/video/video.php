@@ -402,11 +402,9 @@ if (isset($id)) {
 			$rowClass = " ";
 		}
 			$tool_content .= "\n     <tr $rowClass>";
-			$tool_content .= "\n       <td width=\"1%\">
-			<img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+			$tool_content .= "\n       <td width=\"1%\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
       			$tool_content .= $link_to_add;
-			$tool_content .= "\n       <td align='center'>
-			<a href='$_SERVER[PHP_SELF]?id=$myrow[0]&table_edit=$table&action2=edit'><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>&nbsp;&nbsp;";
+			$tool_content .= "\n       <td align='center'><a href='$_SERVER[PHP_SELF]?id=$myrow[0]&table_edit=$table&action2=edit'><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>&nbsp;&nbsp;";
 			$tool_content .= "<a href='$_SERVER[PHP_SELF]?id=$myrow[0]&delete=yes&table=$table' onClick='return confirmation(\"".addslashes($myrow[2])."\");'><img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></img></a></td>\n     </tr>";
 		$i++;
 		$count_video_presented_for_admin++;

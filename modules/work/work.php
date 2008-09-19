@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*===========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
@@ -228,7 +228,7 @@ function show_submission($sid)
 		}
 		$tool_content .=  "</p>\n";
 	} else {
-		$tool_content .= "<p>error - no such submission with id $sid</p>\n";
+		$tool_content .= "<p class=\"caution_small\">error - no such submission with id $sid</p>\n";
 	}
 }
 
@@ -258,13 +258,13 @@ function submit_work($id) {
 	//Do not allow work submission if:
 	//	> after work deadline
 	//	> user not registered to lesson
-	//	> user is guest 
+	//	> user is guest
 	if(isset($_SESSION["statut"])) {
 		$status=$_SESSION["statut"];
 	} else {
 		unset($status);
 	}
-	
+
 	$submit_ok = FALSE; //Default do not allow submission
 	if(isset($uid) && $uid) { //check if loged-in
 		if ($GLOBALS['statut'] == 10) { //user is guest
@@ -272,22 +272,22 @@ function submit_work($id) {
 		} else { //user NOT guest
 			if(isset($status) && isset($status[$_SESSION["dbname"]])) {
 				//user is registered to this lesson
-				$res = db_query("SELECT (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days 
+				$res = db_query("SELECT (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days
 					FROM assignments WHERE id = '$id'");
 				$row = mysql_fetch_array($res);
 				if ($row['days'] < 0) {
 					$submit_ok = FALSE; //after assignment deadline
-				} else { 
+				} else {
 					$submit_ok = TRUE; //before deadline
 				}
 			} else {
 				//user NOT registered to this lesson
-				$submit_ok = FALSE; 
+				$submit_ok = FALSE;
 			}
-			
+
 		}
 	} //checks for submission validity end here
-	
+
   	$res = db_query("SELECT title FROM assignments WHERE id = '$id'");
 	$row = mysql_fetch_array($res);
 
@@ -323,18 +323,8 @@ function submit_work($id) {
 				'$filename','".$_FILES['userfile']['name'].
 				"', '$stud_comments')", $currentCourseID);
 		}
-		
-		$tool_content .="
-    <table width=\"99%\">
-    <tbody>
-    <tr>
-      <td class=\"success\">
-      <p><b>$msg2</b></p><p>$msg1</p>
-      </td>
-    </tr>
-    </tbody>
-    </table>
-    <p align=\"right\"><a href='work.php'>$langBack</a></p>";
+
+		$tool_content .="<p class=\"success_small\">$msg2<br />$msg1<br /><a href='work.php'>$langBack</a></p><br />";
 	} else {
 	$tool_content .="
     <table width=\"99%\">
@@ -350,17 +340,7 @@ function submit_work($id) {
 	}
 
   } else { // not submit_ok
-  	$tool_content .="
-    <table width=\"99%\">
-    <tbody>
-    <tr>
-      <td class=\"caution\">
-      <p><b>$langExerciseNotPermit</b></p>
-      <p align=\"right\"><a href='work.php'>$langBack</a></p>
-      </td>
-    </tr>
-    </tbody>
-    </table>";
+  	$tool_content .="<p class=\"caution_small\">$langExerciseNotPermit<br /><a href='work.php'>$langBack</a></p></br>";
   }
 }
 
@@ -385,7 +365,7 @@ function new_assignment()
       </ul>
     </div>";
 	$tool_content .= "
-    <form action=\"work.php\" method=\"post\" onsubmit=\"return checkrequired(this, 'title');\">
+  <form action=\"work.php\" method=\"post\" onsubmit=\"return checkrequired(this, 'title');\">
     <table width=\"99%\" class='FormData'>
     <tbody>
     <tr>
@@ -427,8 +407,8 @@ function new_assignment()
     </tr>
     </tbody>
     </table>
-    </form>
-    <br/>
+  </form>
+  <br/>
     ";
 }
 
@@ -461,7 +441,7 @@ function date_form($day, $month, $year)
 }
 
 //form for editing
-function show_edit_assignment($id) 
+function show_edit_assignment($id)
 {
 	global $tool_content, $m, $langEdit, $langWorks, $langBack;
 	global $urlAppend;
@@ -533,7 +513,7 @@ cData;
     </tbody>
     </table>
     </form>";
-	
+
 	$tool_content .= "
     <br />
     <div align=\"right\"><a href='work.php'>$langBack</ul></div>
@@ -722,7 +702,7 @@ function assignment_details($id, $row, $message = null)
     </div>
 	";
 	}
-	
+
 	if (isset($message)) {
 		$tool_content .="
     <table width=\"99%\">
@@ -865,7 +845,7 @@ function show_assignment($id, $message = FALSE)
 	$num_results = mysql_num_rows($result);
 	if ($num_results > 0) {
 		if ($num_results == 1) {
-			$num_of_submissions = $m['one_submission'];  
+			$num_of_submissions = $m['one_submission'];
 		} else {
 			//$nameTools .= sprintf(" ($m[more_submissions])", $num_results);
 			$num_of_submissions = sprintf("$m[more_submissions]", $num_results);
@@ -931,9 +911,9 @@ cData;
 			$tool_content .= "
       </tr>
 ";
-	  
+
 		$i = 1;
-		while ($row = mysql_fetch_array($result)) 
+		while ($row = mysql_fetch_array($result))
 		{
 			//is it a group assignment?
 			if (!empty($row['group_id'])) {
@@ -993,10 +973,10 @@ cData;
 cData;
 			$i++;
 		} //END of While
-		
+
 	$tool_content .="</tbody></table>";
 
-	
+
 	$tool_content .= "
     <br />
     <table class=\"FormData\" width=\"99%\">
@@ -1010,7 +990,7 @@ cData;
     </form>
 	";
 
-	  
+
 		if ($gradesExists) {
 			foreach ( $gradeOccurances as $gradeValue=>$gradeOccurance ) {
 				$percentage = 100*($gradeOccurance/$num_results);
@@ -1031,7 +1011,7 @@ cData;
 		}
 
 	} else {
-	
+
 		$tool_content .= <<<cData
 
     <br />
@@ -1126,9 +1106,12 @@ cData;
 // show all the assignments
 function show_assignments($message = null)
 {
-	global $tool_content, $m, $langNoAssign, $langNewAssign, $langCommands;
+	global $tool_content, $m, $langNoAssign, $langNewAssign, $langCommands, ${urlServer};
 
 	$result = db_query("SELECT * FROM assignments ORDER BY id");
+
+	if (isset($message)) {
+		$tool_content .="<p class=\"success_small\">$message</p><br/>";
 
 	$tool_content .="
     <div id=\"operations_container\">
@@ -1136,19 +1119,8 @@ function show_assignments($message = null)
         <li><a href='work.php?add=1'>$langNewAssign</a></li>
       </ul>
     </div>";
-	
-	
-	if (isset($message)) {
-		$tool_content .="
-    <table width=\"99%\">
-    <tbody>
-    <tr>
-      <td class=\"success\"><p><b>$message</b></p></td>
-    </tr>
-    </tbody>
-    </table>
-    <br/>";
-		}
+
+	}
 
 	if (mysql_num_rows($result)) {
 
@@ -1157,14 +1129,14 @@ function show_assignments($message = null)
     <table width="99%" class="WorkSum" align="left">
     <thead>
     <tr>
-      <td class='left' colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;<b>${m['title']}</b></td>
-      <td width='130'><div align="right"><b>${m['deadline']}</b></div></td>
-      <td width="110"><div align="right"><b>$langCommands</b>&nbsp;</div></td>
+      <th colspan="2"><div align="left">&nbsp;&nbsp;&nbsp;&nbsp;${m['title']}</div></th>
+      <th width="130">${m['deadline']}</th>
+      <th width="110">$langCommands &nbsp;</th>
     </tr>
     </thead>
     <tbody>
 cData;
-       $index = 1;
+       $index = 0;
 		while ($row = mysql_fetch_array($result)) {
 			// Check if assignement contains unevaluatde (incoming) submissions
 			$AssignementId = $row['id'];
@@ -1172,23 +1144,25 @@ cData;
 			$row_s = mysql_fetch_array($result_s);
 			$hasUnevaluatedSubmissions = $row_s[0];
 			if(!$row['active']) {
-				$visibility_css = "class=\"invisible\"";
+				$visibility_css = "style=\"color: #CAC3B5;\"";
 			} else {
 				$visibility_css = "";
 			}
+			            if ($index%2==0) {
+	                       $tool_content .= "\n    <tr ".$visibility_css.">";
+	                    } else {
+	                       $tool_content .= "\n    <tr class=\"odd\" ".$visibility_css.">";
+                        }
 
 			$tool_content .= "
-    <tr ".$visibility_css.">
-      <td align='right' width='5'>$index.</td>
-      <td><a href=\"work.php?id=${row['id']}\" ";
+      <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+      <td ".$visibility_css."><a href=\"work.php?id=${row['id']}\" ";
 			$tool_content .= ">";
 			$tool_content .= $row_title = htmlspecialchars($row['title']);
-			$tool_content .= <<<cData
-</a></td>
-      <td $visibility_css align="center">${row['deadline']}</td>
-      <td $visibility_css align="right">
-         <a href="work.php?id=${row['id']}&choice=edit"><img src="../../template/classic/img/edit.gif" border="0" alt="${m['edit']}"></a>
-cData;
+			$tool_content .= "</a></td>
+      <td align=\"center\">".nice_format($row[deadline])."</td>
+      <td align=\"right\">
+         <a href=\"work.php?id=${row['id']}&choice=edit\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"${m['edit']}\"></a>";
 			$tool_content .= "
          <a href='work.php?id=${row['id']}&choice=do_delete' onClick=\"return confirmation('".addslashes($row_title)."');\"><img src=\"../../template/classic/img/delete.gif\" border=\"0\" alt=\"${m['delete']}\"></a>";
 
