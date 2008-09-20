@@ -25,12 +25,12 @@
 
 /*
  * File exchange Component
- * 
+ *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * 
+ *
  * @abstract This is responsible for exchanging files between the users of a course
- * 
+ *
  * Based on code by Jan Bols
  *
  */
@@ -235,7 +235,7 @@ tCont2;
 	//==========================================================================
 	//END of send_file form
 	//==========================================================================
-} 
+}
 
 /**
  * ========================================
@@ -263,7 +263,7 @@ tCont4;
 
 	// check if there are received documents. If yes then display the icon deleteall
 	$dr_unid = urlencode( $dropbox_unid);
-	if ($numberDisplayed > 0) 
+	if ($numberDisplayed > 0)
 	{
 		$dr_lang_all = addslashes( $dropbox_lang["all"]);
 		$tool_content .= "
@@ -271,12 +271,12 @@ tCont4;
       <th width=\"3\">
         <a href=\"dropbox_submit.php?deleteReceived=all&dropbox_unid=$dr_unid\" onClick=\"return confirmationall('".$dropbox_lang["all"]."');\"><img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
 	}
-			
+
 	$tool_content .= <<<tCont5
 
       </th>
       <td>
-	
+
 tCont5;
 	/*
 	$tool_content .= "
@@ -345,13 +345,15 @@ tCont5;
       </table>
 
       <table width=\"99%\" class=\"dropbox\">
-      <tbody>
+      <thead>
       <tr>
-        <td colspan=\"2\"><b>".$dropbox_lang['file']."</b></td>
-        <td width=\"130\"><b>".$dropbox_lang["authors"]."</b></td>
-        <td width=\"130\"><b>".$dropbox_lang['date']."</b></td>
-        <td width=\"20\"><b>$langDelete</b></td>
-      </tr>";
+         <td colspan=\"2\"><b>".$dropbox_lang['file']."</b></td>
+         <td width=\"130\"><b>".$dropbox_lang["authors"]."</b></td>
+         <td width=\"130\"><b>".$dropbox_lang['date']."</b></td>
+         <td width=\"20\"><b>$langDelete</b></td>
+      </tr>
+      </thead>
+      <tbody>";
 
  /**
  * --------------------------------------
@@ -367,9 +369,12 @@ tCont5;
 		{
 			$numberDisplayed -= 1; continue;
 		}
-
+			if ($i%2==0) {
+	           $tool_content .= "\n       <tr>";
+	        } else {
+	           $tool_content .= "\n       <tr class=\"odd\">";
+            }
 		$tool_content .= "
-      <tr>
         <td width=\"3\"><img src=\"../../template/classic/img/inbox.gif\" border=\"0\" title=\"$dropbox_lang[receivedTitle]\"></td>
         <td>";
 
@@ -396,7 +401,7 @@ tCont9;
 		}
 
 		$tool_content .= "
-        </td>	
+        </td>
         <td><div class=\"cellpos\">";
 
 		$tool_content .= "
@@ -452,7 +457,7 @@ $tool_content .="
 	}
 
 	$tool_content .= "
-        <td>";	
+        <td>";
 	/* exoume vgalei to sort
 	$tool_content .= "
         <form class=\"sort\" name=\"formSent\" method=\"get\" action=\"index.php\">
@@ -559,12 +564,17 @@ foreach ($dropbox_person -> sentWork as $w)
 		$imgsrc = '../../template/classic/img/outbox.gif';
 	}
 	$fSize = ceil(($w->filesize)/1024);
+			if ($i%2==0) {
+	           $tool_content .= "\n       <tr>";
+	        } else {
+	           $tool_content .= "\n       <tr class=\"odd\">";
+            }
 	$tool_content .= <<<tCont12
-		<tr>
+
 		<td width="3"><img src="../../template/classic/img/outbox.gif" border="0" title="$w->title"></td>
 		<td >
 		<a href="$ahref" target="_blank">
-		$w->title</a> 
+		$w->title</a>
         <small>&nbsp;&nbsp;&nbsp;($fSize kB)</small>
         <br />
         <small>$w->description</small>
@@ -583,7 +593,7 @@ tCont12;
 	$tool_content .= "
 		</td>
 		<td>
-		
+
 		$w->uploadDate
 		</td>
 

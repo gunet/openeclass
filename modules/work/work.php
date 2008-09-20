@@ -903,9 +903,9 @@ cData;
         <td width=\"3\">&nbsp;</td>";
 
 			sort_link($m['username'], 'nom', 'align=left');
-			sort_link($m['am'], 'am', 'align=center');
+			sort_link($m['am'], 'am', 'align=left');
 			$tool_content .= "
-        <td align=\"center\"><div class='center'><b>".$m['filename']."</b></div></td>";
+        <td align=\"center\"><div class='left'><b>".$m['filename']."</b></div></td>";
 			sort_link($m['sub_date'], 'date', 'align=center');
 			sort_link($m['grade'], 'grade', 'align=center class=grade');
 			$tool_content .= "
@@ -939,7 +939,7 @@ cData;
       <tr>
         <td align='right' width='4'>$i.</td>
         <td>${uid_2_name} $subContentGroup</td>
-        <td width="75">${stud_am[0]}</td>
+        <td width="75" align=\"left\">${stud_am[0]}</td>
         <td width="180"><a href="work.php?get=${row['id']}">${row['file_name']}</a>
 cData;
 			if (trim($row['comments'] != '')) {
@@ -954,23 +954,21 @@ cData;
             </tbody>
             </table>";
 			}
-			$tool_content .= <<<cData
-
+			$tool_content .= "
         </td>
-        <td width="75">${row['submission_date']}</td>
-        <td width="180" align="left" class="grade">
-            <div align="center"><input type="text" value="${row['grade']}" maxlength="3" size="3" name="grades[${row['id']}]" class="grade_input"></div>
-            <table align="left" width="100%" class="Info">
+        <td width=\"75\" align=\"center\">".nice_format($row['submission_date'])."</td>
+        <td width=\"180\" align=\"left\" class=\"grade\">
+            <div align=\"center\"><input type=\"text\" value=\"${row['grade']}\" maxlength=\"3\" size=\"3\" name=\"grades[${row['id']}]\" class=\"grade_input\"></div>
+            <table align=\"left\" width=\"100%\" class=\"Info\">
             <tbody>
             <tr>
-              <td width="1" class="left"><img src='../../template/classic/img/forum_on.gif' alt='$m[comments]' title="$m[comments]"></td>
+              <td width=\"1\" class=\"left\"><img src='../../template/classic/img/forum_on.gif' alt='$m[comments]' title=\"$m[comments]\"></td>
               <td>$prof_comment</td>
             <tr>
             </tbody>
             </table>
         </td>
-      </tr>
-cData;
+      </tr>";
 			$i++;
 		} //END of While
 
@@ -1036,7 +1034,7 @@ function show_student_assignments()
 {
 
 	global $tool_content, $m, $uid;
-	global $langDaysLeft, $langDays, $langNoAssign;
+	global $langDaysLeft, $langDays, $langNoAssign, ${urlServer};
 
 	$result = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days FROM assignments
 			WHERE active = '1' ORDER BY submission_date");
@@ -1048,24 +1046,27 @@ function show_student_assignments()
       <table class="WorkSum" align="left" width="99%">
       <thead>
       <tr>
-        <th colspan="2"><div align="left">&nbsp;&nbsp;<b>${m['title']}</b></div></th>
-        <th><b>${m['deadline']}</b></th>
-        <th><b>${m['submitted']}</b></th>
-        <th><b>${m['grade']}</b></th>
+        <th colspan="2"><div align="left">&nbsp;&nbsp;${m['title']}</div></th>
+        <th><div align="left">${m['deadline']}</th>
+        <th>${m['submitted']}</th>
+        <th>${m['grade']}</th>
       </tr>
       </thead>
       <tbody>
 cData;
-
+        $k = 0;
 		while ($row = mysql_fetch_array($result)) {
 			$title_temp = htmlspecialchars($row['title']);
-			$tool_content .= <<<cData
-
-      <tr>
-        <td width="1"><img src='../../template/classic/img/bullet_bw.gif' alt=''></td>
-        <td><a href="work.php?id=${row['id']}">${title_temp}</a></td>
-        <td width="30%">${row['deadline']}
-cData;
+			if ($k%2==0) {
+	           $tool_content .= "\n      <tr>";
+	        } else {
+	           $tool_content .= "\n      <tr class=\"odd\">";
+            }
+			$tool_content .= "
+        <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+        <td><a href=\"work.php?id=${row['id']}\">${title_temp}</a></td>
+        <td width=\"30%\">".nice_format($row[deadline])."
+        ";
 
 			if ($row['days'] > 1) {
 				$tool_content .= " (<span class=\"not_expired\">$m[in]&nbsp;$row[days]&nbsp;$langDays</span>";
@@ -1092,7 +1093,8 @@ cData;
 			$tool_content .= "</td>
         <td width=\"10%\" align=\"center\">${grade}</td>
       </tr>";
-		}
+      $k++;
+	}
 		$tool_content .= '
       </tbody>
       </table>';
@@ -1131,7 +1133,7 @@ function show_assignments($message = null)
     <tr>
       <th colspan="2"><div align="left">&nbsp;&nbsp;&nbsp;&nbsp;${m['title']}</div></th>
       <th width="130">${m['deadline']}</th>
-      <th width="110">$langCommands &nbsp;</th>
+      <th width="110"><div align="right">$langCommands &nbsp;</div></th>
     </tr>
     </thead>
     <tbody>
