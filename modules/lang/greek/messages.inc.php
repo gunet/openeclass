@@ -2223,23 +2223,23 @@ $langPollEdited ="<p class='success_small'>Το Ερωτηματολόγιο τ�
 $langPollCreator = "Δημιουργός";
 $langPollCreation = "Ημ/νία Δημιουργίας";
 $langPollCreateDate = "Το Ερωτηματολόγιο δημιουργήθηκε την";
-$langPollCreationError = "Σφάλμα κατά την δημιουργία του Ερωτηματολογίου. Παρακαλώ προσπαθήστε ξανά.";
-$langPollDeleted ="Το Ερωτηματολόγιο διαγράφηκε με επιτυχία. <br><br><a href=\"questionnaire.php\">Επιστροφή</a>.";
-$langPollDeactivated ="Το Ερωτηματολόγιο απενεργοποιήθηκε με επιτυχία!";
-$langPollActivated ="Το Ερωτηματολόγιο ενεργοποιήθηκε με επιτυχία!";
-$langPollSubmitted ="Ευχαριστούμε για την συμμετοχή σας!<br><br><a href=\"questionnaire.php\">Επιστροφή</a>";
+$langPollCreationError = "<p class='caution_small'>Σφάλμα κατά την δημιουργία του Ερωτηματολογίου. Παρακαλώ προσπαθήστε ξανά.</p>";
+$langPollDeleted ="<p class='success_small'>Το Ερωτηματολόγιο διαγράφηκε με επιτυχία. <br><a href=\"questionnaire.php\">Επιστροφή</a></p>";
+$langPollDeactivated ="<p class='success_small'>Το Ερωτηματολόγιο απενεργοποιήθηκε με επιτυχία!</p>";
+$langPollActivated ="<p class='success_small'>Το Ερωτηματολόγιο ενεργοποιήθηκε με επιτυχία!</p>";
+$langPollSubmitted ="<p class='success_small'>Ευχαριστούμε για την συμμετοχή σας!<br /><a href=\"questionnaire.php\">Επιστροφή</a></p>";
 $langPollTotalAnswers = "Συνολικός αριθμός απαντήσεων";
 $langPollNone = "Δεν υπάρχουν αυτή την στιγμή διαθέσιμα Ερωτηματολόγια.";
-$langPollInactive = "Το Ερωτηματολόγιο έχει λήξει ή δεν έχει ενεργοποιηθεί ακόμα.";
+$langPollInactive = "<p class='caution_small'>Το Ερωτηματολόγιο έχει λήξει ή δεν έχει ενεργοποιηθεί ακόμα.</p>";
 $langPollHasEnded = "Έχει λήξει";
 $langPollCharts = "Αποτελέσματα Ερωτηματολογίου";
 $langPollUnknown = "Δεν ξέρω / Δεν απαντώ";
 $langIndividuals = "Αποτελέσματα ανά χρήστη";
 $langCollectiveCharts = "Συγκεντρωτικά αποτελέσματα";
 $langHasNotParticipated = "Δεν έχετε συμμετάσχει";
-$langThereAreParticipants = "Στο Ερωτηματολόγιο έχουν ήδη συμμετάσχει χρήστες. Η διόρθωση των στοιχείων δεν είναι δυνατή!";
-$langPollEmpty = "Παρακαλώ προσθέστε ερωτήσεις στο Ερωτηματολόγιο!";
-$langPollEmptyAnswers = "Σφάλμα! Δεν υπάρχουν απαντήσεις στην ερώτηση";
+$langThereAreParticipants = "<p class='caution_small'>Στο Ερωτηματολόγιο έχουν ήδη συμμετάσχει χρήστες. <br />Η διόρθωση των στοιχείων δεν είναι δυνατή!</p>";
+$langPollEmpty = "<p class='caution_small'>Παρακαλώ προσθέστε ερωτήσεις στο Ερωτηματολόγιο!</p>";
+$langPollEmptyAnswers = "<p class='caution_small'>Σφάλμα! Δεν υπάρχουν απαντήσεις στην ερώτηση</p>";
 
 /************************************************************
 * registration.inc.php

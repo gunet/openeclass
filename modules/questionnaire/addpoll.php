@@ -78,7 +78,7 @@ if (isset($_POST['PollCreate']))  {
 		draw($tool_content, 2, 'questionnaire', $local_head, '');
 		exit;
 	} else {
-		$tool_content .= "<p class=\"caution_small\">$langPollEmpty</p><br />";
+		$tool_content .= "$langPollEmpty<br />";
 	}
 }
 
@@ -141,7 +141,7 @@ function jscal_html($name, $u_date = FALSE) {
 function printPollCreationForm() {
 	global $tool_content, $langTitle, $langPollStart, $langPollAddMultiple, $langPollAddFill,
 		$langPollEnd, $langPollMC, $langPollFillText, $langPollContinue, $langCreatePoll,
-		$nameTools, $pid, $langSurvey;
+		$nameTools, $pid, $langSurvey, $langSelection;
 
 	if(isset($_POST['PollName'])) {
 		$PollName = htmlspecialchars($_POST['PollName']);
@@ -164,13 +164,28 @@ function printPollCreationForm() {
 		$pidvar = '';
 	}
 	$tool_content .= "
-    <form action='$_SERVER[PHP_SELF]' id='poll' method='post'>$pidvar
+    <form action='$_SERVER[PHP_SELF]' id='poll' method='post'>";
+    /*
+    $tool_content .= "$pidvar
 		<div id=\"operations_container\">
-		  <ul id=\"opslist\">
+		  <ul id=\"opslist\"> $langSelection:
 		    <li><input type='submit' name='MoreMultiple' value='$langPollAddMultiple' class=\"toolBar_Button\"></li>
-		    <li><input type='submit' name='MoreFill' value='$langPollAddFill' class=\"toolBar_Button\"></li>
+		    <li><input type='submit'  name='MoreFill' value='$langPollAddFill' class=\"toolBar_Button\"></li>
 		  </ul>
-        </div>
+        </div>";
+    */
+	$tool_content .= "
+    <table width=\"99%\" align=\"left\" class=\"Questionnaire_Operations\">
+    <thead>
+    <tr>
+      <td width=\"60%\">$langSelection:&nbsp;</td>
+      <td width=\"20%\"><div align=\"right\"><input type='submit' name='MoreMultiple' value='$langPollAddMultiple' class=\"toolBar_Button\"></div></td>
+      <td width=\"20%\"><div align=\"right\"><input type='submit' size=\"5\" name='MoreFill' value='$langPollAddFill' class=\"toolBar_Button\"></div></td>
+    </tr>
+    </thead>
+    </table>
+    <br /><br />
+
 
     <table width=\"99%\" class='FormData'>
     <tbody>
@@ -189,18 +204,9 @@ function printPollCreationForm() {
       <th class='left'>$langPollEnd</th>
       <td>$PollEnd</td>
     </tr>
-    <tr>
-      <th>&nbsp;</th>
-      <td>
-      <input type='submit' name='PollCreate' value='$nameTools'>
-      </td>
-    </tr>
     </tbody>
     </table>
-    <br>
-
-    <table width=\"99%\" class=\"Exercise\">
-    <tbody>";
+    <br />";
 
 	if (isset($_POST['question'])) {
 		$questions = $_POST['question'];
@@ -218,6 +224,15 @@ function printPollCreationForm() {
 	}
 	printQuestionForm($questions, $question_types);
     	$tool_content .= '
+
+    <table width="99%" class="FormData">
+    <tbody>
+    <tr>
+      <th width="220">&nbsp;</th>
+      <td>
+      <input type="submit" name="PollCreate" value="'.$nameTools.'">
+      </td>
+    </tr>
     </tbody>
     </table>
     </form>';
@@ -333,6 +348,8 @@ function add_multiple_choice_question($i, $text)
 	global $tool_content, $langQuestion, $langPollMoreAnswers, $langAnswers, $langPollUnknown, $langPollFillText, $langPollNumAnswers, $langPollAddAnswer, $langPollMC;
 
 	$tool_content .= "
+    <table width=\"99%\" class='Questionnaire'>
+    <tbody>
     <tr>
       <th class=\"left\" width=\"220\"><b>$langQuestion #" . ($i+1) ."</b><br><small>$langPollMC</small></th>
       <td>
@@ -364,6 +381,10 @@ function add_multiple_choice_question($i, $text)
       </td>
     </tr>
 ";
+	$tool_content .= "
+    </tbody>
+    </table>
+    <br />";
 }
 
 /*****************************************************************************
@@ -374,6 +395,8 @@ function add_fill_text_question($i, $text)
 	global $tool_content, $langQuestion, $langAnswer, $langPollFillText;
 
 	$tool_content .= "
+    <table width=\"99%\" class='Questionnaire'>
+    <tbody>
     <tr>
       <th class=\"left\" width=\"220\"><b>$langQuestion #" . ($i+1) ."</b><br><small>$langPollFillText</small></th>
       <td>
@@ -381,6 +404,10 @@ function add_fill_text_question($i, $text)
       <input type='hidden' name='question_type[$i]' value='2'>
       </td>
     </tr>";
+    $tool_content .= "
+    </tbody>
+    </table>
+    <br />";
 }
 
 /********************************************************
