@@ -18,12 +18,12 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-/**
+/*
  * Course Tools Component
  * 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
@@ -114,7 +114,7 @@ function reverseAll(cbList) {
 <script>
 function confirmation (name)
 {
-		if (confirm("$langDeleteLink " + name + "?"))
+	if (confirm("$langDeleteLink " + name + "?"))
         {return true;}
     	else
         {return false;}
@@ -128,11 +128,8 @@ if ($is_adminOfCourse){
 	global $dbname;
 	if  (isset($_REQUEST['toolStatus']) ){
 		if(isset($_POST['toolStatActive'])) $tool_stat_active = $_POST['toolStatActive'];
-		//	dumpArray($_POST['toolStatActive']);
-		//	dumpArray($_POST['toolStatInactive']);
 
 		$hideSql = "UPDATE  `accueil` SET `visible` = 0 ";
-
 
 		if (isset($tool_stat_active)) {
 			$loopCount = count($tool_stat_active);
@@ -149,7 +146,6 @@ if ($is_adminOfCourse){
 			else {
 				$tool_id .= " OR (`id` = " . $tool_stat_active[$i] .")" ;
 			}
-
 			$i++;
 		}
 
@@ -186,14 +182,13 @@ if ($is_adminOfCourse){
 
 					$event_counter=0;
 					while ($myAgenda = mysql_fetch_array($mysql_query_result)) {
-						$lesson_agenda[$event_counter]['id']                  = $myAgenda[0];
-						$lesson_agenda[$event_counter]['title']               = $myAgenda[1];
-						$lesson_agenda[$event_counter]['content']             = $myAgenda[2];
-						$lesson_agenda[$event_counter]['date']                = $myAgenda[3];
-						$lesson_agenda[$event_counter]['time']                = $myAgenda[4];
-						$lesson_agenda[$event_counter]['duree']               = $myAgenda[5];
-						$lesson_agenda[$event_counter]['lesson_code']         = $currentCourseID;
-
+						$lesson_agenda[$event_counter]['id']            = $myAgenda[0];
+						$lesson_agenda[$event_counter]['title']         = $myAgenda[1];
+						$lesson_agenda[$event_counter]['content']       = $myAgenda[2];
+						$lesson_agenda[$event_counter]['date']          = $myAgenda[3];
+						$lesson_agenda[$event_counter]['time']          = $myAgenda[4];
+						$lesson_agenda[$event_counter]['duree']         = $myAgenda[5];
+						$lesson_agenda[$event_counter]['lesson_code']   = $currentCourseID;
 						$event_counter++;
 					}
 
@@ -250,21 +245,13 @@ if ($is_adminOfCourse){
 
 	//--add external link
 
-	if(isset($submit) &&  @$action ==2){
-		if (($link == "http://") or ($link == "ftp://") or empty($link))  {
-			$tool_content .= "
-		<table>
-			<tbody>
-				<tr>
-					<td class=\"caution\">
-					<p><b>$langInvalidLink</b></p>
-					<a href=\"../../courses/$currentCourseID/index.php\">$langHome</a>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		";
-
+	if(isset($submit) &&  @$action == 2) {
+		if (($link == "http://") or ($link == "ftp://") or empty($link) or empty($name_link))  {
+			$tool_content .= "<table><tbody><tr>
+				<td class=\"caution\">
+				<p><b>$langInvalidLink</b></p>
+				<p><a href=\"$_SERVER[PHP_SELF]?action=2\">$langHome</a></p>
+				</td></tr></tbody></table>";
 			draw($tool_content, 2);
 			exit();
 		}
@@ -277,20 +264,19 @@ if ($is_adminOfCourse){
 
 		if($mID<101) $mID = 101;
 		else $mID = $mID+1;
-
+		$link = quote($link);
+		$name_link = quote($name_link);
 		mysql_query("INSERT INTO accueil VALUES ($mID,
-					'$name_link',
-					'$link \"target=_blank',
+					$name_link,
+					$link,
 					'external_link',
 					'1',
 					'0',
-					'$link',
+					$link,
 					''
 					)");
 
-		$tool_content .= "
-		<table width=\"99%\">
-		<tbody>
+		$tool_content .= "<table width=\"99%\"><tbody>
 			<tr><td class=\"success\"><p><b>$langLinkAdded</b></p></td></tr>
 		</tbody>
 		</table>
@@ -298,22 +284,18 @@ if ($is_adminOfCourse){
 		";
 		unset($action);
 	}
-
-	if(isset($submit) &&  @$action ==1){//upload html page
-		// UPLOAD FILE TO "documents" DIRECTORY + INSERT INTO documents TABLE
+// -------------------------
+//upload html page
+// -------------------------
+	
+	if(isset($submit) &&  @$action == 1){ 
 		$updir = "$webDir/courses/$currentCourseID/page/"; //path to upload directory
-		$size = "20000000"; //file size ex: 5000000 bytes = 5 megabytes
-		if (isset($file_name) and ($file_name != "") && ($file_size <= "$size")) {
-
-			$file_name = str_replace(" ", "", $file_name);
-			$file_name = str_replace("ι", "e", $file_name);
-			$file_name = str_replace("θ", "e", $file_name);
-			$file_name = str_replace("κ", "e", $file_name);
-			$file_name = str_replace("ΰ", "a", $file_name);
-
+		$size = "20971520"; //file size is 20M (1024x1024x20)
+		if (isset($file_name) and ($file_name != "") && ($file_size <= "$size") and ($link_name != "")) {
+		
 			@copy("$file", "$updir/$file_name")
-			or die("<p>$langCouldNot</p></tr>");
-
+				or die("<p>$langCouldNot</p></tr>");
+			
 			$sql = 'SELECT MAX(`id`) FROM `accueil` ';
 			$res = db_query($sql,$dbname);
 			while ($maxID = mysql_fetch_row($res)) {
@@ -322,11 +304,13 @@ if ($is_adminOfCourse){
 
 			if($mID<101) $mID = 101;
 			else $mID = $mID+1;
-
+			
+			$link_name = quote($link_name);
+			$lien = quote("../../courses/$currentCourse/page/$file_name");
 			db_query("INSERT INTO accueil VALUES (
 					$mID,
-					'$link_name',
-					'../../courses/$currentCourse/page/$file_name \"target=_blank',
+					$link_name,
+					$lien,
 					'external_link',
 					'1',
 					'0',
@@ -334,28 +318,16 @@ if ($is_adminOfCourse){
 					'HTML_PAGE'
 					)", $currentCourse);
 
-			$tool_content .=  "
-					<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"success\">
-						<p><b>$langOkSent</b></p>
-					</td>
-					</tr>
-				</tbody>
+			$tool_content .=  "<table width=\"99%\">
+				<tbody><tr><td class=\"success\">
+					<p><b>$langOkSent</b></p>
+				</td></tr></tbody>
 			</table><br/>";
 		} else {
-			$tool_content .= "
-			<table>
-				<tbody>
-					<tr>
-						<td class=\"caution\">
-						<p><b>$langTooBig</b></p>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			";
+			$tool_content .= "<table><tbody><tr><td class=\"caution\">
+					<p><b>$langTooBig</b></p>
+					<p><a href=\"$_SERVER[PHP_SELF]?action=1\">$langHome</a></p>
+					</td></tr></tbody></table>";
 			draw($tool_content, 2);
 		}	// else
 		unset($action);
@@ -398,9 +370,7 @@ if ($is_adminOfCourse && @$action == 1) {//upload html file
   </tr>
   </tbody>
   </table>
-  <br>
-			
-		</form>";
+  <br></form>";
 
 	draw($tool_content, 2);
 	exit();
@@ -438,10 +408,7 @@ if ($is_adminOfCourse && @$action == 2) {//add external link
     <td>&nbsp;</td>
   </tr>
   </thead>
-  </table>
-
-			</form>
-			";
+  </table></form>";
 	draw($tool_content, 2);
 	exit();
 
@@ -477,7 +444,6 @@ if ($is_adminOfCourse) {
 					if ($toolArr[$i][4][$j] < 100) {
 						$inactiveTools .= "        <option value=\"".$toolArr[$i][4][$j]."\">".$toolArr[$i][1][$j]."</option>\n";
 					} else {
-
 						$inactiveTools .= "<option class=\"emphasised\" value=\"".$toolArr[$i][4][$j]."\">".$toolArr[$i][1][$j]."</option>\n";
 						$arr['text']=$toolArr[$i][1][$j];
 						$arr['id'] = $toolArr[$i][4][$j];
@@ -554,26 +520,20 @@ tForm;
     <td class=\"left\" width=\"20\"><b>$langDelete</b></td>
   </tr>
 ";
-
 		for ($i=0; $i <$extToolsCount; $i++) {
-
 			if ($i%2==0) {
-				$tool_content .= "
-  <tr>\n";
+				$tool_content .= "<tr>\n";
 			}
 			elseif ($i%2==1) {
-				$tool_content .= "
-  <tr class=\"odd\">\n";
+				$tool_content .= "<tr class=\"odd\">\n";
 			}
-			$tool_content .= "
-    <th class=\"left\" width='1'><img src=\"../../template/classic/img/external_link_on.gif\" border=\"0\" title='$langTitle' alt=\"".$langTitle."\"></th>
-    <td class=\"left\">".$externalLinks[$i]['text']."</td>\n";
+			$tool_content .= "<th class=\"left\" width='1'>
+			<img src=\"../../template/classic/img/external_link_on.gif\" border=\"0\" title='$langTitle' alt=\"".$langTitle."\"></th>
+    			<td class=\"left\">".$externalLinks[$i]['text']."</td>\n";
 
-			$tool_content .= "
-			
-    <td align='center'>
-    <a href=\"".$_SERVER['PHP_SELF'] . "?delete=" . $externalLinks[$i]['id']."\" onClick=\"return confirmation('".addslashes($externalLinks[$i]['text'])."');\">
-    <img src=\"../../template/classic/img/delete.gif\" border=\"0\" title='$langDelete' alt=\"".$langDelete."\"></a>
+			$tool_content .= "<td align='center'>
+    			<a href=\"".$_SERVER['PHP_SELF'] . "?delete=" . $externalLinks[$i]['id']."\" onClick=\"return confirmation('".addslashes($externalLinks[$i]['text'])."');\">
+    			<img src=\"../../template/classic/img/delete.gif\" border=\"0\" title='$langDelete' alt=\"".$langDelete."\"></a>
     </td>
   </tr>";
 

@@ -1086,7 +1086,7 @@ $langAdded="Link added";
 $langHome="Back to Home Page";
 $langName="Name";
 $langLink="Link";
-$langInvalidLink = "Link is empty!";
+$langInvalidLink = "Link (or its description) is emptyσ!";
 
 /*********************************************************
 * faculte.inc.php
@@ -1283,7 +1283,7 @@ $langAddPageToSite="Add a page to site";
 $langNotAllowed="Not allowed";
 $langCouldNot="File could not be sent";
 $langOkSent="<p><b>Your page has been sent</b><br/><br/>A link has been created on the left menu</p>";
-$langTooBig="You didn't choose any file to send, or it is too big";
+$langTooBig="You didn't choose any file to send, or it is too big or you didn't type a page title";
 $langExplanation_0="The page must be in HTML format (e.g. \"my_page.htm\"). It will be linked from Homepage.";
 $langExplanation_1="Page info";
 $langExplanation_2="The name that will be presented in the left side menu.";
