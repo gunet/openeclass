@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 
@@ -941,6 +941,16 @@ function upgrade_course($code, $lang)
                 update_field("accueil", "image","dropbox", "id", 16);
                 update_field("accueil", "image","conference", "id", 19);
                 update_field("accueil", "image","description", "id",	20);
+
+		$sql = db_query("SELECT image FROM accueil");
+                while ($u = mysql_fetch_row($sql))  {
+			if ($u[0] == '../../../images/npage.gif')  {
+                	 	update_field("accueil", "image", "external_link", "image", "../../../images/npage.gif");
+			}
+			if ($u[0] == '../../../images/page.gif')  {
+                 		update_field("accueil", "image", "external_link", "image", "../../../images/page.gif");
+			}
+                }
 
                 // update menu entries with new messages
                 update_field("accueil", "rubrique", "$langWork[$lang]", "id", "5");
