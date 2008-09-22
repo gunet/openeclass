@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 /*===========================================================================
@@ -117,14 +117,7 @@ if(!empty($auth)) {
 }
 
 $tool_content .= "\n      <br>
-    </td>
-  </tr>
-  </thead>
-  </table>
-
-  </td>
-</tr>
-</thead>
-</table>";
+    </td></tr></thead></table>
+    </td></tr></thead></table>";
 draw($tool_content, 0, 'auth');
 ?>

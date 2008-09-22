@@ -51,6 +51,7 @@
 	 Dionysios G. Synodinos <dsin@noc.ntua.gr> (National Technical University of Athens)
          Michalis Psaltakis <mpsaltakis@aegean.gr> (University of the Aegean)
          Konstantinidis K. (Aristotele University of Thessaloniki)
+	 Emmanuela Patiniotaki <aporoemm@hotmail.com> (University of Athens)
 
 	Xinha:
 	 Xinha was originally based on work by Mihai Bazon who produced htmlArea for Interactive Tools.

@@ -18,11 +18,11 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
-/**===========================================================================
+/*===========================================================================
 	ldapsearch.php
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
@@ -36,10 +36,21 @@ include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php' ;
 require_once 'auth.inc.php';
 
+$tool_content = "";
+
+if (isset($_GET['auth']) or isset($_POST['auth']))
+$_SESSION['u_tmp']=$auth;
+if(!isset($_GET['auth']) or !isset($_POST['auth']))
+$auth=$_SESSION['u_tmp'];
+
 $nameTools = get_auth_info($auth);
 $navigation[]= array ("url"=>"registration.php", "name"=> "$langNewUserAccountActivation");
 $nameTools = $langUserData;
-$tool_content = "";
+
+if ($language == 'greek')
+	$lang = 'el';
+elseif ($language == 'english')
+	$lang = 'en';
 
 // get the values from ldapnewuser.php
 $ldap_email = isset($_POST['ldap_email'])?$_POST['ldap_email']:'';
@@ -64,19 +75,19 @@ if(!empty($is_submit))
 		// try to authenticate him
 		$auth_method_settings = get_auth_settings($auth);		// get the db settings of the authentication method defined
 
-		switch($auth)			// now get the connection settings
+		switch($auth)		// now get the connection settings
 		{
 			case '2':	$pop3host = str_replace("pop3host=","",$auth_method_settings['auth_settings']);
-							break;
+				break;
 			case '3':	$imaphost = str_replace("imaphost=","",$auth_method_settings['auth_settings']);
-							break;
+				break;
 			case '4':	$ldapsettings = $auth_method_settings['auth_settings'];
 					    $ldap = explode("|",$ldapsettings);
 					    $ldaphost = str_replace("ldaphost=","",$ldap[0]);	//ldaphost
 					    $ldapbind_dn = str_replace("ldapbind_dn=","",$ldap[1]);	//ldapbase_dn
 					    $ldapbind_user = str_replace("ldapbind_user=","",$ldap[2]);	//ldapbind_user
 					    $ldapbind_pw = str_replace("ldapbind_pw=","",$ldap[3]);		// ldapbind_pw
-							break;
+				break;
 			case '5':	$dbsettings = $auth_method_settings['auth_settings'];
     					$edb = explode("|",$dbsettings);
     					$dbhost = str_replace("dbhost=","",$edb[0]);	//dbhost
@@ -86,9 +97,9 @@ if(!empty($is_submit))
 					    $dbtable = str_replace("dbtable=","",$edb[4]);//dbtable
 					    $dbfielduser = str_replace("dbfielduser=","",$edb[5]);//dbfielduser
 					    $dbfieldpass = str_replace("dbfieldpass=","",$edb[6]);//dbfieldpass
-							break;
+				break;
 			default:
-							break;
+				break;
 		}
 		
 		$is_valid = auth_user_login($auth,$ldap_email,$ldap_passwd);
@@ -244,9 +255,9 @@ $registration_errors = array();
 
 
 $q1 = "INSERT INTO `$mysqlMainDb`.user
-      (user_id, nom, prenom, username, password, email, statut, department, am, registered_at, expires_at)
+      (user_id, nom, prenom, username, password, email, statut, department, am, registered_at, expires_at, lang)
       VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email','5',
-        '$department','$am',".$registered_at.",".$expires_at.")";
+        '$department','$am',".$registered_at.",".$expires_at.", '$lang')";
 
     $inscr_user = mysql_query($q1);
     $last_id = mysql_insert_id();

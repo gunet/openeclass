@@ -420,6 +420,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
  * @param mixed $toolContent html code
  *
  */
+/*
 function drawPerso($toolContent) {
 	
 	global $langUser, $prenom, $nom, $langLogout, $intitule, $nameTools, $langHelp, $langPersonalisedBriefcase;
@@ -513,7 +514,7 @@ function drawPerso($toolContent) {
 	
 	$t->pparse ( 'Output', 'fh' );
 }
-
+*/
 /**
  * Function dumpArray
  *

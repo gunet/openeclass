@@ -51,6 +51,11 @@ if (isset($close_user_registration) and $close_user_registration == TRUE) {
 	exit;
  }
 
+if ($language == 'greek')
+	$lang = 'el';
+elseif ($language == 'english')
+	$lang = 'en';
+
 // display form
 if (!isset($submit)) {
 	// Main body
@@ -60,7 +65,6 @@ if (!isset($submit)) {
 <thead>
 <tr>
   <td>
-
   <table width=\"100%\" align='left' class='FormData'>
   <thead>
   <tr>
@@ -110,7 +114,6 @@ $tool_content .= "\n	    </select>
   </tr>
   </thead>
   </table>
-
       <div align=\"right\"><small>$langRequiredFields</small></div>
   </td>
 </tr>
@@ -196,11 +199,10 @@ send_mail($siteName, $emailAdministrator, '', $email, $emailsubject, $emailbody,
     } else {
            $password_encrypted = $password;
     }
-
     $q1 = "INSERT INTO `$mysqlMainDb`.user
-      (user_id, nom, prenom, username, password, email, statut, department, am, registered_at, expires_at)
+      (user_id, nom, prenom, username, password, email, statut, department, am, registered_at, expires_at, lang)
       VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email','5',
-        '$department','$am',".$registered_at.",".$expires_at.")";
+        '$department','$am',".$registered_at.",".$expires_at.",'$lang')";
 
     $inscr_user = mysql_query($q1);
     $last_id = mysql_insert_id();

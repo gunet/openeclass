@@ -136,13 +136,6 @@ function getToolsArray($cat) {
                     where admin=1
                     ORDER BY rubrique", $currentCourse);
 			break;
-		case 'claroAdmin':
-			$result = db_query("
-                    select *
-                    from accueil
-                    where visible = 2
-                    ORDER BY id", $currentCourse);
-			break;
 	}
 
 	return $result;
@@ -224,7 +217,6 @@ function loggedInMenu(){
 	}
 
 	if ($statut == 10) {
-
 		array_push($sideMenuText, $GLOBALS['langManuals']);
 		array_push($sideMenuLink, $urlServer."manuals/manual.php");
 		array_push($sideMenuImg, "manual.gif");

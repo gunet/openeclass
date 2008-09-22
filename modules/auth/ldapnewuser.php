@@ -18,12 +18,12 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	ldapnewuser.php
 * @version $Id$
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
@@ -47,6 +47,11 @@ $tool_content = "";
 
 // for security
 $auth = isset($_GET['auth'])?intval($_GET['auth']):0;
+
+if (isset($_GET['auth']) or isset($_POST['auth']))
+$_SESSION['u_tmp']=$auth;
+if(!isset($_GET['auth']) or !isset($_POST['auth']))
+$auth=$_SESSION['u_tmp'];
 
 $authmethods = get_auth_active_methods();
 
