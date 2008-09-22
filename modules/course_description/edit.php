@@ -24,12 +24,12 @@
 ============================================================================*/
 /*
  * Edit, Course Description
- * 
+ *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * 
+ *
  * @abstract Actions for add/edit/delete portions of a course's descriptions
- * 
+ *
  * Based on previous code of eclass 1.6
  *
  */
@@ -43,7 +43,7 @@ $require_prof = true;
 include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
 // support for math symbols
-include '../../include/phpmathpublisher/mathpublisher.php'; 
+include '../../include/phpmathpublisher/mathpublisher.php';
 
 $tool_content = "";
 $nameTools = $langEditCourseProgram ;
@@ -67,7 +67,7 @@ hCont;
 
 $body_action = "onload=\"initEditor()\"";
 
-if ($is_adminOfCourse) { 
+if ($is_adminOfCourse) {
 
 //Save  actions
 	if (isset($save)) {
@@ -76,11 +76,11 @@ if ($is_adminOfCourse) {
 			$res = db_query($sql, $db);
 			$idMax = mysql_fetch_array($res);
 			$idMax = max(sizeof($titreBloc),$idMax["idMax"]);
-			$sql ="INSERT IGNORE INTO `course_description` (`id`) 
+			$sql ="INSERT IGNORE INTO `course_description` (`id`)
 				VALUES ('".($idMax+1)."');";
 			$_POST["edIdBloc"]= $idMax+1;
 		} else {
-			$sql ="INSERT IGNORE INTO `course_description`(`id`) 
+			$sql ="INSERT IGNORE INTO `course_description`(`id`)
 				VALUES ('".$_POST["edIdBloc"]."');";
 			}
 		db_query($sql, $db);
@@ -93,8 +93,8 @@ if ($is_adminOfCourse) {
 			WHERE id = '".$_POST["edIdBloc"]."';";
 		db_query($sql, $db);
 	}
-	
-//Delete action 
+
+//Delete action
 	if (isset($deleteOK)) {
 		$sql = "SELECT * FROM `course_description` where id = '".$_POST["edIdBloc"]."'";
 		$res = db_query($sql,$db);
@@ -112,7 +112,7 @@ if ($is_adminOfCourse) {
 //Edit action
 	elseif(isset($numBloc)) {
 		if (is_numeric($numBloc)) {
-			$sql = "SELECT * FROM `course_description` 
+			$sql = "SELECT * FROM `course_description`
 				WHERE id = '".mysql_real_escape_string($numBloc)."'";
 			$res = db_query($sql,$db);
 			$blocs = mysql_fetch_array($res);
@@ -142,23 +142,23 @@ if (isset($delete) and $delete == "ask") {
 	$tool_content .= "</form><br>";
     } else {
 
-    $tool_content .= "<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">		
+    $tool_content .= "<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
             <table width='99%' class='FormData' align='center'>
             <tbody><tr><th>&nbsp;</th><td><b>".@$titreBloc[$numBloc]."</b></td></tr>";
-		if (($numBloc =="add") || @(!$titreBlocNotEditable[$numBloc])) { 
+		if (($numBloc =="add") || @(!$titreBlocNotEditable[$numBloc])) {
 			$tool_content .= "<tr><th class='left' width='100'>".$langTitle."</th>
               		<td><input type=\"text\" name=\"edTitleBloc\" size=\"50\" value=\"".@$titreBloc[$numBloc]."\" class='FormData_InputText''></td></tr>";
 		} else {
 			$tool_content .= "<input type=\"hidden\" name=\"edTitleBloc\" value=\"".$titreBloc[$numBloc]."\" >";
 		}
-		if ($numBloc =="add") { 
+		if ($numBloc =="add") {
 			$tool_content .= "<input type=\"hidden\" name=\"edIdBloc\" value=\"add\">";
 		} else {
 			$tool_content .= "<input type=\"hidden\" name=\"edIdBloc\" value=\"".$numBloc."\">";
 		}
 		$tool_content .= "<tr><th class='left' width='100'>&nbsp;</th>
               	<td><textarea id='xinha' name='edContentBloc' value='".@$contentBloc."' rows='20' cols='70'>".@$contentBloc."</textarea></td></tr>";
-		
+
 	$tool_content .= "<tr><th class='left'>&nbsp;</th><td>
               <input type=\"submit\" name=\"save\" value=\"".$langAdd."\">&nbsp;&nbsp;
               <input type=\"submit\" name=\"ignore\" value=\"".$langBackAndForget ."\">
@@ -177,21 +177,36 @@ if (isset($delete) and $delete == "ask") {
 		<div id='operations_container'>
 		<small><b>$langAddCat :</small></b>&nbsp;&nbsp;&nbsp;
 		<select name='numBloc' size='1' class='auth_input'>";
-		while (list($numBloc,) = each($titreBloc)) { 
+		while (list($numBloc,) = each($titreBloc)) {
 			if (!isset($blocState[$numBloc])||$blocState[$numBloc] != "used")
 				$tool_content .= "<option value='".$numBloc."'>".$titreBloc[$numBloc]."</option>";
 		}
 		$tool_content .= "</select>&nbsp;&nbsp;
 		<input type='submit' name='add' value='".$langAdd."'></div></form><br>";
-		reset($titreBloc);		
-		while (list($numBloc,) = each($titreBloc)) { 
+		reset($titreBloc);
+		while (list($numBloc,) = each($titreBloc)) {
 			if (isset($blocState[$numBloc]) && $blocState[$numBloc]=="used") {
-				$tool_content .= "<p><div id='topic_title_id'>".$titreBloc[$numBloc]."&nbsp;&nbsp;&nbsp;
-         			<a href='".$_SERVER['PHP_SELF']."?numBloc=".$numBloc."' >
-         			<img src='../../template/classic/img/edit.gif' border='0' title='".$langModify."'></a>
-         			<a href='".$_SERVER['PHP_SELF']."?delete=ask&numBloc=".$numBloc."'>
-         			<img src='../../images/delete.gif' border='0' title='".$langDelete."'></a>
-         			</div></p><p>".mathfilter(make_clickable(nl2br($contentBloc[$numBloc])), 12, "../../courses/mathimg/")."</p><br>";
+
+	$tool_content .= "
+    <table width=\"99%\" class=\"FormData\">
+    <thead>
+    <tr>
+      <th class=\"left\" width=\"220\" style=\"border: 1px solid #edecdf;\"><u>".$titreBloc[$numBloc]."</u></th>
+      <th width=\"50\" class=\"right\" style=\"border: 1px solid #edecdf\"><a href='".$_SERVER['PHP_SELF']."?numBloc=".$numBloc."' ><img src='../../template/classic/img/edit.gif' border='0' title='".$langModify."'></a>&nbsp;<a href='".$_SERVER['PHP_SELF']."?delete=ask&numBloc=".$numBloc."'><img src='../../images/delete.gif' border='0' title='".$langDelete."'></a></th>
+      <td></td>
+    </tr>
+    </thead>
+    </table>
+
+    <table width=\"99%\" class=\"CourseDescr\">
+    <thead>
+    <tr>
+      <td>".mathfilter(make_clickable(nl2br($contentBloc[$numBloc])), 12, "../../courses/mathimg/")."</td>
+    </tr>
+    </tgead>
+    </table>";
+
+	$tool_content .= "<br />";
 			}
 		}
 	}
@@ -201,7 +216,7 @@ if (isset($delete) and $delete == "ask") {
 
 // End of page
 if(isset($numBloc)) {
-	draw($tool_content, 2, '', $head_content, $body_action);
+	draw($tool_content, 2, 'course_description', $head_content, $body_action);
 } else {
 	draw($tool_content, 2, 'course_description');
 }

@@ -81,8 +81,8 @@ if ($is_adminOfCourse) {
     $tool_content .= "
       <div id=\"operations_container\">
         <ul id=\"opslist\">
-          <li><img src='../../template/classic/img/clean.gif'>&nbsp;<a href='messageList.php?reset=true' target='messageList' class=small_tools>$langWash</a></li>
-          <li><img src='../../template/classic/img/save.gif'>&nbsp;<a href='messageList.php?store=true' target='messageList' class=small_tools>$langSave</a></li>
+          <li><a href='messageList.php?reset=true' target='messageList' class=small_tools>$langWash</a></li>
+          <li><a href='messageList.php?store=true' target='messageList' class=small_tools>$langSave</a></li>
         </ul>
       </div>";
 }
