@@ -61,7 +61,7 @@ if (isset($_GET['edit']) and isset($pid))  {
 	if (check_poll_participants($pid)) {
 		$tool_content .= "<center>$langThereAreParticipants";
 		$tool_content .= "<br><br><a href='questionnaire.php'>$langBack</a></center>";
-		draw($tool_content, 2, '', $local_head, '');
+		draw($tool_content, 2, 'questionnaire', $local_head, '');
 		exit();
 	} else {
 		fill_questions($pid);
@@ -75,7 +75,7 @@ if (isset($_POST['PollCreate']))  {
 		} else {
 			createPoll($_POST['question'], $_POST['question_type']);
 		}
-		draw($tool_content, 2, '', $local_head, '');
+		draw($tool_content, 2, 'questionnaire', $local_head, '');
 		exit;
 	} else {
 		$tool_content .= "<p class=\"caution_small\">$langPollEmpty</p><br />";
@@ -83,7 +83,7 @@ if (isset($_POST['PollCreate']))  {
 }
 
 printPollCreationForm();
-draw($tool_content, 2, '', $local_head, '');
+draw($tool_content, 2, 'questionnaire', $local_head, '');
 
 
 /*****************************************************************************
@@ -167,8 +167,8 @@ function printPollCreationForm() {
     <form action='$_SERVER[PHP_SELF]' id='poll' method='post'>$pidvar
 		<div id=\"operations_container\">
 		  <ul id=\"opslist\">
-		    <li><input type='submit' name='MoreMultiple' value='$langPollAddMultiple'></li>
-		    <li><input type='submit' name='MoreFill' value='$langPollAddFill'></li>
+		    <li><input type='submit' name='MoreMultiple' value='$langPollAddMultiple' class=\"toolBar_Button\"></li>
+		    <li><input type='submit' name='MoreFill' value='$langPollAddFill' class=\"toolBar_Button\"></li>
 		  </ul>
         </div>
 
@@ -197,7 +197,10 @@ function printPollCreationForm() {
     </tr>
     </tbody>
     </table>
-    <br><table width=\"99%\" class=\"Exercise\"><tbody>";
+    <br>
+
+    <table width=\"99%\" class=\"Exercise\">
+    <tbody>";
 
 	if (isset($_POST['question'])) {
 		$questions = $_POST['question'];
