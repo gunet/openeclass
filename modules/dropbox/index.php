@@ -131,7 +131,7 @@ tCont2;
     <tbody>
     <tr>
       <th class=\"left\" width=\"220\">&nbsp;</th>
-      <td>".$dropbox_lang["uploadFile"]."</td>
+      <td><b>".$dropbox_lang["uploadFile"]."</b></td>
     </tr>
     <tr>
       <th class=\"left\">".$dropbox_lang['file']." :</th>
