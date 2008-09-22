@@ -1059,6 +1059,7 @@ function document_upgrade_file($path, $data)
         $old_filename = preg_replace('|^.*/|', '', $db_path);
         $new_filename = random_filename($old_filename);
         $new_path = preg_replace('|/[^/]*$|', "/$new_filename", $db_path);
+        $file_date = quote(date('c', filemtime($path)));
         $r = db_query("SELECT * FROM $table WHERE path = ".quote($db_path));
         if (mysql_num_rows($r) > 0) {
                 $current_filename = mysql_fetch_array($r);
@@ -1070,7 +1071,8 @@ function document_upgrade_file($path, $data)
                         // File exists in database, hasn't been upgraded
                         db_query("UPDATE $table
                                         SET filename = " . quote($old_filename) . ",
-                                        path = " . quote($new_path) . "
+                                        path = " . quote($new_path) . ",
+                                        date = $file_date, date_modified = $file_date,
                                         WHERE path= " . quote($db_path));
                         rename($path, $data.$new_path);
                 } else {
@@ -1079,7 +1081,6 @@ function document_upgrade_file($path, $data)
                 }
         } else {
                 // File doesn't exist in database
-                $file_date = quote(date('c', filemtime($path)));
                 if ($table == 'document') {
                         db_query("INSERT INTO document
                                   SET path = " . quote($new_path) . ",
