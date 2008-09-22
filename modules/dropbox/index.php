@@ -251,13 +251,12 @@ tCont2;
 if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
 {
 	$numberDisplayed = count($dropbox_person -> receivedWork);
-	$tool_content .= <<<tCont4
+	$tool_content .= "
 
-    <table width="99%" class="FormData">
+    <table width=\"99%\" class=\"FormData\">
     <thead>
     <tr>
-      <th class="left" width="220">
-tCont4;
+      <th class=\"left\" width=\"220\" style=\"border: 1px solid #edecdf\"><u>";
 	$tool_content .= "
  	".strtoupper($dropbox_lang["receivedTitle"])."";
 
@@ -267,8 +266,8 @@ tCont4;
 	{
 		$dr_lang_all = addslashes( $dropbox_lang["all"]);
 		$tool_content .= "
-      </th>
-      <th width=\"3\">
+      </u></th>
+      <th width=\"3\" style=\"border: 1px solid #edecdf\">
         <a href=\"dropbox_submit.php?deleteReceived=all&dropbox_unid=$dr_unid\" onClick=\"return confirmationall('".$dropbox_lang["all"]."');\"><img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>";
 	}
 
@@ -347,10 +346,10 @@ tCont5;
       <table width=\"99%\" class=\"dropbox\">
       <thead>
       <tr>
-         <td colspan=\"2\"><b>".$dropbox_lang['file']."</b></td>
-         <td width=\"130\"><b>".$dropbox_lang["authors"]."</b></td>
-         <td width=\"130\"><b>".$dropbox_lang['date']."</b></td>
-         <td width=\"20\"><b>$langDelete</b></td>
+         <th colspan=\"2\" class=\"left\">&nbsp;".$dropbox_lang['file']."</th>
+         <th width=\"130\" class=\"left\">".$dropbox_lang["authors"]."</th>
+         <th width=\"130\">".$dropbox_lang['date']."</th>
+         <th width=\"20\">$langDelete</th>
       </tr>
       </thead>
       <tbody>";
@@ -433,26 +432,24 @@ tCont9;
  */
 
 $numSent = count($dropbox_person -> sentWork);
-$tool_content .= <<<tCont10
+$tool_content .= "
 
-      <br>
-      <table width="99%" class="FormData">
+      <br />
+
+      <table width=\"99%\" class=\"FormData\">
       <thead>
       <tr>
-        <th class="left" width="220">
-tCont10;
+        <th class=\"left\" width=\"220\" style=\"border: 1px solid #edecdf\"><u>";
 $tool_content .= strtoupper($dropbox_lang["sentTitle"]);
 $tool_content .="
-        </th>";
+        </u></th>";
 	// if the user has sent files then display the icon deleteall
 	if ($numSent > 0) {
 	$tool_content .= "
-        <th width=\"3\">
-            <div class=\"cellpos\">
+        <th width=\"3\" style=\"border: 1px solid #edecdf\">
             <a href=\"dropbox_submit.php?deleteSent=all&dropbox_unid=".urlencode( $dropbox_unid).$mailingInUrl."\"
 	onClick=\"return confirmationall('".addslashes($dropbox_lang["all"])."');\">
             <img src=\"../../images/delete.gif\" border=\"0\" title=\"$langDelete\"></a>
-            </div>
         </th>";
 	}
 
@@ -525,18 +522,20 @@ $tool_content .= "
 $tool_content .= "
         </td>
       </tr>
-      </thead>
+      </tbody>
       </table>
 
 
       <table width=99% class=\"dropbox\">
-      <tbody>
+      <thead>
       <tr>
-        <td colspan=\"2\"><b>".$dropbox_lang['file']."</b></td>
-        <td width=\"130\"><b>".$dropbox_lang['col_recipient']."</b></td>
-        <td width=\"130\"><b>".$dropbox_lang['date']."</b></td>
-        <td width=\"20\"><b>$langDelete</b></td>
-        </tr>
+        <th colspan=\"2\" class=\"left\">&nbsp;".$dropbox_lang['file']."</th>
+        <th width=\"130\" class=\"left\">".$dropbox_lang['col_recipient']."</th>
+        <th width=\"130\">".$dropbox_lang['date']."</th>
+        <th width=\"20\">$langDelete</th>
+      </tr>
+      </thead>
+      <tbody>
 	";
 
 

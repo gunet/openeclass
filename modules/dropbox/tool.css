@@ -47,6 +47,7 @@ table.dropbox th {
 	vertical-align: top;
 	background: #edecdf;
 	font-size:10px;
+    font-weight: bold;
 	color: #727266;
 	border-top: 1px solid #edecdf;
 	border-bottom: 1px solid #edecdf;
@@ -54,7 +55,6 @@ table.dropbox th {
 	border-right: 1px solid #edecdf;
 	font-style : normal;
 	font-variant : normal;
-	font-weight : normal;
 }
 
 table.dropbox td {

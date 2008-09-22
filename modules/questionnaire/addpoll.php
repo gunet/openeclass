@@ -78,7 +78,7 @@ if (isset($_POST['PollCreate']))  {
 		draw($tool_content, 2, '', $local_head, '');
 		exit;
 	} else {
-		$tool_content .= "<p>$langPollEmpty</p>";
+		$tool_content .= "<p class=\"caution_small\">$langPollEmpty</p><br />";
 	}
 }
 
@@ -87,7 +87,7 @@ draw($tool_content, 2, '', $local_head, '');
 
 
 /*****************************************************************************
-Fill the appropriate $_POST values from the database as if poll $pid was submitted 
+Fill the appropriate $_POST values from the database as if poll $pid was submitted
 ******************************************************************************/
 function fill_questions($pid)
 {
@@ -104,7 +104,7 @@ function fill_questions($pid)
 		$pqid = $theQuestion['pqid'];
 		$_POST['question_type'][$qnumber] = $qtype;
 		if ($qtype == 1) {
-			$answers = db_query("SELECT * FROM poll_question_answer 
+			$answers = db_query("SELECT * FROM poll_question_answer
 					WHERE pqid=$pqid ORDER BY pqaid");
 			$_POST['answer'.$qnumber] = array();
 			while ($theAnswer = mysql_fetch_array($answers)) {
@@ -117,7 +117,7 @@ function fill_questions($pid)
 
 
 /*****************************************************************************
-		Create the HTML for a jscalendar field 
+		Create the HTML for a jscalendar field
 ******************************************************************************/
 function jscal_html($name, $u_date = FALSE) {
 	global $jscalendar;
@@ -166,10 +166,11 @@ function printPollCreationForm() {
 	$tool_content .= "
     <form action='$_SERVER[PHP_SELF]' id='poll' method='post'>$pidvar
 		<div id=\"operations_container\">
-		<ul id=\"opslist\">
-		<li><input type='submit' name='MoreMultiple' value='$langPollAddMultiple'></li>
-		<li><input type='submit' name='MoreFill' value='$langPollAddFill'></li>
-		</ul></div>
+		  <ul id=\"opslist\">
+		    <li><input type='submit' name='MoreMultiple' value='$langPollAddMultiple'></li>
+		    <li><input type='submit' name='MoreFill' value='$langPollAddFill'></li>
+		  </ul>
+        </div>
 
     <table width=\"99%\" class='FormData'>
     <tbody>
@@ -223,8 +224,8 @@ function printPollCreationForm() {
 		Prints a form to edit current questions and answers
 ******************************************************************************/
 function printQuestionForm($questions, $question_types) {
-	global $tool_content, $langPollMC, $langPollFillText, $langPollContinue, 
-		$langCreate, $langPollMoreQuestions, 
+	global $tool_content, $langPollMC, $langPollFillText, $langPollContinue,
+		$langCreate, $langPollMoreQuestions,
 		$langPollCreated, $MoreQuestions;
 
 	foreach ($questions as $i => $text) {
@@ -260,7 +261,7 @@ function insertPollQuestions($pid, $questions, $question_types)
 				foreach ($answers as $j => $AnswerText) {
 					$AnswerText = trim($AnswerText);
 					if (!empty($AnswerText)) {
-						db_query("INSERT INTO poll_question_answer (pqid, answer_text) 
+						db_query("INSERT INTO poll_question_answer (pqid, answer_text)
 							VALUES ($pqid, '".mysql_real_escape_string($AnswerText) ."')");
 					}
 				}
@@ -293,7 +294,7 @@ function createPoll($questions, $question_types) {
 		mysql_real_escape_string($CreationDate) . "','".
 		mysql_real_escape_string($StartDate) . "','".
 		mysql_real_escape_string($EndDate) . "','".
-		mysql_real_escape_string($PollActive) ."')");	
+		mysql_real_escape_string($PollActive) ."')");
 	$pid = mysql_insert_id();
 	insertPollQuestions($pid, $questions, $question_types);
 	$GLOBALS["tool_content"] .= $GLOBALS["langPollCreated"];
@@ -308,15 +309,15 @@ function editPoll($pid, $questions, $question_types) {
 
 	$PollName = $_POST['PollName'];
 	$StartDate = $_POST['PollStart'];
-	$EndDate = $_POST['PollEnd']; 
+	$EndDate = $_POST['PollEnd'];
 
-	mysql_select_db($GLOBALS['currentCourseID']);	
-	$result = db_query("UPDATE poll SET name = '$PollName', 
+	mysql_select_db($GLOBALS['currentCourseID']);
+	$result = db_query("UPDATE poll SET name = '$PollName',
 		start_date = '$StartDate', end_date = '$EndDate' WHERE pid='$pid'");
 	db_query("DELETE FROM poll_question_answer WHERE pqid IN
 		(SELECT pqid FROM poll_question WHERE pid='$pid')");
 	db_query("DELETE FROM poll_question WHERE pid='$pid'");
- 	insertPollQuestions($pid, $questions, $question_types); 
+ 	insertPollQuestions($pid, $questions, $question_types);
 	$GLOBALS["tool_content"] .= $GLOBALS["langPollEdited"];
 }
 
@@ -327,7 +328,7 @@ function editPoll($pid, $questions, $question_types) {
 function add_multiple_choice_question($i, $text)
 {
 	global $tool_content, $langQuestion, $langPollMoreAnswers, $langAnswers, $langPollUnknown, $langPollFillText, $langPollNumAnswers, $langPollAddAnswer, $langPollMC;
-	
+
 	$tool_content .= "
     <tr>
       <th class=\"left\" width=\"220\"><b>$langQuestion #" . ($i+1) ."</b><br><small>$langPollMC</small></th>
@@ -368,7 +369,7 @@ function add_multiple_choice_question($i, $text)
 function add_fill_text_question($i, $text)
 {
 	global $tool_content, $langQuestion, $langAnswer, $langPollFillText;
-	
+
 	$tool_content .= "
     <tr>
       <th class=\"left\" width=\"220\"><b>$langQuestion #" . ($i+1) ."</b><br><small>$langPollFillText</small></th>
@@ -382,17 +383,17 @@ function add_fill_text_question($i, $text)
 /********************************************************
 	Check if there are participants in the poll
 *********************************************************/
-function check_poll_participants($pid) 
+function check_poll_participants($pid)
 {
 	global $currentCourseID;
 
 	$sql = db_query("SELECT * FROM poll_answer_record WHERE pid='$pid'", $currentCourseID);
 	if (mysql_num_rows($sql) > 0)
 		return true;
-	else 
+	else
 		return false;
 
-} 
+}
 
 /********************************************************
 	Check if there are some non-empty questions
