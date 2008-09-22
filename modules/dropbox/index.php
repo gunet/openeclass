@@ -377,9 +377,6 @@ tCont5;
         <td width=\"3\"><img src=\"../../template/classic/img/inbox.gif\" border=\"0\" title=\"$dropbox_lang[receivedTitle]\"></td>
         <td>";
 
-		/* if (isset($origin))
-		$tool_content .= "<a href='dropbox_download.php?origin=$origin&id=".urlencode($w->id)."' target=_blank'>".$w->title."</a>";
-		else */
 		$tool_content .= "<a href='dropbox_download.php?id=".urlencode($w->id)."' target=_blank>".$w->title."</a>";
 
 		$fSize = ceil(($w->filesize)/1024);
@@ -389,10 +386,15 @@ tCont5;
         <small>$w->description</small>
         </td>
 tCont9;
+	if ($GLOBALS['language'] == 'greek') {
+		$w->uploadDate = date("d-m-Y / H:i",time());
+		$w->lastUploadDate = date("d-m-Y / H:i",time());
+	} else {
+		$w->uploadDate = date("Y-m-d / H:i",time());
+		$w->lastUploadDate = date("d-m-Y / H:i",time());
+	}
 
-		$tool_content .= "
-        <td>$w->author</td>
-        <td>$w->uploadDate";
+		$tool_content .= "<td>$w->author</td><td>".$w->uploadDate;
 
 		if ($w->uploadDate != $w->lastUploadDate)
 		{
@@ -588,10 +590,17 @@ tCont12;
 	}
 	$tool_content = strrev(substr(strrev($tool_content), 7));
 
+	if ($GLOBALS['language'] == 'greek') {
+		$w->uploadDate = date("d-m-Y / H:i",time());
+		$w->lastUploadDate = date("d-m-Y / H:i",time());
+	} else {
+		$w->uploadDate = date("Y-m-d / H:i",time());
+		$w->lastUploadDate = date("d-m-Y / H:i",time());
+	}
+
 	$tool_content .= "
 		</td>
 		<td>
-
 		$w->uploadDate
 		</td>
 

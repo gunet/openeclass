@@ -33,17 +33,17 @@
  * 		. filename		=> name of file stored on the server
  * 		. filesize							// RH: Mailing: zero for sent zip
  * 		. title			=> name of file returned to user. This is the original name of the file
- * 							except when the original name contained spaces. In that case the spaces
- * 							will be replaced by _
+ * 		except when the original name contained spaces. In that case the spaces
+ * 		will be replaced by _
  * 		. description
  * 		. author
- * 		. upload_date	=> date when file was first sent
+ * 		. uploaddate	=> date when file was first sent
  * 		. lastUploadDate=> date when file was last sent
  *  	. isOldWork 	=> has the work already been uploaded before
  * 
  * - Dropbox_SentWork extends Dropbox_Work
  * 		. recipients	=> array of ["id"]["name"] lists the recipients of the work
- * 											// RH: Mailing: or mailing pseudo_id
+ * 		// RH: Mailing: or mailing pseudo_id
  * - Dropbox_Person:
  * 		. userId
  * 		. receivedWork 	=> array of Dropbox_Work objects
@@ -101,7 +101,7 @@ class Dropbox_Work {
 		$this->title = $title;
 		$this->description = $description;
 		$this->author = $author;
-		$this->lastUploadDate = date("Y-m-d H:i:s",time());
+		$this->lastUploadDate = date("Y-m-d H:i",time());
 
 		/*
 		* Check if object exists already. If it does, the old object is used 

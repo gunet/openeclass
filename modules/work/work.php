@@ -1034,7 +1034,7 @@ function show_student_assignments()
 {
 
 	global $tool_content, $m, $uid;
-	global $langDaysLeft, $langDays, $langNoAssign, ${urlServer};
+	global $langDaysLeft, $langDays, $langNoAssign, $urlServer;
 
 	$result = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days FROM assignments
 			WHERE active = '1' ORDER BY submission_date");
@@ -1065,7 +1065,7 @@ cData;
 			$tool_content .= "
         <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
         <td><a href=\"work.php?id=${row['id']}\">${title_temp}</a></td>
-        <td width=\"30%\">".nice_format($row[deadline])."
+        <td width=\"30%\">".nice_format($row['deadline'])."
         ";
 
 			if ($row['days'] > 1) {
