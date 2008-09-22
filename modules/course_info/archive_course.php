@@ -130,6 +130,7 @@ function copydir($origine, $destination) {
 			else 
 			{
 				copy("$origine/$fichier", "$destination/$fichier");
+                                touch("$destination/$fichier", filemtime("$origine/$fichier"));
 				$total++;
 			}
 		}
