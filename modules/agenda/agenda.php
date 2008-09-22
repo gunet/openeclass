@@ -305,13 +305,13 @@ if (!isset($sens)) $sens =" ASC";
 $result = db_query("SELECT id, titre, contenu, day, hour, lasting FROM agenda ORDER BY day ".$sens.", hour ".$sens,$currentCourseID);
 if (mysql_num_rows($result) > 0) {
 	$tool_content .=  "\n    <table width=\"99%\" align=\"left\" class=\"FormData\">";
-	$tool_content .=  "\n    <thead>";
+	$tool_content .=  "\n    <tbody>";
 	$tool_content .=  "\n    <tr>";
-	$tool_content .=  "\n      <td><div align=\"left\"><b>$langEvents</b></div></td>";
+	$tool_content .=  "\n      <th style=\"border: 1px solid #edecdf\"><div align=\"left\"><b>$langEvents</b></div></th>";
 	if ($is_adminOfCourse) {
-		$tool_content .=  "\n      <td width=60><b>$langActions</b></td>";
+		$tool_content .=  "\n      <th width=60 style=\"border: 1px solid #edecdf\"><b>$langActions</b></th>";
 	}
-	$tool_content .= "\n    </tr>\n    </thead>";
+	$tool_content .= "\n    </tr>\n    </tbody>";
 	$tool_content .= "\n    </table>\n\n";
 	$numLine=0;
 	$barreMois ="";
@@ -331,7 +331,7 @@ if (mysql_num_rows($result) > 0) {
 				((strtotime($myrow["day"]." ".$myrow["hour"]) < time()) && ($sens==" DESC "))) {
 				if ($barreMois!=date("m",time())) {
 					$barreMois=date("m",time());
-					$tool_content .= "\n    <tr>";
+					$tool_content .= "\n    <tr class=\"odd\">";
 					// current month
 					$tool_content .= "\n      <td colspan=\"2\" class=\"monthLabel\">".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",time()))."</b></td>";
 					$tool_content .= "\n    </tr>";
@@ -347,22 +347,18 @@ if (mysql_num_rows($result) > 0) {
 			$barreMois=date("m",strtotime($myrow["day"]));
 
             // month LABEL
-			$tool_content .= "\n    <tr>";
+			$tool_content .= "\n    <tr class=\"odd\">";
 			$tool_content .=  "\n      <td colspan=\"2\" class=\"monthLabel\"><div align=\"center\">".$langCalendar."&nbsp;<b>".ucfirst(claro_format_locale_date("%B %Y",strtotime($myrow["day"])))."</b></div></td>";
 			$tool_content .= "\n    </tr>";
 		}
 
-		if($numLine%2 == 0) {
 			$tool_content .= "\n    <tr>";
-		} elseif($numLine%2 == 1) {
-			$tool_content .= "\n    <tr class=\"odd\">";
-        }
 		if ($is_adminOfCourse)
 			$tool_content .= "\n      <td valign=\"top\">";
 		else
 			$tool_content .= "\n      <td valign=\"top\" colspan=\"2\">";
 
-		$tool_content .= "".ucfirst(claro_format_locale_date($dateFormatLong,strtotime($myrow["day"])))." / $langHour: ".ucfirst(date("H:i",strtotime($myrow["hour"])))." ";
+		$tool_content .= "<span class=\"day\">".ucfirst(claro_format_locale_date($dateFormatLong,strtotime($myrow["day"])))."</span> ($langHour: ".ucfirst(date("H:i",strtotime($myrow["hour"]))).")";
 	$message = "$langUnknown";
 	if ($myrow["lasting"] !="") {
 		if ($myrow["lasting"] == 1)
@@ -370,7 +366,7 @@ if (mysql_num_rows($result) > 0) {
 		else
 			$message = $langHours;
 	}
-		$tool_content .=  "<br><b>".$myrow["titre"]."</b> (".$langLasting.": ".$myrow["lasting"]." ".$message.")<p class=\"agendaBody\">$contenu</p></td>";
+		$tool_content .=  "<p class=\"event\"><b>".$myrow["titre"]."</b> (".$langLasting.": ".$myrow["lasting"]." ".$message.")</p><p class=\"agendaBody\">$contenu</p></td>";
 
 	//agenda event functions
 	//added icons next to each function

@@ -27,12 +27,20 @@ table.Agenda td {
 }
 
 .monthLabel {
-  border-bottom: 1px dotted #a33033;
   text-align: center;
   color: #a33033;
 }
 
+.day {
+  border-bottom: 1px dotted #727266;
+}
+
+.event {
+  padding: 4px 0px 0px 4px;
+}
+
+
 .agendaBody {;
-  padding: 4px;
+  padding: 0px 0px 0px 4px;  
 }
 
