@@ -440,9 +440,8 @@ $tool_content .= "
       <thead>
       <tr>
         <th class=\"left\" width=\"220\" style=\"border: 1px solid #edecdf\"><u>";
-$tool_content .= strtoupper($dropbox_lang["sentTitle"]);
-$tool_content .="
-        </u></th>";
+        $tool_content .= strtoupper($dropbox_lang["sentTitle"]);
+        $tool_content .="</u></th>";
 	// if the user has sent files then display the icon deleteall
 	if ($numSent > 0) {
 	$tool_content .= "
