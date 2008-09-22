@@ -1083,7 +1083,7 @@ function document_upgrade_file($path, $data)
                         db_query("UPDATE $table
                                         SET filename = " . quote($old_filename) . ",
                                         path = " . quote($new_path) . ",
-                                        date = $file_date, date_modified = $file_date,
+                                        date = $file_date, date_modified = $file_date
                                         WHERE path= " . quote($db_path));
                         rename($path, $data.$new_path);
                 } else {
