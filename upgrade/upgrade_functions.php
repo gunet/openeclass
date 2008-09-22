@@ -30,6 +30,7 @@
 
 //function to update a field in a table
 function update_field($table, $field, $field_name, $id_col, $id) {
+	$id = quote($id);
 	$sql = "UPDATE `$table` SET `$field` = '$field_name' WHERE `$id_col` = $id;";
 	db_query($sql);
 }
