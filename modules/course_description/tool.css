@@ -12,10 +12,10 @@ form.category {
 table.CourseDescr {
     padding: 2px;
 	vertical-align: top;
-    border-top: 1px solid #edecdf;
-    border-bottom: 1px solid #edecdf;
-    border-left: 1px solid #edecdf;
-    border-right: 1px solid #edecdf;
+    border-top: 1px solid #CAC3B5;
+    border-bottom: 1px solid #CAC3B5;
+    border-left: 1px solid #CAC3B5;
+    border-right: 1px solid #CAC3B5;
 }
 
 table.CourseDescr th {
@@ -40,3 +40,4 @@ table.CourseDescr td {
 	color: #727266;
 	vertical-align: middle;
 }
+

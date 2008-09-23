@@ -70,17 +70,21 @@ $res = db_query($sql, $currentCourseID);
 if (mysql_num_rows($res) > 0) {
 	while ($bloc = mysql_fetch_array($res)) {
 	$tool_content .= "
-    <table width=\"99%\" class=\"FormData\">
-    <thead>
-    <tr>
-      <th class=\"left\" width=\"220\" style=\"border: 1px solid #edecdf;\"><u>".$bloc["title"]."</u></th>
-      <td></td>
-    </tr>
-    </thead>
-    </table>
+
 
     <table width=\"99%\" class=\"CourseDescr\">
     <thead>
+    <tr>
+      <td>
+        <table width=\"100%\" class=\"FormData\">
+        <thead>
+        <tr>
+          <th class=\"left\" style=\"border: 1px solid #edecdf;\"><u>".$bloc["title"]."</u></th>
+        </tr>
+        </thead>
+        </table>
+      </td>
+    </tr>
     <tr>
       <td colspan=\"2\">".mathfilter(make_clickable(nl2br($bloc["content"])), 12, "../../courses/mathimg/")."</td>
     </tr>
