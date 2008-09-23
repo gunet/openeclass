@@ -19,9 +19,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*					Network Operations Center, University of Athens,
+*					Panepistimiopolis Ilissia, 15784, Athens, Greece
+*					eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 $require_admin = TRUE;
@@ -52,9 +52,9 @@ if (isset($close) && $close == 1) {
 } elseif (isset($close) && $close == 2) {
 	if (!empty($comment)) {
 		if (db_query("UPDATE prof_request set status = '2',
-					    date_closed = NOW(),
-					    comment = '".mysql_escape_string($comment)."'
-					    WHERE rid = '$id'")) {
+				    date_closed = NOW(),
+				    comment = '".mysql_escape_string($comment)."'
+				    WHERE rid = '$id'")) {
 			if ($sendmail == 1) {
         $emailsubject = $langemailsubjectBlocked;
 				$emailbody = "$langemailbodyBlocked
@@ -69,7 +69,7 @@ $langphone $telephone
 $langEmail : $emailAdministrator
 
 ";
-				send_mail($siteName, $emailAdministrator, "$prof_name $prof_surname",
+			send_mail($siteName, $emailAdministrator, "$prof_name $prof_surname",
 					$prof_email, $emailsubject, $emailbody, $charset);
 			}
                   $tool_content .= "<div class=alert1>$langRequestReject</div><br>";
@@ -81,19 +81,19 @@ $langEmail : $emailAdministrator
  // reject request
 // ----------------
 		$r = db_query("SELECT comment, profname, profsurname, profemail, proftmima, date_open, profcomm
-					     FROM prof_request WHERE rid = '$id'");
+				FROM prof_request WHERE rid = '$id'");
 		$d = mysql_fetch_assoc($r);
 
 $tool_content .= "<br><br>
           <center><p>$langWarnReject:<br><br>".$d['profname']." ".$d['profsurname']." &lt;".$d['profemail']."&gt;
           <br><br>$langComments:  <form action=\"$_SERVER[PHP_SELF]\" method=\"post\"
-							 <input type='hidden' name='id' value='$id'>
+		<input type='hidden' name='id' value='$id'>
                <input type='hidden' name='close' value='2'>
                <input type='hidden' name='prof_name' value='$d[profname]'>
                <input type='hidden' name='prof_surname' value='$d[profsurname]'>
-					<textarea name=\"comment\" rows=\"5\" cols=\"40\">".$d['comment']."</textarea>
+		<textarea name=\"comment\" rows=\"5\" cols=\"40\">".$d['comment']."</textarea>
           <br>
-					<input type=\"checkbox\" name=\"sendmail\" value=\"1\" checked=\"yes\">&nbsp;$langRequestSendMessage
+		<input type=\"checkbox\" name=\"sendmail\" value=\"1\" checked=\"yes\">&nbsp;$langRequestSendMessage
           <input type=\"text\" name=\"prof_email\" value=\"".$d['profemail']."\">
           <br><br>($langRequestDisplayMessage)
           <br><br><input type=\"submit\" name=\"submit\" value=\"$langRejectRequest\"></form></p></center>";
@@ -117,8 +117,8 @@ $tool_content .= "<br><br>
   </thead>
   <tbody>";
 
-	$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,comment
-								FROM prof_request WHERE status='1' and statut='5'");
+	$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,comment,lang
+			FROM prof_request WHERE status='1' and statut='5'");
 
     $k = 0;
 	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
@@ -130,7 +130,7 @@ $tool_content .= "<br><br>
 	            }
 	    $tool_content .= "\n    <td width=\"1\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
      $tool_content .= "\n    <td title=".htmlspecialchars($req[3])."><small>".htmlspecialchars($req[2])."&nbsp;".htmlspecialchars($req[1])."</small></td>";
-		for ($i = 3; $i < mysql_num_fields($sql) - 2; $i++) {
+		for ($i = 3; $i < mysql_num_fields($sql) - 3; $i++) {
 			if ($i == 4 and $req[$i] != "") {
 				$tool_content .= "\n    <td><small><a href=\"mailto:".htmlspecialchars($req[$i])."\" class=small_tools>".htmlspecialchars($req[$i])."</a></small></td>";
 			} else {
@@ -147,6 +147,7 @@ $tool_content .= "<br><br>
 			"&pu=".urlencode($req['profuname']).
 			"&pe=".urlencode($req['profemail']).
 			"&pt=".urlencode($req['proftmima']).
+			"&lang=".$req['lang'].
 			"\" class=small_tools>$langRegistration</a>";
 			$tool_content .= "</small></td>\n  </tr>";
 			$k++;

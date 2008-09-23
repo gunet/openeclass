@@ -146,7 +146,7 @@ $tool_content .= "
     </tr>
     <tr>
       <th>&nbsp;</th>
-      <td><input type=\"submit\" name=\"submit\" value=\"".$langOk."\" >
+      <td><input type=\"submit\" name=\"submit\" value=\"".$langSubmit."\" >
           <input type=\"hidden\" name=\"auth\" value=\"1\" >&nbsp;
           <small>".$langRequiredFields."</small></td>
     </tr>

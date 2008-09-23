@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 $require_admin = TRUE;
@@ -45,6 +45,11 @@ if($submit) {
   $password = isset($_POST['password'])?$_POST['password']:'';
   $email_form = isset($_POST['email_form'])?$_POST['email_form']:'';
   $department = isset($_POST['department'])?$_POST['department']:'';
+  $localize = isset($_POST['localize'])?$_POST['localize']:'';
+	if ($localize == 'greek')
+		$lang = 'el';
+	elseif ($localize == 'english')
+		$lang = 'en';
 
       // check if user name exists
   $username_check=mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='$uname'");
@@ -52,22 +57,12 @@ if($submit) {
     $user_exist=$myusername[0];
   }
 
-// check if passwd is too easy
-  if ((strtoupper($password) == strtoupper($uname))
-      or (strtoupper($password) == strtoupper($nom_form))
-      or (strtoupper($password) == strtoupper($prenom_form))
-      or (strtoupper($password) == strtoupper($email))) {
-      $tool_content .= error_screen($langPassTooEasy);
-      $tool_content .= end_tables();
-  }
-
 // check if there are empty fields
-  elseif (empty($nom_form) or empty($prenom_form) or empty($password)
+  if (empty($nom_form) or empty($prenom_form) or empty($password)
         or empty($uname) or empty($email_form)) {
       $tool_content .= error_screen($langEmptyFields);
       $tool_content .= end_tables();
   }
-
   elseif(isset($user_exist) and $uname==$user_exist) {
       $tool_content .= error_screen($langUserFree);
       $tool_content .= end_tables();
@@ -110,8 +105,8 @@ send_mail($siteName, $emailAdministrator, '', $email_form, $emailsubject, $email
     $s = mysql_query("SELECT id FROM faculte WHERE name='$department'");
     $dep = mysql_fetch_array($s);
     $inscr_user=mysql_query("INSERT INTO `$mysqlMainDb`.user
-      (user_id, nom, prenom, username, password, email, statut, department, registered_at, expires_at)
-      VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email_form', '5', '$dep[id]', '$registered_at', '$expires_at')");
+      (user_id, nom, prenom, username, password, email, statut, department, registered_at, expires_at, lang)
+      VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email_form', '5', '$dep[id]', '$registered_at', '$expires_at', '$lang')");
 
     // close request
         $rid = intval($_POST['rid']);
@@ -127,6 +122,14 @@ send_mail($siteName, $emailAdministrator, '', $email_form, $emailsubject, $email
 //---------------------------
 // 	display form
 // ---------------------------
+
+if (isset($_GET['lang'])) {
+	$lang = $_GET['lang'];
+	if ($lang == 'el')
+		$language = 'greek';
+	elseif ($lang == 'en')
+		$language = 'english';
+}
 
 $tool_content .= "<table width=\"99%\"><tbody>
    <tr>
@@ -172,9 +175,13 @@ $tool_content .= "<table width=\"99%\"><tbody>
 		else 
 			$tool_content .= selection ($dep, 'department');
  
-	   	$tool_content .= "</td></tr><tr><td colspan=\"2\">".$langRequiredFields."</td></tr>
-			<tr><td>&nbsp;</td>
-		<td><input type=\"submit\" name=\"submit\" value=\"".$langOk."\" ></td>
+	$tool_content .= "<tr><th class='left'>$langLanguage</th><td>";
+	$tool_content .= lang_select_options('localize');
+	$tool_content .= "</td></tr>";
+
+	$tool_content .= "</td></tr><tr><td colspan=\"2\">".$langRequiredFields."</td></tr>
+		<tr><td>&nbsp;</td>
+		<td><input type=\"submit\" name=\"submit\" value=\"".$langSubmit."\" ></td>
 		</tr></thead></table>
 		<input type='hidden' name='rid' value='".@$id."'>
 		</tbody></table></form>";

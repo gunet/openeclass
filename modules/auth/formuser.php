@@ -18,35 +18,46 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 
 $tool_content = "";
+
+// security check
+if (isset($_POST['localize'])) {
+	$language = preg_replace('/[^a-z]/', '', $_POST['localize']);
+}
+if ($language == 'greek')
+	$lang = 'el';
+elseif ($language == 'english')
+	$lang = 'en';
+
+
 $nameTools = $langUserRequest;
 $navigation[] = array("url"=>"registration.php", "name"=> $langNewUser);
 
 if (isset($submit)) {
 	if (empty($usercomment) or empty($name)
 		or empty($surname) or empty($username) or empty($userphone) or empty($usermail)) {
-			$tool_content .= "<table width=\"99%\"><tbody><tr>
+		$tool_content .= "<table width=\"99%\"><tbody><tr>
 		    <td class=\"caution\" height='60'>
-    			<p>$langFieldsMissing</p>
-			<p><a href='$_SERVER[PHP_SELF]?name=$_POST[name]&surname=$_POST[surname]&userphone=$_POST[userphone]&username=$_POST[username]&usermail=$_POST[usermail]&usercomment=$_POST[usercomment]'>$langAgain</a></p>
-		    </td>
-		  </tr></tbody>
-		</table><br><br/>";
+    		<p>$langFieldsMissing</p>
+		<p><a href='$_SERVER[PHP_SELF]?name=$_POST[name]&surname=$_POST[surname]&userphone=$_POST[userphone]&username=$_POST[username]&usermail=$_POST[usermail]&usercomment=$_POST[usercomment]'>$langAgain</a></p>
+	    </td>
+	  </tr></tbody>
+	</table><br><br/>";
     draw($tool_content, 0, 'auth');
 	  exit;
 
-   } else {  // register user request
+} else {  // register user request
 
 	// ------------------- Update table prof_request ------------------------------
-$upd=db_query("INSERT INTO prof_request(profname,profsurname,profuname,profemail,proftmima,profcomm,status,date_open,comment,statut) VALUES('$name','$surname','$username','$usermail','$department','$userphone','1',NOW(),'$usercomment','5')");
+$upd=db_query("INSERT INTO prof_request(profname,profsurname,profuname,profemail,proftmima,profcomm,status,date_open,comment,lang,statut) VALUES('$name','$surname','$username','$usermail','$department','$userphone','1',NOW(),'$usercomment','$lang','5')");
 
 //----------------------------- Email Message --------------------------
     $MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" .
@@ -60,7 +71,7 @@ $upd=db_query("INSERT INTO prof_request(profname,profsurname,profuname,profemail
 	    <td class=\"caution\" height='60'>
   	  <p>$langMailErrorMessage&nbsp; <a href=\"mailto:$emailhelpdesk\" class=mainpage>$emailhelpdesk</a>.</p>
     	</td>
-		  </tr></tbody></table><br><br/>";
+	  </tr></tbody></table><br><br/>";
 	}
 
     //  User Message
@@ -68,7 +79,7 @@ $upd=db_query("INSERT INTO prof_request(profname,profsurname,profuname,profemail
     <td class=\"well-done\" height='60'>
     <p>$langDearUser!<br/><br/>$success</p>
     </td>
-		 </tr></tbody></table>
+	 </tr></tbody></table>
 	  <p><br/><br/>$infoprof<br/><br/>$click <a href=\"$urlServer\" class=mainpage>$langHere</a> $langBackPage</p>
   	<br><br/></td></tr></table>";
 
@@ -80,10 +91,10 @@ $upd=db_query("INSERT INTO prof_request(profname,profsurname,profuname,profemail
 
 // security
 if (!isset($close_user_registration) or $close_user_registration == FALSE) {
-			$tool_content .= "<div class='td_main'>$langForbidden</div></td></tr></table>";
-			draw($tool_content, 0, 'auth');
-			exit;
-			}
+		$tool_content .= "<div class='td_main'>$langForbidden</div></td></tr></table>";
+		draw($tool_content, 0, 'auth');
+		exit;
+	}
 
 $tool_content .= "
 <p>$langInfoStudReq</p><br />
@@ -92,7 +103,6 @@ $tool_content .= "
 <thead>
 <tr>
   <td>
-
   <table width=\"99%\" align='left' class='FormData'>
   <thead>
   <tr>
@@ -108,7 +118,7 @@ $tool_content .= "
     <td><input type='text' name='userphone' value='".@$userphone."' class='FormData_InputText' size=\"33\">&nbsp;&nbsp;<small>(*)</small></td>
   </tr>
   <tr>
-    <th class='left'>$langProfUname</th>
+    <th class='left'>$langUsername</th>
     <td><input type='text' name='username' size=\"33\" maxlength='20' value='".@$username."' class='FormData_InputText'>&nbsp;&nbsp;<small>(*)&nbsp;$langUserNotice</small></td>
   </tr>
     <th class='left'>$langProfEmail</th>
@@ -124,12 +134,18 @@ $tool_content .= "
 
     $deps=mysql_query("SELECT name FROM faculte order by name");
     while ($dep = mysql_fetch_array($deps)) {
-           $tool_content .= "\n        <option value='$dep[0]'>$dep[0]</option>\n";
+           $tool_content .= "\n<option value='$dep[0]'>$dep[0]</option>\n";
     }
 
-	 $tool_content .= "\n        </select>
+	 $tool_content .= "\n</select>
     </td>
   </tr>
+	<tr>
+      <th class='left'>$langLanguage</th>
+      <td>";
+	$tool_content .= lang_select_options('localize');
+	$tool_content .= "</td>
+    </tr>
   <tr>
     <th class='left'>&nbsp;</th>
     <td><input type='submit' class='ButtonSubmit' name='submit' value='$langSubmitNew'></td>
