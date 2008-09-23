@@ -39,14 +39,19 @@ require_once 'auth.inc.php';
 $tool_content = "";
 
 if (isset($_GET['auth']) or isset($_POST['auth']))
-$_SESSION['u_tmp']=$auth;
+	$_SESSION['u_tmp']=$auth;
 if(!isset($_GET['auth']) or !isset($_POST['auth']))
-$auth=$_SESSION['u_tmp'];
+	$auth=$_SESSION['u_tmp'];
 
 $nameTools = get_auth_info($auth);
 $navigation[]= array ("url"=>"registration.php", "name"=> "$langNewUserAccountActivation");
 $nameTools = $langUserData;
 
+// security check
+
+if (isset($_POST['localize'])) {
+	$language = preg_replace('/[^a-z]/', '', $_POST['localize']);
+}
 if ($language == 'greek')
 	$lang = 'el';
 elseif ($language == 'english')
@@ -77,18 +82,18 @@ if(!empty($is_submit))
 
 		switch($auth)		// now get the connection settings
 		{
-			case '2':	$pop3host = str_replace("pop3host=","",$auth_method_settings['auth_settings']);
+			case '2': $pop3host = str_replace("pop3host=","",$auth_method_settings['auth_settings']);
 				break;
-			case '3':	$imaphost = str_replace("imaphost=","",$auth_method_settings['auth_settings']);
+			case '3': $imaphost = str_replace("imaphost=","",$auth_method_settings['auth_settings']);
 				break;
-			case '4':	$ldapsettings = $auth_method_settings['auth_settings'];
-					    $ldap = explode("|",$ldapsettings);
-					    $ldaphost = str_replace("ldaphost=","",$ldap[0]);	//ldaphost
-					    $ldapbind_dn = str_replace("ldapbind_dn=","",$ldap[1]);	//ldapbase_dn
-					    $ldapbind_user = str_replace("ldapbind_user=","",$ldap[2]);	//ldapbind_user
-					    $ldapbind_pw = str_replace("ldapbind_pw=","",$ldap[3]);		// ldapbind_pw
+			case '4': $ldapsettings = $auth_method_settings['auth_settings'];
+				    $ldap = explode("|",$ldapsettings);
+				    $ldaphost = str_replace("ldaphost=","",$ldap[0]);	//ldaphost
+				    $ldapbind_dn = str_replace("ldapbind_dn=","",$ldap[1]);	//ldapbase_dn
+				    $ldapbind_user = str_replace("ldapbind_user=","",$ldap[2]);	//ldapbind_user
+				    $ldapbind_pw = str_replace("ldapbind_pw=","",$ldap[3]);		// ldapbind_pw
 				break;
-			case '5':	$dbsettings = $auth_method_settings['auth_settings'];
+			case '5': $dbsettings = $auth_method_settings['auth_settings'];
     					$edb = explode("|",$dbsettings);
     					$dbhost = str_replace("dbhost=","",$edb[0]);	//dbhost
     					$dbname = str_replace("dbname=","",$edb[1]);	//dbname
@@ -105,12 +110,9 @@ if(!empty($is_submit))
 		$is_valid = auth_user_login($auth,$ldap_email,$ldap_passwd);
 
 		if($is_valid) {  // Successfully connected
-			$tool_content .= "
-    	<table width=\"99%\" align='left' class='FormData'>
-	    <thead>
-  	  <tr>
-      <td>
-      <form action=\"$_SERVER[PHP_SELF]\" method=\"post\">" .
+			$tool_content .= "<table width=\"99%\" align='left' class='FormData'><thead>
+  	  		<tr><td>
+      		<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">" .
 				(isset($GLOBALS['auth_user_info'])?
                 ('<input type="hidden" name="prenom_form" value="' . $GLOBALS['auth_user_info']['firstname'] .
                  '"><input type="hidden" name="nom_form" value="' . $GLOBALS['auth_user_info']['lastname'] .
@@ -119,13 +121,13 @@ if(!empty($is_submit))
       <table width=\"100%\">
        <tbody>
        <tr>  
-	        <th class='left' width='20%'>".$langName."</th>
-				<td width='10%'>".(isset($GLOBALS['auth_user_info'])?
+	     <th class='left' width='20%'>".$langName."</th>
+			<td width='10%'>".(isset($GLOBALS['auth_user_info'])?
         		 $GLOBALS['auth_user_info']['firstname']: '<input class="FormData_InputText" type="text" name="prenom_form" size="38">')."</td>
        </tr>
        <tr>
          <th class='left'>".$langSurname."</th>
-					<td width='10%'>".(isset($GLOBALS['auth_user_info'])?
+	<td width='10%'>".(isset($GLOBALS['auth_user_info'])?
               $GLOBALS['auth_user_info']['lastname']: '<input class="FormData_InputText" type="text" name="nom_form" size="38">')."</td>
        </tr>
        <tr>
@@ -144,13 +146,17 @@ if(!empty($is_submit))
          <select name=\"department\">
          ";
 			$deps=mysql_query("SELECT name, id FROM faculte ORDER BY id",$db);
-			while ($dep = mysql_fetch_array($deps)) 
-			$tool_content .= "\n
-			    <option value=\"$dep[1]\">$dep[0]</option>
-			";
-			
-			$tool_content .= "</select></td></tr>
-       <tr>
+			while ($dep = mysql_fetch_array($deps))  { 
+				$tool_content .= "\n<option value=\"$dep[1]\">$dep[0]</option>";
+			}
+			$tool_content .= "</select></td></tr>";
+	
+	$tool_content .= "<tr><th class='left'>$langLanguage</th>
+      		<td width='1'>";
+	$tool_content .= lang_select_options('localize');
+	$tool_content .= "</td><td><small>$langTipLang2</small></td></tr>";
+
+       $tool_content .= "<tr>
          <th class='left'>&nbsp;</th>
          <td><input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\">
              <input type=\"hidden\" name=\"uname\" value=\"".$ldap_email."\">

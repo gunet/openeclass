@@ -128,7 +128,7 @@ if(isset($msg))
 			break;
 		}
 		case 5: {//username already exists
-			$message = $langUserTaken;
+			$message = $langUserFree;
 			$urlText = "";
 			$type = "caution_small";
 			break;

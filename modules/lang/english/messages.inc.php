@@ -572,6 +572,7 @@ $langConfTip="Select users course access.";
 $langOtherActions = "Other Actions";
 $langOptPassword = "Optional Password: ";
 $langTipLang="Choose the course language.";
+$langTipLang2="Choose the language of the platform.";
 $langNoCourseTitle = "You didn't type course title";
 
 // delete_course.php
@@ -2285,9 +2286,16 @@ $langSubmitNew = "Submit";
 $langInvalidAuth = "Invalid auth method";
 
 // newuser_second.php
-$langUserFree="This username is already taken. Use your browser's back button and choose another.";
+$langUserFree="This username is already taken!";
 $langYourReg="Your registration on";
+$langDear="Dear";
 $langYouAreReg="\nYou are registered on";
+$langSettings="created with success!\nYour account settings are:\n\nUser Name:";
+$langAddressOf="\n\nPlatform URL address";
+$langProblem="\nIn case of problems, contact with your Asynchronous Teleteaching Team";
+$langFormula="\n\nYours sincerely,\n";
+$langManager="\nAdministrator";
+
 $langIs="is";
 $langPersonalSettings="Your personnal settings have been registered and an email has been sent to help you remember your username and password.</p>";
 $langPersonalSettingsMore="Click <a href='../../index.php'>here</a> to navigate your User Portfolio.<br>
@@ -2298,13 +2306,11 @@ $langCanEnter="Enter the classroom";
 $langChoice="Choise";
 $langLessonName="Course Name";
 
-
 // profile.php
 $langModifProfile="Modify my profile";
 $langPassTwo="You have typed two different passwords";
 $langAgain="Try again!";
 $langFields="You left some fields empty";
-$langUserTaken="This username is already taken";
 $langProfileReg="Your new profile has been saved";
 $langHome="Back to Home Page";
 $langPassChanged="Your password has been modified";
@@ -2912,7 +2918,6 @@ $langContinue = "Continue";
 $langDear = "Dear";
 $langDelImage = "Remove picture";
 $langEmailWrong = "The email address is not valid";
-$langFormula = "Yours sincerely";
 $langGroupTutor = "Group Tutor";
 $langLastname = "Last name";
 $langLegendRequiredFields = "<span class=\"required\">*</span> denotes required field";
@@ -2924,7 +2929,6 @@ $langPassTwice = "You typed two different passwords";
 $langPeriodHourShort = "h.";
 $langPersonalCourseList = "Personal course list";
 $langPreview = "Preview";
-$langProblem = "In case of problems, contact us.";
 $langSaveChanges = "Save changes";
 $langTheSystemIsCaseSensitive = "The system is case sensitive.";
 $langUpdateImage = "Change picture";
@@ -3337,7 +3341,6 @@ $langNamesSurvey="Learning Profile Surveys";
 $langPollType="Type";
 $langPollCreate="Create Poll";
 $langNoCoursesAvailable="There are no available courses for registration";
-$langAddressOf="\n\nPlatform Address";
 $langRegDone="Your changes were guaranteed.";
 $langBackPage="to go back to home page";
 $mailsubject2 = "Request ".$langOfStudent." - Asynchronous Teleteaching Team";

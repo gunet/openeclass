@@ -50,7 +50,10 @@ if (isset($close_user_registration) and $close_user_registration == TRUE) {
         draw($tool_content,0);
 	exit;
  }
-
+// security check
+if (isset($_POST['localize'])) {
+	$language = preg_replace('/[^a-z]/', '', $_POST['localize']);
+}
 if ($language == 'greek')
 	$lang = 'el';
 elseif ($language == 'english')
@@ -100,11 +103,19 @@ if (!isset($submit)) {
     <th class='left'>$langDepartment</th>
 	<td colspan=\"2\"><select name=\"department\">";
 $deps=mysql_query("SELECT name, id FROM faculte ORDER BY id");
-while ($dep = mysql_fetch_array($deps))
-	$tool_content .= "\n	      <option value=\"".$dep[1]."\">".$dep[0]."</option>";
-$tool_content .= "\n	    </select>
+while ($dep = mysql_fetch_array($deps)) {
+	$tool_content .= "\n<option value=\"".$dep[1]."\">".$dep[0]."</option>";
+	}
+$tool_content .= "\n</select>
     </td>
   </tr>
+   <tr>
+      <th class='left'>$langLanguage</th>
+      <td width='1'>";
+	$tool_content .= lang_select_options('localize');
+	$tool_content .= "</td>
+      <td><small>$langTipLang2</small></td>
+    </tr>
   <tr>
     <th class='left'>&nbsp;</th>
     <td colspan=\"2\">
