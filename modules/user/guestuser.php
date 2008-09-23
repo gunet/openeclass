@@ -33,25 +33,12 @@ $navigation[] = array ("url"=>"user.php", "name"=> $langUsers);
 $tool_content = "";
 // IF PROF ONLY
 if($is_adminOfCourse) {
-	$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">
-        <li><a href=\"user.php\">$langBackUser</a></li>
-      </ul>
-    </div>";
-
 	if (isset($createguest) and (!guestid($currentCourseID)))
 	{
 		// encrypt the password
 		createguest($currentCourseID,md5($guestpassword));
 		$tool_content .= "
-    <table width=\"99%\">
-    <thead>
-    <tr>
-      <td class=\"success\">$langGuestSuccess</td>
-    </tr>
-    </thead>
-    </table>";
+    <p class=\"success_small\">$langGuestSuccess<br /><a href=\"user.php\">$langBackUser</a></p><br />";
 	} elseif (isset($changepass))
 	{
 		$g=guestid($currentCourseID);
@@ -61,24 +48,12 @@ if($is_adminOfCourse) {
 		$uguest=mysql_query("UPDATE user SET password='$guestpassword_encrypted' WHERE user_id='$g'")
 		or die($langGuestFail);
 		$tool_content .= "
-    <table width=\"99%\">
-    <thead>
-    <tr>
-      <td class=\"success\">$langGuestChange</td>
-    </tr>
-    </thead>
-    </table>";
+    <p class=\"success_small\">$langGuestChange<br /><a href=\"user.php\">$langBackUser</a></p><br />";
 	} else {
 		$id = guestid($currentCourseID);
 		if ($id) {
 		$tool_content .= "
-    <table width=\"99%\">
-    <thead>
-    <tr>
-      <td class=\"success\">$langGuestExist</td>
-    </tr>
-    </thead>
-    </table>";
+    <p class=\"caution_small\">$langGuestExist<br /><a href=\"user.php\">$langBackUser</a></p><br />";
 
 			$q1=mysql_query("SELECT nom,prenom,username FROM user where user_id='$id'");
 			$s=mysql_fetch_array($q1);
@@ -91,7 +66,7 @@ if($is_adminOfCourse) {
     <tr>
       <th width=\"220\">&nbsp;</th>
       <td><b>$langUserData</b></td>
-      <td align=\"right\"><small>$langAskGuest</small></td>
+      <td>&nbsp;</td>
     </tr>
     <tr>
       <th class=\"left\">$langName:</th>
@@ -111,7 +86,7 @@ if($is_adminOfCourse) {
     <tr>
       <th class=\"left\">$langPass:</th>
       <td><input type=\"text\" name=\"guestpassword\" value=\"\"  class=\"FormData_InputText\"></td>
-      <td align=\"right\"><small></small></td>
+      <td align=\"right\"><small>$langAskGuest</small></td>
     </tr>
     <tr>
       <th>&nbsp;</th>

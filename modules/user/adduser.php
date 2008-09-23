@@ -47,33 +47,19 @@ if (isset($add)) {
 
 		$tool_content .= "
 
-    <table width=\"99%\">
-    <thead>
-    <tr>
-      <td class=\"success\">";
+    <p class=\"success_small\">";
 	if ($result) {
 		$tool_content .=  "$langTheU $langAdded";
 	} else {
 		$tool_content .=  "$langAddError";
 	}
-		$tool_content .= "</td>
-    </tr>
-    </thead>
-    </table>";
+		$tool_content .= "<br /><a href=\"adduser.php\">$langAddBack</a></p><br />\n";
 
-	$tool_content .= "
-    <br><br>
-    <p align=\"right\"><a href=\"adduser.php\">$langAddBack</a></p>\n";
 } else {
-	$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">
-        <li><a href=\"user.php\">$langBackUser</a></li>
-      </ul>
-    </div>";
+
 $tool_content .= "
 
-    <form method='post' action='$_SERVER[PHP_SELF]'";
+    <form method='post' action='$_SERVER[PHP_SELF]'>";
 
 if(!isset($search_nom)) $search_nom = "";
 if(!isset($search_prenom)) $search_prenom = "";
@@ -84,28 +70,23 @@ $tool_content .= <<<tCont
     <tbody>
     <tr>
       <th width="220">&nbsp;</th>
-      <td><b>$langUserData</b></td>
-      <td align="justify"><small>$langAskUser</small></td>
+      <td>$langAskUser<br /><br /><b>$langUserData</b></td>
     </tr>
     <tr>
       <th class="left">$langSurname</th>
       <td><input type="text" name="search_nom" value="$search_nom" class="FormData_InputText"></td>
-      <td>&nbsp;</td>
     </tr>
 	<tr>
       <th class="left">$langName</th>
       <td><input type="text" name="search_prenom" value="$search_prenom" class="FormData_InputText"></td>
-      <td>&nbsp;</td>
     </tr>
 	<tr>
       <th class="left">$langUsername</th>
       <td><input type="text" name="search_uname" value="$search_uname" class="FormData_InputText"></td>
-      <td>&nbsp;</td>
     </tr>
     <tr>
       <th class="left">&nbsp;</th>
       <td><input type="submit" value="$langSearch"></td>
-      <td>&nbsp;</td>
     </tr>
 	</tbody>
 	</table>
@@ -138,11 +119,11 @@ tCont;
 			");
 		if (mysql_num_rows($result) == 0) {
 			$tool_content .= "
-    <p class=\"alert1\">$langNoUsersFound</p>\n";
+    <p class=\"caution_small\">$langNoUsersFound</p>\n";
 		} else {
 			$tool_content .= <<<tCont3
 
-    <table width=99%>
+    <table width=99% class="FormData">
     <tbody>
     <tr>
       <th class="right" width="2%">$langID</th>
@@ -179,7 +160,7 @@ tCont3;
 		db_query("DROP TABLE lala");
 	} else {
     $tool_content .= "
-    <p class=\"alert1\">$langNoUsersFound</p>";
+    <p class=\"caution_small\">$langNoUsersFound</p>";
     }
 
 	}

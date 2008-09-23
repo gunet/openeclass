@@ -61,10 +61,9 @@ if ($is_adminOfCourse)  {
 				$tool_content .= "<h4>$langMailError</h4>";
 			}
 		}
-		$tool_content .= "<table width=\"99%\"><thead>
-    		<tr><td class=\"success\">$langEmailSuccess</td></tr>
-    		</thead></table><br />";
-		$tool_content .= "<p align=\"right\"><a href=\"group.php\">$langBack</a></p>";
+		$tool_content .= "<p class=\"success_small\">$langEmailSuccess<br />";
+		$tool_content .= "<a href=\"group.php\">$langBack</a></p>";
+		$tool_content .= "<p>&nbsp;</p>";
 	} else {
 
 		$tool_content .= <<<tCont

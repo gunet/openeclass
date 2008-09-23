@@ -21,31 +21,26 @@ td.highlight a:hover {
     text-decoration: underline;
 }
 
+.UsersHead {
+  background: #edecdf;
+  text-align: center !important;
+  font-weight: bold;
+  font-size: 10px !important; 
+}
+
+
 table.NavUsers{
     padding: 2px;
     vertical-align: middle;
-    border-top: 1px solid #edecdf;
-    border-bottom: 1px solid #edecdf;
-    border-left: 1px solid #edecdf;
-    border-right: 1px solid #edecdf;
+    border-top: 1px solid #CAC3B5;
+    border-bottom: 1px solid #CAC3B5;
+    border-left: 1px solid #CAC3B5;
+    border-right: 1px solid #CAC3B5;
     }
-
-table.NavUser thead{
-	padding: 2px;
-	vertical-align: middle;
-	border-top: 1px solid #CAC3B5;
-	border-bottom: 1px solid #CAC3B5;
-	border-left: 1px solid #edecdf;
-	border-right: 1px solid #edecdf;
-}
 
 table.NavUser tbody{
     padding: 2px;
     vertical-align: middle;
-    border-top: 1px solid #edecdf;
-    border-bottom: 1px solid #CAC3B5;
-    border-left: 1px solid #edecdf;
-    border-right: 1px solid #edecdf;
 }
 
 table.NavUser th{
@@ -55,15 +50,16 @@ table.NavUser th{
 	padding-top: 6px;
 	font-weight: bold;
 	font-size:10px !important;
-	vertical-align: middle;
-	background : #fbfbfb;
+	background : #edecdf;
+    border-bottom: 1px dotted #CAC3B5;
+    border-top: 0px dotted #CAC3B5;
 }
 
 table.NavUser td {
 	color: #727266;
 	vertical-align: top;
-	background : #fbfbfb;
 	padding : 5px 4px 4px 4px;
+    border-bottom: 1px dotted #CAC3B5;
 }
 
 

@@ -16,6 +16,14 @@
     float: left;
     }
 
+.GroupHead {
+  background: #edecdf;
+  text-align: center !important;
+  font-weight: bold;
+  font-size: 10px !important;
+}
+
+
 .Group_Operations {
     background: #CAC3B5;
     font-size: 11px;

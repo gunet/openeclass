@@ -266,6 +266,11 @@ while ($myMember = mysql_fetch_array($resultMember))
 }
 
 //========================================================================
+	if (isset($message)) {
+		$tool_content .= "
+        <p class=\"success_small\">$message</p>
+        <p>&nbsp;</p>";
+	}
 		$tool_content .= "
     <div id=\"operations_container\">
       <ul id=\"opslist\">
@@ -274,17 +279,7 @@ while ($myMember = mysql_fetch_array($resultMember))
       </ul>
     </div>";
 
-	if (isset($message)) {
-		$tool_content .= "
-    <table width=\"99%\">
-    <thead>
-    <tr>
-      <td class=\"success\">$message</td>
-    </tr>
-    </thead>
-    </table>
-    ";
-	}
+
 $tool_content .="
   <form name= \"groupedit\" method=\"POST\" action=\"".$_SERVER['PHP_SELF']."?edit=yes&userGroupId=$userGroupId\">
     <br />

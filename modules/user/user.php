@@ -88,13 +88,11 @@ if ($is_adminOfCourse) {
     </tr>
     </thead>
     </table>
-	<br />
-    <br />
-    ";
+	<br /><br /><br />";
 
 	// display number of users
 $tool_content .= "
-    <table width=\"99%\">
+    <table width=\"99%\" class=\"FormData\" style=\"border: 1px solid #CAC3B5;\">
     <tbody>
     <tr>
       <td class=\"odd\">
@@ -228,27 +226,27 @@ if ($countUser>=$endList) {
 }	// Show navigation buttons
 
 $tool_content .= "
-   <table width=99% class=\"NavUser\">
+   <table width=99% class=\"FormData\" style=\"border: 1px solid #CAC3B5;\">
    <thead>
-   <tr>
-     <td width=\"2%\" rowspan=\"2\" align=\"right\"><div align=\"right\"><b>$langID</b></div></td>
-     <td scope=\"col\" width=\"120\" rowspan=\"2\"><div align=\"left\"><b>$langSurname<br>$langName</b></div></td>";
+   <tr class=\"odd\">
+     <td rowspan=\"2\" class=\"UsersHead\">$langID</td>
+     <td rowspan=\"2\" class=\"UsersHead\"><div align=\"left\">$langSurname<br>$langName</div></td>";
 
 if(isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2))  {
 	$tool_content .="
-     <td scope=\"col\" width=\"100\" rowspan=\"2\"><div align=\"center\"><b>$langEmail</b></div></td>";
+     <td rowspan=\"2\" class=\"UsersHead\">$langEmail</td>";
 }
 
 $tool_content .= "
-     <td scope=\"col\" width=\"60\" rowspan=\"2\"><div align=\"center\"><b>$langAm</b></div></td>
-     <td scope=\"col\" width=\"60\" rowspan=\"2\"><div align=\"center\"><b>$langGroup</b></div></td>
-     <td scope=\"col\" width=\"60\" rowspan=\"2\"><div align=\"center\"><b>$langCourseRegistrationDate</b></div></td>";
+     <td rowspan=\"2\" class=\"UsersHead\">$langAm</td>
+     <td rowspan=\"2\" class=\"UsersHead\">$langGroup</td>
+     <td rowspan=\"2\" class=\"UsersHead\">$langCourseRegistrationDate</td>";
 
 // show admin tutor and unregister only to admins
 if (isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2)) {
 	$tool_content .= "
-     <td scope=\"col\" width=\"60\" colspan=\"2\"><div align=\"center\"><b>$langUserPermitions</b></div></td>
-     <td scope=\"col\" width=\"50\" rowspan=\"2\"><div align=\"center\"><b>$langActions</b></div></td>";
+     <td colspan=\"2\" class=\"UsersHead\">$langUserPermitions</td>
+     <td rowspan=\"2\" class=\"UsersHead\">$langActions</td>";
 }
 
 $tool_content .= "
@@ -257,14 +255,11 @@ $tool_content .= "
 if (isset($status) && ($status[$currentCourseID]==1 OR $status[$currentCourseID]==2)) {
 	$tool_content .= "
   <tr>
-     <td scope=\"col\" width=\"60\"><div align=\"center\"><b>$langTutor</b></div></td>
-     <td scope=\"col\" width=\"60\"><div align=\"center\"><b>$langAdministrator</b></div></td>
+     <td class=\"UsersHead\">$langTutor</td>
+     <td class=\"UsersHead\">$langAdministrator</td>
   </tr>";
 }
 
-$tool_content .= "
-   </thead>
-   <tbody>";
 $result = mysql_query("SELECT user.user_id, user.nom, user.prenom, user.email, user.am, cours_user.statut,
 		cours_user.tutor, cours_user.reg_date, user_group.team
 		FROM `$mysqlMainDb`.cours_user, `$mysqlMainDb`.user
@@ -272,6 +267,9 @@ $result = mysql_query("SELECT user.user_id, user.nom, user.prenom, user.email, u
 		ON user.user_id=user_group.user
 		WHERE `user`.`user_id`=`cours_user`.`user_id` AND `cours_user`.`code_cours`='$currentCourseID'
 		ORDER BY nom, prenom LIMIT $startList, $endList", $db);
+		$tool_content .= "
+   </thead>
+   </tbody>";
 
 while ($myrow = mysql_fetch_array($result)) {
 	// bi colored table

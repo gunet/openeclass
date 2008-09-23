@@ -229,6 +229,15 @@ while ($myTutor = mysql_fetch_array($sqlTutor)) {
 
 if ($is_adminOfCourse) {
 
+	// Show DB messages
+	if(isset($message))
+	{
+		$tool_content .= "
+      <p class=\"success_small\">$message</p><br />";
+	}
+	unset($message);
+
+
 	$tool_content .= "
     <table width=\"99%\" align=\"left\" class=\"Group_Operations\">
     <thead>
@@ -242,7 +251,7 @@ if ($is_adminOfCourse) {
     </tr>
     </thead>
     </table>
-	<br /><br />
+	<br /><br /><br />
     ";
 	/*
 	$tool_content .= "
@@ -255,35 +264,15 @@ if ($is_adminOfCourse) {
 	</ul></div>
 	<br />";
 	*/
-	// Show DB messages
-	if(isset($message))
-	{
-		$tool_content .= "
-
-    <table width=\"99%\">
-    <thead>
-    <tr>
-      <td class=\"success\">$message</td>
-    </tr>
-    </thead>
-    </table>
-    ";
-	}
-	unset($message);
-
-
 
 	// ---------- display properties ------------------------
 	$tool_content .= <<<tCont3
 
-    <br />
-    <table class="GroupSum" width=\"99%\">
-    <thead>
-    <tr>
+    <table class="FormData" width="99%" style="border: 1px solid #CAC3B5;">
+    <tbody>
+    <tr class="odd">
       <td colspan="2" class="right"><a href="group_properties.php">$langPropModify</a> <img src="../../template/classic/img/edit.gif" border="0" title="'.$langEdit.'"></td>
     </tr>
-    </thead>
-    <tbody>
     <tr>
       <td><b>$langGroupsProperties</b></td>
       <td align="right"><b>$langGroupAccess</b></td>
@@ -369,21 +358,19 @@ tCont3;
 		$tool_content .= "
 
     <br />
-    <table width=\"99%\">
-    <thead>
+    <table width=\"99%\" align=\"left\" class=\"FormData\" style=\"border: 1px solid #CAC3B5;\">
+    <tbody>
     <tr>
-      <th colspan=\"2\"><div align=\"left\">$langExistingGroups</div></th>
-      <th width=\"80\">$langRegistered</th>
-      <th width=\"80\">$langMax</th>
-      <th width=\"50\">$langEdit</th>
-      <th width=\"50\">$langDelete</th>
-    </tr>
-    </thead>
-    <tbody>";
+      <td colspan=\"2\" class=\"GroupHead\"><div align=\"left\">$langGroupName</div></td>
+      <td width=\"80\" class=\"GroupHead\">$langRegistered</td>
+      <td width=\"80\" class=\"GroupHead\">$langMax</td>
+      <td width=\"50\" class=\"GroupHead\">$langEdit</td>
+      <td width=\"50\" class=\"GroupHead\">$langDelete</td>
+    </tr>";
 	} else {
 	$tool_content .= "
-    <br />
-    <div class=\"alert1\">$langNoGroup</div>";
+    <p>&nbsp;</p>
+    <p class=\"caution_small\">$langNoGroup</p>";
 	}
 
 	while ($group = mysql_fetch_array($groupSelect))
@@ -400,7 +387,7 @@ tCont3;
     <tr class=\"odd\">";
 		}
 		$tool_content .= "
-      <td width=\"2%\"><img src=\"../../template/classic/img/bullet_bw.gif\" alt=\"bullet\" title=\"bullet\" border=\"0\"></td>
+      <td width=\"2%\"><img src=\"../../template/classic/img/arrow_grey.gif\" alt=\"bullet\" title=\"bullet\" border=\"0\"></td>
       <td><div align=\"left\"><a href=\"group_space.php?userGroupId=".$group["id"]."\">".$group["name"]."</a></div></td>
       <td><div class=\"cellpos\">".$countRegistered."</div></td>";
 		if ($group['maxStudent']==0) {
@@ -423,18 +410,15 @@ tCont3;
 		AND statut=5 AND tutor=0", $mysqlMainDb);
 	$countUsers = mysql_num_rows($coursUsersSelect);
 	$countNoGroup=($countUsers-$totalRegistered);
-	$tool_content .= <<<tCont4
+	$tool_content .= "
 
     </tbody>
     </table>
-    <br />
-
-
-tCont4;
+    <p>&nbsp;</p>";
 
 $tool_content .= "
 
-    <table width=\"99%\">
+    <table width=\"99%\" class=\"FormData\" style=\"border: 1px solid #CAC3B5;\">
     <tbody>
     <tr>
       <td class=\"odd\">
@@ -444,8 +428,7 @@ $tool_content .= "
       </td>
     </tr>
     </tbody>
-    </table>
-    \n";
+    </table>\n";
 
 }	// end prof only
 
