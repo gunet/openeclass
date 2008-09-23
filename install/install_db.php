@@ -269,6 +269,7 @@ mysql_query("CREATE TABLE `prof_request` (
         `date_open` datetime default NULL,
         `date_closed` datetime default NULL,
         `comment` text default NULL,
+	`lang` ENUM( 'el', 'en' ) NOT NULL DEFAULT 'el',
 	`statut`  tinyint(4) NOT NULL default 1,
         PRIMARY KEY  (`rid`))
         TYPE=MyISAM $charset_spec");

@@ -19,9 +19,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 
@@ -215,7 +215,7 @@ if (!empty($show) && ($show=="closed")) {
     $k = 0;
 	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 		$req = mysql_fetch_array($sql);
-				if ($k%2==0) {
+			if ($k%2==0) {
 	              $tool_content .= "\n  <tr>";
 	            } else {
 	              $tool_content .= "\n  <tr class=\"odd\">";
@@ -361,11 +361,11 @@ else
   </thead>
   <tbody>";
 
- 	$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,comment,profpassword
+ 	$sql = db_query("SELECT rid,profname,profsurname,profuname,profemail,proftmima,profcomm,date_open,comment,profpassword, lang
 		FROM prof_request WHERE (status='1' AND statut<>'5')");
 
     $k = 0;
-	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
+	for ($j = 0; $j < mysql_num_rows($sql) ; $j++) {
 		$req = mysql_fetch_array($sql);
 				if ($k%2==0) {
 	              $tool_content .= "\n  <tr>";
@@ -374,7 +374,7 @@ else
 	            }
 	    $tool_content .= "\n    <td align=\"right\" width=\"1\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
 		$tool_content .= "\n    <td>".htmlspecialchars($req[1])."&nbsp;".htmlspecialchars($req[2])."</td>";
-		for ($i = 3; $i < mysql_num_fields($sql)-3; $i++) {
+		for ($i = 3; $i < mysql_num_fields($sql)-4; $i++) {
 			if ($i == 4 and $req[$i] != "") {
 				$tool_content .= "\n    <td><a href=\"mailto:".
 				htmlspecialchars($req[$i])."\">".
@@ -386,7 +386,6 @@ else
 		$tool_content .= "\n    <td align=\"center\"><small>".nice_format(date("Y-m-d", strtotime($req[7])))."</small></td>";
 		$tool_content .= "\n    <td align=\"center\">$req[8]</td>";
 		$tool_content .= "\n    <td align=center><a href='listreq.php?id=$req[rid]&close=1' onclick='return confirmation();'>$langClose</a><br /><a href='listreq.php?id=$req[rid]&close=2'>$langRejectRequest</a>";
-
 		switch($req['profpassword']) {
 			case 'ldap': $tool_content .= "<br /><a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid']).
 				"&pn=".urlencode($req['profname']).
@@ -394,6 +393,7 @@ else
 				"&pu=".urlencode($req['profuname']).
 				"&pe=".urlencode($req['profemail']).
 				"&pt=".urlencode($req['proftmima']).
+				"&lang=".$req['lang'].
 				"&auth=4'>$langRegistration<br />($langViaLdap)</td>\n  </tr>";
         break;
       case 'pop3': $tool_content .= "<br><a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid']).
@@ -402,7 +402,8 @@ else
                                       "&pu=".urlencode($req['profuname']).
                                       "&pe=".urlencode($req['profemail']).
                                       "&pt=".urlencode($req['proftmima']).
-																			"&auth=2'>$langRegistration<br>($langViaPop)</td>\n  </tr>";
+				      "&lang=".$req['lang'].
+				"&auth=2'>$langRegistration<br>($langViaPop)</td>\n  </tr>";
         break;
       case 'imap': $tool_content .= "<br><a href='../auth/ldapnewprofadmin.php?id=".urlencode($req['rid']).
                                       "&pn=".urlencode($req['profname']).
@@ -410,6 +411,7 @@ else
                                       "&pu=".urlencode($req['profuname']).
                                       "&pe=".urlencode($req['profemail']).
                                       "&pt=".urlencode($req['proftmima']).
+				      "&lang=".$req['lang'].
 				"&auth=3'>$langRegistration<br>($langViaImap)</td>\n  </tr>";
         break;
       default:  $tool_content .= "<br><a href='../auth/newprofadmin.php?id=".urlencode($req['rid']).
@@ -418,7 +420,7 @@ else
                       "&pu=".urlencode($req['profuname']).
                       "&pe=".urlencode($req['profemail']).
                       "&pt=".urlencode($req['proftmima']).
-                      "'>$langRegistration</a></td>\n  </tr>";
+                      "&lang=".$req['lang']."'>$langRegistration</a></td>\n  </tr>";
         break;
 		}
 		$k++;

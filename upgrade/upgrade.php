@@ -284,6 +284,9 @@ if (!isset($submit2)) {
         $exp = 126144000 + $reg;
         if (!mysql_field_exists($mysqlMainDb,'prof_request','profpassword'))
                 echo add_field('prof_request','profpassword',"VARCHAR(255)");
+        if (!mysql_field_exists($mysqlMainDb,'prof_request','lang'))
+		echo add_field('prof_request','lang',"ENUM( 'el', 'en' ) NOT NULL DEFAULT 'el'");
+
         // Add 2 new fields into table 'user': registered_at,expires_at
         if (!mysql_field_exists($mysqlMainDb,'user','registered_at'))
                 echo add_field('user', 'registered_at', "INT(10) DEFAULT $reg NOT NULL");

@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 include '../../include/baseTheme.php';
@@ -31,6 +31,16 @@ $navigation[] = array("url"=>"registration.php", "name"=> $langNewUser);
 
 // Initialise $tool_content
 $tool_content = "";
+
+// security check
+if (isset($_POST['localize'])) {
+	$language = preg_replace('/[^a-z]/', '', $_POST['localize']);
+}
+if ($language == 'greek')
+	$lang = 'el';
+elseif ($language == 'english')
+	$lang = 'en';
+
 
 $auth = get_auth_id();
 
@@ -43,7 +53,6 @@ if (!isset($submit)) {
 <thead>
 <tr>
   <td>
-
   <table width=\"99%\" class='FormData' align='left'>
   <thead>
   <tr>
@@ -61,10 +70,6 @@ if (!isset($submit)) {
   <tr>
     <th class='left'>$langUsername</th>
     <td><input size='35' type=\"text\" name=\"uname\" value=\"$uname\" class='FormData_InputText'>&nbsp;&nbsp;<small>(*)</small></td>
-  </tr>
-  <tr>
-    <th class='left'>$langPass</th>
-    <td><input size='35' type=\"text\" name=\"password\" value=\"".create_pass(5)."\" class='FormData_InputText'>&nbsp;&nbsp;<small>(*)</small></td>
   </tr>
   <tr>
     <th class='left'>$langEmail</th>
@@ -85,6 +90,12 @@ if (!isset($submit)) {
         $tool_content .= "</select>
     </td>
   </tr>
+<tr>
+      <th class='left'>$langLanguage</th>
+      <td>";
+	$tool_content .= lang_select_options('localize');
+	$tool_content .= "</td>
+    </tr>
   <tr>
     <th>&nbsp;</th>
     <td>
@@ -110,8 +121,8 @@ if (!isset($submit)) {
 $registration_errors = array();
 
     // check if there are empty fields
-    if (empty($nom_form) or empty($prenom_form) or empty($userphone) or empty($password)
-				or empty($usercomment) or empty($uname) or (empty($email_form))) {
+    if (empty($nom_form) or empty($prenom_form) or empty($userphone)
+	 or empty($usercomment) or empty($uname) or (empty($email_form))) {
       $registration_errors[]=$langEmptyFields;
 	   }
 
@@ -142,9 +153,8 @@ if (count($registration_errors) == 0) {    // registration is ok
       $name = $prenom_form;
 
 	mysql_select_db($mysqlMainDb,$db);
-      $sql = "INSERT INTO prof_request(profname,profsurname,profuname,profpassword,
-      profemail,proftmima,profcomm,status,date_open,comment) VALUES(
-      '$name','$surname','$username','$password','$usermail','$department','$userphone','1',NOW(),'$usercomment')";
+      $sql = "INSERT INTO prof_request(profname,profsurname,profuname, profemail,proftmima,profcomm,status,date_open,comment, lang) VALUES(
+      '$name','$surname','$username','$usermail','$department','$userphone','1',NOW(),'$usercomment','$lang')";
       $upd=mysql_query($sql,$db);
       //----------------------------- Email Message --------------------------
         $MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" . $mailbody3
@@ -152,14 +162,12 @@ if (count($registration_errors) == 0) {    // registration is ok
         . "$langProfUname : $username\n$langProfEmail : $usermail\n" . "$contactphone : $userphone\n\n\n$logo\n\n";
     if (!send_mail($gunet, $emailhelpdesk, '', $emailhelpdesk, $mailsubject, $MailMessage, $charset))
       {
-        $tool_content .= "
-	  	  <table width=\"99%\">
-  	  	<tbody>
-		    <tr>
+        $tool_content .= "<table width=\"99%\">
+  	  <tbody><tr>
     	  <td class=\"caution\" height='60'>
       	<p>$langMailErrorMessage &nbsp; <a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></p>
-		    </td>
-    		</tr></tbody></table>";
+	</td>
+    	</tr></tbody></table>";
         draw($tool_content,0);
         exit();
       }
@@ -181,7 +189,7 @@ if (count($registration_errors) == 0) {    // registration is ok
                         $tool_content .= "<p>$error</p>";
                 }
 	       $tool_content .= "<p><a href='$_SERVER[PHP_SELF]?prenom_form=$_POST[prenom_form]&nom_form=$_POST[nom_form]&userphone=$_POST[userphone]&uname=$_POST[uname]&email_form=$_POST[email_form]&usercomment=$_POST[usercomment]'>$langAgain</a></p>" .
-                                 "</td></tr></tbody></table><br /><br />";
+                "</td></tr></tbody></table><br /><br />";
 	}
 
 } // end of submit

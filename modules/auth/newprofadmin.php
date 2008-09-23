@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 $require_admin = TRUE;
@@ -30,9 +30,10 @@ $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 
 // Initialise $tool_content
 $tool_content = "";
+
 $submit = isset($_POST['submit'])?$_POST['submit']:'';
-if($submit)
-{
+if($submit) {
+		
 	// register user
 	$nom_form = isset($_POST['nom_form'])?$_POST['nom_form']:'';
 	$prenom_form = isset($_POST['prenom_form'])?$_POST['prenom_form']:'';
@@ -40,16 +41,12 @@ if($submit)
 	$password = isset($_POST['password'])?$_POST['password']:'';
 	$email_form = isset($_POST['email_form'])?$_POST['email_form']:'';
 	$department = isset($_POST['department'])?$_POST['department']:'';
+	$localize = isset($_POST['localize'])?$_POST['localize']:'';
+	if ($localize == 'greek')
+		$lang = 'el';
+	elseif ($localize == 'english')
+		$lang = 'en';
 
-	// do not allow the user to have the characters: ',\" or \\ in username
-
-	if ((strstr($uname, "'")) or (strstr($uname, '"')) or (strstr($uname, '\\')))
-	{
-		$tool_content .= "<p class=\"caution_small\">$langCharactersNotAllowed</p><br /><br />
-		<p align=\"right\"><a href='$_SERVER[PHP_SELF]'>".$langAgain."</a></p>";
-	}
-	else	// do the other checks
-	{
 		// check if user name exists
 		$username_check=mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='".escapeSimple($uname)."'");
 		while ($myusername = mysql_fetch_array($username_check))
@@ -67,10 +64,10 @@ if($submit)
 		{
 			$tool_content .= "<p class=\"caution_small\">$langUserFree</p>
 			<br><br><p align=\"right\"><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
-	  }
+	  	}
 		elseif(!email_seems_valid($email_form)) // check if email syntax is valid
 		{
-      $tool_content .= "<p class=\"caution_small\">$langEmailWrong.</p>
+      			$tool_content .= "<p class=\"caution_small\">$langEmailWrong.</p>
 			<br><br><p align=\"right\"><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
 		}
 		else
@@ -82,19 +79,26 @@ if($submit)
 			$password_encrypted = md5($password);
 			$uname = escapeSimple($uname);
 			$inscr_user=mysql_query("INSERT INTO `$mysqlMainDb`.user
-				(user_id, nom, prenom, username, password, email, statut, department, registered_at, expires_at)
-				VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email_form','$statut','$dep[id]', '$registered_at', '$expires_at')");
+				(user_id, nom, prenom, username, password, email, statut, department, registered_at, expires_at,lang)
+				VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email_form','$statut','$dep[id]', '$registered_at', '$expires_at', '$lang')");
 			$last_id=mysql_insert_id();
 
 		// close request
-	  $rid = intval($_POST['rid']);
-  	  db_query("UPDATE prof_request set status = '2',date_closed = NOW() WHERE rid = '$rid'");
-	       $tool_content .= "<p class=\"success_small\">$profsuccess</p><br><br><p align=\"right\"><a href='../admin/listreq.php'>$langBackReq</a></p>";
+	  	$rid = intval($_POST['rid']);
+  	  	db_query("UPDATE prof_request set status = '2',date_closed = NOW() WHERE rid = '$rid'");
+	       	$tool_content .= "<p class=\"success_small\">$profsuccess</p><br><br><p align=\"right\"><a href='../admin/listreq.php'>$langBackReq</a></p>";
 		}
-	}
+} else {
+
+// if not submit then display the form
+if (isset($_GET['lang'])) {
+	$lang = $_GET['lang'];
+	if ($lang == 'el')
+		$language = 'greek';
+	elseif ($lang == 'en')
+		$language = 'english';
 }
-else
-{
+
 $tool_content .= "
     <form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
     <table width=\"99%\" align=\"left\" class=\"FormData\">
@@ -129,10 +133,16 @@ $tool_content .= "
         $deps=mysql_query("SELECT name FROM faculte order by id");
         while ($dep = mysql_fetch_array($deps))
         {
-        	$tool_content .= "      <option value=\"$dep[0]\">$dep[0]</option>\n";
+        	$tool_content .= "<option value=\"$dep[0]\">$dep[0]</option>\n";
         }
-        $tool_content .= "      </select>
+        $tool_content .= "</select>
       </td>
+    </tr>
+	<tr>
+      <th class='left'>$langLanguage</th>
+      <td>";
+	$tool_content .= lang_select_options('localize');
+	$tool_content .= "</td>
     </tr>
     <tr>
       <th>&nbsp;</th>

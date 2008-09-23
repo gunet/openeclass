@@ -18,12 +18,12 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
-/**===========================================================================
+/*===========================================================================
 	ldapsearch.php
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
@@ -44,6 +44,15 @@ $navigation[]= array ("url"=>"registration.php", "name"=> "$langNewUser");
 $navigation[]= array ("url"=>"ldapnewprof.php", "name"=> "$langConfirmUser");
 
 $tool_content = "";
+// security check
+if (isset($_POST['localize'])) {
+	$language = preg_replace('/[^a-z]/', '', $_POST['localize']);
+}
+if ($language == 'greek')
+	$lang = 'el';
+elseif ($language == 'english')
+	$lang = 'en';
+
 $auth = get_auth_id();
 
 // for security
@@ -71,31 +80,31 @@ if(!empty($is_submit)) {
 	{
 		// try to authenticate user
 		$auth_method_settings = get_auth_settings($auth);		// get the settings of the authentication method defined
-		switch($auth)			// now get the connection settings
+		switch($auth)		// now get the connection settings
 		{
-			case '2':	$pop3host = str_replace("pop3host=","",$auth_method_settings['auth_settings']);
-							break;
-			case '3':	$imaphost = str_replace("imaphost=","",$auth_method_settings['auth_settings']);
-							break;
-			case '4':	$ldapsettings = $auth_method_settings['auth_settings'];
-					    $ldap = explode("|",$ldapsettings);
-					    $ldaphost = str_replace("ldaphost=","",$ldap[0]);	//ldaphost
-					    $ldapbind_dn = str_replace("ldapbind_dn=","",$ldap[1]);	//ldapbase_dn
-					    $ldapbind_user = str_replace("ldapbind_user=","",$ldap[2]);	//ldapbind_user
-					    $ldapbind_pw = str_replace("ldapbind_pw=","",$ldap[3]);		// ldapbind_pw
-							break;
-			case '5':	$dbsettings = $auth_method_settings['auth_settings'];
-    					$edb = explode("|",$dbsettings);
-    					$dbhost = str_replace("dbhost=","",$edb[0]);	//dbhost
-    					$dbname = str_replace("dbname=","",$edb[1]);	//dbname
-    					$dbuser = str_replace("dbuser=","",$edb[2]);//dbuser
-    					$dbpass = str_replace("dbpass=","",$edb[3]);// dbpass
-					    $dbtable = str_replace("dbtable=","",$edb[4]);//dbtable
-					    $dbfielduser = str_replace("dbfielduser=","",$edb[5]);//dbfielduser
-					    $dbfieldpass = str_replace("dbfieldpass=","",$edb[6]);//dbfieldpass
-							break;
+			case '2':$pop3host = str_replace("pop3host=","",$auth_method_settings['auth_settings']);
+				break;
+			case '3':$imaphost = str_replace("imaphost=","",$auth_method_settings['auth_settings']);
+				break;
+			case '4':$ldapsettings = $auth_method_settings['auth_settings'];
+				    $ldap = explode("|",$ldapsettings);
+				    $ldaphost = str_replace("ldaphost=","",$ldap[0]);	//ldaphost
+				    $ldapbind_dn = str_replace("ldapbind_dn=","",$ldap[1]);	//ldapbase_dn
+				    $ldapbind_user = str_replace("ldapbind_user=","",$ldap[2]);	//ldapbind_user
+				    $ldapbind_pw = str_replace("ldapbind_pw=","",$ldap[3]);		// ldapbind_pw
+				break;
+			case '5':$dbsettings = $auth_method_settings['auth_settings'];
+    				$edb = explode("|",$dbsettings);
+    				$dbhost = str_replace("dbhost=","",$edb[0]);	//dbhost
+    				$dbname = str_replace("dbname=","",$edb[1]);	//dbname
+    				$dbuser = str_replace("dbuser=","",$edb[2]);//dbuser
+    				$dbpass = str_replace("dbpass=","",$edb[3]);// dbpass
+				    $dbtable = str_replace("dbtable=","",$edb[4]);//dbtable
+				    $dbfielduser = str_replace("dbfielduser=","",$edb[5]);//dbfielduser
+				    $dbfieldpass = str_replace("dbfieldpass=","",$edb[6]);//dbfieldpass
+				break;
 			default:
-							break;
+				break;
 			}
 		$is_valid = auth_user_login($auth,$ldap_email,$ldap_passwd);
 	}	
@@ -147,7 +156,12 @@ if ($is_valid) { // connection successful
 		        $tool_content .= "<option value=\"$dep[0]\">$dep[0]</option>\n";
         }
         $tool_content .= "</select></td>
-	       </tr>	
+	       </tr>
+	<tr>
+      	<th class='left'>$langLanguage</th>
+      	<td>";
+	$tool_content .= lang_select_options('localize');
+	$tool_content .= "</td></tr>	
   	     <tr>
          <th class='left'>&nbsp;</th>
          <td><input type=\"submit\" name=\"submit\" value=\"".$langRegistration."\">
@@ -205,11 +219,10 @@ if (isset($submit))  {
 
 			mysql_select_db($mysqlMainDb,$db);
       $sql = "INSERT INTO prof_request(profname,profsurname,profuname,profpassword,
-      profemail,proftmima,profcomm,status,date_open,comment) VALUES(
-      '$name','$surname','$username','$password','$usermail','$department','$userphone','1',NOW(),'$usercomment')";
+      profemail,proftmima,profcomm,status,date_open,comment,lang) VALUES(
+      '$name','$surname','$username','$password','$usermail','$department','$userphone','1',NOW(),'$usercomment', '$lang')";
       $upd=mysql_query($sql,$db);
-      
-			//----------------------------- email message --------------------------
+	//----------------------------- email message --------------------------
         $MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" . $mailbody3
         . $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langDepartment: $department\n$langComments: $usercomment\n"
         . "$langProfUname : $username\n$langProfEmail : $usermail\n" . "$contactphone : $userphone\n\n\n$logo\n\n";

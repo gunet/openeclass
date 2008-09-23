@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 /*===========================================================================
@@ -47,7 +47,7 @@ $navigation[] = array("url" => "../admin/listreq.php", "name" => $langOpenProfes
 $tool_content = "";
 
 // -----------------------------------------
-// 				professor registration
+// 		professor registration
 // -----------------------------------------
 
 if (isset($submit))  {
@@ -56,19 +56,26 @@ if (isset($submit))  {
       $ps = $_POST['ps'];
       $pu = $_POST['pu'];
       $pe = $_POST['pe'];
-			$department = $_POST['department'];
+      $department = $_POST['department'];
+	
+	$localize = isset($_POST['localize'])?$_POST['localize']:'';
+	if ($localize == 'greek')
+		$lang = 'el';
+	elseif ($localize == 'english')
+		$lang = 'en';
 
-		// check if user name exists
+	// check if user name exists
     	$username_check=mysql_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='".escapeSimple($pu)."'");
-	    while ($myusername = mysql_fetch_array($username_check))
+	 while ($myusername = mysql_fetch_array($username_check))
   	  {
-    	  $user_exist=$myusername[0];
-	    }
-	  	if(isset($user_exist) and $pu == $user_exist) {
-	  	   $tool_content .= "<p class=\"caution_small\">$langUserFree</p><br><br><p align=\"right\"><a href='../admin/listreq.php'>$langBackReq</a></p>";
-				 draw($tool_content,0,'auth');
-		     exit();
-	    }
+    	 	 $user_exist=$myusername[0];
+	  }
+	
+	if(isset($user_exist) and $pu == $user_exist) {
+	     $tool_content .= "<p class=\"caution_small\">$langUserFree</p><br><br><p align=\"right\"><a href='../admin/listreq.php'>$langBackReq</a></p>";
+		 draw($tool_content,0,'auth');
+	     exit();
+	}
 
         switch($auth)
         {
@@ -85,16 +92,15 @@ if (isset($submit))  {
         }
 
 	$registered_at = time();
-    $expires_at = time() + $durationAccount;
+        $expires_at = time() + $durationAccount;
 
-		$sql=db_query("INSERT INTO user (user_id, nom, prenom, username, password, email, statut, department, registered_at, expires_at)
-       VALUES ('NULL', '$pn', '$ps', '$pu', '$password', '$pe','1','$department', '$registered_at', '$expires_at')", $mysqlMainDb);
+	$sql=db_query("INSERT INTO user (user_id, nom, prenom, username, password, email, statut, department, registered_at, expires_at, lang)
+       VALUES ('NULL', '$pn', '$ps', '$pu', '$password', '$pe','1','$department', '$registered_at', '$expires_at', '$lang')", $mysqlMainDb);
 
 	// close request
       //  Update table prof_request ------------------------------
       $rid = intval($_POST['rid']);
       db_query("UPDATE prof_request set status = '2',date_closed = NOW() WHERE rid = '$rid'");
-
 		$emailbody = "$langDestination $pu $ps\n" .
                                 "$langYouAreReg $siteName $langSettings $pu\n" .
                                 "$langPass: $password\n$langAddress $siteName: " .
@@ -117,14 +123,23 @@ if (isset($submit))  {
     $tool_content .= "<table width=\"99%\"><tbody>
       <tr>
       <td class=\"well-done\" height='60'>
-		<p>$profsuccess</p><br><br>
-		<center><p><a href='../admin/listreq.php'>$langBackReq</a></p></center>
+	<p>$profsuccess</p><br><br>
+	<center><p><a href='../admin/listreq.php'>$langBackReq</a></p></center>
       </td>
       </tr></tbody></table>";
 
 } else {  // display the form
-	$tool_content .= "
-<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
+
+// if not submit then display the form
+if (isset($_GET['lang'])) {
+	$lang = $_GET['lang'];
+	if ($lang == 'el')
+		$language = 'greek';
+	elseif ($lang == 'en')
+		$language = 'english';
+}
+
+	$tool_content .= "<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">
   <table width=\"99%\" class=\"FormData\">
   <tbody>
   <tr>
@@ -160,6 +175,12 @@ if (isset($submit))  {
         $tool_content .= "</select>
     </td>
   </tr>
+	<tr>
+      <th class='left'>$langLanguage</th>
+      <td>";
+	$tool_content .= lang_select_options('localize');
+	$tool_content .= "</td>
+    </tr>
   <tr>
     <th>&nbsp;</th>
     <td><input type=\"submit\" name=\"submit\" value=\"".$langOk."\" >
