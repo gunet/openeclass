@@ -1108,7 +1108,7 @@ cData;
 // show all the assignments
 function show_assignments($message = null)
 {
-	global $tool_content, $m, $langNoAssign, $langNewAssign, $langCommands, ${urlServer};
+	global $tool_content, $m, $langNoAssign, $langNewAssign, $langCommands, $urlServer;
 
 	$result = db_query("SELECT * FROM assignments ORDER BY id");
 
@@ -1162,7 +1162,7 @@ cData;
 			$tool_content .= ">";
 			$tool_content .= $row_title = htmlspecialchars($row['title']);
 			$tool_content .= "</a></td>
-      <td align=\"center\">".nice_format($row[deadline])."</td>
+      <td align=\"center\">".nice_format($row['deadline'])."</td>
       <td align=\"right\">
          <a href=\"work.php?id=${row['id']}&choice=edit\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" alt=\"${m['edit']}\"></a>";
 			$tool_content .= "
