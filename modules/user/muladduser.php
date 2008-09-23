@@ -36,12 +36,6 @@ $tool_content = "";
 
 // IF PROF ONLY
 if($is_adminOfCourse) {
-	$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">
-        <li><a href=\"user.php\">$langBackUser</a></li>
-      </ul>
-    </div>";
 
     $tool_content .= "
     <form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\" enctype=\"multipart/form-data\">";
