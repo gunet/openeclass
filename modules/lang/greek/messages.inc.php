@@ -546,7 +546,7 @@ $langQuestionPlan = "Ερώτηση στον διδάσκοντα";
 $langInfo2Say = "Πληροφορία για τους ".$langsOfStudentss;
 $langAddCat = "Κατηγορία";
 $langBackAndForget ="Ακύρωση και επιστροφή";
-$langBlockDeleted = "Η παρακάτω περιγραφή διαγράφηκε!";
+$langBlockDeleted = "Η περιγραφή διαγράφηκε!";
 
 /********************************************************
 * course_home.inc.php

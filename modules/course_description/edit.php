@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 /*
  * Edit, Course Description
@@ -45,7 +45,7 @@ include '../../include/lib/textLib.inc.php';
 // support for math symbols
 include '../../include/phpmathpublisher/mathpublisher.php';
 
-$tool_content = "";
+$tool_content = $head_content = "";
 $nameTools = $langEditCourseProgram ;
 $navigation[]= array ("url"=>"index.php", "name"=> $langCourseProgram);
 
@@ -55,7 +55,20 @@ if ($language == 'greek')
 else
         $lang_editor='en';
 
-$head_content = <<<hCont
+
+$head_content .= <<<hCont
+<script type="text/javascript">
+function confirmation ()
+{
+    if (confirm('$langConfirmDelete'))
+        {return true;}
+    else
+        {return false;}
+}
+</script>
+hCont;
+
+$head_content .= <<<hCont
 <script type="text/javascript">
         _editor_url  = "$urlAppend/include/xinha/";
         _editor_lang = "$lang_editor";
@@ -82,9 +95,9 @@ if ($is_adminOfCourse) {
 		} else {
 			$sql ="INSERT IGNORE INTO `course_description`(`id`)
 				VALUES ('".$_POST["edIdBloc"]."');";
-			}
+		}
 		db_query($sql, $db);
-		if ($edTitleBloc=="") {
+		if ($edTitleBloc == "") {
 			$edTitleBloc = $titreBloc[$edIdBloc];
 		}
 		$sql ="UPDATE course_description SET title= ".quote(trim($edTitleBloc)).",
@@ -95,19 +108,10 @@ if ($is_adminOfCourse) {
 	}
 
 //Delete action
-	if (isset($deleteOK)) {
-		$sql = "SELECT * FROM `course_description` where id = '".$_POST["edIdBloc"]."'";
+	if (isset($delete) and $delete == 'yes') {
+		$sql ="DELETE FROM `course_description` WHERE id = '$_GET[numBloc]'";
 		$res = db_query($sql,$db);
-		$blocs = mysql_fetch_array($res);
-		if (is_array($blocs)) {
-			$tool_content .= "<h4>$langBlockDeleted</h4>";
-			$tool_content .= "<div class=\"deleted\">
-			<p>".$blocs["title"]."</p>
-			<p>".mathfilter($blocs["content"], 12, "../../courses/mathimg/")."</p></div>";
-		}
-		$sql ="DELETE FROM `course_description` WHERE id = '".$_POST["edIdBloc"]."'";
-		$res = db_query($sql,$db);
-		$tool_content .= "<br><p><a href=\"".$_SERVER['PHP_SELF']."\">".$langBack."</a></p>";
+		$tool_content .= "<p class='success'>$langBlockDeleted<br><br><a href=\"".$_SERVER['PHP_SELF']."\">".$langBack."</a></p>";
 	}
 //Edit action
 	elseif(isset($numBloc)) {
@@ -122,42 +126,20 @@ if ($is_adminOfCourse) {
 			}
 		}
 
-// delete confirmation
-if (isset($delete) and $delete == "ask") {
-	$tool_content .= "<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">";
-        $sql = "SELECT * FROM `course_description` where id = '".$numBloc."'";
-        $res = db_query($sql,$db);
-        $blocs = mysql_fetch_array($res);
-        if (is_array($blocs)) {
-         	$tool_content .= "<table align=center width=96% border=\"0\" >";
-		$tool_content .= "<tr><td class=color2>";
-    		$tool_content .= "<b>".$blocs["title"].":</b></td></tr><tr><td class=color1>".mathfilter($blocs["content"], 12, "../../courses/mathimg/")."";
-		$tool_content .= "</td></tr></table>";
-		$tool_content .= "<table align=center width=96% border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
-		$tool_content .= "<tr><td>";
-		$tool_content .= "<input type=\"hidden\" name=\"edIdBloc\" value=\"".$numBloc."\">";
-		$tool_content .= "<br><div id=\"operations_container\">
-		<input type=\"submit\" name=\"deleteOK\" value=\"".$langDelete."\"></div><br></td></tr></table>";
-        }
-	$tool_content .= "</form><br>";
-    } else {
-
     $tool_content .= "
     <form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
-
     <table width='99%' class='CourseDescr' align='left'>
     <tbody>
     <tr>
       <th class=\"left\">".$langTitle.": ".@$titreBloc[$numBloc]."</th>
     </tr>";
-		if (($numBloc =="add") || @(!$titreBlocNotEditable[$numBloc])) {
-			$tool_content .= "
-    <tr>
-      <td><input type=\"text\" name=\"edTitleBloc\" rows='20' cols='90' value=\"".@$titreBloc[$numBloc]."\"></td>
-    </tr>";
-		} else {
-			$tool_content .= "<input type=\"hidden\" name=\"edTitleBloc\" value=\"".$titreBloc[$numBloc]."\" >";
-		}
+	if (($numBloc =="add") || @(!$titreBlocNotEditable[$numBloc])) {
+		$tool_content .= "<tr><td>
+		<input type=\"text\" name=\"edTitleBloc\" rows='20' cols='90' value=\"".@$titreBloc[$numBloc]."\">
+		</td></tr>";
+	} else {
+		$tool_content .= "<input type=\"hidden\" name=\"edTitleBloc\" value=\"".$titreBloc[$numBloc]."\" >";
+	}
 		if ($numBloc =="add") {
 			$tool_content .= "<input type=\"hidden\" name=\"edIdBloc\" value=\"add\">";
 		} else {
@@ -168,19 +150,12 @@ if (isset($delete) and $delete == "ask") {
       <td><textarea id='xinha' name='edContentBloc' value='".@$contentBloc."' rows='20' cols='90'>".@$contentBloc."</textarea></td>
     </tr>";
 
-	$tool_content .= "
-    <tr>
+	$tool_content .= "<tr>
       <th><input type=\"submit\" name=\"save\" value=\"".$langAdd."\">&nbsp;&nbsp;
           <input type=\"submit\" name=\"ignore\" value=\"".$langBackAndForget ."\">
       </th>
     </tr>";
-	$tool_content .= "
-    <tbody>
-    </tr>
-    </table>
-
-    </form>";
-	}
+	$tool_content .= "<tbody></tr></table></form>";
 } else {
 		$sql = "SELECT * FROM `course_description` order by id";
 		$res = db_query($sql,$db);
@@ -205,47 +180,28 @@ if (isset($delete) and $delete == "ask") {
 			if (!isset($blocState[$numBloc])||$blocState[$numBloc] != "used")
 				$tool_content .= "\n            <option value='".$numBloc."'>".$titreBloc[$numBloc]."</option>";
 		}
-		$tool_content .= "\n          </select>
-      </td>
-    </tr>
-    <tr>
-      <th>&nbsp;</th>
-      <td><input type='submit' name='add' value='".$langAdd."'></td>
-    </tr>
-    </tbody>
-    </table>
-    <p>&nbsp;</p>
-
+		$tool_content .= "\n</select></td></tr><tr><th>&nbsp;</th>
+      		<td><input type='submit' name='add' value='".$langAdd."'></td>
+    		</tr></tbody></table>
+    		<p>&nbsp;</p>
     </form>\n";
 
 	reset($titreBloc);
 		while (list($numBloc,) = each($titreBloc)) {
 			if (isset($blocState[$numBloc]) && $blocState[$numBloc]=="used") {
-
-	$tool_content .= "
-
-
-    <table width=\"99%\" class=\"CourseDescr\">
-    <thead>
-    <tr>
-      <td>
-        <table width=\"100%\" class=\"FormData\">
-        <thead>
-        <tr>
-          <th class=\"left\" style=\"border: 1px solid #E6B45D;\">".$titreBloc[$numBloc].":</th>
-          <td width=\"50\" class=\"right\"><a href='".$_SERVER['PHP_SELF']."?numBloc=".$numBloc."' ><img src='../../template/classic/img/edit.gif' border='0' title='".$langModify."'></a>&nbsp;&nbsp;<a href='".$_SERVER['PHP_SELF']."?delete=ask&numBloc=".$numBloc."'><img src='../../images/delete.gif' border='0' title='".$langDelete."'></a>&nbsp;</td>
-        </tr>
-        </thead>
-        </table>
-      </td>
-    </tr>
-    <tr>
-      <td>".mathfilter(make_clickable(nl2br($contentBloc[$numBloc])), 12, "../../courses/mathimg/")."</td>
-    </tr>
-    </tgead>
-    </table>";
-
-	$tool_content .= "<br />";
+				$tool_content .= "<table width=\"99%\" class=\"CourseDescr\">
+    					<thead><tr><td>
+        				<table width=\"100%\" class=\"FormData\">
+        				<thead><tr>
+          				<th class=\"left\" style=\"border: 1px solid #E6B45D;\">".$titreBloc[$numBloc].":</th>
+          				<td width=\"50\" class=\"right\">
+					<a href='".$_SERVER['PHP_SELF']."?numBloc=".$numBloc."' >
+					<img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></a>&nbsp;&nbsp;";
+					$tool_content .= "<a href='$_SERVER[PHP_SELF]?delete=yes&numBloc=$numBloc' onClick='return confirmation();'><img src='../../images/delete.gif' border='0' title='$langDelete'></a>&nbsp;</td></tr></thead></table>
+      					</td></tr><tr>
+      				<td>".mathfilter(make_clickable(nl2br($contentBloc[$numBloc])), 12, "../../courses/mathimg/")."</td>
+    				</tr></thead></table>";
+				$tool_content .= "<br />";
 			}
 		}
 	}
@@ -255,8 +211,8 @@ if (isset($delete) and $delete == "ask") {
 
 // End of page
 if(isset($numBloc)) {
-	draw($tool_content, 2, course_description, $head_content, $body_action);
+	draw($tool_content, 2, 'course_description', $head_content, $body_action);
 } else {
-	draw($tool_content, 2, course_description);
+	draw($tool_content, 2, 'course_description', $head_content);
 }
 ?>
