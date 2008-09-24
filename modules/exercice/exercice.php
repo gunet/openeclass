@@ -202,7 +202,7 @@ while($row=mysql_fetch_array($result))
 	$page_temp = ($i+(@$page*$limitExPage)).'.';
 	if(!$row['active']) {
 		$tool_content .= "
-        <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+        <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_red.gif' title='bullet'></td>
         <td><div class=\"invisible\"><a href=\"exercice_submit.php?exerciseId=${row['id']}\">".$row['titre']."</a>&nbsp;<br/><small>".$row['description']."</small></div></td>";
 	} else {
 		$tool_content .= "

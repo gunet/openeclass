@@ -1134,8 +1134,10 @@ cData;
 			$hasUnevaluatedSubmissions = $row_s[0];
 			if(!$row['active']) {
 				$visibility_css = "style=\"color: #CAC3B5;\"";
+				$visibility_image = "arrow_red";
 			} else {
 				$visibility_css = "";
+				$visibility_image = "arrow_grey";
 			}
 			            if ($index%2==0) {
 	                       $tool_content .= "\n    <tr ".$visibility_css.">";
@@ -1144,7 +1146,7 @@ cData;
                         }
 
 			$tool_content .= "
-      <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+      <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/$visibility_image.gif' title='bullet'></td>
       <td ".$visibility_css."><a href=\"work.php?id=${row['id']}\" ";
 			$tool_content .= ">";
 			$tool_content .= $row_title = htmlspecialchars($row['title']);

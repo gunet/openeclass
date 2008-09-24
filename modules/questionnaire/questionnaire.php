@@ -79,12 +79,12 @@ if (isset($visibility)) {
 		case 'activate':
 			$sql = "UPDATE poll SET active='1' WHERE pid='".mysql_real_escape_string($_GET['pid'])."'";
 			$result = db_query($sql,$currentCourseID);
-			$GLOBALS["tool_content"] .= "<p class=\"success_small\">".$GLOBALS["langPollActivated"]."</p><br>";
+			$GLOBALS["tool_content"] .= "".$GLOBALS["langPollActivated"]."<br>";
 			break;
 		case 'deactivate':
 			$sql = "UPDATE poll SET active='0' WHERE pid='".mysql_real_escape_string($_GET['pid'])."'";
 			$result = db_query($sql, $currentCourseID);
-			$GLOBALS["tool_content"] .= "<p class=\"success_small\">".$GLOBALS["langPollDeactivated"]."</p><br>";
+			$GLOBALS["tool_content"] .= "".$GLOBALS["langPollDeactivated"]."<br>";
 			break;
 		}
 }
@@ -292,38 +292,45 @@ if (!$poll_check) {
       <table border="0" width="99%">
       <tbody>
       <tr>
-        <th class='left' colspan="2" width='30%'>&nbsp;$langTitle</th>
-        <th width='20%' class='left'>$langPollCreator</th>
+        <th class='left' colspan="2" width='35%'>&nbsp;$langTitle</th>
+        <th width='25%' class='left'>$langPollCreator</th>
         <th width='10%'>$langPollCreation</th>
         <th width='10%'>$langPollStart</th>
         <th width='10%'>$langPollEnd</th>
 cData;
 
 	if ($is_adminOfCourse) {
- 		$tool_content .= "\n        <th width='20%'>$langActions</th>";
+ 		$tool_content .= "\n        <th width=\"10%\">$langActions</th>";
 	} else {
-		$tool_content .= "\n        <th width='20'>$langParticipate</th>";
+		$tool_content .= "\n        <th>$langParticipate</th>";
 	}
-	$tool_content .= "</tr>";
+	$tool_content .= "\n      </tr>";
 	$active_polls = db_query("SELECT * FROM poll", $currentCourse);
 	$index_aa = 1;
+	$k =0;
 		while ($thepoll = mysql_fetch_array($active_polls)) {
 			$visibility = $thepoll["active"];
-			if ($index_aa%2==1) {
+
+
+		if (($visibility) or ($is_adminOfCourse)) {
+			if ($k%2==0) {
 	           $tool_content .= "\n      <tr>";
 	        } else {
 	           $tool_content .= "\n      <tr class=\"odd\">";
             }
 
-		if (($visibility) or ($is_adminOfCourse)) {
 			if ($visibility) {
-				$visibility_css = " ";
+				$visibility_css = "";
 				$visibility_gif = "invisible";
 				$visibility_func = "deactivate";
+				$arrow_gif = "arrow_red";
+				$k++;
 			} else {
 				$visibility_css = " class=\"invisible\"";
 				$visibility_gif = "visible";
 				$visibility_func = "activate";
+				$arrow_gif = "arrow_grey";
+				$k++;
 			}
 
 			$temp_CurrentDate = date("Y-m-d");
@@ -349,10 +356,10 @@ cData;
 				$poll_ended = 1;
 			}
 			if ($is_adminOfCourse) {
-				$tool_content .= "\n      <td width=\"1%\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
-        <td><div align=\"left\"><a href='pollresults.php?pid=$pid'>$thepoll[name]</a></div></td>";
+				$tool_content .= "\n        <td width=\"1%\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/$arrow_gif.gif' title='bullet'></td>
+        <td><div align=\"left\"><a href='pollresults.php?pid=$pid'>$thepoll[name]</a>";
 			} else {
-				$tool_content .= "".$visibility_css."\n        <td width=\"1%\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+				$tool_content .= "\n        <td width=\"1%\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
         <td><div align=\"left\">";
 				if (($has_participated[0] == 0) and $poll_ended == 0) {
 					$tool_content .= "<a href='pollparticipate.php?UseCase=1&pid=$pid'>$thepoll[name]</a>";

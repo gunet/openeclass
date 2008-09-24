@@ -1,3 +1,8 @@
+.invisible {
+    color: silver !important;
+}
+
+
 .toolBar_Button{
     margin-top: 0px;
     font-family: Verdana, Arial, Helvetica, sans-serif;

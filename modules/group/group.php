@@ -458,20 +458,20 @@ else {
 	if ($num_of_groups > 0) {
 
 	$tool_content .= "
-    <table width=\"99%\" class=\"GroupSum\">
+    <table width=\"99%\" align=\"left\" class=\"FormData\" style=\"border: 1px solid #CAC3B5;\">
     <thead>
     <tr>
-      <td colspan=\"2\"><b>$langExistingGroups</b></td>";
+      <td colspan=\"2\" class=\"GroupHead\"><div align=\"left\">$langGroupName</div></td>";
 
 	// If self-registration allowed by admin
 	if($selfRegProp==1) {
 		$tool_content .= "
-      <td width=\"50\"><div align='center'><b>$langRegistration</b></div></td>";
+      <td width=\"50\" class=\"GroupHead\">$langRegistration</td>";
 	}
 
 	$tool_content .= "
-      <td width=\"50\"><div align='center'><b>$langRegistered</b></div></td>
-      <td width=\"50\"><div align='center'><b>$langMax</b></div></td>
+      <td width=\"50\" class=\"GroupHead\">$langRegistered</td>
+      <td width=\"50\" class=\"GroupHead\">$langMax</td>
     </tr>
     </thead>
     <tbody>";
@@ -481,15 +481,20 @@ else {
     <div class=\"alert1\">$langNoGroup</div>";
 	}
 
-
+    $k = 0;
 	//$totalRegistered=0;
 	while ($group = mysql_fetch_array($groupSelect)) {
 		// Count students registered in each group
 		$resultRegistered = db_query("SELECT id FROM user_group WHERE team='".$group["id"]."'", $currentCourse);
 		$countRegistered = mysql_num_rows($resultRegistered);
+		if ($k%2==0) {
+			$tool_content .= "\n    <tr>";
+		} else {
+			$tool_content .= "\n    <tr class=\"odd\">";
+		}
+
 		$tool_content .= "
-    <tr>
-      <td width=\"2%\"><img src=\"../../template/classic/img/bullet_bw.gif\" alt=\"bullet\" title=\"bullet\" border=\"0\"></td>
+      <td width=\"2%\"><img src=\"../../template/classic/img/arrow_grey.gif\" alt=\"bullet\" title=\"bullet\" border=\"0\"></td>
       <td>";
 
 		// Allow student to enter group only if member
@@ -537,8 +542,9 @@ else {
 		$tool_content .= "
     </tr>";
 		$totalRegistered=($totalRegistered+$countRegistered);
-
+	$k++;
 	}	// while loop
+
 	$tool_content .= "
     </tbody>
     </table>";
