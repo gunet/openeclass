@@ -326,17 +326,7 @@ function submit_work($id) {
 
 		$tool_content .="<p class=\"success_small\">$msg2<br />$msg1<br /><a href='work.php'>$langBack</a></p><br />";
 	} else {
-	$tool_content .="
-    <table width=\"99%\">
-    <tbody>
-    <tr>
-      <td class=\"caution\">
-        <p><b>$langUploadError</b></p>
-      </td>
-    </tr>
-    </tbody>
-    </table>
-    <p align=\"right\"><a href='work.php'>$langBack</a></p>";
+	$tool_content .="    <p class=\"caution_small\">$langUploadError<br /><a href='work.php'>$langBack</a></p><br />";
 	}
 
   } else { // not submit_ok
@@ -464,19 +454,16 @@ function show_edit_assignment($id)
     <table width="99%" class="FormData">
     <tbody>
     <tr>
-      <th width="220">&nbsp;</th>
+      <th width="150">&nbsp;</th>
       <td><b>$m[WorkInfo]</b></td>
     </tr>
     <tr>
-      <th class="left" width='220'>$m[title]:</th>
+      <th class="left">$m[title]:</th>
       <td><input type="text" name="title" size="45" value="${row['title']}" class='FormData_InputText'></td>
     </tr>
     <tr>
       <th class="left">${m['description']}:</th>
-      <td>&nbsp;</td>
-    </tr>
-    <tr>
-      <td colspan='2'><textarea id='xinha' name='desc' value='$description' style='width:100%' rows='20' cols='60'>${row['description']}</textarea></td>
+      <td><textarea id='xinha' name='desc' value='$description' style='width:100%'>${row['description']}</textarea></td>
     </tr>
     <tr>
       <th class="left">${m['comments']}:</th>
@@ -487,7 +474,7 @@ function show_edit_assignment($id)
       <td>
 cData;
 
-	$tool_content .= getJsDeadline($deadline)."
+	$tool_content .= getJsDeadline(nice_format($deadline))."
       </td>
     </tr>
     <tr>
@@ -740,11 +727,11 @@ function assignment_details($id, $row, $message = null)
 	$tool_content .= "
     <tr>
       <th class='left'>$m[start_date]:</th>
-      <td>$row[submission_date]</td>
+      <td>".nice_format($row['submission_date'])."</td>
     </tr>
     <tr>
       <th class='left'>$m[deadline]:</th>
-      <td>$row[deadline] ";
+      <td>".nice_format($row['deadline'])." ";
 	if ($row['days'] > 1) {
 		$tool_content .= "<span class=\"not_expired\">$langDaysLeft $row[days] $langDays</span></td>
     </tr>";
@@ -1114,15 +1101,15 @@ function show_assignments($message = null)
 
 	if (isset($message)) {
 		$tool_content .="<p class=\"success_small\">$message</p><br/>";
+	}
 
 	$tool_content .="
     <div id=\"operations_container\">
       <ul id=\"opslist\">
         <li><a href='work.php?add=1'>$langNewAssign</a></li>
       </ul>
-    </div>";
+    </div><br />";
 
-	}
 
 	if (mysql_num_rows($result)) {
 

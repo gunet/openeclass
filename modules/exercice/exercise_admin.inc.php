@@ -24,7 +24,7 @@
 ============================================================================*/
 
 /*****************************************************************************
-		Create the HTML for a jscalendar field 
+		Create the HTML for a jscalendar field
 ******************************************************************************/
 
 
@@ -49,7 +49,7 @@ if(isset($submitExercise))
 			$objExercise->updateStartDate($exerciseStartDate);
 			$objExercise->updateEndDate($exerciseEndDate);
 			$objExercise->updateTimeConstrain($exerciseTimeConstrain);
-			$objExercise->updateAttemptsAllowed($exerciseAttemptsAllowed);			
+			$objExercise->updateAttemptsAllowed($exerciseAttemptsAllowed);
 			$objExercise->setRandom($randomQuestions);
 			$objExercise->save();
 			// reads the exercise ID (only usefull for a new exercise)
@@ -109,19 +109,19 @@ $tool_content .= "
       <td><textarea wrap=\"virtual\" ".
 	"name=\"exerciseDescription\" cols=\"50\" rows=\"4\" style=\"width:400px;\" class=\"FormData_InputText\">".htmlspecialchars($exerciseDescription)."</textarea></td>
     </tr>";
-	
+
 $tool_content .= "
     <tr>
       <th class=\"left\">".$langExerciseType." :</th>
       <td>"."<input type=\"radio\" name=\"exerciseType\" value=\"1\" ";
-	
-if($exerciseType <= 1) 
+
+if($exerciseType <= 1)
 	$tool_content .= " checked=\"checked\"";
 $tool_content .= "> ".$langSimpleExercise."
       <br>
       <input type=\"radio\" name=\"exerciseType\" value=\"2\" ";
 
-if($exerciseType >= 2) 
+if($exerciseType >= 2)
 	$tool_content .= 'checked="checked"';
 $tool_content .= "> ".$langSequentialExercise."</td>
     </tr>";
@@ -138,7 +138,7 @@ else
 
 $tool_content .= "
       <th class=\"left\">".$langExerciseStart." :</th>"."
-      <td>$start_cal_Excercise</td></tr>"; 
+      <td>$start_cal_Excercise</td></tr>";
 
 $tool_content .= "
       <th class=\"left\">".$langExerciseEnd." :</th>"."
@@ -148,16 +148,16 @@ $tool_content .= "
 $tool_content .= "
     <tr>
       <th class=\"left\">".$langExerciseConstrain." :</th>"."
-      <td><input type=\"text\" name=\"exerciseTimeConstrain\" size=\"3\" maxlength=\"3\" ". 
-  "value=\"".htmlspecialchars($exerciseTimeConstrain)."\" class=\"FormData_InputText\">&nbsp;&nbsp;". 
+      <td><input type=\"text\" name=\"exerciseTimeConstrain\" size=\"3\" maxlength=\"3\" ".
+  "value=\"".htmlspecialchars($exerciseTimeConstrain)."\" class=\"FormData_InputText\">&nbsp;&nbsp;".
   $langExerciseConstrainUnit." &nbsp;&nbsp;&nbsp;&nbsp;(".$langExerciseConstrainExplanation.")</td>
     </tr>";
-  
+
 $tool_content .= "
     <tr>
       <th class=\"left\">".$langExerciseAttemptsAllowed." :</th>"."
-      <td><input type=\"text\" name=\"exerciseAttemptsAllowed\" size=\"3\" maxlength=\"2\"". 
-  "value=\"".htmlspecialchars($exerciseAttemptsAllowed)."\" class=\"FormData_InputText\">&nbsp;&nbsp;". 
+      <td><input type=\"text\" name=\"exerciseAttemptsAllowed\" size=\"3\" maxlength=\"2\"".
+  "value=\"".htmlspecialchars($exerciseAttemptsAllowed)."\" class=\"FormData_InputText\">&nbsp;&nbsp;".
   $langExerciseAttemptsAllowedUnit." &nbsp;&nbsp;&nbsp;(".$langExerciseAttemptsAllowedExplanation.")</td>
     </tr>";
 
