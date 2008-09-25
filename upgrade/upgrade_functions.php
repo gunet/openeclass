@@ -951,6 +951,9 @@ function upgrade_course($code, $lang)
 			if ($u[0] == '../../../images/page.gif')  {
                  		update_field("accueil", "image", "external_link", "image", "../../../images/page.gif");
 			}
+			if ($u[0] == 'travaux.png')  {
+                 		update_field("accueil", "image", "external_link", "image", "travaux.png");
+			}
                 }
 
                 // update menu entries with new messages
