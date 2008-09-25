@@ -672,7 +672,7 @@ if (mysql_num_rows($sql) == 0) {
 	// Current Directory Line
 	$tool_content .= "\n<div class=\"fileman\">";
 	$tool_content .= "\n  <table width=\"99%\" align='left' class=\"Documents\">";
-    $tool_content .= "\n  <thead>";
+    $tool_content .= "\n  <tbody>";
 
 	   if($is_adminOfCourse) {
 		  $cols = 4;
@@ -681,8 +681,8 @@ if (mysql_num_rows($sql) == 0) {
 	   }
 
 	$tool_content .= "\n  <tr>";
-    $tool_content .= "\n    <td height='18' colspan='$cols'><div align=\"left\">$langDirectory: ".make_clickable_path($dbTable, $curDirPath). "</div></td>";
-	$tool_content .= "\n    <td><div align='right'>";
+    $tool_content .= "\n    <th height='18' colspan='$cols'><div align=\"left\">$langDirectory: ".make_clickable_path($dbTable, $curDirPath). "</div></th>";
+	$tool_content .= "\n    <th><div align='right'>";
 
 	/*** go to parent directory ***/
 	if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
@@ -690,19 +690,19 @@ if (mysql_num_rows($sql) == 0) {
    	    $tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdParentDir."\">$langUp</a>\n";
    	    $tool_content .=  "<img src=\"../../template/classic/img/parent.gif\" border=0 align=\"absmiddle\" height='12' width='12'>";
 	}
-	$tool_content .= "</div></td>";
+	$tool_content .= "</div></th>";
     $tool_content .= "\n  </tr>";
 	$tool_content .= "\n  <tr>";
-    $tool_content .= "\n    <th width='1'>".$m['type']."</th>";
-	$tool_content .= "\n    <th><div align=\"left\">$langName</div></th>";
-	$tool_content .= "\n    <th width='100'>$langSize</th>";
-	$tool_content .= "\n    <th width='100'>$langDate</th>";
+    $tool_content .= "\n    <td width='1' class=\"DocHead\"><b>".$m['type']."</b></td>";
+	$tool_content .= "\n    <td class=\"DocHead\"><b><div align=\"left\">$langName</div></b></td>";
+	$tool_content .= "\n    <td width='100' class=\"DocHead\"><b>$langSize</b></td>";
+	$tool_content .= "\n    <td width='100' class=\"DocHead\"><b>$langDate</b></td>";
 	if($is_adminOfCourse) {
-		$tool_content .= "\n    <th width='100'>$langCommands</th>";
+		$tool_content .= "\n    <td width='100' class=\"DocHead\"><b>$langCommands</b></td>";
 	}
 	$tool_content .= "\n  </tr>";
-	$tool_content .= "\n  </thead>";
-	$tool_content .= "\n  </tbody>";
+	//$tool_content .= "\n  </thead>";
+	//$tool_content .= "\n  </tbody>";
 
 // ---------------------------------
 // Display Directories
@@ -726,7 +726,7 @@ if (mysql_num_rows($sql) == 0) {
 				continue;
 			}
 			$tool_content .=  "\n  <tr $style2>";
-			$tool_content .=  "\n    <td width='1' valign=\"top\" style=\"padding-top: 7px;\"><a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style."><img src=\"../../template/classic/img/folder.gif\" border=0 align='absmiddle'></a></td>";
+			$tool_content .=  "\n    <td width='1%' valign=\"top\" style=\"padding-top: 7px;\"><a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style."><img src=\"../../template/classic/img/folder.gif\" border=0></a></td>";
 			$tool_content .=  "\n    <td><div align=\"left\">";
 			$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style.">";
 			$tool_content .=  $dspDirName."";
@@ -793,7 +793,7 @@ if (mysql_num_rows($sql) == 0) {
 				continue;
 			}
 			$tool_content .=  "\n  <tr ".$style2.">";
-			$tool_content .=  "\n    <td valign=\"top\" style=\"padding-top: 7px;\">";
+			$tool_content .=  "\n    <td valign=\"top\" valign=\"top\" style=\"padding-top: 7px;\">";
             $tool_content .=  "<img src=\"./img/".$image."\" align='absmiddle' border=0>";
 			//h $dspFileName periexei to onoma tou arxeiou sto filesystem
 			$query = "SELECT filename, copyrighted FROM document WHERE path LIKE '%".$curDirPath."/".$fileName."%'";

@@ -147,7 +147,7 @@ if ($is_adminOfCourse) {
 		}
 		$tool_content .= "
     <tr>
-      <td><textarea id='xinha' name='edContentBloc' value='".@$contentBloc."' rows='20' cols='90'>".@$contentBloc."</textarea></td>
+      <td><textarea id='xinha' width=\"100%\" name='edContentBloc' value='".@$contentBloc."' rows='20' cols='100'>".@$contentBloc."</textarea></td>
     </tr>";
 
 	$tool_content .= "<tr>

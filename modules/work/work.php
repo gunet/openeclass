@@ -519,36 +519,9 @@ function edit_assignment($id)
 		description='".mysql_real_escape_string($_POST['desc'])."', group_submissions='".mysql_real_escape_string($_POST['group_submissions'])."',
 		comments='".mysql_real_escape_string($_POST['comments'])."', deadline='".mysql_real_escape_string($_POST['WorkEnd'])."' WHERE id='$id'")) {
 
-	$tool_content .= "
-    <div id=\"operations_container\">
-    <ul id=\"opslist\">
-      <li><a href='work.php?id=$id'>$langBackAssignment \"$_POST[title]\"</a></li>
-    </ul>
-    </div>
-    ";
-	$tool_content .="
-    <table width=\"99%\">
-    <tbody>
-    <tr>
-      <td class=\"success\">
-      <p><b>$langEditSuccess</b></p>
-      </td>
-    </tr>
-    </tbody>
-    </table>";
-
+	$tool_content .="<p class=\"success_small\">$langEditSuccess<br /><a href='work.php?id=$id'>$langBackAssignment \"$_POST[title]\"</a></p><br />";
 	} else {
-	$tool_content .="
-    <table width=\"99%\">
-    <tbody>
-    <tr>
-      <td class=\"success\">
-      <p><b>$langEditError</b></p>
-      <p align=\"right\"><a href='work.php?id=$id'>$langBackAssignment \"$_POST[title]\"</a></p>
-      </td>
-    </tr>
-    </tbody>
-    </table>";
+	$tool_content .="<p class=\"caution_small\">$langEditError<br /><a href='work.php?id=$id'>$langBackAssignment \"$_POST[title]\"</a></p><br />";
 	}
 }
 

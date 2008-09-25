@@ -268,7 +268,7 @@ if ($is_adminOfCourse) {
 	// ---------- display properties ------------------------
 	$tool_content .= <<<tCont3
 
-    <table class="FormData" width="99%" style="border: 1px solid #CAC3B5;">
+    <table class="FormData" align="center" style="border: 1px solid #CAC3B5;">
     <tbody>
     <tr class="odd">
       <td colspan="2" class="right"><a href="group_properties.php">$langPropModify</a> <img src="../../template/classic/img/edit.gif" border="0" title="'.$langEdit.'"></td>
@@ -358,14 +358,14 @@ tCont3;
 		$tool_content .= "
 
     <br />
-    <table width=\"99%\" align=\"left\" class=\"FormData\" style=\"border: 1px solid #CAC3B5;\">
+    <table width=\"99%\" align=\"left\" class=\"GroupList\">
     <tbody>
     <tr>
-      <td colspan=\"2\" class=\"GroupHead\"><div align=\"left\">$langGroupName</div></td>
-      <td width=\"80\" class=\"GroupHead\">$langRegistered</td>
-      <td width=\"80\" class=\"GroupHead\">$langMax</td>
-      <td width=\"50\" class=\"GroupHead\">$langEdit</td>
-      <td width=\"50\" class=\"GroupHead\">$langDelete</td>
+      <th colspan=\"2\" class=\"GroupHead\"><div align=\"left\">$langGroupName</div></th>
+      <th width=\"80\" class=\"GroupHead\">$langRegistered</th>
+      <th width=\"80\" class=\"GroupHead\">$langMax</th>
+      <th width=\"50\" class=\"GroupHead\">$langEdit</th>
+      <th width=\"50\" class=\"GroupHead\">$langDelete</th>
     </tr>";
 	} else {
 	$tool_content .= "
@@ -418,7 +418,7 @@ tCont3;
 
 $tool_content .= "
 
-    <table width=\"99%\" class=\"FormData\" style=\"border: 1px solid #CAC3B5;\">
+    <table width=\"99%\" class=\"FormData\" style=\"border: 1px solid #edecdf;\">
     <tbody>
     <tr>
       <td class=\"odd\">
@@ -458,20 +458,20 @@ else {
 	if ($num_of_groups > 0) {
 
 	$tool_content .= "
-    <table width=\"99%\" align=\"left\" class=\"FormData\" style=\"border: 1px solid #CAC3B5;\">
+    <table width=\"99%\" align=\"left\" class=\"GroupList\">
     <thead>
     <tr>
-      <td colspan=\"2\" class=\"GroupHead\"><div align=\"left\">$langGroupName</div></td>";
+      <th colspan=\"2\" class=\"GroupHead\"><div align=\"left\">$langGroupName</div></th>";
 
 	// If self-registration allowed by admin
 	if($selfRegProp==1) {
 		$tool_content .= "
-      <td width=\"50\" class=\"GroupHead\">$langRegistration</td>";
+      <th width=\"50\" class=\"GroupHead\">$langRegistration</th>";
 	}
 
 	$tool_content .= "
-      <td width=\"50\" class=\"GroupHead\">$langRegistered</td>
-      <td width=\"50\" class=\"GroupHead\">$langMax</td>
+      <th width=\"50\" class=\"GroupHead\">$langRegistered</th>
+      <th width=\"50\" class=\"GroupHead\">$langMax</th>
     </tr>
     </thead>
     <tbody>";
@@ -495,7 +495,7 @@ else {
 
 		$tool_content .= "
       <td width=\"2%\"><img src=\"../../template/classic/img/arrow_grey.gif\" alt=\"bullet\" title=\"bullet\" border=\"0\"></td>
-      <td>";
+      <td><div align=\"left\">";
 
 		// Allow student to enter group only if member
 		if(@($tutorCheck==1)) {
@@ -514,7 +514,7 @@ else {
 				$tool_content .= $group['name'];
 			}
 		}	// else
-		$tool_content .= "</td>";
+		$tool_content .= "</div></td>";
 
 		// SELF REGISTRATION
 		// If self-registration allowed by admin

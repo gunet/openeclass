@@ -27,7 +27,7 @@
 	showquota.php
 	@last update: 18-07-2006 by Sakis Agorastos
 	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
-==============================================================================        
+==============================================================================
     @Description: A page that shows a table with statistic data and a
     gauge bar. The statistical data are transfered here with GET in
     $diskQuotaDocument and $diskUsed
@@ -64,14 +64,25 @@ $nameTools = $langQuotaBar;
 	format_bytesize($diskUsed, '0');
 	//telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
 	//ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
-	$tool_content .= "<table><tbody><tr>
-      	<th class='left' width='170'>$langQuotaUsed</td>
-      	<td width='110' align='center'>$diskUsed</td>
-    	</tr><tr><th class='left'>$langQuotaPercentage</td><td align='center'>";
+	$tool_content .= "
+    <table class=\"FormData\">
+    <tbody>
+    <tr>
+      	<th class='left' width='220'>$langQuotaUsed :</td>
+      	<td>$diskUsed</td>
+    </tr>
+    <tr>
+        <th class='left'>$langQuotaPercentage :</td>
+        <td align='center'>";
 	$tool_content .= $oGauge->display();
-    	$tool_content .= "$diskUsedPercentage</td></tr><tr>
-     	<th class='left'>$langQuotaTotal</td>
-      	<td align='center'>$diskQuotaDocument</td></tr></tbody></table>";
+    	$tool_content .= "$diskUsedPercentage</td>
+    </tr>
+    <tr>
+     	<th class='left'>$langQuotaTotal :</td>
+      	<td align='center'>$diskQuotaDocument</td>
+    </tr>
+    </tbody>
+    </table>";
 $tmp_cwd = getcwd();
-draw($tool_content, 2, '', '');
+draw($tool_content, 2, 'documents', '');
 ?>

@@ -89,17 +89,6 @@ if (isset($visibility)) {
 		}
 }
 
-    if ($is_adminOfCourse) {
-	$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">
-        <li><a href='addpoll.php'>$langCreatePoll</a></li>
-      </ul>
-    </div>
-    ";
-    }
-
-
 
 // delete polls
 if (isset($delete) and $delete='yes')  {
@@ -109,11 +98,20 @@ if (isset($delete) and $delete='yes')  {
 	db_query("DELETE FROM poll WHERE pid=$pid");
 	db_query("DELETE FROM poll_question WHERE pid='$pid'");
 	db_query("DELETE FROM poll_answer_record WHERE pid='$pid'");
-        $GLOBALS["tool_content"] .= "<p>".$GLOBALS["langPollDeleted"]."</p>";
-	draw($tool_content, 2, ' ', $head_content);
+        $GLOBALS["tool_content"] .= "".$GLOBALS["langPollDeleted"]."";
+	draw($tool_content, 2, 'questionnaire', $head_content);
 	exit();
 }
 
+    if ($is_adminOfCourse) {
+	$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">
+        <li><a href='addpoll.php'>$langCreatePoll</a></li>
+      </ul>
+    </div>
+    ";
+    }
 
 /*
 // delete surveys
@@ -129,7 +127,7 @@ if (isset($sdelete) and $sdelete='yes') {
         db_query("DELETE FROM survey_question WHERE sid=".mysql_real_escape_string($_GET['sid']));
 
        $GLOBALS["tool_content"] .= "<p>".$GLOBALS["langSurveyDeleted"]."</p>";
-       draw($tool_content, 2, ' ', $head_content);
+       draw($tool_content, 2, 'questionnaire', $head_content);
 			 exit();
 }
 */
@@ -138,7 +136,7 @@ if (isset($sdelete) and $sdelete='yes') {
 
 
 printPolls();
-draw($tool_content, 2, ' ', $head_content);
+draw($tool_content, 2, 'questionnaire', $head_content);
 
  /***************************************************************************************************
  * printSurveys()
@@ -289,7 +287,7 @@ if (!$poll_check) {
 	// Print active polls
 		$tool_content .= <<<cData
 
-      <table border="0" width="99%">
+      <table border="0" width="99%" class="Questionnaire">
       <tbody>
       <tr>
         <th class='left' colspan="2" width='35%'>&nbsp;$langTitle</th>

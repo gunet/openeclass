@@ -25,10 +25,10 @@
 
 /*
  * Course Tools Component
- * 
+ *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * 
+ *
  * @abstract This component offers several operations regarding a course's tools.
  * The course administrator can:
  * 1. Activate/De-activate tools
@@ -51,7 +51,7 @@ $tool_content = "";
 $head_content = <<<hCont
 <script type="text/javascript" language="JavaScript">
 
-<!-- Begin javascript menu swapper 
+<!-- Begin javascript menu swapper
 function move(fbox, tbox) {
 var arrFbox = new Array();
 var arrTbox = new Array();
@@ -98,13 +98,13 @@ tbox[c] = no;
 <script type="text/javascript" language="JavaScript">
 
 function selectAll(cbList,bSelect) {
-  for (var i=0; i<cbList.length; i++) 
+  for (var i=0; i<cbList.length; i++)
     cbList[i].selected = cbList[i].checked = bSelect
 }
 
 function reverseAll(cbList) {
   for (var i=0; i<cbList.length; i++) {
-    cbList[i].checked = !(cbList[i].checked) 
+    cbList[i].checked = !(cbList[i].checked)
     cbList[i].selected = !(cbList[i].selected)
   }
 }
@@ -118,7 +118,7 @@ function confirmation (name)
         {return true;}
     	else
         {return false;}
-    
+
 }
 </script>
 hCont;
@@ -194,11 +194,11 @@ if ($is_adminOfCourse){
 
 					for ($j=0; $j <$event_counter; $j++) {
 						db_query("INSERT INTO agenda (lesson_event_id, titre, contenu, day, hour, lasting, lesson_code)
-          						VALUES ('".$lesson_agenda[$j]['id']."', 
-                  				'".$lesson_agenda[$j]['title']."', 
-                  				'".$lesson_agenda[$j]['content']."', 
-                  				'".$lesson_agenda[$j]['date']."', 
-                  				'".$lesson_agenda[$j]['time']."', 
+          						VALUES ('".$lesson_agenda[$j]['id']."',
+                  				'".$lesson_agenda[$j]['title']."',
+                  				'".$lesson_agenda[$j]['content']."',
+                  				'".$lesson_agenda[$j]['date']."',
+                  				'".$lesson_agenda[$j]['time']."',
                   				'".$lesson_agenda[$j]['duree']."',
                   				'".$lesson_agenda[$j]['lesson_code']."'
                   			)", $mysqlMainDb);
@@ -235,11 +235,7 @@ if ($is_adminOfCourse){
 		db_query($sql, $dbname);
 		unset($sql);
 
-		$tool_content .= "
-		<table width=\"99%\">
-			<tbody><tr><td class=\"success\"><p><b>$langLinkDeleted</b></p></td></tr></tbody>
-		</table>
-		<br/><br/>";
+		$tool_content .= "<p class=\"success_small\">$langLinkDeleted</p><br/>";
 	}
 
 
@@ -247,11 +243,7 @@ if ($is_adminOfCourse){
 
 	if(isset($submit) &&  @$action == 2) {
 		if (($link == "http://") or ($link == "ftp://") or empty($link) or empty($name_link))  {
-			$tool_content .= "<table><tbody><tr>
-				<td class=\"caution\">
-				<p><b>$langInvalidLink</b></p>
-				<p><a href=\"$_SERVER[PHP_SELF]?action=2\">$langHome</a></p>
-				</td></tr></tbody></table>";
+			$tool_content .= "<p class=\"caution_small\">$langInvalidLink<br /><a href=\"$_SERVER[PHP_SELF]?action=2\">$langHome</a></p><br />";
 			draw($tool_content, 2);
 			exit();
 		}
@@ -276,26 +268,21 @@ if ($is_adminOfCourse){
 					''
 					)");
 
-		$tool_content .= "<table width=\"99%\"><tbody>
-			<tr><td class=\"success\"><p><b>$langLinkAdded</b></p></td></tr>
-		</tbody>
-		</table>
-		<br/><br/>
-		";
+		$tool_content .= "<p class=\"success_small\">$langLinkAdded</p><br/>";
 		unset($action);
 	}
 // -------------------------
 //upload html page
 // -------------------------
-	
-	if(isset($submit) &&  @$action == 1){ 
+
+	if(isset($submit) &&  @$action == 1){
 		$updir = "$webDir/courses/$currentCourseID/page/"; //path to upload directory
 		$size = "20971520"; //file size is 20M (1024x1024x20)
 		if (isset($file_name) and ($file_name != "") && ($file_size <= "$size") and ($link_name != "")) {
-		
+
 			@copy("$file", "$updir/$file_name")
 				or die("<p>$langCouldNot</p></tr>");
-			
+
 			$sql = 'SELECT MAX(`id`) FROM `accueil` ';
 			$res = db_query($sql,$dbname);
 			while ($maxID = mysql_fetch_row($res)) {
@@ -304,7 +291,7 @@ if ($is_adminOfCourse){
 
 			if($mID<101) $mID = 101;
 			else $mID = $mID+1;
-			
+
 			$link_name = quote($link_name);
 			$lien = quote("../../courses/$currentCourse/page/$file_name");
 			db_query("INSERT INTO accueil VALUES (
@@ -318,16 +305,9 @@ if ($is_adminOfCourse){
 					'HTML_PAGE'
 					)", $currentCourse);
 
-			$tool_content .=  "<table width=\"99%\">
-				<tbody><tr><td class=\"success\">
-					<p><b>$langOkSent</b></p>
-				</td></tr></tbody>
-			</table><br/>";
+			$tool_content .= "<p class=\"success_small\">$langOkSent</p><br/>";
 		} else {
-			$tool_content .= "<table><tbody><tr><td class=\"caution\">
-					<p><b>$langTooBig</b></p>
-					<p><a href=\"$_SERVER[PHP_SELF]?action=1\">$langHome</a></p>
-					</td></tr></tbody></table>";
+			$tool_content .= "<p class=\"caution_small\">$langTooBig<br /><a href=\"$_SERVER[PHP_SELF]?action=1\">$langHome</a></p><br />";
 			draw($tool_content, 2);
 		}	// else
 		unset($action);
@@ -345,11 +325,11 @@ if ($is_adminOfCourse && @$action == 1) {//upload html file
   <form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes&action=1\" enctype=\"multipart/form-data\">
   <p>$langExplanation_0</p>
   <p>$langExplanation_3</p>
-  <br>
+  <br />
   <table width=\"99%\" align='left' class='FormData'>
   <tbody>
   <tr>
-    <th class='left' width='20%'>&nbsp;</th>
+    <th class='left' width='220'>&nbsp;</th>
     <td><b>$langExplanation_1</b></td>
     <td>&nbsp;</td>
   </tr>
@@ -388,7 +368,7 @@ if ($is_adminOfCourse && @$action == 2) {//add external link
   <table width=\"99%\" align='left' class='FormData'>
   <tbody>
   <tr>
-    <th class='left' width='20%'>&nbsp;</th>
+    <th class='left' width='220'>&nbsp;</th>
     <td><b>$langExplanation_4</b></td>
     <td>&nbsp;</td>
   </tr>
@@ -457,21 +437,20 @@ if ($is_adminOfCourse) {
 	//output tool content
 	$tool_content .= "
 	<div id=\"operations_container\">
-	<ul id=\"opslist\">
-	<li><a href=\"".$_SERVER['PHP_SELF']."?action=1\">".$langUploadPage."</a></li>
-	<li><a href=\"".$_SERVER['PHP_SELF']."?action=2\">".$langAddExtLink."</a></li>
-	</ul>
-	</div>
-";
+	  <ul id=\"opslist\">
+	    <li><a href=\"".$_SERVER['PHP_SELF']."?action=1\">".$langUploadPage."</a></li>
+	    <li><a href=\"".$_SERVER['PHP_SELF']."?action=2\">".$langAddExtLink."</a></li>
+	  </ul>
+	</div>";
 
 	$tool_content .= <<<tForm
 <form name="courseTools" action="$_SERVER[PHP_SELF]" method="post" enctype="multipart/form-data">
   <br/>
-  <table class='FormData' align=\"center\" width='500'>
-  <tbody>
+  <table class='FormData' align=\"left\" width='99%' style="border: 1px solid #CAC3B5;">
+  <thead>
   <tr>
     <th>$langInactiveTools</th>
-    <th>$langMove</th>
+    <th width="10%">$langMove</th>
     <th>$langActiveTools</th>
   </tr>
   <tr>
@@ -497,7 +476,7 @@ if ($is_adminOfCourse) {
         </th>
     <th>&nbsp;</th>
   </tr>
-  </tbody>
+  </thead>
   </table>
 </form>
 tForm;
@@ -511,11 +490,11 @@ tForm;
   <br/>
   <table width=\"500\">
   <tbody>
-  <tr> 
+  <tr>
     <th rowspan='2'>&nbsp;</th>
     <td colspan='2'><b>$langOperations</b></td>
   </tr>
-  <tr> 
+  <tr>
     <td class=\"left\"><b>$langTitle</b></td>
     <td class=\"left\" width=\"20\"><b>$langDelete</b></td>
   </tr>

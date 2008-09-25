@@ -35,13 +35,13 @@ include '../../include/baseTheme.php';
 
 $nameTools = $langArchiveCourse;
 $navigation[] = array("url" => "infocours.php", "name" => $langModifInfo);
-$tool_content = ""; 
-$archiveDir = "/courses/archive"; 
- 
+$tool_content = "";
+$archiveDir = "/courses/archive";
+
 if (extension_loaded("zlib")) {
 	include("../../include/pclzip/pclzip.lib.php");
 }
-		
+
 // check if you are admin
 if($is_adminOfCourse) {
 	$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\"><li>";
@@ -52,24 +52,24 @@ if($is_adminOfCourse) {
 	} else {
 		$tool_content .= "<a href=\"infocours.php\">$langBack</a></li>";
 	}
-	
-	$tool_content .= "</ul></div>";	
+
+	$tool_content .= "</ul></div>";
 	$dateBackuping  = date("Y-m-d-H-i-(B)-s");
-	$shortDateBackuping  = date("YzBs"); // YEAR - Day in Year - Swatch - second 
+	$shortDateBackuping  = date("YzBs"); // YEAR - Day in Year - Swatch - second
 	$archiveDir .= "/".$currentCourseID."/".$dateBackuping;
 	$zipfile = $webDir."courses/archive/$currentCourseID/archive.$currentCourseID.$shortDateBackuping.zip";
 	$tool_content .= "<table class='Deps' align='center'><tbody><tr><th align=\"left\"><ol>\n";
 
 	$dirArchive = realpath("../..").$archiveDir;
 	mkpath($dirArchive);
-	
-	// creation of the sql queries will all the data dumped 
+
+	// creation of the sql queries will all the data dumped
 	create_backup_file("$webDir/$archiveDir/backup.php");
 
     	$dirhtml = realpath("../..").$archiveDir."/html";
 
 	$tool_content .= "<li>".$langBUCourseDataOfMainBase."  ".$currentCourseID."</li>\n";
-	
+
 	// we can copy file of course
 	$tool_content .= "<li>".$langCopyDirectoryCourse."<br>(";
 	$nbFiles = copydir(realpath("../../courses/".$currentCourseID."/"), $dirhtml);
@@ -80,24 +80,18 @@ if($is_adminOfCourse) {
 //-----------------------------------------
 // create zip file
 // ----------------------------------------
-	
+
 	$zipCourse = new PclZip($zipfile);
 	if ($zipCourse->create($webDir.$archiveDir, PCLZIP_OPT_REMOVE_PATH, "$webDir") == 0) {
 		$tool_content .= "Error: ".$zipCourse->errorInfo(true);
 		draw($tool_content, 2, 'course_info');
 		exit;
-	} else { 
-		$tool_content .= "<br /><table width='99%'><tbody>
-   		<tr><td class='success' width='1'></td>
-     		<td class='left'><b>$langBackupSuccesfull</b></td><td><div align='right'>
-    		<a href='$urlServer/courses/archive/$currentCourseID/archive.$currentCourseID.$shortDateBackuping.zip'>$langDownloadIt</a>
-		</div></td><td width='1'>
-		<img src='../../template/classic/img/download.gif' title='$langDownloadIt' width='30' height='29'></td></tr>
-    		</tbody></table>";
+	} else {
+		$tool_content .= "<br /><p class='success_small'>$langBackupSuccesfull</p><div align=\"right\"><a href='$urlServer/courses/archive/$currentCourseID/archive.$currentCourseID.$shortDateBackuping.zip'>$langDownloadIt</a><img src='../../template/classic/img/download.gif' title='$langDownloadIt' width='30' height='29'></div>";
 	}
-	draw($tool_content, 2, 'course_info');	
+	draw($tool_content, 2, 'course_info');
 }	// end of isadminOfCourse
-else 
+else
 {
 	$tool_content .= "<center><p>$langNotAllowed</p></center>";
 	draw($tool_content, 2, 'course_info');
@@ -109,16 +103,16 @@ else
 // ---------------------------------------------
 
 function copydir($origine, $destination) {
-	
+
 	$dossier=opendir($origine);
 	if (file_exists($destination))
-	{ 
+	{
 		return 0;
 	}
 	mkdir($destination, 0755);
 	$total = 0;
 
-	while ($fichier = readdir($dossier)) 
+	while ($fichier = readdir($dossier))
 	{
 		$l = array('.', '..');
 		if (!in_array( $fichier, $l))
@@ -126,8 +120,8 @@ function copydir($origine, $destination) {
 			if (is_dir($origine."/".$fichier))
 			{
 				$total += copydir("$origine/$fichier", "$destination/$fichier");
-			} 
-			else 
+			}
+			else
 			{
 				copy("$origine/$fichier", "$destination/$fichier");
                                 touch("$destination/$fichier", filemtime("$origine/$fichier"));
@@ -159,7 +153,7 @@ function create_backup_file($file) {
 
 function backup_annonces($f, $course) {
 	global $mysqlMainDb;
-	
+
 	$res = mysql_query("SELECT * FROM `$mysqlMainDb`.annonces
 				    WHERE code_cours = '$course'");
 	while($q = mysql_fetch_array($res)) {
@@ -235,7 +229,7 @@ function backup_dropbox_post($f) {
 
 function backup_users($f, $course) {
 	global $mysqlMainDb;
-	
+
 	$res = mysql_query("SELECT user.*, cours_user.statut as cours_statut
 		FROM `$mysqlMainDb`.user, `$mysqlMainDb`.cours_user
 		WHERE user.user_id=cours_user.user_id
@@ -256,15 +250,15 @@ function backup_users($f, $course) {
 	}
 }
 
-function backup_course_db($f, $course) { 
-	mysql_select_db($course); 
-	$res_tables = mysql_list_tables($course); 
-	while ($r = mysql_fetch_row($res_tables)) 
-	{ 
-		$tablename = $r[0]; 
-		fwrite($f, "query(\"DROP TABLE IF EXISTS `$tablename`\");\n"); 
+function backup_course_db($f, $course) {
+	mysql_select_db($course);
+	$res_tables = mysql_list_tables($course);
+	while ($r = mysql_fetch_row($res_tables))
+	{
+		$tablename = $r[0];
+		fwrite($f, "query(\"DROP TABLE IF EXISTS `$tablename`\");\n");
 		$res_create = mysql_fetch_array(mysql_query("SHOW CREATE TABLE $tablename"));
-		$schema = $res_create[1]; 
+		$schema = $res_create[1];
 		fwrite($f, "query(\"$schema\");\n");
 		if ($tablename == 'user_group') {
 			backup_groups($f);
@@ -277,12 +271,12 @@ function backup_course_db($f, $course) {
 		} elseif ($tablename == 'dropbox_post') {
 			backup_dropbox_post($f);
 		} else {
-			$res = mysql_query("SELECT * FROM $tablename"); 
-			if (mysql_num_rows($res) > 0) { 
+			$res = mysql_query("SELECT * FROM $tablename");
+			if (mysql_num_rows($res) > 0) {
 				$fieldnames = "";
-				$num_fields = mysql_num_fields($res); 
-				for($j = 0; $j < $num_fields; $j++) { 
-					$fieldnames .= "`".mysql_field_name($res, $j)."`"; 
+				$num_fields = mysql_num_fields($res);
+				for($j = 0; $j < $num_fields; $j++) {
+					$fieldnames .= "`".mysql_field_name($res, $j)."`";
 					if ($j < ($num_fields - 1)) {
 						$fieldnames .= ', ';
 					}
@@ -299,7 +293,7 @@ function backup_course_db($f, $course) {
 						fputs($f, ",\n\t(");
 					}
 					$counter++;
-					for ($j = 0; $j < $num_fields; $j++) { 
+					for ($j = 0; $j < $num_fields; $j++) {
 						fputs($f, quote($rowdata[$j]));
 						if ($j < ($num_fields - 1)) {
 							fputs($f, ', ');
@@ -308,15 +302,15 @@ function backup_course_db($f, $course) {
 					fputs($f, ')');
 				}
 				fputs($f, "\n\");\n");
-			} 
-		} 
-	} 
+			}
+		}
+	}
 }
 
 
 function backup_course_details($f, $course) {
 	global $mysqlMainDb;
-	
+
 	$res = mysql_query("SELECT * FROM `$mysqlMainDb`.cours
 				    WHERE code = '$course'");
 	$q = mysql_fetch_array($res);
