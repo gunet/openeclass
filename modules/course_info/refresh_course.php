@@ -63,49 +63,33 @@ if(isset($submit)) {
 	if (isset($hideworks))
 	$output[] = hide_work();
 
-	
+
 	if (($count_events = count($output)) > 0 ) {
 
-		$tool_content .=  "<table width=\"99%\">
-				<tbody>
-					<tr>
-						<td class=\"success\">
-						<p><b>$langRefreshSuccess</b></p>
-		<ul class=\"listBullet\">
-		";
+		$tool_content .=  "<p class=\"success_small\">$langRefreshSuccess
+		<ul class=\"listBullet\">";
 		for ($i=0; $i< $count_events; $i++) {
 			$tool_content .= "
-			<li>$output[$i]</li>
-			";
+			<li>$output[$i]</li>			";
 		}
 
-		$tool_content .= "</ul>
-		</td>
-					</tr>
-				</tbody>
-			</table>
-		";
+		$tool_content .= "\n		</ul>\n</p><br />";
 	}
 
 
 
-	$tool_content .="<p><a href='infocours.php'>$langBack</a></p>";
+	$tool_content .="<p align=\"right\"><a href='infocours.php'>$langBack</a></p>";
 
 } else {
-  $tool_content .= "
-  <div id=\"operations_container\">
-  <ul id=\"opslist\">
-    <li><a href=\"infocours.php\">$langBack</a></li>
-  </ul>
-  </div>";
-	$tool_content .= "<br />
+
+	$tool_content .= "
 <form action='refresh_course.php' method='post'>
-    
-    <table width=\"99%\">
+
+    <table width=\"99%\" class=\"FormData\">
     <tbody>
     <tr>
-      <th width='20%'>&nbsp;</th>
-      <td colspan='2'><p>$langRefreshInfo</p><br /><p>$langRefreshInfo_A :</ p></td>
+      <th width='220'>&nbsp;</th>
+      <td colspan='2'>$langRefreshInfo<br /><br /><b>$langRefreshInfo_A :</b></td>
     </tr>
     <tr>
       <th class='left'><img src=\"../../template/classic/img/users_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"> $langUsers</th>
@@ -135,6 +119,7 @@ if(isset($submit)) {
     </table>
 </form>";
 
+  $tool_content .= "<p align=\"right\"><a href=\"infocours.php\">$langBack</a></p>";
 }
 
 draw($tool_content, 2, 'course_info');

@@ -32,8 +32,8 @@ $nameTools = $langDelCourse;
 $tool_content = "";
 
 if($is_adminOfCourse) {
-	if(isset($delete)) {		
-		mysql_select_db("$mysqlMainDb",$db); 
+	if(isset($delete)) {
+		mysql_select_db("$mysqlMainDb",$db);
 		mysql_query("DROP DATABASE `$currentCourseID`");
 		mysql_query("DELETE FROM `$mysqlMainDb`.cours WHERE code='$currentCourseID'");
 		mysql_query("DELETE FROM `$mysqlMainDb`.cours_user WHERE code_cours='$currentCourseID'");
@@ -44,35 +44,24 @@ if($is_adminOfCourse) {
 		##[END personalisation modification]############
 		@mkdir("../../courses/garbage");
 		rename("../../courses/$currentCourseID", "../../courses/garbage/$currentCourseID");
-		
-		$tool_content .= "<table width=\"99%\"><tbody><tr>
-		<td class=\"success\"><p><b>$langTheCourse $currentCourseID $intitule $langHasDel</b></p>
-		<p><a href=\"../../index.php\">".$langBackHome." ".$siteName."</a></p>
-		</td></tr></tbody></table>";
-		
+
+		$tool_content .= "<p class=\"success_small\">$langTheCourse <b>($intitule $currentCourseID)</b>  $langHasDel</p><br />
+		<p align=\"right\"><a href=\"../../index.php\">".$langBackHome." ".$siteName."</a></p>";
+
 		draw($tool_content, 1);
 		exit();
 	} else {
-
-  $tool_content .= "<div id=\"operations_container\">
-  <ul id=\"opslist\">
-    <li><a href=\"infocours.php\">$langBack</a></li>
-  </ul>
-  </div>";
-
-  $tool_content .= "<br />";
 
   $tool_content .= "
     <table width=\"99%\">
     <tbody>
     <tr>
-    <th>&nbsp;</th>
-    <td class=\"caution_NoBorder\" height='60' colspan='2'>
-    <p>$langByDel_A <b>$intitule ($currentCourseID) </b>&nbsp;?  </p>
-    </td>
+      <td class=\"caution_NoBorder\" height='60' colspan='3'>
+        <p>$langByDel_A <b>$intitule ($currentCourseID) </b>&nbsp;?  </p>
+      </td>
   </tr>
     <tr>
-      <th rowspan='2' class='left' width='150'>$langConfirmDel :</th>
+      <th rowspan='2' class='left' width='220'>$langConfirmDel :</th>
       <td width='52' align='center'><a href=\"".$_SERVER['PHP_SELF']."?delete=yes\">$langYes</a></td>
       <td><small>$langByDel</small></td>
     </tr>
@@ -82,6 +71,10 @@ if($is_adminOfCourse) {
     </tr>
     </tbody>
     </table>";
+
+  $tool_content .= "<p align=\"right\"><a href=\"infocours.php\">$langBack</a></p>
+  </ul>
+  </div>";
 
 	} // else
 } else  {

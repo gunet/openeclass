@@ -44,16 +44,7 @@ if (extension_loaded("zlib")) {
 
 // check if you are admin
 if($is_adminOfCourse) {
-	$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\"><li>";
-	if (isset($c) && ($c!="")) {
-		if (isset($search) && ($search=="yes")) $searchurl = "&search=yes";
-		else $searchurl = "";
-		$tool_content .= "<a href=\"../admin/editcours.php?c=".$c."".$searchurl."\">$langBack</a></li>";
-	} else {
-		$tool_content .= "<a href=\"infocours.php\">$langBack</a></li>";
-	}
 
-	$tool_content .= "</ul></div>";
 	$dateBackuping  = date("Y-m-d-H-i-(B)-s");
 	$shortDateBackuping  = date("YzBs"); // YEAR - Day in Year - Swatch - second
 	$archiveDir .= "/".$currentCourseID."/".$dateBackuping;
@@ -87,8 +78,19 @@ if($is_adminOfCourse) {
 		draw($tool_content, 2, 'course_info');
 		exit;
 	} else {
-		$tool_content .= "<br /><p class='success_small'>$langBackupSuccesfull</p><div align=\"right\"><a href='$urlServer/courses/archive/$currentCourseID/archive.$currentCourseID.$shortDateBackuping.zip'>$langDownloadIt</a><img src='../../template/classic/img/download.gif' title='$langDownloadIt' width='30' height='29'></div>";
+		$tool_content .= "<br /><p class='success_small'>$langBackupSuccesfull</p><div align=\"left\"><a href='$urlServer/courses/archive/$currentCourseID/archive.$currentCourseID.$shortDateBackuping.zip'>$langDownloadIt</a><img src='../../template/classic/img/download.gif' title='$langDownloadIt' width='30' height='29'></div>";
 	}
+
+	$tool_content .= "<p align=\"right\">";
+	if (isset($c) && ($c!="")) {
+		if (isset($search) && ($search=="yes")) $searchurl = "&search=yes";
+		else $searchurl = "";
+		$tool_content .= "<a href=\"../admin/editcours.php?c=".$c."".$searchurl."\">$langBack</a>";
+	} else {
+		$tool_content .= "<a href=\"infocours.php\">$langBack</a>";
+	}
+	$tool_content .= "</p>";
+
 	draw($tool_content, 2, 'course_info');
 }	// end of isadminOfCourse
 else

@@ -1,4 +1,4 @@
-<? 
+<?
 
 /*===========================================================================
 *   Open eClass 2.1
@@ -33,7 +33,7 @@ if (isset($from_home) and ($from_home == TRUE) and isset($_GET['cid'])) {
 $require_current_course = TRUE;
 $require_prof = true;
 $require_help = TRUE;
-$helpTopic = 'Infocours'; 
+$helpTopic = 'Infocours';
 if (isset($_POST['localize'])) {
 	$newlang = $language = preg_replace('/[^a-z]/', '', $_POST['localize']);
 }
@@ -62,13 +62,13 @@ if ($is_adminOfCourse) {
 
 		list($facid, $facname) = split("--", $facu);
 		$sql = "UPDATE $mysqlMainDb.cours
-			SET intitule='$int', 
-				faculte='$facname', 
+			SET intitule='$int',
+				faculte='$facname',
 				description=".autoquote($description).",
 				course_addon=".autoquote($course_addon).",
 				course_keywords=".autoquote($course_keywords).",
-				visible=".autoquote($formvisible).", 
-				titulaires=".autoquote($titulary).", 
+				visible=".autoquote($formvisible).",
+				titulaires=".autoquote($titulary).",
 				languageCourse=".autoquote($newlang).",
 				type=".autoquote($type).",
 				password=".autoquote($password).",
@@ -101,25 +101,11 @@ if ($is_adminOfCourse) {
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langUsage' WHERE id='24'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langToolManagement' WHERE id='25'");
 		mysql_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langWiki' WHERE id='26'");
-		
-  $tool_content .= "<div id=\"operations_container\">
-		<ul id=\"opslist\"><li><a href=\"".$_SERVER['PHP_SELF']."\">$langBack</a></li></ul>
-	  </div>";
-  $tool_content .= "<table width=\"99%\">
-  <tbody>
-  <tr><td class=\"success\">$langModifDone.</td></tr>
-  </tbody>
-  </table><br />";
+
+  $tool_content .= "<p class=\"success_small\">$langModifDone.<br /><a href=\"".$_SERVER['PHP_SELF']."\">$langBack</a></p><br />";
 
 	} else {
-		$tool_content .= "<table width=\"99%\">
-		  <tbody>
-		<tr><td class=\"caution\" height='60'><p>$langNoCourseTitle</p>
-    		<p><a href=\"$_SERVER[PHP_SELF]\">$langAgain</a></p>
-		    </td>
-		  </tr>
-		  </tbody>
-		  </table>";
+		$tool_content .= "<p class=\"caution_small\">$langNoCourseTitle<br /><a href=\"$_SERVER[PHP_SELF]\">$langAgain</a></p><br />";
 		}
 } else {
 
@@ -130,10 +116,10 @@ if ($is_adminOfCourse) {
 
 		$sql = "SELECT cours_faculte.faculte,
 			cours.intitule, cours.description, course_keywords, course_addon,
-			cours.visible, cours.fake_code, cours.titulaires, cours.languageCourse, 
+			cours.visible, cours.fake_code, cours.titulaires, cours.languageCourse,
 			cours.departmentUrlName, cours.departmentUrl, cours.type, cours.password
-			FROM `$mysqlMainDb`.cours, `$mysqlMainDb`.cours_faculte 
-			WHERE cours.code='$currentCourseID' 
+			FROM `$mysqlMainDb`.cours, `$mysqlMainDb`.cours_faculte
+			WHERE cours.code='$currentCourseID'
 			AND cours_faculte.code='$currentCourseID'";
 		$result = mysql_query($sql);
 		$leCours = mysql_fetch_array($result);
@@ -156,7 +142,7 @@ if ($is_adminOfCourse) {
    		<form method='post' action='$_SERVER[PHP_SELF]'>
 		  <table width=\"100%\"><tbody>
 	    <tr>
-      <th class='left' width='150'>&nbsp;</th>
+      <th class='left' width='220'>&nbsp;</th>
       <td><b>$langCourseIden</b></td>
       <td>&nbsp;</td>
   	  </tr>
@@ -199,7 +185,7 @@ if ($is_adminOfCourse) {
       <td><textarea name='description' value='".q($leCours['description'])."' cols='57' rows='4' class='FormData_InputText'>".q($leCours['description'])."</textarea></td>
       <td>&nbsp;</td>
     </tr>";
-		$tool_content .= "<tr><th class='left'>$langCourseKeywords&nbsp;</th> 
+		$tool_content .= "<tr><th class='left'>$langCourseKeywords&nbsp;</th>
 		<td><input type='text' name='course_keywords' value='".q($leCours['course_keywords'])."' size='60' class='FormData_InputText'></td>
 			<td>&nbsp;</td>
     </tr>
@@ -214,7 +200,7 @@ if ($is_adminOfCourse) {
     <table width=\"100%\">
     <tbody>
     <tr>
-      <th class='left' width='150'>&nbsp;</th>
+      <th class='left' width='220'>&nbsp;</th>
       <td colspan='2'><b>$langConfidentiality</b></td>
     </tr>
     <tr>
@@ -225,14 +211,14 @@ if ($is_adminOfCourse) {
     <tr>
       <th rowspan='2' class='left'><img src=\"../../template/classic/img/Registration.gif\" alt=\"".$m['legrestricted']."\" title=\"".$m['legrestricted']."\" width=\"16\" height=\"16\">&nbsp;".$m['legrestricted']."&nbsp;:</th>
       <td><input type=\"radio\" name=\"formvisible\" value=\"1\"".@$visibleChecked[1]."></td>
-      <td>$langPrivOpen</td> 
+      <td>$langPrivOpen</td>
     </tr>
     <tr>
       <td>&nbsp;</td>
       <td bgcolor='#F8F8F8'><input type=\"checkbox\" name=\"checkpassword\" ".$checkpasssel.">&nbsp;
             $langOptPassword&nbsp;
             <input type='text' name='password' value='".q($password)."' class='FormData_InputText'>
-      </td> 
+      </td>
     </tr>
     <tr>
       <th class='left'><img src='../../template/classic/img/ClosedCourse.gif' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16'>&nbsp;$m[legclosed]&nbsp;:</th>
@@ -245,7 +231,7 @@ if ($is_adminOfCourse) {
     <table width=\"100%\">
     <tbody>
     <tr>
-      <th class='left' width='150'>&nbsp;</th>
+      <th class='left' width='220'>&nbsp;</th>
       <td colspan='2'><b>$langLanguage</b></td>
     </tr>
     <tr>
@@ -263,7 +249,7 @@ if ($is_adminOfCourse) {
     <table width=\"100%\">
     <tbody>
     <tr>
-      <th class='left' width='150'>&nbsp;</th>
+      <th class='left' width='220'>&nbsp;</th>
       <td><input type='Submit' name='submit' value='$langSubmit'></td>
       <td>&nbsp;</td>
     </tr>

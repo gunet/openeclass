@@ -389,16 +389,9 @@ if (isset($create_course)) {
                 session_register("status");
 
                 $tool_content .= "
-  <table width=\"99%\">
-  <tbody>
-  <tr>
-    <td class=\"success\" width='1'>&nbsp;</td>
-    <td>$langJustCreated: &nbsp;<b>$intitule</b><br/><small>$langEnterMetadata</small></td>
-  </tr>
-  </tbody>
-  </table><br /><br />
-  <p align='center'><a href='../../courses/$repertoire/index.php' class=mainpage><img src=\"../../template/classic/img/go.gif\" alt=\"\" border=\"0\" height=\"46\" width=\"46\"></a><p>
-  <p align='center'>&nbsp;<a href='../../courses/$repertoire/index.php' class=mainpage>$langEnter</a>&nbsp;</p>
+                <p class=\"success_small\">$langJustCreated: &nbsp;<b>$intitule</b></p>
+                <p><small>$langEnterMetadata</small></p><br />
+                <p align='center'>&nbsp;<a href='../../courses/$repertoire/index.php' class=mainpage>$langEnter</a>&nbsp;</p>
 ";
 } // end of submit
 

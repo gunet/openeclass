@@ -31,8 +31,8 @@ $nameTools = $langUnregCours;
 $local_style = 'h3 { font-size: 10pt;} li { font-size: 10pt;} ';
 
 $tool_content = "";
-$tool_content .= "<table width=100% border='0' height=316 cellspacing='0' align=center cellpadding='0'>\n";
-$tool_content .= "<tr><td valign=top>";
+//$tool_content .= "<table width=100% border='0' height=316 cellspacing='0' align=center cellpadding='0'>\n";
+//$tool_content .= "<tr><td valign=top>";
 
 if (isset($_GET['cid']))
   $_SESSION['cid_tmp']=$cid;
@@ -40,35 +40,45 @@ if(!isset($_GET['cid']))
   $cid=$_SESSION['cid_tmp'];
 
 if (!isset($doit) or $doit != "yes") {
-  $tool_content .= "<br><table border=\"0\" width=80% align=center cellspacing='1' cellpadding='1'>
-	      <tr><td class=kk colspan=2 align=center>$langConfirmUnregCours : <em>$cid</em></td></tr>
-        <tr><td>&nbsp;</td></tr>
-        <tr>
-        <td class='tborder' width='50%' align=center onMouseOver=\"this.style.backgroundColor='#C0BD85'\"; onMouseOut=\"this.style.backgroundColor='transparent'\">
-           $langYes:&nbsp;<a href='$_SERVER[PHP_SELF]?u=$uid&cid=$cid&doit=yes' class=mainpage>$langDelete</a>
-           </td>
-           <td class='tborder' align=center onMouseOver=\"this.style.backgroundColor='orange'\"; onMouseOut=\"this.style.backgroundColor='transparent'\">
-           $langNo:&nbsp;<a href='../../index.php' class=mainpage>$langBack</a>
-           </td></tr></table>";
+
+  $tool_content .= "
+    <table width=\"99%\">
+    <tbody>
+    <tr>
+      <td class=\"caution_NoBorder\" height='60' colspan='3'>
+        <p>$langConfirmUnregCours : <em>$cid</em>&nbsp;? </p>
+      </td>
+    </tr>
+    <tr>
+      <th rowspan='2' class='left' width='30%'>$l_confirm :</th>
+      <td><a href='$_SERVER[PHP_SELF]?u=$uid&cid=$cid&doit=yes' class=mainpage>$langYes</a></td>
+      <td align=\"left\" width='60%'><small>$langUnCourse</small></td>
+    </tr>
+    <tr>
+      <td><a href='../../index.php' class=mainpage>$langNo</a></td>
+      <td align=\"left\"><small>&nbsp;</small></td>
+    </tr>
+    </tbody>
+    </table>";
 
 } else {
 if (isset($uid) and $uid==$_SESSION['uid']) {
-            $tool_content .= "<table cellpadding=3 height=320 cellspacing=0 border=0 width=100%>";
-            $tool_content .= "<br><tr valign=top>";
-            $tool_content .= "<td align=center valign=top class=td_main>";
-            $tool_content .= "<span class='labeltext'>";
+            //$tool_content .= "<table cellpadding=3 height=320 cellspacing=0 border=0 width=100%>";
+            //$tool_content .= "<br><tr valign=top>";
+            //$tool_content .= "<td align=center valign=top class=td_main>";
+            //$tool_content .= "<span class='labeltext'>";
             db_query("DELETE from cours_user WHERE code_cours='$cid' and user_id='$uid'");
                 if (mysql_affected_rows() > 0) {
-                        $tool_content .= "<p class=alert1>$langCoursDelSuccess</p>";
+                        $tool_content .= "<p class='success_small'>$langCoursDelSuccess</p>";
                 } else {
-                        $tool_content .= "<p class=alert1>$langCoursError</p>";
+                        $tool_content .= "<p class='caution_small'>$langCoursError</p>";
                 }
          }
-       $tool_content .= "<div align=right><a href='../../index.php' class=mainpage>$langBack</a></div><br><br>";
-		$tool_content .= "</td></tr></table>";
+        $tool_content .= "<br><br><div align=right><a href='../../index.php' class=mainpage>$langBack</a></div>";
+		//$tool_content .= "</td></tr></table>";
 }
 
-$tool_content .= "</td></tr></table>";
+//$tool_content .= "</td></tr></table>";
 if (isset($_SESSION['uid'])) {
         draw($tool_content, 1);
 } else {
