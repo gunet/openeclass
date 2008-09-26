@@ -129,17 +129,17 @@ find ./ -type d -exec chmod 775 {} \;
 <p>The following example presupposes that eClass has already been installed to directory <code>C:\Program Files\Apache\htdocs\</code> and that you have downloaded <b>openeclass-2.1.zip</b>.</p>  
 <p>Due to several changes included by the new (2.1) Open eClass version you will have to delete the old and install the new one. To make sure that you old configuration remain intact you must do the following actions:</p>
 <ul>
-  <li>Move to the eClass installed catalogue. e.g.<code>C:\Program
+  <li>Move to the eClass installed folder. e.g.<code>C:\Program
     Files\Apache\htdocs</code></li>
-  <li>Move the configuration file (<code>C:\Program Files\Apache\htdocs\eclass\claroline\include\config.php</code>)
-    in another temporary folder in your desktop (e.g. e.g. from <code>C:\Program
-    Files\Apache\htdocs\eclass\claroline\include\</code> to folder <code>C:\Documents
+  <li>Move the configuration file (<code>C:\Program Files\Apache\htdocs\eclass\include\config.php</code>)
+    in another temporary folder in your desktop (e.g. from <code>C:\Program
+    Files\Apache\htdocs\eclass\include\</code> to folder <code>C:\Documents
     and Settings\Administrator\Desktop\</code></li>)
   <li>If you have courses in which you have used subsystem 'Chat' then move the appropriate chat files as well.
-    There are found in folder <code>C:\Program Files\Apache\htdocs\eclass\claroline\chat\</code> with the form course_code.chat.txt e.g.
+    These are found in folder <code>C:\Program Files\Apache\htdocs\eclass\modules\chat\</code> with the form course_code.chat.txt 
   </li>
   <li>Go to eclass folder (e.g.<code>C:\Program Files\Apache\htdocs\eclass\</code>) and delete all the folders except courses and config.</li>
-  <li>Unzip openeclass-2.1.zip to a temporary folderon the desktop. e.g.
+  <li>Unzip openeclass-2.1.zip to a temporary folder on the desktop. e.g.
     <code>C:\Documents and Settings\Administrator\Desktop\eclass17</code>.
 	After that rename the temporary folder eclass21 to eclass and copy it along with its contents (files and documents). Then, open the file that includes eClass installation, e.g. 
  <code>C:\Program
