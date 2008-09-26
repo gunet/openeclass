@@ -38,6 +38,8 @@ function update_field($table, $field, $field_name, $id_col, $id) {
 // Removes initial part of path from assignment_submit.file_path
 function update_assignment_submit()
 {
+	global $langTable;
+
 	$updated = FALSE;
 	$q = db_query('SELECT id, file_path FROM assignment_submit');
 	if ($q) {
@@ -51,7 +53,7 @@ function update_assignment_submit()
 		}
 	}
 	if ($updated) {
-		echo "Πίνακας assignment_submit: $GLOBALS[OK]<br>\n";
+		echo "$langTable assignment_submit: $GLOBALS[OK]<br>\n";
 	}
 }
 
@@ -59,10 +61,10 @@ function update_assignment_submit()
 // Adds field $field to table $table of current database, if it doesn't already exist
 function add_field($table, $field, $type)
 {
-	global $OK, $BAD;
+	global $langToTable, $langAddField, $langThereIs, $OK, $BAD;
 
 	$retString = "";
-	$retString .= "Προσθήκη πεδίου <b>$field</b> στον πίνακα <b>$table</b>: ";
+	$retString .= "$langAddField <b>$field</b> $langToTable <b>$table</b>: ";
 	$fields = db_query("SHOW COLUMNS FROM $table LIKE '$field'");
 	if (mysql_num_rows($fields) == 0) {
 		if (db_query("ALTER TABLE `$table` ADD `$field` $type")) {
@@ -71,7 +73,7 @@ function add_field($table, $field, $type)
 			$retString .= " $BAD<br>";
 		}
 	} else {
-		$retString .= "Υπάρχει ήδη. $OK<br>";
+		$retString .= "$langThereIs $OK<br>";
 	}
 
 	return $retString;
@@ -79,10 +81,10 @@ function add_field($table, $field, $type)
 
 function add_field_after_field($table, $field, $after_field, $type)
 {
-	global $OK, $BAD;
+	global $langToTable, $langAddField, $langAfterField, $langThereIs, $OK, $BAD;
 
 	$retString = "";
-	$retString .= "Προσθήκη πεδίου <b>$field</b> μετά το πεδίο <b>$after_field</b> στον πίνακα <b>$table</b>: ";
+	$retString .= "$langAddField <b>$field</b> $langAfterField <b>$after_field</b> $langToTable <b>$table</b>: ";
 	$fields = db_query("SHOW COLUMNS FROM $table LIKE '$field'");
 	if (mysql_num_rows($fields) == 0) {
 		if (db_query("ALTER TABLE `$table` ADD COLUMN `$field` $type AFTER `$after_field`")) {
@@ -91,16 +93,17 @@ function add_field_after_field($table, $field, $after_field, $type)
 			$retString .= " $BAD<br>";
 		}
 	} else {
-		$retString .= "Υπάρχει ήδη. $OK<br>";
+		$retString .= "$langThereIs $OK<br>";
 	}
 
 	return $retString;
 }
 function rename_field($table, $field, $new_field, $type)
 {
-	global $OK, $BAD;
+	global $langThereIs, $langToA, $langRenameField, $langToTable, $OK, $BAD;
+
 	$retString = "";
-	$retString .= "Μετονομασία πεδίου <b>$field</b> σε <b>$new_field</b> στον πίνακα <b>$table</b>: ";
+	$retString .= "$langRenameField <b>$field</b> $langToA <b>$new_field</b> $langToTable <b>$table</b>: ";
 	$fields = db_query("SHOW COLUMNS FROM $table LIKE '$new_field'");
 	if (mysql_num_rows($fields) == 0) {
 		if (db_query("ALTER TABLE `$table` CHANGE  `$field` `$new_field` $type")) {
@@ -109,7 +112,7 @@ function rename_field($table, $field, $new_field, $type)
 			$retString .= " $BAD<br>";
 		}
 	} else {
-		$retString .= "Υπάρχει ήδη. $OK<br>";
+		$retString .= "$langThereIs $OK<br>";
 	}
 	return $retString;
 
@@ -117,10 +120,10 @@ function rename_field($table, $field, $new_field, $type)
 }
 
 function delete_field($table, $field) {
-	global $OK, $BAD;
+	global $langOfTable, $langDeleteField, $OK, $BAD;
 	
 	$retString = "";
-	$retString .= "Διαγραφή πεδίου <b>$field</b> του πίνακα <b>$table</b>";
+	$retString .= "$langDeleteField <b>$field</b> $langOfTable <b>$table</b>";
 	if (db_query("ALTER TABLE `$table` DROP `$field`")) {
 		$retString .= " $OK<br>";
 	} else {
@@ -131,9 +134,9 @@ function delete_field($table, $field) {
 
 function delete_table($table)
 {
-	global $OK, $BAD;
+	global $langDeleteTable, $OK, $BAD;
 	$retString = "";
-	$retString .= "Διαγραφή πίνακα <b>$table</b>: ";
+	$retString .= "$langDeleteTable <b>$table</b>: ";
 	if (db_query("DROP TABLE $table")) {
 		$retString .= " $OK<br>";
 	} else {
@@ -144,9 +147,10 @@ function delete_table($table)
 
 function merge_tables($table_destination,$table_source,$fields_destination,$fields_source)
 {
-	global $OK, $BAD;
+	global $langMergeTables, $OK, $BAD;
+
 	$retString = "";
-	$retString .= " Ενοποίηση των πινάκων <b>$table_destination</b>,<b>$table_source</b>";
+	$retString .= " $langMergeTables <b>$table_destination</b>,<b>$table_source</b>";
 	$query = "INSERT INTO $table_destination (";
 	foreach($fields_destination as $val)
 	{
@@ -214,26 +218,29 @@ function accueil_tool_missing($define_var) {
 
 // add indexes in specific columns/tables
 function add_index($index, $column, $table)  {
+	global $langIndexAdded, $langIndexExists, $langOfTable;
 
         $ind_sql = db_query("SHOW INDEX FROM $table");
         while ($i = mysql_fetch_array($ind_sql))  {
                 if ($i['Key_name'] == $index) {
-                        $retString = "<p>Υπάρχει ήδη κάποιο index στον πίνακα $table</p>";
+                        $retString = "<p>$langIndexExists $table</p>";
 			return $retString;
                 }
         }
         db_query("ALTER TABLE $table ADD INDEX $index($column)");
-        $retString = "<p>Προστέθηκε index στο πεδίο $column του πίνακα $table</p>";
+        $retString = "<p>$langIndexAdded $column $langOfTable $table</p>";
         return $retString;
 }
 
 // convert database and all tables to UTF-8
 function convert_db_utf8($database)
 {
+	global $langNotTablesList;
+
         db_query("ALTER DATABASE `$database` DEFAULT CHARACTER SET=utf8");
         $result = mysql_list_tables($database);
         if (!$result) {
-                echo "DB Error, could not list tables for database $database. ",
+                echo "$langNotTablesList $database. ",
                      'MySQL Error: ', mysql_error();
         }
         while ($row = mysql_fetch_row($result)) {
@@ -246,10 +253,10 @@ function convert_db_utf8($database)
 // Upgrade course database and documents
 function upgrade_course($code, $lang)
 {
-		global $webDir, $mysqlMainDb, $tool_content, $OK, $BAD;
+	global $webDir, $mysqlMainDb, $tool_content, $langTable, $langNotMovedDir, $langToDir, $OK, $BAD;
+	global $langMoveIntroText, $langCorrectTableEntries, $langEncodeDocuments, $langEncodeGroupDocuments;	
 
-		include 'messages_accueil.php';
-	
+		include 'messages_accueil.php';	
 
 		mysql_select_db($code);
 
@@ -268,9 +275,9 @@ function upgrade_course($code, $lang)
                 while ($f = mysql_fetch_row($s)) {
                         if (empty($f[0]))  {
                                 if (db_query("UPDATE `questions` SET type=1",$code)) {
-                                        echo "Πίνακας questions: $OK<br>";
+                                        echo "$langTable questions: $OK<br>";
                                 } else {
-                                        echo "Πίνακας questions: $BAD<br>";
+                                        echo "$langTable questions: $BAD<br>";
                                 }
                         }
                 } // while
@@ -764,12 +771,12 @@ function upgrade_course($code, $lang)
 
 
         	// -------------- document upgrade ---------------------
-		echo "Κωδικοποίηση των περιεχομένων του υποσυστήματος 'Έγγραφα'<br>";
+		echo "$langEncodeDocuments<br>";
 	  	flush();
                 encode_documents($code);
 
                 // -------------- group document upgrade ---------------
-		echo "Κωδικοποίηση των περιεχομένων του υποσυστήματος Ομάδες Χρηστών - 'Έγγραφα'<br>";
+		echo "$langEncodeGroupDocuments<br>";
 	  	flush();
 	        // find group secret directory	
         	$s = db_query("SELECT id, secretDirectory FROM student_group");
@@ -782,7 +789,7 @@ function upgrade_course($code, $lang)
                 $course_video = "${webDir}courses/$code/video";
 		if (is_dir($course_video)) {
                         if (!rename($course_video, "${webDir}video/$code")) {
-                              echo "Προσοχή: Δεν ήταν δυνατή η μεταφορά του υποκαταλόγου $course_video στο φάκελο video<br>";
+                              echo "$langNotMovedDir $course_video $langToDir video<br>";
                         }
                 }
                 // upgrade video 
@@ -887,7 +894,7 @@ function upgrade_course($code, $lang)
                 }
 
                 // table accueil
-                echo "Διόρθωση εγγραφών του πίνακα accueil.<br>";
+                echo "$langCorrectTableEntries accueil.<br>";
 
                 /* compatibility update
                    a) remove entries modules import, external, videolinks, old statistics
@@ -972,38 +979,13 @@ function upgrade_course($code, $lang)
                         while ($text = mysql_fetch_array($sql)) {
                                 $description = quote($text[0]);
                                 if (db_query("UPDATE cours SET description=$description WHERE code='$code'", $mysqlMainDb)) {
-                                        echo "Μεταφορά του εισαγωγικού κειμένου στον πίνακα <b>cours</b>: $OK<br>";
+                                        echo "$langMoveIntroText <b>cours</b>: $OK<br>";
                                         db_query("DROP TABLE IF EXISTS introduction", $code);
                                 } else {
-                                        echo "Μεταφορά του εισαγωγικού κειμένου στον πίνακα <b>cours</b>: $BAD<br>";
+                                        echo "$langMoveIntroText <b>cours</b>: $BAD<br>";
                                 }
                         }
                 } // end of table introduction
-
-                // remove table 'cours_description' entries and insert them in table 'cours'
-                // after that drop table cours_description
-                /*
-                   if (mysql_table_exists($code, 'course_description')) {
-                // description
-                $sql = db_query("SELECT content FROM course_description WHERE id='0'", $code);
-                while ($cdesc = mysql_fetch_array($sql))
-                db_query("UPDATE cours SET description='$cdesc[0]' WHERE code='$code'", $mysqlMainDb));
-                $sql = db_query("SELECT content FROM course_description WHERE id='1'", $code);
-                while ($cdesc = mysql_fetch_array($sql))
-                db_query("UPDATE cours SET cours_objectives='$cdesc[0]' WHERE code='$code'", $mysqlMainDb);
-                $sql = db_query("SELECT content FROM course_description WHERE id='2'", $code);
-                while ($cdesc = mysql_fetch_array($sql))
-                db_query("UPDATE cours SET cours_prerequisites='$cdesc[0]' WHERE code='$code'", $mysqlMainDb);
-                $sql = db_query("SELECT content FROM course_description WHERE id='3'", $code);
-                while ($cdesc = mysql_fetch_array($sql))
-                db_query("UPDATE cours SET course_keywords='$cdesc[0]' WHERE code='$code'", $mysqlMainDb);
-                $sql = db_query("SELECT content FROM course_description WHERE id='4'", $code);
-                while ($cdesc = mysql_fetch_array($sql))
-                db_query("UPDATE cours SET course_references='$cdesc[0]' WHERE code='$code'", $mysqlMainDb);
-
-                db_query("DROP TABLE course_description", $code);
-                } // end of table 'cours_description'
-                 */
 
                 $tool_content .= "<br><br></td></tr>";
 
@@ -1194,7 +1176,7 @@ function traverseDirTree($base, $fileFunc, $dirFunc, $data) {
 // -------------------------------------
 function upgrade_video($file, $id, $code)
 {
-	global $webDir;
+	global $webDir, $langGroupNone, $langWarnVideoFile;
 
 	$fileName = trim($file);
         $fileName = replace_dangerous_char($fileName);
@@ -1206,7 +1188,7 @@ function upgrade_video($file, $id, $code)
         	db_query("UPDATE video SET path = '$safe_filename'
 	        	WHERE id = '$id'", $code);
 	} else {
-		echo "Προσοχή: το αρχείο video $path_to_video.$file δεν υπάρχει!<br>";
+		echo "$langWarnVideoFile $path_to_video.$file $langGroupNone!<br>";
                 db_query("DELETE FROM video WHERE id = '$id'", $code);
         }
 }

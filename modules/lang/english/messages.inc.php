@@ -504,12 +504,16 @@ $langWrongAuth = "You did not provide a valid pair of username/password";
 $langCopyright = "Copyright Notice";
 $langCopyrightNotice = '
 Open eClass © 2003 - 2008 <a href="http://www.gunet.gr/" target=_blank>Greek Universities Network GUnet</a>.<br>&nbsp;<br>
-The <a href="http://www.openeclass.org" target=_blank>Open eClass platform</a>
-is a complete Electronic Course Management System and is GUnet\'s
-proposition for an Asynchronous Teleteaching Service infrastructure.
-It was developed and is actively supported by the GUnet Asynchronous
-Teleteaching Team, and is <a href="http://download.eclass.gunet.gr" target="_blank">distributed freely</a>
-as Open Source Software under the GNU General Public License (GNU GPL).<br><br>
+The Open eClass plaform is a complete Course Management System. It is the 
+solution offered by the Greek Academic Network GUnet to support Asynchronous 
+eLearning Services via a simple web browser. Its goal is the incorporation 
+and constructive use of the Internet and web technologies in the teaching and 
+learning process. It supports the electronic management, storage and presentation 
+of teaching materials, independently of the spatial and time limiting factors 
+of conventional teaching and creating the necessary conditions for a dynamic 
+teaching environment.<br><br>
+Open eClass is an open platform distributed in the hope that it will be useful. 
+It was developed and is actively supported by the GUnet Asynchronous eLearning Group, and is distributed freely as Open Source Software under the GNU General Public License (GNU GPL).<br><br>
 The content of Electronic Courses hosted on the Open eClass platform, as well as
 all copyrights of this content, belongs to the authors of the courses and
 GUnet claims no rights on it. For every use or republication of course
@@ -2612,8 +2616,6 @@ $langErrorLang = "Error! No languages found !";
 /****************************************************************
 * search.inc.php
 ****************************************************************/
-
-
 $langDoSearch = "Proceed with search";
 $langNewSearch = "New search";
 $langSearch_terms = "Search criteria: ";
@@ -2690,25 +2692,72 @@ $langAs = "as";
      You will not appear anymore in your logs.<br><br><br><br>";
  $msgCreateCookError = "<b>Administrator:</b> cookie could not be saved on your computer.<br>
      Check your browser settings and refresh page.<br><br><br><br>";
- $msgInstalComments = "<p>The automatic install procedure will attempt to:</p>
-       <ul>
-         <li>create a table named <b>liste_domaines</b> in your SQL base<br>
-           </b>This table will be automatically filled with country names with InterNIC
-           codes</li>
-         <li>create a table named <b>logezboo</b><br>
-           This table will store your logs</li>
-       </ul>
-       <font color=\"#FF3333\">You must have modified manually:<ul><li><b>config_sql.php3</b> file with your <b>login</b>, <b>password</b> and <b>base name</b> for SQL sever connexion.</li><br><li>The file <b>config.inc.php3</b> must have been modified to select apropriate language.</font></li></ul><br>To do so, you can you anykind of text editor (such as Notepad).";
- $msgInstallAbort = "SETUP ABORTED";
- $msgInstall1 = "If there is no error message above, installation is successfull.";
- $msgInstall2 = "2 tables have been created in your SQL base";
- $msgInstall3 = "You can now open the main interface";
- $msgInstall4 = "In order to fill your table when pages are loaded, you must put a tag in monitored pages.";
- $msgUpgradeComments ="This new version of ezBOO WebStats uses the same table <b>logezboo</b> as previous
-  versions.<br>If countries are not written in english, you must erase table <b>liste_domaine</b>
- et launch setup.<br>This will have no effect on the table <b>logezboo</b> .<br>Error message is normal. :-)";
 
 $langStats="Statistics";
+
+/*************************************************************
+* upgrade.inc.php
+*************************************************************/
+$langUpgrade = "Database upgrade";
+$langExplUpgrade = "The upgrade script will modify configuration file <em>config.php</em>. 
+   Please make sure that web server have access to <em>config.php</em>. For security reasons, current configuration of <em>config.php</em> will remain in file <em>config_backup.php</em>.";
+$langExpl2Upgrade = "Also for security reasons make sure that you have backedup all the databases.";
+$langWarnUpgrade = "WARNING!";
+$langExecTimeUpgrade = "WARNING! For upgrade script to run successfully make sure that php variable <em>max_execution_time</em> which is defined in <em>php.ini</em> is larger than 300 (= 5 miunutes). Modify variable and restart the upgrade process";
+$langUpgradeCont = "Το continue upgrade process, please enter platform administrator username / password:";
+$langUpgDetails = "Username / Password";
+$langUpgMan = "upgrade instructions";
+$langUpgToSee = "To review all the new features and changes of eClass new version click ";
+$langUpgLastStep = "before continue.";
+$langUpgRead = "If you haven't done that, please read carefully";
+$langSuccessOk = "Success ";
+$langSuccessBad = "Error or not needed modification";
+$langUpgAdminError = "Wrong Admin username or/and password! Please try again.";
+$langConfigError1 = "Cannot create backup copy of config.php! Please check permissions.";
+$langConfigError2 = "Cannot read config.php! Please check read permissions.";
+$langConfigError3 = "config.php was NOT modified! Please check permissions.";
+$langConfigError4 = "Cannot access directory of config.php! Please check permissions.";
+$langUpgradeSuccess = "Upgrade Database of Open eClass finished successfully!";
+$langUpgNoVideoDir = "Cannot create 'video' directory! Please check permissions.";
+$langUpgNoVideoDir2 = "Τhere is already a file with the name 'video'! You must delete it first";
+$langUpgNoVideoDir3 = "No write permissions in directory 'video'!";
+$langUpgReady = "You are ready to use the new version of Open eClass!";
+$langUpgSucNotice = "If an error occured, maybe some course is not completely working .<br>
+                In such case please contact us in <a href='mailto:eclass@gunet.gr'>eclass@gunet.gr</a><br>
+                describing exactly the problem<br> and (if it's possible) sending us all the error messages";
+$langUpgCourse = "Upgrade of Course";
+$langUpgFileNotRead = "File couldn't be read. Please check permissions.";
+$langUpgFileNotModify = "File couldn't be modified. Please check permissions.";
+$langUpgNotChDir = "Couldn't change directory! Please check permissions.";
+$langUpgIndex = "Modification of course index.php";
+$langCheckPerm = "Check permissions";
+$langUpgNotIndex = "Couldn't change course directory";
+$langConfigFound = "Found the following info in <tt>config.php</tt>.";
+$langConfigMod = "Feel free to modify them.";
+$langUpgContact = "Contact Info";
+$langUpgAddress = "Insitution Address:";
+$langUpgTel = "Phone:";
+$langUpgReg = "User Registration";
+$langTable = "Table";
+$langToTable = "to table";
+$langAddField = "Add field";
+$langAfterField = "after field";
+$langToA = "to";
+$langRenameField = "Rename field";
+$langOfTable = "of table";
+$langDeleteField = "Delete field";
+$langDeleteTable = "Delete table";
+$langMergeTables = "Merge Tables";
+$langIndexExists = "Index exists in table";
+$langIndexAdded = "Index added in field";
+$langNotTablesList = "DB Error, could not list tables for database";
+$langNotMovedDir = "Warning: Failure moving of subdirectory";
+$langToDir = "to directory";
+$langCorrectTableEntries = "Correct entries of table";
+$langMoveIntroText = "Moving of introduction text to table";
+$langEncodeDocuments = "Encoding of 'Documents'";
+$langEncodeGroupDocuments = "Encoding of 'Group Documents'";
+$langWarnVideoFile = "Warning: Video file";
 
 /*************************************************************
 * toolmanagement.inc.php

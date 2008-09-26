@@ -11,8 +11,8 @@ of teaching materials, independently of the spatial and time limiting factors
 of conventional teaching and creating the necessary conditions for a dynamic 
 teaching environment.
 
-Open eClass is an open platform distributed in the hope that it will be useful 
-(without any warranty). It was developed and is actively supported by the GUnet 
+Open eClass is an open platform distributed in the hope that it will be useful. 
+It was developed and is actively supported by the GUnet 
 Asynchronous eLearning Group, and is distributed freely as Open Source Software 
 under the GNU General Public License (GNU GPL).
 

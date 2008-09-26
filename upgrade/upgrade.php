@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 session_start();
@@ -34,13 +34,13 @@ include '../include/lib/fileUploadLib.inc.php';
 include '../include/lib/forcedownload.php';
 include 'upgrade_functions.php';
 
-$nameTools = "Αναβάθμιση των βάσεων δεδομένων του eClass";
+$nameTools = $langUpgrade;
 $auth_methods = array("imap","pop3","ldap","db");
-$OK = "[<font color='green'> Επιτυχία </font>]";
-$BAD = "[<font color='red'> Σφάλμα ή δεν χρειάζεται τροποποίηση</font>]";
+$OK = "[<font color='green'> $langSuccessOk </font>]";
+$BAD = "[<font color='red'> $langSuccessBad </font>]";
 
 $tool_content = "";
-$tool_content .= "<table width=\"99%\"><tbody>";
+
 
 // default quota values  (if needed)
 $diskQuotaDocument = 40000000;
@@ -70,9 +70,8 @@ if (!isset($submit2)) {
         }
 
         if (!is_admin(@$_REQUEST['login'], $newpass, $mysqlMainDb)) {
-                $tool_content .= "<p>Τα στοιχεία που δώσατε δεν αντιστοιχούν στο διαχειριστή του
-                        συστήματος! Παρακαλούμε επιστρέψτε στην προηγούμενη σελίδα και ξαναδοκιμάστε.</p>
-                        <center><a href=\"index.php\">Επιστροφή</a></center>";
+                $tool_content .= "<p>$langUpgAdminError</p>
+                        <center><a href=\"index.php\">$langBack</a></center>";
                 draw($tool_content, 0);
                 exit;
         }
@@ -81,19 +80,19 @@ if (!isset($submit2)) {
 // Make sure 'video' subdirectory exists and is writable
 if (!file_exists('../video')) {
         if (!mkdir('../video')) {
-                die('Ο υποκατάλογος "video" δεν υπάρχει και δεν μπόρεσε να δημιουργηθεί. Ελέγξτε τα δικαιώματα πρόσβασης.');
+                die("$langUpgNoVideoDir");
         }
 } elseif (!is_dir('../video')) {
-        die('Υπάρχει ένα αρχείο με όνομα "video" που εμποδίζει! Θα πρέπει να το διαγράψετε.');
+        die("$langUpgNoVideoDir2");
 } elseif (!is_writable('../video')) {
-        die('Δεν υπάρχει δικαίωμα εγγραφής στον υποκατάλογο "video"!');
+        die("$langUpgNoVideoDir3");
 }
 
 // ********************************************
 // upgrade config.php
 // *******************************************
 if (!@chdir("../config/")) {
-     die ("Δεν ήταν δυνατή η πρόσβαση στον κατάλογο του αρχείο ρυθμίσεων config.php! Ελέγξτε τα δικαιώματα πρόσβασης.");
+     die ("$langConfigError4");
 }
 
 if (!isset($submit2)) {
@@ -101,32 +100,32 @@ if (!isset($submit2)) {
         // get old contact values
         $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>" .
                 "<div class='kk'>" .
-                "<p>Στο αρχείο ρυθμίσεων <tt>config.php</tt> βρέθηκαν τα παρακάτω στοιχεία επικοινωνίας." .
-                "<br>Μπορείτε να τα αλλάξετε / συμπληρώσετε.</p>" .
-                "<fieldset><legend>Στοιχεία Επικοινωνίας</legend>" .
-                "<table><tr><td style='border: 1px solid #FFFFFF;'>Όνομα Ιδρύματος:</td>" .
+                "<p>$langConfigFound" .
+                "<br>$langConfigMod</p>" .
+                "<fieldset><legend>$langUpgContact</legend>" .
+                "<table><tr><td style='border: 1px solid #FFFFFF;'>$langInstituteShortName:</td>" .
                 "<td style='border: 1px solid #FFFFFF;'>&nbsp;<input class=auth_input_admin type='text' size='40' name='Institution' value='".@$Institution."'></td></tr>" .
-                "<tr><td style='border: 1px solid #FFFFFF;'>Διεύθυνση Ιδρύματος:</td>" .
+                "<tr><td style='border: 1px solid #FFFFFF;'>$langUpgAddress</td>" .
                 "<td style='border: 1px solid #FFFFFF;'>&nbsp;<textarea rows='3' cols='40' class=auth_input_admin name='postaddress'>".@$postaddress."</textarea></td></tr>" .
-                "<tr><td style='border: 1px solid #FFFFFF;'>Τηλ. Επικοινωνίας:</td>" .
+                "<tr><td style='border: 1px solid #FFFFFF;'>$langUpgTel</td>" .
                 "<td style='border: 1px solid #FFFFFF;'>&nbsp;<input class=auth_input_admin type='text' name='telephone' value='".@$telephone."'></td></tr>" .
                 "<tr><td style='border: 1px solid #FFFFFF;'>Fax:</td>" .
                 "<td style='border: 1px solid #FFFFFF;'>&nbsp;<input class=auth_input_admin type='text' name='fax' value='".@$fax."'></td></tr></table></fieldset>
-                <fieldset><legend>Εγγραφή Χρηστών</legend>
+                <fieldset><legend>$langUpgReg</legend>
                 <table cellpadding='1' cellspacing='2' border='0' width='99%'>
                 <tr><td style='border: 1px solid #FFFFFF;''>
-                <span class='explanationtext'>Εγγραφή χρηστών μέσω αίτησης</span></td>
+                <span class='explanationtext'>$langViaReq</span></td>
                 <td style='border: 1px solid #FFFFFF;'><input type='checkbox' name='reguser' $closeregdefault></td>
                 </tr>
                 </table></fieldset>
-                <p><input name='submit2' value='Συνέχεια' type='submit'></p>
+                <p><input name='submit2' value='$langCont' type='submit'></p>
                 </div></form>";
 } else {
         // Main part of upgrade starts here
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<title>η-Τάξη ΕΚΠΑ | Αναβάθμιση των βάσεων δεδομένων του eClass</title>
+<title><?= $langUpgrade ?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link href="../template/classic/theme.css" rel="stylesheet" type="text/css" />
 <link href="../template/classic/tool_content.css" rel="stylesheet" type="text/css" />
@@ -136,11 +135,11 @@ if (!isset($submit2)) {
 
         // backup of config file 
         if (!copy("config.php","config_backup.php"))
-                die ("Δεν ήταν δυνατή η λειτουργία αντιγράφου ασφαλείας του config.php! Ελέγξτε τα δικαιώματα πρόσβασης.");
+                die ("$langConfigError1");
 
         $conf = file_get_contents("config.php");
         if (!$conf)
-                die ("Το αρχείο ρυθμίσεων config.php δεν μπόρεσε να διαβαστεί! Ελέγξτε τα δικαιώματα πρόσβασης.");
+                die ("$langConfigError2");
 
         $lines_to_add = "";
 
@@ -204,7 +203,7 @@ if (!isset($submit2)) {
                         $conf);
         $fp = @fopen("config.php","w");
         if (!$fp)
-                die ("Δεν πραγματοποιήθηκε η εγγραφή των αλλαγών στο αρχείο ρυθμίσεων config.php! Ελέγξτε τα δικαιώματα πρόσβασης.");
+                die ("$langConfigError3");
         fwrite($fp, $new_conf);
         fclose($fp);
         // ****************************************************
@@ -468,10 +467,10 @@ if (!isset($submit2)) {
                 $lang = $code[1];
 
                 // modify course_code/index.php
-                echo "<hr><p>Τροποποίηση αρχείου index.php του μαθήματος <b>$code[0]</b><br />";
+                echo "<hr><p>$langUpgIndex <b>$code[0]</b><br />";
                 flush();
                 if (!@chdir("$webDir/courses/$code[0]")) {
-                        die ("Δεν πραγματοποιήθηκε η αλλαγή στον κατάλογο του μαθήματος \"$code[0]\"! Ελέγξτε τα δικαιώματα πρόσβασης.");
+                        die ("$langUpgNotIndex \"$code[0]\"! $langCheckPerm.");
                 }
 
                 if (!file_exists("temp")) {
@@ -480,20 +479,20 @@ if (!isset($submit2)) {
 
                 $filecontents = file_get_contents("index.php");
                 if (!$filecontents)
-                        die ("To αρχείο δεν μπόρεσε να διαβαστεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
+                        die ("$langUpgFileNotRead");
                 $newfilecontents = preg_replace('#../claroline/#','../../modules/',$filecontents);
                 $fp = @fopen("index.php","w");
                 if (!$fp)
-                        die ("To αρχείο δεν μπόρεσε να διαβαστεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
+                        die ("$langUpgFileNotRead");
                 if (!@fwrite($fp, $newfilecontents))
-                        die ("Το αρχείο δεν μπόρεσε να τροποποιηθεί. Ελέγξτε τα δικαιώματα πρόσβασης.");
+                        die ("$langUpgFileNotModify");
                 fclose($fp);
                 // Fixed By vagpits
                 if (!@chdir("$webDir/upgrade")) {
-                        die("Δεν πραγματοποιήθηκε η αλλαγή στον κατάλογο αναβάθμισης! Ελέγξτε τα δικαιώματα πρόσβασης.");
+                        die("$langUpgNotChDir");
                 }
 
-                echo "Αναβάθμιση μαθήματος <b>$code[0]</b><br>";
+                echo "$langUpgCourse <b>$code[0]</b><br>";
                 flush();
                 upgrade_course($code[0], $lang);
                 echo "</p>\n";
@@ -501,13 +500,10 @@ if (!isset($submit2)) {
 
         convert_db_utf8($mysqlMainDb);
 
-        echo "<p><em class='success_small' style='font-weight:bold;'>Η αναβάθμιση των βάσεων δεδομένων του eClass πραγματοποιήθηκε!</em></p>
-                <p><em style='font-weight:bold;'>Είστε πλέον έτοιμοι να χρησιμοποιήσετε την καινούρια έκδοση του eClass!</em></p>
-                <em>Αν παρουσιάστηκε κάποιο σφάλμα, πιθανόν κάποιο μάθημα να μην δουλεύει εντελώς σωστά.<br>
-                Σε αυτή την περίπτωση επικοινωνήστε μαζί μας στο <a href='mailto:eclass@gunet.gr'>eclass@gunet.gr</a><br>
-                περιγράφοντας το πρόβλημα που παρουσιάστηκε<br> και στέλνοντας (αν είναι δυνατόν) όλα τα μηνύματα που εμφανίστηκαν στην οθόνη σας</em>></center>
-		<center><p><a href='$urlServer?logout=yes'>Επιστροφή</a></p></center>
-                </td></tr></tbody></table>";
+        echo "<hr><p><em class='success_small' style='font-weight:bold;'>$langUpgradeSuccess</em></p>
+                <p><em style='font-weight:bold;'>$langUpgReady</em></p>
+                <em>$langUpgSucNotice</em></center>
+		<center><p><a href='$urlServer?logout=yes'>$langBack</a></p></center>";
 
         echo '</body></html>';
         exit;

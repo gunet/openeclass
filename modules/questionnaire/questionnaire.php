@@ -269,7 +269,7 @@ global $tool_content, $currentCourse, $langCreatePoll, $langPollsActive,
 	$langPollEnd, $langPollNone, $is_adminOfCourse,
 	$mysqlMainDb, $langEdit, $langDelete, $langActions,
 	$langDeactivate, $langPollsInactive, $langPollHasEnded, $langActivate, $langParticipate,
-	$user_id, $langHasParticipated, $langHasNotParticipated, $uid, ${urlServer};
+	$user_id, $langHasParticipated, $langHasNotParticipated, $uid, $urlServer;
 
 $poll_check = 0;
 $result = mysql_list_tables($currentCourse);
