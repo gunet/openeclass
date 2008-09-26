@@ -32,6 +32,12 @@ include '../include/baseTheme.php';
 $nameTools = $langUpgrade;
 $max_execution_time = trim(ini_get('max_execution_time'));
 
+if ($GLOBALS['language'] == 'greek') { 
+	$upgrade_info_file = 'upgrade_info.php';
+} else {
+ 	$upgrade_info_file = 'upgrade_info_en.php';
+}
+
 // Initialise $tool_content
 $tool_content = "";
 
@@ -44,7 +50,7 @@ if (intval($max_execution_time) < 300) {
 	draw($tool_content, 0);
 	exit;
 }
-$tool_content .= "<p>$langUpgToSee <a href='CHANGES.txt'>$langHere</a>. $langUpgRead <a href='upgrade_info.php'>$langUpgMan</a>
+$tool_content .= "<p>$langUpgToSee <a href='CHANGES.txt'>$langHere</a>. $langUpgRead <a href='$upgrade_info_file'>$langUpgMan</a>
    $langUpgLastStep</p>
 <p>$langUpgradeCont</p>
 <form method='post' action='upgrade.php'>
