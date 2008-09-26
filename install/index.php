@@ -38,14 +38,14 @@ if (!isset($siteName)) $siteName = "";
 if (!isset($InstitutionUrl)) $InstitutionUrl = "";
 if (!isset($Institution)) $Institution = "";
 
-// greek is the default language 
+// greek is the default language
 if (!isset($lang)) {
 	$_SESSION['lang'] = 'greek';
 }
 // get installation language
 if (isset($_POST['lang'])) {
 	$_SESSION['lang'] = $_POST['lang'];
-} 
+}
 
 $lang = $_SESSION['lang'];
 
@@ -56,16 +56,51 @@ include "../modules/lang/$lang/messages.inc.php";
 
 if (file_exists("../config/config.php")) {
 	$tool_content .= "
-	<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
-	<html xmlns=\"http://www.w3.org/1999/xhtml\"><head>
-	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
-    	<title>$langWelcomeWizard</title>
-    	<link href=\"../template/classic/tool_content.css\" rel=\"stylesheet\" type=\"text/css\" />
-    	<link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
-  	</head>
-  	<body><table width = \"99%\"><tbody><tr><td class=\"extraMessage\">$langWarnConfig
-	</td></tr></tbody></table>
-	</body></html>";
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\">
+<head>
+  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
+  <title>$langWelcomeWizard</title>
+  <link href=\"../template/classic/tool_content.css\" rel=\"stylesheet\" type=\"text/css\" />
+  <link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
+</head>
+<body>
+
+  <p>&nbsp;</p>
+  <table width=\"65%\" class=\"FormData\" align=\"center\" style=\"border: 1px solid #edecdf;\">
+  <thead>
+  <tr>
+    <td>&nbsp</td>
+  </tr>
+  <tr>
+    <td><div align=\"center\"><img style='border:0px;' src='../template/classic/img/caution_alert.gif' title='caution-alert'></div></td>
+  </tr>
+  <tr>
+    <td><div align=\"center\"><h4>$langWarnConfig3 !</h4></div></td>
+  </tr>
+  <tr>
+    <td>
+
+    <table width=\"100%\" class=\"FormInput\" align=\"center\">
+    <tbody>
+    <tr>
+      <td width=\"40%\" class=\"odd\"><b>Πιθανοί λόγοι</b></td>
+      <td><b>Αντιμετώπιση</b></td>
+    </tr>
+    <tr>
+      <td class=\"odd\" class=\"left\">$langWarnConfig1</td>
+      <td>$langWarnConfig2</td>
+    </tr>
+    </tbody>
+    </table>
+
+    </td>
+  </tr>
+  </thead>
+  </table>
+
+</body>
+</html>";
 	exit($tool_content);
 }
 
@@ -120,7 +155,7 @@ if (isset($alreadyVisited)) {
             <input type=\"hidden\" name=\"postaddressForm\" value=\"".@$postaddressForm."\">
             <input type=\"hidden\" name=\"ldapserver\" value=\"".@$ldapserver."\">
             <input type=\"hidden\" name=\"dnldapserver\" value=\"".@$dnldapserver."\">
-	    <input type=\"hidden\" name=\"reguser\" value=\"".@$reguser."\">
+            <input type=\"hidden\" name=\"reguser\" value=\"".@$reguser."\">
             <input type=\"hidden\" name=\"vodServer\" value=\"".@$vodServerForm."\">
             <input type=\"hidden\" name=\"MCU\" value=\"".@$MCUForm."\">
             <input type=\"hidden\" name=\"persoIsActive\" value=\"".@$persoIsActive."\">";
@@ -387,7 +422,7 @@ elseif(isset($_REQUEST['install7']))
 	$db = @mysql_connect("$dbHostForm", "$dbUsernameForm", "$dbPassForm");
 	if (mysql_errno() > 0) // problem with server
 	{
-		$no = mysql_errno(); 
+		$no = mysql_errno();
 		$msg = mysql_error();
 		$tool_content .= "<table width = \"99%\"><tbody><tr><td class=\"extraMessage\">
 		<u><b>[".$no."] - ".$msg."</b></u><br/>
@@ -405,7 +440,7 @@ elseif(isset($_REQUEST['install7']))
 	}
 
 	$mysqlMainDb = $dbNameForm;
-	
+
 	// create main database
 	require "install_db.php";
 
@@ -545,10 +580,13 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 		exit();
 	}
 
-	$tool_content .= "<u>$langCheckReq</u><p>
-        Webserver (<em>$langFoundIt <b>".$_SERVER['SERVER_SOFTWARE']."</b></em>)
-        $langWithPHP (<em>$langFoundIt <b>PHP ".phpversion()."</b></em>).</p>";
-	$tool_content .= "<u>$langRequiredPHP</u>";
+	$tool_content .= "
+    <b>$langCheckReq</b>
+    <ul id=\"installBullet\">
+        <li>Webserver (<em>$langFoundIt <b>".$_SERVER['SERVER_SOFTWARE']."</b></em>)
+        $langWithPHP (<em>$langFoundIt <b>PHP ".phpversion()."</b></em>).";
+	$tool_content .= "</li></ul>";
+	$tool_content .= "<b>$langRequiredPHP</b>";
 	$tool_content .= "<ul id=\"installBullet\">";
 	warnIfExtNotLoaded("standard");
 	warnIfExtNotLoaded("session");
@@ -557,16 +595,19 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	warnIfExtNotLoaded("mbstring");
 	warnIfExtNotLoaded("zlib");
 	warnIfExtNotLoaded("pcre");
-	$tool_content .= "</ul><u>$langOptionalPHP</u>";
+	$tool_content .= "</ul><b>$langOptionalPHP</b>";
 	$tool_content .= "<ul id=\"installBullet\">";
 	warnIfExtNotLoaded("ldap");
 	$tool_content .= "</ul>";
-	$tool_content .= "<u>$langOtherReq</u><ul id=\"installBullet\">
+
+	$tool_content .= "
+    <b>$langOtherReq</b>
+    <ul id=\"installBullet\">
     		<li>$langInstallBullet1</li>
     		<li>$langInstallBullet2</li>
     		<li>$langInstallBullet3</li>
     		</ul>
-    		<u>$langAddOnStreaming:</u>
+    		<b>$langAddOnStreaming:</b>
 		<ul id=\"installBullet\">
      		<li>$langAddOnExpl</li>
     		<li>$langExpPhpMyAdmin</li></ul>
@@ -581,30 +622,62 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 			'english' => 'English (en)');
 
 		$tool_content .= "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
-		<html><head><title>$langWelcomeWizard</title>
-    		<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
-    		<link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
-  		</head>
-  		<body><div class=\"outer\">
-    		<div class=\"welcomeImg\"></div>
-		<form name='langform' action='$_SERVER[PHP_SELF]' method=\"post\">
-		<p>$langChooseLang:&nbsp;&nbsp;
-		".selection($langLanguages, 'lang', $lang, 'onChange="document.langform.submit();"')."
-		</p>
-		</form>
-		$langWelcomeWizard $langThisWizard
-    		<ul id=\"installBullet\">
-    		<li>$langWizardHelp1</li>
-    		<li>$langWizardHelp2</li>
-    		<li>$langWizardHelp3</li>
-    		</ul>
-		<p>
-		<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method=\"post\">
-		<input type=\"hidden\" name=\"welcomeScreen\" value=\"welcomeScreen\">
-  		<input type=\"submit\" name=\"install1\" value=\"$langNextStep >\">
-		</p>
- 		</div></form>
-		</body></html>";
+<html>
+  <head>
+  <title>$langWelcomeWizard</title>
+  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
+  <link href=\"./install.css\" rel=\"stylesheet\" type=\"text/css\" />
+  <link href=\"../template/classic/tool_content.css\" rel=\"stylesheet\" type=\"text/css\" />
+  <link href=\"../template/classic/perso.css\" rel=\"stylesheet\" type=\"text/css\" />
+  </head>
+  <body>
+
+    <table class=\"FormInput\" align=\"center\" style=\"border: 1px solid #edecdf;\">
+    <thead>
+    <tr>
+      <td colspan=\"2\"><div align=\"center\" class=\"welcomeImg\"></div></td>
+    </tr>
+    <tr>
+      <td colspan=\"2\"><div align=\"center\"><h4>$langWelcomeWizard</h4></div>$langThisWizard
+      <ul id=\"installBullet\">
+        <li>$langWizardHelp1</li>
+        <li>$langWizardHelp2</li>
+        <li>$langWizardHelp3</li>
+      </ul>
+      </td>
+    </tr>
+    <tr>
+      <td colspan=\"2\">
+
+      <table width=\"100%\" class=\"FormInput\" align=\"center\">
+      <tbody>
+      <tr>
+        <td width=\"40%\" class=\"odd\">&nbsp;</td>
+        <td><b>$l_options</b></td>
+      </tr>
+      <tr>
+        <td class=\"odd\" class=\"left\">$langChooseLang:</td>
+        <td><form name='langform' action='$_SERVER[PHP_SELF]' method=\"post\">".selection($langLanguages, 'lang', $lang, 'onChange="document.langform.submit();"')."</form></td>
+      </tr>
+      <tr>
+        <td class=\"odd\" class=\"left\">&nbsp;</td>
+        <td>
+           <form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method=\"post\">
+             <input type=\"hidden\" name=\"welcomeScreen\" value=\"welcomeScreen\">
+             <input type=\"submit\" name=\"install1\" value=\"$langNextStep >\">
+           </form>
+        </td>
+      </tr>
+      </thead>
+      </table>
+
+        </td>
+      </tr>
+    </thead>
+    </table>
+
+  </body>
+</html>";
 		echo $tool_content;
 	}
 ?>

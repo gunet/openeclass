@@ -1,10 +1,12 @@
-#installBullet { 
-	list-style-image: url(../template/classic/img/square_bullet.gif); 
+#installBullet {
+	list-style-image: url(../template/classic/img/arrow_grey.gif);
+    font-size: 10px !important;
+
 }
 
 li {
 	font-family: Arial, Helvetica, sans-serif;
-	font-size:12px;
+	font-size:10px !important;
 }
 
 body{font-size:12px;font-family: Verdana, Arial, sans-serif;}
@@ -21,6 +23,11 @@ DIV.outer
       margin-left: -207px; /* half of width */
       margin-top: -222px;  /* half of height */
 }
+
+a.installer {
+  color: red !important;
+}
+
 
 DIV.welcomeImg {
 	float: left;
