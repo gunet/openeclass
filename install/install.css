@@ -53,7 +53,7 @@ DIV.welcomeImg {
 }
 
 .extraMessageOK {
-	background-image: url(../template/classic/img/tick.gif);
+	background-image: url(../template/classic/img/well-done.gif);
 	background-repeat: no-repeat;
 	background-position: 4px 4px;
 	padding-left : 24px;
