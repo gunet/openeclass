@@ -55,8 +55,10 @@ DIV.welcomeImg {
 .extraMessageOK {
 	background-image: url(../template/classic/img/well-done.gif);
 	background-repeat: no-repeat;
-	background-position: 4px 4px;
-	padding-left : 24px;
+	background-position: 4px 5px;
+	padding-left : 30px;
+    padding-top : 5px;
+    padding-bottom : 5px;
 	background-color:#CCFF99;
 }
 

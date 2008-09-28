@@ -622,13 +622,14 @@ $encryptedPasswd = true;
 	// write to file
 	fwrite($fd, $stringConfig);
 	// message
+	$tool_content .= "
+    <p class=\"extraMessageOK\">$langInstallSuccess
+    <br />
+    <br />
+    <b>$langProtect</b></p>
+    </form>
+    <form action=\"../\"><input type=\"submit\" value=\"$langEnterFirstTime\"></form>";
 
-	$tool_content .= "<table width = \"99%\"><tbody><tr><td class=\"extraMessageOK\">
-	<p>$langInstallSuccess</p>
-        <br><p><b>$langProtect</b></p>
-	</td></tr></tbody></table><br>
-        </form>
-    	<form action=\"../\"><input type=\"submit\" value=\"$langEnterFirstTime\"></form>";
 	draw($tool_content);
 	}       // τέλος ελέγχου για δικαιώματα
 }	// end of step 6
