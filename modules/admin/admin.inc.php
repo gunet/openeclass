@@ -1,27 +1,28 @@
 <?php
-/*===========================================================================
+/*========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
-* ===========================================================================
-*	Copyright(c) 2003-2008  Greek Universities Network - GUnet
-*	A full copyright notice can be read in "/info/copyright.txt".
+* ========================================================================
+*  Copyright(c) 2003-2008  Greek Universities Network - GUnet
+*  A full copyright notice can be read in "/info/copyright.txt".
 *
-*  	Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-*				Yannis Exidaridis <jexi@noc.uoa.gr>
-*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*			Yannis Exidaridis <jexi@noc.uoa.gr>
+*			Alexandros Diamantidis <adia@noc.uoa.gr>
+*			Tilemachos Raptis <traptis@noc.uoa.gr>
 *
-*	For a full list of contributors, see "credits.txt".
+*  For a full list of contributors, see "credits.txt".
 *
-*	This program is a free software under the terms of the GNU
-*	(General Public License) as published by the Free Software
-*	Foundation. See the GNU License for more details.
-*	The full license can be read in "license.txt".
+*  Open eClass is an open platform distributed in the hope that it will
+*  be useful (without any warranty), under the terms of the GNU (General
+*  Public License) as published by the Free Software Foundation.
+*  The full license can be read in "/info/license/license_gpl.txt".
 *
-*	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
-============================================================================*/
+*  Contact address: 	GUnet Asynchronous eLearning Group,
+*  			Network Operations Center, University of Athens,
+*  			Panepistimiopolis Ilissia, 15784, Athens, Greece
+*  			eMail: info@openeclass.org
+* =========================================================================*/
 
 /*===========================================================================
 	admin.inc.php
@@ -29,10 +30,10 @@
 	              11-07-2006 by Vagelis Pitsiougas
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
-==============================================================================        
+==============================================================================
         @Description: Functions Library for admin purposes
 
- 	This library includes all the functions that admin is using 
+ 	This library includes all the functions that admin is using
 	and their settings.
 
 ==============================================================================
@@ -48,7 +49,7 @@
 	@param string the string to remove unsafe slashes from
 	@return string
 *********************************************************/
-function stripslashes_safe($string) 
+function stripslashes_safe($string)
 {
 
     $string = str_replace("\\'", "'", $string);
@@ -58,7 +59,7 @@ function stripslashes_safe($string)
 }
 
 /*************************************************************
-Show a selection box with departments. 
+Show a selection box with departments.
 
 The function returns a value( a formatted select box with departments)
 and their values as keys in the array/select box
@@ -71,7 +72,7 @@ function list_departments($department_value)
 	$qry = "SELECT faculte.id,faculte.name FROM faculte ORDER BY faculte.name";
   	$dep = mysql_query($qry);
   	if($dep)
-  	{	
+  	{
 		$departments_select = "";
 		$departments = array();
 		while($row=mysql_fetch_array($dep))
@@ -89,7 +90,7 @@ function list_departments($department_value)
 
 /**************************************************************
 Purpose: covert the difference ($seconds) between 2 unix timestamps
-and produce a string ($r), explaining the time 
+and produce a string ($r), explaining the time
 (e.g. 2 years 2 months 1 day)
 
 $seconds : integer
@@ -100,20 +101,20 @@ function convert_time($seconds)
     $f_minutes = $seconds / 60;
     $i_minutes = floor($f_minutes);
     $r_seconds = intval(($f_minutes - $i_minutes) * 60);
-	        
+
     $f_hours = $i_minutes / 60;
     $i_hours = floor($f_hours);
     $r_minutes = intval(($f_hours  - $i_hours) * 60);
-			        
+
     $f_days = $i_hours / 24;
     $i_days = floor($f_days);
     $r_hours = intval(($f_days - $i_days) * 24);
-    $r = "";					        
-    if ($i_days > 0) 
+    $r = "";
+    if ($i_days > 0)
     {
 	if($i_days >= 365)
 	{
-	    $i_years = floor($i_days / 365);    
+	    $i_years = floor($i_days / 365);
 	    $i_days = $i_days % 365;
 	    $r = $i_years;
 	    if($i_years>1)
@@ -135,7 +136,7 @@ function convert_time($seconds)
 	}
     }
     if ($r_hours > 0) $r .= "$r_hours hours ";
-    if ($r_minutes > 0) $r .= "$r_minutes min";							    
+    if ($r_minutes > 0) $r .= "$r_minutes min";
     return $r;
 }
 
@@ -149,12 +150,12 @@ Parameters: limit - the current limit
 return String (the constructed table)
 ***************************************************************/
 function show_paging($limit, $listsize, $fulllistsize, $page) {
-	
+
 	global $langNextPage;
 
 	$retString = "";
 	// Page numbers of navigation
-	$pn = 15;	
+	$pn = 15;
 	$retString .= "<br><table width=\"99%\"><tbody><tr><td width=\"3%\" nowrap>$langPage</b></td><td align=\"center\">";
 	// Deal with previous page
 	if ($limit!=0) {
@@ -165,7 +166,7 @@ function show_paging($limit, $listsize, $fulllistsize, $page) {
 	}
 	// Deal with pages
 	if (ceil($fulllistsize / $listsize) <= $pn/3)
-	{ 
+	{
 		// Show all
 		$counter = 0;
 		while ($counter * $listsize < $fulllistsize) {
@@ -269,7 +270,7 @@ function show_paging($limit, $listsize, $fulllistsize, $page) {
 				$retString .= "<b><a href=\"".$page."?limit=".$newlimit."\">".$aa."</a></b>&nbsp;";
 			}
 			$counter++;
-		}		
+		}
 	}
 	// Deal with next page
 	if ($limit + $listsize >= $fulllistsize) {
@@ -279,7 +280,7 @@ function show_paging($limit, $listsize, $fulllistsize, $page) {
 		$retString .= "|&nbsp;<a href=\"".$page."?limit=".$newlimit."\"><b>$langNextPage</b></a>";
 	}
 	$retString .= "</td></tr></tbody></table>";
-	
+
 	return $retString;
 }
 

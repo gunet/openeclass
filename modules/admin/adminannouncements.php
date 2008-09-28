@@ -1,27 +1,28 @@
 <?
-/*===========================================================================
+/*========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
-* ===========================================================================
-*	Copyright(c) 2003-2008  Greek Universities Network - GUnet
-*	A full copyright notice can be read in "/info/copyright.txt".
+* ========================================================================
+*  Copyright(c) 2003-2008  Greek Universities Network - GUnet
+*  A full copyright notice can be read in "/info/copyright.txt".
 *
-*  	Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-*				Yannis Exidaridis <jexi@noc.uoa.gr>
-*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*			Yannis Exidaridis <jexi@noc.uoa.gr>
+*			Alexandros Diamantidis <adia@noc.uoa.gr>
+*			Tilemachos Raptis <traptis@noc.uoa.gr>
 *
-*	For a full list of contributors, see "credits.txt".
+*  For a full list of contributors, see "credits.txt".
 *
-*	This program is a free software under the terms of the GNU
-*	(General Public License) as published by the Free Software
-*	Foundation. See the GNU License for more details.
-*	The full license can be read in "license.txt".
+*  Open eClass is an open platform distributed in the hope that it will
+*  be useful (without any warranty), under the terms of the GNU (General
+*  Public License) as published by the Free Software Foundation.
+*  The full license can be read in "/info/license/license_gpl.txt".
 *
-*	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*				Network Operations Center, University of Athens,
-*				Panepistimiopolis Ilissia, 15784, Athens, Greece
-*				eMail: eclassadmin@gunet.gr
-============================================================================*/
+*  Contact address: 	GUnet Asynchronous eLearning Group,
+*  			Network Operations Center, University of Athens,
+*  			Panepistimiopolis Ilissia, 15784, Athens, Greece
+*  			eMail: info@openeclass.org
+* =========================================================================*/
 
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
@@ -226,7 +227,7 @@ $table_title = 'en_title';
 			$visibleAnn = $myrow['visible'];
 			if ($visibleAnn == 'I') {
 			   	$stylerow = "style='color: silver;'";
-			} else { 
+			} else {
 				$stylerow = "";
 			}
 			$tool_content .=  "<tr class=\"odd\" $stylerow>
@@ -254,7 +255,7 @@ $table_title = 'en_title';
     			<td>".$myrow['gr_comment']."</td>";
 			// english comments
 			$tool_content .= "<td>".$myrow['en_comment']."</td></tr>";
-		}	// end while 
+		}	// end while
 		$tool_content .= "</tbody></table>";
 	}	// end: if ($displayAnnoucementList == true)
 

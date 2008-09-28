@@ -1,28 +1,28 @@
 <?
-
-/*===========================================================================
+/*========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
-* ===========================================================================
-*	Copyright(c) 2003-2008  Greek Universities Network - GUnet
-*	A full copyright notice can be read in "/info/copyright.txt".
+* ========================================================================
+*  Copyright(c) 2003-2008  Greek Universities Network - GUnet
+*  A full copyright notice can be read in "/info/copyright.txt".
 *
-*  	Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-*				Yannis Exidaridis <jexi@noc.uoa.gr>
-*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*			Yannis Exidaridis <jexi@noc.uoa.gr>
+*			Alexandros Diamantidis <adia@noc.uoa.gr>
+*			Tilemachos Raptis <traptis@noc.uoa.gr>
 *
-*	For a full list of contributors, see "credits.txt".
+*  For a full list of contributors, see "credits.txt".
 *
-*	This program is a free software under the terms of the GNU
-*	(General Public License) as published by the Free Software
-*	Foundation. See the GNU License for more details.
-*	The full license can be read in "license.txt".
+*  Open eClass is an open platform distributed in the hope that it will
+*  be useful (without any warranty), under the terms of the GNU (General
+*  Public License) as published by the Free Software Foundation.
+*  The full license can be read in "/info/license/license_gpl.txt".
 *
-*	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
-============================================================================*/
+*  Contact address: 	GUnet Asynchronous eLearning Group,
+*  			Network Operations Center, University of Athens,
+*  			Panepistimiopolis Ilissia, 15784, Athens, Greece
+*  			eMail: info@openeclass.org
+* =========================================================================*/
 
 
 /**===========================================================================
@@ -30,13 +30,13 @@
 	@last update: 27-06-2006 by Karatzidis Stratos
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
-==============================================================================        
+==============================================================================
         @Description: Delete user from platform and from courses (eclass version)
 
  	This script allows the admin to :
  	- permanently delete a user account
  	- delete a user from participating into a course
- 	
+
 ==============================================================================
 */
 
@@ -60,7 +60,7 @@ $t = 0;
 if(empty($doit))
 {
 	$tool_content .= "<h4>$langConfirmDelete</h4><p>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em>";
-	if(!empty($c)) 
+	if(!empty($c))
 	{
 		$tool_content .= " $langConfirmDeleteQuestion2 <em>".htmlspecialchars($c)."</em>";
 	}
@@ -68,18 +68,18 @@ if(empty($doit))
 		<ul>
 		<li>$langYes: <a href=\"unreguser.php?u=".htmlspecialchars($u)."&c=".htmlspecialchars($c)."&doit=yes\">$langDelete</a><br>&nbsp;</li>
 		<li>$langNo: <a href=\"edituser.php?u=".htmlspecialchars($u)."\">$langBack</a></li>
-		</ul>";	
-} 
-else 
+		</ul>";
+}
+else
 {
 	if($doit == "yes")
 	{
 		$conn = mysql_connect($mysqlServer, $mysqlUser, $mysqlPassword);
 		if (!mysql_select_db($mysqlMainDb, $conn))
-	                die("Cannot select database");  
-		if(empty($c)) 
+	                die("Cannot select database");
+		if(empty($c))
 		{
-			if ($u == 1) 
+			if ($u == 1)
 			{
 				$tool_content .= $langTryDeleteAdmin;
 			}
@@ -92,7 +92,7 @@ else
 				{
 					$tool_content .= "$langUnregForbidden <em>$u_realname ($u_account)</em><br>";
 					$v = 0;	$s = 0;
-					for ($p = 0; $p < mysql_num_rows($q1); $p++) 
+					for ($p = 0; $p < mysql_num_rows($q1); $p++)
 				  {
 						$l1 = mysql_fetch_array($q1);
 						$tutor = $l1[5];
@@ -105,28 +105,28 @@ else
 							$s++;
 						}
 					}
-					
+
 					if($v>0)
 					{
 						if($s>0)
 						{
 							//display list
 							$tool_content .= "$langUnregFirst <br><br>";
-							$sql = mysql_query("SELECT a.code, a.intitule, b.statut, a.cours_id, b.tutor 
+							$sql = mysql_query("SELECT a.code, a.intitule, b.statut, a.cours_id, b.tutor
 							FROM cours AS a LEFT JOIN cours_user AS b ON a.code = b.code_cours
 							WHERE b.user_id = '".mysql_real_escape_string($u)."' AND b.tutor=0 ORDER BY b.statut, a.faculte");
-							// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα 
-							if (mysql_num_rows($sql) > 0) 
+							// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
+							if (mysql_num_rows($sql) > 0)
 							{
 								$tool_content .= "<h4>$langStudentParticipation</h4>\n".
 								"<table border=\"1\">\n<tr><th>$langLessonCode</th><th>$langLessonName</th>".
 								"<th>$langProperty</th><th>$langActions</th></tr>";
-					  		for ($j = 0; $j < mysql_num_rows($sql); $j++) 
+					  		for ($j = 0; $j < mysql_num_rows($sql); $j++)
 				  			{
 									$logs = mysql_fetch_array($sql);
 									$tool_content .= "<tr><td>".htmlspecialchars($logs[0])."</td><td>".
 									htmlspecialchars($logs[1])."</td><td align=\"center\">";
-									switch ($logs[4]) 
+									switch ($logs[4])
 									{
 										case '1':
 											$tool_content .= $langTeacher;
@@ -148,16 +148,16 @@ else
 						else
 						{
 							$tool_content .= "$langUnregTeacher<br>";
-							$sql = mysql_query("SELECT a.code, a.intitule, b.statut, a.cours_id 
+							$sql = mysql_query("SELECT a.code, a.intitule, b.statut, a.cours_id
 							FROM cours AS a LEFT JOIN cours_user AS b ON a.code = b.code_cours
 							WHERE b.user_id = '".mysql_real_escape_string($u)."' AND b.statut=1 ORDER BY b.statut, a.faculte");
-							// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα 
-							if (mysql_num_rows($sql) > 0) 
+							// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
+							if (mysql_num_rows($sql) > 0)
 							{
 								$tool_content .= "<h4>$langStudentParticipation</h4>\n".
 								"<table border=\"1\">\n<tr><th>$langLessonCode</th><th>$langLessonName</th>".
 								"<th>$langProperty</th><th>$langActions</th></tr>";
-					  		for ($j = 0; $j < mysql_num_rows($sql); $j++) 
+					  		for ($j = 0; $j < mysql_num_rows($sql); $j++)
 				  			{
 									$logs = mysql_fetch_array($sql);
 									$tool_content .= "<tr><td>".htmlspecialchars($logs[0])."</td><td>".
@@ -167,31 +167,31 @@ else
 								}
 							}
 					  	$tool_content .= "</table>\n";
-							
-							
-							
-							
+
+
+
+
 						}
 					}
 					else
 					{
 						// display list
 						$tool_content .= "$langUnregFirst <br><br>";
-						$sql = mysql_query("SELECT a.code, a.intitule, b.statut, a.cours_id 
+						$sql = mysql_query("SELECT a.code, a.intitule, b.statut, a.cours_id
 						FROM cours AS a LEFT JOIN cours_user AS b ON a.code = b.code_cours
 						WHERE b.user_id = '".mysql_real_escape_string($u)."' AND (b.statut=5 OR b.statut=10) ORDER BY b.statut, a.faculte");
-						// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα 
-						if (mysql_num_rows($sql) > 0) 
+						// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
+						if (mysql_num_rows($sql) > 0)
 						{
 						$tool_content .= "<h4>$langStudentParticipation</h4>\n".
 						"<table border=\"1\">\n<tr><th>$langLessonCode</th><th>$langLessonName</th>".
 						"<th>$langProperty</th><th>$langActions</th></tr>";
-					  for ($j = 0; $j < mysql_num_rows($sql); $j++) 
+					  for ($j = 0; $j < mysql_num_rows($sql); $j++)
 				  	{
 							$logs = mysql_fetch_array($sql);
 							$tool_content .= "<tr><td>".htmlspecialchars($logs[0])."</td><td>".
 							htmlspecialchars($logs[1])."</td><td align=\"center\">";
-							switch ($logs[2]) 
+							switch ($logs[2])
 							{
 								case 1:
 									$tool_content .= $langTeacher;
@@ -209,9 +209,9 @@ else
 						}
 				  	$tool_content .= "</table>\n";
 						}
-						
+
 					}
-																									
+
 					$t = 1;
 				}
 				else
@@ -226,8 +226,8 @@ else
 						$t = 3;
 					}
 				}
-			
-				
+
+
 				switch($t)
 				{
 					case '1':	$tool_content .= "";	$m = 1; break;
@@ -235,29 +235,29 @@ else
 					case '3': $tool_content .= "$langErrorDelete";	$m = 1;	break;
 					default: $m = 0;	break;
 				}
-			
-			
+
+
 				if($u!=1)
 				{
 					mysql_query("DELETE from admin WHERE idUser = '".mysql_real_escape_string($u)."'");
 				}
-				if (mysql_affected_rows($conn) > 0) 
+				if (mysql_affected_rows($conn) > 0)
 				{
 					$tool_content .= "<p>$langUserWithId ".htmlspecialchars($u)." $langWasAdmin.</p>\n";
 				}
-				
-				// delete guest user from cours_user 
+
+				// delete guest user from cours_user
 				if($u_statut == '10')
 				{
 					$sql = mysql_query("DELETE from cours_user WHERE user_id = '".mysql_real_escape_string($u)."'");
 				}
 			}
-			
-		} 
+
+		}
 		elseif((!empty($c)) && (!empty($u)))
 		{
 			$sql = mysql_query("DELETE from cours_user WHERE user_id = '".mysql_real_escape_string($u)."' and code_cours='".mysql_real_escape_string($c)."'");
-			if (mysql_affected_rows($conn) > 0)  
+			if (mysql_affected_rows($conn) > 0)
 			{
 				$tool_content .= "<p>$langUserWithId ".htmlspecialchars($u)." $langWasCourseDeleted ".htmlspecialchars($c).".</p>\n";
 				$m = 1;
@@ -273,17 +273,17 @@ else
 		}
 		$tool_content .= "<a href=\"./index.php\">$langBackAdmin</a>.<br />\n";
 	}
-}	
+}
 
 function get_uid_statut($u)
 {
 	global $mysqlMainDb;
 
-	if ($r = mysql_fetch_row(db_query("SELECT statut FROM user WHERE user_id = '".mysql_real_escape_string($u)."'",	$mysqlMainDb))) 
+	if ($r = mysql_fetch_row(db_query("SELECT statut FROM user WHERE user_id = '".mysql_real_escape_string($u)."'",	$mysqlMainDb)))
 	{
 		return $r[0];
-	} 
-	else 
+	}
+	else
 	{
 		return FALSE;
 	}
