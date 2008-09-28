@@ -1,43 +1,44 @@
 <?php
-/*===========================================================================
+/*========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
-* ===========================================================================
-*	Copyright(c) 2003-2008  Greek Universities Network - GUnet
-*	A full copyright notice can be read in "/info/copyright.txt".
+* ========================================================================
+*  Copyright(c) 2003-2008  Greek Universities Network - GUnet
+*  A full copyright notice can be read in "/info/copyright.txt".
 *
-*  	Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-*				Yannis Exidaridis <jexi@noc.uoa.gr>
-*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*			Yannis Exidaridis <jexi@noc.uoa.gr>
+*			Alexandros Diamantidis <adia@noc.uoa.gr>
+*			Tilemachos Raptis <traptis@noc.uoa.gr>
 *
-*	For a full list of contributors, see "credits.txt".
+*  For a full list of contributors, see "credits.txt".
 *
-*	This program is a free software under the terms of the GNU
-*	(General Public License) as published by the Free Software
-*	Foundation. See the GNU License for more details.
-*	The full license can be read in "license.txt".
+*  Open eClass is an open platform distributed in the hope that it will
+*  be useful (without any warranty), under the terms of the GNU (General
+*  Public License) as published by the Free Software Foundation.
+*  The full license can be read in "/info/license/license_gpl.txt".
 *
-*	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
-============================================================================*/
+*  Contact address: 	GUnet Asynchronous eLearning Group,
+*  			Network Operations Center, University of Athens,
+*  			Panepistimiopolis Ilissia, 15784, Athens, Greece
+*  			eMail: info@openeclass.org
+* =========================================================================*/
 /*
  * Perso Component
- * 
+ *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * 
+ *
  * @abstract This component is the central controller of eclass personalised.
- * It controls personalisation and initialises several variables used by it. 
- * 
+ * It controls personalisation and initialises several variables used by it.
+ *
  * It is based on the diploma thesis of Evelthon Prodromou
  *
  */
 
 include("redirector.php");
 //Check for lessons that the user is a professor
-$result2 = mysql_query("SELECT cours.code k, cours.fake_code c, cours.intitule i, cours.titulaires t, cours_user.statut s FROM cours, cours_user WHERE cours.code=cours_user.code_cours 
+$result2 = mysql_query("SELECT cours.code k, cours.fake_code c, cours.intitule i, cours.titulaires t, cours_user.statut s FROM cours, cours_user WHERE cours.code=cours_user.code_cours
 	AND cours_user.user_id='".$uid."' AND cours_user.statut='1'");
 if (mysql_num_rows($result2) > 0) {
 	$i=0;
@@ -65,7 +66,7 @@ include(getcwd() . "/modules/perso/forumPosts.php");
 $last_login_query = 	"SELECT  `id_user` ,  `when` ,  `action`
 			FROM  $mysqlMainDb.loginout
 			WHERE  `action`  =  'LOGIN' AND  `id_user`  = $uid
-			ORDER BY  `when`  DESC 
+			ORDER BY  `when`  DESC
 			LIMIT 1,1 ";
 
 $login_date_result 	= db_query($last_login_query, $mysqlMainDb);
@@ -197,14 +198,14 @@ $perso_tool_content = array(
  *
  * It is used by the announcements and agenda personalised components. These
  * tools offer the ability to the professor to add content by using a WYSIWYG editor.
- * Thus, the professor can add several HTML tags to the content. 
- * 
+ * Thus, the professor can add several HTML tags to the content.
+ *
  * The personalised logic limits this content to an X number of characters. This can
  * cause several tags to be in a not-closed state.
- * 
- * This function makes sure ALL tags are closed so that no errors are presented to 
- * the personalised interface 
- * 
+ *
+ * This function makes sure ALL tags are closed so that no errors are presented to
+ * the personalised interface
+ *
  * @param string $string HTML code parsed by the personalised components
  * @return string HTML code with all html tag elements closed properly
  */
@@ -220,7 +221,7 @@ function autoCloseTags($string) {
 	preg_match_all("/<(([A-Z]|[a-z]).*)(( )|(>))/isU",$string,$result);
 
 	$openedtags=$result[1];
-	
+
 	//this is just done so that the order of the closed tags in the end will be better
 	$openedtags=array_reverse($openedtags);
 
@@ -237,7 +238,7 @@ function autoCloseTags($string) {
 	//prepare the close-tags for output
 	for($x=0;$x<count($tags);$x++) {
 		$add=strtolower(trim($tags[$x]));
-		
+
 		if(!in_array($add,$donotclose)) $tagstoclose.='</'.$add.'>';
 	}
 

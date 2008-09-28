@@ -1,27 +1,28 @@
 <?php
-/*===========================================================================
+/*========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
-* ===========================================================================
-*	Copyright(c) 2003-2008  Greek Universities Network - GUnet
-*	A full copyright notice can be read in "/info/copyright.txt".
+* ========================================================================
+*  Copyright(c) 2003-2008  Greek Universities Network - GUnet
+*  A full copyright notice can be read in "/info/copyright.txt".
 *
-*  	Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-*				Yannis Exidaridis <jexi@noc.uoa.gr>
-*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*			Yannis Exidaridis <jexi@noc.uoa.gr>
+*			Alexandros Diamantidis <adia@noc.uoa.gr>
+*			Tilemachos Raptis <traptis@noc.uoa.gr>
 *
-*	For a full list of contributors, see "credits.txt".
+*  For a full list of contributors, see "credits.txt".
 *
-*	This program is a free software under the terms of the GNU
-*	(General Public License) as published by the Free Software
-*	Foundation. See the GNU License for more details.
-*	The full license can be read in "license.txt".
+*  Open eClass is an open platform distributed in the hope that it will
+*  be useful (without any warranty), under the terms of the GNU (General
+*  Public License) as published by the Free Software Foundation.
+*  The full license can be read in "/info/license/license_gpl.txt".
 *
-*	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*				Network Operations Center, University of Athens,
-*				Panepistimiopolis Ilissia, 15784, Athens, Greece
-*				eMail: eclassadmin@gunet.gr
-============================================================================*/
+*  Contact address: 	GUnet Asynchronous eLearning Group,
+*  			Network Operations Center, University of Athens,
+*  			Panepistimiopolis Ilissia, 15784, Athens, Greece
+*  			eMail: info@openeclass.org
+* =========================================================================*/
 
 session_start();
 
@@ -133,7 +134,7 @@ if (!isset($submit2)) {
 <body>
 <?php
 
-        // backup of config file 
+        // backup of config file
         if (!copy("config.php","config_backup.php"))
                 die ("$langConfigError1");
 
@@ -243,11 +244,11 @@ if (!isset($submit2)) {
         // ***********************************************
         // new queries - upgrade queries to 2.0
         // ***********************************************
-	
+
 	// delete deprecated tables
 	if (mysql_table_exists($mysqlMainDb, 'institution'))
                 db_query("DROP TABLE `institution`");
-	
+
         if (!mysql_field_exists("$mysqlMainDb",'cours','course_objectives'))
                 echo add_field('cours', 'course_objectives', "TEXT");
         if (!mysql_field_exists("$mysqlMainDb",'cours','course_prerequisites'))
@@ -272,11 +273,11 @@ if (!isset($submit2)) {
                 echo delete_field('user', 'inst_id');
 	if (mysql_field_exists("$mysqlMainDb",'cours_user','role'))
                 echo delete_field('cours_user', 'role');
-	
+
 	// add field to cours_user to keep track course user registration date
 	if (!mysql_field_exists($mysqlMainDb,'cours_user','reg_date'))
                 echo add_field('cours_user','reg_date',"DATE NOT NULL");
-	
+
         // kstratos - UOM
         // Add 1 new field into table 'prof_request', after the field 'profuname'
         $reg = time();
@@ -419,7 +420,7 @@ if (!isset($submit2)) {
                                         $newpass = md5($pass);
                                         // do the update
                                         db_query("UPDATE user SET password = '$newpass'
-                                                        WHERE user_id = $row[user_id]"); 
+                                                        WHERE user_id = $row[user_id]");
                                 }
                         }
                 } else {
@@ -436,7 +437,7 @@ if (!isset($submit2)) {
                         OR registered_at='NULL' OR registered_at=NULL
                         OR registered_at='null' OR registered_at=null
                         OR registered_at='\N' OR registered_at=\N
-                        OR registered_at=''");  
+                        OR registered_at=''");
 
                 while ($row = mysql_fetch_array($res)) {
                         $registered_at = $row["registered_at"];

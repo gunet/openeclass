@@ -1,33 +1,34 @@
 <?
-/*===========================================================================
-*              GUnet eClass 2.0
-*       E-learning and Course Management Program
-* ===========================================================================
-*	Copyright(c) 2003-2006  Greek Universities Network - GUnet
-*	A full copyright notice can be read in "/info/copyright.txt".
+/*========================================================================
+*   Open eClass 2.1
+*   E-learning and Course Management System
+* ========================================================================
+*  Copyright(c) 2003-2008  Greek Universities Network - GUnet
+*  A full copyright notice can be read in "/info/copyright.txt".
 *
-*  Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-*				Yannis Exidaridis <jexi@noc.uoa.gr>
-*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*			Yannis Exidaridis <jexi@noc.uoa.gr>
+*			Alexandros Diamantidis <adia@noc.uoa.gr>
+*			Tilemachos Raptis <traptis@noc.uoa.gr>
 *
-*	For a full list of contributors, see "credits.txt".
+*  For a full list of contributors, see "credits.txt".
 *
-*	This program is a free software under the terms of the GNU
-*	(General Public License) as published by the Free Software
-*	Foundation. See the GNU License for more details.
-*	The full license can be read in "license.txt".
+*  Open eClass is an open platform distributed in the hope that it will
+*  be useful (without any warranty), under the terms of the GNU (General
+*  Public License) as published by the Free Software Foundation.
+*  The full license can be read in "/info/license/license_gpl.txt".
 *
-*	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*				Network Operations Center, University of Athens,
-*				Panepistimiopolis Ilissia, 15784, Athens, Greece
-*				eMail: eclassadmin@gunet.gr
-============================================================================*/
+*  Contact address: 	GUnet Asynchronous eLearning Group,
+*  			Network Operations Center, University of Athens,
+*  			Panepistimiopolis Ilissia, 15784, Athens, Greece
+*  			eMail: info@openeclass.org
+* =========================================================================*/
 /*
  * Init
- * 
+ *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * 
+ *
  * @abstract This file is included each and every time by baseTheme.php
  * It initialises variables, includes security checks and serves language switching
  *
@@ -172,8 +173,8 @@ if (isset($require_current_course) and $require_current_course) {
 		$dbname = $_SESSION['dbname'];
 		$currentCourse = $dbname;
 		$result = db_query("
-		SELECT code, fake_code, intitule, faculte, 
-			titulaires, languageCourse, 
+		SELECT code, fake_code, intitule, faculte,
+			titulaires, languageCourse,
 			departmentUrlName, departmentUrl, visible
 		FROM cours WHERE cours.code='$currentCourse'");
 
@@ -283,16 +284,16 @@ if(file_exists($module_ini_dir = getcwd() . "/module.ini.php") && !$is_adminOfCo
 		}
 	} else {
 		$result = db_query("
-			SELECT `id` FROM `accueil` 
+			SELECT `id` FROM `accueil`
 			WHERE `visible` = 1
 			AND (
-			`id` = 1 or 
-			`id` = 2 or 
-			`id` = 3 or 
-			`id` = 4 or 
-			`id` = 7 or 
-			`id` = 10 or 
-			`id` = 20) 
+			`id` = 1 or
+			`id` = 2 or
+			`id` = 3 or
+			`id` = 4 or
+			`id` = 7 or
+			`id` = 10 or
+			`id` = 20)
 			ORDER BY rubrique
 			", $currentCourse);
 	}

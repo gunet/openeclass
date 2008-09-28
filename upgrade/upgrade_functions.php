@@ -1,27 +1,28 @@
 <?
-/*===========================================================================
+/*========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
-* ===========================================================================
-*	Copyright(c) 2003-2008  Greek Universities Network - GUnet
-*	A full copyright notice can be read in "/info/copyright.txt".
+* ========================================================================
+*  Copyright(c) 2003-2008  Greek Universities Network - GUnet
+*  A full copyright notice can be read in "/info/copyright.txt".
 *
-*  	Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-*				Yannis Exidaridis <jexi@noc.uoa.gr>
-*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*			Yannis Exidaridis <jexi@noc.uoa.gr>
+*			Alexandros Diamantidis <adia@noc.uoa.gr>
+*			Tilemachos Raptis <traptis@noc.uoa.gr>
 *
-*	For a full list of contributors, see "credits.txt".
+*  For a full list of contributors, see "credits.txt".
 *
-*	This program is a free software under the terms of the GNU
-*	(General Public License) as published by the Free Software
-*	Foundation. See the GNU License for more details.
-*	The full license can be read in "license.txt".
+*  Open eClass is an open platform distributed in the hope that it will
+*  be useful (without any warranty), under the terms of the GNU (General
+*  Public License) as published by the Free Software Foundation.
+*  The full license can be read in "/info/license/license_gpl.txt".
 *
-*	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*				Network Operations Center, University of Athens,
-*				Panepistimiopolis Ilissia, 15784, Athens, Greece
-*				eMail: eclassadmin@gunet.gr
-============================================================================*/
+*  Contact address: 	GUnet Asynchronous eLearning Group,
+*  			Network Operations Center, University of Athens,
+*  			Panepistimiopolis Ilissia, 15784, Athens, Greece
+*  			eMail: info@openeclass.org
+* =========================================================================*/
 
 
 // ----------------------------------------------------------------
@@ -121,7 +122,7 @@ function rename_field($table, $field, $new_field, $type)
 
 function delete_field($table, $field) {
 	global $langOfTable, $langDeleteField, $OK, $BAD;
-	
+
 	$retString = "";
 	$retString .= "$langDeleteField <b>$field</b> $langOfTable <b>$table</b>";
 	if (db_query("ALTER TABLE `$table` DROP `$field`")) {
@@ -254,9 +255,9 @@ function convert_db_utf8($database)
 function upgrade_course($code, $lang)
 {
 	global $webDir, $mysqlMainDb, $tool_content, $langTable, $langNotMovedDir, $langToDir, $OK, $BAD;
-	global $langMoveIntroText, $langCorrectTableEntries, $langEncodeDocuments, $langEncodeGroupDocuments;	
+	global $langMoveIntroText, $langCorrectTableEntries, $langEncodeDocuments, $langEncodeGroupDocuments;
 
-		include 'messages_accueil.php';	
+		include 'messages_accueil.php';
 
 		mysql_select_db($code);
 
@@ -424,7 +425,7 @@ function upgrade_course($code, $lang)
                 }
                 // end of agenda
 
-		// Group table 
+		// Group table
 		if (!mysql_table_exists($code, 'group_documents'))  {
 			db_query("CREATE TABLE `group_documents` (
 			`id` INT(4) NOT NULL AUTO_INCREMENT,
@@ -614,9 +615,9 @@ function upgrade_course($code, $lang)
                 } else {
 			db_query("ALTER TABLE `poll` CHANGE `creation_date` `creation_date` DATE NOT NULL DEFAULT '0000-00-00'", $code);
 			db_query("ALTER TABLE `poll` CHANGE `start_date` `start_date` DATE NOT NULL DEFAULT '0000-00-00'", $code);
-			db_query("ALTER TABLE `poll` CHANGE `end_date` `end_date` DATE NOT NULL DEFAULT '0000-00-00'", $code); 
+			db_query("ALTER TABLE `poll` CHANGE `end_date` `end_date` DATE NOT NULL DEFAULT '0000-00-00'", $code);
 		}
-			
+
                 if (!mysql_table_exists($code, 'poll_answer'))  {
                         db_query("CREATE TABLE `poll_answer` (
                                 `aid` bigint(12) NOT NULL default '0',
@@ -634,8 +635,8 @@ function upgrade_course($code, $lang)
                                 `question_answer` varchar(250) NOT NULL default '',
                                 PRIMARY KEY  (`arid`)
                                         ) ", $code); //TYPE=MyISAM COMMENT='For the poll module';
-                } 
-		
+                }
+
 		if (!mysql_field_exists("$code",'poll_answer_record', 'qtype'))
                         echo add_field_after_field('poll_answer_record', 'pid', 'arid', "INT(11) NOT NULL");
 		if (!mysql_field_exists("$code",'poll_answer_record', 'pid'))
@@ -736,7 +737,7 @@ function upgrade_course($code, $lang)
  			db_query("ALTER TABLE `exercices` CHANGE `StartDate` `StartDate` DATE NULL DEFAULT NULL", $code);
 		if (!mysql_field_exists("$code",'exercices','EndDate'))
                         echo add_field_after_field('exercices', 'EndDate', 'StartDate', "DATE NOT NULL default '0000-00-00'");
-		else 
+		else
 			db_query("ALTER TABLE `exercices` CHANGE `EndDate` `EndDate` DATE NULL DEFAULT NULL", $code);
                 if (!mysql_field_exists("$code",'exercices','TimeConstrain'))
                         echo add_field_after_field('exercices', 'TimeConstrain', 'EndDate', "INT(11)");
@@ -778,7 +779,7 @@ function upgrade_course($code, $lang)
                 // -------------- group document upgrade ---------------
 		echo "$langEncodeGroupDocuments<br>";
 	  	flush();
-	        // find group secret directory	
+	        // find group secret directory
         	$s = db_query("SELECT id, secretDirectory FROM student_group");
                 while ($group = mysql_fetch_array($s)) {
                         encode_group_documents($code, $group['id'], $group['secretDirectory']);
@@ -792,7 +793,7 @@ function upgrade_course($code, $lang)
                               echo "$langNotMovedDir $course_video $langToDir video<br>";
                         }
                 }
-                // upgrade video 
+                // upgrade video
 		if (!mysql_field_exists("$code",'video','path')) {
                         echo add_field_after_field('video', 'path', 'id', "VARCHAR(255)");
 			$r = db_query("SELECT * FROM video", $code);
@@ -823,7 +824,7 @@ function upgrade_course($code, $lang)
                 // Move all external links to id > 100
                 db_query("UPDATE `accueil`
                                 SET `id` = `id` + 80
-                                WHERE `id`>20 AND `id`<100 
+                                WHERE `id`>20 AND `id`<100
                                 AND `define_var` <> 'MODULE_ID_QUESTIONNAIRE' AND `define_var` <> 'MODULE_ID_LP'
                                 AND `define_var` <> 'MODULE_ID_USAGE' AND `define_var` <> 'MODULE_ID_TOOLADMIN'
                                 AND `define_var` <> 'MODULE_ID_WIKI'", $code);
@@ -930,8 +931,8 @@ function upgrade_course($code, $lang)
                         $newlink_image = preg_replace('#../claroline/image/#','../../images/',$oldlink_image);
                         $oldlink_address = $u[3];
                         $newlink_address = preg_replace('#../claroline/image/#','../../images/',$oldlink_address);
-                        db_query("UPDATE accueil SET lien='$newlink_lien', 
-                                        image='$newlink_image', address='$newlink_address' WHERE id='$u[0]'"); 
+                        db_query("UPDATE accueil SET lien='$newlink_lien',
+                                        image='$newlink_image', address='$newlink_address' WHERE id='$u[0]'");
                 }
 
                 //set the new images for the icons of lesson modules
@@ -1081,7 +1082,7 @@ function document_upgrade_file($path, $data)
                         db_query("INSERT INTO document
                                   SET path = " . quote($new_path) . ",
                                       filename = " . quote($old_filename) . ",
-                                      visibility = 'v', 
+                                      visibility = 'v',
                                       comment = '', category = '',
                                       title = '', creator = '',
                                       date = $file_date, date_modified = $file_date,
