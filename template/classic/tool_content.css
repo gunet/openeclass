@@ -526,22 +526,21 @@ table.FormData td {
 .FormData_InactiveTools{
     margin-top: 0px;
     font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 12px;
+    font-size: 11px;
     padding: 3px 3px 3px 3px;
     border: 1px dotted #727266;
     background-color: #fbfbfb;
-    color: #9F9F9F;
+    color: #a33033;
 }
 
 .FormData_ActiveTools{
     margin-top: 0px;
     font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 12px;
+    font-size: 11px;
     padding: 3px 3px 3px 3px;
     border: 1px dotted #727266;
     background-color: #fbfbfb;
-    color: #000000;
-  font-weight: bold
+    color: green;
 }
 
 .auth_input{

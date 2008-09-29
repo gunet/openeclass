@@ -244,7 +244,7 @@ if ($is_adminOfCourse){
 	if(isset($submit) &&  @$action == 2) {
 		if (($link == "http://") or ($link == "ftp://") or empty($link) or empty($name_link))  {
 			$tool_content .= "<p class=\"caution_small\">$langInvalidLink<br /><a href=\"$_SERVER[PHP_SELF]?action=2\">$langHome</a></p><br />";
-			draw($tool_content, 2);
+			draw($tool_content, 2, 'course_tools');
 			exit();
 		}
 
@@ -308,7 +308,7 @@ if ($is_adminOfCourse){
 			$tool_content .= "<p class=\"success_small\">$langOkSent</p><br/>";
 		} else {
 			$tool_content .= "<p class=\"caution_small\">$langTooBig<br /><a href=\"$_SERVER[PHP_SELF]?action=1\">$langHome</a></p><br />";
-			draw($tool_content, 2);
+			draw($tool_content, 2, 'course_tools');
 		}	// else
 		unset($action);
 	}
@@ -352,7 +352,7 @@ if ($is_adminOfCourse && @$action == 1) {//upload html file
   </table>
   <br></form>";
 
-	draw($tool_content, 2);
+	draw($tool_content, 2, 'course_tools');
 	exit();
 }
 
@@ -389,7 +389,7 @@ if ($is_adminOfCourse && @$action == 2) {//add external link
   </tr>
   </thead>
   </table></form>";
-	draw($tool_content, 2);
+	draw($tool_content, 2, 'course_tools');
 	exit();
 
 }
@@ -446,12 +446,12 @@ if ($is_adminOfCourse) {
 	$tool_content .= <<<tForm
 <form name="courseTools" action="$_SERVER[PHP_SELF]" method="post" enctype="multipart/form-data">
   <br/>
-  <table class='FormData' align=\"left\" width='99%' style="border: 1px solid #CAC3B5;">
+  <table class="FormData" align="center" width="99%" style="border: 1px solid #CAC3B5;">
   <thead>
   <tr>
-    <th>$langInactiveTools</th>
-    <th width="10%">$langMove</th>
-    <th>$langActiveTools</th>
+    <td width="45%" style="color: #a33033;"><div align="center"><b>$langInactiveTools<b></div></td>
+    <td width="10%" style="color: #727266;"><div align="center"><b>$langMove<b></div></td>
+    <td width="45%" style="color: green;"><div align="center"><b>$langActiveTools<b></div></td>
   </tr>
   <tr>
     <td><div align="center">
@@ -469,12 +469,12 @@ if ($is_adminOfCourse) {
     </td>
   </tr>
   <tr>
-    <th>&nbsp;</th>
-    <th><div align="center">
+    <td>&nbsp;</td>
+    <td><div align="center">
         <input type=submit value="$langSubmitChanges"  name="toolStatus" onClick="selectAll(this.form.elements[3],true)">
         </div>
-        </th>
-    <th>&nbsp;</th>
+        </td>
+    <td>&nbsp;</td>
   </tr>
   </thead>
   </table>

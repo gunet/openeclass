@@ -563,7 +563,7 @@ if($sql)
   <tr class=\"odd\">";
 	            }
 				$tool_content .= "
-    <td width=\"1\"><img style='border:0px;' src='${urlServer}/template/classic/img/bullet_bw.gif' title='bullet'></td>
+    <td width=\"1\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
     <td>".htmlspecialchars($logs['nom'])."</td>
     <td>".htmlspecialchars($logs['prenom'])."</td>
     <td>".htmlspecialchars($logs['username'])."</td>

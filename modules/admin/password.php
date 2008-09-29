@@ -87,7 +87,7 @@ elseif (isset($submit) && isset($changePass) && ($changePass == "do")) {
 		exit();
 	}
 	if ($_REQUEST['password_form1'] !== $_REQUEST['password_form']) {
-		$tool_content .= mes($langPassTwo, "", 'caution');
+		$tool_content .= mes($langPassTwo, "", 'caution_small');
 		draw($tool_content, 3);
 		exit();
 	}
@@ -99,7 +99,7 @@ elseif (isset($submit) && isset($changePass) && ($changePass == "do")) {
 	$new_pass = md5($_REQUEST['password_form']);
 	$sql = "UPDATE `user` SET `password` = '$new_pass' WHERE `user_id` = '$userid'";
 	db_query($sql, $mysqlMainDb);
-	$tool_content .= mes($langPassChanged, $langHome, 'success');
+	$tool_content .= mes($langPassChanged, $langHome, 'success_small');
 	draw($tool_content, 3);
 	exit();
 }
@@ -109,10 +109,7 @@ draw($tool_content, 3);
 function mes($message, $urlText, $type) {
 	global $urlServer, $langBack, $userid;
 
- 	$str = "<table width='99%'><tbody>
-		<tr><td class='$type'>$message<br><a href='$urlServer'>$urlText</a></td></tr>
-		<tr><td align='center'><a href='$_SERVER[PHP_SELF]?userid=$userid'>$langBack</a></td></tr>
-		</tbody></table><br/>";
+ 	$str = "<p class='$type'>$message<br /><a href='$urlServer'>$urlText</a><br /><a href='$_SERVER[PHP_SELF]?userid=$userid'>$langBack</a></p><br />";
 	return $str;
 }
 
