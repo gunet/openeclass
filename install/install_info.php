@@ -3,7 +3,7 @@
 <html>
 <head>
 <META http-equiv=Content-Type content="text/html; charset=UTF-8">
-<title>Οδηγίες Εγκατάστασης Πλατφόρμας Open eClass 2.0</title>
+<title>Οδηγίες Εγκατάστασης Πλατφόρμας Open eClass 2.1</title>
 <style type="text/css">
 
 body {
@@ -134,7 +134,7 @@ Options -Indexes
 
     </div>
     
-<h4> 2. <a href="http://www.php.net" target="_blank">PHP</a> (εκδόσεις &gt;= 4.3.0) 
+<h4>2. <a href="http://www.php.net" target="_blank">PHP</a> (εκδόσεις &gt;= 4.3.0) 
 </h4>
 <p> Η πλατφόρμα λειτουργεί χωρίς προβλήματα με εκδόσεις &gt;= <i>4.3.0 </i>και 
   με εκδόσεις <em>5.x.</em> </p>
@@ -400,10 +400,6 @@ short_open_tag = on</pre>
     <code>(path του eClass)/template/classic/img/logo_bg_50.gif</code> 
     <p> με την δικιά του. </p>
   </li>
-  <li>
-    <p> Οποιαδήποτε αλλαγή θέλετε να κάνετε στις πληροφορίες που δώσατε κατά την 
-      εγκατάσταση, απλά τροποποιήστε το αρχείο <em>config.php</em> </p>
-    <code>(path του eclass)/config/config.php</code>. </li>
   <li> 
     <p> Στο αρχείο <em>config.php</em> ορίζεται η μεταβλητή <em>have_latex</em> 
       η οποία εξ'ορισμού έχει τιμή <em>FALSE</em>. Αλλάζοντας την σε τιμή <em>TRUΕ</em> 
@@ -448,10 +444,6 @@ short_open_tag = on</pre>
       <li>Για τους χρήστες του Internet Explorer, από τα μενού επιλέξτε διαδοχικά 
         <em>Internet Options/Security/Custom Level/Security Options</em> και μαρκάρετε 
         την επιλογή <em>"Scripting of java applets"</em>. </li>
-      <li>Για τους χρήστες του <em>Netscape / Mozilla,</em> από τα μενού επιλέξτε 
-        διαδοχικά <em>Edit / Preferences / Advanced / Scripts and Plugins</em> 
-        και μαρκάρετε την επιλογή <em>"Enable Java script for Navigator".</em> 
-      </li>
       <li>Για τους χρήστες του <em>Firefox</em>, επιλέξτε διαδοχικά <em>Edit / 
         Preferences / Web features</em> και μαρκάρετε την επιλογή <em>"Enable 
         JavaScript".</em> </li>

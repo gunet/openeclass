@@ -54,6 +54,11 @@ include "../include/lib/main.lib.php";
 include "install_functions.php";
 include "../modules/lang/$lang/common.inc.php";
 include "../modules/lang/$lang/messages.inc.php";
+if ($lang == 'english') {
+	$install_info_file = "install_info_en.php";
+} else { 
+	$install_info_file = "install_info.php";
+}
 
 if (file_exists("../config/config.php")) {
 	$tool_content .= "
@@ -719,7 +724,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 		<ul id=\"installBullet\">
      		<li>$langAddOnExpl</li>
     		<li>$langExpPhpMyAdmin</li></ul>
-		<p>$langBeforeInstall1<a href=\"install_info.php\" target=_blank>$langInstallInstr</a>.</p>
+		<p>$langBeforeInstall1<a href=\"$install_info_file\" target=_blank>$langInstallInstr</a>.</p>
 		<p>$langBeforeInstall2<a href=\"../README.txt\" target=_blank>$langHere</a>.</p>
 		<br><input type=\"submit\" name=\"install2\" value=\"$langNextStep >\">
 		</form>";
