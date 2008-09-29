@@ -348,12 +348,7 @@ function new_assignment()
 	$month	= date("m");
 	$year	= date("Y");
 
-	$tool_content .= "
-    <div id=\"operations_container\">
-      <ul id=\"opslist\">
-        <li><a href='work.php'>$langBack</a></li>
-      </ul>
-    </div>";
+
 	$tool_content .= "
   <form action=\"work.php\" method=\"post\" onsubmit=\"return checkrequired(this, 'title');\">
     <table width=\"99%\" class='FormData'>
@@ -398,8 +393,9 @@ function new_assignment()
     </tbody>
     </table>
   </form>
-  <br/>
-    ";
+  <br/>";
+
+  	$tool_content .= "<p align=\"right\"><a href='work.php'>$langBack</a></p>";
 }
 
 
@@ -540,21 +536,7 @@ function delete_assignment($id) {
 	move_dir("$workPath/$secret",
 	"$webDir/courses/garbage/$currentCourseID/work/${id}_$secret");
 
-	$tool_content .= "
-    <div id=\"operations_container\">
-    <ul id=\"opslist\">
-      <li><a href=\"work.php\">".$langBack."</a></li>
-    </ul>
-    </div>
-    ";
-	$tool_content .="
-    <table width=\"99%\">
-    <tbody>
-    <tr>
-      <td class=\"success\"><p><b>$langDeleted</b></p></td>
-    </tr>
-    </tbody>
-    </table>";
+	$tool_content .="<p class=\"success_small\">$langDeleted<br /><a href=\"work.php\">".$langBack."</a></p>";
 }
 
 

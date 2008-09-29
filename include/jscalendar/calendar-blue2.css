@@ -3,11 +3,11 @@
 div.calendar { position: relative; }
 
 .calendar, .calendar table {
-  border: 1px solid #a33033;
+  border: 1px solid #727266;
   font-size: 11px;
   color: #000;
   cursor: default;
-  background: #F1F8FC;
+  background: #edecdf;
   font-family: tahoma,verdana,sans-serif;
 }
 
@@ -36,11 +36,11 @@ div.calendar { position: relative; }
 }
 
 .calendar thead .daynames { /* Row <TR> containing the day names */
-  background: #C7E1F3;
+  background: #edecdf;
 }
 
 .calendar thead .name { /* Cells <TD> containing the day names */
-  border-bottom: 1px solid #206A9B;
+  border-bottom: 1px solid #727266;
   padding: 2px;
   text-align: center;
   color: #000;
@@ -53,13 +53,13 @@ div.calendar { position: relative; }
 .calendar thead .hilite { /* How do the buttons in header appear when hover */
   background-color: #edecdf;
   color: #000;
-  border: 1px solid #016DC5;
+  border: 1px solid #727266;
   padding: 1px;
 }
 
 .calendar thead .active { /* Active (pressed) buttons in header */
-  background-color: #006AA9;
-  border: 1px solid #008AFF;
+  background-color: #727266;
+  border: 1px solid #727266;
   padding: 2px 0px 0px 2px;
 }
 
@@ -82,25 +82,25 @@ div.calendar { position: relative; }
 .calendar table .wn {
   padding: 2px 3px 2px 2px;
   border-right: 1px solid #000;
-  background: #C7E1F3;
+  background: #edecdf;
 }
 
 .calendar tbody .rowhilite td {
-  background: #def;
+  background: #edecdf;
 }
 
 .calendar tbody .rowhilite td.wn {
-  background: #F1F8FC;
+  background: #edecdf;
 }
 
 .calendar tbody td.hilite { /* Hovered cells <TD> */
-  background: #def;
+  background: #CAC3B5;
   padding: 1px 3px 1px 1px;
-  border: 1px solid #8FC4E8;
+  border: 1px solid #edecdf;
 }
 
 .calendar tbody td.active { /* Active (pressed) cells <TD> */
-  background: #cde;
+  background: #edecdf;
   padding: 2px 2px 0px 2px;
 }
 
@@ -118,7 +118,7 @@ div.calendar { position: relative; }
 
 .calendar tbody td.today { /* Cell showing selected date */
   font-weight: bold;
-  color: #D50000;
+  color: #a33033;
 }
 
 .calendar tbody .disabled { color: #999; }
@@ -135,26 +135,26 @@ div.calendar { position: relative; }
 
 .calendar tfoot .footrow { /* The <TR> in footer (only one right now) */
   text-align: center;
-  background: #206A9B;
+  background: #727266;
   color: #fff;
 }
 
 .calendar tfoot .ttip { /* Tooltip (status bar) cell <TD> */
   background: #CAC3B5;
   color: #000;
-  border-top: 1px solid #206A9B;
+  border-top: 1px solid #727266;
   padding: 1px;
 }
 
 .calendar tfoot .hilite { /* Hover style for buttons in footer */
-  background: #B8DAF0;
-  border: 1px solid #178AEB;
+  background: #edecdf;
+  border: 1px solid #727266;
   color: #000;
   padding: 1px;
 }
 
 .calendar tfoot .active { /* Active (pressed) style for buttons in footer */
-  background: #006AA9;
+  background: #727266;
   padding: 2px 0px 0px 2px;
 }
 
@@ -185,7 +185,7 @@ div.calendar { position: relative; }
 }
 
 .calendar .combo .hilite {
-  background: #34ABFA;
+  background: #727266;
   border-top: 1px solid #46a;
   border-bottom: 1px solid #46a;
   font-weight: bold;
@@ -194,7 +194,7 @@ div.calendar { position: relative; }
 .calendar .combo .active {
   border-top: 1px solid #46a;
   border-bottom: 1px solid #46a;
-  background: #F1F8FC;
+  background: #edecdf;
   font-weight: bold;
 }
 
@@ -202,7 +202,7 @@ div.calendar { position: relative; }
   border-top: 1px solid #000;
   padding: 1px 0px;
   text-align: center;
-  background-color: #E3F0F9;
+  background-color: #edecdf;
 }
 
 .calendar td.time .hour,
@@ -211,7 +211,7 @@ div.calendar { position: relative; }
   padding: 0px 3px 0px 4px;
   border: 1px solid #889;
   font-weight: bold;
-  background-color: #F1F8FC;
+  background-color: #edecdf;
 }
 
 .calendar td.time .ampm {
@@ -225,7 +225,7 @@ div.calendar { position: relative; }
 
 .calendar td.time span.hilite {
   border-color: #000;
-  background-color: #267DB7;
+  background-color: #727266;
   color: #fff;
 }
 

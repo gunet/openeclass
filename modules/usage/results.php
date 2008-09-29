@@ -91,8 +91,8 @@ switch ($u_stats_value) {
     case "visits":
 
      $chart = new VerticalChart(200, 300);
-	$query = "SELECT ".$date_what.", COUNT(*) AS cnt FROM actions 
-		WHERE $date_where AND $mod_where GROUP BY $date_group ORDER BY date_time ASC"; 
+	$query = "SELECT ".$date_what.", COUNT(*) AS cnt FROM actions
+		WHERE $date_where AND $mod_where GROUP BY $date_group ORDER BY date_time ASC";
             $result = db_query($query, $currentCourseID);
 
         switch ($u_interval) {
@@ -148,7 +148,7 @@ switch ($u_stats_value) {
 	switch ($u_interval) {
             case "summary":
                 while ($row = mysql_fetch_assoc($result)) {
-		    $row['tot_dur'] = round($row['tot_dur'] / 60); 
+		    $row['tot_dur'] = round($row['tot_dur'] / 60);
 		    $chart->addPoint(new Point($langSummary, $row['tot_dur']));
                     $chart->width += 25;
                     $chart_content=1;
@@ -202,11 +202,28 @@ $chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).
 $chart->render($webDir.$chart_path);
 
  if ($chart_content) {
-        $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
+  $tool_content .= '
+  <table class="FormData" width="99%" align="left">
+  <tbody>
+  <tr>
+    <th width="220"  class="left">'.$langVisits.' :</th>
+    <td valign="top"><img src="'.$urlServer.$chart_path.'" /></td>
+  </tr>
+  </tbody>
+  </table>';
     }
  else   {
-      $tool_content .='<br><p>'.$langNoStatistics.'</p>';
+
+  $tool_content .='
+  <table class="FormData" width="99%" align="left">
+  <tbody>
+  <tr>
+    <th width="220"  class="left">'.$langVisits.' :</th>
+    <td>'.$langNoStatistics.'</td>
+  </tr>
+  </tbody>
+  </table>';
  }
- $tool_content .= '<br>';
+ $tool_content .= '<br \>';
 
 ?>

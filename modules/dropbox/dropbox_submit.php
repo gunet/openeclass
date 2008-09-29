@@ -25,14 +25,14 @@
 * =========================================================================*/
 /**
  * Handles actions submitted from the main page index.php by POST or GET requests
- * 
+ *
  * 1. Initialise vars
  * 2. Prevent resubmit
  * 3. Form submit & file upload
  * 4. Form submit feedback
  * 5. Delete entries
  * 6. Delete entries feedback
- * 
+ *
  */
 
 require_once("dropbox_init1.inc.php");
@@ -45,7 +45,7 @@ $nameTools = $dropbox_lang["dropbox"];
  * This part checks if the $dropbox_unid var has the same ID
  * as the session var $dropbox_uniqueid that was registered as a session
  * var before.
- * The resubmit prevention only works with GET requests, because it gives some annoying 
+ * The resubmit prevention only works with GET requests, because it gives some annoying
  * behaviours with POST requests.
  */
 
@@ -242,29 +242,11 @@ if (!isset( $_POST['authors']) || !isset( $_POST['description']))
 
 
 	if (!$error) {
-		$tool_content .= "<table width=\"99%\">
-		<tbody>
-		<tr>
-		<td class=\"success\">
-		<p><b>".$dropbox_lang["docAdd"]."</b></p>
-		<p><a href='index.php'>".$dropbox_lang['backList']."</a></p>
-		</td>
-		</tr>
-		</tbody>
-		</table><br/>";
+		$tool_content .= "<p class=\"success_small\">".$dropbox_lang["docAdd"]."<br /><a href='index.php'>".$dropbox_lang['backList']."</a></p><br/>";
 	}
 	else
 	{
-		$tool_content .= "<table width=\"99%\">
-		<tbody>
-		<tr>
-		<td class=\"caution\">
-		<p><b>".$errormsg."</b></p>
-		<p><a href='index.php'>".$dropbox_lang['backList']."</a></p>
-		</td>
-		</tr>
-		</tbody>
-		</table><br/>";
+		$tool_content .= "<p class=\"caution_small\">".$errormsg."<br /><a href='index.php'>".$dropbox_lang['backList']."</a><br/>";
 
 		$tool_content .=  "<b><font color='#FF0000'>".$errormsg."</font></b><br><br>";
 	}
@@ -295,8 +277,8 @@ if (isset($_GET['mailingIndex']))  // examine or send
 	{
 		$var = strtoupper($nameParts[2]);  // the variable part of the name
 		$sel = "SELECT u.user_id, u.nom, u.prenom, cu.statut
-				FROM `".$mysqlMainDb."`.`user` u 
-				LEFT JOIN `".$mysqlMainDb."`.`cours_user` cu 
+				FROM `".$mysqlMainDb."`.`user` u
+				LEFT JOIN `".$mysqlMainDb."`.`cours_user` cu
 				ON cu.user_id = u.user_id AND cu.code_cours = '$currentCourseID'";
 		$sel .= " WHERE u.".$dropbox_cnf["mailingWhere".$var]." = '";
 
@@ -436,10 +418,10 @@ if (isset($_GET['mailingIndex']))  // examine or send
 			// find student course members not among the recipients
 
 			$sql = "SELECT u.nom, u.prenom
-					FROM `".$mysqlMainDb."`.`cours_user` cu 
-					LEFT JOIN  `".$mysqlMainDb."`.`user` u 
+					FROM `".$mysqlMainDb."`.`cours_user` cu
+					LEFT JOIN  `".$mysqlMainDb."`.`user` u
 					ON cu.user_id = u.user_id AND cu.code_cours = '$currentCourseID'
-					WHERE cu.statut = 5 
+					WHERE cu.statut = 5
 					AND u.user_id NOT IN ('" . implode("', '" , $students) . "')";
 			$result = db_query($sql);
 
@@ -585,16 +567,7 @@ if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent']))
      * DELETE FILE FEEDBACK
      * ========================================
      */
-	$tool_content .= "<table width=\"99%\">
-		<tbody>
-		<tr>
-		<td class=\"success\">
-		<p><b>".$dropbox_lang["fileDeleted"]."</b></p>
-		<p><a href='index.php'>".$dropbox_lang['backList']."</a></p>
-		</td>
-		</tr>
-		</tbody>
-		</table><br/>";
+	$tool_content .= "<p class=\"success_small\">".$dropbox_lang["fileDeleted"]."<br /><a href='index.php'>".$dropbox_lang['backList']."</a></p><br/>";
 }
 draw($tool_content, 2, 'dropbox', $head_content);
 ?>

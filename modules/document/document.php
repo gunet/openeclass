@@ -300,7 +300,7 @@ if($is_adminOfCourse)
 	if (isset($delete)) {
 		if (my_delete($baseWorkDir.$delete)) {
 			update_db_info("document", "delete", $delete);
-			$dialogBox = "<b>$langDocDeleted</b>";
+			$dialogBox = "<p class=\"success_small\">$langDocDeleted</p><br />";
 		}
 	}
 
@@ -367,7 +367,7 @@ if($is_adminOfCourse)
 				language=\"\",
 				copyrighted=\"\"";
 			mysql_query($query);
-			$dialogBox = "<p class=\"caution_small\">$langDirCr</p><br />";
+			$dialogBox = "<p class=\"success_small\">$langDirCr</p><br />";
 		}
 	}
 

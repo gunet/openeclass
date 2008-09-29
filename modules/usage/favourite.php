@@ -48,12 +48,15 @@ include '../../include/baseTheme.php';
 include('../../include/action.php');
 
 $tool_content = '';
-$tool_content .= "<div id=\"operations_container\">
-	<ul id=\"opslist\">";
-$tool_content .= "<li><a href='usage.php'>".$langUsage."</a></li>";
-$tool_content .= "<li><a href='favourite.php?first='>".$langFavourite."</a></li>";
-$tool_content .= "<li><a href='userlogins.php?first='>".$langUserLogins."</a></li>";
-$tool_content .= "<li><a href='oldStats.php'>".$langOldStats."</a></li></ul></div>";
+$tool_content .= "
+  <div id=\"operations_container\">
+    <ul id=\"opslist\">
+      <li><a href='usage.php'>".$langUsage."</a></li>
+      <li><a href='favourite.php?first='>".$langFavourite."</a></li>
+      <li><a href='userlogins.php?first='>".$langUserLogins."</a></li>
+      <li><a href='oldStats.php'>".$langOldStats."</a></li>
+    </ul>
+  </div>";
 
 $tool_content .= "<p> $langFavouriteExpl </p>";
 
@@ -113,7 +116,7 @@ $local_head = $jscalendar->get_load_files_code();
     switch ($u_stats_value) {
         case "visits":
             $query = "SELECT module_id, COUNT(*) AS cnt, accueil.rubrique AS name FROM actions ".
-            " LEFT JOIN accueil ON actions.module_id = accueil.id  
+            " LEFT JOIN accueil ON actions.module_id = accueil.id
 		WHERE $date_where AND $user_where GROUP BY module_id";
 
             $result = db_query($query, $currentCourseID);
@@ -132,7 +135,7 @@ $local_head = $jscalendar->get_load_files_code();
 
         case "duration":
             $query = "SELECT module_id, SUM(duration) AS tot_dur, accueil.rubrique AS name FROM actions ".
-            " LEFT JOIN accueil ON actions.module_id = accueil.id  
+            " LEFT JOIN accueil ON actions.module_id = accueil.id
 		WHERE $date_where AND $user_where GROUP BY module_id";
 
             $result = db_query($query, $currentCourseID);
@@ -168,7 +171,7 @@ $local_head = $jscalendar->get_load_files_code();
                  'showOthers'     => true,
                  'ifFormat'       => '%Y-%m-%d',
                  'timeFormat'     => '24'),
-           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+           array('style'       => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
                  'name'        => 'u_date_start',
                  'value'       => $u_date_start));
 
@@ -177,7 +180,7 @@ $local_head = $jscalendar->get_load_files_code();
                  'showOthers'     => true,
                  'ifFormat'       => '%Y-%m-%d',
                  'timeFormat'     => '24'),
-           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+           array('style'       => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
                  'name'        => 'u_date_end',
                  'value'       => $u_date_end));
 
