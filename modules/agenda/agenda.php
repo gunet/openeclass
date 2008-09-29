@@ -78,6 +78,32 @@ if ($language == 'greek') {
 
 hContent;
 
+$head_content .= <<<hContent
+<script type="text/javascript">
+function checkrequired(which, entry) {
+	var pass=true;
+	if (document.images) {
+		for (i=0;i<which.length;i++) {
+			var tempobj=which.elements[i];
+			if (tempobj.name == entry) {
+				if (tempobj.type=="text"&&tempobj.value=='') {
+					pass=false;
+					break;
+		  		}
+	  		}
+		}
+	}
+	if (!pass) {
+		alert("$langEmptyAgendaTitle");
+		return false;
+	} else {
+		return true;
+	}
+}
+
+</script>
+hContent;
+
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
 $head_content .= $jscalendar->get_load_files_code();
 
@@ -234,9 +260,8 @@ function confirmation (name)
 		$navigation[] = array ("url"=>"agenda.php", "name"=> $langAgenda);
 		$tool_content .= <<<tContentForm
 
-<form method="post" action="".$_SERVER[PHP_SELF]."">
+<form method="post" action="".$_SERVER[PHP_SELF]." onsubmit="return checkrequired(this, 'titre');">
     <input type="hidden" name="id" value="$id">
-
     <table width=\"99%\" class=\"FormData\">
     <tbody>
     <tr>
@@ -263,7 +288,7 @@ tContentForm;
 		    <option value='$hours'>$hours</option>
     		<option value='--'>--</option>";
             for ($h=0; $h<=24; $h++)
-            $tool_content .= "\n		    <option value='$h'>$h</option>";
+            $tool_content .= "\n<option value='$h'>$h</option>";
             $tool_content .= "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
         $tool_content .= "$langMinute:<select name=\"fminute\" class='auth_input'>
             <option value=\"$minutes\">[$minutes]</option>

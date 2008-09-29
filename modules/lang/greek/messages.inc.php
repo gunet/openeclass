@@ -404,7 +404,7 @@ $langNoEvents = "Δεν υπάρχουν γεγονότα";
 $langSureToDel = "Είστε σίγουρος ότι θέλετε να διαγράψετε το γεγονός με τίτλο";
 $langDelete = "Διαγραφή";
 $langInHour = "(σε ώρες)";
-
+$langEmptyAgendaTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο του γεγονότος";
 
 // week days
 $langDay_of_weekNames = array();

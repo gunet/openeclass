@@ -395,6 +395,7 @@ $langNoEvents = "No events exist";
 $langSureToDel = "Are you sure you want to delete the event titled";
 $langChooseDate = "Choose Date";
 $langInHour = "(in hour)";
+$langEmptyAgendaTitle = "Please type agenda title";
 
 /*****************************************************************
 * announcements.inc.php
