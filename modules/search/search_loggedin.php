@@ -162,7 +162,7 @@ function match_arrays($search_terms_array, $mycours_string)
 
 function my_stripos($string, $word)
 {
-      $source = array('ά', 'έ', '�?', 'ί', 'ύ', 'ό', 'ώ', 'ϊ', 'ϋ', 'ΐ', 'ΰ');
+      $source = array('ά', 'έ', 'ή', 'ί', 'ύ', 'ό', 'ώ', 'ϊ', 'ϋ', 'ΐ', 'ΰ');
       $target = array('α', 'ε', 'η', 'ι', 'υ', 'ο', 'ω', 'ι', 'υ', 'ι', 'υ');
 
      return strpos(
