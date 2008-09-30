@@ -280,8 +280,7 @@ if (!extension_loaded('gd')) {
   </tbody>
   </table>';
         $tool_content .= '';
-    }
-    else   {
+} elseif (isset($btnUsage) and $chart_content == 0) {
   $tool_content .= '
   <table class="FormData" width="99%" align="left">
   <tbody>

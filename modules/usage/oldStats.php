@@ -108,8 +108,8 @@ $local_head = $jscalendar->get_load_files_code();
         $usage_defaults = array (
             'u_stats_value' => 'visits',
             'u_module_id' => -1,
-            'u_date_start' => strftime('%Y-%m-%d', strtotime('now -4 month')),
-            'u_date_end' => strftime('%Y-%m-%d', strtotime('now -1 month')),
+            'u_date_start' => strftime('%Y-%m-%d', strtotime('now -2 year')),
+            'u_date_end' => strftime('%Y-%m-%d', strtotime('now -8 month')),
         );
 
         foreach ($usage_defaults as $key => $val) {
@@ -181,8 +181,7 @@ $local_head = $jscalendar->get_load_files_code();
 
     if ($chart_content) {
         $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
-    }
-    else   {
+    } elseif (isset($btnUsage) and $chart_content == 0) {
       $tool_content .='<br><p align="center"><b>'.$langNoStatistics.'</b></p>';
     }
     $tool_content .= '<br>';
@@ -220,9 +219,7 @@ $local_head = $jscalendar->get_load_files_code();
         '<option value="visits" '.	 (($u_stats_value=='visits')?('selected'):(''))	  .'>'.$langVisits."</option>\n".
         '<option value="duration" '.(($u_stats_value=='duration')?('selected'):('')) .'>'.$langDuration."</option>\n";
 
-    $tool_content .= '
-<form method="post">
-
+    $tool_content .= '<form method="post">
   <table class="FormData" width="99%" align="left">
   <tbody>
   <tr>
