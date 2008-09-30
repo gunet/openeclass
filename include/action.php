@@ -71,7 +71,6 @@ class action {
         $end_date = date('Y-m-01 00:00:00', $end_stmp);
 
         while ($end_date < $current_month){
-
             $result = db_query($sql_1, $currentCourseID);
             while ($row = mysql_fetch_assoc($result)) {
                 #edw kanoume douleia gia ka8e module
