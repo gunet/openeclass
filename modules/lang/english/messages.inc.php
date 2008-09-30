@@ -1,28 +1,28 @@
 <?php
-/*===========================================================================
+/*========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
-* ===========================================================================
-*	Copyright(c) 2003-2008  Greek Universities Network - GUnet
-*	A full copyright notice can be read in "/info/copyright.txt".
+* ========================================================================
+*  Copyright(c) 2003-2008  Greek Universities Network - GUnet
+*  A full copyright notice can be read in "/info/copyright.txt".
 *
-*  	Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-*				Yannis Exidaridis <jexi@noc.uoa.gr>
-*				Alexandros Diamantidis <adia@noc.uoa.gr>
+*  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*			Yannis Exidaridis <jexi@noc.uoa.gr>
+*			Alexandros Diamantidis <adia@noc.uoa.gr>
+*			Tilemachos Raptis <traptis@noc.uoa.gr>
 *
-*	For a full list of contributors, see "credits.txt".
+*  For a full list of contributors, see "credits.txt".
 *
-*	This program is a free software under the terms of the GNU
-*	(General Public License) as published by the Free Software
-*	Foundation. See the GNU License for more details.
-*	The full license can be read in "license.txt".
+*  Open eClass is an open platform distributed in the hope that it will
+*  be useful (without any warranty), under the terms of the GNU (General
+*  Public License) as published by the Free Software Foundation.
+*  The full license can be read in "/info/license/license_gpl.txt".
 *
-*	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*				Network Operations Center, University of Athens,
-*				Panepistimiopolis Ilissia, 15784, Athens, Greece
-*				eMail: eclassadmin@gunet.gr
-============================================================================*/
-
+*  Contact address: 	GUnet Asynchronous eLearning Group,
+*  			Network Operations Center, University of Athens,
+*  			Panepistimiopolis Ilissia, 15784, Athens, Greece
+*  			eMail: info@openeclass.org
+* =========================================================================*/
 
 
 /********************************************************
@@ -2708,7 +2708,7 @@ $langExplUpgrade = "The upgrade script will modify configuration file <em>config
 $langExpl2Upgrade = "Also for security reasons make sure that you have backedup all the databases.";
 $langWarnUpgrade = "WARNING!";
 $langExecTimeUpgrade = "WARNING! For upgrade script to run successfully make sure that php variable <em>max_execution_time</em> which is defined in <em>php.ini</em> is larger than 300 (= 5 miunutes). Modify variable and restart the upgrade process";
-$langUpgradeCont = "Το continue upgrade process, please enter platform administrator username / password:";
+$langUpgradeCont = "�?ο continue upgrade process, please enter platform administrator username / password:";
 $langUpgDetails = "Username / Password";
 $langUpgMan = "upgrade instructions";
 $langUpgToSee = "To review all the new features and changes of eClass new version click ";
@@ -2723,7 +2723,7 @@ $langConfigError3 = "config.php was NOT modified! Please check permissions.";
 $langConfigError4 = "Cannot access directory of config.php! Please check permissions.";
 $langUpgradeSuccess = "Upgrade Database of Open eClass finished successfully!";
 $langUpgNoVideoDir = "Cannot create 'video' directory! Please check permissions.";
-$langUpgNoVideoDir2 = "Τhere is already a file with the name 'video'! You must delete it first";
+$langUpgNoVideoDir2 = "�?here is already a file with the name 'video'! You must delete it first";
 $langUpgNoVideoDir3 = "No write permissions in directory 'video'!";
 $langUpgReady = "You are ready to use the new version of Open eClass!";
 $langUpgSucNotice = "If an error occured, maybe some course is not completely working .<br>
