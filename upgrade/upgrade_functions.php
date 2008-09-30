@@ -254,776 +254,812 @@ function convert_db_utf8($database)
 // Upgrade course database and documents
 function upgrade_course($code, $lang)
 {
-	global $webDir, $mysqlMainDb, $tool_content, $langTable, $langNotMovedDir, $langToDir, $OK, $BAD;
-	global $langMoveIntroText, $langCorrectTableEntries, $langEncodeDocuments, $langEncodeGroupDocuments;
+        global $webDir, $mysqlMainDb, $tool_content, $langTable,
+               $langNotMovedDir, $langToDir, $OK, $BAD, $langMoveIntroText,
+               $langCorrectTableEntries, $langEncodeDocuments,
+               $langEncodeGroupDocuments, $langUpgIndex, $langUpgNotIndex,
+               $langCheckPerm, $langUpgFileNotRead, $langUpgFileNotModify,
+               $langUpgNotChDir, $langUpgCourse;
 
-		include 'messages_accueil.php';
+        include 'messages_accueil.php';
 
-		mysql_select_db($code);
+        mysql_select_db($code);
 
-                // *********************************
-                // old upgrade queries
-                // *********************************
+        // ****************************
+        // modify course_code/index.php
+        // ****************************
 
-                // upgrade queries from 1.2 --> 1.4
-                if (!mysql_field_exists('$code','exercices','type'))
-                        echo add_field('exercices','type',"TINYINT( 4 ) UNSIGNED DEFAULT '1' NOT NULL AFTER `description`");
-                if (!mysql_field_exists('$code','exercices','random'))
-                        echo add_field('exercices','random',"SMALLINT( 6 ) DEFAULT '0' NOT NULL AFTER `type`");
-                if (!mysql_field_exists('$code','reponses','ponderation'))
-                        echo add_field('reponses','ponderation',"SMALLINT( 5 ) NOT NULL AFTER `comment`");
-                $s = db_query("SELECT type FROM questions",$code);
-                while ($f = mysql_fetch_row($s)) {
-                        if (empty($f[0]))  {
-                                if (db_query("UPDATE `questions` SET type=1",$code)) {
-                                        echo "$langTable questions: $OK<br>";
-                                } else {
-                                        echo "$langTable questions: $BAD<br>";
-                                }
+        echo "<hr><p>$langUpgIndex <b>$code</b><br />";
+        flush();
+        $course_base_dir = "{$webDir}courses/$code";
+        if (!is_writable($course_base_dir)) {
+                die ("$langUpgNotIndex \"$course_base_dir\"! $langCheckPerm.");
+        }
+
+        if (!file_exists("$course_base_dir/temp")) {
+                mkdir("$course_base_dir/temp", 0777);
+        }
+
+        $filecontents = file_get_contents("$course_base_dir/index.php");
+        if (!$filecontents) {
+                die($langUpgFileNotRead);
+        }
+        $newfilecontents = preg_replace('#../claroline/#',
+                                        '../../modules/',
+                                        $filecontents);
+        if (!($fp = @fopen("$course_base_dir/index.php","w"))) {
+                die($langUpgFileNotRead);
+        }
+        if (!@fwrite($fp, $newfilecontents))
+                die($langUpgFileNotModify);
+        fclose($fp);
+
+        echo "$langUpgCourse <b>$code</b><br>";
+        flush();
+
+        // *********************************
+        // old upgrade queries
+        // *********************************
+
+        // upgrade queries from 1.2 --> 1.4
+        if (!mysql_field_exists('$code','exercices','type'))
+                echo add_field('exercices','type',"TINYINT( 4 ) UNSIGNED DEFAULT '1' NOT NULL AFTER `description`");
+        if (!mysql_field_exists('$code','exercices','random'))
+                echo add_field('exercices','random',"SMALLINT( 6 ) DEFAULT '0' NOT NULL AFTER `type`");
+        if (!mysql_field_exists('$code','reponses','ponderation'))
+                echo add_field('reponses','ponderation',"SMALLINT( 5 ) NOT NULL AFTER `comment`");
+        $s = db_query("SELECT type FROM questions",$code);
+        while ($f = mysql_fetch_row($s)) {
+                if (empty($f[0]))  {
+                        if (db_query("UPDATE `questions` SET type=1",$code)) {
+                                echo "$langTable questions: $OK<br>";
+                        } else {
+                                echo "$langTable questions: $BAD<br>";
                         }
-                } // while
-
-                if (!mysql_table_exists($code, 'assignments'))  {
-                        db_query("CREATE TABLE `assignments` (
-                                `id` int(11) NOT NULL auto_increment,
-                                `title` varchar(200) NOT NULL default '',
-                                `description` text NOT NULL,
-                                `comments` text NOT NULL,
-                                `deadline` date NOT NULL default '0000-00-00',
-                                `submission_date` date NOT NULL default '0000-00-00',
-                                `active` char(1) NOT NULL default '1',
-                                `secret_directory` varchar(30) NOT NULL,
-                                `group_submissions` CHAR(1) DEFAULT '0' NOT NULL,
-                                UNIQUE KEY `id` (`id`))", $code);
                 }
+        } // while
 
-                if (!mysql_table_exists($code, 'assignment_submit')) {
-                        db_query("CREATE TABLE `assignment_submit` (
-                                `id` int(11) NOT NULL auto_increment,
-                                `uid` int(11) NOT NULL default '0',
-                                `assignment_id` int(11) NOT NULL default '0',
-                                `submission_date` date NOT NULL default '0000-00-00',
-                                `submission_ip` varchar(16) NOT NULL default '',
-                                `file_path` varchar(200) NOT NULL default '',
-                                `file_name` varchar(200) NOT NULL default '',
-                                `comments` text NOT NULL,
-                                `grade` varchar(50) NOT NULL default '',
-                                `grade_comments` text NOT NULL,
-                                `grade_submission_date` date NOT NULL default '0000-00-00',
-                                `grade_submission_ip` varchar(16) NOT NULL default '',
-                                `group_id` INT( 11 ) DEFAULT NULL,
-                                UNIQUE KEY `id` (`id`))",$code);
-                }
-                update_assignment_submit();
+        if (!mysql_table_exists($code, 'assignments'))  {
+                db_query("CREATE TABLE `assignments` (
+                        `id` int(11) NOT NULL auto_increment,
+                        `title` varchar(200) NOT NULL default '',
+                        `description` text NOT NULL,
+                        `comments` text NOT NULL,
+                        `deadline` date NOT NULL default '0000-00-00',
+                        `submission_date` date NOT NULL default '0000-00-00',
+                        `active` char(1) NOT NULL default '1',
+                        `secret_directory` varchar(30) NOT NULL,
+                        `group_submissions` CHAR(1) DEFAULT '0' NOT NULL,
+                        UNIQUE KEY `id` (`id`))", $code);
+        }
 
-                // upgrade queries for eClass 1.5
-                if (!mysql_table_exists($code, 'videolinks'))  {
-                        db_query("CREATE TABLE videolinks (
-                                id int(11) NOT NULL auto_increment,
-                                   url varchar(200),
-                                   titre varchar(200),
-                                   description text,
-                                   visibility CHAR(1) DEFAULT '1' NOT NULL,
-                                   PRIMARY KEY (id))", $code);
-                }
+        if (!mysql_table_exists($code, 'assignment_submit')) {
+                db_query("CREATE TABLE `assignment_submit` (
+                        `id` int(11) NOT NULL auto_increment,
+                        `uid` int(11) NOT NULL default '0',
+                        `assignment_id` int(11) NOT NULL default '0',
+                        `submission_date` date NOT NULL default '0000-00-00',
+                        `submission_ip` varchar(16) NOT NULL default '',
+                        `file_path` varchar(200) NOT NULL default '',
+                        `file_name` varchar(200) NOT NULL default '',
+                        `comments` text NOT NULL,
+                        `grade` varchar(50) NOT NULL default '',
+                        `grade_comments` text NOT NULL,
+                        `grade_submission_date` date NOT NULL default '0000-00-00',
+                        `grade_submission_ip` varchar(16) NOT NULL default '',
+                        `group_id` INT( 11 ) DEFAULT NULL,
+                        UNIQUE KEY `id` (`id`))",$code);
+        }
+        update_assignment_submit();
 
-                // upgrade queries for eClass 1.6
-                echo add_field('liens','category',"INT(4) DEFAULT '0' NOT NULL");
-                echo add_field('liens','ordre',"MEDIUMINT(8) DEFAULT '0' NOT NULL");
-                if (!mysql_table_exists($code, 'link_categories'))  {
-                        db_query("CREATE TABLE `link_categories` (
-                                `id` int(6) NOT NULL auto_increment,
-                                `categoryname` varchar(255) default NULL,
-                                `description` text,
-                                `ordre` mediumint(8) NOT NULL default '0',
-                                PRIMARY KEY  (`id`))",$code);
-                }
+        // upgrade queries for eClass 1.5
+        if (!mysql_table_exists($code, 'videolinks'))  {
+                db_query("CREATE TABLE videolinks (
+                        id int(11) NOT NULL auto_increment,
+                           url varchar(200),
+                           titre varchar(200),
+                           description text,
+                           visibility CHAR(1) DEFAULT '1' NOT NULL,
+                           PRIMARY KEY (id))", $code);
+        }
 
-                // correct link entries to correctly appear in a blank window
-                $sql = db_query("SELECT url FROM `liens` WHERE url REGEXP '\"target=_blank$'");
-                while ($u = mysql_fetch_row($sql))  {
-                        $temp = $u[0];
-                        $newurl = preg_replace('#\s*"target=_blank#','',$temp);
-                        db_query("UPDATE liens SET url='$newurl' WHERE url='$temp'");
-                }
+        // upgrade queries for eClass 1.6
+        echo add_field('liens','category',"INT(4) DEFAULT '0' NOT NULL");
+        echo add_field('liens','ordre',"MEDIUMINT(8) DEFAULT '0' NOT NULL");
+        if (!mysql_table_exists($code, 'link_categories'))  {
+                db_query("CREATE TABLE `link_categories` (
+                        `id` int(6) NOT NULL auto_increment,
+                        `categoryname` varchar(255) default NULL,
+                        `description` text,
+                        `ordre` mediumint(8) NOT NULL default '0',
+                        PRIMARY KEY  (`id`))",$code);
+        }
 
-                // for dropbox
-                if (!mysql_table_exists($code, 'dropbox_file'))  {
-                        db_query("INSERT INTO accueil VALUES (
-                                16,
-                                '$langDropbox[$lang]',
-                                '../../modules/dropbox/index.php',
-                                'dropbox',
-                                '0',
-                                '0',
-                                '',
-                                )", $code);
+        // correct link entries to correctly appear in a blank window
+        $sql = db_query("SELECT url FROM `liens` WHERE url REGEXP '\"target=_blank$'");
+        while ($u = mysql_fetch_row($sql))  {
+                $temp = $u[0];
+                $newurl = preg_replace('#\s*"target=_blank#','',$temp);
+                db_query("UPDATE liens SET url='$newurl' WHERE url='$temp'");
+        }
 
-                        db_query("CREATE TABLE dropbox_file (
-                                id int(11) unsigned NOT NULL auto_increment,
-                                   uploaderId int(11) unsigned NOT NULL default '0',
-                                   filename varchar(250) NOT NULL default '',
-                                   filesize int(11) unsigned NOT NULL default '0',
-                                   title varchar(250) default '',
-                                   description varchar(250) default '',
-                                   author varchar(250) default '',
-                                   uploadDate datetime NOT NULL default '0000-00-00 00:00:00',
-                                   lastUploadDate datetime NOT NULL default '0000-00-00 00:00:00',
-                                   PRIMARY KEY (id),
-                                   UNIQUE KEY UN_filename (filename))", $code);
-                }
-                if (!mysql_table_exists($code, 'dropbox_person'))  {
-                        db_query("CREATE TABLE dropbox_person (
-                                fileId int(11) unsigned NOT NULL default '0',
-                                       personId int(11) unsigned NOT NULL default '0',
-                                       PRIMARY KEY  (fileId,personId))", $code);
-                }
-                if (!mysql_table_exists($code, 'dropbox_post'))  {
-                        db_query("CREATE TABLE dropbox_post (
-                                fileId int(11) unsigned NOT NULL default '0',
-                                       recipientId int(11) unsigned NOT NULL default '0',
-                                       PRIMARY KEY  (fileId,recipientId))", $code);
-                }
+        // for dropbox
+        if (!mysql_table_exists($code, 'dropbox_file'))  {
+                db_query("INSERT INTO accueil VALUES (
+                        16,
+                        '$langDropbox[$lang]',
+                        '../../modules/dropbox/index.php',
+                        'dropbox',
+                        '0',
+                        '0',
+                        '',
+                        )", $code);
 
-                // ********************************************
-                // new upgrade queries for eClass 2.0
-                // ********************************************
-		if (mysql_table_exists($code, 'work'))
-                	db_query("DROP TABLE `work`");
-		if (mysql_table_exists($code, 'work_student'))
-                	db_query("DROP TABLE `work_student`");
+                db_query("CREATE TABLE dropbox_file (
+                        id int(11) unsigned NOT NULL auto_increment,
+                           uploaderId int(11) unsigned NOT NULL default '0',
+                           filename varchar(250) NOT NULL default '',
+                           filesize int(11) unsigned NOT NULL default '0',
+                           title varchar(250) default '',
+                           description varchar(250) default '',
+                           author varchar(250) default '',
+                           uploadDate datetime NOT NULL default '0000-00-00 00:00:00',
+                           lastUploadDate datetime NOT NULL default '0000-00-00 00:00:00',
+                           PRIMARY KEY (id),
+                           UNIQUE KEY UN_filename (filename))", $code);
+        }
+        if (!mysql_table_exists($code, 'dropbox_person'))  {
+                db_query("CREATE TABLE dropbox_person (
+                        fileId int(11) unsigned NOT NULL default '0',
+                               personId int(11) unsigned NOT NULL default '0',
+                               PRIMARY KEY  (fileId,personId))", $code);
+        }
+        if (!mysql_table_exists($code, 'dropbox_post'))  {
+                db_query("CREATE TABLE dropbox_post (
+                        fileId int(11) unsigned NOT NULL default '0',
+                               recipientId int(11) unsigned NOT NULL default '0',
+                               PRIMARY KEY  (fileId,recipientId))", $code);
+        }
 
-                $sql = 'SELECT id, titre, contenu, day, hour, lasting
-                        FROM  agenda WHERE CONCAT(titre,contenu) != \'\'
-                        AND DATE_FORMAT(day,\'%Y %m %d\') >= \''.date("Y m d").'\'';
+        // ********************************************
+        // new upgrade queries for eClass 2.0
+        // ********************************************
+        if (mysql_table_exists($code, 'work'))
+                db_query("DROP TABLE `work`");
+        if (mysql_table_exists($code, 'work_student'))
+                db_query("DROP TABLE `work_student`");
 
-                //  Get all agenda events from each table & parse them to arrays
-                $mysql_query_result = db_query($sql, $code);
-                $event_counter=0;
-                while ($myAgenda = mysql_fetch_array($mysql_query_result)) {
-                        $lesson_agenda[$event_counter]['id'] = $myAgenda[0];
-                        $lesson_agenda[$event_counter]['title'] = $myAgenda[1];
-                        $lesson_agenda[$event_counter]['content'] = $myAgenda[2];
-                        $lesson_agenda[$event_counter]['date'] = $myAgenda[3];
-                        $lesson_agenda[$event_counter]['time'] = $myAgenda[4];
-                        $lesson_agenda[$event_counter]['duree'] = $myAgenda[5];
-                        $lesson_agenda[$event_counter]['lesson_code'] = $code;
-                        $event_counter++;
-                }
+        $sql = 'SELECT id, titre, contenu, day, hour, lasting
+                FROM  agenda WHERE CONCAT(titre,contenu) != \'\'
+                AND DATE_FORMAT(day,\'%Y %m %d\') >= \''.date("Y m d").'\'';
 
-                for ($j=0; $j <$event_counter; $j++) {
-                        db_query("INSERT INTO agenda (lesson_event_id, titre, contenu, day, hour, lasting, lesson_code)
-                                        VALUES ('".$lesson_agenda[$j]['id']."',
-                                                '".$lesson_agenda[$j]['title']."',
-                                                '".$lesson_agenda[$j]['content']."',
-                                                '".$lesson_agenda[$j]['date']."',
-                                                '".$lesson_agenda[$j]['time']."',
-                                                '".$lesson_agenda[$j]['duree']."',
-                                                '".$lesson_agenda[$j]['lesson_code']."'
-                                               )", $mysqlMainDb);
+        //  Get all agenda events from each table & parse them to arrays
+        $mysql_query_result = db_query($sql, $code);
+        $event_counter=0;
+        while ($myAgenda = mysql_fetch_array($mysql_query_result)) {
+                $lesson_agenda[$event_counter]['id'] = $myAgenda[0];
+                $lesson_agenda[$event_counter]['title'] = $myAgenda[1];
+                $lesson_agenda[$event_counter]['content'] = $myAgenda[2];
+                $lesson_agenda[$event_counter]['date'] = $myAgenda[3];
+                $lesson_agenda[$event_counter]['time'] = $myAgenda[4];
+                $lesson_agenda[$event_counter]['duree'] = $myAgenda[5];
+                $lesson_agenda[$event_counter]['lesson_code'] = $code;
+                $event_counter++;
+        }
 
-                }
-                // end of agenda
+        for ($j=0; $j <$event_counter; $j++) {
+                db_query("INSERT INTO agenda (lesson_event_id, titre, contenu, day, hour, lasting, lesson_code)
+                                VALUES ('".$lesson_agenda[$j]['id']."',
+                                        '".$lesson_agenda[$j]['title']."',
+                                        '".$lesson_agenda[$j]['content']."',
+                                        '".$lesson_agenda[$j]['date']."',
+                                        '".$lesson_agenda[$j]['time']."',
+                                        '".$lesson_agenda[$j]['duree']."',
+                                        '".$lesson_agenda[$j]['lesson_code']."'
+                                       )", $mysqlMainDb);
 
-		// Group table
-		if (!mysql_table_exists($code, 'group_documents'))  {
-			db_query("CREATE TABLE `group_documents` (
-			`id` INT(4) NOT NULL AUTO_INCREMENT,
-			`path` VARCHAR(255) default NULL ,
-			`filename` VARCHAR(255) default NULL,
- 			PRIMARY KEY(id))", $code);
-		}
+        }
+        // end of agenda
 
-                // Learning Path tables
-                if (!mysql_table_exists($code, 'lp_module'))  {
-                        db_query("CREATE TABLE `lp_module` (
-                                `module_id` int(11) NOT NULL auto_increment,
-                                `name` varchar(255) NOT NULL default '',
-                                `comment` text NOT NULL,
-                                `accessibility` enum('PRIVATE','PUBLIC') NOT NULL default 'PRIVATE',
-                                `startAsset_id` int(11) NOT NULL default '0',
-                                `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','LABEL','COURSE_DESCRIPTION','LINK') NOT NULL,
-                                `launch_data` text NOT NULL,
-                                PRIMARY KEY  (`module_id`)
+        // Group table
+        if (!mysql_table_exists($code, 'group_documents'))  {
+                db_query("CREATE TABLE `group_documents` (
+                        `id` INT(4) NOT NULL AUTO_INCREMENT,
+                        `path` VARCHAR(255) default NULL ,
+                        `filename` VARCHAR(255) default NULL,
+                        PRIMARY KEY(id))", $code);
+        }
+
+        // Learning Path tables
+        if (!mysql_table_exists($code, 'lp_module'))  {
+                db_query("CREATE TABLE `lp_module` (
+                        `module_id` int(11) NOT NULL auto_increment,
+                        `name` varchar(255) NOT NULL default '',
+                        `comment` text NOT NULL,
+                        `accessibility` enum('PRIVATE','PUBLIC') NOT NULL default 'PRIVATE',
+                        `startAsset_id` int(11) NOT NULL default '0',
+                        `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','LABEL','COURSE_DESCRIPTION','LINK') NOT NULL,
+                        `launch_data` text NOT NULL,
+                        PRIMARY KEY  (`module_id`)
                                 ) ", $code); //TYPE=MyISAM COMMENT='List of available modules used in learning paths';
-                }
-                if (!mysql_table_exists($code, 'lp_learnPath'))  {
-                        db_query("CREATE TABLE `lp_learnPath` (
-                                `learnPath_id` int(11) NOT NULL auto_increment,
-                                `name` varchar(255) NOT NULL default '',
-                                `comment` text NOT NULL,
-                                `lock` enum('OPEN','CLOSE') NOT NULL default 'OPEN',
-                                `visibility` enum('HIDE','SHOW') NOT NULL default 'SHOW',
-                                `rank` int(11) NOT NULL default '0',
-                                PRIMARY KEY  (`learnPath_id`),
-                                UNIQUE KEY rank (`rank`)
-                                        ) ", $code); //TYPE=MyISAM COMMENT='List of learning Paths';
-                }
+        }
+        if (!mysql_table_exists($code, 'lp_learnPath'))  {
+                db_query("CREATE TABLE `lp_learnPath` (
+                        `learnPath_id` int(11) NOT NULL auto_increment,
+                        `name` varchar(255) NOT NULL default '',
+                        `comment` text NOT NULL,
+                        `lock` enum('OPEN','CLOSE') NOT NULL default 'OPEN',
+                        `visibility` enum('HIDE','SHOW') NOT NULL default 'SHOW',
+                        `rank` int(11) NOT NULL default '0',
+                        PRIMARY KEY  (`learnPath_id`),
+                        UNIQUE KEY rank (`rank`)
+                                ) ", $code); //TYPE=MyISAM COMMENT='List of learning Paths';
+        }
 
-                if (!mysql_table_exists($code, 'lp_rel_learnPath_module'))  {
-                        db_query("CREATE TABLE `lp_rel_learnPath_module` (
-                                `learnPath_module_id` int(11) NOT NULL auto_increment,
-                                `learnPath_id` int(11) NOT NULL default '0',
-                                `module_id` int(11) NOT NULL default '0',
-                                `lock` enum('OPEN','CLOSE') NOT NULL default 'OPEN',
-                                `visibility` enum('HIDE','SHOW') NOT NULL default 'SHOW',
-                                `specificComment` text NOT NULL,
-                                `rank` int(11) NOT NULL default '0',
-                                `parent` int(11) NOT NULL default '0',
-                                `raw_to_pass` tinyint(4) NOT NULL default '50',
-                                PRIMARY KEY  (`learnPath_module_id`)
-                                        ) ", $code);//TYPE=MyISAM COMMENT='This table links module to the learning path using them';
-                }
+        if (!mysql_table_exists($code, 'lp_rel_learnPath_module'))  {
+                db_query("CREATE TABLE `lp_rel_learnPath_module` (
+                        `learnPath_module_id` int(11) NOT NULL auto_increment,
+                        `learnPath_id` int(11) NOT NULL default '0',
+                        `module_id` int(11) NOT NULL default '0',
+                        `lock` enum('OPEN','CLOSE') NOT NULL default 'OPEN',
+                        `visibility` enum('HIDE','SHOW') NOT NULL default 'SHOW',
+                        `specificComment` text NOT NULL,
+                        `rank` int(11) NOT NULL default '0',
+                        `parent` int(11) NOT NULL default '0',
+                        `raw_to_pass` tinyint(4) NOT NULL default '50',
+                        PRIMARY KEY  (`learnPath_module_id`)
+                                ) ", $code);//TYPE=MyISAM COMMENT='This table links module to the learning path using them';
+        }
 
-                if (!mysql_table_exists($code, 'lp_asset'))  {
-                        db_query("CREATE TABLE `lp_asset` (
-                                `asset_id` int(11) NOT NULL auto_increment,
-                                `module_id` int(11) NOT NULL default '0',
-                                `path` varchar(255) NOT NULL default '',
-                                `comment` varchar(255) default NULL,
-                                PRIMARY KEY  (`asset_id`)
-                                        ) ", $code); //TYPE=MyISAM COMMENT='List of resources of module of learning paths';
-                }
+        if (!mysql_table_exists($code, 'lp_asset'))  {
+                db_query("CREATE TABLE `lp_asset` (
+                        `asset_id` int(11) NOT NULL auto_increment,
+                        `module_id` int(11) NOT NULL default '0',
+                        `path` varchar(255) NOT NULL default '',
+                        `comment` varchar(255) default NULL,
+                        PRIMARY KEY  (`asset_id`)
+                                ) ", $code); //TYPE=MyISAM COMMENT='List of resources of module of learning paths';
+        }
 
-                if (!mysql_table_exists($code, 'lp_user_module_progress'))  {
-                        db_query("CREATE TABLE `lp_user_module_progress` (
-                                `user_module_progress_id` int(22) NOT NULL auto_increment,
-                                `user_id` mediumint(9) NOT NULL default '0',
-                                `learnPath_module_id` int(11) NOT NULL default '0',
-                                `learnPath_id` int(11) NOT NULL default '0',
-                                `lesson_location` varchar(255) NOT NULL default '',
-                                `lesson_status` enum('NOT ATTEMPTED','PASSED','FAILED','COMPLETED','BROWSED','INCOMPLETE','UNKNOWN') NOT NULL default 'NOT ATTEMPTED',
-                                `entry` enum('AB-INITIO','RESUME','') NOT NULL default 'AB-INITIO',
-                                `raw` tinyint(4) NOT NULL default '-1',
-                                `scoreMin` tinyint(4) NOT NULL default '-1',
-                                `scoreMax` tinyint(4) NOT NULL default '-1',
-                                `total_time` varchar(13) NOT NULL default '0000:00:00.00',
-                                `session_time` varchar(13) NOT NULL default '0000:00:00.00',
-                                `suspend_data` text NOT NULL,
-                                `credit` enum('CREDIT','NO-CREDIT') NOT NULL default 'NO-CREDIT',
-                                PRIMARY KEY  (`user_module_progress_id`)
-                                        ) ", $code); //TYPE=MyISAM COMMENT='Record the last known status of the user in the course';
-                }
+        if (!mysql_table_exists($code, 'lp_user_module_progress'))  {
+                db_query("CREATE TABLE `lp_user_module_progress` (
+                        `user_module_progress_id` int(22) NOT NULL auto_increment,
+                        `user_id` mediumint(9) NOT NULL default '0',
+                        `learnPath_module_id` int(11) NOT NULL default '0',
+                        `learnPath_id` int(11) NOT NULL default '0',
+                        `lesson_location` varchar(255) NOT NULL default '',
+                        `lesson_status` enum('NOT ATTEMPTED','PASSED','FAILED','COMPLETED','BROWSED','INCOMPLETE','UNKNOWN') NOT NULL default 'NOT ATTEMPTED',
+                        `entry` enum('AB-INITIO','RESUME','') NOT NULL default 'AB-INITIO',
+                        `raw` tinyint(4) NOT NULL default '-1',
+                        `scoreMin` tinyint(4) NOT NULL default '-1',
+                        `scoreMax` tinyint(4) NOT NULL default '-1',
+                        `total_time` varchar(13) NOT NULL default '0000:00:00.00',
+                        `session_time` varchar(13) NOT NULL default '0000:00:00.00',
+                        `suspend_data` text NOT NULL,
+                        `credit` enum('CREDIT','NO-CREDIT') NOT NULL default 'NO-CREDIT',
+                        PRIMARY KEY  (`user_module_progress_id`)
+                                ) ", $code); //TYPE=MyISAM COMMENT='Record the last known status of the user in the course';
+        }
 
-                // Wiki tables
-                if (!mysql_table_exists($code, 'wiki_properties'))  {
-                        db_query("CREATE TABLE `wiki_properties` (
-                                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-                                `title` VARCHAR(255) NOT NULL DEFAULT '',
-                                `description` TEXT NULL,
-                                `group_id` INT(11) NOT NULL DEFAULT 0,
-                                PRIMARY KEY(`id`)
-                                        ) ", $code);
-                }
+        // Wiki tables
+        if (!mysql_table_exists($code, 'wiki_properties'))  {
+                db_query("CREATE TABLE `wiki_properties` (
+                        `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+                        `title` VARCHAR(255) NOT NULL DEFAULT '',
+                        `description` TEXT NULL,
+                        `group_id` INT(11) NOT NULL DEFAULT 0,
+                        PRIMARY KEY(`id`)
+                                ) ", $code);
+        }
 
-                if (!mysql_table_exists($code, 'wiki_acls'))  {
-                        db_query("CREATE TABLE `wiki_acls` (
-                                `wiki_id` INT(11) UNSIGNED NOT NULL,
-                                `flag` VARCHAR(255) NOT NULL,
-                                `value` ENUM('false','true') NOT NULL DEFAULT 'false'
-                                        ) ", $code);
-                }
+        if (!mysql_table_exists($code, 'wiki_acls'))  {
+                db_query("CREATE TABLE `wiki_acls` (
+                        `wiki_id` INT(11) UNSIGNED NOT NULL,
+                        `flag` VARCHAR(255) NOT NULL,
+                        `value` ENUM('false','true') NOT NULL DEFAULT 'false'
+                                ) ", $code);
+        }
 
-                if (!mysql_table_exists($code, 'wiki_pages'))  {
-                        db_query("CREATE TABLE `wiki_pages` (
-                                `id` int(11) unsigned NOT NULL auto_increment,
-                                `wiki_id` int(11) unsigned NOT NULL default '0',
-                                `owner_id` int(11) unsigned NOT NULL default '0',
-                                `title` varchar(255) NOT NULL default '',
-                                `ctime` datetime NOT NULL default '0000-00-00 00:00:00',
-                                `last_version` int(11) unsigned NOT NULL default '0',
-                                `last_mtime` datetime NOT NULL default '0000-00-00 00:00:00',
-                                PRIMARY KEY  (`id`)
-                                        ) ", $code);
-                }
+        if (!mysql_table_exists($code, 'wiki_pages'))  {
+                db_query("CREATE TABLE `wiki_pages` (
+                        `id` int(11) unsigned NOT NULL auto_increment,
+                        `wiki_id` int(11) unsigned NOT NULL default '0',
+                        `owner_id` int(11) unsigned NOT NULL default '0',
+                        `title` varchar(255) NOT NULL default '',
+                        `ctime` datetime NOT NULL default '0000-00-00 00:00:00',
+                        `last_version` int(11) unsigned NOT NULL default '0',
+                        `last_mtime` datetime NOT NULL default '0000-00-00 00:00:00',
+                        PRIMARY KEY  (`id`)
+                                ) ", $code);
+        }
 
-                if (!mysql_table_exists($code, 'wiki_pages_content'))  {
-                        db_query("CREATE TABLE `wiki_pages_content` (
-                                `id` int(11) unsigned NOT NULL auto_increment,
-                                `pid` int(11) unsigned NOT NULL default '0',
-                                `editor_id` int(11) NOT NULL default '0',
-                                `mtime` datetime NOT NULL default '0000-00-00 00:00:00',
-                                `content` text NOT NULL,
-                                PRIMARY KEY  (`id`)
-                                        ) ", $code);
-                }
+        if (!mysql_table_exists($code, 'wiki_pages_content'))  {
+                db_query("CREATE TABLE `wiki_pages_content` (
+                        `id` int(11) unsigned NOT NULL auto_increment,
+                        `pid` int(11) unsigned NOT NULL default '0',
+                        `editor_id` int(11) NOT NULL default '0',
+                        `mtime` datetime NOT NULL default '0000-00-00 00:00:00',
+                        `content` text NOT NULL,
+                        PRIMARY KEY  (`id`)
+                                ) ", $code);
+        }
 
-                // questionnaire tables
-                if (!mysql_table_exists($code, 'survey'))  {
-                        db_query("CREATE TABLE `survey` (
-                                `sid` bigint(14) NOT NULL auto_increment,
-                                `creator_id` mediumint(8) unsigned NOT NULL default '0',
-                                `course_id` varchar(20) NOT NULL default '0',
-                                `name` varchar(255) NOT NULL default '',
-                                `creation_date` datetime NOT NULL default '0000-00-00 00:00:00',
-                                `start_date` datetime NOT NULL default '0000-00-00 00:00:00',
-                                `end_date` datetime NOT NULL default '0000-00-00 00:00:00',
-                                `type` int(11) NOT NULL default '0',
-                                `active` int(11) NOT NULL default '0',
-                                PRIMARY KEY  (`sid`)
-                                        ) ", $code); //TYPE=MyISAM COMMENT='For the questionnaire module';
-                }
-                if (!mysql_table_exists($code, 'survey_answer'))  {
-                        db_query("CREATE TABLE `survey_answer` (
-                                `aid` bigint(12) NOT NULL default '0',
-                                `creator_id` mediumint(8) unsigned NOT NULL default '0',
-                                `sid` bigint(12) NOT NULL default '0',
-                                `date` datetime NOT NULL default '0000-00-00 00:00:00',
-                                PRIMARY KEY  (`aid`)
-                                        ) ", $code); //TYPE=MyISAM COMMENT='For the questionnaire module';
-                }
-                if (!mysql_table_exists($code, 'survey_answer_record'))  {
-                        db_query("CREATE TABLE `survey_answer_record` (
-                                `arid` int(11) NOT NULL auto_increment,
-                                `aid` bigint(12) NOT NULL default '0',
-                                `question_text` varchar(250) NOT NULL default '',
-                                `question_answer` varchar(250) NOT NULL default '',
-                                PRIMARY KEY  (`arid`)
-                                        ) ", $code); //TYPE=MyISAM COMMENT='For the questionnaire module';
-                }
-                if (!mysql_table_exists($code, 'survey_question'))  {
-                        db_query("CREATE TABLE `survey_question` (
-                                `sqid` bigint(12) NOT NULL default '0',
-                                `sid` bigint(12) NOT NULL default '0',
-                                `question_text` varchar(250) NOT NULL default '',
-                                PRIMARY KEY  (`sqid`)
-                                        ) ", $code); //TYPE=MyISAM COMMENT='For the questionnaire module';
-                }
-                if (!mysql_table_exists($code, 'survey_question_answer'))  {
-                        db_query("CREATE TABLE `survey_question_answer` (
-                                `sqaid` int(11) NOT NULL auto_increment,
-                                `sqid` bigint(12) NOT NULL default '0',
-                                `answer_text` varchar(250) default NULL,
-                                PRIMARY KEY  (`sqaid`)
-                                        ) ", $code); //TYPE=MyISAM COMMENT='For the questionnaire module';
-                }
+        // questionnaire tables
+        if (!mysql_table_exists($code, 'survey'))  {
+                db_query("CREATE TABLE `survey` (
+                        `sid` bigint(14) NOT NULL auto_increment,
+                        `creator_id` mediumint(8) unsigned NOT NULL default '0',
+                        `course_id` varchar(20) NOT NULL default '0',
+                        `name` varchar(255) NOT NULL default '',
+                        `creation_date` datetime NOT NULL default '0000-00-00 00:00:00',
+                        `start_date` datetime NOT NULL default '0000-00-00 00:00:00',
+                        `end_date` datetime NOT NULL default '0000-00-00 00:00:00',
+                        `type` int(11) NOT NULL default '0',
+                        `active` int(11) NOT NULL default '0',
+                        PRIMARY KEY  (`sid`)
+                                ) ", $code); //TYPE=MyISAM COMMENT='For the questionnaire module';
+        }
+        if (!mysql_table_exists($code, 'survey_answer'))  {
+                db_query("CREATE TABLE `survey_answer` (
+                        `aid` bigint(12) NOT NULL default '0',
+                        `creator_id` mediumint(8) unsigned NOT NULL default '0',
+                        `sid` bigint(12) NOT NULL default '0',
+                        `date` datetime NOT NULL default '0000-00-00 00:00:00',
+                        PRIMARY KEY  (`aid`)
+                                ) ", $code); //TYPE=MyISAM COMMENT='For the questionnaire module';
+        }
+        if (!mysql_table_exists($code, 'survey_answer_record'))  {
+                db_query("CREATE TABLE `survey_answer_record` (
+                        `arid` int(11) NOT NULL auto_increment,
+                        `aid` bigint(12) NOT NULL default '0',
+                        `question_text` varchar(250) NOT NULL default '',
+                        `question_answer` varchar(250) NOT NULL default '',
+                        PRIMARY KEY  (`arid`)
+                                ) ", $code); //TYPE=MyISAM COMMENT='For the questionnaire module';
+        }
+        if (!mysql_table_exists($code, 'survey_question'))  {
+                db_query("CREATE TABLE `survey_question` (
+                        `sqid` bigint(12) NOT NULL default '0',
+                        `sid` bigint(12) NOT NULL default '0',
+                        `question_text` varchar(250) NOT NULL default '',
+                        PRIMARY KEY  (`sqid`)
+                                ) ", $code); //TYPE=MyISAM COMMENT='For the questionnaire module';
+        }
+        if (!mysql_table_exists($code, 'survey_question_answer'))  {
+                db_query("CREATE TABLE `survey_question_answer` (
+                        `sqaid` int(11) NOT NULL auto_increment,
+                        `sqid` bigint(12) NOT NULL default '0',
+                        `answer_text` varchar(250) default NULL,
+                        PRIMARY KEY  (`sqaid`)
+                                ) ", $code); //TYPE=MyISAM COMMENT='For the questionnaire module';
+        }
 
-                // poll tables
-                if (!mysql_table_exists($code, 'poll'))  {
-                        db_query("CREATE TABLE `poll` (
-                                `pid` bigint(14) NOT NULL auto_increment,
-                                `creator_id` mediumint(8) unsigned NOT NULL default '0',
-                                `course_id` varchar(20) NOT NULL default '0',
-                                `name` varchar(255) NOT NULL default '',
-                                `creation_date` date NOT NULL default '0000-00-00',
-                                `start_date` date NOT NULL default '0000-00-00',
-                                `end_date` date NOT NULL default '0000-00-00',
-                                `type` int(11) NOT NULL default '0',
-                                `active` int(11) NOT NULL default '0',
-                                PRIMARY KEY  (`pid`)
+        // poll tables
+        if (!mysql_table_exists($code, 'poll'))  {
+                db_query("CREATE TABLE `poll` (
+                        `pid` bigint(14) NOT NULL auto_increment,
+                        `creator_id` mediumint(8) unsigned NOT NULL default '0',
+                        `course_id` varchar(20) NOT NULL default '0',
+                        `name` varchar(255) NOT NULL default '',
+                        `creation_date` date NOT NULL default '0000-00-00',
+                        `start_date` date NOT NULL default '0000-00-00',
+                        `end_date` date NOT NULL default '0000-00-00',
+                        `type` int(11) NOT NULL default '0',
+                        `active` int(11) NOT NULL default '0',
+                        PRIMARY KEY  (`pid`)
                                 ) ", $code); //TYPE=MyISAM COMMENT='For the poll module';
-                } else {
-			db_query("ALTER TABLE `poll` CHANGE `creation_date` `creation_date` DATE NOT NULL DEFAULT '0000-00-00'", $code);
-			db_query("ALTER TABLE `poll` CHANGE `start_date` `start_date` DATE NOT NULL DEFAULT '0000-00-00'", $code);
-			db_query("ALTER TABLE `poll` CHANGE `end_date` `end_date` DATE NOT NULL DEFAULT '0000-00-00'", $code);
-		}
+        } else {
+                db_query("ALTER TABLE `poll` CHANGE `creation_date` `creation_date` DATE NOT NULL DEFAULT '0000-00-00'", $code);
+                db_query("ALTER TABLE `poll` CHANGE `start_date` `start_date` DATE NOT NULL DEFAULT '0000-00-00'", $code);
+                db_query("ALTER TABLE `poll` CHANGE `end_date` `end_date` DATE NOT NULL DEFAULT '0000-00-00'", $code);
+        }
 
-                if (!mysql_table_exists($code, 'poll_answer'))  {
-                        db_query("CREATE TABLE `poll_answer` (
-                                `aid` bigint(12) NOT NULL default '0',
-                                `creator_id` mediumint(8) unsigned NOT NULL default '0',
-                                `pid` bigint(12) NOT NULL default '0',
-                                `date` datetime NOT NULL default '0000-00-00 00:00:00',
-                                PRIMARY KEY  (`aid`)
-                                        ) ", $code); //TYPE=MyISAM COMMENT='For the poll module';
-                }
-                if (!mysql_table_exists($code, 'poll_answer_record'))  {
-                        db_query("CREATE TABLE `poll_answer_record` (
-                                `arid` int(11) NOT NULL auto_increment,
-                                `aid` bigint(12) NOT NULL default '0',
-                                `question_text` varchar(250) NOT NULL default '',
-                                `question_answer` varchar(250) NOT NULL default '',
-                                PRIMARY KEY  (`arid`)
-                                        ) ", $code); //TYPE=MyISAM COMMENT='For the poll module';
-                }
+        if (!mysql_table_exists($code, 'poll_answer'))  {
+                db_query("CREATE TABLE `poll_answer` (
+                        `aid` bigint(12) NOT NULL default '0',
+                        `creator_id` mediumint(8) unsigned NOT NULL default '0',
+                        `pid` bigint(12) NOT NULL default '0',
+                        `date` datetime NOT NULL default '0000-00-00 00:00:00',
+                        PRIMARY KEY  (`aid`)
+                                ) ", $code); //TYPE=MyISAM COMMENT='For the poll module';
+        }
+        if (!mysql_table_exists($code, 'poll_answer_record'))  {
+                db_query("CREATE TABLE `poll_answer_record` (
+                        `arid` int(11) NOT NULL auto_increment,
+                        `aid` bigint(12) NOT NULL default '0',
+                        `question_text` varchar(250) NOT NULL default '',
+                        `question_answer` varchar(250) NOT NULL default '',
+                        PRIMARY KEY  (`arid`)
+                                ) ", $code); //TYPE=MyISAM COMMENT='For the poll module';
+        }
 
-		if (!mysql_field_exists("$code",'poll_answer_record', 'qtype'))
-                        echo add_field_after_field('poll_answer_record', 'pid', 'arid', "INT(11) NOT NULL");
-		if (!mysql_field_exists("$code",'poll_answer_record', 'pid'))
-                        echo add_field_after_field('poll_answer_record', 'pid', 'arid', "INT(11) NOT NULL DEFAULT '0'");
-		if (!mysql_field_exists("$code",'poll_answer_record', 'qid'))
-                        echo add_field_after_field('poll_answer_record', 'qid', 'pid', "INT(11) NOT NULL DEFAULT '0'");
-		if (mysql_field_exists("$code",'poll_answer_record', 'question_text'))
-                        echo delete_field('poll_answer_record', 'question_text');
-		if (mysql_field_exists("$code",'poll_answer_record', 'question_answer'))
-                        echo delete_field('poll_answer_record', 'question_answer');
-		if (!mysql_field_exists("$code",'poll_answer_record','answer_text'))
-                        echo add_field('poll_answer_record', 'answer_text', "VARCHAR(255) NOT NULL");
-		if (!mysql_field_exists("$code",'poll_answer_record','user_id'))
-                        echo add_field('poll_answer_record', 'user_id', "INT(11) NOT NULL DEFAULT '0'");
-		if (!mysql_field_exists("$code",'poll_answer_record', 'submit_date'))
-                        echo add_field('poll_answer_record', 'submit_date', "DATE NOT NULL DEFAULT '0000-00-00'");
+        if (!mysql_field_exists("$code",'poll_answer_record', 'qtype'))
+                echo add_field_after_field('poll_answer_record', 'pid', 'arid', "INT(11) NOT NULL");
+        if (!mysql_field_exists("$code",'poll_answer_record', 'pid'))
+                echo add_field_after_field('poll_answer_record', 'pid', 'arid', "INT(11) NOT NULL DEFAULT '0'");
+        if (!mysql_field_exists("$code",'poll_answer_record', 'qid'))
+                echo add_field_after_field('poll_answer_record', 'qid', 'pid', "INT(11) NOT NULL DEFAULT '0'");
+        if (mysql_field_exists("$code",'poll_answer_record', 'question_text'))
+                echo delete_field('poll_answer_record', 'question_text');
+        if (mysql_field_exists("$code",'poll_answer_record', 'question_answer'))
+                echo delete_field('poll_answer_record', 'question_answer');
+        if (!mysql_field_exists("$code",'poll_answer_record','answer_text'))
+                echo add_field('poll_answer_record', 'answer_text', "VARCHAR(255) NOT NULL");
+        if (!mysql_field_exists("$code",'poll_answer_record','user_id'))
+                echo add_field('poll_answer_record', 'user_id', "INT(11) NOT NULL DEFAULT '0'");
+        if (!mysql_field_exists("$code",'poll_answer_record', 'submit_date'))
+                echo add_field('poll_answer_record', 'submit_date', "DATE NOT NULL DEFAULT '0000-00-00'");
 
-                if (!mysql_table_exists($code, 'poll_question'))  {
-                        db_query("CREATE TABLE `poll_question` (
-                                `pqid` bigint(12) NOT NULL default '0',
-                                `pid` bigint(12) NOT NULL default '0',
-                                `question_text` varchar(250) NOT NULL default '',
-                                PRIMARY KEY  (`pqid`)
-                          ) ", $code); //TYPE=MyISAM COMMENT='For the poll module';
-                }
+        if (!mysql_table_exists($code, 'poll_question'))  {
+                db_query("CREATE TABLE `poll_question` (
+                        `pqid` bigint(12) NOT NULL default '0',
+                        `pid` bigint(12) NOT NULL default '0',
+                        `question_text` varchar(250) NOT NULL default '',
+                        PRIMARY KEY  (`pqid`)
+                                ) ", $code); //TYPE=MyISAM COMMENT='For the poll module';
+        }
 
-		if (!mysql_field_exists("$code",'poll_question','qtype'))
-                        echo add_field('poll_question', 'qtype', "ENUM('multiple', 'fill') NOT NULL");
+        if (!mysql_field_exists("$code",'poll_question','qtype'))
+                echo add_field('poll_question', 'qtype', "ENUM('multiple', 'fill') NOT NULL");
 
-		 if (!mysql_table_exists($code, 'poll_question_answer'))  {
-                        db_query("CREATE TABLE `poll_question_answer` (
-                                `pqaid` int(11) NOT NULL auto_increment,
-                                `pqid` bigint(12) NOT NULL default '0',
-                                `answer_text` varchar(250) default NULL,
-                                PRIMARY KEY  (`pqaid`)
-                                        ) ", $code); //TYPE=MyISAM COMMENT='For the poll module';
-                }
+        if (!mysql_table_exists($code, 'poll_question_answer'))  {
+                db_query("CREATE TABLE `poll_question_answer` (
+                        `pqaid` int(11) NOT NULL auto_increment,
+                        `pqid` bigint(12) NOT NULL default '0',
+                        `answer_text` varchar(250) default NULL,
+                        PRIMARY KEY  (`pqaid`)
+                                ) ", $code); //TYPE=MyISAM COMMENT='For the poll module';
+        }
 
 
-                //  usage tables
-                if (!mysql_table_exists($code, 'actions')) {
-                        db_query("CREATE TABLE actions (
-                                id int(11) NOT NULL auto_increment,
-                                   user_id int(11) NOT NULL,
-                                   module_id int(11) NOT NULL,
-                                   action_type_id int(11) NOT NULL,
-                                   date_time DATETIME NOT NULL default '0000-00-00 00:00:00',
-                                   duration int(11) NOT NULL,
-                                   PRIMARY KEY (id))", $code);
-                }
+        //  usage tables
+        if (!mysql_table_exists($code, 'actions')) {
+                db_query("CREATE TABLE actions (
+                        id int(11) NOT NULL auto_increment,
+                           user_id int(11) NOT NULL,
+                           module_id int(11) NOT NULL,
+                           action_type_id int(11) NOT NULL,
+                           date_time DATETIME NOT NULL default '0000-00-00 00:00:00',
+                           duration int(11) NOT NULL,
+                           PRIMARY KEY (id))", $code);
+        }
 
-                if (!mysql_table_exists($code, 'logins')) {
-                        db_query("CREATE TABLE logins (
-                                id int(11) NOT NULL auto_increment,
-                                   user_id int(11) NOT NULL,
-                                   ip char(16) NOT NULL default '0.0.0.0',
-                                   date_time DATETIME NOT NULL default '0000-00-00 00:00:00',
-                                   PRIMARY KEY (id))", $code);
-                }
+        if (!mysql_table_exists($code, 'logins')) {
+                db_query("CREATE TABLE logins (
+                        id int(11) NOT NULL auto_increment,
+                           user_id int(11) NOT NULL,
+                           ip char(16) NOT NULL default '0.0.0.0',
+                           date_time DATETIME NOT NULL default '0000-00-00 00:00:00',
+                           PRIMARY KEY (id))", $code);
+        }
 
-                if (!mysql_table_exists($code, 'action_types')) {
-                        db_query("CREATE TABLE action_types (
-                                id int(11) NOT NULL auto_increment,
-                                   name varchar(200),
-                                   PRIMARY KEY (id))", $code);
-                        db_query("INSERT INTO action_types VALUES ('1', 'access')", $code);
-                }
-                if (!mysql_table_exists($code, 'actions_summary')) {
-                        db_query("CREATE TABLE actions_summary (
-                                id int(11) NOT NULL auto_increment,
-                                   module_id int(11) NOT NULL,
-                                   visits int(11) NOT NULL,
-                                   start_date DATETIME NOT NULL default '0000-00-00 00:00:00',
-                                   end_date DATETIME NOT NULL default '0000-00-00 00:00:00',
-                                   duration int(11) NOT NULL,
-                                   PRIMARY KEY (id))", $code);
-                }
+        if (!mysql_table_exists($code, 'action_types')) {
+                db_query("CREATE TABLE action_types (
+                        id int(11) NOT NULL auto_increment,
+                           name varchar(200),
+                           PRIMARY KEY (id))", $code);
+                db_query("INSERT INTO action_types VALUES ('1', 'access')", $code);
+        }
+        if (!mysql_table_exists($code, 'actions_summary')) {
+                db_query("CREATE TABLE actions_summary (
+                        id int(11) NOT NULL auto_increment,
+                           module_id int(11) NOT NULL,
+                           visits int(11) NOT NULL,
+                           start_date DATETIME NOT NULL default '0000-00-00 00:00:00',
+                           end_date DATETIME NOT NULL default '0000-00-00 00:00:00',
+                           duration int(11) NOT NULL,
+                           PRIMARY KEY (id))", $code);
+        }
 
-                // exercise tables
-                if (!mysql_table_exists($code, 'exercise_user_record'))  {
-                        db_query("CREATE TABLE `exercise_user_record` (
-                                `eurid` int(11) NOT NULL auto_increment,
-                                `eid` tinyint(4) NOT NULL default '0',
-                                `uid` mediumint(8) NOT NULL default '0',
-                                `RecordStartDate` date NOT NULL default '0000-00-00',
-                                `RecordEndDate` date NOT NULL default '0000-00-00',
-                                `TotalScore` int(11) NOT NULL default '0',
-                                `TotalWeighting` int(11) default '0',
-                                `attempt` int(11) NOT NULL default '0',
-                                PRIMARY KEY  (`eurid`)
+        // exercise tables
+        if (!mysql_table_exists($code, 'exercise_user_record'))  {
+                db_query("CREATE TABLE `exercise_user_record` (
+                        `eurid` int(11) NOT NULL auto_increment,
+                        `eid` tinyint(4) NOT NULL default '0',
+                        `uid` mediumint(8) NOT NULL default '0',
+                        `RecordStartDate` date NOT NULL default '0000-00-00',
+                        `RecordEndDate` date NOT NULL default '0000-00-00',
+                        `TotalScore` int(11) NOT NULL default '0',
+                        `TotalWeighting` int(11) default '0',
+                        `attempt` int(11) NOT NULL default '0',
+                        PRIMARY KEY  (`eurid`)
                                 ) ", $code); //TYPE=MyISAM COMMENT='For the exercise module';
+        }
+
+        // Upgrading EXERCICES table for new func of EXERCISE module
+        if (!mysql_field_exists("$code",'exercices','StartDate'))
+                echo add_field_after_field('exercices', 'StartDate', 'type', "DATE NOT NULL default '0000-00-00'");
+        else
+                db_query("ALTER TABLE `exercices` CHANGE `StartDate` `StartDate` DATE NULL DEFAULT NULL", $code);
+        if (!mysql_field_exists("$code",'exercices','EndDate'))
+                echo add_field_after_field('exercices', 'EndDate', 'StartDate', "DATE NOT NULL default '0000-00-00'");
+        else
+                db_query("ALTER TABLE `exercices` CHANGE `EndDate` `EndDate` DATE NULL DEFAULT NULL", $code);
+        if (!mysql_field_exists("$code",'exercices','TimeConstrain'))
+                echo add_field_after_field('exercices', 'TimeConstrain', 'EndDate', "INT(11)");
+        if (!mysql_field_exists("$code",'exercices','AttemptsAllowed'))
+                echo add_field_after_field('exercices', 'AttemptsAllowed', 'TimeConstrain', "INT(11)");
+
+        // add new document fields
+        if (!mysql_field_exists("$code",'document','filename'))
+                echo add_field('document', 'filename', "TEXT");
+        if (!mysql_field_exists("$code",'document','category'))
+                echo add_field('document', 'category', "TEXT");
+        if (!mysql_field_exists("$code",'document','title'))
+                echo add_field('document', 'title', "TEXT");
+        if (!mysql_field_exists("$code",'document','creator'))
+                echo add_field('document', 'creator', "TEXT");
+        if (!mysql_field_exists("$code",'document','date'))
+                echo add_field('document', 'date', "DATETIME");
+        if (!mysql_field_exists("$code",'document','date_modified'))
+                echo add_field('document', 'date_modified', "DATETIME");
+        if (!mysql_field_exists("$code",'document','subject'))
+                echo add_field('document', 'subject', "TEXT");
+        if (!mysql_field_exists("$code",'document','description'))
+                echo add_field('document', 'description', "TEXT");
+        if (!mysql_field_exists("$code",'document','author'))
+                echo add_field('document', 'author', "TEXT");
+        if (!mysql_field_exists("$code",'document','format'))
+                echo add_field('document', 'format', "TEXT");
+        if (!mysql_field_exists("$code",'document','language'))
+                echo add_field('document', 'language', "TEXT");
+        if (!mysql_field_exists("$code",'document','copyrighted'))
+                echo add_field('document', 'copyrighted', "TEXT");
+
+
+        // -------------- document upgrade ---------------------
+        echo "$langEncodeDocuments<br>";
+        flush();
+        encode_documents($code);
+
+        // -------------- group document upgrade ---------------
+        echo "$langEncodeGroupDocuments<br>";
+        flush();
+        // find group secret directory
+        $s = db_query("SELECT id, secretDirectory FROM student_group");
+        while ($group = mysql_fetch_array($s)) {
+                encode_group_documents($code, $group['id'], $group['secretDirectory']);
+        }
+
+
+        // -------------- move video files to new directory -----
+        $course_video = "${webDir}courses/$code/video";
+        if (is_dir($course_video)) {
+                if (!rename($course_video, "${webDir}video/$code")) {
+                        echo "$langNotMovedDir $course_video $langToDir video<br>";
                 }
-
-                // Upgrading EXERCICES table for new func of EXERCISE module
-                if (!mysql_field_exists("$code",'exercices','StartDate'))
-                        echo add_field_after_field('exercices', 'StartDate', 'type', "DATE NOT NULL default '0000-00-00'");
-		else
- 			db_query("ALTER TABLE `exercices` CHANGE `StartDate` `StartDate` DATE NULL DEFAULT NULL", $code);
-		if (!mysql_field_exists("$code",'exercices','EndDate'))
-                        echo add_field_after_field('exercices', 'EndDate', 'StartDate', "DATE NOT NULL default '0000-00-00'");
-		else
-			db_query("ALTER TABLE `exercices` CHANGE `EndDate` `EndDate` DATE NULL DEFAULT NULL", $code);
-                if (!mysql_field_exists("$code",'exercices','TimeConstrain'))
-                        echo add_field_after_field('exercices', 'TimeConstrain', 'EndDate', "INT(11)");
-                if (!mysql_field_exists("$code",'exercices','AttemptsAllowed'))
-                        echo add_field_after_field('exercices', 'AttemptsAllowed', 'TimeConstrain', "INT(11)");
-
-		 // add new document fields
-                if (!mysql_field_exists("$code",'document','filename'))
-                        echo add_field('document', 'filename', "TEXT");
-                if (!mysql_field_exists("$code",'document','category'))
-                        echo add_field('document', 'category', "TEXT");
-                if (!mysql_field_exists("$code",'document','title'))
-                        echo add_field('document', 'title', "TEXT");
-                if (!mysql_field_exists("$code",'document','creator'))
-                        echo add_field('document', 'creator', "TEXT");
-                if (!mysql_field_exists("$code",'document','date'))
-                        echo add_field('document', 'date', "DATETIME");
-                if (!mysql_field_exists("$code",'document','date_modified'))
-                        echo add_field('document', 'date_modified', "DATETIME");
-                if (!mysql_field_exists("$code",'document','subject'))
-                        echo add_field('document', 'subject', "TEXT");
-                if (!mysql_field_exists("$code",'document','description'))
-                        echo add_field('document', 'description', "TEXT");
-                if (!mysql_field_exists("$code",'document','author'))
-                        echo add_field('document', 'author', "TEXT");
-                if (!mysql_field_exists("$code",'document','format'))
-                        echo add_field('document', 'format', "TEXT");
-                if (!mysql_field_exists("$code",'document','language'))
-                        echo add_field('document', 'language', "TEXT");
-                if (!mysql_field_exists("$code",'document','copyrighted'))
-                        echo add_field('document', 'copyrighted', "TEXT");
-
-
-        	// -------------- document upgrade ---------------------
-		echo "$langEncodeDocuments<br>";
-	  	flush();
-                encode_documents($code);
-
-                // -------------- group document upgrade ---------------
-		echo "$langEncodeGroupDocuments<br>";
-	  	flush();
-	        // find group secret directory
-        	$s = db_query("SELECT id, secretDirectory FROM student_group");
-                while ($group = mysql_fetch_array($s)) {
-                        encode_group_documents($code, $group['id'], $group['secretDirectory']);
+        }
+        // upgrade video
+        if (!mysql_field_exists("$code",'video','path')) {
+                echo add_field_after_field('video', 'path', 'id', "VARCHAR(255)");
+                $r = db_query("SELECT * FROM video", $code);
+                while ($row = mysql_fetch_array($r)) {
+                        upgrade_video($row['url'], $row['id'], $code);
                 }
+        }
+        if (!mysql_field_exists("$code",'video','creator'))
+                echo add_field_after_field('video', 'creator', 'description', "VARCHAR(255)");
+        if (!mysql_field_exists("$code",'video','publisher'))
+                echo add_field_after_field('video', 'publisher', 'creator',"VARCHAR(255)");
+        if (!mysql_field_exists("$code",'video','date'))
+                echo add_field_after_field('video', 'date', 'publisher',"DATETIME");
 
+        // upgrade videolinks
+        if (!mysql_field_exists("$code",'videolinks','creator'))
+                echo add_field_after_field('videolinks', 'creator', 'description', "VARCHAR(255)");
+        if (!mysql_field_exists("$code",'videolinks','publisher'))
+                echo add_field_after_field('videolinks', 'publisher', 'creator',"VARCHAR(255)");
+        if (!mysql_field_exists("$code",'videolinks','date'))
+                echo add_field_after_field('videolinks', 'date', 'publisher',"DATETIME");
 
-             	// -------------- move video files to new directory -----
-                $course_video = "${webDir}courses/$code/video";
-		if (is_dir($course_video)) {
-                        if (!rename($course_video, "${webDir}video/$code")) {
-                              echo "$langNotMovedDir $course_video $langToDir video<br>";
+        // upgrading accueil table
+
+        //  create new column (define_var)
+        echo add_field("accueil","define_var", "VARCHAR(50) NOT NULL");
+
+        // Move all external links to id > 100
+        db_query("UPDATE `accueil`
+                        SET `id` = `id` + 80
+                        WHERE `id`>20 AND `id`<100
+                        AND `define_var` <> 'MODULE_ID_QUESTIONNAIRE' AND `define_var` <> 'MODULE_ID_LP'
+                        AND `define_var` <> 'MODULE_ID_USAGE' AND `define_var` <> 'MODULE_ID_TOOLADMIN'
+                        AND `define_var` <> 'MODULE_ID_WIKI'", $code);
+
+        // id νέων υποσυστημάτων
+        if (accueil_tool_missing('MODULE_ID_QUESTIONNAIRE')) {
+                db_query("INSERT IGNORE INTO accueil VALUES (
+                        '21',
+                        '$langQuestionnaire[$lang]',
+                        '../../modules/questionnaire/questionnaire.php',
+                        'questionnaire',
+                        '0',
+                        '0',
+                        '',
+                        'MODULE_ID_QUESTIONNAIRE'
+                                )", $code);
+        }
+
+        if (accueil_tool_missing('MODULE_ID_LP')) {
+                db_query("INSERT IGNORE INTO accueil VALUES (
+                        '23',
+                        '$langLearnPath[$lang]',
+                        '../../modules/learnPath/learningPathList.php',
+                        'lp',
+                        '0',
+                        '0',
+                        '',
+                        'MODULE_ID_LP'
+                                )", $code);
+        }
+
+        if (accueil_tool_missing('MODULE_ID_USAGE')) {
+                db_query("INSERT IGNORE INTO accueil VALUES (
+                        '24',
+                        '$langCourseStat[$lang]',
+                        '../../modules/usage/usage.php',
+                        'usage',
+                        '0',
+                        '1',
+                        '',
+                        'MODULE_ID_USAGE')", $code);
+        }
+
+        if (accueil_tool_missing('MODULE_ID_TOOLADMIN')) {
+                db_query("INSERT IGNORE INTO accueil VALUES (
+                        '25',
+                        '$langToolManagement[$lang]',
+                        '../../modules/course_tools/course_tools.php',
+                        'tooladmin',
+                        '0',
+                        '1',
+                        '',
+                        'MODULE_ID_TOOLADMIN'
+                                )", $code);
+        }
+
+        if (accueil_tool_missing('MODULE_ID_WIKI')) {
+                db_query("INSERT IGNORE INTO accueil VALUES (
+                        '26',
+                        '$langWiki[$lang]',
+                        '../../modules/wiki/wiki.php',
+                        'wiki',
+                        '0',
+                        '0',
+                        '',
+                        'MODULE_ID_WIKI'
+                                )", $code);
+        }
+
+        // table accueil
+        echo "$langCorrectTableEntries accueil.<br>";
+
+        /* compatibility update
+           a) remove entries modules import, external, videolinks, old statistics
+           b) correct agenda and video link
+         */
+        db_query("DELETE FROM accueil WHERE (id = 12 OR id = 13 OR id = 11 OR id=6)", $code);
+        update_field("accueil", "lien", "../../modules/agenda/agenda.php", "id", 1);
+        db_query("UPDATE accueil SET visible = '0', admin = '1' WHERE id = 8 LIMIT 1", $code);
+        update_field("accueil", "lien", "../../modules/video/video.php", "id", 4);
+        update_field("accueil", "lien", "../../modules/conference/conference.php", "id", 19);
+
+        //set define string vars
+        update_field("accueil", "define_var", "MODULE_ID_AGENDA", "id", 1);
+        update_field("accueil", "define_var", "MODULE_ID_LINKS", "id",	2);
+        update_field("accueil", "define_var", "MODULE_ID_DOCS", "id", 3);
+        update_field("accueil", "define_var", "MODULE_ID_VIDEO", "id", 4);
+        update_field("accueil", "define_var", "MODULE_ID_ASSIGN", "id", 5);
+        update_field("accueil", "define_var", "MODULE_ID_ANNOUNCE", "id", 7);
+        update_field("accueil", "define_var", "MODULE_ID_USERS", "id",	8);
+        update_field("accueil", "define_var", "MODULE_ID_FORUM", "id", 9);
+        update_field("accueil", "define_var", "MODULE_ID_EXERCISE", "id", 10);
+        update_field("accueil", "define_var", "MODULE_ID_COURSEINFO", "id", 14);
+        update_field("accueil", "define_var", "MODULE_ID_GROUPS", "id", 15);
+        update_field("accueil", "define_var", "MODULE_ID_DROPBOX", "id", 16);
+        update_field("accueil", "define_var", "MODULE_ID_CHAT", "id", 	19);
+        update_field("accueil", "define_var", "MODULE_ID_DESCRIPTION","id", 20);
+
+        $sql = db_query("SELECT id,lien,image,address FROM accueil");
+        while ($u = mysql_fetch_row($sql))  {
+                $oldlink_lien = $u[1];
+                $newlink_lien = preg_replace('#../claroline/#','../../modules/',$oldlink_lien);
+                $oldlink_image = $u[2];
+                $newlink_image = preg_replace('#../claroline/image/#','../../images/',$oldlink_image);
+                $oldlink_address = $u[3];
+                $newlink_address = preg_replace('#../claroline/image/#','../../images/',$oldlink_address);
+                db_query("UPDATE accueil SET lien='$newlink_lien',
+                                image='$newlink_image', address='$newlink_address' WHERE id='$u[0]'");
+        }
+
+        //set the new images for the icons of lesson modules
+        update_field("accueil", "image","calendar", "id", 1);
+        update_field("accueil", "image","links", "id",	2);
+        update_field("accueil", "image","docs", "id",	 3);
+        update_field("accueil", "image","videos", "id",	4);
+        update_field("accueil", "image","assignments", "id",5);
+        update_field("accueil", "image","announcements", "id",7);
+        update_field("accueil", "image","users", "id", 8);
+        update_field("accueil", "image","forum", "id", 9);
+        update_field("accueil", "image","exercise", "id", 10);
+        update_field("accueil", "image","course_info", "id",	14);
+        update_field("accueil", "image","groups", "id", 15);
+        update_field("accueil", "image","dropbox", "id", 16);
+        update_field("accueil", "image","conference", "id", 19);
+        update_field("accueil", "image","description", "id",	20);
+
+        $sql = db_query("SELECT image FROM accueil");
+        while ($u = mysql_fetch_row($sql))  {
+                if ($u[0] == '../../../images/npage.gif')  {
+                        update_field("accueil", "image", "external_link", "image", "../../../images/npage.gif");
+                }
+                if ($u[0] == '../../../images/page.gif')  {
+                        update_field("accueil", "image", "external_link", "image", "../../../images/page.gif");
+                }
+                if ($u[0] == 'travaux.png')  {
+                        update_field("accueil", "image", "external_link", "image", "travaux.png");
+                }
+        }
+
+        // update menu entries with new messages
+        update_field("accueil", "rubrique", "$langWork[$lang]", "id", "5");
+        update_field("accueil", "rubrique", "$langForums[$lang]", "id", "9");
+        update_field("accueil", "rubrique", "$langUsers[$lang]", "id", "8");
+        update_field("accueil", "visible", "0", "id", "8");
+        update_field("accueil", "admin", "1", "id", "8");
+        update_field("accueil", "rubrique", "$langCourseAdmin[$lang]", "id", "14");
+        update_field("accueil", "rubrique", "$langDropBox[$lang]", "id", "16");
+
+        // remove table 'introduction' entries and insert them in table 'cours' (field 'description') in eclass maindb
+        // after that drop table introduction
+        if (mysql_table_exists($code, 'introduction')) {
+                $sql = db_query("SELECT texte_intro FROM introduction", $code);
+                while ($text = mysql_fetch_array($sql)) {
+                        $description = quote($text[0]);
+                        if (db_query("UPDATE cours SET description=$description WHERE code='$code'", $mysqlMainDb)) {
+                                echo "$langMoveIntroText <b>cours</b>: $OK<br>";
+                                db_query("DROP TABLE IF EXISTS introduction", $code);
+                        } else {
+                                echo "$langMoveIntroText <b>cours</b>: $BAD<br>";
                         }
                 }
-                // upgrade video
-		if (!mysql_field_exists("$code",'video','path')) {
-                        echo add_field_after_field('video', 'path', 'id', "VARCHAR(255)");
-			$r = db_query("SELECT * FROM video", $code);
-			while ($row = mysql_fetch_array($r)) {
-				upgrade_video($row['url'], $row['id'], $code);
-			}
-		}
-                if (!mysql_field_exists("$code",'video','creator'))
-                        echo add_field_after_field('video', 'creator', 'description', "VARCHAR(255)");
-                if (!mysql_field_exists("$code",'video','publisher'))
-                        echo add_field_after_field('video', 'publisher', 'creator',"VARCHAR(255)");
-                if (!mysql_field_exists("$code",'video','date'))
-                        echo add_field_after_field('video', 'date', 'publisher',"DATETIME");
+        } // end of table introduction
 
-		// upgrade videolinks
-		if (!mysql_field_exists("$code",'videolinks','creator'))
-                        echo add_field_after_field('videolinks', 'creator', 'description', "VARCHAR(255)");
-                if (!mysql_field_exists("$code",'videolinks','publisher'))
-                        echo add_field_after_field('videolinks', 'publisher', 'creator',"VARCHAR(255)");
-                if (!mysql_field_exists("$code",'videolinks','date'))
-                        echo add_field_after_field('videolinks', 'date', 'publisher',"DATETIME");
+        $tool_content .= "<br><br></td></tr>";
 
-                // upgrading accueil table
+        // add full text indexes for search operation (ginetai xrhsh @$tmp = mysql_query(...) giati ean
+        // yparxei hdh, to FULL INDEX den mporei na ksanadhmiourgithei. epipleon, den yparxei tropos
+        // elegxou gia to an yparxei index, opote o monadikos tropos diekperaiwshs ths ergasias einai
+        // dokimh-sfalma.
+        @$tmp = mysql_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");
+        @$tmp = mysql_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)");
+        @$tmp = mysql_query("ALTER TABLE `document` ADD FULLTEXT `document` (`filename` ,`comment` ,`title`,`creator`,`subject`,`description`,`author`,`language`)");
+        @$tmp = mysql_query("ALTER TABLE `exercices` ADD FULLTEXT `exercices` (`titre`,`description`)");
+        @$tmp = mysql_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
+        @$tmp = mysql_query("ALTER TABLE `liens` ADD FULLTEXT `liens` (`url` ,`titre` ,`description`)");
+        @$tmp = mysql_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`titre` ,`description`)");
 
-                //  create new column (define_var)
-                echo add_field("accueil","define_var", "VARCHAR(50) NOT NULL");
+        // bogart: Update code for phpbb functionality START
+        // Remove tables banlist, disallow, headermetafooter, priv_msgs, ranks, sessions, themes, whosonline, words
+        db_query("DROP TABLE IF EXISTS access");
+        db_query("DROP TABLE IF EXISTS banlist");
+        db_query("DROP TABLE IF EXISTS config");
+        db_query("DROP TABLE IF EXISTS disallow");
+        db_query("DROP TABLE IF EXISTS forum_access");
+        db_query("DROP TABLE IF EXISTS forum_mods");
+        db_query("DROP TABLE IF EXISTS headermetafooter");
+        db_query("DROP TABLE IF EXISTS priv_msgs");
+        db_query("DROP TABLE IF EXISTS ranks");
+        db_query("DROP TABLE IF EXISTS sessions");
+        db_query("DROP TABLE IF EXISTS themes");
+        db_query("DROP TABLE IF EXISTS whosonline");
+        db_query("DROP TABLE IF EXISTS words");
+        // bogart: Update code for phpbb functionality END
 
-                // Move all external links to id > 100
-                db_query("UPDATE `accueil`
-                                SET `id` = `id` + 80
-                                WHERE `id`>20 AND `id`<100
-                                AND `define_var` <> 'MODULE_ID_QUESTIONNAIRE' AND `define_var` <> 'MODULE_ID_LP'
-                                AND `define_var` <> 'MODULE_ID_USAGE' AND `define_var` <> 'MODULE_ID_TOOLADMIN'
-                                AND `define_var` <> 'MODULE_ID_WIKI'", $code);
+        // remove tables liste_domains. Used for old statistics module
+        db_query("DROP TABLE IF EXISTS liste_domaines");
 
-                // id νέων υποσυστημάτων
-                if (accueil_tool_missing('MODULE_ID_QUESTIONNAIRE')) {
-                        db_query("INSERT IGNORE INTO accueil VALUES (
-                                '21',
-                                '$langQuestionnaire[$lang]',
-                                '../../modules/questionnaire/questionnaire.php',
-                                'questionnaire',
-                                '0',
-                                '0',
-                                '',
-                                'MODULE_ID_QUESTIONNAIRE'
-                                        )", $code);
-                }
-
-                if (accueil_tool_missing('MODULE_ID_LP')) {
-                        db_query("INSERT IGNORE INTO accueil VALUES (
-                                '23',
-                                '$langLearnPath[$lang]',
-                                '../../modules/learnPath/learningPathList.php',
-                                'lp',
-                                '0',
-                                '0',
-                                '',
-                                'MODULE_ID_LP'
-                                        )", $code);
-                }
-
-                if (accueil_tool_missing('MODULE_ID_USAGE')) {
-                        db_query("INSERT IGNORE INTO accueil VALUES (
-                                '24',
-                                '$langCourseStat[$lang]',
-                                '../../modules/usage/usage.php',
-                                'usage',
-                                '0',
-                                '1',
-                                '',
-                                'MODULE_ID_USAGE')", $code);
-                }
-
-                if (accueil_tool_missing('MODULE_ID_TOOLADMIN')) {
-                        db_query("INSERT IGNORE INTO accueil VALUES (
-                                '25',
-                                '$langToolManagement[$lang]',
-                                '../../modules/course_tools/course_tools.php',
-                                'tooladmin',
-                                '0',
-                                '1',
-                                '',
-                                'MODULE_ID_TOOLADMIN'
-                                        )", $code);
-                }
-
-                if (accueil_tool_missing('MODULE_ID_WIKI')) {
-                        db_query("INSERT IGNORE INTO accueil VALUES (
-                                '26',
-                                '$langWiki[$lang]',
-                                '../../modules/wiki/wiki.php',
-                                'wiki',
-                                '0',
-                                '0',
-                                '',
-                                'MODULE_ID_WIKI'
-                                        )", $code);
-                }
-
-                // table accueil
-                echo "$langCorrectTableEntries accueil.<br>";
-
-                /* compatibility update
-                   a) remove entries modules import, external, videolinks, old statistics
-                   b) correct agenda and video link
-                 */
-                db_query("DELETE FROM accueil WHERE (id = 12 OR id = 13 OR id = 11 OR id=6)", $code);
-                update_field("accueil", "lien", "../../modules/agenda/agenda.php", "id", 1);
-                db_query("UPDATE accueil SET visible = '0', admin = '1' WHERE id = 8 LIMIT 1", $code);
-                update_field("accueil", "lien", "../../modules/video/video.php", "id", 4);
-                update_field("accueil", "lien", "../../modules/conference/conference.php", "id", 19);
-
-                //set define string vars
-                update_field("accueil", "define_var", "MODULE_ID_AGENDA", "id", 1);
-                update_field("accueil", "define_var", "MODULE_ID_LINKS", "id",	2);
-                update_field("accueil", "define_var", "MODULE_ID_DOCS", "id", 3);
-                update_field("accueil", "define_var", "MODULE_ID_VIDEO", "id", 4);
-                update_field("accueil", "define_var", "MODULE_ID_ASSIGN", "id", 5);
-                update_field("accueil", "define_var", "MODULE_ID_ANNOUNCE", "id", 7);
-                update_field("accueil", "define_var", "MODULE_ID_USERS", "id",	8);
-                update_field("accueil", "define_var", "MODULE_ID_FORUM", "id", 9);
-                update_field("accueil", "define_var", "MODULE_ID_EXERCISE", "id", 10);
-                update_field("accueil", "define_var", "MODULE_ID_COURSEINFO", "id", 14);
-                update_field("accueil", "define_var", "MODULE_ID_GROUPS", "id", 15);
-                update_field("accueil", "define_var", "MODULE_ID_DROPBOX", "id", 16);
-                update_field("accueil", "define_var", "MODULE_ID_CHAT", "id", 	19);
-                update_field("accueil", "define_var", "MODULE_ID_DESCRIPTION","id", 20);
-
-                $sql = db_query("SELECT id,lien,image,address FROM accueil");
-                while ($u = mysql_fetch_row($sql))  {
-                        $oldlink_lien = $u[1];
-                        $newlink_lien = preg_replace('#../claroline/#','../../modules/',$oldlink_lien);
-                        $oldlink_image = $u[2];
-                        $newlink_image = preg_replace('#../claroline/image/#','../../images/',$oldlink_image);
-                        $oldlink_address = $u[3];
-                        $newlink_address = preg_replace('#../claroline/image/#','../../images/',$oldlink_address);
-                        db_query("UPDATE accueil SET lien='$newlink_lien',
-                                        image='$newlink_image', address='$newlink_address' WHERE id='$u[0]'");
-                }
-
-                //set the new images for the icons of lesson modules
-                update_field("accueil", "image","calendar", "id", 1);
-                update_field("accueil", "image","links", "id",	2);
-                update_field("accueil", "image","docs", "id",	 3);
-                update_field("accueil", "image","videos", "id",	4);
-                update_field("accueil", "image","assignments", "id",5);
-                update_field("accueil", "image","announcements", "id",7);
-                update_field("accueil", "image","users", "id", 8);
-                update_field("accueil", "image","forum", "id", 9);
-                update_field("accueil", "image","exercise", "id", 10);
-                update_field("accueil", "image","course_info", "id",	14);
-                update_field("accueil", "image","groups", "id", 15);
-                update_field("accueil", "image","dropbox", "id", 16);
-                update_field("accueil", "image","conference", "id", 19);
-                update_field("accueil", "image","description", "id",	20);
-
-		$sql = db_query("SELECT image FROM accueil");
-                while ($u = mysql_fetch_row($sql))  {
-			if ($u[0] == '../../../images/npage.gif')  {
-                	 	update_field("accueil", "image", "external_link", "image", "../../../images/npage.gif");
-			}
-			if ($u[0] == '../../../images/page.gif')  {
-                 		update_field("accueil", "image", "external_link", "image", "../../../images/page.gif");
-			}
-			if ($u[0] == 'travaux.png')  {
-                 		update_field("accueil", "image", "external_link", "image", "travaux.png");
-			}
-                }
-
-                // update menu entries with new messages
-                update_field("accueil", "rubrique", "$langWork[$lang]", "id", "5");
-                update_field("accueil", "rubrique", "$langForums[$lang]", "id", "9");
-                update_field("accueil", "rubrique", "$langUsers[$lang]", "id", "8");
-                update_field("accueil", "visible", "0", "id", "8");
-                update_field("accueil", "admin", "1", "id", "8");
-                update_field("accueil", "rubrique", "$langCourseAdmin[$lang]", "id", "14");
-                update_field("accueil", "rubrique", "$langDropBox[$lang]", "id", "16");
-
-                // remove table 'introduction' entries and insert them in table 'cours' (field 'description') in eclass maindb
-                // after that drop table introduction
-                if (mysql_table_exists($code, 'introduction')) {
-                        $sql = db_query("SELECT texte_intro FROM introduction", $code);
-                        while ($text = mysql_fetch_array($sql)) {
-                                $description = quote($text[0]);
-                                if (db_query("UPDATE cours SET description=$description WHERE code='$code'", $mysqlMainDb)) {
-                                        echo "$langMoveIntroText <b>cours</b>: $OK<br>";
-                                        db_query("DROP TABLE IF EXISTS introduction", $code);
-                                } else {
-                                        echo "$langMoveIntroText <b>cours</b>: $BAD<br>";
-                                }
-                        }
-                } // end of table introduction
-
-                $tool_content .= "<br><br></td></tr>";
-
-                // add full text indexes for search operation (ginetai xrhsh @$tmp = mysql_query(...) giati ean
-                // yparxei hdh, to FULL INDEX den mporei na ksanadhmiourgithei. epipleon, den yparxei tropos
-                // elegxou gia to an yparxei index, opote o monadikos tropos diekperaiwshs ths ergasias einai
-                // dokimh-sfalma.
-                @$tmp = mysql_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");
-                @$tmp = mysql_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)");
-                @$tmp = mysql_query("ALTER TABLE `document` ADD FULLTEXT `document` (`filename` ,`comment` ,`title`,`creator`,`subject`,`description`,`author`,`language`)");
-                @$tmp = mysql_query("ALTER TABLE `exercices` ADD FULLTEXT `exercices` (`titre`,`description`)");
-                @$tmp = mysql_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
-                @$tmp = mysql_query("ALTER TABLE `liens` ADD FULLTEXT `liens` (`url` ,`titre` ,`description`)");
-                @$tmp = mysql_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`titre` ,`description`)");
-
-                // bogart: Update code for phpbb functionality START
-                // Remove tables banlist, disallow, headermetafooter, priv_msgs, ranks, sessions, themes, whosonline, words
-                db_query("DROP TABLE IF EXISTS access");
-                db_query("DROP TABLE IF EXISTS banlist");
-                db_query("DROP TABLE IF EXISTS config");
-                db_query("DROP TABLE IF EXISTS disallow");
-                db_query("DROP TABLE IF EXISTS forum_access");
-                db_query("DROP TABLE IF EXISTS forum_mods");
-                db_query("DROP TABLE IF EXISTS headermetafooter");
-                db_query("DROP TABLE IF EXISTS priv_msgs");
-                db_query("DROP TABLE IF EXISTS ranks");
-                db_query("DROP TABLE IF EXISTS sessions");
-                db_query("DROP TABLE IF EXISTS themes");
-                db_query("DROP TABLE IF EXISTS whosonline");
-                db_query("DROP TABLE IF EXISTS words");
-                // bogart: Update code for phpbb functionality END
-
-                // remove tables liste_domains. Used for old statistics module
-                db_query("DROP TABLE IF EXISTS liste_domaines");
-
-                // convert to UTF-8
-                convert_db_utf8($code);
+        // convert to UTF-8
+        convert_db_utf8($code);
 }
 
 
@@ -1132,8 +1168,10 @@ function trim_path($path)
 // Database selected should be the current course database
 function encode_group_documents($course_code, $group_id, $secret_directory)
 {
+        $cwd = getcwd();
         chdir($GLOBALS['webDir'].'courses/'.$course_code.'/group');
         traverseDirTree($secret_directory, 'document_upgrade_file', 'document_upgrade_dir', $secret_directory);
+        chdir($cwd);
 }
 
 
@@ -1141,8 +1179,10 @@ function encode_group_documents($course_code, $group_id, $secret_directory)
 // Database selected should be the current course database
 function encode_documents($course_code)
 {
+        $cwd = getcwd();
         chdir($GLOBALS['webDir'].'courses/'.$course_code);
         traverseDirTree('document', 'document_upgrade_file', 'document_upgrade_dir', 'document');
+        chdir($cwd);
 }
 
 

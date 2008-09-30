@@ -467,34 +467,6 @@ if (!isset($submit2)) {
                 // get course language
                 $lang = $code[1];
 
-                // modify course_code/index.php
-                echo "<hr><p>$langUpgIndex <b>$code[0]</b><br />";
-                flush();
-                if (!@chdir("$webDir/courses/$code[0]")) {
-                        die ("$langUpgNotIndex \"$code[0]\"! $langCheckPerm.");
-                }
-
-                if (!file_exists("temp")) {
-                        mkdir("temp", 0777);
-                }
-
-                $filecontents = file_get_contents("index.php");
-                if (!$filecontents)
-                        die ("$langUpgFileNotRead");
-                $newfilecontents = preg_replace('#../claroline/#','../../modules/',$filecontents);
-                $fp = @fopen("index.php","w");
-                if (!$fp)
-                        die ("$langUpgFileNotRead");
-                if (!@fwrite($fp, $newfilecontents))
-                        die ("$langUpgFileNotModify");
-                fclose($fp);
-                // Fixed By vagpits
-                if (!@chdir("$webDir/upgrade")) {
-                        die("$langUpgNotChDir");
-                }
-
-                echo "$langUpgCourse <b>$code[0]</b><br>";
-                flush();
                 upgrade_course($code[0], $lang);
                 echo "</p>\n";
         }
