@@ -1,28 +1,27 @@
 <?php
-/*========================================================================
+/*===========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
-* ========================================================================
-*  Copyright(c) 2003-2008  Greek Universities Network - GUnet
-*  A full copyright notice can be read in "/info/copyright.txt".
+* ===========================================================================
+*	Copyright(c) 2003-2008  Greek Universities Network - GUnet
+*	A full copyright notice can be read in "/info/copyright.txt".
 *
-*  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-*			Yannis Exidaridis <jexi@noc.uoa.gr>
-*			Alexandros Diamantidis <adia@noc.uoa.gr>
-*			Tilemachos Raptis <traptis@noc.uoa.gr>
+*  	Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
 *
-*  For a full list of contributors, see "credits.txt".
+*	For a full list of contributors, see "credits.txt".
 *
-*  Open eClass is an open platform distributed in the hope that it will
-*  be useful (without any warranty), under the terms of the GNU (General
-*  Public License) as published by the Free Software Foundation.
-*  The full license can be read in "/info/license/license_gpl.txt".
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
 *
-*  Contact address: 	GUnet Asynchronous eLearning Group,
-*  			Network Operations Center, University of Athens,
-*  			Panepistimiopolis Ilissia, 15784, Athens, Greece
-*  			eMail: info@openeclass.org
-* =========================================================================*/
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
 
 
 // The function used to add a link or a category
@@ -257,7 +256,7 @@ function showlinksofcategory($catid)
 	global $urlview;
 	global $up, $down;
 	global $langLinkDelconfirm;
-	global $langDelete, $langUp, $langDown, $langModify, $langLinks, $langCategoryDelconfirm;
+	global $langDelete, $langUp, $langDown, $langModify, $langLinks, $langCategoryDelconfirm, ${urlServer};
 	global $tool_content;
 	global $dbname;
 
@@ -271,8 +270,9 @@ function showlinksofcategory($catid)
 		$myrow[3] = parse_tex($myrow[3]);
 		$tool_content .= "
     <tr>
-      <td width='25' style='border-bottom : white; border-left: 1px solid #edecdf;'>&nbsp;</td>
-      <td width='500' class=\"linkimg\"><a href=\"link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\"><img src=\"../../template/classic/img/links_on.gif\" border=\"0\" title=\"".$langLinks."\"></a> <a href=\"link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">".$myrow[2]."</a>
+      <td>&nbsp;</td>
+      <td width='1'><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title=\"".$langLinks."\"></td>
+      <td><a href=\"link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">".$myrow[2]."</a>
         <br>
         <small>".$myrow[3]."</small>
       </td>";
@@ -288,7 +288,7 @@ function showlinksofcategory($catid)
 
 			$tool_content .=  "<img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langModify."\"></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?action=deletelink&id=".$myrow[0]."&urlview=".$urlview."\" onclick=\"javascript:if(!confirm('".$langLinkDelconfirm."')) return false;\"><img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\"></a>
       </td>
-      <td width='45' align='right' style='border-right: 1px solid #edecdf;'>";
+      <td width='45' align='right'>";
 			// DISPLAY MOVE UP COMMAND only if it is not the top link
 			if ($i!=1)
 			{
@@ -305,7 +305,7 @@ function showlinksofcategory($catid)
 		} else {
 		$tool_content .=  "
       <td width='45' align='right'>&nbsp;</td>
-      <td width='45' align='right' style='border-right: 1px solid #edecdf;'>&nbsp;</td>";
+      <td width='45' align='right'>&nbsp;</td>";
 	    }
 
 		$tool_content .= "

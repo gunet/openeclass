@@ -188,7 +188,7 @@ if ($table_cont) {
     <th colspan=\"4\" style=\"border-top: 1px solid #edecdf; border-left: 1px solid #edecdf; border-right: 1px solid #edecdf;\">$langUserLogins</th>
   </tr>
   <tr>
-    <th colspan=\"2\" style=\"border: 1px solid #edecdf;\">".$langUser."</th>
+    <th colspan=\"2\" class=\"left\" style=\"border: 1px solid #edecdf;\">&nbsp;&nbsp;&nbsp;&nbsp;".$langUser."</th>
     <th style=\"border: 1px solid #edecdf;\">".$langAddress."</th>
     <th style=\"border: 1px solid #edecdf;\">".$langLoginDate."</th>
   </tr>";
@@ -207,7 +207,7 @@ if ($table2_cont) {
     <th colspan=\"4\" style=\"border-top: 1px solid #edecdf; border-left: 1px solid #edecdf; border-right: 1px solid #edecdf;\">$langUserLogins</th>
   </tr>
   <tr>
-    <th colspan=\"2\" style=\"border: 1px solid #edecdf;\">".$langHost."</th>
+    <th colspan=\"2\" class=\"left\" style=\"border: 1px solid #edecdf;\">&nbsp;&nbsp;&nbsp;&nbsp;".$langHost."</th>
     <th style=\"border: 1px solid #edecdf;\">".$langAddress."</th>
     <th style=\"border: 1px solid #edecdf;\">".$langLoginDate."</th>
   </tr>";
@@ -292,11 +292,8 @@ if (!($table_cont || $table2_cont)) {
     <td>'."$end_cal".'</td>
   </tr>
   <tr>
-    <th class="left" rowspan="2">'.$langUser.':</th>
-    <td>'.$langFirstLetterUser.': '.$letterlinks.'</td>
-  </tr>
-  <tr>
-    <td><select name="u_user_id" class="auth_input">'.$user_opts.'</select></td>
+    <th class="left">'.$langUser.':</th>
+    <td>'.$langFirstLetterUser.': '.$letterlinks.' <br /><select name="u_user_id" class="auth_input">'.$user_opts.'</select></td>
   </tr>
   <tr>
     <th>&nbsp;</th>

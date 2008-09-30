@@ -91,7 +91,7 @@ $chart_content=0;
 switch ($u_stats_value) {
     case "visits":
 
-     $chart = new VerticalChart(200, 300);
+     $chart = new VerticalChart(300, 300);
 	$query = "SELECT ".$date_what.", COUNT(*) AS cnt FROM actions
 		WHERE $date_where AND $mod_where GROUP BY $date_group ORDER BY date_time ASC";
             $result = db_query($query, $currentCourseID);
@@ -203,26 +203,10 @@ $chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).
 $chart->render($webDir.$chart_path);
 
  if ($chart_content) {
-  $tool_content .= '
-  <table class="FormData" width="99%" align="left">
-  <tbody>
-  <tr>
-    <th width="220"  class="left">'.$langVisits.' :</th>
-    <td valign="top"><img src="'.$urlServer.$chart_path.'" /></td>
-  </tr>
-  </tbody>
-  </table>';
+  $tool_content .= '<p align="center"><img src="'.$urlServer.$chart_path.'" /></p>';
  } else {
 
-  $tool_content .='
-  <table class="FormData" width="99%" align="left">
-  <tbody>
-  <tr>
-    <th width="220"  class="left">'.$langVisits.' :</th>
-    <td>'.$langNoStatistics.'</td>
-  </tr>
-  </tbody>
-  </table>';
+  $tool_content .='<p align="center"><b>'.$langNoStatistics.'</b></p>';
  }
  //$tool_content .= '<br \>';
 

@@ -1,44 +1,43 @@
 <?php
-/*========================================================================
+/*===========================================================================
 *   Open eClass 2.1
 *   E-learning and Course Management System
-* ========================================================================
-*  Copyright(c) 2003-2008  Greek Universities Network - GUnet
-*  A full copyright notice can be read in "/info/copyright.txt".
+* ===========================================================================
+*	Copyright(c) 2003-2008  Greek Universities Network - GUnet
+*	A full copyright notice can be read in "/info/copyright.txt".
 *
-*  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
-*			Yannis Exidaridis <jexi@noc.uoa.gr>
-*			Alexandros Diamantidis <adia@noc.uoa.gr>
-*			Tilemachos Raptis <traptis@noc.uoa.gr>
+*  	Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
+*				Yannis Exidaridis <jexi@noc.uoa.gr>
+*				Alexandros Diamantidis <adia@noc.uoa.gr>
 *
-*  For a full list of contributors, see "credits.txt".
+*	For a full list of contributors, see "credits.txt".
 *
-*  Open eClass is an open platform distributed in the hope that it will
-*  be useful (without any warranty), under the terms of the GNU (General
-*  Public License) as published by the Free Software Foundation.
-*  The full license can be read in "/info/license/license_gpl.txt".
+*	This program is a free software under the terms of the GNU
+*	(General Public License) as published by the Free Software
+*	Foundation. See the GNU License for more details.
+*	The full license can be read in "license.txt".
 *
-*  Contact address: 	GUnet Asynchronous eLearning Group,
-*  			Network Operations Center, University of Athens,
-*  			Panepistimiopolis Ilissia, 15784, Athens, Greece
-*  			eMail: info@openeclass.org
-* =========================================================================*/
+*	Contact address: 	GUnet Asynchronous Teleteaching Group,
+*						Network Operations Center, University of Athens,
+*						Panepistimiopolis Ilissia, 15784, Athens, Greece
+*						eMail: eclassadmin@gunet.gr
+============================================================================*/
 
 /*
  * Links Component
- * 
+ *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * 
+ *
  * @abstract This component organises the links of a lesson.
  * This module can:
  * - Organize links into categories
  * - move links up/down within a category
  * - move categories up/down
  * - expand/collapse all categories
- * 
+ *
  * Based on code by Patrick Cool
- * 
+ *
  */
 
 $require_current_course = TRUE;
@@ -89,38 +88,37 @@ if (isset($action) && ($is_adminOfCourse)) { //allow link management actions onl
 
 if($is_adminOfCourse) {
 
-	//displaying the error / status messages if there is one
+
+	if (!empty($catlinkstatus))	{
+	   $tool_content .=  "<p class=\"success_small\">".$catlinkstatus."</p><br />";
+	   unset($catlinkstatus);
+	}
 
 	$tool_content .="
     <div id=\"operations_container\">
-    <ul id=\"opslist\">";
+      <ul id=\"opslist\">";
 	if (isset($category))
 	$tool_content .=  "
-      <li><a href=\"".$_SERVER['PHP_SELF']."?action=addlink&category=".$category."&urlview=@$urlview\">".$langLinkAdd."</a></li>";
+        <li><a href=\"".$_SERVER['PHP_SELF']."?action=addlink&category=".$category."&urlview=@$urlview\">".$langLinkAdd."</a></li>";
 	else
 	$tool_content .=  "
-      <li><a href=\"".$_SERVER['PHP_SELF']."?action=addlink\">".$langLinkAdd."</a></li>";
+        <li><a href=\"".$_SERVER['PHP_SELF']."?action=addlink\">".$langLinkAdd."</a></li>";
 	//	$tool_content .= "<li> | </li>";
 	if (isset($urlview))
 	$tool_content .=  "
-      <li><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory&urlview=".$urlview."\">".$langCategoryAdd."</a></li>";
+        <li><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory&urlview=".$urlview."\">".$langCategoryAdd."</a></li>";
 	else
 	$tool_content .=  "
-      <li><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory\">".$langCategoryAdd."</a></li>";
-
-	$tool_content .=  "</ul></div>";
-
-	if (!empty($catlinkstatus))	{
+        <li><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory\">".$langCategoryAdd."</a></li>";
 
 	$tool_content .=  "
-    <table width=\"99%\"><tbody><tr><td class=\"success\"><p><b>".$catlinkstatus."</b></td></tr></tbody></table>";
-	$tool_content .= "
-    <br>";
-		unset($catlinkstatus);
-	}
+      </ul>
+    </div>";
+
+
 
 	// Displaying the correct title and the form for adding a category or link.
-	//This is only shown when nothing has been submitted yet, hence !isset($submitLink)
+	// This is only shown when nothing has been submitted yet, hence !isset($submitLink)
 	if (isset($action) and ($action=="addlink" or $action=="editlink") and !isset($submitLink))
 	{
 
@@ -133,7 +131,7 @@ if($is_adminOfCourse) {
 		$tool_content .= "<table width='99%' class='FormData' height='250'>
           <tbody>
           <tr>
-            <th class='left' width='150'>&nbsp;</th>
+            <th class='left' width='220'>&nbsp;</th>
             <td><b>";
 		if ($action=="addlink")
 		{$tool_content .=  $langLinkAdd;}
@@ -192,9 +190,9 @@ if($is_adminOfCourse) {
           <table width='99%' class='FormData' height='250'>
           <tbody>
           <tr>
-            <th class='left' width='150'>&nbsp;</th>
+            <th class='left' width='220'>&nbsp;</th>
             <td><b>";
-			
+
 		if ($action=="addcategory") {
 		   $tool_content .=  $langCategoryAdd;
 		} else {
@@ -213,7 +211,7 @@ if($is_adminOfCourse) {
           </tr>
           <tr>
             <th class='left'>".$langDescription." :</th>
-            <td><textarea wrap=\"physical\" rows=\"8\" cols=\"50\" name=\"description\" class='FormData_InputText'>
+            <td><textarea wrap=\"physical\" rows=\"5\" cols=\"50\" name=\"description\" class='FormData_InputText'>
 				".@htmlspecialchars($description)."</textarea></td>
           </tr>
           <tr>
@@ -250,47 +248,48 @@ if (mysql_num_rows($resultcategories) > 0) {
 	$sqlcategories="SELECT * FROM `".$tbl_categories."` ORDER BY `ordre` DESC";
 	$resultcategories=db_query($sqlcategories, $dbname);
 	$aantalcategories = @mysql_num_rows($resultcategories);
-	
+
 	if ($aantalcategories > 0) {
-		$more_less = "
-    <table class=\"Deps\" width=\"99%\">
-    <tbody>
+	$more_less = "
+    <table width=\"99%\" class=\"FormData\" style=\"border: 1px solid #edecdf;\">
+    <thead>
     <tr>
-      <th>$langCategorisedLinks:</th>
-      <td><a href=\"".$_SERVER['PHP_SELF']."?urlview=";
+      <th class=\"left\" style=\"border: 1px solid #edecdf;\">$langCategorisedLinks:</th>
+      <th class=\"left\" style=\"border: 1px solid #edecdf;\" width=\"1\"><img src=\"../../template/classic/img/closeddir.gif\" border=\"0\" title=\"$showall\"></th>
+      <th class=\"left\" style=\"border: 1px solid #edecdf;\" width=\"30\"><a href=\"".$_SERVER['PHP_SELF']."?urlview=";
 		for($j = 1; $j <= $aantalcategories; $j++)
 		{
 			$more_less .=  "0";
 		}
-		$more_less .=  "\">$shownone</a> ";
-		$more_less .=  " | <a href=\"".$_SERVER['PHP_SELF']."?urlview=";
+		$more_less .=  "\">$shownone</a></th>";
+		$more_less .=  "
+      <th class=\"left\" style=\"border: 1px solid #edecdf;\" width=\"1\"><img src=\"../../template/classic/img/opendir.gif\" border=\"0\" title=\"$showall\"></th>
+      <th class=\"left\" style=\"border: 1px solid #edecdf;\" width=\"30\"><a href=\"".$_SERVER['PHP_SELF']."?urlview=";
 		for($j = 1; $j <= $aantalcategories; $j++)
 		{
 			$more_less .=  "1";
 		}
-		$more_less .=  "\">$showall</a></td>";
+		$more_less .=  "\">$showall</a></th>";
 		$more_less .= "
     </tr>
-    </tbody>
+    </thead>
     </table>";
 	}
-	
-	
-    // Edw fiaxnei ton pinaka me tis henik;ew kathgories
+
+
+    // Edw fiaxnei ton pinaka me tis Genikes kathgories
 	if ($numberofzerocategory!==0)
 	{
-	$tool_content .=  "
-    <table width=\"99%\">
-    <tbody>
+	$tool_content .= "\n
+    <table width=\"99%\" class=\"FormData\" style=\"border: 1px solid #edecdf;\">
+    <thead>
     <tr>
-      <td width='25' style='background:#FBFBFB; border-left: 1px solid #edecdf; border-top: 1px solid #edecdf;'><img src=\"../../template/classic/img/opendir.gif\" border=\"0\" title=\"$langNoCategory\"></td>
-      <td class='left' width='500' colspan='3' style='background:#FBFBFB; border-right: 1px solid #edecdf; border-top: 1px solid #edecdf;'>$langNoCategory</td>
-    </tr>";
+      <th width='15' style=\"border: 1px solid #edecdf;\"><img src=\"../../template/classic/img/opendir.gif\" border=\"0\" title=\"$langNoCategory\"></th>
+      <th class='left' colspan='6' style=\"border: 1px solid #edecdf;\">$langNoCategory</th>
+    </tr>
+    </thead>
+    <tbody>";
 	showlinksofcategory(0);
-	$tool_content .= "
-    <tr>
-      <td colspan='4' style='background:#FBFBFB; border-left: 1px solid #edecdf; border-right: 1px solid #edecdf; border-bottom: 1px solid #edecdf;'>&nbsp;</td>
-    </tr>";
 	$tool_content .= "
     </tbody>
     </table>";
@@ -298,13 +297,13 @@ if (mysql_num_rows($resultcategories) > 0) {
 
 	// Edw fiaxnei to tool bar me tin emfanisi apokripsi
 	$tool_content .= "
-	
+
     <br/>
+
     $more_less
-	
-    <table width=\"99%\">
-    <tbody>
-    ";
+
+    <table width=\"99%\" class=\"FormData\" style=\"border: 1px solid #edecdf;\">
+    <tbody>";
 	$i=0;
 	$catcounter=1;
 	$view="0";
@@ -323,14 +322,14 @@ if (mysql_num_rows($resultcategories) > 0) {
 		// if the $urlview has a 1 for this categorie, this means it is expanded and should be desplayed as a
 		// - instead of a +, the category is no longer clickable and all the links of this category are displayed
 		$myrow["description"]=parse_tex($myrow["description"]);
-		if ((isset($urlview[$i]) and $urlview[$i]=="1")) 
+		if ((isset($urlview[$i]) and $urlview[$i]=="1"))
 		{
 			$newurlview=$urlview;
 			$newurlview[$i]="0";
 			$tool_content .=  "
     <tr>
-      <td class=\"left\" width='25' style='background:#FBFBFB; border-left: 1px solid #edecdf;'><img src=\"../../template/classic/img/opendir.gif\" border=\"0\" title=\"$shownone\"></td>
-      <td width='500' style='background:#FBFBFB;'><a href=\"".$_SERVER['PHP_SELF']."?urlview=".$newurlview."\">".$myrow["categoryname"]."</a>
+      <td class=\"left\" width='15'><img src=\"../../template/classic/img/opendir.gif\" border=\"0\" title=\"$shownone\"></td>
+      <td colspan=\"2\"><a href=\"".$_SERVER['PHP_SELF']."?urlview=".$newurlview."\">".$myrow["categoryname"]."</a>
           <br>
           <small>".$myrow["description"]."</small>
       </td>";
@@ -338,8 +337,8 @@ if (mysql_num_rows($resultcategories) > 0) {
 		showcategoryadmintools($myrow["id"]);
 		} else {
 		$tool_content .=  "
-      <td width='45' style='background:#FBFBFB;'>&nbsp;</td>
-      <td width='45' style='background:#FBFBFB; border-right: 1px solid #edecdf;'>&nbsp;</td>
+      <td width='45'>&nbsp;</td>
+      <td width='45'>&nbsp;</td>
     </tr>";
 		}
 
@@ -347,9 +346,9 @@ if (mysql_num_rows($resultcategories) > 0) {
 
 		} else {
 			$tool_content .=  "
-    <tr>
-      <td class=\"left\" width='25' style='background:#FBFBFB; border-left: 1px solid #edecdf;'><img src=\"../../template/classic/img/closeddir.gif\" border=\"0\" title=\"$showall\"></td>
-      <td width='500' style='background:#FBFBFB;'><a href=\"".$_SERVER['PHP_SELF']."?urlview=";
+    <tr class=\"odd\">
+      <td class=\"left\" width='15'><img src=\"../../template/classic/img/closeddir.gif\" border=\"0\" title=\"$showall\"></td>
+      <td><a href=\"".$_SERVER['PHP_SELF']."?urlview=";
 			$tool_content .=  is_array($view)?implode('',$view):$view;
 			$tool_content .=  "\">".$myrow["categoryname"]."</a>
           <br>
@@ -359,21 +358,17 @@ if (mysql_num_rows($resultcategories) > 0) {
 			showcategoryadmintools($myrow["id"]);
 			} else {
 	        $tool_content .=  "
-      <td width='45' style='background:#FBFBFB;'>&nbsp;</td>
-      <td width='45' style='background:#FBFBFB; border-right: 1px solid #edecdf;'>&nbsp;</td>
-	</tr>";			
+      <td width='45'>&nbsp;</td>
+      <td width='45'>&nbsp;</td>
+	</tr>";
 			}
 			//$tool_content .=  "</td></tr>";
 		}
 		// displaying the link of the category
 		$i++;
 	}
-	$tool_content .= "
-    <tr>
-      <td colspan='4' style='background:#FBFBFB; border-left: 1px solid #edecdf; border-right: 1px solid #edecdf; border-bottom: 1px solid #edecdf;'>&nbsp;</td>
-    </tr>";
 	$tool_content .=  "
-    </tbody>   
+    </tbody>
     </table>";
 
 } else {   // no category

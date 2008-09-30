@@ -75,7 +75,11 @@ $tool_content .= '
   <table class="FormData" width="99%" align="left">
   <tbody>
   <tr>
-    <th width="220" class="left">'.$langValueType.':</th>
+    <th width="220" class="left">&nbsp;</th>
+    <td><b>'.$langModify.'</b></td>
+  </tr>
+  <tr>
+    <th class="left">'.$langValueType.':</th>
     <td><select name="u_stats_value">'.$statsValueOptions.'</select></td>
   </tr>
   <tr>

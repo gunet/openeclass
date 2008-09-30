@@ -125,7 +125,7 @@ $local_head = $jscalendar->get_load_files_code();
 
             while ($row = mysql_fetch_assoc($result)) {
                 $chart->addPoint(new Point($row['name'], $row['cnt']));
-                $chart->width += 20;
+                $chart->width += 25;
                 $chart_content=1;
             }
 
@@ -144,7 +144,7 @@ $local_head = $jscalendar->get_load_files_code();
 
             while ($row = mysql_fetch_assoc($result)) {
                 $chart->addPoint(new Point($row['name'], $row['tot_dur']));
-                $chart->width += 20;
+                $chart->width += 25;
                 $chart_content=1;
             }
 
@@ -159,7 +159,7 @@ $local_head = $jscalendar->get_load_files_code();
     $chart->render($webDir.$chart_path);
 
     if ($chart_content) {
-        $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
+        $tool_content .= '<p align="center"><img src="'.$urlServer.$chart_path.'" /></p>';
     }
     else   {
       $tool_content .='<p align="center"><b>'.$langNoStatistics.'</b></p>';
