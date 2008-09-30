@@ -1702,6 +1702,7 @@ $showall="Show all";
 $shownone="Show none";
 $langProfNoLinksExist = "<br />No links exist! <br /><br />You may use the tool operations to add links.";
 $langNoLinksExist = "The ".$langsTeacher." has not added any links.";
+$langEmptyLinkURL = "Link URL is empty";
 
 /*******************************************************
 * lostapass.inc.php
@@ -2708,7 +2709,7 @@ $langExplUpgrade = "The upgrade script will modify configuration file <em>config
 $langExpl2Upgrade = "Also for security reasons make sure that you have backedup all the databases.";
 $langWarnUpgrade = "WARNING!";
 $langExecTimeUpgrade = "WARNING! For upgrade script to run successfully make sure that php variable <em>max_execution_time</em> which is defined in <em>php.ini</em> is larger than 300 (= 5 miunutes). Modify variable and restart the upgrade process";
-$langUpgradeCont = "Î?Î¿ continue upgrade process, please enter platform administrator username / password:";
+$langUpgradeCont = "ï¿½?Î¿ continue upgrade process, please enter platform administrator username / password:";
 $langUpgDetails = "Username / Password";
 $langUpgMan = "upgrade instructions";
 $langUpgToSee = "To review all the new features and changes of eClass new version click ";
@@ -2723,7 +2724,7 @@ $langConfigError3 = "config.php was NOT modified! Please check permissions.";
 $langConfigError4 = "Cannot access directory of config.php! Please check permissions.";
 $langUpgradeSuccess = "Upgrade Database of Open eClass finished successfully!";
 $langUpgNoVideoDir = "Cannot create 'video' directory! Please check permissions.";
-$langUpgNoVideoDir2 = "Î?here is already a file with the name 'video'! You must delete it first";
+$langUpgNoVideoDir2 = "ï¿½?here is already a file with the name 'video'! You must delete it first";
 $langUpgNoVideoDir3 = "No write permissions in directory 'video'!";
 $langUpgReady = "You are ready to use the new version of Open eClass!";
 $langUpgSucNotice = "If an error occured, maybe some course is not completely working .<br>

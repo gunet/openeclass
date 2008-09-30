@@ -18,9 +18,9 @@
 *	The full license can be read in "license.txt".
 *
 *	Contact address: 	GUnet Asynchronous Teleteaching Group,
-*						Network Operations Center, University of Athens,
-*						Panepistimiopolis Ilissia, 15784, Athens, Greece
-*						eMail: eclassadmin@gunet.gr
+*				Network Operations Center, University of Athens,
+*				Panepistimiopolis Ilissia, 15784, Athens, Greece
+*				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
 /*
@@ -57,7 +57,33 @@ $action_stats->record('MODULE_ID_LINKS');
 /**************************************/
 
 $nameTools = $langLinks;
-$tool_content = "";
+$tool_content = $head_content = "";
+
+$head_content .= <<<hContent
+<script type="text/javascript">
+function checkrequired(which, entry) {
+	var pass=true;
+	if (document.images) {
+		for (i=0;i<which.length;i++) {
+			var tempobj=which.elements[i];
+			if (tempobj.name == entry) {
+				if (tempobj.type=="text"&&tempobj.value=='') {
+					pass=false;
+					break;
+		  		}
+	  		}
+		}
+	}
+	if (!pass) {
+		alert("$langEmptyLinkURL");
+		return false;
+	} else {
+		return true;
+	}
+}
+
+</script>
+hContent;
 
 include("linkfunctions.php");
 
@@ -103,7 +129,6 @@ if($is_adminOfCourse) {
 	else
 	$tool_content .=  "
         <li><a href=\"".$_SERVER['PHP_SELF']."?action=addlink\">".$langLinkAdd."</a></li>";
-	//	$tool_content .= "<li> | </li>";
 	if (isset($urlview))
 	$tool_content .=  "
         <li><a href=\"".$_SERVER['PHP_SELF']."?action=addcategory&urlview=".$urlview."\">".$langCategoryAdd."</a></li>";
@@ -116,15 +141,13 @@ if($is_adminOfCourse) {
     </div>";
 
 
-
 	// Displaying the correct title and the form for adding a category or link.
 	// This is only shown when nothing has been submitted yet, hence !isset($submitLink)
 	if (isset($action) and ($action=="addlink" or $action=="editlink") and !isset($submitLink))
 	{
-
 		if (isset($category) and $category=="")
 		{$category=0;}
-		$tool_content .=  "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?action=".$action."&urlview=".@$urlview."\">";
+		$tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?action=".$action."&urlview=".@$urlview."\" onsubmit=\"return checkrequired(this, 'urllink');\">";
 		if ($action=="editlink")
 		{$tool_content .= "<input type=\"hidden\" name=\"id\" value=\"".$id."\">";}
 
@@ -165,7 +188,7 @@ if($is_adminOfCourse) {
 		$resultcategories = db_query($sqlcategories, $dbname);
 		while ($myrow = mysql_fetch_array($resultcategories))
 		{
-			$tool_content .=  "                <option value=\"".$myrow["id"]."\"";
+			$tool_content .=  "<option value=\"".$myrow["id"]."\"";
 			if (isset($category) and $myrow["id"]==$category)
 			$tool_content .=  " selected";
 			$tool_content .= 	">".$myrow["categoryname"]."</option>\n";
@@ -402,7 +425,5 @@ if (mysql_num_rows($resultcategories) > 0) {
 	}
 }
 
-draw($tool_content, 2, 'link');
-//call draw as shown below to hide the left nav
-//draw($tool_content, 2, 'link', '', '', true);
+draw($tool_content, 2, 'link', $head_content);
 ?>
