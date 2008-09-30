@@ -1,24 +1,24 @@
 <?
 	/** Libchart - PHP chart library
-	*	
+	*
 	* Copyright (C) 2005-2006 Jean-Marc Trémeaux (jm.tremeaux at gmail.com)
-	* 	
+	*
 	* This library is free software; you can redistribute it and/or
 	* modify it under the terms of the GNU Lesser General Public
 	* License as published by the Free Software Foundation; either
 	* version 2.1 of the License, or (at your option) any later version.
-	* 
+	*
 	* This library is distributed in the hope that it will be useful,
 	* but WITHOUT ANY WARRANTY; without even the implied warranty of
 	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 	* Lesser General Public License for more details.
-	* 
+	*
 	* You should have received a copy of the GNU Lesser General Public
 	* License along with this library; if not, write to the Free Software
 	* Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-	* 
+	*
 	*/
-	
+
 	/**
 	* Pie chart
 	*
@@ -34,22 +34,22 @@
     		* @param	integer		width of the image
     		* @param	integer		height of the image
 		*/
-		
-		function PieChart($width = 600, $height = 250)
+
+		function PieChart($width = 500, $height = 250)
 		{
 			parent::Chart($width, $height);
 
 			$this->setMargin(5);
-			$this->setLabelMarginLeft(30);
-			$this->setLabelMarginRight(30);
-			$this->setLabelMarginTop(50);
-			$this->setLabelMarginBottom(30);
+			$this->setLabelMarginLeft(10);
+			$this->setLabelMarginRight(10);
+			$this->setLabelMarginTop(30);
+			$this->setLabelMarginBottom(10);
 			$this->setLabelMarginCenter(20);
 
 			$this->setPieRatio(0.55);
 
-			$this->labelBoxWidth = 15;
-			$this->labelBoxHeight = 15;
+			$this->labelBoxWidth = 13;
+			$this->labelBoxHeight = 13;
 		}
 
 		/**
@@ -58,7 +58,7 @@
 		* @access	public
 		* @param	double		ratio (value between 0 and 1)
 		*/
-		
+
 		function setPieRatio($pieRatio)
 		{
 			$this->pieRatio = $pieRatio;
@@ -72,20 +72,20 @@
 		* @param	double		second value
 		* @return	integer		result of the comparison
 		*/
-		
+
 		function sortPie($v1, $v2)
 		{
 			return $v1[0] == $v2[0] ? 0 :
 				$v1[0] > $v2[0] ? -1 :
 				1;
 		}
-		
+
 		/**
 		* Compute pie values in percentage and sort them
 		*
 		* @access	private
 		*/
-		
+
 		function computePercent()
 		{
 			$this->total = 0;
@@ -110,7 +110,7 @@
 		* @access	public
 		* @param	integer		margin value in pixels
 		*/
-		
+
 		function setLabelMarginCenter($labelMarginCenter)
 		{
 			$this->labelMarginCenter = $labelMarginCenter;
@@ -125,7 +125,7 @@
 		* @param	integer		bottom right coordinate (x)
 		* @param	integer		bottom right coordinate (y)
 		*/
-		
+
 		function outlinedBox($x1, $y1, $x2, $y2)
 		{
 			imagefilledrectangle($this->img, $x1, $y1, $x2, $y2, $this->axisColor1->getColor($this->img));
@@ -140,19 +140,19 @@
 		*
 		* @access	private
 		*/
-		
+
 		function computeLabelMargin()
 		{
 			$graphWidth = $this->width - $this->margin * 2 - $this->labelMarginLeft - $this->labelMarginCenter - $this->labelMarginRight;
-			
+
 			$this->pieTLX = $this->margin + $this->labelMarginLeft;
 			$this->pieTLY = $this->margin + $this->labelMarginTop;
 			$this->pieBRX = $this->pieTLX + $graphWidth * $this->pieRatio;
 			$this->pieBRY = $this->height - $this->margin - $this->labelMarginBottom;
-			
+
 			$this->pieCenterX = $this->pieTLX + ($this->pieBRX - $this->pieTLX) / 2;
 			$this->pieCenterY = $this->pieTLY + ($this->pieBRY - $this->pieTLY) / 2;
-			
+
 			$this->pieWidth = round(($this->pieBRX - $this->pieTLX) * 4 / 5);
 			$this->pieHeight = round(($this->pieBRY - $this->pieTLY) * 3.7 / 5);
 			$this->pieDepth = round($this->pieWidth * 0.05);
@@ -169,7 +169,7 @@
 		*
 		* @access	private
 		*/
-		
+
 		function createImage()
 		{
 			parent::createImage();
@@ -235,7 +235,7 @@
 		*
 		* @access	private
 		*/
-		
+
 		function printLabel()
 		{
 			$i = 0;
@@ -247,7 +247,7 @@
 			{
 				list($percent, $point) = $a;
 				$legend = $point->getX();
-				
+
 				$color = $this->pieColor[$i % count($this->pieColor)];
 
 				$boxY1 = $this->labelTLY + $this->margin + $i * ($this->labelBoxHeight + $this->margin);
@@ -270,7 +270,7 @@
 		* @param	array		colors for each portion
 		* @param	bitfield	drawing mode
 		*/
-		
+
 		function drawDisc($cy, $colorArray, $mode)
 		{
 			$i = 0;
@@ -299,7 +299,7 @@
 		*
 		* @access	private
 		*/
-		
+
 		function drawPercent()
 		{
 			$angle1 = 0;
@@ -310,7 +310,7 @@
 				list($percent, $point) = $a;
 
 				// If value is null, don't print percentage
-				
+
 				if($percent <= 0)
 					continue;
 
@@ -334,7 +334,7 @@
 		*
 		* @access	private
 		*/
-		
+
 		function printPie()
 		{
 			// Silhouette
@@ -358,7 +358,7 @@
 		* @access	public
 		* @param	string		name of the file to render the image to (optional)
 		*/
-		
+
 		function render($fileName = null)
 		{
 			$this->computeLabelMargin();

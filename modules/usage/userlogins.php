@@ -46,13 +46,15 @@ $require_prof = true;
 include '../../include/baseTheme.php';
 include('../../include/action.php');
 $tool_content = '';
-$tool_content .= "<div id=\"operations_container\">
-	<ul id=\"opslist\">";
-$tool_content .= "<li><a href='usage.php'>".$langUsage."</a></li>";
-$tool_content .= "<li><a href='favourite.php?first='>".$langFavourite."</a></li>";
-$tool_content .= "<li><a href='userlogins.php?first='>".$langUserLogins."</a></li>";
-$tool_content .= "<li><a href='oldStats.php'>".$langOldStats."</a></li></ul></div>";
-$tool_content .= "<p> $langUserLogins </p>";
+$tool_content .= "
+  <div id=\"operations_container\">
+    <ul id=\"opslist\">
+      <li><a href='usage.php'>".$langUsage."</a></li>
+      <li><a href='favourite.php?first='>".$langFavourite."</a></li>
+      <li><a href='userlogins.php?first='>".$langUserLogins."</a></li>
+      <li><a href='oldStats.php'>".$langOldStats."</a></li>
+    </ul>
+  </div>";
 
 $nameTools = $langUsage;
 $local_style = '
@@ -72,7 +74,7 @@ $local_head = $jscalendar->get_load_files_code();
 
 
 
-        
+
 $usage_defaults = array (
     'u_user_id' => -1,
     'u_date_start' => strftime('%Y-%m-%d', strtotime('now -2 day')),
@@ -129,41 +131,93 @@ while ($row = mysql_fetch_assoc($result_2)) {
 
 $result = db_query($sql_1, $currentCourseID);
 $table_cont ='';
+
+$k=0;
 while ($row = mysql_fetch_assoc($result)) {
     $user = $users[$row['user_id']];
-    $table_cont .= '<tr><td> '.$user. '</td>
-                    <td>'.$row['ip'].'</td>
-                    <td>'.$row['date_time'].'</td></tr>';
+	if ($k%2==0) {
+	$table_cont .= "
+  <tr>";
+	} else {
+	$table_cont .= "
+  <tr class=\"odd\">";
+	}
+    $table_cont .= "
+    <td width=\"1\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+    <td>".$user."</td>
+    <td align=\"center\">".$row['ip']."</td>
+    <td align=\"center\">".$row['date_time']."</td>
+  </tr>";
+
+  $k++;
 }
 
 
 //Take data from stat_accueil
- $table2_cont = '';
+$table2_cont = '';
 if ($exist_stat_accueil){
     $result_4= db_query($sql_4, $currentCourseID);
+    $k1=0;
     while ($row = mysql_fetch_assoc($result_4)) {
-        $table2_cont .= '<tr><td> '.$row['host']. '</td>
-                    <td>'.$row['address'].'</td>
-                    <td>'.$row['date'].'</td></tr>';
+	if ($k%2==0) {
+	$table2_cont .= "
+  <tr>";
+	} else {
+	$table2_cont .= "
+  <tr class=\"odd\">";
+	}
+        $table2_cont .= "
+    <td width=\"1\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+    <td>".$row['host']."</td>
+    <td align=\"center\">".$row['address']."</td>
+    <td align=\"center\">".$row['date']."</td>
+  </tr>";
+
+    $k1++;
     }
 }
 
-
+//$tool_content .= "<p>$langUserLogins</p>";
 //Records exist?
 if ($table_cont) {
-    $tool_content .=  '<table><thead>
-        <tr> <th>'.$langUser.'</th> <th>'.$langAddress.' </th> <th>'.$langLoginDate.'</th>'.
-        $table_cont.'</thead></table>';
+  $tool_content .= "
+  <table class=\"FormData\" width=\"99%\" align=\"left\" style=\"border: 1px solid #edecdf;\">
+  <tbody>
+  <tr>
+    <th colspan=\"4\" style=\"border-top: 1px solid #edecdf; border-left: 1px solid #edecdf; border-right: 1px solid #edecdf;\">$langUserLogins</th>
+  </tr>
+  <tr>
+    <th colspan=\"2\" style=\"border: 1px solid #edecdf;\">".$langUser."</th>
+    <th style=\"border: 1px solid #edecdf;\">".$langAddress."</th>
+    <th style=\"border: 1px solid #edecdf;\">".$langLoginDate."</th>
+  </tr>";
+  $tool_content .= "".$table_cont."";
+  $tool_content .= "
+  </tbody>
+  </table>";
 }
 if ($table2_cont) {
-    $tool_content .=  '<br><p>'.$langStatAccueil.'</p><table><thead>
-        <tr> <th>'.$langHost.'</th> <th>'.$langAddress.' </th> <th>'.$langLoginDate.'</th>'.
-        $table2_cont.'</thead></table>';
-
+  $tool_content .= "
+  <br>
+  <p>".$langStatAccueil."</p>
+  <table class=\"FormData\" width=\"99%\" align=\"left\">
+  <tbody>
+  <tr>
+    <th colspan=\"4\" style=\"border-top: 1px solid #edecdf; border-left: 1px solid #edecdf; border-right: 1px solid #edecdf;\">$langUserLogins</th>
+  </tr>
+  <tr>
+    <th colspan=\"2\" style=\"border: 1px solid #edecdf;\">".$langHost."</th>
+    <th style=\"border: 1px solid #edecdf;\">".$langAddress."</th>
+    <th style=\"border: 1px solid #edecdf;\">".$langLoginDate."</th>
+  </tr>";
+  $tool_content .= "".$table2_cont."";
+  $tool_content .= "
+  </tbody>
+  </table>";
 }
 if (!($table_cont || $table2_cont)) {
 
-    $tool_content .= '<p>'.$langNoLogins.'</p>';
+    $tool_content .= '<p align="center"><b>'.$langNoLogins.'</b></p>';
 }
 
     //make form
@@ -172,7 +226,7 @@ if (!($table_cont || $table2_cont)) {
                  'showOthers'     => true,
                  'ifFormat'       => '%Y-%m-%d',
                  'timeFormat'     => '24'),
-           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+           array('style'       => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
                  'name'        => 'u_date_start',
                  'value'       => $u_date_start));
 
@@ -181,7 +235,7 @@ if (!($table_cont || $table2_cont)) {
                  'showOthers'     => true,
                  'ifFormat'       => '%Y-%m-%d',
                  'timeFormat'     => '24'),
-           array('style'       => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+           array('style'       => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
                  'name'        => 'u_date_end',
                  'value'       => $u_date_end));
 
@@ -219,28 +273,38 @@ if (!($table_cont || $table2_cont)) {
     }
 
     $tool_content .= '
-    <form method="post">
-    &nbsp;&nbsp;
-        <table>
-        <thead>
-        <tr>
-            <th>'.$langStartDate.'</th>
-            <td>'."$start_cal".'</td>
-        </tr>
-        <tr>
-            <th>'.$langEndDate.'</th>
-            <td>'."$end_cal".'</td>
-        </tr>
-        <tr>
-            <th>'.$langUser.'</th>
-            <td>'.$langFirstLetterUser.':<br/>'.$letterlinks.'<br />
-            <select name="u_user_id">'.$user_opts.'</select></td>
-        </tr>
-        </thead>
-        </table>
-        <br/>
-            <input type="submit" name="btnUsage" value="'.$langSubmit.'">
-    </form>';
+<p>&nbsp;</p>
+<form method="post">
+
+  <table class="FormData" width="99%" align="left">
+  <tbody>
+  <tr>
+    <th width="220" class="left">&nbsp;</th>
+    <td><b>'.$langModify.'</b></td>
+  </tr>
+  <tr>
+    <th class="left">'.$langStartDate.':</th>
+    <td>'."$start_cal".'</td>
+  </tr>
+  <tr>
+    <th class="left">'.$langEndDate.':</th>
+    <td>'."$end_cal".'</td>
+  </tr>
+  <tr>
+    <th class="left" rowspan="2">'.$langUser.':</th>
+    <td>'.$langFirstLetterUser.': '.$letterlinks.'</td>
+  </tr>
+  <tr>
+    <td><select name="u_user_id" class="auth_input">'.$user_opts.'</select></td>
+  </tr>
+  <tr>
+    <th>&nbsp;</th>
+    <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
+  </tr>
+  </tbody>
+  </table>
+
+</form>';
 
 
 draw($tool_content, 2, '', $local_head, '');

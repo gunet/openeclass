@@ -58,14 +58,11 @@ $tool_content .= "
     </ul>
   </div>";
 
-$tool_content .= "<p> $langFavouriteExpl </p>";
-
 $dateNow = date("d-m-Y / H:i:s",time());
 $nameTools = $langUsage;
 $local_style = '
-    .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
-     padding-left: 15px; padding-right : 15px; }
-    .content {position: relative; left: 25px; }';
+    .month { font-weight : bold; color: #FFFFFF; background-color: #000066; padding-left: 15px; padding-right : 15px; }
+    .content { position: relative; left: 25px; }';
 
 
 include('../../include/jscalendar/calendar.php');
@@ -79,8 +76,10 @@ $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calen
 $local_head = $jscalendar->get_load_files_code();
 
     if (!extension_loaded('gd')) {
-        $tool_content .= "<p>$langGDRequired</p>";
+
+        $tool_content .= "<p class=\"caution_small\">$langGDRequired</p>";
     } else {
+        $tool_content .= "<p>$langFavouriteExpl ";
         $made_chart = true;
 
         //make chart
@@ -121,11 +120,11 @@ $local_head = $jscalendar->get_load_files_code();
 
             $result = db_query($query, $currentCourseID);
 
-            $chart = new PieChart(500, 300);
+            $chart = new PieChart(350, 350);
 
             while ($row = mysql_fetch_assoc($result)) {
                 $chart->addPoint(new Point($row['name'], $row['cnt']));
-                $chart->width += 25;
+                $chart->width += 20;
                 $chart_content=1;
             }
 
@@ -140,16 +139,16 @@ $local_head = $jscalendar->get_load_files_code();
 
             $result = db_query($query, $currentCourseID);
 
-            $chart = new PieChart(500, 300);
+            $chart = new PieChart(350, 350);
 
             while ($row = mysql_fetch_assoc($result)) {
                 $chart->addPoint(new Point($row['name'], $row['tot_dur']));
-                $chart->width += 25;
+                $chart->width += 20;
                 $chart_content=1;
             }
 
             $chart->setTitle("$langFavourite");
-            $tool_content .= "<p> $langDurationExpl</p>";
+            $tool_content .= "\n<br /><small>($langDurationExpl)</small></p>";
 
         break;
     }
@@ -162,7 +161,7 @@ $local_head = $jscalendar->get_load_files_code();
         $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
     }
     else   {
-      $tool_content .='<br><p>'.$langNoStatistics.'</p>';
+      $tool_content .='<p align="center"><b>'.$langNoStatistics.'</b></p>';
     }
 
     //make form
@@ -222,36 +221,43 @@ $local_head = $jscalendar->get_load_files_code();
 
 
     $tool_content .= '
-    <form method="post">
-    &nbsp;&nbsp;
-        <table>
-        <thead>
-        <tr>
-            <th>'.$langValueType.'</th>
-            <td><select name="u_stats_value">'.$statsValueOptions.'</select></td>
-        </tr>
-        <tr>
-            <th>'.$langStartDate.'</th>
-            <td>'."$start_cal".'</td>
-        </tr>
-        <tr>
-            <th>'.$langEndDate.'</th>
-            <td>'."$end_cal".'</td>
-        </tr>
-        <tr>
-            <th>'.$langUser.'</th>
-            <td>'.$langFirstLetterUser.':<br/>'.$letterlinks.'<br />
-            <select name="u_user_id">'.$user_opts.'</select></td>
-        </tr>
-        </thead>
-        </table>
-        <br/>
-            <input type="submit" name="btnUsage" value="'.$langSubmit.'">
-    </form>';
-    }
+ <form method="post">
+  <table class="FormData" width="99%" align="left">
+  <tbody>
+  <tr>
+    <th width="220" class="left">&nbsp;</th>
+    <td><b>'.$langModify.'</b></td>
+  </tr>
+  <tr>
+    <th class="left">'.$langValueType.':</th>
+    <td><select name="u_stats_value" class="auth_input">'.$statsValueOptions.'</select></td>
+  </tr>
+  <tr>
+    <th class="left">'.$langStartDate.':</th>
+    <td>'."$start_cal".'</td>
+  </tr>
+  <tr>
+    <th class="left">'.$langEndDate.':</th>
+    <td>'."$end_cal".'</td>
+  </tr>
+  <tr>
+    <th class="left" rowspan="2">'.$langUser.':</th>
+    <td>'.$langFirstLetterUser.': '.$letterlinks.'</td>
+  </tr>
+  <tr>
+    <td><select name="u_user_id" class="auth_input">'.$user_opts.'</select></td>
+  </tr>
+  <tr>
+    <th class="left">&nbsp;</th>
+    <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
+  </tr>
+  </thead>
+  </table>
+ </form>';
+}
 
 
-draw($tool_content, 2, '', $local_head, '');
+draw($tool_content, 2, '', $local_head, 'usage');
 
 /*
 if ($made_chart) {

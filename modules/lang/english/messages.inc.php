@@ -505,15 +505,15 @@ $langWrongAuth = "You did not provide a valid pair of username/password";
 $langCopyright = "Copyright Notice";
 $langCopyrightNotice = '
 Open eClass © 2003 - 2008 <a href="http://www.gunet.gr/" target=_blank>Greek Universities Network GUnet</a>.<br>&nbsp;<br>
-The Open eClass plaform is a complete Course Management System. It is the 
-solution offered by the Greek Academic Network GUnet to support Asynchronous 
-eLearning Services via a simple web browser. Its goal is the incorporation 
-and constructive use of the Internet and web technologies in the teaching and 
-learning process. It supports the electronic management, storage and presentation 
-of teaching materials, independently of the spatial and time limiting factors 
-of conventional teaching and creating the necessary conditions for a dynamic 
+The Open eClass plaform is a complete Course Management System. It is the
+solution offered by the Greek Academic Network GUnet to support Asynchronous
+eLearning Services via a simple web browser. Its goal is the incorporation
+and constructive use of the Internet and web technologies in the teaching and
+learning process. It supports the electronic management, storage and presentation
+of teaching materials, independently of the spatial and time limiting factors
+of conventional teaching and creating the necessary conditions for a dynamic
 teaching environment.<br><br>
-Open eClass is an open platform distributed in the hope that it will be useful. 
+Open eClass is an open platform distributed in the hope that it will be useful.
 It was developed and is actively supported by the GUnet Asynchronous eLearning Group, and is distributed freely as Open Source Software under the GNU General Public License (GNU GPL).<br><br>
 The content of Electronic Courses hosted on the Open eClass platform, as well as
 all copyrights of this content, belongs to the authors of the courses and
@@ -2703,7 +2703,7 @@ $langStats="Statistics";
 * upgrade.inc.php
 *************************************************************/
 $langUpgrade = "Database upgrade";
-$langExplUpgrade = "The upgrade script will modify configuration file <em>config.php</em>. 
+$langExplUpgrade = "The upgrade script will modify configuration file <em>config.php</em>.
    Please make sure that web server have access to <em>config.php</em>. For security reasons, current configuration of <em>config.php</em> will remain in file <em>config_backup.php</em>.";
 $langExpl2Upgrade = "Also for security reasons make sure that you have backedup all the databases.";
 $langWarnUpgrade = "WARNING!";
@@ -2871,7 +2871,7 @@ $langConfirmUnregCours = "Are you sure you want to unregister from course with c
  $langFavourite = "Module Preferences";
  $langFavouriteExpl = "One user or all users preference for modules in a certain time period.";
  $langOldStats = "Show Old Statistics";
- $langOldStatsExpl = "Monthly statistics older than eight months.";
+ $langOldStatsExpl = "Monthly statistics <u>older than eight months</u>.";
  $langOldStatsLoginsExpl = "Monthly statistics regarding number of logins older than eight months.";
  $langInterval = "Interval";
  $langDaily = "Daily";

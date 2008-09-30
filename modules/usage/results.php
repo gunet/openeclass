@@ -211,8 +211,7 @@ $chart->render($webDir.$chart_path);
   </tr>
   </tbody>
   </table>';
-    }
- else   {
+ } else {
 
   $tool_content .='
   <table class="FormData" width="99%" align="left">
@@ -224,6 +223,6 @@ $chart->render($webDir.$chart_path);
   </tbody>
   </table>';
  }
- $tool_content .= '<br \>';
+ //$tool_content .= '<br \>';
 
 ?>

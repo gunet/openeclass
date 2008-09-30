@@ -31,7 +31,7 @@
     @authors list: Vangelis Haniotakis haniotak@ucnet.uoc.gr
                 Ophelia Neofytou    ophelia@ucnet.uoc.gr
 ==============================================================================
-    @Description: 
+    @Description:
         Show old statistics for the course, taken from table "action_summary" of the course's database.
 
 ==============================================================================
@@ -47,12 +47,15 @@ include '../../include/baseTheme.php';
 include('../../include/action.php');
 
 $tool_content = '';
-$tool_content .= "<div id=\"operations_container\">
+$tool_content .= "
+  <div id=\"operations_container\">
 	<ul id=\"opslist\">";
-$tool_content .= "<li><a href='usage.php'>".$langUsage."</a></li>";
-$tool_content .= "<li><a href='favourite.php?first='>".$langFavourite."</a></li>";
-$tool_content .= "<li><a href='userlogins.php?first='>".$langUserLogins."</a></li>";
-$tool_content .= "<li><a href='oldStats.php'>".$langOldStats."</a></li></ul></div>";
+$tool_content .= "\n	  <li><a href='usage.php'>".$langUsage."</a></li>";
+$tool_content .= "\n	  <li><a href='favourite.php?first='>".$langFavourite."</a></li>";
+$tool_content .= "\n	  <li><a href='userlogins.php?first='>".$langUserLogins."</a></li>";
+$tool_content .= "\n	  <li><a href='oldStats.php'>".$langOldStats."</a></li>
+    </ul>
+  </div>";
 
 $query = "SELECT MIN(date_time) as min_time FROM actions";
 $result = db_query($query, $currentCourseID);
@@ -134,16 +137,16 @@ $local_head = $jscalendar->get_load_files_code();
             " WHERE $date_where AND $mod_where GROUP BY MONTH(start_date)";
 
             $result = db_query($query, $currentCourseID);
-   
+
             $chart = new VerticalChart(200, 300);
-   
+
             while ($row = mysql_fetch_assoc($result)) {
                 $mont = $langMonths[$row['month']];
                 $chart->addPoint(new Point($mont." - ".$row['year'], $row['visits']));
-                $chart->width += 25;
+                $chart->width += 20;
                  $chart_content=1;
             }
-       
+
             $chart->setTitle("$langOldStats");
 
         break;
@@ -160,7 +163,7 @@ $local_head = $jscalendar->get_load_files_code();
             while ($row = mysql_fetch_assoc($result)) {
                 $mont = $langMonths[$row['month']];
                 $chart->addPoint(new Point($mont." - ".$row['year'], $row['tot_dur']));
-                $chart->width += 25;
+                $chart->width += 20;
                  $chart_content=1;
             }
 
@@ -178,7 +181,7 @@ $local_head = $jscalendar->get_load_files_code();
         $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
     }
     else   {
-      $tool_content .='<br><p>'.$langNoStatistics.'</p>';
+      $tool_content .='<br><p align="center"><b>'.$langNoStatistics.'</b></p>';
     }
     $tool_content .= '<br>';
 
@@ -188,7 +191,7 @@ $local_head = $jscalendar->get_load_files_code();
                  'showOthers'     => true,
                  'ifFormat'       => '%Y-%m-%d',
                  'timeFormat'     => '24'),
-           array('style'  => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+           array('style'  => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
                  'name'   => 'u_date_start',
                  'value'  => $u_date_start));
 
@@ -197,7 +200,7 @@ $local_head = $jscalendar->get_load_files_code();
                  'showOthers'     => true,
                  'ifFormat'       => '%Y-%m-%d',
                  'timeFormat'     => '24'),
-           array('style'  => 'width: 15em; color: #840; background-color: #ff8; border: 1px solid #000; text-align: center',
+           array('style'  => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
                  'name'   => 'u_date_end',
                  'value' => $u_date_end));
 
@@ -214,33 +217,40 @@ $local_head = $jscalendar->get_load_files_code();
     $statsValueOptions =
         '<option value="visits" '.	 (($u_stats_value=='visits')?('selected'):(''))	  .'>'.$langVisits."</option>\n".
         '<option value="duration" '.(($u_stats_value=='duration')?('selected'):('')) .'>'.$langDuration."</option>\n";
-  
+
     $tool_content .= '
-    <form method="post">
-    &nbsp;&nbsp;
-        <table>
-        <thead>
-        <tr>
-            <th>'.$langValueType.'</th>
-            <td><select name="u_stats_value">'.$statsValueOptions.'</select></td>
-        </tr>
-        <tr>
-            <th>'.$langStartDate.'</th>
-            <td>'."$start_cal".'</td>
-        </tr>
-        <tr>
-            <th>'.$langEndDate.'</th>
-            <td>'."$end_cal".'</td>
-        </tr>
-        <tr>
-            <th>'.$langModule.'</th>
-            <td><select name="u_module_id">'.$mod_opts.'</select></td>
-        </tr>
-        </thead>
-        </table>
-        <br/>
-            <input type="submit" name="btnUsage" value="'.$langSubmit.'">
-         </form>';
+<form method="post">
+
+  <table class="FormData" width="99%" align="left">
+  <tbody>
+  <tr>
+    <th width="220" class="left">&nbsp;</th>
+    <td><b>'.$langModify.'</b></td>
+  </tr>
+  <tr>
+    <th width="220" class="left">'.$langValueType.'</th>
+    <td><select name="u_stats_value" class="auth_input">'.$statsValueOptions.'</select></td>
+  </tr>
+  <tr>
+    <th class="left">'.$langStartDate.'</th>
+    <td>'."$start_cal".'</td>
+  </tr>
+  <tr>
+     <th class="left">'.$langEndDate.'</th>
+     <td>'."$end_cal".'</td>
+  </tr>
+  <tr>
+    <th class="left">'.$langModule.'</th>
+    <td><select name="u_module_id" class="auth_input">'.$mod_opts.'</select></td>
+  </tr>
+  <tr>
+    <th>&nbsp;</th>
+    <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
+  </tr>
+  </thead>
+  </table>
+
+</form>';
      }
 
 draw($tool_content, 2, '', $local_head, '');
@@ -248,7 +258,7 @@ draw($tool_content, 2, '', $local_head, '');
 if ($made_chart) {
 		while (ob_get_level() > 0) {
     	 ob_end_flush();
-    }    
+    }
     ob_flush();
     flush();
     sleep(5);
