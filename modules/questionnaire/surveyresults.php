@@ -120,7 +120,7 @@ if ($_GET['type'] == 2) { //TF
 
 	require_once '../../include/libchart/libchart.php';
 	//$chart = new PieChart(600, 300);
-	//$chart->setTitle("ÁðïôåëÝóìáôá Äçìïóêüðéóçò");
+	//$chart->setTitle("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 	
 	$answers = db_query("
 		select * from survey_answer 

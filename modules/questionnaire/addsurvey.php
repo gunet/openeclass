@@ -147,7 +147,7 @@ function addEvent(SelectedQuestion) {
 	var CurrentQuestion = new Array(6);
 
 	var question1= new Array(6);
-	question1[0]="Σε αυτ�? την ενότητα, η προσπάθια μου επικεντρώθηκε σε θέματα που με ενδιέφεραν.";
+	question1[0]="Σε αυτή την ενότητα, η προσπάθια μου επικεντρώθηκε σε θέματα που με ενδιέφεραν.";
 	question1[1]="Σχεδόν ποτέ.";
 	question1[2]="Σπάνια.";
 	question1[3]="Μερικές φορές.";
@@ -155,7 +155,7 @@ function addEvent(SelectedQuestion) {
 	question1[5]="Σχεδόν πάντα.";
 	
 	var question2= new Array(6);
-	question2[0]="Σε αυτ�? την ενότητα, αυτά που μαθαίνω έχουν να κάνουν με το επάγγελμά μου.";
+	question2[0]="Σε αυτή την ενότητα, αυτά που μαθαίνω έχουν να κάνουν με το επάγγελμά μου.";
 	question2[1]="Σχεδόν ποτέ.";                                                                   
 	question2[2]="Σπάνια.";                                                                        
 	question2[3]="Μερικές φορές.";                                                                 
@@ -163,7 +163,7 @@ function addEvent(SelectedQuestion) {
 	question2[5]="Σχεδόν πάντα.";    
 	
 	var question3= new Array(6);
-	question3[0]="Σε αυτ�? την ενότητα, ασκώ κριτικ�? σκέψη.";
+	question3[0]="Σε αυτή την ενότητα, ασκώ κριτική σκέψη.";
 	question3[1]="Σχεδόν ποτέ.";                                                                   
 	question3[2]="Σπάνια.";                                                                        
 	question3[3]="Μερικές φορές.";                                                                 
@@ -171,7 +171,7 @@ function addEvent(SelectedQuestion) {
 	question3[5]="Σχεδόν πάντα.";     
 	
 	var question4= new Array(6);
-	question4[0]="Σε αυτ�? την ενότητα, συνεργάζομαι με τους συμφοιτητές μου.";
+	question4[0]="Σε αυτή την ενότητα, συνεργάζομαι με τους συμφοιτητές μου.";
 	question4[1]="Σχεδόν ποτέ.";                                                                   
 	question4[2]="Σπάνια.";                                                                        
 	question4[3]="Μερικές φορές.";                                                                 
@@ -179,7 +179,7 @@ function addEvent(SelectedQuestion) {
 	question4[5]="Σχεδόν πάντα.";    
 	
 	var question5= new Array(6);
-	question5[0]="Σε αυτ�? την ενότητα, η διδασκαλία κρίνεται ικανοποιητικ�?.";
+	question5[0]="Σε αυτή την ενότητα, η διδασκαλία κρίνεται ικανοποιητική.";
 	question5[1]="Σχεδόν ποτέ.";                                                                   
 	question5[2]="Σπάνια.";                                                                        
 	question5[3]="Μερικές φορές.";                                                                 
@@ -187,7 +187,7 @@ function addEvent(SelectedQuestion) {
 	question5[5]="Σχεδόν πάντα.";                                                         
 	
 	var question6= new Array(6);
-	question6[0]="Σε αυτ�? την ενότητα, υπάρχει σωστ�? επικοινωνία με τον διδάσκοντα.";
+	question6[0]="Σε αυτή την ενότητα, υπάρχει σωστή επικοινωνία με τον διδάσκοντα.";
 	question6[1]="Σχεδόν ποτέ.";                                                                   
 	question6[2]="Σπάνια.";                                                                        
 	question6[3]="Μερικές φορές.";                                                                 
@@ -195,7 +195,7 @@ function addEvent(SelectedQuestion) {
 	question6[5]="Σχεδόν πάντα."; 
 	
 	var question7= new Array(6);
-	question7[0]="Προσπαθώ να βρίσκω λάθη στο σκεπτικό του συνομιλητ�? μου.";
+	question7[0]="Προσπαθώ να βρίσκω λάθη στο σκεπτικό του συνομιλητή μου.";
 	question7[1]="ΟΧΙ!";                                                                   
 	question7[2]="ίσως όχι.";                                                                        
 	question7[3]="Ούτε συμφωνώ, ούτε διαφωνώ.";                                                                 
@@ -204,7 +204,7 @@ function addEvent(SelectedQuestion) {
 	question7[5]="";  
 	
 	var question8= new Array(6);
-	question8[0]="Όταν συζητώ μπαίνω στην θέση του συνομιλητ�? μου.";
+	question8[0]="Όταν συζητώ μπαίνω στην θέση του συνομιλητή μου.";
 	question8[1]="ΟΧΙ!";                                                                   
 	question8[2]="ίσως όχι.";                                                                        
 	question8[3]="Ούτε συμφωνώ, ούτε διαφωνώ.";                                                                 
@@ -222,7 +222,7 @@ function addEvent(SelectedQuestion) {
 	question9[5]=""; 
 	
 	var question10= new Array(6);
-	question10[0]="Μου αρέσει να παίρνω τον ρόλο του συν�?γορου του διαβόλου.";
+	question10[0]="Μου αρέσει να παίρνω τον ρόλο του συνήγορου του διαβόλου.";
 	question10[1]="ΟΧΙ!";                                                                   
 	question10[2]="ίσως όχι.";                                                                        
 	question10[3]="Ούτε συμφωνώ, ούτε διαφωνώ.";                                                                 
