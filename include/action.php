@@ -62,14 +62,16 @@ class action {
  
         $result = db_query($sql_0, $currentCourseID);
         while ($row = mysql_fetch_assoc($result)) {
-            $min_date = $row['min_date'];
+            $start_date = $row['min_date'];
         }
+	if (empty($start_date)) {
+		$start_date = '2003-01-01 00:00:00';
+	}
         mysql_free_result($result);
 
-        $end_stmp = strtotime($min_date)+ 31*24*60*60;  //min time + 1 month
-        $start_date = $min_date;
+	$stmp = strtotime($start_date);
+        $end_stmp = $stmp + 31*24*60*60;  //min time + 1 month
         $end_date = date('Y-m-01 00:00:00', $end_stmp);
-
         while ($end_date < $current_month){
             $result = db_query($sql_1, $currentCourseID);
             while ($row = mysql_fetch_assoc($result)) {
@@ -87,7 +89,6 @@ class action {
                     $total_dur = $row2['total_dur'];
                 }
                 mysql_free_result($result_2);
-                print "$total_dur";
                 $sql_3 = "INSERT INTO actions_summary SET ".
                     " module_id = '$module_id', ".
                     " visits = '$visits', ".
@@ -109,8 +110,10 @@ class action {
             
             #next month
             $start_date = $end_date;
-            $end_stmp =strtotime($end_date)+ 31*24*60*60;  //end time + 1 month
+	    $stmp = $end_stmp;	
+            $end_stmp += 31*24*60*60;  //end time + 1 month
             $end_date = date('Y-m-01 00:00:00', $end_stmp);
+	    $start_date = date('Y-m-01 00:00:00', $stmp);
         }
     }
 

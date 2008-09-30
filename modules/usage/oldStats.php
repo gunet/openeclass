@@ -39,8 +39,8 @@
 */
 
 $require_current_course = TRUE;
-$require_help 			= true;
-$helpTopic 				= 'Usage';
+$require_help = true;
+$helpTopic = 'Usage';
 $require_login = true;
 $require_prof = true;
 
@@ -64,7 +64,7 @@ while ($row = mysql_fetch_assoc($result)) {
         $min_time = strtotime($row['min_time']);
     }
 
-@mysql_free_result($result);
+mysql_free_result($result);
  if ($min_time + 243*24*3600 < time()) { #actions more than eight months old
     $action = new action();
     $action->summarize();     #move data to action_summary
@@ -75,7 +75,7 @@ $result = db_query($query, $currentCourseID);
 while ($row = mysql_fetch_assoc($result)) {
     $min_time = strtotime($row['min_time']);
 }
-@mysql_free_result($result);
+mysql_free_result($result);
 
 $min_t = date("d-m-Y", $min_time);
 $tool_content .= "<p> $langOldStatsExpl</p>";

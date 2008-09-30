@@ -2762,6 +2762,9 @@ $langMoveIntroText = "Moving of introduction text to table";
 $langEncodeDocuments = "Encoding of 'Documents'";
 $langEncodeGroupDocuments = "Encoding of 'Group Documents'";
 $langWarnVideoFile = "Warning: Video file";
+$langChangeDBCharset = "Changing enconding of data base";
+$langToUTF = "to UTF-8";
+$langNotEncrypted = "WARNING! Upgrade process couldn't encrypt passwords so the platform is not functioning. Comment the line «\$encryptedPasswd = true;» from the config.inc.php file";
 
 /*************************************************************
 * toolmanagement.inc.php

@@ -424,10 +424,7 @@ if (!isset($submit2)) {
                                 }
                         }
                 } else {
-                        die("ΠΡΟΣΟΧΗ! Η διαδικασία αναβάθμισης δεν μπόρεσε να " .
-                                        "κρυπτογραφήσει τα password και η πλατφόρμα δεν μπορεί " .
-                                        "να λειτουργήσει. Αφαιρέστε τη γραμμή " .
-                                        "«\$encryptedPasswd = true;»");
+                        die("$langNotEncrypted");
                 }
         }
 
@@ -470,7 +467,8 @@ if (!isset($submit2)) {
                 upgrade_course($code[0], $lang);
                 echo "</p>\n";
         }
-
+	echo "<hr>";
+	echo "<p>$langChangeDBCharset <b>$mysqlMainDb</b> $langToUTF</p><br>";
         convert_db_utf8($mysqlMainDb);
 
         echo "<hr><p><em class='success_small' style='font-weight:bold;'>$langUpgradeSuccess</em></p>

@@ -62,72 +62,57 @@ function update_assignment_submit()
 // Adds field $field to table $table of current database, if it doesn't already exist
 function add_field($table, $field, $type)
 {
-	global $langToTable, $langAddField, $langThereIs, $OK, $BAD;
+	global $langToTable, $langAddField, $BAD;
 
 	$retString = "";
-	$retString .= "$langAddField <b>$field</b> $langToTable <b>$table</b>: ";
 	$fields = db_query("SHOW COLUMNS FROM $table LIKE '$field'");
 	if (mysql_num_rows($fields) == 0) {
-		if (db_query("ALTER TABLE `$table` ADD `$field` $type")) {
-			$retString .= " $OK<br>";
-		} else {
+		if (!db_query("ALTER TABLE `$table` ADD `$field` $type")) {
+			$retString .= "$langAddField <b>$field</b> $langToTable <b>$table</b>: ";
 			$retString .= " $BAD<br>";
 		}
-	} else {
-		$retString .= "$langThereIs $OK<br>";
-	}
-
+	} 
 	return $retString;
 }
 
 function add_field_after_field($table, $field, $after_field, $type)
 {
-	global $langToTable, $langAddField, $langAfterField, $langThereIs, $OK, $BAD;
+	global $langToTable, $langAddField, $langAfterField, $BAD;
 
 	$retString = "";
-	$retString .= "$langAddField <b>$field</b> $langAfterField <b>$after_field</b> $langToTable <b>$table</b>: ";
+	
 	$fields = db_query("SHOW COLUMNS FROM $table LIKE '$field'");
 	if (mysql_num_rows($fields) == 0) {
-		if (db_query("ALTER TABLE `$table` ADD COLUMN `$field` $type AFTER `$after_field`")) {
-			$retString .= " $OK<br>";
-		} else {
+		if (!db_query("ALTER TABLE `$table` ADD COLUMN `$field` $type AFTER `$after_field`")) {
+			$retString .= "$langAddField <b>$field</b> $langAfterField <b>$after_field</b> $langToTable <b>$table</b>: ";
 			$retString .= " $BAD<br>";
 		}
-	} else {
-		$retString .= "$langThereIs $OK<br>";
-	}
-
+	} 
 	return $retString;
 }
+
 function rename_field($table, $field, $new_field, $type)
 {
-	global $langThereIs, $langToA, $langRenameField, $langToTable, $OK, $BAD;
+	global $langToA, $langRenameField, $langToTable, $BAD;
 
 	$retString = "";
-	$retString .= "$langRenameField <b>$field</b> $langToA <b>$new_field</b> $langToTable <b>$table</b>: ";
+	
 	$fields = db_query("SHOW COLUMNS FROM $table LIKE '$new_field'");
 	if (mysql_num_rows($fields) == 0) {
-		if (db_query("ALTER TABLE `$table` CHANGE  `$field` `$new_field` $type")) {
-			$retString .= " $OK<br>";
-		} else {
+		if (!db_query("ALTER TABLE `$table` CHANGE  `$field` `$new_field` $type")) {
+			$retString .= "$langRenameField <b>$field</b> $langToA <b>$new_field</b> $langToTable <b>$table</b>: ";
 			$retString .= " $BAD<br>";
-		}
-	} else {
-		$retString .= "$langThereIs $OK<br>";
-	}
+		} 
+	} 
 	return $retString;
-
-
 }
 
 function delete_field($table, $field) {
-	global $langOfTable, $langDeleteField, $OK, $BAD;
+	global $langOfTable, $langDeleteField, $BAD;
 
 	$retString = "";
-	$retString .= "$langDeleteField <b>$field</b> $langOfTable <b>$table</b>";
-	if (db_query("ALTER TABLE `$table` DROP `$field`")) {
-		$retString .= " $OK<br>";
-	} else {
+	if (!db_query("ALTER TABLE `$table` DROP `$field`")) {
+		$retString .= "$langDeleteField <b>$field</b> $langOfTable <b>$table</b>";	
 		$retString .= " $BAD<br>";
 	}
 	return $retString;
@@ -135,12 +120,11 @@ function delete_field($table, $field) {
 
 function delete_table($table)
 {
-	global $langDeleteTable, $OK, $BAD;
+	global $langDeleteTable, $BAD;
 	$retString = "";
-	$retString .= "$langDeleteTable <b>$table</b>: ";
-	if (db_query("DROP TABLE $table")) {
-		$retString .= " $OK<br>";
-	} else {
+
+	if (!db_query("DROP TABLE $table")) {
+		$retString .= "$langDeleteTable <b>$table</b>: ";
 		$retString .= " $BAD<br>";
 	}
 	return $retString;
@@ -148,10 +132,10 @@ function delete_table($table)
 
 function merge_tables($table_destination,$table_source,$fields_destination,$fields_source)
 {
-	global $langMergeTables, $OK, $BAD;
+	global $langMergeTables, $BAD;
 
 	$retString = "";
-	$retString .= " $langMergeTables <b>$table_destination</b>,<b>$table_source</b>";
+	
 	$query = "INSERT INTO $table_destination (";
 	foreach($fields_destination as $val)
 	{
@@ -163,14 +147,12 @@ function merge_tables($table_destination,$table_source,$fields_destination,$fiel
 		$query.=$val.",";
 	}
 	$query=substr($query,0,-1)." FROM ".$table_source;
-	if (db_query($query)) {
-		$retString .= " $OK<br>";
-	} else {
+	if (!db_query($query)) {
+		$retString .= " $langMergeTables <b>$table_destination</b>,<b>$table_source</b>";
 		$retString .= " $BAD<br>";
 	}
 
 	return $retString;
-
 }
 
 // checks if a mysql table exists
