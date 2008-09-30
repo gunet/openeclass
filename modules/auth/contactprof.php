@@ -28,7 +28,7 @@ $require_login = TRUE;
 $guest_allowed = true;
 include '../../include/baseTheme.php';
 include('../../include/sendMail.inc.php');
-$nameTools = "Αποστολή ενημερωτικού email στον διδάσκοντα";
+$nameTools = "οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ email οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½";
 $tool_content = "";
 
 if (isset($_POST["submit"])) {
@@ -41,13 +41,13 @@ if (isset($_POST["submit"])) {
 		$sql1 = db_query("SELECT email FROM user WHERE user_id='".$m["user_id"]."'");
 		$m1 = mysql_fetch_array($sql1);
 		$to = $m1["email"];
-		$emailsubject = "Εγγραφή σε κλειστό μάθημα";
-		$emailbody = "Ο φοιτητής με τα παρακάτω στοιχεία επιθυμεί την εγγραφή του στο μάθημά σας:
+		$emailsubject = "οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½";
+		$emailbody = "οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½:
 
 $lastname $firstname
 Email: $email
 
-Σχόλια: $body";
+οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½: $body";
 $errorExists = false;
 		if (!send_mail($siteName, $emailAdministrator, '', $to,
 		$emailsubject, $emailbody, $charset)) {
@@ -92,19 +92,19 @@ else
 	$tool_content .= "<p><a href=\"courses.php?fc=".$_GET['fc']."\">$langReturn</a></p>";
 	$tool_content .= "<form action=\"".$_SERVER['PHP_SELF']."?fc=".$_GET['fc']."\" method=\"post\">
 <table width=\"99%\"><thead>";
-	$tool_content .= "<tr><th>Όνομα:</th><td><input type=\"text\" name=\"firstname\" value=\"".$row["nom"]."\" readonly></td></tr>";
-	$tool_content .= "<tr><th>Επίθετο:</th><td><input type=\"text\" name=\"lastname\" value=\"".$row["prenom"]."\" readonly></td></tr>";
+	$tool_content .= "<tr><th>οΏ½οΏ½οΏ½οΏ½οΏ½:</th><td><input type=\"text\" name=\"firstname\" value=\"".$row["nom"]."\" readonly></td></tr>";
+	$tool_content .= "<tr><th>οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½:</th><td><input type=\"text\" name=\"lastname\" value=\"".$row["prenom"]."\" readonly></td></tr>";
 	$tool_content .= "<tr><th>Email:</th><td><input type=\"text\" name=\"email\" value=\"".$row["email"]."\" readonly></td></tr>";
-	$tool_content .= "<th>Σχόλια:</th><td><textarea rows=\"6\" cols=\"40\" name=\"body\"></textarea></td></tr>";
-	//	$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\">&nbsp;</td><td><input type=\"submit\" name=\"submit\" value=\"Αποστολή\"><input type=\"hidden\" name=\"cc\" value=\"".$_GET['cc']."\"></td></tr>";
+	$tool_content .= "<th>οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½:</th><td><textarea rows=\"6\" cols=\"40\" name=\"body\"></textarea></td></tr>";
+	//	$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\">&nbsp;</td><td><input type=\"submit\" name=\"submit\" value=\"οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½\"><input type=\"hidden\" name=\"cc\" value=\"".$_GET['cc']."\"></td></tr>";
 	$tool_content .= "</thead></table>
 	<br/>
-	<input type=\"submit\" name=\"submit\" value=\"Αποστολή\"><input type=\"hidden\" name=\"cc\" value=\"".$_GET['cc']."\">
+	<input type=\"submit\" name=\"submit\" value=\"οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½\"><input type=\"hidden\" name=\"cc\" value=\"".$_GET['cc']."\">
 	</form>";
 
 }
 
-//$tool_content .= "<p><a href=\"courses.php?fc=".$_GET['fc']."\">Επιστροφή</a></p>";
+//$tool_content .= "<p><a href=\"courses.php?fc=".$_GET['fc']."\">οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½</a></p>";
 
 draw($tool_content,1,'admin');
 
