@@ -1007,18 +1007,18 @@ function upgrade_course($code, $lang)
 
         $tool_content .= "<br><br></td></tr>";
 
-        // add full text indexes for search operation (ginetai xrhsh @$tmp = mysql_query(...) giati ean
+        // add full text indexes for search operation (ginetai xrhsh @mysql_query(...) giati ean
         // yparxei hdh, to FULL INDEX den mporei na ksanadhmiourgithei. epipleon, den yparxei tropos
         // elegxou gia to an yparxei index, opote o monadikos tropos diekperaiwshs ths ergasias einai
         // dokimh-sfalma.
-        @$tmp = db_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");
-        @$tmp = db_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)");
-        @$tmp = db_query("ALTER TABLE `document` ADD FULLTEXT `document` (`filename` ,`comment` ,`title`,`creator`,`subject`,`description`,`author`,`language`)");
-        @$tmp = db_query("ALTER TABLE `exercices` ADD FULLTEXT `exercices` (`titre`,`description`)");
-        @$tmp = db_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
-	@$tmp = db_query("ALTER TABLE `forums` ADD FULLTEXT `forums` (`forum_name`,`forum_desc`)");
-        @$tmp = db_query("ALTER TABLE `liens` ADD FULLTEXT `liens` (`url` ,`titre` ,`description`)");
-        @$tmp = db_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`titre` ,`description`)");
+        @mysql_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");
+        @mysql_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)");
+        @mysql_query("ALTER TABLE `document` ADD FULLTEXT `document` (`filename` ,`comment` ,`title`,`creator`,`subject`,`description`,`author`,`language`)");
+        @mysql_query("ALTER TABLE `exercices` ADD FULLTEXT `exercices` (`titre`,`description`)");
+        @mysql_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
+	@mysql_query("ALTER TABLE `forums` ADD FULLTEXT `forums` (`forum_name`,`forum_desc`)");
+        @mysql_query("ALTER TABLE `liens` ADD FULLTEXT `liens` (`url` ,`titre` ,`description`)");
+        @mysql_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`titre` ,`description`)");
 
         // bogart: Update code for phpbb functionality START
         // Remove tables banlist, disallow, headermetafooter, priv_msgs, ranks, sessions, themes, whosonline, words
