@@ -29,7 +29,6 @@ $require_prof = true;
 include '../../include/baseTheme.php';
 
 $nameTools = $langDelCourse;
-
 $tool_content = "";
 
 if($is_adminOfCourse) {
@@ -49,6 +48,7 @@ if($is_adminOfCourse) {
 		$tool_content .= "<p class=\"success_small\">$langTheCourse <b>($intitule $currentCourseID)</b>  $langHasDel</p><br />
 		<p align=\"right\"><a href=\"../../index.php\">".$langBackHome." ".$siteName."</a></p>";
 
+                unset($currentCourseID);
 		draw($tool_content, 1);
 		exit();
 	} else {

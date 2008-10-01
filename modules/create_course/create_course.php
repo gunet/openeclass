@@ -64,19 +64,44 @@ hContent;
 $titulaire_probable="$prenom $nom";
 
 $tool_content .= "<form method='post' name='createform' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'intitule', 'titulaires');\">";
-//$tool_content .= "<form method='post' name='createform' action='$_SERVER[PHP_SELF]'>";
-@$tool_content .= "<input type='hidden' name='intitule' value='".htmlspecialchars($_POST['intitule'])."' />
-      <input type='hidden' name='faculte' value='".htmlspecialchars($_POST['faculte'])."' />
-      <input type='hidden' name='titulaires' value='".htmlspecialchars($_POST['titulaires'])."' />
-      <input type='hidden' name='type' value='".htmlspecialchars($_POST['type'])."' />
-      <input type='hidden' name='languageCourse' value='".htmlspecialchars($_POST['languageCourse'])."' />
-      <input type='hidden' name='description' value='".htmlspecialchars($_POST['description'])."' />
-      <input type='hidden' name='course_addon' value='".htmlspecialchars($_POST['course_addon'])."' />
-      <input type='hidden' name='course_keywords' value='".htmlspecialchars($_POST['course_keywords'])."' />";
 
-@$tool_content .= "<input type='hidden' name='visit' value='".htmlspecialchars($_POST['visit'])."' />";
 
-if (isset($back1) or !isset($visit)) {
+function escape_if_exists($name) {
+        if (isset($_POST[$name])) {
+                if (get_magic_quotes_gpc()) {
+                        $tmp = stripslashes($_POST[$name]);
+                } else {
+                        $tmp = $_POST[$name];
+                }
+                $GLOBALS[$name] = $tmp;
+                $GLOBALS[$name . '_html'] = '<input type="hidden" name="' . $name .
+                       '" value="' . htmlspecialchars($tmp) . '" />';
+        } else {
+                $GLOBALS[$name . '_html'] = $GLOBALS[$name] = '';
+        }
+}
+
+escape_if_exists('intitule');
+escape_if_exists('faculte');
+escape_if_exists('titulaires');
+escape_if_exists('type');
+escape_if_exists('languageCourse');
+escape_if_exists('description');
+escape_if_exists('course_addon');
+escape_if_exists('course_keywords');
+escape_if_exists('visit');
+
+$tool_content .= $intitule_html .
+                 $faculte_html .
+                 $titulaires_html .
+                 $type_html .
+                 $languageCourse_html .
+                 $description_html .
+                 $course_addon_html .
+                 $course_keywords_html . 
+                 $visit_html;
+
+if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 
    // display form
    $tool_content .= "
@@ -140,7 +165,7 @@ if (isset($back1) or !isset($visit)) {
 // step 2 of creation
 // --------------------------------
 
- elseif (isset($create2) or isset($back2))  {
+ elseif (isset($_POST['create2']) or isset($_POST['back2']))  {
 	$nameTools = $langCreateCourse . " (" . $langCreateCourseStep." 2 " .$langCreateCourseStep2 . " 3 )";
 	$tool_content .= "
     <table width=\"99%\" align='left' class='FormData'>
@@ -168,11 +193,11 @@ if (isset($back1) or !isset($visit)) {
     <tr>
        <th>&nbsp;</th>
        <td><input type='submit' name='back1' value='< $langPreviousStep ' />&nbsp;<input type='submit' name='create3' value='$langNextStep >' /></td>
-       <td><p align='right'><small>$langFieldsOptionalNote</p></td>
+       <td><p align='right'><small>$langFieldsOptionalNote</small></p></td>
     </tbody>
     </table><br />";
 
-}  elseif (isset($create3) or isset($back2)) {
+}  elseif (isset($_POST['create3']) or isset($_POST['back2'])) {
 	$nameTools = $langCreateCourse . " (" . $langCreateCourseStep." 3 " .$langCreateCourseStep2 . " 3 )" ;
     $tool_content .= "
     <table width=\"99%\" align='left' class='FormData'>
@@ -217,70 +242,70 @@ if (isset($back1) or !isset($visit)) {
       <td colspan='2'>
       <table>
       <tr>
-        <td width='30' ><img src=\"../../template/classic/img/calendar_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
+        <td width='30' ><img src=\"../../template/classic/img/calendar_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
         <td width='200'>$langAgenda</td>
         <td width='30' ><input name=\"subsystems[]\" type=\"checkbox\" value=\"1\" checked=\"checked\" /></td>
         <th width='2' >&nbsp;</th>
-        <td width='30' >&nbsp;<img src=\"../../template/classic/img/dropbox_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
+        <td width='30' >&nbsp;<img src=\"../../template/classic/img/dropbox_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
         <td width='200'>$langDropBox</td>
         <td width='30' ><input type=\"checkbox\" name=\"subsystems[]\" value=\"15\" /></td>
       </tr>
       <tr>
-        <td><img src=\"../../template/classic/img/links_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
+        <td><img src=\"../../template/classic/img/links_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
         <td>$langLinks</td>
         <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"2\" checked=\"checked\" /></td>
         <th>&nbsp;</th>
-        <td>&nbsp;<img src=\"../../template/classic/img/groups_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
+        <td>&nbsp;<img src=\"../../template/classic/img/groups_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
         <td>$langGroups</td>
         <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"16\" /></td>
       </tr>
       <tr>
-        <td><img src=\"../../template/classic/img/docs_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
+        <td><img src=\"../../template/classic/img/docs_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
         <td>$langDoc</td>
         <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"3\" checked=\"checked\" /></td>
         <th>&nbsp;</th>
-        <td>&nbsp;<img src=\"../../template/classic/img/chat_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
+        <td>&nbsp;<img src=\"../../template/classic/img/chat_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
         <td>$langConference</td>
         <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"19\" /></td>
       </tr>
       <tr>
-        <td><img src=\"../../template/classic/img/video_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
+        <td><img src=\"../../template/classic/img/video_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
         <td>$langVideo</td>
         <td><input name=\"subsystems[]\" type=\"checkbox\" value=\"4\"  /></td>
         <th>&nbsp;</th>
-        <td>&nbsp;<img src=\"../../template/classic/img/description_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
+        <td>&nbsp;<img src=\"../../template/classic/img/description_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
         <td>$langCourseDescription</td>
         <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"20\" checked=\"checked\" /></td>
       </tr>
       <tr>
-      <td><img src=\"../../template/classic/img/assignments_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
+      <td><img src=\"../../template/classic/img/assignments_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
         <td>$langWorks</td>
         <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"5\" /></td>
         <th>&nbsp;</th>
-        <td>&nbsp;<img src=\"../../template/classic/img/questionnaire_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
+        <td>&nbsp;<img src=\"../../template/classic/img/questionnaire_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
         <td>$langQuestionnaire</td>
         <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"21\" /></td>
       </tr>
       <tr>
-        <td><img src=\"../../template/classic/img/announcements_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
+        <td><img src=\"../../template/classic/img/announcements_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
         <td>$langAnnouncements</td>
         <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"7\" checked=\"checked\"/></td>
         <th>&nbsp;</th>
-        <td>&nbsp;<img src=\"../../template/classic/img/lp_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
+        <td>&nbsp;<img src=\"../../template/classic/img/lp_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
         <td>$langLearnPath</td>
         <td><input type=\"checkbox\" name=\"subsystems[]\"  value=\"23\" /></td>
       </tr>
       <tr>
-        <td><img src=\"../../template/classic/img/forum_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
+        <td><img src=\"../../template/classic/img/forum_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
         <td>$langForums</td>
         <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"9\" /></td>
         <th>&nbsp;</th>
-        <td>&nbsp;<img src=\"../../template/classic/img/wiki_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
+        <td>&nbsp;<img src=\"../../template/classic/img/wiki_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
         <td>$langWiki</td>
         <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"26\" /></td>
       </tr>
       <tr>
-        <td><img src=\"../../template/classic/img/exercise_on.gif\" alt=\"\" border=\"0\" height=\"16\" width=\"16\"></td>
+        <td><img src=\"../../template/classic/img/exercise_on.gif\" alt=\"\" height=\"16\" width=\"16\"></td>
         <td>$langExercices</td>
         <td><input type=\"checkbox\" name=\"subsystems[]\" value=\"10\" /></td>
         <th>&nbsp;</th>
@@ -301,7 +326,7 @@ if (isset($back1) or !isset($visit)) {
 } // end of create3
 
 // create the course and the course database
-if (isset($create_course)) {
+if (isset($_POST['create_course'])) {
 
 	$nameTools = $langCourseCreate;
         // H metavlhth faculte periexei to fac_id kai to
@@ -349,16 +374,16 @@ if (isset($create_course)) {
 
                 mysql_query("INSERT INTO cours SET
                                 code = '$code',
-                                languageCourse = '$language',
-                                intitule = '$intitule',
-                                description = '$description',
-                                course_addon = '$course_addon',
-                                course_keywords = '$course_keywords',
+                                languageCourse =" . quote($language) . ",
+                                intitule = " . quote($intitule) . ",
+                                description = " . quote($description) . ",
+                                course_addon = " . quote($course_addon) . ",
+                                course_keywords = " . quote($course_keywords) . ",
                                 faculte = '$facname',
-                                visible = '$formvisible',
-                                titulaires = '$titulaires',
-                                fake_code = '$code',
-                                type = '$type',
+                                visible = " . quote($formvisible) . ",
+                                titulaires = " . quote($titulaires) . ",
+                                fake_code = " . quote($code) . ",
+                                type = " . quote($type) . ",
                                 faculteid = '$facid',
 		first_create = NOW()");
                 mysql_query("INSERT INTO cours_user SET
