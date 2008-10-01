@@ -998,7 +998,6 @@ function upgrade_course($code, $lang)
                 while ($text = mysql_fetch_array($sql)) {
                         $description = quote($text[0]);
                         if (db_query("UPDATE cours SET description=$description WHERE code='$code'", $mysqlMainDb)) {
-                                echo "$langMoveIntroText <b>cours</b>: $OK<br>";
                                 db_query("DROP TABLE IF EXISTS introduction", $code);
                         } else {
                                 echo "$langMoveIntroText <b>cours</b>: $BAD<br>";

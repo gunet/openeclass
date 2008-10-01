@@ -10,8 +10,6 @@
       *			Alexandros Diamantidis <adia@noc.uoa.gr>
       *			Tilemachos Raptis <traptis@noc.uoa.gr>
       *
-      *  For a full list of contributors, see "credits.txt".
-      *
       *  Open eClass is an open platform distributed in the hope that it will
       *  be useful (without any warranty), under the terms of the GNU (General
       *  Public License) as published by the Free Software Foundation.
@@ -36,7 +34,6 @@
 	 Evelthon Prodromou <eprodromou@upnet.gr> (University of Patras)
 	 Thanos Kyritsis <atkyritsis@upnet.gr> (University of Patras)
 
-
       Also Credits to:
 	 Artemios Vogiatzis <bogart@upatras.gr (University of Patras)
 	 George Doukas <geodoukas@upatras.gr> (University of Patras)
@@ -54,14 +51,14 @@
          Konstantinidis K. (Aristotele University of Thessaloniki)
 	 Emmanuela Patiniotaki <aporoemm@hotmail.com> (University of Athens)
 
-	Xinha:
+      Xinha:
 	 Xinha was originally based on work by Mihai Bazon who produced htmlArea for Interactive Tools.
 	 Currently leading the Xinha project is James Sleeman.
 	 Raimund Meyer (ray) has contributed somewhat to the advancement of Xinha recently.
 	     Copyright (c) 2003-2004 dynarch.com.
     	     Copyright (c) 2002-2003 interactivetools.com, inc.
 
-	  Template Engine: Copyright 1999-2000 NetUSE GmbH Kristian Koehntopp
+      Template Engine: Copyright 1999-2000 NetUSE GmbH Kristian Koehntopp
 
       PclZip: Vincent Blavet <vincent@phpconcept.net>
 
@@ -84,12 +81,14 @@
       Dropbox module: Copyright 2004 Jan Bols <jan@ivpv.UGent.be>
 
       Wiki module: Frederic Minne <zefredz@gmail.com>
-	class wiki2xhtml based on DotClear version 3.1d licensed under GPL
-	Copyright (c) 2004 Olivier Meunier and contributors.
-	 DotClear contributors: Stephanie Booth, Mathieu Pillard, Christophe Bonijol, Jean-Charles Bagneris, Nicolas Chachereau, Jereme Lipowicz	
+         class wiki2xhtml based on DotClear version 3.1d licensed under GPL
+	 Copyright (c) 2004 Olivier Meunier and contributors.
+	 DotClear contributors: Stephanie Booth, Mathieu Pillard,
+                                Christophe Bonijol, Jean-Charles Bagneris,
+                                Nicolas Chachereau, Jereme Lipowicz	
 
       Learnpath module: Piraux Sebastien <pir@cerdecam.be>
-	        Lederer Guillaume <led@cerdecam.be>
+                        Lederer Guillaume <led@cerdecam.be>
 	
       PHP MathPublisher : Copyright (c) 2005 by Pascal Brachet <pbrachet@xm1math.net> 
 
@@ -98,3 +97,8 @@
       Function parse_tex(): Patrick Cool <patrick.cool@UGent.be>
 
       Function user_get_data(): Mathieu Laurent <laurent@cerdecam.be>
+
+      SortTable (sorttable.js): Stuart Langridge (licenced as X11)
+         http://www.kryogenix.org/code/browser/sorttable/
+
+

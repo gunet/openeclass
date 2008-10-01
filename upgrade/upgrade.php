@@ -102,7 +102,7 @@ if (!isset($submit2)) {
         $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>" .
                 "<div class='kk'>" .
                 "<p>$langConfigFound" .
-                "<br>$langConfigMod</p>" .
+                "<br />$langConfigMod</p>" .
                 "<fieldset><legend>$langUpgContact</legend>" .
                 "<table><tr><td style='border: 1px solid #FFFFFF;'>$langInstituteShortName:</td>" .
                 "<td style='border: 1px solid #FFFFFF;'>&nbsp;<input class=auth_input_admin type='text' size='40' name='Institution' value='".@$Institution."'></td></tr>" .
@@ -131,8 +131,11 @@ if (!isset($submit2)) {
 <link href="../template/classic/theme.css" rel="stylesheet" type="text/css" />
 <link href="../template/classic/tool_content.css" rel="stylesheet" type="text/css" />
 </head>
-<body>
+<body class='upgrade-main'>
 <?php
+
+        echo "<h1>$langUpgradeStart</h1>",
+             "<p>$langUpgradeConfig</p>";
 
         // backup of config file
         if (!copy("config.php","config_backup.php"))
@@ -467,13 +470,13 @@ if (!isset($submit2)) {
                 upgrade_course($code[0], $lang);
                 echo "</p>\n";
         }
-	echo "<hr>";
-	echo "<p>$langChangeDBCharset <b>$mysqlMainDb</b> $langToUTF</p><br>";
+	echo "<hr />";
+	echo "<p>$langChangeDBCharset <b>$mysqlMainDb</b> $langToUTF</p><br />";
         convert_db_utf8($mysqlMainDb);
 
-        echo "<hr><p><em class='success_small' style='font-weight:bold;'>$langUpgradeSuccess</em></p>
+        echo "<hr /><p><em class='success_small' style='font-weight:bold;'>$langUpgradeSuccess</em></p>
                 <p><em style='font-weight:bold;'>$langUpgReady</em></p>
-                <em>$langUpgSucNotice</em></center>
+                <p><em>$langUpgSucNotice</em></p>
 		<center><p><a href='$urlServer?logout=yes'>$langBack</a></p></center>";
 
         echo '</body></html>';
