@@ -140,12 +140,12 @@ $local_head = $jscalendar->get_load_files_code();
 
             $result = db_query($query, $currentCourseID);
 
-            $chart = new PieChart(350, 350);
+            $chart = new PieChart(600, 300);
 
             while ($row = mysql_fetch_assoc($result)) {
                 $chart->addPoint(new Point($row['name'], $row['tot_dur']));
-                $chart->width += 25;
-                $chart_content=1;
+                $chart->width += 7;
+                $chart_content=5;
             }
 
             $chart->setTitle("$langFavourite");
@@ -159,7 +159,7 @@ $local_head = $jscalendar->get_load_files_code();
     $chart->render($webDir.$chart_path);
 
     if ($chart_content) {
-        $tool_content .= '<p align="center"><img src="'.$urlServer.$chart_path.'" /></p>';
+        $tool_content .= '<p align="left"><img src="'.$urlServer.$chart_path.'" /></p>';
      } elseif (isset($btnUsage) and $chart_content == 0) {
       $tool_content .='<p align="center"><b>'.$langNoStatistics.'</b></p>';
     }

@@ -277,9 +277,9 @@ if (mysql_num_rows($resultcategories) > 0) {
     <table width=\"99%\" class=\"FormData\" style=\"border: 1px solid #edecdf;\">
     <thead>
     <tr>
-      <th class=\"left\" style=\"border: 1px solid #edecdf;\">$langCategorisedLinks:</th>
+      <th class=\"left\" style=\"border: 1px solid #edecdf;\">$langCategorisedLinks</th>
       <th class=\"left\" style=\"border: 1px solid #edecdf;\" width=\"1\"><img src=\"../../template/classic/img/closeddir.gif\" border=\"0\" title=\"$showall\"></th>
-      <th class=\"left\" style=\"border: 1px solid #edecdf;\" width=\"30\"><a href=\"".$_SERVER['PHP_SELF']."?urlview=";
+      <th class=\"left\" style=\"border: 1px solid #edecdf;\" width=\"70\"><a href=\"".$_SERVER['PHP_SELF']."?urlview=";
 		for($j = 1; $j <= $aantalcategories; $j++)
 		{
 			$more_less .=  "0";
@@ -287,7 +287,7 @@ if (mysql_num_rows($resultcategories) > 0) {
 		$more_less .=  "\">$shownone</a></th>";
 		$more_less .=  "
       <th class=\"left\" style=\"border: 1px solid #edecdf;\" width=\"1\"><img src=\"../../template/classic/img/opendir.gif\" border=\"0\" title=\"$showall\"></th>
-      <th class=\"left\" style=\"border: 1px solid #edecdf;\" width=\"30\"><a href=\"".$_SERVER['PHP_SELF']."?urlview=";
+      <th class=\"left\" style=\"border: 1px solid #edecdf;\" width=\"70\"><a href=\"".$_SERVER['PHP_SELF']."?urlview=";
 		for($j = 1; $j <= $aantalcategories; $j++)
 		{
 			$more_less .=  "1";
@@ -353,8 +353,8 @@ if (mysql_num_rows($resultcategories) > 0) {
     <tr>
       <td class=\"left\" width='15'><img src=\"../../template/classic/img/opendir.gif\" border=\"0\" title=\"$shownone\"></td>
       <td colspan=\"2\"><a href=\"".$_SERVER['PHP_SELF']."?urlview=".$newurlview."\">".$myrow["categoryname"]."</a>
-          <br>
-          <small>".$myrow["description"]."</small>
+             <br>
+             <small>".$myrow["description"]."</small>
       </td>";
 	    if ($is_adminOfCourse) {
 		showcategoryadmintools($myrow["id"]);
@@ -371,7 +371,7 @@ if (mysql_num_rows($resultcategories) > 0) {
 			$tool_content .=  "
     <tr class=\"odd\">
       <td class=\"left\" width='15'><img src=\"../../template/classic/img/closeddir.gif\" border=\"0\" title=\"$showall\"></td>
-      <td><a href=\"".$_SERVER['PHP_SELF']."?urlview=";
+      <td colspan=\"2\"><a href=\"".$_SERVER['PHP_SELF']."?urlview=";
 			$tool_content .=  is_array($view)?implode('',$view):$view;
 			$tool_content .=  "\">".$myrow["categoryname"]."</a>
           <br>

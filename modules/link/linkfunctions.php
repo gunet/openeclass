@@ -324,13 +324,13 @@ function showcategoryadmintools($categoryid)
 	global $tool_content;
 
 	$tool_content .=  "
-      <td width='45' align='right'><a href=\"$_SERVER[PHP_SELF]?action=editcategory&id=$categoryid&urlview=$urlview\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langModify."\">&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?action=deletecategory&id=".$categoryid."&urlview=".$urlview."\" onclick=\"javascript:if(!confirm('".$langCatDel."')) return false;\">". "<img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\"></a>
+      <td width='45' align='right'><a href=\"$_SERVER[PHP_SELF]?action=editcategory&id=$categoryid&urlview=$urlview\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langModify."\"></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?action=deletecategory&id=".$categoryid."&urlview=".$urlview."\" onclick=\"javascript:if(!confirm('".$langCatDel."')) return false;\">". "<img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\"></a>
       </td>";
 
 
 	// DISPLAY MOVE UP COMMAND only if it is not the top link
 		$tool_content .=  "
-      <td width='45' align='right' style='border-right: 1px solid #edecdf;'>";
+      <td width='45' align='right'>";
 	if ($catcounter!=1)
 	{
 		$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?catmove=true&up=".$categoryid."&urlview=$urlview\"><img src=\"../../template/classic/img/up.gif\" border=0 title=\"".$langUp."\"></a>";
