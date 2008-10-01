@@ -52,10 +52,8 @@ $tool_content = '';
 $tool_content .= "
   <div id=\"operations_container\">
     <ul id=\"opslist\">
-      <li><a href='usage.php'>".$langUsage."</a></li>
-      <li><a href='favourite.php?first='>".$langFavourite."</a></li>
+      <li><a href='usage.php'>".$langUsageVisits."</a></li>
       <li><a href='userlogins.php?first='>".$langUserLogins."</a></li>
-      <li><a href='oldStats.php'>".$langOldStats."</a></li>
     </ul>
   </div>";
 
@@ -80,7 +78,7 @@ $local_head = $jscalendar->get_load_files_code();
 
         $tool_content .= "<p class=\"caution_small\">$langGDRequired</p>";
     } else {
-        $tool_content .= "<p>$langFavouriteExpl ";
+
         $made_chart = true;
 
         //make chart
@@ -159,9 +157,10 @@ $local_head = $jscalendar->get_load_files_code();
     $chart->render($webDir.$chart_path);
 
     if ($chart_content) {
+        $tool_content .= "<p>$langFavouriteExpl</p>";
         $tool_content .= '<p align="left"><img src="'.$urlServer.$chart_path.'" /></p>';
      } elseif (isset($btnUsage) and $chart_content == 0) {
-      $tool_content .='<p align="center"><b>'.$langNoStatistics.'</b></p>';
+      $tool_content .='<p class="alert1">'.$langNoStatistics.'</p>';
     }
 
     //make form
@@ -226,7 +225,7 @@ $local_head = $jscalendar->get_load_files_code();
   <tbody>
   <tr>
     <th width="220" class="left">&nbsp;</th>
-    <td><b>'.$langModify.'</b></td>
+    <td><b>'.$langFavourite.'</b><br />'.$langCreateStatsGraph.':</td>
   </tr>
   <tr>
     <th class="left">'.$langValueType.':</th>
@@ -249,7 +248,9 @@ $local_head = $jscalendar->get_load_files_code();
   </tr>
   <tr>
     <th class="left">&nbsp;</th>
-    <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
+    <td><input type="submit" name="btnUsage" value="'.$langSubmit.'">
+        <div align="right"><a href="oldStats.php">'.$langOldStats.'</a></div>
+    </td>
   </tr>
   </thead>
   </table>

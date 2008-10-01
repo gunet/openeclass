@@ -50,10 +50,8 @@ $tool_content = '';
 $tool_content .= "
   <div id=\"operations_container\">
     <ul id=\"opslist\">
-      <li><a href='usage.php'>".$langUsage."</a></li>
+      <li><a href='usage.php'>".$langUsageVisits."</a></li>
       <li><a href='favourite.php?first='>".$langFavourite."</a></li>
-      <li><a href='userlogins.php?first='>".$langUserLogins."</a></li>
-      <li><a href='oldStats.php'>".$langOldStats."</a></li>
     </ul>
   </div>";
 
@@ -145,7 +143,13 @@ while ($row = mysql_fetch_assoc($result)) {
 	}
     $table_cont .= "
     <td width=\"1\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
-    <td>".$user."</td>
+    <td>";
+    if (!$user) {
+        $table_cont .= "<font color=\"red\">".$l_anonymous."</font>";
+    } else {
+        $table_cont .= "".$user."";
+    }
+    $table_cont .= "</td>
     <td align=\"center\">".$row['ip']."</td>
     <td align=\"center\">".$row['date_time']."</td>
   </tr>";
@@ -218,7 +222,7 @@ if ($table2_cont) {
 }
 if (!($table_cont || $table2_cont)) {
 
-    $tool_content .= '<p align="center"><b>'.$langNoLogins.'</b></p>';
+    $tool_content .= '<p class="alert1">'.$langNoLogins.'</p>';
 }
 
     //make form
@@ -281,7 +285,7 @@ if (!($table_cont || $table2_cont)) {
   <tbody>
   <tr>
     <th width="220" class="left">&nbsp;</th>
-    <td><b>'.$langModify.'</b></td>
+    <td><b>'.$langUserLogins.'</b><br />'.$langCreateStatsGraph.':</td>
   </tr>
   <tr>
     <th class="left">'.$langStartDate.':</th>
@@ -297,7 +301,9 @@ if (!($table_cont || $table2_cont)) {
   </tr>
   <tr>
     <th>&nbsp;</th>
-    <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
+    <td><input type="submit" name="btnUsage" value="'.$langSubmit.'">
+        <div align="right"><a href="oldStats.php">'.$langOldStats.'</a></div>
+    </td>
   </tr>
   </tbody>
   </table>

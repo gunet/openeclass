@@ -2852,8 +2852,8 @@ $langConfirmUnregCours = "Are you sure you want to unregister from course with c
 /******************************************************************
 * usage.inc.php
 ******************************************************************/
-
- $langGDRequired = "The GD library is required!";
+ $langCreateStatsGraph ="Parameter selection";
+  $langGDRequired = "The GD library is required!";
  $langNoStatistics = "There are no visits.";
  $langPersonalStats="My statistics";
  $langUserLogins="User visits";
@@ -2872,6 +2872,7 @@ $langConfirmUnregCours = "Are you sure you want to unregister from course with c
  $langVisits = "Number of visits";
  $langFirstLetterUser = "First letter of last name";
  $langFirstLetterCourse = "First letter of course name";
+ $langUsageVisits = "Course Visits";
  $langFavourite = "Module Preferences";
  $langFavouriteExpl = "One user or all users preference for modules in a certain time period.";
  $langOldStats = "Show Old Statistics";

@@ -47,12 +47,10 @@ include '../../include/baseTheme.php';
 $tool_content = '';
 $tool_content .= "
 <div id=\"operations_container\">
-	<ul id=\"opslist\"><li><a href=".$_SERVER['PHP_SELF'].">".$langUsage."</a></li>";
-$tool_content .= "<li><a href='favourite.php?first='>".$langFavourite."</a></li>";
-$tool_content .= "<li><a href='userlogins.php?first='>".$langUserLogins."</a></li>";
-$tool_content .= "<li><a href='oldStats.php'>".$langOldStats."</a></li>
-</ul></div>
-";
+  <ul id=\"opslist\">";
+$tool_content .= "\n    <li><a href='favourite.php?first='>".$langFavourite."</a></li>";
+$tool_content .= "\n    <li><a href='userlogins.php?first='>".$langUserLogins."</a></li>";
+$tool_content .= "\n  </ul>\n</div>";
 
 $dateNow = date("d-m-Y / H:i:s",time());
 $nameTools = $langUsage;

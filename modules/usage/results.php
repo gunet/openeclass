@@ -192,7 +192,7 @@ switch ($u_stats_value) {
        }
 
     $chart->setTitle("$langDurationVisits");
-    $tool_content .= "<p> $langDurationExpl</p>";
+    $tool_content .= "<p>$langDurationExpl</p>";
 
     break;
 }
@@ -205,7 +205,7 @@ $chart->render($webDir.$chart_path);
  if ($chart_content) {
   $tool_content .= '<p align="center"><img src="'.$urlServer.$chart_path.'" /></p>';
 } elseif (isset($btnUsage) and $chart_content == 0) {
-  $tool_content .='<p align="center"><b>'.$langNoStatistics.'</b></p>';
+  $tool_content .='<p class="alert1">'.$langNoStatistics.'</p>';
  }
 
 ?>
