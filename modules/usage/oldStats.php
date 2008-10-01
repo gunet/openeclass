@@ -51,10 +51,9 @@ $tool_content = '';
 $tool_content .= "
   <div id=\"operations_container\">
 	<ul id=\"opslist\">";
-$tool_content .= "\n	  <li><a href='usage.php'>".$langUsage."</a></li>";
+$tool_content .= "\n	  <li><a href='usage.php'>".$langUsageVisits."</a></li>";
 $tool_content .= "\n	  <li><a href='favourite.php?first='>".$langFavourite."</a></li>";
-$tool_content .= "\n	  <li><a href='userlogins.php?first='>".$langUserLogins."</a></li>";
-$tool_content .= "\n	  <li><a href='oldStats.php'>".$langOldStats."</a></li>
+$tool_content .= "\n	  <li><a href='userlogins.php?first='>".$langUserLogins."</a></li>
     </ul>
   </div>";
 
@@ -78,7 +77,7 @@ while ($row = mysql_fetch_assoc($result)) {
 mysql_free_result($result);
 
 $min_t = date("d-m-Y", $min_time);
-$tool_content .= "<p> $langOldStatsExpl</p>";
+
 
 $dateNow = date("d-m-Y / H:i:s",time());
 $nameTools = $langUsage;
@@ -146,9 +145,8 @@ $local_head = $jscalendar->get_load_files_code();
                 $mont = $langMonths[$row['month']];
                 $chart->addPoint(new Point($mont." - ".$row['year'], $row['visits']));
                 $chart->width += 20;
-                 $chart_content=1;
+                $chart_content=1;
             }
-
             $chart->setTitle("$langOldStats");
 
         break;
@@ -170,7 +168,7 @@ $local_head = $jscalendar->get_load_files_code();
             }
 
             $chart->setTitle("$langOldStats");
-            $tool_content .= "<p> $langDurationExpl</p>";
+            $tool_content .= "<p>$langDurationExpl</p>";
 
         break;
     }
@@ -180,11 +178,12 @@ $local_head = $jscalendar->get_load_files_code();
     $chart->render($webDir.$chart_path);
 
     if ($chart_content) {
+        $tool_content .= "<p>$langOldStatsExpl</p>";
         $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
     } elseif (isset($btnUsage) and $chart_content == 0) {
-      $tool_content .='<br><p align="center"><b>'.$langNoStatistics.'</b></p>';
+      $tool_content .='<p class="alert1">'.$langNoStatistics.'</p>';
     }
-    $tool_content .= '<br>';
+    //$tool_content .= '<br>';
 
     //make form
     $start_cal = $jscalendar->make_input_field(
@@ -219,12 +218,13 @@ $local_head = $jscalendar->get_load_files_code();
         '<option value="visits" '.	 (($u_stats_value=='visits')?('selected'):(''))	  .'>'.$langVisits."</option>\n".
         '<option value="duration" '.(($u_stats_value=='duration')?('selected'):('')) .'>'.$langDuration."</option>\n";
 
-    $tool_content .= '<form method="post">
+    $tool_content .= '
+<form method="post">
   <table class="FormData" width="99%" align="left">
   <tbody>
   <tr>
     <th width="220" class="left">&nbsp;</th>
-    <td><b>'.$langModify.'</b></td>
+    <td><b>'.$langOldStats.'</b><br />'.$langCreateStatsGraph.':</td>
   </tr>
   <tr>
     <th width="220" class="left">'.$langValueType.'</th>
@@ -248,7 +248,6 @@ $local_head = $jscalendar->get_load_files_code();
   </tr>
   </thead>
   </table>
-
 </form>';
      }
 
