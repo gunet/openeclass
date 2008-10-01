@@ -41,8 +41,8 @@
 
 			$this->setLabelMarginLeft(50);
 			$this->setLabelMarginRight(30);
-			$this->setLabelMarginTop(40);
-			$this->setLabelMarginBottom(50);
+			$this->setLabelMarginTop(10);
+			$this->setLabelMarginBottom(90);
 		}
 
 		/**
