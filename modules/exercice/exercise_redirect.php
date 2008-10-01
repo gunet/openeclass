@@ -63,7 +63,7 @@ if(!session_is_registered('objExercise')) {
 	$objExercise=new Exercise();
 
 	// if the specified exercise doesn't exist or is disabled
-	if(!$objExercise->read($exerciseId) && (!$is_allowedToEdit))
+	if(@(!$objExercise->read($exerciseId) && (!$is_allowedToEdit)))
 		{
 		$tool_content .= $langExerciseNotFound;
 		draw($tool_content, 2);
