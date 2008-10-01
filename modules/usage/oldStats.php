@@ -139,13 +139,13 @@ $local_head = $jscalendar->get_load_files_code();
 
             $result = db_query($query, $currentCourseID);
 
-            $chart = new VerticalChart(240, 360);
+            $chart = new VerticalChart(200, 300);
 
             while ($row = mysql_fetch_assoc($result)) {
                 $mont = $langMonths[$row['month']];
                 $chart->addPoint(new Point($mont." - ".$row['year'], $row['visits']));
                 $chart->width += 20;
-                $chart_content=1;
+                $chart_content=5;
             }
             $chart->setTitle("$langOldStats");
 
@@ -158,13 +158,13 @@ $local_head = $jscalendar->get_load_files_code();
 
             $result = db_query($query, $currentCourseID);
 
-            $chart = new VerticalChart(240, 360);
+            $chart = new VerticalChart(200, 300);
 
             while ($row = mysql_fetch_assoc($result)) {
                 $mont = $langMonths[$row['month']];
                 $chart->addPoint(new Point($mont." - ".$row['year'], $row['tot_dur']));
                 $chart->width += 20;
-                 $chart_content=1;
+                $chart_content=5;
             }
 
             $chart->setTitle("$langOldStats");

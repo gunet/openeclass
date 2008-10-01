@@ -1,24 +1,24 @@
 <?
 	/** Libchart - PHP chart library
-	*	
+	*
 	* Copyright (C) 2005-2006 Jean-Marc Trémeaux (jm.tremeaux at gmail.com)
-	* 	
+	*
 	* This library is free software; you can redistribute it and/or
 	* modify it under the terms of the GNU Lesser General Public
 	* License as published by the Free Software Foundation; either
 	* version 2.1 of the License, or (at your option) any later version.
-	* 
+	*
 	* This library is distributed in the hope that it will be useful,
 	* but WITHOUT ANY WARRANTY; without even the implied warranty of
 	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 	* Lesser General Public License for more details.
-	* 
+	*
 	* You should have received a copy of the GNU Lesser General Public
 	* License along with this library; if not, write to the Free Software
 	* Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-	* 
+	*
 	*/
-	
+
 	/**
 	* Vertical bar chart
 	*
@@ -34,15 +34,15 @@
     		* @param	integer		width of the image
     		* @param	integer		height of the image
 		*/
-		
-		function VerticalChart($width = 600, $height = 250)
+
+		function VerticalChart($width = 600, $height = 300)
 		{
 			parent::BarChart($width, $height);
 
-			$this->setLabelMarginLeft(50);
-			$this->setLabelMarginRight(30);
-			$this->setLabelMarginTop(40);
-			$this->setLabelMarginBottom(50);
+			$this->setLabelMarginLeft(10);
+			$this->setLabelMarginRight(10);
+			$this->setLabelMarginTop(10);
+			$this->setLabelMarginBottom(10);
 		}
 
 		/**
@@ -50,14 +50,14 @@
 		*
 		* @access	private
 		*/
-		
+
 		function printAxis()
 		{
 			// Check if some points were defined
-			
+
 			if(!$this->sampleCount)
 				return;
-			
+
 			$minValue = $this->axis->getLowerBoundary();
 			$maxValue = $this->axis->getUpperBoundary();
 			$stepValue = $this->axis->getTics();
@@ -91,7 +91,7 @@
 				{
 					$point = current($this->point);
 					next($this->point);
-	
+
 					$text = $point->getX();
 
 					$this->text->printDiagonal($this->img, $x + $columnWidth * 1 / 3, $this->graphBRY + 10, $this->textColor, $text);
@@ -108,10 +108,10 @@
 		function printBar()
 		{
 			// Check if some points were defined
-			
+
 			if(!$this->sampleCount)
 				return;
-			
+
 			reset($this->point);
 
 			$minValue = $this->axis->getLowerBoundary();
@@ -128,7 +128,7 @@
 				next($this->point);
 
 				$value = $point->getY();
-				
+
 				$ymin = $this->graphBRY - ($value - $minValue) * ($this->graphBRY - $this->graphTLY) / ($this->axis->displayDelta);
 
 				$this->text->printText($this->img, $x + $columnWidth / 2, $ymin - 5, $this->textColor, $value, $this->text->fontCondensed, $this->text->HORIZONTAL_CENTER_ALIGN | $this->text->VERTICAL_BOTTOM_ALIGN);
@@ -142,14 +142,14 @@
 				imagefilledrectangle($this->img, $x1 + 1, $ymin + 1, $x2 - 4, $this->graphBRY - 1, $this->barColor1->getColor($this->img));
 			}
 		}
-		
+
 		/**
 		* Render the chart image
 		*
 		* @access	public
 		* @param	string		name of the file to render the image to (optional)
 		*/
-		
+
 		function render($fileName = null)
 		{
 			$this->computeBound();
