@@ -135,11 +135,11 @@ for ( $i = 0 ; $i < sizeof($flatElementList) ; $i++ )
 
 // -------------------- table header ----------------------------
 $tool_content .= '
-    <table width="99%">'."\n"
-	.'    <thead>'."\n"
+    <table width="99%" class="LearnPathSum">'."\n"
+	.'    <tbody>'."\n"
           // ------------------- some user details --------------------------
-	.'    <tr>'."\n"
-	.'      <td colspan="'.($maxDeep+2).'" class="left"><img src="../../template/classic/img/lp_on.gif" alt="'.$langLearningPath.'" title="'.$langLearningPath.'" border="0" />&nbsp;<b>'.$LPname.'</b></td>'."\n"
+	.'    <tr class="odd">'."\n"
+	.'      <td colspan="'.($maxDeep+2).'" class="left">'.$langLearnPath.': &nbsp;<b>'.$LPname.'</b></td>'."\n"
 	.'      <td colspan="'.($maxDeep+4).'" class="right"><b>'.$langStudent.'</b>: '.$uDetails['lastname'].' '.$uDetails['firstname'].' ('.$uDetails['email'].')</td>'."\n"
 	.'    </tr>'."\n"
 	.'    <tr>'."\n"
@@ -148,9 +148,7 @@ $tool_content .= '
 	.'      <th width="15%">'.$langTotalTimeSpent.'</th>'."\n"
 	.'      <th width="15%">'.$langLessonStatus.'</th>'."\n"
 	.'      <th width="25%" colspan="2">'.$langProgress.'</th>'."\n"
-	.'    </tr>'."\n"
-	.'    </thead>'."\n"
-	.'    <tbody>'."\n\n";
+	.'    </tr>'."\n";
 
 // ---------------- display list of elements ------------------------
 foreach ($flatElementList as $module)
@@ -305,16 +303,16 @@ foreach ($flatElementList as $module)
 
 		$tool_content .= '</tr>'."\n";
 }
-$tool_content .= '</tbody>'."\n".'<tfoot>'."\n";
+//$tool_content .= '</tbody>'."\n".'<tfoot>'."\n";
 
 if ($moduleNb == 0)
 {
-	$tool_content .= '<tr>'."\n".'<td align="center" colspan="6">'.$langNoModule.'</td>'."\n".'    </tr>'."\n";
+	$tool_content .= '<tr class="odd">'."\n".'<td align="center" colspan="7">'.$langNoModule.'</td>'."\n".'    </tr>'."\n";
 }
 elseif($moduleNb > 0)
 {
 	// display global stats
-	$tool_content .= '    <tr>'."\n"
+	$tool_content .= '    <tr class="odd">'."\n"
 		.'      <td colspan="'.($maxDeep+1).'">&nbsp;</td>'."\n"
 		.'      <td align="right">'.(($global_time != "0000:00:00")? $langTimeInLearnPath : '&nbsp;').'</td>'."\n"
 		.'      <td align="center">'.(($global_time != "0000:00:00")? preg_replace("/\.[0-9]{0,2}/", "", $global_time) : '&nbsp;').'</td>'."\n"
@@ -325,7 +323,7 @@ elseif($moduleNb > 0)
 		.'      <td align="left">&nbsp;'.round($globalProg / ($moduleNb) ) .'%</td>'."\n"
 		.'    </tr>';
 }
-$tool_content .= "\n".'    </tfoot>'."\n".'    </table>'."\n";
+$tool_content .= "\n".'    </tbody>'."\n".'    </table>'."\n";
 
 draw($tool_content, 2, "learnPath", $head_content);
 ?>

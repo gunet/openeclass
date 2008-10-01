@@ -98,32 +98,38 @@ if( $learnPathName )
 	mysql_select_db($currentCourseID);
 
 	// display tab header
-	$tool_content .= '    <table width="99%">'."\n\n"
-		.'    <thead>'."\n"
-		.'    <tr>'."\n"
-		.'      <td colspan="4" class="left"><img src="../../template/classic/img/lp_on.gif" alt="'.$langLearningPath.'" title="'.$langLearningPath.'" border="0" /><b>';
+	$tool_content .= '    <table width="99%" class="LearnPathSum">'."\n\n"
+		.'    <tbody>'."\n"
+		.'    <tr class="odd">'."\n"
+		.'      <td colspan="4" class="left">'.$langLearnPath.': <b>';
 	$tool_content .= disp_tool_title($titleTab);
 	$tool_content .= '</b></td>'."\n"
 		.'    </tr>'."\n"
 		.'    <tr>'."\n"
-		.'      <th colspan="2" class="left">'.$langStudent.'</th>'."\n"
+		.'      <th>&nbsp;</th>'."\n"
+		.'      <th><div align="left">'.$langStudent.'</div></th>'."\n"
 		.'      <th colspan="2" width="25%">'.$langProgress.'</th>'."\n"
-		.'    </tr>'."\n"
-		.'    </thead>'."\n\n"
-		.'    <tbody>'."\n";
+		.'    </tr>'."\n";
 
 	// display tab content
+	$k=0;
 	foreach ($usersList as $user)
 	{
 		$lpProgress = get_learnPath_progress($path_id,$user['user_id']);
-		$tool_content .= '    <tr>'."\n"
-		.'      <td width="1"><img src="../../template/classic/img/bullet_bw.gif" alt="bullet" title="bullet" border="0"></td>'."\n"
+			if ($k%2==0) {
+	           $tool_content .= "\n    <tr>";
+	        } else {
+	           $tool_content .= "\n    <tr class=\"odd\">";
+            }
+		$tool_content .= ''."\n"
+		.'      <td width="1"><img src="../../template/classic/img/arrow_grey.gif" alt="bullet" title="bullet" border="0"></td>'."\n"
 		.'      <td><a href="detailsUserPath.php?uInfo='.$user['user_id'].'&amp;path_id='.$path_id.'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
 		.'      <td align="right">'
 		.disp_progress_bar($lpProgress, 1)
 		.'</td>'."\n"
 		.'      <td align="left"><small>'.$lpProgress.'%</small></td>'."\n"
 		.'    </tr>'."\n";
+		$k++;
 	}
 	// foot of table
 	$tool_content .= '    </tbody>'."\n\n".'    </table>'."\n\n";

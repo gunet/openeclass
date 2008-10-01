@@ -422,7 +422,7 @@ if (isset($displayCreateLabelForm) && $displayCreateLabelForm)
 {
     $tool_content .= "
     <tr>
-      <th class=\"left\" height=\"32\">$langLearningModule :</th>
+      <th class=\"left\" height=\"32\">$langLabel :</th>
       <td class=\"right\">
         <form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">
           <label for=\"newLabel\">".$langNewLabel.": </label>&nbsp;

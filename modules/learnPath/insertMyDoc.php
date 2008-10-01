@@ -204,7 +204,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                     $query = db_query($sql);
                     $addedDoc =  $filenameDocument;
                     $InfoBox .= $addedDoc ." ".$langDocInsertedAsModule."<br>";
-                    $style = "success";
+                    $style = "success_small";
                     $tool_content .= "<table width=\"99%\"><tr>";
                     $tool_content .= disp_message_box($InfoBox, $style);
                     $tool_content .= "</td></tr></table>";
@@ -213,7 +213,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                 else
                 {
                     $InfoBox .= "<b>$filenameDocument</b>: ".$langDocumentAlreadyUsed."<br>";
-                    $style = "caution";
+                    $style = "caution_small";
                     $tool_content .= "<table width=\"99%\"><tr>";
                     $tool_content .= disp_message_box($InfoBox, $style);
                     $tool_content .= "</td></tr></table>";

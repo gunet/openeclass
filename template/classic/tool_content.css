@@ -247,11 +247,8 @@ p.success_small{
     background-repeat: no-repeat;
     background-position: 1px 1px;
     padding-left : 27px;
-    background-color: #FFF8DC;
-    color: #646664;
     font-size: 10px;
     font-style: normal;
-    font-weight: bold;
 }
 
 .success em {

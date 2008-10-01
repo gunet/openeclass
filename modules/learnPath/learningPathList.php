@@ -463,7 +463,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
     if ($list['visibility'] == 'HIDE') {
         if ($is_adminOfCourse) {
             $style = " class=\"invisible\"";
-            $image_bullet = "lp_off.gif";
+            $image_bullet = "arrow_red.gif";
         }
         else {
             continue; // skip the display of this file
@@ -471,7 +471,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
     }
     else {
         $style="";
-        $image_bullet = "lp_on.gif";
+        $image_bullet = "arrow_grey.gif";
     }
 
     $tool_content .= "
