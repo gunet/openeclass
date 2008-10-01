@@ -39,10 +39,10 @@
 		{
 			parent::BarChart($width, $height);
 
-			$this->setLabelMarginLeft(10);
-			$this->setLabelMarginRight(10);
-			$this->setLabelMarginTop(10);
-			$this->setLabelMarginBottom(10);
+			$this->setLabelMarginLeft(50);
+			$this->setLabelMarginRight(30);
+			$this->setLabelMarginTop(5);
+			$this->setLabelMarginBottom(95);
 		}
 
 		/**

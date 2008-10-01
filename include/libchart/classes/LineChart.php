@@ -1,24 +1,24 @@
 <?
 	/** Libchart - PHP chart library
-	*	
+	*
 	* Copyright (C) 2005-2006 Jean-Marc Trémeaux (jm.tremeaux at gmail.com)
-	* 	
+	*
 	* This library is free software; you can redistribute it and/or
 	* modify it under the terms of the GNU Lesser General Public
 	* License as published by the Free Software Foundation; either
 	* version 2.1 of the License, or (at your option) any later version.
-	* 
+	*
 	* This library is distributed in the hope that it will be useful,
 	* but WITHOUT ANY WARRANTY; without even the implied warranty of
 	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 	* Lesser General Public License for more details.
-	* 
+	*
 	* You should have received a copy of the GNU Lesser General Public
 	* License along with this library; if not, write to the Free Software
 	* Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-	* 
+	*
 	*/
-	
+
 	/**
 	* Line chart
 	*
@@ -34,8 +34,8 @@
     		* @param	integer		width of the image
     		* @param	integer		height of the image
 		*/
-		
-		function LineChart($width = 600, $height = 250)
+
+		function LineChart($width = 600, $height = 300)
 		{
 			parent::BarChart($width, $height);
 
@@ -50,14 +50,14 @@
 		*
 		* @access	private
 		*/
-		
+
 		function printAxis()
 		{
 			// Check if some points were defined
-			
+
 			if($this->sampleCount < 2)
 				return;
-			
+
 			$minValue = $this->axis->getLowerBoundary();
 			$maxValue = $this->axis->getUpperBoundary();
 			$stepValue = $this->axis->getTics();
@@ -105,15 +105,15 @@
 		function printLine()
 		{
 			// Check if some points were defined
-			
+
 			if($this->sampleCount < 2)
 				return;
-			
+
 			reset($this->point);
 
 			$minValue = $this->axis->getLowerBoundary();
 			$maxValue = $this->axis->getUpperBoundary();
-			
+
 			$columnWidth = ($this->graphBRX - $this->graphTLX) / ($this->sampleCount - 1);
 
 			$x1 = null;
@@ -127,31 +127,31 @@
 				next($this->point);
 
 				$value = $point->getY();
-				
+
 				$y2 = $this->graphBRY - ($value - $minValue) * ($this->graphBRY - $this->graphTLY) / ($this->axis->displayDelta);
 
 //				$this->text->printText($this->img, $x2, $y2 - 5, $this->textColor, $value, $this->text->fontCondensed, $this->text->HORIZONTAL_CENTER_ALIGN | $this->text->VERTICAL_BOTTOM_ALIGN);
 
-				// Draw line 
+				// Draw line
 
 				if($x1)
 				{
 					$this->primitive->line($x1, $y1, $x2, $y2, $this->barColor4, 4);
 					$this->primitive->line($x1, $y1 - 1, $x2, $y2 - 1, $this->barColor3, 2);
 				}
-				
+
 				$x1 = $x2;
 				$y1 = $y2;
 			}
 		}
-		
+
 		/**
 		* Render the chart image
 		*
 		* @access	public
 		* @param	string		name of the file to render the image to (optional)
 		*/
-		
+
 		function render($fileName = null)
 		{
 			$this->computeBound();
