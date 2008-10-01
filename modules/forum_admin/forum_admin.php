@@ -56,58 +56,50 @@ function confirmation ()
 	if(isset($forumgo)) {
 	$nameTools = $langAddForum;
 	$navigation[]= array ("url"=>"../forum_admin/forum_admin.php", "name"=> $langOrganisation);
-		$tool_content .= "
-
-	<table class=\"Deps\" width=\"99%\">
-    <tbody>
-    <tr>
-     <th>$langForCat: <b>$ctg</b></th>
-     <td><a href=\"$PHP_SELF?forumadmin=yes\">$langBackCat</a></td>
-    </tr>
-    </tbody>
-    </table>
-    <br />";
-		$result = db_query("select forum_id, forum_name, forum_desc, forum_access, forum_moderator, forum_type from forums where cat_id='$cat_id'", $currentCourseID);
+	$result = db_query("select forum_id, forum_name, forum_desc, forum_access, forum_moderator, forum_type from forums where cat_id='$cat_id'", $currentCourseID);
 	if ($result and mysql_num_rows($result) > 0) {
 		$tool_content .= "
 		<form action=\"forum_admin.php?forumgoadd=yes&ctg=$ctg&cat_id=$cat_id\" method=post>
     		<table width=99% class=\"ForumAdmSum\">
-    		<thead>
-    		<tr>
-      		<th width='10'>$langID</th>
-      		<th>&nbsp;$langForName</th>
-      		<th>$langDescription</th>
-      		<th width='75'><div align=\"center\">$langActions</div></th>
+    		<tbody>
+    		<tr class=\"odd\">
+    		  <td colspan=\"4\"><small>$langForCat: <b>$ctg</b></small></td>
     		</tr>
-    		</thead>
+    		<tr>
+      		  <th width='10'>$langID</th>
+      		  <th>$langForName</th>
+      		  <th>$langDescription</th>
+      		  <th width='75'><div align=\"center\">$langActions</div></th>
+    		</tr>
     		<tbody>";
 		$i=1;
 		while(list($forum_id, $forum_name, $forum_desc, $forum_access,
 			$forum_moderator, $forum_type) = mysql_fetch_row($result)) {
+                    if ($i%2==1) {
+	                   $tool_content .= "\n    		<tr>";
+                    } else {
+	                   $tool_content .= "\n    		<tr class=\"odd\">";
+                    }
 			$tool_content .= "
-      			<tr><td align='right'>$i.</td>
-      			<td align='left'>$forum_name</td>
-      			<td align='left'>$forum_desc&nbsp;</td>";
-			$tool_content .= "<td align='center'>
-        		<a href=forum_admin.php?forumgoedit=yes&forum_id=$forum_id&ctg=$ctg&cat_id=$cat_id><img src='../../template/classic/img/edit.gif' title='$langModify' border='0'></img></a>
-        		&nbsp;
-        		<a href=forum_admin.php?forumgodel=yes&forum_id=$forum_id&cat_id=$cat_id&ctg=$ctg&ok=0><img src='../../template/classic/img/delete.gif' title='$langDelete' border='0'></img></a>
-      			</td></tr>";
+      		  <td align='right'>$i.</td>
+      		  <td align='left'>$forum_name</td>
+      		  <td align='left'>$forum_desc&nbsp;</td>";
+			$tool_content .= "\n      		  <td align='center'><a href=forum_admin.php?forumgoedit=yes&forum_id=$forum_id&ctg=$ctg&cat_id=$cat_id><img src='../../template/classic/img/edit.gif' title='$langModify' border='0'></img></a>&nbsp;<a href=forum_admin.php?forumgodel=yes&forum_id=$forum_id&cat_id=$cat_id&ctg=$ctg&ok=0><img src='../../template/classic/img/delete.gif' title='$langDelete' border='0'></img></a></td>
+    		</tr>";
 		$i++;
 	}
 	$tool_content .= "
-    </tbody>
-    </table>
-    </form>
+    		</tbody>
+    		</table>
+    		</form>
 
     <br/>";
 	} else {
-		    $tool_content .= "<p class=\"alert1\">$l_noforum</p>
-    			</tr>";
+		    $tool_content .= "\n<p class=\"alert1\">$l_noforum</p>";
 	}
 
 	$tool_content .= "
-    <form action=\"forum_admin.php?forumgoadd=yes&ctg=$ctg&cat_id=$cat_id\" method=post>
+  <form action=\"forum_admin.php?forumgoadd=yes&ctg=$ctg&cat_id=$cat_id\" method=post>
     <table width=99% class=\"FormData\" align=\"left\">
     <tbody>
     <tr>
@@ -136,7 +128,8 @@ function confirmation ()
     </tr>
     </tbody>
     </table>
-    </form>";
+  </form>
+<div align=\"right\"><a href=\"$PHP_SELF?forumadmin=yes\">$langBackCat</a></div>";
 	}
 	// forum go edit
 	elseif(isset($forumgoedit)) {
@@ -148,7 +141,7 @@ function confirmation ()
 		list($forum_id, $forum_name, $forum_desc, $forum_access, $forum_moderator, $cat_id_1,
 		$forum_type) = mysql_fetch_row($result);
 		$tool_content .= "
-    <form action=\"forum_admin.php?forumgosave=yes&ctg=$ctg&cat_id=".@$cat_id."\" method=post>
+  <form action=\"forum_admin.php?forumgosave=yes&ctg=$ctg&cat_id=".@$cat_id."\" method=post>
     <input type=hidden name=forum_id value=$forum_id>
     <table width=99% class=\"FormData\">
     <tbody>
@@ -189,7 +182,7 @@ function confirmation ()
     </thead>
     </table>
 
-    </form>";
+  </form>";
 	}
 
 	// edit forum category
@@ -197,7 +190,7 @@ function confirmation ()
 		$result = db_query("select cat_id, cat_title from catagories where cat_id='$cat_id'", $currentCourseID);
 		list($cat_id, $cat_title) = mysql_fetch_row($result);
 		$tool_content .= "
-    <form action=\"forum_admin.php?forumcatsave=yes\" method=post>
+  <form action=\"forum_admin.php?forumcatsave=yes\" method=post>
     <input type=hidden name=cat_id value=$cat_id>
     <table width=99% class=\"FormData\">
     <tbody>
@@ -215,13 +208,13 @@ function confirmation ()
     </tr>
     </thead>
     </table>
-    </form>";
+  </form>";
 	}
 
 	// save forum category
 	elseif (isset($forumcatsave)) {
 		db_query("update catagories set cat_title='$cat_title' where cat_id='$cat_id'", $currentCourseID);
-        $tool_content .= "<p class=\"success_small\">$langNameCatMod<br /><a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a></p>";
+        $tool_content .= "\n<p class=\"success_small\">$langNameCatMod<br /><a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a></p>";
 	}
 
 	// forum go save
@@ -235,13 +228,13 @@ function confirmation ()
 		@db_query("update forums set forum_name='$forum_name', forum_desc='$forum_desc',
             	forum_access='2', forum_moderator='1', cat_id='$cat_id',
             	forum_type='$forum_type' where forum_id='$forum_id'", $currentCourseID);
-		$tool_content .= "<p class=\"success_small\">$langForumDataChanged<br /><a href=\"$PHP_SELF?forumgo=yes&cat_id=$cat_id&ctg=$ctg\">$langBack</a></p>";
+		$tool_content .= "\n<p class=\"success_small\">$langForumDataChanged<br /><a href=\"$PHP_SELF?forumgo=yes&cat_id=$cat_id&ctg=$ctg\">$langBack</a></p>";
 	}
 
 	// forum add category
 	elseif(isset($forumcatadd)) {
 		db_query("insert into catagories values (NULL, '$catagories', NULL)", $currentCourseID);
-		$tool_content .= "<p class=\"success_small\">$langCatAdded<br /><a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a></p>";
+		$tool_content .= "\n<p class=\"success_small\">$langCatAdded<br /><a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a></p>";
 		}
 
 	// forum go add
@@ -258,7 +251,7 @@ function confirmation ()
 		while ($my_forum_id = mysql_fetch_array($idforum)) {
 			$forid=$my_forum_id[0];
 		}
-		$tool_content .= "<p class=\"success_small\">$langForumCategoryAdded<br /><a href=\"$PHP_SELF?forumgo=yes&cat_id=$cat_id&ctg=$ctg\">$langBack</a></p>";
+		$tool_content .= "\n<p class=\"success_small\">$langForumCategoryAdded<br /><a href=\"$PHP_SELF?forumgo=yes&cat_id=$cat_id&ctg=$ctg\">$langBack</a></p>";
 		}
 
 	// forum delete category
@@ -269,7 +262,7 @@ function confirmation ()
 		}
 		db_query("delete from forums where cat_id=$cat_id", $currentCourseID);
 		db_query("delete from catagories where cat_id=$cat_id", $currentCourseID);
-		$tool_content .= "<p class=\"success_small\">$langCatForumDelete<br /><a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a></p>";
+		$tool_content .= "\n<p class=\"success_small\">$langCatForumDelete<br /><a href=\"$PHP_SELF?forumadmin=yes\">$langBack</a></p>";
 	}
 
 	// forum delete
@@ -279,16 +272,16 @@ function confirmation ()
 
 		db_query("delete from topics where forum_id=$forum_id", $currentCourseID);
 		db_query("delete from forums where forum_id=$forum_id", $currentCourseID);
-		$tool_content .= "<p class=\"success_small\">$langForumDelete<br /><a href=\"$PHP_SELF?forumgo=yes&ctg=$ctg&cat_id=$cat_id\">$langBack</a></p>";
+		$tool_content .= "\n<p class=\"success_small\">$langForumDelete<br /><a href=\"$PHP_SELF?forumgo=yes&ctg=$ctg&cat_id=$cat_id\">$langBack</a></p>";
 	} else {
 		$tool_content .= "
-    <form action=\"forum_admin.php?forumadmin=yes\" method=post></td><tr><td>";
+  <form action=\"forum_admin.php?forumadmin=yes\" method=post></td><tr><td>";
 		$tool_content .= "
     <table width=99% class=\"ForumCategory\">
-    <thead>
+    <tbody>
     <tr>
       <th width='10'>$langID</th>
-      <th>$langForCategories</th>
+      <th><div align='left'>$langForCategories</div></th>
       <th width='70'>$langNbFor</th>
       <th width='75'>$langActions</th>
     </tr>
@@ -299,23 +292,20 @@ function confirmation ()
 	while(list($cat_id, $cat_title) = mysql_fetch_row($result)) {
 		$gets = db_query("select count(*) as total from forums where cat_id=$cat_id", $currentCourseID);
 		$numbers= mysql_fetch_array($gets);
-		$tool_content .= "<tr><td><div align='right'>$i.</div></td>
-      		<td><div align='left'>$cat_title &nbsp;</div></td>
-      		<td>$numbers[total]</td><td>
-        	<a href='forum_admin.php?forumgo=yes&cat_id=$cat_id&ctg=$cat_title'><img src='../../template/classic/img/forum_on.gif' border='0' title='$langForums'></img></a>&nbsp;
-        	<a href='forum_admin.php?forumcatedit=yes&cat_id=$cat_id'><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>&nbsp;
-        	<a href='forum_admin.php?forumcatdel=yes&cat_id=$cat_id&ok=0' onClick='return confirmation();'><img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></img></a>
-      		</td>
-    		</tr>";
+		$tool_content .= "\n    <tr class=\"odd\">\n      <td><div align='right'>$i.</div></td>
+      <td><div align='left'>$cat_title &nbsp;</div></td>
+      <td><div align='center'>$numbers[total]</div></td>
+      <td><a href='forum_admin.php?forumgo=yes&cat_id=$cat_id&ctg=$cat_title'><img src='../../template/classic/img/forum_on.gif' border='0' title='$langForums'></img></a>&nbsp;<a href='forum_admin.php?forumcatedit=yes&cat_id=$cat_id'><img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></img></a>&nbsp;<a href='forum_admin.php?forumcatdel=yes&cat_id=$cat_id&ok=0' onClick='return confirmation();'><img src='../../template/classic/img/delete.gif' border='0' title='$langDelete'></img></a></td>
+    </tr>";
 			$i++;
 		}
 	$tool_content .= "
-    </thead>
+    </tbody>
     </table>
-    </form>
+  </form>
 
-    <br/>
-    <form action=\"forum_admin.php?forumcatadd=yes\" method=post>
+  <br/>
+  <form action=\"forum_admin.php?forumcatadd=yes\" method=post>
 
     <table width=99% class=\"FormData\" align=\"left\">
     <tbody>
