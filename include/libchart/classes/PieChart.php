@@ -35,18 +35,18 @@
     		* @param	integer		height of the image
 		*/
 
-		function PieChart($width = 600, $height = 250)
+		function PieChart($width = 600, $height = 300)
 		{
 			parent::Chart($width, $height);
 
-			$this->setMargin(5);
-			$this->setLabelMarginLeft(10);
-			$this->setLabelMarginRight(10);
-			$this->setLabelMarginTop(30);
-			$this->setLabelMarginBottom(10);
-			$this->setLabelMarginCenter(20);
+			$this->setMargin(4);
+			$this->setLabelMarginLeft(0);
+			$this->setLabelMarginRight(0);
+			$this->setLabelMarginTop(20);
+			$this->setLabelMarginBottom(5);
+			$this->setLabelMarginCenter(5);
 
-			$this->setPieRatio(0.55);
+			$this->setPieRatio(0.40);
 
 			$this->labelBoxWidth = 13;
 			$this->labelBoxHeight = 13;
