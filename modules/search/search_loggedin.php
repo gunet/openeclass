@@ -44,7 +44,7 @@ $tool_content = "";
 //elegxos ean *yparxoun* oroi anazhthshs
 if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_terms_instructor) && empty($search_terms_coursecode)) {
 /**********************************************************************************************
-				emfanish formas anahzthshs ean oi oroi anazhthshs einai kenoi 
+		emfanish formas anahzthshs ean oi oroi anazhthshs einai kenoi 
 ***********************************************************************************************/
 	$tool_content .= "<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
 	<table width=\"99%\"><tbody>
@@ -137,7 +137,7 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 
 }
 
-draw($tool_content, 0);
+draw($tool_content, 1);
 
 //katharisma twn orwn anazhthshs gia apofygh lathwn
 $search_terms_title = "";

@@ -103,8 +103,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
     </tr>
 	</tbody></table></form>";
 	
-}else 
-{
+} else {
 /**********************************************************************************************
 	ektelesh anazhthshs afou yparxoun oroi anazhthshs
 	 emfanish arikown mhnymatwn anazhthshs
@@ -136,8 +135,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		for ($i=0; $i<=50; $i++)
 		{
 			$sbsystems[$i] = "1";
-		}
-		
+		}	
 	}
 	
 	//ektypwsh mhnymatwn anazhthshs
@@ -231,14 +229,12 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 	</label>
 	<div class=\"clearer\"></div>
 	</fieldset>
-	</div>
-		";
+	</div>";
 	}
 	
 		
 	if($sbsystems["3"] == "1")
 	{
-	
 		//anazhthsh ston pinaka documents (perioxh eggrafwn)
 		$tmp_result = "<div id=\"marginForm\"><fieldset>
 		<legend>$langDoc</legend><label>
@@ -269,8 +265,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 				<div class=\"clearer\"></div>
 			</fieldset>
 			</div>
-		";
-		
+		";	
 	}
 	
 	
@@ -308,12 +303,10 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 	
 	if($sbsystems["9"] == 1)
 	{
-		
 		//anazhthsh ston pinaka posts_text (periexomeno mhnymatwn gia ta forums)
 		$tmp_result = "<div id=\"marginForm\"><fieldset>
 		<legend>$langForum</legend><label><ul class=\"listBullet\">";	
 		
-		//$query = "SELECT * FROM posts_text WHERE post_text LIKE '%".$search_terms."%'";
 		$myquery = "SELECT * FROM posts_text WHERE MATCH (post_text)".$query;
 		$result = mysql_query($myquery);	
 		
@@ -326,13 +319,26 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 				$tmp_result .= "<li>".$res['post_text']."</li>";
 			}
 		}
+		
+		$myquery = "SELECT * FROM forums WHERE MATCH (forum_name,forum_desc)".$query;
+		$result = mysql_query($myquery);	
+		
+		$c = 0;
+		if(mysql_num_rows($result) > 0)
+		{
+			while(@$res = mysql_fetch_array($result))
+			{
+				$c++;
+				$tmp_result .= "<li>".$res['forum_name'].": ".$res['forum_desc']."</li>";
+			}
+		}
+
 		if ($c != 0) $tool_content .= $tmp_result."</ul>
 		</label>
 				<div class=\"clearer\"></div>
 			</fieldset>
 			</div>
 		";
-		
 	}	
 	
 	
@@ -360,9 +366,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		</label>
 				<div class=\"clearer\"></div>
 			</fieldset>
-			</div>
-		";
-		
+			</div>";
 	}
 	
 	if($sbsystems["4"] == 1)
@@ -414,9 +418,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		</label>
 				<div class=\"clearer\"></div>
 			</fieldset>
-			</div>
-		";
-		
+			</div>";
 	}//telos if($sbsystems["3"] == 1) <- theorw pws videos & videolinks perilamvanetai sto idio checkbox
 
 	//ean den vrethikan apotelesmata, emfanish analogou mhnymatos
@@ -427,7 +429,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 
 }//telos anazhthshs (if empty($search_terms) = false)
 
-draw($tool_content, 0);
+draw($tool_content, 2);
 
 //katharisma ths $search_terms gia apofygh lathwn
 $search_terms = "";

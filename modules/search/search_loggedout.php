@@ -103,22 +103,17 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 				<ul class=\"listBullet\">
 				<li>
 				$langLessonCode : ".$mycours['code']."</li>
-				<li>
-					$langTeacher : ".$mycours['titulaires']."
-				</li><li>
-					$langKeywords : ".$mycours['course_keywords']."
-				</li>
+				<li>	$langTeacher : ".$mycours['titulaires']."</li>
+				<li>$langKeywords : ".$mycours['course_keywords']."</li>
 				<li><a href=\"../../courses/".$mycours['code']."/\"> ".$langEnter."</a></li>
 				</label>
 				<div class=\"clearer\"></div>
 			</fieldset>
 			</div>
 			";
-			
 			//afkhsh tou arithmou apotelesmatwn
 			$results_found++;			
 		}
-		
     }
     
     //elegxos tou arithmou twn apotelesmatwn pou exoun emfanistei. ean den emfanistike kanena apotelesma, ektypwsh analogou mhnymatos
@@ -130,7 +125,6 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 }
 
 draw($tool_content, 0);
-
 
 //katharisma twn orwn anazhthshs gia apofygh lathwn
 $search_terms_title = "";
@@ -144,13 +138,8 @@ function match_arrays($search_terms_array, $mycours_string)
 	//elegxos gia to an yparxoun apotelesmata sthn trexousa grammh toy $mycours_array
 		if(!empty($search_terms_array) || $search_terms_array != "" || !empty($mycours_string) || $mycours_string != "")
 		{
-			//echo "compare: ".$search_terms_array." == ".$mycours_string;
 			$ret = my_stripos($mycours_string, $search_terms_array);
-			//if($ret == 0) echo " MATCH!<br>";
-			//echo "<br> RET: ".$ret;
 			if($ret !== FALSE) return TRUE;
-
-			//echo "<br>";
 		}
 
 	return FALSE;

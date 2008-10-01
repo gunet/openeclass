@@ -1012,13 +1012,14 @@ function upgrade_course($code, $lang)
         // yparxei hdh, to FULL INDEX den mporei na ksanadhmiourgithei. epipleon, den yparxei tropos
         // elegxou gia to an yparxei index, opote o monadikos tropos diekperaiwshs ths ergasias einai
         // dokimh-sfalma.
-        @$tmp = mysql_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");
-        @$tmp = mysql_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)");
-        @$tmp = mysql_query("ALTER TABLE `document` ADD FULLTEXT `document` (`filename` ,`comment` ,`title`,`creator`,`subject`,`description`,`author`,`language`)");
-        @$tmp = mysql_query("ALTER TABLE `exercices` ADD FULLTEXT `exercices` (`titre`,`description`)");
-        @$tmp = mysql_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
-        @$tmp = mysql_query("ALTER TABLE `liens` ADD FULLTEXT `liens` (`url` ,`titre` ,`description`)");
-        @$tmp = mysql_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`titre` ,`description`)");
+        @$tmp = db_query("ALTER TABLE `agenda` ADD FULLTEXT `agenda` (`titre` ,`contenu`)");
+        @$tmp = db_query("ALTER TABLE `course_description` ADD FULLTEXT `course_description` (`title` ,`content`)");
+        @$tmp = db_query("ALTER TABLE `document` ADD FULLTEXT `document` (`filename` ,`comment` ,`title`,`creator`,`subject`,`description`,`author`,`language`)");
+        @$tmp = db_query("ALTER TABLE `exercices` ADD FULLTEXT `exercices` (`titre`,`description`)");
+        @$tmp = db_query("ALTER TABLE `posts_text` ADD FULLTEXT `posts_text` (`post_text`)");
+	@$tmp = db_query("ALTER TABLE `forums` ADD FULLTEXT `forums` (`forum_name`,`forum_desc`)");
+        @$tmp = db_query("ALTER TABLE `liens` ADD FULLTEXT `liens` (`url` ,`titre` ,`description`)");
+        @$tmp = db_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`titre` ,`description`)");
 
         // bogart: Update code for phpbb functionality START
         // Remove tables banlist, disallow, headermetafooter, priv_msgs, ranks, sessions, themes, whosonline, words
