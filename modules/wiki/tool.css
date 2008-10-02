@@ -141,19 +141,12 @@ table.WikiSum{
 
 table.WikiSum thead{
 	padding: 2px;
-	border-top: 1px solid #CAC3B5;
-	border-bottom: 1px solid #CAC3B5;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
 	border-left: 1px solid #edecdf;
 	border-right: 1px solid #edecdf;
 }
 
-table.WikiSum tbody{
-    padding: 2px;
-    border-top: 1px solid #edecdf;
-    border-bottom: 1px solid #CAC3B5;
-    border-left: 1px solid #edecdf;
-    border-right: 1px solid #edecdf;
-}
 
 table.WikiSum th{
 	text-align: center;
@@ -162,35 +155,21 @@ table.WikiSum th{
 	padding-top: 6px;
 	font-weight: bold;
 	font-size:10px !important;
+    border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+    background: #edecdf;
 }
 
 table.WikiSum td{
 	color: #727266;
-	vertical-align: top;
-	padding : 5px 4px 4px 4px;
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.Wiki_header { 
+.Wiki_header {
     color: #000 !important;
-    background-color: #f9f8ea !important;
+    background-color: #edecdf !important;
 	text-align: center !important;
 	font-weight: bold !important;
 }

@@ -525,10 +525,11 @@
             {
                 $tool_content .= '        <thead>' . "\n"
                     . '        <tr class="Wiki_header">' . "\n"
-                    . '          <td colspan="2"><div align="center">'.$langTitle.'</div></td>' . "\n"
-                    . '          <td><div align="center">'.$langDescription.'</div></td>' . "\n"
-                    . '          <td width="15%"><div align="center">'.$langWikiNumberOfPages.'</div></td>' . "\n"
-                    . '          <td width="15%" colspan="3" ><div align="center" >'.$langActions.'</div></td>'
+                    . '          <td width="1%">&nbsp;</td>' . "\n"
+                    . '          <td><div align="left">'.$langTitle.'</div></td>' . "\n"
+                    . '          <td>'.$langDescription.'</td>' . "\n"
+                    . '          <td width="15%"><div align="center">'.$langPages.'</div></td>' . "\n"
+                    . '          <td width="15%" colspan="3" ><div align="center">'.$langActions.'</div></td>'
                     . '        </tr>' . "\n"
                     . '        </thead>' . "\n"
                     ;
@@ -538,10 +539,11 @@
             {
                 $tool_content .= '        <thead>' . "\n"
                     . '        <tr class="Wiki_header">' . "\n"
-                    . '          <td colspan="2"><div align="center">'.$langTitle.'</div></td>' . "\n"
-                    . '          <td><div align="center">'.$langDescription.'</div></td>' . "\n"
-                    . '          <td><div align="center">'.$langWikiNumberOfPages.'</div></td>' . "\n"
-                    . '          <td><div align="center">'.$langWikiRecentChanges.'</div></td>' . "\n"
+                    . '          <td width="1%">&nbsp;</td>' . "\n"
+                    . '          <td><div align="left">'.$langTitle.'</div></td>' . "\n"
+                    . '          <td>'.$langDescription.'</td>' . "\n"
+                    . '          <td width="20%"><div align="center">'.$langWikiNumberOfPages.'</div></td>' . "\n"
+                    . '          <td width="20%"><div align="center">'.$langWikiRecentChanges.'</div></td>' . "\n"
                     . '        </tr>' . "\n"
                     . '        </thead>' . "\n"
                     ;
@@ -570,8 +572,8 @@
                         $classItem="";
                     }
 
-                    $tool_content .= '          <td width="2%">';
-                    $tool_content .= '<img src="' . $imgRepositoryWeb . '/wiki.gif" alt="'.$langWiki.'" title="'.$langWiki.'" border="0" />';
+                    $tool_content .= '          <td>';
+                    $tool_content .= '<img src="' . $imgRepositoryWeb . '/arrow_grey.gif" alt="'.$langWiki.'" title="'.$langWiki.'" border="0" />';
                     $tool_content .= '</td>' . "\n";
 
                     $tool_content .= '          <td>';
@@ -593,11 +595,11 @@
                     }
                     $tool_content .= '</td>' . "\n";
 
-                    $tool_content .= '          <td style="text-align: center;">';
+                    $tool_content .= '          <td><div align="center">';
                     $tool_content .= '<a href="page.php?wikiId=' . $entry['id'] . '&amp;action=all">';
                     $tool_content .= $wikiStore->getNumberOfPagesInWiki( $entry['id'] );
                     $tool_content .= '</a>';
-                    $tool_content .= '</td>' . "\n";
+                    $tool_content .= '</div></td>' . "\n";
 
                     $tool_content .= '          <td style="text-align: center;">';
                     // display direct link to main page
@@ -616,7 +618,7 @@
                     {
                         // edit link
 
-                        $tool_content .= '          <td style="text-align:center;">';
+                        $tool_content .= '          <td style="text-align: center;">';
                         $tool_content .= '<a href="'.$_SERVER['PHP_SELF'].'?wikiId='
                             . $entry['id'].'&amp;action=rqEdit'
                             . '">'
@@ -628,7 +630,7 @@
 
                         // delete link
 
-                        $tool_content .= '          <td style="text-align:center;">';
+                        $tool_content .= '          <td style="text-align: center;">';
                         $tool_content .= '<a href="'.$_SERVER['PHP_SELF'].'?wikiId='
                             . $entry['id'].'&amp;action=rqDelete'
                             . '">'
