@@ -253,8 +253,8 @@ function add_assignment($title, $comments, $desc, $deadline, $group_submissions)
 
 function submit_work($id) {
 
-	global $tool_content, $workPath, $uid, $stud_comments, $group_sub, $REMOTE_ADDR,
-	$langUploadSuccess, $langBack, $langWorks, $langUploadError, $currentCourseID, $langExerciseNotPermit;
+	global $tool_content, $workPath, $uid, $stud_comments, $group_sub, $REMOTE_ADDR, $langUploadSuccess, 
+	$langBack, $langWorks, $langUploadError, $currentCourseID, $langExerciseNotPermit, $langUnwantedFiletype;
 
 	//DUKE Work submission bug fix.
 	//Do not allow work submission if:
@@ -296,8 +296,8 @@ function submit_work($id) {
 	$nav[] = array("url"=>"work.php", "name"=> $langWorks);
 	$nav[] = array("url"=>"work.php?id=$id", "name"=> $row['title']);
 
-  if($submit_ok) { //only if passed the above validity checks...
-
+  	if($submit_ok) { //only if passed the above validity checks...
+	
 	$msg1 = delete_submissions_by_uid($uid, -1, $id);
 
 	$local_name = greek_to_latin(uid_to_name($uid));
@@ -306,6 +306,11 @@ function submit_work($id) {
 		$local_name = "$local_name $am[0]";
 	}
 	$local_name = replace_dangerous_char($local_name);
+	if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
+		$tool_content .= "<p class=\"caution_small\">$langUnwantedFiletype: {$_FILES['userfile']['name']}<br />";
+		$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?id=$id\">$langBack</a></p><br />";
+		return;
+	}
 	$secret = work_secret($id);
 	$filename = "$secret/$local_name.".extension($_FILES['userfile']['name']);
 	if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/$filename")) {
