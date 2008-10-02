@@ -28,7 +28,7 @@
 	search_loggedin.php
 	@version $Id$
 	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
-==============================================================================        
+==============================================================================
     @Description: Search function that searches data within public access
     courses and courses to which the student enrolled. In case the user is
     an administrator the script shows all the courses the user manages
@@ -44,36 +44,45 @@ $tool_content = "";
 //elegxos ean *yparxoun* oroi anazhthshs
 if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_terms_instructor) && empty($search_terms_coursecode)) {
 /**********************************************************************************************
-		emfanish formas anahzthshs ean oi oroi anazhthshs einai kenoi 
+		emfanish formas anahzthshs ean oi oroi anazhthshs einai kenoi
 ***********************************************************************************************/
-	$tool_content .= "<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
-	<table width=\"99%\"><tbody>
+	$tool_content .= "
+    <form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
+	<table width=\"99%\" class=\"FormData\" align=\"left\">
+    <tbody>
 	<tr>
-	<th width=\"120\" class='left'>$langTitle</th>
-	<td width=\"250\"><input class='FormData_InputText' name=\"search_terms_title\" type=\"text\" size=\"50\" /></td>
-	<td><small>$langTitle_Descr</small></td>	
+      <th width=\"120\" class='left'>&nbsp;</th>
+	  <td><b>$langSearchCriteria</b></td>
+    </tr>
+	<tr>
+	  <th width=\"120\" class='left'>$langTitle</th>
+	  <td width=\"250\"><input class='FormData_InputText' name=\"search_terms_title\" type=\"text\" size=\"50\" /></td>
+	  <td><small>$langTitle_Descr</small></td>
 	</tr>
 	<tr>
-	<th width=\"120\" class='left'>$langKeywords</th>				
-	<td><input class='FormData_InputText' name=\"search_terms_keywords\" type=\"text\" size=\"50\" /></td>
-	<td><small>$langKeywords_Descr</small></td>	
+	  <th width=\"120\" class='left'>$langKeywords</th>
+	  <td><input class='FormData_InputText' name=\"search_terms_keywords\" type=\"text\" size=\"50\" /></td>
+	  <td><small>$langKeywords_Descr</small></td>
 	</tr>
 	<tr>
-	<th width=\"120\" class='left'>$langTeacher</td>					
-	<td><input class='FormData_InputText' name=\"search_terms_instructor\" type=\"text\" size=\"50\" /></td>
-	<td><small>$langInstructor_Descr</small></td>
+	  <th width=\"120\" class='left'>$langTeacher</td>
+	  <td><input class='FormData_InputText' name=\"search_terms_instructor\" type=\"text\" size=\"50\" /></td>
+	  <td><small>$langInstructor_Descr</small></td>
 	</tr>
 	<tr>
-	<th width=\"120\" class='left'>$langCourseCode</td>					
-	<td><input class='FormData_InputText' name=\"search_terms_coursecode\" type=\"text\" size=\"50\" /></td>
-	<td><small>$langCourseCode_Descr</small></td>
+	  <th width=\"120\" class='left'>$langCourseCode</td>
+	  <td><input class='FormData_InputText' name=\"search_terms_coursecode\" type=\"text\" size=\"50\" /></td>
+   	  <td><small>$langCourseCode_Descr</small></td>
 	</tr>
 	<tr>
-	<th>&nbsp;</th>	
-	<td colspan=2><input type=\"Submit\" name=\"submit\" value=\"$langDoSearch\" />&nbsp;&nbsp;<input type=\"Reset\" name=\"reset\" value=\"$langNewSearch\" /></td>
-	</tr></tbody></table></form>";
-	
-}else 
+	  <th>&nbsp;</th>
+	  <td colspan=2><input type=\"Submit\" name=\"submit\" value=\"$langDoSearch\" />&nbsp;&nbsp;<input type=\"Reset\" name=\"reset\" value=\"$langNewSearch\" /></td>
+	</tr>
+    </tbody>
+    </table>
+    </form>";
+
+}else
 {
 /**********************************************************************************************
 	ektelesh anazhthshs afou yparxoun oroi anazhthshs
@@ -83,61 +92,78 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 	//ektelesh erwthmatos gia to se poia mathimata einai eggegramenos o xrhsths. sta apotelesmata perilamvanontai
 	//kai ola ta anoixta kai anoixta me eggrafh mathimata.
 	$result = mysql_query(" SELECT DISTINCT cours.code, cours.intitule, cours.course_keywords, cours.titulaires
-			FROM `cours` , `cours_user` 
+			FROM `cours` , `cours_user`
 			WHERE (cours.code = cours_user.code_cours
 			AND cours_user.user_id = '".$uid."')
 			OR cours.visible = '2'
 			OR cours.visible = '1'");
-	
-	
+
+
 	$results_found = 0; //arithmos apotelesmatwn pou exoun emfanistei (ena gia kathe grammh tou $mycours)
-	
+
 	//*****************************************************************************************************
 	//vrogxos gia na diatreksoume ola ta mathimata sta opoia enai anoixta (public OR open for registration)
-    while ($mycours = mysql_fetch_array($result)) 
+	$tool_content .= "
+    <div id=\"operations_container\">
+      <ul id=\"opslist\">
+        <li><a href=\"search.php\">$langNewSearch</a></li>
+      </ul>
+    </div>
+    ";
+
+
+    $tool_content .= "
+    <table width=\"99%\" class=\"search\" align=\"left\">
+    <tbody>
+    <tr>
+      <th width=\"1%\">&nbsp;</th>
+      <th width=\"40%\"><div align=\"left\">".$langCourse." ($langCode)</div></th>
+      <th width=\"30%\">$langTeacher</th>
+      <th width=\"30%\">$langKeywords</th>
+    </tr>";
+    $k=0;
+    while ($mycours = mysql_fetch_array($result))
     {
-    	
-	$show_entry = FALSE; //flag gia emfanish apotelesmatwn se mia grammh tou array efoson entopistoun apotelesmata				
+		if ($k%2==0) {
+	       $tool_content .= "\n    <tr>";
+	    } else {
+	       $tool_content .= "\n    <tr class=\"odd\">";
+        }
+
+	    $show_entry = FALSE; //flag gia emfanish apotelesmatwn se mia grammh tou array efoson entopistoun apotelesmata
 		if (!empty($search_terms_title)) $show_entry = match_arrays($search_terms_title, $mycours['intitule']);
 		if (!empty($search_terms_keywords)) if($show_entry == FALSE) $show_entry = match_arrays($search_terms_keywords, $mycours['course_keywords']);
 		if (!empty($search_terms_instructor)) if($show_entry == FALSE) $show_entry = match_arrays($search_terms_instructor, $mycours['titulaires']);
 		if (!empty($search_terms_coursecode)) if($show_entry == FALSE) $show_entry = match_arrays($search_terms_coursecode, $mycours['code']);
-		
+
 		//EMFANISH APOTELESMATOS:
 		//ean to flag $show_entry exei allaxtei se TRUE (ara kapoios apo tous orous anazhthshs entopistike sto
 		//$mycours, emfanise thn eggrafh
 		if($show_entry)
-		{			
-			$tool_content .= "
-			<div id=\"marginForm\"><fieldset><legend>
-			".$langCourse.": ".$mycours['intitule']."
-			</legend><label>
-			<ul class=\"listBullet\">
-			<li>$langLessonCode : ".$mycours['code']."</li>
-			<li>$langTeacher : ".$mycours['titulaires']."
-			</li><li>
-			$langKeywords : ".$mycours['course_keywords']."
-			</li>
-			<li><a href=\"../../courses/".$mycours['code']."/\"> ".$langEnter."</a></li>
-			</label>
-			<div class=\"clearer\"></div>
-			</fieldset>
-			</div>
-			";
-			
+		{
+            $tool_content .= "\n      <td><img src=\"../../template/classic/img/arrow_grey.gif\" alt=\"\" border=\"0\" /></td>";
+            $tool_content .= "\n      <td><a href=\"../../courses/".$mycours['code']."/\">".$mycours['intitule']."</a> (".$mycours['code'].")</td>";
+            $tool_content .= "\n      <td align=\"center\">".$mycours['titulaires']."</td>";
+            $tool_content .= "\n      <td align=\"center\">".$mycours['course_keywords']."</td>";
+            $tool_content .= "\n    </tr>";
 			//afkhsh tou arithmou apotelesmatwn
-			$results_found++;			
+			$results_found++;
 		}
+		$k++;
     }
-    
     //elegxos tou arithmou twn apotelesmatwn pou exoun emfanistei. ean den emfanistike kanena apotelesma, ektypwsh analogou mhnymatos
-   if($results_found == 0) $tool_content .= "<p>$langNoResult</p>";
+    if($results_found == 0) $tool_content .= "\n    <tr><td colspan=\"4\" align=\"center\">$langNoResult</td></tr>";
+    $tool_content .= "\n    </tbody>";
+    $tool_content .= "\n    </table>";
+
+
+
     //ektypwsh syndesmou gia nea anazhthsh
-    $tool_content .= "<p align=\"center\"><a href=\"search.php\">$langNewSearch</a></p>";
+    //$tool_content .= "<p align=\"center\"><a href=\"search.php\">$langNewSearch</a></p>";
 
 }
 
-draw($tool_content, 1);
+draw($tool_content, 1, 'search');
 
 //katharisma twn orwn anazhthshs gia apofygh lathwn
 $search_terms_title = "";
@@ -155,7 +181,7 @@ function match_arrays($search_terms_array, $mycours_string)
 	$ret = my_stripos($mycours_string, $search_terms_array);
 		if($ret !== FALSE) return TRUE;
 		}
-		
+
 	return FALSE;
 }
 

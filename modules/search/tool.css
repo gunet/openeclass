@@ -1,3 +1,5 @@
+
+
 #marginForm fieldset
 {
 	display: block;
@@ -90,4 +92,47 @@ thead th {
 
 .b-bottom {
     border-bottom: 1px solid silver;
+}
+
+table.search{
+    padding: 2px;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.search thead{
+	padding: 2px;
+	border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+}
+
+
+table.search th{
+	text-align: center;
+	padding: 4px;
+	padding-bottom: 6px;
+	padding-top: 6px;
+	font-weight: bold;
+	font-size:10px !important;
+    border-top: 1px solid #edecdf;
+	border-bottom: 1px solid #edecdf;
+	border-left: 1px solid #edecdf;
+	border-right: 1px solid #edecdf;
+    background: #edecdf;
+}
+
+table.search td{
+	color: #727266;
+}
+
+
+.search_header {
+    color: #000 !important;
+    background-color: #edecdf !important;
+	text-align: center !important;
+	font-weight: bold !important;
 }
