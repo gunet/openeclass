@@ -33,7 +33,7 @@ $helpTopic = 'User';
 include '../../include/baseTheme.php';
 
 $nameTools = $langAddUser;
-$navigation[] = array ("url"=>"user.php", "name"=> $langUsers);
+$navigation[] = array ("url"=>"user.php", "name"=> $langAdminUsers);
 
 $tool_content="";
 
@@ -46,9 +46,7 @@ if (isset($add)) {
 		"VALUES ('".mysql_escape_string($add)."', '$currentCourseID', ".
 		"'5', CURDATE())");
 
-		$tool_content .= "
-
-    <p class=\"success_small\">";
+		$tool_content .= "<p class=\"success_small\">";
 	if ($result) {
 		$tool_content .=  "$langTheU $langAdded";
 	} else {
@@ -58,9 +56,7 @@ if (isset($add)) {
 
 } else {
 
-$tool_content .= "
-
-    <form method='post' action='$_SERVER[PHP_SELF]'>";
+	$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]'>";
 
 if(!isset($search_nom)) $search_nom = "";
 if(!isset($search_prenom)) $search_prenom = "";
@@ -114,15 +110,13 @@ tCont;
 			db_query("CREATE TEMPORARY TABLE lala AS
 			SELECT user_id FROM cours_user WHERE code_cours='$currentCourseID'
 			");
-		$result = db_query("SELECT u.user_id, u.nom, u.prenom, u.username FROM
+			$result = db_query("SELECT u.user_id, u.nom, u.prenom, u.username FROM
 			user u LEFT JOIN lala c ON u.user_id = c.user_id WHERE
-			c.user_id IS NULL AND $query
-			");
-		if (mysql_num_rows($result) == 0) {
-			$tool_content .= "
-    <p class=\"caution_small\">$langNoUsersFound</p>\n";
-		} else {
-			$tool_content .= <<<tCont3
+			c.user_id IS NULL AND $query");
+			if (mysql_num_rows($result) == 0) {
+				$tool_content .= "<p class=\"caution_small\">$langNoUsersFound</p>\n";
+			} else {
+				$tool_content .= <<<tCont3
 
     <table width=99% class="FormData">
     <tbody>
@@ -137,33 +131,21 @@ tCont3;
 			$i = 1;
 			while ($myrow = mysql_fetch_array($result)) {
 				if ($i % 2 == 0) {
-					$tool_content .= "
-    <tr>";
+					$tool_content .= "<tr>";
 		        	} else {
-					$tool_content .= "
-    <tr class=\"odd\">";
+					$tool_content .= "<tr class=\"odd\">";
 				}
-				$tool_content .= "
-      <td align=\"right\">$i.</td>
-      <td>$myrow[prenom]</td>
-      <td>$myrow[nom]</td>
-      <td>$myrow[username]</td>
-      <td align=\"center\"><a href=\"$_SERVER[PHP_SELF]?add=$myrow[user_id]\">$langRegister</a></td>
-    </tr>\n";
+				$tool_content .= "<td align=\"right\">$i.</td><td>$myrow[prenom]</td>
+      				<td>$myrow[nom]</td><td>$myrow[username]</td>
+      				<td align=\"center\">
+				<a href=\"$_SERVER[PHP_SELF]?add=$myrow[user_id]\">$langRegister</a></td></tr>\n";
 				$i++;
 			}
-
-	$tool_content .= "
-    </tbody>";
-	$tool_content .= "
-    </table>";
-        	}
-		db_query("DROP TABLE lala");
-	} else {
-    $tool_content .= "
-    <p class=\"caution_small\">$langNoUsersFound</p>";
-    }
-
+			$tool_content .= "</tbody>";
+			$tool_content .= "</table>";
+        		}
+			db_query("DROP TABLE lala");
+		} 
 	}
 }
 

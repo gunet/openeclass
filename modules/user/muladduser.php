@@ -31,7 +31,7 @@ $helpTopic = 'User';
 include '../../include/baseTheme.php';
 
 $nameTools = $langAddManyUsers;
-$navigation[] = array ("url"=>"user.php", "name"=> $langUsers);
+$navigation[] = array ("url"=>"user.php", "name"=> $langAdminUsers);
 
 $tool_content = "";
 

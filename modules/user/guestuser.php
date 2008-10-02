@@ -29,7 +29,7 @@ $helpTopic = 'Guest';
 include '../../include/baseTheme.php';
 
 $nameTools = $langAddGuest;
-$navigation[] = array ("url"=>"user.php", "name"=> $langUsers);
+$navigation[] = array ("url"=>"user.php", "name"=> $langAdminUsers);
 
 $tool_content = "";
 // IF PROF ONLY
