@@ -57,6 +57,19 @@
 
 	$head_content = "";
 	$tool_content = "";
+
+$head_content .= '
+<script>
+function confirmation (name)
+{
+    if (confirm("'.$langConfirmDelete.'"))
+        {return true;}
+    else
+        {return false;}
+}
+</script>
+';
+
 	$style= "";
 
 	$imgRepositoryWeb = "../../template/classic/img";
@@ -108,7 +121,7 @@
     // filter allowed actions using user status
     if ( $is_allowedToAdmin )
     {
-        $valid_actions = array( "list", "rqEdit", "exEdit", "rqDelete", "exDelete" );
+	$valid_actions = array( "list", "rqEdit", "exEdit", "exDelete" );
     }
     else
     {
@@ -206,26 +219,6 @@
 
     switch ( $action )
     {
-        // request delete
-        case "rqDelete":
-        {
-            if ( ! $wikiStore->wikiIdExists( $wikiId ) )
-            {
-                // die( $langWikiInvalidWikiId );
-                $message = $langWikiInvalidWikiId;
-                $action = "error";
-                $style = "caution";
-            }
-            else
-            {
-                $wiki = $wikiStore->loadWiki( $wikiId );
-                $wikiTitle = $wiki->getTitle();
-                $message = $langWikiDeleteWikiWarning;
-                $style = "caution";
-            }
-
-            break;
-        }
         // execute delete
         case "exDelete":
         {
@@ -366,15 +359,6 @@
             $noPHP_SELF = true;
             break;
         }
-        case "rqDelete":
-        {
-            $navigation[] = array ('url' => 'wiki.php', 'name' => $langWiki );
-            $navigation[] = array ('url' => NULL
-                , 'name' => $wikiTitle);
-            $nameTools = $langDelete;
-            $noPHP_SELF = true;
-            break;
-        }
         case "list":
         default:
         {
@@ -411,13 +395,6 @@
 
             break;
         }
-        // delete form
-        case "rqDelete":
-        {
-            $toolTitle['mainTitle'] = $langWikiDeleteWiki;
-
-            break;
-        }
         // list wiki
         case "list":
         {
@@ -439,26 +416,6 @@
         {
             $tool_content .= claro_disp_wiki_properties_form( $wikiId, $wikiTitle
                 , $wikiDesc, $groupId, $wikiACL );
-
-            break;
-        }
-        // delete form
-        case "rqDelete":
-        {
-            $tool_content .= '<form method="POST" action="'
-                . $_SERVER['PHP_SELF']
-                . '" id="rqDelete">'
-                . "\n"
-                ;
-
-            $tool_content .= '<div style="padding: 5px">'
-                . '<input type="hidden" name="wikiId" value="' . $wikiId . '" />' . "\n"
-                . '<input type="submit" name="action[exDelete]" value="' . $langContinue . '" />' . "\n"
-                . disp_button ($_SERVER['PHP_SELF'], $langCancel )
-                . '</div>'
-                ;
-
-            $tool_content .= '</form>' . "\n";
 
             break;
         }
@@ -630,11 +587,11 @@
 
                         // delete link
 
-                        $tool_content .= '          <td style="text-align: center;">';
+                        $tool_content .= '<td style="text-align: center;">';
                         $tool_content .= '<a href="'.$_SERVER['PHP_SELF'].'?wikiId='
-                            . $entry['id'].'&amp;action=rqDelete'
+                            . $entry['id'].'&amp;action=exDelete'
                             . '">'
-                            . '<img src="'.$imgRepositoryWeb.'/delete.gif" border="0" alt="'.$langDelete.'" title="'.$langDelete.'" />'
+                            . '<img src="'.$imgRepositoryWeb.'/delete.gif" border="0" alt="'.$langDelete.'" title="'.$langDelete.'" onClick="return confirmation();"/>'
                             . '</a>'
                             ;
                         $tool_content .= '</td>' . "\n";
