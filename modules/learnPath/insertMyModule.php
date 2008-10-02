@@ -164,10 +164,10 @@ $tool_content .= '    <form name="addmodule" action="'.$_SERVER['PHP_SELF'].'?cm
 $tool_content .= '    <table width="99%" class="LearnPathSum">'."\n"
        .'    <thead>'."\n"
        .'    <tr class="LP_header">'."\n"
-       .'      <td class="left"><div align="center">'
+       .'      <td><div align="left">'
        .$langLearningModule
        .'</div></td>'."\n"
-       .'      <td width="100"><div align="center">'
+       .'      <td width="30%"><div align="center">'
        .$langSelection
        .'</div></td>'."\n"
        .'    </tr>'."\n"

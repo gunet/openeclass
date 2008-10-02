@@ -120,35 +120,42 @@ $sql = "SELECT LP.`name`, LP.`learnPath_id`
 $lpList = db_query_fetch_all($sql);
 
 // table header
-$tool_content .= '<table width="99%">'."\n"
+$tool_content .= '<table width="99%" class="LearnPathSum">'."\n"
 	.'      <thead>'."\n"
 	.'      <tr>'."\n"
-	.'        <th colspan="2">'.$langLearningPath.'</th>'."\n"
-	.'        <th colspan="2" width="25%">'.$langProgress.'</th>'."\n"
+	.'        <th>&nbsp;</th>'."\n"
+	.'        <th align="left"><div align="left">'.$langLearningPath.'</div></th>'."\n"
+	.'        <th colspan="2" width="30%">'.$langProgress.'</th>'."\n"
 	.'      </tr>'."\n"
 	.'      </thead>'."\n"
-	.'      </tbody>'."\n";
+	.'      <tbody>'."\n";
 if(sizeof($lpList) == 0)
 {
-$tool_content .= '      <tfoot>'."\n".'    <tr>'."\n"
+$tool_content .= '    <tr>'."\n"
 	.'        <td colspan="3" align="center">'.$langNoLearningPath.'</td>'."\n"
-	.'      </tr>'."\n".'    </tfoot>'."\n";
+	.'      </tr>'."\n";
 }
 else
 {
 	// display each learning path with the corresponding progression of the user
+	$k=0;
 	foreach($lpList as $lpDetails)
 	{
-
+		if ($k%2==0) {
+	       $tool_content .= "      <tr>";
+	    } else {
+	       $tool_content .= "      <tr class=\"odd\">";
+        }
 		$lpProgress = get_learnPath_progress($lpDetails['learnPath_id'],$_GET['uInfo']);
-		$tool_content .= '      <tr>'."\n"
-			.'        <td width="1%"><img src="../../template/classic/img/lp_on.gif" alt="" border="0" /></td>'."\n"
+		$tool_content .= ''."\n"
+			.'        <td width="1%"><img src="../../template/classic/img/arrow_grey.gif" alt="" border="0" /></td>'."\n"
 			.'        <td><a href="detailsUserPath.php?uInfo='.$_GET['uInfo'].'&path_id='.$lpDetails['learnPath_id'].'">'.htmlspecialchars($lpDetails['name']).'</a></td>'."\n"
 			.'        <td align="right">'.""
 			.disp_progress_bar($lpProgress, 1)
 			.'</td>'."\n"
 			.'        <td align="left"><small>'.$lpProgress.'%</small></td>'."\n"
 			.'      </tr>'."\n";
+		$k++;
 	}
 }
 $tool_content .= '      </tbody>'."\n"

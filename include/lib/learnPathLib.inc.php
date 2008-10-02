@@ -663,10 +663,10 @@ function display_my_exercises($dialogBox, $style)
     $output .= '    <table width="99%" class="LearnPathSum">'."\n"
     .    '    <thead>'."\n"
     .    '    <tr align="center" class="LP_header">'."\n"
-    .    '      <td><div align="center">'
+    .    '      <td><div align="left">'
     .    $langExercise
     .    '</div></td>'."\n"
-    .    '      <td width="100"><div align="center">'
+    .    '      <td width="30%"><div align="center">'
     .    $langSelection
     .    '</div></td>'."\n"
     .    '    </tr>'."\n"
@@ -1541,7 +1541,7 @@ function disp_message_box($message, $style = FALSE)
 	else {
 		$cell = "<td class=\"left\">";
 	}
-	
+
     return "$cell $message" ;
 }
 

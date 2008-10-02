@@ -206,10 +206,11 @@ function showlinks($tbl_link)
 	$output .= "
     <table width=\"99%\" class=\"LearnPathSum\">
     <thead>
-      <tr align=\"center\" class=\"LP_header\">
-        <td colspan=\"2\"><div align=\"center\">$langName</div></td>
-        <td width=\"10\"><div align=\"center\">$langSelection</div></td>
-      </tr>
+    <tr align=\"center\" class=\"LP_header\">
+      <td width=\"1%\">&nbsp;</td>
+      <td><div align=\"left\">$langName</div></td>
+      <td width=\"20%\"><div align=\"center\">$langSelection</div></td>
+    </tr>
     </thead>
     <tbody>";
 	$i=1;
@@ -218,12 +219,12 @@ function showlinks($tbl_link)
 		$myrow[3] = parse_tex($myrow[3]);
 		$output .= 	"
     <tr>
-      <td width=\"1\" valign=\"top\"><img src=\"../../template/classic/img/links_on.gif\" border=\"0\"></td>
+      <td valign=\"top\"><img src=\"../../template/classic/img/links_on.gif\" border=\"0\"></td>
       <td align=\"left\" valign=\"top\"><a href=\"../link/link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">".$myrow[2]."</a>
       <br />
-      <small class=\"comments\">".$myrow[3]."</small>";
+      <small class=\"comments\">".$myrow[3]."</small></td>";
 		$output .= 	"
-      <td align=\"center\"><input type=\"checkbox\" name=\"insertLink_".$i."\" id=\"insertLink_".$i."\" value=\"$myrow[0]\" /></td>
+      <td><div align=\"center\"><input type=\"checkbox\" name=\"insertLink_".$i."\" id=\"insertLink_".$i."\" value=\"$myrow[0]\" /></div></td>
     </tr>";
 		$i++;
 	}

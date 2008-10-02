@@ -139,8 +139,8 @@ $tool_content .= '
 	.'    <tbody>'."\n"
           // ------------------- some user details --------------------------
 	.'    <tr class="odd">'."\n"
-	.'      <td colspan="'.($maxDeep+2).'" class="left">'.$langLearnPath.': &nbsp;<b>'.$LPname.'</b></td>'."\n"
-	.'      <td colspan="'.($maxDeep+4).'" class="right"><b>'.$langStudent.'</b>: '.$uDetails['lastname'].' '.$uDetails['firstname'].' ('.$uDetails['email'].')</td>'."\n"
+	.'      <td colspan="'.($maxDeep+1).'" class="left"><small><b>'.$langLearnPath.'</b>:&nbsp;'.$LPname.'</small></td>'."\n"
+	.'      <td colspan="'.($maxDeep+3).'" class="right"><small><b>'.$langStudent.'</b>: '.$uDetails['lastname'].' '.$uDetails['firstname'].' ('.$uDetails['email'].')</small></td>'."\n"
 	.'    </tr>'."\n"
 	.'    <tr>'."\n"
 	.'      <th width="30%" colspan="'.($maxDeep+1).'">'.$langLearningObjects.'</th>'."\n"
@@ -177,7 +177,7 @@ foreach ($flatElementList as $module)
 	// display the current module name
 	$spacingString = '';
 	for($i = 0; $i < $module['children']; $i++)
-	$spacingString .= '      <td width="5">&nbsp;</td>\n';
+	$spacingString .= '      <td width="5">&nbsp;</td>'."\n";
 	$colspan = $maxDeep - $module['children']+1;
 
 	$tool_content .= '    <tr align="center">'."\n".$spacingString.'      <td colspan="'.$colspan.'" align="left">';
@@ -301,13 +301,13 @@ foreach ($flatElementList as $module)
 		if($module['contentType'] != CTLABEL_)
 			$moduleNb++; // increment number of modules used to compute global progression except if the module is a title
 
-		$tool_content .= '</tr>'."\n";
+		$tool_content .= '    </tr>'."\n";
 }
 //$tool_content .= '</tbody>'."\n".'<tfoot>'."\n";
 
 if ($moduleNb == 0)
 {
-	$tool_content .= '<tr class="odd">'."\n".'<td align="center" colspan="7">'.$langNoModule.'</td>'."\n".'    </tr>'."\n";
+	$tool_content .= '    <tr class="odd">'."\n".'<td align="center" colspan="7">'.$langNoModule.'</td>'."\n".'    </tr>'."\n";
 }
 elseif($moduleNb > 0)
 {
@@ -316,11 +316,11 @@ elseif($moduleNb > 0)
 		.'      <td colspan="'.($maxDeep+1).'">&nbsp;</td>'."\n"
 		.'      <td align="right">'.(($global_time != "0000:00:00")? $langTimeInLearnPath : '&nbsp;').'</td>'."\n"
 		.'      <td align="center">'.(($global_time != "0000:00:00")? preg_replace("/\.[0-9]{0,2}/", "", $global_time) : '&nbsp;').'</td>'."\n"
-		.'<td align="right">'.$langGlobalProgress.'</td>'."\n"
+		.'<td align="right"><small>'.$langGlobalProgress.'</small></td>'."\n"
 		.'<td align="right">'
 		.disp_progress_bar(round($globalProg / ($moduleNb) ), 1)
 		.'</td>'."\n"
-		.'      <td align="left">&nbsp;'.round($globalProg / ($moduleNb) ) .'%</td>'."\n"
+		.'      <td align="left"><small>&nbsp;'.round($globalProg / ($moduleNb) ) .'%</small></td>'."\n"
 		.'    </tr>';
 }
 $tool_content .= "\n".'    </tbody>'."\n".'    </table>'."\n";

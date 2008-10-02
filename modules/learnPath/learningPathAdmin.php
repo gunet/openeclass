@@ -215,7 +215,7 @@ switch($cmd)
                             `rank` = " . (int)$order . "
                         WHERE `learnPath_module_id` = ". (int)$_REQUEST['cmdid'];
                 $query = db_query($sql);
-                $dialogBox .= $langModuleMoved;
+                $dialogBox .= "<p class=\"success_small\">$langModuleMoved</p><br />";
             }
 
         }
@@ -444,7 +444,7 @@ if (!isset($displayCreateLabelForm))
 
 $tool_content .="
     <tr>
-      <th class=\"left\" height=\"32\">$langLearningModule :</th>
+      <th class=\"left\" height=\"32\">$langLabel :</th>
       <td class=\"right\"><a href=\"".$_SERVER['PHP_SELF']."?cmd=createLabel\">".$langCreate."</a></td>
     </tr>";
 }
@@ -596,7 +596,7 @@ foreach ($flatElementList as $module)
             $moduleImg = choose_image(basename($module['path']));
 
         $contentType_alt = selectAlt($module['contentType']);
-        $tool_content .= "<img src=\"".$imgRepositoryWeb."".$moduleImg."\" alt=\"".$contentType_alt."\" title=\"".$contentType_alt."\" border=\"0\">&nbsp;<a href=\"module.php?module_id=".$module['module_id']."\"".$style.">". htmlspecialchars($module['name']). "</a>";
+        $tool_content .= "<span style=\"vertical-align: middle;\"><img src=\"".$imgRepositoryWeb."".$moduleImg."\" alt=\"".$contentType_alt."\" title=\"".$contentType_alt."\" border=\"0\"></span>&nbsp;<a href=\"module.php?module_id=".$module['module_id']."\"".$style.">". htmlspecialchars($module['name']). "</a>";
     }
     $tool_content .= "</td>"; // end of td of module name
 

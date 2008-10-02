@@ -145,10 +145,10 @@ switch( $cmd )
 
 			$tool_content .= disp_message_box("
 				<form method=\"post\" name=\"rename\" action=\"".$_SERVER['PHP_SELF']."\">
-                <table width=\"99%\" class=\"LearnPathSum\"><thead><tr class=\"LP_header\"><td>
-                    <label for=\"newName\">".$langInsertNewModuleName."</label> :
+                <table width=\"99%\" class=\"FormData\"><tbody><tr><th class=\"left\" width=\"220\">
+                    <label for=\"newName\">".$langInsertNewModuleName."</label> :</th><td>
 				    <input type=\"text\" size=\"40\" class=\"auth_input\"name=\"newName\" id=\"newName\" value=\"".htmlspecialchars($list['name'])."\"></input></td><td class=\"right\">
-				    <input type=\"submit\" value=\"".$langGradeOk."\" name=\"submit\">
+				    <input type=\"submit\" value=\"".$langImport."\" name=\"submit\">
                     <input type=\"hidden\" name=\"cmd\" value=\"exRename\">
 				    <input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">
                 </td></tr></thead></table>
@@ -208,13 +208,12 @@ switch( $cmd )
             {
 
                 $tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">\n"
-                    .'    <table width="99%" class="LearnPathSum"><thead><tr class="LP_header"><td><b>'.$langComments.'</b>:<br /> '."\n"
-                    .disp_html_area('comment', $comment['comment'], 1, 60)
-                    ."<br />\n"
+                    .'    <table width="99%" class="FormData"><tbody><tr><th class="left" width="160">'.$langComments.' :</th><td>'."\n"
+                    .disp_html_area('comment', $comment['comment'], 2, 40)
                     ."<input type=\"hidden\" name=\"cmd\" value=\"exComment\">\n"
                     ."<input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">\n"
-                    ."<input type=\"submit\" value=\"".$langGradeOk."\">\n"
-                    ."</td></tr></thead></table>\n"
+                    ."<input type=\"submit\" value=\"".$langImport."\">\n"
+                    ."</td></tr></tbody></table>\n"
                     ."</form>\n";
 
                  $head_content .= disp_html_area_head("comment");
@@ -276,7 +275,7 @@ $tool_content .= "
     <table width=\"99%\" class=\"LearnPathSum\">
     <thead>
     <tr class=\"LP_header\">
-      <td colspan=\"2\"><div align=\"center\"><b>".$langLearningObjects."</b></div></td>
+      <td colspan=\"2\"><div align=\"left\"><b>".$langLearningObjects."</b></div></td>
       <td width=\"10%\"><div align=\"right\"><b>".$langTools."</b>&nbsp;&nbsp;&nbsp;</div></td>\n";
 $tool_content .="    </tr>\n".
       "    </thead>\n".

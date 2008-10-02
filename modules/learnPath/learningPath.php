@@ -147,28 +147,38 @@ for( $i = 0 ; $i < sizeof($flatElementList) ; $i++ )
  ================================================================*/
 
 // comment
-$tool_content .= "<p style=\"color: gray;\">".commentBox(LEARNINGPATH_, DISPLAY_)."</p>";
-
+if (commentBox(LEARNINGPATH_, DISPLAY_)) {
+$tool_content .= "
+  <table width=\"99%\" class=\"LearnPathSum\">
+  <tbody>
+  <tr>
+    <th><div align=\"left\">".$langComments."&nbsp;".$langLearningPath1.":</div></th>
+  </tr>
+  <tr class=\"odd\">
+    <td><small>".commentBox(LEARNINGPATH_, DISPLAY_)."</small></td>
+  </tr>
+  </tbody>
+  </table>
+  <br />";
+}
 
 // --------------------------- module table header --------------------------
 $tool_content .= "
     <table width=\"99%\" class=\"LearnPathSum\">
-    <thead>
-    <tr class=\"LP_header\">
-      <td colspan=\"".($maxDeep+1)."\"><div align=\"center\">&nbsp;&nbsp;<b>".$langLearningObjects."</b></u></div></td>\n";
+    <tbody>";
+$tool_content .= "
+    <tr>
+      <th colspan=\"".($maxDeep+1)."\"><div align=\"left\"><b>".$langLearningObjects."</b></div></th>\n";
 
 
 // show only progress column for authenticated users
 if ($uid) {
-    $tool_content .= '      <td colspan="2" width="20%"><div align="center"><u><b>'.$langProgress.'</b></u></div></td>'."\n";
+    $tool_content .= '      <th colspan="2" width="25%"><b>'.$langProgress.'</b></th>'."\n";
 }
 
-$tool_content .= "    </tr>
-    </thead>\n
-    <tbody>\n";
+$tool_content .= "    </tr>\n";
 
-  // ------------------ module table list display -----------------------------------
-
+// ------------------ module table list display -----------------------------------
 if (!isset($globalProg)) $globalProg = 0;
 
 foreach ($flatElementList as $module)
@@ -209,12 +219,12 @@ foreach ($flatElementList as $module)
     $spacingString = "";
     for($i = 0; $i < $module['children']; $i++)
     {
-        $spacingString .= '      <td width="5">&nbsp;</td>'."\n";
+        $spacingString .= "\n      <td width=\"5\">&nbsp;</td>";
     }
 
     $colspan = $maxDeep - $module['children']+1;
 
-    $tool_content .= "    <tr align=\"center\">".$spacingString."
+    $tool_content .= "    <tr>".$spacingString."
       <td colspan=\"".$colspan."\" align=\"left\">";
 
     //-- if chapter head
@@ -235,7 +245,7 @@ foreach ($flatElementList as $module)
             $moduleImg = choose_image(basename($module['path']));
 
         $contentType_alt = selectAlt($module['contentType']);
-        $tool_content .= '<img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" />&nbsp;'
+        $tool_content .= '<span style="vertical-align: middle;"><img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" /></span>&nbsp;'
         .'<a href="module.php?module_id='.$module['module_id'].'">'.htmlspecialchars($module['name']).'</a>'."";
         // a module ALLOW access to the following modules if
         // document module : credit == CREDIT || lesson_status == 'completed'
@@ -269,7 +279,7 @@ foreach ($flatElementList as $module)
        else
             $moduleImg = choose_image(basename($module['path']));
 
-        $tool_content .= '<img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" />'." "
+        $tool_content .= '<span style="vertical-align: middle;"><img src="'.$imgRepositoryWeb.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" /></span>'." "
              .htmlspecialchars($module['name']);
     }
     $tool_content .= '</td>'."\n";
@@ -277,7 +287,7 @@ foreach ($flatElementList as $module)
     if( $uid && ($module['contentType'] != CTLABEL_) )
     {
         // display the progress value for current module
-        $tool_content .= '<td align="right">'.disp_progress_bar ($progress, 1).'</td>'."\n"
+        $tool_content .= '      <td align="right">'.disp_progress_bar ($progress, 1).'</td>'."\n"
         	.'      <td align="left">'
 			.'<small>&nbsp;'.$progress.'%</small>'
 			.'</td>'."\n";
@@ -295,7 +305,7 @@ foreach ($flatElementList as $module)
     if($module['contentType'] != CTLABEL_)
         $moduleNb++; // increment number of modules used to compute global progression except if the module is a title
 
-    $tool_content .= '</tr>'."\n";
+    $tool_content .= '    </tr>'."\n";
 }
 
 
@@ -303,8 +313,8 @@ foreach ($flatElementList as $module)
 
 if($uid && $moduleNb > 0) {
     // add a blank line between module progression and global progression
-    $tool_content .= '    <tr>'."\n"
-		.'      <td align="right" colspan="'.($maxDeep+1).'"><b>'.$langGlobalProgress.'</b></td>'."\n"
+    $tool_content .= '    <tr class="odd">'."\n"
+		.'      <td colspan="'.($maxDeep+1).'" align="right"><small><b>'.$langGlobalProgress.'</b></small></td>'."\n"
 		.'      <td align="right">'
         .disp_progress_bar(round($globalProg / ($moduleNb) ), 1 )
 		.'</td>'."\n"
@@ -315,5 +325,7 @@ if($uid && $moduleNb > 0) {
 		.'    </tbody>'."\n\n";
 }
 $tool_content .= '    </table>'."\n\n";
+
+
 draw($tool_content, 2, "learnPath");
 ?>

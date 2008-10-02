@@ -405,7 +405,7 @@ $tool_content .= "
     <thead>
     <tr class=\"LP_header\">
       <td width=\"1%\">&nbsp;</td>
-      <td><div align=\"center\">".$langLearningPaths."</div></td>\n";
+      <td><div align=\"left\">".$langLearningPaths."</div></td>\n";
 
 
 if($is_adminOfCourse) {
@@ -415,7 +415,7 @@ if($is_adminOfCourse) {
 }
 elseif($uid) {
      // display progression only if user is not teacher && not anonymous
-     $tool_content .= "      <td colspan=\"2\" width=\"20%\"><div align=\"center\">".$langProgress."</div></td>\n";
+     $tool_content .= "      <td colspan=\"2\" width=\"30%\"><div align=\"center\">".$langProgress."</div></td>\n";
 }
 // close title line
 $tool_content .= "    </tr>
@@ -543,11 +543,10 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         }
     }
     else {  //else of !$is_blocked condition , we have already been blocked before, so we continue beeing blocked : we don't display any links to next paths any longer
-        $tool_content .= "      <td align=\"left\"><img src=\"../../template/classic/img/lp_on.gif\" alt=\"\" border=\"0\" /> ".$list['name'].$list['minRaw']."</td>\n";
+        $tool_content .= "      <td align=\"left\"><img src=\"../../template/classic/img/arrow_grey.gif\" alt=\"\" border=\"0\" /> ".$list['name'].$list['minRaw']."</td>\n";
     }
 
     // DISPLAY ADMIN LINK-----------------------------------------------------------
-
     if($is_adminOfCourse) {
         // 5 administration columns
 
@@ -657,8 +656,8 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         if ($prog >= 0) {
             $globalprog += $prog;
         }
-        $tool_content .= "<td align=\"right\" width=\"130\">".disp_progress_bar($prog, 1)."</td>\n";
-        $tool_content .= "<td align=\"left\" width=\"30\"><small> ".$prog."% </small></td>";
+        $tool_content .= "<td align=\"right\">".disp_progress_bar($prog, 1)."</td>\n";
+        $tool_content .= "<td align=\"left\"><small> ".$prog."% </small></td>";
     }
     $tool_content .= "
     </tr>";
@@ -666,7 +665,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
 } // end while
 
 $tool_content .= "
-    <tr>";
+    <tr class=\"odd\">";
 
 if (!$is_adminOfCourse && $iterator != 1 && $uid) {
     // add a blank line between module progression and global progression

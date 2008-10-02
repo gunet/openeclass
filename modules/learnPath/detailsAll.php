@@ -77,18 +77,20 @@ $tool_content .= get_limited_page_links($sql, 30, $langPreviousPage, $langNextPa
 $usersList = get_limited_list($sql, 30);
 
 // display tab header
-$tool_content .= '<table width="99%">'."\n"
-	.'  <thead>'."\n"
-	.'  <tr>'."\n"
-	.'    <th colspan="2" class="left"><div align="center">'.$langStudent.'</div></th>'."\n"
-	.'    <th colspan="2" width="20%"><div align="center">'.$langProgress.'</div></th>'."\n"
-	.'  </tr>'."\n"
-	.'  </thead>'."\n\n"
-	.'  <tbody>'."\n";
+$tool_content .= '<table width="99%" class="LearnPathSum">'."\n"
+	.'      <thead>'."\n"
+	.'      <tr>'."\n"
+	.'        <th class="left">&nbsp;</th>'."\n"
+	.'        <th class="left"><div align="left">'.$langStudent.'</div></th>'."\n"
+	.'        <th colspan="2" width="30%"><div align="center">'.$langProgress.'&nbsp;&nbsp;</div></th>'."\n"
+	.'      </tr>'."\n"
+	.'      </thead>'."\n\n"
+	.'      <tbody>'."\n";
 
 mysql_select_db($currentCourseID);
 
 // display tab content
+$k=0;
 foreach ( $usersList as $user )
 {
 	// list available learning paths
@@ -98,7 +100,11 @@ foreach ( $usersList as $user )
 
 	$iterator = 1;
 	$globalprog = 0;
-
+		if ($k%2==0) {
+	       $tool_content .= "\n    <tr>";
+	    } else {
+	       $tool_content .= "\n    <tr class=\"odd\">";
+        }
 	foreach($learningPathList as $learningPath)
 	{
 		// % progress
@@ -111,26 +117,26 @@ foreach ( $usersList as $user )
 	}
 	if($iterator == 1)
 	{
-		$tool_content .= '    <tr>
-      <td align="center" colspan="8">'.$langNoLearningPath.'</td>
-    </tr>'."\n";
+		$tool_content .= '        <td align="center" colspan="8">'.$langNoLearningPath.'</td>
+      </tr>'."\n";
 	}
 	else
 	{
 		$total = round($globalprog/($iterator-1));
 
-		$tool_content .= '    <tr>'."\n"
-		.'<td width="1"><img src="../../template/classic/img/bullet_bw.gif" alt="bullet" title="bullet" border="0"></td>'."\n"
-		.'      <td><a href="detailsUser.php?uInfo='.$user['user_id'].'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
-			.'<td align="right">'
-			.disp_progress_bar($total, 1)
-			.'</td>'."\n"
-			.'      <td align="left"><small>'.$total.'%</small></td>'."\n"
-			.'    </tr>'."\n";
+		$tool_content .= ''."\n"
+		.'        <td width="1"><img src="../../template/classic/img/arrow_grey.gif" alt="bullet" title="bullet" border="0"></td>'."\n"
+		.'        <td><a href="detailsUser.php?uInfo='.$user['user_id'].'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
+		.'        <td align="right">'
+		.disp_progress_bar($total, 1)
+		.'        </td>'."\n"
+		.'        <td align="left"><small>'.$total.'%</small></td>'."\n"
+		.'      </tr>'."\n";
 	}
+	$k++;
 }
 
 // foot of table
-$tool_content .= '    </tbody>'."\n".'    </table>'."\n\n";
+$tool_content .= '      </tbody>'."\n".'      </table>'."\n\n";
 draw($tool_content, 2, "learnPath", $head_content);
 ?>
