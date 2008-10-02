@@ -149,8 +149,7 @@ cData;
 		draw($tool_content, 2, 'phpbb');
 		exit();
 	}
-		$tool_content .= "
-    <tbody>";
+		$tool_content .= "<tbody>";
 	 
 	while ( $forum_data = mysql_fetch_array($f_res) ) {
 		$forum_row[] = $forum_data;
@@ -159,19 +158,13 @@ cData;
 		if ( $viewcat != -1 ) {
 			if ( $categories[$i][cat_id] != $viewcat ) {
 				$title = stripslashes($categories[$i][cat_title]);
-				$tool_content .= "
-    <tr class=\"Forum\">
-      <td colspan=\"5\" class=\"left\">&nbsp;$title</td>
-    </tr>";
+				$tool_content .= "<tr class=\"Forum\"><td colspan=\"5\" class=\"left\">&nbsp;$title</td></tr>";
 				continue;
 			}
 		}
 		$title = stripslashes($categories[$i]["cat_title"]);
 		$catNum = $categories[$i]["cat_id"];
-		$tool_content .= "
-    <tr>
-      <td colspan=\"5\" class=\"Forum\">&nbsp;$title</td>
-    </tr>";
+		$tool_content .= "<tr><td colspan=\"5\" class=\"Forum\">&nbsp;$title</td></tr>";
 		@reset($forum_row);
 		for ( $x=0; $x < count($forum_row); $x++) {
 			unset($last_post);
@@ -188,17 +181,15 @@ cData;
 				if (empty($last_post) ) {
 					$last_post = $l_noposts;
 				}
-				$tool_content .= "
-    <tr>";
+				$tool_content .= "<tr>";
 				if ( !isset($last_visit) ) {
 					$last_visit = 0;
 				}
 				if(@$last_post_time > $last_visit && $last_post != $l_noposts) {
-					$tool_content .= "
-      <td width=\"1\" class=\"left\"><IMG SRC=\"$newposts_image\"></td>";
+					$tool_content .= "<td width=\"1\" class=\"left\">
+					<img src=\"$newposts_image\"></td>";
 				} else {
-					$tool_content .= "
-      <td width=2% class=\"center\"><IMG SRC=\"$folder_image\"></td>";
+					$tool_content .= "<td width=2% class=\"center\"><IMG SRC=\"$folder_image\"></td>";
 				}
 				$name = stripslashes($forum_row[$x]["forum_name"]);
 				$last_post_nom = $forum_row[$x]["nom"];
@@ -207,10 +198,9 @@ cData;
 				$total_posts = $forum_row[$x]["forum_posts"];
 				$total_topics = $forum_row[$x]["forum_topics"];
 				$desc = stripslashes($forum_row[$x]["forum_desc"]);
-				$tool_content .= "
-      <td>";
+				$tool_content .= "<td>";
 				$forum=$forum_row[$x]["forum_id"];
-				if ( $is_adminOfCourse==1 ) { // admin
+				if ($is_adminOfCourse) { // admin
 					$sqlTutor = db_query("SELECT id FROM student_group
 						WHERE forumId='$forum' AND tutor='$uid'", $currentCourseID );
 					$countTutor = mysql_num_rows($sqlTutor);
@@ -219,10 +209,7 @@ cData;
 					} else {
 						$tool_content .= "<a href=\"viewforum.php?forum=" . $forum_row[$x]["forum_id"] . "&$total_posts\">$name</a>&nbsp;($langOneMyGroups)";
 					}
-				} 
-				if ( $is_adminOfCourse==1 ) { // admin
-					$tool_content .= "<a href=\"viewforum.php?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>";
-				} elseif ( $catNum == 1 ) { // STUDENT VIEW
+				} elseif ( $catNum == 1 ) { // student view
 					if ( @$forum == @$myGroupForum ) {
 						$tool_content .= "<a href=\"viewforum.php?forum=".$forum_row[$x]["forum_id"]."&$total_posts\">$name</a>&nbsp;&nbsp;($langMyGroup)";
 					} else {
@@ -237,13 +224,9 @@ cData;
 				}
 				$tool_content .= "<br>$desc";
 				$tool_content .= "</td>";
-				$tool_content .= "
-      <td width=\"65\" class=\"Forum_leftside\">$total_topics</td>";
-				$tool_content .= "
-      <td width=\"65\" class=\"Forum_leftside\">$total_posts</td>";
-				$tool_content .= "
-      <td width=\"200\" class=\"Forum_post\">";
-	  			//if (isset($last_post_prenom) && isset($last_post_nom)) {
+				$tool_content .= "<td width=\"65\" class=\"Forum_leftside\">$total_topics</td>";
+				$tool_content .= "<td width=\"65\" class=\"Forum_leftside\">$total_posts</td>";
+				$tool_content .= "<td width=\"200\" class=\"Forum_post\">";
 			if ($total_topics>0 && $total_posts>0) {
 				$tool_content .= "$last_post_prenom $last_post_nom 
              <a set=\"yes\" href=\"viewtopic.php?topic=$last_post_topic_id&forum=$forum\"><IMG border=\"0\" SRC=\"$icon_topic_latest\"></a><br />$human_last_post_time</td>";	  			    
