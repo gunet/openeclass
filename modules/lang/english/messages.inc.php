@@ -2653,51 +2653,6 @@ $lang_subscribe_processing ="Registration process";
 $langAuthRequest = "Authentification needed";
 $langAlreadySubscribe ="already subscribed";
 $langAs = "as";
-
-/************************************************************
-* stat.inc.php
-************************************************************/
- $msgAdminPanel = "Administrator Panel";
- $msgStats = "Statistics";
- $msgStatsBy = "Statistics by";
- $msgHours = "hours";
- $msgDay = "day";
- $msgWeek = "week";
- $msgMonth = "month";
- $msgYear = "year";
- $msgFrom = "from ";
- $msgTo = "to ";
- $msgPreviousDay = "previous day";
- $msgNextDay = "next day";
- $msgPreviousWeek = "previous week";
- $msgNextWeek = "next week";
- $msgCalendar = "calendar";
- $msgShowRowLogs = "show row logs";
- $msgRowLogs = "row logs";
- $msgRecords = "records";
- $msgDaySort = "Day sort";
- $msgMonthSort = "Monthly sort";
- $msgCountrySort = "Country sort";
- $msgOsSort = "OS sort";
- $msgBrowserSort = "Browser sort";
- $msgProviderSort = "Provider sort";
- $msgTotal = "Total";
- $msgBaseConnectImpossible = "Unable to select SQL base";
- $msgSqlConnectImpossible = "SQL server connection impossible";
- $msgMonthsArray = array("january","february","march","april","may","june","july","august","september","october","november","december");
- $msgDaysArray = array("Sunday","Monday","Tuesday","Wenesday","Thursday","Friday","Saturday");
- $msgDaysShortArray=array("S","M","T","W","T","F","S");
- $msgToday = "Today";
- $msgOther = "Other";
- $msgUnknown = "Unknown";
- $msgServerInfo = "php Server info";
- $msgStatBy = "Statistics by";
- $msgVersion = "Webstats 1.30";
- $msgCreateCook = "<b>Administrator:</b> A cookie has been created on your computer,<BR>
-     You will not appear anymore in your logs.<br><br><br><br>";
- $msgCreateCookError = "<b>Administrator:</b> cookie could not be saved on your computer.<br>
-     Check your browser settings and refresh page.<br><br><br><br>";
-
 $langStats="Statistics";
 
 /*************************************************************
@@ -2709,7 +2664,7 @@ $langExplUpgrade = "The upgrade script will modify configuration file <em>config
 $langExpl2Upgrade = "Also for security reasons make sure that you have backedup all the databases.";
 $langWarnUpgrade = "WARNING!";
 $langExecTimeUpgrade = "WARNING! For upgrade script to run successfully make sure that php variable <em>max_execution_time</em> which is defined in <em>php.ini</em> is larger than 300 (= 5 miunutes). Modify variable and restart the upgrade process";
-$langUpgradeCont = "�?ο continue upgrade process, please enter platform administrator username / password:";
+$langUpgradeCont = "Tο continue upgrade process, please enter platform administrator username / password:";
 $langUpgDetails = "Username / Password";
 $langUpgMan = "upgrade instructions";
 $langUpgToSee = "To review all the new features and changes of eClass new version click ";
