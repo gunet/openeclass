@@ -29,10 +29,26 @@ include '../include/baseTheme.php';
 $nameTools = $langInfo;
 $tool_content ="";
 
-$tool_content .= "
-<p align='justify'>$langIntro
-<br><br>
-$langAboutText:&nbsp;<b>$siteName $langEclassVersion</b>&nbsp;&nbsp;(<a href='http://portal.eclass.gunet.gr/' title='Portal eClass' target='_blank' border=0>>></a>)<br><br>";
+
+    $tool_content .= "
+    <table width=\"99%\" class=\"Search\" align=\"left\" style=\"border: 1px solid #edecdf;\">
+    <tbody>
+    <tr class=\"odd\">
+      <td>$langIntro<br><br>
+
+          <table width=\"600\" class=\"FormData\" align=\"center\">
+          <thead>
+          <tr class=\"odd\">
+            <th width=\"160\">&nbsp;</th>
+            <td><b>$langStoixeia</b></td>
+          </tr>
+          <tr class=\"odd\">
+            <th class=\"left\">$l_version:</th>
+            <td>$langAboutText:&nbsp;<b>$siteName $langEclassVersion</b>&nbsp;&nbsp;(<a href='http://portal.eclass.gunet.gr/' title='Portal eClass' target='_blank' border=0>>></a>)</td>
+          </tr>
+          <tr class=\"odd\">
+            <th class=\"left\">$langCoursesHeader:</th>
+            <td>";
 
 /*
   * Make table with general platform information
@@ -57,7 +73,6 @@ foreach ($course_codes as $course_code) {
         $tmp = $row['first'];
         if ($tmp < $first_date_time and $tmp !=0 ) {
             $first_date_time = $tmp;
-
         }
     }
     mysql_free_result($result);
@@ -79,30 +94,48 @@ $a3=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM cours WHERE visible='0'"
 
 $tool_content .= "$langAboutCourses <b>$a[0]</b> $langCourses<br>";
 $tool_content .= "
-        <ul>
-        <li><b>$a1[0]</b> $langOpen,</li>
-        <li><b>$a2[0]</b> $langSemiopen,</li>
-        <li><b>$a3[0]</b> $langClosed </li>
-        </ul>
-       ";
+             <ul>
+                <li><b>$a1[0]</b> $langOpen,</li>
+                <li><b>$a2[0]</b> $langSemiopen,</li>
+                <li><b>$a3[0]</b> $langClosed </li>
+             </ul>
+            </td>
+          </tr>";
+
 
 $e=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user"));
 $b=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='1'"));
 $c=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='5'"));
 $d=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='10'"));
-$tool_content .= "<p>$langAboutUsers <b>$e[0]</b> $langUsers</p>";
 
-$tool_content .= "
-          <ul>
-          <li><b>$b[0]</b> $langTeachers, </li>
-          <li><b>$c[0]</b> $langStudents $langAnd </li>
-          <li><b>$d[0]</b> $langGuest </li>
-          </ul>
-          ";
+    $tool_content .= "
+          <tr class=\"odd\">
+            <th class=\"left\">$langUsers:</th>
+            <td>$langAboutUsers <b>$e[0]</b> $langUsers
+              <ul>
+                <li><b>$b[0]</b> $langTeachers, </li>
+                <li><b>$c[0]</b> $langStudents $langAnd </li>
+                <li><b>$d[0]</b> $langGuest </li>
+              </ul></td>
+          </tr>
+          <tr class=\"odd\">
+            <th class=\"left\">$langOperation:</th>
+            <td>$langUptime<b> ".$uptime."</b> $langLast30daysLogins1 <b>".$total_logins[0]."</b>.</td>
+          </tr>
+          <tr class=\"odd\">
+            <th class=\"left\">$langSupportUser</th>
+            <td>$administratorName $administratorSurname</td>
+          </tr>
+          </thead>
+          </table>
 
-$tool_content .= "<p>$langUptime<b> ".$uptime."</b> $langLast30daysLogins1 <b>".$total_logins[0]."</b>.</p><br/><br/>";
+          <br>";
 
-$tool_content .= "<p align='justify'>$langSupportUser <i> $administratorName $administratorSurname </i></p>";
+    $tool_content .= "
+      </td>
+    </tr>
+    </tbody>
+    </table>";
 
 if (isset($uid) and $uid) {
         draw($tool_content, 1);

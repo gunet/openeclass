@@ -127,6 +127,17 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
       </ul>
     </div>
     ";
+
+	$tool_content .= "
+    <table width=\"99%\" class=\"FormData\" align=\"left\">
+    <tbody>
+    <tr>
+      <th width=\"180\" class=\"left\">&nbsp;</th>
+      <td><b>$langResults</b></td>
+    </tr>
+    </tbody>
+    </table>";
+
 	//elegxos ean o xrhsths ektelei thn anazhthsh apo to input box tou UI
 	if(@!empty($subsystems))
 	{
@@ -144,8 +155,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 			$sbsystems[$sb] = "1";
 		}
 
-	} else
-	{
+	} else {
 		//h anazhthsh ektelestike apo to inputbox tou UI
 		//ola ta yposysthmata tha symperilifthoun sthn anazhthsh
 
@@ -157,8 +167,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 	}
 
 	//ektypwsh mhnymatwn anazhthshs
-	if (@!empty($not_search_terms)) $tool_content .= "<h3>$langNOT: $not_search_terms</h3><br>";
-	$tool_content .= "<p>";
+	if (@!empty($not_search_terms)) $tool_content .= "<p>$langNOT: $not_search_terms</p><br>";
 
 	/******************************************************************************************************
 		ektelesh erwthmatwn gia anazhthsh
@@ -171,10 +180,12 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		//
 		// h anazhthsh perilamvanei MONO to paron mathima
 		//-------------------------------------------------------------------------------------------------
-		$tmp_result = "<div id=\"marginForm\"><fieldset>
-		<legend>$langAnnouncements</legend><label>
-		<ul class=\"listBullet\">";
-
+	$tmp_result = "\n
+    <table width=\"99%\" class=\"FormData\" align=\"left\">
+    <tbody>
+    <tr>
+      <th width=\"180\" class=\"left\">$langAnnouncements:</th>
+      <td><div class=\"Results\">";
 		//anazhthsh sthn kentrikh vash - epilogh ths kentrikhs DB
 		mysql_select_db("$mysqlMainDb");
 		$myquery = "SELECT * FROM annonces WHERE MATCH (contenu,code_cours)".$query;
@@ -189,16 +200,16 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 				if($res["code_cours"] == $dbname)
 				{
 					$c++;
-					$tmp_result .= "<li>".$res['contenu'].": ".$res['temps']."<br>";
+					$tmp_result .= "\n        <li>".$res['contenu'].": ".$res['temps']."<br>";
 				}
 			}
 		}
-		if ($c != 0) $tool_content .= $tmp_result."</ul>
-		</label>
-		<div class=\"clearer\"></div>
-		</fieldset>
-		</div>
-		";
+	   if ($c != 0) {
+        $tool_content .= $tmp_result .= "\n      </div></td>
+    <tr>
+    </tbody>
+    </table>\n";
+        }
 	}
 
 	//epilosh ths vashs tou mathimatos
@@ -207,32 +218,38 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 	if($sbsystems["1"] == "1") {
 
 	//anazhthsh ston pinaka agenda
-	$tmp_result = "<div id=\"marginForm\"><fieldset>
-	<legend>$langAgenda</legend>
-	<label><ul class=\"listBullet\">";
+	$tmp_result = "\n
+    <table width=\"99%\" class=\"FormData\" align=\"left\">
+    <tbody>
+    <tr>
+      <th width=\"180\" class=\"left\">$langAgenda:</th>
+      <td><div class=\"Results\">";
 	$myquery = "SELECT * FROM agenda WHERE MATCH (titre,contenu)".$query;
 	$result = mysql_query($myquery);
-
 	$c = 0;
 	if(mysql_num_rows($result) > 0) {
 		while(@$res = mysql_fetch_array($result))
 		 {
 			$c++;
-			$tmp_result .= "<li>".$res['titre'].": ".$res['contenu']."</li>";
+			$tmp_result .= "\n        <li>".$res['titre'].": ".$res['contenu']."</li>";
 			}
 		}
-		if ($c != 0) $tool_content .= $tmp_result."</ul>
-		</label>
-		<div class=\"clearer\"></div>
-		</fieldset>
-		</div>
-		";
+	if ($c != 0) {
+        $tool_content .= $tmp_result .= "\n      </div></td>
+    <tr>
+    </tbody>
+    </table>\n";
+        }
 	}
 
 	if($sbsystems["20"] == "1") {
 	//anazhthsh ston pinaka course_description
-	$tmp_result = "<div id=\"marginForm\">
-	<fieldset><legend>$langCourseDescription</legend><label><ul class=\"listBullet\">";
+	$tmp_result = "\n
+    <table width=\"99%\" class=\"FormData\" align=\"left\">
+    <tbody>
+    <tr>
+      <th width=\"180\" class=\"left\">$langCourseDescription:</th>
+      <td><div class=\"Results\">";
 	$myquery = "SELECT * FROM course_description WHERE MATCH (title,content)".$query;
 	$result = mysql_query($myquery);
 	$c = 0;
@@ -240,23 +257,27 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 		while(@$res = mysql_fetch_array($result))
 		{
 			$c++;
-			$tmp_result .= "<li>".$res['title'].": ".$res['content']."</li>";
+			$tmp_result .= "\n        <li>".$res['title'].": ".$res['content']."</li>";
 		}
 	}
-	if ($c != 0) $tool_content .= $tmp_result."</ul>
-	</label>
-	<div class=\"clearer\"></div>
-	</fieldset>
-	</div>";
+	if ($c != 0) {
+        $tool_content .= $tmp_result .= "\n      </div></td>
+    <tr>
+    </tbody>
+    </table>\n";
+        }
 	}
 
 
 	if($sbsystems["3"] == "1")
 	{
-		//anazhthsh ston pinaka documents (perioxh eggrafwn)
-		$tmp_result = "<div id=\"marginForm\"><fieldset>
-		<legend>$langDoc</legend><label>
-		<ul class=\"listBullet\">";
+	//anazhthsh ston pinaka documents (perioxh eggrafwn)
+	$tmp_result = "\n
+    <table width=\"99%\" class=\"FormData\" align=\"left\">
+    <tbody>
+    <tr>
+      <th width=\"180\" class=\"left\">$langDoc:</th>
+      <td><div class=\"Results\">";
 		$myquery = "SELECT * FROM document WHERE MATCH (filename,comment,title,creator,subject,description,author,language)".$query;
 		$result = mysql_query($myquery);
 		$c = 0;
@@ -268,35 +289,34 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 				if($is_adminOfCourse)
 				{
 					$c++;
-					$tmp_result .= "<li><b>".$res['filename']."</b>: (".$res['comment'].")</li>";
+					$tmp_result .= "\n        <li><b>".$res['filename']."</b>: (".$res['comment'].")</li>";
 
 				}elseif ($res['visibility'] == "v")
 				{
 
 					$c++;
-					$tmp_result .= "<li><b>".$res['filename']."</b>: (".$res['comment'].")</li>";
+					$tmp_result .= "\n        <li><b>".$res['filename']."</b>: (".$res['comment'].")</li>";
 				}
 			}
 		}
-		if ($c != 0) $tool_content .= $tmp_result."</ul>
-		</label>
-				<div class=\"clearer\"></div>
-			</fieldset>
-			</div>
-		";
+	if ($c != 0) {
+        $tool_content .= $tmp_result .= "\n      </div></td>
+    <tr>
+    </tbody>
+    </table>\n";
+        }
 	}
-
 
 
 	if($sbsystems["10"] == 1)
 	{
 		//anazhthsh ston pinaka excercises
-		$tmp_result = "
-		<div id=\"marginForm\"><fieldset>
-		<legend>$langExercices</legend>
-		<label>
-		<ul class=\"listBullet\">";
-
+	$tmp_result = "\n
+    <table width=\"99%\" class=\"FormData\" align=\"left\">
+    <tbody>
+    <tr>
+      <th width=\"180\" class=\"left\">$langExercices:</th>
+      <td><div class=\"Results\">";
 		$myquery = "SELECT * FROM exercices WHERE MATCH (titre,description)".$query;
 		$result = mysql_query($myquery);
 
@@ -306,25 +326,27 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 			while(@$res = mysql_fetch_array($result))
 			{
 				$c++;
-				$tmp_result .= "<li>".$res['titre'].": ".$res['description']."</li>";
+				$tmp_result .= "\n        <li>".$res['titre'].": ".$res['description']."</li>";
 			}
 		}
-		if ($c != 0) $tool_content .= $tmp_result."</ul>
-		</label>
-				<div class=\"clearer\"></div>
-			</fieldset>
-			</div>
-		";
-
+	if ($c != 0) {
+        $tool_content .= $tmp_result .= "\n      </div></td>
+    <tr>
+    </tbody>
+    </table>\n";
+        }
 	}
 
 
 	if($sbsystems["9"] == 1)
 	{
 		//anazhthsh ston pinaka posts_text (periexomeno mhnymatwn gia ta forums)
-		$tmp_result = "<div id=\"marginForm\"><fieldset>
-		<legend>$langForum</legend><label><ul class=\"listBullet\">";
-
+	$tmp_result = "\n
+    <table width=\"99%\" class=\"FormData\" align=\"left\">
+    <tbody>
+    <tr>
+      <th width=\"180\" class=\"left\">$langForum:</th>
+      <td><div class=\"Results\">";
 		$myquery = "SELECT * FROM posts_text WHERE MATCH (post_text)".$query;
 		$result = mysql_query($myquery);
 
@@ -334,7 +356,7 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 			while(@$res = mysql_fetch_array($result))
 			{
 				$c++;
-				$tmp_result .= "<li>".$res['post_text']."</li>";
+				$tmp_result .= "\n        <li>".$res['post_text']."</li>";
 			}
 		}
 
@@ -347,16 +369,15 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 			while(@$res = mysql_fetch_array($result))
 			{
 				$c++;
-				$tmp_result .= "<li>".$res['forum_name'].": ".$res['forum_desc']."</li>";
+				$tmp_result .= "\n        <li>".$res['forum_name'].": ".$res['forum_desc']."</li>";
 			}
 		}
-
-		if ($c != 0) $tool_content .= $tmp_result."</ul>
-		</label>
-				<div class=\"clearer\"></div>
-			</fieldset>
-			</div>
-		";
+	if ($c != 0) {
+        $tool_content .= $tmp_result .= "\n      </div></td>
+    <tr>
+    </tbody>
+    </table>\n";
+        }
 	}
 
 
@@ -364,10 +385,12 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 	if($sbsystems["2"] == 1)
 	{
 		//anazhthsh ston pinaka liens (syndesmoi sto internet)
-		$tmp_result = "<div id=\"marginForm\"><fieldset>
-		<legend>$langLinks</legend>
-		<label>
-		<ul class=\"listBullet\">";
+	$tmp_result = "\n
+    <table width=\"99%\" class=\"FormData\" align=\"left\">
+    <tbody>
+    <tr>
+      <th width=\"180\" class=\"left\">$langLinks:</th>
+      <td><div class=\"Results\">";
 		$myquery = "SELECT * FROM liens WHERE MATCH (url,titre,description)".$query;
 		$result = mysql_query($myquery);
 
@@ -377,23 +400,27 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 			while(@$res = mysql_fetch_array($result))
 			{
 				$c++;
-				$tmp_result .= "<li>".$res['url'].": ".$res['titre']." (".$res['description'].")</li>";
+				$tmp_result .= "\n        <li>".$res['url'].": ".$res['titre']." (".$res['description'].")</li>";
 			}
 		}
-		if ($c != 0) $tool_content .= $tmp_result."</ul>
-		</label>
-				<div class=\"clearer\"></div>
-			</fieldset>
-			</div>";
+	if ($c != 0) {
+        $tool_content .= $tmp_result .= "\n      </div></td>
+    <tr>
+    </tbody>
+    </table>\n";
+        }
 	}
 
 	if($sbsystems["4"] == 1)
 	{
 
 		//anazhthsh ston pinaka video
-		$tmp_result = "<div id=\"marginForm\"><fieldset>
-		<legend>$langVideo</legend><label>
-		<ul class=\"listBullet\">";
+	$tmp_result = "\n
+    <table width=\"99%\" class=\"FormData\" align=\"left\">
+    <tbody>
+    <tr>
+      <th width=\"180\" class=\"left\">$langVideo:</th>
+      <td><div class=\"Results\">";
 		$myquery = "SELECT * FROM video WHERE MATCH (url,titre,description)".$query;
 		$result = mysql_query($myquery);
 
@@ -403,23 +430,24 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 			while(@$res = mysql_fetch_array($result))
 			{
 				$c++;
-				$tmp_result .= "<li>".$res['url'].": ".$res['titre']." (".$res['description'].")</li>";
+				$tmp_result .= "\n        <li>".$res['url'].": ".$res['titre']." (".$res['description'].")</li>";
 			}
 		}
-		if ($c != 0) $tool_content .= $tmp_result."</ul>
-		</label>
-				<div class=\"clearer\"></div>
-			</fieldset>
-			</div>
-		";
+	if ($c != 0) {
+        $tool_content .= $tmp_result .= "\n      </div></td>
+    <tr>
+    </tbody>
+    </table>\n";
+        }
 
 
 		//anazhthsh ston pinaka videolinks
-		$tmp_result = "<div id=\"marginForm\">
-		<fieldset><legend>$langVideoLinks
-		</legend>
-		<label>
-		<ul class=\"listBullet\">";
+	$tmp_result = "\n
+    <table width=\"99%\" class=\"FormData\" align=\"left\">
+    <tbody>
+    <tr>
+      <th width=\"180\" class=\"left\">$langVideo $langLinks:</th>
+      <td><div class=\"Results\">";
 		$myquery = "SELECT * FROM videolinks WHERE MATCH (url,titre,description)".$query;
 		$result = mysql_query($myquery);
 
@@ -429,23 +457,26 @@ if(empty($or_search_terms) && empty($not_search_terms)) {
 			while($res = mysql_fetch_array($result))
 			{
 				$c++;
-				$tmp_result .= "<li>".$res['url'].": ".$res['titre']." (".$res['description'].")</li>";
+				$tmp_result .= "\n        <li>".$res['url'].": ".$res['titre']." (".$res['description'].")</li>";
 			}
 		}
-		if ($c != 0) $tool_content .= $tmp_result."</ul>
-		</label>
-				<div class=\"clearer\"></div>
-			</fieldset>
-			</div>";
+	if ($c != 0) {
+        $tool_content .= $tmp_result .= "\n      </div></td>
+    <tr>
+    </tbody>
+    </table>\n";
+        }
 	}//telos if($sbsystems["3"] == 1) <- theorw pws videos & videolinks perilamvanetai sto idio checkbox
 
 	//ean den vrethikan apotelesmata, emfanish analogou mhnymatos
-	if(stristr($tool_content, "<fieldset>") === FALSE) $tool_content .= "<p>$langNoResult</p>";
+	if(stristr($tool_content, "Results") === FALSE) {
+    $tool_content .= "<br /><p class=\"caution_small\">$langNoResult</p>";
+    }
 
 
 }//telos anazhthshs (if empty($search_terms) = false)
 
-draw($tool_content, 2);
+draw($tool_content, 2, 'search');
 
 //katharisma ths $search_terms gia apofygh lathwn
 $search_terms = "";

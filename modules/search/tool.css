@@ -1,138 +1,29 @@
-
-
-#marginForm fieldset
-{
-	display: block;
-	margin: 0 0 1em 0;
-	border: 0 solid #FFFFFF;
-	border-top: 1px solid #84b3fa;
-	padding: 0 1em 1em 1em;
-	font-size: 12px;
+.Results {
+    padding: 2px 1px 1px 14px;
+    list-style: disc;
+    color: #727266;
 }
 
-#marginForm label
-{
-	clear: both;
-	float: left;
-	display: block;
-	width: 100%;
-	margin-top: 0.2em;
-	font-weight: normal;
-}
 
-#marginForm label.first
-{
-	margin-top: 0.2em;
-}
-
-.tidy {
-        vertical-align: middle;
-        padding : 2px;
-        font-size: 8pt;
-        word-wrap: break-word;
-        word-break: break-all;
-        }
-
-.color1 {
-        background : #F5F5F5;
-        vertical-align: middle;
-        padding : 5px;
-        font-size: 8pt;
-        word-wrap: break-word;
-        word-break: break-all;
-        }
-
-p{
-  font-size: 9pt;
-}
-
-LEGEND{
-  font-size: 10pt;
-  padding : 4px;
-}
-
-table{
-    border: 0px;
-	font-family: Verdana, Arial, sans-serif !important;
-}
-
-th {
-	padding: 4px;
-	background-color: #ffffff;
-  border: 0px;
-  font-family: Verdana, Arial, sans-serif !important;
-}
-
-td {
-	padding: 4px;
-    border: 0px;
-    background-color: #ffffff;
-    font-family: Verdana, Arial, sans-serif !important;
-}
-
-thead th {
-	text-align: left;
-	background: #E6EDF5;
-	color: #4F76A3;
-    border: 1px solid silver;
-	font-size: 90% !important;
-}
-
-.b-right {
-    border-right: 1px solid silver;
-}
-
-.b-left {
-    border-left: 1px solid silver;
-}
-
-.b-top {
-    border-top: 1px solid silver;
-}
-
-.b-bottom {
-    border-bottom: 1px solid silver;
-}
-
-table.search{
-    padding: 2px;
+table.Search{
+    padding: 0px 0px 0px 0px;
     border-top: 1px solid #edecdf;
     border-bottom: 1px solid #edecdf;
     border-left: 1px solid #edecdf;
     border-right: 1px solid #edecdf;
 }
 
-table.search thead{
-	padding: 2px;
-	border-top: 1px solid #edecdf;
-	border-bottom: 1px solid #edecdf;
-	border-left: 1px solid #edecdf;
-	border-right: 1px solid #edecdf;
-}
-
-
-table.search th{
-	text-align: center;
-	padding: 4px;
-	padding-bottom: 6px;
-	padding-top: 6px;
-	font-weight: bold;
-	font-size:10px !important;
+table.Search th {
+    text-align: center !important;
     border-top: 1px solid #edecdf;
-	border-bottom: 1px solid #edecdf;
-	border-left: 1px solid #edecdf;
-	border-right: 1px solid #edecdf;
-    background: #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
 }
 
-table.search td{
+table.Search td {
 	color: #727266;
-}
-
-
-.search_header {
-    color: #000 !important;
-    background-color: #edecdf !important;
-	text-align: center !important;
-	font-weight: bold !important;
+	vertical-align: top;
+	padding : 5px 4px 4px 4px;
+    font-size: 10px;
 }

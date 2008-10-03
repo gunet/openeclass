@@ -77,7 +77,7 @@ include ('tools.php');
  * @param string $body_action (optional) code to be added to the BODY tag
  */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
-	global $langUser, $prenom, $nom, $langLogout, $intitule, $nameTools, $langHelp, $langAnonUser;
+	global $langUser, $langUserHeader, $prenom, $nom, $langLogout, $intitule, $nameTools, $langHelp, $langAnonUser;
 	global $language, $helpTopic, $require_help, $langEclass, $langCopyrightFooter;
 	global $relPath, $urlServer, $toolContent_ErrorExists, $statut;
 	global $page_name, $page_navi, $currentCourseID, $langHomePage, $siteName, $navigation;
@@ -197,7 +197,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 		//show user's name and surname on the user bar
 		if (session_is_registered ( 'uid' ) && strlen ( $nom ) > 0) {
-			$t->set_var ( 'LANG_USER', $langUser );
+			$t->set_var ( 'LANG_USER', $langUserHeader );
 			$t->set_var ( 'USER_NAME', $prenom );
 			$t->set_var ( 'USER_SURNAME', $nom . ", " );
 		}

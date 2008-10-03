@@ -280,6 +280,10 @@ tContentForm;
 		}
 		$tool_content .= "
     <tr>
+      <th class=\"left\">$langTitle:</th>
+      <td><input type=\"text\" size=\"70\" name=\"titre\" value=\"".@$titre."\"  class='FormData_InputText'></td>
+    </tr>
+    <tr>
       <th class=\"left\" rowspan=\"2\">$l_options:</th>
       <td>$langDate: ".$start_cal."</td>
     </tr>
@@ -290,7 +294,7 @@ tContentForm;
             for ($h=0; $h<=24; $h++)
             $tool_content .= "\n<option value='$h'>$h</option>";
             $tool_content .= "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
-        $tool_content .= "$langMinute:<select name=\"fminute\" class='auth_input'>
+        $tool_content .= "$langMinute: <select name=\"fminute\" class='auth_input'>
             <option value=\"$minutes\">[$minutes]</option>
             <option value=\"--\">--</option>";
 	for ($m=0; $m<=55; $m=$m+5)
@@ -298,10 +302,6 @@ tContentForm;
 
 		$tool_content .= "
            </select>&nbsp;&nbsp;&nbsp;&nbsp;$langLasting $langInHour: <input class='FormData_InputText' type=\"text\" name=\"lasting\" value=\"".@$myrow['lasting']."\" size=\"2\" maxlength=\"2\"></td>
-    </tr>
-    <tr>
-      <th class=\"left\">$langTitle:</th>
-      <td><input type=\"text\" size=\"70\" name=\"titre\" value=\"".@$titre."\"  class='FormData_InputText'></td>
     </tr>";
     if (!isset($contenu)) {
 			$contenu="";

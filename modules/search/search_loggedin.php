@@ -113,8 +113,11 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 
 
     $tool_content .= "
-    <table width=\"99%\" class=\"search\" align=\"left\">
+    <table width=\"99%\" class=\"Search\" align=\"left\">
     <tbody>
+    <tr class=\"odd\">
+      <td colspan=\"4\">$langDoSearch:&nbsp;<b>$langResults</b></td>
+    </tr>
     <tr>
       <th width=\"1%\">&nbsp;</th>
       <th width=\"40%\"><div align=\"left\">".$langCourse." ($langCode)</div></th>

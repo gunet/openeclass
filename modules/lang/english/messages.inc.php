@@ -43,6 +43,7 @@ $langTotalCourses = "Number of courses";
 $langInfo = "Platform Information";
 $langAboutCourses = "There are ";
 $langAboutUsers = "Platform has";
+$langOperation ="Operation";
 $langAboutCourses1 = "At this moment, platform hosts ";
 $langAboutUsers1 = "The number of registered users is ";
 $langLast30daysLogins1 = "and the total number of logins on the platform the last 30 days is ";
@@ -53,6 +54,7 @@ $langSemiopen = "require registration";
 $langUsers = "Users";
 $langUsersS = "users";
 $langUser = "User";
+$langUserHeader = "User:";
 $langSupportUser = "Support Person:";
 
 /**********************************************************
@@ -148,6 +150,7 @@ $langErrors = "Errors:";
 $langNbAnnoucement = "Number of announcements";
 $langStatCour = "Course statistics";
 $langCourses = "Courses";
+$langCoursesHeader = "Courses";
 $langNumCourses = "Number of courses";
 $langNumEachCourse = "Courses per faculty";
 $langNumEachLang = "Courses per language";

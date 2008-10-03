@@ -42,6 +42,7 @@ $langTotalCourses = "Αριθμός μαθημάτων";
 $langInfo = "Ταυτότητα Πλατφόρμας";
 $langAboutCourses = "Η πλατφόρμα υποστηρίζει συνολικά";
 $langAboutUsers = "H πλατφόρμα διαθέτει";
+$langOperation ="Λειτουργία";
 
 
 #For the logged-out user:
@@ -50,12 +51,14 @@ $langAboutUsers1 = "Οι εγγεγραμένοι χρήστες είναι ";
 $langLast30daysLogins1 = "και οι συνολικές προσβάσεις στην πλατφόρμα τις τελευταίες 30 μέρες είναι ";
 $langAnd = "και";
 $langCourses = "μαθήματα";
+$langCoursesHeader = "Μαθήματα";
 $langClosed = "κλειστά";
 $langOpen = "ανοικτά";
 $langSemiopen = "απαιτούν εγγραφή";
 $langUsers = "Χρήστες";
 $langUsersS = "χρήστες";
 $langUser = "Χρήστης";
+$langUserHeader = "Χρήστης:";
 $langUserS = "χρήστης";
 $langSupportUser = "Υπεύθυνος Υποστήριξης:";
 $langAdminUsers = "Διαχείριση Χρηστών";
