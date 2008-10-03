@@ -56,22 +56,23 @@ pre {
   </head>
   <body>
     <h2>Installation Instructions Open eClass 2.1</h2>
-    <p>The Asynchronous <b>Open eClass 2.1</b> eLearning platform has been tested and operates normally: 
+<p>The Open eClass platform is a complete Course Management System. It is the solution offered by the Greek Academic Network GUnet to support Asynchronous eLearning Services. It is mainly designed, developed and supported by the GUnet Asynchronous eLearning Group and is distributed for free as open-source software.</p>
+    <p>The Asynchronous <b>Open eClass 2.1</b> eLearning platform has been tested and operates wwell in: 
     </p>
     <ul>
-      <li>In Ms Windows environment (<b>Windows NT</b>, <b>Windows
+      <li>Ms Windows environment (<b>Windows NT</b>, <b>Windows
       2000</b>, <b>Windows XP</b>, <b>Windows 2003</b>)
       </li>
-      <li>In various Linux distributions (e.g. <b>RedHat</b>,
+      <li>Various Linux distributions (e.g. <b>RedHat</b>,
       <b>Debian</b>, <b>Ubuntu</b>, <b>Suse</b> κ.λπ.)
       </li>
-      <li>In UNIX environment (e.g. <b>Solaris</b>).
+      <li>UNIX environment (e.g. <b>Solaris</b>).
       </li>
-    </ul>Here are the platform installation instructions presented analytically:<br>
+    </ul>In the following pages platform’s installation instructions are presented analytically:<br>
     <ul>
       <li><a href="#before">Actions before installation – Prerequisities</a></li>
-      <li><a href="#unix">For Unix / Linux systems (Solaris/Redhat, Debian, Suse, Mandrake etc.)</a> </li>
-      <li><a href="#win">For Ms Windows systems (Win2000, WinXP, Win2003 etc.)</a></li>
+      <li><a href="#unix">Installations in Unix / Linux operational systems (Solaris/Redhat, Debian, Suse, Mandrake etc.)</a> </li>
+      <li><a href="#win">Installations in Ms Windows systems (Win2000, WinXP, Win2003 etc.)</a></li>
       <li><a href="#after">Actions after installation – Further settings</a></li>
     </ul>
     <hr>
@@ -102,19 +103,17 @@ Options -Indexes
 </pre>
     <div class="note">
       <p><b>For Windows Only</b>. If Microsoft Webserver (<em>IIS</em>) runs on your computer, you will have to deactivate it. Follow <em>Start-&gt;Programs-&gt;Administrative
-        Tools-&gt;Services</em> and click on  “stop” in order to stop the <em>«World Wide Web Publishing Service»</em>. Click right on the service and click on <em>«Disabled»</em> from the <em>«Startup type»</em> options to disable <em>IIS</em> permanently. 
+        Tools-&gt;Services</em> and click on  “stop” in order to stop the <em>«World Wide Web Publishing Service»</em>. Click right on the service and click on <em>«Disabled»</em> from the <em>«Startup type»</em> options to disable <em>IIS</em> permanently. Please notice that platform Open eClass operates without any problems under IIS web server, but without being exhaustive tested.   
       </p>
     </div>
 
-<h4> 2. <a href="http://www.php.net" target="_blank">PHP</a> (versions &gt;= 4.3.0) 
+<h4> 2. Scripting Language<a href="http://www.php.net" target="_blank"> PHP</a> (versions &gt;= 4.3.0) 
 </h4>
 <p>The platform operates without any problems with &gt;= <i>4.3.0 </i> and 5.x versions.
 <em>5.x.</em> </p> 
-<p>During PHP installation, it is important to activate the Apache support for PHP. Note that you will need to activate support for <em>mysql, zlib, pcre</em> and <em>gd</em> modules in PHP. If you wish to use an LDAP server to authenticate users, you have to activate the module for the <em>ldap</em> support as well. Most of the PHP distributions have built-in support for these modules (except for the Idap module maybe).
-</p>
-    <p>Satisfaction of the above is checked during eClass installation.  
+<p>During PHP installation, it is important to activate the Apache support for PHP. Note that you will need to activate support for <em>mysql, zlib, pcre</em> and <em>gd</em> modules in PHP. If you wish to use an LDAP server to authenticate users, you have to activate the module for the <em>ldap</em> support as well. Most of the PHP distributions have built-in support for these modules (except for the Ldap module maybe). Satisfaction of the above is checked during Open eClass installation. 
     </p>
-<p>You will also have to define the following parameters on the  <code>php.ini</code> file:  
+<p>You will also have to define the following parameters on the <code>php.ini</code> file:  
 </p>
 <pre>register_globals = on
 
@@ -156,17 +155,17 @@ What is more, if a PHP note comes up during the application, search for the erro
     <p>Finally, you are advised to define the default charset again by the following line:
  <code>default_charset = "UTF-8"</code>  
     </p>
-    <p>As soon as you have finished with changes, restart apache. 
+    <p>As soon as you have finished with changes, restart Apache Web Server. 
     </p>
 
-<h4> 3. <a href="http://www.mysql.com" target="_blank">MySQL</a> (versions 4.1.x 
+<h4> 3. Database<a href="http://www.mysql.com" target="_blank">MySQL</a> (versions 4.1.x 
   or 5.x) </h4>
     <p>Along with the MySQL installation, a user account with database creation rights has to be created. 
     </p>
 	<p>You should also be sure that MySQL is not running on a strict mode. For that reason, you should check if the <pre>--sql-mode</pre> parameter that exists in the <em>my.cnf</em> or <em>my.ini</em> configuration file for UNIX and Windows users correspondingly, has a value or not. If it does (e.g. <code>--sql-mode=STRICT_TRANS_TABLES</code> or <code>--sql-mode=STRICT_ALL_TABLES</code>), then turn it into a blank one (<code>--sql-mode=""</code>). 
 	</p>
     <h4>
-      4. <a href="http://www.sendmail.org" target=
+      4. Mail Servers <a href="http://www.sendmail.org" target=
       "_blank">sendmail</a> or <a href="http://www.postfix.org"
       target="_blank">postfix</a> (optional)
     </h4>
@@ -178,11 +177,10 @@ What is more, if a PHP note comes up during the application, search for the erro
         <b>For Windows only:</b> Alternatively, in order to install the above, use the
        <a href="http://www.easyphp.org" target="_blank">EasyPHP</a> package or <a href="http://www.apachefriends.org/en/xampp-windows.html" target="_blank">XAMPP</a> package.
       </p>
-
     </div>
     <hr>
     <h3>
-      <a name="unix" id="unix">For Unix / Linux systems
+      <a name="unix" id="unix">Installation in Unix / Linux systems
       (Solaris / Redhat, Debian, Suse, Ubuntu etc)</a>
     </h3>
     <h3>
@@ -203,11 +201,10 @@ To give access rights to web server you can type the following commands (if the 
     </p>
     <p>In order to start installing, visit the /install/ sub-directory address with a web browser. If, for example, the main eclass directory is located in http://www.example.gr/eclass/, the address you have to type is <code>http://www.example.gr/eclass/install/</code>. Then follow the platform installation guide steps like the ones presented on your screen. Note that during the installation process you will be required the following:
 </p>
-    
 <ul>
   <li>The name of the computer MySQL is installed to (e.g. eclass.gunet.gr, localhost – if they are on the same computer)  </li>
   <li>A “username” and a “password” for MySQL with database creation rights. </li>
-  <li>Name for the main eClass database (default is eclass). Change it howoever if there is a database with the same name already.  
+  <li>Name for the main eClass database (default is eclass). Change it however if there is a database with the same name already.  
   </li>
   <li>Platform URL (as this appears on the browser after installation
     e.g. http://eclass.gunet.gr/eclass/) </li>
@@ -222,7 +219,7 @@ The ldap server of the institute user authentication will be taking place  (ldap
 </ul>
     <hr>
     <h3>
-      <a name="win" id="win">For Ms Windows systems (Win2000, WinXP, Win2003 κ.λπ.)</a>
+      <a name="win" id="win">Installation in Ms Windows systems (Win2000, WinXP, Win2003)</a>
     </h3>
     <h3>
       Installation Process:
@@ -241,14 +238,14 @@ The ldap server of the institute user authentication will be taking place  (ldap
   <li>The file path on the server. Make sure that the path is right (e.g. C:\Program Files\Apache\htdocs\).</li>
   <li>Administrator’s Name / Surname and email.</li>
   <li>Administrator’s Username and Password.</li>
-  <li>The name you would like to give to the platform (e.g. GUnet eClass).</li>
+  <li>The name you would like to give to the platform (e.g. Open eClass).</li>
   <li>Phone number and email helpdesk (several applications meet this email, it could be the same as the administrator’s).</li>
   <li>Name and address of your institute.</li>
   <li>The ldap server of the institute user authentication will be taking place  (ldap.noc.uoa.gr), as well as the ldap server basedn (e.g. ou=people,o=UoA,c=gr). It should be noted, that the computer eclass will be installed to, needs to have access to the ldap server of the institute. In case there is no LDAP server available in your institute or organisation, leave it blank. There is an alternative way of authenticate users through MySQL.</li>
 </ul>
     <hr>
     <h3>
-      <a name="after" id="after">Actions after installation – Further settings:</a>
+      <a name="after" id="after">Actions after Installation – Further Settings:</a>
     </h3>
 <ul>
   <li> 
@@ -301,4 +298,3 @@ eclass/install/index.php</pre>
 </ul>
   </body>
 </html>
-
