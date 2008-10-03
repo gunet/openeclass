@@ -173,7 +173,7 @@ $tool_content .= "
 	            } else {
 	              $tool_content .= "\n  <tr class=\"odd\">";
 	            }
-            $tool_content .= "\n         <td width=\"1\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+            $tool_content .= "\n         <td width=\"1%\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
             $tool_content .= "\n         <td>".$codelink."</td>";
             $tool_content .= "\n         <td><small>$mycours[t]</small></td>";
             $tool_content .= "\n         <td align='center'>";
@@ -207,5 +207,5 @@ $tool_content .= "
 
 $tool_content .= "<br>";
 
-draw($tool_content, 0);
+draw($tool_content, 0, 'auth');
 ?>

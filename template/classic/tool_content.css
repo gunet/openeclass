@@ -226,10 +226,10 @@ p.caution_small{
 }
 
 p.success_small{
-  border-bottom: 1px solid #BAEFBF;
-  border-top: 1px solid #BAEFBF;
-  border-left: 1px solid #BAEFBF;
-  border-right: 1px solid #BAEFBF;
+  border-bottom: 1px solid #edecdf;
+  border-top: 0px solid #BAEFBF;
+  border-left: 0px solid #BAEFBF;
+  border-right: 0px solid #edecdf;
 }
 
 
@@ -411,7 +411,7 @@ table.DepTitle th{
     padding: 8px;
     font-weight: normal;
     background: #CAC3B5;
-    font-size:11px;
+    font-size:10px;
     color: #000000;
     border-top: 1px solid #a33033;
     border-bottom: 1px solid #a33033;
@@ -422,8 +422,8 @@ table.DepTitle th{
 table.DepTitle td {
     text-align: right;
     background: #CAC3B5;
-    font-size:11px;
-    color: #edecdf;
+    font-size:10px;
+    color: #a33033;
     border-top: 1px solid #a33033;
     border-bottom: 1px solid #a33033;
     border-left: 0px solid #ffffff;
@@ -433,15 +433,13 @@ table.DepTitle td {
 table.DepTitle a {
     color: #000000;
     font-size: 10px;
-    font-weight: bold;
+    font-weight: normal;
     text-decoration: none;
-    vertical-align: middle;
 }
 
 table.DepTitle a:hover {
     text-decoration: underline;
-    color: #edecdf;
-    vertical-align: middle;
+    color: #fff;
     font-size: 10px;
 }
 
