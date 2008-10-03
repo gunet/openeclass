@@ -1,4 +1,4 @@
-.invisible { 
+.invisible {
 	background: #F7F9FC !important;
 	color: silver !important;
 	}
@@ -50,15 +50,13 @@ table {
 
 th {
 	padding: 4px;
-	background-color: #ffffff;
-  border: 0px;
-  font-family: Verdana, Arial, sans-serif !important;
+    border: 0px;
+    font-family: Verdana, Arial, sans-serif !important;
 }
 
 td {
-padding: 4px;
+    padding: 4px;
     border: 0px;
-    background-color: #ffffff;
     font-family: Verdana, Arial, sans-serif !important;
 }
 

@@ -32,7 +32,7 @@ $tool_content ="";
 
     $tool_content .= "
     <p>$langIntro</p>
-    <br><br>
+    <br>
 
           <table width=\"600\" class=\"Smart\" align=\"center\" >
           <tbody>

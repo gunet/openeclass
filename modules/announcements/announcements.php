@@ -332,7 +332,7 @@ hContent;
       </tr>";
         $tool_content .= "
       <tr>
-        <td colspan='2'><textarea id='xinha' name='newContent' value='$contentToModify' rows='20' cols='90'>$contentToModify</textarea></td>
+        <td colspan='2'><textarea id='xinha' name='newContent' value='$contentToModify' rows='15' cols='75'>$contentToModify</textarea></td>
       </tr>";
         $tool_content .= "
             <input type=\"hidden\" name=\"id\" value=\"" . $AnnouncementToModify . "\">";

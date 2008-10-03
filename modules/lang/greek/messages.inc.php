@@ -133,6 +133,7 @@ $langLastLesson = "Τελευταίο μάθημα που δημιουργήθη
 $langLastProf = "Τελευταία εγγραφή ".$langsOfTeacher.":";
 $langLastStud = "Τελευταία εγγραφή ".$langsOfStudent.":";
 $langAfterLastLogin = "Μετά την τελευταία σας είσοδο έχουν εγγραφεί στην πλατφόρμα:";
+$langAfterLastLoginInfo = "Στοιχεία μετά την τελευταία σας είσοδο:";
 $langOtherActions = "Άλλες Ενέργειες";
 
 // Stat

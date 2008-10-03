@@ -122,6 +122,7 @@ $langLastLesson = "Last created course:";
 $langLastProf = "Last ".$langsTeacher." registration:";
 $langLastStud = "Last user registration:";
 $langAfterLastLogin = "After your last login, there have been registered:";
+$langAfterLastLoginInfo = "Data after your last login";
 $langOtherActions = "Other Actions";
 $langFound = "Found";
 $langFoundIt = "found";

@@ -97,17 +97,38 @@ $c=mysql_fetch_array(db_query("SELECT COUNT(*) FROM user where statut='5'"));
 $d=mysql_fetch_array(db_query("SELECT COUNT(*) FROM user where statut='10'"));
 
 // Constract a table with platform identification info
-$tool_content .= "<p><b>$langPlatformIdentity</b></p>
-<ul class=\"listBullet\">
-<li>$langAboutText <b>".$siteName." ".$langEclassVersion."</b></li>
-<li>".$langHostName."<b>".$SERVER_NAME."</b></li>
-<li>".$langWebVersion."<b>".$SERVER_SOFTWARE."</b></li>";
-// Check if we have mysql database to display its information
-if (extension_loaded('mysql'))
-    $tool_content .= "<li>$langMySqlVersion<b>".mysql_get_server_info()."</b></li>";
-else // If not display message no MySQL
-    $tool_content .= "<li font color=\"red\">".$langNoMysql."</li>";
-$tool_content .= "</ul>";
+$tool_content .= "
+    <table width=\"75%\" class=\"Smart\" align=\"center\" >
+    <tbody>
+    <tr class=\"odd\">
+      <th width=\"160\" style=\"border-left: 1px solid #edecdf; border-top: 1px solid #edecdf;\">&nbsp;</th>
+      <td><b>$langPlatformIdentity</b></td>
+    </tr>
+    <tr class=\"odd\">
+      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">Version:</th>
+      <td>$langAboutText <b>".$siteName." ".$langEclassVersion."</b></td>
+    </tr>
+    <tr class=\"odd\">
+      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">IP Host:</th>
+      <td>".$langHostName."<b>".$SERVER_NAME."</b></td>
+    </tr>
+    <tr class=\"odd\">
+      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">Web Server:</th>
+      <td>".$langWebVersion."<b>".$SERVER_SOFTWARE."</b></td>
+    </tr>
+    <tr class=\"odd\">
+      <th class=\"left\" style=\"border-left: 1px solid #edecdf; border-bottom: 1px solid #edecdf;\">Data Base Server:</th>
+      <td>";
+        if (extension_loaded('mysql'))
+            $tool_content .= "$langMySqlVersion<b>".mysql_get_server_info()."</b>";
+        else // If not display message no MySQL
+            $tool_content .= "<font color=\"red\">".$langNoMysql."</font>";
+    $tool_content .= "</td>
+    </tr>
+    </tbody>
+    </table>
+
+    <br>";
 
 if ($b[0] == 1)
 	$mes_teacher = $langTeacher;
@@ -125,12 +146,45 @@ else
 	$mes_guest = $langGuests;
 
 // Constract a table with platform statistical info
-$tool_content .= "<p><b>$langStoixeia</b><p>
-<ul class=\"listBullet\">
-<li>".$langAboutCourses." <b>".$a[0]."</b> ".$langCourses." (<i><b>".$a1[0]."</b> ".$langOpen.", <b>".$a2[0]."</b> ".$langSemiopen.", <b>".$a3[0]."</b> ".$langClosed."</i>)</li>
-<li>".$langAboutUsers." <b>".$e[0]."</b> ".$langUsersS." (<i><b>".$b[0]."</b> ".$mes_teacher.", <b>".$c[0]."</b> ".$mes_student." ".$langAnd." <b>".$d[0]."</b> ".$mes_guest."</i>)</li>
-<li>".$langTotalHits.": <b>".$totalHits."</b></li>
-<li>".$langUptime.": <b>".$uptime."</b></li></ul>";
+$tool_content .= "
+    <table width=\"75%\" class=\"Smart\" align=\"center\" >
+    <tbody>
+    <tr class=\"odd\">
+      <th width=\"160\" style=\"border-left: 1px solid #edecdf; border-top: 1px solid #edecdf;\">&nbsp;</th>
+      <td><b>$langStoixeia</b></td>
+    </tr>
+    <tr class=\"odd\">
+      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langCoursesHeader:</th>
+      <td>".$langAboutCourses." <b>".$a[0]."</b> ".$langCourses."
+         <ul>
+           <li><b>".$a1[0]."</b> ".$langOpen.",</li>
+           <li><b>".$a2[0]."</b> ".$langSemiopen.",</li>
+           <li><b>".$a3[0]."</b> ".$langClosed."</i></li>
+         </ul>
+      </td>
+    </tr>
+    <tr class=\"odd\">
+      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langUsers:</th>
+      <td>".$langAboutUsers." <b>".$e[0]."</b> ".$langUsersS."
+         <ul>
+           <li><b>".$b[0]."</b> ".$mes_teacher.",</li>
+           <li><b>".$c[0]."</b> ".$mes_student." ".$langAnd."</li>
+           <li><b>".$d[0]."</b> ".$mes_guest."</i></li>
+         </ul>
+      </td>
+    </tr>
+    <tr class=\"odd\">
+      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">".$langTotalHits.":</th>
+      <td><b>".$totalHits."</b></td>
+    </tr>
+    <tr class=\"odd\">
+      <th class=\"left\" style=\"border-left: 1px solid #edecdf; border-bottom: 1px solid #edecdf;\">".$langUptime.":</th>
+      <td><b>".$uptime."</b></td>
+    </tr>
+    </tbody>
+    </table>
+
+    <br>";
 
 // Count prof requests with status = 1
 $sql = "SELECT COUNT(*) AS cnt FROM prof_request WHERE status = 1";
@@ -147,19 +201,19 @@ if ($count_prof_requests > 0) {
 $sql = "SELECT code, intitule, titulaires FROM cours ORDER BY cours_id DESC LIMIT 0,1";
 $result = mysql_query($sql);
 $myrow = mysql_fetch_array($result);
-$last_course_info = "<b>".$myrow['intitule']."</b> <i>(".$myrow['code'].", ".$myrow['titulaires'].")</i>";
+$last_course_info = "<b>".$myrow['intitule']."</b> (".$myrow['code'].", ".$myrow['titulaires'].")";
 
 // Find last prof registration
 $sql = "SELECT prenom, nom, email, registered_at FROM user WHERE statut = 1 ORDER BY user_id DESC LIMIT 0,1";
 $result = mysql_query($sql);
 $myrow = mysql_fetch_array($result);
-$last_prof_info = "<b>".$myrow['prenom']." ".$myrow['nom']."</b> <i>(".$myrow['email'].", ".date("j/n/Y H:i",$myrow['registered_at']).")</i>";
+$last_prof_info = "<b>".$myrow['prenom']." ".$myrow['nom']."</b> (".$myrow['email'].", ".date("j/n/Y H:i",$myrow['registered_at']).")";
 
 // Find last stud registration
 $sql = "SELECT prenom, nom, email, registered_at FROM user WHERE statut = 5 ORDER BY user_id DESC LIMIT 0,1";
 $result = mysql_query($sql);
 $myrow = mysql_fetch_array($result);
-$last_stud_info = "<b>".$myrow['prenom']." ".$myrow['nom']."</b> <i>(".$myrow['email'].", ".date("j/n/Y H:i",$myrow['registered_at']).")</i>";
+$last_stud_info = "<b>".$myrow['prenom']." ".$myrow['nom']."</b> (".$myrow['email'].", ".date("j/n/Y H:i",$myrow['registered_at']).")";
 
 // Find admin's last login
 $sql = "SELECT `when` FROM loginout WHERE id_user = '".$uid."' AND action = 'LOGIN' ORDER BY `when` DESC LIMIT 1,1";
@@ -179,13 +233,43 @@ $result = mysql_query($sql);
 $myrow = mysql_fetch_array($result);
 $lastregisteredstuds = $myrow['cnt'];
 
-$tool_content .= "<p><b><caption>$langInfoAdmin</b></p>
-<ul class=\"listBullet\">
-<li>$langOpenRequests: <b>".$prof_request_msg."</b></li>
-<li>$langLastLesson $last_course_info</li>
-<li>$langLastProf $last_prof_info</li>
-<li>$langLastStud $last_stud_info</li>
-<li>$langAfterLastLogin <i><b>".$lastregisteredprofs."</b> $langTeachers<b> ".$lastregisteredstuds."</b> $langUsersS </i></li>";
+
+$tool_content .= "
+    <table width=\"75%\" class=\"Smart\" align=\"center\" >
+    <tbody>
+    <tr class=\"odd\">
+      <th width=\"160\" style=\"border-left: 1px solid #edecdf; border-top: 1px solid #edecdf;\">&nbsp;</th>
+      <td><b>$langInfoAdmin</b></td>
+    </tr>
+    <tr class=\"odd\">
+      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langOpenRequests:</th>
+      <td>".$prof_request_msg."</td>
+    </tr>
+    <tr class=\"odd\">
+      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langLastLesson</th>
+      <td>$last_course_info</td>
+    </tr>
+    <tr class=\"odd\">
+      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langLastProf</th>
+      <td>$last_prof_info</td>
+    </tr>
+    <tr class=\"odd\">
+      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langLastStud</th>
+      <td>$last_stud_info</td>
+    </tr>
+    <tr class=\"odd\">
+      <th class=\"left\" style=\"border-left: 1px solid #edecdf; border-bottom: 1px solid #edecdf;\">$langAfterLastLoginInfo</th>
+      <td>$langAfterLastLogin
+        <ul>
+          <li><b>".$lastregisteredprofs."</b> $langTeachers</li>
+          <li><b>".$lastregisteredstuds."</b> $langUsersS </li>
+        </ul>
+      </td>
+    </tr>
+    </tbody>
+    </table>
+
+    <br>";
 
 /*****************************************************************************
         DISPLAY HTML
