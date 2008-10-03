@@ -31,23 +31,21 @@ $tool_content ="";
 
 
     $tool_content .= "
-    <table width=\"99%\" class=\"Search\" align=\"left\" style=\"border: 1px solid #edecdf;\">
-    <tbody>
-    <tr class=\"odd\">
-      <td>$langIntro<br><br>
+    <p>$langIntro</p>
+    <br><br>
 
-          <table width=\"600\" class=\"FormData\" align=\"center\">
-          <thead>
+          <table width=\"600\" class=\"Smart\" align=\"center\" >
+          <tbody>
           <tr class=\"odd\">
-            <th width=\"160\">&nbsp;</th>
+            <th width=\"160\" style=\"border-left: 1px solid #edecdf; border-top: 1px solid #edecdf;\">&nbsp;</th>
             <td><b>$langStoixeia</b></td>
           </tr>
           <tr class=\"odd\">
-            <th class=\"left\">$l_version:</th>
+            <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$l_version:</th>
             <td>$langAboutText:&nbsp;<b>$siteName $langEclassVersion</b>&nbsp;&nbsp;(<a href='http://portal.eclass.gunet.gr/' title='Portal eClass' target='_blank' border=0>>></a>)</td>
           </tr>
           <tr class=\"odd\">
-            <th class=\"left\">$langCoursesHeader:</th>
+            <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langCoursesHeader:</th>
             <td>";
 
 /*
@@ -110,7 +108,7 @@ $d=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='10'"))
 
     $tool_content .= "
           <tr class=\"odd\">
-            <th class=\"left\">$langUsers:</th>
+            <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langUsers:</th>
             <td>$langAboutUsers <b>$e[0]</b> $langUsers
               <ul>
                 <li><b>$b[0]</b> $langTeachers, </li>
@@ -119,23 +117,18 @@ $d=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM user where statut='10'"))
               </ul></td>
           </tr>
           <tr class=\"odd\">
-            <th class=\"left\">$langOperation:</th>
+            <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langOperation:</th>
             <td>$langUptime<b> ".$uptime."</b> $langLast30daysLogins1 <b>".$total_logins[0]."</b>.</td>
           </tr>
           <tr class=\"odd\">
-            <th class=\"left\">$langSupportUser</th>
+            <th class=\"left\" style=\"border-left: 1px solid #edecdf; border-bottom: 1px solid #edecdf;\">$langSupportUser</th>
             <td>$administratorName $administratorSurname</td>
           </tr>
-          </thead>
+          </tbody>
           </table>
 
           <br>";
 
-    $tool_content .= "
-      </td>
-    </tr>
-    </tbody>
-    </table>";
 
 if (isset($uid) and $uid) {
         draw($tool_content, 1);

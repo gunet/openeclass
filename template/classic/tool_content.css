@@ -634,3 +634,19 @@ table.AnnouncementsList td {
 	border : 0px dotted #fff !important;
 }
 
+
+table.Smart{
+    padding: 0px 0px 0px 0px;
+    border-top: 1px solid #edecdf;
+    border-bottom: 1px solid #edecdf;
+    border-left: 1px solid #edecdf;
+    border-right: 1px solid #edecdf;
+}
+
+table.Smart td {
+	color: #727266;
+	vertical-align: top;
+	padding : 5px 4px 4px 4px;
+    font-size: 10px;
+}
+
