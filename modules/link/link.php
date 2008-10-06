@@ -397,19 +397,14 @@ if (mysql_num_rows($resultcategories) > 0) {
 } else {   // no category
    if (getNumberOfLinks(0)>0){
 	$tool_content .=  "
-    <table width=\"99%\">
+    <table width=\"99%\" class=\"FormData\" style=\"border: 1px solid #edecdf;\">
     <tbody>
     <tr>
       <td width='1' style='background:#FBFBFB; border-left: 1px solid #edecdf; border-top: 1px solid #edecdf;'><img src=\"../../template/classic/img/opendir.gif\" border=\"0\" title=\"$langNoCategory\"></td>
-      <td class=\"left\" colspan=\"3\" style='background:#FBFBFB; border-top: 1px solid #edecdf; border-right: 1px solid #edecdf;'><b>$langLinks</b></td>
+      <td class=\"left\" colspan=\"4\" style='background:#FBFBFB; border-top: 1px solid #edecdf; border-right: 1px solid #edecdf;'><b>$langLinks</b></td>
     </tr>";
 	showlinksofcategory(0);
 	$tool_content .=  "
-      </td>
-    </tr>
-    <tr>
-      <td colspan='4' style='background:#FBFBFB; border-left: 1px solid #edecdf; border-right: 1px solid #edecdf; border-bottom: 1px solid #edecdf;'>&nbsp;</td>
-    </tr>
     </tbody>
     </table>";
 	} else {
