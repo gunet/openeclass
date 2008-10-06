@@ -302,16 +302,21 @@ hContent;
         // should not send email if updating old message
         if (isset ($modify) && $modify) {
             $tool_content .= "
-            <table width='99%' class='FormData'>
-            <tbody>
-            <tr>
-              <th>&nbsp;</th>
-              <td><b>$langModifAnn</b></td>
-            </tr>";
+      <table width='99%' class='FormData'>
+      <tbody>
+      <tr>
+        <th>&nbsp;</th>
+        <td><b>$langModifAnn</b></td>
+      </tr>";
             $langAdd = $nameTools = $langModifAnn;
         } else {
-		$tool_content .= "<table width='99%' class='FormData' align='center'>
-      		<tbody><tr><th width='220'>&nbsp;</th><td><b>" . $langAddAnn . "</b></td></tr>";
+		$tool_content .= "
+      <table width='99%' class='FormData' align='center'>
+      <tbody>
+      <tr>
+        <th width=\"220\">&nbsp;</th>
+        <td><b>".$langAddAnn."</b></td>
+      </tr>";
 		$nameTools = $langAddAnn;
         }
 	$navigation[] = array("url" => "announcements.php", "name" => $langAnnouncements);
@@ -332,7 +337,7 @@ hContent;
       </tr>";
         $tool_content .= "
       <tr>
-        <td colspan='2'><textarea id='xinha' name='newContent' value='$contentToModify' rows='15' cols='75'>$contentToModify</textarea></td>
+        <td colspan='2' align=\"left\"><textarea id='xinha' name='newContent' value='$contentToModify' rows='20' cols='80'>$contentToModify</textarea></td>
       </tr>";
         $tool_content .= "
             <input type=\"hidden\" name=\"id\" value=\"" . $AnnouncementToModify . "\">";

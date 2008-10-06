@@ -543,7 +543,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         }
     }
     else {  //else of !$is_blocked condition , we have already been blocked before, so we continue beeing blocked : we don't display any links to next paths any longer
-        $tool_content .= "      <td align=\"left\"><img src=\"../../template/classic/img/arrow_grey.gif\" alt=\"\" border=\"0\" /> ".$list['name'].$list['minRaw']."</td>\n";
+        $tool_content .= "      <td class=\"left\"><img src=\"../../template/classic/img/arrow_grey.gif\" alt=\"\" border=\"0\" /> ".$list['name'].$list['minRaw']."</td>\n";
     }
 
     // DISPLAY ADMIN LINK-----------------------------------------------------------
@@ -671,7 +671,7 @@ if (!$is_adminOfCourse && $iterator != 1 && $uid) {
     // add a blank line between module progression and global progression
     $total = round($globalprog / ($iterator-1));
     $tool_content .= "
-      <td colspan = '2'><div align='right'><b>".$langPathsInCourseProg."</b>:</div></td>
+      <td colspan='2'><div align='right'><b>".$langPathsInCourseProg."</b>:</div></td>
       <td><div align='right'>".disp_progress_bar($total, 1)."</div></td>
       <td><div align='left'>".$total."%</div></td>\n";
 }

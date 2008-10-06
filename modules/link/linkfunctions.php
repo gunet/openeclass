@@ -271,8 +271,8 @@ function showlinksofcategory($catid)
 		$tool_content .= "
     <tr>
       <td>&nbsp;</td>
-      <td width='1'><img style='border:0px;' src='$urlServer/template/classic/img/arrow_grey.gif' title=\"".$langLinks."\"></td>
-      <td><a href=\"link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">".$myrow[2]."</a>
+      <td width='1%'><img style='border:0px;' src='$urlServer/template/classic/img/arrow_grey.gif' title=\"".$langLinks."\"></td>
+      <td class=\"left\"><a href=\"link_goto.php?link_id=".$myrow[0]."&link_url=".urlencode($myrow[1])."\" target=\"_blank\">".$myrow[2]."</a>
         <br>
         <small>".$myrow[3]."</small>
       </td>";
