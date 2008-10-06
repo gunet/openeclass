@@ -682,4 +682,5 @@ $langWikiContent = "<p>To create a new Wiki</p>
 <p>To enter a Wiki click on the title of the Wiki in the list.</p>
 <p>To change the properties of a Wiki click on the icon <img src='../../template/classic/img/edit.gif' align='absmiddle' border='0'>.</p> 
 <p>To delete a Wiki click on the icon <img src='../../template/classic/img/delete.gif' align='absmiddle' border='0'></p> 
-<p>To get the list of the last modified pages click on the link 'Recent changes'.</p>";
+<p>To get the list of the last modified pages click on the link 'Recent changes'.</p>
+<p>Use icons to format you text. Note that you can create a link (first select your text and then click on the icon <img src='../../modules/wiki/toolbar/bt_link.png' align='absmiddle' border='0'>) to a new wiki page which it will be created.";

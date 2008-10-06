@@ -109,7 +109,7 @@
         function getToolbar()
         {
 
-	    global $wiki_toolbar, $langWikiUrl;
+	    global $wiki_toolbar, $langWikiUrl, $langWikiUrlLang;
             $toolbar = '';
 
             $toolbar .= '<script type="text/javascript" src="'
@@ -134,7 +134,7 @@
 		tb.btList('".$wiki_toolbar['Unorderedlist']."','ul');
 		tb.btList('".$wiki_toolbar['Orderedlist']."','ol');
 		tb.addSpace(10);
-        	tb.btLink('".$wiki_toolbar['Link']."','".$langWikiUrl."','Language?','fr');
+        	tb.btLink('".$wiki_toolbar['Link']."','".$langWikiUrl."','".$langWikiUrlLang."','gr');
         	tb.btImgLink('".$wiki_toolbar['Externalimage']."','".$langWikiUrl."');
 		tb.draw('');
 	}
