@@ -66,17 +66,18 @@ if (isset($_POST["submit"])) {
                 while (list($key,$contenu) = each ($selectCourse)) {
 				 $sqlcheckpassword = mysql_query("SELECT password FROM cours WHERE code='".$contenu."'");
                         $myrow = mysql_fetch_array($sqlcheckpassword);
-                        if ($myrow['password']!="" && $myrow['password']!=$$contenu) {
-                                $errorExists = true;
+                        if ($myrow['password'] != "" and $myrow['password'] != autounquote($$contenu)) {
+                                $errorExists = true;		
                         } else {
                         	if(!is_restricted($contenu)) { //do not allow registration to restricted course
                                 $sqlInsertCourse =
                                 "INSERT INTO `cours_user` (`code_cours`, `user_id`, `statut`, `reg_date`)
                                          VALUES ('".$contenu."', '".$uid."', '5', CURDATE())";
                                 mysql_query($sqlInsertCourse) ;
-                                if (mysql_errno() > 0) echo mysql_errno().": ".mysql_error()."<br>";
+                                if (mysql_errno() > 0) {
+                                        echo mysql_errno().": ".mysql_error()."<br>";
                         	} else { //DUKE
-                                $restrictedCourses[$i]=$contenu;
+                                        $restrictedCourses[$i]=$contenu;
                         	}
                         }
                 }

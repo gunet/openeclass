@@ -147,6 +147,14 @@ function autoquote($s) {
         }
 }
 
+// Unquote string if needed (if magic quotes are on)
+function autounquote($s) {
+        if (get_magic_quotes_gpc()) {
+        	return stripslashes($s);
+        } else {
+        	return $s;
+        }
+}
 
 // Shortcut for htmlspecialchars()
 function q($s)
