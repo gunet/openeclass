@@ -1,26 +1,26 @@
 <?php
 
 // Message file for language en
-// Generated 2008-10-07 16:51:32
+// Generated 2008-10-07 17:01:08
 
-$langWindowClose = "Close window"; // 
-$langHDefault = 'Help non available'; // 
-$langDefaultContent = '<p>There is no help text available for the platform page you<BR>are currently viewing.</p>'; // 
-$langHFor = "Forums"; // 
-$langForContent = "<p>The forum is a written asynchronous communication tool.<BR>While email allows one-to-one dialogue, forums allow public or semi-public<BR>dialogue.</p><p>Technically speaking, students only need their<BR>browser to use eClass forums.</P><p>To organise forums, click on<BR>'Administer'. Discussions are organised in sets and subsets as<BR>following:</p><p><b>Category > Forum > Topic > Answers</b></p>To structure<BR>your students discussions, it is necessary to organise catgories and<BR>forums beforehand, leaving creation of topics and answers to them. By<BR>default, the eClass forum contains only the category 'Public', a sample<BR>forum and a sample topic.</p><p>The first thing you should do is delete<BR>the sample topic and modify the first forum name. Then, you can<BR>create other forums in the 'public' category, by groups or by themes, to<BR>fit your learning scenario requirements.</p><p>Don't mix Categories and<BR>forums, and don't forget that an empty category (without forums) does not<BR>appear on the student view.</p><p>The description of a forum can be the<BR>list of its members, the definition of a goal, a task, a theme...</p>"; // 
-$langHInit = "Home Page"; // 
-$langInitContent = "<p>You are currently in the Open eClass platform's home page.<BR>Type your username and password to login to the platform. In case you<BR>have forgotten your login information, click on 'Forgot your password?' and<BR>enter your e-mail address in the form that appears, in order to recover<BR>your username and password.</p><BR><p><b>New user registration</b></p><BR><p>If you are a student, you have to register by clicking in 'User<BR>Registration', and then you have to choose your desired courses.</p> <BR><p><b>Professor acount request</b></p><BR><p>If you are a professor, you also have to register by clicking on 'Professor account request'.<BR>After that, you must fill in a form with some personal information: Name, surname, username, phone number, e-mail and<BR>the department in which you belong. After filling the form, your request will be sent to the platform administrators<BR>. They will create your account and send you an e-mail with all the details of your account.<BR>Using your username / password you will be able to login in the platform. After entering the platform, you have to<BR>click in 'Create course site'. After completing some details about your course, your course will be created<BR>and you will be directed to your newly created course home page.</p>"; // 
-$langInit_studentContent = $langInitContent; // 
-$langHPortfolio = "User Portfolio"; // 
-$langPortfolioContent = "<p>Here you can find all courses you are registered to<BR>(as a student), as well as all the courses you have created (as a professor).<BR>You can enter any one of them by clicking on its title.</p><BR><BR><p>Using the options of the side menu, you can register to additional<BR>courses or sign out from your currently selected courses, change<BR>your profile information (such as name, password and preferred language),<BR>or find an aggregation page with the announcements and agenda of your<BR>courses.</p>"; // 
-$langPortfolio_studentContent = $langPortfolioContent; // 
-$langHcourse_home_stud = 'Main course page'; // 
-$langcourse_home_studContent = '<p>You are currently in the on-line course<BR>main page. From the side menu options, you can enter any of the course<BR>modules that have been activated by the course instructors.<BR></p>'; // 
-$langHcourse_home_prof = 'Main course page'; // 
-$langcourse_home_profContent = '<p class="helptopic">You are currently<BR>in the main page of your on-line course. From the side menu options,<BR>you can enter any of the modules where you can add your course\'s<BR>content. Active tools are visible to the visitors and students of<BR>your course, while inactive tools are only visible and accessible to<BR>you.</p><BR><p class="helptopic">Using the administration tools you can<BR>activate or inactivate course modules, review and administer registered<BR>users, change various options (such as course title, access control, etc.),<BR>and view usage statistics.</p>'; // 
-$langHDoc = "Documents"; // 
-$langDocContent = "<p>The Documents tool is similar to the FileManager of<BR>your desktop computer.</p><p>You can upload files of any type (HTML, Word,<BR>Powerpoint, Excel, Acrobat, Flash, Quicktime, etc.). Your only concern<BR>must be that your students have the corresponding software to read them.<BR>Some file types may contain viruses, it is your responsibilty not to<BR>upload virus contaminated files. It is a worthwhile precaution to check documents with<BR>antivirus software before uploading them.</p><BR><p>Documents are presented in alphabetical order.<br><b>Tip : </b>If<BR>you want to present them in a different order, numerate them: 01, 02,<BR>03...</p><BR><p>You can :</p><BR><h4>Upload a document</h4><BR><ul><BR><li>Select the file on your computer by clicking on 'Upload file'.</li><BR><li>In the following form use 'Browse' button to search for the file in your computer.</li><BR><li>Launch the upload with the 'Upload' button <BR></li><BR></ul><BR><h4>Rename a document (a directory)</h4><BR><ul><BR><li><BR>Click on the icon 'Rename' (<img src='../../template/classic/img/edit.gif' width=10 height=10<BR>align=baseline>).<BR></li><BR><li><BR>Type the new name in the field (top left)<BR></li><BR><li><BR>Validate by clicking 'Rename' button.<BR></li><BR></ul><BR><h4><BR>Delete a document (or a directory)<BR></h4><BR><ul><BR><li><BR>Click on the icon 'Delete' (<img src='../../template/classic/img/delete.gif' width=10 height=10 align=baseline>)</li><BR></ul><BR><h4><BR>Make a document (or directory) invisible to students<BR></h4><BR><ul><BR><li><BR>Click on the icon 'Visible/invisible' (<img src='../../template/classic/img/visible.gif' width=10 height=10 align=baseline>) <BR></li><BR><li><BR>After that the document (or directory) still exists but it is not visible by students anymore.<BR></li><BR><li><BR>To make it invisible back again, click on the icon 'Visible/invisible' (<img src='../../template/classic/img/invisible.gif' width=14 height=10 align=baseline> <BR></li><BR></ul><BR><h4><BR>Add or modify a comment to a document (or a directory)<BR></h4><BR><ul><BR><li><BR>Click on the 'Comment' icon *(<img src='../../template/classic/img/information.gif' width=10<BR>height=10 align=baseline>)</li><BR><li><BR>Type new comment in the corresponding field (top right).<BR></li><BR></ul><BR><hr><BR><p><BR>You can organise your content through filing. For this:<BR></p><BR><h4><BR><b><BR>Create a directory<BR></b><BR></h4><BR><ul><BR><li><BR>Click on the link 'Create a directory'.<BR></li><BR><li><BR>Type the name of your new directory in the corresponding field (top left)<BR></li><BR><li><BR>Validate by clicking 'Create directory' button.<BR></li><BR></ul><BR><h4><BR>Move a document (or directory)<BR></h4><BR><ul><BR><li><BR>Click on the icon 'Move' (<img src='../../template/classic/img/move_doc.gif' width=10 height=10 align=basename>)<BR></li><BR><li><BR>Choose the directory into which you want to move the document (or directory) in the corresponding scrolling menu (top left) (note: the word 'root' means you cannot go upper than that level in the document tree of the server).<BR></li><BR><li><BR>Validate by clicking on 'Move' <BR></li><BR></ul><BR></p>"; // 
-$langHUser = "Users Administration"; // 
+$langWindowClose = "Close window";
+$langHDefault = 'Help non available';
+$langDefaultContent = '<p>There is no help text available for the platform page you<BR>are currently viewing.</p>';
+$langHFor = "Forums";
+$langForContent = "<p>The forum is a written asynchronous communication tool.<BR>While email allows one-to-one dialogue, forums allow public or semi-public<BR>dialogue.</p><p>Technically speaking, students only need their<BR>browser to use eClass forums.</P><p>To organise forums, click on<BR>'Administer'. Discussions are organised in sets and subsets as<BR>following:</p><p><b>Category > Forum > Topic > Answers</b></p>To structure<BR>your students discussions, it is necessary to organise catgories and<BR>forums beforehand, leaving creation of topics and answers to them. By<BR>default, the eClass forum contains only the category 'Public', a sample<BR>forum and a sample topic.</p><p>The first thing you should do is delete<BR>the sample topic and modify the first forum name. Then, you can<BR>create other forums in the 'public' category, by groups or by themes, to<BR>fit your learning scenario requirements.</p><p>Don't mix Categories and<BR>forums, and don't forget that an empty category (without forums) does not<BR>appear on the student view.</p><p>The description of a forum can be the<BR>list of its members, the definition of a goal, a task, a theme...</p>";
+$langHInit = "Home Page";
+$langInitContent = "<p>You are currently in the Open eClass platform's home page.<BR>Type your username and password to login to the platform. In case you<BR>have forgotten your login information, click on 'Forgot your password?' and<BR>enter your e-mail address in the form that appears, in order to recover<BR>your username and password.</p><BR><p><b>New user registration</b></p><BR><p>If you are a student, you have to register by clicking in 'User<BR>Registration', and then you have to choose your desired courses.</p> <BR><p><b>Professor acount request</b></p><BR><p>If you are a professor, you also have to register by clicking on 'Professor account request'.<BR>After that, you must fill in a form with some personal information: Name, surname, username, phone number, e-mail and<BR>the department in which you belong. After filling the form, your request will be sent to the platform administrators<BR>. They will create your account and send you an e-mail with all the details of your account.<BR>Using your username / password you will be able to login in the platform. After entering the platform, you have to<BR>click in 'Create course site'. After completing some details about your course, your course will be created<BR>and you will be directed to your newly created course home page.</p>";
+$langInit_studentContent = $langInitContent;
+$langHPortfolio = "User Portfolio";
+$langPortfolioContent = "<p>Here you can find all courses you are registered to<BR>(as a student), as well as all the courses you have created (as a professor).<BR>You can enter any one of them by clicking on its title.</p><BR><BR><p>Using the options of the side menu, you can register to additional<BR>courses or sign out from your currently selected courses, change<BR>your profile information (such as name, password and preferred language),<BR>or find an aggregation page with the announcements and agenda of your<BR>courses.</p>";
+$langPortfolio_studentContent = $langPortfolioContent;
+$langHcourse_home_stud = 'Main course page';
+$langcourse_home_studContent = '<p>You are currently in the on-line course<BR>main page. From the side menu options, you can enter any of the course<BR>modules that have been activated by the course instructors.<BR></p>';
+$langHcourse_home_prof = 'Main course page';
+$langcourse_home_profContent = '<p class="helptopic">You are currently<BR>in the main page of your on-line course. From the side menu options,<BR>you can enter any of the modules where you can add your course\'s<BR>content. Active tools are visible to the visitors and students of<BR>your course, while inactive tools are only visible and accessible to<BR>you.</p><BR><p class="helptopic">Using the administration tools you can<BR>activate or inactivate course modules, review and administer registered<BR>users, change various options (such as course title, access control, etc.),<BR>and view usage statistics.</p>';
+$langHDoc = "Documents";
+$langDocContent = "<p>The Documents tool is similar to the FileManager of<BR>your desktop computer.</p><p>You can upload files of any type (HTML, Word,<BR>Powerpoint, Excel, Acrobat, Flash, Quicktime, etc.). Your only concern<BR>must be that your students have the corresponding software to read them.<BR>Some file types may contain viruses, it is your responsibilty not to<BR>upload virus contaminated files. It is a worthwhile precaution to check documents with<BR>antivirus software before uploading them.</p><BR><p>Documents are presented in alphabetical order.<br><b>Tip : </b>If<BR>you want to present them in a different order, numerate them: 01, 02,<BR>03...</p><BR><p>You can :</p><BR><h4>Upload a document</h4><BR><ul><BR><li>Select the file on your computer by clicking on 'Upload file'.</li><BR><li>In the following form use 'Browse' button to search for the file in your computer.</li><BR><li>Launch the upload with the 'Upload' button <BR></li><BR></ul><BR><h4>Rename a document (a directory)</h4><BR><ul><BR><li><BR>Click on the icon 'Rename' (<img src='../../template/classic/img/edit.gif' width=10 height=10<BR>align=baseline>).<BR></li><BR><li><BR>Type the new name in the field (top left)<BR></li><BR><li><BR>Validate by clicking 'Rename' button.<BR></li><BR></ul><BR><h4><BR>Delete a document (or a directory)<BR></h4><BR><ul><BR><li><BR>Click on the icon 'Delete' (<img src='../../template/classic/img/delete.gif' width=10 height=10 align=baseline>)</li><BR></ul><BR><h4><BR>Make a document (or directory) invisible to students<BR></h4><BR><ul><BR><li><BR>Click on the icon 'Visible/invisible' (<img src='../../template/classic/img/visible.gif' width=10 height=10 align=baseline>) <BR></li><BR><li><BR>After that the document (or directory) still exists but it is not visible by students anymore.<BR></li><BR><li><BR>To make it invisible back again, click on the icon 'Visible/invisible' (<img src='../../template/classic/img/invisible.gif' width=14 height=10 align=baseline> <BR></li><BR></ul><BR><h4><BR>Add or modify a comment to a document (or a directory)<BR></h4><BR><ul><BR><li><BR>Click on the 'Comment' icon *(<img src='../../template/classic/img/information.gif' width=10<BR>height=10 align=baseline>)</li><BR><li><BR>Type new comment in the corresponding field (top right).<BR></li><BR></ul><BR><hr><BR><p><BR>You can organise your content through filing. For this:<BR></p><BR><h4><BR><b><BR>Create a directory<BR></b><BR></h4><BR><ul><BR><li><BR>Click on the link 'Create a directory'.<BR></li><BR><li><BR>Type the name of your new directory in the corresponding field (top left)<BR></li><BR><li><BR>Validate by clicking 'Create directory' button.<BR></li><BR></ul><BR><h4><BR>Move a document (or directory)<BR></h4><BR><ul><BR><li><BR>Click on the icon 'Move' (<img src='../../template/classic/img/move_doc.gif' width=10 height=10 align=basename>)<BR></li><BR><li><BR>Choose the directory into which you want to move the document (or directory) in the corresponding scrolling menu (top left) (note: the word 'root' means you cannot go upper than that level in the document tree of the server).<BR></li><BR><li><BR>Validate by clicking on 'Move' <BR></li><BR></ul><BR></p>";
+$langHUser = "Users Administration";
 $langUserContent = "<b>Roles</b><p>Roles have no computer related function.
  They do not give rights on operating the system.</p>
 <hr>
@@ -33,15 +33,15 @@ $langUserContent = "<b>Roles</b><p>Roles have no computer related function.
  register him in the course or be sure he is already registerd, then click
  on 'Add' under 'Administrator'.</p><hr>
 <b>Add One user</b>
-<p>To add a user for your course, fill the fields and click in 'Search' button. After finding user click in 'Register user to course' to register him/her in your course</p>"; // 
-$langHGuest = "Guest Account"; // 
-$langGuestContent = "<p>By clicking in 'Add guest account'you can create an account for a guest user in a course. A guest user, can have access in the initial course page and of course the various active course tools but can't upload or modify anything.</p>"; // 
-$langHQuestionnaire = "Questionnaire"; // 
+<p>To add a user for your course, fill the fields and click in 'Search' button. After finding user click in 'Register user to course' to register him/her in your course</p>";
+$langHGuest = "Guest Account";
+$langGuestContent = "<p>By clicking in 'Add guest account'you can create an account for a guest user in a course. A guest user, can have access in the initial course page and of course the various active course tools but can't upload or modify anything.</p>";
+$langHQuestionnaire = "Questionnaire";
 $langQuestionnaireContent = "<p>With this tool can create and manage questionnaires.</p>
 <p>To create a questionnaire click on 'Create Questionnaire'. In the next form fill the title and the start / end date of the questionnaire. You can choose the question type by clicking in the corresponing buttons ('New mulitple choise question' and 'New text fill question'. After completing the questions and their answers click on 'Create Questionnaire' 
 </p>
-<p>Questionnaire results can accessed by the questionnaire admin page.</p>"; // 
-$langHExercise = "Exercises"; // 
+<p>Questionnaire results can accessed by the questionnaire admin page.</p>";
+$langHExercise = "Exercises";
 $langExerciseContent = "<p>The exercise tool allows you to create exercises that will contains as many questions as
 you l
 ike.<br><br>
@@ -135,8 +135,8 @@ new exercise, via the question pool.<br><br>
 The question pool also allows to reuse a same questions into several exercises.<br><br>
 By default, all questions of your course are shown. You can show the questions related to an exercise, by chosing
 this one in the drop-down menu &quot;Filter&quot;.<br><br>
-Orphan questions are questions that don't belong to any exercise.</p>"; // 
-$langHWork = "Assignments"; // 
+Orphan questions are questions that don't belong to any exercise.</p>";
+$langHWork = "Assignments";
 $langWorkContent = "<p>Assignment tool is a complete tool for creating / submittion of assignments.</p>
 <p>As a professor, you can create an assignment by clicking on <b>\"New Assignment\"</b>.
 Fill in the title of the assignment, define a deadline and optionally add a comment.</p>
@@ -159,8 +159,8 @@ Note, the student cannot upload an assignment after the deadline.
 Also, if he / she has uploaded an assignment and wants to upload a new one, the old one will be replaced by the new
 one.
 </p>
-"; // 
-$langHGroup = "Groups"; // 
+";
+$langHGroup = "Groups";
 $langGroupContent = "<p>This tool allows to create and manage work groups.
 At creation (Create groups), groups are emtpy. There are
 many ways to fill them:
@@ -196,40 +196,40 @@ with a series of informations and functions
 <ul><li><b>Edit</b> to modify manually Group name, description, tutor,
 members list.</li>
 <li><b>Delete</b> deletes a group.</li></ul>
-<hr noshade size=1>"; // 
-$langHAgenda = "Agenda"; // 
+<hr noshade size=1>";
+$langHAgenda = "Agenda";
 $langAgendaContent = "<p>You can add an event in agenda, by clicking on the link 'Add an event'. In the following form, choose a date, type a title and describe the details. After that press button 'Add / / Modify'An event will be created.</p>
 <p>If you wish, you can change some event properties by clicking the icon 'Modify' or deleting an event by clicking
-the icon 'Delete'.</p>"; // 
-$langHLink = "Link"; // 
+the icon 'Delete'.</p>";
+$langHLink = "Link";
 $langLinkContent = "<p>With the Links tool you can create links to various web pages.</p>
 <p>To add a link click on the link 'Add link'. Type the url, the link name and (optionally) a small description. If you want you can choose the category which the link will belongs. Click on the 'Add' button to add the link.</p>
 <p>You can organize your links by grouping them in categories. You can add a category by clicking in 'Add category' Type the category name and category description. After that click on the button 'Add'.</p> 
-<p>Notice that you can edit every link to re-assign it into a new category (of course you need to create this category first).</p>"; // 
-$langHAnnounce = "Announcements"; // 
+<p>Notice that you can edit every link to re-assign it into a new category (of course you need to create this category first).</p>";
+$langHAnnounce = "Announcements";
 $langAnnounceContent = "<p>You can add announcements in a course by clicking in the link 'Add announcement'. In the following form type the title and the body of the announcement. After that click on the 'Add'button.</p><p>
-Also, you can change the announcement clicking on the icon 'Modify' or delete an announcement clicking on the icon 'Delete'. If you want to mail your announcement to the registered students in your lesson, just check 'Send announcement (via email) to registered students'</p>"; // 
-$langHProfile = "Modify my profile"; // 
+Also, you can change the announcement clicking on the icon 'Modify' or delete an announcement clicking on the icon 'Delete'. If you want to mail your announcement to the registered students in your lesson, just check 'Send announcement (via email) to registered students'</p>";
+$langHProfile = "Modify my profile";
 $langProfileContent = "<p>You can modify your personal info in the platform</p>
 <li>You can modify your name, surname, and your e-mail address.</li>
 <li>Also if you desire, you can modify your username and your password.</li>
-<li>After making any changes, just click on the button 'Modify'.</li>"; // 
-$langHImport = "Upload html page"; // 
+<li>After making any changes, just click on the button 'Modify'.</li>";
+$langHImport = "Upload html page";
 $langImportContent = "<p>You can add your personal pages in course home page.
 The page must be in HTML format and can be created with a word processor or
 an editor for creating Web sites and pages. If you want to add a page upload the file .html
 by pressing the button 'Browse', type the title of the page and press button 'Add'.
 Your page will be linked from Homepage. If you want to send non HTML documents
 (PDF, Word, Power Point, Video, etc.) use 'Documents tool'
-These links can be deactivated and deleted.</p>"; // 
-$langHModule = "Add external link"; // 
+These links can be deactivated and deleted.</p>";
+$langHModule = "Add external link";
 $langModuleContent = "<p>If you want to add links in course home page, just type the title and the address of the
-link and press button 'Add'. These links can be deactivated and deleted.</p>"; // 
-$langHcourseTools = "Tools Management"; // 
+link and press button 'Add'. These links can be deactivated and deleted.</p>";
+$langHcourseTools = "Tools Management";
 $langcourseToolsContent = "<p>This module is used to activate or deactivate course tools. Each tool's status is presented in one of the two columns and can be active or not.</p>
 <p>In order to change the status of a tool click on the tools name to it and then click on '>>' to change it's status. You can move multiple tools by using CTRL+click. Finally, click  on 'Submit changes' to save your changes.</p>
-"; // 
-$langHInfocours = "Course Administration"; // 
+";
+$langHInfocours = "Course Administration";
 $langInfocoursContent = "<p>When the page of your course is ready, you can modify
 course information. You can modify professor name, configure the users access rights
 and modify the language that will be valid for every visitor of your course's website.
@@ -247,29 +247,29 @@ download and save it to your computer. In case of unmeant deletion or destructio
 you can use the backup file but you have to contact with the administrator of the platform.</p>
 <p><b>Delete the whole course website :</b> Deleting the course website will permanently delete all
 the documents it contains and unregister all its students (not remove them from other courses).</p>
-<p><b>Refresh Course :</b> You can delete the old data courses in order to create course for the next academic year.</p>"; // 
-$langHConference = "Conference"; // 
+<p><b>Refresh Course :</b> You can delete the old data courses in order to create course for the next academic year.</p>";
+$langHConference = "Conference";
 $langConferenceContent = "<p>The instructor has the ability to exchange messages with the students by typing the message on text field at the bottom of the page and then pressing \">>\". The instructor has the option to clear all past messages from appearing on the page by selecting \"Clear\". Also clicking on 'Save'you can save all the conference messages in the 'Documents'</p>
-"; // 
-$langHConference_stud = $langHConference; // 
-$langConference_studentContent = "<p>The instructor has the ability to exchange messages with the students that are using the Conference Module by typing the message on text field at the bottom of the page and then pressing \">>\". The instructor also has the option to clear all past messages from appearing on the page by selecting \"Clear\".</p>"; // 
-$langHVideo = "Video"; // 
+";
+$langHConference_stud = $langHConference;
+$langConference_studentContent = "<p>The instructor has the ability to exchange messages with the students that are using the Conference Module by typing the message on text field at the bottom of the page and then pressing \">>\". The instructor also has the option to clear all past messages from appearing on the page by selecting \"Clear\".</p>";
+$langHVideo = "Video";
 $langVideoContent = "
 <p>Courses might contain audio and video files as contend. Audio and video files can be distributed either via downloading or streaming. When distributed via downloading there is a significant amount of time for waiting until downloading finishes in order to playback the file. When distributed via streaming there is no wait time and playback starts immediately. Video module adds streaming capabilities to eClass.</p>
 <p><b><u>Instructor Options</u></b></p>
 <p>
 You can upload video file in several formats like mpeg, avi etc. Choose \"Add video\" and type the path to the video file you want or click on \"Browse\" to locate it visually. Optionally you can fill in the \"Document title\" & \"Description\" fields. Click on \"Add\" in order to upload the file to the platform. Additionally you can add video links to your courses. Choose \"Add video link\" and then type the link to the file on the streaming server you want to add in the \"URL\" field. Optionally you can fill in the \"Document title\" & \"Description\" fields. When finished click on \"Add\". Once added you can modify any of the fields by choosing \"Modify\" or you can delete a file or link by choosing \"Delete\". By choosing \"Delete whole list\" you can remove all the files and links added to a course. If there is a streaming server integrated with the platform the process of video files addition is transparent. There is no extra care or action to be done in order the files to be streamed from the streaming server. Keep in mind that video files and links will be available all the time if someone uses the direct url to them.
-</p>"; // 
-$langHVideo_stud = $langHVideo; // 
+</p>";
+$langHVideo_stud = $langHVideo;
 $langVideo_studentContent = "<p>Choose the video file you want to playback. If there is a streaming server integrated with platform, the student should be informed what client should use for playback.
-</p>"; // 
-$langHCoursedescription = "Course Description"; // 
+</p>";
+$langHCoursedescription = "Course Description";
 $langCoursedescriptionContent = "<p>You can add some additional info about the course, when you click in 'Create
 and Edit'. You can add a category, selecting it from the drop down box and click in the button 'Add'.
 After entering the information you want press the button 'Add'. </p><p>If, for some reason, you decide that don't want to enter
 the information press 'Return and Cancel'. Whenever you want, you can modify the information you have entered by
-clicking 'Modify' or deleting it by clicking on 'Delete'.</p>"; // 
-$langHPath = "Help - Learning Path"; // 
+clicking 'Modify' or deleting it by clicking on 'Delete'.</p>";
+$langHPath = "Help - Learning Path";
 $langPathContent = "
 The Learning Path tool has four functions:
 <ul>
@@ -372,18 +372,19 @@ href=\"http://www.trivantis.com/\">http://www.trivantis.com</a></li>
 
 <p>The Learning Path section lists all the <i>self-built Learning Paths</i>
 and all uploaded <i>Scorm format Learning Paths</i>, as well.</p>
-"; // 
-$langHDropbox = "DropBox"; // 
+";
+$langHDropbox = "DropBox";
 $langDropboxContent = "<p>Dropbox is a tool exchange file between professors and students. You can exchange various file types (e.g. Word files, Excel, PDF etc.)</p>
 <p>There are two folders. In folder <b>Received Files</b>
 there are all files you have recieved from other users of the platform with some additional info such as username, file size and file recieved date. In folder <b>Sent files</b> there are files you have sent in other users of platform with similar info.</p>
 <p>Note that if you delete a file, file doesn't delete from the platform database but only from this folder.</p>
 <p>If you wish to send a file to another user, first select the file from your computer by clicking on 'File Upload'. Optionally you can type a short description. Then select the recipient from the users list and click on 'Send'  You can select more recipients with your mouse and pressing <b>CTRL (Control)</b>.
-</p>"; // 
-$langHUsage = "Use Statistics"; // 
-$langUsageContent = "<p>Usage statistics modules allow the professor to see statistics about his lesson. They are presented in the form of charts or lists.</p><BR><p><strong>Statistics categories</strong></p><BR><ul><BR><li>Usage statistics</li><BR><li>Favorite modules</li><BR><li>User visits</li><BR><li>Old statistics</li><BR></ul><BR><p>Usage statistics can be grouped by number of visits or visit duration. Additionally, the professor is able to choose the modules he wants to see and the timeframe.</p><BR><p>The favorite modules statistics can be grouped by number of visits or visit duration. Additionally, the professor is able to choose the modules he wants to see.</p><BR><p>The user visits statistics can be grouped by users, either all, or by letter.</p><BR><p>Old statistics presentation can be grouped by number of visits or visit duration. Additionally, the professor is able to choose the modules he wants to see and the timeframe.</p><BR>"; // 
-$langHCreateCourse = "Create Course"; // 
-$langCreateCourseContent = "<p>The Create Course Wizard is one of the most important tools of the platform. By using this, the user-teacher is able to create new courses in the platform and configure them.</p><p>The wizards consist of 3 steps. Filling in every required field with an asterisk, is mandatory. Under each field, lie exemplary information to help the user filling them in.</p><p>In case the user enters invalid data in a field, the system informs the user and prompts him to correct the error so as to be able to continue with the next step.</p>"; // 
-$langHWiki = "Wiki"; // 
-$langWikiContent = "<p>To create a new Wiki</p><BR><ul><BR><li>Click on the "Create a new Wiki" link. Then enter the Wiki properties:</li><BR>
-<li><b>Wiki Title</b>: choose a title for the Wiki</li><BR><li><b>Wiki Description</b>: choose a description for the Wiki</li><BR><li><b>Access control management</b>: set the Wiki access control by checking/uncheking the box (see below)</li><BR></ul><BR><p>To enter a Wiki click on the Wiki title from the list.</p><BR><p>To change the properties of a Wiki click on the icon <img src='../../template/classic/img/edit.gif' align='absmiddle' border='0'>.</p> <BR><p>To delete a Wiki click on the icon <img src='../../template/classic/img/delete.gif' align='absmiddle' border='0'></p> <BR><p>To get the list of the last modified pages click on the link 'Recent changes'.</p>"; // 
+</p>";
+$langHUsage = "Use Statistics";
+$langUsageContent = "<p>Usage statistics modules allow the professor to see statistics about his lesson. They are presented in the form of charts or lists.</p><BR><p><strong>Statistics categories</strong></p><BR><ul><BR><li>Usage statistics</li><BR><li>Favorite modules</li><BR><li>User visits</li><BR><li>Old statistics</li><BR></ul><BR><p>Usage statistics can be grouped by number of visits or visit duration. Additionally, the professor is able to choose the modules he wants to see and the timeframe.</p><BR><p>The favorite modules statistics can be grouped by number of visits or visit duration. Additionally, the professor is able to choose the modules he wants to see.</p><BR><p>The user visits statistics can be grouped by users, either all, or by letter.</p><BR><p>Old statistics presentation can be grouped by number of visits or visit duration. Additionally, the professor is able to choose the modules he wants to see and the timeframe.</p><BR>";
+$langHCreateCourse = "Create Course";
+$langCreateCourseContent = "<p>The Create Course Wizard is one of the most important tools of the platform. By using this, the user-teacher is able to create new courses in the platform and configure them.</p><p>The wizards consist of 3 steps. Filling in every required field with an asterisk, is mandatory. Under each field, lie exemplary information to help the user filling them in.</p><p>In case the user enters invalid data in a field, the system informs the user and prompts him to correct the error so as to be able to continue with the next step.</p>";
+$langHWiki = "Wiki";
+$langWikiContent = '<p>To create a new Wiki</p><BR><ul><BR><li>Click on the "Create a new Wiki" link. Then enter the Wiki properties:</li><BR><br>
+<li><b>Wiki Title</b>: choose a title for the Wiki</li><BR><li><b>Wiki Description</b>: choose a description for the Wiki</li><BR><li><b>Access control management</b>: set the Wiki access control by checking/uncheking the box (see below)</li><BR></ul><BR><p>To enter a Wiki click on the Wiki title from the list.</p><BR><p>To change the properties of a Wiki click on the icon <img src="../../template/classic/img/edit.gif" align="absmiddle" border="0">.</p> <BR><p>To delete a Wiki click on the icon <img src="../../template/classic/img/delete.gif" align="absmiddle" border="0"></p> <BR><p>To get the list of the last modified pages click on the link "Recent changes".</p>'
+;
