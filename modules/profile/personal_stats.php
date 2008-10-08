@@ -46,39 +46,41 @@ if (!extension_loaded('gd')) {
 	require_once '../../include/libchart/libchart.php';
 	$sql = "SELECT code, intitule FROM cours";
 	$result = db_query($sql);
-	while ($row = mysql_fetch_assoc($result)) {
-		$course_codes[] = $row['code'];
-		$course_names[$row['code']]=$row['intitule'];
-	}
-	mysql_free_result($result);
-	foreach ($course_codes as $course_code) {
-		$sql = "SELECT COUNT(*) AS cnt FROM actions WHERE user_id = '$uid'";
-		$result = db_query($sql, $course_code);
+	if (mysql_num_rows($result) > 0) {  // found courses ?
 		while ($row = mysql_fetch_assoc($result)) {
-			$totalHits += $row['cnt'];
-			$hits[$course_code] = $row['cnt'];
+			$course_codes[] = $row['code'];
+			$course_names[$row['code']]=$row['intitule'];
 		}
 		mysql_free_result($result);
+		foreach ($course_codes as $course_code) {
+			$sql = "SELECT COUNT(*) AS cnt FROM actions WHERE user_id = '$uid'";
+			$result = db_query($sql, $course_code);
+			while ($row = mysql_fetch_assoc($result)) {
+				$totalHits += $row['cnt'];
+				$hits[$course_code] = $row['cnt'];
+			}
+			mysql_free_result($result);
+		}
+		$tool_content .= "<p>$langTotalVisitsCourses: $totalHits</p>";
+		$chart = new PieChart(500, 300);
+		$chart_content=0;
+		foreach ($hits as $code => $count) {
+			if ($count >0 ){
+				$chart_content=1;
+				$chart->addPoint(new Point($course_names[$code], $count));
+			}
+		}
+		$chart->setTitle($langCourseVisits);
+		if (!file_exists("../../courses/temp")) {
+			mkdir("../../courses/temp", 0777);
+		}
+		$chart_path = 'courses/temp/chart_'.md5(serialize($chart)).'.png';
+		$chart->render($webDir.$chart_path);
+		if ($chart_content) {
+		$tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
+		}
+			$made_chart = true;
 	}
-	$tool_content .= "<p>$langTotalVisitsCourses: $totalHits</p>";
-	$chart = new PieChart(500, 300);
-	$chart_content=0;
-	foreach ($hits as $code => $count) {
-        if ($count >0 ){
-           $chart_content=1;
-		   $chart->addPoint(new Point($course_names[$code], $count));
-        }
-    }
-	$chart->setTitle($langCourseVisits);
-	if (!file_exists("../../courses/temp")) {
-        mkdir("../../courses/temp", 0777);
-    }
-	$chart_path = 'courses/temp/chart_'.md5(serialize($chart)).'.png';
-	$chart->render($webDir.$chart_path);
-	if ($chart_content) {
-	   $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
-    }
-    $made_chart = true;
 }
 // End of chart display; chart unlinked at end of script.
 
