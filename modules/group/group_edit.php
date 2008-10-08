@@ -112,7 +112,28 @@ function reverseAll(cbList) {
     cbList[i].selected = !(cbList[i].selected)
   }
 }
-
+</script>
+<script type="text/javascript">
+function checkrequired(which, entry) {
+	var pass=true;
+	if (document.images) {
+		for (i=0;i<which.length;i++) {
+			var tempobj=which.elements[i];
+			if (tempobj.name == entry) {
+				if (tempobj.type=="text"&&tempobj.value=='') {
+					pass=false;
+					break;
+		  		}
+	  		}
+		}
+	}
+	if (!pass) {
+		alert("$langEmptyGroupName");
+		return false;
+	} else {
+		return true;
+	}
+}
 </script>
 hCont;
 
@@ -282,7 +303,7 @@ while ($myMember = mysql_fetch_array($resultMember))
 
 
 $tool_content .="
-  <form name= \"groupedit\" method=\"POST\" action=\"".$_SERVER['PHP_SELF']."?edit=yes&userGroupId=$userGroupId\">
+  <form name= \"groupedit\" method=\"POST\" action=\"".$_SERVER['PHP_SELF']."?edit=yes&userGroupId=$userGroupId\" onsubmit = \" return checkrequired(this,'name');\">
     <br />
     <table width=\"99%\" class=\"FormData\">
     <thead>
@@ -297,7 +318,7 @@ $tool_content .="
     <tr>
       <th class=\"left\">$langGroupTutor:</th>
       <td>
-         <select name=\"tutor\"  class=\"FormData_InputText\">$tool_content_tutor</select>
+         <select name=\"tutor\" class=\"FormData_InputText\">$tool_content_tutor</select>
       </td>
     </tr>
     <tr>

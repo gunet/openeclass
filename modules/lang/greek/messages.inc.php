@@ -1152,6 +1152,7 @@ $langExistingGroups="Υπάρχουσες Ομάδες Χρηστών";
 $langEdit="Διόρθωση";
 $langDeleteGroupWarn = "Επιβεβαίωση διαγραφής της ομάδας χρηστών";
 $langDeleteGroupAllWarn = "Επιβεβαίωση διαγραφής όλων των ομάδων χρηστών";
+$langEmptyGroupName = "Αφήσατε κενό το όνομα της ομάδας χρηστών";
 
 // Group Properties
 $langGroupProperties="Ρυθμίσεις ομάδων χρηστών";
