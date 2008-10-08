@@ -142,17 +142,12 @@ $have_latex = '.$latex.';
 
 $close_user_registration = '.$user_reg.';
 $encryptedPasswd = "true";
-$persoIsActive = "'.$_POST['formpersoIsActive'].'";
+$persoIsActive = TRUE;
 
 $durationAccount = "'.$_POST['formdurationAccount'].'";
 ';
 	// Save new config.php
 	fwrite($fd, $stringConfig);
-	// Update user with perso = no if persoisactive==false
-	if ($_POST['formpersoIsActive']=="false") {
-		$sql = 'UPDATE `user` SET `perso` = \'no\'';
-		mysql_query($sql);
-	}
 	// Display result message
 	$tool_content .= "<p>".$langFileUpdatedSuccess."</p>";
 
@@ -317,22 +312,6 @@ $tool_content .= "
       <option value=\"false\" ".$have_latexSelFalse.">false</option>
     </select></td>
   </tr>";
-	// Add select for $persoIsActive
-	if ($persoIsActive == "true") {
-		$persoIsActiveSelTrue = "selected";
-		$persoIsActiveSelFalse = "";
-	} else {
-		$persoIsActiveSelTrue = "";
-		$persoIsActiveSelFalse = "selected";
-	}
-	$tool_content .= "
-  <tr>
-    <th class=\"left\"><b>\$persoIsActive:</b></th>
-    <td><select name=\"formpersoIsActive\">
-      <option value=\"true\" ".$persoIsActiveSelTrue.">true</option>
-      <option value=\"false\" ".$persoIsActiveSelFalse.">false</option>
-    </select></td>
-</tr>";
 
 $tool_content .= "
   <tr>

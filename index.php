@@ -70,7 +70,9 @@ unset($dbname);
 
 //if platform admin allows usage of eclass personalised
 //create a session so that each user can activate it for himself.
-if (isset($persoIsActive)) session_register("perso_is_active");
+if (isset($persoIsActive)) {
+session_register("perso_is_active");
+}
 
 // ------------------------------------------------------------------------
 // if we try to login... then authenticate user.

@@ -38,7 +38,6 @@ $tool_content = "";
 if (!isset($siteName)) $siteName = "";
 if (!isset($InstitutionUrl)) $InstitutionUrl = "";
 if (!isset($Institution)) $Institution = "";
-
 // greek is the default language
 if (!isset($lang)) {
 	$_SESSION['lang'] = 'greek';
@@ -56,7 +55,7 @@ include "../modules/lang/$lang/common.inc.php";
 include "../modules/lang/$lang/messages.inc.php";
 if ($lang == 'english') {
 	$install_info_file = "install_info_en.php";
-} else { 
+} else {
 	$install_info_file = "install_info.php";
 }
 
@@ -162,11 +161,8 @@ if (isset($alreadyVisited)) {
             <input type=\"hidden\" name=\"ldapserver\" value=\"".@$ldapserver."\">
             <input type=\"hidden\" name=\"dnldapserver\" value=\"".@$dnldapserver."\">
             <input type=\"hidden\" name=\"reguser\" value=\"".@$reguser."\">
-            <input type=\"hidden\" name=\"vodServer\" value=\"".@$vodServerForm."\">
-            <input type=\"hidden\" name=\"MCU\" value=\"".@$MCUForm."\">
-            <input type=\"hidden\" name=\"persoIsActive\" value=\"".@$persoIsActive."\">";
+            <input type=\"hidden\" name=\"vodServer\" value=\"".@$vodServerForm."\">";
 }
-
 
 // step 2 license
 
@@ -254,14 +250,7 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
 {
 	// Added by vagpits
-	// Global variable persoIsActive
-	if ($persoIsActive == "true") {
-		$persoIsActiveSelTrue = "selected";
-		$persoIsActiveSelFalse = "";
-	} else {
-		$persoIsActiveSelTrue = "";
-		$persoIsActiveSelFalse = "selected";
-	}
+
 	$langStepTitle = $langCfgSetting;
 	$langStep = $langStep4;
 	$_SESSION['step']=4;
@@ -340,7 +329,8 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back4']))
 	<tr>
       <th class=\"left\">$langViaReq</th>
 	  <td><input type='checkbox' name='reguser'></td>
-	</tr>
+	</tr>";
+	/*
     <tr>
       <th class=\"left\">$langVod</th>
       <td>
@@ -385,17 +375,8 @@ function set_MCU()
 	<tr>
       <th class=\"left\"><div id=\"MCU_div_text\"></div></th>
 	  <td><div id=\"MCU_div_input\"></td>
-    </tr>
-    <tr>
-      <th class=\"left\">$langPerso</th>
-      <td>
-        <select name=\"persoIsActive\">
-          <option value=\"true\" ".$persoIsActiveSelTrue.">true</option>
-          <option value=\"false\" ".$persoIsActiveSelFalse.">false</option>
-        </select>
-      </td>
-    </tr>
-    <tr>
+    </tr>*/
+    $tool_content .= "<tr>
       <th class=\"left\">&nbsp;</th>
       <td><input type=\"submit\" name=\"back3\" value=\"< $langPreviousStep \">
           <input type=\"submit\" name=\"install6\" value='$langNextStep >'>
@@ -508,16 +489,16 @@ elseif(isset($_REQUEST['install6']))
     <tr>
 	  <th class=\"left\">$langGroupStudentRegistrationType</th>
 	  <td>".$mes_add."</td>
-	</tr>
-    <tr>
+	</tr>";
+    /*<tr>
 	  <th class=\"left\">MCU:</th>
 	  <td>".@$MCUForm."</td>
 	</tr>
     <tr>
 	  <th class=\"left\">$langVod:</th>
 	  <td>".@$vodServerForm."</td>
-	</tr>
-    <tr>
+	</tr> */
+    $tool_content .= "<tr>
 	  <th class=\"left\">&nbsp;</th>
 	  <td><input type=\"submit\" name=\"back4\" value=\"< $langPreviousStep\">
         <input type=\"submit\" name=\"install7\" value=\"$langInstall >\"></td>
@@ -616,15 +597,19 @@ $postaddress = "'.$postaddressForm.'";
 $have_latex = FALSE;
 $close_user_registration = '.$user_registration.';
 
-$persoIsActive = '.$persoIsActive.';
+$persoIsActive = TRUE;
 $durationAccount = "126144000";
 
 define("UTF8", true);
 
-'.($vodServer==''?'//':'').'$vodServer = "'.$vodServer.'";
-'.($MCU==''?'//':'').'$MCU = "'.$MCU.'";
+
 $encryptedPasswd = true;
 ';
+
+// was in config
+//'.($vodServer==''?'//':'').'$vodServer = "'.$vodServer.'";
+//'.($MCU==''?'//':'').'$MCU = "'.$MCU.'";
+
 	// write to file
 	fwrite($fd, $stringConfig);
 	// message
