@@ -253,7 +253,7 @@ function add_assignment($title, $comments, $desc, $deadline, $group_submissions)
 
 function submit_work($id) {
 
-	global $tool_content, $workPath, $uid, $stud_comments, $group_sub, $REMOTE_ADDR, $langUploadSuccess, 
+	global $tool_content, $workPath, $uid, $stud_comments, $group_sub, $REMOTE_ADDR, $langUploadSuccess,
 	$langBack, $langWorks, $langUploadError, $currentCourseID, $langExerciseNotPermit, $langUnwantedFiletype;
 
 	//DUKE Work submission bug fix.
@@ -297,7 +297,7 @@ function submit_work($id) {
 	$nav[] = array("url"=>"work.php?id=$id", "name"=> $row['title']);
 
   	if($submit_ok) { //only if passed the above validity checks...
-	
+
 	$msg1 = delete_submissions_by_uid($uid, -1, $id);
 
 	$local_name = greek_to_latin(uid_to_name($uid));
@@ -1081,7 +1081,7 @@ function show_assignments($message = null)
     <thead>
     <tr>
       <th colspan="2"><div align="left">&nbsp;&nbsp;&nbsp;&nbsp;${m['title']}</div></th>
-      <th width="130">${m['deadline']}</th>
+      <th width="150">${m['deadline']}</th>
       <th width="110"><div align="right">$langCommands &nbsp;</div></th>
     </tr>
     </thead>
@@ -1108,7 +1108,7 @@ cData;
                         }
 
 			$tool_content .= "
-      <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/$visibility_image.gif' title='bullet'></td>
+      <td width=\"1%\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/$visibility_image.gif' title='bullet'></td>
       <td ".$visibility_css."><a href=\"work.php?id=${row['id']}\" ";
 			$tool_content .= ">";
 			$tool_content .= $row_title = htmlspecialchars($row['title']);

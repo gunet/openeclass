@@ -690,7 +690,7 @@ if (mysql_num_rows($sql) == 0) {
 	if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
 	{
    	    $tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdParentDir."\">$langUp</a>\n";
-   	    $tool_content .=  "<img src=\"../../template/classic/img/parent.gif\" border=0 align=\"absmiddle\" height='12' width='12'>";
+   	    $tool_content .=  "<img src=\"../../template/classic/img/parent.gif\" border=0 align=\"absmiddle\" height='20' width='20'>";
 	}
 	$tool_content .= "</div></th>";
     $tool_content .= "\n  </tr>";
