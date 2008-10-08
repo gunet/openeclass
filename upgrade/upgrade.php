@@ -185,7 +185,7 @@ if (!isset($submit2)) {
 
         $new_conf = preg_replace(
                         array(
-				'#^.*(mainInterfaceWidth|bannerPath|userMailCanBeEmpty).*$#m',
+				'#^.*(mainInterfaceWidth|bannerPath|userMailCanBeEmpty|colorLight|colorMedium|colorDark|table_border|color1|color2).*$#m',
                                 '#\$postaddress\b[^;]*;#sm',
                                 '#\$fax\b[^;]*;#',
                                 '#\$close_user_registration\b[^;]*;#',
