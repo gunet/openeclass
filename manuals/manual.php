@@ -46,7 +46,7 @@ switch ($localize) {
 		break;
 	case 'english': $ext = '_en';
 		break;
-	default: $ext = '';
+	default: $ext = '_el';
 }
 
 $tool_content .= <<<tCont
