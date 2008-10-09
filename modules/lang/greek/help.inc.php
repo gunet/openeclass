@@ -89,14 +89,13 @@ $langPortfolioContent="<p>Σε αυτή τη σελίδα εμφανίζοντα
 ";
 $langPortfolio_studentContent = $langPortfolioContent;
 
-$langHcourse_home_stud='Κεντρική σελίδα μαθήματος';
-$langcourse_home_studContent='<p>Βρίσκεστε στην κεντρική σελίδα του
+$langHcourse_home='Κεντρική σελίδα μαθήματος';
+$langcourse_home_studentContent='<p>Βρίσκεστε στην κεντρική σελίδα του
 ηλεκτρονικού μαθήματος. Από τις επιλογές του μενού στο αριστερό μέρος της
 οθόνης, μπορείτε να μεταβείτε στα υποσυστήματα που έχουν ενεργοποιηθεί από
 τους διδάσκοντες του μαθήματος.</p>';
 
-$langHcourse_home_prof = $langHcourse_home_stud;
-$langcourse_home_profContent='<p class="helptopic">Βρίσκεστε στην κεντρική σελίδα του
+$langcourse_homeContent='<p class="helptopic">Βρίσκεστε στην κεντρική σελίδα του
 ηλεκτρονικού μαθήματός σας. Από τις επιλογές του μενού στο αριστερό μέρος της
 οθόνης, μπορείτε να μεταβείτε στα υποσυστήματα του μαθήματος, στα οποία
 μπορείτε να προσθέσετε το εκπαιδευτικό υλικό του μαθήματος. Τα

@@ -102,7 +102,7 @@ $bar_content .= "<p><b>".$langFaculty."</b>: ".$faculte."</p>";
 $bar_content .= "<p><b>".$m['type']."</b>: ".$lessonType."</p>";
 
 $require_help = TRUE;
-$helpTopic = $is_adminOfCourse? 'course_home_prof': 'course_home_stud';
+$helpTopic = 'course_home';
 
 if ($is_adminOfCourse) {
 

@@ -56,7 +56,7 @@ include "../../include/lib/fileUploadLib.inc.php";
 $nameTools = $langDoc;
 $navigation[] = array ("url" => "group_space.php", "name" => $langGroupSpace);
 $baseServDir = $webDir;
-$tool_content = "";
+$tool_content = $dialogBox = "";
 
 $local_head = '
 <script>
@@ -237,7 +237,6 @@ if (isset($newDirPath) && isset($newDirName)) {
                 db_query('INSERT INTO group_documents SET
                                 path='.quote($newDirPath.'/'.$safe_dirName).',
                                 filename='.quote($newDirName));
-                mysql_query($query);
                 $dialogBox = "<p class=\"success_small\">$langDirCr</p><br />";
         }
 }
@@ -247,7 +246,7 @@ STEP 1
 --------------------------------------*/
 if (isset($createDir))
 {
-	$dialogBox ="";
+	//$dialogBox ="";
 	$dialogBox .= "<form>\n";
 	$dialogBox .= "<input type=\"hidden\" name=\"newDirPath\" value=\"$createDir\">\n";
 	$dialogBox .= "<table class='FormData' width=\"99%\"><tbody><tr><th class='left' width=\"220\">$langNewDir:</th>";
@@ -359,13 +358,6 @@ else
 UPLOAD SECTION
 --------------------------------------*/
 
-	$dialogBox .= "<form>\n";
-	$dialogBox .= "<input type=\"hidden\" name=\"newDirPath\" value=\"$createDir\">\n";
-	$dialogBox .= "<table class='FormData' width=\"99%\"><tbody><tr><th class='left' width=\"220\">$langNewDir:</th>";
-	$dialogBox .= "<td class='left' width=\"1\"><input type=\"text\" name=\"newDirName\" class='FormData_InputText'></td>";
-	$dialogBox .= "<td class='left'><input type=\"submit\" value=\"$langCreate\"></td> \n";
-	$dialogBox .= "</tr></tbody></table></form><br />\n";
-
 if(isset($uploadPath)) {
 	$tool_content .= <<<cData
 	<form action='$_SERVER[PHP_SELF]' method='post' enctype='multipart/form-data'>
@@ -396,7 +388,7 @@ $tool_content .= "
   /*** go to parent directory ***/
 if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
 {
-	$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$ParentDir."\">$langUp</a>\n";
+	$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$parentDir."\">$langUp</a>\n";
 	$tool_content .=  "<img src=\"../../template/classic/img/parent.gif\" border=0 align=\"absmiddle\">";
 }
 
