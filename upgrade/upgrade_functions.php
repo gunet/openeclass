@@ -1152,7 +1152,10 @@ function encode_group_documents($course_code, $group_id, $secret_directory)
 {
         $cwd = getcwd();
         chdir($GLOBALS['webDir'].'courses/'.$course_code.'/group');
-        traverseDirTree($secret_directory, 'document_upgrade_file', 'document_upgrade_dir', $secret_directory);
+	if (is_dir($secret_directory)) {
+	        traverseDirTree($secret_directory, 'document_upgrade_file', 'document_upgrade_dir', $secret_directory);
+	} else {
+		mkdir($secret_directory, '0775');
         chdir($cwd);
 }
 

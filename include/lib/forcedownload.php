@@ -77,13 +77,12 @@ function send_file_to_client($real_filename, $filename, $send_inline = false)
 
 function get_file_extention($filename)
 {
-        $pos=strpos(strrev($filename),".");
-        if($pos) {
-                $ext = substr($filename,strlen($filename)-$pos,$pos);
-        } else {
-                $ext="";
-        }
-        return $ext;
+	$matches = array();
+	if (preg_match('/\.([a-zA-Z0-9_-]{1,8})$/', $filename, $matches)) {
+		return $matches[1];
+	} else {
+		return '';
+	}
 }
 
 
