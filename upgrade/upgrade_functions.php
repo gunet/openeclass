@@ -431,12 +431,12 @@ function upgrade_course($code, $lang)
 
         for ($j=0; $j <$event_counter; $j++) {
                 db_query("INSERT INTO agenda (lesson_event_id, titre, contenu, day, hour, lasting, lesson_code)
-                                VALUES ('".$lesson_agenda[$j]['id']."',
-                                        '".$lesson_agenda[$j]['title']."',
-                                        '".$lesson_agenda[$j]['content']."',
-                                        '".$lesson_agenda[$j]['date']."',
-                                        '".$lesson_agenda[$j]['time']."',
-                                        '".$lesson_agenda[$j]['duree']."',
+                                VALUES (".q($lesson_agenda[$j]['id']).",
+                                        ".q($lesson_agenda[$j]['title']).",
+                                        ".q($lesson_agenda[$j]['content']).",
+                                        ".$lesson_agenda[$j]['date'].",
+                                        ".$lesson_agenda[$j]['time'].",
+                                        ".$lesson_agenda[$j]['duree'].",
                                         '".$lesson_agenda[$j]['lesson_code']."'
                                        )", $mysqlMainDb);
 

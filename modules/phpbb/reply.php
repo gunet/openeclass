@@ -58,7 +58,8 @@
  * GUNET eclass 2.0 standard stuff
  */
 $require_current_course = TRUE;
-$require_help = FALSE;
+$require_help = TRUE;
+$helpTopic = 'For';
 include '../../include/baseTheme.php';
 
 $tool_content = "";

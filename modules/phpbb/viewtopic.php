@@ -59,7 +59,8 @@
  */
 $require_current_course = TRUE;
 $require_login = TRUE;
-$require_help = FALSE;
+$require_help = TRUE;
+$helpTopic = 'For';
 include '../../include/baseTheme.php';
 $tool_content = "";
 
