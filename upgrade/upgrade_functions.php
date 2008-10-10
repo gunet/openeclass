@@ -1156,6 +1156,7 @@ function encode_group_documents($course_code, $group_id, $secret_directory)
 	        traverseDirTree($secret_directory, 'document_upgrade_file', 'document_upgrade_dir', $secret_directory);
 	} else {
 		mkdir($secret_directory, '0775');
+        }
         chdir($cwd);
 }
 
