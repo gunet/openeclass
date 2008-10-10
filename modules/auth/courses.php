@@ -319,25 +319,25 @@ function expanded_faculte($fac, $uid) {
     	$retString .= "\n      <td>&nbsp;</td>";
     	$retString .= "\n    </tr>";
         $retString .= "\n    </thead>";
-    	$retString .= "\n    </table>\n";
+    	$retString .= "\n    </table>\n\n";
 	}
 
     // legend
     $retString .= "\n    <table width=\"99%\" style=\"border: 1px solid #edecdf;\">";
     $retString .= "\n    <tr>";
-    $retString .= "\n    <td>";
+    $retString .= "\n       <td>\n";
 
-    $retString .= "\n    <script type=\"text/javascript\" src=\"sorttable.js\"></script>";
-    $retString .= "\n    <table class=\"sortable\" id=\"t1\" width=\"100%\">";
-    $retString .= "\n    <thead>";
-    $retString .= "\n    <tr>";
-    $retString .= "\n      <th width='10%' style=\"border: 1px solid #E1E0CC;\">$langRegistration</th>";
-    $retString .= "\n      <th class='left' width='60%' style=\"border: 1px solid #E1E0CC;\">$langCourseCode</th>";
-    $retString .= "\n      <th class='left' width='23%' style=\"border: 1px solid #E1E0CC;\">$langTeacher</th>";
-    $retString .= "\n      <th width='7%' style=\"border: 1px solid #E1E0CC;\"><b>$langType</b></th>";
-    $retString .= "\n    </tr>";
-    $retString .= "\n    </thead>";
-    $retString .= "\n    <tbody>";
+    $retString .= "\n       <script type=\"text/javascript\" src=\"sorttable.js\"></script>";
+    $retString .= "\n       <table class=\"sortable\" id=\"t1\" width=\"100%\">";
+    $retString .= "\n       <thead>";
+    $retString .= "\n       <tr>";
+    $retString .= "\n           <th width='10%' style=\"border: 1px solid #E1E0CC;\">$langRegistration</th>";
+    $retString .= "\n           <th class='left' width='60%' style=\"border: 1px solid #E1E0CC;\">$langCourseCode</th>";
+    $retString .= "\n           <th class='left' width='23%' style=\"border: 1px solid #E1E0CC;\">$langTeacher</th>";
+    $retString .= "\n           <th width='7%' style=\"border: 1px solid #E1E0CC;\"><b>$langType</b></th>";
+    $retString .= "\n       </tr>";
+    $retString .= "\n       </thead>";
+    $retString .= "\n       <tbody>";
 
     $k=0;
 	while ($mycours = mysql_fetch_array($result)) {
@@ -347,12 +347,12 @@ function expanded_faculte($fac, $uid) {
 		$codelink = $mycours['i'];
 	  }
                 if ($k%2==0) {
-	              $retString .= "\n    <tr>";
+	              $retString .= "\n       <tr>";
 	            } else {
-	              $retString .= "\n    <tr class=\"odd\">";
+	              $retString .= "\n       <tr class=\"odd\">";
 	            }
 
-	$retString .= "\n      <td width='10%' align='center'>";
+	$retString .= "\n           <td width='10%' align='center'>";
 
 	$requirepassword = "";
       if (isset ($myCourses[$mycours["k"]]["subscribed"])) {
@@ -363,7 +363,6 @@ function expanded_faculte($fac, $uid) {
           } else {
             $requirepassword = "";
           }
-
           $retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]' checked >";
 	    } else {
           $retString .= "<img src=../../template/classic/img/teacher.gif title=$langTutor>";
@@ -375,15 +374,15 @@ function expanded_faculte($fac, $uid) {
 			  $requirepassword = "";
 		}
 		if ($mycours["visible"]>0  || isset ($myCourses[$mycours["k"]]["subscribed"])) {
-	      		  $retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]'></td>";
+	      		  $retString .= "<input type='checkbox' name='selectCourse[]' value='$mycours[k]'>";
        		}
       }
 
 	$retString .= "<input type='hidden' name='changeCourse[]' value='$mycours[k]'>";
 	$retString .= "</td>";
-	$retString .= "\n      <td width=60%><b>$codelink</b> <small><font style=\"color: #a33033;\">(".$mycours['k'].")</font></small>$requirepassword </td>";
-	$retString .= "\n      <td width=23%>$mycours[t]</td>";
-	$retString .= "\n      <td align='center' width='7%'>";
+	$retString .= "\n           <td width=60%><b>$codelink</b> <small><font style=\"color: #a33033;\">(".$mycours['k'].")</font></small>$requirepassword </td>";
+	$retString .= "\n           <td width=23%>$mycours[t]</td>";
+	$retString .= "\n           <td align='center' width='7%'>";
             // show the necessary access icon
             foreach ($icons as $visible => $image) {
               if ($visible == $mycours['visible']) {
@@ -391,16 +390,16 @@ function expanded_faculte($fac, $uid) {
               }
             }
     $retString .= "</td>";
-    $retString .= "\n    </tr>";
+    $retString .= "\n       </tr>";
     $k++;
    }
    // END of while
-   	$retString .= "\n    </tbody>
-    </table>
+   	$retString .= "\n       </tbody>";
+   	$retString .= "\n       </table>";
 
-    </td>
-  </tr>
-  </table>\n";
+   	$retString .= "\n       </td>";
+   	$retString .= "\n    </tr>";
+   	$retString .= "\n    </table>\n";
 	}
 
 return $retString;
