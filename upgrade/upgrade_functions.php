@@ -839,10 +839,10 @@ function upgrade_course($code, $lang)
         //  create new column (define_var)
         echo add_field("accueil","define_var", "VARCHAR(50) NOT NULL");
 
-        // Move all external links to id > 100
+        // Move all external links to id > 1000
         db_query("UPDATE `accueil`
-                        SET `id` = `id` + 80
-                        WHERE `id`>20 AND `id`<100
+                        SET `id` = `id` + 1000
+                        WHERE `id`>20 AND `id`<1000
                         AND `define_var` <> 'MODULE_ID_QUESTIONNAIRE' AND `define_var` <> 'MODULE_ID_LP'
                         AND `define_var` <> 'MODULE_ID_USAGE' AND `define_var` <> 'MODULE_ID_TOOLADMIN'
                         AND `define_var` <> 'MODULE_ID_WIKI'", $code);
