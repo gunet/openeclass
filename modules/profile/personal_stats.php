@@ -78,7 +78,7 @@ if (!extension_loaded('gd')) {
 		$chart_path = 'courses/temp/chart_'.md5(serialize($chart)).'.png';
 		$chart->render($webDir.$chart_path);
 		if ($chart_content) {
-		$tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
+		$tool_content .= '<p><img src="'.$urlServer.$chart_path.'" /></p>';
 		}
 		$made_chart = true;
 
@@ -90,7 +90,7 @@ if (!extension_loaded('gd')) {
     <td><b>$langPlatformGenStats</b></td>
   </tr>
   <tr>
-    <th class=\"left\" valign=\"top\">$langTotalVisitsCourses:</th>
+    <th width=\"220\" class=\"left\">$langTotalVisitsCourses:</th>
     <td>$totalHits</td>
   </tr>
   </tbody>

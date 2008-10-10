@@ -82,7 +82,7 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 		{
     $tool_content .= "
   <tr>
-    <th class=\"left\">$langStudentParticipation</th>
+    <th class=\"left\" valign=\"top\">$langStudentParticipation</th>
     <td>
 
       <table class=\"FormData\" width=\"99%\" align=\"left\">
@@ -115,30 +115,29 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 						$tool_content .= $langTeacher;
 						$tool_content .= "</div></td>
          <td><div align=\"center\">---</div></td>
-      </tr>\n";
+      </tr>";
 						break;
 					case 5:
 						$tool_content .= $langStudent;
 						$tool_content .= "</div></td>
          <td><div align=\"center\"><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\"><img src='../../images/delete.gif' title='$langDelete' border='0'></img></a></div></td>
-      </tr>\n";
+      </tr>";
 						break;
 					default:
 						$tool_content .= $langVisitor;
 						$tool_content .= "</div></td>
          <td><div align=\"center\"><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\"><img src='../../images/delete.gif' title='$langDelete' border='0'></img></a></div></td>
-      </tr>\n";
+      </tr>";
 					break;
 				}
 				$k++;
 			}
 		  $tool_content .= "
       </tbody>
-      </table>\n
-      ";
-		}
-		else
-		{
+      </table>\n";
+		  $tool_content .= "\n    </td>\n  </tr>";
+
+		} else {
     $tool_content .= "
   <tr>
     <th class=\"left\">$langStudentParticipation</th>
@@ -160,6 +159,7 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
     </td>
   </tr>";
 		}
+	/*
     $tool_content .= "
   </thead>
   </table>";
@@ -167,6 +167,7 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
     $tool_content .= "
   <table class=\"FormData\" width=\"99%\" align=\"left\">
   <thead>";
+  */
     $tool_content .= "
   <tr>
     <th class=\"left\" width=\"220\">$langTotalVisits:</th>
@@ -202,9 +203,10 @@ if (!extension_loaded('gd')) {
     <td colspan=\"2\">";
 	$chart = new PieChart(600, 300);
 	foreach ($hits as $code => $count) {
-		$chart_content=5;
-		$chart->width += 7;
+		$chart_content=1;
+		$chart->width += 1;
 		$chart->addPoint(new Point($course_names[$code], $count));
+
 	}
 	$chart->setTitle($langCourseVisits);
 	$chart_path = 'courses/chart_'.md5(serialize($chart)).'.png';
@@ -215,6 +217,8 @@ if (!extension_loaded('gd')) {
     $tool_content .= "
     </td>
   </tr>";
+
+  /*
     $tool_content .= "
   </thead>
   </table>";
@@ -222,6 +226,7 @@ if (!extension_loaded('gd')) {
     $tool_content .= "
   <table class=\"FormData\" width=\"99%\" align=\"left\">
   <thead>";
+  */
 // End of chart display; chart unlinked at end of script.
 
 $sql = "SELECT * FROM loginout WHERE id_user = '".$_SESSION["uid"]."' ORDER by idLog DESC LIMIT 15";
@@ -230,8 +235,8 @@ $leResultat = db_query($sql, $mysqlMainDb);
 
     $tool_content .= "
   <tr>
-    <th class=\"left\" width=\"220\">$langLastUserVisits $info[2]</th>
-    <td>";
+    <th class=\"left\" width=\"220\" valign=\"top\">$langLastUserVisits $info[2]</th>
+    <td>\n";
 $tool_content .= "
       <table width=\"99%\">
       <thead>
@@ -265,7 +270,7 @@ while ($leRecord = mysql_fetch_array($leResultat)) {
 }
 $tool_content .= "
       </tbody>
-      </table>";
+      </table>\n";
 
 $tool_content .= "
     </td>
