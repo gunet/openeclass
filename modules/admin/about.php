@@ -99,28 +99,64 @@ foreach ($course_codes as $course_code) {
 $uptime = date("d-m-Y H:i", $first_date_time);
 
 // Constract a table with all information
-$tool_content .= "<table width=\"99%\">
-<tbody>
-<tr valign=\"top\"><td><br>
-<p align=center>".$langAboutText."</p>
-<p align=center><b>".$langEclassVersion."</b></p>
-<p align=center>".$langHostName."<b>".$SERVER_NAME."</b></p>
-<p align=center>".$langWebVersion."<b>".$SERVER_SOFTWARE."</b></p>";
+$tool_content .= "
+    <table width=\"75%\" class=\"Smart\" align=\"center\" >
+    <tbody>
+    <tr class=\"odd\">
+      <th width=\"160\" style=\"border-left: 1px solid #edecdf; border-top: 1px solid #edecdf;\">&nbsp;</th>
+      <td><b>$langPlatformIdentity</b></td>
+    </tr>
+    <tr class=\"odd\">
+      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">Version:</th>
+      <td>$langAboutText <b>".$siteName." ".$langEclassVersion."</b></td>
+    </tr>
+    <tr class=\"odd\">
+      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">IP Host:</th>
+      <td>".$langHostName."<b>".$SERVER_NAME."</b></td>
+    </tr>
+    <tr class=\"odd\">
+      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">Web Server:</th>
+      <td>".$langWebVersion."<b>".$SERVER_SOFTWARE."</b></td>
+    </tr>
+    <tr class=\"odd\">
+      <th class=\"left\" style=\"border-left: 1px solid #edecdf; border-bottom: 1px solid #edecdf;\">Data Base Server:</th>
+      <td>";
+        if (extension_loaded('mysql'))
+            $tool_content .= "$langMySqlVersion<b>".mysql_get_server_info()."</b>";
+        else // If not display message no MySQL
+            $tool_content .= "<font color=\"red\">".$langNoMysql."</font>";
+    $tool_content .= "</td>
+    </tr>
+    </tbody>
+    </table>
 
-// Check if we have mysql database to display its information
-if (extension_loaded('mysql'))
-    $tool_content .= "<p align=center>$langMySqlVersion<b>".mysql_get_server_info()."</b></p>";
-else // If not display message no MySQL
-    $tool_content .= "<p align=center font color=\"red\">".$langNoMysql."</p>";
+    <br>";
 
-// Close table correctly
-$tool_content .= "<p align=center>".$langTotalCourses.": <b>".$totalCourses."</b></p>
-									<p align=center>".$langTotalHits.": <b>".$totalHits."</b></p>
-									<p align=center>".$langUptime.": <b>".$uptime."</b></p>";
-$tool_content .= "<br></tbody></td></tr></table>";
+$tool_content .= "
+    <table width=\"75%\" class=\"Smart\" align=\"center\" >
+    <tbody>
+    <tr class=\"odd\">
+      <th width=\"160\" style=\"border-left: 1px solid #edecdf; border-top: 1px solid #edecdf;\">&nbsp;</th>
+      <td><b>$langStoixeia</b></td>
+    </tr>
+    <tr class=\"odd\">
+      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">$langCoursesHeader:</th>
+      <td>".$langAboutCourses." <b>".$totalCourses."</b> ".$langCourses."</td>
+    </tr>
+    <tr class=\"odd\">
+      <th class=\"left\" style=\"border-left: 1px solid #edecdf;\">".$langTotalHits.":</th>
+      <td><b>".$totalHits."</b></td>
+    </tr>
+    <tr class=\"odd\">
+      <th class=\"left\" style=\"border-left: 1px solid #edecdf; border-bottom: 1px solid #edecdf;\">".$langUptime.":</th>
+      <td><b>".$uptime."</b></td>
+    </tr>
+    </tbody>
+    </table>
 
-// Display link back to index.php
-$tool_content .= "<br><center><p><a href=\"index.php\">".$langBack."</a></p></center>";
+    <br>";
+
+$tool_content .= "<br><p class=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
 
 /*****************************************************************************
         DISPLAY HTML

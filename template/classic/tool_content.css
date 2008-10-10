@@ -258,6 +258,11 @@ p.success_small{
    background-color: #CAC3B5;
 }
 
+.today {
+     background-color: #ffffff;
+}
+
+
 .left{
     text-align: left;
 }

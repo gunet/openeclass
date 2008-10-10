@@ -64,7 +64,7 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
   <thead>
   <tr>
     <th width=\"220\">&nbsp;</th>
-    <td>$langUserStats <b>$info[2]</b></td>
+    <td><b>$langUserStats</b>: $info[2]</td>
   </tr>";
 
 		$sql = mysql_query("SELECT nom, prenom, username FROM user WHERE user_id = '$u'");
@@ -84,16 +84,16 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
   <tr>
     <th class=\"left\">$langStudentParticipation</th>
     <td>
-       <table class=\"FormData\" width=\"99%\" align=\"left\">
-       <thead>
-       <tr>
-         <th>$langLessonCode</th>
-         <th>$langLessonName</th>
+
+      <table class=\"FormData\" width=\"99%\" align=\"left\">
+      <thead>
+      <tr>
+         <th colspan=\"2\"><div align=\"left\">&nbsp;&nbsp;$langCourseCode</div></th>
          <th>$langProperty</th>
          <th>$langActions</th>
-       </tr>
-       </thead>
-       <tbody>";
+      </tr>
+      </thead>
+      <tbody>";
           $k = 0;
 		  for ($j = 0; $j < mysql_num_rows($sql); $j++)
 		  {
@@ -106,35 +106,36 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
       <tr class=\"odd\">";
 	                }
 				$tool_content .= "
-         <td>".htmlspecialchars($logs[0])."</td>
-         <td>".htmlspecialchars($logs[1])."</td>
-         <td align=\"center\">";
+         <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+         <td align=\"left\">".htmlspecialchars($logs[0])." (".htmlspecialchars($logs[1]).")</td>
+         <td><div align=\"center\">";
 				switch ($logs[2])
 				{
 					case 1:
 						$tool_content .= $langTeacher;
-						$tool_content .= "</td>
-         <td align=\"center\">---</td>
-       </tr>\n";
+						$tool_content .= "</div></td>
+         <td><div align=\"center\">---</div></td>
+      </tr>\n";
 						break;
 					case 5:
 						$tool_content .= $langStudent;
-						$tool_content .= "</td>
-         <td align=\"center\"><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">"."$langDelete</a></td>
-       </tr>\n";
+						$tool_content .= "</div></td>
+         <td><div align=\"center\"><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\"><img src='../../images/delete.gif' title='$langDelete' border='0'></img></a></div></td>
+      </tr>\n";
 						break;
 					default:
 						$tool_content .= $langVisitor;
-						$tool_content .= "</td>
-         <td align=\"center\"><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\">"."$langDelete</a></td>
-       </tr>\n";
+						$tool_content .= "</div></td>
+         <td><div align=\"center\"><a href=\"unreguser.php?u=$u&un=$info[2]&c=$logs[0]\"><img src='../../images/delete.gif' title='$langDelete' border='0'></img></a></div></td>
+      </tr>\n";
 					break;
 				}
 				$k++;
 			}
 		  $tool_content .= "
-       </tbody>
-       </table>\n";
+      </tbody>
+      </table>\n
+      ";
 		}
 		else
 		{
@@ -159,10 +160,16 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
     </td>
   </tr>";
 		}
+    $tool_content .= "
+  </thead>
+  </table>";
 
     $tool_content .= "
+  <table class=\"FormData\" width=\"99%\" align=\"left\">
+  <thead>";
+    $tool_content .= "
   <tr>
-    <th class=\"left\">&nbsp;</th>
+    <th class=\"left\" width=\"220\">$langTotalVisits:</th>
     <td>";
 // Chart display added - haniotak
 if (!extension_loaded('gd')) {
@@ -185,9 +192,15 @@ if (!extension_loaded('gd')) {
 		}
 		mysql_free_result($result);
 	}
-	$tool_content .= "&nbsp;<p>$langTotalVisits: $totalHits</p>";
-	$chart = new PieChart(500, 300);
+	$tool_content .= "<b>$totalHits</b></td>";
+    $tool_content .= "
+  </tr>
+  <tr>
+    <td colspan=\"2\">";
+	$chart = new PieChart(600, 300);
 	foreach ($hits as $code => $count) {
+		$chart_content=5;
+		$chart->width += 7;
 		$chart->addPoint(new Point($code, $count));
 	}
 	$chart->setTitle($langCourseVisits);
@@ -199,7 +212,13 @@ if (!extension_loaded('gd')) {
     $tool_content .= "
     </td>
   </tr>";
+    $tool_content .= "
+  </thead>
+  </table>";
 
+    $tool_content .= "
+  <table class=\"FormData\" width=\"99%\" align=\"left\">
+  <thead>";
 // End of chart display; chart unlinked at end of script.
 
 $sql = "SELECT * FROM loginout WHERE id_user = '".$_SESSION["uid"]."' ORDER by idLog DESC LIMIT 15";
@@ -208,13 +227,13 @@ $leResultat = db_query($sql, $mysqlMainDb);
 
     $tool_content .= "
   <tr>
-    <th class=\"left\">$langLastUserVisits $info[2]</th>
+    <th class=\"left\" width=\"220\">$langLastUserVisits $info[2]</th>
     <td>";
 $tool_content .= "
       <table width=\"99%\">
       <thead>
       <tr>
-        <th>$langDate</th>
+        <th colspan=\"2\"><div align=\"left\">&nbsp;&nbsp;$langDate</div></th>
         <th>$langAction</th>
       </tr>
       </thead>
@@ -235,8 +254,9 @@ while ($leRecord = mysql_fetch_array($leResultat)) {
       <tr class=\"odd\">";
 	}
 	$tool_content .= "
-        <td>".strftime("%Y-%m-%d %H:%M:%S ", strtotime($when))."</td>
-        <td>".$nomAction[$action]."</td>
+        <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+        <td>".strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when))."</td>
+        <td align=\"center\"><div align=\"center\">".$nomAction[$action]."</div></td>
       </tr>";
 	$i++;
 }

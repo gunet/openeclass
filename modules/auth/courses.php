@@ -111,29 +111,35 @@ else
     $numrows = mysql_num_rows($result);
     if (isset($result))  {
     $tool_content .= "
-    <script type=\"text/javascript\" src=\"sorttable.js\"></script>
-    <table width='99%' class=\"sortable\" id=\"t1\">
-    <thead>
-    <tr>
-      <th class='left'><b>$langFaculty</b></th>
-    </tr>
-    </thead>";
+  <table width=\"99%\" style=\"border: 1px solid #edecdf;\">
+  <tr>
+    <td>
 
+        <script type=\"text/javascript\" src=\"sorttable.js\"></script>
+        <table width='100%' class=\"sortable\" id=\"t1\">
+        <thead>
+        <tr>
+            <th class='left'><b>$langFaculty</b></th>
+        </tr>
+        </thead>
+        <tbody>";
+      $k = 0;
       while ($fac = mysql_fetch_array($result)) {
-      $tool_content .= "
-    <tr onMouseOver=\"this.style.backgroundColor='#fbfbfb'\" onMouseOut=\"this.style.backgroundColor='transparent'\">
-    <td>&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;
-        <a href='courses.php?fc=$fac[id]'>$fac[name]</a> <small><font color='#a5a5a5'>($fac[code])</font></small>";
+            if ($k%2==0) {
+	           $tool_content .= "\n        <tr>";
+	        } else {
+	           $tool_content .= "\n        <tr class=\"odd\">";
+            }
+
+      $tool_content .= "\n            <td>&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<a href='courses.php?fc=$fac[id]'>$fac[name]</a> <small><font color='#a33033'>($fac[code])</font></small>";
       $n=db_query("SELECT COUNT(*) FROM cours_faculte WHERE faculte='$fac[name]'");
       $r=mysql_fetch_array($n);
-      $tool_content .= "
-       &nbsp;<small><font color=#a5a5a5>($r[0]  ". ($r[0] == 1? $langAvCours: $langAvCourses) . ")</font><small>
-    </td>
-  </tr>
-      ";
+      $tool_content .= "&nbsp;<small><font color=#a5a5a5>($r[0]  ". ($r[0] == 1? $langAvCours: $langAvCourses) . ")</font><small></td>
+        </tr>";
+        $k++;
       }
-      $tool_content .= "
-  </table>\n";
+      $tool_content .= "\n        </tbody>\n        </table>";
+      $tool_content .= "\n\n    </td>\n  </tr>\n  </table>\n";
     }
       $tool_content .= "<br>\n";
       $tool_content .= "<br>\n";

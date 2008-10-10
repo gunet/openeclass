@@ -61,12 +61,13 @@ if (!extension_loaded('gd')) {
 			}
 			mysql_free_result($result);
 		}
-		$tool_content .= "<p>$langTotalVisitsCourses: $totalHits</p>";
-		$chart = new PieChart(500, 300);
+
+		$chart = new PieChart(600, 300);
 		$chart_content=0;
 		foreach ($hits as $code => $count) {
 			if ($count >0 ){
-				$chart_content=1;
+				$chart_content=5;
+				$chart->width += 7;
 				$chart->addPoint(new Point($course_names[$code], $count));
 			}
 		}
@@ -79,7 +80,21 @@ if (!extension_loaded('gd')) {
 		if ($chart_content) {
 		$tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
 		}
-			$made_chart = true;
+		$made_chart = true;
+
+    $tool_content .= "
+  <table class=\"FormData\" width=\"99%\" align=\"left\">
+  <tbody>
+  <tr>
+    <th width=\"220\" class=\"left\" valign=\"top\">&nbsp;</th>
+    <td><b>$langPlatformGenStats</b></td>
+  </tr>
+  <tr>
+    <th class=\"left\" valign=\"top\">$langTotalVisitsCourses:</th>
+    <td>$totalHits</td>
+  </tr>
+  </tbody>
+  </table>";
 	}
 }
 // End of chart display; chart unlinked at end of script.
@@ -89,48 +104,58 @@ $sql = "SELECT * FROM loginout
     WHERE id_user = '".$_SESSION["uid"]."' ORDER by idLog DESC LIMIT 10";
 
 $leResultat = db_query($sql, $mysqlMainDb);
-$tool_content .= " <br>
-    <table width=\"99%\">
-        <thead>
-            <tr>
-                <th>$langLastVisits</th>
-            </tr>
-        </thead>
-    </table>
-    <br>
 
-    <table width=\"99%\">
-        <thead>
-            <tr>
-                <th>$langDate</th>
-                <th>$langAction</th>
-            </tr>
-        </thead>
-        <tbody>
-            ";
-$i = 0;
 
-$nomAction["LOGIN"] = "<font color=\"#008000\">$langLogIn</font>";
-$nomAction["LOGOUT"] = "<font color=\"#FF0000\">$langLogOut</font>";
-$i=0;
-while ($leRecord = mysql_fetch_array($leResultat)) {
-	$when = $leRecord["when"];
-	$action = $leRecord["action"];
-	if ($i%2==0) {
-		$tool_content .= "<tr>";
-	} else {
-		$tool_content .= "<tr class=\"odd\">";
-	}
-	$tool_content .= "
-    <td>
-        ".strftime("%Y-%m-%d %H:%M:%S ", strtotime($when))."
-    </td>
-    <td>".$nomAction[$action]."</td>
+    $tool_content .= "
+  <table class=\"FormData\" width=\"99%\" align=\"left\">
+  <thead>
+  <tr>
+    <th width=\"220\" class=\"left\" valign=\"top\">$langLastVisits:</th>
+    <td>";
+
+    $tool_content .= "
+    <table width=\"100%\">
+    <thead>
+    <tr>
+        <th colspan=\"2\" class=\"left\">&nbsp;&nbsp;&nbsp;&nbsp;$langDate</th>
+        <th>$langAction</th>
+    </tr>
+    </thead>
+    <tbody>";
+    $i = 0;
+
+    $nomAction["LOGIN"] = "<div align=\"center\"><font color=\"#008000\">$langLogIn</font></div>";
+    $nomAction["LOGOUT"] = "<div align=\"center\"><font color=\"#FF0000\">$langLogOut</font></div>";
+    $i=0;
+    while ($leRecord = mysql_fetch_array($leResultat)) {
+	   $when = $leRecord["when"];
+	   $action = $leRecord["action"];
+	   if ($i%2==0) {
+		$tool_content .= "\n    <tr>";
+	   } else {
+		$tool_content .= "\n    <tr class=\"odd\">";
+	   }
+	   $tool_content .= "
+        <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+        <td>".strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when))."</td>
+        <td>".$nomAction[$action]."</td>
     </tr>";
 	$i++;
-}
+    }
 
-$tool_content .= "</tbody></table>";
+$tool_content .= "\n    </tbody>\n    </table>\n";
+
+
+    $tool_content .= "
+    </td>
+  </tr>
+  </thead>
+  </table>";
+
+
+
+
+
 draw($tool_content, 1);
 
 // Unlink chart file - haniotak

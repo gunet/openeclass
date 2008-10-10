@@ -99,7 +99,7 @@ if (!isset($a)) {
 	$a=mysql_fetch_array(mysql_query("SELECT COUNT(*) FROM faculte"));
 	// Construct a table
 	$tool_content .= "
-  <table width='99%' class='FormData'>
+  <table width='99%' class='FormData' align=\"left\">
   <tbody>
   <tr>
     <td class=\"odd\"><b>".$langFaculteCatalog."</b>:<div align=\"right\"><i>".$langManyExist.": <b>$a[0]</b> ".$langFaculteDepartments."</i></div></td>
@@ -110,35 +110,33 @@ if (!isset($a)) {
   <br />";
 
 	$tool_content .= "
-  <table width='99%' class='FormData'>
+  <table width='99%' class='FormData' align=\"left\">
   <tbody>
   <tr>
-    <th scope=\"col\">".$langFaculteDepartment."</th scope=\"col\">
+    <th scope=\"col\" colspan=\"2\"><div align=\"left\">&nbsp;&nbsp;".$langFaculteDepartment."</div></th scope=\"col\">
     <th scope=\"col\">$langCode</th>
     <th>".$langActions."</th>
   </tr>";
 	$sql=mysql_query("SELECT code,name,id FROM faculte");
 
+    $k = 0;
 	// For all faculties display some info
 	for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 		$logs = mysql_fetch_array($sql);
-		$tool_content .= "
-  <tr>";
-
-			$tool_content .= "
-    <td>".htmlspecialchars($logs[1])."</td>
-    <td>".htmlspecialchars($logs[0])."</td>";
+		if ($k%2==0) {
+		  $tool_content .= "\n  <tr>";
+	    } else {
+		  $tool_content .= "\n  <tr class=\"odd\">";
+        }
+            $tool_content .= "\n    <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>";
+            $tool_content .= "\n    <td>".htmlspecialchars($logs[1])."</td>";
+            $tool_content .= "\n    <td align=\"center\">".htmlspecialchars($logs[0])."</td>";
 
 
 		// Give administrator a link to delete or edit a faculty
-    $tool_content .= "
-    <td width=\"3%\" nowrap><a href=\"$_SERVER[PHP_SELF]?a=2&c=".$logs['id']."\">
-		<img src='../../images/delete.gif' border='0' title='$langDelete'></img></a>
-		  &nbsp;&nbsp;<a href=\"$_SERVER[PHP_SELF]?a=3&c=".$logs['id']."\">
-		  <img src='../../template/classic/img/edit.gif' border='0' title='$langEdit'></img>
-		  </a>
-    </td>
+    $tool_content .= "\n    <td width=\"15%\" align=\"center\" nowrap><a href=\"$_SERVER[PHP_SELF]?a=2&c=".$logs['id']."\"><img src='../../images/delete.gif' border='0' title='$langDelete'></img></a>&nbsp;&nbsp;<a href=\"$_SERVER[PHP_SELF]?a=3&c=".$logs['id']."\"><img src='../../template/classic/img/edit.gif' border='0' title='$langEdit'></img></a></td>
   </tr>\n";
+    $k++;
 	}
 	// Close table correctly
 	$tool_content .= "
