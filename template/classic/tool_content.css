@@ -562,17 +562,17 @@ table.FormData td {
 table.sortable a.sortheader {
     background-color: #edecdf;
     color: #727266;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: normal;
     text-decoration: none;
-    padding : 2px;
+    padding : 0px;
     display: block;
 }
 
 a.sortheader, a.sortheader:link, a.sortheader:active, a.sortheader:visited {
     background-color: #edecdf;
     color: #727266;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: nolmal;
     text-decoration: none;
 }
@@ -580,7 +580,7 @@ a.sortheader, a.sortheader:link, a.sortheader:active, a.sortheader:visited {
 a.sortheader:hover {
     background-color: #edecdf;
     color: #CAC3B5;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: normal;
     text-decoration: underline;
 }
