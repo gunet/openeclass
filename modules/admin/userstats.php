@@ -53,7 +53,7 @@ if((!empty($u)) && ctype_digit($u))	// validate the user id
 {
 	$u = (int)$u;
 		$sql = mysql_query("SELECT nom, prenom, username, password, email, phone, department, registered_at, expires_at
-					FROM user WHERE user_id = '$u'");
+			FROM user WHERE user_id = '$u'");
 		if (!$sql)
 		{
 	    die("Unable to query database (user_id='$u')!");
@@ -177,10 +177,13 @@ if (!extension_loaded('gd')) {
 } else {
 	$totalHits = 0;
 	require_once '../../include/libchart/libchart.php';
-	$sql = "SELECT code FROM cours";
+	$sql = "SELECT a.code, a.intitule, b.statut, a.cours_id
+			FROM cours AS a LEFT JOIN cours_user AS b ON a.code = b.code_cours
+			WHERE b.user_id = '$u' ORDER BY b.statut, a.faculte";
 	$result = db_query($sql);
 	while ($row = mysql_fetch_assoc($result)) {
 		$course_codes[] = $row['code'];
+		$course_names[$row['code']]=$row['intitule'];
 	}
 	mysql_free_result($result);
 	foreach ($course_codes as $course_code) {
@@ -201,7 +204,7 @@ if (!extension_loaded('gd')) {
 	foreach ($hits as $code => $count) {
 		$chart_content=5;
 		$chart->width += 7;
-		$chart->addPoint(new Point($code, $count));
+		$chart->addPoint(new Point($course_names[$code], $count));
 	}
 	$chart->setTitle($langCourseVisits);
 	$chart_path = 'courses/chart_'.md5(serialize($chart)).'.png';
