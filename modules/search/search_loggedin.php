@@ -111,26 +111,14 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
     </div>
     ";
 
-
-    $tool_content .= "
-    <table width=\"99%\" class=\"Search\" align=\"left\">
-    <tbody>
-    <tr class=\"odd\">
-      <td colspan=\"4\">$langDoSearch:&nbsp;<b>$langResults</b></td>
-    </tr>
-    <tr>
-      <th width=\"1%\">&nbsp;</th>
-      <th width=\"40%\"><div align=\"left\">".$langCourse." ($langCode)</div></th>
-      <th width=\"30%\">$langTeacher</th>
-      <th width=\"30%\">$langKeywords</th>
-    </tr>";
-    $k=0;
+    $k = 0;
+    $tbl_content = "";
     while ($mycours = mysql_fetch_array($result))
     {
 		if ($k%2==0) {
-	       $tool_content .= "\n    <tr>";
+	       $tbl_content .= "\n    <tr>";
 	    } else {
-	       $tool_content .= "\n    <tr class=\"odd\">";
+	       $tbl_content .= "\n    <tr class=\"odd\">";
         }
 
 	    $show_entry = FALSE; //flag gia emfanish apotelesmatwn se mia grammh tou array efoson entopistoun apotelesmata
@@ -144,23 +132,37 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 		//$mycours, emfanise thn eggrafh
 		if($show_entry)
 		{
-            $tool_content .= "\n      <td><img src=\"../../template/classic/img/arrow_grey.gif\" alt=\"\" border=\"0\" /></td>";
-            $tool_content .= "\n      <td><a href=\"../../courses/".$mycours['code']."/\">".$mycours['intitule']."</a> (".$mycours['code'].")</td>";
-            $tool_content .= "\n      <td align=\"center\">".$mycours['titulaires']."</td>";
-            $tool_content .= "\n      <td align=\"center\">".$mycours['course_keywords']."</td>";
-            $tool_content .= "\n    </tr>";
+            $tbl_content .= "\n      <td><img src=\"../../template/classic/img/arrow_grey.gif\" alt=\"\" border=\"0\" /></td>";
+            $tbl_content .= "\n      <td><a href=\"../../courses/".$mycours['code']."/\">".$mycours['intitule']."</a> (".$mycours['code'].")</td>";
+            $tbl_content .= "\n      <td>".$mycours['titulaires']."</td>";
+            $tbl_content .= "\n      <td>".$mycours['course_keywords']."</td>";
+            $tbl_content .= "\n    </tr>";
 			//afkhsh tou arithmou apotelesmatwn
 			$results_found++;
+			$k++;
 		}
 		$k++;
     }
     //elegxos tou arithmou twn apotelesmatwn pou exoun emfanistei. ean den emfanistike kanena apotelesma, ektypwsh analogou mhnymatos
-    if($results_found == 0) $tool_content .= "\n    <tr><td colspan=\"4\" align=\"center\">$langNoResult</td></tr>";
+    if($results_found == 0) {
+        $tool_content .= "\n<br />    \n    <p class=\"alert1\">$langNoResult</p>";
+    } else {
+    $tool_content .= "
+    <table width=\"99%\" class=\"Search\" align=\"left\">
+    <tbody>
+    <tr class=\"odd\">
+      <td colspan=\"4\">$langDoSearch:&nbsp;<b>$langResults</b></td>
+    </tr>
+    <tr>
+      <th width=\"1%\">&nbsp;</th>
+      <th width=\"40%\"><div align=\"left\">".$langCourse." ($langCode)</div></th>
+      <th width=\"30%\"><div align=\"left\">$langTeacher</div></th>
+      <th width=\"30%\"><div align=\"left\">$langKeywords</div></th>
+    </tr>";
+    $tool_content .=  $tbl_content;
     $tool_content .= "\n    </tbody>";
     $tool_content .= "\n    </table>";
-
-
-
+}
     //ektypwsh syndesmou gia nea anazhthsh
     //$tool_content .= "<p align=\"center\"><a href=\"search.php\">$langNewSearch</a></p>";
 
