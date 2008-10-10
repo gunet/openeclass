@@ -234,7 +234,7 @@ function convert_db_utf8($database)
 
 
 // Upgrade course database and documents
-function upgrade_course($code, $lang)
+function upgrade_course($code, $lang, $extramessage = '')
 {
         global $webDir, $mysqlMainDb, $tool_content, $langTable,
                $langNotMovedDir, $langToDir, $OK, $BAD, $langMoveIntroText,
@@ -251,7 +251,7 @@ function upgrade_course($code, $lang)
         // modify course_code/index.php
         // ****************************
 
-        echo "<hr><p>$langUpgIndex <b>$code</b><br />";
+        echo "<hr><p>$langUpgIndex <b>$code</b> $extramessage<br />";
         flush();
         $course_base_dir = "{$webDir}courses/$code";
         if (!is_writable($course_base_dir)) {

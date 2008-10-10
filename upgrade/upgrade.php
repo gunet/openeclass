@@ -463,12 +463,15 @@ if (!isset($submit2)) {
         // upgrade courses databases
         // **********************************************
         $res = db_query("SELECT code, languageCourse FROM cours ORDER BY code");
+        $total = mysql_num_rows($res);
+        $i = 1;
         while ($code = mysql_fetch_row($res)) {
                 // get course language
                 $lang = $code[1];
 
-                upgrade_course($code[0], $lang);
+                upgrade_course($code[0], $lang, "($i / $total)");
                 echo "</p>\n";
+                $i++;
         }
 	echo "<hr />";
 	echo "<p>$langChangeDBCharset <b>$mysqlMainDb</b> $langToUTF</p><br />";
