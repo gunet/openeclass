@@ -227,7 +227,7 @@ function convert_db_utf8($database)
                      'MySQL Error: ', mysql_error();
         }
         while ($row = mysql_fetch_row($result)) {
-                db_query("ALTER TABLE `$database`.`$row[0]` DEFAULT CHARACTER SET=utf8");
+                db_query("ALTER TABLE `$database`.`$row[0]` CONVERT TO CHARACTER SET utf8");
         }
         mysql_free_result($result);
 }
