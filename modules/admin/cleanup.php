@@ -84,7 +84,7 @@ function cleanup($path, $max_age)
 {
 	$max_age_seconds = $max_age * 60 * 60 * 24;
 	$files_left = 0;
-	if ($dh = opendir($path)) {
+	if ($dh = @opendir($path)) {
 		while (($file = readdir($dh)) !== false) {
 			if ($file != '.' and $file != '..') {
 				$filepath = "$path/$file";
