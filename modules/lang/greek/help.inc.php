@@ -94,6 +94,7 @@ $langPortfolioContent="<p>Σε αυτή τη σελίδα εμφανίζοντα
 $langPortfolio_studentContent = $langPortfolioContent;
 
 $langHcourse_home='Κεντρική σελίδα μαθήματος';
+$langHcourse_home_student=$langHcourse_home ;
 $langcourse_home_studentContent='<p>Βρίσκεστε στην κεντρική σελίδα του
 ηλεκτρονικού μαθήματος. Από τις επιλογές του μενού στο αριστερό μέρος της
 οθόνης, μπορείτε να μεταβείτε στα υποσυστήματα που έχουν ενεργοποιηθεί από
