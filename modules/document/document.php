@@ -697,10 +697,10 @@ if (mysql_num_rows($sql) == 0) {
 	$tool_content .= "\n  <tr>";
     $tool_content .= "\n    <td width=\"1%\" class=\"DocHead\"><b><div align=\"center\">".$m['type']."</div></b></td>";
 	$tool_content .= "\n    <td class=\"DocHead\"><b><div align=\"left\">$langName</div></b></td>";
-	$tool_content .= "\n    <td width='100' class=\"DocHead\"><b><div align=\"center\">$langSize</div></b></td>";
-	$tool_content .= "\n    <td width='100' class=\"DocHead\"><b><div align=\"center\">$langDate</div></b></td>";
+	$tool_content .= "\n    <td width='15%' class=\"DocHead\"><b><div align=\"center\">$langSize</div></b></td>";
+	$tool_content .= "\n    <td width='15%' class=\"DocHead\"><b><div align=\"center\">$langDate</div></b></td>";
 	if($is_adminOfCourse) {
-		$tool_content .= "\n    <td width='100' class=\"DocHead\"><b><div align=\"center\">$langCommands</div></b></td>";
+		$tool_content .= "\n    <td width='20%' class=\"DocHead\"><b><div align=\"center\">$langCommands</div></b></td>";
 	}
 	$tool_content .= "\n  </tr>";
 	//$tool_content .= "\n  </thead>";
