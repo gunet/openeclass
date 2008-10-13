@@ -695,7 +695,7 @@ if (mysql_num_rows($sql) == 0) {
 	$tool_content .= "</div></th>";
     $tool_content .= "\n  </tr>";
 	$tool_content .= "\n  <tr>";
-    $tool_content .= "\n    <td width='1' class=\"DocHead\"><b>".$m['type']."</b></td>";
+    $tool_content .= "\n    <td width=\"1%\" class=\"DocHead\"><b>".$m['type']."</b></td>";
 	$tool_content .= "\n    <td class=\"DocHead\"><b><div align=\"left\">$langName</div></b></td>";
 	$tool_content .= "\n    <td width='100' class=\"DocHead\"><b>$langSize</b></td>";
 	$tool_content .= "\n    <td width='100' class=\"DocHead\"><b>$langDate</b></td>";
@@ -795,13 +795,13 @@ if (mysql_num_rows($sql) == 0) {
 				continue;
 			}
 			$tool_content .=  "\n  <tr ".$style2.">";
-			$tool_content .=  "\n    <td valign=\"top\" valign=\"top\" style=\"padding-top: 7px;\">";
-            $tool_content .=  "<img src=\"./img/".$image."\" align='absmiddle' border=0>";
+			$tool_content .=  "\n    <td width='1%' valign=\"top\" style=\"padding-top: 7px;\"><div align=\"center\">";
+            $tool_content .=  "<a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' 	title=\"$langSave\"><img src=\"./img/".$image."\" align='absmiddle' border=0></a>";
 			//h $dspFileName periexei to onoma tou arxeiou sto filesystem
 			$query = "SELECT filename, copyrighted FROM document WHERE path LIKE '%".$curDirPath."/".$fileName."%'";
 			$result = mysql_query ($query);
 			$row = mysql_fetch_array($result);
-			$tool_content .=  "</td>";
+			$tool_content .=  "</div></td>";
             $tool_content .=  "\n    <td>";
 			$tool_content .=  "<div align=\"left\"><a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' 	title=\"$langSave\">".$row["filename"];
 			if ($row["copyrighted"] == "1")

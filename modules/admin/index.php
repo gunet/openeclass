@@ -101,7 +101,7 @@ $tool_content .= "
     <table width=\"75%\" class=\"Smart\" align=\"center\" >
     <tbody>
     <tr class=\"odd\">
-      <th width=\"160\" style=\"border-left: 1px solid #edecdf; border-top: 1px solid #edecdf;\">&nbsp;</th>
+      <th width=\"30%\" style=\"border-left: 1px solid #edecdf; border-top: 1px solid #edecdf;\">&nbsp;</th>
       <td><b>$langPlatformIdentity</b></td>
     </tr>
     <tr class=\"odd\">
@@ -150,7 +150,7 @@ $tool_content .= "
     <table width=\"75%\" class=\"Smart\" align=\"center\" >
     <tbody>
     <tr class=\"odd\">
-      <th width=\"160\" style=\"border-left: 1px solid #edecdf; border-top: 1px solid #edecdf;\">&nbsp;</th>
+      <th width=\"30%\" style=\"border-left: 1px solid #edecdf; border-top: 1px solid #edecdf;\">&nbsp;</th>
       <td><b>$langStoixeia</b></td>
     </tr>
     <tr class=\"odd\">
@@ -238,7 +238,7 @@ $tool_content .= "
     <table width=\"75%\" class=\"Smart\" align=\"center\" >
     <tbody>
     <tr class=\"odd\">
-      <th width=\"160\" style=\"border-left: 1px solid #edecdf; border-top: 1px solid #edecdf;\">&nbsp;</th>
+      <th width=\"30%\" style=\"border-left: 1px solid #edecdf; border-top: 1px solid #edecdf;\">&nbsp;</th>
       <td><b>$langInfoAdmin</b></td>
     </tr>
     <tr class=\"odd\">
