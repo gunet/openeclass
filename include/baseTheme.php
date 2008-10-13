@@ -83,7 +83,7 @@ include ('tools.php');
  * @param string $body_action (optional) code to be added to the BODY tag
  */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
-	global $langUser, $langUserHeader, $prenom, $nom, $langLogout, $intitule, $nameTools, $langHelp, $langAnonUser, $langActivate, $langDeactivate;
+	global $langUser, $langUserHeader, $prenom, $nom, $langLogout, $siteName, $intitule, $nameTools, $langHelp, $langAnonUser, $langActivate, $langDeactivate;
 	global $language, $helpTopic, $require_help, $langEclass, $langCopyrightFooter;
 	global $relPath, $urlServer, $toolContent_ErrorExists, $statut;
 	global $page_name, $page_navi, $currentCourseID, $langHomePage, $siteName, $navigation;
@@ -178,6 +178,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		}
 
 		$t->set_var ( 'URL_PATH', $urlServer );
+		$t->set_var ( 'SITE_NAME', $siteName );
 
 		//If there is a message to display, show it (ex. Session timeout)
 		if (strlen ( $messageBox ) > 1) {
