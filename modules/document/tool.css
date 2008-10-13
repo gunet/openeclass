@@ -30,6 +30,7 @@ table.Documents{
 .DocHead {
    background-color: #fbfbfb;
    color: #727266;
+   text-align: center !important;
 }
 
 
