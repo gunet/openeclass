@@ -39,7 +39,13 @@
  *
  */
 include ('init.php');
-
+if ($is_adminOfCourse) {
+	if (isset($_GET['hide']) and $_GET['hide'] == 0) {
+		db_query("UPDATE accueil SET visible = 0 WHERE id='$module_id'", $currentCourseID);
+	} else if (isset($_GET['hide']) and $_GET['hide'] == 1) {
+		db_query("UPDATE accueil SET visible = 1 WHERE id='$module_id'", $currentCourseID);
+	}
+}
 //template path for logged out + logged in (ex., when session expires)
 $extraMessage = ""; //initialise var for security
 if (isset ( $errorMessagePath )) {
@@ -77,7 +83,7 @@ include ('tools.php');
  * @param string $body_action (optional) code to be added to the BODY tag
  */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
-	global $langUser, $langUserHeader, $prenom, $nom, $langLogout, $intitule, $nameTools, $langHelp, $langAnonUser;
+	global $langUser, $langUserHeader, $prenom, $nom, $langLogout, $intitule, $nameTools, $langHelp, $langAnonUser, $langActivate, $langDeactivate;
 	global $language, $helpTopic, $require_help, $langEclass, $langCopyrightFooter;
 	global $relPath, $urlServer, $toolContent_ErrorExists, $statut;
 	global $page_name, $page_navi, $currentCourseID, $langHomePage, $siteName, $navigation;
@@ -86,7 +92,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	global $langSearch, $langAdvancedSearch;
 	global $langMyPersoLessons, $langMyPersoDeadlines;
 	global $langMyPersoAnnouncements, $langMyPersoDocs, $langMyPersoAgenda, $langMyPersoForum;
-	global $require_current_course, $is_adminOfCourse;
+	global $require_current_course, $is_adminOfCourse, $module_id;
 
 	//get blocks content from $toolContent array
 	if ($perso_tool_content) {
@@ -237,6 +243,20 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$searchAction = "search.php";
 			$searchAdvancedURL = $searchAction;
 		}
+		$mod_activation = ''; 
+		if ($is_adminOfCourse) {
+			// link for activating / deactivating module
+			if(file_exists($module_ini_dir = getcwd() . "/module.ini.php")) {
+				include $module_ini_dir;
+				if (visible_module($module_id)) {
+					$message = $langDeactivate;
+					$mod_activation = "(<a href='$_SERVER[PHP_SELF]?module_id=$module_id&hide=0'>$langDeactivate</a>)";
+				} else { 
+					$message = $langActivate;
+					$mod_activation = "(<a href='$_SERVER[PHP_SELF]?module_id=$module_id&hide=1'>$langActivate</a>)";
+				}
+			}
+		}
 
 		$t->set_var ( 'SEARCH_ACTION', $searchAction );
 		$t->set_var ( 'SEARCH_ADVANCED_URL', $searchAdvancedURL );
@@ -244,7 +264,11 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		$t->set_var ( 'SEARCH_ADVANCED', $langAdvancedSearch );
 
 		$t->set_var ( 'TOOL_NAME', $nameTools );
-
+		
+		if ($is_adminOfCourse) { 
+			$t->set_var ( 'ACTIVATE_MODULE', $mod_activation );
+		}
+	
 		$t->set_var ( 'LOGOUT_LINK', $relPath );
 
 		if ($menuTypeID != 2) {

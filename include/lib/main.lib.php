@@ -843,3 +843,13 @@ function mkpath($path)  {
 		}
 	}
 }
+
+// checks if a module is visible 
+function visible_module($module_id) {
+
+	$v = mysql_fetch_array(db_query("SELECT visible FROM accueil WHERE id ='$module_id'"));
+ 	if ($v['visible'] == 1)
+		return TRUE;
+	else
+		return FALSE;
+}

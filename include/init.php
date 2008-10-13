@@ -158,6 +158,7 @@ if (!isset($guest_allowed) || $guest_allowed!= true){
 }
 
 
+
 // If $require_current_course is true, initialise course settings
 // Read properties of current course
 if (isset($require_current_course) and $require_current_course) {
@@ -269,7 +270,7 @@ if (isset($_SESSION['status'])) {
 //be able to access inactive tools.
 if(file_exists($module_ini_dir = getcwd() . "/module.ini.php") && !$is_adminOfCourse && @$ignore_module_ini != true) {
 	include($module_ini_dir);
-
+	
 	if (!check_guest()) {
 		if (isset($_SESSION['uid']) and $_SESSION['uid']) {
 			$result = db_query("
