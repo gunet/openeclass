@@ -564,6 +564,47 @@ body {
 	border-top: 1px solid #a33033;
 }
 
+.HelpIcon {
+  padding-bottom: 0px;
+}
+
+
+.actmod {
+  color: #CEC3B5;
+  font-size: 10px !important;
+  padding: 10px;
+}
+
+.actmod a{
+	width: 250px;
+    padding: 1px;
+    font-size: 10px !important;
+    color: #CEC3B5 !important;
+    text-decoration: none !important;
+    font-weight: normal !important;
+}
+
+
+
+.actmod a.deactivate_module:hover {
+  	color: #a33033 !important;
+    padding: 1px;
+	text-decoration: none !important;
+    font-size: 10px !important;
+    font-weight: normal !important;
+	width: 250px;
+}
+
+.actmod a.activate_module:hover {
+  	color: green !important;
+    padding: 1px;
+	text-decoration: none !important;
+    font-size: 10px !important;
+    font-weight: normal !important;
+	width: 250px;
+}
+
+
 #content_main_no_nav {
 	margin-top:22px;
 	//margin-top:8px;

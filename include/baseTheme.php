@@ -244,17 +244,17 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$searchAction = "search.php";
 			$searchAdvancedURL = $searchAction;
 		}
-		$mod_activation = ''; 
+		$mod_activation = '';
 		if ($is_adminOfCourse) {
 			// link for activating / deactivating module
 			if(file_exists($module_ini_dir = getcwd() . "/module.ini.php")) {
 				include $module_ini_dir;
 				if (visible_module($module_id)) {
 					$message = $langDeactivate;
-					$mod_activation = "(<a href='$_SERVER[PHP_SELF]?module_id=$module_id&hide=0'>$langDeactivate</a>)";
-				} else { 
+					$mod_activation = "<a class=\"deactivate_module\" href='$_SERVER[PHP_SELF]?module_id=$module_id&hide=0'>($langDeactivate)</a>";
+				} else {
 					$message = $langActivate;
-					$mod_activation = "(<a href='$_SERVER[PHP_SELF]?module_id=$module_id&hide=1'>$langActivate</a>)";
+					$mod_activation = "<a class=\"activate_module\" href='$_SERVER[PHP_SELF]?module_id=$module_id&hide=1'>($langActivate)</a>";
 				}
 			}
 		}
@@ -265,11 +265,11 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		$t->set_var ( 'SEARCH_ADVANCED', $langAdvancedSearch );
 
 		$t->set_var ( 'TOOL_NAME', $nameTools );
-		
-		if ($is_adminOfCourse) { 
+
+		if ($is_adminOfCourse) {
 			$t->set_var ( 'ACTIVATE_MODULE', $mod_activation );
 		}
-	
+
 		$t->set_var ( 'LOGOUT_LINK', $relPath );
 
 		if ($menuTypeID != 2) {
@@ -402,7 +402,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			}
 			$help_link_icon = " <a  href=\"" . $relPath . "modules/help/help.php?topic=$helpTopic&amp;language=$language\"
         onClick=\"window.open('" . $relPath . "modules/help/help.php?topic=$helpTopic&amp;language=$language','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10');
-        return false;\"> <img src=\"" . $relPath . "template/classic/img/help_icon.gif\" width=\"12\" height=\"12\" border=\"0\" alt=\"$langHelp\"/> </a>";
+        return false;\"><img class=\"HelpIcon\" src=\"" . $relPath . "template/classic/img/help_icon.gif\" width=\"12\" height=\"12\" border=\"0\" alt=\"$langHelp\"/></a>";
 
 			$t->set_var ( 'HELP_LINK_ICON', $help_link_icon );
 			$t->set_var ( 'LANG_HELP', $langHelp );
