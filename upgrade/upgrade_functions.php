@@ -635,15 +635,6 @@ function upgrade_course($code, $lang, $extramessage = '')
                 db_query("ALTER TABLE `poll` CHANGE `end_date` `end_date` DATE NOT NULL DEFAULT '0000-00-00'", $code);
         }
 
-        if (!mysql_table_exists($code, 'poll_answer'))  {
-                db_query("CREATE TABLE `poll_answer` (
-                        `aid` bigint(12) NOT NULL default '0',
-                        `creator_id` mediumint(8) unsigned NOT NULL default '0',
-                        `pid` bigint(12) NOT NULL default '0',
-                        `date` datetime NOT NULL default '0000-00-00 00:00:00',
-                        PRIMARY KEY  (`aid`)
-                                ) ", $code); //TYPE=MyISAM COMMENT='For the poll module';
-        }
         if (!mysql_table_exists($code, 'poll_answer_record'))  {
                 db_query("CREATE TABLE `poll_answer_record` (
                         `arid` int(11) NOT NULL auto_increment,
