@@ -55,24 +55,21 @@ $title = $GLOBALS["langH" . str_replace('_student', '', $_GET['topic'])];
 
 		<style type='text/css'>
 			html {
-                                background-color: #575656;
+                                background-color: #727266;
                                 padding: 5px 5px 5px 5px;
-                           }	
+                           }
                       body {
                                 background-color: #ffffff;
-                                color: #575656;
-                                font-size: 11px; font-family: Verdana, Arial;
+                                color: #727266;
+                                font-size: 10px; font-family: Verdana, Arial;
                                 line-height: 1.3;
                            }
 
                         h3 {
-                                color: #004571;
-                                background : #F1F1F1;
+                                color: #727266;
+                                background : #edecdf;
                                 font-size : 14pt;
-                                border-bottom : 1px solid Silver;
-                                border-right : 1px solid Silver;
-                                border-top : 1px solid Silver;
-                                border-left : 1px solid Silver;
+                                border-bottom : 3px solid #a33033;
                                 padding : 8px;
                                 font-variant : normal;
                                 font-weight : bold;
@@ -80,16 +77,16 @@ $title = $GLOBALS["langH" . str_replace('_student', '', $_GET['topic'])];
 
                         p {
                            padding: 10px;
-                            text-align:justify;
+                           text-align:justify;
                         }
 
 			h4 {
-				background-color: white; 
-                                font-family: Verdana, Arial, Helvetica;
-                                color: #004571;
+				background-color: white;
+                font-family: Verdana, Arial, Helvetica;
+                color: #727266;
 				font-size: 12px;
-                                padding: 10px;
-                                border-bottom : 1px dotted silver;
+                padding: 10px;
+                border-bottom : 1px dotted silver;
 			   }
 			.helptopic {
 				font-size: 11px; font-family: Verdana, Arial;
@@ -111,9 +108,8 @@ $title = $GLOBALS["langH" . str_replace('_student', '', $_GET['topic'])];
 	</head>
 	<body>
 		<h3><?= $title ?></h3>
-		<?= $GLOBALS["lang$_GET[topic]Content"] ?>	
-		<center><p>
-			<a href='javascript:window.close();'><?= $langWindowClose ?></a>
-		</p></center>
+		<?= $GLOBALS["lang$_GET[topic]Content"] ?>
+		<div align="right"><a href='javascript:window.close();'><?= $langWindowClose ?></a>&nbsp;&nbsp;</div>
+		<br />
 	</body>
 </html>
