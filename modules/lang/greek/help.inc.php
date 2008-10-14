@@ -77,6 +77,7 @@ $langInitContent = "<p class='helptopic'>Βρίσκεστε στην Αρχικ�
 <p class='helptopic'>Για περισσότερες πληροφορίες σχετικά με τη λειτουργία της
 πλατφόρμας διαβάστε τα σχετικά εγχειρίδια χρήσης.</p>";
 
+$langHInit_student = $langHInit;
 $langInit_studentContent = $langInitContent;
 
 $langHPortfolio="Χαρτοφυλάκιο χρήστη";
@@ -91,6 +92,7 @@ $langPortfolioContent="<p>Σε αυτή τη σελίδα εμφανίζοντα
 να δείτε συγκεντρωτικά τις ανακοινώσεις και το ημερολόγιο των μαθημάτων
 σας.</p>
 ";
+$langHPortfolio_student = $langHPortfolio;
 $langPortfolio_studentContent = $langPortfolioContent;
 
 $langHcourse_home='Κεντρική σελίδα μαθήματος';
