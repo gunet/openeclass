@@ -85,7 +85,7 @@ include ('tools.php');
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
 	global $langUser, $langUserHeader, $prenom, $nom, $langLogout, $siteName, $intitule, $nameTools, $langHelp, $langAnonUser, $langActivate, $langDeactivate;
 	global $language, $helpTopic, $require_help, $langEclass, $langCopyrightFooter;
-	global $relPath, $urlServer, $toolContent_ErrorExists, $statut;
+	global $relPath, $urlServer, $urlAppend, $toolContent_ErrorExists, $statut;
 	global $page_name, $page_navi, $currentCourseID, $langHomePage, $siteName, $navigation;
 	global $homePage, $courseHome, $uid, $webDir, $extraMessage;
 	global $langChangeLang, $langUserBriefcase, $langPersonalisedBriefcase, $langAdmin, $switchLangURL;
@@ -177,7 +177,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var ( 'CONTENT_MAIN_CSS', 'content_main' );
 		}
 
-		$t->set_var ( 'URL_PATH', $urlServer );
+		$t->set_var ( 'URL_PATH', $urlAppend.'/' );
 		$t->set_var ( 'SITE_NAME', $siteName );
 
 		//If there is a message to display, show it (ex. Session timeout)
@@ -425,7 +425,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var ( 'DOCS_CONTENT', $docs_content );
 			$t->set_var ( 'AGENDA_CONTENT', $agenda_content );
 			$t->set_var ( 'FORUM_CONTENT', $forum_content );
-			$t->set_var ( 'URL_PATH', $urlServer );
+			$t->set_var ( 'URL_PATH', $urlAppend.'/' );
 			$t->set_var ( 'TOOL_PATH', $relPath );
 		}
 
@@ -518,7 +518,7 @@ function drawPerso($toolContent) {
 	$t->set_var ( 'DOCS_CONTENT', $docs_content );
 	$t->set_var ( 'AGENDA_CONTENT', $agenda_content );
 	$t->set_var ( 'FORUM_CONTENT', $forum_content );
-	$t->set_var ( 'URL_PATH', $urlServer );
+	$t->set_var ( 'URL_PATH', $urlAppend.'/' );
 	$t->set_var ( 'TOOL_PATH', $relPath );
 
 	//START breadcrumb
