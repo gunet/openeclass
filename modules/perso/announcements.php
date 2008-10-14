@@ -311,7 +311,7 @@ aCont;
 		if ($iterator > 0) {
 			$announceExist = true;
 			$assign_content .= "\n          <li class=\"category\">".$data[$i][0]."</li>";
-			$url = $_SERVER['PHP_SELF'] . "?perso=2&c=" .$data[$i][1];
+			$url = $urlServer . "index.php?perso=2&c=" .$data[$i][1];
 			for ($j=0; $j < $iterator; $j++){
 				if(strlen($data[$i][2][$j][1]) > 150) {
 					$data[$i][2][$j][1] = substr($data[$i][2][$j][1], 0, 150);

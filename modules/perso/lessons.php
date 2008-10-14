@@ -214,7 +214,7 @@ function  getUserLessonInfo($uid, $type) {
 
 function htmlInterface($data, $lesson_fCode) {
 
-	global $statut, $is_admin, $urlServer, $langCourseCreate, $langOtherCourses;
+	global $statut, $is_admin, $urlAppend, $urlServer, $langCourseCreate, $langOtherCourses;
 
 	global $langNotEnrolledToLessons, $langWelcomeProf, $langWelcomeStud;
 
@@ -238,15 +238,15 @@ lCont;
 		for ($i=0; $i<$data[0]; $i++) {
  			$lesson_content .= "
         <tr style=\"background-color: transparent;\" onmouseover=\"this.style.backgroundColor='#fbfbfb'\" onmouseout=\"this.style.backgroundColor='transparent'\">
-          <td align='left' width=\"1\" style=\"padding-left: 4px; padding-right: 0px;\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
-          <td align='left' style=\"padding-left: 0px; padding-top: 2px; padding-bottom: 2px; padding-right: 0px;\"><a href=\"courses/".$data[2][$i]."\">".$lesson_fCode[$i]." - ".$data[1][$i]."</a><cite class=\"content_pos\">".$data[3][$i]."</cite></td>";
+          <td align='left' width=\"1\" style=\"padding-left: 4px; padding-right: 0px;\"><img style='border:0px;' src='${urlAppend}/template/classic/img/arrow_grey.gif' title='bullet'></td>
+          <td align='left' style=\"padding-left: 0px; padding-top: 2px; padding-bottom: 2px; padding-right: 0px;\"><a href=\"${urlServer}courses/".$data[2][$i]."/\">".$lesson_fCode[$i]." - ".$data[1][$i]."</a><cite class=\"content_pos\">".$data[3][$i]."</cite></td>";
 			if ($data[4][$i] == '5') {
 				$lesson_content .= "
-          <td align='center'><a href=\"modules/unreguser/unregcours.php?cid=".$data[2][$i]."&uid=".$uid."\"><img style='border:0px;' src='${urlServer}/template/classic/img/cunregister.gif' title='$langUnregCourse'></img></a></td>
+          <td align='center'><a href=\"${urlServer}modules/unreguser/unregcours.php?cid=".$data[2][$i]."&uid=".$uid."\"><img style='border:0px;' src='${urlAppend}/template/classic/img/cunregister.gif' title='$langUnregCourse'></img></a></td>
         </tr>";
 			} elseif ($data[4][$i] == '1') {
 				$lesson_content .= "
-          <td align='center'><a href=\"modules/course_info/infocours.php?from_home=TRUE&cid=".$data[2][$i]."\"><img style='border:0px;' src='${urlServer}/template/classic/img/referencement.gif' title='$langManagement'></img></a></td>
+          <td align='center'><a href=\"${urlServer}modules/course_info/infocours.php?from_home=TRUE&cid=".$data[2][$i]."\"><img style='border:0px;' src='${urlAppend}/template/classic/img/referencement.gif' title='$langManagement'></img></a></td>
         </tr>";
 			}
 		}

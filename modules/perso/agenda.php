@@ -278,7 +278,7 @@ function getUserAgenda($param, $type) {
 
 function agendaHtmlInterface($data) {
 
-	global $langNoEventsExist, $langUnknown, $langDuration, $langMore, $l_ondate, $langHours, $langHour, $langExerciseStart;
+	global $langNoEventsExist, $langUnknown, $langDuration, $langMore, $l_ondate, $langHours, $langHour, $langExerciseStart, $urlServer;
 
 
 	$numOfDays = count($data);
@@ -299,7 +299,7 @@ agCont;
 
 			for ($j=0; $j < $iterator; $j++){
 
-				$url = $_SERVER['PHP_SELF'] . "?perso=4&c=" . $data[$i][$j][5];
+				$url = $urlServer . "index.php?perso=4&c=" . $data[$i][$j][5];
 
 				if (strlen($data[$i][$j][4]) == 0) {
 					$data[$i][$j][4] = "$langUnknown";

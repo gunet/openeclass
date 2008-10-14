@@ -186,7 +186,7 @@ function getUserAssignments($param, $type) {
 
 function assignHtmlInterface($data) {
 
-	global  $langCourse, $langAssignment, $langDeadline, $langNoAssignmentsExist, $langGroupWorkSubmitted1, $langGroupWorkDeadline_of_Submission, $langGroupWorkSubmitted, $langExerciseEnd;
+	global  $langCourse, $langAssignment, $langDeadline, $langNoAssignmentsExist, $langGroupWorkSubmitted1, $langGroupWorkDeadline_of_Submission, $langGroupWorkSubmitted, $langExerciseEnd, $urlServer;
 
 	$assign_content = "";
 
@@ -204,7 +204,7 @@ aCont;
 		if ($iterator > 0) {
 			$assignmentsExist = true;
 			for ($j=0; $j < $iterator; $j++) {
-				$url = $_SERVER['PHP_SELF'] . "?perso=1&c=" .$data[$i][1]."&i=".$data[$i][2][$j][0];
+				$url = $urlServer . "index.php?perso=1&c=" .$data[$i][1]."&i=".$data[$i][2][$j][0];
 
 				if($data[$i][2][$j][6] == 1) {
 					$submit_status = "&nbsp;(".$langGroupWorkSubmitted.")";

@@ -280,7 +280,7 @@ function getUserForumPosts($param, $type) {
 
 function forumHtmlInterface($data) {
 
-	global $langNoPosts, $langMore, $langSender;
+	global $langNoPosts, $langMore, $langSender, $urlServer;
 
 	$content = "";
 
@@ -294,7 +294,7 @@ fCont;
 			$content .= "\n          <li class=\"category\">".$data[$i][0]."</li>";
 			$iterator =  count($data[$i][2][0]);
 			for ($j=0; $j < $iterator; $j++){
-				$url = $_SERVER['PHP_SELF']."?perso=5&c=".$data[$i][1]."&t=".$data[$i][2][0][$j][2]."&f=".$data[$i][2][0][$j][0]."&s=".$data[$i][2][0][$j][4];
+				$url = $urlServer."index.php?perso=5&c=".$data[$i][1]."&t=".$data[$i][2][0][$j][2]."&f=".$data[$i][2][0][$j][0]."&s=".$data[$i][2][0][$j][4];
 				if(strlen($data[$i][2][0][$j][8]) > 150) {
 					$data[$i][2][0][$j][8] = substr($data[$i][2][0][$j][8], 0, 150);
 					$data[$i][2][0][$j][8] .= " <strong><span class=\"announce_date\">$langMore</span></strong>";
