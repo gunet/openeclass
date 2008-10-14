@@ -41,9 +41,9 @@
 include ('init.php');
 if ($is_adminOfCourse) {
 	if (isset($_GET['hide']) and $_GET['hide'] == 0) {
-		db_query("UPDATE accueil SET visible = 0 WHERE id='$module_id'", $currentCourseID);
+		db_query("UPDATE accueil SET visible = 0 WHERE id='$eclass_module_id'", $currentCourseID);
 	} else if (isset($_GET['hide']) and $_GET['hide'] == 1) {
-		db_query("UPDATE accueil SET visible = 1 WHERE id='$module_id'", $currentCourseID);
+		db_query("UPDATE accueil SET visible = 1 WHERE id='$eclass_module_id'", $currentCourseID);
 	}
 }
 //template path for logged out + logged in (ex., when session expires)
@@ -92,7 +92,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 	global $langSearch, $langAdvancedSearch;
 	global $langMyPersoLessons, $langMyPersoDeadlines;
 	global $langMyPersoAnnouncements, $langMyPersoDocs, $langMyPersoAgenda, $langMyPersoForum;
-	global $require_current_course, $is_adminOfCourse, $module_id;
+	global $require_current_course, $is_adminOfCourse;
 
 	//get blocks content from $toolContent array
 	if ($perso_tool_content) {
@@ -251,10 +251,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 				include $module_ini_dir;
 				if (visible_module($module_id)) {
 					$message = $langDeactivate;
-					$mod_activation = "<a class=\"deactivate_module\" href='$_SERVER[PHP_SELF]?module_id=$module_id&hide=0'>($langDeactivate)</a>";
+					$mod_activation = "<a class=\"deactivate_module\" href='$_SERVER[PHP_SELF]?eclass_module_id=$module_id&hide=0'>($langDeactivate)</a>";
 				} else {
 					$message = $langActivate;
-					$mod_activation = "<a class=\"activate_module\" href='$_SERVER[PHP_SELF]?module_id=$module_id&hide=1'>($langActivate)</a>";
+					$mod_activation = "<a class=\"activate_module\" href='$_SERVER[PHP_SELF]?eclass_module_id=$module_id&hide=1'>($langActivate)</a>";
 				}
 			}
 		}
