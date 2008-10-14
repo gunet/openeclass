@@ -2788,7 +2788,7 @@ $langConfirmUnregCours = "Θέλετε σίγουρα να απεγγραφεί�
 * usage.inc.php
 ********************************************************************/
  $langCreateStatsGraph ="Επιλογή παραμέτρων";
- $langGDRequired = "Απαιτείται η βιβιλιοθήκη GD!";
+ $langGDRequired = "Απαιτείται η βιβλιοθήκη GD!";
  $langPersonalStats="Τα στατιστικά μου";
  $langUserLogins="Επισκέψεις χρηστών στο μάθημα";
  $langStartDate = "Ημερομηνία Έναρξης";
