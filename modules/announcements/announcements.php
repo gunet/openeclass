@@ -388,12 +388,10 @@ cData;
 	$tool_content .= "
       <table width=\"99%\" align='left' class=\"announcements\">";
 	if ($announcementNumber > 0) {
-		$tool_content .= <<<cData
-\n
+		$tool_content .= "
       <thead>
       <tr>
-        <th class="left" colspan="2"><b>$langAnnouncement</b></th>
-cData;
+        <th class=\"left\" colspan=\"2\"><b>$langAnnouncement</b></th>";
 	$tool_content .= "
           <th width='70' class=\"right\"><b>$langTools</b></th>";
 		if ($announcementNumber > 1) {
@@ -422,7 +420,15 @@ cData;
             }
             $tool_content .= "
         <td width=\"1\"><img style='border:0px; padding-top:3px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
-        <td><b>" . $myrow["title"] . "</b>&nbsp;<small>(" . $myrow['temps'] . ")</small>
+        <td><b>";
+
+            if ($myrow["title"]=="") {
+                $tool_content .= "".$langAnnouncementNoTille."";
+            } else {
+                $tool_content .= "".$myrow["title"]."";
+            }
+
+            $tool_content .= "</b>&nbsp;<small>(" . $myrow['temps'] . ")</small>
             <br />$content        </td>
         <td width='70' class='right'>
         <a href=\"$_SERVER[PHP_SELF]?modify=" . $myrow['id'] . "\">
