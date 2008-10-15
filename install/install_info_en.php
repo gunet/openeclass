@@ -64,25 +64,25 @@ pre {
       2000</b>, <b>Windows XP</b>, <b>Windows 2003</b>)
       </li>
       <li>Various Linux distributions (e.g. <b>RedHat</b>,
-      <b>Debian</b>, <b>Ubuntu</b>, <b>Suse</b> κ.λπ.)
+      <b>Debian</b>, <b>Ubuntu</b>, <b>Suse</b> etc)
       </li>
       <li>UNIX environment (e.g. <b>Solaris</b>).
       </li>
-    </ul>In the following pages platform’s installation instructions are presented analytically:<br>
+    </ul>In the following pages platform's installation instructions are presented analytically:<br>
     <ul>
-      <li><a href="#before">Actions before installation – Prerequisities</a></li>
+      <li><a href="#before">Actions before installation - Prerequisities</a></li>
       <li><a href="#unix">Installations in Unix / Linux operational systems (Solaris/Redhat, Debian, Suse, Mandrake etc.)</a> </li>
       <li><a href="#win">Installations in Ms Windows systems (Win2000, WinXP, Win2003 etc.)</a></li>
-      <li><a href="#after">Actions after installation – Further settings</a></li>
+      <li><a href="#after">Actions after installation - Further settings</a></li>
     </ul>
     <hr>
     <h3>
-      <a name="before" id="before">Actions before installation – prequisities:</a>
+      <a name="before" id="before">Actions before installation - prequisities:</a>
     </h3>
     <p>A series of applications needs to exist and operate in order for the eClass platform to be installed and operate as well. These applications are:
     </p>
     <h4>
-      1. Web Server (<a href="http://httpd.apache.org/" target="_blank">Apache</a> 1.3.x ή 2.x)
+      1. Web Server (<a href="http://httpd.apache.org/" target="_blank">Apache</a> 1.3.x or 2.x)
     </h4>
     <p>Apache has to be able to control pages of the <em>.php .inc.</em> type. If you have not set the server yet, adding the following line to the <code>httpd.conf</code> file is enough:  
     </p>
@@ -103,7 +103,7 @@ Options -Indexes
 </pre>
     <div class="note">
       <p><b>For Windows Only</b>. If Microsoft Webserver (<em>IIS</em>) runs on your computer, you will have to deactivate it. Follow <em>Start-&gt;Programs-&gt;Administrative
-        Tools-&gt;Services</em> and click on  “stop” in order to stop the <em>«World Wide Web Publishing Service»</em>. Click right on the service and click on <em>«Disabled»</em> from the <em>«Startup type»</em> options to disable <em>IIS</em> permanently. Please notice that platform Open eClass operates without any problems under IIS web server, but without being exhaustive tested.   
+        Tools-&gt;Services</em> and click on 'stop' in order to stop the <em>«World Wide Web Publishing Service»</em>. Click right on the service and click on <em>«Disabled»</em> from the <em>«Startup type»</em> options to disable <em>IIS</em> permanently. Please notice that platform Open eClass operates without any problems under IIS web server, but without being exhaustive tested.   
       </p>
     </div>
 
@@ -170,7 +170,7 @@ What is more, if a PHP note comes up during the application, search for the erro
       target="_blank">postfix</a> (optional)
     </h4>
 
-    <p>In some of the platform operations (e.g. during users’ registration), emails are sent. If any of the email mission applications does not function, platform mails are not sent anywhere. 
+    <p>In some of the platform operations (e.g. during users' registration), emails are sent. If any of the email mission applications does not function, platform mails are not sent anywhere. 
     </p>
     <div class="note">
       <p>
@@ -192,27 +192,27 @@ You can decompress the <b>openeclass-2.1.tar.gz</b> file using the <code>tar xzv
     <p>
 To give access rights to web server you can type the following commands (if the web server runs as a www-data user) 
     </p><pre>
-		cd (path του eclass) (e.g. cd /opt/eclass)
+		cd (path of eclass) (e.g. cd /opt/eclass)
 		chown -R www-data *
 		find ./ -type f -exec chmod 664 {} \;
 		find ./ -type d -exec chmod 775 {} \;
 		</pre>
-    <p>Administrator’s rights (root) are usually necessary for the above commands.  
+    <p>Administrator's rights (root) are usually necessary for the above commands.  
     </p>
     <p>In order to start installing, visit the /install/ sub-directory address with a web browser. If, for example, the main eclass directory is located in http://www.example.gr/eclass/, the address you have to type is <code>http://www.example.gr/eclass/install/</code>. Then follow the platform installation guide steps like the ones presented on your screen. Note that during the installation process you will be required the following:
 </p>
 <ul>
-  <li>The name of the computer MySQL is installed to (e.g. eclass.gunet.gr, localhost – if they are on the same computer)  </li>
-  <li>A “username” and a “password” for MySQL with database creation rights. </li>
+  <li>The name of the computer MySQL is installed to (e.g. eclass.gunet.gr, localhost - if they are on the same computer)  </li>
+  <li>A 'username' and a 'password' for MySQL with database creation rights. </li>
   <li>Name for the main eClass database (default is eclass). Change it however if there is a database with the same name already.  
   </li>
   <li>Platform URL (as this appears on the browser after installation
     e.g. http://eclass.gunet.gr/eclass/) </li>
   <li>The file path on the server. Make sure that the path is right (e.g. /var/www/html/). </li>
-  <li>Administrator’s Name / Surname and email. </li>
-  <li>Administrator’s Username and Password.</li>
+  <li>Administrator's Name / Surname and email. </li>
+  <li>Administrator's Username and Password.</li>
   <li>The name you would like to give to the platform (e.g. Open eClass).</li>
-  <li>Phone number and email helpdesk (several applications meet this email, it could be the same as the administrator’s).</li>
+  <li>Phone number and email helpdesk (several applications meet this email, it could be the same as the administrator's).</li>
   <li>Name and address of your institute.</li>
   <li>
 The ldap server of the institute user authentication will be taking place  (ldap.noc.uoa.gr), as well as the ldap server basedn (e.g. ou=people,o=UoA,c=gr). It should be noted, that the computer eclass will be installed to, needs to have access to the lpad server of the institute. In case there is no LDAP server available in your institute or organisation, leave it blank. There is an alternative way of authenticate users through MySQL. </li>
@@ -228,39 +228,39 @@ The ldap server of the institute user authentication will be taking place  (ldap
     </p>
     <p>In order to start installation, visit the /install/ sub-directory address with a web browser.  If, for example, the main eclass directory is located in http://www.example.gr/eclass/, the address you have to type is <code>http://www.example.gr/eclass/install/</code>. Then follow the platform installation guide steps like the ones presented on your screen. Note that during the installation process you will be required the following:</p>
 <ul>
-  <li>The name of the computer MySQL is installed to (e.g. eclass.gunet.gr, localhost – if they are on the same computer) 
+  <li>The name of the computer MySQL is installed to (e.g. eclass.gunet.gr, localhost - if they are on the same computer) 
  </li>
-  <li>A “username” and a “password” for MySQL with database c rights.  </li>
+  <li>A 'username' and a 'password' for MySQL with database c rights.  </li>
   <li>Name for the main eClass database (default is eclass). Change it however if there is a database with the same name already.  
   </li>
   <li>Platform URL (as this appears on the browser after installation e.g.http://eclass.gunet.gr/eclass/). 
  </li>
   <li>The file path on the server. Make sure that the path is right (e.g. C:\Program Files\Apache\htdocs\).</li>
-  <li>Administrator’s Name / Surname and email.</li>
-  <li>Administrator’s Username and Password.</li>
+  <li>Administrator's Name / Surname and email.</li>
+  <li>Administrator's Username and Password.</li>
   <li>The name you would like to give to the platform (e.g. Open eClass).</li>
-  <li>Phone number and email helpdesk (several applications meet this email, it could be the same as the administrator’s).</li>
+  <li>Phone number and email helpdesk (several applications meet this email, it could be the same as the administrator's).</li>
   <li>Name and address of your institute.</li>
   <li>The ldap server of the institute user authentication will be taking place  (ldap.noc.uoa.gr), as well as the ldap server basedn (e.g. ou=people,o=UoA,c=gr). It should be noted, that the computer eclass will be installed to, needs to have access to the ldap server of the institute. In case there is no LDAP server available in your institute or organisation, leave it blank. There is an alternative way of authenticate users through MySQL.</li>
 </ul>
     <hr>
     <h3>
-      <a name="after" id="after">Actions after Installation – Further Settings:</a>
+      <a name="after" id="after">Actions after Installation - Further Settings:</a>
     </h3>
 <ul>
   <li> 
-    <p>The platform is delivered through the phpMyAdmin management tool. For safety and security reasons, access to phpMyAdmin is done through the browser’s cookies. If you want to change it, you can refer to the config.inc.php file of phpMyAdmin.</p>
+    <p>The platform is delivered through the phpMyAdmin management tool. For safety and security reasons, access to phpMyAdmin is done through the browser's cookies. If you want to change it, you can refer to the config.inc.php file of phpMyAdmin.</p>
   </li>
-  <li>eClass introduces 3 tentetive / general Schools / Faculties. (Faculty 1-Code TMA, Faculty 2-Code TMB etc).You will have to change and adjust them to the Schools-Faculties of your own institute. You can do this through the administrator tool. You will find more and further information for these actions in the Administrator’s manual (included in the administator tool).</li>
+  <li>eClass introduces 3 tentetive / general Schools / Faculties. (Faculty 1-Code TMA, Faculty 2-Code TMB etc).You will have to change and adjust them to the Schools-Faculties of your own institute. You can do this through the administrator tool. You will find more and further information for these actions in the Administrator's manual (included in the administator tool).</li>
   <li> 
     <p> In case some institutes intend to substitute the initial eClass logo with one of its own, they just have to substitute the picture.</p>
-    <pre>(path του eClass)/template/classic/img/logo_bg_50.gif</pre> 
+    <pre>(path of eClass)/template/classic/img/logo_bg_50.gif</pre> 
     <p> with its own. </p>
   </li>
   <li> 
     <p>In the <em>config.php</em> the variable <em>have_latex</em>, which is <em>FALSE</em> by definition is defined. If you change its value to <em>TRUE</em>, mathematic symbols will be supported only in some eClass subsystems. However, this presupposes the existence of a latex system on the host computer where eClass has installed. For more about the configurations you will need to do, please refer to <a href="README_latex.txt">README_latex.txt</a>. If you do not want to have a latex support, leave it as it is (that is in <em>FALSE</em> value).</p>
   <li> 
-    <p>In the <em>config.php</em> file, the <em>close_user_registration</em> variable, which is FALSE by definition, will be defined. Changing the value to <em>TRUE</em>, registration of users with “student” rights will not be free anymore. Users will have to follow a process similar to the teacher account creation process, namely filling in a student account application form, in order to obtain a platform account. The application will be examined by the administrator who either approves of it and opens an account, or rejects it. 
+    <p>In the <em>config.php</em> file, the <em>close_user_registration</em> variable, which is FALSE by definition, will be defined. Changing the value to <em>TRUE</em>, registration of users with 'student' rights will not be free anymore. Users will have to follow a process similar to the teacher account creation process, namely filling in a student account application form, in order to obtain a platform account. The application will be examined by the administrator who either approves of it and opens an account, or rejects it. 
  </p>
   </li>
 <li>

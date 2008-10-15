@@ -61,12 +61,12 @@ pre {
 <div class="note">
 <p><b>WARNING!</b>
 <ul>
-<li>Please ensure that during the platform’s upgrade process there is no access to eCourses by the platform’s users and the platform’s database is not accessible by anyone  
+<li>Please ensure that during the platform's upgrade process there is no access to eCourses by the platform's users and the platform's database is not accessible by anyone  
 </li>
-<li>Also check the platform’s version that is already installed in your server, by following the link “Platform’s Information” in the home page. In order to the upgrade process to be possible the already installed platform should be either version 1.7 or 2.0 or 2.0 beta For previous versions (1.5, 1.6) you need to upgrade first in  1.7 following the instructions at the last section of this manual “Upgrade to Open eClass 2.1 from older versions 1.5, 1.6”.
+<li>Also check the platform's version that is already installed in your server, by following the link 'Platform's Information' in the home page. In order to the upgrade process to be possible the already installed platform should be either version 1.7 or 2.0 or 2.0 beta For previous versions (1.5, 1.6) you need to upgrade first in  1.7 following the instructions at the last section of this manual 'Upgrade to Open eClass 2.1 from older versions 1.5, 1.6'.
 </li>
 <li>
-Before the upgrade procedure please backup both the eCourses files and the platform’s Database.
+Before the upgrade procedure please backup both the eCourses files and the platform's Database.
 </li>
 </ul>
 Then, follow the steps below.
@@ -95,7 +95,7 @@ Then, follow the steps below.
 <a name="unix">
 <h3>1st Step: Upgrading in Unix / Linux computers</h3>
 </a>
-<p>All operations presuppose you have the administrator’s rights (root) on your computer.</p>
+<p>All operations presuppose you have the administrator's rights (root) on your computer.</p>
 <p>The following example presumes that the eClass platform is already installed on directory <code>/var/www/html</code>.</p>
 <p>Due to some changes included by the new (2.1) Open eClass version you will have to delete the old and install the new one. To make sure that you old configuration remain intact you must do the following actions:</p>
 <p>We consider that you have downloaded <b>openeclass-2.1.tar.gz</b> on the <code>/tmp
@@ -182,8 +182,8 @@ find ./ -type d -exec chmod 775 {} \;
   <p><b>For Unix/Linux systems only: </b>The process of platform database upgrade includes changes on the <em> config.php</em>. As a result, you will temporarily need to change your access rights on the <em>config.php</em> file and the /config directory into read-write (chmod 664).
   </div>
 <p>Then keystroke the following URL on your browser:</p>
-<code>http://(url του eclass)/upgrade/</code>
-<p>You will be prompted for the username and password of the platform administrator. After providing your personal details, you will be asked to change/correct contact details, as well as students’ registration mode on the platform (free or applied registration). The database upgrade will begin afterwards. You will see several messages concerning your working progress. Probably you will not see any false messages. Note that depending on the number and content of courses, it is possible that the process will last for a long time. 
+<code>http://(url of eclass)/upgrade/</code>
+<p>You will be prompted for the username and password of the platform administrator. After providing your personal details, you will be asked to change/correct contact details, as well as students' registration mode on the platform (free or applied registration). The database upgrade will begin afterwards. You will see several messages concerning your working progress. Probably you will not see any false messages. Note that depending on the number and content of courses, it is possible that the process will last for a long time. 
 </p>
 <p>In the opposite case (namely if error messages occur), then it is possible for a course not to be operating properly. Such error messages may occur if you have altered the structure of an eclass database table. Note (if possible) the accurate error message you saw.</p>
 <p>If you face any problems with any course after the upgrade, contact us (eclass@gunet.gr). (<a href="mailto:admin@openeclass.org">admin@openeclass.org</a>).</p>
@@ -198,7 +198,7 @@ find ./ -type d -exec chmod 775 {} \;
 <a name="other">
 <h3>Optional Further Configurations</h3>
 </a>
-<ul><li>In the <em>config.php</em> file, the <em>close_user_registration</em> variable, which is FALSE by definition, will be defined. Changing the value to <em>TRUE</em>, registration of users with “student” rights will not be free anymore. Users will have to follow a process similar to the teacher account creation process, namely filling in a student account application form, in order to obtain a platform account. The application will be examined by the administrator who either approves of it and opens an account, or rejects it.  
+<ul><li>In the <em>config.php</em> file, the <em>close_user_registration</em> variable, which is FALSE by definition, will be defined. Changing the value to <em>TRUE</em>, registration of users with 'student' rights will not be free anymore. Users will have to follow a process similar to the teacher account creation process, namely filling in a student account application form, in order to obtain a platform account. The application will be examined by the administrator who either approves of it and opens an account, or rejects it.  
 </li>
 <li>
 In the <em>config.php</em> file the <em>have_latex</em> variable, which is <em>FALSE</em> by definition is defined. If you change the value to TRUE, mathematic symbols will be supported only in some eClass subsystems. However, this presupposes the existence of a latex system on the eClass subsystem. For more about the configuration you will need to do, read the <a href="../install/README_latex.txt">README_latex.txt</a>. If you do not want to have a latex support, leave it as it is (that is in <em>FALSE</em> value). 
@@ -212,7 +212,7 @@ You can add a text (e.g. informative) on the left and right of the platform home
 <li>
 If you want to use the platform with a Web server which has the SSL support activated (e.g. https://eclass.gunet.gr), you can do it by defining the <em>urlSecure</em> variable on <em>config.php</em>. e.g.<code>$urlSecure = "https://eclass.gunet.gr"</code> 
     </li>
-You will find more and further information for these actions in the Administratior’s manual (included in the management tool). 
+You will find more and further information for these actions in the Administratior's manual (included in the management tool). 
 </ul>
 <h3>Upgrading from Older Versions (1.5,  1.6) </h3>
 <p>For upgrading from older versions 1.5, 1.6 you have to do some changes manually. Starting from the course directories is now stored in a new directory named <em>courses</em>. Also the configurations file location (<code>config.php</code>) has changed, and is now included in a new directory named <em>config</em>. So, in order not to lose your previous configuration and all your eCourses files, please follow the instructions below. 
@@ -253,7 +253,7 @@ mkdir courses</pre>
     π.χ.
     <pre>mv /tmp/config.php /var/www/html/eclass/config/</pre>
   <li>Move the course directories in directory <em>courses</em>. (e.g. in case there are courses with codes
-     ΤΜΑ100, ΤΜΑ101)
+     TMA100, TMA101)
     <pre>cd /var/www/html/eclass
 	mv TMA* ./courses/</pre>
   </li>
@@ -272,7 +272,7 @@ find ./ -type d -exec chmod 775 {} \;
 <h4> For Ms Windows Computers </h4>
 </a>
 <ul>
-  <li>Go to eClass folder π.χ. <code>C:\Program
+  <li>Go to eClass folder e.g. <code>C:\Program
     Files\Apache\htdocs</code></li>
   <li>Move configuration file <code>C:\Program Files\Apache\htdocs\eclass\claroline\include\config.php</code>
     to another temporary folder in your desktop e.g. from <code>C:\Program
