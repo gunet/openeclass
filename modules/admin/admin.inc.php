@@ -151,7 +151,7 @@ return String (the constructed table)
 ***************************************************************/
 function show_paging($limit, $listsize, $fulllistsize, $page) {
 
-	global $langNextPage;
+	global $langNextPage, $langPage, $langBeforePage;
 
 	$retString = "";
 	// Page numbers of navigation
