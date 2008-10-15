@@ -1079,6 +1079,10 @@ $langInfoAbout = "The <strong>$siteName</strong> plaform is a complete Course Ma
 The introduction of eLearning into the traditional teaching process provides new capabilities and allows new means of interaction between $langsStudents and $langsTeachers, through a contemporary technological peak environment."; //
 $langWelcomeStud = "Select \"Courses list\"to review the available courses."; //
 $langWelcomeProf = "Select \"Create course site\"to create your on-line courses."; //
+$langWelcomeSelect = "Select";
+$langWelcomeStudPerso = "<b>\"Courses list\"</b> to review the available courses.";
+$langWelcomeProfPerso = "<b>\"Create course site\"</b> to create your on-line courses.";
+
 $langTitleInstall = "Open eClass Install Wizard"; //
 $langWelcomeWizard = "Welcome to installation wizard of Open eClass!"; //
 $langInstallProgress = "Install Progress"; //
