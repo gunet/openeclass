@@ -335,7 +335,7 @@ if (mysql_num_rows($result) > 0) {
 	$tool_content .=  "\n    <tr>";
 	$tool_content .=  "\n      <th style=\"border: 1px solid #edecdf\"><div align=\"left\"><b>$langEvents</b></div></th>";
 	if ($is_adminOfCourse) {
-		$tool_content .=  "\n      <th width=60 style=\"border: 1px solid #edecdf\"><b>$langActions</b></th>";
+		$tool_content .=  "\n      <th width=\"60\" class='right' style=\"border: 1px solid #edecdf\"><b>$langActions</b></th>";
 	}
 	$tool_content .= "\n    </tr>\n    </tbody>";
 	$tool_content .= "\n    </table>\n\n";
@@ -392,13 +392,19 @@ if (mysql_num_rows($result) > 0) {
 		else
 			$message = $langHours;
 	}
-		$tool_content .=  "<p class=\"event\"><b>".$myrow["titre"]."</b> (".$langLasting.": ".$myrow["lasting"]." ".$message.")</p><p class=\"agendaBody\">$contenu</p></td>";
+		$tool_content .=  "<p class=\"event\"><b>";
+            if ($myrow["titre"]=="") {
+                $tool_content .= "".$langAgendaNoTitle."";
+            } else {
+                $tool_content .= "".$myrow["titre"]."";
+            }
+		$tool_content .= "</b> (".$langLasting.": ".$myrow["lasting"]." ".$message.")</p><p class=\"agendaBody\">$contenu</p></td>";
 
 	//agenda event functions
 	//added icons next to each function
 	//(evelthon, 12/05/2006)
 	if ($is_adminOfCourse) {
-		$tool_content .=  "\n      <td class='right'><a href=\"$_SERVER[PHP_SELF]?id=".$myrow["id"]."\">
+		$tool_content .=  "\n      <td class='right' width=\"60\"><a href=\"$_SERVER[PHP_SELF]?id=".$myrow["id"]."\">
             	<img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langModify."\"></a>&nbsp;
         	<a href=\"$_SERVER[PHP_SELF]?id=".$myrow[0]."&delete=yes\" onClick=\"return confirmation('".addslashes($myrow["titre"])."');\">
             	<img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\"></a></td>";

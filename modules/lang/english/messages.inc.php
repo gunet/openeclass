@@ -2742,6 +2742,7 @@ $langCoursesHeader = "Courses"; //
 $langUserHeader = "User:"; //
 $langAfterLastLoginInfo = "Data after your last login"; //
 $langEmptyAgendaTitle = "Please type agenda title"; //
+$langAgendaNoTitle = "Agenda without title"
 $langTipLang2 = "Choose the language of the platform."; //
 $langEmptyCat = "Enter category name"; //
 $langWarnConfig1 = "File <b>config.php</b> exists"; //

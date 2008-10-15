@@ -410,6 +410,7 @@ $langSureToDel = "Είστε σίγουρος ότι θέλετε να διαγ�
 $langDelete = "Διαγραφή";
 $langInHour = "(σε ώρες)";
 $langEmptyAgendaTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο του γεγονότος";
+$langAgendaNoTitle = "Γεγονός χωρίς τίτλο";
 
 // week days
 $langDay_of_weekNames = array();
@@ -464,7 +465,7 @@ $langSureToDelAnnounce = "Είστε σίγουρος ότι θέλετε να �
 $langSureToDelAnnounceAll = "Είστε σίγουρος ότι θέλετε να διαγράψετε όλες τις ανακοινώσεις";
 $langAnn = "Ανακοινώθηκε την";
 $langEmptyAnTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της ανακοίνωσης";
-$langAnnouncementNoTille = "Ανακοίνωση χωρίς όνομα";
+$langAnnouncementNoTille = "Ανακοίνωση χωρίς τίτλο";
 /*******************************************
 * archive_course.inc.php
 *******************************************/
