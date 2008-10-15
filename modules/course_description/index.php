@@ -62,8 +62,7 @@ if ($is_adminOfCourse) {
     <ul id=\"opslist\">
 	  <li><a href=\"edit.php\">".$langEditCourseProgram."</a></li>
     </ul>
-  </div>
-  <br />";
+  </div>";
 }
 
 $sql = "SELECT `id`,`title`,`content` FROM `course_description` order by id";
@@ -71,7 +70,7 @@ $res = db_query($sql, $currentCourseID);
 if (mysql_num_rows($res) > 0) {
 	while ($bloc = mysql_fetch_array($res)) {
 	$tool_content .= "
-
+    <br />
 
     <table width=\"99%\" class=\"CourseDescr\">
     <thead>
@@ -95,7 +94,7 @@ if (mysql_num_rows($res) > 0) {
 	$tool_content .= "<br />";
 	}
 } else {
-	$tool_content .= "<br><p class=\"alert1\">$langThisCourseDescriptionIsEmpty</p>";
+	$tool_content .= "<p class=\"alert1\">$langThisCourseDescriptionIsEmpty</p>";
 }
 
 draw($tool_content, 2, 'course_description');

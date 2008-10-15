@@ -366,8 +366,7 @@ if (isset($id)) {
     </ul>
   </div>";
 	}
-	$tool_content.="\n\n
-<form method=\"POST\" action=\"$_SERVER[PHP_SELF]?submit=yes\" enctype=\"multipart/form-data\" id=\"insert_form\"></form>";
+
 	$count_video = mysql_fetch_array(db_query("SELECT count(*) FROM video ORDER BY titre",$currentCourseID));
 	$count_video_links = mysql_fetch_array(db_query("SELECT count(*) FROM videolinks
 				ORDER BY titre",$currentCourseID));

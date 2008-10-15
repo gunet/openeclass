@@ -652,7 +652,7 @@ if($is_adminOfCourse) {
 	$tool_content .= "\n      <li><a href=\"$_SERVER[PHP_SELF]?createDir=".$cmdCurDirPath."\">$langCreateDir</small></a></li>";
 	$diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
 	$tool_content .= "\n      <li><a href=\"showquota.php?diskQuotaDocument=$diskQuotaDocument&diskUsed=$diskUsed\">$langQuotaBar</a></li>";
-    $tool_content .= "\n    </ul>\n  </div>\n<br />";
+    $tool_content .= "\n    </ul>\n  </div>\n";
 
 	// Dialog Box
 	if (!empty($dialogBox))
@@ -672,7 +672,7 @@ if (mysql_num_rows($sql) == 0) {
 } else {
 
 	// Current Directory Line
-	$tool_content .= "\n<div class=\"fileman\">";
+	$tool_content .= "\n<br /><div class=\"fileman\">";
 	$tool_content .= "\n  <table width=\"99%\" align='left' class=\"Documents\">";
     $tool_content .= "\n  <tbody>";
 

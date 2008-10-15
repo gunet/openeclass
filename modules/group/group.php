@@ -477,8 +477,7 @@ else {
     <tbody>";
 	} else {
 	$tool_content .= "
-    <br />
-    <div class=\"alert1\">$langNoGroup</div>";
+    <p class=\"alert1\">$langNoGroup</p>";
 	}
 
     $k = 0;

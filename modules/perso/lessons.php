@@ -238,7 +238,7 @@ lCont;
 		for ($i=0; $i<$data[0]; $i++) {
  			$lesson_content .= "
         <tr style=\"background-color: transparent;\" onmouseover=\"this.style.backgroundColor='#fbfbfb'\" onmouseout=\"this.style.backgroundColor='transparent'\">
-          <td valign=\"top\" align='left' width=\"10\" style=\"padding-left: 4px; padding-right: 0px;\"><img style='border:0px;' src='${urlAppend}/template/classic/img/arrow_grey.gif' title='bullet'>&nbsp;&nbsp;</td>
+          <td valign=\"top\" align='left' width=\"2\" style=\"padding-left: 4px; padding-right: 0px;\"><img style='border:0px;' src='${urlAppend}/template/classic/img/arrow_grey.gif' title='bullet'></td>
           <td align='left' style=\"padding-left: 0px; padding-top: 2px; padding-bottom: 2px; padding-right: 0px;\"><a href=\"${urlServer}courses/".$data[2][$i]."/\">".$lesson_fCode[$i]." - ".$data[1][$i]."</a><cite class=\"content_pos\">".$data[3][$i]."</cite></td>";
 			if ($data[4][$i] == '5') {
 				$lesson_content .= "

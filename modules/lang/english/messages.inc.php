@@ -1390,7 +1390,7 @@ $langNoCategory = "No category"; //
 $langCategorisedLinks = "Categorised links"; //
 $showall = "Show all"; //
 $shownone = "Show none"; //
-$langProfNoLinksExist = "<br />No links exist! <br /><br />You may use the tool operations to add links."; //
+$langProfNoLinksExist = "No links exist! <br /><p align=\"center\">You may use the tool operations to add links."; //
 $langNoLinksExist = "The ".$langsTeacher."has not added any links."; //
 $lang_remind_pass = 'Reset password'; //
 $lang_pass_intro = '<p>If you have forgotten you passwrd, please fill in your <em>username</em>
@@ -1511,6 +1511,7 @@ $langLoginBeforePost1 = "To post messages on the forum, "; //
 $langLoginBeforePost2 = "beforehand, you must "; //
 $langLoginBeforePost3 = "login on the Campus"; //
 $langPages = "Pages"; //
+$langNoForums = "No Forums available";
 $langNewTopic = "New topic"; //
 $langTopicData = "Topic elements"; //
 $langTopicAnswer = "Topic Answer"; //

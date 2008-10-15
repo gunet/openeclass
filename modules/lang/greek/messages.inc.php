@@ -1666,7 +1666,7 @@ $langNoCategory = "Γενικοί σύνδεσμοι";
 $langCategorisedLinks = "Κατηγοριοποιημένοι σύνδεσμοι";
 $showall = "Εμφάνιση";
 $shownone = "Απόκρυψη";
-$langProfNoLinksExist = "<br />Δεν υπάρχουν σύνδεσμοι! <br /><br />Μπορείτε να χρησιμοποιήσετε τις λειτουργίες του εργαλείου για να προσθέσετε σύνδεσμους.";
+$langProfNoLinksExist = "Δεν υπάρχουν σύνδεσμοι!<p><p align=\"center\"><small>Μπορείτε να χρησιμοποιήσετε τις λειτουργίες του εργαλείου για να προσθέσετε σύνδεσμους.</small>";
 $langNoLinksExist = "Δεν έχουν προστεθεί σύνδεσμοι.";
 $langEmptyLinkURL = "Δεν πληκτρολογήσατε το url του συνδέσμου";
 
@@ -1825,6 +1825,7 @@ $langLoginBeforePost1 = "Για να στείλετε μηνύματα, ";
 $langLoginBeforePost2 = "πρέπει προηγουμένως να ";
 $langLoginBeforePost3 = "κάνετε login στην πλατφόρμα";
 $langPages = "Σελίδες";
+$langNoForums = "Δεν υπάρχουν διαθέσιμες περιοχές συζητήσεων";
 
 // page_header.php
 

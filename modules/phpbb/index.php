@@ -92,6 +92,27 @@ if ($is_adminOfCourse || $is_admin) {
     <br />
 	";
 }
+
+/*
+* Populate data with forum categories
+*/
+$sql = "SELECT c.* FROM catagories c, forums f
+	 WHERE f.cat_id=c.cat_id
+	 GROUP BY c.cat_id, c.cat_title, c.cat_order
+	 ORDER BY c.cat_id DESC";
+
+if ( !$result = db_query($sql, $currentCourseID)) {
+/*
+	$tool_content .= "
+    </table>";
+*/
+	$tool_content .= "$langUnableGetCategories<br>$sql";
+	draw($tool_content, 2, 'phpbb');
+	exit();
+}
+
+$total_categories = mysql_num_rows($result);
+if ( $total_categories ) {
 $tool_content .= <<<cData
 
     <table width="99%" class="ForumSum">
@@ -105,24 +126,7 @@ $tool_content .= <<<cData
     </thead>
 cData;
 
-/*
-* Populate data with forum categories
-*/
-$sql = "SELECT c.* FROM catagories c, forums f
-	 WHERE f.cat_id=c.cat_id
-	 GROUP BY c.cat_id, c.cat_title, c.cat_order
-	 ORDER BY c.cat_id DESC";
 
-if ( !$result = db_query($sql, $currentCourseID)) {
-	$tool_content .= "
-    </table>";
-	$tool_content .= "$langUnableGetCategories<br>$sql";
-	draw($tool_content, 2);
-	exit();
-}
-
-$total_categories = mysql_num_rows($result);
-if ( $total_categories ) {
 	if ( isset($viewcat) ) {
 		if ( !$viewcat ) {
 			$viewcat = -1;
@@ -151,7 +155,7 @@ cData;
 		exit();
 	}
 		$tool_content .= "<tbody>";
-	 
+
 	while ( $forum_data = mysql_fetch_array($f_res) ) {
 		$forum_row[] = $forum_data;
 	}
@@ -229,15 +233,17 @@ cData;
 				$tool_content .= "<td width=\"65\" class=\"Forum_leftside\">$total_posts</td>";
 				$tool_content .= "<td width=\"200\" class=\"Forum_post\">";
 			if ($total_topics>0 && $total_posts>0) {
-				$tool_content .= "$last_post_prenom $last_post_nom 
-             <a set=\"yes\" href=\"viewtopic.php?topic=$last_post_topic_id&forum=$forum\"><IMG border=\"0\" SRC=\"$icon_topic_latest\"></a><br />$human_last_post_time</td>";	  			    
+				$tool_content .= "$last_post_prenom $last_post_nom
+             <a set=\"yes\" href=\"viewtopic.php?topic=$last_post_topic_id&forum=$forum\"><IMG border=\"0\" SRC=\"$icon_topic_latest\"></a><br />$human_last_post_time</td>";
 	  		} else {
-				$tool_content .= "<font color=\"#CAC3B5\">$l_noposts</font></td>";				
+				$tool_content .= "<font color=\"#CAC3B5\">$l_noposts</font></td>";
 			}
 				$tool_content .= "</tr>";
 			}
 		}
 	}
+} else {
+$tool_content .= "<p class=\"alert1\">$langNoForums</p>";
 }
 
 /*

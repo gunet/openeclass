@@ -94,7 +94,7 @@ table.Question td {
 }
 
 .empty {
-	color: red !important;
+	color: #000000 !important;
 }
 
 .score {

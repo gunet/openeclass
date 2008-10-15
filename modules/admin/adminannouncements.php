@@ -133,7 +133,7 @@ $table_title = 'en_title';
 	// 	action message
 
 	if (isset($message) && $message) {
-		$tool_content .=  "<table width=\"99%\" align=\"left\"><tbody><tr><td class=\"success\">$message</td></tr></tbody></table><br/>";
+		$tool_content .=  "<p class=\"success_small\">$message</p><br/>";
  		$displayAnnouncementList = true;
 		$displayForm  = false;//do not show form
 	}
