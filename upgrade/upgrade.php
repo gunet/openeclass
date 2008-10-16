@@ -400,7 +400,7 @@ if (!isset($submit2)) {
 
         // add 5 new fields to table users
         if (!mysql_field_exists("$mysqlMainDb",'user','perso'))
-                echo add_field('user', 'perso', "enum('yes','no') NOT NULL default 'no'");
+                echo add_field('user', 'perso', "enum('yes','no') NOT NULL default 'yes'");
         if (!mysql_field_exists("$mysqlMainDb",'user','announce_flag'))
                 echo add_field('user', 'announce_flag', "date NOT NULL default '0000-00-00'");
         if (!mysql_field_exists("$mysqlMainDb",'user','doc_flag'))
