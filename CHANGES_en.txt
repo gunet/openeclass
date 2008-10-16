@@ -1,0 +1,32 @@
+****************************************
+Open eClass Platform - CHANGES 
+****************************************
+
+Platform GUnet eClass has been renamed to Open eClass (http://www.openeclass.org).
+
+Open eClass 2.1 is the new version of the platform and is available from 15/10/2008. 
+The platform was designed and developed by the GUnet Asynchronous eLearning group.
+This version introduces a number of new features, the most important of them are
+listed below.
+
+
+********************************************************************
+Open eClass 2.1 - Changes List
+********************************************************************
+
+-- New Graphical User Interface
+-- New "Learning Path" module compatible with SCORM 1.2 and 2004
+-- New "Questionnaire"module
+-- New "Wiki" module
+-- Improved  "Assingments" and "Exercises" modules
+-- Personalized user portfolio 
+-- Multilanguage support (UTF-8 encoding)
+-- Math symbols support 
+-- New embedded HTML editor
+-- Alternative user authentication through LDAP, POP3, IMAP and external MySQL DB
+-- New wizard for courses creating.
+-- User auditing and user statistics functionalities
+-- Enhanced "search" facility
+-- Improved security and new Password enryption 
+-- New platform's web portal (http://www.openeclass.org)
+

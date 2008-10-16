@@ -31,11 +31,15 @@
 
       Special Credits to:     
 
-      /************************************************************************      
+      /************************************************************************
+      
        Evelthon Prodromou <eprodromou@upnet.gr> (University of Patras)
+       
        for his important contribution in Open eClass 2.0 & 2.1
-       Design & Developement: main template file and css, personalised portfolio
-			      eCourses User Interface  
+       Design & Developement: main template file, engine and css, 
+			      personalised portfolio
+			      Platform's User Interface  
+      
       ************************************************************************/
    
       Also Special Credits to:
