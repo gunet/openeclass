@@ -60,7 +60,9 @@ $tool_content .= "\n	  <li><a href='userlogins.php?first='>".$langUserLogins."</
 $query = "SELECT MIN(date_time) as min_time FROM actions";
 $result = db_query($query, $currentCourseID);
 while ($row = mysql_fetch_assoc($result)) {
-        $min_time = strtotime($row['min_time']);
+	if (!empty($row['min_time'])) {
+	        $min_time = strtotime($row['min_time']);
+	} else break;
     }
 
 mysql_free_result($result);
@@ -72,7 +74,9 @@ mysql_free_result($result);
 $query = "SELECT MIN(date_time) as min_time FROM actions";
 $result = db_query($query, $currentCourseID);
 while ($row = mysql_fetch_assoc($result)) {
-    $min_time = strtotime($row['min_time']);
+	if (!empty($row['min_time'])) {
+		    $min_time = strtotime($row['min_time']);
+	} else break;
 }
 mysql_free_result($result);
 
