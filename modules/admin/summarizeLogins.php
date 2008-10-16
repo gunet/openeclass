@@ -54,14 +54,13 @@
 
 
     if ( $minstmp + 243*24*3600 < $maxstmp ) { //data more than eight months old
-
-        $end_stmp = strtotime($min_date)+ 31*24*60*60;  //min time + 1 month
+	$stmp = strtotime($min_date);
+        $end_stmp = $stmp + 31*24*60*60;  //min time + 1 month
         $start_date = $min_date;
         $end_date = date('Y-m-01 00:00:00', $end_stmp);
 
 
         while ($end_date < $current_month){
-
                 $sql_1 = "SELECT count(idLog) as visits FROM loginout ".
                     " WHERE `when` >= '$start_date' AND `when` < '$end_date' AND action='LOGIN'";
 
@@ -87,8 +86,10 @@
 
             #next month
             $start_date = $end_date;
-            $end_stmp =strtotime($end_date)+ 31*24*60*60;  //end time + 1 month
+	    $stmp = $end_stmp;
+            $end_stmp += 31*24*60*60;  //end time + 1 month
             $end_date = date('Y-m-01 00:00:00', $end_stmp);
+	    $start_date = date('Y-m-01 00:00:00', $stmp);
 
         }
     }
