@@ -47,13 +47,13 @@ if (isset($result))  {
 
    $k = 0;
    while ($fac = mysql_fetch_array($result)) {
-   if ($k%2==0) {
-	              $tool_content .= "\n  <tr>";
-	            } else {
-	              $tool_content .= "\n  <tr class=\"odd\">";
-	            }
+     if ($k%2==0) {
+       $tool_content .= "\n  <tr>";
+     } else {
+       $tool_content .= "\n  <tr class=\"odd\">";
+     }
 	$tool_content .= "
-    <td width='1'><img src='../../images/arrow_blue.gif'></td>
+    <td width=\"1\"><img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'></td>
     <td><a href='opencourses.php?fc=$fac[id]'>$fac[name]</a>&nbsp;&nbsp;<small><font style=\"color: #a33033;\">($fac[code])</font>";
 
      	$n=mysql_query("SELECT COUNT(*) FROM cours_faculte WHERE faculte='$fac[name]'");
