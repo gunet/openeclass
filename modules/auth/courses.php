@@ -75,8 +75,8 @@ if (isset($_POST["submit"])) {
                                          VALUES ('".$contenu."', '".$uid."', '5', CURDATE())";
                                 mysql_query($sqlInsertCourse) ;
                                 if (mysql_errno() > 0) {
-                    						echo mysql_errno().": ".mysql_error()."<br>";
-                    					}
+              						echo mysql_errno().": ".mysql_error()."<br>";
+              					}
                         	} else { //DUKE
                                         $restrictedCourses[$i]=$contenu;
                         	}
@@ -131,7 +131,7 @@ else
 	           $tool_content .= "\n        <tr class=\"odd\">";
             }
 
-      $tool_content .= "\n            <td>&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<a href='courses.php?fc=$fac[id]'>$fac[name]</a> <small><font color='#a33033'>($fac[code])</font></small>";
+      $tool_content .= "\n            <td>&nbsp;<img src='../../images/arrow_blue.gif'>&nbsp;<a href='$_SERVER[PHP_SELF]?fc=$fac[id]'>$fac[name]</a> <small><font color='#a33033'>($fac[code])</font></small>";
       $n=db_query("SELECT COUNT(*) FROM cours_faculte WHERE faculte='$fac[name]'");
       $r=mysql_fetch_array($n);
       $tool_content .= "&nbsp;<small><font color=#a5a5a5>($r[0]  ". ($r[0] == 1? $langAvCours: $langAvCourses) . ")</font><small></td>
@@ -145,12 +145,11 @@ else
       $tool_content .= "<br>\n";
   } else {
   // department exists
-  $tool_content .= "
-    <form action=\"$_SERVER[PHP_SELF]\" method=\"post\">";
   $numofcourses = getdepnumcourses($fac);
 
   // display all the facultes collapsed
   $tool_content .= collapsed_facultes_horiz($fac);
+  $tool_content .= "<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">";
   $tool_content .= "<br/>";
   if ($numofcourses > 0) {
   $tool_content .= expanded_faculte($fac, $uid);
@@ -262,17 +261,16 @@ function expanded_faculte($fac, $uid) {
 				$counter++;
 			}
 			$retString .= "</div></td>
-    </tr>
-    </tbody>
-    </table>\n
-    &nbsp;";
+				</tr>
+				</tbody>
+				</table>\n
+				&nbsp;";
 		} else {
 		  $retString .= "<td>&nbsp;</td>
-    </tr>
-    </thead>
-    </table>\n
-    <br/><br/>";
-
+				</tr>
+				</thead>
+				</table>\n
+				<br/><br/>";
         }
 
 	  // changed this foreach statement a bit
@@ -396,7 +394,6 @@ function expanded_faculte($fac, $uid) {
    // END of while
    	$retString .= "\n       </tbody>";
    	$retString .= "\n       </table>";
-
    	$retString .= "\n       </td>";
    	$retString .= "\n    </tr>";
    	$retString .= "\n    </table>\n";
@@ -428,7 +425,6 @@ $result = mysql_query(
 		ORDER BY cours.faculte");
 
 	while ($fac = mysql_fetch_array($result)) {
-		//$retString .= "<blockquote>";
 		$retString .= "<a href=\"?fc=$fac[id]\" class=\"normal\">$fac[f]</a>";
 
 		$n = db_query("SELECT COUNT(*) FROM cours
@@ -442,38 +438,52 @@ $result = mysql_query(
 	return $retString;
 }
 
+
 function collapsed_facultes_horiz($fac) {
 
-global $langListFac;
-$retString = "";
+	global $langListFac;
 
+	$retString = "";
 	$retString .= "\n
-    <table class=\"DepTitle\" width=\"99%\" align=\"left\">
-    <tr>
-      <th><b>$langListFac</b>:</th>
-      <td>";
+	<table class=\"DepTitle\" width=\"99%\" align=\"left\">
+	<tr>
+	<th><b>$langListFac</b>:</th>
+	<td>";
 
-$result = db_query("SELECT DISTINCT faculte.id id, faculte.name f
-                FROM faculte
-                ORDER BY name");
+	// department selection box 
+	$retString .= dep_selection($fac);
 
-	$counter = 1;
-	while ($facs = mysql_fetch_array($result)) {
-		if ($counter != 1) $retString .= " | ";
-		if ($facs['f'] != $fac)
-			$codelink = "<a href=\"?fc=$facs[id]\">$facs[f]</a>";
-		else
-			$codelink = "$facs[f]";
-
-		$retString .= $codelink;
-		$counter++;
-	}
-              // o pinakas autos stoixizei tin kartela
-    $retString .= "\n      </td>\n    </tr>\n    </table>\n<br>";
+ 	// o pinakas autos stoixizei tin kartela
+  	$retString .= "\n      </td>\n    </tr>\n    </table>\n<br>";
 
 return $retString;
 }
 
+// selection of department
+function dep_selection($fac) {
+
+	$string = "";
+	$faculte_names = array();
+
+	// get all the departments
+	$result = db_query("SELECT DISTINCT faculte.id id, faculte.name f FROM faculte ORDER BY name");
+	while ($facs = mysql_fetch_array($result)) {
+		$faculte_names[$facs['id']] = $facs['f'];
+	}
+
+	// get fac id from name
+	$facselect = mysql_fetch_row(db_query("SELECT id FROM faculte WHERE name='$fac'"));
+	$fac = $facselect[0];
+
+	$string .= '<form name="depform" action="' . $_SERVER ['PHP_SELF'] . '" method="get" >';
+	$string .= selection($faculte_names, 'fc', $fac, 'onChange="document.depform.submit();"');
+	$string .= '</form>';
+	
+return $string;
+}
+
+
+// check if a course is restricted
 function is_restricted($course)
 {
 	$res = mysql_fetch_row(db_query("SELECT visible FROM cours
