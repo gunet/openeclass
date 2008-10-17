@@ -50,6 +50,8 @@ $action = new action();
 $action->record('MODULE_ID_AGENDA');
 
 $dateNow = date("j-n-Y / H:i",time());
+$datetoday = date("Y-n-j",time());
+
 $nameTools = $langAgenda;
 $tool_content = $head_content = "";
 
@@ -113,7 +115,7 @@ $start_cal = $jscalendar->make_input_field(
                  'ifFormat' => '%Y-%m-%d'),
 	array('style' => 'width: 14em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center',
                  'name' => 'date',
-                 'value' => ' '));
+                 'value' => $datetoday));
 }
 
 if ($is_adminOfCourse) {
@@ -255,11 +257,10 @@ function confirmation (name)
 		$id="";
 	}
 
-	if (@$addEvent == 1 || (isset($id) && $id)) {
+	if ((isset($addEvent) && ($addEvent == 1)) || (isset($id) && $id)) {
 		$nameTools = $langAddEvent;
-		$navigation[] = array ("url"=>"agenda.php", "name"=> $langAgenda);
+		$navigation[] = array ("url"=>"$_SERVER[PHP_SELF]", "name"=> $langAgenda);
 		$tool_content .= <<<tContentForm
-
 <form method="post" action="".$_SERVER[PHP_SELF]." onsubmit="return checkrequired(this, 'titre');">
     <input type="hidden" name="id" value="$id">
     <table width=\"99%\" class=\"FormData\">
@@ -278,48 +279,43 @@ tContentForm;
 			$hours=$hourAncient[0];
 			$minutes=$hourAncient[1];
 		}
-		$tool_content .= "
-    <tr>
-      <th class=\"left\">$langTitle:</th>
-      <td><input type=\"text\" size=\"70\" name=\"titre\" value=\"".@$titre."\"  class='FormData_InputText'></td>
-    </tr>
-    <tr>
-      <th class=\"left\" rowspan=\"2\">$l_options:</th>
-      <td>$langDate: ".$start_cal."</td>
-    </tr>
-    <tr>
-      <td>$langHour: <select name='fhour' class='auth_input'>
-		    <option value='$hours'>$hours</option>
-    		<option value='--'>--</option>";
-            for ($h=0; $h<=24; $h++)
-            $tool_content .= "\n<option value='$h'>$h</option>";
-            $tool_content .= "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
-        $tool_content .= "$langMinute: <select name=\"fminute\" class='auth_input'>
-            <option value=\"$minutes\">[$minutes]</option>
-            <option value=\"--\">--</option>";
-	for ($m=0; $m<=55; $m=$m+5)
-		$tool_content .=  "<option value='$m'>$m</option>";
+		$tool_content .= "<tr><th class=\"left\">$langTitle:</th>
+			<td><input type=\"text\" size=\"70\" name=\"titre\" value=\"".@$titre."\"  class='FormData_InputText'></td>
+			</tr>
+			<tr>
+			<th class=\"left\" rowspan=\"2\">$l_options:</th>
+			<td>$langDate: ".$start_cal."</td>
+			</tr>
+			<tr>
+		<td>$langHour: <select name='fhour' class='auth_input'>
+				<option value='$hours'>$hours</option>
+				<option value='--'>--</option>";
+			for ($h=0; $h<=24; $h++)
+				$tool_content .= "\n<option value='$h'>$h</option>";
+			$tool_content .= "</select>&nbsp;&nbsp;&nbsp;&nbsp;";
+			$tool_content .= "$langMinute: <select name=\"fminute\" class='auth_input'>
+			<option value=\"$minutes\">[$minutes]</option>
+			<option value=\"--\">--</option>";
+			for ($m=0; $m<=55; $m=$m+5)
+				$tool_content .=  "<option value='$m'>$m</option>";
 
-		$tool_content .= "
-           </select>&nbsp;&nbsp;&nbsp;&nbsp;$langLasting $langInHour: <input class='FormData_InputText' type=\"text\" name=\"lasting\" value=\"".@$myrow['lasting']."\" size=\"2\" maxlength=\"2\"></td>
-    </tr>";
-    if (!isset($contenu)) {
-			$contenu="";
+			$tool_content .= "</select>&nbsp;&nbsp;&nbsp;&nbsp;$langLasting $langInHour: 
+			<input class='FormData_InputText' type=\"text\" name=\"lasting\" value=\"".@$myrow['lasting']."\" size=\"2\" maxlength=\"2\"></td>
+    			</tr>";
+    		if (!isset($contenu)) {
+			$contenu = "";
 		}
-		$tool_content .= "
-    <tr>
-      <th class=\"left\">$langDetail:</th>
-      <td><textarea id='xinha' name='contenu' value='$contenu' rows='12' cols='70'>".$contenu."</textarea></td>
-    </tr>
-    <tr>
-      <th class=\"left\">&nbsp;</th>
-      <td><input type=\"submit\" name=\"submit\" value=\"$langAddModify\"></td>
-    </tr>
-    </tbody>
-    </table>
-</form>
-<br />";
-
+		$tool_content .= "<tr><th class=\"left\">$langDetail:</th>
+			<td><textarea id='xinha' name='contenu' value='$contenu' rows='12' cols='70'>".$contenu."</textarea></td>
+			</tr>
+			<tr>
+			<th class=\"left\">&nbsp;</th>
+			<td><input type=\"submit\" name=\"submit\" value=\"$langAddModify\"></td>
+			</tr>
+			</tbody>
+			</table>
+			</form>
+			<br />";
 	}
 }
 
