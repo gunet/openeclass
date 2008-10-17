@@ -35,8 +35,10 @@ $max_execution_time = trim(ini_get('max_execution_time'));
 
 if ($GLOBALS['language'] == 'greek') {
 	$upgrade_info_file = 'upgrade_info.php';
+	$link_changes_file = 'CHANGES_el.txt';
 } else {
  	$upgrade_info_file = 'upgrade_info_en.php';
+	$link_changes_file = 'CHANGES_en.txt';
 }
 
 // Initialise $tool_content
@@ -51,7 +53,7 @@ if (intval($max_execution_time) < 300) {
 	draw($tool_content, 0);
 	exit;
 }
-$tool_content .= "<p>$langUpgToSee <a href='CHANGES.txt'>$langHere</a>. $langUpgRead <a href='$upgrade_info_file'>$langUpgMan</a>
+$tool_content .= "<p>$langUpgToSee <a href='$link_changes_file'>$langHere</a>. $langUpgRead <a href='$upgrade_info_file'>$langUpgMan</a>
    $langUpgLastStep</p>
 <p>$langUpgradeCont</p>
 <form method='post' action='upgrade.php'>

@@ -102,15 +102,6 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 		) As lala");
 
 
-/*
-	$result = mysql_query(" SELECT DISTINCT cours.code, cours.intitule, cours.course_keywords, cours.titulaires
-			FROM `cours` , `cours_user`
-			WHERE (cours.code = cours_user.code_cours
-			AND cours_user.user_id = '".$uid."')
-			OR cours.visible = '2'
-			OR cours.visible = '1'");
-
-*/
 	$results_found = 0; //arithmos apotelesmatwn pou exoun emfanistei (ena gia kathe grammh tou $mycours)
 
 	//*****************************************************************************************************
