@@ -91,6 +91,18 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 
 	//ektelesh erwthmatos gia to se poia mathimata einai eggegramenos o xrhsths. sta apotelesmata perilamvanontai
 	//kai ola ta anoixta kai anoixta me eggrafh mathimata.
+
+	$result = mysql_query("SELECT DISTINCT * FROM (
+		SELECT  cours.code, cours.intitule, cours.course_keywords, cours.titulaires
+		FROM cours, cours_user  WHERE cours.code = cours_user.code_cours AND cours_user.user_id = '".$uid."'
+		UNION
+		SELECT  cours.code, cours.intitule, cours.course_keywords, cours.titulaires
+		FROM cours
+		WHERE cours.visible IN ('1','2')
+		) As lala");
+
+
+/*
 	$result = mysql_query(" SELECT DISTINCT cours.code, cours.intitule, cours.course_keywords, cours.titulaires
 			FROM `cours` , `cours_user`
 			WHERE (cours.code = cours_user.code_cours
@@ -98,7 +110,7 @@ if(empty($search_terms_title) && empty($search_terms_keywords) && empty($search_
 			OR cours.visible = '2'
 			OR cours.visible = '1'");
 
-
+*/
 	$results_found = 0; //arithmos apotelesmatwn pou exoun emfanistei (ena gia kathe grammh tou $mycours)
 
 	//*****************************************************************************************************
