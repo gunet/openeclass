@@ -3,6 +3,19 @@
 // Message file for language en
 // Generated 2008-10-07 17:01:08
 
+
+// PHPMATHPUBLISHER : HELP
+$langPHPMathPublisher="<p><u>Support of mathematic symbols:</u>
+<br />
+For the incorporation of mathematic symbols in your texts, you can use the <a href=\"../../manuals/PhpMathPublisherHelp.pdf\" target=\"_Blanc\">commands</a> (symbolisms) that it provides PhpMathPublisher.<br />
+More analytically, you use the author of text in order to you import your content. If in the content that you import exist mathematic symbols that you wish to present, then:
+<ol>
+  <li>Click the icon 'Toggle HTML Source'.</li>
+  <li>Import your mathematic symbols between the tags &lt;m>.....&lt;/m></li>
+</ol>
+<p>For the finding of commands that corresponds in the particular symbols that you wish to import, you are consulted (<a href=\"../../manuals/PhpMathPublisherHelp.pdf\" target=\"_Blanc\">here</a>).<br />
+Eg., in order to you import the square root a you will type &lt;m>sqrt{a}&lt;/m></p>";
+
 $langWindowClose = "Close window";
 $langHDefault = 'Help non available';
 $langDefaultContent = '<p>There is no help text available for the platform page you are currently viewing.</p>';
@@ -23,10 +36,10 @@ $langcourse_home_studentContent = '<p>You are currently in the on-line course ma
 $langHcourse_home = 'Main course page';
 $langcourse_homeContent = '<p class="helptopic">You are currently in the main page of your on-line course. From the side menu options, you can enter any of the modules where you can add your course\'s content. Active tools are visible to the visitors and students of your course, while inactive tools are only visible and accessible to you.</p> <p class="helptopic">Using the administration tools you can activate or inactivate course modules, review and administer registered users, change various options (such as course title, access control, etc.), and view usage statistics.</p>';
 $langHDoc = "Documents";
-$langHDoc_student = $langHDoc ; 
+$langHDoc_student = $langHDoc ;
 $langDocContent = "<p>The Documents tool is similar to the FileManager of your desktop computer.</p><p>You can upload files of any type (HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime, etc.). Your only concern must be that your students have the corresponding software to read them. Some file types may contain viruses, it is your responsibilty not to upload virus contaminated files. It is a worthwhile precaution to check documents with antivirus software before uploading them.</p> <p>Documents are presented in alphabetical order.<br><b>Tip : </b>If you want to present them in a different order, numerate them: 01, 02, 03...</p> <p>You can :</p> <h4>Upload a document</h4> <ul> <li>Select the file on your computer by clicking on 'Upload file'.</li> <li>In the following form use 'Browse' button to search for the file in your computer.</li> <li>Launch the upload with the 'Upload' button  </li> </ul> <h4>Rename a document (a directory)</h4> <ul> <li> Click on the icon 'Rename' (<img src='../../template/classic/img/edit.gif' width=10 height=10 align=baseline>). </li> <li> Type the new name in the field (top left) </li> <li> Validate by clicking 'Rename' button. </li> </ul> <h4> Delete a document (or a directory) </h4> <ul> <li> Click on the icon 'Delete' (<img src='../../template/classic/img/delete.gif' width=10 height=10 align=baseline>)</li> </ul> <h4> Make a document (or directory) invisible to students </h4> <ul> <li> Click on the icon 'Visible/invisible' (<img src='../../template/classic/img/visible.gif' width=10 height=10 align=baseline>)  </li> <li> After that the document (or directory) still exists but it is not visible by students anymore. </li> <li> To make it invisible back again, click on the icon 'Visible/invisible' (<img src='../../template/classic/img/invisible.gif' width=14 height=10 align=baseline>  </li> </ul> <h4> Add or modify a comment to a document (or a directory) </h4> <ul> <li> Click on the 'Comment' icon *(<img src='../../template/classic/img/information.gif' width=10 height=10 align=baseline>)</li> <li> Type new comment in the corresponding field (top right). </li> </ul> <hr> <p> You can organise your content through filing. For this: </p> <h4> <b> Create a directory </b> </h4> <ul> <li> Click on the link 'Create a directory'. </li> <li> Type the name of your new directory in the corresponding field (top left) </li> <li> Validate by clicking 'Create directory' button. </li> </ul> <h4> Move a document (or directory) </h4> <ul> <li> Click on the icon 'Move' (<img src='../../template/classic/img/move_doc.gif' width=10 height=10 align=basename>) </li> <li> Choose the directory into which you want to move the document (or directory) in the corresponding scrolling menu (top left) (note: the word 'root' means you cannot go upper than that level in the document tree of the server). </li> <li> Validate by clicking on 'Move'  </li> </ul> </p>";
 $langDoc_studentContent ="<p>The module “Documents” is the area where the educational material of the course is stored, organized and presented. More specifically, this module provides a useful file organization and grouping mechanism for educational material (texts, presentations, pictures, diagrams, etc) through a folder, sub-folder system.
-</p>" ; 
+</p>" ;
 $langHUser = "Users Administration";
 $langUserContent = "<b>Roles</b><p>Roles have no computer related function.
  They do not give rights on operating the system.</p>
@@ -46,10 +59,10 @@ $langGuestContent = "<p>By clicking in 'Add guest account'you can create an acco
 $langHQuestionnaire = "Questionnaire";
 $langHQuestionnaire_student = $langHQuestionnaire ;
 $langQuestionnaireContent = "<p>With this tool can create and manage questionnaires.</p>
-<p>To create a questionnaire click on 'Create Questionnaire'. In the next form fill the title and the start / end date of the questionnaire. You can choose the question type by clicking in the corresponing buttons ('New mulitple choise question' and 'New text fill question'. After completing the questions and their answers click on 'Create Questionnaire' 
+<p>To create a questionnaire click on 'Create Questionnaire'. In the next form fill the title and the start / end date of the questionnaire. You can choose the question type by clicking in the corresponing buttons ('New mulitple choise question' and 'New text fill question'. After completing the questions and their answers click on 'Create Questionnaire'
 </p>
 <p>Questionnaire results can accessed by the questionnaire admin page.</p>";
-$langQuestionnaire_studentContent = "<p>Questionnaire is a new module providing interaction between teachers and students. Course teacher create poll questionnaires about the course in order to have feedback from the students. 
+$langQuestionnaire_studentContent = "<p>Questionnaire is a new module providing interaction between teachers and students. Course teacher create poll questionnaires about the course in order to have feedback from the students.
 </p>" ;
 $langHExercise = "Exercises";
 $langHExercise_student = $langHExercise ;
@@ -150,7 +163,7 @@ Orphan questions are questions that don't belong to any exercise.</p>";
 $langExercise_studentContent = "<p>This module provides self-evaluation exercises for students, which have been created by the course teacher. Its basic aim is students’ training on course material. Some exercises may have a time limit or maximum number of attempts (teacher’s choice).
 </p>" ;
 $langHWork = "Assignments";
-$langHWork_student = $langHWork ; 
+$langHWork_student = $langHWork ;
 $langWorkContent = "<p>Assignment tool is a complete tool for creating / submittion of assignments.</p>
 <p>As a professor, you can create an assignment by clicking on <b>\"New Assignment\"</b>.
 Fill in the title of the assignment, define a deadline and optionally add a comment.</p>
@@ -172,7 +185,7 @@ uploaded an assignment or no.
 Note, the student cannot upload an assignment after the deadline.
 Also, if he / she has uploaded an assignment and wants to upload a new one, the old one will be replaced by the new
 one.
-</p>
+</p>$langPHPMathPublisher
 ";
 $langWork_studentContent = "<p>The Course Assignments module is a very useful tool since it allows the electronic admission, submission and evaluation of course assignments. More specifically, it allows registered student users to upload electronically their assignments in the platform until the submission date and then see their grade, after the teacher has graded them.
 </p>" ;$langHGroup = "Groups";
@@ -219,21 +232,21 @@ $langHAgenda = "Agenda";
 $langHAgenda_student = $langHAgenda ;
 $langAgendaContent = "<p>You can add an event in agenda, by clicking on the link 'Add an event'. In the following form, choose a date, type a title and describe the details. After that press button 'Add / / Modify'An event will be created.</p>
 <p>If you wish, you can change some event properties by clicking the icon 'Modify' or deleting an event by clicking
-the icon 'Delete'.</p>";
-$langAgenda_studentContent = "<p>The Agenda module informs you about the most important events of the course in a chronological order (conferences, meetings, evaluations, etc).</p><p>You have the choice of altering the presentation order of events (recent-older), by clicking on the “Reverse presentation order” that is on top action bar. 
+the icon 'Delete'.</p>$langPHPMathPublisher";
+$langAgenda_studentContent = "<p>The Agenda module informs you about the most important events of the course in a chronological order (conferences, meetings, evaluations, etc).</p><p>You have the choice of altering the presentation order of events (recent-older), by clicking on the “Reverse presentation order” that is on top action bar.
 </p>" ;
 $langHLink = "Link";
 $langHLink_student = $langHLink ;
 $langLinkContent = "<p>With the Links tool you can create links to various web pages.</p>
 <p>To add a link click on the link 'Add link'. Type the url, the link name and (optionally) a small description. If you want you can choose the category which the link will belongs. Click on the 'Add' button to add the link.</p>
-<p>You can organize your links by grouping them in categories. You can add a category by clicking in 'Add category' Type the category name and category description. After that click on the button 'Add'.</p> 
+<p>You can organize your links by grouping them in categories. You can add a category by clicking in 'Add category' Type the category name and category description. After that click on the button 'Add'.</p>
 <p>Notice that you can edit every link to re-assign it into a new category (of course you need to create this category first).</p>";
 $langLink_studentContent = "<p>The Links module gives you the opportunity to add useful Internet resources and categorize them at the same time. They have been organized by the course teacher and each one of them has a title and a description with further information.
 </p>" ;
 $langHAnnounce = "Announcements";
 $langHAnnounce_student = $langHAnnounce ;
 $langAnnounceContent = "<p>You can add announcements in a course by clicking in the link 'Add announcement'.</p><p>
-Also, you can change the announcement clicking on the icon 'Modify' or delete an announcement clicking on the icon 'Delete'. If you want to mail your announcement to the registered students in your lesson, just check 'Send announcement (via email) to registered students'</p>";
+Also, you can change the announcement clicking on the icon 'Modify' or delete an announcement clicking on the icon 'Delete'. If you want to mail your announcement to the registered students in your lesson, just check 'Send announcement (via email) to registered students'</p>$langPHPMathPublisher";
 $langAnnounce_studentContent = "<p>The Announcements module allows registered users’ enlightenment on specific course issues. At the same time, it allows course teachers to send announcements to registered students, who have defined their email address in their profile, via email. (“Modify your Profile” in user’s portfolio).
 </p>" ;
 
@@ -241,8 +254,8 @@ $langHXinha = "HTML Editor";
 $langHXinha_student = $langHXinha ;
 $langXinhaContent = "<p>Type title and body of the announcement. Use the html editor to compose your message.
 <p>Note that you may have math symbols in your text. To accomplish this, you must do the following steps. First you must click on the button 'Toggle HTML source'. Fill the math expression between tags
-&lt;m>.....&lt;/m>. Use the syntax as explained in the following link <a href='http://www.xm1math.net/phpmathpublisher/doc/help.html' target=_blank>http://www.xm1math.net/phpmathpublisher/doc/help.html</a>. 
-E.g. for the square root of a, type &lt;m>sqrt{a}&lt;/m> 
+&lt;m>.....&lt;/m>. Use the syntax as explained in the following link <a href='http://www.xm1math.net/phpmathpublisher/doc/help.html' target=_blank>http://www.xm1math.net/phpmathpublisher/doc/help.html</a>.
+E.g. for the square root of a, type &lt;m>sqrt{a}&lt;/m>
 </p>
 <p>After that click on the 'Add'button.</p></p>";
 
@@ -288,13 +301,13 @@ you can use the backup file but you have to contact with the administrator of th
 the documents it contains and unregister all its students (not remove them from other courses).</p>
 <p><b>Refresh Course :</b> You can delete the old data courses in order to create course for the next academic year.</p>";
 $langHConference = "Conference";
-$langHConference_student = $langHConference ;   
+$langHConference_student = $langHConference ;
 $langConferenceContent = "<p>The instructor has the ability to exchange messages with the students by typing the message on text field at the bottom of the page and then pressing \">>\". The instructor has the option to clear all past messages from appearing on the page by selecting \"Clear\". Also clicking on 'Save'you can save all the conference messages in the 'Documents'</p>
 ";
 $langConference_studentContent = "The Teleconferencing is a message exchange module (chat). Students can type a message and click on “>>” to exchange messages with other course register users. This module offers real time communication for course participants regardless the special limiting factor." ;
 // $langHConference_stud = $langHConference;
 $langHVideo = "Video";
-$langHVideo_student = $langHVideo ; 
+$langHVideo_student = $langHVideo ;
 $langVideoContent = "
 <p>Courses might contain audio and video files as contend. Audio and video files can be distributed either via downloading or streaming. When distributed via downloading there is a significant amount of time for waiting until downloading finishes in order to playback the file. When distributed via streaming there is no wait time and playback starts immediately. Video module adds streaming capabilities to eClass.</p>
 <p><b><u>Instructor Options</u></b></p>
@@ -310,11 +323,11 @@ $langCoursedescriptionContent = "<p>You can add some additional info about the c
 and Edit'. You can add a category, selecting it from the drop down box and click in the button 'Add'.
 After entering the information you want press the button 'Add'. </p><p>If, for some reason, you decide that don't want to enter
 the information press 'Return and Cancel'. Whenever you want, you can modify the information you have entered by
-clicking 'Modify' or deleting it by clicking on 'Delete'.</p>";
+clicking 'Modify' or deleting it by clicking on 'Delete'.</p>$langPHPMathPublisher";
 $langCoursedescription_studentContent = "<p>Course description is a module providing useful information about the course syllabus, like course short description, course ID, goals and educational material, evaluation and testing, supportive educational material and activities and any other information the teacher values as being important.
 </p>" ;
 $langHPath = "Help - Learning Path";
-$langHPath_student = $langHPath ; 
+$langHPath_student = $langHPath ;
 $langPathContent = "
 The Learning Path tool has four functions:
 <ul>
@@ -418,10 +431,10 @@ href=\"http://www.trivantis.com/\">http://www.trivantis.com</a></li>
 <p>The Learning Path section lists all the <i>self-built Learning Paths</i>
 and all uploaded <i>Scorm format Learning Paths</i>, as well.</p>
 ";
-$langPath_studentContent = "<p>This module offers the opportunity to the course teacher to create a sequence of steps (learning path) as learning activities, which should be followed by the students. 
+$langPath_studentContent = "<p>This module offers the opportunity to the course teacher to create a sequence of steps (learning path) as learning activities, which should be followed by the students.
 </p>" ;
 $langHDropbox = "DropBox";
-$langHDropbox_student = $langHDropbox ; 
+$langHDropbox_student = $langHDropbox ;
 $langDropboxContent = "<p>Dropbox is a tool exchange file between professors and students. You can exchange various file types (e.g. Word files, Excel, PDF etc.)</p>
 <p>There are two folders. In folder <b>Received Files</b>
 there are all files you have recieved from other users of the platform with some additional info such as username, file size and file recieved date. In folder <b>Sent files</b> there are files you have sent in other users of platform with similar info.</p>
@@ -429,7 +442,7 @@ there are all files you have recieved from other users of the platform with some
 <p>If you wish to send a file to another user, first select the file from your computer by clicking on 'File Upload'. Optionally you can type a short description. Then select the recipient from the users list and click on 'Send'  You can select more recipients with your mouse and pressing <b>CTRL (Control)</b>.
 </p>";
 $langDropbox_studentContent ="<p>The Dropbox module is a collaboration tool used by teachers and students to exchange course files. You can send and receive any type of text files, pictures or presentations.
-</p>"; 
+</p>";
 $langHUsage = "Use Statistics";
 $langUsageContent = "<p>Usage statistics modules allow the professor to see statistics about his lesson. They are presented in the form of charts or lists.</p> <p><strong>Statistics categories</strong></p> <ul> <li>Usage statistics</li> <li>Favorite modules</li> <li>User visits</li> <li>Old statistics</li> </ul> <p>Usage statistics can be grouped by number of visits or visit duration. Additionally, the professor is able to choose the modules he wants to see and the timeframe.</p> <p>The favorite modules statistics can be grouped by number of visits or visit duration. Additionally, the professor is able to choose the modules he wants to see.</p> <p>The user visits statistics can be grouped by users, either all, or by letter.</p> <p>Old statistics presentation can be grouped by number of visits or visit duration. Additionally, the professor is able to choose the modules he wants to see and the timeframe.</p> ";
 $langHCreateCourse = "Create Course";
