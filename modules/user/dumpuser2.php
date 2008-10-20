@@ -41,7 +41,8 @@ if($is_adminOfCourse) {
 	header("Content-Type: text/csv; charset=$charset");
 	header("Content-Disposition: attachment; filename=listusers.csv");
 	
-	echo "$langSurname;$langName;$langEmail;$langAm;$langUsername;$langGroups$crlf";
+	echo join(';', array_map("csv_escape", array($langSurname, $langName, $langEmail, $langAm, $langUsername, $langGroups))),
+	     $crlf;
 	$sql = db_query("SELECT  user.nom, user.prenom, user.email, user.am, user.username, user_group.team
 			FROM cours_user, user LEFT JOIN `$currentCourseID`.user_group ON `user`.user_id=user_group.user
 			WHERE `user`.`user_id`=`cours_user`.`user_id` AND `cours_user`.`code_cours`='$currentCourseID'
