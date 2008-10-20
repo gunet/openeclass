@@ -232,10 +232,22 @@ $langLink_studentContent = "<p>The Links module gives you the opportunity to add
 </p>" ;
 $langHAnnounce = "Announcements";
 $langHAnnounce_student = $langHAnnounce ;
-$langAnnounceContent = "<p>You can add announcements in a course by clicking in the link 'Add announcement'. In the following form type the title and the body of the announcement. After that click on the 'Add'button.</p><p>
+$langAnnounceContent = "<p>You can add announcements in a course by clicking in the link 'Add announcement'.</p><p>
 Also, you can change the announcement clicking on the icon 'Modify' or delete an announcement clicking on the icon 'Delete'. If you want to mail your announcement to the registered students in your lesson, just check 'Send announcement (via email) to registered students'</p>";
 $langAnnounce_studentContent = "<p>The Announcements module allows registered users’ enlightenment on specific course issues. At the same time, it allows course teachers to send announcements to registered students, who have defined their email address in their profile, via email. (“Modify your Profile” in user’s portfolio).
 </p>" ;
+
+$langHXinha = "HTML Editor";
+$langHXinha_student = $langHXinha ;
+$langXinhaContent = "<p>Type title and body of the announcement. Use the html editor to compose your message.
+<p>Note that you may have math symbols in your text. To accomplish this, you must do the following steps. First you must click on the button 'Toggle HTML source'. Fill the math expression between tags
+&lt;m>.....&lt;/m>. Use the syntax as explained in the following link <a href='http://www.xm1math.net/phpmathpublisher/doc/help.html' target=_blank>http://www.xm1math.net/phpmathpublisher/doc/help.html</a>. 
+E.g. for the square root of a, type &lt;m>sqrt{a}&lt;/m> 
+</p>
+<p>After that click on the 'Add'button.</p></p>";
+
+
+
 $langHProfile = "Modify my profile";
 $langProfileContent = "<p>You can modify your personal info in the platform</p>
 <li>You can modify your name, surname, and your e-mail address.</li>
