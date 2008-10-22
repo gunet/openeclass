@@ -175,13 +175,6 @@ if ($persoStatus == "yes")  {
 	$checkedPerso = "checked";
 }
 
-if ($userLang == "el") {
-	$checkedLangEl = "checked";
-	$checkedLangEn = "";
-} else {
-	$checkedLangEl = "";
-	$checkedLangEn = "checked";
-}
 ##[END personalisation modification]############
 
 session_unregister("uname");
@@ -288,8 +281,7 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
     <tr>
       <th class='left'>$langLanguage</th>
       <td>
-        <input type='radio' name='userLanguage' value='el' $checkedLangEl>$langGreek<br>
-        <input type='radio' name='userLanguage' value='en' $checkedLangEn>$langEnglish
+        " . lang_select_options('userLanguage') . "
       </td>
     </tr>
 	<tr>

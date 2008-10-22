@@ -73,12 +73,12 @@ if (isset($send_archive) and $_FILES['archiveZipped']['size'] > 0) {
 	$tool_content .= "<p>$langCopyFiles $webDir/courses/$course_code</p><br><p>";
 	$action = 1;
 	$userid_map = array();
-	if ($encoding != 'UTF-8') {
-		db_query('SET NAMES greek');
-	}
 	// now we include the file for restoring
 	ob_start();
 	include("$restoreThis/backup.php");
+	if ($encoding != 'UTF-8') {
+		db_query('SET NAMES greek');
+	}
 	upgrade_course($course_code, $course_lang);
 	$tool_content .= ob_get_contents();
 	ob_end_clean();

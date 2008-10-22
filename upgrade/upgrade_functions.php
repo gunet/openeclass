@@ -934,13 +934,31 @@ function upgrade_course($code, $lang, $extramessage = '')
         $sql = db_query("SELECT id,lien,image,address FROM accueil");
         while ($u = mysql_fetch_row($sql))  {
                 $oldlink_lien = $u[1];
-                $newlink_lien = preg_replace('#../claroline/#','../../modules/',$oldlink_lien);
+                $newlink_lien = preg_replace(
+                        array('#../claroline/#',
+                              '#../../modules/import/import_page.php\?link=(\S+) "target=_blank#'),
+                        array('../../modules/',
+                              '../../courses/' . $code . '/page/$1'),
+                        $oldlink_lien);
                 $oldlink_image = $u[2];
-                $newlink_image = preg_replace('#../claroline/image/#','../../images/',$oldlink_image);
+                $newlink_image = str_replace(
+                        '../claroline/image/',
+                        '../../images/',
+                        $oldlink_image);
                 $oldlink_address = $u[3];
-                $newlink_address = preg_replace('#../claroline/image/#','../../images/',$oldlink_address);
-                db_query("UPDATE accueil SET lien='$newlink_lien',
-                                image='$newlink_image', address='$newlink_address' WHERE id='$u[0]'");
+                $newlink_address = str_replace(
+                        '../claroline/image/',
+                        '../../images/',
+                        $oldlink_address);
+                if ($oldlink_lien != $newlink_lien or
+                    $oldlink_image != $newlink_image or
+                    $oldlink_address != $newlink_address) {
+                        db_query("UPDATE accueil SET
+                                         lien = " . quote($newlink_lien) . ",
+                                         image = " . quote($newlink_image) . ",
+                                         address = " . quote($newlink_address) . "
+                                  WHERE id='$u[0]'");
+                }
         }
 
         //set the new images for the icons of lesson modules
