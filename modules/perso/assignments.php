@@ -305,7 +305,7 @@ function findSubmission($uid, $id, $lesson_db) {
 
 		$gid = getUserGroup($uid, $lesson_db);
 
-		$res = db_query("SELECT id FROM $lesson_db.assignment_submit
+		$res = db_query("SELECT id FROM `$lesson_db`.assignment_submit
 
 			WHERE assignment_id = '$id'
 
@@ -313,7 +313,7 @@ function findSubmission($uid, $id, $lesson_db) {
 
 	} else {
 
-		$res =db_query("SELECT id FROM $lesson_db.assignment_submit
+		$res =db_query("SELECT id FROM `$lesson_db`.assignment_submit
 
 			WHERE assignment_id = '$id' AND uid = '$uid'", $lesson_db);
 
@@ -359,7 +359,7 @@ function findSubmission($uid, $id, $lesson_db) {
 
 function isGroupAssignment($id, $lesson_db) {
 
-	$res = db_query("SELECT group_submissions FROM $lesson_db.assignments WHERE id = '$id'", $lesson_db);
+	$res = db_query("SELECT group_submissions FROM `$lesson_db`.assignments WHERE id = '$id'", $lesson_db);
 
 	if ($res) {
 
@@ -407,7 +407,7 @@ function getUserGroup($uid, $lesson_db) {
 
 
 
-	$res =db_query("SELECT team FROM $lesson_db.user_group WHERE user = '$uid'", $lesson_db);
+	$res =db_query("SELECT team FROM `$lesson_db`.user_group WHERE user = '$uid'", $lesson_db);
 
 	if ($res) {
 
