@@ -395,8 +395,11 @@ function check_guest() {
 
 function check_prof()
 {
-	global $mysqlMainDb, $uid;
+	global $mysqlMainDb, $uid, $require_current_course, $is_adminOfCourse;
 	if (isset($uid)) {
+                if (isset($require_current_course) and $is_adminOfCourse) {
+                        return true;
+                }
 		$res = db_query("SELECT statut FROM user WHERE user_id='$uid'", $mysqlMainDb);
 		$s = mysql_fetch_array($res);
 		if ($s['statut'] == 1)
