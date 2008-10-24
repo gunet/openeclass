@@ -83,10 +83,12 @@ if (isset($_REQUEST['do']) && $_REQUEST['do'] == "go") {
 	$hash = $_REQUEST['h'];
 
 	$res = db_query("SELECT `user_id`, `hash`, `password`, `datetime` FROM passwd_reset
-							WHERE `user_id` = '" . mysql_escape_string($userUID) . "'
-							AND `hash` = '" . mysql_escape_string($hash) . "'
-							AND TIMESTAMPDIFF(MINUTE, `datetime`,NOW()) < 60
-							", $mysqlMainDb);
+			WHERE `user_id` = '" . mysql_escape_string($userUID) . "'
+			AND `hash` = '" . mysql_escape_string($hash) . "'
+			AND TIME_TO_SEC(TIMEDIFF(`datetime`,NOW())) < 3600
+			", $mysqlMainDb);
+
+
 
 	if (mysql_num_rows($res) == 1) {
 		$myrow = mysql_fetch_array($res);
