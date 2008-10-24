@@ -150,7 +150,7 @@ while ($mycours = mysql_fetch_array($result2)) {
 } // if
 
 // get last login date
-$last_login_query = "SELECT `when` FROM  $mysqlMainDb.loginout
+$last_login_query = "SELECT `when` FROM  `$mysqlMainDb`.loginout
 	WHERE action = 'LOGIN' AND id_user = '$uid' ORDER BY `when` DESC LIMIT 1,1";
 
 $row = mysql_fetch_row(db_query($last_login_query));
@@ -169,12 +169,12 @@ if (mysql_num_rows(db_query($sql, $mysqlMainDb)) > 0) {
 	$found = 0;
 	$ansql = db_query($sql, $mysqlMainDb);
 	while ($c = mysql_fetch_array($ansql)) {
-		$result = db_query("SELECT temps FROM `$mysqlMainDb`.annonces, $c[k].accueil
+		$result = db_query("SELECT temps FROM `$mysqlMainDb`.annonces, `$c[k]`.accueil
 			WHERE code_cours='$c[k]'
 			AND DATE_SUB(DATE_FORMAT('".$logindate."','%Y-%m-%d'), INTERVAL 10 DAY)
 			<= DATE_FORMAT(temps,'%Y-%m-%d')
-			AND $c[k].accueil.visible =1
-			AND $c[k].accueil.id =7", $mysqlMainDb);
+			AND `$c[k]`.accueil.visible =1
+			AND `$c[k]`.accueil.id =7", `$mysqlMainDb`);
 		if (mysql_num_rows($result) > 0) $found++;
 	}
 // if announcements found then display them
@@ -195,12 +195,12 @@ $tool_content .= "
         $la = 0;
 		while ($c = mysql_fetch_array($ansql)) {
 			$result = db_query("SELECT contenu, temps, title
-			FROM $mysqlMainDb.annonces, $c[k].accueil
+			FROM    $mysqlMainDb`.annonces, `$c[k]`.accueil
 			WHERE code_cours='$c[k]'
 			AND DATE_SUB(DATE_FORMAT('".$logindate."','%Y-%m-%d'), INTERVAL 10 DAY)
 			<= DATE_FORMAT(temps,'%Y-%m-%d')
-			AND $c[k].accueil.visible =1
-			AND $c[k].accueil.id =7
+			AND `$c[k]`.accueil.visible =1
+			AND `$c[k]`.accueil.id =7
 			ORDER BY temps DESC", $mysqlMainDb);
 
 
