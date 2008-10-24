@@ -38,112 +38,116 @@
 
 $require_current_course = TRUE;
 $require_login = true;
-$require_prof = true;
 
 include "../../include/baseTheme.php";
 $tool_content = "";
 
-if(!isset($_REQUEST['uploadPath'])) {
-	$_REQUEST['uploadPath'] = "";
-}
+if($is_adminOfCourse) {
 
-$nameTools = $langDownloadFile;
-$navigation[]= array ("url"=>"document.php", "name"=> $langDoc);
-$tool_content .= "
-<form action=\"document.php\" method=\"post\" enctype=\"multipart/form-data\">
-    <input type=\"hidden\" name=\"uploadPath\" value=\"".htmlspecialchars($_REQUEST['uploadPath'])."\">
-     <table width=\"99%\">
-     <tbody>
-     <tr>
-       <th class='left' width='300'>&nbsp;</th>
-       <td><b>$dropbox_lang[uploadFile]</b></td>
-       <td>&nbsp;</td>
-     </tr>
-     <tr>
-       <th class='left'>$langPathUploadFile:</th>
-       <td><input type=\"file\" name=\"userFile\" size=\"35\" class='FormData_InputText'></td>
-       <td>&nbsp;</td>
-     </tr>
-     <tr>
-       <th class='left'>$langTitle:</th>
-       <td><input type=\"text\" name=\"file_title\" value=\"\" size=\"40\" class='FormData_InputText'></td>
-       <td>&nbsp;</td>
-     </tr>
-     <tr>
-        <th class='left'>$langComment:</th>
-        <td><input type=\"text\" name=\"file_comment\" value=\"\" size=\"40\" class='FormData_InputText'></td>
-       <td>&nbsp;</td>
-     </tr>
-     <tr>
-       <th class='left'>$langCategory:</th>
-       <td>
-           <select name=\"file_category\" class='auth_input'>
-             <option selected=\"selected\" value=\"0\">$langCategoryOther<br>
-             <option value=\"1\">$langCategoryExcercise<br>
-             <option value=\"2\">$langCategoryLecture<br>
-             <option value=\"3\">$langCategoryEssay<br>
-             <option value=\"4\">$langCategoryDescription<br>
-             <option value=\"5\">$langCategoryExample<br>
-             <option value=\"6\">$langCategoryTheory<br>
-           </select>
-       </td>
-       <td>&nbsp;</td>
-           <input type=\"hidden\" name=\"file_creator\" value=\"$prenom $nom\" size=\"40\">
-     </tr>
-     <tr>
-       <th class='left'>$langSubject:</th>
-       <td><input type=\"text\" name=\"file_subject\" value=\"\" size=\"40\" class='FormData_InputText'></td>
-       <td>&nbsp;</td>
-     </tr>
-     <tr>
-       <th class='left'>$langDescription:</th>
-       <td><input type=\"text\" name=\"file_description\" value=\"\" size=\"40\" class='FormData_InputText'></td>
-       <td>&nbsp;</td>
-     </tr>
-     <tr>
-       <th class='left'>$langAuthor:</th>
-       <td><input type=\"text\" name=\"file_author\" value=\"\" size=\"40\" class='FormData_InputText'></td>
-       <td>&nbsp;</td>
-     </tr>
-     <tr>
-       <th class='left'><input type=\"hidden\" name=\"file_date\" value=\"\" size=\"40\">
-           <input type=\"hidden\" name=\"file_format\" value=\"\" size=\"40\">
-           $langLanguage:
-       </th>
-       <td>
-          <select name=\"file_language\" class='auth_input'>
-            <option value=\"en\">$langEnglish</option>
-		<option value=\"fr\">$langFrench</option>
-		<option value=\"de\">$langGerman</option>
-		<option value=\"el\" selected>$langGreek</option>
-		<option value=\"it\">$langItalian</option>
-		<option value=\"es\">$langSpanish</option>
-          </select>
-       </td>
-       <td>&nbsp;</td>
-     </tr>
-     <tr>
-       <th class='left'>$langCopyrighted:</th>
-       <td>
-         <input name=\"file_copyrighted\" type=\"radio\" value=\"0\" checked/> $langCopyrightedUnknown&nbsp;
-  		<input name=\"file_copyrighted\" type=\"radio\" value=\"2\" /> $langCopyrightedFree&nbsp;
-         <input name=\"file_copyrighted\" type=\"radio\" value=\"1\" /> $langCopyrightedNotFree
-       </td>
-       <td>&nbsp;</td>
-     </tr>
-     <tr>
-       <th class='left'>$langUncompress</th>
-       <td><input type=\"checkbox\" name=\"uncompress\" value=\"1\"> </td>
-       <td>&nbsp;</td>
-     </tr>
-     <tr>
-       <th class='left'>&nbsp;</th>
-       <td colspan=\"2\"><input type=\"submit\" value=\"$langUpload\"><p align='right'><small>$langNotRequired</small></p></td>
-     </tr>
-     </tbody>
-     </table>
-     <br/>";
-    $tool_content .=  "</form>";
+	if(!isset($_REQUEST['uploadPath'])) {
+		$_REQUEST['uploadPath'] = "";
+	}
+	
+	$nameTools = $langDownloadFile;
+	$navigation[]= array ("url"=>"document.php", "name"=> $langDoc);
+	$tool_content .= "
+	<form action=\"document.php\" method=\"post\" enctype=\"multipart/form-data\">
+	<input type=\"hidden\" name=\"uploadPath\" value=\"".htmlspecialchars($_REQUEST['uploadPath'])."\">
+	<table width=\"99%\">
+	<tbody>
+	<tr>
+	<th class='left' width='300'>&nbsp;</th>
+	<td><b>$dropbox_lang[uploadFile]</b></td>
+	<td>&nbsp;</td>
+	</tr>
+	<tr>
+	<th class='left'>$langPathUploadFile:</th>
+	<td><input type=\"file\" name=\"userFile\" size=\"35\" class='FormData_InputText'></td>
+	<td>&nbsp;</td>
+	</tr>
+	<tr>
+	<th class='left'>$langTitle:</th>
+	<td><input type=\"text\" name=\"file_title\" value=\"\" size=\"40\" class='FormData_InputText'></td>
+	<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<th class='left'>$langComment:</th>
+		<td><input type=\"text\" name=\"file_comment\" value=\"\" size=\"40\" class='FormData_InputText'></td>
+	<td>&nbsp;</td>
+	</tr>
+	<tr>
+	<th class='left'>$langCategory:</th>
+	<td>
+		<select name=\"file_category\" class='auth_input'>
+		<option selected=\"selected\" value=\"0\">$langCategoryOther<br>
+		<option value=\"1\">$langCategoryExcercise<br>
+		<option value=\"2\">$langCategoryLecture<br>
+		<option value=\"3\">$langCategoryEssay<br>
+		<option value=\"4\">$langCategoryDescription<br>
+		<option value=\"5\">$langCategoryExample<br>
+		<option value=\"6\">$langCategoryTheory<br>
+		</select>
+	</td>
+	<td>&nbsp;</td>
+		<input type=\"hidden\" name=\"file_creator\" value=\"$prenom $nom\" size=\"40\">
+	</tr>
+	<tr>
+	<th class='left'>$langSubject:</th>
+	<td><input type=\"text\" name=\"file_subject\" value=\"\" size=\"40\" class='FormData_InputText'></td>
+	<td>&nbsp;</td>
+	</tr>
+	<tr>
+	<th class='left'>$langDescription:</th>
+	<td><input type=\"text\" name=\"file_description\" value=\"\" size=\"40\" class='FormData_InputText'></td>
+	<td>&nbsp;</td>
+	</tr>
+	<tr>
+	<th class='left'>$langAuthor:</th>
+	<td><input type=\"text\" name=\"file_author\" value=\"\" size=\"40\" class='FormData_InputText'></td>
+	<td>&nbsp;</td>
+	</tr>
+	<tr>
+	<th class='left'><input type=\"hidden\" name=\"file_date\" value=\"\" size=\"40\">
+		<input type=\"hidden\" name=\"file_format\" value=\"\" size=\"40\">
+		$langLanguage:
+	</th>
+	<td>
+		<select name=\"file_language\" class='auth_input'>
+		<option value=\"en\">$langEnglish</option>
+			<option value=\"fr\">$langFrench</option>
+			<option value=\"de\">$langGerman</option>
+			<option value=\"el\" selected>$langGreek</option>
+			<option value=\"it\">$langItalian</option>
+			<option value=\"es\">$langSpanish</option>
+		</select>
+	</td>
+	<td>&nbsp;</td>
+	</tr>
+	<tr>
+	<th class='left'>$langCopyrighted:</th>
+	<td>
+		<input name=\"file_copyrighted\" type=\"radio\" value=\"0\" checked/> $langCopyrightedUnknown&nbsp;
+			<input name=\"file_copyrighted\" type=\"radio\" value=\"2\" /> $langCopyrightedFree&nbsp;
+		<input name=\"file_copyrighted\" type=\"radio\" value=\"1\" /> $langCopyrightedNotFree
+	</td>
+	<td>&nbsp;</td>
+	</tr>
+	<tr>
+	<th class='left'>$langUncompress</th>
+	<td><input type=\"checkbox\" name=\"uncompress\" value=\"1\"> </td>
+	<td>&nbsp;</td>
+	</tr>
+	<tr>
+	<th class='left'>&nbsp;</th>
+	<td colspan=\"2\"><input type=\"submit\" value=\"$langUpload\"><p align='right'><small>$langNotRequired</small></p></td>
+	</tr>
+	</tbody>
+	</table>
+	<br/>";
+	$tool_content .=  "</form>";
+} else {
+	$tool_content .= "<span class='caution_small'>$langNotAllowed</span>";
+}
 
 draw($tool_content, '2');
 
