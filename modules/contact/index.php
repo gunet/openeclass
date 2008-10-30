@@ -80,7 +80,7 @@ function form()
   </tr>
   <tr>
     <th>&nbsp;</th>
-    <td><input type='submit' name='submit' value='$GLOBALS[langSendMessage]'></td>
+    <td><input type='submit' name='submit' value='$GLOBALS[langSendMessage]' /></td>
   </tr>
   </tbody>
   </table>
@@ -107,7 +107,7 @@ function email_profs($course, $content, $from_name, $from_address)
 
 	while ($prof = mysql_fetch_array($profs)) {
 		$to_name = $prof['prenom'].' '.$prof['nom'];
-		$ret .= "<p><img src=../../images/teacher.gif> $to_name</p><br>\n";
+		$ret .= "<p><img src='../../template/classic/img/teacher.gif' /> $to_name</p><br>\n";
 		if (!send_mail($from_name,
 			$GLOBALS['emailAdministrator'],
 			$to_name,
