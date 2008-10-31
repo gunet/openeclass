@@ -77,11 +77,13 @@ $tool_content = ""; //initialise $tool_content
 if ($is_adminOfCourse) {
 
 	$tool_content .= "
-    <table width=\"99%\" align=\"left\" class=\"Group_Operations\">
+    <table width=\"99%\" align=\"left\" class=\"Users_Operations\">
     <thead>
     <tr>
-      <td width=\"50%\">&nbsp;<b>$langDumpUser $langCsv:</b><br><a href=\"dumpuser2.php\">$langcsvenc2</a><br>
-	<a href=\"dumpuser2.php?enc=1253\">$langcsvenc1</a></td>
+      <td width=\"50%\">&nbsp;<b>$langDumpUser $langCsv:</b>
+         <br>&nbsp;&nbsp;1.&nbsp;<a href=\"dumpuser2.php\">$langcsvenc2</a>
+         <br>&nbsp;&nbsp;2.&nbsp;<a href=\"dumpuser2.php?enc=1253\">$langcsvenc1</a>
+      </td>
       <td width=\"50%\"><div align=\"right\"><a href=\"../group/group.php\">$langGroupUserManagement</a>&nbsp;</div></td>
     </tr>
     <tr>
@@ -90,7 +92,7 @@ if ($is_adminOfCourse) {
     </tr>
     </thead>
     </table>
-	<br /><br /><br />";
+	<p>&nbsp;</p>";
 
 	// display number of users
 $tool_content .= "
@@ -104,7 +106,7 @@ $tool_content .= "
     </tr>
     </tbody>
     </table>
-    <br />";
+    <p>&nbsp;</p>";
 
 }	// if prof
 

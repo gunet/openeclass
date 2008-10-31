@@ -25,7 +25,7 @@ td.highlight a:hover {
   background: #edecdf;
   text-align: center !important;
   font-weight: bold;
-  font-size: 10px !important; 
+  font-size: 10px !important;
 }
 
 
@@ -63,7 +63,11 @@ table.NavUser td {
 }
 
 
-.Group_Operations {
+
+table.Users_Operations {
+    background: none;
+    vertical-align: middle;
+    padding: 2px;
     background: #CAC3B5;
     font-size: 11px;
     color: #000000;
@@ -73,22 +77,42 @@ table.NavUser td {
 	border-right: 1px solid #CAC3B5;
 }
 
-.Group_Operations td{
+table.Users_Operations tr {
+    padding: 4px;
+    font-size: 11px;
+}
+
+table.Users_Operations th {
+    padding: 4px;
+    font-size: 11px;
+
+}
+
+table.Users_Operations td {
+    padding: 4px;
+    font-size: 11px;
+}
+
+table.Users_Operations td {
     padding: 2px !important;
 }
 
-.Group_Operations a {
+table.Users_Operations a {
    color: #000000;
    font-size: 10px;
    font-weight: normal;
    text-decoration: none;
 }
 
-.Group_Operations a:hover {
+table.Users_Operations a:hover {
        text-decoration: underline;
        color: #ffffff;
        font-size: 10px;
 }
+
+
+
+
 
 /* Pagination
 ---------------------------------------- */
