@@ -420,7 +420,7 @@ if (!isset($submit2)) {
                         while ($row = mysql_fetch_array($res)) {
                                 $pass = $row["password"];
                                 if (!in_array($pass,$auth_methods)) {
-                                        $newpass = md5($pass);
+                                        $newpass = md5(iconv('ISO-8859-7', 'UTF-8', $pass));
                                         // do the update
                                         db_query("UPDATE user SET password = '$newpass'
                                                         WHERE user_id = $row[user_id]");
