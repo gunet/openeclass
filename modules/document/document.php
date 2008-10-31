@@ -778,6 +778,20 @@ if (mysql_num_rows($sql) == 0) {
 	//       Display Files
 	// ------------------------------
 	if (isset($fileNameList)) {
+                if (empty($curDirPath)) {
+                        $dirname = '';
+                } else {
+                        $components = split('/', $curDirPath);
+                        array_shift($components);
+                        $partial_path = '';
+                        $dirname = '';
+                        foreach ($components as $c) {
+                                $partial_path .= '/' . $c;
+                                $q = db_query("SELECT filename FROM document WHERE path = '$partial_path'");
+                                $r = mysql_fetch_row($q);
+                                $dirname .= '/' . $r[0];
+                        }
+                }
 		while (list($fileKey, $fileName) = each ($fileNameList)) {
 			$image = choose_image($fileName);
 			$size = format_file_size($fileSizeList[$fileKey]);
@@ -786,7 +800,7 @@ if (mysql_num_rows($sql) == 0) {
 			$cmdFileName = rawurlencode($curDirPath."/".$fileName);
 			$dspFileName = htmlspecialchars($fileName);
 			if (@$fileVisibilityList[$fileKey] == "i") {
-				$style2=" class=\"invisible_doc\"";
+				$style2=" class='invisible_doc'";
 			} else {
 				$style2="";
 			}
@@ -794,18 +808,19 @@ if (mysql_num_rows($sql) == 0) {
 			if ((@$fileVisibilityList[$fileKey] == "i")  and (!$is_adminOfCourse)) {
 				continue;
 			}
-			$tool_content .=  "\n  <tr ".$style2.">";
-			$tool_content .=  "\n    <td width='1%' valign=\"top\" style=\"padding-top: 7px;\"><div align=\"center\">";
-            $tool_content .=  "<a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' 	title=\"$langSave\"><img src=\"./img/".$image."\" align='absmiddle' border=0></a>";
-			//h $dspFileName periexei to onoma tou arxeiou sto filesystem
-			$query = "SELECT filename, copyrighted FROM document WHERE path LIKE '%".$curDirPath."/".$fileName."%'";
-			$result = mysql_query ($query);
+			$query = "SELECT * FROM document
+                                  WHERE path = '$curDirPath/$fileName'";
+			$result = db_query($query);
 			$row = mysql_fetch_array($result);
+                        $file_url = "file.php/$currentCourseID$dirname/$row[filename]";
+			$tool_content .=  "<tr$style2>";
+			$tool_content .=  "  <td width='1%' valign='top' style='padding-top: 7px;'><div align='center'>";
+            $tool_content .=  "<a href='$file_url' title='$langSave' target='_blank'><img src='img/$image' align='absmiddle' border='0'></a>";
 			$tool_content .=  "</div></td>";
             $tool_content .=  "\n    <td>";
-			$tool_content .=  "<div align=\"left\"><a href='$_SERVER[PHP_SELF]?action2=download&id=".$cmdFileName."' 	title=\"$langSave\">".$row["filename"];
-			if ($row["copyrighted"] == "1")
-				$tool_content .= " <img src=\"./img/copyrighted.jpg\" align='absmiddle' border=\"0\">";
+			$tool_content .=  "<div align=\"left\"><a href='$file_url' title='$langSave' target='_blank'>$row[filename]";
+			if ($row['copyrighted'] == '1')
+				$tool_content .= " <img src='./img/copyrighted.jpg' align='absmiddle' border='0'>";
 			$tool_content .= "</a>";
 			/*** comments ***/
 			if (@$fileCommentList[$fileKey] != "")
