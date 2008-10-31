@@ -332,7 +332,7 @@ function get_all_uids_of_students_in_course($code_cours)
 function selection($entries, $name, $default = '', $extra = '')
 {
 	$retString = "";
-	$retString .= "<select name='$name' $extra>\n";
+	$retString .= "\n<select name='$name' $extra class='auth_input'>\n";
 	foreach ($entries as $value => $label) {
 		if ($value == $default) {
 			$retString .= "<option selected value='" . htmlspecialchars($value) . "'>" .
