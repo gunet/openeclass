@@ -136,13 +136,6 @@ if (isset($require_login) and $require_login and !$uid) {
 	$errorMessagePath = "../../";
 }
 
-if (isset($require_prof) and $require_prof) {
-	if (!check_prof()) {
-		$toolContent_ErrorExists = $langCheckProf;
-		$errorMessagePath = "../../";
-	}
-}
-
 if (isset($require_admin) && $require_admin) {
 	if(!check_admin()) {
 		$toolContent_ErrorExists = $langCheckAdmin;
@@ -265,6 +258,15 @@ if (isset($_SESSION['status'])) {
 } else {
 	unset($status);
 }
+
+
+if (isset($require_prof) and $require_prof) {
+	if (!check_prof()) {
+		$toolContent_ErrorExists = $langCheckProf;
+		$errorMessagePath = "../../";
+	}
+}
+
 
 //Security check:: Users that do not have Professor access for a course must not
 //be able to access inactive tools.
