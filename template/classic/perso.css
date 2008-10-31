@@ -34,6 +34,8 @@ table.blocks {
 	border-right: 1px solid #CAC3B5 !important;
 	margin-bottom: 0.8em !important;
 	font-weight : bold;
+    word-wrap: break-word !important;
+    overflow: hidden !important;
 }
 
 table.blocks a {
@@ -100,7 +102,10 @@ table.assign {
 
 //===[END assignments block]
 
-#datacontainer { width: 100%; padding:0;}
+#datacontainer {
+  width: 100%;
+  padding:0;
+  }
 
 #datacontainer ul {
 	margin: 0;
@@ -203,6 +208,17 @@ table.assign {
 	padding-left: 14px;
 	color: #727266;
 	font-weight: bold;
+    overflow: hidden;
+    white-space: pre;           /* CSS2 */
+    white-space: -moz-pre-wrap; /* Mozilla */
+    white-space: -hp-pre-wrap;  /* HP printers */
+    white-space: -o-pre-wrap;   /* Opera 7 */
+    white-space: -pre-wrap;     /* Opera 4-6 */
+    white-space: pre-wrap;      /* CSS 2.1 */
+    white-space: pre-line;      /* CSS 3 (and 2.1 as well, actually) */
+    word-wrap:   break-word;    /* IE */
+    word-break:  break-all;
+    word-wrap: breakword;
 }
 
 .more_pos {
