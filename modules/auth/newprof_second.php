@@ -37,7 +37,7 @@ $tool_content = "";
 $statut=1;
 
 $submit = isset($_POST['submit'])?$_POST['submit']:'';
-$uname = preg_replace('/\s+/', ' ', trim(isset($_POST['uname'])?$_POST['uname']:''));
+$uname = preg_replace('/\ +/', ' ', trim(isset($_POST['uname'])?$_POST['uname']:''));
 $password = isset($_POST['password'])?$_POST['password']:'';
 $email_form = isset($_POST['email_form'])?$_POST['email_form']:'';
 $nom_form = isset($_POST['nom_form'])?$_POST['nom_form']:'';

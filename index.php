@@ -78,13 +78,15 @@ session_register("perso_is_active");
 // if we try to login... then authenticate user.
 // -----------------------------------------------------------------------
 $warning = '';
-$uname = preg_replace('/\s+/', ' ', trim(isset($_POST['uname'])?$_POST['uname']:''));
+if (isset($_POST['uname'])) {
+        $uname = escapeSimple(preg_replace('/ +/', ' ', trim($_POST['uname'])));
+} else {
+        $uname = '';
+}
 $pass = isset($_POST['pass'])?$_POST['pass']:'';
 $submit = isset($_POST['submit'])?$_POST['submit']:'';
 $auth = get_auth_active_methods();
 $is_eclass_unique = is_eclass_unique();
-
-$uname = escapeSimple($uname);
 
 if(!empty($submit))
 {

@@ -296,7 +296,7 @@ if(!in_array($info['password'], $authmethods)) {
 		$lname = isset($_POST['lname'])?$_POST['lname']:'';
 
 		// trim white spaces in the end and in the beginning of the word
-		$username = preg_replace('/\s+/', ' ', trim(isset($_POST['username'])?$_POST['username']:''));
+		$username = preg_replace('/\ +/', ' ', trim(isset($_POST['username'])?$_POST['username']:''));
 
 		$email = isset($_POST['email'])?$_POST['email']:'';
 		$phone = isset($_POST['phone'])?$_POST['phone']:'';
