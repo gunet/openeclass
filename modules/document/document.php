@@ -691,8 +691,8 @@ if (mysql_num_rows($sql) == 0) {
                                 $link_extra = '';
                         } else {
                                 $image = 'img/' . choose_image($entry['filename']);
-                                $file_url = "file.php/$currentCourseID$dirname/" .
-                                        str_replace('/', '//', $entry['filename']);
+                                $file_url = htmlspecialchars("file.php/$currentCourseID$dirname/" .
+                                        str_replace('/', '//', $entry['filename']), ENT_QUOTES);
                                 $link_extra = " title='$langSave' target='_blank'";
                                 if ($entry['copyrighted']) {
                                         $copyright_icon = " <img src='./img/copyrighted.jpg' align='absmiddle' border='0' />";
