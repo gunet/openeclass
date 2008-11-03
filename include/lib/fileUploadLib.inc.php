@@ -87,37 +87,21 @@ function php2phps ($fileName)
 
 function dir_total_space($dirPath)
 {
-	$sumSize=0;
-	chdir ($dirPath) ;
+	$sumSize = 0;
 	$handle = opendir($dirPath);
-
-	while ($element = readdir($handle) )
-	{
-		if ( $element == "." || $element == "..")
-		{
+	while ($element = readdir($handle)) {
+                $file = $dirPath . '/' . $element;
+		if ($element == '.' or $element == '..') {
 			continue; // skip the current and parent directories
 		}
-		if ( is_file($element) )
-		{
-			@$sumSize += filesize($element);
+		if (is_file($file)) {
+			$sumSize += filesize($file);
 		}
-		if ( is_dir($element) )
-		{
-			$dirList[] = $dirPath.'/'.$element;
+		if (is_dir($file)) {
+			$sumSize += dir_total_space($file);
 		}
 	}
-
 	closedir($handle) ;
-
-	if ( isset($dirList) && sizeof($dirList) > 0)
-	{
-		foreach($dirList as $j)
-		{
-			$sizeDir = dir_total_space($j);	// recursivity
-			$sumSize += $sizeDir;
-		}
-	}
-
 	return $sumSize;
 }
 

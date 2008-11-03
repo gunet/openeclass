@@ -74,20 +74,9 @@ function update_db_info($dbTable, $action, $oldPath, $newPath = "")
  *           boolean FALSE otherwise.
  */
 
-
 function check_name_exist($filePath)
 {
-	clearstatcache();
-	if (@chdir (dirname($filePath))) {
-	    $fileName = preg_match('!/([^/]+)$!', $filePath, $filename);
-    	if (file_exists($filename[1] )) {
-    		return true;
-	    } else {
-		    return false;
-	    }
-    } else {
-        return false; 
-    }
+        return file_exists($filePath);
 }
 
 
@@ -143,6 +132,7 @@ function removeDir($dirPath)
 
 	if (!@rmdir($dirPath)) // If PHP can not manage to remove the dir...
 	{
+                $cwd = getcwd();
 		chdir($dirPath);
 		$handle = opendir($dirPath) ;
 
@@ -163,6 +153,7 @@ function removeDir($dirPath)
 		}
 
 		closedir ($handle) ;
+                chdir($cwd);
 
 		if (isset($dirToRemove) and sizeof($dirToRemove) > 0)
 		{
@@ -682,5 +673,3 @@ function claro_mkdir($pathName, $mode = 0777, $recursive = false)
 }
 
 /* ----------- end of backported functions from Claroline 1.7.x ----------- */
-
-?>

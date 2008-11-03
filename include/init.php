@@ -172,6 +172,11 @@ if (isset($require_current_course) and $require_current_course) {
 			departmentUrlName, departmentUrl, visible
 		FROM cours WHERE cours.code='$currentCourse'");
 
+                if (!$result or mysql_num_rows($result) == 0) {
+                        header('Location: ' . $urlServer);
+                        exit;
+                }
+
 		while ($theCourse = mysql_fetch_array($result)) {
 			$fake_code = $theCourse["fake_code"];
 			$code_cours = $theCourse["code"];

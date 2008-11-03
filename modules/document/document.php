@@ -56,16 +56,18 @@ $helpTopic = 'Doc';
 
 // check for quotas
 mysql_select_db($mysqlMainDb);
-$d = mysql_fetch_array(mysql_query("SELECT doc_quota FROM cours WHERE code='$currentCourseID'"));
-$diskQuotaDocument = $d['doc_quota'];
+$d = mysql_fetch_row(mysql_query("SELECT doc_quota FROM cours WHERE code='$currentCourseID'"));
+$diskQuotaDocument = $d[0];
 mysql_select_db($currentCourseID);
+
+$basedir = $webDir . 'courses/' . $currentCourseID . '/document';
 
 // -------------------------
 // download action2
 // --------------------------
 if (@$action2=="download")
 {
-	$real_file = $webDir."/courses/".$currentCourseID."/document/".$id;
+	$real_file = $basedir . $id;
 	if (strpos($real_file, '/../') === FALSE) {
 		//fortwma tou pragmatikou onomatos tou arxeiou pou vrisketai apothikevmeno sth vash
 		$result = mysql_query ("SELECT filename FROM document WHERE path LIKE '%$id%'");
@@ -88,14 +90,9 @@ if($is_adminOfCourse)  {
 }
 
 // file manager basic variables definition
-$baseServDir = $webDir;
-$baseServUrl = $urlAppend."/";
-$courseDir = "courses/$currentCourseID/document";
-$baseWorkDir = $baseServDir.$courseDir;
-$diskUsed = dir_total_space($baseWorkDir);
-
+$diskUsed = dir_total_space($basedir);
 $local_head = '
-<script>
+<script type="text/javascript">
 function confirmation (name)
 {
     if (confirm("'.$langConfirmDelete.'" + name))
@@ -110,51 +107,53 @@ function confirmation (name)
 // actions to do before extracting file from zip archive
 function renameziparchivefile($p_event, &$p_header) {
 
-	global $dbTable, $file_comment, $file_category, $file_creator, $file_date, $file_subject,
-		$file_title, $file_description, $file_author, $file_format, $file_language, $file_copyrighted,
-		$currentCourseID, $uploadPath, $realFileSize;
+        global $dbTable, $file_comment, $file_category, $file_creator, $file_date, $file_subject,
+               $file_title, $file_description, $file_author, $file_format, $file_language, $file_copyrighted,
+               $currentCourseID, $uploadPath, $realFileSize;
 
-	$realFileSize += $p_header['size'];
-	$fileName = $p_header['stored_filename'];
-	/**** Check for no desired characters ***/
-	$fileName = replace_dangerous_char($fileName);
-	/*** Try to add an extension to files witout extension ***/
-	$fileName = add_ext_on_mime($fileName);
-	/*** Handle PHP files ***/
-	$fileName = php2phps($fileName);
-	//ypologismos onomatos arxeiou me date + time.
-	//to onoma afto tha xrhsimopoiei sto filesystem & tha apothikevetai ston pinaka documents
-	$safe_fileName = date("YmdGis").randomkeys("8").".".get_file_extention($fileName);
-	//prosthiki eggrafhs kai metadedomenwn gia to eggrafo sth vash
-	if ($uploadPath == ".")
-		$uploadPath2 = "/".$safe_fileName;
-	else
-		$uploadPath2 = $uploadPath."/".$safe_fileName;
-	//san file format vres to extension tou arxeiou
-	$file_format = get_file_extention($fileName);
-	//san date you arxeiou xrhsimopoihse thn shmerinh hm/nia
-	$file_date = date("Y\-m\-d G\:i\:s");
-	$query = "INSERT INTO ".$dbTable." SET
-		path = '".mysql_real_escape_string($uploadPath2)."',
-		filename = '".mysql_real_escape_string($fileName)."',
-		visibility = 'v',
-		comment = '".mysql_real_escape_string($file_comment)."',
-		category = '".mysql_real_escape_string($file_category)."',
-		title =	'".mysql_real_escape_string($file_title)."',
-		creator	= '".mysql_real_escape_string($file_creator)."',
-		date = '".mysql_real_escape_string($file_date)."',
-		date_modified = '".mysql_real_escape_string($file_date)."',
-		subject = '".mysql_real_escape_string($file_subject)."',
-		description = '".mysql_real_escape_string($file_description)."',
-		author = '".mysql_real_escape_string($file_author)."',
-		format = '".mysql_real_escape_string($file_format)."',
-		language = '".mysql_real_escape_string($file_language)."',
-		copyrighted = '".mysql_real_escape_string($file_copyrighted)."'";
-		db_query($query, $currentCourseID);
-	// file will be extracted with new encoded filename
-		$p_header['filename'] = $safe_fileName;
-return 1;
+        $realFileSize += $p_header['size'];
+        $fileName = $p_header['stored_filename'];
+        /**** Check for no desired characters ***/
+        $fileName = replace_dangerous_char($fileName);
+        /*** Try to add an extension to files witout extension ***/
+        $fileName = add_ext_on_mime($fileName);
+        /*** Handle PHP files ***/
+        $fileName = php2phps($fileName);
+        // ypologismos onomatos arxeiou me date + time.
+        // to onoma afto tha xrhsimopoiei sto filesystem & tha apothikevetai ston pinaka documents
+        $safe_fileName = date("YmdGis").randomkeys("8").".".get_file_extention($fileName);
+        // prosthiki eggrafhs kai metadedomenwn gia to eggrafo sth vash
+        if ($uploadPath == ".") {
+                $uploadPath2 = "/".$safe_fileName;
+        } else {
+                $uploadPath2 = $uploadPath."/".$safe_fileName;
+        }
+        // san file format vres to extension tou arxeiou
+        $file_format = get_file_extention($fileName);
+        // san date you arxeiou xrhsimopoihse thn shmerinh hm/nia
+        $file_date = date("Y\-m\-d G\:i\:s");
+        $query = "INSERT INTO ".$dbTable." SET
+                path = '".mysql_real_escape_string($uploadPath2)."',
+                     filename = '".mysql_real_escape_string($fileName)."',
+                     visibility = 'v',
+                     comment = '".mysql_real_escape_string($file_comment)."',
+                     category = '".mysql_real_escape_string($file_category)."',
+                     title =	'".mysql_real_escape_string($file_title)."',
+                     creator	= '".mysql_real_escape_string($file_creator)."',
+                     date = '".mysql_real_escape_string($file_date)."',
+                     date_modified = '".mysql_real_escape_string($file_date)."',
+                     subject = '".mysql_real_escape_string($file_subject)."',
+                     description = '".mysql_real_escape_string($file_description)."',
+                     author = '".mysql_real_escape_string($file_author)."',
+                     format = '".mysql_real_escape_string($file_format)."',
+                     language = '".mysql_real_escape_string($file_language)."',
+                     copyrighted = '".mysql_real_escape_string($file_copyrighted)."'";
+        db_query($query, $currentCourseID);
+        // file will be extracted with new encoded filename
+        $p_header['filename'] = $safe_fileName;
+        return 1;
 }
+
 
 /*** clean information submited by the user from antislash ***/
 stripSubmitValue($_POST);
@@ -177,7 +176,7 @@ if($is_adminOfCourse)
 	if (is_uploaded_file(@$userFile))
 	{
 		// check for disk quotas
-		$diskUsed = dir_total_space($baseWorkDir);
+		$diskUsed = dir_total_space($basedir);
 		if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaDocument) {
 			$dialogBox .= $langNoSpace;
 		}
@@ -251,7 +250,7 @@ if($is_adminOfCourse)
 				db_query($query, $currentCourseID);
 
 				/*** Copy the file to the desired destination ***/
-				copy ($userFile, $baseWorkDir.$uploadPath."/".$safe_fileName);
+				copy ($userFile, $basedir.$uploadPath."/".$safe_fileName);
 				@$dialogBox .= "<p class=\"success_small\">$langDownloadEnd</p><br />";
 			} // end else tou if(!empty($row['filename']))
 		} // end else
@@ -266,9 +265,9 @@ if($is_adminOfCourse)
 	if (isset($moveTo))
 	{
 		//elegxos ean source kai destintation einai to idio
-		if($baseWorkDir."/".$source != $baseWorkDir.$moveTo || $baseWorkDir.$source != $baseWorkDir.$moveTo)
+		if($basedir . $source != $basedir . $moveTo || $basedir . $source != $basedir . $moveTo)
 		{
-			if (move($baseWorkDir.$source,$baseWorkDir.$moveTo)) {
+			if (move($basedir . $source, $basedir . $moveTo)) {
 				update_db_info("document", "update", $source, $moveTo."/".my_basename($source));
 				$dialogBox = "<p class=\"success_small\">$langDirMv</p><br />";
 			}
@@ -291,14 +290,14 @@ if($is_adminOfCourse)
 		$result = mysql_query ("SELECT * FROM $dbTable WHERE path=\"".$move."\"");
 		$res = mysql_fetch_array($result);
 		$moveFileNameAlias = $res['filename'];
-		@$dialogBox .= form_dir_list_exclude($dbTable, "source", $move, "moveTo", $baseWorkDir, $move);
+		@$dialogBox .= form_dir_list_exclude($dbTable, "source", $move, "moveTo", $basedir, $move);
 	}
 
 	/**************************************
 	DELETE FILE OR DIRECTORY
 	**************************************/
 	if (isset($delete)) {
-		if (my_delete($baseWorkDir.$delete)) {
+		if (my_delete($basedir . $delete)) {
 			update_db_info("document", "delete", $delete);
 			$dialogBox = "<p class=\"success_small\">$langDocDeleted</p><br />";
 		}
@@ -349,7 +348,7 @@ if($is_adminOfCourse)
                 	$dialogBox .= "<p class=\"caution_small\">$langFileExists</p><br />";
         	} else {
 			$safe_dirName = date("YmdGis").randomkeys("8");
-			mkdir($baseWorkDir.$newDirPath."/".$safe_dirName, 0775);
+			mkdir($basedir . $newDirPath . '/' . $safe_dirName, 0775);
 			$query =  "INSERT INTO ".$dbTable." SET
     				path=\"".$newDirPath."/".$safe_dirName."\",
     				filename=\"".$newDirName."\",
@@ -527,7 +526,7 @@ if($is_adminOfCourse)
 		else
 			$newVisibilityStatus = "i";
 		// enallagh ths timhs sto pedio visibility tou pinaka document
-		mysql_query ("UPDATE $dbTable SET visibility='".$newVisibilityStatus."' WHERE path LIKE '%".$visibilityPath."%'");
+		mysql_query ("UPDATE $dbTable SET visibility='".$newVisibilityStatus."' WHERE path = '$visibilityPath'");
 		$dialogBox = "<p class=\"success_small\">$langViMod</p><br />";
 	}
 } // teacher only
@@ -547,88 +546,37 @@ else
 	$curDirPath="";
 }
 
-// The strpos($curDirPath, "..") prevent malicious users to go to the root directory
-if ($curDirPath == "/" || $curDirPath == "\\" || strpos($curDirPath, ".."))
-{
-	$curDirPath =""; // manage the root directory problem
+if ($curDirPath == '/') {
+        $curDirPath = '';
 }
-
 $curDirName = my_basename($curDirPath);
 $parentDir = dirname($curDirPath);
 
-if ($parentDir == "/" || $parentDir == "\\")
-{
-	$parentDir =""; // manage the root directory problem
+if (strpos($curDirName, '/../') !== false or
+    !is_dir(realpath($basedir . $curDirPath))) {
+	$tool_content .=  $langInvalidDir;
+        draw($tool_content, 2, 'document');
+        exit;
 }
 
-// Read current Directory content
-// Searching files and directories info in database
-
-/*** Search infos in the DB about the current directory the user is in ***/
+/*** Retrieve file info for current directory from database and disk ***/
 $result = db_query("SELECT * FROM $dbTable
     	WHERE path LIKE '$curDirPath/%'
         AND path NOT LIKE '$curDirPath/%/%'");
 
-while($row = mysql_fetch_array($result, MYSQL_ASSOC))
-{
-	$attribute['path'][] = $row['path'];
-	$attribute['visibility'][] = $row['visibility'];
-	$attribute['comment'][] = $row['comment'];
+$fileinfo = array();
+while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+        $fileinfo[] = array(
+                'is_dir' => is_dir($basedir . $row['path']),
+                'size' => filesize($basedir . $row['path']),
+                'filename' => $row['filename'],
+                'path' => $row['path'],
+                'visible' => ($row['visibility'] == 'v'),
+                'comment' => $row['comment'],
+                'copyrighted' => $row['copyrighted'],
+                'date' => strtotime($row['date_modified']));
 }
 
-// load Files and directories into arrays
-if (@chdir(realpath($baseWorkDir.$curDirPath))) {
-	$handle = opendir(".");
-	while ($file = readdir($handle))
-	{
-		if ($file == "." || $file == "..")
-		{
-			continue;                       // Skip current and parent directories
-		}
-		if(is_dir($file)) {
-			$dirNameList[] = $file;
-			/*** Make the correspondance between info given by the file system and info given by the DB ***/
-			$keyDir = sizeof($dirNameList)-1;
-			if (isset($attribute))
-			{
-				$keyAttribute = array_search($curDirPath."/".$file, $attribute['path']);
-				if ($keyAttribute !== false)
-				{
-					$dirCommentList[$keyDir] = $attribute['comment'][$keyAttribute];
-					$dirVisibilityList[$keyDir] = $attribute['visibility'][$keyAttribute];
-				}
-			}
-		}
-		if(is_file($file)) {
-			$fileNameList[] = $file;
-			$fileSizeList[] = filesize($file);
-			$fileDateList[] = filemtime($file);
-			/*** Make the correspondance between info given by the file system and info given by the DB ***/
-			$keyFile = sizeof($fileNameList)-1;
-			if (isset($attribute))
-			{
-				$keyAttribute = array_search($curDirPath."/".$file, $attribute['path']);
-				if ($keyAttribute !== false)
-				{
-					$fileCommentList[$keyFile] = $attribute['comment'][$keyAttribute];
-					$fileVisibilityList[$keyFile] = $attribute['visibility'][$keyAttribute];
-				}
-			}
-		}
-	} // end while ($file = readdir($handle))
-	closedir($handle);
-	unset($attribute);
-	/*** Sort alphabetically ***/
-	if (isset($dirNameList)) {
-		asort($dirNameList);
-	}
-	if (isset($fileNameList)) {
-		asort($fileNameList);
-	}
-
-} else {
-	$tool_content .=  $langInvalidDir;
-}
 // end of common to teachers and students
 
 // ----------------------------------------------
@@ -649,9 +597,9 @@ if($is_adminOfCourse) {
 	/*----------------------------------------
 	Create new folder
 	--------------------------------------*/
-	$tool_content .= "\n      <li><a href=\"$_SERVER[PHP_SELF]?createDir=".$cmdCurDirPath."\">$langCreateDir</small></a></li>";
+	$tool_content .= "\n      <li><a href=\"$_SERVER[PHP_SELF]?createDir=".$cmdCurDirPath."\">$langCreateDir</a></li>";
 	$diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
-	$tool_content .= "\n      <li><a href=\"showquota.php?diskQuotaDocument=$diskQuotaDocument&diskUsed=$diskUsed\">$langQuotaBar</a></li>";
+	$tool_content .= "\n      <li><a href=\"showquota.php?diskQuotaDocument=$diskQuotaDocument&amp;diskUsed=$diskUsed\">$langQuotaBar</a></li>";
     $tool_content .= "\n    </ul>\n  </div>\n";
 
 	// Dialog Box
@@ -674,201 +622,129 @@ if (mysql_num_rows($sql) == 0) {
 	// Current Directory Line
 	$tool_content .= "\n<br /><div class=\"fileman\">";
 	$tool_content .= "\n  <table width=\"99%\" align='left' class=\"Documents\">";
-    $tool_content .= "\n  <tbody>";
+        $tool_content .= "\n  <tbody>";
 
-	   if($is_adminOfCourse) {
-		  $cols = 4;
-	   } else {
-		  $cols = 3;
-	   }
+        if ($is_adminOfCourse) {
+                $cols = 4;
+        } else {
+                $cols = 3;
+        }
 
 	$tool_content .= "\n  <tr>";
-    $tool_content .= "\n    <th height='18' colspan='$cols'><div align=\"left\">$langDirectory: ".make_clickable_path($dbTable, $curDirPath). "</div></th>";
-	$tool_content .= "\n    <th><div align='right'>";
+        $tool_content .= "\n    <th height='18' colspan='$cols'><div align=\"left\">$langDirectory: ".make_clickable_path($dbTable, $curDirPath). "</div></th>";
+        $tool_content .= "\n    <th><div align='right'>";
 
 	/*** go to parent directory ***/
-	if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
-	{
-   	    $tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdParentDir."\">$langUp</a>\n";
-   	    $tool_content .=  "<img src=\"../../template/classic/img/parent.gif\" border=0 align=\"absmiddle\" height='20' width='20'>";
-	}
-	$tool_content .= "</div></th>";
-    $tool_content .= "\n  </tr>";
-	$tool_content .= "\n  <tr>";
-    $tool_content .= "\n    <td width=\"1%\" class=\"DocHead\"><b><div align=\"center\">".$m['type']."</div></b></td>";
-	$tool_content .= "\n    <td class=\"DocHead\"><b><div align=\"left\">$langName</div></b></td>";
-	$tool_content .= "\n    <td width='15%' class=\"DocHead\"><b><div align=\"center\">$langSize</div></b></td>";
-	$tool_content .= "\n    <td width='15%' class=\"DocHead\"><b><div align=\"center\">$langDate</div></b></td>";
+        if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
+        {
+                $parentlink = $_SERVER['PHP_SELF'] . '?openDir=' .$cmdParentDir;
+                $tool_content .=  "<a href='$parentlink'>$langUp</a> <a href='$parentlink'><img src='../../template/classic/img/parent.gif' border='0' align='absmiddle' height='20' width='20' /></a>";
+        }
+        $tool_content .= "</div></th>";
+        $tool_content .= "\n  </tr>";
+        $tool_content .= "\n  <tr>";
+        $tool_content .= "\n    <td width='1%' class='DocHead'><div align='center'><b>$m[type]</b></div></td>";
+        $tool_content .= "\n    <td class='DocHead'><div align='left'><b>$langName</b></div></td>";
+        $tool_content .= "\n    <td width='15%' class='DocHead'><div align='center'><b>$langSize</b></div></td>";
+        $tool_content .= "\n    <td width='15%' class='DocHead'><div align='center'><b>$langDate</b></div></td>";
 	if($is_adminOfCourse) {
-		$tool_content .= "\n    <td width='20%' class=\"DocHead\"><b><div align=\"center\">$langCommands</div></b></td>";
+		$tool_content .= "\n    <td width='20%' class='DocHead'><div align='center'><b>$langCommands</b></div></td>";
 	}
 	$tool_content .= "\n  </tr>";
-	//$tool_content .= "\n  </thead>";
-	//$tool_content .= "\n  </tbody>";
 
-// ---------------------------------
-// Display Directories
-// ---------------------------------
-	if (isset($dirNameList))
-	{
-		while (list($dirKey, $dirName) = each($dirNameList)) {
-			$result = db_query("SELECT filename FROM document WHERE path LIKE '%$dirName'");
-			$row = mysql_fetch_array($result);
-			$dspDirName = $row['filename'];
-			$cmdDirName = rawurlencode($curDirPath."/".$dirName);
-			if (@$dirVisibilityList[$dirKey] == "i") {
-				$style=" class=\"invisible\"";
-				$style2 = " class=\"invisible_doc\"";
-			} else {
-				$style="";
-				$style2="";
-			}
-		// do not display invisible directories to students
-			if ((@$dirVisibilityList[$dirKey] == "i")  and (!$is_adminOfCourse)) {
-				continue;
-			}
-			$tool_content .=  "\n  <tr $style2>";
-			$tool_content .=  "\n    <td width='1%' valign=\"top\" style=\"padding-top: 7px;\"><a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style."><img src=\"../../template/classic/img/folder.gif\" border=0></a></td>";
-			$tool_content .=  "\n    <td><div align=\"left\">";
-			$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?openDir=".$cmdDirName."\"".$style.">";
-			$tool_content .=  $dspDirName."";
-			$tool_content .=  "</a>";
-			/*** comments ***/
-			if (@$dirCommentList[$dirKey] != "")
-			{
-				$dirCommentList[$dirKey] = htmlspecialchars($dirCommentList[$dirKey]);
-				$dirCommentList[$dirKey] = nl2br($dirCommentList[$dirKey]);
-				$tool_content .=  "<br /><span class=\"comment\">";
-				$tool_content .=  " (".$dirCommentList[$dirKey].")";
-				$tool_content .=  "</span>\n";
-			}
-			/*** skip display date and time ***/
-			$tool_content .=  "</div></td>";
-			$tool_content .=  "\n    <td>&nbsp;</td>";
-			$tool_content .=  "\n    <td>&nbsp;</td>";
-			if($is_adminOfCourse) {
-				/*** delete command ***/
-				@$tool_content .=  "\n    <td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdDirName."\" onClick=\"return confirmation('".addslashes($dspDirName)."');\">";
-                $tool_content .=  "<img src=\"../../template/classic/img/delete.gif\" border=0 title=\"$langDelete\"></a>&nbsp;";
-				/*** copy command ***/
-				$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?move=".$cmdDirName."\">";
-                $tool_content .=  "<img src=\"../../template/classic/img/move_doc.gif\" border=0 title=\"$langMove\"></a>&nbsp;";
-				/*** rename command ***/
-				$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?rename=".$cmdDirName."\">";
-                $tool_content .=  "<img src=\"../../template/classic/img/edit.gif\" border=0 title=\"$langRename\"></a>&nbsp;";
-				/*** comment command ***/
-				$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?comment=".$cmdDirName."\">";
-                $tool_content .=  "<img src=\"../../template/classic/img/information.gif\" border=0 title=\"$langComment\"></a>&nbsp;";
-				/*** visibility command ***/
-				if (@$dirVisibilityList[$dirKey] == "i") {
-					$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?mkVisibl=".$cmdDirName."\">";
-                    $tool_content .=  "<img src=\"../../template/classic/img/invisible.gif\" border=0 title=\"$langVisible\"></a>";
-				}
-				else {
-					$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?mkInvisibl=".$cmdDirName."\">";
-                    $tool_content .=  "<img src=\"../../template/classic/img/visible.gif\" border=0 title=\"$langVisible\"></a>";
-				}
-				$tool_content .=  "</td>";
-			    $tool_content .=  "\n  </tr>";
-			}
-		}
-	}
+        // Find real file path
+        if (empty($curDirPath)) {
+                $dirname = '';
+        } else {
+                $components = split('/', $curDirPath);
+                array_shift($components);
+                $partial_path = '';
+                $dirname = '';
+                foreach ($components as $c) {
+                        $partial_path .= '/' . $c;
+                        $q = db_query("SELECT filename FROM document WHERE path = '$partial_path'");
+                        $r = mysql_fetch_row($q);
+                        $dirname .= '/' . str_replace('/', '//', $r[0]);
+                }
+        }
 
-	// ------------------------------
-	//       Display Files
-	// ------------------------------
-	if (isset($fileNameList)) {
-                if (empty($curDirPath)) {
-                        $dirname = '';
-                } else {
-                        $components = split('/', $curDirPath);
-                        array_shift($components);
-                        $partial_path = '';
-                        $dirname = '';
-                        foreach ($components as $c) {
-                                $partial_path .= '/' . $c;
-                                $q = db_query("SELECT filename FROM document WHERE path = '$partial_path'");
-                                $r = mysql_fetch_row($q);
-                                $dirname .= '/' . $r[0];
+        // -------------------------------------
+        // Display directories first, then files
+        // -------------------------------------
+        foreach (array(true, false) as $is_dir) {
+                foreach ($fileinfo as $entry) {
+                        if (($entry['is_dir'] != $is_dir) or
+                                        (!$is_adminOfCourse and !$entry['visible'])) {
+                                continue;
+                        }
+                        $cmdDirName = $entry['path'];
+                        if ($entry['visible']) {
+                                $style = $style2 = '';
+                        } else {
+                                $style = ' class="invisible"';
+                                $style2 = ' class="invisible_doc"';
+                        }
+                        $copyright_icon = '';
+                        if ($is_dir) {
+                                $image = '../../template/classic/img/folder.gif';
+                                $file_url = "$_SERVER[PHP_SELF]?openDir=$cmdDirName";
+                                $link_extra = '';
+                        } else {
+                                $image = 'img/' . choose_image($entry['filename']);
+                                $file_url = "file.php/$currentCourseID$dirname/" .
+                                        str_replace('/', '//', $entry['filename']);
+                                $link_extra = " title='$langSave' target='_blank'";
+                                if ($entry['copyrighted']) {
+                                        $copyright_icon = " <img src='./img/copyrighted.jpg' align='absmiddle' border='0' />";
+                                }
+                        }
+                        $tool_content .= "\n  <tr$style2>";
+                        $tool_content .= "\n    <td width='1%' valign='top' style='padding-top: 7px;'><a href='$file_url'$style$link_extra><img src='$image' border='0' /></a></td>";
+                        $tool_content .= "\n    <td><div align='left'><a href='$file_url'$style$link_extra>" . $entry['filename'] . $copyright_icon . '</a>';
+
+                        /*** comments ***/
+                        if (!empty($entry['comments'])) {
+                                $tool_content .= "<br /><span class='comment'>(" .
+                                        nl2br(htmlspecialchars($entry['comments'])) .
+                                        ")</span>\n";
+                        }
+                        $tool_content .= "</div></td>\n";
+                        if ($is_dir) {
+                                // skip display date and time for directories
+                                $tool_content .= "<td>&nbsp;</td><td>&nbsp;</td>";
+                        } else {
+                                $size = format_file_size($entry['size']);
+                                $date = format_date($entry['date']);
+                                $tool_content .= "<td>$size</td><td>$date</td>";
+                        }
+                        if ($is_adminOfCourse) {
+                                /*** delete command ***/
+                                $tool_content .= "\n    <td><a href='$_SERVER[PHP_SELF]?delete=$cmdDirName' onClick=\"return confirmation('".addslashes($entry['filename'])."');\">";
+                                $tool_content .= "<img src='../../template/classic/img/delete.gif' border='0' title='$langDelete' /></a>&nbsp;";
+                                /*** copy command ***/
+                                $tool_content .= "<a href='$_SERVER[PHP_SELF]?move=$cmdDirName'>";
+                                $tool_content .= "<img src='../../template/classic/img/move_doc.gif' border='0' title='$langMove' /></a>&nbsp;";
+                                /*** rename command ***/
+                                $tool_content .=  "<a href='$_SERVER[PHP_SELF]?rename=$cmdDirName'>";
+                                $tool_content .=  "<img src='../../template/classic/img/edit.gif' border='0' title='$langRename' /></a>&nbsp;";
+                                /*** comment command ***/
+                                $tool_content .= "<a href='$_SERVER[PHP_SELF]?comment=$cmdDirName'>";
+                                $tool_content .= "<img src='../../template/classic/img/information.gif' border='0' title='$langComment' /></a>&nbsp;";
+                                /*** visibility command ***/
+                                if ($entry['visible']) {
+                                        $tool_content .= "<a href='$_SERVER[PHP_SELF]?mkInvisibl=$cmdDirName'>";
+                                        $tool_content .= "<img src='../../template/classic/img/visible.gif' border='0' title='$langVisible' /></a>";
+                                } else {
+                                        $tool_content .= "<a href='$_SERVER[PHP_SELF]?mkVisibl=$cmdDirName'>";
+                                        $tool_content .= "<img src='../../template/classic/img/invisible.gif' border='0' title='$langVisible' /></a>";
+                                }
+                                $tool_content .= "</td>";
+                                $tool_content .= "\n  </tr>";
                         }
                 }
-		while (list($fileKey, $fileName) = each ($fileNameList)) {
-			$image = choose_image($fileName);
-			$size = format_file_size($fileSizeList[$fileKey]);
-			$date = format_date($fileDateList[$fileKey]);
-			$urlFileName = format_url($baseServUrl.$courseDir.$curDirPath."/".$fileName);
-			$cmdFileName = rawurlencode($curDirPath."/".$fileName);
-			$dspFileName = htmlspecialchars($fileName);
-			if (@$fileVisibilityList[$fileKey] == "i") {
-				$style2=" class='invisible_doc'";
-			} else {
-				$style2="";
-			}
-			// do not display invisible files to students
-			if ((@$fileVisibilityList[$fileKey] == "i")  and (!$is_adminOfCourse)) {
-				continue;
-			}
-			$query = "SELECT * FROM document
-                                  WHERE path = '$curDirPath/$fileName'";
-			$result = db_query($query);
-			$row = mysql_fetch_array($result);
-                        $file_url = "file.php/$currentCourseID$dirname/$row[filename]";
-			$tool_content .=  "<tr$style2>";
-			$tool_content .=  "  <td width='1%' valign='top' style='padding-top: 7px;'><div align='center'>";
-            $tool_content .=  "<a href='$file_url' title='$langSave' target='_blank'><img src='img/$image' align='absmiddle' border='0'></a>";
-			$tool_content .=  "</div></td>";
-            $tool_content .=  "\n    <td>";
-			$tool_content .=  "<div align=\"left\"><a href='$file_url' title='$langSave' target='_blank'>$row[filename]";
-			if ($row['copyrighted'] == '1')
-				$tool_content .= " <img src='./img/copyrighted.jpg' align='absmiddle' border='0'>";
-			$tool_content .= "</a>";
-			/*** comments ***/
-			if (@$fileCommentList[$fileKey] != "")
-			{
-				$fileCommentList[$fileKey] = htmlspecialchars($fileCommentList[$fileKey]);
-				$fileCommentList[$fileKey] = nl2br($fileCommentList[$fileKey]);
-				$tool_content .=  "&nbsp;<br /><span class=\"comment\">";
-				$tool_content .=  " (".$fileCommentList[$fileKey].")";
-				$tool_content .=  "</span>";
-			}
-			$tool_content .=  "</div></td>";
-			/*** size ***/
-			$tool_content .=  "\n    <td>".$size."</td>";
-			/*** date ***/
-			$tool_content .=  "\n    <td>".$date."</td>";
-			if($is_adminOfCourse) {
-				/*** delete command ***/
-				$tool_content .=  "\n    <td><a href=\"$_SERVER[PHP_SELF]?delete=".$cmdFileName."\" onClick=\"return confirmation('".addslashes($row["filename"])."');\">";
-                $tool_content .=  "<img src=\"../../template/classic/img/delete.gif\" border=0  title=\"$langDelete\"></a>&nbsp;";
-				/*** copy command ***/
-				$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?move=".$cmdFileName."\">";
-                $tool_content .=  "<img src=\"../../template/classic/img/move_doc.gif\" border=0  title=\"$langMove\"></a>&nbsp;";
-				/*** rename command ***/
-				$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?rename=".$cmdFileName."\">";
-                $tool_content .=  "<img src=\"../../template/classic/img/edit.gif\" border=0  title=\"$langRename\"></a>&nbsp;";
-				/*** comment command ***/
-				$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?comment=".$cmdFileName."\">";
-                $tool_content .=  "<img src=\"../../template/classic/img/information.gif\" border=0  title=\"$langComment\"></a>&nbsp;";
-				/*** visibility command ***/
-				if (@$fileVisibilityList[$fileKey] == "i")
-				{
-					$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?mkVisibl=".$cmdFileName."\">";
-                    $tool_content .=  "<img src=\"../../template/classic/img/invisible.gif\" border=0  title=\"$langVisible\"></a>";
-				} else {
-					$tool_content .=  "<a href=\"$_SERVER[PHP_SELF]?mkInvisibl=".$cmdFileName."\">";
-                    $tool_content .=  "<img src=\"../../template/classic/img/visible.gif\" border=0  title=\"$langVisible\"></a>";
-				}
-				$tool_content .=  "</td>";
-                $tool_content .=  "\n  </tr>";
-			}
-		}
-	}
-    $tool_content .=  "\n  </tbody>";
-    $tool_content .=  "\n  </table>";
-    $tool_content .=  "\n</div>";
+        }
+        $tool_content .=  "\n  </tbody>";
+        $tool_content .=  "\n  </table>";
+        $tool_content .=  "\n</div>";
 }
-$tmp_cwd = getcwd();
-chdir($baseServDir."/modules/document/");
 draw($tool_content, 2, "document", $local_head);
-chdir($tmp_cwd);
-?>

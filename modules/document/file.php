@@ -32,9 +32,10 @@ file.php
 
 session_start();
 
-$path_components = split('/', strstr($_SERVER['REQUEST_URI'], 'file.php/'));
+$uri = str_replace('//', chr(1), strstr($_SERVER['REQUEST_URI'], 'file.php/'));
+$path_components = split('/', $uri);
 array_shift($path_components);
-$dbname = array_shift($path_components);
+$dbname = mysql_real_escape_string(array_shift($path_components));
 session_register("dbname");
 
 $require_current_course = true;
@@ -54,7 +55,7 @@ $basedir = "{$webDir}courses/$dbname/document";
 $depth = 1;
 $path = '';
 foreach ($path_components as $component) {
-        $component = urldecode($component);
+        $component = urldecode(str_replace(chr(1), '/', $component));
         $q = db_query("SELECT path, visibility,
                               (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
                        FROM document WHERE filename = " . quote($component) .
@@ -67,4 +68,8 @@ if ($r['visibility'] != 'v' and !$is_adminOfCourse) {
         session_write_close();
         header("Location: $urlServer" );
 }
-send_file_to_client($basedir . $r['path'], $component, true);
+if (file_exists($basedir . $r['path'])) {
+        send_file_to_client($basedir . $r['path'], $component, true);
+} else {
+        header('Location: ', $urlServer);
+}
