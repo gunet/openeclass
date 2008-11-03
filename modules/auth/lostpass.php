@@ -169,7 +169,7 @@ $tool_content = "<table width=\"99%\">
 	/***** If valid e-mail address was entered, find user and send email *****/
 	$res = db_query("SELECT user_id, nom, prenom, username, password, statut FROM user
 				WHERE email = '" . mysql_escape_string($email) . "'
-				AND username = '" . mysql_escape_string($userName) . "'", $mysqlMainDb);
+				AND BINARY username = '" . mysql_escape_string($userName) . "'", $mysqlMainDb);
 
 	if (mysql_num_rows($res) == 1) {
 		$text = $langPassResetIntro. $emailhelpdesk;

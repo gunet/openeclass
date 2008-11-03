@@ -27,6 +27,7 @@
 
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
+include '../../include/sendMail.inc.php';
 $nameTools = $langProfReg;
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 
@@ -89,7 +90,28 @@ if($submit) {
 	  	$rid = intval($_POST['rid']);
   	  	db_query("UPDATE prof_request set status = '2',date_closed = NOW() WHERE rid = '$rid'");
 	       	$tool_content .= "<p class=\"success_small\">$profsuccess</p><br><br><p align=\"right\"><a href='../admin/listreq.php'>$langBackReq</a></p>";
+		
+		// send email
+		$emailsubject = "$langYourReg $siteName $langAsProf";
+		
+$emailbody = "
+$langDestination $prenom_form $nom_form
+
+$langYouAreReg $siteName $langAsProf, $langSettings $uname
+$langPass : $password
+$langAddress $siteName $langIs: $urlServer
+$langProblem
+
+$administratorName $administratorSurname
+$langManager $siteName
+$langTel $telephone
+$langEmail : $emailAdministrator
+";
+		
+		send_mail($siteName, $emailAdministrator, '', $email_form, $emailsubject, $emailbody, $charset);
+
 		}
+
 } else {
 
 // if not submit then display the form

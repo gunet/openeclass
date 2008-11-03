@@ -153,6 +153,7 @@ if (count($registration_errors) == 0) {    // registration is ok
       $surname = $nom_form;
       $name = $prenom_form;
 
+
 	mysql_select_db($mysqlMainDb,$db);
       $sql = "INSERT INTO prof_request(profname,profsurname,profuname, profemail,proftmima,profcomm,status,date_open,comment, lang) VALUES(
       '$name','$surname','$username','$usermail','$department','$userphone','1',NOW(),'$usercomment','$lang')";
