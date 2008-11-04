@@ -153,14 +153,19 @@ $tool_content .= "
     </tr>
     <tr>
       <th class='left'>".$langDepartment.":</th>
-      <td><select name=\"department\" class=\"auth_input\">";
-        $deps=mysql_query("SELECT name FROM faculte order by id");
-        while ($dep = mysql_fetch_array($deps))
-        {
-        	$tool_content .= "<option value=\"$dep[0]\">$dep[0]</option>\n";
-        }
-        $tool_content .= "</select>
-      </td>
+      <td>";
+
+	$dep = array();
+        $deps = db_query("SELECT name FROM faculte order by id");
+  	while ($n = mysql_fetch_array($deps))
+    	$dep[$n[0]] = $n['name'];
+
+  	if (isset($pt))
+    		$tool_content .= selection ($dep, 'department', $pt);
+  	else
+    		$tool_content .= selection ($dep, 'department');
+
+      $tool_content .= "</td>
     </tr>
 	<tr>
       <th class='left'>$langLanguage</th>
