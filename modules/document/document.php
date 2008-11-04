@@ -664,7 +664,7 @@ if (mysql_num_rows($sql) == 0) {
                 }
                 if ($sort == $this_sort) {
                         $this_reverse = !$reverse;
-                        $indicator = $reverse? ' &#9652;': ' &#9662;';
+                        $indicator = $reverse? ' &#8593;': ' &#8595;';
                 } else {
                         $this_reverse = $reverse;
                         $indicator = '';
@@ -683,7 +683,7 @@ if (mysql_num_rows($sql) == 0) {
         $tool_content .= "</div></th>";
         $tool_content .= "\n  </tr>";
         $tool_content .= "\n  <tr>";
-        $tool_content .= "\n    <td width='10%' class='DocHead'><div align='center'><b>" .
+        $tool_content .= "\n    <td width='15%' class='DocHead'><div align='center'><b>" .
                          headlink($m['type'], 'type') . '</b></div></td>';
         $tool_content .= "\n    <td class='DocHead'><div align='left'><b>" .
                          headlink($langName, 'name') . '</b></div></td>';
