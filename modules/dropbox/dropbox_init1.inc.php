@@ -93,6 +93,10 @@ $dropbox_cnf["courseUserTbl"] = "cours_user";
  */
 $dropbox_cnf["courseId"] = $currentCourseID;
 $dropbox_cnf["sysPath"] = $webDir."courses/".$currentCourseID."/dropbox"; //path to dropbox subdir in course containing the uploaded files
+if (!is_dir($dropbox_cnf["sysPath"])) {
+	mkdir($dropbox_cnf["sysPath"]);
+} 
+	
 // get dropbox quotas from database
 $d = mysql_fetch_array(db_query("SELECT dropbox_quota FROM `".$mysqlMainDb."`.`cours` WHERE code='$currentCourseID'"));
 $diskQuotaDropbox = $d['dropbox_quota'];
