@@ -56,7 +56,7 @@ $depth = 1;
 $path = '';
 foreach ($path_components as $component) {
         $component = urldecode(str_replace(chr(1), '/', $component));
-        $q = db_query("SELECT path, visibility,
+        $q = db_query("SELECT path, visibility, format,
                               (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
                        FROM document WHERE filename = " . quote($component) .
                        " AND path LIKE '$path%' HAVING depth = $depth");
@@ -67,6 +67,9 @@ if ($r['visibility'] != 'v' and !$is_adminOfCourse) {
         $_SESSION['errMessage'] = $l_noread;
         session_write_close();
         header("Location: $urlServer" );
+}
+if (!preg_match("/\.$r[format]$/", $component)) {
+        $component .= '.' . $r['format'];
 }
 if (file_exists($basedir . $r['path'])) {
         send_file_to_client($basedir . $r['path'], $component, true);

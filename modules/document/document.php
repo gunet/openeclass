@@ -587,6 +587,7 @@ while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 'is_dir' => is_dir($basedir . $row['path']),
                 'size' => filesize($basedir . $row['path']),
                 'filename' => $row['filename'],
+                'format' => $row['format'],
                 'path' => $row['path'],
                 'visible' => ($row['visibility'] == 'v'),
                 'comment' => $row['comment'],
@@ -732,7 +733,7 @@ if (mysql_num_rows($sql) == 0) {
                                 $file_url = "$_SERVER[PHP_SELF]?openDir=$cmdDirName";
                                 $link_extra = '';
                         } else {
-                                $image = 'img/' . choose_image($entry['filename']);
+                                $image = 'img/' . choose_image('.' . $entry['format']);
                                 $file_url = htmlspecialchars("file.php/$currentCourseID$dirname/" .
                                         str_replace('/', '//', $entry['filename']), ENT_QUOTES);
                                 $link_extra = " title='$langSave' target='_blank'";
