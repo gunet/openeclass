@@ -559,10 +559,27 @@ if (strpos($curDirName, '/../') !== false or
         exit;
 }
 
+$order = 'ORDER BY filename';
+$sort = 'name';
+$reverse = false;
+if (isset($_GET['sort'])) {
+        if ($_GET['sort'] == 'type') {
+                $order = 'ORDER BY format';
+                $sort = 'type';
+        } elseif ($_GET['sort'] == 'date') {
+                $order = 'ORDER BY date_modified';
+                $sort = 'date';
+        }
+}
+if (isset($_GET['rev'])) {
+        $order .= ' DESC';
+        $reverse = true;
+}
+
 /*** Retrieve file info for current directory from database and disk ***/
 $result = db_query("SELECT * FROM $dbTable
     	WHERE path LIKE '$curDirPath/%'
-        AND path NOT LIKE '$curDirPath/%/%'");
+        AND path NOT LIKE '$curDirPath/%/%' $order");
 
 $fileinfo = array();
 while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
@@ -634,19 +651,44 @@ if (mysql_num_rows($sql) == 0) {
         $tool_content .= "\n    <th height='18' colspan='$cols'><div align=\"left\">$langDirectory: ".make_clickable_path($dbTable, $curDirPath). "</div></th>";
         $tool_content .= "\n    <th><div align='right'>";
 
+        // Link for sortable table headings
+        function headlink($label, $this_sort)
+        {
+                global $sort, $reverse, $curDirPath;
+
+                if (empty($curDirPath)) {
+                        $path = '/';
+                } else {
+                        $path = $curDirPath;
+                }
+                if ($sort == $this_sort) {
+                        $this_reverse = !$reverse;
+                        $indicator = $reverse? ' &#9652;': ' &#9662;';
+                } else {
+                        $this_reverse = $reverse;
+                        $indicator = '';
+                }
+                return '<a href=\'' . $_SERVER['PHP_SELF'] . '?openDir=' . $path .
+                       '&amp;sort=' . $this_sort . ($this_reverse? '&amp;rev=1': '') .
+                       '\'>' . $label . $indicator . '</a>';
+        }
+
 	/*** go to parent directory ***/
         if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
         {
-                $parentlink = $_SERVER['PHP_SELF'] . '?openDir=' .$cmdParentDir;
+                $parentlink = $_SERVER['PHP_SELF'] . '?openDir=' . $cmdParentDir;
                 $tool_content .=  "<a href='$parentlink'>$langUp</a> <a href='$parentlink'><img src='../../template/classic/img/parent.gif' border='0' align='absmiddle' height='20' width='20' /></a>";
         }
         $tool_content .= "</div></th>";
         $tool_content .= "\n  </tr>";
         $tool_content .= "\n  <tr>";
-        $tool_content .= "\n    <td width='1%' class='DocHead'><div align='center'><b>$m[type]</b></div></td>";
-        $tool_content .= "\n    <td class='DocHead'><div align='left'><b>$langName</b></div></td>";
+        $tool_content .= "\n    <td width='10%' class='DocHead'><div align='center'><b>" .
+                         headlink($m['type'], 'type') . '</b></div></td>';
+        $tool_content .= "\n    <td class='DocHead'><div align='left'><b>" .
+                         headlink($langName, 'name') . '</b></div></td>';
         $tool_content .= "\n    <td width='15%' class='DocHead'><div align='center'><b>$langSize</b></div></td>";
-        $tool_content .= "\n    <td width='15%' class='DocHead'><div align='center'><b>$langDate</b></div></td>";
+        $tool_content .= "\n    <td width='15%' class='DocHead'><div align='center'><b>" . 
+                         headlink($langDate, 'date') . '</b></div></td>';
 	if($is_adminOfCourse) {
 		$tool_content .= "\n    <td width='20%' class='DocHead'><div align='center'><b>$langCommands</b></div></td>";
 	}
@@ -710,7 +752,7 @@ if (mysql_num_rows($sql) == 0) {
                         }
                         $tool_content .= "</div></td>\n";
                         if ($is_dir) {
-                                // skip display date and time for directories
+                                // skip display of date and time for directories
                                 $tool_content .= "<td>&nbsp;</td><td>&nbsp;</td>";
                         } else {
                                 $size = format_file_size($entry['size']);
