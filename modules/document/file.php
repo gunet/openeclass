@@ -32,10 +32,17 @@ file.php
 
 session_start();
 
+// save current course
+if (isset($_SESSION['dbname'])) {
+        $old_dbname = $_SESSION['dbname'];
+}
+
 $uri = str_replace('//', chr(1), strstr($_SERVER['REQUEST_URI'], 'file.php/'));
 $path_components = split('/', $uri);
 array_shift($path_components);
-$dbname = mysql_real_escape_string(array_shift($path_components));
+
+// temporary change course
+$dbname = addslashes(array_shift($path_components));
 session_register("dbname");
 
 $require_current_course = true;
@@ -70,6 +77,11 @@ if ($r['visibility'] != 'v' and !$is_adminOfCourse) {
 }
 if (!preg_match("/\.$r[format]$/", $component)) {
         $component .= '.' . $r['format'];
+}
+
+// restore current course
+if (isset($old_dbname)) {
+        $dbname = $old_dbname;
 }
 if (file_exists($basedir . $r['path'])) {
         send_file_to_client($basedir . $r['path'], $component, true);

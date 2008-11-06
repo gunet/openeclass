@@ -56,10 +56,8 @@ function send_file_to_client($real_filename, $filename, $send_inline = false)
         }
 
         $content_type = get_mime_type($filename);
-        if ($send_inline) {
-                $disposition = 'inline';
-        } else {
-                $disposition = 'attachment';
+        if (!$send_inline) {
+                header("Content-Disposition: attachment");
         }
         if ($content_type == 'text/html') {
                 $charset = '; charset=' . html_charset($real_filename);
@@ -68,8 +66,8 @@ function send_file_to_client($real_filename, $filename, $send_inline = false)
         } else {
                 $charset = '';
         }
+        
         header("Content-type: $content_type$charset");
-        header("Content-Disposition: $disposition; filename=\"$filename\"");
 
         // IE cannot download from sessions without a cache
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE'))

@@ -309,16 +309,17 @@ if($is_adminOfCourse)
 	// step 2
 	//nea methodos metonomasias arxeiwn kanontas update sthn eggrafh pou yparxei sth vash
 	if (isset($renameTo2)) {
-		$query =  "UPDATE ".$dbTable." SET filename=\"".$renameTo2."\" WHERE path=\"".$sourceFile."\"";
+		$query =  "UPDATE $dbTable SET filename=" .
+                        quote($renameTo2) . " WHERE path='$sourceFile'";
 		db_query($query);
-		$dialogBox = "<p class=\"caution_small\">$langElRen</p><br />";
+		$dialogBox = "<p class='caution_small'>$langElRen</p><br />";
 	}
 
 	//	rename
 	if (isset($rename))
 	{
 		//elegxos gia to ean yparxei hdh eggrafh sth vash
-		$result = mysql_query ("SELECT * FROM $dbTable WHERE path=\"".$rename."\"");
+		$result = mysql_query("SELECT * FROM $dbTable WHERE path='$rename'");
 		$res = mysql_fetch_array($result);
 		//yparxei eggrafh sth vash gia to arxeio opote xrhsimopoihse thn nea methodo metonomasias (ginetai sto STEP 2)
 		$fileName = $res["filename"];
@@ -349,22 +350,22 @@ if($is_adminOfCourse)
         	} else {
 			$safe_dirName = date("YmdGis").randomkeys("8");
 			mkdir($basedir . $newDirPath . '/' . $safe_dirName, 0775);
-			$query =  "INSERT INTO ".$dbTable." SET
-    				path=\"".$newDirPath."/".$safe_dirName."\",
-    				filename=\"".$newDirName."\",
-    				visibility=\"v\",
-				comment=\"\",
-				category=\"\",
-				title=\"\",
-				creator=\"".$prenom." ".$nom."\",
-				date=\"".date("Y\-m\-d G\:i\:s")."\",
-				date_modified=\"".date("Y\-m\-d G\:i\:s")."\",
-				subject=\"\",
-				description=\"\",
-				author=\"\",
-				format=\"\",
-				language=\"\",
-				copyrighted=\"\"";
+			$query =  "INSERT INTO $dbTable SET
+    				path='" . $newDirPath."/".$safe_dirName . "',
+    				filename=" . quote($newDirName) . ",
+    				visibility='v',
+				comment='',
+				category='',
+				title='',
+				creator=" . quote($prenom." ".$nom) . ",
+				date='" . date("Y\-m\-d G\:i\:s") . "',
+				date_modified='" . date("Y\-m\-d G\:i\:s") . "',
+				subject='',
+				description='',
+				author='',
+				format='',
+				language='',
+				copyrighted=''";
 			mysql_query($query);
 			$dialogBox = "<p class=\"success_small\">$langDirCr</p><br />";
 		}
