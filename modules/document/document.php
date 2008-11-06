@@ -748,9 +748,9 @@ if (mysql_num_rows($sql) == 0) {
                         $tool_content .= "\n    <td><div align='left'><a href='$file_url'$style$link_extra>" . $entry['filename'] . $copyright_icon . '</a>';
 
                         /*** comments ***/
-                        if (!empty($entry['comments'])) {
+                        if (!empty($entry['comment'])) {
                                 $tool_content .= "<br /><span class='comment'>(" .
-                                        nl2br(htmlspecialchars($entry['comments'])) .
+                                        nl2br(htmlspecialchars($entry['comment'])) .
                                         ")</span>\n";
                         }
                         $tool_content .= "</div></td>\n";
