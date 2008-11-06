@@ -73,7 +73,6 @@ $head_content .= <<<hCont
 <script type="text/javascript">
         _editor_url  = "$urlAppend/include/xinha/";
         _editor_lang = "$lang_editor";
-        _editor_skin = "silva";
 </script>
 <script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
 <script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
@@ -148,7 +147,11 @@ if ($is_adminOfCourse) {
 		}
 		$tool_content .= "
     <tr>
-      <td><textarea id='xinha' width=\"100%\" name='edContentBloc' value='".@$contentBloc."' rows='20' cols='100'>".@$contentBloc."</textarea></td>
+      <td>
+	<table class='xinha_editor'><tr><td>
+<textarea id='xinha' width=\"100%\" name='edContentBloc' value='".@$contentBloc."'>".@$contentBloc."</textarea>
+	</td></tr></table>
+</td>
     </tr>";
 
 	$tool_content .= "<tr>

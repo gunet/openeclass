@@ -73,7 +73,6 @@ if ($language == 'greek') {
 <script type="text/javascript">
         _editor_url  = "$urlAppend/include/xinha/";
         _editor_lang = "$lang_editor";
-        _editor_skin = "silva";
 </script>
 <script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
 <script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
@@ -306,7 +305,7 @@ tContentForm;
 			$contenu = "";
 		}
 		$tool_content .= "<tr><th class=\"left\">$langDetail:</th>
-			<td><textarea id='xinha' name='contenu' value='$contenu' rows='12' cols='70'>".$contenu."</textarea></td>
+			<td><textarea id='xinha' name='contenu' value='$contenu'>".$contenu."</textarea></td>
 			</tr>
 			<tr>
 			<th class=\"left\">&nbsp;</th>

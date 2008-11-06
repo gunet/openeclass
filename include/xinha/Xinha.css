@@ -3,7 +3,7 @@
 .htmlarea .toolbar {
   cursor: default;
   background: ButtonFace;
-  padding: 3px;
+  padding: 1px;
   border: 1px solid;
   border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
 }
@@ -17,8 +17,8 @@
   border: 1px solid ButtonFace;
   padding: 1px;
   margin: 0px;
-  width: 18px;
-  height: 18px;
+  width: 15px;
+  height: 15px;
 }
 .htmlarea .toolbar a.button:hover {
   border: 1px solid;

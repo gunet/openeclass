@@ -18,12 +18,8 @@ xinha_init = xinha_init ? xinha_init : function()
 	 *
 	 * which will load no extra plugins at all.
 	 ************************************************************************/
-
 	xinha_plugins = xinha_plugins ? xinha_plugins :
 	[
-	 'ListType',
-	 'Stylist',
-	 'DynamicCSS',
 	 'SuperClean'
 	];
 
@@ -54,23 +50,20 @@ xinha_init = xinha_init ? xinha_init : function()
 	 *************************************************************************/
 
 	 xinha_config = xinha_config ? xinha_config() : new Xinha.Config();
-
-
+	 xinha_config.height = '200px';
+  	 xinha_config.width  = '150px';
 	 // Dimitris
 	xinha_config.toolbar =
 	[
-			["separator","formatblock","bold","italic","underline","strikethrough"],
-			["separator","forecolor","hilitecolor","textindicator"],
-			["linebreak","separator","justifyleft","justifycenter","justifyright","justifyfull"],
-			["separator","insertorderedlist","insertunorderedlist","outdent","indent"],
-			["separator","inserthorizontalrule","createlink","inserttable"],
-			["linebreak","separator","undo","redo","selectall"],
-			["separator","killword", "removeformat", "htmlmode"]
+		["formatblock","bold","italic","underline","strikethrough","forecolor","hilitecolor",
+		"justifyleft","justifycenter","justifyright","justifyfull",
+		"insertorderedlist","insertunorderedlist","outdent","indent",
+		"inserthorizontalrule","createlink","inserttable","undo","redo",
+		"killword", "removeformat", "htmlmode"]
 	];
 
    xinha_config.formatblock =
   {
-    "&mdash;": "",
     "H3"  : "h3",
     "H4"  : "h4",
     "H5" : "h5",
@@ -108,7 +101,9 @@ xinha_init = xinha_init ? xinha_init : function()
 	 *   xinha_editors.myTextArea.config.height = '480px';
 	 *
 	 ************************************************************************/
-
+   	//xinha_editors.myTextArea.config.width  = '200px';
+	//xinha_editors.myTextArea.config.height = '150px';
+	 
 	/** STEP 6 ***************************************************************
 	 * Finally we "start" the editors, this turns the textareas into
 	 * Xinha editors.
@@ -118,4 +113,4 @@ xinha_init = xinha_init ? xinha_init : function()
 }
 
 Xinha._addEvent(window,'load', xinha_init); // this executes the xinha_init function on page load 
-																						// and does not interfere with window.onload properties set by other scripts
+	// and does not interfere with window.onload properties set by other scripts

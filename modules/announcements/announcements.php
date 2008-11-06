@@ -45,6 +45,7 @@ $guest_allowed = true;
 include '../../include/baseTheme.php';
 include('../../include/lib/textLib.inc.php');
 include('../../include/sendMail.inc.php');
+
 // support for math symbols
 include('../../include/phpmathpublisher/mathpublisher.php');
 
@@ -70,7 +71,6 @@ if ($is_adminOfCourse && (@$addAnnouce == 1 || isset($modify))) {
 <script type="text/javascript">
         _editor_url  = "$urlAppend/include/xinha/";
         _editor_lang = "$lang_editor";
-        _editor_skin = "silva";
 </script>
 <script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
 <script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
@@ -337,7 +337,11 @@ hContent;
       </tr>";
         $tool_content .= "
       <tr>
-        <td colspan='2' align=\"left\"><textarea id='xinha' name='newContent' value='$contentToModify' rows='20' cols='80'>$contentToModify</textarea></td>
+        <td colspan='2' align=\"left\">
+	<table class='xinha_editor'><tr><td>
+	<textarea id='xinha' name='newContent' value='$contentToModify' >$contentToModify</textarea>
+	</td></tr></table>
+	</td>
       </tr>";
         $tool_content .= "
             <input type=\"hidden\" name=\"id\" value=\"" . $AnnouncementToModify . "\">";
@@ -365,26 +369,7 @@ hContent;
         $result = db_query("SELECT * FROM annonces WHERE code_cours='$currentCourse' ORDER BY ordre DESC", $mysqlMainDb);
         $iterator = 1;
         $bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
-/*
-	if ($announcementNumber > 0) {
-		$tool_content .= <<<cData
-\n
-      <table class="FormData" width="99%">
-      <thead>
-      <tr>
-        <th class="left" width="220">$langAnnouncement</th>
-cData;
-	$tool_content .= "
-          <td class='right'>&nbsp;</td>
-          <td width='70' class='right'>$langTools</td>";
-		if ($announcementNumber > 1) {
-			$tool_content .= "
-          <td width='70' class='right'>$langMove</td>";
-		}
-		$tool_content .= "
-        </tr></thead></table>";
-	}
-*/
+
 	$tool_content .= "
       <table width=\"99%\" align='left' class=\"announcements\">";
 	if ($announcementNumber > 0) {

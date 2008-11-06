@@ -30,7 +30,6 @@ if (isset($from_home) and ($from_home == TRUE) and isset($_GET['cid'])) {
         $dbname = $cid;
         session_register("dbname");
 }
-
 $require_current_course = TRUE;
 $require_prof = true;
 $require_help = TRUE;
@@ -49,6 +48,20 @@ $tool_content = "";
 
 // submit
 if ($is_adminOfCourse) {
+
+if ($language == 'greek')
+        $lang_editor = 'el';
+    else
+        $lang_editor = 'en';
+$head_content = <<<hContent
+<script type="text/javascript">
+        _editor_url  = "$urlAppend/include/xinha/";
+        _editor_lang = "$lang_editor";
+</script>
+<script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
+<script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
+hContent;
+
 	if (isset($submit)) {
 		if (!empty($int)) {
 			if(isset($newlang)) {
@@ -106,13 +119,14 @@ if ($is_adminOfCourse) {
   $tool_content .= "<p class=\"success_small\">$langModifDone.<br /><a href=\"".$_SERVER['PHP_SELF']."\">$langBack</a></p><br />";
 
 	} else {
-		$tool_content .= "<p class=\"caution_small\">$langNoCourseTitle<br /><a href=\"$_SERVER[PHP_SELF]\">$langAgain</a></p><br />";
+		$tool_content .= "<p class=\"caution_small\">$langNoCourseTitle<br />
+		<a href=\"$_SERVER[PHP_SELF]\">$langAgain</a></p><br />";
 		}
 } else {
 
 		$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
 		$tool_content .= "<li><a href=\"archive_course.php\">$langBackupCourse</a></li>
-  		  <li><a href=\"delete_course.php\">$langDelCourse</a></li>
+  		<li><a href=\"delete_course.php\">$langDelCourse</a></li>
     		<li><a href=\"refresh_course.php\">$langRefreshCourse</a></li></ul></div>";
 
 		$sql = "SELECT cours_faculte.faculte,
@@ -139,36 +153,35 @@ if ($is_adminOfCourse) {
 		if ($password!="") $checkpasssel = "checked"; else $checkpasssel="";
 
 		@$tool_content .="
-<form method='post' action='$_SERVER[PHP_SELF]'>
-  <table width=\"99%\" align='left'>
-  <thead>
-  <tr>
-    <td>
-
-      <table width=\"100%\" class='FormData' align='left'>
-      <tbody>
-      <tr>
-        <th class='left' width='220'>&nbsp;</th>
-        <td><b>$langCourseIden</b></td>
-        <td>&nbsp;</td>
-  	  </tr>
-      <tr>
-        <th class='left'>$langCode&nbsp;:</th>
-        <td>$fake_code</td>
-        <td>&nbsp;</td>
-      </tr>
-      <tr>
-        <th class='left'>$langCourseTitle&nbsp;:</th>
-        <td><input type=\"text\" name=\"int\" value=\"$int\" size=\"60\" class='FormData_InputText'></td>
-        <td>&nbsp;</td>
-      </tr>
-      <tr>
-        <th class='left'>$langTeachers&nbsp;:</th>
-        <td><input type=\"text\" name=\"titulary\" value=\"$titulary\" size=\"60\" class='FormData_InputText'></td>
-       <td>&nbsp;</td>
-      </tr>
-        <th class='left'>$langFaculty&nbsp;:</th>
-        <td>
+		<form method='post' action='$_SERVER[PHP_SELF]'>
+		<table width=\"99%\" align='left'>
+		<thead>
+		<tr>
+		<td>
+		<table width=\"100%\" class='FormData' align='left'>
+		<tbody>
+		<tr>
+			<th class='left' width='220'>&nbsp;</th>
+			<td><b>$langCourseIden</b></td>
+			<td>&nbsp;</td>
+			</tr>
+		<tr>
+			<th class='left'>$langCode&nbsp;:</th>
+			<td>$fake_code</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<th class='left'>$langCourseTitle&nbsp;:</th>
+			<td><input type=\"text\" name=\"int\" value=\"$int\" size=\"60\" class='FormData_InputText'></td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<th class='left'>$langTeachers&nbsp;:</th>
+			<td><input type=\"text\" name=\"titulary\" value=\"$titulary\" size=\"60\" class='FormData_InputText'></td>
+		<td>&nbsp;</td>
+		</tr>
+			<tr><th class='left'>$langFaculty&nbsp;:</th>
+			<td>
           <select name=\"facu\" class='auth_input'>";
 		$resultFac=mysql_query("SELECT id,name FROM `$mysqlMainDb`.faculte ORDER BY number");
 		while ($myfac = mysql_fetch_array($resultFac)) {
@@ -179,14 +192,10 @@ if ($is_adminOfCourse) {
 				$tool_content .= "
             <option value=\"".$myfac['id']."--".$myfac['name']."\">$myfac[name]</option>";
 		}
-		$tool_content .= "
-          </select>
-        </td>
-        <td>&nbsp;</td>
-      </tr>
-      <tr>
-        <th class='left'>$m[type]&nbsp;:</th>
-        <td>";
+		$tool_content .= "</select></td><td>&nbsp;</td></tr>
+		<tr>
+		<th class='left'>$m[type]&nbsp;:</th>
+		<td>";
 
       $tool_content .= selection(array('pre' => $m['pre'], 'post' => $m['post'], 'other' => $m['other']),'type', $type);
       $tool_content .= "</td>
@@ -194,7 +203,9 @@ if ($is_adminOfCourse) {
       </tr>
       <tr>
         <th class='left'>$langDescription&nbsp;:</th>
-        <td><textarea name='description' value='".q($leCours['description'])."' cols='57' rows='4' class='FormData_InputText'>".q($leCours['description'])."</textarea></td>
+        <td width='100'>
+	<table class='xinha_editor'><tr><td>
+<textarea id='xinha' name='description' value='".q($leCours['description'])."' cols='20' rows='4' class='FormData_InputText'>".q($leCours['description'])."</textarea></td></tr></table>
         <td>&nbsp;</td>
       </tr>
       <tr>
@@ -208,7 +219,6 @@ if ($is_adminOfCourse) {
       </tr>
       </tbody>
       </table>
-
       <br />";
 
 	$tool_content .= "
@@ -241,9 +251,7 @@ if ($is_adminOfCourse) {
       </tr>
       </tbody>
       </table>
-
       <br />
-
       <table width=\"100%\" class='FormData' align='left'>
       <tbody>
       <tr>
@@ -257,21 +265,14 @@ if ($is_adminOfCourse) {
 		$tool_content .= lang_select_options('localize');
 		$tool_content .= "
         </td>
-        <td><small>$langTipLang</p></td>
+        <td><small>$langTipLang</small></td>
       </tr>
       <tr>
         <th class='left' width='220'>&nbsp;</th>
-        <td><input type='Submit' name='submit' value='$langSubmit'></td>
+        <td><input type='submit' name='submit' value='$langSubmit'></td>
         <td>&nbsp;</td>
-      </tr>
-      </tbody>
-      </table>
-
-    </td>
-  </tr>
-  </thead>
-  </table>
-
+      </tr></tbody></table>
+    </td></tr></thead></table>
 </form>";
 	}     // else
 }   // if uid==prof_id
@@ -281,4 +282,4 @@ else {
 	$tool_content .= "<p>$langForbidden</p>";
 }
 
-draw($tool_content,2,'course_info');
+draw($tool_content, 2, 'course_info', $head_content);

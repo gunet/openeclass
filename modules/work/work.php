@@ -123,7 +123,6 @@ $head_content .= <<<hContent
 <script type="text/javascript">
         _editor_url  = "$urlAppend/include/xinha/";
         _editor_lang = "$lang_editor";
-        _editor_skin = "silva";
 </script>
 <script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
 <script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
@@ -373,7 +372,8 @@ function new_assignment()
       <td>&nbsp;</td>
     </tr>
     <tr>
-      <td colspan='2'>"."<textarea id=\"xinha\" name=\"desc\" value=\"$desc\" style='width:100%' rows=\"10\" cols=\"20\">";
+      <td colspan='2'>"."
+	<textarea id=\"xinha\" name=\"desc\" value=\"$desc\" rows=\"10\" cols=\"20\">";
 
 	if ($desc)
 		$tool_content .= "$desc";
@@ -466,7 +466,9 @@ function show_edit_assignment($id)
     </tr>
     <tr>
       <th class="left">${m['description']}:</th>
-      <td><textarea id='xinha' name='desc' value='$description' style='width:100%'>${row['description']}</textarea></td>
+      <td>
+<table class='xinha_editor'><tr><td>
+<textarea id='xinha' name='desc' value='$description' style='width:100%'>${row['description']}</textarea></td></tr></table></td>
     </tr>
     <tr>
       <th class="left">${m['comments']}:</th>
