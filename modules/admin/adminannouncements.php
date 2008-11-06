@@ -31,6 +31,23 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $nameTools = $langAdminAn;
 $tool_content = $head_content = "";
 
+if ($language == 'greek')
+        $lang_editor = 'el';
+    else
+        $lang_editor = 'en';
+
+$head_content .= <<<hContent
+<script type="text/javascript">
+        _editor_url  = "$urlAppend/include/xinha/";
+        _editor_lang = "$lang_editor";
+</script>
+<script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
+<script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
+<script type="text/javascript">
+xinha_editors = ['xinha', 'xinha_en'];
+</script>
+hContent;
+
 $head_content .= '
 <script>
 function confirmation ()
@@ -173,7 +190,9 @@ $table_title = 'en_title';
         <td><input type=\"text\" name='title' value='$titleToModify' size='50' class='FormData_InputText'></td>
         </tr>
         <tr><th class='left'>$_lang_body_</th>
-       <td><textarea name='newContent' value='$contentToModify' rows='10' cols='50' class='FormData_InputText'>$contentToModify</textarea>
+       <td>
+	<table class='xinha_editor'><tr><td>
+	<textarea id='xinha' name='newContent' value='$contentToModify' class='FormData_InputText'>$contentToModify</textarea></td></tr></table>
 	<input type=\"hidden\" name=\"id\" value=\"".$AnnouncementToModify."\"></td>
        </tr><tr>
       <th class='left'>$_lang_comment_</th>
@@ -185,7 +204,11 @@ $table_title = 'en_title';
       <td><input type=\"text\" name='title_en' value='$titleToModifyEn' size='50' class='FormData_InputText'></td>
       </tr><tr>
       <th class='left'>$_lang_bodyen_</th>
-      <td><textarea name='newContent_en' value='$contentToModifyEn' rows='10' cols='50' class='FormData_InputText'>$contentToModifyEn</textarea></td>
+      <td>
+	<table class='xinha_editor'><tr><td>
+	<textarea id='xinha_en' name='newContent_en' value='$contentToModifyEn' class='FormData_InputText'>$contentToModifyEn</textarea>
+	</table></td></tr>
+</td>
     </tr>
     <tr>
       <th class='left'>$_lang_commenten_</th>
@@ -260,5 +283,5 @@ $table_title = 'en_title';
 	}	// end: if ($displayAnnoucementList == true)
 
 // display everything
-draw($tool_content, 3, '', $head_content);
+draw($tool_content, 3, 'admin', $head_content);
 ?>
