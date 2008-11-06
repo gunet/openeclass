@@ -68,6 +68,12 @@ while($result = mysql_fetch_row($res)) {
 
 if(strlen($description) > 0) {
 	$main_content .= "<div id=\"course_home_id\">$langDescription</div><p>$description</p>";
+	if ($is_adminOfCourse) {
+		$main_content .= "<a href='../../modules/course_info/infocours.php?'>
+		<img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></img></a";
+	}
+} else {
+	$main_content .= $langThisCourseDescriptionIsEmpty; 
 }
 
 if (strlen($keywords) > 0) {
