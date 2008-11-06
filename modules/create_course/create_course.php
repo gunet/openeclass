@@ -35,6 +35,11 @@ include '../../include/baseTheme.php';
 $nameTools = $langCreateCourse . " (" . $langCreateCourseStep ." 1 " .$langCreateCourseStep2 . " 3)" ;
 $tool_content = $head_content = "";
 
+if ($language == 'greek')
+        $lang_editor = 'el';
+    else
+        $lang_editor = 'en';
+
 $head_content .= <<<hContent
 <script type="text/javascript">
 function checkrequired(which, entry, entry2) {
@@ -59,6 +64,12 @@ function checkrequired(which, entry, entry2) {
 }
 
 </script>
+<script type="text/javascript">
+        _editor_url  = "$urlAppend/include/xinha/";
+        _editor_lang = "$lang_editor";
+</script>
+<script type="text/javascript" src="$urlAppend/include/xinha/XinhaCore.js"></script>
+<script type="text/javascript" src="$urlAppend/include/xinha/my_config.js"></script>
 hContent;
 
 $titulaire_probable="$prenom $nom";
@@ -177,18 +188,19 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
     </tr>
     <tr>
       <th class='left' width=\"160\">$langDescrInfo&nbsp;:</th>
-      <td width=\"160\"><textarea name='description' cols='50' rows='6' class='FormData_InputText' wrap=\"soft\">$description</textarea></td>
-      <td>&nbsp;</td>
+      <td colspan='2' width=\"160\">
+	<table class='xinha_editor'><tr><td>
+	<textarea id='xinha' name='description' class='FormData_InputText' wrap=\"soft\">$description</textarea>
+	</td></tr></table>
+	</td>
     </tr>
     <tr>
       <th class='left' width=\"160\">$langCourseKeywords&nbsp;</th>
-      <td width=\"160\"><textarea name='course_keywords' cols='50' rows='6' class='FormData_InputText'>$course_keywords</textarea></td>
-      <td>&nbsp;</td>
+      <td width=\"160\" colspan='2'><textarea name='course_keywords' cols='55' rows='2' class='FormData_InputText'>$course_keywords</textarea></td>
     </tr>
     <tr>
       <th class='left' width=\"160\">$langCourseAddon&nbsp;</th>
-      <td width=\"160\"><textarea name='course_addon' cols='50' rows='6' class='FormData_InputText'>$course_addon</textarea></td>
-      <td>&nbsp;</td>
+      <td width=\"160\" colspan='2'><textarea name='course_addon' cols='55' rows='5' class='FormData_InputText'>$course_addon</textarea></td>
     </tr>
     <tr>
        <th>&nbsp;</th>
@@ -361,7 +373,7 @@ if (isset($_POST['create_course'])) {
                        mkdir("../../courses/$repertoire/scormPackages", 0777) and
                        mkdir("../../video/$repertoire", 0777))) {
                         $tool_content .= "<div class='caution'>$langErrorDir</div>";
-                        draw($tool_content, '1', null, $head_content);
+                        draw($tool_content, '1', 'create_course', $head_content);
                         exit;
                 }
                 // ---------------------------------------------------------
@@ -423,5 +435,5 @@ if (isset($_POST['create_course'])) {
 
 $tool_content .= "</form>";
 
-draw($tool_content, '1', null, $head_content);
+draw($tool_content, '1', 'create_course', $head_content);
 ?>
