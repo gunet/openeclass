@@ -749,9 +749,9 @@ if (mysql_num_rows($sql) == 0) {
 
                         /*** comments ***/
                         if (!empty($entry['comment'])) {
-                                $tool_content .= "<br /><span class='comment'>(" .
+                                $tool_content .= "<br /><span class='comment'>" .
                                         nl2br(htmlspecialchars($entry['comment'])) .
-                                        ")</span>\n";
+                                        "</span>\n";
                         }
                         $tool_content .= "</div></td>\n";
                         if ($is_dir) {
