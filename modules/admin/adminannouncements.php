@@ -192,7 +192,7 @@ $table_title = 'en_title';
         <tr><th class='left'>$_lang_body_</th>
        <td>
 	<table class='xinha_editor'><tr><td>
-	<textarea id='xinha' name='newContent' value='$contentToModify' class='FormData_InputText'>$contentToModify</textarea></td></tr></table>
+	<textarea id='xinha' name='newContent' value='$contentToModify'>$contentToModify</textarea></td></tr></table>
 	<input type=\"hidden\" name=\"id\" value=\"".$AnnouncementToModify."\"></td>
        </tr><tr>
       <th class='left'>$_lang_comment_</th>
@@ -206,7 +206,7 @@ $table_title = 'en_title';
       <th class='left'>$_lang_bodyen_</th>
       <td>
 	<table class='xinha_editor'><tr><td>
-	<textarea id='xinha_en' name='newContent_en' value='$contentToModifyEn' class='FormData_InputText'>$contentToModifyEn</textarea>
+	<textarea id='xinha_en' name='newContent_en' value='$contentToModifyEn'>$contentToModifyEn</textarea>
 	</table></td></tr>
 </td>
     </tr>

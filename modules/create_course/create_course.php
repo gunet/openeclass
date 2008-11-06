@@ -190,7 +190,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
       <th class='left' width=\"160\">$langDescrInfo&nbsp;:</th>
       <td colspan='2' width=\"160\">
 	<table class='xinha_editor'><tr><td>
-	<textarea id='xinha' name='description' class='FormData_InputText' wrap=\"soft\">$description</textarea>
+	<textarea id='xinha' name='description' wrap=\"soft\">$description</textarea>
 	</td></tr></table>
 	</td>
     </tr>
