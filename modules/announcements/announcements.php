@@ -333,15 +333,13 @@ hContent;
         $tool_content .= "
       <tr>
         <th class='left'>$langAnnBody:</th>
-        <td>&nbsp;</td>
-      </tr>";
-        $tool_content .= "
-      <tr>
-        <td colspan='2' align=\"left\">
-	<table class='xinha_editor'><tr><td>
-	<textarea id='xinha' name='newContent' value='$contentToModify' >$contentToModify</textarea>
-	</td></tr></table>
-	</td>
+        <td>
+          <table class='xinha_editor'>
+          <tr>
+            <td><textarea id='xinha' name='newContent' value='$contentToModify'>$contentToModify</textarea></td>
+          </tr>
+          </table>
+        </td>
       </tr>";
         $tool_content .= "
             <input type=\"hidden\" name=\"id\" value=\"" . $AnnouncementToModify . "\">";

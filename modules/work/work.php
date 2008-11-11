@@ -369,16 +369,16 @@ function new_assignment()
     </tr>
     <tr>
       <th class=\"left\">".$m['description'].":</th>
-      <td>&nbsp;</td>
-    </tr>
-    <tr>
-      <td colspan='2'>"."
-	<textarea id=\"xinha\" name=\"desc\" value=\"$desc\" rows=\"10\" cols=\"20\">";
-
-	if ($desc)
-		$tool_content .= "$desc";
-
-	$tool_content .= "</textarea></td>
+      <td>
+        <table class='xinha_editor'>
+        <tr>
+          <td><textarea id='xinha' name=\"desc\" value=\"$desc\" style='width:100%'>";
+	       if ($desc)
+		      $tool_content .= "$desc";
+    $tool_content .= "</textarea></td>
+        </tr>
+        </table>
+      </td>
     </tr>
     <tr>
       <th class=\"left\">".$m['comments'].":</th>
@@ -467,8 +467,12 @@ function show_edit_assignment($id)
     <tr>
       <th class="left">${m['description']}:</th>
       <td>
-<table class='xinha_editor'><tr><td>
-<textarea id='xinha' name='desc' value='$description' style='width:100%'>${row['description']}</textarea></td></tr></table></td>
+        <table class='xinha_editor'>
+        <tr>
+          <td><textarea id='xinha' name='desc' value='$description' style='width:100%'>${row['description']}</textarea></td>
+        </tr>
+        </table>
+      </td>
     </tr>
     <tr>
       <th class="left">${m['comments']}:</th>

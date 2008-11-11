@@ -112,7 +112,7 @@ $start_cal = $jscalendar->make_input_field(
 	array('showOthers' => true,
 	    	 'align' => 'Tl',
                  'ifFormat' => '%Y-%m-%d'),
-	array('style' => 'width: 14em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center',
+	array('style' => 'width: 8em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center',
                  'name' => 'date',
                  'value' => $datetoday));
 }
@@ -247,7 +247,7 @@ function confirmation (name)
           array('showOthers' => true,
                 'align' => 'Tl',
                  'ifFormat' => '%Y-%m-%d'),
-          array('style' => 'width: 14em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center',
+          array('style' => 'width: 8em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center',
                  'name' => 'date',
                  'value' => $dayAncient));
 	}
@@ -279,7 +279,7 @@ tContentForm;
 			$minutes=$hourAncient[1];
 		}
 		$tool_content .= "<tr><th class=\"left\">$langTitle:</th>
-			<td><input type=\"text\" size=\"70\" name=\"titre\" value=\"".@$titre."\"  class='FormData_InputText'></td>
+			<td><input type=\"text\" size=\"85\" name=\"titre\" value=\"".@$titre."\"  class='FormData_InputText'></td>
 			</tr>
 			<tr>
 			<th class=\"left\" rowspan=\"2\">$l_options:</th>
@@ -298,7 +298,7 @@ tContentForm;
 			for ($m=0; $m<=55; $m=$m+5)
 				$tool_content .=  "<option value='$m'>$m</option>";
 
-			$tool_content .= "</select>&nbsp;&nbsp;&nbsp;&nbsp;$langLasting $langInHour: 
+			$tool_content .= "</select>&nbsp;&nbsp;&nbsp;&nbsp;$langLasting $langInHour:
 			<input class='FormData_InputText' type=\"text\" name=\"lasting\" value=\"".@$myrow['lasting']."\" size=\"2\" maxlength=\"2\"></td>
     			</tr>";
     		if (!isset($contenu)) {

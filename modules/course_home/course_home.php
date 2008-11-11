@@ -67,17 +67,25 @@ while($result = mysql_fetch_row($res)) {
 }
 
 if(strlen($description) > 0) {
-	$main_content .= "<div id=\"course_home_id\">$langDescription</div><p>$description</p>";
-	if ($is_adminOfCourse) {
-		$main_content .= "<a href='../../modules/course_info/infocours.php?'>
-		<img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></img></a";
-	}
+	$main_content .= "<div id=\"course_home_id\">";
+	if (!$is_adminOfCourse) {
+		$main_content .= "$langDescription";
+	} else {
+		$main_content .= "$langDescription &nbsp;<a href='../../modules/course_info/infocours.php?'><img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></img></a>";
+    }
+    $main_content .= "</div><p>$description</p>";
+
 } else {
-	$main_content .= $langThisCourseDescriptionIsEmpty; 
+	$main_content .= $langThisCourseDescriptionIsEmpty;
+	if (!$is_adminOfCourse) {
+		$main_content .= "&nbsp;";
+	} else {
+		$main_content .= "&nbsp;&nbsp;<a href='../../modules/course_info/infocours.php?'><img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></img></a>";
+    }
 }
 
 if (strlen($keywords) > 0) {
-	$main_content .= "<p><b>$langCourseKeywords </b>$keywords</p>";
+	$main_content .= "<p><br /><b>$langCourseKeywords </b>$keywords</p><p>&nbsp;</p>";
 }
 
 if(strlen($addon) > 0) {

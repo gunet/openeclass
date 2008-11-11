@@ -161,7 +161,7 @@ hContent;
 		<table width=\"100%\" class='FormData' align='left'>
 		<tbody>
 		<tr>
-			<th class='left' width='220'>&nbsp;</th>
+			<th class='left' width='150'>&nbsp;</th>
 			<td><b>$langCourseIden</b></td>
 			<td>&nbsp;</td>
 			</tr>
@@ -204,8 +204,12 @@ hContent;
       <tr>
         <th class='left'>$langDescription&nbsp;:</th>
         <td width='100'>
-	<table class='xinha_editor'><tr><td>
-<textarea id='xinha' name='description' value='".q($leCours['description'])."' cols='20' rows='4' class='FormData_InputText'>".q($leCours['description'])."</textarea></td></tr></table>
+	      <table class='xinha_editor'>
+          <tr>
+             <td><textarea id='xinha' name='description' value='".q($leCours['description'])."' cols='20' rows='4' class='FormData_InputText'>".q($leCours['description'])."</textarea></td>
+          </tr>
+          </table>
+        </td>
         <td>&nbsp;</td>
       </tr>
       <tr>
@@ -219,13 +223,13 @@ hContent;
       </tr>
       </tbody>
       </table>
-      <br />";
+      <p>&nbsp;</p>\n";
 
 	$tool_content .= "
       <table width=\"100%\" class='FormData' align='left'>
       <tbody>
       <tr>
-        <th class='left' width='220'>&nbsp;</th>
+        <th class='left' width='150'>&nbsp;</th>
         <td colspan='2'><b>$langConfidentiality</b></td>
       </tr>
       <tr>
@@ -251,11 +255,11 @@ hContent;
       </tr>
       </tbody>
       </table>
-      <br />
+      <p>&nbsp;</p>
       <table width=\"100%\" class='FormData' align='left'>
       <tbody>
       <tr>
-        <th class='left' width='220'>&nbsp;</th>
+        <th class='left' width='150'>&nbsp;</th>
         <td colspan='2'><b>$langLanguage</b></td>
       </tr>
       <tr>
@@ -268,11 +272,16 @@ hContent;
         <td><small>$langTipLang</small></td>
       </tr>
       <tr>
-        <th class='left' width='220'>&nbsp;</th>
+        <th class='left' width='150'>&nbsp;</th>
         <td><input type='submit' name='submit' value='$langSubmit'></td>
         <td>&nbsp;</td>
-      </tr></tbody></table>
-    </td></tr></thead></table>
+      </tr>
+      </tbody>
+      </table>
+    </td>
+  </tr>
+  </thead>
+  </table>
 </form>";
 	}     // else
 }   // if uid==prof_id

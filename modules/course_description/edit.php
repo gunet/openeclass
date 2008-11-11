@@ -128,15 +128,19 @@ if ($is_adminOfCourse) {
 
     $tool_content .= "
     <form method=\"post\" action=\"$_SERVER[PHP_SELF]\">
-    <table width='99%' class='CourseDescr' align='left'>
+
+    <table width='99%' class='FormData  ' align='left'>
     <tbody>
     <tr>
-      <th class=\"left\">".$langTitle.": ".@$titreBloc[$numBloc]."</th>
+      <th class=\"left\" width=\"220\">".$langTitle.":</th>
+      <td><b>".@$titreBloc[$numBloc]."</b></td>
     </tr>";
 	if (($numBloc =="add") || @(!$titreBlocNotEditable[$numBloc])) {
-		$tool_content .= "<tr><td>
-		<input type=\"text\" name=\"edTitleBloc\" rows='20' cols='90' value=\"".@$titreBloc[$numBloc]."\">
-		</td></tr>";
+		$tool_content .= "
+    <tr>
+      <th class=\"left\">&nbsp;</th>
+      <td><input type=\"text\" name=\"edTitleBloc\" rows='20' cols='90' value=\"".@$titreBloc[$numBloc]."\"></td>
+    </tr>";
 	} else {
 		$tool_content .= "<input type=\"hidden\" name=\"edTitleBloc\" value=\"".$titreBloc[$numBloc]."\" >";
 	}
@@ -147,19 +151,28 @@ if ($is_adminOfCourse) {
 		}
 		$tool_content .= "
     <tr>
+      <th class=\"left\">&nbsp;</th>
       <td>
-	<table class='xinha_editor'><tr><td>
-<textarea id='xinha' width=\"100%\" name='edContentBloc' value='".@$contentBloc."'>".@$contentBloc."</textarea>
-	</td></tr></table>
-</td>
+	    <table class='xinha_editor'>
+        <tr>
+          <td><textarea id='xinha' width=\"100%\" name='edContentBloc' value='".@$contentBloc."'>".@$contentBloc."</textarea></td>
+        </tr>
+        </table>
+      </td>
     </tr>";
 
-	$tool_content .= "<tr>
-      <th><input type=\"submit\" name=\"save\" value=\"".$langAdd."\">&nbsp;&nbsp;
+	$tool_content .= "
+    <tr>
+      <th class=\"left\">&nbsp;</th>
+      <td><input type=\"submit\" name=\"save\" value=\"".$langAdd."\">&nbsp;&nbsp;
           <input type=\"submit\" name=\"ignore\" value=\"".$langBackAndForget ."\">
-      </th>
+      </td>
     </tr>";
-	$tool_content .= "<tbody></tr></table></form>";
+	$tool_content .= "
+    <tbody>
+    </table>
+
+    </form>";
 } else {
 		$sql = "SELECT * FROM `course_description` order by id";
 		$res = db_query($sql,$db);
@@ -197,7 +210,7 @@ if ($is_adminOfCourse) {
     					<thead><tr><td>
         				<table width=\"100%\" class=\"FormData\">
         				<thead><tr>
-          				<th class=\"left\" style=\"border: 1px solid #E6B45D;\">".$titreBloc[$numBloc].":</th>
+          				<th class=\"left\" style=\"border: 1px solid #CAC3B5;\">".$titreBloc[$numBloc].":</th>
           				<td width=\"50\" class=\"right\">
 					<a href='".$_SERVER['PHP_SELF']."?numBloc=".$numBloc."' >
 					<img src='../../template/classic/img/edit.gif' border='0' title='$langModify'></a>&nbsp;&nbsp;";

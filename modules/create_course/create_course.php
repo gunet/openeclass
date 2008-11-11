@@ -109,7 +109,7 @@ $tool_content .= $intitule_html .
                  $languageCourse_html .
                  $description_html .
                  $course_addon_html .
-                 $course_keywords_html . 
+                 $course_keywords_html .
                  $visit_html;
 
 if (isset($_POST['back1']) or !isset($_POST['visit'])) {
@@ -184,30 +184,32 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
     <tr>
       <th width=\"220\">&nbsp;</th>
       <td><b>$langCreateCourseStep2Title</b></td>
-      <td>&nbsp;</td>
     </tr>
     <tr>
-      <th class='left' width=\"160\">$langDescrInfo&nbsp;:</th>
-      <td colspan='2' width=\"160\">
-	<table class='xinha_editor'><tr><td>
-	<textarea id='xinha' name='description' wrap=\"soft\">$description</textarea>
-	</td></tr></table>
-	</td>
+      <th class='left'>$langDescrInfo&nbsp;:</th>
+      <td>
+        <table class='xinha_editor'>
+        <tr>
+          <td><textarea id='xinha' name='description' wrap=\"soft\">$description</textarea></td>
+        </tr>
+        </table>
+      </td>
     </tr>
     <tr>
-      <th class='left' width=\"160\">$langCourseKeywords&nbsp;</th>
-      <td width=\"160\" colspan='2'><textarea name='course_keywords' cols='55' rows='2' class='FormData_InputText'>$course_keywords</textarea></td>
+      <th class='left'>$langCourseKeywords&nbsp;</th>
+      <td><textarea name='course_keywords' cols='85' rows='3' class='FormData_InputText'>$course_keywords</textarea></td>
     </tr>
     <tr>
       <th class='left' width=\"160\">$langCourseAddon&nbsp;</th>
-      <td width=\"160\" colspan='2'><textarea name='course_addon' cols='55' rows='5' class='FormData_InputText'>$course_addon</textarea></td>
+      <td><textarea name='course_addon' cols='85' rows='5' class='FormData_InputText'>$course_addon</textarea></td>
     </tr>
     <tr>
        <th>&nbsp;</th>
        <td><input type='submit' name='back1' value='< $langPreviousStep ' />&nbsp;<input type='submit' name='create3' value='$langNextStep >' /></td>
-       <td><p align='right'><small>$langFieldsOptionalNote</small></p></td>
     </tbody>
-    </table><br />";
+    </table>
+    <p align='right'><small>$langFieldsOptionalNote</small></p>
+    <br />";
 
 }  elseif (isset($_POST['create3']) or isset($_POST['back2'])) {
 	$nameTools = $langCreateCourse . " (" . $langCreateCourseStep." 3 " .$langCreateCourseStep2 . " 3 )" ;
