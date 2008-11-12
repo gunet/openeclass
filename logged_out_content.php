@@ -70,9 +70,6 @@ lCont;
 
 $tool_content .='<br>';
 
- @include("./modules/lang/$language/admin.inc.php");
- @include("./modules/lang/$language/about.inc.php");
-
 $result = db_query($sql, $mysqlMainDb);
 if (mysql_num_rows($result) > 0) {
 	$announceArr = array();
@@ -94,22 +91,15 @@ if (mysql_num_rows($result) > 0) {
 	$numOfAnnouncements = count($announceArr);
 
 	for($i=0; $i < $numOfAnnouncements; $i++) {
-	//	if ($i%2 == 0)
-	//			$rowClass = "class=\"odd\"";
-	//	else
-	//			$rowClass = "";
-
-		$tool_content .= "
-  <tr>
-    <td colspan=\"2\">
-      <img style='border:0px;' src='${urlServer}/template/classic/img/arrow_grey.gif' title='bullet'>
-      <b>".$announceArr[$i][1]."</b>
-      (".greek_format($announceArr[$i][0]).")
-    <p>
-        ".$announceArr[$i][2]."<br />
-        <i>".$announceArr[$i][3]."</i></p>
-    </td>
-  </tr>";
+		$tool_content .= "<tr><td colspan=\"2\">
+		<img style='border:0px;' src='${urlAppend}/template/classic/img/arrow_grey.gif' title='bullet'>
+		<b>".$announceArr[$i][1]."</b>
+		(".greek_format($announceArr[$i][0]).")
+		<p>
+		".$announceArr[$i][2]."<br />
+		<i>".$announceArr[$i][3]."</i></p>
+		</td>
+		</tr>";
 	}
 	$tool_content .= "
   </tbody>
