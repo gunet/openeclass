@@ -483,7 +483,7 @@ function show_edit_assignment($id)
       <td>
 cData;
 
-	$tool_content .= getJsDeadline(nice_format($deadline))."
+	$tool_content .= getJsDeadline($deadline)."
       </td>
     </tr>
     <tr>
