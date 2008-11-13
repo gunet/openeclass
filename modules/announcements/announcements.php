@@ -232,7 +232,9 @@ hContent;
         } // else
         // SEND EMAIL (OPTIONAL)
         if (isset($_POST['emailOption']) && is_numeric($_POST['emailOption']) && $_POST['emailOption'] == 1) {
-            $emailContent = stripslashes($newContent);
+	    $antitle = stripslashes($antitle);
+	    $newContent = stripslashes($newContent);
+            $emailContent = "".$antitle."<br><br>".$newContent."";
             $emailSubject = "$professorMessage ($currentCourseID - $intitule)";
             // Select students email list
             $sqlUserOfCourse = "SELECT user.email FROM cours_user, user WHERE code_cours='$currentCourseID'
