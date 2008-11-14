@@ -6,7 +6,7 @@
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>."; //
 $langVersion = "$siteName version"; //
 $langAboutText = "The platform version is"; //
-$langEclassVersion = "2.1.1"; //
+$langEclassVersion = "2.1.2"; //
 $langHostName = "Host Name is"; //
 $langWebVersion = "uses"; //
 $langMySqlVersion = "MySql "; //

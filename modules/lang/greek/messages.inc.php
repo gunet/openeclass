@@ -30,7 +30,7 @@
 $langIntro = "Η πλατφόρμα <b>$siteName</b> είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και υποστηρίζει την Υπηρεσία Ασύγχρονης Τηλεκπαίδευσης στο <a href=\"$InstitutionUrl\" target=\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion="Έκδοση του $siteName";
 $langAboutText="Η έκδοση της πλατφόρμας είναι";
-$langEclassVersion="2.1.1";
+$langEclassVersion="2.1.2";
 $langHostName="Ο υπολογιστής στον οποίο βρίσκεται η πλατφόρμα είναι ο ";
 $langWebVersion="Xρησιμοποιεί ";
 $langMySqlVersion="και MySql ";
