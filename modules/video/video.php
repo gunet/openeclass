@@ -80,7 +80,7 @@ if (isset($action2) and $action2 == "download")
 		{
 			$id = $row['url'];
 		}
-		send_file_to_client($real_file, my_basename($id), true);
+		send_file_to_client($real_file, my_basename($id), true, true);
 		exit;
 	} else {
 		header("Refresh: ${urlServer}modules/video/video.php");
