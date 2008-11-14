@@ -4,10 +4,31 @@ Open eClass Platform - CHANGES
 
 Platform GUnet eClass has been renamed to Open eClass (http://www.openeclass.org).
 
-Open eClass 2.1 is the new version of the platform and is available from 15/10/2008. 
+Open eClass 2.1.2 is the new version of the platform and is available from 15/10/2008. 
 The platform was designed and developed by the GUnet Asynchronous eLearning group.
 This version introduces a number of new features, the most important of them are
 listed below.
+
+********************************************************************
+Open eClass 2.1.2 - Changes List
+********************************************************************
+
+-- Fix bug in user authentication
+-- HTML editor added in "Create Course" and "Course Admin"
+-- Fix in upgrade process.
+-- Various fixes
+
+
+********************************************************************
+Open eClass 2.1.1 - Changes List
+********************************************************************
+
+-- Fix bug in "Show old statistics".
+-- Fix bug in "Search" inside a course.
+-- Fix bug in authentication users via LDAP.
+-- Fix a compatibility bug in versions Mysql 4.x in "Forgot your password".
+-- Add subsystem "Login as a different user" in administration tool.
+-- Various fixes in upgrade process.
 
 
 ********************************************************************
