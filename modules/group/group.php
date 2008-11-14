@@ -303,7 +303,7 @@ tCont3;
     <tr>
       <td>";
 
-		if($myProperties['forum']==1) {
+	if($myProperties['forum']==1) {
 			$tool_content .= "$langGroupForum</td>
       <td align=\"right\"><font color=\"green\">$langYes</font>";
 			$fontColor="black";
@@ -373,34 +373,34 @@ tCont3;
     <p class=\"caution_small\">$langNoGroup</p>";
 	}
 
-	while ($group = mysql_fetch_array($groupSelect))
-	{
+	while ($group = mysql_fetch_array($groupSelect)) {
 		// Count students registered in each group
 		$resultRegistered = db_query("SELECT id FROM user_group WHERE team='".$group["id"]."'", $currentCourse);
 		$countRegistered = mysql_num_rows($resultRegistered);
 		if ($myIterator%2==0) {
-			$tool_content .= "
-    <tr>";
+			$tool_content .= "<tr>";
 		}
 		elseif ($myIterator%2==1) {
-			$tool_content .= "
-    <tr class=\"odd\">";
+			$tool_content .= "<tr class=\"odd\">";
 		}
-		$tool_content .= "
-      <td width=\"2%\"><img src=\"../../template/classic/img/arrow_grey.gif\" alt=\"bullet\" title=\"bullet\" border=\"0\"></td>
-      <td><div align=\"left\"><a href=\"group_space.php?userGroupId=".$group["id"]."\">".$group["name"]."</a></div></td>
-      <td><div class=\"cellpos\">".$countRegistered."</div></td>";
+		$tool_content .= "<td width=\"2%\">
+		<img src=\"../../template/classic/img/arrow_grey.gif\" alt=\"bullet\" title=\"bullet\" border=\"0\"></td><td><div align=\"left\">
+		<a href=\"group_space.php?userGroupId=".$group["id"]."\">".$group["name"]."</a></div></td>
+      		<td><div class=\"cellpos\">".$countRegistered."</div></td>";
 		if ($group['maxStudent']==0) {
 			$tool_content .= "
-      <td><div class=\"cellpos\">-</div></td>";
+      			<td><div class=\"cellpos\">-</div></td>";
 		} else {
 			$tool_content .= "
-      <td><div class=\"cellpos\">".$group["maxStudent"]."</div></td>";
+      			<td><div class=\"cellpos\">".$group["maxStudent"]."</div></td>";
 		}
-		$tool_content .= "
-      <td><div class=\"cellpos\"><a href=\"group_edit.php?userGroupId=".$group["id"]."\"><img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langEdit."\"></a></div></td>
-      <td><div class=\"cellpos\"><a href=\"".$_SERVER['PHP_SELF']."?delete_one=yes&id=".$group["id"]."\" onClick=\"return confirmation('".addslashes($group["name"])."');\"><img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\"></a></div></td>
-    </tr>";
+		$tool_content .= "<td><div class=\"cellpos\">
+		<a href=\"group_edit.php?userGroupId=".$group["id"]."\">
+		<img src=\"../../template/classic/img/edit.gif\" border=\"0\" title=\"".$langEdit."\"></a></div></td>
+      		<td><div class=\"cellpos\">
+		<a href=\"".$_SERVER['PHP_SELF']."?delete_one=yes&id=".$group["id"]."\" onClick=\"return confirmation('".addslashes($group["name"])."');\">
+		<img src=\"../../template/classic/img/delete.gif\" border=\"0\" title=\"".$langDelete."\"></a></div></td>
+    		</tr>";
 		$totalRegistered = $totalRegistered+$countRegistered;
 		$myIterator++;
 	}	// while loop
