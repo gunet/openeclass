@@ -363,7 +363,7 @@ if($is_adminOfCourse)
 				subject='',
 				description='',
 				author='',
-				format='',
+				format='.dir',
 				language='',
 				copyrighted=''";
 			mysql_query($query);
