@@ -751,6 +751,11 @@ function upgrade_course($code, $lang, $extramessage = '')
                 echo add_field_after_field('exercices', 'TimeConstrain', 'EndDate', "INT(11)");
         if (!mysql_field_exists("$code",'exercices','AttemptsAllowed'))
                 echo add_field_after_field('exercices', 'AttemptsAllowed', 'TimeConstrain', "INT(11)");
+        db_query('UPDATE exercices
+                  SET StartDate = NOW(),
+                      EndDate = DATE_ADD(NOW(), INTERVAL 20 YEAR)
+                  WHERE StartDate IS NULL OR EndDate IS NULL');
+
 
         // add new document fields
         if (!mysql_field_exists("$code",'document','filename'))
@@ -783,6 +788,8 @@ function upgrade_course($code, $lang, $extramessage = '')
         echo "$langEncodeDocuments<br>";
         flush();
         encode_documents($code);
+        fix_multiple_document_entries('document');
+        fix_document_date_and_format($code);
 
         // -------------- group document upgrade ---------------
         echo "$langEncodeGroupDocuments<br>";
@@ -792,6 +799,7 @@ function upgrade_course($code, $lang, $extramessage = '')
         while ($group = mysql_fetch_array($s)) {
                 encode_group_documents($code, $group['id'], $group['secretDirectory']);
         }
+        fix_multiple_document_entries('group_documents');
 
 
         // -------------- move video files to new directory -----
@@ -1092,10 +1100,12 @@ function document_upgrade_file($path, $data)
                                 $old_filename = $current_filename['filename'];
                         }
                         // File exists in database, hasn't been upgraded
+                        $format = quote(get_file_extention($old_filename));
                         db_query("UPDATE $table
                                         SET filename = " . quote($old_filename) . ",
                                         path = " . quote($new_path) . ",
-                                        date = $file_date, date_modified = $file_date
+                                        date = $file_date, date_modified = $file_date,
+                                        format = $format
                                         WHERE path= " . quote($db_path));
                         rename($path, $data.$new_path);
                 } else {
@@ -1105,6 +1115,7 @@ function document_upgrade_file($path, $data)
         } else {
                 // File doesn't exist in database
                 if ($table == 'document') {
+                        $format = quote(get_file_extention($old_filename));
                         db_query("INSERT INTO document
                                   SET path = " . quote($new_path) . ",
                                       filename = " . quote($old_filename) . ",
@@ -1113,7 +1124,7 @@ function document_upgrade_file($path, $data)
                                       title = '', creator = '',
                                       date = $file_date, date_modified = $file_date,
                                       subject = '', description = '',
-                                      author = '', format = '',
+                                      author = '', format = $format,
                                       language = '', copyrighted = ''");
                 } else {
                         db_query("INSERT INTO group_documents
@@ -1131,8 +1142,10 @@ function document_upgrade_dir($path, $data)
 {
         if ($data == 'document') {
                 $table = 'document';
+                $format = " format = '.dir' ";
         } else {
                 $table = 'group_documents';
+                $format = '';
         }
 
         $db_path = trim_path($path);
@@ -1140,9 +1153,10 @@ function document_upgrade_dir($path, $data)
         if ($new_path) {
                 // Directory was renamed - need to update contents' entries
                 db_query("UPDATE $table
-                          SET path = CONCAT(".quote($new_path).',
-                                SUBSTRING(path FROM '. (1+strlen($db_path)) .'))
-                          WHERE path LIKE '.quote("$db_path%"));
+                          SET path = CONCAT(" . quote($new_path) . ',
+                                SUBSTRING(path FROM ' . (1+strlen($db_path)) . '))'
+                          . $format .
+                          'WHERE path LIKE ' . quote("$db_path%"));
         }
 }
 
@@ -1166,6 +1180,53 @@ function encode_group_documents($course_code, $group_id, $secret_directory)
 		mkdir($secret_directory, '0775');
         }
         chdir($cwd);
+}
+
+
+// Update database entries for files missing the correct date
+// Delete entries for non-existent files
+function fix_document_date_and_format($code)
+{
+        global $webDir;
+        $base = "{$webDir}courses/$code/document";
+
+        $q = db_query("SELECT * FROM document WHERE date = '0000-00-00 00:00:00'");
+        while ($file = mysql_fetch_array($q)) {
+                $path = $base . $file['path'];
+                if (!file_exists($path)) {
+                        db_query("DELETE FROM document WHERE id = $file[id]");
+                } else {
+                        $file_date = quote(date('Y-m-d H:i:s', filemtime($path)));
+                        db_query("UPDATE document
+                                  SET date = $file_date, date_modified = $file_date
+                                  WHERE id = $file[id]");
+                }
+        }
+        $q = db_query("SELECT * FROM document
+                       WHERE format='' OR format IS NULL");
+        while ($file = mysql_fetch_array($q)) {
+                $path = $base . $file['path'];
+                if (is_dir($path)) {
+                        $format = '.dir';
+                } else {
+                        $format = get_file_extention($file['filename']);
+                }
+                db_query("UPDATE document SET format = '$format' WHERE id = $file[id]");
+        }
+}
+
+
+// Delete multiple entries for the same file in the document or
+// group_documents tables
+function fix_multiple_document_entries($table)
+{
+        $q = db_query("SELECT path, count(path) as c FROM $table
+                        GROUP BY path HAVING c > 1");
+        while ($file = mysql_fetch_array($q)) {
+                db_query("DELETE FROM document WHERE path = " .
+                         quote($file['path']) .
+                         " LIMIT " . ($file['c'] - 1));
+        }
 }
 
 
