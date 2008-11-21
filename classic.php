@@ -195,7 +195,7 @@ $tool_content .= "
         $la = 0;
 		while ($c = mysql_fetch_array($ansql)) {
 			$result = db_query("SELECT contenu, temps, title
-			FROM    $mysqlMainDb`.annonces, `$c[k]`.accueil
+			FROM `$mysqlMainDb`.annonces, `$c[k]`.accueil
 			WHERE code_cours='$c[k]'
 			AND DATE_SUB(DATE_FORMAT('".$logindate."','%Y-%m-%d'), INTERVAL 10 DAY)
 			<= DATE_FORMAT(temps,'%Y-%m-%d')
