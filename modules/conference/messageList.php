@@ -31,10 +31,18 @@ include '../../include/baseTheme.php';
 <head>
 <meta http-equiv="refresh" content="30; url=<?= $_SERVER['PHP_SELF'] ?>" />
 <title>Chat messages</title>
+<style type="text/css">
+span { color: #727266; }
+div { font-size: 90%; } 
+body { font-family: Verdana, Arial, Helvetica, sans-serif; }
+</style>
 </head>
 <body>
 <?
 include '../../include/lib/textLib.inc.php';
+
+// support for math symbols
+include('../../include/phpmathpublisher/mathpublisher.php');
 
 $coursePath=$webDir."courses";
 $fileChatName   = $coursePath.'/'.$currentCourseID.'.chat.txt';
@@ -90,20 +98,26 @@ if (isset($_GET['store']) && $is_adminOfCourse) {
 // add new line
 if (isset($chatLine) and trim($chatLine) != '') {
 	$fchat = fopen($fileChatName,'a');
+	$chatLine = mathfilter($chatLine, 12, '../../courses/mathimg/');
 	fwrite($fchat,$timeNow.' - '.$nick.' : '.stripslashes($chatLine)."\n");
 	fclose($fchat);
 }
 
 // display message list
 $fileContent  = file($fileChatName);
+
 $FileNbLine   = count($fileContent);
 $lineToRemove = $FileNbLine - MESSAGE_LINE_NB;
 if ($lineToRemove < 0) $lineToRemove = 0;
 $tmp = array_splice($fileContent, 0 , $lineToRemove);
-
 $fileReverse = array_reverse($fileContent);
+
 foreach ($fileReverse as $thisLine) {
-    echo '<small><span style="color:#727266;">', preg_replace('/ : /', '</span> : ', $thisLine), "</small><br />\n";
+	$newline = preg_replace('/ : /', '</span> : ', $thisLine);
+	if (strpos($newline, '</span>') === false) {
+		$newline .= '</span>';
+	}
+ 	echo '<div><span>', $newline, "</div>\n";
 }
 
 echo "</body></html>\n";
