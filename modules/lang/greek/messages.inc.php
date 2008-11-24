@@ -2703,6 +2703,7 @@ $langEncodeGroupDocuments = "Κωδικοποίηση των περιεχομέ�
 $langWarnVideoFile = "Προσοχή: το αρχείο video";
 $langChangeDBCharset = "Αλλαγή κωδικοποίησης βάσης δεδομένων";
 $langToUTF = "σε UTF-8";
+$langEncryptPass = "Κωδικοποίηση των συνθηματικών των χρηστών";
 $langNotEncrypted = "ΠΡΟΣΟΧΗ! Η διαδικασία αναβάθμισης δεν μπόρεσε να κρυπτογραφήσει τα password και η πλατφόρμα δεν μπορεί να λειτουργήσει. Αφαιρέστε τη γραμμή «\$encryptedPasswd = true;» από το αρχείο ρυθμίσεων config.inc.php";
 $langUpgradeStart = 'Έναρξη αναβάθμισης Open eClass 2.1';
 $langUpgradeConfig = 'Αναβάθμιση αρχείου ρυθμίσεων (config.php)';

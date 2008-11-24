@@ -214,6 +214,8 @@ if (!isset($submit2)) {
         // 		upgrade eclass main database
         // ****************************************************
 
+	echo "<p>$langUpgradeBase <b>$mysqlMainDb</b></p>";
+
 	db_query('SET NAMES greek');
 
         // **************************************
@@ -415,6 +417,7 @@ if (!isset($submit2)) {
         @mysql_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_objectives`,`course_prerequisites` ,`course_keywords` ,`course_references`)");
 
         // encrypt passwords in users table
+	echo "<p>$langEncryptPass</p>";
         if (!isset($encryptedPasswd)) {
                 if ($res = db_query("SELECT user_id, password FROM user")) {
                         while ($row = mysql_fetch_array($res)) {
