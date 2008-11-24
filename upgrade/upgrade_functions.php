@@ -1142,7 +1142,7 @@ function document_upgrade_dir($path, $data)
 {
         if ($data == 'document') {
                 $table = 'document';
-                $format = " format = '.dir' ";
+                $format = ", format = '.dir' ";
         } else {
                 $table = 'group_documents';
                 $format = '';
