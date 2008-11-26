@@ -189,7 +189,7 @@ if (!isset($submit2)) {
                                 '#\$postaddress\b[^;]*;#sm',
                                 '#\$fax\b[^;]*;#',
                                 '#\$close_user_registration\b[^;]*;#',
-                                '#(\?>)?\s*\n$#',
+                                '#(\?>)?\s*$#',
                                 '#\$Institution\b[^;]*;#',
                                 '#\$telephone\b[^;]*;#',
                                 '#^/\*$.*^\*/$#sm',
@@ -199,12 +199,12 @@ if (!isset($submit2)) {
                                 "\$postaddress = '$_POST[postaddress]';",
                                 "\$fax = '$_POST[fax]';",
                                 "\$close_user_registration = $user_reg;",
-                                "\n".$lines_to_add,
+                            	'',
                                 "\$Institution = '$_POST[Institution]';",
                                 "\$telephone = '$_POST[telephone]';",
                                 $new_copyright,
                                 ''),
-                        $conf);
+                        $conf) . "\n" . $lines_to_add;
 
         $fp = @fopen("config.php","w");
         if (!$fp)
