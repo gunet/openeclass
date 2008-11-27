@@ -1190,7 +1190,7 @@ function fix_document_date_and_format($code)
         global $webDir;
         $base = "{$webDir}courses/$code/document";
 
-        $q = db_query("SELECT * FROM document WHERE date = '0000-00-00 00:00:00'");
+        $q = db_query("SELECT * FROM document WHERE date = '0000-00-00 00:00:00' OR date IS NULL");
         while ($file = mysql_fetch_array($q)) {
                 $path = $base . $file['path'];
                 if (!file_exists($path)) {
