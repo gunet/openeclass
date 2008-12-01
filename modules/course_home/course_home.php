@@ -71,7 +71,7 @@ if(strlen($description) > 0) {
 	if (!$is_adminOfCourse) {
 		$main_content .= "$langDescription";
 	} else {
-		$main_content .= "$langDescription &nbsp;<a href='../../modules/course_info/infocours.php?'><img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></img></a>";
+		$main_content .= "$langDescription &nbsp;<a href='../../modules/course_info/infocours.php'><img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></img></a>";
     }
     $main_content .= "</div><p>$description</p>";
 
@@ -80,7 +80,7 @@ if(strlen($description) > 0) {
 	if (!$is_adminOfCourse) {
 		$main_content .= "&nbsp;";
 	} else {
-		$main_content .= "&nbsp;&nbsp;<a href='../../modules/course_info/infocours.php?'><img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></img></a>";
+		$main_content .= "&nbsp;&nbsp;<a href='../../modules/course_info/infocours.php'><img src='../../template/classic/img/edit.gif' title='$langEdit' border='0'></img></a>";
     }
 }
 
