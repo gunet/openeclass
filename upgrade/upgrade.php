@@ -136,7 +136,7 @@ if (!isset($submit2)) {
 
         echo "<h1>$langUpgradeStart</h1>",
              "<p>$langUpgradeConfig</p>";
-
+	flush();
         // backup of config file
         if (!copy("config.php","config_backup.php"))
                 die ("$langConfigError1");
@@ -216,7 +216,7 @@ if (!isset($submit2)) {
         // ****************************************************
 
 	echo "<p>$langUpgradeBase <b>$mysqlMainDb</b></p>";
-
+	flush();
 	db_query('SET NAMES greek');
 
         // **************************************
@@ -419,6 +419,7 @@ if (!isset($submit2)) {
 
         // encrypt passwords in users table
 	echo "<p>$langEncryptPass</p>";
+	flush();
         if (!isset($encryptedPasswd)) {
                 if ($res = db_query("SELECT user_id, password FROM user")) {
                         while ($row = mysql_fetch_array($res)) {

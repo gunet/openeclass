@@ -1142,10 +1142,8 @@ function document_upgrade_dir($path, $data)
 {
         if ($data == 'document') {
                 $table = 'document';
-                $format = ", format = '.dir' ";
         } else {
                 $table = 'group_documents';
-                $format = '';
         }
 
         $db_path = trim_path($path);
@@ -1154,10 +1152,13 @@ function document_upgrade_dir($path, $data)
                 // Directory was renamed - need to update contents' entries
                 db_query("UPDATE $table
                           SET path = CONCAT(" . quote($new_path) . ',
-                                SUBSTRING(path FROM ' . (1+strlen($db_path)) . '))'
-                          . $format .
+                                SUBSTRING(path FROM ' . (1+strlen($db_path)) . '))' .
                           'WHERE path LIKE ' . quote("$db_path%"));
-        }
+	        if ($data == 'document') {
+	                db_query("UPDATE $table SET format = '.dir'
+			          WHERE path = " . quote($new_path));
+	        }
+	}
 }
 
 
