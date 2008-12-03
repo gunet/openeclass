@@ -443,18 +443,18 @@ function collapsed_facultes_horiz($fac) {
 
 	global $langListFac;
 
-	$retString = "";
+	$retString = "<form name=\"depform\" action=\"' . $_SERVER ['PHP_SELF'] . '\" method=\"get\" >";
 	$retString .= "\n
 	<table class=\"DepTitle\" width=\"99%\" align=\"left\">
 	<tr>
 	<th><b>$langListFac</b>:</th>
 	<td>";
 
-	// department selection box 
+	// department selection box
 	$retString .= dep_selection($fac);
 
  	// o pinakas autos stoixizei tin kartela
-  	$retString .= "\n      </td>\n    </tr>\n    </table>\n<br>";
+  	$retString .= "\n      </td>\n    </tr>\n    </table>\n</form>\n<br>";
 
 return $retString;
 }
@@ -475,10 +475,10 @@ function dep_selection($fac) {
 	$facselect = mysql_fetch_row(db_query("SELECT id FROM faculte WHERE name='$fac'"));
 	$fac = $facselect[0];
 
-	$string .= '<form name="depform" action="' . $_SERVER ['PHP_SELF'] . '" method="get" >';
+	//$string .= '<form name="depform" action="' . $_SERVER ['PHP_SELF'] . '" method="get" >';
 	$string .= selection($faculte_names, 'fc', $fac, 'onChange="document.depform.submit();"');
-	$string .= '</form>';
-	
+	//$string .= '</form>';
+
 return $string;
 }
 
