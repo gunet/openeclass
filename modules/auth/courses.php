@@ -149,8 +149,8 @@ else
 
   // display all the facultes collapsed
   $tool_content .= collapsed_facultes_horiz($fac);
-  $tool_content .= "<form action=\"$_SERVER[PHP_SELF]\" method=\"post\">";
-  $tool_content .= "<br/>";
+  $tool_content .= "\n    <form action=\"$_SERVER[PHP_SELF]\" method=\"post\">";
+  //$tool_content .= "\n    <br/>";
   if ($numofcourses > 0) {
   $tool_content .= expanded_faculte($fac, $uid);
   $tool_content .= "\n
@@ -260,17 +260,18 @@ function expanded_faculte($fac, $uid) {
 				$retString .= "<a href=\"#".$t."\">".$m["$ts"]."</a>";
 				$counter++;
 			}
-			$retString .= "</div></td>
-				</tr>
-				</tbody>
-				</table>\n
+			$retString .= "</div>
+      </td>
+    </tr>
+    </tbody>
+    </table>\n
 				&nbsp;";
 		} else {
-		  $retString .= "<td>&nbsp;</td>
-				</tr>
-				</thead>
-				</table>\n
-				<br/><br/>";
+		  $retString .= "\n      <td>&nbsp;</td>\n
+    </tr>\n
+    </thead>\n
+    </table>\n
+    <br/><br/>";
         }
 
 	  // changed this foreach statement a bit
@@ -443,18 +444,20 @@ function collapsed_facultes_horiz($fac) {
 
 	global $langListFac;
 
-	$retString = "<form name=\"depform\" action=\"' . $_SERVER ['PHP_SELF'] . '\" method=\"get\" >";
+	$retString = "\n   <form name='depform' action='$_SERVER[PHP_SELF]' method='get'>";
 	$retString .= "\n
-	<table class=\"DepTitle\" width=\"99%\" align=\"left\">
-	<tr>
-	<th><b>$langListFac</b>:</th>
-	<td>";
+    <table class=\"DepTitle\" width=\"99%\" align=\"left\">
+    <tr>
+       <th>$langListFac:&nbsp;</th>
+       <td>";
 
 	// department selection box
 	$retString .= dep_selection($fac);
 
  	// o pinakas autos stoixizei tin kartela
-  	$retString .= "\n      </td>\n    </tr>\n    </table>\n</form>\n<br>";
+  	$retString .= "\n        </td>\n    </tr>\n    </table>";
+  	$retString .= "\n    </form>";
+  	//$retString .= "\n    <p>&nbsp;</p>\n";
 
 return $retString;
 }
@@ -474,10 +477,7 @@ function dep_selection($fac) {
 	// get fac id from name
 	$facselect = mysql_fetch_row(db_query("SELECT id FROM faculte WHERE name='$fac'"));
 	$fac = $facselect[0];
-
-	//$string .= '<form name="depform" action="' . $_SERVER ['PHP_SELF'] . '" method="get" >';
 	$string .= selection($faculte_names, 'fc', $fac, 'onChange="document.depform.submit();"');
-	//$string .= '</form>';
 
 return $string;
 }

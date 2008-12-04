@@ -407,8 +407,12 @@ table.CourseListTitle a:hover {
     font-size: 10px;
 }
 
+
 table.DepTitle {
     background: none;
+    vertical-align: middle;
+    margin-bottom: 1px;
+    padding: 0px;
 }
 
 table.DepTitle th{
@@ -446,6 +450,11 @@ table.DepTitle a:hover {
     text-decoration: underline;
     color: #fff;
     font-size: 10px;
+}
+
+table.DepTitle form {
+    padding: 0px 0px 0px 0px;
+    vertical-align: middle;
 }
 
 table.Deps {
