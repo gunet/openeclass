@@ -1,7 +1,7 @@
 <?
     /** Libchart - PHP chart library
     *
-    * Copyright (C) 2005-2006 Jean-Marc Trιmeaux (jm.tremeaux at gmail.com)
+    * Copyright (C) 2005-2006 Jean-Marc Trémeaux (jm.tremeaux at gmail.com)
     *
     * This library is free software; you can redistribute it and/or
     * modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,7 @@
     /**
     * Text drawing helper
     *
-    * @author   Jean-Marc Trιmeaux (jm.tremeaux at gmail.com)
+    * @author   Jean-Marc Trémeaux (jm.tremeaux at gmail.com)
     */
 
     class Text
@@ -43,12 +43,8 @@
         function Text()
         {
             // Free low-res fonts based on Bitstream Vera <http://dejavu.sourceforge.net/wiki/>
-
-//            $this->fontCondensed = dirname(__FILE__) . "/../fonts/DejaVuSansCondensed.ttf";
-//            $this->fontCondensedBold = dirname(__FILE__) . "/../fonts/DejaVuSansCondensed-Bold.ttf";
-            $this->fontCondensed = dirname(__FILE__) . "/../fonts/MgOpenModernaRegular.ttf";
-            $this->fontCondensedBold = dirname(__FILE__) . "/../fonts/MgOpenModernaBold.ttf";
-
+	   $this->fontCondensed = dirname(__FILE__) . "/../fonts/DejaVuSans.ttf";
+           $this->fontCondensedBold = dirname(__FILE__) . "/../fonts/DejaVuSans-Bold.ttf";
         }
 
         /**
