@@ -68,6 +68,7 @@ foreach ($path_components as $component) {
                        FROM document WHERE filename = " . quote($component) .
                        " AND path LIKE '$path%' HAVING depth = $depth");
         $r = mysql_fetch_array($q);
+        $path = $r['path'];
         $depth++;
 }
 if ($r['visibility'] != 'v' and !$is_adminOfCourse) {
