@@ -109,9 +109,15 @@ class Dropbox_Work {
 		* with updated information (authors, descriptio, uploadDate)
 		*/
 		$this->isOldWork = FALSE;
-		$sql="SELECT id, uploadDate 
+		if ($GLOBALS['language'] == 'greek') {
+			$sql="SELECT id, DATE_FORMAT(uploadDate, '%H-%m-%Y / %H:%i')
 				FROM `".$dropbox_cnf["fileTbl"]."` 
 				WHERE filename = '".addslashes($this->filename)."'";
+		} else {
+			$sql="SELECT id, DATE_FORMAT(uploadDate, '%Y-%m-% / %H:%i')
+				FROM `".$dropbox_cnf["fileTbl"]."` 
+				WHERE filename = '".addslashes($this->filename)."'";
+		}
         	$result = db_query($sql,$currentCourseID);
 		$res = mysql_fetch_array($result);
 		if ($res != FALSE) $this->isOldWork = TRUE;
@@ -174,9 +180,19 @@ class Dropbox_Work {
 		/*
 		* get the data from DB
 		*/
-		$sql="SELECT uploaderId, filename, filesize, title, description, author, uploadDate, lastUploadDate
-				FROM `".$dropbox_cnf["fileTbl"]."`
-				WHERE id='".addslashes($id)."'";
+	if ($GLOBALS['language'] == 'greek') {
+		$sql="SELECT uploaderId, filename, filesize, title, description, author,
+			DATE_FORMAT(uploadDate, '%H-%m-%Y / %H:%i') AS uploadDate, 
+			DATE_FORMAT(lastUploadDate, '%H-%m-%Y / %H:%i') AS lastUploadDate
+			FROM `".$dropbox_cnf["fileTbl"]."`
+			WHERE id='".addslashes($id)."'";
+	} else {
+		$sql="SELECT uploaderId, filename, filesize, title, description, author,
+			DATE_FORMAT(uploadDate, '%Y-%m-%H / %H:%i') AS uploadDate, 
+			DATE_FORMAT(lastUploadDate, '%Y-%m-%H / %H:%i') AS lastUploadDate
+			FROM `".$dropbox_cnf["fileTbl"]."`
+			WHERE id='".addslashes($id)."'";
+	}
 	        $result = db_query($sql, $currentCourseID);
 		$res = mysql_fetch_array($result);;
 		
@@ -349,10 +365,9 @@ class Dropbox_Person {
 		/*
 		* find all entries where this person is the recipient 
 		*/
-		$sql = "SELECT r.fileId 
-				FROM 
-					`".$dropbox_cnf["postTbl"]."` r
-					, `".$dropbox_cnf["personTbl"]."` p
+		$sql = "SELECT r.fileId FROM 
+				`".$dropbox_cnf["postTbl"]."` r
+				, `".$dropbox_cnf["personTbl"]."` p
 				WHERE r.recipientId = '".addslashes($this->userId)."' 
 					AND r.recipientId = p.personId
 					AND r.fileId = p.fileId";
@@ -364,8 +379,7 @@ class Dropbox_Person {
 		/*
 		* find all entries where this person is the sender/uploader
 		*/
-		$sql = "SELECT f.id 
-				FROM `".$dropbox_cnf["fileTbl"]."` f, `".$dropbox_cnf["personTbl"]."` p 
+		$sql = "SELECT f.id FROM `".$dropbox_cnf["fileTbl"]."` f, `".$dropbox_cnf["personTbl"]."` p 
 				WHERE f.uploaderId = '".addslashes($this->userId)."'
 				AND f.uploaderId = p.personId
 				AND f.id = p.fileId";
@@ -388,7 +402,7 @@ class Dropbox_Person {
 		$aval = $a->$sort;
 		$bval = $b->$sort;
 		if ($sort == 'recipients') {	//the recipients property is an array so we do the comparison based 
-										//on the first item of the recipients array
+					//on the first item of the recipients array
 		    $aval = $aval[0]['name'];
 			$bval = $bval[0]['name'];
 		}

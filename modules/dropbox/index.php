@@ -238,15 +238,15 @@ tCont2;
 	//==========================================================================
 }
 
-/**
+/*
  * ========================================
  * FILES LIST
  * ========================================
  */
 
-/**
+/*
  * --------------------------------------
- *       RECEIVED FILES LIST:  TABLE HEADER
+ * RECEIVED FILES LIST:  TABLE HEADER
  * --------------------------------------
  */
 if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
@@ -278,66 +278,7 @@ if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
       <td>
 
 tCont5;
-	/*
-	$tool_content .= "
-        <div align=\"right\">
-        <form class=\"sort\" name=\"formReceived\" method=\"get\" action=\"index.php\">
-		".$dropbox_lang["orderBy"]."";
-	$tool_content .= "
-        <select name=\"receivedOrder\" onchange=\"javascript: this.form.submit()\" class=\"auth_input\">";
-	if ($receivedOrder=="lastDate") {
-		$tool_content .= "
-          <option value=\"lastDate\" selected>";
-	}	else {
-		$tool_content .= "
-          <option value=\"lastDate\">";
-	}
-	$tool_content .= "".$dropbox_lang['lastDate']."</option>";
-	if ($dropbox_cnf["allowOverwrite"]) {
-		if ($receivedOrder=="firstDate") {
-			$tool_content .= "
-          <option value=\"firstDate\" selected>";
-		} else {
-			$tool_content .= "
-          <option value=\"firstDate\">";
-		}
-	}
-	$tool_content .= "".$dropbox_lang['firstDate']."</option>";
-	if ($receivedOrder=="title"){
-		$tool_content .="
-          <option value=\"title\" selected>";
-	} else {
-		$tool_content .="
-          <option value=\"title\">";
-	}
-	$tool_content .= "".$dropbox_lang['title']."</option>";
-	if ($receivedOrder=="size"){
-		$tool_content .="option value=\"size\" selected>";
-	} else {
-		$tool_content .="
-          <option value=\"size\">";
-	}
-	$tool_content .= "".$dropbox_lang['size']."</option>";
-	if ($receivedOrder=="author"){
-		$tool_content .="option value=\"author\" selected>";
-	} else {
-		$tool_content .="
-          <option value=\"author\">";
-	}
-	$tool_content .= "".$dropbox_lang['author']."</option>";
-	if ($receivedOrder=="sender"){
-		$tool_content .="option value=\"sender\" selected>";
-	} else {
-		$tool_content .="
-          <option value=\"ender\">";
-	}
-	$tool_content .= "".$dropbox_lang['sender']."</option>";
 
-	$tool_content .= "
-        </select>
-        </form>
-        </div>";
-	*/
 	$tool_content .= "
         </td>
       </tr>
@@ -355,9 +296,9 @@ tCont5;
       </thead>
       <tbody>";
 
- /**
+ /*
  * --------------------------------------
- *       RECEIVED FILES LIST
+ * RECEIVED FILES LIST
  * --------------------------------------
  */
 
@@ -369,7 +310,7 @@ tCont5;
 		{
 			$numberDisplayed -= 1; continue;
 		}
-			if ($i%2==0) {
+		if ($i%2==0) {
 	           $tool_content .= "\n       <tr>";
 	        } else {
 	           $tool_content .= "\n       <tr class=\"odd\">";
@@ -387,14 +328,6 @@ tCont5;
         <small>$w->description</small>
         </td>
 tCont9;
-	if ($GLOBALS['language'] == 'greek') {
-		$w->uploadDate = date("d-m-Y / H:i",time());
-		$w->lastUploadDate = date("d-m-Y / H:i",time());
-	} else {
-		$w->uploadDate = date("Y-m-d / H:i",time());
-		$w->lastUploadDate = date("d-m-Y / H:i",time());
-	}
-
 		$tool_content .= "<td>$w->author</td><td>".$w->uploadDate;
 
 		if ($w->uploadDate != $w->lastUploadDate)
@@ -406,15 +339,12 @@ tCont9;
         </td>
         <td><div class=\"cellpos\">";
 
-		$tool_content .= "
+	$tool_content .= "
         <a href=\"dropbox_submit.php?deleteReceived=".urlencode($w->id)."&dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation(\"$w->title\");'>
         <img src=\"../../template/classic/img/delete-small.png\" border=\"0\" title=\"$langDelete\"></a>";
 
-		$tool_content .="
-        </div>
-        </td>
-      </tr>";
-		$i++;
+	$tool_content .= "</div></td></tr>";
+	$i++;
 	} //end of foreach
 	if ($numberDisplayed == 0) {  // RH
 	$tool_content .= "
@@ -428,9 +358,9 @@ tCont9;
 
 }  // RH: Mailing: end of 'Mailing detail: no received files'
 
-/**
+/*
  * --------------------------------------
- *       SENT FILES LIST:  TABLE HEADER
+ *�SENT FILES LIST:  TABLE HEADER
  * --------------------------------------
  */
 
@@ -542,9 +472,9 @@ $tool_content .= "
 
 
 
-/**
+/*
  * --------------------------------------
- *       SENT FILES LIST
+ * SENT FILES LIST
  * --------------------------------------
  */
 $i = 0;
@@ -590,14 +520,6 @@ tCont12;
 		$tool_content .=  $r["name"] . ", <br>\n";
 	}
 	$tool_content = strrev(substr(strrev($tool_content), 7));
-
-	if ($GLOBALS['language'] == 'greek') {
-		$w->uploadDate = date("d-m-Y / H:i",time());
-		$w->lastUploadDate = date("d-m-Y / H:i",time());
-	} else {
-		$w->uploadDate = date("Y-m-d / H:i",time());
-		$w->lastUploadDate = date("d-m-Y / H:i",time());
-	}
 
 	$tool_content .= "
 		</td>
