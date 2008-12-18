@@ -110,11 +110,11 @@ class Dropbox_Work {
 		*/
 		$this->isOldWork = FALSE;
 		if ($GLOBALS['language'] == 'greek') {
-			$sql="SELECT id, DATE_FORMAT(uploadDate, '%H-%m-%Y / %H:%i')
+			$sql="SELECT id, DATE_FORMAT(uploadDate, '%d-%m-%Y / %H:%i')
 				FROM `".$dropbox_cnf["fileTbl"]."` 
 				WHERE filename = '".addslashes($this->filename)."'";
 		} else {
-			$sql="SELECT id, DATE_FORMAT(uploadDate, '%Y-%m-% / %H:%i')
+			$sql="SELECT id, DATE_FORMAT(uploadDate, '%Y-%m-d% / %H:%i')
 				FROM `".$dropbox_cnf["fileTbl"]."` 
 				WHERE filename = '".addslashes($this->filename)."'";
 		}
@@ -182,14 +182,14 @@ class Dropbox_Work {
 		*/
 	if ($GLOBALS['language'] == 'greek') {
 		$sql="SELECT uploaderId, filename, filesize, title, description, author,
-			DATE_FORMAT(uploadDate, '%H-%m-%Y / %H:%i') AS uploadDate, 
-			DATE_FORMAT(lastUploadDate, '%H-%m-%Y / %H:%i') AS lastUploadDate
+			DATE_FORMAT(uploadDate, '%d-%m-%Y / %H:%i') AS uploadDate, 
+			DATE_FORMAT(lastUploadDate, '%d-%m-%Y / %H:%i') AS lastUploadDate
 			FROM `".$dropbox_cnf["fileTbl"]."`
 			WHERE id='".addslashes($id)."'";
 	} else {
 		$sql="SELECT uploaderId, filename, filesize, title, description, author,
-			DATE_FORMAT(uploadDate, '%Y-%m-%H / %H:%i') AS uploadDate, 
-			DATE_FORMAT(lastUploadDate, '%Y-%m-%H / %H:%i') AS lastUploadDate
+			DATE_FORMAT(uploadDate, '%Y-%m-%d / %H:%i') AS uploadDate, 
+			DATE_FORMAT(lastUploadDate, '%Y-%m-%d / %H:%i') AS lastUploadDate
 			FROM `".$dropbox_cnf["fileTbl"]."`
 			WHERE id='".addslashes($id)."'";
 	}

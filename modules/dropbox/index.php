@@ -360,7 +360,7 @@ tCont9;
 
 /*
  * --------------------------------------
- * SENT FILES LIST:  TABLE HEADER
+ *ï¿½SENT FILES LIST:  TABLE HEADER
  * --------------------------------------
  */
 
