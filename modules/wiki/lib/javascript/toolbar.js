@@ -297,7 +297,7 @@ function dcToolBar(textarea,format,img_path)
 			
 			if (getFormat() == 'wiki') {
 				stag = '[';
-				var etag = '|'+href;
+				var etag = href;
 				if (hreflang) { etag = etag+'|'+hreflang; }
 				etag = etag+']';
 			} else {
