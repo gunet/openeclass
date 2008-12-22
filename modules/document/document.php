@@ -324,11 +324,11 @@ if($is_adminOfCourse)
 		//yparxei eggrafh sth vash gia to arxeio opote xrhsimopoihse thn nea methodo metonomasias (ginetai sto STEP 2)
 		$fileName = $res["filename"];
 		@$dialogBox .= "<form>\n";
-		$dialogBox .= "<input type=\"hidden\" name=\"sourceFile\" value=\"$rename\">
-        	<table class='FormData' width=\"99%\"><tbody><tr>
+		$dialogBox .= "<input type='hidden' name='sourceFile' value='$rename' />
+        	<table class='FormData' width='99%'><tbody><tr>
           	<th class='left' width='200'>$langRename:</th>
-          	<td class='left'>$langRename ".htmlspecialchars($fileName)." $langIn: <input type=\"text\" name=\"renameTo2\" value=\"$fileName\" class='FormData_InputText' size='50'></td>
-          	<td class='left' width='1'><input type=\"submit\" value=\"$langRename\"></td>
+          	<td class='left'>$langRename ".htmlspecialchars($fileName)." $langIn: <input type='text' name='renameTo2' value='$fileName' class='FormData_InputText' size='50' /></td>
+          	<td class='left' width='1'><input type='submit' value='$langRename' /></td>
         	</tr></tbody></table></form><br />";
 	}
 
@@ -375,11 +375,11 @@ if($is_adminOfCourse)
 	if (isset($createDir))
 	{
 		$dialogBox .= "<form>\n";
-		$dialogBox .= "<input type=\"hidden\" name=\"newDirPath\" value=\"$createDir\">\n";
+		$dialogBox .= "<input type='hidden' name='newDirPath' value='$createDir' />\n";
 		$dialogBox .= "<table class='FormData' width=\"99%\">
         	<tbody><tr><th class='left' width='200'>$langNameDir:</th>
-          	<td class='left' width='1'><input type=\"text\" name=\"newDirName\" class='FormData_InputText'></td>
-          	<td class='left'><input type=\"submit\" value=\"$langCreateDir\"></td>
+          	<td class='left' width='1'><input type='text' name='newDirName' class='FormData_InputText' /></td>
+          	<td class='left'><input type='submit' value='$langCreateDir' /></td>
   		</tr></tbody></table></form><br />";
 	}
 
@@ -458,21 +458,21 @@ if($is_adminOfCourse)
 		$fileName = my_basename($comment);
 		if (empty($oldFilename)) $oldFilename = $fileName;
 		$dialogBox .="	<form method=\"post\" action=\"$_SERVER[PHP_SELF]?edit_metadata\">
-        		<input type=\"hidden\" name=\"commentPath\" value=\"$comment\">
-        		<input type=\"hidden\" size=\"80\" name=\"file_filename\" value=\"$oldFilename\">
+        		<input type='hidden' name='commentPath' value='$comment' />
+        		<input type='hidden' size='80' name='file_filename' value='$oldFilename' />
         		<table  class='FormData' width=\"99%\">
         		<tbody><tr><th>&nbsp;</th>
         		<td><b>$langAddComment: </b>".htmlspecialchars($oldFilename)."</td>
         		</tr><tr>
         		<th class='left'>$langComment:</th>
-        		<td><input type=\"text\" size=\"60\" name=\"file_comment\" value=\"$oldComment\" class='FormData_InputText'></td>
+        		<td><input type='text' size='60' name='file_comment' value='$oldComment' class='FormData_InputText' /></td>
         		</tr><tr>
         		<th class='left'>$langTitle:</th>
-        		<td><input type=\"text\" size=\"60\" name=\"file_title\" value=\"$oldTitle\" class='FormData_InputText'></td>
+        		<td><input type='text' size='60' name='file_title' value='$oldTitle' class='FormData_InputText' /></td>
         		</tr>
         		<tr><th class='left'>$langCategory:</th><td>";
 		//ektypwsh tou combobox gia thn epilogh kathgorias tou eggrafou
-		$dialogBox .= "<select name=\"file_category\" class='auth_input'>
+		$dialogBox .= "<select name='file_category' class='auth_input'>
 			<option"; if($oldCategory=="0") $dialogBox .= " selected=\"selected\""; $dialogBox .= " value=\"0\">$langCategoryOther<br>";
 		$dialogBox .= "	<option";
 		if($oldCategory=="1") $dialogBox .= " selected=\"selected\""; $dialogBox .= " value=\"1\">$langCategoryExcercise<br>
@@ -482,36 +482,36 @@ if($is_adminOfCourse)
 		<option"; if($oldCategory=="4") $dialogBox .= " selected=\"selected\""; $dialogBox .= " value=\"5\">$langCategoryExample<br>
 		<option"; if($oldCategory=="5") $dialogBox .= " selected=\"selected\""; $dialogBox .= " value=\"6\">$langCategoryTheory<br>
 		</select></td></tr>";
-		$dialogBox .= "<input type=\"hidden\" size=\"80\" name=\"file_creator\" value=\"$oldCreator\">
-    			<input type=\"hidden\" size=\"80\" name=\"file_date\" value=\"$oldDate\">
+		$dialogBox .= "<input type='hidden' size='80' name='file_creator' value='$oldCreator' />
+    			<input type='hidden' size='80' name='file_date' value='$oldDate' />
     			<tr><th class='left'>$langSubject : </th><td>
-			<input type=\"text\" size=\"60\" name=\"file_subject\" value=\"$oldSubject\" class='FormData_InputText'>
+			<input type='text' size='60' name='file_subject' value='$oldSubject' class='FormData_InputText' />
 			</td></tr><tr><th class='left'>$langDescription : </th><td>
-    			<input type=\"text\" size=\"60\" name=\"file_description\" value=\"$oldDescription\" class='FormData_InputText'></td></tr>
+    			<input type='text' size='60' name='file_description' value='$oldDescription' class='FormData_InputText' /></td></tr>
     			<tr><th class='left'>$langAuthor : </th><td>
-    			<input type=\"text\" size=\"60\" name=\"file_author\" value=\"$oldAuthor\" class='FormData_InputText'>
+    			<input type='text' size='60' name='file_author' value='$oldAuthor' class='FormData_InputText' />
     			</td></tr>";
 
 		$dialogBox .= "<tr><th class='left'>$langCopyrighted : </th>
-			<td><input name=\"file_copyrighted\" type=\"radio\" value=\"0\" ";
-		if ($oldCopyrighted=="0" || empty($oldCopyrighted)) $dialogBox .= " checked=\"checked\" "; $dialogBox .= " /> $langCopyrightedUnknown <input name=\"file_copyrighted\" type=\"radio\" value=\"2\" "; if ($oldCopyrighted=="2") $dialogBox .= " checked=\"checked\" "; $dialogBox .= " /> $langCopyrightedFree <input name=\"file_copyrighted\" type=\"radio\" value=\"1\" ";
+			<td><input name='file_copyrighted' type='radio' value='0' ";
+		if ($oldCopyrighted=="0" || empty($oldCopyrighted)) $dialogBox .= " checked='checked' "; $dialogBox .= " /> $langCopyrightedUnknown <input name='file_copyrighted' type='radio' value='2' "; if ($oldCopyrighted=="2") $dialogBox .= " checked='checked' "; $dialogBox .= " /> $langCopyrightedFree <input name='file_copyrighted' type='radio' value='1' ";
 
-		if ($oldCopyrighted=="1") $dialogBox .= " checked=\"checked\" "; $dialogBox .= "/> $langCopyrightedNotFree
+		if ($oldCopyrighted=="1") $dialogBox .= " checked='checked' "; $dialogBox .= "/> $langCopyrightedNotFree
     		</td></tr>
-    		<input type=\"hidden\" size=\"80\" name=\"file_oldLanguage\" value=\"$oldLanguage\">";
+    		<input type='hidden' size='80' name='file_oldLanguage' value='$oldLanguage' />";
 		//ektypwsh tou combox gia epilogh glwssas
 		$dialogBox .= "	<tr><th class='left'>$langLanguage :</th>
-    			<td><select name=\"file_language\" class='auth_input'>
-			</option><option value=\"en\">$langEnglish
-			</option><option value=\"fr\">$langFrench
-			</option><option value=\"de\">$langGerman
-			</option><option value=\"el\" selected>$langGreek
-			</option><option value=\"it\">$langItalian
-			</option><option value=\"es\">$langSpanish
+    			<td><select name='file_language' class='auth_input'>
+			</option><option value='en'>$langEnglish
+			</option><option value='fr'>$langFrench
+			</option><option value='de'>$langGerman
+			</option><option value='el' selected>$langGreek
+			</option><option value='it'>$langItalian
+			</option><option value='es'>$langSpanish
 			</option>
 			</select></td></tr>
 			<tr><th>&nbsp;</th>
-			<td><input type=\"submit\" value=\"$langOkComment\">&nbsp;&nbsp;&nbsp;$langNotRequired</td>
+			<td><input type='submit' value='$langOkComment' />&nbsp;&nbsp;&nbsp;$langNotRequired</td>
 			</tr></tbody></table></form><br>";
 	}
 
