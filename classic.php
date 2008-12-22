@@ -208,7 +208,7 @@ $tool_content .= "
 				$content = $ann['contenu'];
                 		$content = make_clickable($content);
                 		$content = nl2br($content);
-				$content = mathfilter($content, 12, "../../include/phpmathpublisher/img/");
+				$content = mathfilter($content, 12, "courses/mathimg/");
 				$row = mysql_fetch_array(db_query("SELECT intitule,titulaires
 							FROM cours WHERE code='$c[k]'"));
                     if ($la%2==0) {
