@@ -114,9 +114,16 @@ function process_extracted_file($p_event, &$p_header) {
                $file_copyrighted, $uploadPath, $realFileSize, $basedir;
 
         $realFileSize += $p_header['size'];
-        $path_components = explode('/', $p_header['stored_filename']);
+        $stored_filename = $p_header['stored_filename'];
+        if (invalid_utf8($stored_filename)) {
+                $stored_filename = iconv('CP737', 'UTF-8', $stored_filename);
+        }
+        $path_components = explode('/', $stored_filename);
         $filename = array_pop($path_components);
         $file_date = date("Y\-m\-d G\:i\:s", $p_header['mtime']);
+        if (invalid_utf8($filename)) {
+                $filename = iconv('CP737', 'UTF-8', $filename);
+        }
         $path = make_path($uploadPath, $path_components);
         if ($p_header['folder']) {
                 // Directory has been created by make_path(),
@@ -145,6 +152,12 @@ function process_extracted_file($p_event, &$p_header) {
                 $p_header['filename'] = $basedir . $path;
                 return 1;
         }
+}
+
+
+function invalid_utf8($s)
+{
+        return !@iconv('UTF-8', 'UTF-32', $s);
 }
 
 
