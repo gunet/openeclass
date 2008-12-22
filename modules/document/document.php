@@ -104,56 +104,96 @@ function confirmation (name)
 ';
 
 
-// actions to do before extracting file from zip archive
-function renameziparchivefile($p_event, &$p_header) {
+// Actions to do before extracting file from zip archive
+// Create database entries and set extracted file path to
+// a new safe filename
+function process_extracted_file($p_event, &$p_header) {
 
-        global $dbTable, $file_comment, $file_category, $file_creator, $file_date, $file_subject,
-               $file_title, $file_description, $file_author, $file_format, $file_language, $file_copyrighted,
-               $currentCourseID, $uploadPath, $realFileSize;
+        global $file_comment, $file_category, $file_creator, $file_date, $file_subject,
+               $file_title, $file_description, $file_author, $file_language,
+               $file_copyrighted, $uploadPath, $realFileSize, $basedir;
 
         $realFileSize += $p_header['size'];
-        $fileName = $p_header['stored_filename'];
-        /**** Check for no desired characters ***/
-        $fileName = replace_dangerous_char($fileName);
-        /*** Try to add an extension to files witout extension ***/
-        $fileName = add_ext_on_mime($fileName);
-        /*** Handle PHP files ***/
-        $fileName = php2phps($fileName);
-        // ypologismos onomatos arxeiou me date + time.
-        // to onoma afto tha xrhsimopoiei sto filesystem & tha apothikevetai ston pinaka documents
-        $safe_fileName = date("YmdGis").randomkeys("8").".".get_file_extention($fileName);
-        // prosthiki eggrafhs kai metadedomenwn gia to eggrafo sth vash
-        if ($uploadPath == ".") {
-                $uploadPath2 = "/".$safe_fileName;
+        $path_components = explode('/', $p_header['stored_filename']);
+        $filename = array_pop($path_components);
+        $file_date = date("Y\-m\-d G\:i\:s", $p_header['mtime']);
+        $path = make_path($uploadPath, $path_components);
+        if ($p_header['folder']) {
+                // Directory has been created by make_path(),
+                // no need to do anything else
+                return 0;
         } else {
-                $uploadPath2 = $uploadPath."/".$safe_fileName;
+                $format = get_file_extention($filename);
+                $path .= '/' . safe_filename($format);
+                db_query("INSERT INTO document SET
+                                 path = '$path',
+                                 filename = " . quote($filename) .",
+                                 visibility = 'v',
+                                 comment = " . quote($file_comment) . ",
+                                 category = " . quote($file_category) . ",
+                                 title = " . quote($file_title) . ",
+                                 creator = " . quote($file_creator) . ",
+                                 date = " . quote($file_date) . ",
+                                 date_modified = " . quote($file_date) . ",
+                                 subject = " . quote($file_subject) . ",
+                                 description = " . quote($file_description) . ",
+                                 author = " . quote($file_author) . ",
+                                 format = '$format',
+                                 language = " . quote($file_language) . ",
+                                 copyrighted = " . quote($file_copyrighted));
+                // File will be extracted with new encoded filename
+                $p_header['filename'] = $basedir . $path;
+                return 1;
         }
-        // san file format vres to extension tou arxeiou
-        $file_format = get_file_extention($fileName);
-        // san date you arxeiou xrhsimopoihse thn shmerinh hm/nia
-        $file_date = date("Y\-m\-d G\:i\:s");
-        $query = "INSERT INTO ".$dbTable." SET
-                path = '".mysql_real_escape_string($uploadPath2)."',
-                     filename = '".mysql_real_escape_string($fileName)."',
-                     visibility = 'v',
-                     comment = '".mysql_real_escape_string($file_comment)."',
-                     category = '".mysql_real_escape_string($file_category)."',
-                     title =	'".mysql_real_escape_string($file_title)."',
-                     creator	= '".mysql_real_escape_string($file_creator)."',
-                     date = '".mysql_real_escape_string($file_date)."',
-                     date_modified = '".mysql_real_escape_string($file_date)."',
-                     subject = '".mysql_real_escape_string($file_subject)."',
-                     description = '".mysql_real_escape_string($file_description)."',
-                     author = '".mysql_real_escape_string($file_author)."',
-                     format = '".mysql_real_escape_string($file_format)."',
-                     language = '".mysql_real_escape_string($file_language)."',
-                     copyrighted = '".mysql_real_escape_string($file_copyrighted)."'";
-        db_query($query, $currentCourseID);
-        // file will be extracted with new encoded filename
-        $p_header['filename'] = $safe_fileName;
-        return 1;
 }
 
+
+// Create a path with directory names given in array $path_components
+// under base path $path, inserting the appropriate entries in 
+// document table.
+// Returns the full encoded path created.
+function make_path($path, $path_components)
+{
+        global $basedir, $nom, $prenom;
+
+        $depth = 1 + substr_count($path, '/');
+        foreach ($path_components as $component) {
+                $q = db_query("SELECT path, visibility, format,
+                                (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
+                                FROM document WHERE filename = " . quote($component) .
+                                " AND path LIKE '$path%' HAVING depth = $depth");
+                if (mysql_num_rows($q) > 0) {
+                        // Path component already exists in database
+                        $r = mysql_fetch_array($q);
+                        $path = $r['path'];
+                        $depth++;
+                } else {
+                        // Path component must be created
+                        $path .= '/' . safe_filename();
+                        mkdir($basedir . $path, 0775);
+                        db_query("INSERT INTO document SET
+    				  path='$path',
+                                  filename=" . quote($component) . ",
+    				  visibility='v',
+                                  creator=" . quote($prenom." ".$nom) . ",
+                                  date=NOW(),
+                                  date_modified=NOW(),
+                                  format='.dir'");
+                }
+        }
+        return $path;
+}
+
+// Return a new random filename
+function safe_filename($suffix = '')
+{
+        $prefix = sprintf('%08x', time()) . randomkeys(4);
+        if (empty($suffix)) {
+                return $prefix;
+        } else {
+                return $prefix . '.' . $suffix;
+        }
+}
 
 /*** clean information submited by the user from antislash ***/
 stripSubmitValue($_POST);
@@ -188,11 +228,10 @@ if($is_adminOfCourse)
 		}
 		/*** Unzipping stage ***/
 		elseif (isset($uncompress) and $uncompress == 1
-			and preg_match("/.zip$/", $_FILES['userFile']['name']) )
-		{
+			and preg_match('/\.zip$/i', $_FILES['userFile']['name'])) {
 			$zipFile = new pclZip($userFile);
 			$realFileSize = 0;
-			$zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'renameziparchivefile');
+			$zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'process_extracted_file');
 			if ($diskUsed + $realFileSize > $diskQuotaDocument) {
 				$dialogBox .= $langNoSpace;
 			} else {
@@ -220,7 +259,7 @@ if($is_adminOfCourse)
 				$fileName = php2phps($fileName);
 				//ypologismos onomatos arxeiou me date + time.
 				//to onoma afto tha xrhsimopoiei sto filesystem & tha apothikevetai ston pinaka documents
-				$safe_fileName = date("YmdGis").randomkeys("8").".".get_file_extention($fileName);
+				$safe_fileName = safe_filename(get_file_extention($fileName));
 				//prosthiki eggrafhs kai metadedomenwn gia to eggrafo sth vash
 				if ($uploadPath == ".")
 					$uploadPath2 = "/".$safe_fileName;
@@ -297,9 +336,9 @@ if($is_adminOfCourse)
 	DELETE FILE OR DIRECTORY
 	**************************************/
 	if (isset($delete)) {
+                update_db_info("document", "delete", $delete);
 		if (my_delete($basedir . $delete)) {
-			update_db_info("document", "delete", $delete);
-			$dialogBox = "<p class=\"success_small\">$langDocDeleted</p><br />";
+			$dialogBox = "<p class='success_small'>$langDocDeleted</p><br />";
 		}
 	}
 
@@ -348,7 +387,7 @@ if($is_adminOfCourse)
         	if ($exists) {
                 	$dialogBox .= "<p class=\"caution_small\">$langFileExists</p><br />";
         	} else {
-			$safe_dirName = date("YmdGis").randomkeys("8");
+			$safe_dirName = safe_filename();
 			mkdir($basedir . $newDirPath . '/' . $safe_dirName, 0775);
 			$query =  "INSERT INTO $dbTable SET
     				path='" . $newDirPath."/".$safe_dirName . "',
