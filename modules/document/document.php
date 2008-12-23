@@ -167,8 +167,9 @@ function invalid_utf8($s)
 // Returns the full encoded path created.
 function make_path($path, $path_components)
 {
-        global $basedir, $nom, $prenom;
+        global $basedir, $nom, $prenom, $path_already_exists;
 
+        $path_already_exists = true;
         $depth = 1 + substr_count($path, '/');
         foreach ($path_components as $component) {
                 $q = db_query("SELECT path, visibility, format,
@@ -192,6 +193,7 @@ function make_path($path, $path_components)
                                   date=NOW(),
                                   date_modified=NOW(),
                                   format='.dir'");
+                        $path_already_exists = false;
                 }
         }
         return $path;
@@ -385,45 +387,21 @@ if($is_adminOfCourse)
 	}
 
 	// create directory
-	//step 2
-	if (isset($newDirPath) and !empty($newDirName))
-	{
-		$newDirName = trim($newDirName);
-        	$r = db_query('SELECT * FROM document WHERE filename = ' . quote($newDirName));
-        	$exists = false;
-        	$parent = preg_replace('|/[^/]*$|', '', $newDirPath);
-        	while ($rs = mysql_fetch_array($r)) {
-                	if (preg_replace('|/[^/]*$|', '', $rs['path']) == $parent) {
-                        	$exists = true;
-                	}
-        	}
-        	if ($exists) {
-                	$dialogBox .= "<p class=\"caution_small\">$langFileExists</p><br />";
-        	} else {
-			$safe_dirName = safe_filename();
-			mkdir($basedir . $newDirPath . '/' . $safe_dirName, 0775);
-			$query =  "INSERT INTO $dbTable SET
-    				path='" . $newDirPath."/".$safe_dirName . "',
-    				filename=" . quote($newDirName) . ",
-    				visibility='v',
-				comment='',
-				category='',
-				title='',
-				creator=" . quote($prenom." ".$nom) . ",
-				date='" . date("Y\-m\-d G\:i\:s") . "',
-				date_modified='" . date("Y\-m\-d G\:i\:s") . "',
-				subject='',
-				description='',
-				author='',
-				format='.dir',
-				language='',
-				copyrighted=''";
-			mysql_query($query);
-			$dialogBox = "<p class=\"success_small\">$langDirCr</p><br />";
-		}
+	// step 2: create the new directory
+	if (isset($newDirPath)) {
+                $newDirName = preg_replace('/\s+/', ' ', trim($newDirName));
+                if (!empty($newDirName)) {
+                        make_path($newDirPath, array($newDirName));
+                        // $path_already_exists: global variable set by make_path()
+                        if ($path_already_exists) {
+                                $dialogBox = "<p class='caution_small'>$langFileExists</p>";
+                        } else {
+                                $dialogBox = "<p class='success_small'>$langDirCr</p>";
+                        }
+                }
 	}
 
-	// step 1
+	// step 1: display a field to enter the new dir name
 	if (isset($createDir))
 	{
 		$dialogBox .= "<form>\n";
