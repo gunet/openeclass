@@ -141,7 +141,7 @@ if (is_uploaded_file(@$userFile) )
 		$fileName = add_ext_on_mime($fileName);
 		/*** Handle PHP files ***/
 		$fileName = php2phps($fileName);
-		$safe_fileName = date("YmdGis").randomkeys("8").".".get_file_extention($fileName);
+		$safe_fileName = date("YmdGis").randomkeys("8").".".get_file_extension($fileName);
 		$path = $uploadPath."/".$safe_fileName;
 		/*** Copy the file to the desired destination ***/
 		copy ($userFile, $baseWorkDir.$uploadPath."/".$safe_fileName);

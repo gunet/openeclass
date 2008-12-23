@@ -1065,15 +1065,6 @@ function upgrade_course($code, $lang, $extramessage = '')
 // functions for document ------------
 // -----------------------------------
 
-// Returns a random filename with the same extension as $filename
-function random_filename($filename)  {
-        $ext = get_file_extention($filename);
-        if (!empty($ext)) {
-                $ext = '.' . $ext;
-        }
-        return date("mdGi") . randomkeys('5') . $ext;
-}
-
 // Rename a file and insert its information in the database, if needed
 // Returns the new file path or false if file wasn't renamed
 function document_upgrade_file($path, $data)
@@ -1088,7 +1079,7 @@ function document_upgrade_file($path, $data)
         // No need to conver them, we're assuming "SET NAMES greek"
         $db_path = trim_path($path);
         $old_filename = preg_replace('|^.*/|', '', $db_path);
-        $new_filename = random_filename($old_filename);
+        $new_filename = safe_filename(get_file_extension($old_filename));
         $new_path = preg_replace('|/[^/]*$|', "/$new_filename", $db_path);
         $file_date = quote(date('Y-m-d H:i:s', filemtime($path)));
         $r = db_query("SELECT * FROM $table WHERE path = ".quote($db_path));
@@ -1100,7 +1091,7 @@ function document_upgrade_file($path, $data)
                                 $old_filename = $current_filename['filename'];
                         }
                         // File exists in database, hasn't been upgraded
-                        $format = quote(get_file_extention($old_filename));
+                        $format = quote(get_file_extension($old_filename));
                         db_query("UPDATE $table
                                         SET filename = " . quote($old_filename) . ",
                                         path = " . quote($new_path) . ",
@@ -1115,7 +1106,7 @@ function document_upgrade_file($path, $data)
         } else {
                 // File doesn't exist in database
                 if ($table == 'document') {
-                        $format = quote(get_file_extention($old_filename));
+                        $format = quote(get_file_extension($old_filename));
                         db_query("INSERT INTO document
                                   SET path = " . quote($new_path) . ",
                                       filename = " . quote($old_filename) . ",
@@ -1210,7 +1201,7 @@ function fix_document_date_and_format($code)
                 if (is_dir($path)) {
                         $format = '.dir';
                 } else {
-                        $format = get_file_extention($file['filename']);
+                        $format = get_file_extension($file['filename']);
                 }
                 db_query("UPDATE document SET format = '$format' WHERE id = $file[id]");
         }
@@ -1279,7 +1270,7 @@ function upgrade_video($file, $id, $code)
         $fileName = replace_dangerous_char($fileName);
         $fileName = add_ext_on_mime($fileName);
 	$fileName = php2phps($fileName);
-        $safe_filename = date("YmdGis")."_".randomkeys('3').".".get_file_extention($fileName);
+        $safe_filename = date("YmdGis")."_".randomkeys('3').".".get_file_extension($fileName);
 	$path_to_video = $webDir.'video/'.$code.'/';
         if (rename($path_to_video.$file, $path_to_video.$safe_filename)) {
         	db_query("UPDATE video SET path = '$safe_filename'

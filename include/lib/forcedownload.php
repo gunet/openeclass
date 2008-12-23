@@ -83,7 +83,7 @@ function send_file_to_client($real_filename, $filename, $send_inline = false)
 }
 
 
-function get_file_extention($filename)
+function get_file_extension($filename)
 {
 	$matches = array();
 	if (preg_match('/\.([a-zA-Z0-9_-]{1,8})$/', $filename, $matches)) {
@@ -97,6 +97,28 @@ function get_file_extention($filename)
 function get_mime_type($filename)
 {
         $f=array(
+                'manifest' => 'application/manifest',
+                'xaml' => 'application/xaml+xml',
+                'application' => 'application/x-ms-application',
+                'deploy' => 'application/octet-stream',
+                'xbap' => 'application/x-ms-xbap',
+                'docm' => 'application/vnd.ms-word.document.macroEnabled.12', 
+                'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 
+                'dotm' => 'application/vnd.ms-word.template.macroEnabled.12', 
+                'dotx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.template', 
+                'potm' => 'application/vnd.ms-powerpoint.template.macroEnabled.12', 
+                'potx' => 'application/vnd.openxmlformats-officedocument.presentationml.template', 
+                'ppam' => 'application/vnd.ms-powerpoint.addin.macroEnabled.12', 
+                'ppsm' => 'application/vnd.ms-powerpoint.slideshow.macroEnabled.12', 
+                'ppsx' => 'application/vnd.openxmlformats-officedocument.presentationml.slideshow', 
+                'pptm' => 'application/vnd.ms-powerpoint.presentation.macroEnabled.12', 
+                'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 
+                'xlam' => 'application/vnd.ms-excel.addin.macroEnabled.12', 
+                'xlsb' => 'application/vnd.ms-excel.sheet.binary.macroEnabled.12', 
+                'xlsm' => 'application/vnd.ms-excel.sheet.macroEnabled.12', 
+                'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 
+                'xltm' => 'application/vnd.ms-excel.template.macroEnabled.12', 
+                'xltx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
                 'ez' => 'application/andrew-inset',
                 'hqx' => 'application/mac-binhex40',
                 'cpt' => 'application/mac-compactpro',
@@ -241,7 +263,7 @@ function get_mime_type($filename)
                 'wmx' => 'video/x-ms-wmx',
                 'wmz' => 'application/x-ms-wmz',
                 'wmd' => 'application/x-ms-wmd');
-        $ext = get_file_extention($filename);
+        $ext = get_file_extension($filename);
         if (isset($f[$ext])) {
                 return $f[$ext];
         } else {

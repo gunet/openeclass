@@ -116,21 +116,18 @@ function process_extracted_file($p_event, &$p_header) {
         $realFileSize += $p_header['size'];
         $stored_filename = $p_header['stored_filename'];
         if (invalid_utf8($stored_filename)) {
-                $stored_filename = iconv('CP737', 'UTF-8', $stored_filename);
+                $stored_filename = cp737_to_utf8($stored_filename);
         }
         $path_components = explode('/', $stored_filename);
         $filename = array_pop($path_components);
         $file_date = date("Y\-m\-d G\:i\:s", $p_header['mtime']);
-        if (invalid_utf8($filename)) {
-                $filename = iconv('CP737', 'UTF-8', $filename);
-        }
         $path = make_path($uploadPath, $path_components);
         if ($p_header['folder']) {
                 // Directory has been created by make_path(),
                 // no need to do anything else
                 return 0;
         } else {
-                $format = get_file_extention($filename);
+                $format = get_file_extension($filename);
                 $path .= '/' . safe_filename($format);
                 db_query("INSERT INTO document SET
                                  path = '$path',
@@ -152,12 +149,6 @@ function process_extracted_file($p_event, &$p_header) {
                 $p_header['filename'] = $basedir . $path;
                 return 1;
         }
-}
-
-
-function invalid_utf8($s)
-{
-        return !@iconv('UTF-8', 'UTF-32', $s);
 }
 
 
@@ -197,17 +188,6 @@ function make_path($path, $path_components)
                 }
         }
         return $path;
-}
-
-// Return a new random filename
-function safe_filename($suffix = '')
-{
-        $prefix = sprintf('%08x', time()) . randomkeys(4);
-        if (empty($suffix)) {
-                return $prefix;
-        } else {
-                return $prefix . '.' . $suffix;
-        }
 }
 
 /*** clean information submited by the user from antislash ***/
@@ -274,14 +254,14 @@ if($is_adminOfCourse)
 				$fileName = php2phps($fileName);
 				//ypologismos onomatos arxeiou me date + time.
 				//to onoma afto tha xrhsimopoiei sto filesystem & tha apothikevetai ston pinaka documents
-				$safe_fileName = safe_filename(get_file_extention($fileName));
+				$safe_fileName = safe_filename(get_file_extension($fileName));
 				//prosthiki eggrafhs kai metadedomenwn gia to eggrafo sth vash
 				if ($uploadPath == ".")
 					$uploadPath2 = "/".$safe_fileName;
 				else
 					$uploadPath2 = $uploadPath."/".$safe_fileName;
 				//san file format vres to extension tou arxeiou
-				$file_format = get_file_extention($fileName);
+				$file_format = get_file_extension($fileName);
 				//san date you arxeiou xrhsimopoihse thn shmerinh hm/nia
 				$file_date = date("Y\-m\-d G\:i\:s");
 				$query = "INSERT INTO ".$dbTable." SET
@@ -440,7 +420,7 @@ if($is_adminOfCourse)
 		{
 			if (empty($file_language)) $file_language = $file_oldLanguage;
 			if (empty($file_filename)) $file_filename = htmlspecialchars($fileName);
-			$file_format = get_file_extention($file_filename);
+			$file_format = get_file_extension($file_filename);
 			$query =  "INSERT INTO ".$dbTable." SET
     			path=\"".$commentPath."\",
     			filename=\"".$file_filename."\",

@@ -781,22 +781,22 @@ function add_check_if_javascript_enabled_js()
 
 /*
  * check extension and  write  if exist  in a  <LI></LI>
- * @params string	$extentionName 	name  of  php extention to be checked
- * @params boolean	$echoWhenOk	true => show ok when  extention exist
+ * @params string	$extensionName 	name  of  php extension to be checked
+ * @params boolean	$echoWhenOk	true => show ok when  extension exist
  * @author Christophe Gesche
- * @desc check extention and  write  if exist  in a  <LI></LI>
+ * @desc check extension and  write  if exist  in a  <LI></LI>
  */
-function warnIfExtNotLoaded($extentionName) {
+function warnIfExtNotLoaded($extensionName) {
 
 	global $tool_content;
-	if (extension_loaded ($extentionName)) {
-		$tool_content .= "<li> $extentionName - <b>ok!</b> </li> ";
+	if (extension_loaded ($extensionName)) {
+		$tool_content .= "<li> $extensionName - <b>ok!</b> </li> ";
 	} else {
 		$tool_content .= "
-                <li>$extentionName
+                <li>$extensionName
                 <font color=\"#FF0000\"> - <b>Δεν είναι εγκατεστημένο!</b></font>
                 (Διαβάστε περισσότερα
-                <a href=\"http://www.php.net/$extentionName\" target=_blank>εδώ)</a>
+                <a href=\"http://www.php.net/$extensionName\" target=_blank>εδώ)</a>
                 </li>";
 	}
 }
@@ -856,3 +856,70 @@ function visible_module($module_id) {
 	else
 		return FALSE;
 }
+
+
+// Returns true if a string is invalid UTF-8
+function invalid_utf8($s)
+{
+        return !@iconv('UTF-8', 'UTF-32', $s);
+}
+
+
+// Converts a string from Code Page 737 (DOS Greek) to UTF-8
+function cp737_to_utf8($s)
+{
+        // First try with iconv()...
+        $cp737 = @iconv('CP737', 'UTF-8', $s);
+        if ($cp737 !== false) {
+                return $cp737;
+        } else {
+                // ... if it fails, fall back to manual conversion
+                return str_replace(
+                        array("\x80", "\x81", "\x82", "\x83", "\x84", "\x85", "\x86",
+                              "\x87", "\x88", "\x89", "\x8a", "\x8b", "\x8c", "\x8d",
+                              "\x8e", "\x8f", "\x90", "\x91", "\x92", "\x93", "\x94",
+                              "\x95", "\x96", "\x97", "\x98", "\x99", "\x9a", "\x9b",
+                              "\x9c", "\x9d", "\x9e", "\x9f", "\xa0", "\xa1", "\xa2",
+                              "\xa3", "\xa4", "\xa5", "\xa6", "\xa7", "\xa8", "\xa9",
+                              "\xaa", "\xab", "\xac", "\xad", "\xae", "\xaf", "\xb0",
+                              "\xb1", "\xb2", "\xb3", "\xb4", "\xb5", "\xb6", "\xb7",
+                              "\xb8", "\xb9", "\xba", "\xbb", "\xbc", "\xbd", "\xbe",
+                              "\xbf", "\xc0", "\xc1", "\xc2", "\xc3", "\xc4", "\xc5",
+                              "\xc6", "\xc7", "\xc8", "\xc9", "\xca", "\xcb", "\xcc",
+                              "\xcd", "\xce", "\xcf", "\xd0", "\xd1", "\xd2", "\xd3",
+                              "\xd4", "\xd5", "\xd6", "\xd7", "\xd8", "\xd9", "\xda",
+                              "\xdb", "\xdc", "\xdd", "\xde", "\xdf", "\xe0", "\xe1",
+                              "\xe2", "\xe3", "\xe4", "\xe5", "\xe6", "\xe7", "\xe8",
+                              "\xe9", "\xea", "\xeb", "\xec", "\xed", "\xee", "\xef",
+                              "\xf0", "\xf1", "\xf2", "\xf3", "\xf4", "\xf5", "\xf6",
+                              "\xf7", "\xf8", "\xf9", "\xfa", "\xfb", "\xfc", "\xfd",
+                              "\xfe", "\xff"),
+                        array('Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ', 'Ι', 'Κ', 'Λ',
+                              'Μ', 'Ν', 'Ξ', 'Ο', 'Π', 'Ρ', 'Σ', 'Τ', 'Υ', 'Φ', 'Χ',
+                              'Ψ', 'Ω', 'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 'ι',
+                              'κ', 'λ', 'μ', 'ν', 'ξ', 'ο', 'π', 'ρ', 'σ', 'ς', 'τ',
+                              'υ', 'φ', 'χ', 'ψ', '░', '▒', '▓', '│', '┤', '╡', '╢',
+                              '╖', '╕', '╣', '║', '╗', '╝', '╜', '╛', '┐', '└', '┴',
+                              '┬', '├', '─', '┼', '╞', '╟', '╚', '╔', '╩', '╦', '╠',
+                              '═', '╬', '╧', '╨', '╤', '╥', '╙', '╘', '╒', '╓', '╫',
+                              '╪', '┘', '┌', '█', '▄', '▌', '▐', '▀', 'ω', 'ά', 'έ',
+                              'ή', 'ϊ', 'ί', 'ό', 'ύ', 'ϋ', 'ώ', 'Ά', 'Έ', 'Ή', 'Ί',
+                              'Ό', 'Ύ', 'Ώ', '±', '≥', '≤', 'Ϊ', 'Ϋ', '÷', '≈', '°',
+                              '∙', '·', '√', 'ⁿ', '²', '■', ' '),
+                        $s);
+        }
+}
+
+
+// Return a new random filename, with the given extension
+function safe_filename($extension = '')
+{
+        $prefix = sprintf('%08x', time()) . randomkeys(4);
+        if (empty($extension)) {
+                return $prefix;
+        } else {
+                return $prefix . '.' . $extension;
+        }
+}
+
+

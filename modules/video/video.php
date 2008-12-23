@@ -155,7 +155,7 @@ if (isset($_POST['submit']) or isset($_POST['edit_submit'])) {
 					$file_name = str_replace(" ", "%20", $file_name);
 					$file_name = str_replace("%20", "", $file_name);
 					$file_name = str_replace("\'", "", $file_name);
-					$safe_filename = date("YmdGis").randomkeys("8").".".get_file_extention($file_name);
+					$safe_filename = date("YmdGis").randomkeys("8").".".get_file_extension($file_name);
 					if ($titre == "") $titre = $file_name;
 					$iscopy=@copy("$file", "$updir/$safe_filename");
 						if(!$iscopy) {
