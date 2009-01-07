@@ -166,4 +166,3 @@
 				imagepng($this->img);
 		}
 	}
-?>

@@ -1,7 +1,7 @@
 <?
 	/** Libchart - PHP chart library
 	*	
-	* Copyright (C) 2005-2006 Jean-Marc Trémeaux (jm.tremeaux at gmail.com)
+	* Copyright (C) 2005-2006 Jean-Marc TrÎ¹meaux (jm.tremeaux at gmail.com)
 	* 	
 	* This library is free software; you can redistribute it and/or
 	* modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,7 @@
 	/**
 	* Automatic axis boundaries and ticks calibration
 	*
-	* @author   Jean-Marc Trémeaux (jm.tremeaux at gmail.com)
+	* @author   Jean-Marc TrÎ¹meaux (jm.tremeaux at gmail.com)
 	*/
 
 	class Axis
@@ -164,4 +164,3 @@
 			return $this->tics;
 		}
 	}
-?>

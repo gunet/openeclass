@@ -192,4 +192,3 @@ function my_stripos($string, $word)
 	str_replace($source, $target, mb_strtolower($string, 'UTF-8')),
 	str_replace($source, $target, mb_strtolower($word, 'UTF-8')));
 }
-?>

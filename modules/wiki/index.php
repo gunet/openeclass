@@ -46,4 +46,3 @@
 
 header( "Location: wiki.php" );
 exit();
-?>

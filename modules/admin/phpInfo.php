@@ -83,4 +83,3 @@ $tool_content .= "<br><center><p><a href=\"index.php\">$langBack</a></p></center
 // 3: display administrator menu
 // admin: use tool.css from admin folder
 draw($tool_content,3,'admin');
-?>

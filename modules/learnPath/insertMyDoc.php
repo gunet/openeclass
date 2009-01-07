@@ -377,4 +377,3 @@ $tool_content .= display_my_documents($dialogBox, $style) ;
 //$tool_content .= display_path_content();
 chdir($pwd);
 draw($tool_content, 2, "learnPath");
-?>

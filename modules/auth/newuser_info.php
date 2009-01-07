@@ -74,4 +74,3 @@ if(!empty($auth))
 }
 $tool_content .= "";
 draw($tool_content,0,'auth');
-?>
